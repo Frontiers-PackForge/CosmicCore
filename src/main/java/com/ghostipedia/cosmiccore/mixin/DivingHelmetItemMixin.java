@@ -1,7 +1,6 @@
-package com.ghostipedia.CosmicCore.mixin;
+package com.ghostipedia.cosmiccore.mixin;
 
-import com.ghostipedia.CosmicCore.CosmicCore;
-import com.ghostipedia.CosmicCore.common.breath.OxygenHelper;
+import com.ghostipedia.cosmiccore.common.breath.OxygenHelper;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraftforge.fluids.FluidType;
 import org.spongepowered.asm.mixin.Mixin;

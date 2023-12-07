@@ -1,6 +1,6 @@
-package com.ghostipedia.CosmicCore.common.data;
+package com.ghostipedia.cosmiccore.common.data;
 
-import com.ghostipedia.CosmicCore.CosmicCore;
+import com.ghostipedia.cosmiccore.CosmicCore;
 import com.gregtechceu.gtceu.api.block.RendererBlock;
 import com.gregtechceu.gtceu.api.block.RendererGlassBlock;
 import com.gregtechceu.gtceu.api.item.RendererBlockItem;
@@ -21,7 +21,7 @@ import java.util.Map;
 import java.util.function.BiFunction;
 import java.util.function.Supplier;
 
-import static com.ghostipedia.CosmicCore.api.registries.CosmicRegistries.REGISTRATE;
+import static com.ghostipedia.cosmiccore.api.registries.CosmicRegistries.REGISTRATE;
 
 
 public class CosmicBlocks {

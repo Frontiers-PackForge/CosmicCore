@@ -1,17 +1,12 @@
-package com.ghostipedia.CosmicCore.common.data;
+package com.ghostipedia.cosmiccore.common.data;
 
-import com.ghostipedia.CosmicCore.CosmicCore;
 import com.gregtechceu.gtceu.api.item.ComponentItem;
 import com.gregtechceu.gtceu.api.item.component.IItemComponent;
 import com.gregtechceu.gtceu.api.registry.GTRegistries;
-import com.gregtechceu.gtceu.api.registry.registrate.GTRegistrate;
 import com.tterrag.registrate.util.entry.ItemEntry;
 import com.tterrag.registrate.util.nullness.NonNullConsumer;
-import net.minecraft.world.item.ArmorItem;
-import net.minecraft.world.item.Item;
-import net.minecraft.world.item.Rarity;
 
-import static com.ghostipedia.CosmicCore.api.registries.CosmicRegistries.REGISTRATE;
+import static com.ghostipedia.cosmiccore.api.registries.CosmicRegistries.REGISTRATE;
 
 
 @SuppressWarnings("Convert2MethodRef")

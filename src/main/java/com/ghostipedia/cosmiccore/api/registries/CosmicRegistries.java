@@ -1,6 +1,5 @@
-package com.ghostipedia.CosmicCore.api.registries;
-import com.ghostipedia.CosmicCore.CosmicCore;
-import com.gregtechceu.gtceu.api.registry.GTRegistry;
+package com.ghostipedia.cosmiccore.api.registries;
+import com.ghostipedia.cosmiccore.CosmicCore;
 import com.gregtechceu.gtceu.api.registry.registrate.GTRegistrate;
 
 public class CosmicRegistries {

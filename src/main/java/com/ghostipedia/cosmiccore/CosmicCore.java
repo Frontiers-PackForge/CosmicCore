@@ -1,9 +1,9 @@
-package com.ghostipedia.CosmicCore;
+package com.ghostipedia.cosmiccore;
 
-import com.ghostipedia.CosmicCore.api.registries.CosmicRegistries;
-import com.ghostipedia.CosmicCore.common.data.CosmicBlocks;
-import com.ghostipedia.CosmicCore.common.data.CosmicCreativeModeTabs;
-import com.ghostipedia.CosmicCore.common.data.CosmicItems;
+import com.ghostipedia.cosmiccore.api.registries.CosmicRegistries;
+import com.ghostipedia.cosmiccore.common.data.CosmicBlocks;
+import com.ghostipedia.cosmiccore.common.data.CosmicCreativeModeTabs;
+import com.ghostipedia.cosmiccore.common.data.CosmicItems;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.fml.common.Mod;
 import org.slf4j.Logger;
