@@ -15,11 +15,6 @@ public class DivingHelmetItemMixin {
      */
     @Redirect(method = "breatheUnderwater(Lnet/minecraftforge/event/entity/living/LivingEvent$LivingTickEvent;)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/LivingEntity;canDrownInFluidType(Lnet/minecraftforge/fluids/FluidType;)Z"))
     private static boolean redirectCanDrownInFluidType(LivingEntity entity, FluidType fluidtype) {
-        final var res = entity.isInFluidType();
-        if (fluidtype == (entity.getEyeInFluidType()))
-        {
-            return res || OxygenHelper.airQualityActivatesHelmet(entity);
-        }
-        return res;
+        return entity.isInFluidType() || (fluidtype == (entity.getEyeInFluidType()) && OxygenHelper.airQualityActivatesHelmet(entity));
     }
 }
