@@ -10,6 +10,10 @@
   "item.cosmiccore.cosmic_processor_mainframe": "ǝɯɐɹɟuıɐW ɹossǝɔoɹԀ ɔıɯsoƆ",
   "item.cosmiccore.cosmic_processor_supercomputer": "ɹǝʇndɯoɔɹǝdnS ɹossǝɔoɹԀ ɔıɯsoƆ",
   "item.cosmiccore.donk": "ʞuoᗡ",
+  "item.cosmiccore.echo_processor": "ɹossǝɔoɹԀ oɥɔƎ",
+  "item.cosmiccore.echo_processor_assembly": "ʎןqɯǝssⱯ ɹossǝɔoɹԀ oɥɔƎ",
+  "item.cosmiccore.echo_processor_mainframe": "ǝɯɐɹɟuıɐW ɹossǝɔoɹԀ oɥɔƎ",
+  "item.cosmiccore.echo_processor_supercomputer": "ɹǝʇndɯoɔɹǝdnS ɹossǝɔoɹԀ oɥɔƎ",
   "item.cosmiccore.macroverse_processor": "ɹossǝɔoɹԀ ǝsɹǝʌoɹɔɐW",
   "item.cosmiccore.macroverse_processor_assembly": "ʎןqɯǝssⱯ ɹossǝɔoɹԀ ǝsɹǝʌoɹɔɐW",
   "item.cosmiccore.macroverse_processor_mainframe": "ǝɯɐɹɟuıɐW ɹossǝɔoɹԀ ǝsɹǝʌoɹɔɐW",
@@ -22,9 +26,5 @@
   "item.cosmiccore.psionic_processor_assembly": "ʎןqɯǝssⱯ ɹossǝɔoɹԀ ɔıuoısԀ",
   "item.cosmiccore.psionic_processor_mainframe": "ǝɯɐɹɟuıɐW ɹossǝɔoɹԀ ɔıuoısԀ",
   "item.cosmiccore.psionic_processor_supercomputer": "ɹǝʇndɯoɔɹǝdnS ɹossǝɔoɹԀ ɔıuoısԀ",
-  "item.cosmiccore.sonic_processor": "ɹossǝɔoɹԀ ɔıuoS",
-  "item.cosmiccore.sonic_processor_assembly": "ʎןqɯǝssⱯ ɹossǝɔoɹԀ ɔıuoS",
-  "item.cosmiccore.sonic_processor_mainframe": "ǝɯɐɹɟuıɐW ɹossǝɔoɹԀ ɔıuoS",
-  "item.cosmiccore.sonic_processor_supercomputer": "ɹǝʇndɯoɔɹǝdnS ɹossǝɔoɹԀ ɔıuoS",
   "itemGroup.cosmiccore.cosmiccore": "ǝɹoɔɔıɯsoƆ"
 }

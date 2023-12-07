@@ -10,6 +10,10 @@
   "item.cosmiccore.cosmic_processor_mainframe": "Cosmic Processor Mainframe",
   "item.cosmiccore.cosmic_processor_supercomputer": "Cosmic Processor Supercomputer",
   "item.cosmiccore.donk": "Donk",
+  "item.cosmiccore.echo_processor": "Echo Processor",
+  "item.cosmiccore.echo_processor_assembly": "Echo Processor Assembly",
+  "item.cosmiccore.echo_processor_mainframe": "Echo Processor Mainframe",
+  "item.cosmiccore.echo_processor_supercomputer": "Echo Processor Supercomputer",
   "item.cosmiccore.macroverse_processor": "Macroverse Processor",
   "item.cosmiccore.macroverse_processor_assembly": "Macroverse Processor Assembly",
   "item.cosmiccore.macroverse_processor_mainframe": "Macroverse Processor Mainframe",
@@ -22,9 +26,5 @@
   "item.cosmiccore.psionic_processor_assembly": "Psionic Processor Assembly",
   "item.cosmiccore.psionic_processor_mainframe": "Psionic Processor Mainframe",
   "item.cosmiccore.psionic_processor_supercomputer": "Psionic Processor Supercomputer",
-  "item.cosmiccore.sonic_processor": "Sonic Processor",
-  "item.cosmiccore.sonic_processor_assembly": "Sonic Processor Assembly",
-  "item.cosmiccore.sonic_processor_mainframe": "Sonic Processor Mainframe",
-  "item.cosmiccore.sonic_processor_supercomputer": "Sonic Processor Supercomputer",
   "itemGroup.cosmiccore.cosmiccore": "Cosmiccore"
 }

@@ -1,11 +1,15 @@
-// 1.20.1	2023-12-05T13:39:40.6628762	Registrate Provider for cosmiccore [Recipes, Advancements, Loot Tables, Tags (blocks), Tags (items), Tags (fluids), Tags (entity_types), generic_server_provider, Blockstates, Item models, Lang (en_us/en_ud), generic_client_provider]
-652801c5522ff929bcd0e6e543c5c8885827ea79 assets/cosmiccore/lang/en_ud.json
-6f7c69eab37da7c35785f3a58fa92aad47b3ecee assets/cosmiccore/lang/en_us.json
+// 1.20.1	2023-12-07T00:34:49.7864429	Registrate Provider for cosmiccore [Recipes, Advancements, Loot Tables, Tags (blocks), Tags (items), Tags (fluids), Tags (entity_types), generic_server_provider, Blockstates, Item models, Lang (en_us/en_ud), generic_client_provider]
+b85a1d09a46a29444f92c1675a0a10f4be44e3a9 assets/cosmiccore/lang/en_ud.json
+9d085a2bde1dd568b3faf3e219ae03d40d5e334d assets/cosmiccore/lang/en_us.json
 df450aaa119bb426b16e578a830e1fc1a04a60d8 assets/cosmiccore/models/item/cosmic_processor.json
 91154670f2e413b35d8a509da73aa02359333e6b assets/cosmiccore/models/item/cosmic_processor_assembly.json
 eaf524be5527803a5e3be4067aeec8145db355be assets/cosmiccore/models/item/cosmic_processor_mainframe.json
 0871996f2b4d7aa488650e85e75c3ff090fbe27d assets/cosmiccore/models/item/cosmic_processor_supercomputer.json
 16b7eec898adb2720a89ede7dd791388205d4726 assets/cosmiccore/models/item/donk.json
+8eb7df700409f424544dbf3c4c80aa8fea27393a assets/cosmiccore/models/item/echo_processor.json
+27d4b2e77f987a271d811317a7b7e328c74ece32 assets/cosmiccore/models/item/echo_processor_assembly.json
+863c680458d56a6bb21e030fc75cb6c264dca274 assets/cosmiccore/models/item/echo_processor_mainframe.json
+2114c90c1d60c254d6cd2a2f60e298f6feba457e assets/cosmiccore/models/item/echo_processor_supercomputer.json
 dc9364f04c4b466e0216140a75f57b9be0e7e9ae assets/cosmiccore/models/item/macroverse_processor.json
 3c71196cc55319ca6017dfeb8a7ddd55005a6a9e assets/cosmiccore/models/item/macroverse_processor_assembly.json
 27b7656e8b9c9658fdfd0058b7cdd75b43bed697 assets/cosmiccore/models/item/macroverse_processor_mainframe.json
@@ -18,10 +22,6 @@ af9dc074daf38c5f5d6ebd1013a8a7e6734cc5cf assets/cosmiccore/models/item/optical_p
 301cfcc7e9b94f6411f8a5d122957b96ffd92777 assets/cosmiccore/models/item/psionic_processor_assembly.json
 3b183bd70f213664dcabc0d4cfe63dae9ede5fe5 assets/cosmiccore/models/item/psionic_processor_mainframe.json
 8386c74a5be350377574c9971dad7ad65c942799 assets/cosmiccore/models/item/psionic_processor_supercomputer.json
-00b19c617c8ebd6640c677e1d66c32a29cdc7ec8 assets/cosmiccore/models/item/sonic_processor.json
-cc1fdf363f62acd299ca1ff498d5687457b12f4a assets/cosmiccore/models/item/sonic_processor_assembly.json
-16925d40b7c3d5d4109033cfa8968318d17db1b5 assets/cosmiccore/models/item/sonic_processor_mainframe.json
-835fcc4d18d68bd696c51b210d332913bf34be30 assets/cosmiccore/models/item/sonic_processor_supercomputer.json
 476358d77ab98294ee20503689c35d1e06cfff83 data/cosmiccore/loot_tables/blocks/aerospace_aluminium_casing.json
 a35174b11a61eb4b119adc39e1f07cc42a784c6a data/cosmiccore/loot_tables/blocks/beam_receiver.json
 f07a4cc7e9e21719a4f5f418fb8a2e871eef6d1c data/cosmiccore/loot_tables/blocks/dyson_solar_cell.json

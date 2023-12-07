@@ -22,24 +22,24 @@ public class CosmicItems  {
             .register();
 
  //New Circuits
- //Sonic (ZPM-UEV)
-    public static final ItemEntry<ComponentItem> SONAR_PROCESSOR = REGISTRATE.item("sonic_processor", ComponentItem::create)
-            .lang("Sonic Processor")
+ //Echo (ZPM-UEV)
+    public static final ItemEntry<ComponentItem> SONAR_PROCESSOR = REGISTRATE.item("echo_processor", ComponentItem::create)
+            .lang("Echo Processor")
             .properties(p -> p.stacksTo(64))
             .defaultModel()
             .register();
-    public static final ItemEntry<ComponentItem> SONAR_PROCESSOR_ASSEMBLY = REGISTRATE.item("sonic_processor_assembly", ComponentItem::create)
-            .lang("Sonic Processor Assembly")
+    public static final ItemEntry<ComponentItem> SONAR_PROCESSOR_ASSEMBLY = REGISTRATE.item("echo_processor_assembly", ComponentItem::create)
+            .lang("Echo Processor Assembly")
             .properties(p -> p.stacksTo(64))
             .defaultModel()
             .register();
-    public static final ItemEntry<ComponentItem> SONAR_PROCESSOR_SUPERCOMPUTER = REGISTRATE.item("sonic_processor_supercomputer", ComponentItem::create)
-            .lang("Sonic Processor Supercomputer")
+    public static final ItemEntry<ComponentItem> SONAR_PROCESSOR_SUPERCOMPUTER = REGISTRATE.item("echo_processor_supercomputer", ComponentItem::create)
+            .lang("Echo Processor Supercomputer")
             .properties(p -> p.stacksTo(64))
             .defaultModel()
             .register();
-    public static final ItemEntry<ComponentItem> SONAR_PROCESSOR_MAINFRAME = REGISTRATE.item("sonic_processor_mainframe", ComponentItem::create)
-            .lang("Sonic Processor Mainframe")
+    public static final ItemEntry<ComponentItem> SONAR_PROCESSOR_MAINFRAME = REGISTRATE.item("echo_processor_mainframe", ComponentItem::create)
+            .lang("Echo Processor Mainframe")
             .properties(p -> p.stacksTo(64))
             .defaultModel()
             .register();
