@@ -15,7 +15,7 @@ public class DivingHelmetItemMixin {
      * Activate helmet "if in water or lava" -> "if in water or bad air or lava"
      */
     @Redirect(method = "breatheUnderwater(Lnet/minecraftforge/event/entity/living/LivingEvent$LivingTickEvent;)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/LivingEntity;canDrownInFluidType(Lnet/minecraftforge/fluids/FluidType;)Z"))
-    private boolean redirectCanDrownInFluidType(LivingEntity entity, FluidType fluidtype) {
+    private static boolean redirectCanDrownInFluidType(LivingEntity entity, FluidType fluidtype) {
         final var res = entity.isInFluidType();
         if (fluidtype == (entity.getEyeInFluidType()))
         {
