@@ -10,7 +10,7 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 
 import com.ghostipedia.cosmiccore.common.breath.OxygenHelper;
 
-@Mixin(value=RemainingAirOverlay.class, remap=false)
+@Mixin(value=RemainingAirOverlay.class)
 public class CosmicCoreRemainingAirOverlayMixin {
 
 
