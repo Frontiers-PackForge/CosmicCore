@@ -27,6 +27,7 @@ loom {
         // this will be added to the jar manifest as well!
         mixinConfigs = [
                 "cosmiccore.mixins.json"
+
         ]
 
         // missing access transformers?
@@ -103,6 +104,10 @@ repositories {
         name = 'GeckoLib'
         url 'https://dl.cloudsmith.io/public/geckolib3/geckolib/maven/'
     }
+    maven {
+        name "tterrag maven"
+        url "https://maven.tterrag.com/"
+    }
 
 }
 
@@ -119,13 +124,23 @@ dependencies {
     modCompileOnly("mezz.jei:jei-${project.minecraft_version}-forge-api:${project.jei_version}") { transitive = false }
     modCompileOnly("mezz.jei:jei-${project.minecraft_version}-common-api:${project.jei_version}") { transitive = false }
 
+
     modImplementation("com.gregtechceu.gtceu:gtceu-forge-${project.minecraft_version}:${project.gtceu_version}") { transitive = false }
     modImplementation("com.lowdragmc.ldlib:ldlib-forge-${project.minecraft_version}:${project.ldlib_version}") { transitive = false }
     modImplementation("com.tterrag.registrate:Registrate:${project.registrate_version}")
     modImplementation("dev.latvian.mods:kubejs-forge:${project.kubejs_version}")
+    //Mod Deps for gluing things together.
     //modImplementation("curse.maven:cold-sweat-506194:4805548")
     modImplementation("curse.maven:sanity-descent-into-madness-876448:4625236")
     modImplementation('software.bernie.geckolib:geckolib-forge-1.20.1:4.2.2')
+    modImplementation("com.jozufozu.flywheel:flywheel-forge-1.20.1:0.6.10-7")
+    modImplementation("curse.maven:create-328085:4762216")
+    modImplementation("curse.maven:new-thin-air-878379:4848005")
+    modImplementation("curse.maven:puzzles-lib-495476:4924184")
+
+
+
+
 
     modRuntimeOnly("vazkii.patchouli:Patchouli:${project.minecraft_version}-${project.patchouli_version}-FORGE")
     modRuntimeOnly("top.theillusivec4.curios:curios-forge:${project.curios_version}+${project.minecraft_version}")
