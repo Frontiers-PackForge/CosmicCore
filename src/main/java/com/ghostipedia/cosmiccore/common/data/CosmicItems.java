@@ -14,12 +14,28 @@ public class CosmicItems  {
     static {
         GTRegistries.REGISTRATE.creativeModeTab(() -> CosmicCreativeModeTabs.COSMIC_CORE);
     }
-    // region chips
+//Literally Random shit
     public static final ItemEntry<ComponentItem> DONK = REGISTRATE.item("donk", ComponentItem::create)
             .lang("Donk")
             .properties(p -> p.stacksTo(16))
             .defaultModel()
             .register();
+    public static final ItemEntry<ComponentItem> WAXED_LEATHER = REGISTRATE.item("waxed_leather", ComponentItem::create)
+            .lang("Waxed Leather")
+            .properties(p -> p.stacksTo(64))
+            .defaultModel()
+            .register();
+    public static final ItemEntry<ComponentItem> ENGOURGED_SPORE = REGISTRATE.item("engourged_spore", ComponentItem::create)
+            .lang("Engourged Spore")
+            .properties(p -> p.stacksTo(64))
+            .defaultModel()
+            .register();
+    public static final ItemEntry<ComponentItem> BLACKSTONE_PUSTULE = REGISTRATE.item("blackstone_pustule", ComponentItem::create)
+            .lang("Blackstone Pustule")
+            .properties(p -> p.stacksTo(64))
+            .defaultModel()
+            .register();
+
 
  //New Circuits
  //Echo (ZPM-UEV)

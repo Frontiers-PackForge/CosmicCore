@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:block",
+  "pools": [
+    {
+      "bonus_rolls": 0.0,
+      "conditions": [
+        {
+          "condition": "minecraft:survives_explosion"
+        }
+      ],
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "cosmiccore:alternator_flux_coiling"
+        }
+      ],
+      "rolls": 1.0
+    }
+  ],
+  "random_sequence": "cosmiccore:blocks/alternator_flux_coiling"
+}

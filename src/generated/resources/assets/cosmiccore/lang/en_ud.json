@@ -1,10 +1,12 @@
 {
   "block.cosmiccore.aerospace_aluminium_casing": "buısɐƆ ɯnıuıɯnןⱯ ǝɔɐdsoɹǝⱯ",
+  "block.cosmiccore.alternator_flux_coiling": "buıןıoƆ xnןℲ ɹoʇɐuɹǝʇןⱯ",
   "block.cosmiccore.beam_receiver": "ɹǝʌıǝɔǝᴚ ɯɐǝᗺ",
   "block.cosmiccore.dyson_solar_cell": "ןןǝƆ ɹɐןoS uosʎᗡ",
   "block.cosmiccore.dyson_sphere_casing": "buısɐƆ ǝɹǝɥdS uosʎᗡ",
   "block.cosmiccore.dyson_sphere_maintenance_port": "ʇɹoԀ ǝɔuɐuǝʇuıɐW ǝɹǝɥdS uosʎᗡ",
   "block.cosmiccore.space_elevator_support": "ʇɹoddnS ɹoʇɐʌǝןƎ ǝɔɐdS",
+  "item.cosmiccore.blackstone_pustule": "ǝןnʇsnԀ ǝuoʇsʞɔɐןᗺ",
   "item.cosmiccore.cosmic_processor": "ɹossǝɔoɹԀ ɔıɯsoƆ",
   "item.cosmiccore.cosmic_processor_assembly": "ʎןqɯǝssⱯ ɹossǝɔoɹԀ ɔıɯsoƆ",
   "item.cosmiccore.cosmic_processor_mainframe": "ǝɯɐɹɟuıɐW ɹossǝɔoɹԀ ɔıɯsoƆ",
@@ -14,6 +16,7 @@
   "item.cosmiccore.echo_processor_assembly": "ʎןqɯǝssⱯ ɹossǝɔoɹԀ oɥɔƎ",
   "item.cosmiccore.echo_processor_mainframe": "ǝɯɐɹɟuıɐW ɹossǝɔoɹԀ oɥɔƎ",
   "item.cosmiccore.echo_processor_supercomputer": "ɹǝʇndɯoɔɹǝdnS ɹossǝɔoɹԀ oɥɔƎ",
+  "item.cosmiccore.engourged_spore": "ǝɹodS pǝbɹnobuƎ",
   "item.cosmiccore.macroverse_processor": "ɹossǝɔoɹԀ ǝsɹǝʌoɹɔɐW",
   "item.cosmiccore.macroverse_processor_assembly": "ʎןqɯǝssⱯ ɹossǝɔoɹԀ ǝsɹǝʌoɹɔɐW",
   "item.cosmiccore.macroverse_processor_mainframe": "ǝɯɐɹɟuıɐW ɹossǝɔoɹԀ ǝsɹǝʌoɹɔɐW",
@@ -26,5 +29,6 @@
   "item.cosmiccore.psionic_processor_assembly": "ʎןqɯǝssⱯ ɹossǝɔoɹԀ ɔıuoısԀ",
   "item.cosmiccore.psionic_processor_mainframe": "ǝɯɐɹɟuıɐW ɹossǝɔoɹԀ ɔıuoısԀ",
   "item.cosmiccore.psionic_processor_supercomputer": "ɹǝʇndɯoɔɹǝdnS ɹossǝɔoɹԀ ɔıuoısԀ",
+  "item.cosmiccore.waxed_leather": "ɹǝɥʇɐǝꞀ pǝxɐM",
   "itemGroup.cosmiccore.cosmiccore": "ǝɹoɔɔıɯsoƆ"
 }

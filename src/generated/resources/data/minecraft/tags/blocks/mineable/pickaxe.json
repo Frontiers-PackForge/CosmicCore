@@ -5,6 +5,7 @@
     "cosmiccore:space_elevator_support",
     "cosmiccore:dyson_sphere_casing",
     "cosmiccore:dyson_solar_cell",
-    "cosmiccore:dyson_sphere_maintenance_port"
+    "cosmiccore:dyson_sphere_maintenance_port",
+    "cosmiccore:alternator_flux_coiling"
   ]
 }
