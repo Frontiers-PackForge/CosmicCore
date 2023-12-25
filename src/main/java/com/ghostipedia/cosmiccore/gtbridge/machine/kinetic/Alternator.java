@@ -1,6 +1,7 @@
 package com.ghostipedia.cosmiccore.gtbridge.machine.kinetic;
 
 import com.gregtechceu.gtceu.api.GTValues;
+import com.gregtechceu.gtceu.api.capability.IEnergyContainer;
 import com.gregtechceu.gtceu.api.capability.recipe.EURecipeCapability;
 import com.gregtechceu.gtceu.api.capability.recipe.IO;
 import com.gregtechceu.gtceu.api.capability.recipe.RecipeCapability;
@@ -11,7 +12,10 @@ import com.gregtechceu.gtceu.api.gui.fancy.TooltipsPanel;
 import com.gregtechceu.gtceu.api.machine.IMachineBlockEntity;
 import com.gregtechceu.gtceu.api.machine.MetaMachine;
 import com.gregtechceu.gtceu.api.machine.feature.ITieredMachine;
+import com.gregtechceu.gtceu.api.machine.feature.multiblock.IMultiPart;
 import com.gregtechceu.gtceu.api.machine.multiblock.WorkableElectricMultiblockMachine;
+import com.gregtechceu.gtceu.api.machine.trait.NotifiableEnergyContainer;
+import com.gregtechceu.gtceu.api.misc.EnergyContainerList;
 import com.gregtechceu.gtceu.api.recipe.GTRecipe;
 import com.gregtechceu.gtceu.api.recipe.RecipeHelper;
 import com.gregtechceu.gtceu.api.recipe.content.Content;
@@ -20,6 +24,8 @@ import com.gregtechceu.gtceu.common.data.GTRecipeModifiers;
 import com.gregtechceu.gtceu.data.recipe.builder.GTRecipeBuilder;
 import com.lowdragmc.lowdraglib.side.fluid.FluidHelper;
 import com.lowdragmc.lowdraglib.side.fluid.FluidStack;
+import com.lowdragmc.lowdraglib.syncdata.annotation.Persisted;
+import it.unimi.dsi.fastutil.longs.Long2ObjectMaps;
 import lombok.Getter;
 import lombok.val;
 import net.minecraft.ChatFormatting;
@@ -31,7 +37,12 @@ import net.minecraft.network.chat.Style;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+
+import static com.gregtechceu.gtceu.api.GTValues.LuV;
 
 /**
  * @author KilaBash
@@ -41,18 +52,28 @@ import java.util.List;
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
 public class Alternator extends WorkableElectricMultiblockMachine implements ITieredMachine {
-    private static final FluidStack OXYGEN_STACK = GTMaterials.Oxygen.getFluid(20 * FluidHelper.getBucket() / 1000);
-    private static final FluidStack LIQUID_OXYGEN_STACK = GTMaterials.Oxygen.getFluid(FluidStorageKeys.LIQUID, 80 * FluidHelper.getBucket() / 1000);
-    private static final FluidStack LUBRICANT_STACK = GTMaterials.Lubricant.getFluid(FluidHelper.getBucket() / 1000);
 
     @Getter
     private final int tier;
+    @Nullable
+    protected EnergyContainerList inputEnergyContainers;
+    @Persisted
+    protected final NotifiableEnergyContainer energyContainer;
     // runtime
     private boolean isOxygenBoosted = false;
 
     public Alternator(IMachineBlockEntity holder, int tier) {
         super(holder);
         this.tier = tier;
+        this.energyContainer = createEnergyContainer();
+    }
+
+    public NotifiableEnergyContainer createEnergyContainer() {
+        // create an internal energy container for temp storage. its capacity is decided when the structure formed.
+        // it doesn't provide any capability of all sides, but null for the goggles mod to check it storages.
+        var container = new NotifiableEnergyContainer(this, 0, 0, 0, 0, 0);
+        container.setCapabilityValidator(Objects::isNull);
+        return container;
     }
 
     private boolean isIntakesObstructed() {
@@ -72,6 +93,41 @@ public class Alternator extends WorkableElectricMultiblockMachine implements ITi
         }
         return false;
     }
+
+    //Forming Logic
+    @Override
+    public void onStructureInvalid() {
+        super.onStructureInvalid();
+        this.inputEnergyContainers = null;
+        energyContainer.resetBasicInfo(0, 0, 0, 0, 0);
+        energyContainer.setEnergyStored(0);
+    }
+
+    @Override
+    public void onStructureFormed() {
+        super.onStructureFormed();
+        // capture all energy containers
+        List<IEnergyContainer> energyContainers = new ArrayList<>();
+        Map<Long, IO> ioMap = getMultiblockState().getMatchContext().getOrCreate("ioMap", Long2ObjectMaps::emptyMap);
+        for (IMultiPart part : getParts()) {
+            IO io = ioMap.getOrDefault(part.self().getPos().asLong(), IO.BOTH);
+            if(io == IO.NONE || io == IO.OUT) continue;
+            for (var handler : part.getRecipeHandlers()) {
+                // If IO not compatible
+                if (io != IO.BOTH && handler.getHandlerIO() != IO.BOTH && io != handler.getHandlerIO()) continue;
+                if (handler.getCapability() == EURecipeCapability.CAP && handler instanceof IEnergyContainer container) {
+                    energyContainers.add(container);
+                }
+            }
+        }
+        this.inputEnergyContainers = new EnergyContainerList(energyContainers);
+        energyContainer.resetBasicInfo(calculateEnergyStorageFactor(getTier(), energyContainers.size()), 0, 0, 0, 0);
+    }
+
+    public static long calculateEnergyStorageFactor(int tier, int energyInputAmount) {
+        return energyInputAmount * (long) Math.pow(2, tier - LuV) * 10000000L;
+    }
+
 
     private boolean isExtreme() {
         return getTier() > GTValues.EV;
@@ -93,32 +149,15 @@ public class Alternator extends WorkableElectricMultiblockMachine implements ITi
             return GTValues.V[tier];
     }
 
-    protected GTRecipe getLubricantRecipe() {
-        return GTRecipeBuilder.ofRaw().inputFluids(LUBRICANT_STACK).buildRawRecipe();
-    }
 
-    protected GTRecipe getBoostRecipe() {
-        return GTRecipeBuilder.ofRaw().inputFluids(isExtreme() ? LIQUID_OXYGEN_STACK : OXYGEN_STACK).buildRawRecipe();
-    }
 
     @Nullable
     public static GTRecipe recipeModifier(MetaMachine machine, @Nonnull GTRecipe recipe) {
         if (machine instanceof Alternator alternator) {
             var EUt = RecipeHelper.getOutputEUt(recipe);
             // has lubricant
-            if (EUt > 0 && alternator.getLubricantRecipe().matchRecipe(alternator).isSuccess() && !alternator.isIntakesObstructed()) {
-                var maxParallel = (int) (alternator.getOverclockVoltage() / EUt); // get maximum parallel
-                var parallelResult = GTRecipeModifiers.fastParallel(alternator, recipe, maxParallel, false);
-                if (alternator.isOxygenBoosted) { // boost production
-                    recipe = parallelResult.getA() == recipe ? recipe.copy() : parallelResult.getA();
-                    long eut = (long) (EUt * parallelResult.getB() * (alternator.isExtreme() ? 2 : 1.5));
-                    recipe.tickOutputs.put(EURecipeCapability.CAP, List.of(new Content(eut, 1.0f, 0.0f, null, null)));
-                } else {
-                    recipe = parallelResult.getA();
-                }
                 return recipe;
             }
-        }
         return null;
     }
 
@@ -127,18 +166,9 @@ public class Alternator extends WorkableElectricMultiblockMachine implements ITi
         super.onWorking();
         // check lubricant
         val totalContinuousRunningTime = recipeLogic.getTotalContinuousRunningTime();
-        if ((totalContinuousRunningTime == 1 || totalContinuousRunningTime % 72 == 0)) {
+
             // insufficient lubricant
-            if (!getLubricantRecipe().handleRecipeIO(IO.IN, this)) {
-                recipeLogic.interruptRecipe();
-            }
         }
-        // check boost fluid
-        if ((totalContinuousRunningTime == 1 || totalContinuousRunningTime % 20 == 0) && isBoostAllowed()) {
-            var boosterRecipe = getBoostRecipe();
-            this.isOxygenBoosted = boosterRecipe.matchRecipe(this).isSuccess() && boosterRecipe.handleRecipeIO(IO.IN, this);
-        }
-    }
 
     @Override
     public boolean dampingWhenWaiting() {
