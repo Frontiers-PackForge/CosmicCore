@@ -40,8 +40,7 @@ public class CosmicCore {
         CosmicRegistries.REGISTRATE.registerRegistrate();
     }
     private void commonSetup(final FMLCommonSetupEvent event) {
-        // Some common setup code
-        LOGGER.info("lol");
+        LOGGER.info("CosmicCore Initialized!");
     }
 
     public static ResourceLocation id(String path) {

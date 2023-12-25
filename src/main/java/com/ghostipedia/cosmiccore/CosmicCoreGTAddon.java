@@ -1,6 +1,6 @@
 package com.ghostipedia.cosmiccore;
 
-import com.ghostipedia.cosmiccore.gtbridge.CosmicCoreMachines;
+
 import com.ghostipedia.cosmiccore.gtbridge.CosmicCoreRecipeTypes;
 import com.gregtechceu.gtceu.api.addon.GTAddon;
 import com.gregtechceu.gtceu.api.addon.IGTAddon;
@@ -14,7 +14,6 @@ public class CosmicCoreGTAddon implements IGTAddon {
     @Override
     public void initializeAddon() {
         CosmicCore.LOGGER.info("CosmicCoreGTAddon has loaded!");
-       // CosmicCoreMachines.init();
     }
 
     @Override
