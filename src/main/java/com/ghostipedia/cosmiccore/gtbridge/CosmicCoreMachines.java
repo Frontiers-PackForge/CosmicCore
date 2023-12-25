@@ -1,11 +1,13 @@
 package com.ghostipedia.cosmiccore.gtbridge;
 
+import com.gregtechceu.gtceu.api.machine.multiblock.WorkableElectricMultiblockMachine;
+import com.gregtechceu.gtceu.api.registry.GTRegistries;
+
 import com.gregtechceu.gtceu.api.data.RotationState;
 import com.gregtechceu.gtceu.api.machine.MultiblockMachineDefinition;
 import com.gregtechceu.gtceu.api.machine.multiblock.PartAbility;
 import com.gregtechceu.gtceu.api.pattern.FactoryBlockPattern;
 import com.gregtechceu.gtceu.api.pattern.Predicates;
-import com.gregtechceu.gtceu.api.registry.GTRegistries;
 import com.gregtechceu.gtceu.common.data.GTBlocks;
 import com.ghostipedia.cosmiccore.gtbridge.machine.kinetic.Alternator;
 
@@ -14,11 +16,11 @@ import static com.gregtechceu.gtceu.api.pattern.Predicates.autoAbilities;
 
 @SuppressWarnings("unused")
 public class CosmicCoreMachines {
-    public static final MultiblockMachineDefinition ALTERNATOR = GTRegistries.REGISTRATE.multiblock("alternator", Alternator::new)
+    public static final MultiblockMachineDefinition ALTERNATOR_MACHINE = GTRegistries.REGISTRATE.multiblock("Alternator", WorkableElectricMultiblockMachine::new)
             .rotationState(RotationState.NON_Y_AXIS)
             //.tooltips(Component.translatable("gtceu.multiblock.alternator.tooltip1"))
-            .recipeTypes(CosmicCoreRecipeTypes.ALTERNATOR_MACHINE_RECIPES)
-            .recipeModifier(CosmicCoreRecipeModifiers::AlternatorRecipe)
+            //.recipeTypes(CosmicCoreRecipeTypes.ALTERNATOR_MACHINE)
+            //.recipeModifier(CosmicCoreRecipeModifiers::AlternatorRecipe)
             .appearanceBlock(GTBlocks.CASING_BRONZE_BRICKS)
             .pattern(definition -> FactoryBlockPattern.start()
                     .aisle("F###F", "ZWBWZ", "ZWBWZ", "ZWBWZ")
