@@ -4,26 +4,17 @@ import com.gregtechceu.gtceu.api.GTValues;
 import com.gregtechceu.gtceu.api.capability.IEnergyContainer;
 import com.gregtechceu.gtceu.api.capability.recipe.EURecipeCapability;
 import com.gregtechceu.gtceu.api.capability.recipe.IO;
-import com.gregtechceu.gtceu.api.capability.recipe.RecipeCapability;
-import com.gregtechceu.gtceu.api.fluids.store.FluidStorageKeys;
 import com.gregtechceu.gtceu.api.gui.GuiTextures;
 import com.gregtechceu.gtceu.api.gui.fancy.IFancyTooltip;
 import com.gregtechceu.gtceu.api.gui.fancy.TooltipsPanel;
 import com.gregtechceu.gtceu.api.machine.IMachineBlockEntity;
-import com.gregtechceu.gtceu.api.machine.MetaMachine;
 import com.gregtechceu.gtceu.api.machine.feature.ITieredMachine;
 import com.gregtechceu.gtceu.api.machine.feature.multiblock.IMultiPart;
 import com.gregtechceu.gtceu.api.machine.multiblock.WorkableElectricMultiblockMachine;
 import com.gregtechceu.gtceu.api.machine.trait.NotifiableEnergyContainer;
 import com.gregtechceu.gtceu.api.misc.EnergyContainerList;
-import com.gregtechceu.gtceu.api.recipe.GTRecipe;
-import com.gregtechceu.gtceu.api.recipe.RecipeHelper;
-import com.gregtechceu.gtceu.api.recipe.content.Content;
-import com.gregtechceu.gtceu.common.data.GTMaterials;
-import com.gregtechceu.gtceu.common.data.GTRecipeModifiers;
-import com.gregtechceu.gtceu.data.recipe.builder.GTRecipeBuilder;
-import com.lowdragmc.lowdraglib.side.fluid.FluidHelper;
-import com.lowdragmc.lowdraglib.side.fluid.FluidStack;
+import com.gregtechceu.gtceu.common.machine.kinetic.IKineticMachine;
+import com.gregtechceu.gtceu.common.machine.trait.NotifiableStressTrait;
 import com.lowdragmc.lowdraglib.syncdata.annotation.Persisted;
 import it.unimi.dsi.fastutil.longs.Long2ObjectMaps;
 import lombok.Getter;
@@ -51,28 +42,38 @@ import static com.gregtechceu.gtceu.api.GTValues.LuV;
  */
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
-public class Alternator extends WorkableElectricMultiblockMachine implements ITieredMachine {
+public class Alternator extends WorkableElectricMultiblockMachine implements ITieredMachine, IKineticMachine {
 
     @Getter
     private final int tier;
+    @Persisted
+    protected final NotifiableStressTrait stressTrait;
     @Nullable
     protected EnergyContainerList inputEnergyContainers;
     @Persisted
     protected final NotifiableEnergyContainer energyContainer;
     // runtime
     private boolean isOxygenBoosted = false;
+    protected NotifiableStressTrait createStressTrait(Object... args) {
+        return new NotifiableStressTrait(this, IO.IN, IO.IN);
+    }
 
     public Alternator(IMachineBlockEntity holder, int tier) {
         super(holder);
         this.tier = tier;
         this.energyContainer = createEnergyContainer();
+        this.stressTrait = createStressTrait();
     }
+
+
 
     public NotifiableEnergyContainer createEnergyContainer() {
         // create an internal energy container for temp storage. its capacity is decided when the structure formed.
         // it doesn't provide any capability of all sides, but null for the goggles mod to check it storages.
         var container = new NotifiableEnergyContainer(this, 0, 0, 0, 0, 0);
-        container.setCapabilityValidator(Objects::isNull);
+        //container.setCapabilityValidator(Objects::isNull);
+        container.setSideInputCondition(dir -> dir.getAxis() != getRotationFacing().getAxis());
+        container.setCapabilityValidator(dir -> dir.getAxis() != getRotationFacing().getAxis());
         return container;
     }
 
@@ -128,6 +129,20 @@ public class Alternator extends WorkableElectricMultiblockMachine implements ITi
         return energyInputAmount * (long) Math.pow(2, tier - LuV) * 10000000L;
     }
 
+    @Override
+    public void onRotated(Direction oldFacing, Direction newFacing) {
+        super.onRotated(oldFacing, newFacing);
+        if (!isRemote()) {
+            if (oldFacing.getAxis() != newFacing.getAxis()) {
+                var holder = getKineticHolder();
+                if (holder.hasNetwork()) {
+                    holder.getOrCreateNetwork().remove(holder);
+                }
+                holder.detachKinetics();
+                holder.removeSource();
+            }
+        }
+    }
 
     private boolean isExtreme() {
         return getTier() > GTValues.EV;
@@ -151,15 +166,15 @@ public class Alternator extends WorkableElectricMultiblockMachine implements ITi
 
 
 
-    @Nullable
-    public static GTRecipe recipeModifier(MetaMachine machine, @Nonnull GTRecipe recipe) {
-        if (machine instanceof Alternator alternator) {
-            var EUt = RecipeHelper.getOutputEUt(recipe);
+    //@Nullable
+    //public static GTRecipe recipeModifier(MetaMachine machine, @Nonnull GTRecipe recipe) {
+    //    if (machine instanceof Alternator alternator) {
+     //       var EUt = RecipeHelper.getOutputEUt(recipe);
             // has lubricant
-                return recipe;
-            }
-        return null;
-    }
+       //         return recipe;
+         //   }
+       // return null;
+   // }
 
     @Override
     public void onWorking() {

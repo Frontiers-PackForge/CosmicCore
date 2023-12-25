@@ -2,6 +2,7 @@ package com.ghostipedia.cosmiccore.gtbridge;
 
 
 import com.gregtechceu.gtceu.api.GTValues;
+import com.gregtechceu.gtceu.api.capability.recipe.IO;
 import com.gregtechceu.gtceu.api.gui.GuiTextures;
 import com.gregtechceu.gtceu.api.recipe.GTRecipeType;
 import com.gregtechceu.gtceu.common.data.GTRecipeTypes;
@@ -17,6 +18,7 @@ public class CosmicCoreRecipeTypes {
             .setSlotOverlay(false, false, GuiTextures.BOX_OVERLAY)
             .setProgressBar(GuiTextures.PROGRESS_BAR_BATH, ProgressTexture.FillDirection.LEFT_TO_RIGHT)
             .setMaxTooltips(1)
+            .setEUIO(IO.BOTH)
             .setSound(GTSoundEntries.COOLING);
 
 
