@@ -143,6 +143,7 @@ dependencies {
 
 
 
+    modRuntimeOnly("curse.maven:jade-324717:4973483")
     modRuntimeOnly("vazkii.patchouli:Patchouli:${project.minecraft_version}-${project.patchouli_version}-FORGE")
     modRuntimeOnly("top.theillusivec4.curios:curios-forge:${project.curios_version}+${project.minecraft_version}")
     modRuntimeOnly("dev.toma.configuration:configuration-forge-${project.minecraft_version}:${project.configuration_version}")

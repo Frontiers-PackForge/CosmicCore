@@ -22,7 +22,7 @@ public class CosmicCoreMachines {
             .rotationState(RotationState.NON_Y_AXIS)
             //.tooltips(Component.translatable("gtceu.multiblock.alternator.tooltip1"))
             .recipeTypes(GTRecipeTypes.DUMMY_RECIPES)
-            //.recipeModifier(Alternator::AlternatorRecipe)
+            .recipeModifier(Alternator::recipeModifier)
             .appearanceBlock(GTBlocks.CASING_STEEL_SOLID)
             .pattern(definition -> FactoryBlockPattern.start()
                     .aisle("F###F", "ZWBWZ", "ZWBWZ", "ZWBWZ")
