@@ -1,5 +1,6 @@
 package com.ghostipedia.cosmiccore.gtbridge.machine.kinetic;
 
+import com.ghostipedia.cosmiccore.gtbridge.AlternatorLogic;
 import com.gregtechceu.gtceu.api.GTValues;
 import com.gregtechceu.gtceu.api.capability.IEnergyContainer;
 import com.gregtechceu.gtceu.api.capability.recipe.EURecipeCapability;
@@ -8,10 +9,10 @@ import com.gregtechceu.gtceu.api.gui.GuiTextures;
 import com.gregtechceu.gtceu.api.gui.fancy.IFancyTooltip;
 import com.gregtechceu.gtceu.api.gui.fancy.TooltipsPanel;
 import com.gregtechceu.gtceu.api.machine.IMachineBlockEntity;
-import com.gregtechceu.gtceu.api.machine.feature.ITieredMachine;
 import com.gregtechceu.gtceu.api.machine.feature.multiblock.IMultiPart;
 import com.gregtechceu.gtceu.api.machine.multiblock.WorkableElectricMultiblockMachine;
 import com.gregtechceu.gtceu.api.machine.trait.NotifiableEnergyContainer;
+import com.gregtechceu.gtceu.api.machine.trait.RecipeLogic;
 import com.gregtechceu.gtceu.api.misc.EnergyContainerList;
 import com.gregtechceu.gtceu.common.machine.kinetic.IKineticMachine;
 import com.gregtechceu.gtceu.common.machine.trait.NotifiableStressTrait;
@@ -25,13 +26,11 @@ import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.Style;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 
 import static com.gregtechceu.gtceu.api.GTValues.LuV;
 
@@ -42,27 +41,26 @@ import static com.gregtechceu.gtceu.api.GTValues.LuV;
  */
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
-public class Alternator extends WorkableElectricMultiblockMachine implements ITieredMachine, IKineticMachine {
+public class Alternator extends WorkableElectricMultiblockMachine implements IKineticMachine {
 
-    @Getter
-    private final int tier;
-    @Persisted
-    protected final NotifiableStressTrait stressTrait;
-    @Nullable
-    protected EnergyContainerList inputEnergyContainers;
+
+    @Nullable @Getter
+    protected EnergyContainerList outputEnergyContainer;
     @Persisted
     protected final NotifiableEnergyContainer energyContainer;
     // runtime
     private boolean isOxygenBoosted = false;
-    protected NotifiableStressTrait createStressTrait(Object... args) {
-        return new NotifiableStressTrait(this, IO.IN, IO.IN);
+    private List<NotifiableStressTrait> outputStressHatches;
+
+    @Override
+    protected RecipeLogic createRecipeLogic(Object... args) {
+        return new AlternatorLogic(this);
     }
 
-    public Alternator(IMachineBlockEntity holder, int tier) {
+
+    public Alternator(IMachineBlockEntity holder) {
         super(holder);
-        this.tier = tier;
         this.energyContainer = createEnergyContainer();
-        this.stressTrait = createStressTrait();
     }
 
 
@@ -99,7 +97,7 @@ public class Alternator extends WorkableElectricMultiblockMachine implements ITi
     @Override
     public void onStructureInvalid() {
         super.onStructureInvalid();
-        this.inputEnergyContainers = null;
+        this.outputEnergyContainer = null;
         energyContainer.resetBasicInfo(0, 0, 0, 0, 0);
         energyContainer.setEnergyStored(0);
     }
@@ -112,7 +110,7 @@ public class Alternator extends WorkableElectricMultiblockMachine implements ITi
         Map<Long, IO> ioMap = getMultiblockState().getMatchContext().getOrCreate("ioMap", Long2ObjectMaps::emptyMap);
         for (IMultiPart part : getParts()) {
             IO io = ioMap.getOrDefault(part.self().getPos().asLong(), IO.BOTH);
-            if(io == IO.NONE || io == IO.OUT) continue;
+            if(io == IO.NONE || io == IO.IN) continue;
             for (var handler : part.getRecipeHandlers()) {
                 // If IO not compatible
                 if (io != IO.BOTH && handler.getHandlerIO() != IO.BOTH && io != handler.getHandlerIO()) continue;
@@ -121,8 +119,7 @@ public class Alternator extends WorkableElectricMultiblockMachine implements ITi
                 }
             }
         }
-        this.inputEnergyContainers = new EnergyContainerList(energyContainers);
-        energyContainer.resetBasicInfo(calculateEnergyStorageFactor(getTier(), energyContainers.size()), 0, 0, 0, 0);
+        this.outputEnergyContainer = new EnergyContainerList(energyContainers);
     }
 
     public static long calculateEnergyStorageFactor(int tier, int energyInputAmount) {
@@ -156,13 +153,6 @@ public class Alternator extends WorkableElectricMultiblockMachine implements ITi
     //******     Recipe Logic    *******//
     //////////////////////////////////////
 
-    @Override
-    public long getOverclockVoltage() {
-        if (isOxygenBoosted)
-            return GTValues.V[tier] * 2;
-        else
-            return GTValues.V[tier];
-    }
 
 
 

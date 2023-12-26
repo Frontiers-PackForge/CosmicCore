@@ -1,5 +1,6 @@
 package com.ghostipedia.cosmiccore.gtbridge;
 
+import com.gregtechceu.gtceu.GTCEu;
 import com.gregtechceu.gtceu.api.machine.multiblock.WorkableElectricMultiblockMachine;
 import com.gregtechceu.gtceu.api.registry.GTRegistries;
 
@@ -10,18 +11,19 @@ import com.gregtechceu.gtceu.api.pattern.FactoryBlockPattern;
 import com.gregtechceu.gtceu.api.pattern.Predicates;
 import com.gregtechceu.gtceu.common.data.GTBlocks;
 import com.ghostipedia.cosmiccore.gtbridge.machine.kinetic.Alternator;
+import com.gregtechceu.gtceu.common.data.GTRecipeTypes;
 
 import static com.gregtechceu.gtceu.api.pattern.Predicates.abilities;
 import static com.gregtechceu.gtceu.api.pattern.Predicates.autoAbilities;
 
 @SuppressWarnings("unused")
 public class CosmicCoreMachines {
-    public static final MultiblockMachineDefinition ALTERNATOR_MACHINE = GTRegistries.REGISTRATE.multiblock("alternator", WorkableElectricMultiblockMachine::new)
+    public static final MultiblockMachineDefinition ALTERNATOR_MACHINE = GTRegistries.REGISTRATE.multiblock("alternator", Alternator::new)
             .rotationState(RotationState.NON_Y_AXIS)
             //.tooltips(Component.translatable("gtceu.multiblock.alternator.tooltip1"))
-            .recipeTypes(CosmicCoreRecipeTypes.ALTERNATOR_MACHINE_RECIPES)
+            .recipeTypes(GTRecipeTypes.DUMMY_RECIPES)
             //.recipeModifier(Alternator::AlternatorRecipe)
-            .appearanceBlock(GTBlocks.CASING_BRONZE_BRICKS)
+            .appearanceBlock(GTBlocks.CASING_STEEL_SOLID)
             .pattern(definition -> FactoryBlockPattern.start()
                     .aisle("F###F", "ZWBWZ", "ZWBWZ", "ZWBWZ")
                     .aisle("#####", "ZWBWZ", "XOOOX", "ZWBWZ")
@@ -37,7 +39,7 @@ public class CosmicCoreMachines {
                     .where('O', Predicates.blocks(GTBlocks.CASING_STEEL_GEARBOX.get()))
                     .where('F', Predicates.blocks(GTBlocks.CASING_STEEL_SOLID.get()))
                     .build())
-            //.workableCasingRenderer(GTCEu.id("gtceu:block/casings/steam/steel/side"), GTCEu.id("gtceu:block/casings/steam/steel/front"), false)
+            .workableCasingRenderer(GTCEu.id("block/casings/solid/machine_casing_solid_steel"), GTCEu.id("block/multiblock/generator/large_bronze_boiler"), false)
             .register();
 
     public static void init() {

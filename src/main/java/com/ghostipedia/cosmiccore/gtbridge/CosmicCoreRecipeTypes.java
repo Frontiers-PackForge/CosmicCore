@@ -12,14 +12,19 @@ import com.lowdragmc.lowdraglib.gui.texture.ProgressTexture;
 public class CosmicCoreRecipeTypes {
 
 
-    public final static GTRecipeType ALTERNATOR_MACHINE_RECIPES = GTRecipeTypes.register("alternator", GTRecipeTypes.MULTIBLOCK)
-            .setMaxIOSize(1, 1, 0, 0)
-            .prepareBuilder(gtRecipeBuilder -> gtRecipeBuilder.EUt(GTValues.VA[GTValues.LV]))
-            .setSlotOverlay(false, false, GuiTextures.BOX_OVERLAY)
-            .setProgressBar(GuiTextures.PROGRESS_BAR_BATH, ProgressTexture.FillDirection.LEFT_TO_RIGHT)
-            .setMaxTooltips(1)
-            .setEUIO(IO.BOTH)
-            .setSound(GTSoundEntries.COOLING);
+
+
+
+
+
+    //public final static GTRecipeType ALTERNATOR_MACHINE_RECIPES = GTRecipeTypes.register("alternator", GTRecipeTypes.MULTIBLOCK)
+     //       .setMaxIOSize(1, 1, 0, 0)
+      //      .prepareBuilder(gtRecipeBuilder -> gtRecipeBuilder.EUt(GTValues.VA[GTValues.LV]))
+       //     .setSlotOverlay(false, false, GuiTextures.BOX_OVERLAY)
+        //    .setProgressBar(GuiTextures.PROGRESS_BAR_BATH, ProgressTexture.FillDirection.LEFT_TO_RIGHT)
+         //   .setMaxTooltips(1)
+          //  .setEUIO(IO.BOTH)
+           // .setSound(GTSoundEntries.COOLING);
 
 
     public static void init() {
