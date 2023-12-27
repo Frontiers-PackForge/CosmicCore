@@ -13,18 +13,13 @@ import com.gregtechceu.gtceu.api.machine.MetaMachine;
 import com.gregtechceu.gtceu.api.machine.feature.multiblock.IDisplayUIMachine;
 import com.gregtechceu.gtceu.api.machine.feature.multiblock.IMultiPart;
 import com.gregtechceu.gtceu.api.machine.multiblock.WorkableElectricMultiblockMachine;
-import com.gregtechceu.gtceu.api.machine.trait.NotifiableEnergyContainer;
 import com.gregtechceu.gtceu.api.machine.trait.RecipeLogic;
 import com.gregtechceu.gtceu.api.misc.EnergyContainerList;
 import com.gregtechceu.gtceu.api.recipe.GTRecipe;
-import com.gregtechceu.gtceu.api.recipe.RecipeHelper;
-import com.gregtechceu.gtceu.common.machine.kinetic.IKineticMachine;
 import com.gregtechceu.gtceu.common.machine.trait.NotifiableStressTrait;
 import com.gregtechceu.gtceu.utils.GTUtil;
-import com.lowdragmc.lowdraglib.syncdata.annotation.Persisted;
 import it.unimi.dsi.fastutil.longs.Long2ObjectMaps;
 import lombok.Getter;
-import lombok.val;
 import net.minecraft.ChatFormatting;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.core.Direction;
@@ -47,7 +42,7 @@ import static com.gregtechceu.gtceu.api.GTValues.LuV;
  */
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
-public class Alternator extends WorkableElectricMultiblockMachine implements IDisplayUIMachine {
+public class AlternatorMachine extends WorkableElectricMultiblockMachine implements IDisplayUIMachine {
 
 
     @Nullable @Getter
@@ -62,7 +57,7 @@ public class Alternator extends WorkableElectricMultiblockMachine implements IDi
     }
 
 
-    public Alternator(IMachineBlockEntity holder) {
+    public AlternatorMachine(IMachineBlockEntity holder) {
         super(holder);
     }
 
@@ -133,8 +128,8 @@ public class Alternator extends WorkableElectricMultiblockMachine implements IDi
 
     @Nullable
     public static GTRecipe recipeModifier(MetaMachine machine, @Nonnull GTRecipe recipe) {
-        if (machine instanceof Alternator alternator) {
-            if (alternator.outputEnergyContainer.getEnergyStored() >= alternator.outputEnergyContainer.getEnergyCapacity()) {
+        if (machine instanceof AlternatorMachine alternatorMachine) {
+            if (alternatorMachine.outputEnergyContainer.getEnergyStored() >= alternatorMachine.outputEnergyContainer.getEnergyCapacity()) {
                 recipe.getTickOutputContents(EURecipeCapability.CAP).clear();
                 return recipe;
             }

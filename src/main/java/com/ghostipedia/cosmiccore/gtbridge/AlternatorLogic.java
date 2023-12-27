@@ -6,19 +6,19 @@ import com.gregtechceu.gtceu.api.machine.trait.RecipeLogic;
 import com.gregtechceu.gtceu.api.recipe.GTRecipe;
 import com.gregtechceu.gtceu.data.recipe.builder.GTRecipeBuilder;
 import net.minecraft.server.level.ServerLevel;
-import com.ghostipedia.cosmiccore.gtbridge.machine.kinetic.Alternator;
+import com.ghostipedia.cosmiccore.gtbridge.machine.kinetic.AlternatorMachine;
 
 import javax.annotation.Nullable;
 
 public class AlternatorLogic extends RecipeLogic {
 
-    public AlternatorLogic(Alternator machine) {
+    public AlternatorLogic(AlternatorMachine machine) {
         super(machine);
     }
 
     @Override
-    public Alternator getMachine() {
-        return (Alternator)super.getMachine();
+    public AlternatorMachine getMachine() {
+        return (AlternatorMachine)super.getMachine();
     }
 
     @Override
@@ -42,7 +42,7 @@ public class AlternatorLogic extends RecipeLogic {
     @Override
     public void findAndHandleRecipe() {
         if (getMachine().getLevel() instanceof ServerLevel serverLevel) {
-            var match = getFluidDrillRecipe();
+            var match = getAlternatorRecipe();
             if (match != null) {
                 if (match.matchRecipe(this.machine).isSuccess() && match.matchTickRecipe(this.machine).isSuccess()) {
                     setupRecipe(match);
@@ -52,7 +52,7 @@ public class AlternatorLogic extends RecipeLogic {
     }
 
     @Nullable
-    private GTRecipe getFluidDrillRecipe() {
+    private GTRecipe getAlternatorRecipe() {
         if (getMachine().getLevel() instanceof ServerLevel serverLevel) {
             long totalEU = getMachine().outputEnergyContainer.getOutputVoltage();
             var recipe = GTRecipeBuilder.ofRaw()
