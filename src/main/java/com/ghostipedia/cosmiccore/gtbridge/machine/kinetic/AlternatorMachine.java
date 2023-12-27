@@ -48,8 +48,6 @@ public class AlternatorMachine extends WorkableElectricMultiblockMachine impleme
     @Nullable @Getter
     public EnergyContainerList outputEnergyContainer;
     // runtime
-    private boolean isOxygenBoosted = false;
-    private List<NotifiableStressTrait> outputStressHatches;
 
     @Override
     protected RecipeLogic createRecipeLogic(Object... args) {
@@ -105,18 +103,6 @@ public class AlternatorMachine extends WorkableElectricMultiblockMachine impleme
             }
         }
         this.outputEnergyContainer = new EnergyContainerList(energyContainers);
-    }
-
-    public static long calculateEnergyStorageFactor(int tier, int energyInputAmount) {
-        return energyInputAmount * (long) Math.pow(2, tier - LuV) * 10000000L;
-    }
-
-    private boolean isExtreme() {
-        return getTier() > GTValues.EV;
-    }
-
-    public boolean isBoostAllowed() {
-        return getMaxVoltage() >= GTValues.V[getTier() + 1];
     }
 
     //////////////////////////////////////
