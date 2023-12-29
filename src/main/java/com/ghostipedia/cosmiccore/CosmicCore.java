@@ -36,7 +36,6 @@ public class CosmicCore {
         CosmicBlocks.init();
         CosmicItems.init();
         CosmicRegistries.REGISTRATE.registerRegistrate();
-        CosmicRegistries.CCADDON.registerRegistrate();
         LOGGER.info("CosmicCore has loaded!");
 
     }
