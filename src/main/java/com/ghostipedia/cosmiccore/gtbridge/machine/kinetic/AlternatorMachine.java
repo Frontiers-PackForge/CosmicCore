@@ -137,6 +137,11 @@ public class AlternatorMachine extends WorkableElectricMultiblockMachine impleme
     //*******        GUI        ********//
     //////////////////////////////////////
 
+    /**
+     * Adds display text to the given list of components.
+     *
+     * @param textList The list of components to add the display text to.
+     */
     @Override
     public void addDisplayText(List<Component> textList) {
         if (isFormed()) {

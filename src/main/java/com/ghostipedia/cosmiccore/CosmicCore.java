@@ -28,10 +28,9 @@ public class CosmicCore {
         ConfigHolder.init();
 
         IEventBus modBus = FMLJavaModLoadingContext.get().getModEventBus();
+        //Init Everything
 
         MinecraftForge.EVENT_BUS.register(this);
-       // CosmicCore.init();
-        //Init Everything
         CosmicCreativeModeTabs.init();
         CosmicBlocks.init();
         CosmicItems.init();
@@ -39,6 +38,7 @@ public class CosmicCore {
         LOGGER.info("CosmicCore has loaded!");
 
     }
+    //Resource Location (Textures etc)
     public static ResourceLocation id(String path) {
         return new ResourceLocation(MOD_ID, path);
     }

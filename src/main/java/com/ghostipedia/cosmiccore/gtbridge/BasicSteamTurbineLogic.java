@@ -8,6 +8,7 @@ import com.gregtechceu.gtceu.common.data.GTMaterials;
 import com.gregtechceu.gtceu.common.machine.trait.NotifiableStressTrait;
 import com.gregtechceu.gtceu.data.recipe.builder.GTRecipeBuilder;
 import com.lowdragmc.lowdraglib.misc.FluidTransferList;
+import com.lowdragmc.lowdraglib.syncdata.field.ManagedFieldHolder;
 import lombok.Getter;
 import net.minecraft.server.level.ServerLevel;
 
@@ -30,26 +31,10 @@ public class BasicSteamTurbineLogic extends RecipeLogic {
         return (BasicSteamTurbineMachine)super.getMachine();
     }
 
- //   @Override
-   // public GTRecipe.ActionResult handleTickRecipe(GTRecipe recipe) {
-     //   if (recipe.hasTick()) {
-       //     var result = recipe.matchRecipe(IO.IN,getMachine(),recipe.tickInputs,false);
-         ////     recipe.handleTickRecipeIO(IO.IN, this.machine);
-             //   result = recipe.matchRecipe(IO.OUT,getMachine(),recipe.tickOutputs,false);
-               // if( result.isSuccess()){
-                //    recipe.handleTickRecipeIO(IO.OUT, this.machine);
-                //}
-
-           // } else {
-            //    return result;
-           // }
-    //    }
-   //     return GTRecipe.ActionResult.SUCCESS;
-  //  }
 
     @Override
     public void findAndHandleRecipe() {
-        if (getMachine().getLevel() instanceof ServerLevel serverLevel) {
+        if (!isSuspend() && getMachine().getLevel() instanceof ServerLevel serverLevel) {
             var match = getTurbineRecipe();
             if (match != null) {
                 if (match.matchRecipe(this.machine).isSuccess() && match.matchTickRecipe(this.machine).isSuccess()) {
@@ -59,14 +44,15 @@ public class BasicSteamTurbineLogic extends RecipeLogic {
         }
     }
 
+
+
     @Nullable
     private GTRecipe getTurbineRecipe() {
         if (getMachine().getLevel() instanceof ServerLevel serverLevel) {
             var recipe = GTRecipeBuilder.ofRaw()
-                    .perTick(true)
                     //.rpm(64).perTick(true)
                     .outputStress(2048)
-                    .duration(Integer.MAX_VALUE)
+                    .duration(1)
                     .perTick(true)
                     .inputFluids(GTMaterials.Steam.getFluid(800))
                     .buildRawRecipe();

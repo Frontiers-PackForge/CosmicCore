@@ -51,6 +51,11 @@ public class AlternatorLogic extends RecipeLogic {
         }
     }
 
+    /**
+     * Retrieves the recipe for the Alternator machine.
+     *
+     * @return The recipe for the Alternator machine, or null if no recipe is found.
+     */
     @Nullable
     private GTRecipe getAlternatorRecipe() {
         if (getMachine().getLevel() instanceof ServerLevel serverLevel) {
