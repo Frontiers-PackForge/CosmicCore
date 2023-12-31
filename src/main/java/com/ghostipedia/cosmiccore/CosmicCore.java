@@ -22,32 +22,19 @@ public class CosmicCore {
             MOD_ID = "cosmiccore",
             NAME = "CosmicCore";
     public static final Logger LOGGER = LoggerFactory.getLogger(NAME);
-
+    //Init Everything
     public CosmicCore() {
 
         ConfigHolder.init();
 
         IEventBus modBus = FMLJavaModLoadingContext.get().getModEventBus();
-
         MinecraftForge.EVENT_BUS.register(this);
-       // CosmicCore.init();
-        //Init Everything
         CosmicCreativeModeTabs.init();
         CosmicBlocks.init();
         CosmicItems.init();
         CosmicRegistries.REGISTRATE.registerRegistrate();
-        CosmicRegistries.CCADDON.registerRegistrate();
 
     }
-
-    //public static void init() {
-
-        // ConfigHolder.init(); // Forcefully init GT config because fabric doesn't allow dependents to load after dependencies
-      //  CosmicCreativeModeTabs.init();
-        //CosmicBlocks.init();
-        //CosmicItems.init();
-        //CosmicRegistries.REGISTRATE.registerRegistrate();
-    //}
 
     public static ResourceLocation id(String path) {
         return new ResourceLocation(MOD_ID, path);
