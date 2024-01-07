@@ -1,11 +1,13 @@
 package com.ghostipedia.cosmiccore;
 
 
+import com.ghostipedia.cosmiccore.CommonProxy;
 import com.ghostipedia.cosmiccore.gtbridge.CosmicCoreRecipeTypes;
 import com.ghostipedia.cosmiccore.gtbridge.CosmicCoreRecipes;
 import com.gregtechceu.gtceu.api.addon.GTAddon;
 import com.gregtechceu.gtceu.api.addon.IGTAddon;
 import net.minecraft.data.recipes.FinishedRecipe;
+import net.minecraft.resources.ResourceLocation;
 
 import java.util.function.Consumer;
 
@@ -15,6 +17,7 @@ public class CosmicCoreGTAddon implements IGTAddon {
     @Override
     public void initializeAddon() {
         CosmicCore.LOGGER.info("CosmicCoreGTAddon has loaded!");
+        CommonProxy.init();
     }
 
     @Override

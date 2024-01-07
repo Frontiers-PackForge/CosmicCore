@@ -22,20 +22,23 @@ public class CosmicCore {
             MOD_ID = "cosmiccore",
             NAME = "CosmicCore";
     public static final Logger LOGGER = LoggerFactory.getLogger(NAME);
-    //Init Everything
+
     public CosmicCore() {
 
         ConfigHolder.init();
 
         IEventBus modBus = FMLJavaModLoadingContext.get().getModEventBus();
+        //Init Everything
+
         MinecraftForge.EVENT_BUS.register(this);
         CosmicCreativeModeTabs.init();
         CosmicBlocks.init();
         CosmicItems.init();
         CosmicRegistries.REGISTRATE.registerRegistrate();
+        LOGGER.info("CosmicCore has loaded!");
 
     }
-
+    //Resource Location (Textures etc)
     public static ResourceLocation id(String path) {
         return new ResourceLocation(MOD_ID, path);
     }
