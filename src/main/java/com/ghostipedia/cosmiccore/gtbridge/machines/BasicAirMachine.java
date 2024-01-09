@@ -1,5 +1,6 @@
-package com.ghostipedia.cosmiccore;
+package com.ghostipedia.cosmiccore.gtbridge.machines;
 
+import com.ghostipedia.cosmiccore.gtbridge.machines.logic.BasicAirMachineLogic;
 import com.gregtechceu.gtceu.api.GTValues;
 import com.gregtechceu.gtceu.api.capability.recipe.FluidRecipeCapability;
 import com.gregtechceu.gtceu.api.capability.recipe.IO;
@@ -30,17 +31,12 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
-/**
- * @author KilaBash
- * @date 2023/7/9
- * @implNote LargeCombustionEngineMachine
- */
+
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
 public class BasicAirMachine extends WorkableElectricMultiblockMachine implements IDisplayUIMachine {
 
 
-//Dumb Cursed Tests
 
 
     @Override
@@ -48,12 +44,6 @@ public class BasicAirMachine extends WorkableElectricMultiblockMachine implement
         super.onLoad();
     }
 
-
-
-
-    @Nullable
-    @Getter
-    public FluidTransferList inputFluidInventory;
 
     @Override
     protected RecipeLogic createRecipeLogic(Object... args) {
@@ -69,6 +59,8 @@ public class BasicAirMachine extends WorkableElectricMultiblockMachine implement
     @Override
     public void onStructureFormed() {
         super.onStructureFormed();
+    }
+/*
         //getRecipeLogic().resetRecipeLogic();
         // capture all energy containers
         List<IFluidTransfer> fluidTanks = new ArrayList<>();
@@ -87,6 +79,8 @@ public class BasicAirMachine extends WorkableElectricMultiblockMachine implement
         this.inputFluidInventory = new FluidTransferList(fluidTanks);
     }
 
+
+ */
     //////////////////////////////////////
     //******     Recipe Logic    *******//
     //////////////////////////////////////

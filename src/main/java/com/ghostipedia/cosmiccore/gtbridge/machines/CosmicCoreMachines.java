@@ -1,6 +1,8 @@
-package com.ghostipedia.cosmiccore;
+package com.ghostipedia.cosmiccore.gtbridge.machines;
 
 import com.ghostipedia.cosmiccore.common.data.CosmicBlocks;
+import com.ghostipedia.cosmiccore.gtbridge.machines.BasicAirMachine;
+import com.ghostipedia.cosmiccore.gtbridge.machines.parts.AirHatchPartMachine;
 import com.gregtechceu.gtceu.GTCEu;
 import com.gregtechceu.gtceu.api.capability.recipe.IO;
 import com.gregtechceu.gtceu.api.machine.MachineDefinition;
@@ -13,22 +15,33 @@ import com.gregtechceu.gtceu.api.pattern.FactoryBlockPattern;
 import com.gregtechceu.gtceu.api.pattern.Predicates;
 import com.gregtechceu.gtceu.common.data.GTBlocks;
 import com.gregtechceu.gtceu.common.data.GTMaterials;
-import com.gregtechceu.gtceu.api.registry.registrate.MachineBuilder;
 import com.gregtechceu.gtceu.common.data.GTRecipeTypes;
 
 import static com.gregtechceu.gtceu.api.pattern.Predicates.abilities;
 import static com.gregtechceu.gtceu.api.pattern.Predicates.autoAbilities;
+import static com.gregtechceu.gtceu.common.data.GTMachines.registerTieredMachines;
 
 @SuppressWarnings("unused")
 public class CosmicCoreMachines {
 
-    public static final MachineDefinition[] PRESSURE_HATCH = AirHatchPartMachine("pressure_hatch", (holder, tier) ->
-            new AirHatchPartMachine(holder, tier, IO.BOTH, 20,1),
-            (tier, builder) -> builder.abilities(PRESSURE_CONTAINER)
-                    .rotationState(Rotationstate.ALL)
+    public static final PartAbility PRESSURE_CONTAINER = new PartAbility("pressure_container");
+
+
+
+    static int initialCapacity = 1;
+    static int slots = 1;
+
+
+
+    public static final MachineDefinition[] PRESSURE_HATCH = registerTieredMachines("pressure_hatch", (holder, tier) -> {
+        return new AirHatchPartMachine(holder, tier, IO.BOTH);
+            }, (tier, builder) ->builder
+                    .langValue("Cock")
+                    .rotationState(RotationState.ALL)
+                    .abilities(PRESSURE_CONTAINER)
                     .overlayTieredHullRenderer("pressure_hatch")
-                    .register()
-    );
+                    .register(),
+            0, 1);
 
     public static final MultiblockMachineDefinition AIR_MACHINE = GTRegistries.REGISTRATE.multiblock("airmachine", BasicAirMachine::new)
             .rotationState(RotationState.NON_Y_AXIS)
@@ -45,7 +58,7 @@ public class CosmicCoreMachines {
                     .where('W', Predicates.blocks(CosmicBlocks.ALTERNATOR_FLUX_COILING.get()))
                     .where('B', Predicates.blocks(GTBlocks.CASING_STEEL_SOLID.get()))
                     .where('Z', Predicates.blocks(GTBlocks.CASING_STEEL_SOLID.get())
-                            .or(abilities(PartAbility.).setExactLimit(1)))
+                            .or(abilities(PRESSURE_CONTAINER).setExactLimit(1)))
                     .where('X', Predicates.blocks(GTBlocks.CASING_STEEL_SOLID.get())
                             .or(abilities(PartAbility.IMPORT_FLUIDS).setExactLimit(1)))
                     .where('O', Predicates.blocks(GTBlocks.CASING_STEEL_GEARBOX.get()))
