@@ -18,6 +18,7 @@ public class CosmicItems  {
     public static final ItemEntry<ComponentItem> DONK = REGISTRATE.item("donk", ComponentItem::create)
             .lang("Donk")
             .properties(p -> p.stacksTo(16))
+        .tag()
             .defaultModel()
             .register();
     public static final ItemEntry<ComponentItem> WAXED_LEATHER = REGISTRATE.item("waxed_leather", ComponentItem::create)
@@ -25,8 +26,8 @@ public class CosmicItems  {
             .properties(p -> p.stacksTo(64))
             .defaultModel()
             .register();
-    public static final ItemEntry<ComponentItem> ENGOURGED_SPORE = REGISTRATE.item("engourged_spore", ComponentItem::create)
-            .lang("Engourged Spore")
+    public static final ItemEntry<ComponentItem> OVERLOADED_PEARLS = REGISTRATE.item("overloaded_pearls", ComponentItem::create)
+            .lang("Overloaded Pearls")
             .properties(p -> p.stacksTo(64))
             .defaultModel()
             .register();
@@ -35,6 +36,7 @@ public class CosmicItems  {
             .properties(p -> p.stacksTo(64))
             .defaultModel()
             .register();
+
 
 
  //New Circuits
