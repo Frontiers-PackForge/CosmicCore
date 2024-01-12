@@ -16,6 +16,7 @@ import com.gregtechceu.gtceu.api.pattern.Predicates;
 import com.gregtechceu.gtceu.common.data.GTBlocks;
 import com.gregtechceu.gtceu.common.data.GTMaterials;
 import com.gregtechceu.gtceu.common.data.GTRecipeTypes;
+import me.desht.pneumaticcraft.api.pressure.PressureTier;
 
 import static com.gregtechceu.gtceu.api.pattern.Predicates.abilities;
 import static com.gregtechceu.gtceu.api.pattern.Predicates.autoAbilities;
@@ -34,7 +35,8 @@ public class CosmicCoreMachines {
 
 
     public static final MachineDefinition[] PRESSURE_HATCH = registerTieredMachines("pressure_hatch", (holder, tier) -> {
-        return new AirHatchPartMachine(holder, tier, IO.BOTH);
+                int volume= 5000;
+                return new AirHatchPartMachine(holder, tier, IO.BOTH, PressureTier.TIER_ONE, volume);
             }, (tier, builder) ->builder
                     .langValue("Cock")
                     .rotationState(RotationState.ALL)

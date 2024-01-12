@@ -1,87 +1,188 @@
 package com.ghostipedia.cosmiccore.gtbridge.machines.parts;
 
 import com.gregtechceu.gtceu.api.capability.recipe.IO;
+import com.gregtechceu.gtceu.api.capability.recipe.RecipeCapability;
 import com.gregtechceu.gtceu.api.gui.GuiTextures;
 import com.gregtechceu.gtceu.api.machine.IMachineBlockEntity;
 import com.gregtechceu.gtceu.api.machine.TickableSubscription;
-import com.gregtechceu.gtceu.api.machine.multiblock.part.MultiblockPartMachine;
 import com.gregtechceu.gtceu.api.machine.multiblock.part.TieredIOPartMachine;
-import com.gregtechceu.gtceu.api.machine.multiblock.part.TieredPartMachine;
-import com.gregtechceu.gtceu.api.machine.trait.NotifiableFluidTank;
 import com.lowdragmc.lowdraglib.gui.widget.*;
-import com.lowdragmc.lowdraglib.side.fluid.FluidHelper;
-import com.lowdragmc.lowdraglib.side.fluid.FluidTransferHelper;
 import com.lowdragmc.lowdraglib.syncdata.ISubscription;
 import com.lowdragmc.lowdraglib.syncdata.field.ManagedFieldHolder;
+import it.unimi.dsi.fastutil.floats.FloatPredicate;
 import me.desht.pneumaticcraft.api.PNCCapabilities;
 import me.desht.pneumaticcraft.api.PneumaticRegistry;
-import me.desht.pneumaticcraft.api.pressure.PressureHelper;
 import me.desht.pneumaticcraft.api.pressure.PressureTier;
-import me.desht.pneumaticcraft.api.tileentity.IAirHandler;
 import me.desht.pneumaticcraft.api.tileentity.IAirHandlerMachine;
 import me.desht.pneumaticcraft.api.tileentity.IAirHandlerMachineFactory;
-import me.desht.pneumaticcraft.api.upgrade.PNCUpgrade;
-import me.desht.pneumaticcraft.common.capabilities.BasicAirHandler;
 import me.desht.pneumaticcraft.common.capabilities.MachineAirHandler;
-import me.desht.pneumaticcraft.common.item.ItemRegistry;
-import me.desht.pneumaticcraft.common.network.GuiSynced;
-import me.desht.pneumaticcraft.common.upgrades.IUpgradeHolder;
-import me.desht.pneumaticcraft.common.upgrades.ModUpgrades;
-import me.desht.pneumaticcraft.common.upgrades.UpgradeCache;
 import me.desht.pneumaticcraft.common.util.DirectionUtil;
-import me.desht.pneumaticcraft.common.util.PneumaticCraftUtils;
-import me.desht.pneumaticcraft.lib.PneumaticValues;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.Component;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
-import net.minecraftforge.registries.ForgeRegistries;
 import org.jetbrains.annotations.Nullable;
 
 
 import javax.annotation.Nonnull;
 import javax.annotation.ParametersAreNonnullByDefault;
-import java.util.EnumMap;
-import java.util.Map;
+import java.util.*;
+
+import static com.gregtechceu.gtceu.api.blockentity.forge.MetaMachineBlockEntityImpl.getCapability;
 
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
-public class AirHatchPartMachine extends TieredPartMachine {
+public class AirHatchPartMachine extends TieredIOPartMachine implements IAirHandlerMachine {
 
-    protected static final ManagedFieldHolder MANAGED_FIELD_HOLDER = new ManagedFieldHolder(AirHatchPartMachine.class, TieredPartMachine.MANAGED_FIELD_HOLDER);
+    protected static final ManagedFieldHolder MANAGED_FIELD_HOLDER = new ManagedFieldHolder(AirHatchPartMachine.class, TieredIOPartMachine.MANAGED_FIELD_HOLDER);
 
 
 
-    private BasicAirHandler airHandler;
-    private final LazyOptional<IAirHandler> airCap = LazyOptional.of(this::getAirHandler);
+
+
+
+    private IAirHandlerMachine airHandler;
+  //  private final LazyOptional<IAirHandler> airCap = LazyOptional.of(this::getAirHandler);
     @Nullable
     protected TickableSubscription autoIOSubs;
     @Nullable
     protected ISubscription tankSubs;
 
+    @Override
+    public float getDangerPressure() {
+        return 0;
+    }
 
+    @Override
+    public float getCriticalPressure() {
+        return 0;
+    }
+
+    @Override
+    public void setPressure(float v) {
+
+    }
+
+    @Override
+    public void setVolumeUpgrades(int i) {
+
+    }
+
+    @Override
+    public void enableSafetyVenting(FloatPredicate floatPredicate, Direction direction) {
+
+    }
+
+    @Override
+    public void disableSafetyVenting() {
+
+    }
+
+    @Override
+    public void tick(BlockEntity blockEntity) {
+
+    }
+
+    @Override
+    public void setSideLeaking(@Nullable Direction direction) {
+
+    }
+
+    @Nullable
+    @Override
+    public Direction getSideLeaking() {
+        return null;
+    }
+    @Nonnull
+    @Override
+    public List<Connection> getConnectedAirHandlers(BlockEntity blockEntity) {
+        return new ArrayList<>();
+    }
+
+    @Override
+    public void setConnectedFaces(List<Direction> side) {
+
+    }
+
+    @Override
+    public float getPressure() {
+        return 0;
+    }
+
+    @Override
+    public int getAir() {
+        return 0;
+    }
+
+    @Override
+    public void addAir(int i) {
+
+    }
+
+    @Override
+    public int getBaseVolume() {
+        return 0;
+    }
+
+    @Override
+    public void setBaseVolume(int i) {
+
+    }
+
+    @Override
+    public int getVolume() {
+        return 0;
+    }
+
+    @Override
+    public float maxPressure() {
+        return 0;
+    }
+
+    @Override
+    public void printManometerMessage(Player player, List<Component> list) {
+
+    }
+
+    @Override
+    public CompoundTag serializeNBT() {
+        return null;
+    }
+
+    @Override
+    public void deserializeNBT(CompoundTag arg) {
+
+    }
 /*
 
 
  */
 
 
-
-  //  public Item getHatchType() {
+/*
+    public Item getDroneItem() {
         // return the item which has the same name as our entity type
-  //      return PneumaticCraftUtils.getRegistryName(ForgeRegistries.ENTITY_TYPES, getType())
-    //            .map(ForgeRegistries.ITEMS::getValue)
-    //            .orElseThrow();
-   // }
+        return PneumaticCraftUtils.getRegistryName(ForgeRegistries.ENTITY_TYPES, getType())
+                .map(ForgeRegistries.ITEMS::getValue)
+                .orElseThrow();
+    }
 
-    private final Map<Direction, LazyOptional<IAirHandlerMachine>> neighbourAirHandlers = new EnumMap<>(Direction.class);
 
-    private int volumeUpgrades = 0;
+ */
+
 
 
 protected final IO io;
+
+/*
     protected BasicAirHandler getAirHandler() {
+
         if (airHandler == null) {
             int vol = PressureHelper.getUpgradedVolume(5000, volumeUpgrades);
            // ItemStack stack = new ItemStack(getHatchType());
@@ -100,19 +201,54 @@ protected final IO io;
         return airHandler;
     }
 
+
+ */
+
+
+
+/*
+public void initializeHullAirHandlers() {
+    airHandlerMap.clear();
+    for (Direction side : DirectionUtil.VALUES) {
+        getCapability(PNCCapabilities.AIR_HANDLER_MACHINE_CAPABILITY, side, getFrontFacing())
+                .ifPresent(handler -> airHandlerMap.computeIfAbsent(handler, k -> new ArrayList<>()).add(side));
+    }
+    airHandlerMap.forEach(IAirHandlerMachine::setConnectedFaces);
+}
+
+ */
+    private final LazyOptional<IAirHandlerMachine> airHandlerCap;
+    private final Map<IAirHandlerMachine, List<Direction>> airHandlerMap = new IdentityHashMap<>();
     // The `Object... args` parameter is necessary in case a superclass needs to pass any args along to createTank().
     // We can't use fields here because those won't be available while createTank() is called.
-    public AirHatchPartMachine(IMachineBlockEntity holder, int tier, IO io, Object... args) {
-        super(holder, tier);
+    public AirHatchPartMachine(IMachineBlockEntity holder, int tier, IO io, PressureTier pressureTier, int volume, Object... args) {
+        super(holder, tier, io);
         this.io = io;
+        this.airHandler = PneumaticRegistry.getInstance().getAirHandlerMachineFactory().createAirHandler(pressureTier, volume);
+        this.airHandlerCap = LazyOptional.of(() -> airHandler);
         //IAirHandlerMachineFactory factory = getAirHandlerMachineFactory();
-        this.airHandler = getAirHandler();
-        for (Direction dir : DirectionUtil.VALUES) {
-            this.neighbourAirHandlers.put(dir, LazyOptional.empty());
-            }
+        //this.airHandler = getAirHandler();
+
         //this.tank = createTank(initialCapacity, slots, args);
     }
+    public boolean canConnectPneumatic(Direction side) {
+        return true;
+    }
 
+    @Nonnull
+    public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> capability, @Nullable Direction side) {
+        if (capability == PNCCapabilities.AIR_HANDLER_MACHINE_CAPABILITY) {
+            return airHandlerCap.cast();
+        }
+        // chain to super so not to forget anything.
+        return getCapability(capability, side);
+        //return LazyOptional.empty();
+    }
+
+    public BlockPos getBlockPos() {
+        // Replacing `getPos()` with the method you use to get BlockPos of your block.
+        return getPos();
+    }
     //////////////////////////////////////
     //*****     Initialization    ******//
     //////////////////////////////////////
@@ -122,18 +258,18 @@ protected final IO io;
     }
 
 
-/*
+
     @Override
     public void onLoad() {
         super.onLoad();
-        if (getLevel() instanceof ServerLevel serverLevel) {
-            serverLevel.getServer().tell(new TickTask(0, this::updateTankSubscription));
-        }
-        //tankSubs = tank.addChangedListener(this::updateTankSubscription);
+       // initializeHullAirHandlers();
     }
 
 
- */
+
+
+
+
     @Override
     public void onUnload() {
         super.onUnload();
@@ -151,11 +287,14 @@ protected final IO io;
     public void onNeighborChanged(Block block, BlockPos fromPos, boolean isMoving) {
         super.onNeighborChanged(block, fromPos, isMoving);
         //updateTankSubscription();
+       // initializeHullAirHandlers();
     }
 
     @Override
     public void onRotated(Direction oldFacing, Direction newFacing) {
         super.onRotated(oldFacing, newFacing);
+       // initializeHullAirHandlers();
+
         //updateTankSubscription();
     }
 /*
@@ -168,6 +307,7 @@ protected final IO io;
             autoIOSubs = null;
         }
     }
+
 
  */
 /*
