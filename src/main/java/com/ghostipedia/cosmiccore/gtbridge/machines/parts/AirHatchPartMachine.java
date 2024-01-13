@@ -1,5 +1,6 @@
 package com.ghostipedia.cosmiccore.gtbridge.machines.parts;
 
+import com.ghostipedia.cosmiccore.gtbridge.machines.traits.NotifiableAirContainer;
 import com.gregtechceu.gtceu.api.capability.recipe.IO;
 import com.gregtechceu.gtceu.api.gui.GuiTextures;
 import com.gregtechceu.gtceu.api.machine.IMachineBlockEntity;
@@ -35,6 +36,7 @@ import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.block.Block;
+import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.registries.ForgeRegistries;
 import org.jetbrains.annotations.Nullable;
@@ -47,70 +49,37 @@ import java.util.Map;
 
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
-public class AirHatchPartMachine extends TieredPartMachine {
+public class AirHatchPartMachine extends TieredIOPartMachine {
 
-    protected static final ManagedFieldHolder MANAGED_FIELD_HOLDER = new ManagedFieldHolder(AirHatchPartMachine.class, TieredPartMachine.MANAGED_FIELD_HOLDER);
+    protected static final ManagedFieldHolder MANAGED_FIELD_HOLDER = new ManagedFieldHolder(AirHatchPartMachine.class, TieredIOPartMachine.MANAGED_FIELD_HOLDER);
 
+public final NotifiableAirContainer tank;
 
+    private IAirHandlerMachineFactory airHandler;
 
-    private BasicAirHandler airHandler;
-    private final LazyOptional<IAirHandler> airCap = LazyOptional.of(this::getAirHandler);
+    //Temporary Spaghetti
+    //private final LazyOptional<IAirHandlerMachine> airHandlerMachineCap;
     @Nullable
     protected TickableSubscription autoIOSubs;
     @Nullable
     protected ISubscription tankSubs;
 
-
-/*
-
-
- */
-
-
-
-  //  public Item getHatchType() {
-        // return the item which has the same name as our entity type
-  //      return PneumaticCraftUtils.getRegistryName(ForgeRegistries.ENTITY_TYPES, getType())
-    //            .map(ForgeRegistries.ITEMS::getValue)
-    //            .orElseThrow();
-   // }
-
+    //Gotta rework this, will do in a bit
     private final Map<Direction, LazyOptional<IAirHandlerMachine>> neighbourAirHandlers = new EnumMap<>(Direction.class);
-
-    private int volumeUpgrades = 0;
 
 
 protected final IO io;
-    protected BasicAirHandler getAirHandler() {
-        if (airHandler == null) {
-            int vol = PressureHelper.getUpgradedVolume(5000, volumeUpgrades);
-           // ItemStack stack = new ItemStack(getHatchType());
-           // EnchantmentHelper.setEnchantments(stackEnchants, stack);
-           // vol = ItemRegistry.getInstance().getModifiedVolume(stack, vol);
-            airHandler = new BasicAirHandler(vol) {
-                @Override
-                public void addAir(int amount) {
-               //     if (amount > 0 || getUpgrades(ModUpgrades.CREATIVE.get()) == 0)
-                         {
-                        super.addAir(amount);
-                    }
-                }
-            };
-        }
-        return airHandler;
-    }
 
-    // The `Object... args` parameter is necessary in case a superclass needs to pass any args along to createTank().
+    protected NotifiableAirContainer createTank(PressureTier pressureTier, int volume, IO io, IO capabilityIO) {
+        return new NotifiableAirContainer(this, pressureTier, volume, io, io);
+    }
+        // The `Object... args` parameter is necessary in case a superclass needs to pass any args along to createTank().
     // We can't use fields here because those won't be available while createTank() is called.
     public AirHatchPartMachine(IMachineBlockEntity holder, int tier, IO io, Object... args) {
-        super(holder, tier);
+        super(holder, tier, io);
         this.io = io;
-        //IAirHandlerMachineFactory factory = getAirHandlerMachineFactory();
-        this.airHandler = getAirHandler();
-        for (Direction dir : DirectionUtil.VALUES) {
-            this.neighbourAirHandlers.put(dir, LazyOptional.empty());
-            }
-        //this.tank = createTank(initialCapacity, slots, args);
+        this.tank = createTank(PressureTier.TIER_ONE, 5000, IO.IN, IO.OUT);
+
     }
 
     //////////////////////////////////////
