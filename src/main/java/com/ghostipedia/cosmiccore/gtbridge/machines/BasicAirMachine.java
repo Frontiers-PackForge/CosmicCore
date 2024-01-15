@@ -23,6 +23,8 @@ import lombok.Getter;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Player;
+import me.desht.pneumaticcraft.api.tileentity.IAirHandlerMachine;
+import com.ghostipedia.cosmiccore.gtbridge.machines.traits.NotifiableAirContainer;
 
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
@@ -54,6 +56,7 @@ public class BasicAirMachine extends WorkableElectricMultiblockMachine implement
     public BasicAirMachine(IMachineBlockEntity holder) {
         super(holder);
     }
+
 
     //Forming Logic
     @Override

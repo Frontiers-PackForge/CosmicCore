@@ -10,9 +10,11 @@ import com.gregtechceu.gtceu.api.machine.multiblock.part.TieredIOPartMachine;
 import com.gregtechceu.gtceu.api.machine.multiblock.part.TieredPartMachine;
 import com.gregtechceu.gtceu.api.machine.trait.NotifiableFluidTank;
 import com.lowdragmc.lowdraglib.gui.widget.*;
+import com.lowdragmc.lowdraglib.misc.FluidStorage;
 import com.lowdragmc.lowdraglib.side.fluid.FluidHelper;
 import com.lowdragmc.lowdraglib.side.fluid.FluidTransferHelper;
 import com.lowdragmc.lowdraglib.syncdata.ISubscription;
+import com.lowdragmc.lowdraglib.syncdata.annotation.Persisted;
 import com.lowdragmc.lowdraglib.syncdata.field.ManagedFieldHolder;
 import me.desht.pneumaticcraft.api.PNCCapabilities;
 import me.desht.pneumaticcraft.api.PneumaticRegistry;
@@ -36,6 +38,7 @@ import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.registries.ForgeRegistries;
@@ -44,8 +47,7 @@ import org.jetbrains.annotations.Nullable;
 
 import javax.annotation.Nonnull;
 import javax.annotation.ParametersAreNonnullByDefault;
-import java.util.EnumMap;
-import java.util.Map;
+import java.util.*;
 
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
@@ -65,20 +67,22 @@ public final NotifiableAirContainer tank;
     protected ISubscription tankSubs;
 
     //Gotta rework this, will do in a bit
-    private final Map<Direction, LazyOptional<IAirHandlerMachine>> neighbourAirHandlers = new EnumMap<>(Direction.class);
 
 
 protected final IO io;
 
-    protected NotifiableAirContainer createTank(PressureTier pressureTier, int volume, IO io, IO capabilityIO) {
-        return new NotifiableAirContainer(this, pressureTier, volume, io, io);
+    private final Map<IAirHandlerMachine, List<Direction>> airHandlerMap = new IdentityHashMap<>();
+
+    protected NotifiableAirContainer createTank(List<FluidStorage> storages, PressureTier pressureTier, int volume, IO io, IO capabilityIO) {
+        return new NotifiableAirContainer(this, storages, pressureTier, volume, io, io);
     }
         // The `Object... args` parameter is necessary in case a superclass needs to pass any args along to createTank().
     // We can't use fields here because those won't be available while createTank() is called.
-    public AirHatchPartMachine(IMachineBlockEntity holder, int tier, IO io, Object... args) {
+    public AirHatchPartMachine(IMachineBlockEntity holder, int tier, PressureTier pTier, IO io, Object... args) {
         super(holder, tier, io);
         this.io = io;
-        this.tank = createTank(PressureTier.TIER_ONE, 5000, IO.IN, IO.OUT);
+        List<FluidStorage> storages = new ArrayList<>();
+        this.tank = createTank(storages, PressureTier.TIER_ONE, 5000, IO.IN, IO.OUT);
 
     }
 
@@ -91,18 +95,19 @@ protected final IO io;
     }
 
 
-/*
+
     @Override
     public void onLoad() {
         super.onLoad();
+        /*
+
         if (getLevel() instanceof ServerLevel serverLevel) {
             serverLevel.getServer().tell(new TickTask(0, this::updateTankSubscription));
         }
         //tankSubs = tank.addChangedListener(this::updateTankSubscription);
+    */
     }
 
-
- */
     @Override
     public void onUnload() {
         super.onUnload();

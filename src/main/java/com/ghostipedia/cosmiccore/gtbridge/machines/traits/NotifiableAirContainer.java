@@ -6,6 +6,7 @@ import com.gregtechceu.gtceu.api.machine.MetaMachine;
 import com.gregtechceu.gtceu.api.machine.trait.ICapabilityTrait;
 import com.gregtechceu.gtceu.api.machine.trait.NotifiableRecipeHandlerTrait;
 import com.gregtechceu.gtceu.api.recipe.GTRecipe;
+import com.lowdragmc.lowdraglib.misc.FluidStorage;
 import com.lowdragmc.lowdraglib.syncdata.annotation.DescSynced;
 import com.lowdragmc.lowdraglib.syncdata.annotation.Persisted;
 import com.lowdragmc.lowdraglib.syncdata.field.ManagedFieldHolder;
@@ -24,6 +25,7 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraftforge.common.util.LazyOptional;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.ArrayList;
 import java.util.IdentityHashMap;
 import java.util.List;
 import java.util.Map;
@@ -49,16 +51,17 @@ public class NotifiableAirContainer extends NotifiableRecipeHandlerTrait<Double>
 
     @Override
     public float getPressure() {
-        return 0;
+        return (float) this.airHandler.getPressure();
     }
 
     @Override
     public int getAir() {
-        return 0;
+        return this.airHandler.getAir();
     }
 
     @Override
     public void addAir(int i) {
+        this.airHandler.addAir(i);
 
     }
 
@@ -79,13 +82,13 @@ public class NotifiableAirContainer extends NotifiableRecipeHandlerTrait<Double>
 
     @Override
     public float maxPressure() {
-        return 0;
+        return this.airHandler.getDangerPressure();
     }
 
 
     @Override
     public float getDangerPressure() {
-        return 0;
+        return 20f;
     }
 
     @Override
@@ -131,7 +134,8 @@ public class NotifiableAirContainer extends NotifiableRecipeHandlerTrait<Double>
 
     @Override
     public List<Connection> getConnectedAirHandlers(BlockEntity blockEntity) {
-        return null;
+        List<IAirHandlerMachine.Connection> neighbours = new ArrayList<>();
+        return neighbours;
     }
 
     @Override
@@ -149,24 +153,57 @@ public class NotifiableAirContainer extends NotifiableRecipeHandlerTrait<Double>
         return null;
     }
 
+    @Persisted
+    public final FluidStorage[] storages;
+
     @Override
     public void deserializeNBT(CompoundTag arg) {
 
     }
+    public boolean isEmpty() {
+        if (isEmpty == null) {
+            isEmpty = true;
+            for (FluidStorage storage : storages) {
+                if (!storage.getFluid().isEmpty()) {
+                    isEmpty = false;
+                    break;
+                }
+            }
+        }
+        return isEmpty;
+    }
 
-    public NotifiableAirContainer(MetaMachine machine, PressureTier pressureTier, int volume, IO io, IO capabilityIO) {
+    @Setter
+    protected boolean allowSameFluids;
+    private Boolean isEmpty;
+    public void onContentsChanged() {
+        isEmpty = null;
+        notifyListeners();
+    }
+
+
+    public NotifiableAirContainer(MetaMachine machine, List<FluidStorage> storages, PressureTier pressureTier, int volume, IO io, IO capabilityIO) {
         super(machine);
         this.handlerIO = io;
         this.capabilityIO = capabilityIO;
+        this.storages = storages.toArray(FluidStorage[]::new);
+        for (FluidStorage storage : this.storages) {
+            storage.setOnContentsChanged(this::onContentsChanged);
+        }
+        if (io == IO.IN) {
+            this.allowSameFluids = true;
+        }
         //this.storages
         this.airHandler = PneumaticRegistry.getInstance().getAirHandlerMachineFactory().createAirHandler(pressureTier, volume);
         this.airHandlerCap = LazyOptional.of(() -> airHandler);
     }
-
+/*
     public static NotifiableAirContainer airContainer(MetaMachine machine, PressureTier pressureTier, int volume, IO io, IO CapabilityIO) {
         return new NotifiableAirContainer(machine, PressureTier.TIER_ONE, volume, io, CapabilityIO);
     }
 
+
+ */
     @Override
     public List<Double> handleRecipeInner(IO io, GTRecipe recipe, List<Double> left, @Nullable String slotName, boolean simulate) {
         IAirHandlerMachine container = this;
