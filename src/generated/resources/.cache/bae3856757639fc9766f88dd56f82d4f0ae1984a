@@ -1,6 +1,6 @@
-// 1.20.1	2023-12-16T00:17:17.8298683	Registrate Provider for cosmiccore [Recipes, Advancements, Loot Tables, Tags (blocks), Tags (items), Tags (fluids), Tags (entity_types), generic_server_provider, Blockstates, Item models, Lang (en_us/en_ud), generic_client_provider]
-4e41520987e9224e4039434f110a7a3f54bf4be4 assets/cosmiccore/lang/en_ud.json
-b755eb0b927094c6da5d224dfe027d7cfa4ff8ae assets/cosmiccore/lang/en_us.json
+// 1.20.1	2024-01-09T09:18:06.765163	Registrate Provider for cosmiccore [Recipes, Advancements, Loot Tables, Tags (blocks), Tags (items), Tags (fluids), Tags (entity_types), generic_server_provider, Blockstates, Item models, Lang (en_us/en_ud), generic_client_provider]
+4fc10542fc8b2c93906e8582ee65c8f6410970ee assets/cosmiccore/lang/en_ud.json
+891608830f3328d7e4d61599cf6f503a005ea56b assets/cosmiccore/lang/en_us.json
 c76c82b134cbacd0e7515c19881d2c29cec3e00d assets/cosmiccore/models/item/blackstone_pustule.json
 df450aaa119bb426b16e578a830e1fc1a04a60d8 assets/cosmiccore/models/item/cosmic_processor.json
 91154670f2e413b35d8a509da73aa02359333e6b assets/cosmiccore/models/item/cosmic_processor_assembly.json
@@ -11,7 +11,6 @@ eaf524be5527803a5e3be4067aeec8145db355be assets/cosmiccore/models/item/cosmic_pr
 27d4b2e77f987a271d811317a7b7e328c74ece32 assets/cosmiccore/models/item/echo_processor_assembly.json
 863c680458d56a6bb21e030fc75cb6c264dca274 assets/cosmiccore/models/item/echo_processor_mainframe.json
 2114c90c1d60c254d6cd2a2f60e298f6feba457e assets/cosmiccore/models/item/echo_processor_supercomputer.json
-8c509c7493ade9b4723b1a863fa9f4406de0f47c assets/cosmiccore/models/item/engourged_spore.json
 dc9364f04c4b466e0216140a75f57b9be0e7e9ae assets/cosmiccore/models/item/macroverse_processor.json
 3c71196cc55319ca6017dfeb8a7ddd55005a6a9e assets/cosmiccore/models/item/macroverse_processor_assembly.json
 27b7656e8b9c9658fdfd0058b7cdd75b43bed697 assets/cosmiccore/models/item/macroverse_processor_mainframe.json
@@ -20,6 +19,7 @@ dc9364f04c4b466e0216140a75f57b9be0e7e9ae assets/cosmiccore/models/item/macrovers
 bb899d04f55c382f1d6a0eae9822887bd38cadfa assets/cosmiccore/models/item/optical_processor_assembly.json
 53e1420bb1d135a5169d5c428ab5e1b948712b7c assets/cosmiccore/models/item/optical_processor_mainframe.json
 af9dc074daf38c5f5d6ebd1013a8a7e6734cc5cf assets/cosmiccore/models/item/optical_processor_supercomputer.json
+684a536f97a8fb02fd230167b2a3aac4dff6788d assets/cosmiccore/models/item/overloaded_pearls.json
 5f60818f352b26d5c1325244f773f0cd8a335c8f assets/cosmiccore/models/item/psionic_processor.json
 301cfcc7e9b94f6411f8a5d122957b96ffd92777 assets/cosmiccore/models/item/psionic_processor_assembly.json
 3b183bd70f213664dcabc0d4cfe63dae9ede5fe5 assets/cosmiccore/models/item/psionic_processor_mainframe.json
@@ -31,6 +31,7 @@ a35174b11a61eb4b119adc39e1f07cc42a784c6a data/cosmiccore/loot_tables/blocks/beam
 f07a4cc7e9e21719a4f5f418fb8a2e871eef6d1c data/cosmiccore/loot_tables/blocks/dyson_solar_cell.json
 96f12ca462ae23e65e791793473f61573857ea01 data/cosmiccore/loot_tables/blocks/dyson_sphere_casing.json
 b49d4e42ae499d7a8f26f051fdee195e6196e9cb data/cosmiccore/loot_tables/blocks/dyson_sphere_maintenance_port.json
+62f36629bdb270b69dc2a728e6af1dfd55ae603a data/cosmiccore/loot_tables/blocks/plated_aerocloud.json
 617cd2f9016c5cb13fb505b69e4c283f53ac2002 data/cosmiccore/loot_tables/blocks/space_elevator_support.json
-de90c654d7a97c9e96c6759ba77f7401aec77ea2 data/forge/tags/blocks/mineable/wrench.json
-de90c654d7a97c9e96c6759ba77f7401aec77ea2 data/minecraft/tags/blocks/mineable/pickaxe.json
+2fc921e7b6a83ca646740daff9db13d8234b53c7 data/forge/tags/blocks/mineable/wrench.json
+2fc921e7b6a83ca646740daff9db13d8234b53c7 data/minecraft/tags/blocks/mineable/pickaxe.json
