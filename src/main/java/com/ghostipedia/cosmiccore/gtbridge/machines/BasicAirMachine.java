@@ -62,6 +62,7 @@ public class BasicAirMachine extends WorkableElectricMultiblockMachine implement
     @Override
     public void onStructureFormed() {
         super.onStructureFormed();
+        scheduleRenderUpdate();
     }
 /*
         //getRecipeLogic().resetRecipeLogic();

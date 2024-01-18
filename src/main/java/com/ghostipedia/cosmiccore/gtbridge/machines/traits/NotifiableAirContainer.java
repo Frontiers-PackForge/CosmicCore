@@ -13,6 +13,7 @@ import com.lowdragmc.lowdraglib.syncdata.field.ManagedFieldHolder;
 import it.unimi.dsi.fastutil.floats.FloatPredicate;
 import lombok.Getter;
 import lombok.Setter;
+import me.desht.pneumaticcraft.api.PNCCapabilities;
 import me.desht.pneumaticcraft.api.PneumaticRegistry;
 import me.desht.pneumaticcraft.api.pressure.PressureTier;
 import me.desht.pneumaticcraft.api.tileentity.IAirHandler;
@@ -22,6 +23,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
 import org.jetbrains.annotations.Nullable;
 
@@ -182,6 +184,13 @@ public class NotifiableAirContainer extends NotifiableRecipeHandlerTrait<Double>
     }
 
 
+    public <T> LazyOptional<T> getCapability(Capability<T> cap, Direction side) {
+        if (cap == PNCCapabilities.AIR_HANDLER_MACHINE_CAPABILITY) {
+            return airHandlerCap.cast();
+        }
+        return LazyOptional.empty();
+    }
+
     public NotifiableAirContainer(MetaMachine machine, List<FluidStorage> storages, PressureTier pressureTier, int volume, IO io, IO capabilityIO) {
         super(machine);
         this.handlerIO = io;
@@ -194,7 +203,7 @@ public class NotifiableAirContainer extends NotifiableRecipeHandlerTrait<Double>
             this.allowSameFluids = true;
         }
         //this.storages
-        this.airHandler = PneumaticRegistry.getInstance().getAirHandlerMachineFactory().createAirHandler(pressureTier, volume);
+        this.airHandler = PneumaticRegistry.getInstance().getAirHandlerMachineFactory().createTierOneAirHandler(volume);
         this.airHandlerCap = LazyOptional.of(() -> airHandler);
     }
 /*

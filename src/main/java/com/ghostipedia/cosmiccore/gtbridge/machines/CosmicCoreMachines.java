@@ -42,7 +42,7 @@ public class CosmicCoreMachines {
                     .abilities(PRESSURE_CONTAINER)
                     .overlayTieredHullRenderer("pressure_hatch")
                     .register(),
-            0, 1);
+            1, 1);
 
     public static final MultiblockMachineDefinition AIR_MACHINE = GTRegistries.REGISTRATE.multiblock("airmachine", BasicAirMachine::new)
             .rotationState(RotationState.NON_Y_AXIS)
