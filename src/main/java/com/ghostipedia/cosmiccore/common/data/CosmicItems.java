@@ -1,5 +1,6 @@
 package com.ghostipedia.cosmiccore.common.data;
 
+import com.ghostipedia.cosmiccore.api.registries.CosmicRegistries;
 import com.gregtechceu.gtceu.api.item.ComponentItem;
 import com.gregtechceu.gtceu.api.item.component.IItemComponent;
 import com.gregtechceu.gtceu.api.registry.GTRegistries;
@@ -12,7 +13,7 @@ import static com.ghostipedia.cosmiccore.api.registries.CosmicRegistries.REGISTR
 @SuppressWarnings("Convert2MethodRef")
 public class CosmicItems  {
     static {
-        GTRegistries.REGISTRATE.creativeModeTab(() -> CosmicCreativeModeTabs.COSMIC_CORE);
+        CosmicRegistries.REGISTRATE.creativeModeTab(() -> CosmicCreativeModeTabs.COSMIC_CORE);
     }
 //Literally Random shit
     public static final ItemEntry<ComponentItem> DONK = REGISTRATE.item("donk", ComponentItem::create)
