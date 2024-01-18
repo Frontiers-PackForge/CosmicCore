@@ -1,6 +1,7 @@
 package com.ghostipedia.cosmiccore.common.data;
 
 import com.ghostipedia.cosmiccore.CosmicCore;
+import com.ghostipedia.cosmiccore.common.data.recipe.RecipeTags;
 import com.gregtechceu.gtceu.api.block.RendererBlock;
 import com.gregtechceu.gtceu.api.block.RendererGlassBlock;
 import com.gregtechceu.gtceu.api.item.RendererBlockItem;
@@ -75,7 +76,8 @@ public class CosmicBlocks {
                                 Map.of("all", texture)) : null))
                 .initialProperties(properties)
                 .blockstate(NonNullBiConsumer.noop())
-                .tag(GTToolType.WRENCH.harvestTags.get(0), BlockTags.MINEABLE_WITH_PICKAXE)
+
+                .tag(RecipeTags.MINEABLE_WITH_WRENCH, BlockTags.MINEABLE_WITH_PICKAXE)
                 .item(RendererBlockItem::new)
                 .model(NonNullBiConsumer.noop())
                 .build()
@@ -88,7 +90,7 @@ public class CosmicBlocks {
                                 Map.of("side", sideTexture, "top", topTexture, "bottom", bottomTexture)) : null))
                 .initialProperties(properties)
                 .blockstate(NonNullBiConsumer.noop())
-                .tag(GTToolType.WRENCH.harvestTags.get(0), BlockTags.MINEABLE_WITH_PICKAXE)
+                .tag(RecipeTags.MINEABLE_WITH_WRENCH, BlockTags.MINEABLE_WITH_PICKAXE)
                 .item(RendererBlockItem::new)
                 .model(NonNullBiConsumer.noop())
                 .build()
