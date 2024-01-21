@@ -5,6 +5,7 @@ import com.ghostipedia.cosmiccore.common.data.CosmicBlocks;
 import com.ghostipedia.cosmiccore.common.data.CosmicCreativeModeTabs;
 import com.ghostipedia.cosmiccore.common.data.CosmicItems;
 import com.ghostipedia.cosmiccore.gtbridge.CosmicCoreRecipeTypes;
+import com.ghostipedia.cosmiccore.gtbridge.machines.CosmicCoreMachines;
 import com.gregtechceu.gtceu.api.GTCEuAPI;
 import com.gregtechceu.gtceu.api.data.chemical.material.event.MaterialRegistryEvent;
 import com.gregtechceu.gtceu.api.data.chemical.material.registry.MaterialRegistry;
@@ -45,7 +46,7 @@ public class CosmicCore {
         bus.register(this);
         bus.addGenericListener(GTRecipeType.class, this::registerRecipeTypes);
        // bus.addGenericListener(Class.class, this::registerRecipeConditions);
-       // bus.addGenericListener(MachineDefinition.class, this::registerMachines);
+        bus.addGenericListener(MachineDefinition.class, this::registerMachines);
 
 
     }
@@ -74,5 +75,10 @@ public class CosmicCore {
     @SubscribeEvent
     public void registerRecipeTypes(GTCEuAPI.RegisterEvent<ResourceLocation, GTRecipeType> event) {
         CosmicCoreRecipeTypes.init();
+    }
+
+    @SubscribeEvent
+    public void registerMachines(GTCEuAPI.RegisterEvent<ResourceLocation, MachineDefinition> event) {
+        CosmicCoreMachines.init();
     }
 }

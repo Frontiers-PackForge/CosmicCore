@@ -6,39 +6,30 @@ import com.gregtechceu.gtceu.api.machine.MetaMachine;
 import com.gregtechceu.gtceu.api.machine.trait.ICapabilityTrait;
 import com.gregtechceu.gtceu.api.machine.trait.NotifiableRecipeHandlerTrait;
 import com.gregtechceu.gtceu.api.recipe.GTRecipe;
-import com.lowdragmc.lowdraglib.misc.FluidStorage;
 import com.lowdragmc.lowdraglib.syncdata.annotation.DescSynced;
 import com.lowdragmc.lowdraglib.syncdata.annotation.Persisted;
 import com.lowdragmc.lowdraglib.syncdata.field.ManagedFieldHolder;
 import it.unimi.dsi.fastutil.floats.FloatPredicate;
 import lombok.Getter;
 import lombok.Setter;
-import me.desht.pneumaticcraft.api.PNCCapabilities;
 import me.desht.pneumaticcraft.api.PneumaticRegistry;
 import me.desht.pneumaticcraft.api.pressure.PressureTier;
-import me.desht.pneumaticcraft.api.tileentity.IAirHandler;
 import me.desht.pneumaticcraft.api.tileentity.IAirHandlerMachine;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.block.entity.BlockEntity;
-import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.common.util.LazyOptional;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
-import java.util.IdentityHashMap;
 import java.util.List;
-import java.util.Map;
 
 public class NotifiableAirContainer extends NotifiableRecipeHandlerTrait<Double> implements IAirHandlerMachine, ICapabilityTrait {
     public static final ManagedFieldHolder MANAGED_FIELD_HOLDER = new ManagedFieldHolder(NotifiableAirContainer.class, NotifiableRecipeHandlerTrait.MANAGED_FIELD_HOLDER);
 
 
     protected final IAirHandlerMachine airHandler;
-    private final LazyOptional<IAirHandlerMachine> airHandlerCap;
-    private final Map<IAirHandlerMachine, List<Direction>> airHandlerMap = new IdentityHashMap<>();
     public final IO handlerIO;
     public final IO capabilityIO;
 
@@ -155,64 +146,17 @@ public class NotifiableAirContainer extends NotifiableRecipeHandlerTrait<Double>
         return null;
     }
 
-    @Persisted
-    public final FluidStorage[] storages;
-
     @Override
     public void deserializeNBT(CompoundTag arg) {
 
     }
-    public boolean isEmpty() {
-        if (isEmpty == null) {
-            isEmpty = true;
-            for (FluidStorage storage : storages) {
-                if (!storage.getFluid().isEmpty()) {
-                    isEmpty = false;
-                    break;
-                }
-            }
-        }
-        return isEmpty;
-    }
 
-    @Setter
-    protected boolean allowSameFluids;
-    private Boolean isEmpty;
-    public void onContentsChanged() {
-        isEmpty = null;
-        notifyListeners();
-    }
-
-
-    public <T> LazyOptional<T> getCapability(Capability<T> cap, Direction side) {
-        if (cap == PNCCapabilities.AIR_HANDLER_MACHINE_CAPABILITY) {
-            return airHandlerCap.cast();
-        }
-        return LazyOptional.empty();
-    }
-
-    public NotifiableAirContainer(MetaMachine machine, List<FluidStorage> storages, PressureTier pressureTier, int volume, IO io, IO capabilityIO) {
+    public NotifiableAirContainer(MetaMachine machine, PressureTier pressureTier, int volume, IO io, IO capabilityIO) {
         super(machine);
         this.handlerIO = io;
         this.capabilityIO = capabilityIO;
-        this.storages = storages.toArray(FluidStorage[]::new);
-        for (FluidStorage storage : this.storages) {
-            storage.setOnContentsChanged(this::onContentsChanged);
-        }
-        if (io == IO.IN) {
-            this.allowSameFluids = true;
-        }
-        //this.storages
-        this.airHandler = PneumaticRegistry.getInstance().getAirHandlerMachineFactory().createTierOneAirHandler(volume);
-        this.airHandlerCap = LazyOptional.of(() -> airHandler);
+        this.airHandler = PneumaticRegistry.getInstance().getAirHandlerMachineFactory().createAirHandler(pressureTier, volume);
     }
-/*
-    public static NotifiableAirContainer airContainer(MetaMachine machine, PressureTier pressureTier, int volume, IO io, IO CapabilityIO) {
-        return new NotifiableAirContainer(machine, PressureTier.TIER_ONE, volume, io, CapabilityIO);
-    }
-
-
- */
     @Override
     public List<Double> handleRecipeInner(IO io, GTRecipe recipe, List<Double> left, @Nullable String slotName, boolean simulate) {
         IAirHandlerMachine container = this;

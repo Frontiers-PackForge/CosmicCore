@@ -55,12 +55,11 @@ public class AirHatchPartMachine extends TieredIOPartMachine {
 
     protected static final ManagedFieldHolder MANAGED_FIELD_HOLDER = new ManagedFieldHolder(AirHatchPartMachine.class, TieredIOPartMachine.MANAGED_FIELD_HOLDER);
 
-public final NotifiableAirContainer tank;
+public final NotifiableAirContainer airHandler;
 
-    private IAirHandlerMachineFactory airHandler;
+ //   private IAirHandlerMachine airHandler;
 
-    //Temporary Spaghetti
-    //private final LazyOptional<IAirHandlerMachine> airHandlerMachineCap;
+    private final LazyOptional<IAirHandlerMachine> airHandlerMachineCap;
     @Nullable
     protected TickableSubscription autoIOSubs;
     @Nullable
@@ -73,16 +72,16 @@ protected final IO io;
 
     private final Map<IAirHandlerMachine, List<Direction>> airHandlerMap = new IdentityHashMap<>();
 
-    protected NotifiableAirContainer createTank(List<FluidStorage> storages, PressureTier pressureTier, int volume, IO io, IO capabilityIO) {
-        return new NotifiableAirContainer(this, storages, pressureTier, volume, io, io);
+    protected NotifiableAirContainer createTank(PressureTier pressureTier, int volume, IO io, IO capabilityIO) {
+        return new NotifiableAirContainer(this, pressureTier, volume, io, io);
     }
         // The `Object... args` parameter is necessary in case a superclass needs to pass any args along to createTank().
     // We can't use fields here because those won't be available while createTank() is called.
     public AirHatchPartMachine(IMachineBlockEntity holder, int tier, PressureTier pTier, IO io, Object... args) {
         super(holder, tier, io);
         this.io = io;
-        List<FluidStorage> storages = new ArrayList<>();
-        this.tank = createTank(storages, PressureTier.TIER_ONE, 5000, IO.IN, IO.OUT);
+        this.airHandler = createTank(PressureTier.TIER_ONE, 5000, IO.IN, IO.IN);
+        airHandlerMachineCap = LazyOptional.of(() -> this.airHandler);
 
     }
 
