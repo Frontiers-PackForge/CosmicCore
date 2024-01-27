@@ -1,11 +1,15 @@
 package com.ghostipedia.cosmiccore.gtbridge.machines;
 
 import com.ghostipedia.cosmiccore.gtbridge.machines.logic.BasicAirMachineLogic;
+import com.ghostipedia.cosmiccore.gtbridge.machines.parts.AirHatchPartMachine;
+import com.ghostipedia.cosmiccore.gtbridge.machines.traits.AirRecipeCapability;
 import com.gregtechceu.gtceu.api.GTValues;
+import com.gregtechceu.gtceu.api.capability.recipe.IO;
 import com.gregtechceu.gtceu.api.gui.GuiTextures;
 import com.gregtechceu.gtceu.api.gui.fancy.IFancyUIProvider;
 import com.gregtechceu.gtceu.api.machine.IMachineBlockEntity;
 import com.gregtechceu.gtceu.api.machine.feature.multiblock.IDisplayUIMachine;
+import com.gregtechceu.gtceu.api.machine.feature.multiblock.IMultiPart;
 import com.gregtechceu.gtceu.api.machine.multiblock.WorkableElectricMultiblockMachine;
 import com.gregtechceu.gtceu.api.machine.trait.RecipeLogic;
 import com.gregtechceu.gtceu.utils.GTUtil;
@@ -13,19 +17,23 @@ import com.lowdragmc.lowdraglib.gui.modular.ModularUI;
 import com.lowdragmc.lowdraglib.gui.widget.ComponentPanelWidget;
 import com.lowdragmc.lowdraglib.gui.widget.DraggableScrollableWidgetGroup;
 import com.lowdragmc.lowdraglib.gui.widget.LabelWidget;
+import com.lowdragmc.lowdraglib.misc.FluidTransferList;
+import it.unimi.dsi.fastutil.longs.Long2ObjectMaps;
+import me.desht.pneumaticcraft.api.PNCCapabilities;
+import me.desht.pneumaticcraft.api.tileentity.IAirHandlerMachine;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Player;
 import javax.annotation.ParametersAreNonnullByDefault;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
 
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
 public class BasicAirMachine extends WorkableElectricMultiblockMachine implements IDisplayUIMachine {
-
-
 
 
     @Override
@@ -44,34 +52,40 @@ public class BasicAirMachine extends WorkableElectricMultiblockMachine implement
         super(holder);
     }
 
-
+   // public IAirHandlerMachine AirContainer;
     //Forming Logic
     @Override
     public void onStructureFormed() {
         super.onStructureFormed();
-        scheduleRenderUpdate();
+        //    scheduleRenderUpdate();
     }
 /*
         //getRecipeLogic().resetRecipeLogic();
         // capture all energy containers
-        List<IFluidTransfer> fluidTanks = new ArrayList<>();
+        List<IAirHandlerMachine> airTanks = new ArrayList<>();
         Map<Long, IO> ioMap = getMultiblockState().getMatchContext().getOrCreate("ioMap", Long2ObjectMaps::emptyMap);
         for (IMultiPart part : getParts()) {
+            if (!(part instanceof AirHatchPartMachine)) {
+            continue;
+            }
             IO io = ioMap.getOrDefault(part.self().getPos().asLong(), IO.BOTH);
             if (io == IO.NONE || io == IO.IN) continue;
             for (var handler : part.getRecipeHandlers()) {
                 if (io != IO.BOTH && handler.getHandlerIO() != IO.BOTH && io != handler.getHandlerIO()) continue;
                 var handlerIO = io == IO.OUT ? handler.getHandlerIO() : io;
-                if (handlerIO == IO.IN && handler.getCapability() == FluidRecipeCapability.CAP && handler instanceof IFluidTransfer fluidTransfer) {
-                    fluidTanks.add(fluidTransfer);
+                if (handlerIO == IO.IN && handler.getCapability() == AirRecipeCapability.CAP && handler instanceof IAirHandlerMachine airTransfer) {
+                    airTanks.add(airTransfer);
                 }
             }
         }
-        this.inputFluidInventory = new FluidTransferList(fluidTanks);
+       // airHandler = new AirContainer(airTanks);
+
     }
 
 
  */
+
+
     //////////////////////////////////////
     //******     Recipe Logic    *******//
     //////////////////////////////////////

@@ -6,7 +6,10 @@ import com.ghostipedia.cosmiccore.common.data.CosmicCreativeModeTabs;
 import com.ghostipedia.cosmiccore.common.data.CosmicItems;
 import com.ghostipedia.cosmiccore.gtbridge.CosmicCoreRecipeTypes;
 import com.ghostipedia.cosmiccore.gtbridge.machines.CosmicCoreMachines;
+import com.ghostipedia.cosmiccore.gtbridge.machines.traits.CosmicCaps;
+import com.ghostipedia.cosmiccore.gtbridge.machines.traits.CosmicRecipeCaps;
 import com.gregtechceu.gtceu.api.GTCEuAPI;
+import com.gregtechceu.gtceu.api.capability.recipe.RecipeCapability;
 import com.gregtechceu.gtceu.api.data.chemical.material.event.MaterialRegistryEvent;
 import com.gregtechceu.gtceu.api.data.chemical.material.registry.MaterialRegistry;
 import com.gregtechceu.gtceu.api.machine.MachineDefinition;
@@ -16,6 +19,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.RegisterClientReloadListenersEvent;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.common.capabilities.RegisterCapabilitiesEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.DistExecutor;
@@ -45,10 +49,19 @@ public class CosmicCore {
         var bus = FMLJavaModLoadingContext.get().getModEventBus();
         bus.register(this);
         bus.addGenericListener(GTRecipeType.class, this::registerRecipeTypes);
+        bus.addGenericListener(RecipeCapability.class, this::registerRecipeCaps);
        // bus.addGenericListener(Class.class, this::registerRecipeConditions);
         bus.addGenericListener(MachineDefinition.class, this::registerMachines);
+        bus.addListener(this::registerCapabilities);
 
 
+    }
+
+    public void registerCapabilities(RegisterCapabilitiesEvent event) {
+        CosmicCaps.register(event);
+    }
+    public void registerRecipeCaps(GTCEuAPI.RegisterEvent<String, RecipeCapability<?>> event) {
+        CosmicRecipeCaps.init();
     }
 
     public static void init() {

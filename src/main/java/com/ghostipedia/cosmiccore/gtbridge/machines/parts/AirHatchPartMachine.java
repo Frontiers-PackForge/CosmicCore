@@ -1,21 +1,16 @@
 package com.ghostipedia.cosmiccore.gtbridge.machines.parts;
 
+import com.ghostipedia.cosmiccore.gtbridge.machines.traits.CosmicCaps;
 import com.ghostipedia.cosmiccore.gtbridge.machines.traits.NotifiableAirContainer;
 import com.gregtechceu.gtceu.api.capability.recipe.IO;
 import com.gregtechceu.gtceu.api.gui.GuiTextures;
 import com.gregtechceu.gtceu.api.machine.IMachineBlockEntity;
 import com.gregtechceu.gtceu.api.machine.TickableSubscription;
-import com.gregtechceu.gtceu.api.machine.multiblock.part.MultiblockPartMachine;
 import com.gregtechceu.gtceu.api.machine.multiblock.part.TieredIOPartMachine;
-import com.gregtechceu.gtceu.api.machine.multiblock.part.TieredPartMachine;
-import com.gregtechceu.gtceu.api.machine.trait.NotifiableFluidTank;
 import com.lowdragmc.lowdraglib.gui.widget.*;
-import com.lowdragmc.lowdraglib.misc.FluidStorage;
-import com.lowdragmc.lowdraglib.side.fluid.FluidHelper;
-import com.lowdragmc.lowdraglib.side.fluid.FluidTransferHelper;
 import com.lowdragmc.lowdraglib.syncdata.ISubscription;
-import com.lowdragmc.lowdraglib.syncdata.annotation.Persisted;
 import com.lowdragmc.lowdraglib.syncdata.field.ManagedFieldHolder;
+import it.unimi.dsi.fastutil.floats.FloatPredicate;
 import me.desht.pneumaticcraft.api.PNCCapabilities;
 import me.desht.pneumaticcraft.api.PneumaticRegistry;
 import me.desht.pneumaticcraft.api.pressure.PressureHelper;
@@ -37,11 +32,17 @@ import me.desht.pneumaticcraft.lib.PneumaticValues;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.Component;
+import net.minecraft.server.TickTask;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.registries.ForgeRegistries;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 
@@ -53,35 +54,37 @@ import java.util.*;
 @MethodsReturnNonnullByDefault
 public class AirHatchPartMachine extends TieredIOPartMachine {
 
-    protected static final ManagedFieldHolder MANAGED_FIELD_HOLDER = new ManagedFieldHolder(AirHatchPartMachine.class, TieredIOPartMachine.MANAGED_FIELD_HOLDER);
 
-public final NotifiableAirContainer airHandler;
 
- //   private IAirHandlerMachine airHandler;
-
-    private final LazyOptional<IAirHandlerMachine> airHandlerMachineCap;
+    private final NotifiableAirContainer airHandler;
     @Nullable
-    protected TickableSubscription autoIOSubs;
-    @Nullable
-    protected ISubscription tankSubs;
+    protected TickableSubscription updateSubs;
+    private final LazyOptional<NotifiableAirContainer> airHandlerCap;
 
-    //Gotta rework this, will do in a bit
+    private int volume;
+    private float maxVolume;
 
 
-protected final IO io;
 
-    private final Map<IAirHandlerMachine, List<Direction>> airHandlerMap = new IdentityHashMap<>();
 
-    protected NotifiableAirContainer createTank(PressureTier pressureTier, int volume, IO io, IO capabilityIO) {
-        return new NotifiableAirContainer(this, pressureTier, volume, io, io);
+    @Nonnull
+    public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> cap, Direction side) {
+        if (cap == PNCCapabilities.AIR_HANDLER_MACHINE_CAPABILITY && canConnectPneumatic(side)) {
+            return airHandlerCap.cast();
+        }
+        return LazyOptional.empty();
     }
-        // The `Object... args` parameter is necessary in case a superclass needs to pass any args along to createTank().
+
+    private boolean canConnectPneumatic(Direction side) {
+        return true;
+    }
+
+    // The `Object... args` parameter is necessary in case a superclass needs to pass any args along to createTank().
     // We can't use fields here because those won't be available while createTank() is called.
-    public AirHatchPartMachine(IMachineBlockEntity holder, int tier, PressureTier pTier, IO io, Object... args) {
+    public AirHatchPartMachine(IMachineBlockEntity holder, int tier, PressureTier pressureTier, int volume, float maxPressure, IO io, Object... args) {
         super(holder, tier, io);
-        this.io = io;
-        this.airHandler = createTank(PressureTier.TIER_ONE, 5000, IO.IN, IO.IN);
-        airHandlerMachineCap = LazyOptional.of(() -> this.airHandler);
+        this.airHandler = new NotifiableAirContainer(this, pressureTier, volume, maxPressure, IO.IN);
+        this.airHandlerCap = LazyOptional.of(() -> airHandler);
 
     }
 
@@ -98,21 +101,35 @@ protected final IO io;
     @Override
     public void onLoad() {
         super.onLoad();
-        /*
 
         if (getLevel() instanceof ServerLevel serverLevel) {
-            serverLevel.getServer().tell(new TickTask(0, this::updateTankSubscription));
+            serverLevel.getServer().tell(new TickTask(0, this::updatePressureSubscription));
         }
         //tankSubs = tank.addChangedListener(this::updateTankSubscription);
-    */
     }
+
+    public void updatePressureSubscription() {
+        if (updateSubs ==null ) {
+            updateSubs = new TickableSubscription(this::updatePressure);
+        }
+    }
+
+    public void updatePressure() {
+        BlockEntity blocklol = getLevel().getBlockEntity(getPos().relative(getFrontFacing()));
+        if (blocklol != null) {
+            IAirHandlerMachine container = blocklol.getCapability(CosmicCaps.CAPABILITY_PRESSURE_CONTAINER, this.getFrontFacing().getOpposite()).resolve().orElse(null);
+        }
+
+    }
+
+
 
     @Override
     public void onUnload() {
         super.onUnload();
-        if (tankSubs != null) {
-            tankSubs.unsubscribe();
-            tankSubs = null;
+        if (updateSubs != null) {
+            updateSubs.unsubscribe();
+            updateSubs = null;
         }
     }
 
@@ -123,13 +140,13 @@ protected final IO io;
     @Override
     public void onNeighborChanged(Block block, BlockPos fromPos, boolean isMoving) {
         super.onNeighborChanged(block, fromPos, isMoving);
-        //updateTankSubscription();
+        updatePressureSubscription();
     }
 
     @Override
     public void onRotated(Direction oldFacing, Direction newFacing) {
         super.onRotated(oldFacing, newFacing);
-        //updateTankSubscription();
+        updatePressureSubscription();
     }
 /*
     protected void updateTankSubscription() {
@@ -176,5 +193,6 @@ protected final IO io;
         group.setBackground(GuiTextures.BACKGROUND_INVERSE);
         return group;
     }
+
 
 }

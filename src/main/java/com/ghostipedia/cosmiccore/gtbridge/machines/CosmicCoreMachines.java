@@ -4,6 +4,7 @@ import com.ghostipedia.cosmiccore.api.registries.CosmicRegistries;
 import com.ghostipedia.cosmiccore.common.data.CosmicBlocks;
 import com.ghostipedia.cosmiccore.gtbridge.machines.BasicAirMachine;
 import com.ghostipedia.cosmiccore.gtbridge.machines.parts.AirHatchPartMachine;
+import com.ghostipedia.cosmiccore.gtbridge.machines.traits.ICosmicPneumaticMachines;
 import com.gregtechceu.gtceu.GTCEu;
 import com.gregtechceu.gtceu.api.GTValues;
 import com.gregtechceu.gtceu.api.capability.recipe.IO;
@@ -40,6 +41,8 @@ public class CosmicCoreMachines {
     static int initialCapacity = 1;
     static int slots = 1;
 
+    static int volume;
+
     public static MachineDefinition[] registerTieredMachines(String name,
                                                              BiFunction<IMachineBlockEntity, Integer, MetaMachine> factory,
                                                              BiFunction<Integer, MachineBuilder<MachineDefinition>, MachineDefinition> builder,
@@ -57,7 +60,8 @@ public class CosmicCoreMachines {
 
 
     public static final MachineDefinition[] PRESSURE_HATCH = registerTieredMachines("pressure_hatch", (holder, tier) -> {
-        return new AirHatchPartMachine(holder, tier, PressureTier.TIER_ONE, IO.BOTH);
+                int maxPressure = 20;
+                return new AirHatchPartMachine(holder, tier, PressureTier.TIER_ONE, volume, maxPressure, IO.BOTH);
             }, (tier, builder) ->builder
                     .langValue("Yes")
                     .rotationState(RotationState.ALL)

@@ -8,6 +8,7 @@ public class AirRecipeCapability extends RecipeCapability<Double> {
     public static final AirRecipeCapability CAP = new AirRecipeCapability();
 
 
+
     protected AirRecipeCapability() {
         super("Bar", 0xFFAA33AA, SerializerDouble.INSTANCE);
     }
