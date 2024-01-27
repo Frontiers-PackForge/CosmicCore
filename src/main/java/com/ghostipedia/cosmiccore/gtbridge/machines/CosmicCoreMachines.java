@@ -4,7 +4,6 @@ import com.ghostipedia.cosmiccore.api.registries.CosmicRegistries;
 import com.ghostipedia.cosmiccore.common.data.CosmicBlocks;
 import com.ghostipedia.cosmiccore.gtbridge.machines.BasicAirMachine;
 import com.ghostipedia.cosmiccore.gtbridge.machines.parts.AirHatchPartMachine;
-import com.ghostipedia.cosmiccore.gtbridge.machines.traits.ICosmicPneumaticMachines;
 import com.gregtechceu.gtceu.GTCEu;
 import com.gregtechceu.gtceu.api.GTValues;
 import com.gregtechceu.gtceu.api.capability.recipe.IO;
