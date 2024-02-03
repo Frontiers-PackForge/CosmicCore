@@ -1,11 +1,14 @@
 package com.ghostipedia.cosmiccore.common.data;
 
 import com.ghostipedia.cosmiccore.CosmicCore;
+import com.ghostipedia.cosmiccore.api.registries.CosmicRegistries;
 import com.ghostipedia.cosmiccore.common.data.recipe.RecipeTags;
+import com.ghostipedia.cosmiccore.gtbridge.pipenet.PressurePipeType;
+import com.ghostipedia.cosmiccore.gtbridge.pipenet.blockentities.PressurePipeBlock;
+import com.ghostipedia.cosmiccore.gtbridge.pipenet.item.PressurePipeBlockItem;
 import com.gregtechceu.gtceu.api.block.RendererBlock;
 import com.gregtechceu.gtceu.api.block.RendererGlassBlock;
 import com.gregtechceu.gtceu.api.item.RendererBlockItem;
-import com.gregtechceu.gtceu.api.item.tool.GTToolType;
 import com.gregtechceu.gtceu.client.renderer.block.TextureOverrideRenderer;
 import com.lowdragmc.lowdraglib.Platform;
 import com.lowdragmc.lowdraglib.client.renderer.IRenderer;
@@ -22,12 +25,12 @@ import java.util.Map;
 import java.util.function.BiFunction;
 import java.util.function.Supplier;
 
-import static com.ghostipedia.cosmiccore.api.registries.CosmicRegistries.REGISTRATE;
+import static com.ghostipedia.cosmiccore.api.registries.CosmicRegistries.COSMIC_REGISTRATE;
 
 
 public class CosmicBlocks {
     static {
-        REGISTRATE.creativeModeTab(() -> CosmicCreativeModeTabs.COSMIC_CORE);
+        COSMIC_REGISTRATE.creativeModeTab(() -> CosmicCreativeModeTabs.COSMIC_CORE);
     }
 
     // region casings
@@ -39,6 +42,25 @@ public class CosmicBlocks {
     public static final BlockEntry<Block> CASING_DYSON_CELL = createCasingBlock("dyson_solar_cell", CosmicCore.id("block/casings/solid/dyson_solar_cell"));
     public static final BlockEntry<Block> CASING_DYSON_PORT = createCasingBlock("dyson_sphere_maintenance_port", CosmicCore.id("block/casings/solid/dyson_sphere_maintenance_port"));
     public static final BlockEntry<Block> ALTERNATOR_FLUX_COILING = createCasingBlock("alternator_flux_coiling", CosmicCore.id("block/casings/solid/alternator_flux_coiling_copper"));
+
+    @SuppressWarnings("unchecked")
+    public static final BlockEntry<PressurePipeBlock>[] PRESSURE_PIPE_BLOCKS = new BlockEntry[PressurePipeType.values().length];
+
+
+    private static void generatePressurePipeBlocks() {
+        for (int i = 0; i < PressurePipeType.values().length; ++i) {
+            var type = PressurePipeType.values()[i];
+            PRESSURE_PIPE_BLOCKS[i] = CosmicRegistries.COSMIC_REGISTRATE.block("%s_pipe".formatted(type.getSerializedName()), (p) -> new PressurePipeBlock(p, type))
+                    .initialProperties(() -> Blocks.IRON_BLOCK)
+                    .properties(p -> p.dynamicShape().noOcclusion())
+                    .blockstate(NonNullBiConsumer.noop())
+                    .addLayer(() -> RenderType::cutoutMipped)
+                    .item(PressurePipeBlockItem::new)
+                    .model(NonNullBiConsumer.noop())
+                    .build()
+                    .register();
+        }
+    }
     //'cosmiccore:alternator_flux_coiling'
     // endregion
 
@@ -70,7 +92,7 @@ public class CosmicBlocks {
     }
 
     private static BlockEntry<Block> createCasingBlock(String name, BiFunction<BlockBehaviour.Properties, IRenderer, ? extends RendererBlock> blockSupplier, ResourceLocation texture, NonNullSupplier<? extends Block> properties, Supplier<Supplier<RenderType>> type) {
-        return REGISTRATE.block(name, p -> (Block) blockSupplier.apply(p,
+        return COSMIC_REGISTRATE.block(name, p -> (Block) blockSupplier.apply(p,
                         Platform.isClient() ? new TextureOverrideRenderer(new ResourceLocation("block/cube_all"),
                                 Map.of("all", texture)) : null))
                 .initialProperties(properties)
@@ -83,7 +105,7 @@ public class CosmicBlocks {
     }
 
     private static BlockEntry<Block> createBottomTopCasingBlock(String name, BiFunction<BlockBehaviour.Properties, IRenderer, ? extends RendererBlock> blockSupplier, ResourceLocation sideTexture, ResourceLocation topTexture, ResourceLocation bottomTexture, NonNullSupplier<? extends Block> properties, Supplier<Supplier<RenderType>> type) {
-        return REGISTRATE.block(name, p -> (Block) blockSupplier.apply(p,
+        return COSMIC_REGISTRATE.block(name, p -> (Block) blockSupplier.apply(p,
                         Platform.isClient() ? new TextureOverrideRenderer(new ResourceLocation("block/cube_bottom_top"),
                                 Map.of("side", sideTexture, "top", topTexture, "bottom", bottomTexture)) : null))
                 .initialProperties(properties)
@@ -95,6 +117,7 @@ public class CosmicBlocks {
                 .register();
     }
     public static void init() {
+        generatePressurePipeBlocks();
 
     }
 }

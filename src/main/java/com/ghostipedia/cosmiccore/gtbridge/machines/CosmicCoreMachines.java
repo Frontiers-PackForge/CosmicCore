@@ -1,16 +1,15 @@
 package com.ghostipedia.cosmiccore.gtbridge.machines;
 
-import com.ghostipedia.cosmiccore.api.registries.CosmicRegistries;
+import com.ghostipedia.cosmiccore.Statics;
 import com.ghostipedia.cosmiccore.common.data.CosmicBlocks;
-import com.ghostipedia.cosmiccore.gtbridge.machines.BasicAirMachine;
-import com.ghostipedia.cosmiccore.gtbridge.machines.parts.AirHatchPartMachine;
+import com.ghostipedia.cosmiccore.gtbridge.machines.parts.PressureHatchPartMachine;
 import com.gregtechceu.gtceu.GTCEu;
+import com.gregtechceu.gtceu.api.GTCEuAPI;
 import com.gregtechceu.gtceu.api.GTValues;
-import com.gregtechceu.gtceu.api.capability.recipe.IO;
 import com.gregtechceu.gtceu.api.machine.IMachineBlockEntity;
 import com.gregtechceu.gtceu.api.machine.MachineDefinition;
 import com.gregtechceu.gtceu.api.machine.MetaMachine;
-import com.gregtechceu.gtceu.api.registry.GTRegistries;
+import com.gregtechceu.gtceu.api.pattern.TraceabilityPredicate;
 
 import com.gregtechceu.gtceu.api.data.RotationState;
 import com.gregtechceu.gtceu.api.machine.MultiblockMachineDefinition;
@@ -21,26 +20,59 @@ import com.gregtechceu.gtceu.api.registry.registrate.MachineBuilder;
 import com.gregtechceu.gtceu.common.data.GTBlocks;
 import com.gregtechceu.gtceu.common.data.GTMaterials;
 import com.gregtechceu.gtceu.common.data.GTRecipeTypes;
-import me.desht.pneumaticcraft.api.pressure.PressureTier;
 
+import java.util.Locale;
 import java.util.function.BiFunction;
 
-import static com.ghostipedia.cosmiccore.api.registries.CosmicRegistries.REGISTRATE;
+import static com.ghostipedia.cosmiccore.api.registries.CosmicRegistries.COSMIC_REGISTRATE;
 import static com.gregtechceu.gtceu.api.pattern.Predicates.abilities;
 import static com.gregtechceu.gtceu.api.pattern.Predicates.autoAbilities;
-import static com.gregtechceu.gtceu.common.data.GTMachines.registerTieredMachines;
 
 @SuppressWarnings("unused")
 public class CosmicCoreMachines {
 
     public static final PartAbility PRESSURE_CONTAINER = new PartAbility("pressure_container");
 
-    public final static int[] Tiers = new int[] {GTValues.LV, GTValues.MV};
+    public final static int[] ELECTRIC_TIERS = GTCEuAPI.isHighTier() ?
+            new int[] {GTValues.LV, GTValues.MV, GTValues.HV, GTValues.EV, GTValues.IV, GTValues.LuV, GTValues.ZPM, GTValues.UV, GTValues.UHV, GTValues.UEV, GTValues.UIV, GTValues.UXV, GTValues.OpV} :
+            new int[] {GTValues.LV, GTValues.MV, GTValues.HV, GTValues.EV, GTValues.IV, GTValues.LuV, GTValues.ZPM, GTValues.UV};
+    public final static int[] HIGH_TIERS = GTCEuAPI.isHighTier() ?
+            new int[] {GTValues.IV, GTValues.LuV, GTValues.ZPM, GTValues.UV, GTValues.UHV, GTValues.UEV, GTValues.UIV, GTValues.UXV, GTValues.OpV} :
+            new int[] {GTValues.IV, GTValues.LuV, GTValues.ZPM, GTValues.UV, GTValues.UHV};
 
-    static int initialCapacity = 1;
-    static int slots = 1;
+    public static MachineDefinition[] registerPressureTieredMachines(String name,
+                                                                     BiFunction<IMachineBlockEntity, Integer, MetaMachine> factory,
+                                                                     BiFunction<Integer, MachineBuilder<MachineDefinition>, MachineDefinition> builder,
+                                                                     int... tiers) {
+        MachineDefinition[] definitions = new MachineDefinition[Statics.P.length];
+        for (int tier : tiers) {
+            var register = COSMIC_REGISTRATE.machine(Statics.PN[tier].toLowerCase(Locale.ROOT) + "_" + name, holder -> factory.apply(holder, tier))
+                    .tier(tier);
+            definitions[tier] = builder.apply(tier, register);
+        }
+        return definitions;
+    }
 
-    static int volume;
+    public static TraceabilityPredicate pressurePredicate() {
+        return abilities(PRESSURE_CONTAINER).setMaxGlobalLimited(1).setPreviewCount(1);
+    }
+
+
+    public static final MachineDefinition[] PRESSURE_HATCH = registerPressureTieredMachines("pressure_hatch", (holder, tier) -> {
+                double min = Statics.P[Statics.UEV];
+                double max = Statics.P[Statics.UEV];
+                if (tier < Statics.UEV) min = Statics.P[tier];
+                else if (tier > Statics.UEV) max = Statics.P[tier];
+
+                tier = Math.abs(Statics.UEV - tier);
+                return new PressureHatchPartMachine(holder, tier, min, max);
+            }, (tier, builder) -> builder
+                    .langValue("%s Hatch".formatted(Statics.PRESSURE_NAMES[tier]))
+                    .abilities(PRESSURE_CONTAINER)
+                    .rotationState(RotationState.ALL)
+                    .overlayTieredHullRenderer("pressure_hatch")
+                    .register(),
+            0, 1, 2, 3, 4, 5, 6, 7, 8, 9);
 
     public static MachineDefinition[] registerTieredMachines(String name,
                                                              BiFunction<IMachineBlockEntity, Integer, MetaMachine> factory,
@@ -49,27 +81,14 @@ public class CosmicCoreMachines {
         MachineDefinition[] definitions = new MachineDefinition[tiers.length];
         for (int i = 0; i < tiers.length; i++) {
             int tier = tiers[i];
-            var register =  REGISTRATE.machine(GTValues.VN[tier].toLowerCase() + "_" + name, holder -> factory.apply(holder, tier))
+            var register =  COSMIC_REGISTRATE.machine(GTValues.VN[tier].toLowerCase() + "_" + name, holder -> factory.apply(holder, tier))
                     .tier(tier);
             definitions[i] = builder.apply(tier, register);
         }
         return definitions;
     }
 
-
-
-    public static final MachineDefinition[] PRESSURE_HATCH = registerTieredMachines("pressure_hatch", (holder, tier) -> {
-                int maxPressure = 20;
-                return new AirHatchPartMachine(holder, tier, PressureTier.TIER_ONE, volume, maxPressure, IO.BOTH);
-            }, (tier, builder) ->builder
-                    .langValue("Yes")
-                    .rotationState(RotationState.ALL)
-                    .abilities(PRESSURE_CONTAINER)
-                    .overlayTieredHullRenderer("pressure_hatch")
-                    .register(),
-            Tiers);
-
-    public static final MultiblockMachineDefinition AIR_MACHINE = REGISTRATE.multiblock("airmachine", BasicAirMachine::new)
+    public static final MultiblockMachineDefinition AIR_MACHINE = COSMIC_REGISTRATE.multiblock("airmachine", BasicAirMachine::new)
             .rotationState(RotationState.NON_Y_AXIS)
             //.tooltips(Component.translatable("gtceu.multiblock.alternator.tooltip1"))
             .recipeTypes(GTRecipeTypes.DUMMY_RECIPES)

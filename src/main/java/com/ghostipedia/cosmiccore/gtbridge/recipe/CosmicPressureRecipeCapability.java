@@ -1,16 +1,16 @@
-package com.ghostipedia.cosmiccore.gtbridge.machines.traits;
+package com.ghostipedia.cosmiccore.gtbridge.recipe;
 
 import com.gregtechceu.gtceu.api.capability.recipe.RecipeCapability;
 import com.gregtechceu.gtceu.api.recipe.content.ContentModifier;
 import com.gregtechceu.gtceu.api.recipe.content.SerializerDouble;
 
-public class AirRecipeCapability extends RecipeCapability<Double> {
-    public static final AirRecipeCapability CAP = new AirRecipeCapability();
+public class CosmicPressureRecipeCapability extends RecipeCapability<Double> {
+
+    public static final CosmicPressureRecipeCapability CAP = new CosmicPressureRecipeCapability();
 
 
-
-    protected AirRecipeCapability() {
-        super("Bar", 0xFFAA33AA, SerializerDouble.INSTANCE);
+    protected CosmicPressureRecipeCapability() {
+        super("bar", 0xFFAA33AA, SerializerDouble.INSTANCE);
     }
 
     @Override

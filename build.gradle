@@ -138,7 +138,6 @@ dependencies {
     modImplementation("curse.maven:create-328085:4762216")
     modImplementation("curse.maven:new-thin-air-878379:4848005")
     modImplementation("curse.maven:puzzles-lib-495476:4924184")
-    modImplementation("curse.maven:pneumaticcraft-repressurized-281849:4921181")
 
 
 
