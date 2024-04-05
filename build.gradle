@@ -80,6 +80,9 @@ repositories {
             includeGroup "dev.latvian.mods"
         }
     }
+    maven {
+        url "https://tehnut.info/maven/"
+    }
     maven { // Registrate
         url = "https://maven.tterrag.com/"
         content {
@@ -141,6 +144,11 @@ dependencies {
     modImplementation("com.teamresourceful.resourcefulconfig:resourcefulconfig-forge-${project.minecraft_version}:${project.resourcefulconfig_version}")
     modImplementation("earth.terrarium.botarium:botarium-forge-${project.minecraft_version}:${project.botarium_version}")
     modImplementation("earth.terrarium.adastra:ad_astra-forge-${project.minecraft_version}:${ad_astra_version}") {transitive false} // issue with create mod so not transitive
+
+    // Blood Magic //TODO: Find real repo url
+    //modImplementation("com.wayoftime.bloodmagic:BloodMagic:${project.minecraft_version}-${project.blood_magic_version}")
+    modCompileOnly("curse.maven:blood-magic-224791:4779713") // API
+    modRuntimeOnly("curse.maven:blood-magic-224791:4779711") // Runtime to test in game
 
     //Piss
     //modImplementation("curse.maven:cold-sweat-506194:4805548")
