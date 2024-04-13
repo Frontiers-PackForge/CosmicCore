@@ -7,6 +7,8 @@
     "cosmiccore:dyson_solar_cell",
     "cosmiccore:dyson_sphere_maintenance_port",
     "cosmiccore:alternator_flux_coiling",
-    "cosmiccore:plated_aerocloud"
+    "cosmiccore:plated_aerocloud",
+    "cosmiccore:high_temperature_fission_casing",
+    "cosmiccore:highly_conductive_fission_casing"
   ]
 }
