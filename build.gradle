@@ -147,8 +147,9 @@ dependencies {
 
     // Blood Magic //TODO: Find real repo url
     //modImplementation("com.wayoftime.bloodmagic:BloodMagic:${project.minecraft_version}-${project.blood_magic_version}")
-    modCompileOnly("curse.maven:blood-magic-224791:4779713") // API
-    modRuntimeOnly("curse.maven:blood-magic-224791:4779711") // Runtime to test in game
+    // modCompileOnly("curse.maven:blood-magic-224791:4779713") // API
+    // modRuntimeOnly("curse.maven:blood-magic-224791:4779711") // Runtime to test in game
+    modImplementation("curse.maven:blood-magic-224791:4779711")
 
     //Piss
     //modImplementation("curse.maven:cold-sweat-506194:4805548")

@@ -4,6 +4,7 @@ import com.ghostipedia.cosmiccore.api.registries.CosmicRegistries;
 import com.ghostipedia.cosmiccore.common.data.CosmicBlocks;
 import com.ghostipedia.cosmiccore.common.data.CosmicCreativeModeTabs;
 import com.ghostipedia.cosmiccore.common.data.CosmicItems;
+import com.ghostipedia.cosmiccore.common.data.CosmicMachines;
 import com.ghostipedia.cosmiccore.gtbridge.CosmicCoreRecipeTypes;
 import com.gregtechceu.gtceu.api.GTCEuAPI;
 import com.gregtechceu.gtceu.api.data.chemical.material.event.MaterialRegistryEvent;
@@ -33,11 +34,11 @@ import org.slf4j.LoggerFactory;
 
 @Mod(CosmicCore.MOD_ID)
 public class CosmicCore {
-    public static final String
-            MOD_ID = "cosmiccore",
-            NAME = "CosmicCore";
+    public static final String MOD_ID = "cosmiccore", NAME = "CosmicCore";
     public static final Logger LOGGER = LoggerFactory.getLogger(NAME);
+
     public static MaterialRegistry MATERIAL_REGISTRY;
+
     //Init Everything
     public CosmicCore() {
         CosmicCore.init();
@@ -46,8 +47,7 @@ public class CosmicCore {
         bus.addGenericListener(GTRecipeType.class, this::registerRecipeTypes);
        // bus.addGenericListener(Class.class, this::registerRecipeConditions);
        // bus.addGenericListener(MachineDefinition.class, this::registerMachines);
-
-
+        bus.addGenericListener(MachineDefinition.class, this::registerMachines);
     }
 
     public static void init() {
@@ -56,9 +56,6 @@ public class CosmicCore {
         CosmicBlocks.init();
         CosmicItems.init();
         CosmicRegistries.REGISTRATE.registerRegistrate();
-
-
-
     }
 
     public static ResourceLocation id(String path) {
@@ -74,5 +71,9 @@ public class CosmicCore {
     @SubscribeEvent
     public void registerRecipeTypes(GTCEuAPI.RegisterEvent<ResourceLocation, GTRecipeType> event) {
         CosmicCoreRecipeTypes.init();
+    }
+
+    public void registerMachines(GTCEuAPI.RegisterEvent<ResourceLocation, MachineDefinition> event) {
+        CosmicMachines.init();
     }
 }
