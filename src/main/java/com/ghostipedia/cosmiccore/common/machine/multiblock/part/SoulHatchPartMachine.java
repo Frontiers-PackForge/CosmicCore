@@ -6,26 +6,14 @@ import com.gregtechceu.gtceu.api.capability.recipe.IO;
 import com.gregtechceu.gtceu.api.gui.GuiTextures;
 import com.gregtechceu.gtceu.api.machine.IMachineBlockEntity;
 import com.gregtechceu.gtceu.api.machine.multiblock.part.TieredIOPartMachine;
-import com.lowdragmc.lowdraglib.gui.modular.ModularUI;
-import com.lowdragmc.lowdraglib.gui.widget.ImageWidget;
-import com.lowdragmc.lowdraglib.gui.widget.LabelWidget;
-import com.lowdragmc.lowdraglib.gui.widget.Widget;
-import com.lowdragmc.lowdraglib.gui.widget.WidgetGroup;
-import com.lowdragmc.lowdraglib.syncdata.ISubscription;
+import com.lowdragmc.lowdraglib.gui.widget.*;
+import com.lowdragmc.lowdraglib.syncdata.annotation.Persisted;
 import com.lowdragmc.lowdraglib.syncdata.field.ManagedFieldHolder;
-import com.lowdragmc.lowdraglib.syncdata.managed.ManagedField;
 import net.minecraft.MethodsReturnNonnullByDefault;
-import net.minecraft.world.InteractionHand;
+import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.phys.BlockHitResult;
-import wayoftime.bloodmagic.core.data.SoulNetwork;
-import wayoftime.bloodmagic.core.data.SoulTicket;
-import wayoftime.bloodmagic.util.helper.NetworkHelper;
 
-import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
-
-import static net.minecraft.commands.arguments.coordinates.BlockPosArgument.getBlockPos;
 
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
@@ -33,6 +21,7 @@ public class SoulHatchPartMachine extends TieredIOPartMachine {
 
     protected static final ManagedFieldHolder MANAGED_FIELD_HOLDER = new ManagedFieldHolder(SoulHatchPartMachine.class, TieredIOPartMachine.MANAGED_FIELD_HOLDER);
 
+    @Persisted
     protected NotifiableSoulContainer soulContainer;
 
     public SoulHatchPartMachine(IMachineBlockEntity holder, int tier, IO io) {
@@ -42,13 +31,18 @@ public class SoulHatchPartMachine extends TieredIOPartMachine {
 
     @Override
     public Widget createUIWidget() {
-        return super.createUIWidget();
+        var group = new WidgetGroup(0,0,128,63);
+
+        group.addWidget(new ImageWidget(4, 4, 120, 55, GuiTextures.DISPLAY));
+        group.addWidget(new LabelWidget(8, 8, Component.translatable("gui.cosmiccore.soul_hatch.label." + (this.io == IO.IN ? "import" : "export"))));
+        group.addWidget(new ComponentPanelWidget(8, 18, this.soulContainer::buildDisplayInfo));
+
+        group.setBackground(GuiTextures.BACKGROUND_INVERSE);
+        return group;
     }
 
-    @Override
-    public boolean shouldOpenUI(Player player, InteractionHand hand, BlockHitResult hit) {
-//        if (!soulContainer.hasNetwork()) soulContainer.setCachedNetwork(NetworkHelper.getSoulNetwork(player));
-        return true;
+    public void attachSoulNetwork(Player player) {
+        this.soulContainer.setOwner(player.getUUID());
     }
 
     @Override
