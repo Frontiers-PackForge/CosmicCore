@@ -11,7 +11,8 @@ import com.lowdragmc.lowdraglib.gui.texture.ProgressTexture;
 
 public class CosmicCoreRecipeTypes {
 
-    public static final GTRecipeType SOUL_TESTER_RECIPES = GTRecipeTypes.register("soul_tester", GTRecipeTypes.MULTIBLOCK).setMaxIOSize(1,1,0,0)
+    public static final GTRecipeType SOUL_TESTER_RECIPES = GTRecipeTypes.register("soul_tester", GTRecipeTypes.MULTIBLOCK)
+            .setMaxIOSize(1,1,0,0)
             .setProgressBar(GuiTextures.PROGRESS_BAR_ARROW, ProgressTexture.FillDirection.LEFT_TO_RIGHT)
             .setMaxTooltips(1);
 

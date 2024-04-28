@@ -36,9 +36,14 @@ public class CosmicCoreGTAddon implements IGTAddon {
 
     @Override
     public void addRecipes(Consumer<FinishedRecipe> provider) {
+        CosmicCoreRecipeTypes.init();
         CosmicCoreRecipes.init(provider);
     }
 
+    @Override
+    public void registerRecipeCapabilities() {
+        CosmicRecipeCapabilities.init();
+    }
 
     public static final ContentJS<Integer> SOUL_IN = new ContentJS<>(NumberComponent.INT, CosmicRecipeCapabilities.SOUL, false);
     public static final ContentJS<Integer> SOUL_OUT = new ContentJS<>(NumberComponent.INT, CosmicRecipeCapabilities.SOUL, true);

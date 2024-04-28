@@ -39,12 +39,10 @@ public class CosmicCore {
         CosmicCore.init();
         var bus = FMLJavaModLoadingContext.get().getModEventBus();
         bus.register(this);
-        bus.addGenericListener(RecipeCapability.class, this::registerRecipeCapabilities);
         bus.addGenericListener(GTRecipeType.class, this::registerRecipeTypes);
        // bus.addGenericListener(Class.class, this::registerRecipeConditions);
        // bus.addGenericListener(MachineDefinition.class, this::registerMachines);
         bus.addGenericListener(MachineDefinition.class, this::registerMachines);
-        bus.addListener(this::registerCapabilities);
     }
 
     public static void init() {
@@ -65,7 +63,6 @@ public class CosmicCore {
     }
 
 
-    @SubscribeEvent
     public void registerRecipeTypes(GTCEuAPI.RegisterEvent<ResourceLocation, GTRecipeType> event) {
         CosmicCoreRecipeTypes.init();
     }
@@ -74,11 +71,8 @@ public class CosmicCore {
         CosmicMachines.init();
     }
 
+    @SubscribeEvent
     public void registerCapabilities(RegisterCapabilitiesEvent event) {
         CosmicCapabilities.register(event);
-    }
-
-    public void registerRecipeCapabilities(GTCEuAPI.RegisterEvent<String, RecipeCapability<?>> event) {
-        CosmicRecipeCapabilities.init();
     }
 }
