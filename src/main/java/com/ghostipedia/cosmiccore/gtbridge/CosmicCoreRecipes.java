@@ -13,9 +13,9 @@ public class CosmicCoreRecipes {
 
     public static void init (Consumer<FinishedRecipe> provider) {
         SOUL_TESTER_RECIPES.recipeBuilder("soul_to_dirt")
-                .inputItems(Blocks.DIRT.asItem())
+                .inputItems(Blocks.DIRT.asItem(), 1)
                 .output(SoulRecipeCapability.CAP, 10)
-                .duration(60)
+                .duration(10)
                 .save(provider);
     }
 

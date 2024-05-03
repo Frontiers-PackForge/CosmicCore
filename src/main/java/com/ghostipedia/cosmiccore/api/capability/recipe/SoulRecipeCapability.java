@@ -8,7 +8,7 @@ public class SoulRecipeCapability extends RecipeCapability<Integer> {
     public final static SoulRecipeCapability CAP = new SoulRecipeCapability();
 
     protected SoulRecipeCapability() {
-        super("soul", 0xCC0000FF, SerializerInteger.INSTANCE);
+        super("soul", 0x5E2129FF, true, 0, SerializerInteger.INSTANCE);
     }
 
     @Override

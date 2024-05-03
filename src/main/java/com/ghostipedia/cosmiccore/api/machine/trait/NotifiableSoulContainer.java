@@ -1,9 +1,11 @@
 package com.ghostipedia.cosmiccore.api.machine.trait;
 
+import com.ghostipedia.cosmiccore.CosmicCore;
 import com.ghostipedia.cosmiccore.api.capability.recipe.SoulRecipeCapability;
 import com.ghostipedia.cosmiccore.api.capability.ISoulContainer;
 import com.gregtechceu.gtceu.api.capability.recipe.IO;
 import com.gregtechceu.gtceu.api.capability.recipe.RecipeCapability;
+import com.gregtechceu.gtceu.api.machine.ConditionalSubscriptionHandler;
 import com.gregtechceu.gtceu.api.machine.MetaMachine;
 import com.gregtechceu.gtceu.api.machine.trait.NotifiableRecipeHandlerTrait;
 import com.gregtechceu.gtceu.api.recipe.GTRecipe;
@@ -11,8 +13,6 @@ import com.lowdragmc.lowdraglib.syncdata.annotation.DescSynced;
 import com.lowdragmc.lowdraglib.syncdata.annotation.Persisted;
 import com.lowdragmc.lowdraglib.syncdata.field.ManagedFieldHolder;
 import lombok.Getter;
-import lombok.Setter;
-import net.minecraft.network.chat.Component;
 import org.jetbrains.annotations.Nullable;
 import wayoftime.bloodmagic.core.data.SoulNetwork;
 import wayoftime.bloodmagic.core.data.SoulTicket;
@@ -27,15 +27,35 @@ public class NotifiableSoulContainer extends NotifiableRecipeHandlerTrait<Intege
     public static final ManagedFieldHolder MANAGED_FIELD_HOLDER = new ManagedFieldHolder(NotifiableSoulContainer.class, NotifiableRecipeHandlerTrait.MANAGED_FIELD_HOLDER);
 
     @Getter
-    public final IO handlerIO;
+    private final IO handlerIO;
+    private final ConditionalSubscriptionHandler conditionalSubscriptionHandler;
 
-    @Getter @Setter
+    @Getter
     @Persisted @DescSynced
-    public UUID owner;
+    private UUID owner;
+
+    @Getter
+    private int currentEssence;
 
     public NotifiableSoulContainer(MetaMachine machine,IO io) {
         super(machine);
         this.handlerIO = io;
+        this.currentEssence = -1;
+        conditionalSubscriptionHandler = new ConditionalSubscriptionHandler(machine, this::querySoulNetwork, () -> owner != null);
+    }
+
+    private void querySoulNetwork() {
+        if (this.machine.getOffsetTimer() % 20 != 0) return;
+
+        var network = this.getSoulNetwork();
+        if (network == null) return;
+
+        var essence = network.getCurrentEssence();
+        if (this.currentEssence == essence) return;
+
+        CosmicCore.LOGGER.info("Update Current Essence: {} LPs", essence);
+        this.currentEssence = essence;
+        this.notifyListeners();
     }
 
     @Override
@@ -56,7 +76,13 @@ public class NotifiableSoulContainer extends NotifiableRecipeHandlerTrait<Intege
     @Override
     public List<Object> getContents() {
         if (this.owner == null) return Collections.emptyList();
-        return List.of(this.getNetwork().getCurrentEssence());
+        return List.of(this.getSoulNetwork().getCurrentEssence());
+    }
+
+    @Override
+    public double getTotalContentAmount() {
+        if (this.owner == null)return 0;
+        return this.getSoulNetwork().getCurrentEssence();
     }
 
     @Override
@@ -69,21 +95,24 @@ public class NotifiableSoulContainer extends NotifiableRecipeHandlerTrait<Intege
         return MANAGED_FIELD_HOLDER;
     }
 
-    private SoulNetwork getNetwork() {
-        return NetworkHelper.getSoulNetwork(this.owner);
-    }
-
-    public void buildDisplayInfo(List<net.minecraft.network.chat.Component> textList) {
-        if (this.owner != null) {
-            textList.add(Component.translatable("gui.cosmiccore.soul_hatch.owner", PlayerHelper.getUsernameFromUUID(this.owner)));
-            textList.add(Component.translatable("gui.cosmiccore.soul_hatch.lp", this.getNetwork().getCurrentEssence()));
-        } else {
-            textList.add(Component.translatable("gui.cosmiccore.soul_hatch.no_network"));
-        }
+    public String getUsername() {
+        return PlayerHelper.getUsernameFromUUID(owner);
     }
 
     @Override
     public SoulNetwork getSoulNetwork() {
         return NetworkHelper.getSoulNetwork(this.owner);
+    }
+
+    @Override
+    public void setOwner(UUID owner) {
+        this.owner = owner;
+        conditionalSubscriptionHandler.updateSubscription();
+    }
+
+    @Override
+    public void onMachineLoad() {
+        super.onMachineLoad();
+        conditionalSubscriptionHandler.initialize(this.machine.getLevel());
     }
 }

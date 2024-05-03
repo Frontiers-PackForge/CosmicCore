@@ -80,9 +80,6 @@ repositories {
             includeGroup "dev.latvian.mods"
         }
     }
-    maven {
-        url "https://tehnut.info/maven/"
-    }
     maven { // Registrate
         url = "https://maven.tterrag.com/"
         content {
