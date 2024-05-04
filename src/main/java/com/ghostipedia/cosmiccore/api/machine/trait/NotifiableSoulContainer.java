@@ -1,6 +1,5 @@
 package com.ghostipedia.cosmiccore.api.machine.trait;
 
-import com.ghostipedia.cosmiccore.CosmicCore;
 import com.ghostipedia.cosmiccore.api.capability.recipe.SoulRecipeCapability;
 import com.ghostipedia.cosmiccore.api.capability.ISoulContainer;
 import com.gregtechceu.gtceu.api.capability.recipe.IO;
@@ -17,7 +16,6 @@ import org.jetbrains.annotations.Nullable;
 import wayoftime.bloodmagic.core.data.SoulNetwork;
 import wayoftime.bloodmagic.core.data.SoulTicket;
 import wayoftime.bloodmagic.util.helper.NetworkHelper;
-import wayoftime.bloodmagic.util.helper.PlayerHelper;
 
 import java.util.Collections;
 import java.util.List;
@@ -35,6 +33,7 @@ public class NotifiableSoulContainer extends NotifiableRecipeHandlerTrait<Intege
     private UUID owner;
 
     @Getter
+    @DescSynced
     private int currentEssence;
 
     public NotifiableSoulContainer(MetaMachine machine,IO io) {
@@ -53,7 +52,6 @@ public class NotifiableSoulContainer extends NotifiableRecipeHandlerTrait<Intege
         var essence = network.getCurrentEssence();
         if (this.currentEssence == essence) return;
 
-        CosmicCore.LOGGER.info("Update Current Essence: {} LPs", essence);
         this.currentEssence = essence;
         this.notifyListeners();
     }
@@ -93,10 +91,6 @@ public class NotifiableSoulContainer extends NotifiableRecipeHandlerTrait<Intege
     @Override
     public ManagedFieldHolder getFieldHolder() {
         return MANAGED_FIELD_HOLDER;
-    }
-
-    public String getUsername() {
-        return PlayerHelper.getUsernameFromUUID(owner);
     }
 
     @Override
