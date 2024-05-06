@@ -2,7 +2,7 @@
   "parent": "block/block",
   "textures": {
     "particle": "#overlay_soul_hatch",
-    "overlay_soul_hatch": "cosmiccore:block/overlay/soul_input_hatch"
+    "overlay_soul_hatch": "cosmiccore:block/overlay/soul_overlay_front"
   },
   "elements": [
     {
