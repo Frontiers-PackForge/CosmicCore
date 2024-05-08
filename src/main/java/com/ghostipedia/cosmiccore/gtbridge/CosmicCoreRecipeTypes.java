@@ -15,6 +15,10 @@ public class CosmicCoreRecipeTypes {
             .setMaxIOSize(1,1,0,0)
             .setProgressBar(GuiTextures.PROGRESS_BAR_ARROW, ProgressTexture.FillDirection.LEFT_TO_RIGHT)
             .setMaxTooltips(1);
+    public static final GTRecipeType GROVE_RECIPES = GTRecipeTypes.register("grove_recipes", GTRecipeTypes.MULTIBLOCK)
+            .setMaxIOSize(2,9,1,3)
+            .setProgressBar(GuiTextures.PROGRESS_BAR_ARROW, ProgressTexture.FillDirection.LEFT_TO_RIGHT)
+            .setMaxTooltips(1);
 
 
     public static void init() {
