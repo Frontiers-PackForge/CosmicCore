@@ -75,11 +75,11 @@ public class CosmicMachines {
                     .build())
             .workableCasingRenderer(GTCEu.id("block/casings/solid/machine_casing_inert_ptfe"), GTCEu.id("block/multiblock/coke_oven"))
             .register();
+    //Terrifying Recipe Modifiers half of this is moonruns to me :lets:
     public final static MultiblockMachineDefinition DRYGMY_GROVE = REGISTRATE.multiblock("drygmy_grove", WorkableElectricMultiblockMachine::new)
             .rotationState(RotationState.NON_Y_AXIS)
             .recipeType(CosmicCoreRecipeTypes.GROVE_RECIPES)
             .recipeModifiers(true,
-
                     (machine, recipe) -> {
                         if (machine instanceof IRecipeCapabilityHolder holder) {
                             // Find all the items in the combined Item Input inventories and create oversized ItemStacks
@@ -88,14 +88,11 @@ public class CosmicMachines {
                                     .map(container -> container.getContents().stream().filter(ItemStack.class::isInstance).map(ItemStack.class::cast).toList())
                                     .flatMap(container -> GTHashMaps.fromItemStackCollection(container).object2IntEntrySet().stream())
                                     .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, Integer::sum, () -> new Object2IntOpenCustomHashMap<>(ItemStackHashStrategy.comparingAllButCount())));
-//"ars_nouveau:drygmy_charm"
                             ItemStack stack = new ItemStack(BuiltInRegistries.ITEM.get(new ResourceLocation("ars_nouveau:drygmy_charm")));
                             //Never let the multiplier be 0 (THIS IS NOT ACTUALLY PARALLEL, It's just being used to to some goober grade math)
                             if (ingredientStacks.getInt(stack) >= 1) {
                                 var maxParallel = ingredientStacks.getInt(stack);
-                                var result = GTRecipeModifiers.accurateParallel(machine, recipe, maxParallel, false);
                                 recipe = copyOutputs(recipe, ContentModifier.multiplier(maxParallel));
-//                                recipe = result.getA() == recipe ? result.getA().copy() : result.getA();
                             }
                         }
                         return recipe;
