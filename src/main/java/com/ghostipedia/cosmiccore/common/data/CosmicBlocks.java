@@ -32,6 +32,7 @@ import java.util.function.BiFunction;
 import java.util.function.Supplier;
 
 import static com.ghostipedia.cosmiccore.api.registries.CosmicRegistries.REGISTRATE;
+import static com.gregtechceu.gtceu.common.data.GTBlocks.ALL_COILS;
 
 
 public class CosmicBlocks {
@@ -41,7 +42,7 @@ public class CosmicBlocks {
     }
     //Coil Register
 
-    public static final Map<ICoilType, Supplier<CoilBlock>> ALL_EXTENDED_COILS = new HashMap<>();
+
     public static final BlockEntry<CoilBlock> COIL_PRISMATIC_TUNGSTENSTEEL = createCoilBlock(CosmicCoilBlock.CoilType.PRISMATIC_TUNGSTENSTEEL);
     public static final BlockEntry<CoilBlock> COIL_SHIMMERING_NEUTRONIUM = createCoilBlock(CosmicCoilBlock.CoilType.SHIMMERING_NEUTRONIUM);
     public static final BlockEntry<Block> CASING_DYSON_CELL = createCasingBlock("dyson_solar_cell", CosmicCore.id("block/casings/solid/dyson_solar_cell"));
@@ -93,7 +94,7 @@ public class CosmicBlocks {
                 .model(NonNullBiConsumer.noop())
                 .build()
                 .register();
-        ALL_EXTENDED_COILS.put(coilType, coilBlock);
+            GTBlocks.ALL_COILS.put(coilType, coilBlock);
         return coilBlock;
     }
 
