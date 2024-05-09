@@ -36,7 +36,7 @@ public class NotifiableSoulContainer extends NotifiableRecipeHandlerTrait<Intege
     @DescSynced
     private int currentEssence;
 
-    public NotifiableSoulContainer(MetaMachine machine,IO io) {
+    public NotifiableSoulContainer(MetaMachine machine, IO io) {
         super(machine);
         this.handlerIO = io;
         this.currentEssence = -1;
@@ -63,9 +63,13 @@ public class NotifiableSoulContainer extends NotifiableRecipeHandlerTrait<Intege
 
         int lifeEssence = left.stream().reduce(0, Integer::sum);
         if (io == IO.IN) {
-            if (!simulate) lifeEssence = container.getSoulNetwork().syphon(SoulTicket.block(this.machine.getLevel(), this.machine.getPos(), lifeEssence), false);
+            var canOutput = container.getSoulNetwork().getCurrentEssence();
+            if (!simulate) lifeEssence = container.getSoulNetwork().syphon(SoulTicket.block(this.machine.getLevel(), this.machine.getPos(), Math.min(canOutput, lifeEssence)), false);
+            lifeEssence = lifeEssence - canOutput;
         } else if (io == IO.OUT) {
-            if (!simulate) lifeEssence = container.getSoulNetwork().add(SoulTicket.block(this.machine.getLevel(), this.machine.getPos(), lifeEssence), Integer.MAX_VALUE);
+            var canInput = Integer.MAX_VALUE - container.getSoulNetwork().getCurrentEssence();
+            if (!simulate) lifeEssence = container.getSoulNetwork().add(SoulTicket.block(this.machine.getLevel(), this.machine.getPos(), Math.min(canInput, lifeEssence)), Integer.MAX_VALUE);
+            lifeEssence = lifeEssence - canInput;
         }
 
         return lifeEssence <= 0 ? null : Collections.singletonList(lifeEssence);
@@ -96,6 +100,11 @@ public class NotifiableSoulContainer extends NotifiableRecipeHandlerTrait<Intege
     @Override
     public SoulNetwork getSoulNetwork() {
         return NetworkHelper.getSoulNetwork(this.owner);
+    }
+
+    @Override
+    public int getSize() {
+        return 1;
     }
 
     @Override

@@ -2,6 +2,7 @@ package com.ghostipedia.cosmiccore.gtbridge;
 
 import com.ghostipedia.cosmiccore.api.capability.recipe.SoulRecipeCapability;
 import net.minecraft.data.recipes.FinishedRecipe;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Blocks;
 
 import java.util.function.Consumer;
@@ -12,9 +13,15 @@ public class CosmicCoreRecipes {
 
 
     public static void init (Consumer<FinishedRecipe> provider) {
-        SOUL_TESTER_RECIPES.recipeBuilder("soul_to_dirt")
+        SOUL_TESTER_RECIPES.recipeBuilder("dirt_to_soul")
                 .inputItems(Blocks.DIRT.asItem(), 1)
-                .output(SoulRecipeCapability.CAP, 10)
+                .output(SoulRecipeCapability.CAP, 69696)
+                .duration(10)
+                .save(provider);
+
+        SOUL_TESTER_RECIPES.recipeBuilder("soul_to_diamond")
+                .input(SoulRecipeCapability.CAP, 45454)
+                .outputItems(Items.DIAMOND, 1)
                 .duration(10)
                 .save(provider);
     }
