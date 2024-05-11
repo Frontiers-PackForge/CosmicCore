@@ -3,6 +3,7 @@ package com.ghostipedia.cosmiccore;
 
 import com.ghostipedia.cosmiccore.api.capability.recipe.CosmicRecipeCapabilities;
 import com.ghostipedia.cosmiccore.api.registries.CosmicRegistries;
+import com.ghostipedia.cosmiccore.common.data.materials.CosmicElements;
 import com.ghostipedia.cosmiccore.gtbridge.CosmicCoreRecipeTypes;
 import com.ghostipedia.cosmiccore.gtbridge.CosmicCoreRecipes;
 import com.gregtechceu.gtceu.api.addon.GTAddon;
@@ -27,6 +28,12 @@ public class CosmicCoreGTAddon implements IGTAddon {
     @Override
     public void initializeAddon() {
         CosmicCore.LOGGER.info("CosmicCoreGTAddon has loaded!");
+    }
+
+    @Override
+    public void registerElements() {
+        IGTAddon.super.registerElements();
+        CosmicElements.init();
     }
 
     @Override

@@ -88,10 +88,11 @@ public class CosmicMachines {
                                     .map(container -> container.getContents().stream().filter(ItemStack.class::isInstance).map(ItemStack.class::cast).toList())
                                     .flatMap(container -> GTHashMaps.fromItemStackCollection(container).object2IntEntrySet().stream())
                                     .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, Integer::sum, () -> new Object2IntOpenCustomHashMap<>(ItemStackHashStrategy.comparingAllButCount())));
-                            ItemStack stack = new ItemStack(BuiltInRegistries.ITEM.get(new ResourceLocation("ars_nouveau:drygmy_charm")));
+                            //"ars_nouveau:drygmy_charm"
+                            ItemStack stack = new ItemStack(BuiltInRegistries.ITEM.get(new ResourceLocation("cosmiccore:donk")));
                             //Never let the multiplier be 0 (THIS IS NOT ACTUALLY PARALLEL, It's just being used to to some goober grade math)
                             if (ingredientStacks.getInt(stack) >= 1) {
-                                var maxParallel = ingredientStacks.getInt(stack);
+                                var maxParallel = ingredientStacks.getInt(stack) / 2;
                                 recipe = copyOutputs(recipe, ContentModifier.multiplier(maxParallel));
                             }
                         }

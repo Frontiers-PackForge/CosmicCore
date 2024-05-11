@@ -47,5 +47,7 @@
   "item.cosmiccore.psionic_processor_assembly": "Psionic Processor Assembly",
   "item.cosmiccore.psionic_processor_mainframe": "Psionic Processor Mainframe",
   "item.cosmiccore.psionic_processor_supercomputer": "Psionic Processor Supercomputer",
-  "item.cosmiccore.waxed_leather": "Waxed Leather"
+  "item.cosmiccore.waxed_leather": "Waxed Leather",
+  "material.cosmiccore.prismatic": "Prismatic",
+  "material.cosmiccore.prismatic_tungstensteel": "Prismatic Tungstensteel"
 }

@@ -1,6 +1,6 @@
 {
     "ldlib": {
-        "connection": "gtceu:block/casings/coils/prismatic_tungstensteel_ctm"
+        "connection": "cosmiccore:block/casings/coils/prismatic_tungstensteel_ctm"
     },
     "animation":{
       "interpolate": true,
