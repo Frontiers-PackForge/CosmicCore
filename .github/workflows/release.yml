@@ -1,0 +1,65 @@
+name: Release
+
+on:
+  workflow_dispatch:
+    inputs:
+      version_type:
+        description: 'The type of version to release (alpha | beta | release)'
+        default: 'beta'
+        required: true
+        type: string
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+
+      - name: Setup Java
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'temurin'
+          java-version: 17
+
+      - name: Setup Gradle Caches
+        uses: actions/cache@v3
+        with:
+          path: ~/.gradle/caches
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*') }}
+          restore-keys: ${{ runner.os }}-gradle
+
+      - name: Setup Gradle Wrapper
+        run: chmod +x gradlew
+
+      - name: Get Version and Platform
+        id: properties
+        uses: christian-draeger/read-properties@1.1.1
+        with:
+          path: ./gradle.properties
+          properties: "mod_version minecraft_version"
+
+      - name: Build Project
+        run: ./gradlew build
+
+      - name: Upload Forge Releases (Curse|Modrinth|Github)
+        id: forge_release
+        uses: Kir-Antipov/mc-publish@v3.3.0
+        with:
+          curseforge-id: ${{ vars.CURSE_ID }}
+          curseforge-token: ${{ secrets.CURSE_TOKEN }}
+
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          github-generate-changelog: true
+          github-tag: "${{ steps.properties.outputs.minecraft_version }}-${{ steps.properties.outputs.mod_version }}"
+
+          files: ./build/libs/!(*-@(dev|sources|dev-shadow)).jar
+          name: "Cosmic Core ${{ steps.properties.outputs.mod_version }}"
+          version: ${{ steps.properties.outputs.version }}
+          version-type: ${{ inputs.version_type }}
+          changelog-file: changelog.md
+          loaders: forge
+          game-versions: ${{ steps.properties.outputs.minecraftVersion }}

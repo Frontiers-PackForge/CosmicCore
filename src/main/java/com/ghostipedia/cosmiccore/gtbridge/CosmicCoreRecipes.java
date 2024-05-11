@@ -1,12 +1,15 @@
 package com.ghostipedia.cosmiccore.gtbridge;
 
 import com.ghostipedia.cosmiccore.api.capability.recipe.SoulRecipeCapability;
+import com.ghostipedia.cosmiccore.common.data.CosmicItems;
+import com.gregtechceu.gtceu.api.GTValues;
 import net.minecraft.data.recipes.FinishedRecipe;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Blocks;
 
 import java.util.function.Consumer;
 
+import static com.ghostipedia.cosmiccore.gtbridge.CosmicCoreRecipeTypes.GROVE_RECIPES;
 import static com.ghostipedia.cosmiccore.gtbridge.CosmicCoreRecipeTypes.SOUL_TESTER_RECIPES;
 
 public class CosmicCoreRecipes {

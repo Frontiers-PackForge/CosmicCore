@@ -11,11 +11,11 @@
       "entries": [
         {
           "type": "minecraft:item",
-          "name": "cosmiccore:beam_receiver"
+          "name": "cosmiccore:highly_conductive_fission_casing"
         }
       ],
       "rolls": 1.0
     }
   ],
-  "random_sequence": "cosmiccore:blocks/beam_receiver"
+  "random_sequence": "cosmiccore:blocks/highly_conductive_fission_casing"
 }

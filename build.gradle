@@ -152,9 +152,9 @@ dependencies {
     //modImplementation("curse.maven:cold-sweat-506194:4805548")
     modImplementation("curse.maven:sanity-descent-into-madness-876448:4625236")
     modImplementation('software.bernie.geckolib:geckolib-forge-1.20.1:4.2.2')
-    modImplementation("com.jozufozu.flywheel:flywheel-forge-1.20.1:0.6.10-7")
-    modImplementation("curse.maven:create-328085:4762216")
-    modImplementation("curse.maven:new-thin-air-878379:4848005")
+    modCompileOnly("com.jozufozu.flywheel:flywheel-forge-1.20.1:0.6.10-7")
+    modCompileOnly("curse.maven:create-328085:4762216")
+    modCompileOnly("curse.maven:new-thin-air-878379:4848005")
     modImplementation("curse.maven:puzzles-lib-495476:4924184")
 
     modRuntimeOnly("curse.maven:jade-324717:4973483")
