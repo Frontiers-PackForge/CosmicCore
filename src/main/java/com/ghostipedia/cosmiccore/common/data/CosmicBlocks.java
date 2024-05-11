@@ -2,6 +2,7 @@ package com.ghostipedia.cosmiccore.common.data;
 
 import com.ghostipedia.cosmiccore.CosmicCore;
 import com.ghostipedia.cosmiccore.common.data.recipe.RecipeTags;
+import com.gregtechceu.gtceu.api.GTCEuAPI;
 import com.gregtechceu.gtceu.api.block.ICoilType;
 import com.gregtechceu.gtceu.api.block.RendererBlock;
 import com.gregtechceu.gtceu.api.block.RendererGlassBlock;
@@ -32,7 +33,6 @@ import java.util.function.BiFunction;
 import java.util.function.Supplier;
 
 import static com.ghostipedia.cosmiccore.api.registries.CosmicRegistries.REGISTRATE;
-import static com.gregtechceu.gtceu.common.data.GTBlocks.ALL_COILS;
 
 
 public class CosmicBlocks {
@@ -85,7 +85,7 @@ public class CosmicBlocks {
     }
 
     private static BlockEntry<CoilBlock> createCoilBlock(ICoilType coilType) {
-        BlockEntry<CoilBlock> coilBlock = GTRegistration.REGISTRATE.block("%s_coil_block".formatted(coilType.getName()), p -> new CoilBlock(p, coilType))
+        BlockEntry<CoilBlock> coilBlock = REGISTRATE.block("%s_coil_block".formatted(coilType.getName()), p -> new CoilBlock(p, coilType))
                 .initialProperties(() -> Blocks.IRON_BLOCK)
                 .addLayer(() -> RenderType::cutoutMipped)
                 .blockstate(NonNullBiConsumer.noop())
@@ -94,7 +94,7 @@ public class CosmicBlocks {
                 .model(NonNullBiConsumer.noop())
                 .build()
                 .register();
-            GTBlocks.ALL_COILS.put(coilType, coilBlock);
+        GTCEuAPI.HEATING_COILS.put(coilType, coilBlock);
         return coilBlock;
     }
 
