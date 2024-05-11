@@ -30,7 +30,7 @@ public class SoulHatchPartMachine extends TieredIOPartMachine {
 
     public SoulHatchPartMachine(IMachineBlockEntity holder, int tier, IO io) {
         super(holder, tier, io);
-        this.soulContainer = new NotifiableSoulContainer(this, io);
+        this.soulContainer = new NotifiableSoulContainer(this, io, tier);
     }
 
     @Override

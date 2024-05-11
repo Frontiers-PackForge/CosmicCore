@@ -13,12 +13,10 @@ import com.gregtechceu.gtceu.api.machine.MachineDefinition;
 import com.gregtechceu.gtceu.api.machine.MetaMachine;
 import com.gregtechceu.gtceu.api.machine.MultiblockMachineDefinition;
 import com.gregtechceu.gtceu.api.machine.multiblock.PartAbility;
-import com.gregtechceu.gtceu.api.machine.multiblock.WorkableMultiblockMachine;
 import com.gregtechceu.gtceu.api.pattern.FactoryBlockPattern;
 import com.gregtechceu.gtceu.api.registry.registrate.MachineBuilder;
 import com.gregtechceu.gtceu.common.data.GTBlocks;
 import com.gregtechceu.gtceu.common.machine.multiblock.primitive.PrimitiveWorkableMachine;
-import com.ibm.icu.impl.ICUService;
 
 import java.util.Locale;
 import java.util.function.BiFunction;
@@ -29,7 +27,7 @@ import static com.gregtechceu.gtceu.api.pattern.Predicates.*;
 public class CosmicMachines {
 
 
-    public static final int[] HIGH_TIERS = GTValues.tiersBetween(GTValues.IV, GTCEuAPI.isHighTier() ? GTValues.OpV : GTValues.UHV);
+    public static final int[] HIGH_TIERS = GTValues.tiersBetween(GTValues.ZPM, GTCEuAPI.isHighTier() ? GTValues.MAX : GTValues.UHV);
 
     public final static MachineDefinition[] SOUL_IMPORT_HATCH = registerSoulTieredHatch(
             "soul_input_hatch", "Soul Input Hatch", "soul_hatch.import",
