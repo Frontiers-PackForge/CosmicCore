@@ -40,7 +40,7 @@ jobs:
         uses: christian-draeger/read-properties@1.1.1
         with:
           path: ./gradle.properties
-          properties: "version enabledPlatforms minecraftVersion"
+          properties: "mod_version minecraft_version"
 
       - name: Build Project
         run: ./gradlew build
@@ -54,10 +54,10 @@ jobs:
 
           github-token: ${{ secrets.GITHUB_TOKEN }}
           github-generate-changelog: true
-          github-tag: "${{ steps.properties.outputs.minecraftVersion }}-${{ steps.properties.outputs.version }}"
+          github-tag: "${{ steps.properties.outputs.minecraft_version }}-${{ steps.properties.outputs.mod_version }}"
 
           files: ./build/libs/!(*-@(dev|sources|dev-shadow)).jar
-          name: "Cosmic Core ${{ steps.properties.outputs.version }}"
+          name: "Cosmic Core ${{ steps.properties.outputs.mod_version }}"
           version: ${{ steps.properties.outputs.version }}
           version-type: ${{ inputs.version_type }}
           changelog-file: changelog.md
