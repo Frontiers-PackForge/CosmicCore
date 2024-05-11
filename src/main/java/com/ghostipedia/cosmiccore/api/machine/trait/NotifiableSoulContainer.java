@@ -16,6 +16,7 @@ import org.jetbrains.annotations.Nullable;
 import wayoftime.bloodmagic.core.data.SoulNetwork;
 import wayoftime.bloodmagic.core.data.SoulTicket;
 import wayoftime.bloodmagic.util.helper.NetworkHelper;
+import com.gregtechceu.gtceu.api.GTValues;
 
 import java.util.Collections;
 import java.util.List;
@@ -36,10 +37,18 @@ public class NotifiableSoulContainer extends NotifiableRecipeHandlerTrait<Intege
     @DescSynced
     private int currentEssence;
 
-    public NotifiableSoulContainer(MetaMachine machine,IO io) {
+    @Persisted
+    private int maxCapacity;
+
+    @Persisted
+    private int maxConsumption;
+
+    public NotifiableSoulContainer(MetaMachine machine, IO io, int maxCapacity, int maxConsumption) {
         super(machine);
         this.handlerIO = io;
         this.currentEssence = -1;
+        this.maxCapacity = maxCapacity;
+        this.maxConsumption = maxConsumption;
         conditionalSubscriptionHandler = new ConditionalSubscriptionHandler(machine, this::querySoulNetwork, () -> owner != null);
     }
 
@@ -63,9 +72,13 @@ public class NotifiableSoulContainer extends NotifiableRecipeHandlerTrait<Intege
 
         int lifeEssence = left.stream().reduce(0, Integer::sum);
         if (io == IO.IN) {
-            if (!simulate) lifeEssence = container.getSoulNetwork().syphon(SoulTicket.block(this.machine.getLevel(), this.machine.getPos(), lifeEssence), false);
+            var canOutput = Math.min(this.maxConsumption, container.getSoulNetwork().getCurrentEssence());
+            if (!simulate) lifeEssence = container.getSoulNetwork().syphon(SoulTicket.block(this.machine.getLevel(), this.machine.getPos(), Math.min(canOutput, lifeEssence)), false);
+            lifeEssence = lifeEssence - canOutput;
         } else if (io == IO.OUT) {
-            if (!simulate) lifeEssence = container.getSoulNetwork().add(SoulTicket.block(this.machine.getLevel(), this.machine.getPos(), lifeEssence), Integer.MAX_VALUE);
+            var canInput = this.maxCapacity - container.getSoulNetwork().getCurrentEssence();
+            if (!simulate) lifeEssence = container.getSoulNetwork().add(SoulTicket.block(this.machine.getLevel(), this.machine.getPos(), Math.min(canInput, lifeEssence)), this.maxCapacity);
+            lifeEssence = lifeEssence - canInput;
         }
 
         return lifeEssence <= 0 ? null : Collections.singletonList(lifeEssence);
@@ -96,6 +109,11 @@ public class NotifiableSoulContainer extends NotifiableRecipeHandlerTrait<Intege
     @Override
     public SoulNetwork getSoulNetwork() {
         return NetworkHelper.getSoulNetwork(this.owner);
+    }
+
+    @Override
+    public int getSize() {
+        return 1;
     }
 
     @Override

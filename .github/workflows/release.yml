@@ -58,8 +58,8 @@ jobs:
 
           files: ./build/libs/!(*-@(dev|sources|dev-shadow)).jar
           name: "Cosmic Core ${{ steps.properties.outputs.mod_version }}"
-          version: ${{ steps.properties.outputs.version }}
+          version: ${{ steps.properties.outputs.mod_version }}
           version-type: ${{ inputs.version_type }}
           changelog-file: changelog.md
           loaders: forge
-          game-versions: ${{ steps.properties.outputs.minecraftVersion }}
+          game-versions: ${{ steps.properties.outputs.minecraft_version }}

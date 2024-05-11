@@ -7,10 +7,12 @@ import com.ghostipedia.cosmiccore.common.data.CosmicBlocks;
 import com.ghostipedia.cosmiccore.common.data.CosmicCreativeModeTabs;
 import com.ghostipedia.cosmiccore.common.data.CosmicItems;
 import com.ghostipedia.cosmiccore.common.data.CosmicMachines;
+import com.ghostipedia.cosmiccore.common.data.CosmicMachines;
 import com.ghostipedia.cosmiccore.common.data.materials.CosmicElements;
 import com.ghostipedia.cosmiccore.common.data.materials.CosmicMaterials;
 import com.ghostipedia.cosmiccore.gtbridge.CosmicCoreRecipeTypes;
 import com.gregtechceu.gtceu.api.GTCEuAPI;
+import com.gregtechceu.gtceu.api.capability.recipe.RecipeCapability;
 import com.gregtechceu.gtceu.api.capability.recipe.RecipeCapability;
 import com.gregtechceu.gtceu.api.data.chemical.Element;
 import com.gregtechceu.gtceu.api.data.chemical.material.event.MaterialEvent;
@@ -37,9 +39,7 @@ import org.slf4j.LoggerFactory;
 public class CosmicCore {
     public static final String MOD_ID = "cosmiccore", NAME = "CosmicCore";
     public static final Logger LOGGER = LoggerFactory.getLogger(NAME);
-
     public static MaterialRegistry MATERIAL_REGISTRY;
-
     //Init Everything
     public CosmicCore() {
         CosmicCore.init();
