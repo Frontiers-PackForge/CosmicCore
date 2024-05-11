@@ -1,11 +1,8 @@
 {
   "values": [
-    "cosmiccore:aerospace_aluminium_casing",
-    "cosmiccore:beam_receiver",
-    "cosmiccore:space_elevator_support",
-    "cosmiccore:dyson_sphere_casing",
+    "cosmiccore:prismatic_tungstensteel_coil_block",
+    "cosmiccore:shimmering_neutronium_coil_block",
     "cosmiccore:dyson_solar_cell",
-    "cosmiccore:dyson_sphere_maintenance_port",
     "cosmiccore:alternator_flux_coiling",
     "cosmiccore:plated_aerocloud",
     "cosmiccore:high_temperature_fission_casing",

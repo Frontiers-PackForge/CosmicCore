@@ -11,11 +11,11 @@
       "entries": [
         {
           "type": "minecraft:item",
-          "name": "cosmiccore:beam_receiver"
+          "name": "cosmiccore:prismatic_tungstensteel_coil_block"
         }
       ],
       "rolls": 1.0
     }
   ],
-  "random_sequence": "cosmiccore:blocks/beam_receiver"
+  "random_sequence": "cosmiccore:blocks/prismatic_tungstensteel_coil_block"
 }

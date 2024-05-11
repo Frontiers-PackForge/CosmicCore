@@ -1,12 +1,18 @@
 package com.ghostipedia.cosmiccore;
 
 
+import com.ghostipedia.cosmiccore.api.capability.recipe.CosmicRecipeCapabilities;
 import com.ghostipedia.cosmiccore.api.registries.CosmicRegistries;
+import com.ghostipedia.cosmiccore.common.data.materials.CosmicElements;
 import com.ghostipedia.cosmiccore.gtbridge.CosmicCoreRecipeTypes;
 import com.ghostipedia.cosmiccore.gtbridge.CosmicCoreRecipes;
 import com.gregtechceu.gtceu.api.addon.GTAddon;
 import com.gregtechceu.gtceu.api.addon.IGTAddon;
+import com.gregtechceu.gtceu.api.addon.events.KJSRecipeKeyEvent;
 import com.gregtechceu.gtceu.api.registry.registrate.GTRegistrate;
+import com.gregtechceu.gtceu.integration.kjs.recipe.components.ContentJS;
+import com.mojang.datafixers.util.Pair;
+import dev.latvian.mods.kubejs.recipe.component.NumberComponent;
 import net.minecraft.data.recipes.FinishedRecipe;
 
 import java.util.function.Consumer;
@@ -25,6 +31,12 @@ public class CosmicCoreGTAddon implements IGTAddon {
     }
 
     @Override
+    public void registerElements() {
+        IGTAddon.super.registerElements();
+        CosmicElements.init();
+    }
+
+    @Override
     public String addonModId() {
         return CosmicCore.MOD_ID;
     }
@@ -33,5 +45,18 @@ public class CosmicCoreGTAddon implements IGTAddon {
     public void addRecipes(Consumer<FinishedRecipe> provider) {
         CosmicCoreRecipeTypes.init();
         CosmicCoreRecipes.init(provider);
+    }
+
+    @Override
+    public void registerRecipeCapabilities() {
+        CosmicRecipeCapabilities.init();
+    }
+
+    public static final ContentJS<Integer> SOUL_IN = new ContentJS<>(NumberComponent.INT, CosmicRecipeCapabilities.SOUL, false);
+    public static final ContentJS<Integer> SOUL_OUT = new ContentJS<>(NumberComponent.INT, CosmicRecipeCapabilities.SOUL, true);
+
+    @Override
+    public void registerRecipeKeys(KJSRecipeKeyEvent event) {
+        event.registerKey(CosmicRecipeCapabilities.SOUL, Pair.of(SOUL_IN, SOUL_OUT));
     }
 }

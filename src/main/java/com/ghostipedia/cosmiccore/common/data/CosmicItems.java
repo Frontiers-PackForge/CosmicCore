@@ -6,6 +6,7 @@ import com.gregtechceu.gtceu.api.item.component.IItemComponent;
 import com.gregtechceu.gtceu.api.registry.GTRegistries;
 import com.tterrag.registrate.util.entry.ItemEntry;
 import com.tterrag.registrate.util.nullness.NonNullConsumer;
+import wayoftime.bloodmagic.common.item.BloodOrb;
 
 import static com.ghostipedia.cosmiccore.api.registries.CosmicRegistries.REGISTRATE;
 

@@ -142,13 +142,19 @@ dependencies {
     modImplementation("earth.terrarium.botarium:botarium-forge-${project.minecraft_version}:${project.botarium_version}")
     modImplementation("earth.terrarium.adastra:ad_astra-forge-${project.minecraft_version}:${ad_astra_version}") {transitive false} // issue with create mod so not transitive
 
+    // Blood Magic //TODO: Find real repo url
+    //modImplementation("com.wayoftime.bloodmagic:BloodMagic:${project.minecraft_version}-${project.blood_magic_version}")
+    // modCompileOnly("curse.maven:blood-magic-224791:4779713") // API
+    // modRuntimeOnly("curse.maven:blood-magic-224791:4779711") // Runtime to test in game
+    modImplementation("curse.maven:blood-magic-224791:4779711")
+
     //Piss
     //modImplementation("curse.maven:cold-sweat-506194:4805548")
     modImplementation("curse.maven:sanity-descent-into-madness-876448:4625236")
     modImplementation('software.bernie.geckolib:geckolib-forge-1.20.1:4.2.2')
-    modImplementation("com.jozufozu.flywheel:flywheel-forge-1.20.1:0.6.10-7")
-    modImplementation("curse.maven:create-328085:4762216")
-    modImplementation("curse.maven:new-thin-air-878379:4848005")
+    modCompileOnly("com.jozufozu.flywheel:flywheel-forge-1.20.1:0.6.10-7")
+    modCompileOnly("curse.maven:create-328085:4762216")
+    modCompileOnly("curse.maven:new-thin-air-878379:4848005")
     modImplementation("curse.maven:puzzles-lib-495476:4924184")
 
     modRuntimeOnly("curse.maven:jade-324717:4973483")
