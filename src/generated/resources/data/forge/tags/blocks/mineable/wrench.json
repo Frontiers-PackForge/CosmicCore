@@ -4,6 +4,8 @@
     "cosmiccore:shimmering_neutronium_coil_block",
     "cosmiccore:dyson_solar_cell",
     "cosmiccore:alternator_flux_coiling",
-    "cosmiccore:plated_aerocloud"
+    "cosmiccore:plated_aerocloud",
+    "cosmiccore:high_temperature_fission_casing",
+    "cosmiccore:highly_conductive_fission_casing"
   ]
 }

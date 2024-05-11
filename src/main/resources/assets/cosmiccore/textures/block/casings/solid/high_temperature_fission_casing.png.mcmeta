@@ -1,0 +1,5 @@
+{
+    "ldlib": {
+        "connection": "cosmiccore:block/casings/solid/high_temperature_fission_casing_ctm"
+    }
+}
