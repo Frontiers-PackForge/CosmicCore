@@ -62,4 +62,4 @@ jobs:
           version-type: ${{ inputs.version_type }}
           changelog-file: changelog.md
           loaders: forge
-          game-versions: ${{ steps.properties.outputs.minecraftVersion }}
+          game-versions: ${{ steps.properties.outputs.minecraft_version }}
