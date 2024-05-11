@@ -47,7 +47,6 @@ jobs:
 
       - name: Upload Forge Releases (Curse|Modrinth|Github)
         id: forge_release
-        if: contains(steps.properties.outputs.enabledPlatforms, 'forge')
         uses: Kir-Antipov/mc-publish@v3.3.0
         with:
           curseforge-id: ${{ vars.CURSE_ID }}
