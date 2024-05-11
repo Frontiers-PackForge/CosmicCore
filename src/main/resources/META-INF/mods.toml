@@ -53,7 +53,7 @@ modId = "minecraft"
 mandatory = true
 # See above for how to read this notation, this essentially means any
 # version of Minecraft from 1.20.1 (inclusive).
-versionRange = "[1.20.1,)"
+versionRange = "[1.20.1]"
 ordering = "NONE"
 side = "BOTH"
 
