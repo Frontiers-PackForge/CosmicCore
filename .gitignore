@@ -31,3 +31,6 @@ bin/
 # fabric
 
 run/
+
+# forge generated resources cache
+src/generated/resources/.cache
