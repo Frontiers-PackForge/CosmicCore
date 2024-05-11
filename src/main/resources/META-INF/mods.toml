@@ -56,3 +56,10 @@ mandatory = true
 versionRange = "[1.20.1,)"
 ordering = "NONE"
 side = "BOTH"
+
+[[dependencies.cosmiccore]]
+modId="gtceu"
+mandatory=true
+versionRange="[1.2.2,)"
+ordering="AFTER"
+side="BOTH"
