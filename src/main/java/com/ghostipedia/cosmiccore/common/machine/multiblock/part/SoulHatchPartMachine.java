@@ -30,7 +30,7 @@ public class SoulHatchPartMachine extends TieredIOPartMachine {
 
     public SoulHatchPartMachine(IMachineBlockEntity holder, int tier, IO io) {
         super(holder, tier, io);
-        this.soulContainer = new NotifiableSoulContainer(this, io, tier);
+        this.soulContainer = new NotifiableSoulContainer(this, io, getMaxCapacity(tier), getMaxConsumption(tier));
     }
 
     @Override
@@ -49,6 +49,34 @@ public class SoulHatchPartMachine extends TieredIOPartMachine {
 
         group.setBackground(GuiTextures.BACKGROUND_INVERSE);
         return group;
+    }
+
+    public static int getMaxCapacity(int tier) {
+        return switch (tier) {
+            case GTValues.ZPM -> 10000000;
+            case GTValues.UV  -> 20000000;
+            case GTValues.UHV -> 50000000;
+            case GTValues.UEV -> 100000000;
+            case GTValues.UIV -> 250000000;
+            case GTValues.UXV -> 500000000;
+            case GTValues.OpV -> 1000000000;
+            case GTValues.MAX -> Integer.MAX_VALUE;
+            default -> 0;
+        };
+    }
+
+    public static int getMaxConsumption(int tier) {
+        return switch (tier) {
+            case GTValues.ZPM -> 5000000;
+            case GTValues.UV  -> 10000000;
+            case GTValues.UHV -> 25000000;
+            case GTValues.UEV -> 50000000;
+            case GTValues.UIV -> 125000000;
+            case GTValues.UXV -> 250000000;
+            case GTValues.OpV -> 500000000;
+            case GTValues.MAX -> Integer.MAX_VALUE;
+            default -> 0;
+        };
     }
 
     public void attachSoulNetwork(Player player) {

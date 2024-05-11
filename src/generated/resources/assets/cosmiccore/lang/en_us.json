@@ -11,7 +11,10 @@
   "block.cosmiccore.luv_soul_output_hatch": "§dLuV Soul Output Hatch",
   "block.cosmiccore.opv_soul_input_hatch": "§9§lOpV Soul Input Hatch",
   "block.cosmiccore.opv_soul_output_hatch": "§9§lOpV Soul Output Hatch",
+  "block.cosmiccore.max_soul_input_hatch": "§c§lMAX Soul Input Hatch",
+  "block.cosmiccore.max_soul_output_hatch": "§c§lMAX Soul Output Hatch",
   "block.cosmiccore.plated_aerocloud": "Plated Aerocloud",
+  "block.cosmiccore.soul_tester": "Soul Tester",
   "block.cosmiccore.space_elevator_support": "Space Elevator Support",
   "block.cosmiccore.uev_soul_input_hatch": "§aUEV Soul Input Hatch",
   "block.cosmiccore.uev_soul_output_hatch": "§aUEV Soul Output Hatch",
@@ -53,5 +56,8 @@
   "gui.cosmiccore.soul_hatch.label.export": "Soul Output Hatch",
   "gui.cosmiccore.soul_hatch.owner": "Owner: %s",
   "gui.cosmiccore.soul_hatch.lp": "LP: %s",
-  "gui.cosmiccore.soul_hatch.no_network": "No Network Connected"
+  "gui.cosmiccore.soul_hatch.no_network": "No Network Connected",
+  "tooltip.cosmiccore.soul_hatch.input": "Max recipe consumption: %s LP",
+  "tooltip.cosmiccore.soul_hatch.output": "Max network Capacity: %s LP",
+  "itemGroup.cosmiccore.creative_tab": "Cosmic Core"
 }

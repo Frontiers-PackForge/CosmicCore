@@ -1,6 +1,7 @@
 package com.ghostipedia.cosmiccore.common.data;
 
 import com.ghostipedia.cosmiccore.api.machine.part.CosmicPartAbility;
+import com.ghostipedia.cosmiccore.api.registries.CosmicRegistries;
 import com.ghostipedia.cosmiccore.common.machine.multiblock.part.SoulHatchPartMachine;
 import com.ghostipedia.cosmiccore.gtbridge.CosmicCoreRecipeTypes;
 import com.gregtechceu.gtceu.GTCEu;
@@ -17,6 +18,7 @@ import com.gregtechceu.gtceu.api.pattern.FactoryBlockPattern;
 import com.gregtechceu.gtceu.api.registry.registrate.MachineBuilder;
 import com.gregtechceu.gtceu.common.data.GTBlocks;
 import com.gregtechceu.gtceu.common.machine.multiblock.primitive.PrimitiveWorkableMachine;
+import net.minecraft.network.chat.Component;
 
 import java.util.Locale;
 import java.util.function.BiFunction;
@@ -25,19 +27,21 @@ import static com.ghostipedia.cosmiccore.api.registries.CosmicRegistries.REGISTR
 import static com.gregtechceu.gtceu.api.pattern.Predicates.*;
 
 public class CosmicMachines {
-
+    static {
+        CosmicRegistries.REGISTRATE.creativeModeTab(() -> CosmicCreativeModeTabs.COSMIC_CORE);
+    }
 
     public static final int[] HIGH_TIERS = GTValues.tiersBetween(GTValues.ZPM, GTCEuAPI.isHighTier() ? GTValues.MAX : GTValues.UHV);
 
-    public final static MachineDefinition[] SOUL_IMPORT_HATCH = registerSoulTieredHatch(
+    public static final MachineDefinition[] SOUL_IMPORT_HATCH = registerSoulTieredHatch(
             "soul_input_hatch", "Soul Input Hatch", "soul_hatch.import",
             IO.IN, HIGH_TIERS, CosmicPartAbility.IMPORT_SOUL);
 
-    public final static MachineDefinition[] SOUL_EXPORT_HATCH = registerSoulTieredHatch(
+    public static final MachineDefinition[] SOUL_EXPORT_HATCH = registerSoulTieredHatch(
             "soul_output_hatch", "Soul Output Hatch", "soul_hatch.export",
             IO.OUT, HIGH_TIERS, CosmicPartAbility.EXPORT_SOUL);
 
-    public final static MultiblockMachineDefinition SOUL_TESTER = REGISTRATE.multiblock("soul_tester", PrimitiveWorkableMachine::new)
+    public static final MultiblockMachineDefinition SOUL_TESTER = REGISTRATE.multiblock("soul_tester", PrimitiveWorkableMachine::new)
             .rotationState(RotationState.NON_Y_AXIS)
             .recipeType(CosmicCoreRecipeTypes.SOUL_TESTER_RECIPES)
             .appearanceBlock(GTBlocks.CASING_PRIMITIVE_BRICKS)
@@ -59,7 +63,10 @@ public class CosmicMachines {
                         .rotationState(RotationState.ALL)
                         .overlayTieredHullRenderer(model)
                         .compassNode("soul_hatch")
-                        .register(), tiers);
+                        .tooltipBuilder((item, tooltip) -> {
+                            if (io == IO.IN) tooltip.add(Component.translatable("tooltip.cosmiccore.soul_hatch.input", SoulHatchPartMachine.getMaxConsumption(tier)));
+                            else tooltip.add(Component.translatable("tooltip.cosmiccore.soul_hatch.output", SoulHatchPartMachine.getMaxCapacity(tier)));
+                        }).register(), tiers);
     }
 
     private static MachineDefinition[] registerTieredMachines(String name, BiFunction<IMachineBlockEntity, Integer, MetaMachine> factory,

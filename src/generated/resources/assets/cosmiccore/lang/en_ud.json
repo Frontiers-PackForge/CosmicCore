@@ -11,7 +11,10 @@
   "block.cosmiccore.luv_soul_output_hatch": "ɥɔʇɐH ʇndʇnO ןnoS ΛnꞀp§",
   "block.cosmiccore.opv_soul_input_hatch": "ɥɔʇɐH ʇnduI ןnoS ΛdOן§6§",
   "block.cosmiccore.opv_soul_output_hatch": "ɥɔʇɐH ʇndʇnO ןnoS ΛdOן§6§",
+  "block.cosmiccore.max_soul_input_hatch": "ɥɔʇɐH ʇnduI ןnoS XⱯWן§ɔ§",
+  "block.cosmiccore.max_soul_output_hatch": "ɥɔʇɐH ʇndʇnO ןnoS XⱯWן§ɔ§",
   "block.cosmiccore.plated_aerocloud": "pnoןɔoɹǝⱯ pǝʇɐןԀ",
+  "block.cosmiccore.soul_tester": "ɹǝʇsǝ⟘ ןnoS",
   "block.cosmiccore.space_elevator_support": "ʇɹoddnS ɹoʇɐʌǝןƎ ǝɔɐdS",
   "block.cosmiccore.uev_soul_input_hatch": "ɥɔʇɐH ʇnduI ןnoS ΛƎ∩ɐ§",
   "block.cosmiccore.uev_soul_output_hatch": "ɥɔʇɐH ʇndʇnO ןnoS ΛƎ∩ɐ§",
@@ -48,5 +51,6 @@
   "item.cosmiccore.psionic_processor_assembly": "ʎןqɯǝssⱯ ɹossǝɔoɹԀ ɔıuoısԀ",
   "item.cosmiccore.psionic_processor_mainframe": "ǝɯɐɹɟuıɐW ɹossǝɔoɹԀ ɔıuoısԀ",
   "item.cosmiccore.psionic_processor_supercomputer": "ɹǝʇndɯoɔɹǝdnS ɹossǝɔoɹԀ ɔıuoısԀ",
-  "item.cosmiccore.waxed_leather": "ɹǝɥʇɐǝꞀ pǝxɐM"
+  "item.cosmiccore.waxed_leather": "ɹǝɥʇɐǝꞀ pǝxɐM",
+  "itemGroup.cosmiccore.creative_tab": "ǝɹoƆ ɔıɯsoƆ"
 }
