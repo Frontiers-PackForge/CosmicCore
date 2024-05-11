@@ -1,10 +1,7 @@
 {
-  "block.cosmiccore.aerospace_aluminium_casing": "Aerospace Aluminium Casing",
   "block.cosmiccore.alternator_flux_coiling": "Alternator Flux Coiling",
-  "block.cosmiccore.beam_receiver": "Beam Receiver",
+  "block.cosmiccore.drygmy_grove": "Drygmy Grove",
   "block.cosmiccore.dyson_solar_cell": "Dyson Solar Cell",
-  "block.cosmiccore.dyson_sphere_casing": "Dyson Sphere Casing",
-  "block.cosmiccore.dyson_sphere_maintenance_port": "Dyson Sphere Maintenance Port",
   "block.cosmiccore.iv_soul_input_hatch": "§9IV Soul Input Hatch",
   "block.cosmiccore.iv_soul_output_hatch": "§9IV Soul Output Hatch",
   "block.cosmiccore.luv_soul_input_hatch": "§dLuV Soul Input Hatch",
@@ -12,7 +9,9 @@
   "block.cosmiccore.opv_soul_input_hatch": "§9§lOpV Soul Input Hatch",
   "block.cosmiccore.opv_soul_output_hatch": "§9§lOpV Soul Output Hatch",
   "block.cosmiccore.plated_aerocloud": "Plated Aerocloud",
-  "block.cosmiccore.space_elevator_support": "Space Elevator Support",
+  "block.cosmiccore.prismatic_tungstensteel_coil_block": "Prismatic Tungstensteel Coil Block",
+  "block.cosmiccore.shimmering_neutronium_coil_block": "Shimmering Neutronium Coil Block",
+  "block.cosmiccore.soul_tester": "Soul Tester",
   "block.cosmiccore.uev_soul_input_hatch": "§aUEV Soul Input Hatch",
   "block.cosmiccore.uev_soul_output_hatch": "§aUEV Soul Output Hatch",
   "block.cosmiccore.uhv_soul_input_hatch": "§4UHV Soul Input Hatch",
@@ -48,10 +47,5 @@
   "item.cosmiccore.psionic_processor_assembly": "Psionic Processor Assembly",
   "item.cosmiccore.psionic_processor_mainframe": "Psionic Processor Mainframe",
   "item.cosmiccore.psionic_processor_supercomputer": "Psionic Processor Supercomputer",
-  "item.cosmiccore.waxed_leather": "Waxed Leather",
-  "gui.cosmiccore.soul_hatch.label.import": "Soul Input Hatch",
-  "gui.cosmiccore.soul_hatch.label.export": "Soul Output Hatch",
-  "gui.cosmiccore.soul_hatch.owner": "Owner: %s",
-  "gui.cosmiccore.soul_hatch.lp": "LP: %s",
-  "gui.cosmiccore.soul_hatch.no_network": "No Network Connected"
+  "item.cosmiccore.waxed_leather": "Waxed Leather"
 }

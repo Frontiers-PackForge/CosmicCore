@@ -11,11 +11,11 @@
       "entries": [
         {
           "type": "minecraft:item",
-          "name": "cosmiccore:dyson_sphere_maintenance_port"
+          "name": "cosmiccore:shimmering_neutronium_coil_block"
         }
       ],
       "rolls": 1.0
     }
   ],
-  "random_sequence": "cosmiccore:blocks/dyson_sphere_maintenance_port"
+  "random_sequence": "cosmiccore:blocks/shimmering_neutronium_coil_block"
 }

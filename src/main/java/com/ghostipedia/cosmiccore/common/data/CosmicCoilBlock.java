@@ -1,5 +1,6 @@
 package com.ghostipedia.cosmiccore.common.data;
 
+import com.ghostipedia.cosmiccore.CosmicCore;
 import com.gregtechceu.gtceu.GTCEu;
 import com.gregtechceu.gtceu.api.block.ICoilType;
 import com.gregtechceu.gtceu.api.data.chemical.material.Material;
@@ -11,8 +12,8 @@ import org.jetbrains.annotations.NotNull;
 
 public class CosmicCoilBlock {
     public enum CoilType implements StringRepresentable, ICoilType {
-        PRISMATIC_TUNGSTENSTEEL("prismatic_tungstensteel", 4500, 4, 2, GTMaterials.Neutronium, GTCEu.id("block/casings/coils/prismatic_tungstensteel")),
-        SHIMMERING_NEUTRONIUM("shimmering_neutronium", 4500, 4, 2, GTMaterials.Neutronium, GTCEu.id("block/casings/coils/shimmering_neutronium"));
+        PRISMATIC_TUNGSTENSTEEL("prismatic_tungstensteel", 4500, 4, 2, null, CosmicCore.id("block/casings/coils/prismatic_tungstensteel")),
+        SHIMMERING_NEUTRONIUM("shimmering_neutronium", 19840, 20, 10, null, CosmicCore.id("block/casings/coils/shimmering_neutronium"));
 
         @NotNull
         @Getter
