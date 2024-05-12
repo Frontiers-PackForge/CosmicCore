@@ -66,5 +66,7 @@
   "material.cosmiccore.resonant_virtue_meld": "Resonant Virtue Meld",
   "material.cosmiccore.shimmering_neutronium": "Shimmering Neutronium",
   "material.cosmiccore.trinavine": "Trinavine",
-  "material.cosmiccore.virtue_meld": "Virtue Meld"
+  "material.cosmiccore.virtue_meld": "Virtue Meld",
+  "cosmiccore.recipe.soulIn": "Souls: %s LP",
+  "cosmiccore.recipe.soulOut": "Generation: %s LP"
 }
