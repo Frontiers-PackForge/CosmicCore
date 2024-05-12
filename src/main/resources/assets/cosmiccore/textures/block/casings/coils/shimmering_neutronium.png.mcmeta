@@ -1,0 +1,9 @@
+{
+    "ldlib": {
+        "connection": "cosmiccore:block/casings/coils/shimmering_neutronium_ctm"
+    },
+    "animation":{
+      "interpolate": true,
+      "frametime":8
+   }
+}

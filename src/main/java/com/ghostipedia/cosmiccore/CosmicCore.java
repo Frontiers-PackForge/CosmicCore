@@ -75,6 +75,11 @@ public class CosmicCore {
     @SubscribeEvent
     public void onLoadComplete(FMLLoadCompleteEvent event) {
         GTCEuAPI.HEATING_COILS.remove(CoilBlock.CoilType.RTMALLOY);
+        GTCEuAPI.HEATING_COILS.remove(CoilBlock.CoilType.HSSG);
+        GTCEuAPI.HEATING_COILS.remove(CoilBlock.CoilType.NAQUADAH);
+        GTCEuAPI.HEATING_COILS.remove(CoilBlock.CoilType.TRINIUM);
+        GTCEuAPI.HEATING_COILS.remove(CoilBlock.CoilType.TRITANIUM);
+
     }
 
     public void registerRecipeTypes(GTCEuAPI.RegisterEvent<ResourceLocation, GTRecipeType> event) {

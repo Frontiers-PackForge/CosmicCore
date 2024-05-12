@@ -16,12 +16,25 @@ import static com.gregtechceu.gtceu.common.data.GTMaterials.*;
 
 public class CosmicMaterials {
     public static Material Prisma;
+    public static Material Virtue;
     public static Material PrismaticTungstensteel;
+    public static Material ResonantVirtueMeld;
+    public static Material NaquadicSuperalloy;
+    public static Material Trinavine;
+    public static Material LivingIgniclad;
+    public static Material PsionicGalvorn;
+    public static Material ProgrammableMatter;
+    public static Material ShimmeringNeutronium;
+    public static Material CausalFabric;
 
     public static void register() {
         Prisma = new Material.Builder(CosmicCore.id("prisma"))
                 .liquid(new FluidBuilder().state(FluidState.LIQUID).customStill())
                 .element(CosmicElements.Pi)
+                .buildAndRegister();
+        Virtue = new Material.Builder(CosmicCore.id("virtue_meld"))
+                .liquid(new FluidBuilder().temperature(666))
+                .element(CosmicElements.ViR)
                 .buildAndRegister();
         PrismaticTungstensteel = new Material.Builder(CosmicCore.id("prismatic_tungstensteel"))
                 .ingot()
@@ -33,6 +46,73 @@ public class CosmicMaterials {
                 .cableProperties(GTValues.V[4], 1, 1)
                 .fluidPipeProperties(1166, 100, true)
                 .blastTemp(3600, BlastProperty.GasTier.HIGH, GTValues.VA[GTValues.EV])
+                .buildAndRegister();
+        ResonantVirtueMeld = new Material.Builder(CosmicCore.id("resonant_virtue_meld"))
+                .ingot()
+                .liquid(new FluidBuilder().temperature(1240))
+                .color(0xff8400).secondaryColor(0xcffee00)
+                .flags(GENERATE_GEAR, GENERATE_SMALL_GEAR, GENERATE_RING, GENERATE_FRAME, GENERATE_SPRING, GENERATE_SPRING_SMALL, GENERATE_FINE_WIRE)
+                .components(Virtue, 2, Naquadah, 3)
+                .cableProperties(GTValues.V[5], 4, 6)
+                .blastTemp(4200)
+                .buildAndRegister();
+        NaquadicSuperalloy = new Material.Builder(CosmicCore.id("naquadric_superalloy"))
+                .ingot()
+                .liquid(new FluidBuilder().temperature(1300))
+                .color(0x001f04).secondaryColor(0x000000)
+                .flags(GENERATE_GEAR, GENERATE_SMALL_GEAR, GENERATE_RING, GENERATE_FRAME, GENERATE_SPRING, GENERATE_SPRING_SMALL, GENERATE_FINE_WIRE)
+                .components(BlackSteel, 4, Naquadah, 3, RhodiumPlatedPalladium, 6)
+                .cableProperties(GTValues.V[6], 4, 6)
+                .blastTemp(5400, BlastProperty.GasTier.HIGHER, GTValues.VA[GTValues.LuV])
+                .buildAndRegister();
+        //TODO: Pack Progression Materials in core when needed. For now things below this are sorted out well enough - I don't really feel like having to write 10000000 elements and placeholder materials just to do component based auto-gen rn
+        Trinavine = new Material.Builder(CosmicCore.id("trinavine"))
+                .ingot()
+                .liquid(new FluidBuilder().temperature(1500))
+                .color(0xdb5e5e).secondaryColor(0x5e0f3d)
+                .flags(GENERATE_GEAR, GENERATE_SMALL_GEAR, GENERATE_RING, GENERATE_FRAME, GENERATE_SPRING, GENERATE_SPRING_SMALL, GENERATE_FINE_WIRE)
+                .cableProperties(GTValues.V[7], 4, 6)
+                .blastTemp(7000, BlastProperty.GasTier.HIGHER, GTValues.VA[GTValues.ZPM])
+                .buildAndRegister();
+        LivingIgniclad = new Material.Builder(CosmicCore.id("living_igniclad"))
+                .ingot()
+                .liquid(new FluidBuilder().temperature(1760))
+                .color(0x940002).secondaryColor(0xe35e17)
+                .flags(GENERATE_GEAR, GENERATE_SMALL_GEAR, GENERATE_RING, GENERATE_FRAME, GENERATE_SPRING, GENERATE_SPRING_SMALL, GENERATE_FINE_WIRE)
+                .cableProperties(GTValues.V[8], 4, 6)
+                .blastTemp(9000, BlastProperty.GasTier.HIGHER, GTValues.VA[GTValues.UV])
+                .buildAndRegister();
+        PsionicGalvorn = new Material.Builder(CosmicCore.id("psionic_galvorn"))
+                .ingot()
+                .liquid(new FluidBuilder().temperature(1760))
+                .color(0x004094).secondaryColor(0x0962ab)
+                .flags(GENERATE_GEAR, GENERATE_SMALL_GEAR, GENERATE_RING, GENERATE_FRAME, GENERATE_SPRING, GENERATE_SPRING_SMALL, GENERATE_FINE_WIRE)
+                .cableProperties(GTValues.V[9], 4, 6)
+                .blastTemp(10500, BlastProperty.GasTier.HIGHER, GTValues.VA[GTValues.UV])
+                .buildAndRegister();
+        ProgrammableMatter = new Material.Builder(CosmicCore.id("programmable_matter"))
+                .ingot()
+                .liquid(new FluidBuilder().temperature(1760))
+                .color(0x003e4f).secondaryColor(0x0a2830)
+                .flags(GENERATE_GEAR, GENERATE_SMALL_GEAR, GENERATE_RING, GENERATE_FRAME, GENERATE_SPRING, GENERATE_SPRING_SMALL, GENERATE_FINE_WIRE)
+                .cableProperties(GTValues.V[10], 4, 6)
+                .blastTemp(13000, BlastProperty.GasTier.HIGHEST, GTValues.VA[GTValues.UHV])
+                .buildAndRegister();
+        ShimmeringNeutronium = new Material.Builder(CosmicCore.id("shimmering_neutronium"))
+                .ingot()
+                .liquid(new FluidBuilder().temperature(1760))
+                .color(0xc7e9f2).secondaryColor(0xffffff)
+                .flags(GENERATE_GEAR, GENERATE_SMALL_GEAR, GENERATE_RING, GENERATE_FRAME, GENERATE_SPRING, GENERATE_SPRING_SMALL, GENERATE_FINE_WIRE)
+                .cableProperties(GTValues.V[11], 4, 6)
+                .blastTemp(9000, BlastProperty.GasTier.HIGHEST, GTValues.VA[GTValues.UEV])
+                .buildAndRegister();
+        CausalFabric = new Material.Builder(CosmicCore.id("causal_fabric"))
+                .ingot()
+                .liquid(new FluidBuilder().temperature(1760))
+                .color(0x270054).secondaryColor(0x481c7a)
+                .flags(GENERATE_GEAR, GENERATE_SMALL_GEAR, GENERATE_RING, GENERATE_FRAME, GENERATE_SPRING, GENERATE_SPRING_SMALL, GENERATE_FINE_WIRE)
+                .cableProperties(GTValues.V[11], 4, 6)
+                .blastTemp(19000, BlastProperty.GasTier.HIGHEST, GTValues.VA[GTValues.UIV])
                 .buildAndRegister();
 
     }

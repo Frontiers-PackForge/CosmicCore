@@ -1,7 +1,13 @@
 {
   "values": [
+    "cosmiccore:resonant_virtue_meld_coil_block",
     "cosmiccore:prismatic_tungstensteel_coil_block",
+    "cosmiccore:trinavine_coil_block",
+    "cosmiccore:psionic_galvorn_coil_block",
+    "cosmiccore:living_igniclad_coil_block",
+    "cosmiccore:programable_matter_coil_block",
     "cosmiccore:shimmering_neutronium_coil_block",
+    "cosmiccore:causal_fabric_coil_block",
     "cosmiccore:dyson_solar_cell",
     "cosmiccore:alternator_flux_coiling",
     "cosmiccore:plated_aerocloud",

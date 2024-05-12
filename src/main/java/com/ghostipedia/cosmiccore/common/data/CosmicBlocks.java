@@ -45,7 +45,14 @@ public class CosmicBlocks {
 
 
     public static final BlockEntry<CoilBlock> COIL_PRISMATIC_TUNGSTENSTEEL = createCoilBlock(CosmicCoilBlock.CoilType.PRISMATIC_TUNGSTENSTEEL);
+    public static final BlockEntry<CoilBlock> COIL_RESONANT_VIRTUE_MELD = createCoilBlock(CosmicCoilBlock.CoilType.RESONANT_VIRTUE_MELD);
+    public static final BlockEntry<CoilBlock> COIL_NAQUADIC_SUPERALLOY = createCoilBlock(CosmicCoilBlock.CoilType.PRISMATIC_TUNGSTENSTEEL);
+    public static final BlockEntry<CoilBlock> COIL_TRANAVINE = createCoilBlock(CosmicCoilBlock.CoilType.TRINAVINE);
+    public static final BlockEntry<CoilBlock> COIL_PSIONIC_GALVORN = createCoilBlock(CosmicCoilBlock.CoilType.PSIONIC_GALVORN);
+    public static final BlockEntry<CoilBlock> COIL_LIVING_IGNICLAD = createCoilBlock(CosmicCoilBlock.CoilType.LIVING_IGNICLAD);
+    public static final BlockEntry<CoilBlock> COIL_PROGRAMMABLE_MATTER = createCoilBlock(CosmicCoilBlock.CoilType.PROGRAMMABLE_MATTER);
     public static final BlockEntry<CoilBlock> COIL_SHIMMERING_NEUTRONIUM = createCoilBlock(CosmicCoilBlock.CoilType.SHIMMERING_NEUTRONIUM);
+    public static final BlockEntry<CoilBlock> COIL_CAUSAL_FABRIC = createCoilBlock(CosmicCoilBlock.CoilType.CAUSAL_FABRIC);
     public static final BlockEntry<Block> CASING_DYSON_CELL = createCasingBlock("dyson_solar_cell", CosmicCore.id("block/casings/solid/dyson_solar_cell"));
     public static final BlockEntry<Block> ALTERNATOR_FLUX_COILING = createCasingBlock("alternator_flux_coiling", CosmicCore.id("block/casings/solid/alternator_flux_coiling_copper"));
     public static final BlockEntry<Block> PLATED_AEROCLOUD = createCasingBlock("plated_aerocloud", CosmicCore.id("block/casings/solid/plated_aerocloud"));
