@@ -1,6 +1,6 @@
 {
     "ldlib": {
-        "connection": "cosmiccore:block/casings/coils/igniclad_ctm"
+        "connection": "cosmiccore:block/casings/coils/living_igniclad_ctm"
     },
     "animation":{
       "interpolate": true,

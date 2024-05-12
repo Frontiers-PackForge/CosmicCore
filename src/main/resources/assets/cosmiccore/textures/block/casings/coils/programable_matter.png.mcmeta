@@ -1,6 +1,6 @@
 {
     "ldlib": {
-        "connection": "cosmiccore:block/casings/coils/programmable_matter_ctm"
+        "connection": "cosmiccore:block/casings/coils/programable_matter_ctm"
     },
     "animation":{
       "interpolate": true,

@@ -46,7 +46,7 @@ public class CosmicBlocks {
 
     public static final BlockEntry<CoilBlock> COIL_PRISMATIC_TUNGSTENSTEEL = createCoilBlock(CosmicCoilBlock.CoilType.PRISMATIC_TUNGSTENSTEEL);
     public static final BlockEntry<CoilBlock> COIL_RESONANT_VIRTUE_MELD = createCoilBlock(CosmicCoilBlock.CoilType.RESONANT_VIRTUE_MELD);
-    public static final BlockEntry<CoilBlock> COIL_NAQUADIC_SUPERALLOY = createCoilBlock(CosmicCoilBlock.CoilType.PRISMATIC_TUNGSTENSTEEL);
+    public static final BlockEntry<CoilBlock> COIL_NAQUADIC_SUPERALLOY = createCoilBlock(CosmicCoilBlock.CoilType.NAQUADIC_SUPERALLOY);
     public static final BlockEntry<CoilBlock> COIL_TRANAVINE = createCoilBlock(CosmicCoilBlock.CoilType.TRINAVINE);
     public static final BlockEntry<CoilBlock> COIL_PSIONIC_GALVORN = createCoilBlock(CosmicCoilBlock.CoilType.PSIONIC_GALVORN);
     public static final BlockEntry<CoilBlock> COIL_LIVING_IGNICLAD = createCoilBlock(CosmicCoilBlock.CoilType.LIVING_IGNICLAD);
