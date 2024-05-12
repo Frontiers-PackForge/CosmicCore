@@ -29,6 +29,7 @@ import com.gregtechceu.gtceu.common.data.GTBlocks;
 import com.gregtechceu.gtceu.common.data.GTMaterials;
 import com.gregtechceu.gtceu.common.data.GTRecipeModifiers;
 import com.gregtechceu.gtceu.common.machine.multiblock.primitive.PrimitiveWorkableMachine;
+import com.tterrag.registrate.util.entry.BlockEntry;
 import net.minecraft.network.chat.Component;
 import com.gregtechceu.gtceu.utils.GTHashMaps;
 import com.gregtechceu.gtceu.utils.ItemStackHashStrategy;
@@ -36,7 +37,9 @@ import it.unimi.dsi.fastutil.objects.Object2IntMap;
 import it.unimi.dsi.fastutil.objects.Object2IntOpenCustomHashMap;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.block.Blocks;
 
 import java.util.*;
 import java.util.function.BiFunction;
@@ -63,19 +66,19 @@ public class CosmicMachines {
     public static final MachineDefinition[] SOUL_EXPORT_HATCH = registerSoulTieredHatch(
             "soul_output_hatch", "Soul Output Hatch", "soul_hatch.export",
             IO.OUT, HIGH_TIERS, CosmicPartAbility.EXPORT_SOUL);
-
-    public static final MultiblockMachineDefinition SOUL_TESTER = REGISTRATE.multiblock("soul_tester", PrimitiveWorkableMachine::new)
-            .rotationState(RotationState.NON_Y_AXIS)
-            .recipeType(CosmicCoreRecipeTypes.SOUL_TESTER_RECIPES)
-            .appearanceBlock(GTBlocks.CASING_PRIMITIVE_BRICKS)
-            .pattern(definition -> FactoryBlockPattern.start()
-                    .aisle("S", "C", "I")
-                    .where("C", controller(blocks(definition.getBlock())))
-                    .where("S", abilities(CosmicPartAbility.IMPORT_SOUL).or(abilities(CosmicPartAbility.EXPORT_SOUL)))
-                    .where("I", abilities(PartAbility.EXPORT_ITEMS).or(abilities(PartAbility.IMPORT_ITEMS)))
-                    .build())
-            .workableCasingRenderer(GTCEu.id("block/casings/solid/machine_casing_inert_ptfe"), GTCEu.id("block/multiblock/coke_oven"))
-            .register();
+//Enable If needed Inside of Dev
+//    public static final MultiblockMachineDefinition SOUL_TESTER = REGISTRATE.multiblock("soul_tester", PrimitiveWorkableMachine::new)
+//            .rotationState(RotationState.NON_Y_AXIS)
+//            .recipeType(CosmicCoreRecipeTypes.SOUL_TESTER_RECIPES)
+//            .appearanceBlock(GTBlocks.CASING_PRIMITIVE_BRICKS)
+//            .pattern(definition -> FactoryBlockPattern.start()
+//                    .aisle("S", "C", "I")
+//                    .where("C", controller(blocks(definition.getBlock())))
+//                    .where("S", abilities(CosmicPartAbility.IMPORT_SOUL).or(abilities(CosmicPartAbility.EXPORT_SOUL)))
+//                    .where("I", abilities(PartAbility.EXPORT_ITEMS).or(abilities(PartAbility.IMPORT_ITEMS)))
+//                    .build())
+//            .workableCasingRenderer(GTCEu.id("block/casings/solid/machine_casing_inert_ptfe"), GTCEu.id("block/multiblock/coke_oven"))
+//            .register();
 
     //Terrifying Recipe Modifiers half of this is moonruns to me :lets:
     public final static MultiblockMachineDefinition DRYGMY_GROVE = REGISTRATE.multiblock("drygmy_grove", WorkableElectricMultiblockMachine::new)
@@ -90,7 +93,6 @@ public class CosmicMachines {
                                     .map(container -> container.getContents().stream().filter(ItemStack.class::isInstance).map(ItemStack.class::cast).toList())
                                     .flatMap(container -> GTHashMaps.fromItemStackCollection(container).object2IntEntrySet().stream())
                                     .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, Integer::sum, () -> new Object2IntOpenCustomHashMap<>(ItemStackHashStrategy.comparingAllButCount())));
-                            //"ars_nouveau:drygmy_charm"
                             ItemStack stack = new ItemStack(BuiltInRegistries.ITEM.get(new ResourceLocation("ars_nouveau:drygmy_charm")));
                             //Never let the multiplier be 0 (THIS IS NOT ACTUALLY PARALLEL, It's just being used to to some goober grade math)
                             if (ingredientStacks.getInt(stack) >= 1) {
@@ -101,19 +103,24 @@ public class CosmicMachines {
                         return recipe;
                     },
                     GTRecipeModifiers.ELECTRIC_OVERCLOCK.apply(OverclockingLogic.NON_PERFECT_OVERCLOCK))
-            .appearanceBlock(GTBlocks.CASING_TITANIUM_STABLE)
+            .appearanceBlock(GTBlocks.CASING_STAINLESS_CLEAN)
             .pattern(definition -> FactoryBlockPattern.start()
-                    .aisle("#####", "##A##", "##A##", "#####", "##A##", "##A##", "#####")
-                    .aisle("#TTT#", "##Q##", "#####", "#####", "#####", "##Q##", "#TTT#")
-                    .aisle("#TTT#", "AQGQA", "A#G#A", "##G##", "A#G#A", "AQGQA", "#TTT#")
-                    .aisle("#TTT#", "##Q##", "#####", "#####", "#####", "##Q##", "#TCT#")
-                    .aisle("#####", "##A##", "##A##", "#####", "##A##", "##A##", "#####")
+                    .aisle("##QQQ##", "##QQQ##", "#######", "#######", "#######", "##QQQ##", "##QQQ##")
+                    .aisle("#QQQQQ#", "#QMMMQ#", "#FLBBF#", "#F#B#F#", "#F###F#", "#QGGGQ#", "#QQQQQ#")
+                    .aisle("QQQQQQQ", "QMMMMMQ", "#B#####", "#B#####", "#######", "QGP#PGQ", "QQQQQQQ")
+                    .aisle("QQQQQQQ", "QMMMMMQ", "#B###B#", "#######", "#######", "QG###GQ", "QQQQQQQ")
+                    .aisle("QQQQQQQ", "QMMMMMQ", "####LB#", "#####B#", "#######", "QGP#PGQ", "QQQQQQQ")
+                    .aisle("#QQQQQ#", "#QMMMQ#", "#F#BBF#", "#F##BF#", "#F###F#", "#QGGGQ#", "#QQQQQ#")
+                    .aisle("##QQQ##", "##QCQ##", "#######", "#######", "#######", "##QQQ##", "##QQQ##")
                     .where('#', any())
                     .where("C", controller(blocks(definition.getBlock())))
-                    .where('Q', blocks(ChemicalHelper.getBlock(TagPrefix.frameGt, GTMaterials.Aluminium)))
-                    .where('A', blocks(GTBlocks.CASING_ALUMINIUM_FROSTPROOF.get()))
-                    .where('G', blocks(GTBlocks.CASING_TEMPERED_GLASS.get()))
-                    .where('T', blocks(GTBlocks.CASING_TITANIUM_STABLE.get())
+                    .where('F', blocks(ChemicalHelper.getBlock(TagPrefix.frameGt, GTMaterials.StainlessSteel)))
+                    .where('M', blocks(Blocks.MOSS_BLOCK))
+                    .where('B', blocks(Blocks.AZALEA_LEAVES))
+                    .where('L', blocks(Blocks.FLOWERING_AZALEA))
+                    .where('P', blocks(GTBlocks.CASING_STEEL_PIPE.get()))
+                    .where('G', blocks(Blocks.SEA_LANTERN)) //WHAT THE HELL IS A LAMP BRO - HALP
+                    .where('Q', blocks(GTBlocks.CASING_STAINLESS_CLEAN.get())
                             .or(abilities(PartAbility.IMPORT_FLUIDS))
                             .or(abilities(PartAbility.EXPORT_FLUIDS))
                             .or(abilities(PartAbility.IMPORT_ITEMS))
@@ -122,7 +129,7 @@ public class CosmicMachines {
                             .or(abilities(PartAbility.MAINTENANCE))
                             .or(abilities(CosmicPartAbility.IMPORT_SOUL))
                     ).build())
-            .workableCasingRenderer(GTCEu.id("block/casings/solid/machine_casing_stable_titanium"), GTCEu.id("block/multiblock/coke_oven"))
+            .workableCasingRenderer(GTCEu.id("block/casings/solid/machine_casing_clean_stainless_steel"), GTCEu.id("block/multiblock/data_bank"))
             .register();
 
     private static MachineDefinition[] registerSoulTieredHatch(String name, String displayName, String model, IO io, int[] tiers, PartAbility... abilities) {
@@ -135,8 +142,10 @@ public class CosmicMachines {
                         .overlayTieredHullRenderer(model)
                         .compassNode("soul_hatch")
                         .tooltipBuilder((item, tooltip) -> {
-                            if (io == IO.IN) tooltip.add(Component.translatable("tooltip.cosmiccore.soul_hatch.input", SoulHatchPartMachine.getMaxConsumption(tier)));
-                            else tooltip.add(Component.translatable("tooltip.cosmiccore.soul_hatch.output", SoulHatchPartMachine.getMaxCapacity(tier)));
+                            if (io == IO.IN)
+                                tooltip.add(Component.translatable("tooltip.cosmiccore.soul_hatch.input", SoulHatchPartMachine.getMaxConsumption(tier)));
+                            else
+                                tooltip.add(Component.translatable("tooltip.cosmiccore.soul_hatch.output", SoulHatchPartMachine.getMaxCapacity(tier)));
                         }).register(), tiers);
     }
 
@@ -149,5 +158,6 @@ public class CosmicMachines {
         return definitions;
     }
 
-    public static void init() {}
+    public static void init() {
+    }
 }
