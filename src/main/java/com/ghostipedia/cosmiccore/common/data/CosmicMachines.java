@@ -116,8 +116,10 @@ public class CosmicMachines {
                     .where("C", controller(blocks(definition.getBlock())))
                     .where('F', blocks(ChemicalHelper.getBlock(TagPrefix.frameGt, GTMaterials.StainlessSteel)))
                     .where('M', blocks(Blocks.MOSS_BLOCK))
-                    .where('B', blocks(Blocks.AZALEA_LEAVES))
-                    .where('L', blocks(Blocks.FLOWERING_AZALEA))
+                    .where('B', blocks(Blocks.AZALEA_LEAVES)
+                            .or(blocks(Blocks.FLOWERING_AZALEA_LEAVES)))
+                    .where('L', blocks(Blocks.FLOWERING_AZALEA)
+                            .or(blocks(Blocks.AZALEA)))
                     .where('P', blocks(GTBlocks.CASING_STEEL_PIPE.get()))
                     .where('G', blocks(Blocks.SEA_LANTERN)) //WHAT THE HELL IS A LAMP BRO - HALP
                     .where('Q', blocks(GTBlocks.CASING_STAINLESS_CLEAN.get())
