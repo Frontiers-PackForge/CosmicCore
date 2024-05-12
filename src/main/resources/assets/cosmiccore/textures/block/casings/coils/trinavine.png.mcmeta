@@ -1,0 +1,9 @@
+{
+    "ldlib": {
+        "connection": "cosmiccore:block/casings/coils/trinavine_ctm"
+    },
+    "animation":{
+      "interpolate": true,
+      "frametime":8
+   }
+}
