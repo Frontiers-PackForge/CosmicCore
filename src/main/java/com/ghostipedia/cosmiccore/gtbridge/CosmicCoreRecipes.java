@@ -1,5 +1,6 @@
 package com.ghostipedia.cosmiccore.gtbridge;
 
+import com.ghostipedia.cosmiccore.api.capability.recipe.SoulRecipeCapability;
 import com.ghostipedia.cosmiccore.common.data.CosmicItems;
 import com.gregtechceu.gtceu.api.GTValues;
 import net.minecraft.data.recipes.FinishedRecipe;
@@ -25,11 +26,18 @@ public class CosmicCoreRecipes {
 //                .duration(10)
 //                .save(provider);
         GROVE_RECIPES.recipeBuilder("dirt_movement")
+                .input(SoulRecipeCapability.CAP, 100)
                 .notConsumable(CosmicItems.DONK)
                 .notConsumable(Items.ZOMBIE_HEAD)
                 .outputItems(Items.ROTTEN_FLESH, 1)
                 .duration(20)
-                .inputEU(GTValues.HV)
+                .EUt(GTValues.VA[GTValues.HV])
+                .save(provider);
+        GROVE_RECIPES.recipeBuilder("killing_mobs")
+                .output(SoulRecipeCapability.CAP, 1000)
+                .notConsumable(Items.ZOMBIE_HEAD)
+                .duration(20)
+                .EUt(GTValues.VA[GTValues.HV])
                 .save(provider);
     }
 

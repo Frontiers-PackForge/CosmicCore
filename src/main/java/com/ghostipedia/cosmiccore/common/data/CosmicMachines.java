@@ -120,6 +120,7 @@ public class CosmicMachines {
                             .or(abilities(PartAbility.EXPORT_ITEMS))
                             .or(abilities(PartAbility.INPUT_ENERGY))
                             .or(abilities(PartAbility.MAINTENANCE))
+                            .or(abilities(CosmicPartAbility.IMPORT_SOUL))
                     ).build())
             .workableCasingRenderer(GTCEu.id("block/casings/solid/machine_casing_stable_titanium"), GTCEu.id("block/multiblock/coke_oven"))
             .register();
