@@ -52,9 +52,11 @@ public class SoulRecipeCapability extends RecipeCapability<Integer> {
     }
     @Override
     public void addXEIInfo(WidgetGroup group, int xOffset, List<Content> contents, boolean perTick, boolean isInput, MutableInt yOffset) {
-        if (perTick && isInput) {
-            int soul = contents.stream().map(Content::getContent).mapToInt(SoulRecipeCapability.CAP::of).sum();
-            group.addWidget(new LabelWidget(3 - xOffset, yOffset.addAndGet(10), LocalizationUtils.format("cosmiccore.recipe.soul", soul)));
+        int soul = contents.stream().map(Content::getContent).mapToInt(SoulRecipeCapability.CAP::of).sum();
+        if (isInput) {
+            group.addWidget(new LabelWidget(3 - xOffset, yOffset.addAndGet(-30), LocalizationUtils.format("cosmiccore.recipe.soulIn", soul)));
+        } else {
+            group.addWidget(new LabelWidget(3 - xOffset, yOffset.addAndGet(-30), LocalizationUtils.format("cosmiccore.recipe.soulOut", soul)));
         }
     }
 }
