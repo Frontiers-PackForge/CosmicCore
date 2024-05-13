@@ -47,8 +47,8 @@ public class MagnetBlock extends ActiveBlock {
         }
     }
     public enum MagnetType implements StringRepresentable, IMagnetType{
-        HIGH_POWERED("high_powered_magnet",1500,100,3, CosmicMaterials.LivingIgniclad, CosmicCore.id("block/casings/solid/alternator_flux_coiling_copper")),
-        FUSION_GRADE("fusion_grade_magnet",10000,500,3, CosmicMaterials.LivingIgniclad, CosmicCore.id("block/casings/solid/alternator_flux_coiling_copper"));
+        HIGH_POWERED("high_powered",1500,100,3, CosmicMaterials.LivingIgniclad, CosmicCore.id("block/casings/solid/alternator_flux_coiling_copper")),
+        FUSION_GRADE("fusion_grade",10000,500,3, CosmicMaterials.LivingIgniclad, CosmicCore.id("block/casings/solid/alternator_flux_coiling_copper"));
 
         @NotNull @Getter
         private final String name;
