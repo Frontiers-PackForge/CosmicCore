@@ -1,6 +1,6 @@
-// 1.20.1	2024-05-12T14:03:45.2990489	Registrate Provider for cosmiccore [Recipes, Advancements, Loot Tables, Tags (blocks), Tags (items), Tags (fluids), Tags (entity_types), Blockstates, Item models, Lang (en_us/en_ud)]
-6b466d90b71310016d90daa7f4f9b254cf5af60f assets/cosmiccore/lang/en_ud.json
-7dd98a66b1d17a6fc27dd07afea33b22a3f33b3f assets/cosmiccore/lang/en_us.json
+// 1.20.1	2024-05-13T11:58:09.046607	Registrate Provider for cosmiccore [Recipes, Advancements, Loot Tables, Tags (blocks), Tags (items), Tags (fluids), Tags (entity_types), Blockstates, Item models, Lang (en_us/en_ud)]
+1961f50cbb349abf9099056a7ee7103997d810fa assets/cosmiccore/lang/en_ud.json
+689fb34260a361653c5a5cd1c4ee2f875a8c17b2 assets/cosmiccore/lang/en_us.json
 c76c82b134cbacd0e7515c19881d2c29cec3e00d assets/cosmiccore/models/item/blackstone_pustule.json
 df450aaa119bb426b16e578a830e1fc1a04a60d8 assets/cosmiccore/models/item/cosmic_processor.json
 91154670f2e413b35d8a509da73aa02359333e6b assets/cosmiccore/models/item/cosmic_processor_assembly.json
@@ -29,8 +29,10 @@ f49fce727fa7662a4f8675b4872c0e8b951208fe data/cosmiccore/loot_tables/blocks/alte
 7364009d12355e14797ff1265bb04a502c7cb418 data/cosmiccore/loot_tables/blocks/causal_fabric_coil_block.json
 f07a4cc7e9e21719a4f5f418fb8a2e871eef6d1c data/cosmiccore/loot_tables/blocks/dyson_solar_cell.json
 a367ae931634505f97110455dcdd55c66249d6b7 data/cosmiccore/loot_tables/blocks/highly_conductive_fission_casing.json
+6d7752ebfd0d1d53cd4e449f27f84ea514c5781d data/cosmiccore/loot_tables/blocks/high_powered_magnet_magnet.json
 9b8c3cab0e12a9fb1462d3438a2d864e606312ce data/cosmiccore/loot_tables/blocks/high_temperature_fission_casing.json
 fda60d7a180e2d2194a4a7b24409d4a366e3873f data/cosmiccore/loot_tables/blocks/living_igniclad_coil_block.json
+1f49edb69dca37026921ebeeb89cb4e7b6e634e4 data/cosmiccore/loot_tables/blocks/naquadric_superalloy_coil_block.json
 62f36629bdb270b69dc2a728e6af1dfd55ae603a data/cosmiccore/loot_tables/blocks/plated_aerocloud.json
 4d724fafcf00e6916fb56e3fba041bc93261fcc1 data/cosmiccore/loot_tables/blocks/prismatic_tungstensteel_coil_block.json
 1485edf0f170daeea9f8440b3cc4d42b6d2d85c0 data/cosmiccore/loot_tables/blocks/programable_matter_coil_block.json
@@ -38,5 +40,5 @@ fda60d7a180e2d2194a4a7b24409d4a366e3873f data/cosmiccore/loot_tables/blocks/livi
 e3a118feb12f1dd6a20748b201d988e6dc65df31 data/cosmiccore/loot_tables/blocks/resonant_virtue_meld_coil_block.json
 9d1576e19a12b759aeb315052691f826c6352541 data/cosmiccore/loot_tables/blocks/shimmering_neutronium_coil_block.json
 d75809fc6d2e2d1d39e04b619e951347096bb186 data/cosmiccore/loot_tables/blocks/trinavine_coil_block.json
-4107c82e43d55493c0ecdd880136c20f9dd0e503 data/forge/tags/blocks/mineable/wrench.json
-e665557405e640d6678312f708029f27d297285d data/minecraft/tags/blocks/mineable/pickaxe.json
+7cc808bdad045a9fc0fcc187d9485e17afbecbe5 data/forge/tags/blocks/mineable/wrench.json
+049795ab85c892daab29ce24aad383dd749e68d1 data/minecraft/tags/blocks/mineable/pickaxe.json
