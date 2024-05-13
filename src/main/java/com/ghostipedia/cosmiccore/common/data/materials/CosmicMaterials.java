@@ -104,7 +104,7 @@ public class CosmicMaterials {
                 .color(0xc7e9f2).secondaryColor(0xffffff)
                 .flags(GENERATE_GEAR, GENERATE_SMALL_GEAR, GENERATE_RING, GENERATE_FRAME, GENERATE_SPRING, GENERATE_SPRING_SMALL, GENERATE_FINE_WIRE)
                 .cableProperties(GTValues.V[11], 4, 6)
-                .blastTemp(9000, BlastProperty.GasTier.HIGHEST, GTValues.VA[GTValues.UEV])
+                .blastTemp(15000, BlastProperty.GasTier.HIGHEST, GTValues.VA[GTValues.UEV])
                 .buildAndRegister();
         CausalFabric = new Material.Builder(CosmicCore.id("causal_fabric"))
                 .ingot()
