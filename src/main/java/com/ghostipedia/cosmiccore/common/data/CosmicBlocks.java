@@ -1,6 +1,9 @@
 package com.ghostipedia.cosmiccore.common.data;
 
 import com.ghostipedia.cosmiccore.CosmicCore;
+import com.ghostipedia.cosmiccore.api.CosmicCoreAPI;
+import com.ghostipedia.cosmiccore.api.block.IMagnetType;
+import com.ghostipedia.cosmiccore.common.block.MagnetBlock;
 import com.ghostipedia.cosmiccore.common.data.recipe.RecipeTags;
 import com.gregtechceu.gtceu.api.GTCEuAPI;
 import com.gregtechceu.gtceu.api.block.ICoilType;
@@ -56,6 +59,9 @@ public class CosmicBlocks {
     public static final BlockEntry<Block> CASING_DYSON_CELL = createCasingBlock("dyson_solar_cell", CosmicCore.id("block/casings/solid/dyson_solar_cell"));
     public static final BlockEntry<Block> ALTERNATOR_FLUX_COILING = createCasingBlock("alternator_flux_coiling", CosmicCore.id("block/casings/solid/alternator_flux_coiling_copper"));
     public static final BlockEntry<Block> PLATED_AEROCLOUD = createCasingBlock("plated_aerocloud", CosmicCore.id("block/casings/solid/plated_aerocloud"));
+
+    public static final BlockEntry<MagnetBlock> MAGNET_HIGH_POWERED = createMagnetBlock(MagnetBlock.MagnetType.HIGH_POWERED);
+    public static final BlockEntry<MagnetBlock> MAGNET_FUSION_GRADE = createMagnetBlock(MagnetBlock.MagnetType.FUSION_GRADE);
 
 
     public static final BlockEntry<Block> HIGH_TEMP_FISSION_CASING = createCasingBlockWrenchOnly("high_temperature_fission_casing", CosmicCore.id("block/casings/solid/high_temperature_fission_casing"));
@@ -122,6 +128,20 @@ public class CosmicBlocks {
                 .register();
         GTCEuAPI.HEATING_COILS.put(coilType, coilBlock);
         return coilBlock;
+    }
+    private static BlockEntry<MagnetBlock> createMagnetBlock(IMagnetType magnetType) {
+        BlockEntry<MagnetBlock> magnetBlock = REGISTRATE.block("%s_magnet".formatted(magnetType.getName()), p -> new MagnetBlock(p, magnetType))
+                .initialProperties(() -> Blocks.IRON_BLOCK)
+                .addLayer(() -> RenderType::cutoutMipped)
+                .blockstate(NonNullBiConsumer.noop())
+                .tag(RecipeTags.MINEABLE_WITH_WRENCH, BlockTags.MINEABLE_WITH_PICKAXE)
+                .item(RendererBlockItem::new)
+                .model(NonNullBiConsumer.noop())
+                .build()
+                .register();
+        CosmicCoreAPI.MAGNET_COILS.put(magnetType,magnetBlock);
+
+        return magnetBlock;
     }
 
     public static void init() {

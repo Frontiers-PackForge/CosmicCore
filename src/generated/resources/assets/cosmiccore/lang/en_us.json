@@ -3,6 +3,7 @@
   "block.cosmiccore.causal_fabric_coil_block": "Causal Fabric Coil Block",
   "block.cosmiccore.drygmy_grove": "Drygmy Grove",
   "block.cosmiccore.dyson_solar_cell": "Dyson Solar Cell",
+  "block.cosmiccore.high_powered_magnet": "High Powered Magnet",
   "block.cosmiccore.high_temperature_fission_casing": "High Temperature Fission Casing",
   "block.cosmiccore.highly_conductive_fission_casing": "Highly Conductive Fission Casing",
   "block.cosmiccore.iv_soul_input_hatch": "§9IV Soul Input Hatch",
@@ -10,6 +11,7 @@
   "block.cosmiccore.living_igniclad_coil_block": "Living Igniclad Coil Block",
   "block.cosmiccore.luv_soul_input_hatch": "§dLuV Soul Input Hatch",
   "block.cosmiccore.luv_soul_output_hatch": "§dLuV Soul Output Hatch",
+  "block.cosmiccore.naquadric_superalloy_coil_block": "Naquadric Superalloy Coil Block",
   "block.cosmiccore.opv_soul_input_hatch": "§9§lOpV Soul Input Hatch",
   "block.cosmiccore.opv_soul_output_hatch": "§9§lOpV Soul Output Hatch",
   "block.cosmiccore.plated_aerocloud": "Plated Aerocloud",
@@ -67,6 +69,10 @@
   "material.cosmiccore.shimmering_neutronium": "Shimmering Neutronium",
   "material.cosmiccore.trinavine": "Trinavine",
   "material.cosmiccore.virtue_meld": "Virtue Meld",
-  "cosmiccore.recipe.soulIn": "Souls In: %s LP",
-  "cosmiccore.recipe.soulOut": "Souls Out: %s LP"
+  "cosmiccore.recipe.soulIn": "Soul Input: %s",
+  "cosmiccore.recipe.soulOut": "Soul Output: %s",
+  "cosmiccore.wire_coil.magnet_capacity": "  §fMax Field Strength: §f%s",
+  "cosmiccore.wire_coil.magnet_regen": "  §5Field Regen Rate: %s",
+  "cosmiccore.wire_coil.eu_multiplier": "  §aEnergy Usage Multiplier: §c%s x EU",
+  "cosmiccore.wire_coil.magnet_stats": "§8Magnet Stats"
 }
