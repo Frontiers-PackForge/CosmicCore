@@ -148,9 +148,8 @@ dependencies {
     // modRuntimeOnly("curse.maven:blood-magic-224791:4779711") // Runtime to test in game
     modImplementation("curse.maven:blood-magic-224791:4779711")
 
-    //Piss
+
     //modImplementation("curse.maven:cold-sweat-506194:4805548")
-    modImplementation("curse.maven:sanity-descent-into-madness-876448:4625236")
     modImplementation('software.bernie.geckolib:geckolib-forge-1.20.1:4.2.2')
     modCompileOnly("com.jozufozu.flywheel:flywheel-forge-1.20.1:0.6.10-7")
     modCompileOnly("curse.maven:create-328085:4762216")

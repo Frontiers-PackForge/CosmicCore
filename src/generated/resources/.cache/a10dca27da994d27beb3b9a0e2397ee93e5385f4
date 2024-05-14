@@ -1,6 +1,6 @@
-// 1.20.1	2024-05-13T23:40:30.8914982	Registrate Provider for cosmiccore [Recipes, Advancements, Loot Tables, Tags (blocks), Tags (items), Tags (fluids), Tags (entity_types), Blockstates, Item models, Lang (en_us/en_ud)]
-75d21c3c5b5ebceb48d52857e0899fa4f0900909 assets/cosmiccore/lang/en_ud.json
-47d0f24ff11436e66fc273e28eaf9760f6e850a8 assets/cosmiccore/lang/en_us.json
+// 1.20.1	2024-05-14T06:23:15.4080647	Registrate Provider for cosmiccore [Recipes, Advancements, Loot Tables, Tags (blocks), Tags (items), Tags (fluids), Tags (entity_types), Blockstates, Item models, Lang (en_us/en_ud)]
+edb2037867fdb2f6e1e8a59cb1ed0e615b0e4717 assets/cosmiccore/lang/en_ud.json
+efcb0fa17c2371c1bd93ceee76575f6046c9a125 assets/cosmiccore/lang/en_us.json
 c76c82b134cbacd0e7515c19881d2c29cec3e00d assets/cosmiccore/models/item/blackstone_pustule.json
 df450aaa119bb426b16e578a830e1fc1a04a60d8 assets/cosmiccore/models/item/cosmic_processor.json
 91154670f2e413b35d8a509da73aa02359333e6b assets/cosmiccore/models/item/cosmic_processor_assembly.json

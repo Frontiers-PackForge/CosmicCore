@@ -34,6 +34,12 @@
   "block.cosmiccore.uxv_soul_output_hatch": "§eUXV Soul Output Hatch",
   "block.cosmiccore.zpm_soul_input_hatch": "§cZPM Soul Input Hatch",
   "block.cosmiccore.zpm_soul_output_hatch": "§cZPM Soul Output Hatch",
+  "cosmiccore.recipe.soulIn": "Soul Input: %s",
+  "cosmiccore.recipe.soulOut": "Soul Output: %s",
+  "cosmiccore.wire_coil.eu_multiplier": "  §aEnergy Usage Multiplier: §c%s x EU",
+  "cosmiccore.wire_coil.magnet_capacity": "  §fMax Field Strength: §f%s",
+  "cosmiccore.wire_coil.magnet_regen": "  §5Field Regen Rate: %s",
+  "cosmiccore.wire_coil.magnet_stats": "§8Magnet Stats",
   "item.cosmiccore.blackstone_pustule": "Blackstone Pustule",
   "item.cosmiccore.cosmic_processor": "Cosmic Processor",
   "item.cosmiccore.cosmic_processor_assembly": "Cosmic Processor Assembly",
@@ -70,10 +76,6 @@
   "material.cosmiccore.shimmering_neutronium": "Shimmering Neutronium",
   "material.cosmiccore.trinavine": "Trinavine",
   "material.cosmiccore.virtue_meld": "Virtue Meld",
-  "cosmiccore.recipe.soulIn": "Soul Input: %s",
-  "cosmiccore.recipe.soulOut": "Soul Output: %s",
-  "cosmiccore.wire_coil.magnet_capacity": "  §fMax Field Strength: §f%s",
-  "cosmiccore.wire_coil.magnet_regen": "  §5Field Regen Rate: %s",
-  "cosmiccore.wire_coil.eu_multiplier": "  §aEnergy Usage Multiplier: §c%s x EU",
-  "cosmiccore.wire_coil.magnet_stats": "§8Magnet Stats"
+  "tooltip.cosmiccore.soul_hatch.input": "§cMax Recipe Input§f:§6 %s",
+  "tooltip.cosmiccore.soul_hatch.output": "§cMax Soul Network Capacity§f:§6 %s"
 }

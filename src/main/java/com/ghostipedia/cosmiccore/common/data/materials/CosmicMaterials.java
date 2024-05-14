@@ -56,9 +56,10 @@ public class CosmicMaterials {
                 .ingot()
                 .liquid(new FluidBuilder().temperature(1240))
                 .color(0xff8400).secondaryColor(0xcffee00).iconSet(MaterialIconSet.SHINY)
-                .flags(GENERATE_BOLT_SCREW,GENERATE_ROUND,GENERATE_GEAR, GENERATE_SMALL_GEAR, GENERATE_RING, GENERATE_FRAME, GENERATE_SPRING, GENERATE_SPRING_SMALL, GENERATE_FINE_WIRE)
+                .flags(GENERATE_ROTOR,GENERATE_BOLT_SCREW,GENERATE_ROUND,GENERATE_GEAR, GENERATE_SMALL_GEAR, GENERATE_RING, GENERATE_FRAME, GENERATE_SPRING, GENERATE_SPRING_SMALL, GENERATE_FINE_WIRE)
                 .components(Virtue, 4, Naquadah, 1,TungstenSteel, 15, Chromium, 3, Molybdenum, 6, Vanadium, 3,Prisma,8)
                 .cableProperties(GTValues.V[5], 4, 6)
+                .rotorStats(23.0f, 15.0f, 2560)
                 .blastTemp(4200, BlastProperty.GasTier.HIGHER, GTValues.VA[GTValues.IV], 1800)
                 .buildAndRegister().setFormula("ERROR4Nq((FeW)5CrMo2V)3Pi8");
         NaquadicSuperalloy = new Material.Builder(CosmicCore.id("naquadric_superalloy"))
