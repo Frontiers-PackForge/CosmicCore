@@ -1,6 +1,6 @@
 package com.ghostipedia.cosmiccore;
 
-import com.ghostipedia.cosmiccore.api.registries.CosmicRegistries;
+import com.ghostipedia.cosmiccore.api.registries.CosmicRegistration;
 import com.ghostipedia.cosmiccore.api.capability.CosmicCapabilities;
 import com.ghostipedia.cosmiccore.common.data.*;
 import com.ghostipedia.cosmiccore.common.data.materials.CosmicMaterials;
@@ -13,7 +13,6 @@ import com.gregtechceu.gtceu.api.machine.MachineDefinition;
 import com.gregtechceu.gtceu.api.recipe.GTRecipeType;
 import com.gregtechceu.gtceu.common.block.CoilBlock;
 import com.gregtechceu.gtceu.config.ConfigHolder;
-import com.tterrag.registrate.providers.RegistrateLangProvider;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.common.capabilities.RegisterCapabilitiesEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -47,7 +46,8 @@ public class CosmicCore {
         CosmicCreativeModeTabs.init();
         CosmicBlocks.init();
         CosmicItems.init();
-        CosmicRegistries.REGISTRATE.registerRegistrate();
+        CosmicRegistration.REGISTRATE.registerRegistrate();
+        CosmicCoreDatagen.init();
     }
 
     public static ResourceLocation id(String path) {

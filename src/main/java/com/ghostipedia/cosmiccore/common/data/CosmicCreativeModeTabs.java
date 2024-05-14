@@ -2,10 +2,9 @@ package com.ghostipedia.cosmiccore.common.data;
 import com.ghostipedia.cosmiccore.CosmicCore;
 import com.gregtechceu.gtceu.common.data.GTCreativeModeTabs;
 import com.tterrag.registrate.util.entry.RegistryEntry;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.*;
 
-import static com.ghostipedia.cosmiccore.api.registries.CosmicRegistries.REGISTRATE;
+import static com.ghostipedia.cosmiccore.api.registries.CosmicRegistration.REGISTRATE;
 
 
 public class CosmicCreativeModeTabs {
