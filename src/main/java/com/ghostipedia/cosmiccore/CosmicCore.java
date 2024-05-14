@@ -1,6 +1,6 @@
 package com.ghostipedia.cosmiccore;
 
-import com.ghostipedia.cosmiccore.api.registries.CosmicRegistries;
+import com.ghostipedia.cosmiccore.api.registries.CosmicRegistration;
 import com.ghostipedia.cosmiccore.api.capability.CosmicCapabilities;
 import com.ghostipedia.cosmiccore.common.data.*;
 import com.ghostipedia.cosmiccore.common.data.materials.CosmicMaterials;
@@ -47,7 +47,8 @@ public class CosmicCore {
         CosmicCreativeModeTabs.init();
         CosmicBlocks.init();
         CosmicItems.init();
-        CosmicRegistries.REGISTRATE.registerRegistrate();
+        CosmicRegistration.REGISTRATE.registerRegistrate();
+        CosmicCoreDatagen.init();
     }
 
     public static ResourceLocation id(String path) {

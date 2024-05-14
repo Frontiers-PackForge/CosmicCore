@@ -3,7 +3,8 @@
   "block.cosmiccore.causal_fabric_coil_block": "ʞɔoןᗺ ןıoƆ ɔıɹqɐℲ ןɐsnɐƆ",
   "block.cosmiccore.drygmy_grove": "ǝʌoɹ⅁ ʎɯbʎɹᗡ",
   "block.cosmiccore.dyson_solar_cell": "ןןǝƆ ɹɐןoS uosʎᗡ",
-  "block.cosmiccore.high_powered_magnet_magnet": "ʇǝubɐW ʇǝubɐW pǝɹǝʍoԀ ɥbıH",
+  "block.cosmiccore.fusion_grade_magnet": "ʇǝubɐW ǝpɐɹ⅁ uoısnℲ",
+  "block.cosmiccore.high_powered_magnet": "ʇǝubɐW pǝɹǝʍoԀ ɥbıH",
   "block.cosmiccore.high_temperature_fission_casing": "buısɐƆ uoıssıℲ ǝɹnʇɐɹǝdɯǝ⟘ ɥbıH",
   "block.cosmiccore.highly_conductive_fission_casing": "buısɐƆ uoıssıℲ ǝʌıʇɔnpuoƆ ʎןɥbıH",
   "block.cosmiccore.iv_soul_input_hatch": "ɥɔʇɐH ʇnduI ןnoS ΛI6§",
@@ -33,6 +34,12 @@
   "block.cosmiccore.uxv_soul_output_hatch": "ɥɔʇɐH ʇndʇnO ןnoS ΛX∩ǝ§",
   "block.cosmiccore.zpm_soul_input_hatch": "ɥɔʇɐH ʇnduI ןnoS WԀZɔ§",
   "block.cosmiccore.zpm_soul_output_hatch": "ɥɔʇɐH ʇndʇnO ןnoS WԀZɔ§",
+  "cosmiccore.recipe.soulIn": "%s :ʇnduI ןnoS",
+  "cosmiccore.recipe.soulOut": "%s :ʇndʇnO ןnoS",
+  "cosmiccore.wire_coil.eu_multiplier": "∩Ǝ x %sɔ§ :ɹǝıןdıʇןnW ǝbɐs∩ ʎbɹǝuƎɐ§  ",
+  "cosmiccore.wire_coil.magnet_capacity": "%sɟ§ :ɥʇbuǝɹʇS pןǝıℲ xɐWɟ§  ",
+  "cosmiccore.wire_coil.magnet_regen": "%s :ǝʇɐᴚ uǝbǝᴚ pןǝıℲϛ§  ",
+  "cosmiccore.wire_coil.magnet_stats": "sʇɐʇS ʇǝubɐW8§",
   "item.cosmiccore.blackstone_pustule": "ǝןnʇsnԀ ǝuoʇsʞɔɐןᗺ",
   "item.cosmiccore.cosmic_processor": "ɹossǝɔoɹԀ ɔıɯsoƆ",
   "item.cosmiccore.cosmic_processor_assembly": "ʎןqɯǝssⱯ ɹossǝɔoɹԀ ɔıɯsoƆ",
@@ -68,5 +75,7 @@
   "material.cosmiccore.resonant_virtue_meld": "pןǝW ǝnʇɹıΛ ʇuɐuosǝᴚ",
   "material.cosmiccore.shimmering_neutronium": "ɯnıuoɹʇnǝN buıɹǝɯɯıɥS",
   "material.cosmiccore.trinavine": "ǝuıʌɐuıɹ⟘",
-  "material.cosmiccore.virtue_meld": "pןǝW ǝnʇɹıΛ"
+  "material.cosmiccore.virtue_meld": "pןǝW ǝnʇɹıΛ",
+  "tooltip.cosmiccore.soul_hatch.input": "%s 9§:ɟ§ʇnduI ǝdıɔǝᴚ xɐWɔ§",
+  "tooltip.cosmiccore.soul_hatch.output": "%s 9§:ɟ§ʎʇıɔɐdɐƆ ʞɹoʍʇǝN ןnoS xɐWɔ§"
 }

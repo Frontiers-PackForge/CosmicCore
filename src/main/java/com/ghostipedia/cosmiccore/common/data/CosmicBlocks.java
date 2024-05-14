@@ -9,14 +9,9 @@ import com.gregtechceu.gtceu.api.GTCEuAPI;
 import com.gregtechceu.gtceu.api.block.ICoilType;
 import com.gregtechceu.gtceu.api.block.RendererBlock;
 import com.gregtechceu.gtceu.api.block.RendererGlassBlock;
-import com.gregtechceu.gtceu.api.data.tag.TagUtil;
 import com.gregtechceu.gtceu.api.item.RendererBlockItem;
-import com.gregtechceu.gtceu.api.item.tool.GTToolType;
 import com.gregtechceu.gtceu.client.renderer.block.TextureOverrideRenderer;
 import com.gregtechceu.gtceu.common.block.CoilBlock;
-import com.gregtechceu.gtceu.common.data.GTBlocks;
-import com.gregtechceu.gtceu.common.data.GTCompassSections;
-import com.gregtechceu.gtceu.common.registry.GTRegistration;
 import com.lowdragmc.lowdraglib.Platform;
 import com.lowdragmc.lowdraglib.client.renderer.IRenderer;
 import com.tterrag.registrate.util.entry.BlockEntry;
@@ -25,18 +20,14 @@ import com.tterrag.registrate.util.nullness.NonNullSupplier;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.BlockTags;
-import net.minecraft.tags.TagKey;
-import net.minecraft.util.StringRepresentable;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockBehaviour;
-import net.minecraftforge.fml.event.lifecycle.FMLLoadCompleteEvent;
 
-import java.util.HashMap;
 import java.util.Map;
 import java.util.function.BiFunction;
 import java.util.function.Supplier;
 
-import static com.ghostipedia.cosmiccore.api.registries.CosmicRegistries.REGISTRATE;
+import static com.ghostipedia.cosmiccore.api.registries.CosmicRegistration.REGISTRATE;
 
 
 public class CosmicBlocks {
@@ -64,6 +55,7 @@ public class CosmicBlocks {
     public static final BlockEntry<MagnetBlock> MAGNET_FUSION_GRADE = createMagnetBlock(MagnetBlock.MagnetType.FUSION_GRADE);
 
 
+//TODO : FIGURE OUT WHY these are  breaking the minable tags for pickaxe/wrench..
     public static final BlockEntry<Block> HIGH_TEMP_FISSION_CASING = createCasingBlockWrenchOnly("high_temperature_fission_casing", CosmicCore.id("block/casings/solid/high_temperature_fission_casing"));
     public static final BlockEntry<Block> HIGHLY_CONDUCTIVE_FISSION_CASING = createCasingBlockWrenchOnly("highly_conductive_fission_casing", CosmicCore.id("block/casings/solid/highly_conductive_fission_casing"));
 

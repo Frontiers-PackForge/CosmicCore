@@ -11,11 +11,11 @@
       "entries": [
         {
           "type": "minecraft:item",
-          "name": "cosmiccore:high_powered_magnet_magnet"
+          "name": "cosmiccore:fusion_grade_magnet"
         }
       ],
       "rolls": 1.0
     }
   ],
-  "random_sequence": "cosmiccore:blocks/high_powered_magnet_magnet"
+  "random_sequence": "cosmiccore:blocks/fusion_grade_magnet"
 }

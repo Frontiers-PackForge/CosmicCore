@@ -2,7 +2,7 @@ package com.ghostipedia.cosmiccore;
 
 
 import com.ghostipedia.cosmiccore.api.capability.recipe.CosmicRecipeCapabilities;
-import com.ghostipedia.cosmiccore.api.registries.CosmicRegistries;
+import com.ghostipedia.cosmiccore.api.registries.CosmicRegistration;
 import com.ghostipedia.cosmiccore.common.data.materials.CosmicElements;
 import com.ghostipedia.cosmiccore.gtbridge.CosmicRecipeTypes;
 import com.ghostipedia.cosmiccore.gtbridge.CosmicCoreRecipes;
@@ -10,9 +10,7 @@ import com.gregtechceu.gtceu.api.addon.GTAddon;
 import com.gregtechceu.gtceu.api.addon.IGTAddon;
 import com.gregtechceu.gtceu.api.addon.events.KJSRecipeKeyEvent;
 import com.gregtechceu.gtceu.api.registry.registrate.GTRegistrate;
-import com.gregtechceu.gtceu.integration.kjs.recipe.components.ContentJS;
 import com.mojang.datafixers.util.Pair;
-import dev.latvian.mods.kubejs.recipe.component.NumberComponent;
 import net.minecraft.data.recipes.FinishedRecipe;
 
 import java.util.function.Consumer;
@@ -25,7 +23,7 @@ public class CosmicCoreGTAddon implements IGTAddon {
 
     @Override
     public GTRegistrate getRegistrate() {
-        return CosmicRegistries.REGISTRATE;
+        return CosmicRegistration.REGISTRATE;
     }
 
     @Override

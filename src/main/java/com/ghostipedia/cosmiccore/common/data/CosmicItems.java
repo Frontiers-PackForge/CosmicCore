@@ -1,20 +1,18 @@
 package com.ghostipedia.cosmiccore.common.data;
 
-import com.ghostipedia.cosmiccore.api.registries.CosmicRegistries;
+import com.ghostipedia.cosmiccore.api.registries.CosmicRegistration;
 import com.gregtechceu.gtceu.api.item.ComponentItem;
 import com.gregtechceu.gtceu.api.item.component.IItemComponent;
-import com.gregtechceu.gtceu.api.registry.GTRegistries;
 import com.tterrag.registrate.util.entry.ItemEntry;
 import com.tterrag.registrate.util.nullness.NonNullConsumer;
-import wayoftime.bloodmagic.common.item.BloodOrb;
 
-import static com.ghostipedia.cosmiccore.api.registries.CosmicRegistries.REGISTRATE;
+import static com.ghostipedia.cosmiccore.api.registries.CosmicRegistration.REGISTRATE;
 
 
 @SuppressWarnings("Convert2MethodRef")
 public class CosmicItems  {
     static {
-        CosmicRegistries.REGISTRATE.creativeModeTab(() -> CosmicCreativeModeTabs.COSMIC_CORE);
+        CosmicRegistration.REGISTRATE.creativeModeTab(() -> CosmicCreativeModeTabs.COSMIC_CORE);
     }
 //Literally Random shit
     public static final ItemEntry<ComponentItem> DONK = REGISTRATE.item("donk", ComponentItem::create)

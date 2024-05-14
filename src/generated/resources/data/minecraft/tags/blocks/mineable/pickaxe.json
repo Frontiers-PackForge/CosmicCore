@@ -12,6 +12,7 @@
     "cosmiccore:dyson_solar_cell",
     "cosmiccore:alternator_flux_coiling",
     "cosmiccore:plated_aerocloud",
-    "cosmiccore:high_powered_magnet_magnet"
+    "cosmiccore:high_powered_magnet",
+    "cosmiccore:fusion_grade_magnet"
   ]
 }
