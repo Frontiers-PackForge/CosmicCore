@@ -138,6 +138,7 @@ public class CosmicMachines {
             .recipeType(CosmicRecipeTypes.NAQUAHINE_REACTOR)
             .recipeModifiers(GTRecipeModifiers.ELECTRIC_OVERCLOCK.apply(OverclockingLogic.NON_PERFECT_OVERCLOCK))
             .appearanceBlock(CosmicBlocks.NAQUADAH_PRESSURE_RESISTANT_CASING)
+            .generator(true)
             .pattern(definition -> FactoryBlockPattern.start()
                     .aisle("##QQQ##", "##QQQ##", "###Q###", "#######", "#######","#######","#######","#######","#######","#######","###Q###","##QQQ##","##QQQ##")
                     .aisle("#QQQQQ#", "#QQSQQ#", "#FQQQF#", "#FQFQF#", "#F###F#","#F###F#","#F###F#","#F###F#","#F###F#","#FQFQF#","#FQQQF#","#QQSQQ#","#QQQQQ#")
