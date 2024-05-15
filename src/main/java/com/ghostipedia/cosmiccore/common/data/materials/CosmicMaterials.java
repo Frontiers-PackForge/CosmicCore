@@ -26,6 +26,7 @@ public class CosmicMaterials {
     public static Material ResonantVirtueMeld;
     public static Material NaquadicSuperalloy;
     public static Material Trinavine;
+    public static Material TriniumNaqide;
     public static Material LivingIgniclad;
     public static Material PsionicGalvorn;
     public static Material ProgrammableMatter;
@@ -40,6 +41,14 @@ public class CosmicMaterials {
         Virtue = new Material.Builder(CosmicCore.id("virtue_meld"))
                 .liquid(new FluidBuilder().temperature(666))
                 .element(CosmicElements.ViR)
+                .buildAndRegister();
+        TriniumNaqide = new Material.Builder(CosmicCore.id("trinium_naqide"))
+                .ingot()
+                .liquid(new FluidBuilder().temperature(3400))
+                .color(0x6f42cf).secondaryColor(0xc71414).iconSet(MaterialIconSet.BRIGHT)
+                .flags(GENERATE_GEAR, GENERATE_RING, GENERATE_FRAME, GENERATE_FINE_WIRE)
+                .components(Trinium, 2, NaquadahEnriched, 4)
+                .blastTemp(3600, BlastProperty.GasTier.HIGH, GTValues.VA[GTValues.LuV], 1200)
                 .buildAndRegister();
         PrismaticTungstensteel = new Material.Builder(CosmicCore.id("prismatic_tungstensteel"))
                 .ingot()
