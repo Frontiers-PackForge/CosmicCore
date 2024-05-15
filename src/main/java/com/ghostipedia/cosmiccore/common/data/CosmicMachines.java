@@ -1,5 +1,6 @@
 package com.ghostipedia.cosmiccore.common.data;
 
+import com.ghostipedia.cosmiccore.CosmicCore;
 import com.ghostipedia.cosmiccore.api.machine.part.CosmicPartAbility;
 import com.ghostipedia.cosmiccore.api.registries.CosmicRegistration;
 import com.ghostipedia.cosmiccore.common.machine.multiblock.part.SoulHatchPartMachine;
@@ -28,6 +29,7 @@ import com.gregtechceu.gtceu.api.registry.registrate.MachineBuilder;
 import com.gregtechceu.gtceu.common.data.GTBlocks;
 import com.gregtechceu.gtceu.common.data.GTMaterials;
 import com.gregtechceu.gtceu.common.data.GTRecipeModifiers;
+import dev.architectury.fluid.FluidStack;
 import net.minecraft.network.chat.Component;
 import com.gregtechceu.gtceu.utils.GTHashMaps;
 import com.gregtechceu.gtceu.utils.ItemStackHashStrategy;
@@ -130,6 +132,36 @@ public class CosmicMachines {
                             .or(abilities(CosmicPartAbility.IMPORT_SOUL))
                     ).build())
             .workableCasingRenderer(GTCEu.id("block/casings/solid/machine_casing_clean_stainless_steel"), GTCEu.id("block/multiblock/data_bank"))
+            .register();
+    public final static MultiblockMachineDefinition NAQUAHINE_PRESSURE_REACTOR = REGISTRATE.multiblock("naquahine_pressure_reactor", WorkableElectricMultiblockMachine::new)
+            .rotationState(RotationState.NON_Y_AXIS)
+            .recipeType(CosmicRecipeTypes.NAQUAHINE_REACTOR)
+            .recipeModifiers(GTRecipeModifiers.ELECTRIC_OVERCLOCK.apply(OverclockingLogic.NON_PERFECT_OVERCLOCK))
+            .appearanceBlock(CosmicBlocks.NAQUADAH_PRESSURE_RESISTANT_CASING)
+            .pattern(definition -> FactoryBlockPattern.start()
+                    .aisle("##QQQ##", "##QQQ##", "###Q###", "#######", "#######","#######","#######","#######","#######","#######","###Q###","##QQQ##","##QQQ##")
+                    .aisle("#QQQQQ#", "#QQSQQ#", "#FQQQF#", "#FQFQF#", "#F###F#","#F###F#","#F###F#","#F###F#","#F###F#","#FQFQF#","#FQQQF#","#QQSQQ#","#QQQQQ#")
+                    .aisle("QQQQQQQ", "QQSSSQQ", "#QSSSQ#", "#QHGHQ#", "#QHGHQ#","#QHGHQ#","#QHGHQ#","#QHGHQ#","#QHGHQ#","#QHGHQ#","#QSSSQ#","QQSSSQQ","QQQQQQQ")
+                    .aisle("QQQQQQQ", "QSSSSSQ", "QQSSSQQ", "#FGSGF#", "##GSG##","##GSG##","##GSG##","##GSG##","##GSG##","#FGSGF#","QQSSSQQ","QSSSSSQ","QQQQQQQ")
+                    .aisle("QQQQQQQ", "QQSSSQQ", "#QSSSQ#", "#QHGHQ#", "#QHGHQ#","#QHGHQ#","#QHGHQ#","#QHGHQ#","#QHGHQ#","#QHGHQ#","#QSSSQ#","QQSSSQQ","QQQQQQQ")
+                    .aisle("#QQQQQ#", "#QQSQQ#", "#FQQQF#", "#FQFQF#", "#F###F#","#F###F#","#F###F#","#F###F#","#F###F#","#FQFQF#","#FQQQF#","#QQSQQ#","#QQQQQ#")
+                    .aisle("##QQQ##", "##QCQ##", "###Q###", "#######", "#######","#######","#######","#######","#######","#######","###Q###","##QQQ##","##QQQ##")
+                    .where('#', any())
+                    .where("C", controller(blocks(definition.getBlock())))
+                    .where('F', blocks(ChemicalHelper.getBlock(TagPrefix.frameGt, GTMaterials.NaquadahAlloy)))
+                    .where('S', blocks(GTBlocks.SUPERCONDUCTING_COIL.get()))
+                    .where('H', blocks(CosmicBlocks.RESONANTLY_TUNED_VIRTUE_MELD_CASING.get()))
+                    .where('G', blocks(GTBlocks.FUSION_GLASS.get()))
+                    .where('Q', blocks(CosmicBlocks.NAQUADAH_PRESSURE_RESISTANT_CASING.get())
+                            .or(abilities(PartAbility.IMPORT_FLUIDS))
+                            .or(abilities(PartAbility.EXPORT_FLUIDS))
+                            .or(abilities(PartAbility.IMPORT_ITEMS))
+                            .or(abilities(PartAbility.EXPORT_ITEMS))
+                            .or(abilities(PartAbility.INPUT_ENERGY))
+                            .or(abilities(PartAbility.MAINTENANCE))
+                            .or(abilities(PartAbility.OUTPUT_LASER))
+                    ).build())
+            .workableCasingRenderer(CosmicCore.id("block/casings/solid/naquadah_pressure_resistant_casing"), GTCEu.id("block/multiblock/hpca"))
             .register();
 
     private static MachineDefinition[] registerSoulTieredHatch(String name, String displayName, String model, IO io, int[] tiers, PartAbility... abilities) {
