@@ -48,6 +48,8 @@ public class CosmicBlocks {
     public static final BlockEntry<CoilBlock> COIL_SHIMMERING_NEUTRONIUM = createCoilBlock(CosmicCoilBlock.CoilType.SHIMMERING_NEUTRONIUM);
     public static final BlockEntry<CoilBlock> COIL_CAUSAL_FABRIC = createCoilBlock(CosmicCoilBlock.CoilType.CAUSAL_FABRIC);
     public static final BlockEntry<Block> CASING_DYSON_CELL = createCasingBlock("dyson_solar_cell", CosmicCore.id("block/casings/solid/dyson_solar_cell"));
+    public static final BlockEntry<Block> NAQUADAH_PRESSURE_RESISTANT_CASING = createCasingBlock("naquadah_pressure_resistant_casing", CosmicCore.id("block/casings/solid/naquadah_pressure_resistant_casing"));
+    public static final BlockEntry<Block> RESONANTLY_TUNED_VIRTUE_MELD_CASING = createCasingBlock("resonantly_tuned_virtue_meld_casing", CosmicCore.id("block/casings/solid/resonantly_tuned_virtue_meld_casing"));
     public static final BlockEntry<Block> ALTERNATOR_FLUX_COILING = createCasingBlock("alternator_flux_coiling", CosmicCore.id("block/casings/solid/alternator_flux_coiling_copper"));
     public static final BlockEntry<Block> PLATED_AEROCLOUD = createCasingBlock("plated_aerocloud", CosmicCore.id("block/casings/solid/plated_aerocloud"));
 
