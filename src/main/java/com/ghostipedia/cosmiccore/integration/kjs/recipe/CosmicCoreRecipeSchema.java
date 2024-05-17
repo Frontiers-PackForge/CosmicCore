@@ -22,6 +22,18 @@ public interface CosmicCoreRecipeSchema {
             return this.output(SoulRecipeCapability.CAP, souls);
         }
 
+        public GTRecipeSchema.GTRecipeJS magnetStats(int minField, int decayRate,boolean perTick){
+            this.addData("min_field", minField);
+            this.addData("decay_rate", decayRate);
+            this.addData("per_tick", perTick);
+            return this;
+        }
+        public GTRecipeSchema.GTRecipeJS magnetStats(int minField, int decayRate){
+            this.addData("min_field", minField);
+            this.addData("decay_rate", decayRate);
+            this.addData("per_tick", true);
+            return this;
+        }
     }
 
     RecipeSchema SCHEMA = new RecipeSchema(CosmicRecipeJS.class, CosmicRecipeJS::new, DURATION, DATA, CONDITIONS, ALL_INPUTS, ALL_TICK_INPUTS, ALL_OUTPUTS, ALL_TICK_OUTPUTS, IS_FUEL)

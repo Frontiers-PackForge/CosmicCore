@@ -40,15 +40,15 @@ public class MagnetBlock extends ActiveBlock {
             tooltip.add(Component.translatable("cosmiccore.wire_coil.magnet_stats"));
             tooltip.add(Component.translatable("cosmiccore.wire_coil.magnet_capacity", magnetBlock.getMagnetFieldCapacity()));
             tooltip.add(Component.translatable("cosmiccore.wire_coil.magnet_regen", magnetBlock.getMagnetRegenRate()));
-            tooltip.add(Component.translatable("cosmiccore.wire_coil.eu_multiplier",  magnetBlock.energyMultiplier()));
+            tooltip.add(Component.translatable("cosmiccore.wire_coil.eu_multiplier",  magnetBlock.energyConsumption()));
 
         } else {
             tooltip.add(Component.translatable("block.gtceu.wire_coil.tooltip_extended_info"));
         }
     }
     public enum MagnetType implements StringRepresentable, IMagnetType{
-        HIGH_POWERED("high_powered",1500,100,3, CosmicMaterials.LivingIgniclad, CosmicCore.id("block/casings/solid/alternator_flux_coiling_copper")),
-        FUSION_GRADE("fusion_grade",10000,500,3, CosmicMaterials.LivingIgniclad, CosmicCore.id("block/casings/solid/alternator_flux_coiling_copper"));
+        HIGH_POWERED("high_powered",15000,10,3, CosmicMaterials.LivingIgniclad, CosmicCore.id("block/casings/solid/alternator_flux_coiling_copper")),
+        FUSION_GRADE("fusion_grade",100000,500,8192, CosmicMaterials.LivingIgniclad, CosmicCore.id("block/casings/solid/magnet_fusion_grade"));
 
         @NotNull @Getter
         private final String name;
@@ -57,16 +57,16 @@ public class MagnetBlock extends ActiveBlock {
         @Getter
         private final int regenRate;
         @Getter
-        private final int energyMultiplier;
+        private final int energyConsumed;
         @Getter
         private final Material material;
         @NotNull @Getter
         private final ResourceLocation texture;
-        MagnetType(String name, int magnetStrength, int regenRate, int energyMultiplier, Material material, ResourceLocation texture) {
+        MagnetType(String name, int magnetStrength, int regenRate, int energyConsumed, Material material, ResourceLocation texture) {
             this.name = name;
             this.magnetStrength = magnetStrength;
             this.regenRate = regenRate;
-            this.energyMultiplier = energyMultiplier;
+            this.energyConsumed = energyConsumed;
             this.material = material;
             this.texture = texture;
         }
@@ -94,8 +94,8 @@ public class MagnetBlock extends ActiveBlock {
         }
 
         @Override
-        public int energyMultiplier() {
-            return getEnergyMultiplier();
+        public int energyConsumption() {
+            return getEnergyConsumed();
         }
 
     }
