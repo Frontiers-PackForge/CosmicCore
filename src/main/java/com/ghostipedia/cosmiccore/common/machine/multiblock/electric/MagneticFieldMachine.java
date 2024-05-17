@@ -9,6 +9,7 @@ import com.gregtechceu.gtceu.api.machine.TickableSubscription;
 import com.gregtechceu.gtceu.api.machine.feature.ITieredMachine;
 import com.gregtechceu.gtceu.api.machine.feature.multiblock.IMultiPart;
 import com.gregtechceu.gtceu.api.misc.EnergyContainerList;
+import com.gregtechceu.gtceu.api.recipe.GTRecipe;
 import com.gregtechceu.gtceu.utils.FormattingUtil;
 import com.lowdragmc.lowdraglib.syncdata.annotation.Persisted;
 import com.lowdragmc.lowdraglib.syncdata.field.ManagedFieldHolder;
@@ -49,14 +50,15 @@ public class MagneticFieldMachine extends MagnetWorkableElectricMultiblockMachin
         List<IEnergyContainer> energyContainers = new ArrayList<>();
         Map<Long, IO> ioMap = getMultiblockState().getMatchContext().getOrCreate("ioMap", Long2ObjectMaps::emptyMap);
         for (IMultiPart part : getParts()) {
-            IO io = ioMap.getOrDefault(part.self().getPos().asLong(), IO.BOTH);
+            IO io = ioMap.getOrDefault(part.self().getPos().asLong(), IO.IN);
             if (io == IO.NONE || io == IO.OUT) continue;
             for (var handler : part.getRecipeHandlers()) {
-                // If IO not compatible
-                if (io != IO.BOTH && handler.getHandlerIO() != IO.BOTH && io != handler.getHandlerIO()) continue;
-                if (handler.getCapability() == EURecipeCapability.CAP && handler instanceof IEnergyContainer container) {
-                    energyContainers.add(container);
-                    traitSubscriptions.add(handler.addChangedListener(this::updateMagnetFieldSubscription));
+                IO handlerIO = handler.getHandlerIO();
+                if (handlerIO == IO.IN){
+                    if (handler.getCapability() == EURecipeCapability.CAP && handler instanceof IEnergyContainer container) {
+                        energyContainers.add(container);
+                        traitSubscriptions.add(handler.addChangedListener(this::updateMagnetFieldSubscription));
+                    }
                 }
             }
         }
@@ -96,10 +98,45 @@ public class MagneticFieldMachine extends MagnetWorkableElectricMultiblockMachin
             return;
         }
         if (inputEnergyContainers.getEnergyStored() > getEnergyCost() && getMagnetStrength() > fieldStrength) {
+            if(fieldStrength < 0){
+                fieldStrength = 0;
+            }
+            if(fieldStrength > getMagnetStrength()){
+                fieldStrength = getMagnetStrength();
+            }
             inputEnergyContainers.removeEnergy(getEnergyCost());
             fieldStrength += getMagnetRegen();
+//            fieldStrength = Math.min(fieldStrength, getMagnetStrength());
 
         }
+    }
+
+    @Override
+    public boolean beforeWorking(@org.jetbrains.annotations.Nullable GTRecipe recipe) {
+       if(recipe.data.getInt("min_field") <= fieldStrength){
+           if(recipe.data.contains("decay_rate") && recipe.data.getInt("decay_rate") > 0){
+               if (!recipe.data.getBoolean("per_tick")){
+                   fieldStrength = fieldStrength - recipe.data.getInt("decay_rate");
+               } return true;
+           }
+       }
+        return false;
+    }
+
+    @Override
+    public boolean onWorking() {
+        GTRecipe recipe = recipeLogic.getLastRecipe();
+        if(!recipe.data.getBoolean("per_tick")){
+            return super.onWorking();
+        }
+        if(!recipe.data.contains("decay_rate") || recipe.data.getInt("decay_rate") <= 0){
+            return false;
+        }
+        if(fieldStrength < recipe.data.getInt("min_field")){
+            return false;
+        }
+        fieldStrength = fieldStrength - recipe.data.getInt("decay_rate");
+        return super.onWorking();
     }
 
     @Override

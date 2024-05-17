@@ -5,6 +5,7 @@ import com.ghostipedia.cosmiccore.common.block.MagnetBlock;
 import com.gregtechceu.gtceu.api.block.ICoilType;
 import com.gregtechceu.gtceu.api.machine.IMachineBlockEntity;
 import com.gregtechceu.gtceu.api.machine.multiblock.WorkableElectricMultiblockMachine;
+import com.gregtechceu.gtceu.utils.GTUtil;
 import lombok.Getter;
 
 @Getter
@@ -25,7 +26,10 @@ public class MagnetWorkableElectricMultiblockMachine extends WorkableElectricMul
             this.magnetType = magnet;
         }
     }
-
+    @Override
+    public int getTier() {
+        return GTUtil.getFloorTierByVoltage(getMaxVoltage());
+    }
     public int getMagnetStrength() {
         return magnetType.getMagnetFieldCapacity();
     }

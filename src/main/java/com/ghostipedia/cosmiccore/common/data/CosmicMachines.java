@@ -3,6 +3,7 @@ package com.ghostipedia.cosmiccore.common.data;
 import com.ghostipedia.cosmiccore.CosmicCore;
 import com.ghostipedia.cosmiccore.api.machine.part.CosmicPartAbility;
 import com.ghostipedia.cosmiccore.api.registries.CosmicRegistration;
+import com.ghostipedia.cosmiccore.common.data.recipe.CosmicRecipeModifiers;
 import com.ghostipedia.cosmiccore.common.machine.multiblock.electric.MagneticFieldMachine;
 import com.ghostipedia.cosmiccore.common.machine.multiblock.part.SoulHatchPartMachine;
 import com.ghostipedia.cosmiccore.gtbridge.CosmicRecipeTypes;
@@ -137,7 +138,7 @@ public class CosmicMachines {
     public final static MultiblockMachineDefinition NAQUAHINE_PRESSURE_REACTOR = REGISTRATE.multiblock("naquahine_pressure_reactor", MagneticFieldMachine::new)
             .rotationState(RotationState.NON_Y_AXIS)
             .recipeType(CosmicRecipeTypes.NAQUAHINE_REACTOR)
-            .recipeModifier(GTRecipeModifiers.PARALLEL_HATCH)
+            .recipeModifier(CosmicRecipeModifiers::magnetRecipe)
             .appearanceBlock(CosmicBlocks.NAQUADAH_PRESSURE_RESISTANT_CASING)
             .generator(true)
             .pattern(definition -> FactoryBlockPattern.start()
@@ -162,8 +163,9 @@ public class CosmicMachines {
                             .or(abilities(PartAbility.INPUT_ENERGY))
                             .or(abilities(PartAbility.MAINTENANCE))
                             .or(abilities(PartAbility.OUTPUT_LASER))
-                            .or(abilities(PartAbility.PARALLEL_HATCH))
+                            .or(abilities(PartAbility.INPUT_LASER))
                             .or(abilities(PartAbility.INPUT_ENERGY))
+                            .or(abilities(PartAbility.OUTPUT_ENERGY))
                     ).build())
             .workableCasingRenderer(CosmicCore.id("block/casings/solid/naquadah_pressure_resistant_casing"), GTCEu.id("block/multiblock/hpca"))
 
