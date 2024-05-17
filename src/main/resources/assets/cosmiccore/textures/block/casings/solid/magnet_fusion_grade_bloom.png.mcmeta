@@ -1,0 +1,9 @@
+{
+    "ldlib": {
+        "connection": "cosmiccore:block/casings/solid/magnet_fusion_grade_bloom_ctm",
+        "emissive": true
+    },
+    "shimmer": {
+        "bloom": true
+    }
+}
