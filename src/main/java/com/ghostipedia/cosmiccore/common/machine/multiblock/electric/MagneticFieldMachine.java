@@ -106,7 +106,7 @@ public class MagneticFieldMachine extends MagnetWorkableElectricMultiblockMachin
             }
             inputEnergyContainers.removeEnergy(getEnergyCost());
             fieldStrength += getMagnetRegen();
-//            fieldStrength = Math.min(fieldStrength, getMagnetStrength());
+            fieldStrength = Math.min(fieldStrength, getMagnetStrength());
 
         }
     }
