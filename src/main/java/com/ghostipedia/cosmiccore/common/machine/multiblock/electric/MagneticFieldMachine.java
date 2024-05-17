@@ -140,6 +140,11 @@ public class MagneticFieldMachine extends MagnetWorkableElectricMultiblockMachin
     }
 
     @Override
+    public boolean dampingWhenWaiting() {
+        return false;
+    }
+
+    @Override
     public void addDisplayText(List<Component> textList) {
         super.addDisplayText(textList);
         if (isFormed) {
