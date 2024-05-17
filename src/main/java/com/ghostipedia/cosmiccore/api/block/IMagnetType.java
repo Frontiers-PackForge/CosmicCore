@@ -1,8 +1,6 @@
 package com.ghostipedia.cosmiccore.api.block;
 
 import com.ghostipedia.cosmiccore.api.CosmicCoreAPI;
-import com.gregtechceu.gtceu.api.GTCEuAPI;
-import com.gregtechceu.gtceu.api.block.ICoilType;
 import net.minecraft.resources.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -35,7 +33,7 @@ public interface IMagnetType {
      * @return EU Recipe multiplier applied by the magnet
      */
 
-    int energyMultiplier();
+    int energyConsumption();
 
     /**
      * @return the {@link ResourceLocation} defining the base texture of the magnet
