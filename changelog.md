@@ -1,1 +1,1 @@
-LITERALLY ALL OF MAGNETISM CONTENT
+Added Spacesuit Versions of the Nano and Quantum Armors for Ad Astra Support
