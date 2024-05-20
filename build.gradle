@@ -27,7 +27,6 @@ loom {
         // this will be added to the jar manifest as well!
         mixinConfigs = [
                 "cosmiccore.mixins.json"
-
         ]
 
         // missing access transformers?
@@ -47,12 +46,7 @@ loom {
     runConfigs.named("data").configure {
         programArg("--existing=" + file("src/main/resources").absolutePath)
         programArgs("--client", "--server")
-
-
-
     }
-
-
 }
 
 repositories {
@@ -165,10 +159,11 @@ dependencies {
     // Mixin Extras
     implementation(annotationProcessor("io.github.llamalad7:mixinextras-common:${project.mixinextras_version}"))
     implementation(include("io.github.llamalad7:mixinextras-forge:${project.mixinextras_version}"))
+    annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
 
     // lombok
-    compileOnly 'org.projectlombok:lombok:1.18.24'
-    annotationProcessor 'org.projectlombok:lombok:1.18.24'
+    compileOnly 'org.projectlombok:lombok:1.18.32'
+    annotationProcessor 'org.projectlombok:lombok:1.18.32'
 }
 
 processResources {
