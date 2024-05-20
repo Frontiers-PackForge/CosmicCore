@@ -2,16 +2,19 @@ package com.ghostipedia.cosmiccore.common.data;
 
 import com.ghostipedia.cosmiccore.api.registries.CosmicRegistration;
 import com.ghostipedia.cosmiccore.common.data.lang.CosmicLangHandler;
+import com.ghostipedia.cosmiccore.common.data.tag.CosmicTagsHandler;
 import com.gregtechceu.gtceu.common.registry.GTRegistration;
+import com.gregtechceu.gtceu.data.tags.TagsHandler;
 import com.tterrag.registrate.providers.ProviderType;
 
 public class CosmicCoreDatagen {
+
     public static void init() {
-        //TODO: IDK IF I NEED THESE YET, MIGHT BE NEEDED IDK
-//        CosmicRegistration.REGISTRATE.addDataGenerator(ProviderType.ITEM_TAGS, TagsHandler::initItem);
-//        CosmicRegistration.REGISTRATE.addDataGenerator(ProviderType.BLOCK_TAGS, TagsHandler::initBlock);
-//        CosmicRegistration.REGISTRATE.addDataGenerator(ProviderType.FLUID_TAGS, TagsHandler::initFluid);
-//        CosmicRegistration.REGISTRATE.addDataGenerator(ProviderType.ENTITY_TAGS, TagsHandler::initEntity);
+        CosmicRegistration.REGISTRATE.addDataGenerator(ProviderType.ITEM_TAGS, CosmicTagsHandler::initItem);
+        CosmicRegistration.REGISTRATE.addDataGenerator(ProviderType.BLOCK_TAGS, CosmicTagsHandler::initBlock);
+        CosmicRegistration.REGISTRATE.addDataGenerator(ProviderType.FLUID_TAGS, CosmicTagsHandler::initFluid);
+        CosmicRegistration.REGISTRATE.addDataGenerator(ProviderType.ENTITY_TAGS, CosmicTagsHandler::initEntity);
         CosmicRegistration.REGISTRATE.addDataGenerator(ProviderType.LANG, CosmicLangHandler::init);
     }
+
 }
