@@ -26,7 +26,6 @@ public interface ISpaceSuite {
         if (Level.isClientSide) return;
         if (player.isCreative() || player.isSpectator()) return;
         if (!(itemStack.getItem() instanceof SpaceArmorComponentItem suit)) return;
-        if (!hasFullNanoSet(player) && !hasFullQuantumSet(player)) return;
         player.setTicksFrozen(0);
         if (player.tickCount % 12 == 0 && suit.hasOxygen(player)) {
             if (!OxygenApi.API.hasOxygen(player)) suit.consumeOxygen(itemStack, 1);

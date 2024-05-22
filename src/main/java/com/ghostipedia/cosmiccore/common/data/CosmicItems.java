@@ -9,6 +9,7 @@ import com.gregtechceu.gtceu.common.item.armor.GTArmorMaterials;
 import com.gregtechceu.gtceu.config.ConfigHolder;
 import com.tterrag.registrate.util.entry.ItemEntry;
 import com.tterrag.registrate.util.nullness.NonNullConsumer;
+import earth.terrarium.adastra.common.tags.ModItemTags;
 import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.Rarity;
 
@@ -157,7 +158,7 @@ public class CosmicItems  {
             .setArmorLogic(new NanoMuscleSpaceSuite(ArmorItem.Type.CHESTPLATE, 512,
                     6_400_000L * (long) Math.max(1, Math.pow(4, ConfigHolder.INSTANCE.tools.voltageTierNanoSuit - 3)),
                     ConfigHolder.INSTANCE.tools.voltageTierNanoSuit)))
-            .tag(CosmicItemTags.NANOMUSCLE_SPACE_SUITE)
+            .tag(CosmicItemTags.NANOMUSCLE_SPACE_SUITE, ModItemTags.SPACE_SUITS, ModItemTags.FREEZE_RESISTANT_ARMOR, ModItemTags.HEAT_RESISTANT_ARMOR)
             .lang("NanoMuscle™ Space Suite Chestplate")
             .properties(p -> p.rarity(Rarity.RARE))
             .register();
@@ -165,7 +166,7 @@ public class CosmicItems  {
             .setArmorLogic(new AdvancedNanoMuscleSpaceSuite(512,
                     12_800_000L * (long) Math.max(1, Math.pow(4, ConfigHolder.INSTANCE.tools.voltageTierAdvNanoSuit - 3)),
                     ConfigHolder.INSTANCE.tools.voltageTierAdvNanoSuit)))
-            .tag(CosmicItemTags.NANOMUSCLE_SPACE_SUITE)
+            .tag(CosmicItemTags.NANOMUSCLE_SPACE_SUITE, ModItemTags.SPACE_SUITS, ModItemTags.FREEZE_RESISTANT_ARMOR, ModItemTags.HEAT_RESISTANT_ARMOR)
             .lang("Advanced NanoMuscle™ Space Suite Chestplate")
             .properties(p -> p.rarity(Rarity.EPIC))
             .register();
@@ -173,7 +174,7 @@ public class CosmicItems  {
             .setArmorLogic(new QuarkTechSpaceSuite(ArmorItem.Type.CHESTPLATE, 8192,
                     100_000_000L * (long) Math.max(1, Math.pow(4, ConfigHolder.INSTANCE.tools.voltageTierQuarkTech - 5)),
                     ConfigHolder.INSTANCE.tools.voltageTierNanoSuit)))
-            .tag(CosmicItemTags.QUARKTECH_SPACE_SUITE)
+            .tag(CosmicItemTags.QUARKTECH_SPACE_SUITE, ModItemTags.SPACE_SUITS, ModItemTags.FREEZE_RESISTANT_ARMOR, ModItemTags.HEAT_RESISTANT_ARMOR)
             .lang("NanoMuscle™ Space Suite Chestplate")
             .properties(p -> p.rarity(Rarity.RARE))
             .register();
@@ -181,7 +182,7 @@ public class CosmicItems  {
             .setArmorLogic(new AdvancedQuarkTechSpaceSuite(8192,
                     1_000_000_000L * (long) Math.max(1, Math.pow(4, ConfigHolder.INSTANCE.tools.voltageTierAdvQuarkTech - 6)),
                     ConfigHolder.INSTANCE.tools.voltageTierAdvNanoSuit)))
-            .tag(CosmicItemTags.QUARKTECH_SPACE_SUITE)
+            .tag(CosmicItemTags.QUARKTECH_SPACE_SUITE, ModItemTags.SPACE_SUITS, ModItemTags.FREEZE_RESISTANT_ARMOR, ModItemTags.HEAT_RESISTANT_ARMOR)
             .lang("Advanced NanoMuscle™ Space Suite Chestplate")
             .properties(p -> p.rarity(Rarity.EPIC))
             .register();
