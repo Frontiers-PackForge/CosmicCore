@@ -36,6 +36,7 @@ public class CosmicPredicates {
                 .toArray(BlockInfo[]::new))
                 .addTooltips(Component.translatable("gtceu.multiblock.pattern.error.coils"));
     }
+
     public static void init() {
     }
 }

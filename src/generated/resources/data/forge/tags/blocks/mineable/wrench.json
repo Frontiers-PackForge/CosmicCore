@@ -16,6 +16,9 @@
     "cosmiccore:plated_aerocloud",
     "cosmiccore:high_powered_magnet",
     "cosmiccore:fusion_grade_magnet",
+    "cosmiccore:yggdrasil_god_magnet",
+    "cosmiccore:yggdrasil_reality_compression_vessel",
+    "cosmiccore:planet_grade_pressure_vessel",
     "cosmiccore:high_temperature_fission_casing",
     "cosmiccore:highly_conductive_fission_casing"
   ]

@@ -3,7 +3,9 @@ package com.ghostipedia.cosmiccore.common.data;
 import com.ghostipedia.cosmiccore.CosmicCore;
 import com.ghostipedia.cosmiccore.api.CosmicCoreAPI;
 import com.ghostipedia.cosmiccore.api.block.IMagnetType;
+import com.ghostipedia.cosmiccore.api.block.IPressureType;
 import com.ghostipedia.cosmiccore.common.block.MagnetBlock;
+import com.ghostipedia.cosmiccore.common.block.PressureBlock;
 import com.ghostipedia.cosmiccore.common.data.recipe.RecipeTags;
 import com.gregtechceu.gtceu.api.GTCEuAPI;
 import com.gregtechceu.gtceu.api.block.ICoilType;
@@ -55,6 +57,9 @@ public class CosmicBlocks {
 
     public static final BlockEntry<MagnetBlock> MAGNET_HIGH_POWERED = createMagnetBlock(MagnetBlock.MagnetType.HIGH_POWERED);
     public static final BlockEntry<MagnetBlock> MAGNET_FUSION_GRADE = createMagnetBlock(MagnetBlock.MagnetType.FUSION_GRADE);
+    public static final BlockEntry<MagnetBlock> MAGNET_YGGDRASIL_GRADE = createMagnetBlock(MagnetBlock.MagnetType.YGGDRASIL_REALITY_CONSTRAINT_COIL);
+    public static final BlockEntry<PressureBlock> PRESSURE_YGGDRASIL_GRADE = createPressureBlock(PressureBlock.PressureType.YGGDRASIL_REALITY_COMPRESSION_VESSEL);
+    public static final BlockEntry<PressureBlock> PRESSURE_PLANET_GRADE = createPressureBlock(PressureBlock.PressureType.PLANET_GRADE_VESSEL);
 
 
 //TODO : FIGURE OUT WHY these are  breaking the minable tags for pickaxe/wrench..
@@ -137,7 +142,20 @@ public class CosmicBlocks {
 
         return magnetBlock;
     }
+    private static BlockEntry<PressureBlock> createPressureBlock(IPressureType pressureType) {
+        BlockEntry<PressureBlock> pressureBlock = REGISTRATE.block("%s_vessel".formatted(pressureType.getName()), p -> new PressureBlock(p, pressureType))
+                .initialProperties(() -> Blocks.IRON_BLOCK)
+                .addLayer(() -> RenderType::cutoutMipped)
+                .blockstate(NonNullBiConsumer.noop())
+                .tag(RecipeTags.MINEABLE_WITH_WRENCH, BlockTags.MINEABLE_WITH_PICKAXE)
+                .item(RendererBlockItem::new)
+                .model(NonNullBiConsumer.noop())
+                .build()
+                .register();
+        CosmicCoreAPI.PRESSURE_VESSELS.put(pressureType,pressureBlock);
 
+        return pressureBlock;
+    }
     public static void init() {
 
     }
