@@ -175,15 +175,15 @@ public class CosmicItems  {
                     100_000_000L * (long) Math.max(1, Math.pow(4, ConfigHolder.INSTANCE.tools.voltageTierQuarkTech - 5)),
                     ConfigHolder.INSTANCE.tools.voltageTierNanoSuit)))
             .tag(CosmicItemTags.QUARKTECH_SPACE_SUITE, ModItemTags.SPACE_SUITS, ModItemTags.FREEZE_RESISTANT_ARMOR, ModItemTags.HEAT_RESISTANT_ARMOR)
-            .lang("NanoMuscle™ Space Suite Chestplate")
+            .lang("QuarkTech™ Space Suite Chestplate")
             .properties(p -> p.rarity(Rarity.RARE))
             .register();
     public static ItemEntry<SpaceArmorComponentItem> ADVANCED_SPACE_QUARK_CHESTPLATE = REGISTRATE.item("space_advanced_quarktech_chestplate", (p) -> new SpaceArmorComponentItem(GTArmorMaterials.ARMOR, ArmorItem.Type.CHESTPLATE, 50000, p)
             .setArmorLogic(new AdvancedQuarkTechSpaceSuite(8192,
-                    1_000_000_000L * (long) Math.max(1, Math.pow(4, ConfigHolder.INSTANCE.tools.voltageTierAdvQuarkTech - 6)),
+                    100_000_000L * (long) Math.max(1, Math.pow(4, ConfigHolder.INSTANCE.tools.voltageTierAdvQuarkTech - 6)),
                     ConfigHolder.INSTANCE.tools.voltageTierAdvNanoSuit)))
             .tag(CosmicItemTags.QUARKTECH_SPACE_SUITE, ModItemTags.SPACE_SUITS, ModItemTags.FREEZE_RESISTANT_ARMOR, ModItemTags.HEAT_RESISTANT_ARMOR)
-            .lang("Advanced NanoMuscle™ Space Suite Chestplate")
+            .lang("Advanced QuarkTech™ Space Suite Chestplate")
             .properties(p -> p.rarity(Rarity.EPIC))
             .register();
 

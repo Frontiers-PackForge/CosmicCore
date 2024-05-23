@@ -1,1 +1,1 @@
-Updated to GregTechModern 1.2.3
+Fixing QuarkTech being named wrongly and having a hilariously large energy buffer
