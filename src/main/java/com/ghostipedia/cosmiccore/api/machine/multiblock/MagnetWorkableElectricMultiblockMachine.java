@@ -26,10 +26,7 @@ public class MagnetWorkableElectricMultiblockMachine extends WorkableElectricMul
             this.magnetType = magnet;
         }
     }
-    @Override
-    public int getTier() {
-        return GTUtil.getFloorTierByVoltage(getMaxVoltage());
-    }
+
     public int getMagnetStrength() {
         return magnetType.getMagnetFieldCapacity();
     }

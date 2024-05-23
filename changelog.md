@@ -1,1 +1,1 @@
-Added Spacesuit Versions of the Nano and Quantum Armors for Ad Astra Support
+Updated to GregTechModern 1.2.3
