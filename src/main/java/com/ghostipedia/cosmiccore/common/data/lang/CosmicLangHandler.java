@@ -26,6 +26,7 @@ public class CosmicLangHandler {
         replace(provider,"cosmiccore.recipe.minField", "§fMin. Field Strength: %sT");
         replace(provider,"cosmiccore.recipe.fieldDecay", "§fField Decay: %sT/t");
         replace(provider,"cosmiccore.recipe.fieldSlam", "§fField Consumed: %sT");
-
+        replace(provider,"tagprefix.leached_ore", "Leached %s Ore");
+        replace(provider,"tagprefix.prisma_frothed_ore", "Prisma Frothed %s Ore");
     }
 }

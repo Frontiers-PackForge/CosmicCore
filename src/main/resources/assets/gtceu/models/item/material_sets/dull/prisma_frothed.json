@@ -1,0 +1,9 @@
+{
+  "parent": "item/generated",
+  "textures": {
+    "layer0": "gtceu:item/material_sets/dull/frothed",
+    "layer1": "gtceu:item/material_sets/dull/frothed_secondary",
+    "layer2": "gtceu:item/material_sets/dull/frothed_overlay",
+    "layer3": "gtceu:item/material_sets/dull/frothed_overlay_glint"
+  }
+}

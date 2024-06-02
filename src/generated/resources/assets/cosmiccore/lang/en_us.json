@@ -80,6 +80,7 @@
   "item.cosmiccore.waxed_leather": "Waxed Leather",
   "itemGroup.cosmiccore.creative_tab": "Cosmic Core",
   "material.cosmiccore.causal_fabric": "Causal Fabric",
+  "material.cosmiccore.diluted_prisma": "Diluted Prisma",
   "material.cosmiccore.living_igniclad": "Living Igniclad",
   "material.cosmiccore.naquadric_superalloy": "Naquadric Superalloy",
   "material.cosmiccore.prisma": "Prisma",
@@ -91,6 +92,8 @@
   "material.cosmiccore.trinavine": "Trinavine",
   "material.cosmiccore.trinium_naqide": "Trinium Naqide",
   "material.cosmiccore.virtue_meld": "Virtue Meld",
+  "tagprefix.leached_ore": "Leached %s Ore",
+  "tagprefix.prisma_frothed_ore": "Prisma Frothed %s Ore",
   "tooltip.cosmiccore.soul_hatch.input": "§cMax Recipe Input§f:§6 %s",
   "tooltip.cosmiccore.soul_hatch.output": "§cMax Soul Network Capacity§f:§6 %s"
 }

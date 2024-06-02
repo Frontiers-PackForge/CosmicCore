@@ -2,12 +2,17 @@ package com.ghostipedia.cosmiccore.gtbridge;
 
 
 import com.gregtechceu.gtceu.api.GTValues;
+import com.gregtechceu.gtceu.data.recipe.serialized.chemistry.DistillationRecipes;
 import net.minecraft.data.recipes.FinishedRecipe;
 import net.minecraft.world.level.block.Blocks;
 
 import java.util.function.Consumer;
 
+import static com.ghostipedia.cosmiccore.common.data.materials.CosmicMaterials.DilutedPrisma;
+import static com.ghostipedia.cosmiccore.common.data.materials.CosmicMaterials.Prisma;
 import static com.ghostipedia.cosmiccore.gtbridge.CosmicRecipeTypes.NAQUAHINE_REACTOR;
+import static com.gregtechceu.gtceu.common.data.GTMaterials.Water;
+import static com.gregtechceu.gtceu.common.data.GTRecipeTypes.DISTILLATION_RECIPES;
 
 public class CosmicCoreRecipes {
 
@@ -20,11 +25,13 @@ public class CosmicCoreRecipes {
 //                .save(provider);
 //
 
-//        SOUL_TESTER_RECIPES.recipeBuilder("soul_to_diamond")
-//                .input(SoulRecipeCapability.CAP, 7000000)
-//                .outputItems(Items.DRAGON_EGG, 1)
-//                .duration(10)
-//                .save(provider);
+        DISTILLATION_RECIPES.recipeBuilder("diluted_prisma_to_prisma_and_water")
+                .inputFluids(DilutedPrisma.getFluid(5000))
+                .outputFluids(Prisma.getFluid(1000))
+                .outputFluids(Water.getFluid(4000))
+                .duration(40)
+                .EUt(GTValues.VA[GTValues.HV])
+                .save(provider);
 //        GROVE_RECIPES.recipeBuilder("dirt_movement")
 //                .input(SoulRecipeCapability.CAP, 100)
 //                .notConsumable(CosmicItems.DONK)

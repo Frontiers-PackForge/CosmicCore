@@ -1,5 +1,7 @@
 package com.ghostipedia.cosmiccore;
 
+import com.ghostipedia.cosmiccore.api.data.CosmicCoreMaterialIconType;
+import com.ghostipedia.cosmiccore.api.data.CosmicCoreTagPrefix;
 import com.ghostipedia.cosmiccore.api.pattern.CosmicPredicates;
 import com.ghostipedia.cosmiccore.api.registries.CosmicRegistration;
 import com.ghostipedia.cosmiccore.api.capability.CosmicCapabilities;
@@ -50,6 +52,7 @@ public class CosmicCore {
         CosmicRegistration.REGISTRATE.registerRegistrate();
         CosmicCoreDatagen.init();
         CosmicPredicates.init();
+
     }
 
     public static ResourceLocation id(String path) {
