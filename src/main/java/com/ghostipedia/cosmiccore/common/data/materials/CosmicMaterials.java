@@ -21,6 +21,7 @@ import static com.gregtechceu.gtceu.common.data.GTMaterials.*;
 
 public class CosmicMaterials {
     public static Material Prisma;
+    public static Material DilutedPrisma;
     public static Material Virtue;
     public static Material PrismaticTungstensteel;
     public static Material ResonantVirtueMeld;
@@ -37,6 +38,12 @@ public class CosmicMaterials {
         Prisma = new Material.Builder(CosmicCore.id("prisma"))
                 .liquid(new FluidBuilder().state(FluidState.LIQUID).customStill())
                 .element(CosmicElements.Pi)
+                .buildAndRegister();
+        DilutedPrisma = new Material.Builder(CosmicCore.id("diluted_prisma"))
+                .liquid()
+                .color(0x4995b3).secondaryColor(0x4995b3)
+                .components(Prisma, 1, Water, 4)
+                .flags(DISABLE_DECOMPOSITION)
                 .buildAndRegister();
         Virtue = new Material.Builder(CosmicCore.id("virtue_meld"))
                 .liquid(new FluidBuilder().temperature(666))
