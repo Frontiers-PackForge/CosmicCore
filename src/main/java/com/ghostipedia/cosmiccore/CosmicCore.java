@@ -52,6 +52,7 @@ public class CosmicCore {
         CosmicRegistration.REGISTRATE.registerRegistrate();
         CosmicCoreDatagen.init();
         CosmicPredicates.init();
+        CosmicBlockEntities.init();
 
     }
 

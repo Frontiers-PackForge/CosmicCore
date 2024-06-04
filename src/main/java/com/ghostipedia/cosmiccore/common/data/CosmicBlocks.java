@@ -4,6 +4,8 @@ import com.ghostipedia.cosmiccore.CosmicCore;
 import com.ghostipedia.cosmiccore.api.CosmicCoreAPI;
 import com.ghostipedia.cosmiccore.api.block.IMagnetType;
 import com.ghostipedia.cosmiccore.common.block.MagnetBlock;
+import com.ghostipedia.cosmiccore.common.block.ReforgingTableBlock;
+import com.ghostipedia.cosmiccore.common.blockentity.ReforgingTableTile;
 import com.ghostipedia.cosmiccore.common.data.recipe.RecipeTags;
 import com.gregtechceu.gtceu.api.GTCEuAPI;
 import com.gregtechceu.gtceu.api.block.ICoilType;
@@ -15,6 +17,7 @@ import com.gregtechceu.gtceu.common.block.CoilBlock;
 import com.lowdragmc.lowdraglib.Platform;
 import com.lowdragmc.lowdraglib.client.renderer.IRenderer;
 import com.tterrag.registrate.util.entry.BlockEntry;
+import com.tterrag.registrate.util.entry.RegistryEntry;
 import com.tterrag.registrate.util.nullness.NonNullBiConsumer;
 import com.tterrag.registrate.util.nullness.NonNullSupplier;
 import net.minecraft.client.renderer.RenderType;
@@ -22,12 +25,14 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockBehaviour;
+import net.minecraftforge.registries.RegistryObject;
 
 import java.util.Map;
 import java.util.function.BiFunction;
 import java.util.function.Supplier;
 
 import static com.ghostipedia.cosmiccore.api.registries.CosmicRegistration.REGISTRATE;
+import static dev.shadowsoffire.apotheosis.Apoth.R;
 
 
 public class CosmicBlocks {
@@ -56,8 +61,14 @@ public class CosmicBlocks {
     public static final BlockEntry<MagnetBlock> MAGNET_HIGH_POWERED = createMagnetBlock(MagnetBlock.MagnetType.HIGH_POWERED);
     public static final BlockEntry<MagnetBlock> MAGNET_FUSION_GRADE = createMagnetBlock(MagnetBlock.MagnetType.FUSION_GRADE);
 
+    public static final RegistryEntry<ReforgingTableBlock> GOOD_REFORGING_TABLE = REGISTRATE.block("good_reforging_table", p -> new ReforgingTableBlock(p, 10))
+            .properties(p -> p.requiresCorrectToolForDrops().strength(4, 1000F))
+            .lang("Good Reforging Table")
+            .defaultBlockstate()
+            .defaultLoot()
+            .simpleItem()
+            .register();
 
-//TODO : FIGURE OUT WHY these are  breaking the minable tags for pickaxe/wrench..
     public static final BlockEntry<Block> HIGH_TEMP_FISSION_CASING = createCasingBlockWrenchOnly("high_temperature_fission_casing", CosmicCore.id("block/casings/solid/high_temperature_fission_casing"));
     public static final BlockEntry<Block> HIGHLY_CONDUCTIVE_FISSION_CASING = createCasingBlockWrenchOnly("highly_conductive_fission_casing", CosmicCore.id("block/casings/solid/highly_conductive_fission_casing"));
 
