@@ -17,7 +17,6 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-@Debug(export = true)
 @Mixin(Player.class)
 public class PlayerBreathingMixin {
 
@@ -28,22 +27,22 @@ public class PlayerBreathingMixin {
     private boolean _$didTurtleEffect = false;
 
     /**
-     * @author
-     * @reason
+     * @author MrQuentinet
+     * @reason Detect when player enter and exit the water. Reset _$didTurtleEffect to false when leaving water
      */
     @Overwrite
     protected boolean updateIsUnderwater() {
         var isInWater = ((Player)(Object)this).isEyeInFluid(FluidTags.WATER);
         if (isInWater != this.wasUnderwater) {
             this.wasUnderwater = isInWater;
-            _$didTurtleEffect = false;
+            if (!isInWater) _$didTurtleEffect = false;
         }
         return this.wasUnderwater;
     }
 
     /**
-     * @author
-     * @reason
+     * @author MrQuentinet
+     * @reason Give Water breathing effect when wearing turtle helmet. Happen only when player enters water
      */
     @Overwrite
     private void turtleHelmetTick() {
