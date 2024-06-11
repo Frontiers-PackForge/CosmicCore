@@ -1,0 +1,35 @@
+architectury {
+    platformSetupLoomIde()
+    forge()
+}
+
+static def isJetBrainsRuntime() {
+    return System.getProperty('java.vm.vendor').contains('JetBrains')
+}
+
+loom {
+    silentMojangMappingsLicense()
+
+    forge {
+        mixinConfig(
+                "${mod_id}.mixins.json",
+        )
+
+        dataGen{
+            mod(mod_id)
+        }
+    }
+
+    runConfigs.named("data").configure {
+        programArg("--existing=" + file("src/main/resources").absolutePath)
+    }
+
+    if (isJetBrainsRuntime()) {
+        runs {
+            client {
+                vmArgs '-XX:+AllowEnhancedClassRedefinition'
+                vmArgs '-XX:HotswapAgent=fatjar'
+            }
+        }
+    }
+}

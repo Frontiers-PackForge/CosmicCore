@@ -1,10 +1,160 @@
 pluginManagement {
-    // when using additional gradle plugins like shadow,
-    // add their repositories to this list!
     repositories {
-        maven { url "https://maven.fabricmc.net/" }
-        maven { url "https://maven.architectury.dev/" }
-        maven { url "https://files.minecraftforge.net/maven/" }
+        maven { url = "https://maven.fabricmc.net/" }
+        maven { url = "https://maven.architectury.dev/" }
+        maven { url = "https://maven.minecraftforge.net/" }
+        maven { url = "https://maven.quiltmc.org/repository/release" }
         gradlePluginPortal()
     }
 }
+
+dependencyResolutionManagement {
+    repositories {
+        mavenCentral()
+    }
+
+    versionCatalogs {
+        // Minecraft Version
+        def minecraftVersion = "1.20.1"
+
+        // Forge
+        def forgeVersion = "47.2.17"
+
+        // Mod Dependencies Versions
+        def jeiVersion = "15.3.0.4"
+        def registrateForgeVersion = "MC1.20-1.3.3"
+        def createForgeVersion = "0.5.1.d-9"
+        def flywheelForgeVersion = "0.6.10-7"
+        def jadeForgeVersion = "11.6.3"
+        def gtceuVersion = "1.2.3.a"
+        def kjsVersion = "2001.6.4-build.120"
+        def patchouliVersion = "81"
+        def curiosForgeVersion = "5.4.3"
+        def adAstraForgeVersion = "1.15.18"
+        def botariumForgeVersion = "2.3.3"
+        def resourcefulConfigForgeVersion = "2.1.2"
+        def yabnVersion = "1.0.3"
+        def bytecodecsVersion = "1.0.2"
+        def bloodMagicVersion = "4779711"
+        def thinAirVersion = "4848005"
+        def puzzlesLibVersion = "4924184"
+
+
+        // Libs
+        def quiltMappingsVersion = "23"  // https://lambdaurora.dev/tools/import_quilt.html
+        def parchmentVersion = "2023.09.03" // https://parchmentmc.org/docs/getting-started
+        def shadowVersion = "7.1.2"
+        def spotlessVersion = "6.25.0"
+        def architecturyPluginVersion = "3.4-SNAPSHOT"
+        def architecturyLoomVersion = "1.3-SNAPSHOT"
+        def vineFlowerVersion = "1.+"
+        def macheteVersion = "1.+"
+        def configurationVersion = "2.2.0"
+        def ldLibVersion = "1.0.25.l"
+        def mixinextrasVersion = "0.2.0"
+        def resourcefulLibForgeVersion = "2.1.23"
+        def geckolibForgeVersion = "4.2.2"
+
+        forge {
+            version("forgeShortVersion", forgeVersion)
+            def minecraftForge = version("minecraftforge", "${minecraftVersion}-${forgeVersion}")
+            library("minecraftForge", "net.minecraftforge", "forge").versionRef(minecraftForge)
+
+            def registrate = version("registrate", registrateForgeVersion)
+            library("registrate", "com.tterrag.registrate", "Registrate").versionRef(registrate)
+
+            def createForge = version("createForge", createForgeVersion)
+            library("createForge", "com.simibubi.create", "create-${minecraftVersion}").versionRef(createForge)
+
+            def flywheel = version("flywheel", flywheelForgeVersion)
+            library("flywheel", "com.jozufozu.flywheel", "flywheel-forge-${minecraftVersion}").versionRef(flywheel)
+
+            def ldLib = version("ldlib", ldLibVersion)
+            library("ldlib-forge", "com.lowdragmc.ldlib", "ldlib-forge-${minecraftVersion}").versionRef(ldLib)
+
+            def gtceu = version("gtceu", gtceuVersion)
+            library("gtceu", "com.gregtechceu.gtceu", "gtceu-${minecraftVersion}").versionRef(gtceu)
+
+            def jei = version("jei", jeiVersion)
+            library("jei-common-api", "mezz.jei", "jei-${minecraftVersion}-common-api").versionRef(jei)
+            library("jei-forge-api", "mezz.jei", "jei-${minecraftVersion}-forge-api").versionRef(jei)
+            library("jei-forge-impl", "mezz.jei", "jei-${minecraftVersion}-forge").versionRef(jei)
+
+            def jade = version("jade", jadeForgeVersion)
+            library("jade", "maven.modrinth", "jade").versionRef(jade)
+
+            def kubejs = version("kubejs", kjsVersion)
+            library("kubejs", "dev.latvian.mods", "kubejs-forge").versionRef(kubejs)
+
+            def mixinextras = version("mixinextras", mixinextrasVersion)
+            library("mixinextras-forge", "io.github.llamalad7", "mixinextras-forge").versionRef(mixinextras)
+
+            def configuration = version("configuration", configurationVersion)
+            library("configuration", "dev.toma.configuration", "configuration-forge-${minecraftVersion}").versionRef(configuration)
+
+            def yabn = version("yabn", yabnVersion)
+            library("yabn", "com.teamresourceful", "yabn").versionRef(yabn)
+
+            def bytecodecs = version("bytecodecs", bytecodecsVersion)
+            library("bytecodecs", "com.teamresourceful", "bytecodecs").versionRef(bytecodecs)
+
+            def resourcefullib = version("resourcefullib", resourcefulLibForgeVersion)
+            library("resourcefullib", "com.teamresourceful.resourcefullib", "resourcefullib-forge-${minecraftVersion}").versionRef(resourcefullib)
+
+            def resourcefulconfig = version("resourcefulconfig", resourcefulConfigForgeVersion)
+            library("resourcefulconfig", "com.teamresourceful.resourcefulconfig", "resourcefulconfig-forge-${minecraftVersion}").versionRef(resourcefulconfig)
+
+            def botarium = version("botarium", botariumForgeVersion)
+            library("botarium", "earth.terrarium.botarium", "botarium-forge-${minecraftVersion}").versionRef(botarium)
+
+            def adastra = version("adastra", adAstraForgeVersion)
+            library("adastra", "earth.terrarium.adastra", "ad_astra-forge-${minecraftVersion}").versionRef(adastra)
+
+            def bloodMagic = version("bloodMagic", bloodMagicVersion)
+            library("bloodMagic", "curse.maven", "blood-magic-224791").versionRef(bloodMagic)
+
+            def geckoLib = version("geckoLib", geckolibForgeVersion)
+            library("geckoLib", "software.bernie.geckolib", "geckolib-forge-${minecraftVersion}").versionRef(geckoLib)
+
+            def thinAir = version("thinAir", thinAirVersion)
+            library("thinAir", "curse.maven", "new-thin-air-878379").versionRef(thinAir)
+
+            def puzzlesLib = version("puzzlesLib", puzzlesLibVersion)
+            library("puzzlesLib", "curse.maven", "puzzles-lib-495476").versionRef(puzzlesLib)
+
+            def patchouli = version("patchouli", "${minecraftVersion}-${patchouliVersion}-FORGE")
+            library("patchouli", "vazkii.patchouli", "Patchouli").versionRef(patchouli)
+
+            def curios = version("curios", "${curiosForgeVersion}+${minecraftVersion}")
+            library("curios", "top.theillusivec4.curios", "curios-forge").versionRef(curios)
+        }
+
+        libs {
+            version("quiltMappings", quiltMappingsVersion)
+            version("parchment", parchmentVersion)
+
+            def minecraft = version("minecraft", minecraftVersion)
+            library("minecraft", "com.mojang", "minecraft").versionRef(minecraft)
+
+            def shadow = version("shadow", shadowVersion)
+            plugin("shadow", "com.github.johnrengelman.shadow").versionRef(shadow)
+
+            def spotless = version("spotless", spotlessVersion)
+            plugin("spotless", "com.diffplug.spotless").versionRef(spotless)
+
+            def architecturyPlugin = version("architectury", architecturyPluginVersion)
+            plugin("architectury", "architectury-plugin").versionRef(architecturyPlugin)
+
+            def architecturyLoom = version("architectury-loom", architecturyLoomVersion)
+            plugin("architectury-loom", "dev.architectury.loom").versionRef(architecturyLoom)
+
+            def vineFlower = version("vineFlower", vineFlowerVersion)
+            plugin("vineFlower", "io.github.juuxel.loom-vineflower").versionRef(vineFlower)
+
+            def machete = version("machete", macheteVersion)
+            plugin("machete", "io.github.p03w.machete").versionRef(machete)
+        }
+    }
+}
+
+rootProject.name = "${mod_id}"

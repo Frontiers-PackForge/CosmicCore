@@ -1,0 +1,76 @@
+dependencies {
+
+    minecraft "com.mojang:minecraft:${libs.versions.minecraft.get()}"
+
+    mappings loom.layered {
+        it.mappings("org.quiltmc:quilt-mappings:${libs.versions.minecraft.get()}+build.${libs.versions.quiltMappings.get()}:intermediary-v2")
+        it.parchment("org.parchmentmc.data:parchment-${libs.versions.minecraft.get()}:${libs.versions.parchment.get()}@zip")
+        it.officialMojangMappings { nameSyntheticMembers = false }
+    }
+
+    forge forge.minecraftForge
+
+    // lombok
+    compileOnly 'org.projectlombok:lombok:1.18.24'
+    annotationProcessor 'org.projectlombok:lombok:1.18.24'
+
+    // From Forge
+
+    // Registrate
+    modApi(include(forge.registrate.get()))
+
+    // JEI
+    modCompileOnly(forge.jei.common.api) { transitive = false }
+    modCompileOnly(forge.jei.forge.api) { transitive = false }
+    modCompileOnly(forge.jei.forge.impl) { transitive = false }
+
+    // Create and its dependencies
+    modCompileOnly("com.simibubi.create:create-${libs.versions.minecraft.get()}:${forge.versions.createForge.get()}:all") { transitive = false }
+    modCompileOnly forge.flywheel
+
+    // LDLib
+    modImplementation(forge.ldlib.forge) { transitive = false }
+
+    // GTCEU
+    modImplementation(forge.gtceu) { transitive = false }
+
+    // KJS
+    modImplementation forge.kubejs
+
+    // AdAstra
+    forgeRuntimeLibrary forge.yabn
+    forgeRuntimeLibrary forge.bytecodecs
+    modImplementation forge.resourcefullib
+    modImplementation forge.resourcefulconfig
+    modImplementation forge.botarium
+    modImplementation(forge.adastra)  { transitive = false }
+
+    // BloodMagic
+    modImplementation forge.bloodMagic
+
+    // GeckoLib
+    modImplementation forge.geckoLib
+
+    // Thin Air
+    modCompileOnly forge.thinAir
+
+    // PuzzlesLib
+    modImplementation forge.puzzlesLib
+
+    // Jade
+    modRuntimeOnly forge.jade
+
+    // Patchouli
+    modRuntimeOnly forge.patchouli
+
+    // Curios
+    modRuntimeOnly forge.curios
+
+    // Configuration
+    modRuntimeOnly forge.configuration
+
+    // Mixin Extras
+    implementation(annotationProcessor("io.github.llamalad7:mixinextras-common:${this.forge.versions.mixinextras.get()}"))
+    implementation(include(forge.mixinextras.forge.get()))
+
+}

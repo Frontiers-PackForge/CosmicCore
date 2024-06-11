@@ -1,0 +1,39 @@
+repositories {
+    mavenLocal()
+    mavenCentral()
+    maven { url = "https://api.modrinth.com/maven" }
+    maven {
+        url "https://cursemaven.com/"
+        content {
+            includeGroup "curse.maven"
+        }
+    } // Curse Forge File
+    maven { // Registrate
+        url = "https://maven.tterrag.com/"
+        content {
+            // need to be specific here due to version overlaps
+            includeGroup("com.jozufozu.flywheel")
+            includeGroup("com.tterrag.registrate")
+            includeGroup("com.simibubi.create")
+        }
+    }
+    maven { // Patchouli, JEI
+        name = "BlameJared"
+        url = "https://maven.blamejared.com/"
+    }
+    maven { url = 'https://maven.parchmentmc.org' } // Parchment mappings
+    maven { url = "https://maven.theillusivec4.top/" } // Curios
+    maven { url = "https://maven.quiltmc.org/repository/release" } // Quilt Mappings
+    maven { url = "https://maven.firstdarkdev.xyz/snapshots" } // LDLib
+    maven { url = "https://maven.teamresourceful.com/repository/maven-public/" } // AdAstra, Botarium, ResourcefulLib, ResourcefulConfig
+    maven {
+        url "https://maven.saps.dev/releases/"
+        content {
+            includeGroup "dev.latvian.mods"
+        }
+    }
+    maven {
+        name = 'GeckoLib'
+        url 'https://dl.cloudsmith.io/public/geckolib3/geckolib/maven/'
+    }
+}
