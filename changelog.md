@@ -1,1 +1,1 @@
-Fixes Turtle Helmets bypassing Air Restrictions
+Adds Advanced Ram Wafers and Chips
