@@ -50,6 +50,8 @@
   "cosmiccore.wire_coil.magnet_regen": "  §5Field Regen Rate: %s Tesla/t",
   "cosmiccore.wire_coil.magnet_stats": "§8Magnet Stats",
   "gtceu.naquahine_reactor": "§bNaquahine Reactor",
+  "item.cosmiccore.aram_chip": "ARAM Chip",
+  "item.cosmiccore.aram_wafer": "ARAM Wafer",
   "item.cosmiccore.blackstone_pustule": "Blackstone Pustule",
   "item.cosmiccore.cosmic_processor": "Cosmic Processor",
   "item.cosmiccore.cosmic_processor_assembly": "Cosmic Processor Assembly",

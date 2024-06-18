@@ -39,6 +39,16 @@ public class CosmicItems  {
             .properties(p -> p.stacksTo(64))
             .defaultModel()
             .register();
+    public static final ItemEntry<ComponentItem> ADVANCED_RAM_WAFER = REGISTRATE.item("aram_wafer", ComponentItem::create)
+            .lang("ARAM Wafer")
+            .properties(p -> p.stacksTo(64))
+            .defaultModel()
+            .register();
+    public static final ItemEntry<ComponentItem> ADVANCED_RAM_CHIP = REGISTRATE.item("aram_chip", ComponentItem::create)
+            .lang("ARAM Chip")
+            .properties(p -> p.stacksTo(64))
+            .defaultModel()
+            .register();
     public static final ItemEntry<ComponentItem> BLACKSTONE_PUSTULE = REGISTRATE.item("blackstone_pustule", ComponentItem::create)
             .lang("Blackstone Pustule")
             .properties(p -> p.stacksTo(64))
