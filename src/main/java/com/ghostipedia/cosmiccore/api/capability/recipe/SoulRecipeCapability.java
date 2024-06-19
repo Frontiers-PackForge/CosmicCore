@@ -51,7 +51,6 @@ public class SoulRecipeCapability extends RecipeCapability<Integer> {
         return true;
     }
 
-    @Override
     public void addXEIInfo(WidgetGroup group, int xOffset, List<Content> contents, boolean perTick, boolean isInput, MutableInt yOffset) {
         int soul = contents.stream().map(Content::getContent).mapToInt(SoulRecipeCapability.CAP::of).sum();
         if (isInput) {

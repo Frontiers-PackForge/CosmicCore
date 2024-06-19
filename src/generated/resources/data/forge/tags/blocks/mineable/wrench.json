@@ -17,6 +17,8 @@
     "cosmiccore:high_powered_magnet",
     "cosmiccore:fusion_grade_magnet",
     "cosmiccore:high_temperature_fission_casing",
+    "cosmiccore:vomahine_certified_chemically_resistant_casing",
+    "cosmiccore:vomahine_certified_chemically_resistant_pipe",
     "cosmiccore:highly_conductive_fission_casing"
   ]
 }

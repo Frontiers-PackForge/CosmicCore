@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:block",
+  "pools": [
+    {
+      "bonus_rolls": 0.0,
+      "conditions": [
+        {
+          "condition": "minecraft:survives_explosion"
+        }
+      ],
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "cosmiccore:vomahine_certified_chemically_resistant_pipe"
+        }
+      ],
+      "rolls": 1.0
+    }
+  ],
+  "random_sequence": "cosmiccore:blocks/vomahine_certified_chemically_resistant_pipe"
+}

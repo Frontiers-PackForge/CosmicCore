@@ -1,1 +1,1 @@
-Adds Advanced Ram Wafers and Chips
+New Parallel Behavior and First Vomhine Industries Multi

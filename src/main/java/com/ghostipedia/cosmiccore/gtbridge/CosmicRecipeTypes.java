@@ -6,8 +6,11 @@ import com.gregtechceu.gtceu.api.capability.recipe.IO;
 import com.gregtechceu.gtceu.api.gui.GuiTextures;
 import com.gregtechceu.gtceu.api.recipe.GTRecipeType;
 import com.gregtechceu.gtceu.common.data.GTRecipeTypes;
+import com.gregtechceu.gtceu.common.data.GTSoundEntries;
 import com.lowdragmc.lowdraglib.gui.texture.ProgressTexture;
 import com.lowdragmc.lowdraglib.utils.LocalizationUtils;
+
+import static com.gregtechceu.gtceu.common.data.GTRecipeTypes.*;
 
 public class CosmicRecipeTypes {
 
@@ -41,9 +44,25 @@ public class CosmicRecipeTypes {
                 return LocalizationUtils.format("cosmiccore.recipe.fieldDecay", decayRate);
             })
             .setMaxIOSize(1, 0, 1, 0)
+            .setSound(GTSoundEntries.ARC)
+            .setProgressBar(GuiTextures.PROGRESS_BAR_ARROW, ProgressTexture.FillDirection.LEFT_TO_RIGHT);
+    public static final GTRecipeType VOMAHINE_INDUSTRIAL_CHEMVAT = GTRecipeTypes.register("vomahine_industrial_chemvat", GTRecipeTypes.MULTIBLOCK)
+            .setMaxIOSize(6, 6, 6, 6)
+            .setHasResearchSlot(true)
+            .setSound(GTSoundEntries.CHEMICAL)
             .setProgressBar(GuiTextures.PROGRESS_BAR_ARROW, ProgressTexture.FillDirection.LEFT_TO_RIGHT);
 
-
     public static void init() {
+        CHEMICAL_RECIPES.onRecipeBuild((builder, provider) -> {
+            LARGE_CHEMICAL_RECIPES.copyFrom(builder)
+                    .save(provider);
+            VOMAHINE_INDUSTRIAL_CHEMVAT.copyFrom(builder)
+                    .save(provider);
+        });
+        LARGE_CHEMICAL_RECIPES.onRecipeBuild((builder, provider) -> {
+            VOMAHINE_INDUSTRIAL_CHEMVAT.copyFrom(builder)
+                    .save(provider);
+        });
+
     }
 }

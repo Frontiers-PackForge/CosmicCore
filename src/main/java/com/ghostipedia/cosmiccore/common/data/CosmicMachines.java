@@ -31,6 +31,7 @@ import com.gregtechceu.gtceu.api.registry.registrate.MachineBuilder;
 import com.gregtechceu.gtceu.common.data.GTBlocks;
 import com.gregtechceu.gtceu.common.data.GTMaterials;
 import com.gregtechceu.gtceu.common.data.GTRecipeModifiers;
+import com.gregtechceu.gtceu.common.machine.multiblock.part.ParallelHatchPartMachine;
 import net.minecraft.network.chat.Component;
 import com.gregtechceu.gtceu.utils.GTHashMaps;
 import com.gregtechceu.gtceu.utils.ItemStackHashStrategy;
@@ -47,7 +48,10 @@ import java.util.stream.Collectors;
 
 import static com.ghostipedia.cosmiccore.api.pattern.CosmicPredicates.magnetCoils;
 import static com.ghostipedia.cosmiccore.api.registries.CosmicRegistration.REGISTRATE;
+import static com.gregtechceu.gtceu.api.GTValues.*;
+import static com.gregtechceu.gtceu.api.GTValues.UV;
 import static com.gregtechceu.gtceu.api.pattern.Predicates.*;
+import static com.gregtechceu.gtceu.common.data.GTMachines.registerTieredMachines;
 
 public class CosmicMachines {
     static {
@@ -144,9 +148,9 @@ public class CosmicMachines {
             .pattern(definition -> FactoryBlockPattern.start()
                     .aisle("##QQQ##", "##QQQ##", "###Q###", "#######", "#######","#######","#######","#######","#######","#######","###Q###","##QQQ##","##QQQ##")
                     .aisle("#QQQQQ#", "#QQSQQ#", "#FQQQF#", "#FQFQF#", "#F###F#","#F###F#","#F###F#","#F###F#","#F###F#","#FQFQF#","#FQQQF#","#QQSQQ#","#QQQQQ#")
-                    .aisle("QQQQQQQ", "QQSSSQQ", "#QSSSQ#", "#QHGHQ#", "#QHGHQ#","#QHGHQ#","#QHGHQ#","#QHGHQ#","#QHGHQ#","#QHGHQ#","#QSSSQ#","QQSSSQQ","QQQQQQQ")
+                    .aisle("QQQQQQQ", "QQSSSQQ", "#QSSSQ#", "#QHGHQ#", "##HGH##","##HGH##","##HGH##","##HGH##","##HGH##","#QHGHQ#","#QSSSQ#","QQSSSQQ","QQQQQQQ")
                     .aisle("QQQQQQQ", "QSSSSSQ", "QQSSSQQ", "#FGSGF#", "##GSG##","##GSG##","##GSG##","##GSG##","##GSG##","#FGSGF#","QQSSSQQ","QSSSSSQ","QQQQQQQ")
-                    .aisle("QQQQQQQ", "QQSSSQQ", "#QSSSQ#", "#QHGHQ#", "#QHGHQ#","#QHGHQ#","#QHGHQ#","#QHGHQ#","#QHGHQ#","#QHGHQ#","#QSSSQ#","QQSSSQQ","QQQQQQQ")
+                    .aisle("QQQQQQQ", "QQSSSQQ", "#QSSSQ#", "#QHGHQ#", "##HGH##","##HGH##","##HGH##","##HGH##","##HGH##","#QHGHQ#","#QSSSQ#","QQSSSQQ","QQQQQQQ")
                     .aisle("#QQQQQ#", "#QQSQQ#", "#FQQQF#", "#FQFQF#", "#F###F#","#F###F#","#F###F#","#F###F#","#F###F#","#FQFQF#","#FQQQF#","#QQSQQ#","#QQQQQ#")
                     .aisle("##QQQ##", "##QCQ##", "###Q###", "#######", "#######","#######","#######","#######","#######","#######","###Q###","##QQQ##","##QQQ##")
                     .where('#', any())
@@ -170,7 +174,42 @@ public class CosmicMachines {
             .workableCasingRenderer(CosmicCore.id("block/casings/solid/naquadah_pressure_resistant_casing"), GTCEu.id("block/multiblock/hpca"))
 
             .register();
+    public final static MultiblockMachineDefinition VOMAHINE_INDUSTRIAL_CHEMPLANT = REGISTRATE.multiblock("vomahine_industrial_chemical_plant", WorkableElectricMultiblockMachine::new)
+            .rotationState(RotationState.ALL)
+            .recipeType(CosmicRecipeTypes.VOMAHINE_INDUSTRIAL_CHEMVAT)
+            .recipeModifiers(CosmicRecipeModifiers::vomahineChemicalPlantParallel,GTRecipeModifiers.ELECTRIC_OVERCLOCK.apply(OverclockingLogic.PERFECT_OVERCLOCK))
+            .appearanceBlock(CosmicBlocks.VOMAHINE_CERTIFIED_CHEMICALLY_RESISTANT_CASING)
+            .pattern(definition -> FactoryBlockPattern.start()
+                    .aisle("##QQQ##", "##QQQ##", "###Q###", "#######", "#######","#######","#######","#######","###Q###","##QQQ##","##QQQ##")
+                    .aisle("#QQQQQ#", "#QQSQQ#", "#FQQQF#", "#FQ#QF#", "#F###F#","#F###F#","#F###F#","#FQ#QF#","#FQQQF#","#QQSQQ#","#QQQQQ#")
+                    .aisle("QQQQQQQ", "QQSSSQQ", "#QSSSQ#", "##HGH##", "##HGH##","##HGH##","##HGH##","#QHGHQ#","#QSSSQ#","QQSSSQQ","QQQQQQQ")
+                    .aisle("QQQQQQQ", "QSSSSSQ", "QQSSSQQ", "##GSG##", "##GSG##","##GSG##","##GSG##","##GSG##","QQSSSQQ","QSSSSSQ","QQQQQQQ")
+                    .aisle("QQQQQQQ", "QQSSSQQ", "#QSSSQ#", "##HGH##", "##HGH##","##HGH##","##HGH##","#QHGHQ#","#QSSSQ#","QQSSSQQ","QQQQQQQ")
+                    .aisle("#QQQQQ#", "#QQSQQ#", "#FQQQF#", "#FQ#QF#", "#F###F#","#F###F#","#F###F#","#FQ#QF#","#FQQQF#","#QQSQQ#","#QQQQQ#")
+                    .aisle("##QQQ##", "##QCQ##", "###Q###", "#######", "#######","#######","#######","#######","###Q###","##QQQ##","##QQQ##")
+                    .where('#', any())
+                    .where("C", controller(blocks(definition.getBlock())))
+                    .where('F', blocks(ChemicalHelper.getBlock(TagPrefix.frameGt, GTMaterials.NaquadahAlloy)))
+                    .where('S', blocks(CosmicBlocks.COIL_RESONANT_VIRTUE_MELD.get()))
+                    .where('H', blocks(CosmicBlocks.VOMAHINE_CERTIFIED_CHEMICALLY_RESISTANT_PIPE.get()))
+                    .where('G', blocks(GTBlocks.CASING_LAMINATED_GLASS.get()))
+                    .where('Q', blocks(CosmicBlocks.VOMAHINE_CERTIFIED_CHEMICALLY_RESISTANT_CASING.get())
+                            .or(abilities(PartAbility.IMPORT_FLUIDS))
+                            .or(abilities(PartAbility.EXPORT_FLUIDS))
+                            .or(abilities(PartAbility.IMPORT_ITEMS))
+                            .or(abilities(PartAbility.EXPORT_ITEMS))
+                            .or(abilities(PartAbility.INPUT_ENERGY))
+                            .or(abilities(PartAbility.MAINTENANCE))
+                            .or(abilities(PartAbility.DATA_ACCESS))
+                            .or(abilities(PartAbility.COMPUTATION_DATA_RECEPTION))
+                            .or(abilities(PartAbility.OPTICAL_DATA_RECEPTION))
+                            .or(abilities(PartAbility.PARALLEL_HATCH))
+                            .or(abilities(PartAbility.INPUT_LASER))
+                            .or(abilities(PartAbility.INPUT_ENERGY))
+                    ).build())
+            .workableCasingRenderer(CosmicCore.id("block/casings/solid/vomahine_certified_chemically_resistant_casing"), CosmicCore.id("block/multiblock/vomahine_chemplant"))
 
+            .register();
     private static MachineDefinition[] registerSoulTieredHatch(String name, String displayName, String model, IO io, int[] tiers, PartAbility... abilities) {
         return registerTieredMachines(name,
                 (holder, tier) -> new SoulHatchPartMachine(holder, tier, io),
