@@ -4,9 +4,13 @@ import com.ghostipedia.cosmiccore.api.item.armor.*;
 import com.ghostipedia.cosmiccore.api.registries.CosmicRegistration;
 import com.ghostipedia.cosmiccore.common.data.tag.item.CosmicItemTags;
 import com.gregtechceu.gtceu.api.item.ComponentItem;
+import com.gregtechceu.gtceu.api.item.armor.ArmorComponentItem;
 import com.gregtechceu.gtceu.api.item.component.IItemComponent;
 import com.gregtechceu.gtceu.common.item.armor.GTArmorMaterials;
+import com.gregtechceu.gtceu.common.item.armor.QuarkTechSuite;
+import com.gregtechceu.gtceu.common.registry.GTRegistration;
 import com.gregtechceu.gtceu.config.ConfigHolder;
+import com.gregtechceu.gtceu.data.recipe.CustomTags;
 import com.gregtechceu.gtceu.integration.jade.GTJadePlugin;
 import com.tterrag.registrate.util.entry.ItemEntry;
 import com.tterrag.registrate.util.nullness.NonNullConsumer;
@@ -197,7 +201,48 @@ public class CosmicItems  {
             .lang("Advanced QuarkTech™ Space Suite Chestplate")
             .properties(p -> p.rarity(Rarity.EPIC))
             .register();
+    public static ItemEntry<SpaceArmorComponentItem> VOMHINEE_WARPTECH_CHESTPLATE = REGISTRATE.item("vomhine_warptech_chestplate", (p) -> new SpaceArmorComponentItem(GTArmorMaterials.ARMOR, ArmorItem.Type.CHESTPLATE, 100000, p)
+                    .setArmorLogic(new AdvancedQuarkTechSpaceSuite(8192,
+                            100_000_000L * (long) Math.max(1, Math.pow(4, ConfigHolder.INSTANCE.tools.voltageTierAdvQuarkTech - 6)),
+                            ConfigHolder.INSTANCE.tools.voltageTierAdvNanoSuit)))
+            .tag(CosmicItemTags.QUARKTECH_SPACE_SUITE, ModItemTags.SPACE_SUITS, ModItemTags.FREEZE_RESISTANT_ARMOR, ModItemTags.HEAT_RESISTANT_ARMOR)
+            .lang("Vomhine™ WarpTech Chestplate")
+            .properties(p -> p.rarity(Rarity.EPIC))
+            .register();
 
+    public static ItemEntry<ArmorComponentItem> VOMHINEE_WARPTECH_LEGGINGS = REGISTRATE.item("vomhine_warptech_leggings",
+                    (p) -> new ArmorComponentItem(GTArmorMaterials.ARMOR, ArmorItem.Type.LEGGINGS, p)
+                            .setArmorLogic(new QuarkTechSuite(ArmorItem.Type.LEGGINGS,
+                                    8192,
+                                    100_000_000L * (long) Math.max(1,
+                                            Math.pow(4, ConfigHolder.INSTANCE.tools.voltageTierQuarkTech - 5)),
+                                    ConfigHolder.INSTANCE.tools.voltageTierQuarkTech)))
+            .lang("Vomhine™ WarpTech Leggings")
+            .properties(p -> p.rarity(Rarity.EPIC))
+            .tag(CustomTags.PPE_ARMOR)
+            .register();
+    public static ItemEntry<ArmorComponentItem> VOMHINEE_WARPTECH_HELMET = REGISTRATE.item("vomhine_warptech_helmet",
+                    (p) -> new ArmorComponentItem(GTArmorMaterials.ARMOR, ArmorItem.Type.HELMET, p)
+                            .setArmorLogic(new QuarkTechSuite(ArmorItem.Type.HELMET,
+                                    8192,
+                                    100_000_000L * (long) Math.max(1,
+                                            Math.pow(4, ConfigHolder.INSTANCE.tools.voltageTierQuarkTech - 5)),
+                                    ConfigHolder.INSTANCE.tools.voltageTierQuarkTech)))
+            .lang("Vomhine™ WarpTech Leggings")
+            .properties(p -> p.rarity(Rarity.EPIC))
+            .tag(CustomTags.PPE_ARMOR)
+            .register();
+    public static ItemEntry<ArmorComponentItem> VOMHINEE_WARPTECH_BOOTS = REGISTRATE.item("vomhine_warptech_boots",
+                    (p) -> new ArmorComponentItem(GTArmorMaterials.ARMOR, ArmorItem.Type.BOOTS, p)
+                            .setArmorLogic(new QuarkTechSuite(ArmorItem.Type.BOOTS,
+                                    8192,
+                                    100_000_000L * (long) Math.max(1,
+                                            Math.pow(4, ConfigHolder.INSTANCE.tools.voltageTierQuarkTech - 5)),
+                                    ConfigHolder.INSTANCE.tools.voltageTierQuarkTech)))
+            .lang("Vomhine™ WarpTech Leggings")
+            .properties(p -> p.rarity(Rarity.EPIC))
+            .tag(CustomTags.PPE_ARMOR)
+            .register();
     public static <T extends ComponentItem> NonNullConsumer<T> attach(IItemComponent... components) {
         return item -> item.attachComponents(components);
     }

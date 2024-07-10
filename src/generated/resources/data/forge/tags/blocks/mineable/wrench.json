@@ -19,6 +19,8 @@
     "cosmiccore:high_temperature_fission_casing",
     "cosmiccore:vomahine_certified_chemically_resistant_casing",
     "cosmiccore:vomahine_certified_chemically_resistant_pipe",
+    "cosmiccore:vomahine_certified_interstellar_grade_casing",
+    "cosmiccore:vomahine_ultra_powered_casing",
     "cosmiccore:highly_conductive_fission_casing"
   ]
 }
