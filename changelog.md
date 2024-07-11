@@ -1,1 +1,3 @@
-New Parallel Behavior and First Vomhine Industries Multi
+Celestial Bore
+Vomahine Warptech Armor
+Textures and other stuff for 0.5.0
