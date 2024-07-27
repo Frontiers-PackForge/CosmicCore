@@ -33,6 +33,20 @@ public class CosmicMaterials {
     public static Material ProgrammableMatter;
     public static Material ShimmeringNeutronium;
     public static Material CausalFabric;
+    public static Material Potential;
+    public static Material FalseInfinity;
+    public static Material SuitableInfinity;
+    public static Material LogicalInfinity;
+    public static Material Taranium;
+    public static Material Spacetime;
+    public static Material StygianPlague;
+    public static Material EnragedStygianPlague;
+    public static Material Cosmocite;
+    public static Material TearsOfTheUniverse;
+    public static Material Ichor;
+    public static Material Ichorium;
+    public static Material Chronon;
+    public static Material Temmerite;
 
     public static void register() {
         Prisma = new Material.Builder(CosmicCore.id("prisma"))
@@ -92,7 +106,7 @@ public class CosmicMaterials {
                 .color(0xdb5e5e).secondaryColor(0x5e0f3d).iconSet(MaterialIconSet.BRIGHT)
                 .flags(GENERATE_BOLT_SCREW,GENERATE_ROUND,GENERATE_GEAR, GENERATE_SMALL_GEAR, GENERATE_RING, GENERATE_FRAME, GENERATE_SPRING, GENERATE_SPRING_SMALL, GENERATE_FINE_WIRE)
                 .cableProperties(GTValues.V[7], 4, 6)
-                .blastTemp(7000, BlastProperty.GasTier.HIGHER, GTValues.VA[GTValues.ZPM],5600)
+                .blastTemp(5400, BlastProperty.GasTier.HIGHER, GTValues.VA[GTValues.LuV],900)
                 .buildAndRegister();
 
         LivingIgniclad = new Material.Builder(CosmicCore.id("living_igniclad"))
@@ -134,6 +148,99 @@ public class CosmicMaterials {
                 .flags(GENERATE_BOLT_SCREW,GENERATE_GEAR, GENERATE_SMALL_GEAR, GENERATE_RING, GENERATE_FRAME, GENERATE_SPRING, GENERATE_SPRING_SMALL, GENERATE_FINE_WIRE)
                 .cableProperties(GTValues.V[11], 4, 6)
                 .blastTemp(19000, BlastProperty.GasTier.HIGHEST, GTValues.VA[GTValues.UIV],5600)
+                .buildAndRegister();
+
+        //Misc Materials
+
+        //TODO - Colors , Textures, Fluid Textures, they're all gonna look the same in game for now.
+        //TODO - Infinity Line Scripts On KubeJS side.
+        Potential = new Material.Builder(CosmicCore.id("potential"))
+                .dust()
+                .liquid(new FluidBuilder().temperature(1500))
+                .color(0x828282).secondaryColor(0x5e0f3d).iconSet(MaterialIconSet.BRIGHT)
+                .flags(DISABLE_DECOMPOSITION)
+                .buildAndRegister();
+        FalseInfinity = new Material.Builder(CosmicCore.id("false_infinity"))
+                .liquid(new FluidBuilder().temperature(3500))
+                .color(0x508582).secondaryColor(0x5e0f3d).iconSet(MaterialIconSet.BRIGHT)
+                .flags(DISABLE_DECOMPOSITION)
+                .buildAndRegister();
+        SuitableInfinity = new Material.Builder(CosmicCore.id("suitable_infinity"))
+                .liquid(new FluidBuilder().temperature(7900))
+                .color(0x508582).secondaryColor(0x5e0f3d).iconSet(MaterialIconSet.BRIGHT)
+                .flags(DISABLE_DECOMPOSITION)
+                .buildAndRegister();
+        //TODO - Actual Textures for the entire material set... Let's do something that isn't the typical rainbow infinity, maybe make it something special.
+        LogicalInfinity = new Material.Builder(CosmicCore.id("logical_infinity"))
+                .ingot()
+                .liquid(new FluidBuilder().temperature(10750))
+                .iconSet(CosmicMaterialSet.INFINITY)
+                .flags(GENERATE_BOLT_SCREW,GENERATE_ROUND,GENERATE_GEAR, GENERATE_SMALL_GEAR, GENERATE_RING, GENERATE_FRAME, GENERATE_SPRING, GENERATE_SPRING_SMALL, GENERATE_FINE_WIRE)
+                .cableProperties(GTValues.V[7], 16, 0, true)
+                .buildAndRegister();
+        //TODO - Taranium Bedrock Soot + Adamantium Processing
+        Taranium = new Material.Builder(CosmicCore.id("taranium"))
+                .ingot()
+                .liquid(new FluidBuilder().temperature(18000))
+                .color(0x383838).secondaryColor(0x5e0f3d).iconSet(MaterialIconSet.BRIGHT)
+                .flags(GENERATE_BOLT_SCREW,GENERATE_ROUND,GENERATE_GEAR, GENERATE_SMALL_GEAR, GENERATE_RING, GENERATE_FRAME, GENERATE_SPRING, GENERATE_SPRING_SMALL, GENERATE_FINE_WIRE)
+                .cableProperties(GTValues.V[12], 64, 0, true)
+                .buildAndRegister();
+        //Todo Temporal Tear
+        Chronon = new Material.Builder(CosmicCore.id("chronon"))
+                .ingot()
+                .liquid(new FluidBuilder().temperature(100000000))
+                .iconSet(CosmicMaterialSet.CHRONON)
+                .flags(GENERATE_BOLT_SCREW,GENERATE_ROUND,GENERATE_GEAR, GENERATE_SMALL_GEAR, GENERATE_RING, GENERATE_FRAME, GENERATE_SPRING, GENERATE_SPRING_SMALL, GENERATE_FINE_WIRE)
+                .cableProperties(GTValues.V[12], 64, 0, true)
+                .buildAndRegister();
+        //TODO - Tengam but worse, way worse, please like actually make this the most soul crushing material to make at the current tier, but super easy after lol
+        Temmerite = new Material.Builder(CosmicCore.id("temmerite"))
+                .ingot()
+                .liquid(new FluidBuilder().temperature(19500))
+                .color(0xdb5e5e).secondaryColor(0x5e0f3d).iconSet(MaterialIconSet.SHINY)
+                .flags(GENERATE_BOLT_SCREW,GENERATE_ROUND,GENERATE_GEAR, GENERATE_SMALL_GEAR, GENERATE_RING, GENERATE_FRAME, GENERATE_SPRING, GENERATE_SPRING_SMALL, GENERATE_FINE_WIRE)
+                .cableProperties(GTValues.V[12], 64, 0, true)
+                .buildAndRegister();
+        //If For some reason using hebrew as denotations for absolute constants upsets people, go back to using Greek, I doubt it'll be an issue but denote this just incase.
+        //TODO - Thaumic Tinker Inspired chaos Ft Virtue Meld, Make your dead gods cry rivers of mutated blood - Resistant to Acausal decay and contains the Universe constance of "Dalet" (ד)
+        Ichor = new Material.Builder(CosmicCore.id("ichor"))
+                .liquid(new FluidBuilder().temperature(19500))
+                .color(0xfca103).secondaryColor(0xfcbe03).iconSet(MaterialIconSet.BRIGHT)
+                .buildAndRegister();
+        //TODO - The Finalized Version of Virtue Meld, only present on Grand Virtues. Resistant to Atemporal decay and contains the Universe constance of "Alef" (א)
+        Ichorium = new Material.Builder(CosmicCore.id("ichorium"))
+                .ingot()
+                .liquid(new FluidBuilder().temperature(19500))
+                .color(0xfca103).secondaryColor(0xfcbe03).iconSet(MaterialIconSet.BRIGHT)
+                .flags(GENERATE_BOLT_SCREW,GENERATE_ROUND,GENERATE_GEAR, GENERATE_SMALL_GEAR, GENERATE_RING, GENERATE_FRAME, GENERATE_SPRING, GENERATE_SPRING_SMALL, GENERATE_FINE_WIRE)
+                .cableProperties(GTValues.V[12], 64, 0, true)
+                .buildAndRegister();
+        //TODO - A ????? of nothing from the empty space between each instance of cylindrical multiverses. Dissolves the Constant of "Resh" (ר)
+        Cosmocite = new Material.Builder(CosmicCore.id("cosmocite"))
+                .liquid(new FluidBuilder().temperature(12123500))
+                .color(0xdb5e5e).secondaryColor(0x5e0f3d).iconSet(MaterialIconSet.SHINY)
+                .buildAndRegister();
+        //TODO - A ????? of ???? comprised of the collective agony of Universe 0S37 (I keep forgetting the descriptor for the main universe the game is in) . Dissolves the Constant of "Waw/Vav" (ו)
+        TearsOfTheUniverse = new Material.Builder(CosmicCore.id("universe_tears"))
+                .liquid(new FluidBuilder().temperature(1))
+                .color(0xdb5e5e).secondaryColor(0x5e0f3d).iconSet(MaterialIconSet.SHINY)
+                .buildAndRegister();
+        //TODO - A dangerous bioweapon unleashed on many orbital bodies in space, entirely designed to sterilize life from anything it touches.
+        // Oh it's also like, self-aware but not fully sentient. Only works on impulse kinda - I'm not lore dumping more here lmfao
+        StygianPlague = new Material.Builder(CosmicCore.id("stygian_plague"))
+                .liquid(new FluidBuilder().temperature(240))
+                .color(0x4f035e).iconSet(MaterialIconSet.SHINY)
+                .buildAndRegister();
+        //TODO - Now it's mad. Now it's airborne vs waterborne, and it knows how to mentally abuse you.
+        EnragedStygianPlague = new Material.Builder(CosmicCore.id("enraged_stygian_plague"))
+                .liquid(new FluidBuilder().temperature(350))
+                .color(0x5e031d).iconSet(MaterialIconSet.SHINY)
+                .buildAndRegister();
+        //TODO - OMG! ! ! ! GTNH ! ! ! !?!?!?! SPACE!?!?!TIMEE?E!?!?!?!?! WOEAEAOWE SO FUNNY, Fuck off - Make this part of the fuel for the Temporal Tear.
+        Spacetime = new Material.Builder(CosmicCore.id("spacetime"))
+                .liquid(new FluidBuilder().temperature(10))
+                .color(0xdb5e5e).secondaryColor(0x5e0f3d).iconSet(MaterialIconSet.SHINY)
                 .buildAndRegister();
 
     }

@@ -11,11 +11,11 @@
       "entries": [
         {
           "type": "minecraft:item",
-          "name": "cosmiccore:trinavine_coil_block"
+          "name": "cosmiccore:reinforced_trinavine_coil_block"
         }
       ],
       "rolls": 1.0
     }
   ],
-  "random_sequence": "cosmiccore:blocks/trinavine_coil_block"
+  "random_sequence": "cosmiccore:blocks/reinforced_trinavine_coil_block"
 }

@@ -18,7 +18,7 @@ public class CosmicCoilBlock {
         PRISMATIC_TUNGSTENSTEEL("prismatic_tungstensteel", 4500, 3, 4, 2, () -> CosmicMaterials.PrismaticTungstensteel, CosmicCore.id("block/casings/coils/prismatic_tungstensteel")),
         RESONANT_VIRTUE_MELD("resonant_virtue_meld", 5400, 4, 5, 3, () -> CosmicMaterials.ResonantVirtueMeld, CosmicCore.id("block/casings/coils/resonant_virtue_meld")),
         NAQUADIC_SUPERALLOY("naquadric_superalloy", 7200, 5, 6, 4, () -> CosmicMaterials.NaquadicSuperalloy, CosmicCore.id("block/casings/coils/naquadric_superalloy")),
-        TRINAVINE("trinavine", 9500, 3, 7, 4, () -> CosmicMaterials.Trinavine, CosmicCore.id("block/casings/coils/trinavine")),
+        TRINAVINE("reinforced_trinavine", 9500, 3, 7, 4, () -> CosmicMaterials.Trinavine, CosmicCore.id("block/casings/coils/trinavine")),
         LIVING_IGNICLAD("living_igniclad", 10800, 7, 8, 5, () -> CosmicMaterials.LivingIgniclad, CosmicCore.id("block/casings/coils/living_igniclad")),
         PSIONIC_GALVORN("psionic_galvorn", 12800, 8, 9, 6, () -> CosmicMaterials.PsionicGalvorn, CosmicCore.id("block/casings/coils/psionic_galvorn")),
         PROGRAMMABLE_MATTER("programable_matter", 15800, 9, 10, 7, () -> CosmicMaterials.ProgrammableMatter, CosmicCore.id("block/casings/coils/programable_matter")),

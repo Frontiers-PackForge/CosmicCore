@@ -6,6 +6,7 @@ import com.ghostipedia.cosmiccore.api.pattern.CosmicPredicates;
 import com.ghostipedia.cosmiccore.api.registries.CosmicRegistration;
 import com.ghostipedia.cosmiccore.api.capability.CosmicCapabilities;
 import com.ghostipedia.cosmiccore.common.data.*;
+import com.ghostipedia.cosmiccore.common.data.materials.CosmicMaterialSet;
 import com.ghostipedia.cosmiccore.common.data.materials.CosmicMaterials;
 import com.ghostipedia.cosmiccore.gtbridge.CosmicRecipeTypes;
 import com.gregtechceu.gtceu.api.GTCEuAPI;
@@ -54,7 +55,7 @@ public class CosmicCore {
         CosmicRegistration.REGISTRATE.registerRegistrate();
         CosmicCoreDatagen.init();
         CosmicPredicates.init();
-
+        CosmicMaterialSet.init();
     }
 
     public static ResourceLocation id(String path) {
@@ -68,6 +69,7 @@ public class CosmicCore {
     @SubscribeEvent
     public void  registerMaterials(MaterialEvent event) {
         CosmicMaterials.register();
+
     }
 
     @SubscribeEvent
