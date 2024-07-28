@@ -175,7 +175,7 @@ public class CosmicMaterials {
                 .ingot()
                 .liquid(new FluidBuilder().temperature(10750))
                 .iconSet(CosmicMaterialSet.INFINITY)
-                .flags(GENERATE_BOLT_SCREW,GENERATE_ROUND,GENERATE_GEAR, GENERATE_SMALL_GEAR, GENERATE_RING, GENERATE_FRAME, GENERATE_SPRING, GENERATE_SPRING_SMALL, GENERATE_FINE_WIRE)
+                .flags(GENERATE_ROTOR, GENERATE_FRAME,GENERATE_BOLT_SCREW,GENERATE_ROUND,GENERATE_GEAR, GENERATE_SMALL_GEAR, GENERATE_RING, GENERATE_FRAME, GENERATE_SPRING, GENERATE_SPRING_SMALL, GENERATE_FINE_WIRE)
                 .cableProperties(GTValues.V[7], 16, 0, true)
                 .buildAndRegister();
         //TODO - Taranium Bedrock Soot + Adamantium Processing
@@ -198,7 +198,7 @@ public class CosmicMaterials {
         Temmerite = new Material.Builder(CosmicCore.id("temmerite"))
                 .ingot()
                 .liquid(new FluidBuilder().temperature(19500))
-                .color(0xdb5e5e).secondaryColor(0x5e0f3d).iconSet(MaterialIconSet.SHINY)
+                .color(0x42f5a1).secondaryColor(0x42f5e0).iconSet(MaterialIconSet.BRIGHT)
                 .flags(GENERATE_BOLT_SCREW,GENERATE_ROUND,GENERATE_GEAR, GENERATE_SMALL_GEAR, GENERATE_RING, GENERATE_FRAME, GENERATE_SPRING, GENERATE_SPRING_SMALL, GENERATE_FINE_WIRE)
                 .cableProperties(GTValues.V[12], 64, 0, true)
                 .buildAndRegister();
@@ -229,12 +229,12 @@ public class CosmicMaterials {
         //TODO - A dangerous bioweapon unleashed on many orbital bodies in space, entirely designed to sterilize life from anything it touches.
         // Oh it's also like, self-aware but not fully sentient. Only works on impulse kinda - I'm not lore dumping more here lmfao
         StygianPlague = new Material.Builder(CosmicCore.id("stygian_plague"))
-                .liquid(new FluidBuilder().temperature(240))
+                .liquid(new FluidBuilder().state(FluidState.LIQUID).customStill().temperature(240))
                 .color(0x4f035e).iconSet(MaterialIconSet.SHINY)
                 .buildAndRegister();
         //TODO - Now it's mad. Now it's airborne vs waterborne, and it knows how to mentally abuse you.
         EnragedStygianPlague = new Material.Builder(CosmicCore.id("enraged_stygian_plague"))
-                .liquid(new FluidBuilder().temperature(350))
+                .liquid(new FluidBuilder().state(FluidState.LIQUID).customStill().temperature(350))
                 .color(0x5e031d).iconSet(MaterialIconSet.SHINY)
                 .buildAndRegister();
         //TODO - OMG! ! ! ! GTNH ! ! ! !?!?!?! SPACE!?!?!TIMEE?E!?!?!?!?! WOEAEAOWE SO FUNNY, Fuck off - Make this part of the fuel for the Temporal Tear.
