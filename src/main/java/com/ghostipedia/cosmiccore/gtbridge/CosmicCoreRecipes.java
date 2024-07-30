@@ -1,6 +1,8 @@
 package com.ghostipedia.cosmiccore.gtbridge;
 
 
+import com.ghostipedia.cosmiccore.api.capability.recipe.SoulRecipeCapability;
+import com.ghostipedia.cosmiccore.common.data.CosmicItems;
 import com.gregtechceu.gtceu.api.GTValues;
 import com.gregtechceu.gtceu.data.recipe.serialized.chemistry.DistillationRecipes;
 import net.minecraft.data.recipes.FinishedRecipe;
@@ -11,8 +13,7 @@ import java.util.function.Consumer;
 
 import static com.ghostipedia.cosmiccore.common.data.materials.CosmicMaterials.DilutedPrisma;
 import static com.ghostipedia.cosmiccore.common.data.materials.CosmicMaterials.Prisma;
-import static com.ghostipedia.cosmiccore.gtbridge.CosmicRecipeTypes.CELESTIAL_BORE;
-import static com.ghostipedia.cosmiccore.gtbridge.CosmicRecipeTypes.NAQUAHINE_REACTOR;
+import static com.ghostipedia.cosmiccore.gtbridge.CosmicRecipeTypes.*;
 import static com.gregtechceu.gtceu.common.data.GTMaterials.Water;
 import static com.gregtechceu.gtceu.common.data.GTRecipeTypes.DISTILLATION_RECIPES;
 

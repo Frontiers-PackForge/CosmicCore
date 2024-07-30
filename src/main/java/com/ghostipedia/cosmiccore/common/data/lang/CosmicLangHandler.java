@@ -19,6 +19,11 @@ public class CosmicLangHandler {
         replace(provider,"cosmiccore.wire_coil.magnet_stats", "§8Magnet Stats");
         replace(provider,"tooltip.cosmiccore.soul_hatch.input", "§cMax Recipe Input§f:§6 %s");
         replace(provider,"tooltip.cosmiccore.soul_hatch.output", "§cMax Soul Network Capacity§f:§6 %s");
+        replace(provider,"gui.cosmiccore.soul_hatch.label.import", "Soul Input Hatch");
+        replace(provider,"gui.cosmiccore.soul_hatch.label.export", "Soul Output Hatch");
+        replace(provider,"gui.cosmiccore.soul_hatch.owner", "Network Owner: %d");
+        replace(provider,"gui.cosmiccore.soul_hatch.lp", "LP Stored: %s");
+        replace(provider,"tooltip.cosmiccore.soul_hatch.output", "§cMax Soul Network Capacity§f:§6 %s");
         replace(provider,"cosmiccore.multiblock.magnetic_field_strength", "§fMax Field Strength§f:§6 %s");
         replace(provider,"cosmiccore.multiblock.magnetic_regen", "§aField Recovery Rate§f:§6 %sT/t");
         replace(provider,"gtceu.naquahine_reactor", "§bNaquahine Reactor");
