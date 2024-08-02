@@ -33,6 +33,7 @@ import com.gregtechceu.gtceu.api.registry.registrate.MachineBuilder;
 import com.gregtechceu.gtceu.common.data.GTBlocks;
 import com.gregtechceu.gtceu.common.data.GTMaterials;
 import com.gregtechceu.gtceu.common.data.GTRecipeModifiers;
+import com.gregtechceu.gtceu.common.data.GTRecipeTypes;
 import net.minecraft.network.chat.Component;
 import com.gregtechceu.gtceu.utils.GTHashMaps;
 import com.gregtechceu.gtceu.utils.ItemStackHashStrategy;
@@ -52,7 +53,7 @@ import static com.ghostipedia.cosmiccore.api.registries.CosmicRegistration.REGIS
 import static com.gregtechceu.gtceu.api.GTValues.*;
 import static com.gregtechceu.gtceu.api.GTValues.UV;
 import static com.gregtechceu.gtceu.api.pattern.Predicates.*;
-import static com.gregtechceu.gtceu.common.data.GTMachines.registerTieredMachines;
+import static com.gregtechceu.gtceu.common.data.GTMachines.*;
 
 public class CosmicMachines {
     static {
@@ -72,7 +73,9 @@ public class CosmicMachines {
     public static final MachineDefinition[] SOUL_EXPORT_HATCH = registerSoulTieredHatch(
             "soul_output_hatch", "Soul Output Hatch", "soul_hatch.export",
             IO.OUT, HIGH_TIERS, CosmicPartAbility.EXPORT_SOUL);
-
+    public static final MachineDefinition[] NAQUAHINE_MINI_REACTOR = registerSimpleGenerator("naquahine_mini_reactor",
+            CosmicRecipeTypes.MINI_NAQUAHINE_REACTOR, genericGeneratorTankSizeFunction, 0.0f, GTValues.IV, GTValues.LuV,
+            GTValues.ZPM, GTValues.UV, GTValues.UHV);
     public static final MachineDefinition[] COSMIC_PARALLEL_HATCH = registerTieredMachines("cosmic_parallel_hatch",
             CosmicParallelHatchPartMachine::new,
             (tier, builder) -> builder
@@ -80,7 +83,8 @@ public class CosmicMachines {
                         case 7 -> "Ultimate";
                         case 8 -> "Super";
                         case 9 -> "Extreme";
-                        case 10 -> "Guh";
+                        case 10 -> "WarpTech";
+                        case 15 -> "Paradox";
                         default -> "Simple"; // Should never be hit.
                     } + " Parallel Control Hatch")
                     .rotationState(RotationState.ALL)

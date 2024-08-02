@@ -25,6 +25,7 @@ public class CosmicRecipeTypes {
             .setMaxSize(IO.IN, SoulRecipeCapability.CAP, 1)
             .setMaxSize(IO.OUT, SoulRecipeCapability.CAP, 1)
             .setMaxIOSize(2, 9, 1, 3)
+
             .setProgressBar(GuiTextures.PROGRESS_BAR_ARROW, ProgressTexture.FillDirection.LEFT_TO_RIGHT);
     public static final GTRecipeType LEACHING_PLANT = GTRecipeTypes.register("leaching_plant", GTRecipeTypes.MULTIBLOCK)
             .setMaxIOSize(3, 6, 3, 3)
@@ -50,6 +51,10 @@ public class CosmicRecipeTypes {
             .setMaxIOSize(1, 0, 1, 0)
             .setSound(GTSoundEntries.ARC)
             .setProgressBar(GuiTextures.PROGRESS_BAR_ARROW, ProgressTexture.FillDirection.LEFT_TO_RIGHT);
+    public static final GTRecipeType MINI_NAQUAHINE_REACTOR = GTRecipeTypes.register("mini_naquahine_reactor", GTRecipeTypes.GENERATOR)
+            .setMaxIOSize(1, 0, 1, 0)
+            .setSound(GTSoundEntries.ARC)
+            .setProgressBar(GuiTextures.PROGRESS_BAR_GAS_COLLECTOR, ProgressTexture.FillDirection.DOWN_TO_UP);
     public static final GTRecipeType VOMAHINE_INDUSTRIAL_CHEMVAT = GTRecipeTypes.register("vomahine_industrial_chemvat", GTRecipeTypes.MULTIBLOCK)
             .setMaxIOSize(6, 6, 6, 6)
             .setHasResearchSlot(true)

@@ -33,5 +33,11 @@ public class CosmicLangHandler {
         replace(provider,"cosmiccore.recipe.fieldSlam", "§fField Consumed: %sT");
         replace(provider,"tagprefix.leached_ore", "Leached %s Ore");
         replace(provider,"tagprefix.prisma_frothed_ore", "Prisma Frothed %s Ore");
+        replace(provider,"block.gtceu.iv_naquahine_mini_reactor", "§3Micro Naquahine Reactor§r");
+        replace(provider,"block.gtceu.luv_naquahine_mini_reactor", "§dAdvanced Micro Naquahine Reactor§r");
+        replace(provider,"block.gtceu.zpm_naquahine_mini_reactor", "§cElite Micro Naquahine Reactor§r");
+        replace(provider,"block.gtceu.uv_naquahine_mini_reactor", "§3Ultimate Micro Naquahine Reactor§r");
+        replace(provider,"block.gtceu.uhv_naquahine_mini_reactor", "§4Epic Micro Naquahine Reactor§r");
+
     }
 }

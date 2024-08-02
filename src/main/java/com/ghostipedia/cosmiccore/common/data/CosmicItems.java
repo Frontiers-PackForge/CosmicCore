@@ -59,7 +59,11 @@ public class CosmicItems  {
             .defaultModel()
             .register();
 
-
+    public static final ItemEntry<ComponentItem> WRAPPED_S = REGISTRATE.item("blackstone_pustule", ComponentItem::create)
+            .lang("Blackstone Pustule")
+            .properties(p -> p.stacksTo(64))
+            .defaultModel()
+            .register();
 
  //New Circuits
  //Echo (ZPM-UEV)
