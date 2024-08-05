@@ -1,6 +1,6 @@
 {
   "parent": "minecraft:item/generated",
   "textures": {
-    "layer0": "cosmiccore:item/vomhine_warptech_helmet"
+    "layer0": "cosmiccore:item/vomahine_warptech_gravplate"
   }
 }
