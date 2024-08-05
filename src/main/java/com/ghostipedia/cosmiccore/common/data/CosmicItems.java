@@ -205,45 +205,53 @@ public class CosmicItems  {
             .lang("Advanced QuarkTech™ Space Suite Chestplate")
             .properties(p -> p.rarity(Rarity.EPIC))
             .register();
-    public static ItemEntry<SpaceArmorComponentItem> VOMHINEE_WARPTECH_CHESTPLATE = REGISTRATE.item("vomhine_warptech_chestplate", (p) -> new SpaceArmorComponentItem(GTArmorMaterials.ARMOR, ArmorItem.Type.CHESTPLATE, 100000, p)
-                    .setArmorLogic(new AdvancedQuarkTechSpaceSuite(8192,
-                            100_000_000L * (long) Math.max(1, Math.pow(4, ConfigHolder.INSTANCE.tools.voltageTierAdvQuarkTech - 6)),
-                            ConfigHolder.INSTANCE.tools.voltageTierAdvNanoSuit)))
+    //Oiled up white girl trying to understand what the FUCK an armor tag is, i'm doing to fucking shove a whole pineapple up the ass of whatever mojang employee thought these were **OKAY TO CODE**
+    public static ItemEntry<SpaceArmorComponentItem> VOMHINEE_WARPTECH_CHESTPLATE = REGISTRATE.item("vomahine_warptech_chestplate", (p) -> new SpaceArmorComponentItem(GTArmorMaterials.ARMOR, ArmorItem.Type.CHESTPLATE, 100000, p)
+                    .setArmorLogic(new QuarkTechSpaceSuite(ArmorItem.Type.CHESTPLATE, 8192,
+                            100_000_000L * (long) Math.max(1, Math.pow(4, ConfigHolder.INSTANCE.tools.voltageTierQuarkTech - 5)),
+                            ConfigHolder.INSTANCE.tools.voltageTierAdvQuarkTech)))
             .tag(CosmicItemTags.QUARKTECH_SPACE_SUITE, ModItemTags.SPACE_SUITS, ModItemTags.FREEZE_RESISTANT_ARMOR, ModItemTags.HEAT_RESISTANT_ARMOR)
-            .lang("Vomhine™ WarpTech Chestplate")
+            .lang("Vomahine™ WarpTech Chestplate")
             .properties(p -> p.rarity(Rarity.EPIC))
             .register();
-
-    public static ItemEntry<ArmorComponentItem> VOMHINEE_WARPTECH_LEGGINGS = REGISTRATE.item("vomhine_warptech_leggings",
+    public static ItemEntry<SpaceArmorComponentItem> ADVANCED_VOMHINEE_WARPTECH_CHESTPLATE = REGISTRATE.item("vomahine_warptech_gravplate", (p) -> new SpaceArmorComponentItem(GTArmorMaterials.ARMOR, ArmorItem.Type.CHESTPLATE, 100000, p)
+                    .setArmorLogic(new AdvancedQuarkTechSpaceSuite(8192,
+                            100_000_000L * (long) Math.max(1, Math.pow(4, ConfigHolder.INSTANCE.tools.voltageTierAdvQuarkTech - 6)),
+                            ConfigHolder.INSTANCE.tools.voltageTierAdvQuarkTech)))
+            .tag(CosmicItemTags.QUARKTECH_SPACE_SUITE, ModItemTags.SPACE_SUITS, ModItemTags.FREEZE_RESISTANT_ARMOR, ModItemTags.HEAT_RESISTANT_ARMOR)
+            .lang("Vomahine™ WarpTech Gravplate")
+            .properties(p -> p.rarity(Rarity.EPIC))
+            .register();
+    public static ItemEntry<ArmorComponentItem> VOMHINEE_WARPTECH_LEGGINGS = REGISTRATE.item("vomahine_warptech_leggings",
                     (p) -> new ArmorComponentItem(GTArmorMaterials.ARMOR, ArmorItem.Type.LEGGINGS, p)
                             .setArmorLogic(new QuarkTechSuite(ArmorItem.Type.LEGGINGS,
                                     8192,
                                     100_000_000L * (long) Math.max(1,
                                             Math.pow(4, ConfigHolder.INSTANCE.tools.voltageTierQuarkTech - 5)),
                                     ConfigHolder.INSTANCE.tools.voltageTierQuarkTech)))
-            .lang("Vomhine™ WarpTech Leggings")
+            .lang("Vomahine™ WarpTech Leggings")
             .properties(p -> p.rarity(Rarity.EPIC))
             .tag(CustomTags.PPE_ARMOR)
             .register();
-    public static ItemEntry<ArmorComponentItem> VOMHINEE_WARPTECH_HELMET = REGISTRATE.item("vomhine_warptech_helmet",
+    public static ItemEntry<ArmorComponentItem> VOMHINEE_WARPTECH_HELMET = REGISTRATE.item("vomahine_warptech_helmet",
                     (p) -> new ArmorComponentItem(GTArmorMaterials.ARMOR, ArmorItem.Type.HELMET, p)
                             .setArmorLogic(new QuarkTechSuite(ArmorItem.Type.HELMET,
                                     8192,
                                     100_000_000L * (long) Math.max(1,
                                             Math.pow(4, ConfigHolder.INSTANCE.tools.voltageTierQuarkTech - 5)),
                                     ConfigHolder.INSTANCE.tools.voltageTierQuarkTech)))
-            .lang("Vomhine™ WarpTech Leggings")
+            .lang("Vomahine™ WarpTech Leggings")
             .properties(p -> p.rarity(Rarity.EPIC))
             .tag(CustomTags.PPE_ARMOR)
             .register();
-    public static ItemEntry<ArmorComponentItem> VOMHINEE_WARPTECH_BOOTS = REGISTRATE.item("vomhine_warptech_boots",
+    public static ItemEntry<ArmorComponentItem> VOMHINEE_WARPTECH_BOOTS = REGISTRATE.item("vomahine_warptech_boots",
                     (p) -> new ArmorComponentItem(GTArmorMaterials.ARMOR, ArmorItem.Type.BOOTS, p)
                             .setArmorLogic(new QuarkTechSuite(ArmorItem.Type.BOOTS,
                                     8192,
                                     100_000_000L * (long) Math.max(1,
                                             Math.pow(4, ConfigHolder.INSTANCE.tools.voltageTierQuarkTech - 5)),
                                     ConfigHolder.INSTANCE.tools.voltageTierQuarkTech)))
-            .lang("Vomhine™ WarpTech Leggings")
+            .lang("Vomahine™ WarpTech Leggings")
             .properties(p -> p.rarity(Rarity.EPIC))
             .tag(CustomTags.PPE_ARMOR)
             .register();

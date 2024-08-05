@@ -92,7 +92,7 @@ public class CosmicMachines {
                     .workableTieredHullRenderer(GTCEu.id("block/machines/parallel_hatch_mk" + (tier - 4)))
                     .tooltips(Component.translatable("gtceu.machine.parallel_hatch_mk" + tier + ".tooltip"))
                     .register(),
-            ZPM, UV, UHV, UEV);
+            ZPM, UV, UHV, UEV,UIV);
 
 
 //Enable If needed Inside of Dev
@@ -200,7 +200,7 @@ public class CosmicMachines {
     public final static MultiblockMachineDefinition VOMAHINE_INDUSTRIAL_CHEMPLANT = REGISTRATE.multiblock("vomahine_industrial_chemical_plant", WorkableElectricMultiblockMachine::new)
             .rotationState(RotationState.ALL)
             .recipeType(CosmicRecipeTypes.VOMAHINE_INDUSTRIAL_CHEMVAT)
-            .recipeModifiers(GTRecipeModifiers.ELECTRIC_OVERCLOCK.apply(OverclockingLogic.NON_PERFECT_OVERCLOCK),CosmicRecipeModifiers::vomahineChemicalPlantParallel)
+            .recipeModifiers(CosmicRecipeModifiers::vomahineChemicalPlantParallel,GTRecipeModifiers.ELECTRIC_OVERCLOCK.apply(OverclockingLogic.NON_PERFECT_OVERCLOCK))
             .appearanceBlock(CosmicBlocks.VOMAHINE_CERTIFIED_CHEMICALLY_RESISTANT_CASING)
             .pattern(definition -> FactoryBlockPattern.start()
                     .aisle("##QQQ##", "##QQQ##", "###Q###", "#######", "#######","#######","#######","#######","###Q###","##QQQ##","##QQQ##")
