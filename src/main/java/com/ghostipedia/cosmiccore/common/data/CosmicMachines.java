@@ -63,7 +63,21 @@ public class CosmicMachines {
     public static final int[] HIGH_TIERS = GTValues.tiersBetween(GTValues.IV, GTCEuAPI.isHighTier() ? GTValues.OpV : GTValues.UHV);
 
     public static GTRecipe copyOutputs(GTRecipe recipe, ContentModifier modifier) {
-        return new GTRecipe(recipe.recipeType, recipe.getId(), recipe.inputs, recipe.copyContents(recipe.outputs, modifier), recipe.tickInputs, recipe.copyContents(recipe.tickOutputs, modifier), new ArrayList<>(recipe.conditions), new ArrayList<>(recipe.ingredientActions), recipe.data, recipe.duration, recipe.isFuel);
+
+        return new GTRecipe(recipe.recipeType, recipe.getId(),
+                recipe.inputs,
+                recipe.copyContents(recipe.outputs, modifier),
+                recipe.tickInputs,
+                recipe.copyContents(recipe.tickOutputs, modifier),
+                new HashMap<>(recipe.inputChanceLogics), new HashMap<>(recipe.outputChanceLogics),
+                new HashMap<>(recipe.tickInputChanceLogics), new HashMap<>(recipe.tickOutputChanceLogics),
+                new ArrayList<>(recipe.conditions),
+                new ArrayList<>(recipe.ingredientActions),
+                recipe.data,
+                recipe.duration,
+                recipe.isFuel);
+
+
     }
 
     public final static MachineDefinition[] SOUL_IMPORT_HATCH = registerSoulTieredHatch(

@@ -25,13 +25,13 @@ public interface CosmicCoreRecipeSchema {
         public GTRecipeSchema.GTRecipeJS magnetStats(int minField, int decayRate,boolean perTick){
             this.addData("min_field", minField);
             this.addData("decay_rate", decayRate);
-            this.addData("per_tick", perTick);
+            this.addDataBool("per_tick", perTick);
             return this;
         }
         public GTRecipeSchema.GTRecipeJS magnetStats(int minField, int decayRate){
             this.addData("min_field", minField);
             this.addData("decay_rate", decayRate);
-            this.addData("per_tick", true);
+            this.addDataBool("per_tick", true);
             return this;
         }
     }

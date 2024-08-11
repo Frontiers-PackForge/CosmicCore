@@ -51,7 +51,9 @@ loom {
 
 repositories {
     mavenCentral()
-
+    flatDir {
+        dirs 'lib'
+    }
     // Ad Astra
     maven {
         url "https://maven.teamresourceful.com/repository/maven-public/"
@@ -141,7 +143,7 @@ dependencies {
     // modCompileOnly("curse.maven:blood-magic-224791:4779713") // API
     // modRuntimeOnly("curse.maven:blood-magic-224791:4779711") // Runtime to test in game
     modImplementation("curse.maven:blood-magic-224791:4779711")
-
+//    modImplementation("gtceu-1.20.1-1.3.1-build_947.jar")
 
     //modImplementation("curse.maven:cold-sweat-506194:4805548")
     modImplementation('software.bernie.geckolib:geckolib-forge-1.20.1:4.2.2')
