@@ -1,11 +1,11 @@
-package com.ghostipedia.cosmiccore.client;
+package com.ghostipedia.cosmiccore.client.renderer.block;
 
+import com.ghostipedia.cosmiccore.client.renderer.CosmicCoreRenderTypes;
 import com.gregtechceu.gtceu.client.renderer.block.TextureOverrideRenderer;
 import com.lowdragmc.lowdraglib.client.bakedpipeline.Quad;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -22,9 +22,9 @@ import org.joml.Matrix4f;
 import java.util.List;
 import java.util.Map;
 
-public class EndPortalCoilRenderer extends TextureOverrideRenderer {
+public class NebulaeCoilRenderer extends TextureOverrideRenderer {
 
-    public EndPortalCoilRenderer(ResourceLocation model, @NotNull Map<String, ResourceLocation> override) {
+    public NebulaeCoilRenderer(ResourceLocation model, @NotNull Map<String, ResourceLocation> override) {
         super(model, override);
     }
 
@@ -46,7 +46,7 @@ public class EndPortalCoilRenderer extends TextureOverrideRenderer {
         poseStack.pushPose();
         Matrix4f pose = poseStack.last().pose();
 
-        VertexConsumer consumer = buffer.getBuffer(RenderType.endGateway());
+        VertexConsumer consumer = buffer.getBuffer(CosmicCoreRenderTypes.nebulae());
         this.renderFace(blockEntity, pose, consumer, 0.0F, 1.0F, 0.0F, 1.0F, 1.0F, 1.0F, 1.0F, 1.0F, Direction.SOUTH);
         this.renderFace(blockEntity, pose, consumer, 0.0F, 1.0F, 1.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F, Direction.NORTH);
         this.renderFace(blockEntity, pose, consumer, 1.0F, 1.0F, 1.0F, 0.0F, 0.0F, 1.0F, 1.0F, 0.0F, Direction.EAST);
