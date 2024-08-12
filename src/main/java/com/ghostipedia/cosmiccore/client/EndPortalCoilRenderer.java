@@ -1,23 +1,39 @@
 package com.ghostipedia.cosmiccore.client;
 
 import com.gregtechceu.gtceu.client.renderer.block.TextureOverrideRenderer;
+import com.lowdragmc.lowdraglib.client.bakedpipeline.Quad;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.block.model.BakedQuad;
+import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.RandomSource;
+import net.minecraft.world.level.BlockAndTintGetter;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.joml.Matrix4f;
 
+import java.util.List;
 import java.util.Map;
 
 public class EndPortalCoilRenderer extends TextureOverrideRenderer {
 
     public EndPortalCoilRenderer(ResourceLocation model, @NotNull Map<String, ResourceLocation> override) {
         super(model, override);
+    }
+
+    @Override
+    public List<BakedQuad> renderModel(@Nullable BlockAndTintGetter level, @Nullable BlockPos pos, @Nullable BlockState state, @Nullable Direction side, RandomSource rand) {
+        return super.renderModel(level, pos, state, side, rand)
+                .stream()
+                .map(quad -> Quad.from(quad, 0.001F).rebake())
+                .toList();
     }
 
     @Override

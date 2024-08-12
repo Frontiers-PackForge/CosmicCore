@@ -135,7 +135,7 @@ public class CosmicBlocks {
         return coilBlock;
     }
     private static BlockEntry<CoilBlock> createCoilBlock(ICoilType coilType, IRenderer renderer, IRenderer activeRenderer) {
-        BlockEntry<CoilBlock> coilBlock = REGISTRATE.block("%s_coil_block".formatted(coilType.getName()), p -> new CoilBlock(p, coilType, renderer, activeRenderer))
+        BlockEntry<CoilBlock> coilBlock = REGISTRATE.block("%s_coil_block".formatted(coilType.getName()), p -> (CoilBlock) new CosmicCoilBlock(p, coilType, renderer, activeRenderer))
                 .initialProperties(() -> Blocks.IRON_BLOCK)
                 .addLayer(() -> RenderType::cutoutMipped)
                 .blockstate(NonNullBiConsumer.noop())

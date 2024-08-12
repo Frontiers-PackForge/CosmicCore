@@ -51,6 +51,7 @@ public class CosmicCore {
         ConfigHolder.init();
         CosmicCreativeModeTabs.init();
         CosmicBlocks.init();
+        CosmicBlockEntities.init();
         CosmicItems.init();
         CosmicRegistration.REGISTRATE.registerRegistrate();
         CosmicCoreDatagen.init();
@@ -66,10 +67,10 @@ public class CosmicCore {
     public void registerMaterialRegistry(MaterialRegistryEvent event) {
         MATERIAL_REGISTRY = GTCEuAPI.materialManager.createRegistry(CosmicCore.MOD_ID);
     }
-    @SubscribeEvent
-    public void  registerMaterials(MaterialEvent event) {
-        CosmicMaterials.register();
 
+    @SubscribeEvent
+    public void registerMaterials(MaterialEvent event) {
+        CosmicMaterials.register();
     }
 
     @SubscribeEvent
