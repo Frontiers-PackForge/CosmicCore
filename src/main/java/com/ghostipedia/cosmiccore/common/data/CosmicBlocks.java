@@ -3,7 +3,7 @@ package com.ghostipedia.cosmiccore.common.data;
 import com.ghostipedia.cosmiccore.CosmicCore;
 import com.ghostipedia.cosmiccore.api.CosmicCoreAPI;
 import com.ghostipedia.cosmiccore.api.block.IMagnetType;
-import com.ghostipedia.cosmiccore.client.EndPortalCoilRenderer;
+import com.ghostipedia.cosmiccore.client.renderer.block.NebulaeCoilRenderer;
 import com.ghostipedia.cosmiccore.common.block.MagnetBlock;
 import com.ghostipedia.cosmiccore.common.data.recipe.RecipeTags;
 import com.gregtechceu.gtceu.api.GTCEuAPI;
@@ -50,7 +50,7 @@ public class CosmicBlocks {
     public static final BlockEntry<CoilBlock> COIL_CAUSAL_FABRIC = createCoilBlock(CosmicCoilBlock.CoilType.CAUSAL_FABRIC,
             Platform.isClient() ? new TextureOverrideRenderer(new ResourceLocation("block/cube_all"),
                     Map.of("all", CosmicCore.id("block/casings/coils/causal_fabric_off"))) : null,
-            Platform.isClient() ? new EndPortalCoilRenderer(new ResourceLocation("block/cube_all"),
+            Platform.isClient() ? new NebulaeCoilRenderer(new ResourceLocation("block/cube_all"),
                     Map.of("all", CosmicCoilBlock.CoilType.CAUSAL_FABRIC.getTexture())) : null
 
             );
