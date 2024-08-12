@@ -33,11 +33,6 @@ public class CosmicCoilBlock extends CoilBlock implements EntityBlock {
         return CosmicBlockEntities.CAUSAL_FABRIC_COIL_BLOCK_ENTITY.create(pos, state);
     }
 
-    @Override
-    public RenderShape getRenderShape(BlockState state) {
-        return RenderShape.ENTITYBLOCK_ANIMATED;
-    }
-
     public enum CoilType implements StringRepresentable, ICoilType {
         PRISMATIC_TUNGSTENSTEEL("prismatic_tungstensteel", 4500, 3, 4, 2, () -> CosmicMaterials.PrismaticTungstensteel, CosmicCore.id("block/casings/coils/prismatic_tungstensteel")),
         RESONANT_VIRTUE_MELD("resonant_virtue_meld", 5400, 4, 5, 3, () -> CosmicMaterials.ResonantVirtueMeld, CosmicCore.id("block/casings/coils/resonant_virtue_meld")),
