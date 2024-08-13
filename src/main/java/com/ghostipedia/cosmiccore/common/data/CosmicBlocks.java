@@ -137,7 +137,7 @@ public class CosmicBlocks {
     private static BlockEntry<CoilBlock> createCoilBlock(ICoilType coilType, IRenderer renderer, IRenderer activeRenderer) {
         BlockEntry<CoilBlock> coilBlock = REGISTRATE.block("%s_coil_block".formatted(coilType.getName()), p -> (CoilBlock) new CosmicCoilBlock(p, coilType, renderer, activeRenderer))
                 .initialProperties(() -> Blocks.IRON_BLOCK)
-                .addLayer(() -> RenderType::cutoutMipped)
+                .addLayer(() -> RenderType::translucent)
                 .blockstate(NonNullBiConsumer.noop())
                 .tag(RecipeTags.MINEABLE_WITH_WRENCH, BlockTags.MINEABLE_WITH_PICKAXE)
                 .item(RendererBlockItem::new)
