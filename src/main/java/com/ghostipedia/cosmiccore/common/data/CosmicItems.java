@@ -15,17 +15,37 @@ import com.gregtechceu.gtceu.integration.jade.GTJadePlugin;
 import com.tterrag.registrate.util.entry.ItemEntry;
 import com.tterrag.registrate.util.nullness.NonNullConsumer;
 import earth.terrarium.adastra.common.tags.ModItemTags;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.Rarity;
+import wayoftime.bloodmagic.common.item.BloodOrb;
+import wayoftime.bloodmagic.common.item.ItemBloodOrb;
+import wayoftime.bloodmagic.common.registration.impl.BloodOrbDeferredRegister;
+import wayoftime.bloodmagic.common.registration.impl.BloodOrbRegistryObject;
 
 import static com.ghostipedia.cosmiccore.api.registries.CosmicRegistration.REGISTRATE;
+import static wayoftime.bloodmagic.common.item.BloodMagicItems.BLOOD_ORBS;
 
 
 @SuppressWarnings("Convert2MethodRef")
 public class CosmicItems  {
+    public static final BloodOrbRegistryObject<BloodOrb> ORB_ASCENDANT;
+    public static final BloodOrbRegistryObject<BloodOrb> ORB_VOIDSENT;
+    public static final BloodOrbRegistryObject<BloodOrb> ORB_SOVEREIGN;
     static {
         CosmicRegistration.REGISTRATE.creativeModeTab(() -> CosmicCreativeModeTabs.COSMIC_CORE);
+        ORB_ASCENDANT = BLOOD_ORBS.register("ascendantbloodorb", () -> {
+            return new BloodOrb(new ResourceLocation("bloodmagic", "ascendantbloodorb"), 5, 25000000, 1000);
+        });
+        ORB_VOIDSENT = BLOOD_ORBS.register("voidsentbloodorb", () -> {
+            return new BloodOrb(new ResourceLocation("bloodmagic", "voidsentbloodorb"), 5, 50000000, 1000);
+        });
+        ORB_SOVEREIGN = BLOOD_ORBS.register("sovereignbloodorb", () -> {
+            return new BloodOrb(new ResourceLocation("bloodmagic", "sovereignbloodorb"), 5, 100000000, 10000);
+        });
     }
+    public static final CosmicBloodOrbDeferredRegister COSMIC_BLOOD_ORBS = new CosmicBloodOrbDeferredRegister("cosmiccore");
+
 //Literally Random shit
     public static final ItemEntry<ComponentItem> DONK = REGISTRATE.item("donk", ComponentItem::create)
             .lang("Donk")
@@ -33,6 +53,36 @@ public class CosmicItems  {
         .tag()
             .defaultModel()
             .register();
+
+    public static final ItemEntry<ItemBloodOrb> ITEM_ORB_ASCENDANT = REGISTRATE.item("asc_blood_orb", (p) -> new ItemBloodOrb(ORB_ASCENDANT))
+            .lang("Ascendant Blood Orb")
+            .properties(p -> p.stacksTo(1))
+            .defaultModel()
+            .register();
+    public static final ItemEntry<ItemBloodOrb> ITEM_ORB_VOIDSENT = REGISTRATE.item("void_blood_orb", (p) -> new ItemBloodOrb(ORB_VOIDSENT))
+            .lang("Ascendant Blood Orb")
+            .properties(p -> p.stacksTo(1))
+            .defaultModel()
+            .register();
+    public static final ItemEntry<ItemBloodOrb> ITEM_ORB_SOVEREIGNT = REGISTRATE.item("sov_blood_orb", (p) -> new ItemBloodOrb(ORB_SOVEREIGN))
+            .lang("Ascendant Blood Orb")
+            .properties(p -> p.stacksTo(1))
+            .defaultModel()
+            .register();
+
+//    public static ItemEntry<SpaceArmorComponentItem> SPACE_NANO_CHESTPLATE = REGISTRATE.item("space_nanomuscle_chestplate", (p) -> new SpaceArmorComponentItem(GTArmorMaterials.ARMOR, ArmorItem.Type.CHESTPLATE, 5000, p)
+//                    .setArmorLogic(new NanoMuscleSpaceSuite(ArmorItem.Type.CHESTPLATE, 512,
+//                            6_400_000L * (long) Math.max(1, Math.pow(4, ConfigHolder.INSTANCE.tools.voltageTierNanoSuit - 3)),
+//                            ConfigHolder.INSTANCE.tools.voltageTierNanoSuit)))
+//            .tag(CosmicItemTags.NANOMUSCLE_SPACE_SUITE, ModItemTags.SPACE_SUITS, ModItemTags.FREEZE_RESISTANT_ARMOR, ModItemTags.HEAT_RESISTANT_ARMOR)
+//            .lang("NanoMuscle™ Space Suite Chestplate")
+//            .properties(p -> p.rarity(Rarity.RARE))
+//            .register();
+
+
+
+
+
     public static final ItemEntry<ComponentItem> WAXED_LEATHER = REGISTRATE.item("waxed_leather", ComponentItem::create)
             .lang("Waxed Leather")
             .properties(p -> p.stacksTo(64))
@@ -199,7 +249,7 @@ public class CosmicItems  {
             .register();
     public static ItemEntry<SpaceArmorComponentItem> ADVANCED_SPACE_QUARK_CHESTPLATE = REGISTRATE.item("space_advanced_quarktech_chestplate", (p) -> new SpaceArmorComponentItem(GTArmorMaterials.ARMOR, ArmorItem.Type.CHESTPLATE, 50000, p)
             .setArmorLogic(new AdvancedQuarkTechSpaceSuite(8192,
-                    100_000_000L * (long) Math.max(1, Math.pow(4, ConfigHolder.INSTANCE.tools.voltageTierAdvQuarkTech - 6)),
+                    1_000_000_000L * (long) Math.max(1, Math.pow(4, ConfigHolder.INSTANCE.tools.voltageTierAdvQuarkTech - 6)),
                     ConfigHolder.INSTANCE.tools.voltageTierAdvNanoSuit)))
             .tag(CosmicItemTags.QUARKTECH_SPACE_SUITE, ModItemTags.SPACE_SUITS, ModItemTags.FREEZE_RESISTANT_ARMOR, ModItemTags.HEAT_RESISTANT_ARMOR)
             .lang("Advanced QuarkTech™ Space Suite Chestplate")
@@ -216,7 +266,7 @@ public class CosmicItems  {
             .register();
     public static ItemEntry<SpaceArmorComponentItem> ADVANCED_VOMHINEE_WARPTECH_CHESTPLATE = REGISTRATE.item("vomahine_warptech_gravplate", (p) -> new SpaceArmorComponentItem(GTArmorMaterials.ARMOR, ArmorItem.Type.CHESTPLATE, 100000, p)
                     .setArmorLogic(new AdvancedQuarkTechSpaceSuite(8192,
-                            100_000_000L * (long) Math.max(1, Math.pow(4, ConfigHolder.INSTANCE.tools.voltageTierAdvQuarkTech - 6)),
+                            10_000_000_000L * (long) Math.max(1, Math.pow(4, ConfigHolder.INSTANCE.tools.voltageTierAdvQuarkTech - 6)),
                             ConfigHolder.INSTANCE.tools.voltageTierAdvQuarkTech)))
             .tag(CosmicItemTags.QUARKTECH_SPACE_SUITE, ModItemTags.SPACE_SUITS, ModItemTags.FREEZE_RESISTANT_ARMOR, ModItemTags.HEAT_RESISTANT_ARMOR)
             .lang("Vomahine™ WarpTech Gravplate")

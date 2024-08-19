@@ -51,7 +51,9 @@ loom {
 
 repositories {
     mavenCentral()
-
+    flatDir {
+        dirs 'lib'
+    }
     // Ad Astra
     maven {
         url "https://maven.teamresourceful.com/repository/maven-public/"
@@ -105,7 +107,7 @@ repositories {
         name "tterrag maven"
         url "https://maven.tterrag.com/"
     }
-
+    maven { url = "https://api.modrinth.com/maven" }
 }
 
 dependencies {
@@ -141,7 +143,7 @@ dependencies {
     // modCompileOnly("curse.maven:blood-magic-224791:4779713") // API
     // modRuntimeOnly("curse.maven:blood-magic-224791:4779711") // Runtime to test in game
     modImplementation("curse.maven:blood-magic-224791:4779711")
-
+//    modImplementation("gtceu-1.20.1-1.3.1-build_947.jar")
 
     //modImplementation("curse.maven:cold-sweat-506194:4805548")
     modImplementation('software.bernie.geckolib:geckolib-forge-1.20.1:4.2.2')
@@ -155,6 +157,11 @@ dependencies {
     modRuntimeOnly("top.theillusivec4.curios:curios-forge:${project.curios_version}+${project.minecraft_version}")
     modRuntimeOnly("dev.toma.configuration:configuration-forge-${project.minecraft_version}:${project.configuration_version}")
     modRuntimeOnly("mezz.jei:jei-${project.minecraft_version}-forge:${project.jei_version}") { transitive = false }
+
+    modImplementation("maven.modrinth:embeddium:0.3.19+mc1.20.1")
+    modImplementation("maven.modrinth:oculus:1.20.1-1.7.0")
+    // oculus needs this apparently??? idk
+    forgeRuntimeLibrary(runtimeOnly("org.anarres:jcpp:1.4.14"))
 
     // Mixin Extras
     implementation(annotationProcessor("io.github.llamalad7:mixinextras-common:${project.mixinextras_version}"))

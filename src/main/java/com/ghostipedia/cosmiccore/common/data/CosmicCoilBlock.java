@@ -1,19 +1,38 @@
 package com.ghostipedia.cosmiccore.common.data;
 
 import com.ghostipedia.cosmiccore.CosmicCore;
+import com.ghostipedia.cosmiccore.common.blockentity.CosmicCoilBlockEntity;
 import com.ghostipedia.cosmiccore.common.data.materials.CosmicMaterials;
 import com.gregtechceu.gtceu.GTCEu;
 import com.gregtechceu.gtceu.api.block.ICoilType;
 import com.gregtechceu.gtceu.api.data.chemical.material.Material;
+import com.gregtechceu.gtceu.common.block.CoilBlock;
 import com.gregtechceu.gtceu.common.data.GTMaterials;
+import com.lowdragmc.lowdraglib.client.renderer.IRenderer;
 import lombok.Getter;
+import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.StringRepresentable;
+import net.minecraft.world.level.block.EntityBlock;
+import net.minecraft.world.level.block.RenderShape;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.function.Supplier;
 
-public class CosmicCoilBlock {
+public class CosmicCoilBlock extends CoilBlock implements EntityBlock {
+    public CosmicCoilBlock(Properties properties, ICoilType coilType, @Nullable IRenderer renderer, @Nullable IRenderer activeRenderer) {
+        super(properties, coilType, renderer, activeRenderer);
+    }
+
+    @Nullable
+    @Override
+    public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
+        return CosmicBlockEntities.CAUSAL_FABRIC_COIL_BLOCK_ENTITY.create(pos, state);
+    }
+
     public enum CoilType implements StringRepresentable, ICoilType {
         PRISMATIC_TUNGSTENSTEEL("prismatic_tungstensteel", 4500, 3, 4, 2, () -> CosmicMaterials.PrismaticTungstensteel, CosmicCore.id("block/casings/coils/prismatic_tungstensteel")),
         RESONANT_VIRTUE_MELD("resonant_virtue_meld", 5400, 4, 5, 3, () -> CosmicMaterials.ResonantVirtueMeld, CosmicCore.id("block/casings/coils/resonant_virtue_meld")),

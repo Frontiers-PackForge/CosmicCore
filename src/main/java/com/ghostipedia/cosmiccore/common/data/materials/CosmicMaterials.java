@@ -84,7 +84,7 @@ public class CosmicMaterials {
         ResonantVirtueMeld = new Material.Builder(CosmicCore.id("resonant_virtue_meld"))
                 .ingot()
                 .liquid(new FluidBuilder().temperature(1240))
-                .color(0xff8400).secondaryColor(0xcffee00).iconSet(MaterialIconSet.SHINY)
+                .color(0x1acde1).secondaryColor(0x00935d).iconSet(MaterialIconSet.SHINY)
                 .flags(GENERATE_ROTOR,GENERATE_BOLT_SCREW,GENERATE_ROUND,GENERATE_GEAR, GENERATE_SMALL_GEAR, GENERATE_RING, GENERATE_FRAME, GENERATE_SPRING, GENERATE_SPRING_SMALL, GENERATE_FINE_WIRE)
                 .components(Virtue, 4, Naquadah, 1,TungstenSteel, 15, Chromium, 3, Molybdenum, 6, Vanadium, 3,Prisma,8)
                 .cableProperties(GTValues.V[5], 4, 6)

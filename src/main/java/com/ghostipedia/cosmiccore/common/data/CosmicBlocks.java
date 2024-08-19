@@ -3,6 +3,7 @@ package com.ghostipedia.cosmiccore.common.data;
 import com.ghostipedia.cosmiccore.CosmicCore;
 import com.ghostipedia.cosmiccore.api.CosmicCoreAPI;
 import com.ghostipedia.cosmiccore.api.block.IMagnetType;
+import com.ghostipedia.cosmiccore.client.renderer.block.NebulaeCoilRenderer;
 import com.ghostipedia.cosmiccore.common.block.MagnetBlock;
 import com.ghostipedia.cosmiccore.common.data.recipe.RecipeTags;
 import com.gregtechceu.gtceu.api.GTCEuAPI;
@@ -46,7 +47,13 @@ public class CosmicBlocks {
     public static final BlockEntry<CoilBlock> COIL_LIVING_IGNICLAD = createCoilBlock(CosmicCoilBlock.CoilType.LIVING_IGNICLAD);
     public static final BlockEntry<CoilBlock> COIL_PROGRAMMABLE_MATTER = createCoilBlock(CosmicCoilBlock.CoilType.PROGRAMMABLE_MATTER);
     public static final BlockEntry<CoilBlock> COIL_SHIMMERING_NEUTRONIUM = createCoilBlock(CosmicCoilBlock.CoilType.SHIMMERING_NEUTRONIUM);
-    public static final BlockEntry<CoilBlock> COIL_CAUSAL_FABRIC = createCoilBlock(CosmicCoilBlock.CoilType.CAUSAL_FABRIC);
+    public static final BlockEntry<CoilBlock> COIL_CAUSAL_FABRIC = createCoilBlock(CosmicCoilBlock.CoilType.CAUSAL_FABRIC,
+            Platform.isClient() ? new TextureOverrideRenderer(new ResourceLocation("block/cube_all"),
+                    Map.of("all", CosmicCore.id("block/casings/coils/causal_fabric_off"))) : null,
+            Platform.isClient() ? new NebulaeCoilRenderer(new ResourceLocation("block/cube_all"),
+                    Map.of("all", CosmicCoilBlock.CoilType.CAUSAL_FABRIC.getTexture())) : null
+
+            );
     public static final BlockEntry<Block> CASING_DYSON_CELL = createCasingBlock("dyson_solar_cell", CosmicCore.id("block/casings/solid/dyson_solar_cell"));
     public static final BlockEntry<Block> NAQUADAH_PRESSURE_RESISTANT_CASING = createCasingBlock("naquadah_pressure_resistant_casing", CosmicCore.id("block/casings/solid/naquadah_pressure_resistant_casing"));
     public static final BlockEntry<Block> RESONANTLY_TUNED_VIRTUE_MELD_CASING = createCasingBlock("resonantly_tuned_virtue_meld_casing", CosmicCore.id("block/casings/solid/resonantly_tuned_virtue_meld_casing"));
@@ -118,6 +125,19 @@ public class CosmicBlocks {
         BlockEntry<CoilBlock> coilBlock = REGISTRATE.block("%s_coil_block".formatted(coilType.getName()), p -> new CoilBlock(p, coilType))
                 .initialProperties(() -> Blocks.IRON_BLOCK)
                 .addLayer(() -> RenderType::cutoutMipped)
+                .blockstate(NonNullBiConsumer.noop())
+                .tag(RecipeTags.MINEABLE_WITH_WRENCH, BlockTags.MINEABLE_WITH_PICKAXE)
+                .item(RendererBlockItem::new)
+                .model(NonNullBiConsumer.noop())
+                .build()
+                .register();
+        GTCEuAPI.HEATING_COILS.put(coilType, coilBlock);
+        return coilBlock;
+    }
+    private static BlockEntry<CoilBlock> createCoilBlock(ICoilType coilType, IRenderer renderer, IRenderer activeRenderer) {
+        BlockEntry<CoilBlock> coilBlock = REGISTRATE.block("%s_coil_block".formatted(coilType.getName()), p -> (CoilBlock) new CosmicCoilBlock(p, coilType, renderer, activeRenderer))
+                .initialProperties(() -> Blocks.IRON_BLOCK)
+                .addLayer(() -> RenderType::translucent)
                 .blockstate(NonNullBiConsumer.noop())
                 .tag(RecipeTags.MINEABLE_WITH_WRENCH, BlockTags.MINEABLE_WITH_PICKAXE)
                 .item(RendererBlockItem::new)

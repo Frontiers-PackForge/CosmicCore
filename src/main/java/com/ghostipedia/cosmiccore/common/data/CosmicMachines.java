@@ -30,10 +30,8 @@ import com.gregtechceu.gtceu.api.recipe.GTRecipe;
 import com.gregtechceu.gtceu.api.recipe.OverclockingLogic;
 import com.gregtechceu.gtceu.api.recipe.content.ContentModifier;
 import com.gregtechceu.gtceu.api.registry.registrate.MachineBuilder;
-import com.gregtechceu.gtceu.common.data.GTBlocks;
-import com.gregtechceu.gtceu.common.data.GTMaterials;
-import com.gregtechceu.gtceu.common.data.GTRecipeModifiers;
-import com.gregtechceu.gtceu.common.data.GTRecipeTypes;
+import com.gregtechceu.gtceu.common.data.*;
+import com.gregtechceu.gtceu.common.machine.multiblock.electric.FusionReactorMachine;
 import net.minecraft.network.chat.Component;
 import com.gregtechceu.gtceu.utils.GTHashMaps;
 import com.gregtechceu.gtceu.utils.ItemStackHashStrategy;
@@ -42,6 +40,7 @@ import it.unimi.dsi.fastutil.objects.Object2IntOpenCustomHashMap;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 
 import java.util.*;
@@ -53,6 +52,7 @@ import static com.ghostipedia.cosmiccore.api.registries.CosmicRegistration.REGIS
 import static com.gregtechceu.gtceu.api.GTValues.*;
 import static com.gregtechceu.gtceu.api.GTValues.UV;
 import static com.gregtechceu.gtceu.api.pattern.Predicates.*;
+import static com.gregtechceu.gtceu.common.data.GTBlocks.FUSION_GLASS;
 import static com.gregtechceu.gtceu.common.data.GTMachines.*;
 
 public class CosmicMachines {
@@ -63,7 +63,21 @@ public class CosmicMachines {
     public static final int[] HIGH_TIERS = GTValues.tiersBetween(GTValues.IV, GTCEuAPI.isHighTier() ? GTValues.OpV : GTValues.UHV);
 
     public static GTRecipe copyOutputs(GTRecipe recipe, ContentModifier modifier) {
-        return new GTRecipe(recipe.recipeType, recipe.getId(), recipe.inputs, recipe.copyContents(recipe.outputs, modifier), recipe.tickInputs, recipe.copyContents(recipe.tickOutputs, modifier), new ArrayList<>(recipe.conditions), new ArrayList<>(recipe.ingredientActions), recipe.data, recipe.duration, recipe.isFuel);
+
+        return new GTRecipe(recipe.recipeType, recipe.getId(),
+                recipe.inputs,
+                recipe.copyContents(recipe.outputs, modifier),
+                recipe.tickInputs,
+                recipe.copyContents(recipe.tickOutputs, modifier),
+                new HashMap<>(recipe.inputChanceLogics), new HashMap<>(recipe.outputChanceLogics),
+                new HashMap<>(recipe.tickInputChanceLogics), new HashMap<>(recipe.tickOutputChanceLogics),
+                new ArrayList<>(recipe.conditions),
+                new ArrayList<>(recipe.ingredientActions),
+                recipe.data,
+                recipe.duration,
+                recipe.isFuel);
+
+
     }
 
     public final static MachineDefinition[] SOUL_IMPORT_HATCH = registerSoulTieredHatch(
@@ -181,7 +195,7 @@ public class CosmicMachines {
                     .where('F', blocks(ChemicalHelper.getBlock(TagPrefix.frameGt, GTMaterials.NaquadahAlloy)))
                     .where('S', magnetCoils())
                     .where('H', blocks(CosmicBlocks.RESONANTLY_TUNED_VIRTUE_MELD_CASING.get()))
-                    .where('G', blocks(GTBlocks.FUSION_GLASS.get()))
+                    .where('G', blocks(FUSION_GLASS.get()))
                     .where('Q', blocks(CosmicBlocks.NAQUADAH_PRESSURE_RESISTANT_CASING.get())
                             .or(abilities(PartAbility.IMPORT_FLUIDS))
                             .or(abilities(PartAbility.EXPORT_FLUIDS))
@@ -350,5 +364,42 @@ public class CosmicMachines {
     }
 
     public static void init() {
+        for (MultiblockMachineDefinition definition : GTMachines.FUSION_REACTOR) {
+            if (definition == null) continue;
+            definition.setPatternFactory(() -> {
+                var casing = blocks(FusionReactorMachine.getCasingState(definition.getTier()));
+                return FactoryBlockPattern.start()
+                        .aisle("###############", "######OGO######", "###############")
+                        .aisle("######ICI######", "####GGAAAGG####", "######ICI######")
+                        .aisle("####CC###CC####", "###EAAOGOAAE###", "####CC###CC####")
+                        .aisle("###C#######C###", "##EKEG###GEKE##", "###C#######C###")
+                        .aisle("##C#########C##", "#GAE#######EAG#", "##C#########C##")
+                        .aisle("##C#########C##", "#GAG#######GAG#", "##C#########C##")
+                        .aisle("#I###########I#", "OAO#########OAO", "#I###########I#")
+                        .aisle("#C###########C#", "GAG#########GAG", "#C###########C#")
+                        .aisle("#I###########I#", "OAO#########OAO", "#I###########I#")
+                        .aisle("##C#########C##", "#GAG#######GAG#", "##C#########C##")
+                        .aisle("##C#########C##", "#GAE#######EAG#", "##C#########C##")
+                        .aisle("###C#######C###", "##EKEG###GEKE##", "###C#######C###")
+                        .aisle("####CC###CC####", "###EAAOGOAAE###", "####CC###CC####")
+                        .aisle("######ICI######", "####GGAAAGG####", "######ICI######")
+                        .aisle("###############", "######OSO######", "###############")
+                        .where('S', controller(blocks(definition.get())))
+                        .where('G', blocks(FUSION_GLASS.get()).or(casing))
+                        .where('E', casing.or(
+                                blocks(PartAbility.INPUT_ENERGY.getBlockRange(definition.getTier(), UV).toArray(Block[]::new))
+                                        .setMinGlobalLimited(1).setPreviewCount(16)))
+                        .where('C', casing)
+                        .where('K', blocks(FusionReactorMachine.getCoilState(definition.getTier())))
+                        .where('O', casing.or(abilities(PartAbility.EXPORT_FLUIDS))
+                                .or(abilities(PartAbility.EXPORT_ITEMS)))
+                        .where('A', air())
+                        .where('I', casing.or(abilities(PartAbility.IMPORT_FLUIDS).setMinGlobalLimited(2))
+                                .or(abilities(PartAbility.IMPORT_ITEMS)))
+                        .where('#', any())
+                        .build();
+            });
+        }
     }
+
 }

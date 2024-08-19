@@ -40,7 +40,7 @@ public class CosmicCoreOreRecipeHandler {
                 Integer.MAX_VALUE, material, property.getOreByProducts(), Material.class);
 
         var builder = LEACHING_PLANT.recipeBuilder("crushed" + material.getName() + "_to_crushedleached")
-                .inputItems(crushedPrefix, material)
+                .inputItems(crushedPurified, material)
                 .inputFluids(Water.getFluid(100))
                 .inputFluids(SulfuricAcid.getFluid(200))
                 .outputItems(leachedStack)
