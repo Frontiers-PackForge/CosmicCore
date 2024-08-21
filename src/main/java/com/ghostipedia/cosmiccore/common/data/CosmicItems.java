@@ -53,7 +53,66 @@ public class CosmicItems  {
         .tag()
             .defaultModel()
             .register();
-
+    public static final ItemEntry<ComponentItem> DILUMIXAL_NAQ_DOPED_BOULE = REGISTRATE.item("dilumixal_naquadah_doped_silicon_boule", ComponentItem::create)
+            .lang("DiLumixal Naquadah Doped Silicon Boule")
+            .properties(p -> p.stacksTo(64) )
+            .tag()
+            .defaultModel()
+            .register();
+    public static final ItemEntry<ComponentItem> DILUMIXAL_NAQ_DOPED_WAFER = REGISTRATE.item("dilumixal_naquadah_doped_silicon_wafer", ComponentItem::create)
+            .lang("DiLumixal Naquadah Doped Silicon Wafer")
+            .properties(p -> p.stacksTo(64))
+            .tag()
+            .defaultModel()
+            .register();
+    public static final ItemEntry<ComponentItem> CRYSTAL_CHIPLET_BASE = REGISTRATE.item("crystal_chiplet_base", ComponentItem::create)
+            .lang("Crystal Chiplet Base")
+            .properties(p -> p.stacksTo(64))
+            .tag()
+            .defaultModel()
+            .register();
+    public static final ItemEntry<ComponentItem> ENGRAVED_CRYSTAL_CHIPLET = REGISTRATE.item("engraved_crystal_chiplet", ComponentItem::create)
+            .lang("Engraved Crystal Chiplet")
+            .properties(p -> p.stacksTo(64))
+            .tag()
+            .defaultModel()
+            .register();
+    public static final ItemEntry<ComponentItem> UNSEALED_CRYSTAL_CPU = REGISTRATE.item("unsealed_crystal_cpu", ComponentItem::create)
+            .lang("Unsealed Crystal CPU")
+            .properties(p -> p.stacksTo(64))
+            .tag()
+            .defaultModel()
+            .register();
+    public static final ItemEntry<ComponentItem> CRYSTALLINE_TRANSISTOR = REGISTRATE.item("crystalline_transistor", ComponentItem::create)
+            .lang("Crystalline Transistor")
+            .properties(p -> p.stacksTo(64))
+            .tag()
+            .defaultModel()
+            .register();
+    public static final ItemEntry<ComponentItem> CRYSTALLINE_RESISTOR = REGISTRATE.item("crystalline_resistor", ComponentItem::create)
+            .lang("Crystalline Resistor")
+            .properties(p -> p.stacksTo(64))
+            .tag()
+            .defaultModel()
+            .register();
+    public static final ItemEntry<ComponentItem> CRYSTALLINE_CAPACITOR = REGISTRATE.item("crystalline_capacitor", ComponentItem::create)
+            .lang("Crystalline Capacitor")
+            .properties(p -> p.stacksTo(64))
+            .tag()
+            .defaultModel()
+            .register();
+    public static final ItemEntry<ComponentItem> CRYSTALLINE_DIODE = REGISTRATE.item("crystalline_diode", ComponentItem::create)
+            .lang("Crystalline Diode")
+            .properties(p -> p.stacksTo(64))
+            .tag()
+            .defaultModel()
+            .register();
+    public static final ItemEntry<ComponentItem> CRYSTALLINE_INDUCTOR = REGISTRATE.item("crystalline_inductor", ComponentItem::create)
+            .lang("Crystalline Inductor")
+            .properties(p -> p.stacksTo(64))
+            .tag()
+            .defaultModel()
+            .register();
     public static final ItemEntry<ItemBloodOrb> ITEM_ORB_ASCENDANT = REGISTRATE.item("asc_blood_orb", (p) -> new ItemBloodOrb(ORB_ASCENDANT))
             .lang("Ascendant Blood Orb")
             .properties(p -> p.stacksTo(1))
