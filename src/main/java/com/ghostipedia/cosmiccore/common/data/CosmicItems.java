@@ -145,27 +145,27 @@ public class CosmicItems {
             .defaultModel()
             .register();
 
-    public static final ItemEntry<ComponentItem> VOMAPLAST = REGISTRATE.item("vomaplast", ComponentItem::create)
-            .lang("Vomaplast")
-            .properties(p -> p.stacksTo(64))
-            .defaultModel()
-            .register();
-    public static final ItemEntry<ComponentItem> ECTOPHASM = REGISTRATE.item("ectophasm", ComponentItem::create)
-            .lang("Ectophasm")
-            .properties(p -> p.stacksTo(64))
-            .defaultModel()
-            .register();
-    public static final ItemEntry<ComponentItem> DEMONIC_DESIRE = REGISTRATE.item("demonic_desire", ComponentItem::create)
-            .lang("Deomic Desire")
-            .properties(p -> p.stacksTo(64))
-            .defaultModel()
-            .register();
-    public static final ItemEntry<ComponentItem> WEAKENED_SOUL = REGISTRATE.item("weakened_soul", ComponentItem::create)
-            .lang("Weakened Soul")
-            .properties(p -> p.stacksTo(64))
-            .defaultModel()
-            .register();
-
+//    public static final ItemEntry<ComponentItem> VOMAPLAST = REGISTRATE.item("vomaplast", ComponentItem::create)
+//            .lang("Vomaplast")
+//            .properties(p -> p.stacksTo(64))
+//            .defaultModel()
+//            .register();
+//    public static final ItemEntry<ComponentItem> ECTOPHASM = REGISTRATE.item("ectophasm", ComponentItem::create)
+//            .lang("Ectophasm")
+//            .properties(p -> p.stacksTo(64))
+//            .defaultModel()
+//            .register();
+//    public static final ItemEntry<ComponentItem> DEMONIC_DESIRE = REGISTRATE.item("demonic_desire", ComponentItem::create)
+//            .lang("Deomic Desire")
+//            .properties(p -> p.stacksTo(64))
+//            .defaultModel()
+//            .register();
+//    public static final ItemEntry<ComponentItem> WEAKENED_SOUL = REGISTRATE.item("weakened_soul", ComponentItem::create)
+//            .lang("Weakened Soul")
+//            .properties(p -> p.stacksTo(64))
+//            .defaultModel()
+//            .register();
+//
 
     public static final ItemEntry<ComponentItem> WAXED_LEATHER = REGISTRATE.item("waxed_leather", ComponentItem::create)
             .lang("Waxed Leather")

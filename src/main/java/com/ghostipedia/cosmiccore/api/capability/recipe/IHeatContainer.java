@@ -57,6 +57,7 @@ public interface IHeatContainer extends IHeatInfoProvider {
         return new HeatInfo(getHeatStorage(), getHeatStorage(),getHeatCanBeOverloaded());
     };
     // Params needs to build the container.
+    //This Abomination - Allows Going below Absolute Zero
     @Override
     default boolean supportsImpossibleHeatValues(){
         return false;

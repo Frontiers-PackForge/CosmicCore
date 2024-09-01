@@ -26,11 +26,7 @@ import java.util.Map;
 public class MagnetBlock extends ActiveBlock {
     public IMagnetType magnetBlock;
     public MagnetBlock(Properties properties, IMagnetType magnetType) {
-        super(properties, Platform.isClient() ? new TextureOverrideRenderer(new ResourceLocation("block/cube_all"),
-                        Map.of("all", magnetType.getTexture())) : null,
-                Platform.isClient() ? new TextureOverrideRenderer(GTCEu.id("block/cube_2_layer_all"),
-                        Map.of("bot_all", magnetType.getTexture(),
-                                "top_all", new ResourceLocation(magnetType.getTexture() + "_bloom"))) : null);
+        super(properties);
         this.magnetBlock = magnetType;
     }
     @Override

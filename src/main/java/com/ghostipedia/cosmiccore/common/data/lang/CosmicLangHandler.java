@@ -21,9 +21,14 @@ public class CosmicLangHandler {
         replace(provider,"tooltip.cosmiccore.soul_hatch.output", "§cMax Soul Network Capacity§f:§6 %s");
         replace(provider,"gui.cosmiccore.soul_hatch.label.import", "Soul Input Hatch");
         replace(provider,"gui.cosmiccore.soul_hatch.label.export", "Soul Output Hatch");
+        replace(provider,"gui.cosmiccore.thermia_hatch.label.export", "§6Thermia Output Vent");
+        replace(provider,"gui.cosmiccore.thermia_hatch.label.import", "§6Thermia Input Socket");
         replace(provider,"gui.cosmiccore.soul_hatch.owner", "Network Owner: %d");
         replace(provider,"gui.cosmiccore.soul_hatch.lp", "LP Stored: %s");
         replace(provider,"tooltip.cosmiccore.soul_hatch.output", "§cMax Soul Network Capacity§f:§6 %s");
+        replace(provider,"tooltip.cosmiccore.thermia_hatch_limit", "§cTemp. Limit: %sK");
+        replace(provider,"gui.cosmiccore.thermia_hatch.hatch_limit", "§cTemp. Limit:");
+        replace(provider,"gui.cosmiccore.thermia_hatch.stored_temp", "§6Current Temp:");
         replace(provider,"cosmiccore.multiblock.magnetic_field_strength", "§fMax Field Strength§f:§6 %s");
         replace(provider,"cosmiccore.multiblock.magnetic_regen", "§aField Recovery Rate§f:§6 %sT/t");
         replace(provider,"gtceu.naquahine_reactor", "§bNaquahine Reactor");
