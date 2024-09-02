@@ -1,0 +1,7 @@
+{
+  "parent": "gtceu:block/cube_2_layer/all",
+  "textures": {
+    "bot_all": "cosmiccore:block/casings/coils/psionic_galvorn",
+    "top_all": "cosmiccore:block/casings/coils/psionic_galvorn_bloom"
+  }
+}

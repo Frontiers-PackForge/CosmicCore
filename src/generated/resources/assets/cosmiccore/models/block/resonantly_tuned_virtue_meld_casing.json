@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:block/cube_all",
+  "textures": {
+    "all": "cosmiccore:block/casings/solid/resonantly_tuned_virtue_meld_casing"
+  }
+}

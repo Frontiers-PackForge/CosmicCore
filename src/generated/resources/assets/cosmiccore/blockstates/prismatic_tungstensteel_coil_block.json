@@ -1,0 +1,10 @@
+{
+  "variants": {
+    "active=false": {
+      "model": "cosmiccore:block/prismatic_tungstensteel_coil_block"
+    },
+    "active=true": {
+      "model": "cosmiccore:block/prismatic_tungstensteel_coil_block_active"
+    }
+  }
+}

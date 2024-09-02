@@ -1,0 +1,10 @@
+{
+  "variants": {
+    "active=false": {
+      "model": "cosmiccore:block/fusion_grade_magnet"
+    },
+    "active=true": {
+      "model": "cosmiccore:block/fusion_grade_magnet_active"
+    }
+  }
+}

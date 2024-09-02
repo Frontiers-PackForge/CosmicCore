@@ -186,7 +186,7 @@ public class CosmicMachines {
     public final static MultiblockMachineDefinition NAQUAHINE_PRESSURE_REACTOR = REGISTRATE.multiblock("naquahine_pressure_reactor", MagneticFieldMachine::new)
             .rotationState(RotationState.NON_Y_AXIS)
             .recipeType(CosmicRecipeTypes.NAQUAHINE_REACTOR)
-            .recipeModifier(CosmicRecipeModifiers::magnetRecipe)
+            .recipeModifier(CosmicRecipeModifiers::reactorRecipe)
             .appearanceBlock(CosmicBlocks.NAQUADAH_PRESSURE_RESISTANT_CASING)
             .generator(true)
             .pattern(definition -> FactoryBlockPattern.start()
