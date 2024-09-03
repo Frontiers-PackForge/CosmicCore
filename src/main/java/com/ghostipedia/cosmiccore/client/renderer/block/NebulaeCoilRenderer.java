@@ -2,18 +2,23 @@ package com.ghostipedia.cosmiccore.client.renderer.block;
 
 import com.ghostipedia.cosmiccore.CosmicCore;
 import com.ghostipedia.cosmiccore.client.renderer.CosmicCoreRenderTypes;
+import com.ghostipedia.cosmiccore.common.blockentity.CosmicCoilBlockEntity;
 import com.gregtechceu.gtceu.api.GTValues;
 import com.gregtechceu.gtceu.client.renderer.block.TextureOverrideRenderer;
 import com.lowdragmc.lowdraglib.LDLib;
 import com.lowdragmc.lowdraglib.client.bakedpipeline.Quad;
+import com.lowdragmc.lowdraglib.client.renderer.ATESRRendererProvider;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
+import com.tterrag.registrate.util.nullness.NonNullFunction;
 import net.irisshaders.iris.Iris;
 import net.irisshaders.iris.uniforms.SystemTimeUniforms;
 import net.minecraft.client.renderer.LightTexture;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.block.model.BakedQuad;
+import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
+import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -37,6 +42,10 @@ public class NebulaeCoilRenderer extends TextureOverrideRenderer {
 
     public NebulaeCoilRenderer(ResourceLocation model, @NotNull Map<String, ResourceLocation> override) {
         super(model, override);
+    }
+
+    public static NonNullFunction<BlockEntityRendererProvider.Context, BlockEntityRenderer<? super CosmicCoilBlockEntity>> createBlockEntityRenderer() {
+        return ctx -> new ATESRRendererProvider<>();
     }
 
     @Override
