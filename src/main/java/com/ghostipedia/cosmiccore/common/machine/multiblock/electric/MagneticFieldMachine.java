@@ -18,6 +18,7 @@ import lombok.Getter;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.Style;
+import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
@@ -40,6 +41,7 @@ public class MagneticFieldMachine extends MagnetWorkableElectricMultiblockMachin
         super(holder);
     }
     @Override
+    @NotNull
     public ManagedFieldHolder getFieldHolder() {
         return MANAGED_FIELD_HOLDER;
     }
