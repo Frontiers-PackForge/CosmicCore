@@ -1,0 +1,10 @@
+{
+  "variants": {
+    "active=false": {
+      "model": "cosmiccore:block/high_powered_magnet"
+    },
+    "active=true": {
+      "model": "cosmiccore:block/high_powered_magnet_active"
+    }
+  }
+}

@@ -6,26 +6,33 @@ import com.ghostipedia.cosmiccore.api.block.IMagnetType;
 import com.ghostipedia.cosmiccore.client.renderer.block.NebulaeCoilRenderer;
 import com.ghostipedia.cosmiccore.common.block.MagnetBlock;
 import com.ghostipedia.cosmiccore.common.data.recipe.RecipeTags;
+import com.gregtechceu.gtceu.GTCEu;
 import com.gregtechceu.gtceu.api.GTCEuAPI;
+import com.gregtechceu.gtceu.api.block.ActiveBlock;
 import com.gregtechceu.gtceu.api.block.ICoilType;
-import com.gregtechceu.gtceu.api.block.RendererBlock;
-import com.gregtechceu.gtceu.api.block.RendererGlassBlock;
 import com.gregtechceu.gtceu.api.item.RendererBlockItem;
 import com.gregtechceu.gtceu.client.renderer.block.TextureOverrideRenderer;
 import com.gregtechceu.gtceu.common.block.CoilBlock;
+import com.gregtechceu.gtceu.common.data.GTModels;
 import com.lowdragmc.lowdraglib.Platform;
 import com.lowdragmc.lowdraglib.client.renderer.IRenderer;
+import com.tterrag.registrate.providers.DataGenContext;
+import com.tterrag.registrate.providers.RegistrateBlockstateProvider;
 import com.tterrag.registrate.util.entry.BlockEntry;
 import com.tterrag.registrate.util.nullness.NonNullBiConsumer;
+import com.tterrag.registrate.util.nullness.NonNullFunction;
 import com.tterrag.registrate.util.nullness.NonNullSupplier;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.BlockTags;
-import net.minecraft.world.level.block.*;
+import net.minecraft.world.item.BlockItem;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.GlassBlock;
 import net.minecraft.world.level.block.state.BlockBehaviour;
+import net.minecraftforge.client.model.generators.ModelFile;
 
 import java.util.Map;
-import java.util.function.BiFunction;
 import java.util.function.Supplier;
 
 import static com.ghostipedia.cosmiccore.api.registries.CosmicRegistration.REGISTRATE;
@@ -65,58 +72,46 @@ public class CosmicBlocks {
 
 
 //TODO : FIGURE OUT WHY these are  breaking the minable tags for pickaxe/wrench..
-    public static final BlockEntry<Block> HIGH_TEMP_FISSION_CASING = createCasingBlockWrenchOnly("high_temperature_fission_casing", CosmicCore.id("block/casings/solid/high_temperature_fission_casing"));
-    public static final BlockEntry<Block> VOMAHINE_CERTIFIED_CHEMICALLY_RESISTANT_CASING = createCasingBlockWrenchOnly("vomahine_certified_chemically_resistant_casing", CosmicCore.id("block/casings/solid/vomahine_certified_chemically_resistant_casing"));
-    public static final BlockEntry<Block> VOMAHINE_CERTIFIED_CHEMICALLY_RESISTANT_PIPE = createCasingBlockWrenchOnly("vomahine_certified_chemically_resistant_pipe", CosmicCore.id("block/casings/solid/vomahine_certified_chemically_resistant_pipe"));
-    public static final BlockEntry<Block> VOMAHINE_CERTIFIED_INTERSTELLAR_GRADE_CASING = createCasingBlockWrenchOnly("vomahine_certified_interstellar_grade_casing", CosmicCore.id("block/casings/solid/vomahine_certified_interstellar_grade_casing"));
-    public static final BlockEntry<Block> VOMAHINE_ULTRA_POWERED_CASING = createCasingBlockWrenchOnly("vomahine_ultra_powered_casing", CosmicCore.id("block/casings/solid/vomahine_ultra_powered_casing"));
-    public static final BlockEntry<Block> HIGHLY_CONDUCTIVE_FISSION_CASING = createCasingBlockWrenchOnly("highly_conductive_fission_casing", CosmicCore.id("block/casings/solid/highly_conductive_fission_casing"));
+    public static final BlockEntry<Block> HIGH_TEMP_FISSION_CASING = createCasingBlock("high_temperature_fission_casing", CosmicCore.id("block/casings/solid/high_temperature_fission_casing"));
+    public static final BlockEntry<Block> VOMAHINE_CERTIFIED_CHEMICALLY_RESISTANT_CASING = createCasingBlock("vomahine_certified_chemically_resistant_casing", CosmicCore.id("block/casings/solid/vomahine_certified_chemically_resistant_casing"));
+    public static final BlockEntry<Block> VOMAHINE_CERTIFIED_CHEMICALLY_RESISTANT_PIPE = createCasingBlock("vomahine_certified_chemically_resistant_pipe", CosmicCore.id("block/casings/solid/vomahine_certified_chemically_resistant_pipe"));
+    public static final BlockEntry<Block> VOMAHINE_CERTIFIED_INTERSTELLAR_GRADE_CASING = createCasingBlock("vomahine_certified_interstellar_grade_casing", CosmicCore.id("block/casings/solid/vomahine_certified_interstellar_grade_casing"));
+    public static final BlockEntry<Block> VOMAHINE_ULTRA_POWERED_CASING = createCasingBlock("vomahine_ultra_powered_casing", CosmicCore.id("block/casings/solid/vomahine_ultra_powered_casing"));
+    public static final BlockEntry<Block> HIGHLY_CONDUCTIVE_FISSION_CASING = createCasingBlock("highly_conductive_fission_casing", CosmicCore.id("block/casings/solid/highly_conductive_fission_casing"));
 
     //This is a Bunch of Rendering Magic I barely understand (See: I Don't understand at all) ~Ghost
-    private static BlockEntry<Block> createCasingBlock(String name, ResourceLocation texture) {
-        return createCasingBlock(name, RendererBlock::new, texture, () -> Blocks.IRON_BLOCK, () -> RenderType::cutoutMipped);
-    }
-    private static BlockEntry<Block> createCasingBlockWrenchOnly(String name, ResourceLocation texture) {
-        return createCasingBlockWrenchOnly(name, RendererBlock::new, texture, () -> Blocks.IRON_BLOCK, () -> RenderType::cutoutMipped);
-    }
     private static BlockEntry<Block> createGlassCasingBlock(String name, ResourceLocation texture, Supplier<Supplier<RenderType>> type) {
-        return createCasingBlockWrenchOnly(name, RendererGlassBlock::new, texture, () -> Blocks.GLASS, type);
+        return createCasingBlock(name, GlassBlock::new, texture, () -> Blocks.GLASS, type);
     }
 
-    private static BlockEntry<Block> createCasingBlock(String name, BiFunction<BlockBehaviour.Properties, IRenderer, ? extends RendererBlock> blockSupplier, ResourceLocation texture, NonNullSupplier<? extends Block> properties, Supplier<Supplier<RenderType>> type) {
-        return REGISTRATE.block(name, p -> (Block) blockSupplier.apply(p,
-                        Platform.isClient() ? new TextureOverrideRenderer(new ResourceLocation("block/cube_all"),
-                                Map.of("all", texture)) : null))
-                .initialProperties(properties)
-                .blockstate(NonNullBiConsumer.noop())
-
-                .tag(RecipeTags.MINEABLE_WITH_WRENCH, BlockTags.MINEABLE_WITH_PICKAXE)
-                .item(RendererBlockItem::new)
-                .model(NonNullBiConsumer.noop())
-                .build()
-                .register();
+    public static BlockEntry<Block> createCasingBlock(String name, ResourceLocation texture) {
+        return createCasingBlock(name, Block::new, texture, () -> Blocks.IRON_BLOCK,
+                () -> RenderType::cutoutMipped);
     }
-    private static BlockEntry<Block> createCasingBlockWrenchOnly(String name, BiFunction<BlockBehaviour.Properties, IRenderer, ? extends RendererBlock> blockSupplier, ResourceLocation texture, NonNullSupplier<? extends Block> properties, Supplier<Supplier<RenderType>> type) {
-        return REGISTRATE.block(name, p -> (Block) blockSupplier.apply(p,
-                        Platform.isClient() ? new TextureOverrideRenderer(new ResourceLocation("block/cube_all"),
-                                Map.of("all", texture)) : null))
+
+    public static BlockEntry<Block> createCasingBlock(String name,
+                                                      NonNullFunction<BlockBehaviour.Properties, Block> blockSupplier,
+                                                      ResourceLocation texture,
+                                                      NonNullSupplier<? extends Block> properties,
+                                                      Supplier<Supplier<RenderType>> type) {
+        return REGISTRATE.block(name, blockSupplier)
                 .initialProperties(properties)
-                .blockstate(NonNullBiConsumer.noop())
+                .properties(p -> p.isValidSpawn((state, level, pos, ent) -> false))
+                .addLayer(type)
+                .blockstate(GTModels.cubeAllModel(name, texture))
                 .tag(RecipeTags.MINEABLE_WITH_WRENCH)
-                .item(RendererBlockItem::new)
-                .model(NonNullBiConsumer.noop())
+                .item(BlockItem::new)
                 .build()
                 .register();
     }
-    private static BlockEntry<Block> createBottomTopCasingBlock(String name, BiFunction<BlockBehaviour.Properties, IRenderer, ? extends RendererBlock> blockSupplier, ResourceLocation sideTexture, ResourceLocation topTexture, ResourceLocation bottomTexture, NonNullSupplier<? extends Block> properties, Supplier<Supplier<RenderType>> type) {
-        return REGISTRATE.block(name, p -> (Block) blockSupplier.apply(p,
-                        Platform.isClient() ? new TextureOverrideRenderer(new ResourceLocation("block/cube_bottom_top"),
-                                Map.of("side", sideTexture, "top", topTexture, "bottom", bottomTexture)) : null))
-                .initialProperties(properties)
-                .blockstate(NonNullBiConsumer.noop())
-                .tag(RecipeTags.MINEABLE_WITH_WRENCH, BlockTags.MINEABLE_WITH_PICKAXE)
-                .item(RendererBlockItem::new)
-                .model(NonNullBiConsumer.noop())
+    private static BlockEntry<Block> createSidedCasingBlock(String name, ResourceLocation texture) {
+        return REGISTRATE.block(name, Block::new)
+                .initialProperties(() -> Blocks.IRON_BLOCK)
+                .properties(p -> p.isValidSpawn((state, level, pos, ent) -> false))
+                .addLayer(() -> RenderType::cutoutMipped)
+                .blockstate(GTModels.createSidedCasingModel(name, texture))
+                .tag(RecipeTags.MINEABLE_WITH_WRENCH)
+                .item(BlockItem::new)
                 .build()
                 .register();
     }
@@ -125,10 +120,9 @@ public class CosmicBlocks {
         BlockEntry<CoilBlock> coilBlock = REGISTRATE.block("%s_coil_block".formatted(coilType.getName()), p -> new CoilBlock(p, coilType))
                 .initialProperties(() -> Blocks.IRON_BLOCK)
                 .addLayer(() -> RenderType::cutoutMipped)
-                .blockstate(NonNullBiConsumer.noop())
+                .blockstate(GTModels.createCoilModel("%s_coil_block".formatted(coilType.getName()), coilType))
                 .tag(RecipeTags.MINEABLE_WITH_WRENCH, BlockTags.MINEABLE_WITH_PICKAXE)
-                .item(RendererBlockItem::new)
-                .model(NonNullBiConsumer.noop())
+                .item(BlockItem::new)
                 .build()
                 .register();
         GTCEuAPI.HEATING_COILS.put(coilType, coilBlock);
@@ -151,15 +145,27 @@ public class CosmicBlocks {
         BlockEntry<MagnetBlock> magnetBlock = REGISTRATE.block("%s_magnet".formatted(magnetType.getName()), p -> new MagnetBlock(p, magnetType))
                 .initialProperties(() -> Blocks.IRON_BLOCK)
                 .addLayer(() -> RenderType::cutoutMipped)
-                .blockstate(NonNullBiConsumer.noop())
+                .blockstate(createMagnetModel("%s_magnet".formatted(magnetType.getName()), magnetType))
                 .tag(RecipeTags.MINEABLE_WITH_WRENCH, BlockTags.MINEABLE_WITH_PICKAXE)
-                .item(RendererBlockItem::new)
-                .model(NonNullBiConsumer.noop())
+                .item(BlockItem::new)
                 .build()
                 .register();
         CosmicCoreAPI.MAGNET_COILS.put(magnetType,magnetBlock);
 
         return magnetBlock;
+    }
+    public static NonNullBiConsumer<DataGenContext<Block, MagnetBlock>, RegistrateBlockstateProvider> createMagnetModel(String name,
+                                                                                                                    IMagnetType magnetType) {
+        return (ctx, prov) -> {
+            ActiveBlock block = ctx.getEntry();
+            ModelFile inactive = prov.models().cubeAll(name, magnetType.getTexture());
+            ModelFile active = prov.models().withExistingParent(name + "_active", GTCEu.id("block/cube_2_layer/all"))
+                    .texture("bot_all", magnetType.getTexture())
+                    .texture("top_all", magnetType.getTexture().withSuffix("_bloom"));
+            prov.getVariantBuilder(block)
+                    .partialState().with(ActiveBlock.ACTIVE, false).modelForState().modelFile(inactive).addModel()
+                    .partialState().with(ActiveBlock.ACTIVE, true).modelForState().modelFile(active).addModel();
+        };
     }
 
     public static void init() {

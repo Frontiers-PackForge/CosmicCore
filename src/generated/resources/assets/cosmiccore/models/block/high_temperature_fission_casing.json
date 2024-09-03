@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:block/cube_all",
+  "textures": {
+    "all": "cosmiccore:block/casings/solid/high_temperature_fission_casing"
+  }
+}

@@ -1,0 +1,7 @@
+{
+  "parent": "gtceu:block/cube_2_layer/all",
+  "textures": {
+    "bot_all": "cosmiccore:block/casings/coils/resonant_virtue_meld",
+    "top_all": "cosmiccore:block/casings/coils/resonant_virtue_meld_bloom"
+  }
+}

@@ -1,0 +1,7 @@
+{
+  "parent": "gtceu:block/cube_2_layer/all",
+  "textures": {
+    "bot_all": "cosmiccore:block/casings/solid/alternator_flux_coiling_copper",
+    "top_all": "cosmiccore:block/casings/solid/alternator_flux_coiling_copper_bloom"
+  }
+}

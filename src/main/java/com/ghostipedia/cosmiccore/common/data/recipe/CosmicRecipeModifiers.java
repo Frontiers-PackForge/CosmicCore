@@ -1,24 +1,20 @@
 package com.ghostipedia.cosmiccore.common.data.recipe;
 
-import com.ghostipedia.cosmiccore.api.machine.multiblock.MagnetWorkableElectricMultiblockMachine;
 import com.ghostipedia.cosmiccore.common.machine.multiblock.electric.MagneticFieldMachine;
-import com.gregtechceu.gtceu.api.GTValues;
 import com.gregtechceu.gtceu.api.capability.IParallelHatch;
 import com.gregtechceu.gtceu.api.machine.MetaMachine;
-import com.gregtechceu.gtceu.api.machine.multiblock.CoilWorkableElectricMultiblockMachine;
 import com.gregtechceu.gtceu.api.machine.multiblock.WorkableElectricMultiblockMachine;
 import com.gregtechceu.gtceu.api.recipe.GTRecipe;
-import com.gregtechceu.gtceu.api.recipe.OverclockingLogic;
 import com.gregtechceu.gtceu.api.recipe.RecipeHelper;
-import com.gregtechceu.gtceu.api.recipe.modifier.ParallelLogic;
+import com.gregtechceu.gtceu.api.recipe.logic.OCParams;
+import com.gregtechceu.gtceu.api.recipe.logic.OCResult;
 import com.gregtechceu.gtceu.common.data.GTRecipeModifiers;
-import com.mojang.datafixers.util.Pair;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Optional;
 
 public class CosmicRecipeModifiers {
-    public static GTRecipe magnetRecipe(MetaMachine machine, @NotNull GTRecipe recipe) {
+    public static GTRecipe reactorRecipe(MetaMachine machine, @NotNull GTRecipe recipe, OCParams ocParams, OCResult ocResult) {
         if (machine instanceof MagneticFieldMachine magnetMachine) {
             final var magnetStrength = magnetMachine.getFieldStrength();
             if (!recipe.data.contains("min_field") || recipe.data.getInt("min_field") > magnetStrength) {
@@ -29,13 +25,13 @@ public class CosmicRecipeModifiers {
                     return null;
                 }
             }
-
+            ocResult.init(-RecipeHelper.getOutputEUt(recipe), recipe.duration);
             return recipe;
         }
         return null;
     }
 
-    public static GTRecipe vomahineChemicalPlantParallel(MetaMachine machine, @NotNull GTRecipe recipe){
+    public static GTRecipe vomahineChemicalPlantParallel(MetaMachine machine, @NotNull GTRecipe recipe, OCParams ocParams, OCResult ocResult){
         if (machine instanceof WorkableElectricMultiblockMachine vomahineMachine){
             Optional<IParallelHatch> optional = vomahineMachine.getParts().stream().filter(IParallelHatch.class::isInstance)
                     .map(IParallelHatch.class::cast).findAny();

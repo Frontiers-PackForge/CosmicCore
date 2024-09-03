@@ -1,0 +1,10 @@
+{
+  "variants": {
+    "active=false": {
+      "model": "cosmiccore:block/psionic_galvorn_coil_block"
+    },
+    "active=true": {
+      "model": "cosmiccore:block/psionic_galvorn_coil_block_active"
+    }
+  }
+}

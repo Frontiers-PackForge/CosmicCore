@@ -8,6 +8,7 @@ import com.ghostipedia.cosmiccore.common.data.recipe.CosmicRecipeModifiers;
 import com.ghostipedia.cosmiccore.common.machine.multiblock.electric.MagneticFieldMachine;
 import com.ghostipedia.cosmiccore.common.machine.multiblock.part.CosmicParallelHatchPartMachine;
 import com.ghostipedia.cosmiccore.common.machine.multiblock.part.SoulHatchPartMachine;
+import com.ghostipedia.cosmiccore.common.machine.multiblock.part.ThermiaHatchPartMachine;
 import com.ghostipedia.cosmiccore.gtbridge.CosmicRecipeTypes;
 import com.gregtechceu.gtceu.GTCEu;
 import com.gregtechceu.gtceu.api.GTCEuAPI;
@@ -87,6 +88,12 @@ public class CosmicMachines {
     public static final MachineDefinition[] SOUL_EXPORT_HATCH = registerSoulTieredHatch(
             "soul_output_hatch", "Soul Output Hatch", "soul_hatch.export",
             IO.OUT, HIGH_TIERS, CosmicPartAbility.EXPORT_SOUL);
+    public static final MachineDefinition[] THERMIA_VENT = registerThermiaTieredHatch(
+            "thermia_export_hatch", "Thermia Vent", "thermia_hatch.export",
+            IO.OUT, HIGH_TIERS, CosmicPartAbility.EXPORT_THERMIA);
+    public static final MachineDefinition[] THERMIA_SOCKET = registerThermiaTieredHatch(
+            "thermia_import_hatch", "Thermia Socket", "thermia_hatch.import",
+            IO.IN, HIGH_TIERS, CosmicPartAbility.IMPORT_THERMIA);
     public static final MachineDefinition[] NAQUAHINE_MINI_REACTOR = registerSimpleGenerator("naquahine_mini_reactor",
             CosmicRecipeTypes.MINI_NAQUAHINE_REACTOR, genericGeneratorTankSizeFunction, 0.0f, GTValues.IV, GTValues.LuV,
             GTValues.ZPM, GTValues.UV, GTValues.UHV);
@@ -128,7 +135,7 @@ public class CosmicMachines {
             .rotationState(RotationState.NON_Y_AXIS)
             .recipeType(CosmicRecipeTypes.GROVE_RECIPES)
             .recipeModifiers(true,
-                    (machine, recipe) -> {
+                    (machine, recipe, OCParams, OCResult) -> {
                         if (machine instanceof IRecipeCapabilityHolder holder) {
                             // Find all the items in the combined Item Input inventories and create oversized ItemStacks
                             Object2IntMap<ItemStack> ingredientStacks = Objects.requireNonNullElseGet(holder.getCapabilitiesProxy().get(IO.IN, ItemRecipeCapability.CAP), Collections::<IRecipeHandler<?>>emptyList)
@@ -179,7 +186,7 @@ public class CosmicMachines {
     public final static MultiblockMachineDefinition NAQUAHINE_PRESSURE_REACTOR = REGISTRATE.multiblock("naquahine_pressure_reactor", MagneticFieldMachine::new)
             .rotationState(RotationState.NON_Y_AXIS)
             .recipeType(CosmicRecipeTypes.NAQUAHINE_REACTOR)
-            .recipeModifier(CosmicRecipeModifiers::magnetRecipe)
+            .recipeModifier(CosmicRecipeModifiers::reactorRecipe)
             .appearanceBlock(CosmicBlocks.NAQUADAH_PRESSURE_RESISTANT_CASING)
             .generator(true)
             .pattern(definition -> FactoryBlockPattern.start()
@@ -351,6 +358,21 @@ public class CosmicMachines {
                                 tooltip.add(Component.translatable("tooltip.cosmiccore.soul_hatch.input", SoulHatchPartMachine.getMaxConsumption(tier)));
                             else
                                 tooltip.add(Component.translatable("tooltip.cosmiccore.soul_hatch.output", SoulHatchPartMachine.getMaxCapacity(tier)));
+                        }).register(), tiers);
+    }
+    private static MachineDefinition[] registerThermiaTieredHatch(String name, String displayName, String model, IO io, int[] tiers, PartAbility... abilities) {
+        return registerTieredMachines(name,
+                (holder, tier) -> new ThermiaHatchPartMachine(holder, tier, io),
+                (tier, builder) -> builder
+                        .langValue(GTValues.VNF[tier] + ' ' + displayName)
+                        .abilities(abilities)
+                        .rotationState(RotationState.ALL)
+                        .overlayTieredHullRenderer(model)
+                        .tooltipBuilder((item, tooltip) -> {
+                            if (io == IO.IN)
+                                tooltip.add(Component.translatable("tooltip.cosmiccore.thermia_hatch_limit", ThermiaHatchPartMachine.getThermiaLimits(tier)));
+                            else
+                                tooltip.add(Component.translatable("tooltip.cosmiccore.thermia_hatch_limit", ThermiaHatchPartMachine.getThermiaLimits(tier)));
                         }).register(), tiers);
     }
 

@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:block/cube_all",
+  "textures": {
+    "all": "cosmiccore:block/casings/solid/naquadah_pressure_resistant_casing"
+  }
+}

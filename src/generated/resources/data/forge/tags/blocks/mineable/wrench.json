@@ -9,18 +9,7 @@
     "cosmiccore:programable_matter_coil_block",
     "cosmiccore:shimmering_neutronium_coil_block",
     "cosmiccore:causal_fabric_coil_block",
-    "cosmiccore:dyson_solar_cell",
-    "cosmiccore:naquadah_pressure_resistant_casing",
-    "cosmiccore:resonantly_tuned_virtue_meld_casing",
-    "cosmiccore:alternator_flux_coiling",
-    "cosmiccore:plated_aerocloud",
     "cosmiccore:high_powered_magnet",
-    "cosmiccore:fusion_grade_magnet",
-    "cosmiccore:high_temperature_fission_casing",
-    "cosmiccore:vomahine_certified_chemically_resistant_casing",
-    "cosmiccore:vomahine_certified_chemically_resistant_pipe",
-    "cosmiccore:vomahine_certified_interstellar_grade_casing",
-    "cosmiccore:vomahine_ultra_powered_casing",
-    "cosmiccore:highly_conductive_fission_casing"
+    "cosmiccore:fusion_grade_magnet"
   ]
 }

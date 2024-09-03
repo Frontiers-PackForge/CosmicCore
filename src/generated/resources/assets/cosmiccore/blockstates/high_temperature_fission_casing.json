@@ -1,0 +1,7 @@
+{
+  "variants": {
+    "": {
+      "model": "cosmiccore:block/high_temperature_fission_casing"
+    }
+  }
+}
