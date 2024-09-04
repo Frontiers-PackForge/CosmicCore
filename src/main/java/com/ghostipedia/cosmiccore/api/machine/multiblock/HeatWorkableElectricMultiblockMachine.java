@@ -30,8 +30,4 @@ public class HeatWorkableElectricMultiblockMachine extends WorkableElectricMulti
             }
         }
     }
-
-   ;
-
-
 }

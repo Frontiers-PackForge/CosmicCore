@@ -12,7 +12,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
-public class NotifiableThermiaContainer extends NotifiableRecipeHandlerTrait<Integer> implements IHeatContainer {
+public class NotifiableThermiaContainer extends NotifiableRecipeHandlerTrait<Long> implements IHeatContainer {
     @Getter
     private final IO handlerIO;
     @Getter
@@ -47,7 +47,7 @@ public class NotifiableThermiaContainer extends NotifiableRecipeHandlerTrait<Int
     }
 
     @Override
-    public List<Integer> handleRecipeInner(IO io, GTRecipe recipe, List<Integer> left, @Nullable String slotName, boolean simulate) {
+    public List<Long> handleRecipeInner(IO io, GTRecipe recipe, List<Long> left, @Nullable String slotName, boolean simulate) {
         return null;
     }
 
@@ -62,7 +62,7 @@ public class NotifiableThermiaContainer extends NotifiableRecipeHandlerTrait<Int
     }
 
     @Override
-    public RecipeCapability<Integer> getCapability() {
+    public RecipeCapability<Long> getCapability() {
         return null;
     }
 }

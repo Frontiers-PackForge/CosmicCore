@@ -1,12 +1,9 @@
 package com.ghostipedia.cosmiccore.api.capability.recipe;
 
-import com.ghostipedia.cosmiccore.api.recipe.lookup.MapHeatIngredient;
-import com.ghostipedia.cosmiccore.api.recipe.lookup.MapSoulIngredient;
 import com.gregtechceu.gtceu.api.capability.recipe.RecipeCapability;
 import com.gregtechceu.gtceu.api.recipe.GTRecipe;
 import com.gregtechceu.gtceu.api.recipe.content.Content;
 import com.gregtechceu.gtceu.api.recipe.content.ContentModifier;
-import com.gregtechceu.gtceu.api.recipe.content.IContentSerializer;
 import com.gregtechceu.gtceu.api.recipe.content.SerializerLong;
 import com.gregtechceu.gtceu.api.recipe.lookup.AbstractMapIngredient;
 import com.lowdragmc.lowdraglib.gui.widget.LabelWidget;
