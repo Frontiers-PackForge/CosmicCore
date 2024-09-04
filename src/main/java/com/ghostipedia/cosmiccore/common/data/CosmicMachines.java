@@ -44,6 +44,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.material.WaterFluid;
 
 import java.util.*;
 import java.util.function.BiFunction;
@@ -55,6 +56,7 @@ import static com.gregtechceu.gtceu.api.GTValues.*;
 import static com.gregtechceu.gtceu.api.GTValues.UV;
 import static com.gregtechceu.gtceu.api.pattern.Predicates.*;
 import static com.gregtechceu.gtceu.api.pattern.util.RelativeDirection.*;
+import static com.gregtechceu.gtceu.common.data.GCyMBlocks.*;
 import static com.gregtechceu.gtceu.common.data.GTBlocks.*;
 import static com.gregtechceu.gtceu.common.data.GTMachines.*;
 
@@ -244,6 +246,42 @@ public class CosmicMachines {
                                     .setMaxLayerLimited(1)))
                     .build())
             .workableCasingRenderer(GTCEu.id("block/casings/solid/machine_casing_clean_stainless_steel"), GTCEu.id("block/multiblock/generator/large_gas_turbine"))
+            .register();
+
+    public final static MultiblockMachineDefinition CHROMATIC_FLOTATION_PLANT = REGISTRATE.multiblock("chromatic_flotation_plant", WorkableElectricMultiblockMachine::new)
+            .rotationState(RotationState.NON_Y_AXIS)
+            .recipeType(CosmicRecipeTypes.CHROMATIC_FLOTATION_PLANT)
+            .recipeModifier(GTRecipeModifiers.ELECTRIC_OVERCLOCK.apply(OverclockingLogic.NON_PERFECT_OVERCLOCK))
+            .appearanceBlock(GCyMBlocks.CASING_WATERTIGHT)
+            .generator(true)
+            .pattern(definition -> FactoryBlockPattern.start()
+                    .aisle("AAAAAAA", "AAAAAAA", "AAAAAAA", "AAAAAAA", "AAAAAAA")
+                    .aisle("AAAAAAA", "ABCBCBA", "ABBBBBA", "ABBBBBA", "ABBBBBA")
+                    .aisle("AAAAAAA", "ABCBCBA", "ABBBBBA", "ABBBBBA", "ABBBBBA")
+                    .aisle("AAAAAAA", "ABCBCBA", "ABBBBBA", "ABBBBBA", "ABBBBBA")
+                    .aisle("AAAAAAA", "ABCBCBA", "ABBBBBA", "ABBBBBA", "ABBBBBA")
+                    .aisle("AAAAAAA", "AACACAA", "AAAAAAA", "AAAAAAA", "AAAAAAA")
+                    .aisle("       ", "  C C  ", "       ", "       ", "       ")
+                    .aisle(" DDDDD ", " DCDCD ", " DDDDD ", "       ", "       ")
+                    .aisle(" DDDDD ", " DEEED ", " DDDDD ", "       ", "       ")
+                    .aisle(" DDDDD ", " DEEED ", " DDDDD ", "       ", "       ")
+                    .aisle(" DDDDD ", " DDFDD ", " DDDDD ", "       ", "       ")
+                    .aisle("       ", "       ", "       ", "       ", "       ")
+                    .where(' ', any())
+                    .where("F", controller(blocks(definition.getBlock())))
+                    .where('C', blocks(CASING_TUNGSTENSTEEL_PIPE.get()))
+                    .where('A', blocks(CASING_CORROSION_PROOF.get()))
+                    .where('E', blocks(CASING_STEEL_SOLID.get()))
+                    .where('B', blocks(Blocks.WATER))
+                    .where('D', blocks(CASING_WATERTIGHT.get())
+                            .or(Predicates.abilities(PartAbility.EXPORT_ITEMS).setMaxGlobalLimited(1))
+                            .or(Predicates.abilities(PartAbility.EXPORT_FLUIDS).setMaxGlobalLimited(1))
+                            .or(Predicates.abilities(PartAbility.INPUT_ENERGY).setMinGlobalLimited(1).setMaxGlobalLimited(2))
+                            .or(Predicates.abilities(PartAbility.IMPORT_FLUIDS).setExactLimit(1))
+                            .or(Predicates.abilities(PartAbility.IMPORT_ITEMS).setExactLimit(1))
+                    )
+                    .build())
+            .workableCasingRenderer(GTCEu.id("block/casings/gcym/watertight_casing"), GTCEu.id("block/multiblock/generator/large_gas_turbine"))
             .register();
 
     public final static MultiblockMachineDefinition VOMAHINE_INDUSTRIAL_CHEMPLANT = REGISTRATE.multiblock("vomahine_industrial_chemical_plant", WorkableElectricMultiblockMachine::new)
