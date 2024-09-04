@@ -43,6 +43,13 @@ public class CosmicLangHandler {
         replace(provider,"block.gtceu.zpm_naquahine_mini_reactor", "§cElite Micro Naquahine Reactor§r");
         replace(provider,"block.gtceu.uv_naquahine_mini_reactor", "§3Ultimate Micro Naquahine Reactor§r");
         replace(provider,"block.gtceu.uhv_naquahine_mini_reactor", "§4Epic Micro Naquahine Reactor§r");
+        replace(provider,"item.cosmiccore.debug.structure_writer.structural_scale", "Structure size: X:%s Y:%s Z:%s");
+        replace(provider,"item.cosmiccore.debug.structure_writer.export_order", "Pattern Export Order:\n §cC:%s§l§d/§aS:%s§l§d/§bA:%s");
+        replace(provider,"item.cosmiccore.debug.structure_writer.export_to_log", "Print Aisles to Log");
+        replace(provider,"item.cosmiccore.debug.structure_writer.rotate_along_x_axis", "Rotate X Axis");
+        replace(provider,"item.cosmiccore.debug.structure_writer.rotate_along_y_axis", "Rotate Y Axis");
+        replace(provider,"item.cosmiccore.debug.structure_writer.output_successful", "Output Successful! Check your log file!");
+
 
     }
 }

@@ -33,6 +33,9 @@ public class CosmicRecipeTypes {
     public static final GTRecipeType CHROMATIC_FLOTATION_PLANT = GTRecipeTypes.register("chromatic_flotation_plant", GTRecipeTypes.MULTIBLOCK)
             .setMaxIOSize(3, 9, 3, 3)
             .setProgressBar(GuiTextures.PROGRESS_BAR_ARROW, ProgressTexture.FillDirection.LEFT_TO_RIGHT);
+    public static final GTRecipeType CHROMATIC_DISTILLATION_PLANT = GTRecipeTypes.register("chormatic_distillation_plant", GTRecipeTypes.MULTIBLOCK)
+            .setMaxIOSize(1, 1, 1, 16)
+            .setProgressBar(GuiTextures.PROGRESS_BAR_ARROW, ProgressTexture.FillDirection.LEFT_TO_RIGHT);
     public static final GTRecipeType CELESTIAL_BORE = GTRecipeTypes.register("celestial_bore", GTRecipeTypes.MULTIBLOCK)
             .setMaxIOSize(1, 54, 3, 18)
             .setProgressBar(GuiTextures.PROGRESS_BAR_ARROW, ProgressTexture.FillDirection.LEFT_TO_RIGHT);

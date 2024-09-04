@@ -6,6 +6,7 @@ import com.ghostipedia.cosmiccore.common.data.tag.item.CosmicItemTags;
 import com.gregtechceu.gtceu.api.item.ComponentItem;
 import com.gregtechceu.gtceu.api.item.armor.ArmorComponentItem;
 import com.gregtechceu.gtceu.api.item.component.IItemComponent;
+import com.gregtechceu.gtceu.common.data.GTCompassSections;
 import com.gregtechceu.gtceu.common.item.armor.GTArmorMaterials;
 import com.gregtechceu.gtceu.common.item.armor.QuarkTechSuite;
 import com.gregtechceu.gtceu.common.registry.GTRegistration;
@@ -304,6 +305,12 @@ public class CosmicItems {
             .lang("Macroverse Processor Mainframe")
             .properties(p -> p.stacksTo(64))
             .defaultModel()
+            .register();
+    public static ItemEntry<ComponentItem> DEBUG_STRUCTURE_WRITER = REGISTRATE
+            .item("debug_structure_writer", ComponentItem::create)
+            .lang("Debug Structure Writer")
+            .properties(p -> p.stacksTo(1))
+            .onRegister( attach(StructureWriteBehavior.INSTANCE))
             .register();
 
     // Space Suite
