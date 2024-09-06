@@ -7,6 +7,7 @@ import com.ghostipedia.cosmiccore.client.CosmicCoreClient;
 import com.ghostipedia.cosmiccore.common.data.*;
 import com.ghostipedia.cosmiccore.common.data.materials.CosmicMaterialSet;
 import com.ghostipedia.cosmiccore.common.data.materials.CosmicMaterials;
+import com.ghostipedia.cosmiccore.common.machine.multiblock.multi.StellarIris;
 import com.ghostipedia.cosmiccore.gtbridge.CosmicRecipeTypes;
 import com.gregtechceu.gtceu.api.GTCEuAPI;
 import com.gregtechceu.gtceu.api.data.chemical.material.event.MaterialEvent;
@@ -90,6 +91,7 @@ public class CosmicCore {
 
     public void registerMachines(GTCEuAPI.RegisterEvent<ResourceLocation, MachineDefinition> event) {
         CosmicMachines.init();
+        StellarIris.init();
     }
 
     @SubscribeEvent
