@@ -50,7 +50,7 @@ public class IrisMachineRenderer extends WorkableCasingMachineRenderer {
     public void render(BlockEntity blockEntity, float partialTicks, PoseStack poseStack, MultiBufferSource buffer,
                        int combinedLight, int combinedOverlay) {
         if (blockEntity instanceof IMachineBlockEntity machineBlockEntity &&
-                machineBlockEntity.getMetaMachine() instanceof WorkableElectricMultiblockMachine machine) {
+                machineBlockEntity.getMetaMachine() instanceof WorkableElectricMultiblockMachine machine && machine.isFormed()) {
             var level = machine.getLevel();
             var frontFacing = machine.getFrontFacing();
             float tick = level.getGameTime() + partialTicks;

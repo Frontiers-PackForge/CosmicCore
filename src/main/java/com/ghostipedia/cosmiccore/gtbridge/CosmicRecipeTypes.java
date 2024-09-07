@@ -33,6 +33,10 @@ public class CosmicRecipeTypes {
     public static final GTRecipeType CHROMATIC_FLOTATION_PLANT = GTRecipeTypes.register("chromatic_flotation_plant", GTRecipeTypes.MULTIBLOCK)
             .setMaxIOSize(3, 9, 3, 3)
             .setProgressBar(GuiTextures.PROGRESS_BAR_ARROW, ProgressTexture.FillDirection.LEFT_TO_RIGHT);
+    public static final GTRecipeType STELLAR_IRIS = GTRecipeTypes.register("stellar_iris", GTRecipeTypes.MULTIBLOCK)
+            .setMaxIOSize(16, 16, 16, 16)
+//            .setSound(CosmicSounds.BLACK_HOLE_CRY)
+            .setProgressBar(GuiTextures.PROGRESS_BAR_ARROW, ProgressTexture.FillDirection.LEFT_TO_RIGHT);
     public static final GTRecipeType CHROMATIC_DISTILLATION_PLANT = GTRecipeTypes.register("chormatic_distillation_plant", GTRecipeTypes.MULTIBLOCK)
             .setMaxIOSize(1, 1, 1, 16)
             .setProgressBar(GuiTextures.PROGRESS_BAR_ARROW, ProgressTexture.FillDirection.LEFT_TO_RIGHT);

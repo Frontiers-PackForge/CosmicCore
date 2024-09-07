@@ -12,6 +12,8 @@ public class IrisMultiblockMachine extends WorkableElectricMultiblockMachine {
         @Override
         public void onStructureFormed() {
             super.onStructureFormed();
+
             }
+
  }
 

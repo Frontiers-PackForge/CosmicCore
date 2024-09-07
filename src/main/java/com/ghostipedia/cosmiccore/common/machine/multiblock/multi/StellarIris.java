@@ -7,8 +7,10 @@ import com.ghostipedia.cosmiccore.gtbridge.CosmicRecipeTypes;
 import com.gregtechceu.gtceu.GTCEu;
 import com.gregtechceu.gtceu.api.data.RotationState;
 import com.gregtechceu.gtceu.api.machine.MultiblockMachineDefinition;
+import com.gregtechceu.gtceu.api.machine.multiblock.PartAbility;
 import com.gregtechceu.gtceu.api.machine.multiblock.WorkableElectricMultiblockMachine;
 import com.gregtechceu.gtceu.api.pattern.FactoryBlockPattern;
+import com.gregtechceu.gtceu.api.pattern.Predicates;
 import com.gregtechceu.gtceu.api.recipe.OverclockingLogic;
 import com.gregtechceu.gtceu.client.renderer.machine.FusionReactorRenderer;
 import com.gregtechceu.gtceu.common.data.GTRecipeModifiers;
@@ -21,10 +23,10 @@ import static com.gregtechceu.gtceu.api.pattern.Predicates.blocks;
 import static com.gregtechceu.gtceu.common.data.GCyMBlocks.*;
 
 public class StellarIris {
-    public final static MultiblockMachineDefinition COSMIC_TEAR = REGISTRATE.multiblock("cosmic_tear", WorkableElectricMultiblockMachine::new)
+    public final static MultiblockMachineDefinition STELLAR_IRIS = REGISTRATE.multiblock("stellar_iris", WorkableElectricMultiblockMachine::new)
             .rotationState(RotationState.ALL)
-            .recipeType(CosmicRecipeTypes.CHROMATIC_FLOTATION_PLANT)
-            .recipeModifier(GTRecipeModifiers.ELECTRIC_OVERCLOCK.apply(OverclockingLogic.NON_PERFECT_OVERCLOCK))
+            .recipeType(CosmicRecipeTypes.STELLAR_IRIS)
+            .recipeModifier(GTRecipeModifiers.ELECTRIC_OVERCLOCK.apply(OverclockingLogic.NON_PERFECT_OVERCLOCK_SUBTICK))
             .appearanceBlock(CosmicBlocks.VOMAHINE_CERTIFIED_CHEMICALLY_RESISTANT_CASING)
             .generator(true)
             .pattern(definition -> FactoryBlockPattern.start()
@@ -157,7 +159,15 @@ public class StellarIris {
                     .aisle("                                                                                                                               ", "                                                                                                                               ", "                                                                                                                               ", "                                                                                                                               ", "                                                                                                                               ", "                                                                                                                               ", "                                                                                                                               ", "                                                                                                                               ", "                                                                                                                               ", "                                                                                                                               ", "                                                                                                                               ", "                                                                                                                               ", "                                                                                                                               ", "                                                                                                                               ", "                                                                                                                               ", "                                                        AAAAAAAAAAAAAAA                                                        ", "                                                                                                                               ", "                                                                                                                               ", "                                                                                                                               ", "                                                                                                                               ", "                                                                                                                               ", "                                                        AAAAAAAAAAAAAAA                                                        ", "                                                                                                                               ", "                                                                                                                               ", "                                                                                                                               ", "                                                                                                                               ", "                                                                                                                               ", "                                                                                                                               ", "                                                                                                                               ", "                                                                                                                               ", "                                                                                                                               ", "                                                                                                                               ", "                                                                                                                               ", "                                                                                                                               ", "                                                                                                                               ", "                                                                                                                               ", "                                                                                                                               ")
                     .where(' ', any())
                     .where("G", controller(blocks(definition.getBlock())))
-                    .where('F', blocks(VOMAHINE_CERTIFIED_CHEMICALLY_RESISTANT_CASING.get()))
+                    .where('F', blocks(VOMAHINE_CERTIFIED_CHEMICALLY_RESISTANT_CASING.get())
+                                    .or(Predicates.abilities(PartAbility.EXPORT_ITEMS).setMaxGlobalLimited(16))
+                                    .or(Predicates.abilities(PartAbility.EXPORT_FLUIDS).setMaxGlobalLimited(16))
+                                    .or(Predicates.abilities(PartAbility.INPUT_ENERGY).setMaxGlobalLimited(2))
+                                    .or(Predicates.abilities(PartAbility.INPUT_LASER).setMaxGlobalLimited(1))
+                                    .or(Predicates.abilities(PartAbility.OUTPUT_LASER).setMaxGlobalLimited(1))
+                                    .or(Predicates.abilities(PartAbility.IMPORT_FLUIDS).setMaxGlobalLimited(16))
+                                    .or(Predicates.abilities(PartAbility.IMPORT_ITEMS).setMaxGlobalLimited(16))
+                            )
                     .where('C', blocks(VOMAHINE_CERTIFIED_INTERSTELLAR_GRADE_CASING.get()))
                     .where('D', blocks(CASING_ATOMIC.get()))
                     .where('B', blocks(VOMAHINE_CERTIFIED_INTERSTELLAR_GRADE_CASING.get()))
