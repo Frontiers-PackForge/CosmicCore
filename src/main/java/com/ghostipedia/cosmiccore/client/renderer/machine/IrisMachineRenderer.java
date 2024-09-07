@@ -28,7 +28,12 @@ public class IrisMachineRenderer extends WorkableCasingMachineRenderer {
 
     public static final ResourceLocation TEXTURE = CosmicCore.id("block/casings/solid/vomahine_certified_chemically_resistant_casing");
     public static final ResourceLocation OVERLAY_MODEL_TEXTURES = GTCEu.id("block/multiblock/fusion_reactor");
-    public static final ResourceLocation IRIS_MODEL = CosmicCore.id("block/iris/iris_sphere");
+    public static final ResourceLocation STAR_MODEL_CORE = CosmicCore.id("block/iris/star_sphere");
+    public static final ResourceLocation STAR_MODEL_OUTER = CosmicCore.id("block/iris/star_sphere_outer");
+    public static final ResourceLocation STAR_MODEL_INNER = CosmicCore.id("block/iris/star_sphere_inner");
+    public static final ResourceLocation IRIS_MODEL_CORE = CosmicCore.id("block/iris/iris_sphere");
+    public static final ResourceLocation IRIS_MODEL_RING = CosmicCore.id("block/iris/iris_ring");
+    public static final ResourceLocation IRIS_MODEL_RING_WHITE = CosmicCore.id("block/iris/iris_ring_white");
 
     public IrisMachineRenderer() {
         super(TEXTURE, OVERLAY_MODEL_TEXTURES);
@@ -49,7 +54,12 @@ public class IrisMachineRenderer extends WorkableCasingMachineRenderer {
             var level = machine.getLevel();
             var frontFacing = machine.getFrontFacing();
             float tick = level.getGameTime() + partialTicks;
-            renderIris(poseStack, buffer, frontFacing, tick, combinedLight, combinedOverlay);
+            renderStar(poseStack, buffer, frontFacing, tick, combinedLight, combinedOverlay);
+            renderStarInsides(poseStack, buffer, frontFacing, tick, combinedLight, combinedOverlay);
+            renderStarShell(poseStack, buffer, frontFacing, tick, combinedLight, combinedOverlay);
+//            renderIris(poseStack, buffer, frontFacing, tick, combinedLight, combinedOverlay);
+//            renderRing(poseStack, buffer, frontFacing, tick, combinedLight, combinedOverlay);
+//            renderRingSmall(poseStack, buffer, frontFacing, tick, combinedLight, combinedOverlay);
         }
     }
 
@@ -58,7 +68,7 @@ public class IrisMachineRenderer extends WorkableCasingMachineRenderer {
                            float tick, int combinedLight, int combinedOverlay) {
         var modelManager = Minecraft.getInstance().getModelManager();
         poseStack.pushPose();
-        BakedModel bakedmodel = modelManager.getModel(IRIS_MODEL);
+        BakedModel bakedmodel = modelManager.getModel(IRIS_MODEL_CORE);
         poseStack.translate(0.5D, 0.5D, 0.5D);
         poseStack.mulPose(new Quaternionf().rotateAxis(tick * Mth.TWO_PI / 80, 0, 1, 0));
         poseStack.scale(10.0f, 10.0f, 10.0f);
@@ -71,13 +81,119 @@ public class IrisMachineRenderer extends WorkableCasingMachineRenderer {
         }
         poseStack.popPose();
     }
+    public void renderRing(PoseStack poseStack, MultiBufferSource bufferSource, Direction frontFacing,
+                           float tick, int combinedLight, int combinedOverlay) {
+        var modelManager = Minecraft.getInstance().getModelManager();
+        poseStack.pushPose();
+        BakedModel bakedmodel = modelManager.getModel(IRIS_MODEL_RING);
+        poseStack.translate(0.5D, 1D, 0.5D);
+        poseStack.mulPose(new Quaternionf().rotateAxis(tick * Mth.TWO_PI / 80, 0, 1, 0));
+        poseStack.scale(20.0f, 20.0f, 20.0f);
+        PoseStack.Pose pose = poseStack.last();
+
+        VertexConsumer consumer = bufferSource.getBuffer(RenderType.cutout());
+        List<BakedQuad> quads = bakedmodel.getQuads(null, null, GTValues.RNG);
+        for (BakedQuad quad : quads) {
+            consumer.putBulkData(pose, quad, 1f, 1f, 1f, combinedLight, combinedOverlay);
+        }
+        poseStack.popPose();
+    }
+    public void renderRingSmall(PoseStack poseStack, MultiBufferSource bufferSource, Direction frontFacing,
+                           float tick, int combinedLight, int combinedOverlay) {
+        var modelManager = Minecraft.getInstance().getModelManager();
+        poseStack.pushPose();
+        BakedModel bakedmodel = modelManager.getModel(IRIS_MODEL_RING_WHITE);
+        poseStack.translate(0.5D, 1.3D, 0.5D);
+        poseStack.mulPose(new Quaternionf().rotateAxis(tick * Mth.TWO_PI / 20, 0, 1, 0));
+        poseStack.scale(13.0f, 13.0f, 13.0f);
+        PoseStack.Pose pose = poseStack.last();
+
+        VertexConsumer consumer = bufferSource.getBuffer(RenderType.cutout());
+        List<BakedQuad> quads = bakedmodel.getQuads(null, null, GTValues.RNG);
+        for (BakedQuad quad : quads) {
+            consumer.putBulkData(pose, quad, 1f, 1f, 1f, combinedLight, combinedOverlay);
+        }
+        poseStack.popPose();
+    }
+    ///STAR
+
+    public void renderStar(PoseStack poseStack, MultiBufferSource bufferSource, Direction frontFacing,
+                           float tick, int combinedLight, int combinedOverlay) {
+        var modelManager = Minecraft.getInstance().getModelManager();
+        poseStack.pushPose();
+        BakedModel bakedmodel = modelManager.getModel(STAR_MODEL_CORE);
+        poseStack.translate(0.5D, 1D, 0.5D);
+        poseStack.mulPose(new Quaternionf().rotateAxis(tick * Mth.TWO_PI / 80, 0.25f, 0.75f, 0));
+        poseStack.scale(3.0f, 3.0f, 3.0f);
+        PoseStack.Pose pose = poseStack.last();
+
+        VertexConsumer consumer = bufferSource.getBuffer(RenderType.cutout());
+        List<BakedQuad> quads = bakedmodel.getQuads(null, null, GTValues.RNG);
+        for (BakedQuad quad : quads) {
+            consumer.putBulkData(pose, quad, 1f, 1f, 1f, combinedLight, combinedOverlay);
+        }
+        poseStack.popPose();
+    }
+    public void renderStarShell(PoseStack poseStack, MultiBufferSource bufferSource, Direction frontFacing,
+                           float tick, int combinedLight, int combinedOverlay) {
+        var modelManager = Minecraft.getInstance().getModelManager();
+        poseStack.pushPose();
+        BakedModel bakedmodel = modelManager.getModel(STAR_MODEL_OUTER);
+        poseStack.translate(0.5D, 1D, 0.5D);
+        poseStack.mulPose(new Quaternionf().rotateAxis(tick * Mth.TWO_PI / 80, 0.45f, 0, 0.75f));
+        poseStack.scale(5.0f, 5.0f, 5.0f);
+        PoseStack.Pose pose = poseStack.last();
+
+        VertexConsumer consumer = bufferSource.getBuffer(RenderType.cutout());
+        List<BakedQuad> quads = bakedmodel.getQuads(null, null, GTValues.RNG);
+        for (BakedQuad quad : quads) {
+            consumer.putBulkData(pose, quad, 1f, 1f, 1f, combinedLight, combinedOverlay);
+        }
+        poseStack.popPose();
+    }
+
+    public void renderStarInsides(PoseStack poseStack, MultiBufferSource bufferSource, Direction frontFacing,
+                                float tick, int combinedLight, int combinedOverlay) {
+        var modelManager = Minecraft.getInstance().getModelManager();
+        poseStack.pushPose();
+        BakedModel bakedmodel = modelManager.getModel(STAR_MODEL_INNER);
+        poseStack.translate(0.5D, 1D, 0.5D);
+        poseStack.mulPose(new Quaternionf().rotateAxis(tick * Mth.TWO_PI / 80, 0, 0.8f, 0));
+        poseStack.scale(4.0f, 4.0f, 4.0f);
+        PoseStack.Pose pose = poseStack.last();
+
+        VertexConsumer consumer = bufferSource.getBuffer(RenderType.cutout());
+        List<BakedQuad> quads = bakedmodel.getQuads(null, null, GTValues.RNG);
+        for (BakedQuad quad : quads) {
+            consumer.putBulkData(pose, quad, 1f, 1f, 1f, combinedLight, combinedOverlay);
+        }
+        poseStack.popPose();
+    }
+
+
+
     @Override
     public void onAdditionalModel(Consumer<ResourceLocation> registry) {
         super.onAdditionalModel(registry);
-        registry.accept(IRIS_MODEL);
+        registry.accept(IRIS_MODEL_CORE);
+        registry.accept(IRIS_MODEL_RING);
+        registry.accept(IRIS_MODEL_RING_WHITE);
+        registry.accept(STAR_MODEL_CORE);
+        registry.accept(STAR_MODEL_INNER);
+        registry.accept(STAR_MODEL_OUTER);
     }
     @OnlyIn(Dist.CLIENT)
     public float reBakeCustomQuadsOffset() {
         return 0f;
+    }
+
+    @Override
+    public boolean isGlobalRenderer(BlockEntity blockEntity) {
+        return true;
+    }
+
+    @Override
+    public int getViewDistance() {
+        return 256;
     }
 }

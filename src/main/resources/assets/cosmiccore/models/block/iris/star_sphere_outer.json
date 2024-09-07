@@ -1,0 +1,9 @@
+{
+    "loader": "forge:obj",
+    "model": "cosmiccore:models/block/iris/star_shell.obj",
+    "textures": {
+      "texture0": "cosmiccore:block/iris/star_shell",
+      "particle":"cosmiccore:block/iris/star_shell"
+    },
+    "automatic_culling": false
+  }
