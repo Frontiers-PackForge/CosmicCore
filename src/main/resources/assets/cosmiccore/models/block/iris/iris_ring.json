@@ -1,8 +1,0 @@
-{
-    "loader": "forge:obj",
-    "model": "cosmiccore:models/block/iris/the_ring.obj",
-    "textures": {
-      "texture0": "cosmiccore:block/iris/the_ring"
-    },
-    "automatic_culling": false
-  }
