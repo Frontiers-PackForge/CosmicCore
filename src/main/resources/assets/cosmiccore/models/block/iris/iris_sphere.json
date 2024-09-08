@@ -1,0 +1,9 @@
+{
+    "loader": "forge:obj",
+    "model": "cosmiccore:models/block/iris/the_hole.obj",
+    "textures": {
+      "texture0": "cosmiccore:block/iris/the_hole",
+      "particle":"cosmiccore:block/iris/the_hole"
+    },
+    "automatic_culling": false
+  }

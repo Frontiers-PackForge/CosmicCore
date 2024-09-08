@@ -20,6 +20,7 @@ public class ForgeClientEventHandler {
         var stage = event.getStage();
         if (stage == RenderLevelStageEvent.Stage.AFTER_TRIPWIRE_BLOCKS) {
             StructureBoundingBox.renderStructureSelect(event.getPoseStack(), event.getCamera());
+
         }
     }
 }

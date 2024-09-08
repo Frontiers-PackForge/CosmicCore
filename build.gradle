@@ -6,7 +6,10 @@ plugins {
 base {
     archivesName = project.archives_base_name
 }
-
+configurations.all {
+    // Check for snapshots more frequently than Gradle's default of 1 day. 0 = every build.
+    resolutionStrategy.cacheChangingModulesFor 0, 'seconds'
+}
 version = project.mod_version
 group = project.maven_group
 
