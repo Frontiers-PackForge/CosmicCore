@@ -58,7 +58,13 @@ public class CosmicLangHandler {
         replace(provider,"item.cosmiccore.debug.structure_writer.rotate_along_x_axis", "Rotate X Axis");
         replace(provider,"item.cosmiccore.debug.structure_writer.rotate_along_y_axis", "Rotate Y Axis");
         replace(provider,"item.cosmiccore.debug.structure_writer.output_successful", "Output Successful! Check your log file!");
-
+        replace(provider,"cosmiccore.lore.shard_small.0", "§6A shard from a past eternity");
+        replace(provider,"cosmiccore.lore.shard_small.1", "§6it subtly echos to rewrite fate.");
+        replace(provider,"cosmiccore.lore.shard_large.0", "§aA large fragment from a past eternity");
+        replace(provider,"cosmiccore.lore.shard_large.1", "§ait echos to rewrite fate.");
+        replace(provider,"cosmiccore.lore.shard_huge.0", "§3An abnormally massive cluster from past eternity.");
+        replace(provider,"cosmiccore.lore.shard_huge.1", "§3it screams and wails at you to undo history.");
+        replace(provider,"cosmiccore.lore.shard_huge.2", "§cYour mind shatters trying to understand this.");
 
     }
 }

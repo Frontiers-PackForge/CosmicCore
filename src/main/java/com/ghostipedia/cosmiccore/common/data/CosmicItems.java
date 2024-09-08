@@ -7,6 +7,7 @@ import com.gregtechceu.gtceu.api.item.ComponentItem;
 import com.gregtechceu.gtceu.api.item.armor.ArmorComponentItem;
 import com.gregtechceu.gtceu.api.item.component.IItemComponent;
 import com.gregtechceu.gtceu.common.data.GTCompassSections;
+import com.gregtechceu.gtceu.common.item.TooltipBehavior;
 import com.gregtechceu.gtceu.common.item.armor.GTArmorMaterials;
 import com.gregtechceu.gtceu.common.item.armor.QuarkTechSuite;
 import com.gregtechceu.gtceu.common.registry.GTRegistration;
@@ -16,6 +17,7 @@ import com.gregtechceu.gtceu.integration.jade.GTJadePlugin;
 import com.tterrag.registrate.util.entry.ItemEntry;
 import com.tterrag.registrate.util.nullness.NonNullConsumer;
 import earth.terrarium.adastra.common.tags.ModItemTags;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.Rarity;
@@ -149,6 +151,39 @@ public class CosmicItems {
 //    public static final ItemEntry<ComponentItem> VOMAPLAST = REGISTRATE.item("vomaplast", ComponentItem::create)
 //            .lang("Vomaplast")
 //            .properties(p -> p.stacksTo(64))
+//            .defaultModel()
+//            .register();
+    public static final ItemEntry<ComponentItem> PERPETUITY_SHARD = REGISTRATE.item("shard_of_perpetuity", ComponentItem::create)
+            .lang("Shard of Perpetuity")
+            .properties(p -> p.stacksTo(256))
+            .onRegister(attach(new TooltipBehavior(tooltips -> {
+                tooltips.add(Component.translatable("cosmiccore.lore.shard_small.0"));
+                tooltips.add(Component.translatable("cosmiccore.lore.shard_small.1"));
+            })))
+            .defaultModel()
+            .register();
+    public static final ItemEntry<ComponentItem> PERPETUITY_SHARD_LARGE = REGISTRATE.item("large_shard_of_perpetuity", ComponentItem::create)
+            .lang("Large Shard of Perpetuity")
+            .properties(p -> p.stacksTo(64))
+            .onRegister(attach(new TooltipBehavior(tooltips -> {
+                tooltips.add(Component.translatable("cosmiccore.lore.shard_large.0"));
+                tooltips.add(Component.translatable("cosmiccore.lore.shard_large.1"));
+            })))
+            .defaultModel()
+            .register();
+    public static final ItemEntry<ComponentItem> PERPETUITY_SHARD_MASSIVE = REGISTRATE.item("cluster_of_perpetuity", ComponentItem::create)
+            .lang("Cluster of Perpetuity")
+            .properties(p -> p.stacksTo(60))
+            .onRegister(attach(new TooltipBehavior(tooltips -> {
+                tooltips.add(Component.translatable("cosmiccore.lore.shard_huge.0"));
+                tooltips.add(Component.translatable("cosmiccore.lore.shard_huge.1"));
+                tooltips.add(Component.translatable("cosmiccore.lore.shard_huge.2"));
+            })))
+            .defaultModel()
+            .register();
+//    public static final ItemEntry<ComponentItem> PARADOX_ECHOS = REGISTRATE.item("paradox_echos", ComponentItem::create)
+//            .lang("Paradox Echos")
+//            .properties(p -> p.stacksTo(256))
 //            .defaultModel()
 //            .register();
 //    public static final ItemEntry<ComponentItem> ECTOPHASM = REGISTRATE.item("ectophasm", ComponentItem::create)
