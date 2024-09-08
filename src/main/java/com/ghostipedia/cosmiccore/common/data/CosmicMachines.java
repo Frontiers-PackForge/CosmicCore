@@ -338,7 +338,7 @@ public class CosmicMachines {
             .register();
     public final static MultiblockMachineDefinition VOMAHINE_INDUSTRIAL_CHEMPLANT = REGISTRATE.multiblock("vomahine_industrial_chemical_plant", WorkableElectricMultiblockMachine::new)
             .rotationState(RotationState.ALL)
-            .recipeType(CosmicRecipeTypes.VOMAHINE_INDUSTRIAL_CHEMVAT)
+            .recipeTypes(CosmicRecipeTypes.VOMAHINE_INDUSTRIAL_CHEMVAT, GTRecipeTypes.CRACKING_RECIPES)
             .recipeModifiers(CosmicRecipeModifiers::vomahineChemicalPlantParallel,GTRecipeModifiers.ELECTRIC_OVERCLOCK.apply(OverclockingLogic.NON_PERFECT_OVERCLOCK))
             .appearanceBlock(VOMAHINE_CERTIFIED_CHEMICALLY_RESISTANT_CASING)
             .pattern(definition -> FactoryBlockPattern.start()
