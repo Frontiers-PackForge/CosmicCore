@@ -228,7 +228,6 @@ public class CosmicMachines {
             .recipeType(CosmicRecipeTypes.CHROMATIC_DISTILLATION_PLANT)
             .recipeModifier(GTRecipeModifiers.ELECTRIC_OVERCLOCK.apply(OverclockingLogic.NON_PERFECT_OVERCLOCK))
             .appearanceBlock(GTBlocks.CASING_STAINLESS_CLEAN)
-            .generator(true)
             .pattern(definition -> FactoryBlockPattern.start(RIGHT, BACK, UP)
                     .aisle(" BCB ", "BBBBB", "BBBBB", "BBBBB", " BBB ")
                     .aisle(" A A ", "AGPGA", "APGPA", "AGPGA", " A A ").setRepeatable(1,15)

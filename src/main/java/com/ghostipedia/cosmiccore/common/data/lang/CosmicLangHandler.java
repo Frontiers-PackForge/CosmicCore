@@ -31,6 +31,15 @@ public class CosmicLangHandler {
         replace(provider,"gui.cosmiccore.thermia_hatch.stored_temp", "§6Current Temp:");
         replace(provider,"cosmiccore.multiblock.magnetic_field_strength", "§fMax Field Strength§f:§6 %s");
         replace(provider,"cosmiccore.multiblock.magnetic_regen", "§aField Recovery Rate§f:§6 %sT/t");
+        replace(provider,"cosmiccore.multiblock.fuel_star", "§a§lFuel Star Core");
+        replace(provider,"cosmiccore.multiblock.iris.star_stage_empty", "§aStar Core Stage§f: §6Compressed Gas Cloud");
+        replace(provider,"cosmiccore.multiblock.iris.star_stage_early_star", "§aStar Core Stage§f: §6Infant Star");
+        replace(provider,"cosmiccore.multiblock.iris.star_stage_request", "§cStar Core Requires \n§r%s \n§cfor Next Stage.");
+        replace(provider,"cosmiccore.multiblock.iris.star_stage_sustain", "§cStar Requires \n§r%s \n§cto avoid §lcataclysmic failure!");
+        replace(provider,"cosmiccore.multiblock.iris.tooltip.0", "§cYour Mind Shatters Trying to Understand This");
+        replace(provider,"cosmiccore.multiblock.iris.tooltip.1", "§c§lDANGER: DO NOT RENDER THE JEI PREVIEW");
+        replace(provider,"cosmiccore.multiblock.iris.tooltip.2", "§c§lDANGER: YOU WILL LAG OR CRASH YOUR GAME");
+        replace(provider,"cosmiccore.multiblock.iris.tooltip.3", "§aFuture Multiblock - JEI preview will be disabled/optimized");
         replace(provider,"gtceu.naquahine_reactor", "§bNaquahine Reactor");
         replace(provider,"cosmiccore.multiblock.current_field_strength", "§fField Strength: %s");
         replace(provider,"cosmiccore.recipe.minField", "§fMin. Field Strength: %sT");

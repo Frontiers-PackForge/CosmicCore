@@ -69,7 +69,7 @@ public class IrisMachineRenderer extends WorkableCasingMachineRenderer {
         var modelManager = Minecraft.getInstance().getModelManager();
         poseStack.pushPose();
         BakedModel bakedmodel = modelManager.getModel(IRIS_MODEL_CORE);
-        poseStack.translate(0.5D, 0.5D, 0.5D);
+        poseStack.translate(0.5D, -2.5D, 46.5D);
         poseStack.mulPose(new Quaternionf().rotateAxis(tick * Mth.TWO_PI / 80, 0, 1, 0));
         poseStack.scale(10.0f, 10.0f, 10.0f);
         PoseStack.Pose pose = poseStack.last();
@@ -86,7 +86,7 @@ public class IrisMachineRenderer extends WorkableCasingMachineRenderer {
         var modelManager = Minecraft.getInstance().getModelManager();
         poseStack.pushPose();
         BakedModel bakedmodel = modelManager.getModel(IRIS_MODEL_RING);
-        poseStack.translate(0.5D, 1D, 0.5D);
+        poseStack.translate(0.5D, -2.5D, 46.5D);
         poseStack.mulPose(new Quaternionf().rotateAxis(tick * Mth.TWO_PI / 80, 0, 1, 0));
         poseStack.scale(20.0f, 20.0f, 20.0f);
         PoseStack.Pose pose = poseStack.last();
@@ -103,7 +103,7 @@ public class IrisMachineRenderer extends WorkableCasingMachineRenderer {
         var modelManager = Minecraft.getInstance().getModelManager();
         poseStack.pushPose();
         BakedModel bakedmodel = modelManager.getModel(IRIS_MODEL_RING_WHITE);
-        poseStack.translate(0.5D, 1.3D, 0.5D);
+        poseStack.translate(0.5D, -2.0D, 46.5D);
         poseStack.mulPose(new Quaternionf().rotateAxis(tick * Mth.TWO_PI / 20, 0, 1, 0));
         poseStack.scale(13.0f, 13.0f, 13.0f);
         PoseStack.Pose pose = poseStack.last();
@@ -122,15 +122,18 @@ public class IrisMachineRenderer extends WorkableCasingMachineRenderer {
         var modelManager = Minecraft.getInstance().getModelManager();
         poseStack.pushPose();
         BakedModel bakedmodel = modelManager.getModel(STAR_MODEL_CORE);
-        poseStack.translate(0.5D, 1D, 0.5D);
-        poseStack.mulPose(new Quaternionf().rotateAxis(tick * Mth.TWO_PI / 80, 0.25f, 0.75f, 0));
-        poseStack.scale(3.0f, 3.0f, 3.0f);
+        poseStack.translate(0.5D, -2.5D, 46.5D);
+        poseStack.mulPose(new Quaternionf().rotateXYZ(0.25f,0.0f,0f));
+        poseStack.mulPose(new Quaternionf().rotateAxis(tick * Mth.TWO_PI / 80, 0f, 1f, 0));
+        poseStack.scale(4.6f, 4.6f, 4.6f);
         PoseStack.Pose pose = poseStack.last();
 
-        VertexConsumer consumer = bufferSource.getBuffer(RenderType.cutout());
+        VertexConsumer consumer = bufferSource.getBuffer(RenderType.translucent());
         List<BakedQuad> quads = bakedmodel.getQuads(null, null, GTValues.RNG);
         for (BakedQuad quad : quads) {
             consumer.putBulkData(pose, quad, 1f, 1f, 1f, combinedLight, combinedOverlay);
+            consumer.putBulkData(pose, quad, new float[]{1.0f, 1.0f, 1.0f, 1.0f}, 1f, 1f, 1f, 0.65f, new int[]{combinedLight, combinedLight, combinedLight, combinedLight}, combinedOverlay, false);
+
         }
         poseStack.popPose();
     }
@@ -139,15 +142,17 @@ public class IrisMachineRenderer extends WorkableCasingMachineRenderer {
         var modelManager = Minecraft.getInstance().getModelManager();
         poseStack.pushPose();
         BakedModel bakedmodel = modelManager.getModel(STAR_MODEL_OUTER);
-        poseStack.translate(0.5D, 1D, 0.5D);
-        poseStack.mulPose(new Quaternionf().rotateAxis(tick * Mth.TWO_PI / 80, 0.45f, 0, 0.75f));
+        poseStack.translate(0.5D, -2.5D, 46.5D);
+        poseStack.mulPose(new Quaternionf().rotateXYZ(0.65f,0.0f,0.35f));
+        poseStack.mulPose(new Quaternionf().rotateAxis(tick * Mth.TWO_PI / 80, 0f, 1, 0f));
         poseStack.scale(5.0f, 5.0f, 5.0f);
         PoseStack.Pose pose = poseStack.last();
 
-        VertexConsumer consumer = bufferSource.getBuffer(RenderType.cutout());
+        VertexConsumer consumer = bufferSource.getBuffer(RenderType.translucent());
         List<BakedQuad> quads = bakedmodel.getQuads(null, null, GTValues.RNG);
         for (BakedQuad quad : quads) {
             consumer.putBulkData(pose, quad, 1f, 1f, 1f, combinedLight, combinedOverlay);
+            consumer.putBulkData(pose, quad, new float[]{1.0f, 1.0f, 1.0f, 1.0f}, 1f, 1f, 1f, 0.5f, new int[]{combinedLight, combinedLight, combinedLight, combinedLight}, combinedOverlay, false);
         }
         poseStack.popPose();
     }
@@ -157,15 +162,16 @@ public class IrisMachineRenderer extends WorkableCasingMachineRenderer {
         var modelManager = Minecraft.getInstance().getModelManager();
         poseStack.pushPose();
         BakedModel bakedmodel = modelManager.getModel(STAR_MODEL_INNER);
-        poseStack.translate(0.5D, 1D, 0.5D);
-        poseStack.mulPose(new Quaternionf().rotateAxis(tick * Mth.TWO_PI / 80, 0, 0.8f, 0));
-        poseStack.scale(4.0f, 4.0f, 4.0f);
+        poseStack.translate(0.5D, -2.5D, 46.5D);
+        poseStack.mulPose(new Quaternionf().rotateAxis(tick * Mth.TWO_PI / 80, 0, 1f, 0));
+        poseStack.scale(4.85f, 4.85f, 4.85f);
         PoseStack.Pose pose = poseStack.last();
 
         VertexConsumer consumer = bufferSource.getBuffer(RenderType.cutout());
         List<BakedQuad> quads = bakedmodel.getQuads(null, null, GTValues.RNG);
         for (BakedQuad quad : quads) {
             consumer.putBulkData(pose, quad, 1f, 1f, 1f, combinedLight, combinedOverlay);
+            consumer.putBulkData(pose, quad, new float[]{1.0f, 1.0f, 1.0f, 1.0f}, 1f, 1f, 1f, 0.7f, new int[]{combinedLight, combinedLight, combinedLight, combinedLight}, combinedOverlay, false);
         }
         poseStack.popPose();
     }
