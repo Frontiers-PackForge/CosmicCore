@@ -155,7 +155,7 @@ public class CosmicItems {
 //            .register();
     public static final ItemEntry<ComponentItem> PERPETUITY_SHARD = REGISTRATE.item("shard_of_perpetuity", ComponentItem::create)
             .lang("Shard of Perpetuity")
-            .properties(p -> p.stacksTo(256))
+            .properties(p -> p.stacksTo(64))
             .onRegister(attach(new TooltipBehavior(tooltips -> {
                 tooltips.add(Component.translatable("cosmiccore.lore.shard_small.0"));
                 tooltips.add(Component.translatable("cosmiccore.lore.shard_small.1"));
@@ -183,7 +183,7 @@ public class CosmicItems {
             .register();
 //    public static final ItemEntry<ComponentItem> PARADOX_ECHOS = REGISTRATE.item("paradox_echos", ComponentItem::create)
 //            .lang("Paradox Echos")
-//            .properties(p -> p.stacksTo(256))
+//            .properties(p -> p.stacksTo(64))
 //            .defaultModel()
 //            .register();
 //    public static final ItemEntry<ComponentItem> ECTOPHASM = REGISTRATE.item("ectophasm", ComponentItem::create)
@@ -436,7 +436,7 @@ public class CosmicItems {
 
     public static final ItemEntry<ComponentItem> OMNIA_CIRCUIT_LV = REGISTRATE.item("omnia_circuit_lv", ComponentItem::create)
             .lang("LV Omnia Circuit")
-            .properties(p -> p.stacksTo(256))
+            .properties(p -> p.stacksTo(64))
             .tag(CustomTags.LV_CIRCUITS)
             .onRegister(attach(new TooltipBehavior(tooltips -> {
                 tooltips.add(Component.translatable("cosmiccore.omnia_circuit.lv"));
@@ -445,7 +445,7 @@ public class CosmicItems {
             .register();
     public static final ItemEntry<ComponentItem> OMNIA_CIRCUIT_MV = REGISTRATE.item("omnia_circuit_mv", ComponentItem::create)
             .lang("MV Omnia Circuit")
-            .properties(p -> p.stacksTo(256))
+            .properties(p -> p.stacksTo(64))
             .tag(CustomTags.MV_CIRCUITS)
             .onRegister(attach(new TooltipBehavior(tooltips -> {
                 tooltips.add(Component.translatable("cosmiccore.omnia_circuit.mv"));
@@ -454,7 +454,7 @@ public class CosmicItems {
             .register();
     public static final ItemEntry<ComponentItem> OMNIA_CIRCUIT_HV = REGISTRATE.item("omnia_circuit_hv", ComponentItem::create)
             .lang("HV Omnia Circuit")
-            .properties(p -> p.stacksTo(256))
+            .properties(p -> p.stacksTo(64))
             .tag(CustomTags.HV_CIRCUITS)
             .onRegister(attach(new TooltipBehavior(tooltips -> {
                 tooltips.add(Component.translatable("cosmiccore.omnia_circuit.hv"));
@@ -463,7 +463,7 @@ public class CosmicItems {
             .register();
     public static final ItemEntry<ComponentItem> OMNIA_CIRCUIT_EV = REGISTRATE.item("omnia_circuit_ev", ComponentItem::create)
             .lang("EV Omnia Circuit")
-            .properties(p -> p.stacksTo(256))
+            .properties(p -> p.stacksTo(64))
             .tag(CustomTags.EV_CIRCUITS)
             .onRegister(attach(new TooltipBehavior(tooltips -> {
                 tooltips.add(Component.translatable("cosmiccore.omnia_circuit.ev"));
@@ -472,7 +472,7 @@ public class CosmicItems {
             .register();
     public static final ItemEntry<ComponentItem> OMNIA_CIRCUIT_IV = REGISTRATE.item("omnia_circuit_iv", ComponentItem::create)
             .lang("IV Omnia Circuit")
-            .properties(p -> p.stacksTo(256))
+            .properties(p -> p.stacksTo(64))
             .tag(CustomTags.IV_CIRCUITS)
             .onRegister(attach(new TooltipBehavior(tooltips -> {
                 tooltips.add(Component.translatable("cosmiccore.omnia_circuit.iv"));
@@ -481,7 +481,7 @@ public class CosmicItems {
             .register();
     public static final ItemEntry<ComponentItem> OMNIA_CIRCUIT_LUV = REGISTRATE.item("omnia_circuit_luv", ComponentItem::create)
             .lang("LuV Omnia Circuit")
-            .properties(p -> p.stacksTo(256))
+            .properties(p -> p.stacksTo(64))
             .tag(CustomTags.LuV_CIRCUITS)
             .onRegister(attach(new TooltipBehavior(tooltips -> {
                 tooltips.add(Component.translatable("cosmiccore.omnia_circuit.luv"));
@@ -490,7 +490,7 @@ public class CosmicItems {
             .register();
     public static final ItemEntry<ComponentItem> OMNIA_CIRCUIT_ZPM = REGISTRATE.item("omnia_circuit_zpm", ComponentItem::create)
             .lang("ZPM Omnia Circuit")
-            .properties(p -> p.stacksTo(256))
+            .properties(p -> p.stacksTo(64))
             .tag(CustomTags.ZPM_CIRCUITS)
             .onRegister(attach(new TooltipBehavior(tooltips -> {
                 tooltips.add(Component.translatable("cosmiccore.omnia_circuit.zpm"));
@@ -499,7 +499,7 @@ public class CosmicItems {
             .register();
     public static final ItemEntry<ComponentItem> OMNIA_CIRCUIT_UV = REGISTRATE.item("omnia_circuit_uv", ComponentItem::create)
             .lang("UV Omnia Circuit")
-            .properties(p -> p.stacksTo(256))
+            .properties(p -> p.stacksTo(64))
             .tag(CustomTags.UV_CIRCUITS)
             .onRegister(attach(new TooltipBehavior(tooltips -> {
                 tooltips.add(Component.translatable("cosmiccore.omnia_circuit.uv"));
@@ -509,7 +509,7 @@ public class CosmicItems {
     public static final ItemEntry<ComponentItem> OMNIA_CIRCUIT_UHV = REGISTRATE.item("omnia_circuit_uhv", ComponentItem::create)
             .lang("UHV Omnia Circuit")
             .tag(CustomTags.UHV_CIRCUITS)
-            .properties(p -> p.stacksTo(256))
+            .properties(p -> p.stacksTo(64))
             .onRegister(attach(new TooltipBehavior(tooltips -> {
                 tooltips.add(Component.translatable("cosmiccore.omnia_circuit.uhv"));
             })))
@@ -518,7 +518,7 @@ public class CosmicItems {
     public static final ItemEntry<ComponentItem> OMNIA_CIRCUIT_UEV = REGISTRATE.item("omnia_circuit_uev", ComponentItem::create)
             .lang("UEV Omnia Circuit")
             .tag(CustomTags.UEV_CIRCUITS)
-            .properties(p -> p.stacksTo(256))
+            .properties(p -> p.stacksTo(64))
             .onRegister(attach(new TooltipBehavior(tooltips -> {
                 tooltips.add(Component.translatable("cosmiccore.omnia_circuit.uev"));
             })))
@@ -527,7 +527,7 @@ public class CosmicItems {
     public static final ItemEntry<ComponentItem> OMNIA_CIRCUIT_UIV = REGISTRATE.item("omnia_circuit_uiv", ComponentItem::create)
             .lang("UIV Omnia Circuit")
             .tag(CustomTags.UIV_CIRCUITS)
-            .properties(p -> p.stacksTo(256))
+            .properties(p -> p.stacksTo(64))
             .onRegister(attach(new TooltipBehavior(tooltips -> {
                 tooltips.add(Component.translatable("cosmiccore.omnia_circuit.uiv"));
             })))
@@ -536,7 +536,7 @@ public class CosmicItems {
     public static final ItemEntry<ComponentItem> OMNIA_CIRCUIT_UXV = REGISTRATE.item("omnia_circuit_uxv", ComponentItem::create)
             .lang("UXV Omnia Circuit")
             .tag(CustomTags.UXV_CIRCUITS)
-            .properties(p -> p.stacksTo(256))
+            .properties(p -> p.stacksTo(64))
             .onRegister(attach(new TooltipBehavior(tooltips -> {
                 tooltips.add(Component.translatable("cosmiccore.omnia_circuit.uxv"));
             })))
@@ -545,7 +545,7 @@ public class CosmicItems {
     public static final ItemEntry<ComponentItem> OMNIA_CIRCUIT_OPV = REGISTRATE.item("omnia_circuit_opv", ComponentItem::create)
             .lang("OPV Omnia Circuit")
             .tag(CustomTags.OpV_CIRCUITS)
-            .properties(p -> p.stacksTo(256))
+            .properties(p -> p.stacksTo(64))
             .onRegister(attach(new TooltipBehavior(tooltips -> {
                 tooltips.add(Component.translatable("cosmiccore.omnia_circuit.opv"));
             })))
