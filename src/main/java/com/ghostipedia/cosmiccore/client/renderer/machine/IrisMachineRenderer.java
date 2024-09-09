@@ -54,12 +54,12 @@ public class IrisMachineRenderer extends WorkableCasingMachineRenderer {
             var level = machine.getLevel();
             var frontFacing = machine.getFrontFacing();
             float tick = level.getGameTime() + partialTicks;
-            renderStar(poseStack, buffer, frontFacing, tick, combinedLight, combinedOverlay);
-            renderStarInsides(poseStack, buffer, frontFacing, tick, combinedLight, combinedOverlay);
-            renderStarShell(poseStack, buffer, frontFacing, tick, combinedLight, combinedOverlay);
-//            renderIris(poseStack, buffer, frontFacing, tick, combinedLight, combinedOverlay);
-//            renderRing(poseStack, buffer, frontFacing, tick, combinedLight, combinedOverlay);
-//            renderRingSmall(poseStack, buffer, frontFacing, tick, combinedLight, combinedOverlay);
+//            renderStar(poseStack, buffer, frontFacing, tick, combinedLight, combinedOverlay);
+//            renderStarInsides(poseStack, buffer, frontFacing, tick, combinedLight, combinedOverlay);
+//            renderStarShell(poseStack, buffer, frontFacing, tick, combinedLight, combinedOverlay);
+            renderIris(poseStack, buffer, frontFacing, tick, combinedLight, combinedOverlay);
+            renderRing(poseStack, buffer, frontFacing, tick, combinedLight, combinedOverlay);
+            renderRingSmall(poseStack, buffer, frontFacing, tick, combinedLight, combinedOverlay);
         }
     }
 

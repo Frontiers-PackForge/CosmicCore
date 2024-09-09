@@ -65,6 +65,19 @@ public class CosmicLangHandler {
         replace(provider,"cosmiccore.lore.shard_huge.0", "§3An abnormally massive cluster from past eternity.");
         replace(provider,"cosmiccore.lore.shard_huge.1", "§3it screams and wails at you to undo history.");
         replace(provider,"cosmiccore.lore.shard_huge.2", "§cYour mind shatters trying to understand this.");
+        replace(provider,"cosmiccore.omnia_circuit.lv", "§6Works as any LV Circuit.");
+        replace(provider,"cosmiccore.omnia_circuit.mv", "§6Works as any MV Circuit.");
+        replace(provider,"cosmiccore.omnia_circuit.hv", "§6Works as any HV Circuit.");
+        replace(provider,"cosmiccore.omnia_circuit.ev", "§6Works as any EV Circuit.");
+        replace(provider,"cosmiccore.omnia_circuit.iv", "§6Works as any IV Circuit.");
+        replace(provider,"cosmiccore.omnia_circuit.luv", "§6Works as any LuV Circuit.");
+        replace(provider,"cosmiccore.omnia_circuit.zpm", "§6Works as any ZPM Circuit.");
+        replace(provider,"cosmiccore.omnia_circuit.uv", "§6Works as any UV Circuit.");
+        replace(provider,"cosmiccore.omnia_circuit.uhv", "§6Works as any UHV Circuit.");
+        replace(provider,"cosmiccore.omnia_circuit.uev", "§6Works as any UEV Circuit.");
+        replace(provider,"cosmiccore.omnia_circuit.uiv", "§6Works as any UIV Circuit.");
+        replace(provider,"cosmiccore.omnia_circuit.uxv", "§6Works as any UXV Circuit.");
+        replace(provider,"cosmiccore.omnia_circuit.opv", "§6Works as any OPV Circuit.");
 
     }
 }
