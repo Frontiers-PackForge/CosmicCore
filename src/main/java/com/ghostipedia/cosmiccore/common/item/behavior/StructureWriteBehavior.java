@@ -1,4 +1,4 @@
-package com.ghostipedia.cosmiccore.common.data;
+package com.ghostipedia.cosmiccore.common.item.behavior;
 
 import com.ghostipedia.cosmiccore.api.data.DebugBlockPattern;
 import com.google.common.base.Joiner;
@@ -38,8 +38,7 @@ public class StructureWriteBehavior implements IItemUIFactory {
     }
 
     @Override
-    public ModularUI createUI(
-            HeldItemUIFactory.HeldItemHolder playerInventoryHolder, Player entityPlayer) {
+    public ModularUI createUI(HeldItemUIFactory.HeldItemHolder playerInventoryHolder, Player entityPlayer) {
         var container = new WidgetGroup(8, 8, 160, 54);
         container
                 .addWidget(new ImageWidget(4, 4, 152, 46, GuiTextures.DISPLAY))
@@ -57,8 +56,7 @@ public class StructureWriteBehavior implements IItemUIFactory {
                     }
                     return LocalizationUtils.format(
                             "item.cosmiccore.debug.structure_writer.structural_scale", x, y, z);
-                })
-                        .setTextColor(0xFAF9F6))
+                }).setTextColor(0xFAF9F6))
                 .addWidget(new LabelWidget(7, 20, () -> {
                     var direction = getDir(playerInventoryHolder.getHeld());
                     var dirs = DebugBlockPattern.getDir(direction);
@@ -67,8 +65,7 @@ public class StructureWriteBehavior implements IItemUIFactory {
                             dirs[0].name(),
                             dirs[1].name(),
                             dirs[2].name());
-                })
-                        .setTextColor(0xFAF9F6));
+                }).setTextColor(0xFAF9F6));
         container.setBackground(GuiTextures.BACKGROUND_INVERSE);
         return new ModularUI(176, 120, playerInventoryHolder, entityPlayer)
                 .background(GuiTextures.BACKGROUND)

@@ -13,8 +13,9 @@ public class ForgeCommonEventListener {
 
     @SubscribeEvent
     public static void entityPlacementEventHandler(BlockEvent.EntityPlaceEvent event) {
-        if (event.getPlacedBlock().getBlock() instanceof MetaMachineBlock block && block.getMachine(event.getLevel(), event.getPos()) instanceof SoulHatchPartMachine soulHatch
-            && event.getEntity() instanceof Player player) {
+        if (event.getPlacedBlock().getBlock() instanceof MetaMachineBlock block &&
+                block.getMachine(event.getLevel(), event.getPos()) instanceof SoulHatchPartMachine soulHatch &&
+                event.getEntity() instanceof Player player) {
             soulHatch.attachSoulNetwork(player);
         }
     }
