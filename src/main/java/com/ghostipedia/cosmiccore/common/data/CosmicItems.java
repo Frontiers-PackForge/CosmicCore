@@ -18,10 +18,16 @@ import com.tterrag.registrate.util.nullness.NonNullConsumer;
 import earth.terrarium.adastra.common.tags.ModItemTags;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.tags.DamageTypeTags;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ArmorItem;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Rarity;
+import net.minecraft.world.level.Level;
 import wayoftime.bloodmagic.common.item.BloodOrb;
 import wayoftime.bloodmagic.common.item.ItemBloodOrb;
 import wayoftime.bloodmagic.common.registration.impl.BloodOrbRegistryObject;
@@ -172,6 +178,40 @@ public class CosmicItems {
                 tooltips.add(Component.translatable("cosmiccore.lore.shard_huge.2"));
             })))
             .defaultModel()
+            .register();
+
+    public static ItemEntry<ComponentItem> THE_ONE_RING = REGISTRATE
+            .item("the_one_ring", p -> (ComponentItem) new ComponentItem(p) {
+                @Override
+                public boolean canBeHurtBy(DamageSource damageSource) {
+                    return damageSource.is(DamageTypes.LAVA);
+                }
+
+                @Override
+                public int getEntityLifespan(ItemStack itemStack, Level level) {
+                    return Short.MIN_VALUE;
+                }
+
+                @Override
+                public boolean onDroppedByPlayer(ItemStack item, Player player) {
+                    return false;
+                }
+
+                @Override
+                public boolean isFoil(ItemStack stack) {
+                    return true;
+                }
+            })
+            .lang("The One Ring")
+            .properties(p -> p.stacksTo(1).fireResistant())
+            .onRegister(attach(new EffectApplicationBehavior()
+                    .addEffect(() -> new MobEffectInstance(MobEffects.INVISIBILITY, 10), 1.0F)
+                    .addEffect(() -> new MobEffectInstance(MobEffects.UNLUCK, 10, 5), 1.0F)
+                    .addEffect(() -> new MobEffectInstance(MobEffects.MOVEMENT_SPEED, 10, 1), 1.0F),
+                    new TooltipBehavior(list -> {
+                        list.add(Component.translatable("item.cosmiccore.the_one_ring.tooltip.0"));
+                        list.add(Component.translatable("item.cosmiccore.the_one_ring.tooltip.1"));
+                    })))
             .register();
 //    public static final ItemEntry<ComponentItem> PARADOX_ECHOS = REGISTRATE.item("paradox_echos", ComponentItem::create)
 //            .lang("Paradox Echos")

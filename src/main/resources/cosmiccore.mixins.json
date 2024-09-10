@@ -1,18 +1,20 @@
 {
-  "required": true,
-  "package": "com.ghostipedia.cosmiccore.mixin",
-  "compatibilityLevel": "JAVA_17",
-  "minVersion": "0.8",
-  "mixins": [
-    "AdAstraOverlayScreenMixin",
-    "AdAstraSpaceSuitItemMixin",
-    "DivingHelmetItemMixin",
-    "PlayerBreathingMixin",
-    "client.CosmicCoreRemainingAirOverlayMixin"
-  ],
-  "client": [
-  ],
-  "injectors": {
-    "defaultRequire": 1
+    "required": true,
+    "package": "com.ghostipedia.cosmiccore.mixin",
+    "compatibilityLevel": "JAVA_17",
+    "minVersion": "0.8",
+    "mixins": [
+        "AdAstraOverlayScreenMixin",
+        "AdAstraSpaceSuitItemMixin",
+        "DivingHelmetItemMixin",
+        "PlayerBreathingMixin",
+        "accessor.LivingEntityAccessor",
+        "client.CosmicCoreRemainingAirOverlayMixin"
+    ],
+    "client": [
+        "client.MinecraftMixin"
+    ],
+    "injectors": {
+        "defaultRequire": 1
   }
 }
