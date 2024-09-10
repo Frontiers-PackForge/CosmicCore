@@ -25,7 +25,7 @@ public class CosmicRecipeModifiers {
                     return null;
                 }
             }
-            ocResult.init(-RecipeHelper.getOutputEUt(recipe), recipe.duration);
+            ocResult.init(-RecipeHelper.getOutputEUt(recipe), recipe.duration, ocParams.getOcAmount());
             return recipe;
         }
         return null;
