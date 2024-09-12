@@ -1,0 +1,9 @@
+{
+    "loader": "forge:obj",
+    "model": "cosmiccore:models/block/iris/beam_box.obj",
+    "textures": {
+      "texture0": "cosmiccore:block/iris/beam_box",
+      "particle":"cosmiccore:block/iris/beam_box"
+    },
+    "automatic_culling": false
+  }
