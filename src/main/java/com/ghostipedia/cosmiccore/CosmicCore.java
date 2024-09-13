@@ -46,6 +46,8 @@ public class CosmicCore {
         bus.addGenericListener(MachineDefinition.class, this::registerMachines);
         bus.addGenericListener(SoundEntry.class, this::registerSounds);
 
+        CosmicLootModifiers.register(bus);
+
         if (Platform.isClient()) {
             bus.register(CosmicCoreClient.class);
         }

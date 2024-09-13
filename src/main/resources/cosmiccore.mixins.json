@@ -9,6 +9,7 @@
         "DivingHelmetItemMixin",
         "PlayerBreathingMixin",
         "accessor.LivingEntityAccessor",
+        "accessor.LootTableAccessor",
         "client.CosmicCoreRemainingAirOverlayMixin"
     ],
     "client": [
