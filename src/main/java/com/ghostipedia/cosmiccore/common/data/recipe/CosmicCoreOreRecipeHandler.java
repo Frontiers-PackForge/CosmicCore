@@ -12,7 +12,7 @@ import net.minecraft.world.item.ItemStack;
 
 import java.util.function.Consumer;
 
-import static com.ghostipedia.cosmiccore.api.data.CosmicCoreTagPrefix.*;
+import static com.ghostipedia.cosmiccore.api.data.CosmicCustomTags.*;
 import static com.ghostipedia.cosmiccore.common.data.materials.CosmicMaterials.DilutedPrisma;
 import static com.ghostipedia.cosmiccore.common.data.materials.CosmicMaterials.Prisma;
 import static com.ghostipedia.cosmiccore.gtbridge.CosmicRecipeTypes.*;
