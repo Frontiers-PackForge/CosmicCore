@@ -3,8 +3,10 @@ package com.ghostipedia.cosmiccore.common.machine.multiblock.multi.modular;
 import com.ghostipedia.cosmiccore.api.CosmicCoreAPI;
 import com.ghostipedia.cosmiccore.api.block.IMultiblockProvider;
 import com.ghostipedia.cosmiccore.api.block.IMultiblockReciever;
+import com.ghostipedia.cosmiccore.api.machine.multiblock.MagnetWorkableElectricMultiblockMachine;
 import com.ghostipedia.cosmiccore.client.renderer.machine.StarBallastMachineRenderer;
 import com.ghostipedia.cosmiccore.common.data.CosmicBlocks;
+import com.ghostipedia.cosmiccore.common.machine.multiblock.electric.MagneticFieldMachine;
 import com.ghostipedia.cosmiccore.gtbridge.CosmicRecipeTypes;
 import com.gregtechceu.gtceu.api.capability.IEnergyContainer;
 import com.gregtechceu.gtceu.api.data.RotationState;
@@ -19,6 +21,7 @@ import com.gregtechceu.gtceu.api.pattern.Predicates;
 import com.gregtechceu.gtceu.api.pattern.TraceabilityPredicate;
 import com.gregtechceu.gtceu.api.recipe.OverclockingLogic;
 import com.gregtechceu.gtceu.common.data.GTRecipeModifiers;
+import com.lowdragmc.lowdraglib.syncdata.field.ManagedFieldHolder;
 import com.lowdragmc.lowdraglib.utils.BlockInfo;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
@@ -38,12 +41,18 @@ import static com.gregtechceu.gtceu.api.pattern.Predicates.blocks;
 import static com.gregtechceu.gtceu.common.data.GCyMBlocks.CASING_HIGH_TEMPERATURE_SMELTING;
 
 public class StarLadder extends WorkableElectricMultiblockMachine implements IMultiblockProvider {
+    protected static final ManagedFieldHolder MANAGED_FIELD_HOLDER = new ManagedFieldHolder(StarLadder.class, WorkableElectricMultiblockMachine.MANAGED_FIELD_HOLDER);
     @Nullable
     protected EnergyContainerList inputEnergyContainers;
     //assuming a collection is just like a map, but it lost the actual mapping
     private final Collection<IMultiblockReciever> starLadderReceivers = ConcurrentHashMap.newKeySet();
-    public StarLadder(IMachineBlockEntity holder) {
-        super(holder);
+    public StarLadder(IMachineBlockEntity holder, Object... args) {
+        super(holder, args);
+    }
+    @Override
+    @NotNull
+    public ManagedFieldHolder getFieldHolder() {
+        return MANAGED_FIELD_HOLDER;
     }
     protected int tetherTier = 0;
     @Override
@@ -132,6 +141,5 @@ public class StarLadder extends WorkableElectricMultiblockMachine implements IMu
             )
             .hasTESR(true)
             .register();
-
-
+    public static void init() {}
 }
