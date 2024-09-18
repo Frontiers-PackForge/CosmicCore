@@ -1,50 +1,49 @@
 package com.ghostipedia.cosmiccore.common.machine.multiblock.multi.modular;
 
-import com.ghostipedia.cosmiccore.api.CosmicCoreAPI;
+import com.ghostipedia.cosmiccore.CosmicCore;
 import com.ghostipedia.cosmiccore.api.block.IMultiblockProvider;
 import com.ghostipedia.cosmiccore.api.block.IMultiblockReciever;
-import com.ghostipedia.cosmiccore.api.machine.multiblock.MagnetWorkableElectricMultiblockMachine;
-import com.ghostipedia.cosmiccore.client.renderer.machine.StarBallastMachineRenderer;
 import com.ghostipedia.cosmiccore.common.data.CosmicBlocks;
-import com.ghostipedia.cosmiccore.common.machine.multiblock.electric.MagneticFieldMachine;
-import com.ghostipedia.cosmiccore.gtbridge.CosmicRecipeTypes;
+import com.gregtechceu.gtceu.GTCEu;
 import com.gregtechceu.gtceu.api.capability.IEnergyContainer;
+import com.gregtechceu.gtceu.api.capability.recipe.IO;
 import com.gregtechceu.gtceu.api.data.RotationState;
+import com.gregtechceu.gtceu.api.gui.GuiTextures;
 import com.gregtechceu.gtceu.api.machine.IMachineBlockEntity;
-import com.gregtechceu.gtceu.api.machine.MetaMachine;
 import com.gregtechceu.gtceu.api.machine.MultiblockMachineDefinition;
 import com.gregtechceu.gtceu.api.machine.multiblock.PartAbility;
 import com.gregtechceu.gtceu.api.machine.multiblock.WorkableElectricMultiblockMachine;
+import com.gregtechceu.gtceu.api.machine.trait.NotifiableItemStackHandler;
 import com.gregtechceu.gtceu.api.misc.EnergyContainerList;
 import com.gregtechceu.gtceu.api.pattern.FactoryBlockPattern;
 import com.gregtechceu.gtceu.api.pattern.Predicates;
-import com.gregtechceu.gtceu.api.pattern.TraceabilityPredicate;
 import com.gregtechceu.gtceu.api.recipe.OverclockingLogic;
 import com.gregtechceu.gtceu.common.data.GTRecipeModifiers;
+import com.gregtechceu.gtceu.common.data.GTRecipeTypes;
+import com.lowdragmc.lowdraglib.gui.texture.GuiTextureGroup;
+import com.lowdragmc.lowdraglib.gui.texture.TextTexture;
+import com.lowdragmc.lowdraglib.gui.widget.*;
+import com.lowdragmc.lowdraglib.syncdata.annotation.Persisted;
 import com.lowdragmc.lowdraglib.syncdata.field.ManagedFieldHolder;
-import com.lowdragmc.lowdraglib.utils.BlockInfo;
-import net.minecraft.core.BlockPos;
+import lombok.Getter;
 import net.minecraft.network.chat.Component;
-import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.Block;
 import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
 import java.util.Collection;
-import java.util.Comparator;
+import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 
-import static com.ghostipedia.cosmiccore.api.data.CosmicCustomTags.STAR_LADDER_BLOCKS;
 import static com.ghostipedia.cosmiccore.api.registries.CosmicRegistration.REGISTRATE;
 import static com.gregtechceu.gtceu.api.pattern.Predicates.*;
-import static com.gregtechceu.gtceu.api.pattern.Predicates.blocks;
-import static com.gregtechceu.gtceu.common.data.GCyMBlocks.CASING_HIGH_TEMPERATURE_SMELTING;
 
 public class StarLadder extends WorkableElectricMultiblockMachine implements IMultiblockProvider {
     protected static final ManagedFieldHolder MANAGED_FIELD_HOLDER = new ManagedFieldHolder(StarLadder.class, WorkableElectricMultiblockMachine.MANAGED_FIELD_HOLDER);
     @Nullable
     protected EnergyContainerList inputEnergyContainers;
     //assuming a collection is just like a map, but it lost the actual mapping
+    @Getter
+    protected boolean isFuelable;
     private final Collection<IMultiblockReciever> starLadderReceivers = ConcurrentHashMap.newKeySet();
     public StarLadder(IMachineBlockEntity holder, Object... args) {
         super(holder, args);
@@ -54,7 +53,7 @@ public class StarLadder extends WorkableElectricMultiblockMachine implements IMu
     public ManagedFieldHolder getFieldHolder() {
         return MANAGED_FIELD_HOLDER;
     }
-    protected int tetherTier = 0;
+    protected int tetherTier = 1;
     @Override
     public int getModulatorTier() {
         return 0;
@@ -79,6 +78,7 @@ public class StarLadder extends WorkableElectricMultiblockMachine implements IMu
     @Override
     public void onStructureFormed() {
         super.onStructureFormed();
+
     }
 
     @Override
@@ -87,35 +87,37 @@ public class StarLadder extends WorkableElectricMultiblockMachine implements IMu
         this.starLadderReceivers.forEach(IMultiblockReciever::sendWorkingDisabled);
         this.starLadderReceivers.forEach(s -> s.setModularMultiBlock(null));
     }
-    //New Code ft. Ghost what the HELL are you doing...
-    @NotNull
-    protected TraceabilityPredicate starLadderModules(Level level, BlockPos pos) {
-        return new TraceabilityPredicate(blockWorldState -> {
-            var blockState = blockWorldState.getBlockState();
-            Block block = blockState.getBlock();
-            MetaMachine metaMachine = MetaMachine.getMachine(level, pos);
-            if (blockState.is(STAR_LADDER_BLOCKS)) {
-                if(block == CosmicBlocks.STAR_LADDER_CASING.get()) return true;
-            }
-            if(metaMachine == null) return false;
-            if (metaMachine instanceof IMultiblockProvider) return false;
-            if (!(metaMachine instanceof IMultiblockReciever starLadderReceiver)) return false;
-            if(starLadderReceiver.getModularMultiBlock() != this){
-                starLadderReceiver.setModularMultiBlock(this);
-                this.starLadderReceivers.add(starLadderReceiver);
-            }
-            return true;
-        }, () -> CosmicCoreAPI.MAGNET_COILS.entrySet().stream()
-                // sort to make autogenerated jei previews not pick random coils each game load
-                .sorted(Comparator.comparingInt(value -> value.getKey().getMagnetFieldCapacity()))
-                .map(coil -> BlockInfo.fromBlockState(coil.getValue().get().defaultBlockState()))
-                .toArray(BlockInfo[]::new))
-                .addTooltips(Component.translatable("gtceu.multiblock.pattern.error.coils"));
+    public void isfuelable(boolean fuelable) {
+        this.isFuelable = fuelable;
     }
+    //New Code ft. Ghost what the HELL are you doing...
+//    @NotNull
+//    protected static TraceabilityPredicate starLadderModulesOld() {
+//        return new TraceabilityPredicate(MultiblockState -> {
+//            var blockState = MultiblockState.getBlockState();
+//            Block block = blockState.getBlock();
+//            MetaMachine metaMachine = MetaMachine.getMachine(level, pos);
+//            if (blockState.is(STAR_LADDER_BLOCKS)) {
+//                if(block == CosmicBlocks.STAR_LADDER_CASING.get()) return true;
+//            }
+//            if(metaMachine == null) return false;
+//            if (metaMachine instanceof IMultiblockProvider) return false;
+//            if (!(metaMachine instanceof IMultiblockReciever starLadderReceiver)) return false;
+//            if(starLadderReceiver.getModularMultiBlock() != this){
+//                starLadderReceiver.setModularMultiBlock(this);
+//                this.starLadderReceivers.add(starLadderReceiver);
+//            }
+//            return true;
+//        }, () -> CosmicCoreAPI.STARLADDER_CASINGS.entrySet().stream()
+//                // sort to make autogenerated jei previews not pick random coils each game load
+//                .map(coil -> BlockInfo.fromBlockState(coil.getValue().get().defaultBlockState()))
+//                .toArray(BlockInfo[]::new))
+//                .addTooltips(Component.translatable("gtceu.multiblock.pattern.error.coils"));
+//    }
 
-    public final  MultiblockMachineDefinition STAR_LADDER = REGISTRATE.multiblock("star_ladder", StarLadder::new)
-            .rotationState(RotationState.Y_AXIS)
-            .recipeType(CosmicRecipeTypes.VOMAHINE_CORE_DRILL)
+    public static final MultiblockMachineDefinition STAR_LADDER = REGISTRATE.multiblock("star_ladder", StarLadder::new)
+            .rotationState(RotationState.NON_Y_AXIS)
+            .recipeType(GTRecipeTypes.DUMMY_RECIPES)
             .recipeModifier(GTRecipeModifiers.ELECTRIC_OVERCLOCK.apply(OverclockingLogic.NON_PERFECT_OVERCLOCK_SUBTICK))
             .appearanceBlock(CosmicBlocks.VOMAHINE_CERTIFIED_CHEMICALLY_RESISTANT_CASING)
             .pattern(definition -> FactoryBlockPattern.start()
@@ -123,7 +125,7 @@ public class StarLadder extends WorkableElectricMultiblockMachine implements IMu
                     .aisle("AAAAA", "A B A", "Q   Q", "A   A")
                     .where(' ', any())
                     .where("B", controller(blocks(definition.getBlock())))
-                    .where('A', blocks(CASING_HIGH_TEMPERATURE_SMELTING.get())
+                    .where('A', blocks(CosmicBlocks.VOMAHINE_CERTIFIED_CHEMICALLY_RESISTANT_CASING.get())
                             .or(Predicates.abilities(PartAbility.EXPORT_ITEMS).setMaxGlobalLimited(16))
                             .or(Predicates.abilities(PartAbility.EXPORT_FLUIDS).setMaxGlobalLimited(16))
                             .or(Predicates.abilities(PartAbility.INPUT_ENERGY).setMaxGlobalLimited(2))
@@ -131,9 +133,9 @@ public class StarLadder extends WorkableElectricMultiblockMachine implements IMu
                             .or(Predicates.abilities(PartAbility.OUTPUT_LASER).setMaxGlobalLimited(1))
                             .or(Predicates.abilities(PartAbility.IMPORT_FLUIDS).setMaxGlobalLimited(16))
                             .or(Predicates.abilities(PartAbility.IMPORT_ITEMS).setMaxGlobalLimited(16)))
-                    .where("Q", starLadderModules(getLevel(), getPos()))
+                    .where("Q", blocks(CosmicBlocks.VOMAHINE_ULTRA_POWERED_CASING.get()))
                     .build())
-            .renderer(StarBallastMachineRenderer::new)
+            .workableCasingRenderer(CosmicCore.id("block/casings/solid/vomahine_certified_chemically_resistant_casing"), GTCEu.id("block/multiblock/fusion_reactor"))
             .tooltips(Component.translatable("cosmiccore.multiblock.iris.tooltip.0"),
                     Component.translatable("cosmiccore.multiblock.iris.tooltip.1"),
                     Component.translatable("cosmiccore.multiblock.iris.tooltip.2"),
@@ -141,5 +143,33 @@ public class StarLadder extends WorkableElectricMultiblockMachine implements IMu
             )
             .hasTESR(true)
             .register();
+    @Override
+    public Widget createUIWidget() {
+        var group = new WidgetGroup(0, 0, 182 + 8, 117 + 8);
+        group.addWidget(new DraggableScrollableWidgetGroup(4, 4, 182, 117).setBackground(getScreenTexture())
+                .addWidget(new LabelWidget(4, 5, self().getBlockState().getBlock().getDescriptionId()))
+                .addWidget(new ComponentPanelWidget(4, 17, this::addDisplayText)
+                        .textSupplier(this.getLevel().isClientSide ? null : this::addDisplayText)
+                        .setMaxWidthLimit(150)
+                        .clickHandler(this::handleDisplayClick)));
+        group.setBackground(GuiTextures.BACKGROUND_INVERSE);
+        group.addWidget(new ButtonWidget(
+                27,
+                100,
+                158,
+                20,
+                new GuiTextureGroup(
+                        GuiTextures.BUTTON,
+                        new TextTexture("cosmiccore.multiblock.send_orbit_data")),
+                clickData -> isfuelable(true)));
+        return group;
+    }
+
+    @Override
+    public void addDisplayText(List<Component> textList) {
+        if (isFormed()) {
+            textList.add(Component.translatable("cosmiccore.multiblock.advanced.star_ladder_tier", tetherTier , getMaxModules()));
+        }
+    }
     public static void init() {}
 }

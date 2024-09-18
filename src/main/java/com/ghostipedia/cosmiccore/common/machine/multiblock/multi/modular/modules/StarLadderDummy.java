@@ -55,26 +55,26 @@ public class StarLadderDummy extends ModularizedWorkableElectricMultiblockMachin
     public String getNameForDisplays() {
         return this.getDefinition().getId().toLanguageKey("block", "display_count");
     }
-    public static final MultiblockMachineDefinition[] STAR_LADDER_DUMMY_MODULE = registerTieredModules("star_ladder_dummy_module",
-            (holder, tier) -> new StarLadderDummy(holder, tier, 0, 1)
-                    .rotationState(RotationState.ALL)
-                    .langValue("Assembly Module MK %s".formatted(toRomanNumeral(tier - 5)))
-                    .recipeType(GTRecipeTypes.ASSEMBLER_RECIPES)
-                    .appearanceBlock(() -> FusionReactorMachine.getCasingState(tier))
-                    .pattern((definition) -> {
-                        var casing = blocks(FusionReactorMachine.getCasingState(tier));
-                        return FactoryBlockPattern.start()
-                                .aisle("A", "A", "A", "A")
-                                .aisle("A", "A", "B", "A")
-                                .where("B", controller(blocks(definition.getBlock())))
-                                .where('A', blocks(CASING_HIGH_TEMPERATURE_SMELTING.get()).or(abilities()))
-                                .build();
-                    })
-                    .workableCasingRenderer(CosmicCore.id("block/casings/solid/vomahine_certified_chemically_resistant_casing"), GTCEu.id("block/multiblock/fusion_reactor"))
-                    .hasTESR(true)
-                    .compassNodeSelf()
-                    .register(),
-            ZPM, UV, UHV);
+//    public static final MultiblockMachineDefinition[] STAR_LADDER_DUMMY_MODULE = registerTieredModules("star_ladder_dummy_module",
+//            (holder, tier) -> new StarLadderDummy(holder, tier, 0, 1)
+//                    .rotationState(RotationState.ALL)
+//                    .langValue("Assembly Module MK %s".formatted(toRomanNumeral(tier - 5)))
+//                    .recipeType(GTRecipeTypes.ASSEMBLER_RECIPES)
+//                    .appearanceBlock(() -> FusionReactorMachine.getCasingState(tier))
+//                    .pattern((definition) -> {
+//                        var casing = blocks(FusionReactorMachine.getCasingState(tier));
+//                        return FactoryBlockPattern.start()
+//                                .aisle("A", "A", "A", "A")
+//                                .aisle("A", "A", "B", "A")
+//                                .where("B", controller(blocks(definition.getBlock())))
+//                                .where('A', blocks(CASING_HIGH_TEMPERATURE_SMELTING.get()).or(abilities()))
+//                                .build();
+//                    })
+//                    .workableCasingRenderer(CosmicCore.id("block/casings/solid/vomahine_certified_chemically_resistant_casing"), GTCEu.id("block/multiblock/fusion_reactor"))
+//                    .hasTESR(true)
+//                    .compassNodeSelf()
+//                    .register(),
+//            ZPM, UV, UHV);
 
     public static MultiblockMachineDefinition[] registerTieredModules(String name,
                                                                       BiFunction<IMachineBlockEntity, Integer, MultiblockControllerMachine> factory,

@@ -6,14 +6,21 @@ import com.ghostipedia.cosmiccore.api.block.IMultiblockProvider;
 import com.ghostipedia.cosmiccore.api.block.IMultiblockReciever;
 import com.ghostipedia.cosmiccore.common.block.MagnetBlock;
 import com.ghostipedia.cosmiccore.common.data.CosmicBlocks;
+import com.gregtechceu.gtceu.api.GTCEuAPI;
 import com.gregtechceu.gtceu.api.machine.MetaMachine;
 import com.gregtechceu.gtceu.api.machine.feature.multiblock.IMultiController;
+import com.gregtechceu.gtceu.api.machine.multiblock.IBatteryData;
 import com.gregtechceu.gtceu.api.machine.trait.MachineTrait;
 import com.gregtechceu.gtceu.api.pattern.Predicates;
 import com.gregtechceu.gtceu.api.pattern.TraceabilityPredicate;
 import com.gregtechceu.gtceu.api.pattern.error.PatternStringError;
+import com.gregtechceu.gtceu.api.pattern.util.PatternMatchContext;
+import com.gregtechceu.gtceu.common.block.BatteryBlock;
+import com.gregtechceu.gtceu.common.machine.multiblock.electric.PowerSubstationMachine;
 import com.lowdragmc.lowdraglib.utils.BlockInfo;
 import com.tterrag.registrate.util.entry.BlockEntry;
+import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
+import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.Tag;
@@ -21,9 +28,11 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Comparator;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
@@ -31,6 +40,7 @@ import java.util.function.Supplier;
 import static com.ghostipedia.cosmiccore.api.data.CosmicCustomTags.STAR_LADDER_BLOCKS;
 import static com.gregtechceu.gtceu.api.pattern.Predicates.blocks;
 import static com.gregtechceu.gtceu.common.data.GCyMBlocks.CASING_ATOMIC;
+import static com.gregtechceu.gtceu.common.machine.multiblock.electric.PowerSubstationMachine.PMC_BATTERY_HEADER;
 
 public class CosmicPredicates {
     public static TraceabilityPredicate magnetCoils() {
@@ -55,6 +65,26 @@ public class CosmicPredicates {
                 .toArray(BlockInfo[]::new))
                 .addTooltips(Component.translatable("gtceu.multiblock.pattern.error.coils"));
     }
+
+    public static TraceabilityPredicate starLadderModules() {
+        return new TraceabilityPredicate(blockWorldState -> {
+            var blockState = blockWorldState.getBlockState();
+            PatternMatchContext matchContext = blockWorldState.getMatchContext();
+            for (var entry : CosmicCoreAPI.STARLADDER_MODULES.entrySet()) {
+                if (blockState.is(entry.getValue().get())) {
+                    var modulatorTier = entry.getKey().getModulatorTier();
+                    Object currentModule = blockWorldState.getMatchContext().getOrPut("ModuleType", modulatorTier);
+                    matchContext.getOrCreate("moduleMap", Long2ObjectOpenHashMap::new).put(blockWorldState.getPos().asLong(),blockState);
+                    return true;
+                }
+            }
+            return false;
+        }, () -> CosmicCoreAPI.STARLADDER_MODULES.values().stream()
+                .map(blockSupplier -> BlockInfo.fromBlockState(blockSupplier.get().defaultBlockState()))
+                .toArray(BlockInfo[]::new))
+                .addTooltips(Component.translatable("gtceu.multiblock.pattern.error.filters"));
+    }
+
     public static void init() {
     }
 }

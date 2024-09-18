@@ -9,13 +9,14 @@ public class ModularizedMultis {
     public static void init() {
 
         //Vomahine Modular Hardware
-
+        ShredderMultiblock.init();
 
 
         //MegaStructures
         StellarIris.init();
         StellarStarBallast.init();
-        ShredderMultiblock.init();
+
+        StarLadder.init();
 
     }
 
