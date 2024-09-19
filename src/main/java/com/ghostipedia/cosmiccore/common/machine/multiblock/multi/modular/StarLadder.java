@@ -53,7 +53,7 @@ public class StarLadder extends WorkableElectricMultiblockMachine implements IMu
     public ManagedFieldHolder getFieldHolder() {
         return MANAGED_FIELD_HOLDER;
     }
-    protected int tetherTier = 1;
+    protected int tetherTier = 0;
     @Override
     public int getModulatorTier() {
         return 0;
@@ -62,7 +62,7 @@ public class StarLadder extends WorkableElectricMultiblockMachine implements IMu
         if (this.tetherTier == 1) return 6;
         if (this.tetherTier == 2) return 12;
         if (this.tetherTier == 3) return 16;
-        return 0;
+        return 4;
     }
 
     @Override
