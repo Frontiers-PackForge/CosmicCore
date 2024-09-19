@@ -80,6 +80,12 @@ public class CosmicLangHandler {
         replace(provider,"cosmiccore.omnia_circuit.uiv", "§6Works as any UIV Circuit.");
         replace(provider,"cosmiccore.omnia_circuit.uxv", "§6Works as any UXV Circuit.");
         replace(provider,"cosmiccore.omnia_circuit.opv", "§6Works as any OPV Circuit.");
+        replace(provider,"block.gtceu.steam_mixing_vessel", "§6Large Steam Mixing Vessel");
+        replace(provider,"block.gtceu.industrial_primitive_blast_furnace", "Industrial Primitive Blast Furnace");
+        replace(provider,"cosmiccore.multiblock.ipbf.tooltip.0", "§7§oTurn up the heat!");
+        replace(provider,"cosmiccore.multiblock.ipbf.tooltip.1", "§fConsumes steam to power internal bellows");
+        replace(provider,"cosmiccore.multiblock.ipbf.tooltip.2", "§fallowing the bulk smelting of steel.");
+        replace(provider,"cosmiccore.multiblock.ipbf.tooltip.3", "§aParallel Amount§f: §b8x§r");
 
     }
 }
