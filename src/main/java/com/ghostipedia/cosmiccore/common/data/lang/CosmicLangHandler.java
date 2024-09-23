@@ -83,9 +83,15 @@ public class CosmicLangHandler {
         replace(provider,"block.gtceu.steam_mixing_vessel", "§6Large Steam Mixing Vessel");
         replace(provider,"block.gtceu.industrial_primitive_blast_furnace", "Industrial Primitive Blast Furnace");
         replace(provider,"cosmiccore.multiblock.ipbf.tooltip.0", "§7§oTurn up the heat!");
-        replace(provider,"cosmiccore.multiblock.ipbf.tooltip.1", "§fConsumes steam to power internal bellows");
-        replace(provider,"cosmiccore.multiblock.ipbf.tooltip.2", "§fallowing the bulk smelting of steel.");
+        replace(provider,"cosmiccore.multiblock.ipbf.tooltip.1", "§fConsumes creosote with recipes to improve efficiency.");
+        replace(provider,"cosmiccore.multiblock.ipbf.tooltip.2", "§aRecipes are §f25% §aFaster.");
         replace(provider,"cosmiccore.multiblock.ipbf.tooltip.3", "§aParallel Amount§f: §b8x§r");
+        replace(provider,"block.gtceu.steam_fluid_output_hatch", "Bronze Fluid Output Hatch");
+        replace(provider,"block.gtceu.steam_fluid_input_hatch", "Bronze Fluid Input Hatch");
+        replace(provider,"block.gtceu.hp_steam_bender", "HP Steam Bender");
+        replace(provider,"block.gtceu.lp_steam_bender", "I Don't Actually Exist");
+        replace(provider,"block.gtceu.hp_steam_wiremill", "HP Steam Wiremill");
+        replace(provider,"block.gtceu.lp_steam_wiremill", "I Don't Actually Exist");
 
     }
 }

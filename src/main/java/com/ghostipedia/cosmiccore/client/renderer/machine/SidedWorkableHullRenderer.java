@@ -36,9 +36,7 @@ public class SidedWorkableHullRenderer extends WorkableCasingMachineRenderer imp
     public void renderPartModel(List<BakedQuad> quads, IMultiController machine, IMultiPart part, Direction frontFacing,
                                 @Nullable Direction side, RandomSource rand, Direction modelFacing,
                                 ModelState modelState) {
-        // We have to render it ourselves to avoid uv issues
         if (machine.self().getPos().atY(BlockPos.getY(machine.self().getPos().asLong())).getY() == part.self().getPos().getY()) {
-            // firebox
             if (side != null && modelFacing != null) {
                 if (side == Direction.UP) {
                     quads.add(StaticFaceBakery.bakeFace(modelFacing,

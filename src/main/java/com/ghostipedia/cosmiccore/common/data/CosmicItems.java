@@ -341,6 +341,16 @@ public class CosmicItems {
             .properties(p -> p.stacksTo(64))
             .defaultModel()
             .register();
+    public static final ItemEntry<ComponentItem> FIRECLAY_BALL = REGISTRATE.item("fireclay_ball", ComponentItem::create)
+            .lang("Fireclay ball")
+            .properties(p -> p.stacksTo(64))
+            .defaultModel()
+            .register();
+    public static final ItemEntry<ComponentItem> HARDENED_RESIN = REGISTRATE.item("hardened_resin", ComponentItem::create)
+            .lang("Hardened Resin")
+            .properties(p -> p.stacksTo(64))
+            .defaultModel()
+            .register();
     public static ItemEntry<ComponentItem> DEBUG_STRUCTURE_WRITER = REGISTRATE
             .item("debug_structure_writer", ComponentItem::create)
             .lang("Debug Structure Writer")
