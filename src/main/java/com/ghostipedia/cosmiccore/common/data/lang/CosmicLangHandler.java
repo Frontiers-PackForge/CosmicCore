@@ -32,6 +32,7 @@ public class CosmicLangHandler {
         replace(provider,"cosmiccore.multiblock.magnetic_field_strength", "§fMax Field Strength§f:§6 %s");
         replace(provider,"cosmiccore.multiblock.magnetic_regen", "§aField Recovery Rate§f:§6 %sT/t");
         replace(provider,"cosmiccore.multiblock.fuel_star", "§a§lFuel Star Core");
+        replace(provider,"cosmiccore.multiblock.send_orbit_data", "§a§lSend Research Payload");
         replace(provider,"cosmiccore.multiblock.iris.star_stage_empty", "§aStar Core Stage§f: §6Compressed Gas Cloud");
         replace(provider,"cosmiccore.multiblock.iris.star_stage_early_star", "§aStar Core Stage§f: §6Infant Star");
         replace(provider,"cosmiccore.multiblock.iris.star_stage_request", "§cStar Core Requires \n§r%s \n§cfor Next Stage.");
@@ -40,6 +41,7 @@ public class CosmicLangHandler {
         replace(provider,"cosmiccore.multiblock.iris.tooltip.1", "§c§lDANGER: DO NOT RENDER THE JEI PREVIEW");
         replace(provider,"cosmiccore.multiblock.iris.tooltip.2", "§c§lDANGER: YOU WILL LAG OR CRASH YOUR GAME");
         replace(provider,"cosmiccore.multiblock.iris.tooltip.3", "§aFuture Multiblock - JEI preview will be disabled/optimized");
+        replace(provider,"cosmiccore.multiblock.advanced.star_ladder_tier", "§aVomahine StarLadder Tether Tier§f: §b%s \n §aMax Research Modules§f: §b%s");
         replace(provider,"gtceu.naquahine_reactor", "§bNaquahine Reactor");
         replace(provider,"cosmiccore.multiblock.current_field_strength", "§fField Strength: %s");
         replace(provider,"cosmiccore.recipe.minField", "§fMin. Field Strength: %sT");
@@ -78,6 +80,18 @@ public class CosmicLangHandler {
         replace(provider,"cosmiccore.omnia_circuit.uiv", "§6Works as any UIV Circuit.");
         replace(provider,"cosmiccore.omnia_circuit.uxv", "§6Works as any UXV Circuit.");
         replace(provider,"cosmiccore.omnia_circuit.opv", "§6Works as any OPV Circuit.");
+        replace(provider,"block.gtceu.steam_mixing_vessel", "§6Large Steam Mixing Vessel");
+        replace(provider,"block.gtceu.industrial_primitive_blast_furnace", "Industrial Primitive Blast Furnace");
+        replace(provider,"cosmiccore.multiblock.ipbf.tooltip.0", "§7§oTurn up the heat!");
+        replace(provider,"cosmiccore.multiblock.ipbf.tooltip.1", "§fConsumes creosote with recipes to improve efficiency.");
+        replace(provider,"cosmiccore.multiblock.ipbf.tooltip.2", "§aRecipes are §f25% §aFaster.");
+        replace(provider,"cosmiccore.multiblock.ipbf.tooltip.3", "§aParallel Amount§f: §b8x§r");
+        replace(provider,"block.gtceu.steam_fluid_output_hatch", "Bronze Fluid Output Hatch");
+        replace(provider,"block.gtceu.steam_fluid_input_hatch", "Bronze Fluid Input Hatch");
+        replace(provider,"block.gtceu.hp_steam_bender", "HP Steam Bender");
+        replace(provider,"block.gtceu.lp_steam_bender", "I Don't Actually Exist");
+        replace(provider,"block.gtceu.hp_steam_wiremill", "HP Steam Wiremill");
+        replace(provider,"block.gtceu.lp_steam_wiremill", "I Don't Actually Exist");
 
     }
 }
