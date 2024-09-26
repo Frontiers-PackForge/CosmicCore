@@ -93,5 +93,7 @@ public class CosmicLangHandler {
         replace(provider,"block.gtceu.hp_steam_wiremill", "HP Steam Wiremill");
         replace(provider,"block.gtceu.lp_steam_wiremill", "I Don't Actually Exist");
 
+        replace(provider,"item.cosmiccore.the_one_ring.tooltip.0", "§6§oOne Ring to rule them all, One Ring to find them, One Ring to bring them all and in the darkness bind them.§r");
+        replace(provider,"item.cosmiccore.the_one_ring.tooltip.1", "You might find it hard to take off.");
     }
 }

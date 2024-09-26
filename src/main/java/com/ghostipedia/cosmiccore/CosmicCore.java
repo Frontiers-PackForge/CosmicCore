@@ -17,6 +17,7 @@ import com.gregtechceu.gtceu.api.data.chemical.material.event.MaterialRegistryEv
 import com.gregtechceu.gtceu.api.data.chemical.material.registry.MaterialRegistry;
 import com.gregtechceu.gtceu.api.machine.MachineDefinition;
 import com.gregtechceu.gtceu.api.recipe.GTRecipeType;
+import com.gregtechceu.gtceu.api.sound.SoundEntry;
 import com.gregtechceu.gtceu.common.block.CoilBlock;
 import com.gregtechceu.gtceu.config.ConfigHolder;
 import com.lowdragmc.lowdraglib.Platform;
@@ -45,6 +46,9 @@ public class CosmicCore {
        // bus.addGenericListener(Class.class, this::registerRecipeConditions);
        // bus.addGenericListener(MachineDefinition.class, this::registerMachines);
         bus.addGenericListener(MachineDefinition.class, this::registerMachines);
+        bus.addGenericListener(SoundEntry.class, this::registerSounds);
+
+        CosmicLootModifiers.register(bus);
 
         if (Platform.isClient()) {
             bus.register(CosmicCoreClient.class);
@@ -95,6 +99,10 @@ public class CosmicCore {
         ModularizedMultis.init();
         CosmicMachines.init();
 
+    }
+
+    public void registerSounds(GTCEuAPI.RegisterEvent<ResourceLocation, SoundEntry> event) {
+        CosmicSounds.init();
     }
 
     @SubscribeEvent

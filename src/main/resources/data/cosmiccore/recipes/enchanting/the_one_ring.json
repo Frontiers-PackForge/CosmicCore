@@ -1,0 +1,16 @@
+{
+    "type": "apotheosis:enchanting",
+    "input": {
+        "item": "gtceu:gold_ring"
+    },
+    "requirements": {
+        "eterna": 50,
+        "quanta": 85,
+        "arcana": 100
+    },
+    "display_level": 5,
+    "result": {
+        "item": "cosmiccore:the_one_ring",
+        "count": 1
+    }
+}

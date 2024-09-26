@@ -3,34 +3,40 @@ package com.ghostipedia.cosmiccore.common.data;
 import com.ghostipedia.cosmiccore.api.item.armor.*;
 import com.ghostipedia.cosmiccore.api.registries.CosmicRegistration;
 import com.ghostipedia.cosmiccore.common.data.tag.item.CosmicItemTags;
+import com.ghostipedia.cosmiccore.common.item.behavior.EffectApplicationBehavior;
+import com.ghostipedia.cosmiccore.common.item.behavior.StructureWriteBehavior;
 import com.gregtechceu.gtceu.api.item.ComponentItem;
 import com.gregtechceu.gtceu.api.item.armor.ArmorComponentItem;
 import com.gregtechceu.gtceu.api.item.component.IItemComponent;
-import com.gregtechceu.gtceu.common.data.GTCompassSections;
 import com.gregtechceu.gtceu.common.item.TooltipBehavior;
 import com.gregtechceu.gtceu.common.item.armor.GTArmorMaterials;
 import com.gregtechceu.gtceu.common.item.armor.QuarkTechSuite;
-import com.gregtechceu.gtceu.common.registry.GTRegistration;
 import com.gregtechceu.gtceu.config.ConfigHolder;
 import com.gregtechceu.gtceu.data.recipe.CustomTags;
-import com.gregtechceu.gtceu.integration.jade.GTJadePlugin;
 import com.tterrag.registrate.util.entry.ItemEntry;
 import com.tterrag.registrate.util.nullness.NonNullConsumer;
 import earth.terrarium.adastra.common.tags.ModItemTags;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.tags.DamageTypeTags;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.damagesource.DamageTypes;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ArmorItem;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Rarity;
+import net.minecraft.world.level.Level;
 import wayoftime.bloodmagic.common.item.BloodOrb;
 import wayoftime.bloodmagic.common.item.ItemBloodOrb;
-import wayoftime.bloodmagic.common.registration.impl.BloodOrbDeferredRegister;
 import wayoftime.bloodmagic.common.registration.impl.BloodOrbRegistryObject;
 
 import static com.ghostipedia.cosmiccore.api.registries.CosmicRegistration.REGISTRATE;
 import static wayoftime.bloodmagic.common.item.BloodMagicItems.BLOOD_ORBS;
 
 
-@SuppressWarnings("Convert2MethodRef")
+@SuppressWarnings({ "unused" })
 public class CosmicItems {
     public static final BloodOrbRegistryObject<BloodOrb> ORB_ASCENDANT;
     public static final BloodOrbRegistryObject<BloodOrb> ORB_VOIDSENT;
@@ -134,14 +140,6 @@ public class CosmicItems {
             .defaultModel()
             .register();
 
-    //    public static ItemEntry<SpaceArmorComponentItem> SPACE_NANO_CHESTPLATE = REGISTRATE.item("space_nanomuscle_chestplate", (p) -> new SpaceArmorComponentItem(GTArmorMaterials.ARMOR, ArmorItem.Type.CHESTPLATE, 5000, p)
-//                    .setArmorLogic(new NanoMuscleSpaceSuite(ArmorItem.Type.CHESTPLATE, 512,
-//                            6_400_000L * (long) Math.max(1, Math.pow(4, ConfigHolder.INSTANCE.tools.voltageTierNanoSuit - 3)),
-//                            ConfigHolder.INSTANCE.tools.voltageTierNanoSuit)))
-//            .tag(CosmicItemTags.NANOMUSCLE_SPACE_SUITE, ModItemTags.SPACE_SUITS, ModItemTags.FREEZE_RESISTANT_ARMOR, ModItemTags.HEAT_RESISTANT_ARMOR)
-//            .lang("NanoMuscle™ Space Suite Chestplate")
-//            .properties(p -> p.rarity(Rarity.RARE))
-//            .register();
     public static final ItemEntry<ComponentItem> THERMAL_CHAIN_AGENT = REGISTRATE.item("thermal_chain_agent", ComponentItem::create)
             .lang("Thermal Chain Agent")
             .properties(p -> p.stacksTo(64))
@@ -180,6 +178,40 @@ public class CosmicItems {
                 tooltips.add(Component.translatable("cosmiccore.lore.shard_huge.2"));
             })))
             .defaultModel()
+            .register();
+
+    public static ItemEntry<ComponentItem> THE_ONE_RING = REGISTRATE
+            .item("the_one_ring", p -> (ComponentItem) new ComponentItem(p) {
+                @Override
+                public boolean canBeHurtBy(DamageSource damageSource) {
+                    return damageSource.is(DamageTypes.LAVA);
+                }
+
+                @Override
+                public int getEntityLifespan(ItemStack itemStack, Level level) {
+                    return Short.MIN_VALUE;
+                }
+
+                @Override
+                public boolean onDroppedByPlayer(ItemStack item, Player player) {
+                    return false;
+                }
+
+                @Override
+                public boolean isFoil(ItemStack stack) {
+                    return true;
+                }
+            })
+            .lang("The One Ring")
+            .properties(p -> p.stacksTo(1).fireResistant())
+            .onRegister(attach(new EffectApplicationBehavior()
+                    .addEffect(() -> new MobEffectInstance(MobEffects.INVISIBILITY, 10), 1.0F)
+                    .addEffect(() -> new MobEffectInstance(MobEffects.UNLUCK, 10, 5), 1.0F)
+                    .addEffect(() -> new MobEffectInstance(MobEffects.MOVEMENT_SPEED, 10, 1), 1.0F),
+                    new TooltipBehavior(list -> {
+                        list.add(Component.translatable("item.cosmiccore.the_one_ring.tooltip.0"));
+                        list.add(Component.translatable("item.cosmiccore.the_one_ring.tooltip.1"));
+                    })))
             .register();
 //    public static final ItemEntry<ComponentItem> PARADOX_ECHOS = REGISTRATE.item("paradox_echos", ComponentItem::create)
 //            .lang("Paradox Echos")
@@ -355,7 +387,7 @@ public class CosmicItems {
             .item("debug_structure_writer", ComponentItem::create)
             .lang("Debug Structure Writer")
             .properties(p -> p.stacksTo(1))
-            .onRegister( attach(StructureWriteBehavior.INSTANCE))
+            .onRegister(attach(StructureWriteBehavior.INSTANCE))
             .register();
 
     // Space Suite

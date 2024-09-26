@@ -1,7 +1,7 @@
 package com.ghostipedia.cosmiccore.client.renderer;
 
 import com.ghostipedia.cosmiccore.api.data.DebugBlockPattern;
-import com.ghostipedia.cosmiccore.common.data.StructureWriteBehavior;
+import com.ghostipedia.cosmiccore.common.item.behavior.StructureWriteBehavior;
 import com.lowdragmc.lowdraglib.client.utils.RenderBufferUtils;
 import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
@@ -16,7 +16,7 @@ import net.minecraft.world.phys.Vec3;
 import org.joml.Matrix3f;
 import org.joml.Matrix4f;
 
-import static com.ghostipedia.cosmiccore.common.data.StructureWriteBehavior.getDir;
+import static com.ghostipedia.cosmiccore.common.item.behavior.StructureWriteBehavior.getDir;
 
 public class StructureBoundingBox {
     public static void renderStructureSelect(PoseStack poseStack, Camera camera) {

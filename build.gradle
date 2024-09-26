@@ -105,11 +105,8 @@ repositories {
         url = "https://maven.theillusivec4.top/"
     }
     maven {
-        url "https://cursemaven.com/"
-        content {
-            includeGroup "curse.maven"
-        }
-    } // Curse Forge File
+        url = "https://maven.shadowsoffire.dev/releases"
+    }
     maven {
         name = 'GeckoLib'
         url 'https://dl.cloudsmith.io/public/geckolib3/geckolib/maven/'
@@ -119,6 +116,12 @@ repositories {
         url "https://maven.tterrag.com/"
     }
     maven { url = "https://api.modrinth.com/maven" }
+    maven {
+        url "https://cursemaven.com/"
+        content {
+            includeGroup "curse.maven"
+        }
+    } // Curse Forge File
 }
 
 dependencies {
@@ -134,7 +137,7 @@ dependencies {
     modCompileOnly("mezz.jei:jei-${project.minecraft_version}-forge-api:${project.jei_version}") { transitive = false }
     modCompileOnly("mezz.jei:jei-${project.minecraft_version}-common-api:${project.jei_version}") { transitive = false }
 
-    modImplementation("com.gregtechceu.gtceu:gtceu-${project.minecraft_version}:${project.gtceu_version}") { transitive = false }
+    modImplementation("com.gregtechceu.gtceu:gtceu-${project.minecraft_version}:${project.gtceu_version}:slim") { transitive = false }
     modImplementation("com.lowdragmc.ldlib:ldlib-forge-${project.minecraft_version}:${project.ldlib_version}") { transitive = false }
     modImplementation("com.tterrag.registrate:Registrate:${project.registrate_version}")
     modImplementation("dev.latvian.mods:kubejs-forge:${project.kubejs_version}")
@@ -160,9 +163,14 @@ dependencies {
     modCompileOnly("curse.maven:new-thin-air-878379:4848005")
     modImplementation("curse.maven:puzzles-lib-495476:4924184")
 
+    modImplementation("dev.shadowsoffire:Apotheosis:${project.minecraft_version}-7.4.2")
+    modImplementation("dev.shadowsoffire:Placebo:${project.minecraft_version}-8.6.2")
+    modImplementation("dev.shadowsoffire:ApothicAttributes:${project.minecraft_version}-1.3.5")
+
+
     modRuntimeOnly("curse.maven:jade-324717:4973483")
     modRuntimeOnly("vazkii.patchouli:Patchouli:${project.minecraft_version}-${project.patchouli_version}-FORGE")
-    modRuntimeOnly("top.theillusivec4.curios:curios-forge:${project.curios_version}+${project.minecraft_version}")
+    modImplementation("top.theillusivec4.curios:curios-forge:${project.curios_version}+${project.minecraft_version}")
     modRuntimeOnly("dev.toma.configuration:configuration-forge-${project.minecraft_version}:${project.configuration_version}")
     modRuntimeOnly("mezz.jei:jei-${project.minecraft_version}-forge:${project.jei_version}") { transitive = false }
 
