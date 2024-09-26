@@ -1,14 +1,18 @@
 package com.ghostipedia.cosmiccore.api.data;
 
-import com.gregtechceu.gtceu.api.data.chemical.material.info.MaterialIconType;
+import com.ghostipedia.cosmiccore.common.data.tag.TagUtil;
 import com.gregtechceu.gtceu.api.data.tag.TagPrefix;
-import com.gregtechceu.gtceu.api.registry.GTRegistries;
+import net.minecraft.tags.TagKey;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.level.block.Block;
 
 import static com.gregtechceu.gtceu.api.data.tag.TagPrefix.Conditions.hasOreProperty;
 
-public class CosmicCoreTagPrefix {
+public class CosmicCustomTags {
     public static TagPrefix crushedLeached;
     public static TagPrefix prismaFrothed;
+    public static final TagKey<Block> STAR_LADDER_BLOCKS = TagUtil.createBlockTag("starladder_blocks");
+    public static final TagKey<Item> STAR_LADDER_ITEMS = TagUtil.createItemTag("starladder_items");
     public static void initTagPrefixes() {
         crushedLeached = new TagPrefix("leachedOre")
                 .idPattern("leached_%s_ore")

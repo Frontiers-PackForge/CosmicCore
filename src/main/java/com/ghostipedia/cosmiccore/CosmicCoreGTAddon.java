@@ -3,7 +3,7 @@ package com.ghostipedia.cosmiccore;
 
 import com.ghostipedia.cosmiccore.api.capability.recipe.CosmicRecipeCapabilities;
 import com.ghostipedia.cosmiccore.api.data.CosmicCoreMaterialIconType;
-import com.ghostipedia.cosmiccore.api.data.CosmicCoreTagPrefix;
+import com.ghostipedia.cosmiccore.api.data.CosmicCustomTags;
 import com.ghostipedia.cosmiccore.api.registries.CosmicRegistration;
 import com.ghostipedia.cosmiccore.common.data.materials.CosmicElements;
 import com.ghostipedia.cosmiccore.common.data.recipe.CosmicCoreOreRecipeHandler;
@@ -32,7 +32,7 @@ public class CosmicCoreGTAddon implements IGTAddon {
     @Override
     public void registerTagPrefixes() {
         CosmicCoreMaterialIconType.init();
-        CosmicCoreTagPrefix.initTagPrefixes();
+        CosmicCustomTags.initTagPrefixes();
     }
 
     @Override
