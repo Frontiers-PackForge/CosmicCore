@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:block/cube_all",
+  "textures": {
+    "all": "cosmiccore:block/casings/solid/steel_plated_bronze_casing"
+  }
+}

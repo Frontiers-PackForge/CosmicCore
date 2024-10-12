@@ -1,5 +1,6 @@
 package com.ghostipedia.cosmiccore.common.machine.multiblock.steam;
 
+import com.gregtechceu.gtceu.api.GTValues;
 import com.gregtechceu.gtceu.api.capability.recipe.EURecipeCapability;
 import com.gregtechceu.gtceu.api.capability.recipe.FluidRecipeCapability;
 import com.gregtechceu.gtceu.api.capability.recipe.IO;
@@ -28,6 +29,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.Style;
 import net.minecraft.world.entity.player.Player;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -52,7 +54,7 @@ public class WeakSteamParallelMultiBlockMachine extends WorkableMultiblockMachin
         while (itr.hasNext()) {
             var handler = itr.next();
             if (handler instanceof NotifiableFluidTank tank) {
-                if (tank.isFluidValid(0, GTMaterials.Steam.getFluid(1))) {
+                if (tank.getFluidInTank(0).getFluid() == GTMaterials.Steam.getFluid()) {
                     itr.remove();
                     if (!capabilitiesProxy.contains(IO.IN, EURecipeCapability.CAP)) {
                         capabilitiesProxy.put(IO.IN, EURecipeCapability.CAP, new ArrayList<>());
@@ -61,21 +63,31 @@ public class WeakSteamParallelMultiBlockMachine extends WorkableMultiblockMachin
                             .add(new SteamEnergyRecipeHandler(tank, CONVERSION_RATE));
                     return;
                 }
+                else if (!capabilitiesProxy.contains(IO.IN, EURecipeCapability.CAP)) {
+                    capabilitiesProxy.put(IO.IN, EURecipeCapability.CAP, new ArrayList<>());
+                }
+                return;
             }
         }
     }
-
+    @Nullable
     public static GTRecipe recipeModifier(MetaMachine machine, @NotNull GTRecipe recipe, @NotNull OCParams params,
                                           @NotNull OCResult result) {
-        int duration = recipe.duration;
-        var eut = RecipeHelper.getInputEUt(recipe);
-        var parallelRecipe = GTRecipeModifiers.accurateParallel(machine, recipe, MAX_PARALLELS, false);
+        if (machine instanceof WeakSteamParallelMultiBlockMachine){
+            if (RecipeHelper.getRecipeEUtTier(recipe) > GTValues.LV) {
+                return null;
+            }
+            int duration = recipe.duration;
+            var eut = RecipeHelper.getInputEUt(recipe);
+            var parallelRecipe = GTRecipeModifiers.accurateParallel(machine, recipe, MAX_PARALLELS, false);
 
-        // we remove tick inputs, as our "cost" is just steam now, just stored as EU/t
-        // also set the duration to just 1.5x the original, instead of fully multiplied
-        result.init((long) Math.min(32, Math.ceil(eut * 1.33)), (int) (duration * 1.5), parallelRecipe.getSecond(),
-                params.getOcAmount());
-        return recipe;
+            // we remove tick inputs, as our "cost" is just steam now, just stored as EU/t
+            // also set the duration to just 1.5x the original, instead of fully multiplied
+            result.init((long) Math.min(32, Math.ceil(eut * 1.33)), (int) (duration * 1.5), parallelRecipe.getSecond(),
+                    params.getOcAmount());
+            return recipe;
+        }
+        return null;
     }
 
     @Override

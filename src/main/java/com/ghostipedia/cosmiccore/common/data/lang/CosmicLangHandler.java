@@ -86,12 +86,30 @@ public class CosmicLangHandler {
         replace(provider,"cosmiccore.multiblock.ipbf.tooltip.1", "§fConsumes creosote with recipes to improve efficiency.");
         replace(provider,"cosmiccore.multiblock.ipbf.tooltip.2", "§aRecipes are §f25% §aFaster.");
         replace(provider,"cosmiccore.multiblock.ipbf.tooltip.3", "§aParallel Amount§f: §b8x§r");
+        replace(provider,"block.gtceu.high_pressure_assembler", "High Pressure Assembler");
+        replace(provider,"cosmiccore.multiblock.hpsassem.tooltip.0", "§7§oLet's build an empire!");
+        replace(provider,"cosmiccore.multiblock.hpsassem.tooltip.1", "§fA large but powerful assembler made of steel");
+        replace(provider,"cosmiccore.multiblock.hpsassem.tooltip.2", "§aParallel Amount§f: §b4x§r");
         replace(provider,"block.gtceu.steam_fluid_output_hatch", "Bronze Fluid Output Hatch");
         replace(provider,"block.gtceu.steam_fluid_input_hatch", "Bronze Fluid Input Hatch");
         replace(provider,"block.gtceu.hp_steam_bender", "HP Steam Bender");
         replace(provider,"block.gtceu.lp_steam_bender", "I Don't Actually Exist");
         replace(provider,"block.gtceu.hp_steam_wiremill", "HP Steam Wiremill");
         replace(provider,"block.gtceu.lp_steam_wiremill", "I Don't Actually Exist");
+        //Rune Lang
+        replace(provider,"cosmiccore.rune_vague", "§7§oLatent emotions seem to be missing.");
+        replace(provider,"cosmiccore.arklys.1", "§6Ark - Structure");
+        replace(provider,"cosmiccore.arklys.2", "§6Lys - Release");
+
+        replace(provider,"cosmiccore.tylomir.1", "§6Tylo - Formation");
+        replace(provider,"cosmiccore.tylomir.2", "§6Mir - World");
+
+        replace(provider,"cosmiccore.khoruth.1", "§6Khor - Space");
+        replace(provider,"cosmiccore.khoruth.2", "§6Ruth - Foundation");
+
+        replace(provider,"cosmiccore.zelothar.1", "§6Zelos - Zeal");
+        replace(provider,"cosmiccore.zelothar.2", "§6Thar - Forge");
+
 
         replace(provider,"item.cosmiccore.the_one_ring.tooltip.0", "§6§oOne Ring to rule them all, One Ring to find them, One Ring to bring them all and in the darkness bind them.§r");
         replace(provider,"item.cosmiccore.the_one_ring.tooltip.1", "You might find it hard to take off.");

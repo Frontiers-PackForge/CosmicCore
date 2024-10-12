@@ -246,6 +246,34 @@ public static final MultiblockMachineDefinition STEAM_MIXER = GTRegistration.REG
                     Component.translatable("cosmiccore.multiblock.ipbf.tooltip.3")
             )
             .register();
+    public static final MultiblockMachineDefinition HIGH_PRESSURE_ASSEMBLER = GTRegistration.REGISTRATE
+            .multiblock("high_pressure_assembler", WeakSteamParallelMultiBlockMachine::new)
+            .rotationState(RotationState.ALL)
+            .recipeType(GTRecipeTypes.ASSEMBLER_RECIPES)
+            .recipeModifier(SteamParallelMultiblockMachine::recipeModifier, true)
+            .appearanceBlock(STEEL_PLATED_BRONZE)
+            .pattern(definition -> FactoryBlockPattern.start()
+                    .aisle("AAAAA", "BBBBB", "BBBBB")
+                    .aisle("AAAAA", "BDDDB", "BBBBB")
+                    .aisle("AAAAA", "BYBBB", "BBBBB")
+                    .where('B', blocks(STEEL_PLATED_BRONZE.get())
+                            .or(Predicates.abilities(PartAbility.STEAM_IMPORT_ITEMS).setPreviewCount(1).setExactLimit(2))
+                            .or(Predicates.abilities(PartAbility.STEAM_EXPORT_ITEMS).setPreviewCount(1).setExactLimit(1))
+                            .or(Predicates.abilities(PartAbility.IMPORT_FLUIDS).setPreviewCount(1).setExactLimit(1)))
+                    .where('#', Predicates.air())
+                    .where('Y', Predicates.controller(blocks(definition.getBlock())))
+                    .where('A', blocks(FIREBOX_STEEL.get()).setMinGlobalLimited(11)
+                            .or(Predicates.abilities(PartAbility.STEAM).setExactLimit(1)))
+                    .where('D', blocks(CASING_STEEL_GEARBOX.get()))
+                    .build())
+            .renderer(() -> new LargeBoilerRenderer(CosmicCore.id("block/casings/solid/steel_plated_bronze_casing"),
+                    BoilerFireboxType.STEEL_FIREBOX,
+                    GTCEu.id("block/multiblock/implosion_compressor")))
+            .tooltips(Component.translatable("cosmiccore.multiblock.hpsassem.tooltip.0"),
+                    Component.translatable("cosmiccore.multiblock.hpsassem.tooltip.1"),
+                    Component.translatable("cosmiccore.multiblock.hpsassem.tooltip.2")
+            )
+            .register();
     //Terrifying Recipe Modifiers half of this is moonruns to me :lets:
     public final static MultiblockMachineDefinition DRYGMY_GROVE = REGISTRATE.multiblock("drygmy_grove", WorkableElectricMultiblockMachine::new)
             .rotationState(RotationState.NON_Y_AXIS)

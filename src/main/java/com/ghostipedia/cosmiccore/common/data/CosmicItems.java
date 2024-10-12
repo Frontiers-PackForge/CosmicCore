@@ -593,7 +593,46 @@ public class CosmicItems {
             })))
             .defaultModel()
             .register();
-
+    public static final ItemEntry<ComponentItem> RUNE_SLATE_ARKLYS = REGISTRATE.item("rune_slate_arklys", ComponentItem::create)
+            .lang("Rune Slate [Arklys]")
+            .properties(p -> p.stacksTo(64))
+            .onRegister(attach(new TooltipBehavior(tooltips -> {
+                tooltips.add(Component.translatable("cosmiccore.arklys.1"));
+                tooltips.add(Component.translatable("cosmiccore.arklys.2"));
+                tooltips.add(Component.translatable("cosmiccore.rune_vague"));
+            })))
+            .defaultModel()
+            .register();
+    public static final ItemEntry<ComponentItem> RUNE_SLATE_TYLOMIR = REGISTRATE.item("rune_slate_tylomir", ComponentItem::create)
+            .lang("Rune Slate [Tylomir]")
+            .properties(p -> p.stacksTo(64))
+            .onRegister(attach(new TooltipBehavior(tooltips -> {
+                tooltips.add(Component.translatable("cosmiccore.tylomir.1"));
+                tooltips.add(Component.translatable("cosmiccore.tylomir.2"));
+                tooltips.add(Component.translatable("cosmiccore.rune_vague"));
+            })))
+            .defaultModel()
+            .register();
+    public static final ItemEntry<ComponentItem> RUNE_SLATE_KHORUTH = REGISTRATE.item("rune_slate_khoruth", ComponentItem::create)
+            .lang("Rune Slate [Khoruth]")
+            .properties(p -> p.stacksTo(64))
+            .onRegister(attach(new TooltipBehavior(tooltips -> {
+                tooltips.add(Component.translatable("cosmiccore.khoruth.1"));
+                tooltips.add(Component.translatable("cosmiccore.khoruth.2"));
+                tooltips.add(Component.translatable("cosmiccore.rune_vague"));
+            })))
+            .defaultModel()
+            .register();
+    public static final ItemEntry<ComponentItem> RUNE_SLATE_ZELOTHAR = REGISTRATE.item("rune_slate_zelothar", ComponentItem::create)
+            .lang("Rune Slate [Zelothar]")
+            .properties(p -> p.stacksTo(64))
+            .onRegister(attach(new TooltipBehavior(tooltips -> {
+                tooltips.add(Component.translatable("cosmiccore.zelothar.1"));
+                tooltips.add(Component.translatable("cosmiccore.zelothar.2"));
+                tooltips.add(Component.translatable("cosmiccore.rune_vague"));
+            })))
+            .defaultModel()
+            .register();
 
 
 
