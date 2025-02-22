@@ -7,6 +7,7 @@
   "mixins": [
     "AdAstraOverlayScreenMixin",
     "AdAstraSpaceSuitItemMixin",
+    "BlockModifierMixin",
     "ApotheosisRecipeHelperMixin",
     "ApothSmithingCategoryMixin",
     "DivingHelmetItemMixin",
@@ -18,8 +19,7 @@
     "client.CosmicCoreRemainingAirOverlayMixin"
   ],
   "client": [
-    "client.MinecraftMixin",
-    "client.SoundManagerMixin"
+    "client.MinecraftMixin"
   ],
   "injectors": {
     "defaultRequire": 1
