@@ -27,7 +27,7 @@ public class ForgeClientEventHandler {
 
     @SubscribeEvent
     public static void onRenderFog(ViewportEvent.RenderFog event) {
-        if (CosmicUtils.hasRing(event.getCamera().getEntity())) {
+        if (CosmicUtils.hasTheOneRing(event.getCamera().getEntity())) {
             event.setFogShape(FogShape.SPHERE);
 
             // Shrink the fog to be very close
@@ -44,7 +44,7 @@ public class ForgeClientEventHandler {
 
     @SubscribeEvent
     public static void onComputeFogColor(ViewportEvent.ComputeFogColor event) {
-        if (CosmicUtils.hasRing(event.getCamera().getEntity())) {
+        if (CosmicUtils.hasTheOneRing(event.getCamera().getEntity())) {
             // and make the fog a blue mist.
             // #7CBADA
             event.setRed(0.671F);

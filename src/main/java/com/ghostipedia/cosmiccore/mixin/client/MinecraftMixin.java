@@ -22,6 +22,6 @@ public class MinecraftMixin {
 
     @ModifyReturnValue(method = "shouldEntityAppearGlowing", at = @At("RETURN"))
     private boolean cosmiccore$makeRingGlow(boolean original, Entity entity) {
-        return original || (CosmicUtils.hasRing(player) && CosmicUtils.hasRing(entity));
+        return original || (CosmicUtils.hasTheOneRing(player) && CosmicUtils.hasTheOneRing(entity));
     }
 }
