@@ -20,7 +20,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-@Mixin(value = SoundManager.class, priority = 1999)
+@Mixin(value = SoundManager.class, priority = 999)
 public abstract class SoundManagerMixin {
 
     @Shadow
