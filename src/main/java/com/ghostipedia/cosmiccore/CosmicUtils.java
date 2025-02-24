@@ -23,9 +23,10 @@ public class CosmicUtils {
 
     /**
      * Check if an entity has a specific item in a curio slot
-     * @param entity Entity to check
+     * 
+     * @param entity    Entity to check
      * @param curioSlot Curio slot to check for item
-     * @param item Item to check for in curio slot
+     * @param item      Item to check for in curio slot
      * @return True if item was found
      */
     public static boolean hasCurio(@Nullable Entity entity, String curioSlot, ItemStack item) {
