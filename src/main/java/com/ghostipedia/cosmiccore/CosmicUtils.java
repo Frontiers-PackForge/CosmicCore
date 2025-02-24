@@ -1,12 +1,11 @@
 package com.ghostipedia.cosmiccore;
 
 import com.ghostipedia.cosmiccore.common.data.CosmicItems;
-
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.common.util.LazyOptional;
-
 import org.jetbrains.annotations.Nullable;
 import top.theillusivec4.curios.api.CuriosApi;
 import top.theillusivec4.curios.api.type.capability.ICuriosItemHandler;
@@ -18,7 +17,7 @@ import java.util.Optional;
 public class CosmicUtils {
 
     public static boolean hasTheOneRing(@Nullable Entity entity) {
-        return hasCurio(entity, "ring", CosmicItems.THE_ONE_RING.asStack());
+        return hasCurio(entity, "ring", CosmicItems.THE_ONE_RING.asItem());
     }
 
     /**
@@ -29,7 +28,7 @@ public class CosmicUtils {
      * @param item      Item to check for in curio slot
      * @return True if item was found
      */
-    public static boolean hasCurio(@Nullable Entity entity, String curioSlot, ItemStack item) {
+    public static boolean hasCurio(@Nullable Entity entity, String curioSlot, Item item) {
         if (!(entity instanceof LivingEntity living)) {
             return false;
         }
@@ -42,7 +41,7 @@ public class CosmicUtils {
                 IDynamicStackHandler stackHandler = handler.get().getStacks();
                 for (int i = 0; i < stackHandler.getSlots(); i++) {
                     ItemStack stack = stackHandler.getStackInSlot(i);
-                    if (stack.is(item.getItem())) {
+                    if (stack.is(item)) {
                         return true;
                     }
                 }

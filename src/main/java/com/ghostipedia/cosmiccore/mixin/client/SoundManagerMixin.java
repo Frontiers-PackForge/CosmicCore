@@ -20,7 +20,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-@Mixin(SoundManager.class)
+@Mixin(value = SoundManager.class, priority = 1999)
 public abstract class SoundManagerMixin {
 
     @Shadow
@@ -63,7 +63,7 @@ public abstract class SoundManagerMixin {
     private boolean cosmicCore$checkForSpaceRadio() {
         LocalPlayer player = Minecraft.getInstance().player;
         if (player != null) {
-            return CosmicUtils.hasCurio(player, "head", CosmicItems.SPACE_RADIO.asStack());
+            return CosmicUtils.hasCurio(player, "head", CosmicItems.SPACE_RADIO.asItem());
         }
         return false;
     }
