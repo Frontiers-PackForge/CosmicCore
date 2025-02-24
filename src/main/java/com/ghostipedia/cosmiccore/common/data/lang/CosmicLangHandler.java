@@ -142,6 +142,8 @@ public class CosmicLangHandler {
                 "§6§oOne Ring to rule them all, One Ring to find them, One Ring to bring them all and in the darkness bind them.§r");
         replace(provider, "item.cosmiccore.the_one_ring.tooltip.1", "You might find it hard to take off.");
 
+        replace(provider, "item.cosmiccore.space_radio.tooltip", "§6Lets you hear sounds in space!");
+
         replace(provider, "behavior.wireless_data.owner.player", "§3Player Name: §r%s");
         replace(provider, "behavior.wireless_data.owner.team", "§3Team Name: §r");
     }

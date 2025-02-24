@@ -273,6 +273,15 @@ public class CosmicItems {
     // .register();
     //
 
+    public static ItemEntry<ComponentItem> SPACE_RADIO = REGISTRATE
+            .item("space_radio", ComponentItem::create)
+            .lang("Space Radio")
+            .properties(p -> p.stacksTo(1).fireResistant())
+            .onRegister(attach(new TooltipBehavior(list -> {
+                        list.add(Component.translatable("item.cosmiccore.space_radio.tooltip"));
+                    })))
+            .register();
+
     public static final ItemEntry<ComponentItem> WAXED_LEATHER = REGISTRATE.item("waxed_leather", ComponentItem::create)
             .lang("Waxed Leather")
             .properties(p -> p.stacksTo(64))

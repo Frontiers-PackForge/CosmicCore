@@ -262,6 +262,8 @@
   "item.cosmiccore.space_advanced_quarktech_chestplate": "Advanced QuarkTech™ Space Suite Chestplate",
   "item.cosmiccore.space_nanomuscle_chestplate": "NanoMuscle™ Space Suite Chestplate",
   "item.cosmiccore.space_quarktech_chestplate": "QuarkTech™ Space Suite Chestplate",
+  "item.cosmiccore.space_radio": "Space Radio",
+  "item.cosmiccore.space_radio.tooltip": "§6Lets you hear sounds in space!",
   "item.cosmiccore.the_one_ring": "The One Ring",
   "item.cosmiccore.the_one_ring.tooltip.0": "§6§oOne Ring to rule them all, One Ring to find them, One Ring to bring them all and in the darkness bind them.§r",
   "item.cosmiccore.the_one_ring.tooltip.1": "You might find it hard to take off.",
