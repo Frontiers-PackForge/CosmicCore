@@ -146,5 +146,7 @@ public class CosmicLangHandler {
 
         replace(provider, "behavior.wireless_data.owner.player", "§3Player Name: §r%s");
         replace(provider, "behavior.wireless_data.owner.team", "§3Team Name: §r");
+
+        woah heyyy look at this hehehehhe i broke this. this is intentional
     }
 }
