@@ -5,6 +5,8 @@ import com.ghostipedia.cosmiccore.api.CosmicCoreAPI;
 import com.ghostipedia.cosmiccore.api.block.IMagnetType;
 import com.ghostipedia.cosmiccore.client.renderer.block.NebulaeCoilRenderer;
 import com.ghostipedia.cosmiccore.common.block.MagnetBlock;
+import com.ghostipedia.cosmiccore.common.block.noctyx.NoctyxConnectorBlock;
+import com.ghostipedia.cosmiccore.common.block.noctyx.NoctyxRelayBlock;
 import com.ghostipedia.cosmiccore.common.data.recipe.RecipeTags;
 import com.ghostipedia.cosmiccore.common.item.RenderBlockItem;
 
@@ -30,6 +32,7 @@ import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraftforge.client.model.generators.ModelFile;
 
 import com.tterrag.registrate.providers.DataGenContext;
+import com.tterrag.registrate.providers.ProviderType;
 import com.tterrag.registrate.providers.RegistrateBlockstateProvider;
 import com.tterrag.registrate.util.entry.BlockEntry;
 import com.tterrag.registrate.util.nullness.NonNullBiConsumer;
@@ -41,6 +44,7 @@ import java.util.function.Supplier;
 
 import static com.ghostipedia.cosmiccore.api.registries.CosmicRegistration.REGISTRATE;
 
+@SuppressWarnings("removal")
 public class CosmicBlocks {
 
     static {
@@ -110,6 +114,27 @@ public class CosmicBlocks {
             "vomahine_ultra_powered_casing", CosmicCore.id("block/casings/solid/vomahine_ultra_powered_casing"));
     public static final BlockEntry<Block> HIGHLY_CONDUCTIVE_FISSION_CASING = createCasingBlock(
             "highly_conductive_fission_casing", CosmicCore.id("block/casings/solid/highly_conductive_fission_casing"));
+
+    // noctyx blocks
+    public static final BlockEntry<NoctyxConnectorBlock> NOCTYX_CONNECTOR_BLOCK = REGISTRATE
+            .block("noctyx_connector", NoctyxConnectorBlock::new)
+            .initialProperties(() -> Blocks.TORCH)
+            .lang("Noctyx Connector")
+            .defaultBlockstate() // todo: define models according to block state
+            .defaultLoot()
+            .simpleItem()
+            .setData(ProviderType.LANG, NonNullBiConsumer.noop())
+            .register();
+
+    public static final BlockEntry<NoctyxRelayBlock> NOCTYX_RELAY_BLOCK = REGISTRATE
+            .block("noctyx_relay", NoctyxRelayBlock::new)
+            .initialProperties(() -> Blocks.TORCH)
+            .lang("Noctyx Relay")
+            .defaultBlockstate() // todo: define models according to block state
+            .defaultLoot()
+            .simpleItem()
+            .setData(ProviderType.LANG, NonNullBiConsumer.noop())
+            .register();
 
     // This is a Bunch of Rendering Magic I barely understand (See: I Don't understand at all) ~Ghost
     private static BlockEntry<Block> createGlassCasingBlock(String name, ResourceLocation texture,
