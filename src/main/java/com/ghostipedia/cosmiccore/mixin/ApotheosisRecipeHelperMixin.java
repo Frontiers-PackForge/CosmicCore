@@ -7,11 +7,16 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @SuppressWarnings("deprecation")
-@Mixin(value = RecipeHelper.class, remap = false)
+@Mixin(value = RecipeHelper.RecipeFactory.class, remap = false)
 public class ApotheosisRecipeHelperMixin {
 
-    @Inject(method = "registerProvider", at = @At("HEAD"), cancellable = true)
-    public void cosmicCore$injectRegisterProvider(CallbackInfo ci) {
+    @Inject(method = "addShaped", at = @At("HEAD"), cancellable = true)
+    public void cosmicCore$injectAddShaped(CallbackInfo ci) {
+        ci.cancel();
+    }
+
+    @Inject(method = "addShapeless", at = @At("HEAD"), cancellable = true)
+    public void cosmicCore$injectAddShapeless(CallbackInfo ci) {
         ci.cancel();
     }
 }

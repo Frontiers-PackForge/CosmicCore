@@ -6,8 +6,9 @@
   "mixins": [
     "AdAstraOverlayScreenMixin",
     "AdAstraSpaceSuitItemMixin",
-    "DivingHelmetItemMixin",
     "ApotheosisRecipeHelperMixin",
+    "ApothSmithingCategoryMixin",
+    "DivingHelmetItemMixin",
     "GTValuesMixin",
     "MAE2GTIntegrationMixin",
     "PlayerBreathingMixin",
