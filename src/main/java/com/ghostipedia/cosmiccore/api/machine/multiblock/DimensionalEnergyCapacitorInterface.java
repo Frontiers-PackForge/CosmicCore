@@ -11,8 +11,10 @@ import com.gregtechceu.gtceu.api.machine.feature.multiblock.IMultiPart;
 import com.gregtechceu.gtceu.api.machine.multiblock.WorkableMultiblockMachine;
 import com.gregtechceu.gtceu.api.machine.trait.NotifiableEnergyContainer;
 import com.gregtechceu.gtceu.api.misc.EnergyContainerList;
+import com.lowdragmc.lowdraglib.syncdata.annotation.Persisted;
 import com.lowdragmc.lowdraglib.syncdata.field.ManagedFieldHolder;
- import it.unimi.dsi.fastutil.longs.Long2ObjectMaps;
+import com.lowdragmc.lowdraglib.utils.DummyWorld;
+import it.unimi.dsi.fastutil.longs.Long2ObjectMaps;
 import net.minecraft.server.level.ServerLevel;
 
 import java.util.ArrayList;
@@ -21,7 +23,8 @@ import java.util.Map;
 
 public class DimensionalEnergyCapacitorInterface extends WorkableMultiblockMachine {
 
-    protected static final long ticks_between_save_data_operations = 60L * 20L; // Once per minute
+//    protected static final long ticks_between_save_data_operations = 60L * 20L; // Once per minute
+    protected static final long ticks_between_save_data_operations = 10L * 20L; // Once per minute
 
     protected static final ManagedFieldHolder MANAGED_FIELD_HOLDER = new ManagedFieldHolder(
             DimensionalEnergyCapacitorInterface.class, WorkableMultiblockMachine.MANAGED_FIELD_HOLDER);
@@ -30,6 +33,7 @@ public class DimensionalEnergyCapacitorInterface extends WorkableMultiblockMachi
     protected EnergyContainerList inputHatches;
     protected EnergyContainerList outputHatches;
 
+    @Persisted
     protected IEnergyContainer energyBuffer;
 
     protected ConditionalSubscriptionHandler tickSubscription;
@@ -42,6 +46,8 @@ public class DimensionalEnergyCapacitorInterface extends WorkableMultiblockMachi
     @Override
     public void onStructureFormed() {
         super.onStructureFormed();
+        if (getLevel() instanceof DummyWorld) return;
+
         List<IEnergyContainer> inputs = new ArrayList<>();
         List<IEnergyContainer> outputs = new ArrayList<>();
         Map<Long, IO> ioMap = getMultiblockState().getMatchContext().getOrCreate("ioMap", Long2ObjectMaps::emptyMap);
@@ -63,12 +69,14 @@ public class DimensionalEnergyCapacitorInterface extends WorkableMultiblockMachi
         this.outputHatches = new EnergyContainerList(outputs);
 
         setEnergyBuffer();
+
+        tickSubscription.updateSubscription();
     }
 
     private void setEnergyBuffer() {
-        long ioCapacity = inputHatches.getEnergyCapacity() + outputHatches.getEnergyCapacity();
-        // Size is the capacity over the duration between operations with a safety factor of 6s of operations (10%)
-        long bufferSize = ioCapacity * (ticks_between_save_data_operations + (6L * 20L));
+        long totalIOPerTick = (inputHatches.getInputVoltage() + outputHatches.getOutputVoltage());
+        // Size is the totalIOPerTick over the duration between operations doubled
+        long bufferSize = totalIOPerTick * (ticks_between_save_data_operations + (ticks_between_save_data_operations / 2L)) * 2L;
         if (bufferSize < 0L) throw new RuntimeException("DimensionalEnergyCapacitor: Calculated buffer size is too big.");
         this.energyBuffer = new NotifiableEnergyContainer(this, bufferSize, Long.MAX_VALUE, Long.MAX_VALUE, Long.MAX_VALUE, Long.MAX_VALUE);
     }
@@ -105,10 +113,12 @@ public class DimensionalEnergyCapacitorInterface extends WorkableMultiblockMachi
                 if (getOffsetTimer() % ticks_between_save_data_operations == 0) {
                     var data = WirelessEnergySavedData.getOrCreate(serverLevel);
                     var owner = getHolder().getOwner().getUUID();
-                    // After operation buffer should aim to be 50% full
-                    var euToTransfer = (energyBuffer.getEnergyCapacity() / 2) - energyBuffer.getEnergyStored();
-                    var euTransferred = data.addEUToGlobalWirelessEnergy(owner, euToTransfer);
-                    energyBuffer.changeEnergy(euTransferred);
+                    if (data.isActive(owner)) {
+                        // After operation buffer should aim to be 50% full
+                        var euToTransfer = energyBuffer.getEnergyStored() - (energyBuffer.getEnergyCapacity() / 2);
+                        var euTransferred = data.addEUToGlobalWirelessEnergy(owner, euToTransfer);
+                        energyBuffer.changeEnergy(-(euToTransfer - euTransferred));
+                    }
                 }
             }
         }

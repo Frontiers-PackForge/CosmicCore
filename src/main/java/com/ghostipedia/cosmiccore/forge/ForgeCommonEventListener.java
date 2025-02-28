@@ -2,6 +2,7 @@ package com.ghostipedia.cosmiccore.forge;
 
 import com.ghostipedia.cosmiccore.CosmicCore;
 import com.ghostipedia.cosmiccore.CosmicUtils;
+import com.ghostipedia.cosmiccore.common.commands.WirelessEnergyCommand;
 import com.ghostipedia.cosmiccore.common.data.CosmicItems;
 import com.ghostipedia.cosmiccore.common.item.behavior.EffectApplicationBehavior;
 import com.ghostipedia.cosmiccore.common.machine.multiblock.part.SoulHatchPartMachine;
@@ -9,6 +10,7 @@ import com.ghostipedia.cosmiccore.mixin.accessor.LivingEntityAccessor;
 import com.gregtechceu.gtceu.api.block.MetaMachineBlock;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.player.Player;
+import net.minecraftforge.event.RegisterCommandsEvent;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.level.BlockEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -44,5 +46,10 @@ public class ForgeCommonEventListener {
             }
             ((LivingEntityAccessor) event.player).callRemoveEffectParticles();
         }
+    }
+
+    @SubscribeEvent
+    public static void registerCommand(RegisterCommandsEvent event) {
+        WirelessEnergyCommand.register(event.getDispatcher(), event.getBuildContext());
     }
 }

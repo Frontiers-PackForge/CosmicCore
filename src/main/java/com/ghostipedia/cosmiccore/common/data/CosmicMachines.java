@@ -2,6 +2,7 @@ package com.ghostipedia.cosmiccore.common.data;
 
 import com.ghostipedia.cosmiccore.CosmicCore;
 import com.ghostipedia.cosmiccore.api.machine.multiblock.DimensionalEnergyCapacitor;
+import com.ghostipedia.cosmiccore.api.machine.multiblock.DimensionalEnergyCapacitorInterface;
 import com.ghostipedia.cosmiccore.api.machine.multiblock.IPBFMachine;
 import com.ghostipedia.cosmiccore.api.machine.part.CosmicPartAbility;
 import com.ghostipedia.cosmiccore.api.machine.part.SteamFluidHatchPartMachine;
@@ -41,8 +42,10 @@ import com.gregtechceu.gtceu.api.recipe.OverclockingLogic;
 import com.gregtechceu.gtceu.api.registry.registrate.MachineBuilder;
 import com.gregtechceu.gtceu.client.renderer.machine.LargeBoilerRenderer;
 import com.gregtechceu.gtceu.client.renderer.machine.WorkableSteamMachineRenderer;
+import com.gregtechceu.gtceu.client.util.TooltipHelper;
 import com.gregtechceu.gtceu.common.block.BoilerFireboxType;
 import com.gregtechceu.gtceu.common.data.*;
+import com.gregtechceu.gtceu.common.machine.multiblock.electric.ActiveTransformerMachine;
 import com.gregtechceu.gtceu.common.machine.multiblock.electric.FusionReactorMachine;
 import com.gregtechceu.gtceu.common.machine.multiblock.electric.PowerSubstationMachine;
 import com.gregtechceu.gtceu.common.machine.storage.CreativeEnergyContainerMachine;
@@ -680,7 +683,7 @@ public static final MultiblockMachineDefinition STEAM_MIXER = GTRegistration.REG
             .overlayTieredHullRenderer("wireless_data_hatch")
             .register();
 
-    public static final MultiblockMachineDefinition DIMENSIONAL_ENNERGY_CAPACITOR = REGISTRATE
+    public static final MultiblockMachineDefinition DIMENSIONAL_ENERGY_CAPACITOR = REGISTRATE
             .multiblock("dimensional_energy_capacitor", DimensionalEnergyCapacitor::new)
             .langValue("Dimensional energy Capacitor")
             .rotationState(RotationState.ALL)
@@ -696,7 +699,7 @@ public static final MultiblockMachineDefinition STEAM_MIXER = GTRegistration.REG
                     .where('C', blocks(CASING_PALLADIUM_SUBSTATION.get()))
                     .where('X',
                             blocks(CASING_PALLADIUM_SUBSTATION.get())
-                                    .setMinGlobalLimited(PowerSubstationMachine.MIN_CASINGS)
+                                    .setMinGlobalLimited(DimensionalEnergyCapacitor.MIN_CASINGS)
                                     .or(autoAbilities(true, false, false))
                                     .or(abilities(PartAbility.INPUT_ENERGY, PartAbility.SUBSTATION_INPUT_ENERGY,
                                             PartAbility.INPUT_LASER).setMinGlobalLimited(1))
@@ -740,6 +743,30 @@ public static final MultiblockMachineDefinition STEAM_MIXER = GTRegistration.REG
                     GTCEu.id("block/multiblock/power_substation"))
             .register();
 
+    public static final MultiblockMachineDefinition DIMENSIONAL_ENERGY_CAPACITOR_INTERFACE = REGISTRATE
+            .multiblock("dimensional_energy_capacitor_inteface", DimensionalEnergyCapacitorInterface::new)
+            .rotationState(RotationState.ALL)
+            .recipeType(GTRecipeTypes.DUMMY_RECIPES)
+            .appearanceBlock(CASING_PALLADIUM_SUBSTATION)
+            .tooltips(Component.translatable("gtceu.machine.active_transformer.tooltip.0"),
+                    Component.translatable("gtceu.machine.active_transformer.tooltip.1"))
+            .tooltipBuilder(
+                    (stack,
+                     components) -> components.add(Component.translatable("gtceu.machine.active_transformer.tooltip.2")
+                            .append(Component.translatable("gtceu.machine.active_transformer.tooltip.3")
+                                    .withStyle(TooltipHelper.RAINBOW_HSL_SLOW))))
+            .pattern((definition) -> FactoryBlockPattern.start()
+                    .aisle("XXX", "XXX", "XXX")
+                    .aisle("XXX", "XCX", "XXX")
+                    .aisle("XXX", "XSX", "XXX")
+                    .where('S', controller(blocks(definition.getBlock())))
+                    .where('X', blocks(CASING_PALLADIUM_SUBSTATION.get()).setMinGlobalLimited(12)
+                            .or(ActiveTransformerMachine.getHatchPredicates()))
+                    .where('C', blocks(GTBlocks.SUPERCONDUCTING_COIL.get()))
+                    .build())
+            .workableCasingRenderer(GTCEu.id("block/casings/solid/machine_casing_palladium_substation"),
+                    GTCEu.id("block/multiblock/data_bank"))
+            .register();
 
 
     public static void init() {
