@@ -1,6 +1,8 @@
 package com.ghostipedia.cosmiccore.integration.kjs.recipe.components;
 
+import com.ghostipedia.cosmiccore.api.capability.recipe.NoctyxRecipeCapability;
 import com.ghostipedia.cosmiccore.api.capability.recipe.SoulRecipeCapability;
+import com.ghostipedia.cosmiccore.api.noctyx.NoctyxStack;
 
 import com.gregtechceu.gtceu.integration.kjs.recipe.components.ContentJS;
 
@@ -12,4 +14,9 @@ public class CosmicRecipeComponent {
             false);
     public static final ContentJS<Integer> SOUL_OUT = new ContentJS<>(NumberComponent.ANY_INT, SoulRecipeCapability.CAP,
             true);
+
+    public static final ContentJS<NoctyxStack> NOCTYX_IN = new ContentJS<>(NoctyxStackRecipeComponent.INSTANCE,
+            NoctyxRecipeCapability.CAP, false);
+    public static final ContentJS<NoctyxStack> NOCTYX_OUT = new ContentJS<>(NoctyxStackRecipeComponent.INSTANCE,
+            NoctyxRecipeCapability.CAP, true);
 }

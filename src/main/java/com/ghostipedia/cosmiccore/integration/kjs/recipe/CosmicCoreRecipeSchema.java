@@ -1,6 +1,8 @@
 package com.ghostipedia.cosmiccore.integration.kjs.recipe;
 
+import com.ghostipedia.cosmiccore.api.capability.recipe.NoctyxRecipeCapability;
 import com.ghostipedia.cosmiccore.api.capability.recipe.SoulRecipeCapability;
+import com.ghostipedia.cosmiccore.api.noctyx.NoctyxStack;
 
 import com.gregtechceu.gtceu.integration.kjs.recipe.GTRecipeSchema;
 
@@ -21,6 +23,14 @@ public interface CosmicCoreRecipeSchema {
 
         public GTRecipeSchema.GTRecipeJS soulOutput(int souls) {
             return this.output(SoulRecipeCapability.CAP, souls);
+        }
+
+        public GTRecipeSchema.GTRecipeJS noctyxInput(NoctyxStack[] stacks) {
+            return this.input(NoctyxRecipeCapability.CAP, (Object[]) stacks);
+        }
+
+        public GTRecipeSchema.GTRecipeJS noctyxOutput(NoctyxStack[] stacks) {
+            return this.output(NoctyxRecipeCapability.CAP, (Object[]) stacks);
         }
 
         public GTRecipeSchema.GTRecipeJS magnetStats(int minField, int decayRate, boolean perTick) {
