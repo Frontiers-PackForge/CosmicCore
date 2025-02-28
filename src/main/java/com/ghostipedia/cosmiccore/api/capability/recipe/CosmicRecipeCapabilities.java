@@ -5,8 +5,10 @@ import com.gregtechceu.gtceu.api.registry.GTRegistries;
 public class CosmicRecipeCapabilities {
 
     public static final SoulRecipeCapability SOUL = SoulRecipeCapability.CAP;
+    public static final NoctyxRecipeCapability NOCTYX = NoctyxRecipeCapability.CAP;
 
     public static void init() {
         GTRegistries.RECIPE_CAPABILITIES.register(SOUL.name, SOUL);
+        GTRegistries.RECIPE_CAPABILITIES.register(NOCTYX.name, NOCTYX);
     }
 }

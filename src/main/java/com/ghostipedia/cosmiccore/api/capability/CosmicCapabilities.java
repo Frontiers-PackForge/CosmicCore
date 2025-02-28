@@ -9,8 +9,11 @@ public class CosmicCapabilities {
 
     public static Capability<ISoulContainer> CAPABILITY_SOUL_CONTAINER = CapabilityManager
             .get(new CapabilityToken<>() {});
+    public static Capability<INoctyxHandler> CAPABILITY_NOCTYX_CONTAINER = CapabilityManager
+            .get(new CapabilityToken<>() {});
 
     public static void register(RegisterCapabilitiesEvent event) {
         event.register(ISoulContainer.class);
+        event.register(INoctyxHandler.class);
     }
 }

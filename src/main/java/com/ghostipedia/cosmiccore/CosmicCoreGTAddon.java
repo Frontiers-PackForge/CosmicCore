@@ -20,8 +20,7 @@ import com.mojang.datafixers.util.Pair;
 
 import java.util.function.Consumer;
 
-import static com.ghostipedia.cosmiccore.integration.kjs.recipe.components.CosmicRecipeComponent.SOUL_IN;
-import static com.ghostipedia.cosmiccore.integration.kjs.recipe.components.CosmicRecipeComponent.SOUL_OUT;
+import static com.ghostipedia.cosmiccore.integration.kjs.recipe.components.CosmicRecipeComponent.*;
 
 @GTAddon
 public class CosmicCoreGTAddon implements IGTAddon {
@@ -68,5 +67,6 @@ public class CosmicCoreGTAddon implements IGTAddon {
     @Override
     public void registerRecipeKeys(KJSRecipeKeyEvent event) {
         event.registerKey(CosmicRecipeCapabilities.SOUL, Pair.of(SOUL_IN, SOUL_OUT));
+        event.registerKey(CosmicRecipeCapabilities.NOCTYX, Pair.of(NOCTYX_IN, NOCTYX_OUT));
     }
 }
