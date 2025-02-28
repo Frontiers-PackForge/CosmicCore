@@ -144,5 +144,24 @@ public class CosmicLangHandler {
 
         replace(provider, "behavior.wireless_data.owner.player", "§3Player Name: §r%s");
         replace(provider, "behavior.wireless_data.owner.team", "§3Team Name: §r");
+
+        // noctyx types
+        provider.add("cosmiccore.noctyx.type.all", "All");
+        provider.add("cosmiccore.noctyx.type.0", "type_0");
+        provider.add("cosmiccore.noctyx.type.1", "type_1");
+        provider.add("cosmiccore.noctyx.type.2", "type_2");
+        provider.add("cosmiccore.noctyx.type.3", "type_3");
+        provider.add("cosmiccore.noctyx.type.4", "type_4");
+        provider.add("cosmiccore.noctyx.type.5", "type_5");
+        provider.add("cosmiccore.noctyx.type.6", "type_6");
+        provider.add("cosmiccore.noctyx.type.7", "type_7");
+
+        // noctyx network
+        provider.add("cosmiccore.noctyx", "Noctyx");
+        provider.add("cosmiccore.noctyx.connection.type_fail", "Connection Failed: Different Noctyx Types");
+
+        // noctyx recipe cap
+        replace(provider, "cosmiccore.recipe.noctyx.input", "Noctyx Input: %s");
+        replace(provider, "cosmiccore.recipe.noctyx.output", "Noctyx Output: %s");
     }
 }
