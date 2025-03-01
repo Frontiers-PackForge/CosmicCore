@@ -14,25 +14,64 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.experimental.Accessors;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Objects;
 
-@Setter
-@Getter
-@Accessors(fluent = true)
 @AllArgsConstructor
 @NoArgsConstructor
 public class NoctyxStack implements INBTSerializable<CompoundTag> {
 
+    public static final NoctyxStack EMPTY = new NoctyxStack(NoctyxTypes.EMPTY, 0);
+
     public static final Codec<NoctyxStack> CODEC = RecordCodecBuilder.create(instance -> instance.group(
-            NoctyxType.CODEC.fieldOf("type").forGetter(NoctyxStack::type),
-            Codec.INT.fieldOf("amount").forGetter(NoctyxStack::amount))
+            NoctyxType.CODEC.fieldOf("type").forGetter(NoctyxStack::getType),
+            Codec.INT.fieldOf("amount").forGetter(NoctyxStack::getAmount))
             .apply(instance, NoctyxStack::new));
 
-    private NoctyxType type;
+    @Getter
+    private @NotNull NoctyxType type = NoctyxTypes.EMPTY;
     private int amount;
+
+    public static NoctyxStack of(NoctyxType type, int amount) {
+        return new NoctyxStack(type, amount);
+    }
+
+    public static NoctyxStack of(NoctyxStack stack, int amount) {
+        return new NoctyxStack(stack.getType(), amount);
+    }
+
+    public static NoctyxStack of(NoctyxStack other) {
+        return of(other.type, other.amount);
+    }
+
+    public static NoctyxStack of(CompoundTag tag) {
+        var stack = new NoctyxStack();
+        stack.deserializeNBT(tag);
+        return stack;
+    }
+
+    public int getAmount() {
+        return isEmpty() ? 0 : this.amount;
+    }
+
+    public void setAmount(int amount) {
+        if (type == NoctyxTypes.EMPTY) throw new IllegalStateException("Can't modify the empty stack");
+        this.amount = amount;
+    }
+
+    public void setType(@NotNull NoctyxType type) {
+        if (this.type == NoctyxTypes.EMPTY) throw new IllegalStateException("Can't modify the empty stack");
+        this.type = type;
+    }
+
+    public void grow(int amount) {
+        setAmount(this.amount + amount);
+    }
+
+    public void shrink(int amount) {
+        setAmount(this.amount - amount);
+    }
 
     public NoctyxStack copy() {
         return new NoctyxStack(type, amount);
@@ -42,14 +81,25 @@ public class NoctyxStack implements INBTSerializable<CompoundTag> {
         return new NoctyxStack(type, amount);
     }
 
-    public NoctyxStack copyFrom(NoctyxStack other) {
-        this.type(other.type());
-        this.amount(other.amount());
+    public NoctyxStack copyFrom(@NotNull NoctyxStack other) {
+        this.setType(other.getType());
+        this.setAmount(other.getAmount());
         return this;
     }
 
     public boolean isEmpty() {
-        return amount <= 0 || type == null;
+        return amount <= 0 || type.equals(NoctyxTypes.EMPTY);
+    }
+
+    public static boolean isEmpty(NoctyxStack stack) {
+        return stack == null || stack.isEmpty();
+    }
+
+    public boolean isSameType(NoctyxStack other) {
+        if (other == null) {
+            return false;
+        }
+        return this.type.equals(other.getType());
     }
 
     @Override
@@ -70,23 +120,31 @@ public class NoctyxStack implements INBTSerializable<CompoundTag> {
     @Override
     public CompoundTag serializeNBT() {
         var tag = new CompoundTag();
-        if (type != null) {
-            tag.put("type", type.serializeNBT());
+        tag.putInt("amount", getAmount());
+        if (isEmpty()) {
+            return tag;
         }
-        tag.putInt("amount", amount);
+        tag.put("type", type.serializeNBT());
         return tag;
     }
 
     @Override
     public void deserializeNBT(CompoundTag tag) {
-        if (tag.contains("type")) {
-            type = new NoctyxType(tag.getCompound("type"));
+        amount = tag.getInt("amount");
+        if (amount <= 0) {
+            this.type = NoctyxTypes.EMPTY;
+        } else {
+            if (tag.contains("type")) {
+                type = new NoctyxType(tag.getCompound("type"));
+            } else {
+                type = NoctyxTypes.EMPTY;
+            }
         }
     }
 
     @Override
     public String toString() {
-        return type().name() + ": " + amount();
+        return getType().name() + ": " + getAmount();
     }
 
     public MutableComponent displayName() {
@@ -98,19 +156,24 @@ public class NoctyxStack implements INBTSerializable<CompoundTag> {
         @Override
         public NoctyxStack fromJson(JsonElement json) {
             if (!json.isJsonObject()) {
-                return null;
+                return EMPTY;
             }
             var jsonObject = GsonHelper.convertToJsonObject(json, "ingredient");
-            var type = new NoctyxType(GsonHelper.getAsJsonObject(jsonObject, "type"));
             var amount = GsonHelper.getAsInt(jsonObject, "amount");
+            if (amount <= 0) {
+                return EMPTY;
+            }
+            var type = new NoctyxType(GsonHelper.getAsJsonObject(jsonObject, "type"));
             return new NoctyxStack(type, amount);
         }
 
         @Override
         public JsonElement toJson(NoctyxStack content) {
             var json = new JsonObject();
-            json.add("type", content.type().toJson());
             json.addProperty("amount", content.amount);
+            if (!content.isEmpty()) {
+                json.add("type", content.getType().toJson());
+            }
             return json;
         }
 
@@ -124,7 +187,7 @@ public class NoctyxStack implements INBTSerializable<CompoundTag> {
 
         @Override
         public NoctyxStack defaultValue() {
-            return new NoctyxStack();
+            return EMPTY;
         }
 
         @Override

@@ -38,7 +38,7 @@ public class NoctyxRecipeCapability extends RecipeCapability<NoctyxStack> {
 
     @Override
     public NoctyxStack copyWithModifier(NoctyxStack content, ContentModifier modifier) {
-        return content.copyAmount(modifier.apply(content.amount()));
+        return content.copyAmount(modifier.apply(content.getAmount()));
     }
 
     @Override
@@ -56,13 +56,13 @@ public class NoctyxRecipeCapability extends RecipeCapability<NoctyxStack> {
         for (var item : ingredients) {
             if (item instanceof NoctyxStack[] ingredient) {
                 for (var stack : ingredient) {
-                    ingredientMap.compute(stack.type(),
-                            (type, amount) -> (amount == null ? 0 : amount) + stack.amount());
+                    ingredientMap.compute(stack.getType(),
+                            (type, amount) -> (amount == null ? 0 : amount) + stack.getAmount());
                 }
             } else if (item instanceof MapNoctyxIngredient ingredient) {
-                for (var stack : ingredient.stacks) {
-                    ingredientMap.compute(stack.type(),
-                            (type, amount) -> (amount == null ? 0 : amount) + stack.amount());
+                for (var stack : ingredient.getStacks()) {
+                    ingredientMap.compute(stack.getType(),
+                            (type, amount) -> (amount == null ? 0 : amount) + stack.getAmount());
                 }
             }
         }

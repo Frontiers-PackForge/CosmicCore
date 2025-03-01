@@ -8,6 +8,7 @@ public class NoctyxTypes {
         return langPrefix + str;
     }
 
+    public static final NoctyxType EMPTY = new NoctyxType(prefix("empty"), 0, 0, 0, 0);
     public static final NoctyxType ALL = new NoctyxType(prefix("all"), 1, 1, 1, 1);
     public static final NoctyxType TYPE_0 = new NoctyxType(prefix("0"), 1, 1, 0, 1);
     public static final NoctyxType TYPE_1 = new NoctyxType(prefix("1"), 1, .8f, .8f, 1);

@@ -5,17 +5,23 @@ import com.ghostipedia.cosmiccore.api.noctyx.NoctyxStack;
 import com.gregtechceu.gtceu.api.recipe.lookup.AbstractMapIngredient;
 
 import lombok.AllArgsConstructor;
+import lombok.Getter;
 
 import java.util.Arrays;
 
 @AllArgsConstructor
 public class MapNoctyxIngredient extends AbstractMapIngredient {
 
-    public final NoctyxStack[] stacks;
+    @Getter
+    protected NoctyxStack[] stacks;
 
     @Override
     protected int hash() {
         return Arrays.hashCode(stacks);
+    }
+
+    public boolean isEmpty() {
+        return stacks == null || stacks.length == 0;
     }
 
     @Override

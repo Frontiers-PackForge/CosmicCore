@@ -1,15 +1,27 @@
 package com.ghostipedia.cosmiccore.api.capability;
 
 import com.ghostipedia.cosmiccore.api.noctyx.NoctyxStack;
-import com.ghostipedia.cosmiccore.api.noctyx.NoctyxType;
+
+import org.jetbrains.annotations.NotNull;
 
 public interface INoctyxHandler {
 
-    NoctyxType getNoctyxType(int slot);
+    int getSlots();
 
+    @NotNull
     NoctyxStack getNoctyxInContainer(int slot);
 
-    void setNoctyxInContainer(int slot, NoctyxStack stack);
+    int getContainerCapacity(int slot);
+
+    boolean isNoctyxValid(int slot, @NotNull NoctyxStack stack);
+
+    int fill(@NotNull NoctyxStack resource, boolean simulate);
+
+    @NotNull
+    NoctyxStack drain(int maxDrain, boolean simulate);
+
+    @NotNull
+    NoctyxStack drain(@NotNull NoctyxStack resource, boolean simulate);
 
     default boolean supportsFill(int slot) {
         return true;
