@@ -4,6 +4,7 @@ import com.ghostipedia.cosmiccore.api.item.armor.*;
 import com.ghostipedia.cosmiccore.api.registries.CosmicRegistration;
 import com.ghostipedia.cosmiccore.common.data.tag.item.CosmicItemTags;
 import com.ghostipedia.cosmiccore.common.item.behavior.EffectApplicationBehavior;
+import com.ghostipedia.cosmiccore.common.item.behavior.InfiniteSprayCanBehavior;
 import com.ghostipedia.cosmiccore.common.item.behavior.StructureWriteBehavior;
 
 import com.gregtechceu.gtceu.api.item.ComponentItem;
@@ -814,6 +815,15 @@ public class CosmicItems {
                 tooltips.add(Component.translatable("cosmiccore.gravpack.1"));
             })))
             .defaultModel()
+            .register();
+
+    // infinite spraycan
+    public static final ItemEntry<ComponentItem> INFINITE_SPRAY_CAN = REGISTRATE
+            .item("infinite_spray_can", ComponentItem::create)
+            .lang("§4Infinite Spray Can")
+            .tag()
+            .properties(p -> p.stacksTo(1))
+            .onRegister(attach(new InfiniteSprayCanBehavior(1)))
             .register();
 
     public static <T extends ComponentItem> NonNullConsumer<T> attach(IItemComponent... components) {
