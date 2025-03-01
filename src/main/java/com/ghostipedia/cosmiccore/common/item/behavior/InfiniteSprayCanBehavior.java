@@ -12,7 +12,7 @@ import com.gregtechceu.gtceu.config.ConfigHolder;
 import com.gregtechceu.gtceu.data.recipe.CustomTags;
 import com.gregtechceu.gtceu.utils.BreadthFirstBlockSearch;
 
-import com.lowdragmc.lowdraglib.gui.graphprocessor.data.parameter.ExposedParameter;
+import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -78,13 +78,20 @@ public class InfiniteSprayCanBehavior implements IInteractionItem, IAddInformati
         if (player != null) {
             var first = level.getBlockEntity(pos);
 
-            if (context.getHand() != player.getUsedItemHand()) {
-                     changeColor(player.isShiftKeyDown());
+            if (context.getHand() != player.getUsedItemHand() && !isLocked) {
+                if (player.isShiftKeyDown()) {
+                    int nextColor = (color.ordinal() + 1) % DyeColor.values().length;
+                    this.color = DyeColor.values()[nextColor * -1];
+                }
+                int nextColor = (color.ordinal() + 1) % DyeColor.values().length;
+                this.color = DyeColor.values()[nextColor];
+                return InteractionResult.SUCCESS;
             }
+
             if (context.getHand() == player.getUsedItemHand()) {
+
                 //middle mouse handler
                 //todo middle mouse handler
-
 
                 if (first == null || !handleSpecialBlockEntities(first, maxBlocksToRecolor, context)) {
                     handleBlocks(pos, maxBlocksToRecolor, context);
@@ -98,21 +105,6 @@ public class InfiniteSprayCanBehavior implements IInteractionItem, IAddInformati
         }
         return InteractionResult.PASS;
     }
-
-
-    public void changeColor(boolean isShiftPressed) {
-        if (!isLocked) {
-            if(isShiftPressed) {
-                int nextColor = (color.ordinal() + 1) % DyeColor.values().length;
-                this.color = DyeColor.values()[nextColor];
-            }
-            else {
-                int nextColor = (color.ordinal() + 1) % DyeColor.values().length;
-                this.color = DyeColor.values()[nextColor * -1];
-            }
-        }
-    }
-
 
     /*
      * REIMPLEMENTING OLD SPRAY CAN BEHAVIOR FROM GT (maybe mixin) (copied and pasted from gt with durability yeeted)
