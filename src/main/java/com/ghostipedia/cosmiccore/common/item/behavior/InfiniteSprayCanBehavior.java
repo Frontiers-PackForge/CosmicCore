@@ -12,6 +12,7 @@ import com.gregtechceu.gtceu.config.ConfigHolder;
 import com.gregtechceu.gtceu.data.recipe.CustomTags;
 import com.gregtechceu.gtceu.utils.BreadthFirstBlockSearch;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -40,6 +41,8 @@ import appeng.api.util.AECableType;
 import appeng.api.util.AEColor;
 import appeng.blockentity.networking.CableBusBlockEntity;
 import com.google.common.collect.ImmutableMap;
+import lombok.Getter;
+import lombok.Setter;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
@@ -49,17 +52,59 @@ import java.util.function.BiPredicate;
 
 public class InfiniteSprayCanBehavior implements IInteractionItem, IAddInformation {
 
-    private final DyeColor color;
-
+    @Getter
+    @Setter
+    private DyeColor color;
+    @Getter
+    @Setter
+    private Boolean isLocked;
     public InfiniteSprayCanBehavior(int color) {
         DyeColor[] colors = DyeColor.values();
         this.color = color >= colors.length || color < 0 ? null : colors[color];
-
         int colorValue = this.color == null ? 0x969696 : this.color.getTextColor();
+        this.isLocked = isLocked;
+
     }
 
+    @Override
+    public InteractionResult onItemUseFirst(ItemStack itemStack, UseOnContext context) {
+        var player = context.getPlayer();
+        var level = context.getLevel();
+        var pos = context.getClickedPos();
+
+        int maxBlocksToRecolor = Math.max(1,
+                player != null && player.isShiftKeyDown() ? ConfigHolder.INSTANCE.tools.sprayCanChainLength : 1);
+
+        if (player != null) {
+            var first = level.getBlockEntity(pos);
+
+            if (context.getHand() != player.getUsedItemHand() && !isLocked) {
+                if (player.isShiftKeyDown()) {
+                    int nextColor = (color.ordinal() + 1) % DyeColor.values().length;
+                    this.color = DyeColor.values()[nextColor * -1];
+                }
+                int nextColor = (color.ordinal() + 1) % DyeColor.values().length;
+                this.color = DyeColor.values()[nextColor];
+                return InteractionResult.SUCCESS;
+            }
+
+            if (context.getHand() == player.getUsedItemHand()) {
+
+                //middle mouse handler
+                //todo middle mouse handler
+
+                if (first == null || !handleSpecialBlockEntities(first, maxBlocksToRecolor, context)) {
+                    handleBlocks(pos, maxBlocksToRecolor, context);
+                }
+                GTSoundEntries.SPRAY_CAN_TOOL.play(level, null, player.position(), 1.0f, 1.0f);
+                return InteractionResult.SUCCESS;
+            }
 
 
+
+        }
+        return InteractionResult.PASS;
+    }
 
     /*
      * REIMPLEMENTING OLD SPRAY CAN BEHAVIOR FROM GT (maybe mixin) (copied and pasted from gt with durability yeeted)
@@ -157,26 +202,6 @@ public class InfiniteSprayCanBehavior implements IInteractionItem, IAddInformati
         } else {
             tooltipComponents.add(Component.translatable("behaviour.paintspray.solvent.tooltip"));
         }
-    }
-
-    @Override
-    public InteractionResult onItemUseFirst(ItemStack itemStack, UseOnContext context) {
-        var player = context.getPlayer();
-        var level = context.getLevel();
-        var pos = context.getClickedPos();
-
-        int maxBlocksToRecolor = Math.max(1,
-                player != null && player.isShiftKeyDown() ? ConfigHolder.INSTANCE.tools.sprayCanChainLength : 1);
-
-        if (player != null) {
-            var first = level.getBlockEntity(pos);
-            if (first == null || !handleSpecialBlockEntities(first, maxBlocksToRecolor, context)) {
-                handleBlocks(pos, maxBlocksToRecolor, context);
-            }
-            GTSoundEntries.SPRAY_CAN_TOOL.play(level, null, player.position(), 1.0f, 1.0f);
-            return InteractionResult.SUCCESS;
-        }
-        return InteractionResult.PASS;
     }
 
     private static boolean paintPaintable(IPaintable paintable, DyeColor color) {
