@@ -12,12 +12,12 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import sfiomn.legendarysurvivaloverhaul.common.temperature.BlockModifier;
 import sfiomn.legendarysurvivaloverhaul.util.SpreadPoint;
 
-@Mixin(BlockModifier.class)
+@Mixin(value = BlockModifier.class, remap = false)
 public class BlockModifierMixin {
     @Inject(method = "getTemperatureFromSpreadPoint", at = @At("HEAD"), cancellable = true)
     public void cosmicCore$injectGetTemperatureFromSpreadPoint(Level level, SpreadPoint spreadPoint, CallbackInfoReturnable<Float> cir) {
         var entity = level.getBlockEntity(spreadPoint.position());
-        if (!(entity instanceof MetaMachineBlockEntity mmbe)) {
+        if (entity.getLevel().isClientSide || !(entity instanceof MetaMachineBlockEntity mmbe)) {
             return;
         }
         cir.setReturnValue(cosmicCore$getMachineTemperature(mmbe.getMetaMachine()));
