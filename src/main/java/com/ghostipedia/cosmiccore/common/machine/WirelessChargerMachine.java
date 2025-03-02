@@ -122,7 +122,7 @@ public class WirelessChargerMachine extends TieredEnergyMachine {
                         for (int i = 0; i < curios.getSlots(); i++) {
                             var itemInSlot = curios.getStackInSlot(i);
                             var slotElectricItem = GTCapabilityHelper.getElectricItem(itemInSlot);
-                            if (slotElectricItem != null && energyContainer.getEnergyStored() > maxChargeValue) {
+                            if (slotElectricItem != null && energyContainer.getEnergyStored() > maxChargeValue && slotElectricItem.chargeable()) {
                                 long chargedAmount = slotElectricItem.charge(maxChargeValue, tier, true, false);
                                 energyContainer.changeEnergy(-chargedAmount);
                             }
@@ -133,7 +133,7 @@ public class WirelessChargerMachine extends TieredEnergyMachine {
                     for (int i = 0; i < playerInv.getContainerSize(); i++) {
                         var itemInSlot = playerInv.getItem(i);
                         var slotElectricItem = GTCapabilityHelper.getElectricItem(itemInSlot);
-                        if (slotElectricItem != null && energyContainer.getEnergyStored() > maxChargeValue) {
+                        if (slotElectricItem != null && energyContainer.getEnergyStored() > maxChargeValue && slotElectricItem.chargeable()) {
                             long chargedAmount = slotElectricItem.charge(maxChargeValue, tier, true, false);
                             energyContainer.changeEnergy(-chargedAmount);
                         }
