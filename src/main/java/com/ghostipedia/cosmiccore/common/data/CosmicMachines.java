@@ -45,8 +45,8 @@ import com.gregtechceu.gtceu.common.block.BoilerFireboxType;
 import com.gregtechceu.gtceu.common.data.*;
 import com.gregtechceu.gtceu.common.machine.multiblock.electric.FusionReactorMachine;
 import com.gregtechceu.gtceu.common.registry.GTRegistration;
-
 import com.gregtechceu.gtceu.utils.FormattingUtil;
+
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
@@ -134,14 +134,14 @@ public class CosmicMachines {
             (tier, builder) -> builder
                     .langValue("%s Wireless Charger".formatted(VN[tier]))
                     .tooltipBuilder((stack, list) -> {
-                        list.add(Component.translatable("cosmiccore.wireless_charger.range.single", FormattingUtil.formatNumbers(2048L * (tier - GTValues.HV))));
-                        list.add(Component.translatable("cosmiccore.wireless_charger.range.mixed", FormattingUtil.formatNumbers(1024L * (tier - GTValues.HV))));
+                        list.add(Component.translatable("cosmiccore.wireless_charger.range.single",
+                                FormattingUtil.formatNumbers(2048L * (tier - GTValues.HV))));
+                        list.add(Component.translatable("cosmiccore.wireless_charger.range.mixed",
+                                FormattingUtil.formatNumbers(1024L * (tier - GTValues.HV))));
                     })
                     .workableTieredHullRenderer(CosmicCore.id("block/overlay/machine/wireless_charger"))
                     .register(),
             GTValues.tiersBetween(HV, UIV));
-
-
 
     // Enable If needed Inside of Dev
     // public static final MultiblockMachineDefinition SOUL_TESTER = REGISTRATE.multiblock("soul_tester",
