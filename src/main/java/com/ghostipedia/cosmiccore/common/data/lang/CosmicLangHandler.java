@@ -147,7 +147,7 @@ public class CosmicLangHandler {
         replace(provider, "behavior.wireless_data.owner.player", "§3Player Name: §r%s");
         replace(provider, "behavior.wireless_data.owner.team", "§3Team Name: §r");
         replace(provider, "cosmiccore.wireless_charger.mode.0", "Set charger mode: SINGLE [Range - %s blocks]");
-        replace(provider, "cosmiccore.wireless_charger.mode.0", "Set charger mode: MIXED [Range - %s blocks]");
+        replace(provider, "cosmiccore.wireless_charger.mode.1", "Set charger mode: MIXED [Range - %s blocks]");
         replace(provider, "cosmiccore.wireless_charger.range.single", "When in SINGLE mode, supplies charge to 1 player in a range of %s blocks");
         replace(provider, "cosmiccore.wireless_charger.range.mixed", "When in MIXED mode, supplies charge to all players on the team in a range of %s blocks");
     }

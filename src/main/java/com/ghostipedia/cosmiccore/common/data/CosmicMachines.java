@@ -131,6 +131,7 @@ public class CosmicMachines {
     public static final MachineDefinition[] WIRELESS_CHARGER = registerTieredMachines("wireless_charger",
             WirelessChargerMachine::new,
             (tier, builder) -> builder
+                    .langValue("%s Wireless Charger".formatted(VN[tier]))
                     .tooltipBuilder((stack, list) -> {
                         list.add(Component.translatable("cosmiccore.wireless_charger.range.single", Math.pow(2, (tier + 7))));
                         list.add(Component.translatable("cosmiccore.wireless_charger.range.mixed", Math.pow(2, (tier + 6))));
