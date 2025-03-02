@@ -122,7 +122,8 @@ public class WirelessChargerMachine extends TieredEnergyMachine {
                         for (int i = 0; i < curios.getSlots(); i++) {
                             var itemInSlot = curios.getStackInSlot(i);
                             var slotElectricItem = GTCapabilityHelper.getElectricItem(itemInSlot);
-                            if (slotElectricItem != null && energyContainer.getEnergyStored() > maxChargeValue && slotElectricItem.chargeable()) {
+                            if (slotElectricItem != null && energyContainer.getEnergyStored() > maxChargeValue &&
+                                    slotElectricItem.chargeable()) {
                                 long chargedAmount = slotElectricItem.charge(maxChargeValue, tier, true, false);
                                 energyContainer.changeEnergy(-chargedAmount);
                             }
@@ -133,7 +134,8 @@ public class WirelessChargerMachine extends TieredEnergyMachine {
                     for (int i = 0; i < playerInv.getContainerSize(); i++) {
                         var itemInSlot = playerInv.getItem(i);
                         var slotElectricItem = GTCapabilityHelper.getElectricItem(itemInSlot);
-                        if (slotElectricItem != null && energyContainer.getEnergyStored() > maxChargeValue && slotElectricItem.chargeable()) {
+                        if (slotElectricItem != null && energyContainer.getEnergyStored() > maxChargeValue &&
+                                slotElectricItem.chargeable()) {
                             long chargedAmount = slotElectricItem.charge(maxChargeValue, tier, true, false);
                             energyContainer.changeEnergy(-chargedAmount);
                         }
@@ -172,10 +174,10 @@ public class WirelessChargerMachine extends TieredEnergyMachine {
             mode = ChargeMode.values()[((mode.ordinal() + 1) % ChargeMode.values().length)];
             if (mode == ChargeMode.SUPER_CHARGED) {
                 playerIn.displayClientMessage(Component.translatable("cosmiccore.wireless_charger.mode.0",
-                        FormattingUtil.formatNumbers(longRange)), false);
+                        FormattingUtil.formatNumbers(shortRange)), false);
             } else if (mode == ChargeMode.MIXED) {
                 playerIn.displayClientMessage(Component.translatable("cosmiccore.wireless_charger.mode.1",
-                        FormattingUtil.formatNumbers(shortRange)), false);
+                        FormattingUtil.formatNumbers(longRange)), false);
             }
         }
 
