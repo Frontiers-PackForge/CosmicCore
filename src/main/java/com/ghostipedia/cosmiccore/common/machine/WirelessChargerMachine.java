@@ -122,10 +122,9 @@ public class WirelessChargerMachine extends TieredEnergyMachine {
                         for (int i = 0; i < curios.getSlots(); i++) {
                             var itemInSlot = curios.getStackInSlot(i);
                             var slotElectricItem = GTCapabilityHelper.getElectricItem(itemInSlot);
-                            if (slotElectricItem != null) {
-                                slotElectricItem.charge(maxChargeValue, tier, true, false);
-                                energyContainer.changeEnergy(-maxChargeValue);
-                                if (energyContainer.getEnergyStored() < maxChargeValue) break;
+                            if (slotElectricItem != null && energyContainer.getEnergyStored() > maxChargeValue) {
+                                long chargedAmount = slotElectricItem.charge(maxChargeValue, tier, true, false);
+                                energyContainer.changeEnergy(-chargedAmount);
                             }
                         }
                     }
@@ -134,10 +133,9 @@ public class WirelessChargerMachine extends TieredEnergyMachine {
                     for (int i = 0; i < playerInv.getContainerSize(); i++) {
                         var itemInSlot = playerInv.getItem(i);
                         var slotElectricItem = GTCapabilityHelper.getElectricItem(itemInSlot);
-                        if (slotElectricItem != null) {
-                            slotElectricItem.charge(maxChargeValue, tier, true, false);
-                            energyContainer.changeEnergy(-maxChargeValue);
-                            if (energyContainer.getEnergyStored() < maxChargeValue) break;
+                        if (slotElectricItem != null && energyContainer.getEnergyStored() > maxChargeValue) {
+                            long chargedAmount = slotElectricItem.charge(maxChargeValue, tier, true, false);
+                            energyContainer.changeEnergy(-chargedAmount);
                         }
                     }
                 }
