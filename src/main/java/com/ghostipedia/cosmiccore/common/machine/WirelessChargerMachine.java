@@ -152,10 +152,10 @@ public class WirelessChargerMachine extends TieredEnergyMachine {
             List<Player> leavingPlayers = oldPlayerList.stream().filter(player -> !players.contains(player)).toList();
             int radius = mode == ChargeMode.SUPER_CHARGED ? (int)shortRange : (int)longRange;
             for(var player : enteringPlayers) {
-                player.displayClientMessage(Component.translatable("cosmiccore.wireless_charger.enter_range", radius), false);
+                player.displayClientMessage(Component.translatable("cosmiccore.wireless_charger.enter_range", FormattingUtil.formatNumbers(radius)), false);
             }
             for(var player : leavingPlayers) {
-                player.displayClientMessage(Component.translatable("cosmiccore.wireless_charger.left_range", radius), false);
+                player.displayClientMessage(Component.translatable("cosmiccore.wireless_charger.left_range", FormattingUtil.formatNumbers(radius)), false);
             }
 
             if(oldPlayerList != players) oldPlayerList = players;
