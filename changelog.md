@@ -1,5 +1,5 @@
-# Cosmic Core 0.5.11
+# Cosmic Core 0.5.12
 ## Added Items
-* Fixes Wireless Chargers only working on batteries
+* Various Misc Fixes for Wireless Charger Logic
 
 # DO NOT MANUALLY UPDATE COSMIC CORE FOR FRONTIERS **I WILL NOT WORK**
