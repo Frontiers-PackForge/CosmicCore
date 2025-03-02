@@ -59,6 +59,12 @@ repositories {
     flatDir {
         dirs 'lib'
     }
+    maven {
+        url "https://cursemaven.com/"
+        content {
+            includeGroup "curse.maven"
+        }
+    } // Curse Forge File
     // Ad Astra
     maven {
         url "https://maven.teamresourceful.com/repository/maven-public/"
@@ -128,12 +134,7 @@ repositories {
         url "https://maven.tterrag.com/"
     }
     maven { url = "https://api.modrinth.com/maven" }
-    maven {
-        url "https://cursemaven.com/"
-        content {
-            includeGroup "curse.maven"
-        }
-    } // Curse Forge File
+
 }
 
 apply from: "$rootDir/gradle/scripts/spotless.gradle"

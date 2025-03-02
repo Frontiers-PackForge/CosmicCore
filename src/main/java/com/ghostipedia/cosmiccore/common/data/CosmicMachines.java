@@ -10,6 +10,7 @@ import com.ghostipedia.cosmiccore.common.block.WorkableSteamHullType;
 import com.ghostipedia.cosmiccore.common.block.debug.CreativeThermiaContainerMachine;
 import com.ghostipedia.cosmiccore.common.data.materials.CosmicMaterials;
 import com.ghostipedia.cosmiccore.common.data.recipe.CosmicRecipeModifiers;
+import com.ghostipedia.cosmiccore.common.machine.WirelessChargerMachine;
 import com.ghostipedia.cosmiccore.common.machine.multiblock.electric.MagneticFieldMachine;
 import com.ghostipedia.cosmiccore.common.machine.multiblock.multi.WirelessDataBankMachine;
 import com.ghostipedia.cosmiccore.common.machine.multiblock.part.CosmicParallelHatchPartMachine;
@@ -45,6 +46,7 @@ import com.gregtechceu.gtceu.common.data.*;
 import com.gregtechceu.gtceu.common.machine.multiblock.electric.FusionReactorMachine;
 import com.gregtechceu.gtceu.common.registry.GTRegistration;
 
+import com.gregtechceu.gtceu.utils.FormattingUtil;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
@@ -126,6 +128,20 @@ public class CosmicMachines {
                     .tooltips(Component.translatable("gtceu.machine.parallel_hatch_mk" + tier + ".tooltip"))
                     .register(),
             ZPM, UV, UHV, UEV, UIV);
+
+    public static final MachineDefinition[] WIRELESS_CHARGER = registerTieredMachines("wireless_charger",
+            WirelessChargerMachine::new,
+            (tier, builder) -> builder
+                    .langValue("%s Wireless Charger".formatted(VN[tier]))
+                    .tooltipBuilder((stack, list) -> {
+                        list.add(Component.translatable("cosmiccore.wireless_charger.range.single", FormattingUtil.formatNumbers(2048L * (tier - GTValues.HV))));
+                        list.add(Component.translatable("cosmiccore.wireless_charger.range.mixed", FormattingUtil.formatNumbers(1024L * (tier - GTValues.HV))));
+                    })
+                    .workableTieredHullRenderer(CosmicCore.id("block/overlay/machine/wireless_charger"))
+                    .register(),
+            GTValues.tiersBetween(HV, UIV));
+
+
 
     // Enable If needed Inside of Dev
     // public static final MultiblockMachineDefinition SOUL_TESTER = REGISTRATE.multiblock("soul_tester",
