@@ -138,7 +138,7 @@ public class CosmicMachines {
                     })
                     .workableTieredHullRenderer(CosmicCore.id("block/overlay/machine/wireless_charger"))
                     .register(),
-            GTValues.tiersBetween(EV, UIV));
+            GTValues.tiersBetween(HV, UIV));
 
 
 

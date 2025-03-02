@@ -176,6 +176,72 @@ public class CosmicItems {
             .properties(p -> p.stacksTo(64))
             .defaultModel()
             .register();
+    public static final ItemEntry<ComponentItem> RADIO_MODULE_HV = REGISTRATE
+            .item("hv_radio_module", ComponentItem::create)
+            .lang("HV Radio Module")
+            .properties(p -> p.stacksTo(64))
+            .defaultModel()
+            .register();
+    public static final ItemEntry<ComponentItem> RADIO_MODULE_EV = REGISTRATE
+            .item("ev_radio_module", ComponentItem::create)
+            .lang("EV Radio Module")
+            .properties(p -> p.stacksTo(64))
+            .defaultModel()
+            .register();
+    public static final ItemEntry<ComponentItem> RADIO_MODULE_IV = REGISTRATE
+            .item("iv_radio_module", ComponentItem::create)
+            .lang("IV Radio Module")
+            .properties(p -> p.stacksTo(64))
+            .defaultModel()
+            .register();
+    public static final ItemEntry<ComponentItem> RADIO_MODULE_LUV = REGISTRATE
+            .item("luv_radio_module", ComponentItem::create)
+            .lang("LuV Radio Module")
+            .properties(p -> p.stacksTo(64))
+            .defaultModel()
+            .register();
+    public static final ItemEntry<ComponentItem> RADIO_MODULE_ZPM = REGISTRATE
+            .item("zpm_radio_module", ComponentItem::create)
+            .lang("ZPM Radio Module")
+            .properties(p -> p.stacksTo(64))
+            .defaultModel()
+            .register();
+    public static final ItemEntry<ComponentItem> RADIO_MODULE_UV = REGISTRATE
+            .item("uv_radio_module", ComponentItem::create)
+            .lang("UV Radio Module")
+            .properties(p -> p.stacksTo(64))
+            .defaultModel()
+            .register();
+    public static final ItemEntry<ComponentItem> RADIO_MODULE_UHV = REGISTRATE
+            .item("uhv_radio_module", ComponentItem::create)
+            .lang("UHV Radio Module")
+            .properties(p -> p.stacksTo(64))
+            .defaultModel()
+            .register();
+    public static final ItemEntry<ComponentItem> RADIO_MODULE_UEV = REGISTRATE
+            .item("uev_radio_module", ComponentItem::create)
+            .lang("UEV Radio Module")
+            .properties(p -> p.stacksTo(64))
+            .defaultModel()
+            .register();
+    public static final ItemEntry<ComponentItem> RADIO_MODULE_UIV = REGISTRATE
+            .item("uiv_radio_module", ComponentItem::create)
+            .lang("UIV Radio Module")
+            .properties(p -> p.stacksTo(64))
+            .defaultModel()
+            .register();
+    public static final ItemEntry<ComponentItem> RADIO_MODULE_UXV = REGISTRATE
+            .item("uxv_radio_module", ComponentItem::create)
+            .lang("UXV Radio Module")
+            .properties(p -> p.stacksTo(64))
+            .defaultModel()
+            .register();
+    public static final ItemEntry<ComponentItem> RADIO_MODULE_OPV = REGISTRATE
+            .item("opv_radio_module", ComponentItem::create)
+            .lang("OPV Radio Module")
+            .properties(p -> p.stacksTo(64))
+            .defaultModel()
+            .register();
 
     // public static final ItemEntry<ComponentItem> VOMAPLAST = REGISTRATE.item("vomaplast", ComponentItem::create)
     // .lang("Vomaplast")
