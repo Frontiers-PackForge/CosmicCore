@@ -57,8 +57,8 @@ public class WirelessChargerMachine extends TieredEnergyMachine {
         super(holder, tier, args);
         this.tier = tier;
         mode = ChargeMode.SUPER_CHARGED;
-        longRange = 2048L * (tier - GTValues.HV);
-        shortRange = 1024L * (tier - GTValues.HV);
+        longRange = 1024L * (tier - GTValues.MV);
+        shortRange = 512L * (tier - GTValues.MV);
         chargeAmount = GTValues.V[tier];
     }
 
@@ -127,7 +127,7 @@ public class WirelessChargerMachine extends TieredEnergyMachine {
                         for (int i = 0; i < curios.getSlots(); i++) {
                             var itemInSlot = curios.getStackInSlot(i);
                             var slotElectricItem = GTCapabilityHelper.getElectricItem(itemInSlot);
-                            if (slotElectricItem != null && slotElectricItem.canProvideChargeExternally()) {
+                            if (slotElectricItem != null) {
                                 slotElectricItem.charge(maxChargeValue, tier, true, false);
                                 energyContainer.changeEnergy(-maxChargeValue);
                                 if (energyContainer.getEnergyStored() < maxChargeValue) break;
@@ -139,7 +139,7 @@ public class WirelessChargerMachine extends TieredEnergyMachine {
                     for (int i = 0; i < playerInv.getContainerSize(); i++) {
                         var itemInSlot = playerInv.getItem(i);
                         var slotElectricItem = GTCapabilityHelper.getElectricItem(itemInSlot);
-                        if (slotElectricItem != null && slotElectricItem.canProvideChargeExternally()) {
+                        if (slotElectricItem != null) {
                             slotElectricItem.charge(maxChargeValue, tier, true, false);
                             energyContainer.changeEnergy(-maxChargeValue);
                             if (energyContainer.getEnergyStored() < maxChargeValue) break;
