@@ -1,5 +1,5 @@
-# Cosmic Core 0.5.7
+# Cosmic Core 0.5.11
 ## Added Items
-* Adds Wireless Chargers and Radio Modules
+* Fixes Wireless Chargers only working on batteries
 
 # DO NOT MANUALLY UPDATE COSMIC CORE FOR FRONTIERS **I WILL NOT WORK**
