@@ -37,6 +37,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.stream.Collectors;
+
+import static com.gregtechceu.gtceu.api.GTValues.EV;
 
 public class WirelessChargerMachine extends TieredEnergyMachine {
 
@@ -48,12 +51,14 @@ public class WirelessChargerMachine extends TieredEnergyMachine {
 
     private TickableSubscription charge;
 
+    List<Player> oldPlayerList = new ArrayList<>();
+
     public WirelessChargerMachine(IMachineBlockEntity holder, int tier, Object... args) {
         super(holder, tier, args);
         this.tier = tier;
         mode = ChargeMode.SUPER_CHARGED;
-        longRange = (long)Math.pow(2, (tier + 7));
-        shortRange = (long)Math.pow(2, (tier + 6));
+        longRange = 2048L * (tier - GTValues.HV);
+        shortRange = 1024L * (tier - GTValues.HV);
         chargeAmount = GTValues.V[tier];
     }
 
@@ -101,7 +106,7 @@ public class WirelessChargerMachine extends TieredEnergyMachine {
                 Player player = ServerLifecycleHooks.getCurrentServer().getPlayerList().getPlayer(pUUID);
                 if(player != null && isPlayerInRange(player)) players.add(player);
             } else if (owner.type() == IMachineOwner.MachineOwnerType.FTB) {
-                Optional<Team> t = FTBTeamsAPI.api().getClientManager().getTeamByID(((FTBOwner) owner).getUUID());
+                Optional<Team> t = FTBTeamsAPI.api().getManager().getTeamByID(((FTBOwner) owner).getUUID());
                 if(t.isPresent()) {
                     for (var pUUID : t.get().getMembers()) {
                         Player player = ServerLifecycleHooks.getCurrentServer().getPlayerList().getPlayer(pUUID);
@@ -112,35 +117,48 @@ public class WirelessChargerMachine extends TieredEnergyMachine {
                 // DN
             }
 
-            if (players.isEmpty()) return;
+            if (!players.isEmpty()) {
 
-            for (var player : players) {
-                if (GTCEu.Mods.isCuriosLoaded()) {
-                    IItemHandler curios = CuriosApi.getCuriosInventory(player)
-                            .<IItemHandler>map(ICuriosItemHandler::getEquippedCurios)
-                            .orElse(EmptyHandler.INSTANCE);
-                    for (int i = 0; i < curios.getSlots(); i++) {
-                        var itemInSlot = curios.getStackInSlot(i);
+                for (var player : players) {
+                    if (GTCEu.Mods.isCuriosLoaded()) {
+                        IItemHandler curios = CuriosApi.getCuriosInventory(player)
+                                .<IItemHandler>map(ICuriosItemHandler::getEquippedCurios)
+                                .orElse(EmptyHandler.INSTANCE);
+                        for (int i = 0; i < curios.getSlots(); i++) {
+                            var itemInSlot = curios.getStackInSlot(i);
+                            var slotElectricItem = GTCapabilityHelper.getElectricItem(itemInSlot);
+                            if (slotElectricItem != null && slotElectricItem.canProvideChargeExternally()) {
+                                slotElectricItem.charge(maxChargeValue, tier, true, false);
+                                energyContainer.changeEnergy(-maxChargeValue);
+                                if (energyContainer.getEnergyStored() < maxChargeValue) break;
+                            }
+                        }
+                    }
+
+                    var playerInv = player.getInventory();
+                    for (int i = 0; i < playerInv.getContainerSize(); i++) {
+                        var itemInSlot = playerInv.getItem(i);
                         var slotElectricItem = GTCapabilityHelper.getElectricItem(itemInSlot);
                         if (slotElectricItem != null && slotElectricItem.canProvideChargeExternally()) {
                             slotElectricItem.charge(maxChargeValue, tier, true, false);
                             energyContainer.changeEnergy(-maxChargeValue);
-                            if (energyContainer.getEnergyStored() < maxChargeValue) return;
+                            if (energyContainer.getEnergyStored() < maxChargeValue) break;
                         }
                     }
                 }
-
-                var playerInv = player.getInventory();
-                for (int i = 0; i < playerInv.getContainerSize(); i++) {
-                    var itemInSlot = playerInv.getItem(i);
-                    var slotElectricItem = GTCapabilityHelper.getElectricItem(itemInSlot);
-                    if (slotElectricItem != null && slotElectricItem.canProvideChargeExternally()) {
-                        slotElectricItem.charge(maxChargeValue, tier, true, false);
-                        energyContainer.changeEnergy(-maxChargeValue);
-                        if (energyContainer.getEnergyStored() < maxChargeValue) return;
-                    }
-                }
             }
+
+            List<Player> enteringPlayers = players.stream().filter(player -> !oldPlayerList.contains(player)).toList();
+            List<Player> leavingPlayers = oldPlayerList.stream().filter(player -> !players.contains(player)).toList();
+            int radius = mode == ChargeMode.SUPER_CHARGED ? (int)shortRange : (int)longRange;
+            for(var player : enteringPlayers) {
+                player.displayClientMessage(Component.translatable("cosmiccore.wireless_charger.enter_range", radius), false);
+            }
+            for(var player : leavingPlayers) {
+                player.displayClientMessage(Component.translatable("cosmiccore.wireless_charger.left_range", radius), false);
+            }
+
+            if(oldPlayerList != players) oldPlayerList = players;
         }
     }
 
@@ -154,7 +172,6 @@ public class WirelessChargerMachine extends TieredEnergyMachine {
 
     @Override
     protected InteractionResult onScrewdriverClick(Player playerIn, InteractionHand hand, Direction gridSide, BlockHitResult hitResult) {
-
         if(!getLevel().isClientSide) {
             mode = ChargeMode.values()[((mode.ordinal() + 1) % ChargeMode.values().length)];
             if(mode == ChargeMode.SUPER_CHARGED) {
