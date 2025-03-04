@@ -1,5 +1,5 @@
-# Cosmic Core 0.5.12
+# Cosmic Core 0.6.0
 ## Added Items
-* Various Misc Fixes for Wireless Charger Logic
+* Reworked Combustion Generators :)
 
 # DO NOT MANUALLY UPDATE COSMIC CORE FOR FRONTIERS **I WILL NOT WORK**

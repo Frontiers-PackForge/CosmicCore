@@ -37,12 +37,14 @@ import com.gregtechceu.gtceu.api.machine.multiblock.WorkableElectricMultiblockMa
 import com.gregtechceu.gtceu.api.machine.steam.SimpleSteamMachine;
 import com.gregtechceu.gtceu.api.pattern.FactoryBlockPattern;
 import com.gregtechceu.gtceu.api.pattern.Predicates;
+import com.gregtechceu.gtceu.api.recipe.GTRecipeType;
 import com.gregtechceu.gtceu.api.recipe.OverclockingLogic;
 import com.gregtechceu.gtceu.api.registry.registrate.MachineBuilder;
 import com.gregtechceu.gtceu.client.renderer.machine.LargeBoilerRenderer;
 import com.gregtechceu.gtceu.client.renderer.machine.WorkableSteamMachineRenderer;
 import com.gregtechceu.gtceu.common.block.BoilerFireboxType;
 import com.gregtechceu.gtceu.common.data.*;
+import com.gregtechceu.gtceu.common.data.machines.GTMultiMachines;
 import com.gregtechceu.gtceu.common.machine.multiblock.electric.FusionReactorMachine;
 import com.gregtechceu.gtceu.common.registry.GTRegistration;
 import com.gregtechceu.gtceu.utils.FormattingUtil;
@@ -59,6 +61,7 @@ import java.util.function.BiFunction;
 import static com.ghostipedia.cosmiccore.api.pattern.CosmicPredicates.magnetCoils;
 import static com.ghostipedia.cosmiccore.api.registries.CosmicRegistration.REGISTRATE;
 import static com.ghostipedia.cosmiccore.common.data.CosmicBlocks.*;
+import static com.ghostipedia.cosmiccore.common.data.CosmicMachinesUtils.registerCosmicLargeCombustionEngine;
 import static com.gregtechceu.gtceu.api.GTValues.*;
 import static com.gregtechceu.gtceu.api.GTValues.UV;
 import static com.gregtechceu.gtceu.api.pattern.Predicates.*;
@@ -66,6 +69,7 @@ import static com.gregtechceu.gtceu.api.pattern.util.RelativeDirection.*;
 import static com.gregtechceu.gtceu.common.data.GCYMBlocks.*;
 import static com.gregtechceu.gtceu.common.data.GTBlocks.*;
 import static com.gregtechceu.gtceu.common.data.GTMachines.CREATIVE_TOOLTIPS;
+import static com.gregtechceu.gtceu.common.data.GTRecipeTypes.DUMMY_RECIPES;
 import static com.gregtechceu.gtceu.common.data.machines.GTMachineUtils.*;
 import static com.gregtechceu.gtceu.common.data.machines.GTMultiMachines.FUSION_REACTOR;
 
@@ -3017,6 +3021,17 @@ public class CosmicMachines {
                     CosmicCore.id("block/multiblock/vomahine_chemplant"))
             .register();
 
+    public static final MultiblockMachineDefinition LARGE_COMBUSTION_ENGINE = registerCosmicLargeCombustionEngine(
+            "large_combustion_engine_cc", EV,
+            CASING_TITANIUM_STABLE, CASING_TITANIUM_GEARBOX, CASING_ENGINE_INTAKE,
+            GTCEu.id("block/casings/solid/machine_casing_stable_titanium"),
+            GTCEu.id("block/multiblock/generator/large_combustion_engine"));
+    public static final MultiblockMachineDefinition EXTREME_COMBUSTION_ENGINE = registerCosmicLargeCombustionEngine(
+            "extreme_combustion_engine_cc", IV,
+            CASING_TUNGSTENSTEEL_ROBUST, CASING_TUNGSTENSTEEL_GEARBOX, CASING_EXTREME_ENGINE_INTAKE,
+            GTCEu.id("block/casings/solid/machine_casing_robust_tungstensteel"),
+            GTCEu.id("block/multiblock/generator/extreme_combustion_engine"));
+
     private static MachineDefinition[] registerSoulTieredHatch(String name, String displayName, String model, IO io,
                                                                int[] tiers, PartAbility... abilities) {
         return registerTieredMachines(name,
@@ -3121,6 +3136,8 @@ public class CosmicMachines {
             .register();
 
     public static void init() {
+        GTMultiMachines.LARGE_COMBUSTION_ENGINE.setRecipeTypes(new GTRecipeType[] { DUMMY_RECIPES });
+        GTMultiMachines.EXTREME_COMBUSTION_ENGINE.setRecipeTypes(new GTRecipeType[] { DUMMY_RECIPES });
         for (MultiblockMachineDefinition definition : FUSION_REACTOR) {
             if (definition == null) continue;
             definition.setPatternFactory(() -> {

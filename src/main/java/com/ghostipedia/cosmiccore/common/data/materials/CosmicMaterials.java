@@ -42,6 +42,7 @@ public class CosmicMaterials {
     public static Material Ichorium;
     public static Material Chronon;
     public static Material Temmerite;
+    public static Material Triphenylphosphine;
 
     public static void register() {
         Prisma = new Material.Builder(CosmicCore.id("prisma"))
@@ -156,7 +157,10 @@ public class CosmicMaterials {
                 .cableProperties(GTValues.V[11], 4, 6)
                 .blastTemp(19000, BlastProperty.GasTier.HIGHEST, GTValues.VA[GTValues.UIV], 5600)
                 .buildAndRegister();
-
+        Triphenylphosphine = new Material.Builder(CosmicCore.id("triphenylphosphine"))
+                .liquid(new FluidBuilder().temperature(19500))
+                .color(0xfca103).secondaryColor(0xfcbe03).iconSet(MaterialIconSet.BRIGHT)
+                .buildAndRegister();
         // Misc Materials
 
         // TODO - Colors , Textures, Fluid Textures, they're all gonna look the same in game for now.

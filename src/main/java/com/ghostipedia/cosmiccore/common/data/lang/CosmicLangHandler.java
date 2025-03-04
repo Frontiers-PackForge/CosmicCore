@@ -91,6 +91,8 @@ public class CosmicLangHandler {
         replace(provider, "cosmiccore.multiblock.ipbf.tooltip.2", "§aRecipes are §f25% §aFaster.");
         replace(provider, "cosmiccore.multiblock.ipbf.tooltip.3", "§aParallel Amount§f: §b8x§r");
         replace(provider, "block.gtceu.high_pressure_assembler", "High Pressure Assembler");
+        replace(provider, "block.gtceu.large_combustion_engine_cc", "Large Combustion Generator");
+        replace(provider, "block.gtceu.extreme_combustion_engine_cc", "Extreme Combustion Generator");
         replace(provider, "block.gtceu.steam_caster", "Steam Caster Solidifier");
         replace(provider, "cosmiccore.multiblock.hpsassem.tooltip.0", "§7§oLet's build an empire!");
         replace(provider, "cosmiccore.multiblock.hpsassem.tooltip.1", "§fA large but powerful assembler made of steel");
@@ -143,6 +145,22 @@ public class CosmicLangHandler {
         replace(provider, "item.cosmiccore.the_one_ring.tooltip.1", "You might find it hard to take off.");
 
         replace(provider, "item.cosmiccore.space_radio.tooltip", "§6Lets you hear sounds in space!");
+        replace(provider, "cosmiccore.universal.tooltip.lube_info.0",
+                "§aProviding Better Lubricants increases the total EU created");
+        replace(provider, "cosmiccore.universal.tooltip.lube_info.1", "§eLubricant§f: §c1x §fEU total @ 1000mb/hr");
+        replace(provider, "cosmiccore.universal.tooltip.lube_info.2",
+                "§eAdv Lubricant§f: §c1.5x §fEU total @ 500mb/hr");
+        replace(provider, "cosmiccore.universal.tooltip.lube_info.3",
+                "§eTears of the Universe§f: §c2x §fEU total @ 250mb/hr");
+
+        replace(provider, "cosmiccore.universal.boosting_agents.0",
+                "§aCan consume various boosters to increase EU/t multiplier");
+        replace(provider, "cosmiccore.universal.boosting_agents.1", "§6Oxygen §ffor §a3x §fEu/t @ §b20mb/s ");
+        replace(provider, "cosmiccore.universal.boosting_agents.2", "§6Liquid Oxygen §ffor §a6x §fEu/t @ §b80mb/s ");
+        replace(provider, "cosmiccore.universal.boosting_agents.3", "§6Ichor §ffor §a9x §fEu/t @ §b10mb/s ");
+
+        replace(provider, "cosmiccore.multiblock.booster_used", "Booster: %s");
+        replace(provider, "cosmiccore.multiblock.lubricant_used", "Lubricant: %s");
 
         replace(provider, "behavior.wireless_data.owner.player", "§3Player Name: §r%s");
         replace(provider, "behavior.wireless_data.owner.team", "§3Team Name: §r");
