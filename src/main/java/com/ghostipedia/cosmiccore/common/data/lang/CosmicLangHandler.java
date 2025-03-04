@@ -154,7 +154,9 @@ public class CosmicLangHandler {
                 "§eTears of the Universe§f: §c2x §fEU total @ 250mb/hr");
 
         replace(provider, "cosmiccore.universal.boosting_agents.0",
-                "§aCan consume various boosters to increase EU/t multiplier");
+                "§aCan consume various boosters to increase EU/t multiplier")
+        ;replace(provider, "cosmiccore.errors.bad_fuel",
+                "§aInsufficient Fuel Quality! \n Fuel Output Must be >720 EU total per unit");
         replace(provider, "cosmiccore.universal.boosting_agents.1", "§6Oxygen §ffor §a3x §fEu/t @ §b20mb/s ");
         replace(provider, "cosmiccore.universal.boosting_agents.2", "§6Liquid Oxygen §ffor §a6x §fEu/t @ §b80mb/s ");
         replace(provider, "cosmiccore.universal.boosting_agents.3", "§6Ichor §ffor §a9x §fEu/t @ §b10mb/s ");
