@@ -8,8 +8,8 @@ import com.gregtechceu.gtceu.api.machine.multiblock.CoilWorkableElectricMultiblo
 import com.gregtechceu.gtceu.api.recipe.GTRecipe;
 import com.gregtechceu.gtceu.common.data.GTRecipeModifiers;
 
-import dev.architectury.patchedmixin.staticmixin.spongepowered.asm.mixin.injection.At;
-import dev.architectury.patchedmixin.staticmixin.spongepowered.asm.mixin.injection.ModifyVariable;
+import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.ModifyVariable;
 import org.jetbrains.annotations.NotNull;
 import org.spongepowered.asm.mixin.Debug;
 import org.spongepowered.asm.mixin.Mixin;
