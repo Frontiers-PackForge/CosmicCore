@@ -27,10 +27,7 @@ public abstract class SoundManagerMixin {
     @Final
     private SoundEngine soundEngine;
 
-    @Inject(
-            method = "play",
-            at = @At("HEAD"),
-            cancellable = true)
+    @Inject(method = "play", at = @At("HEAD"), cancellable = true)
     private void onPlay(SoundInstance sound, CallbackInfo callbackInfo) {
         if (cosmicCore$checkForSpaceRadio()) {
             callbackInfo.cancel();  // Early exits Ad Astra's mixin from being called. Hopefully
@@ -49,10 +46,7 @@ public abstract class SoundManagerMixin {
         }
     }
 
-    @Inject(
-            method = "playDelayed",
-            at = @At("HEAD"),
-            cancellable = true)
+    @Inject(method = "playDelayed", at = @At("HEAD"), cancellable = true)
     private void onPlayDelayed(SoundInstance sound, int delay, CallbackInfo callbackInfo) {
         if (cosmicCore$checkForSpaceRadio()) {
             callbackInfo.cancel();
