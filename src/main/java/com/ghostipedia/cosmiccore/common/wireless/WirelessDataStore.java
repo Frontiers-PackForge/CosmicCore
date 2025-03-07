@@ -2,6 +2,7 @@ package com.ghostipedia.cosmiccore.common.wireless;
 
 import com.gregtechceu.gtceu.api.capability.IDataAccessHatch;
 import com.gregtechceu.gtceu.api.recipe.GTRecipe;
+
 import org.jetbrains.annotations.NotNull;
 
 import java.util.*;

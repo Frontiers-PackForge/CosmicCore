@@ -1,10 +1,12 @@
 package com.ghostipedia.cosmiccore.api.machine.multiblock;
 
 import com.ghostipedia.cosmiccore.api.capability.recipe.IHeatContainer;
+
 import com.gregtechceu.gtceu.api.capability.recipe.IO;
 import com.gregtechceu.gtceu.api.machine.IMachineBlockEntity;
 import com.gregtechceu.gtceu.api.machine.feature.multiblock.IMultiPart;
 import com.gregtechceu.gtceu.api.machine.multiblock.WorkableElectricMultiblockMachine;
+
 import it.unimi.dsi.fastutil.longs.Long2ObjectMaps;
 import lombok.Getter;
 
@@ -15,7 +17,8 @@ public class HeatWorkableElectricMultiblockMachine extends WorkableElectricMulti
 
     @Getter
     private IHeatContainer heatContainer = null;
-    public HeatWorkableElectricMultiblockMachine(IMachineBlockEntity holder){
+
+    public HeatWorkableElectricMultiblockMachine(IMachineBlockEntity holder) {
         super(holder);
     }
 
@@ -31,7 +34,5 @@ public class HeatWorkableElectricMultiblockMachine extends WorkableElectricMulti
         }
     }
 
-   ;
-
-
+    ;
 }

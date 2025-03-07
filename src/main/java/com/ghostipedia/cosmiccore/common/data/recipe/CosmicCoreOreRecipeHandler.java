@@ -7,6 +7,7 @@ import com.gregtechceu.gtceu.api.data.chemical.material.properties.OreProperty;
 import com.gregtechceu.gtceu.api.data.chemical.material.properties.PropertyKey;
 import com.gregtechceu.gtceu.api.data.tag.TagPrefix;
 import com.gregtechceu.gtceu.utils.GTUtil;
+
 import net.minecraft.data.recipes.FinishedRecipe;
 import net.minecraft.world.item.ItemStack;
 
@@ -20,10 +21,9 @@ import static com.gregtechceu.gtceu.api.data.tag.TagPrefix.*;
 import static com.gregtechceu.gtceu.common.data.GTMaterials.*;
 import static com.gregtechceu.gtceu.common.data.GTRecipeTypes.*;
 
-
 public class CosmicCoreOreRecipeHandler {
-    public static void init(Consumer<FinishedRecipe> provider) {
 
+    public static void init(Consumer<FinishedRecipe> provider) {
         crushed.executeHandler(provider, PropertyKey.ORE, CosmicCoreOreRecipeHandler::processcrushedLeached);
         crushedRefined.executeHandler(provider, PropertyKey.ORE, CosmicCoreOreRecipeHandler::processRefinedFrothed);
         crushedLeached.executeHandler(provider, PropertyKey.ORE, CosmicCoreOreRecipeHandler::processLeachedRefined);
@@ -54,6 +54,7 @@ public class CosmicCoreOreRecipeHandler {
         builder.outputFluids(DilutedSulfuricAcid.getFluid(300));
         builder.duration(60).EUt(GTValues.VA[GTValues.HV]).save(provider);
     }
+
     public static void processRefinedFrothed(TagPrefix refinedPrefix, Material material, OreProperty property,
                                              Consumer<FinishedRecipe> provider) {
         ItemStack frothedStack = ChemicalHelper.get(prismaFrothed, material);
@@ -70,7 +71,7 @@ public class CosmicCoreOreRecipeHandler {
         var builder = CHROMATIC_FLOTATION_PLANT.recipeBuilder("refined" + material.getName() + "_to_frothed")
                 .inputItems(refinedPrefix, material)
                 .inputFluids(Prisma.getFluid(1000))
-                .outputItems(GTUtil.copyAmount(2,frothedStack));
+                .outputItems(GTUtil.copyAmount(2, frothedStack));
         if (byproduct != null && !ChemicalHelper.get(dustImpure, byproduct).isEmpty()) {
             builder.chancedOutput(dustImpure, byproduct, 3500, 1450);
         }
@@ -88,7 +89,7 @@ public class CosmicCoreOreRecipeHandler {
     }
 
     public static void processLeachedRefined(TagPrefix leachedPrefix, Material material, OreProperty property,
-                                          Consumer<FinishedRecipe> provider) {
+                                             Consumer<FinishedRecipe> provider) {
         ItemStack refinedStack = ChemicalHelper.get(crushedRefined, material);
 
         Material byproduct = GTUtil.selectItemInList(
@@ -102,10 +103,6 @@ public class CosmicCoreOreRecipeHandler {
         }
         builder.duration(40).EUt(GTValues.VA[GTValues.HV]).save(provider);
     }
-
-
-
-
 
     public static void processFrothedPure(TagPrefix frothedPrefix, Material material, OreProperty property,
                                           Consumer<FinishedRecipe> provider) {

@@ -4,6 +4,7 @@ import com.gregtechceu.gtceu.api.capability.IParallelHatch;
 import com.gregtechceu.gtceu.api.machine.feature.multiblock.IDisplayUIMachine;
 import com.gregtechceu.gtceu.api.machine.feature.multiblock.IMultiPart;
 import com.gregtechceu.gtceu.api.pattern.MultiblockState;
+
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
@@ -11,6 +12,7 @@ import java.util.Optional;
 import java.util.concurrent.locks.Lock;
 
 public class ChemStackMachine implements IDisplayUIMachine {
+
     public static final int MAX_PARALLELS = 8;
     private static final double CONVERSION_RATE = 0.5D;
 
@@ -25,19 +27,13 @@ public class ChemStackMachine implements IDisplayUIMachine {
     }
 
     @Override
-    public void asyncCheckPattern(long periodID) {
-
-    }
+    public void asyncCheckPattern(long periodID) {}
 
     @Override
-    public void onStructureFormed() {
-
-    }
+    public void onStructureFormed() {}
 
     @Override
-    public void onStructureInvalid() {
-
-    }
+    public void onStructureInvalid() {}
 
     @Override
     public boolean hasFrontFacing() {
@@ -55,9 +51,7 @@ public class ChemStackMachine implements IDisplayUIMachine {
     }
 
     @Override
-    public void onPartUnload() {
-
-    }
+    public void onPartUnload() {}
 
     @Override
     public Lock getPatternLock() {

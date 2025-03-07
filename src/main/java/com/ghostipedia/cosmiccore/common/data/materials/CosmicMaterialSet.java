@@ -8,8 +8,6 @@ public class CosmicMaterialSet {
 
     public static final MaterialIconSet INFINITY = new MaterialIconSet("infinity", SHINY);
     public static final MaterialIconSet CHRONON = new MaterialIconSet("chronon", SHINY);
-    public static void init(){
 
-    }
-
+    public static void init() {}
 }

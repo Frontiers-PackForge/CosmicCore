@@ -2,6 +2,7 @@ package com.ghostipedia.cosmiccore.common.machine.multiblock.multi;
 
 import com.ghostipedia.cosmiccore.common.wireless.WirelessDataStore;
 import com.ghostipedia.cosmiccore.utils.OwnershipUtils;
+
 import com.gregtechceu.gtceu.api.GTValues;
 import com.gregtechceu.gtceu.api.capability.IControllable;
 import com.gregtechceu.gtceu.api.capability.IDataAccessHatch;
@@ -25,10 +26,11 @@ import it.unimi.dsi.fastutil.longs.Long2ObjectMaps;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.level.block.Block;
 
+import it.unimi.dsi.fastutil.longs.Long2ObjectMaps;
 import java.util.*;
 
 public class WirelessDataBankMachine extends WorkableElectricMultiblockMachine
-        implements IFancyUIMachine, IDisplayUIMachine, IControllable {
+                                     implements IFancyUIMachine, IDisplayUIMachine, IControllable {
 
     public static final int EUT_PER_HATCH_CHAINED = GTValues.VA[GTValues.LuV];
 
@@ -84,7 +86,7 @@ public class WirelessDataBankMachine extends WorkableElectricMultiblockMachine
         List<IEnergyContainer> energyContainers = new ArrayList<>();
         Map<Long, IO> ioMap = getMultiblockState().getMatchContext().getOrCreate("ioMap", Long2ObjectMaps::emptyMap);
 
-        for(IMultiPart part : getParts()) {
+        for (IMultiPart part : getParts()) {
             IO io = ioMap.getOrDefault(part.self().getPos().asLong(), IO.BOTH);
             if (part instanceof IMaintenanceMachine maintenanceMachine)
                 this.maintenance = maintenanceMachine;
@@ -159,7 +161,7 @@ public class WirelessDataBankMachine extends WorkableElectricMultiblockMachine
 
         for (var part : getParts()) {
             Block block = part.self().getBlockState().getBlock();
-            if (part instanceof IDataAccessHatch hatch && PartAbility.OPTICAL_DATA_RECEPTION.isApplicable(block)){
+            if (part instanceof IDataAccessHatch hatch && PartAbility.OPTICAL_DATA_RECEPTION.isApplicable(block)) {
                 hatches.add(hatch);
             }
         }

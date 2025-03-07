@@ -10,6 +10,4 @@ public class CosmicCoilBlockEntity extends BlockEntity {
     public CosmicCoilBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState blockState) {
         super(type, pos, blockState);
     }
-
-
 }

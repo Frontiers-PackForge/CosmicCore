@@ -1,20 +1,19 @@
 package com.ghostipedia.cosmiccore.common.machine.multiblock.multi;
 
 import com.ghostipedia.cosmiccore.api.machine.multiblock.IrisMultiblockMachine;
-import com.ghostipedia.cosmiccore.client.renderer.machine.IrisMachineRenderer;
 import com.ghostipedia.cosmiccore.client.renderer.machine.StarBallastMachineRenderer;
 import com.ghostipedia.cosmiccore.common.data.CosmicBlocks;
 import com.ghostipedia.cosmiccore.gtbridge.CosmicRecipeTypes;
+
 import com.gregtechceu.gtceu.api.data.RotationState;
 import com.gregtechceu.gtceu.api.machine.MultiblockMachineDefinition;
 import com.gregtechceu.gtceu.api.machine.multiblock.PartAbility;
 import com.gregtechceu.gtceu.api.pattern.FactoryBlockPattern;
 import com.gregtechceu.gtceu.api.pattern.Predicates;
 import com.gregtechceu.gtceu.api.recipe.OverclockingLogic;
-import com.gregtechceu.gtceu.common.block.LampBlock;
 import com.gregtechceu.gtceu.common.data.GTRecipeModifiers;
+
 import net.minecraft.network.chat.Component;
-import net.minecraft.world.item.DyeColor;
 
 import static com.ghostipedia.cosmiccore.api.registries.CosmicRegistration.REGISTRATE;
 import static com.ghostipedia.cosmiccore.common.data.CosmicBlocks.*;
@@ -26,71 +25,662 @@ import static com.gregtechceu.gtceu.common.data.GTBlocks.*;
 
 public class StellarStarBallast {
 
-    public final static MultiblockMachineDefinition STAR_BALLAST = REGISTRATE.multiblock("star_ballast", IrisMultiblockMachine::new)
+    public final static MultiblockMachineDefinition STAR_BALLAST = REGISTRATE.multiblock("star_ballast",
+            IrisMultiblockMachine::new)
             .rotationState(RotationState.Y_AXIS)
             .recipeType(CosmicRecipeTypes.VOMAHINE_CORE_DRILL)
             .recipeModifier(GTRecipeModifiers.ELECTRIC_OVERCLOCK.apply(OverclockingLogic.NON_PERFECT_OVERCLOCK_SUBTICK))
             .appearanceBlock(CosmicBlocks.VOMAHINE_CERTIFIED_CHEMICALLY_RESISTANT_CASING)
             .pattern(definition -> FactoryBlockPattern.start()
-                    .aisle("                           AAAAA                           ", "                        BBBBBBBBBBB                        ", "                                                           ", "                                                           ", "                                                           ", "                                                           ", "                                                           ", "                                                           ", "                                                           ", "                        BBBBBBBBBBB                        ", "                           AAAAA                           ")
-                    .aisle("                          AAAAAAA                          ", "                    BBBBBBBBBBBBBBBBBBB                    ", "                        CBBDDDDDBBC                        ", "                         BB     BB                         ", "                         BB     BB                         ", "                        BBB     BBB                        ", "                         BB     BB                         ", "                         BB     BB                         ", "                        CBBDDDDDBBC                        ", "                    BBBBBBBBBBBBBBBBBBB                    ", "                          AAAAAAA                          ")
-                    .aisle("                          AADDDAA                          ", "                  BBBBBBBBBBBBBBBBBBBBBBB                  ", "                     CCCAAAAAAAAAAACCC                     ", "                        AAAAAAAAAAA                        ", "                        AAAAAAAAAAA                        ", "                     BBBAAAAAAAAAAABBB                     ", "                        AAAAAAAAAAA                        ", "                        AAAAAAAAAAA                        ", "                     CCCAAAAAAAAAAACCC                     ", "                  BBBBBBBBBBBBBBBBBBBBBBB                  ", "                          AADDDAA                          ")
-                    .aisle("                          AADFDAA                          ", "                BBBBBBBBGGGGGGGGGGGBBBBBBBB                ", "                  CCCAAAAAAAAAAAAAAAAACCC                  ", "                     AAAAAAAAAAAAAAAAA                     ", "                     AAAAAAACCCAAAAAAA                     ", "                  BBBAAAAAAACCCAAAAAAABBB                  ", "                     AAAAAAACCCAAAAAAA                     ", "                     AAAAAAAAAAAAAAAAA                     ", "                  CCCAAAAAAAAAAAAAAAAACCC                  ", "                BBBBBBBBGGGGGGGGGGGBBBBBBBB                ", "                          AADFDAA                          ")
-                    .aisle("                          AADDDAA                          ", "              BBBBBBBGGGBBBBBBBBBBBGGGBBBBBBB              ", "                CCAAAAAAAAAAAAAAAAAAAAAAACC                ", "                  AAAAAAAAAAAAAAAAAAAAAAA                  ", "                  AAAAAAAAAA C AAAAAAAAAA                  ", "                BBAAAAAAAAAACCCAAAAAAAAAABB                ", "                  AAAAAAAAAA C AAAAAAAAAA                  ", "                  AAAAAAAAAAAAAAAAAAAAAAA                  ", "                CCAAAAAAAAAAAAAAAAAAAAAAACC                ", "              BBBBBBBGGGBBBBBBBBBBBGGGBBBBBBB              ", "                          AADDDAA                          ")
-                    .aisle("                          AAAAAAA                          ", "            BBBBBBGGGBBBBBBBBBBBBBBBBBGGGBBBBBB            ", "              CCAAAAAAAACBBDDDDDBBCAAAAAAAACC              ", "                AAAAAAAA BB     BB AAAAAAAA                ", "                AAAAAAAA BB  C  BB AAAAAAAA                ", "              BBAAAAAAAABBB CCC BBBAAAAAAAABB              ", "                AAAAAAAA BB  C  BB AAAAAAAA                ", "                AAAAAAAA BB     BB AAAAAAAA                ", "              CCAAAAAAAACBBDDDDDBBCAAAAAAAACC              ", "            BBBBBBGGGBBBBBBBBBBBBBBBBBGGGBBBBBB            ", "                          AAAAAAA                          ")
-                    .aisle("                           AAAAA                           ", "           BBBBBGGBBBBBBBBBBBBBBBBBBBBBBBGGBBBBB           ", "             CAAAAAAACCC           CCCAAAAAAAC             ", "              AAAAAAA                 AAAAAAA              ", "              AAAAAAA        C        AAAAAAA              ", "             BAAAAAAABBB    CCC    BBBAAAAAAAB             ", "              AAAAAAA        C        AAAAAAA              ", "              AAAAAAA                 AAAAAAA              ", "             CAAAAAAACCC           CCCAAAAAAAC             ", "           BBBBBGGBBBBBBBBBBBBBBBBBBBBBBBGGBBBBB           ", "                           AAAAA                           ")
-                    .aisle("                                                           ", "          BBBBGGBBBBBBBBB         BBBBBBBBBGGBBBB          ", "            CAAAAACCC                 CCCAAAAAC            ", "             AAAAA                       AAAAA             ", "             AAAAA                       AAAAA             ", "            BAAAAABBB        C        BBBAAAAAB            ", "             AAAAA                       AAAAA             ", "             AAAAA                       AAAAA             ", "            CAAAAACCC                 CCCAAAAAC            ", "          BBBBGGBBBBBBBBB         BBBBBBBBBGGBBBB          ", "                                                           ")
-                    .aisle("                                                           ", "         BBBBGBBBBBBB                 BBBBBBBGBBBB         ", "           CAAAAAC                       CAAAAAC           ", "            AAAAA                         AAAAA            ", "            AAAAA                         AAAAA            ", "           BAAAAAB           C           BAAAAAB           ", "            AAAAA                         AAAAA            ", "            AAAAA                         AAAAA            ", "           CAAAAAC                       CAAAAAC           ", "         BBBBGBBBBBBB                 BBBBBBBGBBBB         ", "                                                           ")
-                    .aisle("                                                           ", "        BBBBGBBBBBB                     BBBBBBGBBBB        ", "          CAAAACC                         CCAAAAC          ", "           AAAA                             AAAA           ", "           AAAA                             AAAA           ", "          BAAAABB            C            BBAAAAB          ", "           AAAA                             AAAA           ", "           AAAA                             AAAA           ", "          CAAAACC                         CCAAAAC          ", "        BBBBGBBBBBB                     BBBBBBGBBBB        ", "                                                           ")
-                    .aisle("                                                           ", "       BBBBGBBBBB                         BBBBBGBBBB       ", "         CAAAAC                             CAAAAC         ", "          AAAA                               AAAA          ", "          AAAA                               AAAA          ", "         BAAAAB                             BAAAAB         ", "          AAAA                               AAAA          ", "          AAAA                               AAAA          ", "         CAAAAC                             CAAAAC         ", "       BBBBGBBBBB                         BBBBBGBBBB       ", "                                                           ")
-                    .aisle("                                                           ", "      BBBBGBBBBB                           BBBBBGBBBB      ", "        CAAACC                               CCAAAC        ", "         AAA                                   AAA         ", "         AAA                                   AAA         ", "        BAAABB                               BBAAAB        ", "         AAA                                   AAA         ", "         AAA                                   AAA         ", "        CAAACC                               CCAAAC        ", "      BBBBGBBBBB                           BBBBBGBBBB      ", "                                                           ")
-                    .aisle("                                                           ", "     BBBBGBBBB                               BBBBGBBBB     ", "       CAAAC                                   CAAAC       ", "        AAA                                     AAA        ", "        AAA                                     AAA        ", "       BAAAB                                   BAAAB       ", "        AAA                                     AAA        ", "        AAA                                     AAA        ", "       CAAAC                                   CAAAC       ", "     BBBBGBBBB                               BBBBGBBBB     ", "                                                           ")
-                    .aisle("                                                           ", "     BBBGBBBB                                 BBBBGBBB     ", "      CAAAAC                                   CAAAAC      ", "       AAAA                                     AAAA       ", "       AAAA                                     AAAA       ", "      BAAAAB                                   BAAAAB      ", "       AAAA                                     AAAA       ", "       AAAA                                     AAAA       ", "      CAAAAC                                   CAAAAC      ", "     BBBGBBBB                                 BBBBGBBB     ", "                                                           ")
-                    .aisle("                                                           ", "    BBBGBBBB                                   BBBBGBBB    ", "     CAAAAC                                     CAAAAC     ", "      AAAA                                       AAAA      ", "      AAAA                                       AAAA      ", "     BAAAAB                                     BAAAAB     ", "      AAAA                                       AAAA      ", "      AAAA                                       AAAA      ", "     CAAAAC                                     CAAAAC     ", "    BBBGBBBB                                   BBBBGBBB    ", "                                                           ")
-                    .aisle("                                                           ", "    BBBGBBBB                                   BBBBGBBB    ", "     CAAAC                                       CAAAC     ", "      AAA                                         AAA      ", "      AAA                                         AAA      ", "     BAAAB                                       BAAAB     ", "      AAA                                         AAA      ", "      AAA                                         AAA      ", "     CAAAC                                       CAAAC     ", "    BBBGBBBB                                   BBBBGBBB    ", "                                                           ")
-                    .aisle("                                                           ", "   BBBGBBBB                                     BBBBGBBB   ", "    CAAAAC                                       CAAAAC    ", "     AAAA                                         AAAA     ", "     AAAA                                         AAAA     ", "    BAAAAB                                       BAAAAB    ", "     AAAA                                         AAAA     ", "     AAAA                                         AAAA     ", "    CAAAAC                                       CAAAAC    ", "   BBBGBBBB                                     BBBBGBBB   ", "                                                           ")
-                    .aisle("                                                           ", "   BBBGBBB                                       BBBGBBB   ", "    CAAAC                                         CAAAC    ", "     AAA                                           AAA     ", "     AAA                                           AAA     ", "    BAAAB                                         BAAAB    ", "     AAA                                           AAA     ", "     AAA                                           AAA     ", "    CAAAC                                         CAAAC    ", "   BBBGBBB                                       BBBGBBB   ", "                                                           ")
-                    .aisle("                                                           ", "  BBBGBBBB                                       BBBBGBBB  ", "   CAAAC                                           CAAAC   ", "    AAA                                             AAA    ", "    AAA                                             AAA    ", "   BAAAB                                           BAAAB   ", "    AAA                                             AAA    ", "    AAA                                             AAA    ", "   CAAAC                                           CAAAC   ", "  BBBGBBBB                                       BBBBGBBB  ", "                                                           ")
-                    .aisle("                                                           ", "  BBBGBBB                                         BBBGBBB  ", "   CAAAC                                           CAAAC   ", "    AAA                                             AAA    ", "    AAA                                             AAA    ", "   BAAAB                                           BAAAB   ", "    AAA                                             AAA    ", "    AAA                                             AAA    ", "   CAAAC                                           CAAAC   ", "  BBBGBBB                                         BBBGBBB  ", "                                                           ")
-                    .aisle("                                                           ", " BBBBGBBB                                         BBBGBBBB ", "   CAAAC                                           CAAAC   ", "    AAA                                             AAA    ", "    AAA                                             AAA    ", "   BAAAB                                           BAAAB   ", "    AAA                                             AAA    ", "    AAA                                             AAA    ", "   CAAAC                                           CAAAC   ", " BBBBGBBB                                         BBBGBBBB ", "                                                           ")
-                    .aisle("                                                           ", " BBBGBBB                                           BBBGBBB ", "  CAAAC                                             CAAAC  ", "   AAA                                               AAA   ", "   AAA                                               AAA   ", "  BAAAB                                             BAAAB  ", "   AAA                                               AAA   ", "   AAA                                               AAA   ", "  CAAAC                                             CAAAC  ", " BBBGBBB                                           BBBGBBB ", "                                                           ")
-                    .aisle("                                                           ", " BBBGBBB                                           BBBGBBB ", "  CAAAC                                             CAAAC  ", "   AAA                                               AAA   ", "   AAA                                               AAA   ", "  BAAAB                                             BAAAB  ", "   AAA                                               AAA   ", "   AAA                                               AAA   ", "  CAAAC                                             CAAAC  ", " BBBGBBB                                           BBBGBBB ", "                                                           ")
-                    .aisle("                                                           ", " BBBGBBB                                           BBBGBBB ", "  CAAAC                                             CAAAC  ", "   AAA                                               AAA   ", "   AAA                                               AAA   ", "  BAAAB                                             BAAAB  ", "   AAA                                               AAA   ", "   AAA                                               AAA   ", "  CAAAC                                             CAAAC  ", " BBBGBBB                                           BBBGBBB ", "                                                           ")
-                    .aisle("                                                           ", "BBBGBBBB                                           BBBBGBBB", " CAAAC                                               CAAAC ", "  AAA                                                 AAA  ", "  AAA                                                 AAA  ", " BAAAB                                               BAAAB ", "  AAA                                                 AAA  ", "  AAA                                                 AAA  ", " CAAAC                                               CAAAC ", "BBBGBBBB                                           BBBBGBBB", "                                                           ")
-                    .aisle("                                                           ", "BBBGBBB                                             BBBGBBB", " BAAAB                                               BAAAB ", " BAAAB                                               BAAAB ", " BAAAB                                               BAAAB ", " BAAAB                                               BAAAB ", " BAAAB                                               BAAAB ", " BAAAB                                               BAAAB ", " BAAAB                                               BAAAB ", "BBBGBBB                                             BBBGBBB", "                                                           ")
-                    .aisle(" AAAAA                                               AAAAA ", "BBBGBBB                                             BBBGBBB", " BAAAB                                               BAAAB ", " BAAAB                                               BAAAB ", " BAAAB                                               BAAAB ", " BAAAB                                               BAAAB ", " BAAAB                                               BAAAB ", " BAAAB                                               BAAAB ", " BAAAB                                               BAAAB ", "BBBGBBB                                             BBBGBBB", " AAAAA                                               AAAAA ")
-                    .aisle("AAAAAAA                                             AAAAAAA", "BBBGBBB                                             BBBGBBB", " DAAAD                                               DAAAD ", "  AAA                                                 AAA  ", "  AAA                                                 AAA  ", "  AAA                                                 AAA  ", "  AAA                                                 AAA  ", "  AAA                                                 AAA  ", " DAAAD                                               DAAAD ", "BBBGBBB                                             BBBGBBB", "AAAAAAA                                             AAAAAAA")
-                    .aisle("AADDDAA                                             AADDDAA", "BBBGBBB                                             BBBGBBB", " DAAAD                                               DAAAD ", "  AAA                                                 AAA  ", "  AC                                                   CA  ", "  ACCCC                                             CCCCA  ", "  AC                                                   CA  ", "  AAA                                                 AAA  ", " DAAAD                                               DAAAD ", "BBBGBBB                                             BBBGBBB", "AADDDAA                                             AADDDAA")
-                    .aisle("AADFDAA                                             AADFDAA", "BBBGBBB                                             BBBGBBB", " DAAAD                                               DAAAD ", "  AAA                                                 AAA  ", "  ACCCC                                             CCCCA  ", "  ACCCCCCC                                       CCCCCCCA  ", "  ACCCC                                             CCCCA  ", "  AAA                                                 AAA  ", " DAAAD                                               DAAAD ", "BBBGBBB                                             BBBGBBB", "AADFDAA                                             AADFDAA")
-                    .aisle("AADDDAA                                             AADDDAA", "BBBGBBB                                             BBBGBBB", " DAAAD                                               DAAAD ", "  AAA                                                 AAA  ", "  AC                                                   CA  ", "  ACCCC                                             CCCCA  ", "  AC                                                   CA  ", "  AAA                                                 AAA  ", " DAAAD                                               DAAAD ", "BBBGBBB                                             BBBGBBB", "AADDDAA                                             AADDDAA")
-                    .aisle("AAAAAAA                                             AAAAAAA", "BBBGBBB                                             BBBGBBB", " DAAAD                                               DAAAD ", "  AAA                                                 AAA  ", "  AAA                                                 AAA  ", "  AAA                                                 AAA  ", "  AAA                                                 AAA  ", "  AAA                                                 AAA  ", " DAAAD                                               DAAAD ", "BBBGBBB                                             BBBGBBB", "AAAAAAA                                             AAAAAAA")
-                    .aisle(" AAAAA                                               AAAAA ", "BBBGBBB                                             BBBGBBB", " BAAAB                                               BAAAB ", " BAAAB                                               BAAAB ", " BAAAB                                               BAAAB ", " BAAAB                                               BAAAB ", " BAAAB                                               BAAAB ", " BAAAB                                               BAAAB ", " BAAAB                                               BAAAB ", "BBBGBBB                                             BBBGBBB", " AAAAA                                               AAAAA ")
-                    .aisle("                                                           ", "BBBGBBB                                             BBBGBBB", " BAAAB                                               BAAAB ", " BAAAB                                               BAAAB ", " BAAAB                                               BAAAB ", " BAAAB                                               BAAAB ", " BAAAB                                               BAAAB ", " BAAAB                                               BAAAB ", " BAAAB                                               BAAAB ", "BBBGBBB                                             BBBGBBB", "                                                           ")
-                    .aisle("                                                           ", "BBBGBBBB                                           BBBBGBBB", " CAAAC                                               CAAAC ", "  AAA                                                 AAA  ", "  AAA                                                 AAA  ", " BAAAB                                               BAAAB ", "  AAA                                                 AAA  ", "  AAA                                                 AAA  ", " CAAAC                                               CAAAC ", "BBBGBBBB                                           BBBBGBBB", "                                                           ")
-                    .aisle("                                                           ", " BBBGBBB                                           BBBGBBB ", "  CAAAC                                             CAAAC  ", "   AAA                                               AAA   ", "   AAA                                               AAA   ", "  BAAAB                                             BAAAB  ", "   AAA                                               AAA   ", "   AAA                                               AAA   ", "  CAAAC                                             CAAAC  ", " BBBGBBB                                           BBBGBBB ", "                                                           ")
-                    .aisle("                                                           ", " BBBGBBB                                           BBBGBBB ", "  CAAAC                                             CAAAC  ", "   AAA                                               AAA   ", "   AAA                                               AAA   ", "  BAAAB                                             BAAAB  ", "   AAA                                               AAA   ", "   AAA                                               AAA   ", "  CAAAC                                             CAAAC  ", " BBBGBBB                                           BBBGBBB ", "                                                           ")
-                    .aisle("                                                           ", " BBBGBBB                                           BBBGBBB ", "  CAAAC                                             CAAAC  ", "   AAA                                               AAA   ", "   AAA                                               AAA   ", "  BAAAB                                             BAAAB  ", "   AAA                                               AAA   ", "   AAA                                               AAA   ", "  CAAAC                                             CAAAC  ", " BBBGBBB                                           BBBGBBB ", "                                                           ")
-                    .aisle("                                                           ", " BBBBGBBB                                         BBBGBBBB ", "   CAAAC                                           CAAAC   ", "    AAA                                             AAA    ", "    AAA                                             AAA    ", "   BAAAB                                           BAAAB   ", "    AAA                                             AAA    ", "    AAA                                             AAA    ", "   CAAAC                                           CAAAC   ", " BBBBGBBB                                         BBBGBBBB ", "                                                           ")
-                    .aisle("                                                           ", "  BBBGBBB                                         BBBGBBB  ", "   CAAAC                                           CAAAC   ", "    AAA                                             AAA    ", "    AAA                                             AAA    ", "   BAAAB                                           BAAAB   ", "    AAA                                             AAA    ", "    AAA                                             AAA    ", "   CAAAC                                           CAAAC   ", "  BBBGBBB                                         BBBGBBB  ", "                                                           ")
-                    .aisle("                                                           ", "  BBBGBBBB                                       BBBBGBBB  ", "   CAAAC                                           CAAAC   ", "    AAA                                             AAA    ", "    AAA                                             AAA    ", "   BAAAB                                           BAAAB   ", "    AAA                                             AAA    ", "    AAA                                             AAA    ", "   CAAAC                                           CAAAC   ", "  BBBGBBBB                                       BBBBGBBB  ", "                                                           ")
-                    .aisle("                                                           ", "   BBBGBBB                                       BBBGBBB   ", "    CAAAC                                         CAAAC    ", "     AAA                                           AAA     ", "     AAA                                           AAA     ", "    BAAAB                                         BAAAB    ", "     AAA                                           AAA     ", "     AAA                                           AAA     ", "    CAAAC                                         CAAAC    ", "   BBBGBBB                                       BBBGBBB   ", "                                                           ")
-                    .aisle("                                                           ", "   BBBGBBBB                                     BBBBGBBB   ", "    CAAAAC                                       CAAAAC    ", "     AAAA                                         AAAA     ", "     AAAA                                         AAAA     ", "    BAAAAB                                       BAAAAB    ", "     AAAA                                         AAAA     ", "     AAAA                                         AAAA     ", "    CAAAAC                                       CAAAAC    ", "   BBBGBBBB                                     BBBBGBBB   ", "                                                           ")
-                    .aisle("                                                           ", "    BBBGBBBB                                   BBBBGBBB    ", "     CAAAC                                       CAAAC     ", "      AAA                                         AAA      ", "      AAA                                         AAA      ", "     BAAAB                                       BAAAB     ", "      AAA                                         AAA      ", "      AAA                                         AAA      ", "     CAAAC                                       CAAAC     ", "    BBBGBBBB                                   BBBBGBBB    ", "                                                           ")
-                    .aisle("                                                           ", "    BBBGBBBB                                   BBBBGBBB    ", "     CAAAAC                                     CAAAAC     ", "      AAAA                                       AAAA      ", "      AAAA                                       AAAA      ", "     BAAAAB                                     BAAAAB     ", "      AAAA                                       AAAA      ", "      AAAA                                       AAAA      ", "     CAAAAC                                     CAAAAC     ", "    BBBGBBBB                                   BBBBGBBB    ", "                                                           ")
-                    .aisle("                                                           ", "     BBBGBBBB                                 BBBBGBBB     ", "      CAAAAC                                   CAAAAC      ", "       AAAA                                     AAAA       ", "       AAAA                                     AAAA       ", "      BAAAAB                                   BAAAAB      ", "       AAAA                                     AAAA       ", "       AAAA                                     AAAA       ", "      CAAAAC                                   CAAAAC      ", "     BBBGBBBB                                 BBBBGBBB     ", "                                                           ")
-                    .aisle("                                                           ", "     BBBBGBBBB                               BBBBGBBBB     ", "       CAAAC                                   CAAAC       ", "        AAA                                     AAA        ", "        AAA                                     AAA        ", "       BAAAB                                   BAAAB       ", "        AAA                                     AAA        ", "        AAA                                     AAA        ", "       CAAAC                                   CAAAC       ", "     BBBBGBBBB                               BBBBGBBBB     ", "                                                           ")
-                    .aisle("                                                           ", "      BBBBGBBBBB                           BBBBBGBBBB      ", "        CAAACC                               CCAAAC        ", "         AAA                                   AAA         ", "         AAA                                   AAA         ", "        BAAABB                               BBAAAB        ", "         AAA                                   AAA         ", "         AAA                                   AAA         ", "        CAAACC                               CCAAAC        ", "      BBBBGBBBBB                           BBBBBGBBBB      ", "                                                           ")
-                    .aisle("                                                           ", "       BBBBGBBBBB                         BBBBBGBBBB       ", "         CAAAAC                             CAAAAC         ", "          AAAA                               AAAA          ", "          AAAA                               AAAA          ", "         BAAAAB                             BAAAAB         ", "          AAAA                               AAAA          ", "          AAAA                               AAAA          ", "         CAAAAC                             CAAAAC         ", "       BBBBGBBBBB                         BBBBBGBBBB       ", "                                                           ")
-                    .aisle("                                                           ", "        BBBBGBBBBBB                     BBBBBBGBBBB        ", "          CAAAACC                         CCAAAAC          ", "           AAAA                             AAAA           ", "           AAAA                             AAAA           ", "          BAAAABB            C            BBAAAAB          ", "           AAAA                             AAAA           ", "           AAAA                             AAAA           ", "          CAAAACC                         CCAAAAC          ", "        BBBBGBBBBBB                     BBBBBBGBBBB        ", "                                                           ")
-                    .aisle("                                                           ", "         BBBBGBBBBBBB                 BBBBBBBGBBBB         ", "           CAAAAAC                       CAAAAAC           ", "            AAAAA                         AAAAA            ", "            AAAAA                         AAAAA            ", "           BAAAAAB           C           BAAAAAB           ", "            AAAAA                         AAAAA            ", "            AAAAA                         AAAAA            ", "           CAAAAAC                       CAAAAAC           ", "         BBBBGBBBBBBB                 BBBBBBBGBBBB         ", "                                                           ")
-                    .aisle("                                                           ", "          BBBBGGBBBBBBBBB         BBBBBBBBBGGBBBB          ", "            CAAAAACCC                 CCCAAAAAC            ", "             AAAAA                       AAAAA             ", "             AAAAA                       AAAAA             ", "            BAAAAABBB        C        BBBAAAAAB            ", "             AAAAA                       AAAAA             ", "             AAAAA                       AAAAA             ", "            CAAAAACCC                 CCCAAAAAC            ", "          BBBBGGBBBBBBBBB         BBBBBBBBBGGBBBB          ", "                                                           ")
-                    .aisle("                           AAAAA                           ", "           BBBBBGGBBBBBBBBBBBBBBBBBBBBBBBGGBBBBB           ", "             CAAAAAAACCC           CCCAAAAAAAC             ", "              AAAAAAA                 AAAAAAA              ", "              AAAAAAA        C        AAAAAAA              ", "             BAAAAAAABBB    CCC    BBBAAAAAAAB             ", "              AAAAAAA        C        AAAAAAA              ", "              AAAAAAA                 AAAAAAA              ", "             CAAAAAAACCC           CCCAAAAAAAC             ", "           BBBBBGGBBBBBBBBBBBBBBBBBBBBBBBGGBBBBB           ", "                           AAAAA                           ")
-                    .aisle("                          AAAAAAA                          ", "            BBBBBBGGGBBBBBBBBBBBBBBBBBGGGBBBBBB            ", "              CCAAAAAAAACBBDDDDDBBCAAAAAAAACC              ", "                AAAAAAAA BB     BB AAAAAAAA                ", "                AAAAAAAA BB  C  BB AAAAAAAA                ", "              BBAAAAAAAABBB CCC BBBAAAAAAAABB              ", "                AAAAAAAA BB  C  BB AAAAAAAA                ", "                AAAAAAAA BB     BB AAAAAAAA                ", "              CCAAAAAAAACBBDDDDDBBCAAAAAAAACC              ", "            BBBBBBGGGBBBBBBBBBBBBBBBBBGGGBBBBBB            ", "                          AAAAAAA                          ")
-                    .aisle("                          AADDDAA                          ", "              BBBBBBBGGGBBBBBBBBBBBGGGBBBBBBB              ", "                CCAAAAAAAAAAAAAAAAAAAAAAACC                ", "                  AAAAAAAAAAAAAAAAAAAAAAA                  ", "                  AAAAAAAAAA C AAAAAAAAAA                  ", "                BBAAAAAAAAAACCCAAAAAAAAAABB                ", "                  AAAAAAAAAA C AAAAAAAAAA                  ", "                  AAAAAAAAAAAAAAAAAAAAAAA                  ", "                CCAAAAAAAAAAAAAAAAAAAAAAACC                ", "              BBBBBBBGGGBBBBBBBBBBBGGGBBBBBBB              ", "                          AADDDAA                          ")
-                    .aisle("                          AADFDAA                          ", "                BBBBBBBBGGGGGGGGGGGBBBBBBBB                ", "                  CCCAAAAAAAAAAAAAAAAACCC                  ", "                     AAAAAAAAAAAAAAAAA                     ", "                     AAAAAAACCCAAAAAAA                     ", "                  BBBAAAAAAACCCAAAAAAABBB                  ", "                     AAAAAAACCCAAAAAAA                     ", "                     AAAAAAAAAAAAAAAAA                     ", "                  CCCAAAAAAAAAAAAAAAAACCC                  ", "                BBBBBBBBGGGGGGGGGGGBBBBBBBB                ", "                          AADFDAA                          ")
-                    .aisle("                          AADDDAA                          ", "                  BBBBBBBBBBBBBBBBBBBBBBB                  ", "                     CCCAAAAAAAAAAACCC                     ", "                        AAAAAAAAAAA                        ", "                        AAAAAAAAAAA                        ", "                     BBBAAAAAAAAAAABBB                     ", "                        AAAAAAAAAAA                        ", "                        AAAAAAAAAAA                        ", "                     CCCAAAAAAAAAAACCC                     ", "                  BBBBBBBBBBBBBBBBBBBBBBB                  ", "                          AADDDAA                          ")
-                    .aisle("                          AAAAAAA                          ", "                    BBBBBBBBBBBBBBBBBBB                    ", "                        CBBDDDDDBBC                        ", "                         BB  B  BB                         ", "                         BB B B BB                         ", "                        BBBB Q BBBB                        ", "                         BB B B BB                         ", "                         BB  B  BB                         ", "                        CBBDDDDDBBC                        ", "                    BBBBBBBBBBBBBBBBBBB                    ", "                          AAAAAAA                          ")
-                    .aisle("                           AAAAA                           ", "                        BBBBBBBBBBB                        ", "                                                           ", "                                                           ", "                                                           ", "                                                           ", "                                                           ", "                                                           ", "                                                           ", "                        BBBBBBBBBBB                        ", "                           AAAAA                           ")
+                    .aisle("                           AAAAA                           ",
+                            "                        BBBBBBBBBBB                        ",
+                            "                                                           ",
+                            "                                                           ",
+                            "                                                           ",
+                            "                                                           ",
+                            "                                                           ",
+                            "                                                           ",
+                            "                                                           ",
+                            "                        BBBBBBBBBBB                        ",
+                            "                           AAAAA                           ")
+                    .aisle("                          AAAAAAA                          ",
+                            "                    BBBBBBBBBBBBBBBBBBB                    ",
+                            "                        CBBDDDDDBBC                        ",
+                            "                         BB     BB                         ",
+                            "                         BB     BB                         ",
+                            "                        BBB     BBB                        ",
+                            "                         BB     BB                         ",
+                            "                         BB     BB                         ",
+                            "                        CBBDDDDDBBC                        ",
+                            "                    BBBBBBBBBBBBBBBBBBB                    ",
+                            "                          AAAAAAA                          ")
+                    .aisle("                          AADDDAA                          ",
+                            "                  BBBBBBBBBBBBBBBBBBBBBBB                  ",
+                            "                     CCCAAAAAAAAAAACCC                     ",
+                            "                        AAAAAAAAAAA                        ",
+                            "                        AAAAAAAAAAA                        ",
+                            "                     BBBAAAAAAAAAAABBB                     ",
+                            "                        AAAAAAAAAAA                        ",
+                            "                        AAAAAAAAAAA                        ",
+                            "                     CCCAAAAAAAAAAACCC                     ",
+                            "                  BBBBBBBBBBBBBBBBBBBBBBB                  ",
+                            "                          AADDDAA                          ")
+                    .aisle("                          AADFDAA                          ",
+                            "                BBBBBBBBGGGGGGGGGGGBBBBBBBB                ",
+                            "                  CCCAAAAAAAAAAAAAAAAACCC                  ",
+                            "                     AAAAAAAAAAAAAAAAA                     ",
+                            "                     AAAAAAACCCAAAAAAA                     ",
+                            "                  BBBAAAAAAACCCAAAAAAABBB                  ",
+                            "                     AAAAAAACCCAAAAAAA                     ",
+                            "                     AAAAAAAAAAAAAAAAA                     ",
+                            "                  CCCAAAAAAAAAAAAAAAAACCC                  ",
+                            "                BBBBBBBBGGGGGGGGGGGBBBBBBBB                ",
+                            "                          AADFDAA                          ")
+                    .aisle("                          AADDDAA                          ",
+                            "              BBBBBBBGGGBBBBBBBBBBBGGGBBBBBBB              ",
+                            "                CCAAAAAAAAAAAAAAAAAAAAAAACC                ",
+                            "                  AAAAAAAAAAAAAAAAAAAAAAA                  ",
+                            "                  AAAAAAAAAA C AAAAAAAAAA                  ",
+                            "                BBAAAAAAAAAACCCAAAAAAAAAABB                ",
+                            "                  AAAAAAAAAA C AAAAAAAAAA                  ",
+                            "                  AAAAAAAAAAAAAAAAAAAAAAA                  ",
+                            "                CCAAAAAAAAAAAAAAAAAAAAAAACC                ",
+                            "              BBBBBBBGGGBBBBBBBBBBBGGGBBBBBBB              ",
+                            "                          AADDDAA                          ")
+                    .aisle("                          AAAAAAA                          ",
+                            "            BBBBBBGGGBBBBBBBBBBBBBBBBBGGGBBBBBB            ",
+                            "              CCAAAAAAAACBBDDDDDBBCAAAAAAAACC              ",
+                            "                AAAAAAAA BB     BB AAAAAAAA                ",
+                            "                AAAAAAAA BB  C  BB AAAAAAAA                ",
+                            "              BBAAAAAAAABBB CCC BBBAAAAAAAABB              ",
+                            "                AAAAAAAA BB  C  BB AAAAAAAA                ",
+                            "                AAAAAAAA BB     BB AAAAAAAA                ",
+                            "              CCAAAAAAAACBBDDDDDBBCAAAAAAAACC              ",
+                            "            BBBBBBGGGBBBBBBBBBBBBBBBBBGGGBBBBBB            ",
+                            "                          AAAAAAA                          ")
+                    .aisle("                           AAAAA                           ",
+                            "           BBBBBGGBBBBBBBBBBBBBBBBBBBBBBBGGBBBBB           ",
+                            "             CAAAAAAACCC           CCCAAAAAAAC             ",
+                            "              AAAAAAA                 AAAAAAA              ",
+                            "              AAAAAAA        C        AAAAAAA              ",
+                            "             BAAAAAAABBB    CCC    BBBAAAAAAAB             ",
+                            "              AAAAAAA        C        AAAAAAA              ",
+                            "              AAAAAAA                 AAAAAAA              ",
+                            "             CAAAAAAACCC           CCCAAAAAAAC             ",
+                            "           BBBBBGGBBBBBBBBBBBBBBBBBBBBBBBGGBBBBB           ",
+                            "                           AAAAA                           ")
+                    .aisle("                                                           ",
+                            "          BBBBGGBBBBBBBBB         BBBBBBBBBGGBBBB          ",
+                            "            CAAAAACCC                 CCCAAAAAC            ",
+                            "             AAAAA                       AAAAA             ",
+                            "             AAAAA                       AAAAA             ",
+                            "            BAAAAABBB        C        BBBAAAAAB            ",
+                            "             AAAAA                       AAAAA             ",
+                            "             AAAAA                       AAAAA             ",
+                            "            CAAAAACCC                 CCCAAAAAC            ",
+                            "          BBBBGGBBBBBBBBB         BBBBBBBBBGGBBBB          ",
+                            "                                                           ")
+                    .aisle("                                                           ",
+                            "         BBBBGBBBBBBB                 BBBBBBBGBBBB         ",
+                            "           CAAAAAC                       CAAAAAC           ",
+                            "            AAAAA                         AAAAA            ",
+                            "            AAAAA                         AAAAA            ",
+                            "           BAAAAAB           C           BAAAAAB           ",
+                            "            AAAAA                         AAAAA            ",
+                            "            AAAAA                         AAAAA            ",
+                            "           CAAAAAC                       CAAAAAC           ",
+                            "         BBBBGBBBBBBB                 BBBBBBBGBBBB         ",
+                            "                                                           ")
+                    .aisle("                                                           ",
+                            "        BBBBGBBBBBB                     BBBBBBGBBBB        ",
+                            "          CAAAACC                         CCAAAAC          ",
+                            "           AAAA                             AAAA           ",
+                            "           AAAA                             AAAA           ",
+                            "          BAAAABB            C            BBAAAAB          ",
+                            "           AAAA                             AAAA           ",
+                            "           AAAA                             AAAA           ",
+                            "          CAAAACC                         CCAAAAC          ",
+                            "        BBBBGBBBBBB                     BBBBBBGBBBB        ",
+                            "                                                           ")
+                    .aisle("                                                           ",
+                            "       BBBBGBBBBB                         BBBBBGBBBB       ",
+                            "         CAAAAC                             CAAAAC         ",
+                            "          AAAA                               AAAA          ",
+                            "          AAAA                               AAAA          ",
+                            "         BAAAAB                             BAAAAB         ",
+                            "          AAAA                               AAAA          ",
+                            "          AAAA                               AAAA          ",
+                            "         CAAAAC                             CAAAAC         ",
+                            "       BBBBGBBBBB                         BBBBBGBBBB       ",
+                            "                                                           ")
+                    .aisle("                                                           ",
+                            "      BBBBGBBBBB                           BBBBBGBBBB      ",
+                            "        CAAACC                               CCAAAC        ",
+                            "         AAA                                   AAA         ",
+                            "         AAA                                   AAA         ",
+                            "        BAAABB                               BBAAAB        ",
+                            "         AAA                                   AAA         ",
+                            "         AAA                                   AAA         ",
+                            "        CAAACC                               CCAAAC        ",
+                            "      BBBBGBBBBB                           BBBBBGBBBB      ",
+                            "                                                           ")
+                    .aisle("                                                           ",
+                            "     BBBBGBBBB                               BBBBGBBBB     ",
+                            "       CAAAC                                   CAAAC       ",
+                            "        AAA                                     AAA        ",
+                            "        AAA                                     AAA        ",
+                            "       BAAAB                                   BAAAB       ",
+                            "        AAA                                     AAA        ",
+                            "        AAA                                     AAA        ",
+                            "       CAAAC                                   CAAAC       ",
+                            "     BBBBGBBBB                               BBBBGBBBB     ",
+                            "                                                           ")
+                    .aisle("                                                           ",
+                            "     BBBGBBBB                                 BBBBGBBB     ",
+                            "      CAAAAC                                   CAAAAC      ",
+                            "       AAAA                                     AAAA       ",
+                            "       AAAA                                     AAAA       ",
+                            "      BAAAAB                                   BAAAAB      ",
+                            "       AAAA                                     AAAA       ",
+                            "       AAAA                                     AAAA       ",
+                            "      CAAAAC                                   CAAAAC      ",
+                            "     BBBGBBBB                                 BBBBGBBB     ",
+                            "                                                           ")
+                    .aisle("                                                           ",
+                            "    BBBGBBBB                                   BBBBGBBB    ",
+                            "     CAAAAC                                     CAAAAC     ",
+                            "      AAAA                                       AAAA      ",
+                            "      AAAA                                       AAAA      ",
+                            "     BAAAAB                                     BAAAAB     ",
+                            "      AAAA                                       AAAA      ",
+                            "      AAAA                                       AAAA      ",
+                            "     CAAAAC                                     CAAAAC     ",
+                            "    BBBGBBBB                                   BBBBGBBB    ",
+                            "                                                           ")
+                    .aisle("                                                           ",
+                            "    BBBGBBBB                                   BBBBGBBB    ",
+                            "     CAAAC                                       CAAAC     ",
+                            "      AAA                                         AAA      ",
+                            "      AAA                                         AAA      ",
+                            "     BAAAB                                       BAAAB     ",
+                            "      AAA                                         AAA      ",
+                            "      AAA                                         AAA      ",
+                            "     CAAAC                                       CAAAC     ",
+                            "    BBBGBBBB                                   BBBBGBBB    ",
+                            "                                                           ")
+                    .aisle("                                                           ",
+                            "   BBBGBBBB                                     BBBBGBBB   ",
+                            "    CAAAAC                                       CAAAAC    ",
+                            "     AAAA                                         AAAA     ",
+                            "     AAAA                                         AAAA     ",
+                            "    BAAAAB                                       BAAAAB    ",
+                            "     AAAA                                         AAAA     ",
+                            "     AAAA                                         AAAA     ",
+                            "    CAAAAC                                       CAAAAC    ",
+                            "   BBBGBBBB                                     BBBBGBBB   ",
+                            "                                                           ")
+                    .aisle("                                                           ",
+                            "   BBBGBBB                                       BBBGBBB   ",
+                            "    CAAAC                                         CAAAC    ",
+                            "     AAA                                           AAA     ",
+                            "     AAA                                           AAA     ",
+                            "    BAAAB                                         BAAAB    ",
+                            "     AAA                                           AAA     ",
+                            "     AAA                                           AAA     ",
+                            "    CAAAC                                         CAAAC    ",
+                            "   BBBGBBB                                       BBBGBBB   ",
+                            "                                                           ")
+                    .aisle("                                                           ",
+                            "  BBBGBBBB                                       BBBBGBBB  ",
+                            "   CAAAC                                           CAAAC   ",
+                            "    AAA                                             AAA    ",
+                            "    AAA                                             AAA    ",
+                            "   BAAAB                                           BAAAB   ",
+                            "    AAA                                             AAA    ",
+                            "    AAA                                             AAA    ",
+                            "   CAAAC                                           CAAAC   ",
+                            "  BBBGBBBB                                       BBBBGBBB  ",
+                            "                                                           ")
+                    .aisle("                                                           ",
+                            "  BBBGBBB                                         BBBGBBB  ",
+                            "   CAAAC                                           CAAAC   ",
+                            "    AAA                                             AAA    ",
+                            "    AAA                                             AAA    ",
+                            "   BAAAB                                           BAAAB   ",
+                            "    AAA                                             AAA    ",
+                            "    AAA                                             AAA    ",
+                            "   CAAAC                                           CAAAC   ",
+                            "  BBBGBBB                                         BBBGBBB  ",
+                            "                                                           ")
+                    .aisle("                                                           ",
+                            " BBBBGBBB                                         BBBGBBBB ",
+                            "   CAAAC                                           CAAAC   ",
+                            "    AAA                                             AAA    ",
+                            "    AAA                                             AAA    ",
+                            "   BAAAB                                           BAAAB   ",
+                            "    AAA                                             AAA    ",
+                            "    AAA                                             AAA    ",
+                            "   CAAAC                                           CAAAC   ",
+                            " BBBBGBBB                                         BBBGBBBB ",
+                            "                                                           ")
+                    .aisle("                                                           ",
+                            " BBBGBBB                                           BBBGBBB ",
+                            "  CAAAC                                             CAAAC  ",
+                            "   AAA                                               AAA   ",
+                            "   AAA                                               AAA   ",
+                            "  BAAAB                                             BAAAB  ",
+                            "   AAA                                               AAA   ",
+                            "   AAA                                               AAA   ",
+                            "  CAAAC                                             CAAAC  ",
+                            " BBBGBBB                                           BBBGBBB ",
+                            "                                                           ")
+                    .aisle("                                                           ",
+                            " BBBGBBB                                           BBBGBBB ",
+                            "  CAAAC                                             CAAAC  ",
+                            "   AAA                                               AAA   ",
+                            "   AAA                                               AAA   ",
+                            "  BAAAB                                             BAAAB  ",
+                            "   AAA                                               AAA   ",
+                            "   AAA                                               AAA   ",
+                            "  CAAAC                                             CAAAC  ",
+                            " BBBGBBB                                           BBBGBBB ",
+                            "                                                           ")
+                    .aisle("                                                           ",
+                            " BBBGBBB                                           BBBGBBB ",
+                            "  CAAAC                                             CAAAC  ",
+                            "   AAA                                               AAA   ",
+                            "   AAA                                               AAA   ",
+                            "  BAAAB                                             BAAAB  ",
+                            "   AAA                                               AAA   ",
+                            "   AAA                                               AAA   ",
+                            "  CAAAC                                             CAAAC  ",
+                            " BBBGBBB                                           BBBGBBB ",
+                            "                                                           ")
+                    .aisle("                                                           ",
+                            "BBBGBBBB                                           BBBBGBBB",
+                            " CAAAC                                               CAAAC ",
+                            "  AAA                                                 AAA  ",
+                            "  AAA                                                 AAA  ",
+                            " BAAAB                                               BAAAB ",
+                            "  AAA                                                 AAA  ",
+                            "  AAA                                                 AAA  ",
+                            " CAAAC                                               CAAAC ",
+                            "BBBGBBBB                                           BBBBGBBB",
+                            "                                                           ")
+                    .aisle("                                                           ",
+                            "BBBGBBB                                             BBBGBBB",
+                            " BAAAB                                               BAAAB ",
+                            " BAAAB                                               BAAAB ",
+                            " BAAAB                                               BAAAB ",
+                            " BAAAB                                               BAAAB ",
+                            " BAAAB                                               BAAAB ",
+                            " BAAAB                                               BAAAB ",
+                            " BAAAB                                               BAAAB ",
+                            "BBBGBBB                                             BBBGBBB",
+                            "                                                           ")
+                    .aisle(" AAAAA                                               AAAAA ",
+                            "BBBGBBB                                             BBBGBBB",
+                            " BAAAB                                               BAAAB ",
+                            " BAAAB                                               BAAAB ",
+                            " BAAAB                                               BAAAB ",
+                            " BAAAB                                               BAAAB ",
+                            " BAAAB                                               BAAAB ",
+                            " BAAAB                                               BAAAB ",
+                            " BAAAB                                               BAAAB ",
+                            "BBBGBBB                                             BBBGBBB",
+                            " AAAAA                                               AAAAA ")
+                    .aisle("AAAAAAA                                             AAAAAAA",
+                            "BBBGBBB                                             BBBGBBB",
+                            " DAAAD                                               DAAAD ",
+                            "  AAA                                                 AAA  ",
+                            "  AAA                                                 AAA  ",
+                            "  AAA                                                 AAA  ",
+                            "  AAA                                                 AAA  ",
+                            "  AAA                                                 AAA  ",
+                            " DAAAD                                               DAAAD ",
+                            "BBBGBBB                                             BBBGBBB",
+                            "AAAAAAA                                             AAAAAAA")
+                    .aisle("AADDDAA                                             AADDDAA",
+                            "BBBGBBB                                             BBBGBBB",
+                            " DAAAD                                               DAAAD ",
+                            "  AAA                                                 AAA  ",
+                            "  AC                                                   CA  ",
+                            "  ACCCC                                             CCCCA  ",
+                            "  AC                                                   CA  ",
+                            "  AAA                                                 AAA  ",
+                            " DAAAD                                               DAAAD ",
+                            "BBBGBBB                                             BBBGBBB",
+                            "AADDDAA                                             AADDDAA")
+                    .aisle("AADFDAA                                             AADFDAA",
+                            "BBBGBBB                                             BBBGBBB",
+                            " DAAAD                                               DAAAD ",
+                            "  AAA                                                 AAA  ",
+                            "  ACCCC                                             CCCCA  ",
+                            "  ACCCCCCC                                       CCCCCCCA  ",
+                            "  ACCCC                                             CCCCA  ",
+                            "  AAA                                                 AAA  ",
+                            " DAAAD                                               DAAAD ",
+                            "BBBGBBB                                             BBBGBBB",
+                            "AADFDAA                                             AADFDAA")
+                    .aisle("AADDDAA                                             AADDDAA",
+                            "BBBGBBB                                             BBBGBBB",
+                            " DAAAD                                               DAAAD ",
+                            "  AAA                                                 AAA  ",
+                            "  AC                                                   CA  ",
+                            "  ACCCC                                             CCCCA  ",
+                            "  AC                                                   CA  ",
+                            "  AAA                                                 AAA  ",
+                            " DAAAD                                               DAAAD ",
+                            "BBBGBBB                                             BBBGBBB",
+                            "AADDDAA                                             AADDDAA")
+                    .aisle("AAAAAAA                                             AAAAAAA",
+                            "BBBGBBB                                             BBBGBBB",
+                            " DAAAD                                               DAAAD ",
+                            "  AAA                                                 AAA  ",
+                            "  AAA                                                 AAA  ",
+                            "  AAA                                                 AAA  ",
+                            "  AAA                                                 AAA  ",
+                            "  AAA                                                 AAA  ",
+                            " DAAAD                                               DAAAD ",
+                            "BBBGBBB                                             BBBGBBB",
+                            "AAAAAAA                                             AAAAAAA")
+                    .aisle(" AAAAA                                               AAAAA ",
+                            "BBBGBBB                                             BBBGBBB",
+                            " BAAAB                                               BAAAB ",
+                            " BAAAB                                               BAAAB ",
+                            " BAAAB                                               BAAAB ",
+                            " BAAAB                                               BAAAB ",
+                            " BAAAB                                               BAAAB ",
+                            " BAAAB                                               BAAAB ",
+                            " BAAAB                                               BAAAB ",
+                            "BBBGBBB                                             BBBGBBB",
+                            " AAAAA                                               AAAAA ")
+                    .aisle("                                                           ",
+                            "BBBGBBB                                             BBBGBBB",
+                            " BAAAB                                               BAAAB ",
+                            " BAAAB                                               BAAAB ",
+                            " BAAAB                                               BAAAB ",
+                            " BAAAB                                               BAAAB ",
+                            " BAAAB                                               BAAAB ",
+                            " BAAAB                                               BAAAB ",
+                            " BAAAB                                               BAAAB ",
+                            "BBBGBBB                                             BBBGBBB",
+                            "                                                           ")
+                    .aisle("                                                           ",
+                            "BBBGBBBB                                           BBBBGBBB",
+                            " CAAAC                                               CAAAC ",
+                            "  AAA                                                 AAA  ",
+                            "  AAA                                                 AAA  ",
+                            " BAAAB                                               BAAAB ",
+                            "  AAA                                                 AAA  ",
+                            "  AAA                                                 AAA  ",
+                            " CAAAC                                               CAAAC ",
+                            "BBBGBBBB                                           BBBBGBBB",
+                            "                                                           ")
+                    .aisle("                                                           ",
+                            " BBBGBBB                                           BBBGBBB ",
+                            "  CAAAC                                             CAAAC  ",
+                            "   AAA                                               AAA   ",
+                            "   AAA                                               AAA   ",
+                            "  BAAAB                                             BAAAB  ",
+                            "   AAA                                               AAA   ",
+                            "   AAA                                               AAA   ",
+                            "  CAAAC                                             CAAAC  ",
+                            " BBBGBBB                                           BBBGBBB ",
+                            "                                                           ")
+                    .aisle("                                                           ",
+                            " BBBGBBB                                           BBBGBBB ",
+                            "  CAAAC                                             CAAAC  ",
+                            "   AAA                                               AAA   ",
+                            "   AAA                                               AAA   ",
+                            "  BAAAB                                             BAAAB  ",
+                            "   AAA                                               AAA   ",
+                            "   AAA                                               AAA   ",
+                            "  CAAAC                                             CAAAC  ",
+                            " BBBGBBB                                           BBBGBBB ",
+                            "                                                           ")
+                    .aisle("                                                           ",
+                            " BBBGBBB                                           BBBGBBB ",
+                            "  CAAAC                                             CAAAC  ",
+                            "   AAA                                               AAA   ",
+                            "   AAA                                               AAA   ",
+                            "  BAAAB                                             BAAAB  ",
+                            "   AAA                                               AAA   ",
+                            "   AAA                                               AAA   ",
+                            "  CAAAC                                             CAAAC  ",
+                            " BBBGBBB                                           BBBGBBB ",
+                            "                                                           ")
+                    .aisle("                                                           ",
+                            " BBBBGBBB                                         BBBGBBBB ",
+                            "   CAAAC                                           CAAAC   ",
+                            "    AAA                                             AAA    ",
+                            "    AAA                                             AAA    ",
+                            "   BAAAB                                           BAAAB   ",
+                            "    AAA                                             AAA    ",
+                            "    AAA                                             AAA    ",
+                            "   CAAAC                                           CAAAC   ",
+                            " BBBBGBBB                                         BBBGBBBB ",
+                            "                                                           ")
+                    .aisle("                                                           ",
+                            "  BBBGBBB                                         BBBGBBB  ",
+                            "   CAAAC                                           CAAAC   ",
+                            "    AAA                                             AAA    ",
+                            "    AAA                                             AAA    ",
+                            "   BAAAB                                           BAAAB   ",
+                            "    AAA                                             AAA    ",
+                            "    AAA                                             AAA    ",
+                            "   CAAAC                                           CAAAC   ",
+                            "  BBBGBBB                                         BBBGBBB  ",
+                            "                                                           ")
+                    .aisle("                                                           ",
+                            "  BBBGBBBB                                       BBBBGBBB  ",
+                            "   CAAAC                                           CAAAC   ",
+                            "    AAA                                             AAA    ",
+                            "    AAA                                             AAA    ",
+                            "   BAAAB                                           BAAAB   ",
+                            "    AAA                                             AAA    ",
+                            "    AAA                                             AAA    ",
+                            "   CAAAC                                           CAAAC   ",
+                            "  BBBGBBBB                                       BBBBGBBB  ",
+                            "                                                           ")
+                    .aisle("                                                           ",
+                            "   BBBGBBB                                       BBBGBBB   ",
+                            "    CAAAC                                         CAAAC    ",
+                            "     AAA                                           AAA     ",
+                            "     AAA                                           AAA     ",
+                            "    BAAAB                                         BAAAB    ",
+                            "     AAA                                           AAA     ",
+                            "     AAA                                           AAA     ",
+                            "    CAAAC                                         CAAAC    ",
+                            "   BBBGBBB                                       BBBGBBB   ",
+                            "                                                           ")
+                    .aisle("                                                           ",
+                            "   BBBGBBBB                                     BBBBGBBB   ",
+                            "    CAAAAC                                       CAAAAC    ",
+                            "     AAAA                                         AAAA     ",
+                            "     AAAA                                         AAAA     ",
+                            "    BAAAAB                                       BAAAAB    ",
+                            "     AAAA                                         AAAA     ",
+                            "     AAAA                                         AAAA     ",
+                            "    CAAAAC                                       CAAAAC    ",
+                            "   BBBGBBBB                                     BBBBGBBB   ",
+                            "                                                           ")
+                    .aisle("                                                           ",
+                            "    BBBGBBBB                                   BBBBGBBB    ",
+                            "     CAAAC                                       CAAAC     ",
+                            "      AAA                                         AAA      ",
+                            "      AAA                                         AAA      ",
+                            "     BAAAB                                       BAAAB     ",
+                            "      AAA                                         AAA      ",
+                            "      AAA                                         AAA      ",
+                            "     CAAAC                                       CAAAC     ",
+                            "    BBBGBBBB                                   BBBBGBBB    ",
+                            "                                                           ")
+                    .aisle("                                                           ",
+                            "    BBBGBBBB                                   BBBBGBBB    ",
+                            "     CAAAAC                                     CAAAAC     ",
+                            "      AAAA                                       AAAA      ",
+                            "      AAAA                                       AAAA      ",
+                            "     BAAAAB                                     BAAAAB     ",
+                            "      AAAA                                       AAAA      ",
+                            "      AAAA                                       AAAA      ",
+                            "     CAAAAC                                     CAAAAC     ",
+                            "    BBBGBBBB                                   BBBBGBBB    ",
+                            "                                                           ")
+                    .aisle("                                                           ",
+                            "     BBBGBBBB                                 BBBBGBBB     ",
+                            "      CAAAAC                                   CAAAAC      ",
+                            "       AAAA                                     AAAA       ",
+                            "       AAAA                                     AAAA       ",
+                            "      BAAAAB                                   BAAAAB      ",
+                            "       AAAA                                     AAAA       ",
+                            "       AAAA                                     AAAA       ",
+                            "      CAAAAC                                   CAAAAC      ",
+                            "     BBBGBBBB                                 BBBBGBBB     ",
+                            "                                                           ")
+                    .aisle("                                                           ",
+                            "     BBBBGBBBB                               BBBBGBBBB     ",
+                            "       CAAAC                                   CAAAC       ",
+                            "        AAA                                     AAA        ",
+                            "        AAA                                     AAA        ",
+                            "       BAAAB                                   BAAAB       ",
+                            "        AAA                                     AAA        ",
+                            "        AAA                                     AAA        ",
+                            "       CAAAC                                   CAAAC       ",
+                            "     BBBBGBBBB                               BBBBGBBBB     ",
+                            "                                                           ")
+                    .aisle("                                                           ",
+                            "      BBBBGBBBBB                           BBBBBGBBBB      ",
+                            "        CAAACC                               CCAAAC        ",
+                            "         AAA                                   AAA         ",
+                            "         AAA                                   AAA         ",
+                            "        BAAABB                               BBAAAB        ",
+                            "         AAA                                   AAA         ",
+                            "         AAA                                   AAA         ",
+                            "        CAAACC                               CCAAAC        ",
+                            "      BBBBGBBBBB                           BBBBBGBBBB      ",
+                            "                                                           ")
+                    .aisle("                                                           ",
+                            "       BBBBGBBBBB                         BBBBBGBBBB       ",
+                            "         CAAAAC                             CAAAAC         ",
+                            "          AAAA                               AAAA          ",
+                            "          AAAA                               AAAA          ",
+                            "         BAAAAB                             BAAAAB         ",
+                            "          AAAA                               AAAA          ",
+                            "          AAAA                               AAAA          ",
+                            "         CAAAAC                             CAAAAC         ",
+                            "       BBBBGBBBBB                         BBBBBGBBBB       ",
+                            "                                                           ")
+                    .aisle("                                                           ",
+                            "        BBBBGBBBBBB                     BBBBBBGBBBB        ",
+                            "          CAAAACC                         CCAAAAC          ",
+                            "           AAAA                             AAAA           ",
+                            "           AAAA                             AAAA           ",
+                            "          BAAAABB            C            BBAAAAB          ",
+                            "           AAAA                             AAAA           ",
+                            "           AAAA                             AAAA           ",
+                            "          CAAAACC                         CCAAAAC          ",
+                            "        BBBBGBBBBBB                     BBBBBBGBBBB        ",
+                            "                                                           ")
+                    .aisle("                                                           ",
+                            "         BBBBGBBBBBBB                 BBBBBBBGBBBB         ",
+                            "           CAAAAAC                       CAAAAAC           ",
+                            "            AAAAA                         AAAAA            ",
+                            "            AAAAA                         AAAAA            ",
+                            "           BAAAAAB           C           BAAAAAB           ",
+                            "            AAAAA                         AAAAA            ",
+                            "            AAAAA                         AAAAA            ",
+                            "           CAAAAAC                       CAAAAAC           ",
+                            "         BBBBGBBBBBBB                 BBBBBBBGBBBB         ",
+                            "                                                           ")
+                    .aisle("                                                           ",
+                            "          BBBBGGBBBBBBBBB         BBBBBBBBBGGBBBB          ",
+                            "            CAAAAACCC                 CCCAAAAAC            ",
+                            "             AAAAA                       AAAAA             ",
+                            "             AAAAA                       AAAAA             ",
+                            "            BAAAAABBB        C        BBBAAAAAB            ",
+                            "             AAAAA                       AAAAA             ",
+                            "             AAAAA                       AAAAA             ",
+                            "            CAAAAACCC                 CCCAAAAAC            ",
+                            "          BBBBGGBBBBBBBBB         BBBBBBBBBGGBBBB          ",
+                            "                                                           ")
+                    .aisle("                           AAAAA                           ",
+                            "           BBBBBGGBBBBBBBBBBBBBBBBBBBBBBBGGBBBBB           ",
+                            "             CAAAAAAACCC           CCCAAAAAAAC             ",
+                            "              AAAAAAA                 AAAAAAA              ",
+                            "              AAAAAAA        C        AAAAAAA              ",
+                            "             BAAAAAAABBB    CCC    BBBAAAAAAAB             ",
+                            "              AAAAAAA        C        AAAAAAA              ",
+                            "              AAAAAAA                 AAAAAAA              ",
+                            "             CAAAAAAACCC           CCCAAAAAAAC             ",
+                            "           BBBBBGGBBBBBBBBBBBBBBBBBBBBBBBGGBBBBB           ",
+                            "                           AAAAA                           ")
+                    .aisle("                          AAAAAAA                          ",
+                            "            BBBBBBGGGBBBBBBBBBBBBBBBBBGGGBBBBBB            ",
+                            "              CCAAAAAAAACBBDDDDDBBCAAAAAAAACC              ",
+                            "                AAAAAAAA BB     BB AAAAAAAA                ",
+                            "                AAAAAAAA BB  C  BB AAAAAAAA                ",
+                            "              BBAAAAAAAABBB CCC BBBAAAAAAAABB              ",
+                            "                AAAAAAAA BB  C  BB AAAAAAAA                ",
+                            "                AAAAAAAA BB     BB AAAAAAAA                ",
+                            "              CCAAAAAAAACBBDDDDDBBCAAAAAAAACC              ",
+                            "            BBBBBBGGGBBBBBBBBBBBBBBBBBGGGBBBBBB            ",
+                            "                          AAAAAAA                          ")
+                    .aisle("                          AADDDAA                          ",
+                            "              BBBBBBBGGGBBBBBBBBBBBGGGBBBBBBB              ",
+                            "                CCAAAAAAAAAAAAAAAAAAAAAAACC                ",
+                            "                  AAAAAAAAAAAAAAAAAAAAAAA                  ",
+                            "                  AAAAAAAAAA C AAAAAAAAAA                  ",
+                            "                BBAAAAAAAAAACCCAAAAAAAAAABB                ",
+                            "                  AAAAAAAAAA C AAAAAAAAAA                  ",
+                            "                  AAAAAAAAAAAAAAAAAAAAAAA                  ",
+                            "                CCAAAAAAAAAAAAAAAAAAAAAAACC                ",
+                            "              BBBBBBBGGGBBBBBBBBBBBGGGBBBBBBB              ",
+                            "                          AADDDAA                          ")
+                    .aisle("                          AADFDAA                          ",
+                            "                BBBBBBBBGGGGGGGGGGGBBBBBBBB                ",
+                            "                  CCCAAAAAAAAAAAAAAAAACCC                  ",
+                            "                     AAAAAAAAAAAAAAAAA                     ",
+                            "                     AAAAAAACCCAAAAAAA                     ",
+                            "                  BBBAAAAAAACCCAAAAAAABBB                  ",
+                            "                     AAAAAAACCCAAAAAAA                     ",
+                            "                     AAAAAAAAAAAAAAAAA                     ",
+                            "                  CCCAAAAAAAAAAAAAAAAACCC                  ",
+                            "                BBBBBBBBGGGGGGGGGGGBBBBBBBB                ",
+                            "                          AADFDAA                          ")
+                    .aisle("                          AADDDAA                          ",
+                            "                  BBBBBBBBBBBBBBBBBBBBBBB                  ",
+                            "                     CCCAAAAAAAAAAACCC                     ",
+                            "                        AAAAAAAAAAA                        ",
+                            "                        AAAAAAAAAAA                        ",
+                            "                     BBBAAAAAAAAAAABBB                     ",
+                            "                        AAAAAAAAAAA                        ",
+                            "                        AAAAAAAAAAA                        ",
+                            "                     CCCAAAAAAAAAAACCC                     ",
+                            "                  BBBBBBBBBBBBBBBBBBBBBBB                  ",
+                            "                          AADDDAA                          ")
+                    .aisle("                          AAAAAAA                          ",
+                            "                    BBBBBBBBBBBBBBBBBBB                    ",
+                            "                        CBBDDDDDBBC                        ",
+                            "                         BB  B  BB                         ",
+                            "                         BB B B BB                         ",
+                            "                        BBBB Q BBBB                        ",
+                            "                         BB B B BB                         ",
+                            "                         BB  B  BB                         ",
+                            "                        CBBDDDDDBBC                        ",
+                            "                    BBBBBBBBBBBBBBBBBBB                    ",
+                            "                          AAAAAAA                          ")
+                    .aisle("                           AAAAA                           ",
+                            "                        BBBBBBBBBBB                        ",
+                            "                                                           ",
+                            "                                                           ",
+                            "                                                           ",
+                            "                                                           ",
+                            "                                                           ",
+                            "                                                           ",
+                            "                                                           ",
+                            "                        BBBBBBBBBBB                        ",
+                            "                           AAAAA                           ")
                     .where(' ', any())
                     .where("Q", controller(blocks(definition.getBlock())))
                     .where('A', blocks(CASING_HIGH_TEMPERATURE_SMELTING.get()))
@@ -105,17 +695,16 @@ public class StellarStarBallast {
                             .or(Predicates.abilities(PartAbility.INPUT_LASER).setMaxGlobalLimited(1))
                             .or(Predicates.abilities(PartAbility.OUTPUT_LASER).setMaxGlobalLimited(1))
                             .or(Predicates.abilities(PartAbility.IMPORT_FLUIDS).setMaxGlobalLimited(16))
-                            .or(Predicates.abilities(PartAbility.IMPORT_ITEMS).setMaxGlobalLimited(16))
-                    )
+                            .or(Predicates.abilities(PartAbility.IMPORT_ITEMS).setMaxGlobalLimited(16)))
                     .where('G', blocks(CASING_HIGH_TEMPERATURE_SMELTING.get()))
                     .build())
             .renderer(StarBallastMachineRenderer::new)
             .tooltips(Component.translatable("cosmiccore.multiblock.iris.tooltip.0"),
                     Component.translatable("cosmiccore.multiblock.iris.tooltip.1"),
                     Component.translatable("cosmiccore.multiblock.iris.tooltip.2"),
-                    Component.translatable("cosmiccore.multiblock.iris.tooltip.3")
-            )
+                    Component.translatable("cosmiccore.multiblock.iris.tooltip.3"))
             .hasTESR(true)
             .register();
+
     public static void init() {}
 }

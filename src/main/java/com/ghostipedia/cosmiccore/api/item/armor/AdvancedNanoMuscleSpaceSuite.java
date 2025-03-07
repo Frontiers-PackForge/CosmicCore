@@ -1,6 +1,7 @@
 package com.ghostipedia.cosmiccore.api.item.armor;
 
 import com.gregtechceu.gtceu.common.item.armor.AdvancedNanoMuscleSuite;
+
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;

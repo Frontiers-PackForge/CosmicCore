@@ -1,21 +1,24 @@
 package com.ghostipedia.cosmiccore.common.machine.multiblock.part;
 
 import com.ghostipedia.cosmiccore.common.wireless.WirelessDataStore;
+import com.ghostipedia.cosmiccore.utils.OwnershipUtils;
+
 import com.gregtechceu.gtceu.api.capability.IDataAccessHatch;
 import com.gregtechceu.gtceu.api.machine.IMachineBlockEntity;
 import com.gregtechceu.gtceu.api.machine.multiblock.part.MultiblockPartMachine;
 import com.gregtechceu.gtceu.api.recipe.GTRecipe;
 import com.gregtechceu.gtceu.common.recipe.condition.ResearchCondition;
-import net.minecraft.MethodsReturnNonnullByDefault;
-import org.jetbrains.annotations.NotNull;
 
-import javax.annotation.ParametersAreNonnullByDefault;
+import net.minecraft.MethodsReturnNonnullByDefault;
+
+import org.jetbrains.annotations.NotNull;
 import java.util.Collection;
+import javax.annotation.ParametersAreNonnullByDefault;
 
 @MethodsReturnNonnullByDefault
 @ParametersAreNonnullByDefault
 public class WirelessDataHatchPartMachine extends MultiblockPartMachine
-    implements IDataAccessHatch {
+                                          implements IDataAccessHatch {
 
     public WirelessDataHatchPartMachine(IMachineBlockEntity holder) {
         super(holder);

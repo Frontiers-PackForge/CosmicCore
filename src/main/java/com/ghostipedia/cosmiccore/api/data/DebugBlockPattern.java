@@ -1,6 +1,7 @@
 package com.ghostipedia.cosmiccore.api.data;
 
 import com.gregtechceu.gtceu.api.pattern.util.RelativeDirection;
+
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.Level;
@@ -27,7 +28,7 @@ public class DebugBlockPattern {
     }
 
     public DebugBlockPattern(
-            Level world, int minX, int minY, int minZ, int maxX, int maxY, int maxZ) {
+                             Level world, int minX, int minY, int minZ, int maxX, int maxY, int maxZ) {
         this();
         pattern = new String[1 + maxX - minX][1 + maxY - minY];
         aisleRepetitions = new int[pattern.length][2];
@@ -91,20 +92,16 @@ public class DebugBlockPattern {
     }
 
     public void changeDir(
-            RelativeDirection charDir, RelativeDirection stringDir, RelativeDirection aisleDir) {
-        if (charDir.isSameAxis(stringDir)
-                || stringDir.isSameAxis(aisleDir)
-                || aisleDir.isSameAxis(charDir)) return;
-        char[][][] newPattern = new char
-                [structureDir[0].isSameAxis(aisleDir)
-                ? pattern[0][0].length()
-                : structureDir[1].isSameAxis(aisleDir) ? pattern[0].length : pattern.length]
-                [structureDir[0].isSameAxis(stringDir)
-                ? pattern[0][0].length()
-                : structureDir[1].isSameAxis(stringDir) ? pattern[0].length : pattern.length]
-                [structureDir[0].isSameAxis(charDir)
-                ? pattern[0][0].length()
-                : structureDir[1].isSameAxis(charDir) ? pattern[0].length : pattern.length];
+                          RelativeDirection charDir, RelativeDirection stringDir, RelativeDirection aisleDir) {
+        if (charDir.isSameAxis(stringDir) || stringDir.isSameAxis(aisleDir) || aisleDir.isSameAxis(charDir)) return;
+        char[][][] newPattern = new char[structureDir[0].isSameAxis(aisleDir) ? pattern[0][0].length() :
+                structureDir[1].isSameAxis(aisleDir) ? pattern[0].length : pattern.length][structureDir[0]
+                        .isSameAxis(stringDir) ?
+                                pattern[0][0].length() :
+                                structureDir[1].isSameAxis(stringDir) ? pattern[0].length :
+                                        pattern.length][structureDir[0].isSameAxis(charDir) ? pattern[0][0].length() :
+                                                structureDir[1].isSameAxis(charDir) ? pattern[0].length :
+                                                        pattern.length];
         for (int i = 0; i < pattern.length; i++) {
             for (int j = 0; j < pattern[0].length; j++) {
                 for (int k = 0; k < pattern[0][0].length(); k++) {
@@ -191,7 +188,7 @@ public class DebugBlockPattern {
             aisleRepetition[1] = 1;
         }
 
-        structureDir = new RelativeDirection[] {charDir, stringDir, aisleDir};
+        structureDir = new RelativeDirection[] { charDir, stringDir, aisleDir };
     }
 
     public DebugBlockPattern copy() {

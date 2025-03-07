@@ -14,5 +14,4 @@ public interface IMultiblockReciever {
     void sendWorkingEnabled();
 
     String getNameForDisplays();
-
 }

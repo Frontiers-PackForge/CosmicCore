@@ -1,12 +1,7 @@
 package com.ghostipedia.cosmiccore.api.item.armor;
 
 import com.ghostipedia.cosmiccore.common.data.tag.item.CosmicItemTags;
-import earth.terrarium.adastra.api.systems.OxygenApi;
-import earth.terrarium.adastra.common.constants.ConstantComponents;
-import earth.terrarium.adastra.common.registry.ModFluids;
-import earth.terrarium.adastra.common.utils.FluidUtils;
-import earth.terrarium.adastra.common.utils.TooltipUtils;
-import earth.terrarium.botarium.common.fluid.FluidConstants;
+
 import net.minecraft.network.chat.Component;
 import net.minecraft.tags.FluidTags;
 import net.minecraft.tags.TagKey;
@@ -16,6 +11,13 @@ import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
+
+import earth.terrarium.adastra.api.systems.OxygenApi;
+import earth.terrarium.adastra.common.constants.ConstantComponents;
+import earth.terrarium.adastra.common.registry.ModFluids;
+import earth.terrarium.adastra.common.utils.FluidUtils;
+import earth.terrarium.adastra.common.utils.TooltipUtils;
+import earth.terrarium.botarium.common.fluid.FluidConstants;
 
 import java.util.List;
 import java.util.stream.StreamSupport;
@@ -49,7 +51,6 @@ public interface ISpaceSuite {
                 .allMatch(itemStack -> itemStack.is(tagKey));
     }
 
-
     default void onArmorTick(Level Level, Player player, ItemStack itemStack, ArmorItem.Type type) {
         if (type == ArmorItem.Type.CHESTPLATE) this.tickOxygen(Level, player, itemStack);
     }
@@ -63,5 +64,4 @@ public interface ISpaceSuite {
             TooltipUtils.addDescriptionComponent(lines, ConstantComponents.SPACE_SUIT_INFO);
         }
     }
-
 }

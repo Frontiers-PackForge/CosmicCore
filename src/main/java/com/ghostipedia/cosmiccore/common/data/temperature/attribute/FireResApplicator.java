@@ -1,11 +1,13 @@
 package com.ghostipedia.cosmiccore.common.data.temperature.attribute;
 
 import com.ghostipedia.cosmiccore.CosmicCore;
+
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.event.entity.living.MobEffectEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
+
 import sfiomn.legendarysurvivaloverhaul.api.temperature.TemperatureUtil;
 
 import java.util.UUID;
@@ -18,15 +20,21 @@ public class FireResApplicator {
 
     @SubscribeEvent
     public static void onPotionEffect(MobEffectEvent.Added event) {
-        if (event.getEntity() instanceof Player player && event.getEffectInstance().getEffect() == MobEffects.FIRE_RESISTANCE) {
+        if (event.getEntity() instanceof Player player &&
+                event.getEffectInstance().getEffect() == MobEffects.FIRE_RESISTANCE) {
             TemperatureUtil.internal.addHeatResistanceModifier(player, 500.0, heatResModifierID);
+        }
+        if (event.getEntity() instanceof Player player &&
+                event.getEffectInstance().getEffect() == MobEffects.WATER_BREATHING) {
+
         }
     }
 
     @SubscribeEvent
     public static void onPotionEffect(MobEffectEvent.Expired event) {
         if (event.getEntity() instanceof Player player) {
-            if (event.getEffectInstance() != null && event.getEffectInstance().getEffect() == MobEffects.FIRE_RESISTANCE) {
+            if (event.getEffectInstance() != null &&
+                    event.getEffectInstance().getEffect() == MobEffects.FIRE_RESISTANCE) {
                 TemperatureUtil.internal.addHeatResistanceModifier(player, 0.0, heatResModifierID);
             }
         }
@@ -35,10 +43,10 @@ public class FireResApplicator {
     @SubscribeEvent
     public static void onPotionEffect(MobEffectEvent.Remove event) {
         if (event.getEntity() instanceof Player player) {
-            if (event.getEffectInstance() != null && event.getEffectInstance().getEffect() == MobEffects.FIRE_RESISTANCE) {
+            if (event.getEffectInstance() != null &&
+                    event.getEffectInstance().getEffect() == MobEffects.FIRE_RESISTANCE) {
                 TemperatureUtil.internal.addHeatResistanceModifier(player, 0.0, heatResModifierID);
             }
         }
     }
-
 }

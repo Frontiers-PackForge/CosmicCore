@@ -3,13 +3,15 @@ package com.ghostipedia.cosmiccore.client;
 import com.ghostipedia.cosmiccore.CosmicCore;
 import com.ghostipedia.cosmiccore.CosmicUtils;
 import com.ghostipedia.cosmiccore.client.renderer.StructureBoundingBox;
-import com.mojang.blaze3d.shaders.FogShape;
+
 import net.minecraft.client.renderer.FogRenderer;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.RenderLevelStageEvent;
 import net.minecraftforge.client.event.ViewportEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
+
+import com.mojang.blaze3d.shaders.FogShape;
 
 @SuppressWarnings("unused")
 @Mod.EventBusSubscriber(modid = CosmicCore.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE, value = Dist.CLIENT)
@@ -25,7 +27,7 @@ public class ForgeClientEventHandler {
 
     @SubscribeEvent
     public static void onRenderFog(ViewportEvent.RenderFog event) {
-        if (CosmicUtils.hasRing(event.getCamera().getEntity())) {
+        if (CosmicUtils.hasTheOneRing(event.getCamera().getEntity())) {
             event.setFogShape(FogShape.SPHERE);
 
             // Shrink the fog to be very close
@@ -42,7 +44,7 @@ public class ForgeClientEventHandler {
 
     @SubscribeEvent
     public static void onComputeFogColor(ViewportEvent.ComputeFogColor event) {
-        if (CosmicUtils.hasRing(event.getCamera().getEntity())) {
+        if (CosmicUtils.hasTheOneRing(event.getCamera().getEntity())) {
             // and make the fog a blue mist.
             // #7CBADA
             event.setRed(0.671F);

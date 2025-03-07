@@ -1,11 +1,13 @@
 package com.ghostipedia.cosmiccore.client.renderer;
 
 import com.ghostipedia.cosmiccore.client.CosmicCoreClient;
-import com.mojang.blaze3d.vertex.DefaultVertexFormat;
-import com.mojang.blaze3d.vertex.VertexFormat;
+
 import net.minecraft.client.renderer.RenderType;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+
+import com.mojang.blaze3d.vertex.DefaultVertexFormat;
+import com.mojang.blaze3d.vertex.VertexFormat;
 
 @OnlyIn(Dist.CLIENT)
 public class CosmicCoreRenderTypes extends RenderType {
@@ -19,7 +21,8 @@ public class CosmicCoreRenderTypes extends RenderType {
                     .createCompositeState(false));
 
     private CosmicCoreRenderTypes(String name, VertexFormat format, VertexFormat.Mode mode, int bufferSize,
-                                  boolean affectsCrumbling, boolean sortOnUpload, Runnable setupState, Runnable clearState) {
+                                  boolean affectsCrumbling, boolean sortOnUpload, Runnable setupState,
+                                  Runnable clearState) {
         super(name, format, mode, bufferSize, affectsCrumbling, sortOnUpload, setupState, clearState);
     }
 
