@@ -744,7 +744,7 @@ public static final MultiblockMachineDefinition STEAM_MIXER = GTRegistration.REG
             .register();
 
     public static final MultiblockMachineDefinition DIMENSIONAL_ENERGY_CAPACITOR_INTERFACE = REGISTRATE
-            .multiblock("dimensional_energy_capacitor_inteface", DimensionalEnergyCapacitorInterface::new)
+            .multiblock("dimensional_energy_interface", DimensionalEnergyCapacitorInterface::new)
             .rotationState(RotationState.ALL)
             .recipeType(GTRecipeTypes.DUMMY_RECIPES)
             .appearanceBlock(CASING_PALLADIUM_SUBSTATION)

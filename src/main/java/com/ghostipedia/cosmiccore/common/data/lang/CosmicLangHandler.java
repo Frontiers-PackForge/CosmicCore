@@ -138,5 +138,9 @@ public class CosmicLangHandler {
 
         replace(provider, "behavior.wireless_data.owner.player", "§3Player Name: §r%s");
         replace(provider, "behavior.wireless_data.owner.team", "§3Team Name: §r");
+
+        // Dimensional Energy Capacitor
+        replace(provider, "block.cosmiccore.dimensional_energy_capacitor", "Dimensional Energy Capacitor");
+        replace(provider, "block.cosmiccore.dimensional_energy_interface", "Dimensional Energy Interface");
     }
 }

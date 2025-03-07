@@ -76,6 +76,9 @@ public class WirelessEnergyCommand {
         message.append(" (").append(ownerName).append("):\n");
         message.append("  Capacity: " + FormattingUtil.formatNumbers(wirelessData.getEnergyCapacity(owner)) + " EU\n");
         message.append("  Stored: " + FormattingUtil.formatNumbers(wirelessData.getEnergyStored(owner)) + " EU\n");
+        message.append("  Input: " + FormattingUtil.formatNumbers(wirelessData.getEnergyInput(owner)) + " EU/t\n");
+        message.append("  Output: " + FormattingUtil.formatNumbers(wirelessData.getEnergyOutput(owner)) + " EU/t\n");
+        message.append("  Buffered: " + FormattingUtil.formatNumbers(wirelessData.getEnergyBuffered(owner)) + " EU\n");
         message.append("  Active: " + wirelessData.isActive(owner));
 
         return message;
