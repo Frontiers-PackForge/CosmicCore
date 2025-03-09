@@ -3085,6 +3085,92 @@ public class CosmicMachines {
         return definitions;
     }
 
+    public static final MultiblockMachineDefinition DIMENSIONAL_ENERGY_CAPACITOR = REGISTRATE
+            .multiblock("dimensional_energy_capacitor", DimensionalEnergyCapacitor::new)
+            .langValue("Dimensional Energy Capacitor")
+            .rotationState(RotationState.ALL)
+            .recipeType(GTRecipeTypes.DUMMY_RECIPES)
+            .appearanceBlock(CASING_PALLADIUM_SUBSTATION)
+            .pattern(definition -> FactoryBlockPattern.start(RIGHT, BACK, UP)
+                    .aisle("XXSXX", "XXXXX", "XXXXX", "XXXXX", "XXXXX")
+                    .aisle("XXXXX", "XCCCX", "XCCCX", "XCCCX", "XXXXX")
+                    .aisle("GGGGG", "GBBBG", "GBBBG", "GBBBG", "GGGGG")
+                    .setRepeatable(1, DimensionalEnergyCapacitor.MAX_BATTERY_LAYER)
+                    .aisle("GGGGG", "GGGGG", "GGGGG", "GGGGG", "GGGGG")
+                    .where('S', controller(blocks(definition.getBlock())))
+                    .where('C', blocks(CASING_PALLADIUM_SUBSTATION.get()))
+                    .where('X',
+                            blocks(CASING_PALLADIUM_SUBSTATION.get())
+                                    .setMinGlobalLimited(DimensionalEnergyCapacitor.MIN_CASINGS)
+                                    .or(autoAbilities(true, false, false))
+                                    .or(abilities(PartAbility.INPUT_ENERGY, PartAbility.SUBSTATION_INPUT_ENERGY,
+                                            PartAbility.INPUT_LASER).setMinGlobalLimited(1))
+                                    .or(abilities(PartAbility.OUTPUT_ENERGY, PartAbility.SUBSTATION_OUTPUT_ENERGY,
+                                            PartAbility.OUTPUT_LASER).setMinGlobalLimited(1)))
+                    .where('G', blocks(CASING_LAMINATED_GLASS.get()))
+                    .where('B', Predicates.powerSubstationBatteries())
+                    .build())
+            .shapeInfos(definition -> {
+                List<MultiblockShapeInfo> shapeInfo = new ArrayList<>();
+                MultiblockShapeInfo.ShapeInfoBuilder builder = MultiblockShapeInfo.builder()
+                        .aisle("ICSCO", "NCMCT", "GGGGG", "GGGGG", "GGGGG")
+                        .aisle("CCCCC", "CCCCC", "GBBBG", "GBBBG", "GGGGG")
+                        .aisle("CCCCC", "CCCCC", "GBBBG", "GBBBG", "GGGGG")
+                        .aisle("CCCCC", "CCCCC", "GBBBG", "GBBBG", "GGGGG")
+                        .aisle("CCCCC", "CCCCC", "GGGGG", "GGGGG", "GGGGG")
+                        .where('S', definition, Direction.NORTH)
+                        .where('C', CASING_PALLADIUM_SUBSTATION)
+                        .where('G', CASING_LAMINATED_GLASS)
+                        .where('I', GTMachines.ENERGY_INPUT_HATCH[HV], Direction.NORTH)
+                        .where('N', GTMachines.SUBSTATION_ENERGY_INPUT_HATCH[EV], Direction.NORTH)
+                        .where('O', GTMachines.ENERGY_OUTPUT_HATCH[HV], Direction.NORTH)
+                        .where('T', GTMachines.SUBSTATION_ENERGY_OUTPUT_HATCH[EV], Direction.NORTH)
+                        .where('M',
+                                ConfigHolder.INSTANCE.machines.enableMaintenance ?
+                                        GTMachines.MAINTENANCE_HATCH.getBlock().defaultBlockState().setValue(
+                                                GTMachines.MAINTENANCE_HATCH.get().getRotationState().property,
+                                                Direction.NORTH) :
+                                        CASING_PALLADIUM_SUBSTATION.get().defaultBlockState());
+
+                GTCEuAPI.PSS_BATTERIES.entrySet().stream()
+                        // filter out empty batteries in example structures, though they are still
+                        // allowed in the predicate (so you can see them on right-click)
+                        .filter(entry -> entry.getKey().getCapacity() > 0)
+                        .sorted(Comparator.comparingInt(entry -> entry.getKey().getTier()))
+                        .forEach(entry -> shapeInfo.add(builder.where('B', entry.getValue().get()).build()));
+
+                return shapeInfo;
+            })
+            .workableCasingRenderer(GTCEu.id("block/casings/solid/machine_casing_palladium_substation"),
+                    GTCEu.id("block/multiblock/power_substation"))
+            .register();
+
+    public static final MultiblockMachineDefinition DIMENSIONAL_ENERGY_CAPACITOR_INTERFACE = REGISTRATE
+            .multiblock("dimensional_energy_interface", DimensionalEnergyCapacitorInterface::new)
+            .langValue("Dimensional Energy Interface")
+            .rotationState(RotationState.ALL)
+            .recipeType(GTRecipeTypes.DUMMY_RECIPES)
+            .appearanceBlock(CASING_PALLADIUM_SUBSTATION)
+            .tooltips(Component.translatable("gtceu.machine.active_transformer.tooltip.0"),
+                    Component.translatable("gtceu.machine.active_transformer.tooltip.1"))
+            .tooltipBuilder(
+                    (stack,
+                     components) -> components.add(Component.translatable("gtceu.machine.active_transformer.tooltip.2")
+                            .append(Component.translatable("gtceu.machine.active_transformer.tooltip.3")
+                                    .withStyle(TooltipHelper.RAINBOW_HSL_SLOW))))
+            .pattern((definition) -> FactoryBlockPattern.start()
+                    .aisle("XXX", "XXX", "XXX")
+                    .aisle("XXX", "XCX", "XXX")
+                    .aisle("XXX", "XSX", "XXX")
+                    .where('S', controller(blocks(definition.getBlock())))
+                    .where('X', blocks(CASING_PALLADIUM_SUBSTATION.get()).setMinGlobalLimited(12)
+                            .or(ActiveTransformerMachine.getHatchPredicates()))
+                    .where('C', blocks(GTBlocks.SUPERCONDUCTING_COIL.get()))
+                    .build())
+            .workableCasingRenderer(GTCEu.id("block/casings/solid/machine_casing_palladium_substation"),
+                    GTCEu.id("block/multiblock/data_bank"))
+            .register();
+
     public static final MachineDefinition STEAM_IMPORT_HATCH = GTRegistration.REGISTRATE
             .machine("steam_fluid_input_hatch", holder -> new SteamFluidHatchPartMachine(holder, IO.IN, 4000, 1))
             .rotationState(RotationState.ALL)
