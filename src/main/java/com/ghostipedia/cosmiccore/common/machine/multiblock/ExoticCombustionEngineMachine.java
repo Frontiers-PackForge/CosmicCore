@@ -16,7 +16,6 @@ import com.gregtechceu.gtceu.api.machine.feature.ITieredMachine;
 import com.gregtechceu.gtceu.api.machine.multiblock.MultiblockDisplayText;
 import com.gregtechceu.gtceu.api.machine.multiblock.WorkableElectricMultiblockMachine;
 import com.gregtechceu.gtceu.api.machine.multiblock.WorkableMultiblockMachine;
-import com.gregtechceu.gtceu.api.machine.trait.RecipeLogic;
 import com.gregtechceu.gtceu.api.recipe.GTRecipe;
 import com.gregtechceu.gtceu.api.recipe.RecipeHelper;
 import com.gregtechceu.gtceu.api.recipe.content.ContentModifier;
@@ -105,6 +104,7 @@ public class ExoticCombustionEngineMachine extends WorkableElectricMultiblockMac
     public long getOverclockVoltage() {
         return GTValues.V[tier];
     }
+
     public static ModifierFunction recipeModifier(@NotNull MetaMachine machine, @NotNull GTRecipe recipe) {
         if (!(machine instanceof ExoticCombustionEngineMachine engineMachine)) {
             return RecipeModifier.nullWrongType(ExoticCombustionEngineMachine.class, machine);
@@ -169,10 +169,10 @@ public class ExoticCombustionEngineMachine extends WorkableElectricMultiblockMac
     public boolean onWorking() {
         boolean value = super.onWorking();
         var recipe = recipeLogic.getLastRecipe();
-        if (recipe != null){
+        if (recipe != null) {
             long EUt = RecipeHelper.getOutputEUt(recipe);
             int duration = recipe.duration;
-            if ((EUt/recipe.parallels) * duration < 720){
+            if ((EUt / recipe.parallels) * duration < 720) {
                 this.getRecipeLogic().setWaiting(Component.translatable("cosmiccore.errors.bad_fuel"));
 
             }
@@ -235,8 +235,8 @@ public class ExoticCombustionEngineMachine extends WorkableElectricMultiblockMac
                 .setWorkingStatus(recipeLogic.isWorkingEnabled(), recipeLogic.isActive());
         var voltageName = Component.literal(GTValues.VNF[GTUtil.getFloorTierByVoltage(getOverclockVoltage())]);
         var amperageName = currentBooster != null ? boostingTiers.getInt(currentBooster) * 3 : 1;
-        if (recipeLogic.isSuspend() && !recipeLogic.getFancyTooltip().isEmpty()){
-            builder.addCustom(t-> t.add(recipeLogic.getFancyTooltip().get(0)));
+        if (recipeLogic.isSuspend() && !recipeLogic.getFancyTooltip().isEmpty()) {
+            builder.addCustom(t -> t.add(recipeLogic.getFancyTooltip().get(0)));
             return;
         }
         builder.addCustom(t -> t.add(Component.translatable("gtceu.multiblock.max_energy_per_tick_amps",
@@ -262,9 +262,6 @@ public class ExoticCombustionEngineMachine extends WorkableElectricMultiblockMac
                             Component.translatable(currentLubricant.getTranslationKey()))
                     .withStyle(ChatFormatting.YELLOW)));
         }
-
-
-
 
         builder.addWorkingStatusLine();
     }

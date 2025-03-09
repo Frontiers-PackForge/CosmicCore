@@ -1,5 +1,5 @@
-# Cosmic Core 0.6.0
+# Cosmic Core 0.6.1
 ## Added Items
-* Reworked Combustion Generators :)
+* Prismatic TungstenSteel texture refactor
 
 # DO NOT MANUALLY UPDATE COSMIC CORE FOR FRONTIERS **I WILL NOT WORK**
