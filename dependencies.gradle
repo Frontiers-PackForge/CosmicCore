@@ -2,26 +2,26 @@ dependencies {
     compileOnly(libs.jetbrains.annotations)
 
     // LDLib
-    jarJar(modApi(forge.ldlib.get()))
+    modImplementation(forge.ldlib)
 
     // Registrate
-    jarJar(modApi(forge.registrate.get()))
+    modImplementation(forge.registrate)
 
     // Configuration
-    jarJar(modApi(forge.configuration.get()))
+    modImplementation(forge.configuration)
 
     // GTCEu
-    implementation(variantOf(forge.gtceu) { classifier("slim") })
+    modImplementation(variantOf(forge.gtceu) { classifier("slim") })
 
     // Mixin (& Extras)
     annotationProcessor(variantOf(libs.mixin) { classifier("processor") })
     annotationProcessor(forge.mixinExtras.common)
     api(forge.mixinExtras.common)
-    jarJar(forge.mixinExtras.forge)
 
     // KubeJS
-    implementation(forge.kubejs)
-    implementation(forge.rhino)
+    modImplementation(forge.kubejs)
+    modImplementation(forge.rhino)
+    modImplementation(forge.architectury)
 
     // Recipe Viewers
     modCompileOnly(forge.bundles.jei)
@@ -52,8 +52,8 @@ dependencies {
     modImplementation(forge.bloodMagic)
 
     // Create
-    compileOnly(forge.create)
-    compileOnly(forge.flywheel)
+    modCompileOnly(forge.create)
+    modCompileOnly(forge.flywheel)
     modImplementation(forge.geckoLib)
 
     // Thin air

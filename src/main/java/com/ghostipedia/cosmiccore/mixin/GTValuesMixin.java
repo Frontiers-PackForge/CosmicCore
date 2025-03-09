@@ -10,7 +10,7 @@ public class GTValuesMixin {
 
     @Final
     @Mutable
-    @Shadow
+    @Shadow(remap = false)
     public static int[] VC;
 
     static {
