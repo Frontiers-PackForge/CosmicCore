@@ -1,9 +1,22 @@
 pluginManagement {
-    // when using additional gradle plugins like shadow,
-    // add their repositories to this list!
     repositories {
-        gradlePluginPortal() // Needed for spotless
         maven { url = 'https://maven.minecraftforge.net/' }
-        maven { url = 'https://maven.parchmentmc.org' }
+        gradlePluginPortal() // Needed for spotless
+    }
+    plugins {
+        id 'org.jetbrains.kotlin.jvm' version '2.0.21'
     }
 }
+
+dependencyResolutionManagement {
+    repositories {
+        mavenCentral()
+    }
+    versionCatalogs {
+        forge {
+            from(files("gradle/forge.versions.toml"))
+        }
+    }
+}
+
+rootProject.name = "${mod_id}"

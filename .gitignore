@@ -28,9 +28,10 @@ bin/
 
 *.DS_Store
 
-# fabric
+# runtime folders
 
 run/
+run-data/
 
 # forge generated resources cache
 /src/generated/resources/.cache/
