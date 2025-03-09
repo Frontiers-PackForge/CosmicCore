@@ -69,14 +69,14 @@ public class CosmicItems {
             .register();
     public static final ItemEntry<ComponentItem> DILUMIXAL_NAQ_DOPED_BOULE = REGISTRATE
             .item("dilumixal_naquadah_doped_silicon_boule", ComponentItem::create)
-            .lang("DiLumixal Naquadah Doped Silicon Boule")
+            .lang("DiLumixal Naquadah-doped Silicon Boule")
             .properties(p -> p.stacksTo(64))
             .tag()
             .defaultModel()
             .register();
     public static final ItemEntry<ComponentItem> DILUMIXAL_NAQ_DOPED_WAFER = REGISTRATE
             .item("dilumixal_naquadah_doped_silicon_wafer", ComponentItem::create)
-            .lang("DiLumixal Naquadah Doped Silicon Wafer")
+            .lang("DiLumixal Naquadah-doped Silicon Wafer")
             .properties(p -> p.stacksTo(64))
             .tag()
             .defaultModel()
@@ -159,13 +159,13 @@ public class CosmicItems {
             .register();
     public static final ItemEntry<ItemBloodOrb> ITEM_ORB_VOIDSENT = REGISTRATE
             .item("void_blood_orb", (p) -> new ItemBloodOrb(ORB_VOIDSENT))
-            .lang("Ascendant Blood Orb")
+            .lang("Voidsent Blood Orb")
             .properties(p -> p.stacksTo(1))
             .defaultModel()
             .register();
-    public static final ItemEntry<ItemBloodOrb> ITEM_ORB_SOVEREIGNT = REGISTRATE
+    public static final ItemEntry<ItemBloodOrb> ITEM_ORB_SOVEREIGN = REGISTRATE
             .item("sov_blood_orb", (p) -> new ItemBloodOrb(ORB_SOVEREIGN))
-            .lang("Ascendant Blood Orb")
+            .lang("Sovereign Blood Orb")
             .properties(p -> p.stacksTo(1))
             .defaultModel()
             .register();
@@ -377,12 +377,12 @@ public class CosmicItems {
             .defaultModel()
             .register();
 
-    public static final ItemEntry<ComponentItem> WRAPPED_S = REGISTRATE
-            .item("blackstone_pustule", ComponentItem::create)
-            .lang("Blackstone Pustule")
-            .properties(p -> p.stacksTo(64))
-            .defaultModel()
-            .register();
+//    public static final ItemEntry<ComponentItem> WRAPPED_S = REGISTRATE
+//            .item("blackstone_pustule", ComponentItem::create)
+//            .lang("Blackstone Pustule")
+//            .properties(p -> p.stacksTo(64))
+//            .defaultModel()
+//            .register();
 
     // New Circuits
     // Echo (ZPM-UEV)
@@ -511,7 +511,7 @@ public class CosmicItems {
             .defaultModel()
             .register();
     public static final ItemEntry<ComponentItem> FIRECLAY_BALL = REGISTRATE.item("fireclay_ball", ComponentItem::create)
-            .lang("Fireclay ball")
+            .lang("Fireclay Ball")
             .properties(p -> p.stacksTo(64))
             .defaultModel()
             .register();
