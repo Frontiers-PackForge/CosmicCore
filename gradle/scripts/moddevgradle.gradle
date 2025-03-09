@@ -1,5 +1,5 @@
 mixin {
-    var refMap = add sourceSets.main, "cosmiccore.mixins.json"
+    var refMap = add sourceSets.main, "cosmiccore.refmap.json"
     slimJar.from refMap
     config 'cosmiccore.mixins.json'
 }
