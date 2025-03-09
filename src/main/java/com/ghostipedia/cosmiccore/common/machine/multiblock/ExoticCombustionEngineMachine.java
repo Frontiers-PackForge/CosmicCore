@@ -110,7 +110,9 @@ public class ExoticCombustionEngineMachine extends WorkableElectricMultiblockMac
             return RecipeModifier.nullWrongType(ExoticCombustionEngineMachine.class, machine);
         }
         long EUt = RecipeHelper.getOutputEUt(recipe);
-
+        if (EUt * recipe.duration < 720) {
+            return ModifierFunction.NULL;
+        }
         var fluidHolders = Objects
                 .requireNonNullElseGet(((ExoticCombustionEngineMachine) machine).getCapabilitiesProxy()
                         .get(IO.IN, FluidRecipeCapability.CAP), Collections::<IRecipeHandler<?>>emptyList)
@@ -166,7 +168,15 @@ public class ExoticCombustionEngineMachine extends WorkableElectricMultiblockMac
     @Override
     public boolean onWorking() {
         boolean value = super.onWorking();
+        var recipe = recipeLogic.getLastRecipe();
+        if (recipe != null) {
+            long EUt = RecipeHelper.getOutputEUt(recipe);
+            int duration = recipe.duration;
+            if ((EUt / recipe.parallels) * duration < 720) {
+                this.getRecipeLogic().setWaiting(Component.translatable("cosmiccore.errors.bad_fuel"));
 
+            }
+        }
         if (currentBooster != null) {
             int consumptionRate = 1;
             int tickCycle = 1;
@@ -224,9 +234,13 @@ public class ExoticCombustionEngineMachine extends WorkableElectricMultiblockMac
         MultiblockDisplayText.Builder builder = MultiblockDisplayText.builder(textList, isFormed())
                 .setWorkingStatus(recipeLogic.isWorkingEnabled(), recipeLogic.isActive());
         var voltageName = Component.literal(GTValues.VNF[GTUtil.getFloorTierByVoltage(getOverclockVoltage())]);
-        var amperageName = boostingTiers.getInt(currentBooster) * 3;
+        var amperageName = currentBooster != null ? boostingTiers.getInt(currentBooster) * 3 : 1;
+        if (recipeLogic.isSuspend() && !recipeLogic.getFancyTooltip().isEmpty()) {
+            builder.addCustom(t -> t.add(recipeLogic.getFancyTooltip().get(0)));
+            return;
+        }
         builder.addCustom(t -> t.add(Component.translatable("gtceu.multiblock.max_energy_per_tick_amps",
-                FormattingUtil.formatNumbers(getOverclockVoltage() * boostingTiers.getInt(currentBooster) * 3L),
+                FormattingUtil.formatNumbers(getOverclockVoltage() * amperageName),
                 amperageName, voltageName).withStyle(ChatFormatting.GRAY)));
         if (isActive() && isWorkingEnabled()) {
             builder.addCurrentEnergyProductionLine(
