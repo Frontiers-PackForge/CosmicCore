@@ -34,4 +34,4 @@ run/
 run-data/
 
 # forge generated resources cache
-/src/generated/resource/.cache/
+/src/generated/resources/.cache/
