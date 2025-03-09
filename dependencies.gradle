@@ -1,0 +1,85 @@
+dependencies {
+    compileOnly(libs.jetbrains.annotations)
+
+    // LDLib
+    jarJar(modApi(forge.ldlib.get()))
+
+    // Registrate
+    jarJar(modApi(forge.registrate.get()))
+
+    // Configuration
+    jarJar(modApi(forge.configuration.get()))
+
+    // GTCEu
+    implementation(variantOf(forge.gtceu) { classifier("slim") })
+
+    // Mixin (& Extras)
+    annotationProcessor(variantOf(libs.mixin) { classifier("processor") })
+    annotationProcessor(forge.mixinExtras.common)
+    api(forge.mixinExtras.common)
+    jarJar(forge.mixinExtras.forge)
+
+    // KubeJS
+    implementation(forge.kubejs)
+    implementation(forge.rhino)
+
+    // Recipe Viewers
+    modCompileOnly(forge.bundles.jei)
+    modCompileOnly(forge.emi)
+
+    // WAILA-likes
+    modImplementation(forge.jade)
+
+    // Curios
+    modImplementation(forge.curios)
+
+    // AE2
+    modImplementation(forge.ae2)
+    modImplementation(forge.modernAe2Additions)
+
+    // LSO
+    modImplementation(forge.legendarySurvivalOverhaul)
+
+    // Ad Astra
+    modRuntimeOnly(forge.yabn)
+    modRuntimeOnly(forge.byteCodecs)
+    modImplementation(forge.resourcefullLib)
+    modImplementation(forge.resourcefullConfig)
+    modImplementation(forge.botarium)
+    modImplementation(forge.adAstra)
+
+    // Blood Magic
+    modImplementation(forge.bloodMagic)
+
+    // Create
+    compileOnly(forge.create)
+    compileOnly(forge.flywheel)
+    modImplementation(forge.geckoLib)
+
+    // Thin air
+    modCompileOnly(forge.newThinAir)
+
+    // Puzzles Lib
+    modImplementation(forge.puzzlesLib)
+
+    // Apotheosis
+    modImplementation(forge.placebo)
+    modImplementation(forge.apotheosis)
+    modImplementation(forge.apotheoticAttributes)
+
+    // Patchouli
+    modRuntimeOnly(forge.patchouli)
+
+    // Embedium / Occulus
+    modImplementation(forge.embeddium)
+    modImplementation(forge.oculus)
+    modRuntimeOnly(forge.jcpp)
+
+    // Teams
+    modCompileOnly(forge.ftblibrary.cm)
+    modCompileOnly(forge.ftbteams.cm)
+
+    // Runtime Recipe Viewers - uncomment whichever one you want to use //
+    modRuntimeOnly(forge.emi)
+    // modRuntimeOnly(forge.jei.forge.impl)
+}
