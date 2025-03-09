@@ -28,7 +28,7 @@ bin/
 
 *.DS_Store
 
-# fabric
+# runtime folders
 
 run/
 run-data/
