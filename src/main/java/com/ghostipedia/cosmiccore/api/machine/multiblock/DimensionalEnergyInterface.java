@@ -25,8 +25,10 @@ import com.lowdragmc.lowdraglib.syncdata.field.ManagedFieldHolder;
 import com.lowdragmc.lowdraglib.utils.DummyWorld;
 import it.unimi.dsi.fastutil.longs.Long2ObjectMaps;
 import net.minecraft.ChatFormatting;
+import net.minecraft.client.Minecraft;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.HoverEvent;
+import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.chat.Style;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.player.Player;
@@ -57,13 +59,14 @@ public class DimensionalEnergyInterface extends WorkableMultiblockMachine
     private long netOutLastSec;
     private long averageInLastSec;
     private long averageOutLastSec;
-    private boolean localDisplay;
+    protected boolean localDisplay;
 
     protected ConditionalSubscriptionHandler tickSubscription;
 
     public DimensionalEnergyInterface(IMachineBlockEntity holder) {
         super(holder);
         this.tickSubscription = new ConditionalSubscriptionHandler(this, this::transferEnergyTick, this::isFormed);
+        this.localDisplay = true;
     }
 
     @Override
@@ -196,51 +199,41 @@ public class DimensionalEnergyInterface extends WorkableMultiblockMachine
                                             Component.translatable("cosmic.multiblock.capacitor.info.local"))
                                     .append(Component.literal("]")), "local_display")));
 
-                    BigInteger energyStored;
-                    BigInteger energyCapacity;
+                    BigInteger energyCapacity = data.getEnergyCapacity(owner);;
+                    BigInteger energyStored = data.getTotalNetworkEnergyStoredExceptLocalBuffer(owner, getPos());
+                    energyStored = energyStored.add(BigInteger.valueOf(energyBuffer.getEnergyStored()));
                     BigInteger energyBuffered;
                     long avgIn;
                     long avgOut;
 
                     if (localDisplay) {
-                        energyStored = BigInteger.ZERO;
-                        energyCapacity = BigInteger.ZERO;
-                        energyBuffered = BigInteger.ZERO;
-                        avgIn = 0L;
-                        avgOut = 0L;
+                        energyBuffered = BigInteger.valueOf(energyBuffer.getEnergyStored());
+                        avgIn = averageInLastSec;
+                        avgOut = averageOutLastSec;
                     } else {
-                        energyStored = data.getTotalNetworkEnergyStoredExceptLocalBuffer(owner, getPos());
-                        energyStored = energyStored.add(BigInteger.valueOf(energyBuffer.getEnergyStored()));
-                        energyCapacity = data.getEnergyCapacity(owner);
                         energyBuffered = data.getEnergyBufferedExceptLocal(owner, getPos());
                         energyBuffered = energyBuffered.add(BigInteger.valueOf(energyBuffer.getEnergyStored()));
                         avgIn = data.getEnergyInput(owner);
                         avgOut = data.getEnergyOutput(owner);
                     }
 
+                    int width = 182 - 32;
                     var storedComponent = Component.literal(CosmicFormattingUtil.formatNumberWithCharacterLimit(energyStored, 12));
-                    textList.add(Component.translatable("gtceu.multiblock.power_substation.stored",
-                            storedComponent.setStyle(STYLE_GOLD)));
+                    textList.add(combineWithConstantWidth("gtceu.multiblock.power_substation.stored", storedComponent.setStyle(STYLE_GOLD), width));
 
                     var capacityComponent = Component.literal(CosmicFormattingUtil.formatNumberWithCharacterLimit(energyCapacity, 12));
-                    textList.add(Component.translatable("gtceu.multiblock.power_substation.capacity",
-                            capacityComponent.setStyle(STYLE_GOLD)));
+                    textList.add(combineWithConstantWidth("gtceu.multiblock.power_substation.capacity", capacityComponent.setStyle(STYLE_GOLD), width));
 
                     var bufferedComponent = Component.literal(CosmicFormattingUtil.formatNumberWithCharacterLimit(energyBuffered, 12));
-                    textList.add(Component.translatable("cosmic.multiblock.capacitor.buffered",
-                            bufferedComponent.setStyle(STYLE_GOLD)));
+                    textList.add(combineWithConstantWidth("cosmic.multiblock.capacitor.buffered", bufferedComponent.setStyle(STYLE_GOLD), width));
 
-                    var avgInComponent = Component.literal(FormattingUtil.formatNumbers(avgIn));
-                    textList.add(Component
-                            .translatable("gtceu.multiblock.power_substation.average_in",
-                                    avgInComponent.setStyle(STYLE_GREEN))
+                    var avgInComponent = Component.literal(CosmicFormattingUtil.formatNumberWithCharacterLimit(BigInteger.valueOf(avgIn), 10));
+                    textList.add(combineWithConstantWidth("gtceu.multiblock.power_substation.average_in", avgInComponent.setStyle(STYLE_GREEN), width)
                             .withStyle(Style.EMPTY.withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT,
                                     Component.translatable("gtceu.multiblock.power_substation.average_in_hover")))));
 
-                    var avgOutComponent = Component.literal(FormattingUtil.formatNumbers(Math.abs(avgOut)));
-                    textList.add(Component
-                            .translatable("gtceu.multiblock.power_substation.average_out",
-                                    avgOutComponent.setStyle(STYLE_RED))
+                    var avgOutComponent = Component.literal(CosmicFormattingUtil.formatNumberWithCharacterLimit(BigInteger.valueOf(Math.abs(avgOut)), 10));
+                    textList.add(combineWithConstantWidth("gtceu.multiblock.power_substation.average_out", avgOutComponent.setStyle(STYLE_RED), width)
                             .withStyle(Style.EMPTY.withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT,
                                     Component.translatable("gtceu.multiblock.power_substation.average_out_hover")))));
                 }
@@ -248,6 +241,19 @@ public class DimensionalEnergyInterface extends WorkableMultiblockMachine
 
         }
         getDefinition().getAdditionalDisplay().accept(this, textList);
+    }
+
+    private MutableComponent combineWithConstantWidth(String labelKey, Component body, int width) {
+        var tmp = Component.translatable(labelKey, body);
+        var baseLength = getComponentLength(tmp);
+        var spaceLength = width - baseLength;
+        if (spaceLength <= 0) return Component.literal("Err: Too long");
+        var spacerComponent = Component.literal(".".repeat((spaceLength / 2) - 4) + " ").withStyle(ChatFormatting.DARK_GRAY);
+        return Component.translatable(labelKey, spacerComponent.append(body));
+    }
+
+    private int getComponentLength(Component component) {
+        return Minecraft.getInstance().font.width(component.getString());
     }
 
     @Override

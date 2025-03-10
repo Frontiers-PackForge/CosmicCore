@@ -20,6 +20,7 @@ public class DimensionalEnergyCapacitor extends DimensionalEnergyInterface {
 
     public DimensionalEnergyCapacitor(IMachineBlockEntity holder) {
         super(holder);
+        this.localDisplay = false;
     }
 
     @Override

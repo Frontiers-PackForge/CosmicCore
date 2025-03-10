@@ -1,6 +1,7 @@
 package com.ghostipedia.cosmiccore.utils;
 
 import com.gregtechceu.gtceu.utils.FormattingUtil;
+import net.minecraft.ChatFormatting;
 
 import java.math.BigInteger;
 import java.text.DecimalFormat;
@@ -12,5 +13,4 @@ public class CosmicFormattingUtil {
         if (formattedNumber.length() <= characterLimit) return formattedNumber;
         else return (new DecimalFormat("0.000E0")).format(number);
     }
-
 }
