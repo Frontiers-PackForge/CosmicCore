@@ -185,5 +185,12 @@ public class CosmicLangHandler {
 
         replace(provider, "behavior.wireless_data.owner.player", "§3Player Name: §r%s");
         replace(provider, "behavior.wireless_data.owner.team", "§3Team Name: §r");
+
+        // Dimensional Energy Storage
+        provider.add("cosmic.multiblock.capacitor.info.tittle.global", "Global Network Info ");
+        provider.add("cosmic.multiblock.capacitor.info.tittle.local", "Local Buffer Info ");
+        provider.add("cosmic.multiblock.capacitor.info.global", "Global");
+        provider.add("cosmic.multiblock.capacitor.info.local", "Local");
+        provider.add("cosmic.multiblock.capacitor.buffered", "§7Buffered: %s §7EU");
     }
 }

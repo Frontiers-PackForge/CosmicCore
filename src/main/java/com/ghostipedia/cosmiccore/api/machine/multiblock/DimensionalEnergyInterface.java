@@ -1,6 +1,7 @@
 package com.ghostipedia.cosmiccore.api.machine.multiblock;
 
 import com.ghostipedia.cosmiccore.api.data.wireless.WirelessEnergySavedData;
+import com.ghostipedia.cosmiccore.utils.CosmicFormattingUtil;
 import com.gregtechceu.gtceu.api.capability.IEnergyContainer;
 import com.gregtechceu.gtceu.api.capability.recipe.EURecipeCapability;
 import com.gregtechceu.gtceu.api.capability.recipe.IO;
@@ -15,6 +16,7 @@ import com.gregtechceu.gtceu.api.machine.feature.multiblock.IMultiPart;
 import com.gregtechceu.gtceu.api.machine.multiblock.WorkableMultiblockMachine;
 import com.gregtechceu.gtceu.api.machine.trait.NotifiableEnergyContainer;
 import com.gregtechceu.gtceu.api.misc.EnergyContainerList;
+import com.gregtechceu.gtceu.utils.FormattingUtil;
 import com.lowdragmc.lowdraglib.gui.modular.ModularUI;
 import com.lowdragmc.lowdraglib.gui.util.ClickData;
 import com.lowdragmc.lowdraglib.gui.widget.*;
@@ -22,10 +24,14 @@ import com.lowdragmc.lowdraglib.syncdata.annotation.Persisted;
 import com.lowdragmc.lowdraglib.syncdata.field.ManagedFieldHolder;
 import com.lowdragmc.lowdraglib.utils.DummyWorld;
 import it.unimi.dsi.fastutil.longs.Long2ObjectMaps;
+import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.HoverEvent;
+import net.minecraft.network.chat.Style;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.player.Player;
 
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -49,6 +55,9 @@ public class DimensionalEnergyInterface extends WorkableMultiblockMachine
     // Stats tracked for UI display
     private long netInLastSec;
     private long netOutLastSec;
+    private long averageInLastSec;
+    private long averageOutLastSec;
+    private boolean localDisplay;
 
     protected ConditionalSubscriptionHandler tickSubscription;
 
@@ -111,22 +120,22 @@ public class DimensionalEnergyInterface extends WorkableMultiblockMachine
 
     protected void transferEnergyTick() {
         if (getLevel() instanceof ServerLevel serverLevel) {
-            if (getOffsetTimer() % 20 == 0) {
-                // TODO: handle WORKING / IDLE
-                long averageInLastSec = netInLastSec / 20;
-                long averageOutLastSec = netOutLastSec / 20;
-                netInLastSec = 0;
-                netOutLastSec = 0;
-
-                // Send IO values to global Storage to display in the Dimensional Storage.
-                var data = WirelessEnergySavedData.getOrCreate(serverLevel);
-                var owner = getHolder().getOwner().getUUID();
-                data.setEnergyInput(owner, getPos(), averageInLastSec);
-                data.setEnergyOutput(owner, getPos(), averageOutLastSec);
-                data.setEnergyBuffered(owner, getPos(), energyBuffer.getEnergyStored());
-            }
-
             if(isWorkingEnabled() && isFormed()) {
+                if (getOffsetTimer() % 20 == 0) {
+                    // TODO: handle WORKING / IDLE
+                    averageInLastSec = netInLastSec / 20;
+                    averageOutLastSec = netOutLastSec / 20;
+                    netInLastSec = 0;
+                    netOutLastSec = 0;
+
+                    // Send IO values to global Storage to display in the Dimensional Storage.
+                    var data = WirelessEnergySavedData.getOrCreate(serverLevel);
+                    var owner = getHolder().getOwner().getUUID();
+                    data.setEnergyInput(owner, getPos(), averageInLastSec);
+                    data.setEnergyOutput(owner, getPos(), averageOutLastSec);
+                    data.setEnergyBuffered(owner, getPos(), energyBuffer.getEnergyStored());
+                }
+
                 // Handle inputs
                 long energyBuffered = energyBuffer.addEnergy(inputHatches.getEnergyStored());
                 inputHatches.changeEnergy(-energyBuffered);
@@ -147,6 +156,7 @@ public class DimensionalEnergyInterface extends WorkableMultiblockMachine
                         var euToTransfer = energyBuffer.getEnergyStored() - (energyBuffer.getEnergyCapacity() / 2);
                         var euTransferred = data.addEUToGlobalWirelessEnergy(owner, euToTransfer);
                         energyBuffer.changeEnergy(-(euToTransfer - euTransferred));
+                        data.setEnergyBuffered(owner, getPos(), energyBuffer.getEnergyStored());
                     }
                 }
             }
@@ -157,12 +167,96 @@ public class DimensionalEnergyInterface extends WorkableMultiblockMachine
     @Override
     public void addDisplayText(List<Component> textList) {
         IDisplayUIMachine.super.addDisplayText(textList);
+        if (this.isFormed()){
+            // Multiblock status
+            if (!isWorkingEnabled()) textList.add(Component.translatable("gtceu.multiblock.work_paused"));
+            else if (isActive()) textList.add(Component.translatable("gtceu.multiblock.running"));
+            else textList.add(Component.translatable("gtceu.multiblock.idling"));
+
+            if (recipeLogic.isWaiting()) {
+                textList.add(Component.translatable("gtceu.multiblock.waiting").setStyle(Style.EMPTY.withColor(ChatFormatting.RED)));
+            }
+
+            if (energyBuffer != null) {
+                if (getLevel() instanceof ServerLevel serverLevel) {
+                    var owner = getHolder().getOwner().getUUID();
+                    var data = WirelessEnergySavedData.getOrCreate(serverLevel);
+
+                    var STYLE_GOLD = Style.EMPTY.withColor(ChatFormatting.GOLD);
+                    var STYLE_DARK_RED = Style.EMPTY.withColor(ChatFormatting.DARK_RED);
+                    var STYLE_GREEN = Style.EMPTY.withColor(ChatFormatting.GREEN);
+                    var STYLE_RED = Style.EMPTY.withColor(ChatFormatting.RED);
+
+                    textList.add((localDisplay ?
+                            Component.translatable("cosmic.multiblock.capacitor.info.tittle.local") :
+                            Component.translatable("cosmic.multiblock.capacitor.info.tittle.global"))
+                            .append(ComponentPanelWidget.withButton(Component.literal(" [")
+                                    .append(localDisplay ?
+                                            Component.translatable("cosmic.multiblock.capacitor.info.global") :
+                                            Component.translatable("cosmic.multiblock.capacitor.info.local"))
+                                    .append(Component.literal("]")), "local_display")));
+
+                    BigInteger energyStored;
+                    BigInteger energyCapacity;
+                    BigInteger energyBuffered;
+                    long avgIn;
+                    long avgOut;
+
+                    if (localDisplay) {
+                        energyStored = BigInteger.ZERO;
+                        energyCapacity = BigInteger.ZERO;
+                        energyBuffered = BigInteger.ZERO;
+                        avgIn = 0L;
+                        avgOut = 0L;
+                    } else {
+                        energyStored = data.getTotalNetworkEnergyStoredExceptLocalBuffer(owner, getPos());
+                        energyStored = energyStored.add(BigInteger.valueOf(energyBuffer.getEnergyStored()));
+                        energyCapacity = data.getEnergyCapacity(owner);
+                        energyBuffered = data.getEnergyBufferedExceptLocal(owner, getPos());
+                        energyBuffered = energyBuffered.add(BigInteger.valueOf(energyBuffer.getEnergyStored()));
+                        avgIn = data.getEnergyInput(owner);
+                        avgOut = data.getEnergyOutput(owner);
+                    }
+
+                    var storedComponent = Component.literal(CosmicFormattingUtil.formatNumberWithCharacterLimit(energyStored, 12));
+                    textList.add(Component.translatable("gtceu.multiblock.power_substation.stored",
+                            storedComponent.setStyle(STYLE_GOLD)));
+
+                    var capacityComponent = Component.literal(CosmicFormattingUtil.formatNumberWithCharacterLimit(energyCapacity, 12));
+                    textList.add(Component.translatable("gtceu.multiblock.power_substation.capacity",
+                            capacityComponent.setStyle(STYLE_GOLD)));
+
+                    var bufferedComponent = Component.literal(CosmicFormattingUtil.formatNumberWithCharacterLimit(energyBuffered, 12));
+                    textList.add(Component.translatable("cosmic.multiblock.capacitor.buffered",
+                            bufferedComponent.setStyle(STYLE_GOLD)));
+
+                    var avgInComponent = Component.literal(FormattingUtil.formatNumbers(avgIn));
+                    textList.add(Component
+                            .translatable("gtceu.multiblock.power_substation.average_in",
+                                    avgInComponent.setStyle(STYLE_GREEN))
+                            .withStyle(Style.EMPTY.withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT,
+                                    Component.translatable("gtceu.multiblock.power_substation.average_in_hover")))));
+
+                    var avgOutComponent = Component.literal(FormattingUtil.formatNumbers(Math.abs(avgOut)));
+                    textList.add(Component
+                            .translatable("gtceu.multiblock.power_substation.average_out",
+                                    avgOutComponent.setStyle(STYLE_RED))
+                            .withStyle(Style.EMPTY.withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT,
+                                    Component.translatable("gtceu.multiblock.power_substation.average_out_hover")))));
+                }
+            }
+
+        }
         getDefinition().getAdditionalDisplay().accept(this, textList);
     }
 
     @Override
     public void handleDisplayClick(String componentData, ClickData clickData) {
-        IDisplayUIMachine.super.handleDisplayClick(componentData, clickData);
+        if (!clickData.isRemote) {
+            if (componentData.equals("local_display")) {
+                localDisplay = !localDisplay;
+            }
+        }
     }
 
     @Override
