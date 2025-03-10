@@ -32,6 +32,7 @@ bin/
 
 run/
 run-data/
+runs/
 
 # forge generated resources cache
 /src/generated/resources/.cache/
