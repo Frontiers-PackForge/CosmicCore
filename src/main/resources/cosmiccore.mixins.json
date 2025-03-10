@@ -19,7 +19,8 @@
     "client.CosmicCoreRemainingAirOverlayMixin"
   ],
   "client": [
-    "client.MinecraftMixin"
+    "client.MinecraftMixin",
+    "client.SoundManagerMixin"
   ],
   "injectors": {
     "defaultRequire": 1
