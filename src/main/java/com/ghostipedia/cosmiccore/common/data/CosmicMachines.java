@@ -2,7 +2,7 @@ package com.ghostipedia.cosmiccore.common.data;
 
 import com.ghostipedia.cosmiccore.CosmicCore;
 import com.ghostipedia.cosmiccore.api.machine.multiblock.DimensionalEnergyCapacitor;
-import com.ghostipedia.cosmiccore.api.machine.multiblock.DimensionalEnergyCapacitorInterface;
+import com.ghostipedia.cosmiccore.api.machine.multiblock.DimensionalEnergyInterface;
 import com.ghostipedia.cosmiccore.api.machine.multiblock.IPBFMachine;
 import com.ghostipedia.cosmiccore.api.machine.part.CosmicPartAbility;
 import com.ghostipedia.cosmiccore.api.machine.part.SteamFluidHatchPartMachine;
@@ -14,11 +14,9 @@ import com.ghostipedia.cosmiccore.common.data.materials.CosmicMaterials;
 import com.ghostipedia.cosmiccore.common.data.recipe.CosmicRecipeModifiers;
 import com.ghostipedia.cosmiccore.common.machine.WirelessChargerMachine;
 import com.ghostipedia.cosmiccore.common.machine.multiblock.electric.MagneticFieldMachine;
-import com.ghostipedia.cosmiccore.common.machine.multiblock.multi.WirelessDataBankMachine;
 import com.ghostipedia.cosmiccore.common.machine.multiblock.part.CosmicParallelHatchPartMachine;
 import com.ghostipedia.cosmiccore.common.machine.multiblock.part.SoulHatchPartMachine;
 import com.ghostipedia.cosmiccore.common.machine.multiblock.part.ThermiaHatchPartMachine;
-import com.ghostipedia.cosmiccore.common.machine.multiblock.part.WirelessDataHatchPartMachine;
 import com.ghostipedia.cosmiccore.common.machine.multiblock.steam.WeakSteamParallelMultiBlockMachine;
 import com.ghostipedia.cosmiccore.gtbridge.CosmicRecipeTypes;
 
@@ -51,8 +49,6 @@ import com.gregtechceu.gtceu.common.data.*;
 import com.gregtechceu.gtceu.common.machine.multiblock.electric.ActiveTransformerMachine;
 import com.gregtechceu.gtceu.common.data.machines.GTMultiMachines;
 import com.gregtechceu.gtceu.common.machine.multiblock.electric.FusionReactorMachine;
-import com.gregtechceu.gtceu.common.machine.multiblock.electric.PowerSubstationMachine;
-import com.gregtechceu.gtceu.common.machine.storage.CreativeEnergyContainerMachine;
 import com.gregtechceu.gtceu.common.registry.GTRegistration;
 import com.gregtechceu.gtceu.config.ConfigHolder;
 import it.unimi.dsi.fastutil.Pair;
@@ -63,15 +59,12 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 
-import it.unimi.dsi.fastutil.Pair;
-
 import java.util.*;
 import java.util.function.BiFunction;
 
 import static com.ghostipedia.cosmiccore.api.pattern.CosmicPredicates.magnetCoils;
 import static com.ghostipedia.cosmiccore.api.registries.CosmicRegistration.REGISTRATE;
 import static com.ghostipedia.cosmiccore.common.data.CosmicBlocks.*;
-import static com.ghostipedia.cosmiccore.common.data.CosmicMachinesUtils.registerCosmicLargeCombustionEngine;
 import static com.gregtechceu.gtceu.api.GTValues.*;
 import static com.gregtechceu.gtceu.api.GTValues.UV;
 import static com.gregtechceu.gtceu.api.pattern.Predicates.*;
@@ -80,7 +73,6 @@ import static com.gregtechceu.gtceu.common.data.GCYMBlocks.*;
 import static com.gregtechceu.gtceu.common.data.GTBlocks.*;
 import static com.gregtechceu.gtceu.common.data.GTMachines.CREATIVE_TOOLTIPS;
 import static com.gregtechceu.gtceu.common.data.GTRecipeTypes.DUMMY_RECIPES;
-import static com.gregtechceu.gtceu.common.data.GTMachines.CREATIVE_TOOLTIPS;
 import static com.gregtechceu.gtceu.common.data.machines.GTMachineUtils.*;
 import static com.gregtechceu.gtceu.common.data.machines.GTMultiMachines.FUSION_REACTOR;
 
@@ -3146,7 +3138,7 @@ public class CosmicMachines {
             .register();
 
     public static final MultiblockMachineDefinition DIMENSIONAL_ENERGY_CAPACITOR_INTERFACE = REGISTRATE
-            .multiblock("dimensional_energy_interface", DimensionalEnergyCapacitorInterface::new)
+            .multiblock("dimensional_energy_interface", DimensionalEnergyInterface::new)
             .langValue("Dimensional Energy Interface")
             .rotationState(RotationState.ALL)
             .recipeType(GTRecipeTypes.DUMMY_RECIPES)

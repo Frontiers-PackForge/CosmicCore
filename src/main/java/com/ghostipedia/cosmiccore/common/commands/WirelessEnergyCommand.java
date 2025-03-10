@@ -72,7 +72,7 @@ public class WirelessEnergyCommand {
     private static Component generateInfoMessage(ServerLevel serverLevel, UUID owner, Component ownerName) {
         var wirelessData = WirelessEnergySavedData.getOrCreate(serverLevel);
 
-        var message = Component.literal("Wireless Energy NetWork Info ");
+        var message = Component.literal("Wireless Energy Network Info ");
         message.append(" (").append(ownerName).append("):\n");
         message.append("  Capacity: " + FormattingUtil.formatNumbers(wirelessData.getEnergyCapacity(owner)) + " EU\n");
         message.append("  Stored: " + FormattingUtil.formatNumbers(wirelessData.getEnergyStored(owner)) + " EU\n");
@@ -80,6 +80,7 @@ public class WirelessEnergyCommand {
         message.append("  Output: " + FormattingUtil.formatNumbers(wirelessData.getEnergyOutput(owner)) + " EU/t\n");
         message.append("  Buffered: " + FormattingUtil.formatNumbers(wirelessData.getEnergyBuffered(owner)) + " EU\n");
         message.append("  Active: " + wirelessData.isActive(owner));
+        message.append("  Wireless Dimensions: " + String.join(", ", wirelessData.getWirelessDimensions(owner)));
 
         return message;
     }

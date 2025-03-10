@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-public class DimensionalEnergyCapacitor extends DimensionalEnergyCapacitorInterface{
+public class DimensionalEnergyCapacitor extends DimensionalEnergyInterface {
 
     public static final int MAX_BATTERY_LAYER = 18;
     public static final int MIN_CASINGS = 14;

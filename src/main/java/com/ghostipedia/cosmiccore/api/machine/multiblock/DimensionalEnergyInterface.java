@@ -30,14 +30,14 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-public class DimensionalEnergyCapacitorInterface extends WorkableMultiblockMachine
+public class DimensionalEnergyInterface extends WorkableMultiblockMachine
     implements IFancyUIMachine, IDisplayUIMachine {
 
 //    protected static final long ticks_between_save_data_operations = 60L * 20L; // Once per minute
     protected static final long ticks_between_save_data_operations = 10L * 20L; // Once per 10s
 
     protected static final ManagedFieldHolder MANAGED_FIELD_HOLDER = new ManagedFieldHolder(
-            DimensionalEnergyCapacitorInterface.class, WorkableMultiblockMachine.MANAGED_FIELD_HOLDER);
+            DimensionalEnergyInterface.class, WorkableMultiblockMachine.MANAGED_FIELD_HOLDER);
 
     protected IMaintenanceMachine maintenance;
     protected EnergyContainerList inputHatches;
@@ -48,13 +48,11 @@ public class DimensionalEnergyCapacitorInterface extends WorkableMultiblockMachi
 
     // Stats tracked for UI display
     private long netInLastSec;
-    private long averageInLastSec;
     private long netOutLastSec;
-    private long averageOutLastSec;
 
     protected ConditionalSubscriptionHandler tickSubscription;
 
-    public DimensionalEnergyCapacitorInterface(IMachineBlockEntity holder) {
+    public DimensionalEnergyInterface(IMachineBlockEntity holder) {
         super(holder);
         this.tickSubscription = new ConditionalSubscriptionHandler(this, this::transferEnergyTick, this::isFormed);
     }
@@ -115,8 +113,8 @@ public class DimensionalEnergyCapacitorInterface extends WorkableMultiblockMachi
         if (getLevel() instanceof ServerLevel serverLevel) {
             if (getOffsetTimer() % 20 == 0) {
                 // TODO: handle WORKING / IDLE
-                averageInLastSec = netInLastSec / 20;
-                averageOutLastSec = netOutLastSec / 20;
+                long averageInLastSec = netInLastSec / 20;
+                long averageOutLastSec = netOutLastSec / 20;
                 netInLastSec = 0;
                 netOutLastSec = 0;
 
@@ -159,6 +157,7 @@ public class DimensionalEnergyCapacitorInterface extends WorkableMultiblockMachi
     @Override
     public void addDisplayText(List<Component> textList) {
         IDisplayUIMachine.super.addDisplayText(textList);
+        getDefinition().getAdditionalDisplay().accept(this, textList);
     }
 
     @Override

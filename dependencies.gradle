@@ -76,8 +76,8 @@ dependencies {
     modRuntimeOnly(forge.jcpp)
 
     // Teams
-    modCompileOnly(forge.ftblibrary.cm)
-    modCompileOnly(forge.ftbteams.cm)
+    modImplementation(forge.ftblibrary.cm)
+    modImplementation(forge.ftbteams.cm)
 
     // Runtime Recipe Viewers - uncomment whichever one you want to use //
     modRuntimeOnly(forge.emi)
