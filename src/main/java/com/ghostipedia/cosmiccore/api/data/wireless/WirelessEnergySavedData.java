@@ -23,6 +23,7 @@ public class WirelessEnergySavedData extends SavedData {
         public Map<BlockPos, Long> energyInput;
         public Map<BlockPos, Long> energyOutput;
         public Map<BlockPos, Long> energyBuffered;
+        public Map<BlockPos, Long> passiveDrain;
         public List<String> wirelessDimensions;
 
         public WirelessEnergyData() {
@@ -41,6 +42,7 @@ public class WirelessEnergySavedData extends SavedData {
             this.energyInput = new HashMap<>();
             this.energyOutput = new HashMap<>();
             this.energyBuffered = new HashMap<>();
+            this.passiveDrain = new HashMap<>();
             this.wirelessDimensions = wirelessDimensions;
         }
 
@@ -142,6 +144,11 @@ public class WirelessEnergySavedData extends SavedData {
         GlobalWirelessEnergy.get(uuid).energyInput.put(blockPos, input);
     }
 
+    public void removeEnergyInput(UUID uuid, BlockPos blockPos) {
+        GlobalWirelessEnergy.computeIfAbsent(uuid, k -> new WirelessEnergyData());
+        GlobalWirelessEnergy.get(uuid).energyInput.remove(blockPos);
+    }
+
     public long getEnergyOutput(UUID uuid) {
         GlobalWirelessEnergy.computeIfAbsent(uuid, k -> new WirelessEnergyData());
         return GlobalWirelessEnergy.get(uuid).energyOutput.values().stream().mapToLong(Long::longValue).sum();
@@ -150,6 +157,11 @@ public class WirelessEnergySavedData extends SavedData {
     public void setEnergyOutput(UUID uuid, BlockPos blockPos, long input) {
         GlobalWirelessEnergy.computeIfAbsent(uuid, k -> new WirelessEnergyData());
         GlobalWirelessEnergy.get(uuid).energyOutput.put(blockPos, input);
+    }
+
+    public void removeEnergyOutput(UUID uuid, BlockPos blockPos) {
+        GlobalWirelessEnergy.computeIfAbsent(uuid, k -> new WirelessEnergyData());
+        GlobalWirelessEnergy.get(uuid).energyOutput.remove(blockPos);
     }
 
     public BigInteger getEnergyBuffered(UUID uuid) {
@@ -172,6 +184,26 @@ public class WirelessEnergySavedData extends SavedData {
     public void setEnergyBuffered(UUID uuid, BlockPos blockPos, long input) {
         GlobalWirelessEnergy.computeIfAbsent(uuid, k -> new WirelessEnergyData());
         GlobalWirelessEnergy.get(uuid).energyBuffered.put(blockPos, input);
+    }
+
+    public void removeEnergyBuffered(UUID uuid, BlockPos blockPos) {
+        GlobalWirelessEnergy.computeIfAbsent(uuid, k -> new WirelessEnergyData());
+        GlobalWirelessEnergy.get(uuid).energyBuffered.remove(blockPos);
+    }
+
+    public long getPassiveDrain(UUID uuid) {
+        GlobalWirelessEnergy.computeIfAbsent(uuid, k -> new WirelessEnergyData());
+        return GlobalWirelessEnergy.get(uuid).passiveDrain.values().stream().mapToLong(Long::longValue).sum();
+    }
+
+    public void setPassiveDrain(UUID uuid, BlockPos blockPos, long input) {
+        GlobalWirelessEnergy.computeIfAbsent(uuid, k -> new WirelessEnergyData());
+        GlobalWirelessEnergy.get(uuid).passiveDrain.put(blockPos, input);
+    }
+
+    public void removePassiveDrain(UUID uuid, BlockPos blockPos) {
+        GlobalWirelessEnergy.computeIfAbsent(uuid, k -> new WirelessEnergyData());
+        GlobalWirelessEnergy.get(uuid).passiveDrain.remove(blockPos);
     }
 
     public boolean isWirelessActive(UUID uuid, String dimension) {

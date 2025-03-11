@@ -16,7 +16,7 @@ import com.gregtechceu.gtceu.api.machine.feature.multiblock.IMultiPart;
 import com.gregtechceu.gtceu.api.machine.multiblock.WorkableMultiblockMachine;
 import com.gregtechceu.gtceu.api.machine.trait.NotifiableEnergyContainer;
 import com.gregtechceu.gtceu.api.misc.EnergyContainerList;
-import com.gregtechceu.gtceu.utils.FormattingUtil;
+import com.gregtechceu.gtceu.config.ConfigHolder;
 import com.lowdragmc.lowdraglib.gui.modular.ModularUI;
 import com.lowdragmc.lowdraglib.gui.util.ClickData;
 import com.lowdragmc.lowdraglib.gui.widget.*;
@@ -25,10 +25,8 @@ import com.lowdragmc.lowdraglib.syncdata.field.ManagedFieldHolder;
 import com.lowdragmc.lowdraglib.utils.DummyWorld;
 import it.unimi.dsi.fastutil.longs.Long2ObjectMaps;
 import net.minecraft.ChatFormatting;
-import net.minecraft.client.Minecraft;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.HoverEvent;
-import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.chat.Style;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.player.Player;
@@ -38,11 +36,15 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import static com.ghostipedia.cosmiccore.utils.CosmicFormattingUtil.combineWithConstantWidth;
+import static com.ghostipedia.cosmiccore.utils.CosmicFormattingUtil.formatWithConstantWidth;
+
 public class DimensionalEnergyInterface extends WorkableMultiblockMachine
     implements IFancyUIMachine, IDisplayUIMachine {
 
 //    protected static final long ticks_between_save_data_operations = 60L * 20L; // Once per minute
     protected static final long ticks_between_save_data_operations = 10L * 20L; // Once per 10s
+    private static final int uiWidth = 182;
 
     protected static final ManagedFieldHolder MANAGED_FIELD_HOLDER = new ManagedFieldHolder(
             DimensionalEnergyInterface.class, WorkableMultiblockMachine.MANAGED_FIELD_HOLDER);
@@ -50,6 +52,7 @@ public class DimensionalEnergyInterface extends WorkableMultiblockMachine
     protected IMaintenanceMachine maintenance;
     protected EnergyContainerList inputHatches;
     protected EnergyContainerList outputHatches;
+    protected long passiveDrain;
 
     @Persisted
     protected IEnergyContainer energyBuffer;
@@ -91,6 +94,7 @@ public class DimensionalEnergyInterface extends WorkableMultiblockMachine
                 }
             }
         }
+
         this.inputHatches = new EnergyContainerList(inputs);
         this.outputHatches = new EnergyContainerList(outputs);
 
@@ -103,20 +107,52 @@ public class DimensionalEnergyInterface extends WorkableMultiblockMachine
         long totalIOPerTick = (inputHatches.getInputVoltage() + outputHatches.getOutputVoltage());
         // Size is the totalIOPerTick over the duration between operations doubled
         long bufferSize = totalIOPerTick * (ticks_between_save_data_operations + (ticks_between_save_data_operations / 2L)) * 2L;
+        bufferSize += (getPassiveDrainPerTick() * 8 * 2) * ticks_between_save_data_operations; // Add passive drain buffer (8 is max maintenance issues) times two as buffer is twice the throughput size
         if (bufferSize < 0L) throw new RuntimeException("DimensionalEnergyCapacitor: Calculated buffer size is too big.");
         this.energyBuffer = new NotifiableEnergyContainer(this, bufferSize, Long.MAX_VALUE, Long.MAX_VALUE, Long.MAX_VALUE, Long.MAX_VALUE);
+    }
+
+    public long getPassiveDrainPerTick() {
+        return 20_000L; // 0 in the interfaces, Overridden in the Capacitor
+    }
+
+    public long getPassiveDrain() {
+        if (ConfigHolder.INSTANCE.machines.enableMaintenance) {
+            if (maintenance == null) {
+                for (IMultiPart part : getParts()) {
+                    if (part instanceof IMaintenanceMachine maintenanceMachine) {
+                        this.maintenance = maintenanceMachine;
+                        break;
+                    }
+                }
+            }
+            if (maintenance == null) return getPassiveDrainPerTick();
+            int multiplier = 1 + maintenance.getNumMaintenanceProblems();
+            double modifier = maintenance.getDurationMultiplier();
+            return (long) (getPassiveDrainPerTick() * multiplier * modifier);
+        }
+        return getPassiveDrainPerTick();
     }
 
     @Override
     public void onStructureInvalid() {
         if (getLevel() instanceof ServerLevel serverLevel) { // Transfer buffer content to avoid losses
             var data = WirelessEnergySavedData.getOrCreate(serverLevel);
-            data.addEUToGlobalWirelessEnergy(getHolder().getOwner().getUUID(), energyBuffer.getEnergyStored());
+            var owner = getHolder().getOwner().getUUID();
+            data.addEUToGlobalWirelessEnergy(owner, energyBuffer.getEnergyStored());
+            data.removeEnergyBuffered(owner, getPos());
+            data.removeEnergyInput(owner, getPos());
+            data.removeEnergyOutput(owner, getPos());
         }
 
         this.inputHatches = null;
         this.outputHatches = null;
         this.energyBuffer = null;
+        this.passiveDrain = 0;
+        this.netInLastSec = 0;
+        this.averageInLastSec = 0;
+        this.netOutLastSec = 0;
+        this.averageOutLastSec = 0;
 
         super.onStructureInvalid();
     }
@@ -144,6 +180,10 @@ public class DimensionalEnergyInterface extends WorkableMultiblockMachine
                 inputHatches.changeEnergy(-energyBuffered);
                 netInLastSec += energyBuffered;
 
+                // Passive Drain
+                long energyPassiveDrained = energyBuffer.removeEnergy(getPassiveDrain());
+                netOutLastSec += energyPassiveDrained;
+
                 // Handle outputs
                 long energyNeed = outputHatches.getEnergyCapacity() - outputHatches.getEnergyStored();
                 long energyDeBuffered = energyBuffer.removeEnergy(energyNeed);
@@ -160,6 +200,7 @@ public class DimensionalEnergyInterface extends WorkableMultiblockMachine
                         var euTransferred = data.addEUToGlobalWirelessEnergy(owner, euToTransfer);
                         energyBuffer.changeEnergy(-(euToTransfer - euTransferred));
                         data.setEnergyBuffered(owner, getPos(), energyBuffer.getEnergyStored());
+                        data.setPassiveDrain(owner, getPos(), getPassiveDrain());
                     }
                 }
             }
@@ -190,19 +231,24 @@ public class DimensionalEnergyInterface extends WorkableMultiblockMachine
                     var STYLE_GREEN = Style.EMPTY.withColor(ChatFormatting.GREEN);
                     var STYLE_RED = Style.EMPTY.withColor(ChatFormatting.RED);
 
-                    textList.add((localDisplay ?
+                    // Tittle
+                    var buttonComponent = ComponentPanelWidget.withButton(Component.literal("[").append(localDisplay ?
+                                    Component.translatable("cosmic.multiblock.capacitor.info.global") :
+                                    Component.translatable("cosmic.multiblock.capacitor.info.local"))
+                            .append(Component.literal("]")), "local_display");
+                    var labelComponent = localDisplay ?
                             Component.translatable("cosmic.multiblock.capacitor.info.tittle.local") :
-                            Component.translatable("cosmic.multiblock.capacitor.info.tittle.global"))
-                            .append(ComponentPanelWidget.withButton(Component.literal(" [")
-                                    .append(localDisplay ?
-                                            Component.translatable("cosmic.multiblock.capacitor.info.global") :
-                                            Component.translatable("cosmic.multiblock.capacitor.info.local"))
-                                    .append(Component.literal("]")), "local_display")));
+                            Component.translatable("cosmic.multiblock.capacitor.info.tittle.global");
+                    textList.add(localDisplay
+                            ? combineWithConstantWidth(labelComponent, buttonComponent, uiWidth - 4)
+                            : combineWithConstantWidth(buttonComponent, labelComponent, uiWidth - 4));
+
 
                     BigInteger energyCapacity = data.getEnergyCapacity(owner);;
                     BigInteger energyStored = data.getTotalNetworkEnergyStoredExceptLocalBuffer(owner, getPos());
                     energyStored = energyStored.add(BigInteger.valueOf(energyBuffer.getEnergyStored()));
                     BigInteger energyBuffered;
+                    long passiveDrain;
                     long avgIn;
                     long avgOut;
 
@@ -210,30 +256,34 @@ public class DimensionalEnergyInterface extends WorkableMultiblockMachine
                         energyBuffered = BigInteger.valueOf(energyBuffer.getEnergyStored());
                         avgIn = averageInLastSec;
                         avgOut = averageOutLastSec;
+                        passiveDrain = getPassiveDrain();
                     } else {
                         energyBuffered = data.getEnergyBufferedExceptLocal(owner, getPos());
                         energyBuffered = energyBuffered.add(BigInteger.valueOf(energyBuffer.getEnergyStored()));
                         avgIn = data.getEnergyInput(owner);
                         avgOut = data.getEnergyOutput(owner);
+                        passiveDrain = data.getPassiveDrain(owner);
                     }
 
-                    int width = 182 - 32;
                     var storedComponent = Component.literal(CosmicFormattingUtil.formatNumberWithCharacterLimit(energyStored, 12));
-                    textList.add(combineWithConstantWidth("gtceu.multiblock.power_substation.stored", storedComponent.setStyle(STYLE_GOLD), width));
+                    textList.add(formatWithConstantWidth("gtceu.multiblock.power_substation.stored", storedComponent.setStyle(STYLE_GOLD), uiWidth - 4));
 
                     var capacityComponent = Component.literal(CosmicFormattingUtil.formatNumberWithCharacterLimit(energyCapacity, 12));
-                    textList.add(combineWithConstantWidth("gtceu.multiblock.power_substation.capacity", capacityComponent.setStyle(STYLE_GOLD), width));
+                    textList.add(formatWithConstantWidth("gtceu.multiblock.power_substation.capacity", capacityComponent.setStyle(STYLE_GOLD), uiWidth - 4));
 
                     var bufferedComponent = Component.literal(CosmicFormattingUtil.formatNumberWithCharacterLimit(energyBuffered, 12));
-                    textList.add(combineWithConstantWidth("cosmic.multiblock.capacitor.buffered", bufferedComponent.setStyle(STYLE_GOLD), width));
+                    textList.add(formatWithConstantWidth("cosmic.multiblock.capacitor.buffered", bufferedComponent.setStyle(STYLE_GOLD), uiWidth - 4));
+
+                    var passiveDrainComponent = Component.literal(CosmicFormattingUtil.formatNumberWithCharacterLimit(BigInteger.valueOf(passiveDrain), 9));
+                    textList.add(formatWithConstantWidth("gtceu.multiblock.power_substation.passive_drain", passiveDrainComponent.setStyle(STYLE_DARK_RED), uiWidth - 4));
 
                     var avgInComponent = Component.literal(CosmicFormattingUtil.formatNumberWithCharacterLimit(BigInteger.valueOf(avgIn), 10));
-                    textList.add(combineWithConstantWidth("gtceu.multiblock.power_substation.average_in", avgInComponent.setStyle(STYLE_GREEN), width)
+                    textList.add(formatWithConstantWidth("gtceu.multiblock.power_substation.average_in", avgInComponent.setStyle(STYLE_GREEN), uiWidth - 4)
                             .withStyle(Style.EMPTY.withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT,
                                     Component.translatable("gtceu.multiblock.power_substation.average_in_hover")))));
 
                     var avgOutComponent = Component.literal(CosmicFormattingUtil.formatNumberWithCharacterLimit(BigInteger.valueOf(Math.abs(avgOut)), 10));
-                    textList.add(combineWithConstantWidth("gtceu.multiblock.power_substation.average_out", avgOutComponent.setStyle(STYLE_RED), width)
+                    textList.add(formatWithConstantWidth("gtceu.multiblock.power_substation.average_out", avgOutComponent.setStyle(STYLE_RED), uiWidth - 4)
                             .withStyle(Style.EMPTY.withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT,
                                     Component.translatable("gtceu.multiblock.power_substation.average_out_hover")))));
                 }
@@ -241,19 +291,6 @@ public class DimensionalEnergyInterface extends WorkableMultiblockMachine
 
         }
         getDefinition().getAdditionalDisplay().accept(this, textList);
-    }
-
-    private MutableComponent combineWithConstantWidth(String labelKey, Component body, int width) {
-        var tmp = Component.translatable(labelKey, body);
-        var baseLength = getComponentLength(tmp);
-        var spaceLength = width - baseLength;
-        if (spaceLength <= 0) return Component.literal("Err: Too long");
-        var spacerComponent = Component.literal(".".repeat((spaceLength / 2) - 4) + " ").withStyle(ChatFormatting.DARK_GRAY);
-        return Component.translatable(labelKey, spacerComponent.append(body));
-    }
-
-    private int getComponentLength(Component component) {
-        return Minecraft.getInstance().font.width(component.getString());
     }
 
     @Override
@@ -267,16 +304,16 @@ public class DimensionalEnergyInterface extends WorkableMultiblockMachine
 
     @Override
     public Widget createUIWidget() {
-        var group = new WidgetGroup(0, 0, 182 + 8, 117 + 8);
-        group.addWidget(new DraggableScrollableWidgetGroup(4, 4, 182, 117).setBackground(getScreenTexture())
+        var group = new WidgetGroup(0, 0, uiWidth + 8, 117 + 8);
+        group.addWidget(new DraggableScrollableWidgetGroup(4, 4, uiWidth, 117).setBackground(getScreenTexture())
                 .addWidget(new LabelWidget(4, 5, self().getBlockState().getBlock().getDescriptionId()))
-                .addWidget(new ComponentPanelWidget(4, 17, this::addDisplayText).setMaxWidthLimit(150).clickHandler(this::handleDisplayClick)));
+                .addWidget(new ComponentPanelWidget(4, 17, this::addDisplayText).setMaxWidthLimit(uiWidth - 4).clickHandler(this::handleDisplayClick)));
         group.setBackground(GuiTextures.BACKGROUND_INVERSE);
         return group;
     }
 
     @Override
     public ModularUI createUI(Player entityPlayer) {
-        return new ModularUI(198, 208, this, entityPlayer).widget(new FancyMachineUIWidget(this, 198, 208));
+        return new ModularUI(uiWidth + 8, 208, this, entityPlayer).widget(new FancyMachineUIWidget(this, uiWidth + 8, 208));
     }
 }

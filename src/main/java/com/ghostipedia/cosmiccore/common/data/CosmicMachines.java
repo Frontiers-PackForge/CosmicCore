@@ -3153,11 +3153,12 @@ public class CosmicMachines {
             .pattern((definition) -> FactoryBlockPattern.start()
                     .aisle("XXX", "XXX", "XXX")
                     .aisle("XXX", "XCX", "XXX")
-                    .aisle("XXX", "XSX", "XXX")
+                    .aisle("XMX", "XSX", "XXX")
                     .where('S', controller(blocks(definition.getBlock())))
                     .where('X', blocks(CASING_PALLADIUM_SUBSTATION.get()).setMinGlobalLimited(12)
                             .or(ActiveTransformerMachine.getHatchPredicates()))
                     .where('C', blocks(GTBlocks.SUPERCONDUCTING_COIL.get()))
+                    .where('M', blocks(CASING_PALLADIUM_SUBSTATION.get()).or(autoAbilities(true, false, false)))
                     .build())
             .workableCasingRenderer(GTCEu.id("block/casings/solid/machine_casing_palladium_substation"),
                     GTCEu.id("block/multiblock/data_bank"))

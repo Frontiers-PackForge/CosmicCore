@@ -4,18 +4,33 @@ import com.ghostipedia.cosmiccore.api.data.wireless.WirelessEnergySavedData;
 import com.gregtechceu.gtceu.api.machine.IMachineBlockEntity;
 import com.gregtechceu.gtceu.api.machine.multiblock.IBatteryData;
 import com.gregtechceu.gtceu.common.machine.multiblock.electric.PowerSubstationMachine;
+import com.lowdragmc.lowdraglib.syncdata.annotation.Persisted;
+import com.lowdragmc.lowdraglib.syncdata.field.ManagedFieldHolder;
 import lombok.Getter;
 import net.minecraft.server.level.ServerLevel;
 
 import java.math.BigInteger;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
 public class DimensionalEnergyCapacitor extends DimensionalEnergyInterface {
 
+    protected static final ManagedFieldHolder MANAGED_FIELD_HOLDER = new ManagedFieldHolder(
+            DimensionalEnergyCapacitor.class, DimensionalEnergyInterface.MANAGED_FIELD_HOLDER);
+
     public static final int MAX_BATTERY_LAYER = 18;
     public static final int MIN_CASINGS = 14;
+
+    // Passive Drain Constants
+    // 1% capacity per 24 hours
+    public static final long PASSIVE_DRAIN_DIVISOR = 20 * 60 * 60 * 24 * 100;
+    // no more than 100kEU/t per storage block
+    public static final long PASSIVE_DRAIN_MAX_PER_STORAGE = 100_000L;
+
+    @Persisted
+    private long[] capacities;
 
 
     public DimensionalEnergyCapacitor(IMachineBlockEntity holder) {
@@ -25,8 +40,6 @@ public class DimensionalEnergyCapacitor extends DimensionalEnergyInterface {
 
     @Override
     public void onStructureFormed() {
-        super.onStructureFormed();
-
         List<IBatteryData> batteries = new ArrayList<>();
         for (Map.Entry<String, Object> battery : getMultiblockState().getMatchContext().entrySet()) {
             if (battery.getKey().startsWith(PowerSubstationMachine.PMC_BATTERY_HEADER)
@@ -37,10 +50,14 @@ public class DimensionalEnergyCapacitor extends DimensionalEnergyInterface {
             }
         }
 
+        this.capacities = batteries.stream().mapToLong(IBatteryData::getCapacity).toArray();
+
         if (batteries.isEmpty()) {
             onStructureInvalid();
             return;
         }
+
+        super.onStructureFormed(); // This order is important do not move
 
         if (getLevel() instanceof ServerLevel serverLevel) {
             var owner = getHolder().getOwner().getUUID();
@@ -63,6 +80,13 @@ public class DimensionalEnergyCapacitor extends DimensionalEnergyInterface {
             var wirelessData = WirelessEnergySavedData.getOrCreate(serverLevel);
             wirelessData.setActive(owner, false);
         }
+        this.capacities = null;
+    }
+
+    @Override
+    public long getPassiveDrainPerTick() {
+        long[] drains = Arrays.stream(capacities).map(cap -> Math.min(PASSIVE_DRAIN_MAX_PER_STORAGE, cap / PASSIVE_DRAIN_DIVISOR)).toArray();
+        return Arrays.stream(drains).sum();
     }
 
     @Getter
