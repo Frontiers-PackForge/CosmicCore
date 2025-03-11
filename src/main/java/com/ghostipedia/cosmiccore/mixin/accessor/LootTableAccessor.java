@@ -11,6 +11,6 @@ import java.util.List;
 @Mixin(LootTable.class)
 public interface LootTableAccessor {
 
-    @Accessor(value = "pools", remap = false)
+    @Accessor(value = "pools")
     List<LootPool> getPools();
 }
