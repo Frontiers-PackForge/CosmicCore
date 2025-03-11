@@ -8,6 +8,7 @@ import com.gregtechceu.gtceu.api.machine.IMachineBlockEntity;
 import com.gregtechceu.gtceu.api.machine.MetaMachine;
 import com.gregtechceu.gtceu.api.machine.feature.IFancyUIMachine;
 import com.gregtechceu.gtceu.api.machine.feature.IMachineLife;
+import com.gregtechceu.gtceu.api.machine.multiblock.WorkableMultiblockMachine;
 import com.gregtechceu.gtceu.api.machine.multiblock.part.MultiblockPartMachine;
 import com.gregtechceu.gtceu.api.machine.trait.NotifiableItemStackHandler;
 import com.gregtechceu.gtceu.api.transfer.item.CustomItemStackHandler;
@@ -34,7 +35,7 @@ public class CropHolderPartMachines extends MultiblockPartMachine implements IMa
     @Persisted
     @DescSynced
     private boolean isLocked;
-
+    protected  static final ManagedFieldHolder MANAGED_FIELD_HOLDER = new ManagedFieldHolder(CropHolderPartMachines.class, MultiblockPartMachine.MANAGED_FIELD_HOLDER);
     public CropHolderPartMachines(IMachineBlockEntity holder) {
         super(holder);
         heldCrops = new CropHolderHandler(this);

@@ -140,10 +140,6 @@ public class CosmicLangHandler {
         replace(provider, "cosmiccore.conjuct_valkruth.2", "§6Ruth - Foundation");
         replace(provider, "cosmiccore.conjuct_valkruth_emotion.1", "§bE.R.A -  Convergence");
 
-        replace(provider, "block.cosmiccore.crop_holder",
-                "§aCrop Holder");
-
-
         replace(provider, "item.cosmiccore.the_one_ring.tooltip.0",
                 "§6§oOne Ring to rule them all, One Ring to find them, One Ring to bring them all and in the darkness bind them.§r");
         replace(provider, "item.cosmiccore.the_one_ring.tooltip.1", "You might find it hard to take off.");
