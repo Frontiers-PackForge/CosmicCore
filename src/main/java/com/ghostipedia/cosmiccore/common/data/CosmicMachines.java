@@ -3069,6 +3069,7 @@ public class CosmicMachines {
                         }).register(),
                 tiers);
     }
+
     public static final MachineDefinition CROP_HOLDER = REGISTRATE.machine("crop_holder", CropHolderPartMachines::new)
             .langValue("Crop Holder")
             .tier(HV)
@@ -3143,12 +3144,6 @@ public class CosmicMachines {
     public static void init() {
         GTMultiMachines.LARGE_COMBUSTION_ENGINE.setRecipeTypes(new GTRecipeType[] { DUMMY_RECIPES });
         GTMultiMachines.EXTREME_COMBUSTION_ENGINE.setRecipeTypes(new GTRecipeType[] { DUMMY_RECIPES });
-
-
-
-
-
-
 
         for (MultiblockMachineDefinition definition : FUSION_REACTOR) {
             if (definition == null) continue;
