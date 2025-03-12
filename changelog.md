@@ -1,5 +1,5 @@
-# Cosmic Core 0.6.1
+# Cosmic Core 0.6.3
 ## Added Items
-* Prismatic TungstenSteel texture refactor
+* Updated ARAM Textures, Lang Fixes
 
 # DO NOT MANUALLY UPDATE COSMIC CORE FOR FRONTIERS **I WILL NOT WORK**
