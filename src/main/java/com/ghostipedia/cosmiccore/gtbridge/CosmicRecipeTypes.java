@@ -37,6 +37,13 @@ public class CosmicRecipeTypes {
     public static final GTRecipeType LEACHING_PLANT = GTRecipeTypes.register("leaching_plant", GTRecipeTypes.MULTIBLOCK)
             .setMaxIOSize(3, 6, 3, 3)
             .setProgressBar(GuiTextures.PROGRESS_BAR_ARROW, ProgressTexture.FillDirection.LEFT_TO_RIGHT);
+
+    public static final GTRecipeType HELLFIRE_FOUNDRY = GTRecipeTypes
+            .register("hellfire_foundry", GTRecipeTypes.MULTIBLOCK)
+            .setMaxIOSize(5, 1, 1, 0)
+            .setMaxSize(IO.IN, SoulRecipeCapability.CAP, 1)
+            .setMaxTooltips(4)
+            .setProgressBar(GuiTextures.PROGRESS_BAR_ARROW, ProgressTexture.FillDirection.ALWAYS_FULL);
     public static final GTRecipeType CHROMATIC_FLOTATION_PLANT = GTRecipeTypes
             .register("chromatic_flotation_plant", GTRecipeTypes.MULTIBLOCK)
             .setMaxIOSize(3, 9, 3, 3)

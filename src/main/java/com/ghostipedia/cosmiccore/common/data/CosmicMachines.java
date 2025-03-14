@@ -5,6 +5,7 @@ import com.ghostipedia.cosmiccore.api.machine.multiblock.IPBFMachine;
 import com.ghostipedia.cosmiccore.api.machine.part.CosmicPartAbility;
 import com.ghostipedia.cosmiccore.api.machine.part.SteamFluidHatchPartMachine;
 import com.ghostipedia.cosmiccore.api.registries.CosmicRegistration;
+import com.ghostipedia.cosmiccore.client.renderer.machine.HellFireFoundryWorkableRenderer;
 import com.ghostipedia.cosmiccore.client.renderer.machine.SidedWorkableHullRenderer;
 import com.ghostipedia.cosmiccore.common.block.WorkableSteamHullType;
 import com.ghostipedia.cosmiccore.common.block.debug.CreativeThermiaContainerMachine;
@@ -52,10 +53,12 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 
 import it.unimi.dsi.fastutil.Pair;
+import wayoftime.bloodmagic.BloodMagic;
 
 import java.util.*;
 import java.util.function.BiFunction;
 
+import static com.ghostipedia.cosmiccore.api.machine.part.CosmicPartAbility.IMPORT_SOUL;
 import static com.ghostipedia.cosmiccore.api.pattern.CosmicPredicates.magnetCoils;
 import static com.ghostipedia.cosmiccore.api.registries.CosmicRegistration.REGISTRATE;
 import static com.ghostipedia.cosmiccore.common.data.CosmicBlocks.*;
@@ -70,6 +73,8 @@ import static com.gregtechceu.gtceu.common.data.GTMachines.CREATIVE_TOOLTIPS;
 import static com.gregtechceu.gtceu.common.data.GTRecipeTypes.DUMMY_RECIPES;
 import static com.gregtechceu.gtceu.common.data.machines.GTMachineUtils.*;
 import static com.gregtechceu.gtceu.common.data.machines.GTMultiMachines.FUSION_REACTOR;
+import static com.klikli_dev.occultism.registry.OccultismBlocks.IESNIUM_BLOCK;
+import static wayoftime.bloodmagic.common.block.BloodMagicBlocks.BLANK_RUNE;
 
 public class CosmicMachines {
 
@@ -82,7 +87,7 @@ public class CosmicMachines {
 
     public final static MachineDefinition[] SOUL_IMPORT_HATCH = registerSoulTieredHatch(
             "soul_input_hatch", "Soul Input Hatch", "soul_hatch.import",
-            IO.IN, HIGH_TIERS, CosmicPartAbility.IMPORT_SOUL);
+            IO.IN, HIGH_TIERS, IMPORT_SOUL);
 
     public static final MachineDefinition[] SOUL_EXPORT_HATCH = registerSoulTieredHatch(
             "soul_output_hatch", "Soul Output Hatch", "soul_hatch.export",
@@ -328,7 +333,7 @@ public class CosmicMachines {
                             .or(abilities(PartAbility.EXPORT_ITEMS))
                             .or(abilities(PartAbility.INPUT_ENERGY))
                             .or(abilities(PartAbility.MAINTENANCE))
-                            .or(abilities(CosmicPartAbility.IMPORT_SOUL)))
+                            .or(abilities(IMPORT_SOUL)))
                     .build())
             .workableCasingRenderer(GTCEu.id("block/casings/solid/machine_casing_clean_stainless_steel"),
                     GTCEu.id("block/multiblock/data_bank"))
@@ -646,6 +651,40 @@ public class CosmicMachines {
             .workableCasingRenderer(CosmicCore.id("block/casings/solid/vomahine_certified_chemically_resistant_casing"),
                     CosmicCore.id("block/multiblock/vomahine_chemplant"))
             .register();
+
+    public static final MultiblockMachineDefinition HELLFIRE_FOUNDRY = REGISTRATE
+            .multiblock("hellfire_foundry", WorkableElectricMultiblockMachine::new)
+            .recipeType(CosmicRecipeTypes.HELLFIRE_FOUNDRY)
+            .rotationState(RotationState.NON_Y_AXIS)
+            .partAppearance((controller, part, side) -> HIGHLY_CONDUCTIVE_FISSION_CASING.getDefaultState())
+            .recipeModifiers(GTRecipeModifiers.PARALLEL_HATCH,
+                    GTRecipeModifiers.ELECTRIC_OVERCLOCK.apply(OverclockingLogic.PERFECT_OVERCLOCK))
+            .pattern(definition -> FactoryBlockPattern.start()
+                    .aisle("         ", "         ", " AAAAAAA ", "  AAAAA  ", "         ", "         ", "         ")
+                    .aisle(" AA   AA ", "         ", "ABBBBBBBA", " BBBBBBB ", " BB   BB ", " B     B ", " C     C ")
+                    .aisle(" A     A ", "  A   A  ", "ABBBBBBBA", "ABB   BBA", " B     B ", "         ", "         ")
+                    .aisle("         ", "         ", "ABBBBBBBA", "AB CCC BA", "         ", "         ", "         ")
+                    .aisle("         ", "         ", "ABBBBBBBA", "AB CXC BA", "         ", "         ", "         ")
+                    .aisle("         ", "         ", "ABBBBBBBA", "AB CCC BA", "         ", "         ", "         ")
+                    .aisle(" A     A ", "  A   A  ", "ABBBBBBBA", "ABB   BBA", " B     B ", "         ", "         ")
+                    .aisle(" AA   AA ", "         ", "ABBBBBBBA", " BBBBBBB ", " BB   BB ", " B     B ", " C     C ")
+                    .aisle("         ", "         ", " AAAAAAA ", "  AAQAA  ", "         ", "         ", "         ")
+                    .where('Q', Predicates.controller(Predicates.blocks(definition.get())))
+                    .where(' ', Predicates.any())
+                    .where('A', blocks(BLANK_RUNE.get()))
+                    .where('B', blocks(HIGHLY_CONDUCTIVE_FISSION_CASING.get()).setMinGlobalLimited(70)
+                            .or(autoAbilities(CosmicRecipeTypes.HELLFIRE_FOUNDRY))
+                            .or(abilities(PartAbility.MAINTENANCE).setExactLimit(1))
+                            .or(abilities(PartAbility.INPUT_ENERGY).setExactLimit(1)))
+                    .where('X', abilities(IMPORT_SOUL).setMinGlobalLimited(1, 1).setMaxGlobalLimited(1))
+                    .where('C', blocks(IESNIUM_BLOCK.get()))
+                    .build())
+            .renderer(() -> new HellFireFoundryWorkableRenderer(
+                    BloodMagic.rl("block/blankrune"),
+                    CosmicCore.id("block/casings/solid/highly_conductive_fission_casing"),
+                    GTCEu.id("block/multiblock/network_switch")))
+            .register();
+
     public final static MultiblockMachineDefinition CELESTIAL_BORE = REGISTRATE.multiblock(
             "vomahine_celestial_laser_bore", WorkableElectricMultiblockMachine::new)
             .rotationState(RotationState.ALL)
