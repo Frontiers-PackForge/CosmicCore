@@ -79,8 +79,9 @@ public class WirelessEnergyCommand {
         message.append("  Input: " + FormattingUtil.formatNumbers(wirelessData.getEnergyInput(owner)) + " EU/t\n");
         message.append("  Output: " + FormattingUtil.formatNumbers(wirelessData.getEnergyOutput(owner)) + " EU/t\n");
         message.append("  Buffered: " + FormattingUtil.formatNumbers(wirelessData.getEnergyBuffered(owner)) + " EU\n");
-        message.append("  Active: " + wirelessData.isActive(owner));
-        message.append("  Wireless Dimensions: " + String.join(", ", wirelessData.getWirelessDimensions(owner)));
+        message.append("  Active: " + wirelessData.isActive(owner) + "\n");
+        message.append("  Wireless Dimensions:");
+        for (var dimension : wirelessData.getWirelessDimensions(owner)) message.append("\n    - " + dimension);
 
         return message;
     }

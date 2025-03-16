@@ -24,18 +24,18 @@ public class WirelessEnergySavedData extends SavedData {
         public Map<BlockPos, Long> energyOutput;
         public Map<BlockPos, Long> energyBuffered;
         public Map<BlockPos, Long> passiveDrain;
-        public List<String> wirelessDimensions;
+        public Set<String> wirelessDimensions;
 
         public WirelessEnergyData() {
-            this(BigInteger.ZERO, BigInteger.valueOf(-1), false, new ArrayList<>());
+            this(BigInteger.ZERO, BigInteger.valueOf(-1), false, new HashSet<>());
         }
 
         public WirelessEnergyData(BigInteger energyStored, BigInteger energyCapacity) {
-            this(energyStored, energyCapacity, false, new ArrayList<>());
+            this(energyStored, energyCapacity, false, new HashSet<>());
         }
 
         public WirelessEnergyData(BigInteger energyStored, BigInteger energyCapacity, boolean isActive,
-                                  List<String> wirelessDimensions) {
+                                  Set<String> wirelessDimensions) {
             this.energyStored = energyStored;
             this.energyCapacity = energyCapacity;
             this.isActive = isActive;
@@ -51,7 +51,7 @@ public class WirelessEnergySavedData extends SavedData {
             var capacity = new BigInteger(nbt.getByteArray("energyCapacity"));
             var active = nbt.getBoolean("isActive");
             var dimensionsListTag = nbt.getList("wirelessDimensions", Tag.TAG_STRING);
-            var dimensionsList = new ArrayList<String>();
+            var dimensionsList = new HashSet<String>();
             for (var tag : dimensionsListTag) dimensionsList.add(tag.getAsString());
             return new WirelessEnergyData(stored, capacity, active, dimensionsList);
         }
@@ -211,9 +211,20 @@ public class WirelessEnergySavedData extends SavedData {
         return GlobalWirelessEnergy.get(uuid).wirelessDimensions.contains(dimension);
     }
 
+    public void addWirelessDimensions(UUID uuid, String dimension) {
+        GlobalWirelessEnergy.computeIfAbsent(uuid, k -> new WirelessEnergyData());
+        GlobalWirelessEnergy.get(uuid).wirelessDimensions.add(dimension);
+    }
+
+    public void removeWirelessDimensions(UUID uuid, String dimension) {
+        GlobalWirelessEnergy.computeIfAbsent(uuid, k -> new WirelessEnergyData());
+        GlobalWirelessEnergy.get(uuid).wirelessDimensions.remove(dimension);
+    }
+
+
     public List<String> getWirelessDimensions(UUID uuid) {
         GlobalWirelessEnergy.computeIfAbsent(uuid, k -> new WirelessEnergyData());
-        return GlobalWirelessEnergy.get(uuid).wirelessDimensions;
+        return GlobalWirelessEnergy.get(uuid).wirelessDimensions.stream().toList();
     }
 
     /**
