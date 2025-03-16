@@ -35,12 +35,19 @@ jobs:
       - name: Setup Gradle Wrapper
         run: chmod +x gradlew
 
-      - name: Get Version and Platform
-        id: properties
+      - name: Get Version
+        id: gradle_properties
         uses: christian-draeger/read-properties@1.1.1
         with:
           path: ./gradle.properties
-          properties: "mod_version minecraft_version"
+          properties: "mod_version"
+
+      - name: Get minecraft version
+        id: toml_properties
+        uses: SebRollen/toml-action@v1.2.0
+        with:
+          file: ./gradle/libs.versions.toml
+          field: "versions.minecraft"
 
       - name: Build Project
         run: ./gradlew build
@@ -54,12 +61,12 @@ jobs:
 
           github-token: ${{ secrets.GITHUB_TOKEN }}
           github-generate-changelog: true
-          github-tag: "${{ steps.properties.outputs.minecraft_version }}-${{ steps.properties.outputs.mod_version }}"
+          github-tag: "${{ steps.toml_properties.outputs.value }}-${{ steps.gradle_properties.outputs.mod_version }}"
 
-          files: ./build/libs/!(*-@(dev|sources|dev-shadow)).jar
-          name: "Cosmic Core ${{ steps.properties.outputs.mod_version }}"
-          version: ${{ steps.properties.outputs.mod_version }}
+          files: ./build/libs/!(*-@(dev|sources|dev-slim)).jar
+          name: "Cosmic Core ${{ steps.gradle_properties.outputs.mod_version }}"
+          version: ${{ steps.gradle_properties.outputs.mod_version }}
           version-type: ${{ inputs.version_type }}
           changelog-file: changelog.md
           loaders: forge
-          game-versions: ${{ steps.properties.outputs.minecraft_version }}
+          game-versions: ${{ steps.gradle_properties.outputs.mod_version }}
