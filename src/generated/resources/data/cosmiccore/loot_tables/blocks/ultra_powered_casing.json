@@ -11,11 +11,11 @@
       "entries": [
         {
           "type": "minecraft:item",
-          "name": "cosmiccore:vomahine_ultra_powered_casing"
+          "name": "cosmiccore:ultra_powered_casing"
         }
       ],
       "rolls": 1.0
     }
   ],
-  "random_sequence": "cosmiccore:blocks/vomahine_ultra_powered_casing"
+  "random_sequence": "cosmiccore:blocks/ultra_powered_casing"
 }

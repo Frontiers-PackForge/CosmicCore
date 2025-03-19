@@ -80,8 +80,8 @@ public class CosmicRecipeTypes {
             .setMaxIOSize(1, 0, 1, 0)
             .setSound(GTSoundEntries.ARC)
             .setProgressBar(GuiTextures.PROGRESS_BAR_GAS_COLLECTOR, ProgressTexture.FillDirection.DOWN_TO_UP);
-    public static final GTRecipeType VOMAHINE_INDUSTRIAL_CHEMVAT = GTRecipeTypes
-            .register("vomahine_industrial_chemvat", GTRecipeTypes.MULTIBLOCK)
+    public static final GTRecipeType INDUSTRIAL_CHEMVAT = GTRecipeTypes
+            .register("industrial_chemvat", GTRecipeTypes.MULTIBLOCK)
             .setMaxIOSize(6, 6, 6, 6)
             .setHasResearchSlot(true)
             .setSound(GTSoundEntries.CHEMICAL)
@@ -95,7 +95,7 @@ public class CosmicRecipeTypes {
     // Todo - Custom JEI page / Custom Heating Logic, Custom Slag Generation Logic, THE WHOLE FUCKING PIPENET PROPERTY
     // DEDICATED TO SUPERMOLTEN SLAG [FEAR]
     public static final GTRecipeType VOMAHINE_CORE_DRILL = GTRecipeTypes
-            .register("vomahine_core_drill", GTRecipeTypes.MULTIBLOCK)
+            .register("core_drill", GTRecipeTypes.MULTIBLOCK)
             .setMaxIOSize(3, 6, 3, 6)
             .setHasResearchSlot(true)
             .setSound(GTSoundEntries.REPLICATOR) // TODO - Sounds, VFX
@@ -163,11 +163,11 @@ public class CosmicRecipeTypes {
         CHEMICAL_RECIPES.onRecipeBuild((builder, provider) -> {
             LARGE_CHEMICAL_RECIPES.copyFrom(builder)
                     .save(provider);
-            VOMAHINE_INDUSTRIAL_CHEMVAT.copyFrom(builder)
+            INDUSTRIAL_CHEMVAT.copyFrom(builder)
                     .save(provider);
         });
         LARGE_CHEMICAL_RECIPES.onRecipeBuild((builder, provider) -> {
-            VOMAHINE_INDUSTRIAL_CHEMVAT.copyFrom(builder)
+            INDUSTRIAL_CHEMVAT.copyFrom(builder)
                     .save(provider);
         });
     }

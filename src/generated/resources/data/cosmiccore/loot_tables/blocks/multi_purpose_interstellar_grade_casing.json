@@ -11,11 +11,11 @@
       "entries": [
         {
           "type": "minecraft:item",
-          "name": "cosmiccore:vomahine_certified_chemically_resistant_casing"
+          "name": "cosmiccore:multi_purpose_interstellar_grade_casing"
         }
       ],
       "rolls": 1.0
     }
   ],
-  "random_sequence": "cosmiccore:blocks/vomahine_certified_chemically_resistant_casing"
+  "random_sequence": "cosmiccore:blocks/multi_purpose_interstellar_grade_casing"
 }
