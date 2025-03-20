@@ -47,13 +47,13 @@ public class CosmicItems {
     static {
         CosmicRegistration.REGISTRATE.creativeModeTab(() -> CosmicCreativeModeTabs.COSMIC_CORE);
         ORB_ASCENDANT = BLOOD_ORBS.register("ascendantbloodorb", () -> {
-            return new BloodOrb(new ResourceLocation("bloodmagic", "ascendantbloodorb"), 5, 25000000, 1000);
+            return new BloodOrb(new ResourceLocation("bloodmagic", "ascendantbloodorb"), 6, 25000000, 1000);
         });
         ORB_VOIDSENT = BLOOD_ORBS.register("voidsentbloodorb", () -> {
-            return new BloodOrb(new ResourceLocation("bloodmagic", "voidsentbloodorb"), 5, 50000000, 1000);
+            return new BloodOrb(new ResourceLocation("bloodmagic", "voidsentbloodorb"), 7, 50000000, 1000);
         });
         ORB_SOVEREIGN = BLOOD_ORBS.register("sovereignbloodorb", () -> {
-            return new BloodOrb(new ResourceLocation("bloodmagic", "sovereignbloodorb"), 5, 100000000, 10000);
+            return new BloodOrb(new ResourceLocation("bloodmagic", "sovereignbloodorb"), 8, 100000000, 10000);
         });
     }
 
