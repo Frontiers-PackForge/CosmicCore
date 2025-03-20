@@ -5,8 +5,8 @@ import com.gregtechceu.gtceu.api.registry.GTRegistries;
 
 public class CosmicElements {
 
-    public static final Element Pi = createAndRegister(1, 0, -1, null, "Prisma", "Pi", false);
-    public static final Element ViR = createAndRegister(35, 450, -1, null, "Virtue", "ERROR", false);
+    public static final Element Pi = createAndRegister(1, 0, -1, null, "Prisma", "", false);
+    public static final Element ViR = createAndRegister(35, 450, -1, null, "Virtue", "", false);
 
     public static Element createAndRegister(long protons, long neutrons, long halfLifeSeconds, String decayTo,
                                             String name, String symbol, boolean isIsotope) {

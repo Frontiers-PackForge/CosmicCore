@@ -79,6 +79,11 @@ dependencies {
     modCompileOnly(forge.ftblibrary.cm)
     modCompileOnly(forge.ftbteams.cm)
 
+    //Occultism & Dependencies
+    modImplementation(forge.occultism)
+    modImplementation(forge.geckoLib)
+    modImplementation(forge.modonomicon)
+    modImplementation(forge.smartBrainLib)
     // Runtime Recipe Viewers - uncomment whichever one you want to use //
     modRuntimeOnly(forge.emi)
     // modRuntimeOnly(forge.jei.forge.impl)

@@ -5,6 +5,7 @@ import com.ghostipedia.cosmiccore.api.machine.multiblock.IPBFMachine;
 import com.ghostipedia.cosmiccore.api.machine.part.CosmicPartAbility;
 import com.ghostipedia.cosmiccore.api.machine.part.SteamFluidHatchPartMachine;
 import com.ghostipedia.cosmiccore.api.registries.CosmicRegistration;
+import com.ghostipedia.cosmiccore.client.renderer.machine.HellFireFoundryWorkableRenderer;
 import com.ghostipedia.cosmiccore.client.renderer.machine.SidedWorkableHullRenderer;
 import com.ghostipedia.cosmiccore.common.block.WorkableSteamHullType;
 import com.ghostipedia.cosmiccore.common.block.debug.CreativeThermiaContainerMachine;
@@ -52,10 +53,12 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 
 import it.unimi.dsi.fastutil.Pair;
+import wayoftime.bloodmagic.BloodMagic;
 
 import java.util.*;
 import java.util.function.BiFunction;
 
+import static com.ghostipedia.cosmiccore.api.machine.part.CosmicPartAbility.IMPORT_SOUL;
 import static com.ghostipedia.cosmiccore.api.pattern.CosmicPredicates.magnetCoils;
 import static com.ghostipedia.cosmiccore.api.registries.CosmicRegistration.REGISTRATE;
 import static com.ghostipedia.cosmiccore.common.data.CosmicBlocks.*;
@@ -70,6 +73,8 @@ import static com.gregtechceu.gtceu.common.data.GTMachines.CREATIVE_TOOLTIPS;
 import static com.gregtechceu.gtceu.common.data.GTRecipeTypes.DUMMY_RECIPES;
 import static com.gregtechceu.gtceu.common.data.machines.GTMachineUtils.*;
 import static com.gregtechceu.gtceu.common.data.machines.GTMultiMachines.FUSION_REACTOR;
+import static com.klikli_dev.occultism.registry.OccultismBlocks.IESNIUM_BLOCK;
+import static wayoftime.bloodmagic.common.block.BloodMagicBlocks.BLANK_RUNE;
 
 public class CosmicMachines {
 
@@ -82,7 +87,7 @@ public class CosmicMachines {
 
     public final static MachineDefinition[] SOUL_IMPORT_HATCH = registerSoulTieredHatch(
             "soul_input_hatch", "Soul Input Hatch", "soul_hatch.import",
-            IO.IN, HIGH_TIERS, CosmicPartAbility.IMPORT_SOUL);
+            IO.IN, HIGH_TIERS, IMPORT_SOUL);
 
     public static final MachineDefinition[] SOUL_EXPORT_HATCH = registerSoulTieredHatch(
             "soul_output_hatch", "Soul Output Hatch", "soul_hatch.export",
@@ -328,7 +333,7 @@ public class CosmicMachines {
                             .or(abilities(PartAbility.EXPORT_ITEMS))
                             .or(abilities(PartAbility.INPUT_ENERGY))
                             .or(abilities(PartAbility.MAINTENANCE))
-                            .or(abilities(CosmicPartAbility.IMPORT_SOUL)))
+                            .or(abilities(IMPORT_SOUL)))
                     .build())
             .workableCasingRenderer(GTCEu.id("block/casings/solid/machine_casing_clean_stainless_steel"),
                     GTCEu.id("block/multiblock/data_bank"))
@@ -446,7 +451,7 @@ public class CosmicMachines {
             .rotationState(RotationState.ALL)
             .recipeType(CosmicRecipeTypes.CHROMATIC_FLOTATION_PLANT)
             .recipeModifier(GTRecipeModifiers.ELECTRIC_OVERCLOCK.apply(OverclockingLogic.NON_PERFECT_OVERCLOCK))
-            .appearanceBlock(CosmicBlocks.VOMAHINE_CERTIFIED_CHEMICALLY_RESISTANT_CASING)
+            .appearanceBlock(CosmicBlocks.CYCLOZINE_CHEMICALLY_REPELLING_CASING)
             .generator(true)
             .pattern(definition -> FactoryBlockPattern.start()
                     .aisle("                                   ", "                                   ",
@@ -591,11 +596,11 @@ public class CosmicMachines {
                             "                                   ")
                     .where(' ', any())
                     .where("X", controller(blocks(definition.getBlock())))
-                    .where('C', blocks(VOMAHINE_CERTIFIED_INTERSTELLAR_GRADE_CASING.get()))
-                    .where('A', blocks(VOMAHINE_CERTIFIED_CHEMICALLY_RESISTANT_CASING.get()))
+                    .where('C', blocks(MULTIPURPOSE_INTERSTELLAR_GRADE_CASING.get()))
+                    .where('A', blocks(CYCLOZINE_CHEMICALLY_REPELLING_CASING.get()))
                     .where('E', heatingCoils())
-                    .where('B', blocks(VOMAHINE_ULTRA_POWERED_CASING.get()))
-                    .where('D', blocks(VOMAHINE_CERTIFIED_CHEMICALLY_RESISTANT_PIPE.get()))
+                    .where('B', blocks(ULTRA_POWERED_CASING.get()))
+                    .where('D', blocks(CYCLOZINE_CHEMICALLY_REPELLING_PIPE.get()))
                     .where('F', blocks(HEAT_VENT.get()))
                     .build())
             .workableCasingRenderer(CosmicCore.id("block/casings/solid/vomahine_certified_chemically_resistant_casing"),
@@ -604,9 +609,9 @@ public class CosmicMachines {
     public final static MultiblockMachineDefinition VOMAHINE_INDUSTRIAL_CHEMPLANT = REGISTRATE
             .multiblock("vomahine_industrial_chemical_plant", WorkableElectricMultiblockMachine::new)
             .rotationState(RotationState.ALL)
-            .recipeTypes(CosmicRecipeTypes.VOMAHINE_INDUSTRIAL_CHEMVAT, GTRecipeTypes.CRACKING_RECIPES)
+            .recipeTypes(CosmicRecipeTypes.INDUSTRIAL_CHEMVAT, GTRecipeTypes.CRACKING_RECIPES)
             .recipeModifiers(GTRecipeModifiers.ELECTRIC_OVERCLOCK.apply(OverclockingLogic.NON_PERFECT_OVERCLOCK))
-            .appearanceBlock(VOMAHINE_CERTIFIED_CHEMICALLY_RESISTANT_CASING)
+            .appearanceBlock(CYCLOZINE_CHEMICALLY_REPELLING_CASING)
             .pattern(definition -> FactoryBlockPattern.start()
                     .aisle("##QQQ##", "##QQQ##", "###Q###", "#######", "#######", "#######", "#######", "#######",
                             "###Q###", "##QQQ##", "##QQQ##")
@@ -626,9 +631,9 @@ public class CosmicMachines {
                     .where("C", controller(blocks(definition.getBlock())))
                     .where('F', blocks(ChemicalHelper.getBlock(TagPrefix.frameGt, GTMaterials.NaquadahAlloy)))
                     .where('S', blocks(CosmicBlocks.COIL_RESONANT_VIRTUE_MELD.get()))
-                    .where('H', blocks(CosmicBlocks.VOMAHINE_CERTIFIED_CHEMICALLY_RESISTANT_PIPE.get()))
+                    .where('H', blocks(CosmicBlocks.CYCLOZINE_CHEMICALLY_REPELLING_PIPE.get()))
                     .where('G', blocks(GTBlocks.CASING_LAMINATED_GLASS.get()))
-                    .where('Q', blocks(VOMAHINE_CERTIFIED_CHEMICALLY_RESISTANT_CASING.get())
+                    .where('Q', blocks(CYCLOZINE_CHEMICALLY_REPELLING_CASING.get())
                             .or(abilities(PartAbility.IMPORT_FLUIDS))
                             .or(abilities(PartAbility.EXPORT_FLUIDS))
                             .or(abilities(PartAbility.IMPORT_ITEMS))
@@ -646,12 +651,47 @@ public class CosmicMachines {
             .workableCasingRenderer(CosmicCore.id("block/casings/solid/vomahine_certified_chemically_resistant_casing"),
                     CosmicCore.id("block/multiblock/vomahine_chemplant"))
             .register();
+
+    public static final MultiblockMachineDefinition HELLFIRE_FOUNDRY = REGISTRATE
+            .multiblock("hellfire_foundry", WorkableElectricMultiblockMachine::new)
+            .langValue("§cHellfire Foundry")
+            .recipeType(CosmicRecipeTypes.HELLFIRE_FOUNDRY)
+            .rotationState(RotationState.NON_Y_AXIS)
+            .partAppearance((controller, part, side) -> HIGHLY_CONDUCTIVE_FISSION_CASING.getDefaultState())
+            .recipeModifiers(GTRecipeModifiers.PARALLEL_HATCH,
+                    GTRecipeModifiers.ELECTRIC_OVERCLOCK.apply(OverclockingLogic.PERFECT_OVERCLOCK))
+            .pattern(definition -> FactoryBlockPattern.start()
+                    .aisle("         ", "         ", " AAAAAAA ", "  AAAAA  ", "         ", "         ", "         ")
+                    .aisle(" AA   AA ", "         ", "ABBBBBBBA", " BBBBBBB ", " BB   BB ", " B     B ", " C     C ")
+                    .aisle(" A     A ", "  A   A  ", "ABBBBBBBA", "ABB   BBA", " B     B ", "         ", "         ")
+                    .aisle("         ", "         ", "ABBBBBBBA", "AB CCC BA", "         ", "         ", "         ")
+                    .aisle("         ", "         ", "ABBBBBBBA", "AB CXC BA", "         ", "         ", "         ")
+                    .aisle("         ", "         ", "ABBBBBBBA", "AB CCC BA", "         ", "         ", "         ")
+                    .aisle(" A     A ", "  A   A  ", "ABBBBBBBA", "ABB   BBA", " B     B ", "         ", "         ")
+                    .aisle(" AA   AA ", "         ", "ABBBBBBBA", " BBBBBBB ", " BB   BB ", " B     B ", " C     C ")
+                    .aisle("         ", "         ", " AAAAAAA ", "  AAQAA  ", "         ", "         ", "         ")
+                    .where('Q', Predicates.controller(Predicates.blocks(definition.get())))
+                    .where(' ', Predicates.any())
+                    .where('A', blocks(BLANK_RUNE.get()))
+                    .where('B', blocks(HIGHLY_CONDUCTIVE_FISSION_CASING.get()).setMinGlobalLimited(70)
+                            .or(autoAbilities(CosmicRecipeTypes.HELLFIRE_FOUNDRY))
+                            .or(abilities(PartAbility.MAINTENANCE).setExactLimit(1))
+                            .or(abilities(PartAbility.INPUT_ENERGY).setExactLimit(1)))
+                    .where('X', abilities(IMPORT_SOUL).setMinGlobalLimited(1, 1).setMaxGlobalLimited(1))
+                    .where('C', blocks(IESNIUM_BLOCK.get()))
+                    .build())
+            .renderer(() -> new HellFireFoundryWorkableRenderer(
+                    BloodMagic.rl("block/blankrune"),
+                    CosmicCore.id("block/casings/solid/highly_conductive_fission_casing"),
+                    GTCEu.id("block/multiblock/network_switch")))
+            .register();
+
     public final static MultiblockMachineDefinition CELESTIAL_BORE = REGISTRATE.multiblock(
             "vomahine_celestial_laser_bore", WorkableElectricMultiblockMachine::new)
             .rotationState(RotationState.ALL)
             .recipeType(CosmicRecipeTypes.CELESTIAL_BORE)
             .recipeModifiers(GTRecipeModifiers.ELECTRIC_OVERCLOCK.apply(OverclockingLogic.NON_PERFECT_OVERCLOCK))
-            .appearanceBlock(VOMAHINE_CERTIFIED_CHEMICALLY_RESISTANT_CASING)
+            .appearanceBlock(CYCLOZINE_CHEMICALLY_REPELLING_CASING)
             .pattern(definition -> FactoryBlockPattern.start()
                     .aisle("                                                               ",
                             "                                                               ",
@@ -2987,9 +3027,9 @@ public class CosmicMachines {
                     .where(' ', any())
                     .where("A", blocks(ChemicalHelper.getBlock(TagPrefix.frameGt, CosmicMaterials.PsionicGalvorn)))
                     .where("B", blocks(CosmicBlocks.NAQUADAH_PRESSURE_RESISTANT_CASING.get()))
-                    .where("C", blocks(CosmicBlocks.VOMAHINE_ULTRA_POWERED_CASING.get()))
-                    .where("D", blocks(CosmicBlocks.VOMAHINE_CERTIFIED_INTERSTELLAR_GRADE_CASING.get()))
-                    .where("E", blocks(VOMAHINE_CERTIFIED_CHEMICALLY_RESISTANT_CASING.get())
+                    .where("C", blocks(CosmicBlocks.ULTRA_POWERED_CASING.get()))
+                    .where("D", blocks(CosmicBlocks.MULTIPURPOSE_INTERSTELLAR_GRADE_CASING.get()))
+                    .where("E", blocks(CYCLOZINE_CHEMICALLY_REPELLING_CASING.get())
                             .or(abilities(PartAbility.IMPORT_FLUIDS))
                             .or(abilities(PartAbility.EXPORT_FLUIDS))
                             .or(abilities(PartAbility.IMPORT_ITEMS))
@@ -3004,15 +3044,15 @@ public class CosmicMachines {
                             .or(abilities(PartAbility.INPUT_LASER))
                             .or(abilities(PartAbility.INPUT_ENERGY)))
                     .where("F", blocks(ChemicalHelper.getBlock(TagPrefix.frameGt, CosmicMaterials.Trinavine)))
-                    .where("G", blocks(CosmicBlocks.VOMAHINE_CERTIFIED_INTERSTELLAR_GRADE_CASING.get()))
+                    .where("G", blocks(CosmicBlocks.MULTIPURPOSE_INTERSTELLAR_GRADE_CASING.get()))
                     .where("H", blocks(GTBlocks.CASING_LAMINATED_GLASS.get()))
                     .where("I", blocks(CosmicBlocks.CASING_DYSON_CELL.get()))
-                    .where("J", blocks(CosmicBlocks.VOMAHINE_ULTRA_POWERED_CASING.get()))
+                    .where("J", blocks(CosmicBlocks.ULTRA_POWERED_CASING.get()))
                     .where("K", any())
                     .where("L", magnetCoils())
                     .where("M", blocks(GTBlocks.CASING_LAMINATED_GLASS.get()))
                     .where("N", blocks(GTBlocks.CASING_LAMINATED_GLASS.get()))
-                    .where("O", blocks(CosmicBlocks.VOMAHINE_ULTRA_POWERED_CASING.get()))
+                    .where("O", blocks(CosmicBlocks.ULTRA_POWERED_CASING.get()))
                     .where("P", controller(blocks(definition.getBlock())))
                     .build())
             .workableCasingRenderer(CosmicCore.id("block/casings/solid/vomahine_certified_chemically_resistant_casing"),
