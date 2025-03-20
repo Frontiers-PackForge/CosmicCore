@@ -7,7 +7,6 @@ import com.gregtechceu.gtceu.api.data.chemical.material.Material;
 import com.gregtechceu.gtceu.api.data.chemical.material.info.MaterialIconSet;
 import com.gregtechceu.gtceu.api.data.chemical.material.properties.BlastProperty;
 import com.gregtechceu.gtceu.api.data.chemical.material.properties.PropertyKey;
-import com.gregtechceu.gtceu.api.data.chemical.material.properties.ToolProperty;
 import com.gregtechceu.gtceu.api.fluids.FluidBuilder;
 import com.gregtechceu.gtceu.api.fluids.FluidState;
 
@@ -190,8 +189,7 @@ public class CosmicMaterials {
                         GENERATE_SMALL_GEAR,
                         GENERATE_FINE_WIRE,
                         GENERATE_ROTOR,
-                        GENERATE_ROUND
-                )
+                        GENERATE_ROUND)
                 .buildAndRegister();
         // TODO - Colors , Textures, Fluid Textures, they're all gonna look the same in game for now.
         // TODO - Infinity Line Scripts On KubeJS side.
