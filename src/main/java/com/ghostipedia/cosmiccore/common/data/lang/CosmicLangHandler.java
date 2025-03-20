@@ -192,5 +192,7 @@ public class CosmicLangHandler {
         provider.add("cosmic.multiblock.capacitor.info.global", "Global");
         provider.add("cosmic.multiblock.capacitor.info.local", "Local");
         provider.add("cosmic.multiblock.capacitor.buffered", "§7Buffered: %s §7EU");
+        provider.add("cosmic.multiblock.capacitor.duplicate.multiblock.1", "This multiblock is a duplicate");
+        provider.add("cosmic.multiblock.capacitor.duplicate.multiblock.2", "Only one can exist");
     }
 }

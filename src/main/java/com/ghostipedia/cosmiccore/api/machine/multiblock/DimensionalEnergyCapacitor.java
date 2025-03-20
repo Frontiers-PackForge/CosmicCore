@@ -3,10 +3,13 @@ package com.ghostipedia.cosmiccore.api.machine.multiblock;
 import com.ghostipedia.cosmiccore.api.data.wireless.WirelessEnergySavedData;
 import com.gregtechceu.gtceu.api.machine.IMachineBlockEntity;
 import com.gregtechceu.gtceu.api.machine.multiblock.IBatteryData;
+import com.gregtechceu.gtceu.api.machine.trait.RecipeLogic;
 import com.gregtechceu.gtceu.common.machine.multiblock.electric.PowerSubstationMachine;
 import com.lowdragmc.lowdraglib.syncdata.annotation.Persisted;
 import com.lowdragmc.lowdraglib.syncdata.field.ManagedFieldHolder;
-import lombok.Getter;
+import net.minecraft.ChatFormatting;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.Style;
 import net.minecraft.server.level.ServerLevel;
 
 import java.math.BigInteger;
@@ -29,6 +32,10 @@ public class DimensionalEnergyCapacitor extends DimensionalEnergyInterface {
     // no more than 100kEU/t per storage block
     public static final long PASSIVE_DRAIN_MAX_PER_STORAGE = 100_000L;
 
+    // Used to make sure you cannot have more than one of this multiblock per player / team
+    @Persisted
+    public boolean isDuplicate = false;
+
     @Persisted
     private long[] capacities;
 
@@ -40,28 +47,38 @@ public class DimensionalEnergyCapacitor extends DimensionalEnergyInterface {
 
     @Override
     public void onStructureFormed() {
-        List<IBatteryData> batteries = new ArrayList<>();
-        for (Map.Entry<String, Object> battery : getMultiblockState().getMatchContext().entrySet()) {
-            if (battery.getKey().startsWith(PowerSubstationMachine.PMC_BATTERY_HEADER)
-                    && battery.getValue() instanceof PowerSubstationMachine.BatteryMatchWrapper wrapper) {
-                for (int i = 0; i < wrapper.getAmount(); i++) {
-                    batteries.add(wrapper.getPartType());
-                }
-            }
-        }
-
-        this.capacities = batteries.stream().mapToLong(IBatteryData::getCapacity).toArray();
-
-        if (batteries.isEmpty()) {
-            onStructureInvalid();
-            return;
-        }
-
-        super.onStructureFormed(); // This order is important do not move
-
         if (getLevel() instanceof ServerLevel serverLevel) {
             var owner = getHolder().getOwner().getUUID();
             var wirelessData = WirelessEnergySavedData.getOrCreate(serverLevel);
+
+            // Make sure only one MB can exist per team
+            if (wirelessData.isCapacitorSet(owner)) {
+                this.isDuplicate = wirelessData.isCapacitorDuplicate(owner, getDimension(), getPos());
+                if (isDuplicate) {
+                    recipeLogic.setStatus(RecipeLogic.Status.SUSPEND);
+                    return;
+                }
+            } else wirelessData.setCapacitorPosition(owner, getDimension(), getPos());
+
+
+            List<IBatteryData> batteries = new ArrayList<>();
+            for (Map.Entry<String, Object> battery : getMultiblockState().getMatchContext().entrySet()) {
+                if (battery.getKey().startsWith(PowerSubstationMachine.PMC_BATTERY_HEADER)
+                        && battery.getValue() instanceof PowerSubstationMachine.BatteryMatchWrapper wrapper) {
+                    for (int i = 0; i < wrapper.getAmount(); i++) {
+                        batteries.add(wrapper.getPartType());
+                    }
+                }
+            }
+
+            this.capacities = batteries.stream().mapToLong(IBatteryData::getCapacity).toArray();
+
+            if (batteries.isEmpty()) {
+                onStructureInvalid();
+                return;
+            }
+
+            super.onStructureFormed(); // This order is important do not move
 
 
             var capacity = batteries.stream().mapToLong(IBatteryData::getCapacity)
@@ -79,8 +96,15 @@ public class DimensionalEnergyCapacitor extends DimensionalEnergyInterface {
             var owner = getHolder().getOwner().getUUID();
             var wirelessData = WirelessEnergySavedData.getOrCreate(serverLevel);
             wirelessData.setActive(owner, false);
+            wirelessData.removeCapacitorPosition(owner, getDimension(), getPos());
         }
         this.capacities = null;
+    }
+
+    @Override
+    public boolean isActive() {
+        if (isDuplicate) return false;
+        return super.isActive();
     }
 
     @Override
@@ -89,20 +113,18 @@ public class DimensionalEnergyCapacitor extends DimensionalEnergyInterface {
         return Arrays.stream(drains).sum();
     }
 
-    @Getter
-    public static class CosmicBatteryMatchWrapper extends PowerSubstationMachine.BatteryMatchWrapper {
+    @Override
+    public void addDisplayText(List<Component> textList) {
+        if (this.isDuplicate) {
+            textList.add(Component.translatable("cosmic.multiblock.capacitor.duplicate.multiblock.1").setStyle(Style.EMPTY.withColor(ChatFormatting.DARK_RED)));
+            textList.add(Component.translatable("cosmic.multiblock.capacitor.duplicate.multiblock.2").setStyle(Style.EMPTY.withColor(ChatFormatting.DARK_RED)));
+        } else super.addDisplayText(textList);
+    }
 
-        private final IBatteryData partType;
-        private int amount;
-
-        public CosmicBatteryMatchWrapper(IBatteryData partType) {
-            super(partType);
-            this.partType = partType;
+    private String getDimension() {
+        if (getLevel() instanceof ServerLevel serverLevel) {
+            return serverLevel.dimension().location().toString();
         }
-
-        public CosmicBatteryMatchWrapper increment() {
-            amount++;
-            return this;
-        }
+        return null;
     }
 }

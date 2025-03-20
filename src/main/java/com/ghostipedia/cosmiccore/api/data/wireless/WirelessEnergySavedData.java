@@ -1,14 +1,16 @@
 package com.ghostipedia.cosmiccore.api.data.wireless;
 
+import com.ghostipedia.cosmiccore.utils.NBTUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
-import net.minecraft.nbt.StringTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.util.Tuple;
 import net.minecraft.world.level.saveddata.SavedData;
 
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.math.BigInteger;
 import java.util.*;
@@ -17,6 +19,8 @@ public class WirelessEnergySavedData extends SavedData {
 
     public static class WirelessEnergyData {
 
+        @Nullable
+        public Tuple<String,BlockPos> capacitorLocation;
         public BigInteger energyStored;
         public BigInteger energyCapacity;
         public boolean isActive;
@@ -24,18 +28,17 @@ public class WirelessEnergySavedData extends SavedData {
         public Map<BlockPos, Long> energyOutput;
         public Map<BlockPos, Long> energyBuffered;
         public Map<BlockPos, Long> passiveDrain;
-        public Set<String> wirelessDimensions;
 
         public WirelessEnergyData() {
-            this(BigInteger.ZERO, BigInteger.valueOf(-1), false, new HashSet<>());
+            this(null, BigInteger.ZERO, BigInteger.valueOf(-1), false);
         }
 
         public WirelessEnergyData(BigInteger energyStored, BigInteger energyCapacity) {
-            this(energyStored, energyCapacity, false, new HashSet<>());
+            this(null, energyStored, energyCapacity, false);
         }
 
-        public WirelessEnergyData(BigInteger energyStored, BigInteger energyCapacity, boolean isActive,
-                                  Set<String> wirelessDimensions) {
+        public WirelessEnergyData(@Nullable Tuple<String,BlockPos> capacitorLocation, BigInteger energyStored, BigInteger energyCapacity, boolean isActive) {
+            this.capacitorLocation = capacitorLocation;
             this.energyStored = energyStored;
             this.energyCapacity = energyCapacity;
             this.isActive = isActive;
@@ -43,29 +46,26 @@ public class WirelessEnergySavedData extends SavedData {
             this.energyOutput = new HashMap<>();
             this.energyBuffered = new HashMap<>();
             this.passiveDrain = new HashMap<>();
-            this.wirelessDimensions = wirelessDimensions;
         }
 
         public static WirelessEnergyData fromNBT(CompoundTag nbt) {
+            var capacitor = nbt.contains("capacitorLocation") ? NBTUtils.fromNBT(nbt.getCompound("capacitorLocation")) : null;
             var stored = new BigInteger(nbt.getByteArray("energyStored"));
             var capacity = new BigInteger(nbt.getByteArray("energyCapacity"));
             var active = nbt.getBoolean("isActive");
-            var dimensionsListTag = nbt.getList("wirelessDimensions", Tag.TAG_STRING);
-            var dimensionsList = new HashSet<String>();
-            for (var tag : dimensionsListTag) dimensionsList.add(tag.getAsString());
-            return new WirelessEnergyData(stored, capacity, active, dimensionsList);
+            return new WirelessEnergyData(capacitor, stored, capacity, active);
         }
 
         public CompoundTag toNBT() {
             var tag = new CompoundTag();
+            if (this.capacitorLocation != null) tag.put("capacitorLocation", NBTUtils.toNBT(this.capacitorLocation));
             tag.putByteArray("energyStored", energyStored.toByteArray());
             tag.putByteArray("energyCapacity", energyCapacity.toByteArray());
             tag.putBoolean("isActive", isActive);
-            var list = new ListTag();
-            for (var dimension : wirelessDimensions) list.add(StringTag.valueOf(dimension));
-            tag.put("wirelessDimensions", list);
             return tag;
         }
+
+
     };
 
     private static final String DATA_NAME = "gtceu_wireless_energy";
@@ -206,25 +206,40 @@ public class WirelessEnergySavedData extends SavedData {
         GlobalWirelessEnergy.get(uuid).passiveDrain.remove(blockPos);
     }
 
-    public boolean isWirelessActive(UUID uuid, String dimension) {
+    public void setCapacitorPosition(UUID uuid, String dimension, BlockPos capacitorPos) {
         GlobalWirelessEnergy.computeIfAbsent(uuid, k -> new WirelessEnergyData());
-        return GlobalWirelessEnergy.get(uuid).wirelessDimensions.contains(dimension);
+        GlobalWirelessEnergy.get(uuid).capacitorLocation = new Tuple<>(dimension, capacitorPos);
     }
 
-    public void addWirelessDimensions(UUID uuid, String dimension) {
-        GlobalWirelessEnergy.computeIfAbsent(uuid, k -> new WirelessEnergyData());
-        GlobalWirelessEnergy.get(uuid).wirelessDimensions.add(dimension);
+    public void removeCapacitorPosition(UUID uuid, String dimension, BlockPos capacitorPos) {
+        var data = GlobalWirelessEnergy.computeIfAbsent(uuid, k -> new WirelessEnergyData());
+        if (compareLocations(data.capacitorLocation, new Tuple<>(dimension, capacitorPos))) data.capacitorLocation = null;
     }
 
-    public void removeWirelessDimensions(UUID uuid, String dimension) {
-        GlobalWirelessEnergy.computeIfAbsent(uuid, k -> new WirelessEnergyData());
-        GlobalWirelessEnergy.get(uuid).wirelessDimensions.remove(dimension);
+    private boolean compareLocations(Tuple<String, BlockPos> location1, Tuple<String, BlockPos> location2) {
+        if (location1 == null || location2 == null) return false;
+        if (!location1.getA().equals(location2.getA())) return false;
+        if (location1.getB().getX() != location2.getB().getX()) return false;
+        if (location1.getB().getY() != location2.getB().getY()) return false;
+        if (location1.getB().getZ() != location2.getB().getZ()) return false;
+        return true;
     }
 
 
-    public List<String> getWirelessDimensions(UUID uuid) {
-        GlobalWirelessEnergy.computeIfAbsent(uuid, k -> new WirelessEnergyData());
-        return GlobalWirelessEnergy.get(uuid).wirelessDimensions.stream().toList();
+    @Nullable
+    public Tuple<String, BlockPos> getCapacitorPosition(UUID uuid) {
+        var data = GlobalWirelessEnergy.computeIfAbsent(uuid, k -> new WirelessEnergyData());
+        return data.capacitorLocation;
+    }
+
+    public boolean isCapacitorDuplicate(UUID uuid, String dimension, BlockPos position) {
+        var data = GlobalWirelessEnergy.computeIfAbsent(uuid, k -> new WirelessEnergyData());
+        return !compareLocations(data.capacitorLocation, new Tuple<>(dimension, position));
+    }
+
+    public boolean isCapacitorSet(UUID uuid) {
+        var data = GlobalWirelessEnergy.computeIfAbsent(uuid, k -> new WirelessEnergyData());
+        return data.capacitorLocation != null;
     }
 
     /**

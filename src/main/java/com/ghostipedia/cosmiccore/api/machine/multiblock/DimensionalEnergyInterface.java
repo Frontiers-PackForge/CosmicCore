@@ -74,7 +74,7 @@ public class DimensionalEnergyInterface extends WorkableMultiblockMachine
 
     public DimensionalEnergyInterface(IMachineBlockEntity holder) {
         super(holder);
-        this.tickSubscription = new ConditionalSubscriptionHandler(this, this::transferEnergyTick, this::isFormed);
+        this.tickSubscription = new ConditionalSubscriptionHandler(this, this::transferEnergyTick, this::isActive);
         this.localDisplay = true;
     }
 
@@ -118,6 +118,7 @@ public class DimensionalEnergyInterface extends WorkableMultiblockMachine
             data.removeEnergyBuffered(owner, getPos());
             data.removeEnergyInput(owner, getPos());
             data.removeEnergyOutput(owner, getPos());
+            data.removePassiveDrain(owner, getPos());
         }
 
         this.inputHatches = null;
@@ -130,6 +131,10 @@ public class DimensionalEnergyInterface extends WorkableMultiblockMachine
         this.averageOutLastSec = 0;
 
         super.onStructureInvalid();
+    }
+
+    public boolean isActive() {
+        return isFormed();
     }
 
     private void setEnergyBuffer() {
@@ -198,6 +203,8 @@ public class DimensionalEnergyInterface extends WorkableMultiblockMachine
 
     protected void transferEnergyTick() {
         if (getLevel() instanceof ServerLevel serverLevel) {
+            var data = WirelessEnergySavedData.getOrCreate(serverLevel);
+            var owner = getHolder().getOwner().getUUID();
             if(isWorkingEnabled() && isFormed()) {
                 if (getOffsetTimer() % 20 == 0) {
                     getRecipeLogic().setStatus((energyBuffer != null && energyBuffer.getEnergyStored() > 0)
@@ -210,8 +217,6 @@ public class DimensionalEnergyInterface extends WorkableMultiblockMachine
                     netOutLastSec = 0;
 
                     // Send IO values to global Storage to display in the Dimensional Storage.
-                    var data = WirelessEnergySavedData.getOrCreate(serverLevel);
-                    var owner = getHolder().getOwner().getUUID();
                     data.setEnergyInput(owner, getPos(), averageInLastSec);
                     data.setEnergyOutput(owner, getPos(), averageOutLastSec);
                     data.setEnergyBuffered(owner, getPos(), energyBuffer.getEnergyStored());
@@ -234,8 +239,6 @@ public class DimensionalEnergyInterface extends WorkableMultiblockMachine
 
                 // Handle buffer transfer to WirelessEnergySavedData
                 if (getOffsetTimer() % ticks_between_save_data_operations == 0) {
-                    var data = WirelessEnergySavedData.getOrCreate(serverLevel);
-                    var owner = getHolder().getOwner().getUUID();
                     if (data.isActive(owner)) {
                         // After operation buffer should aim to be 50% full
                         var euToTransfer = energyBuffer.getEnergyStored() - (energyBuffer.getEnergyCapacity() / 2);
@@ -245,6 +248,12 @@ public class DimensionalEnergyInterface extends WorkableMultiblockMachine
                         data.setPassiveDrain(owner, getPos(), getPassiveDrain());
                     }
                 }
+            } else {
+                data.addEUToGlobalWirelessEnergy(owner, energyBuffer.getEnergyStored());
+                data.removeEnergyBuffered(owner, getPos());
+                data.removeEnergyInput(owner, getPos());
+                data.removeEnergyOutput(owner, getPos());
+                data.removePassiveDrain(owner, getPos());
             }
         }
     }

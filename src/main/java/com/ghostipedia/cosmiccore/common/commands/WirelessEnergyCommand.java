@@ -80,8 +80,10 @@ public class WirelessEnergyCommand {
         message.append("  Output: " + FormattingUtil.formatNumbers(wirelessData.getEnergyOutput(owner)) + " EU/t\n");
         message.append("  Buffered: " + FormattingUtil.formatNumbers(wirelessData.getEnergyBuffered(owner)) + " EU\n");
         message.append("  Active: " + wirelessData.isActive(owner) + "\n");
-        message.append("  Wireless Dimensions:");
-        for (var dimension : wirelessData.getWirelessDimensions(owner)) message.append("\n    - " + dimension);
+        var location = wirelessData.getCapacitorPosition(owner);
+        var pos = location != null ? location.getB() : null;
+        var locationStr = location != null ? String.format("%s : x=%d y=%d z=%d", location.getA(), pos.getX(), pos.getY(), pos.getZ()): "No capacitor set";
+        message.append("  Capacitor location: " + locationStr);
 
         return message;
     }

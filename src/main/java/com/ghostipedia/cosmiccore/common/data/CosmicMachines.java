@@ -3,7 +3,6 @@ package com.ghostipedia.cosmiccore.common.data;
 import com.ghostipedia.cosmiccore.CosmicCore;
 import com.ghostipedia.cosmiccore.api.machine.multiblock.DimensionalEnergyCapacitor;
 import com.ghostipedia.cosmiccore.api.machine.multiblock.DimensionalEnergyInterface;
-import com.ghostipedia.cosmiccore.api.machine.multiblock.DimensionalEnergyProvider;
 import com.ghostipedia.cosmiccore.api.machine.multiblock.IPBFMachine;
 import com.ghostipedia.cosmiccore.api.machine.part.CosmicPartAbility;
 import com.ghostipedia.cosmiccore.api.machine.part.SteamFluidHatchPartMachine;
@@ -3155,26 +3154,6 @@ public class CosmicMachines {
                     .aisle("XXX", "XXX", "XXX")
                     .aisle("XXX", "XCX", "XXX")
                     .aisle("XMX", "XSX", "XXX")
-                    .where('S', controller(blocks(definition.getBlock())))
-                    .where('X', blocks(CASING_PALLADIUM_SUBSTATION.get()).setMinGlobalLimited(12)
-                            .or(ActiveTransformerMachine.getHatchPredicates()))
-                    .where('C', blocks(GTBlocks.SUPERCONDUCTING_COIL.get()))
-                    .where('M', blocks(CASING_PALLADIUM_SUBSTATION.get()).or(autoAbilities(true, false, false)))
-                    .build())
-            .workableCasingRenderer(GTCEu.id("block/casings/solid/machine_casing_palladium_substation"),
-                    GTCEu.id("block/multiblock/data_bank"))
-            .register();
-
-    public static final MultiblockMachineDefinition DIMENSIONAL_ENERGY_PROVIDER = REGISTRATE
-            .multiblock("dimensional_energy_provider", DimensionalEnergyProvider::new)
-            .langValue("Dimensional Energy Provider")
-            .rotationState(RotationState.ALL)
-            .recipeType(GTRecipeTypes.DUMMY_RECIPES)
-            .appearanceBlock(CASING_PALLADIUM_SUBSTATION)
-            .pattern((definition) -> FactoryBlockPattern.start()
-                    .aisle(" X ", "XXX", " X ")
-                    .aisle("XXX", "XCX", "XXX")
-                    .aisle(" M ", "XSX", " X ")
                     .where('S', controller(blocks(definition.getBlock())))
                     .where('X', blocks(CASING_PALLADIUM_SUBSTATION.get()).setMinGlobalLimited(12)
                             .or(ActiveTransformerMachine.getHatchPredicates()))

@@ -27,6 +27,7 @@ legacyForge {
             client()
             sourceSet = sourceSets.main
             ideName = "Client"
+            gameDirectory.set(file("runs/client"))
 
             systemProperty('forge.enabledGameTestNamespaces', project.mod_id)
         }
@@ -36,7 +37,7 @@ legacyForge {
             sourceSet = sourceSets.main
             ideName = "Server"
 
-            gameDirectory.set(file("run/server"))
+            gameDirectory.set(file("runs/server"))
             programArgument '--nogui'
             systemProperty('forge.enabledGameTestNamespaces', project.mod_id)
         }
@@ -46,7 +47,7 @@ legacyForge {
             sourceSet = sourceSets.main
             ideName = "Data Generation"
 
-            gameDirectory.set(file("run/data"))
+            gameDirectory.set(file("runs/data"))
             programArguments.addAll('--mod', project.mod_id)
             programArguments.addAll('--all')
             programArguments.addAll('--output', file('src/generated/resources/').getAbsolutePath())
