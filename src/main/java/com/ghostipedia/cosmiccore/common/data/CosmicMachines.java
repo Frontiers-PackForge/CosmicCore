@@ -7,6 +7,7 @@ import com.ghostipedia.cosmiccore.api.machine.part.SteamFluidHatchPartMachine;
 import com.ghostipedia.cosmiccore.api.registries.CosmicRegistration;
 import com.ghostipedia.cosmiccore.client.renderer.machine.HellFireFoundryWorkableRenderer;
 import com.ghostipedia.cosmiccore.client.renderer.machine.SidedWorkableHullRenderer;
+import com.ghostipedia.cosmiccore.client.renderer.machine.SufferingChamberRender;
 import com.ghostipedia.cosmiccore.common.block.WorkableSteamHullType;
 import com.ghostipedia.cosmiccore.common.block.debug.CreativeThermiaContainerMachine;
 import com.ghostipedia.cosmiccore.common.data.materials.CosmicMaterials;
@@ -54,10 +55,12 @@ import net.minecraft.world.level.block.Blocks;
 
 import it.unimi.dsi.fastutil.Pair;
 import wayoftime.bloodmagic.BloodMagic;
+import wayoftime.bloodmagic.common.block.BloodMagicBlocks;
 
 import java.util.*;
 import java.util.function.BiFunction;
 
+import static com.ghostipedia.cosmiccore.api.machine.part.CosmicPartAbility.EXPORT_SOUL;
 import static com.ghostipedia.cosmiccore.api.machine.part.CosmicPartAbility.IMPORT_SOUL;
 import static com.ghostipedia.cosmiccore.api.pattern.CosmicPredicates.magnetCoils;
 import static com.ghostipedia.cosmiccore.api.registries.CosmicRegistration.REGISTRATE;
@@ -683,6 +686,46 @@ public class CosmicMachines {
             .renderer(() -> new HellFireFoundryWorkableRenderer(
                     BloodMagic.rl("block/blankrune"),
                     CosmicCore.id("block/casings/solid/highly_conductive_fission_casing"),
+                    GTCEu.id("block/multiblock/network_switch")))
+            .register();
+    public static final MultiblockMachineDefinition SUFFERING_CHAMBER = REGISTRATE
+            .multiblock("suffering_chamber", WorkableElectricMultiblockMachine::new)
+            .langValue("§cSuffering Chamber")
+            .recipeType(CosmicRecipeTypes.SUFFERING_CHAMBER)
+            .rotationState(RotationState.NON_Y_AXIS)
+            .partAppearance((controller, part, side) -> CASING_STRESS_PROOF.getDefaultState())
+            .recipeModifiers(GTRecipeModifiers.PARALLEL_HATCH,
+                    GTRecipeModifiers.ELECTRIC_OVERCLOCK.apply(OverclockingLogic.PERFECT_OVERCLOCK))
+            .pattern(definition -> FactoryBlockPattern.start()
+                    .aisle("AAA     AAA", "AA       AA", "A         A", "A         A", "           ", "           ", "           ", "           ")
+                    .aisle("A ABBBBBA A", "A ABBBBBA A", "  AB   BA  ", "  AD   DA  ", "  A D D A  ", "  A  E  A  ", "           ", "           ")
+                    .aisle("AAAAAAAAAAA", " AAAAAAAAA ", " A       A ", " AF     FA ", " A       A ", " AA     AA ", "  A     A  ", "  A     A  ")
+                    .aisle(" BAAAAAAAB ", " BAAAAAAAB ", " B       B ", " D G H G D ", "           ", "           ", "           ", "           ")
+                    .aisle(" BAAAAAAAB ", " BAAAAAAAB ", "           ", "           ", " D  G G  D ", "           ", "           ", "           ")
+                    .aisle(" BAAAAAAAB ", " BAAAXAAAB ", "           ", "   H   H   ", "     I     ", " E       E ", "           ", "           ")
+                    .aisle(" BAAAAAAAB ", " BAAAAAAAB ", "           ", "           ", " D  G G  D ", "           ", "           ", "           ")
+                    .aisle(" BAAAAAAAB ", " BAAAAAAAB ", " B       B ", " D G H G D ", "           ", "           ", "           ", "           ")
+                    .aisle("AAAAAAAAAAA", " AAAAAAAAA ", " A       A ", " AF     FA ", " A       A ", " AA     AA ", "  A     A  ", "  A     A  ")
+                    .aisle("A ABBBBBA A", "A ABBQBBA A", "  AB   BA  ", "  AD   DA  ", "  A D D A  ", "  A  E  A  ", "           ", "           ")
+                    .aisle("AAA     AAA", "AA       AA", "A         A", "A         A", "           ", "           ", "           ", "           ")
+
+                    .where('Q', Predicates.controller(Predicates.blocks(definition.get())))
+                    .where(' ', Predicates.any())
+                    .where('A', blocks(CASING_STRESS_PROOF.get()).setMinGlobalLimited(185)
+                            .or(autoAbilities(CosmicRecipeTypes.SUFFERING_CHAMBER))
+                            .or(abilities(PartAbility.INPUT_ENERGY).setExactLimit(1)))
+                    .where('B', blocks(BLANK_RUNE.get()))
+                    .where('D', blocks(BloodMagicBlocks.WATER_RITUAL_STONE.get()))
+                    .where('E', blocks(BloodMagicBlocks.AIR_RITUAL_STONE.get()))
+                    .where('F', blocks(BloodMagicBlocks.DUSK_RITUAL_STONE.get()))
+                    .where('G', blocks(BloodMagicBlocks.FIRE_RITUAL_STONE.get()))
+                    .where('H', blocks(BloodMagicBlocks.EARTH_RITUAL_STONE.get()))
+                    .where('I', blocks(BloodMagicBlocks.MASTER_RITUAL_STONE.get()))
+                    .where('X', abilities(EXPORT_SOUL).setMinGlobalLimited(1, 1).setMaxGlobalLimited(1))
+                    .build())
+            .renderer(() -> new SufferingChamberRender(
+                    BloodMagic.rl("block/blankrune"),
+                    GTCEu.id("block/casings/gcym/stress_proof_casing"),
                     GTCEu.id("block/multiblock/network_switch")))
             .register();
 
