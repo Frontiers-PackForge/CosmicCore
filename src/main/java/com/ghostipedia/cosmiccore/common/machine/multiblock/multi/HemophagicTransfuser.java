@@ -1,34 +1,41 @@
 package com.ghostipedia.cosmiccore.common.machine.multiblock.multi;
 
+import com.ghostipedia.cosmiccore.CosmicCore;
 import com.ghostipedia.cosmiccore.api.machine.multiblock.IrisMultiblockMachine;
+import com.ghostipedia.cosmiccore.client.renderer.machine.HellFireFoundryWorkableRenderer;
 import com.ghostipedia.cosmiccore.client.renderer.machine.HemophagicTransfuserRender;
 import com.ghostipedia.cosmiccore.client.renderer.machine.StarBallastMachineRenderer;
 import com.ghostipedia.cosmiccore.common.data.CosmicBlocks;
 import com.ghostipedia.cosmiccore.gtbridge.CosmicRecipeTypes;
+import com.gregtechceu.gtceu.GTCEu;
 import com.gregtechceu.gtceu.api.data.RotationState;
 import com.gregtechceu.gtceu.api.machine.MultiblockMachineDefinition;
 import com.gregtechceu.gtceu.api.machine.multiblock.PartAbility;
 import com.gregtechceu.gtceu.api.pattern.FactoryBlockPattern;
 import com.gregtechceu.gtceu.api.pattern.Predicates;
 import com.gregtechceu.gtceu.api.recipe.OverclockingLogic;
+import com.gregtechceu.gtceu.common.data.GCYMBlocks;
+import com.gregtechceu.gtceu.common.data.GTBlocks;
 import com.gregtechceu.gtceu.common.data.GTRecipeModifiers;
 import net.minecraft.network.chat.Component;
+import wayoftime.bloodmagic.BloodMagic;
+import wayoftime.bloodmagic.common.block.BloodMagicBlocks;
 
 import static com.ghostipedia.cosmiccore.api.registries.CosmicRegistration.REGISTRATE;
 import static com.ghostipedia.cosmiccore.common.data.CosmicBlocks.*;
 import static com.gregtechceu.gtceu.api.pattern.Predicates.*;
 import static com.gregtechceu.gtceu.api.pattern.Predicates.blocks;
-import static com.gregtechceu.gtceu.common.data.GCYMBlocks.CASING_ATOMIC;
-import static com.gregtechceu.gtceu.common.data.GCYMBlocks.CASING_HIGH_TEMPERATURE_SMELTING;
+import static com.gregtechceu.gtceu.common.data.GCYMBlocks.*;
+import static com.gregtechceu.gtceu.common.data.GTBlocks.HIGH_POWER_CASING;
 
 public class HemophagicTransfuser {
 
     public final static MultiblockMachineDefinition HEMOPHAGIC_TRANSFUSER = REGISTRATE.multiblock("hemophagic_transfuser",
                     IrisMultiblockMachine::new)
             .rotationState(RotationState.NON_Y_AXIS)
-            .recipeType(CosmicRecipeTypes.VOMAHINE_CORE_DRILL)
-            .recipeModifier(GTRecipeModifiers.ELECTRIC_OVERCLOCK.apply(OverclockingLogic.NON_PERFECT_OVERCLOCK_SUBTICK))
-            .appearanceBlock(CosmicBlocks.CYCLOZINE_CHEMICALLY_REPELLING_CASING)
+            .recipeType(CosmicRecipeTypes.HEMOPHAGIC_TRANSFUSER)
+            .recipeModifiers(GTRecipeModifiers.PARALLEL_HATCH, GTRecipeModifiers.ELECTRIC_OVERCLOCK.apply(OverclockingLogic.PERFECT_OVERCLOCK_SUBTICK))
+            .appearanceBlock(BloodMagicBlocks.BLANK_RUNE)
             .pattern(definition -> FactoryBlockPattern.start()
                     .aisle("AAAA   AAAA", "A  AAAAA  A", "A         A", "AA       AA", " A       A ", " A       A ", " A       A ", "AA       AA", "A         A", "A  AAAAA  A", "AAAA   AAAA")
                     .aisle("A  AAAAA  A", "   BCCCB   ", "  B     B  ", "A         A", "AC       CA", "AC       CA", "AC       CA", "A         A", "  B     B  ", "   BCCCB   ", "A  AAAAA  A")
@@ -43,22 +50,23 @@ public class HemophagicTransfuser {
                     .aisle("AAAA   AAAA", "A  AAQAA  A", "A         A", "AA       AA", " A       A ", " A       A ", " A       A ", "AA       AA", "A         A", "A  AAAAA  A", "AAAA   AAAA")
                     .where(' ', any())
                     .where("Q", controller(blocks(definition.getBlock())))
-                    .where('A', blocks(CASING_HIGH_TEMPERATURE_SMELTING.get()))
-                    .where('B', blocks(MULTIPURPOSE_INTERSTELLAR_GRADE_CASING.get()))
-                    .where('C', blocks(MULTIPURPOSE_INTERSTELLAR_GRADE_CASING.get()))
-                    .where('D', blocks(CASING_ATOMIC.get()))
-                    .where('E', blocks(ULTRA_POWERED_CASING.get()))
-                    .where('F', blocks(CYCLOZINE_CHEMICALLY_REPELLING_CASING.get())
-                            .or(Predicates.abilities(PartAbility.EXPORT_ITEMS).setMaxGlobalLimited(16))
-                            .or(Predicates.abilities(PartAbility.EXPORT_FLUIDS).setMaxGlobalLimited(16))
-                            .or(Predicates.abilities(PartAbility.INPUT_ENERGY).setMaxGlobalLimited(2))
-                            .or(Predicates.abilities(PartAbility.INPUT_LASER).setMaxGlobalLimited(1))
-                            .or(Predicates.abilities(PartAbility.OUTPUT_LASER).setMaxGlobalLimited(1))
-                            .or(Predicates.abilities(PartAbility.IMPORT_FLUIDS).setMaxGlobalLimited(16))
-                            .or(Predicates.abilities(PartAbility.IMPORT_ITEMS).setMaxGlobalLimited(16)))
-                    .where('G', blocks(CASING_HIGH_TEMPERATURE_SMELTING.get()))
+                    .where('A', blocks(BloodMagicBlocks.BLANK_RUNE.get()))
+                    .where('B', blocks(BloodMagicBlocks.DAWN_RITUAL_STONE.get()))
+                    .where('C', blocks(BloodMagicBlocks.DUSK_RITUAL_STONE.get()))
+                    .where('F', blocks(CASING_STRESS_PROOF.get()))
+                    .where('E', blocks(CASING_STRESS_PROOF.get()))
+                    .where('D', blocks(CYCLOZINE_CHEMICALLY_REPELLING_CASING.get()).setMinGlobalLimited(28)
+                            //TODO see how to limit to 1 laser OR 1 energy, not 1 of each..
+                            .or(Predicates.abilities(PartAbility.EXPORT_ITEMS).setMinGlobalLimited(1).setPreviewCount(1))
+                            .or(Predicates.abilities(PartAbility.EXPORT_FLUIDS).setMinGlobalLimited(1).setPreviewCount(1))
+                            .or(Predicates.abilities(PartAbility.INPUT_ENERGY).setMinGlobalLimited(1).setPreviewCount(1))
+                            .or(Predicates.abilities(PartAbility.IMPORT_FLUIDS).setMinGlobalLimited(1).setPreviewCount(1))
+                            .or(Predicates.abilities(PartAbility.IMPORT_ITEMS).setMinGlobalLimited(1).setPreviewCount(1)))
                     .build())
-            .renderer(HemophagicTransfuserRender::new)
+            .renderer(() -> new HemophagicTransfuserRender(
+                    BloodMagic.rl("block/blankrune"),
+                    CosmicCore.id("block/casings/solid/vomahine_certified_chemically_resistant_casing"),
+                    GTCEu.id("block/multiblock/network_switch")))
             .tooltips(Component.translatable("cosmiccore.multiblock.iris.tooltip.0"),
                     Component.translatable("cosmiccore.multiblock.iris.tooltip.1"),
                     Component.translatable("cosmiccore.multiblock.iris.tooltip.2"),

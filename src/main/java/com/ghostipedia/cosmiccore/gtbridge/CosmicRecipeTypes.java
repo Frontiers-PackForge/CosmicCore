@@ -44,6 +44,12 @@ public class CosmicRecipeTypes {
             .setMaxSize(IO.IN, SoulRecipeCapability.CAP, 1)
             .setMaxTooltips(4)
             .setProgressBar(GuiTextures.PROGRESS_BAR_ARROW, ProgressTexture.FillDirection.ALWAYS_FULL);
+    public static final GTRecipeType HEMOPHAGIC_TRANSFUSER = GTRecipeTypes
+            .register("hemophagic_transfuser", GTRecipeTypes.MULTIBLOCK)
+            .setMaxIOSize(12, 4, 4, 4)
+            .setMaxSize(IO.IN, SoulRecipeCapability.CAP, 1)
+            .setMaxTooltips(4)
+            .setProgressBar(GuiTextures.PROGRESS_BAR_ARROW, ProgressTexture.FillDirection.ALWAYS_FULL);
     public static final GTRecipeType CHROMATIC_FLOTATION_PLANT = GTRecipeTypes
             .register("chromatic_flotation_plant", GTRecipeTypes.MULTIBLOCK)
             .setMaxIOSize(3, 9, 3, 3)
