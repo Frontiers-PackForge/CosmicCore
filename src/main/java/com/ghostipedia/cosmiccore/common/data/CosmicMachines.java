@@ -6,6 +6,7 @@ import com.ghostipedia.cosmiccore.api.machine.multiblock.DimensionalEnergyInterf
 import com.ghostipedia.cosmiccore.api.machine.multiblock.IPBFMachine;
 import com.ghostipedia.cosmiccore.api.machine.part.CosmicPartAbility;
 import com.ghostipedia.cosmiccore.api.machine.part.SteamFluidHatchPartMachine;
+import com.ghostipedia.cosmiccore.api.machine.part.WirelessEnergyHatchPartMachine;
 import com.ghostipedia.cosmiccore.api.registries.CosmicRegistration;
 import com.ghostipedia.cosmiccore.client.renderer.machine.SidedWorkableHullRenderer;
 import com.ghostipedia.cosmiccore.common.block.WorkableSteamHullType;
@@ -23,6 +24,7 @@ import com.ghostipedia.cosmiccore.gtbridge.CosmicRecipeTypes;
 import com.gregtechceu.gtceu.GTCEu;
 import com.gregtechceu.gtceu.api.GTCEuAPI;
 import com.gregtechceu.gtceu.api.GTValues;
+import com.gregtechceu.gtceu.api.capability.forge.GTCapability;
 import com.gregtechceu.gtceu.api.capability.recipe.IO;
 import com.gregtechceu.gtceu.api.capability.recipe.ItemRecipeCapability;
 import com.gregtechceu.gtceu.api.data.RotationState;
@@ -88,7 +90,6 @@ public class CosmicMachines {
     public final static MachineDefinition[] SOUL_IMPORT_HATCH = registerSoulTieredHatch(
             "soul_input_hatch", "Soul Input Hatch", "soul_hatch.import",
             IO.IN, HIGH_TIERS, CosmicPartAbility.IMPORT_SOUL);
-
     public static final MachineDefinition[] SOUL_EXPORT_HATCH = registerSoulTieredHatch(
             "soul_output_hatch", "Soul Output Hatch", "soul_hatch.export",
             IO.OUT, HIGH_TIERS, CosmicPartAbility.EXPORT_SOUL);
@@ -98,6 +99,28 @@ public class CosmicMachines {
     public static final MachineDefinition[] THERMIA_SOCKET = registerThermiaTieredHatch(
             "thermia_import_hatch", "Thermia Socket", "thermia_hatch.import",
             IO.IN, HIGH_TIERS, CosmicPartAbility.IMPORT_THERMIA);
+
+
+    public static final MachineDefinition[] WIRELESS_ENERGY_INPUT_HATCH = registerWirelessEnergyTieredHatch(
+            "wireless_energy_hatch", "Wireless Energy Hatch", "wireless_energy.1a",
+            IO.IN, HIGH_TIERS, 1, PartAbility.INPUT_ENERGY);
+    public static final MachineDefinition[] WIRELESS_ENERGY_OUTPUT_DYNAMO = registerWirelessEnergyTieredHatch(
+            "wireless_energy_dynamo", "Wireless Energy Dynamo", "wireless_energy.1a",
+            IO.IN, HIGH_TIERS, 1, PartAbility.OUTPUT_ENERGY);
+    public static final MachineDefinition[] WIRELESS_ENERGY_INPUT_HATCH_4A = registerWirelessEnergyTieredHatch(
+            "4a_wireless_energy_hatch", "4A Wireless Energy Hatch", "wireless_energy.4a",
+            IO.IN, HIGH_TIERS, 1, PartAbility.INPUT_ENERGY);
+    public static final MachineDefinition[] WIRELESS_ENERGY_OUTPUT_DYNAMO_4A = registerWirelessEnergyTieredHatch(
+            "4a_wireless_energy_dynamo", "4A Wireless Energy Dynamo", "wireless_energy.4a",
+            IO.IN, HIGH_TIERS, 1, PartAbility.OUTPUT_ENERGY);
+    public static final MachineDefinition[] WIRELESS_ENERGY_INPUT_HATCH_16A = registerWirelessEnergyTieredHatch(
+            "16a_wireless_energy_hatch", "16A Wireless Energy Hatch", "wireless_energy.16a",
+            IO.IN, HIGH_TIERS, 1, PartAbility.INPUT_ENERGY);
+    public static final MachineDefinition[] WIRELESS_ENERGY_OUTPUT_DYNAMO_16A = registerWirelessEnergyTieredHatch(
+            "16a_wireless_energy_dynamo", "16A Wireless Energy Dynamo", "wireless_energy.16a",
+            IO.IN, HIGH_TIERS, 1, PartAbility.OUTPUT_ENERGY);
+
+
     public static final MachineDefinition[] NAQUAHINE_MINI_REACTOR = registerSimpleGenerator("naquahine_mini_reactor",
             CosmicRecipeTypes.MINI_NAQUAHINE_REACTOR, genericGeneratorTankSizeFunction, 0.0f, GTValues.IV, GTValues.LuV,
             GTValues.ZPM, GTValues.UV, GTValues.UHV);
@@ -3023,6 +3046,7 @@ public class CosmicMachines {
             .workableCasingRenderer(CosmicCore.id("block/casings/solid/vomahine_certified_chemically_resistant_casing"), CosmicCore.id("block/multiblock/vomahine_chemplant"))
 
             .register();
+
     private static MachineDefinition[] registerSoulTieredHatch(String name, String displayName, String model, IO io, int[] tiers, PartAbility... abilities) {
         return registerTieredMachines(name,
                 (holder, tier) -> new SoulHatchPartMachine(holder, tier, io),
@@ -3040,6 +3064,19 @@ public class CosmicMachines {
                                         SoulHatchPartMachine.getMaxCapacity(tier)));
                         }).register(),
                 tiers);
+    }
+
+    private static MachineDefinition[] registerWirelessEnergyTieredHatch(String name, String displayName, String model, IO io,
+                                                                         int[] tiers, int amperage, PartAbility... abilities) {
+        return registerTieredMachines(name,
+            (holder, tier) -> new WirelessEnergyHatchPartMachine(holder, tier, io, amperage),
+            (tier, builder) -> builder
+                    .langValue(VNF[tier] + ' ' + displayName)
+                    .abilities(abilities)
+                    .rotationState(RotationState.ALL)
+                    .overlayTieredHullRenderer(model)
+                    .register(),
+            tiers);
     }
 
     private static MachineDefinition[] registerThermiaTieredHatch(String name, String displayName, String model, IO io,

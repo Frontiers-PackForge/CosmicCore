@@ -1,0 +1,16 @@
+{
+  "parent": "block/block",
+  "textures": {
+    "particle": "#overlay_wireless_energy_4a",
+    "overlay_soul_hatch": "cosmiccore:block/overlay/wireless_energy_4a"
+  },
+  "elements": [
+    {
+      "from": [0, 0, 0],
+      "to": [16, 16, 0],
+      "faces": {
+        "north": {"uv": [0, 0, 16, 16], "texture": "#overlay_wireless_energy_4a", "cullface": "north", "tintindex": -101, "emissivity":  15}
+      }
+    }
+  ]
+}
