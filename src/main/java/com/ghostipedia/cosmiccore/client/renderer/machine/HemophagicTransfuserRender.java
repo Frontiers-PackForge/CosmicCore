@@ -1,6 +1,7 @@
 package com.ghostipedia.cosmiccore.client.renderer.machine;
 
 import com.ghostipedia.cosmiccore.CosmicCore;
+
 import com.gregtechceu.gtceu.GTCEu;
 import com.gregtechceu.gtceu.api.GTValues;
 import com.gregtechceu.gtceu.api.machine.IMachineBlockEntity;
@@ -13,11 +14,11 @@ import com.gregtechceu.gtceu.client.renderer.machine.IControllerRenderer;
 import com.gregtechceu.gtceu.client.renderer.machine.WorkableCasingMachineRenderer;
 import com.gregtechceu.gtceu.client.util.RenderBufferHelper;
 import com.gregtechceu.gtceu.client.util.StaticFaceBakery;
+
 import com.lowdragmc.lowdraglib.client.model.ModelFactory;
 import com.lowdragmc.lowdraglib.syncdata.annotation.DescSynced;
 import com.lowdragmc.lowdraglib.syncdata.annotation.Persisted;
-import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.blaze3d.vertex.VertexConsumer;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
@@ -32,6 +33,9 @@ import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+
+import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.VertexConsumer;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Quaternionf;
 import wayoftime.bloodmagic.BloodMagic;
@@ -43,7 +47,7 @@ import static net.minecraft.util.FastColor.ARGB32.*;
 
 public class HemophagicTransfuserRender extends WorkableCasingMachineRenderer implements IControllerRenderer {
 
-    public static final ResourceLocation TEXTURE =BloodMagic.rl("block/blankrune");
+    public static final ResourceLocation TEXTURE = BloodMagic.rl("block/blankrune");
     public static final ResourceLocation OVERLAY_MODEL_TEXTURES = GTCEu.id("block/multiblock/fusion_reactor");
     public static final ResourceLocation HEMOPHAGIC_TRANSFUSER_MODEL = CosmicCore.id("block/iris/bloodcube");
     public static final int CENTER_OFFSET = -5;
@@ -55,6 +59,7 @@ public class HemophagicTransfuserRender extends WorkableCasingMachineRenderer im
     boolean isActive = false;
 
     public final ResourceLocation multipartSprite;
+
     public HemophagicTransfuserRender(ResourceLocation texture, ResourceLocation multipartSprite,
                                       ResourceLocation workableModel) {
         super(TEXTURE, OVERLAY_MODEL_TEXTURES);
@@ -99,12 +104,14 @@ public class HemophagicTransfuserRender extends WorkableCasingMachineRenderer im
                                 @Nullable Direction side, RandomSource rand, Direction modelFacing,
                                 ModelState modelState) {
         if (modelFacing != null) {
-                quads.add(StaticFaceBakery.bakeFace(modelFacing, ModelFactory.getBlockSprite(multipartSprite),
-                        modelState));
+            quads.add(StaticFaceBakery.bakeFace(modelFacing, ModelFactory.getBlockSprite(multipartSprite),
+                    modelState));
         }
     }
+
     @OnlyIn(Dist.CLIENT)
-    public void renderCube(WorkableElectricMultiblockMachine machine, PoseStack poseStack, MultiBufferSource bufferSource,
+    public void renderCube(WorkableElectricMultiblockMachine machine, PoseStack poseStack,
+                           MultiBufferSource bufferSource,
                            Direction frontFacing, Direction upwardsFacing,
                            float tick, int combinedLight, int combinedOverlay) {
         var modelManager = Minecraft.getInstance().getModelManager();
@@ -113,9 +120,9 @@ public class HemophagicTransfuserRender extends WorkableCasingMachineRenderer im
         BlockPos offset = RelativeDirection.offsetPos(BlockPos.ZERO, frontFacing, upwardsFacing, false,
                 0, 0, CENTER_OFFSET);
         poseStack.translate(offset.getX() + 0.5D, offset.getY() + 4.5D, offset.getZ() + 0.5D);
-        if (!machine.recipeLogic.isWorking()){
+        if (!machine.recipeLogic.isWorking()) {
             poseStack.mulPose(new Quaternionf().rotateAxis(tick * Mth.TWO_PI / 80, 0, 1, 0));
-        } else if (machine.recipeLogic.isWorking()){
+        } else if (machine.recipeLogic.isWorking()) {
             poseStack.mulPose(new Quaternionf().rotateAxis(tick * Mth.TWO_PI / 20, 0, 1, 0));
         }
         poseStack.scale(1.0f, 1.0f, 1.0f);
@@ -129,6 +136,7 @@ public class HemophagicTransfuserRender extends WorkableCasingMachineRenderer im
 
         poseStack.popPose();
     }
+
     @OnlyIn(Dist.CLIENT)
     private void renderLightRing(WorkableElectricMultiblockMachine machine, float partialTicks, PoseStack poseStack,
                                  MultiBufferSource buffer, float tick) {
