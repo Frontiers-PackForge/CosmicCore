@@ -1,0 +1,9 @@
+{
+    "loader": "forge:obj",
+    "model": "cosmiccore:models/block/iris/bloodcube.obj",
+    "textures": {
+      "texture0": "cosmiccore:block/iris/bloodcube",
+      "particle":"cosmiccore:block/iris/bloodcube"
+    },
+    "automatic_culling": false
+  }
