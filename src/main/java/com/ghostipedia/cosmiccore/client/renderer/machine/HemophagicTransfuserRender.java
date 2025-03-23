@@ -14,6 +14,8 @@ import com.gregtechceu.gtceu.client.renderer.machine.WorkableCasingMachineRender
 import com.gregtechceu.gtceu.client.util.RenderBufferHelper;
 import com.gregtechceu.gtceu.client.util.StaticFaceBakery;
 import com.lowdragmc.lowdraglib.client.model.ModelFactory;
+import com.lowdragmc.lowdraglib.syncdata.annotation.DescSynced;
+import com.lowdragmc.lowdraglib.syncdata.annotation.Persisted;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.client.Minecraft;
@@ -48,7 +50,9 @@ public class HemophagicTransfuserRender extends WorkableCasingMachineRenderer im
     public static final float FADEOUT = 60;
     protected float delta = 0;
     protected int lastColor = -1;
-
+    @Persisted
+    @DescSynced
+    boolean isActive = false;
 
     public final ResourceLocation multipartSprite;
     public HemophagicTransfuserRender(ResourceLocation texture, ResourceLocation multipartSprite,
@@ -74,7 +78,8 @@ public class HemophagicTransfuserRender extends WorkableCasingMachineRenderer im
             var frontFacing = machine.getFrontFacing();
             var upwardsFacing = machine.getUpwardsFacing();
             float tick = level.getGameTime() + partialTicks;
-            renderCube(poseStack, buffer, frontFacing, upwardsFacing, tick, combinedLight, combinedOverlay);
+            isActive = false;
+            renderCube(machine, poseStack, buffer, frontFacing, upwardsFacing, tick, combinedLight, combinedOverlay);
         }
         if (blockEntity instanceof IMachineBlockEntity machineBlockEntity &&
                 machineBlockEntity.getMetaMachine() instanceof WorkableElectricMultiblockMachine machine &&
@@ -83,7 +88,8 @@ public class HemophagicTransfuserRender extends WorkableCasingMachineRenderer im
             var frontFacing = machine.getFrontFacing();
             var upwardsFacing = machine.getUpwardsFacing();
             float tick = level.getGameTime() + partialTicks;
-            renderCube(poseStack, buffer, frontFacing, upwardsFacing, tick, combinedLight, combinedOverlay);
+            isActive = true;
+            renderCube(machine, poseStack, buffer, frontFacing, upwardsFacing, tick, combinedLight, combinedOverlay);
             renderLightRing(machine, partialTicks, poseStack, buffer, tick);
         }
     }
@@ -98,7 +104,7 @@ public class HemophagicTransfuserRender extends WorkableCasingMachineRenderer im
         }
     }
     @OnlyIn(Dist.CLIENT)
-    public void renderCube(PoseStack poseStack, MultiBufferSource bufferSource,
+    public void renderCube(WorkableElectricMultiblockMachine machine, PoseStack poseStack, MultiBufferSource bufferSource,
                            Direction frontFacing, Direction upwardsFacing,
                            float tick, int combinedLight, int combinedOverlay) {
         var modelManager = Minecraft.getInstance().getModelManager();
@@ -107,7 +113,11 @@ public class HemophagicTransfuserRender extends WorkableCasingMachineRenderer im
         BlockPos offset = RelativeDirection.offsetPos(BlockPos.ZERO, frontFacing, upwardsFacing, false,
                 0, 0, CENTER_OFFSET);
         poseStack.translate(offset.getX() + 0.5D, offset.getY() + 4.5D, offset.getZ() + 0.5D);
-        poseStack.mulPose(new Quaternionf().rotateAxis(tick * Mth.TWO_PI / 80, 0, 1, 0));
+        if (!machine.recipeLogic.isWorking()){
+            poseStack.mulPose(new Quaternionf().rotateAxis(tick * Mth.TWO_PI / 80, 0, 1, 0));
+        } else if (machine.recipeLogic.isWorking()){
+            poseStack.mulPose(new Quaternionf().rotateAxis(tick * Mth.TWO_PI / 20, 0, 1, 0));
+        }
         poseStack.scale(1.0f, 1.0f, 1.0f);
         PoseStack.Pose pose = poseStack.last();
 
@@ -133,28 +143,24 @@ public class HemophagicTransfuserRender extends WorkableCasingMachineRenderer im
             delta -= Minecraft.getInstance().getDeltaFrameTime();
         }
 
-        final var lerpFactor = Math.abs((Math.abs(machine.getOffsetTimer() % 50) + partialTicks) - 25) / 25;
         var front = machine.getFrontFacing();
         var upwards = machine.getUpwardsFacing();
         var flipped = machine.isFlipped();
         var back = RelativeDirection.BACK.getRelativeFacing(front, upwards, flipped);
         var axis = RelativeDirection.UP.getRelativeFacing(front, upwards, flipped).getAxis();
-        var r = Mth.lerp(lerpFactor, red(lastColor), 255) / 255f;
-        var g = Mth.lerp(lerpFactor, green(lastColor), 255) / 255f;
-        var b = Mth.lerp(lerpFactor, blue(lastColor), 255) / 255f;
         BlockPos offset = RelativeDirection.offsetPos(BlockPos.ZERO, front, upwards, false,
                 0, 0, CENTER_OFFSET);
-        poseStack.translate(offset.getX() + -0.5D, offset.getY() + 4.5D, offset.getZ() + 2D);
+        poseStack.translate(offset.getX() + -0.5D, offset.getY() + 4.3D, offset.getZ() + 2D);
         poseStack.mulPose(new Quaternionf().rotateAxis(0, 0, 0, 1));
         poseStack.mulPose(new Quaternionf().rotateAxis(45, 0, 1, 0));
-        poseStack.mulPose(new Quaternionf().rotateAxis(45, 1, 0, 0));
+        poseStack.mulPose(new Quaternionf().rotateAxis(0, 1, 0, 0));
         poseStack.scale(0.25f, 0.25f, 0.25f);
         RenderBufferHelper.renderRing(poseStack, buffer.getBuffer(GTRenderTypes.getLightRing()),
                 back.getStepX() * 7 + 0.5F,
                 back.getStepY() * 7 + 0.5F,
                 back.getStepZ() * 7 + 0.5F,
-                6, 0.3F, 10, 36,
-                r, g, b, alpha, axis);
+                7, 0.3F, 10, 36,
+                0.5F, 0, 0, alpha, axis);
     }
 
     @Override
