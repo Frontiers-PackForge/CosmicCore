@@ -97,17 +97,17 @@ public class CosmicBlocks {
     // TODO : FIGURE OUT WHY these are breaking the minable tags for pickaxe/wrench..
     public static final BlockEntry<Block> HIGH_TEMP_FISSION_CASING = createCasingBlock(
             "high_temperature_fission_casing", CosmicCore.id("block/casings/solid/high_temperature_fission_casing"));
-    public static final BlockEntry<Block> VOMAHINE_CERTIFIED_CHEMICALLY_RESISTANT_CASING = createCasingBlock(
-            "vomahine_certified_chemically_resistant_casing",
+    public static final BlockEntry<Block> CYCLOZINE_CHEMICALLY_REPELLING_CASING = createCasingBlock(
+            "cyclozine_chemically_repelling_casing",
             CosmicCore.id("block/casings/solid/vomahine_certified_chemically_resistant_casing"));
-    public static final BlockEntry<Block> VOMAHINE_CERTIFIED_CHEMICALLY_RESISTANT_PIPE = createCasingBlock(
-            "vomahine_certified_chemically_resistant_pipe",
+    public static final BlockEntry<Block> CYCLOZINE_CHEMICALLY_REPELLING_PIPE = createCasingBlock(
+            "cyclozine_chemically_repelling_pipe",
             CosmicCore.id("block/casings/solid/vomahine_certified_chemically_resistant_pipe"));
-    public static final BlockEntry<Block> VOMAHINE_CERTIFIED_INTERSTELLAR_GRADE_CASING = createCasingBlock(
-            "vomahine_certified_interstellar_grade_casing",
+    public static final BlockEntry<Block> MULTIPURPOSE_INTERSTELLAR_GRADE_CASING = createCasingBlock(
+            "multi_purpose_interstellar_grade_casing",
             CosmicCore.id("block/casings/solid/vomahine_certified_interstellar_grade_casing"));
-    public static final BlockEntry<Block> VOMAHINE_ULTRA_POWERED_CASING = createCasingBlock(
-            "vomahine_ultra_powered_casing", CosmicCore.id("block/casings/solid/vomahine_ultra_powered_casing"));
+    public static final BlockEntry<Block> ULTRA_POWERED_CASING = createCasingBlock(
+            "ultra_powered_casing", CosmicCore.id("block/casings/solid/vomahine_ultra_powered_casing"));
     public static final BlockEntry<Block> HIGHLY_CONDUCTIVE_FISSION_CASING = createCasingBlock(
             "highly_conductive_fission_casing", CosmicCore.id("block/casings/solid/highly_conductive_fission_casing"));
 

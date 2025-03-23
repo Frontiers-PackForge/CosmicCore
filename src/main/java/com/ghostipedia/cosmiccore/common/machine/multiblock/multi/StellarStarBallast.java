@@ -21,7 +21,6 @@ import static com.gregtechceu.gtceu.api.pattern.Predicates.*;
 import static com.gregtechceu.gtceu.api.pattern.Predicates.blocks;
 import static com.gregtechceu.gtceu.common.data.GCYMBlocks.CASING_ATOMIC;
 import static com.gregtechceu.gtceu.common.data.GCYMBlocks.CASING_HIGH_TEMPERATURE_SMELTING;
-import static com.gregtechceu.gtceu.common.data.GTBlocks.*;
 
 public class StellarStarBallast {
 
@@ -30,7 +29,7 @@ public class StellarStarBallast {
             .rotationState(RotationState.Y_AXIS)
             .recipeType(CosmicRecipeTypes.VOMAHINE_CORE_DRILL)
             .recipeModifier(GTRecipeModifiers.ELECTRIC_OVERCLOCK.apply(OverclockingLogic.NON_PERFECT_OVERCLOCK_SUBTICK))
-            .appearanceBlock(CosmicBlocks.VOMAHINE_CERTIFIED_CHEMICALLY_RESISTANT_CASING)
+            .appearanceBlock(CosmicBlocks.CYCLOZINE_CHEMICALLY_REPELLING_CASING)
             .pattern(definition -> FactoryBlockPattern.start()
                     .aisle("                           AAAAA                           ",
                             "                        BBBBBBBBBBB                        ",
@@ -684,11 +683,11 @@ public class StellarStarBallast {
                     .where(' ', any())
                     .where("Q", controller(blocks(definition.getBlock())))
                     .where('A', blocks(CASING_HIGH_TEMPERATURE_SMELTING.get()))
-                    .where('B', blocks(VOMAHINE_CERTIFIED_INTERSTELLAR_GRADE_CASING.get()))
-                    .where('C', blocks(VOMAHINE_CERTIFIED_INTERSTELLAR_GRADE_CASING.get()))
+                    .where('B', blocks(MULTIPURPOSE_INTERSTELLAR_GRADE_CASING.get()))
+                    .where('C', blocks(MULTIPURPOSE_INTERSTELLAR_GRADE_CASING.get()))
                     .where('D', blocks(CASING_ATOMIC.get()))
-                    .where('E', blocks(VOMAHINE_ULTRA_POWERED_CASING.get()))
-                    .where('F', blocks(VOMAHINE_CERTIFIED_CHEMICALLY_RESISTANT_CASING.get())
+                    .where('E', blocks(ULTRA_POWERED_CASING.get()))
+                    .where('F', blocks(CYCLOZINE_CHEMICALLY_REPELLING_CASING.get())
                             .or(Predicates.abilities(PartAbility.EXPORT_ITEMS).setMaxGlobalLimited(16))
                             .or(Predicates.abilities(PartAbility.EXPORT_FLUIDS).setMaxGlobalLimited(16))
                             .or(Predicates.abilities(PartAbility.INPUT_ENERGY).setMaxGlobalLimited(2))

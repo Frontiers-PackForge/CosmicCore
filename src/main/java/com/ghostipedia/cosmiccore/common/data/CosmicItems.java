@@ -47,13 +47,13 @@ public class CosmicItems {
     static {
         CosmicRegistration.REGISTRATE.creativeModeTab(() -> CosmicCreativeModeTabs.COSMIC_CORE);
         ORB_ASCENDANT = BLOOD_ORBS.register("ascendantbloodorb", () -> {
-            return new BloodOrb(new ResourceLocation("bloodmagic", "ascendantbloodorb"), 5, 25000000, 1000);
+            return new BloodOrb(new ResourceLocation("bloodmagic", "ascendantbloodorb"), 6, 25000000, 1000);
         });
         ORB_VOIDSENT = BLOOD_ORBS.register("voidsentbloodorb", () -> {
-            return new BloodOrb(new ResourceLocation("bloodmagic", "voidsentbloodorb"), 5, 50000000, 1000);
+            return new BloodOrb(new ResourceLocation("bloodmagic", "voidsentbloodorb"), 7, 50000000, 1000);
         });
         ORB_SOVEREIGN = BLOOD_ORBS.register("sovereignbloodorb", () -> {
-            return new BloodOrb(new ResourceLocation("bloodmagic", "sovereignbloodorb"), 5, 100000000, 10000);
+            return new BloodOrb(new ResourceLocation("bloodmagic", "sovereignbloodorb"), 8, 100000000, 10000);
         });
     }
 
@@ -69,14 +69,14 @@ public class CosmicItems {
             .register();
     public static final ItemEntry<ComponentItem> DILUMIXAL_NAQ_DOPED_BOULE = REGISTRATE
             .item("dilumixal_naquadah_doped_silicon_boule", ComponentItem::create)
-            .lang("DiLumixal Naquadah Doped Silicon Boule")
+            .lang("DiLumixal Naquadah-doped Silicon Boule")
             .properties(p -> p.stacksTo(64))
             .tag()
             .defaultModel()
             .register();
     public static final ItemEntry<ComponentItem> DILUMIXAL_NAQ_DOPED_WAFER = REGISTRATE
             .item("dilumixal_naquadah_doped_silicon_wafer", ComponentItem::create)
-            .lang("DiLumixal Naquadah Doped Silicon Wafer")
+            .lang("DiLumixal Naquadah-doped Silicon Wafer")
             .properties(p -> p.stacksTo(64))
             .tag()
             .defaultModel()
@@ -159,13 +159,13 @@ public class CosmicItems {
             .register();
     public static final ItemEntry<ItemBloodOrb> ITEM_ORB_VOIDSENT = REGISTRATE
             .item("void_blood_orb", (p) -> new ItemBloodOrb(ORB_VOIDSENT))
-            .lang("Ascendant Blood Orb")
+            .lang("Voidsent Blood Orb")
             .properties(p -> p.stacksTo(1))
             .defaultModel()
             .register();
-    public static final ItemEntry<ItemBloodOrb> ITEM_ORB_SOVEREIGNT = REGISTRATE
+    public static final ItemEntry<ItemBloodOrb> ITEM_ORB_SOVEREIGN = REGISTRATE
             .item("sov_blood_orb", (p) -> new ItemBloodOrb(ORB_SOVEREIGN))
-            .lang("Ascendant Blood Orb")
+            .lang("Sovereign Blood Orb")
             .properties(p -> p.stacksTo(1))
             .defaultModel()
             .register();
@@ -377,12 +377,12 @@ public class CosmicItems {
             .defaultModel()
             .register();
 
-    public static final ItemEntry<ComponentItem> WRAPPED_S = REGISTRATE
-            .item("blackstone_pustule", ComponentItem::create)
-            .lang("Blackstone Pustule")
-            .properties(p -> p.stacksTo(64))
-            .defaultModel()
-            .register();
+    // public static final ItemEntry<ComponentItem> WRAPPED_S = REGISTRATE
+    // .item("blackstone_pustule", ComponentItem::create)
+    // .lang("Blackstone Pustule")
+    // .properties(p -> p.stacksTo(64))
+    // .defaultModel()
+    // .register();
 
     // New Circuits
     // Echo (ZPM-UEV)
@@ -511,7 +511,7 @@ public class CosmicItems {
             .defaultModel()
             .register();
     public static final ItemEntry<ComponentItem> FIRECLAY_BALL = REGISTRATE.item("fireclay_ball", ComponentItem::create)
-            .lang("Fireclay ball")
+            .lang("Fireclay Ball")
             .properties(p -> p.stacksTo(64))
             .defaultModel()
             .register();
@@ -579,20 +579,8 @@ public class CosmicItems {
             .register();
     // Oiled up white girl trying to understand what the FUCK an armor tag is, i'm doing to fucking shove a whole
     // pineapple up the ass of whatever mojang employee thought these were **OKAY TO CODE**
-    public static ItemEntry<SpaceArmorComponentItem> VOMHINEE_WARPTECH_CHESTPLATE = REGISTRATE
-            .item("vomahine_warptech_chestplate",
-                    (p) -> new SpaceArmorComponentItem(GTArmorMaterials.ARMOR, ArmorItem.Type.CHESTPLATE, 100000, p)
-                            .setArmorLogic(new QuarkTechSpaceSuite(ArmorItem.Type.CHESTPLATE, 8192,
-                                    100_000_000L * (long) Math.max(1,
-                                            Math.pow(4, ConfigHolder.INSTANCE.tools.voltageTierQuarkTech - 5)),
-                                    ConfigHolder.INSTANCE.tools.voltageTierAdvQuarkTech)))
-            .tag(CosmicItemTags.QUARKTECH_SPACE_SUITE, ModItemTags.SPACE_SUITS, ModItemTags.FREEZE_RESISTANT_ARMOR,
-                    ModItemTags.HEAT_RESISTANT_ARMOR)
-            .lang("Vomahine™ WarpTech Chestplate")
-            .properties(p -> p.rarity(Rarity.EPIC))
-            .register();
-    public static ItemEntry<SpaceArmorComponentItem> ADVANCED_VOMHINEE_WARPTECH_CHESTPLATE = REGISTRATE
-            .item("vomahine_warptech_gravplate",
+    public static ItemEntry<SpaceArmorComponentItem> ADVANCED_SANGUINE_WARPTECH_CHESTPLATE = REGISTRATE
+            .item("sanguine_warptech_chestplate",
                     (p) -> new SpaceArmorComponentItem(GTArmorMaterials.ARMOR, ArmorItem.Type.CHESTPLATE, 100000, p)
                             .setArmorLogic(new AdvancedQuarkTechSpaceSuite(8192,
                                     10_000_000_000L * (long) Math.max(1,
@@ -600,40 +588,40 @@ public class CosmicItems {
                                     ConfigHolder.INSTANCE.tools.voltageTierAdvQuarkTech)))
             .tag(CosmicItemTags.QUARKTECH_SPACE_SUITE, ModItemTags.SPACE_SUITS, ModItemTags.FREEZE_RESISTANT_ARMOR,
                     ModItemTags.HEAT_RESISTANT_ARMOR)
-            .lang("Vomahine™ WarpTech Gravplate")
+            .lang("Sanguine WarpTech Gravplate")
             .properties(p -> p.rarity(Rarity.EPIC))
             .register();
-    public static ItemEntry<ArmorComponentItem> VOMHINEE_WARPTECH_LEGGINGS = REGISTRATE
-            .item("vomahine_warptech_leggings",
+    public static ItemEntry<ArmorComponentItem> SANGUINE_WARPTECH_LEGGINGS = REGISTRATE
+            .item("sanguine_warptech_leggings",
                     (p) -> new ArmorComponentItem(GTArmorMaterials.ARMOR, ArmorItem.Type.LEGGINGS, p)
                             .setArmorLogic(new QuarkTechSuite(ArmorItem.Type.LEGGINGS,
                                     8192,
                                     100_000_000L * (long) Math.max(1,
                                             Math.pow(4, ConfigHolder.INSTANCE.tools.voltageTierQuarkTech - 5)),
                                     ConfigHolder.INSTANCE.tools.voltageTierQuarkTech)))
-            .lang("Vomahine™ WarpTech Leggings")
+            .lang("Sanguine WarpTech Leggings")
             .properties(p -> p.rarity(Rarity.EPIC))
             .tag(CustomTags.PPE_ARMOR)
             .register();
-    public static ItemEntry<ArmorComponentItem> VOMHINEE_WARPTECH_HELMET = REGISTRATE.item("vomahine_warptech_helmet",
+    public static ItemEntry<ArmorComponentItem> SANGUINE_WARPTECH_HELMET = REGISTRATE.item("sanguine_warptech_helmet",
             (p) -> new ArmorComponentItem(GTArmorMaterials.ARMOR, ArmorItem.Type.HELMET, p)
                     .setArmorLogic(new QuarkTechSuite(ArmorItem.Type.HELMET,
                             8192,
                             100_000_000L * (long) Math.max(1,
                                     Math.pow(4, ConfigHolder.INSTANCE.tools.voltageTierQuarkTech - 5)),
                             ConfigHolder.INSTANCE.tools.voltageTierQuarkTech)))
-            .lang("Vomahine™ WarpTech Leggings")
+            .lang("Sanguine WarpTech Leggings")
             .properties(p -> p.rarity(Rarity.EPIC))
             .tag(CustomTags.PPE_ARMOR)
             .register();
-    public static ItemEntry<ArmorComponentItem> VOMHINEE_WARPTECH_BOOTS = REGISTRATE.item("vomahine_warptech_boots",
+    public static ItemEntry<ArmorComponentItem> SANGUINE_WARPTECH_BOOTS = REGISTRATE.item("sanguine_warptech_boots",
             (p) -> new ArmorComponentItem(GTArmorMaterials.ARMOR, ArmorItem.Type.BOOTS, p)
                     .setArmorLogic(new QuarkTechSuite(ArmorItem.Type.BOOTS,
                             8192,
                             100_000_000L * (long) Math.max(1,
                                     Math.pow(4, ConfigHolder.INSTANCE.tools.voltageTierQuarkTech - 5)),
                             ConfigHolder.INSTANCE.tools.voltageTierQuarkTech)))
-            .lang("Vomahine™ WarpTech Leggings")
+            .lang("Sanguine WarpTech Leggings")
             .properties(p -> p.rarity(Rarity.EPIC))
             .tag(CustomTags.PPE_ARMOR)
             .register();
