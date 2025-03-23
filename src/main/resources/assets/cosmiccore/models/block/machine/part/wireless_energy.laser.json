@@ -2,7 +2,7 @@
   "parent": "block/block",
   "textures": {
     "particle": "#overlay_wireless_energy_laser",
-    "overlay_soul_hatch": "cosmiccore:block/overlay/wireless_energy_laser"
+    "overlay_wireless_energy_laser": "cosmiccore:block/overlay/wireless_energy_laser"
   },
   "elements": [
     {
