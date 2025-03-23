@@ -150,8 +150,8 @@ public class HemophagicTransfuserRender extends WorkableCasingMachineRenderer im
         var axis = RelativeDirection.UP.getRelativeFacing(front, upwards, flipped).getAxis();
         BlockPos offset = RelativeDirection.offsetPos(BlockPos.ZERO, front, upwards, false,
                 0, 0, CENTER_OFFSET);
-        poseStack.translate(offset.getX() + -0.5D, offset.getY() + 4.3D, offset.getZ() + 2D);
-        poseStack.mulPose(new Quaternionf().rotateAxis(0, 0, 0, 1));
+        poseStack.translate(offset.getX() + -0.15D, offset.getY() + 3.5D, offset.getZ() + 2D);
+        poseStack.mulPose(new Quaternionf().rotateAxis(45, 0, 0, 1));
         poseStack.mulPose(new Quaternionf().rotateAxis(45, 0, 1, 0));
         poseStack.mulPose(new Quaternionf().rotateAxis(0, 1, 0, 0));
         poseStack.scale(0.25f, 0.25f, 0.25f);
