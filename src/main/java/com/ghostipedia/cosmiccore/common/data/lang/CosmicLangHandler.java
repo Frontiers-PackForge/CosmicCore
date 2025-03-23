@@ -97,8 +97,8 @@ public class CosmicLangHandler {
         replace(provider, "cosmiccore.multiblock.hpsassem.tooltip.0", "§7§oLet's build an empire!");
         replace(provider, "cosmiccore.multiblock.hpsassem.tooltip.1", "§fA large but powerful assembler made of steel");
         replace(provider, "cosmiccore.multiblock.hpsassem.tooltip.2", "§aParallel Amount§f: §b4x§r");
-        replace(provider, "block.gtceu.steam_fluid_output_hatch", "Output Hatch (Steam)");
-        replace(provider, "block.gtceu.steam_fluid_input_hatch", "Input Hatch (Steam)");
+        replace(provider, "block.gtceu.steam_fluid_output_hatch", "Bronze Output Hatch");
+        replace(provider, "block.gtceu.steam_fluid_input_hatch", "Bronze Input Hatch");
         replace(provider, "gtceu.machine.steam_fluid_hatch_notice",
                 "This hatch is for Fluid ingredients! Not to power with steam!");
         replace(provider, "block.gtceu.hp_steam_bender", "HP Steam Bender");

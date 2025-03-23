@@ -32,10 +32,11 @@ public class HemophagicTransfuser {
 
     public final static MultiblockMachineDefinition HEMOPHAGIC_TRANSFUSER = REGISTRATE.multiblock("hemophagic_transfuser",
                     IrisMultiblockMachine::new)
+            .langValue("§aHemophagic Transfuser")
             .rotationState(RotationState.NON_Y_AXIS)
             .recipeType(CosmicRecipeTypes.HEMOPHAGIC_TRANSFUSER)
+            .partAppearance((controller, part, side) -> CYCLOZINE_CHEMICALLY_REPELLING_CASING.getDefaultState())
             .recipeModifiers(GTRecipeModifiers.PARALLEL_HATCH, GTRecipeModifiers.ELECTRIC_OVERCLOCK.apply(OverclockingLogic.PERFECT_OVERCLOCK_SUBTICK))
-            .appearanceBlock(BloodMagicBlocks.BLANK_RUNE)
             .pattern(definition -> FactoryBlockPattern.start()
                     .aisle("AAAA   AAAA", "A  AAAAA  A", "A         A", "AA       AA", " A       A ", " A       A ", " A       A ", "AA       AA", "A         A", "A  AAAAA  A", "AAAA   AAAA")
                     .aisle("A  AAAAA  A", "   BCCCB   ", "  B     B  ", "A         A", "AC       CA", "AC       CA", "AC       CA", "A         A", "  B     B  ", "   BCCCB   ", "A  AAAAA  A")
@@ -67,10 +68,6 @@ public class HemophagicTransfuser {
                     BloodMagic.rl("block/blankrune"),
                     CosmicCore.id("block/casings/solid/vomahine_certified_chemically_resistant_casing"),
                     GTCEu.id("block/multiblock/network_switch")))
-            .tooltips(Component.translatable("cosmiccore.multiblock.iris.tooltip.0"),
-                    Component.translatable("cosmiccore.multiblock.iris.tooltip.1"),
-                    Component.translatable("cosmiccore.multiblock.iris.tooltip.2"),
-                    Component.translatable("cosmiccore.multiblock.iris.tooltip.3"))
             .hasTESR(true)
             .register();
 

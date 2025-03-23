@@ -44,9 +44,15 @@ public class CosmicRecipeTypes {
             .setMaxSize(IO.IN, SoulRecipeCapability.CAP, 1)
             .setMaxTooltips(4)
             .setProgressBar(GuiTextures.PROGRESS_BAR_ARROW, ProgressTexture.FillDirection.ALWAYS_FULL);
+    public static final GTRecipeType SUFFERING_CHAMBER = GTRecipeTypes
+            .register("suffering_chamber", GTRecipeTypes.MULTIBLOCK)
+            .setMaxIOSize(1, 0, 0, 0)
+            .setMaxSize(IO.OUT, SoulRecipeCapability.CAP, 1)
+            .setMaxTooltips(3)
+            .setProgressBar(GuiTextures.PROGRESS_BAR_ARROW, LEFT_TO_RIGHT);
     public static final GTRecipeType HEMOPHAGIC_TRANSFUSER = GTRecipeTypes
             .register("hemophagic_transfuser", GTRecipeTypes.MULTIBLOCK)
-            .setMaxIOSize(12, 4, 4, 4)
+            .setMaxIOSize(6, 6, 3, 3)
             .setMaxSize(IO.IN, SoulRecipeCapability.CAP, 1)
             .setMaxTooltips(4)
             .setProgressBar(GuiTextures.PROGRESS_BAR_ARROW, ProgressTexture.FillDirection.ALWAYS_FULL);
