@@ -124,6 +124,8 @@ public class HemophagicTransfuserRender extends WorkableCasingMachineRenderer im
         poseStack.mulPose(xAxisRot);
         poseStack.mulPose(yAxisRot);
         poseStack.mulPose(zAxisRot);
+        // scale the stack
+        poseStack.scale(2, 2, 2);
         // translate back to corner of center block position (blocks are drawn from the 0,0,0 corner)
         poseStack.translate(up.getStepX() * (up.getStepX() > 0 ? -.5f : .5f) +
                         back.getStepX() * (back.getStepX() > 0 ? -.5f : .5f) -
@@ -134,7 +136,6 @@ public class HemophagicTransfuserRender extends WorkableCasingMachineRenderer im
                 up.getStepZ() * (up.getStepZ() > 0 ? -.5f : .5f) +
                         back.getStepZ() * (back.getStepZ() > 0 ? -.5f : .5f) -
                         (left.getAxis() == Direction.Axis.Z ? .5f : 0));
-        poseStack.scale(2,2,2);
         // draw block model quads
         var bakedModel = blockRenderer.getBlockModel(CosmicBlocks.BLOOD_CUBE.getDefaultState());
         var consumer = bufferSource.getBuffer(RenderType.solid());
@@ -207,8 +208,7 @@ public class HemophagicTransfuserRender extends WorkableCasingMachineRenderer im
 
         poseStack.mulPose(cosHalfPiPartialDiv60Quaternion);
         RenderBufferHelper.renderRing(poseStack, buffer.getBuffer(GTRenderTypes.getLightRing()), 0, 0, 0,
-                1.6f, 0.1F, 10, 36,
-                0.6F, 0, 0, alpha, axis);
+                1.6f, 0.1F, 10, 36, 0.6F, 0, 0, alpha, axis);
         poseStack.popPose();
         poseStack.popPose();
     }
