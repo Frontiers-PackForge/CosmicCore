@@ -75,8 +75,6 @@ public class HemophagicTransfuserRender extends WorkableCasingMachineRenderer im
             var level = machine.getLevel();
             float tick = level.getGameTime() + partialTicks;
             isActive = machine.isActive();
-            // todo: remove, this is for testing only
-            isActive = true;
             if (machine.isFormed()) {
                 renderCube(machine, poseStack, buffer, tick, combinedLight,
                         combinedOverlay);
