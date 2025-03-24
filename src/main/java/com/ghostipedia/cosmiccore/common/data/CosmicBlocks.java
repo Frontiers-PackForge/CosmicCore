@@ -111,6 +111,10 @@ public class CosmicBlocks {
     public static final BlockEntry<Block> HIGHLY_CONDUCTIVE_FISSION_CASING = createCasingBlock(
             "highly_conductive_fission_casing", CosmicCore.id("block/casings/solid/highly_conductive_fission_casing"));
 
+    // blood cube
+    public static final BlockEntry<Block> BLOOD_CUBE = createCasingBlock(
+            "blood_cube", CosmicCore.id("block/iris/bloodcube"));
+
     // This is a Bunch of Rendering Magic I barely understand (See: I Don't understand at all) ~Ghost
     private static BlockEntry<Block> createGlassCasingBlock(String name, ResourceLocation texture,
                                                             Supplier<Supplier<RenderType>> type) {
