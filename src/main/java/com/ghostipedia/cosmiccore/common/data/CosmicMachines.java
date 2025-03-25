@@ -376,7 +376,8 @@ public class CosmicMachines {
                             .or(abilities(PartAbility.OUTPUT_LASER).setExactLimit(1))
                             .or(abilities(PartAbility.INPUT_LASER)).setExactLimit(1))
                     .build())
-            //Note, Never allow energy hatches, it breaks them pretty badly and i think this is the easier of the two sacrifices for now - G
+            // Note, Never allow energy hatches, it breaks them pretty badly and i think this is the easier of the two
+            // sacrifices for now - G
             .tooltips(Component.translatable("cosmiccore.multiblock.naqreactor.tooltip.0"),
                     Component.translatable("cosmiccore.multiblock.naqreactor.tooltip.1"),
                     Component.translatable("cosmiccore.multiblock.naqreactor.tooltip.2"),
@@ -697,17 +698,28 @@ public class CosmicMachines {
             .recipeModifiers(GTRecipeModifiers.PARALLEL_HATCH,
                     GTRecipeModifiers.ELECTRIC_OVERCLOCK.apply(OverclockingLogic.PERFECT_OVERCLOCK))
             .pattern(definition -> FactoryBlockPattern.start()
-                    .aisle("AAA     AAA", "AA       AA", "A         A", "A         A", "           ", "           ", "           ", "           ")
-                    .aisle("A ABBBBBA A", "A ABBBBBA A", "  AB   BA  ", "  AD   DA  ", "  A D D A  ", "  A  E  A  ", "           ", "           ")
-                    .aisle("AAAAAAAAAAA", " AAAAAAAAA ", " A       A ", " AF     FA ", " A       A ", " AA     AA ", "  A     A  ", "  A     A  ")
-                    .aisle(" BAAAAAAAB ", " BAAAAAAAB ", " B       B ", " D G H G D ", "           ", "           ", "           ", "           ")
-                    .aisle(" BAAAAAAAB ", " BAAAAAAAB ", "           ", "           ", " D  G G  D ", "           ", "           ", "           ")
-                    .aisle(" BAAAAAAAB ", " BAAAXAAAB ", "           ", "   H   H   ", "     I     ", " E       E ", "           ", "           ")
-                    .aisle(" BAAAAAAAB ", " BAAAAAAAB ", "           ", "           ", " D  G G  D ", "           ", "           ", "           ")
-                    .aisle(" BAAAAAAAB ", " BAAAAAAAB ", " B       B ", " D G H G D ", "           ", "           ", "           ", "           ")
-                    .aisle("AAAAAAAAAAA", " AAAAAAAAA ", " A       A ", " AF     FA ", " A       A ", " AA     AA ", "  A     A  ", "  A     A  ")
-                    .aisle("A ABBBBBA A", "A ABBQBBA A", "  AB   BA  ", "  AD   DA  ", "  A D D A  ", "  A  E  A  ", "           ", "           ")
-                    .aisle("AAA     AAA", "AA       AA", "A         A", "A         A", "           ", "           ", "           ", "           ")
+                    .aisle("AAA     AAA", "AA       AA", "A         A", "A         A", "           ", "           ",
+                            "           ", "           ")
+                    .aisle("A ABBBBBA A", "A ABBBBBA A", "  AB   BA  ", "  AD   DA  ", "  A D D A  ", "  A  E  A  ",
+                            "           ", "           ")
+                    .aisle("AAAAAAAAAAA", " AAAAAAAAA ", " A       A ", " AF     FA ", " A       A ", " AA     AA ",
+                            "  A     A  ", "  A     A  ")
+                    .aisle(" BAAAAAAAB ", " BAAAAAAAB ", " B       B ", " D G H G D ", "           ", "           ",
+                            "           ", "           ")
+                    .aisle(" BAAAAAAAB ", " BAAAAAAAB ", "           ", "           ", " D  G G  D ", "           ",
+                            "           ", "           ")
+                    .aisle(" BAAAAAAAB ", " BAAAXAAAB ", "           ", "   H   H   ", "     I     ", " E       E ",
+                            "           ", "           ")
+                    .aisle(" BAAAAAAAB ", " BAAAAAAAB ", "           ", "           ", " D  G G  D ", "           ",
+                            "           ", "           ")
+                    .aisle(" BAAAAAAAB ", " BAAAAAAAB ", " B       B ", " D G H G D ", "           ", "           ",
+                            "           ", "           ")
+                    .aisle("AAAAAAAAAAA", " AAAAAAAAA ", " A       A ", " AF     FA ", " A       A ", " AA     AA ",
+                            "  A     A  ", "  A     A  ")
+                    .aisle("A ABBBBBA A", "A ABBQBBA A", "  AB   BA  ", "  AD   DA  ", "  A D D A  ", "  A  E  A  ",
+                            "           ", "           ")
+                    .aisle("AAA     AAA", "AA       AA", "A         A", "A         A", "           ", "           ",
+                            "           ", "           ")
 
                     .where('Q', Predicates.controller(Predicates.blocks(definition.get())))
                     .where(' ', Predicates.any())

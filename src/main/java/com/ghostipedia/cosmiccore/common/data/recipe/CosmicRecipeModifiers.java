@@ -21,8 +21,8 @@ public class CosmicRecipeModifiers {
         int actualParallel = ParallelLogic.getParallelAmount(magnetMachine, recipe, 16);
         long maxReactorVoltage = magnetMachine.getOverclockVoltage();
         float recipeDuration = (recipe.duration);
-        float durationModifier = recipeDuration * actualParallel /20;
-        //Parallel is ALWAYS capped to 16
+        float durationModifier = recipeDuration * actualParallel / 20;
+        // Parallel is ALWAYS capped to 16
         // Check that the damn thing actually creates EU
         if (EUt <= 0 || maxReactorVoltage <= EUt) return ModifierFunction.NULL;
         if (!recipe.data.contains("min_field") || recipe.data.getInt("min_field") > magnetStrength) {
@@ -36,7 +36,7 @@ public class CosmicRecipeModifiers {
         // EU Outputs is always 16A of the respective recipe (If it can).
         return ModifierFunction.builder()
                 .inputModifier(ContentModifier.multiplier(actualParallel))
-//                .durationMultiplier(durationModifier) this just actually causes hell on earth so ignore for now
+                // .durationMultiplier(durationModifier) this just actually causes hell on earth so ignore for now
                 .eutMultiplier(actualParallel)
                 .parallels(actualParallel)
                 .build();
