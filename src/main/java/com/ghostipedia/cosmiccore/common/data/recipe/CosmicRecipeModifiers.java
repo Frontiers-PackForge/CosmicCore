@@ -5,7 +5,9 @@ import com.ghostipedia.cosmiccore.common.machine.multiblock.electric.MagneticFie
 import com.gregtechceu.gtceu.api.machine.MetaMachine;
 import com.gregtechceu.gtceu.api.recipe.GTRecipe;
 import com.gregtechceu.gtceu.api.recipe.RecipeHelper;
+import com.gregtechceu.gtceu.api.recipe.content.ContentModifier;
 import com.gregtechceu.gtceu.api.recipe.modifier.ModifierFunction;
+import com.gregtechceu.gtceu.api.recipe.modifier.ParallelLogic;
 import com.gregtechceu.gtceu.api.recipe.modifier.RecipeModifier;
 
 public class CosmicRecipeModifiers {
@@ -15,13 +17,14 @@ public class CosmicRecipeModifiers {
             return RecipeModifier.nullWrongType(MagneticFieldMachine.class, machine);
         }
         final var magnetStrength = magnetMachine.getFieldStrength();
-        // Clowns are Real, Ghostipedia is alive in Spirit, this implementation makes the generator parallel to update
-        // power demands vs just..... Doing whatever the hell we did before.
         long EUt = RecipeHelper.getOutputEUt(recipe);
-        long maxVomahineReactorVoltage = magnetMachine.getOverclockVoltage();
+        int actualParallel = ParallelLogic.getParallelAmount(magnetMachine, recipe, 16);
+        long maxReactorVoltage = magnetMachine.getOverclockVoltage();
+        float recipeDuration = (recipe.duration);
+        float durationModifier = recipeDuration * actualParallel / 20;
+        // Parallel is ALWAYS capped to 16
         // Check that the damn thing actually creates EU
-        if (EUt <= 0 || maxVomahineReactorVoltage <= EUt) return ModifierFunction.NULL;
-        // WARNING; DO NOT PARALLEL, YOU WILL **DELETE** PLAYERS ~~BASES~~ **WORLDS**.
+        if (EUt <= 0 || maxReactorVoltage <= EUt) return ModifierFunction.NULL;
         if (!recipe.data.contains("min_field") || recipe.data.getInt("min_field") > magnetStrength) {
             return ModifierFunction.NULL;
         }
@@ -30,8 +33,13 @@ public class CosmicRecipeModifiers {
                 return ModifierFunction.NULL;
             }
         }
-        // There is No Modification Done, just out the Recipe EU
-        return ModifierFunction.IDENTITY;
+        // EU Outputs is always 16A of the respective recipe (If it can).
+        return ModifierFunction.builder()
+                .inputModifier(ContentModifier.multiplier(actualParallel))
+                // .durationMultiplier(durationModifier) this just actually causes hell on earth so ignore for now
+                .eutMultiplier(actualParallel)
+                .parallels(actualParallel)
+                .build();
     }
 
     // TODO; FIX IT!

@@ -369,18 +369,19 @@ public class CosmicMachines {
                     .where('S', magnetCoils())
                     .where('H', blocks(CosmicBlocks.RESONANTLY_TUNED_VIRTUE_MELD_CASING.get()))
                     .where('G', blocks(FUSION_GLASS.get()))
-                    .where('Q', blocks(CosmicBlocks.NAQUADAH_PRESSURE_RESISTANT_CASING.get())
+                    .where('Q', blocks(CosmicBlocks.NAQUADAH_PRESSURE_RESISTANT_CASING.get()).setMinGlobalLimited(160)
                             .or(abilities(PartAbility.IMPORT_FLUIDS))
-                            .or(abilities(PartAbility.EXPORT_FLUIDS))
                             .or(abilities(PartAbility.IMPORT_ITEMS))
-                            .or(abilities(PartAbility.EXPORT_ITEMS))
-                            .or(abilities(PartAbility.INPUT_ENERGY))
-                            .or(abilities(PartAbility.MAINTENANCE))
-                            .or(abilities(PartAbility.OUTPUT_LASER))
-                            .or(abilities(PartAbility.INPUT_LASER))
-                            .or(abilities(PartAbility.INPUT_ENERGY))
-                            .or(abilities(PartAbility.OUTPUT_ENERGY)))
+                            .or(abilities(PartAbility.MAINTENANCE).setExactLimit(1))
+                            .or(abilities(PartAbility.OUTPUT_LASER).setExactLimit(1))
+                            .or(abilities(PartAbility.INPUT_LASER)).setExactLimit(1))
                     .build())
+            // Note, Never allow energy hatches, it breaks them pretty badly and i think this is the easier of the two
+            // sacrifices for now - G
+            .tooltips(Component.translatable("cosmiccore.multiblock.naqreactor.tooltip.0"),
+                    Component.translatable("cosmiccore.multiblock.naqreactor.tooltip.1"),
+                    Component.translatable("cosmiccore.multiblock.naqreactor.tooltip.2"),
+                    Component.translatable("cosmiccore.multiblock.naqreactor.tooltip.3"))
             .workableCasingRenderer(CosmicCore.id("block/casings/solid/naquadah_pressure_resistant_casing"),
                     GTCEu.id("block/multiblock/hpca"))
             .register();

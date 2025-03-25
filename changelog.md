@@ -1,4 +1,4 @@
-# Cosmic Core 0.6.5
-Fixed up stuff for bloodmagic, block renames, retextures of better armors
+# Cosmic Core 0.6.6
+New Multiblock Render, Fixes Jank with Naq Reactors
 
 # DO NOT MANUALLY UPDATE COSMIC CORE FOR FRONTIERS **I WILL NOT WORK**

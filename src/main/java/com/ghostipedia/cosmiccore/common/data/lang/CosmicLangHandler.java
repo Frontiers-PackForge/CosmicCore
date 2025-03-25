@@ -7,6 +7,12 @@ import static com.gregtechceu.gtceu.data.lang.LangHandler.replace;
 public class CosmicLangHandler {
 
     public static void init(RegistrateLangProvider provider) {
+        replace(provider, "cosmiccore.multiblock.naqreactor.tooltip.0",
+                "§cA massive reactor powered by explosions and reactive fuel");
+        replace(provider, "cosmiccore.multiblock.naqreactor.tooltip.1",
+                "§bWill always attempt to parallel to 16x output.");
+        replace(provider, "cosmiccore.multiblock.naqreactor.tooltip.2", "§cOnly Accepts Laser hatches.");
+
         replace(provider, "cosmiccore.gravpack.1", "§aNormalizes Gravity to Match Earth.");
         replace(provider, "cosmiccore.recipe.soulIn", "Soul Input: %s");
         replace(provider, "cosmiccore.recipe.soulOut", "Soul Output: %s");
