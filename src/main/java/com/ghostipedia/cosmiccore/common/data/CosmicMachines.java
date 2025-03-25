@@ -374,14 +374,13 @@ public class CosmicMachines {
                             .or(abilities(PartAbility.IMPORT_ITEMS))
                             .or(abilities(PartAbility.MAINTENANCE).setExactLimit(1))
                             .or(abilities(PartAbility.OUTPUT_LASER).setExactLimit(1))
-                            .or(abilities(PartAbility.INPUT_LASER)).setExactLimit(1))
+                            .or(abilities(PartAbility.INPUT_LASER).setExactLimit(1)))
                     .build())
             // Note, Never allow energy hatches, it breaks them pretty badly and i think this is the easier of the two
             // sacrifices for now - G
             .tooltips(Component.translatable("cosmiccore.multiblock.naqreactor.tooltip.0"),
                     Component.translatable("cosmiccore.multiblock.naqreactor.tooltip.1"),
-                    Component.translatable("cosmiccore.multiblock.naqreactor.tooltip.2"),
-                    Component.translatable("cosmiccore.multiblock.naqreactor.tooltip.3"))
+                    Component.translatable("cosmiccore.multiblock.naqreactor.tooltip.2"))
             .workableCasingRenderer(CosmicCore.id("block/casings/solid/naquadah_pressure_resistant_casing"),
                     GTCEu.id("block/multiblock/hpca"))
             .register();
