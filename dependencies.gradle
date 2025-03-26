@@ -11,7 +11,7 @@ dependencies {
     modImplementation(forge.configuration)
 
     // GTCEu
-    modImplementation(variantOf(forge.gtceu) { classifier("slim") })
+    modImplementation(forge.gtceu)
 
     // Mixin (& Extras)
     annotationProcessor(variantOf(libs.mixin) { classifier("processor") })
