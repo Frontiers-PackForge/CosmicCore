@@ -3145,6 +3145,16 @@ public class CosmicMachines {
             CASING_TUNGSTENSTEEL_ROBUST, CASING_TUNGSTENSTEEL_GEARBOX, CASING_EXTREME_ENGINE_INTAKE,
             GTCEu.id("block/casings/solid/machine_casing_robust_tungstensteel"),
             GTCEu.id("block/multiblock/generator/extreme_combustion_engine"));
+    public static final MultiblockMachineDefinition LUDICROUS_COMBUSTION_ENGINE = registerCosmicLargeCombustionEngine(
+            "ludicrous_combustion_engine_cc", LuV,
+            GILDED_PTHANTERUM_CASING, GEARBOX_PTHANTERUM, CASING_INTAKE_LUDICRIOUS,
+            CosmicCore.id("block/casings/solid/gilded_pthanterum_casing"),
+            GTCEu.id("block/multiblock/generator/extreme_combustion_engine"));
+    public static final MultiblockMachineDefinition ULTIMATE_COMBUSTION_ENGINE = registerCosmicLargeCombustionEngine(
+            "ultimate_combustion_engine_cc", ZPM,
+            REINFORCED_NAQUADRIA_CASING, GEARBOX_NAQUADRIA, CASING_INTAKE_ULTIMATE,
+            CosmicCore.id("block/casings/solid/reinforced_naquadria_casing"),
+            GTCEu.id("block/multiblock/generator/extreme_combustion_engine"));
 
     private static MachineDefinition[] registerSoulTieredHatch(String name, String displayName, String model, IO io,
                                                                int[] tiers, PartAbility... abilities) {

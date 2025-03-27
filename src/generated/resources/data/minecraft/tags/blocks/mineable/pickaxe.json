@@ -11,6 +11,8 @@
     "cosmiccore:causal_fabric_coil_block",
     "cosmiccore:high_powered_magnet",
     "cosmiccore:fusion_grade_magnet",
-    "cosmiccore:heat_fan"
+    "cosmiccore:heat_fan",
+    "cosmiccore:ludicrious_intake",
+    "cosmiccore:ultimate_intake"
   ]
 }
