@@ -12,11 +12,10 @@ import com.gregtechceu.gtceu.GTCEu;
 import com.gregtechceu.gtceu.api.GTCEuAPI;
 import com.gregtechceu.gtceu.api.block.ActiveBlock;
 import com.gregtechceu.gtceu.api.block.ICoilType;
-import com.gregtechceu.gtceu.api.item.tool.GTToolType;
 import com.gregtechceu.gtceu.client.renderer.block.TextureOverrideRenderer;
 import com.gregtechceu.gtceu.common.block.CoilBlock;
 import com.gregtechceu.gtceu.common.data.GTModels;
-import com.gregtechceu.gtceu.common.registry.GTRegistration;
+
 import com.lowdragmc.lowdraglib.Platform;
 import com.lowdragmc.lowdraglib.client.renderer.IRenderer;
 
@@ -116,10 +115,12 @@ public class CosmicBlocks {
     public static final BlockEntry<Block> HIGHLY_CONDUCTIVE_FISSION_CASING = createCasingBlock(
             "highly_conductive_fission_casing", CosmicCore.id("block/casings/solid/highly_conductive_fission_casing"));
     public static final BlockEntry<Block> GEARBOX_PTHANTERUM = createCasingBlock(
-            "machine_casing_gearbox_pthanterum", CosmicCore.id("block/casings/gearbox/machine_casing_gearbox_pthanterum"));
+            "machine_casing_gearbox_pthanterum",
+            CosmicCore.id("block/casings/gearbox/machine_casing_gearbox_pthanterum"));
     public static final BlockEntry<Block> GEARBOX_NAQUADRIA = createCasingBlock(
-            "machine_casing_gearbox_naquadria", CosmicCore.id("block/casings/gearbox/machine_casing_gearbox_naquadria"));
-    //I think i deleted the uh, yeah..
+            "machine_casing_gearbox_naquadria",
+            CosmicCore.id("block/casings/gearbox/machine_casing_gearbox_naquadria"));
+    // I think i deleted the uh, yeah..
     public static final BlockEntry<ActiveBlock> CASING_HEAT_VENT = createActiveCasing("heat_fan",
             "block/variant/heat_fan");
     public static final BlockEntry<ActiveBlock> CASING_INTAKE_LUDICRIOUS = createActiveCasing("ludicrious_intake",
@@ -199,6 +200,7 @@ public class CosmicBlocks {
         GTCEuAPI.HEATING_COILS.put(coilType, coilBlock);
         return coilBlock;
     }
+
     protected static BlockEntry<ActiveBlock> createActiveCasing(String name, String baseModelPath) {
         return REGISTRATE.block(name, ActiveBlock::new)
                 .initialProperties(() -> Blocks.NETHERITE_BLOCK)
@@ -210,6 +212,7 @@ public class CosmicBlocks {
                 .build()
                 .register();
     }
+
     private static BlockEntry<MagnetBlock> createMagnetBlock(IMagnetType magnetType) {
         BlockEntry<MagnetBlock> magnetBlock = REGISTRATE
                 .block("%s_magnet".formatted(magnetType.getName()), p -> new MagnetBlock(p, magnetType))

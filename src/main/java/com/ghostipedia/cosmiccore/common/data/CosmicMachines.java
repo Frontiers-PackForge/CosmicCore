@@ -450,7 +450,8 @@ public class CosmicMachines {
                     GTCEu.id("block/multiblock/generator/large_gas_turbine"))
             .register();
 
-    public final static MultiblockMachineDefinition MANTLE_BORE = REGISTRATE.multiblock("mantle_bore", WorkableElectricMultiblockMachine::new)
+    public final static MultiblockMachineDefinition MANTLE_BORE = REGISTRATE
+            .multiblock("mantle_bore", WorkableElectricMultiblockMachine::new)
             .rotationState(RotationState.NON_Y_AXIS)
             .recipeType(CosmicRecipeTypes.CHROMATIC_DISTILLATION_PLANT)
             .recipeModifier(GTRecipeModifiers.ELECTRIC_OVERCLOCK.apply(OverclockingLogic.NON_PERFECT_OVERCLOCK))
@@ -470,9 +471,11 @@ public class CosmicMachines {
                                     .setMaxGlobalLimited(2))
                             .or(Predicates.abilities(PartAbility.IMPORT_FLUIDS).setExactLimit(1)))
                     .build())
-            .workableCasingRenderer(GTCEu.id("block/casings/solid/machine_casing_solid_steel"), CosmicCore.id("block/multiblock/mantle_bore"))
+            .workableCasingRenderer(GTCEu.id("block/casings/solid/machine_casing_solid_steel"),
+                    CosmicCore.id("block/multiblock/mantle_bore"))
             .register();
-    public final static MultiblockMachineDefinition ORBITAL_TEMPERING_FORGE = REGISTRATE.multiblock("orbital_tempering_forge", WorkableElectricMultiblockMachine::new)
+    public final static MultiblockMachineDefinition ORBITAL_TEMPERING_FORGE = REGISTRATE.multiblock(
+            "orbital_tempering_forge", WorkableElectricMultiblockMachine::new)
             .rotationState(RotationState.ALL)
             .recipeType(CosmicRecipeTypes.CHROMATIC_FLOTATION_PLANT)
             .recipeModifier(GTRecipeModifiers.ELECTRIC_OVERCLOCK.apply(OverclockingLogic.NON_PERFECT_OVERCLOCK))
