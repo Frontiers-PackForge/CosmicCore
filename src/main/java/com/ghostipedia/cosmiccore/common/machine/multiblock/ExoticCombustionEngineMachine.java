@@ -125,12 +125,12 @@ public class ExoticCombustionEngineMachine extends WorkableElectricMultiblockMac
         for (var fluidHolder : fluidHolders) {
             for (var fluidStack : fluidHolder) {
                 if (boostingTiers.containsKey(fluidStack)) {
-                    if (engineMachine.currentBooster == null ||
+                    if (engineMachine.currentBooster == null || engineMachine.currentBooster.isEmpty() ||
                             boostingTiers.getInt(fluidStack) > boostingTiers.getInt(engineMachine.currentBooster)) {
                         engineMachine.currentBooster = fluidStack;
                     }
                 } else if (lubricantTiers.containsKey(fluidStack)) {
-                    if (engineMachine.currentLubricant == null ||
+                    if (engineMachine.currentLubricant == null || engineMachine.currentLubricant.isEmpty() ||
                             lubricantTiers.getInt(fluidStack) > lubricantTiers.getInt(engineMachine.currentLubricant)) {
                         engineMachine.currentLubricant = fluidStack;
                     }
@@ -139,14 +139,14 @@ public class ExoticCombustionEngineMachine extends WorkableElectricMultiblockMac
         }
 
         // Has a variant of lubricant
-        if (EUt > 0 && !engineMachine.isIntakesObstructed() && engineMachine.currentLubricant != null) {
+        if (EUt > 0 && !engineMachine.isIntakesObstructed() && engineMachine.currentLubricant != null && !engineMachine.currentLubricant.isEmpty()) {
             int maxParallel = (int) (engineMachine.getOverclockVoltage() / EUt);
             int actualParallel = ParallelLogic.getParallelAmount(engineMachine, recipe, maxParallel);
             int tier = lubricantTiers.getInt(engineMachine.currentLubricant);
             float durationModifier = (lubricantTiers.getInt(engineMachine.currentLubricant) / 2.0F);
             double eutMultiplier = 1;
             int consumptionMult = 1;
-            if (engineMachine.currentBooster == null) {
+            if (engineMachine.currentBooster == null || engineMachine.currentBooster.isEmpty()) {
                 eutMultiplier = actualParallel;
             } else {
                 consumptionMult = boostingTiers.getInt(engineMachine.currentBooster) * 2;
@@ -177,7 +177,7 @@ public class ExoticCombustionEngineMachine extends WorkableElectricMultiblockMac
 
             }
         }
-        if (currentBooster != null) {
+        if (currentBooster != null && !currentBooster.isEmpty()) {
             int consumptionRate = -1;
             int tickCycle = -1;
             if (currentBooster.isFluidEqual(GTMaterials.Oxygen.getFluid(1))) {
@@ -198,7 +198,7 @@ public class ExoticCombustionEngineMachine extends WorkableElectricMultiblockMac
         }
         // Currently all lubricants are the same, however this may change, so assume this is left this way intentionally
         // (Anyone else who reads this)
-        if (currentLubricant != null) {
+        if (currentLubricant != null && !currentLubricant.isEmpty()) {
             int consumptionRate = -1;
             int tickCycle = -1;
             if (currentLubricant.containsFluid(GTMaterials.Lubricant.getFluid(1))) {
@@ -208,12 +208,11 @@ public class ExoticCombustionEngineMachine extends WorkableElectricMultiblockMac
                     .containsFluid(CosmicMaterials.Triphenylphosphine.getFluid(FluidStorageKeys.LIQUID, 1))) {
                         tickCycle = 144;
                         consumptionRate = 1; // 500/hr
-                    } else
-                if (currentLubricant.containsFluid(
+            } else if (currentLubricant.containsFluid(
                         CosmicMaterials.TearsOfTheUniverse.getFluid(FluidStorageKeys.LIQUID, 1))) {
                             tickCycle = 288;
                             consumptionRate = 1; // 250/hr
-                        }
+            }
             if (tickCycle != -1 && runningTimer % tickCycle == 0) {
                 if (consumptionRate != -1 && currentLubricant.getAmount() >= consumptionRate) {
                     currentLubricant.shrink(consumptionRate);
@@ -221,6 +220,8 @@ public class ExoticCombustionEngineMachine extends WorkableElectricMultiblockMac
                     recipeLogic.interruptRecipe();
                 }
             }
+        } else if(currentLubricant != null) {
+            recipeLogic.interruptRecipe();
         }
         runningTimer++;
         if (runningTimer > 72000) runningTimer %= 72000;
