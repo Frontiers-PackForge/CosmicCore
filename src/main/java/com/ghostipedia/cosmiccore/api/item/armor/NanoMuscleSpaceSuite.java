@@ -1,11 +1,7 @@
 package com.ghostipedia.cosmiccore.api.item.armor;
 
 import com.gregtechceu.gtceu.common.item.armor.NanoMuscleSuite;
-import earth.terrarium.adastra.common.constants.ConstantComponents;
-import earth.terrarium.adastra.common.registry.ModFluids;
-import earth.terrarium.adastra.common.utils.FluidUtils;
-import earth.terrarium.adastra.common.utils.TooltipUtils;
-import earth.terrarium.botarium.common.fluid.FluidConstants;
+
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ArmorItem;

@@ -1,20 +1,22 @@
 package com.ghostipedia.cosmiccore;
 
-
 import com.ghostipedia.cosmiccore.api.capability.recipe.CosmicRecipeCapabilities;
 import com.ghostipedia.cosmiccore.api.data.CosmicCoreMaterialIconType;
 import com.ghostipedia.cosmiccore.api.data.CosmicCustomTags;
 import com.ghostipedia.cosmiccore.api.registries.CosmicRegistration;
 import com.ghostipedia.cosmiccore.common.data.materials.CosmicElements;
 import com.ghostipedia.cosmiccore.common.data.recipe.CosmicCoreOreRecipeHandler;
-import com.ghostipedia.cosmiccore.gtbridge.CosmicRecipeTypes;
 import com.ghostipedia.cosmiccore.gtbridge.CosmicCoreRecipes;
+import com.ghostipedia.cosmiccore.gtbridge.CosmicRecipeTypes;
+
 import com.gregtechceu.gtceu.api.addon.GTAddon;
 import com.gregtechceu.gtceu.api.addon.IGTAddon;
 import com.gregtechceu.gtceu.api.addon.events.KJSRecipeKeyEvent;
 import com.gregtechceu.gtceu.api.registry.registrate.GTRegistrate;
-import com.mojang.datafixers.util.Pair;
+
 import net.minecraft.data.recipes.FinishedRecipe;
+
+import com.mojang.datafixers.util.Pair;
 
 import java.util.function.Consumer;
 

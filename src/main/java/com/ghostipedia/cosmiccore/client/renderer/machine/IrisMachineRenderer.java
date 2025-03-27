@@ -1,13 +1,13 @@
 package com.ghostipedia.cosmiccore.client.renderer.machine;
 
 import com.ghostipedia.cosmiccore.CosmicCore;
+
 import com.gregtechceu.gtceu.GTCEu;
 import com.gregtechceu.gtceu.api.GTValues;
 import com.gregtechceu.gtceu.api.machine.IMachineBlockEntity;
 import com.gregtechceu.gtceu.api.machine.multiblock.WorkableElectricMultiblockMachine;
 import com.gregtechceu.gtceu.client.renderer.machine.WorkableCasingMachineRenderer;
-import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.blaze3d.vertex.VertexConsumer;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
@@ -19,6 +19,9 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+
+import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.VertexConsumer;
 import org.joml.Quaternionf;
 
 import java.util.List;
@@ -26,7 +29,8 @@ import java.util.function.Consumer;
 
 public class IrisMachineRenderer extends WorkableCasingMachineRenderer {
 
-    public static final ResourceLocation TEXTURE = CosmicCore.id("block/casings/solid/vomahine_certified_chemically_resistant_casing");
+    public static final ResourceLocation TEXTURE = CosmicCore
+            .id("block/casings/solid/vomahine_certified_chemically_resistant_casing");
     public static final ResourceLocation OVERLAY_MODEL_TEXTURES = GTCEu.id("block/multiblock/fusion_reactor");
     public static final ResourceLocation STAR_MODEL_CORE = CosmicCore.id("block/iris/star_sphere");
     public static final ResourceLocation STAR_MODEL_OUTER = CosmicCore.id("block/iris/star_sphere_outer");
@@ -50,16 +54,17 @@ public class IrisMachineRenderer extends WorkableCasingMachineRenderer {
     public void render(BlockEntity blockEntity, float partialTicks, PoseStack poseStack, MultiBufferSource buffer,
                        int combinedLight, int combinedOverlay) {
         if (blockEntity instanceof IMachineBlockEntity machineBlockEntity &&
-                machineBlockEntity.getMetaMachine() instanceof WorkableElectricMultiblockMachine machine && machine.isFormed()) {
+                machineBlockEntity.getMetaMachine() instanceof WorkableElectricMultiblockMachine machine &&
+                machine.isFormed()) {
             var level = machine.getLevel();
             var frontFacing = machine.getFrontFacing();
             float tick = level.getGameTime() + partialTicks;
             renderStar(poseStack, buffer, frontFacing, tick, combinedLight, combinedOverlay);
             renderStarInsides(poseStack, buffer, frontFacing, tick, combinedLight, combinedOverlay);
             renderStarShell(poseStack, buffer, frontFacing, tick, combinedLight, combinedOverlay);
-//            renderIris(poseStack, buffer, frontFacing, tick, combinedLight, combinedOverlay);
-//            renderRing(poseStack, buffer, frontFacing, tick, combinedLight, combinedOverlay);
-//            renderRingSmall(poseStack, buffer, frontFacing, tick, combinedLight, combinedOverlay);
+            // renderIris(poseStack, buffer, frontFacing, tick, combinedLight, combinedOverlay);
+            // renderRing(poseStack, buffer, frontFacing, tick, combinedLight, combinedOverlay);
+            // renderRingSmall(poseStack, buffer, frontFacing, tick, combinedLight, combinedOverlay);
         }
     }
 
@@ -81,6 +86,7 @@ public class IrisMachineRenderer extends WorkableCasingMachineRenderer {
         }
         poseStack.popPose();
     }
+
     public void renderRing(PoseStack poseStack, MultiBufferSource bufferSource, Direction frontFacing,
                            float tick, int combinedLight, int combinedOverlay) {
         var modelManager = Minecraft.getInstance().getModelManager();
@@ -98,8 +104,9 @@ public class IrisMachineRenderer extends WorkableCasingMachineRenderer {
         }
         poseStack.popPose();
     }
+
     public void renderRingSmall(PoseStack poseStack, MultiBufferSource bufferSource, Direction frontFacing,
-                           float tick, int combinedLight, int combinedOverlay) {
+                                float tick, int combinedLight, int combinedOverlay) {
         var modelManager = Minecraft.getInstance().getModelManager();
         poseStack.pushPose();
         BakedModel bakedmodel = modelManager.getModel(IRIS_MODEL_RING_WHITE);
@@ -115,7 +122,7 @@ public class IrisMachineRenderer extends WorkableCasingMachineRenderer {
         }
         poseStack.popPose();
     }
-    ///STAR
+    /// STAR
 
     public void renderStar(PoseStack poseStack, MultiBufferSource bufferSource, Direction frontFacing,
                            float tick, int combinedLight, int combinedOverlay) {
@@ -123,7 +130,7 @@ public class IrisMachineRenderer extends WorkableCasingMachineRenderer {
         poseStack.pushPose();
         BakedModel bakedmodel = modelManager.getModel(STAR_MODEL_CORE);
         poseStack.translate(0.5D, -2.5D, 46.5D);
-        poseStack.mulPose(new Quaternionf().rotateXYZ(0.25f,0.0f,0f));
+        poseStack.mulPose(new Quaternionf().rotateXYZ(0.25f, 0.0f, 0f));
         poseStack.mulPose(new Quaternionf().rotateAxis(tick * Mth.TWO_PI / 80, 0f, 1f, 0));
         poseStack.scale(4.6f, 4.6f, 4.6f);
         PoseStack.Pose pose = poseStack.last();
@@ -132,18 +139,20 @@ public class IrisMachineRenderer extends WorkableCasingMachineRenderer {
         List<BakedQuad> quads = bakedmodel.getQuads(null, null, GTValues.RNG);
         for (BakedQuad quad : quads) {
             consumer.putBulkData(pose, quad, 1f, 1f, 1f, combinedLight, combinedOverlay);
-            consumer.putBulkData(pose, quad, new float[]{1.0f, 1.0f, 1.0f, 1.0f}, 1f, 1f, 1f, 0.65f, new int[]{combinedLight, combinedLight, combinedLight, combinedLight}, combinedOverlay, false);
+            consumer.putBulkData(pose, quad, new float[] { 1.0f, 1.0f, 1.0f, 1.0f }, 1f, 1f, 1f, 0.65f,
+                    new int[] { combinedLight, combinedLight, combinedLight, combinedLight }, combinedOverlay, false);
 
         }
         poseStack.popPose();
     }
+
     public void renderStarShell(PoseStack poseStack, MultiBufferSource bufferSource, Direction frontFacing,
-                           float tick, int combinedLight, int combinedOverlay) {
+                                float tick, int combinedLight, int combinedOverlay) {
         var modelManager = Minecraft.getInstance().getModelManager();
         poseStack.pushPose();
         BakedModel bakedmodel = modelManager.getModel(STAR_MODEL_OUTER);
         poseStack.translate(0.5D, -2.5D, 46.5D);
-        poseStack.mulPose(new Quaternionf().rotateXYZ(0.65f,0.0f,0.35f));
+        poseStack.mulPose(new Quaternionf().rotateXYZ(0.65f, 0.0f, 0.35f));
         poseStack.mulPose(new Quaternionf().rotateAxis(tick * Mth.TWO_PI / 80, 0f, 1, 0f));
         poseStack.scale(5.0f, 5.0f, 5.0f);
         PoseStack.Pose pose = poseStack.last();
@@ -152,13 +161,14 @@ public class IrisMachineRenderer extends WorkableCasingMachineRenderer {
         List<BakedQuad> quads = bakedmodel.getQuads(null, null, GTValues.RNG);
         for (BakedQuad quad : quads) {
             consumer.putBulkData(pose, quad, 1f, 1f, 1f, combinedLight, combinedOverlay);
-            consumer.putBulkData(pose, quad, new float[]{1.0f, 1.0f, 1.0f, 1.0f}, 1f, 1f, 1f, 0.5f, new int[]{combinedLight, combinedLight, combinedLight, combinedLight}, combinedOverlay, false);
+            consumer.putBulkData(pose, quad, new float[] { 1.0f, 1.0f, 1.0f, 1.0f }, 1f, 1f, 1f, 0.5f,
+                    new int[] { combinedLight, combinedLight, combinedLight, combinedLight }, combinedOverlay, false);
         }
         poseStack.popPose();
     }
 
     public void renderStarInsides(PoseStack poseStack, MultiBufferSource bufferSource, Direction frontFacing,
-                                float tick, int combinedLight, int combinedOverlay) {
+                                  float tick, int combinedLight, int combinedOverlay) {
         var modelManager = Minecraft.getInstance().getModelManager();
         poseStack.pushPose();
         BakedModel bakedmodel = modelManager.getModel(STAR_MODEL_INNER);
@@ -171,12 +181,11 @@ public class IrisMachineRenderer extends WorkableCasingMachineRenderer {
         List<BakedQuad> quads = bakedmodel.getQuads(null, null, GTValues.RNG);
         for (BakedQuad quad : quads) {
             consumer.putBulkData(pose, quad, 1f, 1f, 1f, combinedLight, combinedOverlay);
-            consumer.putBulkData(pose, quad, new float[]{1.0f, 1.0f, 1.0f, 1.0f}, 1f, 1f, 1f, 0.7f, new int[]{combinedLight, combinedLight, combinedLight, combinedLight}, combinedOverlay, false);
+            consumer.putBulkData(pose, quad, new float[] { 1.0f, 1.0f, 1.0f, 1.0f }, 1f, 1f, 1f, 0.7f,
+                    new int[] { combinedLight, combinedLight, combinedLight, combinedLight }, combinedOverlay, false);
         }
         poseStack.popPose();
     }
-
-
 
     @Override
     public void onAdditionalModel(Consumer<ResourceLocation> registry) {
@@ -188,6 +197,7 @@ public class IrisMachineRenderer extends WorkableCasingMachineRenderer {
         registry.accept(STAR_MODEL_INNER);
         registry.accept(STAR_MODEL_OUTER);
     }
+
     @OnlyIn(Dist.CLIENT)
     public float reBakeCustomQuadsOffset() {
         return 0f;

@@ -1,10 +1,13 @@
 package com.ghostipedia.cosmiccore.common.block;
 
 import com.gregtechceu.gtceu.GTCEu;
+
 import net.minecraft.resources.ResourceLocation;
+
 import org.jetbrains.annotations.NotNull;
 
 public record WorkableSteamHullType(String name, ResourceLocation bottom, ResourceLocation top, ResourceLocation side) {
+
     public static WorkableSteamHullType BRONZE_BRICK_HULL = new WorkableSteamHullType("bricked_bronze",
             GTCEu.id("block/casings/steam/bricked_bronze/bottom"),
             GTCEu.id("block/casings/steam/bricked_bronze/top"),

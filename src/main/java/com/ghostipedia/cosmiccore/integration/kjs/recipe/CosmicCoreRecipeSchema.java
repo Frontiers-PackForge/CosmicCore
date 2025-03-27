@@ -1,16 +1,17 @@
 package com.ghostipedia.cosmiccore.integration.kjs.recipe;
 
 import com.ghostipedia.cosmiccore.api.capability.recipe.SoulRecipeCapability;
+
 import com.gregtechceu.gtceu.integration.kjs.recipe.GTRecipeSchema;
+
 import dev.latvian.mods.kubejs.recipe.schema.RecipeSchema;
 import lombok.experimental.Accessors;
 
 import static com.gregtechceu.gtceu.integration.kjs.recipe.GTRecipeSchema.*;
 
-
 public interface CosmicCoreRecipeSchema {
 
-    @SuppressWarnings({"unused", "UnusedReturnValue"})
+    @SuppressWarnings({ "unused", "UnusedReturnValue" })
     @Accessors(chain = true, fluent = true)
     class CosmicRecipeJS extends GTRecipeSchema.GTRecipeJS {
 
@@ -22,13 +23,14 @@ public interface CosmicCoreRecipeSchema {
             return this.output(SoulRecipeCapability.CAP, souls);
         }
 
-        public GTRecipeSchema.GTRecipeJS magnetStats(int minField, int decayRate,boolean perTick){
+        public GTRecipeSchema.GTRecipeJS magnetStats(int minField, int decayRate, boolean perTick) {
             this.addData("min_field", minField);
             this.addData("decay_rate", decayRate);
             this.addDataBool("per_tick", perTick);
             return this;
         }
-        public GTRecipeSchema.GTRecipeJS magnetStats(int minField, int decayRate){
+
+        public GTRecipeSchema.GTRecipeJS magnetStats(int minField, int decayRate) {
             this.addData("min_field", minField);
             this.addData("decay_rate", decayRate);
             this.addDataBool("per_tick", true);
@@ -42,5 +44,4 @@ public interface CosmicCoreRecipeSchema {
             IS_FUEL, CATEGORY)
             .constructor((recipe, schemaType, keys, from) -> recipe.id(from.getValue(recipe, ID)), ID)
             .constructor(DURATION, CONDITIONS, ALL_INPUTS, ALL_OUTPUTS, ALL_TICK_INPUTS, ALL_TICK_OUTPUTS);
-
 }

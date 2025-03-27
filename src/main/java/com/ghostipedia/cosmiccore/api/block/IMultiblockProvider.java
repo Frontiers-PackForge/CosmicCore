@@ -1,7 +1,6 @@
 package com.ghostipedia.cosmiccore.api.block;
 
 import com.gregtechceu.gtceu.api.capability.IEnergyContainer;
-import com.gregtechceu.gtceu.api.machine.feature.IMachineFeature;
 
 public interface IMultiblockProvider {
 
@@ -10,5 +9,4 @@ public interface IMultiblockProvider {
     IEnergyContainer getEnergyContainersForModules();
 
     boolean amIAModule(IMultiblockProvider receiver);
-
 }

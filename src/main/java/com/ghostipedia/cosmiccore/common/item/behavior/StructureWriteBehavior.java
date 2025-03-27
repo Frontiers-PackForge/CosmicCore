@@ -1,11 +1,12 @@
 package com.ghostipedia.cosmiccore.common.item.behavior;
 
 import com.ghostipedia.cosmiccore.api.data.DebugBlockPattern;
-import com.google.common.base.Joiner;
+
 import com.gregtechceu.gtceu.GTCEu;
 import com.gregtechceu.gtceu.api.gui.GuiTextures;
 import com.gregtechceu.gtceu.api.item.ComponentItem;
 import com.gregtechceu.gtceu.api.item.component.IItemUIFactory;
+
 import com.lowdragmc.lowdraglib.gui.factory.HeldItemUIFactory;
 import com.lowdragmc.lowdraglib.gui.modular.ModularUI;
 import com.lowdragmc.lowdraglib.gui.texture.GuiTextureGroup;
@@ -15,6 +16,7 @@ import com.lowdragmc.lowdraglib.gui.widget.ImageWidget;
 import com.lowdragmc.lowdraglib.gui.widget.LabelWidget;
 import com.lowdragmc.lowdraglib.gui.widget.WidgetGroup;
 import com.lowdragmc.lowdraglib.utils.LocalizationUtils;
+
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
@@ -28,6 +30,8 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
+
+import com.google.common.base.Joiner;
 
 public class StructureWriteBehavior implements IItemUIFactory {
 
@@ -100,8 +104,8 @@ public class StructureWriteBehavior implements IItemUIFactory {
     }
 
     private void exportLog(HeldItemUIFactory.HeldItemHolder playerInventoryHolder) {
-        if (getPos(playerInventoryHolder.getHeld()) != null
-                && playerInventoryHolder.getPlayer() instanceof ServerPlayer player) {
+        if (getPos(playerInventoryHolder.getHeld()) != null &&
+                playerInventoryHolder.getPlayer() instanceof ServerPlayer player) {
             BlockPos[] blockPos = getPos(playerInventoryHolder.getHeld());
             Direction direction = getDir(playerInventoryHolder.getHeld());
             StringBuilder builder = new StringBuilder();
@@ -115,7 +119,8 @@ public class StructureWriteBehavior implements IItemUIFactory {
                     blockPos[1].getZ());
             var dirs = DebugBlockPattern.getDir(direction);
             blockPattern.changeDir(dirs[0], dirs[1], dirs[2]);
-            player.displayClientMessage(Component.translatable("item.cosmiccore.debug.structure_writer.output_successful") ,false);
+            player.displayClientMessage(
+                    Component.translatable("item.cosmiccore.debug.structure_writer.output_successful"), false);
             for (int i = 0; i < blockPattern.pattern.length; i++) {
                 String[] strings = blockPattern.pattern[i];
                 builder.append(".aisle(\"%s\")\n".formatted(Joiner.on("\", \"").join(strings)));
@@ -126,8 +131,8 @@ public class StructureWriteBehavior implements IItemUIFactory {
     }
 
     private void changeDirX(HeldItemUIFactory.HeldItemHolder playerInventoryHolder) {
-        if (getPos(playerInventoryHolder.getHeld()) != null
-                && playerInventoryHolder.getPlayer() instanceof ServerPlayer) {
+        if (getPos(playerInventoryHolder.getHeld()) != null &&
+                playerInventoryHolder.getPlayer() instanceof ServerPlayer) {
             ItemStack itemStack = playerInventoryHolder.getHeld();
             Direction direction = getDir(itemStack);
             direction = direction.getClockWise(Direction.Axis.X);
@@ -136,8 +141,8 @@ public class StructureWriteBehavior implements IItemUIFactory {
     }
 
     private void changeDirY(HeldItemUIFactory.HeldItemHolder playerInventoryHolder) {
-        if (getPos(playerInventoryHolder.getHeld()) != null
-                && playerInventoryHolder.getPlayer() instanceof ServerPlayer) {
+        if (getPos(playerInventoryHolder.getHeld()) != null &&
+                playerInventoryHolder.getPlayer() instanceof ServerPlayer) {
             ItemStack itemStack = playerInventoryHolder.getHeld();
             Direction direction = getDir(itemStack);
             direction = direction.getClockWise(Direction.Axis.Y);
@@ -223,7 +228,7 @@ public class StructureWriteBehavior implements IItemUIFactory {
 
     @Override
     public InteractionResultHolder<ItemStack> use(
-            Item item, Level level, Player player, InteractionHand usedHand) {
+                                                  Item item, Level level, Player player, InteractionHand usedHand) {
         ItemStack stack = player.getItemInHand(usedHand);
         if (player.isShiftKeyDown()) {
             removePos(stack);

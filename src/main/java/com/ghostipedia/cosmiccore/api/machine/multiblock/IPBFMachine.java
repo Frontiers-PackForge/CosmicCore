@@ -11,18 +11,18 @@ import com.gregtechceu.gtceu.api.machine.feature.multiblock.IDisplayUIMachine;
 import com.gregtechceu.gtceu.api.machine.multiblock.WorkableMultiblockMachine;
 import com.gregtechceu.gtceu.api.machine.steam.SteamEnergyRecipeHandler;
 import com.gregtechceu.gtceu.api.recipe.GTRecipe;
-import com.gregtechceu.gtceu.api.recipe.OverclockingLogic;
 import com.gregtechceu.gtceu.api.recipe.RecipeHelper;
 import com.gregtechceu.gtceu.api.recipe.content.ContentModifier;
 import com.gregtechceu.gtceu.api.recipe.modifier.ModifierFunction;
 import com.gregtechceu.gtceu.api.recipe.modifier.ParallelLogic;
-import com.gregtechceu.gtceu.common.data.GTRecipeModifiers;
 import com.gregtechceu.gtceu.config.ConfigHolder;
+
 import com.lowdragmc.lowdraglib.gui.modular.ModularUI;
 import com.lowdragmc.lowdraglib.gui.texture.IGuiTexture;
 import com.lowdragmc.lowdraglib.gui.widget.ComponentPanelWidget;
 import com.lowdragmc.lowdraglib.gui.widget.DraggableScrollableWidgetGroup;
 import com.lowdragmc.lowdraglib.gui.widget.LabelWidget;
+
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -35,13 +35,16 @@ import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
 public class IPBFMachine extends WorkableMultiblockMachine implements IDisplayUIMachine {
+
     public static final int MAX_PARALLELS = 8;
+
     public IPBFMachine(IMachineBlockEntity holder, Object... args) {
         super(holder, args);
     }
@@ -78,6 +81,7 @@ public class IPBFMachine extends WorkableMultiblockMachine implements IDisplayUI
             }
         }
     }
+
     @Override
     public ModularUI createUI(Player entityPlayer) {
         var screen = new DraggableScrollableWidgetGroup(7, 4, 182, 121).setBackground(getScreenTexture());
@@ -92,7 +96,8 @@ public class IPBFMachine extends WorkableMultiblockMachine implements IDisplayUI
                         GuiTextures.SLOT_STEAM.get(true), 7, 134,
                         true));
     }
-    //Smoke VFX
+
+    // Smoke VFX
     @Override
     @OnlyIn(Dist.CLIENT)
     public void clientTick() {
@@ -108,22 +113,25 @@ public class IPBFMachine extends WorkableMultiblockMachine implements IDisplayUI
             getLevel().addParticle(ParticleTypes.LARGE_SMOKE, xPos, yPos, zPos, 0, ySpd, 0);
         }
     }
+
     @Nullable
     public static ModifierFunction recipeModifier(@NotNull MetaMachine machine, @NotNull GTRecipe recipe) {
         if (RecipeHelper.getRecipeEUtTier(recipe) > GTValues.LV) return ModifierFunction.NULL;
         long euTick = RecipeHelper.getRecipeEUtTier(recipe);
-        int parallel = ParallelLogic.getParallelAmount(machine,recipe, 8);
+        int parallel = ParallelLogic.getParallelAmount(machine, recipe, 8);
         return ModifierFunction.builder()
                 .inputModifier(ContentModifier.multiplier(parallel))
                 .outputModifier(ContentModifier.multiplier(parallel))
-                .durationMultiplier(parallel*0.75)
+                .durationMultiplier(parallel * 0.75)
                 .parallels(parallel)
                 .build();
     }
+
     @Override
     public IGuiTexture getScreenTexture() {
         return GuiTextures.DISPLAY_STEAM.get(true);
     }
+
     @Override
     public void animateTick(RandomSource random) {
         if (this.isActive()) {

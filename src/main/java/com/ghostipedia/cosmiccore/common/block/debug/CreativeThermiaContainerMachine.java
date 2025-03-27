@@ -2,15 +2,14 @@ package com.ghostipedia.cosmiccore.common.block.debug;
 
 import com.ghostipedia.cosmiccore.api.capability.recipe.IHeatContainer;
 import com.ghostipedia.cosmiccore.api.machine.trait.NotifiableThermiaContainer;
+
 import com.gregtechceu.gtceu.api.GTValues;
 import com.gregtechceu.gtceu.api.capability.recipe.IO;
 import com.gregtechceu.gtceu.api.gui.GuiTextures;
 import com.gregtechceu.gtceu.api.machine.IMachineBlockEntity;
 import com.gregtechceu.gtceu.api.machine.MetaMachine;
 import com.gregtechceu.gtceu.api.machine.feature.IUIMachine;
-import com.gregtechceu.gtceu.utils.FormattingUtil;
-import com.gregtechceu.gtceu.utils.GTUtil;
-import com.lowdragmc.lowdraglib.gui.editor.ColorPattern;
+
 import com.lowdragmc.lowdraglib.gui.modular.ModularUI;
 import com.lowdragmc.lowdraglib.gui.texture.GuiTextureGroup;
 import com.lowdragmc.lowdraglib.gui.texture.ResourceBorderTexture;
@@ -19,21 +18,19 @@ import com.lowdragmc.lowdraglib.gui.widget.*;
 import com.lowdragmc.lowdraglib.syncdata.annotation.DescSynced;
 import com.lowdragmc.lowdraglib.syncdata.annotation.Persisted;
 import com.lowdragmc.lowdraglib.syncdata.field.ManagedFieldHolder;
-import net.minecraft.client.resources.language.I18n;
-import net.minecraft.core.Direction;
-import net.minecraft.network.chat.Component;
-import net.minecraft.world.entity.player.Player;
-import org.apache.commons.lang3.ArrayUtils;
-import org.jetbrains.annotations.NotNull;
 
-import java.util.Arrays;
+import net.minecraft.core.Direction;
+import net.minecraft.world.entity.player.Player;
+
+import org.jetbrains.annotations.NotNull;
 
 import static com.ghostipedia.cosmiccore.common.machine.multiblock.part.ThermiaHatchPartMachine.getThermiaLimits;
 
 public class CreativeThermiaContainerMachine extends MetaMachine implements IHeatContainer, IUIMachine {
 
-    //FieldHolder
-    public static final ManagedFieldHolder MANAGED_FIELD_HOLDER = new ManagedFieldHolder(CreativeThermiaContainerMachine.class, MetaMachine.MANAGED_FIELD_HOLDER);
+    // FieldHolder
+    public static final ManagedFieldHolder MANAGED_FIELD_HOLDER = new ManagedFieldHolder(
+            CreativeThermiaContainerMachine.class, MetaMachine.MANAGED_FIELD_HOLDER);
     @Persisted
     private long heat = 0;
     @Persisted
@@ -46,13 +43,16 @@ public class CreativeThermiaContainerMachine extends MetaMachine implements IHea
     public @NotNull ManagedFieldHolder getFieldHolder() {
         return MANAGED_FIELD_HOLDER;
     }
+
     @Persisted
     @DescSynced
     private final NotifiableThermiaContainer thermiaContainer;
+
     public CreativeThermiaContainerMachine(IMachineBlockEntity holder) {
         super(holder);
         long currentTemp = 0;
-        this.thermiaContainer = new NotifiableThermiaContainer(this, IO.BOTH, getThermiaLimits(GTValues.MAX), currentTemp);
+        this.thermiaContainer = new NotifiableThermiaContainer(this, IO.BOTH, getThermiaLimits(GTValues.MAX),
+                currentTemp);
     }
 
     @Override
@@ -106,12 +106,10 @@ public class CreativeThermiaContainerMachine extends MetaMachine implements IHea
                         heat = Long.MIN_VALUE;
                     }
                 }).setTexture(
-                                new GuiTextureGroup(ResourceBorderTexture.BUTTON_COMMON,
-                                        new TextTexture("gtceu.creative.energy.sink")),
-                                new GuiTextureGroup(ResourceBorderTexture.BUTTON_COMMON,
-                                        new TextTexture("gtceu.creative.energy.source")))
+                        new GuiTextureGroup(ResourceBorderTexture.BUTTON_COMMON,
+                                new TextTexture("gtceu.creative.energy.sink")),
+                        new GuiTextureGroup(ResourceBorderTexture.BUTTON_COMMON,
+                                new TextTexture("gtceu.creative.energy.source")))
                         .setPressed(source));
     }
 }
-
-

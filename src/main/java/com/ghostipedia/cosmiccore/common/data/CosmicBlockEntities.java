@@ -2,6 +2,7 @@ package com.ghostipedia.cosmiccore.common.data;
 
 import com.ghostipedia.cosmiccore.client.renderer.block.NebulaeCoilRenderer;
 import com.ghostipedia.cosmiccore.common.blockentity.CosmicCoilBlockEntity;
+
 import com.tterrag.registrate.util.entry.BlockEntityEntry;
 
 import static com.gregtechceu.gtceu.common.registry.GTRegistration.REGISTRATE;
@@ -15,7 +16,5 @@ public class CosmicBlockEntities {
             .validBlocks(CosmicBlocks.COIL_CAUSAL_FABRIC)
             .register();
 
-    public static void init() {
-
-    }
+    public static void init() {}
 }

@@ -18,11 +18,11 @@
     "cosmiccore:high_powered_magnet",
     "cosmiccore:fusion_grade_magnet",
     "cosmiccore:high_temperature_fission_casing",
-    "cosmiccore:vomahine_certified_chemically_resistant_casing",
-    "cosmiccore:vomahine_certified_chemically_resistant_pipe",
-    "cosmiccore:vomahine_certified_interstellar_grade_casing",
-    "cosmiccore:vomahine_ultra_powered_casing",
+    "cosmiccore:cyclozine_chemically_repelling_casing",
+    "cosmiccore:cyclozine_chemically_repelling_pipe",
+    "cosmiccore:multi_purpose_interstellar_grade_casing",
+    "cosmiccore:ultra_powered_casing",
     "cosmiccore:highly_conductive_fission_casing",
-    "cosmiccore:heat_fan"
+    "cosmiccore:blood_cube"
   ]
 }

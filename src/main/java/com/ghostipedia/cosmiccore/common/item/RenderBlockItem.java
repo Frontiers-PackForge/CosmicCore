@@ -13,6 +13,7 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import org.jetbrains.annotations.Nullable;
 
 public class RenderBlockItem extends BlockItem implements IItemRendererProvider {
+
     public RenderBlockItem(Block block, Properties properties) {
         super(block, properties);
     }
