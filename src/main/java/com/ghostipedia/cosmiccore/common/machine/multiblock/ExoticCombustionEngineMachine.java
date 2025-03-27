@@ -139,7 +139,8 @@ public class ExoticCombustionEngineMachine extends WorkableElectricMultiblockMac
         }
 
         // Has a variant of lubricant
-        if (EUt > 0 && !engineMachine.isIntakesObstructed() && engineMachine.currentLubricant != null && !engineMachine.currentLubricant.isEmpty()) {
+        if (EUt > 0 && !engineMachine.isIntakesObstructed() && engineMachine.currentLubricant != null &&
+                !engineMachine.currentLubricant.isEmpty()) {
             int maxParallel = (int) (engineMachine.getOverclockVoltage() / EUt);
             int actualParallel = ParallelLogic.getParallelAmount(engineMachine, recipe, maxParallel);
             int tier = lubricantTiers.getInt(engineMachine.currentLubricant);
@@ -208,11 +209,12 @@ public class ExoticCombustionEngineMachine extends WorkableElectricMultiblockMac
                     .containsFluid(CosmicMaterials.Triphenylphosphine.getFluid(FluidStorageKeys.LIQUID, 1))) {
                         tickCycle = 144;
                         consumptionRate = 1; // 500/hr
-            } else if (currentLubricant.containsFluid(
+                    } else
+                if (currentLubricant.containsFluid(
                         CosmicMaterials.TearsOfTheUniverse.getFluid(FluidStorageKeys.LIQUID, 1))) {
                             tickCycle = 288;
                             consumptionRate = 1; // 250/hr
-            }
+                        }
             if (tickCycle != -1 && runningTimer % tickCycle == 0) {
                 if (consumptionRate != -1 && currentLubricant.getAmount() >= consumptionRate) {
                     currentLubricant.shrink(consumptionRate);
@@ -220,7 +222,7 @@ public class ExoticCombustionEngineMachine extends WorkableElectricMultiblockMac
                     recipeLogic.interruptRecipe();
                 }
             }
-        } else if(currentLubricant != null) {
+        } else if (currentLubricant != null) {
             recipeLogic.interruptRecipe();
         }
         runningTimer++;

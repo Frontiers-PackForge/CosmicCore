@@ -449,6 +449,31 @@ public class CosmicMachines {
             .workableCasingRenderer(GTCEu.id("block/casings/gcym/watertight_casing"),
                     GTCEu.id("block/multiblock/generator/large_gas_turbine"))
             .register();
+
+    public final static MultiblockMachineDefinition MANTLE_BORE = REGISTRATE
+            .multiblock("mantle_bore", WorkableElectricMultiblockMachine::new)
+            .rotationState(RotationState.NON_Y_AXIS)
+            .recipeType(CosmicRecipeTypes.CHROMATIC_DISTILLATION_PLANT)
+            .recipeModifier(GTRecipeModifiers.ELECTRIC_OVERCLOCK.apply(OverclockingLogic.NON_PERFECT_OVERCLOCK))
+            .appearanceBlock(GTBlocks.STEEL_HULL)
+            .pattern(definition -> FactoryBlockPattern.start(RIGHT, BACK, UP)
+                    .aisle(" A   A ", "A     A", "       ", "   D   ", "       ", "A     A", " A   A ")
+                    .aisle(" A   A ", "A     A", "   D   ", "  DDD  ", "   D   ", "A     A", " A   A ")
+                    .aisle("  BBB  ", " ACCCA ", "BCBBBCB", "BCBEBCB", "BCBBBCB", " ACCCA ", "  BBB  ")
+                    .where(' ', any())
+                    .where("E", controller(blocks(definition.getBlock())))
+                    .where('C', blocks(CosmicBlocks.CASING_HEAT_VENT.get()))
+                    .where('A', blocks(STEEL_HULL.get()))
+                    .where('D', blocks(STEEL_HULL.get()))
+                    .where('B', blocks(CASING_STEEL_SOLID.get())
+                            .or(Predicates.abilities(PartAbility.EXPORT_ITEMS).setMaxGlobalLimited(1))
+                            .or(Predicates.abilities(PartAbility.INPUT_ENERGY).setMinGlobalLimited(1)
+                                    .setMaxGlobalLimited(2))
+                            .or(Predicates.abilities(PartAbility.IMPORT_FLUIDS).setExactLimit(1)))
+                    .build())
+            .workableCasingRenderer(GTCEu.id("block/casings/solid/machine_casing_solid_steel"),
+                    CosmicCore.id("block/multiblock/mantle_bore"))
+            .register();
     public final static MultiblockMachineDefinition ORBITAL_TEMPERING_FORGE = REGISTRATE.multiblock(
             "orbital_tempering_forge", WorkableElectricMultiblockMachine::new)
             .rotationState(RotationState.ALL)
@@ -3122,6 +3147,16 @@ public class CosmicMachines {
             "extreme_combustion_engine_cc", IV,
             CASING_TUNGSTENSTEEL_ROBUST, CASING_TUNGSTENSTEEL_GEARBOX, CASING_EXTREME_ENGINE_INTAKE,
             GTCEu.id("block/casings/solid/machine_casing_robust_tungstensteel"),
+            GTCEu.id("block/multiblock/generator/extreme_combustion_engine"));
+    public static final MultiblockMachineDefinition LUDICROUS_COMBUSTION_ENGINE = registerCosmicLargeCombustionEngine(
+            "ludicrous_combustion_engine_cc", LuV,
+            GILDED_PTHANTERUM_CASING, GEARBOX_PTHANTERUM, CASING_INTAKE_LUDICRIOUS,
+            CosmicCore.id("block/casings/solid/gilded_pthanterum_casing"),
+            GTCEu.id("block/multiblock/generator/extreme_combustion_engine"));
+    public static final MultiblockMachineDefinition ULTIMATE_COMBUSTION_ENGINE = registerCosmicLargeCombustionEngine(
+            "ultimate_combustion_engine_cc", ZPM,
+            REINFORCED_NAQUADRIA_CASING, GEARBOX_NAQUADRIA, CASING_INTAKE_ULTIMATE,
+            CosmicCore.id("block/casings/solid/reinforced_naquadria_casing"),
             GTCEu.id("block/multiblock/generator/extreme_combustion_engine"));
 
     private static MachineDefinition[] registerSoulTieredHatch(String name, String displayName, String model, IO io,
