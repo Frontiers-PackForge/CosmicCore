@@ -62,9 +62,9 @@ public class ExoticCombustionEngineMachine extends WorkableElectricMultiblockMac
     private final int tier;
     // Probably a bad idea, most likely a better way to do this
     @DescSynced
-    private static Object2IntMap<FluidStack> lubricantTiers = new Object2IntOpenHashMap<>();
+    private static final Object2IntMap<FluidStack> lubricantTiers = new Object2IntOpenHashMap<>();
     @DescSynced
-    private static Object2IntMap<FluidStack> boostingTiers = new Object2IntOpenHashMap<>();
+    private static final Object2IntMap<FluidStack> boostingTiers = new Object2IntOpenHashMap<>();
     private int runningTimer = 0;
     static {
         // Boosting Tiers
@@ -114,7 +114,7 @@ public class ExoticCombustionEngineMachine extends WorkableElectricMultiblockMac
             return ModifierFunction.NULL;
         }
         var fluidHolders = Objects
-                .requireNonNullElseGet(((ExoticCombustionEngineMachine) machine).getCapabilitiesProxy()
+                .requireNonNullElseGet(engineMachine.getCapabilitiesProxy()
                         .get(IO.IN, FluidRecipeCapability.CAP), Collections::<IRecipeHandler<?>>emptyList)
                 .stream()
                 .map(container -> container.getContents().stream().filter(FluidStack.class::isInstance)
@@ -125,12 +125,12 @@ public class ExoticCombustionEngineMachine extends WorkableElectricMultiblockMac
         for (var fluidHolder : fluidHolders) {
             for (var fluidStack : fluidHolder) {
                 if (boostingTiers.containsKey(fluidStack)) {
-                    if (engineMachine.currentBooster == null ||
+                    if (engineMachine.currentBooster == null || engineMachine.currentBooster.isEmpty() ||
                             boostingTiers.getInt(fluidStack) > boostingTiers.getInt(engineMachine.currentBooster)) {
                         engineMachine.currentBooster = fluidStack;
                     }
                 } else if (lubricantTiers.containsKey(fluidStack)) {
-                    if (engineMachine.currentLubricant == null ||
+                    if (engineMachine.currentLubricant == null || engineMachine.currentLubricant.isEmpty() ||
                             lubricantTiers.getInt(fluidStack) > lubricantTiers.getInt(engineMachine.currentLubricant)) {
                         engineMachine.currentLubricant = fluidStack;
                     }
@@ -139,14 +139,14 @@ public class ExoticCombustionEngineMachine extends WorkableElectricMultiblockMac
         }
 
         // Has a variant of lubricant
-        if (EUt > 0 && !engineMachine.isIntakesObstructed() && engineMachine.currentLubricant != null) {
+        if (EUt > 0 && !engineMachine.isIntakesObstructed() && engineMachine.currentLubricant != null && !engineMachine.currentLubricant.isEmpty()) {
             int maxParallel = (int) (engineMachine.getOverclockVoltage() / EUt);
             int actualParallel = ParallelLogic.getParallelAmount(engineMachine, recipe, maxParallel);
             int tier = lubricantTiers.getInt(engineMachine.currentLubricant);
             float durationModifier = (lubricantTiers.getInt(engineMachine.currentLubricant) / 2.0F);
             double eutMultiplier = 1;
             int consumptionMult = 1;
-            if (engineMachine.currentBooster == null) {
+            if (engineMachine.currentBooster == null || engineMachine.currentBooster.isEmpty()) {
                 eutMultiplier = actualParallel;
             } else {
                 consumptionMult = boostingTiers.getInt(engineMachine.currentBooster) * 2;
@@ -177,46 +177,51 @@ public class ExoticCombustionEngineMachine extends WorkableElectricMultiblockMac
 
             }
         }
-        if (currentBooster != null) {
-            int consumptionRate = 1;
-            int tickCycle = 1;
+        if (currentBooster != null && !currentBooster.isEmpty()) {
+            int consumptionRate = -1;
+            int tickCycle = -1;
             if (currentBooster.isFluidEqual(GTMaterials.Oxygen.getFluid(1))) {
                 consumptionRate = 1;
+                tickCycle = 1;
             } else if (currentBooster.isFluidEqual(GTMaterials.Oxygen.getFluid(FluidStorageKeys.LIQUID, 1))) {
                 consumptionRate = 4;
+                tickCycle = 1;
             } else if (currentBooster.isFluidEqual(CosmicMaterials.Ichor.getFluid(1))) {
                 tickCycle = 2;
                 consumptionRate = 1;
             }
-            if (runningTimer % tickCycle == 0) {
-                if (currentBooster.getAmount() > consumptionRate) {
+            if (tickCycle != -1 && runningTimer % tickCycle == 0) {
+                if (consumptionRate != -1 && currentBooster.getAmount() >= consumptionRate) {
                     currentBooster.shrink(consumptionRate);
                 }
             }
         }
         // Currently all lubricants are the same, however this may change, so assume this is left this way intentionally
         // (Anyone else who reads this)
-        if (currentLubricant != null) {
-            int consumptionRate = 1;
-            int tickCycle = 1;
-            if (currentLubricant.isFluidEqual(GTMaterials.Lubricant.getFluid(1))) {
+        if (currentLubricant != null && !currentLubricant.isEmpty()) {
+            int consumptionRate = -1;
+            int tickCycle = -1;
+            if (currentLubricant.containsFluid(GTMaterials.Lubricant.getFluid(1))) {
                 tickCycle = 72;
                 consumptionRate = 1; // 1000/hr
-            } else if (currentLubricant.isFluidEqual(GTMaterials.Redstone.getFluid(FluidStorageKeys.LIQUID, 1))) {
-                tickCycle = 144;
-                consumptionRate = 1; // 500/hr
             } else if (currentLubricant
-                    .isFluidEqual(CosmicMaterials.TearsOfTheUniverse.getFluid(FluidStorageKeys.LIQUID, 1))) {
-                        tickCycle = 288;
-                        consumptionRate = 1; // 250/hr
-                    }
-            if (runningTimer % tickCycle == 0) {
-                if (currentLubricant.getAmount() > consumptionRate) {
+                    .containsFluid(CosmicMaterials.Triphenylphosphine.getFluid(FluidStorageKeys.LIQUID, 1))) {
+                        tickCycle = 144;
+                        consumptionRate = 1; // 500/hr
+            } else if (currentLubricant.containsFluid(
+                        CosmicMaterials.TearsOfTheUniverse.getFluid(FluidStorageKeys.LIQUID, 1))) {
+                            tickCycle = 288;
+                            consumptionRate = 1; // 250/hr
+            }
+            if (tickCycle != -1 && runningTimer % tickCycle == 0) {
+                if (consumptionRate != -1 && currentLubricant.getAmount() >= consumptionRate) {
                     currentLubricant.shrink(consumptionRate);
                 } else {
                     recipeLogic.interruptRecipe();
                 }
             }
+        } else if(currentLubricant != null) {
+            recipeLogic.interruptRecipe();
         }
         runningTimer++;
         if (runningTimer > 72000) runningTimer %= 72000;
