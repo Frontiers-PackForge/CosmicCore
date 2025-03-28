@@ -8,17 +8,8 @@ import net.minecraft.network.chat.Component;
 import net.minecraftforge.common.UsernameCache;
 
 import java.util.List;
-import java.util.UUID;
 
 public class OwnershipUtils {
-
-    public static UUID getOwnerUUID(MachineOwner owner) {
-        if (owner instanceof PlayerOwner playerOwner) {
-            return playerOwner.getUUID();
-        } else if (owner instanceof FTBOwner ftOwner) {
-            return ftOwner.getTeam().getId();
-        } else return null;
-    }
 
     public static String getName(MachineOwner owner) {
         if (owner instanceof PlayerOwner playerOwner) {

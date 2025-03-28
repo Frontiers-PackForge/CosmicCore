@@ -146,17 +146,11 @@ public class WirelessDataBankMachine extends WorkableElectricMultiblockMachine
     }
 
     private void addHatchesToWirelessNetwork() {
-        var owner = getOwner();
-        var uuid = OwnershipUtils.getOwnerUUID(owner);
-        var hatches = getOpticalHatches();
-        WirelessDataStore.addHatches(uuid, hatches);
+        WirelessDataStore.addHatches(getOwnerUUID(), getOpticalHatches());
     }
 
     private void removeHatchesFromWirelessNetwork() {
-        var owner = getOwner();
-        var uuid = OwnershipUtils.getOwnerUUID(owner);
-        var hatches = getOpticalHatches();
-        WirelessDataStore.removeHatches(uuid, hatches);
+        WirelessDataStore.removeHatches(getOwnerUUID(), getOpticalHatches());
     }
 
     private List<IDataAccessHatch> getOpticalHatches() {
