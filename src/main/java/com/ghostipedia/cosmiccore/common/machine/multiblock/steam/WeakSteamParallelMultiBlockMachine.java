@@ -20,7 +20,6 @@ import com.gregtechceu.gtceu.api.recipe.content.ContentModifier;
 import com.gregtechceu.gtceu.api.recipe.modifier.ModifierFunction;
 import com.gregtechceu.gtceu.api.recipe.modifier.ParallelLogic;
 import com.gregtechceu.gtceu.common.data.GTMaterials;
-import com.gregtechceu.gtceu.common.machine.multiblock.part.SteamHatchPartMachine;
 import com.gregtechceu.gtceu.config.ConfigHolder;
 
 import com.lowdragmc.lowdraglib.gui.modular.ModularUI;
@@ -37,7 +36,6 @@ import net.minecraft.world.entity.player.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class WeakSteamParallelMultiBlockMachine extends WorkableMultiblockMachine implements IDisplayUIMachine {
@@ -63,7 +61,8 @@ public class WeakSteamParallelMultiBlockMachine extends WorkableMultiblockMachin
                 if (!hl.isValid(IO.IN)) continue;
                 for (var fluidHandler : hl.getCapability(FluidRecipeCapability.CAP)) {
                     if (!(fluidHandler instanceof NotifiableFluidTank nft)) continue;
-                    if (nft.isFluidValid(0, GTMaterials.Steam.getFluid(1)) && PartAbility.STEAM.isApplicable(part.self().getDefinition().getBlock())) {
+                    if (nft.isFluidValid(0, GTMaterials.Steam.getFluid(1)) &&
+                            PartAbility.STEAM.isApplicable(part.self().getDefinition().getBlock())) {
                         steamEnergy = new SteamEnergyRecipeHandler(nft, CONVERSION_RATE);
                         addHandlerList(RecipeHandlerList.of(IO.IN, steamEnergy));
                         return;

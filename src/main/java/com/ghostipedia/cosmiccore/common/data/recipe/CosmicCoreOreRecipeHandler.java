@@ -3,14 +3,12 @@ package com.ghostipedia.cosmiccore.common.data.recipe;
 import com.gregtechceu.gtceu.api.GTValues;
 import com.gregtechceu.gtceu.api.data.chemical.ChemicalHelper;
 import com.gregtechceu.gtceu.api.data.chemical.material.Material;
-import com.gregtechceu.gtceu.api.data.chemical.material.properties.OreProperty;
 import com.gregtechceu.gtceu.api.data.chemical.material.properties.PropertyKey;
-import com.gregtechceu.gtceu.api.data.tag.TagPrefix;
 import com.gregtechceu.gtceu.common.data.GTMaterials;
-import com.gregtechceu.gtceu.utils.GTUtil;
 
 import net.minecraft.data.recipes.FinishedRecipe;
 import net.minecraft.world.item.ItemStack;
+
 import org.jetbrains.annotations.NotNull;
 
 import java.util.function.Consumer;
@@ -30,36 +28,35 @@ public class CosmicCoreOreRecipeHandler {
         processRefinedFrothed(provider, material);
         processLeachedRefined(provider, material);
         processFrothedPure(provider, material);
-        //todo old
-//        crushed.executeHandler(provider, PropertyKey.ORE, CosmicCoreOreRecipeHandler::processcrushedLeached);
-//        crushedRefined.executeHandler(provider, PropertyKey.ORE, CosmicCoreOreRecipeHandler::processRefinedFrothed);
-//        crushedLeached.executeHandler(provider, PropertyKey.ORE, CosmicCoreOreRecipeHandler::processLeachedRefined);
-//        prismaFrothed.executeHandler(provider, PropertyKey.ORE, CosmicCoreOreRecipeHandler::processFrothedPure);
+        // todo old
+        // crushed.executeHandler(provider, PropertyKey.ORE, CosmicCoreOreRecipeHandler::processcrushedLeached);
+        // crushedRefined.executeHandler(provider, PropertyKey.ORE, CosmicCoreOreRecipeHandler::processRefinedFrothed);
+        // crushedLeached.executeHandler(provider, PropertyKey.ORE, CosmicCoreOreRecipeHandler::processLeachedRefined);
+        // prismaFrothed.executeHandler(provider, PropertyKey.ORE, CosmicCoreOreRecipeHandler::processFrothedPure);
     }
 
     public static void processcrushedLeached(Consumer<FinishedRecipe> provider, Material material) {
         if (!material.shouldGenerateRecipesFor(crushed) && !material.hasProperty(PropertyKey.ORE)) return;
-            var property = material.getProperty(PropertyKey.ORE);
-            ItemStack leachedStack = ChemicalHelper.get(crushedLeached, material);
+        var property = material.getProperty(PropertyKey.ORE);
+        ItemStack leachedStack = ChemicalHelper.get(crushedLeached, material);
 
-            Material byproduct = property.getOreByProduct( 0);
-            Material byproduct2 = property.getOreByProduct( 1);
+        Material byproduct = property.getOreByProduct(0);
+        Material byproduct2 = property.getOreByProduct(1);
 
-            var builder = LEACHING_PLANT.recipeBuilder("crushed" + material.getName() + "_to_crushedleached")
-                    .inputItems(crushedPurified, material)
-                    .inputFluids(Water.getFluid(100))
-                    .inputFluids(SulfuricAcid.getFluid(200))
-                    .outputItems(leachedStack)
-                    .chancedOutput(leachedStack, 5500, 750);
-            if (byproduct != GTMaterials.NULL && !ChemicalHelper.get(dustPure, byproduct).isEmpty()) {
-                builder.chancedOutput(dustPure, byproduct, 1500, 1350);
-            }
-            if (byproduct2 != GTMaterials.NULL && !ChemicalHelper.get(dustPure, byproduct2).isEmpty()) {
-                builder.chancedOutput(dustPure, byproduct2, 2200, 1150);
-            }
-            builder.outputFluids(DilutedSulfuricAcid.getFluid(300));
-            builder.duration(60).EUt(GTValues.VA[GTValues.HV]).save(provider);
-
+        var builder = LEACHING_PLANT.recipeBuilder("crushed" + material.getName() + "_to_crushedleached")
+                .inputItems(crushedPurified, material)
+                .inputFluids(Water.getFluid(100))
+                .inputFluids(SulfuricAcid.getFluid(200))
+                .outputItems(leachedStack)
+                .chancedOutput(leachedStack, 5500, 750);
+        if (byproduct != GTMaterials.NULL && !ChemicalHelper.get(dustPure, byproduct).isEmpty()) {
+            builder.chancedOutput(dustPure, byproduct, 1500, 1350);
+        }
+        if (byproduct2 != GTMaterials.NULL && !ChemicalHelper.get(dustPure, byproduct2).isEmpty()) {
+            builder.chancedOutput(dustPure, byproduct2, 2200, 1150);
+        }
+        builder.outputFluids(DilutedSulfuricAcid.getFluid(300));
+        builder.duration(60).EUt(GTValues.VA[GTValues.HV]).save(provider);
     }
 
     public static void processRefinedFrothed(Consumer<FinishedRecipe> provider, Material material) {
@@ -67,11 +64,10 @@ public class CosmicCoreOreRecipeHandler {
         var property = material.getProperty(PropertyKey.ORE);
         ItemStack frothedStack = ChemicalHelper.get(prismaFrothed, material);
 
-
-        Material byproduct = property.getOreByProduct( 0);
-        Material byproduct2 = property.getOreByProduct( 1);
-        Material byproduct3 = property.getOreByProduct( 2);
-        Material byproduct4 = property.getOreByProduct( Integer.MAX_VALUE);
+        Material byproduct = property.getOreByProduct(0);
+        Material byproduct2 = property.getOreByProduct(1);
+        Material byproduct3 = property.getOreByProduct(2);
+        Material byproduct4 = property.getOreByProduct(Integer.MAX_VALUE);
 
         var builder = CHROMATIC_FLOTATION_PLANT.recipeBuilder("refined" + material.getName() + "_to_frothed")
                 .inputItems(crushedRefined, material)
@@ -98,7 +94,7 @@ public class CosmicCoreOreRecipeHandler {
         ItemStack refinedStack = ChemicalHelper.get(crushedLeached, material);
         var property = material.getProperty(PropertyKey.ORE);
 
-        Material byproduct = property.getOreByProduct( 1);
+        Material byproduct = property.getOreByProduct(1);
 
         var builder = THERMAL_CENTRIFUGE_RECIPES.recipeBuilder("leached" + material.getName() + "_to_refined")
                 .inputItems(crushedLeached, material)
@@ -115,7 +111,7 @@ public class CosmicCoreOreRecipeHandler {
         ItemStack pureStack = ChemicalHelper.get(dustPure, material);
         var property = material.getProperty(PropertyKey.ORE);
 
-        Material byproduct = property.getOreByProduct( 0);
+        Material byproduct = property.getOreByProduct(0);
 
         var builder = CHEMICAL_BATH_RECIPES.recipeBuilder("frothed" + material.getName() + "_to_purified")
                 .inputItems(prismaFrothed, material)

@@ -336,7 +336,7 @@ public class CosmicMachines {
                             .or(abilities(PartAbility.EXPORT_ITEMS))
                             .or(abilities(PartAbility.INPUT_ENERGY))
                             .or(abilities(PartAbility.MAINTENANCE))
-                                    .or(abilities(IMPORT_SOUL)))
+                            .or(abilities(IMPORT_SOUL)))
                     .build())
             .workableCasingRenderer(GTCEu.id("block/casings/solid/machine_casing_clean_stainless_steel"),
                     GTCEu.id("block/multiblock/data_bank"))
