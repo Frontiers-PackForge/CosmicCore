@@ -71,8 +71,8 @@ public class MagneticFieldMachine extends MagnetWorkableElectricMultiblockMachin
                             .filter(IEnergyContainer.class::isInstance)
                             .map(IEnergyContainer.class::cast)
                             .toList();
-                        inputEnergyContainers.addAll(containers);
-                        traitSubscriptions.add(handler.subscribe(this::updateMagnetFieldSubscription));
+                    inputEnergyContainers.addAll(containers);
+                    traitSubscriptions.add(handler.subscribe(this::updateMagnetFieldSubscription));
 
                 }
             }
