@@ -204,8 +204,6 @@ public class HemophagicTransfuserRender extends WorkableCasingMachineRenderer im
                 1.8f, 0.1F, 10, 36, 0.4F, 0f, 0, alpha, axis);
         poseStack.popPose();
         poseStack.pushPose();
-        poseStack.mulPose(sinPartialDiv20Quaternion);
-
         poseStack.mulPose(cosHalfPiPartialDiv60Quaternion);
         RenderBufferHelper.renderRing(poseStack, buffer.getBuffer(GTRenderTypes.getLightRing()), 0, 0, 0,
                 1.6f, 0.1F, 10, 36, 0.6F, 0, 0, alpha, axis);

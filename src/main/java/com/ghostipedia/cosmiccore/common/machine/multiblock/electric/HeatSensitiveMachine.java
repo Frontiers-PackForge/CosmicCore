@@ -60,11 +60,11 @@ public class HeatSensitiveMachine extends HeatWorkableElectricMultiblockMachine 
             if (io == IO.NONE || io == IO.OUT) continue;
             for (var handler : part.getRecipeHandlers()) {
                 IO handlerIO = handler.getHandlerIO();
-                if (handler.getCapability() == HeatRecipeCapability.CAP &&
+                if (handler.hasCapability(HeatRecipeCapability.CAP) &&
                         handler instanceof IHeatContainer container) {
                     heatContainers.add(container);
                 }
-                if (handler.getCapability() == EURecipeCapability.CAP &&
+                if (handler.hasCapability(EURecipeCapability.CAP) &&
                         handler instanceof IEnergyContainer container) {
                     energyContainers.add(container);
                 }

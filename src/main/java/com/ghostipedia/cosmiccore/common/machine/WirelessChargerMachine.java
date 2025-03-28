@@ -7,8 +7,9 @@ import com.gregtechceu.gtceu.api.machine.IMachineBlockEntity;
 import com.gregtechceu.gtceu.api.machine.TickableSubscription;
 import com.gregtechceu.gtceu.api.machine.TieredEnergyMachine;
 import com.gregtechceu.gtceu.api.machine.trait.NotifiableEnergyContainer;
+import com.gregtechceu.gtceu.common.machine.owner.ArgonautsOwner;
 import com.gregtechceu.gtceu.common.machine.owner.FTBOwner;
-import com.gregtechceu.gtceu.common.machine.owner.IMachineOwner;
+import com.gregtechceu.gtceu.common.machine.owner.MachineOwner;
 import com.gregtechceu.gtceu.common.machine.owner.PlayerOwner;
 import com.gregtechceu.gtceu.utils.FormattingUtil;
 
@@ -94,13 +95,13 @@ public class WirelessChargerMachine extends TieredEnergyMachine {
         if (energyContainer.getEnergyStored() < maxChargeValue) return;
         int tickRate = mode == ChargeMode.SUPER_CHARGED ? 4 : 20;
         if (getOffsetTimer() % tickRate == 0) {
-            IMachineOwner owner = getHolder().getOwner();
+            MachineOwner owner = this.getOwner();
             List<Player> players = new ArrayList<>();
-            if (owner.type() == IMachineOwner.MachineOwnerType.PLAYER) {
+            if (owner instanceof PlayerOwner) {
                 UUID pUUID = ((PlayerOwner) owner).getUUID();
                 Player player = ServerLifecycleHooks.getCurrentServer().getPlayerList().getPlayer(pUUID);
                 if (player != null && isPlayerInRange(player)) players.add(player);
-            } else if (owner.type() == IMachineOwner.MachineOwnerType.FTB) {
+            } else if (owner instanceof FTBOwner) {
                 Optional<Team> t = FTBTeamsAPI.api().getManager().getTeamByID(((FTBOwner) owner).getUUID());
                 if (t.isPresent()) {
                     for (var pUUID : t.get().getMembers()) {
@@ -108,7 +109,7 @@ public class WirelessChargerMachine extends TieredEnergyMachine {
                         if (player != null && isPlayerInRange(player)) players.add(player);
                     }
                 }
-            } else if (owner.type() == IMachineOwner.MachineOwnerType.ARGONAUTS) {
+            } else if (owner instanceof ArgonautsOwner) {
                 // DN
             }
 
