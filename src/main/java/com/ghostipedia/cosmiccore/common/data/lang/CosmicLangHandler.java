@@ -1,10 +1,6 @@
 package com.ghostipedia.cosmiccore.common.data.lang;
 
-import com.gregtechceu.gtceu.utils.FormattingUtil;
 import com.tterrag.registrate.providers.RegistrateLangProvider;
-import net.minecraft.ChatFormatting;
-import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.Style;
 
 import static com.gregtechceu.gtceu.data.lang.LangHandler.replace;
 
@@ -181,8 +177,9 @@ public class CosmicLangHandler {
                 "You have entered charging range [Range - %s blocks]");
         replace(provider, "cosmiccore.wireless_charger.left_range", "You have left charging range [Range - %s blocks]");
 
-        replace(provider,"item.cosmiccore.the_one_ring.tooltip.0", "§6§oOne Ring to rule them all, One Ring to find them, One Ring to bring them all and in the darkness bind them.§r");
-        replace(provider,"item.cosmiccore.the_one_ring.tooltip.1", "You might find it hard to take off.");
+        replace(provider, "item.cosmiccore.the_one_ring.tooltip.0",
+                "§6§oOne Ring to rule them all, One Ring to find them, One Ring to bring them all and in the darkness bind them.§r");
+        replace(provider, "item.cosmiccore.the_one_ring.tooltip.1", "You might find it hard to take off.");
 
         replace(provider, "behavior.wireless_data.owner.player", "§3Player Name: §r%s");
         replace(provider, "behavior.wireless_data.owner.team", "§3Team Name: §r");

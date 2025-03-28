@@ -21,12 +21,14 @@ import com.gregtechceu.gtceu.api.machine.multiblock.WorkableElectricMultiblockMa
 import com.gregtechceu.gtceu.api.machine.trait.RecipeLogic;
 import com.gregtechceu.gtceu.api.misc.EnergyContainerList;
 import com.gregtechceu.gtceu.config.ConfigHolder;
+
 import com.lowdragmc.lowdraglib.utils.DummyWorld;
-import it.unimi.dsi.fastutil.longs.Long2ObjectMaps;
+
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.level.block.Block;
 
 import it.unimi.dsi.fastutil.longs.Long2ObjectMaps;
+
 import java.util.*;
 
 public class WirelessDataBankMachine extends WorkableElectricMultiblockMachine
@@ -46,7 +48,8 @@ public class WirelessDataBankMachine extends WorkableElectricMultiblockMachine
 
     public void updateSubscriptions() {
         if (isSubscriptionActive()) {
-            wirelessProviderSubscription = subscribeServerTick(wirelessProviderSubscription, this::transmitWirelessData);
+            wirelessProviderSubscription = subscribeServerTick(wirelessProviderSubscription,
+                    this::transmitWirelessData);
         } else if (wirelessProviderSubscription != null) {
             wirelessProviderSubscription.unsubscribe();
             wirelessProviderSubscription = null;
@@ -65,7 +68,8 @@ public class WirelessDataBankMachine extends WorkableElectricMultiblockMachine
 
     protected void transmitWirelessData() {
         if (isWorkingEnabled()) {
-            getRecipeLogic().setStatus(isSubscriptionActive() ? RecipeLogic.Status.WORKING : RecipeLogic.Status.SUSPEND);
+            getRecipeLogic()
+                    .setStatus(isSubscriptionActive() ? RecipeLogic.Status.WORKING : RecipeLogic.Status.SUSPEND);
             energyContainer.removeEnergy(calculateEnergyUsage());
             addHatchesToWirelessNetwork();
         } else removeHatchesFromWirelessNetwork();
@@ -94,7 +98,8 @@ public class WirelessDataBankMachine extends WorkableElectricMultiblockMachine
             for (var handler : part.getRecipeHandlers()) {
                 var handlerIO = handler.getHandlerIO();
                 if (io != IO.BOTH && handlerIO != IO.BOTH && io != handlerIO) continue;
-                if (handler.getCapability() == EURecipeCapability.CAP && handler instanceof IEnergyContainer container) {
+                if (handler.getCapability() == EURecipeCapability.CAP &&
+                        handler instanceof IEnergyContainer container) {
                     energyContainers.add(container);
                     traitSubscriptions.add(handler.addChangedListener(this::updateSubscriptions));
                 }
@@ -114,7 +119,8 @@ public class WirelessDataBankMachine extends WorkableElectricMultiblockMachine
     private int calculateEnergyUsage() {
         int receivers = getOpticalHatches().size();
         boolean hasMaintenance = ConfigHolder.INSTANCE.machines.enableMaintenance && this.maintenance != null;
-        var maintenanceMultiplier = hasMaintenance ? (1 + ((float) this.maintenance.getNumMaintenanceProblems() / 10)): 1;
+        var maintenanceMultiplier = hasMaintenance ? (1 + ((float) this.maintenance.getNumMaintenanceProblems() / 10)) :
+                1;
         return (int) Math.floor(receivers * maintenanceMultiplier * EUT_PER_HATCH_CHAINED);
     }
 
@@ -141,8 +147,6 @@ public class WirelessDataBankMachine extends WorkableElectricMultiblockMachine
                 .addEmptyLine()
                 .addCustom(list -> OwnershipUtils.addOwnerLine(list, getHolder().getOwner()));
     }
-
-
 
     private void addHatchesToWirelessNetwork() {
         var uuid = getHolder().getOwner().getUUID();

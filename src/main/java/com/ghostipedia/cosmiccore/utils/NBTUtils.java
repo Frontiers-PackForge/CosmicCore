@@ -18,5 +18,4 @@ public abstract class NBTUtils {
         var B = BlockPos.of(tag.getLong("B"));
         return new Tuple<>(A, B);
     }
-
 }

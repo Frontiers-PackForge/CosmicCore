@@ -1,12 +1,15 @@
 package com.ghostipedia.cosmiccore.api.machine.multiblock;
 
 import com.ghostipedia.cosmiccore.api.data.wireless.WirelessEnergySavedData;
+
 import com.gregtechceu.gtceu.api.machine.IMachineBlockEntity;
 import com.gregtechceu.gtceu.api.machine.multiblock.IBatteryData;
 import com.gregtechceu.gtceu.api.machine.trait.RecipeLogic;
 import com.gregtechceu.gtceu.common.machine.multiblock.electric.PowerSubstationMachine;
+
 import com.lowdragmc.lowdraglib.syncdata.annotation.Persisted;
 import com.lowdragmc.lowdraglib.syncdata.field.ManagedFieldHolder;
+
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.Style;
@@ -39,7 +42,6 @@ public class DimensionalEnergyCapacitor extends DimensionalEnergyInterface {
     @Persisted
     private long[] capacities;
 
-
     public DimensionalEnergyCapacitor(IMachineBlockEntity holder) {
         super(holder);
         this.localDisplay = false;
@@ -60,11 +62,10 @@ public class DimensionalEnergyCapacitor extends DimensionalEnergyInterface {
                 }
             } else wirelessData.setCapacitorPosition(owner, getDimension(), getPos());
 
-
             List<IBatteryData> batteries = new ArrayList<>();
             for (Map.Entry<String, Object> battery : getMultiblockState().getMatchContext().entrySet()) {
-                if (battery.getKey().startsWith(PowerSubstationMachine.PMC_BATTERY_HEADER)
-                        && battery.getValue() instanceof PowerSubstationMachine.BatteryMatchWrapper wrapper) {
+                if (battery.getKey().startsWith(PowerSubstationMachine.PMC_BATTERY_HEADER) &&
+                        battery.getValue() instanceof PowerSubstationMachine.BatteryMatchWrapper wrapper) {
                     for (int i = 0; i < wrapper.getAmount(); i++) {
                         batteries.add(wrapper.getPartType());
                     }
@@ -79,7 +80,6 @@ public class DimensionalEnergyCapacitor extends DimensionalEnergyInterface {
             }
 
             super.onStructureFormed(); // This order is important do not move
-
 
             var capacity = batteries.stream().mapToLong(IBatteryData::getCapacity)
                     .mapToObj(BigInteger::valueOf).reduce(BigInteger.ZERO, BigInteger::add);
@@ -109,16 +109,29 @@ public class DimensionalEnergyCapacitor extends DimensionalEnergyInterface {
 
     @Override
     public long getPassiveDrainPerTick() {
-        long[] drains = Arrays.stream(capacities).map(cap -> Math.min(PASSIVE_DRAIN_MAX_PER_STORAGE, cap / PASSIVE_DRAIN_DIVISOR)).toArray();
+        long[] drains = Arrays.stream(capacities)
+                .map(cap -> Math.min(PASSIVE_DRAIN_MAX_PER_STORAGE, cap / PASSIVE_DRAIN_DIVISOR)).toArray();
         return Arrays.stream(drains).sum();
     }
 
     @Override
     public void addDisplayText(List<Component> textList) {
         if (this.isDuplicate) {
-            textList.add(Component.translatable("cosmic.multiblock.capacitor.duplicate.multiblock.1").setStyle(Style.EMPTY.withColor(ChatFormatting.DARK_RED)));
-            textList.add(Component.translatable("cosmic.multiblock.capacitor.duplicate.multiblock.2").setStyle(Style.EMPTY.withColor(ChatFormatting.DARK_RED)));
+            textList.add(Component.translatable("cosmic.multiblock.capacitor.duplicate.multiblock.1")
+                    .setStyle(Style.EMPTY.withColor(ChatFormatting.DARK_RED)));
+            textList.add(Component.translatable("cosmic.multiblock.capacitor.duplicate.multiblock.2")
+                    .setStyle(Style.EMPTY.withColor(ChatFormatting.DARK_RED)));
         } else super.addDisplayText(textList);
+    }
+
+    @Override
+    public void setWorkingEnabled(boolean isWorkingAllowed) {
+        super.setWorkingEnabled(isWorkingAllowed);
+        if (getLevel() instanceof ServerLevel serverLevel) {
+            var owner = getHolder().getOwner().getUUID();
+            var wirelessData = WirelessEnergySavedData.getOrCreate(serverLevel);
+            wirelessData.setActive(owner, isWorkingAllowed);
+        }
     }
 
     private String getDimension() {

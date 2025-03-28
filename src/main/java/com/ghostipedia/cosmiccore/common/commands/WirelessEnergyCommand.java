@@ -1,19 +1,22 @@
 package com.ghostipedia.cosmiccore.common.commands;
 
 import com.ghostipedia.cosmiccore.api.data.wireless.WirelessEnergySavedData;
+
 import com.gregtechceu.gtceu.utils.FormattingUtil;
-import com.mojang.brigadier.CommandDispatcher;
-import com.mojang.brigadier.builder.LiteralArgumentBuilder;
-import com.mojang.brigadier.context.CommandContext;
-import dev.ftb.mods.ftbteams.api.FTBTeamsAPI;
-import dev.ftb.mods.ftbteams.api.Team;
-import dev.ftb.mods.ftbteams.data.TeamArgument;
+
 import net.minecraft.commands.CommandBuildContext;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.arguments.EntityArgument;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
+
+import com.mojang.brigadier.CommandDispatcher;
+import com.mojang.brigadier.builder.LiteralArgumentBuilder;
+import com.mojang.brigadier.context.CommandContext;
+import dev.ftb.mods.ftbteams.api.FTBTeamsAPI;
+import dev.ftb.mods.ftbteams.api.Team;
+import dev.ftb.mods.ftbteams.data.TeamArgument;
 
 import java.util.UUID;
 import java.util.function.BiFunction;
@@ -24,24 +27,28 @@ public class WirelessEnergyCommand {
 
     public static void register(CommandDispatcher<CommandSourceStack> dispatcher, CommandBuildContext buildContext) {
         dispatcher.register(
-                literal("wireless_energy")
-                        .then(wirelessLiteral("info", LEVEL_ALL, WirelessEnergyCommand::displayPlayerInfo, WirelessEnergyCommand::displayTeamInfo))
-                        .then(wirelessLiteral("clear", LEVEL_ADMINS, WirelessEnergyCommand::clearPlayerData, WirelessEnergyCommand::clearTeamData))
-        );
+                literal("wireless")
+                        .then(wirelessLiteral("info", LEVEL_ALL, WirelessEnergyCommand::displayPlayerInfo,
+                                WirelessEnergyCommand::displayTeamInfo))
+                        .then(wirelessLiteral("clear", LEVEL_ADMINS, WirelessEnergyCommand::clearPlayerData,
+                                WirelessEnergyCommand::clearTeamData)));
     }
 
     private static LiteralArgumentBuilder<CommandSourceStack> wirelessLiteral(String name, int permissionLevel,
-        BiFunction<CommandContext<CommandSourceStack>, ServerPlayer, Integer> playerCommand, BiFunction<CommandContext<CommandSourceStack>, Team, Integer> teamCommand) {
+                                                                              BiFunction<CommandContext<CommandSourceStack>, ServerPlayer, Integer> playerCommand,
+                                                                              BiFunction<CommandContext<CommandSourceStack>, Team, Integer> teamCommand) {
         return literal(name)
                 .requires(source -> source.hasPermission(permissionLevel))
-                    .then(literal("player").then(argument("player", EntityArgument.player())
-                            .executes(ctx -> playerCommand.apply(ctx, EntityArgument.getPlayer(ctx, "player")))))
-                    .then(literal("team").then(argument("team", TeamArgument.create())
-                            .executes(ctx -> teamCommand.apply(ctx, TeamArgument.get(ctx, "team")))))
-                    .executes(ctx -> sourceCommand(ctx, playerCommand, teamCommand));
+                .then(literal("player").then(argument("player", EntityArgument.player())
+                        .executes(ctx -> playerCommand.apply(ctx, EntityArgument.getPlayer(ctx, "player")))))
+                .then(literal("team").then(argument("team", TeamArgument.create())
+                        .executes(ctx -> teamCommand.apply(ctx, TeamArgument.get(ctx, "team")))))
+                .executes(ctx -> sourceCommand(ctx, playerCommand, teamCommand));
     }
 
-    private static int sourceCommand(CommandContext<CommandSourceStack> context, BiFunction<CommandContext<CommandSourceStack>, ServerPlayer, Integer> playerCommand, BiFunction<CommandContext<CommandSourceStack>, Team, Integer> teamCommand) {
+    private static int sourceCommand(CommandContext<CommandSourceStack> context,
+                                     BiFunction<CommandContext<CommandSourceStack>, ServerPlayer, Integer> playerCommand,
+                                     BiFunction<CommandContext<CommandSourceStack>, Team, Integer> teamCommand) {
         var owner = getPlayerOrTeam(context.getSource().getPlayer());
         if (owner instanceof ServerPlayer player) return playerCommand.apply(context, player);
         else if (owner instanceof Team team) return teamCommand.apply(context, team);
@@ -50,21 +57,23 @@ public class WirelessEnergyCommand {
 
     private static Object getPlayerOrTeam(ServerPlayer player) {
         var team = FTBTeamsAPI.api().getManager().getTeamForPlayer(player);
-        return (team.isPresent() && ! team.get().isPlayerTeam()) ? team.get() : player;
+        return (team.isPresent() && !team.get().isPlayerTeam()) ? team.get() : player;
     }
 
     // ####################################
-    //            Display Info
+    // Display Info
     // ####################################
 
     private static int displayPlayerInfo(CommandContext<CommandSourceStack> context, ServerPlayer player) {
-        var message = generateInfoMessage(context.getSource().getLevel(), player.getUUID(), Component.literal("Player: ").append(player.getName()));
+        var message = generateInfoMessage(context.getSource().getLevel(), player.getUUID(),
+                Component.literal("Player: ").append(player.getName()));
         context.getSource().sendSuccess(() -> message, false);
         return 1;
     }
 
     private static int displayTeamInfo(CommandContext<CommandSourceStack> context, Team team) {
-        var message = generateInfoMessage(context.getSource().getLevel(), team.getTeamId(), Component.literal("Team: ").append(team.getName()));
+        var message = generateInfoMessage(context.getSource().getLevel(), team.getTeamId(),
+                Component.literal("Team: ").append(team.getName()));
         context.getSource().sendSuccess(() -> message, false);
         return 1;
     }
@@ -82,14 +91,16 @@ public class WirelessEnergyCommand {
         message.append("  Active: " + wirelessData.isActive(owner) + "\n");
         var location = wirelessData.getCapacitorPosition(owner);
         var pos = location != null ? location.getB() : null;
-        var locationStr = location != null ? String.format("%s : x=%d y=%d z=%d", location.getA(), pos.getX(), pos.getY(), pos.getZ()): "No capacitor set";
+        var locationStr = location != null ?
+                String.format("%s : x=%d y=%d z=%d", location.getA(), pos.getX(), pos.getY(), pos.getZ()) :
+                "No capacitor set";
         message.append("  Capacitor location: " + locationStr);
 
         return message;
     }
 
     // ####################################
-    //            Clear data
+    // Clear data
     // ####################################
 
     private static int clearPlayerData(CommandContext<CommandSourceStack> context, ServerPlayer player) {

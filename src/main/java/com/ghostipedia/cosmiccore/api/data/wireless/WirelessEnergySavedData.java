@@ -1,6 +1,7 @@
 package com.ghostipedia.cosmiccore.api.data.wireless;
 
 import com.ghostipedia.cosmiccore.utils.NBTUtils;
+
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
@@ -20,7 +21,7 @@ public class WirelessEnergySavedData extends SavedData {
     public static class WirelessEnergyData {
 
         @Nullable
-        public Tuple<String,BlockPos> capacitorLocation;
+        public Tuple<String, BlockPos> capacitorLocation;
         public BigInteger energyStored;
         public BigInteger energyCapacity;
         public boolean isActive;
@@ -37,7 +38,8 @@ public class WirelessEnergySavedData extends SavedData {
             this(null, energyStored, energyCapacity, false);
         }
 
-        public WirelessEnergyData(@Nullable Tuple<String,BlockPos> capacitorLocation, BigInteger energyStored, BigInteger energyCapacity, boolean isActive) {
+        public WirelessEnergyData(@Nullable Tuple<String, BlockPos> capacitorLocation, BigInteger energyStored,
+                                  BigInteger energyCapacity, boolean isActive) {
             this.capacitorLocation = capacitorLocation;
             this.energyStored = energyStored;
             this.energyCapacity = energyCapacity;
@@ -49,7 +51,8 @@ public class WirelessEnergySavedData extends SavedData {
         }
 
         public static WirelessEnergyData fromNBT(CompoundTag nbt) {
-            var capacitor = nbt.contains("capacitorLocation") ? NBTUtils.fromNBT(nbt.getCompound("capacitorLocation")) : null;
+            var capacitor = nbt.contains("capacitorLocation") ? NBTUtils.fromNBT(nbt.getCompound("capacitorLocation")) :
+                    null;
             var stored = new BigInteger(nbt.getByteArray("energyStored"));
             var capacity = new BigInteger(nbt.getByteArray("energyCapacity"));
             var active = nbt.getBoolean("isActive");
@@ -64,8 +67,6 @@ public class WirelessEnergySavedData extends SavedData {
             tag.putBoolean("isActive", isActive);
             return tag;
         }
-
-
     };
 
     private static final String DATA_NAME = "gtceu_wireless_energy";
@@ -110,110 +111,119 @@ public class WirelessEnergySavedData extends SavedData {
     }
 
     public BigInteger getEnergyStored(UUID uuid) {
-        GlobalWirelessEnergy.computeIfAbsent(uuid, k -> new WirelessEnergyData());
-        return GlobalWirelessEnergy.get(uuid).energyStored;
+        var data = GlobalWirelessEnergy.computeIfAbsent(uuid, k -> new WirelessEnergyData());
+        return data.energyStored;
     }
 
     public BigInteger getTotalNetworkEnergyStored(UUID uuid) {
-        GlobalWirelessEnergy.computeIfAbsent(uuid, k -> new WirelessEnergyData());
         return this.getEnergyStored(uuid).add(this.getEnergyBuffered(uuid));
     }
 
     public BigInteger getTotalNetworkEnergyStoredExceptLocalBuffer(UUID uuid, BlockPos localBufferPos) {
-        GlobalWirelessEnergy.computeIfAbsent(uuid, k -> new WirelessEnergyData());
         return this.getEnergyStored(uuid).add(this.getEnergyBufferedExceptLocal(uuid, localBufferPos));
     }
 
     public BigInteger getEnergyCapacity(UUID uuid) {
-        GlobalWirelessEnergy.computeIfAbsent(uuid, k -> new WirelessEnergyData());
-        return GlobalWirelessEnergy.get(uuid).energyCapacity;
+        var data = GlobalWirelessEnergy.computeIfAbsent(uuid, k -> new WirelessEnergyData());
+        return data.energyCapacity;
     }
 
     public boolean isActive(UUID uuid) {
-        GlobalWirelessEnergy.computeIfAbsent(uuid, k -> new WirelessEnergyData());
-        return GlobalWirelessEnergy.get(uuid).isActive;
+        var data = GlobalWirelessEnergy.computeIfAbsent(uuid, k -> new WirelessEnergyData());
+        return data.isActive;
     }
 
     public long getEnergyInput(UUID uuid) {
-        GlobalWirelessEnergy.computeIfAbsent(uuid, k -> new WirelessEnergyData());
-        return GlobalWirelessEnergy.get(uuid).energyInput.values().stream().mapToLong(Long::longValue).sum();
+        var data = GlobalWirelessEnergy.computeIfAbsent(uuid, k -> new WirelessEnergyData());
+        return data.energyInput.values().stream().mapToLong(Long::longValue).sum();
     }
 
     public void setEnergyInput(UUID uuid, BlockPos blockPos, long input) {
-        GlobalWirelessEnergy.computeIfAbsent(uuid, k -> new WirelessEnergyData());
-        GlobalWirelessEnergy.get(uuid).energyInput.put(blockPos, input);
+        var data = GlobalWirelessEnergy.computeIfAbsent(uuid, k -> new WirelessEnergyData());
+        data.energyInput.put(blockPos, input);
+        setDirty();
     }
 
     public void removeEnergyInput(UUID uuid, BlockPos blockPos) {
-        GlobalWirelessEnergy.computeIfAbsent(uuid, k -> new WirelessEnergyData());
-        GlobalWirelessEnergy.get(uuid).energyInput.remove(blockPos);
+        var data = GlobalWirelessEnergy.computeIfAbsent(uuid, k -> new WirelessEnergyData());
+        data.energyInput.remove(blockPos);
+        setDirty();
     }
 
     public long getEnergyOutput(UUID uuid) {
-        GlobalWirelessEnergy.computeIfAbsent(uuid, k -> new WirelessEnergyData());
-        return GlobalWirelessEnergy.get(uuid).energyOutput.values().stream().mapToLong(Long::longValue).sum();
+        var data = GlobalWirelessEnergy.computeIfAbsent(uuid, k -> new WirelessEnergyData());
+        return data.energyOutput.values().stream().mapToLong(Long::longValue).sum();
     }
 
     public void setEnergyOutput(UUID uuid, BlockPos blockPos, long input) {
-        GlobalWirelessEnergy.computeIfAbsent(uuid, k -> new WirelessEnergyData());
-        GlobalWirelessEnergy.get(uuid).energyOutput.put(blockPos, input);
+        var data = GlobalWirelessEnergy.computeIfAbsent(uuid, k -> new WirelessEnergyData());
+        data.energyOutput.put(blockPos, input);
+        setDirty();
     }
 
     public void removeEnergyOutput(UUID uuid, BlockPos blockPos) {
-        GlobalWirelessEnergy.computeIfAbsent(uuid, k -> new WirelessEnergyData());
-        GlobalWirelessEnergy.get(uuid).energyOutput.remove(blockPos);
+        var data = GlobalWirelessEnergy.computeIfAbsent(uuid, k -> new WirelessEnergyData());
+        data.energyOutput.remove(blockPos);
+        setDirty();
     }
 
     public BigInteger getEnergyBuffered(UUID uuid) {
-        GlobalWirelessEnergy.computeIfAbsent(uuid, k -> new WirelessEnergyData());
+        var data = GlobalWirelessEnergy.computeIfAbsent(uuid, k -> new WirelessEnergyData());
         var sum = BigInteger.ZERO;
-        for (var value : GlobalWirelessEnergy.get(uuid).energyBuffered.values()) sum.add(BigInteger.valueOf(value));
+        for (var value : data.energyBuffered.values()) sum = sum.add(BigInteger.valueOf(value));
         return sum;
     }
 
     public BigInteger getEnergyBufferedExceptLocal(UUID uuid, BlockPos localBufferPos) {
-        GlobalWirelessEnergy.computeIfAbsent(uuid, k -> new WirelessEnergyData());
+        var data = GlobalWirelessEnergy.computeIfAbsent(uuid, k -> new WirelessEnergyData());
         var sum = BigInteger.ZERO;
-        for (var entry : GlobalWirelessEnergy.get(uuid).energyBuffered.entrySet()) {
+        for (var entry : data.energyBuffered.entrySet()) {
             if (!entry.getKey().equals(localBufferPos))
                 sum = sum.add(BigInteger.valueOf(entry.getValue()));
-        };
+        } ;
         return sum;
     }
 
     public void setEnergyBuffered(UUID uuid, BlockPos blockPos, long input) {
-        GlobalWirelessEnergy.computeIfAbsent(uuid, k -> new WirelessEnergyData());
-        GlobalWirelessEnergy.get(uuid).energyBuffered.put(blockPos, input);
+        var data = GlobalWirelessEnergy.computeIfAbsent(uuid, k -> new WirelessEnergyData());
+        data.energyBuffered.put(blockPos, input);
+        setDirty();
     }
 
     public void removeEnergyBuffered(UUID uuid, BlockPos blockPos) {
-        GlobalWirelessEnergy.computeIfAbsent(uuid, k -> new WirelessEnergyData());
-        GlobalWirelessEnergy.get(uuid).energyBuffered.remove(blockPos);
+        var data = GlobalWirelessEnergy.computeIfAbsent(uuid, k -> new WirelessEnergyData());
+        data.energyBuffered.remove(blockPos);
+        setDirty();
     }
 
     public long getPassiveDrain(UUID uuid) {
-        GlobalWirelessEnergy.computeIfAbsent(uuid, k -> new WirelessEnergyData());
-        return GlobalWirelessEnergy.get(uuid).passiveDrain.values().stream().mapToLong(Long::longValue).sum();
+        var data = GlobalWirelessEnergy.computeIfAbsent(uuid, k -> new WirelessEnergyData());
+        return data.passiveDrain.values().stream().mapToLong(Long::longValue).sum();
     }
 
     public void setPassiveDrain(UUID uuid, BlockPos blockPos, long input) {
-        GlobalWirelessEnergy.computeIfAbsent(uuid, k -> new WirelessEnergyData());
-        GlobalWirelessEnergy.get(uuid).passiveDrain.put(blockPos, input);
+        var data = GlobalWirelessEnergy.computeIfAbsent(uuid, k -> new WirelessEnergyData());
+        data.passiveDrain.put(blockPos, input);
+        setDirty();
     }
 
     public void removePassiveDrain(UUID uuid, BlockPos blockPos) {
-        GlobalWirelessEnergy.computeIfAbsent(uuid, k -> new WirelessEnergyData());
-        GlobalWirelessEnergy.get(uuid).passiveDrain.remove(blockPos);
+        var data = GlobalWirelessEnergy.computeIfAbsent(uuid, k -> new WirelessEnergyData());
+        data.passiveDrain.remove(blockPos);
+        setDirty();
     }
 
     public void setCapacitorPosition(UUID uuid, String dimension, BlockPos capacitorPos) {
-        GlobalWirelessEnergy.computeIfAbsent(uuid, k -> new WirelessEnergyData());
-        GlobalWirelessEnergy.get(uuid).capacitorLocation = new Tuple<>(dimension, capacitorPos);
+        var data = GlobalWirelessEnergy.computeIfAbsent(uuid, k -> new WirelessEnergyData());
+        data.capacitorLocation = new Tuple<>(dimension, capacitorPos);
+        setDirty();
     }
 
     public void removeCapacitorPosition(UUID uuid, String dimension, BlockPos capacitorPos) {
         var data = GlobalWirelessEnergy.computeIfAbsent(uuid, k -> new WirelessEnergyData());
-        if (compareLocations(data.capacitorLocation, new Tuple<>(dimension, capacitorPos))) data.capacitorLocation = null;
+        if (compareLocations(data.capacitorLocation, new Tuple<>(dimension, capacitorPos)))
+            data.capacitorLocation = null;
+        setDirty();
     }
 
     private boolean compareLocations(Tuple<String, BlockPos> location1, Tuple<String, BlockPos> location2) {
@@ -224,7 +234,6 @@ public class WirelessEnergySavedData extends SavedData {
         if (location1.getB().getZ() != location2.getB().getZ()) return false;
         return true;
     }
-
 
     @Nullable
     public Tuple<String, BlockPos> getCapacitorPosition(UUID uuid) {
@@ -256,19 +265,18 @@ public class WirelessEnergySavedData extends SavedData {
      * @return The amount of EU left after the operation
      */
     public BigInteger addEUToGlobalWirelessEnergy(UUID uuid, BigInteger EU) {
-        GlobalWirelessEnergy.computeIfAbsent(uuid, k -> new WirelessEnergyData());
-        var energyStore = GlobalWirelessEnergy.get(uuid);
-        var totalEU = energyStore.energyStored.add(EU);
+        var data = GlobalWirelessEnergy.computeIfAbsent(uuid, k -> new WirelessEnergyData());
+        var totalEU = data.energyStored.add(EU);
         if (totalEU.signum() >= 0) {
-            if (totalEU.compareTo(energyStore.energyCapacity) > 0) {
-                var leftover = totalEU.subtract(energyStore.energyCapacity);
-                energyStore.energyStored = energyStore.energyCapacity;
-                GlobalWirelessEnergy.put(uuid, energyStore);
+            if (totalEU.compareTo(data.energyCapacity) > 0) {
+                var leftover = totalEU.subtract(data.energyCapacity);
+                data.energyStored = data.energyCapacity;
+                GlobalWirelessEnergy.put(uuid, data);
                 setDirty();
                 return leftover;
             }
-            energyStore.energyStored = totalEU;
-            GlobalWirelessEnergy.put(uuid, energyStore);
+            data.energyStored = totalEU;
+            GlobalWirelessEnergy.put(uuid, data);
             setDirty();
             return BigInteger.ZERO;
         }
@@ -284,10 +292,8 @@ public class WirelessEnergySavedData extends SavedData {
     }
 
     public void setEnergy(UUID uuid, BigInteger energy) {
-        GlobalWirelessEnergy.computeIfAbsent(uuid, k -> new WirelessEnergyData());
-        var data = GlobalWirelessEnergy.get(uuid);
+        var data = GlobalWirelessEnergy.computeIfAbsent(uuid, k -> new WirelessEnergyData());
         data.energyStored = energy;
-        GlobalWirelessEnergy.put(uuid, data);
         setDirty();
     }
 
@@ -300,10 +306,10 @@ public class WirelessEnergySavedData extends SavedData {
     }
 
     public void setCapacity(UUID uuid, BigInteger capacity) {
-        GlobalWirelessEnergy.computeIfAbsent(uuid, k -> new WirelessEnergyData());
-        var data = GlobalWirelessEnergy.get(uuid);
+        var data = GlobalWirelessEnergy.computeIfAbsent(uuid, k -> new WirelessEnergyData());
         data.energyCapacity = capacity;
-        GlobalWirelessEnergy.put(uuid, data);
+        var isOvercharged = capacity.compareTo(data.energyStored) < 0;
+        if (isOvercharged) data.energyStored = capacity;
         setDirty();
     }
 
@@ -312,7 +318,7 @@ public class WirelessEnergySavedData extends SavedData {
     }
 
     public void setCapacity(UUID uuid, int capacity) {
-        GlobalWirelessEnergy.computeIfAbsent(uuid, k -> new WirelessEnergyData());
+        setCapacity(uuid, BigInteger.valueOf(capacity));
     }
 
     public void clearWirelessEnergy(UUID uuid) {

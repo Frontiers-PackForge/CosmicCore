@@ -2,6 +2,7 @@ package com.ghostipedia.cosmiccore.api.machine.multiblock;
 
 import com.ghostipedia.cosmiccore.api.data.wireless.WirelessEnergySavedData;
 import com.ghostipedia.cosmiccore.utils.CosmicFormattingUtil;
+
 import com.gregtechceu.gtceu.api.capability.IEnergyContainer;
 import com.gregtechceu.gtceu.api.capability.recipe.EURecipeCapability;
 import com.gregtechceu.gtceu.api.capability.recipe.IO;
@@ -19,13 +20,14 @@ import com.gregtechceu.gtceu.api.machine.trait.RecipeLogic;
 import com.gregtechceu.gtceu.api.misc.EnergyContainerList;
 import com.gregtechceu.gtceu.config.ConfigHolder;
 import com.gregtechceu.gtceu.utils.FormattingUtil;
+
 import com.lowdragmc.lowdraglib.gui.modular.ModularUI;
 import com.lowdragmc.lowdraglib.gui.util.ClickData;
 import com.lowdragmc.lowdraglib.gui.widget.*;
 import com.lowdragmc.lowdraglib.syncdata.annotation.Persisted;
 import com.lowdragmc.lowdraglib.syncdata.field.ManagedFieldHolder;
 import com.lowdragmc.lowdraglib.utils.DummyWorld;
-import it.unimi.dsi.fastutil.longs.Long2ObjectMaps;
+
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.HoverEvent;
@@ -33,6 +35,8 @@ import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.chat.Style;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.player.Player;
+
+import it.unimi.dsi.fastutil.longs.Long2ObjectMaps;
 
 import java.math.BigInteger;
 import java.time.Duration;
@@ -44,9 +48,8 @@ import static com.ghostipedia.cosmiccore.utils.CosmicFormattingUtil.combineWithC
 import static com.ghostipedia.cosmiccore.utils.CosmicFormattingUtil.formatWithConstantWidth;
 
 public class DimensionalEnergyInterface extends WorkableMultiblockMachine
-    implements IFancyUIMachine, IDisplayUIMachine {
+                                        implements IFancyUIMachine, IDisplayUIMachine {
 
-//    protected static final long ticks_between_save_data_operations = 60L * 20L; // Once per minute
     protected static final long ticks_between_save_data_operations = 10L * 20L; // Once per 10s
     private static final int uiWidth = 182;
 
@@ -93,7 +96,8 @@ public class DimensionalEnergyInterface extends WorkableMultiblockMachine
             for (var handler : part.getRecipeHandlers()) {
                 var handlerIO = handler.getHandlerIO();
                 if (io != IO.BOTH && handlerIO != IO.BOTH && io != handlerIO) continue;
-                if (handler.getCapability() == EURecipeCapability.CAP && handler instanceof IEnergyContainer container) {
+                if (handler.getCapability() == EURecipeCapability.CAP &&
+                        handler instanceof IEnergyContainer container) {
                     if (handlerIO == IO.IN) inputs.add(container);
                     else if (handlerIO == IO.OUT) outputs.add(container);
                     traitSubscriptions.add(handler.addChangedListener(tickSubscription::updateSubscription));
@@ -115,6 +119,7 @@ public class DimensionalEnergyInterface extends WorkableMultiblockMachine
             var data = WirelessEnergySavedData.getOrCreate(serverLevel);
             var owner = getHolder().getOwner().getUUID();
             data.addEUToGlobalWirelessEnergy(owner, energyBuffer.getEnergyStored());
+            energyBuffer.removeEnergy(energyBuffer.getEnergyStored());
             data.removeEnergyBuffered(owner, getPos());
             data.removeEnergyInput(owner, getPos());
             data.removeEnergyOutput(owner, getPos());
@@ -140,10 +145,13 @@ public class DimensionalEnergyInterface extends WorkableMultiblockMachine
     private void setEnergyBuffer() {
         long totalIOPerTick = (inputHatches.getInputVoltage() + outputHatches.getOutputVoltage());
         // Size is the totalIOPerTick over the duration between operations doubled
-        long bufferSize = totalIOPerTick * (ticks_between_save_data_operations + (ticks_between_save_data_operations / 2L)) * 2L;
-        bufferSize += (getPassiveDrainPerTick() * 8 * 2) * ticks_between_save_data_operations; // Add passive drain buffer (8 is max maintenance issues) times two as buffer is twice the throughput size
-        if (bufferSize < 0L) throw new RuntimeException("DimensionalEnergyCapacitor: Calculated buffer size is too big.");
-        this.energyBuffer = new NotifiableEnergyContainer(this, bufferSize, Long.MAX_VALUE, Long.MAX_VALUE, Long.MAX_VALUE, Long.MAX_VALUE);
+        long bufferSize = totalIOPerTick *
+                (ticks_between_save_data_operations + (ticks_between_save_data_operations / 2L)) * 2L;
+        bufferSize += (getPassiveDrainPerTick() * 8 * 2) * ticks_between_save_data_operations;
+        if (bufferSize < 0L)
+            throw new RuntimeException("DimensionalEnergyCapacitor: Calculated buffer size is too big.");
+        this.energyBuffer = new NotifiableEnergyContainer(this, bufferSize, Long.MAX_VALUE, Long.MAX_VALUE,
+                Long.MAX_VALUE, Long.MAX_VALUE);
     }
 
     public long getPassiveDrainPerTick() {
@@ -199,17 +207,14 @@ public class DimensionalEnergyInterface extends WorkableMultiblockMachine
         return Component.translatable(key, FormattingUtil.formatNumbers(fillTime));
     }
 
-
-
     protected void transferEnergyTick() {
         if (getLevel() instanceof ServerLevel serverLevel) {
             var data = WirelessEnergySavedData.getOrCreate(serverLevel);
             var owner = getHolder().getOwner().getUUID();
-            if(isWorkingEnabled() && isFormed()) {
+            if (isWorkingEnabled() && isFormed()) {
                 if (getOffsetTimer() % 20 == 0) {
-                    getRecipeLogic().setStatus((energyBuffer != null && energyBuffer.getEnergyStored() > 0)
-                            ? RecipeLogic.Status.WORKING
-                            : RecipeLogic.Status.IDLE);
+                    getRecipeLogic().setStatus((energyBuffer != null && energyBuffer.getEnergyStored() > 0) ?
+                            RecipeLogic.Status.WORKING : RecipeLogic.Status.IDLE);
 
                     averageInLastSec = netInLastSec / 20;
                     averageOutLastSec = netOutLastSec / 20;
@@ -249,7 +254,6 @@ public class DimensionalEnergyInterface extends WorkableMultiblockMachine
                     }
                 }
             } else {
-                data.addEUToGlobalWirelessEnergy(owner, energyBuffer.getEnergyStored());
                 data.removeEnergyBuffered(owner, getPos());
                 data.removeEnergyInput(owner, getPos());
                 data.removeEnergyOutput(owner, getPos());
@@ -258,18 +262,18 @@ public class DimensionalEnergyInterface extends WorkableMultiblockMachine
         }
     }
 
-
     @Override
     public void addDisplayText(List<Component> textList) {
         IDisplayUIMachine.super.addDisplayText(textList);
-        if (this.isFormed()){
+        if (this.isFormed()) {
             // Multiblock status
             if (!isWorkingEnabled()) textList.add(Component.translatable("gtceu.multiblock.work_paused"));
             else if (isActive()) textList.add(Component.translatable("gtceu.multiblock.running"));
             else textList.add(Component.translatable("gtceu.multiblock.idling"));
 
             if (recipeLogic.isWaiting()) {
-                textList.add(Component.translatable("gtceu.multiblock.waiting").setStyle(Style.EMPTY.withColor(ChatFormatting.RED)));
+                textList.add(Component.translatable("gtceu.multiblock.waiting")
+                        .setStyle(Style.EMPTY.withColor(ChatFormatting.RED)));
             }
 
             if (energyBuffer != null) {
@@ -284,21 +288,19 @@ public class DimensionalEnergyInterface extends WorkableMultiblockMachine
 
                     // Tittle
                     var buttonComponent = ComponentPanelWidget.withButton(Component.literal("[").append(localDisplay ?
-                                    Component.translatable("cosmic.multiblock.capacitor.info.global") :
-                                    Component.translatable("cosmic.multiblock.capacitor.info.local"))
+                            Component.translatable("cosmic.multiblock.capacitor.info.global") :
+                            Component.translatable("cosmic.multiblock.capacitor.info.local"))
                             .append(Component.literal("]")), "local_display");
 
                     var labelComponent = localDisplay ?
                             Component.translatable("cosmic.multiblock.capacitor.info.tittle.local") :
                             Component.translatable("cosmic.multiblock.capacitor.info.tittle.global");
 
-                    textList.add(localDisplay
-                            ? combineWithConstantWidth(labelComponent, buttonComponent, uiWidth - 4)
-                            : combineWithConstantWidth(buttonComponent, labelComponent, uiWidth - 4));
-
+                    textList.add(localDisplay ? combineWithConstantWidth(labelComponent, buttonComponent, uiWidth - 4) :
+                            combineWithConstantWidth(buttonComponent, labelComponent, uiWidth - 4));
 
                     BigInteger energyCapacity = data.getEnergyCapacity(owner);;
-                    BigInteger energyStored = data.getTotalNetworkEnergyStoredExceptLocalBuffer(owner, getPos());
+                    BigInteger energyStored = data.getEnergyStored(owner);
                     energyStored = energyStored.add(BigInteger.valueOf(energyBuffer.getEnergyStored()));
                     BigInteger energyBuffered;
                     long passiveDrain;
@@ -318,25 +320,37 @@ public class DimensionalEnergyInterface extends WorkableMultiblockMachine
                         passiveDrain = data.getPassiveDrain(owner);
                     }
 
-                    var storedComponent = Component.literal(CosmicFormattingUtil.formatNumberWithCharacterLimit(energyStored, 12));
-                    textList.add(formatWithConstantWidth("gtceu.multiblock.power_substation.stored", storedComponent.setStyle(STYLE_GOLD), uiWidth - 4));
+                    var storedComponent = Component
+                            .literal(CosmicFormattingUtil.formatNumberWithCharacterLimit(energyStored, 12));
+                    textList.add(formatWithConstantWidth("gtceu.multiblock.power_substation.stored",
+                            storedComponent.setStyle(STYLE_GOLD), uiWidth - 4));
 
-                    var capacityComponent = Component.literal(CosmicFormattingUtil.formatNumberWithCharacterLimit(energyCapacity, 12));
-                    textList.add(formatWithConstantWidth("gtceu.multiblock.power_substation.capacity", capacityComponent.setStyle(STYLE_GOLD), uiWidth - 4));
+                    var capacityComponent = Component
+                            .literal(CosmicFormattingUtil.formatNumberWithCharacterLimit(energyCapacity, 12));
+                    textList.add(formatWithConstantWidth("gtceu.multiblock.power_substation.capacity",
+                            capacityComponent.setStyle(STYLE_GOLD), uiWidth - 4));
 
-                    var bufferedComponent = Component.literal(CosmicFormattingUtil.formatNumberWithCharacterLimit(energyBuffered, 12));
-                    textList.add(formatWithConstantWidth("cosmic.multiblock.capacitor.buffered", bufferedComponent.setStyle(STYLE_GOLD), uiWidth - 4));
+                    var bufferedComponent = Component
+                            .literal(CosmicFormattingUtil.formatNumberWithCharacterLimit(energyBuffered, 12));
+                    textList.add(formatWithConstantWidth("cosmic.multiblock.capacitor.buffered",
+                            bufferedComponent.setStyle(STYLE_GOLD), uiWidth - 4));
 
-                    var passiveDrainComponent = Component.literal(CosmicFormattingUtil.formatNumberWithCharacterLimit(BigInteger.valueOf(passiveDrain), 9));
-                    textList.add(formatWithConstantWidth("gtceu.multiblock.power_substation.passive_drain", passiveDrainComponent.setStyle(STYLE_DARK_RED), uiWidth - 4));
+                    var passiveDrainComponent = Component.literal(
+                            CosmicFormattingUtil.formatNumberWithCharacterLimit(BigInteger.valueOf(passiveDrain), 9));
+                    textList.add(formatWithConstantWidth("gtceu.multiblock.power_substation.passive_drain",
+                            passiveDrainComponent.setStyle(STYLE_DARK_RED), uiWidth - 4));
 
-                    var avgInComponent = Component.literal(CosmicFormattingUtil.formatNumberWithCharacterLimit(BigInteger.valueOf(avgIn), 10));
-                    textList.add(formatWithConstantWidth("gtceu.multiblock.power_substation.average_in", avgInComponent.setStyle(STYLE_GREEN), uiWidth - 4)
+                    var avgInComponent = Component.literal(
+                            CosmicFormattingUtil.formatNumberWithCharacterLimit(BigInteger.valueOf(avgIn), 10));
+                    textList.add(formatWithConstantWidth("gtceu.multiblock.power_substation.average_in",
+                            avgInComponent.setStyle(STYLE_GREEN), uiWidth - 4)
                             .withStyle(Style.EMPTY.withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT,
                                     Component.translatable("gtceu.multiblock.power_substation.average_in_hover")))));
 
-                    var avgOutComponent = Component.literal(CosmicFormattingUtil.formatNumberWithCharacterLimit(BigInteger.valueOf(Math.abs(avgOut)), 10));
-                    textList.add(formatWithConstantWidth("gtceu.multiblock.power_substation.average_out", avgOutComponent.setStyle(STYLE_RED), uiWidth - 4)
+                    var avgOutComponent = Component.literal(CosmicFormattingUtil
+                            .formatNumberWithCharacterLimit(BigInteger.valueOf(Math.abs(avgOut)), 10));
+                    textList.add(formatWithConstantWidth("gtceu.multiblock.power_substation.average_out",
+                            avgOutComponent.setStyle(STYLE_RED), uiWidth - 4)
                             .withStyle(Style.EMPTY.withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT,
                                     Component.translatable("gtceu.multiblock.power_substation.average_out_hover")))));
 
@@ -344,7 +358,8 @@ public class DimensionalEnergyInterface extends WorkableMultiblockMachine
                         var avgInput = data.getEnergyInput(owner);
                         var avgOutput = data.getEnergyOutput(owner);
                         if (avgInput > avgOutput) {
-                            BigInteger timeToFillSeconds = data.getEnergyCapacity(owner).subtract(data.getEnergyStored(owner))
+                            BigInteger timeToFillSeconds = data.getEnergyCapacity(owner)
+                                    .subtract(data.getEnergyStored(owner))
                                     .divide(BigInteger.valueOf((avgInput - avgOutput) * 20));
                             textList.add(formatWithConstantWidth("gtceu.multiblock.power_substation.time_to_fill",
                                     getTimeToFillDrainText(timeToFillSeconds).setStyle(STYLE_GREEN), uiWidth - 4));
@@ -376,13 +391,15 @@ public class DimensionalEnergyInterface extends WorkableMultiblockMachine
         var group = new WidgetGroup(0, 0, uiWidth + 8, 117 + 8);
         group.addWidget(new DraggableScrollableWidgetGroup(4, 4, uiWidth, 117).setBackground(getScreenTexture())
                 .addWidget(new LabelWidget(4, 5, self().getBlockState().getBlock().getDescriptionId()))
-                .addWidget(new ComponentPanelWidget(4, 17, this::addDisplayText).setMaxWidthLimit(uiWidth - 4).clickHandler(this::handleDisplayClick)));
+                .addWidget(new ComponentPanelWidget(4, 17, this::addDisplayText).setMaxWidthLimit(uiWidth - 4)
+                        .clickHandler(this::handleDisplayClick)));
         group.setBackground(GuiTextures.BACKGROUND_INVERSE);
         return group;
     }
 
     @Override
     public ModularUI createUI(Player entityPlayer) {
-        return new ModularUI(uiWidth + 8, 208, this, entityPlayer).widget(new FancyMachineUIWidget(this, uiWidth + 8, 208));
+        return new ModularUI(uiWidth + 8, 208, this, entityPlayer)
+                .widget(new FancyMachineUIWidget(this, uiWidth + 8, 208));
     }
 }

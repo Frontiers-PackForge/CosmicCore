@@ -1,6 +1,7 @@
 package com.ghostipedia.cosmiccore.utils;
 
 import com.gregtechceu.gtceu.utils.FormattingUtil;
+
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.chat.Component;
@@ -39,7 +40,7 @@ public class CosmicFormattingUtil {
         return Component.empty().append(comp1).append(spacerComponent).append(comp2);
     }
 
-    private static  int getComponentLength(Component component) {
+    private static int getComponentLength(Component component) {
         return Minecraft.getInstance().font.width(component.getString());
     }
 }

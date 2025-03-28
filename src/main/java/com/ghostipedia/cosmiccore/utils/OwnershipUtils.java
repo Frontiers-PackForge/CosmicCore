@@ -3,14 +3,13 @@ package com.ghostipedia.cosmiccore.utils;
 import com.gregtechceu.gtceu.common.machine.owner.FTBOwner;
 import com.gregtechceu.gtceu.common.machine.owner.IMachineOwner;
 import com.gregtechceu.gtceu.common.machine.owner.PlayerOwner;
+
 import net.minecraft.network.chat.Component;
 import net.minecraftforge.common.UsernameCache;
 
 import java.util.List;
-import java.util.UUID;
 
 public class OwnershipUtils {
-
 
     public static void addOwnerLine(List<Component> textList, IMachineOwner owner) {
         if (owner instanceof PlayerOwner playerOwner) {
