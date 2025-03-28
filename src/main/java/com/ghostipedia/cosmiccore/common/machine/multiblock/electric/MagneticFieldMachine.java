@@ -66,10 +66,10 @@ public class MagneticFieldMachine extends MagnetWorkableElectricMultiblockMachin
             for (var handler : part.getRecipeHandlers()) {
                 IO handlerIO = handler.getHandlerIO();
                 if (handlerIO == IO.IN) {
-                    if (handler.getCapability() == EURecipeCapability.CAP &&
+                    if (handler.hasCapability(EURecipeCapability.CAP) &&
                             handler instanceof IEnergyContainer container) {
                         energyContainers.add(container);
-                        traitSubscriptions.add(handler.addChangedListener(this::updateMagnetFieldSubscription));
+                        traitSubscriptions.add(handler.subscribe(this::updateMagnetFieldSubscription));
                     }
                 }
             }

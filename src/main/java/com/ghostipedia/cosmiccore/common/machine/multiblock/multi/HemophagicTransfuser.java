@@ -17,6 +17,7 @@ import com.gregtechceu.gtceu.common.data.GTRecipeModifiers;
 import wayoftime.bloodmagic.BloodMagic;
 import wayoftime.bloodmagic.common.block.BloodMagicBlocks;
 
+import static com.ghostipedia.cosmiccore.api.machine.part.CosmicPartAbility.IMPORT_SOUL;
 import static com.ghostipedia.cosmiccore.api.registries.CosmicRegistration.REGISTRATE;
 import static com.ghostipedia.cosmiccore.common.data.CosmicBlocks.*;
 import static com.gregtechceu.gtceu.api.pattern.Predicates.*;
@@ -68,14 +69,15 @@ public class HemophagicTransfuser {
                             // TODO see how to limit to 1 laser OR 1 energy, not 1 of each..
                             .or(Predicates.abilities(PartAbility.EXPORT_ITEMS).setMinGlobalLimited(1)
                                     .setPreviewCount(1))
-                            .or(Predicates.abilities(PartAbility.EXPORT_FLUIDS).setMinGlobalLimited(1)
+                            .or(Predicates.abilities(PartAbility.EXPORT_FLUIDS).setPreviewCount(1)
                                     .setPreviewCount(1))
                             .or(Predicates.abilities(PartAbility.INPUT_ENERGY).setMinGlobalLimited(1)
                                     .setPreviewCount(1))
-                            .or(Predicates.abilities(PartAbility.IMPORT_FLUIDS).setMinGlobalLimited(1)
+                            .or(Predicates.abilities(PartAbility.IMPORT_FLUIDS).setPreviewCount(1)
                                     .setPreviewCount(1))
                             .or(Predicates.abilities(PartAbility.IMPORT_ITEMS).setMinGlobalLimited(1)
-                                    .setPreviewCount(1)))
+                                    .setPreviewCount(1))
+                            .or(abilities(IMPORT_SOUL)))
                     .build())
             .renderer(() -> new HemophagicTransfuserRender(
                     BloodMagic.rl("block/blankrune"),

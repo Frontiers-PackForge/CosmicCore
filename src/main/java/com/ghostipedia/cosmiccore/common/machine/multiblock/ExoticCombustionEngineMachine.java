@@ -114,8 +114,7 @@ public class ExoticCombustionEngineMachine extends WorkableElectricMultiblockMac
             return ModifierFunction.NULL;
         }
         var fluidHolders = Objects
-                .requireNonNullElseGet(engineMachine.getCapabilitiesProxy()
-                        .get(IO.IN, FluidRecipeCapability.CAP), Collections::<IRecipeHandler<?>>emptyList)
+                .requireNonNullElseGet(engineMachine.getCapabilitiesFlat(IO.IN, FluidRecipeCapability.CAP), Collections::<IRecipeHandler<?>>emptyList)
                 .stream()
                 .map(container -> container.getContents().stream().filter(FluidStack.class::isInstance)
                         .map(FluidStack.class::cast).toList())

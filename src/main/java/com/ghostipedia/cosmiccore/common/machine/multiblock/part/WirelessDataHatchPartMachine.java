@@ -39,7 +39,7 @@ public class WirelessDataHatchPartMachine extends MultiblockPartMachine
     @Override
     public boolean isRecipeAvailable(@NotNull GTRecipe recipe, @NotNull Collection<IDataAccessHatch> seen) {
         seen.add(this);
-        var dataStore = WirelessDataStore.getWirelessDataStore(OwnershipUtils.getOwnerUUID(getHolder().getOwner()));
+        var dataStore = WirelessDataStore.getWirelessDataStore(OwnershipUtils.getOwnerUUID(getOwner()));
         return recipe.conditions.stream().noneMatch(ResearchCondition.class::isInstance) ||
                 dataStore.isRecipeAvailable(recipe, seen);
     }

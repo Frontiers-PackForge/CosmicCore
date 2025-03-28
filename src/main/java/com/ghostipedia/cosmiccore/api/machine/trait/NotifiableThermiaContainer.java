@@ -64,7 +64,7 @@ public class NotifiableThermiaContainer extends NotifiableRecipeHandlerTrait<Int
     }
 
     @Override
-    public List<Integer> handleRecipeInner(IO io, GTRecipe recipe, List<Integer> left, @Nullable String slotName,
+    public List<Integer> handleRecipeInner(IO io, GTRecipe recipe, List<Integer> left,
                                            boolean simulate) {
         return null;
     }
