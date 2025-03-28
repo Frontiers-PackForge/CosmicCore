@@ -58,23 +58,26 @@ public class MagneticFieldMachine extends MagnetWorkableElectricMultiblockMachin
     public void onStructureFormed() {
         super.onStructureFormed();
 
-        List<IEnergyContainer> energyContainers = new ArrayList<>();
+        List<IEnergyContainer> inputEnergyContainers = new ArrayList<>();
         Map<Long, IO> ioMap = getMultiblockState().getMatchContext().getOrCreate("ioMap", Long2ObjectMaps::emptyMap);
         for (IMultiPart part : getParts()) {
             IO io = ioMap.getOrDefault(part.self().getPos().asLong(), IO.IN);
             if (io == IO.NONE || io == IO.OUT) continue;
-            for (var handler : part.getRecipeHandlers()) {
+            var handlers = part.getRecipeHandlers();
+            for (var handler : handlers) {
                 IO handlerIO = handler.getHandlerIO();
                 if (handlerIO == IO.IN) {
-                    if (handler.hasCapability(EURecipeCapability.CAP) &&
-                            handler instanceof IEnergyContainer container) {
-                        energyContainers.add(container);
+                    var containers = handler.getCapability(EURecipeCapability.CAP).stream()
+                            .filter(IEnergyContainer.class::isInstance)
+                            .map(IEnergyContainer.class::cast)
+                            .toList();
+                        inputEnergyContainers.addAll(containers);
                         traitSubscriptions.add(handler.subscribe(this::updateMagnetFieldSubscription));
-                    }
+
                 }
             }
         }
-        this.inputEnergyContainers = new EnergyContainerList(energyContainers);
+        this.inputEnergyContainers = new EnergyContainerList(inputEnergyContainers);
         updateMagnetFieldSubscription();
     }
 
