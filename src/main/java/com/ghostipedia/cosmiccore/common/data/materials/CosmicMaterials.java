@@ -171,7 +171,7 @@ public class CosmicMaterials {
                 .formula("⦽")
                 .blastTemp(8900)
                 .liquid(new FluidBuilder().temperature(7500))
-                .iconSet(CosmicMaterialSet.NEUTRONITE)
+                .color(0x80faf3).secondaryColor(0x8e2e2d).iconSet(CosmicMaterialSet.NEUTRONITE)
                 .flags(
                         GENERATE_PLATE,
                         GENERATE_DENSE,
