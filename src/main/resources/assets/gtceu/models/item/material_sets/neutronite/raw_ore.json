@@ -1,6 +1,7 @@
 {
   "parent": "item/generated",
   "textures": {
-    "layer0": "gtceu:item/material_sets/neutronite/raw_ore"
+    "layer0": "gtceu:item/material_sets/neutronite/raw_ore",
+    "layer1": "gtceu:item/material_sets/neutronite/raw_ore_secondary"
   }
 }

@@ -1,6 +1,8 @@
 {
   "parent": "item/handheld",
   "textures": {
-    "layer0": "gtceu:item/material_sets/neutronite/rod"
+    "layer0": "gtceu:item/material_sets/neutronite/rod",
+    "layer1": "gtceu:item/material_sets/neutronite/rod_secondary",
+    "layer2": "gtceu:item/material_sets/neutronite/rod_overlay"
   }
 }

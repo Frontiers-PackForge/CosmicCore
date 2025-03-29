@@ -2,7 +2,7 @@
   "parent": "gtceu:item/material_sets/neutronite/ingot",
   "textures": {
     "layer0": "gtceu:item/material_sets/neutronite/ingot",
-    "layer1": "gtceu:item/void",
+    "layer1": "gtceu:item/material_sets/neutronite/ingot_secondary",
     "layer2": "gtceu:item/material_sets/neutronite/ingot_hot_overlay"
   }
 }
