@@ -639,7 +639,8 @@ public class CosmicMachines {
             .multiblock("industrial_chemical_vat", WorkableElectricMultiblockMachine::new)
             .rotationState(RotationState.ALL)
             .recipeTypes(CosmicRecipeTypes.INDUSTRIAL_CHEMVAT, GTRecipeTypes.CRACKING_RECIPES)
-            .recipeModifiers(CosmicRecipeModifiers::chemicalVatLogic, ELECTRIC_OVERCLOCK.apply(OverclockingLogic.NON_PERFECT_OVERCLOCK))
+            .recipeModifiers(CosmicRecipeModifiers::chemicalVatLogic,
+                    ELECTRIC_OVERCLOCK.apply(OverclockingLogic.NON_PERFECT_OVERCLOCK))
             .appearanceBlock(CYCLOZINE_CHEMICALLY_REPELLING_CASING)
             .pattern(definition -> FactoryBlockPattern.start()
                     .aisle("##QQQ##", "##QQQ##", "###Q###", "#######", "#######", "#######", "#######", "#######",
