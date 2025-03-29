@@ -232,7 +232,7 @@ public class ExoticCombustionEngineMachine extends WorkableElectricMultiblockMac
     }
 
     @Override
-    public boolean dampingWhenWaiting() {
+    public boolean regressWhenWaiting() {
         return false;
     }
 

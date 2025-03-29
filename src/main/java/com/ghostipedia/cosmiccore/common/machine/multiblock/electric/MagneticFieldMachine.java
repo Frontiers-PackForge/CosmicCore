@@ -154,7 +154,7 @@ public class MagneticFieldMachine extends MagnetWorkableElectricMultiblockMachin
     }
 
     @Override
-    public boolean dampingWhenWaiting() {
+    public boolean regressWhenWaiting() {
         return false;
     }
 

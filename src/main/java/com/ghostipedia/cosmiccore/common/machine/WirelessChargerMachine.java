@@ -25,6 +25,7 @@ import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.wrapper.EmptyHandler;
 import net.minecraftforge.server.ServerLifecycleHooks;
 
+import dev.ftb.mods.ftbteams.data.PlayerTeam;
 import top.theillusivec4.curios.api.CuriosApi;
 import top.theillusivec4.curios.api.type.capability.ICuriosItemHandler;
 
@@ -100,9 +101,16 @@ public class WirelessChargerMachine extends TieredEnergyMachine {
             } else if (owner instanceof FTBOwner ftbOwner) {
                 var team = ftbOwner.getTeam();
                 if (team == null) return;
-                for (var pUUID : team.getMembers()) {
-                    Player player = ServerLifecycleHooks.getCurrentServer().getPlayerList().getPlayer(pUUID);
-                    if (player != null && isPlayerInRange(player)) players.add(player);
+                if (team.isPlayerTeam()) {
+                    for (var pUUID : ((PlayerTeam) team).getEffectiveTeam().getMembers()) {
+                        Player player = ServerLifecycleHooks.getCurrentServer().getPlayerList().getPlayer(pUUID);
+                        if (player != null && isPlayerInRange(player)) players.add(player);
+                    }
+                } else if (team.isServerTeam() || team.isPartyTeam()) {
+                    for (var pUUID : team.getMembers()) {
+                        Player player = ServerLifecycleHooks.getCurrentServer().getPlayerList().getPlayer(pUUID);
+                        if (player != null && isPlayerInRange(player)) players.add(player);
+                    }
                 }
 
             } else if (owner instanceof ArgonautsOwner) {
