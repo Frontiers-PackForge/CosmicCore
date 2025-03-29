@@ -97,8 +97,10 @@ public class CosmicLangHandler {
         replace(provider, "cosmiccore.multiblock.ipbf.tooltip.2", "§aRecipes are §f25% §aFaster.");
         replace(provider, "cosmiccore.multiblock.ipbf.tooltip.3", "§aParallel Amount§f: §b8x§r");
         replace(provider, "block.gtceu.high_pressure_assembler", "High Pressure Assembler");
-        replace(provider, "block.gtceu.large_combustion_engine_cc", "Large Combustion Generator");
-        replace(provider, "block.gtceu.extreme_combustion_engine_cc", "Extreme Combustion Generator");
+        replace(provider, "block.gtceu.large_combustion_engine_cc", "Large Combustion Engine");
+        replace(provider, "block.gtceu.extreme_combustion_engine_cc", "Extreme Combustion Engine");
+        replace(provider, "block.gtceu.ludicrous_combustion_engine_cc", "Ludicrous Combustion Engine");
+        replace(provider, "block.gtceu.ultimate_combustion_engine_cc", "Ultimate Combustion Engine");
         replace(provider, "block.gtceu.steam_caster", "Steam Caster Solidifier");
         replace(provider, "cosmiccore.multiblock.hpsassem.tooltip.0", "§7§oLet's build an empire!");
         replace(provider, "cosmiccore.multiblock.hpsassem.tooltip.1", "§fA large but powerful assembler made of steel");

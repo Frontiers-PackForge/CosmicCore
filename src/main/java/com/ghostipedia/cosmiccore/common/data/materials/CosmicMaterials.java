@@ -162,7 +162,7 @@ public class CosmicMaterials {
                 .blastTemp(19000, BlastProperty.GasTier.HIGHEST, GTValues.VA[GTValues.UIV], 5600)
                 .buildAndRegister();
         Triphenylphosphine = new Material.Builder(CosmicCore.id("triphenylphosphine"))
-                .liquid(new FluidBuilder().temperature(19500))
+                .liquid(new FluidBuilder().temperature(300))
                 .color(0xfca103).secondaryColor(0xfcbe03).iconSet(MaterialIconSet.BRIGHT)
                 .buildAndRegister();
         // Misc Materials

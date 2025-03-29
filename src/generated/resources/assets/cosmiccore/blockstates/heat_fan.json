@@ -1,0 +1,10 @@
+{
+  "variants": {
+    "active=false": {
+      "model": "cosmiccore:block/variant/heat_fan"
+    },
+    "active=true": {
+      "model": "cosmiccore:block/variant/heat_fan_active"
+    }
+  }
+}
