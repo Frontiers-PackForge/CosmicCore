@@ -2,13 +2,17 @@ package com.ghostipedia.cosmiccore.common.data.recipe;
 
 import com.ghostipedia.cosmiccore.common.machine.multiblock.electric.MagneticFieldMachine;
 
+import com.gregtechceu.gtceu.api.capability.IParallelHatch;
 import com.gregtechceu.gtceu.api.machine.MetaMachine;
+import com.gregtechceu.gtceu.api.machine.multiblock.WorkableMultiblockMachine;
 import com.gregtechceu.gtceu.api.recipe.GTRecipe;
 import com.gregtechceu.gtceu.api.recipe.RecipeHelper;
 import com.gregtechceu.gtceu.api.recipe.content.ContentModifier;
 import com.gregtechceu.gtceu.api.recipe.modifier.ModifierFunction;
 import com.gregtechceu.gtceu.api.recipe.modifier.ParallelLogic;
 import com.gregtechceu.gtceu.api.recipe.modifier.RecipeModifier;
+
+import java.util.Optional;
 
 public class CosmicRecipeModifiers {
 
@@ -41,7 +45,27 @@ public class CosmicRecipeModifiers {
                 .parallels(actualParallel)
                 .build();
     }
+    public static ModifierFunction chemicalVatLogic(MetaMachine machine, GTRecipe recipe){
+        if (machine instanceof WorkableMultiblockMachine vatMachine) {
+            Optional<IParallelHatch> optionalIParallelHatch = vatMachine.getParts().stream().filter(IParallelHatch.class::isInstance).map(IParallelHatch.class::cast).findAny();
+            if (optionalIParallelHatch.isPresent()){
+                IParallelHatch parallelHatch = optionalIParallelHatch.get();
+                var actualParallel = 1;
+                if (parallelHatch.getCurrentParallel() != 0) {
+                    long EUt = RecipeHelper.getInputEUt(recipe);
+                    actualParallel = ParallelLogic.getParallelAmount(vatMachine,recipe, parallelHatch.getCurrentParallel());
 
+                }
+                return  ModifierFunction.builder()
+                        .modifyAllContents(ContentModifier.multiplier(actualParallel))
+                        .eutMultiplier(actualParallel)
+                        .parallels(actualParallel)
+                        .durationMultiplier(actualParallel * 0.25F)
+                        .build();
+            }
+        }
+        return ModifierFunction.IDENTITY;
+    }
     // TODO; FIX IT!
     // public static GTRecipe vomahineChemicalPlantParallel(MetaMachine machine, @NotNull GTRecipe recipe, OCParams
     // ocParams, OCResult ocResult) {
