@@ -36,7 +36,7 @@ public class CosmicCoreOreRecipeHandler {
     }
 
     public static void processcrushedLeached(Consumer<FinishedRecipe> provider, Material material) {
-        if (!material.shouldGenerateRecipesFor(crushed) && !material.hasProperty(PropertyKey.ORE)) return;
+        if (!material.shouldGenerateRecipesFor(crushed) || !material.hasProperty(PropertyKey.ORE)) return;
         var property = material.getProperty(PropertyKey.ORE);
         ItemStack leachedStack = ChemicalHelper.get(crushedLeached, material);
 
@@ -60,7 +60,7 @@ public class CosmicCoreOreRecipeHandler {
     }
 
     public static void processRefinedFrothed(Consumer<FinishedRecipe> provider, Material material) {
-        if (!material.shouldGenerateRecipesFor(crushedRefined) && !material.hasProperty(PropertyKey.ORE)) return;
+        if (!material.shouldGenerateRecipesFor(crushedRefined) || !material.hasProperty(PropertyKey.ORE)) return;
         var property = material.getProperty(PropertyKey.ORE);
         ItemStack frothedStack = ChemicalHelper.get(prismaFrothed, material);
 
@@ -90,7 +90,7 @@ public class CosmicCoreOreRecipeHandler {
     }
 
     public static void processLeachedRefined(Consumer<FinishedRecipe> provider, Material material) {
-        if (!material.shouldGenerateRecipesFor(crushedLeached) && !material.hasProperty(PropertyKey.ORE)) return;
+        if (!material.shouldGenerateRecipesFor(crushedLeached) || !material.hasProperty(PropertyKey.ORE)) return;
         ItemStack refinedStack = ChemicalHelper.get(crushedLeached, material);
         var property = material.getProperty(PropertyKey.ORE);
 
@@ -106,7 +106,7 @@ public class CosmicCoreOreRecipeHandler {
     }
 
     public static void processFrothedPure(Consumer<FinishedRecipe> provider, Material material) {
-        if (!material.shouldGenerateRecipesFor(prismaFrothed) && !material.hasProperty(PropertyKey.ORE)) return;
+        if (!material.shouldGenerateRecipesFor(prismaFrothed) || !material.hasProperty(PropertyKey.ORE)) return;
         ItemStack refinedStack = ChemicalHelper.get(prismaFrothed, material);
         ItemStack pureStack = ChemicalHelper.get(dustPure, material);
         var property = material.getProperty(PropertyKey.ORE);
