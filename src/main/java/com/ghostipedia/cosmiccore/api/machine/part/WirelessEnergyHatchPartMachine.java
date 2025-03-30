@@ -10,11 +10,13 @@ import com.gregtechceu.gtceu.api.machine.feature.IMachineLife;
 import com.gregtechceu.gtceu.api.machine.multiblock.part.TieredIOPartMachine;
 import com.gregtechceu.gtceu.api.machine.trait.NotifiableEnergyContainer;
 
+import com.gregtechceu.gtceu.utils.FormattingUtil;
 import com.lowdragmc.lowdraglib.syncdata.ISubscription;
 import com.lowdragmc.lowdraglib.syncdata.annotation.Persisted;
 import com.lowdragmc.lowdraglib.syncdata.field.ManagedFieldHolder;
 
 import net.minecraft.MethodsReturnNonnullByDefault;
+import net.minecraft.network.chat.Component;
 import net.minecraft.server.TickTask;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.InteractionHand;
@@ -28,6 +30,8 @@ import lombok.Getter;
 
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
+import java.util.ArrayList;
+import java.util.List;
 
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
@@ -163,7 +167,32 @@ public class WirelessEnergyHatchPartMachine extends TieredIOPartMachine implemen
         }
     }
 
-    private long getPassiveDrain() {
-        return 0L;
+    public static Component[] getTooltipComponents(int tier, IO io, int amperage) {
+        var tooltip = new ArrayList<Component>();
+
+        if (io == IO.IN) {
+            tooltip.add(Component.translatable("gtceu.universal.tooltip.voltage_in",
+                    FormattingUtil.formatNumbers(GTValues.V[tier]), GTValues.VNF[tier]));
+            tooltip.add(Component.translatable("gtceu.universal.tooltip.amperage_in", amperage));
+        } else if (io == IO.OUT) {
+            tooltip.add(Component.translatable("gtceu.universal.tooltip.voltage_out",
+                    FormattingUtil.formatNumbers(GTValues.V[tier]), GTValues.VNF[tier]));
+            tooltip.add(Component.translatable("gtceu.universal.tooltip.amperage_out", amperage));
+        }
+
+        tooltip.add(Component.translatable("gtceu.universal.tooltip.energy_storage_capacity",
+                FormattingUtil.formatNumbers(getEnergyCapacity(tier, amperage))));
+
+        if (io == IO.IN) {
+            tooltip.add(Component.translatable(amperage > 1
+                    ? "gtceu.machine.energy_hatch.input_hi_amp.tooltip"
+                    : "gtceu.machine.energy_hatch.input.tooltip"));
+        } else if (io == IO.OUT) {
+            tooltip.add(Component.translatable(amperage > 1
+                    ? "gtceu.machine.energy_hatch.output_hi_amp.tooltip"
+                    : "gtceu.machine.energy_hatch.output.tooltip"));
+        }
+
+        return tooltip.toArray(new Component[0]);
     }
 }
