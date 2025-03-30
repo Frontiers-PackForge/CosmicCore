@@ -13,6 +13,7 @@
     "GTValuesMixin",
     "MAE2GTIntegrationMixin",
     "PlayerBreathingMixin",
+    "TagPrefixItemMixin",
     "accessor.LivingEntityAccessor",
     "accessor.LootTableAccessor",
     "client.CosmicCoreRemainingAirOverlayMixin"

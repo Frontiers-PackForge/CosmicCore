@@ -87,4 +87,7 @@ dependencies {
     // Runtime Recipe Viewers - uncomment whichever one you want to use //
     modRuntimeOnly(forge.emi)
     // modRuntimeOnly(forge.jei.forge.impl)
+
+    //Modern Fix
+    modImplementation(forge.modernFix)
 }

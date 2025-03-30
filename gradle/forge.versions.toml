@@ -45,6 +45,7 @@ create = "4762216"
 newThinAir = "4848005"
 puzzlesLib = "4924184"
 smartBrainLib = "5654964"
+modernFix = "6025611"
 
 [libraries]
 ldlib                     = { module = "com.lowdragmc.ldlib:ldlib-forge-1.20.1", version.ref = "ldlib" }
@@ -97,6 +98,7 @@ create                    = { module = "curse.maven:create-328085", version.ref 
 newThinAir                = { module = "curse.maven:new-thin-air-878379", version.ref = "newThinAir" }
 puzzlesLib                = { module = "curse.maven:puzzles-lib-495476", version.ref = "puzzlesLib" }
 smartBrainLib             = { module = "curse.maven:smartbrainlib-661293", version.ref = "smartBrainLib" }
+modernFix                 = { module = "curse.maven:modernfix-790626", version.ref = "modernFix" }
 
 [bundles]
 jei = ["jei-common-api", "jei-forge-api", "jei-forge-impl"]
