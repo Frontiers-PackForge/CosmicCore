@@ -21,6 +21,8 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.util.FastColor;
 import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
@@ -63,48 +65,42 @@ public class InfiniteSprayCanBehavior implements IInteractionItem, IAddInformati
         this.color = color >= colors.length || color < 0 ? null : colors[color];
         int colorValue = this.color == null ? 0x969696 : this.color.getTextColor();
         this.isLocked = isLocked;
-
     }
+
 
     @Override
     public InteractionResult onItemUseFirst(ItemStack itemStack, UseOnContext context) {
         var player = context.getPlayer();
         var level = context.getLevel();
         var pos = context.getClickedPos();
-
         int maxBlocksToRecolor = Math.max(1,
                 player != null && player.isShiftKeyDown() ? ConfigHolder.INSTANCE.tools.sprayCanChainLength : 1);
-
         if (player != null) {
             var first = level.getBlockEntity(pos);
-
-            if (context.getHand() != player.getUsedItemHand() && !isLocked) {
-                if (player.isShiftKeyDown()) {
-                    int nextColor = (color.ordinal() + 1) % DyeColor.values().length;
-                    this.color = DyeColor.values()[nextColor * -1];
-                }
-                int nextColor = (color.ordinal() + 1) % DyeColor.values().length;
-                this.color = DyeColor.values()[nextColor];
-                return InteractionResult.SUCCESS;
+            //middle mouse handler
+            //todo middle mouse handler
+            if (first == null || !handleSpecialBlockEntities(first, maxBlocksToRecolor, context)) {
+                handleBlocks(pos, maxBlocksToRecolor, context);
             }
-
-            if (context.getHand() == player.getUsedItemHand()) {
-
-                //middle mouse handler
-                //todo middle mouse handler
-
-                if (first == null || !handleSpecialBlockEntities(first, maxBlocksToRecolor, context)) {
-                    handleBlocks(pos, maxBlocksToRecolor, context);
-                }
-                GTSoundEntries.SPRAY_CAN_TOOL.play(level, null, player.position(), 1.0f, 1.0f);
-                return InteractionResult.SUCCESS;
-            }
-
-
-
+            GTSoundEntries.SPRAY_CAN_TOOL.play(level, null, player.position(), 1.0f, 1.0f);
+            return InteractionResult.SUCCESS;
         }
         return InteractionResult.PASS;
     }
+
+    @Override
+    public boolean onEntitySwing(ItemStack stack, LivingEntity entity){
+    if (entity instanceof Player) {
+        if (entity.isShiftKeyDown()) {
+            int nextColor = (color.ordinal() + 1) % DyeColor.values().length;
+            this.color = DyeColor.values()[nextColor * -1];
+        }
+        int nextColor = (color.ordinal() + 1) % DyeColor.values().length;
+        this.color = DyeColor.values()[nextColor];
+        return false;
+    }
+    return true;
+}
 
     /*
      * REIMPLEMENTING OLD SPRAY CAN BEHAVIOR FROM GT (maybe mixin) (copied and pasted from gt with durability yeeted)
