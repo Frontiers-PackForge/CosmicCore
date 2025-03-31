@@ -1,12 +1,26 @@
 package com.ghostipedia.cosmiccore.common.machine.multiblock.multi.modular.VomahineShredder;
 
+import com.gregtechceu.gtceu.GTCEu;
 import com.gregtechceu.gtceu.api.GTValues;
+import com.gregtechceu.gtceu.api.blockentity.MetaMachineBlockEntity;
 import com.gregtechceu.gtceu.api.machine.IMachineBlockEntity;
+import com.gregtechceu.gtceu.api.machine.MetaMachine;
 import com.gregtechceu.gtceu.api.machine.MultiblockMachineDefinition;
 import com.gregtechceu.gtceu.api.machine.multiblock.MultiblockControllerMachine;
+import com.gregtechceu.gtceu.api.machine.multiblock.WorkableElectricMultiblockMachine;
+import com.gregtechceu.gtceu.api.recipe.GTRecipe;
+import com.gregtechceu.gtceu.api.recipe.modifier.ModifierFunction;
+import com.gregtechceu.gtceu.api.recipe.modifier.RecipeModifier;
 import com.gregtechceu.gtceu.api.registry.registrate.MultiblockMachineBuilder;
+import it.unimi.dsi.fastutil.objects.Object2ReferenceOpenHashMap;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.phys.AABB;
+import org.jetbrains.annotations.NotNull;
 
-import java.util.Locale;
+import java.util.*;
 import java.util.function.BiFunction;
 
 import static com.ghostipedia.cosmiccore.api.registries.CosmicRegistration.REGISTRATE;
@@ -14,46 +28,100 @@ import static com.ghostipedia.cosmiccore.common.data.CosmicBlocks.*;
 import static com.gregtechceu.gtceu.api.GTValues.*;
 import static com.gregtechceu.gtceu.api.pattern.Predicates.*;
 
-public class ShredderMultiblock {
+public class ShredderMultiblock extends WorkableElectricMultiblockMachine {
 
-    // public final static MultiblockMachineDefinition VOMAHINE_SHREDDER = REGISTRATE
-    // .multiblock("vomahine_shredder", WorkableElectricMultiblockMachine::new)
-    // .rotationState(RotationState.NON_Y_AXIS)
-    // .recipeModifier(GTRecipeModifiers.ELECTRIC_OVERCLOCK.apply(OverclockingLogic.NON_PERFECT_OVERCLOCK_SUBTICK))
-    // .appearanceBlock(CosmicBlocks.CYCLOZINE_CHEMICALLY_REPELLING_CASING)
-    // .recipeType(GTRecipeTypes.DUMMY_RECIPES)
-    // .pattern(definition -> FactoryBlockPattern.start()
-    // .aisle("AAAAAAAAAAAAA", "ADDDDDDDDDDDA", "ADDDDDDDDDDDA", "AAAAAAADDDDDA", " AAAAAAA")
-    // .aisle("ACCCCCCCCCCCA", "ACCCCCCCCCCCB", "ACCCCCCCCCCCB", "ACCCCCCCCCCCB", " CCCCCCA")
-    // .aisle("ACCCCCCCCCCCA", "ACDDDDCEEEEC ", "ACDDDDCEEEEC ", "ACCCCCCEEEEC ", " C CA")
-    // .aisle("ACCCCCCCCCCCA", "ACCCCCCEEEEC ", "ACCCCCCEEEEC ", "ACCCCCCEEEEC ", " C CA")
-    // .aisle("AAAAAACCCCCCA", "AAAAAACEEEEC ", "AAAAAACEEEEC ", "ABBBBBCEEEEC ", " C CA")
-    // .aisle("AAAAAACCCCCCA", "AFFFFACCCCCCB", "AAAAAACCCCCCB", "A BCCCCCCB", " CCCCCCA")
-    // .aisle("AAAAAAAAAAAAA", "G AB BA", "A AB BA", "A AB BA", " AAAAAAA")
-    // .where(' ', any())
-    // .where("G", controller(blocks(definition.getBlock())))
-    // .where('A', blocks(CYCLOZINE_CHEMICALLY_REPELLING_CASING.get()))
-    // .where('B', blocks(MULTIPURPOSE_INTERSTELLAR_GRADE_CASING.get()))
-    // .where('C', blocks(MULTIPURPOSE_INTERSTELLAR_GRADE_CASING.get()))
-    // .where('D', blocks(CASING_ATOMIC.get()))
-    // .where('E', blocks(ULTRA_POWERED_CASING.get())
-    // .or(Predicates.abilities(PartAbility.EXPORT_ITEMS).setMaxGlobalLimited(16))
-    // .or(Predicates.abilities(PartAbility.EXPORT_FLUIDS).setMaxGlobalLimited(16))
-    // .or(Predicates.abilities(PartAbility.INPUT_ENERGY).setMaxGlobalLimited(2))
-    // .or(Predicates.abilities(PartAbility.INPUT_LASER).setMaxGlobalLimited(1))
-    // .or(Predicates.abilities(PartAbility.OUTPUT_LASER).setMaxGlobalLimited(1))
-    // .or(Predicates.abilities(PartAbility.IMPORT_FLUIDS).setMaxGlobalLimited(16))
-    // .or(Predicates.abilities(PartAbility.IMPORT_ITEMS).setMaxGlobalLimited(16)))
-    // .where('F', blocks(definition.getBlock()))
-    // .build())
-    // .workableCasingRenderer(CosmicCore.id("block/casings/solid/vomahine_certified_chemically_resistant_casing"),
-    // GTCEu.id("block/multiblock/fusion_reactor"))
-    // .tooltips(Component.translatable("cosmiccore.multiblock.shredder.tooltip.0"),
-    // Component.translatable("cosmiccore.multiblock.shredder.tooltip.1"),
-    // Component.translatable("cosmiccore.multiblock.shredder.tooltip.2"),
-    // Component.translatable("cosmiccore.multiblock.shredder.tooltip.3"))
-    // .hasTESR(true)
-    // .register();
+    private final Map<BlockPos, ShredderModule> modules = new Object2ReferenceOpenHashMap<>();
+
+    private AABB bounds;
+
+    public ShredderMultiblock(IMachineBlockEntity holder, Object... args) {
+        super(holder, args);
+        updateBounds();
+    }
+
+    @Override
+    public void setFrontFacing(Direction facing) {
+        super.setFrontFacing(facing);
+        updateBounds();
+    }
+
+    @Override
+    public void setUpwardsFacing(@NotNull Direction upwardsFacing) {
+        super.setUpwardsFacing(upwardsFacing);
+        updateBounds();
+    }
+
+    public void updateBounds() {
+        var right = getFrontFacing().getCounterClockWise();
+        var scale = 4;
+        var r = getPos().offset(getFrontFacing().getOpposite().getNormal()) // right end
+                .offset(right.getNormal().getX() * scale,
+                right.getNormal().getY() * scale, right.getNormal().getZ() * scale);
+        var l = getPos().offset(getFrontFacing().getOpposite().getNormal()) // left end
+                .offset(right.getNormal().getX(), right.getNormal().getY(), right.getNormal().getZ());
+        bounds = new AABB(l, r);
+    }
+
+    @Override
+    public void onStructureFormed() {
+        super.onStructureFormed();
+
+        var bes = getBlockEntitiesInAABB(bounds, getLevel());
+        for (var br : bes) {
+            if(br instanceof MetaMachineBlockEntity blockEntity && blockEntity.metaMachine instanceof ShredderModule module) {
+                if(module.isFormed()) {
+                    module.setShredderMultiblock(this);
+                    modules.put(module.getPos(), module);
+                    GTCEu.LOGGER.info("ShredderModule added: {}, {}, {}, {}, size: {}", module.getPos().getX(),
+                            module.getPos().getY(), module.getPos().getZ(), module.getValue(), modules.size());
+                }
+            }
+        }
+    }
+
+    @Override
+    public void onStructureInvalid() {
+        super.onStructureInvalid();
+        modules.clear();
+    }
+
+    public static ModifierFunction recipeModifier(@NotNull MetaMachine machine, @NotNull GTRecipe recipe) {
+        if(!(machine instanceof ShredderMultiblock shredder)) return RecipeModifier.nullWrongType(ShredderMultiblock.class, machine);
+
+        for (var module : shredder.modules.values()) {
+            // do shit here for recipe modification
+        }
+
+        return ModifierFunction.NULL;
+    }
+
+    @Override
+    public void onLoad() {
+        super.onLoad();
+        updateBounds();
+        subscribeServerTick(this::myTick);
+    }
+
+    public void myTick() {
+        for (var module : modules.values()) {
+            // do shit but on server tick :okay:
+        }
+    }
+
+    public List<BlockEntity> getBlockEntitiesInAABB(AABB aabb, Level level) {
+        List<BlockEntity> bes = new ArrayList<>();
+        for (int x = (int)aabb.minX; x <= (int)aabb.maxX; x++) {
+            for (int y = (int)aabb.minY; y <= (int)aabb.maxY; y++) {
+                for (int z = (int)aabb.minZ; z <= (int)aabb.maxZ; z++) {
+                    var be = level.getBlockEntity(new BlockPos(x, y, z));
+                    if (be != null) bes.add(be);
+                }
+            }
+        }
+        return bes;
+    }
+
+
     //
     // // Shredder Modules
     //

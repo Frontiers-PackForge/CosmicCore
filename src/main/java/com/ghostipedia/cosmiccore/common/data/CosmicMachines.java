@@ -15,6 +15,8 @@ import com.ghostipedia.cosmiccore.common.data.recipe.CosmicRecipeModifiers;
 import com.ghostipedia.cosmiccore.common.machine.WirelessChargerMachine;
 import com.ghostipedia.cosmiccore.common.machine.multiblock.electric.MagneticFieldMachine;
 import com.ghostipedia.cosmiccore.common.machine.multiblock.multi.WirelessDataBankMachine;
+import com.ghostipedia.cosmiccore.common.machine.multiblock.multi.modular.VomahineShredder.ShredderModule;
+import com.ghostipedia.cosmiccore.common.machine.multiblock.multi.modular.VomahineShredder.ShredderMultiblock;
 import com.ghostipedia.cosmiccore.common.machine.multiblock.part.*;
 import com.ghostipedia.cosmiccore.common.machine.multiblock.steam.WeakSteamParallelMultiBlockMachine;
 import com.ghostipedia.cosmiccore.gtbridge.CosmicRecipeTypes;
@@ -36,6 +38,7 @@ import com.gregtechceu.gtceu.api.machine.multiblock.WorkableElectricMultiblockMa
 import com.gregtechceu.gtceu.api.machine.steam.SimpleSteamMachine;
 import com.gregtechceu.gtceu.api.pattern.FactoryBlockPattern;
 import com.gregtechceu.gtceu.api.pattern.Predicates;
+import com.gregtechceu.gtceu.api.pattern.util.RelativeDirection;
 import com.gregtechceu.gtceu.api.recipe.GTRecipeType;
 import com.gregtechceu.gtceu.api.recipe.OverclockingLogic;
 import com.gregtechceu.gtceu.api.registry.registrate.MachineBuilder;
@@ -3144,6 +3147,63 @@ public class CosmicMachines {
             .workableCasingRenderer(CosmicCore.id("block/casings/solid/vomahine_certified_chemically_resistant_casing"),
                     CosmicCore.id("block/multiblock/vomahine_chemplant"))
             .register();
+
+    public static final MultiblockMachineDefinition SHREDDER_MODULE = REGISTRATE
+            .multiblock("shredder_module", ShredderModule::new)
+            .rotationState(RotationState.NON_Y_AXIS)
+            .appearanceBlock(CosmicBlocks.CYCLOZINE_CHEMICALLY_REPELLING_CASING)
+            .recipeType(GTRecipeTypes.DUMMY_RECIPES)
+            .pattern(def -> FactoryBlockPattern.start(RIGHT, UP, FRONT)
+                    .aisle("x")
+                    .aisle("c")
+                    .where('x', heatingCoils())
+                    .where('c', controller(blocks(def.getBlock())))
+                    .build())
+            .workableCasingRenderer(CosmicCore.id("block/casings/solid/vomahine_certified_chemically_resistant_casing"),
+                    GTCEu.id("block/multiblock/fusion_reactor"))
+            .register();
+
+     public final static MultiblockMachineDefinition VOMAHINE_SHREDDER = REGISTRATE
+        .multiblock("vomahine_shredder", ShredderMultiblock::new)
+        .rotationState(RotationState.NON_Y_AXIS)
+        .recipeModifier(GTRecipeModifiers.ELECTRIC_OVERCLOCK.apply(OverclockingLogic.NON_PERFECT_OVERCLOCK_SUBTICK))
+        .appearanceBlock(CosmicBlocks.CYCLOZINE_CHEMICALLY_REPELLING_CASING)
+        .recipeType(GTRecipeTypes.DUMMY_RECIPES)
+        .pattern(definition -> FactoryBlockPattern.start()
+             .aisle("AAAAAAAAAAAAA", "ADDDDDDDDDDDA", "ADDDDDDDDDDDA", "AAAAAAADDDDDA", "      AAAAAAA")
+             .aisle("ACCCCCCCCCCCA", "ACCCCCCCCCCCB", "ACCCCCCCCCCCB", "ACCCCCCCCCCCB", "      CCCCCCA")
+             .aisle("ACCCCCCCCCCCA", "ACDDDDCEEEEC ", "ACDDDDCEEEEC ", "ACCCCCCEEEEC ", "      C    CA")
+             .aisle("ACCCCCCCCCCCA", "ACCCCCCEEEEC ", "ACCCCCCEEEEC ", "ACCCCCCEEEEC ", "      C    CA")
+             .aisle("AAAAAACCCCCCA", "A    ACEEEEC ", "AAAAAACEEEEC ", "ABBBBBCEEEEC ", "      C    CA")
+             .aisle("AAAAAACCCCCCA", "AZZZZACCCCCCB", "AAAAAACCCCCCB", "A    BCCCCCCB", "      CCCCCCA")
+             .aisle("AAAAAAAAAAAAA", "G    AB    BA", "A    AB    BA", "A    AB    BA", "      AAAAAAA")
+        .where(' ', any())
+        .where("G", controller(blocks(definition.getBlock())))
+        .where('A', blocks(CYCLOZINE_CHEMICALLY_REPELLING_CASING.get()))
+        .where('B', blocks(MULTIPURPOSE_INTERSTELLAR_GRADE_CASING.get()))
+        .where('C', blocks(MULTIPURPOSE_INTERSTELLAR_GRADE_CASING.get()))
+        .where('D', blocks(CASING_ATOMIC.get()))
+        .where('E', blocks(ULTRA_POWERED_CASING.get())
+            .or(Predicates.abilities(PartAbility.EXPORT_ITEMS).setMaxGlobalLimited(16))
+            .or(Predicates.abilities(PartAbility.EXPORT_FLUIDS).setMaxGlobalLimited(16))
+            .or(Predicates.abilities(PartAbility.INPUT_ENERGY).setMaxGlobalLimited(2))
+            .or(Predicates.abilities(PartAbility.INPUT_LASER).setMaxGlobalLimited(1))
+            .or(Predicates.abilities(PartAbility.OUTPUT_LASER).setMaxGlobalLimited(1))
+            .or(Predicates.abilities(PartAbility.IMPORT_FLUIDS).setMaxGlobalLimited(16))
+            .or(Predicates.abilities(PartAbility.IMPORT_ITEMS).setMaxGlobalLimited(16)))
+        .where('F', blocks(definition.getBlock()))
+        .where('Z', air().or(blocks(SHREDDER_MODULE.get().self())))
+        .build())
+        .workableCasingRenderer(CosmicCore.id("block/casings/solid/vomahine_certified_chemically_resistant_casing"),
+            GTCEu.id("block/multiblock/fusion_reactor"))
+        .tooltips(Component.translatable("cosmiccore.multiblock.shredder.tooltip.0"),
+            Component.translatable("cosmiccore.multiblock.shredder.tooltip.1"),
+            Component.translatable("cosmiccore.multiblock.shredder.tooltip.2"),
+            Component.translatable("cosmiccore.multiblock.shredder.tooltip.3"))
+        .hasTESR(true)
+        .register();
+
+
 
     public static final MultiblockMachineDefinition LARGE_COMBUSTION_ENGINE = registerCosmicLargeCombustionEngine(
             "large_combustion_engine_cc", EV,
