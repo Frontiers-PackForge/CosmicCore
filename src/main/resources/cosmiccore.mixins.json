@@ -5,9 +5,9 @@
   "compatibilityLevel": "JAVA_17",
   "minVersion": "0.8",
   "client": [
+    "ae2.ProcessingEncodingPanelMixin",
     "client.MinecraftMixin",
-    "client.SoundManagerMixin",
-    "ae2.ProcessingEncodingPanelMixin"
+    "client.SoundManagerMixin"
   ],
   "mixins": [
     "AdAstraOverlayScreenMixin",
@@ -21,6 +21,7 @@
     "TagPrefixItemMixin",
     "accessor.LivingEntityAccessor",
     "accessor.LootTableAccessor",
+    "ae2.AE2StyleManagerMixin",
     "ae2.PatternEncodingTermMenuMixin",
     "client.CosmicCoreRemainingAirOverlayMixin"
   ],

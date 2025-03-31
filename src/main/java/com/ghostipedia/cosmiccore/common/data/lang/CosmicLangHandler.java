@@ -192,5 +192,17 @@ public class CosmicLangHandler {
         replace(provider, "cosmiccore.wireless_charger.enter_range",
                 "You have entered charging range [Range - %s blocks]");
         replace(provider, "cosmiccore.wireless_charger.left_range", "You have left charging range [Range - %s blocks]");
+
+        replace(provider, "coscore.pattern.multiply",
+                "§b%dx§f");
+
+        replace(provider, "coscore.pattern.div",
+                "§c%d÷§f");
+
+        replace(provider, "coscore.pattern.tooltip.div",
+                "Divides contents by §b%d§f");
+
+        replace(provider, "coscore.pattern.tooltip.multiply",
+                "Multiplies contents by §c%d§f");
     }
 }

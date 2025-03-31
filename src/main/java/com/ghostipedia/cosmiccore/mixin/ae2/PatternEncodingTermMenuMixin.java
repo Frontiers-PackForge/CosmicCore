@@ -8,7 +8,7 @@ import appeng.helpers.IPatternTerminalMenuHost;
 import appeng.menu.me.common.MEStorageMenu;
 import appeng.menu.me.items.PatternEncodingTermMenu;
 import appeng.util.ConfigInventory;
-import com.ghostipedia.cosmiccore.client.gui.IPatternEcodingTerminalMenu;
+import com.ghostipedia.cosmiccore.client.gui.IPatternEncodingTerminalMenu;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.inventory.MenuType;
 import org.spongepowered.asm.mixin.*;
@@ -18,8 +18,8 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Debug(
         export = true
 )
-@Mixin(PatternEncodingTermMenu.class)
-public abstract class PatternEncodingTermMenuMixin extends MEStorageMenu implements IMenuCraftingPacket, IPatternEcodingTerminalMenu {
+@Mixin(value = PatternEncodingTermMenu.class, remap = false)
+public abstract class PatternEncodingTermMenuMixin extends MEStorageMenu implements IMenuCraftingPacket, IPatternEncodingTerminalMenu {
 
     @Shadow(remap = false)
     @Final

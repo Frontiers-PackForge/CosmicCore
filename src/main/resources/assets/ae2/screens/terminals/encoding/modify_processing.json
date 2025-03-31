@@ -13,8 +13,20 @@
       "left": 127,
       "bottom": 141
     },
-    "mult5": {
+    "mult8": {
       "left": 127,
+      "bottom": 130
+    },
+    "div2": {
+      "left": 100,
+      "bottom": 152
+    },
+    "div3": {
+      "left": 100,
+      "bottom": 141
+    },
+    "div8": {
+      "left": 100,
       "bottom": 130
     }
   }
