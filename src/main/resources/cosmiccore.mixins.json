@@ -16,6 +16,8 @@
     "TagPrefixItemMixin",
     "accessor.LivingEntityAccessor",
     "accessor.LootTableAccessor",
+    "ae2.PatternEncodingTerminalMenuMixin",
+    "ae2.ProcessingEncodingPanelMixin",
     "client.CosmicCoreRemainingAirOverlayMixin"
   ],
   "client": [
