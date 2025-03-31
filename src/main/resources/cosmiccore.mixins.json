@@ -16,6 +16,8 @@
     "TagPrefixItemMixin",
     "accessor.LivingEntityAccessor",
     "accessor.LootTableAccessor",
+    "accessor.WorkableElectricMultiblockMachineMixin",
+    "accessor.WorkableMultiblockMachineMixin",
     "client.CosmicCoreRemainingAirOverlayMixin"
   ],
   "client": [

@@ -1,13 +1,20 @@
 package com.ghostipedia.cosmiccore.common.machine.multiblock.multi.modular.VomahineShredder;
 
+import com.ghostipedia.cosmiccore.mixin.accessor.WorkableElectricMultiblockMachineMixin;
+import com.ghostipedia.cosmiccore.mixin.accessor.WorkableMultiblockMachineMixin;
 import com.gregtechceu.gtceu.GTCEu;
 import com.gregtechceu.gtceu.api.GTValues;
 import com.gregtechceu.gtceu.api.blockentity.MetaMachineBlockEntity;
+import com.gregtechceu.gtceu.api.capability.recipe.EURecipeCapability;
+import com.gregtechceu.gtceu.api.capability.recipe.FluidRecipeCapability;
+import com.gregtechceu.gtceu.api.capability.recipe.IO;
+import com.gregtechceu.gtceu.api.capability.recipe.ItemRecipeCapability;
 import com.gregtechceu.gtceu.api.machine.IMachineBlockEntity;
 import com.gregtechceu.gtceu.api.machine.MetaMachine;
 import com.gregtechceu.gtceu.api.machine.MultiblockMachineDefinition;
 import com.gregtechceu.gtceu.api.machine.multiblock.MultiblockControllerMachine;
 import com.gregtechceu.gtceu.api.machine.multiblock.WorkableElectricMultiblockMachine;
+import com.gregtechceu.gtceu.api.machine.trait.RecipeHandlerList;
 import com.gregtechceu.gtceu.api.recipe.GTRecipe;
 import com.gregtechceu.gtceu.api.recipe.modifier.ModifierFunction;
 import com.gregtechceu.gtceu.api.recipe.modifier.RecipeModifier;
@@ -24,9 +31,6 @@ import java.util.*;
 import java.util.function.BiFunction;
 
 import static com.ghostipedia.cosmiccore.api.registries.CosmicRegistration.REGISTRATE;
-import static com.ghostipedia.cosmiccore.common.data.CosmicBlocks.*;
-import static com.gregtechceu.gtceu.api.GTValues.*;
-import static com.gregtechceu.gtceu.api.pattern.Predicates.*;
 
 public class ShredderMultiblock extends WorkableElectricMultiblockMachine {
 
@@ -71,6 +75,21 @@ public class ShredderMultiblock extends WorkableElectricMultiblockMachine {
             if(br instanceof MetaMachineBlockEntity blockEntity && blockEntity.metaMachine instanceof ShredderModule module) {
                 if(module.isFormed()) {
                     module.setShredderMultiblock(this);
+//                    ((WorkableElectricMultiblockMachineMixin)module).cosCore$setOverclockTier(this.getOverclockTier());
+//                    ((WorkableElectricMultiblockMachineMixin)module).cosCore$setEnergyContainer(this.getEnergyContainer());
+
+//                    RecipeHandlerList itemHandlerInput = RecipeHandlerList.of(IO.IN,this.getCapabilitiesFlat(IO.IN, ItemRecipeCapability.CAP));
+//                    RecipeHandlerList itemHandlerOutput = RecipeHandlerList.of(IO.IN,this.getCapabilitiesFlat(IO.OUT, ItemRecipeCapability.CAP));
+//                    RecipeHandlerList fluidHandler = RecipeHandlerList.of(IO.IN,this.getCapabilitiesFlat(IO.IN, FluidRecipeCapability.CAP));
+//
+//                    module.addHandlerList(itemHandlerInput);
+//                    ((WorkableMultiblockMachineMixin)module).cosCore$getTraitSubs().add(itemHandlerInput.subscribe(module.getRecipeLogic()::updateTickSubscription));
+//                    module.addHandlerList(itemHandlerOutput);
+//                    ((WorkableMultiblockMachineMixin)module).cosCore$getTraitSubs().add(itemHandlerOutput.subscribe(module.getRecipeLogic()::updateTickSubscription));
+//                    module.addHandlerList(fluidHandler);
+//                    ((WorkableMultiblockMachineMixin)module).cosCore$getTraitSubs().add(fluidHandler.subscribe(module.getRecipeLogic()::updateTickSubscription));
+//                    module.recipeLogic.updateTickSubscription();
+//
                     modules.put(module.getPos(), module);
                     GTCEu.LOGGER.info("ShredderModule added: {}, {}, {}, {}, size: {}", module.getPos().getX(),
                             module.getPos().getY(), module.getPos().getZ(), module.getValue(), modules.size());
