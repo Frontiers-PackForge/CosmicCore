@@ -110,7 +110,7 @@ public class CosmicMaterials {
                 .ingot()
                 .formula("⋖Tv⋗")
                 .liquid(new FluidBuilder().temperature(1500))
-                .color(0xdb5e5e).secondaryColor(0x5e0f3d).iconSet(MaterialIconSet.BRIGHT)
+                .color(0xfe2d2d).secondaryColor(0x353535).iconSet(CosmicMaterialSet.TRINAVINE)
                 .flags(GENERATE_BOLT_SCREW, GENERATE_ROUND, GENERATE_GEAR, GENERATE_SMALL_GEAR, GENERATE_RING,
                         GENERATE_FRAME, GENERATE_SPRING, GENERATE_SPRING_SMALL, GENERATE_FINE_WIRE)
                 .cableProperties(GTValues.V[7], 4, 6)
