@@ -95,21 +95,41 @@ public class CosmicBlocks {
             MagnetBlock.MagnetType.FUSION_GRADE);
 
     // TODO : FIGURE OUT WHY these are breaking the minable tags for pickaxe/wrench..
+    public static final BlockEntry<Block> GILDED_PTHANTERUM_CASING = createCasingBlock(
+            "gilded_pthanterum_casing", CosmicCore.id("block/casings/solid/gilded_pthanterum_casing"));
+    public static final BlockEntry<Block> REINFORCED_NAQUADRIA_CASING = createCasingBlock(
+            "reinforced_naquadria_casing", CosmicCore.id("block/casings/solid/reinforced_naquadria_casing"));
     public static final BlockEntry<Block> HIGH_TEMP_FISSION_CASING = createCasingBlock(
             "high_temperature_fission_casing", CosmicCore.id("block/casings/solid/high_temperature_fission_casing"));
-    public static final BlockEntry<Block> VOMAHINE_CERTIFIED_CHEMICALLY_RESISTANT_CASING = createCasingBlock(
-            "vomahine_certified_chemically_resistant_casing",
+    public static final BlockEntry<Block> CYCLOZINE_CHEMICALLY_REPELLING_CASING = createCasingBlock(
+            "cyclozine_chemically_repelling_casing",
             CosmicCore.id("block/casings/solid/vomahine_certified_chemically_resistant_casing"));
-    public static final BlockEntry<Block> VOMAHINE_CERTIFIED_CHEMICALLY_RESISTANT_PIPE = createCasingBlock(
-            "vomahine_certified_chemically_resistant_pipe",
+    public static final BlockEntry<Block> CYCLOZINE_CHEMICALLY_REPELLING_PIPE = createCasingBlock(
+            "cyclozine_chemically_repelling_pipe",
             CosmicCore.id("block/casings/solid/vomahine_certified_chemically_resistant_pipe"));
-    public static final BlockEntry<Block> VOMAHINE_CERTIFIED_INTERSTELLAR_GRADE_CASING = createCasingBlock(
-            "vomahine_certified_interstellar_grade_casing",
+    public static final BlockEntry<Block> MULTIPURPOSE_INTERSTELLAR_GRADE_CASING = createCasingBlock(
+            "multi_purpose_interstellar_grade_casing",
             CosmicCore.id("block/casings/solid/vomahine_certified_interstellar_grade_casing"));
-    public static final BlockEntry<Block> VOMAHINE_ULTRA_POWERED_CASING = createCasingBlock(
-            "vomahine_ultra_powered_casing", CosmicCore.id("block/casings/solid/vomahine_ultra_powered_casing"));
+    public static final BlockEntry<Block> ULTRA_POWERED_CASING = createCasingBlock(
+            "ultra_powered_casing", CosmicCore.id("block/casings/solid/vomahine_ultra_powered_casing"));
     public static final BlockEntry<Block> HIGHLY_CONDUCTIVE_FISSION_CASING = createCasingBlock(
             "highly_conductive_fission_casing", CosmicCore.id("block/casings/solid/highly_conductive_fission_casing"));
+    public static final BlockEntry<Block> GEARBOX_PTHANTERUM = createCasingBlock(
+            "machine_casing_gearbox_pthanterum",
+            CosmicCore.id("block/casings/gearbox/machine_casing_gearbox_pthanterum"));
+    public static final BlockEntry<Block> GEARBOX_NAQUADRIA = createCasingBlock(
+            "machine_casing_gearbox_naquadria",
+            CosmicCore.id("block/casings/gearbox/machine_casing_gearbox_naquadria"));
+    // I think i deleted the uh, yeah..
+    public static final BlockEntry<ActiveBlock> CASING_HEAT_VENT = createActiveCasing("heat_fan",
+            "block/variant/heat_fan");
+    public static final BlockEntry<ActiveBlock> CASING_INTAKE_LUDICRIOUS = createActiveCasing("ludicrious_intake",
+            "block/variant/ludicrious_intake");
+    public static final BlockEntry<ActiveBlock> CASING_INTAKE_ULTIMATE = createActiveCasing("ultimate_intake",
+            "block/variant/ultimate_intake");
+    // blood cube
+    public static final BlockEntry<Block> BLOOD_CUBE = createCasingBlock(
+            "blood_cube", CosmicCore.id("block/iris/bloodcube"));
 
     // This is a Bunch of Rendering Magic I barely understand (See: I Don't understand at all) ~Ghost
     private static BlockEntry<Block> createGlassCasingBlock(String name, ResourceLocation texture,
@@ -179,6 +199,18 @@ public class CosmicBlocks {
                 .register();
         GTCEuAPI.HEATING_COILS.put(coilType, coilBlock);
         return coilBlock;
+    }
+
+    protected static BlockEntry<ActiveBlock> createActiveCasing(String name, String baseModelPath) {
+        return REGISTRATE.block(name, ActiveBlock::new)
+                .initialProperties(() -> Blocks.NETHERITE_BLOCK)
+                .addLayer(() -> RenderType::cutoutMipped)
+                .blockstate(GTModels.createActiveModel(CosmicCore.id(baseModelPath)))
+                .tag(RecipeTags.MINEABLE_WITH_WRENCH, BlockTags.MINEABLE_WITH_PICKAXE)
+                .item(BlockItem::new)
+                .model((ctx, prov) -> prov.withExistingParent(prov.name(ctx), CosmicCore.id(baseModelPath)))
+                .build()
+                .register();
     }
 
     private static BlockEntry<MagnetBlock> createMagnetBlock(IMagnetType magnetType) {

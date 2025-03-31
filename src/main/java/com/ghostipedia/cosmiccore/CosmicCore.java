@@ -14,6 +14,7 @@ import com.ghostipedia.cosmiccore.gtbridge.CosmicRecipeTypes;
 import com.gregtechceu.gtceu.api.GTCEuAPI;
 import com.gregtechceu.gtceu.api.data.chemical.material.event.MaterialEvent;
 import com.gregtechceu.gtceu.api.data.chemical.material.event.MaterialRegistryEvent;
+import com.gregtechceu.gtceu.api.data.chemical.material.event.PostMaterialEvent;
 import com.gregtechceu.gtceu.api.data.chemical.material.registry.MaterialRegistry;
 import com.gregtechceu.gtceu.api.machine.MachineDefinition;
 import com.gregtechceu.gtceu.api.recipe.GTRecipeType;
@@ -83,6 +84,11 @@ public class CosmicCore {
     @SubscribeEvent
     public void registerMaterials(MaterialEvent event) {
         CosmicMaterials.register();
+    }
+
+    @SubscribeEvent
+    public void modifyExistingMaterials(PostMaterialEvent event) {
+        CosmicMaterials.modifyMaterials();
     }
 
     @SubscribeEvent

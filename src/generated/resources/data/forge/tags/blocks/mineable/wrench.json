@@ -17,11 +17,19 @@
     "cosmiccore:plated_aerocloud",
     "cosmiccore:high_powered_magnet",
     "cosmiccore:fusion_grade_magnet",
+    "cosmiccore:gilded_pthanterum_casing",
+    "cosmiccore:reinforced_naquadria_casing",
     "cosmiccore:high_temperature_fission_casing",
-    "cosmiccore:vomahine_certified_chemically_resistant_casing",
-    "cosmiccore:vomahine_certified_chemically_resistant_pipe",
-    "cosmiccore:vomahine_certified_interstellar_grade_casing",
-    "cosmiccore:vomahine_ultra_powered_casing",
-    "cosmiccore:highly_conductive_fission_casing"
+    "cosmiccore:cyclozine_chemically_repelling_casing",
+    "cosmiccore:cyclozine_chemically_repelling_pipe",
+    "cosmiccore:multi_purpose_interstellar_grade_casing",
+    "cosmiccore:ultra_powered_casing",
+    "cosmiccore:highly_conductive_fission_casing",
+    "cosmiccore:machine_casing_gearbox_pthanterum",
+    "cosmiccore:machine_casing_gearbox_naquadria",
+    "cosmiccore:heat_fan",
+    "cosmiccore:ludicrious_intake",
+    "cosmiccore:ultimate_intake",
+    "cosmiccore:blood_cube"
   ]
 }

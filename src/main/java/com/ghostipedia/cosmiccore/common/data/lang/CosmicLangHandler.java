@@ -7,6 +7,20 @@ import static com.gregtechceu.gtceu.data.lang.LangHandler.replace;
 public class CosmicLangHandler {
 
     public static void init(RegistrateLangProvider provider) {
+        replace(provider, "cosmiccore.multiblock.naqreactor.tooltip.0",
+                "§cA massive reactor powered by explosions and reactive fuel");
+        replace(provider, "cosmiccore.multiblock.naqreactor.tooltip.1",
+                "§bWill always attempt to parallel to 16x output.");
+        replace(provider, "cosmiccore.multiblock.naqreactor.tooltip.2", "§cOnly Accepts Laser hatches.");
+        replace(provider, "gtceu.industrial_chemvat", "§aIndustiral Chemvat");
+        replace(provider, "cosmiccore.multiblock.chemvat.tooltip.0", "§aA massive chemical plant capable of parallel");
+        replace(provider, "cosmiccore.multiblock.chemvat.tooltip.1",
+                "§fWhen parallelized, adds the cumulative time of all recipes together.");
+        replace(provider, "cosmiccore.multiblock.chemvat.tooltip.2",
+                "§fReduces total time of any recipe ran by 75% afterwards.");
+        replace(provider, "cosmiccore.multiblock.chemvat.tooltip.3", "§6Accepts Laser hatches.");
+        replace(provider, "cosmiccore.multiblock.chemvat.tooltip.4", "§6Accepts Cosmic Parallel Hatches.");
+
         replace(provider, "cosmiccore.gravpack.1", "§aNormalizes Gravity to Match Earth.");
         replace(provider, "cosmiccore.recipe.soulIn", "Soul Input: %s");
         replace(provider, "cosmiccore.recipe.soulOut", "Soul Output: %s");
@@ -91,12 +105,16 @@ public class CosmicLangHandler {
         replace(provider, "cosmiccore.multiblock.ipbf.tooltip.2", "§aRecipes are §f25% §aFaster.");
         replace(provider, "cosmiccore.multiblock.ipbf.tooltip.3", "§aParallel Amount§f: §b8x§r");
         replace(provider, "block.gtceu.high_pressure_assembler", "High Pressure Assembler");
+        replace(provider, "block.gtceu.large_combustion_engine_cc", "Large Combustion Engine");
+        replace(provider, "block.gtceu.extreme_combustion_engine_cc", "Extreme Combustion Engine");
+        replace(provider, "block.gtceu.ludicrous_combustion_engine_cc", "Ludicrous Combustion Engine");
+        replace(provider, "block.gtceu.ultimate_combustion_engine_cc", "Ultimate Combustion Engine");
         replace(provider, "block.gtceu.steam_caster", "Steam Caster Solidifier");
         replace(provider, "cosmiccore.multiblock.hpsassem.tooltip.0", "§7§oLet's build an empire!");
         replace(provider, "cosmiccore.multiblock.hpsassem.tooltip.1", "§fA large but powerful assembler made of steel");
         replace(provider, "cosmiccore.multiblock.hpsassem.tooltip.2", "§aParallel Amount§f: §b4x§r");
-        replace(provider, "block.gtceu.steam_fluid_output_hatch", "Output Hatch (Steam)");
-        replace(provider, "block.gtceu.steam_fluid_input_hatch", "Input Hatch (Steam)");
+        replace(provider, "block.gtceu.steam_fluid_output_hatch", "Bronze Output Hatch");
+        replace(provider, "block.gtceu.steam_fluid_input_hatch", "Bronze Input Hatch");
         replace(provider, "gtceu.machine.steam_fluid_hatch_notice",
                 "This hatch is for Fluid ingredients! Not to power with steam!");
         replace(provider, "block.gtceu.hp_steam_bender", "HP Steam Bender");
@@ -137,12 +155,54 @@ public class CosmicLangHandler {
         replace(provider, "cosmiccore.conjuct_valkruth.1", "§6Val - Overwhelming");
         replace(provider, "cosmiccore.conjuct_valkruth.2", "§6Ruth - Foundation");
         replace(provider, "cosmiccore.conjuct_valkruth_emotion.1", "§bE.R.A -  Convergence");
+        replace(provider, "gtceu.hellfire_foundry", "§cHellfire Foundry");
 
         replace(provider, "item.cosmiccore.the_one_ring.tooltip.0",
                 "§6§oOne Ring to rule them all, One Ring to find them, One Ring to bring them all and in the darkness bind them.§r");
         replace(provider, "item.cosmiccore.the_one_ring.tooltip.1", "You might find it hard to take off.");
 
+        replace(provider, "item.cosmiccore.space_radio.tooltip", "§6Lets you hear sounds in space!");
+        replace(provider, "cosmiccore.universal.tooltip.lube_info.0",
+                "§aProviding Better Lubricants increases the total EU created");
+        replace(provider, "cosmiccore.universal.tooltip.lube_info.1", "§eLubricant§f: §c1x §fEU total @ 1000mb/hr");
+        replace(provider, "cosmiccore.universal.tooltip.lube_info.2",
+                "§eAdv Lubricant§f: §c1.5x §fEU total @ 500mb/hr");
+        replace(provider, "cosmiccore.universal.tooltip.lube_info.3",
+                "§eTears of the Universe§f: §c2x §fEU total @ 250mb/hr");
+
+        replace(provider, "cosmiccore.universal.boosting_agents.0",
+                "§aCan consume various boosters to increase EU/t multiplier");
+        replace(provider, "cosmiccore.errors.bad_fuel",
+                "§aInsufficient Fuel Quality! \n Fuel Output Must be >720 EU total per unit");
+        replace(provider, "cosmiccore.universal.boosting_agents.1", "§6Oxygen §ffor §a3x §fEu/t @ §b20mb/s ");
+        replace(provider, "cosmiccore.universal.boosting_agents.2", "§6Liquid Oxygen §ffor §a6x §fEu/t @ §b80mb/s ");
+        replace(provider, "cosmiccore.universal.boosting_agents.3", "§6Ichor §ffor §a9x §fEu/t @ §b10mb/s ");
+
+        replace(provider, "cosmiccore.multiblock.booster_used", "Booster: %s");
+        replace(provider, "cosmiccore.multiblock.lubricant_used", "Lubricant: %s");
+
         replace(provider, "behavior.wireless_data.owner.player", "§3Player Name: §r%s");
         replace(provider, "behavior.wireless_data.owner.team", "§3Team Name: §r");
+        replace(provider, "cosmiccore.wireless_charger.mode.0", "Set charger mode: SUPERCHARGER [Range - %s blocks]");
+        replace(provider, "cosmiccore.wireless_charger.mode.1", "Set charger mode: STANDARD [Range - %s blocks]");
+        replace(provider, "cosmiccore.wireless_charger.range.single",
+                "When in Supercharger mode, supplies 4A within %s blocks");
+        replace(provider, "cosmiccore.wireless_charger.range.mixed",
+                "When in Standard Charge mode, supplies 1A within %s blocks");
+        replace(provider, "cosmiccore.wireless_charger.enter_range",
+                "You have entered charging range [Range - %s blocks]");
+        replace(provider, "cosmiccore.wireless_charger.left_range", "You have left charging range [Range - %s blocks]");
+
+        replace(provider, "coscore.pattern.multiply",
+                "§b%dx§f");
+
+        replace(provider, "coscore.pattern.div",
+                "§c%d÷§f");
+
+        replace(provider, "coscore.pattern.tooltip.div",
+                "Divides contents by §b%d§f");
+
+        replace(provider, "coscore.pattern.tooltip.multiply",
+                "Multiplies contents by §c%d§f");
     }
 }

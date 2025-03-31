@@ -35,7 +35,7 @@ public class ForgeCommonEventListener {
             return;
         }
 
-        if (CosmicUtils.hasRing(event.player)) {
+        if (CosmicUtils.hasTheOneRing(event.player)) {
             // forcefully get the ring's effects.
             var effects = ((EffectApplicationBehavior) CosmicItems.THE_ONE_RING.get().getComponents().get(0))
                     .getEffects();

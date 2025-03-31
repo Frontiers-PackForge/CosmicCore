@@ -14,7 +14,6 @@ import com.lowdragmc.lowdraglib.syncdata.annotation.Persisted;
 import net.minecraft.core.Direction;
 
 import lombok.Getter;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 import java.util.function.Predicate;
@@ -64,7 +63,7 @@ public class NotifiableThermiaContainer extends NotifiableRecipeHandlerTrait<Int
     }
 
     @Override
-    public List<Integer> handleRecipeInner(IO io, GTRecipe recipe, List<Integer> left, @Nullable String slotName,
+    public List<Integer> handleRecipeInner(IO io, GTRecipe recipe, List<Integer> left,
                                            boolean simulate) {
         return null;
     }

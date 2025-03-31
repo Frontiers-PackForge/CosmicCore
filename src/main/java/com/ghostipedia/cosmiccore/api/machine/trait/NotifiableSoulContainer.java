@@ -15,7 +15,6 @@ import com.lowdragmc.lowdraglib.syncdata.annotation.Persisted;
 import com.lowdragmc.lowdraglib.syncdata.field.ManagedFieldHolder;
 
 import lombok.Getter;
-import org.jetbrains.annotations.Nullable;
 import wayoftime.bloodmagic.core.data.SoulNetwork;
 import wayoftime.bloodmagic.core.data.SoulTicket;
 import wayoftime.bloodmagic.util.helper.NetworkHelper;
@@ -72,7 +71,7 @@ public class NotifiableSoulContainer extends NotifiableRecipeHandlerTrait<Intege
     }
 
     @Override
-    public List<Integer> handleRecipeInner(IO io, GTRecipe recipe, List<Integer> left, @Nullable String slotName,
+    public List<Integer> handleRecipeInner(IO io, GTRecipe recipe, List<Integer> left,
                                            boolean simulate) {
         ISoulContainer container = this;
         if (container.getOwner() == null) return null;

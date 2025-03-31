@@ -1,23 +1,32 @@
 {
   "required": true,
+  "refmap": "cosmiccore.refmap.json",
   "package": "com.ghostipedia.cosmiccore.mixin",
   "compatibilityLevel": "JAVA_17",
   "minVersion": "0.8",
+  "client": [
+    "ae2.ProcessingEncodingPanelMixin",
+    "client.MinecraftMixin",
+    "client.SoundManagerMixin"
+  ],
   "mixins": [
     "AdAstraOverlayScreenMixin",
     "AdAstraSpaceSuitItemMixin",
+    "ApotheosisRecipeHelperMixin",
+    "ApothSmithingCategoryMixin",
     "DivingHelmetItemMixin",
     "GTValuesMixin",
     "MAE2GTIntegrationMixin",
     "PlayerBreathingMixin",
+    "TagPrefixItemMixin",
     "accessor.LivingEntityAccessor",
     "accessor.LootTableAccessor",
+    "ae2.AE2StyleManagerMixin",
+    "ae2.PatternEncodingTermMenuMixin",
     "client.CosmicCoreRemainingAirOverlayMixin"
   ],
-  "client": [
-    "client.MinecraftMixin"
-  ],
   "injectors": {
-    "defaultRequire": 1
+    "defaultRequire": 1,
+    "maxShiftBy": 5
   }
 }

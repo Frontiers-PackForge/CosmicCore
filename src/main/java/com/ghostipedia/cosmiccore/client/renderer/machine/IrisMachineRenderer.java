@@ -20,6 +20,7 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
+import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import org.joml.Quaternionf;
@@ -38,6 +39,7 @@ public class IrisMachineRenderer extends WorkableCasingMachineRenderer {
     public static final ResourceLocation IRIS_MODEL_CORE = CosmicCore.id("block/iris/iris_sphere");
     public static final ResourceLocation IRIS_MODEL_RING = CosmicCore.id("block/iris/iris_ring");
     public static final ResourceLocation IRIS_MODEL_RING_WHITE = CosmicCore.id("block/iris/iris_ring_white");
+    private float tickvalue;
 
     public IrisMachineRenderer() {
         super(TEXTURE, OVERLAY_MODEL_TEXTURES);
@@ -58,13 +60,14 @@ public class IrisMachineRenderer extends WorkableCasingMachineRenderer {
                 machine.isFormed()) {
             var level = machine.getLevel();
             var frontFacing = machine.getFrontFacing();
-            float tick = level.getGameTime() + partialTicks;
-            renderStar(poseStack, buffer, frontFacing, tick, combinedLight, combinedOverlay);
-            renderStarInsides(poseStack, buffer, frontFacing, tick, combinedLight, combinedOverlay);
-            renderStarShell(poseStack, buffer, frontFacing, tick, combinedLight, combinedOverlay);
-            // renderIris(poseStack, buffer, frontFacing, tick, combinedLight, combinedOverlay);
-            // renderRing(poseStack, buffer, frontFacing, tick, combinedLight, combinedOverlay);
-            // renderRingSmall(poseStack, buffer, frontFacing, tick, combinedLight, combinedOverlay);
+            assert level != null;
+            tickvalue += partialTicks / 30;
+            // renderStar(poseStack, buffer, frontFacing, tickvalue, combinedLight, combinedOverlay);
+            // renderStarInsides(poseStack, buffer, frontFacing, tickvalue, combinedLight, combinedOverlay);
+            // renderStarShell(poseStack, buffer, frontFacing, tickvalue, combinedLight, combinedOverlay);
+            renderIris(poseStack, buffer, frontFacing, tickvalue, combinedLight, combinedOverlay);
+            renderRing(poseStack, buffer, frontFacing, tickvalue, combinedLight, combinedOverlay);
+            renderRingSmall(poseStack, buffer, frontFacing, tickvalue, combinedLight, combinedOverlay);
         }
     }
 
@@ -96,12 +99,13 @@ public class IrisMachineRenderer extends WorkableCasingMachineRenderer {
         poseStack.mulPose(new Quaternionf().rotateAxis(tick * Mth.TWO_PI / 80, 0, 1, 0));
         poseStack.scale(20.0f, 20.0f, 20.0f);
         PoseStack.Pose pose = poseStack.last();
-
+        RenderSystem.disableCull();
         VertexConsumer consumer = bufferSource.getBuffer(RenderType.cutout());
         List<BakedQuad> quads = bakedmodel.getQuads(null, null, GTValues.RNG);
         for (BakedQuad quad : quads) {
             consumer.putBulkData(pose, quad, 1f, 1f, 1f, combinedLight, combinedOverlay);
         }
+        RenderSystem.enableCull();
         poseStack.popPose();
     }
 
@@ -114,12 +118,13 @@ public class IrisMachineRenderer extends WorkableCasingMachineRenderer {
         poseStack.mulPose(new Quaternionf().rotateAxis(tick * Mth.TWO_PI / 20, 0, 1, 0));
         poseStack.scale(13.0f, 13.0f, 13.0f);
         PoseStack.Pose pose = poseStack.last();
-
+        RenderSystem.disableCull();
         VertexConsumer consumer = bufferSource.getBuffer(RenderType.cutout());
         List<BakedQuad> quads = bakedmodel.getQuads(null, null, GTValues.RNG);
         for (BakedQuad quad : quads) {
             consumer.putBulkData(pose, quad, 1f, 1f, 1f, combinedLight, combinedOverlay);
         }
+        RenderSystem.enableCull();
         poseStack.popPose();
     }
     /// STAR

@@ -37,6 +37,25 @@ public class CosmicRecipeTypes {
     public static final GTRecipeType LEACHING_PLANT = GTRecipeTypes.register("leaching_plant", GTRecipeTypes.MULTIBLOCK)
             .setMaxIOSize(3, 6, 3, 3)
             .setProgressBar(GuiTextures.PROGRESS_BAR_ARROW, ProgressTexture.FillDirection.LEFT_TO_RIGHT);
+
+    public static final GTRecipeType HELLFIRE_FOUNDRY = GTRecipeTypes
+            .register("hellfire_foundry", GTRecipeTypes.MULTIBLOCK)
+            .setMaxIOSize(5, 1, 1, 0)
+            .setMaxSize(IO.IN, SoulRecipeCapability.CAP, 1)
+            .setMaxTooltips(4)
+            .setProgressBar(GuiTextures.PROGRESS_BAR_ARROW, ProgressTexture.FillDirection.ALWAYS_FULL);
+    public static final GTRecipeType SUFFERING_CHAMBER = GTRecipeTypes
+            .register("suffering_chamber", GTRecipeTypes.MULTIBLOCK)
+            .setMaxIOSize(1, 0, 0, 0)
+            .setMaxSize(IO.OUT, SoulRecipeCapability.CAP, 1)
+            .setMaxTooltips(3)
+            .setProgressBar(GuiTextures.PROGRESS_BAR_ARROW, LEFT_TO_RIGHT);
+    public static final GTRecipeType HEMOPHAGIC_TRANSFUSER = GTRecipeTypes
+            .register("hemophagic_transfuser", GTRecipeTypes.MULTIBLOCK)
+            .setMaxIOSize(6, 6, 3, 3)
+            .setMaxSize(IO.IN, SoulRecipeCapability.CAP, 1)
+            .setMaxTooltips(4)
+            .setProgressBar(GuiTextures.PROGRESS_BAR_ARROW, ProgressTexture.FillDirection.ALWAYS_FULL);
     public static final GTRecipeType CHROMATIC_FLOTATION_PLANT = GTRecipeTypes
             .register("chromatic_flotation_plant", GTRecipeTypes.MULTIBLOCK)
             .setMaxIOSize(3, 9, 3, 3)
@@ -73,8 +92,8 @@ public class CosmicRecipeTypes {
             .setMaxIOSize(1, 0, 1, 0)
             .setSound(GTSoundEntries.ARC)
             .setProgressBar(GuiTextures.PROGRESS_BAR_GAS_COLLECTOR, ProgressTexture.FillDirection.DOWN_TO_UP);
-    public static final GTRecipeType VOMAHINE_INDUSTRIAL_CHEMVAT = GTRecipeTypes
-            .register("vomahine_industrial_chemvat", GTRecipeTypes.MULTIBLOCK)
+    public static final GTRecipeType INDUSTRIAL_CHEMVAT = GTRecipeTypes
+            .register("industrial_chemvat", GTRecipeTypes.MULTIBLOCK)
             .setMaxIOSize(6, 6, 6, 6)
             .setHasResearchSlot(true)
             .setSound(GTSoundEntries.CHEMICAL)
@@ -88,7 +107,7 @@ public class CosmicRecipeTypes {
     // Todo - Custom JEI page / Custom Heating Logic, Custom Slag Generation Logic, THE WHOLE FUCKING PIPENET PROPERTY
     // DEDICATED TO SUPERMOLTEN SLAG [FEAR]
     public static final GTRecipeType VOMAHINE_CORE_DRILL = GTRecipeTypes
-            .register("vomahine_core_drill", GTRecipeTypes.MULTIBLOCK)
+            .register("core_drill", GTRecipeTypes.MULTIBLOCK)
             .setMaxIOSize(3, 6, 3, 6)
             .setHasResearchSlot(true)
             .setSound(GTSoundEntries.REPLICATOR) // TODO - Sounds, VFX
@@ -156,11 +175,11 @@ public class CosmicRecipeTypes {
         CHEMICAL_RECIPES.onRecipeBuild((builder, provider) -> {
             LARGE_CHEMICAL_RECIPES.copyFrom(builder)
                     .save(provider);
-            VOMAHINE_INDUSTRIAL_CHEMVAT.copyFrom(builder)
+            INDUSTRIAL_CHEMVAT.copyFrom(builder)
                     .save(provider);
         });
         LARGE_CHEMICAL_RECIPES.onRecipeBuild((builder, provider) -> {
-            VOMAHINE_INDUSTRIAL_CHEMVAT.copyFrom(builder)
+            INDUSTRIAL_CHEMVAT.copyFrom(builder)
                     .save(provider);
         });
     }

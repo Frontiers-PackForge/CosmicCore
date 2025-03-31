@@ -12,14 +12,14 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 
 @Debug(export = true)
-@Mixin(SpaceSuitItem.class)
+@Mixin(value = SpaceSuitItem.class, remap = false)
 public abstract class AdAstraSpaceSuitItemMixin {
 
     /**
      * @author MrQuentinet
      * @reason In order for the GTArmor to work with AdAstra oxygen I needed to change the way the oxygen check is done.
      */
-    @Overwrite(remap = false)
+    @Overwrite
     public static long getOxygenAmount(Entity entity) {
         if (!(entity instanceof LivingEntity livingEntity)) return 0;
         var stack = livingEntity.getItemBySlot(EquipmentSlot.CHEST);
