@@ -45,6 +45,7 @@ import appeng.blockentity.networking.CableBusBlockEntity;
 import com.google.common.collect.ImmutableMap;
 import lombok.Getter;
 import lombok.Setter;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
@@ -69,7 +70,7 @@ public class InfiniteSprayCanBehavior implements IInteractionItem, IAddInformati
 
 
     @Override
-    public InteractionResult onItemUseFirst(ItemStack itemStack, UseOnContext context) {
+    public InteractionResult onItemUseFirst(ItemStack itemStack, @NotNull UseOnContext context) {
         var player = context.getPlayer();
         var level = context.getLevel();
         var pos = context.getClickedPos();
@@ -90,10 +91,11 @@ public class InfiniteSprayCanBehavior implements IInteractionItem, IAddInformati
 
     @Override
     public boolean onEntitySwing(ItemStack stack, LivingEntity entity){
-    if (entity instanceof Player) {
-        if (entity.isShiftKeyDown()) {
+    if (entity instanceof Player player) {
+        if (player.isShiftKeyDown()) {
             int nextColor = (color.ordinal() + 1) % DyeColor.values().length;
             this.color = DyeColor.values()[nextColor * -1];
+            return false;
         }
         int nextColor = (color.ordinal() + 1) % DyeColor.values().length;
         this.color = DyeColor.values()[nextColor];
@@ -101,6 +103,7 @@ public class InfiniteSprayCanBehavior implements IInteractionItem, IAddInformati
     }
     return true;
 }
+
 
     /*
      * REIMPLEMENTING OLD SPRAY CAN BEHAVIOR FROM GT (maybe mixin) (copied and pasted from gt with durability yeeted)
