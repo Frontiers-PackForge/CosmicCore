@@ -95,10 +95,10 @@ public class WirelessDataBankMachine extends WorkableElectricMultiblockMachine
             for (var handler : part.getRecipeHandlers()) {
                 var handlerIO = handler.getHandlerIO();
                 if (io != IO.BOTH && handlerIO != IO.BOTH && io != handlerIO) continue;
-                if (handler.getCapability() == EURecipeCapability.CAP &&
+                if (handler.hasCapability(EURecipeCapability.CAP) &&
                         handler instanceof IEnergyContainer container) {
                     energyContainers.add(container);
-                    traitSubscriptions.add(handler.addChangedListener(this::updateSubscriptions));
+                    traitSubscriptions.add(handler.subscribe(this::updateSubscriptions));
                 }
             }
         }
@@ -142,21 +142,15 @@ public class WirelessDataBankMachine extends WorkableElectricMultiblockMachine
                 .addEnergyUsageExactLine(calculateEnergyUsage())
                 .addWorkingStatusLine()
                 .addEmptyLine()
-                .addCustom(list -> OwnershipUtils.addOwnerLine(list, getHolder().getOwner()));
+                .addCustom(list -> OwnershipUtils.addOwnerLine(list, getOwner()));
     }
 
     private void addHatchesToWirelessNetwork() {
-        var owner = getHolder().getOwner();
-        var uuid = OwnershipUtils.getOwnerUUID(owner);
-        var hatches = getOpticalHatches();
-        WirelessDataStore.addHatches(uuid, hatches);
+        WirelessDataStore.addHatches(getOwnerUUID(), getOpticalHatches());
     }
 
     private void removeHatchesFromWirelessNetwork() {
-        var owner = getHolder().getOwner();
-        var uuid = OwnershipUtils.getOwnerUUID(owner);
-        var hatches = getOpticalHatches();
-        WirelessDataStore.removeHatches(uuid, hatches);
+        WirelessDataStore.removeHatches(getOwnerUUID(), getOpticalHatches());
     }
 
     private List<IDataAccessHatch> getOpticalHatches() {

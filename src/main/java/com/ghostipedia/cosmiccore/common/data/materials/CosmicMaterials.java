@@ -1,6 +1,7 @@
 package com.ghostipedia.cosmiccore.common.data.materials;
 
 import com.ghostipedia.cosmiccore.CosmicCore;
+import com.ghostipedia.cosmiccore.api.data.material.property.CCoreMaterialIconSet;
 
 import com.gregtechceu.gtceu.api.GTValues;
 import com.gregtechceu.gtceu.api.data.chemical.material.Material;
@@ -73,7 +74,7 @@ public class CosmicMaterials {
         PrismaticTungstensteel = new Material.Builder(CosmicCore.id("prismatic_tungstensteel"))
                 .ingot()
                 .liquid(new FluidBuilder().temperature(933))
-                .color(0x6f42cf).secondaryColor(0xc71414).iconSet(MaterialIconSet.BRIGHT)
+                .color(0x6f42cf).secondaryColor(0xc71414).iconSet(CCoreMaterialIconSet.PRISMATIC)
                 .flags(GENERATE_ROUND, GENERATE_GEAR, GENERATE_SMALL_GEAR, GENERATE_RING, GENERATE_FRAME,
                         GENERATE_SPRING, GENERATE_SPRING_SMALL, GENERATE_FINE_WIRE)
                 .components(Prisma, 1, TungstenSteel, 1)
@@ -171,7 +172,7 @@ public class CosmicMaterials {
                 .formula("⦽")
                 .blastTemp(8900)
                 .liquid(new FluidBuilder().temperature(7500))
-                .color(0x80faf3).secondaryColor(0x8e2e2d).iconSet(CosmicMaterialSet.NEUTRONITE)
+                .color(0x80faf3).secondaryColor(0x8e2e2d).iconSet(CCoreMaterialIconSet.VIBRANIUM)
                 .flags(
                         GENERATE_PLATE,
                         GENERATE_DENSE,

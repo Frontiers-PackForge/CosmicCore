@@ -51,7 +51,7 @@ public class HemophagicTransfuserRender extends WorkableCasingMachineRenderer im
     protected float delta = 0;
     protected int lastColor = -1;
     boolean isActive = false;
-
+    private float tickvalue = 0;
     public final ResourceLocation multipartSprite;
 
     public HemophagicTransfuserRender(ResourceLocation texture, ResourceLocation multipartSprite,
@@ -73,14 +73,15 @@ public class HemophagicTransfuserRender extends WorkableCasingMachineRenderer im
         if (blockEntity instanceof IMachineBlockEntity machineBlockEntity &&
                 machineBlockEntity.getMetaMachine() instanceof WorkableElectricMultiblockMachine machine) {
             var level = machine.getLevel();
-            float tick = level.getGameTime() + partialTicks;
+            assert level != null;
+            tickvalue += partialTicks / 30;
             isActive = machine.isActive();
             if (machine.isFormed()) {
-                renderCube(machine, poseStack, buffer, tick, combinedLight,
+                renderCube(machine, poseStack, buffer, tickvalue, combinedLight,
                         combinedOverlay);
             }
             if (isActive) {
-                renderLightRing(machine, tick, poseStack, buffer, tick);
+                renderLightRing(machine, tickvalue, poseStack, buffer, tickvalue);
             }
         }
     }
@@ -204,8 +205,6 @@ public class HemophagicTransfuserRender extends WorkableCasingMachineRenderer im
                 1.8f, 0.1F, 10, 36, 0.4F, 0f, 0, alpha, axis);
         poseStack.popPose();
         poseStack.pushPose();
-        poseStack.mulPose(sinPartialDiv20Quaternion);
-
         poseStack.mulPose(cosHalfPiPartialDiv60Quaternion);
         RenderBufferHelper.renderRing(poseStack, buffer.getBuffer(GTRenderTypes.getLightRing()), 0, 0, 0,
                 1.6f, 0.1F, 10, 36, 0.6F, 0, 0, alpha, axis);
