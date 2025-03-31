@@ -1,8 +1,10 @@
 package com.ghostipedia.cosmiccore.client.gui;
 
-import appeng.client.gui.style.Blitter;
 import com.ghostipedia.cosmiccore.CosmicCore;
+
 import net.minecraft.resources.ResourceLocation;
+
+import appeng.client.gui.style.Blitter;
 
 public enum ModifyIcon {
 

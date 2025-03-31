@@ -6,7 +6,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.ModifyVariable;
 
 @Mixin(value = StyleManager.class, remap = false)
-public class AE2StyleManagerMixin{
+public class AE2StyleManagerMixin {
 
     @ModifyVariable(method = "loadStyleDoc", at = @At("HEAD"), argsOnly = true)
     private static String loadStyleDocHooks(String path) {

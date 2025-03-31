@@ -1,18 +1,16 @@
 package com.ghostipedia.cosmiccore.client.renderer.item;
 
 import com.ghostipedia.cosmiccore.CosmicCore;
+
 import com.gregtechceu.gtceu.GTCEu;
-import com.gregtechceu.gtceu.api.GTValues;
+
 import com.lowdragmc.lowdraglib.client.renderer.IItemRendererProvider;
 import com.lowdragmc.lowdraglib.client.renderer.IRenderer;
 import com.lowdragmc.lowdraglib.utils.ColorUtils;
-import com.mojang.blaze3d.platform.GlStateManager;
-import com.mojang.blaze3d.systems.RenderSystem;
-import com.mojang.blaze3d.vertex.*;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.renderer.GameRenderer;
-import net.minecraft.client.renderer.ItemBlockRenderTypes;
 import net.minecraft.client.renderer.ItemModelShaper;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.ItemRenderer;
@@ -21,26 +19,29 @@ import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.inventory.InventoryMenu;
-import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+
+import com.mojang.blaze3d.platform.GlStateManager;
+import com.mojang.blaze3d.systems.RenderSystem;
+import com.mojang.blaze3d.vertex.*;
 import org.joml.Matrix4f;
 
 import java.util.function.Supplier;
 
 public class HaloRenders implements IRenderer {
 
-
-    public static final HaloRenders PRISMATIC_TUNGSTEN_HALO = HaloRenders.create(0.15F, 0xeb34cf, 10, CosmicCore.id("rnd/halo"));
-
+    public static final HaloRenders PRISMATIC_TUNGSTEN_HALO = HaloRenders.create(0.15F, 0xeb34cf, 10,
+            CosmicCore.id("rnd/halo"));
 
     private static HaloRenders create(float pulse, int colour, int size, ResourceLocation textures) {
         return create(pulse, () -> colour, () -> size, textures);
     }
 
-    private static HaloRenders create(float pulse, Supplier<Integer> colour, Supplier<Integer> size, ResourceLocation textures) {
+    private static HaloRenders create(float pulse, Supplier<Integer> colour, Supplier<Integer> size,
+                                      ResourceLocation textures) {
         return GTCEu.isClientSide() ? new HaloRenders(pulse, colour, size, textures) : null;
     }
 
@@ -58,7 +59,8 @@ public class HaloRenders implements IRenderer {
 
     @Override
     @OnlyIn(Dist.CLIENT)
-    public void renderItem(ItemStack stack, ItemDisplayContext transformType, boolean leftHand, PoseStack poseStack, MultiBufferSource buffer, int combinedLight, int combinedOverlay, BakedModel model) {
+    public void renderItem(ItemStack stack, ItemDisplayContext transformType, boolean leftHand, PoseStack poseStack,
+                           MultiBufferSource buffer, int combinedLight, int combinedOverlay, BakedModel model) {
         model = getVanillaModel(stack, null, null);
         if (transformType == ItemDisplayContext.GUI) {
             if (texture != null) {
@@ -69,9 +71,11 @@ public class HaloRenders implements IRenderer {
                 buf.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX);
                 RenderSystem.enableBlend();
                 RenderSystem.disableDepthTest();
-                RenderSystem.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
+                RenderSystem.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA,
+                        GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
                 int colour = this.colour.get();
-                RenderSystem.setShaderColor(ColorUtils.red(colour), ColorUtils.green(colour), ColorUtils.blue(colour), ColorUtils.alpha(colour));
+                RenderSystem.setShaderColor(ColorUtils.red(colour), ColorUtils.green(colour), ColorUtils.blue(colour),
+                        ColorUtils.alpha(colour));
                 RenderSystem.setShader(GameRenderer::getPositionTexShader);
                 RenderSystem.setShaderTexture(0, InventoryMenu.BLOCK_ATLAS);
                 TextureAtlasSprite sprite = getBlockSprite(texture);
@@ -99,10 +103,12 @@ public class HaloRenders implements IRenderer {
         }
     }
 
-
-    public static void vanillaRender(ItemStack stack, ItemDisplayContext transformType, boolean leftHand, PoseStack poseStack, MultiBufferSource buffer, int combinedLight, int combinedOverlay, BakedModel model) {
+    public static void vanillaRender(ItemStack stack, ItemDisplayContext transformType, boolean leftHand,
+                                     PoseStack poseStack, MultiBufferSource buffer, int combinedLight,
+                                     int combinedOverlay, BakedModel model) {
         IItemRendererProvider.disabled.set(true);
-        Minecraft.getInstance().getItemRenderer().render(stack, transformType, leftHand, poseStack, buffer, combinedLight, combinedOverlay, getVanillaModel(stack, null, null));
+        Minecraft.getInstance().getItemRenderer().render(stack, transformType, leftHand, poseStack, buffer,
+                combinedLight, combinedOverlay, getVanillaModel(stack, null, null));
         IItemRendererProvider.disabled.set(false);
     }
 
@@ -119,6 +125,7 @@ public class HaloRenders implements IRenderer {
         }
         return shaper.getModelManager().getMissingModel();
     }
+
     public static TextureAtlasSprite getBlockSprite(ResourceLocation location) {
         return Minecraft.getInstance().getTextureAtlas(InventoryMenu.BLOCK_ATLAS).apply(location);
     }
