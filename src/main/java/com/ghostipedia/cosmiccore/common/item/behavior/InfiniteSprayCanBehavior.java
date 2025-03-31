@@ -97,9 +97,11 @@ public class InfiniteSprayCanBehavior implements IInteractionItem, IAddInformati
             this.color = DyeColor.values()[nextColor * -1];
             return false;
         }
-        int nextColor = (color.ordinal() + 1) % DyeColor.values().length;
-        this.color = DyeColor.values()[nextColor];
-        return false;
+        else {
+            int nextColor = (color.ordinal() + 1) % DyeColor.values().length;
+            this.color = DyeColor.values()[nextColor];
+            return false;
+        }
     }
     return true;
 }
