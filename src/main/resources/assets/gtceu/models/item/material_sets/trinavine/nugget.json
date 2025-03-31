@@ -1,8 +1,0 @@
-{
-  "parent": "item/generated",
-  "textures": {
-    "layer0": "gtceu:item/material_sets/trinavine/nugget",
-    "layer1": "gtceu:item/material_sets/trinavine/nugget_secondary",
-    "layer2": "gtceu:item/material_sets/trinavine/nugget_overlay"
-  }
-}

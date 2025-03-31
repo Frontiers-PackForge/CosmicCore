@@ -1,8 +1,0 @@
-{
-  "parent": "item/handheld",
-  "textures": {
-    "layer0": "gtceu:item/material_sets/trinavine/rod_long",
-    "layer1": "gtceu:item/material_sets/trinavine/rod_long_secondary",
-    "layer2": "gtceu:item/material_sets/trinavine/rod_long_overlay"
-  }
-}
