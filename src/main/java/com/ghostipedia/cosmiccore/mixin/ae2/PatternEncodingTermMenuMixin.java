@@ -1,7 +1,6 @@
 package com.ghostipedia.cosmiccore.mixin.ae2;
 
 
-import appeng.api.inventories.InternalInventory;
 import appeng.api.stacks.GenericStack;
 import appeng.api.storage.ITerminalHost;
 import appeng.helpers.IMenuCraftingPacket;
@@ -20,7 +19,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
         export = true
 )
 @Mixin(PatternEncodingTermMenu.class)
-public abstract class PatternEncodingTerminalMenuMixin extends MEStorageMenu implements IMenuCraftingPacket, IPatternEcodingTerminalMenu {
+public abstract class PatternEncodingTermMenuMixin extends MEStorageMenu implements IMenuCraftingPacket, IPatternEcodingTerminalMenu {
 
     @Shadow(remap = false)
     @Final
@@ -30,7 +29,7 @@ public abstract class PatternEncodingTerminalMenuMixin extends MEStorageMenu imp
     @Final
     private ConfigInventory encodedOutputsInv;
 
-    public PatternEncodingTerminalMenuMixin(MenuType<?> menuType, int id, Inventory ip, ITerminalHost host) {
+    public PatternEncodingTermMenuMixin(MenuType<?> menuType, int id, Inventory ip, ITerminalHost host) {
         super(menuType, id, ip, host);
     }
 
