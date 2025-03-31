@@ -61,17 +61,17 @@ public abstract class ProcessingEncodingPanelMixin extends EncodingModePanel {
                 Component.translatable("coscore.pattern.tooltip.multiply", 8)
         );
         System.out.println("HELP ME4");
-        cosCore$divTwo = new ModifyIconButton(b -> ((IPatternEncodingTerminalMenu) menu).cosCore$ModifyPattern(8), ModifyIcon.DIVISION_2,
+        cosCore$divTwo = new ModifyIconButton(b -> ((IPatternEncodingTerminalMenu) menu).cosCore$ModifyPattern(-2), ModifyIcon.DIVISION_2,
                 Component.translatable("coscore.pattern.div", 2),
                 Component.translatable("coscore.pattern.tooltip.div", 2)
         );
         System.out.println("HELP ME5");
-        cosCore$divThree = new ModifyIconButton(b -> ((IPatternEncodingTerminalMenu) menu).cosCore$ModifyPattern(8), ModifyIcon.DIVISION_3,
+        cosCore$divThree = new ModifyIconButton(b -> ((IPatternEncodingTerminalMenu) menu).cosCore$ModifyPattern(-3), ModifyIcon.DIVISION_3,
                 Component.translatable("coscore.pattern.div", 3),
                 Component.translatable("coscore.pattern.tooltip.div", 3)
         );
         System.out.println("HELP ME6");
-        cosCore$divEight = new ModifyIconButton(b -> ((IPatternEncodingTerminalMenu) menu).cosCore$ModifyPattern(8), ModifyIcon.DIVISION_8,
+        cosCore$divEight = new ModifyIconButton(b -> ((IPatternEncodingTerminalMenu) menu).cosCore$ModifyPattern(-8), ModifyIcon.DIVISION_8,
                 Component.translatable("coscore.pattern.div", 8),
                 Component.translatable("coscore.pattern.tooltip.div", 8)
         );
