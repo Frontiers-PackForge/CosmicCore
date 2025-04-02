@@ -13,7 +13,6 @@ public class NumberUtils {
         return Component.literal(formatLong(number));
     }
 
-
     public static String formatLong(long number) {
         if (number < 1_000) {
             return DF.format(number);
@@ -29,6 +28,4 @@ public class NumberUtils {
             return DF.format((double) number / 1_000_000_000_000_000.0) + "P";
         }
     }
-
-
 }
