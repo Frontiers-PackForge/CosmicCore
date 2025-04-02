@@ -192,6 +192,10 @@ public class CosmicLangHandler {
         replace(provider, "cosmiccore.wireless_charger.enter_range",
                 "You have entered charging range [Range - %s blocks]");
         replace(provider, "cosmiccore.wireless_charger.left_range", "You have left charging range [Range - %s blocks]");
+        replace(provider, "cosmiccore.circuit.lore.tier.max.0", "MAX Tier Circuit");
+        replace(provider, "cosmiccore.circuit.lore.tier.max.1", "Not a processor- but an Obituary.");
+        replace(provider, "cosmiccore.circuit.lore.tier.max.2", "Input: Existence.");
+        replace(provider, "cosmiccore.circuit.lore.tier.max.3", "Output: A single conclusion.");
 
         replace(provider, "coscore.pattern.multiply",
                 "§b%dx§f");

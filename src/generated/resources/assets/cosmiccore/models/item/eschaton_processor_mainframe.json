@@ -1,6 +1,6 @@
 {
   "parent": "minecraft:item/generated",
   "textures": {
-    "layer0": "cosmiccore:item/macroverse_processor_assembly"
+    "layer0": "cosmiccore:item/eschaton_processor_mainframe"
   }
 }
