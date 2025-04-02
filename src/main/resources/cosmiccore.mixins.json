@@ -22,6 +22,7 @@
     "accessor.LivingEntityAccessor",
     "accessor.LootTableAccessor",
     "ae2.AE2StyleManagerMixin",
+    "ae2.CPUFormattingMixin",
     "ae2.PatternEncodingTermMenuMixin",
     "client.CosmicCoreRemainingAirOverlayMixin"
   ],
