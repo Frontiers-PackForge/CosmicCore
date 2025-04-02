@@ -5,8 +5,8 @@ import com.ghostipedia.cosmiccore.api.registries.CosmicRegistration;
 import com.ghostipedia.cosmiccore.common.data.tag.item.CosmicItemTags;
 import com.ghostipedia.cosmiccore.common.item.behavior.EffectApplicationBehavior;
 import com.ghostipedia.cosmiccore.common.item.behavior.StructureWriteBehavior;
-
 import com.ghostipedia.cosmiccore.utils.StringUtil;
+
 import com.gregtechceu.gtceu.api.item.ComponentItem;
 import com.gregtechceu.gtceu.api.item.armor.ArmorComponentItem;
 import com.gregtechceu.gtceu.api.item.component.IItemComponent;
@@ -17,6 +17,7 @@ import com.gregtechceu.gtceu.config.ConfigHolder;
 import com.gregtechceu.gtceu.data.recipe.CustomTags;
 
 import com.lowdragmc.lowdraglib.utils.LocalizationUtils;
+
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.damagesource.DamageSource;
@@ -512,7 +513,7 @@ public class CosmicItems {
             .item("eschaton_processor_mainframe", ComponentItem::create)
             .lang("Eschaton Processor Mainframe")
             .properties(p -> p.stacksTo(64))
-            .onRegister(       attach(new TooltipBehavior(lines -> {
+            .onRegister(attach(new TooltipBehavior(lines -> {
                 lines.add(Component.literal(StringUtil
                         .rainbowDancing(LocalizationUtils.format("cosmiccore.circuit.lore.tier.max.0"))));
                 lines.add(Component.translatable("cosmiccore.circuit.lore.tier.max.1"));
