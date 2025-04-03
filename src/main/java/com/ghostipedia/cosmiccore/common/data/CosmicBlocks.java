@@ -73,14 +73,17 @@ public class CosmicBlocks {
 
     );
 
-    //New Casings ; Several reference textures from GTOCore, make sure to give credits to them!
+    // New Casings ; Several reference textures from GTOCore, make sure to give credits to them!
     public static final BlockEntry<Block> REFLECTIVE_STARMETAL_CASING = createCasingBlock("reflective_starmetal_casing",
             CosmicCore.id("block/casings/solid/reflective_starmetal_casing"));
-    public static final BlockEntry<Block> TRITANIUM_LINED_HEAVY_NEUTRONIUM_CASING = createCasingBlock("tritanium_lined_heavy_neutronium_casing",
+    public static final BlockEntry<Block> TRITANIUM_LINED_HEAVY_NEUTRONIUM_CASING = createCasingBlock(
+            "tritanium_lined_heavy_neutronium_casing",
             CosmicCore.id("block/casings/solid/tritanium_lined_heavy_bolted_neutronium_casing"));
-    public static final BlockEntry<Block> HIGH_TOLERANCE_RHENIUM_CASING = createCasingBlock("high_tolerance_rhenium_casing",
+    public static final BlockEntry<Block> HIGH_TOLERANCE_RHENIUM_CASING = createCasingBlock(
+            "high_tolerance_rhenium_casing",
             CosmicCore.id("block/casings/solid/high_tolerance_rhenium_casing"));
-    public static final BlockEntry<Block> HIGHLY_FLEXIBLE_REINFORCED_TRINAVINE_CASING = createCasingBlock("highly_flexible_reinforced_trinavine_casing",
+    public static final BlockEntry<Block> HIGHLY_FLEXIBLE_REINFORCED_TRINAVINE_CASING = createCasingBlock(
+            "highly_flexible_reinforced_trinavine_casing",
             CosmicCore.id("block/casings/solid/highly_flexible_reinforced_trinavine_casing"));
     public static final BlockEntry<Block> CASING_DYSON_CELL = createCasingBlock("dyson_solar_cell",
             CosmicCore.id("block/casings/solid/dyson_solar_cell"));
