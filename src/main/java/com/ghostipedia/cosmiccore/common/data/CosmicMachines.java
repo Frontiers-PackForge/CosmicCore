@@ -771,6 +771,41 @@ public class CosmicMachines {
                     GTCEu.id("block/casings/gcym/stress_proof_casing"),
                     GTCEu.id("block/multiblock/network_switch")))
             .register();
+    public static final MultiblockMachineDefinition POLYMERIZER = REGISTRATE
+            .multiblock("polymerizer", WorkableElectricMultiblockMachine::new)
+            .langValue("§aPolymerizer")
+            .recipeType(CosmicRecipeTypes.POLYMERIZER)
+            .rotationState(RotationState.NON_Y_AXIS)
+            .partAppearance((controller, part, side) -> CYCLOZINE_CHEMICALLY_REPELLING_CASING.getDefaultState())
+            .recipeModifiers(GTRecipeModifiers.PARALLEL_HATCH,
+                    ELECTRIC_OVERCLOCK.apply(OverclockingLogic.PERFECT_OVERCLOCK))
+            .pattern(definition -> FactoryBlockPattern.start()
+                    .aisle("X       X", "X       X", "AABBABBAA", "AABBABBAA", "AABBABBAA", "         ", "         ")
+                    .aisle("         ", "AABBABBAA", "AD#####DA", "ADD###DDA", "AD#####DA", "AABBABBAA", "         ")
+                    .aisle("AABBABBAA", "AD#####DA", "EF#####FE", "EFD###DFE", "EF#####FE", "AD#####DA", "AABBABBAA")
+                    .aisle("AABBABBAA", "ADD###DDA", "EFD###DFE", "EDDFFFDDE", "EFD###DFE", "ADD###DDA", "AABBABBAA")
+                    .aisle("AABBABBAA", "AD#####DA", "EF#####FE", "EFD###DFE", "EF#####FE", "AD#####DA", "AABBABBAA")
+                    .aisle("         ", "AABBABBAA", "AD#####DA", "ADD###DDA", "AD#####DA", "AABBABBAA", "         ")
+                    .aisle("X       X", "X       X", "AABBABBAA", "AABBQBBAA", "AABBABBAA", "         ", "         ")
+
+                    .where('Q', Predicates.controller(Predicates.blocks(definition.get())))
+                    .where(' ', Predicates.any())
+                    .where('#', Predicates.air())
+                    .where('A', blocks(HIGH_TOLERANCE_RHENIUM_CASING.get()))
+                    .where('B', blocks(FUSION_GLASS.get()))
+                    .where('D', blocks(RESONANTLY_TUNED_VIRTUE_MELD_CASING.get()))
+                    .where('E', blocks(CYCLOZINE_CHEMICALLY_REPELLING_CASING.get())
+                            .or(autoAbilities(CosmicRecipeTypes.POLYMERIZER))
+                            .or(abilities(PartAbility.INPUT_ENERGY, PartAbility.INPUT_LASER).setExactLimit(1)
+                                    .setPreviewCount(1)))
+                    .where('F', blocks(GEARBOX_PTHANTERUM.get()))
+                    .where('X', blocks(ChemicalHelper.getBlock(TagPrefix.frameGt, GTMaterials.NaquadahAlloy)))
+                    .build())
+            .renderer(() -> new SufferingChamberRender(
+                    CosmicCore.id("block/casings/solid/high_tolerance_rhenium_casing"),
+                    CosmicCore.id("block/casings/solid/vomahine_certified_chemically_resistant_casing"),
+                    GTCEu.id("block/multiblock/assembly_line")))
+            .register();
 
     public final static MultiblockMachineDefinition CELESTIAL_BORE = REGISTRATE.multiblock(
             "vomahine_celestial_laser_bore", WorkableElectricMultiblockMachine::new)

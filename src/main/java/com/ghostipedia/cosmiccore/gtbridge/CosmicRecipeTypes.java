@@ -13,6 +13,7 @@ import com.lowdragmc.lowdraglib.utils.LocalizationUtils;
 
 import static com.gregtechceu.gtceu.common.data.GTRecipeTypes.*;
 import static com.lowdragmc.lowdraglib.gui.texture.ProgressTexture.FillDirection.LEFT_TO_RIGHT;
+import static com.lowdragmc.lowdraglib.gui.texture.ProgressTexture.FillDirection.RIGHT_TO_LEFT;
 
 public class CosmicRecipeTypes {
 
@@ -50,6 +51,11 @@ public class CosmicRecipeTypes {
             .setMaxSize(IO.OUT, SoulRecipeCapability.CAP, 1)
             .setMaxTooltips(3)
             .setProgressBar(GuiTextures.PROGRESS_BAR_ARROW, LEFT_TO_RIGHT);
+    public static final GTRecipeType POLYMERIZER = GTRecipeTypes
+            .register("polymerizer", GTRecipeTypes.MULTIBLOCK)
+            .setMaxIOSize(3, 2, 3, 2)
+            .setMaxTooltips(3)
+            .setProgressBar(GuiTextures.PROGRESS_BAR_ARROW_MULTIPLE, RIGHT_TO_LEFT);
     public static final GTRecipeType HEMOPHAGIC_TRANSFUSER = GTRecipeTypes
             .register("hemophagic_transfuser", GTRecipeTypes.MULTIBLOCK)
             .setMaxIOSize(6, 6, 3, 3)
