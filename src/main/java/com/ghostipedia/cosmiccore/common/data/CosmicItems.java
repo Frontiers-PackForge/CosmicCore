@@ -539,7 +539,7 @@ public class CosmicItems {
 
     public static final ItemEntry<ComponentItem> ABERRANT_ESSENCE = REGISTRATE
             .item("aberrant_essence", ComponentItem::create)
-            .lang("§5Wicked Essence")
+            .lang("§6Aberrant Essence")
             .properties(p -> p.stacksTo(64))
             .onRegister(attach(new TooltipBehavior(lines -> {
                 lines.add(Component.literal(StringUtil
