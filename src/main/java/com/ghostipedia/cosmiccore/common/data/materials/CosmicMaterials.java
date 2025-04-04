@@ -52,6 +52,11 @@ public class CosmicMaterials {
                 .formula("֍")
                 .element(CosmicElements.Pi)
                 .buildAndRegister();
+        Prisma = new Material.Builder(CosmicCore.id("vitrius"))
+                .liquid(new FluidBuilder().state(FluidState.LIQUID).customStill())
+                .formula("֍⋄")
+                .element(CosmicElements.Pi)
+                .buildAndRegister();
         DilutedPrisma = new Material.Builder(CosmicCore.id("diluted_prisma"))
                 .liquid()
                 .color(0x4995b3).secondaryColor(0x4995b3)

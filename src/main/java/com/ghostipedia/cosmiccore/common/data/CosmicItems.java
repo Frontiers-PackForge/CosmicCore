@@ -523,6 +523,31 @@ public class CosmicItems {
             })))
             .defaultModel()
             .register();
+
+    // Demon/Soul Related Items
+
+    public static final ItemEntry<ComponentItem> WICKED_ESSENCE = REGISTRATE
+            .item("wicked_essence", ComponentItem::create)
+            .lang("§5Wicked Essence")
+            .properties(p -> p.stacksTo(64))
+            .onRegister(attach(new TooltipBehavior(lines -> {
+                lines.add(Component.literal(StringUtil
+                        .midnightOscillation(LocalizationUtils.format("cosmiccore.lore.broken_virtue.0"))));
+            })))
+            .defaultModel()
+            .register();
+
+    public static final ItemEntry<ComponentItem> ABERRANT_ESSENCE = REGISTRATE
+            .item("aberrant_essence", ComponentItem::create)
+            .lang("§5Wicked Essence")
+            .properties(p -> p.stacksTo(64))
+            .onRegister(attach(new TooltipBehavior(lines -> {
+                lines.add(Component.literal(StringUtil
+                        .midnightOscillation(LocalizationUtils.format("cosmiccore.lore.broken_virtue.1"))));
+            })))
+            .defaultModel()
+            .register();
+
     public static final ItemEntry<ComponentItem> FIRECLAY_BALL = REGISTRATE.item("fireclay_ball", ComponentItem::create)
             .lang("Fireclay Ball")
             .properties(p -> p.stacksTo(64))

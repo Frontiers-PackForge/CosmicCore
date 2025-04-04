@@ -1,6 +1,7 @@
 {
   "values": [
     "cosmiccore:prisma_bucket",
+    "cosmiccore:vitrius_bucket",
     "cosmiccore:diluted_prisma_bucket",
     "cosmiccore:virtue_meld_bucket",
     "cosmiccore:trinium_naqide_bucket",

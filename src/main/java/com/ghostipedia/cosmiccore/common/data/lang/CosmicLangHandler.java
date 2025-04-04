@@ -197,6 +197,9 @@ public class CosmicLangHandler {
         replace(provider, "cosmiccore.circuit.lore.tier.max.2", "Input: Existence.");
         replace(provider, "cosmiccore.circuit.lore.tier.max.3", "Output: A single conclusion.");
 
+        replace(provider, "cosmiccore.lore.broken_virtue.0", "Perpetuity Shudders Softly");
+        replace(provider, "cosmiccore.lore.broken_virtue.1", "Something has gone very wrong.");
+
         replace(provider, "coscore.pattern.multiply",
                 "§b%dx§f");
 
