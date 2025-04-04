@@ -45,6 +45,7 @@ public class CosmicMaterials {
     public static Material Temmerite;
     public static Material Triphenylphosphine;
     public static Material Neutronite;
+    public static Material Vitrius;
 
     public static void register() {
         Prisma = new Material.Builder(CosmicCore.id("prisma"))
@@ -52,7 +53,7 @@ public class CosmicMaterials {
                 .formula("֍")
                 .element(CosmicElements.Pi)
                 .buildAndRegister();
-        Prisma = new Material.Builder(CosmicCore.id("vitrius"))
+        Vitrius = new Material.Builder(CosmicCore.id("vitrius"))
                 .liquid(new FluidBuilder().state(FluidState.LIQUID).customStill())
                 .formula("֍⋄")
                 .element(CosmicElements.Pi)
