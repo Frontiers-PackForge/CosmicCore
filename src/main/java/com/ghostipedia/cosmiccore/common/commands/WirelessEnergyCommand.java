@@ -17,6 +17,7 @@ import com.mojang.brigadier.context.CommandContext;
 import dev.ftb.mods.ftbteams.api.FTBTeamsAPI;
 import dev.ftb.mods.ftbteams.api.Team;
 import dev.ftb.mods.ftbteams.data.TeamArgument;
+import org.apache.logging.log4j.core.config.builder.api.ComponentBuilder;
 
 import java.util.UUID;
 import java.util.function.BiFunction;
@@ -66,14 +67,14 @@ public class WirelessEnergyCommand {
 
     private static int displayPlayerInfo(CommandContext<CommandSourceStack> context, ServerPlayer player) {
         var message = generateInfoMessage(context.getSource().getLevel(), player.getUUID(),
-                Component.literal("Player: ").append(player.getName()));
+                Component.translatable("cosmic.command.wireless.energy.player", player.getName()));
         context.getSource().sendSuccess(() -> message, false);
         return 1;
     }
 
     private static int displayTeamInfo(CommandContext<CommandSourceStack> context, Team team) {
         var message = generateInfoMessage(context.getSource().getLevel(), team.getTeamId(),
-                Component.literal("Team: ").append(team.getName()));
+                Component.translatable("cosmic.command.wireless.energy.team", team.getName()));
         context.getSource().sendSuccess(() -> message, false);
         return 1;
     }
@@ -81,22 +82,25 @@ public class WirelessEnergyCommand {
     private static Component generateInfoMessage(ServerLevel serverLevel, UUID owner, Component ownerName) {
         var wirelessData = WirelessEnergySavedData.getOrCreate(serverLevel);
 
-        var message = Component.literal("Wireless Energy Network Info ");
-        message.append(" (").append(ownerName).append("):\n");
-        message.append("  Capacity: " + FormattingUtil.formatNumbers(wirelessData.getEnergyCapacity(owner)) + " EU\n");
-        message.append("  Stored: " + FormattingUtil.formatNumbers(wirelessData.getEnergyStored(owner)) + " EU\n");
-        message.append("  Input: " + FormattingUtil.formatNumbers(wirelessData.getEnergyInput(owner)) + " EU/t\n");
-        message.append("  Output: " + FormattingUtil.formatNumbers(wirelessData.getEnergyOutput(owner)) + " EU/t\n");
-        message.append("  Buffered: " + FormattingUtil.formatNumbers(wirelessData.getEnergyBuffered(owner)) + " EU\n");
-        message.append("  Active: " + wirelessData.isActive(owner) + "\n");
-        var location = wirelessData.getCapacitorPosition(owner);
-        var pos = location != null ? location.getB() : null;
-        var locationStr = location != null ?
-                String.format("%s : x=%d y=%d z=%d", location.getA(), pos.getX(), pos.getY(), pos.getZ()) :
-                "No capacitor set";
-        message.append("  Capacitor location: " + locationStr);
+        var message = Component.translatable("cosmic.command.wireless.energy.header", ownerName).append("\n")
+            .append(Component.translatable("cosmic.command.wireless.energy.capacity", FormattingUtil.formatNumbers(wirelessData.getEnergyCapacity(owner)))).append("\n")
+            .append(Component.translatable("cosmic.command.wireless.energy.stored", FormattingUtil.formatNumbers(wirelessData.getEnergyStored(owner)))).append("\n")
+            .append(Component.translatable("cosmic.command.wireless.energy.input", FormattingUtil.formatNumbers(wirelessData.getEnergyInput(owner)))).append("\n")
+            .append(Component.translatable("cosmic.command.wireless.energy.output", FormattingUtil.formatNumbers(wirelessData.getEnergyOutput(owner)))).append("\n")
+            .append(Component.translatable("cosmic.command.wireless.energy.buffered", FormattingUtil.formatNumbers(wirelessData.getEnergyBuffered(owner)))).append("\n")
+            .append(Component.translatable("cosmic.command.wireless.energy.active", wirelessData.isActive(owner))).append("\n")
+            .append(Component.translatable("cosmic.command.wireless.energy.capacitor")).append(getLocationString(serverLevel, owner));
 
         return message;
+    }
+
+    private static Component getLocationString(ServerLevel serverLevel, UUID owner) {
+        var wirelessData = WirelessEnergySavedData.getOrCreate(serverLevel);
+        var location = wirelessData.getCapacitorPosition(owner);
+        var pos = location != null ? location.getB() : null;
+        return location != null ?
+                Component.translatable("cosmic.command.wireless.energy.location.format", location.getA(), pos.getX(), pos.getY(), pos.getZ()) :
+                Component.translatable("cosmic.command.wireless.energy.no.capacitor");
     }
 
     // ####################################
