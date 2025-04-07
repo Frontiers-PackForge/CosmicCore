@@ -5,6 +5,7 @@ import com.ghostipedia.cosmiccore.api.registries.CosmicRegistration;
 import com.ghostipedia.cosmiccore.common.data.tag.item.CosmicItemTags;
 import com.ghostipedia.cosmiccore.common.item.behavior.EffectApplicationBehavior;
 import com.ghostipedia.cosmiccore.common.item.behavior.StructureWriteBehavior;
+import com.ghostipedia.cosmiccore.utils.StringUtil;
 
 import com.gregtechceu.gtceu.api.item.ComponentItem;
 import com.gregtechceu.gtceu.api.item.armor.ArmorComponentItem;
@@ -14,6 +15,8 @@ import com.gregtechceu.gtceu.common.item.armor.GTArmorMaterials;
 import com.gregtechceu.gtceu.common.item.armor.QuarkTechSuite;
 import com.gregtechceu.gtceu.config.ConfigHolder;
 import com.gregtechceu.gtceu.data.recipe.CustomTags;
+
+import com.lowdragmc.lowdraglib.utils.LocalizationUtils;
 
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -35,6 +38,7 @@ import wayoftime.bloodmagic.common.item.ItemBloodOrb;
 import wayoftime.bloodmagic.common.registration.impl.BloodOrbRegistryObject;
 
 import static com.ghostipedia.cosmiccore.api.registries.CosmicRegistration.REGISTRATE;
+import static com.gregtechceu.gtceu.common.data.GTItems.attach;
 import static wayoftime.bloodmagic.common.item.BloodMagicItems.BLOOD_ORBS;
 
 @SuppressWarnings({ "unused" })
@@ -485,31 +489,65 @@ public class CosmicItems {
             .properties(p -> p.stacksTo(64))
             .defaultModel()
             .register();
-    // Macroverse (UIV-MAX)
-    public static final ItemEntry<ComponentItem> MACROVERSE_PROCESSOR = REGISTRATE
-            .item("macroverse_processor", ComponentItem::create)
-            .lang("Macroverse Processor")
+    // Eschaton (UIV-MAX)
+    public static final ItemEntry<ComponentItem> ESCHATON_PROCESSOR = REGISTRATE
+            .item("eschaton_processor", ComponentItem::create)
+            .lang("Eschaton Processor")
+            .properties(p -> p.stacksTo(64))
+
+            .defaultModel()
+            .register();
+    public static final ItemEntry<ComponentItem> ESCHATON_PROCESSOR_ASSEMBLY = REGISTRATE
+            .item("eschaton_processor_assembly", ComponentItem::create)
+            .lang("Eschaton Processor Assembly")
             .properties(p -> p.stacksTo(64))
             .defaultModel()
             .register();
-    public static final ItemEntry<ComponentItem> MACROVERSE_PROCESSOR_ASSEMBLY = REGISTRATE
-            .item("macroverse_processor_assembly", ComponentItem::create)
-            .lang("Macroverse Processor Assembly")
+    public static final ItemEntry<ComponentItem> ESCHATON_PROCESSOR_SUPERCOMPUTER = REGISTRATE
+            .item("eschaton_processor_supercomputer", ComponentItem::create)
+            .lang("Eschaton Processor Supercomputer")
             .properties(p -> p.stacksTo(64))
             .defaultModel()
             .register();
-    public static final ItemEntry<ComponentItem> MACROVERSE_PROCESSOR_SUPERCOMPUTER = REGISTRATE
-            .item("macroverse_processor_supercomputer", ComponentItem::create)
-            .lang("Macroverse Processor Supercomputer")
+    public static final ItemEntry<ComponentItem> ESCHATON_PROCESSOR_MAINFRAME = REGISTRATE
+            .item("eschaton_processor_mainframe", ComponentItem::create)
+            .lang("Eschaton Processor Mainframe")
             .properties(p -> p.stacksTo(64))
+            .onRegister(attach(new TooltipBehavior(lines -> {
+                lines.add(Component.literal(StringUtil
+                        .rainbowDancing(LocalizationUtils.format("cosmiccore.circuit.lore.tier.max.0"))));
+                lines.add(Component.translatable("cosmiccore.circuit.lore.tier.max.1"));
+                lines.add(Component.translatable("cosmiccore.circuit.lore.tier.max.2"));
+                lines.add(Component.translatable("cosmiccore.circuit.lore.tier.max.3"));
+
+            })))
             .defaultModel()
             .register();
-    public static final ItemEntry<ComponentItem> MACROVERSE_PROCESSOR_MAINFRAME = REGISTRATE
-            .item("macroverse_processor_mainframe", ComponentItem::create)
-            .lang("Macroverse Processor Mainframe")
+
+    // Demon/Soul Related Items
+
+    public static final ItemEntry<ComponentItem> WICKED_ESSENCE = REGISTRATE
+            .item("wicked_essence", ComponentItem::create)
+            .lang("§5Wicked Essence")
             .properties(p -> p.stacksTo(64))
+            .onRegister(attach(new TooltipBehavior(lines -> {
+                lines.add(Component.literal(StringUtil
+                        .midnightOscillation(LocalizationUtils.format("cosmiccore.lore.broken_virtue.0"))));
+            })))
             .defaultModel()
             .register();
+
+    public static final ItemEntry<ComponentItem> ABERRANT_ESSENCE = REGISTRATE
+            .item("aberrant_essence", ComponentItem::create)
+            .lang("§6Aberrant Essence")
+            .properties(p -> p.stacksTo(64))
+            .onRegister(attach(new TooltipBehavior(lines -> {
+                lines.add(Component.literal(StringUtil
+                        .midnightOscillation(LocalizationUtils.format("cosmiccore.lore.broken_virtue.1"))));
+            })))
+            .defaultModel()
+            .register();
+
     public static final ItemEntry<ComponentItem> FIRECLAY_BALL = REGISTRATE.item("fireclay_ball", ComponentItem::create)
             .lang("Fireclay Ball")
             .properties(p -> p.stacksTo(64))

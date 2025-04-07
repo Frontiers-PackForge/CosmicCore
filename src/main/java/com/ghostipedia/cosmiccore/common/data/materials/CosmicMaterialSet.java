@@ -9,6 +9,7 @@ public class CosmicMaterialSet {
     public static final MaterialIconSet INFINITY = new MaterialIconSet("infinity", SHINY);
     public static final MaterialIconSet CHRONON = new MaterialIconSet("chronon", SHINY);
     public static final MaterialIconSet NEUTRONITE = new MaterialIconSet("neutronite", SHINY);
+    public static final MaterialIconSet TRINAVINE = new MaterialIconSet("trinavine", SHINY);
 
     public static void init() {}
 }

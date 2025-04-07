@@ -7,8 +7,8 @@ import com.gregtechceu.gtceu.api.machine.IMachineBlockEntity;
 import com.gregtechceu.gtceu.api.machine.TickableSubscription;
 import com.gregtechceu.gtceu.api.machine.TieredEnergyMachine;
 import com.gregtechceu.gtceu.api.machine.trait.NotifiableEnergyContainer;
+import com.gregtechceu.gtceu.common.machine.owner.ArgonautsOwner;
 import com.gregtechceu.gtceu.common.machine.owner.FTBOwner;
-import com.gregtechceu.gtceu.common.machine.owner.IMachineOwner;
 import com.gregtechceu.gtceu.common.machine.owner.PlayerOwner;
 import com.gregtechceu.gtceu.utils.FormattingUtil;
 
@@ -25,14 +25,12 @@ import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.wrapper.EmptyHandler;
 import net.minecraftforge.server.ServerLifecycleHooks;
 
-import dev.ftb.mods.ftbteams.api.FTBTeamsAPI;
-import dev.ftb.mods.ftbteams.api.Team;
+import dev.ftb.mods.ftbteams.data.PlayerTeam;
 import top.theillusivec4.curios.api.CuriosApi;
 import top.theillusivec4.curios.api.type.capability.ICuriosItemHandler;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
 public class WirelessChargerMachine extends TieredEnergyMachine {
@@ -94,21 +92,28 @@ public class WirelessChargerMachine extends TieredEnergyMachine {
         if (energyContainer.getEnergyStored() < maxChargeValue) return;
         int tickRate = mode == ChargeMode.SUPER_CHARGED ? 4 : 20;
         if (getOffsetTimer() % tickRate == 0) {
-            IMachineOwner owner = getHolder().getOwner();
+            var owner = getOwner();
             List<Player> players = new ArrayList<>();
-            if (owner.type() == IMachineOwner.MachineOwnerType.PLAYER) {
-                UUID pUUID = ((PlayerOwner) owner).getUUID();
+            if (owner instanceof PlayerOwner) {
+                UUID pUUID = owner.getUUID();
                 Player player = ServerLifecycleHooks.getCurrentServer().getPlayerList().getPlayer(pUUID);
                 if (player != null && isPlayerInRange(player)) players.add(player);
-            } else if (owner.type() == IMachineOwner.MachineOwnerType.FTB) {
-                Optional<Team> t = FTBTeamsAPI.api().getManager().getTeamByID(((FTBOwner) owner).getUUID());
-                if (t.isPresent()) {
-                    for (var pUUID : t.get().getMembers()) {
+            } else if (owner instanceof FTBOwner ftbOwner) {
+                var team = ftbOwner.getTeam();
+                if (team == null) return;
+                if (team.isPlayerTeam()) {
+                    for (var pUUID : ((PlayerTeam) team).getEffectiveTeam().getMembers()) {
+                        Player player = ServerLifecycleHooks.getCurrentServer().getPlayerList().getPlayer(pUUID);
+                        if (player != null && isPlayerInRange(player)) players.add(player);
+                    }
+                } else if (team.isServerTeam() || team.isPartyTeam()) {
+                    for (var pUUID : team.getMembers()) {
                         Player player = ServerLifecycleHooks.getCurrentServer().getPlayerList().getPlayer(pUUID);
                         if (player != null && isPlayerInRange(player)) players.add(player);
                     }
                 }
-            } else if (owner.type() == IMachineOwner.MachineOwnerType.ARGONAUTS) {
+
+            } else if (owner instanceof ArgonautsOwner) {
                 // DN
             }
 

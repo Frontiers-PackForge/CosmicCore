@@ -24,8 +24,8 @@ dependencies {
     modImplementation(forge.architectury)
 
     // Recipe Viewers
-    modCompileOnly(forge.bundles.jei)
-    modCompileOnly(forge.emi)
+    modImplementation(forge.bundles.jei)
+    modImplementation(forge.emi)
 
     // WAILA-likes
     modImplementation(forge.jade)
@@ -87,4 +87,7 @@ dependencies {
     // Runtime Recipe Viewers - uncomment whichever one you want to use //
     modRuntimeOnly(forge.emi)
     // modRuntimeOnly(forge.jei.forge.impl)
+
+    //Modern Fix
+    modImplementation(forge.modernFix)
 }

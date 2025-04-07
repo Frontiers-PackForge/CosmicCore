@@ -1,6 +1,7 @@
 package com.ghostipedia.cosmiccore.common.data.materials;
 
 import com.ghostipedia.cosmiccore.CosmicCore;
+import com.ghostipedia.cosmiccore.api.data.material.property.CCoreMaterialIconSet;
 
 import com.gregtechceu.gtceu.api.GTValues;
 import com.gregtechceu.gtceu.api.data.chemical.material.Material;
@@ -44,11 +45,17 @@ public class CosmicMaterials {
     public static Material Temmerite;
     public static Material Triphenylphosphine;
     public static Material Neutronite;
+    public static Material Vitrius;
 
     public static void register() {
         Prisma = new Material.Builder(CosmicCore.id("prisma"))
                 .liquid(new FluidBuilder().state(FluidState.LIQUID).customStill())
                 .formula("֍")
+                .element(CosmicElements.Pi)
+                .buildAndRegister();
+        Vitrius = new Material.Builder(CosmicCore.id("vitrius"))
+                .liquid(new FluidBuilder().state(FluidState.LIQUID).customStill())
+                .formula("֍⋄")
                 .element(CosmicElements.Pi)
                 .buildAndRegister();
         DilutedPrisma = new Material.Builder(CosmicCore.id("diluted_prisma"))
@@ -73,7 +80,7 @@ public class CosmicMaterials {
         PrismaticTungstensteel = new Material.Builder(CosmicCore.id("prismatic_tungstensteel"))
                 .ingot()
                 .liquid(new FluidBuilder().temperature(933))
-                .color(0x6f42cf).secondaryColor(0xc71414).iconSet(MaterialIconSet.BRIGHT)
+                .color(0x6f42cf).secondaryColor(0xc71414).iconSet(CCoreMaterialIconSet.PRISMATIC)
                 .flags(GENERATE_ROUND, GENERATE_GEAR, GENERATE_SMALL_GEAR, GENERATE_RING, GENERATE_FRAME,
                         GENERATE_SPRING, GENERATE_SPRING_SMALL, GENERATE_FINE_WIRE)
                 .components(Prisma, 1, TungstenSteel, 1)
@@ -109,10 +116,10 @@ public class CosmicMaterials {
                 .ingot()
                 .formula("⋖Tv⋗")
                 .liquid(new FluidBuilder().temperature(1500))
-                .color(0xdb5e5e).secondaryColor(0x5e0f3d).iconSet(MaterialIconSet.BRIGHT)
+                .color(0xfe2d2d).secondaryColor(0x353535).iconSet(CosmicMaterialSet.TRINAVINE)
                 .flags(GENERATE_BOLT_SCREW, GENERATE_ROUND, GENERATE_GEAR, GENERATE_SMALL_GEAR, GENERATE_RING,
-                        GENERATE_FRAME, GENERATE_SPRING, GENERATE_SPRING_SMALL, GENERATE_FINE_WIRE)
-                .cableProperties(GTValues.V[7], 4, 6)
+                        GENERATE_FRAME, GENERATE_SPRING, GENERATE_SPRING_SMALL, GENERATE_FINE_WIRE, GENERATE_DENSE)
+                .cableProperties(GTValues.V[7], 4, 3)
                 .blastTemp(5400, BlastProperty.GasTier.HIGHER, GTValues.VA[GTValues.LuV], 900)
                 .buildAndRegister();
 
@@ -162,7 +169,7 @@ public class CosmicMaterials {
                 .blastTemp(19000, BlastProperty.GasTier.HIGHEST, GTValues.VA[GTValues.UIV], 5600)
                 .buildAndRegister();
         Triphenylphosphine = new Material.Builder(CosmicCore.id("triphenylphosphine"))
-                .liquid(new FluidBuilder().temperature(19500))
+                .liquid(new FluidBuilder().temperature(300))
                 .color(0xfca103).secondaryColor(0xfcbe03).iconSet(MaterialIconSet.BRIGHT)
                 .buildAndRegister();
         // Misc Materials
@@ -171,7 +178,7 @@ public class CosmicMaterials {
                 .formula("⦽")
                 .blastTemp(8900)
                 .liquid(new FluidBuilder().temperature(7500))
-                .iconSet(CosmicMaterialSet.NEUTRONITE)
+                .color(0x80faf3).secondaryColor(0x8e2e2d).iconSet(CCoreMaterialIconSet.VIBRANIUM)
                 .flags(
                         GENERATE_PLATE,
                         GENERATE_DENSE,
