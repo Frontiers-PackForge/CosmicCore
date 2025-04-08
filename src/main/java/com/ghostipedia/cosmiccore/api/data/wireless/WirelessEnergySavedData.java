@@ -101,6 +101,7 @@ public class WirelessEnergySavedData extends SavedData {
     public CompoundTag save(@NotNull CompoundTag nbt) {
         var wirelessEnergyList = new ListTag();
         for (var entry : GlobalWirelessEnergy.entrySet()) {
+            if (entry.getKey() == null) continue;
             var tag = new CompoundTag();
             tag.putString("uuid", entry.getKey().toString());
             tag.put("energyData", entry.getValue().toNBT());

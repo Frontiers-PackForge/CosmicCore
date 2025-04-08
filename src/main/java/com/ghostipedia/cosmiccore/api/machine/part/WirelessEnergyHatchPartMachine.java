@@ -114,7 +114,7 @@ public class WirelessEnergyHatchPartMachine extends TieredIOPartMachine implemen
         if (getLevel() instanceof ServerLevel serverLevel) {
             if (io == IO.IN) {
                 var data = WirelessEnergySavedData.getOrCreate(serverLevel);
-                var owner = getHolder().getOwner().getUUID();
+                var owner = getOwnerUUID();
 
                 long euToTransfer = energyContainer.getEnergyCapacity() - energyContainer.getEnergyStored();
                 long euTransferred = data.addEUToGlobalWirelessEnergy(owner, -euToTransfer);
@@ -128,7 +128,7 @@ public class WirelessEnergyHatchPartMachine extends TieredIOPartMachine implemen
         IMachineLife.super.onMachineRemoved();
         if (getLevel() instanceof ServerLevel serverLevel) {
             var data = WirelessEnergySavedData.getOrCreate(serverLevel);
-            var owner = getHolder().getOwner().getUUID();
+            var owner = getOwnerUUID();
             data.removeEnergyBuffered(owner, getPos());
             if (io == IO.OUT) data.removeEnergyInput(owner, getPos());
             if (io == IO.IN) data.removeEnergyOutput(owner, getPos());
@@ -142,14 +142,14 @@ public class WirelessEnergyHatchPartMachine extends TieredIOPartMachine implemen
             if (isWorkingEnabled()) {
                 if (getOffsetTimer() % 20 == 0) {
                     var data = WirelessEnergySavedData.getOrCreate(serverLevel);
-                    var owner = getHolder().getOwner().getUUID();
+                    var owner = getOwnerUUID();
                     data.setEnergyBuffered(owner, getPos(), energyContainer.getEnergyStored());
                     if (io == IO.IN) data.setEnergyOutput(owner, getPos(), energyContainer.getOutputPerSec() / 20);
                     if (io == IO.OUT) data.setEnergyInput(owner, getPos(), energyContainer.getInputPerSec() / 20);
                 }
                 if (getOffsetTimer() % ticks_between_save_data_operations == 0) {
                     var data = WirelessEnergySavedData.getOrCreate(serverLevel);
-                    var owner = getHolder().getOwner().getUUID();
+                    var owner = getOwnerUUID();
 
                     if (data.isActive(owner)) {
                         if (io == IO.IN) {

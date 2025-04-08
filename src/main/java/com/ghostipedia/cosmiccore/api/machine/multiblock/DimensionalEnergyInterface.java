@@ -86,38 +86,47 @@ public class DimensionalEnergyInterface extends WorkableMultiblockMachine
         super.onStructureFormed();
         if (getLevel() instanceof DummyWorld) return;
 
+        initializeAbilities();
+        setEnergyBuffer();
+
+        tickSubscription.updateSubscription();
+    }
+
+    private void initializeAbilities() {
         List<IEnergyContainer> inputs = new ArrayList<>();
         List<IEnergyContainer> outputs = new ArrayList<>();
+
         Map<Long, IO> ioMap = getMultiblockState().getMatchContext().getOrCreate("ioMap", Long2ObjectMaps::emptyMap);
         for (IMultiPart part : getParts()) {
             IO io = ioMap.getOrDefault(part.self().getPos().asLong(), IO.BOTH);
             if (io == IO.NONE) continue;
-            if (part instanceof IMaintenanceMachine maintenanceMachine) this.maintenance = maintenanceMachine;
-            for (var handler : part.getRecipeHandlers()) {
-                var handlerIO = handler.getHandlerIO();
-                if (io != IO.BOTH && handlerIO != IO.BOTH && io != handlerIO) continue;
-                if (handler.getCapability() == EURecipeCapability.CAP &&
-                        handler instanceof IEnergyContainer container) {
-                    if (handlerIO == IO.IN) inputs.add(container);
-                    else if (handlerIO == IO.OUT) outputs.add(container);
-                    traitSubscriptions.add(handler.addChangedListener(tickSubscription::updateSubscription));
+
+            var handlerLists = part.getRecipeHandlers();
+            for (var handlerList : handlerLists) {
+                if (!handlerList.isValid(io)) continue;
+                if (handlerList.getHandlerIO() == IO.IN) {
+                    handlerList.getCapability(EURecipeCapability.CAP).stream()
+                            .filter(IEnergyContainer.class::isInstance)
+                            .map(IEnergyContainer.class::cast)
+                            .forEach(inputs::add);
+                } else if (handlerList.getHandlerIO() == IO.OUT) {
+                    handlerList.getCapability(EURecipeCapability.CAP).stream()
+                            .filter(IEnergyContainer.class::isInstance)
+                            .map(IEnergyContainer.class::cast)
+                            .forEach(outputs::add);
                 }
             }
         }
 
         this.inputHatches = new EnergyContainerList(inputs);
         this.outputHatches = new EnergyContainerList(outputs);
-
-        setEnergyBuffer();
-
-        tickSubscription.updateSubscription();
     }
 
     @Override
     public void onStructureInvalid() {
         if (getLevel() instanceof ServerLevel serverLevel) { // Transfer buffer content to avoid losses
             var data = WirelessEnergySavedData.getOrCreate(serverLevel);
-            var owner = getHolder().getOwner().getUUID();
+            var owner = getOwnerUUID();
             data.addEUToGlobalWirelessEnergy(owner, energyBuffer.getEnergyStored());
             energyBuffer.removeEnergy(energyBuffer.getEnergyStored());
             data.removeEnergyBuffered(owner, getPos());
@@ -210,7 +219,7 @@ public class DimensionalEnergyInterface extends WorkableMultiblockMachine
     protected void transferEnergyTick() {
         if (getLevel() instanceof ServerLevel serverLevel) {
             var data = WirelessEnergySavedData.getOrCreate(serverLevel);
-            var owner = getHolder().getOwner().getUUID();
+            var owner = getOwnerUUID();
             if (isWorkingEnabled() && isFormed()) {
                 if (getOffsetTimer() % 20 == 0) {
                     getRecipeLogic().setStatus((energyBuffer != null && energyBuffer.getEnergyStored() > 0) ?
@@ -278,7 +287,7 @@ public class DimensionalEnergyInterface extends WorkableMultiblockMachine
 
             if (energyBuffer != null) {
                 if (getLevel() instanceof ServerLevel serverLevel) {
-                    var owner = getHolder().getOwner().getUUID();
+                    var owner = getOwnerUUID();
                     var data = WirelessEnergySavedData.getOrCreate(serverLevel);
 
                     var STYLE_GOLD = Style.EMPTY.withColor(ChatFormatting.GOLD);

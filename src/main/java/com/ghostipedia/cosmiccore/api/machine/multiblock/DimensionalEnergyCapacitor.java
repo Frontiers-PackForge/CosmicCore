@@ -50,7 +50,7 @@ public class DimensionalEnergyCapacitor extends DimensionalEnergyInterface {
     @Override
     public void onStructureFormed() {
         if (getLevel() instanceof ServerLevel serverLevel) {
-            var owner = getHolder().getOwner().getUUID();
+            var owner = getOwnerUUID();
             var wirelessData = WirelessEnergySavedData.getOrCreate(serverLevel);
 
             // Make sure only one MB can exist per team
@@ -93,7 +93,7 @@ public class DimensionalEnergyCapacitor extends DimensionalEnergyInterface {
     public void onStructureInvalid() {
         super.onStructureInvalid();
         if (getLevel() instanceof ServerLevel serverLevel) {
-            var owner = getHolder().getOwner().getUUID();
+            var owner = getOwnerUUID();
             var wirelessData = WirelessEnergySavedData.getOrCreate(serverLevel);
             wirelessData.setActive(owner, false);
             wirelessData.removeCapacitorPosition(owner, getDimension(), getPos());
@@ -128,7 +128,7 @@ public class DimensionalEnergyCapacitor extends DimensionalEnergyInterface {
     public void setWorkingEnabled(boolean isWorkingAllowed) {
         super.setWorkingEnabled(isWorkingAllowed);
         if (getLevel() instanceof ServerLevel serverLevel) {
-            var owner = getHolder().getOwner().getUUID();
+            var owner = getOwnerUUID();
             var wirelessData = WirelessEnergySavedData.getOrCreate(serverLevel);
             wirelessData.setActive(owner, isWorkingAllowed);
         }

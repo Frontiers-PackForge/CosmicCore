@@ -1,7 +1,7 @@
 package com.ghostipedia.cosmiccore.utils;
 
 import com.gregtechceu.gtceu.common.machine.owner.FTBOwner;
-import com.gregtechceu.gtceu.common.machine.owner.IMachineOwner;
+import com.gregtechceu.gtceu.common.machine.owner.MachineOwner;
 import com.gregtechceu.gtceu.common.machine.owner.PlayerOwner;
 
 import net.minecraft.network.chat.Component;
@@ -20,7 +20,7 @@ public class OwnershipUtils {
         } else return "NaN";
     }
 
-    public static void addOwnerLine(List<Component> textList, IMachineOwner owner) {
+    public static void addOwnerLine(List<Component> textList, MachineOwner owner) {
         if (owner instanceof PlayerOwner playerOwner) {
             var name = UsernameCache.getLastKnownUsername(playerOwner.getUUID());
             textList.add(Component.translatable("behavior.wireless_data.owner.player", name));
