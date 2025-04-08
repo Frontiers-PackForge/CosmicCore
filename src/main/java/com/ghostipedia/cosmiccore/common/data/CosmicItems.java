@@ -528,11 +528,11 @@ public class CosmicItems {
 
     public static final ItemEntry<ComponentItem> WICKED_ESSENCE = REGISTRATE
             .item("wicked_essence", ComponentItem::create)
-            .lang("§5Wicked Essence")
+            .lang("Wicked Essence")
             .properties(p -> p.stacksTo(64))
             .onRegister(attach(new TooltipBehavior(lines -> {
                 lines.add(Component.literal(StringUtil
-                        .midnightOscillation(LocalizationUtils.format("cosmiccore.lore.broken_virtue.0"))));
+                        .goldFlicker(LocalizationUtils.format("cosmiccore.lore.broken_virtue.0"))));
             })))
             .defaultModel()
             .register();

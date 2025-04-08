@@ -52,6 +52,7 @@ import com.gregtechceu.gtceu.common.data.*;
 import com.gregtechceu.gtceu.common.data.machines.GTMultiMachines;
 import com.gregtechceu.gtceu.common.machine.multiblock.electric.ActiveTransformerMachine;
 import com.gregtechceu.gtceu.common.machine.multiblock.electric.FusionReactorMachine;
+import com.gregtechceu.gtceu.common.machine.multiblock.electric.PowerSubstationMachine;
 import com.gregtechceu.gtceu.common.registry.GTRegistration;
 import com.gregtechceu.gtceu.config.ConfigHolder;
 import com.gregtechceu.gtceu.utils.FormattingUtil;
@@ -85,6 +86,7 @@ import static com.gregtechceu.gtceu.common.data.GTRecipeModifiers.ELECTRIC_OVERC
 import static com.gregtechceu.gtceu.common.data.GTRecipeTypes.DUMMY_RECIPES;
 import static com.gregtechceu.gtceu.common.data.machines.GTMachineUtils.*;
 import static com.gregtechceu.gtceu.common.data.machines.GTMultiMachines.FUSION_REACTOR;
+import static com.gregtechceu.gtceu.common.data.machines.GTMultiMachines.POWER_SUBSTATION;
 import static com.klikli_dev.occultism.registry.OccultismBlocks.IESNIUM_BLOCK;
 import static wayoftime.bloodmagic.common.block.BloodMagicBlocks.BLANK_RUNE;
 
@@ -314,31 +316,8 @@ public class CosmicMachines {
             .multiblock("drygmy_grove", WorkableElectricMultiblockMachine::new)
             .rotationState(RotationState.NON_Y_AXIS)
             .recipeType(CosmicRecipeTypes.GROVE_RECIPES)
-            // .recipeModifiers(true,
-            // (machine, recipe, OCParams, OCResult) -> {
-            // if (machine instanceof IRecipeCapabilityHolder holder) {
-            // // Find all the items in the combined Item Input inventories and create oversized ItemStacks
-            // Object2IntMap<ItemStack> ingredientStacks =
-            // Objects.requireNonNullElseGet(holder.getCapabilitiesProxy().get(IO.IN, ItemRecipeCapability.CAP),
-            // Collections::<IRecipeHandler<?>>emptyList)
-            // .stream()
-            // .map(container ->
-            // container.getContents().stream().filter(ItemStack.class::isInstance).map(ItemStack.class::cast).toList())
-            // .flatMap(container -> GTHashMaps.fromItemStackCollection(container).object2IntEntrySet().stream())
-            // .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, Integer::sum, () -> new
-            // Object2IntOpenCustomHashMap<>(ItemStackHashStrategy.comparingAllButCount())));
-            // ItemStack stack = new ItemStack(BuiltInRegistries.ITEM.get(new
-            // ResourceLocation("ars_nouveau:drygmy_charm")));
-            // //Never let the multiplier be 0 (THIS IS NOT ACTUALLY PARALLEL, It's just being used to to some goober
-            // grade math)
-            // if (ingredientStacks.getInt(stack) >= 1) {
-            // var maxParallel = ingredientStacks.getInt(stack) / 2;
-            // recipe = copyOutputs(recipe, ContentModifier.multiplier(maxParallel));
-            // }
-            // }
-            // return recipe;
-            // },
-            // GTRecipeModifiers.ELECTRIC_OVERCLOCK.apply(OverclockingLogic.NON_PERFECT_OVERCLOCK))
+            .recipeModifiers(CosmicRecipeModifiers::groveMulti,
+                    ELECTRIC_OVERCLOCK.apply(OverclockingLogic.NON_PERFECT_OVERCLOCK))
             .appearanceBlock(GTBlocks.CASING_STAINLESS_CLEAN)
             .pattern(definition -> FactoryBlockPattern.start()
                     .aisle("##QQQ##", "##QQQ##", "#######", "#######", "#######", "##QQQ##", "##QQQ##")
@@ -3313,10 +3292,22 @@ public class CosmicMachines {
 
     public static final MultiblockMachineDefinition DIMENSIONAL_ENERGY_CAPACITOR = REGISTRATE
             .multiblock("dimensional_energy_capacitor", DimensionalEnergyCapacitor::new)
-            .langValue("Dimensional Energy Capacitor")
+            .langValue("Power Substation")
             .rotationState(RotationState.ALL)
             .recipeType(GTRecipeTypes.DUMMY_RECIPES)
             .appearanceBlock(CASING_PALLADIUM_SUBSTATION)
+            .tooltips(Component.translatable("gtceu.machine.power_substation.tooltip.0"),
+                    Component.translatable("gtceu.machine.power_substation.tooltip.1"),
+                    Component.translatable("gtceu.machine.power_substation.tooltip.2",
+                            PowerSubstationMachine.MAX_BATTERY_LAYERS),
+                    Component.translatable("gtceu.machine.power_substation.tooltip.3"),
+                    Component.translatable("gtceu.machine.power_substation.tooltip.4",
+                            PowerSubstationMachine.PASSIVE_DRAIN_MAX_PER_STORAGE / 1000),
+                    Component.translatable("gtceu.machine.dec.tooltip.0"),
+                    Component.translatable("gtceu.machine.dec.tooltip.1"),
+                    Component.translatable("gtceu.machine.dec.tooltip.2"),
+                    Component.translatable("gtceu.machine.dec.tooltip.3")
+            )
             .pattern(definition -> FactoryBlockPattern.start(RIGHT, BACK, UP)
                     .aisle("XXSXX", "XXXXX", "XXXXX", "XXXXX", "XXXXX")
                     .aisle("XXXXX", "XCCCX", "XCCCX", "XCCCX", "XXXXX")
@@ -3373,10 +3364,10 @@ public class CosmicMachines {
 
     public static final MultiblockMachineDefinition DIMENSIONAL_ENERGY_INTERFACE = REGISTRATE
             .multiblock("dimensional_energy_interface", DimensionalEnergyInterface::new)
-            .langValue("Dimensional Energy Interface")
+            .langValue("Power Substation Dimensional Interface")
             .rotationState(RotationState.ALL)
             .recipeType(GTRecipeTypes.DUMMY_RECIPES)
-            .appearanceBlock(CASING_PALLADIUM_SUBSTATION)
+            .appearanceBlock(TRITANIUM_LINED_HEAVY_NEUTRONIUM_CASING)
             .tooltips(Component.translatable("gtceu.machine.active_transformer.tooltip.0"),
                     Component.translatable("gtceu.machine.active_transformer.tooltip.1"))
             .tooltipBuilder(
@@ -3384,17 +3375,18 @@ public class CosmicMachines {
                      components) -> components.add(Component.translatable("gtceu.machine.active_transformer.tooltip.2")
                              .append(Component.translatable("gtceu.machine.active_transformer.tooltip.3")
                                      .withStyle(TooltipHelper.RAINBOW_HSL_SLOW))))
+            .tooltips(Component.translatable("gtceu.machine.dec.tooltip.4"))
             .pattern((definition) -> FactoryBlockPattern.start()
                     .aisle("XXX", "XXX", "XXX")
                     .aisle("XXX", "XCX", "XXX")
                     .aisle("XMX", "XSX", "XXX")
                     .where('S', controller(blocks(definition.getBlock())))
-                    .where('X', blocks(CASING_PALLADIUM_SUBSTATION.get()).setMinGlobalLimited(12)
+                    .where('X', blocks(TRITANIUM_LINED_HEAVY_NEUTRONIUM_CASING.get()).setMinGlobalLimited(12)
                             .or(ActiveTransformerMachine.getHatchPredicates()))
                     .where('C', blocks(GTBlocks.SUPERCONDUCTING_COIL.get()))
-                    .where('M', blocks(CASING_PALLADIUM_SUBSTATION.get()).or(autoAbilities(true, false, false)))
+                    .where('M', blocks(TRITANIUM_LINED_HEAVY_NEUTRONIUM_CASING.get()).or(autoAbilities(true, false, false)))
                     .build())
-            .workableCasingRenderer(GTCEu.id("block/casings/solid/machine_casing_palladium_substation"),
+            .workableCasingRenderer(CosmicCore.id("block/casings/solid/tritanium_lined_heavy_bolted_neutronium_casing"),
                     GTCEu.id("block/multiblock/data_bank"))
             .register();
 
@@ -3432,6 +3424,28 @@ public class CosmicMachines {
             .workableCasingRenderer(GTCEu.id("block/casings/hpca/high_power_casing"),
                     CosmicCore.id("block/multiblock/wireless_data_transmitter"))
             .register();
+    public static final MultiblockMachineDefinition LOCAL_POWER_CAPACITOR = REGISTRATE
+            .multiblock("capacitor_array", PowerSubstationMachine::new)
+            .langValue("Capacitor Array")
+            .rotationState(RotationState.NON_Y_AXIS)
+            .appearanceBlock(HIGH_POWER_CASING)
+            .recipeType(GTRecipeTypes.DUMMY_RECIPES)
+            .pattern(definition -> FactoryBlockPattern.start(RIGHT,BACK,UP)
+                    .aisle("AAA", "AAC", "AAA")
+                    .aisle("ABA", "BDB", "ABA")
+                    .setRepeatable(1, PowerSubstationMachine.MAX_BATTERY_LAYERS)
+                    .aisle("AAA", "AAA", "AAA")
+                    .where("C", controller(blocks(definition.getBlock())))
+                    .where("A", blocks(HIGH_POWER_CASING.get())
+                            .or(abilities(PartAbility.INPUT_LASER,PartAbility.INPUT_ENERGY
+                    ,PartAbility.OUTPUT_ENERGY,PartAbility.OUTPUT_LASER)
+                                    .or(abilities(PartAbility.MAINTENANCE)).setExactLimit(1)))
+                    .where("D", Predicates.powerSubstationBatteries())
+                    .where("B", blocks(CASING_LAMINATED_GLASS.get()))
+                    .build())
+            .workableCasingRenderer(GTCEu.id("block/casings/solid/machine_casing_palladium_substation"),
+                    GTCEu.id("block/multiblock/power_substation"))
+            .register();
 
     public static final MachineDefinition WIRELESS_DATA_HATCH = REGISTRATE
             .machine("wireless_data_hatch", WirelessDataHatchPartMachine::new)
@@ -3445,6 +3459,8 @@ public class CosmicMachines {
     public static void init() {
         GTMultiMachines.LARGE_COMBUSTION_ENGINE.setRecipeTypes(new GTRecipeType[] { DUMMY_RECIPES });
         GTMultiMachines.EXTREME_COMBUSTION_ENGINE.setRecipeTypes(new GTRecipeType[] { DUMMY_RECIPES });
+        POWER_SUBSTATION.setRenderXEIPreview(false);
+        POWER_SUBSTATION.setRenderWorldPreview(false);
         for (MultiblockMachineDefinition definition : FUSION_REACTOR) {
             if (definition == null) continue;
             definition.setPatternFactory(() -> {

@@ -228,6 +228,13 @@ public class CosmicLangHandler {
         provider.add("cosmic.multiblock.capacitor.duplicate.multiblock.1", "This multiblock is a duplicate");
         provider.add("cosmic.multiblock.capacitor.duplicate.multiblock.2", "Only one can exist");
 
+        //Dimensional Energy Tooltip
+        provider.add("gtceu.machine.dec.tooltip.0", "Stores power in an interdimensional pocket.");
+        provider.add("gtceu.machine.dec.tooltip.1", "Can send/receive power to/from §bPower Substation Dimensional Interfaces");
+        provider.add("gtceu.machine.dec.tooltip.2", "Can only create §cONE§r Power Substation per team/player.");
+        provider.add("gtceu.machine.dec.tooltip.3", "§cDuplicates will not function.");
+        provider.add("gtceu.machine.dec.tooltip.4", "§7Can Insert and Extract from your wireless networked linked to your §aPower Substation§r");
+
         // Wireless Energy Command
         provider.add("cosmic.command.wireless.energy.player", "§aPlayer:§a %s");
         provider.add("cosmic.command.wireless.energy.team", "§aTeam:§a %s");
