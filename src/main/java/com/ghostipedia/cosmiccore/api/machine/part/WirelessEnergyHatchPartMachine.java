@@ -9,8 +9,8 @@ import com.gregtechceu.gtceu.api.machine.TickableSubscription;
 import com.gregtechceu.gtceu.api.machine.feature.IMachineLife;
 import com.gregtechceu.gtceu.api.machine.multiblock.part.TieredIOPartMachine;
 import com.gregtechceu.gtceu.api.machine.trait.NotifiableEnergyContainer;
-
 import com.gregtechceu.gtceu.utils.FormattingUtil;
+
 import com.lowdragmc.lowdraglib.syncdata.ISubscription;
 import com.lowdragmc.lowdraglib.syncdata.annotation.Persisted;
 import com.lowdragmc.lowdraglib.syncdata.field.ManagedFieldHolder;
@@ -22,16 +22,15 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.inventory.tooltip.TooltipComponent;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.BlockHitResult;
 
 import lombok.Getter;
 
+import java.util.ArrayList;
+
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
-import java.util.ArrayList;
-import java.util.List;
 
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
@@ -184,13 +183,11 @@ public class WirelessEnergyHatchPartMachine extends TieredIOPartMachine implemen
                 FormattingUtil.formatNumbers(getEnergyCapacity(tier, amperage))));
 
         if (io == IO.IN) {
-            tooltip.add(Component.translatable(amperage > 1
-                    ? "gtceu.machine.energy_hatch.input_hi_amp.tooltip"
-                    : "gtceu.machine.energy_hatch.input.tooltip"));
+            tooltip.add(Component.translatable(amperage > 1 ? "gtceu.machine.energy_hatch.input_hi_amp.tooltip" :
+                    "gtceu.machine.energy_hatch.input.tooltip"));
         } else if (io == IO.OUT) {
-            tooltip.add(Component.translatable(amperage > 1
-                    ? "gtceu.machine.energy_hatch.output_hi_amp.tooltip"
-                    : "gtceu.machine.energy_hatch.output.tooltip"));
+            tooltip.add(Component.translatable(amperage > 1 ? "gtceu.machine.energy_hatch.output_hi_amp.tooltip" :
+                    "gtceu.machine.energy_hatch.output.tooltip"));
         }
 
         return tooltip.toArray(new Component[0]);

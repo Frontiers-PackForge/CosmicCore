@@ -17,7 +17,6 @@ import com.mojang.brigadier.context.CommandContext;
 import dev.ftb.mods.ftbteams.api.FTBTeamsAPI;
 import dev.ftb.mods.ftbteams.api.Team;
 import dev.ftb.mods.ftbteams.data.TeamArgument;
-import org.apache.logging.log4j.core.config.builder.api.ComponentBuilder;
 
 import java.util.UUID;
 import java.util.function.BiFunction;
@@ -83,13 +82,25 @@ public class WirelessEnergyCommand {
         var wirelessData = WirelessEnergySavedData.getOrCreate(serverLevel);
 
         var message = Component.translatable("cosmic.command.wireless.energy.header", ownerName).append("\n")
-            .append(Component.translatable("cosmic.command.wireless.energy.capacity", FormattingUtil.formatNumbers(wirelessData.getEnergyCapacity(owner)))).append("\n")
-            .append(Component.translatable("cosmic.command.wireless.energy.stored", FormattingUtil.formatNumbers(wirelessData.getEnergyStored(owner)))).append("\n")
-            .append(Component.translatable("cosmic.command.wireless.energy.input", FormattingUtil.formatNumbers(wirelessData.getEnergyInput(owner)))).append("\n")
-            .append(Component.translatable("cosmic.command.wireless.energy.output", FormattingUtil.formatNumbers(wirelessData.getEnergyOutput(owner)))).append("\n")
-            .append(Component.translatable("cosmic.command.wireless.energy.buffered", FormattingUtil.formatNumbers(wirelessData.getEnergyBuffered(owner)))).append("\n")
-            .append(Component.translatable("cosmic.command.wireless.energy.active", wirelessData.isActive(owner))).append("\n")
-            .append(Component.translatable("cosmic.command.wireless.energy.capacitor")).append(getLocationString(serverLevel, owner));
+                .append(Component.translatable("cosmic.command.wireless.energy.capacity",
+                        FormattingUtil.formatNumbers(wirelessData.getEnergyCapacity(owner))))
+                .append("\n")
+                .append(Component.translatable("cosmic.command.wireless.energy.stored",
+                        FormattingUtil.formatNumbers(wirelessData.getEnergyStored(owner))))
+                .append("\n")
+                .append(Component.translatable("cosmic.command.wireless.energy.input",
+                        FormattingUtil.formatNumbers(wirelessData.getEnergyInput(owner))))
+                .append("\n")
+                .append(Component.translatable("cosmic.command.wireless.energy.output",
+                        FormattingUtil.formatNumbers(wirelessData.getEnergyOutput(owner))))
+                .append("\n")
+                .append(Component.translatable("cosmic.command.wireless.energy.buffered",
+                        FormattingUtil.formatNumbers(wirelessData.getEnergyBuffered(owner))))
+                .append("\n")
+                .append(Component.translatable("cosmic.command.wireless.energy.active", wirelessData.isActive(owner)))
+                .append("\n")
+                .append(Component.translatable("cosmic.command.wireless.energy.capacitor"))
+                .append(getLocationString(serverLevel, owner));
 
         return message;
     }
@@ -99,7 +110,8 @@ public class WirelessEnergyCommand {
         var location = wirelessData.getCapacitorPosition(owner);
         var pos = location != null ? location.getB() : null;
         return location != null ?
-                Component.translatable("cosmic.command.wireless.energy.location.format", location.getA(), pos.getX(), pos.getY(), pos.getZ()) :
+                Component.translatable("cosmic.command.wireless.energy.location.format", location.getA(), pos.getX(),
+                        pos.getY(), pos.getZ()) :
                 Component.translatable("cosmic.command.wireless.energy.no.capacitor");
     }
 

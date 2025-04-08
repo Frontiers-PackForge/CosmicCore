@@ -8,7 +8,6 @@ import net.minecraft.network.chat.Component;
 import net.minecraftforge.common.UsernameCache;
 
 import java.util.List;
-import java.util.UUID;
 
 public class OwnershipUtils {
 
