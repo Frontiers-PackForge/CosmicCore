@@ -3306,8 +3306,7 @@ public class CosmicMachines {
                     Component.translatable("gtceu.machine.dec.tooltip.0"),
                     Component.translatable("gtceu.machine.dec.tooltip.1"),
                     Component.translatable("gtceu.machine.dec.tooltip.2"),
-                    Component.translatable("gtceu.machine.dec.tooltip.3")
-            )
+                    Component.translatable("gtceu.machine.dec.tooltip.3"))
             .pattern(definition -> FactoryBlockPattern.start(RIGHT, BACK, UP)
                     .aisle("XXSXX", "XXXXX", "XXXXX", "XXXXX", "XXXXX")
                     .aisle("XXXXX", "XCCCX", "XCCCX", "XCCCX", "XXXXX")
@@ -3384,7 +3383,8 @@ public class CosmicMachines {
                     .where('X', blocks(TRITANIUM_LINED_HEAVY_NEUTRONIUM_CASING.get()).setMinGlobalLimited(12)
                             .or(ActiveTransformerMachine.getHatchPredicates()))
                     .where('C', blocks(GTBlocks.SUPERCONDUCTING_COIL.get()))
-                    .where('M', blocks(TRITANIUM_LINED_HEAVY_NEUTRONIUM_CASING.get()).or(autoAbilities(true, false, false)))
+                    .where('M',
+                            blocks(TRITANIUM_LINED_HEAVY_NEUTRONIUM_CASING.get()).or(autoAbilities(true, false, false)))
                     .build())
             .workableCasingRenderer(CosmicCore.id("block/casings/solid/tritanium_lined_heavy_bolted_neutronium_casing"),
                     GTCEu.id("block/multiblock/data_bank"))
@@ -3430,15 +3430,15 @@ public class CosmicMachines {
             .rotationState(RotationState.NON_Y_AXIS)
             .appearanceBlock(HIGH_POWER_CASING)
             .recipeType(GTRecipeTypes.DUMMY_RECIPES)
-            .pattern(definition -> FactoryBlockPattern.start(RIGHT,BACK,UP)
+            .pattern(definition -> FactoryBlockPattern.start(RIGHT, BACK, UP)
                     .aisle("AAA", "AAC", "AAA")
                     .aisle("ABA", "BDB", "ABA")
                     .setRepeatable(1, PowerSubstationMachine.MAX_BATTERY_LAYERS)
                     .aisle("AAA", "AAA", "AAA")
                     .where("C", controller(blocks(definition.getBlock())))
                     .where("A", blocks(HIGH_POWER_CASING.get())
-                            .or(abilities(PartAbility.INPUT_LASER,PartAbility.INPUT_ENERGY
-                    ,PartAbility.OUTPUT_ENERGY,PartAbility.OUTPUT_LASER)
+                            .or(abilities(PartAbility.INPUT_LASER, PartAbility.INPUT_ENERGY, PartAbility.OUTPUT_ENERGY,
+                                    PartAbility.OUTPUT_LASER)
                                     .or(abilities(PartAbility.MAINTENANCE)).setExactLimit(1)))
                     .where("D", Predicates.powerSubstationBatteries())
                     .where("B", blocks(CASING_LAMINATED_GLASS.get()))
