@@ -3428,15 +3428,18 @@ public class CosmicMachines {
             .multiblock("capacitor_array", PowerSubstationMachine::new)
             .langValue("Capacitor Array")
             .rotationState(RotationState.NON_Y_AXIS)
-            .appearanceBlock(HIGH_POWER_CASING)
+            .appearanceBlock(CASING_PALLADIUM_SUBSTATION)
             .recipeType(GTRecipeTypes.DUMMY_RECIPES)
+            .tooltips(Component.translatable("cosmiccore.machine.capacitor_array.tooltip.0"),
+                    Component.translatable("cosmiccore.machine.capacitor_array.tooltip.1"),
+                    Component.translatable("cosmiccore.machine.capacitor_array.tooltip.2"))
             .pattern(definition -> FactoryBlockPattern.start(RIGHT, BACK, UP)
-                    .aisle("AAA", "AAC", "AAA")
+                    .aisle("ACA", "AAA", "AAA")
                     .aisle("ABA", "BDB", "ABA")
                     .setRepeatable(1, PowerSubstationMachine.MAX_BATTERY_LAYERS)
                     .aisle("AAA", "AAA", "AAA")
                     .where("C", controller(blocks(definition.getBlock())))
-                    .where("A", blocks(HIGH_POWER_CASING.get())
+                    .where("A", blocks(CASING_PALLADIUM_SUBSTATION.get())
                             .or(abilities(PartAbility.INPUT_LASER, PartAbility.INPUT_ENERGY, PartAbility.OUTPUT_ENERGY,
                                     PartAbility.OUTPUT_LASER)
                                     .or(abilities(PartAbility.MAINTENANCE)).setExactLimit(1)))

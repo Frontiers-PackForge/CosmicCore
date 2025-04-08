@@ -237,6 +237,12 @@ public class CosmicLangHandler {
         provider.add("gtceu.machine.dec.tooltip.4",
                 "§7Can Insert and Extract from your wireless networked linked to your §aPower Substation§r");
 
+        provider.add("cosmiccore.machine.capacitor_array.tooltip.0",
+                "§7Local Dense Power Storage§r");
+        provider.add("cosmiccore.machine.capacitor_array.tooltip.1",
+                "§7Can use any capacitor and be expanded vertically up to 18 times§r");
+        provider.add("cosmiccore.machine.capacitor_array.tooltip.2",
+                "§7Accepts §6Laser Hatches§r");
         // Wireless Energy Command
         provider.add("cosmic.command.wireless.energy.player", "§aPlayer:§a %s");
         provider.add("cosmic.command.wireless.energy.team", "§aTeam:§a %s");
