@@ -3458,9 +3458,13 @@ public class CosmicMachines {
 
     public static void init() {
         GTMultiMachines.LARGE_COMBUSTION_ENGINE.setRecipeTypes(new GTRecipeType[] { DUMMY_RECIPES });
+        GTMultiMachines.LARGE_COMBUSTION_ENGINE.setRenderXEIPreview(false);
+        GTMultiMachines.LARGE_COMBUSTION_ENGINE.setRenderWorldPreview(false);
         GTMultiMachines.EXTREME_COMBUSTION_ENGINE.setRecipeTypes(new GTRecipeType[] { DUMMY_RECIPES });
-        POWER_SUBSTATION.setRenderXEIPreview(false);
-        POWER_SUBSTATION.setRenderWorldPreview(false);
+        GTMultiMachines.EXTREME_COMBUSTION_ENGINE.setRenderXEIPreview(false);
+        GTMultiMachines.EXTREME_COMBUSTION_ENGINE.setRenderWorldPreview(false);
+        GTMultiMachines.POWER_SUBSTATION.setRenderXEIPreview(false);
+        GTMultiMachines.POWER_SUBSTATION.setRenderWorldPreview(false);
         for (MultiblockMachineDefinition definition : FUSION_REACTOR) {
             if (definition == null) continue;
             definition.setPatternFactory(() -> {
