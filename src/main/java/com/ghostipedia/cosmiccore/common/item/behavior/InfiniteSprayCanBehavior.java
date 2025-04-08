@@ -17,6 +17,9 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.network.chat.Style;
+import net.minecraft.network.chat.TextColor;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.util.FastColor;
@@ -48,6 +51,7 @@ import lombok.Setter;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import javax.swing.plaf.multi.MultiTabbedPaneUI;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -61,49 +65,64 @@ public class InfiniteSprayCanBehavior implements IInteractionItem, IAddInformati
     @Getter
     @Setter
     private Boolean isLocked;
+    boolean isSwinging;
+
     public InfiniteSprayCanBehavior(int color) {
         DyeColor[] colors = DyeColor.values();
         this.color = color >= colors.length || color < 0 ? null : colors[color];
         int colorValue = this.color == null ? 0x969696 : this.color.getTextColor();
-        this.isLocked = isLocked;
     }
-
 
     @Override
     public InteractionResult onItemUseFirst(ItemStack itemStack, @NotNull UseOnContext context) {
+        isSwinging = false;
+
         var player = context.getPlayer();
         var level = context.getLevel();
         var pos = context.getClickedPos();
-        int maxBlocksToRecolor = Math.max(1,
-                player != null && player.isShiftKeyDown() ? ConfigHolder.INSTANCE.tools.sprayCanChainLength : 1);
-        if (player != null) {
-            var first = level.getBlockEntity(pos);
-            //middle mouse handler
-            //todo middle mouse handler
-            if (first == null || !handleSpecialBlockEntities(first, maxBlocksToRecolor, context)) {
-                handleBlocks(pos, maxBlocksToRecolor, context);
-            }
-            GTSoundEntries.SPRAY_CAN_TOOL.play(level, null, player.position(), 1.0f, 1.0f);
-            return InteractionResult.SUCCESS;
+        boolean isClient = level.isClientSide();
+        System.out.println(isClient);
+
+        int maxBlocksToRecolor = Math.max(1,player.isCrouching() ? ConfigHolder.INSTANCE.tools.sprayCanChainLength : 1);
+        var first = level.getBlockEntity(pos);
+        //middle mouse handler
+        //todo middle mouse handler
+        if (first == null || !handleSpecialBlockEntities(first, maxBlocksToRecolor, context)) {
+            handleBlocks(pos, maxBlocksToRecolor, context);
         }
-        return InteractionResult.PASS;
+        GTSoundEntries.SPRAY_CAN_TOOL.play(level, null, player.position(), 1.0f, 1.0f);
+        return InteractionResult.SUCCESS;
     }
+
+
 
     @Override
     public boolean onEntitySwing(ItemStack stack, LivingEntity entity){
     if (entity instanceof Player player) {
-        if (player.isShiftKeyDown()) {
-            int nextColor = (color.ordinal() + 1) % DyeColor.values().length;
-            this.color = DyeColor.values()[nextColor * -1];
-            return false;
+        boolean isClient = player.level().isClientSide();
+        System.out.println(isClient);
+        if(!isSwinging){
+            isSwinging = true;
+            return true;
         }
-        else {
-            int nextColor = (color.ordinal() + 1) % DyeColor.values().length;
-            this.color = DyeColor.values()[nextColor];
-            return false;
-        }
+
+
+        int nextColor = player.isCrouching()
+                ? (color.ordinal() - 1 + DyeColor.values().length) % DyeColor.values().length
+                : (color.ordinal() + 1) % DyeColor.values().length;
+        this.color = DyeColor.values()[nextColor];
+
+        //message to action bar
+        MutableComponent message = Component.literal("Spray Can Color is: ");
+        MutableComponent colorComponent = Component.literal(color.toString())
+                .setStyle(Style.EMPTY.withColor(TextColor.fromRgb(color.getTextColor())));
+        message.append(colorComponent);
+
+        player.displayClientMessage(message, true);
+        return false;
     }
     return true;
+
 }
 
 
