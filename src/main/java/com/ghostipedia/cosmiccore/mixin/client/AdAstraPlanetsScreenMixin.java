@@ -18,7 +18,7 @@ import java.util.Set;
 public class AdAstraPlanetsScreenMixin {
 
     @Unique
-    Set<ResourceKey<Level>> noLand = Set.of(Planet.MOON);
+    Set<ResourceKey<Level>> noLand = Set.of(); //Add the planets where the land button should not show up, ex: Planet.MOON
 
     @Shadow
     private Planet selectedPlanet;
