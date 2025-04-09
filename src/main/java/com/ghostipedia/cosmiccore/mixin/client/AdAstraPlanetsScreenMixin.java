@@ -1,5 +1,7 @@
 package com.ghostipedia.cosmiccore.mixin.client;
 
+import com.ghostipedia.cosmiccore.api.misc.PlanetKeys;
+
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.level.Level;
 
@@ -18,8 +20,8 @@ import java.util.Set;
 public class AdAstraPlanetsScreenMixin {
 
     @Unique
-    Set<ResourceKey<Level>> noLand = Set.of(); // Add the planets where the land button should not show up
-                                               // ex: Planet.MOON
+    Set<ResourceKey<Level>> noLand = Set.of(PlanetKeys.SUN); // Add the planets where the land button should not show up
+    // ex: Planet.MOON
 
     @Shadow
     private Planet selectedPlanet;
