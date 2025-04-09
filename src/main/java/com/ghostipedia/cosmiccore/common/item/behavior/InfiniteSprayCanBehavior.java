@@ -12,6 +12,7 @@ import com.gregtechceu.gtceu.config.ConfigHolder;
 import com.gregtechceu.gtceu.data.recipe.CustomTags;
 import com.gregtechceu.gtceu.utils.BreadthFirstBlockSearch;
 
+import com.lowdragmc.lowdraglib.syncdata.annotation.DescSynced;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -65,7 +66,9 @@ public class InfiniteSprayCanBehavior implements IInteractionItem, IAddInformati
     @Getter
     @Setter
     private Boolean isLocked;
-    boolean isSwinging;
+
+    @DescSynced
+    boolean isSwinging = true;
 
     public InfiniteSprayCanBehavior(int color) {
         DyeColor[] colors = DyeColor.values();
@@ -76,13 +79,10 @@ public class InfiniteSprayCanBehavior implements IInteractionItem, IAddInformati
     @Override
     public InteractionResult onItemUseFirst(ItemStack itemStack, @NotNull UseOnContext context) {
         isSwinging = false;
-
         var player = context.getPlayer();
         var level = context.getLevel();
         var pos = context.getClickedPos();
         boolean isClient = level.isClientSide();
-        System.out.println(isClient);
-
         int maxBlocksToRecolor = Math.max(1,player.isCrouching() ? ConfigHolder.INSTANCE.tools.sprayCanChainLength : 1);
         var first = level.getBlockEntity(pos);
         //middle mouse handler
@@ -91,22 +91,21 @@ public class InfiniteSprayCanBehavior implements IInteractionItem, IAddInformati
             handleBlocks(pos, maxBlocksToRecolor, context);
         }
         GTSoundEntries.SPRAY_CAN_TOOL.play(level, null, player.position(), 1.0f, 1.0f);
-        return InteractionResult.SUCCESS;
+        return InteractionResult.PASS;
     }
 
 
 
     @Override
     public boolean onEntitySwing(ItemStack stack, LivingEntity entity){
-    if (entity instanceof Player player) {
-        boolean isClient = player.level().isClientSide();
-        System.out.println(isClient);
+
         if(!isSwinging){
             isSwinging = true;
             return true;
         }
-
-
+        if (entity instanceof Player player) {
+        boolean isClient = player.level().isClientSide();
+        //does the crouch swap code
         int nextColor = player.isCrouching()
                 ? (color.ordinal() - 1 + DyeColor.values().length) % DyeColor.values().length
                 : (color.ordinal() + 1) % DyeColor.values().length;
