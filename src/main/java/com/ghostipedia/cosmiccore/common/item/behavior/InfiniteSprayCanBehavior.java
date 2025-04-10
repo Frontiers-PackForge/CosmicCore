@@ -14,6 +14,7 @@ import com.gregtechceu.gtceu.utils.BreadthFirstBlockSearch;
 
 import com.lowdragmc.lowdraglib.syncdata.annotation.DescSynced;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.color.item.ItemColor;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -58,7 +59,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.function.BiPredicate;
 
-public class InfiniteSprayCanBehavior implements IInteractionItem, IAddInformation {
+public class InfiniteSprayCanBehavior implements IInteractionItem, IAddInformation, ItemColor {
 
     @Getter
     @Setter
@@ -69,6 +70,25 @@ public class InfiniteSprayCanBehavior implements IInteractionItem, IAddInformati
 
     @DescSynced
     boolean isSwinging = true;
+
+
+    @Override
+    public int getColor(ItemStack itemStack, int i) {
+        DyeColor stackColor = getColorFromStack(itemStack);
+        return stackColor.getTextColor();
+    }
+
+    public static DyeColor getColorFromStack(ItemStack stack) {
+        if (stack.hasTag() && stack.getTag().contains("Color")) {
+            return DyeColor.byId(stack.getTag().getInt("Color"));
+        }
+        return DyeColor.GRAY; // default
+    }
+
+
+    public static void setColorToStack(ItemStack stack, DyeColor color) {
+        stack.getOrCreateTag().putInt("Color", color.getId());
+    }
 
     public InfiniteSprayCanBehavior(int color) {
         DyeColor[] colors = DyeColor.values();
@@ -87,13 +107,13 @@ public class InfiniteSprayCanBehavior implements IInteractionItem, IAddInformati
         var first = level.getBlockEntity(pos);
         //middle mouse handler
         //todo middle mouse handler
+
         if (first == null || !handleSpecialBlockEntities(first, maxBlocksToRecolor, context)) {
             handleBlocks(pos, maxBlocksToRecolor, context);
         }
         GTSoundEntries.SPRAY_CAN_TOOL.play(level, null, player.position(), 1.0f, 1.0f);
         return InteractionResult.PASS;
     }
-
 
 
     @Override
@@ -106,10 +126,12 @@ public class InfiniteSprayCanBehavior implements IInteractionItem, IAddInformati
         if (entity instanceof Player player) {
         boolean isClient = player.level().isClientSide();
         //does the crouch swap code
+
         int nextColor = player.isCrouching()
                 ? (color.ordinal() - 1 + DyeColor.values().length) % DyeColor.values().length
                 : (color.ordinal() + 1) % DyeColor.values().length;
         this.color = DyeColor.values()[nextColor];
+        setColorToStack(stack, this.color);
 
         //message to action bar
         MutableComponent message = Component.literal("Spray Can Color is: ");
@@ -486,6 +508,7 @@ public class InfiniteSprayCanBehavior implements IInteractionItem, IAddInformati
         return paintablePredicate.test(parent.getMetaMachine(), child.getMetaMachine()) &&
                 parent.getMetaMachine().getDefinition().equals(child.getMetaMachine().getDefinition());
     };
+
 
     private static class AE2CallWrapper {
 

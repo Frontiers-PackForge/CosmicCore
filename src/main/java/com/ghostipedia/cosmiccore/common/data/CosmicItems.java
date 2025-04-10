@@ -887,6 +887,7 @@ public class CosmicItems {
             .tag()
             .properties(p -> p.stacksTo(1))
             .onRegister(attach(new InfiniteSprayCanBehavior(1)))
+            .defaultModel()
             .register();
 
     public static <T extends ComponentItem> NonNullConsumer<T> attach(IItemComponent... components) {
