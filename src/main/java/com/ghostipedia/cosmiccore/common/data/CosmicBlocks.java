@@ -16,6 +16,7 @@ import com.gregtechceu.gtceu.client.renderer.block.TextureOverrideRenderer;
 import com.gregtechceu.gtceu.common.block.CoilBlock;
 import com.gregtechceu.gtceu.common.data.GTModels;
 
+import com.gregtechceu.gtceu.common.registry.GTRegistration;
 import com.lowdragmc.lowdraglib.Platform;
 import com.lowdragmc.lowdraglib.client.renderer.IRenderer;
 
@@ -144,10 +145,23 @@ public class CosmicBlocks {
     public static final BlockEntry<Block> BLOOD_CUBE = createCasingBlock(
             "blood_cube", CosmicCore.id("block/iris/bloodcube"));
 
+    //GLASS BLOCKS
+    public static final BlockEntry<Block> ZBLAN_REINFORCED_GLASS = createGlassCasingBlock(
+            "zbland_glass", CosmicCore.id("block/casings/glass/zbland_glass"), () -> RenderType::translucent);
+
     // This is a Bunch of Rendering Magic I barely understand (See: I Don't understand at all) ~Ghost
     private static BlockEntry<Block> createGlassCasingBlock(String name, ResourceLocation texture,
                                                             Supplier<Supplier<RenderType>> type) {
-        return createCasingBlock(name, GlassBlock::new, texture, () -> Blocks.GLASS, type);
+        NonNullFunction<BlockBehaviour.Properties, Block> supplier = GlassBlock::new;
+        return REGISTRATE.block(name, supplier)
+                .initialProperties(() -> Blocks.GLASS)
+                .properties(p -> p.isValidSpawn((state, level, pos, ent) -> false))
+                .addLayer(type)
+                .blockstate(GTModels.cubeAllModel(name, texture))
+                .tag(RecipeTags.MINEABLE_WITH_WRENCH)
+                .item(BlockItem::new)
+                .build()
+                .register();
     }
 
     public static BlockEntry<Block> createCasingBlock(String name, ResourceLocation texture) {

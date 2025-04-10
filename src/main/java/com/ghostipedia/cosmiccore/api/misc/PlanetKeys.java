@@ -8,8 +8,12 @@ import net.minecraft.world.level.Level;
 public class PlanetKeys {
 
     public static final ResourceKey<Level> SUN;
+    public static final ResourceKey<Level> JUPITER;
+    public static final ResourceKey<Level> SATURN;
 
     static {
         SUN = ResourceKey.create(Registries.DIMENSION, new ResourceLocation("frontiers", "sun"));
+        JUPITER = ResourceKey.create(Registries.DIMENSION, new ResourceLocation("frontiers", "jupiter"));
+        SATURN = ResourceKey.create(Registries.DIMENSION, new ResourceLocation("frontiers", "saturn"));
     }
 }
