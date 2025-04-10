@@ -8,7 +8,8 @@
     "ae2.ProcessingEncodingPanelMixin",
     "client.AdAstraPlanetsScreenMixin",
     "client.MinecraftMixin",
-    "client.SoundManagerMixin"
+    "client.SoundManagerMixin",
+    "ldlib.CustomBakedModelMixin"
   ],
   "mixins": [
     "AdAstraOverlayScreenMixin",
