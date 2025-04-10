@@ -3,13 +3,16 @@ package com.ghostipedia.cosmiccore.common.data.materials;
 import com.ghostipedia.cosmiccore.CosmicCore;
 import com.ghostipedia.cosmiccore.api.data.material.property.CCoreMaterialIconSet;
 
+import com.gregtechceu.gtceu.GTCEu;
 import com.gregtechceu.gtceu.api.GTValues;
 import com.gregtechceu.gtceu.api.data.chemical.material.Material;
 import com.gregtechceu.gtceu.api.data.chemical.material.info.MaterialIconSet;
 import com.gregtechceu.gtceu.api.data.chemical.material.properties.BlastProperty;
 import com.gregtechceu.gtceu.api.data.chemical.material.properties.PropertyKey;
+import com.gregtechceu.gtceu.api.data.chemical.material.properties.ToolProperty;
 import com.gregtechceu.gtceu.api.fluids.FluidBuilder;
 import com.gregtechceu.gtceu.api.fluids.FluidState;
+import com.gregtechceu.gtceu.common.data.GTElements;
 
 import static com.gregtechceu.gtceu.api.data.chemical.material.info.MaterialFlags.*;
 import static com.gregtechceu.gtceu.common.data.GTMaterials.*;
@@ -331,5 +334,7 @@ public class CosmicMaterials {
         nickelOreProp.setOreByProducts(Cobalt, Iron, Cooperite);
         nickelOreProp.setWashedIn(Mercury);
         chromiteOreProp.setOreByProducts(Iron, Magnesium, Chromite);
+        Neutronium.setMaterialIconSet(CCoreMaterialIconSet.VIBRANIUM);
+
     }
 }

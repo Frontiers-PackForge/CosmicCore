@@ -16,7 +16,6 @@ import com.gregtechceu.gtceu.client.renderer.block.TextureOverrideRenderer;
 import com.gregtechceu.gtceu.common.block.CoilBlock;
 import com.gregtechceu.gtceu.common.data.GTModels;
 
-import com.gregtechceu.gtceu.common.registry.GTRegistration;
 import com.lowdragmc.lowdraglib.Platform;
 import com.lowdragmc.lowdraglib.client.renderer.IRenderer;
 
@@ -145,9 +144,9 @@ public class CosmicBlocks {
     public static final BlockEntry<Block> BLOOD_CUBE = createCasingBlock(
             "blood_cube", CosmicCore.id("block/iris/bloodcube"));
 
-    //GLASS BLOCKS
+    // GLASS BLOCKS
     public static final BlockEntry<Block> ZBLAN_REINFORCED_GLASS = createGlassCasingBlock(
-            "zbland_glass", CosmicCore.id("block/casings/glass/zbland_glass"), () -> RenderType::translucent);
+            "zblan_glass", CosmicCore.id("block/casings/glass/zblan_glass"), () -> RenderType::translucent);
 
     // This is a Bunch of Rendering Magic I barely understand (See: I Don't understand at all) ~Ghost
     private static BlockEntry<Block> createGlassCasingBlock(String name, ResourceLocation texture,

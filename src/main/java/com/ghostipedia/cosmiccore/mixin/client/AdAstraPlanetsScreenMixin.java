@@ -2,6 +2,7 @@ package com.ghostipedia.cosmiccore.mixin.client;
 
 import com.ghostipedia.cosmiccore.CosmicCore;
 
+import com.ghostipedia.cosmiccore.api.misc.PlanetKeys;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.network.chat.Component;
@@ -34,7 +35,7 @@ import static earth.terrarium.adastra.client.screens.PlanetsScreen.SMALL_SELECTI
 public class AdAstraPlanetsScreenMixin extends AbstractContainerScreen<PlanetsMenu> {
 
     @Unique
-    Set<ResourceKey<Level>> noLand = Set.of(); // Add the planets where the land button should not show up
+    Set<ResourceKey<Level>> noLand = Set.of(PlanetKeys.SUN,PlanetKeys.SATURN,PlanetKeys.JUPITER); // Add the planets where the land button should not show up
                                                // ex: Planet.MOON
 
     @Unique
