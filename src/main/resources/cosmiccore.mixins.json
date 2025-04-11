@@ -27,8 +27,8 @@
     "ae2.CPUFormattingMixin",
     "ae2.PatternEncodingTermMenuMixin",
     "client.CosmicCoreRemainingAirOverlayMixin",
-    "lso.FrostBiteEffectMixin",
-    "lso.HeatStrokeEffectMixin",
+    "lso.FrostbiteEffectMixin",
+    "lso.HeatstrokeEffectMixin",
     "lso.TemperatureCapabilityMixin"
   ],
   "injectors": {
