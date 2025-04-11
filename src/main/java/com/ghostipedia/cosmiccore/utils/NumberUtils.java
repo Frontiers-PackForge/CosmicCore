@@ -28,20 +28,4 @@ public class NumberUtils {
             return DF.format((double) number / 1_000_000_000_000_000.0) + "P";
         }
     }
-
-    public static int mapRange(int in, int inStart, int inEnd, int outStart, int outEnd) {
-        return outStart + ((outEnd - outStart) / (inEnd - inStart)) * (in - inStart);
-    }
-
-    public static long mapRange(long in, long inStart, long inEnd, long outStart, long outEnd) {
-        return outStart + ((outEnd - outStart) / (inEnd - inStart)) * (in - inStart);
-    }
-
-    public static float mapRange(float in, float inStart, float inEnd, float outStart, float outEnd) {
-        return outStart + ((outEnd - outStart) / (inEnd - inStart)) * (in - inStart);
-    }
-
-    public static double mapRange(double in, double inStart, double inEnd, double outStart, double outEnd) {
-        return outStart + ((outEnd - outStart) / (inEnd - inStart)) * (in - inStart);
-    }
 }
