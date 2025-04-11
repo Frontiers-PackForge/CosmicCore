@@ -26,7 +26,10 @@
     "ae2.AE2StyleManagerMixin",
     "ae2.CPUFormattingMixin",
     "ae2.PatternEncodingTermMenuMixin",
-    "client.CosmicCoreRemainingAirOverlayMixin"
+    "client.CosmicCoreRemainingAirOverlayMixin",
+    "lso.FrostBiteEffectMixin",
+    "lso.HeatStrokeEffectMixin",
+    "lso.TemperatureCapabilityMixin"
   ],
   "injectors": {
     "defaultRequire": 1,
