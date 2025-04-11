@@ -19,11 +19,11 @@ public abstract class HeatStrokeEffectMixin extends MobEffect {
     protected HeatStrokeEffectMixin(MobEffectCategory category, int color) {
         super(MobEffectCategory.HARMFUL, 16756041);
     }
-    @Unique
-    protected float cosmicCore$HeatDamage = 1F;
+
     /**
      * @author Ghostipedia
-     * @reason Replaces the Default HeatStroke Effect with a scaling damage effect
+     * @reasonReplaces the Default HeatStroke Effect with a Flat Damage Increase
+     * Could someone else figure out how to make it scale, I gave up
      */
     @Overwrite
     @Override
@@ -31,11 +31,9 @@ public abstract class HeatStrokeEffectMixin extends MobEffect {
         if(livingEntity instanceof Player player && !livingEntity.hasEffect(MobEffectRegistry.HEAT_IMMUNITY.get()))
         {
             Level level = livingEntity.getCommandSenderWorld();
-
             if (!player.isSleeping())
             {
-                player.hurt(DamageSourceUtil.getDamageSource(level, ModDamageTypes.HYPERTHERMIA), cosmicCore$HeatDamage);
-                cosmicCore$HeatDamage++;
+                player.hurt(DamageSourceUtil.getDamageSource(level, ModDamageTypes.HYPERTHERMIA), 4);
             }
         }
     }

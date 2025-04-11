@@ -22,7 +22,8 @@ public abstract class FrostBiteEffectMixin extends MobEffect {
 
     /**
      * @author Ghostipedia
-     * @reason Replaces the Default FrostBite Effect with a scaling damage effect
+     * @reason Replaces the Default FrostBite Effect with a Flat Damage Increase
+     * Could someone else figure out how to make it scale, I gave up
      */
     @Overwrite
     @Override
@@ -34,8 +35,7 @@ public abstract class FrostBiteEffectMixin extends MobEffect {
             float damage = 1F;
             if (DamageUtil.isModDangerous(level) && DamageUtil.healthAboveDifficulty(level, player) && !player.isSleeping())
             {
-                player.hurt(DamageSourceUtil.getDamageSource(level, ModDamageTypes.HYPOTHERMIA), damage);
-                damage++;
+                player.hurt(DamageSourceUtil.getDamageSource(level, ModDamageTypes.HYPOTHERMIA), 4);
             }
         }
     }

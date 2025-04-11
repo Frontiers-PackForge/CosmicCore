@@ -26,14 +26,14 @@ public abstract class TemperatureCapabilityMixin implements ITemperatureCapabili
     private void applyDangerousEffects(Player player, TemperatureEnum tempEnum) {
         if (Config.Baked.dangerousHeatTemperature && ThirstUtil.isThirstActive(player) && tempEnum == TemperatureEnum.HEAT_STROKE) {
             if (TemperatureEnum.HEAT_STROKE.getMiddle() <= getTemperatureLevel() && !HeatStrokeEffect.playerIsImmuneToHeat(player)) {
-                // Apply hyperthermia
+                // Apply hyperthermia effect
                 if (!player.hasEffect(MobEffectRegistry.HEAT_STROKE.get()))
                     player.addEffect(new MobEffectInstance(MobEffectRegistry.HEAT_STROKE.get(), -1, 0, false, true));
                 return;
             }
         } else if (Config.Baked.dangerousColdTemperature && tempEnum == TemperatureEnum.FROSTBITE) {
             if (TemperatureEnum.FROSTBITE.getMiddle() >= getTemperatureLevel() && !FrostbiteEffect.playerIsImmuneToFrost(player)) {
-                // Apply hypothermia.json
+                // Apply hypothermia effect
                 if (!player.hasEffect(MobEffectRegistry.FROSTBITE.get()))
                     player.addEffect(new MobEffectInstance(MobEffectRegistry.FROSTBITE.get(), -1, 0, false, true));
                 return;
