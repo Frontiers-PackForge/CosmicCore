@@ -21,20 +21,19 @@ public abstract class TemperatureCapabilityMixin implements ITemperatureCapabili
 
     @Inject(method = "applyDangerousEffects", at = @At("HEAD"))
     private void cosmiccore$trackBadTime(Player player, TemperatureEnum tempEnum, CallbackInfo ci) {
-        if (cosmiccore$badTimeTimer > 0) {
-            // make the player's time alive worse if they're too hot or colds for too long
-            cosmiccore$badTimeTimer += switch (tempEnum) {
-                case HEAT_STROKE, FROSTBITE -> 2;
-                case HOT, COLD -> 1;
-                case NORMAL -> -1;
-            };
-        }
+        // make the player's time alive worse if they're too hot or colds for too long
+        cosmiccore$badTimeTimer += switch (tempEnum) {
+            case HEAT_STROKE, FROSTBITE -> 2;
+            case HOT, COLD -> 1;
+            case NORMAL -> -1;
+        };
+        cosmiccore$badTimeTimer = Math.max(cosmiccore$badTimeTimer, 0);
     }
 
     @ModifyExpressionValue(method = "applyDangerousEffects",
                            at = @At(value = "NEW", target = "net/minecraft/world/effect/MobEffectInstance"))
     private MobEffectInstance cosmiccore$modifyDangerousEffects(MobEffectInstance effect, Player player,
-                                                               TemperatureEnum tempEnum) {
+                                                                TemperatureEnum tempEnum) {
         // change this to give more/less time before the inevitable
         final int MAX_FREE_TIME_SECONDS = 40;
         int extra = cosmiccore$badTimeTimer - MAX_FREE_TIME_SECONDS;
@@ -84,4 +83,5 @@ public abstract class TemperatureCapabilityMixin implements ITemperatureCapabili
             cosmiccore$badTimeTimer = compound.getInt("badTimeTimer");
         }
     }
+
 }
