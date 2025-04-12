@@ -9,6 +9,7 @@ import com.gregtechceu.gtceu.common.machine.multiblock.electric.PowerSubstationM
 
 import com.lowdragmc.lowdraglib.syncdata.annotation.Persisted;
 import com.lowdragmc.lowdraglib.syncdata.field.ManagedFieldHolder;
+import com.lowdragmc.lowdraglib.utils.DummyWorld;
 
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
@@ -49,6 +50,8 @@ public class DimensionalEnergyCapacitor extends DimensionalEnergyInterface {
 
     @Override
     public void onStructureFormed() {
+        if (getLevel() instanceof DummyWorld) super.onStructureFormed();
+
         if (getLevel() instanceof ServerLevel serverLevel) {
             var owner = getOwnerUUID();
             var wirelessData = WirelessEnergySavedData.getOrCreate(serverLevel);
