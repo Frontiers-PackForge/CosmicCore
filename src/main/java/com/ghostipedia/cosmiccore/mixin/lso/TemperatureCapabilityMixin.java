@@ -23,9 +23,9 @@ public abstract class TemperatureCapabilityMixin implements ITemperatureCapabili
     private void cosmiccore$trackBadTime(Player player, TemperatureEnum tempEnum, CallbackInfo ci) {
         // make the player's time alive worse if they're too hot or colds for too long
         cosmiccore$badTimeTimer += switch (tempEnum) {
-            case HEAT_STROKE, FROSTBITE -> 2;
-            case HOT, COLD -> 1;
-            case NORMAL -> -1;
+            case HEAT_STROKE, FROSTBITE -> 2; //Bad Timer Increases while under the effect of something deadly
+            case HOT, COLD -> 0; //Store whatever their previous negative effect was, hold it until they've entered a survivable temp range.
+            case NORMAL -> -4; // Survivable Environment, decrease bad Timer to avoid getting punched with really nasty damage
         };
         cosmiccore$badTimeTimer = Math.max(cosmiccore$badTimeTimer, 0);
     }
@@ -35,13 +35,13 @@ public abstract class TemperatureCapabilityMixin implements ITemperatureCapabili
     private MobEffectInstance cosmiccore$modifyDangerousEffects(MobEffectInstance effect, Player player,
                                                                 TemperatureEnum tempEnum) {
         // change this to give more/less time before the inevitable
-        final int MAX_FREE_TIME_SECONDS = 40;
+        final int MAX_FREE_TIME_SECONDS = 60;
         int extra = cosmiccore$badTimeTimer - MAX_FREE_TIME_SECONDS;
         if (extra <= 0) {
             return effect;
         }
-        // add +1 level of effect for every 5 seconds over the damage threshold
-        int amplifier = extra / 5;
+        // add +1 level of effect for every 10 seconds over the damage threshold
+        int amplifier = extra / 10;
         return new MobEffectInstance(effect.getEffect(), effect.getDuration(), effect.getAmplifier() + amplifier);
     }
 
