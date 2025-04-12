@@ -29,6 +29,8 @@
     "ae2.PatternEncodingTermMenuMixin",
     "client.CosmicCoreRemainingAirOverlayMixin",
     "emi.EmiApiMixin",
+    "lso.FrostbiteEffectMixin",
+    "lso.HeatstrokeEffectMixin",
     "lso.TemperatureCapabilityMixin"
   ],
   "injectors": {

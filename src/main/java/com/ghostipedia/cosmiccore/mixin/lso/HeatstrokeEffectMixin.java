@@ -1,8 +1,9 @@
 package com.ghostipedia.cosmiccore.mixin.lso;
 
-import com.llamalad7.mixinextras.sugar.Local;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectCategory;
+
+import com.llamalad7.mixinextras.sugar.Local;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.ModifyArg;
@@ -18,8 +19,8 @@ public abstract class HeatstrokeEffectMixin extends MobEffect {
 
     @ModifyArg(method = "applyEffectTick",
                at = @At(
-                       value = "INVOKE",
-                       target = "Lnet/minecraft/world/entity/player/Player;hurt(Lnet/minecraft/world/damagesource/DamageSource;F)Z"),
+                        value = "INVOKE",
+                        target = "Lnet/minecraft/world/entity/player/Player;hurt(Lnet/minecraft/world/damagesource/DamageSource;F)Z"),
                index = 1)
     private float cosmiccore$changeDamageAmount(float amount, @Local(argsOnly = true) int amplifier) {
         return amount + amplifier;
@@ -29,5 +30,4 @@ public abstract class HeatstrokeEffectMixin extends MobEffect {
     private int cosmiccore$modifyDamageIncrement(int time) {
         return 50;
     }
-
 }

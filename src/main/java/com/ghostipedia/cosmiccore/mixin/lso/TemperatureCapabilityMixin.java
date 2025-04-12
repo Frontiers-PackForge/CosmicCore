@@ -1,9 +1,10 @@
 package com.ghostipedia.cosmiccore.mixin.lso;
 
-import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.player.Player;
+
+import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.*;
@@ -23,9 +24,11 @@ public abstract class TemperatureCapabilityMixin implements ITemperatureCapabili
     private void cosmiccore$trackBadTime(Player player, TemperatureEnum tempEnum, CallbackInfo ci) {
         // make the player's time alive worse if they're too hot or colds for too long
         cosmiccore$badTimeTimer += switch (tempEnum) {
-            case HEAT_STROKE, FROSTBITE -> 2; //Bad Timer Increases while under the effect of something deadly
-            case HOT, COLD -> 0; //Store whatever their previous negative effect was, hold it until they've entered a survivable temp range.
-            case NORMAL -> -4; // Survivable Environment, decrease bad Timer to avoid getting punched with really nasty damage
+            case HEAT_STROKE, FROSTBITE -> 2; // Bad Timer Increases while under the effect of something deadly
+            case HOT, COLD -> 0; // Store whatever their previous negative effect was, hold it until they've entered a
+                                 // survivable temp range.
+            case NORMAL -> -4; // Survivable Environment, decrease bad Timer to avoid getting punched with really nasty
+                               // damage
         };
         cosmiccore$badTimeTimer = Math.max(cosmiccore$badTimeTimer, 0);
     }
@@ -49,13 +52,11 @@ public abstract class TemperatureCapabilityMixin implements ITemperatureCapabili
     // Don't think about it too hard, ok?
     @ModifyExpressionValue(method = "applyDangerousEffects",
                            at = @At(
-                                   value = "INVOKE",
-                                   target = "Lnet/minecraft/world/entity/player/Player;hasEffect(Lnet/minecraft/world/effect/MobEffect;)Z"),
+                                    value = "INVOKE",
+                                    target = "Lnet/minecraft/world/entity/player/Player;hasEffect(Lnet/minecraft/world/effect/MobEffect;)Z"),
                            slice = @Slice(
-                                   from = @At("HEAD"),
-                                   to = @At(value = "RETURN", ordinal = 1)
-                           )
-    )
+                                          from = @At("HEAD"),
+                                          to = @At(value = "RETURN", ordinal = 1)))
     // This method patches the effect to be reapplied every time applyDangerousEffects is called.
     // It works fine, because MC doesn't error when existing effects are reapplied and instead modifies them
     // to match the new effect.
@@ -83,5 +84,4 @@ public abstract class TemperatureCapabilityMixin implements ITemperatureCapabili
             cosmiccore$badTimeTimer = compound.getInt("badTimeTimer");
         }
     }
-
 }
