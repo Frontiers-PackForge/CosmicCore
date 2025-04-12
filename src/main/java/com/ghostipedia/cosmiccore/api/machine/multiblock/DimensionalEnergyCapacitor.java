@@ -4,14 +4,13 @@ import com.ghostipedia.cosmiccore.api.data.wireless.WirelessEnergySavedData;
 
 import com.gregtechceu.gtceu.api.machine.IMachineBlockEntity;
 import com.gregtechceu.gtceu.api.machine.multiblock.IBatteryData;
-import com.gregtechceu.gtceu.api.machine.multiblock.WorkableMultiblockMachine;
 import com.gregtechceu.gtceu.api.machine.trait.RecipeLogic;
 import com.gregtechceu.gtceu.common.machine.multiblock.electric.PowerSubstationMachine;
 
 import com.lowdragmc.lowdraglib.syncdata.annotation.Persisted;
 import com.lowdragmc.lowdraglib.syncdata.field.ManagedFieldHolder;
-
 import com.lowdragmc.lowdraglib.utils.DummyWorld;
+
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.Style;
@@ -52,7 +51,7 @@ public class DimensionalEnergyCapacitor extends DimensionalEnergyInterface {
     @Override
     public void onStructureFormed() {
         if (getLevel() instanceof DummyWorld) super.onStructureFormed();
-        
+
         if (getLevel() instanceof ServerLevel serverLevel) {
             var owner = getOwnerUUID();
             var wirelessData = WirelessEnergySavedData.getOrCreate(serverLevel);
