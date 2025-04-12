@@ -7,11 +7,8 @@ import net.minecraftforge.registries.ForgeRegistries;
 
 public class FluidUtilities {
 
-    public static Fluid getFluid(String fluidResloc){
+    public static Fluid getFluid(String fluidResloc) {
         Fluid fluid = ForgeRegistries.FLUIDS.getValue(new ResourceLocation(fluidResloc));
         return fluid == null ? Fluids.EMPTY : fluid;
     }
-
-
-
 }

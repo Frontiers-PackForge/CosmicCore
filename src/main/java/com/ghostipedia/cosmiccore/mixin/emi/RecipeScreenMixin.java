@@ -1,5 +1,8 @@
 package com.ghostipedia.cosmiccore.mixin.emi;
 
+import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.network.chat.Component;
+
 import dev.emi.emi.api.EmiApi;
 import dev.emi.emi.api.widget.Bounds;
 import dev.emi.emi.config.EmiConfig;
@@ -7,8 +10,6 @@ import dev.emi.emi.config.SidebarSide;
 import dev.emi.emi.screen.RecipeScreen;
 import dev.emi.emi.screen.RecipeTab;
 import dev.emi.emi.screen.WidgetGroup;
-import net.minecraft.client.gui.screens.Screen;
-import net.minecraft.network.chat.Component;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
@@ -53,17 +54,32 @@ public abstract class RecipeScreenMixin extends Screen {
     @Shadow(remap = false)
     private List<WidgetGroup> currentPage;
 
-    @ModifyArg(method = "render", at = @At(value = "INVOKE", target = "Ldev/emi/emi/EmiRenderHelper;drawNinePatch(Ldev/emi/emi/runtime/EmiDrawContext;Lnet/minecraft/resources/ResourceLocation;IIIIIIII)V", ordinal = 4, remap = false), index = 2)
+    @ModifyArg(method = "render",
+               at = @At(value = "INVOKE",
+                        target = "Ldev/emi/emi/EmiRenderHelper;drawNinePatch(Ldev/emi/emi/runtime/EmiDrawContext;Lnet/minecraft/resources/ResourceLocation;IIIIIIII)V",
+                        ordinal = 4,
+                        remap = false),
+               index = 2)
     private int modifyx(int x) {
         return x + 18 - 18 * cosmicCore$getList(cosmicCore$getWorkstationAmount());
     }
 
-    @ModifyArg(method = "render", at = @At(value = "INVOKE", target = "Ldev/emi/emi/EmiRenderHelper;drawNinePatch(Ldev/emi/emi/runtime/EmiDrawContext;Lnet/minecraft/resources/ResourceLocation;IIIIIIII)V", ordinal = 4, remap = false), index = 4)
+    @ModifyArg(method = "render",
+               at = @At(value = "INVOKE",
+                        target = "Ldev/emi/emi/EmiRenderHelper;drawNinePatch(Ldev/emi/emi/runtime/EmiDrawContext;Lnet/minecraft/resources/ResourceLocation;IIIIIIII)V",
+                        ordinal = 4,
+                        remap = false),
+               index = 4)
     private int modifyw(int x) {
         return x - 18 + 18 * cosmicCore$getList(cosmicCore$getWorkstationAmount());
     }
 
-    @ModifyArg(method = "render", at = @At(value = "INVOKE", target = "Ldev/emi/emi/EmiRenderHelper;drawNinePatch(Ldev/emi/emi/runtime/EmiDrawContext;Lnet/minecraft/resources/ResourceLocation;IIIIIIII)V", ordinal = 4, remap = false), index = 5)
+    @ModifyArg(method = "render",
+               at = @At(value = "INVOKE",
+                        target = "Ldev/emi/emi/EmiRenderHelper;drawNinePatch(Ldev/emi/emi/runtime/EmiDrawContext;Lnet/minecraft/resources/ResourceLocation;IIIIIIII)V",
+                        ordinal = 4,
+                        remap = false),
+               index = 5)
     private int modifyh(int x) {
         return 10 + Math.min(cosmicCore$getWorkstationAmount(), cosmicCore$maxWorkstations()) * 18 + getResolveOffset();
     }
@@ -81,9 +97,11 @@ public abstract class RecipeScreenMixin extends Screen {
             offset = -getResolveOffset();
         }
         if (EmiConfig.workstationLocation == SidebarSide.LEFT) {
-            bounds = new Bounds(x - (cosmicCore$getList(i) * 18), y + 9 + getResolveOffset() + (i % cosmicCore$maxWorkstations() * 18) + offset, 18, 18);
+            bounds = new Bounds(x - (cosmicCore$getList(i) * 18),
+                    y + 9 + getResolveOffset() + (i % cosmicCore$maxWorkstations() * 18) + offset, 18, 18);
         } else if (EmiConfig.workstationLocation == SidebarSide.RIGHT) {
-            bounds = new Bounds(x + (cosmicCore$getList(i) * backgroundWidth), y + 9 + getResolveOffset() + (i % cosmicCore$maxWorkstations() * 18) + offset, 18, 18);
+            bounds = new Bounds(x + (cosmicCore$getList(i) * backgroundWidth),
+                    y + 9 + getResolveOffset() + (i % cosmicCore$maxWorkstations() * 18) + offset, 18, 18);
         } else if (EmiConfig.workstationLocation == SidebarSide.BOTTOM) {
             bounds = new Bounds(x + 5 + getResolveOffset() + i * 18 + offset, y + backgroundHeight - 23, 18, 18);
         }
