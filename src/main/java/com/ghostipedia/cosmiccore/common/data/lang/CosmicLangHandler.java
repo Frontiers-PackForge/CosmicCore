@@ -7,7 +7,7 @@ import static com.gregtechceu.gtceu.data.lang.LangHandler.replace;
 public class CosmicLangHandler {
 
     public static void init(RegistrateLangProvider provider) {
-        replace(provider, "item.gtceu.tool.luv_meld_tool","Trinavine Meld Multitool");
+        replace(provider, "item.gtceu.tool.luv_meld_tool", "Trinavine Meld Multitool");
         replace(provider, "cosmiccore.multiblock.naqreactor.tooltip.0",
                 "§cA massive reactor powered by explosions and reactive fuel");
         replace(provider, "cosmiccore.multiblock.naqreactor.tooltip.1",
