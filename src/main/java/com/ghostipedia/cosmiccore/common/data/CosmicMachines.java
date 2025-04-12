@@ -3463,6 +3463,9 @@ public class CosmicMachines {
         GTMultiMachines.LARGE_COMBUSTION_ENGINE.setRecipeTypes(new GTRecipeType[] { DUMMY_RECIPES });
         GTMultiMachines.LARGE_COMBUSTION_ENGINE.setRenderXEIPreview(false);
         GTMultiMachines.LARGE_COMBUSTION_ENGINE.setRenderWorldPreview(false);
+        GTMultiMachines.LARGE_PLASMA_TURBINE.setRecipeTypes(new GTRecipeType[] { DUMMY_RECIPES });
+        GTMultiMachines.LARGE_PLASMA_TURBINE.setRenderXEIPreview(false);
+        GTMultiMachines.LARGE_PLASMA_TURBINE.setRenderWorldPreview(false);
         GTMultiMachines.EXTREME_COMBUSTION_ENGINE.setRecipeTypes(new GTRecipeType[] { DUMMY_RECIPES });
         GTMultiMachines.EXTREME_COMBUSTION_ENGINE.setRenderXEIPreview(false);
         GTMultiMachines.EXTREME_COMBUSTION_ENGINE.setRenderWorldPreview(false);
