@@ -9,6 +9,7 @@
     "client.AdAstraPlanetsScreenMixin",
     "client.MinecraftMixin",
     "client.SoundManagerMixin",
+    "emi.RecipeScreenMixin",
     "ldlib.CustomBakedModelMixin"
   ],
   "mixins": [
@@ -27,8 +28,7 @@
     "ae2.CPUFormattingMixin",
     "ae2.PatternEncodingTermMenuMixin",
     "client.CosmicCoreRemainingAirOverlayMixin",
-    "lso.FrostbiteEffectMixin",
-    "lso.HeatstrokeEffectMixin",
+    "emi.EmiApiMixin",
     "lso.TemperatureCapabilityMixin"
   ],
   "injectors": {

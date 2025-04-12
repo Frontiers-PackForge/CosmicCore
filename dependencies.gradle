@@ -24,7 +24,7 @@ dependencies {
     modImplementation(forge.architectury)
 
     // Recipe Viewers
-    modImplementation(forge.bundles.jei)
+    modCompileOnly(forge.bundles.jei)
     modImplementation(forge.emi)
 
     // WAILA-likes

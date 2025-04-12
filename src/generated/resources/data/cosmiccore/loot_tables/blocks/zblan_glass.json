@@ -11,11 +11,11 @@
       "entries": [
         {
           "type": "minecraft:item",
-          "name": "cosmiccore:zbland_glass"
+          "name": "cosmiccore:zblan_glass"
         }
       ],
       "rolls": 1.0
     }
   ],
-  "random_sequence": "cosmiccore:blocks/zbland_glass"
+  "random_sequence": "cosmiccore:blocks/zblan_glass"
 }
