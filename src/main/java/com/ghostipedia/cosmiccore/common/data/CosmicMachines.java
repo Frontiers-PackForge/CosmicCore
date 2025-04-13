@@ -34,6 +34,7 @@ import com.gregtechceu.gtceu.api.machine.IMachineBlockEntity;
 import com.gregtechceu.gtceu.api.machine.MachineDefinition;
 import com.gregtechceu.gtceu.api.machine.MetaMachine;
 import com.gregtechceu.gtceu.api.machine.MultiblockMachineDefinition;
+import com.gregtechceu.gtceu.api.machine.multiblock.CoilWorkableElectricMultiblockMachine;
 import com.gregtechceu.gtceu.api.machine.multiblock.PartAbility;
 import com.gregtechceu.gtceu.api.machine.multiblock.WorkableElectricMultiblockMachine;
 import com.gregtechceu.gtceu.api.machine.steam.SimpleSteamMachine;
@@ -49,6 +50,7 @@ import com.gregtechceu.gtceu.client.renderer.machine.WorkableSteamMachineRendere
 import com.gregtechceu.gtceu.client.util.TooltipHelper;
 import com.gregtechceu.gtceu.common.block.BoilerFireboxType;
 import com.gregtechceu.gtceu.common.data.*;
+import com.gregtechceu.gtceu.common.data.machines.GCYMMachines;
 import com.gregtechceu.gtceu.common.data.machines.GTMultiMachines;
 import com.gregtechceu.gtceu.common.machine.multiblock.electric.ActiveTransformerMachine;
 import com.gregtechceu.gtceu.common.machine.multiblock.electric.FusionReactorMachine;
@@ -483,10 +485,11 @@ public class CosmicMachines {
                     CosmicCore.id("block/multiblock/mantle_bore"))
             .register();
     public final static MultiblockMachineDefinition ORBITAL_TEMPERING_FORGE = REGISTRATE.multiblock(
-            "orbital_tempering_forge", WorkableElectricMultiblockMachine::new)
+            "orbital_tempering_forge", CoilWorkableElectricMultiblockMachine::new)
             .rotationState(RotationState.ALL)
-            .recipeType(CosmicRecipeTypes.CHROMATIC_FLOTATION_PLANT)
-            .recipeModifier(ELECTRIC_OVERCLOCK.apply(OverclockingLogic.NON_PERFECT_OVERCLOCK))
+            .recipeType(CosmicRecipeTypes.ORBITAL_FORGE)
+            .recipeModifiers(GTRecipeModifiers.PARALLEL_HATCH,
+                    GTRecipeModifiers::ebfOverclock)
             .appearanceBlock(CosmicBlocks.CYCLOZINE_CHEMICALLY_REPELLING_CASING)
             .generator(true)
             .pattern(definition -> FactoryBlockPattern.start()
@@ -3469,6 +3472,9 @@ public class CosmicMachines {
         GTMultiMachines.EXTREME_COMBUSTION_ENGINE.setRecipeTypes(new GTRecipeType[] { DUMMY_RECIPES });
         GTMultiMachines.EXTREME_COMBUSTION_ENGINE.setRenderXEIPreview(false);
         GTMultiMachines.EXTREME_COMBUSTION_ENGINE.setRenderWorldPreview(false);
+        GCYMMachines.MEGA_BLAST_FURNACE.setRecipeTypes(new GTRecipeType[] { DUMMY_RECIPES });
+        GCYMMachines.MEGA_BLAST_FURNACE.setRenderXEIPreview(false);
+        GCYMMachines.MEGA_BLAST_FURNACE.setRenderWorldPreview(false);
         GTMultiMachines.POWER_SUBSTATION.setRenderXEIPreview(false);
         GTMultiMachines.POWER_SUBSTATION.setRenderWorldPreview(false);
         for (MultiblockMachineDefinition definition : FUSION_REACTOR) {

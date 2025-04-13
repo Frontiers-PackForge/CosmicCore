@@ -336,5 +336,7 @@ public class CosmicMaterials {
         nickelOreProp.setWashedIn(Mercury);
         chromiteOreProp.setOreByProducts(Iron, Magnesium, Chromite);
         Neutronium.setMaterialIconSet(CCoreMaterialIconSet.VIBRANIUM);
+        Neutronium.addFlags(NO_SMELTING, NO_ORE_SMELTING);
+        Neutronium.setProperty(PropertyKey.BLAST, new BlastProperty(15000));
     }
 }

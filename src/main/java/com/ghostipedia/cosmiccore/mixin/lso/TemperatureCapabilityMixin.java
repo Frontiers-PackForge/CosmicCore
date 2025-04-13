@@ -34,7 +34,9 @@ public abstract class TemperatureCapabilityMixin implements ITemperatureCapabili
     }
 
     @ModifyExpressionValue(method = "applyDangerousEffects",
-                           at = @At(value = "NEW", target = "net/minecraft/world/effect/MobEffectInstance", remap = true))
+                           at = @At(value = "NEW",
+                                    target = "net/minecraft/world/effect/MobEffectInstance",
+                                    remap = true))
     private MobEffectInstance cosmiccore$modifyDangerousEffects(MobEffectInstance effect, Player player,
                                                                 TemperatureEnum tempEnum) {
         // change this to give more/less time before the inevitable

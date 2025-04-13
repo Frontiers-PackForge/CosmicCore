@@ -26,20 +26,26 @@ import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.GlassBlock;
+import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
+import net.minecraft.world.level.block.state.properties.NoteBlockInstrument;
+import net.minecraft.world.level.material.MapColor;
 import net.minecraftforge.client.model.generators.ModelFile;
 
+import com.teamresourceful.resourcefullib.common.registry.RegistryEntry;
 import com.tterrag.registrate.providers.DataGenContext;
 import com.tterrag.registrate.providers.RegistrateBlockstateProvider;
 import com.tterrag.registrate.util.entry.BlockEntry;
 import com.tterrag.registrate.util.nullness.NonNullBiConsumer;
 import com.tterrag.registrate.util.nullness.NonNullFunction;
 import com.tterrag.registrate.util.nullness.NonNullSupplier;
+import earth.terrarium.adastra.common.blocks.GlobeBlock;
 
 import java.util.Map;
 import java.util.function.Supplier;
 
 import static com.ghostipedia.cosmiccore.api.registries.CosmicRegistration.REGISTRATE;
+import static earth.terrarium.adastra.common.registry.ModBlocks.GLOBES;
 
 public class CosmicBlocks {
 
@@ -48,6 +54,8 @@ public class CosmicBlocks {
 
     }
     // Coil Register
+    public static final RegistryEntry<Block> SUN_GLOBE = GLOBES.register("sun_globe",
+            () -> new GlobeBlock(ironProperties().noOcclusion()));
 
     public static final BlockEntry<CoilBlock> COIL_PRISMATIC_TUNGSTENSTEEL = createCoilBlock(
             CosmicCoilBlock.CoilType.PRISMATIC_TUNGSTENSTEEL);
@@ -266,6 +274,15 @@ public class CosmicBlocks {
                     .partialState().with(ActiveBlock.ACTIVE, false).modelForState().modelFile(inactive).addModel()
                     .partialState().with(ActiveBlock.ACTIVE, true).modelForState().modelFile(active).addModel();
         };
+    }
+
+    private static BlockBehaviour.Properties ironProperties() {
+        return BlockBehaviour.Properties.of()
+                .mapColor(MapColor.METAL)
+                .instrument(NoteBlockInstrument.IRON_XYLOPHONE)
+                .requiresCorrectToolForDrops()
+                .strength(5, 6)
+                .sound(SoundType.COPPER);
     }
 
     public static void init() {}

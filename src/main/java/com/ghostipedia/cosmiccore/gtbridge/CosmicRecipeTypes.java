@@ -7,9 +7,12 @@ import com.gregtechceu.gtceu.api.gui.GuiTextures;
 import com.gregtechceu.gtceu.api.recipe.GTRecipeType;
 import com.gregtechceu.gtceu.common.data.GTRecipeTypes;
 import com.gregtechceu.gtceu.common.data.GTSoundEntries;
+import com.gregtechceu.gtceu.common.recipe.condition.DimensionCondition;
 
 import com.lowdragmc.lowdraglib.gui.texture.ProgressTexture;
 import com.lowdragmc.lowdraglib.utils.LocalizationUtils;
+
+import net.minecraft.resources.ResourceLocation;
 
 import static com.gregtechceu.gtceu.common.data.GTRecipeTypes.*;
 import static com.lowdragmc.lowdraglib.gui.texture.ProgressTexture.FillDirection.LEFT_TO_RIGHT;
@@ -64,7 +67,11 @@ public class CosmicRecipeTypes {
             .setProgressBar(GuiTextures.PROGRESS_BAR_ARROW, ProgressTexture.FillDirection.ALWAYS_FULL);
     public static final GTRecipeType CHROMATIC_FLOTATION_PLANT = GTRecipeTypes
             .register("chromatic_flotation_plant", GTRecipeTypes.MULTIBLOCK)
-            .setMaxIOSize(3, 9, 3, 3)
+            .setMaxIOSize(3, 3, 3, 3)
+            .setProgressBar(GuiTextures.PROGRESS_BAR_ARROW, ProgressTexture.FillDirection.LEFT_TO_RIGHT);
+    public static final GTRecipeType ORBITAL_FORGE = GTRecipeTypes
+            .register("orbital_forge", GTRecipeTypes.MULTIBLOCK)
+            .setMaxIOSize(3, 3, 3, 3)
             .setProgressBar(GuiTextures.PROGRESS_BAR_ARROW, ProgressTexture.FillDirection.LEFT_TO_RIGHT);
     public static final GTRecipeType STELLAR_IRIS = GTRecipeTypes.register("stellar_iris", GTRecipeTypes.MULTIBLOCK)
             .setMaxIOSize(16, 16, 16, 16)
@@ -187,6 +194,23 @@ public class CosmicRecipeTypes {
         LARGE_CHEMICAL_RECIPES.onRecipeBuild((builder, provider) -> {
             INDUSTRIAL_CHEMVAT.copyFrom(builder)
                     .save(provider);
+        });
+
+        BLAST_RECIPES.onRecipeBuild((builder, provider) -> {
+            var orbitBuilder = ORBITAL_FORGE.copyFrom(builder);
+            // Orbital Forge ONLY copies Standard EBF recipes, if an EBF recipe contains a dimension condition, it is
+            // assumed it can't be done in space
+            // Manual Intervention would be required to make sure it doesn't have some psychotic icon overlaying, this
+            // is the best option and then packside intervention.
+            if (!builder.conditions.isEmpty() &&
+                    builder.conditions.stream().anyMatch(cond -> cond instanceof DimensionCondition)) {
+                orbitBuilder.save(provider);
+            } else {
+                // Will require UI Refactor for GTM to support more than one orbit, the sun is sufficient for now.
+                orbitBuilder.addCondition(new DimensionCondition(new ResourceLocation("frontiers:sun_orbit")))
+                        .save(provider);
+            }
+
         });
     }
 }
