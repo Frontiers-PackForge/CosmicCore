@@ -1,4 +1,7 @@
 repositories {
+    flatDir {
+        dir("libs")
+    }
     mavenLocal()
     mavenCentral()
     maven {

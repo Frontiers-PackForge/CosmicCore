@@ -6,8 +6,10 @@
   "minVersion": "0.8",
   "client": [
     "ae2.ProcessingEncodingPanelMixin",
+    "client.AdAstraPlanetsScreenMixin",
     "client.MinecraftMixin",
-    "client.SoundManagerMixin"
+    "client.SoundManagerMixin",
+    "ldlib.CustomBakedModelMixin"
   ],
   "mixins": [
     "AdAstraOverlayScreenMixin",
@@ -22,6 +24,7 @@
     "accessor.LivingEntityAccessor",
     "accessor.LootTableAccessor",
     "ae2.AE2StyleManagerMixin",
+    "ae2.CPUFormattingMixin",
     "ae2.PatternEncodingTermMenuMixin",
     "client.CosmicCoreRemainingAirOverlayMixin"
   ],

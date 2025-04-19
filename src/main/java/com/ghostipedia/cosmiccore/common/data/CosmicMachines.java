@@ -1,9 +1,12 @@
 package com.ghostipedia.cosmiccore.common.data;
 
 import com.ghostipedia.cosmiccore.CosmicCore;
+import com.ghostipedia.cosmiccore.api.machine.multiblock.DimensionalEnergyCapacitor;
+import com.ghostipedia.cosmiccore.api.machine.multiblock.DimensionalEnergyInterface;
 import com.ghostipedia.cosmiccore.api.machine.multiblock.IPBFMachine;
 import com.ghostipedia.cosmiccore.api.machine.part.CosmicPartAbility;
 import com.ghostipedia.cosmiccore.api.machine.part.SteamFluidHatchPartMachine;
+import com.ghostipedia.cosmiccore.api.machine.part.WirelessEnergyHatchPartMachine;
 import com.ghostipedia.cosmiccore.api.registries.CosmicRegistration;
 import com.ghostipedia.cosmiccore.client.renderer.machine.HellFireFoundryWorkableRenderer;
 import com.ghostipedia.cosmiccore.client.renderer.machine.SidedWorkableHullRenderer;
@@ -35,6 +38,7 @@ import com.gregtechceu.gtceu.api.machine.multiblock.PartAbility;
 import com.gregtechceu.gtceu.api.machine.multiblock.WorkableElectricMultiblockMachine;
 import com.gregtechceu.gtceu.api.machine.steam.SimpleSteamMachine;
 import com.gregtechceu.gtceu.api.pattern.FactoryBlockPattern;
+import com.gregtechceu.gtceu.api.pattern.MultiblockShapeInfo;
 import com.gregtechceu.gtceu.api.pattern.Predicates;
 import com.gregtechceu.gtceu.api.recipe.GTRecipeType;
 import com.gregtechceu.gtceu.api.recipe.OverclockingLogic;
@@ -42,13 +46,18 @@ import com.gregtechceu.gtceu.api.registry.registrate.MachineBuilder;
 import com.gregtechceu.gtceu.client.renderer.machine.LargeBoilerRenderer;
 import com.gregtechceu.gtceu.client.renderer.machine.OverlayTieredActiveMachineRenderer;
 import com.gregtechceu.gtceu.client.renderer.machine.WorkableSteamMachineRenderer;
+import com.gregtechceu.gtceu.client.util.TooltipHelper;
 import com.gregtechceu.gtceu.common.block.BoilerFireboxType;
 import com.gregtechceu.gtceu.common.data.*;
 import com.gregtechceu.gtceu.common.data.machines.GTMultiMachines;
+import com.gregtechceu.gtceu.common.machine.multiblock.electric.ActiveTransformerMachine;
 import com.gregtechceu.gtceu.common.machine.multiblock.electric.FusionReactorMachine;
+import com.gregtechceu.gtceu.common.machine.multiblock.electric.PowerSubstationMachine;
 import com.gregtechceu.gtceu.common.registry.GTRegistration;
+import com.gregtechceu.gtceu.config.ConfigHolder;
 import com.gregtechceu.gtceu.utils.FormattingUtil;
 
+import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
@@ -77,6 +86,7 @@ import static com.gregtechceu.gtceu.common.data.GTRecipeModifiers.ELECTRIC_OVERC
 import static com.gregtechceu.gtceu.common.data.GTRecipeTypes.DUMMY_RECIPES;
 import static com.gregtechceu.gtceu.common.data.machines.GTMachineUtils.*;
 import static com.gregtechceu.gtceu.common.data.machines.GTMultiMachines.FUSION_REACTOR;
+import static com.gregtechceu.gtceu.common.data.machines.GTMultiMachines.POWER_SUBSTATION;
 import static com.klikli_dev.occultism.registry.OccultismBlocks.IESNIUM_BLOCK;
 import static wayoftime.bloodmagic.common.block.BloodMagicBlocks.BLANK_RUNE;
 
@@ -102,6 +112,26 @@ public class CosmicMachines {
     public static final MachineDefinition[] THERMIA_SOCKET = registerThermiaTieredHatch(
             "thermia_import_hatch", "Thermia Socket", "thermia_hatch.import",
             IO.IN, HIGH_TIERS, CosmicPartAbility.IMPORT_THERMIA);
+
+    public static final MachineDefinition[] WIRELESS_ENERGY_INPUT_HATCH = registerWirelessEnergyTieredHatch(
+            "wireless_energy_hatch", "Wireless Energy Hatch", "wireless_energy.1a",
+            IO.IN, HIGH_TIERS, 1, PartAbility.INPUT_ENERGY);
+    public static final MachineDefinition[] WIRELESS_ENERGY_OUTPUT_DYNAMO = registerWirelessEnergyTieredHatch(
+            "wireless_energy_dynamo", "Wireless Energy Dynamo", "wireless_energy.1a",
+            IO.OUT, HIGH_TIERS, 1, PartAbility.OUTPUT_ENERGY);
+    public static final MachineDefinition[] WIRELESS_ENERGY_INPUT_HATCH_4A = registerWirelessEnergyTieredHatch(
+            "4a_wireless_energy_hatch", "4A Wireless Energy Hatch", "wireless_energy.4a",
+            IO.IN, HIGH_TIERS, 4, PartAbility.INPUT_ENERGY);
+    public static final MachineDefinition[] WIRELESS_ENERGY_OUTPUT_DYNAMO_4A = registerWirelessEnergyTieredHatch(
+            "4a_wireless_energy_dynamo", "4A Wireless Energy Dynamo", "wireless_energy.4a",
+            IO.OUT, HIGH_TIERS, 4, PartAbility.OUTPUT_ENERGY);
+    public static final MachineDefinition[] WIRELESS_ENERGY_INPUT_HATCH_16A = registerWirelessEnergyTieredHatch(
+            "16a_wireless_energy_hatch", "16A Wireless Energy Hatch", "wireless_energy.16a",
+            IO.IN, HIGH_TIERS, 16, PartAbility.INPUT_ENERGY);
+    public static final MachineDefinition[] WIRELESS_ENERGY_OUTPUT_DYNAMO_16A = registerWirelessEnergyTieredHatch(
+            "16a_wireless_energy_dynamo", "16A Wireless Energy Dynamo", "wireless_energy.16a",
+            IO.OUT, HIGH_TIERS, 16, PartAbility.OUTPUT_ENERGY);
+
     public static final MachineDefinition[] NAQUAHINE_MINI_REACTOR = registerSimpleGenerator("naquahine_mini_reactor",
             CosmicRecipeTypes.MINI_NAQUAHINE_REACTOR, genericGeneratorTankSizeFunction, 0.0f, GTValues.IV, GTValues.LuV,
             GTValues.ZPM, GTValues.UV, GTValues.UHV);
@@ -286,31 +316,8 @@ public class CosmicMachines {
             .multiblock("drygmy_grove", WorkableElectricMultiblockMachine::new)
             .rotationState(RotationState.NON_Y_AXIS)
             .recipeType(CosmicRecipeTypes.GROVE_RECIPES)
-            // .recipeModifiers(true,
-            // (machine, recipe, OCParams, OCResult) -> {
-            // if (machine instanceof IRecipeCapabilityHolder holder) {
-            // // Find all the items in the combined Item Input inventories and create oversized ItemStacks
-            // Object2IntMap<ItemStack> ingredientStacks =
-            // Objects.requireNonNullElseGet(holder.getCapabilitiesProxy().get(IO.IN, ItemRecipeCapability.CAP),
-            // Collections::<IRecipeHandler<?>>emptyList)
-            // .stream()
-            // .map(container ->
-            // container.getContents().stream().filter(ItemStack.class::isInstance).map(ItemStack.class::cast).toList())
-            // .flatMap(container -> GTHashMaps.fromItemStackCollection(container).object2IntEntrySet().stream())
-            // .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, Integer::sum, () -> new
-            // Object2IntOpenCustomHashMap<>(ItemStackHashStrategy.comparingAllButCount())));
-            // ItemStack stack = new ItemStack(BuiltInRegistries.ITEM.get(new
-            // ResourceLocation("ars_nouveau:drygmy_charm")));
-            // //Never let the multiplier be 0 (THIS IS NOT ACTUALLY PARALLEL, It's just being used to to some goober
-            // grade math)
-            // if (ingredientStacks.getInt(stack) >= 1) {
-            // var maxParallel = ingredientStacks.getInt(stack) / 2;
-            // recipe = copyOutputs(recipe, ContentModifier.multiplier(maxParallel));
-            // }
-            // }
-            // return recipe;
-            // },
-            // GTRecipeModifiers.ELECTRIC_OVERCLOCK.apply(OverclockingLogic.NON_PERFECT_OVERCLOCK))
+            .recipeModifiers(CosmicRecipeModifiers::groveMulti,
+                    ELECTRIC_OVERCLOCK.apply(OverclockingLogic.NON_PERFECT_OVERCLOCK))
             .appearanceBlock(GTBlocks.CASING_STAINLESS_CLEAN)
             .pattern(definition -> FactoryBlockPattern.start()
                     .aisle("##QQQ##", "##QQQ##", "#######", "#######", "#######", "##QQQ##", "##QQQ##")
@@ -770,6 +777,41 @@ public class CosmicMachines {
                     BloodMagic.rl("block/blankrune"),
                     GTCEu.id("block/casings/gcym/stress_proof_casing"),
                     GTCEu.id("block/multiblock/network_switch")))
+            .register();
+    public static final MultiblockMachineDefinition POLYMERIZER = REGISTRATE
+            .multiblock("polymerizer", WorkableElectricMultiblockMachine::new)
+            .langValue("§aPolymerizer")
+            .recipeType(CosmicRecipeTypes.POLYMERIZER)
+            .rotationState(RotationState.NON_Y_AXIS)
+            .partAppearance((controller, part, side) -> CYCLOZINE_CHEMICALLY_REPELLING_CASING.getDefaultState())
+            .recipeModifiers(GTRecipeModifiers.PARALLEL_HATCH,
+                    ELECTRIC_OVERCLOCK.apply(OverclockingLogic.PERFECT_OVERCLOCK))
+            .pattern(definition -> FactoryBlockPattern.start()
+                    .aisle("X       X", "X       X", "AABBABBAA", "AABBABBAA", "AABBABBAA", "         ", "         ")
+                    .aisle("         ", "AABBABBAA", "AD#####DA", "ADD###DDA", "AD#####DA", "AABBABBAA", "         ")
+                    .aisle("AABBABBAA", "AD#####DA", "EF#####FE", "EFD###DFE", "EF#####FE", "AD#####DA", "AABBABBAA")
+                    .aisle("AABBABBAA", "ADD###DDA", "EFD###DFE", "EDDFFFDDE", "EFD###DFE", "ADD###DDA", "AABBABBAA")
+                    .aisle("AABBABBAA", "AD#####DA", "EF#####FE", "EFD###DFE", "EF#####FE", "AD#####DA", "AABBABBAA")
+                    .aisle("         ", "AABBABBAA", "AD#####DA", "ADD###DDA", "AD#####DA", "AABBABBAA", "         ")
+                    .aisle("X       X", "X       X", "AABBABBAA", "AABBQBBAA", "AABBABBAA", "         ", "         ")
+
+                    .where('Q', Predicates.controller(Predicates.blocks(definition.get())))
+                    .where(' ', Predicates.any())
+                    .where('#', Predicates.air())
+                    .where('A', blocks(HIGH_TOLERANCE_RHENIUM_CASING.get()))
+                    .where('B', blocks(FUSION_GLASS.get()))
+                    .where('D', blocks(RESONANTLY_TUNED_VIRTUE_MELD_CASING.get()))
+                    .where('E', blocks(CYCLOZINE_CHEMICALLY_REPELLING_CASING.get())
+                            .or(autoAbilities(CosmicRecipeTypes.POLYMERIZER))
+                            .or(abilities(PartAbility.INPUT_ENERGY, PartAbility.INPUT_LASER).setExactLimit(1)
+                                    .setPreviewCount(1)))
+                    .where('F', blocks(GEARBOX_PTHANTERUM.get()))
+                    .where('X', blocks(ChemicalHelper.getBlock(TagPrefix.frameGt, GTMaterials.NaquadahAlloy)))
+                    .build())
+            .renderer(() -> new SufferingChamberRender(
+                    CosmicCore.id("block/casings/solid/high_tolerance_rhenium_casing"),
+                    CosmicCore.id("block/casings/solid/vomahine_certified_chemically_resistant_casing"),
+                    GTCEu.id("block/multiblock/assembly_line")))
             .register();
 
     public final static MultiblockMachineDefinition CELESTIAL_BORE = REGISTRATE.multiblock(
@@ -3186,12 +3228,27 @@ public class CosmicMachines {
                 tiers);
     }
 
+    private static MachineDefinition[] registerWirelessEnergyTieredHatch(String name, String displayName, String model,
+                                                                         IO io,
+                                                                         int[] tiers, int amperage,
+                                                                         PartAbility... abilities) {
+        return registerTieredMachines(name,
+                (holder, tier) -> new WirelessEnergyHatchPartMachine(holder, tier, io, amperage),
+                (tier, builder) -> builder
+                        .langValue(VNF[tier] + ' ' + displayName)
+                        .abilities(abilities)
+                        .rotationState(RotationState.ALL)
+                        .tooltips(WirelessEnergyHatchPartMachine.getTooltipComponents(tier, io, amperage))
+                        .overlayTieredHullRenderer(model)
+                        .register(),
+                tiers);
+    }
+
     private static MachineDefinition[] registerThermiaTieredHatch(String name, String displayName, String model, IO io,
                                                                   int[] tiers, PartAbility... abilities) {
         return registerTieredMachines(name,
                 (holder, tier) -> new ThermiaHatchPartMachine(holder, tier, io),
                 (tier, builder) -> builder
-                        .langValue(GTValues.VNF[tier] + ' ' + displayName)
                         .abilities(abilities)
                         .rotationState(RotationState.ALL)
                         .overlayTieredHullRenderer(model)
@@ -3233,6 +3290,106 @@ public class CosmicMachines {
         return definitions;
     }
 
+    public static final MultiblockMachineDefinition DIMENSIONAL_ENERGY_CAPACITOR = REGISTRATE
+            .multiblock("dimensional_energy_capacitor", DimensionalEnergyCapacitor::new)
+            .langValue("Power Substation")
+            .rotationState(RotationState.ALL)
+            .recipeType(GTRecipeTypes.DUMMY_RECIPES)
+            .appearanceBlock(CASING_PALLADIUM_SUBSTATION)
+            .tooltips(Component.translatable("gtceu.machine.power_substation.tooltip.0"),
+                    Component.translatable("gtceu.machine.power_substation.tooltip.1"),
+                    Component.translatable("gtceu.machine.power_substation.tooltip.2",
+                            PowerSubstationMachine.MAX_BATTERY_LAYERS),
+                    Component.translatable("gtceu.machine.power_substation.tooltip.3"),
+                    Component.translatable("gtceu.machine.power_substation.tooltip.4",
+                            PowerSubstationMachine.PASSIVE_DRAIN_MAX_PER_STORAGE / 1000),
+                    Component.translatable("gtceu.machine.dec.tooltip.0"),
+                    Component.translatable("gtceu.machine.dec.tooltip.1"),
+                    Component.translatable("gtceu.machine.dec.tooltip.2"),
+                    Component.translatable("gtceu.machine.dec.tooltip.3"))
+            .pattern(definition -> FactoryBlockPattern.start(RIGHT, BACK, UP)
+                    .aisle("XXSXX", "XXXXX", "XXXXX", "XXXXX", "XXXXX")
+                    .aisle("XXXXX", "XCCCX", "XCCCX", "XCCCX", "XXXXX")
+                    .aisle("GGGGG", "GBBBG", "GBBBG", "GBBBG", "GGGGG")
+                    .setRepeatable(1, DimensionalEnergyCapacitor.MAX_BATTERY_LAYER)
+                    .aisle("GGGGG", "GGGGG", "GGGGG", "GGGGG", "GGGGG")
+                    .where('S', controller(blocks(definition.getBlock())))
+                    .where('C', blocks(CASING_PALLADIUM_SUBSTATION.get()))
+                    .where('X',
+                            blocks(CASING_PALLADIUM_SUBSTATION.get())
+                                    .setMinGlobalLimited(DimensionalEnergyCapacitor.MIN_CASINGS)
+                                    .or(autoAbilities(true, false, false))
+                                    .or(abilities(PartAbility.INPUT_ENERGY, PartAbility.SUBSTATION_INPUT_ENERGY,
+                                            PartAbility.INPUT_LASER))
+                                    .or(abilities(PartAbility.OUTPUT_ENERGY, PartAbility.SUBSTATION_OUTPUT_ENERGY,
+                                            PartAbility.OUTPUT_LASER)))
+                    .where('G', blocks(CASING_LAMINATED_GLASS.get()))
+                    .where('B', Predicates.powerSubstationBatteries())
+                    .build())
+            .shapeInfos(definition -> {
+                List<MultiblockShapeInfo> shapeInfo = new ArrayList<>();
+                MultiblockShapeInfo.ShapeInfoBuilder builder = MultiblockShapeInfo.builder()
+                        .aisle("ICSCO", "NCMCT", "GGGGG", "GGGGG", "GGGGG")
+                        .aisle("CCCCC", "CCCCC", "GBBBG", "GBBBG", "GGGGG")
+                        .aisle("CCCCC", "CCCCC", "GBBBG", "GBBBG", "GGGGG")
+                        .aisle("CCCCC", "CCCCC", "GBBBG", "GBBBG", "GGGGG")
+                        .aisle("CCCCC", "CCCCC", "GGGGG", "GGGGG", "GGGGG")
+                        .where('S', definition, Direction.NORTH)
+                        .where('C', CASING_PALLADIUM_SUBSTATION)
+                        .where('G', CASING_LAMINATED_GLASS)
+                        .where('I', GTMachines.ENERGY_INPUT_HATCH[HV], Direction.NORTH)
+                        .where('N', GTMachines.SUBSTATION_ENERGY_INPUT_HATCH[EV], Direction.NORTH)
+                        .where('O', GTMachines.ENERGY_OUTPUT_HATCH[HV], Direction.NORTH)
+                        .where('T', GTMachines.SUBSTATION_ENERGY_OUTPUT_HATCH[EV], Direction.NORTH)
+                        .where('M',
+                                ConfigHolder.INSTANCE.machines.enableMaintenance ?
+                                        GTMachines.MAINTENANCE_HATCH.getBlock().defaultBlockState().setValue(
+                                                GTMachines.MAINTENANCE_HATCH.get().getRotationState().property,
+                                                Direction.NORTH) :
+                                        CASING_PALLADIUM_SUBSTATION.get().defaultBlockState());
+
+                GTCEuAPI.PSS_BATTERIES.entrySet().stream()
+                        // filter out empty batteries in example structures, though they are still
+                        // allowed in the predicate (so you can see them on right-click)
+                        .filter(entry -> entry.getKey().getCapacity() > 0)
+                        .sorted(Comparator.comparingInt(entry -> entry.getKey().getTier()))
+                        .forEach(entry -> shapeInfo.add(builder.where('B', entry.getValue().get()).build()));
+
+                return shapeInfo;
+            })
+            .workableCasingRenderer(GTCEu.id("block/casings/solid/machine_casing_palladium_substation"),
+                    GTCEu.id("block/multiblock/power_substation"))
+            .register();
+
+    public static final MultiblockMachineDefinition DIMENSIONAL_ENERGY_INTERFACE = REGISTRATE
+            .multiblock("dimensional_energy_interface", DimensionalEnergyInterface::new)
+            .langValue("Power Substation Dimensional Interface")
+            .rotationState(RotationState.ALL)
+            .recipeType(GTRecipeTypes.DUMMY_RECIPES)
+            .appearanceBlock(TRITANIUM_LINED_HEAVY_NEUTRONIUM_CASING)
+            .tooltips(Component.translatable("gtceu.machine.active_transformer.tooltip.0"),
+                    Component.translatable("gtceu.machine.active_transformer.tooltip.1"))
+            .tooltipBuilder(
+                    (stack,
+                     components) -> components.add(Component.translatable("gtceu.machine.active_transformer.tooltip.2")
+                             .append(Component.translatable("gtceu.machine.active_transformer.tooltip.3")
+                                     .withStyle(TooltipHelper.RAINBOW_HSL_SLOW))))
+            .tooltips(Component.translatable("gtceu.machine.dec.tooltip.4"))
+            .pattern((definition) -> FactoryBlockPattern.start()
+                    .aisle("XXX", "XXX", "XXX")
+                    .aisle("XXX", "XCX", "XXX")
+                    .aisle("XMX", "XSX", "XXX")
+                    .where('S', controller(blocks(definition.getBlock())))
+                    .where('X', blocks(TRITANIUM_LINED_HEAVY_NEUTRONIUM_CASING.get()).setMinGlobalLimited(12)
+                            .or(ActiveTransformerMachine.getHatchPredicates()))
+                    .where('C', blocks(GTBlocks.SUPERCONDUCTING_COIL.get()))
+                    .where('M',
+                            blocks(TRITANIUM_LINED_HEAVY_NEUTRONIUM_CASING.get()).or(autoAbilities(true, false, false)))
+                    .build())
+            .workableCasingRenderer(CosmicCore.id("block/casings/solid/tritanium_lined_heavy_bolted_neutronium_casing"),
+                    GTCEu.id("block/multiblock/data_bank"))
+            .register();
+
     public static final MachineDefinition STEAM_IMPORT_HATCH = GTRegistration.REGISTRATE
             .machine("steam_fluid_input_hatch", holder -> new SteamFluidHatchPartMachine(holder, IO.IN, 4000, 1))
             .rotationState(RotationState.ALL)
@@ -3267,6 +3424,31 @@ public class CosmicMachines {
             .workableCasingRenderer(GTCEu.id("block/casings/hpca/high_power_casing"),
                     CosmicCore.id("block/multiblock/wireless_data_transmitter"))
             .register();
+    public static final MultiblockMachineDefinition LOCAL_POWER_CAPACITOR = REGISTRATE
+            .multiblock("capacitor_array", PowerSubstationMachine::new)
+            .langValue("Capacitor Array")
+            .rotationState(RotationState.NON_Y_AXIS)
+            .appearanceBlock(CASING_PALLADIUM_SUBSTATION)
+            .recipeType(GTRecipeTypes.DUMMY_RECIPES)
+            .tooltips(Component.translatable("cosmiccore.machine.capacitor_array.tooltip.0"),
+                    Component.translatable("cosmiccore.machine.capacitor_array.tooltip.1"),
+                    Component.translatable("cosmiccore.machine.capacitor_array.tooltip.2"))
+            .pattern(definition -> FactoryBlockPattern.start(RIGHT, BACK, UP)
+                    .aisle("ACA", "AAA", "AAA")
+                    .aisle("ABA", "BDB", "ABA")
+                    .setRepeatable(1, PowerSubstationMachine.MAX_BATTERY_LAYERS)
+                    .aisle("AAA", "AAA", "AAA")
+                    .where("C", controller(blocks(definition.getBlock())))
+                    .where("A", blocks(CASING_PALLADIUM_SUBSTATION.get())
+                            .or(abilities(PartAbility.INPUT_LASER, PartAbility.INPUT_ENERGY, PartAbility.OUTPUT_ENERGY,
+                                    PartAbility.OUTPUT_LASER)
+                                    .or(abilities(PartAbility.MAINTENANCE)).setExactLimit(1)))
+                    .where("D", Predicates.powerSubstationBatteries())
+                    .where("B", blocks(CASING_LAMINATED_GLASS.get()))
+                    .build())
+            .workableCasingRenderer(GTCEu.id("block/casings/solid/machine_casing_palladium_substation"),
+                    GTCEu.id("block/multiblock/power_substation"))
+            .register();
 
     public static final MachineDefinition WIRELESS_DATA_HATCH = REGISTRATE
             .machine("wireless_data_hatch", WirelessDataHatchPartMachine::new)
@@ -3279,8 +3461,13 @@ public class CosmicMachines {
 
     public static void init() {
         GTMultiMachines.LARGE_COMBUSTION_ENGINE.setRecipeTypes(new GTRecipeType[] { DUMMY_RECIPES });
+        GTMultiMachines.LARGE_COMBUSTION_ENGINE.setRenderXEIPreview(false);
+        GTMultiMachines.LARGE_COMBUSTION_ENGINE.setRenderWorldPreview(false);
         GTMultiMachines.EXTREME_COMBUSTION_ENGINE.setRecipeTypes(new GTRecipeType[] { DUMMY_RECIPES });
-
+        GTMultiMachines.EXTREME_COMBUSTION_ENGINE.setRenderXEIPreview(false);
+        GTMultiMachines.EXTREME_COMBUSTION_ENGINE.setRenderWorldPreview(false);
+        GTMultiMachines.POWER_SUBSTATION.setRenderXEIPreview(false);
+        GTMultiMachines.POWER_SUBSTATION.setRenderWorldPreview(false);
         for (MultiblockMachineDefinition definition : FUSION_REACTOR) {
             if (definition == null) continue;
             definition.setPatternFactory(() -> {

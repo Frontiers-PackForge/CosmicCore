@@ -192,6 +192,13 @@ public class CosmicLangHandler {
         replace(provider, "cosmiccore.wireless_charger.enter_range",
                 "You have entered charging range [Range - %s blocks]");
         replace(provider, "cosmiccore.wireless_charger.left_range", "You have left charging range [Range - %s blocks]");
+        replace(provider, "cosmiccore.circuit.lore.tier.max.0", "MAX Tier Circuit");
+        replace(provider, "cosmiccore.circuit.lore.tier.max.1", "Not a processor- but an Obituary.");
+        replace(provider, "cosmiccore.circuit.lore.tier.max.2", "Input: Existence.");
+        replace(provider, "cosmiccore.circuit.lore.tier.max.3", "Output: A single conclusion.");
+
+        replace(provider, "cosmiccore.lore.broken_virtue.0", "Perpetuity Shudders Softly");
+        replace(provider, "cosmiccore.lore.broken_virtue.1", "Something has gone very wrong.");
 
         replace(provider, "coscore.pattern.multiply",
                 "§b%dx§f");
@@ -204,5 +211,50 @@ public class CosmicLangHandler {
 
         replace(provider, "coscore.pattern.tooltip.multiply",
                 "Multiplies contents by §c%d§f");
+
+        replace(provider, "item.cosmiccore.the_one_ring.tooltip.0",
+                "§6§oOne Ring to rule them all, One Ring to find them, One Ring to bring them all and in the darkness bind them.§r");
+        replace(provider, "item.cosmiccore.the_one_ring.tooltip.1", "You might find it hard to take off.");
+
+        replace(provider, "behavior.wireless_data.owner.player", "§3Player Name: §r%s");
+        replace(provider, "behavior.wireless_data.owner.team", "§3Team Name: §r");
+
+        // Dimensional Energy Storage
+        provider.add("cosmic.multiblock.capacitor.info.tittle.global", "Global Network Info");
+        provider.add("cosmic.multiblock.capacitor.info.tittle.local", "Local Buffer Info ");
+        provider.add("cosmic.multiblock.capacitor.info.global", "Global");
+        provider.add("cosmic.multiblock.capacitor.info.local", "Local");
+        provider.add("cosmic.multiblock.capacitor.buffered", "§7Buffered: %s §7EU");
+        provider.add("cosmic.multiblock.capacitor.duplicate.multiblock.1", "This multiblock is a duplicate");
+        provider.add("cosmic.multiblock.capacitor.duplicate.multiblock.2", "Only one can exist");
+
+        // Dimensional Energy Tooltip
+        provider.add("gtceu.machine.dec.tooltip.0", "Stores power in an interdimensional pocket.");
+        provider.add("gtceu.machine.dec.tooltip.1",
+                "Can send/receive power to/from §bPower Substation Dimensional Interfaces");
+        provider.add("gtceu.machine.dec.tooltip.2", "Can only create §cONE§r Power Substation per team/player.");
+        provider.add("gtceu.machine.dec.tooltip.3", "§cDuplicates will not function.");
+        provider.add("gtceu.machine.dec.tooltip.4",
+                "§7Can Insert and Extract from your wireless networked linked to your §aPower Substation§r");
+
+        provider.add("cosmiccore.machine.capacitor_array.tooltip.0",
+                "§7Local Dense Power Storage§r");
+        provider.add("cosmiccore.machine.capacitor_array.tooltip.1",
+                "§7Can use any capacitor and be expanded vertically up to 18 times§r");
+        provider.add("cosmiccore.machine.capacitor_array.tooltip.2",
+                "§7Accepts §6Laser Hatches§r");
+        // Wireless Energy Command
+        provider.add("cosmic.command.wireless.energy.player", "§aPlayer:§a %s");
+        provider.add("cosmic.command.wireless.energy.team", "§aTeam:§a %s");
+        provider.add("cosmic.command.wireless.energy.header", "§eWireless Energy Network Info (§e %s §e)§e:");
+        provider.add("cosmic.command.wireless.energy.capacity", "  §bCapacity:§b %s EU");
+        provider.add("cosmic.command.wireless.energy.stored", "  §bStored:§b %s EU");
+        provider.add("cosmic.command.wireless.energy.input", "  §bInput:§b %s EU/t");
+        provider.add("cosmic.command.wireless.energy.output", "  §bOutput:§b %s EU/t");
+        provider.add("cosmic.command.wireless.energy.buffered", "  §bBuffered:§b %s EU");
+        provider.add("cosmic.command.wireless.energy.active", "  §bActive:§b %s");
+        provider.add("cosmic.command.wireless.energy.location.format", "%s : x=%d y=%d z=%d");
+        provider.add("cosmic.command.wireless.energy.no.capacitor", "No Formed Capacitor");
+        provider.add("cosmic.command.wireless.energy.capacitor", "  §bCapacitor Location:§b ");
     }
 }

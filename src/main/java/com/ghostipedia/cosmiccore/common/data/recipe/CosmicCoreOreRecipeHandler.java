@@ -91,7 +91,7 @@ public class CosmicCoreOreRecipeHandler {
 
     public static void processLeachedRefined(Consumer<FinishedRecipe> provider, Material material) {
         if (!material.shouldGenerateRecipesFor(crushedLeached) || !material.hasProperty(PropertyKey.ORE)) return;
-        ItemStack refinedStack = ChemicalHelper.get(crushedLeached, material);
+        ItemStack refinedStack = ChemicalHelper.get(crushedRefined, material);
         var property = material.getProperty(PropertyKey.ORE);
 
         Material byproduct = property.getOreByProduct(1);

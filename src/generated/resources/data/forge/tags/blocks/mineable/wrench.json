@@ -9,6 +9,10 @@
     "cosmiccore:programable_matter_coil_block",
     "cosmiccore:shimmering_neutronium_coil_block",
     "cosmiccore:causal_fabric_coil_block",
+    "cosmiccore:reflective_starmetal_casing",
+    "cosmiccore:tritanium_lined_heavy_neutronium_casing",
+    "cosmiccore:high_tolerance_rhenium_casing",
+    "cosmiccore:highly_flexible_reinforced_trinavine_casing",
     "cosmiccore:dyson_solar_cell",
     "cosmiccore:naquadah_pressure_resistant_casing",
     "cosmiccore:resonantly_tuned_virtue_meld_casing",
@@ -30,6 +34,7 @@
     "cosmiccore:heat_fan",
     "cosmiccore:ludicrious_intake",
     "cosmiccore:ultimate_intake",
-    "cosmiccore:blood_cube"
+    "cosmiccore:blood_cube",
+    "cosmiccore:zbland_glass"
   ]
 }

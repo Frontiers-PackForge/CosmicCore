@@ -72,6 +72,19 @@ public class CosmicBlocks {
                     Map.of("all", CosmicCoilBlock.CoilType.CAUSAL_FABRIC.getTexture())) : null
 
     );
+
+    // New Casings ; Several reference textures from GTOCore, make sure to give credits to them!
+    public static final BlockEntry<Block> REFLECTIVE_STARMETAL_CASING = createCasingBlock("reflective_starmetal_casing",
+            CosmicCore.id("block/casings/solid/reflective_starmetal_casing"));
+    public static final BlockEntry<Block> TRITANIUM_LINED_HEAVY_NEUTRONIUM_CASING = createCasingBlock(
+            "tritanium_lined_heavy_neutronium_casing",
+            CosmicCore.id("block/casings/solid/tritanium_lined_heavy_bolted_neutronium_casing"));
+    public static final BlockEntry<Block> HIGH_TOLERANCE_RHENIUM_CASING = createCasingBlock(
+            "high_tolerance_rhenium_casing",
+            CosmicCore.id("block/casings/solid/high_tolerance_rhenium_casing"));
+    public static final BlockEntry<Block> HIGHLY_FLEXIBLE_REINFORCED_TRINAVINE_CASING = createCasingBlock(
+            "highly_flexible_reinforced_trinavine_casing",
+            CosmicCore.id("block/casings/solid/highly_flexible_reinforced_trinavine_casing"));
     public static final BlockEntry<Block> CASING_DYSON_CELL = createCasingBlock("dyson_solar_cell",
             CosmicCore.id("block/casings/solid/dyson_solar_cell"));
     public static final BlockEntry<Block> STAR_LADDER_CASING = createCasingBlock("dyson_solar_cell",
@@ -131,10 +144,23 @@ public class CosmicBlocks {
     public static final BlockEntry<Block> BLOOD_CUBE = createCasingBlock(
             "blood_cube", CosmicCore.id("block/iris/bloodcube"));
 
+    // GLASS BLOCKS
+    public static final BlockEntry<Block> ZBLAN_REINFORCED_GLASS = createGlassCasingBlock(
+            "zblan_glass", CosmicCore.id("block/casings/glass/zblan_glass"), () -> RenderType::translucent);
+
     // This is a Bunch of Rendering Magic I barely understand (See: I Don't understand at all) ~Ghost
     private static BlockEntry<Block> createGlassCasingBlock(String name, ResourceLocation texture,
                                                             Supplier<Supplier<RenderType>> type) {
-        return createCasingBlock(name, GlassBlock::new, texture, () -> Blocks.GLASS, type);
+        NonNullFunction<BlockBehaviour.Properties, Block> supplier = GlassBlock::new;
+        return REGISTRATE.block(name, supplier)
+                .initialProperties(() -> Blocks.GLASS)
+                .properties(p -> p.isValidSpawn((state, level, pos, ent) -> false))
+                .addLayer(type)
+                .blockstate(GTModels.cubeAllModel(name, texture))
+                .tag(RecipeTags.MINEABLE_WITH_WRENCH)
+                .item(BlockItem::new)
+                .build()
+                .register();
     }
 
     public static BlockEntry<Block> createCasingBlock(String name, ResourceLocation texture) {

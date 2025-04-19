@@ -1,16 +1,18 @@
 package com.ghostipedia.cosmiccore.client.renderer.item;
 
 import com.ghostipedia.cosmiccore.CosmicCore;
+import com.ghostipedia.cosmiccore.client.gui.AlphaOverrideVertexConsumer;
 
 import com.gregtechceu.gtceu.GTCEu;
+import com.gregtechceu.gtceu.api.GTValues;
 
-import com.lowdragmc.lowdraglib.client.renderer.IItemRendererProvider;
 import com.lowdragmc.lowdraglib.client.renderer.IRenderer;
 import com.lowdragmc.lowdraglib.utils.ColorUtils;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.renderer.GameRenderer;
+import net.minecraft.client.renderer.ItemBlockRenderTypes;
 import net.minecraft.client.renderer.ItemModelShaper;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.ItemRenderer;
@@ -19,6 +21,7 @@ import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.inventory.InventoryMenu;
+import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.api.distmarker.Dist;
@@ -31,9 +34,12 @@ import org.joml.Matrix4f;
 
 import java.util.function.Supplier;
 
+import static com.ghostipedia.cosmiccore.client.renderer.item.RadianceItemRenderer.getItemRenderer;
+import static com.ghostipedia.cosmiccore.client.renderer.item.RadianceItemRenderer.vanillaRender;
+
 public class HaloRenders implements IRenderer {
 
-    public static final HaloRenders PRISMATIC_TUNGSTEN_HALO = HaloRenders.create(0.15F, 0xeb34cf, 10,
+    public static final HaloRenders PRISMATIC_TUNGSTEN_HALO = HaloRenders.create(0F, 0xeb34cf, 10,
             CosmicCore.id("rnd/halo"));
 
     private static HaloRenders create(float pulse, int colour, int size, ResourceLocation textures) {
@@ -96,24 +102,25 @@ public class HaloRenders implements IRenderer {
                 poseStack.popPose();
             }
             vanillaRender(stack, transformType, leftHand, poseStack, buffer, combinedLight, combinedOverlay, model);
+            if (pulse != 0 && !(stack.getItem() instanceof BlockItem)) {
+                poseStack.pushPose();
+                poseStack.translate(-0.5F, -0.5F, -0.5F);
+                float scale = GTValues.RNG.nextFloat() * pulse + 1;
+                float trans = (1 - scale) / 2;
+                poseStack.translate(trans, trans, 0);
+                poseStack.scale(scale, scale, 1.0001F);
+                model.getTransforms().getTransform(transformType).apply(leftHand, poseStack);
+                VertexConsumer vertexConsumer = ItemRenderer.getFoilBufferDirect(buffer,
+                        ItemBlockRenderTypes.getRenderType(stack, true), true, stack.hasFoil());
+                getItemRenderer().renderModelLists(model, stack, combinedLight, combinedOverlay, poseStack,
+                        new AlphaOverrideVertexConsumer(vertexConsumer, (float) 0.6));
+                poseStack.popPose();
+            }
             RenderSystem.enableDepthTest();
             RenderSystem.disableBlend();
         } else {
             vanillaRender(stack, transformType, leftHand, poseStack, buffer, combinedLight, combinedOverlay, model);
         }
-    }
-
-    public static void vanillaRender(ItemStack stack, ItemDisplayContext transformType, boolean leftHand,
-                                     PoseStack poseStack, MultiBufferSource buffer, int combinedLight,
-                                     int combinedOverlay, BakedModel model) {
-        IItemRendererProvider.disabled.set(true);
-        Minecraft.getInstance().getItemRenderer().render(stack, transformType, leftHand, poseStack, buffer,
-                combinedLight, combinedOverlay, getVanillaModel(stack, null, null));
-        IItemRendererProvider.disabled.set(false);
-    }
-
-    public static ItemRenderer getItemRenderer() {
-        return Minecraft.getInstance().getItemRenderer();
     }
 
     public static BakedModel getVanillaModel(ItemStack stack, ClientLevel level, LivingEntity entity) {
