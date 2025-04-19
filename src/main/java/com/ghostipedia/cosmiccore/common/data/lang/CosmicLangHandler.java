@@ -13,7 +13,7 @@ public class CosmicLangHandler {
         replace(provider, "cosmiccore.multiblock.naqreactor.tooltip.1",
                 "§bWill always attempt to parallel to 16x output.");
         replace(provider, "cosmiccore.multiblock.naqreactor.tooltip.2", "§cOnly Accepts Laser hatches.");
-        replace(provider, "gtceu.industrial_chemvat", "§aIndustiral Chemvat");
+        replace(provider, "gtceu.industrial_chemvat", "§aIndustrial Chemvat");
         replace(provider, "cosmiccore.multiblock.chemvat.tooltip.0", "§aA massive chemical plant capable of parallel");
         replace(provider, "cosmiccore.multiblock.chemvat.tooltip.1",
                 "§fWhen parallelized, adds the cumulative time of all recipes together.");

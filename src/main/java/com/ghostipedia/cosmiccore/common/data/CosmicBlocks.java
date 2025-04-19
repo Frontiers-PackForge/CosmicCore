@@ -118,6 +118,8 @@ public class CosmicBlocks {
     // TODO : FIGURE OUT WHY these are breaking the minable tags for pickaxe/wrench..
     public static final BlockEntry<Block> GILDED_PTHANTERUM_CASING = createCasingBlock(
             "gilded_pthanterum_casing", CosmicCore.id("block/casings/solid/gilded_pthanterum_casing"));
+    public static final BlockEntry<Block> WEAR_RESISTANT_RURIDIT_CASING = createCasingBlock(
+            "wear_resistant_ruridit_casing", CosmicCore.id("block/casings/solid/ruridit_casing"));
     public static final BlockEntry<Block> REINFORCED_NAQUADRIA_CASING = createCasingBlock(
             "reinforced_naquadria_casing", CosmicCore.id("block/casings/solid/reinforced_naquadria_casing"));
     public static final BlockEntry<Block> HIGH_TEMP_FISSION_CASING = createCasingBlock(

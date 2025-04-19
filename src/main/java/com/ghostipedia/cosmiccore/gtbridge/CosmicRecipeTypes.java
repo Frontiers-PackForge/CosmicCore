@@ -2,6 +2,7 @@ package com.ghostipedia.cosmiccore.gtbridge;
 
 import com.ghostipedia.cosmiccore.api.capability.recipe.SoulRecipeCapability;
 
+import com.gregtechceu.gtceu.api.block.ICoilType;
 import com.gregtechceu.gtceu.api.capability.recipe.IO;
 import com.gregtechceu.gtceu.api.gui.GuiTextures;
 import com.gregtechceu.gtceu.api.recipe.GTRecipeType;
@@ -12,6 +13,7 @@ import com.gregtechceu.gtceu.common.recipe.condition.DimensionCondition;
 import com.lowdragmc.lowdraglib.gui.texture.ProgressTexture;
 import com.lowdragmc.lowdraglib.utils.LocalizationUtils;
 
+import net.minecraft.client.resources.language.I18n;
 import net.minecraft.resources.ResourceLocation;
 
 import static com.gregtechceu.gtceu.common.data.GTRecipeTypes.*;
@@ -69,10 +71,30 @@ public class CosmicRecipeTypes {
             .register("chromatic_flotation_plant", GTRecipeTypes.MULTIBLOCK)
             .setMaxIOSize(3, 3, 3, 3)
             .setProgressBar(GuiTextures.PROGRESS_BAR_ARROW, ProgressTexture.FillDirection.LEFT_TO_RIGHT);
+    public static final GTRecipeType SPOOLING_MACHINE = GTRecipeTypes
+            .register("spooling_machine", ELECTRIC)
+            .setMaxIOSize(2, 2, 1, 0)
+            .setProgressBar(GuiTextures.PROGRESS_BAR_ARROW, ProgressTexture.FillDirection.LEFT_TO_RIGHT);
     public static final GTRecipeType ORBITAL_FORGE = GTRecipeTypes
             .register("orbital_forge", GTRecipeTypes.MULTIBLOCK)
+            .setHasResearchSlot(true)
+            .setMaxTooltips(4)
             .setMaxIOSize(3, 3, 3, 3)
-            .setProgressBar(GuiTextures.PROGRESS_BAR_ARROW, ProgressTexture.FillDirection.LEFT_TO_RIGHT);
+            .setProgressBar(GuiTextures.PROGRESS_BAR_ARROW, ProgressTexture.FillDirection.LEFT_TO_RIGHT)
+            .addDataInfo(data -> {
+                int temp = data.getInt("ebf_temp");
+                return LocalizationUtils.format("gtceu.recipe.temperature", temp);
+            })
+            .addDataInfo(data -> {
+                int temp = data.getInt("ebf_temp");
+                ICoilType requiredCoil = ICoilType.getMinRequiredType(temp);
+
+                if (requiredCoil != null && !requiredCoil.getMaterial().isNull()) {
+                    return LocalizationUtils.format("gtceu.recipe.coil.tier",
+                            I18n.get(requiredCoil.getMaterial().getUnlocalizedName()));
+                }
+                return "";
+            });
     public static final GTRecipeType STELLAR_IRIS = GTRecipeTypes.register("stellar_iris", GTRecipeTypes.MULTIBLOCK)
             .setMaxIOSize(16, 16, 16, 16)
             // .setSound(CosmicSounds.BLACK_HOLE_CRY)
@@ -200,17 +222,14 @@ public class CosmicRecipeTypes {
             var orbitBuilder = ORBITAL_FORGE.copyFrom(builder);
             // Orbital Forge ONLY copies Standard EBF recipes, if an EBF recipe contains a dimension condition, it is
             // assumed it can't be done in space
-            // Manual Intervention would be required to make sure it doesn't have some psychotic icon overlaying, this
-            // is the best option and then packside intervention.
             if (!builder.conditions.isEmpty() &&
                     builder.conditions.stream().anyMatch(cond -> cond instanceof DimensionCondition)) {
-                orbitBuilder.save(provider);
+                // Do Nothing if the recipe Contains a Dimension
             } else {
-                // Will require UI Refactor for GTM to support more than one orbit, the sun is sufficient for now.
+                // If It Doesn't have a Dimension, add the recipe and give it an dimension req of 'Sun Orbit'
                 orbitBuilder.addCondition(new DimensionCondition(new ResourceLocation("frontiers:sun_orbit")))
                         .save(provider);
             }
-
         });
     }
 }
