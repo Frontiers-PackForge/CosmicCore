@@ -707,7 +707,7 @@ public class CosmicMachines {
             .rotationState(RotationState.ALL)
             .recipeTypes(CosmicRecipeTypes.INDUSTRIAL_CHEMVAT, GTRecipeTypes.CRACKING_RECIPES)
             .recipeModifiers(CosmicRecipeModifiers::chemicalVatLogic,
-                    ELECTRIC_OVERCLOCK.apply(OverclockingLogic.NON_PERFECT_OVERCLOCK))
+                    ELECTRIC_OVERCLOCK.apply(OverclockingLogic.PERFECT_OVERCLOCK_SUBTICK))
             .appearanceBlock(CYCLOZINE_CHEMICALLY_REPELLING_CASING)
             .pattern(definition -> FactoryBlockPattern.start()
                     .aisle("##QQQ##", "##QQQ##", "###Q###", "#######", "#######", "#######", "#######", "#######",
@@ -3502,7 +3502,7 @@ public class CosmicMachines {
                     .where("C", controller(blocks(definition.getBlock())))
                     .where("A", blocks(CASING_PALLADIUM_SUBSTATION.get())
                             .or(abilities(PartAbility.INPUT_LASER, PartAbility.INPUT_ENERGY, PartAbility.OUTPUT_ENERGY,
-                                    PartAbility.OUTPUT_LASER)
+                                    PartAbility.OUTPUT_LASER,PartAbility.SUBSTATION_INPUT_ENERGY,PartAbility.SUBSTATION_OUTPUT_ENERGY)
                                     .or(abilities(PartAbility.MAINTENANCE)).setExactLimit(1)))
                     .where("D", Predicates.powerSubstationBatteries())
                     .where("B", blocks(CASING_LAMINATED_GLASS.get()))
