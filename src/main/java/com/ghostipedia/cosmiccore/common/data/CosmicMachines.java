@@ -21,6 +21,7 @@ import com.ghostipedia.cosmiccore.common.machine.multiblock.multi.WirelessDataBa
 import com.ghostipedia.cosmiccore.common.machine.multiblock.part.*;
 import com.ghostipedia.cosmiccore.common.machine.multiblock.steam.WeakSteamParallelMultiBlockMachine;
 import com.ghostipedia.cosmiccore.gtbridge.CosmicRecipeTypes;
+import com.ghostipedia.cosmiccore.api.machine.multiblock.UniqueWorkableElectricMultiblockMachine;
 
 import com.gregtechceu.gtceu.GTCEu;
 import com.gregtechceu.gtceu.api.GTCEuAPI;
@@ -876,7 +877,7 @@ public class CosmicMachines {
             .register();
 
     public final static MultiblockMachineDefinition CELESTIAL_BORE = REGISTRATE.multiblock(
-            "vomahine_celestial_laser_bore", WorkableElectricMultiblockMachine::new)
+            "vomahine_celestial_laser_bore", UniqueWorkableElectricMultiblockMachine::new)
             .rotationState(RotationState.ALL)
             .recipeType(CosmicRecipeTypes.CELESTIAL_BORE)
             .recipeModifiers(ELECTRIC_OVERCLOCK.apply(OverclockingLogic.NON_PERFECT_OVERCLOCK))
