@@ -1,7 +1,5 @@
 package com.ghostipedia.cosmiccore.api.data.wireless;
 
-import com.ghostipedia.cosmiccore.utils.NBTUtils;
-
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
@@ -21,7 +19,7 @@ public class WirelessEnergySavedData extends SavedData {
     public static class WirelessEnergyData {
 
         @Nullable
-//        public Tuple<String, BlockPos> capacitorLocation;
+        // public Tuple<String, BlockPos> capacitorLocation;
         public BigInteger energyStored;
         public BigInteger energyCapacity;
         public boolean isActive;

@@ -6,6 +6,7 @@ import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.saveddata.SavedData;
+
 import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
@@ -27,7 +28,6 @@ public class UniqueMultiblockSavedData extends SavedData {
                 tag -> new UniqueMultiblockSavedData(serverLevel, tag),
                 () -> new UniqueMultiblockSavedData(serverLevel), DATA_NAME);
     }
-
 
     private UniqueMultiblockSavedData(ServerLevel serverLevel) {
         this.serverLevel = serverLevel;
@@ -57,8 +57,6 @@ public class UniqueMultiblockSavedData extends SavedData {
         compoundTag.put(UNIQUE_MULTI_MAPPING, uniqueMultiDataList);
         return compoundTag;
     }
-
-
 
     public boolean hasData(UUID owner, String multiblockType, String dimension) {
         var data = UniqueMultiblockMapping.computeIfAbsent(owner, uuid -> new UniqueMultiblockData());

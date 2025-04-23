@@ -1,10 +1,10 @@
 package com.ghostipedia.cosmiccore.api.data.savedData;
 
-import lombok.Getter;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
-import net.minecraft.util.Tuple;
+
+import lombok.Getter;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -14,6 +14,7 @@ public class UniqueMultiblockData {
 
     @Getter
     public static class UniqueMultiblockId {
+
         private final String multiblockType;
         private final String multiblockDimension;
 
@@ -27,7 +28,8 @@ public class UniqueMultiblockData {
             if (this == o) return true;
             if (o == null || getClass() != o.getClass()) return false;
             UniqueMultiblockId that = (UniqueMultiblockId) o;
-            return Objects.equals(multiblockType, that.multiblockType) && Objects.equals(multiblockDimension, that.multiblockDimension);
+            return Objects.equals(multiblockType, that.multiblockType) &&
+                    Objects.equals(multiblockDimension, that.multiblockDimension);
         }
 
         @Override

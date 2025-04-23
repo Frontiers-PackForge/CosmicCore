@@ -65,7 +65,8 @@ public class DimensionalEnergyCapacitor extends DimensionalEnergyInterface {
                     recipeLogic.setStatus(RecipeLogic.Status.SUSPEND);
                     return;
                 }
-            } else uniqueMultiblockMapping.addMultiblock(owner, getDefinition().getId().toString(), getDimension(), getPos());
+            } else uniqueMultiblockMapping.addMultiblock(owner, getDefinition().getId().toString(), getDimension(),
+                    getPos());
 
             List<IBatteryData> batteries = new ArrayList<>();
             for (Map.Entry<String, Object> battery : getMultiblockState().getMatchContext().entrySet()) {
@@ -102,7 +103,8 @@ public class DimensionalEnergyCapacitor extends DimensionalEnergyInterface {
             var wirelessData = WirelessEnergySavedData.getOrCreate(serverLevel);
             var uniqueMultiblockMapping = UniqueMultiblockSavedData.getOrCreate(serverLevel);
             wirelessData.setActive(owner, false);
-            uniqueMultiblockMapping.removeMultiblock(owner, getDefinition().getId().toString(), getDimension(), getPos());
+            uniqueMultiblockMapping.removeMultiblock(owner, getDefinition().getId().toString(), getDimension(),
+                    getPos());
         }
         this.capacities = null;
     }

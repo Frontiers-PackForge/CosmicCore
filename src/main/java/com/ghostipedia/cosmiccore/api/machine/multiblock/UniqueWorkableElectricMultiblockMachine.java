@@ -1,11 +1,14 @@
 package com.ghostipedia.cosmiccore.api.machine.multiblock;
 
 import com.ghostipedia.cosmiccore.api.data.savedData.UniqueMultiblockSavedData;
+
 import com.gregtechceu.gtceu.api.machine.IMachineBlockEntity;
 import com.gregtechceu.gtceu.api.machine.multiblock.WorkableElectricMultiblockMachine;
 import com.gregtechceu.gtceu.api.machine.trait.RecipeLogic;
+
 import com.lowdragmc.lowdraglib.syncdata.annotation.Persisted;
 import com.lowdragmc.lowdraglib.syncdata.field.ManagedFieldHolder;
+
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.Style;
@@ -38,7 +41,8 @@ public class UniqueWorkableElectricMultiblockMachine extends WorkableElectricMul
             if (uniqueMultiblockMapping.hasData(owner, multiblockId, getDimension())) {
                 this.isDuplicate = !uniqueMultiblockMapping.isUnique(owner, multiblockId, getDimension(), getPos());
                 if (isDuplicate) recipeLogic.setStatus(RecipeLogic.Status.SUSPEND);
-            } else uniqueMultiblockMapping.addMultiblock(owner, getDefinition().getId().toString(), getDimension(), getPos());
+            } else uniqueMultiblockMapping.addMultiblock(owner, getDefinition().getId().toString(), getDimension(),
+                    getPos());
 
         }
     }
@@ -49,7 +53,8 @@ public class UniqueWorkableElectricMultiblockMachine extends WorkableElectricMul
         if (getLevel() instanceof ServerLevel serverLevel) {
             var owner = getOwnerUUID();
             var uniqueMultiblockMapping = UniqueMultiblockSavedData.getOrCreate(serverLevel);
-            uniqueMultiblockMapping.removeMultiblock(owner, getDefinition().getId().toString(), getDimension(), getPos());
+            uniqueMultiblockMapping.removeMultiblock(owner, getDefinition().getId().toString(), getDimension(),
+                    getPos());
         }
     }
 

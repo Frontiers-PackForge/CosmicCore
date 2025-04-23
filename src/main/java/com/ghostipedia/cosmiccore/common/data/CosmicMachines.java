@@ -4,6 +4,7 @@ import com.ghostipedia.cosmiccore.CosmicCore;
 import com.ghostipedia.cosmiccore.api.machine.multiblock.DimensionalEnergyCapacitor;
 import com.ghostipedia.cosmiccore.api.machine.multiblock.DimensionalEnergyInterface;
 import com.ghostipedia.cosmiccore.api.machine.multiblock.IPBFMachine;
+import com.ghostipedia.cosmiccore.api.machine.multiblock.UniqueWorkableElectricMultiblockMachine;
 import com.ghostipedia.cosmiccore.api.machine.part.CosmicPartAbility;
 import com.ghostipedia.cosmiccore.api.machine.part.SteamFluidHatchPartMachine;
 import com.ghostipedia.cosmiccore.api.machine.part.WirelessEnergyHatchPartMachine;
@@ -21,7 +22,6 @@ import com.ghostipedia.cosmiccore.common.machine.multiblock.multi.WirelessDataBa
 import com.ghostipedia.cosmiccore.common.machine.multiblock.part.*;
 import com.ghostipedia.cosmiccore.common.machine.multiblock.steam.WeakSteamParallelMultiBlockMachine;
 import com.ghostipedia.cosmiccore.gtbridge.CosmicRecipeTypes;
-import com.ghostipedia.cosmiccore.api.machine.multiblock.UniqueWorkableElectricMultiblockMachine;
 
 import com.gregtechceu.gtceu.GTCEu;
 import com.gregtechceu.gtceu.api.GTCEuAPI;
