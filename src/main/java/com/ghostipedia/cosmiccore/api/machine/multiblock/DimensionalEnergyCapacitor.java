@@ -1,5 +1,6 @@
 package com.ghostipedia.cosmiccore.api.machine.multiblock;
 
+import com.ghostipedia.cosmiccore.api.data.savedData.UniqueMultiblockSavedData;
 import com.ghostipedia.cosmiccore.api.data.wireless.WirelessEnergySavedData;
 
 import com.gregtechceu.gtceu.api.machine.IMachineBlockEntity;
@@ -54,16 +55,17 @@ public class DimensionalEnergyCapacitor extends DimensionalEnergyInterface {
 
         if (getLevel() instanceof ServerLevel serverLevel) {
             var owner = getOwnerUUID();
+            var multiblockId = getDefinition().getId().toString();
             var wirelessData = WirelessEnergySavedData.getOrCreate(serverLevel);
+            var uniqueMultiblockMapping = UniqueMultiblockSavedData.getOrCreate(serverLevel);
 
-            // Make sure only one MB can exist per team
-            if (wirelessData.isCapacitorSet(owner)) {
-                this.isDuplicate = wirelessData.isCapacitorDuplicate(owner, getDimension(), getPos());
+            if (uniqueMultiblockMapping.hasData(owner, multiblockId, getDimension())) {
+                this.isDuplicate = !uniqueMultiblockMapping.isUnique(owner, multiblockId, getDimension(), getPos());
                 if (isDuplicate) {
                     recipeLogic.setStatus(RecipeLogic.Status.SUSPEND);
                     return;
                 }
-            } else wirelessData.setCapacitorPosition(owner, getDimension(), getPos());
+            } else uniqueMultiblockMapping.addMultiblock(owner, getDefinition().getId().toString(), getDimension(), getPos());
 
             List<IBatteryData> batteries = new ArrayList<>();
             for (Map.Entry<String, Object> battery : getMultiblockState().getMatchContext().entrySet()) {
@@ -98,8 +100,9 @@ public class DimensionalEnergyCapacitor extends DimensionalEnergyInterface {
         if (getLevel() instanceof ServerLevel serverLevel) {
             var owner = getOwnerUUID();
             var wirelessData = WirelessEnergySavedData.getOrCreate(serverLevel);
+            var uniqueMultiblockMapping = UniqueMultiblockSavedData.getOrCreate(serverLevel);
             wirelessData.setActive(owner, false);
-            wirelessData.removeCapacitorPosition(owner, getDimension(), getPos());
+            uniqueMultiblockMapping.removeMultiblock(owner, getDefinition().getId().toString(), getDimension(), getPos());
         }
         this.capacities = null;
     }
