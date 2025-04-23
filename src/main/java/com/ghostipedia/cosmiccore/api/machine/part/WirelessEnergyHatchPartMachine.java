@@ -36,7 +36,7 @@ import javax.annotation.ParametersAreNonnullByDefault;
 @MethodsReturnNonnullByDefault
 public class WirelessEnergyHatchPartMachine extends TieredIOPartMachine implements IMachineLife {
 
-    protected static final long ticks_between_save_data_operations = 10L * 20L;
+    protected static final long ticks_between_save_data_operations = 5L * 20L;
 
     protected static final ManagedFieldHolder MANAGED_FIELD_HOLDER = new ManagedFieldHolder(
             WirelessEnergyHatchPartMachine.class,
