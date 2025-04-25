@@ -3264,7 +3264,8 @@ public class CosmicMachines {
                     .where('A', blocks(REINFORCED_NAQUADRIA_CASING.get())
                             .or(Predicates.abilities(PartAbility.EXPORT_ITEMS))
                             .or(Predicates.abilities(PartAbility.INPUT_ENERGY).setExactLimit(1))
-                            .or(Predicates.abilities(PartAbility.IMPORT_FLUIDS_1X,PartAbility.IMPORT_FLUIDS_4X,PartAbility.IMPORT_FLUIDS_9X).setExactLimit(1))
+                            .or(Predicates.abilities(PartAbility.IMPORT_FLUIDS_1X, PartAbility.IMPORT_FLUIDS_4X,
+                                    PartAbility.IMPORT_FLUIDS_9X).setExactLimit(1))
                             .or(Predicates.abilities(PartAbility.EXPORT_FLUIDS_1X).setExactLimit(1)))
                     .build())
             .workableCasingRenderer(CosmicCore.id("block/casings/solid/reinforced_naquadria_casing"),

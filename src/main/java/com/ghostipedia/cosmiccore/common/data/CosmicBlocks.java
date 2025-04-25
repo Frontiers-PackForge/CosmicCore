@@ -152,7 +152,8 @@ public class CosmicBlocks {
             "block/variant/ludicrious_intake");
     public static final BlockEntry<ActiveBlock> CASING_INTAKE_ULTIMATE = createActiveCasing("ultimate_intake",
             "block/variant/ultimate_intake");
-    public static final BlockEntry<ActiveBlock> RADIOACTIVE_FILTER_CASING = createActiveCasing("radioactive_filter_casing",
+    public static final BlockEntry<ActiveBlock> RADIOACTIVE_FILTER_CASING = createActiveCasing(
+            "radioactive_filter_casing",
             "block/variant/radioactive_filter_casing");
     // blood cube
     public static final BlockEntry<Block> BLOOD_CUBE = createCasingBlock(
