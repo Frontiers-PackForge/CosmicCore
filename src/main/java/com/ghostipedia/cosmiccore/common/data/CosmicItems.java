@@ -5,6 +5,7 @@ import com.ghostipedia.cosmiccore.api.registries.CosmicRegistration;
 import com.ghostipedia.cosmiccore.common.data.tag.item.CosmicItemTags;
 import com.ghostipedia.cosmiccore.common.item.behavior.EffectApplicationBehavior;
 import com.ghostipedia.cosmiccore.common.item.behavior.StructureWriteBehavior;
+import com.ghostipedia.cosmiccore.common.item.behavior.WirelessPDABehavior;
 import com.ghostipedia.cosmiccore.utils.StringUtil;
 
 import com.gregtechceu.gtceu.api.item.ComponentItem;
@@ -288,6 +289,14 @@ public class CosmicItems {
                 tooltips.add(Component.translatable("cosmiccore.lore.shard_huge.1"));
                 tooltips.add(Component.translatable("cosmiccore.lore.shard_huge.2"));
             })))
+            .defaultModel()
+            .register();
+    public static final ItemEntry<ComponentItem> WIRELESS_PDA = REGISTRATE
+            .item("wireless_pda", ComponentItem::create)
+            .lang("Wireless Data PDA")
+            .properties(p -> p.stacksTo(1))
+            .tag()
+            .onRegister(attach(new WirelessPDABehavior()))
             .defaultModel()
             .register();
 

@@ -51,6 +51,7 @@ public class CosmicCore {
         bus.addGenericListener(MachineDefinition.class, this::registerMachines);
         bus.addGenericListener(SoundEntry.class, this::registerSounds);
         AdAstraEvents.EntityGravityEvent.register(GravityCoreBehavior::clampGravity);
+
         CosmicLootModifiers.register(bus);
 
         if (Platform.isClient()) {
