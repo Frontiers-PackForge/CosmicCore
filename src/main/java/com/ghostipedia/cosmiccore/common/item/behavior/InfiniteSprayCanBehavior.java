@@ -60,7 +60,7 @@ public class InfiniteSprayCanBehavior implements IInteractionItem, IAddInformati
 
     @Getter
     @Setter
-    public DyeColor color;
+    public ExtendedDyeColor color;
     @Getter
     @Setter
     private Boolean isLocked;
@@ -69,9 +69,8 @@ public class InfiniteSprayCanBehavior implements IInteractionItem, IAddInformati
     boolean isSwinging = true;
 
     public InfiniteSprayCanBehavior(int color) {
-        DyeColor[] colors = DyeColor.values();
+        ExtendedDyeColor[] colors = ExtendedDyeColor.values();
         this.color = color >= colors.length || color < 0 ? null : colors[color];
-        int colorValue = this.color == null ? 0x969696 : this.color.getTextColor();
     }
 
     @Override
@@ -100,11 +99,11 @@ public class InfiniteSprayCanBehavior implements IInteractionItem, IAddInformati
         if (entity instanceof Player player) {
             boolean isClient = player.level().isClientSide();
             // does the crouch swap code
+            int totalColors = ExtendedDyeColor.values().length;
+            int nextColor = player.isCrouching() ? (color.ordinal() - 1 + totalColors) % totalColors :
+                    (color.ordinal() + 1) % totalColors;
 
-            int nextColor = player.isCrouching() ?
-                    (color.ordinal() - 1 + DyeColor.values().length) % DyeColor.values().length :
-                    (color.ordinal() + 1) % DyeColor.values().length;
-            this.color = DyeColor.values()[nextColor];
+            this.color = ExtendedDyeColor.values()[nextColor];
 
             PrintColorToActionBar(player, color);
             return true;
@@ -112,7 +111,7 @@ public class InfiniteSprayCanBehavior implements IInteractionItem, IAddInformati
         return false;
     }
 
-    public void PrintColorToActionBar(Player player, DyeColor color) {
+    public void PrintColorToActionBar(Player player, ExtendedDyeColor color) {
         MutableComponent message = Component.literal("Spray Can Color is: ");
         MutableComponent colorComponent = Component.literal(color.toString())
                 .setStyle(Style.EMPTY.withColor(TextColor.fromRgb(color.getTextColor())));
@@ -124,13 +123,13 @@ public class InfiniteSprayCanBehavior implements IInteractionItem, IAddInformati
     // vanilla
     private static final ImmutableMap<DyeColor, Block> GLASS_MAP;
     private static final ImmutableMap<DyeColor, Block> GLASS_PANE_MAP;
-    private static final ImmutableMap<DyeColor, Block> TERRACOTTA_MAP;
-    private static final ImmutableMap<DyeColor, Block> WOOL_MAP;
-    private static final ImmutableMap<DyeColor, Block> CARPET_MAP;
-    private static final ImmutableMap<DyeColor, Block> CONCRETE_MAP;
-    private static final ImmutableMap<DyeColor, Block> CONCRETE_POWDER_MAP;
-    private static final ImmutableMap<DyeColor, Block> SHULKER_BOX_MAP;
-    private static final ImmutableMap<DyeColor, Block> CANDLE_MAP;
+    private static final Map<DyeColor, Block> TERRACOTTA_MAP;
+    private static final Map<DyeColor, Block> WOOL_MAP;
+    private static final Map<DyeColor, Block> CARPET_MAP;
+    private static final Map<DyeColor, Block> CONCRETE_MAP;
+    private static final Map<DyeColor, Block> CONCRETE_POWDER_MAP;
+    private static final Map<DyeColor, Block> SHULKER_BOX_MAP;
+    private static final Map<DyeColor, Block> CANDLE_MAP;
 
     private static ResourceLocation getId(String modid, DyeColor color, String postfix) {
         return new ResourceLocation(modid, "%s_%s".formatted(color.getSerializedName(), postfix));
@@ -202,8 +201,8 @@ public class InfiniteSprayCanBehavior implements IInteractionItem, IAddInformati
         }
     }
 
-    private static boolean paintPaintable(IPaintable paintable, DyeColor color) {
-        if (color == null) {
+    private static boolean paintPaintable(IPaintable paintable, ExtendedDyeColor color) {
+        if (color.isSolvent()) {
             if (paintable.getPaintingColor() == -1) {
                 return false;
             }
@@ -260,7 +259,7 @@ public class InfiniteSprayCanBehavior implements IInteractionItem, IAddInformati
             var tag = shulkerBoxBE.saveWithFullMetadata();
             var level = first.getLevel();
             var pos = first.getBlockPos();
-            recolorBlockNoState(SHULKER_BOX_MAP, color, level, pos, Blocks.SHULKER_BOX);
+            recolorBlockNoState(SHULKER_BOX_MAP, color.getColor(), level, pos, Blocks.SHULKER_BOX);
             if (level.getBlockEntity(pos) instanceof ShulkerBoxBlockEntity newShulker) {
                 newShulker.load(tag);
             }
@@ -292,14 +291,14 @@ public class InfiniteSprayCanBehavior implements IInteractionItem, IAddInformati
     private boolean tryPaintBlock(Level world, BlockPos pos) {
         var blockState = world.getBlockState(pos);
         var block = blockState.getBlock();
-        if (color == null) {
+        if (color.isSolvent()) {
             return tryStripBlockColor(world, pos, block);
         }
         return recolorBlockState(world, pos, color) || tryPaintSpecialBlock(world, pos, block);
     }
 
     @SuppressWarnings({ "rawtypes", "unchecked" })
-    private static boolean recolorBlockState(Level level, BlockPos pos, DyeColor color) {
+    private static boolean recolorBlockState(Level level, BlockPos pos, ExtendedDyeColor color) {
         BlockState state = level.getBlockState(pos);
         for (Property property : state.getProperties()) {
             if (property.getValueClass() == DyeColor.class) {
@@ -312,42 +311,42 @@ public class InfiniteSprayCanBehavior implements IInteractionItem, IAddInformati
 
     private boolean tryPaintSpecialBlock(Level world, BlockPos pos, Block block) {
         if (block.defaultBlockState().is(Tags.Blocks.GLASS)) {
-            if (recolorBlockNoState(GLASS_MAP, this.color, world, pos, Blocks.GLASS)) {
+            if (recolorBlockNoState(GLASS_MAP, this.color.getColor(), world, pos, Blocks.GLASS)) {
                 return true;
             }
         }
         if (block.defaultBlockState().is(Tags.Blocks.GLASS_PANES)) {
-            if (recolorBlockNoState(GLASS_PANE_MAP, this.color, world, pos, Blocks.GLASS_PANE)) {
+            if (recolorBlockNoState(GLASS_PANE_MAP, this.color.getColor(), world, pos, Blocks.GLASS_PANE)) {
                 return true;
             }
         }
         if (block.defaultBlockState().is(BlockTags.TERRACOTTA)) {
-            if (recolorBlockNoState(TERRACOTTA_MAP, this.color, world, pos, Blocks.TERRACOTTA)) {
+            if (recolorBlockNoState(TERRACOTTA_MAP, this.color.getColor(), world, pos, Blocks.TERRACOTTA)) {
                 return true;
             }
         }
         if (block.defaultBlockState().is(BlockTags.WOOL)) {
-            if (recolorBlockNoState(WOOL_MAP, this.color, world, pos)) {
+            if (recolorBlockNoState(WOOL_MAP, this.color.getColor(), world, pos)) {
                 return true;
             }
         }
         if (block.defaultBlockState().is(BlockTags.WOOL_CARPETS)) {
-            if (recolorBlockNoState(CARPET_MAP, this.color, world, pos)) {
+            if (recolorBlockNoState(CARPET_MAP, this.color.getColor(), world, pos)) {
                 return true;
             }
         }
         if (block.defaultBlockState().is(CustomTags.CONCRETE_BLOCK)) {
-            if (recolorBlockNoState(CONCRETE_MAP, this.color, world, pos)) {
+            if (recolorBlockNoState(CONCRETE_MAP, this.color.getColor(), world, pos)) {
                 return true;
             }
         }
         if (block.defaultBlockState().is(CustomTags.CONCRETE_POWDER_BLOCK)) {
-            if (recolorBlockNoState(CONCRETE_POWDER_MAP, this.color, world, pos)) {
+            if (recolorBlockNoState(CONCRETE_POWDER_MAP, this.color.getColor(), world, pos)) {
                 return true;
             }
         }
         if (block.defaultBlockState().is(BlockTags.CANDLES)) {
-            if (recolorBlockNoState(CANDLE_MAP, this.color, world, pos)) {
+            if (recolorBlockNoState(CANDLE_MAP, this.color.getColor(), world, pos)) {
                 return true;
             }
         }
@@ -415,13 +414,13 @@ public class InfiniteSprayCanBehavior implements IInteractionItem, IAddInformati
         // General case
         BlockState state = world.getBlockState(pos);
         for (Property prop : state.getProperties()) {
-            if (prop.getValueClass() == DyeColor.class) {
+            if (prop.getValueClass() == ExtendedDyeColor.class) {
                 BlockState defaultState = block.defaultBlockState();
-                DyeColor defaultColor = DyeColor.WHITE;
+                ExtendedDyeColor defaultColor = ExtendedDyeColor.WHITE;
                 try {
                     // try to read the default color value from the default state instead of just
                     // blindly setting it to default state, and potentially resetting other values
-                    defaultColor = (DyeColor) defaultState.getValue(prop);
+                    defaultColor = (ExtendedDyeColor) defaultState.getValue(prop);
                 } catch (IllegalArgumentException ignored) {
                     // no default color, we may have to fallback to WHITE here
                     // other mods that have custom behavior can be done as

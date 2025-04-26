@@ -1,9 +1,11 @@
 package com.ghostipedia.cosmiccore.common.item.behavior;
 
-import appeng.api.util.AEColor;
-import appeng.blockentity.networking.CableBusBlockEntity;
 import com.ghostipedia.cosmiccore.CosmicCore;
+
+import com.gregtechceu.gtceu.api.blockentity.IPaintable;
+import com.gregtechceu.gtceu.api.blockentity.MetaMachineBlockEntity;
 import com.gregtechceu.gtceu.api.item.ComponentItem;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.player.Player;
@@ -19,7 +21,8 @@ import net.minecraft.world.phys.HitResult;
 import net.minecraftforge.client.event.InputEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
-import org.apache.http.io.SessionOutputBuffer;
+
+import appeng.blockentity.networking.CableBusBlockEntity;
 
 import static com.ghostipedia.cosmiccore.common.data.CosmicItems.INFINITE_SPRAY_CAN;
 
@@ -37,14 +40,10 @@ public class SprayCanEventListener {
         // grabs thine game
         Minecraft mc = Minecraft.getInstance();
         Level level = mc.level;
-        assert level != null;
         Player player = mc.player;
-        if (player == null) {
-            return;
-        }
-        if (mc.hitResult == null) {
-            return;
-        }
+
+        if (player == null || level == null || mc.hitResult == null) return;
+
         ItemStack spraycan = player.getMainHandItem();
         if (spraycan.getItem() != INFINITE_SPRAY_CAN.get().asItem()) {
             return;
@@ -52,65 +51,79 @@ public class SprayCanEventListener {
         }
 
         int dyeID = 0;
-        DyeColor color = null;
-
+        ExtendedDyeColor color = null;
         // check if it gets a block
         if (mc.hitResult.getType() == HitResult.Type.BLOCK) {
 
-
             BlockHitResult blockHit = (BlockHitResult) mc.hitResult;
             BlockPos pos = blockHit.getBlockPos();
+
             BlockEntity entity = level.getBlockEntity(pos);
             if (entity != null) {
                 if (entity instanceof ShulkerBoxBlockEntity shulker) {
-                    color = shulker.getColor();
+                    color = ExtendedDyeColor.fromDyeColor(shulker.getColor());
+
                 } else if (entity instanceof CableBusBlockEntity cable) {
-                    dyeID = cable.getColor().dye.getId();
-                    color = DyeColor.values()[dyeID];
+                    var ae2dye = cable.getColor().dye;
+                    if (ae2dye == null) {
+                        color = ExtendedDyeColor.SOLVENT;
+                    } else {
+                        dyeID = ae2dye.getId();
+                        color = ExtendedDyeColor.getColorFromDyeId(dyeID);
+                    }
+                } else if (entity instanceof IPaintable) {
+                    for (DyeColor dye : DyeColor.values()) {
+                        if (((IPaintable) entity).getPaintingColor() == dye.getTextColor()) {
+                            color = ExtendedDyeColor.getColorFromDyeId(dyeID);
+                        }
+                    }
+                } else if (entity instanceof MetaMachineBlockEntity meta) {
+
+                    var Machinecolor = meta.getMetaMachine().getPaintingColor();
+                    System.out.println(Machinecolor);
+                    for (DyeColor dye : DyeColor.values()) {
+                        if(Machinecolor == -1){
+                            color = ExtendedDyeColor.SOLVENT;
+                            break;
+
+                        } else  if (Machinecolor == dye.getTextColor()) {
+                            color = ExtendedDyeColor.fromDyeColor(dye);
+                        }
+                    }
                 }
             }
-
-            //normal blocks
+            // normal blocks
             BlockState state = level.getBlockState(pos);
             MapColor mapColor = state.getMapColor(level, pos);
 
+            // get the id of the map color
             int id = mapColor.id;
 
             // map id to dye
             if (id >= 15 && id <= 29) {
                 dyeID = id - 14;
-                color = DyeColor.byId(dyeID);
+                color = ExtendedDyeColor.getColorFromDyeId(dyeID);
             } else if (id >= 37 && id <= 51) {
                 dyeID = id - 36;
-                color = DyeColor.byId(dyeID);
-            } else if(id == 8 || id == 36){
+                color = ExtendedDyeColor.getColorFromDyeId(dyeID);
+            } else if (id == 8 || id == 36) {
 
-                dyeID = 0;
-                color = DyeColor.byId(dyeID);
+                dyeID = -1;
+                color = ExtendedDyeColor.getColorFromDyeId(dyeID);
 
             }
 
-
-
-
         }
 
-
         // send to spraycan when finished
-        if (spraycan.getItem() instanceof ComponentItem compItem && color != null) {
-
+        if (spraycan.getItem() instanceof ComponentItem compItem) {
             for (var component : compItem.getComponents()) {
                 if (component instanceof InfiniteSprayCanBehavior behavior) {
                     behavior.setColor(color);
-                    behavior.PrintColorToActionBar(player, behavior.getColor());
+                    behavior.PrintColorToActionBar(player, behavior.color);
                     event.setCanceled(true);
                 }
             }
-
         }
     }
-
-
 }
-
-
