@@ -13,8 +13,7 @@ import com.gregtechceu.gtceu.data.recipe.CustomTags;
 import com.gregtechceu.gtceu.utils.BreadthFirstBlockSearch;
 
 import com.lowdragmc.lowdraglib.syncdata.annotation.DescSynced;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.color.item.ItemColor;
+
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -24,7 +23,6 @@ import net.minecraft.network.chat.Style;
 import net.minecraft.network.chat.TextColor;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.BlockTags;
-import net.minecraft.util.FastColor;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
@@ -53,42 +51,22 @@ import lombok.Setter;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import javax.swing.plaf.multi.MultiTabbedPaneUI;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.function.BiPredicate;
 
-public class InfiniteSprayCanBehavior implements IInteractionItem, IAddInformation, ItemColor {
+public class InfiniteSprayCanBehavior implements IInteractionItem, IAddInformation {
 
     @Getter
     @Setter
-    private DyeColor color;
+    public DyeColor color;
     @Getter
     @Setter
     private Boolean isLocked;
 
     @DescSynced
     boolean isSwinging = true;
-
-
-    @Override
-    public int getColor(ItemStack itemStack, int i) {
-        DyeColor stackColor = getColorFromStack(itemStack);
-        return stackColor.getTextColor();
-    }
-
-    public static DyeColor getColorFromStack(ItemStack stack) {
-        if (stack.hasTag() && stack.getTag().contains("Color")) {
-            return DyeColor.byId(stack.getTag().getInt("Color"));
-        }
-        return DyeColor.GRAY; // default
-    }
-
-
-    public static void setColorToStack(ItemStack stack, DyeColor color) {
-        stack.getOrCreateTag().putInt("Color", color.getId());
-    }
 
     public InfiniteSprayCanBehavior(int color) {
         DyeColor[] colors = DyeColor.values();
@@ -102,11 +80,9 @@ public class InfiniteSprayCanBehavior implements IInteractionItem, IAddInformati
         var player = context.getPlayer();
         var level = context.getLevel();
         var pos = context.getClickedPos();
-        boolean isClient = level.isClientSide();
-        int maxBlocksToRecolor = Math.max(1,player.isCrouching() ? ConfigHolder.INSTANCE.tools.sprayCanChainLength : 1);
+        int maxBlocksToRecolor = Math.max(1,
+                player.isCrouching() ? ConfigHolder.INSTANCE.tools.sprayCanChainLength : 1);
         var first = level.getBlockEntity(pos);
-        //middle mouse handler
-        //todo middle mouse handler
 
         if (first == null || !handleSpecialBlockEntities(first, maxBlocksToRecolor, context)) {
             handleBlocks(pos, maxBlocksToRecolor, context);
@@ -115,43 +91,32 @@ public class InfiniteSprayCanBehavior implements IInteractionItem, IAddInformati
         return InteractionResult.PASS;
     }
 
-
     @Override
-    public boolean onEntitySwing(ItemStack stack, LivingEntity entity){
-
-        if(!isSwinging){
+    public boolean onEntitySwing(ItemStack stack, LivingEntity entity) {
+        if (!isSwinging) {
             isSwinging = true;
             return true;
         }
         if (entity instanceof Player player) {
-        boolean isClient = player.level().isClientSide();
-        //does the crouch swap code
+            boolean isClient = player.level().isClientSide();
+            // does the crouch swap code
 
-        int nextColor = player.isCrouching()
-                ? (color.ordinal() - 1 + DyeColor.values().length) % DyeColor.values().length
-                : (color.ordinal() + 1) % DyeColor.values().length;
-        this.color = DyeColor.values()[nextColor];
-        setColorToStack(stack, this.color);
+            int nextColor = player.isCrouching() ?
+                    (color.ordinal() - 1 + DyeColor.values().length) % DyeColor.values().length :
+                    (color.ordinal() + 1) % DyeColor.values().length;
+            this.color = DyeColor.values()[nextColor];
 
-        //message to action bar
-        MutableComponent message = Component.literal("Spray Can Color is: ");
-        MutableComponent colorComponent = Component.literal(color.toString())
-                .setStyle(Style.EMPTY.withColor(TextColor.fromRgb(color.getTextColor())));
-        message.append(colorComponent);
+            // message to action bar
+            MutableComponent message = Component.literal("Spray Can Color is: ");
+            MutableComponent colorComponent = Component.literal(color.toString())
+                    .setStyle(Style.EMPTY.withColor(TextColor.fromRgb(color.getTextColor())));
+            message.append(colorComponent);
 
-        player.displayClientMessage(message, true);
-        return false;
+            player.displayClientMessage(message, true);
+            return false;
+        }
+        return true;
     }
-    return true;
-
-}
-
-
-    /*
-     * REIMPLEMENTING OLD SPRAY CAN BEHAVIOR FROM GT (maybe mixin) (copied and pasted from gt with durability yeeted)
-     * idk if there is a better way to uh, reimplement this. maybe i can extend the class but i couldn't figure it out
-     * without it collapsing inwards like my soul
-     */
 
     // vanilla
     private static final ImmutableMap<DyeColor, Block> GLASS_MAP;
@@ -221,17 +186,6 @@ public class InfiniteSprayCanBehavior implements IInteractionItem, IAddInformati
         SHULKER_BOX_MAP = shulkerBoxBuilder.build();
         CANDLE_MAP = candleBuilder.build();
 
-    }
-
-    private static int mixColors(float ratio, int... colors) {
-        int r = 0, g = 0, b = 0;
-        ratio = ratio * (1.0f / colors.length);
-        for (int color : colors) {
-            r += FastColor.ARGB32.red(color) * ratio;
-            g += FastColor.ARGB32.green(color) * ratio;
-            b += FastColor.ARGB32.blue(color) * ratio;
-        }
-        return FastColor.ARGB32.color(255, r, g, b);
     }
 
     @Override
@@ -508,7 +462,6 @@ public class InfiniteSprayCanBehavior implements IInteractionItem, IAddInformati
         return paintablePredicate.test(parent.getMetaMachine(), child.getMetaMachine()) &&
                 parent.getMetaMachine().getDefinition().equals(child.getMetaMachine().getDefinition());
     };
-
 
     private static class AE2CallWrapper {
 
