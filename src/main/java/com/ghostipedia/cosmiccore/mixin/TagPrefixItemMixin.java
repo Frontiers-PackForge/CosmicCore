@@ -1,16 +1,14 @@
 package com.ghostipedia.cosmiccore.mixin;
 
 import com.ghostipedia.cosmiccore.api.data.material.property.CCoreMaterialIconSet;
-
 import com.ghostipedia.cosmiccore.client.renderer.item.CosmicCoreItemRendererProvider;
-import com.ghostipedia.cosmiccore.common.data.tag.CosmicTagsHandler;
+
 import com.gregtechceu.gtceu.GTCEu;
 import com.gregtechceu.gtceu.api.data.chemical.material.Material;
 import com.gregtechceu.gtceu.api.data.tag.TagPrefix;
 import com.gregtechceu.gtceu.api.item.TagPrefixItem;
 import com.gregtechceu.gtceu.api.item.component.ICustomRenderer;
 
-import com.lowdragmc.lowdraglib.client.renderer.IItemRendererProvider;
 import com.lowdragmc.lowdraglib.client.renderer.IRenderer;
 
 import net.minecraft.world.item.Item;
@@ -28,7 +26,9 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(value = TagPrefixItem.class, remap = false)
 public class TagPrefixItemMixin extends Item implements CosmicCoreItemRendererProvider {
 
-    @Shadow @Final public TagPrefix tagPrefix;
+    @Shadow
+    @Final
+    public TagPrefix tagPrefix;
     @Final
     public Material material;
 
@@ -63,5 +63,4 @@ public class TagPrefixItemMixin extends Item implements CosmicCoreItemRendererPr
         }
         return null;
     }
-
 }

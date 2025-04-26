@@ -2,13 +2,13 @@ package com.ghostipedia.cosmiccore.client.renderer.item;
 
 import com.ghostipedia.cosmiccore.client.gui.AlphaOverrideVertexConsumer;
 import com.ghostipedia.cosmiccore.common.item.IHaloRender;
+
 import com.gregtechceu.gtceu.api.GTValues;
+
 import com.lowdragmc.lowdraglib.Platform;
 import com.lowdragmc.lowdraglib.client.model.ModelFactory;
 import com.lowdragmc.lowdraglib.utils.ColorUtils;
-import com.mojang.blaze3d.platform.GlStateManager;
-import com.mojang.blaze3d.systems.RenderSystem;
-import com.mojang.blaze3d.vertex.*;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.client.renderer.ItemBlockRenderTypes;
@@ -23,6 +23,10 @@ import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+
+import com.mojang.blaze3d.platform.GlStateManager;
+import com.mojang.blaze3d.systems.RenderSystem;
+import com.mojang.blaze3d.vertex.*;
 import org.joml.Matrix4f;
 
 import java.util.HashSet;
@@ -32,6 +36,7 @@ import java.util.function.Consumer;
 import static com.ghostipedia.cosmiccore.client.renderer.utility.CosmicCoreRenderUtils.bindBlockAtlas;
 
 public class HaloItemRenderer extends WrappedItemRenderer {
+
     private final Set<ResourceLocation> textures = new HashSet<>();
 
     protected HaloItemRenderer() {
@@ -44,20 +49,21 @@ public class HaloItemRenderer extends WrappedItemRenderer {
     public void addTexture(ResourceLocation resourceLocation) {
         textures.add(resourceLocation);
     }
+
     @OnlyIn(Dist.CLIENT)
     @Override
     public void renderItem(
-            ItemStack stack,
-            ItemDisplayContext transformType,
-            boolean leftHand,
-            PoseStack poseStack,
-            MultiBufferSource buffer,
-            int combinedLight,
-            int combinedOverlay,
-            BakedModel model) {
+                           ItemStack stack,
+                           ItemDisplayContext transformType,
+                           boolean leftHand,
+                           PoseStack poseStack,
+                           MultiBufferSource buffer,
+                           int combinedLight,
+                           int combinedOverlay,
+                           BakedModel model) {
         model = getVanillaModel(stack, null, null);
-        if (transformType == ItemDisplayContext.GUI
-                && stack.getItem() instanceof CosmicCoreItemRendererProvider rendererItem) {
+        if (transformType == ItemDisplayContext.GUI &&
+                stack.getItem() instanceof CosmicCoreItemRendererProvider rendererItem) {
 
             if (rendererItem.getRenderInfo(stack) instanceof IHaloRender hri) {
                 Tesselator tess = Tesselator.getInstance();
@@ -155,22 +161,21 @@ public class HaloItemRenderer extends WrappedItemRenderer {
         }
     }
 
-        @OnlyIn(Dist.CLIENT)
+    @OnlyIn(Dist.CLIENT)
     public static void renderAlpha(
-            ItemStack stack,
-            ItemDisplayContext modelTransformationMode,
-            boolean leftHanded,
-            PoseStack matrices,
-            MultiBufferSource buffer,
-            int light,
-            int overlay,
-            BakedModel model,
-            float alphaOverride) {
+                                   ItemStack stack,
+                                   ItemDisplayContext modelTransformationMode,
+                                   boolean leftHanded,
+                                   PoseStack matrices,
+                                   MultiBufferSource buffer,
+                                   int light,
+                                   int overlay,
+                                   BakedModel model,
+                                   float alphaOverride) {
         if (!stack.isEmpty()) {
             model.getTransforms().getTransform(modelTransformationMode).apply(leftHanded, matrices);
             RenderType renderType = ItemBlockRenderTypes.getRenderType(stack, true);
-            VertexConsumer vertexConsumer =
-                    ItemRenderer.getFoilBufferDirect(buffer, renderType, true, stack.hasFoil());
+            VertexConsumer vertexConsumer = ItemRenderer.getFoilBufferDirect(buffer, renderType, true, stack.hasFoil());
 
             Minecraft.getInstance()
                     .getItemRenderer()
@@ -182,17 +187,14 @@ public class HaloItemRenderer extends WrappedItemRenderer {
                             matrices,
                             new AlphaOverrideVertexConsumer(vertexConsumer, alphaOverride));
         }
-
     }
 
     @OnlyIn(Dist.CLIENT)
     @Override
     public void onPrepareTextureAtlas(
-            ResourceLocation atlasName, Consumer<ResourceLocation> register) {
+                                      ResourceLocation atlasName, Consumer<ResourceLocation> register) {
         if (atlasName.equals(InventoryMenu.BLOCK_ATLAS)) {
             textures.forEach(register);
         }
     }
-
 }
-

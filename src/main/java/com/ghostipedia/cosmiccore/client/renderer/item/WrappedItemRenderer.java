@@ -2,7 +2,7 @@ package com.ghostipedia.cosmiccore.client.renderer.item;
 
 import com.lowdragmc.lowdraglib.client.renderer.IItemRendererProvider;
 import com.lowdragmc.lowdraglib.client.renderer.IRenderer;
-import com.mojang.blaze3d.vertex.PoseStack;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.renderer.ItemModelShaper;
@@ -14,6 +14,8 @@ import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+
+import com.mojang.blaze3d.vertex.PoseStack;
 
 public abstract class WrappedItemRenderer implements IRenderer {
 
@@ -30,6 +32,7 @@ public abstract class WrappedItemRenderer implements IRenderer {
     public static ItemRenderer getItemRenderer() {
         return Minecraft.getInstance().getItemRenderer();
     }
+
     @OnlyIn(Dist.CLIENT)
     public static BakedModel getVanillaModel(ItemStack stack, ClientLevel level, LivingEntity entity) {
         ItemModelShaper shaper = getItemRenderer().getItemModelShaper();
