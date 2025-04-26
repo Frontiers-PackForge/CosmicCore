@@ -106,16 +106,19 @@ public class InfiniteSprayCanBehavior implements IInteractionItem, IAddInformati
                     (color.ordinal() + 1) % DyeColor.values().length;
             this.color = DyeColor.values()[nextColor];
 
-            // message to action bar
-            MutableComponent message = Component.literal("Spray Can Color is: ");
-            MutableComponent colorComponent = Component.literal(color.toString())
-                    .setStyle(Style.EMPTY.withColor(TextColor.fromRgb(color.getTextColor())));
-            message.append(colorComponent);
-
-            player.displayClientMessage(message, true);
+            PrintColorToActionBar(player, color);
             return false;
         }
         return true;
+    }
+
+    public void PrintColorToActionBar(Player player, DyeColor color) {
+        MutableComponent message = Component.literal("Spray Can Color is: ");
+        MutableComponent colorComponent = Component.literal(color.toString())
+                .setStyle(Style.EMPTY.withColor(TextColor.fromRgb(color.getTextColor())));
+        message.append(colorComponent);
+
+        player.displayClientMessage(message, true);
     }
 
     // vanilla

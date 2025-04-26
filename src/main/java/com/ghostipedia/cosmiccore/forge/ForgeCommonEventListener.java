@@ -78,6 +78,15 @@ public class ForgeCommonEventListener {
 
         // grabs thine game
         Minecraft mc = Minecraft.getInstance();
+        // grab level and player
+        Level level = mc.level;
+        assert level != null;
+        Player player = mc.player;
+        if (player == null) {
+            return;
+        }
+        ItemStack spraycan = player.getMainHandItem();
+        int dyeID = 0;
 
         // exit the event if no blocks clicked
         if (mc.hitResult == null) {
@@ -89,48 +98,37 @@ public class ForgeCommonEventListener {
             // gets the position level and player for future use
             BlockHitResult blockHit = (BlockHitResult) mc.hitResult;
             BlockPos pos = blockHit.getBlockPos();
-            Level level = mc.level;
-            assert level != null;
-            Player player = mc.player;
 
-            if (player != null) {
-                ItemStack spraycan = player.getMainHandItem();
-                if (spraycan.getItem() == INFINITE_SPRAY_CAN.get().asItem()) {
+            if (spraycan.getItem() == INFINITE_SPRAY_CAN.get().asItem()) {
 
-                    BlockState state = level.getBlockState(pos);
-                    MapColor mapColor = state.getMapColor(level, pos);
+                BlockState state = level.getBlockState(pos);
+                MapColor mapColor = state.getMapColor(level, pos);
 
-                    int id = mapColor.id;
-                    int dyeID;
-                    // maps mapcolorID to Dye id
-                    if (id == 8) {
-                        dyeID = 0;
-                    } else if (id >= 15 && id <= 29) {
-                        dyeID = id - 14;
-                    }
-                    // daily reminder terracotta is stupid
-                    else if (id == 36) {
-                        dyeID = 0;
-                    } else if (id > 36 && id <= 51) {
-                        dyeID = id - 34;
-                    } else {
-                        dyeID = 0;
+                int id = mapColor.id;
+
+                // map id to dye
+                if (id >= 15 && id <= 29) {
+                    dyeID = id - 14;
+                } else if (id >= 37 && id <= 51) {
+                    dyeID = id - 36;
+                } else {
+                    if (id != 8 && id != 36) {
                         return;
                     }
-
-                    if (spraycan.getItem() instanceof ComponentItem compItem) {
-
-                        for (var component : compItem.getComponents()) {
-                            if (component instanceof InfiniteSprayCanBehavior behavior) {
-                                behavior.setColor(DyeColor.values()[dyeID]);
-                            }
-                        }
-
-                    }
-
                 }
 
             }
+        }
+
+        if (spraycan.getItem() instanceof ComponentItem compItem) {
+
+            for (var component : compItem.getComponents()) {
+                if (component instanceof InfiniteSprayCanBehavior behavior) {
+                    behavior.setColor(DyeColor.values()[dyeID]);
+                    behavior.PrintColorToActionBar(player, behavior.getColor());
+                }
+            }
+
         }
     }
 }
