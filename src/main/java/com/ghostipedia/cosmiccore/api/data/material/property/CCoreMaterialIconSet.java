@@ -2,17 +2,19 @@ package com.ghostipedia.cosmiccore.api.data.material.property;
 
 import com.ghostipedia.cosmiccore.CosmicCore;
 import com.ghostipedia.cosmiccore.client.renderer.item.HaloItemRenderer;
-import com.ghostipedia.cosmiccore.client.renderer.item.RadianceItemRenderer;
 import com.ghostipedia.cosmiccore.common.data.materials.CosmicMaterialSet;
+import com.ghostipedia.cosmiccore.utils.ColorUtil;
 
-import com.ghostipedia.cosmiccore.common.item.behavior.HaloItemBehavior;
 import com.gregtechceu.gtceu.api.data.chemical.material.info.MaterialIconSet;
 import com.gregtechceu.gtceu.api.item.component.ICustomRenderer;
 
 import com.lowdragmc.lowdraglib.client.renderer.IRenderer;
 
-import lombok.Getter;
 import net.minecraft.resources.ResourceLocation;
+
+import lombok.Getter;
+
+import java.util.function.Supplier;
 
 @Getter
 public class CCoreMaterialIconSet extends MaterialIconSet {
@@ -23,17 +25,23 @@ public class CCoreMaterialIconSet extends MaterialIconSet {
         this(name, parentIconset, root, renderer == null ? null : () -> renderer);
     }
 
-    private CCoreMaterialIconSet(String name, MaterialIconSet parentIconset, boolean root, ICustomRenderer renderer) {
+    public CCoreMaterialIconSet(String name, MaterialIconSet parentIconset, boolean root, ICustomRenderer renderer) {
         super(name, parentIconset, root);
         this.customRender = renderer;
     }
 
-    public static final CCoreMaterialIconSet VIBRANIUM = new CCoreMaterialIconSet("vibranium",
-            CosmicMaterialSet.NEUTRONITE, false, new HaloItemBehavior(5,0xFF1c1926,new ResourceLocation(CosmicCore.MOD_ID, "rnd/halo"),true,true));
+    static final Supplier<Integer> prismaticColor = () -> {
+        float v = (float) ((System.currentTimeMillis() / 500) % 10) / 10;
+        if (v > 0.5f)
+            v = 1 - v;
+        return (0xff << 24) | ColorUtil.lerpColorRGB(0xffc0cb, 0x000080, v * 2);
+    };
 
+    public static final CCoreMaterialIconSet VIBRANIUM = new CCoreMaterialIconSet("vibranium",
+            CosmicMaterialSet.NEUTRONITE, false,
+            HaloItemRenderer.create(5, 0xFF1c1926, new ResourceLocation(CosmicCore.MOD_ID, "rnd/halo"), true, true));
 
     public static final CCoreMaterialIconSet PRISMATIC = new CCoreMaterialIconSet("prismatic", SHINY, false,
-             new HaloItemBehavior(8,0x99FFFFFF,new ResourceLocation(CosmicCore.MOD_ID, "rnd/halo"),true,false));
-
-
+            HaloItemRenderer.create(8, prismaticColor, new ResourceLocation(CosmicCore.MOD_ID, "rnd/halo"), true,
+                    true));
 }
