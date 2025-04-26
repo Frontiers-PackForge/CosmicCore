@@ -107,9 +107,9 @@ public class InfiniteSprayCanBehavior implements IInteractionItem, IAddInformati
             this.color = DyeColor.values()[nextColor];
 
             PrintColorToActionBar(player, color);
-            return false;
+            return true;
         }
-        return true;
+        return false;
     }
 
     public void PrintColorToActionBar(Player player, DyeColor color) {
