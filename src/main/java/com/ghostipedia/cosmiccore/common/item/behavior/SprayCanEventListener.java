@@ -73,6 +73,11 @@ public class SprayCanEventListener {
                     }
                 } else if (entity instanceof IPaintable) {
                     for (DyeColor dye : DyeColor.values()) {
+                        if(((IPaintable) entity).getPaintingColor() ==  -1){
+
+                            color = ExtendedDyeColor.SOLVENT;
+
+                        }
                         if (((IPaintable) entity).getPaintingColor() == dye.getTextColor()) {
                             color = ExtendedDyeColor.getColorFromDyeId(dyeID);
                         }
