@@ -2,12 +2,14 @@ package com.ghostipedia.cosmiccore.common.data.materials;
 
 import com.ghostipedia.cosmiccore.CosmicCore;
 import com.ghostipedia.cosmiccore.api.data.material.property.CCoreMaterialIconSet;
+import com.ghostipedia.cosmiccore.api.item.MeldingOmniTool;
 
 import com.gregtechceu.gtceu.api.GTValues;
 import com.gregtechceu.gtceu.api.data.chemical.material.Material;
 import com.gregtechceu.gtceu.api.data.chemical.material.info.MaterialIconSet;
 import com.gregtechceu.gtceu.api.data.chemical.material.properties.BlastProperty;
 import com.gregtechceu.gtceu.api.data.chemical.material.properties.PropertyKey;
+import com.gregtechceu.gtceu.api.data.chemical.material.properties.ToolProperty;
 import com.gregtechceu.gtceu.api.fluids.FluidBuilder;
 import com.gregtechceu.gtceu.api.fluids.FluidState;
 
@@ -120,6 +122,8 @@ public class CosmicMaterials {
                 .flags(GENERATE_BOLT_SCREW, GENERATE_ROUND, GENERATE_GEAR, GENERATE_SMALL_GEAR, GENERATE_RING,
                         GENERATE_FRAME, GENERATE_SPRING, GENERATE_SPRING_SMALL, GENERATE_FINE_WIRE, GENERATE_DENSE)
                 .cableProperties(GTValues.V[7], 4, 3)
+                .toolStats(ToolProperty.Builder.of(16, 40, 8192, 6, MeldingOmniTool.MELD_TOOL_LUV).magnetic()
+                        .unbreakable().build())
                 .blastTemp(5400, BlastProperty.GasTier.HIGHER, GTValues.VA[GTValues.LuV], 900)
                 .buildAndRegister();
 
@@ -332,5 +336,7 @@ public class CosmicMaterials {
         nickelOreProp.setWashedIn(Mercury);
         chromiteOreProp.setOreByProducts(Iron, Magnesium, Chromite);
         Neutronium.setMaterialIconSet(CCoreMaterialIconSet.VIBRANIUM);
+        Neutronium.addFlags(NO_SMELTING, NO_ORE_SMELTING);
+        Neutronium.setProperty(PropertyKey.BLAST, new BlastProperty(15000));
     }
 }

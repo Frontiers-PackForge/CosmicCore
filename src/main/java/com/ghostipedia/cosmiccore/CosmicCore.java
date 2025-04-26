@@ -48,11 +48,10 @@ public class CosmicCore {
         var bus = FMLJavaModLoadingContext.get().getModEventBus();
         bus.register(this);
         bus.addGenericListener(GTRecipeType.class, this::registerRecipeTypes);
-        // bus.addGenericListener(Class.class, this::registerRecipeConditions);
-        // bus.addGenericListener(MachineDefinition.class, this::registerMachines);
         bus.addGenericListener(MachineDefinition.class, this::registerMachines);
         bus.addGenericListener(SoundEntry.class, this::registerSounds);
         AdAstraEvents.EntityGravityEvent.register(GravityCoreBehavior::clampGravity);
+
         CosmicLootModifiers.register(bus);
 
         if (Platform.isClient()) {

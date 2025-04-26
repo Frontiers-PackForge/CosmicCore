@@ -6,6 +6,7 @@ import com.ghostipedia.cosmiccore.common.data.tag.item.CosmicItemTags;
 import com.ghostipedia.cosmiccore.common.item.behavior.EffectApplicationBehavior;
 import com.ghostipedia.cosmiccore.common.item.behavior.InfiniteSprayCanBehavior;
 import com.ghostipedia.cosmiccore.common.item.behavior.StructureWriteBehavior;
+import com.ghostipedia.cosmiccore.common.item.behavior.WirelessPDABehavior;
 import com.ghostipedia.cosmiccore.utils.StringUtil;
 
 import com.gregtechceu.gtceu.api.item.ComponentItem;
@@ -27,12 +28,15 @@ import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ArmorItem;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Rarity;
 import net.minecraft.world.level.Level;
 
+import com.teamresourceful.resourcefullib.common.registry.RegistryEntry;
 import com.tterrag.registrate.util.entry.ItemEntry;
 import com.tterrag.registrate.util.nullness.NonNullConsumer;
+import earth.terrarium.adastra.common.items.rendered.RenderedBlockItem;
 import earth.terrarium.adastra.common.tags.ModItemTags;
 import wayoftime.bloodmagic.common.item.BloodOrb;
 import wayoftime.bloodmagic.common.item.ItemBloodOrb;
@@ -40,6 +44,7 @@ import wayoftime.bloodmagic.common.registration.impl.BloodOrbRegistryObject;
 
 import static com.ghostipedia.cosmiccore.api.registries.CosmicRegistration.REGISTRATE;
 import static com.gregtechceu.gtceu.common.data.GTItems.attach;
+import static earth.terrarium.adastra.common.registry.ModItems.GLOBES;
 import static wayoftime.bloodmagic.common.item.BloodMagicItems.BLOOD_ORBS;
 
 @SuppressWarnings({ "unused" })
@@ -49,6 +54,9 @@ public class CosmicItems {
     public static final BloodOrbRegistryObject<BloodOrb> ORB_VOIDSENT;
     public static final BloodOrbRegistryObject<BloodOrb> ORB_SOVEREIGN;
 
+    public static final RegistryEntry<Item> SUN_GLOBE = GLOBES.register("sun_globe",
+            () -> new RenderedBlockItem(CosmicBlocks.SUN_GLOBE.get(),
+                    new Item.Properties().stacksTo(1).rarity(Rarity.RARE)));
     static {
         CosmicRegistration.REGISTRATE.creativeModeTab(() -> CosmicCreativeModeTabs.COSMIC_CORE);
         ORB_ASCENDANT = BLOOD_ORBS.register("ascendantbloodorb", () -> {
@@ -282,6 +290,14 @@ public class CosmicItems {
                 tooltips.add(Component.translatable("cosmiccore.lore.shard_huge.1"));
                 tooltips.add(Component.translatable("cosmiccore.lore.shard_huge.2"));
             })))
+            .defaultModel()
+            .register();
+    public static final ItemEntry<ComponentItem> WIRELESS_PDA = REGISTRATE
+            .item("wireless_pda", ComponentItem::create)
+            .lang("Wireless Data PDA")
+            .properties(p -> p.stacksTo(1))
+            .tag()
+            .onRegister(attach(new WirelessPDABehavior()))
             .defaultModel()
             .register();
 

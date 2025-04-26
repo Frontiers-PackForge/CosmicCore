@@ -7,12 +7,13 @@ import static com.gregtechceu.gtceu.data.lang.LangHandler.replace;
 public class CosmicLangHandler {
 
     public static void init(RegistrateLangProvider provider) {
+        replace(provider, "item.gtceu.tool.luv_meld_tool", "Trinavine Meld Multitool");
         replace(provider, "cosmiccore.multiblock.naqreactor.tooltip.0",
                 "§cA massive reactor powered by explosions and reactive fuel");
         replace(provider, "cosmiccore.multiblock.naqreactor.tooltip.1",
                 "§bWill always attempt to parallel to 16x output.");
         replace(provider, "cosmiccore.multiblock.naqreactor.tooltip.2", "§cOnly Accepts Laser hatches.");
-        replace(provider, "gtceu.industrial_chemvat", "§aIndustiral Chemvat");
+        replace(provider, "gtceu.industrial_chemvat", "§aIndustrial Chemvat");
         replace(provider, "cosmiccore.multiblock.chemvat.tooltip.0", "§aA massive chemical plant capable of parallel");
         replace(provider, "cosmiccore.multiblock.chemvat.tooltip.1",
                 "§fWhen parallelized, adds the cumulative time of all recipes together.");
@@ -256,5 +257,20 @@ public class CosmicLangHandler {
         provider.add("cosmic.command.wireless.energy.location.format", "%s : x=%d y=%d z=%d");
         provider.add("cosmic.command.wireless.energy.no.capacitor", "No Formed Capacitor");
         provider.add("cosmic.command.wireless.energy.capacitor", "  §bCapacitor Location:§b ");
+
+        // Wireless Energy Curio
+        provider.add("cosmic.gui.wireless.energy.player", "§aPlayer:§a %s");
+        provider.add("cosmic.gui.wireless.energy.team", "§aTeam:§a %s");
+        provider.add("cosmic.gui.wireless.energy.header", "§eWireless Energy Network Info (§e %s §e)§e:");
+        provider.add("cosmic.gui.wireless.energy.capacity", "  §bCapacity:§b %s EU");
+        provider.add("cosmic.gui.wireless.energy.stored", "§eStorage §b%s §f%s/%s");
+        provider.add("cosmic.gui.wireless.energy.net", "  §aEU NET: %s EU/t");
+        provider.add("cosmic.gui.wireless.energy.input", "§aIN:§b %s EU/t");
+        provider.add("cosmic.gui.wireless.energy.output", "§cOUTt:§b %s EU/t");
+        provider.add("cosmic.gui.wireless.energy.buffered", "  §bBuffered:§b %s EU");
+        provider.add("cosmic.gui.wireless.energy.active", "  §bActive:§b %s");
+        provider.add("cosmic.gui.wireless.energy.location.format", "%s : x=%d y=%d z=%d");
+        provider.add("cosmic.gui.wireless.energy.no.capacitor", "No Formed Capacitor");
+        provider.add("cosmic.gui.wireless.energy.capacitor", "  §bCapacitor Location:§b ");
     }
 }

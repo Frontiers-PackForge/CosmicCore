@@ -11,11 +11,11 @@
       "entries": [
         {
           "type": "minecraft:item",
-          "name": "cosmiccore:zbland_glass"
+          "name": "cosmiccore:wear_resistant_ruridit_casing"
         }
       ],
       "rolls": 1.0
     }
   ],
-  "random_sequence": "cosmiccore:blocks/zbland_glass"
+  "random_sequence": "cosmiccore:blocks/wear_resistant_ruridit_casing"
 }

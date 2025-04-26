@@ -71,9 +71,9 @@ public class CosmicRecipeModifiers {
                 }
                 return ModifierFunction.builder()
                         .modifyAllContents(ContentModifier.multiplier(actualParallel))
-                        .eutMultiplier(actualParallel)
+                        .eutMultiplier(actualParallel * 0.75F)
                         .parallels(actualParallel)
-                        .durationMultiplier(actualParallel * 0.25F)
+                        .durationMultiplier(actualParallel / 2F * 0.25F)
                         .build();
             }
         }

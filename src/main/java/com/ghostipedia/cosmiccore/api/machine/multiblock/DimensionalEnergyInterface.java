@@ -127,22 +127,24 @@ public class DimensionalEnergyInterface extends WorkableMultiblockMachine
         if (getLevel() instanceof ServerLevel serverLevel) { // Transfer buffer content to avoid losses
             var data = WirelessEnergySavedData.getOrCreate(serverLevel);
             var owner = getOwnerUUID();
-            data.addEUToGlobalWirelessEnergy(owner, energyBuffer.getEnergyStored());
-            energyBuffer.removeEnergy(energyBuffer.getEnergyStored());
+            if (energyBuffer != null) {
+                data.addEUToGlobalWirelessEnergy(owner, energyBuffer.getEnergyStored());
+                energyBuffer.removeEnergy(energyBuffer.getEnergyStored());
+            }
             data.removeEnergyBuffered(owner, getPos());
             data.removeEnergyInput(owner, getPos());
             data.removeEnergyOutput(owner, getPos());
             data.removePassiveDrain(owner, getPos());
-        }
 
-        this.inputHatches = null;
-        this.outputHatches = null;
-        this.energyBuffer = null;
-        this.passiveDrain = 0;
-        this.netInLastSec = 0;
-        this.averageInLastSec = 0;
-        this.netOutLastSec = 0;
-        this.averageOutLastSec = 0;
+            this.inputHatches = null;
+            this.outputHatches = null;
+            this.energyBuffer = null;
+            this.passiveDrain = 0;
+            this.netInLastSec = 0;
+            this.averageInLastSec = 0;
+            this.netOutLastSec = 0;
+            this.averageOutLastSec = 0;
+        }
 
         super.onStructureInvalid();
     }

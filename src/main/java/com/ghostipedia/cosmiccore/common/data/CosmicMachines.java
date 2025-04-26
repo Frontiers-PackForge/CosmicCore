@@ -34,6 +34,7 @@ import com.gregtechceu.gtceu.api.machine.IMachineBlockEntity;
 import com.gregtechceu.gtceu.api.machine.MachineDefinition;
 import com.gregtechceu.gtceu.api.machine.MetaMachine;
 import com.gregtechceu.gtceu.api.machine.MultiblockMachineDefinition;
+import com.gregtechceu.gtceu.api.machine.multiblock.CoilWorkableElectricMultiblockMachine;
 import com.gregtechceu.gtceu.api.machine.multiblock.PartAbility;
 import com.gregtechceu.gtceu.api.machine.multiblock.WorkableElectricMultiblockMachine;
 import com.gregtechceu.gtceu.api.machine.steam.SimpleSteamMachine;
@@ -57,8 +58,10 @@ import com.gregtechceu.gtceu.common.registry.GTRegistration;
 import com.gregtechceu.gtceu.config.ConfigHolder;
 import com.gregtechceu.gtceu.utils.FormattingUtil;
 
+import net.minecraft.ChatFormatting;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.Style;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 
@@ -482,13 +485,47 @@ public class CosmicMachines {
             .workableCasingRenderer(GTCEu.id("block/casings/solid/machine_casing_solid_steel"),
                     CosmicCore.id("block/multiblock/mantle_bore"))
             .register();
+    public final static MultiblockMachineDefinition LARGE_SPOOLING_MACHINE = REGISTRATE
+            .multiblock("large_spooling_machine", WorkableElectricMultiblockMachine::new)
+            .rotationState(RotationState.NON_Y_AXIS)
+            .recipeType(CosmicRecipeTypes.SPOOLING_MACHINE)
+            .recipeModifiers(GTRecipeModifiers.PARALLEL_HATCH,
+                    ELECTRIC_OVERCLOCK.apply(OverclockingLogic.NON_PERFECT_OVERCLOCK))
+            .appearanceBlock(WEAR_RESISTANT_RURIDIT_CASING)
+            .pattern(definition -> FactoryBlockPattern.start()
+                    .aisle("  AAAA", "     F", "  DDDF", "     F", "     F", "     F", "     F", "  AAAA", "      ")
+                    .aisle("  AAAA", "   C  ", "  DC  ", "   C  ", "   C  ", "   C  ", "   C  ", "  AAAA", "      ")
+                    .aisle("AAAAAA", "A   A ", "A E A ", "A   A ", "A   A ", "A   A ", "A   A ", "AAAAAA", " AAA  ")
+                    .aisle("AAAAA ", "B   B ", "B   B ", "B   B ", "B   B ", "B   B ", "B   B ", "A   A ", "AAAAA ")
+                    .aisle("AACAA ", "B D B ", "B D B ", "B D B ", "B D B ", "B D B ", "B D B ", "B D B ", "AACAA ")
+                    .aisle("AAAAA ", "B   B ", "B   B ", "B   B ", "B   B ", "B   B ", "B   B ", "A   A ", "AAAAA ")
+                    .aisle("AAQAA ", "ABBBA ", "ABBBA ", "ABBBA ", "ABBBA ", "ABBBA ", "ABBBA ", "AABAA ", " AAA  ")
+                    .where(' ', any())
+                    .where("Q", controller(blocks(definition.getBlock())))
+                    .where('A', blocks(WEAR_RESISTANT_RURIDIT_CASING.get()).setMinGlobalLimited(85, 90)
+                            .or(Predicates.abilities(PartAbility.IMPORT_ITEMS).setMinGlobalLimited(1))
+                            .or(Predicates.abilities(PartAbility.IMPORT_FLUIDS).setMinGlobalLimited(1))
+                            .or(Predicates.abilities(PartAbility.INPUT_ENERGY).setMinGlobalLimited(1))
+                            .or(Predicates.abilities(PartAbility.MAINTENANCE).setExactLimit(1))
+                            .or(Predicates.abilities(PartAbility.PARALLEL_HATCH).setExactLimit(1))
+                            .or(Predicates.abilities(PartAbility.EXPORT_ITEMS).setMinGlobalLimited(1)))
+                    .where('B', blocks(CASING_LAMINATED_GLASS.get()))
+                    .where('C', blocks(CASING_TUNGSTENSTEEL_GEARBOX.get()))
+                    .where('D', blocks(CASING_STRESS_PROOF.get()))
+                    .where('E', blocks(CASING_STEEL_GEARBOX.get()))
+                    .where('F', blocks(ChemicalHelper.getBlock(TagPrefix.frameGt, GTMaterials.Iridium)))
+
+                    .build())
+            .workableCasingRenderer(CosmicCore.id("block/casings/solid/ruridit_casing"),
+                    GTCEu.id("block/multiblock/generator/large_gas_turbine"))
+            .register();
     public final static MultiblockMachineDefinition ORBITAL_TEMPERING_FORGE = REGISTRATE.multiblock(
-            "orbital_tempering_forge", WorkableElectricMultiblockMachine::new)
+            "orbital_tempering_forge", CoilWorkableElectricMultiblockMachine::new)
             .rotationState(RotationState.ALL)
-            .recipeType(CosmicRecipeTypes.CHROMATIC_FLOTATION_PLANT)
-            .recipeModifier(ELECTRIC_OVERCLOCK.apply(OverclockingLogic.NON_PERFECT_OVERCLOCK))
+            .recipeType(CosmicRecipeTypes.ORBITAL_FORGE)
+            .recipeModifiers(GTRecipeModifiers.PARALLEL_HATCH,
+                    GTRecipeModifiers::ebfOverclock)
             .appearanceBlock(CosmicBlocks.CYCLOZINE_CHEMICALLY_REPELLING_CASING)
-            .generator(true)
             .pattern(definition -> FactoryBlockPattern.start()
                     .aisle("                                   ", "                                   ",
                             "   AAAAA                   AAAAA   ", "   BBBBB                   BBBBB   ",
@@ -633,21 +670,44 @@ public class CosmicMachines {
                     .where(' ', any())
                     .where("X", controller(blocks(definition.getBlock())))
                     .where('C', blocks(MULTIPURPOSE_INTERSTELLAR_GRADE_CASING.get()))
-                    .where('A', blocks(CYCLOZINE_CHEMICALLY_REPELLING_CASING.get()))
                     .where('E', heatingCoils())
                     .where('B', blocks(ULTRA_POWERED_CASING.get()))
                     .where('D', blocks(CYCLOZINE_CHEMICALLY_REPELLING_PIPE.get()))
                     .where('F', blocks(HEAT_VENT.get()))
+                    .where('A', blocks(CYCLOZINE_CHEMICALLY_REPELLING_CASING.get()).setMinGlobalLimited(650, 660)
+                            .or(abilities(PartAbility.IMPORT_FLUIDS))
+                            .or(abilities(PartAbility.EXPORT_FLUIDS))
+                            .or(abilities(PartAbility.IMPORT_ITEMS))
+                            .or(abilities(PartAbility.EXPORT_ITEMS))
+                            .or(abilities(PartAbility.INPUT_ENERGY))
+                            .or(abilities(PartAbility.COMPUTATION_DATA_RECEPTION).setMaxGlobalLimited(1, 1))
+                            .or(abilities(PartAbility.DATA_ACCESS, PartAbility.OPTICAL_DATA_RECEPTION)
+                                    .setMaxGlobalLimited(1, 1))
+                            .or(abilities(PartAbility.PARALLEL_HATCH, CosmicPartAbility.COSMIC_PARALLEL_HATCH)
+                                    .setExactLimit(1))
+                            .or(abilities(PartAbility.INPUT_LASER, PartAbility.INPUT_ENERGY).setExactLimit(1)))
                     .build())
             .workableCasingRenderer(CosmicCore.id("block/casings/solid/vomahine_certified_chemically_resistant_casing"),
                     CosmicCore.id("block/multiblock/vomahine_chemplant"))
+            .additionalDisplay((controller, components) -> {
+                if (controller instanceof CoilWorkableElectricMultiblockMachine coilMachine && controller.isFormed()) {
+                    components.add(Component.translatable("gtceu.multiblock.blast_furnace.max_temperature",
+                            Component
+                                    .translatable(
+                                            FormattingUtil
+                                                    .formatNumbers(coilMachine.getCoilType().getCoilTemperature() +
+                                                            100L * Math.max(0, coilMachine.getTier() - GTValues.MV)) +
+                                                    "K")
+                                    .setStyle(Style.EMPTY.withColor(ChatFormatting.RED))));
+                }
+            })
             .register();
     public final static MultiblockMachineDefinition INDUSTRIAL_CHEMPLANT = REGISTRATE
             .multiblock("industrial_chemical_vat", WorkableElectricMultiblockMachine::new)
             .rotationState(RotationState.ALL)
             .recipeTypes(CosmicRecipeTypes.INDUSTRIAL_CHEMVAT, GTRecipeTypes.CRACKING_RECIPES)
             .recipeModifiers(CosmicRecipeModifiers::chemicalVatLogic,
-                    ELECTRIC_OVERCLOCK.apply(OverclockingLogic.NON_PERFECT_OVERCLOCK))
+                    ELECTRIC_OVERCLOCK.apply(OverclockingLogic.PERFECT_OVERCLOCK_SUBTICK))
             .appearanceBlock(CYCLOZINE_CHEMICALLY_REPELLING_CASING)
             .pattern(definition -> FactoryBlockPattern.start()
                     .aisle("##QQQ##", "##QQQ##", "###Q###", "#######", "#######", "#######", "#######", "#######",
@@ -794,7 +854,6 @@ public class CosmicMachines {
                     .aisle("AABBABBAA", "AD#####DA", "EF#####FE", "EFD###DFE", "EF#####FE", "AD#####DA", "AABBABBAA")
                     .aisle("         ", "AABBABBAA", "AD#####DA", "ADD###DDA", "AD#####DA", "AABBABBAA", "         ")
                     .aisle("X       X", "X       X", "AABBABBAA", "AABBQBBAA", "AABBABBAA", "         ", "         ")
-
                     .where('Q', Predicates.controller(Predicates.blocks(definition.get())))
                     .where(' ', Predicates.any())
                     .where('#', Predicates.air())
@@ -803,7 +862,7 @@ public class CosmicMachines {
                     .where('D', blocks(RESONANTLY_TUNED_VIRTUE_MELD_CASING.get()))
                     .where('E', blocks(CYCLOZINE_CHEMICALLY_REPELLING_CASING.get())
                             .or(autoAbilities(CosmicRecipeTypes.POLYMERIZER))
-                            .or(abilities(PartAbility.INPUT_ENERGY, PartAbility.INPUT_LASER).setExactLimit(1)
+                            .or(abilities(PartAbility.INPUT_ENERGY, PartAbility.INPUT_LASER).setMaxGlobalLimited(2, 2)
                                     .setPreviewCount(1)))
                     .where('F', blocks(GEARBOX_PTHANTERUM.get()))
                     .where('X', blocks(ChemicalHelper.getBlock(TagPrefix.frameGt, GTMaterials.NaquadahAlloy)))
@@ -812,6 +871,7 @@ public class CosmicMachines {
                     CosmicCore.id("block/casings/solid/high_tolerance_rhenium_casing"),
                     CosmicCore.id("block/casings/solid/vomahine_certified_chemically_resistant_casing"),
                     GTCEu.id("block/multiblock/assembly_line")))
+
             .register();
 
     public final static MultiblockMachineDefinition CELESTIAL_BORE = REGISTRATE.multiblock(
@@ -3186,7 +3246,31 @@ public class CosmicMachines {
             .workableCasingRenderer(CosmicCore.id("block/casings/solid/vomahine_certified_chemically_resistant_casing"),
                     CosmicCore.id("block/multiblock/vomahine_chemplant"))
             .register();
-
+    public final static MultiblockMachineDefinition BIOVAT = REGISTRATE
+            .multiblock("biovat", WorkableElectricMultiblockMachine::new)
+            .rotationState(RotationState.NON_Y_AXIS)
+            .recipeType(CosmicRecipeTypes.BIOVAT)
+            .appearanceBlock(REINFORCED_NAQUADRIA_CASING)
+            .pattern(definition -> FactoryBlockPattern.start()
+                    .aisle("AAAAA", "CCCCC", "CCCCC", "AAAAA")
+                    .aisle("AAAAA", "C   C", "C   C", "ADDDA")
+                    .aisle("AAAAA", "C   C", "C   C", "ADDDA")
+                    .aisle("AAAAA", "C   C", "C   C", "ADDDA")
+                    .aisle("AAQAA", "CCCCC", "CCCCC", "AAAAA")
+                    .where(' ', any())
+                    .where("Q", controller(blocks(definition.getBlock())))
+                    .where('C', blocks(ZBLAN_REINFORCED_GLASS.get()))
+                    .where('D', blocks(RADIOACTIVE_FILTER_CASING.get()))
+                    .where('A', blocks(REINFORCED_NAQUADRIA_CASING.get())
+                            .or(Predicates.abilities(PartAbility.EXPORT_ITEMS))
+                            .or(Predicates.abilities(PartAbility.INPUT_ENERGY).setExactLimit(1))
+                            .or(Predicates.abilities(PartAbility.IMPORT_FLUIDS_1X, PartAbility.IMPORT_FLUIDS_4X,
+                                    PartAbility.IMPORT_FLUIDS_9X).setExactLimit(1))
+                            .or(Predicates.abilities(PartAbility.EXPORT_FLUIDS_1X).setExactLimit(1)))
+                    .build())
+            .workableCasingRenderer(CosmicCore.id("block/casings/solid/reinforced_naquadria_casing"),
+                    GTCEu.id("block/multiblock/generator/large_gas_turbine"))
+            .register();
     public static final MultiblockMachineDefinition LARGE_COMBUSTION_ENGINE = registerCosmicLargeCombustionEngine(
             "large_combustion_engine_cc", EV,
             CASING_TITANIUM_STABLE, CASING_TITANIUM_GEARBOX, CASING_ENGINE_INTAKE,
@@ -3436,13 +3520,14 @@ public class CosmicMachines {
             .pattern(definition -> FactoryBlockPattern.start(RIGHT, BACK, UP)
                     .aisle("ACA", "AAA", "AAA")
                     .aisle("ABA", "BDB", "ABA")
-                    .setRepeatable(1, PowerSubstationMachine.MAX_BATTERY_LAYERS)
+                    .setRepeatable(1, 11)
                     .aisle("AAA", "AAA", "AAA")
                     .where("C", controller(blocks(definition.getBlock())))
                     .where("A", blocks(CASING_PALLADIUM_SUBSTATION.get())
                             .or(abilities(PartAbility.INPUT_LASER, PartAbility.INPUT_ENERGY, PartAbility.OUTPUT_ENERGY,
-                                    PartAbility.OUTPUT_LASER)
-                                    .or(abilities(PartAbility.MAINTENANCE)).setExactLimit(1)))
+                                    PartAbility.OUTPUT_LASER, PartAbility.SUBSTATION_INPUT_ENERGY,
+                                    PartAbility.SUBSTATION_OUTPUT_ENERGY)
+                                    .or(abilities(PartAbility.MAINTENANCE).setExactLimit(1))))
                     .where("D", Predicates.powerSubstationBatteries())
                     .where("B", blocks(CASING_LAMINATED_GLASS.get()))
                     .build())
@@ -3463,9 +3548,15 @@ public class CosmicMachines {
         GTMultiMachines.LARGE_COMBUSTION_ENGINE.setRecipeTypes(new GTRecipeType[] { DUMMY_RECIPES });
         GTMultiMachines.LARGE_COMBUSTION_ENGINE.setRenderXEIPreview(false);
         GTMultiMachines.LARGE_COMBUSTION_ENGINE.setRenderWorldPreview(false);
+        GTMultiMachines.LARGE_PLASMA_TURBINE.setRecipeTypes(new GTRecipeType[] { DUMMY_RECIPES });
+        GTMultiMachines.LARGE_PLASMA_TURBINE.setRenderXEIPreview(false);
+        GTMultiMachines.LARGE_PLASMA_TURBINE.setRenderWorldPreview(false);
         GTMultiMachines.EXTREME_COMBUSTION_ENGINE.setRecipeTypes(new GTRecipeType[] { DUMMY_RECIPES });
         GTMultiMachines.EXTREME_COMBUSTION_ENGINE.setRenderXEIPreview(false);
         GTMultiMachines.EXTREME_COMBUSTION_ENGINE.setRenderWorldPreview(false);
+        // GCYMMachines.MEGA_BLAST_FURNACE.setRecipeTypes(new GTRecipeType[] { DUMMY_RECIPES });
+        // GCYMMachines.MEGA_BLAST_FURNACE.setRenderXEIPreview(false);
+        // GCYMMachines.MEGA_BLAST_FURNACE.setRenderWorldPreview(false);
         GTMultiMachines.POWER_SUBSTATION.setRenderXEIPreview(false);
         GTMultiMachines.POWER_SUBSTATION.setRenderWorldPreview(false);
         for (MultiblockMachineDefinition definition : FUSION_REACTOR) {
