@@ -255,11 +255,56 @@ public class CosmicItems {
             .defaultModel()
             .register();
 
-    // public static final ItemEntry<ComponentItem> VOMAPLAST = REGISTRATE.item("vomaplast", ComponentItem::create)
-    // .lang("Vomaplast")
-    // .properties(p -> p.stacksTo(64))
-    // .defaultModel()
-    // .register();
+    public static final ItemEntry<ComponentItem>  BIFIDOBACTERIUM_BREVE_CULTURE = REGISTRATE
+            .item("bifidobacterium_breve_culture", ComponentItem::create)
+            .lang("Bifidobacterium Breve Culture")
+            .properties(p -> p.stacksTo(4))
+            .tag()
+            .defaultModel()
+            .register();
+    public static final ItemEntry<ComponentItem>  BIFIDOBACTERIUM_BREVE = REGISTRATE
+            .item("bifidobacterium_breve", ComponentItem::create)
+            .lang("Bifidobacterium Breve")
+            .properties(p -> p.stacksTo(64))
+            .tag()
+            .defaultModel()
+            .register();
+    //Strep
+    public static final ItemEntry<ComponentItem>  STREPTOCOCCUS_PYOGENES_CULTURE = REGISTRATE
+            .item("streptococcus_pyogenes_culture", ComponentItem::create)
+            .lang("Streptococcus Pyogenes Culture")
+            .properties(p -> p.stacksTo(4))
+            .tag()
+            .defaultModel()
+            .register();
+    public static final ItemEntry<ComponentItem>  STREPTOCOCCUS_PYOGENES = REGISTRATE
+            .item("streptococcus_pyogenes", ComponentItem::create)
+            .lang("Streptococcus Pyogenes")
+            .properties(p -> p.stacksTo(64))
+            .tag()
+            .defaultModel()
+            .register();
+
+    public static final ItemEntry<ComponentItem>  CONTAMINATED_PETRI_DISH = REGISTRATE
+            .item("contaminated_petri_dish", ComponentItem::create)
+            .lang("Contaminated Petri Dish")
+            .properties(p -> p.stacksTo(8))
+            .tag()
+            .defaultModel()
+            .register();
+    public static final ItemEntry<ComponentItem>  ULTRASONIC_HOMOGENIZER = REGISTRATE
+            .item("ultrasonic_homogenizer", ComponentItem::create)
+            .lang("Ultrasonic Homogenizer")
+            .properties(p -> p.stacksTo(1))
+            .tag()
+            .defaultModel()
+            .register();
+
+
+
+
+
+
     public static final ItemEntry<ComponentItem> PERPETUITY_SHARD = REGISTRATE
             .item("shard_of_perpetuity", ComponentItem::create)
             .lang("Shard of Perpetuity")

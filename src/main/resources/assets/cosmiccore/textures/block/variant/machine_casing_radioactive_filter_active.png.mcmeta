@@ -5,5 +5,8 @@
     "animation":{
       "interpolate": true,
       "frametime":16
-   }
+   },
+       "shimmer":{
+        "bloom": true
+    }
 }
