@@ -350,7 +350,7 @@ public class CosmicItems {
             .tag()
             .defaultModel()
             .register();
-
+    //UNSURE IF THESE WILL BE USED
     public static final ItemEntry<ComponentItem> RESPIRATORY_SCULK_HEMOCYTOBLAST = REGISTRATE
             .item("resipiratory_sculk_hemocytoblast", ComponentItem::create)
             .lang("Respiratory Sculk Hemocytoblast")
@@ -383,7 +383,7 @@ public class CosmicItems {
 
     public static final ItemEntry<ComponentItem> FERMIUM_RAD_CHARGES = REGISTRATE
             .item("fermium_rad_charges", ComponentItem::create)
-            .lang("Fermium Radiation Charges")
+            .lang("Fermium Radiation Charge")
             .properties(p -> p.stacksTo(8))
             .tag()
             .defaultModel()
