@@ -350,7 +350,7 @@ public class CosmicItems {
             .tag()
             .defaultModel()
             .register();
-    //UNSURE IF THESE WILL BE USED
+    // UNSURE IF THESE WILL BE USED
     public static final ItemEntry<ComponentItem> RESPIRATORY_SCULK_HEMOCYTOBLAST = REGISTRATE
             .item("resipiratory_sculk_hemocytoblast", ComponentItem::create)
             .lang("Respiratory Sculk Hemocytoblast")
