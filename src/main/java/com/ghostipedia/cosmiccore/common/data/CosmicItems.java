@@ -946,8 +946,9 @@ public class CosmicItems {
             .tag()
             .properties(p -> p.stacksTo(1))
             .onRegister(attach(new InfiniteSprayCanBehavior(1)))
-          .onRegister(modelPredicate(CosmicCore.id("Colors"),
-                  (itemStack) -> (float) itemStack.getOrCreateTag().getInt(InfiniteSprayCanBehavior.ColorTag)))
+//          .onRegister(modelPredicate(CosmicCore.id("Colors"),
+//                  (itemStack) -> (float) itemStack.getOrCreateTag().getInt(InfiniteSprayCanBehavior.ColorTag)))
+            .defaultModel()
             .register();
 
     public static <T extends ComponentItem> NonNullConsumer<T> attach(IItemComponent... components) {
