@@ -14,9 +14,11 @@ import com.gregtechceu.gtceu.utils.BreadthFirstBlockSearch;
 
 import com.lowdragmc.lowdraglib.syncdata.annotation.DescSynced;
 
+import net.minecraft.client.color.item.ItemColor;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.chat.Style;
@@ -56,7 +58,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.function.BiPredicate;
 
-public class InfiniteSprayCanBehavior implements IInteractionItem, IAddInformation {
+public class InfiniteSprayCanBehavior implements IInteractionItem, IAddInformation, ItemColor {
 
     @Getter
     @Setter
@@ -68,6 +70,8 @@ public class InfiniteSprayCanBehavior implements IInteractionItem, IAddInformati
     @DescSynced
     boolean isSwinging = true;
 
+    public static final String ColorTag = "color";
+
     public InfiniteSprayCanBehavior(int color) {
         ExtendedDyeColor[] colors = ExtendedDyeColor.values();
         this.color = color >= colors.length || color < 0 ? null : colors[color];
@@ -76,6 +80,7 @@ public class InfiniteSprayCanBehavior implements IInteractionItem, IAddInformati
     @Override
     public InteractionResult onItemUseFirst(ItemStack itemStack, @NotNull UseOnContext context) {
         isSwinging = false;
+
         var player = context.getPlayer();
         var level = context.getLevel();
         var pos = context.getClickedPos();
@@ -92,6 +97,7 @@ public class InfiniteSprayCanBehavior implements IInteractionItem, IAddInformati
 
     @Override
     public boolean onEntitySwing(ItemStack stack, LivingEntity entity) {
+        CompoundTag tag = stack.getOrCreateTag();
         if (!isSwinging) {
             isSwinging = true;
             return true;
@@ -104,6 +110,9 @@ public class InfiniteSprayCanBehavior implements IInteractionItem, IAddInformati
                     (color.ordinal() + 1) % totalColors;
 
             this.color = ExtendedDyeColor.values()[nextColor];
+            tag.putInt(ColorTag, nextColor);
+            stack.setTag(tag);
+
 
             PrintColorToActionBar(player, color);
             return true;
@@ -194,10 +203,9 @@ public class InfiniteSprayCanBehavior implements IInteractionItem, IAddInformati
     public void appendHoverText(ItemStack stack, @Nullable Level level, List<Component> tooltipComponents,
                                 TooltipFlag isAdvanced) {
         if (color != null) {
-            tooltipComponents
-                    .add(Component.translatable("behaviour.paintspray." + this.color.getSerializedName() + ".tooltip"));
+            tooltipComponents.add(Component.literal("Spray Can current Color: " + this.color.getSerializedName()));
         } else {
-            tooltipComponents.add(Component.translatable("behaviour.paintspray.solvent.tooltip"));
+            tooltipComponents.add(Component.literal("Spray can in SOLVENT mode"));
         }
     }
 
@@ -464,6 +472,11 @@ public class InfiniteSprayCanBehavior implements IInteractionItem, IAddInformati
         return paintablePredicate.test(parent.getMetaMachine(), child.getMetaMachine()) &&
                 parent.getMetaMachine().getDefinition().equals(child.getMetaMachine().getDefinition());
     };
+
+    @Override
+    public int getColor(ItemStack itemStack, int i) {
+        return 0;
+    }
 
     private static class AE2CallWrapper {
 

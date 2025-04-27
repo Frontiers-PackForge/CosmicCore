@@ -57,7 +57,8 @@ public enum ExtendedDyeColor {
 
         return SOLVENT;
     }
-    public DyeColor toDyeColor() {
-        return this.dyeColor;
+    public int getColorId() {
+        return dyeColor != null ? dyeColor.getId() : 0;  // Return the DyeColor ID or -1 if there's no dye color
     }
+
 }

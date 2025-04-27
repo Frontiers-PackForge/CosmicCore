@@ -1,5 +1,6 @@
 package com.ghostipedia.cosmiccore.common.data;
 
+import com.ghostipedia.cosmiccore.CosmicCore;
 import com.ghostipedia.cosmiccore.api.item.armor.*;
 import com.ghostipedia.cosmiccore.api.registries.CosmicRegistration;
 import com.ghostipedia.cosmiccore.common.data.tag.item.CosmicItemTags;
@@ -9,12 +10,14 @@ import com.ghostipedia.cosmiccore.common.item.behavior.StructureWriteBehavior;
 import com.ghostipedia.cosmiccore.common.item.behavior.WirelessPDABehavior;
 import com.ghostipedia.cosmiccore.utils.StringUtil;
 
+import com.gregtechceu.gtceu.GTCEu;
 import com.gregtechceu.gtceu.api.item.ComponentItem;
 import com.gregtechceu.gtceu.api.item.armor.ArmorComponentItem;
 import com.gregtechceu.gtceu.api.item.component.IItemComponent;
 import com.gregtechceu.gtceu.common.item.TooltipBehavior;
 import com.gregtechceu.gtceu.common.item.armor.GTArmorMaterials;
 import com.gregtechceu.gtceu.common.item.armor.QuarkTechSuite;
+import com.gregtechceu.gtceu.common.item.tool.behavior.LighterBehavior;
 import com.gregtechceu.gtceu.config.ConfigHolder;
 import com.gregtechceu.gtceu.data.recipe.CustomTags;
 
@@ -44,6 +47,7 @@ import wayoftime.bloodmagic.common.registration.impl.BloodOrbRegistryObject;
 
 import static com.ghostipedia.cosmiccore.api.registries.CosmicRegistration.REGISTRATE;
 import static com.gregtechceu.gtceu.common.data.GTItems.attach;
+import static com.gregtechceu.gtceu.common.data.GTItems.modelPredicate;
 import static earth.terrarium.adastra.common.registry.ModItems.GLOBES;
 import static wayoftime.bloodmagic.common.item.BloodMagicItems.BLOOD_ORBS;
 
@@ -938,10 +942,12 @@ public class CosmicItems {
     public static final ItemEntry<ComponentItem> INFINITE_SPRAY_CAN = REGISTRATE
             .item("infinite_spray_can", ComponentItem::create)
             .lang("§4Infinite Spray Can")
+
             .tag()
             .properties(p -> p.stacksTo(1))
             .onRegister(attach(new InfiniteSprayCanBehavior(1)))
-            .defaultModel()
+          .onRegister(modelPredicate(CosmicCore.id("Colors"),
+                  (itemStack) -> (float) itemStack.getOrCreateTag().getInt(InfiniteSprayCanBehavior.ColorTag)))
             .register();
 
     public static <T extends ComponentItem> NonNullConsumer<T> attach(IItemComponent... components) {

@@ -8,6 +8,7 @@ import com.gregtechceu.gtceu.api.item.ComponentItem;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.ItemStack;
@@ -25,6 +26,7 @@ import net.minecraftforge.fml.common.Mod;
 import appeng.blockentity.networking.CableBusBlockEntity;
 
 import static com.ghostipedia.cosmiccore.common.data.CosmicItems.INFINITE_SPRAY_CAN;
+import static com.ghostipedia.cosmiccore.common.item.behavior.InfiniteSprayCanBehavior.ColorTag;
 
 @SuppressWarnings("unused")
 @Mod.EventBusSubscriber(modid = CosmicCore.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE)
@@ -123,10 +125,14 @@ public class SprayCanEventListener {
         // send to spraycan when finished
         if (spraycan.getItem() instanceof ComponentItem compItem) {
             for (var component : compItem.getComponents()) {
+               // CompoundTag tag = spraycan.getOrCreateTag();
                 if (component instanceof InfiniteSprayCanBehavior behavior) {
                     behavior.setColor(color);
                     behavior.PrintColorToActionBar(player, behavior.color);
-                    event.setCanceled(true);
+                    assert color != null;
+                //    tag.putInt(ColorTag,color.getColorId());
+                //    spraycan.setTag(tag);
+                //    event.setCanceled(true);
                 }
             }
         }
