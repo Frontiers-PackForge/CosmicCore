@@ -77,6 +77,7 @@ public class InfiniteSprayCanBehavior implements IInteractionItem, IAddInformati
         this.color = color >= colors.length || color < 0 ? null : colors[color];
     }
 
+
     @Override
     public InteractionResult onItemUseFirst(ItemStack itemStack, @NotNull UseOnContext context) {
         isSwinging = false;
@@ -100,7 +101,7 @@ public class InfiniteSprayCanBehavior implements IInteractionItem, IAddInformati
         CompoundTag tag = stack.getOrCreateTag();
         if (!isSwinging) {
             isSwinging = true;
-            return true;
+            return true; // Do the color change only if not already swinging
         }
         if (entity instanceof Player player) {
             boolean isClient = player.level().isClientSide();
@@ -113,12 +114,13 @@ public class InfiniteSprayCanBehavior implements IInteractionItem, IAddInformati
             tag.putInt(ColorTag, nextColor);
             stack.setTag(tag);
 
-
             PrintColorToActionBar(player, color);
+            isSwinging = false;
             return true;
         }
-        return false;
+        return true;
     }
+
 
     public void PrintColorToActionBar(Player player, ExtendedDyeColor color) {
         MutableComponent message = Component.literal("Spray Can Color is: ");

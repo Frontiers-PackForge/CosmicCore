@@ -127,12 +127,13 @@ public class SprayCanEventListener {
             for (var component : compItem.getComponents()) {
                // CompoundTag tag = spraycan.getOrCreateTag();
                 if (component instanceof InfiniteSprayCanBehavior behavior) {
+                    CompoundTag tag = spraycan.getOrCreateTag();
                     behavior.setColor(color);
                     behavior.PrintColorToActionBar(player, behavior.color);
                     assert color != null;
-                //    tag.putInt(ColorTag,color.getColorId());
-                //    spraycan.setTag(tag);
-                //    event.setCanceled(true);
+                    tag.putInt(ColorTag,color.getColorId());
+                    spraycan.setTag(tag);
+                     event.setCanceled(true);
                 }
             }
         }

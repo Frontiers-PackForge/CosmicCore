@@ -1,8 +1,8 @@
 {
-  "parent": "item/generated",
-  "textures": {
-    "layer0": "cosmiccore:item/white_dye_spray_can"
-  },
+"parent": "minecraft:item/generated",
+"textures": {
+"layer0": "cosmiccore:item/infinite_spray_can"
+},
   "overrides": [
     {
       "predicate": {
@@ -101,4 +101,5 @@
       "model": "cosmiccore:item/black_spray_can"
     }
   ]
+
 }

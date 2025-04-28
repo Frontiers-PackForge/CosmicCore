@@ -14,6 +14,7 @@ import com.gregtechceu.gtceu.GTCEu;
 import com.gregtechceu.gtceu.api.item.ComponentItem;
 import com.gregtechceu.gtceu.api.item.armor.ArmorComponentItem;
 import com.gregtechceu.gtceu.api.item.component.IItemComponent;
+import com.gregtechceu.gtceu.common.data.GTItems;
 import com.gregtechceu.gtceu.common.item.TooltipBehavior;
 import com.gregtechceu.gtceu.common.item.armor.GTArmorMaterials;
 import com.gregtechceu.gtceu.common.item.armor.QuarkTechSuite;
@@ -23,6 +24,10 @@ import com.gregtechceu.gtceu.data.recipe.CustomTags;
 
 import com.lowdragmc.lowdraglib.utils.LocalizationUtils;
 
+import com.tterrag.registrate.providers.ProviderType;
+import com.tterrag.registrate.util.nullness.NonNullBiConsumer;
+import net.minecraft.client.renderer.item.ItemProperties;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.damagesource.DamageSource;
@@ -44,6 +49,8 @@ import earth.terrarium.adastra.common.tags.ModItemTags;
 import wayoftime.bloodmagic.common.item.BloodOrb;
 import wayoftime.bloodmagic.common.item.ItemBloodOrb;
 import wayoftime.bloodmagic.common.registration.impl.BloodOrbRegistryObject;
+
+import java.util.function.Function;
 
 import static com.ghostipedia.cosmiccore.api.registries.CosmicRegistration.REGISTRATE;
 import static com.gregtechceu.gtceu.common.data.GTItems.attach;
@@ -942,13 +949,10 @@ public class CosmicItems {
     public static final ItemEntry<ComponentItem> INFINITE_SPRAY_CAN = REGISTRATE
             .item("infinite_spray_can", ComponentItem::create)
             .lang("§4Infinite Spray Can")
-
-            .tag()
+            .setData(ProviderType.ITEM_MODEL, NonNullBiConsumer.noop())
             .properties(p -> p.stacksTo(1))
             .onRegister(attach(new InfiniteSprayCanBehavior(1)))
-            .onRegister(modelPredicate(CosmicCore.id("Colors"),
-                  (itemStack) -> (float) itemStack.getOrCreateTag().getInt(InfiniteSprayCanBehavior.ColorTag)))
-            .defaultModel()
+            .onRegister(modelPredicate(CosmicCore.id("color"), (itemStack) -> (float) itemStack.getOrCreateTag().getInt(InfiniteSprayCanBehavior.ColorTag)))
             .register();
 
     public static <T extends ComponentItem> NonNullConsumer<T> attach(IItemComponent... components) {
@@ -956,4 +960,15 @@ public class CosmicItems {
     }
 
     public static void init() {}
+
+    public static <T extends Item> NonNullConsumer<T> modelPredicate(ResourceLocation predicate,
+                                                                     Function<ItemStack, Float> property) {
+        return item -> {
+            if (GTCEu.isClientSide()) {
+                ItemProperties.register(item, predicate, (itemStack, c, l, i) -> property.apply(itemStack));
+            }
+        };
+    }
+
+
 }
