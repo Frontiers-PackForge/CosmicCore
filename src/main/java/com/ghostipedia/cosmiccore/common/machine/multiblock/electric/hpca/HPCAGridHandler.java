@@ -20,8 +20,11 @@ import com.lowdragmc.lowdraglib.syncdata.field.ManagedFieldHolder;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
 import lombok.Getter;
+import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.material.Fluid;
@@ -57,9 +60,9 @@ public class HPCAGridHandler implements IManaged {
     // cached gui info
     // holding these values past the computation clear because GUI is too "late" to read the state in time
     @DescSynced
-    private long cachedEUt;
+    protected long cachedEUt;
     @DescSynced
-    private int cachedCWUt;
+    protected int cachedCWUt;
 
     public HPCAGridHandler(@Nullable HPCAMachine controller) {
         this.controller = controller;
@@ -298,7 +301,73 @@ public class HPCAGridHandler implements IManaged {
         return maxCoolant;
     }
 
+    public void addInfo(List<Component> textList) {
+        // Max Computation
+        MutableComponent data = Component.literal(Integer.toString(getMaxCWUt())).withStyle(ChatFormatting.AQUA);
+        textList.add(Component.translatable("gtceu.multiblock.hpca.info_max_computation", data)
+                .withStyle(ChatFormatting.GRAY));
 
+        // Cooling
+        ChatFormatting coolingColor = getMaxCoolingAmount() < getMaxCoolingDemand() ? ChatFormatting.RED :
+                ChatFormatting.GREEN;
+        data = Component.literal(Integer.toString(getMaxCoolingDemand())).withStyle(coolingColor);
+        textList.add(Component.translatable("gtceu.multiblock.hpca.info_max_cooling_demand", data)
+                .withStyle(ChatFormatting.GRAY));
+
+        data = Component.literal(Integer.toString(getMaxCoolingAmount())).withStyle(coolingColor);
+        textList.add(Component.translatable("gtceu.multiblock.hpca.info_max_cooling_available", data)
+                .withStyle(ChatFormatting.GRAY));
+
+        // Coolant Required
+        if (getMaxCoolantDemand() > 0) {
+            data = Component.translatable("gtceu.universal.liters", getMaxCoolantDemand())
+                    .withStyle(ChatFormatting.YELLOW).append(" ");
+            Component coolantName = Component.translatable("gtceu.multiblock.hpca.info_coolant_name")
+                    .withStyle(ChatFormatting.YELLOW);
+            data.append(coolantName);
+        } else {
+            data = Component.literal("0").withStyle(ChatFormatting.GREEN);
+        }
+        textList.add(Component.translatable("gtceu.multiblock.hpca.info_max_coolant_required", data)
+                .withStyle(ChatFormatting.GRAY));
+
+        // Bridging
+        if (numBridges > 0) {
+            textList.add(Component.translatable("gtceu.multiblock.hpca.info_bridging_enabled")
+                    .withStyle(ChatFormatting.GREEN));
+        } else {
+            textList.add(Component.translatable("gtceu.multiblock.hpca.info_bridging_disabled")
+                    .withStyle(ChatFormatting.RED));
+        }
+    }
+
+    public void addWarnings(List<Component> textList) {
+        List<Component> warnings = new ArrayList<>();
+        if (numBridges > 1) {
+            warnings.add(Component.translatable("gtceu.multiblock.hpca.warning_multiple_bridges")
+                    .withStyle(ChatFormatting.GRAY));
+        }
+        if (computationProviders.isEmpty()) {
+            warnings.add(Component.translatable("gtceu.multiblock.hpca.warning_no_computation")
+                    .withStyle(ChatFormatting.GRAY));
+        }
+        if (getMaxCoolingDemand() > getMaxCoolingAmount()) {
+            warnings.add(Component.translatable("gtceu.multiblock.hpca.warning_low_cooling")
+                    .withStyle(ChatFormatting.GRAY));
+        }
+        if (!warnings.isEmpty()) {
+            textList.add(Component.translatable("gtceu.multiblock.hpca.warning_structure_header")
+                    .withStyle(ChatFormatting.YELLOW));
+            textList.addAll(warnings);
+        }
+    }
+
+    public void addErrors(List<Component> textList) {
+        if (components.stream().anyMatch(IHPCAComponentHatch::isDamaged)) {
+            textList.add(
+                    Component.translatable("gtceu.multiblock.hpca.error_damaged").withStyle(ChatFormatting.RED));
+        }
+    }
 
     public ResourceTexture getComponentTexture(int index) {
         if (components.size() <= index) {
