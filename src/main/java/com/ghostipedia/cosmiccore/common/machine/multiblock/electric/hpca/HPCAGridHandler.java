@@ -15,6 +15,7 @@ import com.gregtechceu.gtceu.utils.GTTransferUtils;
 import com.lowdragmc.lowdraglib.gui.texture.ResourceTexture;
 import com.lowdragmc.lowdraglib.syncdata.IManaged;
 import com.lowdragmc.lowdraglib.syncdata.annotation.DescSynced;
+import com.lowdragmc.lowdraglib.syncdata.annotation.Persisted;
 import com.lowdragmc.lowdraglib.syncdata.field.FieldManagedStorage;
 import com.lowdragmc.lowdraglib.syncdata.field.ManagedFieldHolder;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
@@ -57,6 +58,9 @@ public class HPCAGridHandler implements IManaged {
     @Getter
     private int allocatedCWUt;
 
+    @Getter @DescSynced
+    private int arrayLength;
+
     // cached gui info
     // holding these values past the computation clear because GUI is too "late" to read the state in time
     @DescSynced
@@ -68,8 +72,9 @@ public class HPCAGridHandler implements IManaged {
         this.controller = controller;
     }
 
-    public void onStructureFormed(Collection<HPCAComponentHatchWrapper> components) {
+    public void onStructureFormed(Collection<HPCAComponentHatchWrapper> components, int arrayLength) {
         reset();
+        this.arrayLength = arrayLength;
         for (HPCAComponentHatchWrapper component : components) {
             this.components.add(component);
             var coolantProvider = component.getHPCACoolantProvider();
@@ -90,6 +95,7 @@ public class HPCAGridHandler implements IManaged {
         coolantProviders.clear();
         computationProviders.clear();
         numBridges = 0;
+        arrayLength = 0;
     }
 
     void clearComputationCache() {
@@ -382,11 +388,11 @@ public class HPCAGridHandler implements IManaged {
 
         if (components.isEmpty()) {
             BlockPos testPos = pos
-                    .relative(frontFacing.getOpposite(), 3)
+                    .relative(frontFacing.getOpposite(), arrayLength)
                     .relative(relativeUp, 3);
 
             for (int i = 0; i < 3; i++) {
-                for (int j = 0; j < 3; j++) {
+                for (int j = 0; j < arrayLength; j++) {
                     BlockPos tempPos = testPos.relative(frontFacing, j).relative(relativeUp.getOpposite(), i);
                     BlockEntity be = world.getBlockEntity(tempPos);
                     if (be instanceof IHPCAComponentHatch hatch) {

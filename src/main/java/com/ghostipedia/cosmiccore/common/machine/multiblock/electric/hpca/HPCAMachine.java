@@ -1,7 +1,8 @@
 package com.ghostipedia.cosmiccore.common.machine.multiblock.electric.hpca;
 
-import com.ghostipedia.cosmiccore.common.machine.multiblock.electric.hpca.componentWrappers.AbstractHPCAComponentHatchWrapper;
+import com.ghostipedia.cosmiccore.CosmicCore;
 import com.ghostipedia.cosmiccore.common.machine.multiblock.electric.hpca.componentWrappers.HPCAComponentHatchWrapper;
+import com.ghostipedia.cosmiccore.common.machine.multiblock.part.HPCAIndicatorPartMachine;
 import com.gregtechceu.gtceu.api.GTValues;
 import com.gregtechceu.gtceu.api.capability.IControllable;
 import com.gregtechceu.gtceu.api.capability.IEnergyContainer;
@@ -29,9 +30,8 @@ import com.gregtechceu.gtceu.utils.FormattingUtil;
 import com.gregtechceu.gtceu.utils.GTUtil;
 import com.lowdragmc.lowdraglib.gui.texture.IGuiTexture;
 import com.lowdragmc.lowdraglib.gui.texture.ProgressTexture;
-import com.lowdragmc.lowdraglib.gui.widget.ImageWidget;
-import com.lowdragmc.lowdraglib.gui.widget.Widget;
-import com.lowdragmc.lowdraglib.gui.widget.WidgetGroup;
+import com.lowdragmc.lowdraglib.gui.texture.ResourceTexture;
+import com.lowdragmc.lowdraglib.gui.widget.*;
 import com.lowdragmc.lowdraglib.syncdata.annotation.DescSynced;
 import com.lowdragmc.lowdraglib.syncdata.annotation.DropSaved;
 import com.lowdragmc.lowdraglib.syncdata.annotation.Persisted;
@@ -50,8 +50,6 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
 import java.util.function.Supplier;
-
-import static com.ghostipedia.cosmiccore.common.machine.multiblock.electric.hpca.HPCAModifier.*;
 
 public class HPCAMachine extends WorkableElectricMultiblockMachine
     implements IOpticalComputationProvider, IControllable, IMachineLife, IDropSaveMachine {
@@ -104,6 +102,8 @@ public class HPCAMachine extends WorkableElectricMultiblockMachine
         List<IFluidHandler> coolantContainers = new ArrayList<>();
         List<HPCAComponentHatchWrapper> componentHatches = new ArrayList<>();
 
+        int indicatorCounter = 0;
+
         Map<Long, IO> ioMap = getMultiblockState().getMatchContext().getOrCreate("ioMap", Long2ObjectMaps::emptyMap);
         for (IMultiPart part : getParts()) {
             var pos = part.self().getPos();
@@ -113,6 +113,7 @@ public class HPCAMachine extends WorkableElectricMultiblockMachine
             }
             if (part instanceof IMaintenanceMachine maintenanceMachine)
                 maintenance = maintenanceMachine;
+            if (part instanceof HPCAIndicatorPartMachine) indicatorCounter++;
             if (io == IO.NONE || io == IO.OUT) continue;
             var handlerLists = part.getRecipeHandlers();
             for (var handlerList : handlerLists) {
@@ -129,7 +130,7 @@ public class HPCAMachine extends WorkableElectricMultiblockMachine
         }
         this.energyContainer = new EnergyContainerList(energyContainers);
         this.coolantHandler = new FluidHandlerList(coolantContainers);
-        this.hpcaHandler.onStructureFormed(componentHatches);
+        this.hpcaHandler.onStructureFormed(componentHatches, indicatorCounter - 3);
 
         if (getLevel() instanceof ServerLevel serverLevel)
             serverLevel.getServer().tell(new TickTask(0, this::updateTickSubscription));
@@ -239,15 +240,24 @@ public class HPCAMachine extends WorkableElectricMultiblockMachine
 
     @Override
     public Widget createUIWidget() {
-        WidgetGroup builder = (WidgetGroup) super.createUIWidget();
+        var width = Math.max((8 + 15 * hpcaHandler.getArrayLength()), 182);
+        WidgetGroup builder = new WidgetGroup(0, 0, width + 8, 117 + 8);
+        builder.addWidget(new DraggableScrollableWidgetGroup(4, 4, width, 117).setBackground(getScreenTexture()).addWidget(new LabelWidget(4, 5, self().getBlockState().getBlock().getDescriptionId())).addWidget(new ComponentPanelWidget(4, 17, this::addDisplayText).textSupplier(this.getLevel().isClientSide ? null : this::addDisplayText).setMaxWidthLimit(200).clickHandler(this::handleDisplayClick)));
+        builder.setBackground(GuiTextures.BACKGROUND_INVERSE);
+
+        int startX = 4 + (width - 15 * hpcaHandler.getArrayLength()) / 2;
+        int startY = 59;
+
+        var texture = new ResourceTexture("cosmiccore:textures/gui/widget/hpca/component_outline_" + hpcaHandler.getArrayLength() + ".png");
+
         // Create the hover grid
         builder.addWidget(new ExtendedProgressWidget(
                 () -> hpcaHandler.getAllocatedCWUt() > 0 ? progressSupplier.getAsDouble() : 0,
-                74, 57, 47, 47, GuiTextures.HPCA_COMPONENT_OUTLINE)
+                startX, 57, 15 * hpcaHandler.getArrayLength() + 2, 47, texture)
                 .setServerTooltipSupplier(hpcaHandler::addInfo)
                 .setFillDirection(ProgressTexture.FillDirection.LEFT_TO_RIGHT));
-        int startX = 76;
-        int startY = 59;
+
+        startX += 2;
 
         // we need to know what components we have on the client
         if (getLevel().isClientSide) {
@@ -258,9 +268,10 @@ public class HPCAMachine extends WorkableElectricMultiblockMachine
                 hpcaHandler.clearClientComponents();
             }
         }
+
         for (int i = 0; i < 3; i++) {
-            for (int j = 0; j < 3; j++) {
-                final int index = i * 3 + j;
+            for (int j = 0; j < hpcaHandler.getArrayLength(); j++) {
+                final int index = i * hpcaHandler.getArrayLength() + j;
                 Supplier<IGuiTexture> textureSupplier = () -> hpcaHandler.getComponentTexture(index);
                 builder.addWidget(new ImageWidget(startX + (15 * j), startY + (15 * i), 13, 13, textureSupplier));
             }
