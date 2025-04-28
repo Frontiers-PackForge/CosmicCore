@@ -17,7 +17,7 @@ import com.ghostipedia.cosmiccore.common.block.debug.CreativeThermiaContainerMac
 import com.ghostipedia.cosmiccore.common.data.materials.CosmicMaterials;
 import com.ghostipedia.cosmiccore.common.data.recipe.CosmicRecipeModifiers;
 import com.ghostipedia.cosmiccore.common.machine.WirelessChargerMachine;
-import com.ghostipedia.cosmiccore.common.machine.multiblock.electric.HPCAMachine;
+import com.ghostipedia.cosmiccore.common.machine.multiblock.electric.hpca.HPCAMachine;
 import com.ghostipedia.cosmiccore.common.machine.multiblock.electric.MagneticFieldMachine;
 import com.ghostipedia.cosmiccore.common.machine.multiblock.multi.WirelessDataBankMachine;
 import com.ghostipedia.cosmiccore.common.machine.multiblock.part.*;
@@ -39,7 +39,6 @@ import com.gregtechceu.gtceu.api.machine.MultiblockMachineDefinition;
 import com.gregtechceu.gtceu.api.machine.multiblock.CoilWorkableElectricMultiblockMachine;
 import com.gregtechceu.gtceu.api.machine.multiblock.PartAbility;
 import com.gregtechceu.gtceu.api.machine.multiblock.WorkableElectricMultiblockMachine;
-import com.gregtechceu.gtceu.api.machine.multiblock.part.MultiblockPartMachine;
 import com.gregtechceu.gtceu.api.machine.steam.SimpleSteamMachine;
 import com.gregtechceu.gtceu.api.pattern.FactoryBlockPattern;
 import com.gregtechceu.gtceu.api.pattern.MultiblockShapeInfo;
@@ -82,8 +81,8 @@ import static com.ghostipedia.cosmiccore.api.pattern.CosmicPredicates.magnetCoil
 import static com.ghostipedia.cosmiccore.api.registries.CosmicRegistration.REGISTRATE;
 import static com.ghostipedia.cosmiccore.common.data.CosmicBlocks.*;
 import static com.ghostipedia.cosmiccore.common.data.CosmicMachinesUtils.registerCosmicLargeCombustionEngine;
-import static com.ghostipedia.cosmiccore.common.machine.multiblock.electric.HPCAMachine.MAX_COMPONENTS_SLICES;
-import static com.ghostipedia.cosmiccore.common.machine.multiblock.electric.HPCAMachine.MIN_COMPONENTS_SLICES;
+import static com.ghostipedia.cosmiccore.common.machine.multiblock.electric.hpca.HPCAMachine.MAX_COMPONENTS_SLICES;
+import static com.ghostipedia.cosmiccore.common.machine.multiblock.electric.hpca.HPCAMachine.MIN_COMPONENTS_SLICES;
 import static com.gregtechceu.gtceu.api.GTValues.*;
 import static com.gregtechceu.gtceu.api.GTValues.UV;
 import static com.gregtechceu.gtceu.api.pattern.Predicates.*;
@@ -95,8 +94,6 @@ import static com.gregtechceu.gtceu.common.data.GTRecipeModifiers.ELECTRIC_OVERC
 import static com.gregtechceu.gtceu.common.data.GTRecipeTypes.DUMMY_RECIPES;
 import static com.gregtechceu.gtceu.common.data.machines.GTMachineUtils.*;
 import static com.gregtechceu.gtceu.common.data.machines.GTMultiMachines.FUSION_REACTOR;
-import static com.gregtechceu.gtceu.common.data.machines.GTMultiMachines.POWER_SUBSTATION;
-import static com.gregtechceu.gtceu.common.data.machines.GTResearchMachines.HPCA_BRIDGE_COMPONENT;
 import static com.klikli_dev.occultism.registry.OccultismBlocks.IESNIUM_BLOCK;
 import static wayoftime.bloodmagic.common.block.BloodMagicBlocks.BLANK_RUNE;
 
