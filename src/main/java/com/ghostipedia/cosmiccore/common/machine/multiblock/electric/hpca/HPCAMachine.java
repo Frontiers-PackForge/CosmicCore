@@ -1,8 +1,8 @@
 package com.ghostipedia.cosmiccore.common.machine.multiblock.electric.hpca;
 
-import com.ghostipedia.cosmiccore.CosmicCore;
 import com.ghostipedia.cosmiccore.common.machine.multiblock.electric.hpca.componentWrappers.HPCAComponentHatchWrapper;
 import com.ghostipedia.cosmiccore.common.machine.multiblock.part.HPCAIndicatorPartMachine;
+
 import com.gregtechceu.gtceu.api.GTValues;
 import com.gregtechceu.gtceu.api.capability.IControllable;
 import com.gregtechceu.gtceu.api.capability.IEnergyContainer;
@@ -28,6 +28,7 @@ import com.gregtechceu.gtceu.api.transfer.fluid.FluidHandlerList;
 import com.gregtechceu.gtceu.config.ConfigHolder;
 import com.gregtechceu.gtceu.utils.FormattingUtil;
 import com.gregtechceu.gtceu.utils.GTUtil;
+
 import com.lowdragmc.lowdraglib.gui.texture.IGuiTexture;
 import com.lowdragmc.lowdraglib.gui.texture.ProgressTexture;
 import com.lowdragmc.lowdraglib.gui.texture.ResourceTexture;
@@ -36,7 +37,7 @@ import com.lowdragmc.lowdraglib.syncdata.annotation.DescSynced;
 import com.lowdragmc.lowdraglib.syncdata.annotation.DropSaved;
 import com.lowdragmc.lowdraglib.syncdata.annotation.Persisted;
 import com.lowdragmc.lowdraglib.syncdata.field.ManagedFieldHolder;
-import it.unimi.dsi.fastutil.longs.Long2ObjectMaps;
+
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
@@ -45,6 +46,8 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.fluids.capability.IFluidHandler;
+
+import it.unimi.dsi.fastutil.longs.Long2ObjectMaps;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -52,7 +55,7 @@ import java.util.*;
 import java.util.function.Supplier;
 
 public class HPCAMachine extends WorkableElectricMultiblockMachine
-    implements IOpticalComputationProvider, IControllable, IMachineLife, IDropSaveMachine {
+                         implements IOpticalComputationProvider, IControllable, IMachineLife, IDropSaveMachine {
 
     private static final ManagedFieldHolder MANAGED_FIELD_HOLDER = new ManagedFieldHolder(
             HPCAMachine.class, WorkableElectricMultiblockMachine.MANAGED_FIELD_HOLDER);
@@ -78,7 +81,9 @@ public class HPCAMachine extends WorkableElectricMultiblockMachine
     @Nullable
     protected TickableSubscription tickSubs;
 
-    @Persisted @DescSynced @DropSaved
+    @Persisted
+    @DescSynced
+    @DropSaved
     private long seed = 0L;
     private HPCAModifier[] hpcaModifiers;
 
@@ -109,7 +114,8 @@ public class HPCAMachine extends WorkableElectricMultiblockMachine
             var pos = part.self().getPos();
             IO io = ioMap.getOrDefault(pos.asLong(), IO.BOTH);
             if (part instanceof IHPCAComponentHatch componentHatch) {
-                componentHatches.add(new HPCAComponentHatchWrapper(componentHatch, getColumnModifier(pos), getRowModifier(pos)));
+                componentHatches.add(
+                        new HPCAComponentHatchWrapper(componentHatch, getColumnModifier(pos), getRowModifier(pos)));
             }
             if (part instanceof IMaintenanceMachine maintenanceMachine)
                 maintenance = maintenanceMachine;
@@ -242,13 +248,18 @@ public class HPCAMachine extends WorkableElectricMultiblockMachine
     public Widget createUIWidget() {
         var width = Math.max((8 + 15 * hpcaHandler.getArrayLength()), 182);
         WidgetGroup builder = new WidgetGroup(0, 0, width + 8, 117 + 8);
-        builder.addWidget(new DraggableScrollableWidgetGroup(4, 4, width, 117).setBackground(getScreenTexture()).addWidget(new LabelWidget(4, 5, self().getBlockState().getBlock().getDescriptionId())).addWidget(new ComponentPanelWidget(4, 17, this::addDisplayText).textSupplier(this.getLevel().isClientSide ? null : this::addDisplayText).setMaxWidthLimit(200).clickHandler(this::handleDisplayClick)));
+        builder.addWidget(new DraggableScrollableWidgetGroup(4, 4, width, 117).setBackground(getScreenTexture())
+                .addWidget(new LabelWidget(4, 5, self().getBlockState().getBlock().getDescriptionId()))
+                .addWidget(new ComponentPanelWidget(4, 17, this::addDisplayText)
+                        .textSupplier(this.getLevel().isClientSide ? null : this::addDisplayText).setMaxWidthLimit(200)
+                        .clickHandler(this::handleDisplayClick)));
         builder.setBackground(GuiTextures.BACKGROUND_INVERSE);
 
         int startX = 4 + (width - 15 * hpcaHandler.getArrayLength()) / 2;
         int startY = 59;
 
-        var texture = new ResourceTexture("cosmiccore:textures/gui/widget/hpca/component_outline_" + hpcaHandler.getArrayLength() + ".png");
+        var texture = new ResourceTexture(
+                "cosmiccore:textures/gui/widget/hpca/component_outline_" + hpcaHandler.getArrayLength() + ".png");
 
         // Create the hover grid
         builder.addWidget(new ExtendedProgressWidget(
@@ -279,8 +290,6 @@ public class HPCAMachine extends WorkableElectricMultiblockMachine
         return builder;
     }
 
-
-
     @Override
     public void addDisplayText(List<Component> textList) {
         MultiblockDisplayText.builder(textList, isFormed())
@@ -294,15 +303,15 @@ public class HPCAMachine extends WorkableElectricMultiblockMachine
                     if (isFormed()) {
                         // Energy Usage
                         tl.add(Component.translatable(
-                                        "gtceu.multiblock.hpca.energy",
-                                        FormattingUtil.formatNumbers(hpcaHandler.cachedEUt),
-                                        FormattingUtil.formatNumbers(hpcaHandler.getMaxEUt()),
-                                        GTValues.VNF[GTUtil.getTierByVoltage(hpcaHandler.getMaxEUt())])
+                                "gtceu.multiblock.hpca.energy",
+                                FormattingUtil.formatNumbers(hpcaHandler.cachedEUt),
+                                FormattingUtil.formatNumbers(hpcaHandler.getMaxEUt()),
+                                GTValues.VNF[GTUtil.getTierByVoltage(hpcaHandler.getMaxEUt())])
                                 .withStyle(ChatFormatting.GRAY));
 
                         // Provided Computation
                         Component cwutInfo = Component.literal(
-                                        hpcaHandler.cachedCWUt + " / " + hpcaHandler.getMaxCWUt() + " CWU/t")
+                                hpcaHandler.cachedCWUt + " / " + hpcaHandler.getMaxCWUt() + " CWU/t")
                                 .withStyle(ChatFormatting.AQUA);
                         tl.add(Component.translatable(
                                 "gtceu.multiblock.hpca.computation",
@@ -331,7 +340,7 @@ public class HPCAMachine extends WorkableElectricMultiblockMachine
         var verticalDelta = Math.abs(pos.getY() - getPos().getY());
         var horizontalDelta = Math.abs(pos.getX() - getPos().getX()) + Math.abs(pos.getZ() - getPos().getZ());
         if (verticalDelta < 4) index = verticalDelta;
-        else index =  horizontalDelta + 3;
+        else index = horizontalDelta + 3;
         return index - 1;
     }
 

@@ -1,12 +1,14 @@
 package com.ghostipedia.cosmiccore.common.machine.multiblock.electric.hpca.componentWrappers;
 
 import com.ghostipedia.cosmiccore.common.machine.multiblock.electric.hpca.HPCAModifier;
+
 import com.gregtechceu.gtceu.api.capability.IHPCACoolantProvider;
 
 public class HPCACoolantProviderWrapper extends AbstractHPCAComponentHatchWrapper<IHPCACoolantProvider>
-    implements IHPCACoolantProvider {
+                                        implements IHPCACoolantProvider {
 
-    public HPCACoolantProviderWrapper(IHPCACoolantProvider component, HPCAModifier columnModifier, HPCAModifier rowModifier) {
+    public HPCACoolantProviderWrapper(IHPCACoolantProvider component, HPCAModifier columnModifier,
+                                      HPCAModifier rowModifier) {
         super(component, columnModifier, rowModifier);
     }
 

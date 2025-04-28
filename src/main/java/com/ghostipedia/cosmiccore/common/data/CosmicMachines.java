@@ -17,8 +17,8 @@ import com.ghostipedia.cosmiccore.common.block.debug.CreativeThermiaContainerMac
 import com.ghostipedia.cosmiccore.common.data.materials.CosmicMaterials;
 import com.ghostipedia.cosmiccore.common.data.recipe.CosmicRecipeModifiers;
 import com.ghostipedia.cosmiccore.common.machine.WirelessChargerMachine;
-import com.ghostipedia.cosmiccore.common.machine.multiblock.electric.hpca.HPCAMachine;
 import com.ghostipedia.cosmiccore.common.machine.multiblock.electric.MagneticFieldMachine;
+import com.ghostipedia.cosmiccore.common.machine.multiblock.electric.hpca.HPCAMachine;
 import com.ghostipedia.cosmiccore.common.machine.multiblock.multi.WirelessDataBankMachine;
 import com.ghostipedia.cosmiccore.common.machine.multiblock.part.*;
 import com.ghostipedia.cosmiccore.common.machine.multiblock.steam.WeakSteamParallelMultiBlockMachine;
@@ -3286,7 +3286,8 @@ public class CosmicMachines {
             .rotationState(RotationState.NON_Y_AXIS)
             .appearanceBlock(COMPUTER_CASING)
             .recipeType(DUMMY_RECIPES)
-            // Builds from the front top left to the back bottom right. Each aisle iss a vertical slice. We draw each aisle left to right, top to bottom
+            // Builds from the front top left to the back bottom right. Each aisle iss a vertical slice. We draw each
+            // aisle left to right, top to bottom
             .pattern(definition -> FactoryBlockPattern.start(RelativeDirection.LEFT, DOWN, RelativeDirection.BACK)
                     .aisle("AA", "CC", "CC", "CC", "SA")
                     .aisle("BA", "XV", "XV", "XV", "VA")
@@ -3303,8 +3304,7 @@ public class CosmicMachines {
                             .or(abilities(PartAbility.IMPORT_FLUIDS).setMaxGlobalLimited(1))
                             .or(abilities(PartAbility.COMPUTATION_DATA_TRANSMISSION).setExactLimit(1))
                             .or(autoAbilities(true, false, false)))
-                    .build()
-            )
+                    .build())
             .sidedWorkableCasingRenderer("block/casings/hpca/computer_casing", GTCEu.id("block/multiblock/hpca"))
             .register();
 

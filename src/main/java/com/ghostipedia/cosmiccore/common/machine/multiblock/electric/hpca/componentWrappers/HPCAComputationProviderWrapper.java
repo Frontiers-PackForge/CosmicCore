@@ -1,12 +1,14 @@
 package com.ghostipedia.cosmiccore.common.machine.multiblock.electric.hpca.componentWrappers;
 
 import com.ghostipedia.cosmiccore.common.machine.multiblock.electric.hpca.HPCAModifier;
+
 import com.gregtechceu.gtceu.api.capability.IHPCAComputationProvider;
 
 public class HPCAComputationProviderWrapper extends AbstractHPCAComponentHatchWrapper<IHPCAComputationProvider>
-        implements IHPCAComputationProvider {
+                                            implements IHPCAComputationProvider {
 
-    public HPCAComputationProviderWrapper(IHPCAComputationProvider component, HPCAModifier columnModifier, HPCAModifier rowModifier) {
+    public HPCAComputationProviderWrapper(IHPCAComputationProvider component, HPCAModifier columnModifier,
+                                          HPCAModifier rowModifier) {
         super(component, columnModifier, rowModifier);
     }
 

@@ -3,12 +3,15 @@ package com.ghostipedia.cosmiccore.client.renderer.machine;
 import com.ghostipedia.cosmiccore.CosmicCore;
 import com.ghostipedia.cosmiccore.common.machine.multiblock.electric.hpca.HPCAMachine;
 import com.ghostipedia.cosmiccore.common.machine.multiblock.part.HPCAIndicatorPartMachine;
+
 import com.gregtechceu.gtceu.GTCEu;
 import com.gregtechceu.gtceu.api.machine.MachineDefinition;
 import com.gregtechceu.gtceu.api.machine.MetaMachine;
 import com.gregtechceu.gtceu.client.renderer.machine.MachineRenderer;
 import com.gregtechceu.gtceu.client.util.StaticFaceBakery;
+
 import com.lowdragmc.lowdraglib.client.model.ModelFactory;
+
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.renderer.texture.TextureAtlas;
 import net.minecraft.client.resources.model.ModelState;
@@ -18,6 +21,7 @@ import net.minecraft.util.RandomSource;
 import net.minecraft.world.phys.AABB;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
@@ -38,17 +42,21 @@ public class HPCAIndicatorRenderer extends MachineRenderer {
 
     @Override
     @OnlyIn(Dist.CLIENT)
-    public void renderMachine(List<BakedQuad> quads, MachineDefinition definition, @Nullable MetaMachine machine, Direction frontFacing, @Nullable Direction side, RandomSource rand, @Nullable Direction modelFacing, ModelState modelState) {
+    public void renderMachine(List<BakedQuad> quads, MachineDefinition definition, @Nullable MetaMachine machine,
+                              Direction frontFacing, @Nullable Direction side, RandomSource rand,
+                              @Nullable Direction modelFacing, ModelState modelState) {
         super.renderMachine(quads, definition, machine, frontFacing, side, rand, modelFacing, modelState);
         if (side != frontFacing || modelFacing == null) return;
 
-        quads.add(StaticFaceBakery.bakeFace(SLIGHTLY_OVER_BLOCK, modelFacing, ModelFactory.getBlockSprite(BASE), modelState,-1, 0, true, true));
-        if (machine instanceof HPCAIndicatorPartMachine indicatorPart){
+        quads.add(StaticFaceBakery.bakeFace(SLIGHTLY_OVER_BLOCK, modelFacing, ModelFactory.getBlockSprite(BASE),
+                modelState, -1, 0, true, true));
+        if (machine instanceof HPCAIndicatorPartMachine indicatorPart) {
             var controllers = indicatorPart.getControllers();
             if (controllers.isEmpty()) return;
-            if (controllers.first() instanceof HPCAMachine controller){
+            if (controllers.first() instanceof HPCAMachine controller) {
                 var modifier = controller.getModifier(machine.getPos());
-                quads.add(StaticFaceBakery.bakeFace(SLIGHTLY_OVER_BLOCK, modelFacing, ModelFactory.getBlockSprite(modifier.overlay), modelState,-1, 0, true, true));
+                quads.add(StaticFaceBakery.bakeFace(SLIGHTLY_OVER_BLOCK, modelFacing,
+                        ModelFactory.getBlockSprite(modifier.overlay), modelState, -1, 0, true, true));
             }
         }
     }

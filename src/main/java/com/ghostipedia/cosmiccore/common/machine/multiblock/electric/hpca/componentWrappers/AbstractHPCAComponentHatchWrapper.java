@@ -1,7 +1,9 @@
 package com.ghostipedia.cosmiccore.common.machine.multiblock.electric.hpca.componentWrappers;
 
 import com.ghostipedia.cosmiccore.common.machine.multiblock.electric.hpca.HPCAModifier;
+
 import com.gregtechceu.gtceu.api.capability.IHPCAComponentHatch;
+
 import com.lowdragmc.lowdraglib.gui.texture.ResourceTexture;
 
 public abstract class AbstractHPCAComponentHatchWrapper<T extends IHPCAComponentHatch> implements IHPCAComponentHatch {

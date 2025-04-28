@@ -1,11 +1,13 @@
 package com.ghostipedia.cosmiccore.common.machine.multiblock.electric.hpca;
 
 import com.ghostipedia.cosmiccore.CosmicCore;
+
 import net.minecraft.resources.ResourceLocation;
 
 import java.util.Random;
 
 public enum HPCAModifier {
+
     RED(CosmicCore.id("block/overlay/machine/hpca/indicator_red")),
     YELLOW(CosmicCore.id("block/overlay/machine/hpca/indicator_yellow")),
     GREEN(CosmicCore.id("block/overlay/machine/hpca/indicator_green"));
