@@ -30,12 +30,12 @@ public class HPCAComputationProviderWrapper extends AbstractHPCAComponentHatchWr
         double coolingAmount = this.hpcaComponent.getCoolingPerTick();
 
         // handle column modifier
-        if (this.columnModifier == HPCAModifier.RED) coolingAmount *= 2;
-        else if (this.columnModifier == HPCAModifier.YELLOW) coolingAmount *= 2;
+        if (this.columnModifier == HPCAModifier.RED) coolingAmount *= 3;
+        else if (this.columnModifier == HPCAModifier.YELLOW) coolingAmount *= 1.5;
 
         // handle row modifier
-        if (this.rowModifier == HPCAModifier.RED) coolingAmount *= 2;
-        else if (this.columnModifier == HPCAModifier.YELLOW) coolingAmount *= 2;
+        if (this.rowModifier == HPCAModifier.RED) coolingAmount *= 1.5;
+        else if (this.columnModifier == HPCAModifier.YELLOW) coolingAmount *= 1.25;
 
         return (int) Math.floor(coolingAmount);
     }

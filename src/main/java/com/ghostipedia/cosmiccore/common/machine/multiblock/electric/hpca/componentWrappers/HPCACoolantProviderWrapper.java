@@ -17,12 +17,12 @@ public class HPCACoolantProviderWrapper extends AbstractHPCAComponentHatchWrappe
         double coolingAmount = this.hpcaComponent.getCoolingAmount();
 
         // handle column modifier
-        if (this.columnModifier == HPCAModifier.RED) coolingAmount *= 0.8;
-        else if (this.columnModifier == HPCAModifier.GREEN) coolingAmount *= 2;
+        if (this.columnModifier == HPCAModifier.RED) coolingAmount *= 0.95;
+        else if (this.columnModifier == HPCAModifier.GREEN) coolingAmount *= 3;
 
         // handle row modifier
-        if (this.rowModifier == HPCAModifier.RED) coolingAmount *= 0.8;
-        else if (this.rowModifier == HPCAModifier.GREEN) coolingAmount *= 2;
+        if (this.rowModifier == HPCAModifier.RED) coolingAmount *= 0.95;
+        else if (this.rowModifier == HPCAModifier.GREEN) coolingAmount *= 3;
 
         return (int) Math.floor(coolingAmount);
     }
