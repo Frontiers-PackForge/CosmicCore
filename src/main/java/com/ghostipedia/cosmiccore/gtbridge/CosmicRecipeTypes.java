@@ -218,7 +218,13 @@ public class CosmicRecipeTypes {
 
     public static void init() {
         LASER_ENGRAVER_RECIPES.setMaxIOSize(2, 2, 1, 1);
-
+        // Oh my God
+        MIXER_RECIPES.setMaxTooltips(4);
+        BREWING_RECIPES.setMaxTooltips(4);
+        FERMENTING_RECIPES.setMaxTooltips(4);
+        DISTILLERY_RECIPES.setMaxTooltips(4);
+        AUTOCLAVE_RECIPES.setMaxTooltips(4);
+        FLUID_HEATER_RECIPES.setMaxTooltips(4);
         CHEMICAL_RECIPES.onRecipeBuild((builder, provider) -> {
             LARGE_CHEMICAL_RECIPES.copyFrom(builder)
                     .save(provider);

@@ -255,6 +255,13 @@ public class CosmicItems {
             .defaultModel()
             .register();
 
+    public static final ItemEntry<ComponentItem> GELATIN_SCAFFOLD = REGISTRATE
+            .item("gelatin_scaffold", ComponentItem::create)
+            .lang("Gelatin Scaffold")
+            .properties(p -> p.stacksTo(16))
+            .tag()
+            .defaultModel()
+            .register();
     public static final ItemEntry<ComponentItem> BIFIDOBACTERIUM_BREVE_CULTURE = REGISTRATE
             .item("bifidobacterium_breve_culture", ComponentItem::create)
             .lang("Bifidobacterium Breve Culture")
