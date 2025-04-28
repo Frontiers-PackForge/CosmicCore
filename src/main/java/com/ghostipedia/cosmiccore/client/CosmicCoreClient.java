@@ -3,6 +3,7 @@ package com.ghostipedia.cosmiccore.client;
 import com.ghostipedia.cosmiccore.CosmicCore;
 
 import net.minecraft.client.renderer.ShaderInstance;
+import net.minecraftforge.client.event.RegisterGuiOverlaysEvent;
 import net.minecraftforge.client.event.RegisterShadersEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 
@@ -27,5 +28,10 @@ public class CosmicCoreClient {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    @SubscribeEvent
+    public static void onGUIRegisterUIOverlays(RegisterGuiOverlaysEvent event) {
+        event.registerAboveAll("cosmichud", new CosmicHudGuiOverlay());
     }
 }

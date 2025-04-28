@@ -1,0 +1,9 @@
+{
+    "ldlib": {
+        "connection": "cosmiccore:block/casings/solid/stellar_neutronium_grade_magnet_bloom_ctm",
+        "emissive": true
+    },
+    "shimmer": {
+        "bloom": true
+    }
+}

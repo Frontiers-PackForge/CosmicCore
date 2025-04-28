@@ -114,6 +114,8 @@ public class CosmicBlocks {
             MagnetBlock.MagnetType.HIGH_POWERED);
     public static final BlockEntry<MagnetBlock> MAGNET_FUSION_GRADE = createMagnetBlock(
             MagnetBlock.MagnetType.FUSION_GRADE);
+    public static final BlockEntry<MagnetBlock> MAGNET_STELLAR_GRADE = createMagnetBlock(
+            MagnetBlock.MagnetType.STELLAR_NEUTRONIUM_GRADE);
 
     // TODO : FIGURE OUT WHY these are breaking the minable tags for pickaxe/wrench..
     public static final BlockEntry<Block> GILDED_PTHANTERUM_CASING = createCasingBlock(
@@ -150,6 +152,9 @@ public class CosmicBlocks {
             "block/variant/ludicrious_intake");
     public static final BlockEntry<ActiveBlock> CASING_INTAKE_ULTIMATE = createActiveCasing("ultimate_intake",
             "block/variant/ultimate_intake");
+    public static final BlockEntry<ActiveBlock> RADIOACTIVE_FILTER_CASING = createActiveCasing(
+            "radioactive_filter_casing",
+            "block/variant/radioactive_filter_casing");
     // blood cube
     public static final BlockEntry<Block> BLOOD_CUBE = createCasingBlock(
             "blood_cube", CosmicCore.id("block/iris/bloodcube"));

@@ -54,7 +54,15 @@ public class MagnetBlock extends ActiveBlock {
         HIGH_POWERED("high_powered", 15000, 10, 3, CosmicMaterials.LivingIgniclad,
                 CosmicCore.id("block/casings/solid/alternator_flux_coiling_copper")),
         FUSION_GRADE("fusion_grade", 100000, 500, 8192, CosmicMaterials.LivingIgniclad,
-                CosmicCore.id("block/casings/solid/magnet_fusion_grade"));
+                CosmicCore.id("block/casings/solid/magnet_fusion_grade")),
+        STELLAR_NEUTRONIUM_GRADE("stellar_neutronium_grade", 250000, 2500, 32768, CosmicMaterials.LivingIgniclad,
+                CosmicCore.id("block/casings/solid/stellar_neutronium_grade_magnet"));
+        // NYI
+        // RAMPART_SUPERCONDUCTING_MAGNET("rampart_magnet", 25000000, 15000, 524288, CosmicMaterials.LivingIgniclad,
+        // CosmicCore.id("block/casings/solid/rampart_magnet")),
+        // GALVORN_SPATIALLY_RESISTANT_MAGNET("galvorn_spatially_resistant_magnet", 1000000000, 750000, 8388608,
+        // CosmicMaterials.LivingIgniclad,
+        // CosmicCore.id("block/casings/solid/galvorn_magnet"));
 
         @NotNull
         @Getter

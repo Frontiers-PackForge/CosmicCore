@@ -19,6 +19,7 @@
     "AdAstraSpaceSuitItemMixin",
     "ApotheosisRecipeHelperMixin",
     "ApothSmithingCategoryMixin",
+    "ComponentItemMixin",
     "DivingHelmetItemMixin",
     "GTValuesMixin",
     "MAE2GTIntegrationMixin",
