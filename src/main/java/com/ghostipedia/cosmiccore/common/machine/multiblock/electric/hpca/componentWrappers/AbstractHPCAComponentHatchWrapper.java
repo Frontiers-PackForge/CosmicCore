@@ -35,7 +35,7 @@ public abstract class AbstractHPCAComponentHatchWrapper<T extends IHPCAComponent
 
     @Override
     public int getUpkeepEUt() {
-        return 0;
+        return hpcaComponent.getUpkeepEUt();
     }
 
     @Override

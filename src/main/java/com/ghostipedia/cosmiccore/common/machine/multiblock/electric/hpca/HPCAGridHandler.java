@@ -35,10 +35,7 @@ import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
 import lombok.Getter;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 public class HPCAGridHandler implements IManaged {
 
@@ -50,7 +47,7 @@ public class HPCAGridHandler implements IManaged {
     private final HPCAMachine controller;
 
     // structure info
-    private final List<IHPCAComponentHatch> components = new ObjectArrayList<>();
+    private IHPCAComponentHatch[] components = new IHPCAComponentHatch[0];
     private final Set<IHPCACoolantProvider> coolantProviders = new ObjectOpenHashSet<>();
     private final Set<IHPCAComputationProvider> computationProviders = new ObjectOpenHashSet<>();
     private int numBridges;
@@ -78,8 +75,12 @@ public class HPCAGridHandler implements IManaged {
     public void onStructureFormed(Collection<HPCAComponentHatchWrapper> components, int arrayLength) {
         reset();
         this.arrayLength = arrayLength;
+        this.components = new IHPCAComponentHatch[3 * arrayLength];
+
+        int i = 0;
+        for (var comp : components) this.components[i++] = comp;
+
         for (HPCAComponentHatchWrapper component : components) {
-            this.components.add(component);
             var coolantProvider = component.getHPCACoolantProvider();
             if (coolantProvider != null) this.coolantProviders.add(coolantProvider);
             var computationProvider = component.getHPCAComputationProvider();
@@ -94,7 +95,7 @@ public class HPCAGridHandler implements IManaged {
 
     private void reset() {
         clearComputationCache();
-        components.clear();
+        components = new IHPCAComponentHatch[0];
         coolantProviders.clear();
         computationProviders.clear();
         numBridges = 0;
@@ -207,6 +208,7 @@ public class HPCAGridHandler implements IManaged {
             // randomize which component is actually damaged
             List<IHPCAComponentHatch> candidates = new ArrayList<>();
             for (var component : components) {
+                if (component == null) continue;
                 if (component.canBeDamaged()) {
                     candidates.add(component);
                 }
@@ -256,6 +258,7 @@ public class HPCAGridHandler implements IManaged {
     public long getUpkeepEUt() {
         long upkeepEUt = 0;
         for (var component : components) {
+            if (component == null) continue;
             upkeepEUt += component.getUpkeepEUt();
         }
         return upkeepEUt;
@@ -265,6 +268,7 @@ public class HPCAGridHandler implements IManaged {
     public long getMaxEUt() {
         long maximumEUt = 0;
         for (var component : components) {
+            if (component == null) continue;
             maximumEUt += component.getMaxEUt();
         }
         return maximumEUt;
@@ -372,48 +376,48 @@ public class HPCAGridHandler implements IManaged {
     }
 
     public void addErrors(List<Component> textList) {
-        if (components.stream().anyMatch(IHPCAComponentHatch::isDamaged)) {
+        if (Arrays.stream(components).anyMatch(IHPCAComponentHatch::isDamaged)) {
             textList.add(
                     Component.translatable("gtceu.multiblock.hpca.error_damaged").withStyle(ChatFormatting.RED));
         }
     }
 
     public ResourceTexture getComponentTexture(int index) {
-        if (components.size() <= index) {
+        if (components.length <= index || components[index] == null) {
             return GuiTextures.BLANK_TRANSPARENT;
         }
-        return components.get(index).getComponentIcon();
+        return components[index].getComponentIcon();
     }
 
     public void tryGatherClientComponents(Level world, BlockPos pos, Direction frontFacing,
                                           Direction upwardsFacing, boolean flip) {
         Direction relativeUp = RelativeDirection.UP.getRelativeFacing(frontFacing, upwardsFacing, flip);
 
-        if (components.isEmpty()) {
-            BlockPos testPos = pos
-                    .relative(frontFacing.getOpposite(), arrayLength)
-                    .relative(relativeUp, 3);
+        BlockPos testPos = pos
+                .relative(frontFacing.getOpposite(), arrayLength)
+                .relative(relativeUp, 3);
 
-            for (int i = 0; i < 3; i++) {
-                for (int j = 0; j < arrayLength; j++) {
-                    BlockPos tempPos = testPos.relative(frontFacing, j).relative(relativeUp.getOpposite(), i);
-                    BlockEntity be = world.getBlockEntity(tempPos);
-                    if (be instanceof IHPCAComponentHatch hatch) {
-                        components.add(hatch);
-                    } else if (be instanceof IMachineBlockEntity machineBE) {
-                        MetaMachine machine = machineBE.getMetaMachine();
-                        if (machine instanceof IHPCAComponentHatch hatch) {
-                            components.add(hatch);
-                        }
+        this.components = new IHPCAComponentHatch[3 * arrayLength];
+
+        for (int i = 0; i < 3; i++) {
+            for (int j = 0; j < arrayLength; j++) {
+                var index = i * arrayLength + j;
+                BlockPos tempPos = testPos.relative(frontFacing, j).relative(relativeUp.getOpposite(), i);
+                BlockEntity be = world.getBlockEntity(tempPos);
+                if (be instanceof IHPCAComponentHatch hatch) {
+                    components[index] = hatch;
+                } else if (be instanceof IMachineBlockEntity machineBE) {
+                    MetaMachine machine = machineBE.getMetaMachine();
+                    if (machine instanceof IHPCAComponentHatch hatch) {
+                        components[index] = hatch;
                     }
-                    // if here without a hatch, something went wrong, better to skip than add a null into the mix.
-                }
+                } else components[index] = null;
             }
         }
     }
 
     public void clearClientComponents() {
-        components.clear();
+        components = new IHPCAComponentHatch[0];
     }
 
     @Override
