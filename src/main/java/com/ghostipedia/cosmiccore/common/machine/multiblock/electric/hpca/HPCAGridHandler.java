@@ -388,7 +388,8 @@ public class HPCAGridHandler implements IManaged {
         }
         if (Arrays.stream(components).anyMatch(Objects::isNull)) {
             textList.add(
-                    Component.translatable("cosmiccore.multiblock.hpca.incomplete-array").withStyle(ChatFormatting.RED));
+                    Component.translatable("cosmiccore.multiblock.hpca.incomplete-array")
+                            .withStyle(ChatFormatting.RED));
         }
     }
 
