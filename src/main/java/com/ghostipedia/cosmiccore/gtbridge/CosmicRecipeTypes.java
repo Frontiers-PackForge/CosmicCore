@@ -1,11 +1,14 @@
 package com.ghostipedia.cosmiccore.gtbridge;
 
+import com.ghostipedia.cosmiccore.CosmicCore;
 import com.ghostipedia.cosmiccore.api.capability.recipe.SoulRecipeCapability;
 
+import com.ghostipedia.cosmiccore.api.recipe.ShapedTinkerRecipe;
 import com.gregtechceu.gtceu.api.block.ICoilType;
 import com.gregtechceu.gtceu.api.capability.recipe.IO;
 import com.gregtechceu.gtceu.api.gui.GuiTextures;
 import com.gregtechceu.gtceu.api.recipe.GTRecipeType;
+import com.gregtechceu.gtceu.api.registry.GTRegistries;
 import com.gregtechceu.gtceu.common.data.GTRecipeTypes;
 import com.gregtechceu.gtceu.common.data.GTSoundEntries;
 import com.gregtechceu.gtceu.common.recipe.condition.DimensionCondition;
@@ -15,6 +18,7 @@ import com.lowdragmc.lowdraglib.gui.texture.ProgressTexture;
 import com.lowdragmc.lowdraglib.utils.LocalizationUtils;
 
 import net.minecraft.client.resources.language.I18n;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 
 import static com.gregtechceu.gtceu.common.data.GTRecipeTypes.*;
@@ -249,5 +253,7 @@ public class CosmicRecipeTypes {
                         .save(provider);
             }
         });
+
+        GTRegistries.register(BuiltInRegistries.RECIPE_SERIALIZER, CosmicCore.id("crafting_shaped_tinker"), ShapedTinkerRecipe.SERIALIZER);
     }
 }

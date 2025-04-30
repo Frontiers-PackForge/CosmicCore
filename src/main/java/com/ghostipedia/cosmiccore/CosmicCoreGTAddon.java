@@ -6,6 +6,7 @@ import com.ghostipedia.cosmiccore.api.data.CosmicCustomTags;
 import com.ghostipedia.cosmiccore.api.registries.CosmicRegistration;
 import com.ghostipedia.cosmiccore.common.data.materials.CosmicElements;
 import com.ghostipedia.cosmiccore.common.data.recipe.CosmicCoreOreRecipeHandler;
+import com.ghostipedia.cosmiccore.common.data.recipe.TinkersRecipeTest;
 import com.ghostipedia.cosmiccore.gtbridge.CosmicCoreRecipes;
 import com.ghostipedia.cosmiccore.gtbridge.CosmicRecipeTypes;
 
@@ -61,6 +62,8 @@ public class CosmicCoreGTAddon implements IGTAddon {
         for (var material : GTCEuAPI.materialManager.getRegisteredMaterials()) {
             CosmicCoreOreRecipeHandler.init(provider, material);
         }
+
+        TinkersRecipeTest.init(provider);
     }
 
     @Override
