@@ -9,6 +9,10 @@ import com.ghostipedia.cosmiccore.common.data.*;
 import com.ghostipedia.cosmiccore.common.data.materials.CosmicMaterialSet;
 import com.ghostipedia.cosmiccore.common.data.materials.CosmicMaterials;
 import com.ghostipedia.cosmiccore.common.item.behavior.GravityCoreBehavior;
+import com.ghostipedia.cosmiccore.common.item.tcon.CosmicTconBlockTagProvider;
+import com.ghostipedia.cosmiccore.common.item.tcon.CosmicTconItemTagProvider;
+import com.ghostipedia.cosmiccore.common.item.tcon.CosmicTinkerTools;
+import com.ghostipedia.cosmiccore.common.item.tcon.CosmicToolDefitionProvider;
 import com.ghostipedia.cosmiccore.common.machine.multiblock.multi.modular.ModularizedMultis;
 import com.ghostipedia.cosmiccore.gtbridge.CosmicRecipeTypes;
 
@@ -25,9 +29,14 @@ import com.gregtechceu.gtceu.config.ConfigHolder;
 
 import com.lowdragmc.lowdraglib.Platform;
 
+import net.minecraft.data.DataGenerator;
+import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.common.capabilities.RegisterCapabilitiesEvent;
 import net.minecraftforge.common.crafting.CraftingHelper;
+import net.minecraftforge.common.data.BlockTagsProvider;
+import net.minecraftforge.common.data.ExistingFileHelper;
+import net.minecraftforge.data.event.GatherDataEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
@@ -37,6 +46,7 @@ import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import earth.terrarium.adastra.api.events.AdAstraEvents;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import slimeknights.tconstruct.tools.data.ToolDefinitionDataProvider;
 
 @Mod(CosmicCore.MOD_ID)
 public class CosmicCore {
@@ -64,14 +74,15 @@ public class CosmicCore {
 
     public static void init() {
         ConfigHolder.init();
-        CosmicCreativeModeTabs.init();
         CosmicBlocks.init();
         CosmicBlockEntities.init();
         CosmicItems.init();
+        CosmicTinkerTools.init();
         CosmicRegistration.REGISTRATE.registerRegistrate();
         CosmicCoreDatagen.init();
         CosmicPredicates.init();
         CosmicMaterialSet.init();
+        CosmicCreativeModeTabs.init();
     }
 
     public static ResourceLocation id(String path) {
@@ -91,6 +102,19 @@ public class CosmicCore {
     @SubscribeEvent
     public void modifyExistingMaterials(PostMaterialEvent event) {
         CosmicMaterials.modifyMaterials();
+    }
+
+    @SubscribeEvent
+    public void gatherDataEvent(GatherDataEvent event){
+        DataGenerator generator = event.getGenerator();
+        PackOutput packOutput = generator.getPackOutput();
+        ExistingFileHelper existingFileHelper = event.getExistingFileHelper();
+        boolean server = event.includeServer();
+        boolean client = event.includeClient();
+        CosmicTconBlockTagProvider blockTags = new CosmicTconBlockTagProvider(packOutput,event.getLookupProvider(),existingFileHelper);
+        generator.addProvider(server,blockTags);
+        generator.addProvider(server, new CosmicToolDefitionProvider(packOutput));
+        generator.addProvider(server, new CosmicTconItemTagProvider(packOutput,event.getLookupProvider(),blockTags.contentsGetter(),existingFileHelper));
     }
 
     @SubscribeEvent
