@@ -1,17 +1,18 @@
 package com.ghostipedia.cosmiccore.api.recipe.ingredient;
 
 import com.ghostipedia.cosmiccore.CosmicCore;
+
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraftforge.common.crafting.IIngredientSerializer;
+
 import com.google.common.base.Preconditions;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import lombok.Getter;
-import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.server.packs.resources.Resource;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.crafting.Ingredient;
-import net.minecraftforge.common.crafting.IIngredientSerializer;
 import org.jetbrains.annotations.Nullable;
 import slimeknights.tconstruct.library.tools.definition.ToolDefinition;
 import slimeknights.tconstruct.library.tools.definition.ToolDefinitionLoader;
@@ -45,11 +46,11 @@ public class TinkerIngredient extends Ingredient {
 
     @Override
     public boolean test(@Nullable ItemStack stack) {
-        if(stack == null || stack.isEmpty()) return false;
-        if(!(stack.getItem() instanceof ModifiableItem)) return false;
+        if (stack == null || stack.isEmpty()) return false;
+        if (!(stack.getItem() instanceof ModifiableItem)) return false;
         ToolStack toolStack = ToolStack.from(stack);
 
-        if(toolStack.isBroken()) return false;
+        if (toolStack.isBroken()) return false;
 
         return super.test(stack);
     }
@@ -61,8 +62,8 @@ public class TinkerIngredient extends Ingredient {
 
     @Override
     public ItemStack[] getItems() {
-        if(cacheStacks == null) {
-            cacheStacks = new ItemStack[]{BuiltInRegistries.ITEM.get(definition.getId()).getDefaultInstance()};
+        if (cacheStacks == null) {
+            cacheStacks = new ItemStack[] { BuiltInRegistries.ITEM.get(definition.getId()).getDefaultInstance() };
         }
         return cacheStacks;
     }
@@ -78,6 +79,7 @@ public class TinkerIngredient extends Ingredient {
     }
 
     public static final IIngredientSerializer<TinkerIngredient> SERIALIZER = new IIngredientSerializer<TinkerIngredient>() {
+
         @Override
         public TinkerIngredient parse(FriendlyByteBuf friendlyByteBuf) {
             ResourceLocation resLoc = friendlyByteBuf.readResourceLocation();
