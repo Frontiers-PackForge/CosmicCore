@@ -132,7 +132,7 @@ public class CosmicRecipeTypes {
             .setMaxIOSize(6, 6, 6, 6)
             .setHasResearchSlot(true)
             .setSound(GTSoundEntries.CHEMICAL)
-            .setMaxTooltips(4)
+            .setMaxTooltips(5)
             .onRecipeBuild(ResearchManager::createDefaultResearchRecipe)
             .setProgressBar(GuiTextures.PROGRESS_BAR_ARROW_MULTIPLE, ProgressTexture.FillDirection.LEFT_TO_RIGHT);
     public static final GTRecipeType BIOVAT = GTRecipeTypes
@@ -225,6 +225,7 @@ public class CosmicRecipeTypes {
         DISTILLERY_RECIPES.setMaxTooltips(4);
         AUTOCLAVE_RECIPES.setMaxTooltips(4);
         FLUID_HEATER_RECIPES.setMaxTooltips(4);
+        CRACKING_RECIPES.setMaxIOSize(2, 2, 2, 2);
         CHEMICAL_RECIPES.onRecipeBuild((builder, provider) -> {
             LARGE_CHEMICAL_RECIPES.copyFrom(builder)
                     .save(provider);
