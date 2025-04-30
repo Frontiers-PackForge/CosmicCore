@@ -60,6 +60,10 @@ public class HPCAGridHandler implements IManaged {
     @DescSynced
     private int arrayLength;
 
+    @Getter
+    @DescSynced
+    private boolean isArrayComplete;
+
     // cached gui info
     // holding these values past the computation clear because GUI is too "late" to read the state in time
     @DescSynced
@@ -75,6 +79,7 @@ public class HPCAGridHandler implements IManaged {
         reset();
         this.arrayLength = arrayLength;
         this.components = new IHPCAComponentHatch[3 * arrayLength];
+        this.isArrayComplete = components.size() == arrayLength * 3;
 
         int i = 0;
         for (var comp : components) this.components[i++] = comp;
@@ -220,6 +225,7 @@ public class HPCAGridHandler implements IManaged {
 
     /** Allocate computation on a given request. Allocates for one tick. */
     public int allocateCWUt(int cwut, boolean simulate) {
+        if (!isArrayComplete) return 0;
         int maxCWUt = getMaxCWUt();
         int availableCWUt = maxCWUt - this.allocatedCWUt;
         int toAllocate = Math.min(cwut, availableCWUt);
@@ -240,6 +246,7 @@ public class HPCAGridHandler implements IManaged {
 
     /** The current EU/t this HPCA should use, considering passive drain, current computation, etc.. */
     public long getCurrentEUt() {
+        if (!isArrayComplete) return 0L;
         long maximumCWUt = Math.max(1, getMaxCWUt()); // behavior is no different setting this to 1 if it is 0
         long maximumEUt = getMaxEUt();
         long upkeepEUt = getUpkeepEUt();
@@ -375,9 +382,13 @@ public class HPCAGridHandler implements IManaged {
     }
 
     public void addErrors(List<Component> textList) {
-        if (Arrays.stream(components).anyMatch(IHPCAComponentHatch::isDamaged)) {
+        if (Arrays.stream(components).filter(Objects::nonNull).anyMatch(IHPCAComponentHatch::isDamaged)) {
             textList.add(
                     Component.translatable("gtceu.multiblock.hpca.error_damaged").withStyle(ChatFormatting.RED));
+        }
+        if (Arrays.stream(components).anyMatch(Objects::isNull)) {
+            textList.add(
+                    Component.translatable("cosmiccore.multiblock.hpca.incomplete-array").withStyle(ChatFormatting.RED));
         }
     }
 

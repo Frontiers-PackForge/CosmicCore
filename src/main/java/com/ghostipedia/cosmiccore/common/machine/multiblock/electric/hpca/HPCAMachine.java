@@ -287,6 +287,10 @@ public class HPCAMachine extends WorkableElectricMultiblockMachine
                 builder.addWidget(new ImageWidget(startX + (15 * j), startY + (15 * i), 13, 13, textureSupplier));
             }
         }
+
+        builder.addWidget(new ComponentPanelWidget(8, 108, this.hpcaHandler::addErrors)
+                .textSupplier(this.getLevel().isClientSide ? null : this.hpcaHandler::addErrors).setMaxWidthLimit(200));
+
         return builder;
     }
 
