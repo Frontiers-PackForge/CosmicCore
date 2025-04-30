@@ -90,4 +90,8 @@ dependencies {
 
     //Modern Fix
     modImplementation(forge.modernFix)
+
+    //Tinkers
+    modImplementation(forge.tconstruct)
+    modImplementation(forge.mantle)
 }

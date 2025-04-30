@@ -91,4 +91,8 @@ repositories {
             includeGroup("com.eliotlash.mclib")
         }
     }
+    maven {
+        name 'DVS1 Maven FS'
+        url 'https://dvs1.progwml6.com/files/maven'
+    }
 }
