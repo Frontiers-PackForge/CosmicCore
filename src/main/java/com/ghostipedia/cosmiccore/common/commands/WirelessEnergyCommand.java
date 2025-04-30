@@ -97,22 +97,9 @@ public class WirelessEnergyCommand {
                 .append(Component.translatable("cosmic.command.wireless.energy.buffered",
                         FormattingUtil.formatNumbers(wirelessData.getEnergyBuffered(owner))))
                 .append("\n")
-                .append(Component.translatable("cosmic.command.wireless.energy.active", wirelessData.isActive(owner)))
-                .append("\n")
-                .append(Component.translatable("cosmic.command.wireless.energy.capacitor"))
-                .append(getLocationString(serverLevel, owner));
+                .append(Component.translatable("cosmic.command.wireless.energy.active", wirelessData.isActive(owner)));
 
         return message;
-    }
-
-    private static Component getLocationString(ServerLevel serverLevel, UUID owner) {
-        var wirelessData = WirelessEnergySavedData.getOrCreate(serverLevel);
-        var location = wirelessData.getCapacitorPosition(owner);
-        var pos = location != null ? location.getB() : null;
-        return location != null ?
-                Component.translatable("cosmic.command.wireless.energy.location.format", location.getA(), pos.getX(),
-                        pos.getY(), pos.getZ()) :
-                Component.translatable("cosmic.command.wireless.energy.no.capacitor");
     }
 
     // ####################################

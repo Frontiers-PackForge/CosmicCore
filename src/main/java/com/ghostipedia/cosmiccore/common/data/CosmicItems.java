@@ -5,6 +5,7 @@ import com.ghostipedia.cosmiccore.api.registries.CosmicRegistration;
 import com.ghostipedia.cosmiccore.common.data.tag.item.CosmicItemTags;
 import com.ghostipedia.cosmiccore.common.item.behavior.EffectApplicationBehavior;
 import com.ghostipedia.cosmiccore.common.item.behavior.StructureWriteBehavior;
+import com.ghostipedia.cosmiccore.common.item.behavior.WirelessPDABehavior;
 import com.ghostipedia.cosmiccore.utils.StringUtil;
 
 import com.gregtechceu.gtceu.api.item.ComponentItem;
@@ -254,11 +255,162 @@ public class CosmicItems {
             .defaultModel()
             .register();
 
-    // public static final ItemEntry<ComponentItem> VOMAPLAST = REGISTRATE.item("vomaplast", ComponentItem::create)
-    // .lang("Vomaplast")
-    // .properties(p -> p.stacksTo(64))
-    // .defaultModel()
-    // .register();
+    public static final ItemEntry<ComponentItem> GELATIN_SCAFFOLD = REGISTRATE
+            .item("gelatin_scaffold", ComponentItem::create)
+            .lang("Gelatin Scaffold")
+            .properties(p -> p.stacksTo(16))
+            .tag()
+            .defaultModel()
+            .register();
+    public static final ItemEntry<ComponentItem> BIFIDOBACTERIUM_BREVE_CULTURE = REGISTRATE
+            .item("bifidobacterium_breve_culture", ComponentItem::create)
+            .lang("Bifidobacterium Breve Culture")
+            .properties(p -> p.stacksTo(4))
+            .tag()
+            .defaultModel()
+            .register();
+    public static final ItemEntry<ComponentItem> BIFIDOBACTERIUM_BREVE = REGISTRATE
+            .item("bifidobacterium_breve", ComponentItem::create)
+            .lang("Bifidobacterium Breve")
+            .properties(p -> p.stacksTo(64))
+            .tag()
+            .defaultModel()
+            .register();
+    // Strep
+    public static final ItemEntry<ComponentItem> STREPTOCOCCUS_PYOGENES_CULTURE = REGISTRATE
+            .item("streptococcus_pyogenes_culture", ComponentItem::create)
+            .lang("Streptococcus Pyogenes Culture")
+            .properties(p -> p.stacksTo(4))
+            .tag()
+            .defaultModel()
+            .register();
+    public static final ItemEntry<ComponentItem> STREPTOCOCCUS_PYOGENES = REGISTRATE
+            .item("streptococcus_pyogenes", ComponentItem::create)
+            .lang("Streptococcus Pyogenes")
+            .properties(p -> p.stacksTo(64))
+            .tag()
+            .defaultModel()
+            .register();
+    // E COLI
+    public static final ItemEntry<ComponentItem> ESCHERICHIA_COLI_CULTURE = REGISTRATE
+            .item("escherichia_coli_culture", ComponentItem::create)
+            .lang("Escherichia Coli Culture")
+            .properties(p -> p.stacksTo(4))
+            .tag()
+            .defaultModel()
+            .register();
+    public static final ItemEntry<ComponentItem> ESCHERICHIA_COLI = REGISTRATE
+            .item("escherichia_coli", ComponentItem::create)
+            .lang("Escherichia Coli")
+            .properties(p -> p.stacksTo(64))
+            .tag()
+            .defaultModel()
+            .register();
+
+    public static final ItemEntry<ComponentItem> CONTAMINATED_PETRI_DISH = REGISTRATE
+            .item("contaminated_petri_dish", ComponentItem::create)
+            .lang("Contaminated Petri Dish")
+            .properties(p -> p.stacksTo(8))
+            .tag()
+            .defaultModel()
+            .register();
+    public static final ItemEntry<ComponentItem> PREPARED_PETRI_DISH = REGISTRATE
+            .item("prepared_petri_dish", ComponentItem::create)
+            .lang("Prepared Petri Dish")
+            .properties(p -> p.stacksTo(8))
+            .tag()
+            .defaultModel()
+            .register();
+    public static final ItemEntry<ComponentItem> ULTRASONIC_HOMOGENIZER = REGISTRATE
+            .item("ultrasonic_homogenizer", ComponentItem::create)
+            .lang("Ultrasonic Homogenizer")
+            .properties(p -> p.stacksTo(1))
+            .tag()
+            .defaultModel()
+            .register();
+    public static final ItemEntry<ComponentItem> COMPUTATION_SUPPORT_UNIT = REGISTRATE
+            .item("computation_support_unit", ComponentItem::create)
+            .lang("Computation Support Unit")
+            .properties(p -> p.stacksTo(16))
+            .tag()
+            .defaultModel()
+            .register();
+    public static final ItemEntry<ComponentItem> WIRED_PETRI_DISH = REGISTRATE
+            .item("wired_petri_dish", ComponentItem::create)
+            .lang("Wired Petri Dish")
+            .properties(p -> p.stacksTo(16))
+            .tag()
+            .defaultModel()
+            .register();
+
+    public static final ItemEntry<ComponentItem> SCULK_FIBROBLAST = REGISTRATE
+            .item("sculk_fibroblast", ComponentItem::create)
+            .lang("Sculk Fibroblast")
+            .properties(p -> p.stacksTo(64))
+            .tag()
+            .defaultModel()
+            .register();
+    public static final ItemEntry<ComponentItem> SCULK_MYOFIBROBLAST = REGISTRATE
+            .item("sculk_myofibroblast", ComponentItem::create)
+            .lang("Sculk Myofibroblast")
+            .properties(p -> p.stacksTo(64))
+            .tag()
+            .defaultModel()
+            .register();
+    // UNSURE IF THESE WILL BE USED
+    public static final ItemEntry<ComponentItem> RESPIRATORY_SCULK_HEMOCYTOBLAST = REGISTRATE
+            .item("resipiratory_sculk_hemocytoblast", ComponentItem::create)
+            .lang("Respiratory Sculk Hemocytoblast")
+            .properties(p -> p.stacksTo(64))
+            .tag()
+            .defaultModel()
+            .register();
+    public static final ItemEntry<ComponentItem> SATURATED_SCULK_HEMOCYTOBLAST = REGISTRATE
+            .item("saturated_sculk_hemocytoblast", ComponentItem::create)
+            .lang("Saturated Sculk Hemocytoblast")
+            .properties(p -> p.stacksTo(64))
+            .tag()
+            .defaultModel()
+            .register();
+    public static final ItemEntry<ComponentItem> INERT_FUNGAL_SPORES = REGISTRATE
+            .item("inert_fungal_spores", ComponentItem::create)
+            .lang("Inert Fungal Spores")
+            .properties(p -> p.stacksTo(64))
+            .tag()
+            .defaultModel()
+            .register();
+
+    public static final ItemEntry<ComponentItem> HEME_RING = REGISTRATE
+            .item("heme_ring", ComponentItem::create)
+            .lang("Heme Ring")
+            .properties(p -> p.stacksTo(64))
+            .tag()
+            .defaultModel()
+            .register();
+
+    public static final ItemEntry<ComponentItem> FERMIUM_RAD_CHARGES = REGISTRATE
+            .item("fermium_rad_charges", ComponentItem::create)
+            .lang("Fermium Radiation Charge")
+            .properties(p -> p.stacksTo(8))
+            .tag()
+            .defaultModel()
+            .register();
+
+    public static final ItemEntry<ComponentItem> NEURO_PROCESSING_ASSEMBLY = REGISTRATE
+            .item("neuro_processing_assembly", ComponentItem::create)
+            .lang("Neuroprocessing Assembly Board")
+            .properties(p -> p.stacksTo(16))
+            .tag()
+            .defaultModel()
+            .register();
+    public static final ItemEntry<ComponentItem> SOMATIC_PROCESSING_ASSEMBLY = REGISTRATE
+            .item("somatic_processing_assembly", ComponentItem::create)
+            .lang("Somatoprocessing Assembly Board")
+            .properties(p -> p.stacksTo(16))
+            .tag()
+            .defaultModel()
+            .register();
+
     public static final ItemEntry<ComponentItem> PERPETUITY_SHARD = REGISTRATE
             .item("shard_of_perpetuity", ComponentItem::create)
             .lang("Shard of Perpetuity")
@@ -288,6 +440,14 @@ public class CosmicItems {
                 tooltips.add(Component.translatable("cosmiccore.lore.shard_huge.1"));
                 tooltips.add(Component.translatable("cosmiccore.lore.shard_huge.2"));
             })))
+            .defaultModel()
+            .register();
+    public static final ItemEntry<ComponentItem> WIRELESS_PDA = REGISTRATE
+            .item("wireless_pda", ComponentItem::create)
+            .lang("Wireless Data PDA")
+            .properties(p -> p.stacksTo(1))
+            .tag()
+            .onRegister(attach(new WirelessPDABehavior()))
             .defaultModel()
             .register();
 

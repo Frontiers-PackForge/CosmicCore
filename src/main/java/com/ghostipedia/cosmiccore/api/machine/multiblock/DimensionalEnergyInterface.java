@@ -50,7 +50,7 @@ import static com.ghostipedia.cosmiccore.utils.CosmicFormattingUtil.formatWithCo
 public class DimensionalEnergyInterface extends WorkableMultiblockMachine
                                         implements IFancyUIMachine, IDisplayUIMachine {
 
-    protected static final long ticks_between_save_data_operations = 10L * 20L; // Once per 10s
+    protected static final long ticks_between_save_data_operations = 5L * 20L; // Once per 5s
     private static final int uiWidth = 182;
 
     protected static final ManagedFieldHolder MANAGED_FIELD_HOLDER = new ManagedFieldHolder(

@@ -9,6 +9,7 @@ import com.gregtechceu.gtceu.api.recipe.GTRecipeType;
 import com.gregtechceu.gtceu.common.data.GTRecipeTypes;
 import com.gregtechceu.gtceu.common.data.GTSoundEntries;
 import com.gregtechceu.gtceu.common.recipe.condition.DimensionCondition;
+import com.gregtechceu.gtceu.utils.ResearchManager;
 
 import com.lowdragmc.lowdraglib.gui.texture.ProgressTexture;
 import com.lowdragmc.lowdraglib.utils.LocalizationUtils;
@@ -18,7 +19,6 @@ import net.minecraft.resources.ResourceLocation;
 
 import static com.gregtechceu.gtceu.common.data.GTRecipeTypes.*;
 import static com.lowdragmc.lowdraglib.gui.texture.ProgressTexture.FillDirection.LEFT_TO_RIGHT;
-import static com.lowdragmc.lowdraglib.gui.texture.ProgressTexture.FillDirection.RIGHT_TO_LEFT;
 
 public class CosmicRecipeTypes {
 
@@ -60,7 +60,7 @@ public class CosmicRecipeTypes {
             .register("polymerizer", GTRecipeTypes.MULTIBLOCK)
             .setMaxIOSize(3, 2, 3, 2)
             .setMaxTooltips(3)
-            .setProgressBar(GuiTextures.PROGRESS_BAR_ARROW_MULTIPLE, RIGHT_TO_LEFT);
+            .setProgressBar(GuiTextures.PROGRESS_BAR_ARROW_MULTIPLE, LEFT_TO_RIGHT);
     public static final GTRecipeType HEMOPHAGIC_TRANSFUSER = GTRecipeTypes
             .register("hemophagic_transfuser", GTRecipeTypes.MULTIBLOCK)
             .setMaxIOSize(6, 6, 3, 3)
@@ -132,6 +132,16 @@ public class CosmicRecipeTypes {
             .setMaxIOSize(6, 6, 6, 6)
             .setHasResearchSlot(true)
             .setSound(GTSoundEntries.CHEMICAL)
+            .setMaxTooltips(4)
+            .onRecipeBuild(ResearchManager::createDefaultResearchRecipe)
+            .setProgressBar(GuiTextures.PROGRESS_BAR_ARROW_MULTIPLE, ProgressTexture.FillDirection.LEFT_TO_RIGHT);
+    public static final GTRecipeType BIOVAT = GTRecipeTypes
+            .register("biovat", GTRecipeTypes.MULTIBLOCK)
+            .setMaxIOSize(6, 6, 3, 3)
+            .setHasResearchSlot(true)
+            .setSound(GTSoundEntries.CHEMICAL)
+            .setMaxTooltips(6)
+            .onRecipeBuild(ResearchManager::createDefaultResearchRecipe)
             .setProgressBar(GuiTextures.PROGRESS_BAR_ARROW_MULTIPLE, ProgressTexture.FillDirection.LEFT_TO_RIGHT);
     /*
      * TODO: Multiblocks that might not need a RecipeType or might use it to do really weird things
@@ -207,6 +217,14 @@ public class CosmicRecipeTypes {
             .setProgressBar(GuiTextures.PROGRESS_BAR_ARROW_MULTIPLE, ProgressTexture.FillDirection.LEFT_TO_RIGHT);
 
     public static void init() {
+        LASER_ENGRAVER_RECIPES.setMaxIOSize(2, 2, 1, 1);
+        // Oh my God
+        MIXER_RECIPES.setMaxTooltips(4);
+        BREWING_RECIPES.setMaxTooltips(4);
+        FERMENTING_RECIPES.setMaxTooltips(4);
+        DISTILLERY_RECIPES.setMaxTooltips(4);
+        AUTOCLAVE_RECIPES.setMaxTooltips(4);
+        FLUID_HEATER_RECIPES.setMaxTooltips(4);
         CHEMICAL_RECIPES.onRecipeBuild((builder, provider) -> {
             LARGE_CHEMICAL_RECIPES.copyFrom(builder)
                     .save(provider);
