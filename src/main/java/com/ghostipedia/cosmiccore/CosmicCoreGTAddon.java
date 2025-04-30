@@ -57,7 +57,6 @@ public class CosmicCoreGTAddon implements IGTAddon {
 
     @Override
     public void addRecipes(Consumer<FinishedRecipe> provider) {
-        CosmicRecipeTypes.init();
         CosmicCoreRecipes.init(provider);
         for (var material : GTCEuAPI.materialManager.getRegisteredMaterials()) {
             CosmicCoreOreRecipeHandler.init(provider, material);

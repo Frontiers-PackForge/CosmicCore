@@ -1,9 +1,11 @@
 package com.ghostipedia.cosmiccore.api.recipe.ingredient;
 
 import com.ghostipedia.cosmiccore.CosmicCore;
+import com.google.common.base.Preconditions;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import lombok.Getter;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.resources.Resource;
@@ -25,8 +27,11 @@ public class TinkerIngredient extends Ingredient {
     @Getter
     private final ToolDefinition definition;
 
+    private ItemStack[] cacheStacks;
+
     public TinkerIngredient(ToolDefinition definition) {
         super(Stream.empty());
+        Preconditions.checkNotNull(definition);
         this.definition = definition;
     }
 
@@ -41,7 +46,7 @@ public class TinkerIngredient extends Ingredient {
     @Override
     public boolean test(@Nullable ItemStack stack) {
         if(stack == null || stack.isEmpty()) return false;
-
+        if(!(stack.getItem() instanceof ModifiableItem)) return false;
         ToolStack toolStack = ToolStack.from(stack);
 
         if(toolStack.isBroken()) return false;
@@ -51,6 +56,19 @@ public class TinkerIngredient extends Ingredient {
 
     @Override
     public boolean isSimple() {
+        return false;
+    }
+
+    @Override
+    public ItemStack[] getItems() {
+        if(cacheStacks == null) {
+            cacheStacks = new ItemStack[]{BuiltInRegistries.ITEM.get(definition.getId()).getDefaultInstance()};
+        }
+        return cacheStacks;
+    }
+
+    @Override
+    public boolean isEmpty() {
         return false;
     }
 
@@ -65,7 +83,7 @@ public class TinkerIngredient extends Ingredient {
             ResourceLocation resLoc = friendlyByteBuf.readResourceLocation();
             var toolDef = ToolDefinitionLoader.getInstance();
             ToolDefinition def = toolDef.getRegisteredToolDefinitions().stream()
-                    .filter(d -> d.getId() == resLoc)
+                    .filter(d -> d.getId().equals(resLoc))
                     .findFirst()
                     .orElse(null);
             return new TinkerIngredient(def);
@@ -76,7 +94,7 @@ public class TinkerIngredient extends Ingredient {
             ResourceLocation resLoc = new ResourceLocation(jsonObject.get("definition").getAsString());
             var toolDef = ToolDefinitionLoader.getInstance();
             ToolDefinition def = toolDef.getRegisteredToolDefinitions().stream()
-                    .filter(d -> d.getId() == resLoc)
+                    .filter(d -> d.getId().equals(resLoc))
                     .findFirst()
                     .orElse(null);
             return new TinkerIngredient(def);

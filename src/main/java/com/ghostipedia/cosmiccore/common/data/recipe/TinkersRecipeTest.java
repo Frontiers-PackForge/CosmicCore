@@ -18,7 +18,7 @@ import java.util.function.Consumer;
 public class TinkersRecipeTest {
 
     public static void init(Consumer<FinishedRecipe> provider) {
-        CosmicVanillaRecipeHelper.addShapedTinkerRecipe(provider, "tinkertest",
+        VanillaRecipeHelper.addShapedRecipe(provider, "tinkertest",
                 new ItemStack(Items.STRING), "BK ", "   ", "   ",
                 'B', Items.OAK_PLANKS,
                 'K', new TinkerIngredient(ToolDefinitions.SCYTHE));

@@ -9,6 +9,7 @@ import org.spongepowered.asm.mixin.Debug;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.Inject;
+import slimeknights.tconstruct.library.tools.helper.ToolDamageUtil;
 import slimeknights.tconstruct.library.tools.item.ModifiableItem;
 import slimeknights.tconstruct.library.tools.nbt.ToolStack;
 
@@ -24,7 +25,7 @@ public class ModifiableItemMixin extends TieredItem {
 
     @Override
     public boolean hasCraftingRemainingItem(ItemStack stack) {
-        return true;
+        return !ToolStack.from(stack).isBroken();
     }
 
     @Override
@@ -32,19 +33,8 @@ public class ModifiableItemMixin extends TieredItem {
         ItemStack stack = itemStack.copy();
         Player player = ForgeHooks.getCraftingPlayer();
 
-        // Damage Item
-        ToolStack tool = ToolStack.from(stack);
-        int currentDamage = tool.getDamage();
-        tool.setDamage(currentDamage + 1);
+        ToolDamageUtil.handleDamageItem(stack, 1, player, p -> {});
 
-        // Play a sound
-        playCraftSound(player, stack);
-
-        return tool.createStack();
-    }
-
-    @Unique
-    private void playCraftSound(Player player, ItemStack stack) {
-
+        return stack;
     }
 }
