@@ -9,6 +9,7 @@ import com.ghostipedia.cosmiccore.api.machine.part.CosmicPartAbility;
 import com.ghostipedia.cosmiccore.api.machine.part.SteamFluidHatchPartMachine;
 import com.ghostipedia.cosmiccore.api.machine.part.WirelessEnergyHatchPartMachine;
 import com.ghostipedia.cosmiccore.api.registries.CosmicRegistration;
+import com.ghostipedia.cosmiccore.client.renderer.machine.HPCAIndicatorRenderer;
 import com.ghostipedia.cosmiccore.client.renderer.machine.HellFireFoundryWorkableRenderer;
 import com.ghostipedia.cosmiccore.client.renderer.machine.SidedWorkableHullRenderer;
 import com.ghostipedia.cosmiccore.client.renderer.machine.SufferingChamberRender;
@@ -18,6 +19,7 @@ import com.ghostipedia.cosmiccore.common.data.materials.CosmicMaterials;
 import com.ghostipedia.cosmiccore.common.data.recipe.CosmicRecipeModifiers;
 import com.ghostipedia.cosmiccore.common.machine.WirelessChargerMachine;
 import com.ghostipedia.cosmiccore.common.machine.multiblock.electric.MagneticFieldMachine;
+import com.ghostipedia.cosmiccore.common.machine.multiblock.electric.hpca.HPCAMachine;
 import com.ghostipedia.cosmiccore.common.machine.multiblock.multi.WirelessDataBankMachine;
 import com.ghostipedia.cosmiccore.common.machine.multiblock.part.*;
 import com.ghostipedia.cosmiccore.common.machine.multiblock.steam.WeakSteamParallelMultiBlockMachine;
@@ -42,6 +44,7 @@ import com.gregtechceu.gtceu.api.machine.steam.SimpleSteamMachine;
 import com.gregtechceu.gtceu.api.pattern.FactoryBlockPattern;
 import com.gregtechceu.gtceu.api.pattern.MultiblockShapeInfo;
 import com.gregtechceu.gtceu.api.pattern.Predicates;
+import com.gregtechceu.gtceu.api.pattern.util.RelativeDirection;
 import com.gregtechceu.gtceu.api.recipe.GTRecipeType;
 import com.gregtechceu.gtceu.api.recipe.OverclockingLogic;
 import com.gregtechceu.gtceu.api.registry.registrate.MachineBuilder;
@@ -79,6 +82,8 @@ import static com.ghostipedia.cosmiccore.api.pattern.CosmicPredicates.magnetCoil
 import static com.ghostipedia.cosmiccore.api.registries.CosmicRegistration.REGISTRATE;
 import static com.ghostipedia.cosmiccore.common.data.CosmicBlocks.*;
 import static com.ghostipedia.cosmiccore.common.data.CosmicMachinesUtils.registerCosmicLargeCombustionEngine;
+import static com.ghostipedia.cosmiccore.common.machine.multiblock.electric.hpca.HPCAMachine.MAX_COMPONENTS_SLICES;
+import static com.ghostipedia.cosmiccore.common.machine.multiblock.electric.hpca.HPCAMachine.MIN_COMPONENTS_SLICES;
 import static com.gregtechceu.gtceu.api.GTValues.*;
 import static com.gregtechceu.gtceu.api.GTValues.UV;
 import static com.gregtechceu.gtceu.api.pattern.Predicates.*;
@@ -90,7 +95,6 @@ import static com.gregtechceu.gtceu.common.data.GTRecipeModifiers.ELECTRIC_OVERC
 import static com.gregtechceu.gtceu.common.data.GTRecipeTypes.DUMMY_RECIPES;
 import static com.gregtechceu.gtceu.common.data.machines.GTMachineUtils.*;
 import static com.gregtechceu.gtceu.common.data.machines.GTMultiMachines.FUSION_REACTOR;
-import static com.gregtechceu.gtceu.common.data.machines.GTMultiMachines.POWER_SUBSTATION;
 import static com.klikli_dev.occultism.registry.OccultismBlocks.IESNIUM_BLOCK;
 import static wayoftime.bloodmagic.common.block.BloodMagicBlocks.BLANK_RUNE;
 
@@ -3292,6 +3296,41 @@ public class CosmicMachines {
             REINFORCED_NAQUADRIA_CASING, GEARBOX_NAQUADRIA, CASING_INTAKE_ULTIMATE,
             CosmicCore.id("block/casings/solid/reinforced_naquadria_casing"),
             GTCEu.id("block/multiblock/generator/extreme_combustion_engine"));
+
+    public static MachineDefinition HPCA_INDICATOR = REGISTRATE
+            .machine("hpca_indicator", HPCAIndicatorPartMachine::new)
+            .langValue("HPCA Indicator")
+            .appearanceBlock(COMPUTER_CASING)
+            .renderer(HPCAIndicatorRenderer::new)
+            .register();
+
+    public static final MachineDefinition HIGH_PERFORMANCE_COMPUTATION_ARRAY = REGISTRATE
+            .multiblock("high_performance_computation_array", HPCAMachine::new)
+            .langValue("High Performance Computation Array (HPCA)")
+            .rotationState(RotationState.NON_Y_AXIS)
+            .appearanceBlock(COMPUTER_CASING)
+            .recipeType(DUMMY_RECIPES)
+            // Builds from the front top left to the back bottom right. Each aisle iss a vertical slice. We draw each
+            // aisle left to right, top to bottom
+            .pattern(definition -> FactoryBlockPattern.start(RelativeDirection.LEFT, DOWN, RelativeDirection.BACK)
+                    .aisle("AA", "CC", "CC", "CC", "SA")
+                    .aisle("BA", "XV", "XV", "XV", "VA")
+                    .setRepeatable(MIN_COMPONENTS_SLICES, MAX_COMPONENTS_SLICES)
+                    .aisle("AA", "BC", "BC", "BC", "AA")
+                    .where('S', controller(blocks(definition.getBlock())))
+                    .where('A', blocks(ADVANCED_COMPUTER_CASING.get()))
+                    .where('B', blocks(HPCA_INDICATOR.get()))
+                    .where('V', blocks(COMPUTER_HEAT_VENT.get()))
+                    .where('X', abilities(PartAbility.HPCA_COMPONENT)
+                            .or(blocks(Blocks.AIR)))
+                    .where('C', blocks(COMPUTER_CASING.get()).setMinGlobalLimited(5)
+                            .or(abilities(PartAbility.INPUT_ENERGY).setMinGlobalLimited(1).setMaxGlobalLimited(2, 1))
+                            .or(abilities(PartAbility.IMPORT_FLUIDS).setMaxGlobalLimited(1))
+                            .or(abilities(PartAbility.COMPUTATION_DATA_TRANSMISSION).setExactLimit(1))
+                            .or(autoAbilities(true, false, false)))
+                    .build())
+            .sidedWorkableCasingRenderer("block/casings/hpca/computer_casing", GTCEu.id("block/multiblock/hpca"))
+            .register();
 
     private static MachineDefinition[] registerSoulTieredHatch(String name, String displayName, String model, IO io,
                                                                int[] tiers, PartAbility... abilities) {
