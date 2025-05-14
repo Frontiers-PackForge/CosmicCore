@@ -22,6 +22,7 @@ public class CosmicMaterials {
     public static Material DilutedPrisma;
     public static Material Virtue;
     public static Material PrismaticTungstensteel;
+    public static Material VoidSpark;
     public static Material ResonantVirtueMeld;
     public static Material NaquadicSuperalloy;
     public static Material Trinavine;
@@ -83,6 +84,18 @@ public class CosmicMaterials {
                 .ingot()
                 .liquid(new FluidBuilder().temperature(933))
                 .color(0x6f42cf).secondaryColor(0xc71414).iconSet(CCoreMaterialIconSet.PRISMATIC)
+                .flags(GENERATE_ROUND, GENERATE_GEAR, GENERATE_SMALL_GEAR, GENERATE_RING, GENERATE_FRAME,
+                        GENERATE_SPRING, GENERATE_SPRING_SMALL, GENERATE_FINE_WIRE)
+                .components(Prisma, 1, TungstenSteel, 1)
+                .cableProperties(GTValues.V[4], 1, 1)
+                .fluidPipeProperties(1166, 100, true)
+                .blastTemp(3600, BlastProperty.GasTier.HIGH, GTValues.VA[GTValues.EV], 1200)
+                .buildAndRegister();
+
+        VoidSpark = new Material.Builder(CosmicCore.id("voidspark"))
+                .ingot()
+                .liquid(new FluidBuilder().temperature(933))
+                .color(0x5b2a9c).secondaryColor(0x2567b8).iconSet(CCoreMaterialIconSet.VOIDSPARKICO)
                 .flags(GENERATE_ROUND, GENERATE_GEAR, GENERATE_SMALL_GEAR, GENERATE_RING, GENERATE_FRAME,
                         GENERATE_SPRING, GENERATE_SPRING_SMALL, GENERATE_FINE_WIRE)
                 .components(Prisma, 1, TungstenSteel, 1)

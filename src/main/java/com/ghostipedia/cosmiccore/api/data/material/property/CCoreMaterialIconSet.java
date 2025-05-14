@@ -42,6 +42,10 @@ public class CCoreMaterialIconSet extends MaterialIconSet {
             HaloItemRenderer.create(5, 0xFF1c1926, new ResourceLocation(CosmicCore.MOD_ID, "rnd/halo"), true, true));
 
     public static final CCoreMaterialIconSet PRISMATIC = new CCoreMaterialIconSet("prismatic", SHINY, false,
-            HaloItemRenderer.create(8, prismaticColor, new ResourceLocation(CosmicCore.MOD_ID, "rnd/halo"), true,
-                    true));
+            HaloItemRenderer.create(8, 0xFF1c1926, new ResourceLocation(CosmicCore.MOD_ID, "rnd/storm_halo"), true,
+                    false));
+
+    public static final CCoreMaterialIconSet VOIDSPARKICO = new CCoreMaterialIconSet("voidspark_special", CosmicMaterialSet.VOIDSPARK, false,
+            HaloItemRenderer.create(8, 0xFF1c1926, new ResourceLocation(CosmicCore.MOD_ID, "rnd/storm_halo"), true,
+                    false));
 }

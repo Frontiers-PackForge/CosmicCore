@@ -410,7 +410,12 @@ public class CosmicItems {
             .tag()
             .defaultModel()
             .register();
-
+    public static final ItemEntry<ComponentItem> PROGRAMMABLE_MOTE = REGISTRATE
+            .item("programmable_mote", ComponentItem::create)
+            .lang("§5Programmable Mote")
+            .properties(p -> p.stacksTo(64))
+            .defaultModel()
+            .register();
     public static final ItemEntry<ComponentItem> PERPETUITY_SHARD = REGISTRATE
             .item("shard_of_perpetuity", ComponentItem::create)
             .lang("Shard of Perpetuity")
