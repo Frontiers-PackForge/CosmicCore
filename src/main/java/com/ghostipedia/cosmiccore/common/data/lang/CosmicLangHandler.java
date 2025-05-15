@@ -275,5 +275,9 @@ public class CosmicLangHandler {
 
         // HPCA
         provider.add("cosmiccore.multiblock.hpca.incomplete-array", "Incomplete Array will not generate");
+
+        provider.add("cosmiccore.multiblock.module.base.count", "Linked to %s bases");
+        provider.add("cosmiccore.multiblock.base.module.count", "Linked to %s modules");
+
     }
 }

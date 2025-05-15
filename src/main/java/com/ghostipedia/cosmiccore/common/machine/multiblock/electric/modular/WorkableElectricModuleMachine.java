@@ -7,25 +7,20 @@ import com.gregtechceu.gtceu.api.machine.MetaMachine;
 import com.gregtechceu.gtceu.api.machine.feature.multiblock.IMultiPart;
 import com.gregtechceu.gtceu.api.machine.multiblock.WorkableElectricMultiblockMachine;
 import com.lowdragmc.lowdraglib.syncdata.annotation.DescSynced;
-import com.lowdragmc.lowdraglib.syncdata.annotation.Persisted;
 import it.unimi.dsi.fastutil.longs.Long2ObjectMaps;
+import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
 import lombok.Getter;
 import net.minecraft.core.BlockPos;
-import net.minecraft.server.TickTask;
-import net.minecraft.server.level.ServerLevel;
+import net.minecraft.network.chat.Component;
 
-import javax.annotation.Nullable;
-import java.io.Serial;
-import java.util.Map;
+import java.util.*;
 
 public class WorkableElectricModuleMachine extends WorkableElectricMultiblockMachine implements IMultiblockModule {
 
     @Getter
-    @Persisted
     @DescSynced
-    private @Nullable BlockPos baseMultiblockPos;
-
-    private @Nullable IModularMultiblock baseMultiblock;
+    private final Set<BlockPos> baseMultiblockPoss = new ObjectOpenHashSet<>();
+    private final Set<IModularMultiblock> baseMultiblocks = new ObjectOpenHashSet<>();
     private boolean baseMultiblockResolved = false;
 
     public WorkableElectricModuleMachine(IMachineBlockEntity holder, Object... args) {
@@ -33,60 +28,85 @@ public class WorkableElectricModuleMachine extends WorkableElectricMultiblockMac
     }
 
     @Override
-    public void onLoad() {
-        super.onLoad();
-        if (getLevel() instanceof ServerLevel level) {
-            level.getServer().tell(new TickTask(0, () -> setBaseMultiblock(baseMultiblockPos)));
+    public void addBase(IModularMultiblock base) {
+        baseMultiblockPoss.add(base.getPos());
+        baseMultiblocks.add(base);
+    }
+
+    @Override
+    public void removeBase(IModularMultiblock base) {
+        baseMultiblockPoss.remove(base.getPos());
+        baseMultiblocks.remove(base);
+    }
+
+    public void setBaseMultiblocks(List<BlockPos> posList) {
+        baseMultiblockResolved = true;
+        var level = getLevel();
+        if (level == null || posList.isEmpty()) baseMultiblocks.clear();
+        else {
+            baseMultiblockPoss.clear();
+            baseMultiblocks.clear();
+            for (var pos : posList) {
+                if (MetaMachine.getMachine(level, pos) instanceof IModularMultiblock machine) {
+                    machine.addModule(this);
+                    baseMultiblockPoss.add(pos);
+                    baseMultiblocks.add(machine);
+                }
+            }
         }
     }
 
-    public void setBaseMultiblock(@Nullable BlockPos pos) {
-        baseMultiblockResolved = true;
-        var level = getLevel();
-        if (level == null || pos == null) baseMultiblock = null;
-        else if (MetaMachine.getMachine(level, pos) instanceof IModularMultiblock machine) {
-            baseMultiblockPos = pos;
-            baseMultiblock = machine;
-            machine.addModule(this);
-        } else baseMultiblock = null;
-    }
-
-    @Nullable
-    public IModularMultiblock getBaseMultiblock() {
-        if (!baseMultiblockResolved) setBaseMultiblock(baseMultiblockPos);
-        return baseMultiblock;
+    public List<IModularMultiblock> getBaseMultiBlocks() {
+        if (!baseMultiblockResolved) setBaseMultiblocks(new ArrayList<>(baseMultiblockPoss));
+        return new ArrayList<>(baseMultiblocks);
     }
 
     @Override
     public void onStructureFormed() {
         super.onStructureFormed();
 
-        if (getLevel() instanceof ServerLevel level) {
-            level.getServer().tell(new TickTask(0, () -> setBaseMultiblock(baseMultiblockPos)));
-        }
-
         Map<Long, IO> ioMap = getMultiblockState().getMatchContext().getOrCreate("ioMap", Long2ObjectMaps::emptyMap);
+        var poss = new ArrayList<BlockPos>();
         for (IMultiPart part : getParts()) {
             if (part instanceof ModuleConnectorPartMachine) {
                 for (var controller : part.getControllers()) {
                     if (controller instanceof IModularMultiblock master) {
-                        setBaseMultiblock(master.getPos());
+                        poss.add(master.getPos());
                     }
                 }
             }
         }
+        setBaseMultiblocks(poss);
     }
 
     @Override
     public void onStructureInvalid() {
-        var base = getBaseMultiblock();
-        if (base != null) {
-            base.removeModule(this);
+        super.onStructureInvalid();
+        var bases = getBaseMultiBlocks();
+        if (!bases.isEmpty()) {
+            for (var base : bases) {
+                base.removeModule(this);
+            }
+        }
+        this.baseMultiblockPoss.clear();
+        this.baseMultiblocks.clear();
+    }
+
+    @Override
+    public void notifyBases() {
+        for (IModularMultiblock base : getBaseMultiBlocks()) {
+            base.onModuleUpdate();
         }
     }
 
     @Override
-    public void onMultiblockUpdate() {
+    public void onBaseUpdate() {
         System.out.println("ModuleTest: Update notification received. IsClient: " + getLevel().isClientSide);
+    }
+
+    @Override
+    public void addDisplayText(List<Component> textList) {
+        super.addDisplayText(textList);
+        textList.add(Component.translatable("cosmiccore.multiblock.module.base.count", baseMultiblockPoss.size()));
     }
 }

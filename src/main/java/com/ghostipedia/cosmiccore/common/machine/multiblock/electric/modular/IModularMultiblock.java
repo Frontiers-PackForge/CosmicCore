@@ -7,6 +7,7 @@ import net.minecraft.core.BlockPos;
 public interface IModularMultiblock {
     void addModule(IMultiblockModule module);
     void removeModule(IMultiblockModule module);
+    void onModuleUpdate();
     void notifyModules();
     BlockPos getPos();
 }

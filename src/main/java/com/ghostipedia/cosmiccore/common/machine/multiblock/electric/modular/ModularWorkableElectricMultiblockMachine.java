@@ -1,19 +1,21 @@
 package com.ghostipedia.cosmiccore.common.machine.multiblock.electric.modular;
 
+import com.ghostipedia.cosmiccore.common.machine.multiblock.part.ModuleConnectorPartMachine;
+import com.gregtechceu.gtceu.api.capability.recipe.IO;
 import com.gregtechceu.gtceu.api.machine.IMachineBlockEntity;
 import com.gregtechceu.gtceu.api.machine.MetaMachine;
-import com.gregtechceu.gtceu.api.machine.feature.multiblock.IMultiController;
+import com.gregtechceu.gtceu.api.machine.feature.multiblock.IMultiPart;
 import com.gregtechceu.gtceu.api.machine.multiblock.WorkableElectricMultiblockMachine;
-import com.lowdragmc.lowdraglib.syncdata.ISubscription;
 import com.lowdragmc.lowdraglib.syncdata.annotation.DescSynced;
 import com.lowdragmc.lowdraglib.syncdata.annotation.Persisted;
 import com.lowdragmc.lowdraglib.syncdata.field.ManagedFieldHolder;
+import it.unimi.dsi.fastutil.longs.Long2ObjectMaps;
 import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
 import net.minecraft.core.BlockPos;
+import net.minecraft.network.chat.Component;
 import org.jetbrains.annotations.UnmodifiableView;
 
-import java.util.Collections;
-import java.util.Set;
+import java.util.*;
 
 public class ModularWorkableElectricMultiblockMachine extends WorkableElectricMultiblockMachine implements IModularMultiblock {
 
@@ -22,18 +24,12 @@ public class ModularWorkableElectricMultiblockMachine extends WorkableElectricMu
 
     @Persisted
     @DescSynced
-    private final Set<BlockPos> modules = new ObjectOpenHashSet<>();
+    private final Set<BlockPos> modulesPoss = new ObjectOpenHashSet<>();
     private final Set<IMultiblockModule> moduleMachines = new ObjectOpenHashSet<>();
-
+    private boolean modulesResolved = false;
 
     public ModularWorkableElectricMultiblockMachine(IMachineBlockEntity holder, Object... args) {
         super(holder, args);
-    }
-
-    @Override
-    public void setWorkingEnabled(boolean isWorkingAllowed) {
-        super.setWorkingEnabled(isWorkingAllowed);
-        notifyModules();
     }
 
     @Override
@@ -43,34 +39,84 @@ public class ModularWorkableElectricMultiblockMachine extends WorkableElectricMu
 
     @Override
     public void addModule(IMultiblockModule module) {
-        modules.add(module.getPos());
+        modulesPoss.add(module.getPos());
         moduleMachines.add(module);
     }
 
     @Override
     public void removeModule(IMultiblockModule module) {
-        modules.remove(module.getPos());
+        modulesPoss.remove(module.getPos());
         moduleMachines.remove(module);
     }
 
-    @UnmodifiableView
-    public Set<IMultiblockModule> getModules() {
-        if (moduleMachines.size() != modules.size()) {
+    public void setModules(List<BlockPos> posList) {
+        modulesResolved = true;
+        var level = getLevel();
+        if (level == null || posList.isEmpty()) moduleMachines.clear();
+        else {
+            modulesPoss.clear();
             moduleMachines.clear();
-            for (var pos : modules) {
-                if (MetaMachine.getMachine(getLevel(), pos) instanceof IMultiblockModule module) {
+            for (var pos : posList) {
+                if (MetaMachine.getMachine(level, pos) instanceof IMultiblockModule module) {
+                    module.addBase(this);
+                    modulesPoss.add(pos);
                     moduleMachines.add(module);
                 }
             }
         }
+    }
+
+    public Set<IMultiblockModule> getModulesPoss() {
+        if (!modulesResolved) setModules(new ArrayList<>(modulesPoss));
         return Collections.unmodifiableSet(moduleMachines);
     }
 
+    @Override
+    public void onStructureFormed() {
+        super.onStructureFormed();
 
-
-    public void notifyModules() {
-        for (IMultiblockModule module : getModules()) {
-            module.onMultiblockUpdate();
+        Map<Long, IO> ioMap = getMultiblockState().getMatchContext().getOrCreate("ioMap", Long2ObjectMaps::emptyMap);
+        var poss = new ArrayList<BlockPos>();
+        for (IMultiPart part : getParts()) {
+            if (part instanceof ModuleConnectorPartMachine) {
+                for (var controller : part.getControllers()) {
+                    if (controller instanceof IMultiblockModule master) {
+                        poss.add(master.getPos());
+                    }
+                }
+            }
         }
+        setModules(poss);
+    }
+
+    @Override
+    public void onStructureInvalid() {
+        super.onStructureInvalid();
+        var modules = getModulesPoss();
+        if (!modules.isEmpty()) {
+            for (var module : modules) {
+                module.removeBase(this);
+            }
+        }
+        this.modulesPoss.clear();
+        this.moduleMachines.clear();
+    }
+
+    @Override
+    public void notifyModules() {
+        for (IMultiblockModule module : getModulesPoss()) {
+            module.onBaseUpdate();
+        }
+    }
+
+    @Override
+    public void onModuleUpdate() {
+        System.out.println("ModularMulti: Update notification received. IsClient: " + getLevel().isClientSide);
+    }
+
+    @Override
+    public void addDisplayText(List<Component> textList) {
+        super.addDisplayText(textList);
+        textList.add(Component.translatable("cosmiccore.multiblock.base.module.count", modulesPoss.size()));
     }
 }

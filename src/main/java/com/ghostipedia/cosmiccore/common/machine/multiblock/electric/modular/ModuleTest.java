@@ -7,4 +7,10 @@ public class ModuleTest extends WorkableElectricModuleMachine {
     public ModuleTest(IMachineBlockEntity holder, Object... args) {
         super(holder, args);
     }
+
+    @Override
+    public void setWorkingEnabled(boolean isWorkingAllowed) {
+        super.setWorkingEnabled(isWorkingAllowed);
+        notifyBases();
+    }
 }
