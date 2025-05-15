@@ -1,6 +1,7 @@
 package com.ghostipedia.cosmiccore.api.machine.part;
 
 import com.gregtechceu.gtceu.api.machine.multiblock.PartAbility;
+import com.ibm.icu.text.MessagePattern;
 
 public class CosmicPartAbility {
 
@@ -11,4 +12,6 @@ public class CosmicPartAbility {
 
     public static final PartAbility IMPORT_THERMIA = new PartAbility("import_thermia");
     public static final PartAbility EXPORT_THERMIA = new PartAbility("export_thermia");
+
+    public static final PartAbility MODULE_CONNECTOR = new PartAbility("module_connector");
 }

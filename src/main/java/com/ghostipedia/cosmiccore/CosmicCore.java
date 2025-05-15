@@ -108,6 +108,7 @@ public class CosmicCore {
     public void registerMachines(GTCEuAPI.RegisterEvent<ResourceLocation, MachineDefinition> event) {
         ModularizedMultis.init();
         CosmicMachines.init();
+        CosmicMachine2.init();
     }
 
     public void registerSounds(GTCEuAPI.RegisterEvent<ResourceLocation, SoundEntry> event) {

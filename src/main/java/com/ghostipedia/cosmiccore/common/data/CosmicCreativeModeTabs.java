@@ -20,5 +20,14 @@ public class CosmicCreativeModeTabs {
                     .build())
             .register();
 
+    public static RegistryEntry<CreativeModeTab> COSMIC_TEST = REGISTRATE.defaultCreativeTab("creative_tab_test",
+            builder -> builder
+                    .displayItems(new GTCreativeModeTabs.RegistrateDisplayItemsGenerator("creative_tab_test", REGISTRATE))
+                    .title(REGISTRATE.addLang("itemGroup", CosmicCore.id("creative_tab_test"), "Cosmic Test"))
+                    .icon(CosmicItems.COSMIC_PROCESSOR::asStack)
+                    .build())
+            .register();
+
+
     public static void init() {}
 }
