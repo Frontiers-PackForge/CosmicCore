@@ -2,13 +2,18 @@ package com.ghostipedia.cosmiccore.common.data.recipe;
 
 import com.ghostipedia.cosmiccore.common.machine.multiblock.electric.MagneticFieldMachine;
 
+import com.ghostipedia.cosmiccore.common.machine.multiblock.electric.modular.orbitalForge.OrbitalForgeModule;
+import com.ghostipedia.cosmiccore.common.machine.multiblock.multi.modular.modules.OrbitalForgeEBFModule;
+import com.gregtechceu.gtceu.api.GTValues;
 import com.gregtechceu.gtceu.api.capability.IParallelHatch;
 import com.gregtechceu.gtceu.api.capability.recipe.IO;
 import com.gregtechceu.gtceu.api.capability.recipe.ItemRecipeCapability;
 import com.gregtechceu.gtceu.api.machine.MetaMachine;
 import com.gregtechceu.gtceu.api.machine.feature.IRecipeLogicMachine;
+import com.gregtechceu.gtceu.api.machine.multiblock.CoilWorkableElectricMultiblockMachine;
 import com.gregtechceu.gtceu.api.machine.multiblock.WorkableMultiblockMachine;
 import com.gregtechceu.gtceu.api.recipe.GTRecipe;
+import com.gregtechceu.gtceu.api.recipe.OverclockingLogic;
 import com.gregtechceu.gtceu.api.recipe.RecipeHelper;
 import com.gregtechceu.gtceu.api.recipe.content.ContentModifier;
 import com.gregtechceu.gtceu.api.recipe.modifier.ModifierFunction;
@@ -23,6 +28,8 @@ import net.minecraft.world.item.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Optional;
+
+import static com.gregtechceu.gtceu.api.recipe.OverclockingLogic.getCoilEUtDiscount;
 
 public class CosmicRecipeModifiers {
 
@@ -101,6 +108,34 @@ public class CosmicRecipeModifiers {
                 .outputModifier(ContentModifier.multiplier(multiplier))
                 .build();
     }
+
+    public static @NotNull ModifierFunction ebfModuleOverclock(@NotNull MetaMachine machine, @NotNull GTRecipe recipe) {
+        if (!(machine instanceof OrbitalForgeModule coilMachine)) {
+            return RecipeModifier.nullWrongType(OrbitalForgeModule.class, machine);
+        }
+
+        int blastFurnaceTemperature = coilMachine.getCoilType().getCoilTemperature() +
+                (100 * Math.max(0, coilMachine.getTier() - GTValues.MV));
+        int recipeTemp = recipe.data.getInt("ebf_temp");
+        if (!recipe.data.contains("ebf_temp") || recipeTemp > blastFurnaceTemperature) {
+            return ModifierFunction.NULL;
+        }
+
+        if (RecipeHelper.getRecipeEUtTier(recipe) > coilMachine.getTier()) {
+            return ModifierFunction.NULL;
+        }
+
+        var discount = ModifierFunction.builder()
+                .eutMultiplier(getCoilEUtDiscount(recipeTemp, blastFurnaceTemperature))
+                .build();
+
+        OverclockingLogic logic = (p, v) -> OverclockingLogic.heatingCoilOC(p, v, recipeTemp, blastFurnaceTemperature);
+        var oc = logic.getModifier(machine, recipe, coilMachine.getOverclockVoltage());
+
+        return oc.compose(discount);
+    }
+
+
 
     // .recipeModifiers(true,
     // (machine, recipe, OCParams, OCResult) -> {

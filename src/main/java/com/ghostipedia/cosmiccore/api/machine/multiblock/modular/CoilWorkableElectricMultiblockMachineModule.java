@@ -3,8 +3,10 @@ package com.ghostipedia.cosmiccore.api.machine.multiblock.modular;
 import com.gregtechceu.gtceu.api.block.ICoilType;
 import com.gregtechceu.gtceu.api.machine.IMachineBlockEntity;
 import com.gregtechceu.gtceu.common.block.CoilBlock;
-import lombok.Getter;
+
 import net.minecraft.MethodsReturnNonnullByDefault;
+
+import lombok.Getter;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 

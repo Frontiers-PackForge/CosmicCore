@@ -5,6 +5,7 @@ import com.ghostipedia.cosmiccore.common.machine.multiblock.multi.HemophagicTran
 import com.ghostipedia.cosmiccore.common.machine.multiblock.multi.StellarIris;
 import com.ghostipedia.cosmiccore.common.machine.multiblock.multi.StellarStarBallast;
 import com.ghostipedia.cosmiccore.common.machine.multiblock.multi.modular.VomahineShredder.ShredderMultiblock;
+import com.ghostipedia.cosmiccore.common.machine.multiblock.multi.modular.modules.OrbitalForgeEBFModule;
 
 // Class for Bulk-Init
 public class ModularizedMultis {
@@ -19,5 +20,7 @@ public class ModularizedMultis {
         HemophagicTransfuser.init();
         StarLadder.init();
         CosmicModularMachines.init();
+        OrbitalForgeModularMachine.init();
+        OrbitalForgeEBFModule.init();
     }
 }

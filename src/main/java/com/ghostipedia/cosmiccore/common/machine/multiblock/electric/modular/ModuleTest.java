@@ -5,6 +5,7 @@ import com.ghostipedia.cosmiccore.api.machine.multiblock.modular.WorkableElectri
 import com.gregtechceu.gtceu.api.machine.ConditionalSubscriptionHandler;
 import com.gregtechceu.gtceu.api.machine.IMachineBlockEntity;
 import com.gregtechceu.gtceu.api.machine.trait.RecipeLogic;
+
 import com.lowdragmc.lowdraglib.utils.DummyWorld;
 
 public class ModuleTest extends WorkableElectricMultiblockMachineModule {
