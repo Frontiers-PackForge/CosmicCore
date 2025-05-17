@@ -19,18 +19,21 @@ import com.gregtechceu.gtceu.api.machine.feature.multiblock.IMultiPart;
 import com.gregtechceu.gtceu.api.machine.multiblock.MultiblockDisplayText;
 import com.gregtechceu.gtceu.api.misc.EnergyContainerList;
 import com.gregtechceu.gtceu.utils.GTUtil;
+
 import com.lowdragmc.lowdraglib.gui.modular.ModularUI;
 import com.lowdragmc.lowdraglib.gui.widget.*;
-import lombok.Getter;
+
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Player;
+
+import lombok.Getter;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
 public class WorkableElectricMultiblockMachineModule extends WorkableMultiblockMachineModule implements IFancyUIMachine,
-        IDisplayUIMachine, ITieredMachine, IOverclockMachine {
+                                                     IDisplayUIMachine, ITieredMachine, IOverclockMachine {
 
     @Getter
     protected int tier;
@@ -181,6 +184,13 @@ public class WorkableElectricMultiblockMachineModule extends WorkableMultiblockM
 
     public EnergyContainerList getEnergyContainer() {
         List<IEnergyContainer> containers = new ArrayList<>();
+        // From base multiblocks
+        for (var base : getBaseMultiBlocks()) {
+            if (base instanceof WorkableElectricModularMultiblockMachine electricBase) {
+                containers.add(electricBase.energyContainer);
+            }
+        }
+        // From module parts
         var handlers = getCapabilitiesFlat(IO.IN, EURecipeCapability.CAP);
         if (handlers.isEmpty()) handlers = getCapabilitiesFlat(IO.OUT, EURecipeCapability.CAP);
         for (IRecipeHandler<?> handler : handlers) {

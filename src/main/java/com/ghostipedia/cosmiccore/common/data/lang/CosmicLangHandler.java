@@ -278,6 +278,5 @@ public class CosmicLangHandler {
 
         provider.add("cosmiccore.multiblock.module.base.count", "Linked to %s bases");
         provider.add("cosmiccore.multiblock.base.module.count", "Linked to %s modules");
-
     }
 }

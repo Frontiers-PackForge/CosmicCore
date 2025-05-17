@@ -1,7 +1,6 @@
 package com.ghostipedia.cosmiccore.api.machine.part;
 
 import com.gregtechceu.gtceu.api.machine.multiblock.PartAbility;
-import com.ibm.icu.text.MessagePattern;
 
 public class CosmicPartAbility {
 

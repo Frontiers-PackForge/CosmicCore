@@ -19,18 +19,22 @@ import com.gregtechceu.gtceu.api.machine.feature.multiblock.IMultiPart;
 import com.gregtechceu.gtceu.api.machine.multiblock.MultiblockDisplayText;
 import com.gregtechceu.gtceu.api.misc.EnergyContainerList;
 import com.gregtechceu.gtceu.utils.GTUtil;
+
 import com.lowdragmc.lowdraglib.gui.modular.ModularUI;
 import com.lowdragmc.lowdraglib.gui.widget.*;
-import lombok.Getter;
+
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Player;
+
+import lombok.Getter;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-public class WorkableElectricModularMultiblockMachine extends WorkableModularMultiblockMachine implements IFancyUIMachine,
-        IDisplayUIMachine, ITieredMachine, IOverclockMachine {
+public class WorkableElectricModularMultiblockMachine extends WorkableModularMultiblockMachine
+                                                      implements IFancyUIMachine,
+                                                      IDisplayUIMachine, ITieredMachine, IOverclockMachine {
 
     @Getter
     protected int tier;
@@ -63,7 +67,6 @@ public class WorkableElectricModularMultiblockMachine extends WorkableModularMul
         this.energyContainer = null;
         this.tier = 0;
     }
-
 
     //////////////////////////////////////
     // ********** GUI ***********//

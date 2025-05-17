@@ -4,6 +4,7 @@ import com.ghostipedia.cosmiccore.api.machine.part.CosmicPartAbility;
 import com.ghostipedia.cosmiccore.common.machine.multiblock.electric.modular.ModularMainTest;
 import com.ghostipedia.cosmiccore.common.machine.multiblock.electric.modular.ModuleTest;
 import com.ghostipedia.cosmiccore.common.machine.multiblock.part.ModuleConnectorPartMachine;
+
 import com.gregtechceu.gtceu.GTCEu;
 import com.gregtechceu.gtceu.api.data.RotationState;
 import com.gregtechceu.gtceu.api.machine.MachineDefinition;
@@ -45,11 +46,12 @@ public class CosmicMachine2 {
                     .aisle("#IXI#")
                     .where('X', controller(blocks(definition.get())))
                     .where('N', abilities(CosmicPartAbility.MODULE_CONNECTOR))
-                    .where('I', blocks(COMPUTER_CASING.get()).or(abilities(PartAbility.INPUT_ENERGY, PartAbility.MAINTENANCE)))
+                    .where('I',
+                            blocks(COMPUTER_CASING.get())
+                                    .or(abilities(PartAbility.INPUT_ENERGY, PartAbility.MAINTENANCE)))
                     .where('C', blocks(COMPUTER_CASING.get()))
                     .where("#", any())
-                    .build()
-            )
+                    .build())
             .sidedWorkableCasingRenderer("block/casings/hpca/computer_casing", GTCEu.id("block/multiblock/hpca"))
             .register();
 
@@ -65,9 +67,9 @@ public class CosmicMachine2 {
                     .where('N', abilities(CosmicPartAbility.MODULE_CONNECTOR))
                     .where('C', blocks(ADVANCED_COMPUTER_CASING.get()))
                     .build())
-            .sidedWorkableCasingRenderer("block/casings/hpca/advanced_computer_casing", GTCEu.id("block/multiblock/generator/large_gas_turbine"))
+            .sidedWorkableCasingRenderer("block/casings/hpca/advanced_computer_casing",
+                    GTCEu.id("block/multiblock/generator/large_gas_turbine"))
             .register();
-
 
     public static void init() {}
 }
