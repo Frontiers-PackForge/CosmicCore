@@ -1,5 +1,6 @@
 package com.ghostipedia.cosmiccore.api.machine.multiblock.modular;
 
+import com.ghostipedia.cosmiccore.api.misc.CosmicEnergyContainerList;
 import com.gregtechceu.gtceu.api.GTValues;
 import com.gregtechceu.gtceu.api.capability.IEnergyContainer;
 import com.gregtechceu.gtceu.api.capability.IParallelHatch;
@@ -38,7 +39,7 @@ public class WorkableElectricModularMultiblockMachine extends WorkableModularMul
 
     @Getter
     protected int tier;
-    protected EnergyContainerList energyContainer;
+    protected CosmicEnergyContainerList energyContainer;
 
     public WorkableElectricModularMultiblockMachine(IMachineBlockEntity holder, Object... args) {
         super(holder, args);
@@ -52,6 +53,7 @@ public class WorkableElectricModularMultiblockMachine extends WorkableModularMul
         super.onStructureInvalid();
         this.energyContainer = null;
         this.tier = 0;
+        notifyModules();
     }
 
     @Override
@@ -59,6 +61,7 @@ public class WorkableElectricModularMultiblockMachine extends WorkableModularMul
         super.onStructureFormed();
         this.energyContainer = getEnergyContainer();
         this.tier = GTUtil.getFloorTierByVoltage(getMaxVoltage());
+        notifyModules();
     }
 
     @Override
@@ -66,6 +69,7 @@ public class WorkableElectricModularMultiblockMachine extends WorkableModularMul
         super.onPartUnload();
         this.energyContainer = null;
         this.tier = 0;
+        notifyModules();
     }
 
     //////////////////////////////////////
@@ -183,7 +187,7 @@ public class WorkableElectricModularMultiblockMachine extends WorkableModularMul
     // ****** RECIPE LOGIC *******//
     //////////////////////////////////////
 
-    public EnergyContainerList getEnergyContainer() {
+    public CosmicEnergyContainerList getEnergyContainer() {
         List<IEnergyContainer> containers = new ArrayList<>();
         var handlers = getCapabilitiesFlat(IO.IN, EURecipeCapability.CAP);
         if (handlers.isEmpty()) handlers = getCapabilitiesFlat(IO.OUT, EURecipeCapability.CAP);
@@ -192,7 +196,7 @@ public class WorkableElectricModularMultiblockMachine extends WorkableModularMul
                 containers.add(container);
             }
         }
-        return new EnergyContainerList(containers);
+        return new CosmicEnergyContainerList(containers);
     }
 
     @Override

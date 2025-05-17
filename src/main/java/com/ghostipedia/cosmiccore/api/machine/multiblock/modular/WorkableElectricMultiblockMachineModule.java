@@ -1,5 +1,6 @@
 package com.ghostipedia.cosmiccore.api.machine.multiblock.modular;
 
+import com.ghostipedia.cosmiccore.api.misc.CosmicEnergyContainerList;
 import com.gregtechceu.gtceu.api.GTValues;
 import com.gregtechceu.gtceu.api.capability.IEnergyContainer;
 import com.gregtechceu.gtceu.api.capability.IParallelHatch;
@@ -37,7 +38,7 @@ public class WorkableElectricMultiblockMachineModule extends WorkableMultiblockM
 
     @Getter
     protected int tier;
-    protected EnergyContainerList energyContainer;
+    protected CosmicEnergyContainerList energyContainer;
 
     public WorkableElectricMultiblockMachineModule(IMachineBlockEntity holder, Object... args) {
         super(holder, args);
@@ -51,6 +52,7 @@ public class WorkableElectricMultiblockMachineModule extends WorkableMultiblockM
         super.onStructureInvalid();
         this.energyContainer = null;
         this.tier = 0;
+        notifyBases();
     }
 
     @Override
@@ -58,6 +60,7 @@ public class WorkableElectricMultiblockMachineModule extends WorkableMultiblockM
         super.onStructureFormed();
         this.energyContainer = getEnergyContainer();
         this.tier = GTUtil.getFloorTierByVoltage(getMaxVoltage());
+        notifyBases();
     }
 
     @Override
@@ -65,6 +68,14 @@ public class WorkableElectricMultiblockMachineModule extends WorkableMultiblockM
         super.onPartUnload();
         this.energyContainer = null;
         this.tier = 0;
+        notifyBases();
+    }
+
+    @Override
+    public void onBaseUpdate() {
+        super.onBaseUpdate();
+        this.energyContainer = getEnergyContainer();
+        this.tier = GTUtil.getFloorTierByVoltage(getMaxVoltage());
     }
 
     //////////////////////////////////////
@@ -182,7 +193,7 @@ public class WorkableElectricMultiblockMachineModule extends WorkableMultiblockM
     // ****** RECIPE LOGIC *******//
     //////////////////////////////////////
 
-    public EnergyContainerList getEnergyContainer() {
+    public CosmicEnergyContainerList getEnergyContainer() {
         List<IEnergyContainer> containers = new ArrayList<>();
         // From base multiblocks
         for (var base : getBaseMultiBlocks()) {
@@ -198,7 +209,7 @@ public class WorkableElectricMultiblockMachineModule extends WorkableMultiblockM
                 containers.add(container);
             }
         }
-        return new EnergyContainerList(containers);
+        return new CosmicEnergyContainerList(containers);
     }
 
     @Override

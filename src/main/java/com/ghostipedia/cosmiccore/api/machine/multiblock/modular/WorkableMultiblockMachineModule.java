@@ -97,6 +97,7 @@ public class WorkableMultiblockMachineModule extends WorkableMultiblockMachine i
             }
         }
         setBaseMultiblocks(poss);
+        notifyBases();
     }
 
     @Override
