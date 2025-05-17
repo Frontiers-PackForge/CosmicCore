@@ -9,7 +9,6 @@ import com.gregtechceu.gtceu.api.data.RotationState;
 import com.gregtechceu.gtceu.api.machine.MachineDefinition;
 import com.gregtechceu.gtceu.api.machine.MultiblockMachineDefinition;
 import com.gregtechceu.gtceu.api.machine.multiblock.PartAbility;
-import com.gregtechceu.gtceu.api.machine.multiblock.part.MultiblockPartMachine;
 import com.gregtechceu.gtceu.api.pattern.FactoryBlockPattern;
 import com.gregtechceu.gtceu.common.data.GTRecipeTypes;
 
@@ -57,7 +56,7 @@ public class CosmicMachine2 {
     public static final MultiblockMachineDefinition MODULE_TEST = REGISTRATE
             .multiblock("machine_module", ModuleTest::new)
             .langValue("Test Module")
-            .rotationState(RotationState.NON_Y_AXIS)
+            .rotationState(RotationState.ALL)
             .appearanceBlock(ADVANCED_COMPUTER_CASING)
             .recipeType(GTRecipeTypes.DUMMY_RECIPES)
             .pattern(definition -> FactoryBlockPattern.start()

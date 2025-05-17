@@ -1,4 +1,4 @@
-package com.ghostipedia.cosmiccore.common.machine.multiblock.electric.modular;
+package com.ghostipedia.cosmiccore.api.machine.multiblock.modular;
 
 import com.ghostipedia.cosmiccore.common.machine.multiblock.part.ModuleConnectorPartMachine;
 import com.gregtechceu.gtceu.api.capability.recipe.IO;
@@ -6,21 +6,20 @@ import com.gregtechceu.gtceu.api.machine.IMachineBlockEntity;
 import com.gregtechceu.gtceu.api.machine.MetaMachine;
 import com.gregtechceu.gtceu.api.machine.feature.multiblock.IMultiPart;
 import com.gregtechceu.gtceu.api.machine.multiblock.WorkableElectricMultiblockMachine;
+import com.gregtechceu.gtceu.api.machine.multiblock.WorkableMultiblockMachine;
 import com.lowdragmc.lowdraglib.syncdata.annotation.DescSynced;
 import com.lowdragmc.lowdraglib.syncdata.annotation.Persisted;
 import com.lowdragmc.lowdraglib.syncdata.field.ManagedFieldHolder;
 import it.unimi.dsi.fastutil.longs.Long2ObjectMaps;
 import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
 import net.minecraft.core.BlockPos;
-import net.minecraft.network.chat.Component;
-import org.jetbrains.annotations.UnmodifiableView;
 
 import java.util.*;
 
-public class ModularWorkableElectricMultiblockMachine extends WorkableElectricMultiblockMachine implements IModularMultiblock {
+public class WorkableModularMultiblockMachine extends WorkableMultiblockMachine implements IModularMultiblock {
 
     public static final ManagedFieldHolder MANAGED_FIELD_HOLDER = new ManagedFieldHolder(
-            ModularWorkableElectricMultiblockMachine.class, WorkableElectricMultiblockMachine.MANAGED_FIELD_HOLDER);
+            WorkableModularMultiblockMachine.class, WorkableMultiblockMachine.MANAGED_FIELD_HOLDER);
 
     @Persisted
     @DescSynced
@@ -28,7 +27,7 @@ public class ModularWorkableElectricMultiblockMachine extends WorkableElectricMu
     private final Set<IMultiblockModule> moduleMachines = new ObjectOpenHashSet<>();
     private boolean modulesResolved = false;
 
-    public ModularWorkableElectricMultiblockMachine(IMachineBlockEntity holder, Object... args) {
+    public WorkableModularMultiblockMachine(IMachineBlockEntity holder, Object... args) {
         super(holder, args);
     }
 
@@ -47,6 +46,11 @@ public class ModularWorkableElectricMultiblockMachine extends WorkableElectricMu
     public void removeModule(IMultiblockModule module) {
         modulesPoss.remove(module.getPos());
         moduleMachines.remove(module);
+    }
+
+    @Override
+    public int getModuleCount() {
+        return modulesPoss.size();
     }
 
     public void setModules(List<BlockPos> posList) {
@@ -112,11 +116,5 @@ public class ModularWorkableElectricMultiblockMachine extends WorkableElectricMu
     @Override
     public void onModuleUpdate() {
         System.out.println("ModularMulti: Update notification received. IsClient: " + getLevel().isClientSide);
-    }
-
-    @Override
-    public void addDisplayText(List<Component> textList) {
-        super.addDisplayText(textList);
-        textList.add(Component.translatable("cosmiccore.multiblock.base.module.count", modulesPoss.size()));
     }
 }

@@ -1,7 +1,5 @@
-package com.ghostipedia.cosmiccore.common.machine.multiblock.electric.modular;
+package com.ghostipedia.cosmiccore.api.machine.multiblock.modular;
 
-import com.gregtechceu.gtceu.api.machine.multiblock.WorkableElectricMultiblockMachine;
-import com.lowdragmc.lowdraglib.syncdata.ISubscription;
 import net.minecraft.core.BlockPos;
 
 public interface IModularMultiblock {
@@ -9,5 +7,6 @@ public interface IModularMultiblock {
     void removeModule(IMultiblockModule module);
     void onModuleUpdate();
     void notifyModules();
+    int getModuleCount();
     BlockPos getPos();
 }
