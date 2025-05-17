@@ -13,6 +13,7 @@ spotless {
     }
     java {
         target 'src/main/java/**/*.java', 'src/test/java/**/*.java'
+        targetExclude 'src/main/java/com/ghostipedia/cosmiccore/common/machine/multiblock/multi/**/*.java'
 
         def orderFile = file("$rootDir/spotless/spotless.importorder")
         def formatFile = file("$rootDir/spotless/spotless.eclipseformat.xml")
