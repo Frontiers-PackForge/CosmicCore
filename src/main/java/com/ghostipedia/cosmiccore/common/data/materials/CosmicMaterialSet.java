@@ -11,6 +11,7 @@ public class CosmicMaterialSet {
     public static final MaterialIconSet NEUTRONITE = new MaterialIconSet("neutronite", SHINY);
     public static final MaterialIconSet TRINAVINE = new MaterialIconSet("trinavine", SHINY);
     public static final MaterialIconSet VOIDSPARK = new MaterialIconSet("voidspark", DULL);
+    public static final MaterialIconSet SOL = new MaterialIconSet("sol", DULL);
 
     public static void init() {}
 }

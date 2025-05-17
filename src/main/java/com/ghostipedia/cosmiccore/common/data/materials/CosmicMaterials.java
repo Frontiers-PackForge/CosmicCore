@@ -49,6 +49,7 @@ public class CosmicMaterials {
     public static Material Triphenylphosphine;
     public static Material Neutronite;
     public static Material Vitrius;
+    public static Material SolSteel;
 
     public static void register() {
         Prisma = new Material.Builder(CosmicCore.id("prisma"))
@@ -95,6 +96,7 @@ public class CosmicMaterials {
         VoidSpark = new Material.Builder(CosmicCore.id("voidspark"))
                 .ingot()
                 .liquid(new FluidBuilder().temperature(933))
+                .formula("\uD802\uDC05")
                 .color(0x5b2a9c).secondaryColor(0x2567b8).iconSet(CCoreMaterialIconSet.VOIDSPARKICO)
                 .flags(GENERATE_ROUND, GENERATE_GEAR, GENERATE_SMALL_GEAR, GENERATE_RING, GENERATE_FRAME,
                         GENERATE_SPRING, GENERATE_SPRING_SMALL, GENERATE_FINE_WIRE)
@@ -103,6 +105,19 @@ public class CosmicMaterials {
                 .fluidPipeProperties(1166, 100, true)
                 .blastTemp(3600, BlastProperty.GasTier.HIGH, GTValues.VA[GTValues.EV], 1200)
                 .buildAndRegister();
+
+        SolSteel = new Material.Builder(CosmicCore.id("sol_steel"))
+                .ingot()
+                .liquid(new FluidBuilder().temperature(933))
+                .color(0x5b2a9c).secondaryColor(0x2567b8).iconSet(CCoreMaterialIconSet.SOL_STEEL)
+                .flags(GENERATE_ROUND, GENERATE_GEAR, GENERATE_SMALL_GEAR, GENERATE_RING, GENERATE_FRAME,
+                        GENERATE_SPRING, GENERATE_SPRING_SMALL, GENERATE_FINE_WIRE)
+                .components(Prisma, 1, TungstenSteel, 1)
+                .cableProperties(GTValues.V[4], 1, 1)
+                .fluidPipeProperties(1166, 100, true)
+                .blastTemp(3600, BlastProperty.GasTier.HIGH, GTValues.VA[GTValues.EV], 1200)
+                .buildAndRegister();
+
         ResonantVirtueMeld = new Material.Builder(CosmicCore.id("resonant_virtue_meld"))
                 .ingot()
                 .liquid(new FluidBuilder().temperature(1240))
