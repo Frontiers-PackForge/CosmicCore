@@ -10,10 +10,15 @@ import com.ghostipedia.cosmiccore.utils.StringUtil;
 
 import com.gregtechceu.gtceu.api.item.ComponentItem;
 import com.gregtechceu.gtceu.api.item.armor.ArmorComponentItem;
+import com.gregtechceu.gtceu.api.item.component.ICustomDescriptionId;
 import com.gregtechceu.gtceu.api.item.component.IItemComponent;
+import com.gregtechceu.gtceu.api.item.component.ThermalFluidStats;
+import com.gregtechceu.gtceu.common.data.GTItems;
+import com.gregtechceu.gtceu.common.item.ItemFluidContainer;
 import com.gregtechceu.gtceu.common.item.TooltipBehavior;
 import com.gregtechceu.gtceu.common.item.armor.GTArmorMaterials;
 import com.gregtechceu.gtceu.common.item.armor.QuarkTechSuite;
+import com.gregtechceu.gtceu.common.registry.GTRegistration;
 import com.gregtechceu.gtceu.config.ConfigHolder;
 import com.gregtechceu.gtceu.data.recipe.CustomTags;
 
@@ -31,9 +36,13 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Rarity;
 import net.minecraft.world.level.Level;
+import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.FluidUtil;
 
 import com.teamresourceful.resourcefullib.common.registry.RegistryEntry;
+import com.tterrag.registrate.providers.ProviderType;
 import com.tterrag.registrate.util.entry.ItemEntry;
+import com.tterrag.registrate.util.nullness.NonNullBiConsumer;
 import com.tterrag.registrate.util.nullness.NonNullConsumer;
 import earth.terrarium.adastra.common.items.rendered.RenderedBlockItem;
 import earth.terrarium.adastra.common.tags.ModItemTags;
@@ -1088,6 +1097,27 @@ public class CosmicItems {
             })))
             .defaultModel()
             .register();
+    public static ItemEntry<ComponentItem> NEUTRONITE_FLUID_CELL = GTRegistration.REGISTRATE
+            .item("indestructible_fluid_cell", ComponentItem::create)
+            .lang("Indestructible %s Fluid Cell")
+            .setData(ProviderType.ITEM_MODEL, NonNullBiConsumer.noop())
+            .color(() -> GTItems::cellColor)
+            .onRegister(attach(
+                    ThermalFluidStats.create(1024000, 1000000, true, true, true, true, true),
+                    new ItemFluidContainer(), cellName()))
+            .register();
+
+    public static ICustomDescriptionId cellName() {
+        return new ICustomDescriptionId() {
+
+            @Override
+            public Component getItemName(ItemStack stack) {
+                Component prefix = FluidUtil.getFluidContained(stack).map(FluidStack::getDisplayName)
+                        .orElse(Component.translatable("gtceu.fluid.empty"));
+                return Component.translatable(stack.getDescriptionId(), prefix);
+            }
+        };
+    }
 
     public static <T extends ComponentItem> NonNullConsumer<T> attach(IItemComponent... components) {
         return item -> item.attachComponents(components);
