@@ -2,12 +2,9 @@ package com.ghostipedia.cosmiccore.common.data;
 
 import com.ghostipedia.cosmiccore.CosmicCore;
 
-import com.gregtechceu.gtceu.api.registry.registrate.SoundEntryBuilder;
 import com.gregtechceu.gtceu.api.sound.SoundEntry;
-import net.minecraft.resources.ResourceLocation;
 
 import static com.gregtechceu.gtceu.common.registry.GTRegistration.REGISTRATE;
-
 
 public class CosmicSounds {
 

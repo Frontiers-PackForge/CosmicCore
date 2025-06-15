@@ -1,6 +1,7 @@
 package com.ghostipedia.cosmiccore.api.machine.multiblock;
 
 import com.ghostipedia.cosmiccore.common.data.CosmicSounds;
+
 import com.gregtechceu.gtceu.api.capability.recipe.IO;
 import com.gregtechceu.gtceu.api.gui.GuiTextures;
 import com.gregtechceu.gtceu.api.gui.fancy.FancyMachineUIWidget;
@@ -9,10 +10,10 @@ import com.gregtechceu.gtceu.api.machine.IMachineBlockEntity;
 import com.gregtechceu.gtceu.api.machine.MetaMachine;
 import com.gregtechceu.gtceu.api.machine.multiblock.WorkableElectricMultiblockMachine;
 import com.gregtechceu.gtceu.api.machine.trait.NotifiableItemStackHandler;
-
 import com.gregtechceu.gtceu.api.machine.trait.RecipeLogic;
 import com.gregtechceu.gtceu.api.pattern.util.RelativeDirection;
 import com.gregtechceu.gtceu.api.sound.AutoReleasedSound;
+
 import com.lowdragmc.lowdraglib.gui.modular.ModularUI;
 import com.lowdragmc.lowdraglib.gui.texture.GuiTextureGroup;
 import com.lowdragmc.lowdraglib.gui.texture.TextTexture;
@@ -24,10 +25,10 @@ import com.lowdragmc.lowdraglib.syncdata.field.ManagedFieldHolder;
 
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Player;
-
-import lombok.Getter;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+
+import lombok.Getter;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
@@ -53,19 +54,27 @@ public class IrisMultiblockMachine extends WorkableElectricMultiblockMachine {
     private Stage stage = Stage.EMPTY;
 
     public enum Stage {
-        EMPTY, GROWING, STAR, SUPERSTAR, BLACK_HOLE, DEATH, DEATH_GRACEFUL;
+        EMPTY,
+        GROWING,
+        STAR,
+        SUPERSTAR,
+        BLACK_HOLE,
+        DEATH,
+        DEATH_GRACEFUL;
     }
 
     public IrisMultiblockMachine(IMachineBlockEntity holder) {
         super(holder);
         this.inventory = new NotifiableItemStackHandler(this, 1, IO.NONE, IO.BOTH);
     }
+
     @OnlyIn(Dist.CLIENT)
     @SuppressWarnings("unused")
     protected void onStatusSynced(RecipeLogic.Status newValue, RecipeLogic.Status oldValue) {
         this.scheduleRenderUpdate();
         soundTick();
     }
+
     @Override
     public @NotNull ManagedFieldHolder getFieldHolder() {
         return MANAGED_FIELD_HOLDER;
@@ -87,7 +96,7 @@ public class IrisMultiblockMachine extends WorkableElectricMultiblockMachine {
     }
 
     @OnlyIn(Dist.CLIENT)
-    public void soundTick(){
+    public void soundTick() {
         if (stage == BLACK_HOLE && isFormed && this.shouldWorkingPlaySound()) {
             var sound = CosmicSounds.BLACK_HOLE_CRY;
             if (workingSound instanceof AutoReleasedSound soundEntry) {
@@ -98,11 +107,16 @@ public class IrisMultiblockMachine extends WorkableElectricMultiblockMachine {
                 workingSound = null;
             }
             if (sound != null) {
-                workingSound = sound.playAutoReleasedSound(() -> this.shouldWorkingPlaySound() && !this.isInValid() && this.getLevel().isLoaded(this.getPos()) && MetaMachine.getMachine(this.getLevel(), this.getPos()) == this, RelativeDirection.offsetPos(this.getPos(),getFrontFacing(),getUpwardsFacing(),isFlipped,0,0,-47), true, 0, 1, 1);
+                workingSound = sound.playAutoReleasedSound(
+                        () -> this.shouldWorkingPlaySound() && !this.isInValid() &&
+                                this.getLevel().isLoaded(this.getPos()) &&
+                                MetaMachine.getMachine(this.getLevel(), this.getPos()) == this,
+                        RelativeDirection.offsetPos(this.getPos(), getFrontFacing(), getUpwardsFacing(), isFlipped, 0,
+                                0, -47),
+                        true, 0, 1, 1);
             }
 
-        }
-        else if (workingSound instanceof AutoReleasedSound soundEntry) {
+        } else if (workingSound instanceof AutoReleasedSound soundEntry) {
             soundEntry.release();
             workingSound = null;
         }

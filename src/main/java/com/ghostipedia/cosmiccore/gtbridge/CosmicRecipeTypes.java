@@ -1,8 +1,8 @@
 package com.ghostipedia.cosmiccore.gtbridge;
 
 import com.ghostipedia.cosmiccore.api.capability.recipe.SoulRecipeCapability;
-
 import com.ghostipedia.cosmiccore.common.data.CosmicSounds;
+
 import com.gregtechceu.gtceu.api.block.ICoilType;
 import com.gregtechceu.gtceu.api.capability.recipe.IO;
 import com.gregtechceu.gtceu.api.gui.GuiTextures;
