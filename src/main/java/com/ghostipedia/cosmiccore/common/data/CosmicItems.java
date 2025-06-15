@@ -80,6 +80,110 @@ public class CosmicItems {
 
     public static final CosmicBloodOrbDeferredRegister COSMIC_BLOOD_ORBS = new CosmicBloodOrbDeferredRegister(
             "cosmiccore");
+    // Tesserae
+    public static final ItemEntry<ComponentItem> TESSARON = REGISTRATE.item("tessaron", ComponentItem::create)
+            .lang("Vexil - [Tessaron]")
+            .properties(p -> p.stacksTo(16))
+            .tag()
+            .defaultModel()
+            .register();
+    public static final ItemEntry<ComponentItem> ESSON = REGISTRATE.item("esson", ComponentItem::create)
+            .lang("Luminon - [Esson]")
+            .properties(p -> p.stacksTo(16))
+            .tag()
+            .defaultModel()
+            .register();
+
+    public static final ItemEntry<ComponentItem> VEXIUN = REGISTRATE.item("vexiun", ComponentItem::create)
+            .lang("Vexil - [Vexiun]")
+            .properties(p -> p.stacksTo(16))
+            .tag()
+            .defaultModel()
+            .register();
+    public static final ItemEntry<ComponentItem> PHANTNON = REGISTRATE.item("phantnon", ComponentItem::create)
+            .lang("Luminon - [Phantnon]")
+            .properties(p -> p.stacksTo(16))
+            .tag()
+            .defaultModel()
+            .register();
+
+    public static final ItemEntry<ComponentItem> AMBRION = REGISTRATE.item("ambrion", ComponentItem::create)
+            .lang("Vexil - [Ambrion]")
+            .properties(p -> p.stacksTo(16))
+            .tag()
+            .defaultModel()
+            .register();
+    public static final ItemEntry<ComponentItem> SPECTIL = REGISTRATE.item("spectil", ComponentItem::create)
+            .lang("Luminon - [Spectil]")
+            .properties(p -> p.stacksTo(16))
+            .tag()
+            .defaultModel()
+            .register();
+
+    public static final ItemEntry<ComponentItem> ETHERA = REGISTRATE.item("ethera", ComponentItem::create)
+            .lang("Vexil - [Ethera]")
+            .properties(p -> p.stacksTo(16))
+            .tag()
+            .defaultModel()
+            .register();
+    public static final ItemEntry<ComponentItem> NYXON = REGISTRATE.item("nyxon", ComponentItem::create)
+            .lang("Luminon - [Nyxon]")
+            .properties(p -> p.stacksTo(16))
+            .tag()
+            .defaultModel()
+            .register();
+
+    public static final ItemEntry<ComponentItem> PYRITH = REGISTRATE.item("pyrith", ComponentItem::create)
+            .lang("Vexil - [Pyrith]")
+            .properties(p -> p.stacksTo(16))
+            .tag()
+            .defaultModel()
+            .register();
+    public static final ItemEntry<ComponentItem> SERAPHON = REGISTRATE.item("seraphon", ComponentItem::create)
+            .lang("Luminon - [Seraphon]")
+            .properties(p -> p.stacksTo(16))
+            .tag()
+            .defaultModel()
+            .register();
+
+    public static final ItemEntry<ComponentItem> TENAEBRUM = REGISTRATE.item("tenaebrum", ComponentItem::create)
+            .lang("Vexil - [Tenaebrum]")
+            .properties(p -> p.stacksTo(16))
+            .tag()
+            .defaultModel()
+            .register();
+    public static final ItemEntry<ComponentItem> DYNAMIA = REGISTRATE.item("dynamia", ComponentItem::create)
+            .lang("Luminon - [Dynamia]")
+            .properties(p -> p.stacksTo(16))
+            .tag()
+            .defaultModel()
+            .register();
+
+    public static final ItemEntry<ComponentItem> CRYSTALA = REGISTRATE.item("crystala", ComponentItem::create)
+            .lang("Vexil - [Crystala]")
+            .properties(p -> p.stacksTo(16))
+            .tag()
+            .defaultModel()
+            .register();
+    public static final ItemEntry<ComponentItem> MYSTRIX = REGISTRATE.item("mystrix", ComponentItem::create)
+            .lang("Luminon - [Mystrix]")
+            .properties(p -> p.stacksTo(16))
+            .tag()
+            .defaultModel()
+            .register();
+
+    public static final ItemEntry<ComponentItem> CHRONIA = REGISTRATE.item("chronia", ComponentItem::create)
+            .lang("Vexil - [Chronia]")
+            .properties(p -> p.stacksTo(16))
+            .tag()
+            .defaultModel()
+            .register();
+    public static final ItemEntry<ComponentItem> ECHON = REGISTRATE.item("echon", ComponentItem::create)
+            .lang("Luminon - [Echon]")
+            .properties(p -> p.stacksTo(16))
+            .tag()
+            .defaultModel()
+            .register();
 
     // Literally Random shit
     public static final ItemEntry<ComponentItem> DONK = REGISTRATE.item("donk", ComponentItem::create)
