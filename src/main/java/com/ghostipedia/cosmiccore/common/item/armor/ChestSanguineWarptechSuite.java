@@ -1,5 +1,6 @@
 package com.ghostipedia.cosmiccore.common.item.armor;
 
+import com.ghostipedia.cosmiccore.CosmicCore;
 import com.ghostipedia.cosmiccore.api.item.armor.AdvancedQuarkTechSpaceSuite;
 
 import com.gregtechceu.gtceu.api.capability.GTCapabilityHelper;
@@ -11,6 +12,9 @@ import com.gregtechceu.gtceu.utils.input.KeyBind;
 import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.protocol.game.ClientboundPlayerAbilitiesPacket;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.entity.player.Abilities;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.ItemStack;
@@ -18,11 +22,16 @@ import net.minecraft.world.level.Level;
 
 import com.mojang.datafixers.util.Pair;
 import it.unimi.dsi.fastutil.ints.IntList;
+import wayoftime.bloodmagic.core.data.SoulNetwork;
+import wayoftime.bloodmagic.core.data.SoulTicket;
+import wayoftime.bloodmagic.util.helper.NetworkHelper;
 
 import java.util.List;
 
 public class ChestSanguineWarptechSuite extends AdvancedQuarkTechSpaceSuite {
 
+    public static final String SANGUINE_SHIELD_NBT_KEY = CosmicCore.MOD_ID + ":sanguine_shield";
+    public static final int SANGUINE_SHIELD_DRAIN_PER_SECOND = 1000;
     // A replacement for checking the current world time, to get around the gamerule that stops it
     private long timer = 0L;
     private List<Pair<NonNullList<ItemStack>, IntList>> inventoryIndexMap;
@@ -49,6 +58,7 @@ public class ChestSanguineWarptechSuite extends AdvancedQuarkTechSpaceSuite {
         byte toggleTimer = data.getByte("toggleTimer");
         boolean canShare = data.getBoolean("canShare");
 
+        // Handle toggle keypresses
         String messageKey = null;
         if (toggleTimer == 0) {
             if (KeyBind.ARMOR_CHARGING.isKeyDown(player)) {
@@ -76,7 +86,26 @@ public class ChestSanguineWarptechSuite extends AdvancedQuarkTechSpaceSuite {
             if (player.isOnFire()) player.extinguishFire();
         }
 
-        player.getAbilities().mayfly = true;
+        // Toggle flight
+        Abilities abilities = player.getAbilities();
+        if (!abilities.mayfly) {
+            abilities.mayfly = true;
+            if (!world.isClientSide && player instanceof ServerPlayer serverPlayer) {
+                serverPlayer.connection.send(new ClientboundPlayerAbilitiesPacket(abilities));
+            }
+        }
+
+        // Sanguine shield
+        if (!world.isClientSide && timer % 100 == 0) {
+            SoulNetwork network = NetworkHelper.getSoulNetwork(player);
+            if (network.getCurrentEssence() < SANGUINE_SHIELD_DRAIN_PER_SECOND) {
+                player.getPersistentData().putBoolean(SANGUINE_SHIELD_NBT_KEY, false);
+            } else {
+                network.syphon(new SoulTicket(SANGUINE_SHIELD_DRAIN_PER_SECOND));
+                player.getPersistentData().putBoolean(SANGUINE_SHIELD_NBT_KEY, true);
+            }
+        }
+
         // Charging mechanics
         if (canShare && !world.isClientSide) {
             // Check for new things to charge every 5 seconds

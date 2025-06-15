@@ -10,16 +10,23 @@ import com.ghostipedia.cosmiccore.mixin.accessor.LivingEntityAccessor;
 
 import com.gregtechceu.gtceu.api.block.MetaMachineBlock;
 
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.protocol.game.ClientboundPlayerAbilitiesPacket;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.event.RegisterCommandsEvent;
 import net.minecraftforge.event.TickEvent;
+import net.minecraftforge.event.entity.living.LivingDamageEvent;
+import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.living.LivingEquipmentChangeEvent;
 import net.minecraftforge.event.level.BlockEvent;
+import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
+
+import static com.ghostipedia.cosmiccore.common.item.armor.ChestSanguineWarptechSuite.SANGUINE_SHIELD_NBT_KEY;
 
 @SuppressWarnings("unused")
 @Mod.EventBusSubscriber(modid = CosmicCore.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE)
@@ -68,6 +75,32 @@ public class ForgeCommonEventListener {
             p.getAbilities().mayfly = false;
             p.getAbilities().flying = false;
             p.fallDistance = 0;
+            p.connection.send(
+                    new ClientboundPlayerAbilitiesPacket(p.getAbilities()));
+        }
+    }
+
+    // Sanguine shield effect from sanguine chest piece negates all damage and defies death.
+    @SubscribeEvent(priority = EventPriority.HIGH)
+    public static void onPlayerDamage(LivingDamageEvent event) {
+        if (!(event.getEntity() instanceof Player player)) return;
+
+        if (player.getPersistentData().getBoolean(SANGUINE_SHIELD_NBT_KEY)) {
+            event.setCanceled(true);
+        }
+    }
+
+    // Sanguine shield effect from sanguine chest piece negates all damage and defies death.
+    @SubscribeEvent(priority = EventPriority.HIGH)
+    public static void onPlayerDeath(LivingDeathEvent event) {
+        if (!(event.getEntity() instanceof Player player)) return;
+
+        // Check if player has protection enabled
+        if (player.getPersistentData().getBoolean(SANGUINE_SHIELD_NBT_KEY)) {
+            event.setCanceled(true); // Prevent death
+
+            // Optional: Add some visual/audio feedback
+            player.sendSystemMessage(Component.literal("Your sanguine armor protected you from death!"));
         }
     }
 
