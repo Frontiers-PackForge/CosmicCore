@@ -10,10 +10,13 @@ import com.ghostipedia.cosmiccore.mixin.accessor.LivingEntityAccessor;
 
 import com.gregtechceu.gtceu.api.block.MetaMachineBlock;
 
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.event.RegisterCommandsEvent;
 import net.minecraftforge.event.TickEvent;
+import net.minecraftforge.event.entity.living.LivingEquipmentChangeEvent;
 import net.minecraftforge.event.level.BlockEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -47,6 +50,24 @@ public class ForgeCommonEventListener {
                 }
             }
             ((LivingEntityAccessor) event.player).callRemoveEffectParticles();
+        }
+    }
+
+    // Sanguine chest piece gives creative flight when equipped and powered.
+    // This is handled in the ChestSanguineWarptechSuite.java
+    // However, we want to take this flight away when it is taken off.
+    @SubscribeEvent
+    public static void onEquipChange(LivingEquipmentChangeEvent e) {
+        if (!(e.getEntity() instanceof ServerPlayer p)) return;
+        if (e.getSlot() != EquipmentSlot.CHEST) return;
+
+        boolean putOn = e.getTo().is(CosmicItems.SANGUINE_WARPTECH_CHESTPLATE.get());
+        boolean tookOff = e.getFrom().is(CosmicItems.SANGUINE_WARPTECH_CHESTPLATE.get()) && !putOn;
+
+        if (tookOff && !p.isCreative() && !p.isSpectator()) {
+            p.getAbilities().mayfly = false;
+            p.getAbilities().flying = false;
+            p.fallDistance = 0;
         }
     }
 
