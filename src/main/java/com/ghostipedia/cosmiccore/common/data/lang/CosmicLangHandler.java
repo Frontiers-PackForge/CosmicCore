@@ -223,6 +223,8 @@ public class CosmicLangHandler {
         // Sanguine Warptech
         provider.add("cosmiccore.armor.sanguinewarptech.hud.LP", "Current LP: %s");
         provider.add("cosmiccore.armor.sanguinewarptech.hud.shieldstate", "Sanguine Shield: %s");
+        provider.add("cosmiccore.armor.sanguinewarptech.message.death_defiance",
+                "Your sanguine armor protected you from death!");
 
         // Dimensional Energy Storage
         provider.add("cosmic.multiblock.capacitor.info.tittle.global", "Global Network Info");

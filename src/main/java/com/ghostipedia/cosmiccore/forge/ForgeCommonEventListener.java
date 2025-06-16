@@ -10,6 +10,7 @@ import com.ghostipedia.cosmiccore.mixin.accessor.LivingEntityAccessor;
 
 import com.gregtechceu.gtceu.api.block.MetaMachineBlock;
 
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.protocol.game.ClientboundPlayerAbilitiesPacket;
 import net.minecraft.server.level.ServerPlayer;
@@ -77,6 +78,7 @@ public class ForgeCommonEventListener {
             p.fallDistance = 0;
             p.connection.send(
                     new ClientboundPlayerAbilitiesPacket(p.getAbilities()));
+            p.getPersistentData().putBoolean(SANGUINE_SHIELD_NBT_KEY, false);
         }
     }
 
@@ -85,7 +87,8 @@ public class ForgeCommonEventListener {
     public static void onPlayerDamage(LivingDamageEvent event) {
         if (!(event.getEntity() instanceof Player player)) return;
 
-        if (player.getPersistentData().getBoolean(SANGUINE_SHIELD_NBT_KEY)) {
+        CompoundTag tag = player.getPersistentData();
+        if (tag.contains(SANGUINE_SHIELD_NBT_KEY) && tag.getBoolean(SANGUINE_SHIELD_NBT_KEY)) {
             event.setCanceled(true);
         }
     }
@@ -95,12 +98,11 @@ public class ForgeCommonEventListener {
     public static void onPlayerDeath(LivingDeathEvent event) {
         if (!(event.getEntity() instanceof Player player)) return;
 
-        // Check if player has protection enabled
-        if (player.getPersistentData().getBoolean(SANGUINE_SHIELD_NBT_KEY)) {
+        CompoundTag tag = player.getPersistentData();
+        if (tag.contains(SANGUINE_SHIELD_NBT_KEY) && tag.getBoolean(SANGUINE_SHIELD_NBT_KEY)) {
             event.setCanceled(true); // Prevent death
-
-            // Optional: Add some visual/audio feedback
-            player.sendSystemMessage(Component.literal("Your sanguine armor protected you from death!"));
+            player.sendSystemMessage(
+                    Component.translatable("cosmiccore.armor.sanguinewarptech.message.death_defiance"));
         }
     }
 
