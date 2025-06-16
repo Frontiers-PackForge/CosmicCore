@@ -9,16 +9,22 @@ import com.gregtechceu.gtceu.api.item.armor.ArmorUtils;
 import com.gregtechceu.gtceu.core.IFireImmuneEntity;
 import com.gregtechceu.gtceu.utils.input.KeyBind;
 
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.protocol.game.ClientboundPlayerAbilitiesPacket;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Abilities;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 import com.mojang.datafixers.util.Pair;
 import it.unimi.dsi.fastutil.ints.IntList;
@@ -40,6 +46,30 @@ public class ChestSanguineWarptechSuite extends AdvancedQuarkTechSpaceSuite {
         super(energyPerUse, capacity, tier);
     }
 
+    @OnlyIn(Dist.CLIENT)
+    @Override
+    public void drawHUD(ItemStack item, GuiGraphics guiGraphics) {
+        addCapacityHUD(item, this.HUD);
+        addSanguineHUD(item, this.HUD);
+        this.HUD.draw(guiGraphics);
+        this.HUD.reset();
+    }
+
+    @OnlyIn(Dist.CLIENT)
+    protected static void addSanguineHUD(ItemStack stack, ArmorUtils.ModularHUD hud) {
+        if (stack == null) return;
+        CompoundTag tag = stack.getOrCreateTag();
+        if (tag.contains("currentLP")) {
+            long currentLP = tag.getLong("currentLP");
+            hud.newString(Component.translatable("cosmiccore.armor.sanguinewarptech.hud.LP", currentLP));
+        }
+        if (tag.contains("isSanguineShieldOn")) {
+            boolean isSanguineShieldOn = tag.getBoolean("isSanguineShieldOn");
+            hud.newString(Component.translatable("cosmiccore.armor.sanguinewarptech.hud.shieldstate",
+                    (isSanguineShieldOn ? "ON" : "OFF")));
+        }
+    }
+
     // Mostly copied from AdvancedQuarkTechSpaceSuite.java
     @Override
     public void onArmorTick(Level world, Player player, ItemStack item) {
@@ -53,6 +83,8 @@ public class ChestSanguineWarptechSuite extends AdvancedQuarkTechSpaceSuite {
         if (!data.contains("toggleTimer")) {
             data.putByte("toggleTimer", (byte) 0);
             data.putBoolean("canShare", false);
+            data.putBoolean("isSanguineShieldOn", false);
+            data.putLong("currentLP", 0);
         }
 
         byte toggleTimer = data.getByte("toggleTimer");
@@ -95,15 +127,20 @@ public class ChestSanguineWarptechSuite extends AdvancedQuarkTechSpaceSuite {
             }
         }
 
-        // Sanguine shield
-        if (!world.isClientSide && timer % 100 == 0) {
+        // Sanguine shield, update every 10 seconds
+        if (!world.isClientSide && timer % (20 * 10) == 0) {
             SoulNetwork network = NetworkHelper.getSoulNetwork(player);
-            if (network.getCurrentEssence() < SANGUINE_SHIELD_DRAIN_PER_SECOND) {
-                player.getPersistentData().putBoolean(SANGUINE_SHIELD_NBT_KEY, false);
+            boolean isSanguineShieldOn;
+            if (network.getCurrentEssence() < SANGUINE_SHIELD_DRAIN_PER_SECOND * 10) {
+                isSanguineShieldOn = false;
             } else {
-                network.syphon(new SoulTicket(SANGUINE_SHIELD_DRAIN_PER_SECOND));
-                player.getPersistentData().putBoolean(SANGUINE_SHIELD_NBT_KEY, true);
+                network.syphon(new SoulTicket(SANGUINE_SHIELD_DRAIN_PER_SECOND * 10));
+                isSanguineShieldOn = true;
             }
+
+            data.putBoolean("isSanguineShieldOn", isSanguineShieldOn);
+            data.putLong("currentLP", network.getCurrentEssence());
+            player.getPersistentData().putBoolean(SANGUINE_SHIELD_NBT_KEY, isSanguineShieldOn);
         }
 
         // Charging mechanics
@@ -152,5 +189,15 @@ public class ChestSanguineWarptechSuite extends AdvancedQuarkTechSpaceSuite {
         timer++;
         if (timer == Long.MAX_VALUE)
             timer = 0;
+    }
+
+    @Override
+    public int damageArmor(LivingEntity entity, ItemStack itemStack, DamageSource source, int damage,
+                           EquipmentSlot equipmentSlot) {
+        IElectricItem item = GTCapabilityHelper.getElectricItem(itemStack);
+        if (item != null) {
+            item.discharge(energyPerUse / 100L * damage, item.getTier(), true, false, false);
+        }
+        return 1;
     }
 }

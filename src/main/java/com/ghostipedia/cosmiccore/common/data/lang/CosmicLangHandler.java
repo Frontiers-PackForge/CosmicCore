@@ -220,6 +220,10 @@ public class CosmicLangHandler {
         replace(provider, "behavior.wireless_data.owner.player", "§3Player Name: §r%s");
         replace(provider, "behavior.wireless_data.owner.team", "§3Team Name: §r");
 
+        // Sanguine Warptech
+        provider.add("cosmiccore.armor.sanguinewarptech.hud.LP", "Current LP: %s");
+        provider.add("cosmiccore.armor.sanguinewarptech.hud.shieldstate", "Sanguine Shield: %s");
+
         // Dimensional Energy Storage
         provider.add("cosmic.multiblock.capacitor.info.tittle.global", "Global Network Info");
         provider.add("cosmic.multiblock.capacitor.info.tittle.local", "Local Buffer Info ");
