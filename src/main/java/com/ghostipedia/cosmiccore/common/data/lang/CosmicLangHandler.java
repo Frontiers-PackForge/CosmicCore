@@ -272,5 +272,8 @@ public class CosmicLangHandler {
         provider.add("cosmic.gui.wireless.energy.location.format", "%s : x=%d y=%d z=%d");
         provider.add("cosmic.gui.wireless.energy.no.capacitor", "No Formed Capacitor");
         provider.add("cosmic.gui.wireless.energy.capacitor", "  §bCapacitor Location:§b ");
+
+        // HPCA
+        provider.add("cosmiccore.multiblock.hpca.incomplete-array", "Incomplete Array will not generate");
     }
 }
