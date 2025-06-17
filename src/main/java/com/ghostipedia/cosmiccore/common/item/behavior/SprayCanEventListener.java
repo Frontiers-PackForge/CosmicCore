@@ -75,13 +75,13 @@ public class SprayCanEventListener {
                     }
                 } else if (entity instanceof IPaintable) {
                     for (DyeColor dye : DyeColor.values()) {
-                        if(((IPaintable) entity).getPaintingColor() ==  -1){
+                        if (((IPaintable) entity).getPaintingColor() == -1) {
 
                             color = ExtendedDyeColor.SOLVENT;
 
                         }
                         if (((IPaintable) entity).getPaintingColor() == dye.getTextColor()) {
-                            color = ExtendedDyeColor.getColorFromDyeId(dyeID);
+                            color = ExtendedDyeColor.getColorFromDyeId(dye.getId());
                         }
                     }
                 } else if (entity instanceof MetaMachineBlockEntity meta) {
@@ -89,11 +89,11 @@ public class SprayCanEventListener {
                     var Machinecolor = meta.getMetaMachine().getPaintingColor();
                     System.out.println(Machinecolor);
                     for (DyeColor dye : DyeColor.values()) {
-                        if(Machinecolor == -1){
+                        if (Machinecolor == -1) {
                             color = ExtendedDyeColor.SOLVENT;
                             break;
 
-                        } else  if (Machinecolor == dye.getTextColor()) {
+                        } else if (Machinecolor == dye.getTextColor()) {
                             color = ExtendedDyeColor.fromDyeColor(dye);
                         }
                     }
@@ -110,12 +110,16 @@ public class SprayCanEventListener {
             if (id >= 15 && id <= 29) {
                 dyeID = id - 14;
                 color = ExtendedDyeColor.getColorFromDyeId(dyeID);
-            } else if (id >= 37 && id <= 51) {
+            }
+            // terracotta is special
+            else if (id >= 37 && id <= 51) {
                 dyeID = id - 36;
                 color = ExtendedDyeColor.getColorFromDyeId(dyeID);
-            } else if (id == 8 || id == 36) {
+            }
+            // white maps to snow????????????????????????????
+            else if (id == 8 || id == 36) {
 
-                dyeID = -1;
+                dyeID = 0;
                 color = ExtendedDyeColor.getColorFromDyeId(dyeID);
 
             }
@@ -125,15 +129,20 @@ public class SprayCanEventListener {
         // send to spraycan when finished
         if (spraycan.getItem() instanceof ComponentItem compItem) {
             for (var component : compItem.getComponents()) {
-               // CompoundTag tag = spraycan.getOrCreateTag();
+                // CompoundTag tag = spraycan.getOrCreateTag();
                 if (component instanceof InfiniteSprayCanBehavior behavior) {
+                    if(behavior.getIsLocked() != true){
                     CompoundTag tag = spraycan.getOrCreateTag();
                     behavior.setColor(color);
                     behavior.PrintColorToActionBar(player, behavior.color);
+
                     assert color != null;
-                    tag.putInt(ColorTag,color.getColorId());
+                    tag.putInt(ColorTag, color.getColorId());
                     spraycan.setTag(tag);
-                     event.setCanceled(true);
+                    }
+                    behavior.PrintColorToActionBar(player, behavior.color);
+                    event.setCanceled(true);
+
                 }
             }
         }

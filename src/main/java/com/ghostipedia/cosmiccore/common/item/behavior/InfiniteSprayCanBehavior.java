@@ -5,13 +5,21 @@ import com.gregtechceu.gtceu.api.GTValues;
 import com.gregtechceu.gtceu.api.blockentity.IPaintable;
 import com.gregtechceu.gtceu.api.blockentity.MetaMachineBlockEntity;
 import com.gregtechceu.gtceu.api.blockentity.PipeBlockEntity;
+import com.gregtechceu.gtceu.api.gui.GuiTextures;
+import com.gregtechceu.gtceu.api.gui.widget.PhantomSlotWidget;
 import com.gregtechceu.gtceu.api.item.component.IAddInformation;
 import com.gregtechceu.gtceu.api.item.component.IInteractionItem;
+import com.gregtechceu.gtceu.api.item.component.IItemUIFactory;
+import com.gregtechceu.gtceu.api.transfer.item.CustomItemStackHandler;
 import com.gregtechceu.gtceu.common.data.GTSoundEntries;
 import com.gregtechceu.gtceu.config.ConfigHolder;
 import com.gregtechceu.gtceu.data.recipe.CustomTags;
 import com.gregtechceu.gtceu.utils.BreadthFirstBlockSearch;
 
+import com.lowdragmc.lowdraglib.gui.factory.HeldItemUIFactory;
+import com.lowdragmc.lowdraglib.gui.modular.ModularUI;
+import com.lowdragmc.lowdraglib.gui.widget.LabelWidget;
+import com.lowdragmc.lowdraglib.gui.widget.WidgetGroup;
 import com.lowdragmc.lowdraglib.syncdata.annotation.DescSynced;
 
 import net.minecraft.client.color.item.ItemColor;
@@ -25,10 +33,13 @@ import net.minecraft.network.chat.Style;
 import net.minecraft.network.chat.TextColor;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.BlockTags;
+import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
+import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.DyeColor;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.context.UseOnContext;
@@ -58,7 +69,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.function.BiPredicate;
 
-public class InfiniteSprayCanBehavior implements IInteractionItem, IAddInformation, ItemColor {
+public class InfiniteSprayCanBehavior implements IInteractionItem, IAddInformation, ItemColor, IItemUIFactory {
 
     @Getter
     @Setter
@@ -75,6 +86,27 @@ public class InfiniteSprayCanBehavior implements IInteractionItem, IAddInformati
     public InfiniteSprayCanBehavior(int color) {
         ExtendedDyeColor[] colors = ExtendedDyeColor.values();
         this.color = color >= colors.length || color < 0 ? null : colors[color];
+    }
+
+    @Override
+    public ModularUI createUI(HeldItemUIFactory.HeldItemHolder holder, Player entityPlayer) {
+        var dyeSlot = new CustomItemStackHandler(1);
+        var modularUI = new ModularUI(266, 166, holder, entityPlayer)
+                .background(GuiTextures.BACKGROUND);
+
+        for(DyeColor dyeColor : DyeColor.values()) {
+            modularUI.widget(new PhantomSlotWidget(dyeSlot, dyeColor.getId(), 16 * dyeColor.getId() , 46 ));
+        }
+        return modularUI;
+    }
+
+    @Override
+    public InteractionResultHolder<ItemStack> use(Item item, Level level, Player player, InteractionHand usedHand) {
+        if(player.isCrouching()) {
+
+            return IItemUIFactory.super.use(item, level, player, usedHand);
+        }
+        return  null;
     }
 
 

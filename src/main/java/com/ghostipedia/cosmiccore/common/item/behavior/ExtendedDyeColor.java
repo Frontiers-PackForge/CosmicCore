@@ -22,8 +22,7 @@ public enum ExtendedDyeColor {
     BLACK(DyeColor.BLACK),
     SOLVENT(null);
 
-    private DyeColor dyeColor;
-    public static final ExtendedDyeColor[] VALUES = ExtendedDyeColor.values();
+    private final DyeColor dyeColor;
 
     ExtendedDyeColor(DyeColor dyeColor) {
         this.dyeColor = dyeColor;
@@ -50,15 +49,17 @@ public enum ExtendedDyeColor {
     }
 
     public static ExtendedDyeColor fromDyeColor(DyeColor dyeColor) {
-        for (var extendedDyeColor : VALUES)
-            if (extendedDyeColor.getColor() == dyeColor) {
-                return extendedDyeColor;
-            }
+        if (dyeColor == null) return SOLVENT;
 
+        for (ExtendedDyeColor colors : values()) {
+            if (colors.dyeColor == dyeColor) {
+                return colors;
+            }
+        }
         return SOLVENT;
     }
+
     public int getColorId() {
         return dyeColor != null ? dyeColor.getId() : 0;  // Return the DyeColor ID or -1 if there's no dye color
     }
-
 }
