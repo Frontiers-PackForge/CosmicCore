@@ -37,7 +37,8 @@ import java.util.List;
 public class ChestSanguineWarptechSuite extends AdvancedQuarkTechSpaceSuite {
 
     public static final String SANGUINE_SHIELD_NBT_KEY = CosmicCore.MOD_ID + ":sanguine_shield";
-    public static final int SANGUINE_SHIELD_DRAIN_PER_SECOND = 1000;
+    public static final int SANGUINE_SHIELD_DRAIN_PER_SECOND = 10;
+    public static final int SECONDS_PER_UPDATE = 1;
     // A replacement for checking the current world time, to get around the gamerule that stops it
     private long timer = 0L;
     private List<Pair<NonNullList<ItemStack>, IntList>> inventoryIndexMap;
@@ -128,13 +129,13 @@ public class ChestSanguineWarptechSuite extends AdvancedQuarkTechSpaceSuite {
         }
 
         // Sanguine shield, update every 10 seconds
-        if (!world.isClientSide && timer % (20 * 10) == 0) {
+        if (!world.isClientSide && timer % (20 * SECONDS_PER_UPDATE) == 0) {
             SoulNetwork network = NetworkHelper.getSoulNetwork(player);
             boolean isSanguineShieldOn;
-            if (network.getCurrentEssence() < SANGUINE_SHIELD_DRAIN_PER_SECOND * 10) {
+            if (network.getCurrentEssence() < SANGUINE_SHIELD_DRAIN_PER_SECOND * SECONDS_PER_UPDATE) {
                 isSanguineShieldOn = false;
             } else {
-                network.syphon(new SoulTicket(SANGUINE_SHIELD_DRAIN_PER_SECOND * 10));
+                network.syphon(new SoulTicket(SANGUINE_SHIELD_DRAIN_PER_SECOND * SECONDS_PER_UPDATE));
                 isSanguineShieldOn = true;
             }
 
