@@ -19,7 +19,6 @@ import java.util.EnumSet;
 @Mixin(value = Setting.class, remap = false)
 public abstract class EUAddSettingMixin<T extends Enum<T>> {
 
-    // Shadow the existing fields
     @Shadow
     @Final
     @Mutable
