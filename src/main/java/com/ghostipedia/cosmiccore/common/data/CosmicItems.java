@@ -4,6 +4,7 @@ import com.ghostipedia.cosmiccore.api.item.armor.*;
 import com.ghostipedia.cosmiccore.api.registries.CosmicRegistration;
 import com.ghostipedia.cosmiccore.common.data.tag.item.CosmicItemTags;
 import com.ghostipedia.cosmiccore.common.item.armor.ChestSanguineWarptechSuite;
+import com.ghostipedia.cosmiccore.common.item.armor.HelmetSanguineWarptechSuite;
 import com.ghostipedia.cosmiccore.common.item.armor.SanguineWarptechSuite;
 import com.ghostipedia.cosmiccore.common.item.behavior.EffectApplicationBehavior;
 import com.ghostipedia.cosmiccore.common.item.behavior.StructureWriteBehavior;
@@ -929,7 +930,7 @@ public class CosmicItems {
             .register();
     public static ItemEntry<ArmorComponentItem> SANGUINE_WARPTECH_HELMET = REGISTRATE.item("sanguine_warptech_helmet",
             (p) -> new ArmorComponentItem(GTArmorMaterials.ARMOR, ArmorItem.Type.HELMET, p)
-                    .setArmorLogic(new SanguineWarptechSuite(ArmorItem.Type.HELMET,
+                    .setArmorLogic(new HelmetSanguineWarptechSuite(ArmorItem.Type.HELMET,
                             8192,
                             100_000_000L * (long) Math.max(1,
                                     Math.pow(4, ConfigHolder.INSTANCE.tools.voltageTierQuarkTech - 5)),
