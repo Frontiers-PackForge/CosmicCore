@@ -12,7 +12,7 @@ import javax.annotation.ParametersAreNonnullByDefault;
 
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
-public class CoilWorkableElectricMultiblockMachineModule extends WorkableElectricMultiblockMachineModule {
+public class CoilWorkableElectricMultiblockMachineModule extends WorkableElectricMultiblockMachineModule implements ICoilModular {
 
     @Getter
     private ICoilType coilType = CoilBlock.CoilType.CUPRONICKEL;

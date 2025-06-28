@@ -1,5 +1,7 @@
 package com.ghostipedia.cosmiccore.common.data.recipe;
 
+import com.ghostipedia.cosmiccore.api.machine.multiblock.modular.CoilWorkableElectricModularMultiblockMachine;
+import com.ghostipedia.cosmiccore.api.machine.multiblock.modular.ICoilModular;
 import com.ghostipedia.cosmiccore.common.machine.multiblock.electric.MagneticFieldMachine;
 
 import com.ghostipedia.cosmiccore.common.machine.multiblock.electric.modular.orbitalForge.OrbitalForgeModule;
@@ -109,9 +111,9 @@ public class CosmicRecipeModifiers {
                 .build();
     }
 
-    public static @NotNull ModifierFunction ebfModuleOverclock(@NotNull MetaMachine machine, @NotNull GTRecipe recipe) {
-        if (!(machine instanceof OrbitalForgeModule coilMachine)) {
-            return RecipeModifier.nullWrongType(OrbitalForgeModule.class, machine);
+    public static @NotNull ModifierFunction modularEbfOverclock(@NotNull MetaMachine machine, @NotNull GTRecipe recipe) {
+        if (!(machine instanceof ICoilModular coilMachine)) {
+            return RecipeModifier.nullWrongType(ICoilModular.class, machine);
         }
 
         int blastFurnaceTemperature = coilMachine.getCoilType().getCoilTemperature() +
@@ -134,8 +136,6 @@ public class CosmicRecipeModifiers {
 
         return oc.compose(discount);
     }
-
-
 
     // .recipeModifiers(true,
     // (machine, recipe, OCParams, OCResult) -> {

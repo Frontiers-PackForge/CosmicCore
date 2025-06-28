@@ -1,5 +1,6 @@
 package com.ghostipedia.cosmiccore.api.machine.multiblock.modular;
 
+import com.ghostipedia.cosmiccore.api.machine.trait.NotifiableExternalEnergyContainer;
 import com.ghostipedia.cosmiccore.api.misc.CosmicEnergyContainerList;
 import com.gregtechceu.gtceu.api.GTValues;
 import com.gregtechceu.gtceu.api.capability.IEnergyContainer;
@@ -18,17 +19,23 @@ import com.gregtechceu.gtceu.api.machine.feature.ITieredMachine;
 import com.gregtechceu.gtceu.api.machine.feature.multiblock.IDisplayUIMachine;
 import com.gregtechceu.gtceu.api.machine.feature.multiblock.IMultiPart;
 import com.gregtechceu.gtceu.api.machine.multiblock.MultiblockDisplayText;
+import com.gregtechceu.gtceu.api.machine.trait.NotifiableEnergyContainer;
+import com.gregtechceu.gtceu.api.machine.trait.RecipeHandlerList;
 import com.gregtechceu.gtceu.api.misc.EnergyContainerList;
 import com.gregtechceu.gtceu.utils.GTUtil;
 
 import com.lowdragmc.lowdraglib.gui.modular.ModularUI;
 import com.lowdragmc.lowdraglib.gui.widget.*;
 
+import com.lowdragmc.lowdraglib.syncdata.annotation.Persisted;
+import com.lowdragmc.lowdraglib.syncdata.field.ManagedFieldHolder;
+import mezz.jei.library.recipes.ExtendableRecipeCategoryHelper;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Player;
 
 import lombok.Getter;
 
+import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -38,7 +45,10 @@ public class WorkableElectricMultiblockMachineModule extends WorkableMultiblockM
 
     @Getter
     protected int tier;
+
+    @Nullable
     protected CosmicEnergyContainerList energyContainer;
+
 
     public WorkableElectricMultiblockMachineModule(IMachineBlockEntity holder, Object... args) {
         super(holder, args);
@@ -232,7 +242,7 @@ public class WorkableElectricMultiblockMachineModule extends WorkableMultiblockM
             }
         } else {
             // Machines
-            long highestVoltage = energyContainer.getHighestInputVoltage();
+            long highestVoltage = energyContainer.getInputVoltage();
             if (energyContainer.getNumHighestInputContainers() > 1) {
                 // allow tier + 1 if there are multiple hatches present at the highest tier
                 int tier = GTUtil.getTierByVoltage(highestVoltage);

@@ -3,6 +3,8 @@ package com.ghostipedia.cosmiccore.api.machine.multiblock.modular;
 import com.ghostipedia.cosmiccore.common.machine.multiblock.part.ModuleConnectorPartMachine;
 
 import com.gregtechceu.gtceu.api.capability.recipe.IO;
+import com.gregtechceu.gtceu.api.capability.recipe.IRecipeHandler;
+import com.gregtechceu.gtceu.api.capability.recipe.RecipeCapability;
 import com.gregtechceu.gtceu.api.machine.IMachineBlockEntity;
 import com.gregtechceu.gtceu.api.machine.MetaMachine;
 import com.gregtechceu.gtceu.api.machine.feature.multiblock.IMultiPart;
@@ -76,6 +78,11 @@ public class WorkableModularMultiblockMachine extends WorkableMultiblockMachine 
     public Set<IMultiblockModule> getModulesPoss() {
         if (!modulesResolved) setModules(new ArrayList<>(modulesPoss));
         return Collections.unmodifiableSet(moduleMachines);
+    }
+
+    @Override
+    public List<IRecipeHandler<?>> getCapabilities(IO io, RecipeCapability<?> cap) {
+        return getCapabilitiesFlat(io, cap);
     }
 
     @Override

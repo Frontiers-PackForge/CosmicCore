@@ -16,6 +16,7 @@ import com.gregtechceu.gtceu.api.machine.multiblock.CoilWorkableElectricMultiblo
 import com.gregtechceu.gtceu.api.machine.multiblock.PartAbility;
 import com.gregtechceu.gtceu.api.pattern.FactoryBlockPattern;
 import com.gregtechceu.gtceu.common.data.GTRecipeModifiers;
+import com.gregtechceu.gtceu.common.data.GTRecipeTypes;
 import com.gregtechceu.gtceu.utils.FormattingUtil;
 
 import net.minecraft.ChatFormatting;
@@ -34,14 +35,13 @@ public class OrbitalForgeEBFModule {
     public final static MultiblockMachineDefinition ORBITAL_TEMPERING_FORGE_EBF_MODULE = REGISTRATE.multiblock(
             "orbital_tempering_forge_ebf_module", OrbitalForgeModule::new)
             .rotationState(RotationState.ALL)
-            .recipeType(CosmicRecipeTypes.ORBITAL_FORGE)
-            .recipeModifiers(GTRecipeModifiers.PARALLEL_HATCH,
-                    CosmicRecipeModifiers::ebfModuleOverclock)
+            .recipeType(GTRecipeTypes.BLAST_RECIPES)
+            .recipeModifiers(GTRecipeModifiers.PARALLEL_HATCH, CosmicRecipeModifiers::modularEbfOverclock)
             .appearanceBlock(CosmicBlocks.CYCLOZINE_CHEMICALLY_REPELLING_CASING)
             .pattern(definition -> FactoryBlockPattern.start()
                     .aisle("AAA", "BBB")
-                    .aisle("ACA", "BDB")
-                    .aisle("AAA", "BBB")
+                    .aisle("ACA", "BBB")
+                    .aisle("AAA", "BDB")
                     .where("D", controller(blocks(definition.getBlock())))
                     .where('C', blocks(CosmicMachine2.MODULE_CONNECTOR.get()))
                     .where('A', blocks(CYCLOZINE_CHEMICALLY_REPELLING_CASING.get()))

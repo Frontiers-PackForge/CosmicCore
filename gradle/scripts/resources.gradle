@@ -10,15 +10,6 @@ def mod_description = getConfig("mod_description")
 def mod_url = getConfig("mod_url")
 def mod_issue_tracker = getConfig("mod_issue_tracker")
 
-// Create run-folders for non-client configs to avoid pollution of dev envs
-tasks.matching { it.name.startsWith('prepare') }.configureEach {
-    doFirst {
-        mkdir('run')
-        mkdir('run/server')
-        mkdir('run/data')
-    }
-}
-
 // This block of code expands all declared replace properties in the specified resource targets.
 // A missing property will result in an error. Properties are expanded using ${} Groovy notation.
 var generateModMetadata = tasks.register("generateModMetadata", ProcessResources) {

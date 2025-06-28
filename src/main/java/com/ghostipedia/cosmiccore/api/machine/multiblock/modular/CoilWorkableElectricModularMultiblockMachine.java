@@ -6,7 +6,7 @@ import com.gregtechceu.gtceu.common.block.CoilBlock;
 
 import lombok.Getter;
 
-public class CoilWorkableElectricModularMultiblockMachine extends WorkableElectricModularMultiblockMachine {
+public class CoilWorkableElectricModularMultiblockMachine extends WorkableElectricModularMultiblockMachine implements ICoilModular {
 
     @Getter
     private ICoilType coilType = CoilBlock.CoilType.CUPRONICKEL;
