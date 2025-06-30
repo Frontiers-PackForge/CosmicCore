@@ -109,7 +109,7 @@ public class ExoticCombustionEngineMachine extends WorkableElectricMultiblockMac
         if (!(machine instanceof ExoticCombustionEngineMachine engineMachine)) {
             return RecipeModifier.nullWrongType(ExoticCombustionEngineMachine.class, machine);
         }
-        long EUt = RecipeHelper.getOutputEUt(recipe);
+        long EUt = recipe.getOutputEUt();
         if (EUt * recipe.duration < 720) {
             return ModifierFunction.NULL;
         }
@@ -171,7 +171,7 @@ public class ExoticCombustionEngineMachine extends WorkableElectricMultiblockMac
         boolean value = super.onWorking();
         var recipe = recipeLogic.getLastRecipe();
         if (recipe != null) {
-            long EUt = RecipeHelper.getOutputEUt(recipe);
+            long EUt = recipe.getOutputEUt();
             int duration = recipe.duration;
             if ((EUt / recipe.parallels) * duration < 720) {
                 this.getRecipeLogic().setWaiting(Component.translatable("cosmiccore.errors.bad_fuel"));
@@ -251,7 +251,7 @@ public class ExoticCombustionEngineMachine extends WorkableElectricMultiblockMac
                 amperageName, voltageName).withStyle(ChatFormatting.GRAY)));
         if (isActive() && isWorkingEnabled()) {
             builder.addCurrentEnergyProductionLine(
-                    recipeLogic.getLastRecipe() != null ? RecipeHelper.getOutputEUt(recipeLogic.getLastRecipe()) : 0);
+                    recipeLogic.getLastRecipe() != null ?recipeLogic.getLastRecipe().getOutputEUt() : 0);
         }
 
         builder.addFuelNeededLine(getRecipeFluidInputInfo(), recipeLogic.getDuration());
@@ -284,7 +284,7 @@ public class ExoticCombustionEngineMachine extends WorkableElectricMultiblockMac
         }
         FluidStack requiredFluidInput = RecipeHelper.getInputFluids(recipe).get(0);
 
-        long ocAmount = getMaxVoltage() / RecipeHelper.getOutputEUt(recipe);
+        long ocAmount = getMaxVoltage() / recipe.getOutputEUt();
         int neededAmount = GTMath.saturatedCast(ocAmount * requiredFluidInput.getAmount());
         return ChatFormatting.RED + FormattingUtil.formatNumbers(neededAmount) + "mB";
     }
