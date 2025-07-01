@@ -74,10 +74,10 @@ dependencies {
 
     // Embedium / Occulus
     modCompileOnly(forge.embeddium)
-//    clientAdditionalRuntimeClasspath(forge.embeddium)
+    clientAdditionalRuntimeClasspath(forge.embeddium)
     modCompileOnly(forge.oculus)
-//    clientAdditionalRuntimeClasspath(forge.oculus)
-//    clientAdditionalRuntimeClasspath(forge.jcpp)
+    clientAdditionalRuntimeClasspath(forge.oculus)
+    clientAdditionalRuntimeClasspath(forge.jcpp)
 
 
     // Teams
