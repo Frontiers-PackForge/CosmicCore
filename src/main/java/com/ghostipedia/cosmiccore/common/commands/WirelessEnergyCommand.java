@@ -4,6 +4,7 @@ import com.ghostipedia.cosmiccore.api.data.wireless.WirelessEnergySavedData;
 
 import com.gregtechceu.gtceu.utils.FormattingUtil;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.commands.CommandBuildContext;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.arguments.EntityArgument;
@@ -30,6 +31,7 @@ public class WirelessEnergyCommand {
                 literal("wireless")
                         .then(wirelessLiteral("info", LEVEL_ALL, WirelessEnergyCommand::displayPlayerInfo,
                                 WirelessEnergyCommand::displayTeamInfo))
+                        .then(literal("debug").requires(source -> source.hasPermission(LEVEL_ALL)).executes(WirelessEnergyCommand::displayDebugInfo))
                         .then(wirelessLiteral("clear", LEVEL_ADMINS, WirelessEnergyCommand::clearPlayerData,
                                 WirelessEnergyCommand::clearTeamData)));
     }
@@ -63,6 +65,20 @@ public class WirelessEnergyCommand {
     // ####################################
     // Display Info
     // ####################################
+
+    private static int displayDebugInfo(CommandContext<CommandSourceStack> context) {
+        var characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789,./ ";
+        var stringBuilder = new StringBuilder();
+        for (var character : characters.toCharArray()) {
+            stringBuilder
+                    .append(character)
+                    .append(":")
+                    .append(Minecraft.getInstance().font.width(String.valueOf(character)))
+                    .append(";");
+        }
+        System.out.println(stringBuilder);
+        return 1;
+    }
 
     private static int displayPlayerInfo(CommandContext<CommandSourceStack> context, ServerPlayer player) {
         var message = generateInfoMessage(context.getSource().getLevel(), player.getUUID(),

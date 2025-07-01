@@ -41,6 +41,7 @@ public class CosmicFormattingUtil {
     }
 
     private static int getComponentLength(Component component) {
-        return Minecraft.getInstance().font.width(component.getString());
+        var util = new StupidFontUtils();
+        return util.getStringWidth(component.getString());
     }
 }
