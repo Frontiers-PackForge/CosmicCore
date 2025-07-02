@@ -2,6 +2,7 @@ package com.ghostipedia.cosmiccore.api.data.material.property;
 
 import com.ghostipedia.cosmiccore.CosmicCore;
 import com.ghostipedia.cosmiccore.client.renderer.item.HaloItemRenderer;
+import com.ghostipedia.cosmiccore.client.renderer.item.LensRender;
 import com.ghostipedia.cosmiccore.common.data.materials.CosmicMaterialSet;
 import com.ghostipedia.cosmiccore.utils.ColorUtil;
 
@@ -39,8 +40,16 @@ public class CCoreMaterialIconSet extends MaterialIconSet {
 
     public static final CCoreMaterialIconSet VIBRANIUM = new CCoreMaterialIconSet("vibranium",
             CosmicMaterialSet.NEUTRONITE, false,
-            HaloItemRenderer.create(5, 0xFFFFFFFF, new ResourceLocation(CosmicCore.MOD_ID, "block/iris/rnd/halo"), true,
+            HaloItemRenderer.create(4, 0xFF489BC3, new ResourceLocation(CosmicCore.MOD_ID, "block/iris/rnd/halo"), true,
                     false));
+     public static final CCoreMaterialIconSet VIBRANIUM_NEUTRONIUM = new CCoreMaterialIconSet("vibranium_neutronium",
+     CosmicMaterialSet.NEUTRONIUM_CCORE, false,
+     HaloItemRenderer.create(3, 0xFFFFFFFF, new ResourceLocation(CosmicCore.MOD_ID,
+     "block/iris/rnd/compression_halo_neutronium_faded"), true,
+     false));
+
+//    public static final CCoreMaterialIconSet VIBRANIUM_NEUTRONIUM = new CCoreMaterialIconSet("vibranium_neutronium",
+//            CosmicMaterialSet.NEUTRONIUM_CCORE, false, LensRender::new);
 
     public static final CCoreMaterialIconSet PRISMATIC = new CCoreMaterialIconSet("prismatic", SHINY, false,
             HaloItemRenderer.create(8, 0xFF1c1926, new ResourceLocation(CosmicCore.MOD_ID, "block/iris/rnd/storm_halo"),

@@ -31,7 +31,7 @@ public class CosmicRecipeModifiers {
             return RecipeModifier.nullWrongType(MagneticFieldMachine.class, machine);
         }
         final var magnetStrength = magnetMachine.getFieldStrength();
-        long EUt = RecipeHelper.getOutputEUt(recipe);
+        long EUt = recipe.getOutputEUt();
         int actualParallel = ParallelLogic.getParallelAmount(magnetMachine, recipe, 16);
         long maxReactorVoltage = magnetMachine.getOverclockVoltage();
         float recipeDuration = (recipe.duration);
@@ -64,7 +64,7 @@ public class CosmicRecipeModifiers {
                 IParallelHatch parallelHatch = optionalIParallelHatch.get();
                 var actualParallel = 1;
                 if (parallelHatch.getCurrentParallel() != 0) {
-                    long EUt = RecipeHelper.getInputEUt(recipe);
+                    long EUt = recipe.getInputEUt();
                     actualParallel = ParallelLogic.getParallelAmount(vatMachine, recipe,
                             parallelHatch.getCurrentParallel());
 
