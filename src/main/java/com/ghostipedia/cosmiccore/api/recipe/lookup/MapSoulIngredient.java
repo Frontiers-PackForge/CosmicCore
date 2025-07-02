@@ -2,6 +2,9 @@ package com.ghostipedia.cosmiccore.api.recipe.lookup;
 
 import com.gregtechceu.gtceu.api.recipe.lookup.ingredient.AbstractMapIngredient;
 
+import java.util.Collections;
+import java.util.List;
+
 public class MapSoulIngredient extends AbstractMapIngredient {
 
     public final Integer souls;
@@ -23,5 +26,9 @@ public class MapSoulIngredient extends AbstractMapIngredient {
     @Override
     public String toString() {
         return "MapSoulIngredient{" + "souls=" + souls + '}';
+    }
+
+    public static List<AbstractMapIngredient> convertToMapIngredient(Integer essence) {
+        return Collections.singletonList(new MapSoulIngredient(essence));
     }
 }

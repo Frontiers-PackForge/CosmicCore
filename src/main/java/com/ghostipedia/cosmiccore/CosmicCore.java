@@ -2,6 +2,7 @@ package com.ghostipedia.cosmiccore;
 
 import com.ghostipedia.cosmiccore.api.capability.CosmicCapabilities;
 import com.ghostipedia.cosmiccore.api.pattern.CosmicPredicates;
+import com.ghostipedia.cosmiccore.api.recipe.lookup.MapSoulIngredient;
 import com.ghostipedia.cosmiccore.api.registries.CosmicRegistration;
 import com.ghostipedia.cosmiccore.client.CosmicCoreClient;
 import com.ghostipedia.cosmiccore.common.data.*;
@@ -18,6 +19,7 @@ import com.gregtechceu.gtceu.api.data.chemical.material.event.PostMaterialEvent;
 import com.gregtechceu.gtceu.api.data.chemical.material.registry.MaterialRegistry;
 import com.gregtechceu.gtceu.api.machine.MachineDefinition;
 import com.gregtechceu.gtceu.api.recipe.GTRecipeType;
+import com.gregtechceu.gtceu.api.recipe.lookup.ingredient.MapIngredientTypeManager;
 import com.gregtechceu.gtceu.api.sound.SoundEntry;
 import com.gregtechceu.gtceu.common.block.CoilBlock;
 import com.gregtechceu.gtceu.config.ConfigHolder;
@@ -28,6 +30,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.common.capabilities.RegisterCapabilitiesEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLLoadCompleteEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 
@@ -88,6 +91,13 @@ public class CosmicCore {
     @SubscribeEvent
     public void modifyExistingMaterials(PostMaterialEvent event) {
         CosmicMaterials.modifyMaterials();
+    }
+
+    @SubscribeEvent
+    public void commonSetup(FMLCommonSetupEvent event) {
+        event.enqueueWork(() -> {
+            MapIngredientTypeManager.registerMapIngredient(Integer.class, MapSoulIngredient::convertToMapIngredient);
+        });
     }
 
     @SubscribeEvent

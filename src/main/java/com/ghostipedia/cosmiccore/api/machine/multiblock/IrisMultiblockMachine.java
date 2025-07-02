@@ -97,7 +97,7 @@ public class IrisMultiblockMachine extends WorkableElectricMultiblockMachine {
 
     @OnlyIn(Dist.CLIENT)
     public void soundTick() {
-        if (stage == BLACK_HOLE && isFormed && this.shouldWorkingPlaySound()) {
+        if (stage == BLACK_HOLE && isFormed) {
             var sound = CosmicSounds.BLACK_HOLE_CRY;
             if (workingSound instanceof AutoReleasedSound soundEntry) {
                 if (soundEntry.soundEntry == sound && !soundEntry.isStopped()) {

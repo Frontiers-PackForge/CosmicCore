@@ -209,8 +209,9 @@ public class CosmicMaterials {
                 .formula("⦽")
                 .blastTemp(8900)
                 .liquid(new FluidBuilder().temperature(7500))
+                .cableProperties(GTValues.V[6], 12, 4)
                 .fluidPipeProperties(65000, 3500, true, true, true, true)
-                .color(0x80faf3).secondaryColor(0x8e2e2d).iconSet(CCoreMaterialIconSet.VIBRANIUM)
+                .iconSet(CCoreMaterialIconSet.VIBRANIUM)// .color(0x489BC3).secondaryColor(0x51ADCA)
                 .flags(
                         GENERATE_PLATE,
                         GENERATE_DENSE,
@@ -363,7 +364,7 @@ public class CosmicMaterials {
         nickelOreProp.setOreByProducts(Cobalt, Iron, Cooperite);
         nickelOreProp.setWashedIn(Mercury);
         chromiteOreProp.setOreByProducts(Iron, Magnesium, Chromite);
-        Neutronium.setMaterialIconSet(CCoreMaterialIconSet.VIBRANIUM);
+        Neutronium.setMaterialIconSet(CCoreMaterialIconSet.VIBRANIUM_NEUTRONIUM);
         Neutronium.addFlags(NO_SMELTING, NO_ORE_SMELTING);
         Neutronium.setProperty(PropertyKey.BLAST, new BlastProperty(15000));
     }

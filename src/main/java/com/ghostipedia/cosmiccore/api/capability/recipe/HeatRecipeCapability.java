@@ -1,7 +1,5 @@
 package com.ghostipedia.cosmiccore.api.capability.recipe;
 
-import com.ghostipedia.cosmiccore.api.recipe.lookup.MapHeatIngredient;
-
 import com.gregtechceu.gtceu.api.capability.recipe.RecipeCapability;
 import com.gregtechceu.gtceu.api.recipe.GTRecipe;
 import com.gregtechceu.gtceu.api.recipe.content.Content;
@@ -13,7 +11,6 @@ import com.lowdragmc.lowdraglib.gui.widget.LabelWidget;
 import com.lowdragmc.lowdraglib.gui.widget.WidgetGroup;
 import com.lowdragmc.lowdraglib.utils.LocalizationUtils;
 
-import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import org.apache.commons.lang3.mutable.MutableInt;
 
 import java.util.List;

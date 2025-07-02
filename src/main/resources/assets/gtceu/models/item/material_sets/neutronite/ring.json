@@ -1,8 +1,8 @@
 {
-  "parent": "item/generated",
-  "textures": {
-    "layer0": "gtceu:item/material_sets/neutronite/ring",
-    "layer1": "gtceu:item/material_sets/neutronite/ring_secondary",
-    "layer2": "gtceu:item/material_sets/neutronite/ring_overlay"
-  }
+    "parent": "gtceu:item/handheld",
+    "textures": {
+        "layer0": "gtceu:item/void",
+        "layer1": "gtceu:item/void",
+        "layer2": "gtceu:item/material_sets/neutronite/ring"
+    }
 }
