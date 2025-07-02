@@ -18,6 +18,7 @@ import com.gregtechceu.gtceu.api.machine.multiblock.WorkableMultiblockMachine;
 import com.gregtechceu.gtceu.api.machine.trait.NotifiableEnergyContainer;
 import com.gregtechceu.gtceu.api.machine.trait.RecipeLogic;
 import com.gregtechceu.gtceu.api.misc.EnergyContainerList;
+import com.gregtechceu.gtceu.common.machine.owner.FTBOwner;
 import com.gregtechceu.gtceu.config.ConfigHolder;
 import com.gregtechceu.gtceu.utils.FormattingUtil;
 
@@ -43,6 +44,7 @@ import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 import static com.ghostipedia.cosmiccore.utils.CosmicFormattingUtil.combineWithConstantWidth;
 import static com.ghostipedia.cosmiccore.utils.CosmicFormattingUtil.formatWithConstantWidth;
@@ -122,11 +124,17 @@ public class DimensionalEnergyInterface extends WorkableMultiblockMachine
         this.outputHatches = new EnergyContainerList(outputs);
     }
 
+    protected UUID getTeamUUID() {
+        var team = ((FTBOwner) getOwner()).getPlayerTeam(getOwnerUUID());
+        return team != null ? team.getTeamId() : getOwnerUUID();
+    }
+
     @Override
     public void onStructureInvalid() {
         if (getLevel() instanceof ServerLevel serverLevel) { // Transfer buffer content to avoid losses
             var data = WirelessEnergySavedData.getOrCreate(serverLevel);
-            var owner = getOwnerUUID();
+            var owner = getTeamUUID();
+
             if (energyBuffer != null) {
                 data.addEUToGlobalWirelessEnergy(owner, energyBuffer.getEnergyStored());
                 energyBuffer.removeEnergy(energyBuffer.getEnergyStored());
@@ -221,7 +229,8 @@ public class DimensionalEnergyInterface extends WorkableMultiblockMachine
     protected void transferEnergyTick() {
         if (getLevel() instanceof ServerLevel serverLevel) {
             var data = WirelessEnergySavedData.getOrCreate(serverLevel);
-            var owner = getOwnerUUID();
+            var owner = getTeamUUID();
+
             if (isWorkingEnabled() && isFormed()) {
                 if (getOffsetTimer() % 20 == 0) {
                     getRecipeLogic().setStatus((energyBuffer != null && energyBuffer.getEnergyStored() > 0) ?
@@ -289,7 +298,7 @@ public class DimensionalEnergyInterface extends WorkableMultiblockMachine
 
             if (energyBuffer != null) {
                 if (getLevel() instanceof ServerLevel serverLevel) {
-                    var owner = getOwnerUUID();
+                    var owner = getTeamUUID();
                     var data = WirelessEnergySavedData.getOrCreate(serverLevel);
 
                     var STYLE_GOLD = Style.EMPTY.withColor(ChatFormatting.GOLD);
