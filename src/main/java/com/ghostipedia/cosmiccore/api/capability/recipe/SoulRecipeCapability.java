@@ -37,7 +37,7 @@ public class SoulRecipeCapability extends RecipeCapability<Integer> {
         return modifier.apply(content);
     }
 
-//    @Override
+    // @Override
     public List<AbstractMapIngredient> convertToMapIngredient(Object ingredient) {
         List<AbstractMapIngredient> ingredients = new ObjectArrayList<>(1);
         if (ingredient instanceof Integer essence) ingredients.add(new MapSoulIngredient(essence));

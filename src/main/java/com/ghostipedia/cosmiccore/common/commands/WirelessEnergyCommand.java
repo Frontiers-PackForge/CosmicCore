@@ -31,7 +31,8 @@ public class WirelessEnergyCommand {
                 literal("wireless")
                         .then(wirelessLiteral("info", LEVEL_ALL, WirelessEnergyCommand::displayPlayerInfo,
                                 WirelessEnergyCommand::displayTeamInfo))
-                        .then(literal("debug").requires(source -> source.hasPermission(LEVEL_ALL)).executes(WirelessEnergyCommand::displayDebugInfo))
+                        .then(literal("debug").requires(source -> source.hasPermission(LEVEL_ALL))
+                                .executes(WirelessEnergyCommand::displayDebugInfo))
                         .then(wirelessLiteral("clear", LEVEL_ADMINS, WirelessEnergyCommand::clearPlayerData,
                                 WirelessEnergyCommand::clearTeamData)));
     }

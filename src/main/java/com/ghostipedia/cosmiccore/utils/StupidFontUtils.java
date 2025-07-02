@@ -102,10 +102,9 @@ public class StupidFontUtils {
             if (CHARACTER_VALUES.containsKey(character)) {
                 width += CHARACTER_VALUES.get(character);
             } else {
-//                throw  new IllegalArgumentException("Character " + character + " is not supported");
+                // throw new IllegalArgumentException("Character " + character + " is not supported");
             }
         }
         return width;
     }
-
 }

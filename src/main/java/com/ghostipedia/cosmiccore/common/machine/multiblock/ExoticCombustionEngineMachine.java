@@ -251,7 +251,7 @@ public class ExoticCombustionEngineMachine extends WorkableElectricMultiblockMac
                 amperageName, voltageName).withStyle(ChatFormatting.GRAY)));
         if (isActive() && isWorkingEnabled()) {
             builder.addCurrentEnergyProductionLine(
-                    recipeLogic.getLastRecipe() != null ?recipeLogic.getLastRecipe().getOutputEUt() : 0);
+                    recipeLogic.getLastRecipe() != null ? recipeLogic.getLastRecipe().getOutputEUt() : 0);
         }
 
         builder.addFuelNeededLine(getRecipeFluidInputInfo(), recipeLogic.getDuration());

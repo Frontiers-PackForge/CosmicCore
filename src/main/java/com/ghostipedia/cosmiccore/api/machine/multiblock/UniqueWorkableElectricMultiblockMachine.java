@@ -5,8 +5,8 @@ import com.ghostipedia.cosmiccore.api.data.savedData.UniqueMultiblockSavedData;
 import com.gregtechceu.gtceu.api.machine.IMachineBlockEntity;
 import com.gregtechceu.gtceu.api.machine.multiblock.WorkableElectricMultiblockMachine;
 import com.gregtechceu.gtceu.api.machine.trait.RecipeLogic;
-
 import com.gregtechceu.gtceu.common.machine.owner.FTBOwner;
+
 import com.lowdragmc.lowdraglib.syncdata.annotation.Persisted;
 import com.lowdragmc.lowdraglib.syncdata.field.ManagedFieldHolder;
 

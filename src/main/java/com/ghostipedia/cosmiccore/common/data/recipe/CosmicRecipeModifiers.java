@@ -96,7 +96,8 @@ public class CosmicRecipeModifiers {
         }
 
         if (count == 1) return ModifierFunction.IDENTITY;
-        int multiplier = ParallelLogic.limitByOutputMerging(rlm, recipe, count, rlm::canVoidRecipeOutputs, Collections.emptyList());
+        int multiplier = ParallelLogic.limitByOutputMerging(rlm, recipe, count, rlm::canVoidRecipeOutputs,
+                Collections.emptyList());
         if (multiplier == 1) return ModifierFunction.IDENTITY;
         return ModifierFunction.builder()
                 .outputModifier(ContentModifier.multiplier(multiplier))

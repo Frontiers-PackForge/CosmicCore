@@ -36,7 +36,7 @@ public class HeatRecipeCapability extends RecipeCapability<Long> {
         return modifier.apply(content);
     }
 
-//    @Override
+    // @Override
     public List<AbstractMapIngredient> convertToMapIngredient(Object ingredient) {
         List<AbstractMapIngredient> ingredients = new ObjectArrayList<>(1);
         if (ingredient instanceof Long thermia) ingredients.add(new MapHeatIngredient(thermia));

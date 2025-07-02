@@ -39,7 +39,7 @@ public class WirelessDataHatchPartMachine extends MultiblockPartMachine
     @Override
     public boolean isRecipeAvailable(@NotNull GTRecipe recipe, @NotNull Collection<IDataAccessHatch> seen) {
         var team = ((FTBOwner) getOwner()).getPlayerTeam(getOwnerUUID());
-        var owner =  team != null ? team.getTeamId() : getOwnerUUID();
+        var owner = team != null ? team.getTeamId() : getOwnerUUID();
 
         seen.add(this);
         var dataStore = WirelessDataStore.getWirelessDataStore(owner);
