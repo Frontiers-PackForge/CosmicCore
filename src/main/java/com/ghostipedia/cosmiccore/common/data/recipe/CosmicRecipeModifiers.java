@@ -22,6 +22,7 @@ import net.minecraft.world.item.ItemStack;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Collections;
 import java.util.Optional;
 
 public class CosmicRecipeModifiers {
@@ -95,7 +96,7 @@ public class CosmicRecipeModifiers {
         }
 
         if (count == 1) return ModifierFunction.IDENTITY;
-        int multiplier = ParallelLogic.limitByOutputMerging(rlm, recipe, count, rlm::canVoidRecipeOutputs);
+        int multiplier = ParallelLogic.limitByOutputMerging(rlm, recipe, count, rlm::canVoidRecipeOutputs, Collections.emptyList());
         if (multiplier == 1) return ModifierFunction.IDENTITY;
         return ModifierFunction.builder()
                 .outputModifier(ContentModifier.multiplier(multiplier))

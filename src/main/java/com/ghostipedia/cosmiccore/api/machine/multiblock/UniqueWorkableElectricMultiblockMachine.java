@@ -6,6 +6,7 @@ import com.gregtechceu.gtceu.api.machine.IMachineBlockEntity;
 import com.gregtechceu.gtceu.api.machine.multiblock.WorkableElectricMultiblockMachine;
 import com.gregtechceu.gtceu.api.machine.trait.RecipeLogic;
 
+import com.gregtechceu.gtceu.common.machine.owner.FTBOwner;
 import com.lowdragmc.lowdraglib.syncdata.annotation.Persisted;
 import com.lowdragmc.lowdraglib.syncdata.field.ManagedFieldHolder;
 
@@ -15,6 +16,7 @@ import net.minecraft.network.chat.Style;
 import net.minecraft.server.level.ServerLevel;
 
 import java.util.List;
+import java.util.UUID;
 
 public class UniqueWorkableElectricMultiblockMachine extends WorkableElectricMultiblockMachine {
 
@@ -34,7 +36,7 @@ public class UniqueWorkableElectricMultiblockMachine extends WorkableElectricMul
         super.onStructureFormed();
 
         if (getLevel() instanceof ServerLevel serverLevel) {
-            var owner = getOwnerUUID();
+            var owner = getTeamUUID();
             var multiblockId = getDefinition().getId().toString();
             var uniqueMultiblockMapping = UniqueMultiblockSavedData.getOrCreate(serverLevel);
 
@@ -47,11 +49,16 @@ public class UniqueWorkableElectricMultiblockMachine extends WorkableElectricMul
         }
     }
 
+    protected UUID getTeamUUID() {
+        var team = ((FTBOwner) getOwner()).getPlayerTeam(getOwnerUUID());
+        return team != null ? team.getTeamId() : getOwnerUUID();
+    }
+
     @Override
     public void onStructureInvalid() {
         super.onStructureInvalid();
         if (getLevel() instanceof ServerLevel serverLevel) {
-            var owner = getOwnerUUID();
+            var owner = getTeamUUID();
             var uniqueMultiblockMapping = UniqueMultiblockSavedData.getOrCreate(serverLevel);
             uniqueMultiblockMapping.removeMultiblock(owner, getDefinition().getId().toString(), getDimension(),
                     getPos());

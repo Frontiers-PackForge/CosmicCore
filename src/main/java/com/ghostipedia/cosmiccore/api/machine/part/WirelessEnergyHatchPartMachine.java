@@ -9,6 +9,7 @@ import com.gregtechceu.gtceu.api.machine.TickableSubscription;
 import com.gregtechceu.gtceu.api.machine.feature.IMachineLife;
 import com.gregtechceu.gtceu.api.machine.multiblock.part.TieredIOPartMachine;
 import com.gregtechceu.gtceu.api.machine.trait.NotifiableEnergyContainer;
+import com.gregtechceu.gtceu.common.machine.owner.FTBOwner;
 import com.gregtechceu.gtceu.utils.FormattingUtil;
 
 import com.lowdragmc.lowdraglib.syncdata.ISubscription;
@@ -28,6 +29,7 @@ import net.minecraft.world.phys.BlockHitResult;
 import lombok.Getter;
 
 import java.util.ArrayList;
+import java.util.UUID;
 
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
@@ -107,13 +109,18 @@ public class WirelessEnergyHatchPartMachine extends TieredIOPartMachine implemen
         }
     }
 
+    protected UUID getTeamUUID() {
+        var team = ((FTBOwner) getOwner()).getPlayerTeam(getOwnerUUID());
+        return team != null ? team.getTeamId() : getOwnerUUID();
+    }
+
     @Override
     public void onMachinePlaced(@org.jetbrains.annotations.Nullable LivingEntity player, ItemStack stack) {
         IMachineLife.super.onMachinePlaced(player, stack);
         if (getLevel() instanceof ServerLevel serverLevel) {
             if (io == IO.IN) {
                 var data = WirelessEnergySavedData.getOrCreate(serverLevel);
-                var owner = getOwnerUUID();
+                var owner = getTeamUUID();
 
                 long euToTransfer = energyContainer.getEnergyCapacity() - energyContainer.getEnergyStored();
                 long euTransferred = data.addEUToGlobalWirelessEnergy(owner, -euToTransfer);
@@ -127,7 +134,7 @@ public class WirelessEnergyHatchPartMachine extends TieredIOPartMachine implemen
         IMachineLife.super.onMachineRemoved();
         if (getLevel() instanceof ServerLevel serverLevel) {
             var data = WirelessEnergySavedData.getOrCreate(serverLevel);
-            var owner = getOwnerUUID();
+            var owner = getTeamUUID();
             data.removeEnergyBuffered(owner, getPos());
             if (io == IO.OUT) data.removeEnergyInput(owner, getPos());
             if (io == IO.IN) data.removeEnergyOutput(owner, getPos());
@@ -141,14 +148,14 @@ public class WirelessEnergyHatchPartMachine extends TieredIOPartMachine implemen
             if (isWorkingEnabled()) {
                 if (getOffsetTimer() % 20 == 0) {
                     var data = WirelessEnergySavedData.getOrCreate(serverLevel);
-                    var owner = getOwnerUUID();
+                    var owner = getTeamUUID();
                     data.setEnergyBuffered(owner, getPos(), energyContainer.getEnergyStored());
                     if (io == IO.IN) data.setEnergyOutput(owner, getPos(), energyContainer.getOutputPerSec() / 20);
                     if (io == IO.OUT) data.setEnergyInput(owner, getPos(), energyContainer.getInputPerSec() / 20);
                 }
                 if (getOffsetTimer() % ticks_between_save_data_operations == 0) {
                     var data = WirelessEnergySavedData.getOrCreate(serverLevel);
-                    var owner = getOwnerUUID();
+                    var owner = getTeamUUID();
 
                     if (data.isActive(owner)) {
                         if (io == IO.IN) {
