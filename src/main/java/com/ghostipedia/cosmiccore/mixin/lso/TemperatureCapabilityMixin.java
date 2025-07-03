@@ -25,9 +25,11 @@ public abstract class TemperatureCapabilityMixin implements ITemperatureCapabili
         // make the player's time alive worse if they're too hot or colds for too long
         cosmiccore$badTimeTimer += switch (tempEnum) {
             case HEAT_STROKE, FROSTBITE -> 2; // Bad Timer Increases while under the effect of something deadly
-            case HOT, COLD -> 0; // Store whatever their previous negative effect was, hold it until they've entered a
-                                 // survivable temp range.
-            case NORMAL -> -4; // Survivable Environment, decrease bad Timer to avoid getting punched with really nasty
+            case HOT, COLD -> -2; // The Player is not 'taking damage' in this state, thus we want to decay the damage
+                                  // tracker.
+                                  // .
+            case NORMAL -> -4; // Survivable Environment, decrease bad Timer WAY FASTER to avoid getting punched with
+                               // really nasty
                                // damage
         };
         cosmiccore$badTimeTimer = Math.max(cosmiccore$badTimeTimer, 0);

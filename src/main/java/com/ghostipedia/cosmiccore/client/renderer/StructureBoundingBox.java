@@ -92,9 +92,9 @@ public class StructureBoundingBox {
 
             var direction = getDir(player.getMainHandItem());
             var dirs = DebugBlockPattern.getDir(direction);
-            var cSign = dirs[0].axis;
-            var sSign = dirs[1].axis;
-            var aSign = dirs[2].axis;
+            var cSign = dirs[0].equivalentGlobal.getAxis();
+            var sSign = dirs[1].equivalentGlobal.getAxis();
+            var aSign = dirs[2].equivalentGlobal.getAxis();
             // I Dislike this
             Matrix4f mat4 = poseStack.last().pose();
             Matrix3f mat3 = new Matrix3f(mat4);

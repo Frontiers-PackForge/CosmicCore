@@ -20,6 +20,7 @@ import com.gregtechceu.gtceu.api.machine.multiblock.PartAbility;
 import com.gregtechceu.gtceu.api.machine.multiblock.WorkableElectricMultiblockMachine;
 import com.gregtechceu.gtceu.api.machine.trait.RecipeLogic;
 import com.gregtechceu.gtceu.api.misc.EnergyContainerList;
+import com.gregtechceu.gtceu.common.machine.owner.FTBOwner;
 import com.gregtechceu.gtceu.config.ConfigHolder;
 
 import com.lowdragmc.lowdraglib.utils.DummyWorld;
@@ -40,6 +41,11 @@ public class WirelessDataBankMachine extends WorkableElectricMultiblockMachine
     private IEnergyContainer energyContainer;
 
     private TickableSubscription wirelessProviderSubscription;
+
+    protected UUID getTeamUUID() {
+        var team = ((FTBOwner) getOwner()).getPlayerTeam(getOwnerUUID());
+        return team != null ? team.getTeamId() : getOwnerUUID();
+    }
 
     public WirelessDataBankMachine(IMachineBlockEntity holder) {
         super(holder);
@@ -149,11 +155,11 @@ public class WirelessDataBankMachine extends WorkableElectricMultiblockMachine
     }
 
     private void addHatchesToWirelessNetwork() {
-        WirelessDataStore.addHatches(getOwnerUUID(), getOpticalHatches());
+        WirelessDataStore.addHatches(getTeamUUID(), getOpticalHatches());
     }
 
     private void removeHatchesFromWirelessNetwork() {
-        WirelessDataStore.removeHatches(getOwnerUUID(), getOpticalHatches());
+        WirelessDataStore.removeHatches(getTeamUUID(), getOpticalHatches());
     }
 
     private List<IDataAccessHatch> getOpticalHatches() {

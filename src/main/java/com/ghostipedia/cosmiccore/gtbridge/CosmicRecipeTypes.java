@@ -1,6 +1,7 @@
 package com.ghostipedia.cosmiccore.gtbridge;
 
 import com.ghostipedia.cosmiccore.api.capability.recipe.SoulRecipeCapability;
+import com.ghostipedia.cosmiccore.common.data.CosmicSounds;
 
 import com.gregtechceu.gtceu.api.block.ICoilType;
 import com.gregtechceu.gtceu.api.capability.recipe.IO;
@@ -56,6 +57,17 @@ public class CosmicRecipeTypes {
             .setMaxSize(IO.OUT, SoulRecipeCapability.CAP, 1)
             .setMaxTooltips(3)
             .setProgressBar(GuiTextures.PROGRESS_BAR_ARROW, LEFT_TO_RIGHT);
+    public static final GTRecipeType ARCANE_DISTILLERY = GTRecipeTypes
+            .register("arcane_distillery", GTRecipeTypes.MULTIBLOCK)
+            .setMaxIOSize(3, 2, 3, 2)
+            .setMaxTooltips(3)
+            .setSound(CosmicSounds.ARCANE_DISTIL)
+            .setProgressBar(GuiTextures.PROGRESS_BAR_ARROW_MULTIPLE, LEFT_TO_RIGHT);
+    public static final GTRecipeType ARCANE_FOLDING = GTRecipeTypes
+            .register("arcane_folding", GTRecipeTypes.MULTIBLOCK)
+            .setMaxIOSize(3, 2, 1, 0)
+            .setMaxTooltips(3)
+            .setProgressBar(GuiTextures.PROGRESS_BAR_ARROW_MULTIPLE, LEFT_TO_RIGHT);
     public static final GTRecipeType POLYMERIZER = GTRecipeTypes
             .register("polymerizer", GTRecipeTypes.MULTIBLOCK)
             .setMaxIOSize(3, 2, 3, 2)

@@ -39,17 +39,32 @@ public class CCoreMaterialIconSet extends MaterialIconSet {
 
     public static final CCoreMaterialIconSet VIBRANIUM = new CCoreMaterialIconSet("vibranium",
             CosmicMaterialSet.NEUTRONITE, false,
-            HaloItemRenderer.create(5, 0xFFFFFFFF, new ResourceLocation(CosmicCore.MOD_ID, "rnd/halo"), true, false));
+            HaloItemRenderer.create(4, 0xFF489BC3, new ResourceLocation(CosmicCore.MOD_ID, "block/iris/rnd/halo"), true,
+                    false));
+    public static final CCoreMaterialIconSet VIBRANIUM_NEUTRONIUM = new CCoreMaterialIconSet("vibranium_neutronium",
+            CosmicMaterialSet.NEUTRONIUM_CCORE, false,
+            HaloItemRenderer.create(3, 0xFFFFFFFF, new ResourceLocation(CosmicCore.MOD_ID,
+                    "block/iris/rnd/compression_halo_neutronium_faded"), true,
+                    false));
+
+    // public static final CCoreMaterialIconSet VIBRANIUM_NEUTRONIUM = new CCoreMaterialIconSet("vibranium_neutronium",
+    // CosmicMaterialSet.NEUTRONIUM_CCORE, false, LensRender::new);
 
     public static final CCoreMaterialIconSet PRISMATIC = new CCoreMaterialIconSet("prismatic", SHINY, false,
-            HaloItemRenderer.create(8, 0xFF1c1926, new ResourceLocation(CosmicCore.MOD_ID, "rnd/storm_halo"), true,
+            HaloItemRenderer.create(8, 0xFF1c1926, new ResourceLocation(CosmicCore.MOD_ID, "block/iris/rnd/storm_halo"),
+                    true,
                     false));
 
-    public static final CCoreMaterialIconSet VOIDSPARKICO = new CCoreMaterialIconSet("voidspark_special", CosmicMaterialSet.VOIDSPARK, false,
-            HaloItemRenderer.create(4, 0xFFFFFFFF, new ResourceLocation(CosmicCore.MOD_ID, "rnd/compression_halo_cyan_faded"), true,
+    public static final CCoreMaterialIconSet VOIDSPARKICO = new CCoreMaterialIconSet("voidspark_special",
+            CosmicMaterialSet.VOIDSPARK, false,
+            HaloItemRenderer.create(4, 0xFFFFFFFF,
+                    new ResourceLocation(CosmicCore.MOD_ID, "block/iris/rnd/compression_halo_cyan_faded"), true,
                     false));
 
-    public static final CCoreMaterialIconSet SOL_STEEL = new CCoreMaterialIconSet("sol_steel", CosmicMaterialSet.SOL, false,
-            HaloItemRenderer.create(4, 0xFFFFFFFF, new ResourceLocation(CosmicCore.MOD_ID, "rnd/compression_halo_sol"), true,
+    public static final CCoreMaterialIconSet SOL_STEEL = new CCoreMaterialIconSet("sol_steel", CosmicMaterialSet.SOL,
+            false,
+            HaloItemRenderer.create(4, 0xFFFFFFFF,
+                    new ResourceLocation(CosmicCore.MOD_ID, "block/iris/rnd/compression_halo_sol"),
+                    true,
                     false));
 }
