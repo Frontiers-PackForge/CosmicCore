@@ -143,10 +143,7 @@ public class SprayCanEventListener {
                             CompoundTag tag = spraycan.getOrCreateTag();
                             color = Objects.requireNonNullElse(color, ExtendedDyeColor.SOLVENT);
                             behavior.setColor(color);
-                            behavior.PrintColorToActionBar(player, color);
-                            tag.put(ColorTag, IntTag.valueOf(color.getColorId()));
-                            spraycan.setTag(tag);
-                            behavior.PrintColorToActionBar(player, behavior.color);
+                            behavior.sendColorToTag(player, behavior.color);
                         } else {
 
                             player.displayClientMessage(Component.literal("Spray Can locked!"), true);

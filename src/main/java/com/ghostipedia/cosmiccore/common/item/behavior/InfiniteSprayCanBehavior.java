@@ -85,6 +85,12 @@ public class InfiniteSprayCanBehavior implements IInteractionItem, IAddInformati
         this.color = color >= colors.length || color < 0 ? null : colors[color];
     }
 
+    public void sendColorToTag(Player Player, ExtendedDyeColor color) {
+        var stack = Player.getMainHandItem();
+        stack.getOrCreateTag().putInt(ColorTag, color.getColorId());
+        PrintColorToActionBar(Player, color);
+    }
+
     @Override
     public ModularUI createUI(HeldItemUIFactory.HeldItemHolder holder, Player player) {
         var ui = new ModularUI(152, 64, holder, player).background(GuiTextures.BACKGROUND);
@@ -100,9 +106,8 @@ public class InfiniteSprayCanBehavior implements IInteractionItem, IAddInformati
                     DyeColor dyeColorVanilla = DyeColor.byId(colorId + 1);
                     ExtendedDyeColor extendedColor = ExtendedDyeColor.fromDyeColor(dyeColorVanilla);
                     setColor(extendedColor);
-                    var stack = player.getMainHandItem();
-                    stack.getOrCreateTag().putInt(ColorTag, dyeColorVanilla.getId());
-                    PrintColorToActionBar(player, extendedColor);
+                    sendColorToTag(player , this.color);
+
                 }));
             } else {
                 ui.widget(new ButtonWidget(64, 36, 16, 18, GuiTextures.BACKGROUND,
@@ -152,10 +157,8 @@ public class InfiniteSprayCanBehavior implements IInteractionItem, IAddInformati
                     (color.ordinal() + 1) % totalColors;
 
             this.color = ExtendedDyeColor.values()[nextColor];
-            tag.putInt(ColorTag, nextColor);
-            stack.setTag(tag);
+            sendColorToTag(player , this.color);
 
-            PrintColorToActionBar(player, color);
             isSwinging = false;
             return true;
         }
