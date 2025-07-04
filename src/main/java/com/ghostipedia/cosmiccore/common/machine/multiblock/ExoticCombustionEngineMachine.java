@@ -284,7 +284,7 @@ public class ExoticCombustionEngineMachine extends WorkableElectricMultiblockMac
         }
         FluidStack requiredFluidInput = RecipeHelper.getInputFluids(recipe).get(0);
 
-        long ocAmount = getMaxVoltage() / recipe.getInputEUt();
+        long ocAmount = getMaxVoltage() / recipe.getOutputEUt();
         int neededAmount = GTMath.saturatedCast(ocAmount * requiredFluidInput.getAmount());
         return ChatFormatting.RED + FormattingUtil.formatNumbers(neededAmount) + "mB";
     }
