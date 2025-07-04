@@ -92,43 +92,30 @@ public class InfiniteSprayCanBehavior implements IInteractionItem, IAddInformati
     }
 
     @Override
-    public ModularUI createUI(HeldItemUIFactory.HeldItemHolder holder, Player entityPlayer) {
-        var modularUI = new ModularUI(152, 64, holder, entityPlayer)
-                .background(GuiTextures.BACKGROUND);
+    public ModularUI createUI(HeldItemUIFactory.HeldItemHolder holder, Player player) {
+        var ui = new ModularUI(152, 64, holder, player).background(GuiTextures.BACKGROUND);
 
-        for(ExtendedDyeColor dyeColor : ExtendedDyeColor.values()) {
+        for (ExtendedDyeColor dyeColor : ExtendedDyeColor.values()) {
             int id = dyeColor.getColorId();
-            if (id == -1){
-                id = 17;
+            if (id == -1) id = 17;
+            if (id != 17) {
+                int x = ((id + 1) % 8) * 18 + 4;
+                int y = (id / 8) * 18 + 4;
+                ui.widget(new ButtonWidget(x, y, 16, 18, GuiTextures.BACKGROUND, cd -> {
+                    int colorId = dyeColor.getColorId();
+                    DyeColor dyeColorVanilla = DyeColor.byId(colorId + 1);
+                    ExtendedDyeColor extendedColor = ExtendedDyeColor.fromDyeColor(dyeColorVanilla);
+                    setColor(extendedColor);
+                    var stack = player.getMainHandItem();
+                    stack.getOrCreateTag().putInt(ColorTag, dyeColorVanilla.getId());
+                    PrintColorToActionBar(player, extendedColor);
+                }));
             } else {
-                id = dyeColor.getColorId();
+                ui.widget(new ButtonWidget(64, 36, 16, 18, GuiTextures.BACKGROUND, cd -> setColor(ExtendedDyeColor.SOLVENT)));
             }
-            if ( id != 17 ){
-                modularUI.widget(new ButtonWidget( ((id + 1) % 8) * 18 + 4 , (id / 8) * 18 + 4, 16, 18, GuiTextures.BACKGROUND,
-                        cd -> {
-
-                            int colorId = dyeColor.getColorId();
-                            DyeColor color = DyeColor.byId(colorId + 1);
-                            ExtendedDyeColor extendedColor = ExtendedDyeColor.fromDyeColor(color);
-
-                            setColor(extendedColor);
-
-                            var stack = entityPlayer.getMainHandItem();
-                            stack.getOrCreateTag().putInt(ColorTag, color.getId());
-
-                            PrintColorToActionBar(entityPlayer, extendedColor);
-
-
-                        }));
-            }
-            else {
-                modularUI.widget( new ButtonWidget(64, 36, 16, 18, GuiTextures.BACKGROUND, cd -> setColor(ExtendedDyeColor.SOLVENT)));
-            }
-
         }
-        return modularUI;
+        return ui;
     }
-
 
     @Override
     public InteractionResultHolder<ItemStack> use(Item item, Level level, Player player, InteractionHand usedHand) {
