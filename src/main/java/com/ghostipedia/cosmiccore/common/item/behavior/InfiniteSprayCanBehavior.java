@@ -1,5 +1,6 @@
 package com.ghostipedia.cosmiccore.common.item.behavior;
 
+import com.ghostipedia.cosmiccore.api.item.MeldingOmniTool;
 import com.gregtechceu.gtceu.GTCEu;
 import com.gregtechceu.gtceu.api.GTValues;
 import com.gregtechceu.gtceu.api.blockentity.IPaintable;
@@ -92,7 +93,7 @@ public class InfiniteSprayCanBehavior implements IInteractionItem, IAddInformati
 
     @Override
     public ModularUI createUI(HeldItemUIFactory.HeldItemHolder holder, Player entityPlayer) {
-        var modularUI = new ModularUI(152, 68, holder, entityPlayer)
+        var modularUI = new ModularUI(152, 64, holder, entityPlayer)
                 .background(GuiTextures.BACKGROUND);
 
         for(ExtendedDyeColor dyeColor : ExtendedDyeColor.values()) {
@@ -103,10 +104,25 @@ public class InfiniteSprayCanBehavior implements IInteractionItem, IAddInformati
                 id = dyeColor.getColorId();
             }
             if ( id != 17 ){
-                modularUI.widget(new ButtonWidget( ((id + 1) % 8) * 18 + 4 , (id / 8) * 20 + 4, 16, 18, GuiTextures.BACKGROUND, cd -> setColor(dyeColor)));
+                modularUI.widget(new ButtonWidget( ((id + 1) % 8) * 18 + 4 , (id / 8) * 18 + 4, 16, 18, GuiTextures.BACKGROUND,
+                        cd -> {
+
+                            int colorId = dyeColor.getColorId();
+                            DyeColor color = DyeColor.byId(colorId + 1);
+                            ExtendedDyeColor extendedColor = ExtendedDyeColor.fromDyeColor(color);
+
+                            setColor(extendedColor);
+
+                            var stack = entityPlayer.getMainHandItem();
+                            stack.getOrCreateTag().putInt(ColorTag, color.getId());
+
+                            PrintColorToActionBar(entityPlayer, extendedColor);
+
+
+                        }));
             }
             else {
-                modularUI.widget( new ButtonWidget(68, 44, 16, 18, GuiTextures.BACKGROUND, cd -> setColor(ExtendedDyeColor.SOLVENT)));
+                modularUI.widget( new ButtonWidget(64, 36, 16, 18, GuiTextures.BACKGROUND, cd -> setColor(ExtendedDyeColor.SOLVENT)));
             }
 
         }
@@ -116,8 +132,8 @@ public class InfiniteSprayCanBehavior implements IInteractionItem, IAddInformati
 
     @Override
     public InteractionResultHolder<ItemStack> use(Item item, Level level, Player player, InteractionHand usedHand) {
+        isSwinging = false;
         if(player.isCrouching()) {
-
             return IItemUIFactory.super.use(item, level, player, usedHand);
         }
         return InteractionResultHolder.pass(player.getItemInHand(usedHand));
@@ -126,7 +142,7 @@ public class InfiniteSprayCanBehavior implements IInteractionItem, IAddInformati
 
     @Override
     public InteractionResult onItemUseFirst(ItemStack itemStack, @NotNull UseOnContext context) {
-        isSwinging = false;
+
 
         var player = context.getPlayer();
         var level = context.getLevel();
