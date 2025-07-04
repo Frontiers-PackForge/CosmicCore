@@ -18,6 +18,8 @@ import com.gregtechceu.gtceu.utils.BreadthFirstBlockSearch;
 
 import com.lowdragmc.lowdraglib.gui.factory.HeldItemUIFactory;
 import com.lowdragmc.lowdraglib.gui.modular.ModularUI;
+import com.lowdragmc.lowdraglib.gui.util.ClickData;
+import com.lowdragmc.lowdraglib.gui.widget.ButtonWidget;
 import com.lowdragmc.lowdraglib.gui.widget.LabelWidget;
 import com.lowdragmc.lowdraglib.gui.widget.WidgetGroup;
 import com.lowdragmc.lowdraglib.syncdata.annotation.DescSynced;
@@ -90,16 +92,27 @@ public class InfiniteSprayCanBehavior implements IInteractionItem, IAddInformati
 
     @Override
     public ModularUI createUI(HeldItemUIFactory.HeldItemHolder holder, Player entityPlayer) {
-        var dyeSlot = new CustomItemStackHandler(1);
-        var modularUI = new ModularUI(266, 166, holder, entityPlayer)
+        var modularUI = new ModularUI(152, 68, holder, entityPlayer)
                 .background(GuiTextures.BACKGROUND);
 
         for(ExtendedDyeColor dyeColor : ExtendedDyeColor.values()) {
             int id = dyeColor.getColorId();
-            modularUI.widget(new PhantomSlotWidget(dyeSlot,     id, 16 * id , 46 ));
+            if (id == -1){
+                id = 17;
+            } else {
+                id = dyeColor.getColorId();
+            }
+            if ( id != 17 ){
+                modularUI.widget(new ButtonWidget( ((id + 1) % 8) * 18 + 4 , (id / 8) * 20 + 4, 16, 18, GuiTextures.BACKGROUND, cd -> setColor(dyeColor)));
+            }
+            else {
+                modularUI.widget( new ButtonWidget(68, 44, 16, 18, GuiTextures.BACKGROUND, cd -> setColor(ExtendedDyeColor.SOLVENT)));
+            }
+
         }
         return modularUI;
     }
+
 
     @Override
     public InteractionResultHolder<ItemStack> use(Item item, Level level, Player player, InteractionHand usedHand) {
@@ -270,8 +283,8 @@ public class InfiniteSprayCanBehavior implements IInteractionItem, IAddInformati
         if (player == null) {
             return false;
         }
-        if (GTCEu.Mods.isAE2Loaded() && InfiniteSprayCanBehavior.AE2CallWrapper.isAE2Cable(first)) {
-            var collected = InfiniteSprayCanBehavior.AE2CallWrapper.collect(first, limit);
+        if (GTCEu.Mods.isAE2Loaded() && AE2CallWrapper.isAE2Cable(first)) {
+            var collected = AE2CallWrapper.collect(first, limit);
             var ae2Color = color == null ? AEColor.TRANSPARENT : AEColor.values()[color.ordinal()];
             for (var c : collected) {
                 if (c.getColor() == ae2Color) {
@@ -528,7 +541,7 @@ public class InfiniteSprayCanBehavior implements IInteractionItem, IAddInformati
         static Set<CableBusBlockEntity> collect(BlockEntity first, int limit) {
             return BreadthFirstBlockSearch.conditionalBlockEntitySearch(CableBusBlockEntity.class,
                     (CableBusBlockEntity) first,
-                    InfiniteSprayCanBehavior.AE2CallWrapper::ae2CablePredicate,
+                    AE2CallWrapper::ae2CablePredicate,
                     limit, limit * 6);
         }
 
