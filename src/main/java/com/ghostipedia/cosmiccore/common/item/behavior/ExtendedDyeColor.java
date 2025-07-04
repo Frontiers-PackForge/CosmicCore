@@ -2,6 +2,10 @@ package com.ghostipedia.cosmiccore.common.item.behavior;
 
 import net.minecraft.world.item.DyeColor;
 
+/**
+ *
+ * This enum exists to add solvent to colors
+ */
 public enum ExtendedDyeColor {
 
     WHITE(DyeColor.WHITE),
@@ -36,6 +40,7 @@ public enum ExtendedDyeColor {
         return dyeColor;
     }
 
+
     public boolean isSolvent() {
         return this == SOLVENT;
     }
@@ -59,7 +64,8 @@ public enum ExtendedDyeColor {
         return SOLVENT;
     }
 
+    // Return the DyeColor ID or -1 if there's no dye color
     public int getColorId() {
-        return dyeColor != null ? dyeColor.getId() : 0;  // Return the DyeColor ID or -1 if there's no dye color
+        return dyeColor != null ? dyeColor.getId() : -1;
     }
 }

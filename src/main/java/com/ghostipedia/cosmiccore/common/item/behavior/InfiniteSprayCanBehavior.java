@@ -76,7 +76,7 @@ public class InfiniteSprayCanBehavior implements IInteractionItem, IAddInformati
     public ExtendedDyeColor color;
     @Getter
     @Setter
-    private Boolean isLocked;
+    private Boolean isLocked = false;
 
     @DescSynced
     boolean isSwinging = true;
@@ -94,8 +94,9 @@ public class InfiniteSprayCanBehavior implements IInteractionItem, IAddInformati
         var modularUI = new ModularUI(266, 166, holder, entityPlayer)
                 .background(GuiTextures.BACKGROUND);
 
-        for(DyeColor dyeColor : DyeColor.values()) {
-            modularUI.widget(new PhantomSlotWidget(dyeSlot, dyeColor.getId(), 16 * dyeColor.getId() , 46 ));
+        for(ExtendedDyeColor dyeColor : ExtendedDyeColor.values()) {
+            int id = dyeColor.getColorId();
+            modularUI.widget(new PhantomSlotWidget(dyeSlot,     id, 16 * id , 46 ));
         }
         return modularUI;
     }
@@ -106,7 +107,7 @@ public class InfiniteSprayCanBehavior implements IInteractionItem, IAddInformati
 
             return IItemUIFactory.super.use(item, level, player, usedHand);
         }
-        return  null;
+        return InteractionResultHolder.pass(player.getItemInHand(usedHand));
     }
 
 
@@ -157,8 +158,14 @@ public class InfiniteSprayCanBehavior implements IInteractionItem, IAddInformati
     public void PrintColorToActionBar(Player player, ExtendedDyeColor color) {
         MutableComponent message = Component.literal("Spray Can Color is: ");
         MutableComponent colorComponent = Component.literal(color.toString())
-                .setStyle(Style.EMPTY.withColor(TextColor.fromRgb(color.getTextColor())));
+                .setStyle(
+                        color == ExtendedDyeColor.SOLVENT
+                                ? Style.EMPTY.withColor(TextColor.fromRgb(0xFFFFFF)) // white
+                                : Style.EMPTY.withColor(TextColor.fromRgb(color.getTextColor()))
+                );
+
         message.append(colorComponent);
+
 
         player.displayClientMessage(message, true);
     }
@@ -351,7 +358,7 @@ public class InfiniteSprayCanBehavior implements IInteractionItem, IAddInformati
         return false;
     }
 
-    private boolean tryPaintSpecialBlock(Level world, BlockPos pos, Block block) {
+    private boolean tryPaintSpecialBlock(Level world, BlockPos pos, @NotNull Block block) {
         if (block.defaultBlockState().is(Tags.Blocks.GLASS)) {
             if (recolorBlockNoState(GLASS_MAP, this.color.getColor(), world, pos, Blocks.GLASS)) {
                 return true;
@@ -511,6 +518,10 @@ public class InfiniteSprayCanBehavior implements IInteractionItem, IAddInformati
     public int getColor(ItemStack itemStack, int i) {
         return 0;
     }
+
+
+
+
 
     private static class AE2CallWrapper {
 

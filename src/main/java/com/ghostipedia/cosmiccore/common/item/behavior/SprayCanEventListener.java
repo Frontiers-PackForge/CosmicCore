@@ -9,6 +9,8 @@ import com.gregtechceu.gtceu.api.item.ComponentItem;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.IntTag;
+import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.ItemStack;
@@ -24,6 +26,8 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
 import appeng.blockentity.networking.CableBusBlockEntity;
+
+import java.util.Objects;
 
 import static com.ghostipedia.cosmiccore.common.data.CosmicItems.INFINITE_SPRAY_CAN;
 import static com.ghostipedia.cosmiccore.common.item.behavior.InfiniteSprayCanBehavior.ColorTag;
@@ -129,22 +133,33 @@ public class SprayCanEventListener {
         // send to spraycan when finished
         if (spraycan.getItem() instanceof ComponentItem compItem) {
             for (var component : compItem.getComponents()) {
-                // CompoundTag tag = spraycan.getOrCreateTag();
                 if (component instanceof InfiniteSprayCanBehavior behavior) {
-                    if(behavior.getIsLocked() != true){
-                    CompoundTag tag = spraycan.getOrCreateTag();
-                    behavior.setColor(color);
-                    behavior.PrintColorToActionBar(player, behavior.color);
+                    if (player.isCrouching()) {
+                        behavior.setIsLocked(true);
+                        player.displayClientMessage(Component.literal("Spray Can locked!"), true);
+                        event.setCanceled(true);
+                    } else {
+                        if (!behavior.getIsLocked()) {
+                            CompoundTag tag = spraycan.getOrCreateTag();
+                            color = Objects.requireNonNullElse(color, ExtendedDyeColor.SOLVENT);
+                            behavior.setColor(color);
+                            behavior.PrintColorToActionBar(player, color);
+                            tag.put(ColorTag, IntTag.valueOf(color.getColorId()));
+                            spraycan.setTag(tag);
+                            behavior.PrintColorToActionBar(player, behavior.color);
+                        }
+                        else{
 
-                    assert color != null;
-                    tag.putInt(ColorTag, color.getColorId());
-                    spraycan.setTag(tag);
+                            player.displayClientMessage(Component.literal("Spray Can locked!"), true);
+
+                        }
+
+
+                        event.setCanceled(true);
                     }
-                    behavior.PrintColorToActionBar(player, behavior.color);
-                    event.setCanceled(true);
-
                 }
             }
         }
+
     }
 }
