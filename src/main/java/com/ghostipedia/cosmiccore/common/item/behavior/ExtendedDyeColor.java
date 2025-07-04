@@ -40,7 +40,6 @@ public enum ExtendedDyeColor {
         return dyeColor;
     }
 
-
     public boolean isSolvent() {
         return this == SOLVENT;
     }

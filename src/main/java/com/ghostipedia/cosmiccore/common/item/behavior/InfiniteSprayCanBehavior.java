@@ -1,17 +1,14 @@
 package com.ghostipedia.cosmiccore.common.item.behavior;
 
-import com.ghostipedia.cosmiccore.api.item.MeldingOmniTool;
 import com.gregtechceu.gtceu.GTCEu;
 import com.gregtechceu.gtceu.api.GTValues;
 import com.gregtechceu.gtceu.api.blockentity.IPaintable;
 import com.gregtechceu.gtceu.api.blockentity.MetaMachineBlockEntity;
 import com.gregtechceu.gtceu.api.blockentity.PipeBlockEntity;
 import com.gregtechceu.gtceu.api.gui.GuiTextures;
-import com.gregtechceu.gtceu.api.gui.widget.PhantomSlotWidget;
 import com.gregtechceu.gtceu.api.item.component.IAddInformation;
 import com.gregtechceu.gtceu.api.item.component.IInteractionItem;
 import com.gregtechceu.gtceu.api.item.component.IItemUIFactory;
-import com.gregtechceu.gtceu.api.transfer.item.CustomItemStackHandler;
 import com.gregtechceu.gtceu.common.data.GTSoundEntries;
 import com.gregtechceu.gtceu.config.ConfigHolder;
 import com.gregtechceu.gtceu.data.recipe.CustomTags;
@@ -19,10 +16,7 @@ import com.gregtechceu.gtceu.utils.BreadthFirstBlockSearch;
 
 import com.lowdragmc.lowdraglib.gui.factory.HeldItemUIFactory;
 import com.lowdragmc.lowdraglib.gui.modular.ModularUI;
-import com.lowdragmc.lowdraglib.gui.util.ClickData;
 import com.lowdragmc.lowdraglib.gui.widget.ButtonWidget;
-import com.lowdragmc.lowdraglib.gui.widget.LabelWidget;
-import com.lowdragmc.lowdraglib.gui.widget.WidgetGroup;
 import com.lowdragmc.lowdraglib.syncdata.annotation.DescSynced;
 
 import net.minecraft.client.color.item.ItemColor;
@@ -111,7 +105,8 @@ public class InfiniteSprayCanBehavior implements IInteractionItem, IAddInformati
                     PrintColorToActionBar(player, extendedColor);
                 }));
             } else {
-                ui.widget(new ButtonWidget(64, 36, 16, 18, GuiTextures.BACKGROUND, cd -> setColor(ExtendedDyeColor.SOLVENT)));
+                ui.widget(new ButtonWidget(64, 36, 16, 18, GuiTextures.BACKGROUND,
+                        cd -> setColor(ExtendedDyeColor.SOLVENT)));
             }
         }
         return ui;
@@ -120,17 +115,14 @@ public class InfiniteSprayCanBehavior implements IInteractionItem, IAddInformati
     @Override
     public InteractionResultHolder<ItemStack> use(Item item, Level level, Player player, InteractionHand usedHand) {
         isSwinging = false;
-        if(player.isCrouching()) {
+        if (player.isCrouching()) {
             return IItemUIFactory.super.use(item, level, player, usedHand);
         }
         return InteractionResultHolder.pass(player.getItemInHand(usedHand));
     }
 
-
     @Override
     public InteractionResult onItemUseFirst(ItemStack itemStack, @NotNull UseOnContext context) {
-
-
         var player = context.getPlayer();
         var level = context.getLevel();
         var pos = context.getClickedPos();
@@ -170,18 +162,14 @@ public class InfiniteSprayCanBehavior implements IInteractionItem, IAddInformati
         return true;
     }
 
-
     public void PrintColorToActionBar(Player player, ExtendedDyeColor color) {
         MutableComponent message = Component.literal("Spray Can Color is: ");
         MutableComponent colorComponent = Component.literal(color.toString())
                 .setStyle(
-                        color == ExtendedDyeColor.SOLVENT
-                                ? Style.EMPTY.withColor(TextColor.fromRgb(0xFFFFFF)) // white
-                                : Style.EMPTY.withColor(TextColor.fromRgb(color.getTextColor()))
-                );
+                        color == ExtendedDyeColor.SOLVENT ? Style.EMPTY.withColor(TextColor.fromRgb(0xFFFFFF)) // white
+                                : Style.EMPTY.withColor(TextColor.fromRgb(color.getTextColor())));
 
         message.append(colorComponent);
-
 
         player.displayClientMessage(message, true);
     }
@@ -534,10 +522,6 @@ public class InfiniteSprayCanBehavior implements IInteractionItem, IAddInformati
     public int getColor(ItemStack itemStack, int i) {
         return 0;
     }
-
-
-
-
 
     private static class AE2CallWrapper {
 

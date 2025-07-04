@@ -1,6 +1,7 @@
 package com.ghostipedia.cosmiccore.api.capability.recipe;
 
 import com.ghostipedia.cosmiccore.api.recipe.lookup.MapHeatIngredient;
+
 import com.gregtechceu.gtceu.api.capability.recipe.RecipeCapability;
 import com.gregtechceu.gtceu.api.recipe.GTRecipe;
 import com.gregtechceu.gtceu.api.recipe.content.Content;

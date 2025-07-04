@@ -147,19 +147,16 @@ public class SprayCanEventListener {
                             tag.put(ColorTag, IntTag.valueOf(color.getColorId()));
                             spraycan.setTag(tag);
                             behavior.PrintColorToActionBar(player, behavior.color);
-                        }
-                        else{
+                        } else {
 
                             player.displayClientMessage(Component.literal("Spray Can locked!"), true);
 
                         }
-
 
                         event.setCanceled(true);
                     }
                 }
             }
         }
-
     }
 }
