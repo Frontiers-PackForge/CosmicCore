@@ -81,7 +81,6 @@ public class InfiniteSprayCanBehavior implements IInteractionItem, IAddInformati
 
     public static final String ColorTag = "color";
 
-
     // guitextures
     public InfiniteSprayCanBehavior(int color) {
         ExtendedDyeColor[] colors = ExtendedDyeColor.values();
@@ -109,7 +108,7 @@ public class InfiniteSprayCanBehavior implements IInteractionItem, IAddInformati
                     DyeColor dyeColorVanilla = DyeColor.byId(colorId + 1);
                     ExtendedDyeColor extendedColor = ExtendedDyeColor.fromDyeColor(dyeColorVanilla);
                     setColor(extendedColor);
-                    sendColorToTag(player , this.color);
+                    sendColorToTag(player, this.color);
 
                 }));
             } else {
@@ -117,7 +116,7 @@ public class InfiniteSprayCanBehavior implements IInteractionItem, IAddInformati
                         cd -> {
 
                             setColor(ExtendedDyeColor.SOLVENT);
-                            sendColorToTag(player , this.color);
+                            sendColorToTag(player, this.color);
                         }));
             }
         }
@@ -167,13 +166,12 @@ public class InfiniteSprayCanBehavior implements IInteractionItem, IAddInformati
 
                 isSwinging = false;
                 return true;
-            }
-            else {
+            } else {
                 player.displayClientMessage(Component.literal("THE SPRAYCAN IS LOCKED")
                         .withStyle(style -> style
                                 .withColor(ChatFormatting.RED)
-                                .withBold(true)
-                        ), true);
+                                .withBold(true)),
+                        true);
 
                 return true;
             }

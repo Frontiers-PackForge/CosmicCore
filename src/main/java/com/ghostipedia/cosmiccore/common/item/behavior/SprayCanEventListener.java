@@ -9,7 +9,6 @@ import com.gregtechceu.gtceu.api.item.ComponentItem;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.IntTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.DyeColor;
@@ -30,7 +29,6 @@ import appeng.blockentity.networking.CableBusBlockEntity;
 import java.util.Objects;
 
 import static com.ghostipedia.cosmiccore.common.data.CosmicItems.INFINITE_SPRAY_CAN;
-import static com.ghostipedia.cosmiccore.common.item.behavior.InfiniteSprayCanBehavior.ColorTag;
 
 @SuppressWarnings("unused")
 @Mod.EventBusSubscriber(modid = CosmicCore.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE)
@@ -135,15 +133,11 @@ public class SprayCanEventListener {
             for (var component : compItem.getComponents()) {
                 if (component instanceof InfiniteSprayCanBehavior behavior) {
                     if (player.isCrouching()) {
-
-                        if (behavior.getIsLocked()){
-
-
+                        if (behavior.getIsLocked()) {
                             player.displayClientMessage(Component.literal("Spray Can unlocked"), true);
                             behavior.setIsLocked(false);
                             event.setCanceled(true);
-                        }
-                        else{
+                        } else {
                             behavior.setIsLocked(true);
                             player.displayClientMessage(Component.literal("Spray Can locked!"), true);
                             event.setCanceled(true);
