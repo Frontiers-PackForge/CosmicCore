@@ -8,7 +8,6 @@ import com.gregtechceu.gtceu.api.item.ComponentItem;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.DyeColor;
@@ -25,6 +24,7 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
 import appeng.blockentity.networking.CableBusBlockEntity;
+import org.lwjgl.glfw.GLFW;
 
 import java.util.Objects;
 
@@ -46,14 +46,14 @@ public class SprayCanEventListener {
         Level level = mc.level;
         Player player = mc.player;
 
+        // null checks the player level and if there is a blokc
         if (player == null || level == null || mc.hitResult == null) return;
 
+        // gets the spraycan and makes sure it is a spraycan
         ItemStack spraycan = player.getMainHandItem();
-        if (spraycan.getItem() != INFINITE_SPRAY_CAN.get().asItem()) {
-            return;
+        if (hasSprayCan(spraycan)) return;
 
-        }
-
+        // sets an id for the dye to properly assign the color
         int dyeID = 0;
         ExtendedDyeColor color = null;
         // check if it gets a block
@@ -129,35 +129,65 @@ public class SprayCanEventListener {
         }
 
         // send to spraycan when finished
-        if (spraycan.getItem() instanceof ComponentItem compItem) {
-            for (var component : compItem.getComponents()) {
-                if (component instanceof InfiniteSprayCanBehavior behavior) {
-                    if (player.isCrouching()) {
-                        if (behavior.getIsLocked()) {
-                            player.displayClientMessage(Component.literal("Spray Can unlocked"), true);
-                            behavior.setIsLocked(false);
-                            event.setCanceled(true);
-                        } else {
-                            behavior.setIsLocked(true);
-                            player.displayClientMessage(Component.literal("Spray Can locked!"), true);
-                            event.setCanceled(true);
-                        }
-                    } else {
-                        if (!behavior.getIsLocked()) {
-                            CompoundTag tag = spraycan.getOrCreateTag();
-                            color = Objects.requireNonNullElse(color, ExtendedDyeColor.SOLVENT);
-                            behavior.setColor(color);
-                            behavior.sendColorToTag(player, behavior.color);
-                        } else {
+        InfiniteSprayCanBehavior behavior = getSprayCanBehavior(spraycan);
+        if (behavior != null) {
 
-                            player.displayClientMessage(Component.literal("Spray Can locked!"), true);
+            // checks if it is locked first before anything
+            if (!behavior.getIsLocked()) {
+                color = Objects.requireNonNullElse(color, ExtendedDyeColor.SOLVENT);
+                behavior.setColor(color);
+                behavior.sendColorToTag(player, behavior.color);
+            } else {
+                player.displayClientMessage(Component.literal("Spray Can locked!"), true);
+            }
 
-                        }
+            event.setCanceled(true);
+        }
+    }
 
-                        event.setCanceled(true);
-                    }
-                }
+    // this event is used here because the other one needs a b lock to be clicked on this one works in the air
+    @SubscribeEvent
+    public static void onMouseInput(InputEvent.MouseButton event) {
+        if (event.getButton() != 2 || event.getAction() != GLFW.GLFW_PRESS) return;
+
+        Minecraft mc = Minecraft.getInstance();
+        Player player = mc.player;
+        Level level = mc.level;
+
+        // null check same as above
+        if (player == null || level == null || mc.hitResult == null) return;
+        ItemStack spraycan = player.getMainHandItem();
+        if (hasSprayCan(spraycan)) return;
+
+        // returns if the player isn't crouching
+        if (!player.isCrouching()) return;
+
+        InfiniteSprayCanBehavior behavior = getSprayCanBehavior(spraycan);
+        if (behavior == null) return;
+
+        // if its locked invert it
+        boolean nowLocked = !behavior.getIsLocked();
+        behavior.setIsLocked(nowLocked);
+        event.setCanceled(true);
+
+        String message = "Spray Can " + (nowLocked ? "locked!" : "unlocked!");
+        player.displayClientMessage(Component.literal(message), true);
+    }
+
+    // just pulls out some repeated code for cleanliness into this method to check if it is a spraycan
+    private static boolean hasSprayCan(ItemStack stack) {
+        return stack.getItem() != INFINITE_SPRAY_CAN.get().asItem();
+    }
+
+    // gets the bahavior to reduce repeated code
+    private static InfiniteSprayCanBehavior getSprayCanBehavior(ItemStack stack) {
+        if (!(stack.getItem() instanceof ComponentItem compItem)) return null;
+
+        for (var component : compItem.getComponents()) {
+            if (component instanceof InfiniteSprayCanBehavior behavior) {
+                return behavior;
             }
         }
+        return null;
     }
 }
