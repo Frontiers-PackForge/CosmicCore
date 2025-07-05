@@ -101,7 +101,7 @@ public class InfiniteSprayCanBehavior implements IInteractionItem, IAddInformati
             if (id != 17) {
                 int x = ((id + 1) % 8) * 18 + 4;
                 int y = (id / 8) * 18 + 4;
-                ui.widget(new ButtonWidget(x, y, 16, 18, GuiTextures.BACKGROUND, cd -> {
+                ui.widget(new ButtonWidget(x, y, 16, 18, dyeColor.getButtonTexture(), cd -> {
                     int colorId = dyeColor.getColorId();
                     DyeColor dyeColorVanilla = DyeColor.byId(colorId + 1);
                     ExtendedDyeColor extendedColor = ExtendedDyeColor.fromDyeColor(dyeColorVanilla);
@@ -110,7 +110,7 @@ public class InfiniteSprayCanBehavior implements IInteractionItem, IAddInformati
 
                 }));
             } else {
-                ui.widget(new ButtonWidget(64, 36, 16, 18, GuiTextures.BACKGROUND,
+                ui.widget(new ButtonWidget(64, 36, 16, 18, dyeColor.getButtonTexture(),
                         cd -> setColor(ExtendedDyeColor.SOLVENT)));
             }
         }

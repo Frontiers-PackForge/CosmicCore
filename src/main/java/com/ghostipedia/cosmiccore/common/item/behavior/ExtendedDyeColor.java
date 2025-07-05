@@ -1,6 +1,10 @@
 package com.ghostipedia.cosmiccore.common.item.behavior;
 
+import com.lowdragmc.lowdraglib.gui.texture.ResourceTexture;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.DyeColor;
+
+import java.io.Serial;
 
 /**
  *
@@ -61,6 +65,15 @@ public enum ExtendedDyeColor {
             }
         }
         return SOLVENT;
+    }
+
+    public ResourceTexture getButtonTexture() {
+        String SprayColor = isSolvent()
+                ? "white_spray_can.png"
+                : String.format("%s_spray_can.png", dyeColor.getName().toLowerCase());
+
+        ResourceLocation textureLocation = new ResourceLocation("cosmiccore", "item/" + SprayColor);
+        return new ResourceTexture(textureLocation);
     }
 
     // Return the DyeColor ID or -1 if there's no dye color
