@@ -109,7 +109,7 @@ public class ExoticCombustionEngineMachine extends WorkableElectricMultiblockMac
         if (!(machine instanceof ExoticCombustionEngineMachine engineMachine)) {
             return RecipeModifier.nullWrongType(ExoticCombustionEngineMachine.class, machine);
         }
-        long EUt = recipe.getInputEUt();
+        long EUt = recipe.getOutputEUt();
         if (EUt * recipe.duration < 720) {
             return ModifierFunction.NULL;
         }
@@ -171,7 +171,7 @@ public class ExoticCombustionEngineMachine extends WorkableElectricMultiblockMac
         boolean value = super.onWorking();
         var recipe = recipeLogic.getLastRecipe();
         if (recipe != null) {
-            long EUt = recipe.getInputEUt();
+            long EUt = recipe.getOutputEUt();
             int duration = recipe.duration;
             if ((EUt / recipe.parallels) * duration < 720) {
                 this.getRecipeLogic().setWaiting(Component.translatable("cosmiccore.errors.bad_fuel"));
