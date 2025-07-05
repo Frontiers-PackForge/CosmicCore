@@ -19,6 +19,7 @@ import com.lowdragmc.lowdraglib.gui.modular.ModularUI;
 import com.lowdragmc.lowdraglib.gui.widget.ButtonWidget;
 import com.lowdragmc.lowdraglib.syncdata.annotation.DescSynced;
 
+import net.minecraft.ChatFormatting;
 import net.minecraft.client.color.item.ItemColor;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -156,17 +157,26 @@ public class InfiniteSprayCanBehavior implements IInteractionItem, IAddInformati
             return true; // Do the color change only if not already swinging
         }
         if (entity instanceof Player player) {
-            boolean isClient = player.level().isClientSide();
-            // does the crouch swap code
-            int totalColors = ExtendedDyeColor.values().length;
-            int nextColor = player.isCrouching() ? (color.ordinal() - 1 + totalColors) % totalColors :
-                    (color.ordinal() + 1) % totalColors;
+            if (!this.isLocked) {
+                int totalColors = ExtendedDyeColor.values().length;
+                int nextColor = player.isCrouching() ? (color.ordinal() - 1 + totalColors) % totalColors :
+                        (color.ordinal() + 1) % totalColors;
 
-            this.color = ExtendedDyeColor.values()[nextColor];
-            sendColorToTag(player , this.color);
+                this.color = ExtendedDyeColor.values()[nextColor];
+                sendColorToTag(player, this.color);
 
-            isSwinging = false;
-            return true;
+                isSwinging = false;
+                return true;
+            }
+            else {
+                player.displayClientMessage(Component.literal("THE SPRAYCAN IS LOCKED")
+                        .withStyle(style -> style
+                                .withColor(ChatFormatting.RED)
+                                .withBold(true)
+                        ), true);
+
+                return true;
+            }
         }
         return true;
     }

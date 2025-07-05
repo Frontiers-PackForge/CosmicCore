@@ -135,9 +135,19 @@ public class SprayCanEventListener {
             for (var component : compItem.getComponents()) {
                 if (component instanceof InfiniteSprayCanBehavior behavior) {
                     if (player.isCrouching()) {
-                        behavior.setIsLocked(true);
-                        player.displayClientMessage(Component.literal("Spray Can locked!"), true);
-                        event.setCanceled(true);
+
+                        if (behavior.getIsLocked()){
+
+
+                            player.displayClientMessage(Component.literal("Spray Can unlocked"), true);
+                            behavior.setIsLocked(false);
+                            event.setCanceled(true);
+                        }
+                        else{
+                            behavior.setIsLocked(true);
+                            player.displayClientMessage(Component.literal("Spray Can locked!"), true);
+                            event.setCanceled(true);
+                        }
                     } else {
                         if (!behavior.getIsLocked()) {
                             CompoundTag tag = spraycan.getOrCreateTag();
