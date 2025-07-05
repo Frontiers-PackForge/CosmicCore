@@ -62,6 +62,13 @@ public class SprayCanEventListener {
             BlockHitResult blockHit = (BlockHitResult) mc.hitResult;
             BlockPos pos = blockHit.getBlockPos();
 
+            /**
+             * im not even gonna try to explain what this does but it grabs the block
+             * and checks what state it is and gets the map color
+             * and then converts it to a dye color
+             * and then send that dye to the spray can but since mc is stupid it has to be like this
+             */
+
             BlockEntity entity = level.getBlockEntity(pos);
             if (entity != null) {
                 if (entity instanceof ShulkerBoxBlockEntity shulker) {
