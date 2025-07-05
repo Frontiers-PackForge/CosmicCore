@@ -80,6 +80,8 @@ public class InfiniteSprayCanBehavior implements IInteractionItem, IAddInformati
 
     public static final String ColorTag = "color";
 
+
+    // guitextures
     public InfiniteSprayCanBehavior(int color) {
         ExtendedDyeColor[] colors = ExtendedDyeColor.values();
         this.color = color >= colors.length || color < 0 ? null : colors[color];
@@ -101,7 +103,7 @@ public class InfiniteSprayCanBehavior implements IInteractionItem, IAddInformati
             if (id != 17) {
                 int x = ((id + 1) % 8) * 18 + 4;
                 int y = (id / 8) * 18 + 4;
-                ui.widget(new ButtonWidget(x, y, 16, 18, dyeColor.getButtonTexture(), cd -> {
+                ui.widget(new ButtonWidget(x, y, 16, 18, dyeColor.getTexture(), cd -> {
                     int colorId = dyeColor.getColorId();
                     DyeColor dyeColorVanilla = DyeColor.byId(colorId + 1);
                     ExtendedDyeColor extendedColor = ExtendedDyeColor.fromDyeColor(dyeColorVanilla);
@@ -110,8 +112,12 @@ public class InfiniteSprayCanBehavior implements IInteractionItem, IAddInformati
 
                 }));
             } else {
-                ui.widget(new ButtonWidget(64, 36, 16, 18, dyeColor.getButtonTexture(),
-                        cd -> setColor(ExtendedDyeColor.SOLVENT)));
+                ui.widget(new ButtonWidget(65, 40, 16, 18, dyeColor.getTexture(),
+                        cd -> {
+
+                            setColor(ExtendedDyeColor.SOLVENT);
+                            sendColorToTag(player , this.color);
+                        }));
             }
         }
         return ui;

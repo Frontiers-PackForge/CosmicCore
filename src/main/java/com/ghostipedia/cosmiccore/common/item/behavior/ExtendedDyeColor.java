@@ -1,10 +1,9 @@
 package com.ghostipedia.cosmiccore.common.item.behavior;
 
 import com.lowdragmc.lowdraglib.gui.texture.ResourceTexture;
+import lombok.Getter;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.DyeColor;
-
-import java.io.Serial;
 
 /**
  *
@@ -12,29 +11,36 @@ import java.io.Serial;
  */
 public enum ExtendedDyeColor {
 
-    WHITE(DyeColor.WHITE),
-    ORANGE(DyeColor.ORANGE),
-    MAGENTA(DyeColor.MAGENTA),
-    LIGHT_BLUE(DyeColor.LIGHT_BLUE),
-    YELLOW(DyeColor.YELLOW),
-    LIME(DyeColor.LIME),
-    PINK(DyeColor.PINK),
-    GRAY(DyeColor.GRAY),
-    LIGHT_GRAY(DyeColor.LIGHT_GRAY),
-    CYAN(DyeColor.CYAN),
-    PURPLE(DyeColor.PURPLE),
-    BLUE(DyeColor.BLUE),
-    BROWN(DyeColor.BROWN),
-    GREEN(DyeColor.GREEN),
-    RED(DyeColor.RED),
-    BLACK(DyeColor.BLACK),
-    SOLVENT(null);
+    WHITE(DyeColor.WHITE, "white_dye_spray_can.png"),
+    ORANGE(DyeColor.ORANGE, "orange_dye_spray_can.png"),
+    MAGENTA(DyeColor.MAGENTA, "magenta_dye_spray_can.png"),
+    LIGHT_BLUE(DyeColor.LIGHT_BLUE, "light_blue_dye_spray_can.png"),
+    YELLOW(DyeColor.YELLOW, "yellow_dye_spray_can.png"),
+    LIME(DyeColor.LIME, "lime_dye_spray_can.png"),
+    PINK(DyeColor.PINK, "pink_dye_spray_can.png"),
+    GRAY(DyeColor.GRAY, "gray_dye_spray_can.png"),
+    LIGHT_GRAY(DyeColor.LIGHT_GRAY, "light_gray_dye_spray_can.png"),
+    CYAN(DyeColor.CYAN, "cyan_dye_spray_can.png"),
+    PURPLE(DyeColor.PURPLE, "purple_dye_spray_can.png"),
+    BLUE(DyeColor.BLUE, "blue_dye_spray_can.png"),
+    BROWN(DyeColor.BROWN, "brown_dye_spray_can.png"),
+    GREEN(DyeColor.GREEN, "green_dye_spray_can.png"),
+    RED(DyeColor.RED, "red_dye_spray_can.png"),
+    BLACK(DyeColor.BLACK, "black_dye_spray_can.png"),
+    SOLVENT(null, "white_dye_spray_can.png");
 
     private final DyeColor dyeColor;
+    @Getter
+    public final ResourceTexture texture;
 
-    ExtendedDyeColor(DyeColor dyeColor) {
+
+
+    ExtendedDyeColor(DyeColor dyeColor, String resloc) {
         this.dyeColor = dyeColor;
+        this.texture = new ResourceTexture("cosmiccore:textures/item/" + resloc);
+        System.out.println(this.texture);
     }
+
 
     public static ExtendedDyeColor getColorFromDyeId(int dyeID) {
         return fromDyeColor(DyeColor.byId(dyeID));
@@ -65,15 +71,6 @@ public enum ExtendedDyeColor {
             }
         }
         return SOLVENT;
-    }
-
-    public ResourceTexture getButtonTexture() {
-        String SprayColor = isSolvent()
-                ? "white_spray_can.png"
-                : String.format("%s_spray_can.png", dyeColor.getName().toLowerCase());
-
-        ResourceLocation textureLocation = new ResourceLocation("cosmiccore", "item/" + SprayColor);
-        return new ResourceTexture(textureLocation);
     }
 
     // Return the DyeColor ID or -1 if there's no dye color
