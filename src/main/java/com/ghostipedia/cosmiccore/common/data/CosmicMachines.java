@@ -48,6 +48,8 @@ import com.gregtechceu.gtceu.api.pattern.util.RelativeDirection;
 import com.gregtechceu.gtceu.api.recipe.GTRecipeType;
 import com.gregtechceu.gtceu.api.recipe.OverclockingLogic;
 import com.gregtechceu.gtceu.api.registry.registrate.MachineBuilder;
+import com.gregtechceu.gtceu.client.renderer.machine.DynamicRenderHelper;
+import com.gregtechceu.gtceu.client.renderer.machine.impl.BoilerMultiPartRender;
 import com.gregtechceu.gtceu.client.util.TooltipHelper;
 import com.gregtechceu.gtceu.common.block.BoilerFireboxType;
 import com.gregtechceu.gtceu.common.data.*;
@@ -92,6 +94,7 @@ import static com.gregtechceu.gtceu.common.data.GTRecipeModifiers.ELECTRIC_OVERC
 import static com.gregtechceu.gtceu.common.data.GTRecipeTypes.DUMMY_RECIPES;
 import static com.gregtechceu.gtceu.common.data.machines.GTMachineUtils.*;
 import static com.gregtechceu.gtceu.common.data.machines.GTMultiMachines.FUSION_REACTOR;
+import static com.gregtechceu.gtceu.common.data.models.GTMachineModels.createWorkableCasingMachineModel;
 import static com.gregtechceu.gtceu.common.data.models.GTMachineModels.createWorkableSteamHullMachineModel;
 import static com.klikli_dev.occultism.registry.OccultismBlocks.IESNIUM_BLOCK;
 import static wayoftime.bloodmagic.common.block.BloodMagicBlocks.BLANK_RUNE;
@@ -280,10 +283,13 @@ public class CosmicMachines {
                                     .setExactLimit(1))
                             .or(Predicates.abilities(PartAbility.IMPORT_FLUIDS).setPreviewCount(1).setExactLimit(1)))
                     .build())
-            .model(() -> new LargeBoilerRenderer(GTCEu.id("block/casings/solid/machine_primitive_bricks"),
-                    BoilerFireboxType.STEEL_FIREBOX,
-                    GTCEu.id("block/multiblock/primitive_blast_furnace")))
-            .tooltips(Component.translatable("cosmiccore.multiblock.ipbf.tooltip.0"),
+            .model(createWorkableCasingMachineModel(GTCEu.id("block/casings/solid/machine_casing_bronze_plated_bricks"),
+                    GTCEu.id("block/multiblock/steam_oven"))
+                    .andThen(b -> b.addDynamicRenderer(
+                            () -> () -> DynamicRenderHelper.makeBoilerPartRender(
+                                    BoilerFireboxType.STEEL_FIREBOX, STEEL_PLATED_BRONZE))))
+            .tooltips(
+                    Component.translatable("cosmiccore.multiblock.ipbf.tooltip.0"),
                     Component.translatable("cosmiccore.multiblock.ipbf.tooltip.1"),
                     Component.translatable("cosmiccore.multiblock.ipbf.tooltip.2"),
                     Component.translatable("cosmiccore.multiblock.ipbf.tooltip.3"))
@@ -310,10 +316,11 @@ public class CosmicMachines {
                             .or(Predicates.abilities(PartAbility.STEAM).setExactLimit(1)))
                     .where('D', blocks(CASING_STEEL_GEARBOX.get()))
                     .build())
-            .model(() -> new LargeBoilerRenderer(CosmicCore.id("block/casings/solid/steel_plated_bronze_casing"),
-                    BoilerFireboxType.STEEL_FIREBOX,
-                    GTCEu.id("block/multiblock/implosion_compressor")))
-            .tooltips(Component.translatable("cosmiccore.multiblock.hpsassem.tooltip.0"),
+            .model(createWorkableCasingMachineModel(GTCEu.id("block/casings/solid/machine_casing_bronze_plated_bricks"),
+                    GTCEu.id("block/multiblock/steam_oven"))
+                    .andThen(b -> b.addDynamicRenderer(
+                            () -> () -> DynamicRenderHelper.makeBoilerPartRender(
+                                    BoilerFireboxType.STEEL_FIREBOX, STEEL_PLATED_BRONZE)))).tooltips(Component.translatable("cosmiccore.multiblock.hpsassem.tooltip.0"),
                     Component.translatable("cosmiccore.multiblock.hpsassem.tooltip.1"),
                     Component.translatable("cosmiccore.multiblock.hpsassem.tooltip.2"))
             .register();
@@ -785,10 +792,6 @@ public class CosmicMachines {
                     .where('X', abilities(IMPORT_SOUL).setMinGlobalLimited(1, 1).setMaxGlobalLimited(1))
                     .where('C', blocks(IESNIUM_BLOCK.get()))
                     .build())
-            .model(() -> new HellFireFoundryWorkableRenderer(
-                    BloodMagic.rl("block/blankrune"),
-                    CosmicCore.id("block/casings/solid/highly_conductive_fission_casing"),
-                    GTCEu.id("block/multiblock/network_switch")))
             .register();
     public static final MultiblockMachineDefinition SUFFERING_CHAMBER = REGISTRATE
             .multiblock("suffering_chamber", WorkableElectricMultiblockMachine::new)
