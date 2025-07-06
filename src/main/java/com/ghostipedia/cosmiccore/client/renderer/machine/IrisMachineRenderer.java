@@ -2,33 +2,52 @@ package com.ghostipedia.cosmiccore.client.renderer.machine;
 
 import com.ghostipedia.cosmiccore.CosmicCore;
 
+import com.ghostipedia.cosmiccore.api.machine.multiblock.IrisMultiblockMachine;
 import com.gregtechceu.gtceu.GTCEu;
 import com.gregtechceu.gtceu.api.GTValues;
 import com.gregtechceu.gtceu.api.machine.IMachineBlockEntity;
 import com.gregtechceu.gtceu.api.machine.multiblock.WorkableElectricMultiblockMachine;
-import com.gregtechceu.gtceu.client.renderer.machine.WorkableCasingMachineRenderer;
+import com.gregtechceu.gtceu.client.renderer.machine.DynamicRender;
 
+
+import com.gregtechceu.gtceu.client.renderer.machine.DynamicRenderType;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.block.model.BakedQuad;
+import net.minecraft.client.renderer.block.model.ItemTransforms;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.resources.model.BakedModel;
+import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
+import net.minecraft.util.RandomSource;
+import net.minecraft.world.item.ItemDisplayContext;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.BlockAndTintGetter;
 import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.AABB;
+import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
+import net.minecraftforge.client.ChunkRenderTypeSet;
+import net.minecraftforge.client.model.data.ModelData;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.joml.Quaternionf;
 
 import java.util.List;
 import java.util.function.Consumer;
 
-public class IrisMachineRenderer extends WorkableCasingMachineRenderer {
+
+public class IrisMachineRenderer extends DynamicRender<IrisMultiblockMachine, IrisMachineRenderer> {
 
     public static final ResourceLocation TEXTURE = CosmicCore
             .id("block/casings/solid/vomahine_certified_chemically_resistant_casing");
@@ -41,14 +60,44 @@ public class IrisMachineRenderer extends WorkableCasingMachineRenderer {
     public static final ResourceLocation IRIS_MODEL_RING_WHITE = CosmicCore.id("block/iris/iris_ring_white");
     private float tickvalue;
 
-    public IrisMachineRenderer() {
-        super(TEXTURE, OVERLAY_MODEL_TEXTURES);
+//    public IrisMachineRenderer() {
+//        super(TEXTURE, OVERLAY_MODEL_TEXTURES);
+//    }
+//
+//    @Override
+//    @OnlyIn(Dist.CLIENT)
+//    public boolean hasTESR(BlockEntity blockEntity) {
+//        return true;
+//    }
+
+    @Override
+    public void render(IrisMultiblockMachine machine, float partialTick, PoseStack poseStack, MultiBufferSource buffer, int packedLight, int packedOverlay) {
+
     }
 
     @Override
-    @OnlyIn(Dist.CLIENT)
-    public boolean hasTESR(BlockEntity blockEntity) {
-        return true;
+    public void renderByItem(ItemStack stack, ItemDisplayContext displayContext, PoseStack poseStack, MultiBufferSource buffer, int packedLight, int packedOverlay) {
+        super.renderByItem(stack, displayContext, poseStack, buffer, packedLight, packedOverlay);
+    }
+
+    @Override
+    public boolean shouldRenderOffScreen(IrisMultiblockMachine machine) {
+        return super.shouldRenderOffScreen(machine);
+    }
+
+    @Override
+    public boolean shouldRender(IrisMultiblockMachine machine, Vec3 cameraPos) {
+        return super.shouldRender(machine, cameraPos);
+    }
+
+    @Override
+    public AABB getRenderBoundingBox(IrisMultiblockMachine machine) {
+        return super.getRenderBoundingBox(machine);
+    }
+
+    @Override
+    public BlockEntityType<? extends BlockEntity> getBlockEntityType() {
+        return super.getBlockEntityType();
     }
 
     @Override
@@ -69,6 +118,26 @@ public class IrisMachineRenderer extends WorkableCasingMachineRenderer {
             renderRing(poseStack, buffer, frontFacing, tickvalue, combinedLight, combinedOverlay);
             renderRingSmall(poseStack, buffer, frontFacing, tickvalue, combinedLight, combinedOverlay);
         }
+    }
+
+    @Override
+    public boolean shouldRenderOffScreen(@NotNull BlockEntity blockEntity) {
+        return super.shouldRenderOffScreen(blockEntity);
+    }
+
+    @Override
+    public int getViewDistance() {
+        return super.getViewDistance();
+    }
+
+    @Override
+    public boolean shouldRender(BlockEntity blockEntity, @NotNull Vec3 cameraPos) {
+        return super.shouldRender(blockEntity, cameraPos);
+    }
+
+    @Override
+    public AABB getRenderBoundingBox(BlockEntity blockEntity) {
+        return super.getRenderBoundingBox(blockEntity);
     }
 
     @OnlyIn(Dist.CLIENT)
@@ -127,6 +196,7 @@ public class IrisMachineRenderer extends WorkableCasingMachineRenderer {
         RenderSystem.enableCull();
         poseStack.popPose();
     }
+
     /// STAR
 
     public void renderStar(PoseStack poseStack, MultiBufferSource bufferSource, Direction frontFacing,
@@ -144,8 +214,8 @@ public class IrisMachineRenderer extends WorkableCasingMachineRenderer {
         List<BakedQuad> quads = bakedmodel.getQuads(null, null, GTValues.RNG);
         for (BakedQuad quad : quads) {
             consumer.putBulkData(pose, quad, 1f, 1f, 1f, combinedLight, combinedOverlay);
-            consumer.putBulkData(pose, quad, new float[] { 1.0f, 1.0f, 1.0f, 1.0f }, 1f, 1f, 1f, 0.65f,
-                    new int[] { combinedLight, combinedLight, combinedLight, combinedLight }, combinedOverlay, false);
+            consumer.putBulkData(pose, quad, new float[]{1.0f, 1.0f, 1.0f, 1.0f}, 1f, 1f, 1f, 0.65f,
+                    new int[]{combinedLight, combinedLight, combinedLight, combinedLight}, combinedOverlay, false);
 
         }
         poseStack.popPose();
@@ -166,8 +236,8 @@ public class IrisMachineRenderer extends WorkableCasingMachineRenderer {
         List<BakedQuad> quads = bakedmodel.getQuads(null, null, GTValues.RNG);
         for (BakedQuad quad : quads) {
             consumer.putBulkData(pose, quad, 1f, 1f, 1f, combinedLight, combinedOverlay);
-            consumer.putBulkData(pose, quad, new float[] { 1.0f, 1.0f, 1.0f, 1.0f }, 1f, 1f, 1f, 0.5f,
-                    new int[] { combinedLight, combinedLight, combinedLight, combinedLight }, combinedOverlay, false);
+            consumer.putBulkData(pose, quad, new float[]{1.0f, 1.0f, 1.0f, 1.0f}, 1f, 1f, 1f, 0.5f,
+                    new int[]{combinedLight, combinedLight, combinedLight, combinedLight}, combinedOverlay, false);
         }
         poseStack.popPose();
     }
@@ -186,35 +256,80 @@ public class IrisMachineRenderer extends WorkableCasingMachineRenderer {
         List<BakedQuad> quads = bakedmodel.getQuads(null, null, GTValues.RNG);
         for (BakedQuad quad : quads) {
             consumer.putBulkData(pose, quad, 1f, 1f, 1f, combinedLight, combinedOverlay);
-            consumer.putBulkData(pose, quad, new float[] { 1.0f, 1.0f, 1.0f, 1.0f }, 1f, 1f, 1f, 0.7f,
-                    new int[] { combinedLight, combinedLight, combinedLight, combinedLight }, combinedOverlay, false);
+            consumer.putBulkData(pose, quad, new float[]{1.0f, 1.0f, 1.0f, 1.0f}, 1f, 1f, 1f, 0.7f,
+                    new int[]{combinedLight, combinedLight, combinedLight, combinedLight}, combinedOverlay, false);
         }
         poseStack.popPose();
     }
 
     @Override
-    public void onAdditionalModel(Consumer<ResourceLocation> registry) {
-        super.onAdditionalModel(registry);
-        registry.accept(IRIS_MODEL_CORE);
-        registry.accept(IRIS_MODEL_RING);
-        registry.accept(IRIS_MODEL_RING_WHITE);
-        registry.accept(STAR_MODEL_CORE);
-        registry.accept(STAR_MODEL_INNER);
-        registry.accept(STAR_MODEL_OUTER);
-    }
-
-    @OnlyIn(Dist.CLIENT)
-    public float reBakeCustomQuadsOffset() {
-        return 0f;
+    public DynamicRenderType<IrisMultiblockMachine, IrisMachineRenderer> getType() {
+        return ;
     }
 
     @Override
-    public boolean isGlobalRenderer(BlockEntity blockEntity) {
-        return true;
+    public @NotNull List<BakedQuad> getQuads(@Nullable BlockState state, @Nullable Direction side, @NotNull RandomSource rand) {
+        return super.getQuads(state, side, rand);
     }
 
     @Override
-    public int getViewDistance() {
-        return 256;
+    public ItemTransforms getTransforms() {
+        return super.getTransforms();
+    }
+
+    @Override
+    public boolean useAmbientOcclusion(BlockState state) {
+        return super.useAmbientOcclusion(state);
+    }
+
+    @Override
+    public boolean useAmbientOcclusion(BlockState state, RenderType renderType) {
+        return super.useAmbientOcclusion(state, renderType);
+    }
+
+    @Override
+    public BakedModel applyTransform(ItemDisplayContext transformType, PoseStack poseStack, boolean applyLeftHandTransform) {
+        return super.applyTransform(transformType, poseStack, applyLeftHandTransform);
+    }
+
+    @Override
+    public @NotNull ModelData getModelData(@NotNull BlockAndTintGetter level, @NotNull BlockPos pos, @NotNull BlockState state, @NotNull ModelData modelData) {
+        return super.getModelData(level, pos, state, modelData);
+    }
+
+    @Override
+    public TextureAtlasSprite getParticleIcon(@NotNull ModelData data) {
+        return super.getParticleIcon(data);
+    }
+
+    @Override
+    public ChunkRenderTypeSet getRenderTypes(@NotNull BlockState state, @NotNull RandomSource rand, @NotNull ModelData data) {
+        return super.getRenderTypes(state, rand, data);
+    }
+
+    @Override
+    public List<RenderType> getRenderTypes(ItemStack itemStack, boolean fabulous) {
+        return super.getRenderTypes(itemStack, fabulous);
+    }
+
+    @Override
+    public List<BakedModel> getRenderPasses(ItemStack itemStack, boolean fabulous) {
+        return super.getRenderPasses(itemStack, fabulous);
     }
 }
+
+//    @Override
+//    public void onAdditionalModel(Consumer<ResourceLocation> registry) {
+//        super.onAdditionalModel(registry);
+//        registry.accept(IRIS_MODEL_CORE);
+//        registry.accept(IRIS_MODEL_RING);
+//        registry.accept(IRIS_MODEL_RING_WHITE);
+//        registry.accept(STAR_MODEL_CORE);
+//        registry.accept(STAR_MODEL_INNER);
+//        registry.accept(STAR_MODEL_OUTER);
+//    }
+//
+//    @Override
+//    public @NotNull ModelData getModelData(@NotNull BlockAndTintGetter level, @NotNull BlockPos pos, @NotNull BlockState state, @NotNull ModelData modelData) {
+//        return super.getModelData(level, pos, state, modelData);
+//    }
