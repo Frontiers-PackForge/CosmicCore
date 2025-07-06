@@ -147,7 +147,7 @@ public class CosmicMachines {
                     .recipeType(GTRecipeTypes.BENDER_RECIPES)
                     .recipeModifier(SimpleSteamMachine::recipeModifier)
                     .addOutputLimit(ItemRecipeCapability.CAP, 1)
-                    .model(createWorkableSteamHullMachineModel(pressure, GTCEu.id("block/machines/bender")))
+                    .workableSteamHullModel(pressure, GTCEu.id("block/machines/bender"))
                     .register());
     public static final Pair<MachineDefinition, MachineDefinition> STEAM_WIREMILL = registerSteamMachines(
             "steam_wiremill", SimpleSteamMachine::new, (pressure, builder) -> builder
@@ -155,7 +155,7 @@ public class CosmicMachines {
                     .recipeType(GTRecipeTypes.WIREMILL_RECIPES)
                     .recipeModifier(SimpleSteamMachine::recipeModifier)
                     .addOutputLimit(ItemRecipeCapability.CAP, 1)
-                    .model(createWorkableSteamHullMachineModel(pressure, GTCEu.id("block/machines/wiremill")))
+                    .workableSteamHullModel(pressure, GTCEu.id("block/machines/wiremill"))
                     .register());
 
     public static final MachineDefinition[] COSMIC_PARALLEL_HATCH = registerTieredMachines("cosmic_parallel_hatch",
