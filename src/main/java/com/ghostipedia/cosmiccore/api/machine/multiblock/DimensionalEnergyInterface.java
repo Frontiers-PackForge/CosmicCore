@@ -154,6 +154,7 @@ public class DimensionalEnergyInterface extends WorkableMultiblockMachine
             this.averageOutLastSec = 0;
         }
 
+        tickSubscription.unsubscribe();
         super.onStructureInvalid();
     }
 

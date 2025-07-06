@@ -1,4 +1,5 @@
 {
+  "behavior.wireless_data.owner.network": "%sɹ§ :ɹǝuʍO ʞɹoʍʇǝNƐ§",
   "behavior.wireless_data.owner.player": "%sɹ§ :ǝɯɐN ɹǝʎɐןԀƐ§",
   "behavior.wireless_data.owner.team": "ɹ§ :ǝɯɐN ɯɐǝ⟘Ɛ§",
   "block.cosmiccore.alternator_flux_coiling": "buıןıoƆ xnןℲ ɹoʇɐuɹǝʇןⱯ",
@@ -339,6 +340,8 @@
   "cosmiccore.wireless_charger.range.single": "sʞɔoןq %s uıɥʇıʍ Ɐㄣ sǝıןddns 'ǝpoɯ ɹǝbɹɐɥɔɹǝdnS uı uǝɥM",
   "cosmiccore.zelothar.1": "ןɐǝZ - soןǝZ9§",
   "cosmiccore.zelothar.2": "ǝbɹoℲ - ɹɐɥ⟘9§",
+  "debug.owner.uuid": "%s ɐ§:ᗡI∩∩ ɹǝuʍOɐ§",
+  "debug.team.uuid": "%s ɐ§:ᗡI∩∩ ɯɐǝ⟘ɐ§",
   "gtceu.hellfire_foundry": "ʎɹpunoℲ ǝɹıɟןןǝHɔ§",
   "gtceu.industrial_chemvat": "ʇɐʌɯǝɥƆ ןɐıɹʇsnpuIɐ§",
   "gtceu.machine.dec.tooltip.0": "˙ʇǝʞɔod ןɐuoısuǝɯıpɹǝʇuı uɐ uı ɹǝʍod sǝɹoʇS",

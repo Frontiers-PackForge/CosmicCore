@@ -19,13 +19,12 @@ public class OwnershipUtils {
         } else return "NaN";
     }
 
-    public static void addOwnerLine(List<Component> textList, MachineOwner owner) {
+    public static void addOwnerLine(List<Component> textList, MachineOwner owner, boolean withNetworkOwner) {
         if (owner instanceof PlayerOwner playerOwner) {
             var name = UsernameCache.getLastKnownUsername(playerOwner.getUUID());
-            textList.add(Component.translatable("behavior.wireless_data.owner.player", name));
+            textList.add(Component.translatable("behavior.wireless_data.owner.player").append(name));
         } else if (owner instanceof FTBOwner ftOwner) {
-            var team = ftOwner.getTeam().getName();
-            textList.add(Component.translatable("behavior.wireless_data.owner.team").append(team));
+            textList.add(Component.translatable("behavior.wireless_data.owner.team").append(ftOwner.getName()));
         }
     }
 }
