@@ -72,14 +72,14 @@ public class CosmicBlocks {
             CosmicCoilBlock.CoilType.PROGRAMMABLE_MATTER);
     public static final BlockEntry<CoilBlock> COIL_SHIMMERING_NEUTRONIUM = createCoilBlock(
             CosmicCoilBlock.CoilType.SHIMMERING_NEUTRONIUM);
-    public static final BlockEntry<CoilBlock> COIL_CAUSAL_FABRIC = createCoilBlock(
-            CosmicCoilBlock.CoilType.CAUSAL_FABRIC,
-            Platform.isClient() ? new TextureOverrideRenderer(new ResourceLocation("block/cube_all"),
-                    Map.of("all", CosmicCore.id("block/casings/coils/causal_fabric_off"))) : null,
-            Platform.isClient() ? new NebulaeCoilRenderer(new ResourceLocation("block/cube_all"),
-                    Map.of("all", CosmicCoilBlock.CoilType.CAUSAL_FABRIC.getTexture())) : null
-
-    );
+//    public static final BlockEntry<CoilBlock> COIL_CAUSAL_FABRIC = createCoilBlock(
+//            CosmicCoilBlock.CoilType.CAUSAL_FABRIC,
+//            Platform.isClient() ? new TextureOverrideRenderer(new ResourceLocation("block/cube_all"),
+//                    Map.of("all", CosmicCore.id("block/casings/coils/causal_fabric_off"))) : null,
+//            Platform.isClient() ? new NebulaeCoilRenderer(new ResourceLocation("block/cube_all"),
+//                    Map.of("all", CosmicCoilBlock.CoilType.CAUSAL_FABRIC.getTexture())) : null
+//
+//    );
 
     // New Casings ; Several reference textures from GTOCore, make sure to give credits to them!
     public static final BlockEntry<Block> REFLECTIVE_STARMETAL_CASING = createCasingBlock("reflective_starmetal_casing",
