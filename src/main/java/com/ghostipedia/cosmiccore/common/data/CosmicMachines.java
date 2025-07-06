@@ -94,8 +94,7 @@ import static com.gregtechceu.gtceu.common.data.GTRecipeModifiers.ELECTRIC_OVERC
 import static com.gregtechceu.gtceu.common.data.GTRecipeTypes.DUMMY_RECIPES;
 import static com.gregtechceu.gtceu.common.data.machines.GTMachineUtils.*;
 import static com.gregtechceu.gtceu.common.data.machines.GTMultiMachines.FUSION_REACTOR;
-import static com.gregtechceu.gtceu.common.data.models.GTMachineModels.createWorkableCasingMachineModel;
-import static com.gregtechceu.gtceu.common.data.models.GTMachineModels.createWorkableSteamHullMachineModel;
+import static com.gregtechceu.gtceu.common.data.models.GTMachineModels.*;
 import static com.klikli_dev.occultism.registry.OccultismBlocks.IESNIUM_BLOCK;
 import static wayoftime.bloodmagic.common.block.BloodMagicBlocks.BLANK_RUNE;
 
@@ -3394,7 +3393,8 @@ public class CosmicMachines {
             .machine("hpca_indicator", HPCAIndicatorPartMachine::new)
             .langValue("HPCA Indicator")
             .appearanceBlock(COMPUTER_CASING)
-            .model(HPCAIndicatorRenderer::new)
+            .model(createTieredHullMachineModel(CosmicCore.id("block/overlay/machine/hpca/indicator")).andThen(
+                            b -> b. )
             .register();
 
     public static final MachineDefinition HIGH_PERFORMANCE_COMPUTATION_ARRAY = REGISTRATE
