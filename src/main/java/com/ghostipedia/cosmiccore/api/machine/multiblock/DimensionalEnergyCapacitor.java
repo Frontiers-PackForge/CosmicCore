@@ -54,7 +54,7 @@ public class DimensionalEnergyCapacitor extends DimensionalEnergyInterface {
         if (getLevel() instanceof DummyWorld) super.onStructureFormed();
 
         if (getLevel() instanceof ServerLevel serverLevel) {
-            var owner = getOwnerUUID();
+            var owner = getTeamUUID();
             var multiblockId = getDefinition().getId().toString();
             var wirelessData = WirelessEnergySavedData.getOrCreate(serverLevel);
             var uniqueMultiblockMapping = UniqueMultiblockSavedData.getOrCreate(serverLevel);
@@ -99,7 +99,7 @@ public class DimensionalEnergyCapacitor extends DimensionalEnergyInterface {
     public void onStructureInvalid() {
         super.onStructureInvalid();
         if (getLevel() instanceof ServerLevel serverLevel) {
-            var owner = getOwnerUUID();
+            var owner = getTeamUUID();
             var wirelessData = WirelessEnergySavedData.getOrCreate(serverLevel);
             var uniqueMultiblockMapping = UniqueMultiblockSavedData.getOrCreate(serverLevel);
             wirelessData.setActive(owner, false);
@@ -136,7 +136,7 @@ public class DimensionalEnergyCapacitor extends DimensionalEnergyInterface {
     public void setWorkingEnabled(boolean isWorkingAllowed) {
         super.setWorkingEnabled(isWorkingAllowed);
         if (getLevel() instanceof ServerLevel serverLevel) {
-            var owner = getOwnerUUID();
+            var owner = getTeamUUID();
             var wirelessData = WirelessEnergySavedData.getOrCreate(serverLevel);
             wirelessData.setActive(owner, isWorkingAllowed);
         }
