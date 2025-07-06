@@ -257,10 +257,7 @@ public class CosmicMachines {
                     .where('C', blocks(BRONZE_HULL.get()))
                     .where('E', blocks(CASING_BRONZE_GEARBOX.get()))
                     .build())
-            .model(() -> new SidedWorkableHullRenderer(
-                    GTCEu.id("block/casings/solid/machine_casing_bronze_plated_bricks"),
-                    WorkableSteamHullType.BRONZE_BRICK_HULL,
-                    CosmicCore.id("block/multiblock/mixing_vessel")))
+            .sidedWorkableCasingModel(GTCEu.id("block/casings/solid/machine_casing_bronze_plated_bricks"), CosmicCore.id("block/multiblock/mixing_vessel"))
             .register();
     public static final MultiblockMachineDefinition INDUSTRIAL_PRIMITIVE_BLAST_FURNACE = GTRegistration.REGISTRATE
             .multiblock("industrial_primitive_blast_furnace", IPBFMachine::new)
@@ -3394,7 +3391,7 @@ public class CosmicMachines {
             .langValue("HPCA Indicator")
             .appearanceBlock(COMPUTER_CASING)
             .model(createTieredHullMachineModel(CosmicCore.id("block/overlay/machine/hpca/indicator")).andThen(
-                            b -> b. )
+                            b -> b.ThisDoesNotExistYet))
             .register();
 
     public static final MachineDefinition HIGH_PERFORMANCE_COMPUTATION_ARRAY = REGISTRATE
