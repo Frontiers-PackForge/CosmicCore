@@ -32,8 +32,18 @@ legacyForge {
             systemProperty('forge.enabledGameTestNamespaces', project.mod_id)
         }
 
-        server {
+        client2 {
             client()
+            sourceSet = sourceSets.main
+            ideName = "Client (2)"
+
+            programArguments.addAll('--username', 'YoungOnion')
+            gameDirectory.set(file("runs/client2"))
+            systemProperty('forge.enabledGameTestNamespaces', project.mod_id)
+        }
+
+        server {
+            server()
             sourceSet = sourceSets.main
             ideName = "Server"
 

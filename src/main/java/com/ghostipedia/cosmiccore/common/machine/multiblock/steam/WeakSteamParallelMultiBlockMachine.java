@@ -110,7 +110,7 @@ public class WeakSteamParallelMultiBlockMachine extends WorkableMultiblockMachin
                 textList.add(Component.translatable("gtceu.multiblock.running"));
                 int currentProgress = (int) (recipeLogic.getProgressPercent() * 100);
                 textList.add(Component.translatable("gtceu.multiblock.parallel", MAX_PARALLELS));
-                textList.add(Component.translatable("gtceu.multiblock.progress", currentProgress));
+                textList.add(Component.translatable("gtceu.multiblock.progress_percent", currentProgress));
             } else {
                 textList.add(Component.translatable("gtceu.multiblock.idling"));
             }

@@ -182,7 +182,8 @@ public class CosmicLangHandler {
         replace(provider, "cosmiccore.multiblock.booster_used", "Booster: %s");
         replace(provider, "cosmiccore.multiblock.lubricant_used", "Lubricant: %s");
 
-        replace(provider, "behavior.wireless_data.owner.player", "§3Player Name: §r%s");
+        replace(provider, "behavior.wireless_data.owner.player", "§3Owner: §r");
+        replace(provider, "behavior.wireless_data.owner.network", "§3Network Owner: §r");
         replace(provider, "behavior.wireless_data.owner.team", "§3Team Name: §r");
         replace(provider, "cosmiccore.wireless_charger.mode.0", "Set charger mode: SUPERCHARGER [Range - %s blocks]");
         replace(provider, "cosmiccore.wireless_charger.mode.1", "Set charger mode: STANDARD [Range - %s blocks]");
@@ -278,5 +279,8 @@ public class CosmicLangHandler {
 
         // HPCA
         provider.add("cosmiccore.multiblock.hpca.incomplete-array", "Incomplete Array will not generate");
+
+        provider.add("debug.owner.uuid", "§aOwner UUID:§a %s");
+        provider.add("debug.team.uuid", "§aTeam UUID:§a %s");
     }
 }
