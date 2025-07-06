@@ -14,6 +14,7 @@ import com.gregtechceu.gtceu.api.block.ActiveBlock;
 import com.gregtechceu.gtceu.api.block.ICoilType;
 import com.gregtechceu.gtceu.common.block.CoilBlock;
 
+import com.gregtechceu.gtceu.common.data.models.GTModels;
 import com.lowdragmc.lowdraglib.Platform;
 import com.lowdragmc.lowdraglib.client.renderer.IRenderer;
 
@@ -43,6 +44,7 @@ import java.util.Map;
 import java.util.function.Supplier;
 
 import static com.ghostipedia.cosmiccore.api.registries.CosmicRegistration.REGISTRATE;
+import static com.gregtechceu.gtceu.api.block.property.GTBlockStateProperties.ACTIVE;
 import static earth.terrarium.adastra.common.registry.ModBlocks.GLOBES;
 
 public class CosmicBlocks {
@@ -169,7 +171,7 @@ public class CosmicBlocks {
                 .initialProperties(() -> Blocks.GLASS)
                 .properties(p -> p.isValidSpawn((state, level, pos, ent) -> false))
                 .addLayer(type)
-                .blockstate(GTModels.cubeAllModel(name, texture))
+                .exBlockstate(GTModels.cubeAllModel(texture))
                 .tag(RecipeTags.MINEABLE_WITH_WRENCH)
                 .item(BlockItem::new)
                 .build()
@@ -190,7 +192,7 @@ public class CosmicBlocks {
                 .initialProperties(properties)
                 .properties(p -> p.isValidSpawn((state, level, pos, ent) -> false))
                 .addLayer(type)
-                .blockstate(GTModels.cubeAllModel(name, texture))
+                .exBlockstate(GTModels.cubeAllModel(texture))
                 .tag(RecipeTags.MINEABLE_WITH_WRENCH)
                 .item(BlockItem::new)
                 .build()
@@ -202,7 +204,7 @@ public class CosmicBlocks {
                 .initialProperties(() -> Blocks.IRON_BLOCK)
                 .properties(p -> p.isValidSpawn((state, level, pos, ent) -> false))
                 .addLayer(() -> RenderType::cutoutMipped)
-                .blockstate(GTModels.createSidedCasingModel(name, texture))
+                .blockstate(GTModels.createSidedCasingModel(texture))
                 .tag(RecipeTags.MINEABLE_WITH_WRENCH)
                 .item(BlockItem::new)
                 .build()
@@ -214,7 +216,7 @@ public class CosmicBlocks {
                 .block("%s_coil_block".formatted(coilType.getName()), p -> new CoilBlock(p, coilType))
                 .initialProperties(() -> Blocks.IRON_BLOCK)
                 .addLayer(() -> RenderType::cutoutMipped)
-                .blockstate(GTModels.createCoilModel("%s_coil_block".formatted(coilType.getName()), coilType))
+                .blockstate(GTModels.createCoilModel(coilType))
                 .tag(RecipeTags.MINEABLE_WITH_WRENCH, BlockTags.MINEABLE_WITH_PICKAXE)
                 .item(BlockItem::new)
                 .build()
@@ -276,8 +278,8 @@ public class CosmicBlocks {
                     .texture("bot_all", magnetType.getTexture())
                     .texture("top_all", magnetType.getTexture().withSuffix("_bloom"));
             prov.getVariantBuilder(block)
-                    .partialState().with(ActiveBlock.ACTIVE, false).modelForState().modelFile(inactive).addModel()
-                    .partialState().with(ActiveBlock.ACTIVE, true).modelForState().modelFile(active).addModel();
+                    .partialState().with(ACTIVE, false).modelForState().modelFile(inactive).addModel()
+                    .partialState().with(ACTIVE, true).modelForState().modelFile(active).addModel();
         };
     }
 
