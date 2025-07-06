@@ -23,6 +23,8 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.function.Supplier;
 
+import static com.gregtechceu.gtceu.api.block.property.GTBlockStateProperties.ACTIVE;
+
 public class CosmicCoilBlock extends CoilBlock implements EntityBlock, IBlockRendererProvider {
 
     private final IRenderer renderer, activeRenderer;
@@ -37,7 +39,8 @@ public class CosmicCoilBlock extends CoilBlock implements EntityBlock, IBlockRen
     @Nullable
     @Override
     public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
-        return CosmicBlockEntities.CAUSAL_FABRIC_COIL_BLOCK_ENTITY.create(pos, state);
+        return null;
+        // return CosmicBlockEntities.CAUSAL_FABRIC_COIL_BLOCK_ENTITY.create(pos, state);
     }
 
     @Nullable
