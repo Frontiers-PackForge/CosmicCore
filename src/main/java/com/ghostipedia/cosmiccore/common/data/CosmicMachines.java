@@ -679,7 +679,7 @@ public class CosmicMachines {
                     CosmicCore.id("block/casings/solid/highly_conductive_fission_casing"),
                     GTCEu.id("block/multiblock/network_switch"))
                     .andThen(model -> model
-                            .addDynamicRenderer(() -> CosmicDynamicRenderHelpers::getHellfireFoundryPartRender)))
+                            .addDynamicRenderer(() -> CosmicDynamicRenderHelpers::createHellfireFoundryPartRender)))
             .register();
     public static final MultiblockMachineDefinition SUFFERING_CHAMBER = REGISTRATE
             .multiblock("suffering_chamber", WorkableElectricMultiblockMachine::new)

@@ -152,9 +152,6 @@ public class CosmicBlocks {
     public static final BlockEntry<ActiveBlock> RADIOACTIVE_FILTER_CASING = createActiveCasing(
             "radioactive_filter_casing",
             "block/variant/radioactive_filter_casing");
-    // blood cube
-    public static final BlockEntry<Block> BLOOD_CUBE = createCasingBlock(
-            "blood_cube", CosmicCore.id("block/iris/bloodcube"));
 
     // GLASS BLOCKS
     public static final BlockEntry<Block> ZBLAN_REINFORCED_GLASS = createGlassCasingBlock(
