@@ -106,29 +106,29 @@ public class CosmicMachines {
             IO.OUT, HIGH_TIERS, CosmicPartAbility.EXPORT_SOUL);
 
     public static final MachineDefinition[] THERMIA_VENT = registerThermiaTieredHatch(
-            "thermia_export_hatch", "Thermia Vent", "thermia_hatch.export",
+            "thermia_export_hatch", "Thermia Vent", "thermia_output_hatch",
             IO.OUT, HIGH_TIERS, CosmicPartAbility.EXPORT_THERMIA);
     public static final MachineDefinition[] THERMIA_SOCKET = registerThermiaTieredHatch(
-            "thermia_import_hatch", "Thermia Socket", "thermia_hatch.import",
+            "thermia_import_hatch", "Thermia Socket", "thermia_input_hatch",
             IO.IN, HIGH_TIERS, CosmicPartAbility.IMPORT_THERMIA);
 
     public static final MachineDefinition[] WIRELESS_ENERGY_INPUT_HATCH = registerWirelessEnergyTieredHatch(
-            "wireless_energy_hatch", "Wireless Energy Hatch", "wireless_energy.1a",
+            "wireless_energy_hatch", "Wireless Energy Hatch", "wireless_energy_1a",
             IO.IN, HIGH_TIERS, 1, PartAbility.INPUT_ENERGY);
     public static final MachineDefinition[] WIRELESS_ENERGY_OUTPUT_DYNAMO = registerWirelessEnergyTieredHatch(
-            "wireless_energy_dynamo", "Wireless Energy Dynamo", "wireless_energy.1a",
+            "wireless_energy_dynamo", "Wireless Energy Dynamo", "wireless_energy_1a",
             IO.OUT, HIGH_TIERS, 1, PartAbility.OUTPUT_ENERGY);
     public static final MachineDefinition[] WIRELESS_ENERGY_INPUT_HATCH_4A = registerWirelessEnergyTieredHatch(
-            "4a_wireless_energy_hatch", "4A Wireless Energy Hatch", "wireless_energy.4a",
+            "4a_wireless_energy_hatch", "4A Wireless Energy Hatch", "wireless_energy_4a",
             IO.IN, HIGH_TIERS, 4, PartAbility.INPUT_ENERGY);
     public static final MachineDefinition[] WIRELESS_ENERGY_OUTPUT_DYNAMO_4A = registerWirelessEnergyTieredHatch(
-            "4a_wireless_energy_dynamo", "4A Wireless Energy Dynamo", "wireless_energy.4a",
+            "4a_wireless_energy_dynamo", "4A Wireless Energy Dynamo", "wireless_energy_4a",
             IO.OUT, HIGH_TIERS, 4, PartAbility.OUTPUT_ENERGY);
     public static final MachineDefinition[] WIRELESS_ENERGY_INPUT_HATCH_16A = registerWirelessEnergyTieredHatch(
-            "16a_wireless_energy_hatch", "16A Wireless Energy Hatch", "wireless_energy.16a",
+            "16a_wireless_energy_hatch", "16A Wireless Energy Hatch", "wireless_energy_16a",
             IO.IN, HIGH_TIERS, 16, PartAbility.INPUT_ENERGY);
     public static final MachineDefinition[] WIRELESS_ENERGY_OUTPUT_DYNAMO_16A = registerWirelessEnergyTieredHatch(
-            "16a_wireless_energy_dynamo", "16A Wireless Energy Dynamo", "wireless_energy.16a",
+            "16a_wireless_energy_dynamo", "16A Wireless Energy Dynamo", "wireless_energy_16a",
             IO.OUT, HIGH_TIERS, 16, PartAbility.OUTPUT_ENERGY);
 
     public static final MachineDefinition[] NAQUAHINE_MINI_REACTOR = registerSimpleGenerator("naquahine_mini_reactor",
