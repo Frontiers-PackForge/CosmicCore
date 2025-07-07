@@ -147,13 +147,12 @@ public class StarLadder extends WorkableElectricMultiblockMachine implements IMu
                     .where("Q", blocks(CosmicModularMachines.STAR_LADDER_TEST_MODULE[GTValues.ZPM].get()))
                     // blocks(Arrays.stream(CosmicModularMachines.STAR_LADDER_TEST_MODULE).filter(Objects::nonNull).map(Supplier::get).toArray(IMachineBlock[]::new))
                     .build())
-            .workableCasingRenderer(CosmicCore.id("block/casings/solid/vomahine_certified_chemically_resistant_casing"),
+            .workableCasingModel(CosmicCore.id("block/casings/solid/vomahine_certified_chemically_resistant_casing"),
                     GTCEu.id("block/multiblock/fusion_reactor"))
             .tooltips(Component.translatable("cosmiccore.multiblock.iris.tooltip.0"),
                     Component.translatable("cosmiccore.multiblock.iris.tooltip.1"),
                     Component.translatable("cosmiccore.multiblock.iris.tooltip.2"),
                     Component.translatable("cosmiccore.multiblock.iris.tooltip.3"))
-            .hasTESR(true)
             .register();
 
     @Override

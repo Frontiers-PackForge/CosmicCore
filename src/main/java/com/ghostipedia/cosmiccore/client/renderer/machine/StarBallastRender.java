@@ -1,13 +1,12 @@
 package com.ghostipedia.cosmiccore.client.renderer.machine;
 
 import com.ghostipedia.cosmiccore.CosmicCore;
-
 import com.ghostipedia.cosmiccore.api.machine.multiblock.IrisMultiblockMachine;
+
 import com.gregtechceu.gtceu.client.renderer.machine.DynamicRender;
 import com.gregtechceu.gtceu.client.renderer.machine.DynamicRenderType;
-
 import com.gregtechceu.gtceu.client.util.ModelUtils;
-import com.mojang.serialization.Codec;
+
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
@@ -18,14 +17,16 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.phys.AABB;
+import net.minecraftforge.client.model.data.ModelData;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import net.minecraftforge.client.model.data.ModelData;
+import com.mojang.serialization.Codec;
 import org.joml.Quaternionf;
 
-import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.List;
+
+import javax.annotation.ParametersAreNonnullByDefault;
 
 // This multi should never be rotated on its side
 // so it uses a static location for the star as the controller should never be rotated on its side
