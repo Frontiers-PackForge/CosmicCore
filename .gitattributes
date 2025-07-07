@@ -3,6 +3,7 @@
 
 # Explicitly declare text files you want to always be normalized and converted
 # to native line endings on checkout.
+*.java text eol=lf
 *.json text eol=lf
 src/generated/resources/.cache/** text eol=lf
 
