@@ -18,6 +18,10 @@ public class CosmicDynamicRenderHelpers {
         return StellarIrisRender.INSTANCE;
     }
 
+    public static DynamicRender<?, ?> getStarBallastRender() {
+        return StarBallastRender.INSTANCE;
+    }
+
     public static DynamicRender<?, ?> createHellfireFoundryPartRender() {
         return new HellFireFoundryPartRender(CosmicBlocks.HIGHLY_CONDUCTIVE_FISSION_CASING.getDefaultState());
     }

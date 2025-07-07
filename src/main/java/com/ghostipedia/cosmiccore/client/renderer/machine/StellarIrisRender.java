@@ -38,9 +38,6 @@ public class StellarIrisRender extends DynamicRender<IrisMultiblockMachine, Stel
     public static final DynamicRenderType<IrisMultiblockMachine, StellarIrisRender> TYPE = new DynamicRenderType<>(
             StellarIrisRender.CODEC);
 
-    public static final ResourceLocation STAR_MODEL_CORE = CosmicCore.id("block/iris/star_sphere");
-    public static final ResourceLocation STAR_MODEL_OUTER = CosmicCore.id("block/iris/star_sphere_outer");
-    public static final ResourceLocation STAR_MODEL_INNER = CosmicCore.id("block/iris/star_sphere_inner");
     public static final ResourceLocation IRIS_MODEL_CORE = CosmicCore.id("block/iris/iris_sphere");
     public static final ResourceLocation IRIS_MODEL_RING = CosmicCore.id("block/iris/iris_ring");
     public static final ResourceLocation IRIS_MODEL_RING_WHITE = CosmicCore.id("block/iris/iris_ring_white");
@@ -133,72 +130,4 @@ public class StellarIrisRender extends DynamicRender<IrisMultiblockMachine, Stel
 
         poseStack.popPose();
     }
-    // spotless:off
-    /*
-
-    /// STAR
-
-    public void renderStar(PoseStack poseStack, MultiBufferSource bufferSource,
-                           float totalTick, int packedLight, int packedOverlay) {
-        var modelManager = Minecraft.getInstance().getModelManager();
-        poseStack.pushPose();
-        BakedModel bakedmodel = modelManager.getModel(STAR_MODEL_CORE);
-        poseStack.translate(0.5D, -2.5D, 46.5D);
-        poseStack.mulPose(new Quaternionf().rotateXYZ(0.25f, 0.0f, 0f));
-        poseStack.mulPose(new Quaternionf().rotateAxis(totalTick * Mth.TWO_PI / 80, 0f, 1f, 0));
-        poseStack.scale(4.6f, 4.6f, 4.6f);
-        PoseStack.Pose pose = poseStack.last();
-
-        VertexConsumer consumer = bufferSource.getBuffer(RenderType.translucent());
-        List<BakedQuad> quads = bakedmodel.getQuads(null, null, GTValues.RNG);
-        for (BakedQuad quad : quads) {
-            consumer.putBulkData(pose, quad, 1f, 1f, 1f, packedLight, packedOverlay);
-            consumer.putBulkData(pose, quad, 1f, 1f, 1f, 0.65f, packedLight, packedOverlay, false);
-
-        }
-        poseStack.popPose();
-    }
-
-    public void renderStarShell(PoseStack poseStack, MultiBufferSource bufferSource,
-                                float totalTick, int packedLight, int packedOverlay) {
-        var modelManager = Minecraft.getInstance().getModelManager();
-        poseStack.pushPose();
-        BakedModel bakedmodel = modelManager.getModel(STAR_MODEL_OUTER);
-        poseStack.translate(0.5D, -2.5D, 46.5D);
-        poseStack.mulPose(new Quaternionf().rotateXYZ(0.65f, 0.0f, 0.35f));
-        poseStack.mulPose(new Quaternionf().rotateAxis(totalTick * Mth.TWO_PI / 80, 0f, 1, 0f));
-        poseStack.scale(5.0f, 5.0f, 5.0f);
-        PoseStack.Pose pose = poseStack.last();
-
-        VertexConsumer consumer = bufferSource.getBuffer(RenderType.translucent());
-        List<BakedQuad> quads = bakedmodel.getQuads(null, null, GTValues.RNG);
-        for (BakedQuad quad : quads) {
-            consumer.putBulkData(pose, quad, 1f, 1f, 1f, packedLight, packedOverlay);
-            consumer.putBulkData(pose, quad, new float[] { 1.0f, 1.0f, 1.0f, 1.0f }, 1f, 1f, 1f, 0.5f,
-                    new int[] { packedLight, packedLight, packedLight, packedLight }, packedOverlay, false);
-        }
-        poseStack.popPose();
-    }
-
-    public void renderStarInsides(PoseStack poseStack, MultiBufferSource bufferSource,
-                                  float totalTick, int packedLight, int packedOverlay) {
-        var modelManager = Minecraft.getInstance().getModelManager();
-        poseStack.pushPose();
-        BakedModel bakedmodel = modelManager.getModel(STAR_MODEL_INNER);
-        poseStack.translate(0.5D, -2.5D, 46.5D);
-        poseStack.mulPose(new Quaternionf().rotateAxis(totalTick * Mth.TWO_PI / 80, 0, 1f, 0));
-        poseStack.scale(4.85f, 4.85f, 4.85f);
-        PoseStack.Pose pose = poseStack.last();
-
-        VertexConsumer consumer = bufferSource.getBuffer(RenderType.cutout());
-        List<BakedQuad> quads = bakedmodel.getQuads(null, null, GTValues.RNG);
-        for (BakedQuad quad : quads) {
-            consumer.putBulkData(pose, quad, 1f, 1f, 1f, packedLight, packedOverlay);
-            consumer.putBulkData(pose, quad, new float[] { 1.0f, 1.0f, 1.0f, 1.0f }, 1f, 1f, 1f, 0.7f,
-                    new int[] { packedLight, packedLight, packedLight, packedLight }, packedOverlay, false);
-        }
-        poseStack.popPose();
-    }
-    */
-    // spotless:on
 }
