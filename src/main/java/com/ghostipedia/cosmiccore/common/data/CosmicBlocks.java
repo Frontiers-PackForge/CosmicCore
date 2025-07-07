@@ -3,18 +3,18 @@ package com.ghostipedia.cosmiccore.common.data;
 import com.ghostipedia.cosmiccore.CosmicCore;
 import com.ghostipedia.cosmiccore.api.CosmicCoreAPI;
 import com.ghostipedia.cosmiccore.api.block.IMagnetType;
+import com.ghostipedia.cosmiccore.client.renderer.block.NebulaeCoilRenderer;
 import com.ghostipedia.cosmiccore.common.block.MagnetBlock;
+import com.ghostipedia.cosmiccore.common.blockentity.CosmicCoilBlockEntity;
 import com.ghostipedia.cosmiccore.common.data.recipe.RecipeTags;
-import com.ghostipedia.cosmiccore.common.item.RenderBlockItem;
 
 import com.gregtechceu.gtceu.GTCEu;
 import com.gregtechceu.gtceu.api.GTCEuAPI;
 import com.gregtechceu.gtceu.api.block.ActiveBlock;
 import com.gregtechceu.gtceu.api.block.ICoilType;
+import com.gregtechceu.gtceu.api.block.property.GTBlockStateProperties;
 import com.gregtechceu.gtceu.common.block.CoilBlock;
 import com.gregtechceu.gtceu.common.data.models.GTModels;
-
-import com.lowdragmc.lowdraglib.client.renderer.IRenderer;
 
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.resources.ResourceLocation;
@@ -69,14 +69,22 @@ public class CosmicBlocks {
             CosmicCoilBlock.CoilType.PROGRAMMABLE_MATTER);
     public static final BlockEntry<CoilBlock> COIL_SHIMMERING_NEUTRONIUM = createCoilBlock(
             CosmicCoilBlock.CoilType.SHIMMERING_NEUTRONIUM);
-    // public static final BlockEntry<CoilBlock> COIL_CAUSAL_FABRIC = createCoilBlock(
-    // CosmicCoilBlock.CoilType.CAUSAL_FABRIC,
-    // Platform.isClient() ? new TextureOverrideRenderer(new ResourceLocation("block/cube_all"),
-    // Map.of("all", CosmicCore.id("block/casings/coils/causal_fabric_off"))) : null,
-    // Platform.isClient() ? new NebulaeCoilRenderer(new ResourceLocation("block/cube_all"),
-    // Map.of("all", CosmicCoilBlock.CoilType.CAUSAL_FABRIC.getTexture())) : null
-    //
-    // );
+    public static final BlockEntry<CoilBlock> COIL_CAUSAL_FABRIC = createCoilBlockWithEntity(
+            CosmicCoilBlock.CoilType.CAUSAL_FABRIC,
+            (ctx, prov) -> {
+                String name = ctx.getName();
+                ActiveBlock block = ctx.getEntry();
+                ModelFile inactive = prov.models()
+                        .cubeAll(name, CosmicCore.id("block/casings/coils/causal_fabric_off"));
+                ModelFile active = prov.models()
+                        .cubeAll(name + "_active", CosmicCore.id("block/casings/coils/causal_fabric"));
+
+                prov.getVariantBuilder(block)
+                        .partialState().with(GTBlockStateProperties.ACTIVE, false).modelForState().modelFile(inactive)
+                        .addModel()
+                        .partialState().with(GTBlockStateProperties.ACTIVE, true).modelForState().modelFile(active)
+                        .addModel();
+            });
 
     // New Casings ; Several reference textures from GTOCore, make sure to give credits to them!
     public static final BlockEntry<Block> REFLECTIVE_STARMETAL_CASING = createCasingBlock("reflective_starmetal_casing",
@@ -219,17 +227,17 @@ public class CosmicBlocks {
         return coilBlock;
     }
 
-    private static BlockEntry<CoilBlock> createCoilBlock(ICoilType coilType, IRenderer renderer,
-                                                         IRenderer activeRenderer) {
+    private static BlockEntry<CoilBlock> createCoilBlockWithEntity(ICoilType coilType,
+                                                                   NonNullBiConsumer<DataGenContext<Block, CoilBlock>, RegistrateBlockstateProvider> blockState) {
         BlockEntry<CoilBlock> coilBlock = REGISTRATE
-                .block("%s_coil_block".formatted(coilType.getName()),
-                        p -> (CoilBlock) new CosmicCoilBlock(p, coilType, renderer, activeRenderer))
+                .block("%s_coil_block".formatted(coilType.getName()), p -> (CoilBlock) new CosmicCoilBlock(p, coilType))
                 .initialProperties(() -> Blocks.IRON_BLOCK)
                 .addLayer(() -> RenderType::translucent)
-                .blockstate(NonNullBiConsumer.noop())
+                .blockstate(blockState)
                 .tag(RecipeTags.MINEABLE_WITH_WRENCH, BlockTags.MINEABLE_WITH_PICKAXE)
-                .item(RenderBlockItem::new)
-                .model(NonNullBiConsumer.noop())
+                .simpleItem()
+                .blockEntity(CosmicCoilBlockEntity::new)
+                .renderer(() -> NebulaeCoilRenderer::new)
                 .build()
                 .register();
         GTCEuAPI.HEATING_COILS.put(coilType, coilBlock);
