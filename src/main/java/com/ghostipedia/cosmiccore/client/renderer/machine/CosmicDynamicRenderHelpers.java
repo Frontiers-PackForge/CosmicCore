@@ -14,6 +14,10 @@ public class CosmicDynamicRenderHelpers {
         return HemophagicTransfuserRender.INSTANCE;
     }
 
+    public static DynamicRender<?, ?> getStellarIrisRender() {
+        return StellarIrisRender.INSTANCE;
+    }
+
     public static DynamicRender<?, ?> createHellfireFoundryPartRender() {
         return new HellFireFoundryPartRender(CosmicBlocks.HIGHLY_CONDUCTIVE_FISSION_CASING.getDefaultState());
     }

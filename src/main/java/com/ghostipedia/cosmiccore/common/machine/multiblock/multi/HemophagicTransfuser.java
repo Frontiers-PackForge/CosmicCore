@@ -3,7 +3,6 @@ package com.ghostipedia.cosmiccore.common.machine.multiblock.multi;
 import com.ghostipedia.cosmiccore.CosmicCore;
 import com.ghostipedia.cosmiccore.api.machine.multiblock.IrisMultiblockMachine;
 import com.ghostipedia.cosmiccore.client.renderer.machine.CosmicDynamicRenderHelpers;
-import com.ghostipedia.cosmiccore.client.renderer.machine.HemophagicTransfuserRender;
 import com.ghostipedia.cosmiccore.gtbridge.CosmicRecipeTypes;
 
 import com.gregtechceu.gtceu.GTCEu;
@@ -74,7 +73,8 @@ public class HemophagicTransfuser {
             .model(createSeparateControllerCasingMachineModel(BloodMagic.rl("block/blankrune"),
                     CosmicCore.id("block/casings/solid/vomahine_certified_chemically_resistant_casing"),
                     GTCEu.id("block/multiblock/network_switch"))
-                    .andThen(model -> model.addDynamicRenderer(() -> CosmicDynamicRenderHelpers::getHemophagicTransfuserRender)))
+                    .andThen(model -> model
+                            .addDynamicRenderer(() -> CosmicDynamicRenderHelpers::getHemophagicTransfuserRender)))
             .hasBER(true)
             .register();
 

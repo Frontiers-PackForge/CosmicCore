@@ -1,8 +1,7 @@
 package com.ghostipedia.cosmiccore.client;
 
 import com.ghostipedia.cosmiccore.CosmicCore;
-import com.ghostipedia.cosmiccore.client.renderer.machine.HPCAIndicatorRender;
-import com.ghostipedia.cosmiccore.client.renderer.machine.HellFireFoundryPartRender;
+import com.ghostipedia.cosmiccore.client.renderer.machine.*;
 
 import com.gregtechceu.gtceu.client.renderer.machine.DynamicRenderManager;
 
@@ -26,6 +25,8 @@ public class CosmicCoreClient {
 
         DynamicRenderManager.register(CosmicCore.id("hpca_indicator"), HPCAIndicatorRender.TYPE);
         DynamicRenderManager.register(CosmicCore.id("hellfire_foundry_parts"), HellFireFoundryPartRender.TYPE);
+        DynamicRenderManager.register(CosmicCore.id("hemographic_transfuser"), HemophagicTransfuserRender.TYPE);
+        DynamicRenderManager.register(CosmicCore.id("stellar_iris"), StellarIrisRender.TYPE);
     }
 
     @Getter

@@ -10,8 +10,6 @@ import com.gregtechceu.gtceu.client.renderer.machine.DynamicRenderType;
 import com.gregtechceu.gtceu.client.util.ModelUtils;
 import com.gregtechceu.gtceu.client.util.RenderBufferHelper;
 
-import com.mojang.blaze3d.vertex.VertexConsumer;
-import com.mojang.serialization.Codec;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.LightTexture;
@@ -26,13 +24,16 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
 import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.VertexConsumer;
+import com.mojang.serialization.Codec;
 import org.joml.Quaternionf;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
-public class HemophagicTransfuserRender extends DynamicRender<WorkableElectricMultiblockMachine, HemophagicTransfuserRender> {
+public class HemophagicTransfuserRender extends
+                                        DynamicRender<WorkableElectricMultiblockMachine, HemophagicTransfuserRender> {
 
     public static final HemophagicTransfuserRender INSTANCE = new HemophagicTransfuserRender();
     public static final Codec<HemophagicTransfuserRender> CODEC = Codec.unit(INSTANCE);
