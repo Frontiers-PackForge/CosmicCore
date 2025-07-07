@@ -123,7 +123,7 @@ public class SufferingChamberRenderer extends DynamicRender<WorkableElectricMult
                                    consumer,
                                    stack.last(),
                                    0x8888FFFF,
-                                   LightTexture.FULL_SKY,
+                                   LightTexture.FULL_BRIGHT,
                                    Direction.UP,
                                    -3.5f, 0, -3.5f, pentagramSprite.getU0(), pentagramSprite.getV1(),
                                    -3.5f, 0,  3.5f, pentagramSprite.getU0(), pentagramSprite.getV0(),
