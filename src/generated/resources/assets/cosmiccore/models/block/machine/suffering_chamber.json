@@ -1,5 +1,10 @@
 {
   "parent": "minecraft:block/block",
+  "dynamic_renders": [
+    {
+      "type": "cosmiccore:suffering_chamber"
+    }
+  ],
   "loader": "gtceu:machine",
   "machine": "cosmiccore:suffering_chamber",
   "texture_overrides": {

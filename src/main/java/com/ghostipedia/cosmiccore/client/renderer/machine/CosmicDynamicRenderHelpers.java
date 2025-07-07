@@ -25,4 +25,8 @@ public class CosmicDynamicRenderHelpers {
     public static DynamicRender<?, ?> createHellfireFoundryPartRender() {
         return new HellFireFoundryPartRender(CosmicBlocks.HIGHLY_CONDUCTIVE_FISSION_CASING.getDefaultState());
     }
+
+    public static DynamicRender<?, ?> getSufferingChamberRenderer() {
+        return  SufferingChamberRenderer.INSTANCE;
+    }
 }

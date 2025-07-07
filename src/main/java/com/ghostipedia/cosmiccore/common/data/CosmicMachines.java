@@ -721,7 +721,8 @@ public class CosmicMachines {
             // spotless:on
             .model(createSeparateControllerCasingMachineModel(BloodMagic.rl("block/blankrune"),
                     GTCEu.id("block/casings/gcym/stress_proof_casing"),
-                    GTCEu.id("block/multiblock/network_switch")))
+                    GTCEu.id("block/multiblock/network_switch")).andThen(model -> model.addDynamicRenderer(() -> CosmicDynamicRenderHelpers::getSufferingChamberRenderer)))
+            .hasBER(true)
             .register();
     public static final MultiblockMachineDefinition POLYMERIZER = REGISTRATE
             .multiblock("polymerizer", WorkableElectricMultiblockMachine::new)
