@@ -49,7 +49,7 @@ public class HemophagicTransfuser {
                     .aisle("A  AAAAA  A", "   BCCCB   ", "  B     B  ", "A         A", "AC       CA", "AC       CA", "AC       CA", "A         A", "  B     B  ", "   BCCCB   ", "A  AAAAA  A")
                     .aisle("AAAA   AAAA", "A  AAQAA  A", "A         A", "AA       AA", " A       A ", " A       A ", " A       A ", "AA       AA", "A         A", "A  AAAAA  A", "AAAA   AAAA")
                     .where(' ', any())
-                    .where("Q", controller(blocks(definition.getBlock())))
+                    .where('Q', controller(blocks(definition.getBlock())))
                     .where('A', blocks(BloodMagicBlocks.BLANK_RUNE.get()))
                     .where('B', blocks(BloodMagicBlocks.DAWN_RITUAL_STONE.get()))
                     .where('C', blocks(BloodMagicBlocks.DUSK_RITUAL_STONE.get()))

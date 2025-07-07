@@ -12,16 +12,19 @@ import com.gregtechceu.gtceu.client.util.ModelUtils;
 import com.gregtechceu.gtceu.client.util.RenderBufferHelper;
 
 import net.minecraft.MethodsReturnNonnullByDefault;
+import net.minecraft.Util;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.LightTexture;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.Sheets;
 import net.minecraft.client.renderer.texture.TextureAtlas;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Vec3i;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
+import net.minecraft.world.phys.AABB;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -29,6 +32,8 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.serialization.Codec;
 import org.joml.Quaternionf;
+
+import java.util.function.BiFunction;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 
@@ -41,6 +46,21 @@ public class HemophagicTransfuserRender extends
     public static final Codec<HemophagicTransfuserRender> CODEC = Codec.unit(INSTANCE);
     public static final DynamicRenderType<WorkableElectricMultiblockMachine, HemophagicTransfuserRender> TYPE = new DynamicRenderType<>(
             HemophagicTransfuserRender.CODEC);
+
+    private static final BiFunction<Direction, Direction, AABB> renderBoundCache = Util.memoize((front, upwards) -> {
+        Direction up = RelativeDirection.UP.getRelative(front, upwards, false);
+        Direction back = RelativeDirection.BACK.getRelative(front, upwards, false);
+        Direction left = RelativeDirection.LEFT.getRelative(front, upwards, false);
+
+        // offset from the controller to the inner cube (scaled up by 1 in all directions)
+        // values are from the multi pattern
+        BlockPos.MutableBlockPos minPos = new BlockPos.MutableBlockPos()
+                .move(left, 3).move(up, 1).move(back, 2);
+        BlockPos.MutableBlockPos maxPos = new BlockPos.MutableBlockPos()
+                .move(left, -3).move(up, 7).move(back, 8);
+
+        return new AABB(minPos, maxPos);
+    });
 
     public static final ResourceLocation BLOOD_CUBE_TEXTURE = CosmicCore.id("block/iris/bloodcube");
 
@@ -59,6 +79,25 @@ public class HemophagicTransfuserRender extends
     @Override
     public DynamicRenderType<WorkableElectricMultiblockMachine, HemophagicTransfuserRender> getType() {
         return TYPE;
+    }
+
+    @Override
+    public int getViewDistance() {
+        return 256;
+    }
+
+    @Override
+    public AABB getRenderBoundingBox(WorkableElectricMultiblockMachine multi) {
+        if (multi.isFormed()) {
+            AABB bounds = renderBoundCache.apply(multi.getFrontFacing(), multi.getUpwardsFacing());
+            return bounds.move(multi.getPos());
+        }
+        return super.getRenderBoundingBox(multi);
+    }
+
+    @Override
+    public boolean shouldRenderOffScreen(WorkableElectricMultiblockMachine machine) {
+        return true;
     }
 
     @Override
@@ -164,15 +203,5 @@ public class HemophagicTransfuserRender extends
                 1.6f, 0.1F, 10, 36,
                 0.6F, 0, 0, 1, axis);
         poseStack.popPose();
-    }
-
-    @Override
-    public boolean shouldRenderOffScreen(WorkableElectricMultiblockMachine machine) {
-        return true;
-    }
-
-    @Override
-    public int getViewDistance() {
-        return 256;
     }
 }

@@ -3,7 +3,6 @@ package com.ghostipedia.cosmiccore.client.renderer.machine;
 import com.ghostipedia.cosmiccore.CosmicCore;
 import com.ghostipedia.cosmiccore.api.machine.multiblock.IrisMultiblockMachine;
 
-import com.gregtechceu.gtceu.api.GTValues;
 import com.gregtechceu.gtceu.client.renderer.machine.DynamicRender;
 import com.gregtechceu.gtceu.client.renderer.machine.DynamicRenderType;
 import com.gregtechceu.gtceu.client.util.ModelUtils;
@@ -19,11 +18,11 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.phys.AABB;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.client.model.data.ModelData;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.serialization.Codec;
-import net.minecraftforge.client.model.data.ModelData;
 import org.joml.Quaternionf;
 
 import java.util.List;
