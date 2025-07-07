@@ -1,0 +1,27 @@
+{
+  "parent": "minecraft:block/block",
+  "dynamic_renders": [
+    {
+      "type": "cosmiccore:hpca_indicator"
+    }
+  ],
+  "loader": "gtceu:machine",
+  "machine": "cosmiccore:hpca_indicator",
+  "replaceable_textures": [
+    "bottom",
+    "top",
+    "side"
+  ],
+  "variants": {
+    "": {
+      "model": {
+        "parent": "cosmiccore:block/machine/part/hpca_indicator",
+        "textures": {
+          "bottom": "gtceu:block/casings/voltage/zpm/bottom",
+          "side": "gtceu:block/casings/voltage/zpm/side",
+          "top": "gtceu:block/casings/voltage/zpm/top"
+        }
+      }
+    }
+  }
+}

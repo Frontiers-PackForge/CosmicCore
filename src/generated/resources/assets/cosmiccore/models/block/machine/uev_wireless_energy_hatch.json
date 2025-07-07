@@ -1,0 +1,22 @@
+{
+  "parent": "minecraft:block/block",
+  "loader": "gtceu:machine",
+  "machine": "cosmiccore:uev_wireless_energy_hatch",
+  "replaceable_textures": [
+    "bottom",
+    "top",
+    "side"
+  ],
+  "variants": {
+    "": {
+      "model": {
+        "parent": "cosmiccore:block/machine/part/wireless_energy_1a",
+        "textures": {
+          "bottom": "gtceu:block/casings/voltage/uev/bottom",
+          "side": "gtceu:block/casings/voltage/uev/side",
+          "top": "gtceu:block/casings/voltage/uev/top"
+        }
+      }
+    }
+  }
+}

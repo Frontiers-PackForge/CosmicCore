@@ -1,0 +1,10 @@
+{
+  "parent": "minecraft:block/block",
+  "loader": "gtceu:machine",
+  "machine": "cosmiccore:creative_thermal",
+  "variants": {
+    "": {
+      "model": "cosmiccore:block/machine/creative_thermal"
+    }
+  }
+}
