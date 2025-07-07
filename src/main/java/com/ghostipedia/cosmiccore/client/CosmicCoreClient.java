@@ -6,6 +6,7 @@ import com.ghostipedia.cosmiccore.client.renderer.machine.*;
 import com.gregtechceu.gtceu.client.renderer.machine.DynamicRenderManager;
 
 import net.minecraft.client.renderer.ShaderInstance;
+import net.minecraftforge.client.event.ModelEvent;
 import net.minecraftforge.client.event.RegisterGuiOverlaysEvent;
 import net.minecraftforge.client.event.RegisterShadersEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
@@ -46,5 +47,17 @@ public class CosmicCoreClient {
     @SubscribeEvent
     public static void onGUIRegisterUIOverlays(RegisterGuiOverlaysEvent event) {
         event.registerAboveAll("cosmichud", new CosmicHudGuiOverlay());
+    }
+
+    @SubscribeEvent
+    public static void registerAdditionalModels(ModelEvent.RegisterAdditional event) {
+        event.register(StellarIrisRender.IRIS_MODEL_CORE);
+        event.register(StellarIrisRender.IRIS_MODEL_RING);
+        event.register(StellarIrisRender.IRIS_MODEL_RING_WHITE);
+
+        event.register(StarBallastRender.STAR_MODEL_CORE);
+        event.register(StarBallastRender.STAR_MODEL_OUTER);
+        event.register(StarBallastRender.STAR_MODEL_INNER);
+        event.register(StarBallastRender.STAR_MODEL_BEAM);
     }
 }

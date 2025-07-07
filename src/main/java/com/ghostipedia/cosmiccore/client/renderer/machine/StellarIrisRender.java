@@ -23,11 +23,14 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.serialization.Codec;
+import net.minecraftforge.client.model.data.ModelData;
 import org.joml.Quaternionf;
 
 import java.util.List;
 
 import javax.annotation.ParametersAreNonnullByDefault;
+
+import static com.ghostipedia.cosmiccore.client.renderer.machine.StarBallastRender.random;
 
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
@@ -98,7 +101,7 @@ public class StellarIrisRender extends DynamicRender<IrisMultiblockMachine, Stel
     @OnlyIn(Dist.CLIENT)
     public void renderIris(PoseStack poseStack, VertexConsumer consumer, int packedLight, int packedOverlay) {
         PoseStack.Pose pose = poseStack.last();
-        List<BakedQuad> quads = irisCoreModel.getQuads(null, null, GTValues.RNG);
+        List<BakedQuad> quads = irisCoreModel.getQuads(null, null, random, ModelData.EMPTY, null);
         for (BakedQuad quad : quads) {
             consumer.putBulkData(pose, quad, 1.0f, 1.0f, 1.0f, packedLight, packedOverlay);
         }
@@ -108,7 +111,7 @@ public class StellarIrisRender extends DynamicRender<IrisMultiblockMachine, Stel
         poseStack.pushPose();
         poseStack.scale(2.0f, 2.0f, 2.0f);
 
-        List<BakedQuad> quads = irisRingModel.getQuads(null, null, GTValues.RNG);
+        List<BakedQuad> quads = irisRingModel.getQuads(null, null, random, ModelData.EMPTY, null);
         for (BakedQuad quad : quads) {
             consumer.putBulkData(poseStack.last(), quad, 1f, 1f, 1f, packedLight, packedOverlay);
         }
@@ -123,7 +126,7 @@ public class StellarIrisRender extends DynamicRender<IrisMultiblockMachine, Stel
         poseStack.mulPose(new Quaternionf().rotateAxis(totalTick * Mth.TWO_PI / 20, 0, 1, 0));
         poseStack.scale(13.0f, 13.0f, 13.0f);
 
-        List<BakedQuad> quads = irisSmallRingModel.getQuads(null, null, GTValues.RNG);
+        List<BakedQuad> quads = irisSmallRingModel.getQuads(null, null, random, ModelData.EMPTY, null);
         for (BakedQuad quad : quads) {
             consumer.putBulkData(poseStack.last(), quad, 1f, 1f, 1f, packedLight, packedOverlay);
         }

@@ -44,7 +44,7 @@ public class StarBallastRender extends DynamicRender<IrisMultiblockMachine, Star
     public static final ResourceLocation STAR_MODEL_INNER = CosmicCore.id("block/iris/star_sphere_inner");
     public static final ResourceLocation STAR_MODEL_BEAM = CosmicCore.id("block/iris/star_beam");
 
-    private static final RandomSource random = RandomSource.create(0L);
+    static final RandomSource random = RandomSource.create(0L);
     private static BakedModel starCoreModel = null;
     private static BakedModel outerStarSphereModel = null;
     private static BakedModel innerStarSphereModel = null;
