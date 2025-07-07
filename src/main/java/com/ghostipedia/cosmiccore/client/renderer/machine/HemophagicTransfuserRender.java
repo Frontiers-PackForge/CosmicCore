@@ -2,6 +2,7 @@ package com.ghostipedia.cosmiccore.client.renderer.machine;
 
 import com.ghostipedia.cosmiccore.CosmicCore;
 
+import com.gregtechceu.gtceu.api.machine.multiblock.MultiblockControllerMachine;
 import com.gregtechceu.gtceu.api.machine.multiblock.WorkableElectricMultiblockMachine;
 import com.gregtechceu.gtceu.api.pattern.util.RelativeDirection;
 import com.gregtechceu.gtceu.client.renderer.GTRenderTypes;
@@ -18,6 +19,7 @@ import net.minecraft.client.renderer.Sheets;
 import net.minecraft.client.renderer.texture.TextureAtlas;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.core.Direction;
+import net.minecraft.core.Vec3i;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraftforge.api.distmarker.Dist;
@@ -64,7 +66,7 @@ public class HemophagicTransfuserRender extends
                        MultiBufferSource buffer, int packedLight, int packedOverlay) {
         float tickValue = (Minecraft.getInstance().level.getGameTime() + partialTick);
         if (machine.isFormed()) {
-            renderBloodCube(poseStack, buffer, tickValue);
+            renderBloodCube(machine, poseStack, buffer, tickValue);
         }
         if (machine.isActive()) {
             renderRings(machine, tickValue, poseStack, buffer);
@@ -72,8 +74,37 @@ public class HemophagicTransfuserRender extends
     }
 
     @OnlyIn(Dist.CLIENT)
-    public void renderBloodCube(PoseStack poseStack, MultiBufferSource bufferSource, float totalTick) {
+    public void renderBloodCube(MultiblockControllerMachine machine, PoseStack poseStack,
+                                MultiBufferSource bufferSource, float totalTick) {
         poseStack.pushPose();
+
+        Direction front = machine.getFrontFacing();
+        Direction upwards = machine.getUpwardsFacing();
+        boolean flipped = machine.isFlipped();
+
+        Vec3i up = RelativeDirection.UP.getRelative(front, upwards, flipped).getNormal();
+        Vec3i back = RelativeDirection.BACK.getRelative(front, upwards, flipped).getNormal();
+        Direction.Axis leftAxis = RelativeDirection.LEFT.getRelative(front, upwards, flipped).getAxis();
+        // translate to the absolute center of the multiblock
+        float xo = 0, yo = 0, zo = 0;
+
+        for (Direction.Axis axis : Direction.Axis.VALUES) {
+            int upOffset = axis.choose(up.getX(), up.getY(), up.getZ());
+            int backOffset = axis.choose(back.getX(), back.getY(), back.getZ());
+
+            float offset = upOffset * (4.0f + (upOffset * 0.5f)) +
+                    backOffset * (5.0f + (backOffset * 0.5f));
+            switch (axis) {
+                case X -> xo = offset;
+                case Y -> yo = offset;
+                case Z -> zo = offset;
+            }
+        }
+        poseStack.translate(
+                xo + (leftAxis == Direction.Axis.X ? 0.5f : 0.0f),
+                yo + (leftAxis == Direction.Axis.Y ? 0.5f : 0.0f),
+                zo + (leftAxis == Direction.Axis.Z ? 0.5f : 0.0f));
+
         // rotate around center
         Quaternionf rot = new Quaternionf()
                 .rotateAxis(Mth.sin(totalTick / 20), 1, 0, 0)
@@ -81,8 +112,6 @@ public class HemophagicTransfuserRender extends
                 .rotateAxis(Mth.cos(Mth.HALF_PI + totalTick / 60), 0, 0, 1)
                 .rotateXYZ(55f * Mth.DEG_TO_RAD, 30f * Mth.DEG_TO_RAD, 0);
         poseStack.mulPose(rot);
-        // scale the stack
-        poseStack.scale(2, 2, 2);
 
         // draw cube quads
         var consumer = bufferSource.getBuffer(Sheets.translucentCullBlockSheet());
