@@ -1197,7 +1197,7 @@ public class CosmicItems {
             .tag()
             .properties(p -> p.stacksTo(64))
             .onRegister(attach(new TooltipBehavior(tooltips -> {
-                tooltips.add(Component.translatable("cosmiccore.gravpack.1"));
+                tooltips.add(Component.translatable("item.cosmiccore.portable_gravity_core.tooltip"));
             })))
             .defaultModel()
             .register();

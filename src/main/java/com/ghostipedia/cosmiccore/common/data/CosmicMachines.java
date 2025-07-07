@@ -200,6 +200,7 @@ public class CosmicMachines {
     // GTCEu.id("block/multiblock/coke_oven"))
     // .register();
 
+    // FIXME why are these registered to GT??
     public static final MultiblockMachineDefinition STEAM_CASTER = GTRegistration.REGISTRATE
             .multiblock("steam_caster", WeakSteamParallelMultiBlockMachine::new)
             .rotationState(RotationState.ALL)
