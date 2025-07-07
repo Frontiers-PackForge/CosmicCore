@@ -9,11 +9,6 @@ import com.ghostipedia.cosmiccore.api.machine.part.CosmicPartAbility;
 import com.ghostipedia.cosmiccore.api.machine.part.SteamFluidHatchPartMachine;
 import com.ghostipedia.cosmiccore.api.machine.part.WirelessEnergyHatchPartMachine;
 import com.ghostipedia.cosmiccore.api.registries.CosmicRegistration;
-import com.ghostipedia.cosmiccore.client.renderer.machine.HPCAIndicatorRenderer;
-import com.ghostipedia.cosmiccore.client.renderer.machine.HellFireFoundryWorkableRenderer;
-import com.ghostipedia.cosmiccore.client.renderer.machine.SidedWorkableHullRenderer;
-import com.ghostipedia.cosmiccore.client.renderer.machine.SufferingChamberRender;
-import com.ghostipedia.cosmiccore.common.block.WorkableSteamHullType;
 import com.ghostipedia.cosmiccore.common.block.debug.CreativeThermiaContainerMachine;
 import com.ghostipedia.cosmiccore.common.data.materials.CosmicMaterials;
 import com.ghostipedia.cosmiccore.common.data.recipe.CosmicRecipeModifiers;
@@ -49,7 +44,6 @@ import com.gregtechceu.gtceu.api.recipe.GTRecipeType;
 import com.gregtechceu.gtceu.api.recipe.OverclockingLogic;
 import com.gregtechceu.gtceu.api.registry.registrate.MachineBuilder;
 import com.gregtechceu.gtceu.client.renderer.machine.DynamicRenderHelper;
-import com.gregtechceu.gtceu.client.renderer.machine.impl.BoilerMultiPartRender;
 import com.gregtechceu.gtceu.client.util.TooltipHelper;
 import com.gregtechceu.gtceu.common.block.BoilerFireboxType;
 import com.gregtechceu.gtceu.common.data.*;
@@ -81,6 +75,7 @@ import static com.ghostipedia.cosmiccore.api.pattern.CosmicPredicates.magnetCoil
 import static com.ghostipedia.cosmiccore.api.registries.CosmicRegistration.REGISTRATE;
 import static com.ghostipedia.cosmiccore.common.data.CosmicBlocks.*;
 import static com.ghostipedia.cosmiccore.common.data.CosmicMachinesUtils.registerCosmicLargeCombustionEngine;
+import static com.ghostipedia.cosmiccore.common.data.datagen.CosmicMachineModels.createSeparateControllerCasingMachineModel;
 import static com.ghostipedia.cosmiccore.common.machine.multiblock.electric.hpca.HPCAMachine.MAX_COMPONENTS_SLICES;
 import static com.ghostipedia.cosmiccore.common.machine.multiblock.electric.hpca.HPCAMachine.MIN_COMPONENTS_SLICES;
 import static com.gregtechceu.gtceu.api.GTValues.*;
@@ -835,8 +830,7 @@ public class CosmicMachines {
                     .where('I', blocks(BloodMagicBlocks.MASTER_RITUAL_STONE.get()))
                     .where('X', abilities(EXPORT_SOUL).setMinGlobalLimited(1, 1).setMaxGlobalLimited(1))
                     .build())
-            .model(() -> new SufferingChamberRender(
-                    BloodMagic.rl("block/blankrune"),
+            .model(createSeparateControllerCasingMachineModel(BloodMagic.rl("block/blankrune"),
                     GTCEu.id("block/casings/gcym/stress_proof_casing"),
                     GTCEu.id("block/multiblock/network_switch")))
             .register();
@@ -869,12 +863,12 @@ public class CosmicMachines {
                     .where('F', blocks(GEARBOX_PTHANTERUM.get()))
                     .where('X', blocks(ChemicalHelper.getBlock(TagPrefix.frameGt, GTMaterials.NaquadahAlloy)))
                     .build())
-            .model(() -> new SufferingChamberRender(
+            .model(createSeparateControllerCasingMachineModel(
                     CosmicCore.id("block/casings/solid/high_tolerance_rhenium_casing"),
                     CosmicCore.id("block/casings/solid/vomahine_certified_chemically_resistant_casing"),
                     GTCEu.id("block/multiblock/assembly_line")))
-
             .register();
+
     // spotless: off
     public static final MultiblockMachineDefinition ARCANE_DISTILLERY = REGISTRATE
             .multiblock("arcane_distillery", WorkableElectricMultiblockMachine::new)
