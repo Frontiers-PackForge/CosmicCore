@@ -526,147 +526,43 @@ public class CosmicMachines {
             .recipeModifiers(GTRecipeModifiers.PARALLEL_HATCH,
                     GTRecipeModifiers::ebfOverclock)
             .appearanceBlock(CosmicBlocks.CYCLOZINE_CHEMICALLY_REPELLING_CASING)
+            // spotless:off
             .pattern(definition -> FactoryBlockPattern.start()
-                    .aisle("                                   ", "                                   ",
-                            "   AAAAA                   AAAAA   ", "   BBBBB                   BBBBB   ",
-                            "   AAAAA                   AAAAA   ", "                                   ",
-                            "                                   ")
-                    .aisle("                                   ", "                                   ",
-                            "  CA   AC      C   C      CA   AC  ", "  BB D BB      CDDDC      BB D BB  ",
-                            "  CA   AC      C   C      CA   AC  ", "                                   ",
-                            "                                   ")
-                    .aisle("                                   ", "               CAAAC               ",
-                            " CC     CC     DEEED     CC     CC ", " BB  D  BB     AEEEA     BB  D  BB ",
-                            " CC     CC     DEEED     CC     CC ", "               CAAAC               ",
-                            "                                   ")
-                    .aisle("               C   C               ", "    AAA        DEEED        AAA    ",
-                            "AA  FFF  AA    A   A    AA  FFF  AA", "BB  CCC  BB    A   A    BB  CCC  BB",
-                            "AA  FFF  AA    A   A    AA  FFF  AA", "    AAA        DEEED        AAA    ",
-                            "               C   C               ")
-                    .aisle("               CDDDC               ", "   AAAAA       AEEEA       AAAAA   ",
-                            "A  F   F  AABBBA   ABBBAA  F   F  A", "B  C   C  BBDDD     DDDBB  C   C  B",
-                            "A  F   F  AABBBA   ABBBAA  F   F  A", "   AAAAA       AEEEA       AAAAA   ",
-                            "               CDDDC               ")
-                    .aisle("               C   C               ", "   AAAAA       AEEEA       AAAAA   ",
-                            "A  F   F  ABDDD     DDDBA  F   F  A", "BDDC   CDDBA           ABDDC   CDDB",
-                            "A  F   F  ABDDD     DDDBA  F   F  A", "   AAAAA       AEEEA       AAAAA   ",
-                            "               C   C               ")
-                    .aisle("               CDDDC               ", "   AAAAA       AEEEA       AAAAA   ",
-                            "A  F   F  AABBBA   ABBBAA  F   F  A", "B  C   C  BBDDD     DDDBB  C   C  B",
-                            "A  F   F  AABBBA   ABBBAA  F   F  A", "   AAAAA       AEEEA       AAAAA   ",
-                            "               CDDDC               ")
-                    .aisle("               C   C               ", "    AAA        DEEED        AAA    ",
-                            "AA  FFF  AA    A   A    AA  FFF  AA", "BB  CCC  BB    A   A    BB  CCC  BB",
-                            "AA  FFF  AA    A   A    AA  FFF  AA", "    AAA        DEEED        AAA    ",
-                            "               C   C               ")
-                    .aisle("                                   ", "               CAAAC               ",
-                            " CC     CC     DEEED     CC     CC ", " BB  D  BB     AEEEA     BB  D  BB ",
-                            " CC     CC     DEEED     CC     CC ", "               CAAAC               ",
-                            "                                   ")
-                    .aisle("                                   ", "                                   ",
-                            "  CA   AC      CAAAC      CA   AC  ", "  BB D BB      CAXAC      BB D BB  ",
-                            "  CA   AC      CAAAC      CA   AC  ", "                                   ",
-                            "                                   ")
-                    .aisle("                                   ", "                                   ",
-                            "   AAAAA                   AAAAA   ", "   BBCBB                   BBCBB   ",
-                            "   AAAAA                   AAAAA   ", "                                   ",
-                            "                                   ")
-                    .aisle("                                   ", "                                   ",
-                            "    ABA                     ABA    ", "    BCB                     BCB    ",
-                            "    ABA                     ABA    ", "                                   ",
-                            "                                   ")
-                    .aisle("                                   ", "                                   ",
-                            "    BDB                     BDB    ", "    DCD                     DCD    ",
-                            "    BDB                     BDB    ", "                                   ",
-                            "                                   ")
-                    .aisle("                                   ", "                                   ",
-                            "    BDB                     BDB    ", "    DCD                     DCD    ",
-                            "    BDB                     BDB    ", "                                   ",
-                            "                                   ")
-                    .aisle("                                   ", "                                   ",
-                            "    BDB                     BDB    ", "    DCD                     DCD    ",
-                            "    BDB                     BDB    ", "                                   ",
-                            "                                   ")
-                    .aisle("   CCCCC                   CCCCC   ", "  CDAAADC                 CDAAADC  ",
-                            " CDABABADC               CDABABADC ", " CAAAAAAAC               CAAAAAAAC ",
-                            " CDABABADC               CDABABADC ", "  CDAAADC                 CDAAADC  ",
-                            "   CCCCC                   CCCCC   ")
-                    .aisle("    D D                     D D    ", "  AEEEEEA                 AEEEEEA  ",
-                            "  E     EA               AE     E  ", " DE     EA               AE     ED ",
-                            "  E     EA               AE     E  ", "  AEEEEEA                 AEEEEEA  ",
-                            "    D D                     D D    ")
-                    .aisle("    D D                     D D    ", "  AEEEEEA                 AEEEEEA  ",
-                            "  E     EA               AE     E  ", " DE     EA               AE     ED ",
-                            "  E     EA               AE     E  ", "  AEEEEEA                 AEEEEEA  ",
-                            "    D D                     D D    ")
-                    .aisle("    D D                     D D    ", "  AEEEEEA                 AEEEEEA  ",
-                            "  E     EA               AE     E  ", " DE     EA               AE     ED ",
-                            "  E     EA               AE     E  ", "  AEEEEEA                 AEEEEEA  ",
-                            "    D D                     D D    ")
-                    .aisle("   CCCCC                   CCCCC   ", "  CDAAADC                 CDAAADC  ",
-                            " CDAA AADC               CDAA AADC ", " CAA   AAC               CAA   AAC ",
-                            " CDAA AADC               CDAA AADC ", "  CDAAADC                 CDAAADC  ",
-                            "   CCCCC                   CCCCC   ")
-                    .aisle("                                   ", "                                   ",
-                            "    BDB                     BDB    ", "    D D                     D D    ",
-                            "    BDB                     BDB    ", "                                   ",
-                            "                                   ")
-                    .aisle("                                   ", "                                   ",
-                            "    BDB                     BDB    ", "    D D                     D D    ",
-                            "    BDB                     BDB    ", "                                   ",
-                            "                                   ")
-                    .aisle("                                   ", "                                   ",
-                            "    BDB                     BDB    ", "    D D                     D D    ",
-                            "    BDB                     BDB    ", "                                   ",
-                            "                                   ")
-                    .aisle("                                   ", "                                   ",
-                            "    ABA                     ABA    ", "    BAB                     BAB    ",
-                            "    ABA                     ABA    ", "                                   ",
-                            "                                   ")
-                    .aisle("                                   ", "                                   ",
-                            "   AAAAA                   AAAAA   ", "   BBBBB                   BBBBB   ",
-                            "   AAAAA                   AAAAA   ", "                                   ",
-                            "                                   ")
-                    .aisle("                                   ", "                                   ",
-                            "  CA   AC      CAAAC      CA   AC  ", "  BB D BB      CAAAC      BB D BB  ",
-                            "  CA   AC      CAAAC      CA   AC  ", "                                   ",
-                            "                                   ")
-                    .aisle("                                   ", "               CAAAC               ",
-                            " CC     CC     DEEED     CC     CC ", " BB  D  BB     AEEEA     BB  D  BB ",
-                            " CC     CC     DEEED     CC     CC ", "               CAAAC               ",
-                            "                                   ")
-                    .aisle("               C   C               ", "    AAA        DEEED        AAA    ",
-                            "AA  FFF  AA    A   A    AA  FFF  AA", "BB  CCC  BB    A   A    BB  CCC  BB",
-                            "AA  FFF  AA    A   A    AA  FFF  AA", "    AAA        DEEED        AAA    ",
-                            "               C   C               ")
-                    .aisle("               CDDDC               ", "   AAAAA       AEEEA       AAAAA   ",
-                            "A  F   F  AABBBB   BBBBAA  F   F  A", "B  C   C  BBDDDA   ADDDBB  C   C  B",
-                            "A  F   F  AABBBB   BBBBAA  F   F  A", "   AAAAA       AEEEA       AAAAA   ",
-                            "               CDDDC               ")
-                    .aisle("               C   C               ", "   AAAAA       AEEEA       AAAAA   ",
-                            "A  F   F  ABDDDA   ADDDBA  F   F  A", "BDDC   CDDCCCCCA   ACCCCCDDC   CDDB",
-                            "A  F   F  ABDDDA   ADDDBA  F   F  A", "   AAAAA       AEEEA       AAAAA   ",
-                            "               C   C               ")
-                    .aisle("               CDDDC               ", "   AAAAA       AEEEA       AAAAA   ",
-                            "A  F   F  AABBBB   BBBBAA  F   F  A", "B  C   C  BBDDDA   ADDDBB  C   C  B",
-                            "A  F   F  AABBBB   BBBBAA  F   F  A", "   AAAAA       AEEEA       AAAAA   ",
-                            "               CDDDC               ")
-                    .aisle("               C   C               ", "    AAA        DEEED        AAA    ",
-                            "AA  FFF  AA    A   A    AA  FFF  AA", "BB  CCC  BB    A   A    BB  CCC  BB",
-                            "AA  FFF  AA    A   A    AA  FFF  AA", "    AAA        DEEED        AAA    ",
-                            "               C   C               ")
-                    .aisle("                                   ", "               CAAAC               ",
-                            " CC     CC     DEEED     CC     CC ", " BB  D  BB     AEEEA     BB  D  BB ",
-                            " CC     CC     DEEED     CC     CC ", "               CAAAC               ",
-                            "                                   ")
-                    .aisle("                                   ", "                                   ",
-                            "  CA   AC      CAAAC      CA   AC  ", "  BB D BB      CDDDC      BB D BB  ",
-                            "  CA   AC      CAAAC      CA   AC  ", "                                   ",
-                            "                                   ")
-                    .aisle("                                   ", "                                   ",
-                            "   AAAAA                   AAAAA   ", "   BBBBB                   BBBBB   ",
-                            "   AAAAA                   AAAAA   ", "                                   ",
-                            "                                   ")
+                    .aisle("                                   ", "                                   ", "   AAAAA                   AAAAA   ", "   BBBBB                   BBBBB   ", "   AAAAA                   AAAAA   ", "                                   ", "                                   ")
+                    .aisle("                                   ", "                                   ", "  CA   AC      C   C      CA   AC  ", "  BB D BB      CDDDC      BB D BB  ", "  CA   AC      C   C      CA   AC  ", "                                   ", "                                   ")
+                    .aisle("                                   ", "               CAAAC               ", " CC     CC     DEEED     CC     CC ", " BB  D  BB     AEEEA     BB  D  BB ", " CC     CC     DEEED     CC     CC ", "               CAAAC               ", "                                   ")
+                    .aisle("               C   C               ", "    AAA        DEEED        AAA    ", "AA  FFF  AA    A   A    AA  FFF  AA", "BB  CCC  BB    A   A    BB  CCC  BB", "AA  FFF  AA    A   A    AA  FFF  AA", "    AAA        DEEED        AAA    ", "               C   C               ")
+                    .aisle("               CDDDC               ", "   AAAAA       AEEEA       AAAAA   ", "A  F   F  AABBBA   ABBBAA  F   F  A", "B  C   C  BBDDD     DDDBB  C   C  B", "A  F   F  AABBBA   ABBBAA  F   F  A", "   AAAAA       AEEEA       AAAAA   ", "               CDDDC               ")
+                    .aisle("               C   C               ", "   AAAAA       AEEEA       AAAAA   ", "A  F   F  ABDDD     DDDBA  F   F  A", "BDDC   CDDBA           ABDDC   CDDB", "A  F   F  ABDDD     DDDBA  F   F  A", "   AAAAA       AEEEA       AAAAA   ", "               C   C               ")
+                    .aisle("               CDDDC               ", "   AAAAA       AEEEA       AAAAA   ", "A  F   F  AABBBA   ABBBAA  F   F  A", "B  C   C  BBDDD     DDDBB  C   C  B", "A  F   F  AABBBA   ABBBAA  F   F  A", "   AAAAA       AEEEA       AAAAA   ", "               CDDDC               ")
+                    .aisle("               C   C               ", "    AAA        DEEED        AAA    ", "AA  FFF  AA    A   A    AA  FFF  AA", "BB  CCC  BB    A   A    BB  CCC  BB", "AA  FFF  AA    A   A    AA  FFF  AA", "    AAA        DEEED        AAA    ", "               C   C               ")
+                    .aisle("                                   ", "               CAAAC               ", " CC     CC     DEEED     CC     CC ", " BB  D  BB     AEEEA     BB  D  BB ", " CC     CC     DEEED     CC     CC ", "               CAAAC               ", "                                   ")
+                    .aisle("                                   ", "                                   ", "  CA   AC      CAAAC      CA   AC  ", "  BB D BB      CAXAC      BB D BB  ", "  CA   AC      CAAAC      CA   AC  ", "                                   ", "                                   ")
+                    .aisle("                                   ", "                                   ", "   AAAAA                   AAAAA   ", "   BBCBB                   BBCBB   ", "   AAAAA                   AAAAA   ", "                                   ", "                                   ")
+                    .aisle("                                   ", "                                   ", "    ABA                     ABA    ", "    BCB                     BCB    ", "    ABA                     ABA    ", "                                   ", "                                   ")
+                    .aisle("                                   ", "                                   ", "    BDB                     BDB    ", "    DCD                     DCD    ", "    BDB                     BDB    ", "                                   ", "                                   ")
+                    .aisle("                                   ", "                                   ", "    BDB                     BDB    ", "    DCD                     DCD    ", "    BDB                     BDB    ", "                                   ", "                                   ")
+                    .aisle("                                   ", "                                   ", "    BDB                     BDB    ", "    DCD                     DCD    ", "    BDB                     BDB    ", "                                   ", "                                   ")
+                    .aisle("   CCCCC                   CCCCC   ", "  CDAAADC                 CDAAADC  ", " CDABABADC               CDABABADC ", " CAAAAAAAC               CAAAAAAAC ", " CDABABADC               CDABABADC ", "  CDAAADC                 CDAAADC  ", "   CCCCC                   CCCCC   ")
+                    .aisle("    D D                     D D    ", "  AEEEEEA                 AEEEEEA  ", "  E     EA               AE     E  ", " DE     EA               AE     ED ", "  E     EA               AE     E  ", "  AEEEEEA                 AEEEEEA  ", "    D D                     D D    ")
+                    .aisle("    D D                     D D    ", "  AEEEEEA                 AEEEEEA  ", "  E     EA               AE     E  ", " DE     EA               AE     ED ", "  E     EA               AE     E  ", "  AEEEEEA                 AEEEEEA  ", "    D D                     D D    ")
+                    .aisle("    D D                     D D    ", "  AEEEEEA                 AEEEEEA  ", "  E     EA               AE     E  ", " DE     EA               AE     ED ", "  E     EA               AE     E  ", "  AEEEEEA                 AEEEEEA  ", "    D D                     D D    ")
+                    .aisle("   CCCCC                   CCCCC   ", "  CDAAADC                 CDAAADC  ", " CDAA AADC               CDAA AADC ", " CAA   AAC               CAA   AAC ", " CDAA AADC               CDAA AADC ", "  CDAAADC                 CDAAADC  ", "   CCCCC                   CCCCC   ")
+                    .aisle("                                   ", "                                   ", "    BDB                     BDB    ", "    D D                     D D    ", "    BDB                     BDB    ", "                                   ", "                                   ")
+                    .aisle("                                   ", "                                   ", "    BDB                     BDB    ", "    D D                     D D    ", "    BDB                     BDB    ", "                                   ", "                                   ")
+                    .aisle("                                   ", "                                   ", "    BDB                     BDB    ", "    D D                     D D    ", "    BDB                     BDB    ", "                                   ", "                                   ")
+                    .aisle("                                   ", "                                   ", "    ABA                     ABA    ", "    BAB                     BAB    ", "    ABA                     ABA    ", "                                   ", "                                   ")
+                    .aisle("                                   ", "                                   ", "   AAAAA                   AAAAA   ", "   BBBBB                   BBBBB   ", "   AAAAA                   AAAAA   ", "                                   ", "                                   ")
+                    .aisle("                                   ", "                                   ", "  CA   AC      CAAAC      CA   AC  ", "  BB D BB      CAAAC      BB D BB  ", "  CA   AC      CAAAC      CA   AC  ", "                                   ", "                                   ")
+                    .aisle("                                   ", "               CAAAC               ", " CC     CC     DEEED     CC     CC ", " BB  D  BB     AEEEA     BB  D  BB ", " CC     CC     DEEED     CC     CC ", "               CAAAC               ", "                                   ")
+                    .aisle("               C   C               ", "    AAA        DEEED        AAA    ", "AA  FFF  AA    A   A    AA  FFF  AA", "BB  CCC  BB    A   A    BB  CCC  BB", "AA  FFF  AA    A   A    AA  FFF  AA", "    AAA        DEEED        AAA    ", "               C   C               ")
+                    .aisle("               CDDDC               ", "   AAAAA       AEEEA       AAAAA   ", "A  F   F  AABBBB   BBBBAA  F   F  A", "B  C   C  BBDDDA   ADDDBB  C   C  B", "A  F   F  AABBBB   BBBBAA  F   F  A", "   AAAAA       AEEEA       AAAAA   ", "               CDDDC               ")
+                    .aisle("               C   C               ", "   AAAAA       AEEEA       AAAAA   ", "A  F   F  ABDDDA   ADDDBA  F   F  A", "BDDC   CDDCCCCCA   ACCCCCDDC   CDDB", "A  F   F  ABDDDA   ADDDBA  F   F  A", "   AAAAA       AEEEA       AAAAA   ", "               C   C               ")
+                    .aisle("               CDDDC               ", "   AAAAA       AEEEA       AAAAA   ", "A  F   F  AABBBB   BBBBAA  F   F  A", "B  C   C  BBDDDA   ADDDBB  C   C  B", "A  F   F  AABBBB   BBBBAA  F   F  A", "   AAAAA       AEEEA       AAAAA   ", "               CDDDC               ")
+                    .aisle("               C   C               ", "    AAA        DEEED        AAA    ", "AA  FFF  AA    A   A    AA  FFF  AA", "BB  CCC  BB    A   A    BB  CCC  BB", "AA  FFF  AA    A   A    AA  FFF  AA", "    AAA        DEEED        AAA    ", "               C   C               ")
+                    .aisle("                                   ", "               CAAAC               ", " CC     CC     DEEED     CC     CC ", " BB  D  BB     AEEEA     BB  D  BB ", " CC     CC     DEEED     CC     CC ", "               CAAAC               ", "                                   ")
+                    .aisle("                                   ", "                                   ", "  CA   AC      CAAAC      CA   AC  ", "  BB D BB      CDDDC      BB D BB  ", "  CA   AC      CAAAC      CA   AC  ", "                                   ", "                                   ")
+                    .aisle("                                   ", "                                   ", "   AAAAA                   AAAAA   ", "   BBBBB                   BBBBB   ", "   AAAAA                   AAAAA   ", "                                   ", "                                   ")
                     .where(' ', any())
                     .where("X", controller(blocks(definition.getBlock())))
                     .where('C', blocks(MULTIPURPOSE_INTERSTELLAR_GRADE_CASING.get()))
@@ -687,6 +583,7 @@ public class CosmicMachines {
                                     .setExactLimit(1))
                             .or(abilities(PartAbility.INPUT_LASER, PartAbility.INPUT_ENERGY).setExactLimit(1)))
                     .build())
+            // spotless:on
             .workableCasingModel(CosmicCore.id("block/casings/solid/vomahine_certified_chemically_resistant_casing"),
                     CosmicCore.id("block/multiblock/vomahine_chemplant"))
             .additionalDisplay((controller, components) -> {
@@ -709,21 +606,15 @@ public class CosmicMachines {
             .recipeModifiers(CosmicRecipeModifiers::chemicalVatLogic,
                     ELECTRIC_OVERCLOCK.apply(OverclockingLogic.PERFECT_OVERCLOCK_SUBTICK))
             .appearanceBlock(CYCLOZINE_CHEMICALLY_REPELLING_CASING)
+            // spotless:off
             .pattern(definition -> FactoryBlockPattern.start()
-                    .aisle("##QQQ##", "##QQQ##", "###Q###", "#######", "#######", "#######", "#######", "#######",
-                            "###Q###", "##QQQ##", "##QQQ##")
-                    .aisle("#QQQQQ#", "#QQSQQ#", "#FQQQF#", "#FQ#QF#", "#F###F#", "#F###F#", "#F###F#", "#FQ#QF#",
-                            "#FQQQF#", "#QQSQQ#", "#QQQQQ#")
-                    .aisle("QQQQQQQ", "QQSSSQQ", "#QSSSQ#", "##HGH##", "##HGH##", "##HGH##", "##HGH##", "#QHGHQ#",
-                            "#QSSSQ#", "QQSSSQQ", "QQQQQQQ")
-                    .aisle("QQQQQQQ", "QSSSSSQ", "QQSSSQQ", "##GSG##", "##GSG##", "##GSG##", "##GSG##", "##GSG##",
-                            "QQSSSQQ", "QSSSSSQ", "QQQQQQQ")
-                    .aisle("QQQQQQQ", "QQSSSQQ", "#QSSSQ#", "##HGH##", "##HGH##", "##HGH##", "##HGH##", "#QHGHQ#",
-                            "#QSSSQ#", "QQSSSQQ", "QQQQQQQ")
-                    .aisle("#QQQQQ#", "#QQSQQ#", "#FQQQF#", "#FQ#QF#", "#F###F#", "#F###F#", "#F###F#", "#FQ#QF#",
-                            "#FQQQF#", "#QQSQQ#", "#QQQQQ#")
-                    .aisle("##QQQ##", "##QCQ##", "###Q###", "#######", "#######", "#######", "#######", "#######",
-                            "###Q###", "##QQQ##", "##QQQ##")
+                    .aisle("##QQQ##", "##QQQ##", "###Q###", "#######", "#######", "#######", "#######", "#######", "###Q###", "##QQQ##", "##QQQ##")
+                    .aisle("#QQQQQ#", "#QQSQQ#", "#FQQQF#", "#FQ#QF#", "#F###F#", "#F###F#", "#F###F#", "#FQ#QF#", "#FQQQF#", "#QQSQQ#", "#QQQQQ#")
+                    .aisle("QQQQQQQ", "QQSSSQQ", "#QSSSQ#", "##HGH##", "##HGH##", "##HGH##", "##HGH##", "#QHGHQ#", "#QSSSQ#", "QQSSSQQ", "QQQQQQQ")
+                    .aisle("QQQQQQQ", "QSSSSSQ", "QQSSSQQ", "##GSG##", "##GSG##", "##GSG##", "##GSG##", "##GSG##", "QQSSSQQ", "QSSSSSQ", "QQQQQQQ")
+                    .aisle("QQQQQQQ", "QQSSSQQ", "#QSSSQ#", "##HGH##", "##HGH##", "##HGH##", "##HGH##", "#QHGHQ#", "#QSSSQ#", "QQSSSQQ", "QQQQQQQ")
+                    .aisle("#QQQQQ#", "#QQSQQ#", "#FQQQF#", "#FQ#QF#", "#F###F#", "#F###F#", "#F###F#", "#FQ#QF#", "#FQQQF#", "#QQSQQ#", "#QQQQQ#")
+                    .aisle("##QQQ##", "##QCQ##", "###Q###", "#######", "#######", "#######", "#######", "#######", "###Q###", "##QQQ##", "##QQQ##")
                     .where('#', any())
                     .where("C", controller(blocks(definition.getBlock())))
                     .where('F', blocks(ChemicalHelper.getBlock(TagPrefix.frameGt, GTMaterials.NaquadahAlloy)))
@@ -745,6 +636,7 @@ public class CosmicMachines {
                             .or(abilities(PartAbility.INPUT_LASER))
                             .or(abilities(PartAbility.INPUT_ENERGY)))
                     .build())
+            // spotless:on
             .tooltips(Component.translatable("cosmiccore.multiblock.chemvat.tooltip.0"),
                     Component.translatable("cosmiccore.multiblock.chemvat.tooltip.1"),
                     Component.translatable("cosmiccore.multiblock.chemvat.tooltip.2"),
@@ -797,30 +689,19 @@ public class CosmicMachines {
             .partAppearance((controller, part, side) -> CASING_STRESS_PROOF.getDefaultState())
             .recipeModifiers(GTRecipeModifiers.PARALLEL_HATCH,
                     ELECTRIC_OVERCLOCK.apply(OverclockingLogic.PERFECT_OVERCLOCK))
+            // spotless:off
             .pattern(definition -> FactoryBlockPattern.start()
-                    .aisle("AAA     AAA", "AA       AA", "A         A", "A         A", "           ", "           ",
-                            "           ", "           ")
-                    .aisle("A ABBBBBA A", "A ABBBBBA A", "  AB   BA  ", "  AD   DA  ", "  A D D A  ", "  A  E  A  ",
-                            "           ", "           ")
-                    .aisle("AAAAAAAAAAA", " AAAAAAAAA ", " A       A ", " AF     FA ", " A       A ", " AA     AA ",
-                            "  A     A  ", "  A     A  ")
-                    .aisle(" BAAAAAAAB ", " BAAAAAAAB ", " B       B ", " D G H G D ", "           ", "           ",
-                            "           ", "           ")
-                    .aisle(" BAAAAAAAB ", " BAAAAAAAB ", "           ", "           ", " D  G G  D ", "           ",
-                            "           ", "           ")
-                    .aisle(" BAAAAAAAB ", " BAAAXAAAB ", "           ", "   H   H   ", "     I     ", " E       E ",
-                            "           ", "           ")
-                    .aisle(" BAAAAAAAB ", " BAAAAAAAB ", "           ", "           ", " D  G G  D ", "           ",
-                            "           ", "           ")
-                    .aisle(" BAAAAAAAB ", " BAAAAAAAB ", " B       B ", " D G H G D ", "           ", "           ",
-                            "           ", "           ")
-                    .aisle("AAAAAAAAAAA", " AAAAAAAAA ", " A       A ", " AF     FA ", " A       A ", " AA     AA ",
-                            "  A     A  ", "  A     A  ")
-                    .aisle("A ABBBBBA A", "A ABBQBBA A", "  AB   BA  ", "  AD   DA  ", "  A D D A  ", "  A  E  A  ",
-                            "           ", "           ")
-                    .aisle("AAA     AAA", "AA       AA", "A         A", "A         A", "           ", "           ",
-                            "           ", "           ")
-
+                    .aisle("AAA     AAA", "AA       AA", "A         A", "A         A", "           ", "           ", "           ", "           ")
+                    .aisle("A ABBBBBA A", "A ABBBBBA A", "  AB   BA  ", "  AD   DA  ", "  A D D A  ", "  A  E  A  ", "           ", "           ")
+                    .aisle("AAAAAAAAAAA", " AAAAAAAAA ", " A       A ", " AF     FA ", " A       A ", " AA     AA ", "  A     A  ", "  A     A  ")
+                    .aisle(" BAAAAAAAB ", " BAAAAAAAB ", " B       B ", " D G H G D ", "           ", "           ", "           ", "           ")
+                    .aisle(" BAAAAAAAB ", " BAAAAAAAB ", "           ", "           ", " D  G G  D ", "           ", "           ", "           ")
+                    .aisle(" BAAAAAAAB ", " BAAAXAAAB ", "           ", "   H   H   ", "     I     ", " E       E ", "           ", "           ")
+                    .aisle(" BAAAAAAAB ", " BAAAAAAAB ", "           ", "           ", " D  G G  D ", "           ", "           ", "           ")
+                    .aisle(" BAAAAAAAB ", " BAAAAAAAB ", " B       B ", " D G H G D ", "           ", "           ", "           ", "           ")
+                    .aisle("AAAAAAAAAAA", " AAAAAAAAA ", " A       A ", " AF     FA ", " A       A ", " AA     AA ", "  A     A  ", "  A     A  ")
+                    .aisle("A ABBBBBA A", "A ABBQBBA A", "  AB   BA  ", "  AD   DA  ", "  A D D A  ", "  A  E  A  ", "           ", "           ")
+                    .aisle("AAA     AAA", "AA       AA", "A         A", "A         A", "           ", "           ", "           ", "           ")
                     .where('Q', Predicates.controller(Predicates.blocks(definition.get())))
                     .where(' ', Predicates.any())
                     .where('A', blocks(CASING_STRESS_PROOF.get()).setMinGlobalLimited(185)
@@ -835,6 +716,7 @@ public class CosmicMachines {
                     .where('I', blocks(BloodMagicBlocks.MASTER_RITUAL_STONE.get()))
                     .where('X', abilities(EXPORT_SOUL).setMinGlobalLimited(1, 1).setMaxGlobalLimited(1))
                     .build())
+            // spotless:on
             .model(createSeparateControllerCasingMachineModel(BloodMagic.rl("block/blankrune"),
                     GTCEu.id("block/casings/gcym/stress_proof_casing"),
                     GTCEu.id("block/multiblock/network_switch")))
@@ -883,74 +765,19 @@ public class CosmicMachines {
             .partAppearance((controller, part, side) -> HIGH_TOLERANCE_RHENIUM_CASING.getDefaultState())
             .recipeModifiers(GTRecipeModifiers.PARALLEL_HATCH,
                     ELECTRIC_OVERCLOCK.apply(OverclockingLogic.PERFECT_OVERCLOCK))
+            // spotless:off
             .pattern(definition -> FactoryBlockPattern.start()
-                    .aisle("     AAAAAAAAA     ", "        A A        ", "      AAA AAA      ", "        AAA        ",
-                            "       BBABB       ", "        BBB        ", "A        B        A", "A A             A A",
-                            "A A B         B A A", "AAAABB       BBAAAA", "A  AABB     BBAA  A", "AAAABB       BBAAAA",
-                            "A A B         B A A", "A A             A A", "A        B        A", "        BBB        ",
-                            "       BBABB       ", "        AAA        ", "      AAA AAA      ", "        A A        ",
-                            "     AAAAAAAAA     ")
-                    .aisle("    AA       AA    ", "      CCCACCC      ", "     A  A A  A     ", "       BAAAB       ",
-                            "      BB A BB      ", "A                 A", "A A             A A", " C  B         B  C ",
-                            " C BB         BB C ", " CAA           AAC ", " A AA         AA A ", " CAA           AAC ",
-                            " C BB         BB C ", " C  B         B  C ", "A A             A A", "A                 A",
-                            "      BB A BB      ", "       BAAAB       ", "     A  A A  A     ", "      CCCACCC      ",
-                            "    AA       AA    ")
-                    .aisle("    A         A    ", "     CCAAAAACC     ", "    A D A A D A    ", "      DBAAABD      ",
-                            "     BD  A  DB     ", "A A   D     D   A A", " C  B D     D B  C ", " CDDDDDDDDDDDDDDDC ",
-                            " A B  D     D  B A ", " AAA  D     D  AAA ", " A AA D     D AA A ", " AAA  D     D  AAA ",
-                            " A B  D     D  B A ", " CDDDDDDDDDDDDDDDC ", " C  B D     D B  C ", "A A   D     D   A A",
-                            "     BD  A  DB     ", "      DBAAABD      ", "    A D A A D A    ", "     CCAAAAACC     ",
-                            "    A         A    ")
-                    .aisle("    A         A    ", "     CAAAAAAAC     ", "    A  AA AA  A    ", "     BBBAAABBB     ",
-                            "    BB  A A  BB    ", "A A B   A A   B A A", " C BB   A A   BB C ", " A B           B A ",
-                            " AAB           BAA ", " AAAAAA     AAAAAA ", " A A           A A ", " AAAAAA     AAAAAA ",
-                            " AAB           BAA ", " A B           B A ", " C BB   A A   BB C ", "A A B   A A   B A A",
-                            "    BB  A A  BB    ", "     BBBAAABBB     ", "    A  AA AA  A    ", "     CAAAAAAAC     ",
-                            "    A         A    ")
-                    .aisle("    A         A    ", "    ACAAEEEAACA    ", "    AAAAAAAAAAA    ", "    AAAAAAAAAAA    ",
-                            "    B  AF FA  B    ", "AAAAB  AF FA  BAAAA", " CAA   AF FA   AAC ", " AAA           AAA ",
-                            " AAAAAA     AAAAAA ", " EAAFFF     FFFAAE ", " EAA           AAE ", " EAAFFF     FFFAAE ",
-                            " AAAAAA     AAAAAA ", " AAA           AAA ", " CAA   AF FA   AAC ", "AAAAB  AF FA  BAAAA",
-                            "    B  AF FA  B    ", "    AAAAAAAAAAA    ", "    AAAAAAAAAAA    ", "    ACAAEEEAACA    ",
-                            "    A         A    ")
-                    .aisle("    A         A    ", "     AAAEEEAAA     ", "        A A        ", "    AAAAA AAAAA    ",
-                            "    AAA     AAA    ", "A  AA         AA  A", " A AA         AA A ", " A AA         AA A ",
-                            " A A           A A ", " EAA           AAE ", " E               E ", " EAA           AAE ",
-                            " A A           A A ", " A AA         AA A ", " A AA         AA A ", "A  AA         AA  A",
-                            "    AAA     AAA    ", "    AAAAA AAAAA    ", "        A A        ", "     AAAEEEAAA     ",
-                            "    A         A    ")
-                    .aisle("    A         A    ", "    ACAAEEEAACA    ", "    AAAAAAAAAAA    ", "    AAAAAAAAAAA    ",
-                            "    B  AF FA  B    ", "AAAAB  AF FA  BAAAA", " CAA   AF FA   AAC ", " AAA           AAA ",
-                            " AAAAAA     AAAAAA ", " EAAFFF     FFFAAE ", " EAA           AAE ", " EAAFFF     FFFAAE ",
-                            " AAAAAA     AAAAAA ", " AAA           AAA ", " CAA   AF FA   AAC ", "AAAAB  AF FA  BAAAA",
-                            "    B  AF FA  B    ", "    AAAAAAAAAAA    ", "    AAAAAAAAAAA    ", "    ACAAEEEAACA    ",
-                            "    A         A    ")
-                    .aisle("    A         A    ", "     CAAAAAAAC     ", "    A  AA AA  A    ", "     BBBAAABBB     ",
-                            "    BB  A A  BB    ", "A A B   A A   B A A", " C BB   A A   BB C ", " A B           B A ",
-                            " AAB           BAA ", " AAAAAA     AAAAAA ", " A A           A A ", " AAAAAA     AAAAAA ",
-                            " AAB           BAA ", " A B           B A ", " C BB   A A   BB C ", "A A B   A A   B A A",
-                            "    BB  A A  BB    ", "     BBBAAABBB     ", "    A  AA AA  A    ", "     CAAAAAAAC     ",
-                            "    A         A    ")
-                    .aisle("    A         A    ", "     CCAAAAACC     ", "    A D A A D A    ", "      DBAAABD      ",
-                            "     BD  A  DB     ", "A A   D     D   A A", " C  B D     D B  C ", " CDDDDDDDDDDDDDDDC ",
-                            " A B  D     D  B A ", " AAA  D     D  AAA ", " A AA D     D AA A ", " AAA  D     D  AAA ",
-                            " A B  D     D  B A ", " CDDDDDDDDDDDDDDDC ", " C  B D     D B  C ", "A A   D     D   A A",
-                            "     BD  A  DB     ", "      DBAAABD      ", "    A D A A D A    ", "     CCAAAAACC     ",
-                            "    A         A    ")
-                    .aisle("    AA       AA    ", "      CCCACCC      ", "     A  A A  A     ", "       BAAAB       ",
-                            "      BB A BB      ", "A                 A", "A A             A A", " C  B         B  C ",
-                            " C BB         BB C ", " CAA           AAC ", " A AA         AA A ", " CAA           AAC ",
-                            " C BB         BB C ", " C  B         B  C ", "A A             A A", "A                 A",
-                            "      BB A BB      ", "       BAAAB       ", "     A  A A  A     ", "      CCCACCC      ",
-                            "    AA       AA    ")
-                    .aisle("     AAAAAAAAA     ", "        A A        ", "      AAA AAA      ", "        AQA        ",
-                            "       BBABB       ", "        BBB        ", "A        B        A", "A A             A A",
-                            "A A B         B A A", "AAAABB       BBAAAA", "A  AABB     BBAA  A", "AAAABB       BBAAAA",
-                            "A A B         B A A", "A A             A A", "A        B        A", "        BBB        ",
-                            "       BBABB       ", "        AAA        ", "      AAA AAA      ", "        A A        ",
-                            "     AAAAAAAAA     ")
-
+                    .aisle("     AAAAAAAAA     ", "        A A        ", "      AAA AAA      ", "        AAA        ", "       BBABB       ", "        BBB        ", "A        B        A", "A A             A A", "A A B         B A A", "AAAABB       BBAAAA", "A  AABB     BBAA  A", "AAAABB       BBAAAA", "A A B         B A A", "A A             A A", "A        B        A", "        BBB        ", "       BBABB       ", "        AAA        ", "      AAA AAA      ", "        A A        ", "     AAAAAAAAA     ")
+                    .aisle("    AA       AA    ", "      CCCACCC      ", "     A  A A  A     ", "       BAAAB       ", "      BB A BB      ", "A                 A", "A A             A A", " C  B         B  C ", " C BB         BB C ", " CAA           AAC ", " A AA         AA A ", " CAA           AAC ", " C BB         BB C ", " C  B         B  C ", "A A             A A", "A                 A", "      BB A BB      ", "       BAAAB       ", "     A  A A  A     ", "      CCCACCC      ", "    AA       AA    ")
+                    .aisle("    A         A    ", "     CCAAAAACC     ", "    A D A A D A    ", "      DBAAABD      ", "     BD  A  DB     ", "A A   D     D   A A", " C  B D     D B  C ", " CDDDDDDDDDDDDDDDC ", " A B  D     D  B A ", " AAA  D     D  AAA ", " A AA D     D AA A ", " AAA  D     D  AAA ", " A B  D     D  B A ", " CDDDDDDDDDDDDDDDC ", " C  B D     D B  C ", "A A   D     D   A A", "     BD  A  DB     ", "      DBAAABD      ", "    A D A A D A    ", "     CCAAAAACC     ", "    A         A    ")
+                    .aisle("    A         A    ", "     CAAAAAAAC     ", "    A  AA AA  A    ", "     BBBAAABBB     ", "    BB  A A  BB    ", "A A B   A A   B A A", " C BB   A A   BB C ", " A B           B A ", " AAB           BAA ", " AAAAAA     AAAAAA ", " A A           A A ", " AAAAAA     AAAAAA ", " AAB           BAA ", " A B           B A ", " C BB   A A   BB C ", "A A B   A A   B A A", "    BB  A A  BB    ", "     BBBAAABBB     ", "    A  AA AA  A    ", "     CAAAAAAAC     ", "    A         A    ")
+                    .aisle("    A         A    ", "    ACAAEEEAACA    ", "    AAAAAAAAAAA    ", "    AAAAAAAAAAA    ", "    B  AF FA  B    ", "AAAAB  AF FA  BAAAA", " CAA   AF FA   AAC ", " AAA           AAA ", " AAAAAA     AAAAAA ", " EAAFFF     FFFAAE ", " EAA           AAE ", " EAAFFF     FFFAAE ", " AAAAAA     AAAAAA ", " AAA           AAA ", " CAA   AF FA   AAC ", "AAAAB  AF FA  BAAAA", "    B  AF FA  B    ", "    AAAAAAAAAAA    ", "    AAAAAAAAAAA    ", "    ACAAEEEAACA    ", "    A         A    ")
+                    .aisle("    A         A    ", "     AAAEEEAAA     ", "        A A        ", "    AAAAA AAAAA    ", "    AAA     AAA    ", "A  AA         AA  A", " A AA         AA A ", " A AA         AA A ", " A A           A A ", " EAA           AAE ", " E               E ", " EAA           AAE ", " A A           A A ", " A AA         AA A ", " A AA         AA A ", "A  AA         AA  A", "    AAA     AAA    ", "    AAAAA AAAAA    ", "        A A        ", "     AAAEEEAAA     ", "    A         A    ")
+                    .aisle("    A         A    ", "    ACAAEEEAACA    ", "    AAAAAAAAAAA    ", "    AAAAAAAAAAA    ", "    B  AF FA  B    ", "AAAAB  AF FA  BAAAA", " CAA   AF FA   AAC ", " AAA           AAA ", " AAAAAA     AAAAAA ", " EAAFFF     FFFAAE ", " EAA           AAE ", " EAAFFF     FFFAAE ", " AAAAAA     AAAAAA ", " AAA           AAA ", " CAA   AF FA   AAC ", "AAAAB  AF FA  BAAAA", "    B  AF FA  B    ", "    AAAAAAAAAAA    ", "    AAAAAAAAAAA    ", "    ACAAEEEAACA    ", "    A         A    ")
+                    .aisle("    A         A    ", "     CAAAAAAAC     ", "    A  AA AA  A    ", "     BBBAAABBB     ", "    BB  A A  BB    ", "A A B   A A   B A A", " C BB   A A   BB C ", " A B           B A ", " AAB           BAA ", " AAAAAA     AAAAAA ", " A A           A A ", " AAAAAA     AAAAAA ", " AAB           BAA ", " A B           B A ", " C BB   A A   BB C ", "A A B   A A   B A A", "    BB  A A  BB    ", "     BBBAAABBB     ", "    A  AA AA  A    ", "     CAAAAAAAC     ", "    A         A    ")
+                    .aisle("    A         A    ", "     CCAAAAACC     ", "    A D A A D A    ", "      DBAAABD      ", "     BD  A  DB     ", "A A   D     D   A A", " C  B D     D B  C ", " CDDDDDDDDDDDDDDDC ", " A B  D     D  B A ", " AAA  D     D  AAA ", " A AA D     D AA A ", " AAA  D     D  AAA ", " A B  D     D  B A ", " CDDDDDDDDDDDDDDDC ", " C  B D     D B  C ", "A A   D     D   A A", "     BD  A  DB     ", "      DBAAABD      ", "    A D A A D A    ", "     CCAAAAACC     ", "    A         A    ")
+                    .aisle("    AA       AA    ", "      CCCACCC      ", "     A  A A  A     ", "       BAAAB       ", "      BB A BB      ", "A                 A", "A A             A A", " C  B         B  C ", " C BB         BB C ", " CAA           AAC ", " A AA         AA A ", " CAA           AAC ", " C BB         BB C ", " C  B         B  C ", "A A             A A", "A                 A", "      BB A BB      ", "       BAAAB       ", "     A  A A  A     ", "      CCCACCC      ", "    AA       AA    ")
+                    .aisle("     AAAAAAAAA     ", "        A A        ", "      AAA AAA      ", "        AQA        ", "       BBABB       ", "        BBB        ", "A        B        A", "A A             A A", "A A B         B A A", "AAAABB       BBAAAA", "A  AABB     BBAA  A", "AAAABB       BBAAAA", "A A B         B A A", "A A             A A", "A        B        A", "        BBB        ", "       BBABB       ", "        AAA        ", "      AAA AAA      ", "        A A        ", "     AAAAAAAAA     ")
                     .where('Q', Predicates.controller(Predicates.blocks(definition.get())))
                     .where(' ', Predicates.any())
                     .where('A', blocks(CASING_ATOMIC.get()))
@@ -963,6 +790,7 @@ public class CosmicMachines {
                                     .setPreviewCount(1)))
                     .where('F', blocks(FUSION_COIL.get()))
                     .build())
+            // spotless:on
             .workableCasingModel(CosmicCore.id("block/casings/solid/high_tolerance_rhenium_casing"),
                     CosmicCore.id("block/multiblock/vomahine_chemplant"))
             .register();
