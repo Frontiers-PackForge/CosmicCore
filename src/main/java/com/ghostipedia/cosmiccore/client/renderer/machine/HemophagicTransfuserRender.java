@@ -101,11 +101,11 @@ public class HemophagicTransfuserRender extends WorkableCasingMachineRenderer im
                            MultiBufferSource bufferSource, float tick, int combinedLight, int combinedOverlay) {
         poseStack.pushPose();
         var blockRenderer = Minecraft.getInstance().getBlockRenderer();
-        var up = RelativeDirection.UP.getRelativeFacing(machine.getFrontFacing(), machine.getUpwardsFacing(),
+        var up = RelativeDirection.UP.getRelative(machine.getFrontFacing(), machine.getUpwardsFacing(),
                 machine.isFlipped());
-        var back = RelativeDirection.BACK.getRelativeFacing(machine.getFrontFacing(), machine.getUpwardsFacing(),
+        var back = RelativeDirection.BACK.getRelative(machine.getFrontFacing(), machine.getUpwardsFacing(),
                 machine.isFlipped());
-        var left = RelativeDirection.LEFT.getRelativeFacing(machine.getFrontFacing(), machine.getUpwardsFacing(),
+        var left = RelativeDirection.LEFT.getRelative(machine.getFrontFacing(), machine.getUpwardsFacing(),
                 machine.isFlipped());
         // translate to the absolute center of multiblock
         poseStack.translate(
@@ -166,12 +166,12 @@ public class HemophagicTransfuserRender extends WorkableCasingMachineRenderer im
         var front = machine.getFrontFacing();
         var upwards = machine.getUpwardsFacing();
         var flipped = machine.isFlipped();
-        var axis = RelativeDirection.UP.getRelativeFacing(front, upwards, flipped).getAxis();
-        var up = RelativeDirection.UP.getRelativeFacing(machine.getFrontFacing(), machine.getUpwardsFacing(),
+        var axis = RelativeDirection.UP.getRelative(front, upwards, flipped).getAxis();
+        var up = RelativeDirection.UP.getRelative(machine.getFrontFacing(), machine.getUpwardsFacing(),
                 machine.isFlipped());
-        var back = RelativeDirection.BACK.getRelativeFacing(machine.getFrontFacing(), machine.getUpwardsFacing(),
+        var back = RelativeDirection.BACK.getRelative(machine.getFrontFacing(), machine.getUpwardsFacing(),
                 machine.isFlipped());
-        var left = RelativeDirection.LEFT.getRelativeFacing(machine.getFrontFacing(), machine.getUpwardsFacing(),
+        var left = RelativeDirection.LEFT.getRelative(machine.getFrontFacing(), machine.getUpwardsFacing(),
                 machine.isFlipped());
         poseStack.pushPose();
         poseStack.translate(
