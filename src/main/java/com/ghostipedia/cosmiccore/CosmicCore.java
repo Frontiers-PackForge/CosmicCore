@@ -46,9 +46,9 @@ public class CosmicCore {
     public static MaterialRegistry MATERIAL_REGISTRY;
 
     // Init Everything
-    public CosmicCore() {
+    public CosmicCore(FMLJavaModLoadingContext context) {
         CosmicCore.init();
-        var bus = FMLJavaModLoadingContext.get().getModEventBus();
+        var bus = context.getModEventBus();
         bus.register(this);
         bus.addGenericListener(GTRecipeType.class, this::registerRecipeTypes);
         bus.addGenericListener(MachineDefinition.class, this::registerMachines);
@@ -58,7 +58,7 @@ public class CosmicCore {
         CosmicLootModifiers.register(bus);
 
         if (Platform.isClient()) {
-            bus.register(CosmicCoreClient.class);
+            CosmicCoreClient.init(bus);
         }
     }
 

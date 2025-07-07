@@ -9,6 +9,7 @@ import com.ghostipedia.cosmiccore.api.machine.part.CosmicPartAbility;
 import com.ghostipedia.cosmiccore.api.machine.part.SteamFluidHatchPartMachine;
 import com.ghostipedia.cosmiccore.api.machine.part.WirelessEnergyHatchPartMachine;
 import com.ghostipedia.cosmiccore.api.registries.CosmicRegistration;
+import com.ghostipedia.cosmiccore.client.renderer.machine.CosmicDynamicRenderHelpers;
 import com.ghostipedia.cosmiccore.common.block.debug.CreativeThermiaContainerMachine;
 import com.ghostipedia.cosmiccore.common.data.materials.CosmicMaterials;
 import com.ghostipedia.cosmiccore.common.data.recipe.CosmicRecipeModifiers;
@@ -70,17 +71,14 @@ import wayoftime.bloodmagic.common.block.BloodMagicBlocks;
 import java.util.*;
 import java.util.function.BiFunction;
 
-import static com.ghostipedia.cosmiccore.api.machine.part.CosmicPartAbility.EXPORT_SOUL;
-import static com.ghostipedia.cosmiccore.api.machine.part.CosmicPartAbility.IMPORT_SOUL;
+import static com.ghostipedia.cosmiccore.api.machine.part.CosmicPartAbility.*;
 import static com.ghostipedia.cosmiccore.api.pattern.CosmicPredicates.magnetCoils;
 import static com.ghostipedia.cosmiccore.api.registries.CosmicRegistration.REGISTRATE;
 import static com.ghostipedia.cosmiccore.common.data.CosmicBlocks.*;
-import static com.ghostipedia.cosmiccore.common.data.CosmicMachinesUtils.registerCosmicLargeCombustionEngine;
-import static com.ghostipedia.cosmiccore.common.data.datagen.CosmicMachineModels.createSeparateControllerCasingMachineModel;
-import static com.ghostipedia.cosmiccore.common.machine.multiblock.electric.hpca.HPCAMachine.MAX_COMPONENTS_SLICES;
-import static com.ghostipedia.cosmiccore.common.machine.multiblock.electric.hpca.HPCAMachine.MIN_COMPONENTS_SLICES;
+import static com.ghostipedia.cosmiccore.common.data.CosmicMachinesUtils.*;
+import static com.ghostipedia.cosmiccore.common.data.datagen.CosmicMachineModels.*;
+import static com.ghostipedia.cosmiccore.common.machine.multiblock.electric.hpca.HPCAMachine.*;
 import static com.gregtechceu.gtceu.api.GTValues.*;
-import static com.gregtechceu.gtceu.api.GTValues.UV;
 import static com.gregtechceu.gtceu.api.pattern.Predicates.*;
 import static com.gregtechceu.gtceu.api.pattern.util.RelativeDirection.*;
 import static com.gregtechceu.gtceu.common.data.GCYMBlocks.*;
@@ -100,16 +98,13 @@ public class CosmicMachines {
         CosmicRegistration.REGISTRATE.creativeModeTab(() -> CosmicCreativeModeTabs.COSMIC_CORE);
     }
 
-    public static final int[] HIGH_TIERS = GTValues.tiersBetween(GTValues.IV,
-            GTCEuAPI.isHighTier() ? GTValues.OpV : GTValues.UHV);
-
-    public final static MachineDefinition[] SOUL_IMPORT_HATCH = registerSoulTieredHatch(
-            "soul_input_hatch", "Soul Input Hatch", "soul_hatch.import",
+    public final static MachineDefinition[] SOUL_IMPORT_HATCH = registerSoulHatch(
+            "soul_input_hatch", "Soul Input Hatch",
             IO.IN, HIGH_TIERS, IMPORT_SOUL);
-
-    public static final MachineDefinition[] SOUL_EXPORT_HATCH = registerSoulTieredHatch(
-            "soul_output_hatch", "Soul Output Hatch", "soul_hatch.export",
+    public static final MachineDefinition[] SOUL_EXPORT_HATCH = registerSoulHatch(
+            "soul_output_hatch", "Soul Output Hatch",
             IO.OUT, HIGH_TIERS, CosmicPartAbility.EXPORT_SOUL);
+
     public static final MachineDefinition[] THERMIA_VENT = registerThermiaTieredHatch(
             "thermia_export_hatch", "Thermia Vent", "thermia_hatch.export",
             IO.OUT, HIGH_TIERS, CosmicPartAbility.EXPORT_THERMIA);
@@ -153,6 +148,7 @@ public class CosmicMachines {
                     .recipeType(GTRecipeTypes.WIREMILL_RECIPES)
                     .recipeModifier(SimpleSteamMachine::recipeModifier)
                     .addOutputLimit(ItemRecipeCapability.CAP, 1)
+                    .modelProperty(SimpleSteamMachine.VENT_DIRECTION_PROPERTY, RelativeDirection.BACK)
                     .workableSteamHullModel(pressure, GTCEu.id("block/machines/wiremill"))
                     .register());
 
@@ -786,6 +782,12 @@ public class CosmicMachines {
                     .where('X', abilities(IMPORT_SOUL).setMinGlobalLimited(1, 1).setMaxGlobalLimited(1))
                     .where('C', blocks(IESNIUM_BLOCK.get()))
                     .build())
+            .model(createSeparateControllerCasingMachineModel(
+                    BloodMagic.rl("block/blankrune"),
+                    CosmicCore.id("block/casings/solid/highly_conductive_fission_casing"),
+                    GTCEu.id("block/multiblock/network_switch"))
+                    .andThen(model -> model
+                            .addDynamicRenderer(() -> CosmicDynamicRenderHelpers::getHellfireFoundryPartRender)))
             .register();
     public static final MultiblockMachineDefinition SUFFERING_CHAMBER = REGISTRATE
             .multiblock("suffering_chamber", WorkableElectricMultiblockMachine::new)
@@ -3387,8 +3389,8 @@ public class CosmicMachines {
             .machine("hpca_indicator", HPCAIndicatorPartMachine::new)
             .langValue("HPCA Indicator")
             .appearanceBlock(COMPUTER_CASING)
-            .model(createTieredHullMachineModel(CosmicCore.id("block/overlay/machine/hpca/indicator")).andThen(
-                    b -> b.ThisDoesNotExistYet))
+            .model(createOverlayTieredHullMachineModel(CosmicCore.id("block/machine/part/hpca_indicator"))
+                    .andThen(b -> b.addDynamicRenderer(() -> CosmicDynamicRenderHelpers::getHPCAIndicatorRender)))
             .tier(ZPM)
             .register();
 
@@ -3420,15 +3422,15 @@ public class CosmicMachines {
             .sidedWorkableCasingModel(GTCEu.id("block/casings/hpca/computer_casing"), GTCEu.id("block/multiblock/hpca"))
             .register();
 
-    private static MachineDefinition[] registerSoulTieredHatch(String name, String displayName, String model, IO io,
-                                                               int[] tiers, PartAbility... abilities) {
+    private static MachineDefinition[] registerSoulHatch(String name, String displayName, IO io,
+                                                         int[] tiers, PartAbility... abilities) {
         return registerTieredMachines(name,
                 (holder, tier) -> new SoulHatchPartMachine(holder, tier, io),
                 (tier, builder) -> builder
                         .langValue(GTValues.VNF[tier] + ' ' + displayName)
                         .abilities(abilities)
                         .rotationState(RotationState.ALL)
-                        .overlayTieredHullModel(model)
+                        .overlayTieredHullModel("soul_hatch")
                         .tooltipBuilder((item, tooltip) -> {
                             if (io == IO.IN)
                                 tooltip.add(Component.translatable("tooltip.cosmiccore.soul_hatch.input",
@@ -3441,8 +3443,7 @@ public class CosmicMachines {
     }
 
     private static MachineDefinition[] registerWirelessEnergyTieredHatch(String name, String displayName, String model,
-                                                                         IO io,
-                                                                         int[] tiers, int amperage,
+                                                                         IO io, int[] tiers, int amperage,
                                                                          PartAbility... abilities) {
         return registerTieredMachines(name,
                 (holder, tier) -> new WirelessEnergyHatchPartMachine(holder, tier, io, amperage),

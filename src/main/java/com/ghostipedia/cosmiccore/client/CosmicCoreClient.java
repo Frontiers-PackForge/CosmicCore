@@ -1,10 +1,15 @@
 package com.ghostipedia.cosmiccore.client;
 
 import com.ghostipedia.cosmiccore.CosmicCore;
+import com.ghostipedia.cosmiccore.client.renderer.machine.HPCAIndicatorRender;
+import com.ghostipedia.cosmiccore.client.renderer.machine.HellFireFoundryPartRender;
+
+import com.gregtechceu.gtceu.client.renderer.machine.DynamicRenderManager;
 
 import net.minecraft.client.renderer.ShaderInstance;
 import net.minecraftforge.client.event.RegisterGuiOverlaysEvent;
 import net.minecraftforge.client.event.RegisterShadersEvent;
+import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 
 import com.mojang.blaze3d.vertex.DefaultVertexFormat;
@@ -12,10 +17,16 @@ import lombok.Getter;
 
 import java.io.IOException;
 
-@SuppressWarnings("unused")
 public class CosmicCoreClient {
 
     private CosmicCoreClient() {}
+
+    public static void init(IEventBus modBus) {
+        modBus.register(CosmicCoreClient.class);
+
+        DynamicRenderManager.register(CosmicCore.id("hpca_indicator"), HPCAIndicatorRender.TYPE);
+        DynamicRenderManager.register(CosmicCore.id("hellfire_foundry_parts"), HellFireFoundryPartRender.TYPE);
+    }
 
     @Getter
     private static ShaderInstance nebulaeShader;
