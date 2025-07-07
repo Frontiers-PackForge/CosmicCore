@@ -1,6 +1,7 @@
 package com.ghostipedia.cosmiccore.common.data.lang;
 
 import com.gregtechceu.gtceu.data.lang.LangHandler;
+
 import com.tterrag.registrate.providers.RegistrateLangProvider;
 
 public class CosmicLangHandler extends LangHandler {
@@ -68,7 +69,6 @@ public class CosmicLangHandler extends LangHandler {
                 "§fA large but powerful assembler made of steel",
                 "§aParallel Amount§f: §b4x§r");
 
-
         // Dimensional Energy Tooltip
         multiLang(provider, "gtceu.machine.dec.tooltip",
                 "Stores power in an interdimensional pocket.",
@@ -94,7 +94,7 @@ public class CosmicLangHandler extends LangHandler {
         provider.add("tooltip.cosmiccore.thermia_hatch_limit", "§cTemp. Limit: %sK");
         provider.add("cosmiccore.multiblock.magnetic_field_strength", "§fMax Field Strength§f:§6 %s");
         provider.add("cosmiccore.multiblock.magnetic_regen", "§aField Recovery Rate§f:§6 %sT/t");
-        
+
         // gui lines
         provider.add("gui.cosmiccore.soul_hatch.label.import", "Soul Input Hatch");
         provider.add("gui.cosmiccore.soul_hatch.label.export", "Soul Output Hatch");
