@@ -91,7 +91,6 @@ public class CosmicLangHandler extends LangHandler {
         provider.add("cosmiccore.wire_coil.magnet_stats", "§8Magnet Stats");
         provider.add("tooltip.cosmiccore.soul_hatch.input", "§cMax Recipe Input§f:§6 %s");
         provider.add("tooltip.cosmiccore.soul_hatch.output", "§cMax Soul Network Capacity§f:§6 %s");
-        provider.add("tooltip.cosmiccore.soul_hatch.output", "§cMax Soul Network Capacity§f:§6 %s");
         provider.add("tooltip.cosmiccore.thermia_hatch_limit", "§cTemp. Limit: %sK");
         provider.add("cosmiccore.multiblock.magnetic_field_strength", "§fMax Field Strength§f:§6 %s");
         provider.add("cosmiccore.multiblock.magnetic_regen", "§aField Recovery Rate§f:§6 %sT/t");
@@ -216,7 +215,7 @@ public class CosmicLangHandler extends LangHandler {
         provider.add("cosmiccore.multiblock.booster_used", "Booster: %s");
         provider.add("cosmiccore.multiblock.lubricant_used", "Lubricant: %s");
 
-        provider.add("behavior.wireless_data.owner.player", "§3Owner: §r");
+        provider.add("behavior.wireless_data.owner.player", "§3Player Name: §r");
         provider.add("behavior.wireless_data.owner.network", "§3Network Owner: §r");
         provider.add("behavior.wireless_data.owner.team", "§3Team Name: §r");
         provider.add("cosmiccore.wireless_charger.mode.0", "Set charger mode: SUPERCHARGER [Range - %s blocks]");
@@ -240,9 +239,6 @@ public class CosmicLangHandler extends LangHandler {
         provider.add("coscore.pattern.div", "§c%d÷§f");
         provider.add("coscore.pattern.tooltip.div", "Divides contents by §b%d§f");
         provider.add("coscore.pattern.tooltip.multiply", "Multiplies contents by §c%d§f");
-
-        provider.add("behavior.wireless_data.owner.player", "§3Player Name: §r%s");
-        provider.add("behavior.wireless_data.owner.team", "§3Team Name: §r");
 
         // Dimensional Energy Storage
         provider.add("cosmic.multiblock.capacitor.info.tittle.global", "Global Network Info");
