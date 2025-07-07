@@ -4,65 +4,47 @@ import com.ghostipedia.cosmiccore.CosmicCore;
 import com.ghostipedia.cosmiccore.common.machine.multiblock.electric.hpca.HPCAMachine;
 import com.ghostipedia.cosmiccore.common.machine.multiblock.part.HPCAIndicatorPartMachine;
 
-import com.gregtechceu.gtceu.GTCEu;
-import com.gregtechceu.gtceu.api.GTValues;
 import com.gregtechceu.gtceu.api.machine.MachineDefinition;
 import com.gregtechceu.gtceu.api.machine.MetaMachine;
 import com.gregtechceu.gtceu.client.renderer.machine.DynamicRender;
 import com.gregtechceu.gtceu.client.renderer.machine.DynamicRenderType;
-import com.gregtechceu.gtceu.client.renderer.machine.impl.FusionRingRender;
-import com.gregtechceu.gtceu.client.util.RenderUtil;
 import com.gregtechceu.gtceu.client.util.StaticFaceBakery;
 
 import com.lowdragmc.lowdraglib.client.model.ModelFactory;
 
 import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.block.model.BakedQuad;
-import net.minecraft.client.renderer.block.model.ItemTransforms;
-import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.client.resources.model.ModelState;
-import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.BlockAndTintGetter;
 import net.minecraft.world.level.block.entity.BlockEntity;
-import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.client.ChunkRenderTypeSet;
-import net.minecraftforge.client.model.data.ModelData;
 
 import appeng.api.config.RelativeDirection;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.serialization.Codec;
-import com.mojang.serialization.codecs.RecordCodecBuilder;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
-public class HPCAIndicatorRenderer extends DynamicRender<HPCAIndicatorPartMachine, HPCAIndicatorRenderer> {
+public class HPCAIndicatorRender extends DynamicRender<HPCAIndicatorPartMachine, HPCAIndicatorRender> {
 
-    public static final Codec<HPCAIndicatorRenderer> CODEC = Codec.unit(HPCAIndicatorRenderer::new);
-    public static final DynamicRenderType<HPCAIndicatorPartMachine, HPCAIndicatorRenderer> TYPE = new DynamicRenderType<>(
-            HPCAIndicatorRenderer.CODEC);
+    public static final Codec<HPCAIndicatorRender> CODEC = Codec.unit(HPCAIndicatorRender::new);
+    public static final DynamicRenderType<HPCAIndicatorPartMachine, HPCAIndicatorRender> TYPE = new DynamicRenderType<>(
+            HPCAIndicatorRender.CODEC);
 
-    public HPCAIndicatorRenderer() {}
+    public HPCAIndicatorRender() {}
 
     public static final ResourceLocation BASE = CosmicCore.id("block/overlay/machine/hpca/indicator");
     public static final AABB SLIGHTLY_OVER_BLOCK = new AABB(-0.001f, -0.001f, -0.001f, 1.001f, 1.001f, 1.001f);
-
-    public HPCAIndicatorRenderer() {
-        super(, GTCEu.id("block/computer_casing"));
-    }
 
     @Override
     @OnlyIn(Dist.CLIENT)
@@ -87,7 +69,7 @@ public class HPCAIndicatorRenderer extends DynamicRender<HPCAIndicatorPartMachin
     }
 
     @Override
-    public @NotNull DynamicRenderType<HPCAIndicatorPartMachine, HPCAIndicatorRenderer> getType() {
+    public @NotNull DynamicRenderType<HPCAIndicatorPartMachine, HPCAIndicatorRender> getType() {
         return TYPE;
     }
 

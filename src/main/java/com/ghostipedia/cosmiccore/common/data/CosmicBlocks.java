@@ -3,7 +3,6 @@ package com.ghostipedia.cosmiccore.common.data;
 import com.ghostipedia.cosmiccore.CosmicCore;
 import com.ghostipedia.cosmiccore.api.CosmicCoreAPI;
 import com.ghostipedia.cosmiccore.api.block.IMagnetType;
-import com.ghostipedia.cosmiccore.client.renderer.block.NebulaeCoilRenderer;
 import com.ghostipedia.cosmiccore.common.block.MagnetBlock;
 import com.ghostipedia.cosmiccore.common.data.recipe.RecipeTags;
 import com.ghostipedia.cosmiccore.common.item.RenderBlockItem;
@@ -13,9 +12,8 @@ import com.gregtechceu.gtceu.api.GTCEuAPI;
 import com.gregtechceu.gtceu.api.block.ActiveBlock;
 import com.gregtechceu.gtceu.api.block.ICoilType;
 import com.gregtechceu.gtceu.common.block.CoilBlock;
-
 import com.gregtechceu.gtceu.common.data.models.GTModels;
-import com.lowdragmc.lowdraglib.Platform;
+
 import com.lowdragmc.lowdraglib.client.renderer.IRenderer;
 
 import net.minecraft.client.renderer.RenderType;
@@ -40,7 +38,6 @@ import com.tterrag.registrate.util.nullness.NonNullFunction;
 import com.tterrag.registrate.util.nullness.NonNullSupplier;
 import earth.terrarium.adastra.common.blocks.GlobeBlock;
 
-import java.util.Map;
 import java.util.function.Supplier;
 
 import static com.ghostipedia.cosmiccore.api.registries.CosmicRegistration.REGISTRATE;
@@ -72,14 +69,14 @@ public class CosmicBlocks {
             CosmicCoilBlock.CoilType.PROGRAMMABLE_MATTER);
     public static final BlockEntry<CoilBlock> COIL_SHIMMERING_NEUTRONIUM = createCoilBlock(
             CosmicCoilBlock.CoilType.SHIMMERING_NEUTRONIUM);
-//    public static final BlockEntry<CoilBlock> COIL_CAUSAL_FABRIC = createCoilBlock(
-//            CosmicCoilBlock.CoilType.CAUSAL_FABRIC,
-//            Platform.isClient() ? new TextureOverrideRenderer(new ResourceLocation("block/cube_all"),
-//                    Map.of("all", CosmicCore.id("block/casings/coils/causal_fabric_off"))) : null,
-//            Platform.isClient() ? new NebulaeCoilRenderer(new ResourceLocation("block/cube_all"),
-//                    Map.of("all", CosmicCoilBlock.CoilType.CAUSAL_FABRIC.getTexture())) : null
-//
-//    );
+    // public static final BlockEntry<CoilBlock> COIL_CAUSAL_FABRIC = createCoilBlock(
+    // CosmicCoilBlock.CoilType.CAUSAL_FABRIC,
+    // Platform.isClient() ? new TextureOverrideRenderer(new ResourceLocation("block/cube_all"),
+    // Map.of("all", CosmicCore.id("block/casings/coils/causal_fabric_off"))) : null,
+    // Platform.isClient() ? new NebulaeCoilRenderer(new ResourceLocation("block/cube_all"),
+    // Map.of("all", CosmicCoilBlock.CoilType.CAUSAL_FABRIC.getTexture())) : null
+    //
+    // );
 
     // New Casings ; Several reference textures from GTOCore, make sure to give credits to them!
     public static final BlockEntry<Block> REFLECTIVE_STARMETAL_CASING = createCasingBlock("reflective_starmetal_casing",

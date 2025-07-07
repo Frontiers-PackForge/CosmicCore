@@ -1,16 +1,15 @@
 package com.ghostipedia.cosmiccore.client.renderer.machine;
 
 import com.ghostipedia.cosmiccore.CosmicCore;
-
 import com.ghostipedia.cosmiccore.api.machine.multiblock.IrisMultiblockMachine;
+
 import com.gregtechceu.gtceu.GTCEu;
 import com.gregtechceu.gtceu.api.GTValues;
 import com.gregtechceu.gtceu.api.machine.IMachineBlockEntity;
 import com.gregtechceu.gtceu.api.machine.multiblock.WorkableElectricMultiblockMachine;
 import com.gregtechceu.gtceu.client.renderer.machine.DynamicRender;
-
-
 import com.gregtechceu.gtceu.client.renderer.machine.DynamicRenderType;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
@@ -33,19 +32,17 @@ import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.client.ChunkRenderTypeSet;
+import net.minecraftforge.client.model.data.ModelData;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import net.minecraftforge.client.ChunkRenderTypeSet;
-import net.minecraftforge.client.model.data.ModelData;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Quaternionf;
 
 import java.util.List;
-import java.util.function.Consumer;
-
 
 public class IrisMachineRenderer extends DynamicRender<IrisMultiblockMachine, IrisMachineRenderer> {
 
@@ -60,23 +57,23 @@ public class IrisMachineRenderer extends DynamicRender<IrisMultiblockMachine, Ir
     public static final ResourceLocation IRIS_MODEL_RING_WHITE = CosmicCore.id("block/iris/iris_ring_white");
     private float tickvalue;
 
-//    public IrisMachineRenderer() {
-//        super(TEXTURE, OVERLAY_MODEL_TEXTURES);
-//    }
-//
-//    @Override
-//    @OnlyIn(Dist.CLIENT)
-//    public boolean hasTESR(BlockEntity blockEntity) {
-//        return true;
-//    }
+    // public IrisMachineRenderer() {
+    // super(TEXTURE, OVERLAY_MODEL_TEXTURES);
+    // }
+    //
+    // @Override
+    // @OnlyIn(Dist.CLIENT)
+    // public boolean hasTESR(BlockEntity blockEntity) {
+    // return true;
+    // }
 
     @Override
-    public void render(IrisMultiblockMachine machine, float partialTick, PoseStack poseStack, MultiBufferSource buffer, int packedLight, int packedOverlay) {
-
-    }
+    public void render(IrisMultiblockMachine machine, float partialTick, PoseStack poseStack, MultiBufferSource buffer,
+                       int packedLight, int packedOverlay) {}
 
     @Override
-    public void renderByItem(ItemStack stack, ItemDisplayContext displayContext, PoseStack poseStack, MultiBufferSource buffer, int packedLight, int packedOverlay) {
+    public void renderByItem(ItemStack stack, ItemDisplayContext displayContext, PoseStack poseStack,
+                             MultiBufferSource buffer, int packedLight, int packedOverlay) {
         super.renderByItem(stack, displayContext, poseStack, buffer, packedLight, packedOverlay);
     }
 
@@ -214,8 +211,8 @@ public class IrisMachineRenderer extends DynamicRender<IrisMultiblockMachine, Ir
         List<BakedQuad> quads = bakedmodel.getQuads(null, null, GTValues.RNG);
         for (BakedQuad quad : quads) {
             consumer.putBulkData(pose, quad, 1f, 1f, 1f, combinedLight, combinedOverlay);
-            consumer.putBulkData(pose, quad, new float[]{1.0f, 1.0f, 1.0f, 1.0f}, 1f, 1f, 1f, 0.65f,
-                    new int[]{combinedLight, combinedLight, combinedLight, combinedLight}, combinedOverlay, false);
+            consumer.putBulkData(pose, quad, new float[] { 1.0f, 1.0f, 1.0f, 1.0f }, 1f, 1f, 1f, 0.65f,
+                    new int[] { combinedLight, combinedLight, combinedLight, combinedLight }, combinedOverlay, false);
 
         }
         poseStack.popPose();
@@ -236,8 +233,8 @@ public class IrisMachineRenderer extends DynamicRender<IrisMultiblockMachine, Ir
         List<BakedQuad> quads = bakedmodel.getQuads(null, null, GTValues.RNG);
         for (BakedQuad quad : quads) {
             consumer.putBulkData(pose, quad, 1f, 1f, 1f, combinedLight, combinedOverlay);
-            consumer.putBulkData(pose, quad, new float[]{1.0f, 1.0f, 1.0f, 1.0f}, 1f, 1f, 1f, 0.5f,
-                    new int[]{combinedLight, combinedLight, combinedLight, combinedLight}, combinedOverlay, false);
+            consumer.putBulkData(pose, quad, new float[] { 1.0f, 1.0f, 1.0f, 1.0f }, 1f, 1f, 1f, 0.5f,
+                    new int[] { combinedLight, combinedLight, combinedLight, combinedLight }, combinedOverlay, false);
         }
         poseStack.popPose();
     }
@@ -256,19 +253,20 @@ public class IrisMachineRenderer extends DynamicRender<IrisMultiblockMachine, Ir
         List<BakedQuad> quads = bakedmodel.getQuads(null, null, GTValues.RNG);
         for (BakedQuad quad : quads) {
             consumer.putBulkData(pose, quad, 1f, 1f, 1f, combinedLight, combinedOverlay);
-            consumer.putBulkData(pose, quad, new float[]{1.0f, 1.0f, 1.0f, 1.0f}, 1f, 1f, 1f, 0.7f,
-                    new int[]{combinedLight, combinedLight, combinedLight, combinedLight}, combinedOverlay, false);
+            consumer.putBulkData(pose, quad, new float[] { 1.0f, 1.0f, 1.0f, 1.0f }, 1f, 1f, 1f, 0.7f,
+                    new int[] { combinedLight, combinedLight, combinedLight, combinedLight }, combinedOverlay, false);
         }
         poseStack.popPose();
     }
 
     @Override
     public DynamicRenderType<IrisMultiblockMachine, IrisMachineRenderer> getType() {
-        return ;
+        return;
     }
 
     @Override
-    public @NotNull List<BakedQuad> getQuads(@Nullable BlockState state, @Nullable Direction side, @NotNull RandomSource rand) {
+    public @NotNull List<BakedQuad> getQuads(@Nullable BlockState state, @Nullable Direction side,
+                                             @NotNull RandomSource rand) {
         return super.getQuads(state, side, rand);
     }
 
@@ -288,12 +286,14 @@ public class IrisMachineRenderer extends DynamicRender<IrisMultiblockMachine, Ir
     }
 
     @Override
-    public BakedModel applyTransform(ItemDisplayContext transformType, PoseStack poseStack, boolean applyLeftHandTransform) {
+    public BakedModel applyTransform(ItemDisplayContext transformType, PoseStack poseStack,
+                                     boolean applyLeftHandTransform) {
         return super.applyTransform(transformType, poseStack, applyLeftHandTransform);
     }
 
     @Override
-    public @NotNull ModelData getModelData(@NotNull BlockAndTintGetter level, @NotNull BlockPos pos, @NotNull BlockState state, @NotNull ModelData modelData) {
+    public @NotNull ModelData getModelData(@NotNull BlockAndTintGetter level, @NotNull BlockPos pos,
+                                           @NotNull BlockState state, @NotNull ModelData modelData) {
         return super.getModelData(level, pos, state, modelData);
     }
 
@@ -303,7 +303,8 @@ public class IrisMachineRenderer extends DynamicRender<IrisMultiblockMachine, Ir
     }
 
     @Override
-    public ChunkRenderTypeSet getRenderTypes(@NotNull BlockState state, @NotNull RandomSource rand, @NotNull ModelData data) {
+    public ChunkRenderTypeSet getRenderTypes(@NotNull BlockState state, @NotNull RandomSource rand,
+                                             @NotNull ModelData data) {
         return super.getRenderTypes(state, rand, data);
     }
 
@@ -318,18 +319,19 @@ public class IrisMachineRenderer extends DynamicRender<IrisMultiblockMachine, Ir
     }
 }
 
-//    @Override
-//    public void onAdditionalModel(Consumer<ResourceLocation> registry) {
-//        super.onAdditionalModel(registry);
-//        registry.accept(IRIS_MODEL_CORE);
-//        registry.accept(IRIS_MODEL_RING);
-//        registry.accept(IRIS_MODEL_RING_WHITE);
-//        registry.accept(STAR_MODEL_CORE);
-//        registry.accept(STAR_MODEL_INNER);
-//        registry.accept(STAR_MODEL_OUTER);
-//    }
+// @Override
+// public void onAdditionalModel(Consumer<ResourceLocation> registry) {
+// super.onAdditionalModel(registry);
+// registry.accept(IRIS_MODEL_CORE);
+// registry.accept(IRIS_MODEL_RING);
+// registry.accept(IRIS_MODEL_RING_WHITE);
+// registry.accept(STAR_MODEL_CORE);
+// registry.accept(STAR_MODEL_INNER);
+// registry.accept(STAR_MODEL_OUTER);
+// }
 //
-//    @Override
-//    public @NotNull ModelData getModelData(@NotNull BlockAndTintGetter level, @NotNull BlockPos pos, @NotNull BlockState state, @NotNull ModelData modelData) {
-//        return super.getModelData(level, pos, state, modelData);
-//    }
+// @Override
+// public @NotNull ModelData getModelData(@NotNull BlockAndTintGetter level, @NotNull BlockPos pos, @NotNull BlockState
+// state, @NotNull ModelData modelData) {
+// return super.getModelData(level, pos, state, modelData);
+// }

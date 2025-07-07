@@ -36,6 +36,7 @@ import com.gregtechceu.gtceu.api.machine.multiblock.CoilWorkableElectricMultiblo
 import com.gregtechceu.gtceu.api.machine.multiblock.PartAbility;
 import com.gregtechceu.gtceu.api.machine.multiblock.WorkableElectricMultiblockMachine;
 import com.gregtechceu.gtceu.api.machine.steam.SimpleSteamMachine;
+import com.gregtechceu.gtceu.api.machine.trait.RecipeLogic;
 import com.gregtechceu.gtceu.api.pattern.FactoryBlockPattern;
 import com.gregtechceu.gtceu.api.pattern.MultiblockShapeInfo;
 import com.gregtechceu.gtceu.api.pattern.Predicates;
@@ -252,7 +253,8 @@ public class CosmicMachines {
                     .where('C', blocks(BRONZE_HULL.get()))
                     .where('E', blocks(CASING_BRONZE_GEARBOX.get()))
                     .build())
-            .sidedWorkableCasingModel(GTCEu.id("block/casings/solid/machine_casing_bronze_plated_bricks"), CosmicCore.id("block/multiblock/mixing_vessel"))
+            .sidedWorkableCasingModel(GTCEu.id("block/casings/solid/machine_casing_bronze_plated_bricks"),
+                    CosmicCore.id("block/multiblock/mixing_vessel"))
             .register();
     public static final MultiblockMachineDefinition INDUSTRIAL_PRIMITIVE_BLAST_FURNACE = GTRegistration.REGISTRATE
             .multiblock("industrial_primitive_blast_furnace", IPBFMachine::new)
@@ -311,7 +313,8 @@ public class CosmicMachines {
                     GTCEu.id("block/multiblock/steam_oven"))
                     .andThen(b -> b.addDynamicRenderer(
                             () -> () -> DynamicRenderHelper.makeBoilerPartRender(
-                                    BoilerFireboxType.STEEL_FIREBOX, STEEL_PLATED_BRONZE)))).tooltips(Component.translatable("cosmiccore.multiblock.hpsassem.tooltip.0"),
+                                    BoilerFireboxType.STEEL_FIREBOX, STEEL_PLATED_BRONZE))))
+            .tooltips(Component.translatable("cosmiccore.multiblock.hpsassem.tooltip.0"),
                     Component.translatable("cosmiccore.multiblock.hpsassem.tooltip.1"),
                     Component.translatable("cosmiccore.multiblock.hpsassem.tooltip.2"))
             .register();
@@ -3385,7 +3388,8 @@ public class CosmicMachines {
             .langValue("HPCA Indicator")
             .appearanceBlock(COMPUTER_CASING)
             .model(createTieredHullMachineModel(CosmicCore.id("block/overlay/machine/hpca/indicator")).andThen(
-                            b -> b.ThisDoesNotExistYet))
+                    b -> b.ThisDoesNotExistYet))
+            .tier(ZPM)
             .register();
 
     public static final MachineDefinition HIGH_PERFORMANCE_COMPUTATION_ARRAY = REGISTRATE
@@ -3476,9 +3480,13 @@ public class CosmicMachines {
             .tier(HV)
             .rotationState(RotationState.ALL)
             .abilities(PartAbility.IMPORT_ITEMS)
-            .model(() -> new OverlayTieredActiveMachineRenderer(HV, GTCEu.id("block/machine/part/object_holder"),
-                    GTCEu.id("block/machine/part/object_holder_active")))
-             .register();
+            .modelProperty(RecipeLogic.STATUS_PROPERTY, RecipeLogic.Status.IDLE)
+            .model(createWorkableTieredHullMachineModel(GTCEu.id("block/machines/object_holder"))
+                    .andThen((ctx, prov, model) -> {
+                        model.addReplaceableTextures("bottom", "top", "side");
+                    }))
+            .register();
+
     public static final MachineDefinition CREATIVE_HEAT = REGISTRATE
             .machine("creative_thermal", CreativeThermiaContainerMachine::new)
             .rotationState(RotationState.NONE)
