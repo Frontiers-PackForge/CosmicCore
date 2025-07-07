@@ -2,9 +2,23 @@
   "parent": "minecraft:block/block",
   "loader": "gtceu:machine",
   "machine": "cosmiccore:creative_thermal",
+  "replaceable_textures": [
+    "bottom",
+    "top",
+    "side"
+  ],
   "variants": {
     "": {
-      "model": "cosmiccore:block/machine/creative_thermal"
+      "model": {
+        "parent": "gtceu:block/machine/template/sided/single",
+        "textures": {
+          "bottom": "gtceu:block/casings/voltage/ulv/bottom",
+          "overlay": "gtceu:block/void",
+          "overlay_emissive": "gtceu:block/overlay/machine/overlay_energy_emitter",
+          "side": "gtceu:block/casings/voltage/ulv/side",
+          "top": "gtceu:block/casings/voltage/ulv/top"
+        }
+      }
     }
   }
 }

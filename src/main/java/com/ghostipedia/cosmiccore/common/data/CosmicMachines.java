@@ -50,6 +50,7 @@ import com.gregtechceu.gtceu.client.util.TooltipHelper;
 import com.gregtechceu.gtceu.common.block.BoilerFireboxType;
 import com.gregtechceu.gtceu.common.data.*;
 import com.gregtechceu.gtceu.common.data.machines.GTMultiMachines;
+import com.gregtechceu.gtceu.common.data.models.GTModels;
 import com.gregtechceu.gtceu.common.machine.multiblock.electric.ActiveTransformerMachine;
 import com.gregtechceu.gtceu.common.machine.multiblock.electric.FusionReactorMachine;
 import com.gregtechceu.gtceu.common.machine.multiblock.electric.PowerSubstationMachine;
@@ -3320,6 +3321,8 @@ public class CosmicMachines {
     public static final MachineDefinition CREATIVE_HEAT = REGISTRATE
             .machine("creative_thermal", CreativeThermiaContainerMachine::new)
             .rotationState(RotationState.NONE)
+            .model(createSingleOverlayTieredHullMachineModel(GTModels.BLANK_TEXTURE,
+                    GTCEu.id("block/overlay/machine/overlay_energy_emitter")))
             .tooltipBuilder(CREATIVE_TOOLTIPS)
             .register();
 
