@@ -10,18 +10,23 @@ import com.gregtechceu.gtceu.client.util.ModelUtils;
 import com.gregtechceu.gtceu.client.util.RenderBufferHelper;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.serialization.Codec;
+import net.minecraft.Util;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.LightTexture;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.Sheets;
 import net.minecraft.client.renderer.texture.TextureAtlas;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Vec3i;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.phys.AABB;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import org.joml.Quaternionf;
+
+import java.util.function.BiFunction;
 
 public class SufferingChamberRenderer extends DynamicRender<WorkableElectricMultiblockMachine, SufferingChamberRenderer> {
 
@@ -35,6 +40,22 @@ public class SufferingChamberRenderer extends DynamicRender<WorkableElectricMult
 
     private static TextureAtlasSprite pentagramSprite = null;
     public static boolean  isEventListenerRegistered = false;
+
+    private static final BiFunction<Direction, Direction, AABB> renderBoundCache = Util.memoize((front, upwards) -> {
+
+        Direction up = RelativeDirection.UP.getRelative(front, upwards, false);
+        Direction back = RelativeDirection.BACK.getRelative(front, upwards, false);
+        Direction left = RelativeDirection.LEFT.getRelative(front, upwards, false);
+
+        BlockPos.MutableBlockPos minPos =  new BlockPos.MutableBlockPos()
+                .move(left, 4).move(up, 4).move(back, 1);
+        BlockPos.MutableBlockPos maxPos =  new BlockPos.MutableBlockPos()
+                .move(left, -4).move(up, 4).move(back, 7);
+
+        return new AABB(minPos, maxPos);
+
+
+    });
 
     private SufferingChamberRenderer() {
 
@@ -54,6 +75,15 @@ public class SufferingChamberRenderer extends DynamicRender<WorkableElectricMult
     }
 
     @Override
+    public AABB getRenderBoundingBox(WorkableElectricMultiblockMachine multi) {
+
+        if (multi.isFormed()){
+            AABB bounds = renderBoundCache.apply(multi.getFrontFacing(), multi.getUpwardsFacing());
+        }
+        return super.getRenderBoundingBox(multi);
+    }
+
+        @Override
     public int getViewDistance() {
         return 256;
     }
