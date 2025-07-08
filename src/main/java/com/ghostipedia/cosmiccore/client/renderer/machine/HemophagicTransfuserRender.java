@@ -102,7 +102,7 @@ public class HemophagicTransfuserRender extends
     @Override
     public void render(WorkableElectricMultiblockMachine machine, float partialTick, PoseStack poseStack,
                        MultiBufferSource buffer, int packedLight, int packedOverlay) {
-        float tickValue = (Minecraft.getInstance().level.getGameTime() + partialTick);
+        float tickValue = (Minecraft.getInstance().player.tickCount + partialTick);
         if (!machine.isFormed()) {
             return;
         }
@@ -136,6 +136,8 @@ public class HemophagicTransfuserRender extends
                 zo + (leftAxis == Direction.Axis.Z ? 0.5f : 0.0f));
 
         renderBloodCube(poseStack, buffer, tickValue);
+        renderRings(up.getAxis(), tickValue, poseStack, buffer);
+
         if (machine.isActive()) {
             renderRings(up.getAxis(), tickValue, poseStack, buffer);
         }
