@@ -87,7 +87,6 @@ public class CosmicRecipeModifiers {
         var handlers = rlm.getCapabilitiesFlat(IO.IN, ItemRecipeCapability.CAP);
         int count = 0;
         for (var handler : handlers) {
-            if (!handler.shouldSearchContent()) continue;
             for (var content : handler.getContents()) {
                 if (content instanceof ItemStack stack && !stack.isEmpty()) {
                     if (stack.is(match)) count += stack.getCount();
