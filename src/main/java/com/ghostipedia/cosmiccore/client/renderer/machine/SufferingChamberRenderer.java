@@ -1,6 +1,7 @@
 package com.ghostipedia.cosmiccore.client.renderer.machine;
 
 import com.ghostipedia.cosmiccore.CosmicCore;
+
 import com.gregtechceu.gtceu.api.machine.multiblock.MultiblockControllerMachine;
 import com.gregtechceu.gtceu.api.machine.multiblock.WorkableElectricMultiblockMachine;
 import com.gregtechceu.gtceu.api.pattern.util.RelativeDirection;
@@ -8,8 +9,7 @@ import com.gregtechceu.gtceu.client.renderer.machine.DynamicRender;
 import com.gregtechceu.gtceu.client.renderer.machine.DynamicRenderType;
 import com.gregtechceu.gtceu.client.util.ModelUtils;
 import com.gregtechceu.gtceu.client.util.RenderBufferHelper;
-import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.serialization.Codec;
+
 import net.minecraft.Util;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.LightTexture;
@@ -24,22 +24,25 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.phys.AABB;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+
+import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.serialization.Codec;
 import org.joml.Quaternionf;
 
 import java.util.function.BiFunction;
 
-public class SufferingChamberRenderer extends DynamicRender<WorkableElectricMultiblockMachine, SufferingChamberRenderer> {
+public class SufferingChamberRenderer extends
+                                      DynamicRender<WorkableElectricMultiblockMachine, SufferingChamberRenderer> {
 
-    public static  final SufferingChamberRenderer INSTANCE = new SufferingChamberRenderer();
+    public static final SufferingChamberRenderer INSTANCE = new SufferingChamberRenderer();
     public static final Codec<SufferingChamberRenderer> CODEC = Codec.unit(INSTANCE);
     public static final DynamicRenderType<WorkableElectricMultiblockMachine, SufferingChamberRenderer> TYPE = new DynamicRenderType<>(
             SufferingChamberRenderer.CODEC);
 
     public static final ResourceLocation pentagram = CosmicCore.id("block/iris/testagram");
 
-
     private static TextureAtlasSprite pentagramSprite = null;
-    public static boolean  isEventListenerRegistered = false;
+    public static boolean isEventListenerRegistered = false;
 
     private static final BiFunction<Direction, Direction, AABB> renderBoundCache = Util.memoize((front, upwards) -> {
 
@@ -47,26 +50,23 @@ public class SufferingChamberRenderer extends DynamicRender<WorkableElectricMult
         Direction back = RelativeDirection.BACK.getRelative(front, upwards, false);
         Direction left = RelativeDirection.LEFT.getRelative(front, upwards, false);
 
-        BlockPos.MutableBlockPos minPos =  new BlockPos.MutableBlockPos()
+        BlockPos.MutableBlockPos minPos = new BlockPos.MutableBlockPos()
                 .move(left, 4).move(up, 3).move(back, 1);
-        BlockPos.MutableBlockPos maxPos =  new BlockPos.MutableBlockPos()
+        BlockPos.MutableBlockPos maxPos = new BlockPos.MutableBlockPos()
                 .move(left, -4).move(up, 5).move(back, 7);
 
         return new AABB(minPos, maxPos);
 
-
     });
 
     private SufferingChamberRenderer() {
-
-        if(!isEventListenerRegistered) {
+        if (!isEventListenerRegistered) {
 
             ModelUtils.registerAtlasStitchedEventListener(TextureAtlas.LOCATION_BLOCKS, event -> {
                 pentagramSprite = event.getAtlas().getSprite(pentagram);
             });
 
         }
-
     }
 
     @Override
@@ -76,15 +76,14 @@ public class SufferingChamberRenderer extends DynamicRender<WorkableElectricMult
 
     @Override
     public AABB getRenderBoundingBox(WorkableElectricMultiblockMachine multi) {
-
-        if (multi.isFormed()){
+        if (multi.isFormed()) {
             AABB bounds = renderBoundCache.apply(multi.getFrontFacing(), multi.getUpwardsFacing());
             return bounds.move(multi.getPos());
         }
         return super.getRenderBoundingBox(multi);
     }
 
-        @Override
+    @Override
     public int getViewDistance() {
         return 256;
     }
@@ -95,20 +94,19 @@ public class SufferingChamberRenderer extends DynamicRender<WorkableElectricMult
     }
 
     @Override
-    public void render(WorkableElectricMultiblockMachine machine, float partialTick, PoseStack poseStack,                       MultiBufferSource buffer, int packedLight, int packedOverlay) {
-
+    public void render(WorkableElectricMultiblockMachine machine, float partialTick, PoseStack poseStack,
+                       MultiBufferSource buffer, int packedLight, int packedOverlay) {
         float tickvalue = (Minecraft.getInstance().level.getGameTime() + partialTick);
-        if (machine.isFormed()){
+        if (machine.isFormed()) {
 
             renderPentagram(machine, poseStack, buffer, tickvalue);
 
         }
-
     }
 
-                       @OnlyIn(Dist.CLIENT)
-    public void renderPentagram(MultiblockControllerMachine machine, PoseStack stack, MultiBufferSource source, float totalTick){
-
+    @OnlyIn(Dist.CLIENT)
+    public void renderPentagram(MultiblockControllerMachine machine, PoseStack stack, MultiBufferSource source,
+                                float totalTick) {
         stack.pushPose();
 
         Direction front = machine.getFrontFacing();
@@ -121,13 +119,11 @@ public class SufferingChamberRenderer extends DynamicRender<WorkableElectricMult
 
         float x0 = 0, y0 = 0, z0 = 0;
 
-
         // go to center of multi
         for (Direction.Axis axis : Direction.Axis.VALUES) {
 
             int upOffset = axis.choose(up.getX(), up.getY(), up.getZ());
             int backOffset = axis.choose(back.getX(), back.getY(), back.getZ());
-
 
             // yoinked omers magic numbers from Hemophagic blahblahlbah
             float offset = upOffset * (4.0f + (upOffset * 0.5f)) +
@@ -139,43 +135,38 @@ public class SufferingChamberRenderer extends DynamicRender<WorkableElectricMult
             }
         }
         x0 -= 1.0f;
-            stack.translate(
-                    x0 + (leftAxis == Direction.Axis.X ? 0.5f : 0.0f),
-                    y0 + (leftAxis == Direction.Axis.Y ? 0.5f : 0.0f),
-                    z0 + (leftAxis == Direction.Axis.Z ? 0.5f : 0.0f));
+        stack.translate(
+                x0 + (leftAxis == Direction.Axis.X ? 0.5f : 0.0f),
+                y0 + (leftAxis == Direction.Axis.Y ? 0.5f : 0.0f),
+                z0 + (leftAxis == Direction.Axis.Z ? 0.5f : 0.0f));
 
-            //do the rotaty thingy yee
-            Quaternionf rot = new Quaternionf()
-                    .rotateY(totalTick / 30 );
-            stack.mulPose(rot);
+        // do the rotaty thingy yee
+        Quaternionf rot = new Quaternionf()
+                .rotateY(totalTick / 30);
+        stack.mulPose(rot);
 
-            var consumer = source.getBuffer(Sheets.translucentCullBlockSheet());
-                           RenderBufferHelper.renderCubeFace(
-                                   consumer,
-                                   stack.last(),
-                                   0x8888FFFF,
-                                   LightTexture.FULL_BRIGHT,
-                                   Direction.UP,
-                                   -3.5f, 0, -3.5f, pentagramSprite.getU0(), pentagramSprite.getV1(),
-                                   -3.5f, 0,  3.5f, pentagramSprite.getU0(), pentagramSprite.getV0(),
-                                   3.5f, 0,  3.5f, pentagramSprite.getU1(), pentagramSprite.getV0(),
-                                   3.5f, 0, -3.5f, pentagramSprite.getU1(), pentagramSprite.getV1()
-                           );
-                           RenderBufferHelper.renderCubeFace(
-                                   consumer,
-                                   stack.last(),
-                                   0x8888FFFF,
-                                   LightTexture.FULL_BRIGHT,
-                                   Direction.DOWN,
-                                   3.5f, 0, -3.5f, pentagramSprite.getU1(), pentagramSprite.getV1(),
-                                   3.5f, 0,  3.5f, pentagramSprite.getU1(), pentagramSprite.getV0(),
-                                   -3.5f, 0,  3.5f, pentagramSprite.getU0(), pentagramSprite.getV0(),
-                                   -3.5f, 0, -3.5f, pentagramSprite.getU0(), pentagramSprite.getV1()
-                           );
+        var consumer = source.getBuffer(Sheets.translucentCullBlockSheet());
+        RenderBufferHelper.renderCubeFace(
+                consumer,
+                stack.last(),
+                0x8888FFFF,
+                LightTexture.FULL_BRIGHT,
+                Direction.UP,
+                -3.5f, 0, -3.5f, pentagramSprite.getU0(), pentagramSprite.getV1(),
+                -3.5f, 0, 3.5f, pentagramSprite.getU0(), pentagramSprite.getV0(),
+                3.5f, 0, 3.5f, pentagramSprite.getU1(), pentagramSprite.getV0(),
+                3.5f, 0, -3.5f, pentagramSprite.getU1(), pentagramSprite.getV1());
+        RenderBufferHelper.renderCubeFace(
+                consumer,
+                stack.last(),
+                0x8888FFFF,
+                LightTexture.FULL_BRIGHT,
+                Direction.DOWN,
+                3.5f, 0, -3.5f, pentagramSprite.getU1(), pentagramSprite.getV1(),
+                3.5f, 0, 3.5f, pentagramSprite.getU1(), pentagramSprite.getV0(),
+                -3.5f, 0, 3.5f, pentagramSprite.getU0(), pentagramSprite.getV0(),
+                -3.5f, 0, -3.5f, pentagramSprite.getU0(), pentagramSprite.getV1());
 
-                           stack.popPose();
-
-
-
+        stack.popPose();
     }
 }

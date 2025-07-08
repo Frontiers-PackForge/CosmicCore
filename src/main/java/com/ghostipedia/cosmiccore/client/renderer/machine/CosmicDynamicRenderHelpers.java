@@ -27,6 +27,6 @@ public class CosmicDynamicRenderHelpers {
     }
 
     public static DynamicRender<?, ?> getSufferingChamberRenderer() {
-        return  SufferingChamberRenderer.INSTANCE;
+        return SufferingChamberRenderer.INSTANCE;
     }
 }
