@@ -21,6 +21,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Vec3i;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.Mth;
 import net.minecraft.world.phys.AABB;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -119,7 +120,7 @@ public class SufferingChamberRenderer extends
 
         float x0 = 0, y0 = 0, z0 = 0;
 
-        // go to center of multi
+        // go to center o  f multi
         for (Direction.Axis axis : Direction.Axis.VALUES) {
 
             int upOffset = axis.choose(up.getX(), up.getY(), up.getZ());
@@ -127,14 +128,14 @@ public class SufferingChamberRenderer extends
 
             // yoinked omers magic numbers from Hemophagic blahblahlbah
             float offset = upOffset * (4.0f + (upOffset * 0.5f)) +
-                    backOffset * (5.0f + (backOffset * 0.5f));
+                    backOffset * (4.0f + (backOffset * 0.5f));
             switch (axis) {
                 case X -> x0 = offset;
                 case Y -> y0 = offset;
                 case Z -> z0 = offset;
             }
         }
-        x0 -= 1.0f;
+
         stack.translate(
                 x0 + (leftAxis == Direction.Axis.X ? 0.5f : 0.0f),
                 y0 + (leftAxis == Direction.Axis.Y ? 0.5f : 0.0f),
@@ -142,7 +143,7 @@ public class SufferingChamberRenderer extends
 
         // do the rotaty thingy yee
         Quaternionf rot = new Quaternionf()
-                .rotateY(totalTick / 30);
+                .rotateY( totalTick/ 30);
         stack.mulPose(rot);
 
         var consumer = source.getBuffer(Sheets.translucentCullBlockSheet());
