@@ -48,9 +48,9 @@ public class SufferingChamberRenderer extends DynamicRender<WorkableElectricMult
         Direction left = RelativeDirection.LEFT.getRelative(front, upwards, false);
 
         BlockPos.MutableBlockPos minPos =  new BlockPos.MutableBlockPos()
-                .move(left, 4).move(up, 4).move(back, 1);
+                .move(left, 4).move(up, 3).move(back, 1);
         BlockPos.MutableBlockPos maxPos =  new BlockPos.MutableBlockPos()
-                .move(left, -4).move(up, 4).move(back, 7);
+                .move(left, -4).move(up, 5).move(back, 7);
 
         return new AABB(minPos, maxPos);
 
@@ -79,6 +79,7 @@ public class SufferingChamberRenderer extends DynamicRender<WorkableElectricMult
 
         if (multi.isFormed()){
             AABB bounds = renderBoundCache.apply(multi.getFrontFacing(), multi.getUpwardsFacing());
+            return bounds.move(multi.getPos());
         }
         return super.getRenderBoundingBox(multi);
     }
@@ -159,6 +160,17 @@ public class SufferingChamberRenderer extends DynamicRender<WorkableElectricMult
                                    -3.5f, 0,  3.5f, pentagramSprite.getU0(), pentagramSprite.getV0(),
                                    3.5f, 0,  3.5f, pentagramSprite.getU1(), pentagramSprite.getV0(),
                                    3.5f, 0, -3.5f, pentagramSprite.getU1(), pentagramSprite.getV1()
+                           );
+                           RenderBufferHelper.renderCubeFace(
+                                   consumer,
+                                   stack.last(),
+                                   0x8888FFFF,
+                                   LightTexture.FULL_BRIGHT,
+                                   Direction.DOWN,
+                                   3.5f, 0, -3.5f, pentagramSprite.getU1(), pentagramSprite.getV1(),
+                                   3.5f, 0,  3.5f, pentagramSprite.getU1(), pentagramSprite.getV0(),
+                                   -3.5f, 0,  3.5f, pentagramSprite.getU0(), pentagramSprite.getV0(),
+                                   -3.5f, 0, -3.5f, pentagramSprite.getU0(), pentagramSprite.getV1()
                            );
 
                            stack.popPose();
