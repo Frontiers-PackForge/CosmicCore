@@ -21,7 +21,6 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Vec3i;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.util.Mth;
 import net.minecraft.world.phys.AABB;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -120,7 +119,7 @@ public class SufferingChamberRenderer extends
 
         float x0 = 0, y0 = 0, z0 = 0;
 
-        // go to center o  f multi
+        // go to center o f multi
         for (Direction.Axis axis : Direction.Axis.VALUES) {
 
             int upOffset = axis.choose(up.getX(), up.getY(), up.getZ());
@@ -143,7 +142,7 @@ public class SufferingChamberRenderer extends
 
         // do the rotaty thingy yee
         Quaternionf rot = new Quaternionf()
-                .rotateY( totalTick/ 30);
+                .rotateY(totalTick / 30);
         stack.mulPose(rot);
 
         var consumer = source.getBuffer(Sheets.translucentCullBlockSheet());
