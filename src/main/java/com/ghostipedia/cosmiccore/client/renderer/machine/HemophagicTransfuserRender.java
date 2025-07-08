@@ -2,7 +2,6 @@ package com.ghostipedia.cosmiccore.client.renderer.machine;
 
 import com.ghostipedia.cosmiccore.CosmicCore;
 
-import com.gregtechceu.gtceu.api.machine.multiblock.MultiblockControllerMachine;
 import com.gregtechceu.gtceu.api.machine.multiblock.WorkableElectricMultiblockMachine;
 import com.gregtechceu.gtceu.api.pattern.util.RelativeDirection;
 import com.gregtechceu.gtceu.client.renderer.GTRenderTypes;
@@ -21,7 +20,6 @@ import net.minecraft.client.renderer.texture.TextureAtlas;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.core.Vec3i;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraft.world.phys.AABB;
@@ -105,32 +103,24 @@ public class HemophagicTransfuserRender extends
     public void render(WorkableElectricMultiblockMachine machine, float partialTick, PoseStack poseStack,
                        MultiBufferSource buffer, int packedLight, int packedOverlay) {
         float tickValue = (Minecraft.getInstance().level.getGameTime() + partialTick);
-        if (machine.isFormed()) {
-            renderBloodCube(machine, poseStack, buffer, tickValue);
+        if (!machine.isFormed()) {
+            return;
         }
-        if (machine.isActive()) {
-            renderRings(machine, tickValue, poseStack, buffer);
-        }
-    }
 
-    @OnlyIn(Dist.CLIENT)
-    public void renderBloodCube(MultiblockControllerMachine machine, PoseStack poseStack,
-                                MultiBufferSource bufferSource, float totalTick) {
         poseStack.pushPose();
-
+        // move the things:tm: to render at the center of the multiblock
         Direction front = machine.getFrontFacing();
         Direction upwards = machine.getUpwardsFacing();
         boolean flipped = machine.isFlipped();
-
-        Vec3i up = RelativeDirection.UP.getRelative(front, upwards, flipped).getNormal();
-        Vec3i back = RelativeDirection.BACK.getRelative(front, upwards, flipped).getNormal();
+        Direction up = RelativeDirection.UP.getRelative(front, upwards, flipped);
+        Direction back = RelativeDirection.BACK.getRelative(front, upwards, flipped);
         Direction.Axis leftAxis = RelativeDirection.LEFT.getRelative(front, upwards, flipped).getAxis();
         // translate to the absolute center of the multiblock
         float xo = 0, yo = 0, zo = 0;
 
         for (Direction.Axis axis : Direction.Axis.VALUES) {
-            int upOffset = axis.choose(up.getX(), up.getY(), up.getZ());
-            int backOffset = axis.choose(back.getX(), back.getY(), back.getZ());
+            int upOffset = axis.choose(up.getStepX(), up.getStepY(), up.getStepZ());
+            int backOffset = axis.choose(back.getStepX(), back.getStepY(), back.getStepZ());
 
             float offset = upOffset * (4.0f + (upOffset * 0.5f)) +
                     backOffset * (5.0f + (backOffset * 0.5f));
@@ -145,6 +135,17 @@ public class HemophagicTransfuserRender extends
                 yo + (leftAxis == Direction.Axis.Y ? 0.5f : 0.0f),
                 zo + (leftAxis == Direction.Axis.Z ? 0.5f : 0.0f));
 
+        renderBloodCube(poseStack, buffer, tickValue);
+        if (machine.isActive()) {
+            renderRings(up.getAxis(), tickValue, poseStack, buffer);
+        }
+
+        poseStack.popPose();
+    }
+
+    @OnlyIn(Dist.CLIENT)
+    public void renderBloodCube(PoseStack poseStack, MultiBufferSource bufferSource, float totalTick) {
+        poseStack.pushPose();
         // rotate around center
         Quaternionf rot = new Quaternionf()
                 .rotateAxis(Mth.sin(totalTick / 20), 1, 0, 0)
@@ -163,12 +164,8 @@ public class HemophagicTransfuserRender extends
     }
 
     @OnlyIn(Dist.CLIENT)
-    private void renderRings(WorkableElectricMultiblockMachine machine, float totalTick,
-                             PoseStack poseStack, MultiBufferSource buffer) {
+    private void renderRings(Direction.Axis upAxis, float totalTick, PoseStack poseStack, MultiBufferSource buffer) {
         VertexConsumer consumer = buffer.getBuffer(GTRenderTypes.getLightRing());
-        Direction.Axis axis = RelativeDirection.UP
-                .getRelative(machine.getFrontFacing(), machine.getUpwardsFacing(), machine.isFlipped())
-                .getAxis();
 
         float xRot = totalTick / 20;
         float zRot = Mth.HALF_PI + totalTick / 60;
@@ -184,7 +181,7 @@ public class HemophagicTransfuserRender extends
         RenderBufferHelper.renderRing(poseStack, consumer,
                 0, 0, 0,
                 2f, 0.1F, 10, 36,
-                0.5F, 0, 0, 1, axis);
+                0.5F, 0, 0, 1, upAxis);
         poseStack.popPose();
 
         poseStack.pushPose();
@@ -194,7 +191,7 @@ public class HemophagicTransfuserRender extends
         RenderBufferHelper.renderRing(poseStack, consumer,
                 0, 0, 0,
                 1.8f, 0.1F, 10, 36,
-                0.4F, 0f, 0, 1, axis);
+                0.4F, 0f, 0, 1, upAxis);
         poseStack.popPose();
 
         poseStack.pushPose();
@@ -202,7 +199,7 @@ public class HemophagicTransfuserRender extends
         RenderBufferHelper.renderRing(poseStack, consumer,
                 0, 0, 0,
                 1.6f, 0.1F, 10, 36,
-                0.6F, 0, 0, 1, axis);
+                0.6F, 0, 0, 1, upAxis);
         poseStack.popPose();
     }
 }
