@@ -158,7 +158,7 @@ public class HemophagicTransfuserRender extends
         poseStack.mulPose(rot);
 
         // draw cube quads
-        VertexConsumer consumer = bufferSource.getBuffer(Sheets.cutoutBlockSheet());
+        var  consumer = bufferSource.getBuffer(Sheets.translucentCullBlockSheet());
         RenderBufferHelper.renderCube(consumer, poseStack.last(), 0xffffffff,
                 LightTexture.FULL_BRIGHT, bloodCubeSprite,
                 -1, -1, -1, 1, 1, 1);
