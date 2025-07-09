@@ -8,7 +8,7 @@ All Code is issued under LGPL-3.0 unless explicitly stated within the file heade
 ### All Files with the extension `.mtl` and `.obj` are All Rights reserved.
 ### All assets in `resources/assets/cosmiccore/textures` are licensed under All Rights Reserved by default
 Exclusions to this rule are as follows  
- - All files contained in the subfolder(s) `items` are licensed as MIT
+ - All files contained in the subfolder(s) `item` are licensed as MIT
  - All files contained in the subfolder(s) `block` EXCLUDING `iris` are licensed as MIT
 
 ```
@@ -21,4 +21,4 @@ Using code/assets from this project requires attribution in both cases and requi
 
 Credits;
 Thanks to [Gregtech Modern](https://github.com/GregTechCEu/GregTech-Modern) for plenty of useful code references and invaluable knowledge in learning Java.
-Thanks to ULSTICK's [GregTech: Refreshed](https://modrinth.com/resourcepack/gregtech-refreshed) for providing me the ability to learn to make modern MC pixelart.
+Thanks to ULSTICK's [GregTech: Refreshed](https://modrinth.com/resourcepack/gregtech-refreshed) for helping me learn how to make Jappa-style pixel art.
