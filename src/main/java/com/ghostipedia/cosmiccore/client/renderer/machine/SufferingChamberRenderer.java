@@ -149,7 +149,7 @@ public class SufferingChamberRenderer extends
         RenderBufferHelper.renderCubeFace(
                 consumer,
                 stack.last(),
-                0x8888FFFF,
+                0xFF88FFFF,
                 LightTexture.FULL_BRIGHT,
                 Direction.UP,
                 -3.5f, 0, -3.5f, pentagramSprite.getU0(), pentagramSprite.getV1(),
@@ -159,7 +159,7 @@ public class SufferingChamberRenderer extends
         RenderBufferHelper.renderCubeFace(
                 consumer,
                 stack.last(),
-                0x8888FFFF,
+                0xFF88FFFF,
                 LightTexture.FULL_BRIGHT,
                 Direction.DOWN,
                 3.5f, 0, -3.5f, pentagramSprite.getU1(), pentagramSprite.getV1(),
