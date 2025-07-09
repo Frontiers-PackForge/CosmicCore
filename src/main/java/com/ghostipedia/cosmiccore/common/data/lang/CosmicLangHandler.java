@@ -248,6 +248,7 @@ public class CosmicLangHandler extends LangHandler {
         provider.add("cosmic.multiblock.capacitor.buffered", "§7Buffered: %s §7EU");
         provider.add("cosmic.multiblock.capacitor.duplicate.multiblock.1", "This multiblock is a duplicate");
         provider.add("cosmic.multiblock.capacitor.duplicate.multiblock.2", "Only one can exist");
+        provider.add("cosmic.multiblock.capacitor.owner.null", "Owner not found");
 
         // Wireless Energy Command
         provider.add("cosmic.command.wireless.energy.player", "§aPlayer:§a %s");

@@ -1,8 +1,12 @@
 package com.ghostipedia.cosmiccore.api.machine.multiblock;
 
+import com.ghostipedia.cosmiccore.CosmicCore;
 import com.ghostipedia.cosmiccore.api.data.savedData.UniqueMultiblockSavedData;
 import com.ghostipedia.cosmiccore.api.data.wireless.WirelessEnergySavedData;
 
+import com.gregtechceu.gtceu.api.gui.GuiTextures;
+import com.gregtechceu.gtceu.api.gui.fancy.IFancyTooltip;
+import com.gregtechceu.gtceu.api.gui.fancy.TooltipsPanel;
 import com.gregtechceu.gtceu.api.machine.IMachineBlockEntity;
 import com.gregtechceu.gtceu.api.machine.multiblock.IBatteryData;
 import com.gregtechceu.gtceu.api.machine.trait.RecipeLogic;
@@ -55,6 +59,10 @@ public class DimensionalEnergyCapacitor extends DimensionalEnergyInterface {
 
         if (getLevel() instanceof ServerLevel serverLevel) {
             var owner = getTeamUUID();
+            if(owner == null) {
+                CosmicCore.LOGGER.warn("DimensionalEnergyCapcitor tried to form with null team.");
+                return;
+            }
             var multiblockId = getDefinition().getId().toString();
             var wirelessData = WirelessEnergySavedData.getOrCreate(serverLevel);
             var uniqueMultiblockMapping = UniqueMultiblockSavedData.getOrCreate(serverLevel);
@@ -100,11 +108,13 @@ public class DimensionalEnergyCapacitor extends DimensionalEnergyInterface {
         super.onStructureInvalid();
         if (getLevel() instanceof ServerLevel serverLevel) {
             var owner = getTeamUUID();
-            var wirelessData = WirelessEnergySavedData.getOrCreate(serverLevel);
-            var uniqueMultiblockMapping = UniqueMultiblockSavedData.getOrCreate(serverLevel);
-            wirelessData.setActive(owner, false);
-            uniqueMultiblockMapping.removeMultiblock(owner, getDefinition().getId().toString(), getDimension(),
-                    getPos());
+            if(owner != null) {
+                var wirelessData = WirelessEnergySavedData.getOrCreate(serverLevel);
+                var uniqueMultiblockMapping = UniqueMultiblockSavedData.getOrCreate(serverLevel);
+                wirelessData.setActive(owner, false);
+                uniqueMultiblockMapping.removeMultiblock(owner, getDefinition().getId().toString(), getDimension(),
+                        getPos());
+            }
         }
         this.capacities = null;
     }
@@ -137,9 +147,26 @@ public class DimensionalEnergyCapacitor extends DimensionalEnergyInterface {
         super.setWorkingEnabled(isWorkingAllowed);
         if (getLevel() instanceof ServerLevel serverLevel) {
             var owner = getTeamUUID();
-            var wirelessData = WirelessEnergySavedData.getOrCreate(serverLevel);
-            wirelessData.setActive(owner, isWorkingAllowed);
+            if(owner != null) {
+                var wirelessData = WirelessEnergySavedData.getOrCreate(serverLevel);
+                wirelessData.setActive(owner, isWorkingAllowed);
+            }
         }
+    }
+    private boolean hasOwner(){
+        var owner = getTeamUUID();
+        return owner != null;
+    }
+
+    @Override
+    public void attachTooltips(TooltipsPanel tooltipsPanel) {
+        super.attachTooltips(tooltipsPanel);
+        tooltipsPanel.attachTooltips(new IFancyTooltip.Basic(
+                () -> GuiTextures.INDICATOR_NO_ENERGY,
+                () -> List.of(Component.translatable("cosmic.multiblock.capacitor.owner.null")
+                        .setStyle(Style.EMPTY.withColor(ChatFormatting.RED))),
+                () -> (!this.hasOwner()),
+                () -> null));
     }
 
     private String getDimension() {

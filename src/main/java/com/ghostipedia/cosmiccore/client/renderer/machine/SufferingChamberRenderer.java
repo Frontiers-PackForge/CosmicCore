@@ -2,7 +2,6 @@ package com.ghostipedia.cosmiccore.client.renderer.machine;
 
 import com.ghostipedia.cosmiccore.CosmicCore;
 
-import com.gregtechceu.gtceu.api.machine.multiblock.MultiblockControllerMachine;
 import com.gregtechceu.gtceu.api.machine.multiblock.WorkableElectricMultiblockMachine;
 import com.gregtechceu.gtceu.api.pattern.util.RelativeDirection;
 import com.gregtechceu.gtceu.client.renderer.machine.DynamicRender;
@@ -10,6 +9,8 @@ import com.gregtechceu.gtceu.client.renderer.machine.DynamicRenderType;
 import com.gregtechceu.gtceu.client.util.ModelUtils;
 import com.gregtechceu.gtceu.client.util.RenderBufferHelper;
 
+import com.mojang.blaze3d.vertex.VertexConsumer;
+import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.Util;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.LightTexture;
@@ -22,30 +23,31 @@ import net.minecraft.core.Direction;
 import net.minecraft.core.Vec3i;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.phys.AABB;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.serialization.Codec;
 import org.joml.Quaternionf;
 
+import javax.annotation.ParametersAreNonnullByDefault;
+import java.util.EnumSet;
 import java.util.function.BiFunction;
 
+@ParametersAreNonnullByDefault
+@MethodsReturnNonnullByDefault
 public class SufferingChamberRenderer extends
                                       DynamicRender<WorkableElectricMultiblockMachine, SufferingChamberRenderer> {
 
+    // spotless:off
     public static final SufferingChamberRenderer INSTANCE = new SufferingChamberRenderer();
     public static final Codec<SufferingChamberRenderer> CODEC = Codec.unit(INSTANCE);
-    public static final DynamicRenderType<WorkableElectricMultiblockMachine, SufferingChamberRenderer> TYPE = new DynamicRenderType<>(
-            SufferingChamberRenderer.CODEC);
+    public static final DynamicRenderType<WorkableElectricMultiblockMachine, SufferingChamberRenderer> TYPE = new DynamicRenderType<>(SufferingChamberRenderer.CODEC);
+    // spotless:on
 
-    public static final ResourceLocation pentagram = CosmicCore.id("block/iris/testagram");
+    public static final ResourceLocation PENTAGRAM = CosmicCore.id("block/iris/pentagram");
 
     private static TextureAtlasSprite pentagramSprite = null;
-    public static boolean isEventListenerRegistered = false;
 
     private static final BiFunction<Direction, Direction, AABB> renderBoundCache = Util.memoize((front, upwards) -> {
-
         Direction up = RelativeDirection.UP.getRelative(front, upwards, false);
         Direction back = RelativeDirection.BACK.getRelative(front, upwards, false);
         Direction left = RelativeDirection.LEFT.getRelative(front, upwards, false);
@@ -56,17 +58,12 @@ public class SufferingChamberRenderer extends
                 .move(left, -4).move(up, 5).move(back, 7);
 
         return new AABB(minPos, maxPos);
-
     });
 
     private SufferingChamberRenderer() {
-        if (!isEventListenerRegistered) {
-
-            ModelUtils.registerAtlasStitchedEventListener(TextureAtlas.LOCATION_BLOCKS, event -> {
-                pentagramSprite = event.getAtlas().getSprite(pentagram);
-            });
-
-        }
+        ModelUtils.registerAtlasStitchedEventListener(TextureAtlas.LOCATION_BLOCKS, event -> {
+            pentagramSprite = event.getAtlas().getSprite(PENTAGRAM);
+        });
     }
 
     @Override
@@ -95,78 +92,58 @@ public class SufferingChamberRenderer extends
 
     @Override
     public void render(WorkableElectricMultiblockMachine machine, float partialTick, PoseStack poseStack,
-                       MultiBufferSource buffer, int packedLight, int packedOverlay) {
-        float tickvalue = (Minecraft.getInstance().level.getGameTime() + partialTick);
-        if (machine.isFormed()) {
-
-            renderPentagram(machine, poseStack, buffer, tickvalue);
-
+                       MultiBufferSource bufferSource, int packedLight, int packedOverlay) {
+        if (!machine.isFormed()) {
+            return;
         }
-    }
+        float totalTick = (Minecraft.getInstance().player.tickCount + partialTick);
 
-    @OnlyIn(Dist.CLIENT)
-    public void renderPentagram(MultiblockControllerMachine machine, PoseStack stack, MultiBufferSource source,
-                                float totalTick) {
-        stack.pushPose();
+        poseStack.pushPose();
 
         Direction front = machine.getFrontFacing();
         Direction upwards = machine.getUpwardsFacing();
-
         boolean flipped = machine.isFlipped();
+
         Vec3i up = RelativeDirection.UP.getRelative(front, upwards, flipped).getNormal();
         Vec3i back = RelativeDirection.BACK.getRelative(front, upwards, flipped).getNormal();
         Direction.Axis leftAxis = RelativeDirection.LEFT.getRelative(front, upwards, flipped).getAxis();
 
-        float x0 = 0, y0 = 0, z0 = 0;
+        float x0ffset = 0, y0ffset = 0, zOffset = 0;
 
-        // go to center o f multi
         for (Direction.Axis axis : Direction.Axis.VALUES) {
+            int upOffset = up.get(axis);
+            int backOffset = back.get(axis);
 
-            int upOffset = axis.choose(up.getX(), up.getY(), up.getZ());
-            int backOffset = axis.choose(back.getX(), back.getY(), back.getZ());
-
-            // yoinked omers magic numbers from Hemophagic blahblahlbah
             float offset = upOffset * (4.0f + (upOffset * 0.5f)) +
                     backOffset * (4.0f + (backOffset * 0.5f));
             switch (axis) {
-                case X -> x0 = offset;
-                case Y -> y0 = offset;
-                case Z -> z0 = offset;
+                case X -> x0ffset = offset;
+                case Y -> y0ffset = offset;
+                case Z -> zOffset = offset;
             }
         }
 
-        stack.translate(
-                x0 + (leftAxis == Direction.Axis.X ? 0.5f : 0.0f),
-                y0 + (leftAxis == Direction.Axis.Y ? 0.5f : 0.0f),
-                z0 + (leftAxis == Direction.Axis.Z ? 0.5f : 0.0f));
+        poseStack.translate(
+                x0ffset + (leftAxis == Direction.Axis.X ? 0.5f : 0.0f),
+                y0ffset + (leftAxis == Direction.Axis.Y ? 0.5f : 0.0f),
+                zOffset + (leftAxis == Direction.Axis.Z ? 0.5f : 0.0f));
 
         // do the rotaty thingy yee
         Quaternionf rot = new Quaternionf()
                 .rotateY(totalTick / 30);
-        stack.mulPose(rot);
+        poseStack.mulPose(rot);
 
-        var consumer = source.getBuffer(Sheets.translucentCullBlockSheet());
-        RenderBufferHelper.renderCubeFace(
+        VertexConsumer consumer = bufferSource.getBuffer(Sheets.cutoutBlockSheet());
+        RenderBufferHelper.renderCube(
                 consumer,
-                stack.last(),
+                poseStack.last(),
+                EnumSet.of(Direction.UP, Direction.DOWN),
                 0xFF88FFFF,
                 LightTexture.FULL_BRIGHT,
-                Direction.UP,
-                -3.5f, 0, -3.5f, pentagramSprite.getU0(), pentagramSprite.getV1(),
-                -3.5f, 0, 3.5f, pentagramSprite.getU0(), pentagramSprite.getV0(),
-                3.5f, 0, 3.5f, pentagramSprite.getU1(), pentagramSprite.getV0(),
-                3.5f, 0, -3.5f, pentagramSprite.getU1(), pentagramSprite.getV1());
-        RenderBufferHelper.renderCubeFace(
-                consumer,
-                stack.last(),
-                0xFF88FFFF,
-                LightTexture.FULL_BRIGHT,
-                Direction.DOWN,
-                3.5f, 0, -3.5f, pentagramSprite.getU1(), pentagramSprite.getV1(),
-                3.5f, 0, 3.5f, pentagramSprite.getU1(), pentagramSprite.getV0(),
-                -3.5f, 0, 3.5f, pentagramSprite.getU0(), pentagramSprite.getV0(),
-                -3.5f, 0, -3.5f, pentagramSprite.getU0(), pentagramSprite.getV1());
+                pentagramSprite,
+                -3.5f, 0, -3.5f,
+                3.5f, 0, 3.5f);
 
-        stack.popPose();
+        poseStack.popPose();
     }
 }
