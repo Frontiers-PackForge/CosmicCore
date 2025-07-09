@@ -132,7 +132,7 @@ public class CosmicMachines {
             "16a_wireless_energy_dynamo", "16A Wireless Energy Dynamo", "wireless_energy_16a",
             IO.OUT, HIGH_TIERS, 16, PartAbility.OUTPUT_ENERGY);
 
-    public static final MachineDefinition[] NAQUAHINE_MINI_REACTOR = registerSimpleGenerator("naquahine_mini_reactor",
+    public static final MachineDefinition[] NAQUAHINE_MINI_REACTOR = CosmicMachinesUtils.registerSimpleGenerator("naquahine_mini_reactor",
             CosmicRecipeTypes.MINI_NAQUAHINE_REACTOR, genericGeneratorTankSizeFunction, 0.0f, GTValues.IV, GTValues.LuV,
             GTValues.ZPM, GTValues.UV, GTValues.UHV);
     public static final Pair<MachineDefinition, MachineDefinition> STEAM_BENDER = registerSteamMachines(

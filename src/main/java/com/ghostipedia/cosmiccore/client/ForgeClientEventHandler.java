@@ -6,6 +6,8 @@ import com.ghostipedia.cosmiccore.client.renderer.StructureBoundingBox;
 
 import com.ghostipedia.cosmiccore.common.data.CosmicMachines;
 import com.gregtechceu.gtceu.GTCEu;
+import com.gregtechceu.gtceu.api.GTValues;
+import com.gregtechceu.gtceu.api.machine.MachineDefinition;
 import com.gregtechceu.gtceu.api.machine.MultiblockMachineDefinition;
 import net.minecraft.client.renderer.FogRenderer;
 import net.minecraft.core.registries.Registries;
@@ -18,6 +20,8 @@ import net.minecraftforge.fml.common.Mod;
 
 import com.mojang.blaze3d.shaders.FogShape;
 import net.minecraftforge.registries.MissingMappingsEvent;
+
+import java.util.Arrays;
 
 @SuppressWarnings("unused")
 @Mod.EventBusSubscriber(modid = CosmicCore.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE, value = Dist.CLIENT)
@@ -69,6 +73,12 @@ public class ForgeClientEventHandler {
         remapMultiMachine(event, "extreme_combustion_engine_cc", CosmicMachines.EXTREME_COMBUSTION_ENGINE);
         remapMultiMachine(event, "ludicrous_combustion_engine_cc", CosmicMachines.LUDICROUS_COMBUSTION_ENGINE);
         remapMultiMachine(event, "ultimate_combustion_engine_cc", CosmicMachines.ULTIMATE_COMBUSTION_ENGINE);
+
+
+        for( MachineDefinition machine : CosmicMachines.NAQUAHINE_MINI_REACTOR){
+            String name = (GTValues.VN[machine.getTier()] + "_naquahine_mini_reactor");
+            remapSingleBLocks(event, name, machine);
+        }
     }
 
     private static void remapMultiMachine(MissingMappingsEvent event, String id, MultiblockMachineDefinition machine) {
@@ -92,4 +102,27 @@ public class ForgeClientEventHandler {
             }
         });
     }
+
+    private static void remapSingleBLocks(MissingMappingsEvent event, String id, MachineDefinition machine) {
+        ResourceLocation resourceId = GTCEu.id(id);
+
+        event.getMappings(Registries.ITEM, GTCEu.MOD_ID).forEach(mapping -> {
+            if (mapping.getKey().equals(resourceId)) {
+                mapping.remap(machine.getItem());
+            }
+        });
+
+        event.getMappings(Registries.BLOCK, GTCEu.MOD_ID).forEach(mapping -> {
+            if (mapping.getKey().equals(resourceId)) {
+                mapping.remap(machine.getBlock());
+            }
+        });
+
+        event.getMappings(Registries.BLOCK_ENTITY_TYPE, GTCEu.MOD_ID).forEach(mapping -> {
+            if (mapping.getKey().equals(resourceId)) {
+                mapping.remap(machine.getBlockEntityType());
+            }
+        });
+    }
+
 }
