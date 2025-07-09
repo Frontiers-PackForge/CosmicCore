@@ -9,7 +9,6 @@ import com.gregtechceu.gtceu.client.renderer.machine.DynamicRenderType;
 import com.gregtechceu.gtceu.client.util.ModelUtils;
 import com.gregtechceu.gtceu.client.util.RenderBufferHelper;
 
-import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.Util;
 import net.minecraft.client.Minecraft;
@@ -25,12 +24,14 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.phys.AABB;
 
 import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.serialization.Codec;
 import org.joml.Quaternionf;
 
-import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.EnumSet;
 import java.util.function.BiFunction;
+
+import javax.annotation.ParametersAreNonnullByDefault;
 
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault

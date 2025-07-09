@@ -54,7 +54,6 @@ import com.gregtechceu.gtceu.common.data.models.GTModels;
 import com.gregtechceu.gtceu.common.machine.multiblock.electric.ActiveTransformerMachine;
 import com.gregtechceu.gtceu.common.machine.multiblock.electric.FusionReactorMachine;
 import com.gregtechceu.gtceu.common.machine.multiblock.electric.PowerSubstationMachine;
-import com.gregtechceu.gtceu.common.registry.GTRegistration;
 import com.gregtechceu.gtceu.config.ConfigHolder;
 import com.gregtechceu.gtceu.utils.FormattingUtil;
 
@@ -62,6 +61,7 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.Style;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 
@@ -132,26 +132,29 @@ public class CosmicMachines {
             "16a_wireless_energy_dynamo", "16A Wireless Energy Dynamo", "wireless_energy_16a",
             IO.OUT, HIGH_TIERS, 16, PartAbility.OUTPUT_ENERGY);
 
-    public static final MachineDefinition[] NAQUAHINE_MINI_REACTOR = CosmicMachinesUtils.registerSimpleGenerator("naquahine_mini_reactor",
+    public static final MachineDefinition[] NAQUAHINE_MINI_REACTOR = CosmicMachinesUtils.registerSimpleGenerator(
+            "naquahine_mini_reactor",
             CosmicRecipeTypes.MINI_NAQUAHINE_REACTOR, genericGeneratorTankSizeFunction, 0.0f, GTValues.IV, GTValues.LuV,
             GTValues.ZPM, GTValues.UV, GTValues.UHV);
-    public static final Pair<MachineDefinition, MachineDefinition> STEAM_BENDER = CosmicMachinesUtils.registerSteamMachines(
-            "steam_bender", SimpleSteamMachine::new, (pressure, builder) -> builder
-                    .rotationState(RotationState.NON_Y_AXIS)
-                    .recipeType(GTRecipeTypes.BENDER_RECIPES)
-                    .recipeModifier(SimpleSteamMachine::recipeModifier)
-                    .addOutputLimit(ItemRecipeCapability.CAP, 1)
-                    .workableSteamHullModel(pressure, GTCEu.id("block/machines/bender"))
-                    .register());
-    public static final Pair<MachineDefinition, MachineDefinition> STEAM_WIREMILL = CosmicMachinesUtils.registerSteamMachines(
-            "steam_wiremill", SimpleSteamMachine::new, (pressure, builder) -> builder
-                    .rotationState(RotationState.NON_Y_AXIS)
-                    .recipeType(GTRecipeTypes.WIREMILL_RECIPES)
-                    .recipeModifier(SimpleSteamMachine::recipeModifier)
-                    .addOutputLimit(ItemRecipeCapability.CAP, 1)
-                    .modelProperty(SimpleSteamMachine.VENT_DIRECTION_PROPERTY, RelativeDirection.BACK)
-                    .workableSteamHullModel(pressure, GTCEu.id("block/machines/wiremill"))
-                    .register());
+    public static final Pair<MachineDefinition, MachineDefinition> STEAM_BENDER = CosmicMachinesUtils
+            .registerSteamMachines(
+                    "steam_bender", SimpleSteamMachine::new, (pressure, builder) -> builder
+                            .rotationState(RotationState.NON_Y_AXIS)
+                            .recipeType(GTRecipeTypes.BENDER_RECIPES)
+                            .recipeModifier(SimpleSteamMachine::recipeModifier)
+                            .addOutputLimit(ItemRecipeCapability.CAP, 1)
+                            .workableSteamHullModel(pressure, GTCEu.id("block/machines/bender"))
+                            .register());
+    public static final Pair<MachineDefinition, MachineDefinition> STEAM_WIREMILL = CosmicMachinesUtils
+            .registerSteamMachines(
+                    "steam_wiremill", SimpleSteamMachine::new, (pressure, builder) -> builder
+                            .rotationState(RotationState.NON_Y_AXIS)
+                            .recipeType(GTRecipeTypes.WIREMILL_RECIPES)
+                            .recipeModifier(SimpleSteamMachine::recipeModifier)
+                            .addOutputLimit(ItemRecipeCapability.CAP, 1)
+                            .modelProperty(SimpleSteamMachine.VENT_DIRECTION_PROPERTY, RelativeDirection.BACK)
+                            .workableSteamHullModel(pressure, GTCEu.id("block/machines/wiremill"))
+                            .register());
 
     public static final MachineDefinition[] COSMIC_PARALLEL_HATCH = registerTieredMachines("cosmic_parallel_hatch",
             CosmicParallelHatchPartMachine::new,
@@ -250,10 +253,9 @@ public class CosmicMachines {
                     .where('B', blocks(CASING_BRONZE_BRICKS.get()))
                     .where('C', blocks(BRONZE_HULL.get()))
                     .where('E', blocks(CASING_BRONZE_GEARBOX.get()))
-            .build())
+                    .build())
             .model(createWorkableCasingMachineModel(GTCEu.id("block/casings/solid/machine_casing_bronze_plated_bricks"),
-                    CosmicCore.id("block/multiblock/mixing_vessel"))
-            )
+                    CosmicCore.id("block/multiblock/mixing_vessel")))
             .register();
     public static final MultiblockMachineDefinition INDUSTRIAL_PRIMITIVE_BLAST_FURNACE = REGISTRATE
             .multiblock("industrial_primitive_blast_furnace", IPBFMachine::new)
@@ -3443,19 +3445,19 @@ public class CosmicMachines {
                     GTCEu.id("block/multiblock/data_bank"))
             .register();
 
-    public static final MachineDefinition STEAM_IMPORT_HATCH = GTRegistration.REGISTRATE
+    public static final MachineDefinition STEAM_IMPORT_HATCH = REGISTRATE
             .machine("steam_fluid_input_hatch", holder -> new SteamFluidHatchPartMachine(holder, IO.IN, 4000, 1))
             .rotationState(RotationState.ALL)
             .abilities(PartAbility.IMPORT_FLUIDS)
-            .overlaySteamHullModel("fluid_hatch.import")
+            .colorOverlaySteamHullModel(new ResourceLocation(GTCEu.MOD_ID, "block/overlay/machine/overlay_pipe_in"), new ResourceLocation(GTCEu.MOD_ID, "block/overlay/machine/overlay_fluid_hatch"))
             .tooltips(Component.translatable("gtceu.machine.steam_fluid_hatch_notice"))
             .langValue("Fluid Input Hatch (Steam)")
             .register();
-    public static final MachineDefinition STEAM_EXPORT_HATCH = GTRegistration.REGISTRATE
+    public static final MachineDefinition STEAM_EXPORT_HATCH = REGISTRATE
             .machine("steam_fluid_output_hatch", holder -> new SteamFluidHatchPartMachine(holder, IO.OUT, 4000, 1))
             .rotationState(RotationState.ALL)
             .abilities(PartAbility.EXPORT_FLUIDS)
-            .overlaySteamHullModel("fluid_hatch.export")
+            .colorOverlaySteamHullModel(new ResourceLocation(GTCEu.MOD_ID, "block/overlay/machine/overlay_pipe_out"), new ResourceLocation(GTCEu.MOD_ID, "block/overlay/machine/overlay_fluid_hatch"))
             .langValue("Fluid Output Hatch (Steam)")
             .register();
 

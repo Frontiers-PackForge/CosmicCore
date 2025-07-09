@@ -140,7 +140,7 @@ public class DimensionalEnergyInterface extends WorkableMultiblockMachine
         if (getLevel() instanceof ServerLevel serverLevel) { // Transfer buffer content to avoid losses
             var data = WirelessEnergySavedData.getOrCreate(serverLevel);
             var owner = getTeamUUID();
-            if(owner != null) {
+            if (owner != null) {
                 if (energyBuffer != null) {
                     data.addEUToGlobalWirelessEnergy(owner, energyBuffer.getEnergyStored());
                     energyBuffer.removeEnergy(energyBuffer.getEnergyStored());

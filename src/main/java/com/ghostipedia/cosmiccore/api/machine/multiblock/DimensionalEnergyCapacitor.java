@@ -59,7 +59,7 @@ public class DimensionalEnergyCapacitor extends DimensionalEnergyInterface {
 
         if (getLevel() instanceof ServerLevel serverLevel) {
             var owner = getTeamUUID();
-            if(owner == null) {
+            if (owner == null) {
                 CosmicCore.LOGGER.warn("DimensionalEnergyCapcitor tried to form with null team.");
                 return;
             }
@@ -108,7 +108,7 @@ public class DimensionalEnergyCapacitor extends DimensionalEnergyInterface {
         super.onStructureInvalid();
         if (getLevel() instanceof ServerLevel serverLevel) {
             var owner = getTeamUUID();
-            if(owner != null) {
+            if (owner != null) {
                 var wirelessData = WirelessEnergySavedData.getOrCreate(serverLevel);
                 var uniqueMultiblockMapping = UniqueMultiblockSavedData.getOrCreate(serverLevel);
                 wirelessData.setActive(owner, false);
@@ -147,13 +147,14 @@ public class DimensionalEnergyCapacitor extends DimensionalEnergyInterface {
         super.setWorkingEnabled(isWorkingAllowed);
         if (getLevel() instanceof ServerLevel serverLevel) {
             var owner = getTeamUUID();
-            if(owner != null) {
+            if (owner != null) {
                 var wirelessData = WirelessEnergySavedData.getOrCreate(serverLevel);
                 wirelessData.setActive(owner, isWorkingAllowed);
             }
         }
     }
-    private boolean hasOwner(){
+
+    private boolean hasOwner() {
         var owner = getTeamUUID();
         return owner != null;
     }

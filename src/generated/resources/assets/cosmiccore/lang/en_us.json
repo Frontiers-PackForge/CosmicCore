@@ -101,6 +101,8 @@
   "block.cosmiccore.star_ballast": "Star Ballast",
   "block.cosmiccore.star_ladder": "Star Ladder",
   "block.cosmiccore.steam_caster": "Steam Caster",
+  "block.cosmiccore.steam_fluid_input_hatch": "Fluid Input Hatch (Steam)",
+  "block.cosmiccore.steam_fluid_output_hatch": "Fluid Output Hatch (Steam)",
   "block.cosmiccore.steam_mixing_vessel": "Steam Mixing Vessel",
   "block.cosmiccore.steel_plated_bronze_casing": "Steel Plated Bronze Casing",
   "block.cosmiccore.stellar_iris": "Stellar Iris",
