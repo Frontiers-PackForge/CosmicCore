@@ -60,7 +60,7 @@ public class HemophagicTransfuserRender extends
         return new AABB(minPos, maxPos);
     });
 
-    public static final ResourceLocation BLOOD_CUBE_TEXTURE = CosmicCore.id("block/iris/bloodcube");
+    public static final ResourceLocation BLOOD_CUBE_TEXTURE = CosmicCore.id("block/iris/blood_cube");
 
     private static TextureAtlasSprite bloodCubeSprite = null;
     private static boolean isEventListenerRegistered = false;
