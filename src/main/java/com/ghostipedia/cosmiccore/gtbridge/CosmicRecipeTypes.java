@@ -55,7 +55,7 @@ public class CosmicRecipeTypes {
             .register("suffering_chamber", GTRecipeTypes.MULTIBLOCK)
             .setMaxIOSize(1, 0, 0, 0)
             .setMaxSize(IO.OUT, SoulRecipeCapability.CAP, 1)
-            .setMaxTooltips(4)
+            .setMaxTooltips(5)
             .setProgressBar(GuiTextures.PROGRESS_BAR_ARROW, LEFT_TO_RIGHT);
     public static final GTRecipeType ARCANE_DISTILLERY = GTRecipeTypes
             .register("arcane_distillery", GTRecipeTypes.MULTIBLOCK)
