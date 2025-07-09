@@ -20,11 +20,12 @@ import net.minecraft.world.level.block.Block;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
 
+import static com.ghostipedia.cosmiccore.api.registries.CosmicRegistration.REGISTRATE;
 import static com.gregtechceu.gtceu.api.GTValues.*;
 import static com.gregtechceu.gtceu.api.GTValues.V;
 import static com.gregtechceu.gtceu.api.pattern.Predicates.*;
 import static com.gregtechceu.gtceu.api.pattern.Predicates.blocks;
-import static com.gregtechceu.gtceu.common.registry.GTRegistration.REGISTRATE;
+
 
 public class CosmicMachinesUtils {
 

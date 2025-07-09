@@ -61,13 +61,17 @@ public class ForgeClientEventHandler {
 
     @SubscribeEvent
     public static void remapIds(MissingMappingsEvent event) {
-        remapMachine(event, "steam_caster", CosmicMachines.STEAM_CASTER);
-        remapMachine(event, "steam_mixer", CosmicMachines.STEAM_MIXER);
-        remapMachine(event, "industrial_primitive_blast_furnace", CosmicMachines.INDUSTRIAL_PRIMITIVE_BLAST_FURNACE);
-        remapMachine(event, "high_pressure_assembler", CosmicMachines.HIGH_PRESSURE_ASSEMBLER);
+        remapMultiMachine(event, "steam_caster", CosmicMachines.STEAM_CASTER);
+        remapMultiMachine(event, "steam_mixer", CosmicMachines.STEAM_MIXER);
+        remapMultiMachine(event, "industrial_primitive_blast_furnace", CosmicMachines.INDUSTRIAL_PRIMITIVE_BLAST_FURNACE);
+        remapMultiMachine(event, "high_pressure_assembler", CosmicMachines.HIGH_PRESSURE_ASSEMBLER);
+        remapMultiMachine(event, "large_combustion_engine_cc", CosmicMachines.LARGE_COMBUSTION_ENGINE);
+        remapMultiMachine(event, "extreme_combustion_engine_cc", CosmicMachines.EXTREME_COMBUSTION_ENGINE);
+        remapMultiMachine(event, "ludicrous_combustion_engine_cc", CosmicMachines.LUDICROUS_COMBUSTION_ENGINE);
+        remapMultiMachine(event, "ultimate_combustion_engine_cc", CosmicMachines.ULTIMATE_COMBUSTION_ENGINE);
     }
 
-    private static void remapMachine(MissingMappingsEvent event, String id, MultiblockMachineDefinition machine) {
+    private static void remapMultiMachine(MissingMappingsEvent event, String id, MultiblockMachineDefinition machine) {
         ResourceLocation resourceId = GTCEu.id(id);
 
         event.getMappings(Registries.ITEM, GTCEu.MOD_ID).forEach(mapping -> {
