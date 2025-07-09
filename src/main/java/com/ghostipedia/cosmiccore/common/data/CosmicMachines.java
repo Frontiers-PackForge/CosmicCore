@@ -250,10 +250,9 @@ public class CosmicMachines {
                     .where('B', blocks(CASING_BRONZE_BRICKS.get()))
                     .where('C', blocks(BRONZE_HULL.get()))
                     .where('E', blocks(CASING_BRONZE_GEARBOX.get()))
-            .build())
+                    .build())
             .model(createWorkableCasingMachineModel(GTCEu.id("block/casings/solid/machine_casing_bronze_plated_bricks"),
-                    CosmicCore.id("block/multiblock/mixing_vessel"))
-            )
+                    CosmicCore.id("block/multiblock/mixing_vessel")))
             .register();
     public static final MultiblockMachineDefinition INDUSTRIAL_PRIMITIVE_BLAST_FURNACE = REGISTRATE
             .multiblock("industrial_primitive_blast_furnace", IPBFMachine::new)

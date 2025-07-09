@@ -1,6 +1,5 @@
 package com.ghostipedia.cosmiccore.api.machine.multiblock;
 
-import com.ghostipedia.cosmiccore.CosmicCore;
 import com.ghostipedia.cosmiccore.api.data.wireless.WirelessEnergySavedData;
 import com.ghostipedia.cosmiccore.utils.CosmicFormattingUtil;
 
@@ -20,6 +19,7 @@ import com.gregtechceu.gtceu.api.machine.trait.NotifiableEnergyContainer;
 import com.gregtechceu.gtceu.api.machine.trait.RecipeLogic;
 import com.gregtechceu.gtceu.api.misc.EnergyContainerList;
 import com.gregtechceu.gtceu.common.machine.owner.FTBOwner;
+import com.gregtechceu.gtceu.common.machine.owner.MachineOwner;
 import com.gregtechceu.gtceu.config.ConfigHolder;
 import com.gregtechceu.gtceu.utils.FormattingUtil;
 
@@ -126,13 +126,20 @@ public class DimensionalEnergyInterface extends WorkableMultiblockMachine
     }
 
     protected UUID getTeamUUID() {
-        CosmicCore.LOGGER.warn("getting team UUID");
+        // CosmicCore.LOGGER.warn("getting team UUID");
+        var owner = getOwner();
         var ownerUUID = getOwnerUUID();
-        CosmicCore.LOGGER.warn("Owner UUID: " + ownerUUID.toString());
-        var team = ((FTBOwner) getOwner()).getPlayerTeam(ownerUUID);
-        CosmicCore.LOGGER.warn("Team UUID: " + team);
-        CosmicCore.LOGGER.warn("Team UUID: " + team.getTeamId());
-        return team != null ? team.getTeamId() : ownerUUID;
+        // Faultcheck the Owner and OwnerUUID
+        if (owner == null) return MachineOwner.EMPTY;
+        if (ownerUUID == null) return MachineOwner.EMPTY;
+
+        // CosmicCore.LOGGER.warn("Owner UUID: " + ownerUUID.toString());
+        var team = ((FTBOwner) owner).getPlayerTeam(ownerUUID);
+        if (team == null) return ownerUUID;
+
+        // CosmicCore.LOGGER.warn("Team UUID: " + team);
+        // CosmicCore.LOGGER.warn("Team UUID: " + team.getTeamId());
+        return team.getTeamId();
     }
 
     @Override
@@ -140,7 +147,7 @@ public class DimensionalEnergyInterface extends WorkableMultiblockMachine
         if (getLevel() instanceof ServerLevel serverLevel) { // Transfer buffer content to avoid losses
             var data = WirelessEnergySavedData.getOrCreate(serverLevel);
             var owner = getTeamUUID();
-            if(owner != null) {
+            if (owner != MachineOwner.EMPTY) {
                 if (energyBuffer != null) {
                     data.addEUToGlobalWirelessEnergy(owner, energyBuffer.getEnergyStored());
                     energyBuffer.removeEnergy(energyBuffer.getEnergyStored());
@@ -238,7 +245,7 @@ public class DimensionalEnergyInterface extends WorkableMultiblockMachine
             var data = WirelessEnergySavedData.getOrCreate(serverLevel);
             var owner = getTeamUUID();
 
-            if (isWorkingEnabled() && isFormed()) {
+            if (isWorkingEnabled() && isFormed() && owner != MachineOwner.EMPTY) {
                 if (getOffsetTimer() % 20 == 0) {
                     getRecipeLogic().setStatus((energyBuffer != null && energyBuffer.getEnergyStored() > 0) ?
                             RecipeLogic.Status.WORKING : RecipeLogic.Status.IDLE);
@@ -303,9 +310,9 @@ public class DimensionalEnergyInterface extends WorkableMultiblockMachine
                         .setStyle(Style.EMPTY.withColor(ChatFormatting.RED)));
             }
 
-            if (energyBuffer != null) {
+            var owner = getTeamUUID();
+            if (energyBuffer != null && owner != MachineOwner.EMPTY) {
                 if (getLevel() instanceof ServerLevel serverLevel) {
-                    var owner = getTeamUUID();
                     var data = WirelessEnergySavedData.getOrCreate(serverLevel);
 
                     var STYLE_GOLD = Style.EMPTY.withColor(ChatFormatting.GOLD);

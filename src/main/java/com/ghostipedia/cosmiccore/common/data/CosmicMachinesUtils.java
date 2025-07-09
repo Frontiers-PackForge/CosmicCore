@@ -40,7 +40,6 @@ import static com.gregtechceu.gtceu.api.pattern.Predicates.blocks;
 import static com.gregtechceu.gtceu.common.data.machines.GTMachineUtils.workableTiered;
 import static com.gregtechceu.gtceu.utils.FormattingUtil.toEnglishName;
 
-
 public class CosmicMachinesUtils {
 
     // Verbaitm the LCE/ECE Code Logic used in GTCEU; Thanks Guys!

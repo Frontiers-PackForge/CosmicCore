@@ -3,12 +3,13 @@ package com.ghostipedia.cosmiccore.client;
 import com.ghostipedia.cosmiccore.CosmicCore;
 import com.ghostipedia.cosmiccore.CosmicUtils;
 import com.ghostipedia.cosmiccore.client.renderer.StructureBoundingBox;
-
 import com.ghostipedia.cosmiccore.common.data.CosmicMachines;
+
 import com.gregtechceu.gtceu.GTCEu;
 import com.gregtechceu.gtceu.api.GTValues;
 import com.gregtechceu.gtceu.api.machine.MachineDefinition;
 import com.gregtechceu.gtceu.api.machine.MultiblockMachineDefinition;
+
 import net.minecraft.client.renderer.FogRenderer;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
@@ -17,11 +18,11 @@ import net.minecraftforge.client.event.RenderLevelStageEvent;
 import net.minecraftforge.client.event.ViewportEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
-
-import com.mojang.blaze3d.shaders.FogShape;
 import net.minecraftforge.registries.MissingMappingsEvent;
 
 import java.util.Arrays;
+
+import com.mojang.blaze3d.shaders.FogShape;
 
 @SuppressWarnings("unused")
 @Mod.EventBusSubscriber(modid = CosmicCore.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE, value = Dist.CLIENT)
@@ -70,7 +71,8 @@ public class ForgeClientEventHandler {
 
         remapMultiMachine(event, "steam_caster", CosmicMachines.STEAM_CASTER);
         remapMultiMachine(event, "steam_mixer", CosmicMachines.STEAM_MIXER);
-        remapMultiMachine(event, "industrial_primitive_blast_furnace", CosmicMachines.INDUSTRIAL_PRIMITIVE_BLAST_FURNACE);
+        remapMultiMachine(event, "industrial_primitive_blast_furnace",
+                CosmicMachines.INDUSTRIAL_PRIMITIVE_BLAST_FURNACE);
         remapMultiMachine(event, "high_pressure_assembler", CosmicMachines.HIGH_PRESSURE_ASSEMBLER);
         remapMultiMachine(event, "large_combustion_engine_cc", CosmicMachines.LARGE_COMBUSTION_ENGINE);
         remapMultiMachine(event, "extreme_combustion_engine_cc", CosmicMachines.EXTREME_COMBUSTION_ENGINE);
