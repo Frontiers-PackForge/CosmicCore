@@ -202,7 +202,7 @@ public class CosmicMachines {
     // .register();
 
     // FIXME why are these registered to GT??
-    public static final MultiblockMachineDefinition STEAM_CASTER = GTRegistration.REGISTRATE
+    public static final MultiblockMachineDefinition STEAM_CASTER = REGISTRATE
             .multiblock("steam_caster", WeakSteamParallelMultiBlockMachine::new)
             .rotationState(RotationState.ALL)
             .appearanceBlock(BRONZE_HULL)
@@ -227,7 +227,7 @@ public class CosmicMachines {
             .workableCasingModel(GTCEu.id("block/casings/solid/machine_coke_bricks"),
                     CosmicCore.id("block/multiblock/solidifier"))
             .register();
-    public static final MultiblockMachineDefinition STEAM_MIXER = GTRegistration.REGISTRATE
+    public static final MultiblockMachineDefinition STEAM_MIXER = REGISTRATE
             .multiblock("steam_mixing_vessel", WeakSteamParallelMultiBlockMachine::new)
             .rotationState(RotationState.ALL)
             .appearanceBlock(BRONZE_BRICKS_HULL)
@@ -250,11 +250,12 @@ public class CosmicMachines {
                     .where('B', blocks(CASING_BRONZE_BRICKS.get()))
                     .where('C', blocks(BRONZE_HULL.get()))
                     .where('E', blocks(CASING_BRONZE_GEARBOX.get()))
-                    .build())
-            .sidedWorkableCasingModel(GTCEu.id("block/casings/solid/machine_casing_bronze_plated_bricks"),
+            .build())
+            .model(createWorkableCasingMachineModel(GTCEu.id("block/casings/solid/machine_casing_bronze_plated_bricks"),
                     CosmicCore.id("block/multiblock/mixing_vessel"))
+            )
             .register();
-    public static final MultiblockMachineDefinition INDUSTRIAL_PRIMITIVE_BLAST_FURNACE = GTRegistration.REGISTRATE
+    public static final MultiblockMachineDefinition INDUSTRIAL_PRIMITIVE_BLAST_FURNACE = REGISTRATE
             .multiblock("industrial_primitive_blast_furnace", IPBFMachine::new)
             .rotationState(RotationState.ALL)
             .recipeType(CosmicRecipeTypes.INDUSTRIAL_PRIMITIVE_BLAST_FURNACE_RECIPES)
@@ -285,7 +286,7 @@ public class CosmicMachines {
                     Component.translatable("cosmiccore.multiblock.ipbf.tooltip.2"),
                     Component.translatable("cosmiccore.multiblock.ipbf.tooltip.3"))
             .register();
-    public static final MultiblockMachineDefinition HIGH_PRESSURE_ASSEMBLER = GTRegistration.REGISTRATE
+    public static final MultiblockMachineDefinition HIGH_PRESSURE_ASSEMBLER = REGISTRATE
             .multiblock("high_pressure_assembler", WeakSteamParallelMultiBlockMachine::new)
             .rotationState(RotationState.ALL)
             .recipeType(GTRecipeTypes.ASSEMBLER_RECIPES)
