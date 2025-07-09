@@ -65,6 +65,9 @@ public class ForgeClientEventHandler {
 
     @SubscribeEvent
     public static void remapIds(MissingMappingsEvent event) {
+
+        //beeg machines
+
         remapMultiMachine(event, "steam_caster", CosmicMachines.STEAM_CASTER);
         remapMultiMachine(event, "steam_mixer", CosmicMachines.STEAM_MIXER);
         remapMultiMachine(event, "industrial_primitive_blast_furnace", CosmicMachines.INDUSTRIAL_PRIMITIVE_BLAST_FURNACE);
@@ -75,11 +78,23 @@ public class ForgeClientEventHandler {
         remapMultiMachine(event, "ultimate_combustion_engine_cc", CosmicMachines.ULTIMATE_COMBUSTION_ENGINE);
 
 
+        //naq mini reactors
         for( MachineDefinition machine : CosmicMachines.NAQUAHINE_MINI_REACTOR){
+            if(machine == null) continue;
             String name = (GTValues.VN[machine.getTier()] + "_naquahine_mini_reactor");
             remapSingleBLocks(event, name, machine);
         }
+
+        //steam sbs
+
+        remapSingleBLocks(event, "lp_steam_wiremill", CosmicMachines.STEAM_WIREMILL.first());
+        remapSingleBLocks(event, "hp_steam_wiremill", CosmicMachines.STEAM_WIREMILL.second());
+        remapSingleBLocks(event, "lp_steam_wiremill", CosmicMachines.STEAM_BENDER.first());
+        remapSingleBLocks(event, "hp_steam_wiremill", CosmicMachines.STEAM_BENDER.second());
+
     }
+
+
 
     private static void remapMultiMachine(MissingMappingsEvent event, String id, MultiblockMachineDefinition machine) {
         ResourceLocation resourceId = GTCEu.id(id);

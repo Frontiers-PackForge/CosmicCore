@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=east": {
+      "model": "cosmiccore:block/machine/hp_steam_bender",
+      "y": 90
+    },
+    "facing=north": {
+      "model": "cosmiccore:block/machine/hp_steam_bender"
+    },
+    "facing=south": {
+      "model": "cosmiccore:block/machine/hp_steam_bender",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "cosmiccore:block/machine/hp_steam_bender",
+      "y": 270
+    }
+  }
+}

@@ -135,7 +135,7 @@ public class CosmicMachines {
     public static final MachineDefinition[] NAQUAHINE_MINI_REACTOR = CosmicMachinesUtils.registerSimpleGenerator("naquahine_mini_reactor",
             CosmicRecipeTypes.MINI_NAQUAHINE_REACTOR, genericGeneratorTankSizeFunction, 0.0f, GTValues.IV, GTValues.LuV,
             GTValues.ZPM, GTValues.UV, GTValues.UHV);
-    public static final Pair<MachineDefinition, MachineDefinition> STEAM_BENDER = registerSteamMachines(
+    public static final Pair<MachineDefinition, MachineDefinition> STEAM_BENDER = CosmicMachinesUtils.registerSteamMachines(
             "steam_bender", SimpleSteamMachine::new, (pressure, builder) -> builder
                     .rotationState(RotationState.NON_Y_AXIS)
                     .recipeType(GTRecipeTypes.BENDER_RECIPES)
@@ -143,7 +143,7 @@ public class CosmicMachines {
                     .addOutputLimit(ItemRecipeCapability.CAP, 1)
                     .workableSteamHullModel(pressure, GTCEu.id("block/machines/bender"))
                     .register());
-    public static final Pair<MachineDefinition, MachineDefinition> STEAM_WIREMILL = registerSteamMachines(
+    public static final Pair<MachineDefinition, MachineDefinition> STEAM_WIREMILL = CosmicMachinesUtils.registerSteamMachines(
             "steam_wiremill", SimpleSteamMachine::new, (pressure, builder) -> builder
                     .rotationState(RotationState.NON_Y_AXIS)
                     .recipeType(GTRecipeTypes.WIREMILL_RECIPES)

@@ -19,6 +19,8 @@ import com.gregtechceu.gtceu.common.data.GTRecipeTypes;
 
 import com.gregtechceu.gtceu.common.data.machines.GTMachineUtils;
 import com.gregtechceu.gtceu.common.registry.GTRegistration;
+import com.gregtechceu.gtceu.utils.FormattingUtil;
+import it.unimi.dsi.fastutil.Pair;
 import it.unimi.dsi.fastutil.ints.Int2IntFunction;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -130,5 +132,19 @@ public class CosmicMachinesUtils {
             definitions[tier] = builder.apply(tier, register);
         }
         return definitions;
+    }
+
+    public static Pair<MachineDefinition, MachineDefinition> registerSteamMachines(String name,
+                                                                                   BiFunction<IMachineBlockEntity, Boolean, MetaMachine> factory,
+                                                                                   BiFunction<Boolean, MachineBuilder<MachineDefinition>, MachineDefinition> builder) {
+        MachineDefinition lowTier = builder.apply(false,
+                REGISTRATE.machine("lp_%s".formatted(name), holder -> factory.apply(holder, false))
+                        .langValue("Low Pressure " + FormattingUtil.toEnglishName(name))
+                        .tier(0));
+        MachineDefinition highTier = builder.apply(true,
+                REGISTRATE.machine("hp_%s".formatted(name), holder -> factory.apply(holder, true))
+                        .langValue("High Pressure " + FormattingUtil.toEnglishName(name))
+                        .tier(1));
+        return Pair.of(lowTier, highTier);
     }
 }
