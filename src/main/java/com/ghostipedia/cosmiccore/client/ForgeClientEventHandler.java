@@ -22,8 +22,6 @@ import net.minecraftforge.registries.MissingMappingsEvent;
 
 import com.mojang.blaze3d.shaders.FogShape;
 
-import com.mojang.blaze3d.shaders.FogShape;
-
 @SuppressWarnings("unused")
 @Mod.EventBusSubscriber(modid = CosmicCore.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE, value = Dist.CLIENT)
 public class ForgeClientEventHandler {
