@@ -135,7 +135,7 @@ public class CosmicMachinesUtils {
                                                                                    BiFunction<Boolean, MachineBuilder<MachineDefinition>, MachineDefinition> builder) {
         MachineDefinition lowTier = builder.apply(false,
                 REGISTRATE.machine("lp_%s".formatted(name), holder -> factory.apply(holder, false))
-                        .langValue("Low Pressure " + FormattingUtil.toEnglishName(name))
+                        .langValue("I DO NOT EXIST")
                         .tier(0));
         MachineDefinition highTier = builder.apply(true,
                 REGISTRATE.machine("hp_%s".formatted(name), holder -> factory.apply(holder, true))

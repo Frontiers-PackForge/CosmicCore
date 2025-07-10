@@ -1,6 +1,6 @@
 {
   "parent": "minecraft:item/generated",
   "textures": {
-    "layer0": "cosmiccore:item/cosmic_processor"
+    "layer0": "cosmiccore:item/akashic_processor_mainframe"
   }
 }
