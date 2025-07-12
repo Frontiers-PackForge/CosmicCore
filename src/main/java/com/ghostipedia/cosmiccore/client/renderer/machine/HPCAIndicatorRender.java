@@ -114,11 +114,9 @@ public class HPCAIndicatorRender extends DynamicRender<HPCAIndicatorPartMachine,
         return super.getRenderBoundingBox(machine);
     }
 
-//    @Override
-//    public @NotNull List<BakedQuad> getQuads(@Nullable BlockState state, @Nullable Direction side,
-//                                             @NotNull RandomSource rand) {
-//        return super.getQuads(state, side, rand);
-//    }
-
-
+    // @Override
+    // public @NotNull List<BakedQuad> getQuads(@Nullable BlockState state, @Nullable Direction side,
+    // @NotNull RandomSource rand) {
+    // return super.getQuads(state, side, rand);
+    // }
 }
