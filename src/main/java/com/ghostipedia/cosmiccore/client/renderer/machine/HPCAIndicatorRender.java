@@ -61,7 +61,8 @@ public class HPCAIndicatorRender extends DynamicRender<HPCAIndicatorPartMachine,
     }
 
     @Override
-    public @NotNull List<BakedQuad> getRenderQuads(@Nullable HPCAIndicatorPartMachine machine, @Nullable BlockAndTintGetter level,
+    public @NotNull List<BakedQuad> getRenderQuads(@Nullable HPCAIndicatorPartMachine machine,
+                                                   @Nullable BlockAndTintGetter level,
                                                    @Nullable BlockPos pos, @Nullable BlockState blockState,
                                                    @Nullable Direction side, RandomSource rand,
                                                    @NotNull ModelData modelData, @Nullable RenderType renderType) {
