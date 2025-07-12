@@ -35,6 +35,7 @@ repositories {
         name = 'FirstDarkDev'
         url = 'https://maven.firstdarkdev.xyz/snapshots/'
     }
+
     maven { // saps.dev Maven (KubeJS and Rhino)
         url "https://maven.latvian.dev/releases"
         content {
