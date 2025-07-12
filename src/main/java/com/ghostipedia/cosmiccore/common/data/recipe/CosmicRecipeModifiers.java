@@ -32,7 +32,7 @@ public class CosmicRecipeModifiers {
             return RecipeModifier.nullWrongType(MagneticFieldMachine.class, machine);
         }
         final var magnetStrength = magnetMachine.getFieldStrength();
-        long EUt = recipe.getOutputEUt();
+        long EUt = recipe.getOutputEUt().getTotalEU();
         int actualParallel = ParallelLogic.getParallelAmount(magnetMachine, recipe, 16);
         long maxReactorVoltage = magnetMachine.getOverclockVoltage();
         float recipeDuration = (recipe.duration);
@@ -65,7 +65,7 @@ public class CosmicRecipeModifiers {
                 IParallelHatch parallelHatch = optionalIParallelHatch.get();
                 var actualParallel = 1;
                 if (parallelHatch.getCurrentParallel() != 0) {
-                    long EUt = recipe.getInputEUt();
+                    long EUt = recipe.getInputEUt().getTotalEU();
                     actualParallel = ParallelLogic.getParallelAmount(vatMachine, recipe,
                             parallelHatch.getCurrentParallel());
 
@@ -87,7 +87,6 @@ public class CosmicRecipeModifiers {
         var handlers = rlm.getCapabilitiesFlat(IO.IN, ItemRecipeCapability.CAP);
         int count = 0;
         for (var handler : handlers) {
-            if (!handler.shouldSearchContent()) continue;
             for (var content : handler.getContents()) {
                 if (content instanceof ItemStack stack && !stack.isEmpty()) {
                     if (stack.is(match)) count += stack.getCount();

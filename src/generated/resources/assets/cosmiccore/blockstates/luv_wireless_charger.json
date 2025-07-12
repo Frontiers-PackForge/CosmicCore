@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=east": {
+      "model": "cosmiccore:block/machine/luv_wireless_charger",
+      "y": 90
+    },
+    "facing=north": {
+      "model": "cosmiccore:block/machine/luv_wireless_charger"
+    },
+    "facing=south": {
+      "model": "cosmiccore:block/machine/luv_wireless_charger",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "cosmiccore:block/machine/luv_wireless_charger",
+      "y": 270
+    }
+  }
+}

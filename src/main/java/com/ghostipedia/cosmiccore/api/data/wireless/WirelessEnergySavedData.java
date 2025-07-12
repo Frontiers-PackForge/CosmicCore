@@ -9,7 +9,6 @@ import net.minecraft.util.Tuple;
 import net.minecraft.world.level.saveddata.SavedData;
 
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.math.BigInteger;
 import java.util.*;
@@ -18,8 +17,6 @@ public class WirelessEnergySavedData extends SavedData {
 
     public static class WirelessEnergyData {
 
-        @Nullable
-        // public Tuple<String, BlockPos> capacitorLocation;
         public BigInteger energyStored;
         public BigInteger energyCapacity;
         public boolean isActive;
@@ -36,8 +33,7 @@ public class WirelessEnergySavedData extends SavedData {
             this(energyStored, energyCapacity, false);
         }
 
-        public WirelessEnergyData(BigInteger energyStored,
-                                  BigInteger energyCapacity, boolean isActive) {
+        public WirelessEnergyData(BigInteger energyStored, BigInteger energyCapacity, boolean isActive) {
             this.energyStored = energyStored;
             this.energyCapacity = energyCapacity;
             this.isActive = isActive;
@@ -63,24 +59,20 @@ public class WirelessEnergySavedData extends SavedData {
         }
     };
 
+    // FIXME why is this attributed to GT?
     private static final String DATA_NAME = "gtceu_wireless_energy";
+    // FIXME this key is kind of weird. Search & replace mistake?
     private static final String GlobalEnergyNBTTag = "gtceu_wireless_energy_MapNBTTag";
     public static final HashMap<UUID, WirelessEnergyData> GlobalWirelessEnergy = new HashMap<>(20, 0.9f);
 
-    private final ServerLevel serverLevel;
-
     public static WirelessEnergySavedData getOrCreate(ServerLevel serverLevel) {
-        return serverLevel.getDataStorage().computeIfAbsent(
-                tag -> new WirelessEnergySavedData(serverLevel, tag),
-                () -> new WirelessEnergySavedData(serverLevel), DATA_NAME);
+        return serverLevel.getDataStorage()
+                .computeIfAbsent(WirelessEnergySavedData::new, WirelessEnergySavedData::new, DATA_NAME);
     }
 
-    private WirelessEnergySavedData(ServerLevel serverLevel) {
-        this.serverLevel = serverLevel;
-    }
+    private WirelessEnergySavedData() {}
 
-    private WirelessEnergySavedData(ServerLevel serverLevel, CompoundTag nbt) {
-        this(serverLevel);
+    private WirelessEnergySavedData(CompoundTag nbt) {
         var list = nbt.getList(GlobalEnergyNBTTag, Tag.TAG_COMPOUND);
         for (int i = 0; i < list.size(); i++) {
             CompoundTag tag = list.getCompound(i);
@@ -211,9 +203,7 @@ public class WirelessEnergySavedData extends SavedData {
     private boolean compareLocations(Tuple<String, BlockPos> location1, Tuple<String, BlockPos> location2) {
         if (location1 == null || location2 == null) return false;
         if (!location1.getA().equals(location2.getA())) return false;
-        if (location1.getB().getX() != location2.getB().getX()) return false;
-        if (location1.getB().getY() != location2.getB().getY()) return false;
-        if (location1.getB().getZ() != location2.getB().getZ()) return false;
+        if (!location1.getB().equals(location2.getB())) return false;
         return true;
     }
 

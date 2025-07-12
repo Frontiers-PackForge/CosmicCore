@@ -7,10 +7,8 @@ import com.gregtechceu.gtceu.api.block.ICoilType;
 import com.gregtechceu.gtceu.api.data.chemical.material.Material;
 import com.gregtechceu.gtceu.common.block.CoilBlock;
 
-import com.lowdragmc.lowdraglib.client.renderer.IBlockRendererProvider;
-import com.lowdragmc.lowdraglib.client.renderer.IRenderer;
-
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.StringRepresentable;
 import net.minecraft.world.level.block.EntityBlock;
@@ -23,27 +21,17 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.function.Supplier;
 
-public class CosmicCoilBlock extends CoilBlock implements EntityBlock, IBlockRendererProvider {
+public class CosmicCoilBlock extends CoilBlock implements EntityBlock {
 
-    private final IRenderer renderer, activeRenderer;
-
-    public CosmicCoilBlock(Properties properties, ICoilType coilType, @Nullable IRenderer renderer,
-                           @Nullable IRenderer activeRenderer) {
+    public CosmicCoilBlock(Properties properties, ICoilType coilType) {
         super(properties, coilType);
-        this.renderer = renderer;
-        this.activeRenderer = activeRenderer;
     }
 
     @Nullable
     @Override
-    public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
-        return CosmicBlockEntities.CAUSAL_FABRIC_COIL_BLOCK_ENTITY.create(pos, state);
-    }
-
-    @Nullable
-    @Override
-    public IRenderer getRenderer(BlockState state) {
-        return state.getValue(ACTIVE) ? activeRenderer : renderer;
+    public BlockEntity newBlockEntity(@NotNull BlockPos pos, @NotNull BlockState state) {
+        return CosmicBlocks.COIL_CAUSAL_FABRIC.getSibling(Registries.BLOCK_ENTITY_TYPE)
+                .get().create(pos, state);
     }
 
     public enum CoilType implements StringRepresentable, ICoilType {

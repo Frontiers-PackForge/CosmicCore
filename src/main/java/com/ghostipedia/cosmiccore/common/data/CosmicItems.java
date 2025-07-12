@@ -603,9 +603,9 @@ public class CosmicItems {
                         list.add(Component.translatable("item.cosmiccore.the_one_ring.tooltip.1"));
                     })))
             .register();
-    // public static final ItemEntry<ComponentItem> PARADOX_ECHOS = REGISTRATE.item("paradox_echos",
+    // public static final ItemEntry<ComponentItem> PARADOX_ECHOS = REGISTRATE.item("paradox_harmonics",
     // ComponentItem::create)
-    // .lang("Paradox Echos")
+    // .lang("Paradox Harmonics")
     // .properties(p -> p.stacksTo(64))
     // .defaultModel()
     // .register();
@@ -674,28 +674,28 @@ public class CosmicItems {
     // .register();
 
     // New Circuits
-    // Echo (ZPM-UEV)
+    // Harmonic (ZPM-UEV)
     public static final ItemEntry<ComponentItem> SONAR_PROCESSOR = REGISTRATE
-            .item("echo_processor", ComponentItem::create)
-            .lang("Echo Processor")
+            .item("harmonic_processor", ComponentItem::create)
+            .lang("Harmonic Processor")
             .properties(p -> p.stacksTo(64))
             .defaultModel()
             .register();
     public static final ItemEntry<ComponentItem> SONAR_PROCESSOR_ASSEMBLY = REGISTRATE
-            .item("echo_processor_assembly", ComponentItem::create)
-            .lang("Echo Processor Assembly")
+            .item("harmonic_processor_assembly", ComponentItem::create)
+            .lang("Harmonic Processor Assembly")
             .properties(p -> p.stacksTo(64))
             .defaultModel()
             .register();
     public static final ItemEntry<ComponentItem> SONAR_PROCESSOR_SUPERCOMPUTER = REGISTRATE
-            .item("echo_processor_supercomputer", ComponentItem::create)
-            .lang("Echo Processor Supercomputer")
+            .item("harmonic_processor_supercomputer", ComponentItem::create)
+            .lang("Harmonic Processor Supercomputer")
             .properties(p -> p.stacksTo(64))
             .defaultModel()
             .register();
     public static final ItemEntry<ComponentItem> SONAR_PROCESSOR_MAINFRAME = REGISTRATE
-            .item("echo_processor_mainframe", ComponentItem::create)
-            .lang("Echo Processor Mainframe")
+            .item("harmonic_processor_mainframe", ComponentItem::create)
+            .lang("Harmonic Processor Mainframe")
             .properties(p -> p.stacksTo(64))
             .defaultModel()
             .register();
@@ -724,53 +724,53 @@ public class CosmicItems {
             .properties(p -> p.stacksTo(64))
             .defaultModel()
             .register();
-    // Cosmic (UHV-UXV)
+    // Suelescent (UHV-UXV)
     public static final ItemEntry<ComponentItem> COSMIC_PROCESSOR = REGISTRATE
-            .item("cosmic_processor", ComponentItem::create)
-            .lang("Cosmic Processor")
+            .item("suelescent_processor", ComponentItem::create)
+            .lang("Suelescent Processor")
             .properties(p -> p.stacksTo(64))
             .defaultModel()
             .register();
     public static final ItemEntry<ComponentItem> COSMIC_PROCESSOR_ASSEMBLY = REGISTRATE
-            .item("cosmic_processor_assembly", ComponentItem::create)
-            .lang("Cosmic Processor Assembly")
+            .item("suelescent_processor_assembly", ComponentItem::create)
+            .lang("Suelescent Processor Assembly")
             .properties(p -> p.stacksTo(64))
             .defaultModel()
             .register();
     public static final ItemEntry<ComponentItem> COSMIC_PROCESSOR_SUPERCOMPUTER = REGISTRATE
-            .item("cosmic_processor_supercomputer", ComponentItem::create)
-            .lang("Cosmic Processor Supercomputer")
+            .item("suelescent_processor_supercomputer", ComponentItem::create)
+            .lang("Suelescent Processor Supercomputer")
             .properties(p -> p.stacksTo(64))
             .defaultModel()
             .register();
     public static final ItemEntry<ComponentItem> COSMIC_PROCESSOR_MAINFRAME = REGISTRATE
-            .item("cosmic_processor_mainframe", ComponentItem::create)
-            .lang("Cosmic Processor Mainframe")
+            .item("suelescent_processor_mainframe", ComponentItem::create)
+            .lang("Suelescent Processor Mainframe")
             .properties(p -> p.stacksTo(64))
             .defaultModel()
             .register();
-    // Psionic Circuit (UEV-OPV)
+    // Akashic Circuit (UEV-OPV)
     public static final ItemEntry<ComponentItem> PSIONIC_PROCESSOR = REGISTRATE
-            .item("psionic_processor", ComponentItem::create)
-            .lang("Psionic Processor")
+            .item("akashic_processor", ComponentItem::create)
+            .lang("Akashic Processor")
             .properties(p -> p.stacksTo(64))
             .defaultModel()
             .register();
     public static final ItemEntry<ComponentItem> PSIONIC_PROCESSOR_ASSEMBLY = REGISTRATE
-            .item("psionic_processor_assembly", ComponentItem::create)
-            .lang("Psionic Processor Assembly")
+            .item("akashic_processor_assembly", ComponentItem::create)
+            .lang("Akashic Processor Assembly")
             .properties(p -> p.stacksTo(64))
             .defaultModel()
             .register();
     public static final ItemEntry<ComponentItem> PSIONIC_PROCESSOR_SUPERCOMPUTER = REGISTRATE
-            .item("psionic_processor_supercomputer", ComponentItem::create)
-            .lang("Psionic Processor Supercomputer")
+            .item("akashic_processor_supercomputer", ComponentItem::create)
+            .lang("Akashic Processor Supercomputer")
             .properties(p -> p.stacksTo(64))
             .defaultModel()
             .register();
     public static final ItemEntry<ComponentItem> PSIONIC_PROCESSOR_MAINFRAME = REGISTRATE
-            .item("psionic_processor_mainframe", ComponentItem::create)
-            .lang("Psionic Processor Mainframe")
+            .item("akashic_processor_mainframe", ComponentItem::create)
+            .lang("Akashic Processor Mainframe")
             .properties(p -> p.stacksTo(64))
             .defaultModel()
             .register();
@@ -1197,7 +1197,7 @@ public class CosmicItems {
             .tag()
             .properties(p -> p.stacksTo(64))
             .onRegister(attach(new TooltipBehavior(tooltips -> {
-                tooltips.add(Component.translatable("cosmiccore.gravpack.1"));
+                tooltips.add(Component.translatable("item.cosmiccore.portable_gravity_core.tooltip"));
             })))
             .defaultModel()
             .register();
