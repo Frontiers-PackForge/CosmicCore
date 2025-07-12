@@ -15,11 +15,13 @@ import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.resources.model.BlockModelRotation;
+import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.inventory.InventoryMenu;
 import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.BlockAndTintGetter;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
@@ -59,9 +61,9 @@ public class HPCAIndicatorRender extends DynamicRender<HPCAIndicatorPartMachine,
     }
 
     @Override
-    public @NotNull List<BakedQuad> getRenderQuads(@Nullable HPCAIndicatorPartMachine machine,
-                                                   @Nullable BlockState blockState,
-                                                   @Nullable Direction side, @NotNull RandomSource rand,
+    public @NotNull List<BakedQuad> getRenderQuads(@Nullable HPCAIndicatorPartMachine machine, @Nullable BlockAndTintGetter level,
+                                                   @Nullable BlockPos pos, @Nullable BlockState blockState,
+                                                   @Nullable Direction side, RandomSource rand,
                                                    @NotNull ModelData modelData, @Nullable RenderType renderType) {
         if (machine == null) return Collections.emptyList();
 
