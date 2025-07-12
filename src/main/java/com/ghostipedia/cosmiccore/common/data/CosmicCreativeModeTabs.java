@@ -4,7 +4,7 @@ import com.ghostipedia.cosmiccore.CosmicCore;
 
 import com.gregtechceu.gtceu.common.data.GTCreativeModeTabs;
 
-import net.minecraft.world.item.*;
+import net.minecraft.world.item.CreativeModeTab;
 
 import com.tterrag.registrate.util.entry.RegistryEntry;
 

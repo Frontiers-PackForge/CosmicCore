@@ -109,13 +109,13 @@ public class ExoticCombustionEngineMachine extends WorkableElectricMultiblockMac
         if (!(machine instanceof ExoticCombustionEngineMachine engineMachine)) {
             return RecipeModifier.nullWrongType(ExoticCombustionEngineMachine.class, machine);
         }
-        long EUt = RecipeHelper.getOutputEUt(recipe);
+        long EUt = recipe.getOutputEUt().voltage();
         if (EUt * recipe.duration < 720) {
             return ModifierFunction.NULL;
         }
         var fluidHolders = Objects
-                .requireNonNullElseGet(engineMachine.getCapabilitiesProxy()
-                        .get(IO.IN, FluidRecipeCapability.CAP), Collections::<IRecipeHandler<?>>emptyList)
+                .requireNonNullElseGet(engineMachine.getCapabilitiesFlat(IO.IN, FluidRecipeCapability.CAP),
+                        Collections::<IRecipeHandler<?>>emptyList)
                 .stream()
                 .map(container -> container.getContents().stream().filter(FluidStack.class::isInstance)
                         .map(FluidStack.class::cast).toList())
@@ -171,7 +171,7 @@ public class ExoticCombustionEngineMachine extends WorkableElectricMultiblockMac
         boolean value = super.onWorking();
         var recipe = recipeLogic.getLastRecipe();
         if (recipe != null) {
-            long EUt = RecipeHelper.getOutputEUt(recipe);
+            long EUt = recipe.getOutputEUt().voltage();
             int duration = recipe.duration;
             if ((EUt / recipe.parallels) * duration < 720) {
                 this.getRecipeLogic().setWaiting(Component.translatable("cosmiccore.errors.bad_fuel"));
@@ -232,7 +232,7 @@ public class ExoticCombustionEngineMachine extends WorkableElectricMultiblockMac
     }
 
     @Override
-    public boolean dampingWhenWaiting() {
+    public boolean regressWhenWaiting() {
         return false;
     }
 
@@ -251,7 +251,7 @@ public class ExoticCombustionEngineMachine extends WorkableElectricMultiblockMac
                 amperageName, voltageName).withStyle(ChatFormatting.GRAY)));
         if (isActive() && isWorkingEnabled()) {
             builder.addCurrentEnergyProductionLine(
-                    recipeLogic.getLastRecipe() != null ? RecipeHelper.getOutputEUt(recipeLogic.getLastRecipe()) : 0);
+                    recipeLogic.getLastRecipe() != null ? recipeLogic.getLastRecipe().getOutputEUt().voltage() : 0);
         }
 
         builder.addFuelNeededLine(getRecipeFluidInputInfo(), recipeLogic.getDuration());
@@ -284,7 +284,7 @@ public class ExoticCombustionEngineMachine extends WorkableElectricMultiblockMac
         }
         FluidStack requiredFluidInput = RecipeHelper.getInputFluids(recipe).get(0);
 
-        long ocAmount = getMaxVoltage() / RecipeHelper.getOutputEUt(recipe);
+        long ocAmount = getMaxVoltage() / recipe.getOutputEUt().voltage();
         int neededAmount = GTMath.saturatedCast(ocAmount * requiredFluidInput.getAmount());
         return ChatFormatting.RED + FormattingUtil.formatNumbers(neededAmount) + "mB";
     }

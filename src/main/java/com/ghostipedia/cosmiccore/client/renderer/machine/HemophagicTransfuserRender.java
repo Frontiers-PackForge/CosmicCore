@@ -1,236 +1,204 @@
 package com.ghostipedia.cosmiccore.client.renderer.machine;
 
 import com.ghostipedia.cosmiccore.CosmicCore;
-import com.ghostipedia.cosmiccore.common.data.CosmicBlocks;
 
-import com.gregtechceu.gtceu.GTCEu;
-import com.gregtechceu.gtceu.api.GTValues;
-import com.gregtechceu.gtceu.api.machine.IMachineBlockEntity;
-import com.gregtechceu.gtceu.api.machine.feature.multiblock.IMultiController;
-import com.gregtechceu.gtceu.api.machine.feature.multiblock.IMultiPart;
 import com.gregtechceu.gtceu.api.machine.multiblock.WorkableElectricMultiblockMachine;
 import com.gregtechceu.gtceu.api.pattern.util.RelativeDirection;
 import com.gregtechceu.gtceu.client.renderer.GTRenderTypes;
-import com.gregtechceu.gtceu.client.renderer.machine.IControllerRenderer;
-import com.gregtechceu.gtceu.client.renderer.machine.WorkableCasingMachineRenderer;
+import com.gregtechceu.gtceu.client.renderer.machine.DynamicRender;
+import com.gregtechceu.gtceu.client.renderer.machine.DynamicRenderType;
+import com.gregtechceu.gtceu.client.util.ModelUtils;
 import com.gregtechceu.gtceu.client.util.RenderBufferHelper;
-import com.gregtechceu.gtceu.client.util.StaticFaceBakery;
-import com.gregtechceu.gtceu.utils.GTUtil;
 
-import com.lowdragmc.lowdraglib.client.model.ModelFactory;
-
+import net.minecraft.MethodsReturnNonnullByDefault;
+import net.minecraft.Util;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.LightTexture;
 import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.RenderType;
-import net.minecraft.client.renderer.block.model.BakedQuad;
-import net.minecraft.client.resources.model.ModelState;
+import net.minecraft.client.renderer.Sheets;
+import net.minecraft.client.renderer.texture.TextureAtlas;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
-import net.minecraft.util.RandomSource;
-import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.phys.AABB;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import org.jetbrains.annotations.Nullable;
+import com.mojang.blaze3d.vertex.VertexConsumer;
+import com.mojang.serialization.Codec;
 import org.joml.Quaternionf;
-import wayoftime.bloodmagic.BloodMagic;
 
-import java.util.List;
-import java.util.function.Consumer;
+import java.util.function.BiFunction;
 
-public class HemophagicTransfuserRender extends WorkableCasingMachineRenderer implements IControllerRenderer {
+import javax.annotation.ParametersAreNonnullByDefault;
 
-    public static final ResourceLocation TEXTURE = BloodMagic.rl("block/blankrune");
-    public static final ResourceLocation OVERLAY_MODEL_TEXTURES = GTCEu.id("block/multiblock/fusion_reactor");
-    public static final ResourceLocation HEMOPHAGIC_TRANSFUSER_MODEL = CosmicCore.id("block/iris/bloodcube");
-    public static final int CENTER_OFFSET = -5;
-    public static final float FADEOUT = 60;
-    protected float delta = 0;
-    protected int lastColor = -1;
-    boolean isActive = false;
+@ParametersAreNonnullByDefault
+@MethodsReturnNonnullByDefault
+public class HemophagicTransfuserRender extends
+                                        DynamicRender<WorkableElectricMultiblockMachine, HemophagicTransfuserRender> {
 
-    public final ResourceLocation multipartSprite;
+    public static final HemophagicTransfuserRender INSTANCE = new HemophagicTransfuserRender();
+    public static final Codec<HemophagicTransfuserRender> CODEC = Codec.unit(INSTANCE);
+    public static final DynamicRenderType<WorkableElectricMultiblockMachine, HemophagicTransfuserRender> TYPE = new DynamicRenderType<>(
+            HemophagicTransfuserRender.CODEC);
 
-    public HemophagicTransfuserRender(ResourceLocation texture, ResourceLocation multipartSprite,
-                                      ResourceLocation workableModel) {
-        super(TEXTURE, OVERLAY_MODEL_TEXTURES);
-        this.multipartSprite = multipartSprite;
-    }
+    private static final BiFunction<Direction, Direction, AABB> renderBoundCache = Util.memoize((front, upwards) -> {
+        Direction up = RelativeDirection.UP.getRelative(front, upwards, false);
+        Direction back = RelativeDirection.BACK.getRelative(front, upwards, false);
+        Direction left = RelativeDirection.LEFT.getRelative(front, upwards, false);
 
-    @Override
-    @OnlyIn(Dist.CLIENT)
-    public boolean hasTESR(BlockEntity blockEntity) {
-        return true;
-    }
+        // offset from the controller to the inner cube (scaled up by 1 in all directions)
+        // values are from the multi pattern
+        BlockPos.MutableBlockPos minPos = new BlockPos.MutableBlockPos()
+                .move(left, 3).move(up, 1).move(back, 2);
+        BlockPos.MutableBlockPos maxPos = new BlockPos.MutableBlockPos()
+                .move(left, -3).move(up, 7).move(back, 8);
 
-    @Override
-    @OnlyIn(Dist.CLIENT)
-    public void render(BlockEntity blockEntity, float partialTicks, PoseStack poseStack, MultiBufferSource buffer,
-                       int combinedLight, int combinedOverlay) {
-        if (blockEntity instanceof IMachineBlockEntity machineBlockEntity &&
-                machineBlockEntity.getMetaMachine() instanceof WorkableElectricMultiblockMachine machine) {
-            var level = machine.getLevel();
-            float tick = level.getGameTime() + partialTicks;
-            isActive = machine.isActive();
-            if (machine.isFormed()) {
-                renderCube(machine, poseStack, buffer, tick, combinedLight,
-                        combinedOverlay);
-            }
-            if (isActive) {
-                renderLightRing(machine, tick, poseStack, buffer, tick);
-            }
+        return new AABB(minPos, maxPos);
+    });
+
+    public static final ResourceLocation BLOOD_CUBE_TEXTURE = CosmicCore.id("block/iris/blood_cube");
+
+    private static TextureAtlasSprite bloodCubeSprite = null;
+    private static boolean isEventListenerRegistered = false;
+
+    @SuppressWarnings("deprecation")
+    private HemophagicTransfuserRender() {
+        if (!isEventListenerRegistered) {
+            ModelUtils.registerAtlasStitchedEventListener(TextureAtlas.LOCATION_BLOCKS, event -> {
+                bloodCubeSprite = event.getAtlas().getSprite(BLOOD_CUBE_TEXTURE);
+            });
+            isEventListenerRegistered = true;
         }
     }
 
     @Override
-    public void renderPartModel(List<BakedQuad> quads, IMultiController machine, IMultiPart part, Direction frontFacing,
-                                @Nullable Direction side, RandomSource rand, Direction modelFacing,
-                                ModelState modelState) {
-        if (modelFacing != null) {
-            quads.add(StaticFaceBakery.bakeFace(modelFacing, ModelFactory.getBlockSprite(multipartSprite),
-                    modelState));
-        }
-    }
-
-    @OnlyIn(Dist.CLIENT)
-    public void renderCube(WorkableElectricMultiblockMachine machine, PoseStack poseStack,
-                           MultiBufferSource bufferSource, float tick, int combinedLight, int combinedOverlay) {
-        poseStack.pushPose();
-        var blockRenderer = Minecraft.getInstance().getBlockRenderer();
-        var up = RelativeDirection.UP.getRelativeFacing(machine.getFrontFacing(), machine.getUpwardsFacing(),
-                machine.isFlipped());
-        var back = RelativeDirection.BACK.getRelativeFacing(machine.getFrontFacing(), machine.getUpwardsFacing(),
-                machine.isFlipped());
-        var left = RelativeDirection.LEFT.getRelativeFacing(machine.getFrontFacing(), machine.getUpwardsFacing(),
-                machine.isFlipped());
-        // translate to the absolute center of multiblock
-        poseStack.translate(
-                up.getStepX() * (4f + (up.getStepX() > 0 ? .5f : -.5f)) +
-                        back.getStepX() * (5f + (back.getStepX() > 0 ? .5f : -.5f)) +
-                        (left.getAxis() == Direction.Axis.X ? .5f : 0),
-                up.getStepY() * (4f + (up.getStepY() > 0 ? .5f : -.5f)) +
-                        back.getStepY() * (5f + (back.getStepY() > 0 ? .5f : -.5f)) +
-                        (left.getAxis() == Direction.Axis.Y ? .5f : 0),
-                up.getStepZ() * (4f + (up.getStepZ() > 0 ? .5f : -.5f)) +
-                        back.getStepZ() * (5f + (back.getStepZ() > 0 ? .5f : -.5f)) +
-                        (left.getAxis() == Direction.Axis.Z ? .5f : 0));
-        // rotate around center
-        Quaternionf xAxisRot = new Quaternionf().rotateAxis(Mth.sin(tick / 20), 1, 0, 0);
-        Quaternionf yAxisRot = new Quaternionf().rotateAxis(Mth.sin(tick / 30), 0, 1, 0);
-        Quaternionf zAxisRot = new Quaternionf().rotateAxis(Mth.cos(Mth.HALF_PI + tick / 60), 0, 0, 1);
-        poseStack.mulPose(xAxisRot);
-        poseStack.mulPose(yAxisRot);
-        poseStack.mulPose(zAxisRot);
-        // scale the stack
-        poseStack.scale(2, 2, 2);
-        // translate back to corner of center block position (blocks are drawn from the 0,0,0 corner)
-        poseStack.translate(up.getStepX() * (up.getStepX() > 0 ? -.5f : .5f) +
-                back.getStepX() * (back.getStepX() > 0 ? -.5f : .5f) -
-                (left.getAxis() == Direction.Axis.X ? .5f : 0),
-                up.getStepY() * (up.getStepY() > 0 ? -.5f : .5f) +
-                        back.getStepY() * (back.getStepY() > 0 ? -.5f : .5f) -
-                        (left.getAxis() == Direction.Axis.Y ? .5f : 0),
-                up.getStepZ() * (up.getStepZ() > 0 ? -.5f : .5f) +
-                        back.getStepZ() * (back.getStepZ() > 0 ? -.5f : .5f) -
-                        (left.getAxis() == Direction.Axis.Z ? .5f : 0));
-        // draw block model quads
-        var bakedModel = blockRenderer.getBlockModel(CosmicBlocks.BLOOD_CUBE.getDefaultState());
-        var consumer = bufferSource.getBuffer(RenderType.solid());
-        for (var face : GTUtil.DIRECTIONS) {
-            bakedModel.getQuads(CosmicBlocks.BLOOD_CUBE.getDefaultState(), face, GTValues.RNG)
-                    .forEach(quad -> consumer.putBulkData(poseStack.last(), quad, 1, 1, 1,
-                            LightTexture.FULL_BRIGHT, combinedOverlay));
-        }
-
-        poseStack.popPose();
-    }
-
-    @OnlyIn(Dist.CLIENT)
-    private void renderLightRing(WorkableElectricMultiblockMachine machine, float partialTicks, PoseStack poseStack,
-                                 MultiBufferSource buffer, float tick) {
-        var color = 12191265;
-        var alpha = 1f;
-        // if (machine.recipeLogic.isWorking()) {
-        // lastColor = color;
-        // delta = FADEOUT;
-        // } else {
-        // alpha = delta / FADEOUT;
-        // lastColor = color(Mth.floor(alpha * 255), red(12191265), green(12191265), blue(12191265));
-        // delta -= Minecraft.getInstance().getDeltaFrameTime();
-        // }
-
-        var front = machine.getFrontFacing();
-        var upwards = machine.getUpwardsFacing();
-        var flipped = machine.isFlipped();
-        var axis = RelativeDirection.UP.getRelativeFacing(front, upwards, flipped).getAxis();
-        var up = RelativeDirection.UP.getRelativeFacing(machine.getFrontFacing(), machine.getUpwardsFacing(),
-                machine.isFlipped());
-        var back = RelativeDirection.BACK.getRelativeFacing(machine.getFrontFacing(), machine.getUpwardsFacing(),
-                machine.isFlipped());
-        var left = RelativeDirection.LEFT.getRelativeFacing(machine.getFrontFacing(), machine.getUpwardsFacing(),
-                machine.isFlipped());
-        poseStack.pushPose();
-        poseStack.translate(
-                up.getStepX() * (4f + (up.getStepX() > 0 ? .5f : -.5f)) +
-                        back.getStepX() * (5f + (back.getStepX() > 0 ? .5f : -.5f)) +
-                        (left.getAxis() == Direction.Axis.X ? .5f : 0),
-                up.getStepY() * (4f + (up.getStepY() > 0 ? .5f : -.5f)) +
-                        back.getStepY() * (5f + (back.getStepY() > 0 ? .5f : -.5f)) +
-                        (left.getAxis() == Direction.Axis.Y ? .5f : 0),
-                up.getStepZ() * (4f + (up.getStepZ() > 0 ? .5f : -.5f)) +
-                        back.getStepZ() * (5f + (back.getStepZ() > 0 ? .5f : -.5f)) +
-                        (left.getAxis() == Direction.Axis.Z ? .5f : 0));
-        poseStack.pushPose();
-        float partialDiv20 = partialTicks / 20;
-        float halfPiPartialDiv60 = Mth.HALF_PI + partialTicks / 60;
-        float partialDiv30 = partialTicks / 30;
-        var sinPartialDiv20Quaternion = new Quaternionf().rotateAxis(Mth.sin(partialDiv20), 1, 0, 0);
-        var sinPartialDiv30Quaternion = new Quaternionf().rotateAxis(Mth.sin(partialDiv30), 0, 1, 0);
-        var cosHalfPiPartialDiv60Quaternion = new Quaternionf().rotateAxis(Mth.cos(halfPiPartialDiv60), 0, 0, 1);
-        poseStack.mulPose(sinPartialDiv20Quaternion);
-        poseStack.mulPose(new Quaternionf().rotateAxis(Mth.cos(partialDiv30), 0, 1, 0));
-        poseStack.mulPose(new Quaternionf().rotateAxis(Mth.sin(halfPiPartialDiv60), 0, 0, 1));
-        RenderBufferHelper.renderRing(poseStack, buffer.getBuffer(GTRenderTypes.getLightRing()), 0, 0, 0,
-                2f, 0.1F, 10, 36, 0.5F, 0, 0, alpha, axis);
-        poseStack.popPose();
-        poseStack.pushPose();
-        poseStack.mulPose(new Quaternionf().rotateAxis(Mth.cos(partialDiv20), 1, 0, 0));
-        poseStack.mulPose(sinPartialDiv30Quaternion);
-        poseStack.mulPose(cosHalfPiPartialDiv60Quaternion);
-        RenderBufferHelper.renderRing(poseStack, buffer.getBuffer(GTRenderTypes.getLightRing()), 0, 0, 0,
-                1.8f, 0.1F, 10, 36, 0.4F, 0f, 0, alpha, axis);
-        poseStack.popPose();
-        poseStack.pushPose();
-        poseStack.mulPose(sinPartialDiv20Quaternion);
-
-        poseStack.mulPose(cosHalfPiPartialDiv60Quaternion);
-        RenderBufferHelper.renderRing(poseStack, buffer.getBuffer(GTRenderTypes.getLightRing()), 0, 0, 0,
-                1.6f, 0.1F, 10, 36, 0.6F, 0, 0, alpha, axis);
-        poseStack.popPose();
-        poseStack.popPose();
-    }
-
-    @Override
-    public void onAdditionalModel(Consumer<ResourceLocation> registry) {
-        super.onAdditionalModel(registry);
-        registry.accept(HEMOPHAGIC_TRANSFUSER_MODEL);
-    }
-
-    @OnlyIn(Dist.CLIENT)
-    public float reBakeCustomQuadsOffset() {
-        return 0f;
-    }
-
-    @Override
-    public boolean isGlobalRenderer(BlockEntity blockEntity) {
-        return true;
+    public DynamicRenderType<WorkableElectricMultiblockMachine, HemophagicTransfuserRender> getType() {
+        return TYPE;
     }
 
     @Override
     public int getViewDistance() {
         return 256;
+    }
+
+    @Override
+    public AABB getRenderBoundingBox(WorkableElectricMultiblockMachine multi) {
+        if (multi.isFormed()) {
+            AABB bounds = renderBoundCache.apply(multi.getFrontFacing(), multi.getUpwardsFacing());
+            return bounds.move(multi.getPos());
+        }
+        return super.getRenderBoundingBox(multi);
+    }
+
+    @Override
+    public boolean shouldRenderOffScreen(WorkableElectricMultiblockMachine machine) {
+        return true;
+    }
+
+    @Override
+    public void render(WorkableElectricMultiblockMachine machine, float partialTick, PoseStack poseStack,
+                       MultiBufferSource buffer, int packedLight, int packedOverlay) {
+        if (!machine.isFormed()) {
+            return;
+        }
+        float totalTick = (Minecraft.getInstance().player.tickCount + partialTick);
+
+        poseStack.pushPose();
+
+        // move the things:tm: to render at the center of the multiblock
+        Direction front = machine.getFrontFacing();
+        Direction upwards = machine.getUpwardsFacing();
+        boolean flipped = machine.isFlipped();
+        Direction up = RelativeDirection.UP.getRelative(front, upwards, flipped);
+        Direction back = RelativeDirection.BACK.getRelative(front, upwards, flipped);
+        Direction.Axis leftAxis = RelativeDirection.LEFT.getRelative(front, upwards, flipped).getAxis();
+
+        // translate to the absolute center of the multiblock
+        float x0ffset = 0, y0ffset = 0, z0ffset = 0;
+
+        for (Direction.Axis axis : Direction.Axis.VALUES) {
+            int upOffset = up.getNormal().get(axis);
+            int backOffset = back.getNormal().get(axis);
+
+            float offset = upOffset * (4.0f + (upOffset * 0.5f)) +
+                    backOffset * (5.0f + (backOffset * 0.5f));
+            switch (axis) {
+                case X -> x0ffset = offset;
+                case Y -> y0ffset = offset;
+                case Z -> z0ffset = offset;
+            }
+        }
+        poseStack.translate(
+                x0ffset + (leftAxis == Direction.Axis.X ? 0.5f : 0.0f),
+                y0ffset + (leftAxis == Direction.Axis.Y ? 0.5f : 0.0f),
+                z0ffset + (leftAxis == Direction.Axis.Z ? 0.5f : 0.0f));
+
+        renderBloodCube(poseStack, buffer, totalTick);
+
+        if (machine.isActive()) {
+            renderRings(up.getAxis(), totalTick, poseStack, buffer);
+        }
+
+        poseStack.popPose();
+    }
+
+    @OnlyIn(Dist.CLIENT)
+    public void renderBloodCube(PoseStack poseStack, MultiBufferSource bufferSource, float totalTick) {
+        poseStack.pushPose();
+        // rotate around center
+        Quaternionf rot = new Quaternionf()
+                .rotateXYZ(Mth.sin(totalTick / 20),
+                        Mth.sin(totalTick / 30),
+                        Mth.cos(Mth.HALF_PI + totalTick / 60))
+                .rotateXYZ(55f * Mth.DEG_TO_RAD, 30f * Mth.DEG_TO_RAD, 0);
+        poseStack.mulPose(rot);
+
+        // draw cube quads
+        var consumer = bufferSource.getBuffer(Sheets.translucentCullBlockSheet());
+        RenderBufferHelper.renderCube(consumer, poseStack.last(), 0xffffffff,
+                LightTexture.FULL_BRIGHT, bloodCubeSprite,
+                -1, -1, -1, 1, 1, 1);
+
+        poseStack.popPose();
+    }
+
+    @OnlyIn(Dist.CLIENT)
+    private void renderRings(Direction.Axis upAxis, float totalTick, PoseStack poseStack, MultiBufferSource buffer) {
+        VertexConsumer consumer = buffer.getBuffer(GTRenderTypes.getLightRing());
+
+        float xRot = totalTick / 20;
+        float zRot = Mth.HALF_PI + totalTick / 60;
+        float yRot = totalTick / 30;
+        float sinX = Mth.sin(xRot), cosX = Mth.cos(xRot);
+        float sinY = Mth.sin(yRot), cosY = Mth.cos(yRot);
+        float sinZ = Mth.sin(zRot), cosZ = Mth.cos(zRot);
+
+        poseStack.pushPose();
+        poseStack.mulPose(new Quaternionf().rotateXYZ(sinX, cosY, sinZ));
+        RenderBufferHelper.renderRing(poseStack, consumer,
+                0, 0, 0,
+                2f, 0.1F, 10, 36,
+                0.5F, 0, 0, 1, upAxis);
+        poseStack.popPose();
+
+        poseStack.pushPose();
+        poseStack.mulPose(new Quaternionf().rotateXYZ(cosX, sinY, sinZ));
+        RenderBufferHelper.renderRing(poseStack, consumer,
+                0, 0, 0,
+                1.8f, 0.1F, 10, 36,
+                0.4F, 0f, 0, 1, upAxis);
+        poseStack.popPose();
+
+        poseStack.pushPose();
+        poseStack.mulPose(new Quaternionf().rotateZ(cosZ));
+        RenderBufferHelper.renderRing(poseStack, consumer,
+                0, 0, 0,
+                1.6f, 0.1F, 10, 36,
+                0.6F, 0, 0, 1, upAxis);
+        poseStack.popPose();
     }
 }

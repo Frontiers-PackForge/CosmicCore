@@ -11,7 +11,7 @@ dependencies {
     modImplementation(forge.configuration)
 
     // GTCEu
-    modImplementation(variantOf(forge.gtceu) { classifier("slim") })
+    modImplementation(forge.gtceu)
 
     // Mixin (& Extras)
     annotationProcessor(variantOf(libs.mixin) { classifier("processor") })
@@ -35,7 +35,9 @@ dependencies {
 
     // AE2
     modImplementation(forge.ae2)
-    modImplementation(forge.modernAe2Additions)
+    modCompileOnly(forge.modernAe2Additions)
+    clientAdditionalRuntimeClasspath(forge.modernAe2Additions)
+    client2AdditionalRuntimeClasspath(forge.modernAe2Additions)
 
     // LSO
     modImplementation(forge.legendarySurvivalOverhaul)
@@ -71,13 +73,17 @@ dependencies {
     modRuntimeOnly(forge.patchouli)
 
     // Embedium / Occulus
-    modImplementation(forge.embeddium)
-    modImplementation(forge.oculus)
-    modRuntimeOnly(forge.jcpp)
+    modCompileOnly(forge.embeddium)
+    clientAdditionalRuntimeClasspath(forge.embeddium)
+    modCompileOnly(forge.oculus)
+    clientAdditionalRuntimeClasspath(forge.oculus)
+    clientAdditionalRuntimeClasspath(forge.jcpp)
+
 
     // Teams
-    modCompileOnly(forge.ftblibrary.cm)
-    modCompileOnly(forge.ftbteams.cm)
+    modImplementation(forge.ftblibrary.cm)
+    modImplementation(forge.ftbteams.cm)
+
 
     //Occultism & Dependencies
     modImplementation(forge.occultism)
@@ -86,5 +92,8 @@ dependencies {
     modImplementation(forge.smartBrainLib)
     // Runtime Recipe Viewers - uncomment whichever one you want to use //
     modRuntimeOnly(forge.emi)
-    // modRuntimeOnly(forge.jei.forge.impl)
+//     modRuntimeOnly(forge.jei.forge.impl)
+
+    //Modern Fix
+    modImplementation(forge.modernFix)
 }

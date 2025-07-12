@@ -28,15 +28,26 @@ legacyForge {
             sourceSet = sourceSets.main
             ideName = "Client"
 
+            gameDirectory.set(file("runs/client"))
+            systemProperty('forge.enabledGameTestNamespaces', project.mod_id)
+        }
+
+        client2 {
+            client()
+            sourceSet = sourceSets.main
+            ideName = "Client (2)"
+
+            programArguments.addAll('--username', 'YoungOnion')
+            gameDirectory.set(file("runs/client2"))
             systemProperty('forge.enabledGameTestNamespaces', project.mod_id)
         }
 
         server {
-            client()
+            server()
             sourceSet = sourceSets.main
             ideName = "Server"
 
-            gameDirectory.set(file("run/server"))
+            gameDirectory.set(file("runs/server"))
             programArgument '--nogui'
             systemProperty('forge.enabledGameTestNamespaces', project.mod_id)
         }
@@ -46,12 +57,12 @@ legacyForge {
             sourceSet = sourceSets.main
             ideName = "Data Generation"
 
-            gameDirectory.set(file("run/data"))
+            gameDirectory.set(file("runs/data"))
             programArguments.addAll('--mod', project.mod_id)
             programArguments.addAll('--all')
             programArguments.addAll('--output', file('src/generated/resources/').getAbsolutePath())
             programArguments.addAll('--existing', file('src/main/resources/').getAbsolutePath())
-            programArguments.addAll('--existing-mod', 'gtceu')
+            programArguments.addAll('--existing-mod', 'gtceu', '--existing-mod', 'bloodmagic')
         }
 
         configureEach {

@@ -4,24 +4,46 @@
   "package": "com.ghostipedia.cosmiccore.mixin",
   "compatibilityLevel": "JAVA_17",
   "minVersion": "0.8",
+  "client": [
+    "ae2.PatternProviderScreenMixin",
+    "ae2.ProcessingEncodingPanelMixin",
+    "ae2.SettingToggleButtonMixin",
+    "client.AdAstraPlanetsScreenMixin",
+    "client.MinecraftMixin",
+    "client.SoundManagerMixin",
+    "emi.RecipeScreenMixin",
+    "ldlib.CustomBakedModelMixin"
+  ],
   "mixins": [
     "AdAstraOverlayScreenMixin",
     "AdAstraSpaceSuitItemMixin",
     "ApotheosisRecipeHelperMixin",
     "ApothSmithingCategoryMixin",
+    "ComponentItemMixin",
     "DivingHelmetItemMixin",
     "GTValuesMixin",
     "MAE2GTIntegrationMixin",
     "PlayerBreathingMixin",
+    "TagPrefixItemMixin",
     "accessor.LivingEntityAccessor",
     "accessor.LootTableAccessor",
-    "client.CosmicCoreRemainingAirOverlayMixin"
-  ],
-  "client": [
-    "client.MinecraftMixin",
-    "client.SoundManagerMixin"
+    "ae2.AE2StyleManagerMixin",
+    "ae2.CPUFormattingMixin",
+    "ae2.PatternEncodingTermMenuMixin",
+    "ae2.PatternProviderLogicMixin",
+    "ae2.PatternProviderMenuMixin",
+    "ae2.SettingsMixin",
+    "ae2.eudisplay.EUAddAppearanceMixin",
+    "ae2.eudisplay.EUAddPowerUnitMixin",
+    "ae2.eudisplay.EUAddSettingMixin",
+    "client.CosmicCoreRemainingAirOverlayMixin",
+    "emi.EmiApiMixin",
+    "lso.FrostbiteEffectMixin",
+    "lso.HeatstrokeEffectMixin",
+    "lso.TemperatureCapabilityMixin"
   ],
   "injectors": {
-    "defaultRequire": 1
+    "defaultRequire": 1,
+    "maxShiftBy": 5
   }
 }

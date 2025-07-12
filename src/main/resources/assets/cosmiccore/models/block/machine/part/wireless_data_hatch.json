@@ -1,16 +1,6 @@
 {
-  "parent": "block/block",
+  "parent": "gtceu:block/overlay/front_emissive",
   "textures": {
-    "particle": "#overlay_wireless_data_hatch",
-    "overlay_wireless_data_hatch": "cosmiccore:block/overlay/wireless_data_hatch"
-  },
-  "elements": [
-    {
-      "from": [0, 0, 0],
-      "to": [16, 16, 0],
-      "faces": {
-        "north": {"uv": [0, 0, 16, 16], "texture": "#overlay_wireless_data_hatch", "cullface": "north", "tintindex": -101, "emissivity":  15}
-      }
-    }
-  ]
+    "overlay_emissive": "cosmiccore:block/overlay/wireless_data_hatch"
+  }
 }

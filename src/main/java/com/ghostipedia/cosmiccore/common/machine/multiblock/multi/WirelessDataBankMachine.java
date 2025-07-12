@@ -9,8 +9,8 @@ import com.gregtechceu.gtceu.api.capability.IDataAccessHatch;
 import com.gregtechceu.gtceu.api.capability.IEnergyContainer;
 import com.gregtechceu.gtceu.api.capability.recipe.EURecipeCapability;
 import com.gregtechceu.gtceu.api.capability.recipe.IO;
+import com.gregtechceu.gtceu.api.machine.ConditionalSubscriptionHandler;
 import com.gregtechceu.gtceu.api.machine.IMachineBlockEntity;
-import com.gregtechceu.gtceu.api.machine.TickableSubscription;
 import com.gregtechceu.gtceu.api.machine.feature.IFancyUIMachine;
 import com.gregtechceu.gtceu.api.machine.feature.multiblock.IDisplayUIMachine;
 import com.gregtechceu.gtceu.api.machine.feature.multiblock.IMaintenanceMachine;
@@ -20,7 +20,10 @@ import com.gregtechceu.gtceu.api.machine.multiblock.PartAbility;
 import com.gregtechceu.gtceu.api.machine.multiblock.WorkableElectricMultiblockMachine;
 import com.gregtechceu.gtceu.api.machine.trait.RecipeLogic;
 import com.gregtechceu.gtceu.api.misc.EnergyContainerList;
+import com.gregtechceu.gtceu.common.machine.owner.FTBOwner;
 import com.gregtechceu.gtceu.config.ConfigHolder;
+
+import com.lowdragmc.lowdraglib.utils.DummyWorld;
 
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.level.block.Block;
@@ -37,52 +40,38 @@ public class WirelessDataBankMachine extends WorkableElectricMultiblockMachine
     private IMaintenanceMachine maintenance;
     private IEnergyContainer energyContainer;
 
-    private TickableSubscription wirelessProviderSubscription;
+    private final ConditionalSubscriptionHandler tickSubscription;
+
+    protected UUID getTeamUUID() {
+        var team = ((FTBOwner) getOwner()).getPlayerTeam(getOwnerUUID());
+        return team != null ? team.getTeamId() : getOwnerUUID();
+    }
 
     public WirelessDataBankMachine(IMachineBlockEntity holder) {
         super(holder);
-        energyContainer = new EnergyContainerList(new ArrayList<>());
+        this.energyContainer = new EnergyContainerList(new ArrayList<>());
+        this.tickSubscription = new ConditionalSubscriptionHandler(this, this::tick, this::isSubscriptionActive);
     }
 
-    public void updateSubscriptions() {
-        if (isSubscriptionActive()) {
-            wirelessProviderSubscription = subscribeServerTick(wirelessProviderSubscription,
-                    this::transmitWirelessData);
-        } else if (wirelessProviderSubscription != null) {
-            wirelessProviderSubscription.unsubscribe();
-            wirelessProviderSubscription = null;
-            removeHatchesFromWirelessNetwork();
+    protected boolean isSubscriptionActive() {
+        return isFormed();
+    }
+
+    private void tick() {
+        if (isWorkingEnabled() && isFormed()) {
+            getRecipeLogic()
+                    .setStatus(isSubscriptionActive() ? RecipeLogic.Status.WORKING : RecipeLogic.Status.SUSPEND);
+            energyContainer.removeEnergy(calculateEnergyUsage());
+            addHatchesToWirelessNetwork();
         } else {
             removeHatchesFromWirelessNetwork();
         }
     }
 
-    public void unsubscribe() {
-        if (wirelessProviderSubscription != null) {
-            wirelessProviderSubscription.unsubscribe();
-            wirelessProviderSubscription = null;
-        }
-    }
-
-    protected void transmitWirelessData() {
-        if (isWorkingEnabled()) {
-            getRecipeLogic()
-                    .setStatus(isSubscriptionActive() ? RecipeLogic.Status.WORKING : RecipeLogic.Status.SUSPEND);
-            energyContainer.removeEnergy(calculateEnergyUsage());
-            addHatchesToWirelessNetwork();
-        } else removeHatchesFromWirelessNetwork();
-        updateSubscriptions();
-    }
-
-    protected boolean isSubscriptionActive() {
-        if (!isFormed()) return false;
-        if (energyContainer == null || energyContainer.getEnergyStored() <= 0) return false;
-        return energyContainer.getEnergyStored() > calculateEnergyUsage();
-    }
-
     @Override
     public void onStructureFormed() {
         super.onStructureFormed();
+        if (getLevel() instanceof DummyWorld) return;
 
         List<IEnergyContainer> energyContainers = new ArrayList<>();
         Map<Long, IO> ioMap = getMultiblockState().getMatchContext().getOrCreate("ioMap", Long2ObjectMaps::emptyMap);
@@ -95,10 +84,9 @@ public class WirelessDataBankMachine extends WorkableElectricMultiblockMachine
             for (var handler : part.getRecipeHandlers()) {
                 var handlerIO = handler.getHandlerIO();
                 if (io != IO.BOTH && handlerIO != IO.BOTH && io != handlerIO) continue;
-                if (handler.getCapability() == EURecipeCapability.CAP &&
+                if (handler.hasCapability(EURecipeCapability.CAP) &&
                         handler instanceof IEnergyContainer container) {
                     energyContainers.add(container);
-                    traitSubscriptions.add(handler.addChangedListener(this::updateSubscriptions));
                 }
             }
         }
@@ -110,7 +98,7 @@ public class WirelessDataBankMachine extends WorkableElectricMultiblockMachine
 
         this.energyContainer = new EnergyContainerList(new ArrayList<>(energyContainers));
 
-        updateSubscriptions();
+        tickSubscription.updateSubscription();
     }
 
     private int calculateEnergyUsage() {
@@ -128,7 +116,7 @@ public class WirelessDataBankMachine extends WorkableElectricMultiblockMachine
         super.onStructureInvalid();
         this.energyContainer = new EnergyContainerList(new ArrayList<>());
         getRecipeLogic().setStatus(RecipeLogic.Status.SUSPEND);
-        unsubscribe();
+        tickSubscription.unsubscribe();
     }
 
     @Override
@@ -142,21 +130,15 @@ public class WirelessDataBankMachine extends WorkableElectricMultiblockMachine
                 .addEnergyUsageExactLine(calculateEnergyUsage())
                 .addWorkingStatusLine()
                 .addEmptyLine()
-                .addCustom(list -> OwnershipUtils.addOwnerLine(list, getHolder().getOwner()));
+                .addCustom(list -> OwnershipUtils.addOwnerLine(list, getOwner(), true));
     }
 
     private void addHatchesToWirelessNetwork() {
-        var owner = getHolder().getOwner();
-        var uuid = OwnershipUtils.getOwnerUUID(owner);
-        var hatches = getOpticalHatches();
-        WirelessDataStore.addHatches(uuid, hatches);
+        WirelessDataStore.addHatches(getTeamUUID(), getOpticalHatches());
     }
 
     private void removeHatchesFromWirelessNetwork() {
-        var owner = getHolder().getOwner();
-        var uuid = OwnershipUtils.getOwnerUUID(owner);
-        var hatches = getOpticalHatches();
-        WirelessDataStore.removeHatches(uuid, hatches);
+        WirelessDataStore.removeHatches(getTeamUUID(), getOpticalHatches());
     }
 
     private List<IDataAccessHatch> getOpticalHatches() {

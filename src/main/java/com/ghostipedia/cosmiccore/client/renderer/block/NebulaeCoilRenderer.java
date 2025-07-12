@@ -4,80 +4,50 @@ import com.ghostipedia.cosmiccore.CosmicCore;
 import com.ghostipedia.cosmiccore.client.renderer.CosmicCoreRenderTypes;
 import com.ghostipedia.cosmiccore.common.blockentity.CosmicCoilBlockEntity;
 
+import com.gregtechceu.gtceu.GTCEu;
 import com.gregtechceu.gtceu.api.GTValues;
-import com.gregtechceu.gtceu.client.renderer.block.TextureOverrideRenderer;
-
-import com.lowdragmc.lowdraglib.LDLib;
-import com.lowdragmc.lowdraglib.client.bakedpipeline.Quad;
-import com.lowdragmc.lowdraglib.client.renderer.ATESRRendererProvider;
+import com.gregtechceu.gtceu.api.block.property.GTBlockStateProperties;
 
 import net.irisshaders.iris.Iris;
 import net.irisshaders.iris.uniforms.SystemTimeUniforms;
 import net.minecraft.client.renderer.LightTexture;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
-import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.client.renderer.texture.OverlayTexture;
-import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.util.RandomSource;
-import net.minecraft.world.level.BlockAndTintGetter;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import com.tterrag.registrate.util.nullness.NonNullFunction;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import org.joml.Matrix3f;
 import org.joml.Matrix4f;
 
-import java.util.List;
-import java.util.Map;
-
-public class NebulaeCoilRenderer extends TextureOverrideRenderer {
+public class NebulaeCoilRenderer implements BlockEntityRenderer<CosmicCoilBlockEntity> {
 
     public static final ResourceLocation NEBULAE_LOCATION = CosmicCore.id("textures/entity/nebulae.png");
 
-    public NebulaeCoilRenderer(ResourceLocation model, @NotNull Map<String, ResourceLocation> override) {
-        super(model, override);
-    }
-
-    public static NonNullFunction<BlockEntityRendererProvider.Context, BlockEntityRenderer<? super CosmicCoilBlockEntity>> createBlockEntityRenderer() {
-        return ctx -> new ATESRRendererProvider<>();
-    }
+    public NebulaeCoilRenderer(BlockEntityRendererProvider.Context context) {}
 
     @Override
-    public List<BakedQuad> renderModel(@Nullable BlockAndTintGetter level, @Nullable BlockPos pos,
-                                       @Nullable BlockState state, @Nullable Direction side, RandomSource rand) {
-        return super.renderModel(level, pos, state, side, rand)
-                .stream()
-                .map(quad -> Quad.from(quad, 0.001F).rebake())
-                .toList();
-    }
+    public void render(CosmicCoilBlockEntity blockEntity, float partialTick, @NotNull PoseStack poseStack,
+                       @NotNull MultiBufferSource buffer, int packedLight, int packedOverlay) {
+        BlockState state = blockEntity.getBlockState();
+        if (!state.getValue(GTBlockStateProperties.ACTIVE)) return;
 
-    @Override
-    public boolean hasTESR(BlockEntity blockEntity) {
-        return true;
-    }
-
-    @Override
-    public void render(BlockEntity blockEntity, float partialTicks, PoseStack poseStack, MultiBufferSource buffer,
-                       int combinedLight, int combinedOverlay) {
         poseStack.pushPose();
         Matrix4f pose = poseStack.last().pose();
 
-        if (LDLib.isModLoaded(GTValues.MODID_OCULUS) && Iris.getCurrentPack().isPresent()) {
+        if (GTCEu.isModLoaded(GTValues.MODID_OCULUS) && Iris.getCurrentPack().isPresent()) {
             VertexConsumer consumer = buffer.getBuffer(RenderType.entitySolid(NEBULAE_LOCATION));
 
             Matrix3f normal = poseStack.last().normal();
-            // animation with a period of 20 seconds.
-            // note that texture coordinates are wrapping, not clamping.
+            // animation with a period of 20 seconds. note that texture coordinates are wrapping, not clamping.
             float progress = (SystemTimeUniforms.TIMER.getFrameTimeCounter() * 0.05f) % 1f;
 
             this.renderFaceOculus(blockEntity, pose, normal, consumer, progress,
@@ -119,25 +89,34 @@ public class NebulaeCoilRenderer extends TextureOverrideRenderer {
         } else {
             VertexConsumer consumer = buffer.getBuffer(CosmicCoreRenderTypes.nebulae());
 
-            this.renderFace(blockEntity, pose, consumer, 0.0F, 1.0F, 0.0F, 1.0F, 1.0F, 1.0F, 1.0F, 1.0F,
+            this.renderFace(blockEntity, pose, consumer,
+                    0.0F, 1.0F, 0.0F, 1.0F, 1.0F, 1.0F, 1.0F, 1.0F,
                     Direction.SOUTH);
-            this.renderFace(blockEntity, pose, consumer, 0.0F, 1.0F, 1.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F,
+            this.renderFace(blockEntity, pose, consumer,
+                    0.0F, 1.0F, 1.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F,
                     Direction.NORTH);
-            this.renderFace(blockEntity, pose, consumer, 1.0F, 1.0F, 1.0F, 0.0F, 0.0F, 1.0F, 1.0F, 0.0F,
+            this.renderFace(blockEntity, pose, consumer,
+                    1.0F, 1.0F, 1.0F, 0.0F, 0.0F, 1.0F, 1.0F, 0.0F,
                     Direction.EAST);
-            this.renderFace(blockEntity, pose, consumer, 0.0F, 0.0F, 0.0F, 1.0F, 0.0F, 1.0F, 1.0F, 0.0F,
+            this.renderFace(blockEntity, pose, consumer,
+                    0.0F, 0.0F, 0.0F, 1.0F, 0.0F, 1.0F, 1.0F, 0.0F,
                     Direction.WEST);
-            this.renderFace(blockEntity, pose, consumer, 0.0F, 1.0F, 0.0F, 0.0F, 0.0F, 0.0F, 1.0F, 1.0F,
+            this.renderFace(blockEntity, pose, consumer,
+                    0.0F, 1.0F, 0.0F, 0.0F, 0.0F, 0.0F, 1.0F, 1.0F,
                     Direction.DOWN);
-            this.renderFace(blockEntity, pose, consumer, 0.0F, 1.0F, 1.0F, 1.0F, 1.0F, 1.0F, 0.0F, 0.0F, Direction.UP);
+            this.renderFace(blockEntity, pose, consumer,
+                    0.0F, 1.0F, 1.0F, 1.0F, 1.0F, 1.0F, 0.0F, 0.0F,
+                    Direction.UP);
         }
 
         poseStack.popPose();
     }
 
-    private void renderFace(
-                            BlockEntity blockEntity, Matrix4f pose, VertexConsumer consumer, float x0, float x1,
-                            float y0, float y1, float z0, float z1, float z2, float z3, Direction direction) {
+    private void renderFace(BlockEntity blockEntity, Matrix4f pose, VertexConsumer consumer,
+                            float x0, float x1,
+                            float y0, float y1,
+                            float z0, float z1, float z2, float z3,
+                            Direction direction) {
         if (Block.shouldRenderFace(blockEntity.getBlockState(), blockEntity.getLevel(), blockEntity.getBlockPos(),
                 direction, blockEntity.getBlockPos().relative(direction))) {
             consumer.vertex(pose, x0, y0, z0).endVertex();

@@ -40,10 +40,10 @@ public class CosmicModularMachines {
                                 .where('A', blocks(CosmicBlocks.CYCLOZINE_CHEMICALLY_REPELLING_CASING.get()))
                                 .build();
                     })
-                    .workableCasingRenderer(
+                    .workableCasingModel(
                             CosmicCore.id("block/casings/solid/vomahine_certified_chemically_resistant_casing"),
                             GTCEu.id("block/multiblock/fusion_reactor"))
-                    .hasTESR(true)
+                    // .hasTESR(true)
                     .register(),
             ZPM, UV, UHV);
 

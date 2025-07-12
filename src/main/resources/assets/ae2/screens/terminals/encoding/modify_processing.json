@@ -1,0 +1,33 @@
+{
+  "$schema": "../../schema.json",
+  "widgets": {
+    "processingCycleOutput": {
+      "left": 127,
+      "bottom": 163
+    },
+    "mult2": {
+      "left": 127,
+      "bottom": 152
+    },
+    "mult3": {
+      "left": 127,
+      "bottom": 141
+    },
+    "mult8": {
+      "left": 127,
+      "bottom": 130
+    },
+    "div2": {
+      "left": 100,
+      "bottom": 152
+    },
+    "div3": {
+      "left": 100,
+      "bottom": 141
+    },
+    "div8": {
+      "left": 100,
+      "bottom": 130
+    }
+  }
+}
