@@ -74,7 +74,7 @@ public class HemophagicTransfuser {
                     CosmicCore.id("block/casings/solid/vomahine_certified_chemically_resistant_casing"),
                     GTCEu.id("block/multiblock/network_switch"))
                     .andThen(model -> model
-                            .addDynamicRenderer(() -> CosmicDynamicRenderHelpers::getHemophagicTransfuserRender)))
+                            .addDynamicRenderer(CosmicDynamicRenderHelpers::getHemophagicTransfuserRender)))
             .hasBER(true)
             .register();
 

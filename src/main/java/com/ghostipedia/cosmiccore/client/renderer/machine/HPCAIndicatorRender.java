@@ -22,7 +22,6 @@ import net.minecraft.world.inventory.InventoryMenu;
 import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.BlockAndTintGetter;
-import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
@@ -101,29 +100,25 @@ public class HPCAIndicatorRender extends DynamicRender<HPCAIndicatorPartMachine,
     }
 
     @Override
-    public void render(@NotNull BlockEntity blockEntity, float partialTick, @NotNull PoseStack poseStack,
-                       @NotNull MultiBufferSource buffer, int packedLight, int packedOverlay) {
-        super.render(blockEntity, partialTick, poseStack, buffer, packedLight, packedOverlay);
-    }
-
-    @Override
-    public boolean shouldRenderOffScreen(@NotNull BlockEntity blockEntity) {
+    public boolean shouldRenderOffScreen(HPCAIndicatorPartMachine machine) {
         return false;
     }
 
     @Override
-    public boolean shouldRender(BlockEntity blockEntity, @NotNull Vec3 cameraPos) {
+    public boolean shouldRender(HPCAIndicatorPartMachine machine, Vec3 cameraPos) {
         return true;
     }
 
     @Override
-    public AABB getRenderBoundingBox(BlockEntity blockEntity) {
-        return super.getRenderBoundingBox(blockEntity);
+    public AABB getRenderBoundingBox(HPCAIndicatorPartMachine machine) {
+        return super.getRenderBoundingBox(machine);
     }
 
-    @Override
-    public @NotNull List<BakedQuad> getQuads(@Nullable BlockState state, @Nullable Direction side,
-                                             @NotNull RandomSource rand) {
-        return super.getQuads(state, side, rand);
-    }
+//    @Override
+//    public @NotNull List<BakedQuad> getQuads(@Nullable BlockState state, @Nullable Direction side,
+//                                             @NotNull RandomSource rand) {
+//        return super.getQuads(state, side, rand);
+//    }
+
+
 }

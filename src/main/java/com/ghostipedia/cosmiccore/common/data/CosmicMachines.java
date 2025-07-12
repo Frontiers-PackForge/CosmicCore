@@ -280,7 +280,7 @@ public class CosmicMachines {
             .model(createWorkableCasingMachineModel(GTCEu.id("block/casings/solid/machine_casing_bronze_plated_bricks"),
                     GTCEu.id("block/multiblock/steam_oven"))
                     .andThen(b -> b.addDynamicRenderer(
-                            () -> () -> DynamicRenderHelper.makeBoilerPartRender(
+                            () -> DynamicRenderHelper.makeBoilerPartRender(
                                     BoilerFireboxType.STEEL_FIREBOX, STEEL_PLATED_BRONZE))))
             .tooltips(
                     Component.translatable("cosmiccore.multiblock.ipbf.tooltip.0"),
@@ -313,7 +313,7 @@ public class CosmicMachines {
             .model(createWorkableCasingMachineModel(GTCEu.id("block/casings/solid/machine_casing_bronze_plated_bricks"),
                     GTCEu.id("block/multiblock/steam_oven"))
                     .andThen(b -> b.addDynamicRenderer(
-                            () -> () -> DynamicRenderHelper.makeBoilerPartRender(
+                            () -> DynamicRenderHelper.makeBoilerPartRender(
                                     BoilerFireboxType.STEEL_FIREBOX, STEEL_PLATED_BRONZE))))
             .tooltips(Component.translatable("cosmiccore.multiblock.hpsassem.tooltip.0"),
                     Component.translatable("cosmiccore.multiblock.hpsassem.tooltip.1"),
@@ -684,7 +684,7 @@ public class CosmicMachines {
                     CosmicCore.id("block/casings/solid/highly_conductive_fission_casing"),
                     GTCEu.id("block/multiblock/network_switch"))
                     .andThen(model -> model
-                            .addDynamicRenderer(() -> CosmicDynamicRenderHelpers::createHellfireFoundryPartRender)))
+                            .addDynamicRenderer(CosmicDynamicRenderHelpers::createHellfireFoundryPartRender)))
             .register();
     public static final MultiblockMachineDefinition SUFFERING_CHAMBER = REGISTRATE
             .multiblock("suffering_chamber", WorkableElectricMultiblockMachine::new)
@@ -726,7 +726,7 @@ public class CosmicMachines {
                     GTCEu.id("block/casings/gcym/stress_proof_casing"),
                     GTCEu.id("block/multiblock/network_switch"))
                     .andThen(model -> model
-                            .addDynamicRenderer(() -> CosmicDynamicRenderHelpers::getSufferingChamberRenderer)))
+                            .addDynamicRenderer(CosmicDynamicRenderHelpers::getSufferingChamberRenderer)))
             .hasBER(true)
             .register();
     public static final MultiblockMachineDefinition POLYMERIZER = REGISTRATE
@@ -3226,7 +3226,7 @@ public class CosmicMachines {
             .langValue("HPCA Indicator")
             .appearanceBlock(COMPUTER_CASING)
             .model(createOverlayTieredHullMachineModel(CosmicCore.id("block/machine/part/hpca_indicator"))
-                    .andThen(b -> b.addDynamicRenderer(() -> CosmicDynamicRenderHelpers::getHPCAIndicatorRender)))
+                    .andThen(b -> b.addDynamicRenderer(CosmicDynamicRenderHelpers::getHPCAIndicatorRender)))
             .tier(ZPM)
             .register();
 
@@ -3449,8 +3449,8 @@ public class CosmicMachines {
             .machine("steam_fluid_input_hatch", holder -> new SteamFluidHatchPartMachine(holder, IO.IN, 4000, 1))
             .rotationState(RotationState.ALL)
             .abilities(PartAbility.IMPORT_FLUIDS)
-            .colorOverlaySteamHullModel(new ResourceLocation(GTCEu.MOD_ID, "block/overlay/machine/overlay_pipe_in"),
-                    new ResourceLocation(GTCEu.MOD_ID, "block/overlay/machine/overlay_fluid_hatch"))
+            .colorOverlaySteamHullModel(new ResourceLocation(GTCEu.MOD_ID, "block/overlay/machine/overlay_pipe"),
+                    new ResourceLocation(GTCEu.MOD_ID, "block/overlay/machine/overlay_fluid_hatch"),new ResourceLocation(GTCEu.MOD_ID, "block/overlay/machine/overlay_fluid_hatch"))
             .tooltips(Component.translatable("gtceu.machine.steam_fluid_hatch_notice"))
             .langValue("Fluid Input Hatch (Steam)")
             .register();
@@ -3458,8 +3458,8 @@ public class CosmicMachines {
             .machine("steam_fluid_output_hatch", holder -> new SteamFluidHatchPartMachine(holder, IO.OUT, 4000, 1))
             .rotationState(RotationState.ALL)
             .abilities(PartAbility.EXPORT_FLUIDS)
-            .colorOverlaySteamHullModel(new ResourceLocation(GTCEu.MOD_ID, "block/overlay/machine/overlay_pipe_out"),
-                    new ResourceLocation(GTCEu.MOD_ID, "block/overlay/machine/overlay_fluid_hatch"))
+            .colorOverlaySteamHullModel(new ResourceLocation(GTCEu.MOD_ID, "block/overlay/machine/overlay_pipe"),
+                    new ResourceLocation(GTCEu.MOD_ID, "block/overlay/machine/overlay_fluid_hatch"),new ResourceLocation(GTCEu.MOD_ID, "block/overlay/machine/overlay_fluid_hatch"))
             .langValue("Fluid Output Hatch (Steam)")
             .register();
 

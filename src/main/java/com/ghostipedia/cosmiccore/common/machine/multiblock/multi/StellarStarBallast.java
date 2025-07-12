@@ -703,7 +703,7 @@ public class StellarStarBallast {
             .model(createWorkableCasingMachineModel(
                     CosmicCore.id("block/casings/solid/vomahine_certified_chemically_resistant_casing"),
                     GTCEu.id("block/multiblock/fusion_reactor"))
-                    .andThen(model -> model.addDynamicRenderer(() -> CosmicDynamicRenderHelpers::getStarBallastRender)))
+                    .andThen(model -> model.addDynamicRenderer(CosmicDynamicRenderHelpers::getStarBallastRender)))
             .hasBER(true)
             .tooltips(Component.translatable("cosmiccore.multiblock.iris.tooltip.0"),
                     Component.translatable("cosmiccore.multiblock.iris.tooltip.1"),
