@@ -5,9 +5,9 @@ import com.ghostipedia.cosmiccore.CosmicCore;
 import com.gregtechceu.gtceu.api.blockentity.IPaintable;
 import com.gregtechceu.gtceu.api.blockentity.MetaMachineBlockEntity;
 import com.gregtechceu.gtceu.api.item.ComponentItem;
-
 import com.gregtechceu.gtceu.common.data.GTSoundEntries;
 import com.gregtechceu.gtceu.config.ConfigHolder;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -41,10 +41,8 @@ import static com.ghostipedia.cosmiccore.common.data.CosmicItems.INFINITE_SPRAY_
 @Mod.EventBusSubscriber(modid = CosmicCore.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE)
 public class SprayCanEventListener {
 
-
     @SubscribeEvent
     public static void onBlockPlaced(BlockEvent.EntityPlaceEvent event) {
-
         Level level = (Level) event.getLevel();
         BlockPos pos = event.getPos();
         if (level.isClientSide) return;
@@ -52,17 +50,17 @@ public class SprayCanEventListener {
         ItemStack can = player.getOffhandItem();
         var behavior = getSprayCanBehavior(can);
         if (behavior == null) return;
-        if(hasSprayCan(can)) return;
+        if (hasSprayCan(can)) return;
 
         UseOnContext fakeContext = new UseOnContext(player, InteractionHand.OFF_HAND,
                 new BlockHitResult(Vec3.atCenterOf(pos), Direction.UP, pos, false));
 
-        if (!behavior.handleSpecialBlockEntities(level.getBlockEntity(pos), ConfigHolder.INSTANCE.tools.sprayCanChainLength, fakeContext)) {
+        if (!behavior.handleSpecialBlockEntities(level.getBlockEntity(pos),
+                ConfigHolder.INSTANCE.tools.sprayCanChainLength, fakeContext)) {
             behavior.handleBlocks(pos, ConfigHolder.INSTANCE.tools.sprayCanChainLength, fakeContext);
         }
 
         GTSoundEntries.SPRAY_CAN_TOOL.play(level, null, player.position(), 1.0f, 1.0f);
-
     }
 
     @SubscribeEvent

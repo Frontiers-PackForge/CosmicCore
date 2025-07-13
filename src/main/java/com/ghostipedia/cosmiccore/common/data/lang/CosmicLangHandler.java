@@ -289,5 +289,14 @@ public class CosmicLangHandler extends LangHandler {
 
         provider.add("debug.owner.uuid", "§aOwner UUID:§a %s");
         provider.add("debug.team.uuid", "§aTeam UUID:§a %s");
+
+        provider.add("cosmiccore.item.spraycan.tooltip.lclick", "§4Left Click: §8Cycle color");
+        provider.add("cosmiccore.item.spraycan.tooltip.lclick_sneak", "§4Left Click + Sneak: §8Cycle color");
+        provider.add("cosmiccore.item.spraycan.tooltip.rclick", "§4Right Click: §8Paint block");
+        provider.add("cosmiccore.item.spraycan.tooltip.rclick_sneak", "§5Right Click + Sneak: §8Open UI");
+        provider.add("cosmiccore.item.spraycan.tooltip.rclick_offhand", "§5Right Click in Offhand: §8Place & paint");
+        provider.add("cosmiccore.item.spraycan.tooltip.locked", "Spraycan is locked");
+        provider.add("cosmiccore.item.spraycan.tooltip.current_color", "Current Color: %s");
+        provider.add("cosmiccore.item.spraycan.tooltip.solvent_mode", "Spraycan in SOLVENT mode");
     }
 }

@@ -262,12 +262,27 @@ public class InfiniteSprayCanBehavior implements IInteractionItem, IAddInformati
     }
 
     @Override
-    public void appendHoverText(ItemStack stack, @Nullable Level level, List<Component> tooltipComponents,
-                                TooltipFlag isAdvanced) {
-        if (color != null) {
-            tooltipComponents.add(Component.literal("Spray Can current Color: " + this.color.getSerializedName()));
+    public void appendHoverText(ItemStack stack, @Nullable Level world, List<Component> tooltip, TooltipFlag flag) {
+        tooltip.add(Component.translatable("cosmiccore.item.spraycan.tooltip.lclick"));
+        tooltip.add(Component.translatable("cosmiccore.item.spraycan.tooltip.lclick_sneak"));
+        tooltip.add(Component.translatable("cosmiccore.item.spraycan.tooltip.rclick"));
+        tooltip.add(Component.translatable("cosmiccore.item.spraycan.tooltip.rclick_sneak"));
+        tooltip.add(Component.translatable("cosmiccore.item.spraycan.tooltip.rclick_offhand"));
+
+        if (this.isLocked) {
+            tooltip.add(Component.translatable("cosmiccore.item.spraycan.tooltip.locked")
+                    .withStyle(ChatFormatting.RED, ChatFormatting.BOLD));
+        }
+
+        if (this.color != null) {
+            tooltip.add(Component
+                    .translatable("cosmiccore.item.spraycan.tooltip.current_color", this.color.getSerializedName())
+                    .setStyle(
+                            color == ExtendedDyeColor.SOLVENT ? Style.EMPTY.withColor(TextColor.fromRgb(0xFFFFFF)) // white
+                                    : Style.EMPTY.withColor(TextColor.fromRgb(color.getTextColor()))));
         } else {
-            tooltipComponents.add(Component.literal("Spray can in SOLVENT mode"));
+            tooltip.add(Component.translatable("cosmiccore.item.spraycan.tooltip.solvent_mode")
+                    .withStyle(ChatFormatting.DARK_AQUA));
         }
     }
 
