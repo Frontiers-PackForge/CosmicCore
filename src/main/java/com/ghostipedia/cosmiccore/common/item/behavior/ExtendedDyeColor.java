@@ -37,7 +37,6 @@ public enum ExtendedDyeColor {
     ExtendedDyeColor(DyeColor dyeColor, String resloc) {
         this.dyeColor = dyeColor;
         this.texture = new ResourceTexture("cosmiccore:textures/item/" + resloc);
-        System.out.println(this.texture);
     }
 
     public static ExtendedDyeColor getColorFromDyeId(int dyeID) {

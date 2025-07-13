@@ -1218,8 +1218,6 @@ public class CosmicItems {
                     (itemStack) -> (float) itemStack.getOrCreateTag().getInt(InfiniteSprayCanBehavior.ColorTag)))
             .register();
 
-
-
     public static ItemEntry<ComponentItem> NEUTRONITE_FLUID_CELL = GTRegistration.REGISTRATE
             .item("indestructible_fluid_cell", ComponentItem::create)
             .lang("Indestructible %s Fluid Cell")
@@ -1254,7 +1252,6 @@ public class CosmicItems {
             }
         };
     }
-
 
     public static void init() {}
 }

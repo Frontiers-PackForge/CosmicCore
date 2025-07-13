@@ -279,7 +279,7 @@ public class CosmicLangHandler extends LangHandler {
         provider.add("cosmic.gui.wireless.energy.no.capacitor", "No Formed Capacitor");
         provider.add("cosmic.gui.wireless.energy.capacitor", "  §bCapacitor Location:§b ");
 
-        replace(provider,"item.cosmiccore.infinite_spray_can", "§lInfinite Spray Can");
+        replace(provider, "item.cosmiccore.infinite_spray_can", "§lInfinite Spray Can");
 
         // AE2 EU Display Mixin
         provider.add("gui.ae2.units.eu", "EU");
