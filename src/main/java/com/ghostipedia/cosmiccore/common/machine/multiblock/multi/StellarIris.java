@@ -1,10 +1,12 @@
 package com.ghostipedia.cosmiccore.common.machine.multiblock.multi;
 
+import com.ghostipedia.cosmiccore.CosmicCore;
 import com.ghostipedia.cosmiccore.api.machine.multiblock.IrisMultiblockMachine;
-import com.ghostipedia.cosmiccore.client.renderer.machine.IrisMachineRenderer;
+import com.ghostipedia.cosmiccore.client.renderer.machine.CosmicDynamicRenderHelpers;
 import com.ghostipedia.cosmiccore.common.data.CosmicBlocks;
 import com.ghostipedia.cosmiccore.gtbridge.CosmicRecipeTypes;
 
+import com.gregtechceu.gtceu.GTCEu;
 import com.gregtechceu.gtceu.api.data.RotationState;
 import com.gregtechceu.gtceu.api.machine.MultiblockMachineDefinition;
 import com.gregtechceu.gtceu.api.machine.multiblock.PartAbility;
@@ -18,17 +20,17 @@ import net.minecraft.network.chat.Component;
 import static com.ghostipedia.cosmiccore.api.registries.CosmicRegistration.REGISTRATE;
 import static com.ghostipedia.cosmiccore.common.data.CosmicBlocks.*;
 import static com.gregtechceu.gtceu.api.pattern.Predicates.*;
-import static com.gregtechceu.gtceu.api.pattern.Predicates.blocks;
 import static com.gregtechceu.gtceu.common.data.GCYMBlocks.*;
+import static com.gregtechceu.gtceu.common.data.models.GTMachineModels.createWorkableCasingMachineModel;
 
 public class StellarIris {
 
-    public final static MultiblockMachineDefinition STELLAR_IRIS = REGISTRATE.multiblock("stellar_iris",
-            IrisMultiblockMachine::new)
+    public final static MultiblockMachineDefinition STELLAR_IRIS = REGISTRATE
+            .multiblock("stellar_iris", IrisMultiblockMachine::new)
             .rotationState(RotationState.ALL)
             .recipeType(CosmicRecipeTypes.STELLAR_IRIS)
             .recipeModifier(GTRecipeModifiers.ELECTRIC_OVERCLOCK.apply(OverclockingLogic.NON_PERFECT_OVERCLOCK_SUBTICK))
-            .appearanceBlock(CosmicBlocks.VOMAHINE_CERTIFIED_CHEMICALLY_RESISTANT_CASING)
+            .appearanceBlock(CosmicBlocks.CYCLOZINE_CHEMICALLY_REPELLING_CASING)
             .pattern(definition -> FactoryBlockPattern.start()
                     .aisle("                                                                                                                               ",
                             "                                                                                                                               ",
@@ -4731,7 +4733,7 @@ public class StellarIris {
                             "                                                                                                                               ")
                     .where(' ', any())
                     .where("G", controller(blocks(definition.getBlock())))
-                    .where('F', blocks(VOMAHINE_CERTIFIED_CHEMICALLY_RESISTANT_CASING.get())
+                    .where('F', blocks(CYCLOZINE_CHEMICALLY_REPELLING_CASING.get())
                             .or(Predicates.abilities(PartAbility.EXPORT_ITEMS).setMaxGlobalLimited(16))
                             .or(Predicates.abilities(PartAbility.EXPORT_FLUIDS).setMaxGlobalLimited(16))
                             .or(Predicates.abilities(PartAbility.INPUT_ENERGY).setMaxGlobalLimited(2))
@@ -4739,18 +4741,21 @@ public class StellarIris {
                             .or(Predicates.abilities(PartAbility.OUTPUT_LASER).setMaxGlobalLimited(1))
                             .or(Predicates.abilities(PartAbility.IMPORT_FLUIDS).setMaxGlobalLimited(16))
                             .or(Predicates.abilities(PartAbility.IMPORT_ITEMS).setMaxGlobalLimited(16)))
-                    .where('C', blocks(VOMAHINE_CERTIFIED_INTERSTELLAR_GRADE_CASING.get()))
+                    .where('C', blocks(MULTIPURPOSE_INTERSTELLAR_GRADE_CASING.get()))
                     .where('D', blocks(CASING_ATOMIC.get()))
-                    .where('B', blocks(VOMAHINE_CERTIFIED_INTERSTELLAR_GRADE_CASING.get()))
-                    .where('E', blocks(VOMAHINE_ULTRA_POWERED_CASING.get()))
+                    .where('B', blocks(MULTIPURPOSE_INTERSTELLAR_GRADE_CASING.get()))
+                    .where('E', blocks(ULTRA_POWERED_CASING.get()))
                     .where('A', blocks(CASING_HIGH_TEMPERATURE_SMELTING.get()))
                     .build())
-            .renderer(IrisMachineRenderer::new)
+            .model(createWorkableCasingMachineModel(
+                    CosmicCore.id("block/casings/solid/vomahine_certified_chemically_resistant_casing"),
+                    GTCEu.id("block/multiblock/fusion_reactor"))
+                    .andThen(model -> model.addDynamicRenderer(CosmicDynamicRenderHelpers::getStellarIrisRender)))
+            .hasBER(true)
             .tooltips(Component.translatable("cosmiccore.multiblock.iris.tooltip.0"),
                     Component.translatable("cosmiccore.multiblock.iris.tooltip.1"),
                     Component.translatable("cosmiccore.multiblock.iris.tooltip.2"),
                     Component.translatable("cosmiccore.multiblock.iris.tooltip.3"))
-            .hasTESR(true)
             .register();
 
     public static void init() {}

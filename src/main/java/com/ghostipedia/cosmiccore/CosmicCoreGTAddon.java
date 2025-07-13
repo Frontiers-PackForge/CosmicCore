@@ -9,6 +9,7 @@ import com.ghostipedia.cosmiccore.common.data.recipe.CosmicCoreOreRecipeHandler;
 import com.ghostipedia.cosmiccore.gtbridge.CosmicCoreRecipes;
 import com.ghostipedia.cosmiccore.gtbridge.CosmicRecipeTypes;
 
+import com.gregtechceu.gtceu.api.GTCEuAPI;
 import com.gregtechceu.gtceu.api.addon.GTAddon;
 import com.gregtechceu.gtceu.api.addon.IGTAddon;
 import com.gregtechceu.gtceu.api.addon.events.KJSRecipeKeyEvent;
@@ -57,7 +58,9 @@ public class CosmicCoreGTAddon implements IGTAddon {
     public void addRecipes(Consumer<FinishedRecipe> provider) {
         CosmicRecipeTypes.init();
         CosmicCoreRecipes.init(provider);
-        CosmicCoreOreRecipeHandler.init(provider);
+        for (var material : GTCEuAPI.materialManager.getRegisteredMaterials()) {
+            CosmicCoreOreRecipeHandler.init(provider, material);
+        }
     }
 
     @Override

@@ -5,19 +5,16 @@ import com.ghostipedia.cosmiccore.api.CosmicCoreAPI;
 import com.ghostipedia.cosmiccore.api.block.IMagnetType;
 import com.ghostipedia.cosmiccore.client.renderer.block.NebulaeCoilRenderer;
 import com.ghostipedia.cosmiccore.common.block.MagnetBlock;
+import com.ghostipedia.cosmiccore.common.blockentity.CosmicCoilBlockEntity;
 import com.ghostipedia.cosmiccore.common.data.recipe.RecipeTags;
-import com.ghostipedia.cosmiccore.common.item.RenderBlockItem;
 
 import com.gregtechceu.gtceu.GTCEu;
 import com.gregtechceu.gtceu.api.GTCEuAPI;
 import com.gregtechceu.gtceu.api.block.ActiveBlock;
 import com.gregtechceu.gtceu.api.block.ICoilType;
-import com.gregtechceu.gtceu.client.renderer.block.TextureOverrideRenderer;
+import com.gregtechceu.gtceu.api.block.property.GTBlockStateProperties;
 import com.gregtechceu.gtceu.common.block.CoilBlock;
-import com.gregtechceu.gtceu.common.data.GTModels;
-
-import com.lowdragmc.lowdraglib.Platform;
-import com.lowdragmc.lowdraglib.client.renderer.IRenderer;
+import com.gregtechceu.gtceu.common.data.models.GTModels;
 
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.resources.ResourceLocation;
@@ -26,20 +23,26 @@ import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.GlassBlock;
+import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
+import net.minecraft.world.level.block.state.properties.NoteBlockInstrument;
+import net.minecraft.world.level.material.MapColor;
 import net.minecraftforge.client.model.generators.ModelFile;
 
+import com.teamresourceful.resourcefullib.common.registry.RegistryEntry;
 import com.tterrag.registrate.providers.DataGenContext;
 import com.tterrag.registrate.providers.RegistrateBlockstateProvider;
 import com.tterrag.registrate.util.entry.BlockEntry;
 import com.tterrag.registrate.util.nullness.NonNullBiConsumer;
 import com.tterrag.registrate.util.nullness.NonNullFunction;
 import com.tterrag.registrate.util.nullness.NonNullSupplier;
+import earth.terrarium.adastra.common.blocks.GlobeBlock;
 
-import java.util.Map;
 import java.util.function.Supplier;
 
 import static com.ghostipedia.cosmiccore.api.registries.CosmicRegistration.REGISTRATE;
+import static com.gregtechceu.gtceu.api.block.property.GTBlockStateProperties.ACTIVE;
+import static earth.terrarium.adastra.common.registry.ModBlocks.GLOBES;
 
 public class CosmicBlocks {
 
@@ -48,6 +51,8 @@ public class CosmicBlocks {
 
     }
     // Coil Register
+    public static final RegistryEntry<Block> SUN_GLOBE = GLOBES.register("sun_globe",
+            () -> new GlobeBlock(ironProperties().noOcclusion()));
 
     public static final BlockEntry<CoilBlock> COIL_PRISMATIC_TUNGSTENSTEEL = createCoilBlock(
             CosmicCoilBlock.CoilType.PRISMATIC_TUNGSTENSTEEL);
@@ -64,14 +69,35 @@ public class CosmicBlocks {
             CosmicCoilBlock.CoilType.PROGRAMMABLE_MATTER);
     public static final BlockEntry<CoilBlock> COIL_SHIMMERING_NEUTRONIUM = createCoilBlock(
             CosmicCoilBlock.CoilType.SHIMMERING_NEUTRONIUM);
-    public static final BlockEntry<CoilBlock> COIL_CAUSAL_FABRIC = createCoilBlock(
+    public static final BlockEntry<CoilBlock> COIL_CAUSAL_FABRIC = createCoilBlockWithEntity(
             CosmicCoilBlock.CoilType.CAUSAL_FABRIC,
-            Platform.isClient() ? new TextureOverrideRenderer(new ResourceLocation("block/cube_all"),
-                    Map.of("all", CosmicCore.id("block/casings/coils/causal_fabric_off"))) : null,
-            Platform.isClient() ? new NebulaeCoilRenderer(new ResourceLocation("block/cube_all"),
-                    Map.of("all", CosmicCoilBlock.CoilType.CAUSAL_FABRIC.getTexture())) : null
+            (ctx, prov) -> {
+                String name = ctx.getName();
+                ActiveBlock block = ctx.getEntry();
+                ModelFile inactive = prov.models()
+                        .cubeAll(name, CosmicCore.id("block/casings/coils/causal_fabric_off"));
+                ModelFile active = prov.models()
+                        .cubeAll(name + "_active", CosmicCore.id("block/casings/coils/causal_fabric"));
 
-    );
+                prov.getVariantBuilder(block)
+                        .partialState().with(GTBlockStateProperties.ACTIVE, false).modelForState().modelFile(inactive)
+                        .addModel()
+                        .partialState().with(GTBlockStateProperties.ACTIVE, true).modelForState().modelFile(active)
+                        .addModel();
+            });
+
+    // New Casings ; Several reference textures from GTOCore, make sure to give credits to them!
+    public static final BlockEntry<Block> REFLECTIVE_STARMETAL_CASING = createCasingBlock("reflective_starmetal_casing",
+            CosmicCore.id("block/casings/solid/reflective_starmetal_casing"));
+    public static final BlockEntry<Block> TRITANIUM_LINED_HEAVY_NEUTRONIUM_CASING = createCasingBlock(
+            "tritanium_lined_heavy_neutronium_casing",
+            CosmicCore.id("block/casings/solid/tritanium_lined_heavy_bolted_neutronium_casing"));
+    public static final BlockEntry<Block> HIGH_TOLERANCE_RHENIUM_CASING = createCasingBlock(
+            "high_tolerance_rhenium_casing",
+            CosmicCore.id("block/casings/solid/high_tolerance_rhenium_casing"));
+    public static final BlockEntry<Block> HIGHLY_FLEXIBLE_REINFORCED_TRINAVINE_CASING = createCasingBlock(
+            "highly_flexible_reinforced_trinavine_casing",
+            CosmicCore.id("block/casings/solid/highly_flexible_reinforced_trinavine_casing"));
     public static final BlockEntry<Block> CASING_DYSON_CELL = createCasingBlock("dyson_solar_cell",
             CosmicCore.id("block/casings/solid/dyson_solar_cell"));
     public static final BlockEntry<Block> STAR_LADDER_CASING = createCasingBlock("dyson_solar_cell",
@@ -93,28 +119,65 @@ public class CosmicBlocks {
             MagnetBlock.MagnetType.HIGH_POWERED);
     public static final BlockEntry<MagnetBlock> MAGNET_FUSION_GRADE = createMagnetBlock(
             MagnetBlock.MagnetType.FUSION_GRADE);
+    public static final BlockEntry<MagnetBlock> MAGNET_STELLAR_GRADE = createMagnetBlock(
+            MagnetBlock.MagnetType.STELLAR_NEUTRONIUM_GRADE);
 
     // TODO : FIGURE OUT WHY these are breaking the minable tags for pickaxe/wrench..
+    public static final BlockEntry<Block> GILDED_PTHANTERUM_CASING = createCasingBlock(
+            "gilded_pthanterum_casing", CosmicCore.id("block/casings/solid/gilded_pthanterum_casing"));
+    public static final BlockEntry<Block> WEAR_RESISTANT_RURIDIT_CASING = createCasingBlock(
+            "wear_resistant_ruridit_casing", CosmicCore.id("block/casings/solid/ruridit_casing"));
+    public static final BlockEntry<Block> REINFORCED_NAQUADRIA_CASING = createCasingBlock(
+            "reinforced_naquadria_casing", CosmicCore.id("block/casings/solid/reinforced_naquadria_casing"));
     public static final BlockEntry<Block> HIGH_TEMP_FISSION_CASING = createCasingBlock(
             "high_temperature_fission_casing", CosmicCore.id("block/casings/solid/high_temperature_fission_casing"));
-    public static final BlockEntry<Block> VOMAHINE_CERTIFIED_CHEMICALLY_RESISTANT_CASING = createCasingBlock(
-            "vomahine_certified_chemically_resistant_casing",
+    public static final BlockEntry<Block> CYCLOZINE_CHEMICALLY_REPELLING_CASING = createCasingBlock(
+            "cyclozine_chemically_repelling_casing",
             CosmicCore.id("block/casings/solid/vomahine_certified_chemically_resistant_casing"));
-    public static final BlockEntry<Block> VOMAHINE_CERTIFIED_CHEMICALLY_RESISTANT_PIPE = createCasingBlock(
-            "vomahine_certified_chemically_resistant_pipe",
+    public static final BlockEntry<Block> CYCLOZINE_CHEMICALLY_REPELLING_PIPE = createCasingBlock(
+            "cyclozine_chemically_repelling_pipe",
             CosmicCore.id("block/casings/solid/vomahine_certified_chemically_resistant_pipe"));
-    public static final BlockEntry<Block> VOMAHINE_CERTIFIED_INTERSTELLAR_GRADE_CASING = createCasingBlock(
-            "vomahine_certified_interstellar_grade_casing",
+    public static final BlockEntry<Block> MULTIPURPOSE_INTERSTELLAR_GRADE_CASING = createCasingBlock(
+            "multi_purpose_interstellar_grade_casing",
             CosmicCore.id("block/casings/solid/vomahine_certified_interstellar_grade_casing"));
-    public static final BlockEntry<Block> VOMAHINE_ULTRA_POWERED_CASING = createCasingBlock(
-            "vomahine_ultra_powered_casing", CosmicCore.id("block/casings/solid/vomahine_ultra_powered_casing"));
+    public static final BlockEntry<Block> ULTRA_POWERED_CASING = createCasingBlock(
+            "ultra_powered_casing", CosmicCore.id("block/casings/solid/vomahine_ultra_powered_casing"));
     public static final BlockEntry<Block> HIGHLY_CONDUCTIVE_FISSION_CASING = createCasingBlock(
             "highly_conductive_fission_casing", CosmicCore.id("block/casings/solid/highly_conductive_fission_casing"));
+    public static final BlockEntry<Block> GEARBOX_PTHANTERUM = createCasingBlock(
+            "machine_casing_gearbox_pthanterum",
+            CosmicCore.id("block/casings/gearbox/machine_casing_gearbox_pthanterum"));
+    public static final BlockEntry<Block> GEARBOX_NAQUADRIA = createCasingBlock(
+            "machine_casing_gearbox_naquadria",
+            CosmicCore.id("block/casings/gearbox/machine_casing_gearbox_naquadria"));
+    // I think i deleted the uh, yeah..
+    public static final BlockEntry<ActiveBlock> CASING_HEAT_VENT = createActiveCasing("heat_fan",
+            "block/variant/heat_fan");
+    public static final BlockEntry<ActiveBlock> CASING_INTAKE_LUDICRIOUS = createActiveCasing("ludicrious_intake",
+            "block/variant/ludicrious_intake");
+    public static final BlockEntry<ActiveBlock> CASING_INTAKE_ULTIMATE = createActiveCasing("ultimate_intake",
+            "block/variant/ultimate_intake");
+    public static final BlockEntry<ActiveBlock> RADIOACTIVE_FILTER_CASING = createActiveCasing(
+            "radioactive_filter_casing",
+            "block/variant/radioactive_filter_casing");
+
+    // GLASS BLOCKS
+    public static final BlockEntry<Block> ZBLAN_REINFORCED_GLASS = createGlassCasingBlock(
+            "zblan_glass", CosmicCore.id("block/casings/glass/zblan_glass"), () -> RenderType::translucent);
 
     // This is a Bunch of Rendering Magic I barely understand (See: I Don't understand at all) ~Ghost
     private static BlockEntry<Block> createGlassCasingBlock(String name, ResourceLocation texture,
                                                             Supplier<Supplier<RenderType>> type) {
-        return createCasingBlock(name, GlassBlock::new, texture, () -> Blocks.GLASS, type);
+        NonNullFunction<BlockBehaviour.Properties, Block> supplier = GlassBlock::new;
+        return REGISTRATE.block(name, supplier)
+                .initialProperties(() -> Blocks.GLASS)
+                .properties(p -> p.isValidSpawn((state, level, pos, ent) -> false))
+                .addLayer(type)
+                .exBlockstate(GTModels.cubeAllModel(texture))
+                .tag(RecipeTags.MINEABLE_WITH_WRENCH)
+                .item(BlockItem::new)
+                .build()
+                .register();
     }
 
     public static BlockEntry<Block> createCasingBlock(String name, ResourceLocation texture) {
@@ -131,7 +194,7 @@ public class CosmicBlocks {
                 .initialProperties(properties)
                 .properties(p -> p.isValidSpawn((state, level, pos, ent) -> false))
                 .addLayer(type)
-                .blockstate(GTModels.cubeAllModel(name, texture))
+                .exBlockstate(GTModels.cubeAllModel(texture))
                 .tag(RecipeTags.MINEABLE_WITH_WRENCH)
                 .item(BlockItem::new)
                 .build()
@@ -143,7 +206,7 @@ public class CosmicBlocks {
                 .initialProperties(() -> Blocks.IRON_BLOCK)
                 .properties(p -> p.isValidSpawn((state, level, pos, ent) -> false))
                 .addLayer(() -> RenderType::cutoutMipped)
-                .blockstate(GTModels.createSidedCasingModel(name, texture))
+                .blockstate(GTModels.createSidedCasingModel(texture))
                 .tag(RecipeTags.MINEABLE_WITH_WRENCH)
                 .item(BlockItem::new)
                 .build()
@@ -155,7 +218,7 @@ public class CosmicBlocks {
                 .block("%s_coil_block".formatted(coilType.getName()), p -> new CoilBlock(p, coilType))
                 .initialProperties(() -> Blocks.IRON_BLOCK)
                 .addLayer(() -> RenderType::cutoutMipped)
-                .blockstate(GTModels.createCoilModel("%s_coil_block".formatted(coilType.getName()), coilType))
+                .blockstate(GTModels.createCoilModel(coilType))
                 .tag(RecipeTags.MINEABLE_WITH_WRENCH, BlockTags.MINEABLE_WITH_PICKAXE)
                 .item(BlockItem::new)
                 .build()
@@ -164,21 +227,33 @@ public class CosmicBlocks {
         return coilBlock;
     }
 
-    private static BlockEntry<CoilBlock> createCoilBlock(ICoilType coilType, IRenderer renderer,
-                                                         IRenderer activeRenderer) {
+    private static BlockEntry<CoilBlock> createCoilBlockWithEntity(ICoilType coilType,
+                                                                   NonNullBiConsumer<DataGenContext<Block, CoilBlock>, RegistrateBlockstateProvider> blockState) {
         BlockEntry<CoilBlock> coilBlock = REGISTRATE
-                .block("%s_coil_block".formatted(coilType.getName()),
-                        p -> (CoilBlock) new CosmicCoilBlock(p, coilType, renderer, activeRenderer))
+                .block("%s_coil_block".formatted(coilType.getName()), p -> (CoilBlock) new CosmicCoilBlock(p, coilType))
                 .initialProperties(() -> Blocks.IRON_BLOCK)
                 .addLayer(() -> RenderType::translucent)
-                .blockstate(NonNullBiConsumer.noop())
+                .blockstate(blockState)
                 .tag(RecipeTags.MINEABLE_WITH_WRENCH, BlockTags.MINEABLE_WITH_PICKAXE)
-                .item(RenderBlockItem::new)
-                .model(NonNullBiConsumer.noop())
+                .simpleItem()
+                .blockEntity(CosmicCoilBlockEntity::new)
+                .renderer(() -> NebulaeCoilRenderer::new)
                 .build()
                 .register();
         GTCEuAPI.HEATING_COILS.put(coilType, coilBlock);
         return coilBlock;
+    }
+
+    protected static BlockEntry<ActiveBlock> createActiveCasing(String name, String baseModelPath) {
+        return REGISTRATE.block(name, ActiveBlock::new)
+                .initialProperties(() -> Blocks.NETHERITE_BLOCK)
+                .addLayer(() -> RenderType::cutoutMipped)
+                .blockstate(GTModels.createActiveModel(CosmicCore.id(baseModelPath)))
+                .tag(RecipeTags.MINEABLE_WITH_WRENCH, BlockTags.MINEABLE_WITH_PICKAXE)
+                .item(BlockItem::new)
+                .model((ctx, prov) -> prov.withExistingParent(prov.name(ctx), CosmicCore.id(baseModelPath)))
+                .build()
+                .register();
     }
 
     private static BlockEntry<MagnetBlock> createMagnetBlock(IMagnetType magnetType) {
@@ -205,9 +280,18 @@ public class CosmicBlocks {
                     .texture("bot_all", magnetType.getTexture())
                     .texture("top_all", magnetType.getTexture().withSuffix("_bloom"));
             prov.getVariantBuilder(block)
-                    .partialState().with(ActiveBlock.ACTIVE, false).modelForState().modelFile(inactive).addModel()
-                    .partialState().with(ActiveBlock.ACTIVE, true).modelForState().modelFile(active).addModel();
+                    .partialState().with(ACTIVE, false).modelForState().modelFile(inactive).addModel()
+                    .partialState().with(ACTIVE, true).modelForState().modelFile(active).addModel();
         };
+    }
+
+    private static BlockBehaviour.Properties ironProperties() {
+        return BlockBehaviour.Properties.of()
+                .mapColor(MapColor.METAL)
+                .instrument(NoteBlockInstrument.IRON_XYLOPHONE)
+                .requiresCorrectToolForDrops()
+                .strength(5, 6)
+                .sound(SoundType.COPPER);
     }
 
     public static void init() {}

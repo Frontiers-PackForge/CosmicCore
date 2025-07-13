@@ -1,0 +1,6 @@
+{
+  "parent": "gtceu:block/cube/all",
+  "textures": {
+    "all": "cosmiccore:block/variant/heat_fan"
+  }
+}

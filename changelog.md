@@ -1,6 +1,4 @@
-# Cosmic Core 0.5.7
-## Added Items
-* Crystal Wrapped Chiplets
-* Crystal Chiplet Mask
+# Cosmic Core 0.6.7
+Engine.
 
 # DO NOT MANUALLY UPDATE COSMIC CORE FOR FRONTIERS **I WILL NOT WORK**

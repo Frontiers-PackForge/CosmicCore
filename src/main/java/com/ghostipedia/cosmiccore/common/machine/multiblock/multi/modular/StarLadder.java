@@ -130,13 +130,13 @@ public class StarLadder extends WorkableElectricMultiblockMachine implements IMu
             .rotationState(RotationState.NON_Y_AXIS)
             .recipeType(GTRecipeTypes.DUMMY_RECIPES)
             .recipeModifier(GTRecipeModifiers.ELECTRIC_OVERCLOCK.apply(OverclockingLogic.NON_PERFECT_OVERCLOCK_SUBTICK))
-            .appearanceBlock(CosmicBlocks.VOMAHINE_CERTIFIED_CHEMICALLY_RESISTANT_CASING)
+            .appearanceBlock(CosmicBlocks.CYCLOZINE_CHEMICALLY_REPELLING_CASING)
             .pattern(definition -> FactoryBlockPattern.start()
                     .aisle("A   A", "A   A", "A   A", "A   A")
                     .aisle("AAAAA", "A B A", "Q   Q", "A   A")
                     .where(' ', any())
                     .where("B", controller(blocks(definition.getBlock())))
-                    .where('A', blocks(CosmicBlocks.VOMAHINE_CERTIFIED_CHEMICALLY_RESISTANT_CASING.get())
+                    .where('A', blocks(CosmicBlocks.CYCLOZINE_CHEMICALLY_REPELLING_CASING.get())
                             .or(Predicates.abilities(PartAbility.EXPORT_ITEMS).setMaxGlobalLimited(16))
                             .or(Predicates.abilities(PartAbility.EXPORT_FLUIDS).setMaxGlobalLimited(16))
                             .or(Predicates.abilities(PartAbility.INPUT_ENERGY).setMaxGlobalLimited(2))
@@ -147,13 +147,12 @@ public class StarLadder extends WorkableElectricMultiblockMachine implements IMu
                     .where("Q", blocks(CosmicModularMachines.STAR_LADDER_TEST_MODULE[GTValues.ZPM].get()))
                     // blocks(Arrays.stream(CosmicModularMachines.STAR_LADDER_TEST_MODULE).filter(Objects::nonNull).map(Supplier::get).toArray(IMachineBlock[]::new))
                     .build())
-            .workableCasingRenderer(CosmicCore.id("block/casings/solid/vomahine_certified_chemically_resistant_casing"),
+            .workableCasingModel(CosmicCore.id("block/casings/solid/vomahine_certified_chemically_resistant_casing"),
                     GTCEu.id("block/multiblock/fusion_reactor"))
             .tooltips(Component.translatable("cosmiccore.multiblock.iris.tooltip.0"),
                     Component.translatable("cosmiccore.multiblock.iris.tooltip.1"),
                     Component.translatable("cosmiccore.multiblock.iris.tooltip.2"),
                     Component.translatable("cosmiccore.multiblock.iris.tooltip.3"))
-            .hasTESR(true)
             .register();
 
     @Override

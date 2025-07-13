@@ -5,12 +5,12 @@ import com.gregtechceu.gtceu.api.GTValues;
 import org.spongepowered.asm.mixin.*;
 
 @Debug
-@Mixin(GTValues.class)
+@Mixin(value = GTValues.class, remap = false)
 public class GTValuesMixin {
 
     @Final
     @Mutable
-    @Shadow
+    @Shadow(remap = false)
     public static int[] VC;
 
     static {

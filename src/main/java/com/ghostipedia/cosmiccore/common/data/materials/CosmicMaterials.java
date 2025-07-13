@@ -1,11 +1,15 @@
 package com.ghostipedia.cosmiccore.common.data.materials;
 
 import com.ghostipedia.cosmiccore.CosmicCore;
+import com.ghostipedia.cosmiccore.api.data.material.property.CCoreMaterialIconSet;
+import com.ghostipedia.cosmiccore.api.item.MeldingOmniTool;
 
 import com.gregtechceu.gtceu.api.GTValues;
 import com.gregtechceu.gtceu.api.data.chemical.material.Material;
 import com.gregtechceu.gtceu.api.data.chemical.material.info.MaterialIconSet;
 import com.gregtechceu.gtceu.api.data.chemical.material.properties.BlastProperty;
+import com.gregtechceu.gtceu.api.data.chemical.material.properties.PropertyKey;
+import com.gregtechceu.gtceu.api.data.chemical.material.properties.ToolProperty;
 import com.gregtechceu.gtceu.api.fluids.FluidBuilder;
 import com.gregtechceu.gtceu.api.fluids.FluidState;
 
@@ -18,6 +22,7 @@ public class CosmicMaterials {
     public static Material DilutedPrisma;
     public static Material Virtue;
     public static Material PrismaticTungstensteel;
+    public static Material VoidSpark;
     public static Material ResonantVirtueMeld;
     public static Material NaquadicSuperalloy;
     public static Material Trinavine;
@@ -41,10 +46,20 @@ public class CosmicMaterials {
     public static Material Ichorium;
     public static Material Chronon;
     public static Material Temmerite;
+    public static Material Triphenylphosphine;
+    public static Material Neutronite;
+    public static Material Vitrius;
+    public static Material SolSteel;
 
     public static void register() {
         Prisma = new Material.Builder(CosmicCore.id("prisma"))
                 .liquid(new FluidBuilder().state(FluidState.LIQUID).customStill())
+                .formula("֍")
+                .element(CosmicElements.Pi)
+                .buildAndRegister();
+        Vitrius = new Material.Builder(CosmicCore.id("vitrius"))
+                .liquid(new FluidBuilder().state(FluidState.LIQUID).customStill())
+                .formula("֍⋄")
                 .element(CosmicElements.Pi)
                 .buildAndRegister();
         DilutedPrisma = new Material.Builder(CosmicCore.id("diluted_prisma"))
@@ -55,6 +70,7 @@ public class CosmicMaterials {
                 .buildAndRegister();
         Virtue = new Material.Builder(CosmicCore.id("virtue_meld"))
                 .liquid(new FluidBuilder().temperature(666))
+                .formula("߷")
                 .element(CosmicElements.ViR)
                 .buildAndRegister();
         TriniumNaqide = new Material.Builder(CosmicCore.id("trinium_naqide"))
@@ -68,7 +84,7 @@ public class CosmicMaterials {
         PrismaticTungstensteel = new Material.Builder(CosmicCore.id("prismatic_tungstensteel"))
                 .ingot()
                 .liquid(new FluidBuilder().temperature(933))
-                .color(0x6f42cf).secondaryColor(0xc71414).iconSet(MaterialIconSet.BRIGHT)
+                .color(0x6f42cf).secondaryColor(0xc71414).iconSet(CCoreMaterialIconSet.PRISMATIC)
                 .flags(GENERATE_ROUND, GENERATE_GEAR, GENERATE_SMALL_GEAR, GENERATE_RING, GENERATE_FRAME,
                         GENERATE_SPRING, GENERATE_SPRING_SMALL, GENERATE_FINE_WIRE)
                 .components(Prisma, 1, TungstenSteel, 1)
@@ -76,6 +92,31 @@ public class CosmicMaterials {
                 .fluidPipeProperties(1166, 100, true)
                 .blastTemp(3600, BlastProperty.GasTier.HIGH, GTValues.VA[GTValues.EV], 1200)
                 .buildAndRegister();
+
+        VoidSpark = new Material.Builder(CosmicCore.id("voidspark"))
+                .ingot()
+                .liquid(new FluidBuilder().temperature(933))
+                .formula("\uD802\uDC05")
+                .color(0x5b2a9c).secondaryColor(0x2567b8).iconSet(CCoreMaterialIconSet.VOIDSPARKICO)
+                .flags(GENERATE_ROUND, GENERATE_GEAR, GENERATE_SMALL_GEAR, GENERATE_RING, GENERATE_FRAME,
+                        GENERATE_SPRING, GENERATE_SPRING_SMALL, GENERATE_FINE_WIRE)
+                .components(Prisma, 1, TungstenSteel, 1)
+                .blastTemp(3600, BlastProperty.GasTier.HIGH, GTValues.VA[GTValues.EV], 1200)
+                .buildAndRegister();
+
+        SolSteel = new Material.Builder(CosmicCore.id("sol_steel"))
+                .ingot()
+                .liquid(new FluidBuilder().temperature(933))
+                .formula(" ⃘ ")
+                .color(0xf0891a).secondaryColor(0xf0891a).iconSet(CCoreMaterialIconSet.SOL_STEEL)
+                .flags(GENERATE_ROUND, GENERATE_GEAR, GENERATE_SMALL_GEAR, GENERATE_RING, GENERATE_FRAME,
+                        GENERATE_SPRING, GENERATE_SPRING_SMALL, GENERATE_FINE_WIRE)
+                .components(Prisma, 1, TungstenSteel, 1)
+                .cableProperties(GTValues.V[8], 4, 1)
+                .fluidPipeProperties(65000, 9500, true, true, true, true)
+                .blastTemp(3600, BlastProperty.GasTier.HIGH, GTValues.VA[GTValues.EV], 1200)
+                .buildAndRegister();
+
         ResonantVirtueMeld = new Material.Builder(CosmicCore.id("resonant_virtue_meld"))
                 .ingot()
                 .liquid(new FluidBuilder().temperature(1240))
@@ -102,11 +143,14 @@ public class CosmicMaterials {
         // based auto-gen rn
         Trinavine = new Material.Builder(CosmicCore.id("trinavine"))
                 .ingot()
+                .formula("⋖Tv⋗")
                 .liquid(new FluidBuilder().temperature(1500))
-                .color(0xdb5e5e).secondaryColor(0x5e0f3d).iconSet(MaterialIconSet.BRIGHT)
+                .color(0xfe2d2d).secondaryColor(0x353535).iconSet(CosmicMaterialSet.TRINAVINE)
                 .flags(GENERATE_BOLT_SCREW, GENERATE_ROUND, GENERATE_GEAR, GENERATE_SMALL_GEAR, GENERATE_RING,
-                        GENERATE_FRAME, GENERATE_SPRING, GENERATE_SPRING_SMALL, GENERATE_FINE_WIRE)
-                .cableProperties(GTValues.V[7], 4, 6)
+                        GENERATE_FRAME, GENERATE_SPRING, GENERATE_SPRING_SMALL, GENERATE_FINE_WIRE, GENERATE_DENSE)
+                .cableProperties(GTValues.V[7], 4, 3)
+                .toolStats(ToolProperty.Builder.of(16, 40, 8192, 6, MeldingOmniTool.MELD_TOOL_LUV).magnetic()
+                        .unbreakable().build())
                 .blastTemp(5400, BlastProperty.GasTier.HIGHER, GTValues.VA[GTValues.LuV], 900)
                 .buildAndRegister();
 
@@ -155,9 +199,38 @@ public class CosmicMaterials {
                 .cableProperties(GTValues.V[11], 4, 6)
                 .blastTemp(19000, BlastProperty.GasTier.HIGHEST, GTValues.VA[GTValues.UIV], 5600)
                 .buildAndRegister();
-
+        Triphenylphosphine = new Material.Builder(CosmicCore.id("triphenylphosphine"))
+                .liquid(new FluidBuilder().temperature(300))
+                .color(0xfca103).secondaryColor(0xfcbe03).iconSet(MaterialIconSet.BRIGHT)
+                .buildAndRegister();
         // Misc Materials
-
+        Neutronite = new Material.Builder(CosmicCore.id("neutronite"))
+                .ingot()
+                .formula("⦽")
+                .blastTemp(8900)
+                .liquid(new FluidBuilder().temperature(7500))
+                .cableProperties(GTValues.V[6], 12, 4)
+                .fluidPipeProperties(65000, 3500, true, true, true, true)
+                .iconSet(CCoreMaterialIconSet.VIBRANIUM)// .color(0x489BC3).secondaryColor(0x51ADCA)
+                .flags(
+                        GENERATE_PLATE,
+                        GENERATE_DENSE,
+                        GENERATE_ROD,
+                        GENERATE_BOLT_SCREW,
+                        GENERATE_FRAME,
+                        GENERATE_GEAR,
+                        GENERATE_SMALL_GEAR,
+                        GENERATE_SPRING,
+                        GENERATE_SPRING_SMALL,
+                        GENERATE_FOIL,
+                        GENERATE_RING,
+                        GENERATE_SPRING,
+                        GENERATE_SPRING_SMALL,
+                        GENERATE_SMALL_GEAR,
+                        GENERATE_FINE_WIRE,
+                        GENERATE_ROTOR,
+                        GENERATE_ROUND)
+                .buildAndRegister();
         // TODO - Colors , Textures, Fluid Textures, they're all gonna look the same in game for now.
         // TODO - Infinity Line Scripts On KubeJS side.
         Potential = new Material.Builder(CosmicCore.id("potential"))
@@ -205,10 +278,11 @@ public class CosmicMaterials {
                         GENERATE_FRAME, GENERATE_SPRING, GENERATE_SPRING_SMALL, GENERATE_FINE_WIRE)
                 .cableProperties(GTValues.V[12], 64, 0, true)
                 .buildAndRegister();
-        // TODO - Tengam but worse, way worse, please like actually make this the most soul crushing material to make at
+        // ZPM Magnet Material
         // the current tier, but super easy after lol
         Temmerite = new Material.Builder(CosmicCore.id("temmerite"))
                 .ingot()
+                .formula("⦽")
                 .liquid(new FluidBuilder().temperature(19500))
                 .color(0x42f5a1).secondaryColor(0x42f5e0).iconSet(MaterialIconSet.BRIGHT)
                 .flags(GENERATE_BOLT_SCREW, GENERATE_ROUND, GENERATE_GEAR, GENERATE_SMALL_GEAR, GENERATE_RING,
@@ -220,12 +294,14 @@ public class CosmicMaterials {
         // TODO - Thaumic Tinker Inspired chaos Ft Virtue Meld, Make your dead gods cry rivers of mutated blood -
         // Resistant to Acausal decay and contains the Universe constance of "Dalet" (ד)
         Ichor = new Material.Builder(CosmicCore.id("ichor"))
+                .formula("⦿")
                 .liquid(new FluidBuilder().temperature(19500))
                 .color(0xfca103).secondaryColor(0xfcbe03).iconSet(MaterialIconSet.BRIGHT)
                 .buildAndRegister();
         // TODO - The Finalized Version of Virtue Meld, only present on Grand Virtues. Resistant to Atemporal decay and
         // contains the Universe constance of "Alef" (א)
         Ichorium = new Material.Builder(CosmicCore.id("ichorium"))
+                .formula("⦾")
                 .ingot()
                 .liquid(new FluidBuilder().temperature(19500))
                 .color(0xfca103).secondaryColor(0xfcbe03).iconSet(MaterialIconSet.BRIGHT)
@@ -264,5 +340,32 @@ public class CosmicMaterials {
                 .liquid(new FluidBuilder().temperature(10))
                 .color(0xdb5e5e).secondaryColor(0x5e0f3d).iconSet(MaterialIconSet.SHINY)
                 .buildAndRegister();
+    }
+
+    public static void modifyMaterials() {
+        var rubyOreProp = Ruby.getProperty(PropertyKey.ORE);
+        var ilmeniteOreProp = Ilmenite.getProperty(PropertyKey.ORE);
+        var aluminiumOreProp = Aluminium.getProperty(PropertyKey.ORE);
+        var bauxiteOreProp = Bauxite.getProperty(PropertyKey.ORE);
+        var nickelOreProp = Nickel.getProperty(PropertyKey.ORE);
+        var chromiteOreProp = Chromite.getProperty(PropertyKey.ORE);
+
+        rubyOreProp.getOreByProducts().clear();
+        ilmeniteOreProp.getOreByProducts().clear();
+        bauxiteOreProp.getOreByProducts().clear();
+        aluminiumOreProp.getOreByProducts().clear();
+        nickelOreProp.getOreByProducts().clear();
+        chromiteOreProp.getOreByProducts().clear();
+
+        rubyOreProp.setOreByProducts(Cinnabar, GarnetRed, GarnetRed);
+        ilmeniteOreProp.setOreByProducts(Iron, Ilmenite, Ilmenite);
+        aluminiumOreProp.setOreByProducts(Bauxite, Bauxite, Ilmenite, Ilmenite);
+        bauxiteOreProp.setOreByProducts(Grossular, Gallium, Gallium);
+        nickelOreProp.setOreByProducts(Cobalt, Iron, Cooperite);
+        nickelOreProp.setWashedIn(Mercury);
+        chromiteOreProp.setOreByProducts(Iron, Magnesium, Chromite);
+        Neutronium.setMaterialIconSet(CCoreMaterialIconSet.VIBRANIUM_NEUTRONIUM);
+        Neutronium.addFlags(NO_SMELTING, NO_ORE_SMELTING);
+        Neutronium.setProperty(PropertyKey.BLAST, new BlastProperty(15000));
     }
 }

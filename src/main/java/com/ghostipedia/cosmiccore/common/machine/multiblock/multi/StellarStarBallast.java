@@ -1,10 +1,12 @@
 package com.ghostipedia.cosmiccore.common.machine.multiblock.multi;
 
+import com.ghostipedia.cosmiccore.CosmicCore;
 import com.ghostipedia.cosmiccore.api.machine.multiblock.IrisMultiblockMachine;
-import com.ghostipedia.cosmiccore.client.renderer.machine.StarBallastMachineRenderer;
+import com.ghostipedia.cosmiccore.client.renderer.machine.CosmicDynamicRenderHelpers;
 import com.ghostipedia.cosmiccore.common.data.CosmicBlocks;
 import com.ghostipedia.cosmiccore.gtbridge.CosmicRecipeTypes;
 
+import com.gregtechceu.gtceu.GTCEu;
 import com.gregtechceu.gtceu.api.data.RotationState;
 import com.gregtechceu.gtceu.api.machine.MultiblockMachineDefinition;
 import com.gregtechceu.gtceu.api.machine.multiblock.PartAbility;
@@ -21,7 +23,7 @@ import static com.gregtechceu.gtceu.api.pattern.Predicates.*;
 import static com.gregtechceu.gtceu.api.pattern.Predicates.blocks;
 import static com.gregtechceu.gtceu.common.data.GCYMBlocks.CASING_ATOMIC;
 import static com.gregtechceu.gtceu.common.data.GCYMBlocks.CASING_HIGH_TEMPERATURE_SMELTING;
-import static com.gregtechceu.gtceu.common.data.GTBlocks.*;
+import static com.gregtechceu.gtceu.common.data.models.GTMachineModels.createWorkableCasingMachineModel;
 
 public class StellarStarBallast {
 
@@ -30,7 +32,7 @@ public class StellarStarBallast {
             .rotationState(RotationState.Y_AXIS)
             .recipeType(CosmicRecipeTypes.VOMAHINE_CORE_DRILL)
             .recipeModifier(GTRecipeModifiers.ELECTRIC_OVERCLOCK.apply(OverclockingLogic.NON_PERFECT_OVERCLOCK_SUBTICK))
-            .appearanceBlock(CosmicBlocks.VOMAHINE_CERTIFIED_CHEMICALLY_RESISTANT_CASING)
+            .appearanceBlock(CosmicBlocks.CYCLOZINE_CHEMICALLY_REPELLING_CASING)
             .pattern(definition -> FactoryBlockPattern.start()
                     .aisle("                           AAAAA                           ",
                             "                        BBBBBBBBBBB                        ",
@@ -684,11 +686,11 @@ public class StellarStarBallast {
                     .where(' ', any())
                     .where("Q", controller(blocks(definition.getBlock())))
                     .where('A', blocks(CASING_HIGH_TEMPERATURE_SMELTING.get()))
-                    .where('B', blocks(VOMAHINE_CERTIFIED_INTERSTELLAR_GRADE_CASING.get()))
-                    .where('C', blocks(VOMAHINE_CERTIFIED_INTERSTELLAR_GRADE_CASING.get()))
+                    .where('B', blocks(MULTIPURPOSE_INTERSTELLAR_GRADE_CASING.get()))
+                    .where('C', blocks(MULTIPURPOSE_INTERSTELLAR_GRADE_CASING.get()))
                     .where('D', blocks(CASING_ATOMIC.get()))
-                    .where('E', blocks(VOMAHINE_ULTRA_POWERED_CASING.get()))
-                    .where('F', blocks(VOMAHINE_CERTIFIED_CHEMICALLY_RESISTANT_CASING.get())
+                    .where('E', blocks(ULTRA_POWERED_CASING.get()))
+                    .where('F', blocks(CYCLOZINE_CHEMICALLY_REPELLING_CASING.get())
                             .or(Predicates.abilities(PartAbility.EXPORT_ITEMS).setMaxGlobalLimited(16))
                             .or(Predicates.abilities(PartAbility.EXPORT_FLUIDS).setMaxGlobalLimited(16))
                             .or(Predicates.abilities(PartAbility.INPUT_ENERGY).setMaxGlobalLimited(2))
@@ -698,12 +700,15 @@ public class StellarStarBallast {
                             .or(Predicates.abilities(PartAbility.IMPORT_ITEMS).setMaxGlobalLimited(16)))
                     .where('G', blocks(CASING_HIGH_TEMPERATURE_SMELTING.get()))
                     .build())
-            .renderer(StarBallastMachineRenderer::new)
+            .model(createWorkableCasingMachineModel(
+                    CosmicCore.id("block/casings/solid/vomahine_certified_chemically_resistant_casing"),
+                    GTCEu.id("block/multiblock/fusion_reactor"))
+                    .andThen(model -> model.addDynamicRenderer(CosmicDynamicRenderHelpers::getStarBallastRender)))
+            .hasBER(true)
             .tooltips(Component.translatable("cosmiccore.multiblock.iris.tooltip.0"),
                     Component.translatable("cosmiccore.multiblock.iris.tooltip.1"),
                     Component.translatable("cosmiccore.multiblock.iris.tooltip.2"),
                     Component.translatable("cosmiccore.multiblock.iris.tooltip.3"))
-            .hasTESR(true)
             .register();
 
     public static void init() {}

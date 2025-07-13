@@ -1,0 +1,20 @@
+{
+  "ambient_drone": {
+    "sounds": [
+      {
+        "type": "file",
+        "name": "cosmiccore:ambient_drone"
+      }
+    ],
+    "subtitle": "cosmiccore.subtitle.ambient_drone"
+  },
+  "arcane_distil": {
+    "sounds": [
+      {
+        "type": "file",
+        "name": "cosmiccore:arcane_distil"
+      }
+    ],
+    "subtitle": "cosmiccore.subtitle.arcane_distil"
+  }
+}

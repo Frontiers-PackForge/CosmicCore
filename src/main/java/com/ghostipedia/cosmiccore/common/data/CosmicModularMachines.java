@@ -37,13 +37,13 @@ public class CosmicModularMachines {
                                 .aisle("A", "A", "A", "A")
                                 .aisle("A", "A", "B", "A")
                                 .where("B", controller(blocks(definition.getBlock())))
-                                .where('A', blocks(CosmicBlocks.VOMAHINE_CERTIFIED_CHEMICALLY_RESISTANT_CASING.get()))
+                                .where('A', blocks(CosmicBlocks.CYCLOZINE_CHEMICALLY_REPELLING_CASING.get()))
                                 .build();
                     })
-                    .workableCasingRenderer(
+                    .workableCasingModel(
                             CosmicCore.id("block/casings/solid/vomahine_certified_chemically_resistant_casing"),
                             GTCEu.id("block/multiblock/fusion_reactor"))
-                    .hasTESR(true)
+                    // .hasTESR(true)
                     .register(),
             ZPM, UV, UHV);
 

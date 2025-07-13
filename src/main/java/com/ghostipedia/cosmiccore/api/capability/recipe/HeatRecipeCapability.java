@@ -7,7 +7,7 @@ import com.gregtechceu.gtceu.api.recipe.GTRecipe;
 import com.gregtechceu.gtceu.api.recipe.content.Content;
 import com.gregtechceu.gtceu.api.recipe.content.ContentModifier;
 import com.gregtechceu.gtceu.api.recipe.content.SerializerLong;
-import com.gregtechceu.gtceu.api.recipe.lookup.AbstractMapIngredient;
+import com.gregtechceu.gtceu.api.recipe.lookup.ingredient.AbstractMapIngredient;
 
 import com.lowdragmc.lowdraglib.gui.widget.LabelWidget;
 import com.lowdragmc.lowdraglib.gui.widget.WidgetGroup;
@@ -36,7 +36,7 @@ public class HeatRecipeCapability extends RecipeCapability<Long> {
         return modifier.apply(content);
     }
 
-    @Override
+    // @Override
     public List<AbstractMapIngredient> convertToMapIngredient(Object ingredient) {
         List<AbstractMapIngredient> ingredients = new ObjectArrayList<>(1);
         if (ingredient instanceof Long thermia) ingredients.add(new MapHeatIngredient(thermia));

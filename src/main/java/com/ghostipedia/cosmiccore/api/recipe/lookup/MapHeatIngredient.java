@@ -1,6 +1,6 @@
 package com.ghostipedia.cosmiccore.api.recipe.lookup;
 
-import com.gregtechceu.gtceu.api.recipe.lookup.AbstractMapIngredient;
+import com.gregtechceu.gtceu.api.recipe.lookup.ingredient.AbstractMapIngredient;
 
 public class MapHeatIngredient extends AbstractMapIngredient {
 

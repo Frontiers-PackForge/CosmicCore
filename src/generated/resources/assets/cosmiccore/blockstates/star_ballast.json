@@ -1,0 +1,42 @@
+{
+  "variants": {
+    "facing=down,upwards_facing=east": {
+      "gtceu:z": 90,
+      "model": "cosmiccore:block/machine/star_ballast",
+      "x": 90
+    },
+    "facing=down,upwards_facing=north": {
+      "model": "cosmiccore:block/machine/star_ballast",
+      "x": 90
+    },
+    "facing=down,upwards_facing=south": {
+      "gtceu:z": 180,
+      "model": "cosmiccore:block/machine/star_ballast",
+      "x": 90
+    },
+    "facing=down,upwards_facing=west": {
+      "gtceu:z": 270,
+      "model": "cosmiccore:block/machine/star_ballast",
+      "x": 90
+    },
+    "facing=up,upwards_facing=east": {
+      "gtceu:z": 270,
+      "model": "cosmiccore:block/machine/star_ballast",
+      "x": 270
+    },
+    "facing=up,upwards_facing=north": {
+      "gtceu:z": 180,
+      "model": "cosmiccore:block/machine/star_ballast",
+      "x": 270
+    },
+    "facing=up,upwards_facing=south": {
+      "model": "cosmiccore:block/machine/star_ballast",
+      "x": 270
+    },
+    "facing=up,upwards_facing=west": {
+      "gtceu:z": 90,
+      "model": "cosmiccore:block/machine/star_ballast",
+      "x": 270
+    }
+  }
+}

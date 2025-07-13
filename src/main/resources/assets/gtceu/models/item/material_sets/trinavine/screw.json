@@ -1,0 +1,8 @@
+{
+  "parent": "item/generated",
+  "textures": {
+    "layer0": "gtceu:item/material_sets/trinavine/screw",
+    "layer1": "gtceu:item/material_sets/trinavine/screw_secondary",
+    "layer2": "gtceu:item/material_sets/trinavine/screw_overlay"
+  }
+}

@@ -1,0 +1,130 @@
+{
+  "parent": "minecraft:block/block",
+  "loader": "gtceu:machine",
+  "machine": "cosmiccore:hp_steam_wiremill",
+  "multipart": [
+    {
+      "apply": {
+        "model": {
+          "parent": "gtceu:block/casings/steam/bricked_steel",
+          "textures": {
+            "overlay_front": "gtceu:block/machines/wiremill/overlay_front",
+            "overlay_front_emissive": "gtceu:block/machines/wiremill/overlay_front_emissive",
+            "overlay_side": "gtceu:block/machines/wiremill/overlay_side",
+            "overlay_top": "gtceu:block/machines/wiremill/overlay_top",
+            "overlay_top_emissive": "gtceu:block/machines/wiremill/overlay_top_emissive"
+          }
+        }
+      },
+      "when": {
+        "recipe_logic_status": "idle"
+      }
+    },
+    {
+      "apply": {
+        "model": {
+          "parent": "gtceu:block/casings/steam/bricked_steel",
+          "textures": {
+            "overlay_front": "gtceu:block/machines/wiremill/overlay_front_active",
+            "overlay_front_emissive": "gtceu:block/machines/wiremill/overlay_front_active_emissive",
+            "overlay_side": "gtceu:block/machines/wiremill/overlay_side_active",
+            "overlay_side_emissive": "gtceu:block/machines/wiremill/overlay_side_active_emissive",
+            "overlay_top": "gtceu:block/machines/wiremill/overlay_top_active",
+            "overlay_top_emissive": "gtceu:block/machines/wiremill/overlay_top_active_emissive"
+          }
+        }
+      },
+      "when": {
+        "recipe_logic_status": "working"
+      }
+    },
+    {
+      "apply": {
+        "model": {
+          "parent": "gtceu:block/casings/steam/bricked_steel",
+          "textures": {
+            "overlay_front": "gtceu:block/machines/wiremill/overlay_front_active",
+            "overlay_front_emissive": "gtceu:block/machines/wiremill/overlay_front_active_emissive",
+            "overlay_side": "gtceu:block/machines/wiremill/overlay_side_active",
+            "overlay_side_emissive": "gtceu:block/machines/wiremill/overlay_side_active_emissive",
+            "overlay_top": "gtceu:block/machines/wiremill/overlay_top_active",
+            "overlay_top_emissive": "gtceu:block/machines/wiremill/overlay_top_active_emissive"
+          }
+        }
+      },
+      "when": {
+        "recipe_logic_status": "waiting"
+      }
+    },
+    {
+      "apply": {
+        "model": {
+          "parent": "gtceu:block/casings/steam/bricked_steel",
+          "textures": {
+            "overlay_front": "gtceu:block/machines/wiremill/overlay_front_paused",
+            "overlay_front_emissive": "gtceu:block/machines/wiremill/overlay_front_paused_emissive",
+            "overlay_side": "gtceu:block/machines/wiremill/overlay_side",
+            "overlay_top": "gtceu:block/machines/wiremill/overlay_top_paused",
+            "overlay_top_emissive": "gtceu:block/machines/wiremill/overlay_top_paused_emissive"
+          }
+        }
+      },
+      "when": {
+        "recipe_logic_status": "suspend"
+      }
+    },
+    {
+      "apply": {
+        "model": "gtceu:block/overlay/machine/overlay_steam_vent",
+        "x": 270
+      },
+      "when": {
+        "steam_vent": "up"
+      }
+    },
+    {
+      "apply": {
+        "model": "gtceu:block/overlay/machine/overlay_steam_vent",
+        "x": 90
+      },
+      "when": {
+        "steam_vent": "down"
+      }
+    },
+    {
+      "apply": {
+        "model": "gtceu:block/overlay/machine/overlay_steam_vent",
+        "y": 270
+      },
+      "when": {
+        "steam_vent": "left"
+      }
+    },
+    {
+      "apply": {
+        "model": "gtceu:block/overlay/machine/overlay_steam_vent",
+        "y": 90
+      },
+      "when": {
+        "steam_vent": "right"
+      }
+    },
+    {
+      "apply": {
+        "model": "gtceu:block/overlay/machine/overlay_steam_vent"
+      },
+      "when": {
+        "steam_vent": "front"
+      }
+    },
+    {
+      "apply": {
+        "model": "gtceu:block/overlay/machine/overlay_steam_vent",
+        "y": 180
+      },
+      "when": {
+        "steam_vent": "back"
+      }
+    }
+  ]
+}

@@ -37,7 +37,6 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
@@ -53,9 +52,8 @@ public class IPBFMachine extends WorkableMultiblockMachine implements IDisplayUI
     public void addDisplayText(List<Component> textList) {
         IDisplayUIMachine.super.addDisplayText(textList);
         if (isFormed()) {
-            var handlers = capabilitiesProxy.get(IO.IN, EURecipeCapability.CAP);
-            if (handlers != null && handlers.size() > 0 &&
-                    handlers.get(0) instanceof SteamEnergyRecipeHandler steamHandler) {
+            var handlers = getCapabilitiesFlat(IO.IN, EURecipeCapability.CAP);
+            if (!handlers.isEmpty() && handlers.get(0) instanceof SteamEnergyRecipeHandler steamHandler) {
                 if (steamHandler.getCapacity() > 0) {
                     long steamStored = steamHandler.getStored();
                     textList.add(Component.translatable("gtceu.multiblock.steam.steam_stored", steamStored,
@@ -114,7 +112,6 @@ public class IPBFMachine extends WorkableMultiblockMachine implements IDisplayUI
         }
     }
 
-    @Nullable
     public static ModifierFunction recipeModifier(@NotNull MetaMachine machine, @NotNull GTRecipe recipe) {
         if (RecipeHelper.getRecipeEUtTier(recipe) > GTValues.LV) return ModifierFunction.NULL;
         long euTick = RecipeHelper.getRecipeEUtTier(recipe);
