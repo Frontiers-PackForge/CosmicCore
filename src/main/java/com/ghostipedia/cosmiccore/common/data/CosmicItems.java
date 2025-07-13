@@ -1,20 +1,33 @@
 package com.ghostipedia.cosmiccore.common.data;
 
+import com.ghostipedia.cosmiccore.CosmicCore;
 import com.ghostipedia.cosmiccore.api.item.armor.*;
 import com.ghostipedia.cosmiccore.api.registries.CosmicRegistration;
 import com.ghostipedia.cosmiccore.common.data.tag.item.CosmicItemTags;
 import com.ghostipedia.cosmiccore.common.item.behavior.EffectApplicationBehavior;
+import com.ghostipedia.cosmiccore.common.item.behavior.InfiniteSprayCanBehavior;
 import com.ghostipedia.cosmiccore.common.item.behavior.StructureWriteBehavior;
+import com.ghostipedia.cosmiccore.common.item.behavior.WirelessPDABehavior;
+import com.ghostipedia.cosmiccore.utils.StringUtil;
 
+import com.gregtechceu.gtceu.GTCEu;
 import com.gregtechceu.gtceu.api.item.ComponentItem;
 import com.gregtechceu.gtceu.api.item.armor.ArmorComponentItem;
+import com.gregtechceu.gtceu.api.item.component.ICustomDescriptionId;
 import com.gregtechceu.gtceu.api.item.component.IItemComponent;
+import com.gregtechceu.gtceu.api.item.component.ThermalFluidStats;
+import com.gregtechceu.gtceu.common.data.GTItems;
+import com.gregtechceu.gtceu.common.item.ItemFluidContainer;
 import com.gregtechceu.gtceu.common.item.TooltipBehavior;
 import com.gregtechceu.gtceu.common.item.armor.GTArmorMaterials;
 import com.gregtechceu.gtceu.common.item.armor.QuarkTechSuite;
+import com.gregtechceu.gtceu.common.registry.GTRegistration;
 import com.gregtechceu.gtceu.config.ConfigHolder;
 import com.gregtechceu.gtceu.data.recipe.CustomTags;
 
+import com.lowdragmc.lowdraglib.utils.LocalizationUtils;
+
+import net.minecraft.client.renderer.item.ItemProperties;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.damagesource.DamageSource;
@@ -23,18 +36,29 @@ import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ArmorItem;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Rarity;
 import net.minecraft.world.level.Level;
+import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.FluidUtil;
 
+import com.teamresourceful.resourcefullib.common.registry.RegistryEntry;
+import com.tterrag.registrate.providers.ProviderType;
 import com.tterrag.registrate.util.entry.ItemEntry;
+import com.tterrag.registrate.util.nullness.NonNullBiConsumer;
 import com.tterrag.registrate.util.nullness.NonNullConsumer;
+import earth.terrarium.adastra.common.items.rendered.RenderedBlockItem;
 import earth.terrarium.adastra.common.tags.ModItemTags;
 import wayoftime.bloodmagic.common.item.BloodOrb;
 import wayoftime.bloodmagic.common.item.ItemBloodOrb;
 import wayoftime.bloodmagic.common.registration.impl.BloodOrbRegistryObject;
 
+import java.util.function.Function;
+
 import static com.ghostipedia.cosmiccore.api.registries.CosmicRegistration.REGISTRATE;
+import static com.gregtechceu.gtceu.common.data.GTItems.attach;
+import static earth.terrarium.adastra.common.registry.ModItems.GLOBES;
 import static wayoftime.bloodmagic.common.item.BloodMagicItems.BLOOD_ORBS;
 
 @SuppressWarnings({ "unused" })
@@ -44,21 +68,128 @@ public class CosmicItems {
     public static final BloodOrbRegistryObject<BloodOrb> ORB_VOIDSENT;
     public static final BloodOrbRegistryObject<BloodOrb> ORB_SOVEREIGN;
 
+    public static final RegistryEntry<Item> SUN_GLOBE = GLOBES.register("sun_globe",
+            () -> new RenderedBlockItem(CosmicBlocks.SUN_GLOBE.get(),
+                    new Item.Properties().stacksTo(1).rarity(Rarity.RARE)));
     static {
         CosmicRegistration.REGISTRATE.creativeModeTab(() -> CosmicCreativeModeTabs.COSMIC_CORE);
         ORB_ASCENDANT = BLOOD_ORBS.register("ascendantbloodorb", () -> {
-            return new BloodOrb(new ResourceLocation("bloodmagic", "ascendantbloodorb"), 5, 25000000, 1000);
+            return new BloodOrb(new ResourceLocation("bloodmagic", "ascendantbloodorb"), 6, 25000000, 1000);
         });
         ORB_VOIDSENT = BLOOD_ORBS.register("voidsentbloodorb", () -> {
-            return new BloodOrb(new ResourceLocation("bloodmagic", "voidsentbloodorb"), 5, 50000000, 1000);
+            return new BloodOrb(new ResourceLocation("bloodmagic", "voidsentbloodorb"), 7, 50000000, 1000);
         });
         ORB_SOVEREIGN = BLOOD_ORBS.register("sovereignbloodorb", () -> {
-            return new BloodOrb(new ResourceLocation("bloodmagic", "sovereignbloodorb"), 5, 100000000, 10000);
+            return new BloodOrb(new ResourceLocation("bloodmagic", "sovereignbloodorb"), 8, 100000000, 10000);
         });
     }
 
     public static final CosmicBloodOrbDeferredRegister COSMIC_BLOOD_ORBS = new CosmicBloodOrbDeferredRegister(
             "cosmiccore");
+    // Tesserae
+    public static final ItemEntry<ComponentItem> TESSARON = REGISTRATE.item("tessaron", ComponentItem::create)
+            .lang("Vexil - [Tessaron]")
+            .properties(p -> p.stacksTo(16))
+            .tag()
+            .defaultModel()
+            .register();
+    public static final ItemEntry<ComponentItem> ESSON = REGISTRATE.item("esson", ComponentItem::create)
+            .lang("Luminon - [Esson]")
+            .properties(p -> p.stacksTo(16))
+            .tag()
+            .defaultModel()
+            .register();
+
+    public static final ItemEntry<ComponentItem> VEXIUN = REGISTRATE.item("vexiun", ComponentItem::create)
+            .lang("Vexil - [Vexiun]")
+            .properties(p -> p.stacksTo(16))
+            .tag()
+            .defaultModel()
+            .register();
+    public static final ItemEntry<ComponentItem> PHANTNON = REGISTRATE.item("phantnon", ComponentItem::create)
+            .lang("Luminon - [Phantnon]")
+            .properties(p -> p.stacksTo(16))
+            .tag()
+            .defaultModel()
+            .register();
+
+    public static final ItemEntry<ComponentItem> AMBRION = REGISTRATE.item("ambrion", ComponentItem::create)
+            .lang("Vexil - [Ambrion]")
+            .properties(p -> p.stacksTo(16))
+            .tag()
+            .defaultModel()
+            .register();
+    public static final ItemEntry<ComponentItem> SPECTIL = REGISTRATE.item("spectil", ComponentItem::create)
+            .lang("Luminon - [Spectil]")
+            .properties(p -> p.stacksTo(16))
+            .tag()
+            .defaultModel()
+            .register();
+
+    public static final ItemEntry<ComponentItem> ETHERA = REGISTRATE.item("ethera", ComponentItem::create)
+            .lang("Vexil - [Ethera]")
+            .properties(p -> p.stacksTo(16))
+            .tag()
+            .defaultModel()
+            .register();
+    public static final ItemEntry<ComponentItem> NYXON = REGISTRATE.item("nyxon", ComponentItem::create)
+            .lang("Luminon - [Nyxon]")
+            .properties(p -> p.stacksTo(16))
+            .tag()
+            .defaultModel()
+            .register();
+
+    public static final ItemEntry<ComponentItem> PYRITH = REGISTRATE.item("pyrith", ComponentItem::create)
+            .lang("Vexil - [Pyrith]")
+            .properties(p -> p.stacksTo(16))
+            .tag()
+            .defaultModel()
+            .register();
+    public static final ItemEntry<ComponentItem> SERAPHON = REGISTRATE.item("seraphon", ComponentItem::create)
+            .lang("Luminon - [Seraphon]")
+            .properties(p -> p.stacksTo(16))
+            .tag()
+            .defaultModel()
+            .register();
+
+    public static final ItemEntry<ComponentItem> TENAEBRUM = REGISTRATE.item("tenaebrum", ComponentItem::create)
+            .lang("Vexil - [Tenaebrum]")
+            .properties(p -> p.stacksTo(16))
+            .tag()
+            .defaultModel()
+            .register();
+    public static final ItemEntry<ComponentItem> DYNAMIA = REGISTRATE.item("dynamia", ComponentItem::create)
+            .lang("Luminon - [Dynamia]")
+            .properties(p -> p.stacksTo(16))
+            .tag()
+            .defaultModel()
+            .register();
+
+    public static final ItemEntry<ComponentItem> CRYSTALA = REGISTRATE.item("crystala", ComponentItem::create)
+            .lang("Vexil - [Crystala]")
+            .properties(p -> p.stacksTo(16))
+            .tag()
+            .defaultModel()
+            .register();
+    public static final ItemEntry<ComponentItem> MYSTRIX = REGISTRATE.item("mystrix", ComponentItem::create)
+            .lang("Luminon - [Mystrix]")
+            .properties(p -> p.stacksTo(16))
+            .tag()
+            .defaultModel()
+            .register();
+
+    public static final ItemEntry<ComponentItem> CHRONIA = REGISTRATE.item("chronia", ComponentItem::create)
+            .lang("Vexil - [Chronia]")
+            .properties(p -> p.stacksTo(16))
+            .tag()
+            .defaultModel()
+            .register();
+    public static final ItemEntry<ComponentItem> ECHON = REGISTRATE.item("echon", ComponentItem::create)
+            .lang("Luminon - [Echon]")
+            .properties(p -> p.stacksTo(16))
+            .tag()
+            .defaultModel()
+            .register();
 
     // Literally Random shit
     public static final ItemEntry<ComponentItem> DONK = REGISTRATE.item("donk", ComponentItem::create)
@@ -69,14 +200,14 @@ public class CosmicItems {
             .register();
     public static final ItemEntry<ComponentItem> DILUMIXAL_NAQ_DOPED_BOULE = REGISTRATE
             .item("dilumixal_naquadah_doped_silicon_boule", ComponentItem::create)
-            .lang("DiLumixal Naquadah Doped Silicon Boule")
+            .lang("DiLumixal Naquadah-doped Silicon Boule")
             .properties(p -> p.stacksTo(64))
             .tag()
             .defaultModel()
             .register();
     public static final ItemEntry<ComponentItem> DILUMIXAL_NAQ_DOPED_WAFER = REGISTRATE
             .item("dilumixal_naquadah_doped_silicon_wafer", ComponentItem::create)
-            .lang("DiLumixal Naquadah Doped Silicon Wafer")
+            .lang("DiLumixal Naquadah-doped Silicon Wafer")
             .properties(p -> p.stacksTo(64))
             .tag()
             .defaultModel()
@@ -159,13 +290,13 @@ public class CosmicItems {
             .register();
     public static final ItemEntry<ItemBloodOrb> ITEM_ORB_VOIDSENT = REGISTRATE
             .item("void_blood_orb", (p) -> new ItemBloodOrb(ORB_VOIDSENT))
-            .lang("Ascendant Blood Orb")
+            .lang("Voidsent Blood Orb")
             .properties(p -> p.stacksTo(1))
             .defaultModel()
             .register();
-    public static final ItemEntry<ItemBloodOrb> ITEM_ORB_SOVEREIGNT = REGISTRATE
+    public static final ItemEntry<ItemBloodOrb> ITEM_ORB_SOVEREIGN = REGISTRATE
             .item("sov_blood_orb", (p) -> new ItemBloodOrb(ORB_SOVEREIGN))
-            .lang("Ascendant Blood Orb")
+            .lang("Sovereign Blood Orb")
             .properties(p -> p.stacksTo(1))
             .defaultModel()
             .register();
@@ -176,12 +307,234 @@ public class CosmicItems {
             .properties(p -> p.stacksTo(64))
             .defaultModel()
             .register();
+    public static final ItemEntry<ComponentItem> RADIO_MODULE_HV = REGISTRATE
+            .item("hv_radio_module", ComponentItem::create)
+            .lang("HV Radio Module")
+            .properties(p -> p.stacksTo(64))
+            .defaultModel()
+            .register();
+    public static final ItemEntry<ComponentItem> RADIO_MODULE_EV = REGISTRATE
+            .item("ev_radio_module", ComponentItem::create)
+            .lang("EV Radio Module")
+            .properties(p -> p.stacksTo(64))
+            .defaultModel()
+            .register();
+    public static final ItemEntry<ComponentItem> RADIO_MODULE_IV = REGISTRATE
+            .item("iv_radio_module", ComponentItem::create)
+            .lang("IV Radio Module")
+            .properties(p -> p.stacksTo(64))
+            .defaultModel()
+            .register();
+    public static final ItemEntry<ComponentItem> RADIO_MODULE_LUV = REGISTRATE
+            .item("luv_radio_module", ComponentItem::create)
+            .lang("LuV Radio Module")
+            .properties(p -> p.stacksTo(64))
+            .defaultModel()
+            .register();
+    public static final ItemEntry<ComponentItem> RADIO_MODULE_ZPM = REGISTRATE
+            .item("zpm_radio_module", ComponentItem::create)
+            .lang("ZPM Radio Module")
+            .properties(p -> p.stacksTo(64))
+            .defaultModel()
+            .register();
+    public static final ItemEntry<ComponentItem> RADIO_MODULE_UV = REGISTRATE
+            .item("uv_radio_module", ComponentItem::create)
+            .lang("UV Radio Module")
+            .properties(p -> p.stacksTo(64))
+            .defaultModel()
+            .register();
+    public static final ItemEntry<ComponentItem> RADIO_MODULE_UHV = REGISTRATE
+            .item("uhv_radio_module", ComponentItem::create)
+            .lang("UHV Radio Module")
+            .properties(p -> p.stacksTo(64))
+            .defaultModel()
+            .register();
+    public static final ItemEntry<ComponentItem> RADIO_MODULE_UEV = REGISTRATE
+            .item("uev_radio_module", ComponentItem::create)
+            .lang("UEV Radio Module")
+            .properties(p -> p.stacksTo(64))
+            .defaultModel()
+            .register();
+    public static final ItemEntry<ComponentItem> RADIO_MODULE_UIV = REGISTRATE
+            .item("uiv_radio_module", ComponentItem::create)
+            .lang("UIV Radio Module")
+            .properties(p -> p.stacksTo(64))
+            .defaultModel()
+            .register();
+    public static final ItemEntry<ComponentItem> RADIO_MODULE_UXV = REGISTRATE
+            .item("uxv_radio_module", ComponentItem::create)
+            .lang("UXV Radio Module")
+            .properties(p -> p.stacksTo(64))
+            .defaultModel()
+            .register();
+    public static final ItemEntry<ComponentItem> RADIO_MODULE_OPV = REGISTRATE
+            .item("opv_radio_module", ComponentItem::create)
+            .lang("OPV Radio Module")
+            .properties(p -> p.stacksTo(64))
+            .defaultModel()
+            .register();
 
-    // public static final ItemEntry<ComponentItem> VOMAPLAST = REGISTRATE.item("vomaplast", ComponentItem::create)
-    // .lang("Vomaplast")
-    // .properties(p -> p.stacksTo(64))
-    // .defaultModel()
-    // .register();
+    public static final ItemEntry<ComponentItem> GELATIN_SCAFFOLD = REGISTRATE
+            .item("gelatin_scaffold", ComponentItem::create)
+            .lang("Gelatin Scaffold")
+            .properties(p -> p.stacksTo(16))
+            .tag()
+            .defaultModel()
+            .register();
+    public static final ItemEntry<ComponentItem> BIFIDOBACTERIUM_BREVE_CULTURE = REGISTRATE
+            .item("bifidobacterium_breve_culture", ComponentItem::create)
+            .lang("Bifidobacterium Breve Culture")
+            .properties(p -> p.stacksTo(4))
+            .tag()
+            .defaultModel()
+            .register();
+    public static final ItemEntry<ComponentItem> BIFIDOBACTERIUM_BREVE = REGISTRATE
+            .item("bifidobacterium_breve", ComponentItem::create)
+            .lang("Bifidobacterium Breve")
+            .properties(p -> p.stacksTo(64))
+            .tag()
+            .defaultModel()
+            .register();
+    // Strep
+    public static final ItemEntry<ComponentItem> STREPTOCOCCUS_PYOGENES_CULTURE = REGISTRATE
+            .item("streptococcus_pyogenes_culture", ComponentItem::create)
+            .lang("Streptococcus Pyogenes Culture")
+            .properties(p -> p.stacksTo(4))
+            .tag()
+            .defaultModel()
+            .register();
+    public static final ItemEntry<ComponentItem> STREPTOCOCCUS_PYOGENES = REGISTRATE
+            .item("streptococcus_pyogenes", ComponentItem::create)
+            .lang("Streptococcus Pyogenes")
+            .properties(p -> p.stacksTo(64))
+            .tag()
+            .defaultModel()
+            .register();
+    // E COLI
+    public static final ItemEntry<ComponentItem> ESCHERICHIA_COLI_CULTURE = REGISTRATE
+            .item("escherichia_coli_culture", ComponentItem::create)
+            .lang("Escherichia Coli Culture")
+            .properties(p -> p.stacksTo(4))
+            .tag()
+            .defaultModel()
+            .register();
+    public static final ItemEntry<ComponentItem> ESCHERICHIA_COLI = REGISTRATE
+            .item("escherichia_coli", ComponentItem::create)
+            .lang("Escherichia Coli")
+            .properties(p -> p.stacksTo(64))
+            .tag()
+            .defaultModel()
+            .register();
+
+    public static final ItemEntry<ComponentItem> CONTAMINATED_PETRI_DISH = REGISTRATE
+            .item("contaminated_petri_dish", ComponentItem::create)
+            .lang("Contaminated Petri Dish")
+            .properties(p -> p.stacksTo(8))
+            .tag()
+            .defaultModel()
+            .register();
+    public static final ItemEntry<ComponentItem> PREPARED_PETRI_DISH = REGISTRATE
+            .item("prepared_petri_dish", ComponentItem::create)
+            .lang("Prepared Petri Dish")
+            .properties(p -> p.stacksTo(8))
+            .tag()
+            .defaultModel()
+            .register();
+    public static final ItemEntry<ComponentItem> ULTRASONIC_HOMOGENIZER = REGISTRATE
+            .item("ultrasonic_homogenizer", ComponentItem::create)
+            .lang("Ultrasonic Homogenizer")
+            .properties(p -> p.stacksTo(1))
+            .tag()
+            .defaultModel()
+            .register();
+    public static final ItemEntry<ComponentItem> COMPUTATION_SUPPORT_UNIT = REGISTRATE
+            .item("computation_support_unit", ComponentItem::create)
+            .lang("Computation Support Unit")
+            .properties(p -> p.stacksTo(16))
+            .tag()
+            .defaultModel()
+            .register();
+    public static final ItemEntry<ComponentItem> WIRED_PETRI_DISH = REGISTRATE
+            .item("wired_petri_dish", ComponentItem::create)
+            .lang("Wired Petri Dish")
+            .properties(p -> p.stacksTo(16))
+            .tag()
+            .defaultModel()
+            .register();
+
+    public static final ItemEntry<ComponentItem> SCULK_FIBROBLAST = REGISTRATE
+            .item("sculk_fibroblast", ComponentItem::create)
+            .lang("Sculk Fibroblast")
+            .properties(p -> p.stacksTo(64))
+            .tag()
+            .defaultModel()
+            .register();
+    public static final ItemEntry<ComponentItem> SCULK_MYOFIBROBLAST = REGISTRATE
+            .item("sculk_myofibroblast", ComponentItem::create)
+            .lang("Sculk Myofibroblast")
+            .properties(p -> p.stacksTo(64))
+            .tag()
+            .defaultModel()
+            .register();
+    // UNSURE IF THESE WILL BE USED
+    public static final ItemEntry<ComponentItem> RESPIRATORY_SCULK_HEMOCYTOBLAST = REGISTRATE
+            .item("resipiratory_sculk_hemocytoblast", ComponentItem::create)
+            .lang("Respiratory Sculk Hemocytoblast")
+            .properties(p -> p.stacksTo(64))
+            .tag()
+            .defaultModel()
+            .register();
+    public static final ItemEntry<ComponentItem> SATURATED_SCULK_HEMOCYTOBLAST = REGISTRATE
+            .item("saturated_sculk_hemocytoblast", ComponentItem::create)
+            .lang("Saturated Sculk Hemocytoblast")
+            .properties(p -> p.stacksTo(64))
+            .tag()
+            .defaultModel()
+            .register();
+    public static final ItemEntry<ComponentItem> INERT_FUNGAL_SPORES = REGISTRATE
+            .item("inert_fungal_spores", ComponentItem::create)
+            .lang("Inert Fungal Spores")
+            .properties(p -> p.stacksTo(64))
+            .tag()
+            .defaultModel()
+            .register();
+
+    public static final ItemEntry<ComponentItem> HEME_RING = REGISTRATE
+            .item("heme_ring", ComponentItem::create)
+            .lang("Heme Ring")
+            .properties(p -> p.stacksTo(64))
+            .tag()
+            .defaultModel()
+            .register();
+
+    public static final ItemEntry<ComponentItem> FERMIUM_RAD_CHARGES = REGISTRATE
+            .item("fermium_rad_charges", ComponentItem::create)
+            .lang("Fermium Radiation Charge")
+            .properties(p -> p.stacksTo(8))
+            .tag()
+            .defaultModel()
+            .register();
+
+    public static final ItemEntry<ComponentItem> NEURO_PROCESSING_ASSEMBLY = REGISTRATE
+            .item("neuro_processing_assembly", ComponentItem::create)
+            .lang("Neuroprocessing Assembly Board")
+            .properties(p -> p.stacksTo(16))
+            .tag()
+            .defaultModel()
+            .register();
+    public static final ItemEntry<ComponentItem> SOMATIC_PROCESSING_ASSEMBLY = REGISTRATE
+            .item("somatic_processing_assembly", ComponentItem::create)
+            .lang("Somatoprocessing Assembly Board")
+            .properties(p -> p.stacksTo(16))
+            .tag()
+            .defaultModel()
+            .register();
+    public static final ItemEntry<ComponentItem> PROGRAMMABLE_MOTE = REGISTRATE
+            .item("programmable_mote", ComponentItem::create)
+            .lang("§5Programmable Mote")
+            .properties(p -> p.stacksTo(64))
+            .defaultModel()
+            .register();
     public static final ItemEntry<ComponentItem> PERPETUITY_SHARD = REGISTRATE
             .item("shard_of_perpetuity", ComponentItem::create)
             .lang("Shard of Perpetuity")
@@ -211,6 +564,14 @@ public class CosmicItems {
                 tooltips.add(Component.translatable("cosmiccore.lore.shard_huge.1"));
                 tooltips.add(Component.translatable("cosmiccore.lore.shard_huge.2"));
             })))
+            .defaultModel()
+            .register();
+    public static final ItemEntry<ComponentItem> WIRELESS_PDA = REGISTRATE
+            .item("wireless_pda", ComponentItem::create)
+            .lang("Wireless Data PDA")
+            .properties(p -> p.stacksTo(1))
+            .tag()
+            .onRegister(attach(new WirelessPDABehavior()))
             .defaultModel()
             .register();
 
@@ -248,9 +609,9 @@ public class CosmicItems {
                         list.add(Component.translatable("item.cosmiccore.the_one_ring.tooltip.1"));
                     })))
             .register();
-    // public static final ItemEntry<ComponentItem> PARADOX_ECHOS = REGISTRATE.item("paradox_echos",
+    // public static final ItemEntry<ComponentItem> PARADOX_ECHOS = REGISTRATE.item("paradox_harmonics",
     // ComponentItem::create)
-    // .lang("Paradox Echos")
+    // .lang("Paradox Harmonics")
     // .properties(p -> p.stacksTo(64))
     // .defaultModel()
     // .register();
@@ -272,6 +633,15 @@ public class CosmicItems {
     // .defaultModel()
     // .register();
     //
+
+    public static ItemEntry<ComponentItem> SPACE_RADIO = REGISTRATE
+            .item("space_radio", ComponentItem::create)
+            .lang("Space Radio")
+            .properties(p -> p.stacksTo(1).fireResistant())
+            .onRegister(attach(new TooltipBehavior(list -> {
+                list.add(Component.translatable("item.cosmiccore.space_radio.tooltip"));
+            })))
+            .register();
 
     public static final ItemEntry<ComponentItem> WAXED_LEATHER = REGISTRATE.item("waxed_leather", ComponentItem::create)
             .lang("Waxed Leather")
@@ -302,36 +672,36 @@ public class CosmicItems {
             .defaultModel()
             .register();
 
-    public static final ItemEntry<ComponentItem> WRAPPED_S = REGISTRATE
-            .item("blackstone_pustule", ComponentItem::create)
-            .lang("Blackstone Pustule")
-            .properties(p -> p.stacksTo(64))
-            .defaultModel()
-            .register();
+    // public static final ItemEntry<ComponentItem> WRAPPED_S = REGISTRATE
+    // .item("blackstone_pustule", ComponentItem::create)
+    // .lang("Blackstone Pustule")
+    // .properties(p -> p.stacksTo(64))
+    // .defaultModel()
+    // .register();
 
     // New Circuits
-    // Echo (ZPM-UEV)
+    // Harmonic (ZPM-UEV)
     public static final ItemEntry<ComponentItem> SONAR_PROCESSOR = REGISTRATE
-            .item("echo_processor", ComponentItem::create)
-            .lang("Echo Processor")
+            .item("harmonic_processor", ComponentItem::create)
+            .lang("Harmonic Processor")
             .properties(p -> p.stacksTo(64))
             .defaultModel()
             .register();
     public static final ItemEntry<ComponentItem> SONAR_PROCESSOR_ASSEMBLY = REGISTRATE
-            .item("echo_processor_assembly", ComponentItem::create)
-            .lang("Echo Processor Assembly")
+            .item("harmonic_processor_assembly", ComponentItem::create)
+            .lang("Harmonic Processor Assembly")
             .properties(p -> p.stacksTo(64))
             .defaultModel()
             .register();
     public static final ItemEntry<ComponentItem> SONAR_PROCESSOR_SUPERCOMPUTER = REGISTRATE
-            .item("echo_processor_supercomputer", ComponentItem::create)
-            .lang("Echo Processor Supercomputer")
+            .item("harmonic_processor_supercomputer", ComponentItem::create)
+            .lang("Harmonic Processor Supercomputer")
             .properties(p -> p.stacksTo(64))
             .defaultModel()
             .register();
     public static final ItemEntry<ComponentItem> SONAR_PROCESSOR_MAINFRAME = REGISTRATE
-            .item("echo_processor_mainframe", ComponentItem::create)
-            .lang("Echo Processor Mainframe")
+            .item("harmonic_processor_mainframe", ComponentItem::create)
+            .lang("Harmonic Processor Mainframe")
             .properties(p -> p.stacksTo(64))
             .defaultModel()
             .register();
@@ -360,83 +730,117 @@ public class CosmicItems {
             .properties(p -> p.stacksTo(64))
             .defaultModel()
             .register();
-    // Cosmic (UHV-UXV)
+    // Suelescent (UHV-UXV)
     public static final ItemEntry<ComponentItem> COSMIC_PROCESSOR = REGISTRATE
-            .item("cosmic_processor", ComponentItem::create)
-            .lang("Cosmic Processor")
+            .item("suelescent_processor", ComponentItem::create)
+            .lang("Suelescent Processor")
             .properties(p -> p.stacksTo(64))
             .defaultModel()
             .register();
     public static final ItemEntry<ComponentItem> COSMIC_PROCESSOR_ASSEMBLY = REGISTRATE
-            .item("cosmic_processor_assembly", ComponentItem::create)
-            .lang("Cosmic Processor Assembly")
+            .item("suelescent_processor_assembly", ComponentItem::create)
+            .lang("Suelescent Processor Assembly")
             .properties(p -> p.stacksTo(64))
             .defaultModel()
             .register();
     public static final ItemEntry<ComponentItem> COSMIC_PROCESSOR_SUPERCOMPUTER = REGISTRATE
-            .item("cosmic_processor_supercomputer", ComponentItem::create)
-            .lang("Cosmic Processor Supercomputer")
+            .item("suelescent_processor_supercomputer", ComponentItem::create)
+            .lang("Suelescent Processor Supercomputer")
             .properties(p -> p.stacksTo(64))
             .defaultModel()
             .register();
     public static final ItemEntry<ComponentItem> COSMIC_PROCESSOR_MAINFRAME = REGISTRATE
-            .item("cosmic_processor_mainframe", ComponentItem::create)
-            .lang("Cosmic Processor Mainframe")
+            .item("suelescent_processor_mainframe", ComponentItem::create)
+            .lang("Suelescent Processor Mainframe")
             .properties(p -> p.stacksTo(64))
             .defaultModel()
             .register();
-    // Psionic Circuit (UEV-OPV)
+    // Akashic Circuit (UEV-OPV)
     public static final ItemEntry<ComponentItem> PSIONIC_PROCESSOR = REGISTRATE
-            .item("psionic_processor", ComponentItem::create)
-            .lang("Psionic Processor")
+            .item("akashic_processor", ComponentItem::create)
+            .lang("Akashic Processor")
             .properties(p -> p.stacksTo(64))
             .defaultModel()
             .register();
     public static final ItemEntry<ComponentItem> PSIONIC_PROCESSOR_ASSEMBLY = REGISTRATE
-            .item("psionic_processor_assembly", ComponentItem::create)
-            .lang("Psionic Processor Assembly")
+            .item("akashic_processor_assembly", ComponentItem::create)
+            .lang("Akashic Processor Assembly")
             .properties(p -> p.stacksTo(64))
             .defaultModel()
             .register();
     public static final ItemEntry<ComponentItem> PSIONIC_PROCESSOR_SUPERCOMPUTER = REGISTRATE
-            .item("psionic_processor_supercomputer", ComponentItem::create)
-            .lang("Psionic Processor Supercomputer")
+            .item("akashic_processor_supercomputer", ComponentItem::create)
+            .lang("Akashic Processor Supercomputer")
             .properties(p -> p.stacksTo(64))
             .defaultModel()
             .register();
     public static final ItemEntry<ComponentItem> PSIONIC_PROCESSOR_MAINFRAME = REGISTRATE
-            .item("psionic_processor_mainframe", ComponentItem::create)
-            .lang("Psionic Processor Mainframe")
+            .item("akashic_processor_mainframe", ComponentItem::create)
+            .lang("Akashic Processor Mainframe")
             .properties(p -> p.stacksTo(64))
             .defaultModel()
             .register();
-    // Macroverse (UIV-MAX)
-    public static final ItemEntry<ComponentItem> MACROVERSE_PROCESSOR = REGISTRATE
-            .item("macroverse_processor", ComponentItem::create)
-            .lang("Macroverse Processor")
+    // Eschaton (UIV-MAX)
+    public static final ItemEntry<ComponentItem> ESCHATON_PROCESSOR = REGISTRATE
+            .item("eschaton_processor", ComponentItem::create)
+            .lang("Eschaton Processor")
+            .properties(p -> p.stacksTo(64))
+
+            .defaultModel()
+            .register();
+    public static final ItemEntry<ComponentItem> ESCHATON_PROCESSOR_ASSEMBLY = REGISTRATE
+            .item("eschaton_processor_assembly", ComponentItem::create)
+            .lang("Eschaton Processor Assembly")
             .properties(p -> p.stacksTo(64))
             .defaultModel()
             .register();
-    public static final ItemEntry<ComponentItem> MACROVERSE_PROCESSOR_ASSEMBLY = REGISTRATE
-            .item("macroverse_processor_assembly", ComponentItem::create)
-            .lang("Macroverse Processor Assembly")
+    public static final ItemEntry<ComponentItem> ESCHATON_PROCESSOR_SUPERCOMPUTER = REGISTRATE
+            .item("eschaton_processor_supercomputer", ComponentItem::create)
+            .lang("Eschaton Processor Supercomputer")
             .properties(p -> p.stacksTo(64))
             .defaultModel()
             .register();
-    public static final ItemEntry<ComponentItem> MACROVERSE_PROCESSOR_SUPERCOMPUTER = REGISTRATE
-            .item("macroverse_processor_supercomputer", ComponentItem::create)
-            .lang("Macroverse Processor Supercomputer")
+    public static final ItemEntry<ComponentItem> ESCHATON_PROCESSOR_MAINFRAME = REGISTRATE
+            .item("eschaton_processor_mainframe", ComponentItem::create)
+            .lang("Eschaton Processor Mainframe")
             .properties(p -> p.stacksTo(64))
+            .onRegister(attach(new TooltipBehavior(lines -> {
+                lines.add(Component.literal(StringUtil
+                        .rainbowDancing(LocalizationUtils.format("cosmiccore.circuit.lore.tier.max.0"))));
+                lines.add(Component.translatable("cosmiccore.circuit.lore.tier.max.1"));
+                lines.add(Component.translatable("cosmiccore.circuit.lore.tier.max.2"));
+                lines.add(Component.translatable("cosmiccore.circuit.lore.tier.max.3"));
+
+            })))
             .defaultModel()
             .register();
-    public static final ItemEntry<ComponentItem> MACROVERSE_PROCESSOR_MAINFRAME = REGISTRATE
-            .item("macroverse_processor_mainframe", ComponentItem::create)
-            .lang("Macroverse Processor Mainframe")
+
+    // Demon/Soul Related Items
+
+    public static final ItemEntry<ComponentItem> WICKED_ESSENCE = REGISTRATE
+            .item("wicked_essence", ComponentItem::create)
+            .lang("Wicked Essence")
             .properties(p -> p.stacksTo(64))
+            .onRegister(attach(new TooltipBehavior(lines -> {
+                lines.add(Component.literal(StringUtil
+                        .goldFlicker(LocalizationUtils.format("cosmiccore.lore.broken_virtue.0"))));
+            })))
             .defaultModel()
             .register();
+
+    public static final ItemEntry<ComponentItem> ABERRANT_ESSENCE = REGISTRATE
+            .item("aberrant_essence", ComponentItem::create)
+            .lang("§6Aberrant Essence")
+            .properties(p -> p.stacksTo(64))
+            .onRegister(attach(new TooltipBehavior(lines -> {
+                lines.add(Component.literal(StringUtil
+                        .midnightOscillation(LocalizationUtils.format("cosmiccore.lore.broken_virtue.1"))));
+            })))
+            .defaultModel()
+            .register();
+
     public static final ItemEntry<ComponentItem> FIRECLAY_BALL = REGISTRATE.item("fireclay_ball", ComponentItem::create)
-            .lang("Fireclay ball")
+            .lang("Fireclay Ball")
             .properties(p -> p.stacksTo(64))
             .defaultModel()
             .register();
@@ -504,20 +908,8 @@ public class CosmicItems {
             .register();
     // Oiled up white girl trying to understand what the FUCK an armor tag is, i'm doing to fucking shove a whole
     // pineapple up the ass of whatever mojang employee thought these were **OKAY TO CODE**
-    public static ItemEntry<SpaceArmorComponentItem> VOMHINEE_WARPTECH_CHESTPLATE = REGISTRATE
-            .item("vomahine_warptech_chestplate",
-                    (p) -> new SpaceArmorComponentItem(GTArmorMaterials.ARMOR, ArmorItem.Type.CHESTPLATE, 100000, p)
-                            .setArmorLogic(new QuarkTechSpaceSuite(ArmorItem.Type.CHESTPLATE, 8192,
-                                    100_000_000L * (long) Math.max(1,
-                                            Math.pow(4, ConfigHolder.INSTANCE.tools.voltageTierQuarkTech - 5)),
-                                    ConfigHolder.INSTANCE.tools.voltageTierAdvQuarkTech)))
-            .tag(CosmicItemTags.QUARKTECH_SPACE_SUITE, ModItemTags.SPACE_SUITS, ModItemTags.FREEZE_RESISTANT_ARMOR,
-                    ModItemTags.HEAT_RESISTANT_ARMOR)
-            .lang("Vomahine™ WarpTech Chestplate")
-            .properties(p -> p.rarity(Rarity.EPIC))
-            .register();
-    public static ItemEntry<SpaceArmorComponentItem> ADVANCED_VOMHINEE_WARPTECH_CHESTPLATE = REGISTRATE
-            .item("vomahine_warptech_gravplate",
+    public static ItemEntry<SpaceArmorComponentItem> ADVANCED_SANGUINE_WARPTECH_CHESTPLATE = REGISTRATE
+            .item("sanguine_warptech_chestplate",
                     (p) -> new SpaceArmorComponentItem(GTArmorMaterials.ARMOR, ArmorItem.Type.CHESTPLATE, 100000, p)
                             .setArmorLogic(new AdvancedQuarkTechSpaceSuite(8192,
                                     10_000_000_000L * (long) Math.max(1,
@@ -525,40 +917,40 @@ public class CosmicItems {
                                     ConfigHolder.INSTANCE.tools.voltageTierAdvQuarkTech)))
             .tag(CosmicItemTags.QUARKTECH_SPACE_SUITE, ModItemTags.SPACE_SUITS, ModItemTags.FREEZE_RESISTANT_ARMOR,
                     ModItemTags.HEAT_RESISTANT_ARMOR)
-            .lang("Vomahine™ WarpTech Gravplate")
+            .lang("Sanguine WarpTech Gravplate")
             .properties(p -> p.rarity(Rarity.EPIC))
             .register();
-    public static ItemEntry<ArmorComponentItem> VOMHINEE_WARPTECH_LEGGINGS = REGISTRATE
-            .item("vomahine_warptech_leggings",
+    public static ItemEntry<ArmorComponentItem> SANGUINE_WARPTECH_LEGGINGS = REGISTRATE
+            .item("sanguine_warptech_leggings",
                     (p) -> new ArmorComponentItem(GTArmorMaterials.ARMOR, ArmorItem.Type.LEGGINGS, p)
                             .setArmorLogic(new QuarkTechSuite(ArmorItem.Type.LEGGINGS,
                                     8192,
                                     100_000_000L * (long) Math.max(1,
                                             Math.pow(4, ConfigHolder.INSTANCE.tools.voltageTierQuarkTech - 5)),
                                     ConfigHolder.INSTANCE.tools.voltageTierQuarkTech)))
-            .lang("Vomahine™ WarpTech Leggings")
+            .lang("Sanguine WarpTech Leggings")
             .properties(p -> p.rarity(Rarity.EPIC))
             .tag(CustomTags.PPE_ARMOR)
             .register();
-    public static ItemEntry<ArmorComponentItem> VOMHINEE_WARPTECH_HELMET = REGISTRATE.item("vomahine_warptech_helmet",
+    public static ItemEntry<ArmorComponentItem> SANGUINE_WARPTECH_HELMET = REGISTRATE.item("sanguine_warptech_helmet",
             (p) -> new ArmorComponentItem(GTArmorMaterials.ARMOR, ArmorItem.Type.HELMET, p)
                     .setArmorLogic(new QuarkTechSuite(ArmorItem.Type.HELMET,
                             8192,
                             100_000_000L * (long) Math.max(1,
                                     Math.pow(4, ConfigHolder.INSTANCE.tools.voltageTierQuarkTech - 5)),
                             ConfigHolder.INSTANCE.tools.voltageTierQuarkTech)))
-            .lang("Vomahine™ WarpTech Leggings")
+            .lang("Sanguine WarpTech Leggings")
             .properties(p -> p.rarity(Rarity.EPIC))
             .tag(CustomTags.PPE_ARMOR)
             .register();
-    public static ItemEntry<ArmorComponentItem> VOMHINEE_WARPTECH_BOOTS = REGISTRATE.item("vomahine_warptech_boots",
+    public static ItemEntry<ArmorComponentItem> SANGUINE_WARPTECH_BOOTS = REGISTRATE.item("sanguine_warptech_boots",
             (p) -> new ArmorComponentItem(GTArmorMaterials.ARMOR, ArmorItem.Type.BOOTS, p)
                     .setArmorLogic(new QuarkTechSuite(ArmorItem.Type.BOOTS,
                             8192,
                             100_000_000L * (long) Math.max(1,
                                     Math.pow(4, ConfigHolder.INSTANCE.tools.voltageTierQuarkTech - 5)),
                             ConfigHolder.INSTANCE.tools.voltageTierQuarkTech)))
-            .lang("Vomahine™ WarpTech Leggings")
+            .lang("Sanguine WarpTech Leggings")
             .properties(p -> p.rarity(Rarity.EPIC))
             .tag(CustomTags.PPE_ARMOR)
             .register();
@@ -811,13 +1203,54 @@ public class CosmicItems {
             .tag()
             .properties(p -> p.stacksTo(64))
             .onRegister(attach(new TooltipBehavior(tooltips -> {
-                tooltips.add(Component.translatable("cosmiccore.gravpack.1"));
+                tooltips.add(Component.translatable("item.cosmiccore.portable_gravity_core.tooltip"));
             })))
             .defaultModel()
             .register();
+    // infinite spraycan
+    public static final ItemEntry<ComponentItem> INFINITE_SPRAY_CAN = REGISTRATE
+            .item("infinite_spray_can", ComponentItem::create)
+            .lang("§5 Infinite_spray_can")
+            .setData(ProviderType.ITEM_MODEL, NonNullBiConsumer.noop())
+            .properties(p -> p.stacksTo(1))
+            .onRegister(attach(new InfiniteSprayCanBehavior(1)))
+            .onRegister(modelPredicate(CosmicCore.id("color"),
+                    (itemStack) -> (float) itemStack.getOrCreateTag().getInt(InfiniteSprayCanBehavior.ColorTag)))
+            .register();
+
+    public static ItemEntry<ComponentItem> NEUTRONITE_FLUID_CELL = GTRegistration.REGISTRATE
+            .item("indestructible_fluid_cell", ComponentItem::create)
+            .lang("Indestructible %s Fluid Cell")
+            .setData(ProviderType.ITEM_MODEL, NonNullBiConsumer.noop())
+            .color(() -> GTItems::cellColor)
+            .onRegister(attach(
+                    ThermalFluidStats.create(1024000, 1000000, true, true, true, true, true),
+                    new ItemFluidContainer(), cellName()))
+            .register();
+
+    public static ICustomDescriptionId cellName() {
+        return new ICustomDescriptionId() {
+
+            @Override
+            public Component getItemName(ItemStack stack) {
+                Component prefix = FluidUtil.getFluidContained(stack).map(FluidStack::getDisplayName)
+                        .orElse(Component.translatable("gtceu.fluid.empty"));
+                return Component.translatable(stack.getDescriptionId(), prefix);
+            }
+        };
+    }
 
     public static <T extends ComponentItem> NonNullConsumer<T> attach(IItemComponent... components) {
         return item -> item.attachComponents(components);
+    }
+
+    public static <T extends Item> NonNullConsumer<T> modelPredicate(ResourceLocation predicate,
+                                                                     Function<ItemStack, Float> property) {
+        return item -> {
+            if (GTCEu.isClientSide()) {
+                ItemProperties.register(item, predicate, (itemStack, c, l, i) -> property.apply(itemStack));
+            }
+        };
     }
 
     public static void init() {}
