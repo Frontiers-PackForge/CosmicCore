@@ -163,7 +163,6 @@ public class InfiniteSprayCanBehavior implements IInteractionItem, IAddInformati
 
                 this.color = ExtendedDyeColor.values()[nextColor];
                 sendColorToTag(player, this.color);
-
                 isSwinging = false;
                 return true;
             } else {
@@ -172,8 +171,7 @@ public class InfiniteSprayCanBehavior implements IInteractionItem, IAddInformati
                                 .withColor(ChatFormatting.RED)
                                 .withBold(true)),
                         true);
-
-                return true;
+                isSwinging = false;
             }
         }
         return true;
@@ -286,7 +284,7 @@ public class InfiniteSprayCanBehavior implements IInteractionItem, IAddInformati
     }
 
     @SuppressWarnings("rawtypes")
-    private boolean handleSpecialBlockEntities(BlockEntity first, int limit, UseOnContext context) {
+    public boolean handleSpecialBlockEntities(BlockEntity first, int limit, UseOnContext context) {
         var player = context.getPlayer();
         if (player == null) {
             return false;
@@ -339,7 +337,7 @@ public class InfiniteSprayCanBehavior implements IInteractionItem, IAddInformati
         return true;
     }
 
-    private void handleBlocks(BlockPos start, int limit, UseOnContext context) {
+    public void handleBlocks(BlockPos start, int limit, UseOnContext context) {
         final var level = context.getLevel();
         var player = context.getPlayer();
         if (player == null) {
