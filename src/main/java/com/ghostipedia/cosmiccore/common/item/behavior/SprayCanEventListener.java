@@ -184,7 +184,8 @@ public class SprayCanEventListener {
     // this event is used here because the other one needs a b lock to be clicked on this one works in the air
     @SubscribeEvent
     public static void onMouseInput(InputEvent.MouseButton event) {
-        if (event.getButton() != 2 || event.getAction() != GLFW.GLFW_PRESS) return;
+        int button = event.getButton();
+        if ((button != 0 && button != 2) || event.getAction() != GLFW.GLFW_PRESS) return;
 
         Minecraft mc = Minecraft.getInstance();
         Player player = mc.player;
@@ -195,11 +196,17 @@ public class SprayCanEventListener {
         ItemStack spraycan = player.getMainHandItem();
         if (hasSprayCan(spraycan)) return;
 
-        // returns if the player isn't crouching
-        if (!player.isCrouching()) return;
-
         InfiniteSprayCanBehavior behavior = getSprayCanBehavior(spraycan);
         if (behavior == null) return;
+
+        // resets the isSwinging flag
+        if (button == 0) {
+            behavior.isSwinging = false;
+            return;
+        }
+
+        // returns if the player isn't crouching
+        if (!player.isCrouching()) return;
 
         // if its locked invert it
         boolean nowLocked = !behavior.getIsLocked();

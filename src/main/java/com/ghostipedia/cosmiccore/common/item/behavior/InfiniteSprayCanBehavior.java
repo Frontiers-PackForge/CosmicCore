@@ -77,7 +77,7 @@ public class InfiniteSprayCanBehavior implements IInteractionItem, IAddInformati
     private Boolean isLocked = false;
 
     @DescSynced
-    boolean isSwinging = true;
+    boolean isSwinging = false;
 
     public static final String ColorTag = "color";
 
@@ -125,7 +125,6 @@ public class InfiniteSprayCanBehavior implements IInteractionItem, IAddInformati
 
     @Override
     public InteractionResultHolder<ItemStack> use(Item item, Level level, Player player, InteractionHand usedHand) {
-        isSwinging = false;
         if (player.isCrouching()) {
             return IItemUIFactory.super.use(item, level, player, usedHand);
         }
@@ -150,32 +149,25 @@ public class InfiniteSprayCanBehavior implements IInteractionItem, IAddInformati
 
     @Override
     public boolean onEntitySwing(ItemStack stack, LivingEntity entity) {
+        if (!(entity instanceof Player player) || isSwinging) {
+            return true;
+        }
         CompoundTag tag = stack.getOrCreateTag();
-        if (!isSwinging) {
-            isSwinging = true;
-            return true; // Do the color change only if not already swinging
+        if (!this.isLocked) {
+            int totalColors = ExtendedDyeColor.values().length;
+            int nextColor = player.isCrouching() ? (color.ordinal() - 1 + totalColors) % totalColors :
+                    (color.ordinal() + 1) % totalColors;
+
+            this.color = ExtendedDyeColor.values()[nextColor];
+            sendColorToTag(player, this.color);
+        } else {
+            player.displayClientMessage(Component.literal("THE SPRAYCAN IS LOCKED")
+                    .withStyle(style -> style
+                            .withColor(ChatFormatting.RED)
+                            .withBold(true)),
+                    true);
         }
-        if (entity instanceof Player player) {
-            if (!this.isLocked) {
-                int totalColors = ExtendedDyeColor.values().length;
-                int nextColor = player.isCrouching() ? (color.ordinal() - 1 + totalColors) % totalColors :
-                        (color.ordinal() + 1) % totalColors;
-
-                this.color = ExtendedDyeColor.values()[nextColor];
-                sendColorToTag(player, this.color);
-
-                isSwinging = false;
-                return true;
-            } else {
-                player.displayClientMessage(Component.literal("THE SPRAYCAN IS LOCKED")
-                        .withStyle(style -> style
-                                .withColor(ChatFormatting.RED)
-                                .withBold(true)),
-                        true);
-
-                return true;
-            }
-        }
+        isSwinging = true;
         return true;
     }
 
