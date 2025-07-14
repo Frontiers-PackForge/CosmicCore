@@ -49,7 +49,7 @@ public class StellarIrisRender extends DynamicRender<IrisMultiblockMachine, Stel
     private static BakedModel irisSmallRingModel = null;
 
     private StellarIrisRender() {
-        ModelUtils.registerBakeEventListener(event -> {
+        ModelUtils.registerBakeEventListener(true, event -> {
             irisCoreModel = event.getModels().get(IRIS_MODEL_CORE);
             irisRingModel = event.getModels().get(IRIS_MODEL_RING);
             irisSmallRingModel = event.getModels().get(IRIS_MODEL_RING_WHITE);

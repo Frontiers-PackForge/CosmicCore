@@ -68,7 +68,7 @@ public class HemophagicTransfuserRender extends
     @SuppressWarnings("deprecation")
     private HemophagicTransfuserRender() {
         if (!isEventListenerRegistered) {
-            ModelUtils.registerAtlasStitchedEventListener(TextureAtlas.LOCATION_BLOCKS, event -> {
+            ModelUtils.registerAtlasStitchedEventListener(true, TextureAtlas.LOCATION_BLOCKS, event -> {
                 bloodCubeSprite = event.getAtlas().getSprite(BLOOD_CUBE_TEXTURE);
             });
             isEventListenerRegistered = true;
