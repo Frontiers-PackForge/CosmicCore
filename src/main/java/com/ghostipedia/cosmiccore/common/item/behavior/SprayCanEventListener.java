@@ -25,6 +25,8 @@ import net.minecraft.world.level.material.MapColor;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.event.InputEvent;
 import net.minecraftforge.event.level.BlockEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -63,6 +65,7 @@ public class SprayCanEventListener {
         GTSoundEntries.SPRAY_CAN_TOOL.play(level, null, player.position(), 1.0f, 1.0f);
     }
 
+    @OnlyIn(Dist.CLIENT)
     @SubscribeEvent
     public static void onClickEvent(InputEvent.InteractionKeyMappingTriggered event) {
         // isPickBlock() returns button == 2 which is the middle mouse click
@@ -182,6 +185,7 @@ public class SprayCanEventListener {
     }
 
     // this event is used here because the other one needs a b lock to be clicked on this one works in the air
+    @OnlyIn(Dist.CLIENT)
     @SubscribeEvent
     public static void onMouseInput(InputEvent.MouseButton event) {
         int button = event.getButton();
