@@ -58,7 +58,7 @@ public class HellFireFoundryPartRender extends
     public HellFireFoundryPartRender(BlockState casing) {
         this.iesniumBlock = OccultismBlocks.IESNIUM_BLOCK.get().defaultBlockState();
         this.casing = casing;
-        ModelUtils.registerBakeEventListener(event -> {
+        ModelUtils.registerBakeEventListener(true, event -> {
             this.iesniumBlockModel = event.getModels().get(BlockModelShaper.stateToModelLocation(this.iesniumBlock));
             this.casingModel = event.getModels().get(BlockModelShaper.stateToModelLocation(this.casing));
         });
@@ -94,11 +94,6 @@ public class HellFireFoundryPartRender extends
 
     @Override
     public boolean shouldRender(WorkableElectricMultiblockMachine machine, Vec3 cameraPos) {
-        return false;
-    }
-
-    @Override
-    public boolean isCustomRenderer() {
         return false;
     }
 }

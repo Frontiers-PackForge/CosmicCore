@@ -62,7 +62,7 @@ public class SufferingChamberRenderer extends
     });
 
     private SufferingChamberRenderer() {
-        ModelUtils.registerAtlasStitchedEventListener(TextureAtlas.LOCATION_BLOCKS, event -> {
+        ModelUtils.registerAtlasStitchedEventListener(true, TextureAtlas.LOCATION_BLOCKS, event -> {
             pentagramSprite = event.getAtlas().getSprite(PENTAGRAM);
         });
     }

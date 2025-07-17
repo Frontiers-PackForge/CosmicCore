@@ -49,7 +49,7 @@ public class HPCAIndicatorRender extends DynamicRender<HPCAIndicatorPartMachine,
 
     private HPCAIndicatorRender() {
         if (!isOverlayListenerInitialized) {
-            ModelUtils.registerAtlasStitchedEventListener(InventoryMenu.BLOCK_ATLAS, event -> {
+            ModelUtils.registerAtlasStitchedEventListener(true, InventoryMenu.BLOCK_ATLAS, event -> {
                 MODIFIER_SPRITES.clear();
                 for (HPCAModifier modifier : HPCAModifier.VALUES) {
                     MODIFIER_SPRITES.put(modifier, event.getAtlas().getSprite(modifier.overlay));

@@ -51,7 +51,7 @@ public class StarBallastRender extends DynamicRender<IrisMultiblockMachine, Star
     private static BakedModel starBeamModel = null;
 
     private StarBallastRender() {
-        ModelUtils.registerBakeEventListener(event -> {
+        ModelUtils.registerBakeEventListener(true, event -> {
             starCoreModel = event.getModels().get(STAR_MODEL_CORE);
             outerStarSphereModel = event.getModels().get(STAR_MODEL_OUTER);
             innerStarSphereModel = event.getModels().get(STAR_MODEL_INNER);
