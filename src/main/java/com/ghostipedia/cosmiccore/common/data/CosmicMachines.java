@@ -10,6 +10,7 @@ import com.ghostipedia.cosmiccore.api.machine.part.SteamFluidHatchPartMachine;
 import com.ghostipedia.cosmiccore.api.machine.part.WirelessEnergyHatchPartMachine;
 import com.ghostipedia.cosmiccore.api.registries.CosmicRegistration;
 import com.ghostipedia.cosmiccore.client.renderer.machine.CosmicDynamicRenderHelpers;
+import com.ghostipedia.cosmiccore.common.block.WorkableSteamHullType;
 import com.ghostipedia.cosmiccore.common.block.debug.CreativeThermiaContainerMachine;
 import com.ghostipedia.cosmiccore.common.data.materials.CosmicMaterials;
 import com.ghostipedia.cosmiccore.common.data.recipe.CosmicRecipeModifiers;
@@ -20,6 +21,7 @@ import com.ghostipedia.cosmiccore.common.machine.multiblock.multi.WirelessDataBa
 import com.ghostipedia.cosmiccore.common.machine.multiblock.part.*;
 import com.ghostipedia.cosmiccore.common.machine.multiblock.steam.WeakSteamParallelMultiBlockMachine;
 import com.ghostipedia.cosmiccore.gtbridge.CosmicRecipeTypes;
+import com.ghostipedia.cosmiccore.api.machine.multiblock.SoulTesterMachine;
 
 import com.gregtechceu.gtceu.GTCEu;
 import com.gregtechceu.gtceu.api.GTCEuAPI;
@@ -54,6 +56,7 @@ import com.gregtechceu.gtceu.common.data.models.GTModels;
 import com.gregtechceu.gtceu.common.machine.multiblock.electric.ActiveTransformerMachine;
 import com.gregtechceu.gtceu.common.machine.multiblock.electric.FusionReactorMachine;
 import com.gregtechceu.gtceu.common.machine.multiblock.electric.PowerSubstationMachine;
+import com.gregtechceu.gtceu.common.machine.multiblock.primitive.PrimitivePumpMachine;
 import com.gregtechceu.gtceu.config.ConfigHolder;
 import com.gregtechceu.gtceu.utils.FormattingUtil;
 
@@ -189,20 +192,19 @@ public class CosmicMachines {
             GTValues.tiersBetween(HV, UIV));
 
     // Enable If needed Inside of Dev
-    // public static final MultiblockMachineDefinition SOUL_TESTER = REGISTRATE.multiblock("soul_tester",
-    // PrimitiveWorkableMachine::new)
-    // .rotationState(RotationState.NON_Y_AXIS)
-    // .recipeType(CosmicCoreRecipeTypes.SOUL_TESTER_RECIPES)
-    // .appearanceBlock(GTBlocks.CASING_PRIMITIVE_BRICKS)
-    // .pattern(definition -> FactoryBlockPattern.start()
-    // .aisle("S", "C", "I")
-    // .where("C", controller(blocks(definition.getBlock())))
-    // .where("S", abilities(CosmicPartAbility.IMPORT_SOUL).or(abilities(CosmicPartAbility.EXPORT_SOUL)))
-    // .where("I", abilities(PartAbility.EXPORT_ITEMS).or(abilities(PartAbility.IMPORT_ITEMS)))
-    // .build())
-    // .workableCasingModel(GTCEu.id("block/casings/solid/machine_casing_inert_ptfe"),
-    // GTCEu.id("block/multiblock/coke_oven"))
-    // .register();
+     public static final MultiblockMachineDefinition SOUL_TESTER = REGISTRATE.multiblock("soul_tester", SoulTesterMachine::new)
+     .rotationState(RotationState.NON_Y_AXIS)
+     .recipeType(CosmicRecipeTypes.SOUL_TESTER_RECIPES)
+     .appearanceBlock(GTBlocks.CASING_STAINLESS_CLEAN)
+     .pattern(definition -> FactoryBlockPattern.start()
+     .aisle("S", "C", "I")
+     .where("C", controller(blocks(definition.getBlock())))
+     .where("S", abilities(CosmicPartAbility.IMPORT_SOUL).or(abilities(CosmicPartAbility.EXPORT_SOUL)))
+     .where("I", abilities(PartAbility.EXPORT_ITEMS).or(abilities(PartAbility.IMPORT_ITEMS)))
+     .build())
+     .workableCasingModel(GTCEu.id("block/casings/solid/machine_coke_bricks"),
+            CosmicCore.id("block/multiblock/solidifier"))
+     .register();
 
     // FIXME why are these registered to GT??
     public static final MultiblockMachineDefinition STEAM_CASTER = REGISTRATE

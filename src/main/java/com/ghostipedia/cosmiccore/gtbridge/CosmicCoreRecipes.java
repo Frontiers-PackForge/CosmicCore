@@ -1,5 +1,6 @@
 package com.ghostipedia.cosmiccore.gtbridge;
 
+import com.ghostipedia.cosmiccore.api.capability.recipe.SoulRecipeCapability;
 import com.gregtechceu.gtceu.api.GTValues;
 
 import net.minecraft.data.recipes.FinishedRecipe;
@@ -17,6 +18,20 @@ public class CosmicCoreRecipes {
 
     public static void init(Consumer<FinishedRecipe> provider) {
         registerIndustrialPrimitiveBlastFurnaceRecipes(provider);
+
+        SOUL_TESTER_RECIPES.recipeBuilder("test_recipe")
+                .input(SoulRecipeCapability.CAP, 1000)
+                .outputItems(gem, Diamond)
+                .duration(40)
+                .EUt(GTValues.VA[GTValues.HV])
+                .save(provider);
+
+        SOUL_TESTER_RECIPES.recipeBuilder("test_recipe")
+                .inputItems(gem, Diamond)
+                .output(SoulRecipeCapability.CAP, 10000)
+                .duration(40)
+                .EUt(GTValues.VA[GTValues.HV])
+                .save(provider);
 
         DISTILLATION_RECIPES.recipeBuilder("diluted_prisma_to_prisma_and_water")
                 .inputFluids(DilutedPrisma.getFluid(5000))
