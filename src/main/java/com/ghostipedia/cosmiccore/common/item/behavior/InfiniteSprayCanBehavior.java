@@ -20,7 +20,6 @@ import com.lowdragmc.lowdraglib.gui.widget.ButtonWidget;
 import com.lowdragmc.lowdraglib.syncdata.annotation.DescSynced;
 
 import net.minecraft.ChatFormatting;
-import net.minecraft.client.color.item.ItemColor;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -67,7 +66,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.function.BiPredicate;
 
-public class InfiniteSprayCanBehavior implements IInteractionItem, IAddInformation, ItemColor, IItemUIFactory {
+public class InfiniteSprayCanBehavior implements IInteractionItem, IAddInformation, IItemUIFactory {
 
     @Getter
     @Setter
@@ -77,7 +76,7 @@ public class InfiniteSprayCanBehavior implements IInteractionItem, IAddInformati
     private Boolean isLocked = false;
 
     @DescSynced
-    boolean isSwinging = false;
+    public boolean isSwinging = false;
 
     public static final String ColorTag = "color";
 
@@ -293,7 +292,7 @@ public class InfiniteSprayCanBehavior implements IInteractionItem, IAddInformati
     }
 
     @SuppressWarnings("rawtypes")
-    boolean handleSpecialBlockEntities(BlockEntity first, int limit, UseOnContext context) {
+    public boolean handleSpecialBlockEntities(BlockEntity first, int limit, UseOnContext context) {
         var player = context.getPlayer();
         if (player == null) {
             return false;
@@ -346,7 +345,7 @@ public class InfiniteSprayCanBehavior implements IInteractionItem, IAddInformati
         return true;
     }
 
-    void handleBlocks(BlockPos start, int limit, UseOnContext context) {
+    public void handleBlocks(BlockPos start, int limit, UseOnContext context) {
         final var level = context.getLevel();
         var player = context.getPlayer();
         if (player == null) {
@@ -541,11 +540,6 @@ public class InfiniteSprayCanBehavior implements IInteractionItem, IAddInformati
         return paintablePredicate.test(parent.getMetaMachine(), child.getMetaMachine()) &&
                 parent.getMetaMachine().getDefinition().equals(child.getMetaMachine().getDefinition());
     };
-
-    @Override
-    public int getColor(ItemStack itemStack, int i) {
-        return 0;
-    }
 
     private static class AE2CallWrapper {
 
