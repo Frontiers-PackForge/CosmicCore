@@ -22,6 +22,7 @@ import net.minecraft.world.entity.player.Player;
 import wayoftime.bloodmagic.util.helper.PlayerHelper;
 
 import javax.annotation.ParametersAreNonnullByDefault;
+import java.util.List;
 
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
@@ -51,16 +52,12 @@ public class SoulHatchPartMachine extends TieredIOPartMachine {
             group.addWidget(
                     new LabelWidget(8, 18, I18n.get("gui.cosmiccore.soul_hatch.no_network")).setClientSideWidget());
         } else {
-            group.addWidget(
-                    new LabelWidget(8, 18,
-                            () -> I18n.get("gui.cosmiccore.soul_hatch.owner",
-                                    PlayerHelper.getUsernameFromUUID(this.soulContainer.getOwner())))
-                            .setClientSideWidget());
-            group.addWidget(
-                    new LabelWidget(8, 28,
-                            () -> I18n.get("gui.cosmiccore.soul_hatch.lp",
-                                    FormattingUtil.formatNumbers(soulContainer.getCurrentEssence())))
-                            .setClientSideWidget());
+            Component owner = Component.translatable("gui.cosmiccore.soul_hatch.owner", PlayerHelper.getUsernameFromUUID(this.soulContainer.getOwner()));
+            Component amount = Component.translatable("gui.cosmiccore.soul_hatch.lp", FormattingUtil.formatNumbers(soulContainer.getCurrentEssence()));
+
+            List<Component> comps = List.of(owner, amount);
+
+            group.addWidget(new ComponentPanelWidget(8, 18,  comps)).setClientSideWidget();
         }
 
         group.setBackground(GuiTextures.BACKGROUND_INVERSE);
