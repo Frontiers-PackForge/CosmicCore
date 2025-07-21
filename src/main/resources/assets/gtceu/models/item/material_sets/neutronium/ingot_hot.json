@@ -3,6 +3,7 @@
     "textures": {
         "layer0": "gtceu:item/void",
         "layer1": "gtceu:item/void",
-        "layer2": "gtceu:item/material_sets/neutronium/ingot_hot"
+        "layer2": "gtceu:item/material_sets/neutronium/ingot_hot",
+        "layer3": "gtceu:item/material_sets/voidspark/ingot_hot_overlay"
     }
 }

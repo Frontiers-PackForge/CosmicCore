@@ -85,6 +85,7 @@ import static com.gregtechceu.gtceu.api.pattern.util.RelativeDirection.*;
 import static com.gregtechceu.gtceu.common.data.GCYMBlocks.*;
 import static com.gregtechceu.gtceu.common.data.GTBlocks.*;
 import static com.gregtechceu.gtceu.common.data.GTMachines.CREATIVE_TOOLTIPS;
+import static com.gregtechceu.gtceu.common.data.GTRecipeModifiers.BATCH_MODE;
 import static com.gregtechceu.gtceu.common.data.GTRecipeModifiers.ELECTRIC_OVERCLOCK;
 import static com.gregtechceu.gtceu.common.data.GTRecipeTypes.DUMMY_RECIPES;
 import static com.gregtechceu.gtceu.common.data.machines.GTMachineUtils.*;
@@ -325,7 +326,7 @@ public class CosmicMachines {
             .rotationState(RotationState.NON_Y_AXIS)
             .recipeType(CosmicRecipeTypes.GROVE_RECIPES)
             .recipeModifiers(CosmicRecipeModifiers::groveMulti,
-                    ELECTRIC_OVERCLOCK.apply(OverclockingLogic.NON_PERFECT_OVERCLOCK))
+                    ELECTRIC_OVERCLOCK.apply(OverclockingLogic.NON_PERFECT_OVERCLOCK), GTRecipeModifiers.BATCH_MODE)
             .appearanceBlock(GTBlocks.CASING_STAINLESS_CLEAN)
             .pattern(definition -> FactoryBlockPattern.start()
                     .aisle("##QQQ##", "##QQQ##", "#######", "#######", "#######", "##QQQ##", "##QQQ##")
@@ -405,7 +406,8 @@ public class CosmicMachines {
             .multiblock("chromatic_distillation_plant", WorkableElectricMultiblockMachine::new)
             .rotationState(RotationState.NON_Y_AXIS)
             .recipeType(CosmicRecipeTypes.CHROMATIC_DISTILLATION_PLANT)
-            .recipeModifier(ELECTRIC_OVERCLOCK.apply(OverclockingLogic.NON_PERFECT_OVERCLOCK))
+            .recipeModifiers(ELECTRIC_OVERCLOCK.apply(OverclockingLogic.NON_PERFECT_OVERCLOCK),
+                    GTRecipeModifiers.PARALLEL_HATCH, GTRecipeModifiers.BATCH_MODE)
             .appearanceBlock(GTBlocks.CASING_STAINLESS_CLEAN)
             .pattern(definition -> FactoryBlockPattern.start(RIGHT, BACK, UP)
                     .aisle(" BCB ", "BBBBB", "BBBBB", "BBBBB", " BBB ")
@@ -432,7 +434,8 @@ public class CosmicMachines {
             .multiblock("chromatic_flotation_plant", WorkableElectricMultiblockMachine::new)
             .rotationState(RotationState.NON_Y_AXIS)
             .recipeType(CosmicRecipeTypes.CHROMATIC_FLOTATION_PLANT)
-            .recipeModifier(ELECTRIC_OVERCLOCK.apply(OverclockingLogic.NON_PERFECT_OVERCLOCK))
+            .recipeModifiers(ELECTRIC_OVERCLOCK.apply(OverclockingLogic.NON_PERFECT_OVERCLOCK),
+                    GTRecipeModifiers.PARALLEL_HATCH, GTRecipeModifiers.BATCH_MODE)
             .appearanceBlock(GCYMBlocks.CASING_WATERTIGHT)
             .generator(true)
             .pattern(definition -> FactoryBlockPattern.start()
@@ -529,7 +532,7 @@ public class CosmicMachines {
             .rotationState(RotationState.ALL)
             .recipeType(CosmicRecipeTypes.ORBITAL_FORGE)
             .recipeModifiers(GTRecipeModifiers.PARALLEL_HATCH,
-                    GTRecipeModifiers::ebfOverclock)
+                    GTRecipeModifiers::ebfOverclock, BATCH_MODE)
             .appearanceBlock(CosmicBlocks.CYCLOZINE_CHEMICALLY_REPELLING_CASING)
             // spotless:off
             .pattern(definition -> FactoryBlockPattern.start()
@@ -609,7 +612,7 @@ public class CosmicMachines {
             .rotationState(RotationState.ALL)
             .recipeTypes(CosmicRecipeTypes.INDUSTRIAL_CHEMVAT, GTRecipeTypes.CRACKING_RECIPES)
             .recipeModifiers(CosmicRecipeModifiers::chemicalVatLogic,
-                    ELECTRIC_OVERCLOCK.apply(OverclockingLogic.PERFECT_OVERCLOCK_SUBTICK))
+                    ELECTRIC_OVERCLOCK.apply(OverclockingLogic.PERFECT_OVERCLOCK_SUBTICK), BATCH_MODE)
             .appearanceBlock(CYCLOZINE_CHEMICALLY_REPELLING_CASING)
             // spotless:off
             .pattern(definition -> FactoryBlockPattern.start()
@@ -658,7 +661,7 @@ public class CosmicMachines {
             .rotationState(RotationState.NON_Y_AXIS)
             .partAppearance((controller, part, side) -> HIGHLY_CONDUCTIVE_FISSION_CASING.getDefaultState())
             .recipeModifiers(GTRecipeModifiers.PARALLEL_HATCH,
-                    ELECTRIC_OVERCLOCK.apply(OverclockingLogic.PERFECT_OVERCLOCK))
+                    ELECTRIC_OVERCLOCK.apply(OverclockingLogic.PERFECT_OVERCLOCK), BATCH_MODE)
             .pattern(definition -> FactoryBlockPattern.start()
                     .aisle("         ", "         ", " AAAAAAA ", "  AAAAA  ", "         ", "         ", "         ")
                     .aisle(" AA   AA ", "         ", "ABBBBBBBA", " BBBBBBB ", " BB   BB ", " B     B ", " C     C ")
@@ -736,7 +739,7 @@ public class CosmicMachines {
             .rotationState(RotationState.NON_Y_AXIS)
             .partAppearance((controller, part, side) -> CYCLOZINE_CHEMICALLY_REPELLING_CASING.getDefaultState())
             .recipeModifiers(GTRecipeModifiers.PARALLEL_HATCH,
-                    ELECTRIC_OVERCLOCK.apply(OverclockingLogic.PERFECT_OVERCLOCK))
+                    ELECTRIC_OVERCLOCK.apply(OverclockingLogic.PERFECT_OVERCLOCK), BATCH_MODE)
             .pattern(definition -> FactoryBlockPattern.start()
                     .aisle("X       X", "X       X", "AABBABBAA", "AABBABBAA", "AABBABBAA", "         ", "         ")
                     .aisle("         ", "AABBABBAA", "AD#####DA", "ADD###DDA", "AD#####DA", "AABBABBAA", "         ")
