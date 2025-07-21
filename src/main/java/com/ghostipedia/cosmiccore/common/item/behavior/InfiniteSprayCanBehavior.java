@@ -70,6 +70,7 @@ public class InfiniteSprayCanBehavior implements IInteractionItem, IAddInformati
 
     @Getter
     @Setter
+    @DescSynced
     public ExtendedDyeColor color;
     @Getter
     @Setter
