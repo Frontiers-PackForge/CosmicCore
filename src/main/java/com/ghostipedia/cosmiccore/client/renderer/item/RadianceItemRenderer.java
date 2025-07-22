@@ -2,13 +2,11 @@ package com.ghostipedia.cosmiccore.client.renderer.item;
 
 import com.ghostipedia.cosmiccore.client.CosmicCoreClient;
 import com.ghostipedia.cosmiccore.client.renderer.CosmicCoreRenderTypes;
-import com.ghostipedia.cosmiccore.client.renderer.CosmicShaders;
 import com.gregtechceu.gtceu.api.GTValues;
 
 import com.lowdragmc.lowdraglib.client.renderer.IItemRendererProvider;
 import com.lowdragmc.lowdraglib.client.renderer.IRenderer;
 
-import com.mojang.blaze3d.shaders.Shader;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Axis;
@@ -34,18 +32,17 @@ public class RadianceItemRenderer implements IRenderer {
     public static final RadianceItemRenderer INSTANCE = new RadianceItemRenderer();
 
 
-
-
-
     @Override
     @OnlyIn(Dist.CLIENT)
     public void renderItem(ItemStack stack, ItemDisplayContext transformType, boolean leftHand, PoseStack poseStack,
                            MultiBufferSource buffer, int combinedLight, int combinedOverlay, BakedModel model) {
         poseStack.pushPose();
+        Minecraft mc = Minecraft.getInstance();
         if (transformType ==  transformType) {
             //Load Shader? IDT we want a vertex consumer
             VertexConsumer consumer = buffer.getBuffer(CosmicCoreRenderTypes.gravity());
             //Attempt 2
+
             ShaderInstance gravShader = CosmicCoreClient.getGravityShader();
             RenderSystem.setShader(() -> gravShader);
 
@@ -70,17 +67,23 @@ public class RadianceItemRenderer implements IRenderer {
 
 
 //            poseStack.scale(scalefactor, scalefactor, 1F);
+            RenderState.IS_RENDERING_LEVEL = true;
+            //The quad has gone missing, how do we get it???
+            //I just wanna render my frag shader onto my materialset
+            RenderState.IS_RENDERING_LEVEL = true;
+            mc.getItemRenderer().renderQuadList(poseStack,consumer,model.getQuads(null,null,null),stack,combinedLight,combinedOverlay);
         }
 
+
         RenderState.IS_RENDERING_LEVEL = true;
-        vanillaRender(stack, transformType, leftHand, poseStack, buffer, combinedLight, combinedOverlay, model);
+        cosmicRenderer(stack, transformType, leftHand, poseStack, buffer, combinedLight, combinedOverlay, model);
         RenderState.IS_RENDERING_LEVEL = false;
         poseStack.popPose();
     }
 
-    public static void vanillaRender(ItemStack stack, ItemDisplayContext transformType, boolean leftHand,
-                                     PoseStack poseStack, MultiBufferSource buffer, int combinedLight,
-                                     int combinedOverlay, BakedModel model) {
+    public static void cosmicRenderer(ItemStack stack, ItemDisplayContext transformType, boolean leftHand,
+                                      PoseStack poseStack, MultiBufferSource buffer, int combinedLight,
+                                      int combinedOverlay, BakedModel model) {
         IItemRendererProvider.disabled.set(true);
         Minecraft.getInstance().getItemRenderer().render(stack, transformType, leftHand, poseStack, buffer,
                 combinedLight, combinedOverlay, getVanillaModel(stack, null, null));
