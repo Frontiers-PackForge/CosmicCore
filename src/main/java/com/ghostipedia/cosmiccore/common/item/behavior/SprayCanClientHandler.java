@@ -1,9 +1,10 @@
 package com.ghostipedia.cosmiccore.common.item.behavior;
 
-import appeng.blockentity.networking.CableBusBlockEntity;
 import com.ghostipedia.cosmiccore.CosmicCore;
+
 import com.gregtechceu.gtceu.api.blockentity.IPaintable;
 import com.gregtechceu.gtceu.api.blockentity.MetaMachineBlockEntity;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
@@ -22,6 +23,8 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.event.InputEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
+
+import appeng.blockentity.networking.CableBusBlockEntity;
 import org.lwjgl.glfw.GLFW;
 
 import java.util.Objects;
@@ -32,6 +35,7 @@ import static com.ghostipedia.cosmiccore.common.item.behavior.SprayCanEventListe
 @SuppressWarnings("unused")
 @Mod.EventBusSubscriber(modid = CosmicCore.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE, value = Dist.CLIENT)
 public class SprayCanClientHandler {
+
     @OnlyIn(Dist.CLIENT)
     @SubscribeEvent
     public static void onClickEvent(InputEvent.InteractionKeyMappingTriggered event) {

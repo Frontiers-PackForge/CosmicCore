@@ -2,10 +2,9 @@ package com.ghostipedia.cosmiccore.utils.input;
 
 import com.ghostipedia.cosmiccore.common.network.CCoreNetwork;
 import com.ghostipedia.cosmiccore.common.network.packet.CosmicClientKeyDownPacket;
+
 import com.gregtechceu.gtceu.GTCEu;
-import com.mojang.blaze3d.platform.InputConstants;
-import it.unimi.dsi.fastutil.ints.Int2BooleanMap;
-import it.unimi.dsi.fastutil.ints.Int2BooleanOpenHashMap;
+
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
 import net.minecraft.server.level.ServerPlayer;
@@ -17,6 +16,10 @@ import net.minecraftforge.client.settings.KeyConflictContext;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
+
+import com.mojang.blaze3d.platform.InputConstants;
+import it.unimi.dsi.fastutil.ints.Int2BooleanMap;
+import it.unimi.dsi.fastutil.ints.Int2BooleanOpenHashMap;
 import org.jetbrains.annotations.ApiStatus;
 
 import java.util.Collections;
@@ -26,8 +29,8 @@ import java.util.function.Supplier;
 
 public enum SyncedKeyMapping {
 
-    SPRAY_CAN_PICK_BLOCK("cosmiccore.key.spray_can_pick_block", KeyConflictContext.IN_GAME, InputConstants.MOUSE_BUTTON_MIDDLE)
-    ;
+    SPRAY_CAN_PICK_BLOCK("cosmiccore.key.spray_can_pick_block", KeyConflictContext.IN_GAME,
+            InputConstants.MOUSE_BUTTON_MIDDLE);
 
     public static final SyncedKeyMapping[] VALUES = values();
 
@@ -199,5 +202,4 @@ public enum SyncedKeyMapping {
             listener.onKeyPressed(player, this, keyDown);
         }
     }
-
 }

@@ -2,15 +2,16 @@ package com.ghostipedia.cosmiccore.common.network.packet;
 
 import com.ghostipedia.cosmiccore.common.network.CCoreNetwork;
 import com.ghostipedia.cosmiccore.utils.input.SyncedKeyMapping;
-import it.unimi.dsi.fastutil.ints.Int2BooleanMap;
-import it.unimi.dsi.fastutil.ints.Int2BooleanOpenHashMap;
+
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraftforge.network.NetworkEvent;
+
+import it.unimi.dsi.fastutil.ints.Int2BooleanMap;
+import it.unimi.dsi.fastutil.ints.Int2BooleanOpenHashMap;
 
 public class CosmicClientKeyDownPacket implements CCoreNetwork.INetPacket {
 
     private Int2BooleanMap updateKeys;
-
 
     public CosmicClientKeyDownPacket(Int2BooleanMap updateKeys) {
         this.updateKeys = updateKeys;
@@ -23,9 +24,6 @@ public class CosmicClientKeyDownPacket implements CCoreNetwork.INetPacket {
             updateKeys.put(buf.readInt(), buf.readBoolean());
         }
     }
-
-
-
 
     @Override
     public void encode(FriendlyByteBuf buffer) {
