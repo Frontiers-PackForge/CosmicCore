@@ -4,6 +4,10 @@ dependencies {
     // LDLib
     modImplementation(forge.ldlib)
 
+    modImplementation(forge.malum)
+    compileOnlyApi(forge.lodestone)
+    runtimeOnly(forge.lodestone)
+
     // Registrate
     modImplementation(forge.registrate)
 

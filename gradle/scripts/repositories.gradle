@@ -5,6 +5,10 @@ repositories {
     mavenLocal()
     mavenCentral()
     maven {
+        name = "BlameJared maven"
+        url = uri("https://maven.blamejared.com/")
+    }
+    maven {
         name = 'GTCEu Maven'
         url = 'https://maven.gtceu.com'
         content {
