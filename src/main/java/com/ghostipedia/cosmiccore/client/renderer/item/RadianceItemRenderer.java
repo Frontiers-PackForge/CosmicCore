@@ -1,16 +1,25 @@
 package com.ghostipedia.cosmiccore.client.renderer.item;
 
+import com.ghostipedia.cosmiccore.client.CosmicCoreClient;
+import com.ghostipedia.cosmiccore.client.renderer.CosmicCoreRenderTypes;
+import com.ghostipedia.cosmiccore.client.renderer.CosmicShaders;
 import com.gregtechceu.gtceu.api.GTValues;
 
 import com.lowdragmc.lowdraglib.client.renderer.IItemRendererProvider;
 import com.lowdragmc.lowdraglib.client.renderer.IRenderer;
 
+import com.mojang.blaze3d.shaders.Shader;
+import com.mojang.blaze3d.systems.RenderSystem;
+import com.mojang.blaze3d.vertex.VertexConsumer;
+import com.mojang.math.Axis;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.renderer.ItemModelShaper;
 import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.ShaderInstance;
 import net.minecraft.client.renderer.entity.ItemRenderer;
 import net.minecraft.client.resources.model.BakedModel;
+import net.minecraft.util.Mth;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
@@ -24,14 +33,43 @@ public class RadianceItemRenderer implements IRenderer {
 
     public static final RadianceItemRenderer INSTANCE = new RadianceItemRenderer();
 
+
+
+
+
     @Override
     @OnlyIn(Dist.CLIENT)
     public void renderItem(ItemStack stack, ItemDisplayContext transformType, boolean leftHand, PoseStack poseStack,
                            MultiBufferSource buffer, int combinedLight, int combinedOverlay, BakedModel model) {
         poseStack.pushPose();
-        if (transformType == ItemDisplayContext.GUI) {
+        if (transformType ==  transformType) {
+            //Load Shader? IDT we want a vertex consumer
+            VertexConsumer consumer = buffer.getBuffer(CosmicCoreRenderTypes.gravity());
+            //Attempt 2
+            ShaderInstance gravShader = CosmicCoreClient.getGravityShader();
+            RenderSystem.setShader(() -> gravShader);
+
+            //At This point I no longer understand what I am doing I am just reading google and hoping.
+
+
+
+            float partialTicks = Minecraft.getInstance().getFrameTime();
             float scalefactor = GTValues.RNG.nextFloat() * 0.2F + 0.95F;
-            poseStack.scale(scalefactor, scalefactor, 1F);
+            float cylicalDistort = partialTicks * 2 * (float)Math.PI;
+
+            float offsetX = 0.01f * Mth.sin(partialTicks * 3);
+            float offsetY = 0.01f * Mth.cos(partialTicks * 2);
+            poseStack.translate(offsetX, offsetY, 0);
+
+            float scaleX = 1.0f + 0.05f * Mth.sin(partialTicks * 2);
+            float scaleY = 1.0f + 0.05f * Mth.sin(partialTicks * 2 + (float)Math.PI / 2);
+            poseStack.scale(scaleX, scaleY, 1.0f);
+
+            float rotation = 2.5f * Mth.sin(partialTicks);
+            poseStack.mulPose(Axis.ZP.rotationDegrees(rotation));
+
+
+//            poseStack.scale(scalefactor, scalefactor, 1F);
         }
 
         RenderState.IS_RENDERING_LEVEL = true;

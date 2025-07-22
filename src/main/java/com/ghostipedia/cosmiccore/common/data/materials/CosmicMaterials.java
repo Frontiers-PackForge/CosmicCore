@@ -350,6 +350,8 @@ public class CosmicMaterials {
         var nickelOreProp = Nickel.getProperty(PropertyKey.ORE);
         var chromiteOreProp = Chromite.getProperty(PropertyKey.ORE);
 
+        Duranium.setMaterialIconSet(CCoreMaterialIconSet.BLAH);
+
         rubyOreProp.getOreByProducts().clear();
         ilmeniteOreProp.getOreByProducts().clear();
         bauxiteOreProp.getOreByProducts().clear();

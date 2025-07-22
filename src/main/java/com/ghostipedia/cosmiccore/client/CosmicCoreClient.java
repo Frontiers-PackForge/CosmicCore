@@ -35,11 +35,20 @@ public class CosmicCoreClient {
     @Getter
     private static ShaderInstance nebulaeShader;
 
+    @Getter
+    private static ShaderInstance gravityShader;
+
     @SubscribeEvent
     public static void shaderRegistry(RegisterShadersEvent event) {
         try {
             event.registerShader(new ShaderInstance(event.getResourceProvider(), CosmicCore.id("rendertype_nebulae"),
                     DefaultVertexFormat.POSITION), (shaderInstance) -> nebulaeShader = shaderInstance);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        try {
+            event.registerShader(new ShaderInstance(event.getResourceProvider(), CosmicCore.id("rendertype_gravity_shader"),
+                    DefaultVertexFormat.POSITION_TEX), (shaderInstance) -> gravityShader = shaderInstance);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

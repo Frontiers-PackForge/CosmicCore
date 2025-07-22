@@ -1,0 +1,18 @@
+{
+  "vertex": "minecraft:rendertype_entity_translucent",
+  "fragment": "cosmiccore:rendertype_gravity_shader",
+  "samplers": [
+    {
+      "name": "DiffuseSampler"
+    }
+  ],
+  "attributes": [],
+  "uniforms": [
+    {
+      "name": "Time",
+      "type": "float",
+      "count": 1,
+      "values": [ 0.0 ]
+    }
+  ]
+}

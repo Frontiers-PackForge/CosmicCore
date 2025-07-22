@@ -1,6 +1,10 @@
 dependencies {
     compileOnly(libs.jetbrains.annotations)
 
+    //Malum/Lodestone
+    modImplementation(forge.malum)
+    modImplementation(forge.lodestone)
+    modImplementation(forge.avarita)
     // LDLib
     modImplementation(forge.ldlib)
 
