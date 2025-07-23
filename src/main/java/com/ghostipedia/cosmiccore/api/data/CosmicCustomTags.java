@@ -2,18 +2,14 @@ package com.ghostipedia.cosmiccore.api.data;
 
 import com.ghostipedia.cosmiccore.common.data.tag.TagUtil;
 
-import com.gregtechceu.gtceu.api.data.chemical.material.Material;
 import com.gregtechceu.gtceu.api.data.tag.TagPrefix;
 
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
 
-import java.util.function.Predicate;
-
 import static com.gregtechceu.gtceu.api.data.tag.TagPrefix.Conditions.hasIngotProperty;
 import static com.gregtechceu.gtceu.api.data.tag.TagPrefix.Conditions.hasOreProperty;
-import static com.gregtechceu.gtceu.api.data.tag.TagPrefix.rod;
 
 public class CosmicCustomTags {
 
