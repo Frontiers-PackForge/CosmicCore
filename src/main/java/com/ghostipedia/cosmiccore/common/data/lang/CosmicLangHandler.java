@@ -122,6 +122,8 @@ public class CosmicLangHandler extends LangHandler {
         provider.add("tagprefix.leached_ore", "Leached %s Ore");
         provider.add("tagprefix.prisma_frothed_ore", "Prisma Frothed %s Ore");
         provider.add("tagprefix.ultradense_plate", "Ultradense %s Plate");
+        provider.add("tagprefix.heavy_beam", "Heavy %s Beam");
+        provider.add("tagprefix.modular_shelling", "%s Modular Shelling");
         provider.add("item.cosmiccore.debug.structure_writer.structural_scale", "Structure size: X:%s Y:%s Z:%s");
         provider.add("item.cosmiccore.debug.structure_writer.export_order",
                 "Pattern Export Order:\n §cC:%s§l§d/§aS:%s§l§d/§bA:%s");

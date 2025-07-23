@@ -7,6 +7,8 @@ public class CosmicCoreMaterialIconType {
     public static final MaterialIconType crushedLeached = new MaterialIconType("crushedLeached");
     public static final MaterialIconType prismaFrothed = new MaterialIconType("prismaFrothed");
     public static final MaterialIconType ultraDense = new MaterialIconType("ultraDense");
+    public static final MaterialIconType heavyBeam = new MaterialIconType("heavyBeam");
+    public static final MaterialIconType modularShelling = new MaterialIconType("modularShelling");
 
     public static void init() {}
 }
