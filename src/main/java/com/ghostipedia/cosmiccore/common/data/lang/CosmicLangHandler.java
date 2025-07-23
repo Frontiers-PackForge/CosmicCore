@@ -121,6 +121,7 @@ public class CosmicLangHandler extends LangHandler {
                 "§aVomahine StarLadder Tether Tier§f: §b%s \n §aMax Research Modules§f: §b%s");
         provider.add("tagprefix.leached_ore", "Leached %s Ore");
         provider.add("tagprefix.prisma_frothed_ore", "Prisma Frothed %s Ore");
+        provider.add("tagprefix.ultradense_plate", "Ultradense %s Plate");
         provider.add("item.cosmiccore.debug.structure_writer.structural_scale", "Structure size: X:%s Y:%s Z:%s");
         provider.add("item.cosmiccore.debug.structure_writer.export_order",
                 "Pattern Export Order:\n §cC:%s§l§d/§aS:%s§l§d/§bA:%s");

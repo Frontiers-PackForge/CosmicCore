@@ -5,13 +5,11 @@
   "variants": {
     "recipe_logic_status=idle": {
       "model": {
-        "parent": "gtceu:block/overlay/2_layer/tinted/front",
+        "parent": "gtceu:block/machine/template/generator_machine",
         "textures": {
           "bottom": "gtceu:block/casings/voltage/uv/bottom",
-          "overlay": "gtceu:block/overlay/machine/overlay_energy_1a_out",
           "overlay_back": "gtceu:block/generators/naquahine_mini_reactor/overlay_back",
           "overlay_side": "gtceu:block/generators/naquahine_mini_reactor/overlay_side",
-          "overlay_tinted": "gtceu:block/overlay/machine/overlay_energy_1a_tinted",
           "overlay_top": "gtceu:block/generators/naquahine_mini_reactor/overlay_top",
           "side": "gtceu:block/casings/voltage/uv/side",
           "top": "gtceu:block/casings/voltage/uv/top"
@@ -20,13 +18,11 @@
     },
     "recipe_logic_status=suspend": {
       "model": {
-        "parent": "gtceu:block/overlay/2_layer/tinted/front",
+        "parent": "gtceu:block/machine/template/generator_machine",
         "textures": {
           "bottom": "gtceu:block/casings/voltage/uv/bottom",
-          "overlay": "gtceu:block/overlay/machine/overlay_energy_1a_out",
           "overlay_back": "gtceu:block/generators/naquahine_mini_reactor/overlay_back",
           "overlay_side": "gtceu:block/generators/naquahine_mini_reactor/overlay_side",
-          "overlay_tinted": "gtceu:block/overlay/machine/overlay_energy_1a_tinted",
           "overlay_top": "gtceu:block/generators/naquahine_mini_reactor/overlay_top",
           "side": "gtceu:block/casings/voltage/uv/side",
           "top": "gtceu:block/casings/voltage/uv/top"
@@ -35,13 +31,11 @@
     },
     "recipe_logic_status=waiting": {
       "model": {
-        "parent": "gtceu:block/overlay/2_layer/tinted/front",
+        "parent": "gtceu:block/machine/template/generator_machine",
         "textures": {
           "bottom": "gtceu:block/casings/voltage/uv/bottom",
-          "overlay": "gtceu:block/overlay/machine/overlay_energy_1a_out",
           "overlay_back": "gtceu:block/generators/naquahine_mini_reactor/overlay_back_active",
           "overlay_side": "gtceu:block/generators/naquahine_mini_reactor/overlay_side_active",
-          "overlay_tinted": "gtceu:block/overlay/machine/overlay_energy_1a_tinted",
           "overlay_top": "gtceu:block/generators/naquahine_mini_reactor/overlay_top_active",
           "side": "gtceu:block/casings/voltage/uv/side",
           "top": "gtceu:block/casings/voltage/uv/top"
@@ -50,13 +44,11 @@
     },
     "recipe_logic_status=working": {
       "model": {
-        "parent": "gtceu:block/overlay/2_layer/tinted/front",
+        "parent": "gtceu:block/machine/template/generator_machine",
         "textures": {
           "bottom": "gtceu:block/casings/voltage/uv/bottom",
-          "overlay": "gtceu:block/overlay/machine/overlay_energy_1a_out",
           "overlay_back": "gtceu:block/generators/naquahine_mini_reactor/overlay_back_active",
           "overlay_side": "gtceu:block/generators/naquahine_mini_reactor/overlay_side_active",
-          "overlay_tinted": "gtceu:block/overlay/machine/overlay_energy_1a_tinted",
           "overlay_top": "gtceu:block/generators/naquahine_mini_reactor/overlay_top_active",
           "side": "gtceu:block/casings/voltage/uv/side",
           "top": "gtceu:block/casings/voltage/uv/top"

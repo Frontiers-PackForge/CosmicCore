@@ -557,6 +557,7 @@
   "material.cosmiccore.voidspark": "Voidspark",
   "tagprefix.leached_ore": "Leached %s Ore",
   "tagprefix.prisma_frothed_ore": "Prisma Frothed %s Ore",
+  "tagprefix.ultradense_plate": "Ultradense %s Plate",
   "tooltip.cosmiccore.soul_hatch.input": "§cMax Recipe Input§f:§6 %s",
   "tooltip.cosmiccore.soul_hatch.output": "§cMax Soul Network Capacity§f:§6 %s",
   "tooltip.cosmiccore.thermia_hatch_limit": "§cTemp. Limit: %sK"

@@ -6,6 +6,7 @@ public class CosmicCoreMaterialIconType {
 
     public static final MaterialIconType crushedLeached = new MaterialIconType("crushedLeached");
     public static final MaterialIconType prismaFrothed = new MaterialIconType("prismaFrothed");
+    public static final MaterialIconType ultraDense = new MaterialIconType("ultraDense");
 
     public static void init() {}
 }
