@@ -35,6 +35,7 @@ public class WelderMulti {
             .langValue("§3Submerged Welder")
             .rotationState(RotationState.NON_Y_AXIS)
             .recipeType(CosmicRecipeTypes.HEMOPHAGIC_TRANSFUSER)
+            .hasBER(true)
             .partAppearance((controller, part, side) -> CYCLOZINE_CHEMICALLY_REPELLING_CASING.getDefaultState())
             .recipeModifiers(GTRecipeModifiers.PARALLEL_HATCH,
                     GTRecipeModifiers.ELECTRIC_OVERCLOCK.apply(OverclockingLogic.PERFECT_OVERCLOCK_SUBTICK))
