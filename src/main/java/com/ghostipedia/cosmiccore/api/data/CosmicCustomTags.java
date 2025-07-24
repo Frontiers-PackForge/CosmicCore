@@ -18,6 +18,7 @@ public class CosmicCustomTags {
     public static TagPrefix ultraDense;
     public static TagPrefix heavyBeam;
     public static TagPrefix modularShelling;
+    public static TagPrefix plasmites;
     public static final TagKey<Block> STAR_LADDER_BLOCKS = TagUtil.createBlockTag("starladder_blocks");
     public static final TagKey<Item> STAR_LADDER_ITEMS = TagUtil.createItemTag("starladder_items");
 
@@ -60,6 +61,14 @@ public class CosmicCustomTags {
                 .defaultTagPath("modular_shellings/%s")
                 .defaultTagPath("modular_shellings")
                 .materialIconType(CosmicCoreMaterialIconType.modularShelling)
+                .unificationEnabled(true)
+                .generateItem(true)
+                .generationCondition(hasIngotProperty);
+        plasmites = new TagPrefix("plasmites")
+                .idPattern("%s_plasmites")
+                .defaultTagPath("plasmites/%s")
+                .defaultTagPath("plasmites")
+                .materialIconType(CosmicCoreMaterialIconType.plasmites)
                 .unificationEnabled(true)
                 .generateItem(true)
                 .generationCondition(hasIngotProperty);
