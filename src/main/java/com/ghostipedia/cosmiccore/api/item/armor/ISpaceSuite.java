@@ -14,6 +14,7 @@ import net.minecraft.world.level.Level;
 
 import earth.terrarium.adastra.api.systems.OxygenApi;
 import earth.terrarium.adastra.common.constants.ConstantComponents;
+import earth.terrarium.adastra.common.items.armor.SpaceSuitItem;
 import earth.terrarium.adastra.common.registry.ModFluids;
 import earth.terrarium.adastra.common.utils.FluidUtils;
 import earth.terrarium.adastra.common.utils.TooltipUtils;
@@ -29,7 +30,7 @@ public interface ISpaceSuite {
         if (player.isCreative() || player.isSpectator()) return;
         if (!(itemStack.getItem() instanceof SpaceArmorComponentItem suit)) return;
         player.setTicksFrozen(0);
-        if (player.tickCount % 12 == 0 && suit.hasOxygen(player)) {
+        if (player.tickCount % 12 == 0 && SpaceSuitItem.hasOxygen(player)) {
             if (!OxygenApi.API.hasOxygen(player)) suit.consumeOxygen(itemStack, 1);
             if (player.isEyeInFluid(FluidTags.WATER)) {
                 suit.consumeOxygen(itemStack, 1);

@@ -2,5 +2,5 @@ package com.ghostipedia.cosmiccore.client.gui;
 
 public interface IPatternEncodingTerminalMenu {
 
-    default void cosCore$ModifyPattern(Integer value) {}
+    default void cosmicCore$modifyPattern(int value) {}
 }

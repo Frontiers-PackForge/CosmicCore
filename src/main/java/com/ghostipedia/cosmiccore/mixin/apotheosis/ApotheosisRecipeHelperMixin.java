@@ -1,4 +1,4 @@
-package com.ghostipedia.cosmiccore.mixin;
+package com.ghostipedia.cosmiccore.mixin.apotheosis;
 
 import dev.shadowsoffire.placebo.recipe.RecipeHelper;
 import org.spongepowered.asm.mixin.Mixin;

@@ -18,12 +18,12 @@ import sfiomn.legendarysurvivaloverhaul.common.capabilities.temperature.Temperat
 public abstract class TemperatureCapabilityMixin implements ITemperatureCapability {
 
     @Unique
-    private int cosmiccore$badTimeTimer = 0;
+    private int cosmicCore$badTimeTimer = 0;
 
     @Inject(method = "applyDangerousEffects", at = @At("HEAD"))
-    private void cosmiccore$trackBadTime(Player player, TemperatureEnum tempEnum, CallbackInfo ci) {
+    private void cosmicCore$trackBadTime(Player player, TemperatureEnum tempEnum, CallbackInfo ci) {
         // make the player's time alive worse if they're too hot or colds for too long
-        cosmiccore$badTimeTimer += switch (tempEnum) {
+        cosmicCore$badTimeTimer += switch (tempEnum) {
             case HEAT_STROKE, FROSTBITE -> 2; // Bad Timer Increases while under the effect of something deadly
             case HOT, COLD -> -2; // The Player is not 'taking damage' in this state, thus we want to decay the damage
                                   // tracker.
@@ -32,18 +32,18 @@ public abstract class TemperatureCapabilityMixin implements ITemperatureCapabili
                                // really nasty
                                // damage
         };
-        cosmiccore$badTimeTimer = Math.max(cosmiccore$badTimeTimer, 0);
+        cosmicCore$badTimeTimer = Math.max(cosmicCore$badTimeTimer, 0);
     }
 
     @ModifyExpressionValue(method = "applyDangerousEffects",
                            at = @At(value = "NEW",
                                     target = "net/minecraft/world/effect/MobEffectInstance",
                                     remap = true))
-    private MobEffectInstance cosmiccore$modifyDangerousEffects(MobEffectInstance effect, Player player,
+    private MobEffectInstance cosmicCore$modifyDangerousEffects(MobEffectInstance effect, Player player,
                                                                 TemperatureEnum tempEnum) {
         // change this to give more/less time before the inevitable
         final int MAX_FREE_TIME_SECONDS = 60;
-        int extra = cosmiccore$badTimeTimer - MAX_FREE_TIME_SECONDS;
+        int extra = cosmicCore$badTimeTimer - MAX_FREE_TIME_SECONDS;
         if (extra <= 0) {
             return effect;
         }
@@ -65,7 +65,7 @@ public abstract class TemperatureCapabilityMixin implements ITemperatureCapabili
     // This method patches the effect to be reapplied every time applyDangerousEffects is called.
     // It works fine, because MC doesn't error when existing effects are reapplied and instead modifies them
     // to match the new effect.
-    private boolean cosmiccore$alwaysApplyEffect(boolean original) {
+    private boolean cosmicCore$alwaysApplyEffect(boolean original) {
         // returns false because it's inverted in the if statement. And I can't change that.
         // see https://github.com/SpongePowered/Mixin/issues/365#issuecomment-539464542 for an explanation.
         return false;
@@ -73,20 +73,20 @@ public abstract class TemperatureCapabilityMixin implements ITemperatureCapabili
 
     // someone should PR this. Not me though :)
     @ModifyConstant(method = "writeNBT", constant = @Constant(stringValue = "ticktimer"))
-    private String cosmiccore$fixSaveDataBug(String original) {
+    private String cosmicCore$fixSaveDataBug(String original) {
         return "tickTimer";
     }
 
     @Inject(method = "writeNBT", at = @At("RETURN"))
-    private void cosmiccore$saveTime(CallbackInfoReturnable<CompoundTag> cir) {
+    private void cosmicCore$saveTime(CallbackInfoReturnable<CompoundTag> cir) {
         CompoundTag tag = cir.getReturnValue();
-        tag.putInt("badTimeTimer", cosmiccore$badTimeTimer);
+        tag.putInt("badTimeTimer", cosmicCore$badTimeTimer);
     }
 
     @Inject(method = "readNBT", at = @At("RETURN"))
-    private void cosmiccore$loadTime(CompoundTag compound, CallbackInfo ci) {
+    private void cosmicCore$loadTime(CompoundTag compound, CallbackInfo ci) {
         if (compound.contains("badTimeTimer")) {
-            cosmiccore$badTimeTimer = compound.getInt("badTimeTimer");
+            cosmicCore$badTimeTimer = compound.getInt("badTimeTimer");
         }
     }
 }

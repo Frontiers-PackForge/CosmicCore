@@ -1,14 +1,13 @@
 package com.ghostipedia.cosmiccore.mixin;
 
-import net.minecraft.tags.FluidTags;
-import net.minecraft.world.effect.MobEffectInstance;
-import net.minecraft.world.effect.MobEffects;
-import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
+import net.minecraft.world.level.material.Fluid;
 
+import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import org.spongepowered.asm.mixin.*;
+import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Redirect;
 
 @Mixin(Player.class)
 public class PlayerBreathingMixin {
@@ -17,33 +16,24 @@ public class PlayerBreathingMixin {
     protected boolean wasUnderwater;
 
     @Unique
-    private boolean _$didTurtleEffect = false;
+    private boolean cosmicCore$didTurtleEffect = false;
 
-    /**
-     * @author MrQuentinet
-     * @reason Detect when player enter and exit the water. Reset _$didTurtleEffect to false when leaving water
-     */
-    @Overwrite
-    protected boolean updateIsUnderwater() {
-        var isInWater = ((Player) (Object) this).isEyeInFluid(FluidTags.WATER);
-        if (isInWater != this.wasUnderwater) {
-            this.wasUnderwater = isInWater;
-            if (!isInWater) _$didTurtleEffect = false;
+    @ModifyExpressionValue(method = "updateIsUnderwater",
+                           at = @At(value = "INVOKE",
+                                    target = "Lnet/minecraft/world/entity/player/Player;isEyeInFluid(Lnet/minecraft/tags/TagKey;)Z"))
+    private boolean cosmicCore$updateTurtleEffectStatus(boolean isInWater) {
+        if (!isInWater && this.wasUnderwater) {
+            cosmicCore$didTurtleEffect = false;
         }
-        return this.wasUnderwater;
+        return isInWater;
     }
 
-    /**
-     * @author MrQuentinet
-     * @reason Give Water breathing effect when wearing turtle helmet. Happen only when player enters water
-     */
-    @Overwrite
-    private void turtleHelmetTick() {
-        ItemStack itemstack = ((Player) (Object) this).getItemBySlot(EquipmentSlot.HEAD);
-        if (itemstack.is(Items.TURTLE_HELMET) && this.wasUnderwater && !_$didTurtleEffect) {
-            _$didTurtleEffect = true;
-            ((Player) (Object) this)
-                    .addEffect(new MobEffectInstance(MobEffects.WATER_BREATHING, 200, 0, false, false, true));
-        }
+    @Redirect(method = "turtleHelmetTick",
+              at = @At(value = "INVOKE",
+                       target = "Lnet/minecraft/world/entity/player/Player;isEyeInFluid(Lnet/minecraft/tags/TagKey;)Z"))
+    private boolean cosmicCore$turtleHelmetTick(Player instance, TagKey<Fluid> tagKey) {
+        // the boolean is inverted after the redirected method call, so this resolves to
+        // !wasUnderwater && !cosmicCore$didTurtleEffect
+        return this.wasUnderwater || cosmicCore$didTurtleEffect;
     }
 }

@@ -1,4 +1,4 @@
-package com.ghostipedia.cosmiccore.mixin;
+package com.ghostipedia.cosmiccore.mixin.gtceu;
 
 import com.gregtechceu.gtceu.api.GTValues;
 

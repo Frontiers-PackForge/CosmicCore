@@ -29,8 +29,8 @@ public abstract class EUAddAppearanceMixin<T extends Enum<T>> {
     }
 
     @Inject(method = "<init>", at = @At("TAIL"), remap = false)
-    private void cosCore$registerEUPowerUnit(Setting<T> setting, T val,
-                                             IHandler<SettingToggleButton<T>> onPress, CallbackInfo ci) {
+    private void cosmicCore$registerEUPowerUnit(Setting<T> setting, T val,
+                                                IHandler<SettingToggleButton<T>> onPress, CallbackInfo ci) {
         if (setting == Settings.POWER_UNITS) {
             PowerUnits eu = PowerUnits.valueOf("EU");
             invokeRegisterApp(Icon.POWER_UNIT_EU, Settings.POWER_UNITS, eu, ButtonToolTips.PowerUnits,

@@ -17,17 +17,15 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-@Debug(
-       export = true)
 @Mixin(value = PatternEncodingTermMenu.class, remap = false)
 public abstract class PatternEncodingTermMenuMixin extends MEStorageMenu
                                                    implements IMenuCraftingPacket, IPatternEncodingTerminalMenu {
 
-    @Shadow(remap = false)
+    @Shadow
     @Final
     private ConfigInventory encodedInputsInv;
 
-    @Shadow(remap = false)
+    @Shadow
     @Final
     private ConfigInventory encodedOutputsInv;
 
@@ -36,25 +34,24 @@ public abstract class PatternEncodingTermMenuMixin extends MEStorageMenu
     }
 
     @Inject(method = "<init>(Lnet/minecraft/world/inventory/MenuType;ILnet/minecraft/world/entity/player/Inventory;Lappeng/helpers/IPatternTerminalMenuHost;Z)V",
-            at = @At("TAIL"),
-            remap = false)
-    private void initHooks(MenuType<?> menuType, int id, Inventory ip, IPatternTerminalMenuHost host,
-                           boolean bindInventory, CallbackInfo ci) {
+            at = @At("TAIL"))
+    private void cosmicCore$injectInit(MenuType<?> menuType, int id, Inventory ip, IPatternTerminalMenuHost host,
+                                       boolean bindInventory, CallbackInfo ci) {
         registerClientAction("modifyPattern", Integer.class,
-                this::cosCore$ModifyPattern);
+                this::cosmicCore$modifyPattern);
     }
 
     @Override
-    public void cosCore$ModifyPattern(Integer data) {
+    public void cosmicCore$modifyPattern(int data) {
         if (isClientSide()) {
             sendClientAction("modifyPattern", data);
         } else {
             // modify
-            var output = cosCore$isValid(encodedOutputsInv, data);
+            var output = cosmicCore$modifyInventoryStacks(encodedOutputsInv, data);
             if (output == null) {
                 return;
             }
-            var input = cosCore$isValid(encodedInputsInv, data);
+            var input = cosmicCore$modifyInventoryStacks(encodedInputsInv, data);
             if (input == null) {
                 return;
             }
@@ -72,16 +69,16 @@ public abstract class PatternEncodingTermMenuMixin extends MEStorageMenu
     }
 
     @Unique
-    private static GenericStack[] cosCore$isValid(ConfigInventory inv, int data) {
-        boolean flag = data > 0;
-        if (!flag) {
+    private static GenericStack[] cosmicCore$modifyInventoryStacks(ConfigInventory inv, int data) {
+        boolean positive = data > 0;
+        if (!positive) {
             data = -data;
         }
         GenericStack[] result = new GenericStack[inv.size()];
         for (int slot = 0; slot < inv.size(); ++slot) {
             GenericStack stack = inv.getStack(slot);
             if (stack != null) {
-                if (flag) {
+                if (positive) {
                     if (data * stack.amount() > Integer.MAX_VALUE) {
                         return null;
                     } else {
@@ -91,7 +88,7 @@ public abstract class PatternEncodingTermMenuMixin extends MEStorageMenu
                     if (stack.amount() % data != 0) {
                         return null;
                     } else {
-                        // 除尽
+                        // indivisible
                         result[slot] = new GenericStack(stack.what(), stack.amount() / data);
                     }
                 }

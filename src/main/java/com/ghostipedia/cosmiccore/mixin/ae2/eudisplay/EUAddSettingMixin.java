@@ -25,7 +25,7 @@ public abstract class EUAddSettingMixin<T extends Enum<T>> {
     private ImmutableSet<T> values;
 
     @Inject(method = "<init>*", at = @At("RETURN"))
-    private void cosCore$onInit(String name, Class<T> enumClass, EnumSet<T> originalValues, CallbackInfo ci) {
+    private void cosmicCore$onInit(String name, Class<T> enumClass, EnumSet<T> originalValues, CallbackInfo ci) {
         if (enumClass.equals(PowerUnits.class)) {
             EnumSet<T> union = EnumSet.copyOf(originalValues);
 

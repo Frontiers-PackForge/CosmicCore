@@ -1,4 +1,4 @@
-package com.ghostipedia.cosmiccore.mixin;
+package com.ghostipedia.cosmiccore.mixin.apotheosis;
 
 import net.minecraft.world.item.crafting.SmithingRecipe;
 

@@ -3,136 +3,100 @@ package com.ghostipedia.cosmiccore.mixin.emi;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
 
-import dev.emi.emi.api.EmiApi;
+import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
+import com.llamalad7.mixinextras.sugar.Local;
 import dev.emi.emi.api.widget.Bounds;
 import dev.emi.emi.config.EmiConfig;
 import dev.emi.emi.config.SidebarSide;
 import dev.emi.emi.screen.RecipeScreen;
-import dev.emi.emi.screen.RecipeTab;
-import dev.emi.emi.screen.WidgetGroup;
+import org.objectweb.asm.Opcodes;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
-import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.ModifyArg;
+import org.spongepowered.asm.mixin.injection.*;
 
-import java.util.List;
-
-@Mixin(RecipeScreen.class)
+@Mixin(value = RecipeScreen.class, remap = false)
 public abstract class RecipeScreenMixin extends Screen {
-
-    @Shadow(remap = false)
-    int x;
-
-    @Shadow(remap = false)
-    int backgroundHeight;
-
-    @Shadow(remap = false)
-    int backgroundWidth;
 
     protected RecipeScreenMixin(Component title) {
         super(title);
     }
 
-    @Shadow(remap = false)
+    @Shadow
     public abstract int getResolveOffset();
 
-    @Shadow(remap = false)
-    int y;
+    @Shadow
+    public abstract int getMaxWorkstations();
 
-    @Shadow(remap = false)
-    private List<RecipeTab> tabs;
-
-    @Shadow(remap = false)
-    private int tab;
-
-    @Override
-    @Shadow(remap = false)
-    public abstract void onClose();
-
-    @Shadow(remap = false)
-    private List<WidgetGroup> currentPage;
-
-    @ModifyArg(method = "render",
-               at = @At(value = "INVOKE",
-                        target = "Ldev/emi/emi/EmiRenderHelper;drawNinePatch(Ldev/emi/emi/runtime/EmiDrawContext;Lnet/minecraft/resources/ResourceLocation;IIIIIIII)V",
-                        ordinal = 4,
-                        remap = false),
-               index = 2)
-    private int modifyx(int x) {
-        return x + 18 - 18 * cosmicCore$getList(cosmicCore$getWorkstationAmount());
-    }
-
-    @ModifyArg(method = "render",
-               at = @At(value = "INVOKE",
-                        target = "Ldev/emi/emi/EmiRenderHelper;drawNinePatch(Ldev/emi/emi/runtime/EmiDrawContext;Lnet/minecraft/resources/ResourceLocation;IIIIIIII)V",
-                        ordinal = 4,
-                        remap = false),
-               index = 4)
-    private int modifyw(int x) {
-        return x - 18 + 18 * cosmicCore$getList(cosmicCore$getWorkstationAmount());
-    }
-
-    @ModifyArg(method = "render",
-               at = @At(value = "INVOKE",
-                        target = "Ldev/emi/emi/EmiRenderHelper;drawNinePatch(Ldev/emi/emi/runtime/EmiDrawContext;Lnet/minecraft/resources/ResourceLocation;IIIIIIII)V",
-                        ordinal = 4,
-                        remap = false),
-               index = 5)
-    private int modifyh(int x) {
-        return 10 + Math.min(cosmicCore$getWorkstationAmount(), cosmicCore$maxWorkstations()) * 18 + getResolveOffset();
-    }
-
-    /**
-     * @author .
-     * @reason .
-     */
-    @Overwrite(remap = false)
-    public Bounds getWorkstationBounds(int i) {
-        Bounds bounds = Bounds.EMPTY;
-        int offset = 0;
-        if (i == -1) {
-            i = 0;
-            offset = -getResolveOffset();
-        }
-        if (EmiConfig.workstationLocation == SidebarSide.LEFT) {
-            bounds = new Bounds(x - (cosmicCore$getList(i) * 18),
-                    y + 9 + getResolveOffset() + (i % cosmicCore$maxWorkstations() * 18) + offset, 18, 18);
-        } else if (EmiConfig.workstationLocation == SidebarSide.RIGHT) {
-            bounds = new Bounds(x + (cosmicCore$getList(i) * backgroundWidth),
-                    y + 9 + getResolveOffset() + (i % cosmicCore$maxWorkstations() * 18) + offset, 18, 18);
-        } else if (EmiConfig.workstationLocation == SidebarSide.BOTTOM) {
-            bounds = new Bounds(x + 5 + getResolveOffset() + i * 18 + offset, y + backgroundHeight - 23, 18, 18);
-        }
-        return bounds;
-    }
-
-    /**
-     * @author .
-     * @reason .
-     */
-    @Overwrite(remap = false)
-    public int getMaxWorkstations() {
+    @ModifyExpressionValue(method = "setPage",
+                           at = @At(value = "INVOKE",
+                                    target = "Ldev/emi/emi/screen/RecipeScreen;getMaxWorkstations()I"))
+    private int cosmicCore$removeWorkstationListLimit1(int originalMax) {
         return Integer.MAX_VALUE;
     }
 
-    @Unique
-    private int cosmicCore$getWorkstationAmount() {
-        return EmiApi.getRecipeManager().getWorkstations(tabs.get(tab).category).size();
+    @Redirect(method = "render", at = @At(value = "INVOKE", target = "Ljava/lang/Math;min(II)I"))
+    private int cosmicCore$removeWorkstationListLimit2(int listSize, int maxWorkstations) {
+        return listSize;
+    }
+
+    @ModifyArg(method = "render",
+               at = @At(value = "INVOKE",
+                        target = "Ldev/emi/emi/EmiRenderHelper;drawNinePatch(Ldev/emi/emi/runtime/EmiDrawContext;Lnet/minecraft/resources/ResourceLocation;IIIIIIII)V"),
+               slice = @Slice(from = @At(value = "INVOKE", target = "Ljava/lang/Math;min(II)I"), to = @At("TAIL")),
+               index = 2)
+    private int cosmicCore$modifyLeftSidebarWorkstationListX(int originalX,
+                                                             @Local Bounds bounds,
+                                                             @Local(ordinal = 5,
+                                                                    name = "workstationAmount") int workstationAmount,
+                                                             @Local(ordinal = 6, name = "offset") int offset) {
+        return originalX + 18 - 18 * cosmicCore$getList(workstationAmount);
+    }
+
+    @ModifyArg(method = "render",
+               at = @At(value = "INVOKE",
+                        target = "Ldev/emi/emi/EmiRenderHelper;drawNinePatch(Ldev/emi/emi/runtime/EmiDrawContext;Lnet/minecraft/resources/ResourceLocation;IIIIIIII)V"),
+               slice = @Slice(from = @At(value = "INVOKE", target = "Ljava/lang/Math;min(II)I"), to = @At("TAIL")),
+               index = 4)
+    private int cosmicCore$modifyLeftSidebarWorkstationListWidth(int originalWidth,
+                                                                 @Local(ordinal = 5,
+                                                                        name = "workstationAmount") int workstationAmount) {
+        return originalWidth - 18 + 18 * cosmicCore$getList(workstationAmount);
+    }
+
+    @ModifyArg(method = "render",
+               at = @At(value = "INVOKE",
+                        target = "Ldev/emi/emi/EmiRenderHelper;drawNinePatch(Ldev/emi/emi/runtime/EmiDrawContext;Lnet/minecraft/resources/ResourceLocation;IIIIIIII)V"),
+               slice = @Slice(from = @At(value = "INVOKE", target = "Ljava/lang/Math;min(II)I"), to = @At("TAIL")),
+               index = 5)
+    private int cosmicCore$modifyHLeftSidebarWorkstationListHeight(int originalHeight,
+                                                                   @Local(ordinal = 5,
+                                                                          name = "workstationAmount") int workstationAmount) {
+        return 10 + workstationAmount * 18 + getResolveOffset();
+    }
+
+    @ModifyConstant(method = "getWorkstationBounds", constant = @Constant(intValue = 18, ordinal = 0))
+    private int cosmicCore$addLeftSideOffset(int constant, int i) {
+        return constant * cosmicCore$getList(i);
+    }
+
+    @ModifyExpressionValue(method = "getWorkstationBounds",
+                           at = @At(value = "FIELD",
+                                    opcode = Opcodes.GETFIELD,
+                                    target = "Ldev/emi/emi/screen/RecipeScreen;backgroundWidth:I"))
+    private int cosmicCore$addRightSideOffset(int backgroundWidth, int i) {
+        return backgroundWidth * cosmicCore$getList(i);
+    }
+
+    @ModifyVariable(method = "getWorkstationBounds", at = @At("HEAD"), ordinal = 0, name = "i", argsOnly = true)
+    private int cosmicCore$limitWorkstationListHeight(int i) {
+        if (EmiConfig.workstationLocation == SidebarSide.NONE) return i;
+        return i % getMaxWorkstations();
     }
 
     @Unique
     private int cosmicCore$getList(int i) {
-        return (int) Math.floor((double) i / cosmicCore$maxWorkstations()) + 1;
-    }
-
-    @Unique
-    private int cosmicCore$maxWorkstations() {
-        return switch (EmiConfig.workstationLocation) {
-            case LEFT, RIGHT -> (backgroundHeight - getResolveOffset() - 18) / 18;
-            case BOTTOM -> (backgroundWidth - getResolveOffset() - 18) / 18;
-            default -> 0;
-        };
+        if (EmiConfig.workstationLocation == SidebarSide.NONE) return 1;
+        return i / getMaxWorkstations() + 1;
     }
 }

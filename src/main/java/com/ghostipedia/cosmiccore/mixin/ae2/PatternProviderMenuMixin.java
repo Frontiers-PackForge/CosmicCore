@@ -24,18 +24,18 @@ public class PatternProviderMenuMixin implements IPatternProviderMenu {
 
     @Unique
     @GuiSync(8)
-    private BlockingMode cosmicCore$UpgradedBlockingMode = BlockingMode.ALL;
+    private BlockingMode cosmicCore$blockingMode = BlockingMode.ALL;
 
     @Inject(method = "broadcastChanges",
             at = @At(value = "INVOKE",
                      target = "Lappeng/helpers/patternprovider/PatternProviderLogic;getUnlockStack()Lappeng/api/stacks/GenericStack;",
                      remap = false))
-    private void broadcastChanges(CallbackInfo ci) {
-        cosmicCore$UpgradedBlockingMode = logic.getConfigManager().getSetting(CosmicBlockingSettings.BLOCKING_MODE);
+    private void cosmicCore$broadcastChanges(CallbackInfo ci) {
+        cosmicCore$blockingMode = logic.getConfigManager().getSetting(CosmicBlockingSettings.BLOCKING_MODE);
     }
 
     @Override
     public BlockingMode cosmicCore$getBlockingMode() {
-        return cosmicCore$UpgradedBlockingMode;
+        return cosmicCore$blockingMode;
     }
 }

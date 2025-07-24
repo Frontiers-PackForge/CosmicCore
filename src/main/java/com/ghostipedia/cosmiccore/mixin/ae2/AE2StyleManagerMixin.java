@@ -9,10 +9,10 @@ import org.spongepowered.asm.mixin.injection.ModifyVariable;
 public class AE2StyleManagerMixin {
 
     @ModifyVariable(method = "loadStyleDoc", at = @At("HEAD"), argsOnly = true)
-    private static String loadStyleDocHooks(String path) {
-        if (path.contains("wireless_pattern_encoding_terminal.json")) {
+    private static String cosmicCore$replacePatternTerminalLayout(String path) {
+        if (path.endsWith("wireless_pattern_encoding_terminal.json")) {
             return "/screens/wtlib/modify_wireless_pattern_encoding_terminal.json";
-        } else if (path.contains("pattern_encoding_terminal.json")) {
+        } else if (path.endsWith("pattern_encoding_terminal.json")) {
             return "/screens/terminals/modify_pattern_encoding_terminal.json";
         }
         return path;

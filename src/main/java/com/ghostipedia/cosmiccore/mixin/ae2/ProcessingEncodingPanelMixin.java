@@ -12,83 +12,85 @@ import appeng.client.gui.WidgetContainer;
 import appeng.client.gui.me.items.EncodingModePanel;
 import appeng.client.gui.me.items.PatternEncodingTermScreen;
 import appeng.client.gui.me.items.ProcessingEncodingPanel;
-import org.spongepowered.asm.mixin.Debug;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-@Debug(
-       export = true)
 @Mixin(value = ProcessingEncodingPanel.class, remap = false)
 public abstract class ProcessingEncodingPanelMixin extends EncodingModePanel {
 
     @Unique
-    private ModifyIconButton cosCore$multTwo;
+    private ModifyIconButton cosmicCore$multTwo;
     @Unique
-    private ModifyIconButton cosCore$multThree;
+    private ModifyIconButton cosmicCore$multThree;
     @Unique
-    private ModifyIconButton cosCore$multEight;
+    private ModifyIconButton cosmicCore$multEight;
     @Unique
-    private ModifyIconButton cosCore$divTwo;
+    private ModifyIconButton cosmicCore$divTwo;
     @Unique
-    private ModifyIconButton cosCore$divThree;
+    private ModifyIconButton cosmicCore$divThree;
     @Unique
-    private ModifyIconButton cosCore$divEight;
+    private ModifyIconButton cosmicCore$divEight;
 
     protected ProcessingEncodingPanelMixin(PatternEncodingTermScreen<?> screen, WidgetContainer widgets) {
         super(screen, widgets);
     }
 
-    @Inject(method = "<init>", at = @At("TAIL"), remap = false)
+    @Inject(method = "<init>", at = @At("TAIL"))
     private void init(PatternEncodingTermScreen<?> screen, WidgetContainer widgets, CallbackInfo ci) {
-        System.out.println("HELP ME");
-        cosCore$multTwo = new ModifyIconButton(b -> ((IPatternEncodingTerminalMenu) menu).cosCore$ModifyPattern(2),
+        cosmicCore$multTwo = new ModifyIconButton(
+                b -> ((IPatternEncodingTerminalMenu) menu).cosmicCore$modifyPattern(2),
                 ModifyIcon.MULTIPLY_2,
                 Component.translatable("coscore.pattern.multiply", 2),
                 Component.translatable("coscore.pattern.tooltip.multiply", 2));
-        System.out.println("HELP ME2");
-        cosCore$multThree = new ModifyIconButton(b -> ((IPatternEncodingTerminalMenu) menu).cosCore$ModifyPattern(3),
+
+        cosmicCore$multThree = new ModifyIconButton(
+                b -> ((IPatternEncodingTerminalMenu) menu).cosmicCore$modifyPattern(3),
                 ModifyIcon.MULTIPLY_3,
                 Component.translatable("coscore.pattern.multiply", 3),
                 Component.translatable("coscore.pattern.tooltip.multiply", 3));
-        System.out.println("HELP ME3");
-        cosCore$multEight = new ModifyIconButton(b -> ((IPatternEncodingTerminalMenu) menu).cosCore$ModifyPattern(8),
+
+        cosmicCore$multEight = new ModifyIconButton(
+                b -> ((IPatternEncodingTerminalMenu) menu).cosmicCore$modifyPattern(8),
                 ModifyIcon.MULTIPLY_8,
                 Component.translatable("coscore.pattern.multiply", 8),
                 Component.translatable("coscore.pattern.tooltip.multiply", 8));
-        System.out.println("HELP ME4");
-        cosCore$divTwo = new ModifyIconButton(b -> ((IPatternEncodingTerminalMenu) menu).cosCore$ModifyPattern(-2),
+
+        cosmicCore$divTwo = new ModifyIconButton(
+                b -> ((IPatternEncodingTerminalMenu) menu).cosmicCore$modifyPattern(-2),
                 ModifyIcon.DIVISION_2,
                 Component.translatable("coscore.pattern.div", 2),
                 Component.translatable("coscore.pattern.tooltip.div", 2));
-        System.out.println("HELP ME5");
-        cosCore$divThree = new ModifyIconButton(b -> ((IPatternEncodingTerminalMenu) menu).cosCore$ModifyPattern(-3),
+
+        cosmicCore$divThree = new ModifyIconButton(
+                b -> ((IPatternEncodingTerminalMenu) menu).cosmicCore$modifyPattern(-3),
                 ModifyIcon.DIVISION_3,
                 Component.translatable("coscore.pattern.div", 3),
                 Component.translatable("coscore.pattern.tooltip.div", 3));
-        System.out.println("HELP ME6");
-        cosCore$divEight = new ModifyIconButton(b -> ((IPatternEncodingTerminalMenu) menu).cosCore$ModifyPattern(-8),
+
+        cosmicCore$divEight = new ModifyIconButton(
+                b -> ((IPatternEncodingTerminalMenu) menu).cosmicCore$modifyPattern(-8),
                 ModifyIcon.DIVISION_8,
                 Component.translatable("coscore.pattern.div", 8),
                 Component.translatable("coscore.pattern.tooltip.div", 8));
 
-        widgets.add("mult2", cosCore$multTwo);
-        widgets.add("mult3", cosCore$multThree);
-        widgets.add("mult8", cosCore$multEight);
-        widgets.add("div2", cosCore$divTwo);
-        widgets.add("div3", cosCore$divThree);
-        widgets.add("div8", cosCore$divEight);
+        widgets.add("mult2", cosmicCore$multTwo);
+        widgets.add("mult3", cosmicCore$multThree);
+        widgets.add("mult8", cosmicCore$multEight);
+        widgets.add("div2", cosmicCore$divTwo);
+        widgets.add("div3", cosmicCore$divThree);
+        widgets.add("div8", cosmicCore$divEight);
     }
 
-    @Inject(method = "setVisible", at = @At("TAIL"), remap = false)
+    @Inject(method = "setVisible", at = @At("TAIL"))
     private void setVisibleHooks(boolean visible, CallbackInfo ci) {
-        cosCore$multTwo.setVisibility(visible);
-        cosCore$multThree.setVisibility(visible);
-        cosCore$multEight.setVisibility(visible);
-        cosCore$divTwo.setVisibility(visible);
-        cosCore$divThree.setVisibility(visible);
-        cosCore$divEight.setVisibility(visible);
+        cosmicCore$multTwo.setVisibility(visible);
+        cosmicCore$multThree.setVisibility(visible);
+        cosmicCore$multEight.setVisibility(visible);
+        cosmicCore$divTwo.setVisibility(visible);
+        cosmicCore$divThree.setVisibility(visible);
+        cosmicCore$divEight.setVisibility(visible);
     }
 }

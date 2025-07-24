@@ -23,22 +23,22 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public class PatternProviderScreenMixin<C extends PatternProviderMenu> extends AEBaseScreen<C> {
 
     @Unique
-    private SettingToggleButton<BlockingMode> cosmicCore$UpgradedBlockingModebutton;
+    private SettingToggleButton<BlockingMode> cosmicCore$blockingModeButton;
 
     protected PatternProviderScreenMixin(C menu, Inventory playerInventory, Component title, ScreenStyle style) {
         super(menu, playerInventory, title, style);
     }
 
     @Inject(method = "<init>", at = @At("TAIL"), remap = false)
-    private void init(PatternProviderMenu menu, Inventory playerInventory, Component title, ScreenStyle style,
-                      CallbackInfo ci) {
-        this.cosmicCore$UpgradedBlockingModebutton = new ServerSettingToggleButton<>(
+    private void cosmicCore$addBlockingModeButton(PatternProviderMenu menu, Inventory playerInventory,
+                                                  Component title, ScreenStyle style, CallbackInfo ci) {
+        this.cosmicCore$blockingModeButton = new ServerSettingToggleButton<>(
                 CosmicBlockingSettings.BLOCKING_MODE, BlockingMode.ALL);
-        this.addToLeftToolbar(this.cosmicCore$UpgradedBlockingModebutton);
+        this.addToLeftToolbar(this.cosmicCore$blockingModeButton);
     }
 
     @Inject(method = "updateBeforeRender", at = @At("TAIL"), remap = false)
-    private void updateBeforeRender(CallbackInfo ci) {
-        this.cosmicCore$UpgradedBlockingModebutton.set(((IPatternProviderMenu) menu).cosmicCore$getBlockingMode());
+    private void cosmicCore$updateBeforeRender(CallbackInfo ci) {
+        this.cosmicCore$blockingModeButton.set(((IPatternProviderMenu) menu).cosmicCore$getBlockingMode());
     }
 }

@@ -18,16 +18,19 @@ public abstract class FrostbiteEffectMixin extends MobEffect {
     }
 
     @ModifyArg(method = "applyEffectTick",
-               at = @At(
-                        value = "INVOKE",
+               at = @At(value = "INVOKE",
                         target = "Lnet/minecraft/world/entity/player/Player;hurt(Lnet/minecraft/world/damagesource/DamageSource;F)Z"),
                index = 1)
-    private float cosmiccore$changeDamageAmount(float amount, @Local(argsOnly = true) int amplifier) {
+    private float cosmicCore$changeDamageAmount(float amount, @Local(argsOnly = true) int amplifier) {
         return amount + amplifier;
     }
 
-    @ModifyVariable(method = "isDurationEffectTick", at = @At(value = "STORE"), ordinal = 2, name = "time")
-    private int cosmiccore$modifyDamageIncrement(int time) {
-        return 50;
+    @ModifyVariable(method = "isDurationEffectTick",
+                    at = @At(value = "LOAD"),
+                    ordinal = 1,
+                    name = "amplifier",
+                    argsOnly = true)
+    private int cosmicCore$modifyDamageIncrement(int originalAmplifier) {
+        return 0;
     }
 }

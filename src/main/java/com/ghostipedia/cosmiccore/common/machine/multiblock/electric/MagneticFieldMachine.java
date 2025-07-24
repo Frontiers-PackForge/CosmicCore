@@ -23,12 +23,11 @@ import net.minecraft.network.chat.Style;
 import it.unimi.dsi.fastutil.longs.Long2ObjectMaps;
 import lombok.Getter;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-
-import javax.annotation.Nullable;
 
 public class MagneticFieldMachine extends MagnetWorkableElectricMultiblockMachine implements ITieredMachine {
 
@@ -125,7 +124,7 @@ public class MagneticFieldMachine extends MagnetWorkableElectricMultiblockMachin
     }
 
     @Override
-    public boolean beforeWorking(@org.jetbrains.annotations.Nullable GTRecipe recipe) {
+    public boolean beforeWorking(@Nullable GTRecipe recipe) {
         if (recipe.data.getInt("min_field") <= fieldStrength) {
             if (recipe.data.contains("decay_rate") && recipe.data.getInt("decay_rate") > 0) {
                 if (!recipe.data.getBoolean("per_tick")) {
