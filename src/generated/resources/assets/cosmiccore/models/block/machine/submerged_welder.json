@@ -1,5 +1,10 @@
 {
   "parent": "minecraft:block/block",
+  "dynamic_renders": [
+    {
+      "type": "cosmiccore:welder_arm_render"
+    }
+  ],
   "loader": "gtceu:machine",
   "machine": "cosmiccore:submerged_welder",
   "texture_overrides": {

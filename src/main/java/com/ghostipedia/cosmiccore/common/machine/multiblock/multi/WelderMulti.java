@@ -29,7 +29,7 @@ import static com.gregtechceu.gtceu.common.data.models.GTMachineModels.createWor
 
 public class WelderMulti {
 
-    public final static MultiblockMachineDefinition  SUBMERGED_WELDER= REGISTRATE
+    public final static MultiblockMachineDefinition  SUBMERGED_WELDER = REGISTRATE
             .multiblock("submerged_welder",
                     WorkableElectricMultiblockMachine::new)
             .langValue("§3Submerged Welder")
