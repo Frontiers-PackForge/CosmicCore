@@ -1,11 +1,9 @@
 package com.ghostipedia.cosmiccore.client.renderer.machine;
 
-import com.ghostipedia.cosmiccore.common.machine.multiblock.multi.WelderMulti;
 import com.gregtechceu.gtceu.api.machine.multiblock.WorkableElectricMultiblockMachine;
 import com.gregtechceu.gtceu.client.renderer.machine.DynamicRender;
 import com.gregtechceu.gtceu.client.renderer.machine.DynamicRenderType;
-import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.serialization.Codec;
+
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.block.model.BakedQuad;
@@ -18,6 +16,9 @@ import net.minecraft.world.level.BlockAndTintGetter;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import net.minecraftforge.client.model.data.ModelData;
+
+import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.serialization.Codec;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -27,7 +28,8 @@ public class WelderArmRender extends DynamicRender<WorkableElectricMultiblockMac
 
     public static final WelderArmRender INSTANCE = new WelderArmRender();
     public static final Codec<WelderArmRender> CODEC = Codec.unit(INSTANCE);
-    public static final DynamicRenderType<WorkableElectricMultiblockMachine, WelderArmRender> TYPE = new DynamicRenderType<>(WelderArmRender.CODEC);
+    public static final DynamicRenderType<WorkableElectricMultiblockMachine, WelderArmRender> TYPE = new DynamicRenderType<>(
+            WelderArmRender.CODEC);
 
     @Override
     public DynamicRenderType<WorkableElectricMultiblockMachine, WelderArmRender> getType() {
@@ -35,17 +37,21 @@ public class WelderArmRender extends DynamicRender<WorkableElectricMultiblockMac
     }
 
     @Override
-    public @NotNull List<BakedQuad> getRenderQuads(@Nullable WorkableElectricMultiblockMachine machine, @Nullable BlockAndTintGetter level, @Nullable BlockPos pos, @Nullable BlockState blockState, @Nullable Direction side, RandomSource rand, @NotNull ModelData modelData, @Nullable RenderType renderType) {
+    public @NotNull List<BakedQuad> getRenderQuads(@Nullable WorkableElectricMultiblockMachine machine,
+                                                   @Nullable BlockAndTintGetter level, @Nullable BlockPos pos,
+                                                   @Nullable BlockState blockState, @Nullable Direction side,
+                                                   RandomSource rand, @NotNull ModelData modelData,
+                                                   @Nullable RenderType renderType) {
         return super.getRenderQuads(machine, level, pos, blockState, side, rand, modelData, renderType);
     }
 
     @Override
-    public void render(WorkableElectricMultiblockMachine machine, float partialTick, PoseStack poseStack, MultiBufferSource buffer, int packedLight, int packedOverlay) {
-
-    }
+    public void render(WorkableElectricMultiblockMachine machine, float partialTick, PoseStack poseStack,
+                       MultiBufferSource buffer, int packedLight, int packedOverlay) {}
 
     @Override
-    public void renderByItem(ItemStack stack, ItemDisplayContext displayContext, PoseStack poseStack, MultiBufferSource buffer, int packedLight, int packedOverlay) {
+    public void renderByItem(ItemStack stack, ItemDisplayContext displayContext, PoseStack poseStack,
+                             MultiBufferSource buffer, int packedLight, int packedOverlay) {
         super.renderByItem(stack, displayContext, poseStack, buffer, packedLight, packedOverlay);
     }
 
@@ -64,4 +70,3 @@ public class WelderArmRender extends DynamicRender<WorkableElectricMultiblockMac
         return super.getRenderBoundingBox(machine);
     }
 }
-

@@ -1,10 +1,9 @@
 package com.ghostipedia.cosmiccore.common.machine.multiblock.multi;
 
 import com.ghostipedia.cosmiccore.CosmicCore;
-import com.ghostipedia.cosmiccore.api.machine.multiblock.IrisMultiblockMachine;
 import com.ghostipedia.cosmiccore.client.renderer.machine.CosmicDynamicRenderHelpers;
-import com.ghostipedia.cosmiccore.client.renderer.machine.SufferingChamberRenderer;
 import com.ghostipedia.cosmiccore.gtbridge.CosmicRecipeTypes;
+
 import com.gregtechceu.gtceu.GTCEu;
 import com.gregtechceu.gtceu.api.data.RotationState;
 import com.gregtechceu.gtceu.api.machine.MultiblockMachineDefinition;
@@ -15,13 +14,10 @@ import com.gregtechceu.gtceu.api.pattern.Predicates;
 import com.gregtechceu.gtceu.api.recipe.OverclockingLogic;
 import com.gregtechceu.gtceu.common.data.GTBlocks;
 import com.gregtechceu.gtceu.common.data.GTRecipeModifiers;
-import wayoftime.bloodmagic.BloodMagic;
-import wayoftime.bloodmagic.common.block.BloodMagicBlocks;
 
 import static com.ghostipedia.cosmiccore.api.machine.part.CosmicPartAbility.IMPORT_SOUL;
 import static com.ghostipedia.cosmiccore.api.registries.CosmicRegistration.REGISTRATE;
 import static com.ghostipedia.cosmiccore.common.data.CosmicBlocks.*;
-import static com.ghostipedia.cosmiccore.common.data.datagen.CosmicMachineModels.createSeparateControllerCasingMachineModel;
 import static com.gregtechceu.gtceu.api.pattern.Predicates.*;
 import static com.gregtechceu.gtceu.common.data.GCYMBlocks.CASING_NONCONDUCTING;
 import static com.gregtechceu.gtceu.common.data.GCYMBlocks.CASING_STRESS_PROOF;
@@ -29,7 +25,7 @@ import static com.gregtechceu.gtceu.common.data.models.GTMachineModels.createWor
 
 public class WelderMulti {
 
-    public final static MultiblockMachineDefinition  SUBMERGED_WELDER = REGISTRATE
+    public final static MultiblockMachineDefinition SUBMERGED_WELDER = REGISTRATE
             .multiblock("submerged_welder",
                     WorkableElectricMultiblockMachine::new)
             .langValue("§3Submerged Welder")
@@ -86,14 +82,12 @@ public class WelderMulti {
                     .build())
             // spotless:on
             .model(
-                createWorkableCasingMachineModel(
-                        CosmicCore.id("block/casings/solid/naquadah_pressure_resistant_casing"),
-                        GTCEu.id("block/multiblock/hpca")
-                    ).andThen(model -> model.addDynamicRenderer(CosmicDynamicRenderHelpers::getWelderArmsRenderer))
-            )
+                    createWorkableCasingMachineModel(
+                            CosmicCore.id("block/casings/solid/naquadah_pressure_resistant_casing"),
+                            GTCEu.id("block/multiblock/hpca"))
+                            .andThen(model -> model
+                                    .addDynamicRenderer(CosmicDynamicRenderHelpers::getWelderArmsRenderer)))
             .register();
 
     public static void init() {}
-
-
 }
