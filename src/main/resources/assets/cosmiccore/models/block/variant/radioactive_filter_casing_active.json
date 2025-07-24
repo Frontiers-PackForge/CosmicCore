@@ -1,6 +1,7 @@
 {
-  "parent": "gtceu:block/cube/all",
+  "parent": "gtceu:block/cube_2_layer/all",
   "textures": {
-    "all": "cosmiccore:block/variant/machine_casing_radioactive_filter_active"
+    "bot_all": "cosmiccore:block/variant/machine_casing_radioactive_filter",
+    "top_all": "cosmiccore:block/variant/machine_casing_radioactive_filter_active"
   }
 }
