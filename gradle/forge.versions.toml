@@ -47,14 +47,10 @@ puzzlesLib = "4924184"
 smartBrainLib = "5654964"
 modernFix = "6025611"
 
-malum = "1.20.1-1.6.72"
+malum = "1.20.1-1.6.7.1"
 lodestone = "1.20.1-1.6.4.1.256"
 
 [libraries]
-
-malum                     = { module = "com.sammy.malum:malum", version.ref = "malum" }
-lodestone                 = { module = "team.lodestar.lodestone:lodestone", version.ref = "lodestone" }
-
 
 ldlib                     = { module = "com.lowdragmc.ldlib:ldlib-forge-1.20.1", version.ref = "ldlib" }
 gtceu                     = { module = "com.gregtechceu.gtceu:gtceu-1.20.1", version.ref = "gtceu" }
@@ -84,12 +80,16 @@ ftblibrary                = { module = "dev.ftb.mods:ftb-library-forge", version
 ftbteams                  = { module = "dev.ftb.mods:ftb-teams-forge", version.ref = "ftbteams" }
 geckoLib                  = { module = "software.bernie.geckolib:geckolib-forge-1.20.1", version.ref = "geckoLib" }
 flywheel                  = { module = "com.jozufozu.flywheel:flywheel-forge-1.20.1", version.ref = "flywheel" }
+
 apotheosis                = { module = "dev.shadowsoffire:Apotheosis", version.ref = "apotheosis" }
 placebo                   = { module = "dev.shadowsoffire:Placebo", version.ref = "placebo" }
 apotheoticAttributes      = { module = "dev.shadowsoffire:ApothicAttributes", version.ref = "apotheoticAttributes" }
 occultism                 = { module = "com.klikli_dev:occultism-1.20.1", version.ref = "occultism"}
 modonomicon               = { module = "com.klikli_dev:modonomicon-1.20.1-forge", version.ref = "modonomicon"}
 jcpp                      = { module = "org.anarres:jcpp", version.ref = "jcpp" } # required by occulus apparently
+
+malum                     = { module = "com.sammy.malum:malum", version.ref = "malum" }
+lodestone                 = { module = "team.lodestar.lodestone:lodestone", version.ref = "lodestone" }
 
 ## modrinth maven ##
 jade                      = { module = "maven.modrinth:jade", version.ref = "jade" }
