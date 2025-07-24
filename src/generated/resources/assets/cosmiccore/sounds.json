@@ -16,5 +16,14 @@
       }
     ],
     "subtitle": "cosmiccore.subtitle.arcane_distil"
+  },
+  "mining_machine": {
+    "sounds": [
+      {
+        "type": "file",
+        "name": "cosmiccore:mining_machine"
+      }
+    ],
+    "subtitle": "cosmiccore.subtitle.mining_machine"
   }
 }

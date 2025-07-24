@@ -19,6 +19,7 @@ public class ModularizedMultis {
         HeavyAssembler.init();
         WelderMulti.init();
         StarLadder.init();
+        VoidMiner.init();
         CosmicModularMachines.init();
     }
 }
