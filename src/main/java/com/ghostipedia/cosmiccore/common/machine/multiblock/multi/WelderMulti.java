@@ -3,6 +3,7 @@ package com.ghostipedia.cosmiccore.common.machine.multiblock.multi;
 import com.ghostipedia.cosmiccore.CosmicCore;
 import com.ghostipedia.cosmiccore.api.machine.multiblock.IrisMultiblockMachine;
 import com.ghostipedia.cosmiccore.client.renderer.machine.CosmicDynamicRenderHelpers;
+import com.ghostipedia.cosmiccore.client.renderer.machine.SufferingChamberRenderer;
 import com.ghostipedia.cosmiccore.gtbridge.CosmicRecipeTypes;
 import com.gregtechceu.gtceu.GTCEu;
 import com.gregtechceu.gtceu.api.data.RotationState;
@@ -24,6 +25,7 @@ import static com.ghostipedia.cosmiccore.common.data.datagen.CosmicMachineModels
 import static com.gregtechceu.gtceu.api.pattern.Predicates.*;
 import static com.gregtechceu.gtceu.common.data.GCYMBlocks.CASING_NONCONDUCTING;
 import static com.gregtechceu.gtceu.common.data.GCYMBlocks.CASING_STRESS_PROOF;
+import static com.gregtechceu.gtceu.common.data.models.GTMachineModels.createWorkableCasingMachineModel;
 
 public class WelderMulti {
 
@@ -82,8 +84,12 @@ public class WelderMulti {
                     .where('H', blocks(GTBlocks.CASING_TUNGSTENSTEEL_PIPE.get()))
                     .build())
             // spotless:on
-            .workableCasingModel(CosmicCore.id("block/casings/solid/naquadah_pressure_resistant_casing"),
-                    GTCEu.id("block/multiblock/hpca"))
+            .model(
+                createWorkableCasingMachineModel(
+                        CosmicCore.id("block/casings/solid/naquadah_pressure_resistant_casing"),
+                        GTCEu.id("block/multiblock/hpca")
+                    ).andThen(model -> model.addDynamicRenderer(CosmicDynamicRenderHelpers::getWelderArmsRenderer))
+            )
             .register();
 
     public static void init() {}

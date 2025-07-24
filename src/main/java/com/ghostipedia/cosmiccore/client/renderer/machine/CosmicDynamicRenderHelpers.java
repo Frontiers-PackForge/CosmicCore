@@ -29,4 +29,8 @@ public class CosmicDynamicRenderHelpers {
     public static DynamicRender<?, ?> getSufferingChamberRenderer() {
         return SufferingChamberRenderer.INSTANCE;
     }
+
+    public static DynamicRender<?,?> getWelderArmsRenderer() {
+        return WelderArmRender.INSTANCE;
+    }
 }
