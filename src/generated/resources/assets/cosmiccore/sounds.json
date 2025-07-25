@@ -17,6 +17,15 @@
     ],
     "subtitle": "cosmiccore.subtitle.arcane_distil"
   },
+  "gas_succ": {
+    "sounds": [
+      {
+        "type": "file",
+        "name": "cosmiccore:gas_succ"
+      }
+    ],
+    "subtitle": "cosmiccore.subtitle.gas_succ"
+  },
   "mining_machine": {
     "sounds": [
       {

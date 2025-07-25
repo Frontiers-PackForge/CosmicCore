@@ -7,6 +7,7 @@ import com.gregtechceu.gtceu.api.data.RotationState;
 import com.gregtechceu.gtceu.api.data.chemical.ChemicalHelper;
 import com.gregtechceu.gtceu.api.data.tag.TagPrefix;
 import com.gregtechceu.gtceu.api.machine.MultiblockMachineDefinition;
+import com.gregtechceu.gtceu.api.machine.multiblock.PartAbility;
 import com.gregtechceu.gtceu.api.machine.multiblock.WorkableElectricMultiblockMachine;
 import com.gregtechceu.gtceu.api.pattern.FactoryBlockPattern;
 import com.gregtechceu.gtceu.api.recipe.OverclockingLogic;
@@ -57,7 +58,12 @@ public class HeavyAssembler {
                     .where(' ', any())
                     .where('Q', controller(blocks(definition.getBlock())))
                     .where('A', blocks(MULTIPURPOSE_INTERSTELLAR_GRADE_CASING.get())
-                            .or(autoAbilities())) //Part IO go here
+                            .or(autoAbilities())
+                            .or(autoAbilities(CosmicRecipeTypes.VOID_MINER))
+                            .or(abilities(PartAbility.IMPORT_FLUIDS,PartAbility.IMPORT_FLUIDS_4X,PartAbility.IMPORT_FLUIDS_9X))
+                            .or(abilities(PartAbility.EXPORT_ITEMS))
+                            .or(abilities(PartAbility.INPUT_ENERGY).setExactLimit(1))
+                            .or(abilities(PartAbility.MAINTENANCE).setExactLimit(1))) //Part IO go here
                     .where('B', blocks(MULTIPURPOSE_INTERSTELLAR_GRADE_CASING.get()))
                     .where('C', blocks(GCYMBlocks.CASING_LARGE_SCALE_ASSEMBLING.get()))
                     .where('F',  blocks(ChemicalHelper.getBlock(TagPrefix.frameGt, GTMaterials.TungstenCarbide)))
