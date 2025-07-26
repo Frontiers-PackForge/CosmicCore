@@ -125,9 +125,7 @@ public class CosmicCoreOreRecipeHandler {
         builder.duration(40).EUt(GTValues.VA[GTValues.IV]).save(provider);
     }
 
-
     // Prismatic Foundry
-
 
     public static void processRawOretoFinalStates(Consumer<FinishedRecipe> provider, Material material) {
         if (!material.shouldGenerateRecipesFor(rawOre) || !material.hasProperty(PropertyKey.ORE)) return;
@@ -157,10 +155,6 @@ public class CosmicCoreOreRecipeHandler {
             builder.chancedOutput(dust, byproduct4, 3500, 0);
         }
         builder.outputFluids(Prisma.getFluid(500));
-        builder.duration(40).EUt(GTValues.V[GTValues.IV]/4).save(provider);
+        builder.duration(40).EUt(GTValues.V[GTValues.IV] / 4).save(provider);
     }
-
-
-
-
 }
