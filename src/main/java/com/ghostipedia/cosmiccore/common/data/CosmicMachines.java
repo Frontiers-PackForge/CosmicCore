@@ -6,6 +6,7 @@ import com.ghostipedia.cosmiccore.api.machine.multiblock.DimensionalEnergyInterf
 import com.ghostipedia.cosmiccore.api.machine.multiblock.IPBFMachine;
 import com.ghostipedia.cosmiccore.api.machine.multiblock.UniqueWorkableElectricMultiblockMachine;
 import com.ghostipedia.cosmiccore.api.machine.part.CosmicPartAbility;
+import com.ghostipedia.cosmiccore.api.machine.part.DroneMaintenanceInterfacePartMachine;
 import com.ghostipedia.cosmiccore.api.machine.part.SteamFluidHatchPartMachine;
 import com.ghostipedia.cosmiccore.api.machine.part.WirelessEnergyHatchPartMachine;
 import com.ghostipedia.cosmiccore.api.registries.CosmicRegistration;
@@ -54,6 +55,7 @@ import com.gregtechceu.gtceu.common.data.models.GTModels;
 import com.gregtechceu.gtceu.common.machine.multiblock.electric.ActiveTransformerMachine;
 import com.gregtechceu.gtceu.common.machine.multiblock.electric.FusionReactorMachine;
 import com.gregtechceu.gtceu.common.machine.multiblock.electric.PowerSubstationMachine;
+import com.gregtechceu.gtceu.common.machine.multiblock.part.MaintenanceHatchPartMachine;
 import com.gregtechceu.gtceu.config.ConfigHolder;
 import com.gregtechceu.gtceu.utils.FormattingUtil;
 
@@ -3520,6 +3522,18 @@ public class CosmicMachines {
             .abilities(PartAbility.DATA_ACCESS)
             .tier(UEV)
             .overlayTieredHullModel("wireless_data_hatch")
+            .register();
+
+    public static final MachineDefinition DRONE_MAINTENANCE_INTERFACE = REGISTRATE
+            .machine("maintenance_hatch", (blockEntity) -> new DroneMaintenanceInterfacePartMachine(blockEntity))
+            .rotationState(RotationState.ALL)
+            .abilities(PartAbility.MAINTENANCE)
+            .tooltips(Component.translatable("gtceu.part_sharing.disabled"))
+            // TODO: Remove this property since it can't be taped, and also add proper models
+            .modelProperty(MaintenanceHatchPartMachine.MAINTENANCE_TAPED_PROPERTY, false)
+            .model(createMaintenanceModel(GTCEu.id("block/machine/part/maintenance_hatch")))
+            .tier(HV)
+            .langValue("Drone Maintenance Interface")
             .register();
 
     public static void init() {
