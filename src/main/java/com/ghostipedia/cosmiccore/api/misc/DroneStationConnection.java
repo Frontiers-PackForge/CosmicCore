@@ -2,10 +2,13 @@ package com.ghostipedia.cosmiccore.api.misc;
 
 import com.ghostipedia.cosmiccore.api.machine.multiblock.DroneStationMachine;
 
+import com.gregtechceu.gtceu.api.blockentity.MetaMachineBlockEntity;
 import com.gregtechceu.gtceu.api.machine.MetaMachine;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import org.jetbrains.annotations.NotNull;
 
 public class DroneStationConnection {
 
@@ -36,8 +39,13 @@ public class DroneStationConnection {
         return isValid();
     }
 
-    // TODO: Implement this.
-    private MetaMachine getMetaMachineAt(BlockPos pos, Level level) {
+    //gets a metamachine at a position
+    private MetaMachine getMetaMachineAt(@NotNull BlockPos pos, Level level) {
+        BlockEntity blockEntity = level.getBlockEntity(pos);
+        if(blockEntity == null) return null;
+        if(blockEntity instanceof MetaMachineBlockEntity machineBlockEntity ) {
+            return machineBlockEntity.getMetaMachine();
+        }
         return null;
     }
 
