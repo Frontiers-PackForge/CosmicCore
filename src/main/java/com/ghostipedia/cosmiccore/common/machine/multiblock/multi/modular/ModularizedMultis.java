@@ -21,6 +21,7 @@ public class ModularizedMultis {
         StarLadder.init();
         VoidMiner.init();
         AtmoPump.init();
+        DroneStation.init();
         CosmicModularMachines.init();
     }
 }
