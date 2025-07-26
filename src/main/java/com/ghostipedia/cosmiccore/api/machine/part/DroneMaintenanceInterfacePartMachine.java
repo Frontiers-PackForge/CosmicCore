@@ -4,6 +4,9 @@ import com.ghostipedia.cosmiccore.api.machine.multiblock.DroneStationMachine;
 import com.ghostipedia.cosmiccore.api.misc.DroneStationConnection;
 
 import com.gregtechceu.gtceu.api.GTValues;
+import com.gregtechceu.gtceu.api.gui.GuiTextures;
+import com.gregtechceu.gtceu.api.gui.fancy.IFancyTooltip;
+import com.gregtechceu.gtceu.api.gui.fancy.TooltipsPanel;
 import com.gregtechceu.gtceu.api.machine.IMachineBlockEntity;
 import com.gregtechceu.gtceu.api.machine.TickableSubscription;
 import com.gregtechceu.gtceu.api.machine.feature.IInteractedMachine;
@@ -16,12 +19,16 @@ import com.lowdragmc.lowdraglib.syncdata.annotation.DescSynced;
 import com.lowdragmc.lowdraglib.syncdata.annotation.Persisted;
 import com.lowdragmc.lowdraglib.syncdata.field.ManagedFieldHolder;
 
+import net.minecraft.ChatFormatting;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.Style;
 import net.minecraft.resources.ResourceLocation;
 
 import lombok.Getter;
 import lombok.Setter;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.List;
 import java.util.Set;
 
 public class DroneMaintenanceInterfacePartMachine extends TieredPartMachine
@@ -45,6 +52,7 @@ public class DroneMaintenanceInterfacePartMachine extends TieredPartMachine
     @Nullable
     protected TickableSubscription maintenanceSubs;
 
+    @Getter
     private DroneStationConnection connection;
 
     public DroneMaintenanceInterfacePartMachine(IMachineBlockEntity holder) {
@@ -113,7 +121,7 @@ public class DroneMaintenanceInterfacePartMachine extends TieredPartMachine
         }
     }
 
-    private boolean hasConnection() {
+    public boolean hasConnection() {
         if (connection == null) return false;
         if (connection.isValid()) return true;
         return connection.reCheckConnection();
@@ -134,6 +142,28 @@ public class DroneMaintenanceInterfacePartMachine extends TieredPartMachine
             station.connections.add(connection);
             return;
         }
+    }
+
+    @Override
+    public void attachTooltips(TooltipsPanel tooltipsPanel) {
+        super.attachTooltips(tooltipsPanel);
+        tooltipsPanel.attachTooltips(new IFancyTooltip.Basic(
+                () -> GuiTextures.GREGTECH_LOGO,
+                () -> List.of(Component.translatable("gtceu.multiblock.drone_maintenance_interface.connection_location",
+                        this.connection.droneStationPos.getX(),
+                        this.connection.droneStationPos.getY(),
+                        this.connection.droneStationPos.getZ())
+                        .setStyle(Style.EMPTY.withColor(ChatFormatting.GREEN))),
+                (() -> !(this.connection == null || this.connection.droneStationPos != null ||
+                        this.connection.droneStation != null)),
+                () -> null));
+        tooltipsPanel.attachTooltips(new IFancyTooltip.Basic(
+                () -> GuiTextures.GREGTECH_LOGO,
+                () -> List.of(Component.translatable("gtceu.multiblock.drone_maintenance_interface.no_connection")
+                        .setStyle(Style.EMPTY.withColor(ChatFormatting.RED))),
+                (() -> this.connection == null || this.connection.droneStationPos != null ||
+                        this.connection.droneStation != null),
+                () -> null));
     }
 
     public void fixAllMaintenanceProblems() {

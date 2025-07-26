@@ -290,6 +290,18 @@ public class CosmicLangHandler extends LangHandler {
         // HPCA
         provider.add("cosmiccore.multiblock.hpca.incomplete-array", "Incomplete Array will not generate");
 
+        // Drone Station
+        provider.add("cosmiccore.multiblock.drone_station_machine.drone_amount", "Currently serving %s drones");
+        provider.add("cosmiccore.multiblock.drone_station_machine.no_drones", "No drones connected");
+
+        provider.add("cosmiccore.multiblock.drone_maintenance_interface.connection_location",
+                "Currently connected to (%s, %s, %s)");
+        provider.add("cosmiccore.multiblock.drone_maintenance_interface.no_connection", "Not connected");
+
+        // JADE
+        provider.add("config.jade.plugin_cosmiccore.drone_station", "[CC] Drone Station");
+        provider.add("config.jade.plugin_cosmiccore.drone_maintenance_interface", "[CC] Drone Maintenance Interface");
+
         provider.add("debug.owner.uuid", "§aOwner UUID:§a %s");
         provider.add("debug.team.uuid", "§aTeam UUID:§a %s");
     }

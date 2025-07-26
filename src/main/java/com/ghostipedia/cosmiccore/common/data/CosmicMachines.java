@@ -3525,7 +3525,8 @@ public class CosmicMachines {
             .register();
 
     public static final MachineDefinition DRONE_MAINTENANCE_INTERFACE = REGISTRATE
-            .machine("maintenance_hatch", (blockEntity) -> new DroneMaintenanceInterfacePartMachine(blockEntity))
+            .machine("drone_maintenance_interface",
+                    (blockEntity) -> new DroneMaintenanceInterfacePartMachine(blockEntity))
             .rotationState(RotationState.ALL)
             .abilities(PartAbility.MAINTENANCE)
             .tooltips(Component.translatable("gtceu.part_sharing.disabled"))
