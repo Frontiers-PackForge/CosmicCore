@@ -154,7 +154,6 @@ public class CosmicCoreOreRecipeHandler {
         if (byproduct4 != GTMaterials.NULL && !ChemicalHelper.get(dust, byproduct4).isEmpty()) {
             builder.chancedOutput(dust, byproduct4, 3500, 0);
         }
-        builder.outputFluids(Prisma.getFluid(500));
-        builder.duration(40).EUt(GTValues.V[GTValues.IV] / 4).save(provider);
+        builder.duration(40).EUt(GTValues.V[GTValues.IV]).save(provider);
     }
 }
