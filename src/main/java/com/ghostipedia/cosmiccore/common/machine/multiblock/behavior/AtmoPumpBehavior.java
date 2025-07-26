@@ -17,7 +17,7 @@ public class AtmoPumpBehavior extends WorkableElectricMultiblockMachine {
     @NotNull
     private AABB killzone = new AABB(BlockPos.ZERO);
     private TickableSubscription hurtSub;
-    private int Damage = 2;
+    private int Damage = 1;
 
     public AtmoPumpBehavior(IMachineBlockEntity holder, Object... args) {
         super(holder, args);
@@ -56,7 +56,7 @@ public class AtmoPumpBehavior extends WorkableElectricMultiblockMachine {
     }
 
     private void suffocatePlayer() {
-        if (getOffsetTimer() % 15 != 0) return;
+        if (getOffsetTimer() % 35 != 0) return;
         if(!this.isActive()) return;
         if (isRemote() || getLevel() == null) return;
         for (Entity entity : getLevel().getEntities(null, killzone)) {
