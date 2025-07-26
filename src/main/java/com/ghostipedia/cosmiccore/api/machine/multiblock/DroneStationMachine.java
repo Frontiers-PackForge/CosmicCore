@@ -5,12 +5,8 @@ import com.ghostipedia.cosmiccore.api.misc.DroneStationConnection;
 import com.gregtechceu.gtceu.api.machine.IMachineBlockEntity;
 import com.gregtechceu.gtceu.api.machine.TickableSubscription;
 import com.gregtechceu.gtceu.api.machine.multiblock.WorkableElectricMultiblockMachine;
-
 import com.gregtechceu.gtceu.api.machine.trait.RecipeLogic;
-import com.lowdragmc.lowdraglib.syncdata.annotation.DescSynced;
-import com.lowdragmc.lowdraglib.syncdata.annotation.Persisted;
-import lombok.Getter;
-import lombok.Setter;
+
 import net.minecraft.resources.ResourceLocation;
 
 import com.google.common.collect.HashMultimap;
@@ -19,7 +15,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class DroneStationMachine extends WorkableElectricMultiblockMachine {
-
 
     // A MultiMap from Dimension -> DroneStation, such that all Drone Maintenance Interfaces can
     // find their closest DroneStation in their world
@@ -34,7 +29,6 @@ public class DroneStationMachine extends WorkableElectricMultiblockMachine {
 
     public DroneStationMachine(IMachineBlockEntity holder, Object... args) {
         super(holder, args);
-
     }
 
     @Override
@@ -59,16 +53,15 @@ public class DroneStationMachine extends WorkableElectricMultiblockMachine {
 
     public void updateDroneHatches() {
         // TODO: Make this machine take EU
-       if(energyContainer != null) {
-           drainEnergy(false);
-       }
-       if(energyContainer.getEnergyStored() != 0) {
-           if (getOffsetTimer() % 20 == 0) {
-               connections.removeIf(connection -> !connection.isValid());
-           }
-       }
+        if (energyContainer != null) {
+            drainEnergy(false);
+        }
+        if (energyContainer.getEnergyStored() != 0) {
+            if (getOffsetTimer() % 20 == 0) {
+                connections.removeIf(connection -> !connection.isValid());
+            }
+        }
     }
-
 
     public boolean drainEnergy(boolean simulate) {
         long resultEnergy = energyContainer.getEnergyStored() - 200;

@@ -8,6 +8,7 @@ import com.gregtechceu.gtceu.api.machine.MetaMachine;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
+
 import org.jetbrains.annotations.NotNull;
 
 public class DroneStationConnection {
@@ -39,11 +40,11 @@ public class DroneStationConnection {
         return isValid();
     }
 
-    //gets a metamachine at a position
+    // gets a metamachine at a position
     private MetaMachine getMetaMachineAt(@NotNull BlockPos pos, Level level) {
         BlockEntity blockEntity = level.getBlockEntity(pos);
-        if(blockEntity == null) return null;
-        if(blockEntity instanceof MetaMachineBlockEntity machineBlockEntity ) {
+        if (blockEntity == null) return null;
+        if (blockEntity instanceof MetaMachineBlockEntity machineBlockEntity) {
             return machineBlockEntity.getMetaMachine();
         }
         return null;

@@ -152,6 +152,4 @@ public class DroneMaintenanceInterfacePartMachine extends TieredPartMachine
     public boolean isTaped() {
         return false;
     }
-
-
 }
