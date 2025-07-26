@@ -12,6 +12,7 @@ public class ModularizedMultis {
         ShredderMultiblock.init();
 
         // MegaStructures
+        PrismaticOreFoundry.init();
         StellarIris.init();
         StellarStarBallast.init();
         HemophagicTransfuser.init();

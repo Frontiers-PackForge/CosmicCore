@@ -38,6 +38,12 @@ public class CosmicRecipeTypes {
             .setSound(MINING_MACHINE)
             .setProgressBar(GuiTextures.PROGRESS_BAR_ARROW, ProgressTexture.FillDirection.LEFT_TO_RIGHT);
 
+    public static final GTRecipeType PRISMA_FOUNDRY = GTRecipeTypes
+            .register("prisma_foundry", GTRecipeTypes.MULTIBLOCK)
+            .setMaxIOSize(3, 6, 3, 0)
+            .setSound(MINING_MACHINE)
+            .setProgressBar(GuiTextures.PROGRESS_BAR_ARROW, ProgressTexture.FillDirection.LEFT_TO_RIGHT);
+
     public static final GTRecipeType ATMOSPHERE_SIPHON = GTRecipeTypes
             .register("atmo_siphon", GTRecipeTypes.MULTIBLOCK)
             .setMaxIOSize(3, 0, 4, 16)

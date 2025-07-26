@@ -28,6 +28,7 @@ public class CosmicCoreOreRecipeHandler {
         processRefinedFrothed(provider, material);
         processLeachedRefined(provider, material);
         processFrothedPure(provider, material);
+        processRawOretoFinalStates(provider, material);
         // todo old
         // crushed.executeHandler(provider, PropertyKey.ORE, CosmicCoreOreRecipeHandler::processcrushedLeached);
         // crushedRefined.executeHandler(provider, PropertyKey.ORE, CosmicCoreOreRecipeHandler::processRefinedFrothed);
@@ -123,4 +124,43 @@ public class CosmicCoreOreRecipeHandler {
         builder.outputFluids(DilutedPrisma.getFluid(1250));
         builder.duration(40).EUt(GTValues.VA[GTValues.IV]).save(provider);
     }
+
+
+    // Prismatic Foundry
+
+
+    public static void processRawOretoFinalStates(Consumer<FinishedRecipe> provider, Material material) {
+        if (!material.shouldGenerateRecipesFor(rawOre) || !material.hasProperty(PropertyKey.ORE)) return;
+        var property = material.getProperty(PropertyKey.ORE);
+        ItemStack frothedStack = ChemicalHelper.get(dust, material);
+
+        Material byproduct = property.getOreByProduct(0);
+        Material byproduct2 = property.getOreByProduct(1);
+        Material byproduct3 = property.getOreByProduct(2);
+        Material byproduct4 = property.getOreByProduct(Integer.MAX_VALUE);
+
+        var builder = PRISMA_FOUNDRY.recipeBuilder("raw_ore_prismf_" + material.getName() + "_to_dusts")
+                .inputItems(rawOre, material)
+                .inputFluids(GTMaterials.Blaze.getFluid(250))
+                .inputFluids(Water.getFluid(2750))
+                .outputItems(frothedStack.copyWithCount(6));
+        if (byproduct != GTMaterials.NULL && !ChemicalHelper.get(dust, byproduct).isEmpty()) {
+            builder.chancedOutput(dust, byproduct, 3500, 0);
+        }
+        if (byproduct2 != GTMaterials.NULL && !ChemicalHelper.get(dust, byproduct2).isEmpty()) {
+            builder.chancedOutput(dust, byproduct2, 3500, 0);
+        }
+        if (byproduct3 != GTMaterials.NULL && !ChemicalHelper.get(dust, byproduct3).isEmpty()) {
+            builder.chancedOutput(dust, byproduct3, 3500, 0);
+        }
+        if (byproduct4 != GTMaterials.NULL && !ChemicalHelper.get(dust, byproduct4).isEmpty()) {
+            builder.chancedOutput(dust, byproduct4, 3500, 0);
+        }
+        builder.outputFluids(Prisma.getFluid(500));
+        builder.duration(40).EUt(GTValues.V[GTValues.IV]/4).save(provider);
+    }
+
+
+
+
 }
