@@ -68,7 +68,7 @@ public class CosmicMaterialRecipeHandlers {
         ORBITAL_FORGE.recipeBuilder("heavy_forging" + material.getName() + "ultra_dense_plate")
                 .inputItems(plate, material, 64)
                 .outputItems(ultraDense, material, 1)
-                .duration((int) material.getMass() * 50)
+                .duration((int) material.getMass() * 15)
                 .EUt(GTValues.VA[GTValues.LuV], 6)
                 .blastFurnaceTemp(9500)
                 .circuitMeta(7)
