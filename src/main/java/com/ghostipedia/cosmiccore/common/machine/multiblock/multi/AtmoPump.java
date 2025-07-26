@@ -23,8 +23,6 @@ import static com.ghostipedia.cosmiccore.api.registries.CosmicRegistration.REGIS
 import static com.ghostipedia.cosmiccore.common.data.CosmicBlocks.*;
 import static com.gregtechceu.gtceu.api.pattern.Predicates.*;
 import static com.gregtechceu.gtceu.common.data.GTBlocks.COMPUTER_CASING;
-import static com.gregtechceu.gtceu.common.data.models.GTMachineModels.createWorkableCasingMachineModel;
-
 // NOTE DO NOT ADD BERS/RENDERS TO THIS YET
 
 public class AtmoPump {
@@ -93,7 +91,7 @@ public class AtmoPump {
                     .build())
             // spotless:on
             .workableCasingModel(
-                    CosmicCore.id("block/casings/solid/tritanium_lined_heavy_neutronium_casing"),
+                    CosmicCore.id("block/casings/solid/tritanium_lined_heavy_bolted_neutronium_casing"),
                     CosmicCore.id("block/multiblock/mantle_bore"))
             .register();
 
