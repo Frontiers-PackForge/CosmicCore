@@ -1,14 +1,13 @@
 package com.ghostipedia.cosmiccore.api.machine.multiblock;
 
+import com.ghostipedia.cosmiccore.api.machine.part.DroneMaintenanceInterfacePartMachine;
 import com.ghostipedia.cosmiccore.api.misc.DroneStationConnection;
 
 import com.gregtechceu.gtceu.api.GTValues;
 import com.gregtechceu.gtceu.api.capability.IControllable;
-import com.gregtechceu.gtceu.api.gui.GuiTextures;
-import com.gregtechceu.gtceu.api.gui.fancy.IFancyTooltip;
-import com.gregtechceu.gtceu.api.gui.fancy.TooltipsPanel;
 import com.gregtechceu.gtceu.api.machine.IMachineBlockEntity;
 import com.gregtechceu.gtceu.api.machine.TickableSubscription;
+import com.gregtechceu.gtceu.api.machine.feature.multiblock.IMultiController;
 import com.gregtechceu.gtceu.api.machine.multiblock.WorkableElectricMultiblockMachine;
 import com.gregtechceu.gtceu.api.machine.trait.RecipeLogic;
 
@@ -96,27 +95,22 @@ public class DroneStationMachine extends WorkableElectricMultiblockMachine {
     }
 
     @Override
-    public void attachTooltips(TooltipsPanel tooltipsPanel) {
-        super.attachTooltips(tooltipsPanel);
-        tooltipsPanel.attachTooltips(new IFancyTooltip.Basic(
-                () -> GuiTextures.GREGTECH_LOGO,
-                () -> List.of(Component
-                        .translatable("gtceu.multiblock.drone_station_machine.drone_amount", this.connections.size())
-                        .setStyle(Style.EMPTY.withColor(ChatFormatting.RED))),
-                (() -> !this.connections.isEmpty()),
-                () -> null));
-    }
-
-    @Override
     public void addDisplayText(List<Component> textList) {
         super.addDisplayText(textList);
         if (!this.connections.isEmpty()) {
             textList.add(Component
-                    .translatable("gtceu.multiblock.drone_station_machine.drone_amount", this.connections.size())
+                    .translatable("cosmiccore.multiblock.drone_station_machine.drone_amount", this.connections.size())
+                    .setStyle(Style.EMPTY.withColor(ChatFormatting.GREEN)));
+        } else {
+            textList.add(Component
+                    .translatable("cosmiccore.multiblock.drone_station_machine.no_drones")
                     .setStyle(Style.EMPTY.withColor(ChatFormatting.RED)));
+
         }
     }
 
+    // EXAMPLE CODE, REMOVE LATER MAYBE?
+    // Or keep in, in which case, this should be a feature and remove this comment :eugeneThumbsUpCool:
     @Override
     protected InteractionResult onScrewdriverClick(Player playerIn, InteractionHand hand, Direction gridSide,
                                                    BlockHitResult hitResult) {
@@ -140,7 +134,9 @@ public class DroneStationMachine extends WorkableElectricMultiblockMachine {
         DroneStationConnection connection = connections.get(index);
         if (!connection.isValid()) return false;
         if (connection.machine == null) return false;
-        if (!(connection.machine instanceof IControllable controllable)) return false;
+        if (!(connection.machine instanceof DroneMaintenanceInterfacePartMachine droneInterface)) return false;
+        IMultiController controller = droneInterface.getControllers().first();
+        if (!(controller instanceof IControllable controllable)) return false;
         controllable.setWorkingEnabled(!controllable.isWorkingEnabled());
         return true;
     }
