@@ -18,8 +18,7 @@ import com.lowdragmc.lowdraglib.utils.LocalizationUtils;
 import net.minecraft.client.resources.language.I18n;
 import net.minecraft.resources.ResourceLocation;
 
-import static com.ghostipedia.cosmiccore.common.data.CosmicSounds.GAS_SUCC;
-import static com.ghostipedia.cosmiccore.common.data.CosmicSounds.MINING_MACHINE;
+import static com.ghostipedia.cosmiccore.common.data.CosmicSounds.*;
 import static com.gregtechceu.gtceu.common.data.GTRecipeTypes.*;
 import static com.lowdragmc.lowdraglib.gui.texture.ProgressTexture.FillDirection.LEFT_TO_RIGHT;
 
@@ -38,6 +37,12 @@ public class CosmicRecipeTypes {
             .setSound(MINING_MACHINE)
             .setProgressBar(GuiTextures.PROGRESS_BAR_ARROW, ProgressTexture.FillDirection.LEFT_TO_RIGHT);
 
+    public static final GTRecipeType HEAVY_ASSEMBLER = GTRecipeTypes
+            .register("heavy_assembler", GTRecipeTypes.MULTIBLOCK)
+            .setMaxIOSize(12, 3, 6, 0)
+            .setSound(HEAVY_ASSEM)
+            .setProgressBar(GuiTextures.PROGRESS_BAR_ARROW, ProgressTexture.FillDirection.LEFT_TO_RIGHT);
+
     public static final GTRecipeType PRISMA_FOUNDRY = GTRecipeTypes
             .register("prisma_foundry", GTRecipeTypes.MULTIBLOCK)
             .setMaxIOSize(3, 6, 3, 0)
@@ -49,13 +54,6 @@ public class CosmicRecipeTypes {
             .setMaxIOSize(3, 0, 4, 16)
             .setSound(GAS_SUCC)
             .setProgressBar(GuiTextures.PROGRESS_BAR_ARROW, ProgressTexture.FillDirection.LEFT_TO_RIGHT);
-
-    public static final GTRecipeType HEAVY_ASSEMBLER = GTRecipeTypes
-            .register("heavy_assembler", GTRecipeTypes.MULTIBLOCK)
-            .setMaxIOSize(12, 4, 6, 0)
-            .setSound(MINING_MACHINE)
-            .setProgressBar(GuiTextures.PROGRESS_BAR_ARROW, ProgressTexture.FillDirection.LEFT_TO_RIGHT);
-
     public static final GTRecipeType GROVE_RECIPES = GTRecipeTypes.register("drygmy_grove", GTRecipeTypes.MULTIBLOCK)
             .setMaxSize(IO.IN, SoulRecipeCapability.CAP, 1)
             .setMaxSize(IO.OUT, SoulRecipeCapability.CAP, 1)
