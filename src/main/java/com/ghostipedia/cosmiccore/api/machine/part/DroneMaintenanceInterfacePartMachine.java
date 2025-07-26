@@ -28,7 +28,7 @@ public class DroneMaintenanceInterfacePartMachine extends TieredPartMachine
                                                   implements IMachineLife, IMaintenanceMachine, IInteractedMachine {
 
     protected static final ManagedFieldHolder MANAGED_FIELD_HOLDER = new ManagedFieldHolder(
-            com.gregtechceu.gtceu.common.machine.multiblock.part.MaintenanceHatchPartMachine.class,
+            DroneMaintenanceInterfacePartMachine.class,
             MultiblockPartMachine.MANAGED_FIELD_HOLDER);
 
     @Getter
@@ -146,10 +146,12 @@ public class DroneMaintenanceInterfacePartMachine extends TieredPartMachine
     }
 
     @Override
-    public void setTaped(boolean isTaped) {}
+    public void setTaped(boolean ignored) {}
 
     @Override
     public boolean isTaped() {
         return false;
     }
+
+
 }
