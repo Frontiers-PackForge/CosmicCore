@@ -1,6 +1,7 @@
 package com.ghostipedia.cosmiccore.common.machine.multiblock.multi;
 
 import com.ghostipedia.cosmiccore.CosmicCore;
+import com.ghostipedia.cosmiccore.common.machine.multiblock.behavior.AtmoPumpBehavior;
 import com.ghostipedia.cosmiccore.gtbridge.CosmicRecipeTypes;
 
 import com.gregtechceu.gtceu.api.data.RotationState;
@@ -8,7 +9,6 @@ import com.gregtechceu.gtceu.api.machine.MetaMachine;
 import com.gregtechceu.gtceu.api.machine.MultiblockMachineDefinition;
 import com.gregtechceu.gtceu.api.machine.feature.multiblock.IRotorHolderMachine;
 import com.gregtechceu.gtceu.api.machine.multiblock.PartAbility;
-import com.gregtechceu.gtceu.api.machine.multiblock.WorkableElectricMultiblockMachine;
 import com.gregtechceu.gtceu.api.pattern.FactoryBlockPattern;
 import com.gregtechceu.gtceu.api.pattern.TraceabilityPredicate;
 import com.gregtechceu.gtceu.api.pattern.predicates.SimplePredicate;
@@ -23,14 +23,14 @@ import static com.ghostipedia.cosmiccore.api.registries.CosmicRegistration.REGIS
 import static com.ghostipedia.cosmiccore.common.data.CosmicBlocks.*;
 import static com.gregtechceu.gtceu.api.pattern.Predicates.*;
 import static com.gregtechceu.gtceu.common.data.GTBlocks.COMPUTER_CASING;
+import static com.gregtechceu.gtceu.common.data.models.GTMachineModels.createWorkableCasingMachineModel;
 
 // NOTE DO NOT ADD BERS/RENDERS TO THIS YET
 
 public class AtmoPump {
 
     public final static MultiblockMachineDefinition ATMO_PUMP = REGISTRATE
-            .multiblock("atmo_pump",
-                    WorkableElectricMultiblockMachine::new)
+            .multiblock("atmo_pump", AtmoPumpBehavior::new)
             .langValue("§6Atmospheric Siphon")
             .rotationState(RotationState.NON_Y_AXIS)
             .recipeType(CosmicRecipeTypes.ATMOSPHERE_SIPHON)
@@ -92,7 +92,8 @@ public class AtmoPump {
                                     .setExactLimit(4))
                     .build())
             // spotless:on
-            .workableCasingModel(CosmicCore.id("block/casings/solid/tritanium_lined_heavy_neutronium_casing"),
+            .workableCasingModel(
+                    CosmicCore.id("block/casings/solid/tritanium_lined_heavy_neutronium_casing"),
                     CosmicCore.id("block/multiblock/mantle_bore"))
             .register();
 
