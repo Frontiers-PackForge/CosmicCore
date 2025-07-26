@@ -34,7 +34,7 @@ public class CosmicRecipeTypes {
 
     public static final GTRecipeType VOID_MINER = GTRecipeTypes
             .register("void_miner", GTRecipeTypes.MULTIBLOCK)
-            .setMaxIOSize(0, 27, 2, 0)
+            .setMaxIOSize(1, 27, 2, 0)
             .setSound(MINING_MACHINE)
             .setProgressBar(GuiTextures.PROGRESS_BAR_ARROW, ProgressTexture.FillDirection.LEFT_TO_RIGHT);
 
