@@ -38,7 +38,7 @@ public class CosmicMaterialRecipeHandlers {
                 .inputItems(rod, material, 16)
                 .inputItems(rod, material, 16)
                 .outputItems(heavyBeam, material, 1)
-                .duration((int) material.getMass() * 64)
+                .duration((int) material.getMass() * 8)
                 .EUt(GTValues.VA[GTValues.LuV], 6)
                 .circuitMeta(1)
                 .save(provider);
@@ -56,7 +56,7 @@ public class CosmicMaterialRecipeHandlers {
                 .inputItems(plate, material, 16)
                 .inputItems(bolt, material, 32)
                 .outputItems(modularShelling, material, 1)
-                .duration((int) material.getMass())
+                .duration((int) material.getMass() * 4)
                 .EUt(GTValues.VA[GTValues.LuV], 6)
                 .circuitMeta(3)
                 .save(provider);

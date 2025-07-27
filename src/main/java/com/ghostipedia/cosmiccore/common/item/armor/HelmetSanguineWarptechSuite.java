@@ -18,9 +18,9 @@ public class HelmetSanguineWarptechSuite extends QuarkTechSuite {
     @Override
     public void onArmorTick(Level world, Player player, ItemStack itemStack) {
         super.onArmorTick(world, player, itemStack);
-        if(world.isClientSide) return;
+        if (world.isClientSide) return;
         int foodLevel = player.getFoodData().getFoodLevel();
-        if(foodLevel < 20) {
+        if (foodLevel < 20) {
             player.addEffect(new MobEffectInstance(MobEffects.SATURATION, 1, 1, false, false));
         }
     }
