@@ -76,12 +76,12 @@ public class WeakSteamParallelMultiBlockMachine extends WorkableMultiblockMachin
         }
     }
 
-    @Nullable
     public static ModifierFunction recipeModifier(@NotNull MetaMachine machine, @NotNull GTRecipe recipe) {
         if (RecipeHelper.getRecipeEUtTier(recipe) > GTValues.LV) return ModifierFunction.NULL;
         long euTick = RecipeHelper.getRecipeEUtTier(recipe);
         int parallel = ParallelLogic.getParallelAmount(machine, recipe, 4);
         double eutMulti = (euTick * 0.5 * parallel <= 32) ? (parallel * 0.5) : (32.0 / euTick);
+
         return ModifierFunction.builder()
                 .inputModifier(ContentModifier.multiplier(parallel))
                 .outputModifier(ContentModifier.multiplier(parallel))
@@ -110,7 +110,7 @@ public class WeakSteamParallelMultiBlockMachine extends WorkableMultiblockMachin
                 textList.add(Component.translatable("gtceu.multiblock.running"));
                 int currentProgress = (int) (recipeLogic.getProgressPercent() * 100);
                 textList.add(Component.translatable("gtceu.multiblock.parallel", MAX_PARALLELS));
-                textList.add(Component.translatable("gtceu.multiblock.progress", currentProgress));
+                textList.add(Component.translatable("gtceu.multiblock.progress_percent", currentProgress));
             } else {
                 textList.add(Component.translatable("gtceu.multiblock.idling"));
             }

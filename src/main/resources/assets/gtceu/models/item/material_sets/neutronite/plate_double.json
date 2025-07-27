@@ -1,8 +1,8 @@
 {
-    "parent": "gtceu:item/material_sets/neutronite/plate",
+    "parent": "gtceu:item/handheld",
     "textures": {
-        "layer0": "gtceu:item/material_sets/neutronite/plate_double",
-        "layer1": "gtceu:item/material_sets/neutronite/plate_double_secondary",
-        "layer2": "gtceu:item/material_sets/neutronite/plate_double_overlay"
+        "layer0": "gtceu:item/void",
+        "layer1": "gtceu:item/void",
+        "layer2": "gtceu:item/material_sets/neutronite/plate_double"
     }
 }

@@ -9,11 +9,7 @@ import com.ghostipedia.cosmiccore.api.machine.part.CosmicPartAbility;
 import com.ghostipedia.cosmiccore.api.machine.part.SteamFluidHatchPartMachine;
 import com.ghostipedia.cosmiccore.api.machine.part.WirelessEnergyHatchPartMachine;
 import com.ghostipedia.cosmiccore.api.registries.CosmicRegistration;
-import com.ghostipedia.cosmiccore.client.renderer.machine.HPCAIndicatorRenderer;
-import com.ghostipedia.cosmiccore.client.renderer.machine.HellFireFoundryWorkableRenderer;
-import com.ghostipedia.cosmiccore.client.renderer.machine.SidedWorkableHullRenderer;
-import com.ghostipedia.cosmiccore.client.renderer.machine.SufferingChamberRender;
-import com.ghostipedia.cosmiccore.common.block.WorkableSteamHullType;
+import com.ghostipedia.cosmiccore.client.renderer.machine.CosmicDynamicRenderHelpers;
 import com.ghostipedia.cosmiccore.common.block.debug.CreativeThermiaContainerMachine;
 import com.ghostipedia.cosmiccore.common.data.materials.CosmicMaterials;
 import com.ghostipedia.cosmiccore.common.data.recipe.CosmicRecipeModifiers;
@@ -41,6 +37,7 @@ import com.gregtechceu.gtceu.api.machine.multiblock.CoilWorkableElectricMultiblo
 import com.gregtechceu.gtceu.api.machine.multiblock.PartAbility;
 import com.gregtechceu.gtceu.api.machine.multiblock.WorkableElectricMultiblockMachine;
 import com.gregtechceu.gtceu.api.machine.steam.SimpleSteamMachine;
+import com.gregtechceu.gtceu.api.machine.trait.RecipeLogic;
 import com.gregtechceu.gtceu.api.pattern.FactoryBlockPattern;
 import com.gregtechceu.gtceu.api.pattern.MultiblockShapeInfo;
 import com.gregtechceu.gtceu.api.pattern.Predicates;
@@ -48,17 +45,15 @@ import com.gregtechceu.gtceu.api.pattern.util.RelativeDirection;
 import com.gregtechceu.gtceu.api.recipe.GTRecipeType;
 import com.gregtechceu.gtceu.api.recipe.OverclockingLogic;
 import com.gregtechceu.gtceu.api.registry.registrate.MachineBuilder;
-import com.gregtechceu.gtceu.client.renderer.machine.LargeBoilerRenderer;
-import com.gregtechceu.gtceu.client.renderer.machine.OverlayTieredActiveMachineRenderer;
-import com.gregtechceu.gtceu.client.renderer.machine.WorkableSteamMachineRenderer;
+import com.gregtechceu.gtceu.client.renderer.machine.DynamicRenderHelper;
 import com.gregtechceu.gtceu.client.util.TooltipHelper;
 import com.gregtechceu.gtceu.common.block.BoilerFireboxType;
 import com.gregtechceu.gtceu.common.data.*;
 import com.gregtechceu.gtceu.common.data.machines.GTMultiMachines;
+import com.gregtechceu.gtceu.common.data.models.GTModels;
 import com.gregtechceu.gtceu.common.machine.multiblock.electric.ActiveTransformerMachine;
 import com.gregtechceu.gtceu.common.machine.multiblock.electric.FusionReactorMachine;
 import com.gregtechceu.gtceu.common.machine.multiblock.electric.PowerSubstationMachine;
-import com.gregtechceu.gtceu.common.registry.GTRegistration;
 import com.gregtechceu.gtceu.config.ConfigHolder;
 import com.gregtechceu.gtceu.utils.FormattingUtil;
 
@@ -66,6 +61,7 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.Style;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 
@@ -76,16 +72,14 @@ import wayoftime.bloodmagic.common.block.BloodMagicBlocks;
 import java.util.*;
 import java.util.function.BiFunction;
 
-import static com.ghostipedia.cosmiccore.api.machine.part.CosmicPartAbility.EXPORT_SOUL;
-import static com.ghostipedia.cosmiccore.api.machine.part.CosmicPartAbility.IMPORT_SOUL;
+import static com.ghostipedia.cosmiccore.api.machine.part.CosmicPartAbility.*;
 import static com.ghostipedia.cosmiccore.api.pattern.CosmicPredicates.magnetCoils;
 import static com.ghostipedia.cosmiccore.api.registries.CosmicRegistration.REGISTRATE;
 import static com.ghostipedia.cosmiccore.common.data.CosmicBlocks.*;
-import static com.ghostipedia.cosmiccore.common.data.CosmicMachinesUtils.registerCosmicLargeCombustionEngine;
-import static com.ghostipedia.cosmiccore.common.machine.multiblock.electric.hpca.HPCAMachine.MAX_COMPONENTS_SLICES;
-import static com.ghostipedia.cosmiccore.common.machine.multiblock.electric.hpca.HPCAMachine.MIN_COMPONENTS_SLICES;
+import static com.ghostipedia.cosmiccore.common.data.CosmicMachinesUtils.*;
+import static com.ghostipedia.cosmiccore.common.data.datagen.CosmicMachineModels.*;
+import static com.ghostipedia.cosmiccore.common.machine.multiblock.electric.hpca.HPCAMachine.*;
 import static com.gregtechceu.gtceu.api.GTValues.*;
-import static com.gregtechceu.gtceu.api.GTValues.UV;
 import static com.gregtechceu.gtceu.api.pattern.Predicates.*;
 import static com.gregtechceu.gtceu.api.pattern.util.RelativeDirection.*;
 import static com.gregtechceu.gtceu.common.data.GCYMBlocks.*;
@@ -95,6 +89,7 @@ import static com.gregtechceu.gtceu.common.data.GTRecipeModifiers.ELECTRIC_OVERC
 import static com.gregtechceu.gtceu.common.data.GTRecipeTypes.DUMMY_RECIPES;
 import static com.gregtechceu.gtceu.common.data.machines.GTMachineUtils.*;
 import static com.gregtechceu.gtceu.common.data.machines.GTMultiMachines.FUSION_REACTOR;
+import static com.gregtechceu.gtceu.common.data.models.GTMachineModels.*;
 import static com.klikli_dev.occultism.registry.OccultismBlocks.IESNIUM_BLOCK;
 import static wayoftime.bloodmagic.common.block.BloodMagicBlocks.BLANK_RUNE;
 
@@ -104,61 +99,62 @@ public class CosmicMachines {
         CosmicRegistration.REGISTRATE.creativeModeTab(() -> CosmicCreativeModeTabs.COSMIC_CORE);
     }
 
-    public static final int[] HIGH_TIERS = GTValues.tiersBetween(GTValues.IV,
-            GTCEuAPI.isHighTier() ? GTValues.OpV : GTValues.UHV);
-
-    public final static MachineDefinition[] SOUL_IMPORT_HATCH = registerSoulTieredHatch(
-            "soul_input_hatch", "Soul Input Hatch", "soul_hatch.import",
+    public final static MachineDefinition[] SOUL_IMPORT_HATCH = registerSoulHatch(
+            "soul_input_hatch", "Soul Input Hatch",
             IO.IN, HIGH_TIERS, IMPORT_SOUL);
-
-    public static final MachineDefinition[] SOUL_EXPORT_HATCH = registerSoulTieredHatch(
-            "soul_output_hatch", "Soul Output Hatch", "soul_hatch.export",
+    public static final MachineDefinition[] SOUL_EXPORT_HATCH = registerSoulHatch(
+            "soul_output_hatch", "Soul Output Hatch",
             IO.OUT, HIGH_TIERS, CosmicPartAbility.EXPORT_SOUL);
+
     public static final MachineDefinition[] THERMIA_VENT = registerThermiaTieredHatch(
-            "thermia_export_hatch", "Thermia Vent", "thermia_hatch.export",
+            "thermia_export_hatch", "Thermia Vent", "thermia_output_hatch",
             IO.OUT, HIGH_TIERS, CosmicPartAbility.EXPORT_THERMIA);
     public static final MachineDefinition[] THERMIA_SOCKET = registerThermiaTieredHatch(
-            "thermia_import_hatch", "Thermia Socket", "thermia_hatch.import",
+            "thermia_import_hatch", "Thermia Socket", "thermia_input_hatch",
             IO.IN, HIGH_TIERS, CosmicPartAbility.IMPORT_THERMIA);
 
     public static final MachineDefinition[] WIRELESS_ENERGY_INPUT_HATCH = registerWirelessEnergyTieredHatch(
-            "wireless_energy_hatch", "Wireless Energy Hatch", "wireless_energy.1a",
+            "wireless_energy_hatch", "Wireless Energy Hatch", "wireless_energy_1a",
             IO.IN, HIGH_TIERS, 1, PartAbility.INPUT_ENERGY);
     public static final MachineDefinition[] WIRELESS_ENERGY_OUTPUT_DYNAMO = registerWirelessEnergyTieredHatch(
-            "wireless_energy_dynamo", "Wireless Energy Dynamo", "wireless_energy.1a",
+            "wireless_energy_dynamo", "Wireless Energy Dynamo", "wireless_energy_1a",
             IO.OUT, HIGH_TIERS, 1, PartAbility.OUTPUT_ENERGY);
     public static final MachineDefinition[] WIRELESS_ENERGY_INPUT_HATCH_4A = registerWirelessEnergyTieredHatch(
-            "4a_wireless_energy_hatch", "4A Wireless Energy Hatch", "wireless_energy.4a",
+            "4a_wireless_energy_hatch", "4A Wireless Energy Hatch", "wireless_energy_4a",
             IO.IN, HIGH_TIERS, 4, PartAbility.INPUT_ENERGY);
     public static final MachineDefinition[] WIRELESS_ENERGY_OUTPUT_DYNAMO_4A = registerWirelessEnergyTieredHatch(
-            "4a_wireless_energy_dynamo", "4A Wireless Energy Dynamo", "wireless_energy.4a",
+            "4a_wireless_energy_dynamo", "4A Wireless Energy Dynamo", "wireless_energy_4a",
             IO.OUT, HIGH_TIERS, 4, PartAbility.OUTPUT_ENERGY);
     public static final MachineDefinition[] WIRELESS_ENERGY_INPUT_HATCH_16A = registerWirelessEnergyTieredHatch(
-            "16a_wireless_energy_hatch", "16A Wireless Energy Hatch", "wireless_energy.16a",
+            "16a_wireless_energy_hatch", "16A Wireless Energy Hatch", "wireless_energy_16a",
             IO.IN, HIGH_TIERS, 16, PartAbility.INPUT_ENERGY);
     public static final MachineDefinition[] WIRELESS_ENERGY_OUTPUT_DYNAMO_16A = registerWirelessEnergyTieredHatch(
-            "16a_wireless_energy_dynamo", "16A Wireless Energy Dynamo", "wireless_energy.16a",
+            "16a_wireless_energy_dynamo", "16A Wireless Energy Dynamo", "wireless_energy_16a",
             IO.OUT, HIGH_TIERS, 16, PartAbility.OUTPUT_ENERGY);
 
-    public static final MachineDefinition[] NAQUAHINE_MINI_REACTOR = registerSimpleGenerator("naquahine_mini_reactor",
+    public static final MachineDefinition[] NAQUAHINE_MINI_REACTOR = CosmicMachinesUtils.registerSimpleGenerator(
+            "naquahine_mini_reactor",
             CosmicRecipeTypes.MINI_NAQUAHINE_REACTOR, genericGeneratorTankSizeFunction, 0.0f, GTValues.IV, GTValues.LuV,
             GTValues.ZPM, GTValues.UV, GTValues.UHV);
-    public static final Pair<MachineDefinition, MachineDefinition> STEAM_BENDER = registerSteamMachines(
-            "steam_bender", SimpleSteamMachine::new, (pressure, builder) -> builder
-                    .rotationState(RotationState.NON_Y_AXIS)
-                    .recipeType(GTRecipeTypes.BENDER_RECIPES)
-                    .recipeModifier(SimpleSteamMachine::recipeModifier)
-                    .addOutputLimit(ItemRecipeCapability.CAP, 1)
-                    .renderer(() -> new WorkableSteamMachineRenderer(pressure, GTCEu.id("block/machines/bender")))
-                    .register());
-    public static final Pair<MachineDefinition, MachineDefinition> STEAM_WIREMILL = registerSteamMachines(
-            "steam_wiremill", SimpleSteamMachine::new, (pressure, builder) -> builder
-                    .rotationState(RotationState.NON_Y_AXIS)
-                    .recipeType(GTRecipeTypes.WIREMILL_RECIPES)
-                    .recipeModifier(SimpleSteamMachine::recipeModifier)
-                    .addOutputLimit(ItemRecipeCapability.CAP, 1)
-                    .renderer(() -> new WorkableSteamMachineRenderer(pressure, GTCEu.id("block/machines/wiremill")))
-                    .register());
+    public static final Pair<MachineDefinition, MachineDefinition> STEAM_BENDER = CosmicMachinesUtils
+            .registerSteamMachines(
+                    "steam_bender", SimpleSteamMachine::new, (pressure, builder) -> builder
+                            .rotationState(RotationState.NON_Y_AXIS)
+                            .recipeType(GTRecipeTypes.BENDER_RECIPES)
+                            .recipeModifier(SimpleSteamMachine::recipeModifier)
+                            .addOutputLimit(ItemRecipeCapability.CAP, 1)
+                            .workableSteamHullModel(pressure, GTCEu.id("block/machines/bender"))
+                            .register());
+    public static final Pair<MachineDefinition, MachineDefinition> STEAM_WIREMILL = CosmicMachinesUtils
+            .registerSteamMachines(
+                    "steam_wiremill", SimpleSteamMachine::new, (pressure, builder) -> builder
+                            .rotationState(RotationState.NON_Y_AXIS)
+                            .recipeType(GTRecipeTypes.WIREMILL_RECIPES)
+                            .recipeModifier(SimpleSteamMachine::recipeModifier)
+                            .addOutputLimit(ItemRecipeCapability.CAP, 1)
+                            .modelProperty(SimpleSteamMachine.VENT_DIRECTION_PROPERTY, RelativeDirection.BACK)
+                            .workableSteamHullModel(pressure, GTCEu.id("block/machines/wiremill"))
+                            .register());
 
     public static final MachineDefinition[] COSMIC_PARALLEL_HATCH = registerTieredMachines("cosmic_parallel_hatch",
             CosmicParallelHatchPartMachine::new,
@@ -173,7 +169,7 @@ public class CosmicMachines {
                     } + " Parallel Control Hatch")
                     .rotationState(RotationState.ALL)
                     .abilities(CosmicPartAbility.COSMIC_PARALLEL_HATCH)
-                    .workableTieredHullRenderer(GTCEu.id("block/machines/parallel_hatch_mk" + (tier - 4)))
+                    .workableTieredHullModel(GTCEu.id("block/machines/parallel_hatch_mk" + (tier - 4)))
                     .tooltips(Component.translatable("gtceu.machine.parallel_hatch_mk" + tier + ".tooltip"))
                     .register(),
             ZPM, UV, UHV, UEV, UIV);
@@ -188,7 +184,7 @@ public class CosmicMachines {
                         list.add(Component.translatable("cosmiccore.wireless_charger.range.mixed",
                                 FormattingUtil.formatNumbers(1024L * (tier - GTValues.HV))));
                     })
-                    .workableTieredHullRenderer(CosmicCore.id("block/overlay/machine/wireless_charger"))
+                    .workableTieredHullModel(CosmicCore.id("block/overlay/machine/wireless_charger"))
                     .register(),
             GTValues.tiersBetween(HV, UIV));
 
@@ -204,11 +200,12 @@ public class CosmicMachines {
     // .where("S", abilities(CosmicPartAbility.IMPORT_SOUL).or(abilities(CosmicPartAbility.EXPORT_SOUL)))
     // .where("I", abilities(PartAbility.EXPORT_ITEMS).or(abilities(PartAbility.IMPORT_ITEMS)))
     // .build())
-    // .workableCasingRenderer(GTCEu.id("block/casings/solid/machine_casing_inert_ptfe"),
+    // .workableCasingModel(GTCEu.id("block/casings/solid/machine_casing_inert_ptfe"),
     // GTCEu.id("block/multiblock/coke_oven"))
     // .register();
 
-    public static final MultiblockMachineDefinition STEAM_CASTER = GTRegistration.REGISTRATE
+    // FIXME why are these registered to GT??
+    public static final MultiblockMachineDefinition STEAM_CASTER = REGISTRATE
             .multiblock("steam_caster", WeakSteamParallelMultiBlockMachine::new)
             .rotationState(RotationState.ALL)
             .appearanceBlock(BRONZE_HULL)
@@ -230,10 +227,10 @@ public class CosmicMachines {
                             .or(Predicates.abilities(PartAbility.STEAM).setExactLimit(1)))
                     .where('C', blocks(CASING_BRONZE_PIPE.get()))
                     .build())
-            .workableCasingRenderer(GTCEu.id("block/casings/solid/machine_coke_bricks"),
+            .workableCasingModel(GTCEu.id("block/casings/solid/machine_coke_bricks"),
                     CosmicCore.id("block/multiblock/solidifier"))
             .register();
-    public static final MultiblockMachineDefinition STEAM_MIXER = GTRegistration.REGISTRATE
+    public static final MultiblockMachineDefinition STEAM_MIXER = REGISTRATE
             .multiblock("steam_mixing_vessel", WeakSteamParallelMultiBlockMachine::new)
             .rotationState(RotationState.ALL)
             .appearanceBlock(BRONZE_BRICKS_HULL)
@@ -257,12 +254,10 @@ public class CosmicMachines {
                     .where('C', blocks(BRONZE_HULL.get()))
                     .where('E', blocks(CASING_BRONZE_GEARBOX.get()))
                     .build())
-            .renderer(() -> new SidedWorkableHullRenderer(
-                    GTCEu.id("block/casings/solid/machine_casing_bronze_plated_bricks"),
-                    WorkableSteamHullType.BRONZE_BRICK_HULL,
+            .model(createWorkableCasingMachineModel(GTCEu.id("block/casings/solid/machine_casing_bronze_plated_bricks"),
                     CosmicCore.id("block/multiblock/mixing_vessel")))
             .register();
-    public static final MultiblockMachineDefinition INDUSTRIAL_PRIMITIVE_BLAST_FURNACE = GTRegistration.REGISTRATE
+    public static final MultiblockMachineDefinition INDUSTRIAL_PRIMITIVE_BLAST_FURNACE = REGISTRATE
             .multiblock("industrial_primitive_blast_furnace", IPBFMachine::new)
             .rotationState(RotationState.ALL)
             .recipeType(CosmicRecipeTypes.INDUSTRIAL_PRIMITIVE_BLAST_FURNACE_RECIPES)
@@ -282,15 +277,18 @@ public class CosmicMachines {
                                     .setExactLimit(1))
                             .or(Predicates.abilities(PartAbility.IMPORT_FLUIDS).setPreviewCount(1).setExactLimit(1)))
                     .build())
-            .renderer(() -> new LargeBoilerRenderer(GTCEu.id("block/casings/solid/machine_primitive_bricks"),
-                    BoilerFireboxType.STEEL_FIREBOX,
-                    GTCEu.id("block/multiblock/primitive_blast_furnace")))
-            .tooltips(Component.translatable("cosmiccore.multiblock.ipbf.tooltip.0"),
+            .model(createWorkableCasingMachineModel(GTCEu.id("block/casings/solid/machine_casing_bronze_plated_bricks"),
+                    GTCEu.id("block/multiblock/steam_oven"))
+                    .andThen(b -> b.addDynamicRenderer(
+                            () -> DynamicRenderHelper.makeBoilerPartRender(
+                                    BoilerFireboxType.STEEL_FIREBOX, STEEL_PLATED_BRONZE))))
+            .tooltips(
+                    Component.translatable("cosmiccore.multiblock.ipbf.tooltip.0"),
                     Component.translatable("cosmiccore.multiblock.ipbf.tooltip.1"),
                     Component.translatable("cosmiccore.multiblock.ipbf.tooltip.2"),
                     Component.translatable("cosmiccore.multiblock.ipbf.tooltip.3"))
             .register();
-    public static final MultiblockMachineDefinition HIGH_PRESSURE_ASSEMBLER = GTRegistration.REGISTRATE
+    public static final MultiblockMachineDefinition HIGH_PRESSURE_ASSEMBLER = REGISTRATE
             .multiblock("high_pressure_assembler", WeakSteamParallelMultiBlockMachine::new)
             .rotationState(RotationState.ALL)
             .recipeType(GTRecipeTypes.ASSEMBLER_RECIPES)
@@ -312,9 +310,11 @@ public class CosmicMachines {
                             .or(Predicates.abilities(PartAbility.STEAM).setExactLimit(1)))
                     .where('D', blocks(CASING_STEEL_GEARBOX.get()))
                     .build())
-            .renderer(() -> new LargeBoilerRenderer(CosmicCore.id("block/casings/solid/steel_plated_bronze_casing"),
-                    BoilerFireboxType.STEEL_FIREBOX,
-                    GTCEu.id("block/multiblock/implosion_compressor")))
+            .model(createWorkableCasingMachineModel(GTCEu.id("block/casings/solid/machine_casing_bronze_plated_bricks"),
+                    GTCEu.id("block/multiblock/steam_oven"))
+                    .andThen(b -> b.addDynamicRenderer(
+                            () -> DynamicRenderHelper.makeBoilerPartRender(
+                                    BoilerFireboxType.STEEL_FIREBOX, STEEL_PLATED_BRONZE))))
             .tooltips(Component.translatable("cosmiccore.multiblock.hpsassem.tooltip.0"),
                     Component.translatable("cosmiccore.multiblock.hpsassem.tooltip.1"),
                     Component.translatable("cosmiccore.multiblock.hpsassem.tooltip.2"))
@@ -354,7 +354,7 @@ public class CosmicMachines {
                             .or(abilities(PartAbility.MAINTENANCE))
                             .or(abilities(IMPORT_SOUL)))
                     .build())
-            .workableCasingRenderer(GTCEu.id("block/casings/solid/machine_casing_clean_stainless_steel"),
+            .workableCasingModel(GTCEu.id("block/casings/solid/machine_casing_clean_stainless_steel"),
                     GTCEu.id("block/multiblock/data_bank"))
             .register();
     public final static MultiblockMachineDefinition NAQUAHINE_PRESSURE_REACTOR = REGISTRATE
@@ -397,7 +397,7 @@ public class CosmicMachines {
             .tooltips(Component.translatable("cosmiccore.multiblock.naqreactor.tooltip.0"),
                     Component.translatable("cosmiccore.multiblock.naqreactor.tooltip.1"),
                     Component.translatable("cosmiccore.multiblock.naqreactor.tooltip.2"))
-            .workableCasingRenderer(CosmicCore.id("block/casings/solid/naquadah_pressure_resistant_casing"),
+            .workableCasingModel(CosmicCore.id("block/casings/solid/naquadah_pressure_resistant_casing"),
                     GTCEu.id("block/multiblock/hpca"))
             .register();
 
@@ -424,7 +424,7 @@ public class CosmicMachines {
                             .or(Predicates.abilities(PartAbility.EXPORT_FLUIDS_1X).setMinLayerLimited(1)
                                     .setMaxLayerLimited(1)))
                     .build())
-            .workableCasingRenderer(GTCEu.id("block/casings/solid/machine_casing_clean_stainless_steel"),
+            .workableCasingModel(GTCEu.id("block/casings/solid/machine_casing_clean_stainless_steel"),
                     GTCEu.id("block/multiblock/generator/large_gas_turbine"))
             .register();
 
@@ -462,7 +462,7 @@ public class CosmicMachines {
                             .or(Predicates.abilities(PartAbility.IMPORT_FLUIDS).setExactLimit(1))
                             .or(Predicates.abilities(PartAbility.IMPORT_ITEMS).setExactLimit(1)))
                     .build())
-            .workableCasingRenderer(GTCEu.id("block/casings/gcym/watertight_casing"),
+            .workableCasingModel(GTCEu.id("block/casings/gcym/watertight_casing"),
                     GTCEu.id("block/multiblock/generator/large_gas_turbine"))
             .register();
 
@@ -487,7 +487,7 @@ public class CosmicMachines {
                                     .setMaxGlobalLimited(2))
                             .or(Predicates.abilities(PartAbility.IMPORT_FLUIDS).setExactLimit(1)))
                     .build())
-            .workableCasingRenderer(GTCEu.id("block/casings/solid/machine_casing_solid_steel"),
+            .workableCasingModel(GTCEu.id("block/casings/solid/machine_casing_solid_steel"),
                     CosmicCore.id("block/multiblock/mantle_bore"))
             .register();
     public final static MultiblockMachineDefinition LARGE_SPOOLING_MACHINE = REGISTRATE
@@ -521,7 +521,7 @@ public class CosmicMachines {
                     .where('F', blocks(ChemicalHelper.getBlock(TagPrefix.frameGt, GTMaterials.Iridium)))
 
                     .build())
-            .workableCasingRenderer(CosmicCore.id("block/casings/solid/ruridit_casing"),
+            .workableCasingModel(CosmicCore.id("block/casings/solid/ruridit_casing"),
                     GTCEu.id("block/multiblock/generator/large_gas_turbine"))
             .register();
     public final static MultiblockMachineDefinition ORBITAL_TEMPERING_FORGE = REGISTRATE.multiblock(
@@ -531,147 +531,43 @@ public class CosmicMachines {
             .recipeModifiers(GTRecipeModifiers.PARALLEL_HATCH,
                     GTRecipeModifiers::ebfOverclock)
             .appearanceBlock(CosmicBlocks.CYCLOZINE_CHEMICALLY_REPELLING_CASING)
+            // spotless:off
             .pattern(definition -> FactoryBlockPattern.start()
-                    .aisle("                                   ", "                                   ",
-                            "   AAAAA                   AAAAA   ", "   BBBBB                   BBBBB   ",
-                            "   AAAAA                   AAAAA   ", "                                   ",
-                            "                                   ")
-                    .aisle("                                   ", "                                   ",
-                            "  CA   AC      C   C      CA   AC  ", "  BB D BB      CDDDC      BB D BB  ",
-                            "  CA   AC      C   C      CA   AC  ", "                                   ",
-                            "                                   ")
-                    .aisle("                                   ", "               CAAAC               ",
-                            " CC     CC     DEEED     CC     CC ", " BB  D  BB     AEEEA     BB  D  BB ",
-                            " CC     CC     DEEED     CC     CC ", "               CAAAC               ",
-                            "                                   ")
-                    .aisle("               C   C               ", "    AAA        DEEED        AAA    ",
-                            "AA  FFF  AA    A   A    AA  FFF  AA", "BB  CCC  BB    A   A    BB  CCC  BB",
-                            "AA  FFF  AA    A   A    AA  FFF  AA", "    AAA        DEEED        AAA    ",
-                            "               C   C               ")
-                    .aisle("               CDDDC               ", "   AAAAA       AEEEA       AAAAA   ",
-                            "A  F   F  AABBBA   ABBBAA  F   F  A", "B  C   C  BBDDD     DDDBB  C   C  B",
-                            "A  F   F  AABBBA   ABBBAA  F   F  A", "   AAAAA       AEEEA       AAAAA   ",
-                            "               CDDDC               ")
-                    .aisle("               C   C               ", "   AAAAA       AEEEA       AAAAA   ",
-                            "A  F   F  ABDDD     DDDBA  F   F  A", "BDDC   CDDBA           ABDDC   CDDB",
-                            "A  F   F  ABDDD     DDDBA  F   F  A", "   AAAAA       AEEEA       AAAAA   ",
-                            "               C   C               ")
-                    .aisle("               CDDDC               ", "   AAAAA       AEEEA       AAAAA   ",
-                            "A  F   F  AABBBA   ABBBAA  F   F  A", "B  C   C  BBDDD     DDDBB  C   C  B",
-                            "A  F   F  AABBBA   ABBBAA  F   F  A", "   AAAAA       AEEEA       AAAAA   ",
-                            "               CDDDC               ")
-                    .aisle("               C   C               ", "    AAA        DEEED        AAA    ",
-                            "AA  FFF  AA    A   A    AA  FFF  AA", "BB  CCC  BB    A   A    BB  CCC  BB",
-                            "AA  FFF  AA    A   A    AA  FFF  AA", "    AAA        DEEED        AAA    ",
-                            "               C   C               ")
-                    .aisle("                                   ", "               CAAAC               ",
-                            " CC     CC     DEEED     CC     CC ", " BB  D  BB     AEEEA     BB  D  BB ",
-                            " CC     CC     DEEED     CC     CC ", "               CAAAC               ",
-                            "                                   ")
-                    .aisle("                                   ", "                                   ",
-                            "  CA   AC      CAAAC      CA   AC  ", "  BB D BB      CAXAC      BB D BB  ",
-                            "  CA   AC      CAAAC      CA   AC  ", "                                   ",
-                            "                                   ")
-                    .aisle("                                   ", "                                   ",
-                            "   AAAAA                   AAAAA   ", "   BBCBB                   BBCBB   ",
-                            "   AAAAA                   AAAAA   ", "                                   ",
-                            "                                   ")
-                    .aisle("                                   ", "                                   ",
-                            "    ABA                     ABA    ", "    BCB                     BCB    ",
-                            "    ABA                     ABA    ", "                                   ",
-                            "                                   ")
-                    .aisle("                                   ", "                                   ",
-                            "    BDB                     BDB    ", "    DCD                     DCD    ",
-                            "    BDB                     BDB    ", "                                   ",
-                            "                                   ")
-                    .aisle("                                   ", "                                   ",
-                            "    BDB                     BDB    ", "    DCD                     DCD    ",
-                            "    BDB                     BDB    ", "                                   ",
-                            "                                   ")
-                    .aisle("                                   ", "                                   ",
-                            "    BDB                     BDB    ", "    DCD                     DCD    ",
-                            "    BDB                     BDB    ", "                                   ",
-                            "                                   ")
-                    .aisle("   CCCCC                   CCCCC   ", "  CDAAADC                 CDAAADC  ",
-                            " CDABABADC               CDABABADC ", " CAAAAAAAC               CAAAAAAAC ",
-                            " CDABABADC               CDABABADC ", "  CDAAADC                 CDAAADC  ",
-                            "   CCCCC                   CCCCC   ")
-                    .aisle("    D D                     D D    ", "  AEEEEEA                 AEEEEEA  ",
-                            "  E     EA               AE     E  ", " DE     EA               AE     ED ",
-                            "  E     EA               AE     E  ", "  AEEEEEA                 AEEEEEA  ",
-                            "    D D                     D D    ")
-                    .aisle("    D D                     D D    ", "  AEEEEEA                 AEEEEEA  ",
-                            "  E     EA               AE     E  ", " DE     EA               AE     ED ",
-                            "  E     EA               AE     E  ", "  AEEEEEA                 AEEEEEA  ",
-                            "    D D                     D D    ")
-                    .aisle("    D D                     D D    ", "  AEEEEEA                 AEEEEEA  ",
-                            "  E     EA               AE     E  ", " DE     EA               AE     ED ",
-                            "  E     EA               AE     E  ", "  AEEEEEA                 AEEEEEA  ",
-                            "    D D                     D D    ")
-                    .aisle("   CCCCC                   CCCCC   ", "  CDAAADC                 CDAAADC  ",
-                            " CDAA AADC               CDAA AADC ", " CAA   AAC               CAA   AAC ",
-                            " CDAA AADC               CDAA AADC ", "  CDAAADC                 CDAAADC  ",
-                            "   CCCCC                   CCCCC   ")
-                    .aisle("                                   ", "                                   ",
-                            "    BDB                     BDB    ", "    D D                     D D    ",
-                            "    BDB                     BDB    ", "                                   ",
-                            "                                   ")
-                    .aisle("                                   ", "                                   ",
-                            "    BDB                     BDB    ", "    D D                     D D    ",
-                            "    BDB                     BDB    ", "                                   ",
-                            "                                   ")
-                    .aisle("                                   ", "                                   ",
-                            "    BDB                     BDB    ", "    D D                     D D    ",
-                            "    BDB                     BDB    ", "                                   ",
-                            "                                   ")
-                    .aisle("                                   ", "                                   ",
-                            "    ABA                     ABA    ", "    BAB                     BAB    ",
-                            "    ABA                     ABA    ", "                                   ",
-                            "                                   ")
-                    .aisle("                                   ", "                                   ",
-                            "   AAAAA                   AAAAA   ", "   BBBBB                   BBBBB   ",
-                            "   AAAAA                   AAAAA   ", "                                   ",
-                            "                                   ")
-                    .aisle("                                   ", "                                   ",
-                            "  CA   AC      CAAAC      CA   AC  ", "  BB D BB      CAAAC      BB D BB  ",
-                            "  CA   AC      CAAAC      CA   AC  ", "                                   ",
-                            "                                   ")
-                    .aisle("                                   ", "               CAAAC               ",
-                            " CC     CC     DEEED     CC     CC ", " BB  D  BB     AEEEA     BB  D  BB ",
-                            " CC     CC     DEEED     CC     CC ", "               CAAAC               ",
-                            "                                   ")
-                    .aisle("               C   C               ", "    AAA        DEEED        AAA    ",
-                            "AA  FFF  AA    A   A    AA  FFF  AA", "BB  CCC  BB    A   A    BB  CCC  BB",
-                            "AA  FFF  AA    A   A    AA  FFF  AA", "    AAA        DEEED        AAA    ",
-                            "               C   C               ")
-                    .aisle("               CDDDC               ", "   AAAAA       AEEEA       AAAAA   ",
-                            "A  F   F  AABBBB   BBBBAA  F   F  A", "B  C   C  BBDDDA   ADDDBB  C   C  B",
-                            "A  F   F  AABBBB   BBBBAA  F   F  A", "   AAAAA       AEEEA       AAAAA   ",
-                            "               CDDDC               ")
-                    .aisle("               C   C               ", "   AAAAA       AEEEA       AAAAA   ",
-                            "A  F   F  ABDDDA   ADDDBA  F   F  A", "BDDC   CDDCCCCCA   ACCCCCDDC   CDDB",
-                            "A  F   F  ABDDDA   ADDDBA  F   F  A", "   AAAAA       AEEEA       AAAAA   ",
-                            "               C   C               ")
-                    .aisle("               CDDDC               ", "   AAAAA       AEEEA       AAAAA   ",
-                            "A  F   F  AABBBB   BBBBAA  F   F  A", "B  C   C  BBDDDA   ADDDBB  C   C  B",
-                            "A  F   F  AABBBB   BBBBAA  F   F  A", "   AAAAA       AEEEA       AAAAA   ",
-                            "               CDDDC               ")
-                    .aisle("               C   C               ", "    AAA        DEEED        AAA    ",
-                            "AA  FFF  AA    A   A    AA  FFF  AA", "BB  CCC  BB    A   A    BB  CCC  BB",
-                            "AA  FFF  AA    A   A    AA  FFF  AA", "    AAA        DEEED        AAA    ",
-                            "               C   C               ")
-                    .aisle("                                   ", "               CAAAC               ",
-                            " CC     CC     DEEED     CC     CC ", " BB  D  BB     AEEEA     BB  D  BB ",
-                            " CC     CC     DEEED     CC     CC ", "               CAAAC               ",
-                            "                                   ")
-                    .aisle("                                   ", "                                   ",
-                            "  CA   AC      CAAAC      CA   AC  ", "  BB D BB      CDDDC      BB D BB  ",
-                            "  CA   AC      CAAAC      CA   AC  ", "                                   ",
-                            "                                   ")
-                    .aisle("                                   ", "                                   ",
-                            "   AAAAA                   AAAAA   ", "   BBBBB                   BBBBB   ",
-                            "   AAAAA                   AAAAA   ", "                                   ",
-                            "                                   ")
+                    .aisle("                                   ", "                                   ", "   AAAAA                   AAAAA   ", "   BBBBB                   BBBBB   ", "   AAAAA                   AAAAA   ", "                                   ", "                                   ")
+                    .aisle("                                   ", "                                   ", "  CA   AC      C   C      CA   AC  ", "  BB D BB      CDDDC      BB D BB  ", "  CA   AC      C   C      CA   AC  ", "                                   ", "                                   ")
+                    .aisle("                                   ", "               CAAAC               ", " CC     CC     DEEED     CC     CC ", " BB  D  BB     AEEEA     BB  D  BB ", " CC     CC     DEEED     CC     CC ", "               CAAAC               ", "                                   ")
+                    .aisle("               C   C               ", "    AAA        DEEED        AAA    ", "AA  FFF  AA    A   A    AA  FFF  AA", "BB  CCC  BB    A   A    BB  CCC  BB", "AA  FFF  AA    A   A    AA  FFF  AA", "    AAA        DEEED        AAA    ", "               C   C               ")
+                    .aisle("               CDDDC               ", "   AAAAA       AEEEA       AAAAA   ", "A  F   F  AABBBA   ABBBAA  F   F  A", "B  C   C  BBDDD     DDDBB  C   C  B", "A  F   F  AABBBA   ABBBAA  F   F  A", "   AAAAA       AEEEA       AAAAA   ", "               CDDDC               ")
+                    .aisle("               C   C               ", "   AAAAA       AEEEA       AAAAA   ", "A  F   F  ABDDD     DDDBA  F   F  A", "BDDC   CDDBA           ABDDC   CDDB", "A  F   F  ABDDD     DDDBA  F   F  A", "   AAAAA       AEEEA       AAAAA   ", "               C   C               ")
+                    .aisle("               CDDDC               ", "   AAAAA       AEEEA       AAAAA   ", "A  F   F  AABBBA   ABBBAA  F   F  A", "B  C   C  BBDDD     DDDBB  C   C  B", "A  F   F  AABBBA   ABBBAA  F   F  A", "   AAAAA       AEEEA       AAAAA   ", "               CDDDC               ")
+                    .aisle("               C   C               ", "    AAA        DEEED        AAA    ", "AA  FFF  AA    A   A    AA  FFF  AA", "BB  CCC  BB    A   A    BB  CCC  BB", "AA  FFF  AA    A   A    AA  FFF  AA", "    AAA        DEEED        AAA    ", "               C   C               ")
+                    .aisle("                                   ", "               CAAAC               ", " CC     CC     DEEED     CC     CC ", " BB  D  BB     AEEEA     BB  D  BB ", " CC     CC     DEEED     CC     CC ", "               CAAAC               ", "                                   ")
+                    .aisle("                                   ", "                                   ", "  CA   AC      CAAAC      CA   AC  ", "  BB D BB      CAXAC      BB D BB  ", "  CA   AC      CAAAC      CA   AC  ", "                                   ", "                                   ")
+                    .aisle("                                   ", "                                   ", "   AAAAA                   AAAAA   ", "   BBCBB                   BBCBB   ", "   AAAAA                   AAAAA   ", "                                   ", "                                   ")
+                    .aisle("                                   ", "                                   ", "    ABA                     ABA    ", "    BCB                     BCB    ", "    ABA                     ABA    ", "                                   ", "                                   ")
+                    .aisle("                                   ", "                                   ", "    BDB                     BDB    ", "    DCD                     DCD    ", "    BDB                     BDB    ", "                                   ", "                                   ")
+                    .aisle("                                   ", "                                   ", "    BDB                     BDB    ", "    DCD                     DCD    ", "    BDB                     BDB    ", "                                   ", "                                   ")
+                    .aisle("                                   ", "                                   ", "    BDB                     BDB    ", "    DCD                     DCD    ", "    BDB                     BDB    ", "                                   ", "                                   ")
+                    .aisle("   CCCCC                   CCCCC   ", "  CDAAADC                 CDAAADC  ", " CDABABADC               CDABABADC ", " CAAAAAAAC               CAAAAAAAC ", " CDABABADC               CDABABADC ", "  CDAAADC                 CDAAADC  ", "   CCCCC                   CCCCC   ")
+                    .aisle("    D D                     D D    ", "  AEEEEEA                 AEEEEEA  ", "  E     EA               AE     E  ", " DE     EA               AE     ED ", "  E     EA               AE     E  ", "  AEEEEEA                 AEEEEEA  ", "    D D                     D D    ")
+                    .aisle("    D D                     D D    ", "  AEEEEEA                 AEEEEEA  ", "  E     EA               AE     E  ", " DE     EA               AE     ED ", "  E     EA               AE     E  ", "  AEEEEEA                 AEEEEEA  ", "    D D                     D D    ")
+                    .aisle("    D D                     D D    ", "  AEEEEEA                 AEEEEEA  ", "  E     EA               AE     E  ", " DE     EA               AE     ED ", "  E     EA               AE     E  ", "  AEEEEEA                 AEEEEEA  ", "    D D                     D D    ")
+                    .aisle("   CCCCC                   CCCCC   ", "  CDAAADC                 CDAAADC  ", " CDAA AADC               CDAA AADC ", " CAA   AAC               CAA   AAC ", " CDAA AADC               CDAA AADC ", "  CDAAADC                 CDAAADC  ", "   CCCCC                   CCCCC   ")
+                    .aisle("                                   ", "                                   ", "    BDB                     BDB    ", "    D D                     D D    ", "    BDB                     BDB    ", "                                   ", "                                   ")
+                    .aisle("                                   ", "                                   ", "    BDB                     BDB    ", "    D D                     D D    ", "    BDB                     BDB    ", "                                   ", "                                   ")
+                    .aisle("                                   ", "                                   ", "    BDB                     BDB    ", "    D D                     D D    ", "    BDB                     BDB    ", "                                   ", "                                   ")
+                    .aisle("                                   ", "                                   ", "    ABA                     ABA    ", "    BAB                     BAB    ", "    ABA                     ABA    ", "                                   ", "                                   ")
+                    .aisle("                                   ", "                                   ", "   AAAAA                   AAAAA   ", "   BBBBB                   BBBBB   ", "   AAAAA                   AAAAA   ", "                                   ", "                                   ")
+                    .aisle("                                   ", "                                   ", "  CA   AC      CAAAC      CA   AC  ", "  BB D BB      CAAAC      BB D BB  ", "  CA   AC      CAAAC      CA   AC  ", "                                   ", "                                   ")
+                    .aisle("                                   ", "               CAAAC               ", " CC     CC     DEEED     CC     CC ", " BB  D  BB     AEEEA     BB  D  BB ", " CC     CC     DEEED     CC     CC ", "               CAAAC               ", "                                   ")
+                    .aisle("               C   C               ", "    AAA        DEEED        AAA    ", "AA  FFF  AA    A   A    AA  FFF  AA", "BB  CCC  BB    A   A    BB  CCC  BB", "AA  FFF  AA    A   A    AA  FFF  AA", "    AAA        DEEED        AAA    ", "               C   C               ")
+                    .aisle("               CDDDC               ", "   AAAAA       AEEEA       AAAAA   ", "A  F   F  AABBBB   BBBBAA  F   F  A", "B  C   C  BBDDDA   ADDDBB  C   C  B", "A  F   F  AABBBB   BBBBAA  F   F  A", "   AAAAA       AEEEA       AAAAA   ", "               CDDDC               ")
+                    .aisle("               C   C               ", "   AAAAA       AEEEA       AAAAA   ", "A  F   F  ABDDDA   ADDDBA  F   F  A", "BDDC   CDDCCCCCA   ACCCCCDDC   CDDB", "A  F   F  ABDDDA   ADDDBA  F   F  A", "   AAAAA       AEEEA       AAAAA   ", "               C   C               ")
+                    .aisle("               CDDDC               ", "   AAAAA       AEEEA       AAAAA   ", "A  F   F  AABBBB   BBBBAA  F   F  A", "B  C   C  BBDDDA   ADDDBB  C   C  B", "A  F   F  AABBBB   BBBBAA  F   F  A", "   AAAAA       AEEEA       AAAAA   ", "               CDDDC               ")
+                    .aisle("               C   C               ", "    AAA        DEEED        AAA    ", "AA  FFF  AA    A   A    AA  FFF  AA", "BB  CCC  BB    A   A    BB  CCC  BB", "AA  FFF  AA    A   A    AA  FFF  AA", "    AAA        DEEED        AAA    ", "               C   C               ")
+                    .aisle("                                   ", "               CAAAC               ", " CC     CC     DEEED     CC     CC ", " BB  D  BB     AEEEA     BB  D  BB ", " CC     CC     DEEED     CC     CC ", "               CAAAC               ", "                                   ")
+                    .aisle("                                   ", "                                   ", "  CA   AC      CAAAC      CA   AC  ", "  BB D BB      CDDDC      BB D BB  ", "  CA   AC      CAAAC      CA   AC  ", "                                   ", "                                   ")
+                    .aisle("                                   ", "                                   ", "   AAAAA                   AAAAA   ", "   BBBBB                   BBBBB   ", "   AAAAA                   AAAAA   ", "                                   ", "                                   ")
                     .where(' ', any())
                     .where("X", controller(blocks(definition.getBlock())))
                     .where('C', blocks(MULTIPURPOSE_INTERSTELLAR_GRADE_CASING.get()))
@@ -692,7 +588,8 @@ public class CosmicMachines {
                                     .setExactLimit(1))
                             .or(abilities(PartAbility.INPUT_LASER, PartAbility.INPUT_ENERGY).setExactLimit(1)))
                     .build())
-            .workableCasingRenderer(CosmicCore.id("block/casings/solid/vomahine_certified_chemically_resistant_casing"),
+            // spotless:on
+            .workableCasingModel(CosmicCore.id("block/casings/solid/vomahine_certified_chemically_resistant_casing"),
                     CosmicCore.id("block/multiblock/vomahine_chemplant"))
             .additionalDisplay((controller, components) -> {
                 if (controller instanceof CoilWorkableElectricMultiblockMachine coilMachine && controller.isFormed()) {
@@ -714,21 +611,15 @@ public class CosmicMachines {
             .recipeModifiers(CosmicRecipeModifiers::chemicalVatLogic,
                     ELECTRIC_OVERCLOCK.apply(OverclockingLogic.PERFECT_OVERCLOCK_SUBTICK))
             .appearanceBlock(CYCLOZINE_CHEMICALLY_REPELLING_CASING)
+            // spotless:off
             .pattern(definition -> FactoryBlockPattern.start()
-                    .aisle("##QQQ##", "##QQQ##", "###Q###", "#######", "#######", "#######", "#######", "#######",
-                            "###Q###", "##QQQ##", "##QQQ##")
-                    .aisle("#QQQQQ#", "#QQSQQ#", "#FQQQF#", "#FQ#QF#", "#F###F#", "#F###F#", "#F###F#", "#FQ#QF#",
-                            "#FQQQF#", "#QQSQQ#", "#QQQQQ#")
-                    .aisle("QQQQQQQ", "QQSSSQQ", "#QSSSQ#", "##HGH##", "##HGH##", "##HGH##", "##HGH##", "#QHGHQ#",
-                            "#QSSSQ#", "QQSSSQQ", "QQQQQQQ")
-                    .aisle("QQQQQQQ", "QSSSSSQ", "QQSSSQQ", "##GSG##", "##GSG##", "##GSG##", "##GSG##", "##GSG##",
-                            "QQSSSQQ", "QSSSSSQ", "QQQQQQQ")
-                    .aisle("QQQQQQQ", "QQSSSQQ", "#QSSSQ#", "##HGH##", "##HGH##", "##HGH##", "##HGH##", "#QHGHQ#",
-                            "#QSSSQ#", "QQSSSQQ", "QQQQQQQ")
-                    .aisle("#QQQQQ#", "#QQSQQ#", "#FQQQF#", "#FQ#QF#", "#F###F#", "#F###F#", "#F###F#", "#FQ#QF#",
-                            "#FQQQF#", "#QQSQQ#", "#QQQQQ#")
-                    .aisle("##QQQ##", "##QCQ##", "###Q###", "#######", "#######", "#######", "#######", "#######",
-                            "###Q###", "##QQQ##", "##QQQ##")
+                    .aisle("##QQQ##", "##QQQ##", "###Q###", "#######", "#######", "#######", "#######", "#######", "###Q###", "##QQQ##", "##QQQ##")
+                    .aisle("#QQQQQ#", "#QQSQQ#", "#FQQQF#", "#FQ#QF#", "#F###F#", "#F###F#", "#F###F#", "#FQ#QF#", "#FQQQF#", "#QQSQQ#", "#QQQQQ#")
+                    .aisle("QQQQQQQ", "QQSSSQQ", "#QSSSQ#", "##HGH##", "##HGH##", "##HGH##", "##HGH##", "#QHGHQ#", "#QSSSQ#", "QQSSSQQ", "QQQQQQQ")
+                    .aisle("QQQQQQQ", "QSSSSSQ", "QQSSSQQ", "##GSG##", "##GSG##", "##GSG##", "##GSG##", "##GSG##", "QQSSSQQ", "QSSSSSQ", "QQQQQQQ")
+                    .aisle("QQQQQQQ", "QQSSSQQ", "#QSSSQ#", "##HGH##", "##HGH##", "##HGH##", "##HGH##", "#QHGHQ#", "#QSSSQ#", "QQSSSQQ", "QQQQQQQ")
+                    .aisle("#QQQQQ#", "#QQSQQ#", "#FQQQF#", "#FQ#QF#", "#F###F#", "#F###F#", "#F###F#", "#FQ#QF#", "#FQQQF#", "#QQSQQ#", "#QQQQQ#")
+                    .aisle("##QQQ##", "##QCQ##", "###Q###", "#######", "#######", "#######", "#######", "#######", "###Q###", "##QQQ##", "##QQQ##")
                     .where('#', any())
                     .where("C", controller(blocks(definition.getBlock())))
                     .where('F', blocks(ChemicalHelper.getBlock(TagPrefix.frameGt, GTMaterials.NaquadahAlloy)))
@@ -750,12 +641,13 @@ public class CosmicMachines {
                             .or(abilities(PartAbility.INPUT_LASER))
                             .or(abilities(PartAbility.INPUT_ENERGY)))
                     .build())
+            // spotless:on
             .tooltips(Component.translatable("cosmiccore.multiblock.chemvat.tooltip.0"),
                     Component.translatable("cosmiccore.multiblock.chemvat.tooltip.1"),
                     Component.translatable("cosmiccore.multiblock.chemvat.tooltip.2"),
                     Component.translatable("cosmiccore.multiblock.chemvat.tooltip.3"),
                     Component.translatable("cosmiccore.multiblock.chemvat.tooltip.4"))
-            .workableCasingRenderer(CosmicCore.id("block/casings/solid/vomahine_certified_chemically_resistant_casing"),
+            .workableCasingModel(CosmicCore.id("block/casings/solid/vomahine_certified_chemically_resistant_casing"),
                     CosmicCore.id("block/multiblock/vomahine_chemplant"))
             .register();
 
@@ -787,10 +679,12 @@ public class CosmicMachines {
                     .where('X', abilities(IMPORT_SOUL).setMinGlobalLimited(1, 1).setMaxGlobalLimited(1))
                     .where('C', blocks(IESNIUM_BLOCK.get()))
                     .build())
-            .renderer(() -> new HellFireFoundryWorkableRenderer(
+            .model(createSeparateControllerCasingMachineModel(
                     BloodMagic.rl("block/blankrune"),
                     CosmicCore.id("block/casings/solid/highly_conductive_fission_casing"),
-                    GTCEu.id("block/multiblock/network_switch")))
+                    GTCEu.id("block/multiblock/network_switch"))
+                    .andThen(model -> model
+                            .addDynamicRenderer(CosmicDynamicRenderHelpers::createHellfireFoundryPartRender)))
             .register();
     public static final MultiblockMachineDefinition SUFFERING_CHAMBER = REGISTRATE
             .multiblock("suffering_chamber", WorkableElectricMultiblockMachine::new)
@@ -800,30 +694,19 @@ public class CosmicMachines {
             .partAppearance((controller, part, side) -> CASING_STRESS_PROOF.getDefaultState())
             .recipeModifiers(GTRecipeModifiers.PARALLEL_HATCH,
                     ELECTRIC_OVERCLOCK.apply(OverclockingLogic.PERFECT_OVERCLOCK))
+            // spotless:off
             .pattern(definition -> FactoryBlockPattern.start()
-                    .aisle("AAA     AAA", "AA       AA", "A         A", "A         A", "           ", "           ",
-                            "           ", "           ")
-                    .aisle("A ABBBBBA A", "A ABBBBBA A", "  AB   BA  ", "  AD   DA  ", "  A D D A  ", "  A  E  A  ",
-                            "           ", "           ")
-                    .aisle("AAAAAAAAAAA", " AAAAAAAAA ", " A       A ", " AF     FA ", " A       A ", " AA     AA ",
-                            "  A     A  ", "  A     A  ")
-                    .aisle(" BAAAAAAAB ", " BAAAAAAAB ", " B       B ", " D G H G D ", "           ", "           ",
-                            "           ", "           ")
-                    .aisle(" BAAAAAAAB ", " BAAAAAAAB ", "           ", "           ", " D  G G  D ", "           ",
-                            "           ", "           ")
-                    .aisle(" BAAAAAAAB ", " BAAAXAAAB ", "           ", "   H   H   ", "     I     ", " E       E ",
-                            "           ", "           ")
-                    .aisle(" BAAAAAAAB ", " BAAAAAAAB ", "           ", "           ", " D  G G  D ", "           ",
-                            "           ", "           ")
-                    .aisle(" BAAAAAAAB ", " BAAAAAAAB ", " B       B ", " D G H G D ", "           ", "           ",
-                            "           ", "           ")
-                    .aisle("AAAAAAAAAAA", " AAAAAAAAA ", " A       A ", " AF     FA ", " A       A ", " AA     AA ",
-                            "  A     A  ", "  A     A  ")
-                    .aisle("A ABBBBBA A", "A ABBQBBA A", "  AB   BA  ", "  AD   DA  ", "  A D D A  ", "  A  E  A  ",
-                            "           ", "           ")
-                    .aisle("AAA     AAA", "AA       AA", "A         A", "A         A", "           ", "           ",
-                            "           ", "           ")
-
+                    .aisle("AAA     AAA", "AA       AA", "A         A", "A         A", "           ", "           ", "           ", "           ")
+                    .aisle("A ABBBBBA A", "A ABBBBBA A", "  AB   BA  ", "  AD   DA  ", "  A D D A  ", "  A  E  A  ", "           ", "           ")
+                    .aisle("AAAAAAAAAAA", " AAAAAAAAA ", " A       A ", " AF     FA ", " A       A ", " AA     AA ", "  A     A  ", "  A     A  ")
+                    .aisle(" BAAAAAAAB ", " BAAAAAAAB ", " B       B ", " D G H G D ", "           ", "           ", "           ", "           ")
+                    .aisle(" BAAAAAAAB ", " BAAAAAAAB ", "           ", "           ", " D  G G  D ", "           ", "           ", "           ")
+                    .aisle(" BAAAAAAAB ", " BAAAXAAAB ", "           ", "   H   H   ", "     I     ", " E       E ", "           ", "           ")
+                    .aisle(" BAAAAAAAB ", " BAAAAAAAB ", "           ", "           ", " D  G G  D ", "           ", "           ", "           ")
+                    .aisle(" BAAAAAAAB ", " BAAAAAAAB ", " B       B ", " D G H G D ", "           ", "           ", "           ", "           ")
+                    .aisle("AAAAAAAAAAA", " AAAAAAAAA ", " A       A ", " AF     FA ", " A       A ", " AA     AA ", "  A     A  ", "  A     A  ")
+                    .aisle("A ABBBBBA A", "A ABBQBBA A", "  AB   BA  ", "  AD   DA  ", "  A D D A  ", "  A  E  A  ", "           ", "           ")
+                    .aisle("AAA     AAA", "AA       AA", "A         A", "A         A", "           ", "           ", "           ", "           ")
                     .where('Q', Predicates.controller(Predicates.blocks(definition.get())))
                     .where(' ', Predicates.any())
                     .where('A', blocks(CASING_STRESS_PROOF.get()).setMinGlobalLimited(185)
@@ -838,10 +721,13 @@ public class CosmicMachines {
                     .where('I', blocks(BloodMagicBlocks.MASTER_RITUAL_STONE.get()))
                     .where('X', abilities(EXPORT_SOUL).setMinGlobalLimited(1, 1).setMaxGlobalLimited(1))
                     .build())
-            .renderer(() -> new SufferingChamberRender(
-                    BloodMagic.rl("block/blankrune"),
+            // spotless:on
+            .model(createSeparateControllerCasingMachineModel(BloodMagic.rl("block/blankrune"),
                     GTCEu.id("block/casings/gcym/stress_proof_casing"),
-                    GTCEu.id("block/multiblock/network_switch")))
+                    GTCEu.id("block/multiblock/network_switch"))
+                    .andThen(model -> model
+                            .addDynamicRenderer(CosmicDynamicRenderHelpers::getSufferingChamberRenderer)))
+            .hasBER(true)
             .register();
     public static final MultiblockMachineDefinition POLYMERIZER = REGISTRATE
             .multiblock("polymerizer", WorkableElectricMultiblockMachine::new)
@@ -872,12 +758,12 @@ public class CosmicMachines {
                     .where('F', blocks(GEARBOX_PTHANTERUM.get()))
                     .where('X', blocks(ChemicalHelper.getBlock(TagPrefix.frameGt, GTMaterials.NaquadahAlloy)))
                     .build())
-            .renderer(() -> new SufferingChamberRender(
+            .model(createSeparateControllerCasingMachineModel(
                     CosmicCore.id("block/casings/solid/high_tolerance_rhenium_casing"),
                     CosmicCore.id("block/casings/solid/vomahine_certified_chemically_resistant_casing"),
                     GTCEu.id("block/multiblock/assembly_line")))
-
             .register();
+
     // spotless: off
     public static final MultiblockMachineDefinition ARCANE_DISTILLERY = REGISTRATE
             .multiblock("arcane_distillery", WorkableElectricMultiblockMachine::new)
@@ -887,74 +773,19 @@ public class CosmicMachines {
             .partAppearance((controller, part, side) -> HIGH_TOLERANCE_RHENIUM_CASING.getDefaultState())
             .recipeModifiers(GTRecipeModifiers.PARALLEL_HATCH,
                     ELECTRIC_OVERCLOCK.apply(OverclockingLogic.PERFECT_OVERCLOCK))
+            // spotless:off
             .pattern(definition -> FactoryBlockPattern.start()
-                    .aisle("     AAAAAAAAA     ", "        A A        ", "      AAA AAA      ", "        AAA        ",
-                            "       BBABB       ", "        BBB        ", "A        B        A", "A A             A A",
-                            "A A B         B A A", "AAAABB       BBAAAA", "A  AABB     BBAA  A", "AAAABB       BBAAAA",
-                            "A A B         B A A", "A A             A A", "A        B        A", "        BBB        ",
-                            "       BBABB       ", "        AAA        ", "      AAA AAA      ", "        A A        ",
-                            "     AAAAAAAAA     ")
-                    .aisle("    AA       AA    ", "      CCCACCC      ", "     A  A A  A     ", "       BAAAB       ",
-                            "      BB A BB      ", "A                 A", "A A             A A", " C  B         B  C ",
-                            " C BB         BB C ", " CAA           AAC ", " A AA         AA A ", " CAA           AAC ",
-                            " C BB         BB C ", " C  B         B  C ", "A A             A A", "A                 A",
-                            "      BB A BB      ", "       BAAAB       ", "     A  A A  A     ", "      CCCACCC      ",
-                            "    AA       AA    ")
-                    .aisle("    A         A    ", "     CCAAAAACC     ", "    A D A A D A    ", "      DBAAABD      ",
-                            "     BD  A  DB     ", "A A   D     D   A A", " C  B D     D B  C ", " CDDDDDDDDDDDDDDDC ",
-                            " A B  D     D  B A ", " AAA  D     D  AAA ", " A AA D     D AA A ", " AAA  D     D  AAA ",
-                            " A B  D     D  B A ", " CDDDDDDDDDDDDDDDC ", " C  B D     D B  C ", "A A   D     D   A A",
-                            "     BD  A  DB     ", "      DBAAABD      ", "    A D A A D A    ", "     CCAAAAACC     ",
-                            "    A         A    ")
-                    .aisle("    A         A    ", "     CAAAAAAAC     ", "    A  AA AA  A    ", "     BBBAAABBB     ",
-                            "    BB  A A  BB    ", "A A B   A A   B A A", " C BB   A A   BB C ", " A B           B A ",
-                            " AAB           BAA ", " AAAAAA     AAAAAA ", " A A           A A ", " AAAAAA     AAAAAA ",
-                            " AAB           BAA ", " A B           B A ", " C BB   A A   BB C ", "A A B   A A   B A A",
-                            "    BB  A A  BB    ", "     BBBAAABBB     ", "    A  AA AA  A    ", "     CAAAAAAAC     ",
-                            "    A         A    ")
-                    .aisle("    A         A    ", "    ACAAEEEAACA    ", "    AAAAAAAAAAA    ", "    AAAAAAAAAAA    ",
-                            "    B  AF FA  B    ", "AAAAB  AF FA  BAAAA", " CAA   AF FA   AAC ", " AAA           AAA ",
-                            " AAAAAA     AAAAAA ", " EAAFFF     FFFAAE ", " EAA           AAE ", " EAAFFF     FFFAAE ",
-                            " AAAAAA     AAAAAA ", " AAA           AAA ", " CAA   AF FA   AAC ", "AAAAB  AF FA  BAAAA",
-                            "    B  AF FA  B    ", "    AAAAAAAAAAA    ", "    AAAAAAAAAAA    ", "    ACAAEEEAACA    ",
-                            "    A         A    ")
-                    .aisle("    A         A    ", "     AAAEEEAAA     ", "        A A        ", "    AAAAA AAAAA    ",
-                            "    AAA     AAA    ", "A  AA         AA  A", " A AA         AA A ", " A AA         AA A ",
-                            " A A           A A ", " EAA           AAE ", " E               E ", " EAA           AAE ",
-                            " A A           A A ", " A AA         AA A ", " A AA         AA A ", "A  AA         AA  A",
-                            "    AAA     AAA    ", "    AAAAA AAAAA    ", "        A A        ", "     AAAEEEAAA     ",
-                            "    A         A    ")
-                    .aisle("    A         A    ", "    ACAAEEEAACA    ", "    AAAAAAAAAAA    ", "    AAAAAAAAAAA    ",
-                            "    B  AF FA  B    ", "AAAAB  AF FA  BAAAA", " CAA   AF FA   AAC ", " AAA           AAA ",
-                            " AAAAAA     AAAAAA ", " EAAFFF     FFFAAE ", " EAA           AAE ", " EAAFFF     FFFAAE ",
-                            " AAAAAA     AAAAAA ", " AAA           AAA ", " CAA   AF FA   AAC ", "AAAAB  AF FA  BAAAA",
-                            "    B  AF FA  B    ", "    AAAAAAAAAAA    ", "    AAAAAAAAAAA    ", "    ACAAEEEAACA    ",
-                            "    A         A    ")
-                    .aisle("    A         A    ", "     CAAAAAAAC     ", "    A  AA AA  A    ", "     BBBAAABBB     ",
-                            "    BB  A A  BB    ", "A A B   A A   B A A", " C BB   A A   BB C ", " A B           B A ",
-                            " AAB           BAA ", " AAAAAA     AAAAAA ", " A A           A A ", " AAAAAA     AAAAAA ",
-                            " AAB           BAA ", " A B           B A ", " C BB   A A   BB C ", "A A B   A A   B A A",
-                            "    BB  A A  BB    ", "     BBBAAABBB     ", "    A  AA AA  A    ", "     CAAAAAAAC     ",
-                            "    A         A    ")
-                    .aisle("    A         A    ", "     CCAAAAACC     ", "    A D A A D A    ", "      DBAAABD      ",
-                            "     BD  A  DB     ", "A A   D     D   A A", " C  B D     D B  C ", " CDDDDDDDDDDDDDDDC ",
-                            " A B  D     D  B A ", " AAA  D     D  AAA ", " A AA D     D AA A ", " AAA  D     D  AAA ",
-                            " A B  D     D  B A ", " CDDDDDDDDDDDDDDDC ", " C  B D     D B  C ", "A A   D     D   A A",
-                            "     BD  A  DB     ", "      DBAAABD      ", "    A D A A D A    ", "     CCAAAAACC     ",
-                            "    A         A    ")
-                    .aisle("    AA       AA    ", "      CCCACCC      ", "     A  A A  A     ", "       BAAAB       ",
-                            "      BB A BB      ", "A                 A", "A A             A A", " C  B         B  C ",
-                            " C BB         BB C ", " CAA           AAC ", " A AA         AA A ", " CAA           AAC ",
-                            " C BB         BB C ", " C  B         B  C ", "A A             A A", "A                 A",
-                            "      BB A BB      ", "       BAAAB       ", "     A  A A  A     ", "      CCCACCC      ",
-                            "    AA       AA    ")
-                    .aisle("     AAAAAAAAA     ", "        A A        ", "      AAA AAA      ", "        AQA        ",
-                            "       BBABB       ", "        BBB        ", "A        B        A", "A A             A A",
-                            "A A B         B A A", "AAAABB       BBAAAA", "A  AABB     BBAA  A", "AAAABB       BBAAAA",
-                            "A A B         B A A", "A A             A A", "A        B        A", "        BBB        ",
-                            "       BBABB       ", "        AAA        ", "      AAA AAA      ", "        A A        ",
-                            "     AAAAAAAAA     ")
-
+                    .aisle("     AAAAAAAAA     ", "        A A        ", "      AAA AAA      ", "        AAA        ", "       BBABB       ", "        BBB        ", "A        B        A", "A A             A A", "A A B         B A A", "AAAABB       BBAAAA", "A  AABB     BBAA  A", "AAAABB       BBAAAA", "A A B         B A A", "A A             A A", "A        B        A", "        BBB        ", "       BBABB       ", "        AAA        ", "      AAA AAA      ", "        A A        ", "     AAAAAAAAA     ")
+                    .aisle("    AA       AA    ", "      CCCACCC      ", "     A  A A  A     ", "       BAAAB       ", "      BB A BB      ", "A                 A", "A A             A A", " C  B         B  C ", " C BB         BB C ", " CAA           AAC ", " A AA         AA A ", " CAA           AAC ", " C BB         BB C ", " C  B         B  C ", "A A             A A", "A                 A", "      BB A BB      ", "       BAAAB       ", "     A  A A  A     ", "      CCCACCC      ", "    AA       AA    ")
+                    .aisle("    A         A    ", "     CCAAAAACC     ", "    A D A A D A    ", "      DBAAABD      ", "     BD  A  DB     ", "A A   D     D   A A", " C  B D     D B  C ", " CDDDDDDDDDDDDDDDC ", " A B  D     D  B A ", " AAA  D     D  AAA ", " A AA D     D AA A ", " AAA  D     D  AAA ", " A B  D     D  B A ", " CDDDDDDDDDDDDDDDC ", " C  B D     D B  C ", "A A   D     D   A A", "     BD  A  DB     ", "      DBAAABD      ", "    A D A A D A    ", "     CCAAAAACC     ", "    A         A    ")
+                    .aisle("    A         A    ", "     CAAAAAAAC     ", "    A  AA AA  A    ", "     BBBAAABBB     ", "    BB  A A  BB    ", "A A B   A A   B A A", " C BB   A A   BB C ", " A B           B A ", " AAB           BAA ", " AAAAAA     AAAAAA ", " A A           A A ", " AAAAAA     AAAAAA ", " AAB           BAA ", " A B           B A ", " C BB   A A   BB C ", "A A B   A A   B A A", "    BB  A A  BB    ", "     BBBAAABBB     ", "    A  AA AA  A    ", "     CAAAAAAAC     ", "    A         A    ")
+                    .aisle("    A         A    ", "    ACAAEEEAACA    ", "    AAAAAAAAAAA    ", "    AAAAAAAAAAA    ", "    B  AF FA  B    ", "AAAAB  AF FA  BAAAA", " CAA   AF FA   AAC ", " AAA           AAA ", " AAAAAA     AAAAAA ", " EAAFFF     FFFAAE ", " EAA           AAE ", " EAAFFF     FFFAAE ", " AAAAAA     AAAAAA ", " AAA           AAA ", " CAA   AF FA   AAC ", "AAAAB  AF FA  BAAAA", "    B  AF FA  B    ", "    AAAAAAAAAAA    ", "    AAAAAAAAAAA    ", "    ACAAEEEAACA    ", "    A         A    ")
+                    .aisle("    A         A    ", "     AAAEEEAAA     ", "        A A        ", "    AAAAA AAAAA    ", "    AAA     AAA    ", "A  AA         AA  A", " A AA         AA A ", " A AA         AA A ", " A A           A A ", " EAA           AAE ", " E               E ", " EAA           AAE ", " A A           A A ", " A AA         AA A ", " A AA         AA A ", "A  AA         AA  A", "    AAA     AAA    ", "    AAAAA AAAAA    ", "        A A        ", "     AAAEEEAAA     ", "    A         A    ")
+                    .aisle("    A         A    ", "    ACAAEEEAACA    ", "    AAAAAAAAAAA    ", "    AAAAAAAAAAA    ", "    B  AF FA  B    ", "AAAAB  AF FA  BAAAA", " CAA   AF FA   AAC ", " AAA           AAA ", " AAAAAA     AAAAAA ", " EAAFFF     FFFAAE ", " EAA           AAE ", " EAAFFF     FFFAAE ", " AAAAAA     AAAAAA ", " AAA           AAA ", " CAA   AF FA   AAC ", "AAAAB  AF FA  BAAAA", "    B  AF FA  B    ", "    AAAAAAAAAAA    ", "    AAAAAAAAAAA    ", "    ACAAEEEAACA    ", "    A         A    ")
+                    .aisle("    A         A    ", "     CAAAAAAAC     ", "    A  AA AA  A    ", "     BBBAAABBB     ", "    BB  A A  BB    ", "A A B   A A   B A A", " C BB   A A   BB C ", " A B           B A ", " AAB           BAA ", " AAAAAA     AAAAAA ", " A A           A A ", " AAAAAA     AAAAAA ", " AAB           BAA ", " A B           B A ", " C BB   A A   BB C ", "A A B   A A   B A A", "    BB  A A  BB    ", "     BBBAAABBB     ", "    A  AA AA  A    ", "     CAAAAAAAC     ", "    A         A    ")
+                    .aisle("    A         A    ", "     CCAAAAACC     ", "    A D A A D A    ", "      DBAAABD      ", "     BD  A  DB     ", "A A   D     D   A A", " C  B D     D B  C ", " CDDDDDDDDDDDDDDDC ", " A B  D     D  B A ", " AAA  D     D  AAA ", " A AA D     D AA A ", " AAA  D     D  AAA ", " A B  D     D  B A ", " CDDDDDDDDDDDDDDDC ", " C  B D     D B  C ", "A A   D     D   A A", "     BD  A  DB     ", "      DBAAABD      ", "    A D A A D A    ", "     CCAAAAACC     ", "    A         A    ")
+                    .aisle("    AA       AA    ", "      CCCACCC      ", "     A  A A  A     ", "       BAAAB       ", "      BB A BB      ", "A                 A", "A A             A A", " C  B         B  C ", " C BB         BB C ", " CAA           AAC ", " A AA         AA A ", " CAA           AAC ", " C BB         BB C ", " C  B         B  C ", "A A             A A", "A                 A", "      BB A BB      ", "       BAAAB       ", "     A  A A  A     ", "      CCCACCC      ", "    AA       AA    ")
+                    .aisle("     AAAAAAAAA     ", "        A A        ", "      AAA AAA      ", "        AQA        ", "       BBABB       ", "        BBB        ", "A        B        A", "A A             A A", "A A B         B A A", "AAAABB       BBAAAA", "A  AABB     BBAA  A", "AAAABB       BBAAAA", "A A B         B A A", "A A             A A", "A        B        A", "        BBB        ", "       BBABB       ", "        AAA        ", "      AAA AAA      ", "        A A        ", "     AAAAAAAAA     ")
                     .where('Q', Predicates.controller(Predicates.blocks(definition.get())))
                     .where(' ', Predicates.any())
                     .where('A', blocks(CASING_ATOMIC.get()))
@@ -967,7 +798,8 @@ public class CosmicMachines {
                                     .setPreviewCount(1)))
                     .where('F', blocks(FUSION_COIL.get()))
                     .build())
-            .workableCasingRenderer(CosmicCore.id("block/casings/solid/high_tolerance_rhenium_casing"),
+            // spotless:on
+            .workableCasingModel(CosmicCore.id("block/casings/solid/high_tolerance_rhenium_casing"),
                     CosmicCore.id("block/multiblock/vomahine_chemplant"))
             .register();
 
@@ -3340,7 +3172,7 @@ public class CosmicMachines {
                     .where("O", blocks(CosmicBlocks.ULTRA_POWERED_CASING.get()))
                     .where("P", controller(blocks(definition.getBlock())))
                     .build())
-            .workableCasingRenderer(CosmicCore.id("block/casings/solid/vomahine_certified_chemically_resistant_casing"),
+            .workableCasingModel(CosmicCore.id("block/casings/solid/vomahine_certified_chemically_resistant_casing"),
                     CosmicCore.id("block/multiblock/vomahine_chemplant"))
             .register();
     public final static MultiblockMachineDefinition BIOVAT = REGISTRATE
@@ -3365,7 +3197,7 @@ public class CosmicMachines {
                                     PartAbility.IMPORT_FLUIDS_9X).setExactLimit(1))
                             .or(Predicates.abilities(PartAbility.EXPORT_FLUIDS_1X).setExactLimit(1)))
                     .build())
-            .workableCasingRenderer(CosmicCore.id("block/casings/solid/reinforced_naquadria_casing"),
+            .workableCasingModel(CosmicCore.id("block/casings/solid/reinforced_naquadria_casing"),
                     GTCEu.id("block/multiblock/generator/large_gas_turbine"))
             .register();
     public static final MultiblockMachineDefinition LARGE_COMBUSTION_ENGINE = registerCosmicLargeCombustionEngine(
@@ -3393,7 +3225,9 @@ public class CosmicMachines {
             .machine("hpca_indicator", HPCAIndicatorPartMachine::new)
             .langValue("HPCA Indicator")
             .appearanceBlock(COMPUTER_CASING)
-            .renderer(HPCAIndicatorRenderer::new)
+            .model(createOverlayTieredHullMachineModel(CosmicCore.id("block/machine/part/hpca_indicator"))
+                    .andThen(b -> b.addDynamicRenderer(CosmicDynamicRenderHelpers::getHPCAIndicatorRender)))
+            .tier(ZPM)
             .register();
 
     public static final MachineDefinition HIGH_PERFORMANCE_COMPUTATION_ARRAY = REGISTRATE
@@ -3421,18 +3255,18 @@ public class CosmicMachines {
                             .or(abilities(PartAbility.COMPUTATION_DATA_TRANSMISSION).setExactLimit(1))
                             .or(autoAbilities(true, false, false)))
                     .build())
-            .sidedWorkableCasingRenderer("block/casings/hpca/computer_casing", GTCEu.id("block/multiblock/hpca"))
+            .sidedWorkableCasingModel(GTCEu.id("block/casings/hpca/computer_casing"), GTCEu.id("block/multiblock/hpca"))
             .register();
 
-    private static MachineDefinition[] registerSoulTieredHatch(String name, String displayName, String model, IO io,
-                                                               int[] tiers, PartAbility... abilities) {
+    private static MachineDefinition[] registerSoulHatch(String name, String displayName, IO io,
+                                                         int[] tiers, PartAbility... abilities) {
         return registerTieredMachines(name,
                 (holder, tier) -> new SoulHatchPartMachine(holder, tier, io),
                 (tier, builder) -> builder
                         .langValue(GTValues.VNF[tier] + ' ' + displayName)
                         .abilities(abilities)
                         .rotationState(RotationState.ALL)
-                        .overlayTieredHullRenderer(model)
+                        .overlayTieredHullModel("soul_hatch")
                         .tooltipBuilder((item, tooltip) -> {
                             if (io == IO.IN)
                                 tooltip.add(Component.translatable("tooltip.cosmiccore.soul_hatch.input",
@@ -3445,8 +3279,7 @@ public class CosmicMachines {
     }
 
     private static MachineDefinition[] registerWirelessEnergyTieredHatch(String name, String displayName, String model,
-                                                                         IO io,
-                                                                         int[] tiers, int amperage,
+                                                                         IO io, int[] tiers, int amperage,
                                                                          PartAbility... abilities) {
         return registerTieredMachines(name,
                 (holder, tier) -> new WirelessEnergyHatchPartMachine(holder, tier, io, amperage),
@@ -3455,7 +3288,7 @@ public class CosmicMachines {
                         .abilities(abilities)
                         .rotationState(RotationState.ALL)
                         .tooltips(WirelessEnergyHatchPartMachine.getTooltipComponents(tier, io, amperage))
-                        .overlayTieredHullRenderer(model)
+                        .overlayTieredHullModel(model)
                         .register(),
                 tiers);
     }
@@ -3467,7 +3300,7 @@ public class CosmicMachines {
                 (tier, builder) -> builder
                         .abilities(abilities)
                         .rotationState(RotationState.ALL)
-                        .overlayTieredHullRenderer(model)
+                        .overlayTieredHullModel(model)
                         .tooltipBuilder((item, tooltip) -> {
                             if (io == IO.IN)
                                 tooltip.add(Component.translatable("tooltip.cosmiccore.thermia_hatch_limit",
@@ -3484,12 +3317,18 @@ public class CosmicMachines {
             .tier(HV)
             .rotationState(RotationState.ALL)
             .abilities(PartAbility.IMPORT_ITEMS)
-            .renderer(() -> new OverlayTieredActiveMachineRenderer(HV, GTCEu.id("block/machine/part/object_holder"),
-                    GTCEu.id("block/machine/part/object_holder_active")))
+            .modelProperty(RecipeLogic.STATUS_PROPERTY, RecipeLogic.Status.IDLE)
+            .model(createWorkableTieredHullMachineModel(GTCEu.id("block/machines/object_holder"))
+                    .andThen((ctx, prov, model) -> {
+                        model.addReplaceableTextures("bottom", "top", "side");
+                    }))
             .register();
+
     public static final MachineDefinition CREATIVE_HEAT = REGISTRATE
             .machine("creative_thermal", CreativeThermiaContainerMachine::new)
             .rotationState(RotationState.NONE)
+            .model(createSingleOverlayTieredHullMachineModel(GTModels.BLANK_TEXTURE,
+                    GTCEu.id("block/overlay/machine/overlay_energy_emitter")))
             .tooltipBuilder(CREATIVE_TOOLTIPS)
             .register();
 
@@ -3573,7 +3412,7 @@ public class CosmicMachines {
 
                 return shapeInfo;
             })
-            .workableCasingRenderer(GTCEu.id("block/casings/solid/machine_casing_palladium_substation"),
+            .workableCasingModel(GTCEu.id("block/casings/solid/machine_casing_palladium_substation"),
                     GTCEu.id("block/multiblock/power_substation"))
             .register();
 
@@ -3602,23 +3441,27 @@ public class CosmicMachines {
                     .where('M',
                             blocks(TRITANIUM_LINED_HEAVY_NEUTRONIUM_CASING.get()).or(autoAbilities(true, false, false)))
                     .build())
-            .workableCasingRenderer(CosmicCore.id("block/casings/solid/tritanium_lined_heavy_bolted_neutronium_casing"),
+            .workableCasingModel(CosmicCore.id("block/casings/solid/tritanium_lined_heavy_bolted_neutronium_casing"),
                     GTCEu.id("block/multiblock/data_bank"))
             .register();
 
-    public static final MachineDefinition STEAM_IMPORT_HATCH = GTRegistration.REGISTRATE
+    public static final MachineDefinition STEAM_IMPORT_HATCH = REGISTRATE
             .machine("steam_fluid_input_hatch", holder -> new SteamFluidHatchPartMachine(holder, IO.IN, 4000, 1))
             .rotationState(RotationState.ALL)
             .abilities(PartAbility.IMPORT_FLUIDS)
-            .overlaySteamHullRenderer("fluid_hatch.import")
+            .colorOverlaySteamHullModel(new ResourceLocation(GTCEu.MOD_ID, "block/overlay/machine/overlay_pipe"),
+                    new ResourceLocation(GTCEu.MOD_ID, "block/overlay/machine/overlay_fluid_hatch"),
+                    new ResourceLocation(GTCEu.MOD_ID, "block/overlay/machine/overlay_fluid_hatch"))
             .tooltips(Component.translatable("gtceu.machine.steam_fluid_hatch_notice"))
             .langValue("Fluid Input Hatch (Steam)")
             .register();
-    public static final MachineDefinition STEAM_EXPORT_HATCH = GTRegistration.REGISTRATE
+    public static final MachineDefinition STEAM_EXPORT_HATCH = REGISTRATE
             .machine("steam_fluid_output_hatch", holder -> new SteamFluidHatchPartMachine(holder, IO.OUT, 4000, 1))
             .rotationState(RotationState.ALL)
             .abilities(PartAbility.EXPORT_FLUIDS)
-            .overlaySteamHullRenderer("fluid_hatch.export")
+            .colorOverlaySteamHullModel(new ResourceLocation(GTCEu.MOD_ID, "block/overlay/machine/overlay_pipe"),
+                    new ResourceLocation(GTCEu.MOD_ID, "block/overlay/machine/overlay_fluid_hatch"),
+                    new ResourceLocation(GTCEu.MOD_ID, "block/overlay/machine/overlay_fluid_hatch"))
             .langValue("Fluid Output Hatch (Steam)")
             .register();
 
@@ -3637,7 +3480,7 @@ public class CosmicMachines {
                     .where("M", abilities(PartAbility.MAINTENANCE))
                     .where("A", blocks(HIGH_POWER_CASING.get()))
                     .build())
-            .workableCasingRenderer(GTCEu.id("block/casings/hpca/high_power_casing"),
+            .workableCasingModel(GTCEu.id("block/casings/hpca/high_power_casing"),
                     CosmicCore.id("block/multiblock/wireless_data_transmitter"))
             .register();
     public static final MultiblockMachineDefinition LOCAL_POWER_CAPACITOR = REGISTRATE
@@ -3663,7 +3506,7 @@ public class CosmicMachines {
                     .where("D", Predicates.powerSubstationBatteries())
                     .where("B", blocks(CASING_LAMINATED_GLASS.get()))
                     .build())
-            .workableCasingRenderer(GTCEu.id("block/casings/solid/machine_casing_palladium_substation"),
+            .workableCasingModel(GTCEu.id("block/casings/solid/machine_casing_palladium_substation"),
                     GTCEu.id("block/multiblock/power_substation"))
             .register();
 
@@ -3673,7 +3516,7 @@ public class CosmicMachines {
             .rotationState(RotationState.ALL)
             .abilities(PartAbility.DATA_ACCESS)
             .tier(UEV)
-            .overlayTieredHullRenderer("wireless_data_hatch")
+            .overlayTieredHullModel("wireless_data_hatch")
             .register();
 
     public static void init() {

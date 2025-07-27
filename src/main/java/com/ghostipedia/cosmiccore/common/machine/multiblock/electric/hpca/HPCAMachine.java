@@ -43,6 +43,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.TickTask;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.fluids.capability.IFluidHandler;
@@ -351,7 +352,8 @@ public class HPCAMachine extends WorkableElectricMultiblockMachine
     public HPCAModifier[] getModifierState() {
         if (hpcaModifiers != null) return hpcaModifiers;
         var state = new HPCAModifier[MAX_COMPONENTS_SLICES + 3];
-        var seededRandom = new Random(this.seed);
+
+        var seededRandom = RandomSource.create(this.seed);
         for (int i = 0; i < state.length; i++) state[i] = HPCAModifier.getRandomModifier(seededRandom);
         this.hpcaModifiers = state;
         return this.hpcaModifiers;

@@ -6,6 +6,8 @@ import com.gregtechceu.gtceu.api.item.IComponentItem;
 import com.gregtechceu.gtceu.api.item.component.IItemHUDProvider;
 import com.gregtechceu.gtceu.api.item.component.IItemLifeCycle;
 import com.gregtechceu.gtceu.common.item.ItemMagnetBehavior;
+import com.gregtechceu.gtceu.common.machine.owner.FTBOwner;
+import com.gregtechceu.gtceu.common.machine.owner.MachineOwner;
 import com.gregtechceu.gtceu.utils.FormattingUtil;
 
 import net.minecraft.ChatFormatting;
@@ -29,6 +31,7 @@ public class WirelessPDABehavior implements IItemHUDProvider, IItemLifeCycle {
 
     private static Level serverLevel;
     private static UUID playerUUID;
+    private static UUID wirelessUUID;
 
     public void ItemMagnetBehavior() {
         MinecraftForge.EVENT_BUS.register(this);
@@ -40,6 +43,8 @@ public class WirelessPDABehavior implements IItemHUDProvider, IItemLifeCycle {
 
     public static void setOwner(Player player) {
         playerUUID = player.getUUID();
+        var team = ((FTBOwner) MachineOwner.getOwner(playerUUID)).getTeam();
+        wirelessUUID = team != null ? team.getTeamId() : playerUUID;
     }
 
     @Override
@@ -47,8 +52,8 @@ public class WirelessPDABehavior implements IItemHUDProvider, IItemLifeCycle {
         Minecraft mc = Minecraft.getInstance();
         if (serverLevel == null || playerUUID == null) return;
         var wirelessData = WirelessEnergySavedData.getOrCreate((ServerLevel) serverLevel);
-        var percentStorage = (wirelessData.getEnergyStored(playerUUID).multiply(BigInteger.valueOf(10000))
-                .divide(wirelessData.getEnergyCapacity(playerUUID)).intValue() / 100.0F);
+        var percentStorage = (wirelessData.getEnergyStored(wirelessUUID).multiply(BigInteger.valueOf(10000))
+                .divide(wirelessData.getEnergyCapacity(wirelessUUID)).intValue() / 100.0F);
 
         guiGraphics.drawString(mc.font,
                 Component.translatable("cosmic.gui.wireless.energy.stored",

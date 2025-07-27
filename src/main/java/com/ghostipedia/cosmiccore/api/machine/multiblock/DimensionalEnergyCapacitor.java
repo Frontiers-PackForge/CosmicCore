@@ -1,12 +1,17 @@
 package com.ghostipedia.cosmiccore.api.machine.multiblock;
 
+import com.ghostipedia.cosmiccore.CosmicCore;
 import com.ghostipedia.cosmiccore.api.data.savedData.UniqueMultiblockSavedData;
 import com.ghostipedia.cosmiccore.api.data.wireless.WirelessEnergySavedData;
 
+import com.gregtechceu.gtceu.api.gui.GuiTextures;
+import com.gregtechceu.gtceu.api.gui.fancy.IFancyTooltip;
+import com.gregtechceu.gtceu.api.gui.fancy.TooltipsPanel;
 import com.gregtechceu.gtceu.api.machine.IMachineBlockEntity;
 import com.gregtechceu.gtceu.api.machine.multiblock.IBatteryData;
 import com.gregtechceu.gtceu.api.machine.trait.RecipeLogic;
 import com.gregtechceu.gtceu.common.machine.multiblock.electric.PowerSubstationMachine;
+import com.gregtechceu.gtceu.common.machine.owner.MachineOwner;
 
 import com.lowdragmc.lowdraglib.syncdata.annotation.Persisted;
 import com.lowdragmc.lowdraglib.syncdata.field.ManagedFieldHolder;
@@ -54,7 +59,11 @@ public class DimensionalEnergyCapacitor extends DimensionalEnergyInterface {
         if (getLevel() instanceof DummyWorld) super.onStructureFormed();
 
         if (getLevel() instanceof ServerLevel serverLevel) {
-            var owner = getOwnerUUID();
+            var owner = getTeamUUID();
+            if (owner == MachineOwner.EMPTY) {
+                CosmicCore.LOGGER.warn("DimensionalEnergyCapcitor tried to form with null team.");
+                return;
+            }
             var multiblockId = getDefinition().getId().toString();
             var wirelessData = WirelessEnergySavedData.getOrCreate(serverLevel);
             var uniqueMultiblockMapping = UniqueMultiblockSavedData.getOrCreate(serverLevel);
@@ -99,12 +108,14 @@ public class DimensionalEnergyCapacitor extends DimensionalEnergyInterface {
     public void onStructureInvalid() {
         super.onStructureInvalid();
         if (getLevel() instanceof ServerLevel serverLevel) {
-            var owner = getOwnerUUID();
-            var wirelessData = WirelessEnergySavedData.getOrCreate(serverLevel);
-            var uniqueMultiblockMapping = UniqueMultiblockSavedData.getOrCreate(serverLevel);
-            wirelessData.setActive(owner, false);
-            uniqueMultiblockMapping.removeMultiblock(owner, getDefinition().getId().toString(), getDimension(),
-                    getPos());
+            var owner = getTeamUUID();
+            if (owner != MachineOwner.EMPTY) {
+                var wirelessData = WirelessEnergySavedData.getOrCreate(serverLevel);
+                var uniqueMultiblockMapping = UniqueMultiblockSavedData.getOrCreate(serverLevel);
+                wirelessData.setActive(owner, false);
+                uniqueMultiblockMapping.removeMultiblock(owner, getDefinition().getId().toString(), getDimension(),
+                        getPos());
+            }
         }
         this.capacities = null;
     }
@@ -136,10 +147,28 @@ public class DimensionalEnergyCapacitor extends DimensionalEnergyInterface {
     public void setWorkingEnabled(boolean isWorkingAllowed) {
         super.setWorkingEnabled(isWorkingAllowed);
         if (getLevel() instanceof ServerLevel serverLevel) {
-            var owner = getOwnerUUID();
-            var wirelessData = WirelessEnergySavedData.getOrCreate(serverLevel);
-            wirelessData.setActive(owner, isWorkingAllowed);
+            var owner = getTeamUUID();
+            if (owner != MachineOwner.EMPTY) {
+                var wirelessData = WirelessEnergySavedData.getOrCreate(serverLevel);
+                wirelessData.setActive(owner, isWorkingAllowed);
+            }
         }
+    }
+
+    private boolean hasOwner() {
+        var owner = getTeamUUID();
+        return owner != MachineOwner.EMPTY;
+    }
+
+    @Override
+    public void attachTooltips(TooltipsPanel tooltipsPanel) {
+        super.attachTooltips(tooltipsPanel);
+        tooltipsPanel.attachTooltips(new IFancyTooltip.Basic(
+                () -> GuiTextures.INDICATOR_NO_ENERGY,
+                () -> List.of(Component.translatable("cosmic.multiblock.capacitor.owner.null")
+                        .setStyle(Style.EMPTY.withColor(ChatFormatting.RED))),
+                () -> (!this.hasOwner()),
+                () -> null));
     }
 
     private String getDimension() {

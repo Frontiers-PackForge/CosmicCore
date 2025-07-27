@@ -22,6 +22,7 @@ import net.minecraft.world.item.ItemStack;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Collections;
 import java.util.Optional;
 
 public class CosmicRecipeModifiers {
@@ -31,7 +32,7 @@ public class CosmicRecipeModifiers {
             return RecipeModifier.nullWrongType(MagneticFieldMachine.class, machine);
         }
         final var magnetStrength = magnetMachine.getFieldStrength();
-        long EUt = RecipeHelper.getOutputEUt(recipe);
+        long EUt = recipe.getOutputEUt().getTotalEU();
         int actualParallel = ParallelLogic.getParallelAmount(magnetMachine, recipe, 16);
         long maxReactorVoltage = magnetMachine.getOverclockVoltage();
         float recipeDuration = (recipe.duration);
@@ -64,7 +65,7 @@ public class CosmicRecipeModifiers {
                 IParallelHatch parallelHatch = optionalIParallelHatch.get();
                 var actualParallel = 1;
                 if (parallelHatch.getCurrentParallel() != 0) {
-                    long EUt = RecipeHelper.getInputEUt(recipe);
+                    long EUt = recipe.getInputEUt().getTotalEU();
                     actualParallel = ParallelLogic.getParallelAmount(vatMachine, recipe,
                             parallelHatch.getCurrentParallel());
 
@@ -86,7 +87,6 @@ public class CosmicRecipeModifiers {
         var handlers = rlm.getCapabilitiesFlat(IO.IN, ItemRecipeCapability.CAP);
         int count = 0;
         for (var handler : handlers) {
-            if (!handler.shouldSearchContent()) continue;
             for (var content : handler.getContents()) {
                 if (content instanceof ItemStack stack && !stack.isEmpty()) {
                     if (stack.is(match)) count += stack.getCount();
@@ -95,7 +95,8 @@ public class CosmicRecipeModifiers {
         }
 
         if (count == 1) return ModifierFunction.IDENTITY;
-        int multiplier = ParallelLogic.limitByOutputMerging(rlm, recipe, count, rlm::canVoidRecipeOutputs);
+        int multiplier = ParallelLogic.limitByOutputMerging(rlm, recipe, count, rlm::canVoidRecipeOutputs,
+                Collections.emptyList());
         if (multiplier == 1) return ModifierFunction.IDENTITY;
         return ModifierFunction.builder()
                 .outputModifier(ContentModifier.multiplier(multiplier))

@@ -55,23 +55,23 @@ public class CosmicRecipeTypes {
             .register("suffering_chamber", GTRecipeTypes.MULTIBLOCK)
             .setMaxIOSize(1, 0, 0, 0)
             .setMaxSize(IO.OUT, SoulRecipeCapability.CAP, 1)
-            .setMaxTooltips(3)
+            .setMaxTooltips(5)
             .setProgressBar(GuiTextures.PROGRESS_BAR_ARROW, LEFT_TO_RIGHT);
     public static final GTRecipeType ARCANE_DISTILLERY = GTRecipeTypes
             .register("arcane_distillery", GTRecipeTypes.MULTIBLOCK)
             .setMaxIOSize(3, 2, 3, 2)
-            .setMaxTooltips(3)
+            .setMaxTooltips(4)
             .setSound(CosmicSounds.ARCANE_DISTIL)
             .setProgressBar(GuiTextures.PROGRESS_BAR_ARROW_MULTIPLE, LEFT_TO_RIGHT);
     public static final GTRecipeType ARCANE_FOLDING = GTRecipeTypes
             .register("arcane_folding", GTRecipeTypes.MULTIBLOCK)
             .setMaxIOSize(3, 2, 1, 0)
-            .setMaxTooltips(3)
+            .setMaxTooltips(4)
             .setProgressBar(GuiTextures.PROGRESS_BAR_ARROW_MULTIPLE, LEFT_TO_RIGHT);
     public static final GTRecipeType POLYMERIZER = GTRecipeTypes
             .register("polymerizer", GTRecipeTypes.MULTIBLOCK)
             .setMaxIOSize(3, 2, 3, 2)
-            .setMaxTooltips(3)
+            .setMaxTooltips(4)
             .setProgressBar(GuiTextures.PROGRESS_BAR_ARROW_MULTIPLE, LEFT_TO_RIGHT);
     public static final GTRecipeType HEMOPHAGIC_TRANSFUSER = GTRecipeTypes
             .register("hemophagic_transfuser", GTRecipeTypes.MULTIBLOCK)
@@ -81,7 +81,7 @@ public class CosmicRecipeTypes {
             .setProgressBar(GuiTextures.PROGRESS_BAR_ARROW, ProgressTexture.FillDirection.ALWAYS_FULL);
     public static final GTRecipeType CHROMATIC_FLOTATION_PLANT = GTRecipeTypes
             .register("chromatic_flotation_plant", GTRecipeTypes.MULTIBLOCK)
-            .setMaxIOSize(3, 3, 3, 3)
+            .setMaxIOSize(3, 4, 3, 3)
             .setProgressBar(GuiTextures.PROGRESS_BAR_ARROW, ProgressTexture.FillDirection.LEFT_TO_RIGHT);
     public static final GTRecipeType SPOOLING_MACHINE = GTRecipeTypes
             .register("spooling_machine", ELECTRIC)

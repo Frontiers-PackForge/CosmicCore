@@ -402,7 +402,7 @@ public class HPCAGridHandler implements IManaged {
 
     public void tryGatherClientComponents(Level world, BlockPos pos, Direction frontFacing,
                                           Direction upwardsFacing, boolean flip) {
-        Direction relativeUp = RelativeDirection.UP.getRelativeFacing(frontFacing, upwardsFacing, flip);
+        Direction relativeUp = RelativeDirection.UP.getRelative(frontFacing, upwardsFacing, flip);
 
         BlockPos testPos = pos
                 .relative(frontFacing.getOpposite(), arrayLength)

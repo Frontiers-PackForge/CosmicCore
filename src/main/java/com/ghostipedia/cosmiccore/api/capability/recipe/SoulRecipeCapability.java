@@ -1,19 +1,15 @@
 package com.ghostipedia.cosmiccore.api.capability.recipe;
 
-import com.ghostipedia.cosmiccore.api.recipe.lookup.MapSoulIngredient;
-
 import com.gregtechceu.gtceu.api.capability.recipe.RecipeCapability;
 import com.gregtechceu.gtceu.api.recipe.GTRecipe;
 import com.gregtechceu.gtceu.api.recipe.content.Content;
 import com.gregtechceu.gtceu.api.recipe.content.ContentModifier;
 import com.gregtechceu.gtceu.api.recipe.content.SerializerInteger;
-import com.gregtechceu.gtceu.api.recipe.lookup.AbstractMapIngredient;
 
 import com.lowdragmc.lowdraglib.gui.widget.LabelWidget;
 import com.lowdragmc.lowdraglib.gui.widget.WidgetGroup;
 import com.lowdragmc.lowdraglib.utils.LocalizationUtils;
 
-import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import org.apache.commons.lang3.mutable.MutableInt;
 
 import java.util.Collection;
@@ -35,13 +31,6 @@ public class SoulRecipeCapability extends RecipeCapability<Integer> {
     @Override
     public Integer copyWithModifier(Integer content, ContentModifier modifier) {
         return modifier.apply(content);
-    }
-
-    @Override
-    public List<AbstractMapIngredient> convertToMapIngredient(Object ingredient) {
-        List<AbstractMapIngredient> ingredients = new ObjectArrayList<>(1);
-        if (ingredient instanceof Integer essence) ingredients.add(new MapSoulIngredient(essence));
-        return ingredients;
     }
 
     @Override
