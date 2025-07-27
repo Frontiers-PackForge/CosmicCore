@@ -7,9 +7,13 @@ import com.gregtechceu.gtceu.api.capability.GTCapabilityHelper;
 import com.gregtechceu.gtceu.api.capability.IElectricItem;
 import com.gregtechceu.gtceu.api.item.armor.ArmorUtils;
 import com.gregtechceu.gtceu.core.IFireImmuneEntity;
+import com.gregtechceu.gtceu.utils.GTUtil;
 import com.gregtechceu.gtceu.utils.input.KeyBind;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.player.Input;
+import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
@@ -25,6 +29,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -59,7 +64,14 @@ public class ChestSanguineWarptechSuite extends AdvancedQuarkTechSpaceSuite {
     }
 
     @OnlyIn(Dist.CLIENT)
-    protected static void addSanguineHUD(ItemStack stack, ArmorUtils.ModularHUD hud) {
+    public boolean isNotMoving() {
+        LocalPlayer player = Minecraft.getInstance().player;
+        Input input = player.input;
+        return input.forwardImpulse == 0 && input.leftImpulse == 0 && !input.jumping && !input.shiftKeyDown;
+    }
+
+    @OnlyIn(Dist.CLIENT)
+    protected void addSanguineHUD(ItemStack stack, ArmorUtils.ModularHUD hud) {
         if (stack == null) return;
         CompoundTag tag = stack.getOrCreateTag();
         if (tag.contains("currentLP")) {
@@ -69,7 +81,14 @@ public class ChestSanguineWarptechSuite extends AdvancedQuarkTechSpaceSuite {
         if (tag.contains("isSanguineShieldOn")) {
             boolean isSanguineShieldOn = tag.getBoolean("isSanguineShieldOn");
             hud.newString(Component.translatable("cosmiccore.armor.sanguinewarptech.hud.shieldstate",
-                    (isSanguineShieldOn ? "ON" : "OFF")));
+                    (isSanguineShieldOn ? "§aON" : "§cOFF")));
+        }
+        if (tag.contains("enabled")) {
+            Component status = (tag.getBoolean("enabled") ?
+                    Component.translatable("metaarmor.hud.status.enabled") :
+                    Component.translatable("metaarmor.hud.status.disabled"));
+            Component result = Component.translatable("metaarmor.hud.engine_enabled", status);
+            this.HUD.newString(result);
         }
     }
 
@@ -87,11 +106,16 @@ public class ChestSanguineWarptechSuite extends AdvancedQuarkTechSpaceSuite {
             data.putByte("toggleTimer", (byte) 0);
             data.putBoolean("canShare", false);
             data.putBoolean("isSanguineShieldOn", false);
+            data.putBoolean("enabled", true);
+            data.putBoolean("inertia", true);
+            data.putByte("toggleTimer", (byte) 0);
             data.putLong("currentLP", 0);
         }
 
         byte toggleTimer = data.getByte("toggleTimer");
         boolean canShare = data.getBoolean("canShare");
+        boolean jetpackEnabled = data.getBoolean("enabled");
+        boolean inertiaDampen = data.getBoolean("inertia");
 
         // Handle toggle keypresses
         String messageKey = null;
@@ -105,6 +129,10 @@ public class ChestSanguineWarptechSuite extends AdvancedQuarkTechSpaceSuite {
                     messageKey = "metaarmor.qts.share." + (canShare ? "enable" : "disable");
                 }
                 data.putBoolean("canShare", canShare);
+            } else if (KeyBind.JETPACK_ENABLE.isKeyDown(player)) {
+                jetpackEnabled = !jetpackEnabled;
+                messageKey = "metaarmor.jetpack.flight." + (jetpackEnabled ? "enable" : "disable");
+                data.putBoolean("enabled", jetpackEnabled);
             }
 
             if (messageKey != null) {
@@ -121,15 +149,37 @@ public class ChestSanguineWarptechSuite extends AdvancedQuarkTechSpaceSuite {
             if (player.isOnFire()) player.extinguishFire();
         }
 
-        // Toggle flight
+        // Smart Flight
         Abilities abilities = player.getAbilities();
         float walkSpeed = abilities.getWalkingSpeed();
+
+        // Boosting Behavior (CTRL Go Nyoom)
+        if (GTUtil.isCtrlDown()) {
+            player.getAbilities().setFlyingSpeed(walkSpeed + 0.5f);
+        } else {
+            player.getAbilities().setFlyingSpeed(walkSpeed + 0.1f);
+        }
+
+        // Inertia Dampening Test
+        Vec3 playerDelta = player.getDeltaMovement();
+        if (world.isClientSide() && isNotMoving() && player.getAbilities().flying) {
+
+            player.getAbilities().setFlyingSpeed(0);
+            player.setDeltaMovement(playerDelta.multiply(0.4f, 0.4f, 0.4f));
+        } else {
+            player.getAbilities().setFlyingSpeed(walkSpeed + 0.1f);
+        }
+
         if (!abilities.mayfly) {
             abilities.mayfly = true;
-            player.getAbilities().setFlyingSpeed(walkSpeed);
             if (!world.isClientSide && player instanceof ServerPlayer serverPlayer) {
                 serverPlayer.connection.send(new ClientboundPlayerAbilitiesPacket(abilities));
             }
+        }
+        // Handle the Transition between jetplate mode and creative flight mode, only allow jetplate when non-create
+        // flight is called.
+        if (!player.getAbilities().flying) {
+            performFlying(player, jetpackEnabled, false, item);
         }
 
         // Sanguine shield, update every 10 seconds

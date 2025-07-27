@@ -246,7 +246,7 @@ public class CosmicLangHandler extends LangHandler {
         provider.add("coscore.pattern.tooltip.multiply", "Multiplies contents by §c%d§f");
 
         // Sanguine Warptech
-        provider.add("cosmiccore.armor.sanguinewarptech.hud.LP", "Current LP: %s");
+        provider.add("cosmiccore.armor.sanguinewarptech.hud.LP", "§4Life Force: §c%s");
         provider.add("cosmiccore.armor.sanguinewarptech.hud.shieldstate", "Sanguine Shield: %s");
         provider.add("cosmiccore.armor.sanguinewarptech.message.death_defiance",
                 "Your sanguine armor protected you from death!");
