@@ -245,6 +245,12 @@ public class CosmicLangHandler extends LangHandler {
         provider.add("coscore.pattern.tooltip.div", "Divides contents by §b%d§f");
         provider.add("coscore.pattern.tooltip.multiply", "Multiplies contents by §c%d§f");
 
+        // Sanguine Warptech
+        provider.add("cosmiccore.armor.sanguinewarptech.hud.LP", "Current LP: %s");
+        provider.add("cosmiccore.armor.sanguinewarptech.hud.shieldstate", "Sanguine Shield: %s");
+        provider.add("cosmiccore.armor.sanguinewarptech.message.death_defiance",
+                "Your sanguine armor protected you from death!");
+
         // Dimensional Energy Storage
         provider.add("cosmic.multiblock.capacitor.info.tittle.global", "Global Network Info");
         provider.add("cosmic.multiblock.capacitor.info.tittle.local", "Local Buffer Info ");

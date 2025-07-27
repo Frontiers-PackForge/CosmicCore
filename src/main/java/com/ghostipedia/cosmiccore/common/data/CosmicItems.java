@@ -3,6 +3,9 @@ package com.ghostipedia.cosmiccore.common.data;
 import com.ghostipedia.cosmiccore.api.item.armor.*;
 import com.ghostipedia.cosmiccore.api.registries.CosmicRegistration;
 import com.ghostipedia.cosmiccore.common.data.tag.item.CosmicItemTags;
+import com.ghostipedia.cosmiccore.common.item.armor.ChestSanguineWarptechSuite;
+import com.ghostipedia.cosmiccore.common.item.armor.HelmetSanguineWarptechSuite;
+import com.ghostipedia.cosmiccore.common.item.armor.SanguineWarptechSuite;
 import com.ghostipedia.cosmiccore.common.item.behavior.EffectApplicationBehavior;
 import com.ghostipedia.cosmiccore.common.item.behavior.StructureWriteBehavior;
 import com.ghostipedia.cosmiccore.common.item.behavior.WirelessPDABehavior;
@@ -17,7 +20,6 @@ import com.gregtechceu.gtceu.common.data.GTItems;
 import com.gregtechceu.gtceu.common.item.ItemFluidContainer;
 import com.gregtechceu.gtceu.common.item.TooltipBehavior;
 import com.gregtechceu.gtceu.common.item.armor.GTArmorMaterials;
-import com.gregtechceu.gtceu.common.item.armor.QuarkTechSuite;
 import com.gregtechceu.gtceu.common.registry.GTRegistration;
 import com.gregtechceu.gtceu.config.ConfigHolder;
 import com.gregtechceu.gtceu.data.recipe.CustomTags;
@@ -902,10 +904,10 @@ public class CosmicItems {
             .register();
     // Oiled up white girl trying to understand what the FUCK an armor tag is, i'm doing to fucking shove a whole
     // pineapple up the ass of whatever mojang employee thought these were **OKAY TO CODE**
-    public static ItemEntry<SpaceArmorComponentItem> ADVANCED_SANGUINE_WARPTECH_CHESTPLATE = REGISTRATE
+    public static ItemEntry<SpaceArmorComponentItem> SANGUINE_WARPTECH_CHESTPLATE = REGISTRATE
             .item("sanguine_warptech_chestplate",
                     (p) -> new SpaceArmorComponentItem(GTArmorMaterials.ARMOR, ArmorItem.Type.CHESTPLATE, 100000, p)
-                            .setArmorLogic(new AdvancedQuarkTechSpaceSuite(8192,
+                            .setArmorLogic(new ChestSanguineWarptechSuite(8192,
                                     10_000_000_000L * (long) Math.max(1,
                                             Math.pow(4, ConfigHolder.INSTANCE.tools.voltageTierAdvQuarkTech - 6)),
                                     ConfigHolder.INSTANCE.tools.voltageTierAdvQuarkTech)))
@@ -917,7 +919,7 @@ public class CosmicItems {
     public static ItemEntry<ArmorComponentItem> SANGUINE_WARPTECH_LEGGINGS = REGISTRATE
             .item("sanguine_warptech_leggings",
                     (p) -> new ArmorComponentItem(GTArmorMaterials.ARMOR, ArmorItem.Type.LEGGINGS, p)
-                            .setArmorLogic(new QuarkTechSuite(ArmorItem.Type.LEGGINGS,
+                            .setArmorLogic(new SanguineWarptechSuite(ArmorItem.Type.LEGGINGS,
                                     8192,
                                     100_000_000L * (long) Math.max(1,
                                             Math.pow(4, ConfigHolder.INSTANCE.tools.voltageTierQuarkTech - 5)),
@@ -928,23 +930,23 @@ public class CosmicItems {
             .register();
     public static ItemEntry<ArmorComponentItem> SANGUINE_WARPTECH_HELMET = REGISTRATE.item("sanguine_warptech_helmet",
             (p) -> new ArmorComponentItem(GTArmorMaterials.ARMOR, ArmorItem.Type.HELMET, p)
-                    .setArmorLogic(new QuarkTechSuite(ArmorItem.Type.HELMET,
+                    .setArmorLogic(new HelmetSanguineWarptechSuite(ArmorItem.Type.HELMET,
                             8192,
                             100_000_000L * (long) Math.max(1,
                                     Math.pow(4, ConfigHolder.INSTANCE.tools.voltageTierQuarkTech - 5)),
                             ConfigHolder.INSTANCE.tools.voltageTierQuarkTech)))
-            .lang("Sanguine WarpTech Leggings")
+            .lang("Sanguine WarpTech Helmet")
             .properties(p -> p.rarity(Rarity.EPIC))
             .tag(CustomTags.PPE_ARMOR)
             .register();
     public static ItemEntry<ArmorComponentItem> SANGUINE_WARPTECH_BOOTS = REGISTRATE.item("sanguine_warptech_boots",
             (p) -> new ArmorComponentItem(GTArmorMaterials.ARMOR, ArmorItem.Type.BOOTS, p)
-                    .setArmorLogic(new QuarkTechSuite(ArmorItem.Type.BOOTS,
+                    .setArmorLogic(new SanguineWarptechSuite(ArmorItem.Type.BOOTS,
                             8192,
                             100_000_000L * (long) Math.max(1,
                                     Math.pow(4, ConfigHolder.INSTANCE.tools.voltageTierQuarkTech - 5)),
                             ConfigHolder.INSTANCE.tools.voltageTierQuarkTech)))
-            .lang("Sanguine WarpTech Leggings")
+            .lang("Sanguine WarpTech Boots")
             .properties(p -> p.rarity(Rarity.EPIC))
             .tag(CustomTags.PPE_ARMOR)
             .register();
