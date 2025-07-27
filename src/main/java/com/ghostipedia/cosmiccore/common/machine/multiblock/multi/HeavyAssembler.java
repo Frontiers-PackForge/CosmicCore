@@ -27,11 +27,11 @@ public class HeavyAssembler {
                     WorkableElectricMultiblockMachine::new)
             .langValue("§9Heavy Assembler")
             .rotationState(RotationState.NON_Y_AXIS)
-            .recipeType(CosmicRecipeTypes.HEMOPHAGIC_TRANSFUSER)
+            .recipeType(CosmicRecipeTypes.HEAVY_ASSEMBLER)
             .appearanceBlock(MULTIPURPOSE_INTERSTELLAR_GRADE_CASING)
             .partAppearance((controller, part, side) -> MULTIPURPOSE_INTERSTELLAR_GRADE_CASING.getDefaultState())
             .recipeModifiers(GTRecipeModifiers.PARALLEL_HATCH,
-                    GTRecipeModifiers.ELECTRIC_OVERCLOCK.apply(OverclockingLogic.NON_PERFECT_OVERCLOCK_SUBTICK))
+                    GTRecipeModifiers.ELECTRIC_OVERCLOCK.apply(OverclockingLogic.NON_PERFECT_OVERCLOCK_SUBTICK),GTRecipeModifiers.BATCH_MODE)
             // spotless:off
             .pattern(definition -> FactoryBlockPattern.start()
                     .aisle(" BB  BBBBBBB", " BBBBBBBBBBB", "BB      BBBB", "B       BBBB", "B       BBB ", "B       BB  ", "BBBBBBBBBB  ")

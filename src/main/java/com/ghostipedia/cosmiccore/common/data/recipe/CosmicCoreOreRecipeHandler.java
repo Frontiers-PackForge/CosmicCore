@@ -143,17 +143,17 @@ public class CosmicCoreOreRecipeHandler {
                 .inputFluids(Water.getFluid(2750))
                 .outputItems(frothedStack.copyWithCount(6));
         if (byproduct != GTMaterials.NULL && !ChemicalHelper.get(dust, byproduct).isEmpty()) {
-            builder.chancedOutput(dust, byproduct, 3500, 0);
+            builder.chancedOutput(dust, byproduct,3, 3500, 0);
         }
         if (byproduct2 != GTMaterials.NULL && !ChemicalHelper.get(dust, byproduct2).isEmpty()) {
-            builder.chancedOutput(dust, byproduct2, 3500, 0);
+            builder.chancedOutput(dust, byproduct2,3, 3500, 0);
         }
         if (byproduct3 != GTMaterials.NULL && !ChemicalHelper.get(dust, byproduct3).isEmpty()) {
-            builder.chancedOutput(dust, byproduct3, 3500, 0);
+            builder.chancedOutput(dust, byproduct3,3, 3500, 0);
         }
         if (byproduct4 != GTMaterials.NULL && !ChemicalHelper.get(dust, byproduct4).isEmpty()) {
-            builder.chancedOutput(dust, byproduct4, 3500, 0);
+            builder.chancedOutput(dust, byproduct4,3, 3500, 0);
         }
-        builder.duration(40).EUt(GTValues.V[GTValues.IV]).save(provider);
+        builder.duration(40).EUt(GTValues.V[GTValues.HV]).save(provider);
     }
 }

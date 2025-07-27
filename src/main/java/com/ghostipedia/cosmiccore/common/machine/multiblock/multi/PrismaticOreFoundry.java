@@ -31,12 +31,12 @@ public class PrismaticOreFoundry {
             .multiblock("prismatic_ore_foundry",
                     WorkableElectricMultiblockMachine::new)
             .langValue(StringUtil
-                    .rainbowDancing("Prismatic Ore Factory"))
+                    .rainbowDancing("Prismatic Ore Foundry"))
             .rotationState(RotationState.NON_Y_AXIS)
             .recipeType(CosmicRecipeTypes.PRISMA_FOUNDRY)
             .appearanceBlock(SELF_HEALING_PTHANTERUM)
             .partAppearance((controller, part, side) -> SELF_HEALING_PTHANTERUM.getDefaultState())
-            .recipeModifiers(
+            .recipeModifiers(GTRecipeModifiers.PARALLEL_HATCH,
                     GTRecipeModifiers.ELECTRIC_OVERCLOCK.apply(OverclockingLogic.NON_PERFECT_OVERCLOCK_SUBTICK),
                     GTRecipeModifiers.BATCH_MODE)
             // spotless:off
@@ -61,11 +61,13 @@ public class PrismaticOreFoundry {
                     .where('A', blocks(GCYMBlocks.CASING_REACTION_SAFE.get()))
                     .where('B', blocks(GCYMBlocks.CASING_WATERTIGHT.get()))   //.setMinGlobalLimited(28)
                     .where('C', blocks(SELF_HEALING_PTHANTERUM.get())
-                            .or(autoAbilities(CosmicRecipeTypes.VOID_MINER))
+                            .or(autoAbilities(CosmicRecipeTypes.PRISMA_FOUNDRY))
                             .or(abilities(PartAbility.IMPORT_FLUIDS,PartAbility.IMPORT_FLUIDS_4X,PartAbility.IMPORT_FLUIDS_9X))
                             .or(abilities(PartAbility.EXPORT_ITEMS,PartAbility.IMPORT_ITEMS))
                             .or(abilities(PartAbility.INPUT_ENERGY, PartAbility.INPUT_LASER).setExactLimit(1))
-                            .or(abilities(PartAbility.MAINTENANCE).setExactLimit(1)))
+                            .or(abilities(PartAbility.MAINTENANCE).setExactLimit(1))
+                            .or(abilities(PartAbility.PARALLEL_HATCH).setMaxGlobalLimited(1,1))
+                    )
                     .where('D', blocks(GCYMBlocks.CASING_CORROSION_PROOF.get()))
                     .where('E', blocks(WEAR_RESISTANT_RURIDIT_CASING.get()))
                     .where('F', blocks(CASING_POLYTETRAFLUOROETHYLENE_PIPE.get()))
