@@ -69,6 +69,7 @@ public class SoulHatchPartMachine extends TieredIOPartMachine {
 
     public static int getMaxCapacity(int tier) {
         return switch (tier) {
+            case GTValues.IV -> 5000000;
             case GTValues.LuV -> 10000000;
             case GTValues.ZPM -> 20000000;
             case GTValues.UV -> 30000000;
