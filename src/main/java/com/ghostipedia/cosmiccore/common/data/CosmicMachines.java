@@ -197,10 +197,11 @@ public class CosmicMachines {
      .recipeType(CosmicRecipeTypes.SOUL_TESTER_RECIPES)
      .appearanceBlock(GTBlocks.CASING_STAINLESS_CLEAN)
      .pattern(definition -> FactoryBlockPattern.start()
-     .aisle("S", "C", "I")
+     .aisle("S", "C", "I", "E")
      .where("C", controller(blocks(definition.getBlock())))
      .where("S", abilities(CosmicPartAbility.IMPORT_SOUL).or(abilities(CosmicPartAbility.EXPORT_SOUL)))
      .where("I", abilities(PartAbility.EXPORT_ITEMS).or(abilities(PartAbility.IMPORT_ITEMS)))
+     .where("E", abilities(PartAbility.INPUT_ENERGY))
      .build())
      .workableCasingModel(GTCEu.id("block/casings/solid/machine_coke_bricks"),
             CosmicCore.id("block/multiblock/solidifier"))

@@ -26,7 +26,7 @@ public class CosmicCoreRecipes {
                 .EUt(GTValues.VA[GTValues.HV])
                 .save(provider);
 
-        SOUL_TESTER_RECIPES.recipeBuilder("test_recipe")
+        SOUL_TESTER_RECIPES.recipeBuilder("test_recipe2")
                 .inputItems(gem, Diamond)
                 .output(SoulRecipeCapability.CAP, 10000)
                 .duration(40)
