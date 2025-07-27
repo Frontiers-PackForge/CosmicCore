@@ -14,8 +14,10 @@ import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.protocol.game.ClientboundPlayerAbilitiesPacket;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Abilities;
@@ -121,8 +123,10 @@ public class ChestSanguineWarptechSuite extends AdvancedQuarkTechSpaceSuite {
 
         // Toggle flight
         Abilities abilities = player.getAbilities();
+        float walkSpeed = abilities.getWalkingSpeed();
         if (!abilities.mayfly) {
             abilities.mayfly = true;
+            player.getAbilities().setFlyingSpeed(walkSpeed);
             if (!world.isClientSide && player instanceof ServerPlayer serverPlayer) {
                 serverPlayer.connection.send(new ClientboundPlayerAbilitiesPacket(abilities));
             }
@@ -200,5 +204,10 @@ public class ChestSanguineWarptechSuite extends AdvancedQuarkTechSpaceSuite {
             item.discharge(energyPerUse / 100L * damage, item.getTier(), true, false, false);
         }
         return 1;
+    }
+
+    @Override
+    public ResourceLocation getArmorTexture(ItemStack stack, Entity entity, EquipmentSlot slot, String type) {
+        return CosmicCore.id("textures/armor/sanguine_suit_1.png");
     }
 }
