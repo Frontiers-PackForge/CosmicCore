@@ -904,6 +904,19 @@ public class CosmicItems {
             .register();
     // Oiled up white girl trying to understand what the FUCK an armor tag is, i'm doing to fucking shove a whole
     // pineapple up the ass of whatever mojang employee thought these were **OKAY TO CODE**
+
+    public static ItemEntry<ArmorComponentItem> SANGUINE_WARPTECH_HELMET = REGISTRATE.item("sanguine_warptech_helmet",
+            (p) -> new ArmorComponentItem(GTArmorMaterials.ARMOR, ArmorItem.Type.HELMET, p)
+                    .setArmorLogic(new HelmetSanguineWarptechSuite(ArmorItem.Type.HELMET,
+                            8192,
+                            100_000_000L * (long) Math.max(1,
+                                    Math.pow(4, ConfigHolder.INSTANCE.tools.voltageTierQuarkTech - 5)),
+                            ConfigHolder.INSTANCE.tools.voltageTierQuarkTech)))
+            .lang("Sanguine WarpTech Helmet")
+            .properties(p -> p.rarity(Rarity.EPIC))
+            .tag(CustomTags.PPE_ARMOR)
+            .register();
+
     public static ItemEntry<SpaceArmorComponentItem> SANGUINE_WARPTECH_CHESTPLATE = REGISTRATE
             .item("sanguine_warptech_chestplate",
                     (p) -> new SpaceArmorComponentItem(GTArmorMaterials.ARMOR, ArmorItem.Type.CHESTPLATE, 100000, p)
@@ -928,17 +941,7 @@ public class CosmicItems {
             .properties(p -> p.rarity(Rarity.EPIC))
             .tag(CustomTags.PPE_ARMOR)
             .register();
-    public static ItemEntry<ArmorComponentItem> SANGUINE_WARPTECH_HELMET = REGISTRATE.item("sanguine_warptech_helmet",
-            (p) -> new ArmorComponentItem(GTArmorMaterials.ARMOR, ArmorItem.Type.HELMET, p)
-                    .setArmorLogic(new HelmetSanguineWarptechSuite(ArmorItem.Type.HELMET,
-                            8192,
-                            100_000_000L * (long) Math.max(1,
-                                    Math.pow(4, ConfigHolder.INSTANCE.tools.voltageTierQuarkTech - 5)),
-                            ConfigHolder.INSTANCE.tools.voltageTierQuarkTech)))
-            .lang("Sanguine WarpTech Helmet")
-            .properties(p -> p.rarity(Rarity.EPIC))
-            .tag(CustomTags.PPE_ARMOR)
-            .register();
+
     public static ItemEntry<ArmorComponentItem> SANGUINE_WARPTECH_BOOTS = REGISTRATE.item("sanguine_warptech_boots",
             (p) -> new ArmorComponentItem(GTArmorMaterials.ARMOR, ArmorItem.Type.BOOTS, p)
                     .setArmorLogic(new SanguineWarptechSuite(ArmorItem.Type.BOOTS,
