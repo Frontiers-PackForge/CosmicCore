@@ -46,6 +46,7 @@ newThinAir = "4848005"
 puzzlesLib = "4924184"
 smartBrainLib = "5654964"
 modernFix = "6025611"
+toolbelt = "5929061"
 
 malum = "1.20.1-1.6.7.1"
 lodestone = "1.20.1-1.6.4.1.256"
@@ -107,6 +108,7 @@ newThinAir                = { module = "curse.maven:new-thin-air-878379", versio
 puzzlesLib                = { module = "curse.maven:puzzles-lib-495476", version.ref = "puzzlesLib" }
 smartBrainLib             = { module = "curse.maven:smartbrainlib-661293", version.ref = "smartBrainLib" }
 modernFix                 = { module = "curse.maven:modernfix-790626", version.ref = "modernFix" }
+toolbelt                 = { module = "curse.maven:tool-belt-260262", version.ref = "toolbelt" }
 
 
 [bundles]
