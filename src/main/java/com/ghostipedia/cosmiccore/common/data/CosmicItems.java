@@ -1,5 +1,6 @@
 package com.ghostipedia.cosmiccore.common.data;
 
+import com.ghostipedia.cosmiccore.CosmicCore;
 import com.ghostipedia.cosmiccore.api.item.armor.*;
 import com.ghostipedia.cosmiccore.api.registries.CosmicRegistration;
 import com.ghostipedia.cosmiccore.common.data.tag.item.CosmicItemTags;
@@ -7,10 +8,12 @@ import com.ghostipedia.cosmiccore.common.item.armor.ChestSanguineWarptechSuite;
 import com.ghostipedia.cosmiccore.common.item.armor.HelmetSanguineWarptechSuite;
 import com.ghostipedia.cosmiccore.common.item.armor.SanguineWarptechSuite;
 import com.ghostipedia.cosmiccore.common.item.behavior.EffectApplicationBehavior;
+import com.ghostipedia.cosmiccore.common.item.behavior.InfiniteSprayCanBehavior;
 import com.ghostipedia.cosmiccore.common.item.behavior.StructureWriteBehavior;
 import com.ghostipedia.cosmiccore.common.item.behavior.WirelessPDABehavior;
 import com.ghostipedia.cosmiccore.utils.StringUtil;
 
+import com.gregtechceu.gtceu.GTCEu;
 import com.gregtechceu.gtceu.api.item.ComponentItem;
 import com.gregtechceu.gtceu.api.item.armor.ArmorComponentItem;
 import com.gregtechceu.gtceu.api.item.component.ICustomDescriptionId;
@@ -26,6 +29,7 @@ import com.gregtechceu.gtceu.data.recipe.CustomTags;
 
 import com.lowdragmc.lowdraglib.utils.LocalizationUtils;
 
+import net.minecraft.client.renderer.item.ItemProperties;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.damagesource.DamageSource;
@@ -51,6 +55,8 @@ import earth.terrarium.adastra.common.tags.ModItemTags;
 import wayoftime.bloodmagic.common.item.BloodOrb;
 import wayoftime.bloodmagic.common.item.ItemBloodOrb;
 import wayoftime.bloodmagic.common.registration.impl.BloodOrbRegistryObject;
+
+import java.util.function.Function;
 
 import static com.ghostipedia.cosmiccore.api.registries.CosmicRegistration.REGISTRATE;
 import static com.gregtechceu.gtceu.common.data.GTItems.attach;
@@ -1203,6 +1209,17 @@ public class CosmicItems {
             })))
             .defaultModel()
             .register();
+    // infinite spraycan
+    public static final ItemEntry<ComponentItem> INFINITE_SPRAY_CAN = REGISTRATE
+            .item("infinite_spray_can", ComponentItem::create)
+            .lang("§5 Infinite_spray_can")
+            .setData(ProviderType.ITEM_MODEL, NonNullBiConsumer.noop())
+            .properties(p -> p.stacksTo(1))
+            .onRegister(attach(new InfiniteSprayCanBehavior(1)))
+            .onRegister(modelPredicate(CosmicCore.id("color"),
+                    (itemStack) -> (float) itemStack.getOrCreateTag().getInt(InfiniteSprayCanBehavior.ColorTag)))
+            .register();
+
     public static ItemEntry<ComponentItem> NEUTRONITE_FLUID_CELL = GTRegistration.REGISTRATE
             .item("indestructible_fluid_cell", ComponentItem::create)
             .lang("Indestructible %s Fluid Cell")
@@ -1227,6 +1244,15 @@ public class CosmicItems {
 
     public static <T extends ComponentItem> NonNullConsumer<T> attach(IItemComponent... components) {
         return item -> item.attachComponents(components);
+    }
+
+    public static <T extends Item> NonNullConsumer<T> modelPredicate(ResourceLocation predicate,
+                                                                     Function<ItemStack, Float> property) {
+        return item -> {
+            if (GTCEu.isClientSide()) {
+                ItemProperties.register(item, predicate, (itemStack, c, l, i) -> property.apply(itemStack));
+            }
+        };
     }
 
     public static void init() {}
