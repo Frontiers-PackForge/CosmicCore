@@ -155,19 +155,18 @@ public class ChestSanguineWarptechSuite extends AdvancedQuarkTechSpaceSuite {
 
         // Boosting Behavior (CTRL Go Nyoom)
         if (GTUtil.isCtrlDown()) {
-            player.getAbilities().setFlyingSpeed(walkSpeed + 0.5f);
+            player.getAbilities().setFlyingSpeed(walkSpeed + 0.2f);
         } else {
-            player.getAbilities().setFlyingSpeed(walkSpeed + 0.1f);
+            player.getAbilities().setFlyingSpeed(walkSpeed);
         }
 
         // Inertia Dampening Test
         Vec3 playerDelta = player.getDeltaMovement();
         if (world.isClientSide() && isNotMoving() && player.getAbilities().flying) {
-
             player.getAbilities().setFlyingSpeed(0);
             player.setDeltaMovement(playerDelta.multiply(0.4f, 0.4f, 0.4f));
         } else {
-            player.getAbilities().setFlyingSpeed(walkSpeed + 0.1f);
+            player.getAbilities().setFlyingSpeed(walkSpeed);
         }
 
         if (!abilities.mayfly) {

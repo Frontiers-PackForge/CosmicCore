@@ -63,6 +63,7 @@ public class HeavyAssembler {
                             .or(autoAbilities(CosmicRecipeTypes.HEAVY_ASSEMBLER))
                             .or(abilities(PartAbility.IMPORT_FLUIDS,PartAbility.IMPORT_FLUIDS_4X,PartAbility.IMPORT_FLUIDS_9X))
                             .or(abilities(PartAbility.INPUT_ENERGY).setExactLimit(1))
+                            .or(abilities(PartAbility.PARALLEL_HATCH).setExactLimit(1))
                             .or(abilities(PartAbility.MAINTENANCE).setExactLimit(1))) //Part IO go here
                     .where('B', blocks(MULTIPURPOSE_INTERSTELLAR_GRADE_CASING.get()))
                     .where('C', blocks(GCYMBlocks.CASING_LARGE_SCALE_ASSEMBLING.get()))

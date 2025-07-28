@@ -29,16 +29,16 @@ public class CosmicMaterialRecipeHandlers {
                 !material.hasProperty(PropertyKey.INGOT))
             return;
         HEAVY_ASSEMBLER.recipeBuilder("heavy_assemble_" + material.getName() + "_to_heavy_beam")
-                .inputItems(plate, material, 4)
-                .inputItems(plate, material, 4)
-                .inputItems(plate, material, 4)
-                .inputItems(plate, material, 4)
-                .inputItems(rod, material, 16)
-                .inputItems(rod, material, 16)
-                .inputItems(rod, material, 16)
-                .inputItems(rod, material, 16)
+                .inputItems(plate, material, 2)
+                .inputItems(plate, material, 2)
+                .inputItems(plate, material, 2)
+                .inputItems(plate, material, 2)
+                .inputItems(rod, material, 4)
+                .inputItems(rod, material, 4)
+                .inputItems(rod, material, 4)
+                .inputItems(rod, material, 4)
                 .outputItems(heavyBeam, material, 1)
-                .duration((int) material.getMass() * 8)
+                .duration((int) material.getMass() * 2)
                 .EUt(GTValues.VA[GTValues.LuV], 6)
                 .circuitMeta(1)
                 .save(provider);
@@ -65,10 +65,10 @@ public class CosmicMaterialRecipeHandlers {
     private static void processUltraDensePlate(@NotNull Consumer<FinishedRecipe> provider, @NotNull Material material) {
         if (!material.shouldGenerateRecipesFor(plate) || !material.hasProperty(PropertyKey.INGOT)) return;
 
-        ORBITAL_FORGE.recipeBuilder("heavy_forging" + material.getName() + "ultra_dense_plate")
+        ORBITAL_FORGE.recipeBuilder("heavy_forging_" + material.getName() + "_ultra_dense_plate")
                 .inputItems(plate, material, 64)
                 .outputItems(ultraDense, material, 1)
-                .duration((int) material.getMass() * 15)
+                .duration((int) material.getMass() * 3)
                 .EUt(GTValues.VA[GTValues.LuV], 6)
                 .blastFurnaceTemp(9500)
                 .circuitMeta(7)
