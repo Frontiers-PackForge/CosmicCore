@@ -1,0 +1,105 @@
+{
+"parent": "minecraft:item/generated",
+"textures": {
+"layer0": "cosmiccore:item/infinite_spray_can"
+},
+  "overrides": [
+    {
+      "predicate": {
+        "cosmiccore:color": 0.0
+      },
+      "model": "cosmiccore:item/white_spray_can"
+    },
+    {
+      "predicate": {
+        "cosmiccore:color": 1.0
+      },
+      "model": "cosmiccore:item/orange_spray_can"
+    },
+    {
+      "predicate": {
+        "cosmiccore:color": 2.0
+      },
+      "model": "cosmiccore:item/magenta_spray_can"
+    },
+    {
+      "predicate": {
+        "cosmiccore:color": 3.0
+      },
+      "model": "cosmiccore:item/light_blue_spray_can"
+    },
+    {
+      "predicate": {
+        "cosmiccore:color": 4.0
+      },
+      "model": "cosmiccore:item/yellow_spray_can"
+    },
+    {
+      "predicate": {
+        "cosmiccore:color": 5.0
+      },
+      "model": "cosmiccore:item/lime_spray_can"
+    },
+    {
+      "predicate": {
+        "cosmiccore:color": 6.0
+      },
+      "model": "cosmiccore:item/pink_spray_can"
+    },
+    {
+      "predicate": {
+        "cosmiccore:color": 7.0
+      },
+      "model": "cosmiccore:item/gray_spray_can"
+    },
+    {
+      "predicate": {
+        "cosmiccore:color": 8.0
+      },
+      "model": "cosmiccore:item/light_gray_spray_can"
+    },
+    {
+      "predicate": {
+        "cosmiccore:color": 9.0
+      },
+      "model": "cosmiccore:item/cyan_spray_can"
+    },
+    {
+      "predicate": {
+        "cosmiccore:color": 10.0
+      },
+      "model": "cosmiccore:item/purple_spray_can"
+    },
+    {
+      "predicate": {
+        "cosmiccore:color": 11.0
+      },
+      "model": "cosmiccore:item/blue_spray_can"
+    },
+    {
+      "predicate": {
+        "cosmiccore:color": 12.0
+      },
+      "model": "cosmiccore:item/brown_spray_can"
+    },
+    {
+      "predicate": {
+        "cosmiccore:color": 13.0
+      },
+      "model": "cosmiccore:item/green_spray_can"
+    },
+    {
+      "predicate": {
+        "cosmiccore:color": 14.0
+      },
+      "model": "cosmiccore:item/red_spray_can"
+    },
+    {
+      "predicate": {
+        "cosmiccore:color": 15.0
+      },
+      "model": "cosmiccore:item/black_spray_can"
+    }
+  ]
+
+}
