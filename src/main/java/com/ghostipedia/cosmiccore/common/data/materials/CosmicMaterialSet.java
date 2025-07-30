@@ -12,6 +12,7 @@ public class CosmicMaterialSet {
     public static final MaterialIconSet NEUTRONIUM_CCORE = new MaterialIconSet("neutronium", SHINY);
     public static final MaterialIconSet COSMIC_NEUTRONIUM_CCORE = new MaterialIconSet("cosmic_neutronium", SHINY);
     public static final MaterialIconSet TRINAVINE = new MaterialIconSet("trinavine", SHINY);
+    public static final MaterialIconSet STARMETAL = new MaterialIconSet("starmetal", SHINY);
     public static final MaterialIconSet VOIDSPARK = new MaterialIconSet("voidspark", DULL);
     public static final MaterialIconSet SOL = new MaterialIconSet("sol", DULL);
 

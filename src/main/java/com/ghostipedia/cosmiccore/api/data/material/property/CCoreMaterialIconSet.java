@@ -58,8 +58,14 @@ public class CCoreMaterialIconSet extends MaterialIconSet {
     public static final CCoreMaterialIconSet VOIDSPARKICO = new CCoreMaterialIconSet("voidspark_special",
             CosmicMaterialSet.VOIDSPARK, false,
             HaloItemRenderer.create(4, 0xFFFFFFFF,
-                    new ResourceLocation(CosmicCore.MOD_ID, "block/iris/rnd/compression_halo_cyan_faded"), true,
+                    new ResourceLocation(CosmicCore.MOD_ID, "block/iris/rnd/tentacle_halo"), true,
                     false));
+
+    public static final CCoreMaterialIconSet STARMETALICO = new CCoreMaterialIconSet("starmetal_special",
+            CosmicMaterialSet.STARMETAL, false,
+            HaloItemRenderer.create(2, 0xFFFFFFFF,
+                    new ResourceLocation(CosmicCore.MOD_ID, "block/iris/rnd/tentacle_halo_glass"), true,
+                    true));
 
     public static final CCoreMaterialIconSet SOL_STEEL = new CCoreMaterialIconSet("sol_steel", CosmicMaterialSet.SOL,
             false,

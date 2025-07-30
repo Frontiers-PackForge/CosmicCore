@@ -3194,11 +3194,11 @@ public class CosmicMachines {
                     .where('C', blocks(ZBLAN_REINFORCED_GLASS.get()))
                     .where('D', blocks(RADIOACTIVE_FILTER_CASING.get()))
                     .where('A', blocks(REINFORCED_NAQUADRIA_CASING.get())
-                            .or(Predicates.abilities(PartAbility.EXPORT_ITEMS))
+                            .or(Predicates.abilities(PartAbility.EXPORT_ITEMS, PartAbility.IMPORT_ITEMS))
                             .or(Predicates.abilities(PartAbility.INPUT_ENERGY).setExactLimit(1))
-                            .or(Predicates.abilities(PartAbility.IMPORT_FLUIDS_1X, PartAbility.IMPORT_FLUIDS_4X,
-                                    PartAbility.IMPORT_FLUIDS_9X).setExactLimit(1))
-                            .or(Predicates.abilities(PartAbility.EXPORT_FLUIDS_1X).setExactLimit(1)))
+                            .or(Predicates.abilities(PartAbility.IMPORT_FLUIDS).setMaxGlobalLimited(1, 1))
+                            .or(Predicates.abilities(PartAbility.EXPORT_FLUIDS).setMaxGlobalLimited(1, 1))
+                            .or(Predicates.abilities(PartAbility.MAINTENANCE).setExactLimit(1)))
                     .build())
             .workableCasingModel(CosmicCore.id("block/casings/solid/reinforced_naquadria_casing"),
                     GTCEu.id("block/multiblock/generator/large_gas_turbine"))
