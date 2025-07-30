@@ -1,7 +1,7 @@
 package com.ghostipedia.cosmiccore.common.machine.multiblock.multi;
 
 import com.ghostipedia.cosmiccore.CosmicCore;
-import com.ghostipedia.cosmiccore.client.renderer.machine.CosmicDynamicRenderHelpers;
+import com.ghostipedia.cosmiccore.client.renderer.utility.CosmicDynamicRenderHelpers;
 import com.ghostipedia.cosmiccore.gtbridge.CosmicRecipeTypes;
 
 import com.gregtechceu.gtceu.GTCEu;

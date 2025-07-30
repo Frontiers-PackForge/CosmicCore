@@ -1,5 +1,6 @@
-package com.ghostipedia.cosmiccore.client.renderer.machine;
+package com.ghostipedia.cosmiccore.client.renderer.utility;
 
+import com.ghostipedia.cosmiccore.client.renderer.machine.*;
 import com.ghostipedia.cosmiccore.common.data.CosmicBlocks;
 
 import com.gregtechceu.gtceu.client.renderer.machine.DynamicRender;
