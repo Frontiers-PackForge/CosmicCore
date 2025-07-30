@@ -22,6 +22,7 @@ public class CosmicMaterialRecipeHandlers {
         processHeavyBeam(provider, material);
         processModularShelling(provider, material);
         processUltraDensePlate(provider, material);
+        processWireSpool(provider, material);
     }
 
     private static void processHeavyBeam(@NotNull Consumer<FinishedRecipe> provider, @NotNull Material material) {
@@ -73,6 +74,20 @@ public class CosmicMaterialRecipeHandlers {
                 .blastFurnaceTemp(9500)
                 .circuitMeta(7)
                 .dimension(new ResourceLocation("frontiers:sun_orbit"))
+                .save(provider);
+    }
+
+
+    private static void processWireSpool(@NotNull Consumer<FinishedRecipe> provider, @NotNull Material material) {
+        if (!material.shouldGenerateRecipesFor(wireGtSingle) || !material.hasProperty(PropertyKey.INGOT))
+            return;
+
+        HEAVY_ASSEMBLER.recipeBuilder("heavy_assemble_" + material.getName() + "_wire_spool")
+                .inputItems(wireGtSingle, material, 64)
+                .outputItems(largeWireSpool, material, 1)
+                .duration((int) material.getMass() * 4)
+                .EUt(GTValues.VA[GTValues.LuV], 6)
+                .circuitMeta(3)
                 .save(provider);
     }
 }
