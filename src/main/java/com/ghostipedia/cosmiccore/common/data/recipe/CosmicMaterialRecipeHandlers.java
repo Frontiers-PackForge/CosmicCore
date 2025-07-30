@@ -77,7 +77,6 @@ public class CosmicMaterialRecipeHandlers {
                 .save(provider);
     }
 
-
     private static void processWireSpool(@NotNull Consumer<FinishedRecipe> provider, @NotNull Material material) {
         if (!material.shouldGenerateRecipesFor(wireGtSingle) || !material.hasProperty(PropertyKey.INGOT))
             return;

@@ -29,7 +29,6 @@ public class CosmicCustomTags {
 
     public static final Predicate<Material> hasWireProp = material -> material.hasProperty(PropertyKey.WIRE);
 
-
     public static void initTagPrefixes() {
         crushedLeached = new TagPrefix("leachedOre")
                 .idPattern("leached_%s_ore")
