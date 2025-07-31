@@ -17,21 +17,30 @@ public class FluidUtilities {
         return fluid == null ? Fluids.EMPTY : fluid;
     }
 
+    /**
+     * Gets the still texture sprite for a given fluid.
+     *
+     * @param fluid The fluid to retrieve the still texture from.
+     * @return The {@link TextureAtlasSprite} for the fluid's still texture.
+     */
     @SuppressWarnings("deprecation")
     public static TextureAtlasSprite getStillSprite(Fluid fluid) {
         var clientFluid = IClientFluidTypeExtensions.of(fluid);
-        var textureAtlas = Minecraft.getInstance()
-                .getTextureAtlas(TextureAtlas.LOCATION_BLOCKS);
-        return textureAtlas.apply(clientFluid.getStillTexture());
+        var atlas = Minecraft.getInstance().getTextureAtlas(TextureAtlas.LOCATION_BLOCKS);
+        return atlas.apply(clientFluid.getStillTexture());
     }
 
+    /**
+     * Gets the flowing texture sprite for a given fluid.
+     *
+     * @param fluid The fluid to retrieve the flowing texture from.
+     * @return The {@link TextureAtlasSprite} for the fluid's flowing texture.
+     */
     @SuppressWarnings("deprecation")
     public static TextureAtlasSprite getFlowingSprite(Fluid fluid) {
         var clientFluid = IClientFluidTypeExtensions.of(fluid);
-        var textureAtlas = Minecraft.getInstance()
-                .getTextureAtlas(TextureAtlas.LOCATION_BLOCKS);
-        return textureAtlas.apply(clientFluid.getFlowingTexture());
-
+        var atlas = Minecraft.getInstance().getTextureAtlas(TextureAtlas.LOCATION_BLOCKS);
+        return atlas.apply(clientFluid.getFlowingTexture());
     }
 
 }
