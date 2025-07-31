@@ -44,6 +44,12 @@ public class CosmicRecipeTypes {
             .setSound(HEAVY_ASSEM)
             .setProgressBar(CosmicGuiTextures.PROGRESS_BAR_HEAVY, ProgressTexture.FillDirection.UP_TO_DOWN);
 
+    public static final GTRecipeType PLASMITE_FORGE = GTRecipeTypes
+            .register("plasmite_forge", GTRecipeTypes.MULTIBLOCK)
+            .setMaxIOSize(3, 3, 3, 3)
+            .setSound(HEAVY_ASSEM)
+            .setProgressBar(CosmicGuiTextures.PROGRESS_BAR_HEAVY, ProgressTexture.FillDirection.UP_TO_DOWN);
+
     public static final GTRecipeType PRISMA_FOUNDRY = GTRecipeTypes
             .register("prisma_foundry", GTRecipeTypes.MULTIBLOCK)
             .setMaxIOSize(3, 6, 3, 0)
@@ -53,6 +59,12 @@ public class CosmicRecipeTypes {
     public static final GTRecipeType ATMOSPHERE_SIPHON = GTRecipeTypes
             .register("atmo_siphon", GTRecipeTypes.MULTIBLOCK)
             .setMaxIOSize(3, 0, 4, 16)
+            .setSound(GAS_SUCC)
+            .setProgressBar(GuiTextures.PROGRESS_BAR_ARROW, ProgressTexture.FillDirection.LEFT_TO_RIGHT);
+
+    public static final GTRecipeType MANA_DIGITIZER = GTRecipeTypes
+            .register("mana_digitizer", GTRecipeTypes.MULTIBLOCK)
+            .setMaxIOSize(1, 0, 2, 2)
             .setSound(GAS_SUCC)
             .setProgressBar(GuiTextures.PROGRESS_BAR_ARROW, ProgressTexture.FillDirection.LEFT_TO_RIGHT);
     public static final GTRecipeType GROVE_RECIPES = GTRecipeTypes.register("drygmy_grove", GTRecipeTypes.MULTIBLOCK)

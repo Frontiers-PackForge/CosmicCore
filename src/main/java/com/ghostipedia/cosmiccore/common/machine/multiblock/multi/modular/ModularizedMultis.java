@@ -23,5 +23,6 @@ public class ModularizedMultis {
         VoidMiner.init();
         AtmoPump.init();
         CosmicModularMachines.init();
+        ManaDigitizer.init();
     }
 }

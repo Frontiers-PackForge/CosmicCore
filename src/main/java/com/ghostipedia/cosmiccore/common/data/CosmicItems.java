@@ -63,7 +63,6 @@ import static com.gregtechceu.gtceu.common.data.GTItems.attach;
 import static earth.terrarium.adastra.common.registry.ModItems.GLOBES;
 import static wayoftime.bloodmagic.common.item.BloodMagicItems.BLOOD_ORBS;
 
-@SuppressWarnings({ "unused" })
 public class CosmicItems {
 
     public static final BloodOrbRegistryObject<BloodOrb> ORB_ASCENDANT;

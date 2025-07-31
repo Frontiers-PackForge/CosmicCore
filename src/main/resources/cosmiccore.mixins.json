@@ -28,7 +28,6 @@
     "accessor.LivingEntityAccessor",
     "accessor.LootTableAccessor",
     "ae2.AE2StyleManagerMixin",
-    "ae2.CPUFormattingMixin",
     "ae2.PatternEncodingTermMenuMixin",
     "ae2.PatternProviderLogicMixin",
     "ae2.PatternProviderMenuMixin",
