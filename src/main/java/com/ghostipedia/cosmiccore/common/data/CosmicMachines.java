@@ -3200,10 +3200,11 @@ public class CosmicMachines {
                                     PartAbility.IMPORT_FLUIDS_9X).setExactLimit(1))
                             .or(Predicates.abilities(PartAbility.EXPORT_FLUIDS_1X).setExactLimit(1)))
                     .build())
-                 .model(
+            .model(
                     createWorkableCasingMachineModel(CosmicCore.id("block/casings/solid/reinforced_naquadria_casing"),
-                    GTCEu.id("block/multiblock/generator/large_gas_turbine"))
-                            .andThen(model -> model.addDynamicRenderer(CosmicDynamicRenderHelpers::getBioVatFluidRender)))
+                            GTCEu.id("block/multiblock/generator/large_gas_turbine"))
+                            .andThen(model -> model
+                                    .addDynamicRenderer(CosmicDynamicRenderHelpers::getBioVatFluidRender)))
             .hasBER(true)
             .register();
     public static final MultiblockMachineDefinition LARGE_COMBUSTION_ENGINE = registerCosmicLargeCombustionEngine(

@@ -35,5 +35,7 @@ public class CosmicDynamicRenderHelpers {
         return WelderArmRender.INSTANCE;
     }
 
-    public static  DynamicRender<?,?> getBioVatFluidRender() { return   BioVatRender.INSTANCE; }
+    public static DynamicRender<?, ?> getBioVatFluidRender() {
+        return BioVatRender.INSTANCE;
+    }
 }

@@ -3,7 +3,6 @@ package com.ghostipedia.cosmiccore.client.renderer.machine;
 import com.gregtechceu.gtceu.api.machine.multiblock.WorkableElectricMultiblockMachine;
 import com.gregtechceu.gtceu.api.pattern.util.RelativeDirection;
 import com.gregtechceu.gtceu.api.recipe.GTRecipe;
-import com.gregtechceu.gtceu.client.renderer.block.FluidBlockRenderer;
 import com.gregtechceu.gtceu.client.renderer.machine.DynamicRender;
 import com.gregtechceu.gtceu.client.renderer.machine.DynamicRenderType;
 import com.gregtechceu.gtceu.client.util.RenderBufferHelper;
@@ -25,11 +24,11 @@ import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.client.extensions.common.IClientFluidTypeExtensions;
 import net.minecraftforge.client.model.data.ModelData;
+import net.minecraftforge.fluids.FluidStack;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.serialization.Codec;
-import net.minecraftforge.fluids.FluidStack;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -44,7 +43,7 @@ public class BioVatRender extends DynamicRender<WorkableElectricMultiblockMachin
     public static final DynamicRenderType<WorkableElectricMultiblockMachine, BioVatRender> TYPE = new DynamicRenderType<>(BioVatRender.CODEC);
     //spotless:on
 
-    private final List<RelativeDirection> RENDER_FACES = List.of(new RelativeDirection[]{
+    private final List<RelativeDirection> RENDER_FACES = List.of(new RelativeDirection[] {
             RelativeDirection.FRONT,
             RelativeDirection.BACK,
             RelativeDirection.LEFT,
@@ -148,7 +147,6 @@ public class BioVatRender extends DynamicRender<WorkableElectricMultiblockMachin
                 y0ffset + (leftAxis == Direction.Axis.Y ? 0.5f : 0.0f),
                 zOffset + (leftAxis == Direction.Axis.Z ? 0.5f : 0.0f));
 
-
         FluidStack fluidStack = new FluidStack(cachedFluid, 1);
         var sprite = Minecraft.getInstance().getTextureAtlas(TextureAtlas.LOCATION_BLOCKS)
                 .apply(IClientFluidTypeExtensions.of(cachedFluid).getStillTexture(fluidStack));
@@ -163,6 +161,5 @@ public class BioVatRender extends DynamicRender<WorkableElectricMultiblockMachin
                 -1.5f, -1, -1.5f,
                 1.5f, 1, 1.5f);
         poseStack.popPose();
-
     }
 }
