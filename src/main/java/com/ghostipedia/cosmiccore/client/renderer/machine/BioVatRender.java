@@ -15,6 +15,7 @@ import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.renderer.texture.TextureAtlas;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.Vec3i;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.BlockAndTintGetter;
@@ -40,7 +41,7 @@ public class BioVatRender extends DynamicRender<WorkableElectricMultiblockMachin
     // spotless:off
     public static final BioVatRender INSTANCE = new BioVatRender();
     public static final Codec<BioVatRender> CODEC = Codec.unit(INSTANCE);
-    public static final DynamicRenderType<WorkableElectricMultiblockMachine, SufferingChamberRenderer> TYPE = new DynamicRenderType<>(SufferingChamberRenderer.CODEC);
+    public static final DynamicRenderType<WorkableElectricMultiblockMachine, BioVatRender> TYPE = new DynamicRenderType<>(BioVatRender.CODEC);
     //spotless:on
 
     private final List<RelativeDirection> RENDER_FACES = List.of(new RelativeDirection[]{
@@ -117,6 +118,37 @@ public class BioVatRender extends DynamicRender<WorkableElectricMultiblockMachin
             return;
         }
 
+        poseStack.pushPose();
+
+        Direction front = machine.getFrontFacing();
+        Direction upwards = machine.getUpwardsFacing();
+        boolean flipped = machine.isFlipped();
+
+        Vec3i up = RelativeDirection.UP.getRelative(front, upwards, flipped).getNormal();
+        Vec3i back = RelativeDirection.BACK.getRelative(front, upwards, flipped).getNormal();
+        Direction.Axis leftAxis = RelativeDirection.LEFT.getRelative(front, upwards, flipped).getAxis();
+
+        float x0ffset = 0, y0ffset = 0, zOffset = 0;
+
+        for (Direction.Axis axis : Direction.Axis.VALUES) {
+            int upOffset = up.get(axis);
+            int backOffset = back.get(axis);
+
+            float offset = upOffset * (1.0f + (upOffset * 0.5f)) +
+                    backOffset * (2.0f + (backOffset * 0.5f));
+            switch (axis) {
+                case X -> x0ffset = offset;
+                case Y -> y0ffset = offset;
+                case Z -> zOffset = offset;
+            }
+        }
+
+        poseStack.translate(
+                x0ffset + (leftAxis == Direction.Axis.X ? 0.5f : 0.0f),
+                y0ffset + (leftAxis == Direction.Axis.Y ? 0.5f : 0.0f),
+                zOffset + (leftAxis == Direction.Axis.Z ? 0.5f : 0.0f));
+
+
         FluidStack fluidStack = new FluidStack(cachedFluid, 1);
         var sprite = Minecraft.getInstance().getTextureAtlas(TextureAtlas.LOCATION_BLOCKS)
                 .apply(IClientFluidTypeExtensions.of(cachedFluid).getStillTexture(fluidStack));
@@ -128,8 +160,9 @@ public class BioVatRender extends DynamicRender<WorkableElectricMultiblockMachin
                 0xFF88FFFF,
                 LightTexture.FULL_BRIGHT,
                 sprite,
-                -3.5f, -1, -3.5f,
-                3.5f, 1, 3.5f);
+                -1f, -1, -1f,
+                3f, 1, 3f);
+        poseStack.popPose();
 
     }
 }
