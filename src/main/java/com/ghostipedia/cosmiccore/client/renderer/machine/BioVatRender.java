@@ -6,11 +6,13 @@ import com.gregtechceu.gtceu.api.recipe.GTRecipe;
 import com.gregtechceu.gtceu.client.renderer.block.FluidBlockRenderer;
 import com.gregtechceu.gtceu.client.renderer.machine.DynamicRender;
 import com.gregtechceu.gtceu.client.renderer.machine.DynamicRenderType;
+import com.gregtechceu.gtceu.client.util.RenderBufferHelper;
 import com.gregtechceu.gtceu.client.util.RenderUtil;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.*;
 import net.minecraft.client.renderer.block.model.BakedQuad;
+import net.minecraft.client.renderer.texture.TextureAtlas;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
@@ -20,14 +22,17 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
+import net.minecraftforge.client.extensions.common.IClientFluidTypeExtensions;
 import net.minecraftforge.client.model.data.ModelData;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.serialization.Codec;
+import net.minecraftforge.fluids.FluidStack;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.EnumSet;
 import java.util.List;
 
 public class BioVatRender extends DynamicRender<WorkableElectricMultiblockMachine, BioVatRender> {
@@ -112,5 +117,19 @@ public class BioVatRender extends DynamicRender<WorkableElectricMultiblockMachin
             return;
         }
 
-          }
+        FluidStack fluidStack = new FluidStack(cachedFluid, 1);
+        var sprite = Minecraft.getInstance().getTextureAtlas(TextureAtlas.LOCATION_BLOCKS)
+                .apply(IClientFluidTypeExtensions.of(cachedFluid).getStillTexture(fluidStack));
+        VertexConsumer consumer = buffer.getBuffer(Sheets.cutoutBlockSheet());
+        RenderBufferHelper.renderCube(
+                consumer,
+                poseStack.last(),
+                EnumSet.of(Direction.UP, Direction.EAST, Direction.WEST, Direction.NORTH, Direction.SOUTH),
+                0xFF88FFFF,
+                LightTexture.FULL_BRIGHT,
+                sprite,
+                -3.5f, -1, -3.5f,
+                3.5f, 1, 3.5f);
+
+    }
 }
