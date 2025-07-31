@@ -160,8 +160,8 @@ public class BioVatRender extends DynamicRender<WorkableElectricMultiblockMachin
                 0xFF88FFFF,
                 LightTexture.FULL_BRIGHT,
                 sprite,
-                -1f, -1, -1f,
-                3f, 1, 3f);
+                -1.5f, -1, -1.5f,
+                1.5f, 1, 1.5f);
         poseStack.popPose();
 
     }
