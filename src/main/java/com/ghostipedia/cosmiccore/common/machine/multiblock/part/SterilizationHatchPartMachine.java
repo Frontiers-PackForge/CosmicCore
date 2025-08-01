@@ -98,7 +98,7 @@ public class SterilizationHatchPartMachine extends TieredIOPartMachine implement
     @Override
     public ModularUI createUI(Player entityPlayer) {
         var group = new WidgetGroup(0,0,176,164);
-        group.addWidget(new LabelWidget(5, 5, "cosmiccore.gui.sterile_hatch"));
+        group.addWidget(new LabelWidget(5, 5, "gui.cosmiccore.sterilization_hatch"));
         group.addWidget(new TankWidget(this.fluidTank, 79, 30,true,true)
                 .setBackground(GuiTextures.FLUID_SLOT));
         return new ModularUI(176,164,this, entityPlayer)

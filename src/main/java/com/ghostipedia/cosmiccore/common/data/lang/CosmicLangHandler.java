@@ -104,6 +104,7 @@ public class CosmicLangHandler extends LangHandler {
         provider.add("gui.cosmiccore.soul_hatch.lp", "LP Stored: %s");
         provider.add("gui.cosmiccore.thermia_hatch.hatch_limit", "§cTemp. Limit:");
         provider.add("gui.cosmiccore.thermia_hatch.stored_temp", "§6Current Temp:");
+        provider.add("gui.cosmiccore.sterilization_hatch", "Sterilization Hatch");
         provider.add("cosmiccore.multiblock.current_field_strength", "§fField Strength: %s");
         provider.add("cosmiccore.recipe.minField", "§fMin. Field Strength: %sT");
         provider.add("cosmiccore.recipe.fieldDecay", "§fField Decay: %sT/t");
