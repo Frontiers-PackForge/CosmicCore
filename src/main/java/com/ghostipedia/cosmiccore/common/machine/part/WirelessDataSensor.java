@@ -30,6 +30,7 @@ import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.math.BigInteger;
@@ -69,6 +70,13 @@ public class WirelessDataSensor extends SensorPartMachine{
     @Setter
     private boolean isInverted;
 
+
+    @Persisted
+    @DescSynced
+    @Getter
+    @Setter
+    private int signal;
+
     private LongInputWidget minValueInput;
     private LongInputWidget maxValueInput;
 
@@ -79,50 +87,81 @@ public class WirelessDataSensor extends SensorPartMachine{
         this.usePercent = true;
     }
 
-
-    public static void setOwner(Player player) {
-        playerUUID = player.getUUID();
-        var team = ((FTBOwner) MachineOwner.getOwner(playerUUID)).getTeam();
-        wirelessUUID = team != null ? team.getTeamId() : playerUUID;
-    }
-
     @Override
     public int getOutputSignal(@Nullable Direction side) {
-        Minecraft mc = Minecraft.getInstance();
-        var wirelessData = WirelessEnergySavedData.getOrCreate((ServerLevel) serverLevel);
-        var percentStorage = (wirelessData.getEnergyStored(wirelessUUID).multiply(BigInteger.valueOf(10000))
-                .divide(wirelessData.getEnergyCapacity(wirelessUUID)).intValue() / 100.0F);
-        if (side == getFrontFacing()) {
+        if (serverLevel == null && !getLevel().isClientSide()) {
+            serverLevel = getLevel();
+        }
+        //Get the UUID appended to 'us' (the machine)
+        if (wirelessUUID == null) {
+            var owner = this.getOwner();
+            if (owner == null) return 0;
+            var team = ((FTBOwner) MachineOwner.getOwner(owner.getPlayerUUID())).getTeam();
+            wirelessUUID = team != null ? team.getTeamId() : playerUUID;
+        }
+        if (side == getFrontFacing().getOpposite()) {
+            //Wireless Data collection
             var controllerPSS = getControllers().stream().filter(DimensionalEnergyCapacitor.class::isInstance)
                     .map(DimensionalEnergyCapacitor.class::cast)
                     .toList();
             if (controllerPSS.isEmpty()) {
-                return 0;
-                //Assert that we're always working with big int.
-            } else {
-               var controller = controllerPSS.get(0);
+                signal =  0;
+                return signal;
+            }
+            var wirelessData = WirelessEnergySavedData.getOrCreate((ServerLevel) serverLevel);
+            var percentStorage = (wirelessData.getEnergyStored(wirelessUUID).multiply(BigInteger.valueOf(10000))
+                    .divide(wirelessData.getEnergyCapacity(wirelessUUID)).intValue() / 100.0F);
+            var controller = controllerPSS.get(0);
                 //If the PSS has too much energy, send a signal
                if (maxValue <= percentStorage) {
-                   return isInverted() ? 0 : 15;
+                   return signal = isInverted() ? 0 : 15;
                }
                //If the PSS has too little energy, disable the signal.
                if (minValue >= percentStorage) {
-                   return isInverted() ? 15 : 0;
+                   return signal = isInverted() ? 15 : 0;
                }
             }
+        return signal;
+    }
 
+    @Override
+    public void updateSignal() {
+        super.updateSignal();
+    }
 
-
-
-
-        }
-
-
-
-        return super.getOutputSignal(side);
+    @Override
+    public boolean canConnectRedstone(@NotNull Direction side) {
+        if (getControllers().isEmpty()) return false;
+        return side == getFrontFacing();
     }
 
 
+    @Override
+    public Widget createUIWidget() {
+        WidgetGroup group = new WidgetGroup(0, 0, 176, 105);
+        group.addWidget(new LabelWidget(10, 5, "cover.advanced_energy_detector.label"));
+
+        group.addWidget(new TextBoxWidget(10, 55, 25,
+                List.of(LocalizationUtils.format("cover.advanced_energy_detector.min"))));
+
+        group.addWidget(new TextBoxWidget(10, 80, 25,
+                List.of(LocalizationUtils.format("cover.advanced_energy_detector.max"))));
+
+        minValueInput = new LongInputWidget(40, 50, 176 - 40 - 10, 20, this::getMinValue, this::setMinValue);
+        maxValueInput = new LongInputWidget(40, 75, 176 - 40 - 10, 20, this::getMaxValue, this::setMaxValue);
+        minValueInput.setMin(0L).setMax(100L);
+        maxValueInput.setMin(0L).setMax(100L);
+        group.addWidget(minValueInput);
+        group.addWidget(maxValueInput);
+
+        // Invert Redstone Output Toggle:
+        group.addWidget(new ToggleButtonWidget(
+                9, 20, 20, 20,
+                GuiTextures.INVERT_REDSTONE_BUTTON, this::isInverted, this::setInverted)
+                .isMultiLang()
+                .setTooltipText("cover.advanced_energy_detector.invert"));
+        return group;
+    }
 
 
 }

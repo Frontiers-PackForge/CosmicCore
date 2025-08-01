@@ -40,6 +40,6 @@ public class SensorPartMachine extends TieredPartMachine {
 
     @Override
     public boolean shouldOpenUI(Player player, InteractionHand hand, BlockHitResult hit) {
-        return false;
+        return true;
     }
 }
