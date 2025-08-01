@@ -2,6 +2,10 @@ package com.ghostipedia.cosmiccore;
 
 import com.ghostipedia.cosmiccore.common.data.CosmicItems;
 
+import com.gregtechceu.gtceu.GTCEu;
+import com.gregtechceu.gtceu.api.item.ComponentItem;
+import com.gregtechceu.gtceu.api.item.component.ICustomRenderer;
+import com.tterrag.registrate.util.nullness.NonNullConsumer;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.Item;
@@ -21,7 +25,9 @@ public class CosmicUtils {
     public static boolean hasTheOneRing(@Nullable Entity entity) {
         return hasCurio(entity, "ring", CosmicItems.THE_ONE_RING.asItem());
     }
-
+    public static <T extends ComponentItem> NonNullConsumer<T> attachRenderer(ICustomRenderer customRenderer) {
+        return !GTCEu.isClientSide() ? NonNullConsumer.noop() : (item) -> item.attachComponents(customRenderer);
+    }
     /**
      * Check if an entity has a specific item in a curio slot
      * 

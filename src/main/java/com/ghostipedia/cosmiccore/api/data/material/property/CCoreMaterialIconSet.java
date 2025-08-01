@@ -17,7 +17,7 @@ import lombok.Getter;
 import java.util.function.Supplier;
 
 @Getter
-public class CCoreMaterialIconSet extends MaterialIconSet {
+public class CCoreMaterialIconSet extends MaterialIconSet implements IRenderer {
 
     private final ICustomRenderer customRender;
 

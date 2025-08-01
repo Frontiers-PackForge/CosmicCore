@@ -1,8 +1,10 @@
 package com.ghostipedia.cosmiccore.common.data;
 
 import com.ghostipedia.cosmiccore.CosmicCore;
+import com.ghostipedia.cosmiccore.api.data.material.property.CCoreMaterialIconSet;
 import com.ghostipedia.cosmiccore.api.item.armor.*;
 import com.ghostipedia.cosmiccore.api.registries.CosmicRegistration;
+import com.ghostipedia.cosmiccore.client.renderer.item.HaloItemRenderer;
 import com.ghostipedia.cosmiccore.common.data.tag.item.CosmicItemTags;
 import com.ghostipedia.cosmiccore.common.item.armor.ChestSanguineWarptechSuite;
 import com.ghostipedia.cosmiccore.common.item.armor.HelmetSanguineWarptechSuite;
@@ -58,6 +60,7 @@ import wayoftime.bloodmagic.common.registration.impl.BloodOrbRegistryObject;
 
 import java.util.function.Function;
 
+import static com.ghostipedia.cosmiccore.CosmicUtils.attachRenderer;
 import static com.ghostipedia.cosmiccore.api.registries.CosmicRegistration.REGISTRATE;
 import static com.gregtechceu.gtceu.common.data.GTItems.attach;
 import static earth.terrarium.adastra.common.registry.ModItems.GLOBES;
@@ -786,25 +789,36 @@ public class CosmicItems {
             .item("eschaton_processor", ComponentItem::create)
             .lang("Eschaton Processor")
             .properties(p -> p.stacksTo(64))
-
+            .onRegister(attachRenderer(() -> HaloItemRenderer.create(6, 0xFFFFFFFF,
+                    new ResourceLocation(CosmicCore.MOD_ID, "block/iris/rnd/tentacle_halo"), true,
+                    false)))
             .defaultModel()
             .register();
     public static final ItemEntry<ComponentItem> ESCHATON_PROCESSOR_ASSEMBLY = REGISTRATE
             .item("eschaton_processor_assembly", ComponentItem::create)
             .lang("Eschaton Processor Assembly")
             .properties(p -> p.stacksTo(64))
+            .onRegister(attachRenderer(() -> HaloItemRenderer.create(6, 0xFFFFFFFF,
+                    new ResourceLocation(CosmicCore.MOD_ID, "block/iris/rnd/tentacle_halo"), true,
+                    false)))
             .defaultModel()
             .register();
     public static final ItemEntry<ComponentItem> ESCHATON_PROCESSOR_SUPERCOMPUTER = REGISTRATE
             .item("eschaton_processor_supercomputer", ComponentItem::create)
             .lang("Eschaton Processor Supercomputer")
             .properties(p -> p.stacksTo(64))
+            .onRegister(attachRenderer(() -> HaloItemRenderer.create(6, 0xFFFFFFFF,
+                    new ResourceLocation(CosmicCore.MOD_ID, "block/iris/rnd/tentacle_halo"), true,
+                    false)))
             .defaultModel()
             .register();
     public static final ItemEntry<ComponentItem> ESCHATON_PROCESSOR_MAINFRAME = REGISTRATE
             .item("eschaton_processor_mainframe", ComponentItem::create)
             .lang("Eschaton Processor Mainframe")
             .properties(p -> p.stacksTo(64))
+            .onRegister(attachRenderer(() -> HaloItemRenderer.create(6, 0xFFFFFFFF,
+                    new ResourceLocation(CosmicCore.MOD_ID, "block/iris/rnd/tentacle_halo"), true,
+                    false)))
             .onRegister(attach(new TooltipBehavior(lines -> {
                 lines.add(Component.literal(StringUtil
                         .rainbowDancing(LocalizationUtils.format("cosmiccore.circuit.lore.tier.max.0"))));
