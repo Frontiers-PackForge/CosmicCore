@@ -113,6 +113,8 @@ public class CosmicBlocks {
             CosmicCore.id("block/casings/solid/alternator_flux_coiling_copper"));
     public static final BlockEntry<Block> PLATED_AEROCLOUD = createCasingBlock("plated_aerocloud",
             CosmicCore.id("block/casings/solid/plated_aerocloud"));
+    public static final BlockEntry<Block> SELF_HEALING_PTHANTERUM = createCasingBlock("self_healing_pthanterum_casing",
+            CosmicCore.id("block/casings/solid/self_healing_pthanterum_casing"));
 
     public static final BlockEntry<MagnetBlock> MAGNET_HIGH_POWERED = createMagnetBlock(
             MagnetBlock.MagnetType.HIGH_POWERED);

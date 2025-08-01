@@ -9,6 +9,7 @@ import com.gregtechceu.gtceu.api.data.RotationState;
 import com.gregtechceu.gtceu.api.data.chemical.ChemicalHelper;
 import com.gregtechceu.gtceu.api.data.tag.TagPrefix;
 import com.gregtechceu.gtceu.api.machine.MultiblockMachineDefinition;
+import com.gregtechceu.gtceu.api.machine.multiblock.PartAbility;
 import com.gregtechceu.gtceu.api.machine.multiblock.WorkableElectricMultiblockMachine;
 import com.gregtechceu.gtceu.api.pattern.FactoryBlockPattern;
 import com.gregtechceu.gtceu.api.recipe.OverclockingLogic;
@@ -28,7 +29,7 @@ public class PlasmiteDistillery {
                     WorkableElectricMultiblockMachine::new)
             .langValue("§9Plasmite Distillery")
             .rotationState(RotationState.NON_Y_AXIS)
-            .recipeType(CosmicRecipeTypes.HEMOPHAGIC_TRANSFUSER)
+            .recipeType(CosmicRecipeTypes.PLASMITE_FORGE)
             .appearanceBlock(HIGHLY_FLEXIBLE_REINFORCED_TRINAVINE_CASING)
             .partAppearance((controller, part, side) -> HIGHLY_FLEXIBLE_REINFORCED_TRINAVINE_CASING.getDefaultState())
             .recipeModifiers(GTRecipeModifiers.PARALLEL_HATCH,
@@ -43,7 +44,10 @@ public class PlasmiteDistillery {
                     .where(' ', any())
                     .where('Q', controller(blocks(definition.getBlock())))
                     .where('A', blocks(HIGHLY_FLEXIBLE_REINFORCED_TRINAVINE_CASING.get())
-                            .or(autoAbilities()))
+                            .or(autoAbilities(CosmicRecipeTypes.PLASMITE_FORGE))
+                            .or(abilities(PartAbility.INPUT_ENERGY).setExactLimit(1))
+                            .or(abilities(PartAbility.PARALLEL_HATCH).setExactLimit(1))
+                            .or(abilities(PartAbility.MAINTENANCE).setExactLimit(1)))
                     .where('B', blocks(CASING_TUNGSTENSTEEL_PIPE.get()))
                     .where('C', blocks(CASING_GRATE.get()))
                     .where('F', blocks(ZBLAN_REINFORCED_GLASS.get()))

@@ -125,6 +125,7 @@ public class CosmicLangHandler extends LangHandler {
         provider.add("tagprefix.heavy_beam", "Heavy %s Beam");
         provider.add("tagprefix.modular_shelling", "%s Modular Shelling");
         provider.add("tagprefix.plasmites", "%s Plasmites");
+        provider.add("tagprefix.wire_spool", "%s Wire Spool");
 
         provider.add("item.cosmiccore.debug.structure_writer.structural_scale", "Structure size: X:%s Y:%s Z:%s");
         provider.add("item.cosmiccore.debug.structure_writer.export_order",
@@ -245,6 +246,12 @@ public class CosmicLangHandler extends LangHandler {
         provider.add("coscore.pattern.tooltip.div", "Divides contents by §b%d§f");
         provider.add("coscore.pattern.tooltip.multiply", "Multiplies contents by §c%d§f");
 
+        // Sanguine Warptech
+        provider.add("cosmiccore.armor.sanguinewarptech.hud.LP", "§4Life Force: §c%s");
+        provider.add("cosmiccore.armor.sanguinewarptech.hud.shieldstate", "Sanguine Shield: %s");
+        provider.add("cosmiccore.armor.sanguinewarptech.message.death_defiance",
+                "Your sanguine armor protected you from death!");
+
         // Dimensional Energy Storage
         provider.add("cosmic.multiblock.capacitor.info.tittle.global", "Global Network Info");
         provider.add("cosmic.multiblock.capacitor.info.tittle.local", "Local Buffer Info ");
@@ -284,6 +291,8 @@ public class CosmicLangHandler extends LangHandler {
         provider.add("cosmic.gui.wireless.energy.no.capacitor", "No Formed Capacitor");
         provider.add("cosmic.gui.wireless.energy.capacitor", "  §bCapacitor Location:§b ");
 
+        replace(provider, "item.cosmiccore.infinite_spray_can", "§lInfinite Spray Can");
+
         // AE2 EU Display Mixin
         provider.add("gui.ae2.units.eu", "EU");
 
@@ -304,5 +313,14 @@ public class CosmicLangHandler extends LangHandler {
 
         provider.add("debug.owner.uuid", "§aOwner UUID:§a %s");
         provider.add("debug.team.uuid", "§aTeam UUID:§a %s");
+
+        provider.add("cosmiccore.item.spraycan.tooltip.lclick", "§4Left Click: §8Cycle color");
+        provider.add("cosmiccore.item.spraycan.tooltip.lclick_sneak", "§4Left Click + Sneak: §8Cycle color");
+        provider.add("cosmiccore.item.spraycan.tooltip.rclick", "§4Right Click: §8Paint block");
+        provider.add("cosmiccore.item.spraycan.tooltip.rclick_sneak", "§5Right Click + Sneak: §8Open UI");
+        provider.add("cosmiccore.item.spraycan.tooltip.rclick_offhand", "§5Right Click in Offhand: §8Place & paint");
+        provider.add("cosmiccore.item.spraycan.tooltip.locked", "Spraycan is locked");
+        provider.add("cosmiccore.item.spraycan.tooltip.current_color", "Current Color: %s");
+        provider.add("cosmiccore.item.spraycan.tooltip.solvent_mode", "Spraycan in SOLVENT mode");
     }
 }

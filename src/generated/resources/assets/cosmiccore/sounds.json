@@ -26,6 +26,15 @@
     ],
     "subtitle": "cosmiccore.subtitle.gas_succ"
   },
+  "heavy_assembler": {
+    "sounds": [
+      {
+        "type": "file",
+        "name": "cosmiccore:heavy_assembler"
+      }
+    ],
+    "subtitle": "cosmiccore.subtitle.heavy_assembler"
+  },
   "mining_machine": {
     "sounds": [
       {

@@ -27,11 +27,12 @@ public class HeavyAssembler {
                     WorkableElectricMultiblockMachine::new)
             .langValue("§9Heavy Assembler")
             .rotationState(RotationState.NON_Y_AXIS)
-            .recipeType(CosmicRecipeTypes.HEMOPHAGIC_TRANSFUSER)
+            .recipeType(CosmicRecipeTypes.HEAVY_ASSEMBLER)
             .appearanceBlock(MULTIPURPOSE_INTERSTELLAR_GRADE_CASING)
             .partAppearance((controller, part, side) -> MULTIPURPOSE_INTERSTELLAR_GRADE_CASING.getDefaultState())
             .recipeModifiers(GTRecipeModifiers.PARALLEL_HATCH,
-                    GTRecipeModifiers.ELECTRIC_OVERCLOCK.apply(OverclockingLogic.NON_PERFECT_OVERCLOCK_SUBTICK))
+                    GTRecipeModifiers.ELECTRIC_OVERCLOCK.apply(OverclockingLogic.NON_PERFECT_OVERCLOCK_SUBTICK),
+                    GTRecipeModifiers.BATCH_MODE)
             // spotless:off
             .pattern(definition -> FactoryBlockPattern.start()
                     .aisle(" BB  BBBBBBB", " BBBBBBBBBBB", "BB      BBBB", "B       BBBB", "B       BBB ", "B       BB  ", "BBBBBBBBBB  ")
@@ -59,10 +60,10 @@ public class HeavyAssembler {
                     .where('Q', controller(blocks(definition.getBlock())))
                     .where('A', blocks(MULTIPURPOSE_INTERSTELLAR_GRADE_CASING.get())
                             .or(autoAbilities())
-                            .or(autoAbilities(CosmicRecipeTypes.VOID_MINER))
+                            .or(autoAbilities(CosmicRecipeTypes.HEAVY_ASSEMBLER))
                             .or(abilities(PartAbility.IMPORT_FLUIDS,PartAbility.IMPORT_FLUIDS_4X,PartAbility.IMPORT_FLUIDS_9X))
-                            .or(abilities(PartAbility.EXPORT_ITEMS))
                             .or(abilities(PartAbility.INPUT_ENERGY).setExactLimit(1))
+                            .or(abilities(PartAbility.PARALLEL_HATCH).setExactLimit(1))
                             .or(abilities(PartAbility.MAINTENANCE).setExactLimit(1))) //Part IO go here
                     .where('B', blocks(MULTIPURPOSE_INTERSTELLAR_GRADE_CASING.get()))
                     .where('C', blocks(GCYMBlocks.CASING_LARGE_SCALE_ASSEMBLING.get()))

@@ -5,6 +5,7 @@ import com.ghostipedia.cosmiccore.common.machine.multiblock.electric.hpca.HPCAMo
 import com.ghostipedia.cosmiccore.common.machine.multiblock.part.HPCAIndicatorPartMachine;
 
 import com.gregtechceu.gtceu.api.machine.feature.multiblock.IMultiController;
+import com.gregtechceu.gtceu.api.pattern.util.RelativeDirection;
 import com.gregtechceu.gtceu.client.renderer.machine.DynamicRender;
 import com.gregtechceu.gtceu.client.renderer.machine.DynamicRenderType;
 import com.gregtechceu.gtceu.client.util.ModelUtils;
@@ -27,7 +28,6 @@ import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.client.model.data.ModelData;
 
-import appeng.api.config.RelativeDirection;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.serialization.Codec;
 import org.jetbrains.annotations.NotNull;
