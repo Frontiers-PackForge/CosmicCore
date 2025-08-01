@@ -3,20 +3,24 @@ package com.ghostipedia.cosmiccore.common.machine.multiblock.multi;
 import com.ghostipedia.cosmiccore.CosmicCore;
 import com.ghostipedia.cosmiccore.api.machine.multiblock.DroneStationMachine;
 
+import com.gregtechceu.gtceu.GTCEu;
 import com.gregtechceu.gtceu.api.data.RotationState;
 import com.gregtechceu.gtceu.api.machine.MultiblockMachineDefinition;
 import com.gregtechceu.gtceu.api.machine.multiblock.PartAbility;
 import com.gregtechceu.gtceu.api.pattern.FactoryBlockPattern;
 import com.gregtechceu.gtceu.api.pattern.Predicates;
 import com.gregtechceu.gtceu.api.recipe.OverclockingLogic;
+import com.gregtechceu.gtceu.common.data.GTMaterials;
 import com.gregtechceu.gtceu.common.data.GTRecipeModifiers;
 import com.gregtechceu.gtceu.common.data.GTRecipeTypes;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraftforge.common.Tags;
 
 import static com.ghostipedia.cosmiccore.api.registries.CosmicRegistration.REGISTRATE;
+import static com.ghostipedia.cosmiccore.common.data.CosmicBlocks.MULTIPURPOSE_INTERSTELLAR_GRADE_CASING;
 import static com.ghostipedia.cosmiccore.common.data.CosmicBlocks.STEEL_PLATED_BRONZE;
-import static com.gregtechceu.gtceu.api.pattern.Predicates.abilities;
-import static com.gregtechceu.gtceu.api.pattern.Predicates.blocks;
-import static com.gregtechceu.gtceu.api.pattern.Predicates.controller;
+import static com.gregtechceu.gtceu.api.pattern.Predicates.*;
+import static com.gregtechceu.gtceu.common.data.GTBlocks.*;
 
 public class DroneStation {
 
@@ -26,21 +30,33 @@ public class DroneStation {
             .langValue("Drone Station")
             .rotationState(RotationState.NON_Y_AXIS)
             .recipeType(GTRecipeTypes.DUMMY_RECIPES)
-            .partAppearance((controller, part, side) -> STEEL_PLATED_BRONZE.getDefaultState())
+            .appearanceBlock(CASING_STAINLESS_CLEAN)
+            .partAppearance((controller, part, side) -> CASING_STAINLESS_CLEAN.getDefaultState())
             .recipeModifiers(GTRecipeModifiers.ELECTRIC_OVERCLOCK.apply(OverclockingLogic.PERFECT_OVERCLOCK_SUBTICK))
             .pattern(definition -> FactoryBlockPattern.start()
-                    .aisle("AAA", "AAA", "AAA")
-                    .aisle("AAA", "A A", "AAA")
-                    .aisle("AAA", "AQA", "AAA")
+                    .aisle(" AAAAA     ", "           ", "           ", "           ", "           ", "           ", "           ", "           ", "           ", "           ", "           ")
+                    .aisle("AAAAAAA    ", "B     B    ", "B     B    ", "B  C  B    ", "B CCC B    ", "BCCCCCB    ", "BCCDCCB    ", "BCCCCCB    ", "B CCC B  F ", "B     B F  ", "           ")
+                    .aisle("AAAAAAAAAA ", "       FFF ", "  CCC  FFF ", "  CEC  FFF ", " CEEEC FFF ", " CEEEC FFF ", " CEEEC     ", " CEEEC   FF", " CEEEC  F  ", "  CCC  F   ", "       F   ")
+                    .aisle("AAAAAAAAAA ", "       F F ", "  CCC  F F ", " CEEEC F F ", " CEEEC F F ", " CEEEC FFF ", " DEEED  B  ", " CEEEC  BFF", " CEEEC  H  ", "  CCC  F H ", "       F   ")
+                    .aisle("AAAAAAAAAA ", "       FFF ", "  CCC  FQF ", "  CEC  FFF ", " CEEEC FFF ", " CEEEC FFF ", " CEEEC     ", " CEEEC   FF", " CEEEC  F  ", "  CCC  F   ", "       F   ")
+                    .aisle("AAAAAAA    ", "B     B    ", "B     B    ", "B  C  B    ", "B CCC B    ", "BCCCCCB    ", "BCCDCCB    ", "BCCCCCB    ", "B CCC B  F ", "B     B F  ", "           ")
+                    .aisle(" AAAAA     ", "           ", "           ", "           ", "           ", "           ", "           ", "           ", "           ", "           ", "           ")
+
                     .where('Q', controller(blocks(definition.getBlock())))
-                    .where('A', blocks(STEEL_PLATED_BRONZE.get())
+                    .where('A', blocks(CASING_STEEL_SOLID.get()))
+                    .where('B', frames(GTMaterials.StainlessSteel))
+                    .where('C', blocks(CASING_TITANIUM_STABLE.get()))
+                    .where('D', blocks(CASING_GRATE.get()))
+                    .where('E', blocks(Blocks.HONEYCOMB_BLOCK))
+                    .where('F', blocks(CASING_STAINLESS_CLEAN.get())
                             .or(Predicates.abilities(PartAbility.INPUT_ENERGY).setMinGlobalLimited(1)
                                     .setPreviewCount(1))
                             .or(Predicates.abilities(PartAbility.IMPORT_ITEMS).setMinGlobalLimited(1)
                                     .setPreviewCount(1)))
+                    .where('H', blocks(CASING_TITANIUM_PIPE.get()))
                     .build())
-            .workableCasingModel(CosmicCore.id("block/casings/solid/tritanium_lined_heavy_bolted_neutronium_casing"),
-                    CosmicCore.id("block/casings/solid/tritanium_lined_heavy_bolted_neutronium_casing"))
+            .workableCasingModel(GTCEu.id("block/casings/solid/machine_casing_clean_stainless_steel"),
+                    GTCEu.id("block/multiblock/power_substation"))
             .register();
 
     public static void init() {}
