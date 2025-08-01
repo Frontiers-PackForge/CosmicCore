@@ -3182,6 +3182,7 @@ public class CosmicMachines {
             .multiblock("biovat", WorkableElectricMultiblockMachine::new)
             .rotationState(RotationState.NON_Y_AXIS)
             .recipeType(CosmicRecipeTypes.BIOVAT)
+            .recipeModifier(CosmicRecipeModifiers::sterileHatch)
             .appearanceBlock(REINFORCED_NAQUADRIA_CASING)
             .pattern(definition -> FactoryBlockPattern.start()
                     .aisle("AAAAA", "CCCCC", "CCCCC", "AAAAA")
@@ -3194,6 +3195,7 @@ public class CosmicMachines {
                     .where('C', blocks(ZBLAN_REINFORCED_GLASS.get()))
                     .where('D', blocks(RADIOACTIVE_FILTER_CASING.get()))
                     .where('A', blocks(REINFORCED_NAQUADRIA_CASING.get())
+                            .or(Predicates.abilities(STERILIZE_HATCH))
                             .or(Predicates.abilities(PartAbility.EXPORT_ITEMS))
                             .or(Predicates.abilities(PartAbility.INPUT_ENERGY).setExactLimit(1))
                             .or(Predicates.abilities(PartAbility.IMPORT_FLUIDS_1X, PartAbility.IMPORT_FLUIDS_4X,
@@ -3520,6 +3522,13 @@ public class CosmicMachines {
             .abilities(PartAbility.DATA_ACCESS)
             .tier(UEV)
             .overlayTieredHullModel("wireless_data_hatch")
+            .register();
+
+    public static final MachineDefinition STERILIZATION_HATCH = REGISTRATE
+            .machine("sterilization_hatch", (holder) -> new SterilizationHatchPartMachine(holder, ZPM, IO.IN))
+            .langValue("Sterilzation Hatch")
+            .overlayTieredHullModel("wireless_data_hatch")
+            .abilities(STERILIZE_HATCH)
             .register();
 
     public static void init() {
