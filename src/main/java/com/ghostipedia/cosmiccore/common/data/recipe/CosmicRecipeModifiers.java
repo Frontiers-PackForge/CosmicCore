@@ -119,15 +119,15 @@ public class CosmicRecipeModifiers {
             var sterileHatch = parts.stream()
                     .filter(part -> part instanceof SterilizationHatchPartMachine)
                     .findAny();
-            if(sterileHatch.isPresent()){
-                var inputs = recipe.tickInputs.getOrDefault(FluidRecipeCapability.CAP, new ArrayList<>());
-                var fluidStack = GTMaterials.Chlorine.getFluid(PLASMA, 20);
+            if (sterileHatch.isPresent()) {
+                var copy = recipe.copy();
+                var inputs = copy.tickInputs.getOrDefault(FluidRecipeCapability.CAP, new ArrayList<>());
+                var fluidStack = GTMaterials.Chlorine.getFluid(PLASMA, 5);
                 inputs.add(new Content(FluidIngredient.of(
-                        TagUtil.createFluidTag(BuiltInRegistries.FLUID.getKey(fluidStack .getFluid()).getPath()),
-                        fluidStack .getAmount(), fluidStack .getTag()) , 10000, 10000,  0));
-                recipe.tickInputs.put(FluidRecipeCapability.CAP, inputs);
-                return  ModifierFunction.IDENTITY;
-
+                        TagUtil.createFluidTag(BuiltInRegistries.FLUID.getKey(fluidStack.getFluid()).getPath()),
+                        fluidStack.getAmount(), fluidStack.getTag()) , 10000, 10000,  0));
+                copy.tickInputs.put(FluidRecipeCapability.CAP, inputs);
+                return (c) -> copy;
             }
             return ModifierFunction.IDENTITY;
         }

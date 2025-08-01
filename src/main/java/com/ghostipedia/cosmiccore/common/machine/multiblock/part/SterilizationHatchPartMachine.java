@@ -1,9 +1,11 @@
 package com.ghostipedia.cosmiccore.common.machine.multiblock.part;
 
+import com.gregtechceu.gtceu.api.capability.ICleanroomReceiver;
 import com.gregtechceu.gtceu.api.capability.recipe.FluidRecipeCapability;
 import com.gregtechceu.gtceu.api.capability.recipe.IO;
 import com.gregtechceu.gtceu.api.capability.recipe.IRecipeHandler;
 import com.gregtechceu.gtceu.api.capability.recipe.RecipeCapability;
+import com.gregtechceu.gtceu.api.fluids.store.FluidStorageKeys;
 import com.gregtechceu.gtceu.api.gui.GuiTextures;
 import com.gregtechceu.gtceu.api.gui.UITemplate;
 import com.gregtechceu.gtceu.api.gui.widget.TankWidget;
@@ -12,14 +14,19 @@ import com.gregtechceu.gtceu.api.machine.feature.ICleanroomProvider;
 import com.gregtechceu.gtceu.api.machine.feature.IUIMachine;
 import com.gregtechceu.gtceu.api.machine.feature.multiblock.IDisplayUIMachine;
 import com.gregtechceu.gtceu.api.machine.feature.multiblock.IMaintenanceMachine;
+import com.gregtechceu.gtceu.api.machine.feature.multiblock.IMultiController;
 import com.gregtechceu.gtceu.api.machine.multiblock.CleanroomType;
 import com.gregtechceu.gtceu.api.machine.multiblock.part.TieredIOPartMachine;
 import com.gregtechceu.gtceu.api.machine.trait.NotifiableFluidTank;
 import com.gregtechceu.gtceu.api.recipe.GTRecipe;
 import com.gregtechceu.gtceu.api.recipe.ingredient.FluidIngredient;
+import com.gregtechceu.gtceu.common.data.GTMaterials;
 import com.lowdragmc.lowdraglib.gui.modular.ModularUI;
+import com.lowdragmc.lowdraglib.gui.widget.LabelWidget;
 import com.lowdragmc.lowdraglib.gui.widget.WidgetGroup;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.material.Fluids;
+import org.jetbrains.annotations.MustBeInvokedByOverriders;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
@@ -32,7 +39,9 @@ public class SterilizationHatchPartMachine extends TieredIOPartMachine implement
 
     public SterilizationHatchPartMachine(IMachineBlockEntity holder, int tier, IO io) {
         super(holder, tier, io);
-        fluidTank = new NotifiableFluidTank(this, 1, 20000, IO.IN, IO.IN);
+        fluidTank = new NotifiableFluidTank(this, 1, 4000, IO.IN, IO.IN);
+
+        fluidTank.setFilter(fluid -> fluid.getFluid() == GTMaterials.Chlorine.getFluid(FluidStorageKeys.PLASMA));
     }
     
     @Override
@@ -48,6 +57,22 @@ public class SterilizationHatchPartMachine extends TieredIOPartMachine implement
         return true;
     }
 
+    @Override
+    public void addedToController(IMultiController controller) {
+        super.addedToController(controller);
+        if(controller instanceof ICleanroomReceiver receiver) {
+            receiver.setCleanroom(this);
+        }
+    }
+
+    @MustBeInvokedByOverriders
+    @Override
+    public void removedFromController(IMultiController controller) {
+        super.removedFromController(controller);
+        if(controller instanceof ICleanroomReceiver receiver) {
+            receiver.setCleanroom(null);
+        }
+    }
 
     @Override
     public List<FluidIngredient> handleRecipeInner(IO io, GTRecipe recipe, List left, boolean simulate) {
@@ -69,14 +94,14 @@ public class SterilizationHatchPartMachine extends TieredIOPartMachine implement
         return  FluidRecipeCapability.CAP;
     }
 
-    //gui
-
+    // GUI
     @Override
     public ModularUI createUI(Player entityPlayer) {
         var group = new WidgetGroup(0,0,176,164);
-        group.addWidget(new TankWidget(this.fluidTank, 176/2 - 9, 164/2 - 9,true,true));
-        return new ModularUI(176,164,this,entityPlayer)
-
+        group.addWidget(new LabelWidget(5, 5, "cosmiccore.gui.sterile_hatch"));
+        group.addWidget(new TankWidget(this.fluidTank, 79, 30,true,true)
+                .setBackground(GuiTextures.FLUID_SLOT));
+        return new ModularUI(176,164,this, entityPlayer)
                 .background(GuiTextures.BACKGROUND)
                 .widget(group)
                 .widget(UITemplate.bindPlayerInventory(entityPlayer.getInventory(),GuiTextures.SLOT,7,84,true));
