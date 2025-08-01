@@ -1,5 +1,6 @@
 package com.ghostipedia.cosmiccore.gtbridge;
 
+import com.ghostipedia.cosmiccore.api.CosmicGuiTextures;
 import com.ghostipedia.cosmiccore.api.capability.recipe.SoulRecipeCapability;
 import com.ghostipedia.cosmiccore.common.data.CosmicSounds;
 
@@ -18,6 +19,7 @@ import com.lowdragmc.lowdraglib.utils.LocalizationUtils;
 import net.minecraft.client.resources.language.I18n;
 import net.minecraft.resources.ResourceLocation;
 
+import static com.ghostipedia.cosmiccore.common.data.CosmicSounds.*;
 import static com.gregtechceu.gtceu.common.data.GTRecipeTypes.*;
 import static com.lowdragmc.lowdraglib.gui.texture.ProgressTexture.FillDirection.LEFT_TO_RIGHT;
 
@@ -30,11 +32,47 @@ public class CosmicRecipeTypes {
             .setMaxIOSize(1, 1, 0, 0)
             .setProgressBar(GuiTextures.PROGRESS_BAR_ARROW, ProgressTexture.FillDirection.LEFT_TO_RIGHT);
 
+    public static final GTRecipeType VOID_MINER = GTRecipeTypes
+            .register("void_miner", GTRecipeTypes.MULTIBLOCK)
+            .setMaxIOSize(1, 27, 2, 0)
+            .setSound(MINING_MACHINE)
+            .setProgressBar(GuiTextures.PROGRESS_BAR_ARROW, ProgressTexture.FillDirection.LEFT_TO_RIGHT);
+
+    public static final GTRecipeType HEAVY_ASSEMBLER = GTRecipeTypes
+            .register("heavy_assembler", GTRecipeTypes.MULTIBLOCK)
+            .setMaxIOSize(12, 3, 6, 0)
+            .setSound(HEAVY_ASSEM)
+            .setProgressBar(CosmicGuiTextures.PROGRESS_BAR_HEAVY, ProgressTexture.FillDirection.UP_TO_DOWN);
+
+    public static final GTRecipeType PLASMITE_FORGE = GTRecipeTypes
+            .register("plasmite_forge", GTRecipeTypes.MULTIBLOCK)
+            .setMaxIOSize(3, 3, 3, 3)
+            .setSound(HEAVY_ASSEM)
+            .setProgressBar(CosmicGuiTextures.PROGRESS_BAR_HEAVY, ProgressTexture.FillDirection.UP_TO_DOWN);
+
+    public static final GTRecipeType PRISMA_FOUNDRY = GTRecipeTypes
+            .register("prisma_foundry", GTRecipeTypes.MULTIBLOCK)
+            .setMaxIOSize(3, 6, 3, 0)
+            .setSound(MINING_MACHINE)
+            .setProgressBar(GuiTextures.PROGRESS_BAR_ARROW, ProgressTexture.FillDirection.LEFT_TO_RIGHT);
+
+    public static final GTRecipeType ATMOSPHERE_SIPHON = GTRecipeTypes
+            .register("atmo_siphon", GTRecipeTypes.MULTIBLOCK)
+            .setMaxIOSize(3, 0, 4, 16)
+            .setSound(GAS_SUCC)
+            .setProgressBar(GuiTextures.PROGRESS_BAR_ARROW, ProgressTexture.FillDirection.LEFT_TO_RIGHT);
+
+    public static final GTRecipeType MANA_DIGITIZER = GTRecipeTypes
+            .register("mana_digitizer", GTRecipeTypes.MULTIBLOCK)
+            .setMaxIOSize(1, 0, 2, 2)
+            .setSound(GAS_SUCC)
+            .setProgressBar(GuiTextures.PROGRESS_BAR_ARROW, ProgressTexture.FillDirection.LEFT_TO_RIGHT);
     public static final GTRecipeType GROVE_RECIPES = GTRecipeTypes.register("drygmy_grove", GTRecipeTypes.MULTIBLOCK)
             .setMaxSize(IO.IN, SoulRecipeCapability.CAP, 1)
             .setMaxSize(IO.OUT, SoulRecipeCapability.CAP, 1)
             .setMaxIOSize(2, 9, 1, 3)
             .setProgressBar(GuiTextures.PROGRESS_BAR_ARROW, ProgressTexture.FillDirection.LEFT_TO_RIGHT);
+
     public final static GTRecipeType INDUSTRIAL_PRIMITIVE_BLAST_FURNACE_RECIPES = register(
             "industrial_primitive_blast_furnace", MULTIBLOCK)
             .setMaxIOSize(3, 3, 1, 0)

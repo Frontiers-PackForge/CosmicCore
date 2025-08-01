@@ -46,11 +46,13 @@ newThinAir = "4848005"
 puzzlesLib = "4924184"
 smartBrainLib = "5654964"
 modernFix = "6025611"
+botania = "6366547"
 
 malum = "1.20.1-1.6.7.1"
 lodestone = "1.20.1-1.6.4.1.256"
 
 [libraries]
+
 
 ldlib                     = { module = "com.lowdragmc.ldlib:ldlib-forge-1.20.1", version.ref = "ldlib" }
 gtceu                     = { module = "com.gregtechceu.gtceu:gtceu-1.20.1", version.ref = "gtceu" }
@@ -107,7 +109,7 @@ newThinAir                = { module = "curse.maven:new-thin-air-878379", versio
 puzzlesLib                = { module = "curse.maven:puzzles-lib-495476", version.ref = "puzzlesLib" }
 smartBrainLib             = { module = "curse.maven:smartbrainlib-661293", version.ref = "smartBrainLib" }
 modernFix                 = { module = "curse.maven:modernfix-790626", version.ref = "modernFix" }
-
+botania                     = { module = "curse.maven:botania-225643", version.ref = "botania" }
 
 [bundles]
 jei = ["jei-common-api", "jei-forge-api", "jei-forge-impl"]

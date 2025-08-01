@@ -52,6 +52,7 @@ public class CosmicMaterials {
     public static Material Neutronite;
     public static Material Vitrius;
     public static Material SolSteel;
+    public static Material StarMetal;
 
     public static void register() {
         Prisma = new Material.Builder(CosmicCore.id("prisma"))
@@ -117,6 +118,19 @@ public class CosmicMaterials {
                 .cableProperties(GTValues.V[8], 4, 1)
                 .fluidPipeProperties(65000, 9500, true, true, true, true)
                 .blastTemp(3600, BlastProperty.GasTier.HIGH, GTValues.VA[GTValues.EV], 1200)
+                .buildAndRegister();
+
+        StarMetal = new Material.Builder(CosmicCore.id("starmetal"))
+                .ingot()
+                .liquid(new FluidBuilder().temperature(9800))
+                .formula("✬")
+                .iconSet(CCoreMaterialIconSet.STARMETALICO)
+                .flags(GENERATE_ROUND, GENERATE_GEAR, GENERATE_SMALL_GEAR, GENERATE_RING, GENERATE_FRAME,
+                        GENERATE_SPRING, GENERATE_SPRING_SMALL, GENERATE_FINE_WIRE)
+                .components(Prisma, 1, TungstenSteel, 1)
+                .cableProperties(GTValues.V[8], 4, 1)
+                .fluidPipeProperties(65000, 9500, true, true, true, false)
+                .blastTemp(8400, BlastProperty.GasTier.HIGHEST, GTValues.VA[GTValues.EV], 1200)
                 .buildAndRegister();
 
         ResonantVirtueMeld = new Material.Builder(CosmicCore.id("resonant_virtue_meld"))

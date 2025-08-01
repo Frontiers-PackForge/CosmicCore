@@ -20,7 +20,7 @@
       "x": 90
     },
     "facing=up,upwards_facing=east": {
-      "gtceu:z": 270,
+      "gtceu:z": 90,
       "model": "cosmiccore:block/machine/star_ballast",
       "x": 270
     },
@@ -34,7 +34,7 @@
       "x": 270
     },
     "facing=up,upwards_facing=west": {
-      "gtceu:z": 90,
+      "gtceu:z": 270,
       "model": "cosmiccore:block/machine/star_ballast",
       "x": 270
     }

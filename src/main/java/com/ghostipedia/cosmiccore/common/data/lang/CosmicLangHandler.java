@@ -125,6 +125,7 @@ public class CosmicLangHandler extends LangHandler {
         provider.add("tagprefix.heavy_beam", "Heavy %s Beam");
         provider.add("tagprefix.modular_shelling", "%s Modular Shelling");
         provider.add("tagprefix.plasmites", "%s Plasmites");
+        provider.add("tagprefix.wire_spool", "%s Wire Spool");
 
         provider.add("item.cosmiccore.debug.structure_writer.structural_scale", "Structure size: X:%s Y:%s Z:%s");
         provider.add("item.cosmiccore.debug.structure_writer.export_order",
@@ -246,7 +247,7 @@ public class CosmicLangHandler extends LangHandler {
         provider.add("coscore.pattern.tooltip.multiply", "Multiplies contents by §c%d§f");
 
         // Sanguine Warptech
-        provider.add("cosmiccore.armor.sanguinewarptech.hud.LP", "Current LP: %s");
+        provider.add("cosmiccore.armor.sanguinewarptech.hud.LP", "§4Life Force: §c%s");
         provider.add("cosmiccore.armor.sanguinewarptech.hud.shieldstate", "Sanguine Shield: %s");
         provider.add("cosmiccore.armor.sanguinewarptech.message.death_defiance",
                 "Your sanguine armor protected you from death!");
