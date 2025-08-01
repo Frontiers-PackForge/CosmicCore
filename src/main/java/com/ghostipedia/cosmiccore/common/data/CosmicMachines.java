@@ -19,6 +19,8 @@ import com.ghostipedia.cosmiccore.common.machine.multiblock.electric.hpca.HPCAMa
 import com.ghostipedia.cosmiccore.common.machine.multiblock.multi.WirelessDataBankMachine;
 import com.ghostipedia.cosmiccore.common.machine.multiblock.part.*;
 import com.ghostipedia.cosmiccore.common.machine.multiblock.steam.WeakSteamParallelMultiBlockMachine;
+import com.ghostipedia.cosmiccore.common.machine.part.SensorPartMachine;
+import com.ghostipedia.cosmiccore.common.machine.part.WirelessDataSensor;
 import com.ghostipedia.cosmiccore.gtbridge.CosmicRecipeTypes;
 
 import com.gregtechceu.gtceu.GTCEu;
@@ -3327,6 +3329,17 @@ public class CosmicMachines {
                     }))
             .register();
 
+    public static final MachineDefinition SENSOR_HATCH = REGISTRATE.machine("sensor_hatch", WirelessDataSensor::new)
+            .langValue("Sensor Hatch")
+            .rotationState(RotationState.ALL)
+            .abilities(CosmicPartAbility.PSS_SENSORS)
+            .modelProperty(RecipeLogic.STATUS_PROPERTY, RecipeLogic.Status.IDLE)
+            .model(createWorkableTieredHullMachineModel(GTCEu.id("block/machines/object_holder"))
+                    .andThen((ctx, prov, model) -> {
+                        model.addReplaceableTextures("bottom", "top", "side");
+                    }))
+            .register();
+
     public static final MachineDefinition CREATIVE_HEAT = REGISTRATE
             .machine("creative_thermal", CreativeThermiaContainerMachine::new)
             .rotationState(RotationState.NONE)
@@ -3376,6 +3389,7 @@ public class CosmicMachines {
                     .where('X',
                             blocks(CASING_PALLADIUM_SUBSTATION.get())
                                     .setMinGlobalLimited(DimensionalEnergyCapacitor.MIN_CASINGS)
+                                    .or(abilities(PSS_SENSORS))
                                     .or(autoAbilities(true, false, false))
                                     .or(abilities(PartAbility.INPUT_ENERGY, PartAbility.SUBSTATION_INPUT_ENERGY,
                                             PartAbility.INPUT_LASER))
@@ -3502,8 +3516,7 @@ public class CosmicMachines {
                     .aisle("AAA", "AAA", "AAA")
                     .where("C", controller(blocks(definition.getBlock())))
                     .where("A", blocks(CASING_PALLADIUM_SUBSTATION.get())
-                            .or(abilities(PartAbility.INPUT_LASER, PartAbility.INPUT_ENERGY, PartAbility.OUTPUT_ENERGY,
-                                    PartAbility.OUTPUT_LASER, PartAbility.SUBSTATION_INPUT_ENERGY,
+                            .or(abilities(PartAbility.INPUT_ENERGY, PartAbility.OUTPUT_ENERGY, PartAbility.SUBSTATION_INPUT_ENERGY,
                                     PartAbility.SUBSTATION_OUTPUT_ENERGY)
                                     .or(abilities(PartAbility.MAINTENANCE).setExactLimit(1))))
                     .where("D", Predicates.powerSubstationBatteries())
