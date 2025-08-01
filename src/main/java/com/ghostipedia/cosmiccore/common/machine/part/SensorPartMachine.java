@@ -4,14 +4,15 @@ import com.gregtechceu.gtceu.api.machine.ConditionalSubscriptionHandler;
 import com.gregtechceu.gtceu.api.machine.IMachineBlockEntity;
 import com.gregtechceu.gtceu.api.machine.feature.multiblock.IMultiController;
 import com.gregtechceu.gtceu.api.machine.multiblock.part.TieredPartMachine;
+
 import net.minecraft.core.Direction;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.phys.BlockHitResult;
+
 import org.jetbrains.annotations.NotNull;
 
 public class SensorPartMachine extends TieredPartMachine {
-
 
     private final ConditionalSubscriptionHandler signalUpdateHandler;
 
@@ -19,7 +20,6 @@ public class SensorPartMachine extends TieredPartMachine {
         super(holder, tier);
         this.signalUpdateHandler = new ConditionalSubscriptionHandler(this, this::updateSignal, () -> true);
     }
-
 
     @Override
     public boolean canConnectRedstone(@NotNull Direction side) {

@@ -19,7 +19,6 @@ import com.ghostipedia.cosmiccore.common.machine.multiblock.electric.hpca.HPCAMa
 import com.ghostipedia.cosmiccore.common.machine.multiblock.multi.WirelessDataBankMachine;
 import com.ghostipedia.cosmiccore.common.machine.multiblock.part.*;
 import com.ghostipedia.cosmiccore.common.machine.multiblock.steam.WeakSteamParallelMultiBlockMachine;
-import com.ghostipedia.cosmiccore.common.machine.part.SensorPartMachine;
 import com.ghostipedia.cosmiccore.common.machine.part.WirelessDataSensor;
 import com.ghostipedia.cosmiccore.gtbridge.CosmicRecipeTypes;
 
@@ -3516,7 +3515,8 @@ public class CosmicMachines {
                     .aisle("AAA", "AAA", "AAA")
                     .where("C", controller(blocks(definition.getBlock())))
                     .where("A", blocks(CASING_PALLADIUM_SUBSTATION.get())
-                            .or(abilities(PartAbility.INPUT_ENERGY, PartAbility.OUTPUT_ENERGY, PartAbility.SUBSTATION_INPUT_ENERGY,
+                            .or(abilities(PartAbility.INPUT_ENERGY, PartAbility.OUTPUT_ENERGY,
+                                    PartAbility.SUBSTATION_INPUT_ENERGY,
                                     PartAbility.SUBSTATION_OUTPUT_ENERGY)
                                     .or(abilities(PartAbility.MAINTENANCE).setExactLimit(1))))
                     .where("D", Predicates.powerSubstationBatteries())

@@ -2,19 +2,15 @@ package com.ghostipedia.cosmiccore.common.machine.part;
 
 import com.ghostipedia.cosmiccore.api.data.wireless.WirelessEnergySavedData;
 import com.ghostipedia.cosmiccore.api.machine.multiblock.DimensionalEnergyCapacitor;
-import com.ghostipedia.cosmiccore.api.machine.multiblock.DimensionalEnergyInterface;
+
 import com.gregtechceu.gtceu.api.GTValues;
-import com.gregtechceu.gtceu.api.capability.GTCapabilityHelper;
-import com.gregtechceu.gtceu.api.capability.IEnergyInfoProvider;
 import com.gregtechceu.gtceu.api.gui.GuiTextures;
 import com.gregtechceu.gtceu.api.gui.widget.LongInputWidget;
 import com.gregtechceu.gtceu.api.gui.widget.ToggleButtonWidget;
 import com.gregtechceu.gtceu.api.machine.IMachineBlockEntity;
-import com.gregtechceu.gtceu.common.cover.detector.AdvancedEnergyDetectorCover;
-import com.gregtechceu.gtceu.common.cover.detector.DetectorCover;
-import com.gregtechceu.gtceu.common.machine.multiblock.electric.PowerSubstationMachine;
 import com.gregtechceu.gtceu.common.machine.owner.FTBOwner;
 import com.gregtechceu.gtceu.common.machine.owner.MachineOwner;
+
 import com.lowdragmc.lowdraglib.gui.widget.LabelWidget;
 import com.lowdragmc.lowdraglib.gui.widget.TextBoxWidget;
 import com.lowdragmc.lowdraglib.gui.widget.Widget;
@@ -23,13 +19,13 @@ import com.lowdragmc.lowdraglib.syncdata.annotation.DescSynced;
 import com.lowdragmc.lowdraglib.syncdata.annotation.Persisted;
 import com.lowdragmc.lowdraglib.syncdata.field.ManagedFieldHolder;
 import com.lowdragmc.lowdraglib.utils.LocalizationUtils;
-import lombok.Getter;
-import lombok.Setter;
-import net.minecraft.client.Minecraft;
+
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
+
+import lombok.Getter;
+import lombok.Setter;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -37,9 +33,8 @@ import java.math.BigInteger;
 import java.util.List;
 import java.util.UUID;
 
-import static com.gregtechceu.gtceu.api.capability.GTCapabilityHelper.getEnergyInfoProvider;
+public class WirelessDataSensor extends SensorPartMachine {
 
-public class WirelessDataSensor extends SensorPartMachine{
     private static Level serverLevel;
     private static UUID playerUUID;
     private static UUID wirelessUUID;
@@ -70,7 +65,6 @@ public class WirelessDataSensor extends SensorPartMachine{
     @Setter
     private boolean isInverted;
 
-
     @Persisted
     @DescSynced
     @Getter
@@ -92,7 +86,7 @@ public class WirelessDataSensor extends SensorPartMachine{
         if (serverLevel == null && !getLevel().isClientSide()) {
             serverLevel = getLevel();
         }
-        //Get the UUID appended to 'us' (the machine)
+        // Get the UUID appended to 'us' (the machine)
         if (wirelessUUID == null) {
             var owner = this.getOwner();
             if (owner == null) return 0;
@@ -100,27 +94,27 @@ public class WirelessDataSensor extends SensorPartMachine{
             wirelessUUID = team != null ? team.getTeamId() : playerUUID;
         }
         if (side == getFrontFacing().getOpposite()) {
-            //Wireless Data collection
+            // Wireless Data collection
             var controllerPSS = getControllers().stream().filter(DimensionalEnergyCapacitor.class::isInstance)
                     .map(DimensionalEnergyCapacitor.class::cast)
                     .toList();
             if (controllerPSS.isEmpty()) {
-                signal =  0;
+                signal = 0;
                 return signal;
             }
             var wirelessData = WirelessEnergySavedData.getOrCreate((ServerLevel) serverLevel);
             var percentStorage = (wirelessData.getEnergyStored(wirelessUUID).multiply(BigInteger.valueOf(10000))
                     .divide(wirelessData.getEnergyCapacity(wirelessUUID)).intValue() / 100.0F);
             var controller = controllerPSS.get(0);
-                //If the PSS has too much energy, send a signal
-               if (maxValue <= percentStorage) {
-                   return signal = isInverted() ? 0 : 15;
-               }
-               //If the PSS has too little energy, disable the signal.
-               if (minValue >= percentStorage) {
-                   return signal = isInverted() ? 15 : 0;
-               }
+            // If the PSS has too much energy, send a signal
+            if (maxValue <= percentStorage) {
+                return signal = isInverted() ? 0 : 15;
             }
+            // If the PSS has too little energy, disable the signal.
+            if (minValue >= percentStorage) {
+                return signal = isInverted() ? 15 : 0;
+            }
+        }
         return signal;
     }
 
@@ -134,7 +128,6 @@ public class WirelessDataSensor extends SensorPartMachine{
         if (getControllers().isEmpty()) return false;
         return side == getFrontFacing();
     }
-
 
     @Override
     public Widget createUIWidget() {
@@ -162,6 +155,4 @@ public class WirelessDataSensor extends SensorPartMachine{
                 .setTooltipText("cover.advanced_energy_detector.invert"));
         return group;
     }
-
-
 }
