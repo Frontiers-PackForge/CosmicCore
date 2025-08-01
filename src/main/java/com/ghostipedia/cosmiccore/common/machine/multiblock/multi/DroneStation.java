@@ -1,6 +1,5 @@
 package com.ghostipedia.cosmiccore.common.machine.multiblock.multi;
 
-import com.ghostipedia.cosmiccore.CosmicCore;
 import com.ghostipedia.cosmiccore.api.machine.multiblock.DroneStationMachine;
 
 import com.gregtechceu.gtceu.GTCEu;
@@ -13,12 +12,10 @@ import com.gregtechceu.gtceu.api.recipe.OverclockingLogic;
 import com.gregtechceu.gtceu.common.data.GTMaterials;
 import com.gregtechceu.gtceu.common.data.GTRecipeModifiers;
 import com.gregtechceu.gtceu.common.data.GTRecipeTypes;
+
 import net.minecraft.world.level.block.Blocks;
-import net.minecraftforge.common.Tags;
 
 import static com.ghostipedia.cosmiccore.api.registries.CosmicRegistration.REGISTRATE;
-import static com.ghostipedia.cosmiccore.common.data.CosmicBlocks.MULTIPURPOSE_INTERSTELLAR_GRADE_CASING;
-import static com.ghostipedia.cosmiccore.common.data.CosmicBlocks.STEEL_PLATED_BRONZE;
 import static com.gregtechceu.gtceu.api.pattern.Predicates.*;
 import static com.gregtechceu.gtceu.common.data.GTBlocks.*;
 
@@ -34,13 +31,20 @@ public class DroneStation {
             .partAppearance((controller, part, side) -> CASING_STAINLESS_CLEAN.getDefaultState())
             .recipeModifiers(GTRecipeModifiers.ELECTRIC_OVERCLOCK.apply(OverclockingLogic.PERFECT_OVERCLOCK_SUBTICK))
             .pattern(definition -> FactoryBlockPattern.start()
-                    .aisle(" AAAAA     ", "           ", "           ", "           ", "           ", "           ", "           ", "           ", "           ", "           ", "           ")
-                    .aisle("AAAAAAA    ", "B     B    ", "B     B    ", "B  C  B    ", "B CCC B    ", "BCCCCCB    ", "BCCDCCB    ", "BCCCCCB    ", "B CCC B  F ", "B     B F  ", "           ")
-                    .aisle("AAAAAAAAAA ", "       FFF ", "  CCC  FFF ", "  CEC  FFF ", " CEEEC FFF ", " CEEEC FFF ", " CEEEC     ", " CEEEC   FF", " CEEEC  F  ", "  CCC  F   ", "       F   ")
-                    .aisle("AAAAAAAAAA ", "       F F ", "  CCC  F F ", " CEEEC F F ", " CEEEC F F ", " CEEEC FFF ", " DEEED  B  ", " CEEEC  BFF", " CEEEC  H  ", "  CCC  F H ", "       F   ")
-                    .aisle("AAAAAAAAAA ", "       FFF ", "  CCC  FQF ", "  CEC  FFF ", " CEEEC FFF ", " CEEEC FFF ", " CEEEC     ", " CEEEC   FF", " CEEEC  F  ", "  CCC  F   ", "       F   ")
-                    .aisle("AAAAAAA    ", "B     B    ", "B     B    ", "B  C  B    ", "B CCC B    ", "BCCCCCB    ", "BCCDCCB    ", "BCCCCCB    ", "B CCC B  F ", "B     B F  ", "           ")
-                    .aisle(" AAAAA     ", "           ", "           ", "           ", "           ", "           ", "           ", "           ", "           ", "           ", "           ")
+                    .aisle(" AAAAA     ", "           ", "           ", "           ", "           ", "           ",
+                            "           ", "           ", "           ", "           ", "           ")
+                    .aisle("AAAAAAA    ", "B     B    ", "B     B    ", "B  C  B    ", "B CCC B    ", "BCCCCCB    ",
+                            "BCCDCCB    ", "BCCCCCB    ", "B CCC B  F ", "B     B F  ", "           ")
+                    .aisle("AAAAAAAAAA ", "       FFF ", "  CCC  FFF ", "  CEC  FFF ", " CEEEC FFF ", " CEEEC FFF ",
+                            " CEEEC     ", " CEEEC   FF", " CEEEC  F  ", "  CCC  F   ", "       F   ")
+                    .aisle("AAAAAAAAAA ", "       F F ", "  CCC  F F ", " CEEEC F F ", " CEEEC F F ", " CEEEC FFF ",
+                            " DEEED  B  ", " CEEEC  BFF", " CEEEC  H  ", "  CCC  F H ", "       F   ")
+                    .aisle("AAAAAAAAAA ", "       FFF ", "  CCC  FQF ", "  CEC  FFF ", " CEEEC FFF ", " CEEEC FFF ",
+                            " CEEEC     ", " CEEEC   FF", " CEEEC  F  ", "  CCC  F   ", "       F   ")
+                    .aisle("AAAAAAA    ", "B     B    ", "B     B    ", "B  C  B    ", "B CCC B    ", "BCCCCCB    ",
+                            "BCCDCCB    ", "BCCCCCB    ", "B CCC B  F ", "B     B F  ", "           ")
+                    .aisle(" AAAAA     ", "           ", "           ", "           ", "           ", "           ",
+                            "           ", "           ", "           ", "           ", "           ")
 
                     .where('Q', controller(blocks(definition.getBlock())))
                     .where('A', blocks(CASING_STEEL_SOLID.get()))

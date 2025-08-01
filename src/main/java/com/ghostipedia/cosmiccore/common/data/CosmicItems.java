@@ -1244,7 +1244,7 @@ public class CosmicItems {
                     ThermalFluidStats.create(1024000, 1000000, true, true, true, true, true),
                     new ItemFluidContainer(), cellName()))
             .register();
-    //Drones
+    // Drones
     public static final ItemEntry<ComponentItem> RUSTY_DRONE = REGISTRATE
             .item("rusty_drone", ComponentItem::create)
             .lang("Rusty Drone")
@@ -1275,6 +1275,7 @@ public class CosmicItems {
             .properties(p -> p.stacksTo(64))
             .defaultModel()
             .register();
+
     public static ICustomDescriptionId cellName() {
         return new ICustomDescriptionId() {
 
