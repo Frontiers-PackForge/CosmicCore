@@ -1244,7 +1244,37 @@ public class CosmicItems {
                     ThermalFluidStats.create(1024000, 1000000, true, true, true, true, true),
                     new ItemFluidContainer(), cellName()))
             .register();
-
+    //Drones
+    public static final ItemEntry<ComponentItem> RUSTY_DRONE = REGISTRATE
+            .item("rusty_drone", ComponentItem::create)
+            .lang("Rusty Drone")
+            .properties(p -> p.stacksTo(64))
+            .defaultModel()
+            .register();
+    public static final ItemEntry<ComponentItem> ROBUST_DRONE = REGISTRATE
+            .item("robust_drone", ComponentItem::create)
+            .lang("Robust Drone")
+            .properties(p -> p.stacksTo(64))
+            .defaultModel()
+            .register();
+    public static final ItemEntry<ComponentItem> INDUSTRIAL_DRONE = REGISTRATE
+            .item("industrial_drone", ComponentItem::create)
+            .lang("Industrial Drone")
+            .properties(p -> p.stacksTo(64))
+            .defaultModel()
+            .register();
+    public static final ItemEntry<ComponentItem> SANGUINE_DRONE = REGISTRATE
+            .item("sanguine_drone", ComponentItem::create)
+            .lang("Sanguine Drone")
+            .properties(p -> p.stacksTo(64))
+            .defaultModel()
+            .register();
+    public static final ItemEntry<ComponentItem> PLASMATIC_DRONE = REGISTRATE
+            .item("plasmatic_drone", ComponentItem::create)
+            .lang("plasmatic_drone")
+            .properties(p -> p.stacksTo(64))
+            .defaultModel()
+            .register();
     public static ICustomDescriptionId cellName() {
         return new ICustomDescriptionId() {
 
