@@ -37,7 +37,13 @@ public class DroneStationMachine extends WorkableElectricMultiblockMachine {
     public final List<DroneStationConnection> connections = new ArrayList<>();
 
     // TODO: Make this configurable? Maybe per voltage you give it?
-    public long blockRangeLimit = 4096;
+    public long blockRangeLimit = 16777216;
+
+    // Rusty = 4096 : 64 Range : 1A HV
+    // Robust = 65536 : 256 Range : 1A EV
+    // Industrial = 262144 : 512 Range : 1 IV
+    // Sanguine = 1048576 : 1024 Range : 1 LUV
+    // Plasmatic = 16777216 : 4096 Range : 1 ZPM
 
     public DroneStationMachine(IMachineBlockEntity holder, Object... args) {
         super(holder, args);
