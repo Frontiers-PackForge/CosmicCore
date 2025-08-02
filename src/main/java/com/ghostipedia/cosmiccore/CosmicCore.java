@@ -9,7 +9,7 @@ import com.ghostipedia.cosmiccore.common.data.*;
 import com.ghostipedia.cosmiccore.common.data.materials.CosmicMaterialSet;
 import com.ghostipedia.cosmiccore.common.data.materials.CosmicMaterials;
 import com.ghostipedia.cosmiccore.common.item.behavior.GravityCoreBehavior;
-import com.ghostipedia.cosmiccore.common.machine.multiblock.multi.modular.ModularizedMultis;
+import com.ghostipedia.cosmiccore.common.machine.multiblock.multi.modular.MultiblockInit;
 import com.ghostipedia.cosmiccore.gtbridge.CosmicRecipeTypes;
 import com.ghostipedia.cosmiccore.utils.input.SyncedKeyMapping;
 
@@ -119,7 +119,7 @@ public class CosmicCore {
     }
 
     public void registerMachines(GTCEuAPI.RegisterEvent<ResourceLocation, MachineDefinition> event) {
-        ModularizedMultis.init();
+        MultiblockInit.init();
         CosmicMachines.init();
     }
 

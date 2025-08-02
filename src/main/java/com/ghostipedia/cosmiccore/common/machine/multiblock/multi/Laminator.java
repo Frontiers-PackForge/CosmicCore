@@ -17,18 +17,16 @@ import com.gregtechceu.gtceu.common.data.GTRecipeModifiers;
 import com.sammy.malum.registry.common.block.BlockRegistry;
 
 import static com.ghostipedia.cosmiccore.api.registries.CosmicRegistration.REGISTRATE;
-import static com.ghostipedia.cosmiccore.common.data.CosmicBlocks.*;
 import static com.ghostipedia.cosmiccore.common.data.CosmicBlocks.CYCLOZINE_CHEMICALLY_REPELLING_CASING;
+import static com.ghostipedia.cosmiccore.common.data.CosmicBlocks.ULTRA_POWERED_CASING;
 import static com.gregtechceu.gtceu.api.pattern.Predicates.*;
-import static com.gregtechceu.gtceu.api.pattern.Predicates.blocks;
-import static com.gregtechceu.gtceu.common.data.GTBlocks.*;
 
-public class ManaDigitizer {
+public class Laminator {
 
-    public final static MultiblockMachineDefinition BOTANICAL_SIMULATION_COMPLEX = REGISTRATE
-            .multiblock("botanical_simulation_complex",
+    public final static MultiblockMachineDefinition LARGE_LAMINATOR = REGISTRATE
+            .multiblock("large_laminator",
                     WorkableElectricMultiblockMachine::new)
-            .langValue("§aBotanical Simulation Complex")
+            .langValue("§1Large Laminator")
             .rotationState(RotationState.NON_Y_AXIS)
             .recipeTypes(CosmicRecipeTypes.MANA_DIGITIZER, CosmicRecipeTypes.MANA_FLUIDIZER)
             .appearanceBlock(CYCLOZINE_CHEMICALLY_REPELLING_CASING)

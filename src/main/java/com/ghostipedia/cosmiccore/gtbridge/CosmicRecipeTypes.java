@@ -25,6 +25,17 @@ import static com.lowdragmc.lowdraglib.gui.texture.ProgressTexture.FillDirection
 
 public class CosmicRecipeTypes {
 
+    public static final GTRecipeType LAMINATOR = GTRecipeTypes
+            .register("laminator", ELECTRIC)
+            .setSound(CosmicSounds.LAMINATOR)
+            .setMaxIOSize(3, 2, 2, 0)
+            .setProgressBar(GuiTextures.PROGRESS_BAR_ARROW, ProgressTexture.FillDirection.LEFT_TO_RIGHT);
+
+    public static final GTRecipeType MANA_FLUIDIZER = GTRecipeTypes
+            .register("mana_fluidizer", ELECTRIC)
+            .setMaxIOSize(1, 1, 1, 1)
+            .setProgressBar(GuiTextures.PROGRESS_BAR_ARROW, ProgressTexture.FillDirection.LEFT_TO_RIGHT);
+
     public static final GTRecipeType SOUL_TESTER_RECIPES = GTRecipeTypes
             .register("soul_tester", GTRecipeTypes.MULTIBLOCK)
             .setMaxSize(IO.IN, SoulRecipeCapability.CAP, 1)
@@ -127,6 +138,7 @@ public class CosmicRecipeTypes {
             .setProgressBar(GuiTextures.PROGRESS_BAR_ARROW, ProgressTexture.FillDirection.LEFT_TO_RIGHT);
     public static final GTRecipeType ORBITAL_FORGE = GTRecipeTypes
             .register("orbital_forge", GTRecipeTypes.MULTIBLOCK)
+            .setSound(CosmicSounds.ORBITAL_FORGE)
             .setHasResearchSlot(true)
             .setMaxTooltips(4)
             .setMaxIOSize(3, 3, 3, 3)
@@ -181,7 +193,7 @@ public class CosmicRecipeTypes {
             .register("industrial_chemvat", GTRecipeTypes.MULTIBLOCK)
             .setMaxIOSize(6, 6, 6, 6)
             .setHasResearchSlot(true)
-            .setSound(GTSoundEntries.CHEMICAL)
+            .setSound(CHEMVAT)
             .setMaxTooltips(5)
             .onRecipeBuild(ResearchManager::createDefaultResearchRecipe)
             .setProgressBar(GuiTextures.PROGRESS_BAR_ARROW_MULTIPLE, ProgressTexture.FillDirection.LEFT_TO_RIGHT);
