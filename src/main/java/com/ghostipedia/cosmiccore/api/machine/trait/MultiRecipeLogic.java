@@ -8,6 +8,7 @@ import com.gregtechceu.gtceu.api.machine.trait.MachineTrait;
 import com.gregtechceu.gtceu.api.machine.trait.RecipeLogic;
 import com.gregtechceu.gtceu.api.recipe.GTRecipe;
 import com.lowdragmc.lowdraglib.syncdata.field.ManagedFieldHolder;
+import lombok.Getter;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -18,6 +19,7 @@ public class MultiRecipeLogic extends RecipeLogic {
 
     public final IRecipeLogicMachine machine;
 
+    @Getter
     private List<RecipeLogic> logics = new ArrayList<>();
 
     protected TickableSubscription subscription;

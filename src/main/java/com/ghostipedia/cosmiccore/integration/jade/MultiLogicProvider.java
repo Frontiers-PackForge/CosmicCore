@@ -1,0 +1,128 @@
+package com.ghostipedia.cosmiccore.integration.jade;
+
+import com.ghostipedia.cosmiccore.CosmicCore;
+import com.ghostipedia.cosmiccore.api.machine.trait.MultiRecipeLogic;
+import com.gregtechceu.gtceu.api.GTValues;
+import com.gregtechceu.gtceu.api.blockentity.MetaMachineBlockEntity;
+import com.gregtechceu.gtceu.api.capability.GTCapabilityHelper;
+import com.gregtechceu.gtceu.api.machine.steam.SimpleSteamMachine;
+import com.gregtechceu.gtceu.api.recipe.RecipeHelper;
+import com.gregtechceu.gtceu.client.util.TooltipHelper;
+import com.gregtechceu.gtceu.common.machine.multiblock.steam.SteamParallelMultiblockMachine;
+import com.gregtechceu.gtceu.integration.jade.provider.CapabilityBlockProvider;
+import com.gregtechceu.gtceu.utils.FormattingUtil;
+import com.gregtechceu.gtceu.utils.GTUtil;
+import net.minecraft.ChatFormatting;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.Mth;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import org.jetbrains.annotations.Nullable;
+import snownee.jade.api.BlockAccessor;
+import snownee.jade.api.ITooltip;
+import snownee.jade.api.config.IPluginConfig;
+
+public class MultiLogicProvider extends CapabilityBlockProvider<MultiRecipeLogic> {
+    protected MultiLogicProvider() {
+        super(CosmicCore.id("multi_recipe_logic_provider"));
+    }
+
+    @Override
+    protected @Nullable MultiRecipeLogic getCapability(Level level, BlockPos pos, @Nullable Direction side) {
+        var logic = GTCapabilityHelper.getRecipeLogic(level, pos, side);
+        return logic instanceof MultiRecipeLogic mrl ? mrl : null;
+    }
+
+    @Override
+    protected void write(CompoundTag data, MultiRecipeLogic capability) {
+        data.putInt("logics", capability.getLogics().size());
+        for(var logic : capability.getLogics()) {
+            data.putBoolean("Working", capability.isWorking());
+            var recipeInfo = new CompoundTag();
+            var recipe = logic.getLastRecipe();
+            if (recipe != null) {
+                var EUt = RecipeHelper.getRealEUtWithIO(recipe);
+
+                recipeInfo.putLong("EUt", EUt.getTotalEU());
+                recipeInfo.putLong("voltage", EUt.voltage());
+                recipeInfo.putBoolean("isInput", EUt.isInput());
+            }
+
+            if (!recipeInfo.isEmpty()) {
+                data.put("Recipe", recipeInfo);
+            }
+        }
+    }
+
+    @Override
+    protected void addTooltip(CompoundTag capData, ITooltip tooltip, Player player, BlockAccessor block, BlockEntity blockEntity, IPluginConfig config) {
+        for(int i = 0; i < capData.getInt("logics"); i++) {
+            if (capData.getBoolean("Working")) {
+                var recipeInfo = capData.getCompound("Recipe");
+                if (!recipeInfo.isEmpty()) {
+                    var EUt = recipeInfo.getLong("EUt");
+                    var isInput = recipeInfo.getBoolean("isInput");
+                    boolean isSteam = false;
+
+                    if (blockEntity instanceof MetaMachineBlockEntity mbe) {
+                        var machine = mbe.getMetaMachine();
+                        if (machine instanceof SimpleSteamMachine ssm) {
+                            EUt = (long) (EUt * ssm.getConversionRate());
+                            isSteam = true;
+                        } else if (machine instanceof SteamParallelMultiblockMachine smb) {
+                            EUt = (long) (EUt * smb.getConversionRate());
+                            isSteam = true;
+                        }
+                    }
+
+                    if (EUt > 0) {
+                        MutableComponent text;
+
+                        if (isSteam) {
+                            text = Component.translatable("gtceu.jade.fluid_use", FormattingUtil.formatNumbers(EUt))
+                                    .withStyle(ChatFormatting.GREEN);
+                        } else {
+                            var voltage = recipeInfo.getLong("voltage");
+                            var tier = GTUtil.getTierByVoltage(voltage);
+                            float minAmperage = (float) EUt / GTValues.V[tier];
+
+                            text = Component
+                                    .translatable("gtceu.jade.amperage_use",
+                                            FormattingUtil.formatNumber2Places(minAmperage))
+                                    .withStyle(ChatFormatting.RED)
+                                    .append(Component.translatable("gtceu.jade.at").withStyle(ChatFormatting.GREEN));
+                            if (tier < GTValues.TIER_COUNT) {
+                                text = text.append(Component.literal(GTValues.VNF[tier])
+                                        .withStyle(style -> style.withColor(GTValues.VC[tier])));
+                            } else {
+                                int speed = Mth.clamp(tier - GTValues.TIER_COUNT - 1, 0, GTValues.TIER_COUNT);
+                                text = text.append(Component.literal("MAX")
+                                        .withStyle(style -> style.withColor(TooltipHelper.rainbowColor(speed)))
+                                        .append(Component.literal("+")
+                                                .withStyle(style -> style.withColor(GTValues.VC[speed]))
+                                                .append(FormattingUtil.formatNumbers(speed))));
+
+                            }
+                            text.append(Component.translatable("gtceu.universal.padded_parentheses",
+                                            (Component.translatable("gtceu.recipe.eu.total",
+                                                    FormattingUtil.formatNumbers(EUt))))
+                                    .withStyle(ChatFormatting.WHITE));
+                        }
+
+                        if (isInput) {
+                            tooltip.add(Component.translatable("gtceu.top.energy_consumption").append(" ").append(text));
+                        } else {
+                            tooltip.add(Component.translatable("gtceu.top.energy_production").append(" ").append(text));
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
