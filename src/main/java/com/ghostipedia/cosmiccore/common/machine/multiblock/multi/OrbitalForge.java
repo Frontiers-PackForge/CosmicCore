@@ -32,7 +32,7 @@ public class OrbitalForge {
     public final static MultiblockMachineDefinition ORBITAL_TEMPERING_FORGE = REGISTRATE.multiblock(
             "orbital_tempering_forge", CoilWorkableElectricMultiblockMachine::new)
             .rotationState(RotationState.ALL)
-            .recipeType(CosmicRecipeTypes.ORBITAL_FORGE)
+            .recipeTypes(CosmicRecipeTypes.ORBITAL_FORGE_EBF, CosmicRecipeTypes.ORBITAL_FORGE_ABS)
             .recipeModifiers(GTRecipeModifiers.PARALLEL_HATCH,
                     GTRecipeModifiers::ebfOverclock, BATCH_MODE)
             .appearanceBlock(CosmicBlocks.CYCLOZINE_CHEMICALLY_REPELLING_CASING)
