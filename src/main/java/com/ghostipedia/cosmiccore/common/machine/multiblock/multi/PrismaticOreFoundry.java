@@ -1,6 +1,7 @@
 package com.ghostipedia.cosmiccore.common.machine.multiblock.multi;
 
 import com.ghostipedia.cosmiccore.CosmicCore;
+import com.ghostipedia.cosmiccore.api.machine.multiblock.WorkableElectricMultiLogicMultiblockMachine;
 import com.ghostipedia.cosmiccore.gtbridge.CosmicRecipeTypes;
 import com.ghostipedia.cosmiccore.utils.StringUtil;
 
@@ -29,7 +30,7 @@ public class PrismaticOreFoundry {
 
     public final static MultiblockMachineDefinition PRISMATIC_ORE_FOUNDRY = REGISTRATE
             .multiblock("prismatic_ore_foundry",
-                    WorkableElectricMultiblockMachine::new)
+                    (holder) -> new WorkableElectricMultiLogicMultiblockMachine(holder, 4))
             .langValue(StringUtil
                     .rainbowDancing("Prismatic Ore Foundry"))
             .rotationState(RotationState.NON_Y_AXIS)

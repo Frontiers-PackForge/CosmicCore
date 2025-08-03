@@ -82,6 +82,8 @@ public class CosmicLangHandler extends LangHandler {
                 "§7Can use any capacitor and be expanded vertically up to 18 times§r",
                 "§7Accepts §6Laser Hatches§r");
 
+        provider.add("config.jade.plugin_cosmiccore.multi_recipe_logic_provider", "[CosmicCore] Multi-Recipe Logic");
+
         // recipe stuff
         provider.add("cosmiccore.recipe.soulIn", "Soul Input: %s");
         provider.add("cosmiccore.recipe.soulOut", "Soul Output: %s");

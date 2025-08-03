@@ -27,6 +27,7 @@
     "TagPrefixItemMixin",
     "accessor.LivingEntityAccessor",
     "accessor.LootTableAccessor",
+    "accessor.RecipeLogicAccessor",
     "ae2.AE2StyleManagerMixin",
     "ae2.PatternEncodingTermMenuMixin",
     "ae2.PatternProviderLogicMixin",

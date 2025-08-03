@@ -89,43 +89,49 @@ public class MultiRecipeLogic extends RecipeLogic {
     @Override
     public void serverTick() {
         for (var logic : logics) {
-            if (!logic.isSuspend()) {
-                if (!logic.isIdle() && logic.getLastRecipe() != null) {
-                    if (logic.getProgress() < logic.getDuration()) {
-                        int delay = ((RecipeLogicAccessor) logic).getRunDelay();
-                        if (delay > 0) {
-                            ((RecipeLogicAccessor) logic).setRunDelay(--delay);
-                        } else {
-                            logic.handleRecipeWorking();
-                        }
-                    }
-                    if (logic.getProgress() < logic.getDuration()) {
-                        logic.onRecipeFinish();
-                    }
-                } else if (logic.getLastRecipe() != null) {
-                    findAndHandleRecipe(logic);
-                } else if (!logic.machine.keepSubscribing() || logic.getMachine().getOffsetTimer() % 5 == 0) {
-                    findAndHandleRecipe(logic);
-                    if (logic.lastFailedMatches != null) {
-                        for (GTRecipe match : logic.lastFailedMatches) {
-                            if (logic.checkMatchedRecipeAvailable(match)) break;
-                        }
-                    }
-                }
-            }
+            logicTick(logic);
+
             boolean unsubscribe = false;
-            if (isSuspend()) {
+            if (logic.isSuspend()) {
                 // Machine is paused and can unsubscribe
                 unsubscribe = true;
-            } else if (lastRecipe == null && isIdle() && !machine.keepSubscribing() && !recipeDirty &&
-                    lastFailedMatches == null) {
+            } else if (logic.getLastRecipe() == null && logic.isIdle() && !logic.machine.keepSubscribing() && !logic.isRecipeDirty() &&
+                    logic.lastFailedMatches == null) {
                         // No recipes available and the machine wants to unsubscribe until notified
                         unsubscribe = true;
                     }
 
-            if (unsubscribe && subscription != null) {
-                subscription.unsubscribe();
-                subscription = null;
+            if (unsubscribe && ((RecipeLogicAccessor) logic).getSubscription() != null) {
+                ((RecipeLogicAccessor) logic).getSubscription().unsubscribe();
+                ((RecipeLogicAccessor) logic).setSubscription(null);
+            }
+        }
+    }
+
+    public void logicTick(RecipeLogic logic) {
+        if (!logic.isSuspend()) {
+            if (!logic.isIdle() && logic.getLastRecipe() != null) {
+                if (logic.getProgress() < logic.getDuration()) {
+                    int delay = ((RecipeLogicAccessor) logic).getRunDelay();
+                    if (delay > 0) {
+                        ((RecipeLogicAccessor) logic).setRunDelay(--delay);
+                    } else {
+                        logic.handleRecipeWorking();
+                    }
+                }
+                if (logic.getProgress() >= logic.getDuration()) {
+                    logic.onRecipeFinish();
+                }
+            } else if (logic.getLastRecipe() != null) {
+                findAndHandleRecipe(logic);
+            } else if (!logic.machine.keepSubscribing() || logic.getMachine().getOffsetTimer() % 5 == 0) {
+                findAndHandleRecipe(logic);
+
+                if (logic.lastFailedMatches != null) {
+                    for (GTRecipe match : logic.lastFailedMatches) {
+                        if (logic.checkMatchedRecipeAvailable(match)) break;
+                    }
+                }
             }
         }
     }
@@ -134,7 +140,7 @@ public class MultiRecipeLogic extends RecipeLogic {
         logic.lastFailedMatches = null;
         // try to execute last recipe if possible
         if (!logic.isRecipeDirty() && logic.getLastRecipe() != null &&
-                ((RecipeLogicAccessor) logic).callCheckRecipe(lastRecipe).isSuccess()) {
+                ((RecipeLogicAccessor) logic).callCheckRecipe(logic.getLastRecipe()).isSuccess()) {
             GTRecipe recipe = logic.getLastRecipe();
             ((RecipeLogicAccessor) logic).setLastRecipe(null);
             ((RecipeLogicAccessor) logic).setLastOriginRecipe(null);
@@ -149,7 +155,7 @@ public class MultiRecipeLogic extends RecipeLogic {
 
     private boolean isRecipeAlreadyRunning(GTRecipe recipe) {
         for (var logic : logics) {
-            if (logic.getLastOriginRecipe() == recipe) {
+            if (logic.getLastRecipe() != null && logic.getLastRecipe().equals(recipe)) {
                 return true;
             }
         }
@@ -162,7 +168,9 @@ public class MultiRecipeLogic extends RecipeLogic {
             if (match == null) continue;
 
             // If a new recipe was found, cache found recipe.
-            if (logic.checkMatchedRecipeAvailable(match) && !isRecipeAlreadyRunning(match))
+            if (isRecipeAlreadyRunning(match))
+                continue;
+            if (logic.checkMatchedRecipeAvailable(match))
                 return;
 
             // cache matching recipes.

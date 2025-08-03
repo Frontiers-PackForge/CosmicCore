@@ -45,8 +45,10 @@ public class MultiLogicProvider extends CapabilityBlockProvider<MultiRecipeLogic
     @Override
     protected void write(CompoundTag data, MultiRecipeLogic capability) {
         data.putInt("logics", capability.getLogics().size());
+        int i = 0;
         for (var logic : capability.getLogics()) {
-            data.putBoolean("Working", capability.isWorking());
+            CompoundTag logicTag = new CompoundTag();
+            logicTag.putBoolean("Working", logic.isWorking());
             var recipeInfo = new CompoundTag();
             var recipe = logic.getLastRecipe();
             if (recipe != null) {
@@ -58,7 +60,9 @@ public class MultiLogicProvider extends CapabilityBlockProvider<MultiRecipeLogic
             }
 
             if (!recipeInfo.isEmpty()) {
-                data.put("Recipe", recipeInfo);
+                logicTag.put("Recipe", recipeInfo);
+                data.put("RecipeInfo" + i, logicTag);
+                i++;
             }
         }
     }
@@ -67,8 +71,9 @@ public class MultiLogicProvider extends CapabilityBlockProvider<MultiRecipeLogic
     protected void addTooltip(CompoundTag capData, ITooltip tooltip, Player player, BlockAccessor block,
                               BlockEntity blockEntity, IPluginConfig config) {
         for (int i = 0; i < capData.getInt("logics"); i++) {
-            if (capData.getBoolean("Working")) {
-                var recipeInfo = capData.getCompound("Recipe");
+            var logicTag = capData.getCompound("RecipeInfo" + i);
+            if (logicTag.getBoolean("Working")) {
+                var recipeInfo = logicTag.getCompound("Recipe");
                 if (!recipeInfo.isEmpty()) {
                     var EUt = recipeInfo.getLong("EUt");
                     var isInput = recipeInfo.getBoolean("isInput");
