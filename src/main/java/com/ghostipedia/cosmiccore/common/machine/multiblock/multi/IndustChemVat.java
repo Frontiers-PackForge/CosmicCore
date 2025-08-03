@@ -31,7 +31,8 @@ public class IndustChemVat {
             .multiblock("industrial_chemical_vat", WorkableElectricMultiblockMachine::new)
             .rotationState(RotationState.ALL)
             .recipeTypes(CosmicRecipeTypes.INDUSTRIAL_CHEMVAT, GTRecipeTypes.CRACKING_RECIPES)
-            .recipeModifiers(CosmicRecipeModifiers::chemicalVatLogic, PARALLEL_HATCH, ELECTRIC_OVERCLOCK.apply(OverclockingLogic.PERFECT_OVERCLOCK_SUBTICK),
+            .recipeModifiers(CosmicRecipeModifiers::chemicalVatLogic, PARALLEL_HATCH,
+                    ELECTRIC_OVERCLOCK.apply(OverclockingLogic.PERFECT_OVERCLOCK_SUBTICK),
                     BATCH_MODE)
             .appearanceBlock(CYCLOZINE_CHEMICALLY_REPELLING_CASING)
             // spotless:off
