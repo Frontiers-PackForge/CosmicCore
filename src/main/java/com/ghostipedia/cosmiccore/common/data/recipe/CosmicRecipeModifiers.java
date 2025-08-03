@@ -2,7 +2,6 @@ package com.ghostipedia.cosmiccore.common.data.recipe;
 
 import com.ghostipedia.cosmiccore.common.machine.multiblock.electric.MagneticFieldMachine;
 
-import com.gregtechceu.gtceu.api.capability.IParallelHatch;
 import com.gregtechceu.gtceu.api.capability.recipe.IO;
 import com.gregtechceu.gtceu.api.capability.recipe.ItemRecipeCapability;
 import com.gregtechceu.gtceu.api.machine.MetaMachine;
@@ -23,7 +22,6 @@ import net.minecraft.world.item.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Collections;
-import java.util.Optional;
 
 public class CosmicRecipeModifiers {
 
