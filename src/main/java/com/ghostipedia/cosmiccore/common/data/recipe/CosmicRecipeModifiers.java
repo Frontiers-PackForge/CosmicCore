@@ -59,17 +59,10 @@ public class CosmicRecipeModifiers {
 
     public static ModifierFunction chemicalVatLogic(MetaMachine machine, GTRecipe recipe) {
         if (machine instanceof WorkableMultiblockMachine vatMachine) {
-            Optional<IParallelHatch> optionalIParallelHatch = vatMachine.getParts().stream()
-                    .filter(IParallelHatch.class::isInstance).map(IParallelHatch.class::cast).findAny();
-            if (optionalIParallelHatch.isPresent()) {
-                IParallelHatch parallelHatch = optionalIParallelHatch.get();
-                var actualParallel = 1;
-                if (parallelHatch.getCurrentParallel() != 0) {
-                    long EUt = recipe.getInputEUt().getTotalEU();
-                    actualParallel = ParallelLogic.getParallelAmount(vatMachine, recipe,
-                            parallelHatch.getCurrentParallel());
+            if (vatMachine.getParallelHatch().isPresent()) {
+                int actualParallel = ParallelLogic.getParallelAmount(vatMachine, recipe,
+                        vatMachine.getParallelHatch().get().getCurrentParallel());
 
-                }
                 return ModifierFunction.builder()
                         .modifyAllContents(ContentModifier.multiplier(actualParallel))
                         .eutMultiplier(actualParallel * 0.75F)
