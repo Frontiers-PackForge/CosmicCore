@@ -1,13 +1,15 @@
 package com.ghostipedia.cosmiccore.api.machine.trait;
 
 import com.ghostipedia.cosmiccore.mixin.accessor.RecipeLogicAccessor;
+
 import com.gregtechceu.gtceu.GTCEu;
 import com.gregtechceu.gtceu.api.machine.TickableSubscription;
 import com.gregtechceu.gtceu.api.machine.feature.IRecipeLogicMachine;
-import com.gregtechceu.gtceu.api.machine.trait.MachineTrait;
 import com.gregtechceu.gtceu.api.machine.trait.RecipeLogic;
 import com.gregtechceu.gtceu.api.recipe.GTRecipe;
+
 import com.lowdragmc.lowdraglib.syncdata.field.ManagedFieldHolder;
+
 import lombok.Getter;
 import org.jetbrains.annotations.NotNull;
 
@@ -33,13 +35,13 @@ public class MultiRecipeLogic extends RecipeLogic {
     }
 
     public void resetAllLogics() {
-        for(var logic : logics) {
+        for (var logic : logics) {
             logic.resetRecipeLogic();
         }
     }
 
     public void resetRecipeLogic(RecipeLogic logic) {
-        if(logics.contains(logic)) {
+        if (logics.contains(logic)) {
             logic.resetRecipeLogic();
         }
     }
@@ -52,13 +54,13 @@ public class MultiRecipeLogic extends RecipeLogic {
 
     public void updateTickSubscription() {
         boolean allSuspended = true;
-        for(var logic : logics) {
-            if(!logic.isSuspend()) {
+        for (var logic : logics) {
+            if (!logic.isSuspend()) {
                 allSuspended = false;
                 break;
             }
         }
-        if(logics.isEmpty()) {
+        if (logics.isEmpty()) {
             allSuspended = false;
         }
         if (!machine.isRecipeLogicAvailable() || allSuspended) {
@@ -76,7 +78,8 @@ public class MultiRecipeLogic extends RecipeLogic {
     }
 
     public void removeLogic(RecipeLogic logic) {
-        if(!logic.isSuspend() || logic.getLastRecipe() != null || !logic.lastFailedMatches.isEmpty() || logic.getProgress() != 0) {
+        if (!logic.isSuspend() || logic.getLastRecipe() != null || !logic.lastFailedMatches.isEmpty() ||
+                logic.getProgress() != 0) {
             GTCEu.LOGGER.warn("tryign to remove a recipe logic when it is still running!");
             return;
         }
@@ -85,13 +88,13 @@ public class MultiRecipeLogic extends RecipeLogic {
 
     @Override
     public void serverTick() {
-        for(var logic : logics) {
+        for (var logic : logics) {
             if (!logic.isSuspend()) {
                 if (!logic.isIdle() && logic.getLastRecipe() != null) {
                     if (logic.getProgress() < logic.getDuration()) {
-                        int delay = ((RecipeLogicAccessor)logic).getRunDelay();
+                        int delay = ((RecipeLogicAccessor) logic).getRunDelay();
                         if (delay > 0) {
-                            ((RecipeLogicAccessor)logic).setRunDelay(--delay);
+                            ((RecipeLogicAccessor) logic).setRunDelay(--delay);
                         } else {
                             logic.handleRecipeWorking();
                         }
@@ -116,9 +119,9 @@ public class MultiRecipeLogic extends RecipeLogic {
                 unsubscribe = true;
             } else if (lastRecipe == null && isIdle() && !machine.keepSubscribing() && !recipeDirty &&
                     lastFailedMatches == null) {
-                // No recipes available and the machine wants to unsubscribe until notified
-                unsubscribe = true;
-            }
+                        // No recipes available and the machine wants to unsubscribe until notified
+                        unsubscribe = true;
+                    }
 
             if (unsubscribe && subscription != null) {
                 subscription.unsubscribe();
@@ -130,22 +133,23 @@ public class MultiRecipeLogic extends RecipeLogic {
     public void findAndHandleRecipe(RecipeLogic logic) {
         logic.lastFailedMatches = null;
         // try to execute last recipe if possible
-        if (!logic.isRecipeDirty() && logic.getLastRecipe() != null && ((RecipeLogicAccessor)logic).callCheckRecipe(lastRecipe).isSuccess()) {
+        if (!logic.isRecipeDirty() && logic.getLastRecipe() != null &&
+                ((RecipeLogicAccessor) logic).callCheckRecipe(lastRecipe).isSuccess()) {
             GTRecipe recipe = logic.getLastRecipe();
-            ((RecipeLogicAccessor)logic).setLastRecipe(null);
-            ((RecipeLogicAccessor)logic).setLastOriginRecipe(null);
+            ((RecipeLogicAccessor) logic).setLastRecipe(null);
+            ((RecipeLogicAccessor) logic).setLastOriginRecipe(null);
             logic.setupRecipe(recipe);
         } else { // try to find and handle a new recipe
-            ((RecipeLogicAccessor)logic).setLastRecipe(null);
-            ((RecipeLogicAccessor)logic).setLastOriginRecipe(null);
+            ((RecipeLogicAccessor) logic).setLastRecipe(null);
+            ((RecipeLogicAccessor) logic).setLastOriginRecipe(null);
             handleSearchingRecipes(logic.searchRecipe(), logic);
         }
-        ((RecipeLogicAccessor)logic).setRecipeDirty(false);
+        ((RecipeLogicAccessor) logic).setRecipeDirty(false);
     }
 
     private boolean isRecipeAlreadyRunning(GTRecipe recipe) {
         for (var logic : logics) {
-            if(logic.getLastOriginRecipe() == recipe) {
+            if (logic.getLastOriginRecipe() == recipe) {
                 return true;
             }
         }

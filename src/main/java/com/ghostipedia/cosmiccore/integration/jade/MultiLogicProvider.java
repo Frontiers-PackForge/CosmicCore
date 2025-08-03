@@ -2,6 +2,7 @@ package com.ghostipedia.cosmiccore.integration.jade;
 
 import com.ghostipedia.cosmiccore.CosmicCore;
 import com.ghostipedia.cosmiccore.api.machine.trait.MultiRecipeLogic;
+
 import com.gregtechceu.gtceu.api.GTValues;
 import com.gregtechceu.gtceu.api.blockentity.MetaMachineBlockEntity;
 import com.gregtechceu.gtceu.api.capability.GTCapabilityHelper;
@@ -12,23 +13,25 @@ import com.gregtechceu.gtceu.common.machine.multiblock.steam.SteamParallelMultib
 import com.gregtechceu.gtceu.integration.jade.provider.CapabilityBlockProvider;
 import com.gregtechceu.gtceu.utils.FormattingUtil;
 import com.gregtechceu.gtceu.utils.GTUtil;
+
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
+
 import org.jetbrains.annotations.Nullable;
 import snownee.jade.api.BlockAccessor;
 import snownee.jade.api.ITooltip;
 import snownee.jade.api.config.IPluginConfig;
 
 public class MultiLogicProvider extends CapabilityBlockProvider<MultiRecipeLogic> {
+
     protected MultiLogicProvider() {
         super(CosmicCore.id("multi_recipe_logic_provider"));
     }
@@ -42,7 +45,7 @@ public class MultiLogicProvider extends CapabilityBlockProvider<MultiRecipeLogic
     @Override
     protected void write(CompoundTag data, MultiRecipeLogic capability) {
         data.putInt("logics", capability.getLogics().size());
-        for(var logic : capability.getLogics()) {
+        for (var logic : capability.getLogics()) {
             data.putBoolean("Working", capability.isWorking());
             var recipeInfo = new CompoundTag();
             var recipe = logic.getLastRecipe();
@@ -61,8 +64,9 @@ public class MultiLogicProvider extends CapabilityBlockProvider<MultiRecipeLogic
     }
 
     @Override
-    protected void addTooltip(CompoundTag capData, ITooltip tooltip, Player player, BlockAccessor block, BlockEntity blockEntity, IPluginConfig config) {
-        for(int i = 0; i < capData.getInt("logics"); i++) {
+    protected void addTooltip(CompoundTag capData, ITooltip tooltip, Player player, BlockAccessor block,
+                              BlockEntity blockEntity, IPluginConfig config) {
+        for (int i = 0; i < capData.getInt("logics"); i++) {
             if (capData.getBoolean("Working")) {
                 var recipeInfo = capData.getCompound("Recipe");
                 if (!recipeInfo.isEmpty()) {
@@ -110,13 +114,14 @@ public class MultiLogicProvider extends CapabilityBlockProvider<MultiRecipeLogic
 
                             }
                             text.append(Component.translatable("gtceu.universal.padded_parentheses",
-                                            (Component.translatable("gtceu.recipe.eu.total",
-                                                    FormattingUtil.formatNumbers(EUt))))
+                                    (Component.translatable("gtceu.recipe.eu.total",
+                                            FormattingUtil.formatNumbers(EUt))))
                                     .withStyle(ChatFormatting.WHITE));
                         }
 
                         if (isInput) {
-                            tooltip.add(Component.translatable("gtceu.top.energy_consumption").append(" ").append(text));
+                            tooltip.add(
+                                    Component.translatable("gtceu.top.energy_consumption").append(" ").append(text));
                         } else {
                             tooltip.add(Component.translatable("gtceu.top.energy_production").append(" ").append(text));
                         }
