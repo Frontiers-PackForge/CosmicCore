@@ -12,8 +12,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.function.Consumer;
 
 import static com.ghostipedia.cosmiccore.api.data.CosmicCustomTags.*;
-import static com.ghostipedia.cosmiccore.gtbridge.CosmicRecipeTypes.HEAVY_ASSEMBLER;
-import static com.ghostipedia.cosmiccore.gtbridge.CosmicRecipeTypes.ORBITAL_FORGE;
+import static com.ghostipedia.cosmiccore.gtbridge.CosmicRecipeTypes.*;
 import static com.gregtechceu.gtceu.api.data.tag.TagPrefix.*;
 
 public class CosmicMaterialRecipeHandlers {
@@ -66,7 +65,7 @@ public class CosmicMaterialRecipeHandlers {
     private static void processUltraDensePlate(@NotNull Consumer<FinishedRecipe> provider, @NotNull Material material) {
         if (!material.shouldGenerateRecipesFor(plate) || !material.hasProperty(PropertyKey.INGOT)) return;
 
-        ORBITAL_FORGE.recipeBuilder("heavy_forging_" + material.getName() + "_ultra_dense_plate")
+        ORBITAL_FORGE_EBF.recipeBuilder("heavy_forging_" + material.getName() + "_ultra_dense_plate")
                 .inputItems(plate, material, 64)
                 .outputItems(ultraDense, material, 1)
                 .duration((int) material.getMass() * 3)
