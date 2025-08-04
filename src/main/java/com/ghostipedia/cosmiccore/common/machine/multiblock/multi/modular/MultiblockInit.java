@@ -44,6 +44,5 @@ public class MultiblockInit {
         SteamCaster.init();
         SteamMixer.init();
         SufferingChamber.init();
-        CelestialBoreNew.init();
     }
 }

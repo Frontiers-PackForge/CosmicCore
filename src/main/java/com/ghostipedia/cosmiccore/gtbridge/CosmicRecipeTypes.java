@@ -188,6 +188,7 @@ public class CosmicRecipeTypes {
             .setProgressBar(GuiTextures.PROGRESS_BAR_ARROW, ProgressTexture.FillDirection.LEFT_TO_RIGHT);
     public static final GTRecipeType CELESTIAL_BORE = GTRecipeTypes.register("celestial_bore", GTRecipeTypes.MULTIBLOCK)
             .setMaxIOSize(1, 54, 3, 18)
+            .setSound(CosmicSounds.LAMINATOR)
             .setProgressBar(GuiTextures.PROGRESS_BAR_ARROW, ProgressTexture.FillDirection.LEFT_TO_RIGHT);
     public static final GTRecipeType NAQUAHINE_REACTOR = GTRecipeTypes
             .register("naquahine_reactor", GTRecipeTypes.MULTIBLOCK)

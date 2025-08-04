@@ -1,14 +1,13 @@
 package com.ghostipedia.cosmiccore.client.renderer.machine;
 
 import com.ghostipedia.cosmiccore.CosmicCore;
+
 import com.gregtechceu.gtceu.api.machine.multiblock.WorkableElectricMultiblockMachine;
 import com.gregtechceu.gtceu.api.pattern.util.RelativeDirection;
 import com.gregtechceu.gtceu.client.renderer.machine.DynamicRender;
 import com.gregtechceu.gtceu.client.renderer.machine.DynamicRenderType;
 import com.gregtechceu.gtceu.client.util.ModelUtils;
-import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.blaze3d.vertex.VertexConsumer;
-import com.mojang.serialization.Codec;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.Sheets;
@@ -21,13 +20,18 @@ import net.minecraft.world.phys.AABB;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.model.data.ModelData;
+
+import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.VertexConsumer;
+import com.mojang.serialization.Codec;
 import org.joml.Quaternionf;
 
 import java.util.List;
 
 import static com.ghostipedia.cosmiccore.client.renderer.machine.StarBallastRender.random;
 
-public class ConceptIncineratorRender extends DynamicRender<WorkableElectricMultiblockMachine, ConceptIncineratorRender> {
+public class ConceptIncineratorRender extends
+                                      DynamicRender<WorkableElectricMultiblockMachine, ConceptIncineratorRender> {
 
     public static final ConceptIncineratorRender INSTANCE = new ConceptIncineratorRender();
     public static final Codec<ConceptIncineratorRender> CODEC = Codec.unit(ConceptIncineratorRender.INSTANCE);
@@ -65,12 +69,12 @@ public class ConceptIncineratorRender extends DynamicRender<WorkableElectricMult
     }
 
     @Override
-    public void render(WorkableElectricMultiblockMachine machine, float partialTick, PoseStack poseStack, MultiBufferSource buffer,
+    public void render(WorkableElectricMultiblockMachine machine, float partialTick, PoseStack poseStack,
+                       MultiBufferSource buffer,
                        int packedLight, int packedOverlay) {
         if (!machine.isFormed()) return;
 
         float totalTick = (Minecraft.getInstance().player.tickCount + partialTick);
-
 
         // move the things:tm: to render at the center of the multiblock
         Direction front = machine.getFrontFacing();
@@ -110,12 +114,12 @@ public class ConceptIncineratorRender extends DynamicRender<WorkableElectricMult
         poseStack.mulPose(new Quaternionf().rotateAxis(totalTick * Mth.TWO_PI / 80, 0, 1, 0));
         VertexConsumer consumer = buffer.getBuffer(Sheets.translucentCullBlockSheet());
         renderBallA(poseStack, consumer, packedLight, packedOverlay);
-        
+
         max = 0.7f;
         amplitude = (max - min) / 2.0f;
         offset = min + amplitude;
         scale = (float) Math.sin(totalTick * 0.1f) * amplitude + offset;
-        poseStack.scale(scale*-2, scale*-2, scale*-2);
+        poseStack.scale(scale * -2, scale * -2, scale * -2);
 
         consumer = buffer.getBuffer(Sheets.cutoutBlockSheet());
         renderBallC(poseStack, consumer, packedLight, packedOverlay);
@@ -146,6 +150,7 @@ public class ConceptIncineratorRender extends DynamicRender<WorkableElectricMult
             consumer.putBulkData(pose, quad, 1f, 1f, 1f, packedLight, packedOverlay);
         }
     }
+
     @OnlyIn(Dist.CLIENT)
     public void renderBallB(PoseStack poseStack, VertexConsumer consumer, int packedLight, int packedOverlay) {
         PoseStack.Pose pose = poseStack.last();
@@ -154,6 +159,7 @@ public class ConceptIncineratorRender extends DynamicRender<WorkableElectricMult
             consumer.putBulkData(pose, quad, 0.1f, 0.1f, 0.1f, packedLight, packedOverlay);
         }
     }
+
     @OnlyIn(Dist.CLIENT)
     public void renderBallC(PoseStack poseStack, VertexConsumer consumer, int packedLight, int packedOverlay) {
         PoseStack.Pose pose = poseStack.last();
@@ -162,6 +168,7 @@ public class ConceptIncineratorRender extends DynamicRender<WorkableElectricMult
             consumer.putBulkData(pose, quad, 0.2f, 0.2f, 0.7f, packedLight, packedOverlay);
         }
     }
+
     public void renderRing(PoseStack poseStack, VertexConsumer consumer, int packedLight, int packedOverlay) {
         poseStack.pushPose();
         poseStack.scale(2.0f, 2.0f, 2.0f);
