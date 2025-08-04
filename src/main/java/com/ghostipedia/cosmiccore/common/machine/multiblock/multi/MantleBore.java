@@ -1,6 +1,7 @@
 package com.ghostipedia.cosmiccore.common.machine.multiblock.multi;
 
 import com.ghostipedia.cosmiccore.CosmicCore;
+import com.ghostipedia.cosmiccore.client.renderer.machine.CosmicDynamicRenderHelpers;
 import com.ghostipedia.cosmiccore.common.data.CosmicBlocks;
 import com.ghostipedia.cosmiccore.gtbridge.CosmicRecipeTypes;
 
@@ -19,6 +20,7 @@ import static com.gregtechceu.gtceu.api.pattern.Predicates.*;
 import static com.gregtechceu.gtceu.api.pattern.util.RelativeDirection.*;
 import static com.gregtechceu.gtceu.common.data.GTBlocks.*;
 import static com.gregtechceu.gtceu.common.data.GTRecipeModifiers.ELECTRIC_OVERCLOCK;
+import static com.gregtechceu.gtceu.common.data.models.GTMachineModels.createWorkableCasingMachineModel;
 
 public class MantleBore {
 
@@ -43,8 +45,11 @@ public class MantleBore {
                                     .setMaxGlobalLimited(2))
                             .or(Predicates.abilities(PartAbility.IMPORT_FLUIDS).setExactLimit(1)))
                     .build())
-            .workableCasingModel(GTCEu.id("block/casings/solid/machine_casing_solid_steel"),
-                    CosmicCore.id("block/multiblock/mantle_bore"))
+            .model(createWorkableCasingMachineModel(
+                    CosmicCore.id("block/casings/solid/vomahine_certified_chemically_resistant_casing"),
+                    GTCEu.id("block/multiblock/fusion_reactor"))
+                    .andThen(model -> model.addDynamicRenderer(CosmicDynamicRenderHelpers::getConceptIncinerator)))
+            .hasBER(true)
             .register();
 
     public static void init() {}

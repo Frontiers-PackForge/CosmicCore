@@ -142,7 +142,7 @@ public class CosmicRecipeTypes {
             .setSound(CosmicSounds.ORBITAL_FORGE)
             .setHasResearchSlot(true)
             .setMaxIOSize(3, 3, 3, 3)
-            .setProgressBar(GuiTextures.PROGRESS_BAR_ARROW, ProgressTexture.FillDirection.LEFT_TO_RIGHT)
+            .setProgressBar(GuiTextures.PROGRESS_BAR_ARC_FURNACE, ProgressTexture.FillDirection.LEFT_TO_RIGHT)
             .addDataInfo(data -> {
                 int temp = data.getInt("ebf_temp");
                 return LocalizationUtils.format("gtceu.recipe.temperature", temp);
@@ -163,7 +163,7 @@ public class CosmicRecipeTypes {
             .setSound(CosmicSounds.ORBITAL_FORGE)
             .setHasResearchSlot(true)
             .setMaxIOSize(9, 3, 3, 3)
-            .setProgressBar(GuiTextures.PROGRESS_BAR_ARROW, ProgressTexture.FillDirection.LEFT_TO_RIGHT)
+            .setProgressBar(GuiTextures.PROGRESS_BAR_COKE_OVEN, ProgressTexture.FillDirection.LEFT_TO_RIGHT)
             .addDataInfo(data -> {
                 int temp = data.getInt("ebf_temp");
                 return LocalizationUtils.format("gtceu.recipe.temperature", temp);

@@ -21,6 +21,7 @@ public class MultiblockInit {
         WelderMulti.init();
         StarLadder.init();
         VoidMiner.init();
+        VoraxReactor.init();
         AtmoPump.init();
         CosmicModularMachines.init();
         ManaDigitizer.init();
