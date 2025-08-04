@@ -3,14 +3,19 @@ package com.ghostipedia.cosmiccore.api.machine.multiblock;
 import com.ghostipedia.cosmiccore.api.machine.part.DroneMaintenanceInterfacePartMachine;
 import com.ghostipedia.cosmiccore.api.misc.DroneStationConnection;
 
+import com.ghostipedia.cosmiccore.common.data.CosmicItems;
 import com.gregtechceu.gtceu.api.GTValues;
 import com.gregtechceu.gtceu.api.capability.IControllable;
+import com.gregtechceu.gtceu.api.capability.recipe.IO;
+import com.gregtechceu.gtceu.api.capability.recipe.ItemRecipeCapability;
 import com.gregtechceu.gtceu.api.machine.IMachineBlockEntity;
 import com.gregtechceu.gtceu.api.machine.TickableSubscription;
 import com.gregtechceu.gtceu.api.machine.feature.multiblock.IMultiController;
 import com.gregtechceu.gtceu.api.machine.multiblock.WorkableElectricMultiblockMachine;
 import com.gregtechceu.gtceu.api.machine.trait.RecipeLogic;
 
+import lombok.Getter;
+import lombok.Setter;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
@@ -19,12 +24,15 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.phys.BlockHitResult;
 
 import com.google.common.collect.HashMultimap;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class DroneStationMachine extends WorkableElectricMultiblockMachine {
 
@@ -36,8 +44,19 @@ public class DroneStationMachine extends WorkableElectricMultiblockMachine {
 
     public final List<DroneStationConnection> connections = new ArrayList<>();
 
-    // TODO: Make this configurable? Maybe per voltage you give it?
-    public long blockRangeLimit = 16777216;
+    private final Item[] allowedItems = new Item[]{
+            CosmicItems.RUSTY_DRONE.asItem(),
+            CosmicItems.ROBUST_DRONE.asItem(),
+            CosmicItems.INDUSTRIAL_DRONE.asItem(),
+            CosmicItems.SANGUINE_DRONE.asItem(),
+            CosmicItems.PLASMATIC_DRONE.asItem(),
+    };
+
+    @Setter
+    public long blockRangeLimit = 0;
+
+    Map<Item, Integer> Ranges = new HashMap<>();
+
 
     // Rusty = 4096 : 64 Range : 1A HV
     // Robust = 65536 : 256 Range : 1A EV
@@ -47,7 +66,13 @@ public class DroneStationMachine extends WorkableElectricMultiblockMachine {
 
     public DroneStationMachine(IMachineBlockEntity holder, Object... args) {
         super(holder, args);
+        for (int i = 0; i < allowedItems.length; i++) {
+            Ranges.put(allowedItems[i], 64 * (i + 1));
+        }
     }
+
+
+
 
     @Override
     public void onStructureFormed() {
@@ -70,10 +95,9 @@ public class DroneStationMachine extends WorkableElectricMultiblockMachine {
     }
 
     public void updateDroneHatches() {
+        var itemHandlers = getCapabilitiesFlat(IO.IN, ItemRecipeCapability.CAP);
         if (energyContainer != null) {
             if (drainEnergy(false)) {
-                // Should we do anything else if the multi is running?
-                // or just passively drain energy and let the rest take care of itself
             }
         }
         if (getOffsetTimer() % 20 == 0) {
@@ -83,7 +107,7 @@ public class DroneStationMachine extends WorkableElectricMultiblockMachine {
 
     public boolean drainEnergy(boolean simulate) {
         // Cost is 1A LV per module per second
-        long powerCost = connections.size() * GTValues.V[GTValues.LV];
+        long powerCost = blockRangeLimit * blockRangeLimit;
         long resultEnergy = energyContainer.getEnergyStored() - powerCost;
         if (resultEnergy >= 0L && resultEnergy <= energyContainer.getEnergyCapacity()) {
             if (!simulate)
@@ -114,6 +138,7 @@ public class DroneStationMachine extends WorkableElectricMultiblockMachine {
 
         }
     }
+
 
     // EXAMPLE CODE, REMOVE LATER MAYBE?
     // Or keep in, in which case, this should be a feature and remove this comment :eugeneThumbsUpCool:
