@@ -2,27 +2,20 @@ package com.ghostipedia.cosmiccore.common.machine.multiblock.multi;
 
 import com.ghostipedia.cosmiccore.CosmicCore;
 import com.ghostipedia.cosmiccore.api.machine.multiblock.UniqueWorkableElectricMultiblockMachine;
-import com.ghostipedia.cosmiccore.api.machine.part.CosmicPartAbility;
-import com.ghostipedia.cosmiccore.common.data.CosmicBlocks;
 import com.ghostipedia.cosmiccore.common.data.materials.CosmicMaterials;
 import com.ghostipedia.cosmiccore.gtbridge.CosmicRecipeTypes;
 
 import com.gregtechceu.gtceu.api.data.RotationState;
-import com.gregtechceu.gtceu.api.data.chemical.ChemicalHelper;
-import com.gregtechceu.gtceu.api.data.tag.TagPrefix;
 import com.gregtechceu.gtceu.api.machine.MultiblockMachineDefinition;
 import com.gregtechceu.gtceu.api.machine.multiblock.PartAbility;
 import com.gregtechceu.gtceu.api.pattern.FactoryBlockPattern;
-import com.gregtechceu.gtceu.api.recipe.OverclockingLogic;
 import com.gregtechceu.gtceu.common.data.GTBlocks;
 import com.gregtechceu.gtceu.common.data.GTMaterials;
 
-import static com.ghostipedia.cosmiccore.api.pattern.CosmicPredicates.magnetCoils;
 import static com.ghostipedia.cosmiccore.api.registries.CosmicRegistration.REGISTRATE;
 import static com.ghostipedia.cosmiccore.common.data.CosmicBlocks.*;
 import static com.gregtechceu.gtceu.api.pattern.Predicates.*;
 import static com.gregtechceu.gtceu.api.pattern.util.RelativeDirection.*;
-import static com.gregtechceu.gtceu.common.data.GTRecipeModifiers.ELECTRIC_OVERCLOCK;
 
 public class CelestialBore {
 
@@ -31,7 +24,7 @@ public class CelestialBore {
             .rotationState(RotationState.NON_Y_AXIS)
             .recipeType(CosmicRecipeTypes.CELESTIAL_BORE)
             .appearanceBlock(TRITANIUM_LINED_HEAVY_NEUTRONIUM_CASING)
-            // spotless:on
+            // spotless:off
             //If Spotless CORRECTS THIS DO NOT COMMIT IT! ! ! ! ! !
             .pattern(definition -> FactoryBlockPattern.start(RIGHT, BACK, UP)
             .aisle("                                                               ", "                                                               ", "                                                               ", "                                                               ", "                                                               ", "                                                               ", "                                                               ", "                                                               ", "                                                               ", "                                                               ", "                                                               ", "                                                               ", "                                                               ", "                                                               ", "                                                               ", "                                                               ", "                                                               ", "                                                               ", "                                                               ", "                                                               ", "                                                               ", "                                                               ", "                                                               ", "                                                               ", "                                                               ", "                                                               ", "                                                               ", "                                                               ", "                               E                               ", "                                                               ", "                                                               ", "                            E     E                            ", "                                                               ", "                                                               ", "                               E                               ", "                                                               ", "                                                               ", "                                                               ", "                                                               ", "                                                               ", "                                                               ", "                                                               ", "                                                               ", "                                                               ", "                                                               ", "                                                               ", "                                                               ", "                                                               ", "                                                               ", "                                                               ", "                                                               ", "                                                               ", "                                                               ", "                                                               ", "                                                               ", "                                                               ", "                                                               ", "                                                               ", "                                                               ", "                                                               ", "                                                               ", "                                                               ", "                                                               ")
@@ -84,27 +77,27 @@ public class CelestialBore {
                     .aisle("                             A   A                             ", "                             A   A                             ", "                           AAAAAAAAA                           ", "                             A D A                             ", "                             ADDDA                             ", "                             A D A                             ", "                           AAAAAAAAA                           ", "                             A   A                             ", "                             A   A                             ", "                                                               ", "                                                               ", "                                                               ", "                                                               ", "                                                               ", "                                                               ", "                                                               ", "                                                               ", "                                                               ", "                                                               ", "                                                               ", "                                                               ", "                                                               ", "                                                               ", "                                                               ", "                                                               ", "                                                               ", "                                                               ", "  A   A                                                 A   A  ", "  A   A                                                 A   A  ", "AAAAAAAAA                                             AAAAAAAAA", "  A D A                                                 A D A  ", "  ADDDA                                                 ADDDA  ", "  A D A                                                 A D A  ", "AAAAAAAAA                                             AAAAAAAAA", "  A   A                                                 A   A  ", "  A   A                                                 A   A  ", "                                                               ", "                                                               ", "                                                               ", "                                                               ", "                                                               ", "                                                               ", "                                                               ", "                                                               ", "                                                               ", "                                                               ", "                                                               ", "                                                               ", "                                                               ", "                                                               ", "                                                               ", "                                                               ", "                                                               ", "                                                               ", "                             A   A                             ", "                             A   A                             ", "                           AAAAAAAAA                           ", "                             A D A                             ", "                             ADDDA                             ", "                             A D A                             ", "                           AAAAAAAAA                           ", "                             A   A                             ", "                             A   A                             ")
                     // spotless:on
                     .where(' ', any())
-            .where("Q", controller(blocks(definition.getBlock())))
-            .where('A', blocks(SELF_HEALING_PTHANTERUM.get()))
-            .where('B', blocks(HIGH_TOLERANCE_RHENIUM_CASING.get()))
-            .where('C', blocks(NAQUADAH_PRESSURE_RESISTANT_CASING.get()))
-            .where('D', blocks(RESONANTLY_TUNED_VIRTUE_MELD_CASING.get()))
-            .where('E', frames(CosmicMaterials.Trinavine))
-            .where('F', blocks(ULTRA_POWERED_CASING.get()))
-            .where('G', blocks(CYCLOZINE_CHEMICALLY_REPELLING_CASING.get()))
-            .where('H', blocks(HIGHLY_FLEXIBLE_REINFORCED_TRINAVINE_CASING.get()))
-            .where('I', blocks(GTBlocks.BATTERY_LAPOTRONIC_ZPM.get()))
-            .where('J', frames(GTMaterials.Neutronium))
-            .where('K', blocks(MAGNET_STELLAR_GRADE.get()))
-            .where('L', blocks(GTBlocks.FUSION_GLASS.get()))
-            .where('M', blocks(MAGNET_STELLAR_GRADE.get()))
-            .where('N', blocks(TRITANIUM_LINED_HEAVY_NEUTRONIUM_CASING.get())
-            .or(autoAbilities(CosmicRecipeTypes.CELESTIAL_BORE))
-            .or(abilities(PartAbility.IMPORT_FLUIDS))
-            .or(abilities(PartAbility.EXPORT_ITEMS,PartAbility.IMPORT_ITEMS))
-            .or(abilities(PartAbility.INPUT_ENERGY).setExactLimit(1))
-            .or(abilities(PartAbility.MAINTENANCE).setExactLimit(1)))
-            .build())
+                    .where("Q", controller(blocks(definition.getBlock())))
+                    .where('A', blocks(SELF_HEALING_PTHANTERUM.get()))
+                    .where('B', blocks(HIGH_TOLERANCE_RHENIUM_CASING.get()))
+                    .where('C', blocks(NAQUADAH_PRESSURE_RESISTANT_CASING.get()))
+                    .where('D', blocks(RESONANTLY_TUNED_VIRTUE_MELD_CASING.get()))
+                    .where('E', frames(CosmicMaterials.Trinavine))
+                    .where('F', blocks(ULTRA_POWERED_CASING.get()))
+                    .where('G', blocks(CYCLOZINE_CHEMICALLY_REPELLING_CASING.get()))
+                    .where('H', blocks(HIGHLY_FLEXIBLE_REINFORCED_TRINAVINE_CASING.get()))
+                    .where('I', blocks(GTBlocks.BATTERY_LAPOTRONIC_ZPM.get()))
+                    .where('J', frames(GTMaterials.Neutronium))
+                    .where('K', blocks(MAGNET_STELLAR_GRADE.get()))
+                    .where('L', blocks(GTBlocks.FUSION_GLASS.get()))
+                    .where('M', blocks(MAGNET_STELLAR_GRADE.get()))
+                    .where('N', blocks(TRITANIUM_LINED_HEAVY_NEUTRONIUM_CASING.get())
+                            .or(autoAbilities(CosmicRecipeTypes.CELESTIAL_BORE))
+                            .or(abilities(PartAbility.IMPORT_FLUIDS))
+                            .or(abilities(PartAbility.EXPORT_ITEMS, PartAbility.IMPORT_ITEMS))
+                            .or(abilities(PartAbility.INPUT_ENERGY).setExactLimit(1))
+                            .or(abilities(PartAbility.MAINTENANCE).setExactLimit(1)))
+                    .build())
             .workableCasingModel(CosmicCore.id("block/casings/solid/tritanium_lined_heavy_bolted_neutronium_casing"),
                     CosmicCore.id("block/multiblock/mantle_bore"))
             .register();
