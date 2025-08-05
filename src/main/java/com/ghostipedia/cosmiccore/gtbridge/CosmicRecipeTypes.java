@@ -309,6 +309,11 @@ public class CosmicRecipeTypes {
         DISTILLERY_RECIPES.setMaxTooltips(4);
         AUTOCLAVE_RECIPES.setMaxTooltips(4);
         FLUID_HEATER_RECIPES.setMaxTooltips(4);
+        BLAST_RECIPES.setHasResearchSlot(true);
+        BLAST_RECIPES.onRecipeBuild(ResearchManager::createDefaultResearchRecipe);
+        LARGE_CHEMICAL_RECIPES.setHasResearchSlot(true);
+        LARGE_CHEMICAL_RECIPES.onRecipeBuild(ResearchManager::createDefaultResearchRecipe);
+
         CRACKING_RECIPES.setMaxIOSize(2, 2, 2, 2);
         CHEMICAL_RECIPES.onRecipeBuild((builder, provider) -> {
             LARGE_CHEMICAL_RECIPES.copyFrom(builder)

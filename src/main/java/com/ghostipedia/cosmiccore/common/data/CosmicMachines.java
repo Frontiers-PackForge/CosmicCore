@@ -67,10 +67,11 @@ import static com.gregtechceu.gtceu.api.pattern.Predicates.*;
 import static com.gregtechceu.gtceu.api.pattern.util.RelativeDirection.*;
 import static com.gregtechceu.gtceu.common.data.GCYMBlocks.*;
 import static com.gregtechceu.gtceu.common.data.GTBlocks.*;
-import static com.gregtechceu.gtceu.common.data.GTMachines.CREATIVE_TOOLTIPS;
+import static com.gregtechceu.gtceu.common.data.GTMachines.*;
 import static com.gregtechceu.gtceu.common.data.GTRecipeTypes.DUMMY_RECIPES;
 import static com.gregtechceu.gtceu.common.data.machines.GTMachineUtils.*;
-import static com.gregtechceu.gtceu.common.data.machines.GTMultiMachines.FUSION_REACTOR;
+import static com.gregtechceu.gtceu.common.data.machines.GTMultiMachines.*;
+import static com.gregtechceu.gtceu.common.data.machines.GTResearchMachines.BASIC_DATA_ACCESS_HATCH;
 import static com.gregtechceu.gtceu.common.data.models.GTMachineModels.*;
 
 public class CosmicMachines {
@@ -567,5 +568,103 @@ public class CosmicMachines {
                         .build();
             });
         }
+        LARGE_CHEMICAL_REACTOR.setPatternFactory(
+                () -> {
+                    var casing = blocks(CASING_PTFE_INERT.get()).setMinGlobalLimited(10);
+                    var research = dataHatchPredicate(blocks(CASING_PTFE_INERT.get())).setMaxGlobalLimited(1, 1);
+                    var abilities = Predicates.autoAbilities(LARGE_CHEMICAL_REACTOR.getRecipeTypes())
+                            .or(Predicates.autoAbilities(true, false, false));
+                    return FactoryBlockPattern.start()
+                            .aisle("XXX", "XCX", "XXX")
+                            .aisle("XCX", "CPC", "XCX")
+                            .aisle("XXX", "XSX", "XXX")
+                            .where('S', Predicates.controller(blocks(LARGE_CHEMICAL_REACTOR.getBlock())))
+                            .where('X', casing.or(abilities).or(research))
+                            .where('P', blocks(CASING_POLYTETRAFLUOROETHYLENE_PIPE.get()))
+                            .where('C', Predicates.heatingCoils().setExactLimit(1)
+                                    .or(abilities)
+                                    .or(casing))
+                            .build();
+                });
+        LARGE_CHEMICAL_REACTOR.setShapes(
+                () -> {
+                    ArrayList<MultiblockShapeInfo> shapeInfo = new ArrayList<>();
+                    var baseBuilder = MultiblockShapeInfo.builder()
+                            .where('S', LARGE_CHEMICAL_REACTOR, Direction.NORTH)
+                            .where('X', CASING_PTFE_INERT.getDefaultState())
+                            .where('P', CASING_POLYTETRAFLUOROETHYLENE_PIPE.getDefaultState())
+                            .where('C', COIL_CUPRONICKEL.getDefaultState())
+                            .where('I', ITEM_IMPORT_BUS[3], Direction.NORTH)
+                            .where('E', ENERGY_INPUT_HATCH[3], Direction.NORTH)
+                            .where('O', ITEM_EXPORT_BUS[3], Direction.NORTH)
+                            .where('F', FLUID_IMPORT_HATCH[3], Direction.NORTH)
+                            .where('M', MAINTENANCE_HATCH, Direction.NORTH)
+                            .where('H', FLUID_EXPORT_HATCH[3], Direction.NORTH)
+                            .where('Q', BASIC_DATA_ACCESS_HATCH, Direction.NORTH);
+                    shapeInfo.add(baseBuilder.shallowCopy()
+                            .aisle("IQO", "FSH", "XMX")
+                            .aisle("XXX", "XPX", "XXX")
+                            .aisle("XEX", "XCX", "XXX")
+                            .build());
+                    shapeInfo.add(baseBuilder.shallowCopy()
+                            .aisle("IQO", "FSH", "XMX")
+                            .aisle("XXX", "XPX", "XCX")
+                            .aisle("XEX", "XXX", "XXX")
+                            .build());
+                    shapeInfo.add(baseBuilder.shallowCopy()
+                            .aisle("IQO", "FSH", "XMX")
+                            .aisle("XCX", "XPX", "XXX")
+                            .aisle("XEX", "XXX", "XXX")
+                            .build());
+                    shapeInfo.add(baseBuilder.shallowCopy()
+                            .aisle("IQO", "FSH", "XMX")
+                            .aisle("XXX", "CPX", "XXX")
+                            .aisle("XEX", "XXX", "XXX")
+                            .build());
+                    shapeInfo.add(baseBuilder.shallowCopy()
+                            .aisle("IQO", "FSH", "XMX")
+                            .aisle("XXX", "XPC", "XXX")
+                            .aisle("XEX", "XXX", "XXX")
+                            .build());
+                    return shapeInfo;
+                });
+
+        ELECTRIC_BLAST_FURNACE.setPatternFactory(() -> FactoryBlockPattern.start()
+                .aisle("XXX", "CCC", "CCC", "XXX")
+                .aisle("XXX", "C#C", "C#C", "XMX")
+                .aisle("XSX", "CCC", "CCC", "XXX")
+                .where('S', controller(blocks(ELECTRIC_BLAST_FURNACE.getBlock())))
+                .where('X', blocks(CASING_INVAR_HEATPROOF.get()).setMinGlobalLimited(9)
+                        .or(autoAbilities(ELECTRIC_BLAST_FURNACE.getRecipeTypes()))
+                        .or(autoAbilities(true, false, false)))
+                .where('M', abilities(PartAbility.MUFFLER))
+                .where('C', heatingCoils())
+                .where('#', air())
+                .build());
+        ELECTRIC_BLAST_FURNACE.setShapes(
+                () -> {
+                    List<MultiblockShapeInfo> shapeInfo = new ArrayList<>();
+                    var builder = MultiblockShapeInfo.builder()
+                            .aisle("ISQ", "CCC", "CCC", "XMX")
+                            .aisle("FXD", "C#C", "C#C", "XHX")
+                            .aisle("EEX", "CCC", "CCC", "XXX")
+                            .where('X', CASING_INVAR_HEATPROOF.getDefaultState())
+                            .where('S', ELECTRIC_BLAST_FURNACE, Direction.NORTH)
+                            .where('#', Blocks.AIR.defaultBlockState())
+                            .where('E', ENERGY_INPUT_HATCH[GTValues.LV], Direction.SOUTH)
+                            .where('I', ITEM_IMPORT_BUS[GTValues.LV], Direction.NORTH)
+                            .where('O', ITEM_EXPORT_BUS[GTValues.LV], Direction.NORTH)
+                            .where('F', FLUID_IMPORT_HATCH[GTValues.LV], Direction.WEST)
+                            .where('D', FLUID_EXPORT_HATCH[GTValues.LV], Direction.EAST)
+                            .where('H', MUFFLER_HATCH[GTValues.LV], Direction.UP)
+                            .where('M', MAINTENANCE_HATCH, Direction.NORTH)
+                            .where('Q', BASIC_DATA_ACCESS_HATCH, Direction.NORTH);
+                    GTCEuAPI.HEATING_COILS.entrySet().stream()
+                            .sorted(Comparator.comparingInt(entry -> entry.getKey().getTier()))
+                            .forEach(
+                                    coil -> shapeInfo
+                                            .add(builder.shallowCopy().where('C', coil.getValue().get()).build()));
+                    return shapeInfo;
+                });
     }
 }
