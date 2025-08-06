@@ -30,7 +30,7 @@ import static com.gregtechceu.gtceu.common.data.models.GTMachineModels.createWor
 public class VoraxReactor {
 
     public final static MultiblockMachineDefinition VORAX_REACTOR = REGISTRATE
-            .multiblock("vorax_reactpr", WorkableElectricMultiblockMachine::new)
+            .multiblock("vorax_reactor", WorkableElectricMultiblockMachine::new)
             .rotationState(RotationState.NON_Y_AXIS)
             .recipeType(CosmicRecipeTypes.CHROMATIC_DISTILLATION_PLANT)
             .recipeModifier(ELECTRIC_OVERCLOCK.apply(OverclockingLogic.NON_PERFECT_OVERCLOCK))
