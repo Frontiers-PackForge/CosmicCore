@@ -1,10 +1,9 @@
 package com.ghostipedia.cosmiccore.common.machine.multiblock.multi;
 
-import com.ghostipedia.cosmiccore.CosmicCore;
 import com.ghostipedia.cosmiccore.client.renderer.machine.CosmicDynamicRenderHelpers;
 import com.ghostipedia.cosmiccore.common.data.CosmicBlocks;
-import com.ghostipedia.cosmiccore.common.data.materials.CosmicMaterials;
 import com.ghostipedia.cosmiccore.gtbridge.CosmicRecipeTypes;
+
 import com.gregtechceu.gtceu.GTCEu;
 import com.gregtechceu.gtceu.api.data.RotationState;
 import com.gregtechceu.gtceu.api.machine.MultiblockMachineDefinition;
@@ -13,13 +12,10 @@ import com.gregtechceu.gtceu.api.machine.multiblock.WorkableElectricMultiblockMa
 import com.gregtechceu.gtceu.api.pattern.FactoryBlockPattern;
 import com.gregtechceu.gtceu.api.pattern.Predicates;
 import com.gregtechceu.gtceu.api.recipe.OverclockingLogic;
-import net.minecraft.world.level.block.Blocks;
 
 import static com.ghostipedia.cosmiccore.api.registries.CosmicRegistration.REGISTRATE;
-import static com.ghostipedia.cosmiccore.common.data.CosmicBlocks.TRITANIUM_LINED_HEAVY_NEUTRONIUM_CASING;
 import static com.gregtechceu.gtceu.api.pattern.Predicates.*;
 import static com.gregtechceu.gtceu.common.data.GCYMBlocks.CASING_ATOMIC;
-import static com.gregtechceu.gtceu.common.data.GTBlocks.FUSION_COIL;
 import static com.gregtechceu.gtceu.common.data.GTMaterials.TungstenCarbide;
 import static com.gregtechceu.gtceu.common.data.GTRecipeModifiers.ELECTRIC_OVERCLOCK;
 import static com.gregtechceu.gtceu.common.data.models.GTMachineModels.createWorkableCasingMachineModel;
@@ -33,6 +29,7 @@ public class SpiritCrucible {
             .recipeModifier(ELECTRIC_OVERCLOCK.apply(OverclockingLogic.NON_PERFECT_OVERCLOCK))
             .appearanceBlock(CASING_ATOMIC)
             .partAppearance((controller, part, side) -> CASING_ATOMIC.getDefaultState())
+            // spotless:off
             .pattern(definition -> FactoryBlockPattern.start()
                     .aisle("AAB       BAA", "  B       B  ", "  B       B  ", "  B       B  ", "             ", "             ", "             ", "             ", "             ", "             ", "             ", "             ", "             ", "             ")
                     .aisle("AA         AA", " A         A ", " AAB     BAA ", "   B     B   ", "   B     B   ", "   B     B   ", "             ", "             ", "             ", "   B     B   ", "   B     B   ", "   B     B   ", "   B     B   ", "   B     B   ")
@@ -59,6 +56,7 @@ public class SpiritCrucible {
                     .where('E', blocks(CASING_ATOMIC.get()))
                     .where('B', blocks(CosmicBlocks.RESONANTLY_TUNED_VIRTUE_MELD_CASING.get()))
                     .build())
+            // spotless:on
             .model(createWorkableCasingMachineModel(
                     GTCEu.id("block/casings/gcym/atomic_casing"),
                     GTCEu.id("block/multiblock/fusion_reactor"))

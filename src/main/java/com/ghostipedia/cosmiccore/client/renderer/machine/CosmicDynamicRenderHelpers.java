@@ -18,7 +18,6 @@ public class CosmicDynamicRenderHelpers {
         return SpiritCrucibleRender.INSTANCE;
     }
 
-
     public static DynamicRender<?, ?> getStellarIrisRender() {
         return StellarIrisRender.INSTANCE;
     }
