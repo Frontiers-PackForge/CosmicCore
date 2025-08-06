@@ -19,6 +19,10 @@ public class CosmicDynamicRenderHelpers {
         return StellarIrisRender.INSTANCE;
     }
 
+    public static DynamicRender<?, ?> getConceptIncinerator() {
+        return ConceptIncineratorRender.INSTANCE;
+    }
+
     public static DynamicRender<?, ?> getStarBallastRender() {
         return StarBallastRender.INSTANCE;
     }

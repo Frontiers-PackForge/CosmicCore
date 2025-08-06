@@ -1,5 +1,6 @@
 package com.ghostipedia.cosmiccore.gtbridge;
 
+import com.ghostipedia.cosmiccore.api.CosmicGuiTextures;
 import com.ghostipedia.cosmiccore.api.capability.recipe.SoulRecipeCapability;
 import com.ghostipedia.cosmiccore.common.data.CosmicSounds;
 
@@ -18,12 +19,23 @@ import com.lowdragmc.lowdraglib.utils.LocalizationUtils;
 import net.minecraft.client.resources.language.I18n;
 import net.minecraft.resources.ResourceLocation;
 
-import static com.ghostipedia.cosmiccore.common.data.CosmicSounds.GAS_SUCC;
-import static com.ghostipedia.cosmiccore.common.data.CosmicSounds.MINING_MACHINE;
+import static com.ghostipedia.cosmiccore.common.data.CosmicSounds.*;
+import static com.gregtechceu.gtceu.common.data.GCYMRecipeTypes.ALLOY_BLAST_RECIPES;
 import static com.gregtechceu.gtceu.common.data.GTRecipeTypes.*;
 import static com.lowdragmc.lowdraglib.gui.texture.ProgressTexture.FillDirection.LEFT_TO_RIGHT;
 
 public class CosmicRecipeTypes {
+
+    public static final GTRecipeType LAMINATOR = GTRecipeTypes
+            .register("laminator", ELECTRIC)
+            .setSound(CosmicSounds.LAMINATOR)
+            .setMaxIOSize(3, 2, 2, 0)
+            .setProgressBar(GuiTextures.PROGRESS_BAR_ARROW, ProgressTexture.FillDirection.LEFT_TO_RIGHT);
+
+    public static final GTRecipeType MANA_FLUIDIZER = GTRecipeTypes
+            .register("mana_fluidizer", ELECTRIC)
+            .setMaxIOSize(1, 1, 1, 1)
+            .setProgressBar(GuiTextures.PROGRESS_BAR_ARROW, ProgressTexture.FillDirection.LEFT_TO_RIGHT);
 
     public static final GTRecipeType SOUL_TESTER_RECIPES = GTRecipeTypes
             .register("soul_tester", GTRecipeTypes.MULTIBLOCK)
@@ -38,23 +50,41 @@ public class CosmicRecipeTypes {
             .setSound(MINING_MACHINE)
             .setProgressBar(GuiTextures.PROGRESS_BAR_ARROW, ProgressTexture.FillDirection.LEFT_TO_RIGHT);
 
+    public static final GTRecipeType HEAVY_ASSEMBLER = GTRecipeTypes
+            .register("heavy_assembler", GTRecipeTypes.MULTIBLOCK)
+            .setMaxIOSize(12, 3, 6, 0)
+            .setSound(HEAVY_ASSEM)
+            .setProgressBar(CosmicGuiTextures.PROGRESS_BAR_HEAVY, ProgressTexture.FillDirection.UP_TO_DOWN);
+
+    public static final GTRecipeType PLASMITE_FORGE = GTRecipeTypes
+            .register("plasmite_forge", GTRecipeTypes.MULTIBLOCK)
+            .setMaxIOSize(3, 3, 3, 3)
+            .setSound(HEAVY_ASSEM)
+            .setProgressBar(CosmicGuiTextures.PROGRESS_BAR_HEAVY, ProgressTexture.FillDirection.UP_TO_DOWN);
+
+    public static final GTRecipeType PRISMA_FOUNDRY = GTRecipeTypes
+            .register("prisma_foundry", GTRecipeTypes.MULTIBLOCK)
+            .setMaxIOSize(3, 6, 3, 0)
+            .setSound(MINING_MACHINE)
+            .setProgressBar(GuiTextures.PROGRESS_BAR_ARROW, ProgressTexture.FillDirection.LEFT_TO_RIGHT);
+
     public static final GTRecipeType ATMOSPHERE_SIPHON = GTRecipeTypes
             .register("atmo_siphon", GTRecipeTypes.MULTIBLOCK)
             .setMaxIOSize(3, 0, 4, 16)
             .setSound(GAS_SUCC)
             .setProgressBar(GuiTextures.PROGRESS_BAR_ARROW, ProgressTexture.FillDirection.LEFT_TO_RIGHT);
 
-    public static final GTRecipeType HEAVY_ASSEMBLER = GTRecipeTypes
-            .register("heavy_assembler", GTRecipeTypes.MULTIBLOCK)
-            .setMaxIOSize(12, 4, 6, 0)
-            .setSound(MINING_MACHINE)
+    public static final GTRecipeType MANA_DIGITIZER = GTRecipeTypes
+            .register("mana_digitizer", GTRecipeTypes.MULTIBLOCK)
+            .setMaxIOSize(1, 0, 2, 2)
+            .setSound(GAS_SUCC)
             .setProgressBar(GuiTextures.PROGRESS_BAR_ARROW, ProgressTexture.FillDirection.LEFT_TO_RIGHT);
-
     public static final GTRecipeType GROVE_RECIPES = GTRecipeTypes.register("drygmy_grove", GTRecipeTypes.MULTIBLOCK)
             .setMaxSize(IO.IN, SoulRecipeCapability.CAP, 1)
             .setMaxSize(IO.OUT, SoulRecipeCapability.CAP, 1)
             .setMaxIOSize(2, 9, 1, 3)
             .setProgressBar(GuiTextures.PROGRESS_BAR_ARROW, ProgressTexture.FillDirection.LEFT_TO_RIGHT);
+
     public final static GTRecipeType INDUSTRIAL_PRIMITIVE_BLAST_FURNACE_RECIPES = register(
             "industrial_primitive_blast_furnace", MULTIBLOCK)
             .setMaxIOSize(3, 3, 1, 0)
@@ -107,12 +137,33 @@ public class CosmicRecipeTypes {
             .register("spooling_machine", ELECTRIC)
             .setMaxIOSize(2, 2, 1, 0)
             .setProgressBar(GuiTextures.PROGRESS_BAR_ARROW, ProgressTexture.FillDirection.LEFT_TO_RIGHT);
-    public static final GTRecipeType ORBITAL_FORGE = GTRecipeTypes
+    public static final GTRecipeType ORBITAL_FORGE_EBF = GTRecipeTypes
             .register("orbital_forge", GTRecipeTypes.MULTIBLOCK)
+            .setSound(CosmicSounds.ORBITAL_FORGE)
             .setHasResearchSlot(true)
-            .setMaxTooltips(4)
             .setMaxIOSize(3, 3, 3, 3)
-            .setProgressBar(GuiTextures.PROGRESS_BAR_ARROW, ProgressTexture.FillDirection.LEFT_TO_RIGHT)
+            .setProgressBar(GuiTextures.PROGRESS_BAR_ARC_FURNACE, ProgressTexture.FillDirection.LEFT_TO_RIGHT)
+            .addDataInfo(data -> {
+                int temp = data.getInt("ebf_temp");
+                return LocalizationUtils.format("gtceu.recipe.temperature", temp);
+            })
+            .addDataInfo(data -> {
+                int temp = data.getInt("ebf_temp");
+                ICoilType requiredCoil = ICoilType.getMinRequiredType(temp);
+
+                if (requiredCoil != null && !requiredCoil.getMaterial().isNull()) {
+                    return LocalizationUtils.format("gtceu.recipe.coil.tier",
+                            I18n.get(requiredCoil.getMaterial().getUnlocalizedName()));
+                }
+                return "";
+            });
+
+    public static final GTRecipeType ORBITAL_FORGE_ABS = GTRecipeTypes
+            .register("orbital_forge_abs", GTRecipeTypes.MULTIBLOCK)
+            .setSound(CosmicSounds.ORBITAL_FORGE)
+            .setHasResearchSlot(true)
+            .setMaxIOSize(9, 3, 3, 3)
+            .setProgressBar(GuiTextures.PROGRESS_BAR_COKE_OVEN, ProgressTexture.FillDirection.LEFT_TO_RIGHT)
             .addDataInfo(data -> {
                 int temp = data.getInt("ebf_temp");
                 return LocalizationUtils.format("gtceu.recipe.temperature", temp);
@@ -137,6 +188,7 @@ public class CosmicRecipeTypes {
             .setProgressBar(GuiTextures.PROGRESS_BAR_ARROW, ProgressTexture.FillDirection.LEFT_TO_RIGHT);
     public static final GTRecipeType CELESTIAL_BORE = GTRecipeTypes.register("celestial_bore", GTRecipeTypes.MULTIBLOCK)
             .setMaxIOSize(1, 54, 3, 18)
+            .setSound(CosmicSounds.LAMINATOR)
             .setProgressBar(GuiTextures.PROGRESS_BAR_ARROW, ProgressTexture.FillDirection.LEFT_TO_RIGHT);
     public static final GTRecipeType NAQUAHINE_REACTOR = GTRecipeTypes
             .register("naquahine_reactor", GTRecipeTypes.MULTIBLOCK)
@@ -163,7 +215,7 @@ public class CosmicRecipeTypes {
             .register("industrial_chemvat", GTRecipeTypes.MULTIBLOCK)
             .setMaxIOSize(6, 6, 6, 6)
             .setHasResearchSlot(true)
-            .setSound(GTSoundEntries.CHEMICAL)
+            .setSound(CHEMVAT)
             .setMaxTooltips(5)
             .onRecipeBuild(ResearchManager::createDefaultResearchRecipe)
             .setProgressBar(GuiTextures.PROGRESS_BAR_ARROW_MULTIPLE, ProgressTexture.FillDirection.LEFT_TO_RIGHT);
@@ -270,7 +322,7 @@ public class CosmicRecipeTypes {
         });
 
         BLAST_RECIPES.onRecipeBuild((builder, provider) -> {
-            var orbitBuilder = ORBITAL_FORGE.copyFrom(builder);
+            var orbitBuilderEBF = ORBITAL_FORGE_EBF.copyFrom(builder);
             // Orbital Forge ONLY copies Standard EBF recipes, if an EBF recipe contains a dimension condition, it is
             // assumed it can't be done in space
             if (!builder.conditions.isEmpty() &&
@@ -278,7 +330,20 @@ public class CosmicRecipeTypes {
                 // Do Nothing if the recipe Contains a Dimension
             } else {
                 // If It Doesn't have a Dimension, add the recipe and give it an dimension req of 'Sun Orbit'
-                orbitBuilder.addCondition(new DimensionCondition(new ResourceLocation("frontiers:sun_orbit")))
+                orbitBuilderEBF.addCondition(new DimensionCondition(new ResourceLocation("frontiers:sun_orbit")))
+                        .save(provider);
+            }
+        });
+        ALLOY_BLAST_RECIPES.onRecipeBuild((builder, provider) -> {
+            var orbitBuilderABS = ORBITAL_FORGE_ABS.copyFrom(builder);
+            // Orbital Forge ONLY copies Standard ABS recipes, if an ABS recipe contains a dimension condition, it is
+            // assumed it can't be done in space
+            if (!builder.conditions.isEmpty() &&
+                    builder.conditions.stream().anyMatch(cond -> cond instanceof DimensionCondition)) {
+                // Do Nothing if the recipe Contains a Dimension
+            } else {
+                // If It Doesn't have a Dimension, add the recipe and give it an dimension req of 'Sun Orbit'
+                orbitBuilderABS.addCondition(new DimensionCondition(new ResourceLocation("frontiers:sun_orbit")))
                         .save(provider);
             }
         });

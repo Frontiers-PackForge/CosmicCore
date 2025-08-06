@@ -3,6 +3,10 @@ dependencies {
 
     modRuntimeOnly("curse.maven:worldedit-225608:4586218") //Worldedit bc i'm lazy ty
 
+    //Botania
+//    implementation(forge.botania)
+
+
     // LDLib
     modImplementation(forge.ldlib)
 
@@ -40,10 +44,14 @@ dependencies {
     modImplementation(forge.curios)
 
     // AE2
-    modImplementation(forge.ae2)
+    jarJar(modImplementation(forge.ae2.get()))
+    modImplementation(forge.guideme)
+
+
+
     modCompileOnly(forge.modernAe2Additions)
-    clientAdditionalRuntimeClasspath(forge.modernAe2Additions)
-    client2AdditionalRuntimeClasspath(forge.modernAe2Additions)
+    modCompileOnly(forge.modernAe2Additions)
+    modCompileOnly(forge.modernAe2Additions)
 
     // LSO
     modImplementation(forge.legendarySurvivalOverhaul)

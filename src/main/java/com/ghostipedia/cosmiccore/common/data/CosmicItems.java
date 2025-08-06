@@ -1,13 +1,20 @@
 package com.ghostipedia.cosmiccore.common.data;
 
+import com.ghostipedia.cosmiccore.CosmicCore;
 import com.ghostipedia.cosmiccore.api.item.armor.*;
 import com.ghostipedia.cosmiccore.api.registries.CosmicRegistration;
+import com.ghostipedia.cosmiccore.client.renderer.item.HaloItemRenderer;
 import com.ghostipedia.cosmiccore.common.data.tag.item.CosmicItemTags;
+import com.ghostipedia.cosmiccore.common.item.armor.ChestSanguineWarptechSuite;
+import com.ghostipedia.cosmiccore.common.item.armor.HelmetSanguineWarptechSuite;
+import com.ghostipedia.cosmiccore.common.item.armor.SanguineWarptechSuite;
 import com.ghostipedia.cosmiccore.common.item.behavior.EffectApplicationBehavior;
+import com.ghostipedia.cosmiccore.common.item.behavior.InfiniteSprayCanBehavior;
 import com.ghostipedia.cosmiccore.common.item.behavior.StructureWriteBehavior;
 import com.ghostipedia.cosmiccore.common.item.behavior.WirelessPDABehavior;
 import com.ghostipedia.cosmiccore.utils.StringUtil;
 
+import com.gregtechceu.gtceu.GTCEu;
 import com.gregtechceu.gtceu.api.item.ComponentItem;
 import com.gregtechceu.gtceu.api.item.armor.ArmorComponentItem;
 import com.gregtechceu.gtceu.api.item.component.ICustomDescriptionId;
@@ -17,13 +24,13 @@ import com.gregtechceu.gtceu.common.data.GTItems;
 import com.gregtechceu.gtceu.common.item.ItemFluidContainer;
 import com.gregtechceu.gtceu.common.item.TooltipBehavior;
 import com.gregtechceu.gtceu.common.item.armor.GTArmorMaterials;
-import com.gregtechceu.gtceu.common.item.armor.QuarkTechSuite;
 import com.gregtechceu.gtceu.common.registry.GTRegistration;
 import com.gregtechceu.gtceu.config.ConfigHolder;
 import com.gregtechceu.gtceu.data.recipe.CustomTags;
 
 import com.lowdragmc.lowdraglib.utils.LocalizationUtils;
 
+import net.minecraft.client.renderer.item.ItemProperties;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.damagesource.DamageSource;
@@ -50,12 +57,14 @@ import wayoftime.bloodmagic.common.item.BloodOrb;
 import wayoftime.bloodmagic.common.item.ItemBloodOrb;
 import wayoftime.bloodmagic.common.registration.impl.BloodOrbRegistryObject;
 
+import java.util.function.Function;
+
+import static com.ghostipedia.cosmiccore.CosmicUtils.attachRenderer;
 import static com.ghostipedia.cosmiccore.api.registries.CosmicRegistration.REGISTRATE;
 import static com.gregtechceu.gtceu.common.data.GTItems.attach;
 import static earth.terrarium.adastra.common.registry.ModItems.GLOBES;
 import static wayoftime.bloodmagic.common.item.BloodMagicItems.BLOOD_ORBS;
 
-@SuppressWarnings({ "unused" })
 public class CosmicItems {
 
     public static final BloodOrbRegistryObject<BloodOrb> ORB_ASCENDANT;
@@ -779,25 +788,36 @@ public class CosmicItems {
             .item("eschaton_processor", ComponentItem::create)
             .lang("Eschaton Processor")
             .properties(p -> p.stacksTo(64))
-
+            .onRegister(attachRenderer(() -> HaloItemRenderer.create(6, 0xFFFFFFFF,
+                    new ResourceLocation(CosmicCore.MOD_ID, "block/iris/rnd/tentacle_halo"), true,
+                    false)))
             .defaultModel()
             .register();
     public static final ItemEntry<ComponentItem> ESCHATON_PROCESSOR_ASSEMBLY = REGISTRATE
             .item("eschaton_processor_assembly", ComponentItem::create)
             .lang("Eschaton Processor Assembly")
             .properties(p -> p.stacksTo(64))
+            .onRegister(attachRenderer(() -> HaloItemRenderer.create(6, 0xFFFFFFFF,
+                    new ResourceLocation(CosmicCore.MOD_ID, "block/iris/rnd/tentacle_halo"), true,
+                    false)))
             .defaultModel()
             .register();
     public static final ItemEntry<ComponentItem> ESCHATON_PROCESSOR_SUPERCOMPUTER = REGISTRATE
             .item("eschaton_processor_supercomputer", ComponentItem::create)
             .lang("Eschaton Processor Supercomputer")
             .properties(p -> p.stacksTo(64))
+            .onRegister(attachRenderer(() -> HaloItemRenderer.create(6, 0xFFFFFFFF,
+                    new ResourceLocation(CosmicCore.MOD_ID, "block/iris/rnd/tentacle_halo"), true,
+                    false)))
             .defaultModel()
             .register();
     public static final ItemEntry<ComponentItem> ESCHATON_PROCESSOR_MAINFRAME = REGISTRATE
             .item("eschaton_processor_mainframe", ComponentItem::create)
             .lang("Eschaton Processor Mainframe")
             .properties(p -> p.stacksTo(64))
+            .onRegister(attachRenderer(() -> HaloItemRenderer.create(6, 0xFFFFFFFF,
+                    new ResourceLocation(CosmicCore.MOD_ID, "block/iris/rnd/tentacle_halo"), true,
+                    false)))
             .onRegister(attach(new TooltipBehavior(lines -> {
                 lines.add(Component.literal(StringUtil
                         .rainbowDancing(LocalizationUtils.format("cosmiccore.circuit.lore.tier.max.0"))));
@@ -902,10 +922,23 @@ public class CosmicItems {
             .register();
     // Oiled up white girl trying to understand what the FUCK an armor tag is, i'm doing to fucking shove a whole
     // pineapple up the ass of whatever mojang employee thought these were **OKAY TO CODE**
-    public static ItemEntry<SpaceArmorComponentItem> ADVANCED_SANGUINE_WARPTECH_CHESTPLATE = REGISTRATE
+
+    public static ItemEntry<ArmorComponentItem> SANGUINE_WARPTECH_HELMET = REGISTRATE.item("sanguine_warptech_helmet",
+            (p) -> new ArmorComponentItem(GTArmorMaterials.ARMOR, ArmorItem.Type.HELMET, p)
+                    .setArmorLogic(new HelmetSanguineWarptechSuite(ArmorItem.Type.HELMET,
+                            8192,
+                            100_000_000L * (long) Math.max(1,
+                                    Math.pow(4, ConfigHolder.INSTANCE.tools.voltageTierQuarkTech - 5)),
+                            ConfigHolder.INSTANCE.tools.voltageTierQuarkTech)))
+            .lang("Sanguine WarpTech Helmet")
+            .properties(p -> p.rarity(Rarity.EPIC))
+            .tag(CustomTags.PPE_ARMOR)
+            .register();
+
+    public static ItemEntry<SpaceArmorComponentItem> SANGUINE_WARPTECH_CHESTPLATE = REGISTRATE
             .item("sanguine_warptech_chestplate",
                     (p) -> new SpaceArmorComponentItem(GTArmorMaterials.ARMOR, ArmorItem.Type.CHESTPLATE, 100000, p)
-                            .setArmorLogic(new AdvancedQuarkTechSpaceSuite(8192,
+                            .setArmorLogic(new ChestSanguineWarptechSuite(8192,
                                     10_000_000_000L * (long) Math.max(1,
                                             Math.pow(4, ConfigHolder.INSTANCE.tools.voltageTierAdvQuarkTech - 6)),
                                     ConfigHolder.INSTANCE.tools.voltageTierAdvQuarkTech)))
@@ -917,7 +950,7 @@ public class CosmicItems {
     public static ItemEntry<ArmorComponentItem> SANGUINE_WARPTECH_LEGGINGS = REGISTRATE
             .item("sanguine_warptech_leggings",
                     (p) -> new ArmorComponentItem(GTArmorMaterials.ARMOR, ArmorItem.Type.LEGGINGS, p)
-                            .setArmorLogic(new QuarkTechSuite(ArmorItem.Type.LEGGINGS,
+                            .setArmorLogic(new SanguineWarptechSuite(ArmorItem.Type.LEGGINGS,
                                     8192,
                                     100_000_000L * (long) Math.max(1,
                                             Math.pow(4, ConfigHolder.INSTANCE.tools.voltageTierQuarkTech - 5)),
@@ -926,25 +959,15 @@ public class CosmicItems {
             .properties(p -> p.rarity(Rarity.EPIC))
             .tag(CustomTags.PPE_ARMOR)
             .register();
-    public static ItemEntry<ArmorComponentItem> SANGUINE_WARPTECH_HELMET = REGISTRATE.item("sanguine_warptech_helmet",
-            (p) -> new ArmorComponentItem(GTArmorMaterials.ARMOR, ArmorItem.Type.HELMET, p)
-                    .setArmorLogic(new QuarkTechSuite(ArmorItem.Type.HELMET,
-                            8192,
-                            100_000_000L * (long) Math.max(1,
-                                    Math.pow(4, ConfigHolder.INSTANCE.tools.voltageTierQuarkTech - 5)),
-                            ConfigHolder.INSTANCE.tools.voltageTierQuarkTech)))
-            .lang("Sanguine WarpTech Leggings")
-            .properties(p -> p.rarity(Rarity.EPIC))
-            .tag(CustomTags.PPE_ARMOR)
-            .register();
+
     public static ItemEntry<ArmorComponentItem> SANGUINE_WARPTECH_BOOTS = REGISTRATE.item("sanguine_warptech_boots",
             (p) -> new ArmorComponentItem(GTArmorMaterials.ARMOR, ArmorItem.Type.BOOTS, p)
-                    .setArmorLogic(new QuarkTechSuite(ArmorItem.Type.BOOTS,
+                    .setArmorLogic(new SanguineWarptechSuite(ArmorItem.Type.BOOTS,
                             8192,
                             100_000_000L * (long) Math.max(1,
                                     Math.pow(4, ConfigHolder.INSTANCE.tools.voltageTierQuarkTech - 5)),
                             ConfigHolder.INSTANCE.tools.voltageTierQuarkTech)))
-            .lang("Sanguine WarpTech Leggings")
+            .lang("Sanguine WarpTech Boots")
             .properties(p -> p.rarity(Rarity.EPIC))
             .tag(CustomTags.PPE_ARMOR)
             .register();
@@ -1201,6 +1224,17 @@ public class CosmicItems {
             })))
             .defaultModel()
             .register();
+    // infinite spraycan
+    public static final ItemEntry<ComponentItem> INFINITE_SPRAY_CAN = REGISTRATE
+            .item("infinite_spray_can", ComponentItem::create)
+            .lang("§5 Infinite_spray_can")
+            .setData(ProviderType.ITEM_MODEL, NonNullBiConsumer.noop())
+            .properties(p -> p.stacksTo(1))
+            .onRegister(attach(new InfiniteSprayCanBehavior(1)))
+            .onRegister(modelPredicate(CosmicCore.id("color"),
+                    (itemStack) -> (float) itemStack.getOrCreateTag().getInt(InfiniteSprayCanBehavior.ColorTag)))
+            .register();
+
     public static ItemEntry<ComponentItem> NEUTRONITE_FLUID_CELL = GTRegistration.REGISTRATE
             .item("indestructible_fluid_cell", ComponentItem::create)
             .lang("Indestructible %s Fluid Cell")
@@ -1225,6 +1259,15 @@ public class CosmicItems {
 
     public static <T extends ComponentItem> NonNullConsumer<T> attach(IItemComponent... components) {
         return item -> item.attachComponents(components);
+    }
+
+    public static <T extends Item> NonNullConsumer<T> modelPredicate(ResourceLocation predicate,
+                                                                     Function<ItemStack, Float> property) {
+        return item -> {
+            if (GTCEu.isClientSide()) {
+                ItemProperties.register(item, predicate, (itemStack, c, l, i) -> property.apply(itemStack));
+            }
+        };
     }
 
     public static void init() {}

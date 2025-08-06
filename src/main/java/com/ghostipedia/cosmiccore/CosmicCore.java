@@ -9,8 +9,9 @@ import com.ghostipedia.cosmiccore.common.data.*;
 import com.ghostipedia.cosmiccore.common.data.materials.CosmicMaterialSet;
 import com.ghostipedia.cosmiccore.common.data.materials.CosmicMaterials;
 import com.ghostipedia.cosmiccore.common.item.behavior.GravityCoreBehavior;
-import com.ghostipedia.cosmiccore.common.machine.multiblock.multi.modular.ModularizedMultis;
+import com.ghostipedia.cosmiccore.common.machine.multiblock.multi.modular.MultiblockInit;
 import com.ghostipedia.cosmiccore.gtbridge.CosmicRecipeTypes;
+import com.ghostipedia.cosmiccore.utils.input.SyncedKeyMapping;
 
 import com.gregtechceu.gtceu.api.GTCEuAPI;
 import com.gregtechceu.gtceu.api.data.chemical.material.event.MaterialEvent;
@@ -68,10 +69,12 @@ public class CosmicCore {
         CosmicBlocks.init();
         CosmicBlockEntities.init();
         CosmicItems.init();
+        CosmicBotanyItemRegistration.init();
         CosmicRegistration.REGISTRATE.registerRegistrate();
         CosmicCoreDatagen.init();
         CosmicPredicates.init();
         CosmicMaterialSet.init();
+        SyncedKeyMapping.init();
     }
 
     public static ResourceLocation id(String path) {
@@ -116,7 +119,7 @@ public class CosmicCore {
     }
 
     public void registerMachines(GTCEuAPI.RegisterEvent<ResourceLocation, MachineDefinition> event) {
-        ModularizedMultis.init();
+        MultiblockInit.init();
         CosmicMachines.init();
     }
 

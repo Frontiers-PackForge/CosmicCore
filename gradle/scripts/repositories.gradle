@@ -1,6 +1,6 @@
 repositories {
     flatDir {
-        dir("libs")
+        dir "libs"
     }
     mavenLocal()
     mavenCentral()
@@ -13,6 +13,7 @@ repositories {
         url = 'https://maven.gtceu.com'
         content {
             includeGroup 'com.gregtechceu.gtceu'
+            includeGroup 'appeng'
         }
     }
     maven { // Curse Forge File
