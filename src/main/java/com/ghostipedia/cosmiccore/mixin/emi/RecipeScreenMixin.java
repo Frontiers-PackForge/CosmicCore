@@ -124,7 +124,8 @@ public abstract class RecipeScreenMixin extends Screen {
 
     @Unique
     private int cosmicCore$getList(int i) {
-        return Math.min((int) Math.floor((double) i / cosmicCore$maxWorkstations()), 1) + 1;    }
+        return Math.min((int) Math.floor((double) i / cosmicCore$maxWorkstations()), 1) + 1;
+    }
 
     @Unique
     private int cosmicCore$maxWorkstations() {
