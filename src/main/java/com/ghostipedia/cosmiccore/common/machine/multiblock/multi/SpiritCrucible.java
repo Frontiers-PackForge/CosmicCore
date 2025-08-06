@@ -29,46 +29,21 @@ public class SpiritCrucible {
             .recipeModifier(ELECTRIC_OVERCLOCK.apply(OverclockingLogic.NON_PERFECT_OVERCLOCK))
             .appearanceBlock(CASING_ATOMIC)
             .partAppearance((controller, part, side) -> CASING_ATOMIC.getDefaultState())
+            // spotless:off
             .pattern(definition -> FactoryBlockPattern.start()
-                    .aisle("AAB       BAA", "  B       B  ", "  B       B  ", "  B       B  ", "             ",
-                            "             ", "             ", "             ", "             ", "             ",
-                            "             ", "             ", "             ", "             ")
-                    .aisle("AA         AA", " A         A ", " AAB     BAA ", "   B     B   ", "   B     B   ",
-                            "   B     B   ", "             ", "             ", "             ", "   B     B   ",
-                            "   B     B   ", "   B     B   ", "   B     B   ", "   B     B   ")
-                    .aisle("B   CAAAC   B", "B   CAAAC   B", "BAA CAAAC AAB", "B A CAAAC A B", "  AAC   CAA  ",
-                            "  D C   C D  ", "  D C   C D  ", "  D C   C D  ", "  D C   C D  ", "  BBC   CBB  ",
-                            "    C   C    ", "             ", "             ", "             ")
-                    .aisle("     EEE     ", "     EEE     ", " B   EEE   B ", " B   EEE   B ", " BAAAAAAAAAB ",
-                            " B A     A B ", "   A     A   ", "             ", "             ", " BBC     CBB ",
-                            " B C     C B ", " B C     C B ", " B         B ", " B         B ")
-                    .aisle("  C EAAAE C  ", "  C EAAAE C  ", "  C EAAAE C  ", "  C EAAAE C  ", "  CAA   AAC  ",
-                            "  C       C  ", "  C       C  ", "  C       C  ", "  C       C  ", "  C       C  ",
-                            "  C       C  ", "             ", "             ", "             ")
-                    .aisle("  AEAAAAAEA  ", "  AEA   AEA  ", "  AEA   AEA  ", "  AEA   AEA  ", "   A     A   ",
-                            "             ", "             ", "             ", "             ", "             ",
-                            "             ", "             ", "             ", "             ")
-                    .aisle("  AEAAAAAEA  ", "  AEA   AEA  ", "  AEA   AEA  ", "  AEA   AEA  ", "   A     A   ",
-                            "             ", "             ", "             ", "             ", "             ",
-                            "             ", "             ", "             ", "             ")
-                    .aisle("  AEAAAAAEA  ", "  AEA   AEA  ", "  AEA   AEA  ", "  AEA   AEA  ", "   A     A   ",
-                            "             ", "             ", "             ", "             ", "             ",
-                            "             ", "             ", "             ", "             ")
-                    .aisle("  C EAAAE C  ", "  C EAAAE C  ", "  C EAAAE C  ", "  C EAAAE C  ", "  CAA   AAC  ",
-                            "  C       C  ", "  C       C  ", "  C       C  ", "  C       C  ", "  C       C  ",
-                            "  C       C  ", "             ", "             ", "             ")
-                    .aisle("     EEE     ", "     EEE     ", " B   EEE   B ", " B   EEE   B ", " BAAAAAAAAAB ",
-                            " B A       B ", "   A     A   ", "             ", "             ", " BBC     CBB ",
-                            " B C     C B ", " B C     C B ", " B         B ", " B         B ")
-                    .aisle("B   CAAAC   B", "B   CAAAC   B", "BAA CAQAC AAB", "B A CAAAC A B", "  AAC   CAA  ",
-                            "  D C   C D  ", "  D C   C D  ", "  D C   C D  ", "  D C   C D  ", "  BBC   CBB  ",
-                            "    C   C    ", "             ", "             ", "             ")
-                    .aisle("AA         AA", " A         A ", " AAB     BAA ", "   B     B   ", "   B     B   ",
-                            "   B     B   ", "             ", "             ", "             ", "   B     B   ",
-                            "   B     B   ", "   B     B   ", "   B     B   ", "   B     B   ")
-                    .aisle("AAB       BAA", "  B       B  ", "  B       B  ", "  B       B  ", "             ",
-                            "             ", "             ", "             ", "             ", "             ",
-                            "             ", "             ", "             ", "             ")
+                    .aisle("AAB       BAA", "  B       B  ", "  B       B  ", "  B       B  ", "             ", "             ", "             ", "             ", "             ", "             ", "             ", "             ", "             ", "             ")
+                    .aisle("AA         AA", " A         A ", " AAB     BAA ", "   B     B   ", "   B     B   ", "   B     B   ", "             ", "             ", "             ", "   B     B   ", "   B     B   ", "   B     B   ", "   B     B   ", "   B     B   ")
+                    .aisle("B   CAAAC   B", "B   CAAAC   B", "BAA CAAAC AAB", "B A CAAAC A B", "  AAC   CAA  ", "  D C   C D  ", "  D C   C D  ", "  D C   C D  ", "  D C   C D  ", "  BBC   CBB  ", "    C   C    ", "             ", "             ", "             ")
+                    .aisle("     EEE     ", "     EEE     ", " B   EEE   B ", " B   EEE   B ", " BAAAAAAAAAB ", " B A     A B ", "   A     A   ", "             ", "             ", " BBC     CBB ", " B C     C B ", " B C     C B ", " B         B ", " B         B ")
+                    .aisle("  C EAAAE C  ", "  C EAAAE C  ", "  C EAAAE C  ", "  C EAAAE C  ", "  CAA   AAC  ", "  C       C  ", "  C       C  ", "  C       C  ", "  C       C  ", "  C       C  ", "  C       C  ", "             ", "             ", "             ")
+                    .aisle("  AEAAAAAEA  ", "  AEA   AEA  ", "  AEA   AEA  ", "  AEA   AEA  ", "   A     A   ", "             ", "             ", "             ", "             ", "             ", "             ", "             ", "             ", "             ")
+                    .aisle("  AEAAAAAEA  ", "  AEA   AEA  ", "  AEA   AEA  ", "  AEA   AEA  ", "   A     A   ", "             ", "             ", "             ", "             ", "             ", "             ", "             ", "             ", "             ")
+                    .aisle("  AEAAAAAEA  ", "  AEA   AEA  ", "  AEA   AEA  ", "  AEA   AEA  ", "   A     A   ", "             ", "             ", "             ", "             ", "             ", "             ", "             ", "             ", "             ")
+                    .aisle("  C EAAAE C  ", "  C EAAAE C  ", "  C EAAAE C  ", "  C EAAAE C  ", "  CAA   AAC  ", "  C       C  ", "  C       C  ", "  C       C  ", "  C       C  ", "  C       C  ", "  C       C  ", "             ", "             ", "             ")
+                    .aisle("     EEE     ", "     EEE     ", " B   EEE   B ", " B   EEE   B ", " BAAAAAAAAAB ", " B A       B ", "   A     A   ", "             ", "             ", " BBC     CBB ", " B C     C B ", " B C     C B ", " B         B ", " B         B ")
+                    .aisle("B   CAAAC   B", "B   CAAAC   B", "BAA CAQAC AAB", "B A CAAAC A B", "  AAC   CAA  ", "  D C   C D  ", "  D C   C D  ", "  D C   C D  ", "  D C   C D  ", "  BBC   CBB  ", "    C   C    ", "             ", "             ", "             ")
+                    .aisle("AA         AA", " A         A ", " AAB     BAA ", "   B     B   ", "   B     B   ", "   B     B   ", "             ", "             ", "             ", "   B     B   ", "   B     B   ", "   B     B   ", "   B     B   ", "   B     B   ")
+                    .aisle("AAB       BAA", "  B       B  ", "  B       B  ", "  B       B  ", "             ", "             ", "             ", "             ", "             ", "             ", "             ", "             ", "             ", "             ")
                     .where(' ', any())
                     .where("Q", controller(blocks(definition.getBlock())))
                     .where('C', blocks(CosmicBlocks.SELF_HEALING_PTHANTERUM.get()))
@@ -81,6 +56,7 @@ public class SpiritCrucible {
                     .where('E', blocks(CASING_ATOMIC.get()))
                     .where('B', blocks(CosmicBlocks.RESONANTLY_TUNED_VIRTUE_MELD_CASING.get()))
                     .build())
+            // spotless:on
             .model(createWorkableCasingMachineModel(
                     GTCEu.id("block/casings/gcym/atomic_casing"),
                     GTCEu.id("block/multiblock/fusion_reactor"))
