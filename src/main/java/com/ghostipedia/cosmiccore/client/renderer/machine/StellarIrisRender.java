@@ -66,7 +66,7 @@ public class StellarIrisRender extends DynamicRender<IrisMultiblockMachine, Stel
                        int packedLight, int packedOverlay) {
         if (!machine.isFormed()) return;
 
-        float totalTick = (Minecraft.getInstance().level.getGameTime() + partialTick);
+        float totalTick = (Minecraft.getInstance().player.tickCount + partialTick);
         VertexConsumer consumer = buffer.getBuffer(Sheets.cutoutBlockSheet());
 
         poseStack.pushPose();
