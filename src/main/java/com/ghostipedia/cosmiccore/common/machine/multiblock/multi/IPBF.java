@@ -11,6 +11,7 @@ import com.gregtechceu.gtceu.api.pattern.FactoryBlockPattern;
 import com.gregtechceu.gtceu.api.pattern.Predicates;
 import com.gregtechceu.gtceu.client.renderer.machine.DynamicRenderHelper;
 import com.gregtechceu.gtceu.common.block.BoilerFireboxType;
+import com.gregtechceu.gtceu.utils.GTUtil;
 
 import net.minecraft.network.chat.Component;
 
@@ -33,7 +34,8 @@ public class IPBF {
                     .aisle("QQQ", "X#X", "X#X", "X#X", "X#X")
                     .aisle("QQQ", "XYX", "XXX", "XXX", "XXX")
                     .where('X', blocks(CASING_PRIMITIVE_BRICKS.get()))
-                    .where('#', Predicates.air())
+                    .where('#', Predicates.air()
+                            .or(Predicates.custom(bws -> GTUtil.isBlockSnow(bws.getBlockState()), null)))
                     .where('Y', Predicates.controller(blocks(definition.getBlock())))
                     .where('Q', blocks(FIREBOX_STEEL.get()).setMinGlobalLimited(6)
                             .or(Predicates.abilities(PartAbility.STEAM_IMPORT_ITEMS).setPreviewCount(1)
@@ -42,11 +44,13 @@ public class IPBF {
                                     .setExactLimit(1))
                             .or(Predicates.abilities(PartAbility.IMPORT_FLUIDS).setPreviewCount(1).setExactLimit(1)))
                     .build())
-            .model(createWorkableCasingMachineModel(GTCEu.id("block/casings/solid/machine_casing_bronze_plated_bricks"),
-                    GTCEu.id("block/multiblock/steam_oven"))
+            .model(createWorkableCasingMachineModel(GTCEu.id("block/casings/solid/machine_primitive_bricks"),
+                    GTCEu.id("block/multiblock/primitive_blast_furnace"))
                     .andThen(b -> b.addDynamicRenderer(
                             () -> DynamicRenderHelper.makeBoilerPartRender(
-                                    BoilerFireboxType.STEEL_FIREBOX, STEEL_PLATED_BRONZE))))
+                                    BoilerFireboxType.STEEL_FIREBOX, STEEL_PLATED_BRONZE)))
+                    .andThen(b -> b.addDynamicRenderer(DynamicRenderHelper::createPBFLavaRender)))
+            .hasBER(true)
             .tooltips(
                     Component.translatable("cosmiccore.multiblock.ipbf.tooltip.0"),
                     Component.translatable("cosmiccore.multiblock.ipbf.tooltip.1"),
