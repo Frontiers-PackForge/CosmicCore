@@ -1,7 +1,7 @@
 package com.ghostipedia.cosmiccore.client.renderer.machine;
 
 import com.ghostipedia.cosmiccore.CosmicCore;
-import com.ghostipedia.cosmiccore.api.machine.multiblock.IrisMultiblockMachine;
+
 import com.gregtechceu.gtceu.api.machine.multiblock.WorkableElectricMultiblockMachine;
 import com.gregtechceu.gtceu.api.pattern.util.RelativeDirection;
 import com.gregtechceu.gtceu.client.renderer.GTRenderTypes;
@@ -9,9 +9,7 @@ import com.gregtechceu.gtceu.client.renderer.machine.DynamicRender;
 import com.gregtechceu.gtceu.client.renderer.machine.DynamicRenderType;
 import com.gregtechceu.gtceu.client.util.ModelUtils;
 import com.gregtechceu.gtceu.client.util.RenderBufferHelper;
-import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.blaze3d.vertex.VertexConsumer;
-import com.mojang.serialization.Codec;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.LightTexture;
 import net.minecraft.client.renderer.MultiBufferSource;
@@ -27,6 +25,10 @@ import net.minecraft.world.phys.AABB;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.model.data.ModelData;
+
+import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.VertexConsumer;
+import com.mojang.serialization.Codec;
 import org.joml.Quaternionf;
 
 import java.util.EnumSet;
@@ -45,6 +47,7 @@ public class SpiritCrucibleRender extends DynamicRender<WorkableElectricMultiblo
     public DynamicRenderType<WorkableElectricMultiblockMachine, SpiritCrucibleRender> getType() {
         return TYPE;
     }
+
     public static final ResourceLocation IRIS_MODEL_CORE = CosmicCore.id("block/iris/iris_sphere");
     private static BakedModel irisCoreModel = null;
 
@@ -64,8 +67,10 @@ public class SpiritCrucibleRender extends DynamicRender<WorkableElectricMultiblo
             blankVoidSprite = event.getAtlas().getSprite(VOID_BLANK);
         });
     }
+
     @Override
-    public void render(WorkableElectricMultiblockMachine machine, float partialTick, PoseStack poseStack, MultiBufferSource buffer, int packedLight, int packedOverlay) {
+    public void render(WorkableElectricMultiblockMachine machine, float partialTick, PoseStack poseStack,
+                       MultiBufferSource buffer, int packedLight, int packedOverlay) {
         if (!machine.isFormed()) {
             return;
         }
@@ -104,7 +109,7 @@ public class SpiritCrucibleRender extends DynamicRender<WorkableElectricMultiblo
         poseStack.popPose();
 
         poseStack.pushPose();
-        poseStack.translate(0,-6,0);
+        poseStack.translate(0, -6, 0);
         Quaternionf rot = new Quaternionf()
                 .rotateY(totalTick / -2);
         poseStack.mulPose(rot);
@@ -118,10 +123,10 @@ public class SpiritCrucibleRender extends DynamicRender<WorkableElectricMultiblo
                 swirlSprite,
                 -3.5f, 0, -3.5f,
                 3.5f, 0, 3.5f);
-        poseStack.translate(0,-6,0);
+        poseStack.translate(0, -6, 0);
         poseStack.popPose();
         poseStack.pushPose();
-        poseStack.translate(0,-6.5,0);
+        poseStack.translate(0, -6.5, 0);
         RenderBufferHelper.renderCube(
                 consumer,
                 poseStack.last(),
@@ -138,7 +143,7 @@ public class SpiritCrucibleRender extends DynamicRender<WorkableElectricMultiblo
         float amplitude = (max - min) / 2.0f;
         float offset = min + amplitude;
         float scale = (float) Math.sin(totalTick * 0.1f) * amplitude + offset;
-//        poseStack.scale(scale, scale, scale);
+        // poseStack.scale(scale, scale, scale);
 
         poseStack.mulPose(new Quaternionf().rotateAxis(totalTick * Mth.TWO_PI / 80, 0, 1, 0));
         consumer = buffer.getBuffer(Sheets.translucentCullBlockSheet());
@@ -155,11 +160,8 @@ public class SpiritCrucibleRender extends DynamicRender<WorkableElectricMultiblo
         consumer = buffer.getBuffer(Sheets.cutoutBlockSheet());
         renderBallC(poseStack, consumer, packedLight, packedOverlay);
         poseStack.popPose();
-
-
-
-
     }
+
     @OnlyIn(Dist.CLIENT)
     public void renderBallA(PoseStack poseStack, VertexConsumer consumer, int packedLight, int packedOverlay) {
         PoseStack.Pose pose = poseStack.last();
@@ -168,6 +170,7 @@ public class SpiritCrucibleRender extends DynamicRender<WorkableElectricMultiblo
             consumer.putBulkData(pose, quad, 0.2F, 0f, 0.2F, packedLight, packedOverlay);
         }
     }
+
     @OnlyIn(Dist.CLIENT)
     public void renderBallC(PoseStack poseStack, VertexConsumer consumer, int packedLight, int packedOverlay) {
         PoseStack.Pose pose = poseStack.last();
@@ -176,6 +179,7 @@ public class SpiritCrucibleRender extends DynamicRender<WorkableElectricMultiblo
             consumer.putBulkData(pose, quad, 0.4F, 0f, 0.4F, packedLight, packedOverlay);
         }
     }
+
     @OnlyIn(Dist.CLIENT)
     private void renderRings(Direction.Axis upAxis, float totalTick, PoseStack poseStack, MultiBufferSource buffer) {
         VertexConsumer consumer = buffer.getBuffer(GTRenderTypes.getLightRing());
@@ -192,7 +196,6 @@ public class SpiritCrucibleRender extends DynamicRender<WorkableElectricMultiblo
         float offset = min + amplitude;
         float scale = (float) Math.sin(totalTick * 0.1f) * amplitude + offset;
 
-
         poseStack.pushPose();
         poseStack.mulPose(new Quaternionf().rotateXYZ(sinX, cosY, sinZ));
         consumer = buffer.getBuffer(GTRenderTypes.getLightRing());
@@ -200,7 +203,7 @@ public class SpiritCrucibleRender extends DynamicRender<WorkableElectricMultiblo
                 0, 0, 0,
                 2.75f, 0.1F, 10, 36,
                 0.5F, 0, 0.5F, 1, upAxis);
-        poseStack.scale(3,3,3);
+        poseStack.scale(3, 3, 3);
         poseStack.popPose();
 
         poseStack.pushPose();
