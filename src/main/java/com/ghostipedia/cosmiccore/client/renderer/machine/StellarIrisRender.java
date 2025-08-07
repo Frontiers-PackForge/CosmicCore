@@ -54,14 +54,13 @@ public class StellarIrisRender extends DynamicRender<IrisMultiblockMachine, Stel
     private static BakedModel outerStarSphereModel = null;
     private static BakedModel innerStarSphereModel = null;
 
-
     private StellarIrisRender() {
         ModelUtils.registerBakeEventListener(true, event -> {
             irisCoreModel = event.getModels().get(IRIS_MODEL_CORE);
             irisRingModel = event.getModels().get(IRIS_MODEL_RING);
             irisSmallRingModel = event.getModels().get(IRIS_MODEL_RING_WHITE);
 
-            //Todo : Figure out why these don't render the ball.
+            // Todo : Figure out why these don't render the ball.
             starCoreModel = event.getModels().get(STAR_MODEL_CORE);
             outerStarSphereModel = event.getModels().get(STAR_MODEL_OUTER);
             innerStarSphereModel = event.getModels().get(STAR_MODEL_INNER);
@@ -86,12 +85,11 @@ public class StellarIrisRender extends DynamicRender<IrisMultiblockMachine, Stel
         poseStack.mulPose(new Quaternionf().rotateAxis(totalTick * Mth.TWO_PI / 80, 0, 1, 0));
         poseStack.scale(10.0f, 10.0f, 10.0f);
 
-//        renderIris(poseStack, consumer, packedLight, packedOverlay);
-//        renderRing(poseStack, consumer, packedLight, packedOverlay);
+        // renderIris(poseStack, consumer, packedLight, packedOverlay);
+        // renderRing(poseStack, consumer, packedLight, packedOverlay);
         renderStar(poseStack, consumer, totalTick, packedLight, packedOverlay);
         renderStarInsides(poseStack, consumer, totalTick, packedLight, packedOverlay);
         renderStarShell(poseStack, consumer, totalTick, packedLight, packedOverlay);
-
 
         poseStack.popPose();
 
@@ -148,6 +146,7 @@ public class StellarIrisRender extends DynamicRender<IrisMultiblockMachine, Stel
 
         poseStack.popPose();
     }
+
     public void renderStar(PoseStack poseStack, VertexConsumer consumer,
                            float totalTick, int packedLight, int packedOverlay) {
         poseStack.pushPose();

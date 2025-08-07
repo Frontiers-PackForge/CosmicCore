@@ -143,7 +143,7 @@ public class SpiritCrucibleRender extends DynamicRender<WorkableElectricMultiblo
         PoseStack.Pose pose = poseStack.last();
         List<BakedQuad> quads = irisCoreModel.getQuads(null, null, random, ModelData.EMPTY, null);
         for (BakedQuad quad : quads) {
-            consumer.putBulkData(pose, quad, 0.2F, 0f, 0.2F,1, LightTexture.FULL_BRIGHT, packedOverlay,false);
+            consumer.putBulkData(pose, quad, 0.2F, 0f, 0.2F, 1, LightTexture.FULL_BRIGHT, packedOverlay, false);
         }
     }
 
@@ -152,7 +152,7 @@ public class SpiritCrucibleRender extends DynamicRender<WorkableElectricMultiblo
         PoseStack.Pose pose = poseStack.last();
         List<BakedQuad> quads = irisCoreModel.getQuads(null, null, random, ModelData.EMPTY, null);
         for (BakedQuad quad : quads) {
-            consumer.putBulkData(pose, quad, 0.4F, 0f, 0.4F,1, LightTexture.FULL_BRIGHT, packedOverlay,false);
+            consumer.putBulkData(pose, quad, 0.4F, 0f, 0.4F, 1, LightTexture.FULL_BRIGHT, packedOverlay, false);
         }
     }
 
