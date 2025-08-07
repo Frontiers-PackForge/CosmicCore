@@ -302,6 +302,7 @@ public class CosmicLangHandler extends LangHandler {
         // Drone Station
         provider.add("cosmiccore.multiblock.drone_station_machine.drone_amount", "Currently serving %s drones");
         provider.add("cosmiccore.multiblock.drone_station_machine.no_drones", "No drones connected");
+        provider.add("cosmiccore.multiblock.drone_station_machine.current_tier", "Current tier: %s");
 
         provider.add("cosmiccore.multiblock.drone_maintenance_interface.connection_location",
                 "Currently connected to (%s, %s, %s)");

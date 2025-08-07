@@ -43,6 +43,21 @@ public class DroneStationProvider extends CapabilityBlockProvider<DroneStationMa
     @Override
     protected void write(CompoundTag compoundTag, DroneStationMachine droneStation) {
         compoundTag.putLong("connections", droneStation.connections.size());
+        if (droneStation.currentTier == null) {
+            compoundTag.putString("currentTier", "None");
+        } else {
+            compoundTag.putString("currentTier", toTitleCase(droneStation.currentTier.name()));
+        }
+    }
+
+    private String toTitleCase(String input) {
+        if (input == null || input.isEmpty()) {
+            return input;
+        }
+        // Upper‐case the first character, lower‐case the rest
+        String first = input.substring(0, 1).toUpperCase();
+        String rest = input.substring(1).toLowerCase();
+        return first + rest;
     }
 
     @Override
@@ -58,6 +73,12 @@ public class DroneStationProvider extends CapabilityBlockProvider<DroneStationMa
                 iTooltip.add(Component.translatable("cosmiccore.multiblock.drone_station_machine.no_drones")
                         .setStyle(Style.EMPTY.withColor(ChatFormatting.RED)));
             }
+        }
+        if (compoundTag.contains("currentTier")) {
+            iTooltip.add(Component
+                    .translatable("cosmiccore.multiblock.drone_station_machine.current_tier",
+                            compoundTag.getString("currentTier"))
+                    .setStyle(Style.EMPTY.withColor(ChatFormatting.GREEN)));
         }
     }
 }

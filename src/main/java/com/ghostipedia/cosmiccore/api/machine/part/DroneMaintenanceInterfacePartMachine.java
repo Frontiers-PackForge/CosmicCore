@@ -4,14 +4,18 @@ import com.ghostipedia.cosmiccore.api.machine.multiblock.DroneStationMachine;
 import com.ghostipedia.cosmiccore.api.misc.DroneStationConnection;
 
 import com.gregtechceu.gtceu.api.GTValues;
+import com.gregtechceu.gtceu.api.capability.ICleanroomReceiver;
 import com.gregtechceu.gtceu.api.gui.GuiTextures;
 import com.gregtechceu.gtceu.api.gui.fancy.IFancyTooltip;
 import com.gregtechceu.gtceu.api.gui.fancy.TooltipsPanel;
 import com.gregtechceu.gtceu.api.machine.IMachineBlockEntity;
 import com.gregtechceu.gtceu.api.machine.TickableSubscription;
+import com.gregtechceu.gtceu.api.machine.feature.ICleanroomProvider;
 import com.gregtechceu.gtceu.api.machine.feature.IInteractedMachine;
 import com.gregtechceu.gtceu.api.machine.feature.IMachineLife;
 import com.gregtechceu.gtceu.api.machine.feature.multiblock.IMaintenanceMachine;
+import com.gregtechceu.gtceu.api.machine.multiblock.CleanroomType;
+import com.gregtechceu.gtceu.api.machine.multiblock.DummyCleanroom;
 import com.gregtechceu.gtceu.api.machine.multiblock.part.MultiblockPartMachine;
 import com.gregtechceu.gtceu.api.machine.multiblock.part.TieredPartMachine;
 
@@ -28,6 +32,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
@@ -37,6 +42,8 @@ public class DroneMaintenanceInterfacePartMachine extends TieredPartMachine
     protected static final ManagedFieldHolder MANAGED_FIELD_HOLDER = new ManagedFieldHolder(
             DroneMaintenanceInterfacePartMachine.class,
             MultiblockPartMachine.MANAGED_FIELD_HOLDER);
+
+    private final ICleanroomProvider DUMMY_CLEANROOM;
 
     @Getter
     @Setter
@@ -57,6 +64,7 @@ public class DroneMaintenanceInterfacePartMachine extends TieredPartMachine
 
     public DroneMaintenanceInterfacePartMachine(IMachineBlockEntity holder) {
         super(holder, GTValues.HV);
+        DUMMY_CLEANROOM = DummyCleanroom.createForTypes(Collections.singletonList(CleanroomType.CLEANROOM));
     }
 
     //////////////////////////////////////
@@ -108,9 +116,12 @@ public class DroneMaintenanceInterfacePartMachine extends TieredPartMachine
         // Fix maintenance problems every second
         if (getOffsetTimer() % 20 == 0) {
             if (hasConnection()) {
-                // TODO: Should fixing maintenance actually take some sort of item or EU amount?
+                updateCleanroomStyle();
                 if (hasMaintenanceProblems()) {
-                    fixAllMaintenanceProblems();
+                    // See if we are allowed to fix maintenance issues + potentially consume a drone
+                    if (connection.droneStation.fixMaintenanceIssue()) {
+                        fixAllMaintenanceProblems();
+                    }
                 }
             } else {
                 // Find a new connection every 10 seconds
@@ -118,6 +129,15 @@ public class DroneMaintenanceInterfacePartMachine extends TieredPartMachine
                     tryFindConnection();
                 }
             }
+        }
+    }
+
+    private void updateCleanroomStyle() {
+        if (!hasConnection()) return;
+        if (connection.droneStation.currentTier != DroneStationMachine.DroneTier.PLASMATIC) return;
+        for (var controller : getControllers()) {
+            if (!(controller instanceof ICleanroomReceiver cleanroomReceiver)) continue;
+            cleanroomReceiver.setCleanroom(DUMMY_CLEANROOM);
         }
     }
 
@@ -136,7 +156,8 @@ public class DroneMaintenanceInterfacePartMachine extends TieredPartMachine
             // TODO: Do we want to take specifically the closest one (slower), or just take the first within range
             // (faster)?
             // the speed difference should be negligible :P
-            if (station.getPos().distSqr(this.getPos()) > station.blockRangeLimit) continue;
+            long blockLimit = station.getBlockLimit();
+            if (station.getPos().distSqr(this.getPos()) > blockLimit * blockLimit) continue;
             if (!station.isActive()) continue;
             connection = new DroneStationConnection(this, station);
             station.connections.add(connection);
@@ -181,5 +202,9 @@ public class DroneMaintenanceInterfacePartMachine extends TieredPartMachine
     @Override
     public boolean isTaped() {
         return false;
+    }
+
+    public ICleanroomProvider getDUMMY_CLEANROOM() {
+        return DUMMY_CLEANROOM;
     }
 }
