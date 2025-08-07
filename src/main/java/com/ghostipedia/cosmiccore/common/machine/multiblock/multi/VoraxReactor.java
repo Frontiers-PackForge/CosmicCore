@@ -32,7 +32,7 @@ public class VoraxReactor {
     public final static MultiblockMachineDefinition VORAX_REACTOR = REGISTRATE
             .multiblock("vorax_reactor", WorkableElectricMultiblockMachine::new)
             .rotationState(RotationState.NON_Y_AXIS)
-            .recipeType(CosmicRecipeTypes.CHROMATIC_DISTILLATION_PLANT)
+            .recipeType(CosmicRecipeTypes.VORAX)
             .recipeModifier(ELECTRIC_OVERCLOCK.apply(OverclockingLogic.NON_PERFECT_OVERCLOCK))
             .appearanceBlock(CASING_ATOMIC)
             .partAppearance((controller, part, side) -> TRITANIUM_LINED_HEAVY_NEUTRONIUM_CASING.getDefaultState())
