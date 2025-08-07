@@ -62,7 +62,9 @@ public class CosmicCustomTags {
                 .materialIconType(CosmicCoreMaterialIconType.ultraDense)
                 .unificationEnabled(true)
                 .generateItem(true)
+                .maxStackSize(1)
                 .generationCondition(hasPlateProp);
+
         heavyBeam = new TagPrefix("heavyBeam")
                 .idPattern("heavy_%s_beam")
                 .defaultTagPath("heavy_beams/%s")
@@ -70,6 +72,7 @@ public class CosmicCustomTags {
                 .materialIconType(CosmicCoreMaterialIconType.heavyBeam)
                 .unificationEnabled(true)
                 .generateItem(true)
+                .maxStackSize(16)
                 .generationCondition(
                         hasPlateProp
                                 .and(hasRodProp));
@@ -80,6 +83,7 @@ public class CosmicCustomTags {
                 .materialIconType(CosmicCoreMaterialIconType.modularShelling)
                 .unificationEnabled(true)
                 .generateItem(true)
+                .maxStackSize(16)
                 .generationCondition(hasPlateProp.and(hasFrameProp).and(hasBoltProp));
         plasmites = new TagPrefix("plasmites")
                 .idPattern("%s_plasmites")
@@ -96,6 +100,7 @@ public class CosmicCustomTags {
                 .materialIconType(CosmicCoreMaterialIconType.wireSpool)
                 .unificationEnabled(true)
                 .generateItem(true)
+                .maxStackSize(4)
                 .generationCondition(hasWireProp.or(hasFineWireProp));
     }
 }
