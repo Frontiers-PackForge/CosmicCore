@@ -87,11 +87,9 @@ dependencies {
     modRuntimeOnly(forge.patchouli)
 
     // Embedium / Occulus
-    modCompileOnly(forge.embeddium)
-    clientAdditionalRuntimeClasspath(forge.embeddium)
-    modCompileOnly(forge.oculus)
-    clientAdditionalRuntimeClasspath(forge.oculus)
-    clientAdditionalRuntimeClasspath(forge.jcpp)
+    modImplementation(forge.embeddium)
+    modImplementation(forge.oculus)
+
 
 
     // Teams

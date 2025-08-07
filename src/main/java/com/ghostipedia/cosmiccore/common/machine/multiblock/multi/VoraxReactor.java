@@ -36,6 +36,7 @@ public class VoraxReactor {
             .recipeModifier(ELECTRIC_OVERCLOCK.apply(OverclockingLogic.NON_PERFECT_OVERCLOCK))
             .appearanceBlock(CASING_ATOMIC)
             .partAppearance((controller, part, side) -> TRITANIUM_LINED_HEAVY_NEUTRONIUM_CASING.getDefaultState())
+            .generator(true)
             .pattern(definition -> FactoryBlockPattern.start()
                     .aisle(" AAAAAAAAA ", "    A A    ", "  AAA AAA  ", "    AAA    ", "   BBABB   ", "    BBB    ",
                             "     B     ", "           ", "           ", "           ", "     B     ", "    BBB    ",
@@ -79,9 +80,9 @@ public class VoraxReactor {
                     .where('F', blocks(FUSION_COIL.get()))
                     .where('B', blocks(CosmicBlocks.TRITANIUM_LINED_HEAVY_NEUTRONIUM_CASING.get())
                             .or(Predicates.abilities(PartAbility.EXPORT_ITEMS).setMaxGlobalLimited(1))
-                            .or(Predicates.abilities(PartAbility.INPUT_ENERGY).setMinGlobalLimited(1)
-                                    .setMaxGlobalLimited(2))
-                            .or(Predicates.abilities(PartAbility.IMPORT_FLUIDS).setExactLimit(1)))
+                            .or(Predicates.abilities(PartAbility.OUTPUT_LASER, PartAbility.SUBSTATION_OUTPUT_ENERGY)
+                                    .setMinGlobalLimited(1, 1))
+                            .or(Predicates.abilities(PartAbility.IMPORT_FLUIDS).setMinGlobalLimited(1, 1)))
                     .build())
             .model(createWorkableCasingMachineModel(
                     CosmicCore.id("block/casings/solid/tritanium_lined_heavy_bolted_neutronium_casing"),
