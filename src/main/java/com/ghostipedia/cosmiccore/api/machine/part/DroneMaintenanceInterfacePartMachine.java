@@ -203,8 +203,4 @@ public class DroneMaintenanceInterfacePartMachine extends TieredPartMachine
     public boolean isTaped() {
         return false;
     }
-
-    public ICleanroomProvider getDUMMY_CLEANROOM() {
-        return DUMMY_CLEANROOM;
-    }
 }
