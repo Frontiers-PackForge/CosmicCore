@@ -32,8 +32,10 @@ public class CosmicCustomTags {
     public static final Predicate<Material> hasPlateProp = material -> material.hasFlag(MaterialFlags.GENERATE_PLATE);
     public static final Predicate<Material> hasRodProp = material -> material.hasFlag(MaterialFlags.GENERATE_ROD);
     public static final Predicate<Material> hasFrameProp = material -> material.hasFlag(MaterialFlags.GENERATE_FRAME);
-    public static final Predicate<Material> hasBoltProp = material -> material.hasFlag(MaterialFlags.GENERATE_BOLT_SCREW);
-    public static final Predicate<Material> hasFineWireProp = material -> material.hasFlag(MaterialFlags.GENERATE_FINE_WIRE);
+    public static final Predicate<Material> hasBoltProp = material -> material
+            .hasFlag(MaterialFlags.GENERATE_BOLT_SCREW);
+    public static final Predicate<Material> hasFineWireProp = material -> material
+            .hasFlag(MaterialFlags.GENERATE_FINE_WIRE);
 
     public static void initTagPrefixes() {
         crushedLeached = new TagPrefix("leachedOre")
@@ -70,8 +72,7 @@ public class CosmicCustomTags {
                 .generateItem(true)
                 .generationCondition(
                         hasPlateProp
-                        .and(hasRodProp)
-                );
+                                .and(hasRodProp));
         modularShelling = new TagPrefix("modular_shelling")
                 .idPattern("%s_modular_shelling")
                 .defaultTagPath("modular_shellings/%s")

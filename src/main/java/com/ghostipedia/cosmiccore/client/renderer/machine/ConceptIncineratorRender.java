@@ -147,7 +147,7 @@ public class ConceptIncineratorRender extends
         PoseStack.Pose pose = poseStack.last();
         List<BakedQuad> quads = irisCoreModel.getQuads(null, null, random, ModelData.EMPTY, null);
         for (BakedQuad quad : quads) {
-            consumer.putBulkData(pose, quad, 1f, 1f, 1f, packedLight, packedOverlay);
+            consumer.putBulkData(pose, quad, 0.016F, 0.094F, 0.125F,1, packedLight, packedOverlay,false);
         }
     }
 
@@ -165,7 +165,7 @@ public class ConceptIncineratorRender extends
         PoseStack.Pose pose = poseStack.last();
         List<BakedQuad> quads = irisCoreModel.getQuads(null, null, random, ModelData.EMPTY, null);
         for (BakedQuad quad : quads) {
-            consumer.putBulkData(pose, quad, 0.2f, 0.2f, 0.7f, packedLight, packedOverlay);
+            consumer.putBulkData(pose, quad, 0.2f, 0.2f, 0.7f,1, packedLight, packedOverlay,false);
         }
     }
 
