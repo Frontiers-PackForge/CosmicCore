@@ -1,6 +1,7 @@
 package com.ghostipedia.cosmiccore.common.machine.multiblock.multi;
 
 import com.ghostipedia.cosmiccore.CosmicCore;
+import com.ghostipedia.cosmiccore.client.renderer.machine.CosmicDynamicRenderHelpers;
 import com.ghostipedia.cosmiccore.gtbridge.CosmicRecipeTypes;
 
 import com.gregtechceu.gtceu.GTCEu;
@@ -14,6 +15,7 @@ import com.gregtechceu.gtceu.api.pattern.Predicates;
 import static com.ghostipedia.cosmiccore.api.registries.CosmicRegistration.REGISTRATE;
 import static com.ghostipedia.cosmiccore.common.data.CosmicBlocks.*;
 import static com.gregtechceu.gtceu.api.pattern.Predicates.*;
+import static com.gregtechceu.gtceu.common.data.models.GTMachineModels.createWorkableCasingMachineModel;
 
 public class BioVat {
 
@@ -39,8 +41,12 @@ public class BioVat {
                             .or(Predicates.abilities(PartAbility.EXPORT_FLUIDS).setMaxGlobalLimited(1, 1))
                             .or(Predicates.abilities(PartAbility.MAINTENANCE).setExactLimit(1)))
                     .build())
-            .workableCasingModel(CosmicCore.id("block/casings/solid/reinforced_naquadria_casing"),
-                    GTCEu.id("block/multiblock/generator/large_gas_turbine"))
+            .model(
+                    createWorkableCasingMachineModel(
+                            CosmicCore.id("block/casings/solid/reinforced_naquadria_casing"),
+                            GTCEu.id("block/multiblock/generator/large_gas_turbine"))
+                            .andThen(d -> d.addDynamicRenderer(CosmicDynamicRenderHelpers::getBioVatRenderer)))
+            .hasBER(true)
             .register();
 
     public static void init() {}
