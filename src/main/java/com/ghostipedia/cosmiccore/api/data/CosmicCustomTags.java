@@ -3,6 +3,7 @@ package com.ghostipedia.cosmiccore.api.data;
 import com.ghostipedia.cosmiccore.common.data.tag.TagUtil;
 
 import com.gregtechceu.gtceu.api.data.chemical.material.Material;
+import com.gregtechceu.gtceu.api.data.chemical.material.info.MaterialFlags;
 import com.gregtechceu.gtceu.api.data.chemical.material.properties.PropertyKey;
 import com.gregtechceu.gtceu.api.data.tag.TagPrefix;
 
@@ -28,6 +29,11 @@ public class CosmicCustomTags {
     public static final TagKey<Item> STAR_LADDER_ITEMS = TagUtil.createItemTag("starladder_items");
 
     public static final Predicate<Material> hasWireProp = material -> material.hasProperty(PropertyKey.WIRE);
+    public static final Predicate<Material> hasPlateProp = material -> material.hasFlag(MaterialFlags.GENERATE_PLATE);
+    public static final Predicate<Material> hasRodProp = material -> material.hasFlag(MaterialFlags.GENERATE_ROD);
+    public static final Predicate<Material> hasFrameProp = material -> material.hasFlag(MaterialFlags.GENERATE_FRAME);
+    public static final Predicate<Material> hasBoltProp = material -> material.hasFlag(MaterialFlags.GENERATE_BOLT_SCREW);
+    public static final Predicate<Material> hasFineWireProp = material -> material.hasFlag(MaterialFlags.GENERATE_FINE_WIRE);
 
     public static void initTagPrefixes() {
         crushedLeached = new TagPrefix("leachedOre")
@@ -54,7 +60,7 @@ public class CosmicCustomTags {
                 .materialIconType(CosmicCoreMaterialIconType.ultraDense)
                 .unificationEnabled(true)
                 .generateItem(true)
-                .generationCondition(hasIngotProperty);
+                .generationCondition(hasPlateProp);
         heavyBeam = new TagPrefix("heavyBeam")
                 .idPattern("heavy_%s_beam")
                 .defaultTagPath("heavy_beams/%s")
@@ -62,7 +68,10 @@ public class CosmicCustomTags {
                 .materialIconType(CosmicCoreMaterialIconType.heavyBeam)
                 .unificationEnabled(true)
                 .generateItem(true)
-                .generationCondition(hasIngotProperty);
+                .generationCondition(
+                        hasPlateProp
+                        .and(hasRodProp)
+                );
         modularShelling = new TagPrefix("modular_shelling")
                 .idPattern("%s_modular_shelling")
                 .defaultTagPath("modular_shellings/%s")
@@ -70,7 +79,7 @@ public class CosmicCustomTags {
                 .materialIconType(CosmicCoreMaterialIconType.modularShelling)
                 .unificationEnabled(true)
                 .generateItem(true)
-                .generationCondition(hasIngotProperty);
+                .generationCondition(hasPlateProp.and(hasFrameProp).and(hasBoltProp));
         plasmites = new TagPrefix("plasmites")
                 .idPattern("%s_plasmites")
                 .defaultTagPath("plasmites/%s")
@@ -86,6 +95,6 @@ public class CosmicCustomTags {
                 .materialIconType(CosmicCoreMaterialIconType.wireSpool)
                 .unificationEnabled(true)
                 .generateItem(true)
-                .generationCondition(hasWireProp);
+                .generationCondition(hasWireProp.or(hasFineWireProp));
     }
 }
