@@ -14,6 +14,7 @@ repositories {
         content {
             includeGroup 'com.gregtechceu.gtceu'
             includeGroup 'appeng'
+            includeGroup 'lu.kolja'
         }
     }
     maven { // Curse Forge File
