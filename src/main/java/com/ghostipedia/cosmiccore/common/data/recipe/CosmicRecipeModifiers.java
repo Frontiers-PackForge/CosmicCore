@@ -1,8 +1,8 @@
 package com.ghostipedia.cosmiccore.common.data.recipe;
 
 import com.ghostipedia.cosmiccore.common.machine.multiblock.electric.MagneticFieldMachine;
-
 import com.ghostipedia.cosmiccore.common.machine.multiblock.part.SterilizationHatchPartMachine;
+
 import com.gregtechceu.gtceu.api.capability.IParallelHatch;
 import com.gregtechceu.gtceu.api.capability.recipe.FluidRecipeCapability;
 import com.gregtechceu.gtceu.api.capability.recipe.IO;
@@ -20,8 +20,8 @@ import com.gregtechceu.gtceu.api.recipe.ingredient.FluidIngredient;
 import com.gregtechceu.gtceu.api.recipe.modifier.ModifierFunction;
 import com.gregtechceu.gtceu.api.recipe.modifier.ParallelLogic;
 import com.gregtechceu.gtceu.api.recipe.modifier.RecipeModifier;
-
 import com.gregtechceu.gtceu.common.data.GTMaterials;
+
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
@@ -114,7 +114,7 @@ public class CosmicRecipeModifiers {
     }
 
     public static @NotNull ModifierFunction sterileHatch(@NotNull MetaMachine machine, @NotNull GTRecipe recipe) {
-        if(machine instanceof IMultiController controller && controller.isFormed()){
+        if (machine instanceof IMultiController controller && controller.isFormed()) {
             var parts = controller.getParts();
             var sterileHatch = parts.stream()
                     .filter(part -> part instanceof SterilizationHatchPartMachine)
@@ -125,7 +125,7 @@ public class CosmicRecipeModifiers {
                 var fluidStack = GTMaterials.Chlorine.getFluid(PLASMA, 5);
                 inputs.add(new Content(FluidIngredient.of(
                         TagUtil.createFluidTag(BuiltInRegistries.FLUID.getKey(fluidStack.getFluid()).getPath()),
-                        fluidStack.getAmount(), fluidStack.getTag()) , 10000, 10000,  0));
+                        fluidStack.getAmount(), fluidStack.getTag()), 10000, 10000, 0));
                 copy.tickInputs.put(FluidRecipeCapability.CAP, inputs);
                 return (c) -> copy;
             }
@@ -133,7 +133,6 @@ public class CosmicRecipeModifiers {
         }
         return ModifierFunction.NULL;
     }
-
 
     // .recipeModifiers(true,
     // (machine, recipe, OCParams, OCResult) -> {

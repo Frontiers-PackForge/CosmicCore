@@ -43,9 +43,7 @@ import com.gregtechceu.gtceu.common.data.models.GTModels;
 import com.gregtechceu.gtceu.common.machine.multiblock.electric.ActiveTransformerMachine;
 import com.gregtechceu.gtceu.common.machine.multiblock.electric.FusionReactorMachine;
 import com.gregtechceu.gtceu.common.machine.multiblock.electric.PowerSubstationMachine;
-import com.gregtechceu.gtceu.common.registry.GTRegistration;
 import com.gregtechceu.gtceu.config.ConfigHolder;
-import com.gregtechceu.gtceu.integration.ae2.machine.MEPatternBufferPartMachine;
 import com.gregtechceu.gtceu.utils.FormattingUtil;
 
 import net.minecraft.core.Direction;
@@ -508,24 +506,6 @@ public class CosmicMachines {
             .workableCasingModel(GTCEu.id("block/casings/solid/machine_casing_palladium_substation"),
                     GTCEu.id("block/multiblock/power_substation"))
             .register();
-
-
-    public static final MachineDefinition AUGMENTED_ME_PATTERN_BUFFER = REGISTRATE
-            .machine("augmented_me_pattern_buffer", AugmentedMEPatternBuffer::new)
-            .tier(UHV)
-            .rotationState(RotationState.ALL)
-            .abilities(PartAbility.IMPORT_ITEMS, PartAbility.IMPORT_FLUIDS, PartAbility.EXPORT_FLUIDS,
-                    PartAbility.EXPORT_ITEMS)
-            .rotationState(RotationState.ALL)
-            .colorOverlayTieredHullModel(GTCEu.id("block/overlay/appeng/me_buffer_hatch"))
-            .langValue("Augmented ME Pattern Buffer")
-            .tooltips(
-                    Component.translatable("block.gtceu.pattern_buffer.desc.0"),
-                    Component.translatable("block.gtceu.pattern_buffer.desc.1"),
-                    Component.translatable("block.gtceu.pattern_buffer.desc.2"),
-                    Component.translatable("gtceu.part_sharing.enabled"))
-            .register();
-
 
     public static final MachineDefinition WIRELESS_DATA_HATCH = REGISTRATE
             .machine("wireless_data_hatch", WirelessDataHatchPartMachine::new)

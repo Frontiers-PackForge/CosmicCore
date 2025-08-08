@@ -1,7 +1,5 @@
 package com.ghostipedia.cosmiccore.common.machine.multiblock;
 
-import com.ghostipedia.cosmiccore.api.machine.multiblock.MagnetWorkableElectricMultiblockMachine;
-import com.ghostipedia.cosmiccore.common.machine.multiblock.electric.MagneticFieldMachine;
 import com.gregtechceu.gtceu.api.capability.IEnergyContainer;
 import com.gregtechceu.gtceu.api.capability.recipe.EURecipeCapability;
 import com.gregtechceu.gtceu.api.capability.recipe.IO;
@@ -9,22 +7,24 @@ import com.gregtechceu.gtceu.api.machine.IMachineBlockEntity;
 import com.gregtechceu.gtceu.api.machine.TickableSubscription;
 import com.gregtechceu.gtceu.api.machine.feature.multiblock.IMultiPart;
 import com.gregtechceu.gtceu.api.machine.multiblock.WorkableElectricMultiblockMachine;
-import com.gregtechceu.gtceu.api.machine.trait.RecipeLogic;
 import com.gregtechceu.gtceu.api.misc.EnergyContainerList;
 import com.gregtechceu.gtceu.api.recipe.GTRecipe;
+
 import com.lowdragmc.lowdraglib.syncdata.annotation.Persisted;
 import com.lowdragmc.lowdraglib.syncdata.field.ManagedFieldHolder;
+
 import it.unimi.dsi.fastutil.longs.Long2ObjectMaps;
 import lombok.Getter;
 import org.jetbrains.annotations.NotNull;
 
-import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import javax.annotation.Nullable;
 
 public class VoraxReactorMachine extends WorkableElectricMultiblockMachine {
+
     @Getter
     private int contagionDelta;
     @Getter
@@ -34,7 +34,6 @@ public class VoraxReactorMachine extends WorkableElectricMultiblockMachine {
     protected static final ManagedFieldHolder MANAGED_FIELD_HOLDER = new ManagedFieldHolder(VoraxReactorMachine.class,
             WorkableElectricMultiblockMachine.MANAGED_FIELD_HOLDER);
 
-
     @Nullable
     protected TickableSubscription contagionSubscription;
     @Nullable
@@ -43,12 +42,12 @@ public class VoraxReactorMachine extends WorkableElectricMultiblockMachine {
     public VoraxReactorMachine(IMachineBlockEntity holder) {
         super(holder);
     }
+
     @Override
     @NotNull
     public ManagedFieldHolder getFieldHolder() {
         return MANAGED_FIELD_HOLDER;
     }
-
 
     @Override
     public void onStructureFormed() {
@@ -84,6 +83,7 @@ public class VoraxReactorMachine extends WorkableElectricMultiblockMachine {
             updateContagionSubs();
         }
     }
+
     @Override
     public void onStructureInvalid() {
         super.onStructureInvalid();
@@ -101,16 +101,14 @@ public class VoraxReactorMachine extends WorkableElectricMultiblockMachine {
         }
     }
 
-
     public void updateContagion() {
-        if (recipeLogic.isWorking()){
+        if (recipeLogic.isWorking()) {
             contagionStrength++;
         }
-        if (recipeLogic.isIdle()){
+        if (recipeLogic.isIdle()) {
 
         }
     }
-
 
     @Override
     public boolean beforeWorking(@org.jetbrains.annotations.Nullable GTRecipe recipe) {
@@ -127,6 +125,4 @@ public class VoraxReactorMachine extends WorkableElectricMultiblockMachine {
     public boolean regressWhenWaiting() {
         return false;
     }
-
-
 }

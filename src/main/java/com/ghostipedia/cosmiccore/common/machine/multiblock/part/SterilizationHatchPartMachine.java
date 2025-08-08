@@ -12,8 +12,6 @@ import com.gregtechceu.gtceu.api.gui.widget.TankWidget;
 import com.gregtechceu.gtceu.api.machine.IMachineBlockEntity;
 import com.gregtechceu.gtceu.api.machine.feature.ICleanroomProvider;
 import com.gregtechceu.gtceu.api.machine.feature.IUIMachine;
-import com.gregtechceu.gtceu.api.machine.feature.multiblock.IDisplayUIMachine;
-import com.gregtechceu.gtceu.api.machine.feature.multiblock.IMaintenanceMachine;
 import com.gregtechceu.gtceu.api.machine.feature.multiblock.IMultiController;
 import com.gregtechceu.gtceu.api.machine.multiblock.CleanroomType;
 import com.gregtechceu.gtceu.api.machine.multiblock.part.TieredIOPartMachine;
@@ -21,19 +19,21 @@ import com.gregtechceu.gtceu.api.machine.trait.NotifiableFluidTank;
 import com.gregtechceu.gtceu.api.recipe.GTRecipe;
 import com.gregtechceu.gtceu.api.recipe.ingredient.FluidIngredient;
 import com.gregtechceu.gtceu.common.data.GTMaterials;
+
 import com.lowdragmc.lowdraglib.gui.modular.ModularUI;
 import com.lowdragmc.lowdraglib.gui.widget.LabelWidget;
 import com.lowdragmc.lowdraglib.gui.widget.WidgetGroup;
+
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.level.material.Fluids;
+
 import org.jetbrains.annotations.MustBeInvokedByOverriders;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 import java.util.Set;
 
-
-public class SterilizationHatchPartMachine extends TieredIOPartMachine implements ICleanroomProvider, IRecipeHandler, IUIMachine {
+public class SterilizationHatchPartMachine extends TieredIOPartMachine
+                                           implements ICleanroomProvider, IRecipeHandler, IUIMachine {
 
     public final NotifiableFluidTank fluidTank;
 
@@ -43,10 +43,10 @@ public class SterilizationHatchPartMachine extends TieredIOPartMachine implement
 
         fluidTank.setFilter(fluid -> fluid.getFluid() == GTMaterials.Chlorine.getFluid(FluidStorageKeys.PLASMA));
     }
-    
+
     @Override
     public Set<CleanroomType> getTypes() {
-        if(!fluidTank.isEmpty() && fluidTank.getFluidInTank(0).getAmount() > 20){
+        if (!fluidTank.isEmpty() && fluidTank.getFluidInTank(0).getAmount() > 20) {
             return Set.of(CleanroomType.CLEANROOM, CleanroomType.STERILE_CLEANROOM);
         }
         return Set.of(CleanroomType.CLEANROOM);
@@ -60,7 +60,7 @@ public class SterilizationHatchPartMachine extends TieredIOPartMachine implement
     @Override
     public void addedToController(IMultiController controller) {
         super.addedToController(controller);
-        if(controller instanceof ICleanroomReceiver receiver) {
+        if (controller instanceof ICleanroomReceiver receiver) {
             receiver.setCleanroom(this);
         }
     }
@@ -69,7 +69,7 @@ public class SterilizationHatchPartMachine extends TieredIOPartMachine implement
     @Override
     public void removedFromController(IMultiController controller) {
         super.removedFromController(controller);
-        if(controller instanceof ICleanroomReceiver receiver) {
+        if (controller instanceof ICleanroomReceiver receiver) {
             receiver.setCleanroom(null);
         }
     }
@@ -91,19 +91,19 @@ public class SterilizationHatchPartMachine extends TieredIOPartMachine implement
 
     @Override
     public RecipeCapability<FluidIngredient> getCapability() {
-        return  FluidRecipeCapability.CAP;
+        return FluidRecipeCapability.CAP;
     }
 
     // GUI
     @Override
     public ModularUI createUI(Player entityPlayer) {
-        var group = new WidgetGroup(0,0,176,164);
+        var group = new WidgetGroup(0, 0, 176, 164);
         group.addWidget(new LabelWidget(5, 5, "gui.cosmiccore.sterilization_hatch"));
-        group.addWidget(new TankWidget(this.fluidTank, 79, 30,true,true)
+        group.addWidget(new TankWidget(this.fluidTank, 79, 30, true, true)
                 .setBackground(GuiTextures.FLUID_SLOT));
-        return new ModularUI(176,164,this, entityPlayer)
+        return new ModularUI(176, 164, this, entityPlayer)
                 .background(GuiTextures.BACKGROUND)
                 .widget(group)
-                .widget(UITemplate.bindPlayerInventory(entityPlayer.getInventory(),GuiTextures.SLOT,7,84,true));
+                .widget(UITemplate.bindPlayerInventory(entityPlayer.getInventory(), GuiTextures.SLOT, 7, 84, true));
     }
 }

@@ -123,11 +123,11 @@ public class ForgeCommonEventListener {
     public static void remapIds(MissingMappingsEvent event) {
         // beeg machines
 
-        remapMultiMachine(event, "steam_caster", CosmicMachines.STEAM_CASTER);
-        remapMultiMachine(event, "steam_mixer", CosmicMachines.STEAM_MIXER);
-        remapMultiMachine(event, "industrial_primitive_blast_furnace",
-                CosmicMachines.INDUSTRIAL_PRIMITIVE_BLAST_FURNACE);
-        remapMultiMachine(event, "high_pressure_assembler", CosmicMachines.HIGH_PRESSURE_ASSEMBLER);
+//        remapMultiMachine(event, "steam_caster", CosmicMachines.STEAM_CASTER);
+//        remapMultiMachine(event, "steam_mixer", CosmicMachines.STEAM_MIXER);
+//        remapMultiMachine(event, "industrial_primitive_blast_furnace",
+//                CosmicMachines.INDUSTRIAL_PRIMITIVE_BLAST_FURNACE);
+//        remapMultiMachine(event, "high_pressure_assembler", .HIGH_PRESSURE_ASSEMBLER);
         remapMultiMachine(event, "large_combustion_engine_cc", CosmicMachines.LARGE_COMBUSTION_ENGINE);
         remapMultiMachine(event, "extreme_combustion_engine_cc", CosmicMachines.EXTREME_COMBUSTION_ENGINE);
         remapMultiMachine(event, "ludicrous_combustion_engine_cc", CosmicMachines.LUDICROUS_COMBUSTION_ENGINE);
