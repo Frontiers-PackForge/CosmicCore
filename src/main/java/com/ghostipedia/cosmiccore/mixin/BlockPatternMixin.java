@@ -1,7 +1,6 @@
 package com.ghostipedia.cosmiccore.mixin;
 
 import com.ghostipedia.cosmiccore.api.block.IBlockPattern;
-import com.ghostipedia.cosmiccore.mixin.accessor.IMultiblockStateAccessor;
 
 import com.gregtechceu.gtceu.api.item.MetaMachineItem;
 import com.gregtechceu.gtceu.api.machine.IMachineBlockEntity;
@@ -87,7 +86,7 @@ public abstract class BlockPatternMixin implements IBlockPattern {
     public void cosmiccore$autoBuild(Player player, MultiblockState worldState, IGrid grid) {
         Level world = player.level();
         int minZ = -centerOffset[4];
-        ((IMultiblockStateAccessor) worldState).clean();
+        worldState.clean();
         IMultiController controller = worldState.getController();
         BlockPos centerPos = controller.self().getPos();
         Direction facing = controller.self().getFrontFacing();
@@ -106,7 +105,7 @@ public abstract class BlockPatternMixin implements IBlockPattern {
                         TraceabilityPredicate predicate = this.blockMatches[c][b][a];
                         BlockPos pos = setActualRelativeOffset(x, y, z, facing, upwardsFacing, isFlipped)
                                 .offset(centerPos.getX(), centerPos.getY(), centerPos.getZ());
-                        ((IMultiblockStateAccessor) worldState).update(pos, predicate);
+                        worldState.update(pos, predicate);
                         if (!world.isEmptyBlock(pos)) {
                             blocks.put(pos, world.getBlockState(pos));
                             for (SimplePredicate limit : predicate.limited) {
