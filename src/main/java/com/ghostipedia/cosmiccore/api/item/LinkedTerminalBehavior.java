@@ -54,7 +54,7 @@ public class LinkedTerminalBehavior implements IInteractionItem, IAddInformation
         if (grid == null) return InteractionResult.PASS;
         ((IBlockPattern) controller.getPattern()).cosmiccore$autoBuild(context.getPlayer(),
                 controller.getMultiblockState(), grid);
-        return InteractionResult.PASS;
+        return InteractionResult.sidedSuccess(false);
     }
 
     @Override
