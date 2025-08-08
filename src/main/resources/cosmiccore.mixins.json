@@ -27,7 +27,6 @@
     "PlayerBreathingMixin",
     "TagPrefixItemMixin",
     "accessor.GTMMEBufferAccessor",
-    "accessor.IMultiblockStateAccessor",
     "accessor.LivingEntityAccessor",
     "accessor.LootTableAccessor",
     "ae2.AE2StyleManagerMixin",
