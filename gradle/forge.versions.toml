@@ -8,6 +8,7 @@ mixinExtras = "0.2.0"
 jei = "15.20.0.105"
 emi = "1.1.13+1.20.1"
 ae2 = "15.4.7-cosmolite.8"
+expandedAE = "1.2.0-cosmolite.2"
 guideme = "20.1.11"
 kubejs = "2001.6.5-build.16"
 rhino = "2001.2.3-build.10"
@@ -48,6 +49,8 @@ puzzlesLib = "4924184"
 smartBrainLib = "5654964"
 modernFix = "6025611"
 botania = "6366547"
+ae2wtlib = "5217955"
+clothConfig = "5729105"
 
 malum = "1.20.1-1.6.7.1"
 lodestone = "1.20.1-1.6.4.1.256"
@@ -68,6 +71,7 @@ jei-forge-impl            = { module = "mezz.jei:jei-1.20.1-forge", version.ref 
 emi                       = { module = "dev.emi:emi-forge", version.ref = "emi" }
 
 ae2                       = { module = "appeng:appliedenergistics2-forge", version.ref = "ae2" }
+expandedAE                = { module = "lu.kolja:expandedae", version.ref = "expandedAE" }
 guideme                   = { module = "org.appliedenergistics:guideme", version.ref = "guideme" }
 kubejs                    = { module = "dev.latvian.mods:kubejs-forge", version.ref = "kubejs" }
 rhino                     = { module = "dev.latvian.mods:rhino-forge", version.ref = "rhino" }
@@ -111,7 +115,9 @@ newThinAir                = { module = "curse.maven:new-thin-air-878379", versio
 puzzlesLib                = { module = "curse.maven:puzzles-lib-495476", version.ref = "puzzlesLib" }
 smartBrainLib             = { module = "curse.maven:smartbrainlib-661293", version.ref = "smartBrainLib" }
 modernFix                 = { module = "curse.maven:modernfix-790626", version.ref = "modernFix" }
-botania                     = { module = "curse.maven:botania-225643", version.ref = "botania" }
+botania                   = { module = "curse.maven:botania-225643", version.ref = "botania" }
+ae2wtlib                  = { module = "curse.maven:applied-energistics-2-wireless-terminals-459929", version.ref = "ae2wtlib" }
+clothConfig               = { module = "curse.maven:cloth-config-348521", version.ref = "clothConfig" }
 
 [bundles]
 jei = ["jei-common-api", "jei-forge-api", "jei-forge-impl"]
