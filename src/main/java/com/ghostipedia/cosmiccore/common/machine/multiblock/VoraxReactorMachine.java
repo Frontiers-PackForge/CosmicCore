@@ -1,5 +1,7 @@
 package com.ghostipedia.cosmiccore.common.machine.multiblock;
 
+import com.ghostipedia.cosmiccore.common.machine.multiblock.part.SterilizationHatchPartMachine;
+import com.gregtechceu.gtceu.GTCEu;
 import com.gregtechceu.gtceu.api.capability.IEnergyContainer;
 import com.gregtechceu.gtceu.api.capability.recipe.EURecipeCapability;
 import com.gregtechceu.gtceu.api.capability.recipe.IO;
@@ -10,11 +12,17 @@ import com.gregtechceu.gtceu.api.machine.multiblock.WorkableElectricMultiblockMa
 import com.gregtechceu.gtceu.api.misc.EnergyContainerList;
 import com.gregtechceu.gtceu.api.recipe.GTRecipe;
 
+import com.gregtechceu.gtceu.utils.FormattingUtil;
+import com.lowdragmc.lowdraglib.syncdata.annotation.DescSynced;
 import com.lowdragmc.lowdraglib.syncdata.annotation.Persisted;
 import com.lowdragmc.lowdraglib.syncdata.field.ManagedFieldHolder;
 
 import it.unimi.dsi.fastutil.longs.Long2ObjectMaps;
 import lombok.Getter;
+import net.minecraft.ChatFormatting;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.Style;
+import net.minecraftforge.fluids.FluidStack;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -25,11 +33,23 @@ import javax.annotation.Nullable;
 
 public class VoraxReactorMachine extends WorkableElectricMultiblockMachine {
 
-    @Getter
-    private int contagionDelta;
+
+    @DescSynced
     @Getter
     @Persisted
-    private int contagionStrength = 0;
+    private float contagionDelta = 30;
+
+    @DescSynced
+    @Getter
+    @Persisted
+    private float contagionStrength = 0;
+
+    @DescSynced
+    @Getter
+    @Persisted
+    private boolean isCleaning = true;
+
+    private SterilizationHatchPartMachine sterileHatch = null;
 
     protected static final ManagedFieldHolder MANAGED_FIELD_HOLDER = new ManagedFieldHolder(VoraxReactorMachine.class,
             WorkableElectricMultiblockMachine.MANAGED_FIELD_HOLDER);
@@ -56,6 +76,9 @@ public class VoraxReactorMachine extends WorkableElectricMultiblockMachine {
         List<IEnergyContainer> outputEnergyContainers = new ArrayList<>();
         Map<Long, IO> ioMap = getMultiblockState().getMatchContext().getOrCreate("ioMap", Long2ObjectMaps::emptyMap);
         for (IMultiPart part : getParts()) {
+            if (part instanceof SterilizationHatchPartMachine) {
+                sterileHatch = (SterilizationHatchPartMachine) part;
+            }
             IO io = ioMap.getOrDefault(part.self().getPos().asLong(), IO.IN);
             if (io == IO.NONE || io == IO.IN) continue;
             var handlers = part.getRecipeHandlers();
@@ -93,7 +116,7 @@ public class VoraxReactorMachine extends WorkableElectricMultiblockMachine {
     }
 
     protected void updateContagionSubs() {
-        if ((outputEnergyContainers != null && outputEnergyContainers.getEnergyStored() > 0)) {
+        if ((outputEnergyContainers != null)) {
             contagionSubscription = subscribeServerTick(contagionSubscription, this::updateContagion);
         } else if (contagionSubscription != null) {
             contagionSubscription.unsubscribe();
@@ -103,17 +126,42 @@ public class VoraxReactorMachine extends WorkableElectricMultiblockMachine {
 
     public void updateContagion() {
         if (recipeLogic.isWorking()) {
-            contagionStrength++;
-        }
-        if (recipeLogic.isIdle()) {
+            if (!isCleaning && contagionStrength >= 100000) {
+                contagionStrength = 100000;
+                GTCEu.LOGGER.info("OVERLOADED");
+            } else {
 
+                    contagionDelta += 0.05F;
+                contagionStrength += contagionDelta;
+                isCleaning = false;
+            }
         }
+        if (recipeLogic.isIdle() || recipeLogic.isSuspend() || recipeLogic.isWaiting() || !this.isWorkingEnabled()) {
+            if (sterileHatch != null) {
+                FluidStack sterileThingy = sterileHatch.fluidTank.getFluidInTank(0);
+                if (!sterileThingy.isEmpty() && sterileThingy.getAmount() >= 15 ) {
+                    contagionDelta -= 0.5F;
+                    sterileThingy.shrink(15);
+                    contagionStrength += contagionDelta;
+                    isCleaning = true;
+                } else {
+                    isCleaning = false;
+                }
+            }
+        }
+        contagionDelta = clamp(contagionDelta,-150,50);
+        contagionStrength = clamp(contagionStrength,0,100000);
+
     }
 
     @Override
     public boolean beforeWorking(@org.jetbrains.annotations.Nullable GTRecipe recipe) {
+        if (contagionDelta <= 0) {
+            contagionDelta = 0;
+        }
         return super.beforeWorking(recipe);
     }
+
 
     @Override
     public boolean onWorking() {
@@ -125,4 +173,28 @@ public class VoraxReactorMachine extends WorkableElectricMultiblockMachine {
     public boolean regressWhenWaiting() {
         return false;
     }
+
+
+
+
+    @Override
+    public void addDisplayText(List<Component> textList) {
+        super.addDisplayText(textList);
+        if (isFormed) {
+            textList.add(Component.translatable("cosmiccore.multiblock.current_contagion", FormattingUtil.formatNumber2Places(contagionStrength)));
+            textList.add(Component.translatable("cosmiccore.multiblock.contagion_rate",FormattingUtil.formatNumber2Places(contagionDelta) ));
+            if (sterileHatch != null  && sterileHatch.fluidTank.getFluidInTank(0).getAmount() < 15) {
+                textList.add(Component.translatable("cosmiccore.multiblock.cleaning_status.error"));
+            } else {
+                textList.add(Component.translatable("cosmiccore.multiblock.cleaning_status", isCleaning ? "Cleaning" : "Growing" ));
+            }
+
+        }
+    }
+
+    public static float clamp(float v, float min, float max) {
+        return Math.max(min, Math.min(v, max));
+    }
+
 }
+

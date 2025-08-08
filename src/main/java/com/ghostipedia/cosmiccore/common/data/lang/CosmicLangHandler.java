@@ -110,6 +110,11 @@ public class CosmicLangHandler extends LangHandler {
         provider.add("cosmiccore.recipe.fieldDecay", "§fField Decay: %sT/t");
         provider.add("cosmiccore.recipe.fieldSlam", "§fField Consumed: %sT");
 
+        provider.add("cosmiccore.multiblock.current_contagion", "§6Contagion Strength: %s");
+        provider.add("cosmiccore.multiblock.contagion_rate", "§cContagion Rate: %s/t");
+        provider.add("cosmiccore.multiblock.cleaning_status", "§aCleaning Status: %s");
+        provider.add("cosmiccore.multiblock.cleaning_status.error", "§cCleaning Status: §4No Cleaning Agent!");
+
         provider.add("cosmiccore.multiblock.fuel_star", "§a§lFuel Star Core");
         provider.add("cosmiccore.multiblock.send_orbit_data", "§a§lSend Research Payload");
         provider.add("cosmiccore.multiblock.iris.star_stage_empty", "§aStar Core Stage§f: §6Compressed Gas Cloud");
