@@ -100,8 +100,8 @@ public class CosmicMaterials {
                 .liquid(new FluidBuilder().temperature(933))
                 .formula("\uD802\uDC05")
                 .color(0x5b2a9c).secondaryColor(0x2567b8).iconSet(CCoreMaterialIconSet.VOIDSPARKICO)
-                .flags(GENERATE_ROUND, GENERATE_GEAR, GENERATE_SMALL_GEAR, GENERATE_RING, GENERATE_FRAME,
-                        GENERATE_SPRING, GENERATE_SPRING_SMALL, GENERATE_FINE_WIRE)
+                .flags(GENERATE_BOLT_SCREW, GENERATE_ROUND, GENERATE_GEAR, GENERATE_SMALL_GEAR, GENERATE_RING,
+                        GENERATE_FRAME, GENERATE_SPRING, GENERATE_SPRING_SMALL, GENERATE_FINE_WIRE, GENERATE_DENSE)
                 .components(Prisma, 1, TungstenSteel, 1)
                 .blastTemp(3600, BlastProperty.GasTier.HIGH, GTValues.VA[GTValues.EV], 1200)
                 .buildAndRegister();
@@ -111,8 +111,8 @@ public class CosmicMaterials {
                 .liquid(new FluidBuilder().temperature(933))
                 .formula(" ⃘ ")
                 .color(0xf0891a).secondaryColor(0xf0891a).iconSet(CCoreMaterialIconSet.SOL_STEEL)
-                .flags(GENERATE_ROUND, GENERATE_GEAR, GENERATE_SMALL_GEAR, GENERATE_RING, GENERATE_FRAME,
-                        GENERATE_SPRING, GENERATE_SPRING_SMALL, GENERATE_FINE_WIRE)
+                .flags(GENERATE_BOLT_SCREW, GENERATE_ROUND, GENERATE_GEAR, GENERATE_SMALL_GEAR, GENERATE_RING,
+                        GENERATE_FRAME, GENERATE_SPRING, GENERATE_SPRING_SMALL, GENERATE_FINE_WIRE, GENERATE_DENSE)
                 .components(Prisma, 1, TungstenSteel, 1)
                 .cableProperties(GTValues.V[8], 4, 1)
                 .fluidPipeProperties(65000, 9500, true, true, true, true)
@@ -124,8 +124,8 @@ public class CosmicMaterials {
                 .liquid(new FluidBuilder().temperature(9800))
                 .formula("✬")
                 .iconSet(CCoreMaterialIconSet.STARMETALICO)
-                .flags(GENERATE_ROUND, GENERATE_GEAR, GENERATE_SMALL_GEAR, GENERATE_RING, GENERATE_FRAME,
-                        GENERATE_SPRING, GENERATE_SPRING_SMALL, GENERATE_FINE_WIRE)
+                .flags(GENERATE_BOLT_SCREW, GENERATE_ROUND, GENERATE_GEAR, GENERATE_SMALL_GEAR, GENERATE_RING,
+                        GENERATE_FRAME, GENERATE_SPRING, GENERATE_SPRING_SMALL, GENERATE_FINE_WIRE, GENERATE_DENSE)
                 .components(Prisma, 1, TungstenSteel, 1)
                 .cableProperties(GTValues.V[8], 4, 1)
                 .fluidPipeProperties(65000, 9500, true, true, true, false)

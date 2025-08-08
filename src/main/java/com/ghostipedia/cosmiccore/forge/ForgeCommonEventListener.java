@@ -6,6 +6,10 @@ import com.ghostipedia.cosmiccore.common.commands.WirelessEnergyCommand;
 import com.ghostipedia.cosmiccore.common.data.CosmicItems;
 import com.ghostipedia.cosmiccore.common.data.CosmicMachines;
 import com.ghostipedia.cosmiccore.common.item.behavior.EffectApplicationBehavior;
+import com.ghostipedia.cosmiccore.common.machine.multiblock.multi.IPBF;
+import com.ghostipedia.cosmiccore.common.machine.multiblock.multi.SteamAssembler;
+import com.ghostipedia.cosmiccore.common.machine.multiblock.multi.SteamCaster;
+import com.ghostipedia.cosmiccore.common.machine.multiblock.multi.SteamMixer;
 import com.ghostipedia.cosmiccore.common.machine.multiblock.part.SoulHatchPartMachine;
 import com.ghostipedia.cosmiccore.mixin.accessor.LivingEntityAccessor;
 
@@ -123,11 +127,11 @@ public class ForgeCommonEventListener {
     public static void remapIds(MissingMappingsEvent event) {
         // beeg machines
 
-//        remapMultiMachine(event, "steam_caster", CosmicMachines.STEAM_CASTER);
-//        remapMultiMachine(event, "steam_mixer", CosmicMachines.STEAM_MIXER);
-//        remapMultiMachine(event, "industrial_primitive_blast_furnace",
-//                CosmicMachines.INDUSTRIAL_PRIMITIVE_BLAST_FURNACE);
-//        remapMultiMachine(event, "high_pressure_assembler", .HIGH_PRESSURE_ASSEMBLER);
+        remapMultiMachine(event, "steam_caster", SteamCaster.STEAM_CASTER);
+        remapMultiMachine(event, "steam_mixer", SteamMixer.STEAM_MIXER);
+        remapMultiMachine(event, "industrial_primitive_blast_furnace",
+                IPBF.INDUSTRIAL_PRIMITIVE_BLAST_FURNACE);
+        remapMultiMachine(event, "high_pressure_assembler", SteamAssembler.HIGH_PRESSURE_ASSEMBLER);
         remapMultiMachine(event, "large_combustion_engine_cc", CosmicMachines.LARGE_COMBUSTION_ENGINE);
         remapMultiMachine(event, "extreme_combustion_engine_cc", CosmicMachines.EXTREME_COMBUSTION_ENGINE);
         remapMultiMachine(event, "ludicrous_combustion_engine_cc", CosmicMachines.LUDICROUS_COMBUSTION_ENGINE);

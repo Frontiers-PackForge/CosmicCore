@@ -17,6 +17,15 @@
     ],
     "subtitle": "cosmiccore.subtitle.arcane_distil"
   },
+  "fluidizer": {
+    "sounds": [
+      {
+        "type": "file",
+        "name": "cosmiccore:fluidizer"
+      }
+    ],
+    "subtitle": "cosmiccore.subtitle.fluidizer"
+  },
   "gas_succ": {
     "sounds": [
       {
@@ -35,6 +44,24 @@
     ],
     "subtitle": "cosmiccore.subtitle.heavy_assembler"
   },
+  "icv": {
+    "sounds": [
+      {
+        "type": "file",
+        "name": "cosmiccore:icv"
+      }
+    ],
+    "subtitle": "cosmiccore.subtitle.icv"
+  },
+  "laminator": {
+    "sounds": [
+      {
+        "type": "file",
+        "name": "cosmiccore:laminator"
+      }
+    ],
+    "subtitle": "cosmiccore.subtitle.laminator"
+  },
   "mining_machine": {
     "sounds": [
       {
@@ -43,5 +70,23 @@
       }
     ],
     "subtitle": "cosmiccore.subtitle.mining_machine"
+  },
+  "orbital_forge": {
+    "sounds": [
+      {
+        "type": "file",
+        "name": "cosmiccore:orbital_forge"
+      }
+    ],
+    "subtitle": "cosmiccore.subtitle.orbital_forge"
+  },
+  "vorax": {
+    "sounds": [
+      {
+        "type": "file",
+        "name": "cosmiccore:vorax"
+      }
+    ],
+    "subtitle": "cosmiccore.subtitle.vorax"
   }
 }

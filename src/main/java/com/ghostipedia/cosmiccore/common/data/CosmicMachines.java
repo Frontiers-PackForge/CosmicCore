@@ -13,7 +13,6 @@ import com.ghostipedia.cosmiccore.common.machine.WirelessChargerMachine;
 import com.ghostipedia.cosmiccore.common.machine.multiblock.electric.hpca.HPCAMachine;
 import com.ghostipedia.cosmiccore.common.machine.multiblock.multi.WirelessDataBankMachine;
 import com.ghostipedia.cosmiccore.common.machine.multiblock.part.*;
-import com.ghostipedia.cosmiccore.common.machine.part.AugmentedMEPatternBuffer;
 import com.ghostipedia.cosmiccore.common.machine.part.WirelessDataSensor;
 import com.ghostipedia.cosmiccore.gtbridge.CosmicRecipeTypes;
 
@@ -514,13 +513,6 @@ public class CosmicMachines {
             .abilities(PartAbility.DATA_ACCESS)
             .tier(UEV)
             .overlayTieredHullModel("wireless_data_hatch")
-            .register();
-
-    public static final MachineDefinition STERILIZATION_HATCH = REGISTRATE
-            .machine("sterilization_hatch", (holder) -> new SterilizationHatchPartMachine(holder, ZPM, IO.IN))
-            .langValue("Sterilzation Hatch")
-            .overlayTieredHullModel("wireless_data_hatch")
-            .abilities(STERILIZE_HATCH)
             .register();
 
     public static void init() {

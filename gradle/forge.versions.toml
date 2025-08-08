@@ -1,13 +1,14 @@
 [versions]
 ldlib = "1.0.40.b"
-gtceu = "7.1.0-SNAPSHOT"
+gtceu = "7.1.3"
 registrate = "MC1.20-1.3.11"
 configuration = "3.1.0-forge"
 mixinExtras = "0.2.0"
 
 jei = "15.20.0.105"
 emi = "1.1.13+1.20.1"
-ae2 = "15.3.3"
+ae2 = "15.4.7-cosmolite.8"
+guideme = "20.1.11"
 kubejs = "2001.6.5-build.16"
 rhino = "2001.2.3-build.10"
 architectury = "9.2.14"
@@ -67,6 +68,7 @@ jei-forge-impl            = { module = "mezz.jei:jei-1.20.1-forge", version.ref 
 emi                       = { module = "dev.emi:emi-forge", version.ref = "emi" }
 
 ae2                       = { module = "appeng:appliedenergistics2-forge", version.ref = "ae2" }
+guideme                   = { module = "org.appliedenergistics:guideme", version.ref = "guideme" }
 kubejs                    = { module = "dev.latvian.mods:kubejs-forge", version.ref = "kubejs" }
 rhino                     = { module = "dev.latvian.mods:rhino-forge", version.ref = "rhino" }
 architectury              = { module = "dev.architectury:architectury-forge", version.ref = "architectury" }

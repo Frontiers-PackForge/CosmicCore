@@ -114,7 +114,7 @@ public abstract class RecipeScreenMixin extends Screen {
      */
     @Overwrite(remap = false)
     public int getMaxWorkstations() {
-        return Integer.MAX_VALUE;
+        return 23;
     }
 
     @Unique
@@ -124,7 +124,7 @@ public abstract class RecipeScreenMixin extends Screen {
 
     @Unique
     private int cosmicCore$getList(int i) {
-        return (int) Math.floor((double) i / cosmicCore$maxWorkstations()) + 1;
+        return Math.min((int) Math.floor((double) i / cosmicCore$maxWorkstations()), 1) + 1;
     }
 
     @Unique

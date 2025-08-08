@@ -14,8 +14,16 @@ public class CosmicDynamicRenderHelpers {
         return HemophagicTransfuserRender.INSTANCE;
     }
 
+    public static DynamicRender<?, ?> getSpiritCrucibleRender() {
+        return SpiritCrucibleRender.INSTANCE;
+    }
+
     public static DynamicRender<?, ?> getStellarIrisRender() {
         return StellarIrisRender.INSTANCE;
+    }
+
+    public static DynamicRender<?, ?> getConceptIncinerator() {
+        return ConceptIncineratorRender.INSTANCE;
     }
 
     public static DynamicRender<?, ?> getStarBallastRender() {

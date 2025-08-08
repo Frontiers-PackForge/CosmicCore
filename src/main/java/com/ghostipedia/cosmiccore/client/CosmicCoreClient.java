@@ -31,6 +31,8 @@ public class CosmicCoreClient {
         DynamicRenderManager.register(CosmicCore.id("stellar_iris"), StellarIrisRender.TYPE);
         DynamicRenderManager.register(CosmicCore.id("star_ballast"), StarBallastRender.TYPE);
         DynamicRenderManager.register(CosmicCore.id("welder_arm_render"), WelderArmRender.TYPE);
+        DynamicRenderManager.register(CosmicCore.id("concept_incinerator"), ConceptIncineratorRender.TYPE);
+        DynamicRenderManager.register(CosmicCore.id("spirit_crucible"), SpiritCrucibleRender.TYPE);
     }
 
     @Getter
@@ -56,6 +58,13 @@ public class CosmicCoreClient {
         event.register(StellarIrisRender.IRIS_MODEL_CORE);
         event.register(StellarIrisRender.IRIS_MODEL_RING);
         event.register(StellarIrisRender.IRIS_MODEL_RING_WHITE);
+
+        event.register(ConceptIncineratorRender.IRIS_MODEL_CORE);
+        event.register(ConceptIncineratorRender.IRIS_MODEL_RING);
+        event.register(ConceptIncineratorRender.IRIS_MODEL_RING_WHITE);
+        event.register(ConceptIncineratorRender.STAR_CORE);
+        event.register(ConceptIncineratorRender.STAR_CORE_MIDDLE);
+        event.register(ConceptIncineratorRender.STAR_CORE_OUTER);
 
         event.register(StarBallastRender.STAR_MODEL_CORE);
         event.register(StarBallastRender.STAR_MODEL_OUTER);
