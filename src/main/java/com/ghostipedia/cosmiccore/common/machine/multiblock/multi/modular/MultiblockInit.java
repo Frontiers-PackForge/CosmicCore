@@ -24,6 +24,7 @@ public class MultiblockInit {
         VoraxReactor.init();
         SpiritCrucible.init();
         AtmoPump.init();
+        DroneStation.init();
         CosmicModularMachines.init();
         ManaDigitizer.init();
         ArcaneDistillery.init();
