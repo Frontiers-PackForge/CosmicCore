@@ -4,6 +4,7 @@ import com.ghostipedia.cosmiccore.CosmicCore;
 import com.ghostipedia.cosmiccore.api.machine.multiblock.DimensionalEnergyCapacitor;
 import com.ghostipedia.cosmiccore.api.machine.multiblock.DimensionalEnergyInterface;
 import com.ghostipedia.cosmiccore.api.machine.part.CosmicPartAbility;
+import com.ghostipedia.cosmiccore.api.machine.part.DroneMaintenanceInterfacePartMachine;
 import com.ghostipedia.cosmiccore.api.machine.part.SteamFluidHatchPartMachine;
 import com.ghostipedia.cosmiccore.api.machine.part.WirelessEnergyHatchPartMachine;
 import com.ghostipedia.cosmiccore.api.registries.CosmicRegistration;
@@ -42,6 +43,7 @@ import com.gregtechceu.gtceu.common.data.models.GTModels;
 import com.gregtechceu.gtceu.common.machine.multiblock.electric.ActiveTransformerMachine;
 import com.gregtechceu.gtceu.common.machine.multiblock.electric.FusionReactorMachine;
 import com.gregtechceu.gtceu.common.machine.multiblock.electric.PowerSubstationMachine;
+import com.gregtechceu.gtceu.common.machine.multiblock.part.MaintenanceHatchPartMachine;
 import com.gregtechceu.gtceu.config.ConfigHolder;
 import com.gregtechceu.gtceu.utils.FormattingUtil;
 
@@ -515,11 +517,23 @@ public class CosmicMachines {
             .overlayTieredHullModel("wireless_data_hatch")
             .register();
 
+    public static final MachineDefinition DRONE_MAINTENANCE_INTERFACE = REGISTRATE
+            .machine("drone_maintenance_interface",
+                    (blockEntity) -> new DroneMaintenanceInterfacePartMachine(blockEntity))
+            .rotationState(RotationState.ALL)
+            .abilities(PartAbility.MAINTENANCE)
+            .tooltips(Component.translatable("gtceu.part_sharing.disabled"))
+            // TODO: Remove this property since it can't be taped, and also add proper models
+            .modelProperty(MaintenanceHatchPartMachine.MAINTENANCE_TAPED_PROPERTY, false)
+            .model(createMaintenanceModel(GTCEu.id("block/machine/part/maintenance_hatch")))
+            .tier(HV)
+            .langValue("Drone Maintenance Interface")
     public static final MachineDefinition STERILIZATION_HATCH = REGISTRATE
             .machine("sterilization_hatch", (holder) -> new SterilizationHatchPartMachine(holder, ZPM, IO.IN))
             .langValue("Sterilzation Hatch")
             .overlayTieredHullModel("wireless_data_hatch")
             .abilities(STERILIZE_HATCH)
+
             .register();
 
     public static void init() {
