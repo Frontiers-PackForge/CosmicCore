@@ -515,6 +515,14 @@ public class CosmicMachines {
             .overlayTieredHullModel("wireless_data_hatch")
             .register();
 
+    public static final MachineDefinition STERILIZATION_HATCH = REGISTRATE
+            .machine("sterilization_hatch", (holder) -> new SterilizationHatchPartMachine(holder, ZPM, IO.IN))
+            .langValue("Sterilzation Hatch")
+            .overlayTieredHullModel("wireless_data_hatch")
+            .abilities(STERILIZE_HATCH)
+            .register();
+
+
     public static void init() {
         GTMultiMachines.LARGE_COMBUSTION_ENGINE.setRecipeTypes(new GTRecipeType[] { DUMMY_RECIPES });
         GTMultiMachines.LARGE_COMBUSTION_ENGINE.setRenderXEIPreview(false);
