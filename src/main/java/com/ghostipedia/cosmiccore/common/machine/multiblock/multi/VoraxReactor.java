@@ -12,7 +12,6 @@ import com.gregtechceu.gtceu.GTCEu;
 import com.gregtechceu.gtceu.api.data.RotationState;
 import com.gregtechceu.gtceu.api.machine.MultiblockMachineDefinition;
 import com.gregtechceu.gtceu.api.machine.multiblock.PartAbility;
-import com.gregtechceu.gtceu.api.machine.multiblock.WorkableElectricMultiblockMachine;
 import com.gregtechceu.gtceu.api.pattern.FactoryBlockPattern;
 import com.gregtechceu.gtceu.api.pattern.Predicates;
 import com.gregtechceu.gtceu.api.recipe.OverclockingLogic;
@@ -81,12 +80,11 @@ public class VoraxReactor {
                     .where('E', blocks(Blocks.SCULK))
                     .where('F', blocks(FUSION_COIL.get()))
                     .where('B', blocks(CosmicBlocks.TRITANIUM_LINED_HEAVY_NEUTRONIUM_CASING.get())
-                            .or(Predicates.abilities(PartAbility.EXPORT_ITEMS).setMaxGlobalLimited(1))
                             .or(Predicates.abilities(PartAbility.OUTPUT_LASER, PartAbility.SUBSTATION_OUTPUT_ENERGY)
-                                    .setMinGlobalLimited(1, 1))
-                            .or(Predicates.abilities(PartAbility.IMPORT_FLUIDS).setMinGlobalLimited(1, 1))
-                            .or(Predicates.abilities(CosmicPartAbility.STERILIZE_HATCH).setExactLimit(1))
-                    )
+                                    .setMaxGlobalLimited(1, 1))
+                            .or(Predicates.abilities(PartAbility.IMPORT_FLUIDS).setMinGlobalLimited(1, 1)
+                                    .setMaxGlobalLimited(3))
+                            .or(Predicates.abilities(CosmicPartAbility.STERILIZE_HATCH).setExactLimit(1)))
                     .build())
             .model(createWorkableCasingMachineModel(
                     CosmicCore.id("block/casings/solid/tritanium_lined_heavy_bolted_neutronium_casing"),

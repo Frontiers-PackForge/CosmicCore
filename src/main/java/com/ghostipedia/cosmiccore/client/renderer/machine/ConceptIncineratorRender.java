@@ -1,16 +1,14 @@
 package com.ghostipedia.cosmiccore.client.renderer.machine;
 
 import com.ghostipedia.cosmiccore.CosmicCore;
-
 import com.ghostipedia.cosmiccore.common.machine.multiblock.VoraxReactorMachine;
+
 import com.gregtechceu.gtceu.api.machine.multiblock.WorkableElectricMultiblockMachine;
 import com.gregtechceu.gtceu.api.pattern.util.RelativeDirection;
 import com.gregtechceu.gtceu.client.renderer.machine.DynamicRender;
 import com.gregtechceu.gtceu.client.renderer.machine.DynamicRenderType;
 import com.gregtechceu.gtceu.client.util.ModelUtils;
 
-import com.gregtechceu.gtceu.utils.GTMath;
-import com.gregtechceu.gtceu.utils.GTUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.Sheets;
@@ -118,15 +116,13 @@ public class ConceptIncineratorRender extends
         VertexConsumer consumer = buffer.getBuffer(Sheets.translucentCullBlockSheet());
 
         float percent = 0;
-        if (machine instanceof  VoraxReactorMachine voraxReactorMachine) {
-            percent = clamp((voraxReactorMachine.getContagionStrength() / 50000f)/4.5f,0F,1F);
+        if (machine instanceof VoraxReactorMachine voraxReactorMachine) {
+            percent = clamp((voraxReactorMachine.getContagionStrength() / 50000f) / 4.5f, 0F, 1F);
         } else {
             percent = 0;
         }
 
-        renderBallA(poseStack, consumer, packedLight, packedOverlay,percent);
-
-
+        renderBallA(poseStack, consumer, packedLight, packedOverlay, percent);
 
         max = 0.7f + percent;
         amplitude = (max - min) / 2.0f;
@@ -156,11 +152,13 @@ public class ConceptIncineratorRender extends
     }
 
     @OnlyIn(Dist.CLIENT)
-    public void renderBallA(PoseStack poseStack, VertexConsumer consumer, int packedLight, int packedOverlay, float percent) {
+    public void renderBallA(PoseStack poseStack, VertexConsumer consumer, int packedLight, int packedOverlay,
+                            float percent) {
         PoseStack.Pose pose = poseStack.last();
         List<BakedQuad> quads = irisCoreModel.getQuads(null, null, random, ModelData.EMPTY, null);
         for (BakedQuad quad : quads) {
-            consumer.putBulkData(pose, quad, 0.016F + (percent/4), 0.094F, 0.125F, 1, packedLight, packedOverlay, false);
+            consumer.putBulkData(pose, quad, 0.016F + (percent / 4), 0.094F, 0.125F, 1, packedLight, packedOverlay,
+                    false);
         }
     }
 
@@ -174,11 +172,13 @@ public class ConceptIncineratorRender extends
     }
 
     @OnlyIn(Dist.CLIENT)
-    public void renderBallC(PoseStack poseStack, VertexConsumer consumer, int packedLight, int packedOverlay, float percent) {
+    public void renderBallC(PoseStack poseStack, VertexConsumer consumer, int packedLight, int packedOverlay,
+                            float percent) {
         PoseStack.Pose pose = poseStack.last();
         List<BakedQuad> quads = irisCoreModel.getQuads(null, null, random, ModelData.EMPTY, null);
         for (BakedQuad quad : quads) {
-            consumer.putBulkData(pose, quad, 0.2f + percent, 0.2f, 0.7f + -percent, 1, packedLight, packedOverlay, false);
+            consumer.putBulkData(pose, quad, 0.2f + percent, 0.2f, 0.7f + -percent, 1, packedLight, packedOverlay,
+                    false);
         }
     }
 
@@ -212,6 +212,7 @@ public class ConceptIncineratorRender extends
 
         poseStack.popPose();
     }
+
     public static float clamp(float v, float min, float max) {
         return Math.max(min, Math.min(v, max));
     }

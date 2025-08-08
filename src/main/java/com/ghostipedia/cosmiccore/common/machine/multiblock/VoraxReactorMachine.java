@@ -1,28 +1,29 @@
 package com.ghostipedia.cosmiccore.common.machine.multiblock;
 
 import com.ghostipedia.cosmiccore.common.machine.multiblock.part.SterilizationHatchPartMachine;
-import com.gregtechceu.gtceu.GTCEu;
+
 import com.gregtechceu.gtceu.api.capability.IEnergyContainer;
 import com.gregtechceu.gtceu.api.capability.recipe.EURecipeCapability;
 import com.gregtechceu.gtceu.api.capability.recipe.IO;
 import com.gregtechceu.gtceu.api.machine.IMachineBlockEntity;
 import com.gregtechceu.gtceu.api.machine.TickableSubscription;
+import com.gregtechceu.gtceu.api.machine.feature.IExplosionMachine;
 import com.gregtechceu.gtceu.api.machine.feature.multiblock.IMultiPart;
 import com.gregtechceu.gtceu.api.machine.multiblock.WorkableElectricMultiblockMachine;
+import com.gregtechceu.gtceu.api.machine.trait.RecipeLogic;
 import com.gregtechceu.gtceu.api.misc.EnergyContainerList;
 import com.gregtechceu.gtceu.api.recipe.GTRecipe;
-
 import com.gregtechceu.gtceu.utils.FormattingUtil;
+
 import com.lowdragmc.lowdraglib.syncdata.annotation.DescSynced;
 import com.lowdragmc.lowdraglib.syncdata.annotation.Persisted;
 import com.lowdragmc.lowdraglib.syncdata.field.ManagedFieldHolder;
 
+import net.minecraft.network.chat.Component;
+import net.minecraftforge.fluids.FluidStack;
+
 import it.unimi.dsi.fastutil.longs.Long2ObjectMaps;
 import lombok.Getter;
-import net.minecraft.ChatFormatting;
-import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.Style;
-import net.minecraftforge.fluids.FluidStack;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -31,8 +32,7 @@ import java.util.Map;
 
 import javax.annotation.Nullable;
 
-public class VoraxReactorMachine extends WorkableElectricMultiblockMachine {
-
+public class VoraxReactorMachine extends WorkableElectricMultiblockMachine implements IExplosionMachine {
 
     @DescSynced
     @Getter
@@ -128,10 +128,11 @@ public class VoraxReactorMachine extends WorkableElectricMultiblockMachine {
         if (recipeLogic.isWorking()) {
             if (!isCleaning && contagionStrength >= 100000) {
                 contagionStrength = 100000;
-                GTCEu.LOGGER.info("OVERLOADED");
+                recipeLogic.setStatus(RecipeLogic.Status.SUSPEND);
+                doExplosion(12f + getTier());
             } else {
 
-                    contagionDelta += 0.05F;
+                contagionDelta += 0.05F;
                 contagionStrength += contagionDelta;
                 isCleaning = false;
             }
@@ -139,7 +140,7 @@ public class VoraxReactorMachine extends WorkableElectricMultiblockMachine {
         if (recipeLogic.isIdle() || recipeLogic.isSuspend() || recipeLogic.isWaiting() || !this.isWorkingEnabled()) {
             if (sterileHatch != null) {
                 FluidStack sterileThingy = sterileHatch.fluidTank.getFluidInTank(0);
-                if (!sterileThingy.isEmpty() && sterileThingy.getAmount() >= 15 ) {
+                if (!sterileThingy.isEmpty() && sterileThingy.getAmount() >= 15) {
                     contagionDelta -= 0.5F;
                     sterileThingy.shrink(15);
                     contagionStrength += contagionDelta;
@@ -149,9 +150,8 @@ public class VoraxReactorMachine extends WorkableElectricMultiblockMachine {
                 }
             }
         }
-        contagionDelta = clamp(contagionDelta,-150,50);
-        contagionStrength = clamp(contagionStrength,0,100000);
-
+        contagionDelta = clamp(contagionDelta, -150, 50);
+        contagionStrength = clamp(contagionStrength, 0, 100000);
     }
 
     @Override
@@ -161,7 +161,6 @@ public class VoraxReactorMachine extends WorkableElectricMultiblockMachine {
         }
         return super.beforeWorking(recipe);
     }
-
 
     @Override
     public boolean onWorking() {
@@ -174,19 +173,19 @@ public class VoraxReactorMachine extends WorkableElectricMultiblockMachine {
         return false;
     }
 
-
-
-
     @Override
     public void addDisplayText(List<Component> textList) {
         super.addDisplayText(textList);
         if (isFormed) {
-            textList.add(Component.translatable("cosmiccore.multiblock.current_contagion", FormattingUtil.formatNumber2Places(contagionStrength)));
-            textList.add(Component.translatable("cosmiccore.multiblock.contagion_rate",FormattingUtil.formatNumber2Places(contagionDelta) ));
-            if (sterileHatch != null  && sterileHatch.fluidTank.getFluidInTank(0).getAmount() < 15) {
+            textList.add(Component.translatable("cosmiccore.multiblock.current_contagion",
+                    FormattingUtil.formatNumber2Places(contagionStrength)));
+            textList.add(Component.translatable("cosmiccore.multiblock.contagion_rate",
+                    FormattingUtil.formatNumber2Places(contagionDelta)));
+            if (sterileHatch != null && sterileHatch.fluidTank.getFluidInTank(0).getAmount() < 15) {
                 textList.add(Component.translatable("cosmiccore.multiblock.cleaning_status.error"));
             } else {
-                textList.add(Component.translatable("cosmiccore.multiblock.cleaning_status", isCleaning ? "Cleaning" : "Growing" ));
+                textList.add(Component.translatable("cosmiccore.multiblock.cleaning_status",
+                        isCleaning ? "Cleaning" : "Growing"));
             }
 
         }
@@ -195,6 +194,4 @@ public class VoraxReactorMachine extends WorkableElectricMultiblockMachine {
     public static float clamp(float v, float min, float max) {
         return Math.max(min, Math.min(v, max));
     }
-
 }
-

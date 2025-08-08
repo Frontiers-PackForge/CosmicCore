@@ -522,7 +522,6 @@ public class CosmicMachines {
             .abilities(STERILIZE_HATCH)
             .register();
 
-
     public static void init() {
         GTMultiMachines.LARGE_COMBUSTION_ENGINE.setRecipeTypes(new GTRecipeType[] { DUMMY_RECIPES });
         GTMultiMachines.LARGE_COMBUSTION_ENGINE.setRenderXEIPreview(false);
