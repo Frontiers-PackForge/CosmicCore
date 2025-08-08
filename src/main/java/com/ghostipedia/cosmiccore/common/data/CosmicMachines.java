@@ -528,6 +528,8 @@ public class CosmicMachines {
             .model(createMaintenanceModel(GTCEu.id("block/machine/part/maintenance_hatch")))
             .tier(HV)
             .langValue("Drone Maintenance Interface")
+            .register();
+
     public static final MachineDefinition STERILIZATION_HATCH = REGISTRATE
             .machine("sterilization_hatch", (holder) -> new SterilizationHatchPartMachine(holder, ZPM, IO.IN))
             .langValue("Sterilzation Hatch")
