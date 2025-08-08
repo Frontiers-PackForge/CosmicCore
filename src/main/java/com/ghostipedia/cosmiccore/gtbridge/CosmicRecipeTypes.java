@@ -31,7 +31,11 @@ public class CosmicRecipeTypes {
             .setSound(CosmicSounds.LAMINATOR)
             .setMaxIOSize(3, 2, 2, 0)
             .setProgressBar(GuiTextures.PROGRESS_BAR_ARROW, ProgressTexture.FillDirection.LEFT_TO_RIGHT);
-
+    public static final GTRecipeType VORAX = GTRecipeTypes
+            .register("vorax", ELECTRIC)
+            .setSound(CosmicSounds.VOARX)
+            .setMaxIOSize(1, 0, 4, 2)
+            .setProgressBar(GuiTextures.PROGRESS_BAR_ARROW_MULTIPLE, ProgressTexture.FillDirection.LEFT_TO_RIGHT);
     public static final GTRecipeType MANA_FLUIDIZER = GTRecipeTypes
             .register("mana_fluidizer", ELECTRIC)
             .setMaxIOSize(1, 1, 1, 1)
@@ -133,6 +137,19 @@ public class CosmicRecipeTypes {
             .register("chromatic_flotation_plant", GTRecipeTypes.MULTIBLOCK)
             .setMaxIOSize(3, 4, 3, 3)
             .setProgressBar(GuiTextures.PROGRESS_BAR_ARROW, ProgressTexture.FillDirection.LEFT_TO_RIGHT);
+
+    public static final GTRecipeType SPIRIT_CRUCIBLE = GTRecipeTypes
+            .register("spirit_crucible", GTRecipeTypes.MULTIBLOCK)
+            .setMaxIOSize(3, 6, 3, 0)
+            .setSound(ARCANE_DISTIL)
+            .setProgressBar(GuiTextures.PROGRESS_BAR_ARROW, ProgressTexture.FillDirection.LEFT_TO_RIGHT);
+
+    public static final GTRecipeType SOUL_FOUNDRY = GTRecipeTypes
+            .register("soul_foundry", GTRecipeTypes.MULTIBLOCK)
+            .setMaxIOSize(6, 1, 3, 1)
+            .setSound(CosmicSounds.LAMINATOR)
+            .setProgressBar(GuiTextures.PROGRESS_BAR_ARROW, ProgressTexture.FillDirection.LEFT_TO_RIGHT);
+
     public static final GTRecipeType SPOOLING_MACHINE = GTRecipeTypes
             .register("spooling_machine", ELECTRIC)
             .setMaxIOSize(2, 2, 1, 0)

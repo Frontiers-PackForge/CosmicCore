@@ -46,6 +46,9 @@ dependencies {
     // AE2
     jarJar(modImplementation(forge.ae2.get()))
     modImplementation(forge.guideme)
+    jarJar(modImplementation(forge.expandedAE.get()))
+    modImplementation(forge.ae2wtlib) //ExpandedAE Dies without - Replace with our fork eventually!
+    modImplementation(forge.clothConfig) //Dep for AE2WTLIB
 
 
 
@@ -87,11 +90,9 @@ dependencies {
     modRuntimeOnly(forge.patchouli)
 
     // Embedium / Occulus
-    modCompileOnly(forge.embeddium)
-    clientAdditionalRuntimeClasspath(forge.embeddium)
-    modCompileOnly(forge.oculus)
-    clientAdditionalRuntimeClasspath(forge.oculus)
-    clientAdditionalRuntimeClasspath(forge.jcpp)
+    modImplementation(forge.embeddium)
+    modImplementation(forge.oculus)
+
 
 
     // Teams

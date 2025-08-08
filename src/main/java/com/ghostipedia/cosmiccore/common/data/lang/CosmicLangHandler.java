@@ -104,10 +104,16 @@ public class CosmicLangHandler extends LangHandler {
         provider.add("gui.cosmiccore.soul_hatch.lp", "LP Stored: %s");
         provider.add("gui.cosmiccore.thermia_hatch.hatch_limit", "§cTemp. Limit:");
         provider.add("gui.cosmiccore.thermia_hatch.stored_temp", "§6Current Temp:");
+        provider.add("gui.cosmiccore.sterilization_hatch", "Sterilization Hatch");
         provider.add("cosmiccore.multiblock.current_field_strength", "§fField Strength: %s");
         provider.add("cosmiccore.recipe.minField", "§fMin. Field Strength: %sT");
         provider.add("cosmiccore.recipe.fieldDecay", "§fField Decay: %sT/t");
         provider.add("cosmiccore.recipe.fieldSlam", "§fField Consumed: %sT");
+
+        provider.add("cosmiccore.multiblock.current_contagion", "§6Contagion Strength: %s");
+        provider.add("cosmiccore.multiblock.contagion_rate", "§cContagion Rate: %s/t");
+        provider.add("cosmiccore.multiblock.cleaning_status", "§aCleaning Status: %s");
+        provider.add("cosmiccore.multiblock.cleaning_status.error", "§cCleaning Status: §4No Cleaning Agent!");
 
         provider.add("cosmiccore.multiblock.fuel_star", "§a§lFuel Star Core");
         provider.add("cosmiccore.multiblock.send_orbit_data", "§a§lSend Research Payload");
