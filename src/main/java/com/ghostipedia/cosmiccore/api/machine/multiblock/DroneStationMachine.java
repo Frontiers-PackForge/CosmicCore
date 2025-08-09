@@ -211,7 +211,7 @@ public class DroneStationMachine extends WorkableElectricMultiblockMachine {
     }
 
     /**
-     * Force turns all machines in range on
+     * Force turns all connected machines in range on
      */
     public void turnAllMachinesOn() {
         System.out.println("Toggling all multis");
@@ -222,7 +222,7 @@ public class DroneStationMachine extends WorkableElectricMultiblockMachine {
     }
 
     /**
-     * Disables a multi.
+     * Disables a connected multi.
      * 
      * @param index the index in the connections list
      */
@@ -240,7 +240,7 @@ public class DroneStationMachine extends WorkableElectricMultiblockMachine {
     }
 
     /**
-     * Force turns all machines in range on
+     * Force turns all connected machines in range on
      *
      * @param index the index in the connections list
      */
