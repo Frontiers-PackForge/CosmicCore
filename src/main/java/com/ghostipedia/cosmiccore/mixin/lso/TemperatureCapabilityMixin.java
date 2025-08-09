@@ -24,7 +24,9 @@ public abstract class TemperatureCapabilityMixin implements ITemperatureCapabili
     private void cosmiccore$trackBadTime(Player player, TemperatureEnum tempEnum, CallbackInfo ci) {
         // make the player's time alive worse if they're too hot or colds for too long
         cosmiccore$badTimeTimer += switch (tempEnum) {
-            case HEAT_STROKE, FROSTBITE -> 2; // Bad Timer Increases while under the effect of something deadly
+            // Bad Timer Increases while under the effect of something deadly
+            case HEAT_STROKE -> this.getTemperatureLevel() >= TemperatureEnum.HEAT_STROKE.getMiddle() ? 2 : 0;
+            case FROSTBITE -> this.getTemperatureLevel() < TemperatureEnum.FROSTBITE.getMiddle() ? 2 : 0;
             case HOT, COLD -> -2; // The Player is not 'taking damage' in this state, thus we want to decay the damage
                                   // tracker.
                                   // .
