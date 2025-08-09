@@ -211,6 +211,17 @@ public class DroneStationMachine extends WorkableElectricMultiblockMachine {
     }
 
     /**
+     * Force turns all machines in range on
+     */
+    public void turnAllMachinesOn() {
+        System.out.println("Toggling all multis");
+        for (int i = 0; i < connections.size(); i++) {
+            forceTurnOnMultiblock(i);
+            i++;
+        }
+    }
+
+    /**
      * Disables a multi.
      * 
      * @param index the index in the connections list
@@ -225,6 +236,25 @@ public class DroneStationMachine extends WorkableElectricMultiblockMachine {
         IMultiController controller = droneInterface.getControllers().first();
         if (!(controller instanceof IControllable controllable)) return false;
         controllable.setWorkingEnabled(!controllable.isWorkingEnabled());
+        return true;
+    }
+
+    /**
+     * Force turns all machines in range on
+     *
+     * @param index the index in the connections list
+     */
+    public boolean forceTurnOnMultiblock(int index) {
+        if (isRemote()) return false;
+        if (index > connections.size()) return false;
+        DroneStationConnection connection = connections.get(index);
+        if (!connection.isValid()) return false;
+        if (connection.machine == null) return false;
+        if (!(connection.machine instanceof DroneMaintenanceInterfacePartMachine droneInterface)) return false;
+        IMultiController controller = droneInterface.getControllers().first();
+        if (!(controller instanceof IControllable controllable)) return false;
+        if (controllable.isWorkingEnabled()) return false;
+        controllable.setWorkingEnabled(true);
         return true;
     }
 
