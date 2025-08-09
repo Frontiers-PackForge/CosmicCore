@@ -97,7 +97,7 @@ public class DroneStationMachine extends WorkableElectricMultiblockMachine {
     // This method is called every tick
     public void updateDroneHatches() {
         if (energyContainer != null) {
-            if (drainEnergy(false)) {
+            if (!drainEnergy(false)) {
                 this.currentTier = null;
             }
         }
