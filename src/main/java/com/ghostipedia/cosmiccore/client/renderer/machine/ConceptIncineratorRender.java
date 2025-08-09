@@ -105,16 +105,6 @@ public class ConceptIncineratorRender extends
                 y0ffset + (leftAxis == Direction.Axis.Y ? 0.5f : 0.0f),
                 z0ffset + (leftAxis == Direction.Axis.Z ? 0.5f : 0.0f));
         poseStack.pushPose();
-
-        float min = 0.5f;
-        float max = 1.0f;
-        float amplitude = (max - min) / 2.0f;
-        float offset = min + amplitude;
-        float scale = (float) Math.sin(totalTick * 0.1f) * amplitude + offset;
-        poseStack.scale(scale, scale, scale);
-        poseStack.mulPose(new Quaternionf().rotateAxis(totalTick * Mth.TWO_PI / 80, 0, 1, 0));
-        VertexConsumer consumer = buffer.getBuffer(Sheets.translucentCullBlockSheet());
-
         float percent = 0;
         if (machine instanceof VoraxReactorMachine voraxReactorMachine) {
             percent = clamp((voraxReactorMachine.getContagionStrength() / 50000f) / 4.5f, 0F, 1F);
@@ -122,12 +112,13 @@ public class ConceptIncineratorRender extends
             percent = 0;
         }
 
+        float scale = heartBeatEffect(0.5f, 1.0f, partialTick, percent);
+        poseStack.scale(scale, scale, scale);
+        poseStack.mulPose(new Quaternionf().rotateAxis(totalTick * Mth.TWO_PI / 80, 0, 1, 0));
+        VertexConsumer consumer = buffer.getBuffer(Sheets.translucentCullBlockSheet());
+
         renderBallA(poseStack, consumer, packedLight, packedOverlay, percent);
 
-        max = 0.7f + percent;
-        amplitude = (max - min) / 2.0f;
-        offset = min + amplitude;
-        scale = (float) Math.sin(totalTick * 0.1f) * amplitude + offset;
         poseStack.scale(scale * -2, scale * -2, scale * -2);
 
         consumer = buffer.getBuffer(Sheets.cutoutBlockSheet());
@@ -139,6 +130,42 @@ public class ConceptIncineratorRender extends
     @Override
     public int getViewDistance() {
         return 512;
+    }
+
+    private float bpmFiltered = 50f;
+
+    private static float smoothstep01(float x) {
+        x = Mth.clamp(x, 0f, 1f);
+        return x * x * (3f - 2f * x);
+    }
+
+    float biExp(float x, float center, float rise, float decay) {
+        if (x < center) return 0f;
+        float u = x - center;
+        return (float) (Math.exp(-u / decay) - Math.exp(-u / rise));
+    }
+
+    public float heartBeatEffect(float min, float max, float partialTick, float percent) {
+        float totalTick = (Minecraft.getInstance().player.tickCount + partialTick);
+        float tSec = totalTick / 20.0f;
+        float easingFunctionThingy = smoothstep01(percent);
+        float idealBPM = Mth.lerp(easingFunctionThingy, 30f, 80);
+        float delta = 0.35f;
+        float timeConversion = 1f / 20f;
+        float alpha = 1f - (float) Math.exp(-timeConversion / delta);
+        bpmFiltered += (idealBPM - bpmFiltered) * alpha;
+        // I Don't like math :(
+        float bpm = bpmFiltered;
+        float beatPeriod = 60f / bpm;
+        float phase = tSec % beatPeriod;
+
+        float p1 = biExp(phase, 0.02f * beatPeriod, 0.02f * beatPeriod, 0.18f * beatPeriod);
+        float p2 = 0.6f * biExp(phase, 0.22f * beatPeriod, 0.02f * beatPeriod, 0.20f * beatPeriod);
+
+        float heartbeat = (p1 + p2) * 1.25f;
+        heartbeat = Mth.clamp(heartbeat, 0f, 1f);
+
+        return Mth.lerp(heartbeat, min, max);
     }
 
     @Override

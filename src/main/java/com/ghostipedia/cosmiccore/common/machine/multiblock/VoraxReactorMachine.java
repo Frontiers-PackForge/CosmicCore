@@ -10,7 +10,6 @@ import com.gregtechceu.gtceu.api.machine.TickableSubscription;
 import com.gregtechceu.gtceu.api.machine.feature.IExplosionMachine;
 import com.gregtechceu.gtceu.api.machine.feature.multiblock.IMultiPart;
 import com.gregtechceu.gtceu.api.machine.multiblock.WorkableElectricMultiblockMachine;
-import com.gregtechceu.gtceu.api.machine.trait.RecipeLogic;
 import com.gregtechceu.gtceu.api.misc.EnergyContainerList;
 import com.gregtechceu.gtceu.api.recipe.GTRecipe;
 import com.gregtechceu.gtceu.utils.FormattingUtil;
@@ -128,8 +127,8 @@ public class VoraxReactorMachine extends WorkableElectricMultiblockMachine imple
         if (recipeLogic.isWorking()) {
             if (!isCleaning && contagionStrength >= 100000) {
                 contagionStrength = 100000;
-                recipeLogic.setStatus(RecipeLogic.Status.SUSPEND);
-                doExplosion(12f + getTier());
+                // recipeLogic.setStatus(RecipeLogic.Status.SUSPEND);
+                // doExplosion(12f + getTier());
             } else {
 
                 contagionDelta += 0.05F;

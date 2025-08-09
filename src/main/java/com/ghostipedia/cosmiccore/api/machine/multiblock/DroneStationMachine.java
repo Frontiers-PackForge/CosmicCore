@@ -8,12 +8,19 @@ import com.gregtechceu.gtceu.api.GTValues;
 import com.gregtechceu.gtceu.api.capability.IControllable;
 import com.gregtechceu.gtceu.api.capability.recipe.IO;
 import com.gregtechceu.gtceu.api.capability.recipe.ItemRecipeCapability;
+import com.gregtechceu.gtceu.api.gui.GuiTextures;
+import com.gregtechceu.gtceu.api.gui.fancy.FancyMachineUIWidget;
 import com.gregtechceu.gtceu.api.machine.IMachineBlockEntity;
 import com.gregtechceu.gtceu.api.machine.TickableSubscription;
 import com.gregtechceu.gtceu.api.machine.feature.multiblock.IMultiController;
 import com.gregtechceu.gtceu.api.machine.multiblock.WorkableElectricMultiblockMachine;
 import com.gregtechceu.gtceu.api.machine.trait.NotifiableItemStackHandler;
 import com.gregtechceu.gtceu.api.machine.trait.RecipeLogic;
+
+import com.lowdragmc.lowdraglib.gui.modular.ModularUI;
+import com.lowdragmc.lowdraglib.gui.texture.GuiTextureGroup;
+import com.lowdragmc.lowdraglib.gui.texture.TextTexture;
+import com.lowdragmc.lowdraglib.gui.widget.*;
 
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.Direction;
@@ -28,6 +35,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.BlockHitResult;
 
 import com.google.common.collect.HashMultimap;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -222,6 +230,17 @@ public class DroneStationMachine extends WorkableElectricMultiblockMachine {
     }
 
     /**
+     * Force turns all connected machines in range on
+     */
+    public void turnAllMachinesOff() {
+        System.out.println("Toggling all multis");
+        for (int i = 0; i < connections.size(); i++) {
+            forceTurnOffMultiblock(i);
+            i++;
+        }
+    }
+
+    /**
      * Disables a connected multi.
      * 
      * @param index the index in the connections list
@@ -258,5 +277,60 @@ public class DroneStationMachine extends WorkableElectricMultiblockMachine {
         return true;
     }
 
+    /**
+     * Force turns all connected machines in range off
+     *
+     * @param index the index in the connections list
+     */
+    public boolean forceTurnOffMultiblock(int index) {
+        if (isRemote()) return false;
+        if (index > connections.size()) return false;
+        DroneStationConnection connection = connections.get(index);
+        if (!connection.isValid()) return false;
+        if (connection.machine == null) return false;
+        if (!(connection.machine instanceof DroneMaintenanceInterfacePartMachine droneInterface)) return false;
+        IMultiController controller = droneInterface.getControllers().first();
+        if (!(controller instanceof IControllable controllable)) return false;
+        if (!controllable.isWorkingEnabled()) return false;
+        controllable.setSuspendAfterFinish(true);
+        return true;
+    }
+
     // TODO: Add functions for UI to disable/enable/read status/etc machines remotely
+
+    @Override
+    public @NotNull Widget createUIWidget() {
+        var group = new WidgetGroup(0, 0, 182 + 8, 117 + 8);
+        group.addWidget(new DraggableScrollableWidgetGroup(4, 4, 182, 117).setBackground(getScreenTexture())
+                .addWidget(new LabelWidget(4, 5, self().getBlockState().getBlock().getDescriptionId()))
+                .addWidget(new ComponentPanelWidget(4, 17, this::addDisplayText)
+                        .textSupplier(this.getLevel().isClientSide ? null : this::addDisplayText)
+                        .setMaxWidthLimit(150)
+                        .clickHandler(this::handleDisplayClick)));
+        group.setBackground(GuiTextures.BACKGROUND_INVERSE);
+        group.addWidget(new ButtonWidget(
+                6,
+                80,
+                178,
+                20,
+                new GuiTextureGroup(
+                        GuiTextures.BUTTON,
+                        new TextTexture("cosmiccore.multiblock.reboot_powergrid")),
+                clickData -> turnAllMachinesOn()));
+        group.addWidget(new ButtonWidget(
+                6,
+                100,
+                178,
+                20,
+                new GuiTextureGroup(
+                        GuiTextures.BUTTON,
+                        new TextTexture("cosmiccore.multiblock.sleep_powergrid")),
+                clickData -> turnAllMachinesOff()));
+        return group;
+    }
+
+    @Override
+    public ModularUI createUI(Player entityPlayer) {
+        return new ModularUI(198, 208, this, entityPlayer).widget(new FancyMachineUIWidget(this, 198, 208));
+    }
 }

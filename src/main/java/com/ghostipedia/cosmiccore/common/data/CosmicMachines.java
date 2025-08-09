@@ -470,13 +470,95 @@ public class CosmicMachines {
             .appearanceBlock(HIGH_POWER_CASING)
             .recipeType(GTRecipeTypes.DUMMY_RECIPES)
             .pattern(definition -> FactoryBlockPattern.start()
-                    .aisle("M", "A", "A")
-                    .aisle("S", "C", "I")
-                    .where("C", controller(blocks(definition.getBlock())))
-                    .where("S", abilities(PartAbility.OPTICAL_DATA_RECEPTION))
-                    .where("I", abilities(PartAbility.INPUT_ENERGY))
-                    .where("M", abilities(PartAbility.MAINTENANCE))
-                    .where("A", blocks(HIGH_POWER_CASING.get()))
+                    // spotless: off
+                    .aisle("   AAAAAAA   ", "     BBB     ", "     BBB     ", "             ", "             ",
+                            "             ", "             ", "             ", "             ", "             ",
+                            "             ", "             ", "             ", "             ", "             ",
+                            "             ", "             ", "             ", "             ", "             ",
+                            "             ", "             ", "             ", "             ", "             ",
+                            "             ", "             ", "             ", "             ")
+                    .aisle(" AAAAAAAAAAA ", " A         A ", "             ", "             ", "             ",
+                            "             ", "             ", "             ", "             ", "             ",
+                            "             ", "             ", "             ", "             ", "             ",
+                            "             ", "             ", "             ", "             ", "             ",
+                            "             ", "             ", "             ", "             ", "             ",
+                            "             ", "             ", "             ", "             ")
+                    .aisle(" ACAACCCAACA ", "  C  CCC  C  ", "  C  CCC  C  ", "  C  CCC  C  ", "  CC  C  CC  ",
+                            "      C      ", "             ", "             ", "             ", "             ",
+                            "             ", "             ", "             ", "             ", "             ",
+                            "             ", "             ", "             ", "             ", "             ",
+                            "             ", "             ", "             ", "             ", "             ",
+                            "             ", "             ", "             ", "             ")
+                    .aisle("AAAAAD DAAAAA", "     D D     ", "     D D     ", "     D D     ", "  CCCD DCCC  ",
+                            "     D D     ", "             ", "             ", "             ", "             ",
+                            "             ", "             ", "             ", "      D      ", "             ",
+                            "             ", "             ", "             ", "             ", "      D      ",
+                            "             ", "             ", "             ", "             ", "             ",
+                            "             ", "             ", "             ", "             ")
+                    .aisle("AAAAAADAAAAAA", "      D      ", "      D      ", "      D      ", "   CCCDCCC   ",
+                            "      D      ", "      D      ", "      D      ", "      D      ", "      D      ",
+                            "      D      ", "      D      ", "      D      ", "     DDD     ", "      D      ",
+                            "      D      ", "      D      ", "      D      ", "      D      ", "     DDD     ",
+                            "      D      ", "      D      ", "             ", "             ", "             ",
+                            "             ", "             ", "             ", "             ")
+                    .aisle("AACDAAAAADCAA", "B CD     DC B", "B CD     DC B", "  CD     DC  ", "   DC   CD   ",
+                            "   D     D   ", "             ", "             ", "             ", "             ",
+                            "             ", "             ", "             ", "    DD DD    ", "             ",
+                            "             ", "             ", "             ", "             ", "    DD DD    ",
+                            "             ", "             ", "             ", "      E      ", "             ",
+                            "      E      ", "             ", "      E      ", "             ")
+                    .aisle("AAC DAAAD CAA", "B C D E D C B", "B C D E D C B", "  C D E D C  ", "  C D E D C  ",
+                            "  C D E D C  ", "    D E D    ", "    D E D    ", "    D E D    ", "    D E D    ",
+                            "    D E D    ", "    D E D    ", "    D E D    ", "   DD E DD   ", "    D E D    ",
+                            "    D E D    ", "    D E D    ", "    D E D    ", "    D E D    ", "   DD E DD   ",
+                            "    D E D    ", "    D E D    ", "      E      ", "     EEE     ", "      E      ",
+                            "     EEE     ", "      E      ", "     EEE     ", "      E      ")
+                    .aisle("AACDAAAAADCAA", "B CD     DC B", "B CD     DC B", "  CD     DC  ", "   DC   CD   ",
+                            "   D     D   ", "             ", "             ", "             ", "             ",
+                            "             ", "             ", "             ", "    DD DD    ", "             ",
+                            "             ", "             ", "             ", "             ", "    DD DD    ",
+                            "             ", "             ", "             ", "      E      ", "             ",
+                            "      E      ", "             ", "      E      ", "             ")
+                    .aisle("AAAAAADAAAAAA", "      D      ", "      D      ", "      D      ", "   CCCDCCC   ",
+                            "      D      ", "      D      ", "      D      ", "      D      ", "      D      ",
+                            "      D      ", "      D      ", "      D      ", "     DDD     ", "      D      ",
+                            "      D      ", "      D      ", "      D      ", "      D      ", "     DDD     ",
+                            "      D      ", "      D      ", "             ", "             ", "             ",
+                            "             ", "             ", "             ", "             ")
+                    .aisle("AAAAAD DAAAAA", "     D D     ", "     D D     ", "     D D     ", "  CCCD DCCC  ",
+                            "     D D     ", "             ", "             ", "             ", "             ",
+                            "             ", "             ", "             ", "      D      ", "             ",
+                            "             ", "             ", "             ", "             ", "      D      ",
+                            "             ", "             ", "             ", "             ", "             ",
+                            "             ", "             ", "             ", "             ")
+                    .aisle(" ACAACCCAACA ", "  C  CCC  C  ", "  C  CCC  C  ", "  C  CCC  C  ", "  CC  C  CC  ",
+                            "      C      ", "             ", "             ", "             ", "             ",
+                            "             ", "             ", "             ", "             ", "             ",
+                            "             ", "             ", "             ", "             ", "             ",
+                            "             ", "             ", "             ", "             ", "             ",
+                            "             ", "             ", "             ", "             ")
+                    .aisle(" AAAAAAAAAAA ", " A         A ", "             ", "             ", "             ",
+                            "             ", "             ", "             ", "             ", "             ",
+                            "             ", "             ", "             ", "             ", "             ",
+                            "             ", "             ", "             ", "             ", "             ",
+                            "             ", "             ", "             ", "             ", "             ",
+                            "             ", "             ", "             ", "             ")
+                    .aisle("   AAAAAAA   ", "     BBB     ", "     BQB     ", "             ", "             ",
+                            "             ", "             ", "             ", "             ", "             ",
+                            "             ", "             ", "             ", "             ", "             ",
+                            "             ", "             ", "             ", "             ", "             ",
+                            "             ", "             ", "             ", "             ", "             ",
+                            "             ", "             ", "             ", "             ")
+                    // spotless: on
+                    .where("Q", controller(blocks(definition.getBlock())))
+                    .where("A", blocks(TRITANIUM_LINED_HEAVY_NEUTRONIUM_CASING.get()))
+                    .where("B", blocks(HIGH_POWER_CASING.get())
+                            .or(abilities(PartAbility.OPTICAL_DATA_RECEPTION))
+                            .or(abilities(PartAbility.INPUT_ENERGY))
+                            .or(abilities(PartAbility.MAINTENANCE).setExactLimit(1)))
+                    .where("C", blocks(HIGH_TOLERANCE_RHENIUM_CASING.get()))
+                    .where("D", frames(GTMaterials.Neutronium))
+                    .where("E", blocks(REFLECTIVE_STARMETAL_CASING.get()))
                     .build())
             .workableCasingModel(GTCEu.id("block/casings/hpca/high_power_casing"),
                     CosmicCore.id("block/multiblock/wireless_data_transmitter"))

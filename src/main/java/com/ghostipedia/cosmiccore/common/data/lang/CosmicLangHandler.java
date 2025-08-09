@@ -133,6 +133,9 @@ public class CosmicLangHandler extends LangHandler {
         provider.add("tagprefix.plasmites", "%s Plasmites");
         provider.add("tagprefix.wire_spool", "%s Wire Spool");
 
+        provider.add("cosmiccore.multiblock.reboot_powergrid", "§aReboot All Connected Machines");
+        provider.add("cosmiccore.multiblock.sleep_powergrid", "§cSuspend All Connected Machines");
+
         provider.add("item.cosmiccore.debug.structure_writer.structural_scale", "Structure size: X:%s Y:%s Z:%s");
         provider.add("item.cosmiccore.debug.structure_writer.export_order",
                 "Pattern Export Order:\n §cC:%s§l§d/§aS:%s§l§d/§bA:%s");
