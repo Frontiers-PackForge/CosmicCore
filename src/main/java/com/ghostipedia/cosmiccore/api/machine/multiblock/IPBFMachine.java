@@ -75,9 +75,7 @@ public class IPBFMachine extends WorkableMultiblockMachine implements IDisplayUI
                                 "gtceu.multiblock.progress",
                                 String.format("%.2f", (float) currentInSec),
                                 String.format("%.2f", (float) maxInSec),
-                                currentProgress
-                        )
-                );
+                                currentProgress));
             } else {
                 textList.add(Component.translatable("gtceu.multiblock.idling"));
             }
