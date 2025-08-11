@@ -7,21 +7,27 @@ import com.gregtechceu.gtceu.api.gui.GuiTextures;
 import com.gregtechceu.gtceu.api.gui.UITemplate;
 import com.gregtechceu.gtceu.api.machine.IMachineBlockEntity;
 import com.gregtechceu.gtceu.api.machine.MetaMachine;
+import com.gregtechceu.gtceu.api.machine.TickableSubscription;
 import com.gregtechceu.gtceu.api.machine.feature.multiblock.IDisplayUIMachine;
+import com.gregtechceu.gtceu.api.machine.feature.multiblock.IFluidRenderMulti;
 import com.gregtechceu.gtceu.api.machine.multiblock.WorkableMultiblockMachine;
 import com.gregtechceu.gtceu.api.machine.steam.SteamEnergyRecipeHandler;
+import com.gregtechceu.gtceu.api.machine.trait.RecipeLogic;
 import com.gregtechceu.gtceu.api.recipe.GTRecipe;
 import com.gregtechceu.gtceu.api.recipe.RecipeHelper;
 import com.gregtechceu.gtceu.api.recipe.content.ContentModifier;
 import com.gregtechceu.gtceu.api.recipe.modifier.ModifierFunction;
 import com.gregtechceu.gtceu.api.recipe.modifier.ParallelLogic;
 import com.gregtechceu.gtceu.config.ConfigHolder;
+import com.gregtechceu.gtceu.utils.GTUtil;
 
 import com.lowdragmc.lowdraglib.gui.modular.ModularUI;
 import com.lowdragmc.lowdraglib.gui.texture.IGuiTexture;
 import com.lowdragmc.lowdraglib.gui.widget.ComponentPanelWidget;
 import com.lowdragmc.lowdraglib.gui.widget.DraggableScrollableWidgetGroup;
 import com.lowdragmc.lowdraglib.gui.widget.LabelWidget;
+import com.lowdragmc.lowdraglib.syncdata.annotation.DescSynced;
+import com.lowdragmc.lowdraglib.syncdata.annotation.RequireRerender;
 
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
@@ -33,19 +39,53 @@ import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.AABB;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
+import lombok.Getter;
+import lombok.Setter;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
-public class IPBFMachine extends WorkableMultiblockMachine implements IDisplayUIMachine {
+public class IPBFMachine extends WorkableMultiblockMachine implements IDisplayUIMachine, IFluidRenderMulti {
 
     public static final int MAX_PARALLELS = 8;
 
+    private TickableSubscription hurtSubscription;
+
+    @Getter
+    @Setter
+    @DescSynced
+    @RequireRerender
+    private @NotNull Set<BlockPos> fluidBlockOffsets = new HashSet<>();
+
     public IPBFMachine(IMachineBlockEntity holder, Object... args) {
         super(holder, args);
+    }
+
+    @Override
+    public void onUnload() {
+        super.onUnload();
+        unsubscribe(hurtSubscription);
+        hurtSubscription = null;
+    }
+
+    @Override
+    public void onStructureFormed() {
+        super.onStructureFormed();
+        IFluidRenderMulti.super.onStructureFormed();
+    }
+
+    @Override
+    public void onStructureInvalid() {
+        super.onStructureInvalid();
+        IFluidRenderMulti.super.onStructureInvalid();
     }
 
     @Override
@@ -93,6 +133,17 @@ public class IPBFMachine extends WorkableMultiblockMachine implements IDisplayUI
                 .widget(UITemplate.bindPlayerInventory(entityPlayer.getInventory(),
                         GuiTextures.SLOT_STEAM.get(true), 7, 134,
                         true));
+    }
+
+    @Override
+    public void notifyStatusChanged(RecipeLogic.Status oldStatus, RecipeLogic.Status newStatus) {
+        super.notifyStatusChanged(oldStatus, newStatus);
+        if (newStatus == RecipeLogic.Status.WORKING) {
+            this.hurtSubscription = subscribeServerTick(this.hurtSubscription, this::hurtEntitiesAndBreakSnow);
+        } else if (oldStatus == RecipeLogic.Status.WORKING && hurtSubscription != null) {
+            unsubscribe(hurtSubscription);
+            hurtSubscription = null;
+        }
     }
 
     // Smoke VFX
@@ -156,5 +207,20 @@ public class IPBFMachine extends WorkableMultiblockMachine implements IDisplayUI
             getLevel().addParticle(ParticleTypes.LARGE_SMOKE, x, y, z, 0, 0, 0);
             getLevel().addParticle(ParticleTypes.FLAME, x, y, z, 0, 0, 0);
         }
+    }
+
+    private void hurtEntitiesAndBreakSnow() {
+        BlockPos middlePos = self().getPos().offset(getFrontFacing().getOpposite().getNormal());
+        getLevel().getEntities(null, new AABB(middlePos)).forEach(e -> e.hurt(e.damageSources().lava(), 3.0f));
+
+        if (getOffsetTimer() % 10 == 0) {
+            BlockState state = getLevel().getBlockState(middlePos);
+            GTUtil.tryBreakSnow(getLevel(), middlePos, state, true);
+        }
+    }
+
+    @Override
+    public @NotNull Set<BlockPos> saveOffsets() {
+        return Collections.singleton(new BlockPos(getFrontFacing().getOpposite().getNormal()));
     }
 }

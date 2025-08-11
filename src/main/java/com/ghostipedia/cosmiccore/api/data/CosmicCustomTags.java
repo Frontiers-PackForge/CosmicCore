@@ -2,11 +2,16 @@ package com.ghostipedia.cosmiccore.api.data;
 
 import com.ghostipedia.cosmiccore.common.data.tag.TagUtil;
 
+import com.gregtechceu.gtceu.api.data.chemical.material.Material;
+import com.gregtechceu.gtceu.api.data.chemical.material.info.MaterialFlags;
+import com.gregtechceu.gtceu.api.data.chemical.material.properties.PropertyKey;
 import com.gregtechceu.gtceu.api.data.tag.TagPrefix;
 
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
+
+import java.util.function.Predicate;
 
 import static com.gregtechceu.gtceu.api.data.tag.TagPrefix.Conditions.hasIngotProperty;
 import static com.gregtechceu.gtceu.api.data.tag.TagPrefix.Conditions.hasOreProperty;
@@ -19,8 +24,18 @@ public class CosmicCustomTags {
     public static TagPrefix heavyBeam;
     public static TagPrefix modularShelling;
     public static TagPrefix plasmites;
+    public static TagPrefix largeWireSpool;
     public static final TagKey<Block> STAR_LADDER_BLOCKS = TagUtil.createBlockTag("starladder_blocks");
     public static final TagKey<Item> STAR_LADDER_ITEMS = TagUtil.createItemTag("starladder_items");
+
+    public static final Predicate<Material> hasWireProp = material -> material.hasProperty(PropertyKey.WIRE);
+    public static final Predicate<Material> hasPlateProp = material -> material.hasFlag(MaterialFlags.GENERATE_PLATE);
+    public static final Predicate<Material> hasRodProp = material -> material.hasFlag(MaterialFlags.GENERATE_ROD);
+    public static final Predicate<Material> hasFrameProp = material -> material.hasFlag(MaterialFlags.GENERATE_FRAME);
+    public static final Predicate<Material> hasBoltProp = material -> material
+            .hasFlag(MaterialFlags.GENERATE_BOLT_SCREW);
+    public static final Predicate<Material> hasFineWireProp = material -> material
+            .hasFlag(MaterialFlags.GENERATE_FINE_WIRE);
 
     public static void initTagPrefixes() {
         crushedLeached = new TagPrefix("leachedOre")
@@ -47,7 +62,9 @@ public class CosmicCustomTags {
                 .materialIconType(CosmicCoreMaterialIconType.ultraDense)
                 .unificationEnabled(true)
                 .generateItem(true)
-                .generationCondition(hasIngotProperty);
+                .maxStackSize(1)
+                .generationCondition(hasPlateProp);
+
         heavyBeam = new TagPrefix("heavyBeam")
                 .idPattern("heavy_%s_beam")
                 .defaultTagPath("heavy_beams/%s")
@@ -55,7 +72,10 @@ public class CosmicCustomTags {
                 .materialIconType(CosmicCoreMaterialIconType.heavyBeam)
                 .unificationEnabled(true)
                 .generateItem(true)
-                .generationCondition(hasIngotProperty);
+                .maxStackSize(16)
+                .generationCondition(
+                        hasPlateProp
+                                .and(hasRodProp));
         modularShelling = new TagPrefix("modular_shelling")
                 .idPattern("%s_modular_shelling")
                 .defaultTagPath("modular_shellings/%s")
@@ -63,7 +83,8 @@ public class CosmicCustomTags {
                 .materialIconType(CosmicCoreMaterialIconType.modularShelling)
                 .unificationEnabled(true)
                 .generateItem(true)
-                .generationCondition(hasIngotProperty);
+                .maxStackSize(16)
+                .generationCondition(hasPlateProp.and(hasFrameProp).and(hasBoltProp));
         plasmites = new TagPrefix("plasmites")
                 .idPattern("%s_plasmites")
                 .defaultTagPath("plasmites/%s")
@@ -72,5 +93,14 @@ public class CosmicCustomTags {
                 .unificationEnabled(true)
                 .generateItem(true)
                 .generationCondition(hasIngotProperty);
+        largeWireSpool = new TagPrefix("large_wire_spool")
+                .idPattern("%s_wire_spool")
+                .defaultTagPath("wire_spools/%s")
+                .defaultTagPath("wire_spools")
+                .materialIconType(CosmicCoreMaterialIconType.wireSpool)
+                .unificationEnabled(true)
+                .generateItem(true)
+                .maxStackSize(4)
+                .generationCondition(hasWireProp.or(hasFineWireProp));
     }
 }

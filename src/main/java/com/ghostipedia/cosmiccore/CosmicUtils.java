@@ -2,12 +2,17 @@ package com.ghostipedia.cosmiccore;
 
 import com.ghostipedia.cosmiccore.common.data.CosmicItems;
 
+import com.gregtechceu.gtceu.GTCEu;
+import com.gregtechceu.gtceu.api.item.ComponentItem;
+import com.gregtechceu.gtceu.api.item.component.ICustomRenderer;
+
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.common.util.LazyOptional;
 
+import com.tterrag.registrate.util.nullness.NonNullConsumer;
 import org.jetbrains.annotations.Nullable;
 import top.theillusivec4.curios.api.CuriosApi;
 import top.theillusivec4.curios.api.type.capability.ICuriosItemHandler;
@@ -20,6 +25,10 @@ public class CosmicUtils {
 
     public static boolean hasTheOneRing(@Nullable Entity entity) {
         return hasCurio(entity, "ring", CosmicItems.THE_ONE_RING.asItem());
+    }
+
+    public static <T extends ComponentItem> NonNullConsumer<T> attachRenderer(ICustomRenderer customRenderer) {
+        return !GTCEu.isClientSide() ? NonNullConsumer.noop() : (item) -> item.attachComponents(customRenderer);
     }
 
     /**

@@ -1,6 +1,6 @@
 repositories {
     flatDir {
-        dir("libs")
+        dir "libs"
     }
     mavenLocal()
     mavenCentral()
@@ -13,6 +13,8 @@ repositories {
         url = 'https://maven.gtceu.com'
         content {
             includeGroup 'com.gregtechceu.gtceu'
+            includeGroup 'appeng'
+            includeGroup 'lu.kolja'
         }
     }
     maven { // Curse Forge File
@@ -103,5 +105,9 @@ repositories {
             includeGroupByRegex("software\\.bernie.*")
             includeGroup("com.eliotlash.mclib")
         }
+    }
+    exclusiveContent { // Configuration
+        forRepository { maven { url = "https://api.repsy.io/mvn/toma/public" } }
+        filter { includeGroup("dev.toma.configuration")}
     }
 }

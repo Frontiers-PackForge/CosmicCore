@@ -10,6 +10,7 @@ public class CosmicCoreMaterialIconType {
     public static final MaterialIconType heavyBeam = new MaterialIconType("heavyBeam");
     public static final MaterialIconType modularShelling = new MaterialIconType("modularShelling");
     public static final MaterialIconType plasmites = new MaterialIconType("plasmites");
+    public static final MaterialIconType wireSpool = new MaterialIconType("wireSpool");
 
     public static void init() {}
 }

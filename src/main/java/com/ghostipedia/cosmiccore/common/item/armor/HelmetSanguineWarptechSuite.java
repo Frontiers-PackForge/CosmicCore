@@ -1,9 +1,14 @@
 package com.ghostipedia.cosmiccore.common.item.armor;
 
+import com.ghostipedia.cosmiccore.CosmicCore;
+
 import com.gregtechceu.gtceu.common.item.armor.QuarkTechSuite;
 
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.ItemStack;
@@ -23,5 +28,10 @@ public class HelmetSanguineWarptechSuite extends QuarkTechSuite {
         if (foodLevel < 20) {
             player.addEffect(new MobEffectInstance(MobEffects.SATURATION, 1, 1, false, false));
         }
+    }
+
+    @Override
+    public ResourceLocation getArmorTexture(ItemStack stack, Entity entity, EquipmentSlot slot, String type) {
+        return CosmicCore.id("textures/armor/sanguine_suit_1.png");
     }
 }

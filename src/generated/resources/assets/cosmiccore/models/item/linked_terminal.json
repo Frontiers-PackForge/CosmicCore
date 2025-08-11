@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "cosmiccore:item/terminal/linked_terminal",
+    "layer1": "cosmiccore:item/terminal/terminal_overlay"
+  }
+}

@@ -1,8 +1,10 @@
 package com.ghostipedia.cosmiccore.common.data;
 
 import com.ghostipedia.cosmiccore.CosmicCore;
+import com.ghostipedia.cosmiccore.api.item.LinkedTerminalBehavior;
 import com.ghostipedia.cosmiccore.api.item.armor.*;
 import com.ghostipedia.cosmiccore.api.registries.CosmicRegistration;
+import com.ghostipedia.cosmiccore.client.renderer.item.HaloItemRenderer;
 import com.ghostipedia.cosmiccore.common.data.tag.item.CosmicItemTags;
 import com.ghostipedia.cosmiccore.common.item.armor.ChestSanguineWarptechSuite;
 import com.ghostipedia.cosmiccore.common.item.armor.HelmetSanguineWarptechSuite;
@@ -58,12 +60,12 @@ import wayoftime.bloodmagic.common.registration.impl.BloodOrbRegistryObject;
 
 import java.util.function.Function;
 
+import static com.ghostipedia.cosmiccore.CosmicUtils.attachRenderer;
 import static com.ghostipedia.cosmiccore.api.registries.CosmicRegistration.REGISTRATE;
 import static com.gregtechceu.gtceu.common.data.GTItems.attach;
 import static earth.terrarium.adastra.common.registry.ModItems.GLOBES;
 import static wayoftime.bloodmagic.common.item.BloodMagicItems.BLOOD_ORBS;
 
-@SuppressWarnings({ "unused" })
 public class CosmicItems {
 
     public static final BloodOrbRegistryObject<BloodOrb> ORB_ASCENDANT;
@@ -787,25 +789,36 @@ public class CosmicItems {
             .item("eschaton_processor", ComponentItem::create)
             .lang("Eschaton Processor")
             .properties(p -> p.stacksTo(64))
-
+            .onRegister(attachRenderer(() -> HaloItemRenderer.create(6, 0xFFFFFFFF,
+                    new ResourceLocation(CosmicCore.MOD_ID, "block/iris/rnd/tentacle_halo"), true,
+                    false)))
             .defaultModel()
             .register();
     public static final ItemEntry<ComponentItem> ESCHATON_PROCESSOR_ASSEMBLY = REGISTRATE
             .item("eschaton_processor_assembly", ComponentItem::create)
             .lang("Eschaton Processor Assembly")
             .properties(p -> p.stacksTo(64))
+            .onRegister(attachRenderer(() -> HaloItemRenderer.create(6, 0xFFFFFFFF,
+                    new ResourceLocation(CosmicCore.MOD_ID, "block/iris/rnd/tentacle_halo"), true,
+                    false)))
             .defaultModel()
             .register();
     public static final ItemEntry<ComponentItem> ESCHATON_PROCESSOR_SUPERCOMPUTER = REGISTRATE
             .item("eschaton_processor_supercomputer", ComponentItem::create)
             .lang("Eschaton Processor Supercomputer")
             .properties(p -> p.stacksTo(64))
+            .onRegister(attachRenderer(() -> HaloItemRenderer.create(6, 0xFFFFFFFF,
+                    new ResourceLocation(CosmicCore.MOD_ID, "block/iris/rnd/tentacle_halo"), true,
+                    false)))
             .defaultModel()
             .register();
     public static final ItemEntry<ComponentItem> ESCHATON_PROCESSOR_MAINFRAME = REGISTRATE
             .item("eschaton_processor_mainframe", ComponentItem::create)
             .lang("Eschaton Processor Mainframe")
             .properties(p -> p.stacksTo(64))
+            .onRegister(attachRenderer(() -> HaloItemRenderer.create(6, 0xFFFFFFFF,
+                    new ResourceLocation(CosmicCore.MOD_ID, "block/iris/rnd/tentacle_halo"), true,
+                    false)))
             .onRegister(attach(new TooltipBehavior(lines -> {
                 lines.add(Component.literal(StringUtil
                         .rainbowDancing(LocalizationUtils.format("cosmiccore.circuit.lore.tier.max.0"))));
@@ -910,6 +923,19 @@ public class CosmicItems {
             .register();
     // Oiled up white girl trying to understand what the FUCK an armor tag is, i'm doing to fucking shove a whole
     // pineapple up the ass of whatever mojang employee thought these were **OKAY TO CODE**
+
+    public static ItemEntry<ArmorComponentItem> SANGUINE_WARPTECH_HELMET = REGISTRATE.item("sanguine_warptech_helmet",
+            (p) -> new ArmorComponentItem(GTArmorMaterials.ARMOR, ArmorItem.Type.HELMET, p)
+                    .setArmorLogic(new HelmetSanguineWarptechSuite(ArmorItem.Type.HELMET,
+                            8192,
+                            100_000_000L * (long) Math.max(1,
+                                    Math.pow(4, ConfigHolder.INSTANCE.tools.voltageTierQuarkTech - 5)),
+                            ConfigHolder.INSTANCE.tools.voltageTierQuarkTech)))
+            .lang("Sanguine WarpTech Helmet")
+            .properties(p -> p.rarity(Rarity.EPIC))
+            .tag(CustomTags.PPE_ARMOR)
+            .register();
+
     public static ItemEntry<SpaceArmorComponentItem> SANGUINE_WARPTECH_CHESTPLATE = REGISTRATE
             .item("sanguine_warptech_chestplate",
                     (p) -> new SpaceArmorComponentItem(GTArmorMaterials.ARMOR, ArmorItem.Type.CHESTPLATE, 100000, p)
@@ -934,17 +960,7 @@ public class CosmicItems {
             .properties(p -> p.rarity(Rarity.EPIC))
             .tag(CustomTags.PPE_ARMOR)
             .register();
-    public static ItemEntry<ArmorComponentItem> SANGUINE_WARPTECH_HELMET = REGISTRATE.item("sanguine_warptech_helmet",
-            (p) -> new ArmorComponentItem(GTArmorMaterials.ARMOR, ArmorItem.Type.HELMET, p)
-                    .setArmorLogic(new HelmetSanguineWarptechSuite(ArmorItem.Type.HELMET,
-                            8192,
-                            100_000_000L * (long) Math.max(1,
-                                    Math.pow(4, ConfigHolder.INSTANCE.tools.voltageTierQuarkTech - 5)),
-                            ConfigHolder.INSTANCE.tools.voltageTierQuarkTech)))
-            .lang("Sanguine WarpTech Helmet")
-            .properties(p -> p.rarity(Rarity.EPIC))
-            .tag(CustomTags.PPE_ARMOR)
-            .register();
+
     public static ItemEntry<ArmorComponentItem> SANGUINE_WARPTECH_BOOTS = REGISTRATE.item("sanguine_warptech_boots",
             (p) -> new ArmorComponentItem(GTArmorMaterials.ARMOR, ArmorItem.Type.BOOTS, p)
                     .setArmorLogic(new SanguineWarptechSuite(ArmorItem.Type.BOOTS,
@@ -1228,6 +1244,48 @@ public class CosmicItems {
             .onRegister(attach(
                     ThermalFluidStats.create(1024000, 1000000, true, true, true, true, true),
                     new ItemFluidContainer(), cellName()))
+            .register();
+    // Drones
+    public static final ItemEntry<ComponentItem> RUSTY_DRONE = REGISTRATE
+            .item("rusty_drone", ComponentItem::create)
+            .lang("Rusty Drone")
+            .properties(p -> p.stacksTo(64))
+            .defaultModel()
+            .register();
+    public static final ItemEntry<ComponentItem> ROBUST_DRONE = REGISTRATE
+            .item("robust_drone", ComponentItem::create)
+            .lang("Robust Drone")
+            .properties(p -> p.stacksTo(64))
+            .defaultModel()
+            .register();
+    public static final ItemEntry<ComponentItem> INDUSTRIAL_DRONE = REGISTRATE
+            .item("industrial_drone", ComponentItem::create)
+            .lang("Industrial Drone")
+            .properties(p -> p.stacksTo(64))
+            .defaultModel()
+            .register();
+    public static final ItemEntry<ComponentItem> SANGUINE_DRONE = REGISTRATE
+            .item("sanguine_drone", ComponentItem::create)
+            .lang("Sanguine Drone")
+            .properties(p -> p.stacksTo(64))
+            .defaultModel()
+            .register();
+    public static final ItemEntry<ComponentItem> PLASMATIC_DRONE = REGISTRATE
+            .item("plasmatic_drone", ComponentItem::create)
+            .lang("plasmatic_drone")
+            .properties(p -> p.stacksTo(64))
+            .defaultModel()
+            .register();
+
+    public static ItemEntry<ComponentItem> LINKED_TERMINAL = REGISTRATE
+            .item("linked_terminal", ComponentItem::create)
+            .lang("Linked Terminal")
+            .model((ctx, prov) -> prov.generated(
+                    ctx::getEntry,
+                    prov.modLoc("item/terminal/linked_terminal"),
+                    prov.modLoc("item/terminal/terminal_overlay")))
+            .properties(p -> p.stacksTo(1))
+            .onRegister(attach(new LinkedTerminalBehavior()))
             .register();
 
     public static ICustomDescriptionId cellName() {

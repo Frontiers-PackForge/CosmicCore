@@ -1,6 +1,7 @@
 package com.ghostipedia.cosmiccore;
 
 import com.ghostipedia.cosmiccore.api.capability.CosmicCapabilities;
+import com.ghostipedia.cosmiccore.api.item.LinkedTerminalBehavior;
 import com.ghostipedia.cosmiccore.api.pattern.CosmicPredicates;
 import com.ghostipedia.cosmiccore.api.recipe.lookup.MapSoulIngredient;
 import com.ghostipedia.cosmiccore.api.registries.CosmicRegistration;
@@ -9,7 +10,7 @@ import com.ghostipedia.cosmiccore.common.data.*;
 import com.ghostipedia.cosmiccore.common.data.materials.CosmicMaterialSet;
 import com.ghostipedia.cosmiccore.common.data.materials.CosmicMaterials;
 import com.ghostipedia.cosmiccore.common.item.behavior.GravityCoreBehavior;
-import com.ghostipedia.cosmiccore.common.machine.multiblock.multi.modular.ModularizedMultis;
+import com.ghostipedia.cosmiccore.common.machine.multiblock.multi.modular.MultiblockInit;
 import com.ghostipedia.cosmiccore.gtbridge.CosmicRecipeTypes;
 import com.ghostipedia.cosmiccore.utils.input.SyncedKeyMapping;
 
@@ -35,6 +36,7 @@ import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLLoadCompleteEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 
+import appeng.api.features.GridLinkables;
 import earth.terrarium.adastra.api.events.AdAstraEvents;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -69,6 +71,7 @@ public class CosmicCore {
         CosmicBlocks.init();
         CosmicBlockEntities.init();
         CosmicItems.init();
+        CosmicBotanyItemRegistration.init();
         CosmicRegistration.REGISTRATE.registerRegistrate();
         CosmicCoreDatagen.init();
         CosmicPredicates.init();
@@ -99,6 +102,7 @@ public class CosmicCore {
     public void commonSetup(FMLCommonSetupEvent event) {
         event.enqueueWork(() -> {
             MapIngredientTypeManager.registerMapIngredient(Integer.class, MapSoulIngredient::convertToMapIngredient);
+            GridLinkables.register(CosmicItems.LINKED_TERMINAL, LinkedTerminalBehavior.handler);
         });
     }
 
@@ -118,7 +122,7 @@ public class CosmicCore {
     }
 
     public void registerMachines(GTCEuAPI.RegisterEvent<ResourceLocation, MachineDefinition> event) {
-        ModularizedMultis.init();
+        MultiblockInit.init();
         CosmicMachines.init();
     }
 
