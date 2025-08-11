@@ -1,16 +1,17 @@
 package com.ghostipedia.cosmiccore.common.machine.multiblock.multi;
 
 import com.ghostipedia.cosmiccore.CosmicCore;
+import com.ghostipedia.cosmiccore.api.machine.part.CosmicPartAbility;
 import com.ghostipedia.cosmiccore.client.renderer.machine.CosmicDynamicRenderHelpers;
 import com.ghostipedia.cosmiccore.common.data.CosmicBlocks;
 import com.ghostipedia.cosmiccore.common.data.materials.CosmicMaterials;
+import com.ghostipedia.cosmiccore.common.machine.multiblock.VoraxReactorMachine;
 import com.ghostipedia.cosmiccore.gtbridge.CosmicRecipeTypes;
 
 import com.gregtechceu.gtceu.GTCEu;
 import com.gregtechceu.gtceu.api.data.RotationState;
 import com.gregtechceu.gtceu.api.machine.MultiblockMachineDefinition;
 import com.gregtechceu.gtceu.api.machine.multiblock.PartAbility;
-import com.gregtechceu.gtceu.api.machine.multiblock.WorkableElectricMultiblockMachine;
 import com.gregtechceu.gtceu.api.pattern.FactoryBlockPattern;
 import com.gregtechceu.gtceu.api.pattern.Predicates;
 import com.gregtechceu.gtceu.api.recipe.OverclockingLogic;
@@ -30,9 +31,9 @@ import static com.gregtechceu.gtceu.common.data.models.GTMachineModels.createWor
 public class VoraxReactor {
 
     public final static MultiblockMachineDefinition VORAX_REACTOR = REGISTRATE
-            .multiblock("vorax_reactor", WorkableElectricMultiblockMachine::new)
+            .multiblock("vorax_reactor", VoraxReactorMachine::new)
             .rotationState(RotationState.NON_Y_AXIS)
-            .recipeType(CosmicRecipeTypes.CHROMATIC_DISTILLATION_PLANT)
+            .recipeType(CosmicRecipeTypes.VORAX)
             .recipeModifier(ELECTRIC_OVERCLOCK.apply(OverclockingLogic.NON_PERFECT_OVERCLOCK))
             .appearanceBlock(CASING_ATOMIC)
             .partAppearance((controller, part, side) -> TRITANIUM_LINED_HEAVY_NEUTRONIUM_CASING.getDefaultState())
@@ -79,10 +80,11 @@ public class VoraxReactor {
                     .where('E', blocks(Blocks.SCULK))
                     .where('F', blocks(FUSION_COIL.get()))
                     .where('B', blocks(CosmicBlocks.TRITANIUM_LINED_HEAVY_NEUTRONIUM_CASING.get())
-                            .or(Predicates.abilities(PartAbility.EXPORT_ITEMS).setMaxGlobalLimited(1))
                             .or(Predicates.abilities(PartAbility.OUTPUT_LASER, PartAbility.SUBSTATION_OUTPUT_ENERGY)
-                                    .setMinGlobalLimited(1, 1))
-                            .or(Predicates.abilities(PartAbility.IMPORT_FLUIDS).setMinGlobalLimited(1, 1)))
+                                    .setMaxGlobalLimited(1, 1))
+                            .or(Predicates.abilities(PartAbility.IMPORT_FLUIDS).setMinGlobalLimited(1, 1)
+                                    .setMaxGlobalLimited(3))
+                            .or(Predicates.abilities(CosmicPartAbility.STERILIZE_HATCH).setExactLimit(1)))
                     .build())
             .model(createWorkableCasingMachineModel(
                     CosmicCore.id("block/casings/solid/tritanium_lined_heavy_bolted_neutronium_casing"),

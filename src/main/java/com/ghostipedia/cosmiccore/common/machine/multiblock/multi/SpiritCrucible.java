@@ -14,6 +14,7 @@ import com.gregtechceu.gtceu.api.pattern.Predicates;
 import com.gregtechceu.gtceu.api.recipe.OverclockingLogic;
 
 import static com.ghostipedia.cosmiccore.api.registries.CosmicRegistration.REGISTRATE;
+import static com.ghostipedia.cosmiccore.gtbridge.CosmicRecipeTypes.SOUL_FOUNDRY;
 import static com.gregtechceu.gtceu.api.pattern.Predicates.*;
 import static com.gregtechceu.gtceu.common.data.GCYMBlocks.CASING_ATOMIC;
 import static com.gregtechceu.gtceu.common.data.GTMaterials.TungstenCarbide;
@@ -25,7 +26,7 @@ public class SpiritCrucible {
     public final static MultiblockMachineDefinition SPIRIT_CRUCIBLE = REGISTRATE
             .multiblock("spirit_crucible", WorkableElectricMultiblockMachine::new)
             .rotationState(RotationState.NON_Y_AXIS)
-            .recipeType(CosmicRecipeTypes.CHROMATIC_DISTILLATION_PLANT)
+            .recipeTypes(CosmicRecipeTypes.SPIRIT_CRUCIBLE, SOUL_FOUNDRY)
             .recipeModifier(ELECTRIC_OVERCLOCK.apply(OverclockingLogic.NON_PERFECT_OVERCLOCK))
             .appearanceBlock(CASING_ATOMIC)
             .partAppearance((controller, part, side) -> CASING_ATOMIC.getDefaultState())
@@ -48,10 +49,12 @@ public class SpiritCrucible {
                     .where("Q", controller(blocks(definition.getBlock())))
                     .where('C', blocks(CosmicBlocks.SELF_HEALING_PTHANTERUM.get()))
                     .where('A', blocks(CASING_ATOMIC.get())
-                            .or(Predicates.abilities(PartAbility.EXPORT_ITEMS).setMaxGlobalLimited(1))
+                            .or(Predicates.abilities(PartAbility.EXPORT_ITEMS).setMaxGlobalLimited(4))
                             .or(Predicates.abilities(PartAbility.INPUT_ENERGY).setMinGlobalLimited(1)
                                     .setMaxGlobalLimited(2))
-                            .or(Predicates.abilities(PartAbility.IMPORT_FLUIDS).setExactLimit(1)))
+                            .or(Predicates.abilities(PartAbility.IMPORT_FLUIDS).setMinGlobalLimited(1,1))
+                            .or(Predicates.abilities(PartAbility.IMPORT_ITEMS).setMinGlobalLimited(1,1))
+                    )
                     .where('D', frames(TungstenCarbide))
                     .where('E', blocks(CASING_ATOMIC.get()))
                     .where('B', blocks(CosmicBlocks.RESONANTLY_TUNED_VIRTUE_MELD_CASING.get()))

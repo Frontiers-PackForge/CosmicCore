@@ -79,5 +79,14 @@
       }
     ],
     "subtitle": "cosmiccore.subtitle.orbital_forge"
+  },
+  "vorax": {
+    "sounds": [
+      {
+        "type": "file",
+        "name": "cosmiccore:vorax"
+      }
+    ],
+    "subtitle": "cosmiccore.subtitle.vorax"
   }
 }

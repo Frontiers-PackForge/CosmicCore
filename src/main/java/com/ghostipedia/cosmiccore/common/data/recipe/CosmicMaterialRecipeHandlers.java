@@ -2,6 +2,7 @@ package com.ghostipedia.cosmiccore.common.data.recipe;
 
 import com.gregtechceu.gtceu.api.GTValues;
 import com.gregtechceu.gtceu.api.data.chemical.material.Material;
+import com.gregtechceu.gtceu.api.data.chemical.material.info.MaterialFlags;
 import com.gregtechceu.gtceu.api.data.chemical.material.properties.PropertyKey;
 
 import net.minecraft.data.recipes.FinishedRecipe;
@@ -45,8 +46,8 @@ public class CosmicMaterialRecipeHandlers {
     }
 
     private static void processModularShelling(@NotNull Consumer<FinishedRecipe> provider, @NotNull Material material) {
-        if (!material.shouldGenerateRecipesFor(plate) || !material.shouldGenerateRecipesFor(bolt) ||
-                !material.shouldGenerateRecipesFor(frameGt) || !material.hasProperty(PropertyKey.INGOT))
+        if (!material.hasFlag(MaterialFlags.GENERATE_PLATE) || !material.hasFlag(MaterialFlags.GENERATE_BOLT_SCREW) ||
+                !material.hasFlag(MaterialFlags.GENERATE_FRAME) || !material.hasProperty(PropertyKey.INGOT))
             return;
 
         HEAVY_ASSEMBLER.recipeBuilder("heavy_assemble_" + material.getName() + "_modular_shelling")
@@ -63,7 +64,7 @@ public class CosmicMaterialRecipeHandlers {
     }
 
     private static void processUltraDensePlate(@NotNull Consumer<FinishedRecipe> provider, @NotNull Material material) {
-        if (!material.shouldGenerateRecipesFor(plate) || !material.hasProperty(PropertyKey.INGOT)) return;
+        if (!material.hasFlag(MaterialFlags.GENERATE_PLATE) || !material.hasProperty(PropertyKey.INGOT)) return;
 
         ORBITAL_FORGE_EBF.recipeBuilder("heavy_forging_" + material.getName() + "_ultra_dense_plate")
                 .inputItems(plate, material, 64)
@@ -77,11 +78,11 @@ public class CosmicMaterialRecipeHandlers {
     }
 
     private static void processWireSpool(@NotNull Consumer<FinishedRecipe> provider, @NotNull Material material) {
-        if (!material.shouldGenerateRecipesFor(wireGtSingle) || !material.hasProperty(PropertyKey.INGOT))
+        if (!material.hasProperty(PropertyKey.WIRE) || !material.hasProperty(PropertyKey.INGOT))
             return;
 
         HEAVY_ASSEMBLER.recipeBuilder("heavy_assemble_" + material.getName() + "_wire_spool")
-                .inputItems(wireGtSingle, material, 64)
+                .inputItems(wireGtSingle, material, 16)
                 .outputItems(largeWireSpool, material, 1)
                 .duration((int) material.getMass() * 4)
                 .EUt(GTValues.VA[GTValues.LuV], 6)

@@ -1,6 +1,7 @@
 package com.ghostipedia.cosmiccore.common.data;
 
 import com.ghostipedia.cosmiccore.CosmicCore;
+import com.ghostipedia.cosmiccore.api.item.LinkedTerminalBehavior;
 import com.ghostipedia.cosmiccore.api.item.armor.*;
 import com.ghostipedia.cosmiccore.api.registries.CosmicRegistration;
 import com.ghostipedia.cosmiccore.client.renderer.item.HaloItemRenderer;
@@ -1243,6 +1244,48 @@ public class CosmicItems {
             .onRegister(attach(
                     ThermalFluidStats.create(1024000, 1000000, true, true, true, true, true),
                     new ItemFluidContainer(), cellName()))
+            .register();
+    // Drones
+    public static final ItemEntry<ComponentItem> RUSTY_DRONE = REGISTRATE
+            .item("rusty_drone", ComponentItem::create)
+            .lang("Rusty Drone")
+            .properties(p -> p.stacksTo(64))
+            .defaultModel()
+            .register();
+    public static final ItemEntry<ComponentItem> ROBUST_DRONE = REGISTRATE
+            .item("robust_drone", ComponentItem::create)
+            .lang("Robust Drone")
+            .properties(p -> p.stacksTo(64))
+            .defaultModel()
+            .register();
+    public static final ItemEntry<ComponentItem> INDUSTRIAL_DRONE = REGISTRATE
+            .item("industrial_drone", ComponentItem::create)
+            .lang("Industrial Drone")
+            .properties(p -> p.stacksTo(64))
+            .defaultModel()
+            .register();
+    public static final ItemEntry<ComponentItem> SANGUINE_DRONE = REGISTRATE
+            .item("sanguine_drone", ComponentItem::create)
+            .lang("Sanguine Drone")
+            .properties(p -> p.stacksTo(64))
+            .defaultModel()
+            .register();
+    public static final ItemEntry<ComponentItem> PLASMATIC_DRONE = REGISTRATE
+            .item("plasmatic_drone", ComponentItem::create)
+            .lang("plasmatic_drone")
+            .properties(p -> p.stacksTo(64))
+            .defaultModel()
+            .register();
+
+    public static ItemEntry<ComponentItem> LINKED_TERMINAL = REGISTRATE
+            .item("linked_terminal", ComponentItem::create)
+            .lang("Linked Terminal")
+            .model((ctx, prov) -> prov.generated(
+                    ctx::getEntry,
+                    prov.modLoc("item/terminal/linked_terminal"),
+                    prov.modLoc("item/terminal/terminal_overlay")))
+            .properties(p -> p.stacksTo(1))
+            .onRegister(attach(new LinkedTerminalBehavior()))
             .register();
 
     public static ICustomDescriptionId cellName() {

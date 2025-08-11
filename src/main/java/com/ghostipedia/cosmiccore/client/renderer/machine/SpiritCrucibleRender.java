@@ -19,7 +19,6 @@ import net.minecraft.client.renderer.texture.TextureAtlas;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.core.Direction;
-import net.minecraft.core.Vec3i;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraft.world.phys.AABB;
@@ -107,7 +106,7 @@ public class SpiritCrucibleRender extends DynamicRender<WorkableElectricMultiblo
         poseStack.pushPose();
 
         renderRings(up.getAxis(), totalTick, poseStack, buffer);
-        renderSwirl(machine,partialTick, poseStack, buffer, packedLight, packedOverlay);
+        renderSwirl(machine, partialTick, poseStack, buffer, packedLight, packedOverlay);
         poseStack.popPose();
 
         poseStack.pushPose();
@@ -144,7 +143,7 @@ public class SpiritCrucibleRender extends DynamicRender<WorkableElectricMultiblo
         PoseStack.Pose pose = poseStack.last();
         List<BakedQuad> quads = irisCoreModel.getQuads(null, null, random, ModelData.EMPTY, null);
         for (BakedQuad quad : quads) {
-            consumer.putBulkData(pose, quad, 0.2F, 0f, 0.2F, LightTexture.FULL_BRIGHT, packedOverlay);
+            consumer.putBulkData(pose, quad, 0.2F, 0f, 0.2F, 1, LightTexture.FULL_BRIGHT, packedOverlay, false);
         }
     }
 
@@ -153,7 +152,7 @@ public class SpiritCrucibleRender extends DynamicRender<WorkableElectricMultiblo
         PoseStack.Pose pose = poseStack.last();
         List<BakedQuad> quads = irisCoreModel.getQuads(null, null, random, ModelData.EMPTY, null);
         for (BakedQuad quad : quads) {
-            consumer.putBulkData(pose, quad, 0.4F, 0f, 0.4F, LightTexture.FULL_BRIGHT, packedOverlay);
+            consumer.putBulkData(pose, quad, 0.4F, 0f, 0.4F, 1, LightTexture.FULL_BRIGHT, packedOverlay, false);
         }
     }
 
@@ -202,11 +201,8 @@ public class SpiritCrucibleRender extends DynamicRender<WorkableElectricMultiblo
         poseStack.popPose();
     }
 
-
-
-
     public void renderSwirl(WorkableElectricMultiblockMachine machine, float partialTick, PoseStack poseStack,
-                       MultiBufferSource bufferSource, int packedLight, int packedOverlay) {
+                            MultiBufferSource bufferSource, int packedLight, int packedOverlay) {
         if (!machine.isFormed()) {
             return;
         }
@@ -217,7 +213,7 @@ public class SpiritCrucibleRender extends DynamicRender<WorkableElectricMultiblo
         Quaternionf rot = new Quaternionf()
                 .rotateY(totalTick / -5);
         poseStack.mulPose(rot);
-        poseStack.translate(0,-6.3,0);
+        poseStack.translate(0, -6.3, 0);
         VertexConsumer consumer = bufferSource.getBuffer(Sheets.cutoutBlockSheet());
         RenderBufferHelper.renderCube(
                 consumer,
@@ -231,9 +227,6 @@ public class SpiritCrucibleRender extends DynamicRender<WorkableElectricMultiblo
 
         poseStack.popPose();
     }
-
-
-
 
     @Override
     public int getViewDistance() {
