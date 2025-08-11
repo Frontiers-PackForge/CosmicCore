@@ -1,8 +1,9 @@
 {
   "parent": "gtceu:item/material_sets/voidspark/ingot",
   "textures": {
-    "layer0": "gtceu:item/material_sets/voidspark/ingot",
-    "layer1": "gtceu:item/material_sets/voidspark/ingot_secondary",
-    "layer2": "gtceu:item/material_sets/voidspark/ingot_hot_overlay"
+    "layer0": "gtceu:item/void",
+    "layer1": "gtceu:item/void",
+    "layer2": "gtceu:item/material_sets/voidspark/ingot",
+    "layer3": "gtceu:item/material_sets/voidspark/ingot_hot"
   }
 }

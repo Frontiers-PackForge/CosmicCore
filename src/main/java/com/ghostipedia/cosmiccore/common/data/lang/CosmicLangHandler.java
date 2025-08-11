@@ -104,10 +104,16 @@ public class CosmicLangHandler extends LangHandler {
         provider.add("gui.cosmiccore.soul_hatch.lp", "LP Stored: %s");
         provider.add("gui.cosmiccore.thermia_hatch.hatch_limit", "§cTemp. Limit:");
         provider.add("gui.cosmiccore.thermia_hatch.stored_temp", "§6Current Temp:");
+        provider.add("gui.cosmiccore.sterilization_hatch", "Sterilization Hatch");
         provider.add("cosmiccore.multiblock.current_field_strength", "§fField Strength: %s");
         provider.add("cosmiccore.recipe.minField", "§fMin. Field Strength: %sT");
         provider.add("cosmiccore.recipe.fieldDecay", "§fField Decay: %sT/t");
         provider.add("cosmiccore.recipe.fieldSlam", "§fField Consumed: %sT");
+
+        provider.add("cosmiccore.multiblock.current_contagion", "§6Contagion Strength: %s");
+        provider.add("cosmiccore.multiblock.contagion_rate", "§cContagion Rate: %s/t");
+        provider.add("cosmiccore.multiblock.cleaning_status", "§aCleaning Status: %s");
+        provider.add("cosmiccore.multiblock.cleaning_status.error", "§cCleaning Status: §4No Cleaning Agent!");
 
         provider.add("cosmiccore.multiblock.fuel_star", "§a§lFuel Star Core");
         provider.add("cosmiccore.multiblock.send_orbit_data", "§a§lSend Research Payload");
@@ -125,6 +131,7 @@ public class CosmicLangHandler extends LangHandler {
         provider.add("tagprefix.heavy_beam", "Heavy %s Beam");
         provider.add("tagprefix.modular_shelling", "%s Modular Shelling");
         provider.add("tagprefix.plasmites", "%s Plasmites");
+        provider.add("tagprefix.wire_spool", "%s Wire Spool");
 
         provider.add("item.cosmiccore.debug.structure_writer.structural_scale", "Structure size: X:%s Y:%s Z:%s");
         provider.add("item.cosmiccore.debug.structure_writer.export_order",
@@ -246,7 +253,7 @@ public class CosmicLangHandler extends LangHandler {
         provider.add("coscore.pattern.tooltip.multiply", "Multiplies contents by §c%d§f");
 
         // Sanguine Warptech
-        provider.add("cosmiccore.armor.sanguinewarptech.hud.LP", "Current LP: %s");
+        provider.add("cosmiccore.armor.sanguinewarptech.hud.LP", "§4Life Force: §c%s");
         provider.add("cosmiccore.armor.sanguinewarptech.hud.shieldstate", "Sanguine Shield: %s");
         provider.add("cosmiccore.armor.sanguinewarptech.message.death_defiance",
                 "Your sanguine armor protected you from death!");
@@ -298,6 +305,19 @@ public class CosmicLangHandler extends LangHandler {
         // HPCA
         provider.add("cosmiccore.multiblock.hpca.incomplete-array", "Incomplete Array will not generate");
 
+        // Drone Station
+        provider.add("cosmiccore.multiblock.drone_station_machine.drone_amount", "Currently serving %s drones");
+        provider.add("cosmiccore.multiblock.drone_station_machine.no_drones", "No drones connected");
+        provider.add("cosmiccore.multiblock.drone_station_machine.current_tier", "Current tier: %s");
+
+        provider.add("cosmiccore.multiblock.drone_maintenance_interface.connection_location",
+                "Currently connected to (%s, %s, %s)");
+        provider.add("cosmiccore.multiblock.drone_maintenance_interface.no_connection", "Not connected");
+
+        // JADE
+        provider.add("config.jade.plugin_cosmiccore.drone_station", "[CC] Drone Station");
+        provider.add("config.jade.plugin_cosmiccore.drone_maintenance_interface", "[CC] Drone Maintenance Interface");
+
         provider.add("debug.owner.uuid", "§aOwner UUID:§a %s");
         provider.add("debug.team.uuid", "§aTeam UUID:§a %s");
 
@@ -309,5 +329,7 @@ public class CosmicLangHandler extends LangHandler {
         provider.add("cosmiccore.item.spraycan.tooltip.locked", "Spraycan is locked");
         provider.add("cosmiccore.item.spraycan.tooltip.current_color", "Current Color: %s");
         provider.add("cosmiccore.item.spraycan.tooltip.solvent_mode", "Spraycan in SOLVENT mode");
+
+        provider.add("cosmiccore.item.linked_terminal.boundTo", "Bound to %s");
     }
 }

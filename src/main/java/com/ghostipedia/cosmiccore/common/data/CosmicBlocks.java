@@ -113,6 +113,21 @@ public class CosmicBlocks {
             CosmicCore.id("block/casings/solid/alternator_flux_coiling_copper"));
     public static final BlockEntry<Block> PLATED_AEROCLOUD = createCasingBlock("plated_aerocloud",
             CosmicCore.id("block/casings/solid/plated_aerocloud"));
+    public static final BlockEntry<Block> SELF_HEALING_PTHANTERUM = createCasingBlock("self_healing_pthanterum_casing",
+            CosmicCore.id("block/casings/solid/self_healing_pthanterum_casing"));
+
+    public static final BlockEntry<Block> NEUTRONIUM_BOUEY = createCasingBlock("neutronium_buoy",
+            CosmicCore.id("block/casings/solid/neutronium_buoy"));
+    public static final BlockEntry<Block> PTHANTERUM_WAVE_BREAKERS_CASING = createCasingBlock(
+            "pthanterum_wave_breakers",
+            CosmicCore.id("block/casings/solid/pthanterum_wave_breakers"));
+    public static final BlockEntry<Block> CYCLOZINE_HIGH_RIGIDITY_CASING = createCasingBlock(
+            "cyclozine_high_rigidity_casing",
+            CosmicCore.id("block/casings/solid/cyclozine_high_rigidity_casing"));
+    // public static final BlockEntry<Block> SOMAPLASTIC_HEAVY_FRAMES = createCasingBlock("somaplastic_heavy_frames",
+    // CosmicCore.id("block/casings/solid/cyclozine_high_rigidity_casing"));
+    // public static final BlockEntry<Block> MOON_DIVE_CASING = createCasingBlock("moon_dive_casing",
+    // CosmicCore.id("block/casings/solid/moon_dive_casing"));
 
     public static final BlockEntry<MagnetBlock> MAGNET_HIGH_POWERED = createMagnetBlock(
             MagnetBlock.MagnetType.HIGH_POWERED);

@@ -51,7 +51,7 @@ public class IrisMultiblockMachine extends WorkableElectricMultiblockMachine {
     @Persisted
     @DescSynced
     @UpdateListener(methodName = "onStatusSynced")
-    private Stage stage = Stage.EMPTY;
+    private Stage stage = Stage.BLACK_HOLE;
 
     public enum Stage {
         EMPTY,

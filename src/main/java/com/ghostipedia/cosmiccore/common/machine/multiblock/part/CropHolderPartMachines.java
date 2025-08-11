@@ -1,6 +1,7 @@
 package com.ghostipedia.cosmiccore.common.machine.multiblock.part;
 
 import com.ghostipedia.cosmiccore.api.CosmicGuiTextures;
+import com.ghostipedia.cosmiccore.common.data.CosmicBotanyItemRegistration;
 
 import com.gregtechceu.gtceu.api.capability.recipe.IO;
 import com.gregtechceu.gtceu.api.gui.GuiTextures;
@@ -29,6 +30,8 @@ import net.minecraftforge.common.IPlantable;
 import lombok.Getter;
 import lombok.Setter;
 import org.jetbrains.annotations.NotNull;
+
+import java.util.Arrays;
 
 public class CropHolderPartMachines extends MultiblockPartMachine implements IMachineLife, IFancyUIMachine {
 
@@ -90,8 +93,11 @@ public class CropHolderPartMachines extends MultiblockPartMachine implements IMa
                     return true;
                 }
             }
+            var flowers = Arrays.stream(CosmicBotanyItemRegistration.CosmicBotanyItem.values())
+                    .filter(i -> i.item.is(item)).toList();
+            return !flowers.isEmpty();
+
             // TODO; Come back for manual Recipe map Injection
-            return false;
         }
     }
 

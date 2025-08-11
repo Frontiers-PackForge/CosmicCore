@@ -18,21 +18,29 @@
           "active": "false"
         }
       }
+    },
+    {
+      "type": "gtceu:fluid_area",
+      "block_light": 15,
+      "fixed_fluid": "minecraft:lava",
+      "offset_face": -0.125,
+      "overwrite_light": true,
+      "sky_light": 15
     }
   ],
   "loader": "gtceu:machine",
   "machine": "cosmiccore:industrial_primitive_blast_furnace",
   "texture_overrides": {
-    "all": "gtceu:block/casings/solid/machine_casing_bronze_plated_bricks"
+    "all": "gtceu:block/casings/solid/machine_primitive_bricks"
   },
   "variants": {
     "is_formed=false,recipe_logic_status=idle": {
       "model": {
         "parent": "gtceu:block/machine/template/cube_all/sided",
         "textures": {
-          "all": "gtceu:block/casings/solid/machine_casing_bronze_plated_bricks",
-          "overlay_front": "gtceu:block/multiblock/steam_oven/overlay_front",
-          "overlay_front_emissive": "gtceu:block/multiblock/steam_oven/overlay_front_emissive"
+          "all": "gtceu:block/casings/solid/machine_primitive_bricks",
+          "overlay_front": "gtceu:block/multiblock/primitive_blast_furnace/overlay_front",
+          "overlay_front_emissive": "gtceu:block/multiblock/primitive_blast_furnace/overlay_front_emissive"
         }
       }
     },
@@ -40,9 +48,9 @@
       "model": {
         "parent": "gtceu:block/machine/template/cube_all/sided",
         "textures": {
-          "all": "gtceu:block/casings/solid/machine_casing_bronze_plated_bricks",
-          "overlay_front": "gtceu:block/multiblock/steam_oven/overlay_front",
-          "overlay_front_emissive": "gtceu:block/multiblock/steam_oven/overlay_front_emissive"
+          "all": "gtceu:block/casings/solid/machine_primitive_bricks",
+          "overlay_front": "gtceu:block/multiblock/primitive_blast_furnace/overlay_front",
+          "overlay_front_emissive": "gtceu:block/multiblock/primitive_blast_furnace/overlay_front_emissive"
         }
       }
     },
@@ -50,9 +58,9 @@
       "model": {
         "parent": "gtceu:block/machine/template/cube_all/sided",
         "textures": {
-          "all": "gtceu:block/casings/solid/machine_casing_bronze_plated_bricks",
-          "overlay_front": "gtceu:block/multiblock/steam_oven/overlay_front_active",
-          "overlay_front_emissive": "gtceu:block/multiblock/steam_oven/overlay_front_active_emissive"
+          "all": "gtceu:block/casings/solid/machine_primitive_bricks",
+          "overlay_front": "gtceu:block/multiblock/primitive_blast_furnace/overlay_front_active",
+          "overlay_front_emissive": "gtceu:block/multiblock/primitive_blast_furnace/overlay_front_active_emissive"
         }
       }
     },
@@ -60,9 +68,9 @@
       "model": {
         "parent": "gtceu:block/machine/template/cube_all/sided",
         "textures": {
-          "all": "gtceu:block/casings/solid/machine_casing_bronze_plated_bricks",
-          "overlay_front": "gtceu:block/multiblock/steam_oven/overlay_front_active",
-          "overlay_front_emissive": "gtceu:block/multiblock/steam_oven/overlay_front_active_emissive"
+          "all": "gtceu:block/casings/solid/machine_primitive_bricks",
+          "overlay_front": "gtceu:block/multiblock/primitive_blast_furnace/overlay_front_active",
+          "overlay_front_emissive": "gtceu:block/multiblock/primitive_blast_furnace/overlay_front_active_emissive"
         }
       }
     },
@@ -70,9 +78,9 @@
       "model": {
         "parent": "gtceu:block/machine/template/cube_all/sided",
         "textures": {
-          "all": "gtceu:block/casings/solid/machine_casing_bronze_plated_bricks",
-          "overlay_front": "gtceu:block/multiblock/steam_oven/overlay_front",
-          "overlay_front_emissive": "gtceu:block/multiblock/steam_oven/overlay_front_emissive"
+          "all": "gtceu:block/casings/solid/machine_primitive_bricks",
+          "overlay_front": "gtceu:block/multiblock/primitive_blast_furnace/overlay_front",
+          "overlay_front_emissive": "gtceu:block/multiblock/primitive_blast_furnace/overlay_front_emissive"
         }
       }
     },
@@ -80,9 +88,9 @@
       "model": {
         "parent": "gtceu:block/machine/template/cube_all/sided",
         "textures": {
-          "all": "gtceu:block/casings/solid/machine_casing_bronze_plated_bricks",
-          "overlay_front": "gtceu:block/multiblock/steam_oven/overlay_front",
-          "overlay_front_emissive": "gtceu:block/multiblock/steam_oven/overlay_front_emissive"
+          "all": "gtceu:block/casings/solid/machine_primitive_bricks",
+          "overlay_front": "gtceu:block/multiblock/primitive_blast_furnace/overlay_front",
+          "overlay_front_emissive": "gtceu:block/multiblock/primitive_blast_furnace/overlay_front_emissive"
         }
       }
     },
@@ -90,9 +98,9 @@
       "model": {
         "parent": "gtceu:block/machine/template/cube_all/sided",
         "textures": {
-          "all": "gtceu:block/casings/solid/machine_casing_bronze_plated_bricks",
-          "overlay_front": "gtceu:block/multiblock/steam_oven/overlay_front_active",
-          "overlay_front_emissive": "gtceu:block/multiblock/steam_oven/overlay_front_active_emissive"
+          "all": "gtceu:block/casings/solid/machine_primitive_bricks",
+          "overlay_front": "gtceu:block/multiblock/primitive_blast_furnace/overlay_front_active",
+          "overlay_front_emissive": "gtceu:block/multiblock/primitive_blast_furnace/overlay_front_active_emissive"
         }
       }
     },
@@ -100,9 +108,9 @@
       "model": {
         "parent": "gtceu:block/machine/template/cube_all/sided",
         "textures": {
-          "all": "gtceu:block/casings/solid/machine_casing_bronze_plated_bricks",
-          "overlay_front": "gtceu:block/multiblock/steam_oven/overlay_front_active",
-          "overlay_front_emissive": "gtceu:block/multiblock/steam_oven/overlay_front_active_emissive"
+          "all": "gtceu:block/casings/solid/machine_primitive_bricks",
+          "overlay_front": "gtceu:block/multiblock/primitive_blast_furnace/overlay_front_active",
+          "overlay_front_emissive": "gtceu:block/multiblock/primitive_blast_furnace/overlay_front_active_emissive"
         }
       }
     }

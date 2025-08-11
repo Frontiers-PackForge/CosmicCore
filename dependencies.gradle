@@ -1,6 +1,12 @@
 dependencies {
     compileOnly(libs.jetbrains.annotations)
 
+    modRuntimeOnly("curse.maven:worldedit-225608:4586218") //Worldedit bc i'm lazy ty
+
+    //Botania
+//    implementation(forge.botania)
+
+
     // LDLib
     modImplementation(forge.ldlib)
 
@@ -38,10 +44,17 @@ dependencies {
     modImplementation(forge.curios)
 
     // AE2
-    modImplementation(forge.ae2)
+    jarJar(modImplementation(forge.ae2.get()))
+    modImplementation(forge.guideme)
+    jarJar(modImplementation(forge.expandedAE.get()))
+    modImplementation(forge.ae2wtlib) //ExpandedAE Dies without - Replace with our fork eventually!
+    modImplementation(forge.clothConfig) //Dep for AE2WTLIB
+
+
+
     modCompileOnly(forge.modernAe2Additions)
-    clientAdditionalRuntimeClasspath(forge.modernAe2Additions)
-    client2AdditionalRuntimeClasspath(forge.modernAe2Additions)
+    modCompileOnly(forge.modernAe2Additions)
+    modCompileOnly(forge.modernAe2Additions)
 
     // LSO
     modImplementation(forge.legendarySurvivalOverhaul)
@@ -77,11 +90,9 @@ dependencies {
     modRuntimeOnly(forge.patchouli)
 
     // Embedium / Occulus
-    modCompileOnly(forge.embeddium)
-    clientAdditionalRuntimeClasspath(forge.embeddium)
-    modCompileOnly(forge.oculus)
-    clientAdditionalRuntimeClasspath(forge.oculus)
-    clientAdditionalRuntimeClasspath(forge.jcpp)
+    modImplementation(forge.embeddium)
+    modImplementation(forge.oculus)
+
 
 
     // Teams

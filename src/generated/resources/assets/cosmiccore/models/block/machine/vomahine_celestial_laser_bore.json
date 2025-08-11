@@ -3,16 +3,16 @@
   "loader": "gtceu:machine",
   "machine": "cosmiccore:vomahine_celestial_laser_bore",
   "texture_overrides": {
-    "all": "cosmiccore:block/casings/solid/vomahine_certified_chemically_resistant_casing"
+    "all": "cosmiccore:block/casings/solid/tritanium_lined_heavy_bolted_neutronium_casing"
   },
   "variants": {
     "is_formed=false,recipe_logic_status=idle": {
       "model": {
         "parent": "gtceu:block/machine/template/cube_all/sided",
         "textures": {
-          "all": "cosmiccore:block/casings/solid/vomahine_certified_chemically_resistant_casing",
-          "overlay_front": "cosmiccore:block/multiblock/vomahine_chemplant/overlay_front",
-          "overlay_front_emissive": "cosmiccore:block/multiblock/vomahine_chemplant/overlay_front_emissive"
+          "all": "cosmiccore:block/casings/solid/tritanium_lined_heavy_bolted_neutronium_casing",
+          "overlay_top": "cosmiccore:block/multiblock/mantle_bore/overlay_top",
+          "overlay_top_emissive": "cosmiccore:block/multiblock/mantle_bore/overlay_top_emissive"
         }
       }
     },
@@ -20,9 +20,9 @@
       "model": {
         "parent": "gtceu:block/machine/template/cube_all/sided",
         "textures": {
-          "all": "cosmiccore:block/casings/solid/vomahine_certified_chemically_resistant_casing",
-          "overlay_front": "cosmiccore:block/multiblock/vomahine_chemplant/overlay_front_paused",
-          "overlay_front_emissive": "cosmiccore:block/multiblock/vomahine_chemplant/overlay_front_paused_emissive"
+          "all": "cosmiccore:block/casings/solid/tritanium_lined_heavy_bolted_neutronium_casing",
+          "overlay_top": "cosmiccore:block/multiblock/mantle_bore/overlay_top_paused",
+          "overlay_top_emissive": "cosmiccore:block/multiblock/mantle_bore/overlay_top_paused_emissive"
         }
       }
     },
@@ -30,9 +30,9 @@
       "model": {
         "parent": "gtceu:block/machine/template/cube_all/sided",
         "textures": {
-          "all": "cosmiccore:block/casings/solid/vomahine_certified_chemically_resistant_casing",
-          "overlay_front": "cosmiccore:block/multiblock/vomahine_chemplant/overlay_front_active",
-          "overlay_front_emissive": "cosmiccore:block/multiblock/vomahine_chemplant/overlay_front_active_emissive"
+          "all": "cosmiccore:block/casings/solid/tritanium_lined_heavy_bolted_neutronium_casing",
+          "overlay_top": "cosmiccore:block/multiblock/mantle_bore/overlay_top_active",
+          "overlay_top_emissive": "cosmiccore:block/multiblock/mantle_bore/overlay_top_active_emissive"
         }
       }
     },
@@ -40,9 +40,9 @@
       "model": {
         "parent": "gtceu:block/machine/template/cube_all/sided",
         "textures": {
-          "all": "cosmiccore:block/casings/solid/vomahine_certified_chemically_resistant_casing",
-          "overlay_front": "cosmiccore:block/multiblock/vomahine_chemplant/overlay_front_active",
-          "overlay_front_emissive": "cosmiccore:block/multiblock/vomahine_chemplant/overlay_front_active_emissive"
+          "all": "cosmiccore:block/casings/solid/tritanium_lined_heavy_bolted_neutronium_casing",
+          "overlay_top": "cosmiccore:block/multiblock/mantle_bore/overlay_top_active",
+          "overlay_top_emissive": "cosmiccore:block/multiblock/mantle_bore/overlay_top_active_emissive"
         }
       }
     },
@@ -50,9 +50,9 @@
       "model": {
         "parent": "gtceu:block/machine/template/cube_all/sided",
         "textures": {
-          "all": "cosmiccore:block/casings/solid/vomahine_certified_chemically_resistant_casing",
-          "overlay_front": "cosmiccore:block/multiblock/vomahine_chemplant/overlay_front",
-          "overlay_front_emissive": "cosmiccore:block/multiblock/vomahine_chemplant/overlay_front_emissive"
+          "all": "cosmiccore:block/casings/solid/tritanium_lined_heavy_bolted_neutronium_casing",
+          "overlay_top": "cosmiccore:block/multiblock/mantle_bore/overlay_top",
+          "overlay_top_emissive": "cosmiccore:block/multiblock/mantle_bore/overlay_top_emissive"
         }
       }
     },
@@ -60,9 +60,9 @@
       "model": {
         "parent": "gtceu:block/machine/template/cube_all/sided",
         "textures": {
-          "all": "cosmiccore:block/casings/solid/vomahine_certified_chemically_resistant_casing",
-          "overlay_front": "cosmiccore:block/multiblock/vomahine_chemplant/overlay_front_paused",
-          "overlay_front_emissive": "cosmiccore:block/multiblock/vomahine_chemplant/overlay_front_paused_emissive"
+          "all": "cosmiccore:block/casings/solid/tritanium_lined_heavy_bolted_neutronium_casing",
+          "overlay_top": "cosmiccore:block/multiblock/mantle_bore/overlay_top_paused",
+          "overlay_top_emissive": "cosmiccore:block/multiblock/mantle_bore/overlay_top_paused_emissive"
         }
       }
     },
@@ -70,9 +70,9 @@
       "model": {
         "parent": "gtceu:block/machine/template/cube_all/sided",
         "textures": {
-          "all": "cosmiccore:block/casings/solid/vomahine_certified_chemically_resistant_casing",
-          "overlay_front": "cosmiccore:block/multiblock/vomahine_chemplant/overlay_front_active",
-          "overlay_front_emissive": "cosmiccore:block/multiblock/vomahine_chemplant/overlay_front_active_emissive"
+          "all": "cosmiccore:block/casings/solid/tritanium_lined_heavy_bolted_neutronium_casing",
+          "overlay_top": "cosmiccore:block/multiblock/mantle_bore/overlay_top_active",
+          "overlay_top_emissive": "cosmiccore:block/multiblock/mantle_bore/overlay_top_active_emissive"
         }
       }
     },
@@ -80,9 +80,9 @@
       "model": {
         "parent": "gtceu:block/machine/template/cube_all/sided",
         "textures": {
-          "all": "cosmiccore:block/casings/solid/vomahine_certified_chemically_resistant_casing",
-          "overlay_front": "cosmiccore:block/multiblock/vomahine_chemplant/overlay_front_active",
-          "overlay_front_emissive": "cosmiccore:block/multiblock/vomahine_chemplant/overlay_front_active_emissive"
+          "all": "cosmiccore:block/casings/solid/tritanium_lined_heavy_bolted_neutronium_casing",
+          "overlay_top": "cosmiccore:block/multiblock/mantle_bore/overlay_top_active",
+          "overlay_top_emissive": "cosmiccore:block/multiblock/mantle_bore/overlay_top_active_emissive"
         }
       }
     }

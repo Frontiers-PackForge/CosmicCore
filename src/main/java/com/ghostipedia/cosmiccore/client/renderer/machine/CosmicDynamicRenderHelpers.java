@@ -14,8 +14,16 @@ public class CosmicDynamicRenderHelpers {
         return HemophagicTransfuserRender.INSTANCE;
     }
 
+    public static DynamicRender<?, ?> getSpiritCrucibleRender() {
+        return SpiritCrucibleRender.INSTANCE;
+    }
+
     public static DynamicRender<?, ?> getStellarIrisRender() {
         return StellarIrisRender.INSTANCE;
+    }
+
+    public static DynamicRender<?, ?> getConceptIncinerator() {
+        return ConceptIncineratorRender.INSTANCE;
     }
 
     public static DynamicRender<?, ?> getStarBallastRender() {
@@ -28,5 +36,9 @@ public class CosmicDynamicRenderHelpers {
 
     public static DynamicRender<?, ?> getSufferingChamberRenderer() {
         return SufferingChamberRenderer.INSTANCE;
+    }
+
+    public static DynamicRender<?, ?> getWelderArmsRenderer() {
+        return WelderArmRender.INSTANCE;
     }
 }
