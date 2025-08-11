@@ -106,9 +106,16 @@ public class IPBFMachine extends WorkableMultiblockMachine implements IDisplayUI
 
             } else if (isActive()) {
                 textList.add(Component.translatable("gtceu.multiblock.running"));
+                double currentInSec = (float) recipeLogic.getProgress() / 20.0f;
+                double maxInSec = (float) recipeLogic.getDuration() / 20.0f;
                 int currentProgress = (int) (recipeLogic.getProgressPercent() * 100);
                 textList.add(Component.translatable("gtceu.multiblock.parallel", MAX_PARALLELS));
-                textList.add(Component.translatable("gtceu.multiblock.progress", currentProgress));
+                textList.add(
+                        Component.translatable(
+                                "gtceu.multiblock.progress",
+                                String.format("%.2f", (float) currentInSec),
+                                String.format("%.2f", (float) maxInSec),
+                                currentProgress));
             } else {
                 textList.add(Component.translatable("gtceu.multiblock.idling"));
             }
