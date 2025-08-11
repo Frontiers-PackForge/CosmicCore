@@ -47,7 +47,7 @@ dependencies {
     // AE2
     jarJar(modImplementation(forge.ae2.get()))
     modImplementation(forge.guideme)
-//    jarJar(modImplementation(forge.expandedAE.get()))
+    jarJar(modImplementation(forge.expandedAE.get()))
     modImplementation(forge.ae2wtlib) //ExpandedAE Dies without - Replace with our fork eventually!
     modImplementation(forge.clothConfig) //Dep for AE2WTLIB
 
