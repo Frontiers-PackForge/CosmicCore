@@ -33,6 +33,7 @@ public class CosmicCoreClient {
         DynamicRenderManager.register(CosmicCore.id("welder_arm_render"), WelderArmRender.TYPE);
         DynamicRenderManager.register(CosmicCore.id("concept_incinerator"), ConceptIncineratorRender.TYPE);
         DynamicRenderManager.register(CosmicCore.id("spirit_crucible"), SpiritCrucibleRender.TYPE);
+        DynamicRenderManager.register(CosmicCore.id("biovat_render"), BioVatRender.TYPE);
     }
 
     @Getter
