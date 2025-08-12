@@ -90,6 +90,39 @@ public class CosmicItems {
 
     public static final CosmicBloodOrbDeferredRegister COSMIC_BLOOD_ORBS = new CosmicBloodOrbDeferredRegister(
             "cosmiccore");
+
+    // Drone Frames
+    public static final ItemEntry<ComponentItem> DRONE_FRAME_1 = REGISTRATE.item("drone_frame_1", ComponentItem::create)
+            .lang("Drone Frame Mk.1")
+            .properties(p -> p.stacksTo(16))
+            .tag()
+            .defaultModel()
+            .register();
+    public static final ItemEntry<ComponentItem> DRONE_FRAME_2 = REGISTRATE.item("drone_frame_2", ComponentItem::create)
+            .lang("Drone Frame Mk.2")
+            .properties(p -> p.stacksTo(16))
+            .tag()
+            .defaultModel()
+            .register();
+    public static final ItemEntry<ComponentItem> DRONE_FRAME_3 = REGISTRATE.item("drone_frame_3", ComponentItem::create)
+            .lang("Drone Frame Mk.3")
+            .properties(p -> p.stacksTo(16))
+            .tag()
+            .defaultModel()
+            .register();
+    public static final ItemEntry<ComponentItem> DRONE_FRAME_4 = REGISTRATE.item("drone_frame_4", ComponentItem::create)
+            .lang("Drone Frame Mk.4")
+            .properties(p -> p.stacksTo(16))
+            .tag()
+            .defaultModel()
+            .register();
+    public static final ItemEntry<ComponentItem> DRONE_FRAME_5 = REGISTRATE.item("drone_frame_5", ComponentItem::create)
+            .lang("Drone Frame Mk.5")
+            .properties(p -> p.stacksTo(16))
+            .tag()
+            .defaultModel()
+            .register();
+
     // Tesserae
     public static final ItemEntry<ComponentItem> TESSARON = REGISTRATE.item("tessaron", ComponentItem::create)
             .lang("Vexil - [Tessaron]")
