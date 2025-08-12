@@ -1,4 +1,5 @@
-# Cosmic Core 0.8.1
+# Cosmic Core 0.8.2
 # DO NOT MANUALLY UPDATE COSMIC CORE FOR FRONTIERS **I WILL NOT WORK**
 
-    Merged Multi Madness into Main
+    Drone Hatch Textures
+    Drone Frame Textures and Items
