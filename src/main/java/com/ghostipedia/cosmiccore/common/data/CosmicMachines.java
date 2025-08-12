@@ -605,10 +605,8 @@ public class CosmicMachines {
             .rotationState(RotationState.ALL)
             .abilities(PartAbility.MAINTENANCE)
             .tooltips(Component.translatable("gtceu.part_sharing.disabled"))
-            // TODO: Remove this property since it can't be taped, and also add proper models
-            .modelProperty(MaintenanceHatchPartMachine.MAINTENANCE_TAPED_PROPERTY, false)
-            .model(createMaintenanceModel(CosmicCore.id("block/machine/part/maintenance_hatch")))
             .tier(EV)
+            .overlayTieredHullModel("drone_hatch_maint")
             .langValue("Drone Maintenance Interface")
             .register();
 

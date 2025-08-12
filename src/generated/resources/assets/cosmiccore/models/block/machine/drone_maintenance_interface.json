@@ -8,24 +8,13 @@
     "side"
   ],
   "variants": {
-    "taped=false": {
+    "": {
       "model": {
-        "parent": "gtceu:block/machine/part/maintenance_hatch",
+        "parent": "cosmiccore:block/machine/part/drone_hatch_maint",
         "textures": {
-          "bottom": "gtceu:block/casings/voltage/hv/bottom",
-          "side": "gtceu:block/casings/voltage/hv/side",
-          "top": "gtceu:block/casings/voltage/hv/top"
-        }
-      }
-    },
-    "taped=true": {
-      "model": {
-        "parent": "gtceu:block/machine/part/maintenance_hatch",
-        "textures": {
-          "bottom": "gtceu:block/casings/voltage/hv/bottom",
-          "overlay_2": "gtceu:block/overlay/machine/overlay_maintenance_taped",
-          "side": "gtceu:block/casings/voltage/hv/side",
-          "top": "gtceu:block/casings/voltage/hv/top"
+          "bottom": "gtceu:block/casings/voltage/ev/bottom",
+          "side": "gtceu:block/casings/voltage/ev/side",
+          "top": "gtceu:block/casings/voltage/ev/top"
         }
       }
     }
