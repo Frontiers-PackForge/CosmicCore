@@ -58,10 +58,10 @@ public class DroneStationMachine extends WorkableElectricMultiblockMachine {
 
         // spotless:off
         PLASMATIC(  4096,   GTValues.V[GTValues.UV],    0f,     CosmicItems.PLASMATIC_DRONE.asItem()),
-        SANGUINE(   1024,   GTValues.V[GTValues.ZPM],   0.25f,  CosmicItems.SANGUINE_DRONE.asItem()),
-        INDUSTRIAL( 512,    GTValues.V[GTValues.LuV],   0.5f,   CosmicItems.INDUSTRIAL_DRONE.asItem()),
-        ROBUST(     256,    GTValues.V[GTValues.IV],    0.75f,  CosmicItems.ROBUST_DRONE.asItem()),
-        RUSTY(      64,     GTValues.V[GTValues.EV],    1,      CosmicItems.RUSTY_DRONE.asItem()),
+        SANGUINE(   2048,   GTValues.V[GTValues.ZPM],   0.25f,  CosmicItems.SANGUINE_DRONE.asItem()),
+        INDUSTRIAL( 1024,    GTValues.V[GTValues.LuV],   0.5f,   CosmicItems.INDUSTRIAL_DRONE.asItem()),
+        ROBUST(     512,    GTValues.V[GTValues.IV],    0.75f,  CosmicItems.ROBUST_DRONE.asItem()),
+        RUSTY(      256,     GTValues.V[GTValues.EV],    1,      CosmicItems.RUSTY_DRONE.asItem()),
         // spotless:on
         ;
 
