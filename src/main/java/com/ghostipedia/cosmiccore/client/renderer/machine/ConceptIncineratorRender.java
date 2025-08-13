@@ -164,7 +164,7 @@ public class ConceptIncineratorRender extends
 
         {
             float tauP = 0.25f;
-            float alphaP = 1f - (float)Math.exp(-(dt <= 0f ? 0f : dt) / tauP);
+            float alphaP = 1f - (float) Math.exp(-(dt <= 0f ? 0f : dt) / tauP);
             percentFiltered += (percent - percentFiltered) * alphaP;
         }
 
@@ -172,7 +172,7 @@ public class ConceptIncineratorRender extends
         float targetBpm = Mth.lerp(eased, 50f, 180f);
 
         float tauB = 0.35f;
-        float alphaB = 1f - (float)Math.exp(-(dt <= 0f ? 0f : dt) / tauB);
+        float alphaB = 1f - (float) Math.exp(-(dt <= 0f ? 0f : dt) / tauB);
         float bpmSmoothed = bpmFiltered + (targetBpm - bpmFiltered) * alphaB;
 
         float maxDeltaPerSec = 60f;
@@ -185,7 +185,7 @@ public class ConceptIncineratorRender extends
 
         if (dt > 0f) {
             beatPhase01 += dt / period;
-            beatPhase01 -= (int)beatPhase01;
+            beatPhase01 -= (int) beatPhase01;
         }
 
         float tInBeat = beatPhase01 * period;
