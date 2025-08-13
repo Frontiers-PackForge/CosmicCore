@@ -29,6 +29,8 @@ import net.minecraftforge.client.model.data.ModelData;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.serialization.Codec;
+import org.joml.Matrix3f;
+import org.joml.Matrix4f;
 import org.joml.Quaternionf;
 
 import java.util.EnumSet;
@@ -226,6 +228,81 @@ public class SpiritCrucibleRender extends DynamicRender<WorkableElectricMultiblo
                 3.5f, 0, 3.5f);
 
         poseStack.popPose();
+
+        poseStack.pushPose();
+        poseStack.translate(0, 2, 0); // position in the machine
+        poseStack.mulPose(new Quaternionf().rotateY(totalTick * 0.02f)); // spin slowly
+        VertexConsumer coneConsumer = bufferSource.getBuffer(Sheets.translucentCullBlockSheet());
+        renderCone(poseStack, coneConsumer, 1.5f, 3.0f, 48, 0.8f, 0.2f, 0.2f, 0.8f, packedLight);
+        poseStack.popPose();
+
+    }
+
+    @OnlyIn(Dist.CLIENT)
+    public void renderCone(PoseStack poseStack, VertexConsumer consumer,
+                           float radius, float height, int segments,
+                           float r, float g, float b, float a,
+                           int packedLight) {
+        if (segments < 3) return;
+
+        PoseStack.Pose pose = poseStack.last();
+        Matrix4f mat = pose.pose();
+        Matrix3f nmat = pose.normal();
+
+        float tipX = 0f, tipY = height, tipZ = 0f;
+        float baseY = 0f;
+
+        float[] xs = new float[segments + 1];
+        float[] zs = new float[segments + 1];
+
+        for (int i = 0; i <= segments; i++) {
+            double ang = (i / (double)segments) * (Math.PI * 2);
+            xs[i] = (float)Math.cos(ang) * radius;
+            zs[i] = (float)Math.sin(ang) * radius;
+        }
+
+        float nySlope = radius / height;
+        float invLen = (float)(1.0 / Math.sqrt(1.0 + nySlope * nySlope));
+        float ny = nySlope * invLen;
+
+        for (int i = 0; i < segments; i++) {
+            float x0 = xs[i], z0 = zs[i];
+            float x1 = xs[i + 1], z1 = zs[i + 1];
+
+            float nx0 = (x0 / radius) * invLen;
+            float nz0 = (z0 / radius) * invLen;
+            float nx1 = (x1 / radius) * invLen;
+            float nz1 = (z1 / radius) * invLen;
+
+            float nxTip = (nx0 + nx1) * 0.5f;
+            float nzTip = (nz0 + nz1) * 0.5f;
+            float lenTip = (float)Math.sqrt(nxTip * nxTip + ny * ny + nzTip * nzTip);
+            if (lenTip > 0f) { nxTip /= lenTip; nzTip /= lenTip; }
+
+            consumer.vertex(mat, tipX, tipY, tipZ)
+                    .color(r, g, b, a)
+                    .uv(0.5f, 1f)
+                    .overlayCoords(0, 0)
+                    .uv2(packedLight)
+                    .normal(nmat, nxTip, ny, nzTip)
+                    .endVertex();
+
+            consumer.vertex(mat, x0, baseY, z0)
+                    .color(r, g, b, a)
+                    .uv(0f, 0f)
+                    .overlayCoords(0, 0)
+                    .uv2(packedLight)
+                    .normal(nmat, nx0, ny, nz0)
+                    .endVertex();
+
+            consumer.vertex(mat, x1, baseY, z1)
+                    .color(r, g, b, a)
+                    .uv(1f, 0f)
+                    .overlayCoords(0, 0)
+                    .uv2(packedLight)
+                    .normal(nmat, nx1, ny, nz1)
+                    .endVertex();
+        }
     }
 
     @Override
