@@ -137,15 +137,17 @@ public class VoraxReactorMachine extends WorkableElectricMultiblockMachine imple
             }
         }
         if (recipeLogic.isIdle() || recipeLogic.isSuspend() || recipeLogic.isWaiting() || !this.isWorkingEnabled()) {
-            if (sterileHatch != null) {
-                FluidStack sterileThingy = sterileHatch.fluidTank.getFluidInTank(0);
-                if (!sterileThingy.isEmpty() && sterileThingy.getAmount() >= 15) {
-                    contagionDelta -= 0.5F;
-                    sterileThingy.shrink(15);
-                    contagionStrength += contagionDelta;
-                    isCleaning = true;
-                } else {
-                    isCleaning = false;
+            if (contagionStrength != 0) {
+                if (sterileHatch != null) {
+                    FluidStack sterileThingy = sterileHatch.fluidTank.getFluidInTank(0);
+                    if (!sterileThingy.isEmpty() && sterileThingy.getAmount() >= 15) {
+                        contagionDelta -= 0.5F;
+                        sterileThingy.shrink(15);
+                        contagionStrength += contagionDelta;
+                        isCleaning = true;
+                    } else {
+                        isCleaning = false;
+                    }
                 }
             }
         }

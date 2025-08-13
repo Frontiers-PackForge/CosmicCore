@@ -133,6 +133,9 @@ public class ConceptIncineratorRender extends
     }
 
     private float bpmFiltered = 50f;
+    private float beatPhase01 = 0f;
+    private float percentFiltered = 0f;
+    private float prevTSec = Float.NaN;
 
     private static float smoothstep01(float x) {
         x = Mth.clamp(x, 0f, 1f);
@@ -148,19 +151,50 @@ public class ConceptIncineratorRender extends
     public float heartBeatEffect(float min, float max, float partialTick, float percent) {
         float totalTick = (Minecraft.getInstance().player.tickCount + partialTick);
         float tSec = totalTick / 20.0f;
-        float easingFunctionThingy = smoothstep01(percent);
-        float idealBPM = Mth.lerp(easingFunctionThingy, 30f, 80);
-        float delta = 0.35f;
-        float timeConversion = 1f / 20f;
-        float alpha = 1f - (float) Math.exp(-timeConversion / delta);
-        bpmFiltered += (idealBPM - bpmFiltered) * alpha;
-        // I Don't like math :(
-        float bpm = bpmFiltered;
-        float beatPeriod = 60f / bpm;
-        float phase = tSec % beatPeriod;
 
-        float p1 = biExp(phase, 0.02f * beatPeriod, 0.02f * beatPeriod, 0.18f * beatPeriod);
-        float p2 = 0.6f * biExp(phase, 0.22f * beatPeriod, 0.02f * beatPeriod, 0.20f * beatPeriod);
+        float dt;
+        if (Float.isNaN(prevTSec)) {
+            dt = 0f;
+        } else {
+            dt = tSec - prevTSec;
+            if (dt < 0f) dt = 0f;
+            if (dt > 0.2f) dt = 0.2f;
+        }
+        prevTSec = tSec;
+
+        {
+            float tauP = 0.25f;
+            float alphaP = 1f - (float)Math.exp(-(dt <= 0f ? 0f : dt) / tauP);
+            percentFiltered += (percent - percentFiltered) * alphaP;
+        }
+
+        float eased = smoothstep01(percentFiltered);
+        float targetBpm = Mth.lerp(eased, 50f, 180f);
+
+        float tauB = 0.35f;
+        float alphaB = 1f - (float)Math.exp(-(dt <= 0f ? 0f : dt) / tauB);
+        float bpmSmoothed = bpmFiltered + (targetBpm - bpmFiltered) * alphaB;
+
+        float maxDeltaPerSec = 60f;
+        float maxStep = maxDeltaPerSec * dt;
+        float delta = Mth.clamp(bpmSmoothed - bpmFiltered, -maxStep, maxStep);
+        bpmFiltered += delta;
+
+        float bpm = Mth.clamp(bpmFiltered, 30f, 180f);
+        float period = 60f / bpm;
+
+        if (dt > 0f) {
+            beatPhase01 += dt / period;
+            beatPhase01 -= (int)beatPhase01;
+        }
+
+        float tInBeat = beatPhase01 * period;
+
+        float c1 = 0.04f, c2 = 0.24f;
+
+        float riseFrac = 0.02f, decayFrac1 = 0.18f, decayFrac2 = 0.20f;
+        float p1 = biExp(tInBeat, c1 * period, riseFrac * period, decayFrac1 * period);
+        float p2 = 0.6f * biExp(tInBeat, c2 * period, riseFrac * period, decayFrac2 * period);
 
         float heartbeat = (p1 + p2) * 1.25f;
         heartbeat = Mth.clamp(heartbeat, 0f, 1f);
