@@ -38,6 +38,7 @@ import com.gregtechceu.gtceu.api.recipe.GTRecipeType;
 import com.gregtechceu.gtceu.api.registry.registrate.MachineBuilder;
 import com.gregtechceu.gtceu.client.util.TooltipHelper;
 import com.gregtechceu.gtceu.common.data.*;
+import com.gregtechceu.gtceu.common.data.machines.GCYMMachines;
 import com.gregtechceu.gtceu.common.data.machines.GTMultiMachines;
 import com.gregtechceu.gtceu.common.data.models.GTModels;
 import com.gregtechceu.gtceu.common.machine.multiblock.electric.ActiveTransformerMachine;
@@ -69,6 +70,7 @@ import static com.gregtechceu.gtceu.api.pattern.util.RelativeDirection.*;
 import static com.gregtechceu.gtceu.common.data.GCYMBlocks.*;
 import static com.gregtechceu.gtceu.common.data.GTBlocks.*;
 import static com.gregtechceu.gtceu.common.data.GTMachines.CREATIVE_TOOLTIPS;
+import static com.gregtechceu.gtceu.common.data.GTRecipeTypes.CENTRIFUGE_RECIPES;
 import static com.gregtechceu.gtceu.common.data.GTRecipeTypes.DUMMY_RECIPES;
 import static com.gregtechceu.gtceu.common.data.machines.GTMachineUtils.*;
 import static com.gregtechceu.gtceu.common.data.machines.GTMultiMachines.FUSION_REACTOR;
@@ -612,7 +614,8 @@ public class CosmicMachines {
     public static final MachineDefinition STERILIZATION_HATCH = REGISTRATE
             .machine("sterilization_hatch", (holder) -> new SterilizationHatchPartMachine(holder, ZPM, IO.IN))
             .langValue("Sterilzation Hatch")
-            .overlayTieredHullModel("wireless_data_hatch")
+            .tier(ZPM)
+            .overlayTieredHullModel("cleaning_cover")
             .abilities(STERILIZE_HATCH)
 
             .register();
@@ -669,5 +672,21 @@ public class CosmicMachines {
                         .build();
             });
         }
+
+        GCYMMachines.LARGE_CENTRIFUGE.setPatternFactory(() -> FactoryBlockPattern.start()
+                .aisle("#XXX#", "XXXXX", "#XXX#")
+                .aisle("XXXXX", "XAPAX", "XXXXX")
+                .aisle("XXXXX", "XPAPX", "XXXXX")
+                .aisle("XXXXX", "XAPAX", "XXXXX")
+                .aisle("#XXX#", "XXSXX", "#XXX#")
+                .where('S', controller(blocks(GCYMMachines.LARGE_CENTRIFUGE.getBlock())))
+                .where('X', blocks(CASING_VIBRATION_SAFE.get()).setMinGlobalLimited(40)
+                        .or(Predicates.autoAbilities(CENTRIFUGE_RECIPES))
+                        .or(Predicates.autoAbilities(true, false, true))
+                        .or(abilities(STERILIZE_HATCH).setMaxGlobalLimited(1, 1)))
+                .where('P', Predicates.blocks(CASING_STEEL_PIPE.get()))
+                .where('A', Predicates.air())
+                .where('#', Predicates.any())
+                .build());
     }
 }
