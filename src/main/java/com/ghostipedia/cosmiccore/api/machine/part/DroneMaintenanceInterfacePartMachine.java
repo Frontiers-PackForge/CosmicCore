@@ -134,7 +134,9 @@ public class DroneMaintenanceInterfacePartMachine extends TieredPartMachine
 
     private void updateCleanroomStyle() {
         if (!hasConnection()) return;
-        if (connection.droneStation.currentTier.range < DroneStationMachine.DroneTier.SANGUINE.range) return;
+        if (connection.droneStation.currentTier != DroneStationMachine.DroneTier.SANGUINE &&
+                connection.droneStation.currentTier != DroneStationMachine.DroneTier.PLASMATIC)
+            return;
         for (var controller : getControllers()) {
             if (!(controller instanceof ICleanroomReceiver cleanroomReceiver)) continue;
             cleanroomReceiver.setCleanroom(DUMMY_CLEANROOM);
