@@ -161,7 +161,7 @@ public class BioVatRender extends DynamicRender<WorkableElectricMultiblockMachin
         IClientFluidTypeExtensions fluidExt = IClientFluidTypeExtensions.of(cachedFluid);
         int color = fluidExt.getTintColor(fluidStack);
 
-        // please
+
         bacVatRender(poseStack, consumer, poseStack.last(), color, LightTexture.FULL_BRIGHT, sprite, flowingSprite);
         poseStack.popPose();
     }
