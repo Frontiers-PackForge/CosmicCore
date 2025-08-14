@@ -614,6 +614,7 @@ public class CosmicMachines {
     public static final MachineDefinition STERILIZATION_HATCH = REGISTRATE
             .machine("sterilization_hatch", (holder) -> new SterilizationHatchPartMachine(holder, ZPM, IO.IN))
             .langValue("Sterilzation Hatch")
+            .rotationState(RotationState.ALL)
             .tier(ZPM)
             .overlayTieredHullModel("cleaning_cover")
             .abilities(STERILIZE_HATCH)
