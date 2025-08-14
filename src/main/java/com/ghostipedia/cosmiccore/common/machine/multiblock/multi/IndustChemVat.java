@@ -13,6 +13,7 @@ import com.gregtechceu.gtceu.api.machine.MultiblockMachineDefinition;
 import com.gregtechceu.gtceu.api.machine.multiblock.PartAbility;
 import com.gregtechceu.gtceu.api.machine.multiblock.WorkableElectricMultiblockMachine;
 import com.gregtechceu.gtceu.api.pattern.FactoryBlockPattern;
+import com.gregtechceu.gtceu.api.pattern.Predicates;
 import com.gregtechceu.gtceu.api.recipe.OverclockingLogic;
 import com.gregtechceu.gtceu.common.data.GTBlocks;
 import com.gregtechceu.gtceu.common.data.GTMaterials;
@@ -63,7 +64,8 @@ public class IndustChemVat {
                             .or(abilities(PartAbility.PARALLEL_HATCH))
                             .or(abilities(CosmicPartAbility.COSMIC_PARALLEL_HATCH))
                             .or(abilities(PartAbility.INPUT_LASER))
-                            .or(abilities(PartAbility.INPUT_ENERGY)))
+                            .or(abilities(PartAbility.INPUT_ENERGY))
+                            .or(Predicates.abilities(CosmicPartAbility.STERILIZE_HATCH)))
                     .build())
             // spotless:on
             .tooltips(Component.translatable("cosmiccore.multiblock.chemvat.tooltip.0"),

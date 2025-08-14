@@ -10,11 +10,11 @@
   "variants": {
     "": {
       "model": {
-        "parent": "cosmiccore:block/machine/part/wireless_data_hatch",
+        "parent": "cosmiccore:block/machine/part/cleaning_cover",
         "textures": {
-          "bottom": "gtceu:block/casings/voltage/ulv/bottom",
-          "side": "gtceu:block/casings/voltage/ulv/side",
-          "top": "gtceu:block/casings/voltage/ulv/top"
+          "bottom": "gtceu:block/casings/voltage/zpm/bottom",
+          "side": "gtceu:block/casings/voltage/zpm/side",
+          "top": "gtceu:block/casings/voltage/zpm/top"
         }
       }
     }

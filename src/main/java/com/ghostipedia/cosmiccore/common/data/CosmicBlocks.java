@@ -129,6 +129,22 @@ public class CosmicBlocks {
     // public static final BlockEntry<Block> MOON_DIVE_CASING = createCasingBlock("moon_dive_casing",
     // CosmicCore.id("block/casings/solid/moon_dive_casing"));
 
+    public static final BlockEntry<Block> BICHROMAL_NEVRAMITE_CASING = createCasingBlock("bichromal_nevramite_casing",
+            CosmicCore.id("block/casings/solid/bichromal_nevramite_casing"));
+    public static final BlockEntry<Block> FULGORINTH_PRIME_CASING = createCasingBlock("fulgorinth_prime_casing",
+            CosmicCore.id("block/casings/solid/fulgorinth_prime_casing"));
+    public static final BlockEntry<Block> OSCILLATING_GILDED_PTHANTERUM_CASING = createCasingBlock(
+            "oscillating_gilded_pthanterum_casings",
+            CosmicCore.id("block/casings/solid/oscillating_gilded_pthanterum_casings"));
+    public static final BlockEntry<Block> PRESSURE_CONTAINMNET_CASING = createCasingBlock("pressure_containment_casing",
+            CosmicCore.id("block/casings/solid/pressure_containment_casing"));
+    public static final BlockEntry<Block> ROYAL_ICHORIUM_CASING = createCasingBlock("royal_ichorium_casing",
+            CosmicCore.id("block/casings/solid/royal_ichorium_casing"));
+    public static final BlockEntry<Block> VIBRANT_RUBIDIUM_CASING = createCasingBlock("vibrant_rubidium_casing",
+            CosmicCore.id("block/casings/solid/vibrant_rubidium_casing"));
+    public static final BlockEntry<Block> WAILING_ICHOR_CASING = createCasingBlock("wailing_ichor_casing",
+            CosmicCore.id("block/casings/solid/wailing_ichor_casing"));
+
     public static final BlockEntry<MagnetBlock> MAGNET_HIGH_POWERED = createMagnetBlock(
             MagnetBlock.MagnetType.HIGH_POWERED);
     public static final BlockEntry<MagnetBlock> MAGNET_FUSION_GRADE = createMagnetBlock(
