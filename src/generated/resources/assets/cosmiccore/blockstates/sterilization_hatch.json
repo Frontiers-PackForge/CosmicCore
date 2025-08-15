@@ -1,5 +1,9 @@
 {
   "variants": {
+    "facing=down": {
+      "model": "cosmiccore:block/machine/sterilization_hatch",
+      "x": 90
+    },
     "facing=east": {
       "model": "cosmiccore:block/machine/sterilization_hatch",
       "y": 90
@@ -10,6 +14,11 @@
     "facing=south": {
       "model": "cosmiccore:block/machine/sterilization_hatch",
       "y": 180
+    },
+    "facing=up": {
+      "gtceu:z": 180,
+      "model": "cosmiccore:block/machine/sterilization_hatch",
+      "x": 270
     },
     "facing=west": {
       "model": "cosmiccore:block/machine/sterilization_hatch",
