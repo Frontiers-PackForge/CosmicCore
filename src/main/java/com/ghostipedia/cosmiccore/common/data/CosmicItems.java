@@ -123,36 +123,40 @@ public class CosmicItems {
             .defaultModel()
             .register();
 
-
-    //Harmonic Chip Stuff
-    public static final ItemEntry<ComponentItem> FLAWED_RESONANT_WAFER = REGISTRATE.item("flawed_resonant_wafer", ComponentItem::create)
+    // Harmonic Chip Stuff
+    public static final ItemEntry<ComponentItem> FLAWED_RESONANT_WAFER = REGISTRATE
+            .item("flawed_resonant_wafer", ComponentItem::create)
             .lang("Flawed Resonant Wafer")
             .properties(p -> p.stacksTo(64))
             .tag()
             .defaultModel()
             .register();
 
-    public static final ItemEntry<ComponentItem> REFINED_RESONANT_WAFER = REGISTRATE.item("refined_resonant_wafer", ComponentItem::create)
+    public static final ItemEntry<ComponentItem> REFINED_RESONANT_WAFER = REGISTRATE
+            .item("refined_resonant_wafer", ComponentItem::create)
             .lang("Refined Resonant Wafer")
             .properties(p -> p.stacksTo(64))
             .tag()
             .defaultModel()
             .register();
-    public static final ItemEntry<ComponentItem> WAFER_PRAGMISO = REGISTRATE.item("wafer_pragmiso", ComponentItem::create)
+    public static final ItemEntry<ComponentItem> WAFER_PRAGMISO = REGISTRATE
+            .item("wafer_pragmiso", ComponentItem::create)
             .lang("Pragmiso Wafer [Physics]")
             .properties(p -> p.stacksTo(64))
             .tag()
             .defaultModel()
             .register();
 
-    public static final ItemEntry<ComponentItem> WAFER_ALCHEMICA = REGISTRATE.item("alchemia_wafer", ComponentItem::create)
+    public static final ItemEntry<ComponentItem> WAFER_ALCHEMICA = REGISTRATE
+            .item("alchemia_wafer", ComponentItem::create)
             .lang("Alchemica Wafer [Chemistry]")
             .properties(p -> p.stacksTo(64))
             .tag()
             .defaultModel()
             .register();
 
-    public static final ItemEntry<ComponentItem> WAFER_THAUMICA = REGISTRATE.item("thaumica_wafer", ComponentItem::create)
+    public static final ItemEntry<ComponentItem> WAFER_THAUMICA = REGISTRATE
+            .item("thaumica_wafer", ComponentItem::create)
             .lang("Thaumica Wafer [Arcana]")
             .properties(p -> p.stacksTo(64))
             .tag()
@@ -165,26 +169,30 @@ public class CosmicItems {
             .tag()
             .defaultModel()
             .register();
-    public static final ItemEntry<ComponentItem> WAFER_LOGOS = REGISTRATE.item("fused_wafer_of_logos", ComponentItem::create)
+    public static final ItemEntry<ComponentItem> WAFER_LOGOS = REGISTRATE
+            .item("fused_wafer_of_logos", ComponentItem::create)
             .lang("Fused Harmonic Wafer of Logos")
             .properties(p -> p.stacksTo(64))
             .tag()
             .defaultModel()
             .register();
-    public static final ItemEntry<ComponentItem> WAFER_ESOTERIC = REGISTRATE.item("fused_wafer_of_esoterica", ComponentItem::create)
+    public static final ItemEntry<ComponentItem> WAFER_ESOTERIC = REGISTRATE
+            .item("fused_wafer_of_esoterica", ComponentItem::create)
             .lang("Fused Harmonic Wafer of Esoterica")
             .properties(p -> p.stacksTo(64))
             .tag()
             .defaultModel()
             .register();
-    public static final ItemEntry<ComponentItem> HARMONIC_OSCILLATING_CHIP = REGISTRATE.item("harmonic_chiplet_oscillating", ComponentItem::create)
+    public static final ItemEntry<ComponentItem> HARMONIC_OSCILLATING_CHIP = REGISTRATE
+            .item("harmonic_chiplet_oscillating", ComponentItem::create)
             .lang("Harmonic Central Processing Unit")
             .properties(p -> p.stacksTo(64))
             .tag()
             .defaultModel()
             .register();
 
-    public static final ItemEntry<ComponentItem> NULL_WAFER_HARMONIC= REGISTRATE.item("null_refined_resonant_wafer", ComponentItem::create)
+    public static final ItemEntry<ComponentItem> NULL_WAFER_HARMONIC = REGISTRATE
+            .item("null_refined_resonant_wafer", ComponentItem::create)
             .lang("Nullified Harmonic Wafer")
             .properties(p -> p.stacksTo(64))
             .tag()
