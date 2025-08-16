@@ -29,6 +29,7 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
 import lombok.Getter;
+import lombok.Setter;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
@@ -48,10 +49,12 @@ public class IrisMultiblockMachine extends WorkableElectricMultiblockMachine {
     @Getter
     protected boolean isFuelable;
     protected Object workingSound;
+
+    @Setter
     @Persisted
     @DescSynced
     @UpdateListener(methodName = "onStatusSynced")
-    private Stage stage = Stage.BLACK_HOLE;
+    private Stage stage = Stage.EMPTY;
 
     public enum Stage {
         EMPTY,
@@ -85,8 +88,10 @@ public class IrisMultiblockMachine extends WorkableElectricMultiblockMachine {
         super.onStructureFormed();
     }
 
-    public void isfuelable(boolean fuelable) {
-        this.isFuelable = fuelable;
+    public void setStarStage() {
+        Stage[] values = Stage.values();
+        int nextVal = (getStage().ordinal() + 1) % values.length;
+        setStage(values[nextVal]);
     }
 
     @Override
@@ -141,15 +146,15 @@ public class IrisMultiblockMachine extends WorkableElectricMultiblockMachine {
                 20,
                 new GuiTextureGroup(
                         GuiTextures.BUTTON,
-                        new TextTexture("cosmiccore.multiblock.fuel_star")),
-                clickData -> isfuelable(true)));
+                        new TextTexture("Change Stage")),
+                clickData -> setStarStage()));
         return group;
     }
 
     @Override
     public void addDisplayText(List<Component> textList) {
         if (isFormed()) {
-            textList.add(Component.translatable("cosmiccore.multiblock.iris.star_stage_early_star"));
+            textList.add(Component.translatable(stage.toString()));
             textList.add(Component.translatable("cosmiccore.multiblock.iris.star_stage_sustain"));
         }
     }

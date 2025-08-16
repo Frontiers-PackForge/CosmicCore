@@ -85,15 +85,25 @@ public class StellarIrisRender extends DynamicRender<IrisMultiblockMachine, Stel
         poseStack.mulPose(new Quaternionf().rotateAxis(totalTick * Mth.TWO_PI / 80, 0, 1, 0));
         poseStack.scale(10.0f, 10.0f, 10.0f);
 
-        // renderIris(poseStack, consumer, packedLight, packedOverlay);
-        // renderRing(poseStack, consumer, packedLight, packedOverlay);
-        renderStar(poseStack, consumer, totalTick, packedLight, packedOverlay);
-        renderStarInsides(poseStack, consumer, totalTick, packedLight, packedOverlay);
-        renderStarShell(poseStack, consumer, totalTick, packedLight, packedOverlay);
-
-        poseStack.popPose();
-
-        renderRingSmall(poseStack, consumer, totalTick, packedLight, packedOverlay);
+        if (machine.getStage() == IrisMultiblockMachine.Stage.STAR) {
+            renderStar(poseStack, consumer, totalTick, packedLight, packedOverlay); // The Actual Core, for some reason.
+            renderStarInsides(poseStack, consumer, totalTick, packedLight, packedOverlay); // The Second Layer???
+            renderStarShell(poseStack, consumer, totalTick, packedLight, packedOverlay);// This one made sense at least.
+            poseStack.popPose();
+        } else if (machine.getStage() == IrisMultiblockMachine.Stage.SUPERSTAR) {
+            poseStack.scale(2, 2, 2);
+            renderStar(poseStack, consumer, totalTick, packedLight, packedOverlay); // The Actual Core, for some reason.
+            renderStarInsides(poseStack, consumer, totalTick, packedLight, packedOverlay); // The Second Layer???
+            renderStarShell(poseStack, consumer, totalTick, packedLight, packedOverlay);// This one made sense at least.
+            poseStack.popPose();
+        } else if (machine.getStage() == IrisMultiblockMachine.Stage.BLACK_HOLE) {
+            renderIris(poseStack, consumer, packedLight, packedOverlay);
+            renderRing(poseStack, consumer, packedLight, packedOverlay);
+            poseStack.popPose();
+            renderRingSmall(poseStack, consumer, totalTick, packedLight, packedOverlay);
+        } else {
+            poseStack.popPose();
+        }
     }
 
     @Override
@@ -147,20 +157,36 @@ public class StellarIrisRender extends DynamicRender<IrisMultiblockMachine, Stel
         poseStack.popPose();
     }
 
+    public void renderStarInsides(PoseStack poseStack, VertexConsumer consumer,
+                                  float totalTick, int packedLight, int packedOverlay) {
+        poseStack.pushPose();
+        Quaternionf rot = new Quaternionf()
+                .rotateXYZ(0.65f, 0.0f, 0.35f)
+                .rotateAxis(totalTick * Mth.TWO_PI / 80, 0f, 1f, 0f);
+        poseStack.mulPose(rot);
+        poseStack.scale(1.05f, 1.05f, 1.05f);
+        PoseStack.Pose pose = poseStack.last();
+
+        List<BakedQuad> quads = innerStarSphereModel.getQuads(null, null, random, ModelData.EMPTY, null);
+        for (BakedQuad quad : quads) {
+            consumer.putBulkData(pose, quad, 1f, 1f, 1f, 0.5f, packedLight, packedOverlay, false);
+        }
+        poseStack.popPose();
+    }
+
     public void renderStar(PoseStack poseStack, VertexConsumer consumer,
                            float totalTick, int packedLight, int packedOverlay) {
         poseStack.pushPose();
-
         Quaternionf rot = new Quaternionf()
-                .rotateXYZ(0.25f, 0.0f, 0f)
-                .rotateAxis(totalTick * Mth.TWO_PI / 80, 0f, 1f, 1f);
+                .rotateXYZ(0.65f, 0.0f, 0.35f)
+                .rotateAxis(totalTick * Mth.TWO_PI / 80, 0f, 1f, 0f);
         poseStack.mulPose(rot);
-        poseStack.scale(9.6f, 9.6f, 9.6f);
+        poseStack.scale(1.03f, 1.03f, 1.03f);
         PoseStack.Pose pose = poseStack.last();
 
         List<BakedQuad> quads = starCoreModel.getQuads(null, null, random, ModelData.EMPTY, null);
         for (BakedQuad quad : quads) {
-            consumer.putBulkData(pose, quad, 1f, 1f, 1f, 0.65f, packedLight, packedOverlay, false);
+            consumer.putBulkData(pose, quad, 1f, 1f, 1f, 0.98f, packedLight, packedOverlay, false);
         }
         poseStack.popPose();
     }
@@ -168,32 +194,16 @@ public class StellarIrisRender extends DynamicRender<IrisMultiblockMachine, Stel
     public void renderStarShell(PoseStack poseStack, VertexConsumer consumer,
                                 float totalTick, int packedLight, int packedOverlay) {
         poseStack.pushPose();
-
         Quaternionf rot = new Quaternionf()
                 .rotateXYZ(0.65f, 0.0f, 0.35f)
                 .rotateAxis(totalTick * Mth.TWO_PI / 80, 0f, 1f, 0f);
         poseStack.mulPose(rot);
-        poseStack.scale(10.0f, 10.0f, 10.0f);
+        poseStack.scale(1.09f, 1.09f, 1.09f);
         PoseStack.Pose pose = poseStack.last();
 
         List<BakedQuad> quads = outerStarSphereModel.getQuads(null, null, random, ModelData.EMPTY, null);
         for (BakedQuad quad : quads) {
-            consumer.putBulkData(pose, quad, 1f, 1f, 1f, 0.5f, packedLight, packedOverlay, false);
-        }
-        poseStack.popPose();
-    }
-
-    public void renderStarInsides(PoseStack poseStack, VertexConsumer consumer,
-                                  float tick, int packedLight, int packedOverlay) {
-        poseStack.pushPose();
-
-        poseStack.mulPose(new Quaternionf().rotateAxis(tick * Mth.TWO_PI / 80, 0, 1f, 0));
-        poseStack.scale(9.85f, 9.85f, 9.85f);
-        PoseStack.Pose pose = poseStack.last();
-
-        List<BakedQuad> quads = innerStarSphereModel.getQuads(null, null, random, ModelData.EMPTY, null);
-        for (BakedQuad quad : quads) {
-            consumer.putBulkData(pose, quad, 1f, 1f, 1f, 0.7f, packedLight, packedOverlay, false);
+            consumer.putBulkData(pose, quad, 1f, 1f, 1f, 1f, packedLight, packedOverlay, false);
         }
         poseStack.popPose();
     }
