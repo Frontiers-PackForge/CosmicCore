@@ -85,9 +85,34 @@ public class StellarIrisRender extends DynamicRender<IrisMultiblockMachine, Stel
 
         float totalTick = (Minecraft.getInstance().player.tickCount + partialTick);
         VertexConsumer consumer = buffer.getBuffer(Sheets.translucentCullBlockSheet());
-
         poseStack.pushPose();
-        poseStack.translate(0.5f, -2.5f, 46.5f);
+
+        Direction front = machine.getFrontFacing();
+        Direction upwards = machine.getUpwardsFacing();
+
+        float x0ffset = 0, y0ffset = -2.5f, z0ffset = 0;
+
+        if (front.getAxis() == Direction.Axis.X) {
+            if (front.getAxisDirection() == Direction.AxisDirection.POSITIVE) {
+                x0ffset = -46.5f;
+                z0ffset = -0.5f;
+            } else {
+                x0ffset = 46.5f;
+                z0ffset = 0.5f;
+            }
+        }
+
+        if (front.getAxis() == Direction.Axis.Z) {
+            if (front.getAxisDirection() == Direction.AxisDirection.POSITIVE) {
+                z0ffset = -46.5f;
+                x0ffset = -0.5f;
+            } else {
+                z0ffset = 46.5f;
+                x0ffset = 0.5f;
+            }
+        }
+
+        poseStack.translate(x0ffset, y0ffset, z0ffset);
         poseStack.mulPose(new Quaternionf().rotateAxis(totalTick * Mth.TWO_PI / 80, 0, 1, 0));
         poseStack.scale(10.0f, 10.0f, 10.0f);
 
@@ -108,11 +133,11 @@ public class StellarIrisRender extends DynamicRender<IrisMultiblockMachine, Stel
             renderIris(poseStack, consumer, packedLight, packedOverlay);
             renderRing(poseStack, consumer, packedLight, packedOverlay);
             poseStack.popPose();
-            renderRingSmall(poseStack, consumer, totalTick, packedLight, packedOverlay);
+
+            renderRingSmall(machine, poseStack, consumer, totalTick, packedLight, packedOverlay);
 
         } else if (machine.getStage() == IrisMultiblockMachine.Stage.DEATH) {
             renderRings(machine.getFrontFacing().getAxis(), totalTick, poseStack, buffer);
-
             renderRingsSecondary(machine.getFrontFacing().getAxis(), totalTick, poseStack, buffer);
             float scale = erraticPulseEffect(0.7f, 1.6f, partialTick, 0.3f, machine);
             poseStack.scale(scale, scale, scale);
@@ -243,10 +268,34 @@ public class StellarIrisRender extends DynamicRender<IrisMultiblockMachine, Stel
     }
 
     @OnlyIn(Dist.CLIENT)
-    public void renderRingSmall(PoseStack poseStack, VertexConsumer consumer,
+    public void renderRingSmall(IrisMultiblockMachine machine,PoseStack poseStack, VertexConsumer consumer,
                                 float totalTick, int packedLight, int packedOverlay) {
         poseStack.pushPose();
-        poseStack.translate(0.5f, -2.0f, 46.5f);
+
+        Direction front = machine.getFrontFacing();
+        Direction upwards = machine.getUpwardsFacing();
+        float x0ffset = 0, y0ffset = -2.3f, z0ffset = 0;
+
+        if (front.getAxis() == Direction.Axis.X) {
+            if (front.getAxisDirection() == Direction.AxisDirection.POSITIVE) {
+                x0ffset = -46.5f;
+                z0ffset = -0.5f;
+            } else {
+                x0ffset = 46.5f;
+                z0ffset = 0.5f;
+            }
+        }
+
+        if (front.getAxis() == Direction.Axis.Z) {
+            if (front.getAxisDirection() == Direction.AxisDirection.POSITIVE) {
+                z0ffset = -46.5f;
+                x0ffset = -0.5f;
+            } else {
+                z0ffset = 46.5f;
+                x0ffset = 0.5f;
+            }
+        }
+        poseStack.translate(x0ffset,y0ffset,z0ffset);
         poseStack.mulPose(new Quaternionf().rotateAxis(totalTick * Mth.TWO_PI / 20, 0, 1, 0));
         poseStack.scale(13.0f, 13.0f, 13.0f);
 

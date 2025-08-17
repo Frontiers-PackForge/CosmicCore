@@ -27,7 +27,7 @@ public class StellarIris {
 
     public final static MultiblockMachineDefinition STELLAR_IRIS = REGISTRATE
             .multiblock("stellar_iris", IrisMultiblockMachine::new)
-            .rotationState(RotationState.ALL)
+            .rotationState(RotationState.NON_Y_AXIS)
             .recipeType(CosmicRecipeTypes.STELLAR_IRIS)
             .recipeModifier(GTRecipeModifiers.ELECTRIC_OVERCLOCK.apply(OverclockingLogic.NON_PERFECT_OVERCLOCK_SUBTICK))
             .appearanceBlock(CosmicBlocks.CYCLOZINE_CHEMICALLY_REPELLING_CASING)

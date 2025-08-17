@@ -9,6 +9,7 @@ import com.gregtechceu.gtceu.api.gui.widget.SlotWidget;
 import com.gregtechceu.gtceu.api.machine.IMachineBlockEntity;
 import com.gregtechceu.gtceu.api.machine.MetaMachine;
 import com.gregtechceu.gtceu.api.machine.multiblock.WorkableElectricMultiblockMachine;
+import com.gregtechceu.gtceu.api.machine.multiblock.WorkableMultiblockMachine;
 import com.gregtechceu.gtceu.api.machine.trait.NotifiableItemStackHandler;
 import com.gregtechceu.gtceu.api.machine.trait.RecipeLogic;
 import com.gregtechceu.gtceu.api.pattern.util.RelativeDirection;
@@ -39,11 +40,13 @@ import static com.ghostipedia.cosmiccore.api.machine.multiblock.IrisMultiblockMa
 @Getter
 public class IrisMultiblockMachine extends WorkableElectricMultiblockMachine {
 
+    public static final ManagedFieldHolder MANAGED_FIELD_HOLDER = new ManagedFieldHolder(
+            IrisMultiblockMachine.class, WorkableElectricMultiblockMachine.MANAGED_FIELD_HOLDER);
+
     @Getter
     @Persisted
     private final NotifiableItemStackHandler inventory;
-    @Persisted
-    protected NotifiableItemStackHandler storageSlot;
+    
     @Getter
     protected boolean ignite;
     @Getter
@@ -65,6 +68,7 @@ public class IrisMultiblockMachine extends WorkableElectricMultiblockMachine {
         DEATH,
         DEATH_GRACEFUL;
     }
+
 
     public IrisMultiblockMachine(IMachineBlockEntity holder) {
         super(holder);
