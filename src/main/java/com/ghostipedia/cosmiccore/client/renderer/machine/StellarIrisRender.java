@@ -94,8 +94,8 @@ public class StellarIrisRender extends DynamicRender<IrisMultiblockMachine, Stel
 
         if (front.getAxis() == Direction.Axis.X) {
             if (front.getAxisDirection() == Direction.AxisDirection.POSITIVE) {
-                x0ffset = -46.5f;
-                z0ffset = -0.5f;
+                x0ffset = -45.5f;
+                z0ffset = 0.5f;
             } else {
                 x0ffset = 46.5f;
                 z0ffset = 0.5f;
@@ -104,8 +104,8 @@ public class StellarIrisRender extends DynamicRender<IrisMultiblockMachine, Stel
 
         if (front.getAxis() == Direction.Axis.Z) {
             if (front.getAxisDirection() == Direction.AxisDirection.POSITIVE) {
-                z0ffset = -46.5f;
-                x0ffset = -0.5f;
+                z0ffset = -45.55f;
+                x0ffset = 0.5f;
             } else {
                 z0ffset = 46.5f;
                 x0ffset = 0.5f;
@@ -268,7 +268,7 @@ public class StellarIrisRender extends DynamicRender<IrisMultiblockMachine, Stel
     }
 
     @OnlyIn(Dist.CLIENT)
-    public void renderRingSmall(IrisMultiblockMachine machine,PoseStack poseStack, VertexConsumer consumer,
+    public void renderRingSmall(IrisMultiblockMachine machine, PoseStack poseStack, VertexConsumer consumer,
                                 float totalTick, int packedLight, int packedOverlay) {
         poseStack.pushPose();
 
@@ -295,7 +295,7 @@ public class StellarIrisRender extends DynamicRender<IrisMultiblockMachine, Stel
                 x0ffset = 0.5f;
             }
         }
-        poseStack.translate(x0ffset,y0ffset,z0ffset);
+        poseStack.translate(x0ffset, y0ffset, z0ffset);
         poseStack.mulPose(new Quaternionf().rotateAxis(totalTick * Mth.TWO_PI / 20, 0, 1, 0));
         poseStack.scale(13.0f, 13.0f, 13.0f);
 

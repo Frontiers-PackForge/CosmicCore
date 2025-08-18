@@ -9,7 +9,6 @@ import com.gregtechceu.gtceu.api.gui.widget.SlotWidget;
 import com.gregtechceu.gtceu.api.machine.IMachineBlockEntity;
 import com.gregtechceu.gtceu.api.machine.MetaMachine;
 import com.gregtechceu.gtceu.api.machine.multiblock.WorkableElectricMultiblockMachine;
-import com.gregtechceu.gtceu.api.machine.multiblock.WorkableMultiblockMachine;
 import com.gregtechceu.gtceu.api.machine.trait.NotifiableItemStackHandler;
 import com.gregtechceu.gtceu.api.machine.trait.RecipeLogic;
 import com.gregtechceu.gtceu.api.pattern.util.RelativeDirection;
@@ -46,7 +45,7 @@ public class IrisMultiblockMachine extends WorkableElectricMultiblockMachine {
     @Getter
     @Persisted
     private final NotifiableItemStackHandler inventory;
-    
+
     @Getter
     protected boolean ignite;
     @Getter
@@ -68,7 +67,6 @@ public class IrisMultiblockMachine extends WorkableElectricMultiblockMachine {
         DEATH,
         DEATH_GRACEFUL;
     }
-
 
     public IrisMultiblockMachine(IMachineBlockEntity holder) {
         super(holder);

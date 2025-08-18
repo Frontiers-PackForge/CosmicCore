@@ -16,7 +16,7 @@ import java.util.function.Predicate;
 import static com.gregtechceu.gtceu.api.data.tag.TagPrefix.Conditions.hasIngotProperty;
 import static com.gregtechceu.gtceu.api.data.tag.TagPrefix.Conditions.hasOreProperty;
 
-public class CosmicCustomTags {
+public class CosmicTagPrefix {
 
     public static TagPrefix crushedLeached;
     public static TagPrefix prismaFrothed;
@@ -25,6 +25,8 @@ public class CosmicCustomTags {
     public static TagPrefix modularShelling;
     public static TagPrefix plasmites;
     public static TagPrefix largeWireSpool;
+    public static TagPrefix alveFoilInsulator;
+    public static TagPrefix shapeMemoryFoil;
     public static final TagKey<Block> STAR_LADDER_BLOCKS = TagUtil.createBlockTag("starladder_blocks");
     public static final TagKey<Item> STAR_LADDER_ITEMS = TagUtil.createItemTag("starladder_items");
 
@@ -93,6 +95,7 @@ public class CosmicCustomTags {
                 .unificationEnabled(true)
                 .generateItem(true)
                 .generationCondition(hasIngotProperty);
+
         largeWireSpool = new TagPrefix("large_wire_spool")
                 .idPattern("%s_wire_spool")
                 .defaultTagPath("wire_spools/%s")
@@ -102,5 +105,25 @@ public class CosmicCustomTags {
                 .generateItem(true)
                 .maxStackSize(4)
                 .generationCondition(hasWireProp.or(hasFineWireProp));
+
+        alveFoilInsulator = new TagPrefix("alveFoilInsulator")
+                .idPattern("%s_alve_foil_insulator")
+                .defaultTagPath("alve_foil_insulators/%s")
+                .defaultTagPath("alve_foil_insulators")
+                .materialIconType(CosmicCoreMaterialIconType.alveFoil)
+                .unificationEnabled(true)
+                .generateItem(true)
+                .maxStackSize(32)
+                .generationCondition(hasPlateProp);
+
+        shapeMemoryFoil = new TagPrefix("shapeMemoryFoil")
+                .idPattern("%s_shape_memory_foil")
+                .defaultTagPath("shape_memory_foils/%s")
+                .defaultTagPath("shape_memory_foils")
+                .materialIconType(CosmicCoreMaterialIconType.memoryFoil)
+                .unificationEnabled(true)
+                .generateItem(true)
+                .maxStackSize(32)
+                .generationCondition(hasBoltProp);
     }
 }

@@ -12,7 +12,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.function.Consumer;
 
-import static com.ghostipedia.cosmiccore.api.data.CosmicCustomTags.*;
+import static com.ghostipedia.cosmiccore.api.data.CosmicTagPrefix.*;
 import static com.ghostipedia.cosmiccore.gtbridge.CosmicRecipeTypes.*;
 import static com.gregtechceu.gtceu.api.data.tag.TagPrefix.*;
 

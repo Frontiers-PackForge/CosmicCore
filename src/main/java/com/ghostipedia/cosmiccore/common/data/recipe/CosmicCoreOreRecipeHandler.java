@@ -13,7 +13,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.function.Consumer;
 
-import static com.ghostipedia.cosmiccore.api.data.CosmicCustomTags.*;
+import static com.ghostipedia.cosmiccore.api.data.CosmicTagPrefix.*;
 import static com.ghostipedia.cosmiccore.common.data.materials.CosmicMaterials.DilutedPrisma;
 import static com.ghostipedia.cosmiccore.common.data.materials.CosmicMaterials.Prisma;
 import static com.ghostipedia.cosmiccore.gtbridge.CosmicRecipeTypes.*;

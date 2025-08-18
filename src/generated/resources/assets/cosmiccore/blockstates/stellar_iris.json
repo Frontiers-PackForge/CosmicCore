@@ -1,24 +1,5 @@
 {
   "variants": {
-    "facing=down,upwards_facing=east": {
-      "gtceu:z": 90,
-      "model": "cosmiccore:block/machine/stellar_iris",
-      "x": 90
-    },
-    "facing=down,upwards_facing=north": {
-      "model": "cosmiccore:block/machine/stellar_iris",
-      "x": 90
-    },
-    "facing=down,upwards_facing=south": {
-      "gtceu:z": 180,
-      "model": "cosmiccore:block/machine/stellar_iris",
-      "x": 90
-    },
-    "facing=down,upwards_facing=west": {
-      "gtceu:z": 270,
-      "model": "cosmiccore:block/machine/stellar_iris",
-      "x": 90
-    },
     "facing=east,upwards_facing=east": {
       "gtceu:z": 270,
       "model": "cosmiccore:block/machine/stellar_iris",
@@ -71,25 +52,6 @@
       "gtceu:z": 90,
       "model": "cosmiccore:block/machine/stellar_iris",
       "y": 180
-    },
-    "facing=up,upwards_facing=east": {
-      "gtceu:z": 90,
-      "model": "cosmiccore:block/machine/stellar_iris",
-      "x": 270
-    },
-    "facing=up,upwards_facing=north": {
-      "gtceu:z": 180,
-      "model": "cosmiccore:block/machine/stellar_iris",
-      "x": 270
-    },
-    "facing=up,upwards_facing=south": {
-      "model": "cosmiccore:block/machine/stellar_iris",
-      "x": 270
-    },
-    "facing=up,upwards_facing=west": {
-      "gtceu:z": 270,
-      "model": "cosmiccore:block/machine/stellar_iris",
-      "x": 270
     },
     "facing=west,upwards_facing=east": {
       "gtceu:z": 270,
