@@ -35,6 +35,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.List;
 
 import static com.ghostipedia.cosmiccore.api.machine.multiblock.IrisMultiblockMachine.Stage.BLACK_HOLE;
+import static com.ghostipedia.cosmiccore.api.machine.multiblock.IrisMultiblockMachine.Stage.DEATH;
 
 @Getter
 public class IrisMultiblockMachine extends WorkableElectricMultiblockMachine {
@@ -104,8 +105,15 @@ public class IrisMultiblockMachine extends WorkableElectricMultiblockMachine {
 
     @OnlyIn(Dist.CLIENT)
     public void soundTick() {
-        if (stage == BLACK_HOLE && isFormed) {
-            var sound = CosmicSounds.BLACK_HOLE_CRY;
+        if (isFormed) {
+            var sound = CosmicSounds.CHEMVAT;
+            if (stage == DEATH) {
+                sound = CosmicSounds.STELLAR_BODY_DYING;
+            }
+            if (stage == BLACK_HOLE) {
+                sound = CosmicSounds.BLACK_HOLE_CRY;
+            }
+
             if (workingSound instanceof AutoReleasedSound soundEntry) {
                 if (soundEntry.soundEntry == sound && !soundEntry.isStopped()) {
                     return;

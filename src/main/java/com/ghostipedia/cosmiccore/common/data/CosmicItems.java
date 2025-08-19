@@ -90,6 +90,88 @@ public class CosmicItems {
 
     public static final CosmicBloodOrbDeferredRegister COSMIC_BLOOD_ORBS = new CosmicBloodOrbDeferredRegister(
             "cosmiccore");
+    // Modules
+
+    public static final ItemEntry<ComponentItem> PROD_MOD_1 = REGISTRATE.item("prod_mod_1", ComponentItem::create)
+            .lang("Productivity Module Mk.1")
+            .properties(p -> p.stacksTo(1))
+            .tag()
+            .defaultModel()
+            .register();
+    public static final ItemEntry<ComponentItem> PROD_MOD_2 = REGISTRATE.item("prod_mod_2", ComponentItem::create)
+            .lang("Productivity Module Mk.2")
+            .properties(p -> p.stacksTo(1))
+            .tag()
+            .defaultModel()
+            .register();
+    public static final ItemEntry<ComponentItem> PROD_MOD_3 = REGISTRATE.item("prod_mod_3", ComponentItem::create)
+            .lang("Productivity Module Mk.3")
+            .properties(p -> p.stacksTo(1))
+            .tag()
+            .defaultModel()
+            .register();
+    public static final ItemEntry<ComponentItem> PROD_MOD_4 = REGISTRATE.item("prod_mod_4", ComponentItem::create)
+            .lang("Productivity Module Mk.4")
+            .properties(p -> p.stacksTo(1))
+            .tag()
+            .defaultModel()
+            .register();
+
+    public static final ItemEntry<ComponentItem> PARA_MOD_1 = REGISTRATE.item("para_mod_1", ComponentItem::create)
+            .lang("Parallelization Module Mk.1")
+            .properties(p -> p.stacksTo(1))
+            .tag()
+            .defaultModel()
+            .register();
+    public static final ItemEntry<ComponentItem> PARA_MOD_2 = REGISTRATE.item("para_mod_2", ComponentItem::create)
+            .lang("Parallelization Module Mk.2")
+            .properties(p -> p.stacksTo(1))
+            .tag()
+            .defaultModel()
+            .register();
+    public static final ItemEntry<ComponentItem> PARA_MOD_3 = REGISTRATE.item("para_mod_3", ComponentItem::create)
+            .lang("Parallelization Module Mk.3")
+            .properties(p -> p.stacksTo(1))
+            .tag()
+            .defaultModel()
+            .register();
+    public static final ItemEntry<ComponentItem> PARA_MOD_4 = REGISTRATE.item("para_mod_4", ComponentItem::create)
+            .lang("Parallelization Module Mk.4")
+            .properties(p -> p.stacksTo(1))
+            .tag()
+            .defaultModel()
+            .register();
+
+    public static final ItemEntry<ComponentItem> RESONANT_MODULE = REGISTRATE
+            .item("resonant_mod", ComponentItem::create)
+            .lang("Resonant Module")
+            .properties(p -> p.stacksTo(1))
+            .tag()
+            .defaultModel()
+            .register();
+
+    public static final ItemEntry<ComponentItem> PROTOCYTE_MOD = REGISTRATE.item("protocyte_mod", ComponentItem::create)
+            .lang("Protocyte Module")
+            .properties(p -> p.stacksTo(1))
+            .tag()
+            .defaultModel()
+            .register();
+
+    public static final ItemEntry<ComponentItem> FUSION_MODULE_MK1 = REGISTRATE
+            .item("resonant_mod", ComponentItem::create)
+            .lang("Fusion Module Mk.1")
+            .properties(p -> p.stacksTo(1))
+            .tag()
+            .defaultModel()
+            .register();
+
+    // public static final ItemEntry<ComponentItem> FUSION_MODULES_MK2 = REGISTRATE.item("fusion_mod_2",
+    // ComponentItem::create)
+    // .lang("Fusion Module Mk.2")
+    // .properties(p -> p.stacksTo(1))
+    // .tag()
+    // .defaultModel()
+    // .register();
 
     // Drone Frames
     public static final ItemEntry<ComponentItem> DRONE_FRAME_1 = REGISTRATE.item("drone_frame_1", ComponentItem::create)

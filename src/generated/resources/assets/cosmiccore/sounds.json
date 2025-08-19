@@ -17,6 +17,15 @@
     ],
     "subtitle": "cosmiccore.subtitle.arcane_distil"
   },
+  "dying_star": {
+    "sounds": [
+      {
+        "type": "file",
+        "name": "cosmiccore:dying_star"
+      }
+    ],
+    "subtitle": "cosmiccore.subtitle.dying_star"
+  },
   "fluidizer": {
     "sounds": [
       {
