@@ -29,6 +29,7 @@ import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.chat.Style;
 import net.minecraft.network.chat.TextColor;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -99,34 +100,54 @@ public class InfiniteSprayCanBehavior implements IInteractionItem, IAddInformati
 
         for (ExtendedDyeColor dyeColor : ExtendedDyeColor.values()) {
             int id = dyeColor.getColorId();
-            if (id == -1) id = 17;
-            if (id != 17) {
-                int x = ((id + 1) % 8) * 18 + 4;
-                int y = (id / 8) * 18 + 4;
-                ui.widget(new ButtonWidget(x, y, 16, 18, dyeColor.getTexture(), cd -> {
-                    int colorId = dyeColor.getColorId();
-                    DyeColor dyeColorVanilla = DyeColor.byId(colorId + 1);
-                    ExtendedDyeColor extendedColor = ExtendedDyeColor.fromDyeColor(dyeColorVanilla);
-                    setColor(extendedColor);
-                    sendColorToTag(player, this.color);
+            if (!dyeColor.isSolvent()) {
+                int x = ((id  % 8) * 18 + 4);
+                int y = ((id / 8) * 18 + 4);
+                ui.widget(new ButtonWidget(x, y, 16, 18, dyeColor.getTexture(),
+                        clickData -> {
+                            if (!isLocked){
+                                setColor(ExtendedDyeColor.fromDyeColor(DyeColor.byId(dyeColor.getColorId())));
+                                sendColorToTag(player, color);
+                            }
+                            else{
+                                player.displayClientMessage(Component.literal("THE SPRAYCAN IS LOCKED")
+                                                .withStyle(style -> style
+                                                        .withColor(ChatFormatting.RED)
+                                                        .withBold(true)),
+                                        true);
+                            }
+                        }));
 
-                }));
-            } else {
+            }
+            else {
                 ui.widget(new ButtonWidget(65, 40, 16, 18, dyeColor.getTexture(),
                         cd -> {
 
-                            setColor(ExtendedDyeColor.SOLVENT);
-                            sendColorToTag(player, this.color);
+                            if(isLocked){
+                                player.displayClientMessage(Component.literal("THE SPRAYCAN IS LOCKED")
+                                                .withStyle(style -> style
+                                                        .withColor(ChatFormatting.RED)
+                                                        .withBold(true)),
+                                        true);
+                            }
+                            else {
+                                setColor(ExtendedDyeColor.SOLVENT);
+                                sendColorToTag(player, this.color);
+                            }
                         }));
             }
         }
-        return ui;
+
+    return ui;
     }
+
 
     @Override
     public InteractionResultHolder<ItemStack> use(Item item, Level level, Player player, InteractionHand usedHand) {
         if (player.isCrouching()) {
-            return IItemUIFactory.super.use(item, level, player, usedHand);
+            if( player instanceof  ServerPlayer serverPlayer){
+                return IItemUIFactory.super.use(item, level, serverPlayer, usedHand);
+            }
         }
         return InteractionResultHolder.pass(player.getItemInHand(usedHand));
     }
@@ -152,7 +173,6 @@ public class InfiniteSprayCanBehavior implements IInteractionItem, IAddInformati
         if (!(entity instanceof Player player) || isSwinging) {
             return true;
         }
-        CompoundTag tag = stack.getOrCreateTag();
         if (!this.isLocked) {
             int totalColors = ExtendedDyeColor.values().length;
             int nextColor = player.isCrouching() ? (color.ordinal() - 1 + totalColors) % totalColors :
