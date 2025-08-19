@@ -1,5 +1,6 @@
 package com.ghostipedia.cosmiccore.common.item.behavior;
 
+import com.ghostipedia.cosmiccore.common.data.CosmicSounds;
 import com.gregtechceu.gtceu.GTCEu;
 import com.gregtechceu.gtceu.api.GTValues;
 import com.gregtechceu.gtceu.api.blockentity.IPaintable;
@@ -177,9 +178,11 @@ public class InfiniteSprayCanBehavior implements IInteractionItem, IAddInformati
             int totalColors = ExtendedDyeColor.values().length;
             int nextColor = player.isCrouching() ? (color.ordinal() - 1 + totalColors) % totalColors :
                     (color.ordinal() + 1) % totalColors;
+            CosmicSounds.SPRAYCAN_SHAKE.play(entity.level(), null, player.position(), 1.0f, 1.0f);
 
             this.color = ExtendedDyeColor.values()[nextColor];
             sendColorToTag(player, this.color);
+
         } else {
             player.displayClientMessage(Component.literal("THE SPRAYCAN IS LOCKED")
                     .withStyle(style -> style

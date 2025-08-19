@@ -80,6 +80,15 @@
     ],
     "subtitle": "cosmiccore.subtitle.orbital_forge"
   },
+  "spraycan_shake": {
+    "sounds": [
+      {
+        "type": "file",
+        "name": "cosmiccore:spraycan_shake"
+      }
+    ],
+    "subtitle": "cosmiccore.subtitle.spraycan_shake"
+  },
   "vorax": {
     "sounds": [
       {
