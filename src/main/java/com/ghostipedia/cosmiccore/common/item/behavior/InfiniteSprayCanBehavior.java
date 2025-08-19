@@ -178,10 +178,9 @@ public class InfiniteSprayCanBehavior implements IInteractionItem, IAddInformati
             int totalColors = ExtendedDyeColor.values().length;
             int nextColor = player.isCrouching() ? (color.ordinal() - 1 + totalColors) % totalColors :
                     (color.ordinal() + 1) % totalColors;
-            CosmicSounds.SPRAYCAN_SHAKE.play(entity.level(), null, player.position(), 1.0f, 1.0f);
-
             this.color = ExtendedDyeColor.values()[nextColor];
             sendColorToTag(player, this.color);
+            CosmicSounds.SPRAYCAN_SHAKE.play(entity.level(), player, player.position(), 1.0f, 1.0f);
 
         } else {
             player.displayClientMessage(Component.literal("THE SPRAYCAN IS LOCKED")
