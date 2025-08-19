@@ -20,19 +20,18 @@ import com.gregtechceu.gtceu.api.machine.trait.NotifiableFluidTank;
 import com.gregtechceu.gtceu.api.recipe.GTRecipe;
 import com.gregtechceu.gtceu.api.recipe.ingredient.FluidIngredient;
 import com.gregtechceu.gtceu.common.data.GTMaterials;
-
 import com.gregtechceu.gtceu.utils.GTTransferUtils;
+
 import com.lowdragmc.lowdraglib.gui.modular.ModularUI;
 import com.lowdragmc.lowdraglib.gui.widget.LabelWidget;
 import com.lowdragmc.lowdraglib.gui.widget.WidgetGroup;
-
 import com.lowdragmc.lowdraglib.syncdata.ISubscription;
-import com.lowdragmc.lowdraglib.syncdata.annotation.Persisted;
+
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.entity.player.Player;
-
 import net.minecraft.world.level.block.Block;
+
 import org.jetbrains.annotations.MustBeInvokedByOverriders;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -42,7 +41,8 @@ import java.util.Set;
 
 public class SterilizationHatchPartMachine extends TieredIOPartMachine
                                            implements ICleanroomProvider, IRecipeHandler, IUIMachine {
-        @Nullable
+
+    @Nullable
     protected TickableSubscription autoIOSubs;
     @Nullable
     protected ISubscription tankSubs;
@@ -104,6 +104,7 @@ public class SterilizationHatchPartMachine extends TieredIOPartMachine
     public RecipeCapability<FluidIngredient> getCapability() {
         return FluidRecipeCapability.CAP;
     }
+
     @Override
     public void onNeighborChanged(Block block, BlockPos fromPos, boolean isMoving) {
         super.onNeighborChanged(block, fromPos, isMoving);
@@ -145,6 +146,7 @@ public class SterilizationHatchPartMachine extends TieredIOPartMachine
             updateTankSubscription();
         }
     }
+
     // GUI
     @Override
     public ModularUI createUI(Player entityPlayer) {
