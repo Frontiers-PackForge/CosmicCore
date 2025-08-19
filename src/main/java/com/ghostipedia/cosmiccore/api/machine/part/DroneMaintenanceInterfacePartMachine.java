@@ -24,6 +24,7 @@ import com.lowdragmc.lowdraglib.syncdata.annotation.Persisted;
 import com.lowdragmc.lowdraglib.syncdata.field.ManagedFieldHolder;
 
 import net.minecraft.ChatFormatting;
+import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.Style;
 import net.minecraft.resources.ResourceLocation;
@@ -61,6 +62,11 @@ public class DroneMaintenanceInterfacePartMachine extends TieredPartMachine
 
     @Getter
     private DroneStationConnection connection;
+
+    // Can't sync a DroneStationConnection so magic value it is
+    // -1 = no connection, otherwise it's the Long packed BPos
+    @DescSynced
+    private long syncedConnectionPos;
 
     public DroneMaintenanceInterfacePartMachine(IMachineBlockEntity holder) {
         super(holder, GTValues.HV);
@@ -116,6 +122,7 @@ public class DroneMaintenanceInterfacePartMachine extends TieredPartMachine
         // Fix maintenance problems every second
         if (getOffsetTimer() % 20 == 0) {
             if (hasConnection()) {
+                syncedConnectionPos = connection.droneStationPos.asLong();
                 updateCleanroomStyle();
                 if (hasMaintenanceProblems()) {
                     // See if we are allowed to fix maintenance issues + potentially consume a drone
@@ -124,6 +131,7 @@ public class DroneMaintenanceInterfacePartMachine extends TieredPartMachine
                     }
                 }
             } else {
+                syncedConnectionPos = -1;
                 // Find a new connection every 10 seconds
                 if (getOffsetTimer() % 200 == 0) {
                     tryFindConnection();
@@ -172,20 +180,19 @@ public class DroneMaintenanceInterfacePartMachine extends TieredPartMachine
         super.attachTooltips(tooltipsPanel);
         tooltipsPanel.attachTooltips(new IFancyTooltip.Basic(
                 () -> GuiTextures.GREGTECH_LOGO,
-                () -> List.of(Component.translatable("gtceu.multiblock.drone_maintenance_interface.connection_location",
-                        this.connection.droneStationPos.getX(),
-                        this.connection.droneStationPos.getY(),
-                        this.connection.droneStationPos.getZ())
+                () -> List.of(Component
+                        .translatable("cosmiccore.multiblock.drone_maintenance_interface.connection_location",
+                                BlockPos.of(this.syncedConnectionPos).getX(),
+                                BlockPos.of(this.syncedConnectionPos).getY(),
+                                BlockPos.of(this.syncedConnectionPos).getZ())
                         .setStyle(Style.EMPTY.withColor(ChatFormatting.GREEN))),
-                (() -> !(this.connection == null || this.connection.droneStationPos != null ||
-                        this.connection.droneStation != null)),
+                () -> this.syncedConnectionPos != -1,
                 () -> null));
         tooltipsPanel.attachTooltips(new IFancyTooltip.Basic(
                 () -> GuiTextures.GREGTECH_LOGO,
-                () -> List.of(Component.translatable("gtceu.multiblock.drone_maintenance_interface.no_connection")
+                () -> List.of(Component.translatable("cosmiccore.multiblock.drone_maintenance_interface.no_connection")
                         .setStyle(Style.EMPTY.withColor(ChatFormatting.RED))),
-                (() -> this.connection == null || this.connection.droneStationPos != null ||
-                        this.connection.droneStation != null),
+                (() -> this.syncedConnectionPos == -1),
                 () -> null));
     }
 
