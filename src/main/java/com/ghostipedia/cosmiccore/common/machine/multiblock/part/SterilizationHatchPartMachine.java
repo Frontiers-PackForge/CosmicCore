@@ -10,6 +10,7 @@ import com.gregtechceu.gtceu.api.gui.GuiTextures;
 import com.gregtechceu.gtceu.api.gui.UITemplate;
 import com.gregtechceu.gtceu.api.gui.widget.TankWidget;
 import com.gregtechceu.gtceu.api.machine.IMachineBlockEntity;
+import com.gregtechceu.gtceu.api.machine.TickableSubscription;
 import com.gregtechceu.gtceu.api.machine.feature.ICleanroomProvider;
 import com.gregtechceu.gtceu.api.machine.feature.IUIMachine;
 import com.gregtechceu.gtceu.api.machine.feature.multiblock.IMultiController;
@@ -20,21 +21,31 @@ import com.gregtechceu.gtceu.api.recipe.GTRecipe;
 import com.gregtechceu.gtceu.api.recipe.ingredient.FluidIngredient;
 import com.gregtechceu.gtceu.common.data.GTMaterials;
 
+import com.gregtechceu.gtceu.utils.GTTransferUtils;
 import com.lowdragmc.lowdraglib.gui.modular.ModularUI;
 import com.lowdragmc.lowdraglib.gui.widget.LabelWidget;
 import com.lowdragmc.lowdraglib.gui.widget.WidgetGroup;
 
+import com.lowdragmc.lowdraglib.syncdata.ISubscription;
+import com.lowdragmc.lowdraglib.syncdata.annotation.Persisted;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.world.entity.player.Player;
 
+import net.minecraft.world.level.block.Block;
 import org.jetbrains.annotations.MustBeInvokedByOverriders;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 import java.util.Set;
 
 public class SterilizationHatchPartMachine extends TieredIOPartMachine
                                            implements ICleanroomProvider, IRecipeHandler, IUIMachine {
-
+        @Nullable
+    protected TickableSubscription autoIOSubs;
+    @Nullable
+    protected ISubscription tankSubs;
     public final NotifiableFluidTank fluidTank;
 
     public SterilizationHatchPartMachine(IMachineBlockEntity holder, int tier, IO io) {
@@ -93,7 +104,47 @@ public class SterilizationHatchPartMachine extends TieredIOPartMachine
     public RecipeCapability<FluidIngredient> getCapability() {
         return FluidRecipeCapability.CAP;
     }
+    @Override
+    public void onNeighborChanged(Block block, BlockPos fromPos, boolean isMoving) {
+        super.onNeighborChanged(block, fromPos, isMoving);
+        updateTankSubscription();
+    }
 
+    @Override
+    public void onRotated(Direction oldFacing, Direction newFacing) {
+        super.onRotated(oldFacing, newFacing);
+        updateTankSubscription(newFacing);
+    }
+
+    protected void updateTankSubscription() {
+        updateTankSubscription(getFrontFacing());
+    }
+
+    protected void updateTankSubscription(Direction newFacing) {
+        if (isWorkingEnabled() && ((io.support(IO.OUT) && !fluidTank.isEmpty()) || io.support(IO.IN)) &&
+                GTTransferUtils.hasAdjacentFluidHandler(getLevel(), getPos(), newFacing)) {
+            autoIOSubs = subscribeServerTick(autoIOSubs, this::autoIO);
+        } else if (autoIOSubs != null) {
+            autoIOSubs.unsubscribe();
+            autoIOSubs = null;
+        }
+    }
+
+    protected void autoIO() {
+        if (getOffsetTimer() % 5 == 0) {
+            if (isWorkingEnabled()) {
+                if (io == IO.OUT) {
+                    fluidTank.exportToNearby(getFrontFacing());
+                } else if (io == IO.IN) {
+                    fluidTank.importFromNearby(getFrontFacing());
+                } else if (io == IO.BOTH) {
+                    fluidTank.importFromNearby(getFrontFacing());
+                    fluidTank.exportToNearby(getFrontFacing().getOpposite());
+                }
+            }
+            updateTankSubscription();
+        }
+    }
     // GUI
     @Override
     public ModularUI createUI(Player entityPlayer) {
