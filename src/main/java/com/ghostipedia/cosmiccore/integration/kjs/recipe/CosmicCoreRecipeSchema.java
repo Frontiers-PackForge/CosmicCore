@@ -2,9 +2,12 @@ package com.ghostipedia.cosmiccore.integration.kjs.recipe;
 
 import com.ghostipedia.cosmiccore.api.capability.recipe.SoulRecipeCapability;
 
+import com.ghostipedia.cosmiccore.api.capability.recipe.SterileRecipeCapability;
 import com.gregtechceu.gtceu.api.recipe.ingredient.FluidIngredient;
 import com.gregtechceu.gtceu.integration.kjs.recipe.GTRecipeSchema;
 
+import com.gregtechceu.gtceu.integration.kjs.recipe.components.GTRecipeComponents;
+import dev.latvian.mods.kubejs.fluid.FluidStackJS;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 
@@ -27,12 +30,8 @@ public interface CosmicCoreRecipeSchema {
             return this.output(SoulRecipeCapability.CAP, souls);
         }
 
-        public GTRecipeSchema.GTRecipeJS sterileInput(FluidStack stack) {
-            return this.input(SoulRecipeCapability.CAP, FluidIngredient.of(stack));
-        }
-
-        public GTRecipeSchema.GTRecipeJS sterileInput(Fluid fluid, int amount) {
-            return this.input(SoulRecipeCapability.CAP, FluidIngredient.of(fluid, amount));
+        public GTRecipeSchema.GTRecipeJS sterileInput(GTRecipeComponents.FluidIngredientJS stack) {
+            return this.input(SterileRecipeCapability.CAP, stack);
         }
 
         public GTRecipeSchema.GTRecipeJS magnetStats(int minField, int decayRate, boolean perTick) {
