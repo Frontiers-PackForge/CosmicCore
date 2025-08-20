@@ -25,6 +25,23 @@ public class CosmicCoreRecipes {
                 .duration(40)
                 .EUt(GTValues.VA[GTValues.HV])
                 .save(provider);
+
+        // TEST RECIPE FOR STERILE HATCHES, REMOVE LATER
+        /*
+         * LARGE_CENTRIFUGE.getRecipeTypes()[0].recipeBuilder("sterile_test_recipe_normal")
+         * .input(SterileRecipeCapability.CAP, FluidIngredient.of(Chlorine.getFluid(15)))
+         * .inputItems(Items.COBBLESTONE, 1)
+         * .outputItems(Items.STONE, 1)
+         * .save(provider);
+         * LARGE_CENTRIFUGE.getRecipeTypes()[0].recipeBuilder("sterile_test_recipe_per_tick")
+         * .perTick(true)
+         * .input(SterileRecipeCapability.CAP, FluidIngredient.of(Chlorine.getFluid(15)))
+         * .perTick(false)
+         * .inputItems(Items.OAK_LOG, 1)
+         * .outputItems(Items.STONE, 1)
+         * .save(provider);
+         */
+
         // GROVE_RECIPES.recipeBuilder("dirt_movement")
         // .input(SoulRecipeCapability.CAP, 100)
         // .notConsumable(CosmicItems.DONK)
