@@ -85,8 +85,8 @@ public class CosmicLangHandler extends LangHandler {
         // recipe stuff
         provider.add("cosmiccore.recipe.soul_in", "Soul Input: %s");
         provider.add("cosmiccore.recipe.soul_out", "Soul Output: %s");
-        provider.add("cosmiccore.recipe.sterile_in", "Sterile Input: %s %s");
-        provider.add("cosmiccore.recipe.sterile_out", "Sterile Output: %s %s");
+        provider.add("cosmiccore.recipe.sterile_in", "Sterilizer: %s %s");
+        provider.add("cosmiccore.recipe.sterile_out", "ERROR?");
         provider.add("cosmiccore.wire_coil.magnet_capacity", "  §fMax Field Strength: §f%s Tesla");
         provider.add("cosmiccore.wire_coil.magnet_regen", "  §5Field Regen Rate: %s Tesla/t");
         provider.add("cosmiccore.wire_coil.eu_multiplier", "  §aMagnet EU Cost: §c%s EU/t");
