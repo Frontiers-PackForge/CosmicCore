@@ -618,7 +618,6 @@ public class CosmicMachines {
             .tier(ZPM)
             .overlayTieredHullModel("cleaning_cover")
             .abilities(STERILIZE_HATCH)
-
             .register();
 
     public static void init() {

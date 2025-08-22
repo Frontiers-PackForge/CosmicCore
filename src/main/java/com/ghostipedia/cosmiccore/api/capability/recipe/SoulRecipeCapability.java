@@ -62,10 +62,10 @@ public class SoulRecipeCapability extends RecipeCapability<Integer> {
         int soul = contents.stream().map(Content::getContent).mapToInt(SoulRecipeCapability.CAP::of).sum();
         if (isInput) {
             group.addWidget(new LabelWidget(3 - xOffset, yOffset.addAndGet(10),
-                    LocalizationUtils.format("cosmiccore.recipe.soulIn", soul)));
+                    LocalizationUtils.format("cosmiccore.recipe.soul_in", soul)));
         } else {
             group.addWidget(new LabelWidget(3 - xOffset, yOffset.addAndGet(10),
-                    LocalizationUtils.format("cosmiccore.recipe.soulOut", soul)));
+                    LocalizationUtils.format("cosmiccore.recipe.soul_out", soul)));
         }
     }
 }

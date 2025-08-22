@@ -1,8 +1,10 @@
 package com.ghostipedia.cosmiccore.integration.kjs.recipe;
 
 import com.ghostipedia.cosmiccore.api.capability.recipe.SoulRecipeCapability;
+import com.ghostipedia.cosmiccore.api.capability.recipe.SterileRecipeCapability;
 
 import com.gregtechceu.gtceu.integration.kjs.recipe.GTRecipeSchema;
+import com.gregtechceu.gtceu.integration.kjs.recipe.components.GTRecipeComponents;
 
 import dev.latvian.mods.kubejs.recipe.schema.RecipeSchema;
 import lombok.experimental.Accessors;
@@ -21,6 +23,10 @@ public interface CosmicCoreRecipeSchema {
 
         public GTRecipeSchema.GTRecipeJS soulOutput(int souls) {
             return this.output(SoulRecipeCapability.CAP, souls);
+        }
+
+        public GTRecipeSchema.GTRecipeJS sterileInput(GTRecipeComponents.FluidIngredientJS stack) {
+            return this.input(SterileRecipeCapability.CAP, stack.ingredient());
         }
 
         public GTRecipeSchema.GTRecipeJS magnetStats(int minField, int decayRate, boolean perTick) {

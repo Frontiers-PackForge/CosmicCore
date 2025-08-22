@@ -1,25 +1,18 @@
 package com.ghostipedia.cosmiccore.common.data.recipe;
 
 import com.ghostipedia.cosmiccore.common.machine.multiblock.electric.MagneticFieldMachine;
-import com.ghostipedia.cosmiccore.common.machine.multiblock.part.SterilizationHatchPartMachine;
 
-import com.gregtechceu.gtceu.api.capability.recipe.FluidRecipeCapability;
 import com.gregtechceu.gtceu.api.capability.recipe.IO;
 import com.gregtechceu.gtceu.api.capability.recipe.ItemRecipeCapability;
-import com.gregtechceu.gtceu.api.data.tag.TagUtil;
 import com.gregtechceu.gtceu.api.machine.MetaMachine;
 import com.gregtechceu.gtceu.api.machine.feature.IRecipeLogicMachine;
-import com.gregtechceu.gtceu.api.machine.feature.multiblock.IMultiController;
 import com.gregtechceu.gtceu.api.machine.multiblock.WorkableMultiblockMachine;
 import com.gregtechceu.gtceu.api.recipe.GTRecipe;
 import com.gregtechceu.gtceu.api.recipe.RecipeHelper;
-import com.gregtechceu.gtceu.api.recipe.content.Content;
 import com.gregtechceu.gtceu.api.recipe.content.ContentModifier;
-import com.gregtechceu.gtceu.api.recipe.ingredient.FluidIngredient;
 import com.gregtechceu.gtceu.api.recipe.modifier.ModifierFunction;
 import com.gregtechceu.gtceu.api.recipe.modifier.ParallelLogic;
 import com.gregtechceu.gtceu.api.recipe.modifier.RecipeModifier;
-import com.gregtechceu.gtceu.common.data.GTMaterials;
 
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
@@ -28,10 +21,7 @@ import net.minecraft.world.item.ItemStack;
 
 import org.jetbrains.annotations.NotNull;
 
-import java.util.ArrayList;
 import java.util.Collections;
-
-import static com.gregtechceu.gtceu.api.fluids.store.FluidStorageKeys.PLASMA;
 
 public class CosmicRecipeModifiers {
 
@@ -104,26 +94,42 @@ public class CosmicRecipeModifiers {
                 .build();
     }
 
-    public static @NotNull ModifierFunction sterileHatch(@NotNull MetaMachine machine, @NotNull GTRecipe recipe) {
-        if (machine instanceof IMultiController controller && controller.isFormed()) {
-            var parts = controller.getParts();
-            var sterileHatch = parts.stream()
-                    .filter(part -> part instanceof SterilizationHatchPartMachine)
-                    .findAny();
-            if (sterileHatch.isPresent()) {
-                var copy = recipe.copy();
-                var inputs = copy.tickInputs.getOrDefault(FluidRecipeCapability.CAP, new ArrayList<>());
-                var fluidStack = GTMaterials.Chlorine.getFluid(PLASMA, 15);
-                inputs.add(new Content(FluidIngredient.of(
-                        TagUtil.createFluidTag(BuiltInRegistries.FLUID.getKey(fluidStack.getFluid()).getPath()),
-                        fluidStack.getAmount(), fluidStack.getTag()), 10000, 10000, 0));
-                copy.tickInputs.put(FluidRecipeCapability.CAP, inputs);
-                return (c) -> copy;
-            }
-            return ModifierFunction.IDENTITY;
-        }
-        return ModifierFunction.NULL;
-    }
+    /*
+     * public static @NotNull BiFunction<MetaMachine, GTRecipe, ModifierFunction> sterileHatch(FluidStack stack, boolean
+     * perTick) {
+     * return (machine, recipe) -> {
+     * if (machine instanceof IMultiController controller && controller.isFormed()) {
+     * var parts = controller.getParts();
+     * var sterileHatch = parts.stream()
+     * .filter(part -> part instanceof SterilizationHatchPartMachine)
+     * .findAny();
+     * if (sterileHatch.isPresent()) {
+     * var copy = recipe.copy();
+     * 
+     * // Change the tickInputs or inputs depending on perTick
+     * var inputsMap = perTick ?
+     * copy.tickInputs :
+     * copy.inputs;
+     * var inputs = inputsMap.getOrDefault(FluidRecipeCapability.CAP, new ArrayList<>());
+     * 
+     * inputs.add(new Content(FluidIngredient.of(
+     * TagUtil.createFluidTag(BuiltInRegistries.FLUID.getKey(stack.getFluid()).getPath()),
+     * stack.getAmount(), stack.getTag()), 10000, 10000, 0));
+     * 
+     * if(perTick) {
+     * inputsMap.put(FluidRecipeCapability.CAP, inputs);
+     * } else {
+     * inputsMap.put(FluidRecipeCapability.CAP, inputs);
+     * }
+     * return (c) -> copy;
+     * }
+     * return ModifierFunction.IDENTITY;
+     * }
+     * return ModifierFunction.NULL;
+     * };
+     * }
+     */
+
     // .recipeModifiers(true,
     // (machine, recipe, OCParams, OCResult) -> {
     // if (machine instanceof IRecipeCapabilityHolder holder) {

@@ -25,6 +25,7 @@ public class CosmicCoreRecipes {
                 .duration(40)
                 .EUt(GTValues.VA[GTValues.HV])
                 .save(provider);
+
         // GROVE_RECIPES.recipeBuilder("dirt_movement")
         // .input(SoulRecipeCapability.CAP, 100)
         // .notConsumable(CosmicItems.DONK)
