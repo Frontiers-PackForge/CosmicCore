@@ -110,7 +110,22 @@ public class CosmicRecipeModifiers {
         }
         return ModifierFunction.IDENTITY;
     }
+    public static @NotNull ModifierFunction innateParallel64(MetaMachine machine, GTRecipe recipe) {
+        if (machine instanceof WorkableMultiblockMachine parallelMachine) {
+            if (parallelMachine.getParallelHatch().isPresent()) {
+                int actualParallel = ParallelLogic.getParallelAmount(parallelMachine, recipe,
+                        parallelMachine.getParallelHatch().get().getCurrentParallel() * 64);
 
+                return ModifierFunction.builder()
+                        .modifyAllContents(ContentModifier.multiplier(actualParallel))
+                        .eutMultiplier(actualParallel)
+                        .parallels(actualParallel)
+                        // .durationMultiplier(actualParallel/4f)
+                        .build();
+            }
+        }
+        return ModifierFunction.IDENTITY;
+    }
     /*
      * public static @NotNull BiFunction<MetaMachine, GTRecipe, ModifierFunction> sterileHatch(FluidStack stack, boolean
      * perTick) {
