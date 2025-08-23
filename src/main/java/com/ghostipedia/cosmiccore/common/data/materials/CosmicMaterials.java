@@ -248,25 +248,25 @@ public class CosmicMaterials {
                 .buildAndRegister();
         // TODO - Colors , Textures, Fluid Textures, they're all gonna look the same in game for now.
         // TODO - Infinity Line Scripts On KubeJS side.
-        Potential = new Material.Builder(CosmicCore.id("potential"))
-                .dust()
-                .liquid(new FluidBuilder().temperature(1500))
-                .color(0x828282).secondaryColor(0x5e0f3d).iconSet(MaterialIconSet.BRIGHT)
-                .flags(DISABLE_DECOMPOSITION)
-                .buildAndRegister();
-        FalseInfinity = new Material.Builder(CosmicCore.id("false_infinity"))
-                .liquid(new FluidBuilder().temperature(3500))
-                .color(0x508582).secondaryColor(0x5e0f3d).iconSet(MaterialIconSet.BRIGHT)
-                .flags(DISABLE_DECOMPOSITION)
-                .buildAndRegister();
-        SuitableInfinity = new Material.Builder(CosmicCore.id("suitable_infinity"))
-                .liquid(new FluidBuilder().temperature(7900))
-                .color(0x508582).secondaryColor(0x5e0f3d).iconSet(MaterialIconSet.BRIGHT)
-                .flags(DISABLE_DECOMPOSITION)
-                .buildAndRegister();
+//        Potential = new Material.Builder(CosmicCore.id("potential"))
+//                .dust()
+//                .liquid(new FluidBuilder().temperature(1500))
+//                .color(0x828282).secondaryColor(0x5e0f3d).iconSet(MaterialIconSet.BRIGHT)
+//                .flags(DISABLE_DECOMPOSITION)
+//                .buildAndRegister();
+//        FalseInfinity = new Material.Builder(CosmicCore.id("false_infinity"))
+//                .liquid(new FluidBuilder().temperature(3500))
+//                .color(0x508582).secondaryColor(0x5e0f3d).iconSet(MaterialIconSet.BRIGHT)
+//                .flags(DISABLE_DECOMPOSITION)
+//                .buildAndRegister();
+//        SuitableInfinity = new Material.Builder(CosmicCore.id("suitable_infinity"))
+//                .liquid(new FluidBuilder().temperature(7900))
+//                .color(0x508582).secondaryColor(0x5e0f3d).iconSet(MaterialIconSet.BRIGHT)
+//                .flags(DISABLE_DECOMPOSITION)
+//                .buildAndRegister();
         // TODO - Actual Textures for the entire material set... Let's do something that isn't the typical rainbow
         // infinity, maybe make it something special.
-        LogicalInfinity = new Material.Builder(CosmicCore.id("logical_infinity"))
+        LogicalInfinity = new Material.Builder(CosmicCore.id("infinity"))
                 .ingot()
                 .liquid(new FluidBuilder().temperature(10750))
                 .iconSet(CosmicMaterialSet.INFINITY)
