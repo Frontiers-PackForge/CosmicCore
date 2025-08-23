@@ -144,8 +144,6 @@ public class CosmicMachines {
             CosmicParallelHatchPartMachine::new,
             (tier, builder) -> builder
                     .langValue(switch (tier) {
-                        case 7 -> "Ultimate";
-                        case 8 -> "Super";
                         case 9 -> "Extreme";
                         case 10 -> "WarpTech";
                         case 15 -> "Paradox";
@@ -619,7 +617,18 @@ public class CosmicMachines {
             .register();
 
     public static final MachineDefinition STERILIZATION_HATCH = REGISTRATE
-            .machine("sterilization_hatch", (holder) -> new SterilizationHatchPartMachine(holder, ZPM, IO.IN))
+            .machine("sterilization_hatch", (holder) -> new SterilizationHatchPartMachine(holder, ZPM, IO.IN, 16000))
+            .langValue("Sterilzation Hatch")
+            .rotationState(RotationState.ALL)
+            .tier(ZPM)
+            .modelProperty(GTMachineModelProperties.IS_FORMED, false)
+            .overlayTieredHullModel("cleaning_cover")
+            .abilities(STERILIZE_HATCH)
+            .register();
+
+    public static final MachineDefinition HUGE_STERILIZATION_HATCH = REGISTRATE
+            .machine("huge_sterilization_hatch",
+                    (holder) -> new SterilizationHatchPartMachine(holder, ZPM, IO.IN, 16000))
             .langValue("Sterilzation Hatch")
             .rotationState(RotationState.ALL)
             .tier(ZPM)

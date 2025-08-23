@@ -1,4 +1,4 @@
-package com.ghostipedia.cosmiccore.common.machine.multiblock;
+package com.ghostipedia.cosmiccore.common.machine.multiblock.multi.logic;
 
 import com.ghostipedia.cosmiccore.common.data.materials.CosmicMaterials;
 

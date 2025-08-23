@@ -65,7 +65,7 @@ public class CosmicRecipeModifiers {
                         .modifyAllContents(ContentModifier.multiplier(actualParallel))
                         .eutMultiplier(actualParallel * 0.75F)
                         .parallels(actualParallel)
-                        .durationMultiplier(actualParallel / 2F * 0.25F)
+                        .durationMultiplier(actualParallel / 8F)
                         .build();
             }
         }
@@ -92,6 +92,23 @@ public class CosmicRecipeModifiers {
         return ModifierFunction.builder()
                 .outputModifier(ContentModifier.multiplier(multiplier))
                 .build();
+    }
+
+    public static @NotNull ModifierFunction innateParallel(MetaMachine machine, GTRecipe recipe) {
+        if (machine instanceof WorkableMultiblockMachine parallelMachine) {
+            if (parallelMachine.getParallelHatch().isPresent()) {
+                int actualParallel = ParallelLogic.getParallelAmount(parallelMachine, recipe,
+                        parallelMachine.getParallelHatch().get().getCurrentParallel() * 4);
+
+                return ModifierFunction.builder()
+                        .modifyAllContents(ContentModifier.multiplier(actualParallel))
+                        .eutMultiplier(actualParallel)
+                        .parallels(actualParallel)
+                        // .durationMultiplier(actualParallel/4f)
+                        .build();
+            }
+        }
+        return ModifierFunction.IDENTITY;
     }
 
     /*

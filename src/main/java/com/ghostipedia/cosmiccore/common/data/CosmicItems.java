@@ -165,13 +165,22 @@ public class CosmicItems {
             .defaultModel()
             .register();
 
-    // public static final ItemEntry<ComponentItem> FUSION_MODULES_MK2 = REGISTRATE.item("fusion_mod_2",
-    // ComponentItem::create)
-    // .lang("Fusion Module Mk.2")
-    // .properties(p -> p.stacksTo(1))
-    // .tag()
-    // .defaultModel()
-    // .register();
+    public static final ItemEntry<ComponentItem> HARMONICALLY_TUNED_CIRCUIT_BOARD = REGISTRATE
+            .item("harmonically_tuned_circuit_board",
+                    ComponentItem::create)
+            .lang("Fusion Module Mk.2")
+            .properties(p -> p.stacksTo(64))
+            .tag()
+            .defaultModel()
+            .register();
+    public static final ItemEntry<ComponentItem> HARMONICALLY_TUNED_PRINTED_CIRCUIT_BOARD = REGISTRATE
+            .item("harmonically_tuned_printed_circuit_board",
+                    ComponentItem::create)
+            .lang("Fusion Module Mk.2")
+            .properties(p -> p.stacksTo(64))
+            .tag()
+            .defaultModel()
+            .register();
 
     // Drone Frames
     public static final ItemEntry<ComponentItem> DRONE_FRAME_1 = REGISTRATE.item("drone_frame_1", ComponentItem::create)

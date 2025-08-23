@@ -39,6 +39,7 @@
     "ae2.eudisplay.EUAddSettingMixin",
     "client.CosmicCoreRemainingAirOverlayMixin",
     "emi.EmiApiMixin",
+    "gtceu.ParallelProviderMixin",
     "lso.FrostbiteEffectMixin",
     "lso.HeatstrokeEffectMixin",
     "lso.TemperatureCapabilityMixin"

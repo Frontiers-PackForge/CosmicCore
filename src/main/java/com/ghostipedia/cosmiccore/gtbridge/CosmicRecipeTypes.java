@@ -41,6 +41,11 @@ public class CosmicRecipeTypes {
             .setMaxIOSize(1, 1, 1, 1)
             .setProgressBar(GuiTextures.PROGRESS_BAR_ARROW, ProgressTexture.FillDirection.LEFT_TO_RIGHT);
 
+    public static final GTRecipeType PCB_FABRICATOR = GTRecipeTypes
+            .register("pcb_fab", ELECTRIC)
+            .setMaxIOSize(8, 1, 4, 0)
+            .setProgressBar(GuiTextures.PROGRESS_BAR_ARROW_MULTIPLE, ProgressTexture.FillDirection.LEFT_TO_RIGHT);
+
     public static final GTRecipeType SOUL_TESTER_RECIPES = GTRecipeTypes
             .register("soul_tester", GTRecipeTypes.MULTIBLOCK)
             .setMaxSize(IO.IN, SoulRecipeCapability.CAP, 1)

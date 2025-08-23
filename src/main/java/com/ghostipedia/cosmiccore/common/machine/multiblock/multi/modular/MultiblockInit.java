@@ -18,6 +18,7 @@ public class MultiblockInit {
         HemophagicTransfuser.init();
         PlasmiteDistillery.init();
         HeavyAssembler.init();
+        PCBFoundry.init();
         WelderMulti.init();
         StarLadder.init();
         VoidMiner.init();

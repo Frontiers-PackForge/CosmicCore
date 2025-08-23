@@ -117,6 +117,11 @@ public class CosmicLangHandler extends LangHandler {
         provider.add("cosmiccore.multiblock.cleaning_status", "§aCleaning Status: %s");
         provider.add("cosmiccore.multiblock.cleaning_status.error", "§cCleaning Status: §4No Cleaning Agent!");
 
+        provider.add("cosmic.multiblock.parallel", "Overloading Parallels by 4x" + "\nMax Parallel: %d" + "\nOriginal Parallel: %d");
+        provider.add("cosmic.multiblock.parallel.exact", "Performing %d Recipes in Parallel");
+
+
+
         provider.add("cosmiccore.multiblock.fuel_star", "§a§lFuel Star Core");
         provider.add("cosmiccore.multiblock.send_orbit_data", "§a§lSend Research Payload");
         provider.add("cosmiccore.multiblock.iris.star_stage_empty", "§aStar Core Stage§f: §6Compressed Gas Cloud");
@@ -322,6 +327,8 @@ public class CosmicLangHandler extends LangHandler {
         // JADE
         provider.add("config.jade.plugin_cosmiccore.drone_station", "[CC] Drone Station");
         provider.add("config.jade.plugin_cosmiccore.drone_maintenance_interface", "[CC] Drone Maintenance Interface");
+
+        provider.add("config.jade.plugin_cosmiccore.parallel_info_cc", "[CC] Parallel Info");
 
         provider.add("debug.owner.uuid", "§aOwner UUID:§a %s");
         provider.add("debug.team.uuid", "§aTeam UUID:§a %s");

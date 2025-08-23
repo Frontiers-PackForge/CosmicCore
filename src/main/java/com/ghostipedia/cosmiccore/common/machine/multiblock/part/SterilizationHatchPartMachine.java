@@ -42,9 +42,9 @@ public class SterilizationHatchPartMachine extends TieredIOPartMachine
     protected ISubscription tankSubs;
     public final NotifiableFluidTank fluidTank;
 
-    public SterilizationHatchPartMachine(IMachineBlockEntity holder, int tier, IO io) {
+    public SterilizationHatchPartMachine(IMachineBlockEntity holder, int tier, IO io, int tankSize) {
         super(holder, tier, io);
-        fluidTank = new NotifiableSterileTank(this, 1, 4000, IO.IN, IO.IN);
+        fluidTank = new NotifiableSterileTank(this, 1, tankSize, IO.IN, IO.IN);
     }
 
     @Override
