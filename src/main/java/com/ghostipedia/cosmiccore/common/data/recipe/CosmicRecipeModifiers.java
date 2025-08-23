@@ -110,6 +110,7 @@ public class CosmicRecipeModifiers {
         }
         return ModifierFunction.IDENTITY;
     }
+
     public static @NotNull ModifierFunction innateParallel64(MetaMachine machine, GTRecipe recipe) {
         if (machine instanceof WorkableMultiblockMachine parallelMachine) {
             if (parallelMachine.getParallelHatch().isPresent()) {

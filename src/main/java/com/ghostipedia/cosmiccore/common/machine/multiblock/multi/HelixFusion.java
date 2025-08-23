@@ -2,15 +2,12 @@ package com.ghostipedia.cosmiccore.common.machine.multiblock.multi;
 
 import com.ghostipedia.cosmiccore.CosmicCore;
 import com.ghostipedia.cosmiccore.api.machine.part.CosmicPartAbility;
-import com.ghostipedia.cosmiccore.common.data.CosmicBlocks;
 import com.ghostipedia.cosmiccore.common.data.recipe.CosmicRecipeModifiers;
 import com.ghostipedia.cosmiccore.common.machine.multiblock.multi.logic.HelixFusionMachine;
-import com.ghostipedia.cosmiccore.common.machine.multiblock.multi.logic.PCBFoundryMachine;
 import com.ghostipedia.cosmiccore.gtbridge.CosmicRecipeTypes;
+
 import com.gregtechceu.gtceu.GTCEu;
 import com.gregtechceu.gtceu.api.data.RotationState;
-import com.gregtechceu.gtceu.api.data.chemical.ChemicalHelper;
-import com.gregtechceu.gtceu.api.data.tag.TagPrefix;
 import com.gregtechceu.gtceu.api.machine.MultiblockMachineDefinition;
 import com.gregtechceu.gtceu.api.machine.multiblock.PartAbility;
 import com.gregtechceu.gtceu.api.pattern.FactoryBlockPattern;
@@ -26,12 +23,12 @@ import static com.gregtechceu.gtceu.api.pattern.Predicates.blocks;
 
 public class HelixFusion {
 
-    public final static MultiblockMachineDefinition PCB_FOUNDRY = REGISTRATE
+    public final static MultiblockMachineDefinition TITAN_FUSION_REACTOR = REGISTRATE
             .multiblock("titan_fusion_reactor",
                     HelixFusionMachine::new)
             .langValue("§9Titan Fusion Reactor")
             .rotationState(RotationState.NON_Y_AXIS)
-            .recipeType(CosmicRecipeTypes.PCB_FABRICATOR)
+            .recipeType(CosmicRecipeTypes.HELIX_FUSION_RECIPES)
             .appearanceBlock(OSCILLATING_GILDED_PTHANTERUM_CASING)
             .partAppearance((controller, part, side) -> OSCILLATING_GILDED_PTHANTERUM_CASING.getDefaultState())
             .recipeModifiers(CosmicRecipeModifiers::innateParallel64,
@@ -85,5 +82,4 @@ public class HelixFusion {
             .register();
 
     public static void init() {}
-
 }
