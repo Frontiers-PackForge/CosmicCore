@@ -117,10 +117,9 @@ public class CosmicLangHandler extends LangHandler {
         provider.add("cosmiccore.multiblock.cleaning_status", "§aCleaning Status: %s");
         provider.add("cosmiccore.multiblock.cleaning_status.error", "§cCleaning Status: §4No Cleaning Agent!");
 
-        provider.add("cosmic.multiblock.parallel", "Overloading Parallels by 4x" + "\nMax Parallel: %d" + "\nOriginal Parallel: %d");
+        provider.add("cosmic.multiblock.parallel",
+                "Overloading Parallels by 4x" + "\nMax Parallel: %d" + "\nOriginal Parallel: %d");
         provider.add("cosmic.multiblock.parallel.exact", "Performing %d Recipes in Parallel");
-
-
 
         provider.add("cosmiccore.multiblock.fuel_star", "§a§lFuel Star Core");
         provider.add("cosmiccore.multiblock.send_orbit_data", "§a§lSend Research Payload");

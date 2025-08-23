@@ -2,8 +2,8 @@ package com.ghostipedia.cosmiccore.integration.jade;
 
 import com.ghostipedia.cosmiccore.integration.jade.provider.DroneMaintenanceInterfaceProvider;
 import com.ghostipedia.cosmiccore.integration.jade.provider.DroneStationProvider;
-
 import com.ghostipedia.cosmiccore.integration.jade.provider.PCBParallelProvider;
+
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 
@@ -28,6 +28,4 @@ public class CCJadePlugin implements IWailaPlugin {
         registration.registerBlockComponent(new DroneMaintenanceInterfaceProvider(), Block.class);
         registration.registerBlockComponent(new PCBParallelProvider(), Block.class);
     }
-
-
 }

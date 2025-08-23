@@ -1,20 +1,19 @@
 package com.ghostipedia.cosmiccore.integration.jade.provider;
 
 import com.ghostipedia.cosmiccore.CosmicCore;
-import com.ghostipedia.cosmiccore.api.machine.multiblock.DroneStationMachine;
 import com.ghostipedia.cosmiccore.common.machine.multiblock.multi.logic.PCBFoundryMachine;
-import com.gregtechceu.gtceu.GTCEu;
+
 import com.gregtechceu.gtceu.api.blockentity.MetaMachineBlockEntity;
 import com.gregtechceu.gtceu.api.capability.IParallelHatch;
-import com.gregtechceu.gtceu.api.machine.feature.IRecipeLogicMachine;
 import com.gregtechceu.gtceu.api.machine.feature.multiblock.IMultiController;
 import com.gregtechceu.gtceu.common.machine.multiblock.part.ParallelHatchPartMachine;
-import com.gregtechceu.gtceu.integration.jade.provider.CapabilityBlockProvider;
 import com.gregtechceu.gtceu.utils.FormattingUtil;
+
 import net.minecraft.ChatFormatting;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
+
 import snownee.jade.api.BlockAccessor;
 import snownee.jade.api.IBlockComponentProvider;
 import snownee.jade.api.IServerDataProvider;
@@ -40,25 +39,27 @@ public class PCBParallelProvider implements IBlockComponentProvider, IServerData
     @Override
     public void appendServerData(CompoundTag compoundTag, BlockAccessor blockAccessor) {
         if (blockAccessor.getBlockEntity() instanceof MetaMachineBlockEntity blockEntity) {
-            if (blockEntity.getMetaMachine() instanceof IParallelHatch parallelHatch ) {
-                if (parallelHatch instanceof ParallelHatchPartMachine multiParallelHatch){
+            if (blockEntity.getMetaMachine() instanceof IParallelHatch parallelHatch) {
+                if (parallelHatch instanceof ParallelHatchPartMachine multiParallelHatch) {
                     if (multiParallelHatch.getControllers().size() == 1) {
                         if (multiParallelHatch.getControllers().first() instanceof PCBFoundryMachine multiContoller) {
-                            compoundTag.putInt("parallelCosmic", parallelHatch.getCurrentParallel()*4);
+                            compoundTag.putInt("parallelCosmic", parallelHatch.getCurrentParallel() * 4);
                         }
                     }
                 }
-            } else if (blockEntity.getMetaMachine() instanceof IMultiController controller && controller instanceof PCBFoundryMachine foundryMachine) {
-                if (foundryMachine.getRecipeLogic().isActive() &&
-                        foundryMachine.getRecipeLogic().getLastRecipe() != null) {
-                    compoundTag.putInt("parallelCosmic", foundryMachine.getRecipeLogic().getLastRecipe().parallels);
-                    compoundTag.putBoolean("exact", true);
-                } else {
-                    controller.getParallelHatch()
-                            .ifPresent(parallelHatch -> compoundTag.putInt("parallelCosmic",
-                                    parallelHatch.getCurrentParallel() * 4));
-                }
-            }
+            } else if (blockEntity.getMetaMachine() instanceof IMultiController controller &&
+                    controller instanceof PCBFoundryMachine foundryMachine) {
+                        if (foundryMachine.getRecipeLogic().isActive() &&
+                                foundryMachine.getRecipeLogic().getLastRecipe() != null) {
+                            compoundTag.putInt("parallelCosmic",
+                                    foundryMachine.getRecipeLogic().getLastRecipe().parallels);
+                            compoundTag.putBoolean("exact", true);
+                        } else {
+                            controller.getParallelHatch()
+                                    .ifPresent(parallelHatch -> compoundTag.putInt("parallelCosmic",
+                                            parallelHatch.getCurrentParallel() * 4));
+                        }
+                    }
         }
     }
 

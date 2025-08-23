@@ -44,7 +44,7 @@ public class PCBFoundryMachine extends WorkableElectricMultiblockMachine impleme
             if (numParallels > 1) {
                 Component parallels = Component.literal(FormattingUtil.formatNumbers(numParallels))
                         .withStyle(ChatFormatting.GOLD);
-                Component parallelsClassic = Component.literal(FormattingUtil.formatNumbers(numParallels/4))
+                Component parallelsClassic = Component.literal(FormattingUtil.formatNumbers(numParallels / 4))
                         .withStyle(ChatFormatting.DARK_PURPLE);
                 String key = "cosmic.multiblock.parallel";
                 if (exact) key += ".exact";
