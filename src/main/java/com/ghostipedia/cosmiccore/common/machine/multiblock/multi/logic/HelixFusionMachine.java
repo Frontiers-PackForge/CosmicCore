@@ -20,6 +20,7 @@ import com.lowdragmc.lowdraglib.syncdata.annotation.DropSaved;
 import com.lowdragmc.lowdraglib.syncdata.annotation.Persisted;
 
 import com.lowdragmc.lowdraglib.syncdata.field.ManagedFieldHolder;
+import lombok.Getter;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Player;
@@ -32,11 +33,13 @@ public class HelixFusionMachine extends WorkableElectricMultiblockMachine implem
     @Persisted
     @DescSynced
     @DropSaved
+    @Getter
     private long EUSpent = 0L;
 
     @Persisted
     @DescSynced
     @DropSaved
+    @Getter
     private int reactorTier = 3;  // To 10, 7 Upgrades
 
 
@@ -59,7 +62,7 @@ public class HelixFusionMachine extends WorkableElectricMultiblockMachine implem
     long baseUpgrade = 1_000_000_000L;
     long cost = 1_000_000_000L;
     public void attemptUpgrade() {
-        long upgradeStep = clampLong((this.reactorTier-3) * 1_000_000_000L,1_000_000_000L,100_000_000_000_000L);
+        long upgradeStep = clampLong(this.reactorTier * 1_000_000_000L,1_000_000_000L,100_000_000_000_000L);
         cost = baseUpgrade + upgradeStep;
         if (EUSpent >= cost) {
             if (reactorTier == 10) {
@@ -141,7 +144,7 @@ public class HelixFusionMachine extends WorkableElectricMultiblockMachine implem
             // TODO: TRACK AND DISPLAY ORVEX APPROPRIATELY
             textList.add(Component.translatable("cosmic.multiblock.orvex_tier", Component.literal(FormattingUtil.formatNumberReadable(this.reactorTier)).withStyle(ChatFormatting.GOLD)));
             textList.add(Component.translatable("cosmic.multiblock.orvex_count",Component.literal(FormattingUtil.formatNumberReadable(this.EUSpent)).withStyle(ChatFormatting.AQUA)));
-            textList.add(Component.translatable("cosmic.multiblock.orvex_upgrade_requires", cost));
+            textList.add(Component.translatable("cosmic.multiblock.orvex_upgrade_requires", Component.literal(FormattingUtil.formatNumberReadable(this.cost)).withStyle(ChatFormatting.AQUA)));
             textList.add(Component.translatable("cosmic.multiblock.orvex_upgrade_check"));
         })
                 .addBatchModeLine(isBatchEnabled(), batchParallels)

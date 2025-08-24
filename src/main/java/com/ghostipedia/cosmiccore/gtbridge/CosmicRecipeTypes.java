@@ -48,7 +48,8 @@ public class CosmicRecipeTypes {
 
     public static final GTRecipeType HELIX_FUSION_RECIPES = GTRecipeTypes
             .register("helix_fusion", ELECTRIC)
-            .setMaxIOSize(2, 2, 2, 2)
+            .setMaxIOSize(3, 3, 3, 6)
+            .setSound(GTSoundEntries.REPLICATOR)
             .setProgressBar(GuiTextures.PROGRESS_BAR_ARROW_MULTIPLE, ProgressTexture.FillDirection.LEFT_TO_RIGHT);
 
     public static final GTRecipeType SOUL_TESTER_RECIPES = GTRecipeTypes

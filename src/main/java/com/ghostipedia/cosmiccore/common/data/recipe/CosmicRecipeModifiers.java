@@ -2,6 +2,7 @@ package com.ghostipedia.cosmiccore.common.data.recipe;
 
 import com.ghostipedia.cosmiccore.common.machine.multiblock.electric.MagneticFieldMachine;
 
+import com.ghostipedia.cosmiccore.common.machine.multiblock.multi.logic.HelixFusionMachine;
 import com.gregtechceu.gtceu.api.capability.recipe.IO;
 import com.gregtechceu.gtceu.api.capability.recipe.ItemRecipeCapability;
 import com.gregtechceu.gtceu.api.machine.MetaMachine;
@@ -111,20 +112,16 @@ public class CosmicRecipeModifiers {
         return ModifierFunction.IDENTITY;
     }
 
-    public static @NotNull ModifierFunction innateParallel64(MetaMachine machine, GTRecipe recipe) {
-        if (machine instanceof WorkableMultiblockMachine parallelMachine) {
-            if (parallelMachine.getParallelHatch().isPresent()) {
+    public static @NotNull ModifierFunction titanReactorParallel(MetaMachine machine, GTRecipe recipe) {
+        if (machine instanceof HelixFusionMachine parallelMachine) {
                 int actualParallel = ParallelLogic.getParallelAmount(parallelMachine, recipe,
-                        parallelMachine.getParallelHatch().get().getCurrentParallel() * 64);
-
+                         64 * (parallelMachine.getReactorTier()-2));
                 return ModifierFunction.builder()
                         .modifyAllContents(ContentModifier.multiplier(actualParallel))
                         .eutMultiplier(actualParallel)
                         .parallels(actualParallel)
-                        // .durationMultiplier(actualParallel/4f)
                         .build();
             }
-        }
         return ModifierFunction.IDENTITY;
     }
     /*

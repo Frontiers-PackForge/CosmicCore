@@ -31,8 +31,8 @@ public class HelixFusion {
             .recipeType(CosmicRecipeTypes.HELIX_FUSION_RECIPES)
             .appearanceBlock(OSCILLATING_GILDED_PTHANTERUM_CASING)
             .partAppearance((controller, part, side) -> OSCILLATING_GILDED_PTHANTERUM_CASING.getDefaultState())
-            .recipeModifiers(CosmicRecipeModifiers::innateParallel64,
-                    GTRecipeModifiers.ELECTRIC_OVERCLOCK.apply(OverclockingLogic.NON_PERFECT_OVERCLOCK_SUBTICK),
+            .recipeModifiers(CosmicRecipeModifiers::titanReactorParallel,
+                    GTRecipeModifiers.ELECTRIC_OVERCLOCK.apply(OverclockingLogic.PERFECT_OVERCLOCK),
                     GTRecipeModifiers.BATCH_MODE)
             // spotless:off
             .pattern(definition -> FactoryBlockPattern.start()
@@ -66,8 +66,7 @@ public class HelixFusion {
                             .or(autoAbilities())
                             .or(autoAbilities(CosmicRecipeTypes.HEAVY_ASSEMBLER))
                             .or(abilities(PartAbility.IMPORT_FLUIDS,PartAbility.IMPORT_FLUIDS_4X,PartAbility.IMPORT_FLUIDS_9X))
-                            .or(abilities(PartAbility.INPUT_ENERGY).setExactLimit(1))
-                            .or(abilities(PartAbility.PARALLEL_HATCH, CosmicPartAbility.COSMIC_PARALLEL_HATCH).setExactLimit(1))
+                            .or(abilities(PartAbility.INPUT_ENERGY,PartAbility.INPUT_LASER).setExactLimit(1))
                             .or(abilities(PartAbility.MAINTENANCE).setExactLimit(1))) //Part IO go here
                     .where('B', blocks(BICHROMAL_NEVRAMITE_CASING.get()))
                     .where('C', frames(GTMaterials.Neutronium))
