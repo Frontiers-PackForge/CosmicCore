@@ -4,6 +4,7 @@ import com.gregtechceu.gtceu.api.gui.GuiTextures;
 import com.gregtechceu.gtceu.api.gui.fancy.FancyMachineUIWidget;
 import com.gregtechceu.gtceu.api.machine.IMachineBlockEntity;
 import com.gregtechceu.gtceu.api.machine.feature.IRecipeLogicMachine;
+import com.gregtechceu.gtceu.api.machine.feature.ITieredMachine;
 import com.gregtechceu.gtceu.api.machine.feature.multiblock.IDisplayUIMachine;
 import com.gregtechceu.gtceu.api.machine.multiblock.MultiblockDisplayText;
 import com.gregtechceu.gtceu.api.machine.multiblock.WorkableElectricMultiblockMachine;
@@ -18,9 +19,11 @@ import com.lowdragmc.lowdraglib.syncdata.annotation.DescSynced;
 import com.lowdragmc.lowdraglib.syncdata.annotation.DropSaved;
 import com.lowdragmc.lowdraglib.syncdata.annotation.Persisted;
 
+import com.lowdragmc.lowdraglib.syncdata.field.ManagedFieldHolder;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Player;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
@@ -31,11 +34,41 @@ public class HelixFusionMachine extends WorkableElectricMultiblockMachine implem
     @DropSaved
     private long EUSpent = 0L;
 
+    @Persisted
+    @DescSynced
+    @DropSaved
+    private int reactorTier = 3;  // To 10, 7 Upgrades
+
+
+    @Persisted
+    @DescSynced
+    @DropSaved
+    private boolean canUpgrade = false;
+
+    protected static final ManagedFieldHolder MANAGED_FIELD_HOLDER = new ManagedFieldHolder(HelixFusionMachine.class,
+            WorkableElectricMultiblockMachine.MANAGED_FIELD_HOLDER);
+
+    @Override
+    @NotNull
+    public ManagedFieldHolder getFieldHolder() {
+        return MANAGED_FIELD_HOLDER;
+    }
     public HelixFusionMachine(IMachineBlockEntity holder) {
         super(holder);
     }
-
-    public void setStarStage() {}
+    long baseUpgrade = 1_000_000_000L;
+    long cost = 1_000_000_000L;
+    public void attemptUpgrade() {
+        long upgradeStep = clampLong((this.reactorTier-3) * 1_000_000_000L,1_000_000_000L,100_000_000_000_000L);
+        cost = baseUpgrade + upgradeStep;
+        if (EUSpent >= cost) {
+            if (reactorTier == 10) {
+                return;
+            }
+            EUSpent -= cost;
+            reactorTier++;
+        }
+    }
 
     @Override // IDEK if this does anything
     public ModularUI createUI(Player entityPlayer) {
@@ -69,7 +102,7 @@ public class HelixFusionMachine extends WorkableElectricMultiblockMachine implem
                 new GuiTextureGroup(
                         GuiTextures.BUTTON,
                         new TextTexture("Upgrade Reactor Tier")),
-                clickData -> setStarStage()));
+                clickData -> attemptUpgrade()));
         return group;
     }
 
@@ -85,7 +118,7 @@ public class HelixFusionMachine extends WorkableElectricMultiblockMachine implem
         } else {
             exact = false;
             numParallels = getParallelHatch()
-                    .map(c -> c.getCurrentParallel() * 64)
+                    .map(c -> c.getCurrentParallel() * 64 * reactorTier)
                     .orElse(0);
             batchParallels = 0;
         }
@@ -106,9 +139,9 @@ public class HelixFusionMachine extends WorkableElectricMultiblockMachine implem
         });
         builder.addCustom((components) -> {
             // TODO: TRACK AND DISPLAY ORVEX APPROPRIATELY
-            textList.add(Component.translatable("cosmic.multiblock.orvex_tier"));
+            textList.add(Component.translatable("cosmic.multiblock.orvex_tier", Component.literal(FormattingUtil.formatNumberReadable(this.reactorTier)).withStyle(ChatFormatting.GOLD)));
             textList.add(Component.translatable("cosmic.multiblock.orvex_count",Component.literal(FormattingUtil.formatNumberReadable(this.EUSpent)).withStyle(ChatFormatting.AQUA)));
-            textList.add(Component.translatable("cosmic.multiblock.orvex_upgrade_requires"));
+            textList.add(Component.translatable("cosmic.multiblock.orvex_upgrade_requires", cost));
             textList.add(Component.translatable("cosmic.multiblock.orvex_upgrade_check"));
         })
                 .addBatchModeLine(isBatchEnabled(), batchParallels)
@@ -134,5 +167,9 @@ public class HelixFusionMachine extends WorkableElectricMultiblockMachine implem
             }
             super.onRecipeFinish();
         }
+    }
+
+    public static long clampLong(long v, long min, long max) {
+        return Math.max(min, Math.min(v, max));
     }
 }
