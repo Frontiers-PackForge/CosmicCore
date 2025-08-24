@@ -1,7 +1,6 @@
 package com.ghostipedia.cosmiccore.common.machine.multiblock.multi;
 
 import com.ghostipedia.cosmiccore.CosmicCore;
-import com.ghostipedia.cosmiccore.api.machine.part.CosmicPartAbility;
 import com.ghostipedia.cosmiccore.common.data.recipe.CosmicRecipeModifiers;
 import com.ghostipedia.cosmiccore.common.machine.multiblock.multi.logic.HelixFusionMachine;
 import com.ghostipedia.cosmiccore.gtbridge.CosmicRecipeTypes;

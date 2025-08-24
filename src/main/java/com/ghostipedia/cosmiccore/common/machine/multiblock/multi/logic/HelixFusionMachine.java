@@ -4,7 +4,6 @@ import com.gregtechceu.gtceu.api.gui.GuiTextures;
 import com.gregtechceu.gtceu.api.gui.fancy.FancyMachineUIWidget;
 import com.gregtechceu.gtceu.api.machine.IMachineBlockEntity;
 import com.gregtechceu.gtceu.api.machine.feature.IRecipeLogicMachine;
-import com.gregtechceu.gtceu.api.machine.feature.ITieredMachine;
 import com.gregtechceu.gtceu.api.machine.feature.multiblock.IDisplayUIMachine;
 import com.gregtechceu.gtceu.api.machine.multiblock.MultiblockDisplayText;
 import com.gregtechceu.gtceu.api.machine.multiblock.WorkableElectricMultiblockMachine;
@@ -18,12 +17,13 @@ import com.lowdragmc.lowdraglib.gui.widget.*;
 import com.lowdragmc.lowdraglib.syncdata.annotation.DescSynced;
 import com.lowdragmc.lowdraglib.syncdata.annotation.DropSaved;
 import com.lowdragmc.lowdraglib.syncdata.annotation.Persisted;
-
 import com.lowdragmc.lowdraglib.syncdata.field.ManagedFieldHolder;
-import lombok.Getter;
+
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Player;
+
+import lombok.Getter;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
@@ -42,7 +42,6 @@ public class HelixFusionMachine extends WorkableElectricMultiblockMachine implem
     @Getter
     private int reactorTier = 3;  // To 10, 7 Upgrades
 
-
     @Persisted
     @DescSynced
     @DropSaved
@@ -56,13 +55,16 @@ public class HelixFusionMachine extends WorkableElectricMultiblockMachine implem
     public ManagedFieldHolder getFieldHolder() {
         return MANAGED_FIELD_HOLDER;
     }
+
     public HelixFusionMachine(IMachineBlockEntity holder) {
         super(holder);
     }
+
     long baseUpgrade = 1_000_000_000L;
     long cost = 1_000_000_000L;
+
     public void attemptUpgrade() {
-        long upgradeStep = clampLong(this.reactorTier * 1_000_000_000L,1_000_000_000L,100_000_000_000_000L);
+        long upgradeStep = clampLong(this.reactorTier * 1_000_000_000L, 1_000_000_000L, 100_000_000_000_000L);
         cost = baseUpgrade + upgradeStep;
         if (EUSpent >= cost) {
             if (reactorTier == 10) {
@@ -142,9 +144,12 @@ public class HelixFusionMachine extends WorkableElectricMultiblockMachine implem
         });
         builder.addCustom((components) -> {
             // TODO: TRACK AND DISPLAY ORVEX APPROPRIATELY
-            textList.add(Component.translatable("cosmic.multiblock.orvex_tier", Component.literal(FormattingUtil.formatNumberReadable(this.reactorTier)).withStyle(ChatFormatting.GOLD)));
-            textList.add(Component.translatable("cosmic.multiblock.orvex_count",Component.literal(FormattingUtil.formatNumberReadable(this.EUSpent)).withStyle(ChatFormatting.AQUA)));
-            textList.add(Component.translatable("cosmic.multiblock.orvex_upgrade_requires", Component.literal(FormattingUtil.formatNumberReadable(this.cost)).withStyle(ChatFormatting.AQUA)));
+            textList.add(Component.translatable("cosmic.multiblock.orvex_tier", Component
+                    .literal(FormattingUtil.formatNumberReadable(this.reactorTier)).withStyle(ChatFormatting.GOLD)));
+            textList.add(Component.translatable("cosmic.multiblock.orvex_count", Component
+                    .literal(FormattingUtil.formatNumberReadable(this.EUSpent)).withStyle(ChatFormatting.AQUA)));
+            textList.add(Component.translatable("cosmic.multiblock.orvex_upgrade_requires",
+                    Component.literal(FormattingUtil.formatNumberReadable(this.cost)).withStyle(ChatFormatting.AQUA)));
             textList.add(Component.translatable("cosmic.multiblock.orvex_upgrade_check"));
         })
                 .addBatchModeLine(isBatchEnabled(), batchParallels)
