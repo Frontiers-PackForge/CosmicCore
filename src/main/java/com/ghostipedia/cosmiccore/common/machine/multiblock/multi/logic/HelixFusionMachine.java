@@ -107,8 +107,7 @@ public class HelixFusionMachine extends WorkableElectricMultiblockMachine implem
         builder.addCustom((components) -> {
             // TODO: TRACK AND DISPLAY ORVEX APPROPRIATELY
             textList.add(Component.translatable("cosmic.multiblock.orvex_tier"));
-            textList.add(Component.translatable("cosmic.multiblock.eu_consumed", this.EUSpent));
-            textList.add(Component.translatable("cosmic.multiblock.orvex_count"));
+            textList.add(Component.translatable("cosmic.multiblock.orvex_count",Component.literal(FormattingUtil.formatNumberReadable(this.EUSpent)).withStyle(ChatFormatting.AQUA)));
             textList.add(Component.translatable("cosmic.multiblock.orvex_upgrade_requires"));
             textList.add(Component.translatable("cosmic.multiblock.orvex_upgrade_check"));
         })
