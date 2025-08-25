@@ -46,6 +46,12 @@ public class CosmicRecipeTypes {
             .setMaxIOSize(8, 1, 4, 0)
             .setProgressBar(GuiTextures.PROGRESS_BAR_ARROW_MULTIPLE, ProgressTexture.FillDirection.LEFT_TO_RIGHT);
 
+    public static final GTRecipeType HELIX_FUSION_RECIPES = GTRecipeTypes
+            .register("helix_fusion", ELECTRIC)
+            .setMaxIOSize(3, 3, 3, 6)
+            .setSound(GTSoundEntries.REPLICATOR)
+            .setProgressBar(GuiTextures.PROGRESS_BAR_ARROW_MULTIPLE, ProgressTexture.FillDirection.LEFT_TO_RIGHT);
+
     public static final GTRecipeType SOUL_TESTER_RECIPES = GTRecipeTypes
             .register("soul_tester", GTRecipeTypes.MULTIBLOCK)
             .setMaxSize(IO.IN, SoulRecipeCapability.CAP, 1)

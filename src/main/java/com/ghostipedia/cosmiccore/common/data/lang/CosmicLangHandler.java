@@ -121,6 +121,13 @@ public class CosmicLangHandler extends LangHandler {
                 "Overloading Parallels by 4x" + "\nMax Parallel: %d" + "\nOriginal Parallel: %d");
         provider.add("cosmic.multiblock.parallel.exact", "Performing %d Recipes in Parallel");
 
+        provider.add("cosmic.multiblock.parallel_fixed_64", "Max Parallel: %d");
+        provider.add("cosmic.multiblock.parallel_fixed_64.exact", "Performing %d Recipes in Parallel");
+        provider.add("cosmic.multiblock.orvex_tier", "§fReactor Tier§7: §6%s");
+        provider.add("cosmic.multiblock.orvex_count", "§fOrvex Residue Extracted§7: %s");
+        provider.add("cosmic.multiblock.orvex_upgrade_requires", "§fUpgrade Requires§7: %s");
+        provider.add("cosmic.multiblock.orvex_upgrade_check", "§fUpgrade Status: §a%s");
+
         provider.add("cosmiccore.multiblock.fuel_star", "§a§lFuel Star Core");
         provider.add("cosmiccore.multiblock.send_orbit_data", "§a§lSend Research Payload");
         provider.add("cosmiccore.multiblock.iris.star_stage_empty", "§aStar Core Stage§f: §6Compressed Gas Cloud");
