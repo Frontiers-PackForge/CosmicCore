@@ -2,7 +2,7 @@
   "parent": "minecraft:block/block",
   "dynamic_renders": [
     {
-      "type": "cosmiccore:concept_incinerator"
+      "type": "cosmiccore:tester_render"
     }
   ],
   "loader": "gtceu:machine",

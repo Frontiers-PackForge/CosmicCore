@@ -52,6 +52,7 @@ public class CosmicMaterials {
     public static Material Vitrius;
     public static Material SolSteel;
     public static Material StarMetal;
+    public static Material Nevramite;
 
     public static void register() {
         Prisma = new Material.Builder(CosmicCore.id("prisma"))
@@ -126,7 +127,20 @@ public class CosmicMaterials {
                 .iconSet(CCoreMaterialIconSet.STARMETALICO)
                 .flags(GENERATE_BOLT_SCREW, GENERATE_ROUND, GENERATE_GEAR, GENERATE_SMALL_GEAR, GENERATE_RING,
                         GENERATE_FRAME, GENERATE_SPRING, GENERATE_SPRING_SMALL, GENERATE_FINE_WIRE, GENERATE_DENSE)
-                .components(Prisma, 1, TungstenSteel, 1)
+                .cableProperties(GTValues.V[8], 4, 1)
+                .fluidPipeProperties(65000, 9500, true, true, true, false)
+                .blastTemp(8400, BlastProperty.GasTier.HIGHEST, GTValues.VA[GTValues.EV], 1200)
+                .buildAndRegister();
+
+        Nevramite = new Material.Builder(CosmicCore.id("nevramite"))
+                .ingot()
+                .langValue("Nevramite")
+                .liquid(new FluidBuilder().temperature(9800))
+                .formula("✫")
+                .color(0x372536)
+                .iconSet(CosmicMaterialSet.NEVRAMITE)
+                .flags(GENERATE_BOLT_SCREW, GENERATE_ROUND, GENERATE_GEAR, GENERATE_SMALL_GEAR, GENERATE_RING,
+                        GENERATE_FRAME, GENERATE_SPRING, GENERATE_SPRING_SMALL, GENERATE_FINE_WIRE, GENERATE_DENSE)
                 .cableProperties(GTValues.V[8], 4, 1)
                 .fluidPipeProperties(65000, 9500, true, true, true, false)
                 .blastTemp(8400, BlastProperty.GasTier.HIGHEST, GTValues.VA[GTValues.EV], 1200)
@@ -248,25 +262,25 @@ public class CosmicMaterials {
                 .buildAndRegister();
         // TODO - Colors , Textures, Fluid Textures, they're all gonna look the same in game for now.
         // TODO - Infinity Line Scripts On KubeJS side.
-        Potential = new Material.Builder(CosmicCore.id("potential"))
-                .dust()
-                .liquid(new FluidBuilder().temperature(1500))
-                .color(0x828282).secondaryColor(0x5e0f3d).iconSet(MaterialIconSet.BRIGHT)
-                .flags(DISABLE_DECOMPOSITION)
-                .buildAndRegister();
-        FalseInfinity = new Material.Builder(CosmicCore.id("false_infinity"))
-                .liquid(new FluidBuilder().temperature(3500))
-                .color(0x508582).secondaryColor(0x5e0f3d).iconSet(MaterialIconSet.BRIGHT)
-                .flags(DISABLE_DECOMPOSITION)
-                .buildAndRegister();
-        SuitableInfinity = new Material.Builder(CosmicCore.id("suitable_infinity"))
-                .liquid(new FluidBuilder().temperature(7900))
-                .color(0x508582).secondaryColor(0x5e0f3d).iconSet(MaterialIconSet.BRIGHT)
-                .flags(DISABLE_DECOMPOSITION)
-                .buildAndRegister();
+        // Potential = new Material.Builder(CosmicCore.id("potential"))
+        // .dust()
+        // .liquid(new FluidBuilder().temperature(1500))
+        // .color(0x828282).secondaryColor(0x5e0f3d).iconSet(MaterialIconSet.BRIGHT)
+        // .flags(DISABLE_DECOMPOSITION)
+        // .buildAndRegister();
+        // FalseInfinity = new Material.Builder(CosmicCore.id("false_infinity"))
+        // .liquid(new FluidBuilder().temperature(3500))
+        // .color(0x508582).secondaryColor(0x5e0f3d).iconSet(MaterialIconSet.BRIGHT)
+        // .flags(DISABLE_DECOMPOSITION)
+        // .buildAndRegister();
+        // SuitableInfinity = new Material.Builder(CosmicCore.id("suitable_infinity"))
+        // .liquid(new FluidBuilder().temperature(7900))
+        // .color(0x508582).secondaryColor(0x5e0f3d).iconSet(MaterialIconSet.BRIGHT)
+        // .flags(DISABLE_DECOMPOSITION)
+        // .buildAndRegister();
         // TODO - Actual Textures for the entire material set... Let's do something that isn't the typical rainbow
         // infinity, maybe make it something special.
-        LogicalInfinity = new Material.Builder(CosmicCore.id("logical_infinity"))
+        LogicalInfinity = new Material.Builder(CosmicCore.id("infinity"))
                 .ingot()
                 .liquid(new FluidBuilder().temperature(10750))
                 .iconSet(CosmicMaterialSet.INFINITY)

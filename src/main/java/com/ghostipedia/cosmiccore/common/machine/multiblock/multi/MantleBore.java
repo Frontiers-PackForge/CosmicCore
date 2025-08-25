@@ -48,7 +48,7 @@ public class MantleBore {
             .model(createWorkableCasingMachineModel(
                     CosmicCore.id("block/casings/solid/vomahine_certified_chemically_resistant_casing"),
                     GTCEu.id("block/multiblock/fusion_reactor"))
-                    .andThen(model -> model.addDynamicRenderer(CosmicDynamicRenderHelpers::getConceptIncinerator)))
+                    .andThen(model -> model.addDynamicRenderer(CosmicDynamicRenderHelpers::getRenderTesterHelper)))
             .hasBER(true)
             .register();
 
