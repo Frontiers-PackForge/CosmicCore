@@ -711,7 +711,7 @@ public class CosmicItems {
             .defaultModel()
             .register();
 
-    //Thrusters (Space Industry stuff)
+    // Thrusters (Space Industry stuff)
 
     public static final ItemEntry<ComponentItem> THRUSTER_UV = REGISTRATE
             .item("uv_thruster", ComponentItem::create)
@@ -755,7 +755,7 @@ public class CosmicItems {
             .tag()
             .defaultModel()
             .register();
-    //Power Cells
+    // Power Cells
     public static final ItemEntry<ComponentItem> POWER_CELL_UV = REGISTRATE
             .item("uv_powercell", ComponentItem::create)
             .lang("UV Power Cell")
@@ -798,7 +798,6 @@ public class CosmicItems {
             .tag()
             .defaultModel()
             .register();
-
 
     public static final ItemEntry<ComponentItem> FERMIUM_RAD_CHARGES = REGISTRATE
             .item("fermium_rad_charges", ComponentItem::create)
