@@ -29,7 +29,7 @@ public class LunarHammer {
                     HelixFusionMachine::new)
             .langValue("§9Lunar Hammer")
             .rotationState(RotationState.NON_Y_AXIS)
-            .recipeType(CosmicRecipeTypes.HELIX_FUSION_RECIPES)
+            .recipeType(CosmicRecipeTypes.LUNAR_HAMMER)
             .appearanceBlock(CASING_HIGH_TEMPERATURE_SMELTING)
             .partAppearance((controller, part, side) -> CASING_HIGH_TEMPERATURE_SMELTING.getDefaultState())
             .recipeModifiers(CosmicRecipeModifiers::titanReactorParallel,
