@@ -3,7 +3,6 @@ package com.ghostipedia.cosmiccore.gtbridge;
 import com.gregtechceu.gtceu.api.GTValues;
 
 import net.minecraft.data.recipes.FinishedRecipe;
-import net.minecraft.world.item.Items;
 
 import java.util.function.Consumer;
 
@@ -27,12 +26,12 @@ public class CosmicCoreRecipes {
                 .EUt(GTValues.VA[GTValues.HV])
                 .save(provider);
 
-        HELIX_FUSION_RECIPES.recipeBuilder("test_helix_recipe")
-                .inputItems(Items.COBBLESTONE, 1)
-                .inputItems(Items.STONE, 1)
-                .EUt(512)
-                .duration(10)
-                .save(provider);
+        // HELIX_FUSION_RECIPES.recipeBuilder("test_helix_recipe")
+        // .inputItems(Items.COBBLESTONE, 1)
+        // .inputItems(Items.STONE, 1)
+        // .EUt(GTValues.VA[9])
+        // .duration(10)
+        // .save(provider);
         // GROVE_RECIPES.recipeBuilder("dirt_movement")
         // .input(SoulRecipeCapability.CAP, 100)
         // .notConsumable(CosmicItems.DONK)

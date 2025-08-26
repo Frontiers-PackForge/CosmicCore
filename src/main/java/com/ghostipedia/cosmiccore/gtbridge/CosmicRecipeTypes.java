@@ -52,6 +52,12 @@ public class CosmicRecipeTypes {
             .setSound(GTSoundEntries.REPLICATOR)
             .setProgressBar(GuiTextures.PROGRESS_BAR_ARROW_MULTIPLE, ProgressTexture.FillDirection.LEFT_TO_RIGHT);
 
+    public static final GTRecipeType LUNAR_HAMMER = GTRecipeTypes
+            .register("lunar_hammer", ELECTRIC)
+            .setMaxIOSize(3, 3, 2, 2)
+            .setSound(GTSoundEntries.JET_ENGINE)
+            .setProgressBar(GuiTextures.PROGRESS_BAR_ARROW_MULTIPLE, ProgressTexture.FillDirection.LEFT_TO_RIGHT);
+
     public static final GTRecipeType SOUL_TESTER_RECIPES = GTRecipeTypes
             .register("soul_tester", GTRecipeTypes.MULTIBLOCK)
             .setMaxSize(IO.IN, SoulRecipeCapability.CAP, 1)

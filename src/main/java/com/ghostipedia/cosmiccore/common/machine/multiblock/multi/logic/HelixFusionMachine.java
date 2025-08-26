@@ -60,19 +60,37 @@ public class HelixFusionMachine extends WorkableElectricMultiblockMachine implem
         super(holder);
     }
 
-    long baseUpgrade = 1_000_000_000L;
-    long cost = 1_000_000_000L;
+    long cost = upgradeCost(reactorTier);
 
     public void attemptUpgrade() {
-        long upgradeStep = clampLong(this.reactorTier * 1_000_000_000L, 1_000_000_000L, 100_000_000_000_000L);
-        cost = baseUpgrade + upgradeStep;
-        if (EUSpent >= cost) {
-            if (reactorTier == 10) {
-                return;
-            }
-            EUSpent -= cost;
-            reactorTier++;
+        if (reactorTier >= 10) {
+            cost = 0L;
+            return;
         }
+        long costNow = upgradeCost(reactorTier);
+        if (EUSpent < costNow) {
+            cost = costNow;
+            return;
+        }
+        EUSpent -= costNow;
+        reactorTier++;
+
+        cost = upgradeCost(reactorTier);
+    }
+
+    static long upgradeCost(int reactorTier) {
+        final long BASE = 8_000_000_000L;
+        final long MAX = 1_000_000_000_000_000L;
+        final int MIN_TIER = 3, MAX_TIER = 10;
+        // Could be a clamp but the clamp was being dumb
+        // Dumb solution for dumb person is this not a clamp but totally a clamp
+        int t = Math.max(MIN_TIER, Math.min(MAX_TIER, reactorTier));
+        if (t >= MAX_TIER) return 0L;
+
+        double r = Math.pow((double) MAX / (double) BASE, 1.0 / (MAX_TIER - MIN_TIER));
+        double raw = BASE * Math.pow(r, t - MIN_TIER);
+
+        return Math.round(raw / 1_000_000.0) * 1_000_000L;
     }
 
     @Override // IDEK if this does anything
@@ -150,7 +168,6 @@ public class HelixFusionMachine extends WorkableElectricMultiblockMachine implem
                     .literal(FormattingUtil.formatNumberReadable(this.EUSpent)).withStyle(ChatFormatting.AQUA)));
             textList.add(Component.translatable("cosmic.multiblock.orvex_upgrade_requires",
                     Component.literal(FormattingUtil.formatNumberReadable(this.cost)).withStyle(ChatFormatting.AQUA)));
-            textList.add(Component.translatable("cosmic.multiblock.orvex_upgrade_check"));
         })
                 .addBatchModeLine(isBatchEnabled(), batchParallels)
                 .addWorkingStatusLine()

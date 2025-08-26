@@ -29,6 +29,7 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.serialization.Codec;
+import org.jetbrains.annotations.NotNull;
 import org.joml.Matrix4f;
 import org.joml.Quaternionf;
 
@@ -89,11 +90,7 @@ public class RenderTesterHelper extends
 
     @Override
     public AABB getRenderBoundingBox(WorkableElectricMultiblockMachine multi) {
-        if (multi.isFormed()) {
-            AABB bounds = renderBoundCache.apply(multi.getFrontFacing(), multi.getUpwardsFacing());
-            return bounds.move(multi.getPos());
-        }
-        return super.getRenderBoundingBox(multi);
+        return new AABB(multi.getPos()).inflate(getViewDistance(), 16, getViewDistance());
     }
 
     @Override
@@ -119,26 +116,28 @@ public class RenderTesterHelper extends
         Direction back = RelativeDirection.BACK.getRelative(front, upwards, flipped);
         Direction.Axis leftAxis = RelativeDirection.LEFT.getRelative(front, upwards, flipped).getAxis();
 
-        // translate to the absolute center of the multiblock
-        float x0ffset = 0, y0ffset = 0, z0ffset = 0;
+        float x0ffset = 0, y0ffset = 2.5f, z0ffset = 0;
 
-        for (Direction.Axis axis : Direction.Axis.VALUES) {
-            int upOffset = up.getNormal().get(axis);
-            int backOffset = back.getNormal().get(axis);
-
-            float offset = upOffset * (4.0f + (upOffset * 0.5f)) +
-                    backOffset * (5.0f + (backOffset * 0.5f));
-            switch (axis) {
-                case X -> x0ffset = offset;
-                case Y -> y0ffset = offset;
-                case Z -> z0ffset = offset;
+        if (front.getAxis() == Direction.Axis.X) {
+            if (front.getAxisDirection() == Direction.AxisDirection.POSITIVE) {
+                x0ffset = -6.5f;
+                z0ffset = 0.5f;
+            } else {
+                x0ffset = 7.5f;
+                z0ffset = 0.5f;
             }
         }
-        poseStack.translate(
-                x0ffset + (leftAxis == Direction.Axis.X ? 0.5f : 0.0f),
-                y0ffset + (leftAxis == Direction.Axis.Y ? 0.5f : 0.0f),
-                z0ffset + (leftAxis == Direction.Axis.Z ? 0.5f : 0.0f));
 
+        if (front.getAxis() == Direction.Axis.Z) {
+            if (front.getAxisDirection() == Direction.AxisDirection.POSITIVE) {
+                z0ffset = -7.5f;
+                x0ffset = 0.5f;
+            } else {
+                z0ffset = 7.5f;
+                x0ffset = 0.5f;
+            }
+        }
+        poseStack.translate(x0ffset, y0ffset, z0ffset);
         poseStack.pushPose();
         poseStack.mulPose(new Quaternionf().rotateAxis(totalTick * Mth.TWO_PI / 160f, 0, 1, 0));
         float radius = 2.0f;
@@ -162,10 +161,11 @@ public class RenderTesterHelper extends
                         Mth.cos(Mth.HALF_PI + totalTick / 60))
                 .rotateXYZ(55f * Mth.DEG_TO_RAD, 30f * Mth.DEG_TO_RAD, 0);
         poseStack.mulPose(rot);
-        renderWireDodecahedron(poseStack, buffer,
-                2f,
-                0x66CCFF,
-                1f);
+        renderWireDodecahedronThick(
+                poseStack, buffer,
+                1.0f,
+                0.12f,
+                0.4f, 0.9f, 1.0f, 0.85f);
         consumer = buffer.getBuffer(GTRenderTypes.getLightRing());
 
         Quaternionf frot = new Quaternionf()
@@ -174,9 +174,14 @@ public class RenderTesterHelper extends
                         Mth.cos(Mth.HALF_PI + totalTick / 40))
                 .rotateXYZ(55f * Mth.DEG_TO_RAD, 30f * Mth.DEG_TO_RAD, 0);
         poseStack.mulPose(frot);
+        renderSolidSphere(poseStack, buffer,
+                0f, 0f, 0f,
+                1.5f,
+                48, 24,
+                /* r,g,b,a */ 0.2f, 0.3f, 1.0f, 1f);
         renderWireDodecahedronThick(
                 poseStack, buffer,
-                4.0f,
+                1.5f,
                 0.12f,
                 0.4f, 0.9f, 1.0f, 0.85f);
         poseStack.popPose();
@@ -269,31 +274,7 @@ public class RenderTesterHelper extends
 
         HashSet<Long> edges = new java.util.HashSet<>(64);
         for (int i = 0; i < 20; i++) {
-            int n1 = -1, n2 = -1, n3 = -1;
-            float d1 = Float.POSITIVE_INFINITY, d2 = Float.POSITIVE_INFINITY, d3 = Float.POSITIVE_INFINITY;
-
-            float xi = V[i][0], yi = V[i][1], zi = V[i][2];
-            for (int j = 0; j < 20; j++) if (j != i) {
-                float dx = xi - V[j][0], dy = yi - V[j][1], dz = zi - V[j][2];
-                float d = dx * dx + dy * dy + dz * dz;
-                if (d < d1) {
-                    d3 = d2;
-                    n3 = n2;
-                    d2 = d1;
-                    n2 = n1;
-                    d1 = d;
-                    n1 = j;
-                } else if (d < d2) {
-                    d3 = d2;
-                    n3 = n2;
-                    d2 = d;
-                    n2 = j;
-                } else if (d < d3) {
-                    d3 = d;
-                    n3 = j;
-                }
-            }
-            int[] ns = { n1, n2, n3 };
+            int[] ns = getInts(V, i);
             for (int j : ns) {
                 int low = Math.min(i, j);
                 int high = Math.max(i, j);
@@ -361,6 +342,73 @@ public class RenderTesterHelper extends
             vertexConsumer.vertex(mat, ax, ay, az).color(r, g, b, a).endVertex();
             vertexConsumer.vertex(mat, cx, cy, cz).color(r, g, b, a).endVertex();
             vertexConsumer.vertex(mat, dxq, dyq, dzq).color(r, g, b, a).endVertex();
+        }
+    }
+
+    private static int @NotNull [] getInts(float[][] V, int i) {
+        int n1 = -1, n2 = -1, n3 = -1;
+        float d1 = Float.POSITIVE_INFINITY, d2 = Float.POSITIVE_INFINITY, d3 = Float.POSITIVE_INFINITY;
+
+        float xi = V[i][0], yi = V[i][1], zi = V[i][2];
+        for (int j = 0; j < 20; j++) if (j != i) {
+            float dx = xi - V[j][0], dy = yi - V[j][1], dz = zi - V[j][2];
+            float d = dx * dx + dy * dy + dz * dz;
+            if (d < d1) {
+                d3 = d2;
+                n3 = n2;
+                d2 = d1;
+                n2 = n1;
+                d1 = d;
+                n1 = j;
+            } else if (d < d2) {
+                d3 = d2;
+                n3 = n2;
+                d2 = d;
+                n2 = j;
+            } else if (d < d3) {
+                d3 = d;
+                n3 = j;
+            }
+        }
+        int[] ns = { n1, n2, n3 };
+        return ns;
+    }
+
+    public static void renderSolidSphere(PoseStack poseStack, MultiBufferSource buffer,
+                                         float cx, float cy, float cz,
+                                         float radius, int slices, int stacks,
+                                         float r, float g, float b, float a) {
+        Matrix4f mat = poseStack.last().pose();
+        VertexConsumer vc = buffer.getBuffer(GTRenderTypes.getLightRing());
+
+        float dPhi = (float) (Mth.TWO_PI / Math.max(3, slices));
+        float dTheta = (float) (Math.PI / Math.max(2, stacks));
+
+        for (int i = 0; i < stacks; i++) {
+            float th0 = i * dTheta;
+            float th1 = (i + 1) * dTheta;
+            float sin0 = Mth.sin(th0), cos0 = Mth.cos(th0);
+            float sin1 = Mth.sin(th1), cos1 = Mth.cos(th1);
+
+            // one triangle strip per latitude band; <= closes seam
+            for (int j = 0; j <= slices; j++) {
+                float ph = j * dPhi;
+                float cosp = Mth.cos(ph), sinp = Mth.sin(ph);
+
+                // band top (th0)
+                float x0 = cx + radius * sin0 * cosp;
+                float y0 = cy + radius * cos0;
+                float z0 = cz + radius * sin0 * sinp;
+
+                // band bottom (th1)
+                float x1 = cx + radius * sin1 * cosp;
+                float y1 = cy + radius * cos1;
+                float z1 = cz + radius * sin1 * sinp;
+
+                // order chosen for typical backface cull; swap if it looks inside-out
+                vc.vertex(mat, x0, y0, z0).color(r, g, b, a).endVertex();
+                vc.vertex(mat, x1, y1, z1).color(r, g, b, a).endVertex();
+            }
         }
     }
 

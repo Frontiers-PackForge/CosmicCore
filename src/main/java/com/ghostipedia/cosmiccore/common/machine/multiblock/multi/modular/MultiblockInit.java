@@ -39,6 +39,7 @@ public class MultiblockInit {
         IPBF.init();
         Laminator.init();
         LargeSpoolingMachine.init();
+        LunarHammer.init();
         MantleBore.init();
         NPR.init();
         OrbitalForge.init();
