@@ -387,6 +387,7 @@
   "cosmiccore.omnia_circuit.uv": "§6Works as any UV Circuit.",
   "cosmiccore.omnia_circuit.uxv": "§6Works as any UXV Circuit.",
   "cosmiccore.omnia_circuit.zpm": "§6Works as any ZPM Circuit.",
+  "cosmiccore.recipe.condition.titan.tooltip": "Requires Titan Reactor Tier: %s",
   "cosmiccore.recipe.fieldDecay": "§fField Decay: %sT/t",
   "cosmiccore.recipe.fieldSlam": "§fField Consumed: %sT",
   "cosmiccore.recipe.minField": "§fMin. Field Strength: %sT",

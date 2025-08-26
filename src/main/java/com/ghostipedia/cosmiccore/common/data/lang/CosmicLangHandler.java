@@ -111,6 +111,7 @@ public class CosmicLangHandler extends LangHandler {
         provider.add("cosmiccore.recipe.minField", "§fMin. Field Strength: %sT");
         provider.add("cosmiccore.recipe.fieldDecay", "§fField Decay: %sT/t");
         provider.add("cosmiccore.recipe.fieldSlam", "§fField Consumed: %sT");
+        provider.add("cosmiccore.recipe.condition.titan.tooltip", "Requires Titan Reactor Tier: %s");
 
         provider.add("cosmiccore.multiblock.current_contagion", "§6Contagion Strength: %s");
         provider.add("cosmiccore.multiblock.contagion_rate", "§cContagion Rate: %s/t");
