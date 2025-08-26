@@ -28,7 +28,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
-public class HelixFusionMachine extends WorkableElectricMultiblockMachine implements IDisplayUIMachine {
+public class TitanFusionReactorMachine extends WorkableElectricMultiblockMachine implements IDisplayUIMachine {
 
     @Persisted
     @DescSynced
@@ -47,7 +47,8 @@ public class HelixFusionMachine extends WorkableElectricMultiblockMachine implem
     @DropSaved
     private boolean canUpgrade = false;
 
-    protected static final ManagedFieldHolder MANAGED_FIELD_HOLDER = new ManagedFieldHolder(HelixFusionMachine.class,
+    protected static final ManagedFieldHolder MANAGED_FIELD_HOLDER = new ManagedFieldHolder(
+            TitanFusionReactorMachine.class,
             WorkableElectricMultiblockMachine.MANAGED_FIELD_HOLDER);
 
     @Override
@@ -56,7 +57,7 @@ public class HelixFusionMachine extends WorkableElectricMultiblockMachine implem
         return MANAGED_FIELD_HOLDER;
     }
 
-    public HelixFusionMachine(IMachineBlockEntity holder) {
+    public TitanFusionReactorMachine(IMachineBlockEntity holder) {
         super(holder);
     }
 
@@ -188,7 +189,7 @@ public class HelixFusionMachine extends WorkableElectricMultiblockMachine implem
             if (lastRecipe != null) {
                 var inputs = lastRecipe.getInputEUt();
                 long totalEUt = inputs.getTotalEU() * lastRecipe.duration;
-                ((HelixFusionMachine) machine).increaseEUConsumed(totalEUt);
+                ((TitanFusionReactorMachine) machine).increaseEUConsumed(totalEUt);
             }
             super.onRecipeFinish();
         }

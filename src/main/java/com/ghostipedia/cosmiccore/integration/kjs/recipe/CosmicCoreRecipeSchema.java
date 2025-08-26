@@ -2,6 +2,7 @@ package com.ghostipedia.cosmiccore.integration.kjs.recipe;
 
 import com.ghostipedia.cosmiccore.api.capability.recipe.SoulRecipeCapability;
 import com.ghostipedia.cosmiccore.api.capability.recipe.SterileRecipeCapability;
+import com.ghostipedia.cosmiccore.common.recipe.condition.TitanCondition;
 
 import com.gregtechceu.gtceu.integration.kjs.recipe.GTRecipeSchema;
 import com.gregtechceu.gtceu.integration.kjs.recipe.components.GTRecipeComponents;
@@ -23,6 +24,10 @@ public interface CosmicCoreRecipeSchema {
 
         public GTRecipeSchema.GTRecipeJS soulOutput(int souls) {
             return this.output(SoulRecipeCapability.CAP, souls);
+        }
+
+        public GTRecipeSchema.GTRecipeJS titanTier(int tier) {
+            return this.addCondition(new TitanCondition(tier));
         }
 
         public GTRecipeSchema.GTRecipeJS sterileInput(GTRecipeComponents.FluidIngredientJS stack) {

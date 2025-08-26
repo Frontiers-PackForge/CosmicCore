@@ -1,7 +1,7 @@
 package com.ghostipedia.cosmiccore.common.data.recipe;
 
 import com.ghostipedia.cosmiccore.common.machine.multiblock.electric.MagneticFieldMachine;
-import com.ghostipedia.cosmiccore.common.machine.multiblock.multi.logic.HelixFusionMachine;
+import com.ghostipedia.cosmiccore.common.machine.multiblock.multi.logic.TitanFusionReactorMachine;
 
 import com.gregtechceu.gtceu.api.capability.recipe.IO;
 import com.gregtechceu.gtceu.api.capability.recipe.ItemRecipeCapability;
@@ -113,7 +113,7 @@ public class CosmicRecipeModifiers {
     }
 
     public static @NotNull ModifierFunction titanReactorParallel(MetaMachine machine, GTRecipe recipe) {
-        if (machine instanceof HelixFusionMachine parallelMachine) {
+        if (machine instanceof TitanFusionReactorMachine parallelMachine) {
             int actualParallel = ParallelLogic.getParallelAmount(parallelMachine, recipe,
                     64 * (parallelMachine.getReactorTier() - 2));
             return ModifierFunction.builder()
