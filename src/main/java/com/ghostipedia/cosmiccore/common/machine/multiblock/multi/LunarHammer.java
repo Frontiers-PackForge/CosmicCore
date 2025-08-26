@@ -3,7 +3,7 @@ package com.ghostipedia.cosmiccore.common.machine.multiblock.multi;
 import com.ghostipedia.cosmiccore.client.renderer.machine.CosmicDynamicRenderHelpers;
 import com.ghostipedia.cosmiccore.common.data.materials.CosmicMaterials;
 import com.ghostipedia.cosmiccore.common.data.recipe.CosmicRecipeModifiers;
-import com.ghostipedia.cosmiccore.common.machine.multiblock.multi.logic.HelixFusionMachine;
+import com.ghostipedia.cosmiccore.common.machine.multiblock.multi.logic.TitanFusionReactorMachine;
 import com.ghostipedia.cosmiccore.gtbridge.CosmicRecipeTypes;
 
 import com.gregtechceu.gtceu.GTCEu;
@@ -26,7 +26,7 @@ public class LunarHammer {
 
     public final static MultiblockMachineDefinition LUNAR_HAMMER = REGISTRATE
             .multiblock("lunar_sheer_hammer",
-                    HelixFusionMachine::new)
+                    TitanFusionReactorMachine::new)
             .langValue("§9Lunar Hammer")
             .rotationState(RotationState.NON_Y_AXIS)
             .recipeType(CosmicRecipeTypes.LUNAR_HAMMER)

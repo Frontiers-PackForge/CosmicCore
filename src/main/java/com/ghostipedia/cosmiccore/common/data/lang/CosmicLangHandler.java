@@ -96,6 +96,7 @@ public class CosmicLangHandler extends LangHandler {
         provider.add("tooltip.cosmiccore.thermia_hatch_limit", "§cTemp. Limit: %sK");
         provider.add("cosmiccore.multiblock.magnetic_field_strength", "§fMax Field Strength§f:§6 %s");
         provider.add("cosmiccore.multiblock.magnetic_regen", "§aField Recovery Rate§f:§6 %sT/t");
+        provider.add("gtceu.titan_fusion", "Titan Fusion Reactor"); // recipe type lang
 
         // gui lines
         provider.add("gui.cosmiccore.soul_hatch.label.import", "Soul Input Hatch");

@@ -1,6 +1,6 @@
 package com.ghostipedia.cosmiccore.common.recipe.condition;
 
-import com.ghostipedia.cosmiccore.common.machine.multiblock.multi.logic.HelixFusionMachine;
+import com.ghostipedia.cosmiccore.common.machine.multiblock.multi.logic.TitanFusionReactorMachine;
 
 import com.gregtechceu.gtceu.api.machine.trait.RecipeLogic;
 import com.gregtechceu.gtceu.api.recipe.GTRecipe;
@@ -55,7 +55,7 @@ public class TitanCondition extends RecipeCondition {
 
     @Override
     protected boolean testCondition(@NotNull GTRecipe recipe, @NotNull RecipeLogic recipeLogic) {
-        if (!(recipeLogic.getMachine() instanceof HelixFusionMachine titanReactor)) return false;
+        if (!(recipeLogic.getMachine() instanceof TitanFusionReactorMachine titanReactor)) return false;
         return titanReactor.getReactorTier() >= tier;
     }
 
