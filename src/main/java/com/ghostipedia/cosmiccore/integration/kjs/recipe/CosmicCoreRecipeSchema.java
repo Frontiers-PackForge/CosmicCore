@@ -2,8 +2,8 @@ package com.ghostipedia.cosmiccore.integration.kjs.recipe;
 
 import com.ghostipedia.cosmiccore.api.capability.recipe.SoulRecipeCapability;
 import com.ghostipedia.cosmiccore.api.capability.recipe.SterileRecipeCapability;
-
 import com.ghostipedia.cosmiccore.common.recipe.condition.TitanCondition;
+
 import com.gregtechceu.gtceu.integration.kjs.recipe.GTRecipeSchema;
 import com.gregtechceu.gtceu.integration.kjs.recipe.components.GTRecipeComponents;
 

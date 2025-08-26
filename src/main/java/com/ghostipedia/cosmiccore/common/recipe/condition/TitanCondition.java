@@ -1,17 +1,17 @@
 package com.ghostipedia.cosmiccore.common.recipe.condition;
 
 import com.ghostipedia.cosmiccore.common.machine.multiblock.multi.logic.HelixFusionMachine;
+
 import com.gregtechceu.gtceu.api.machine.trait.RecipeLogic;
 import com.gregtechceu.gtceu.api.recipe.GTRecipe;
 import com.gregtechceu.gtceu.api.recipe.RecipeCondition;
 import com.gregtechceu.gtceu.api.recipe.condition.RecipeConditionType;
 import com.gregtechceu.gtceu.api.registry.GTRegistries;
-import com.gregtechceu.gtceu.common.data.GTRecipeConditions;
-import com.gregtechceu.gtceu.common.recipe.condition.DimensionCondition;
+
+import net.minecraft.network.chat.Component;
+
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
 
 public class TitanCondition extends RecipeCondition {
@@ -25,22 +25,22 @@ public class TitanCondition extends RecipeCondition {
 
     public static RecipeConditionType<TitanCondition> TYPE;
 
-
-    public TitanCondition(boolean isReverse, int tier){
+    public TitanCondition(boolean isReverse, int tier) {
         this.isReverse = isReverse;
         this.tier = tier;
     }
 
-    public TitanCondition(int tier){
+    public TitanCondition(int tier) {
         this(false, tier);
     }
 
-    public TitanCondition(){
+    public TitanCondition() {
         this.tier = 0;
     }
 
-    public static void register(){
-        TYPE = GTRegistries.RECIPE_CONDITIONS.register("titan_condition", new RecipeConditionType<>(TitanCondition::new, TitanCondition.CODEC));
+    public static void register() {
+        TYPE = GTRegistries.RECIPE_CONDITIONS.register("titan_condition",
+                new RecipeConditionType<>(TitanCondition::new, TitanCondition.CODEC));
     }
 
     @Override
@@ -55,7 +55,7 @@ public class TitanCondition extends RecipeCondition {
 
     @Override
     protected boolean testCondition(@NotNull GTRecipe recipe, @NotNull RecipeLogic recipeLogic) {
-        if(!(recipeLogic.getMachine() instanceof HelixFusionMachine titanReactor)) return false;
+        if (!(recipeLogic.getMachine() instanceof HelixFusionMachine titanReactor)) return false;
         return titanReactor.getReactorTier() >= tier;
     }
 

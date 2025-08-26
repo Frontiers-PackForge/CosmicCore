@@ -24,7 +24,6 @@ import com.gregtechceu.gtceu.api.machine.MachineDefinition;
 import com.gregtechceu.gtceu.api.recipe.GTRecipeType;
 import com.gregtechceu.gtceu.api.recipe.condition.RecipeConditionType;
 import com.gregtechceu.gtceu.api.recipe.lookup.ingredient.MapIngredientTypeManager;
-import com.gregtechceu.gtceu.api.registry.GTRegistries;
 import com.gregtechceu.gtceu.api.sound.SoundEntry;
 import com.gregtechceu.gtceu.common.block.CoilBlock;
 import com.gregtechceu.gtceu.config.ConfigHolder;
@@ -57,6 +56,7 @@ public class CosmicCore {
         var bus = context.getModEventBus();
         bus.register(this);
         bus.addGenericListener(GTRecipeType.class, this::registerRecipeTypes);
+        bus.addGenericListener(RecipeConditionType.class, this::registerConditions);
         bus.addGenericListener(MachineDefinition.class, this::registerMachines);
         bus.addGenericListener(SoundEntry.class, this::registerSounds);
         AdAstraEvents.EntityGravityEvent.register(GravityCoreBehavior::clampGravity);
@@ -120,8 +120,7 @@ public class CosmicCore {
         // p.getTier() < GTValues.ZPM).toArray();
     }
 
-    @SubscribeEvent
-    public static void onRegisterConditions(GTCEuAPI.RegisterEvent<String, RecipeConditionType<?>> event) {
+    public void registerConditions(GTCEuAPI.RegisterEvent<String, RecipeConditionType<?>> event) {
         CosmicConditions.register();
     }
 
