@@ -48,6 +48,6 @@ public class MultiblockInit {
         SteamCaster.init();
         SteamMixer.init();
         SufferingChamber.init();
-        HelixFusion.init();
+        TitanFusion.init();
     }
 }
