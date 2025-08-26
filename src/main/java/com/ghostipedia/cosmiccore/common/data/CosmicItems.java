@@ -711,6 +711,95 @@ public class CosmicItems {
             .defaultModel()
             .register();
 
+    //Thrusters (Space Industry stuff)
+
+    public static final ItemEntry<ComponentItem> THRUSTER_UV = REGISTRATE
+            .item("uv_thruster", ComponentItem::create)
+            .lang(" Thruster")
+            .properties(p -> p.stacksTo(64))
+            .tag()
+            .defaultModel()
+            .register();
+    public static final ItemEntry<ComponentItem> THRUSTER_UHV = REGISTRATE
+            .item("uhv_thruster", ComponentItem::create)
+            .lang("UHV Thruster")
+            .properties(p -> p.stacksTo(64))
+            .tag()
+            .defaultModel()
+            .register();
+    public static final ItemEntry<ComponentItem> THRUSTER_UEV = REGISTRATE
+            .item("uev_thruster", ComponentItem::create)
+            .lang("UEV Thruster")
+            .properties(p -> p.stacksTo(64))
+            .tag()
+            .defaultModel()
+            .register();
+    public static final ItemEntry<ComponentItem> THRUSTER_UIV = REGISTRATE
+            .item("uiv_thruster", ComponentItem::create)
+            .lang("UIV Thruster")
+            .properties(p -> p.stacksTo(64))
+            .tag()
+            .defaultModel()
+            .register();
+    public static final ItemEntry<ComponentItem> THRUSTER_UXV = REGISTRATE
+            .item("uxv_thruster", ComponentItem::create)
+            .lang("UXV Thruster")
+            .properties(p -> p.stacksTo(64))
+            .tag()
+            .defaultModel()
+            .register();
+    public static final ItemEntry<ComponentItem> THRUSTER_OPV = REGISTRATE
+            .item("opv_thruster", ComponentItem::create)
+            .lang("OPv Thruster")
+            .properties(p -> p.stacksTo(64))
+            .tag()
+            .defaultModel()
+            .register();
+    //Power Cells
+    public static final ItemEntry<ComponentItem> POWER_CELL_UV = REGISTRATE
+            .item("uv_powercell", ComponentItem::create)
+            .lang("UV Power Cell")
+            .properties(p -> p.stacksTo(64))
+            .tag()
+            .defaultModel()
+            .register();
+    public static final ItemEntry<ComponentItem> POWER_CELL_UHV = REGISTRATE
+            .item("uhv_powercell", ComponentItem::create)
+            .lang("UHV Power Cell")
+            .properties(p -> p.stacksTo(64))
+            .tag()
+            .defaultModel()
+            .register();
+    public static final ItemEntry<ComponentItem> POWER_CELL_UEV = REGISTRATE
+            .item("uev_powercell", ComponentItem::create)
+            .lang("UEV Power Cell")
+            .properties(p -> p.stacksTo(64))
+            .tag()
+            .defaultModel()
+            .register();
+    public static final ItemEntry<ComponentItem> POWER_CELL_UIV = REGISTRATE
+            .item("uiv_powercell", ComponentItem::create)
+            .lang("UIV Power Cell")
+            .properties(p -> p.stacksTo(64))
+            .tag()
+            .defaultModel()
+            .register();
+    public static final ItemEntry<ComponentItem> POWER_CELL_UXV = REGISTRATE
+            .item("uxv_powercell", ComponentItem::create)
+            .lang("UXV Power Cell")
+            .properties(p -> p.stacksTo(64))
+            .tag()
+            .defaultModel()
+            .register();
+    public static final ItemEntry<ComponentItem> POWER_CELL_OPV = REGISTRATE
+            .item("opv_powercell", ComponentItem::create)
+            .lang("OPv Power Cell")
+            .properties(p -> p.stacksTo(64))
+            .tag()
+            .defaultModel()
+            .register();
+
+
     public static final ItemEntry<ComponentItem> FERMIUM_RAD_CHARGES = REGISTRATE
             .item("fermium_rad_charges", ComponentItem::create)
             .lang("Fermium Radiation Charge")
