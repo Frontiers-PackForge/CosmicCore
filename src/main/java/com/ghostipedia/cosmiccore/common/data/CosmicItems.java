@@ -47,6 +47,10 @@ import net.minecraft.world.level.Level;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidUtil;
 
+import com.sammy.malum.common.item.spirit.SpiritShardItem;
+import com.sammy.malum.core.systems.spirit.MalumSpiritType;
+import com.sammy.malum.core.systems.spirit.SpiritVisualMotif;
+import com.sammy.malum.registry.common.SpiritTypeRegistry;
 import com.teamresourceful.resourcefullib.common.registry.RegistryEntry;
 import com.tterrag.registrate.providers.ProviderType;
 import com.tterrag.registrate.util.entry.ItemEntry;
@@ -54,15 +58,18 @@ import com.tterrag.registrate.util.nullness.NonNullBiConsumer;
 import com.tterrag.registrate.util.nullness.NonNullConsumer;
 import earth.terrarium.adastra.common.items.rendered.RenderedBlockItem;
 import earth.terrarium.adastra.common.tags.ModItemTags;
+import team.lodestar.lodestone.systems.easing.Easing;
 import wayoftime.bloodmagic.common.item.BloodOrb;
 import wayoftime.bloodmagic.common.item.ItemBloodOrb;
 import wayoftime.bloodmagic.common.registration.impl.BloodOrbRegistryObject;
 
+import java.awt.*;
 import java.util.function.Function;
 
 import static com.ghostipedia.cosmiccore.CosmicUtils.attachRenderer;
 import static com.ghostipedia.cosmiccore.api.registries.CosmicRegistration.REGISTRATE;
 import static com.gregtechceu.gtceu.common.data.GTItems.attach;
+import static com.sammy.malum.registry.common.SpiritTypeRegistry.SPIRITS;
 import static earth.terrarium.adastra.common.registry.ModItems.GLOBES;
 import static wayoftime.bloodmagic.common.item.BloodMagicItems.BLOOD_ORBS;
 
@@ -91,6 +98,69 @@ public class CosmicItems {
     public static final CosmicBloodOrbDeferredRegister COSMIC_BLOOD_ORBS = new CosmicBloodOrbDeferredRegister(
             "cosmiccore");
     // Modules
+
+    public static final ItemEntry<SpiritShardItem> ETHERIC_SPIRIT_ITEM = REGISTRATE
+            .item("etheric_spirit", (properties -> new SpiritShardItem(properties, CosmicItems.ETHERIC_SPIRIT)))
+            .lang("Etheric Spirit")
+            .properties(p -> p.stacksTo(64))
+            .tag()
+            .defaultModel()
+            .register();
+
+    public static MalumSpiritType ETHERIC_SPIRIT = SpiritTypeRegistry.register(MalumSpiritType.create("etheric",
+            new SpiritVisualMotif(new Color(120, 75, 255), new Color(55, 55, 55), 0.9f, Easing.BOUNCE_IN_OUT),
+            ETHERIC_SPIRIT_ITEM)
+            .setItemColor(SpiritVisualMotif::getPrimaryColor)
+            .build());
+
+    public static final ItemEntry<SpiritShardItem> WRATHFUL_SPIRIT_ITEM = REGISTRATE
+            .item("wrathful_spirit", (properties -> new SpiritShardItem(properties, CosmicItems.WRATHFUL_SPIRIT)))
+            .lang("Wrathful Spirit")
+            .properties(p -> p.stacksTo(64))
+            .tag()
+            .defaultModel()
+            .register();
+
+    public static MalumSpiritType WRATHFUL_SPIRIT = SpiritTypeRegistry.register(MalumSpiritType.create("wrathful",
+            new SpiritVisualMotif(2, new Color(120, 200, 80), new Color(200, 55, 0), 0.9f, Easing.SINE_IN_OUT),
+            WRATHFUL_SPIRIT_ITEM)
+            .setItemColor(SpiritVisualMotif::getPrimaryColor)
+            .build());
+
+    public static final ItemEntry<SpiritShardItem> PRIDEFUL_SPIRIT_ITEM = REGISTRATE
+            .item("prideful_spirit", (properties -> new SpiritShardItem(properties, CosmicItems.PRIDEFUL_SPIRIT)))
+            .lang("Prideful Spirit")
+            .properties(p -> p.stacksTo(64))
+            .tag()
+            .defaultModel()
+            .register();
+
+    public static MalumSpiritType PRIDEFUL_SPIRIT = SpiritTypeRegistry.register(MalumSpiritType.create("prideful",
+            new SpiritVisualMotif(4, new Color(120, 0, 100), new Color(200, 55, 0), 0.9f, Easing.SINE_IN_OUT),
+            PRIDEFUL_SPIRIT_ITEM)
+            .setItemColor(SpiritVisualMotif::getPrimaryColor)
+            .build());
+
+    public static final ItemEntry<SpiritShardItem> MALICE_SPIRIT_ITEM = REGISTRATE
+            .item("malice_spirit", (properties -> new SpiritShardItem(properties, CosmicItems.MALICE_SPIRIT)))
+            .lang("Malice Spirit")
+            .properties(p -> p.stacksTo(64))
+            .tag()
+            .defaultModel()
+            .register();
+
+    public static MalumSpiritType MALICE_SPIRIT = SpiritTypeRegistry.register(MalumSpiritType.create("malice",
+            new SpiritVisualMotif(4, new Color(210, 210, 210), new Color(200, 55, 0), 0.9f, Easing.SINE_IN_OUT),
+            MALICE_SPIRIT_ITEM)
+            .setItemColor(SpiritVisualMotif::getPrimaryColor)
+            .build());
+    //
+    // public static final ItemEntry<ItemBloodOrb> ITEM_ORB_SOVEREIGN = REGISTRATE
+    // .item("sov_blood_orb", (p) -> new ItemBloodOrb(ORB_SOVEREIGN))
+    // .lang("Sovereign Blood Orb")
+    // .properties(p -> p.stacksTo(1))
+    // .defaultModel()
+    // .register();
 
     public static final ItemEntry<ComponentItem> PROD_MOD_1 = REGISTRATE.item("prod_mod_1", ComponentItem::create)
             .lang("Productivity Module Mk.1")
@@ -168,7 +238,7 @@ public class CosmicItems {
     public static final ItemEntry<ComponentItem> HARMONICALLY_TUNED_CIRCUIT_BOARD = REGISTRATE
             .item("harmonically_tuned_circuit_board",
                     ComponentItem::create)
-            .lang("Fusion Module Mk.2")
+            .lang("Harmonically Tuned Circuit Board")
             .properties(p -> p.stacksTo(64))
             .tag()
             .defaultModel()
@@ -176,7 +246,58 @@ public class CosmicItems {
     public static final ItemEntry<ComponentItem> HARMONICALLY_TUNED_PRINTED_CIRCUIT_BOARD = REGISTRATE
             .item("harmonically_tuned_printed_circuit_board",
                     ComponentItem::create)
-            .lang("Fusion Module Mk.2")
+            .lang("Harmonically Tuned Printed Circuit Board")
+            .properties(p -> p.stacksTo(64))
+            .tag()
+            .defaultModel()
+            .register();
+
+    public static final ItemEntry<ComponentItem> OPTICALLY_REFINED_CIRCUIT_BOARD = REGISTRATE
+            .item("optically_refined_circuit_board",
+                    ComponentItem::create)
+            .lang("Optically Refined Circuit Board")
+            .properties(p -> p.stacksTo(64))
+            .tag()
+            .defaultModel()
+            .register();
+    public static final ItemEntry<ComponentItem> OPTICALLY_REFINED_PRINTED_CIRCUIT_BOARD = REGISTRATE
+            .item("optically_refined_printed_circuit_board",
+                    ComponentItem::create)
+            .lang("Optically Refined Printed Circuit Board")
+            .properties(p -> p.stacksTo(64))
+            .tag()
+            .defaultModel()
+            .register();
+
+    public static final ItemEntry<ComponentItem> PERSONA_CORE_ASSISTED_CIRCUIT_BOARD = REGISTRATE
+            .item("persona_core_assisted_circuit_board",
+                    ComponentItem::create)
+            .lang("Persona Core Assisted Circuit Board")
+            .properties(p -> p.stacksTo(64))
+            .tag()
+            .defaultModel()
+            .register();
+    public static final ItemEntry<ComponentItem> PERSONA_CORE_ASSISTED_PRINTED_CIRCUIT_BOARD = REGISTRATE
+            .item("persona_core_assisted_printed_circuit_board",
+                    ComponentItem::create)
+            .lang("Persona Core Assisted Printed Circuit Board")
+            .properties(p -> p.stacksTo(64))
+            .tag()
+            .defaultModel()
+            .register();
+
+    public static final ItemEntry<ComponentItem> RECORD_KEPT_CIRCUIT_BOARD = REGISTRATE
+            .item("record_kept_circuit_board",
+                    ComponentItem::create)
+            .lang("Record Kept Circuit Board")
+            .properties(p -> p.stacksTo(64))
+            .tag()
+            .defaultModel()
+            .register();
+    public static final ItemEntry<ComponentItem> RECORD_KEPT_PRINTED_CIRCUIT_BOARD = REGISTRATE
+            .item("record_kept_printed_circuit_board",
+                    ComponentItem::create)
+            .lang("Record Kept Printed Circuit Board")
             .properties(p -> p.stacksTo(64))
             .tag()
             .defaultModel()
@@ -578,6 +699,43 @@ public class CosmicItems {
             .defaultModel()
             .register();
 
+    // The Fuckin Spinny Boi
+    public static final ItemEntry<ComponentItem> GYROSCOPE_UV = REGISTRATE
+            .item("uv_gyroscope", ComponentItem::create)
+            .lang("UV Gyroscope")
+            .properties(p -> p.stacksTo(64))
+            .defaultModel()
+            .register();
+    public static final ItemEntry<ComponentItem> GYROSCOPE_UHV = REGISTRATE
+            .item("uhv_gyroscope", ComponentItem::create)
+            .lang("UHV Gyroscope")
+            .properties(p -> p.stacksTo(64))
+            .defaultModel()
+            .register();
+    public static final ItemEntry<ComponentItem> GYROSCOPE_UEV = REGISTRATE
+            .item("uev_gyroscope", ComponentItem::create)
+            .lang("UEV Gyroscope")
+            .properties(p -> p.stacksTo(64))
+            .defaultModel()
+            .register();
+    public static final ItemEntry<ComponentItem> GYROSCOPE_UIV = REGISTRATE
+            .item("uiv_gyroscope", ComponentItem::create)
+            .lang("UIV Gyroscope")
+            .properties(p -> p.stacksTo(64))
+            .defaultModel()
+            .register();
+    public static final ItemEntry<ComponentItem> GYROSCOPE_UXV = REGISTRATE
+            .item("uxv_gyroscope", ComponentItem::create)
+            .lang("UXV Gyroscope")
+            .properties(p -> p.stacksTo(64))
+            .defaultModel()
+            .register();
+    public static final ItemEntry<ComponentItem> GYROSCOPE_OPV = REGISTRATE
+            .item("opv_gyroscope", ComponentItem::create)
+            .lang("OPv Gyroscope")
+            .properties(p -> p.stacksTo(64))
+            .defaultModel()
+            .register();
     public static final ItemEntry<ComponentItem> GELATIN_SCAFFOLD = REGISTRATE
             .item("gelatin_scaffold", ComponentItem::create)
             .lang("Gelatin Scaffold")
@@ -817,6 +975,27 @@ public class CosmicItems {
     public static final ItemEntry<ComponentItem> SOMATIC_PROCESSING_ASSEMBLY = REGISTRATE
             .item("somatic_processing_assembly", ComponentItem::create)
             .lang("Somatoprocessing Assembly Board")
+            .properties(p -> p.stacksTo(16))
+            .tag()
+            .defaultModel()
+            .register();
+    public static final ItemEntry<ComponentItem> OPTIC_PROCESSING_ASSEMBLY = REGISTRATE
+            .item("optical_processing_assembly", ComponentItem::create)
+            .lang("Optical Processor Assembly")
+            .properties(p -> p.stacksTo(16))
+            .tag()
+            .defaultModel()
+            .register();
+    public static final ItemEntry<ComponentItem> SELF_AWARE_PROCESSING_ASSEMBLY = REGISTRATE
+            .item("self_aware_processing_assembly", ComponentItem::create)
+            .lang("Self Aware Processor Assembly")
+            .properties(p -> p.stacksTo(16))
+            .tag()
+            .defaultModel()
+            .register();
+    public static final ItemEntry<ComponentItem> RECORD_KEEPING_PROCESSOR_ASSEMBLY = REGISTRATE
+            .item("record_keeping_processor_assembly", ComponentItem::create)
+            .lang("Record Keeping Processor Assembly")
             .properties(p -> p.stacksTo(16))
             .tag()
             .defaultModel()
@@ -1599,6 +1778,11 @@ public class CosmicItems {
                 ItemProperties.register(item, predicate, (itemStack, c, l, i) -> property.apply(itemStack));
             }
         };
+    }
+
+    public static MalumSpiritType register(MalumSpiritType spiritType) {
+        SPIRITS.put(spiritType.identifier, spiritType);
+        return spiritType;
     }
 
     public static void init() {}
