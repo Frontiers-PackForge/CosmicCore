@@ -1,8 +1,8 @@
 package com.ghostipedia.cosmiccore.api.item;
 
 import com.ghostipedia.cosmiccore.api.block.IBlockPattern;
-
 import com.ghostipedia.cosmiccore.common.data.CosmicItems;
+
 import com.gregtechceu.gtceu.api.item.component.IAddInformation;
 import com.gregtechceu.gtceu.api.item.component.IInteractionItem;
 import com.gregtechceu.gtceu.api.machine.MetaMachine;
