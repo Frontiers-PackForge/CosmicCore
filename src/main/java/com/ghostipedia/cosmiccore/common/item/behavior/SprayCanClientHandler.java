@@ -72,41 +72,30 @@ public class SprayCanClientHandler {
              * and then send that dye to the spray can but since mc is stupid it has to be like this
              */
 
+            
+
             BlockEntity entity = level.getBlockEntity(pos);
             if (entity != null) {
                 if (entity instanceof ShulkerBoxBlockEntity shulker) {
                     color = ExtendedDyeColor.fromDyeColor(shulker.getColor());
 
-                } else if (entity instanceof CableBusBlockEntity cable) {
+                }
+
+                else if (entity instanceof CableBusBlockEntity cable) {
                     var ae2dye = cable.getColor().dye;
-                    if (ae2dye == null) {
+                     if (ae2dye == null) {
                         color = ExtendedDyeColor.SOLVENT;
                     } else {
                         dyeID = ae2dye.getId();
                         color = ExtendedDyeColor.getColorFromDyeId(dyeID);
                     }
-                } else if (entity instanceof IPaintable) {
+                } else if (entity instanceof IPaintable GTEntity) {
                     for (DyeColor dye : DyeColor.values()) {
-                        if (((IPaintable) entity).getPaintingColor() == -1) {
-
+                        if( GTEntity.getPaintingColor() == -1) {
                             color = ExtendedDyeColor.SOLVENT;
-
                         }
-                        if (((IPaintable) entity).getPaintingColor() == dye.getTextColor()) {
+                        if ((GTEntity.getPaintingColor() == dye.getTextColor())) {
                             color = ExtendedDyeColor.getColorFromDyeId(dye.getId());
-                        }
-                    }
-                } else if (entity instanceof MetaMachineBlockEntity meta) {
-
-                    var Machinecolor = meta.getMetaMachine().getPaintingColor();
-                    System.out.println(Machinecolor);
-                    for (DyeColor dye : DyeColor.values()) {
-                        if (Machinecolor == -1) {
-                            color = ExtendedDyeColor.SOLVENT;
-                            break;
-
-                        } else if (Machinecolor == dye.getTextColor()) {
-                            color = ExtendedDyeColor.fromDyeColor(dye);
                         }
                     }
                 }
@@ -114,6 +103,8 @@ public class SprayCanClientHandler {
             // normal blocks
             BlockState state = level.getBlockState(pos);
             MapColor mapColor = state.getMapColor(level, pos);
+
+
 
             // get the id of the map color
             int id = mapColor.id;
