@@ -38,6 +38,7 @@ public class MultiblockInit {
         IndustChemVat.init();
         IPBF.init();
         Laminator.init();
+        ComponentAssemblyLine.init();
         LargeSpoolingMachine.init();
         LunarHammer.init();
         MantleBore.init();

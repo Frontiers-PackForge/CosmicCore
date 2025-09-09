@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "cosmiccore:item/record_kept_printed_circuit_board"
+  }
+}

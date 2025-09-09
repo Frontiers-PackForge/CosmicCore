@@ -100,6 +100,12 @@ public class CosmicRecipeTypes {
             .setMaxIOSize(1, 0, 2, 2)
             .setSound(GAS_SUCC)
             .setProgressBar(GuiTextures.PROGRESS_BAR_ARROW, ProgressTexture.FillDirection.LEFT_TO_RIGHT);
+
+    public static final GTRecipeType COMPONENT_ASSEMBLY_LINE = GTRecipeTypes
+            .register("component_assembly_line", GTRecipeTypes.MULTIBLOCK)
+            .setMaxIOSize(16, 1, 4, 2)
+            .setSound(GAS_SUCC)
+            .setProgressBar(GuiTextures.PROGRESS_BAR_ARROW, ProgressTexture.FillDirection.LEFT_TO_RIGHT);
     public static final GTRecipeType GROVE_RECIPES = GTRecipeTypes.register("drygmy_grove", GTRecipeTypes.MULTIBLOCK)
             .setMaxSize(IO.IN, SoulRecipeCapability.CAP, 1)
             .setMaxSize(IO.OUT, SoulRecipeCapability.CAP, 1)
