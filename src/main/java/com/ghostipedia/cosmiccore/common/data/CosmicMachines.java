@@ -211,6 +211,7 @@ public class CosmicMachines {
             .machine("hpca_indicator", HPCAIndicatorPartMachine::new)
             .langValue("HPCA Indicator")
             .appearanceBlock(COMPUTER_CASING)
+            .modelProperty(GTMachineModelProperties.IS_FORMED, false)
             .model(createOverlayTieredHullMachineModel(CosmicCore.id("block/machine/part/hpca_indicator"))
                     .andThen(b -> b.addDynamicRenderer(CosmicDynamicRenderHelpers::getHPCAIndicatorRender)))
             .tier(ZPM)
@@ -600,6 +601,7 @@ public class CosmicMachines {
             .langValue("Wireless Data Hatch")
             .rotationState(RotationState.ALL)
             .abilities(PartAbility.DATA_ACCESS)
+            .modelProperty(GTMachineModelProperties.IS_FORMED, false)
             .tier(UEV)
             .overlayTieredHullModel("wireless_data_hatch")
             .register();
