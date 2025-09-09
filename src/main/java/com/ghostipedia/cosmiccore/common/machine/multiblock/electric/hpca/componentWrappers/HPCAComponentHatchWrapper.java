@@ -24,4 +24,9 @@ public class HPCAComponentHatchWrapper extends AbstractHPCAComponentHatchWrapper
             return new HPCAComputationProviderWrapper(computationProvider, columnModifier, rowModifier);
         return null;
     }
+
+    @Override
+    public void setActive(boolean active) {
+        active = true;
+    }
 }
