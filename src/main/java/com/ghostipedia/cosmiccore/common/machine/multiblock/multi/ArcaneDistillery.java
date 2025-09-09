@@ -29,8 +29,8 @@ public class ArcaneDistillery {
             .recipeTypes(CosmicRecipeTypes.ARCANE_DISTILLERY, CosmicRecipeTypes.ARCANE_FOLDING)
             .rotationState(RotationState.NON_Y_AXIS)
             .partAppearance((controller, part, side) -> OSCILLATING_GILDED_PTHANTERUM_CASING.getDefaultState())
-            .recipeModifiers(GTRecipeModifiers.PARALLEL_HATCH,
-                    ELECTRIC_OVERCLOCK.apply(OverclockingLogic.PERFECT_OVERCLOCK))
+            .recipeModifiers(GTRecipeModifiers.BATCH_MODE,
+                    ELECTRIC_OVERCLOCK.apply(OverclockingLogic.PERFECT_OVERCLOCK_SUBTICK))
             // spotless:off
             .pattern(definition -> FactoryBlockPattern.start()
                     .aisle("  A  AAA  A  ", "     AAA     ", "     AAA     ", "             ", "             ", "             ", "             ", "             ", "             ", "             ", "     AAA     ", "     AAA     ", "  A  AAA  A  ")
@@ -48,14 +48,15 @@ public class ArcaneDistillery {
                     .aisle("  A  AAA  A  ", "     AQA     ", "     AAA     ", "             ", "             ", "             ", "             ", "             ", "             ", "             ", "     AAA     ", "     AAA     ", "  A  AAA  A  ")
                     .where('Q', Predicates.controller(Predicates.blocks(definition.get())))
                     .where(' ', Predicates.any())
-                    .where('A', blocks(OSCILLATING_GILDED_PTHANTERUM_CASING.get()))
+                    .where('A', blocks(OSCILLATING_GILDED_PTHANTERUM_CASING.get())
+                            .or(autoAbilities(CosmicRecipeTypes.ARCANE_DISTILLERY))
+                            .or(autoAbilities(true,false,false))
+                            .or(abilities(PartAbility.INPUT_ENERGY, PartAbility.INPUT_LASER).setMaxGlobalLimited(2, 2)
+                                    .setPreviewCount(1)))
                     .where('B', blocks(GILDED_PTHANTERUM_CASING.get()))
                     .where('C', blocks(VIBRANT_RUBIDIUM_CASING.get()))
                     .where('D', frames(CosmicMaterials.Neutronite))
-                    .where('E', blocks(TRITANIUM_LINED_HEAVY_NEUTRONIUM_CASING.get())
-                            .or(autoAbilities(CosmicRecipeTypes.ARCANE_DISTILLERY))
-                            .or(abilities(PartAbility.INPUT_ENERGY, PartAbility.INPUT_LASER).setMaxGlobalLimited(2, 2)
-                                    .setPreviewCount(1)))
+                    .where('E', blocks(TRITANIUM_LINED_HEAVY_NEUTRONIUM_CASING.get()))
                     .build())
             // spotless:on
             .workableCasingModel(CosmicCore.id("block/casings/solid/oscillating_gilded_pthanterum_casings"),
