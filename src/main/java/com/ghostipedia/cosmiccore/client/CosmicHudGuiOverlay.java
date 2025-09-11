@@ -53,7 +53,7 @@ public class CosmicHudGuiOverlay implements IGuiOverlay {
         int w = Math.min(sw - 20, 200);
         int h = 6;
         int x = (sw - w) / 2;
-        int y = sh - 28; // above hotbar; tweak if it overlaps other overlays
+        int y = sh - 335; // above hotbar; tweak if it overlaps other overlays
 
         double frac = Math.max(0d, Math.min(1d, (double) timeTicksLeft / (double) timeMaxTicks));
         int filled = (int) (w * frac);
