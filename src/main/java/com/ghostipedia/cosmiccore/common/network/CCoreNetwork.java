@@ -2,7 +2,6 @@ package com.ghostipedia.cosmiccore.common.network;
 
 import com.ghostipedia.cosmiccore.CosmicCore;
 import com.ghostipedia.cosmiccore.common.network.packet.AbyssTimeWarnPacket;
-import com.ghostipedia.cosmiccore.common.network.packet.CosmicClientKeyDownPacket;
 import com.ghostipedia.cosmiccore.common.network.packet.SyncTimeBarPacket;
 
 import net.minecraft.network.FriendlyByteBuf;
@@ -77,7 +76,6 @@ public class CCoreNetwork {
     public static void init() {
         if (INITIALIZED) return;
         INITIALIZED = true;
-        register(CosmicClientKeyDownPacket.class, CosmicClientKeyDownPacket::new, NetworkDirection.PLAY_TO_SERVER);
         register(SyncTimeBarPacket.class, SyncTimeBarPacket::new, NetworkDirection.PLAY_TO_CLIENT);
         register(AbyssTimeWarnPacket.class, AbyssTimeWarnPacket::new, NetworkDirection.PLAY_TO_CLIENT);
     }

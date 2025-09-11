@@ -14,7 +14,6 @@ import com.ghostipedia.cosmiccore.common.machine.multiblock.multi.modular.Multib
 import com.ghostipedia.cosmiccore.common.network.CCoreNetwork;
 import com.ghostipedia.cosmiccore.common.recipe.condition.CosmicConditions;
 import com.ghostipedia.cosmiccore.gtbridge.CosmicRecipeTypes;
-import com.ghostipedia.cosmiccore.utils.input.SyncedKeyMapping;
 
 import com.gregtechceu.gtceu.api.GTCEuAPI;
 import com.gregtechceu.gtceu.api.data.chemical.material.event.MaterialEvent;
@@ -80,7 +79,6 @@ public class CosmicCore {
         CosmicCoreDatagen.init();
         CosmicPredicates.init();
         CosmicMaterialSet.init();
-        SyncedKeyMapping.init();
     }
 
     public static ResourceLocation id(String path) {
