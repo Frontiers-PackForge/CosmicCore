@@ -2,6 +2,7 @@ package com.ghostipedia.cosmiccore.common.network.packet;
 
 import com.ghostipedia.cosmiccore.client.CosmicHudGuiOverlay;
 import com.ghostipedia.cosmiccore.common.network.CCoreNetwork;
+
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
@@ -26,7 +27,6 @@ public class SyncTimeBarPacket implements CCoreNetwork.INetPacket {
         this.maxTicks = buffer.readVarLong();
     }
 
-
     @Override
     public void encode(FriendlyByteBuf buffer) {
         buffer.writeResourceLocation(dimension);
@@ -36,8 +36,7 @@ public class SyncTimeBarPacket implements CCoreNetwork.INetPacket {
 
     @Override
     public void execute(NetworkEvent.Context context) {
-        DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () ->
-                CosmicHudGuiOverlay.setTimeBar(dimension, ticksLeft, maxTicks)
-        );
+        DistExecutor.unsafeRunWhenOn(Dist.CLIENT,
+                () -> () -> CosmicHudGuiOverlay.setTimeBar(dimension, ticksLeft, maxTicks));
     }
 }

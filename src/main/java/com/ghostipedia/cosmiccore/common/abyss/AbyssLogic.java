@@ -1,11 +1,10 @@
 package com.ghostipedia.cosmiccore.common.abyss;
 
-
 import com.ghostipedia.cosmiccore.CosmicCore;
 import com.ghostipedia.cosmiccore.common.network.CCoreNetwork;
 import com.ghostipedia.cosmiccore.common.network.packet.AbyssTimeWarnPacket;
 import com.ghostipedia.cosmiccore.common.network.packet.SyncTimeBarPacket;
-import net.minecraft.core.BlockPos;
+
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -115,7 +114,8 @@ public final class AbyssLogic {
         }
     }
 
-    // OBLITERATE THE OFFENDER -  GET OUT! GET OUT! GET OUT! GET OUT! GET OUT! GET OUT! GET OUT! GET OUT! GET OUT! GET OUT!
+    // OBLITERATE THE OFFENDER - GET OUT! GET OUT! GET OUT! GET OUT! GET OUT! GET OUT! GET OUT! GET OUT! GET OUT! GET
+    // OUT!
     private static void executePlayer(ServerPlayer player, IAbyssTimer cap) {
         cap.setDecaying(AbyssRules.DIM, false);
         hideHUD(player);

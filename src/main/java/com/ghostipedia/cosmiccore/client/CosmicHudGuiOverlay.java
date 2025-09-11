@@ -20,14 +20,16 @@ import org.jetbrains.annotations.NotNull;
 public class CosmicHudGuiOverlay implements IGuiOverlay {
 
     private static long timeTicksLeft = -1;
-    private static long timeMaxTicks  = 0;
+    private static long timeMaxTicks = 0;
+
     public static void setTimeBar(ResourceLocation dim, long left, long max) {
         timeTicksLeft = left;
-        timeMaxTicks  = max;
+        timeMaxTicks = max;
     }
 
     @Override
-    public void render(ForgeGui forgeGui, GuiGraphics guiGraphics, float partialTick, int screenWidth, int screenHeight) {
+    public void render(ForgeGui forgeGui, GuiGraphics guiGraphics, float partialTick, int screenWidth,
+                       int screenHeight) {
         Minecraft mc = Minecraft.getInstance();
         if (mc.isWindowActive() && mc.level != null && !mc.options.renderDebug && !mc.options.hideGui) {
             renderHUDWirelessPDA(WirelessPDABehavior.CosmicCuriosUtils.getPDACurio(mc.player), guiGraphics);
@@ -57,7 +59,7 @@ public class CosmicHudGuiOverlay implements IGuiOverlay {
         int filled = (int) (w * frac);
 
         // background & filled bar
-        gg.fill(x, y, x + w,      y + h, 0xAA000000);
+        gg.fill(x, y, x + w, y + h, 0xAA000000);
         gg.fill(x, y, x + filled, y + h, 0xAAFF5555);
 
         // mm:ss label

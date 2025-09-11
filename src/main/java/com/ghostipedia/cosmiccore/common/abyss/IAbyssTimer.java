@@ -3,7 +3,6 @@ package com.ghostipedia.cosmiccore.common.abyss;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.level.Level;
 
-
 public interface IAbyssTimer {
 
     long getRemainingTicks(ResourceKey<Level> dimension);
@@ -17,8 +16,4 @@ public interface IAbyssTimer {
     double getCleanse(ResourceKey<Level> dimension);
 
     void setCleanse(ResourceKey<Level> dimension, double amount);
-
-
-
-
 }
