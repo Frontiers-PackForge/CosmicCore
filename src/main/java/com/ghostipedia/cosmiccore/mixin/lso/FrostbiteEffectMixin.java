@@ -20,7 +20,7 @@ public abstract class FrostbiteEffectMixin extends MobEffect {
     @ModifyArg(method = "applyEffectTick",
                at = @At(
                         value = "INVOKE",
-                        target = "Lnet/minecraft/world/entity/player/Player;hurt(Lnet/minecraft/world/damagesource/DamageSource;F)Z"),
+                        target = "Lsfiomn/legendarysurvivaloverhaul/api/ModDamageTypes;hypothermia(Lnet/minecraft/world/entity/Entity;F)V"),
                index = 1)
     private float cosmiccore$changeDamageAmount(float amount, @Local(argsOnly = true) int amplifier) {
         return amount + amplifier;
