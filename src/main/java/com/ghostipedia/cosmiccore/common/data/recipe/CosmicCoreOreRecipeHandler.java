@@ -70,7 +70,7 @@ public class CosmicCoreOreRecipeHandler {
         Material byproduct3 = property.getOreByProduct(2);
         Material byproduct4 = property.getOreByProduct(Integer.MAX_VALUE);
 
-        var builder = CHROMATIC_FLOTATION_PLANT.recipeBuilder("refined" + material.getName() + "_to_frothed")
+        var builder = CHROMATIC_FLOTATION_PLANT.recipeBuilder("refined_" + material.getName() + "_to_frothed")
                 .inputItems(crushedRefined, material)
                 .inputFluids(Prisma.getFluid(1000))
                 .outputItems(frothedStack.copyWithCount(2));
