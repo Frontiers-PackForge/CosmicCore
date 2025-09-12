@@ -338,7 +338,7 @@ public class CosmicItems {
     // Harmonic Chip Stuff
     public static final ItemEntry<ComponentItem> FLAWED_RESONANT_WAFER = REGISTRATE
             .item("flawed_resonant_wafer", ComponentItem::create)
-            .lang("Flawed Resonant Wafer")
+            .lang("Flawed Harmonic Wafer")
             .properties(p -> p.stacksTo(64))
             .tag()
             .defaultModel()
@@ -346,7 +346,7 @@ public class CosmicItems {
 
     public static final ItemEntry<ComponentItem> REFINED_RESONANT_WAFER = REGISTRATE
             .item("refined_resonant_wafer", ComponentItem::create)
-            .lang("Refined Resonant Wafer")
+            .lang("Refined Harmonic Wafer")
             .properties(p -> p.stacksTo(64))
             .tag()
             .defaultModel()
@@ -406,6 +406,22 @@ public class CosmicItems {
     public static final ItemEntry<ComponentItem> NULL_WAFER_HARMONIC = REGISTRATE
             .item("null_refined_resonant_wafer", ComponentItem::create)
             .lang("Nullified Harmonic Wafer")
+            .properties(p -> p.stacksTo(64))
+            .tag()
+            .defaultModel()
+            .register();
+
+    public static final ItemEntry<ComponentItem> NULLIFIED_HARMONICS_WAFER = REGISTRATE
+            .item("nullified_harmonics_wafer", ComponentItem::create)
+            .lang("Nullified Harmonic Wafer")
+            .properties(p -> p.stacksTo(64))
+            .tag()
+            .defaultModel()
+            .register();
+
+    public static final ItemEntry<ComponentItem> REFINED_HARMONICS_WAFER = REGISTRATE
+            .item("refined_harmonics_wafer", ComponentItem::create)
+            .lang("Refined Harmonic Wafer")
             .properties(p -> p.stacksTo(64))
             .tag()
             .defaultModel()
