@@ -137,11 +137,10 @@ public class CosmicMaterials {
                 .langValue("Nevramite")
                 .liquid(new FluidBuilder().temperature(9800))
                 .plasma(109000)
-                .fluid(FluidStorageKeys.MOLTEN, FluidState.LIQUID)
                 .formula("✫")
                 .color(0x372536)
                 .iconSet(CosmicMaterialSet.NEVRAMITE)
-                .components(Osmium, 8, Gadolinium,3,Rhenium,3,Molybdenum,2,ActivatedCarbon,1,StarMetal,1)
+                .components(Osmium, 8, Gadolinium, 3, Rhenium, 3, Molybdenum, 2, ActivatedCarbon, 1, StarMetal, 1)
                 .flags(GENERATE_BOLT_SCREW, GENERATE_ROUND, GENERATE_GEAR, GENERATE_SMALL_GEAR, GENERATE_RING,
                         GENERATE_FRAME, GENERATE_SPRING, GENERATE_SPRING_SMALL, GENERATE_FINE_WIRE, GENERATE_DENSE)
                 .cableProperties(GTValues.V[8], 4, 1)
