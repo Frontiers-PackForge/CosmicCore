@@ -44,7 +44,7 @@ public class CosmicCoreOreRecipeHandler {
         Material byproduct = property.getOreByProduct(0);
         Material byproduct2 = property.getOreByProduct(1);
 
-        var builder = LEACHING_PLANT.recipeBuilder("crushed" + material.getName() + "_to_crushedleached")
+        var builder = LEACHING_PLANT.recipeBuilder("crushed_" + material.getName() + "_to_crushedleached")
                 .inputItems(crushedPurified, material)
                 .inputFluids(Water.getFluid(100))
                 .inputFluids(SulfuricAcid.getFluid(200))
@@ -97,7 +97,7 @@ public class CosmicCoreOreRecipeHandler {
 
         Material byproduct = property.getOreByProduct(1);
 
-        var builder = THERMAL_CENTRIFUGE_RECIPES.recipeBuilder("leached" + material.getName() + "_to_refined")
+        var builder = THERMAL_CENTRIFUGE_RECIPES.recipeBuilder("leached_" + material.getName() + "_to_refined")
                 .inputItems(crushedLeached, material)
                 .outputItems(refinedStack);
         if (byproduct != GTMaterials.NULL && !ChemicalHelper.get(dust, byproduct).isEmpty()) {
@@ -114,7 +114,7 @@ public class CosmicCoreOreRecipeHandler {
 
         Material byproduct = property.getOreByProduct(0);
 
-        var builder = CHEMICAL_BATH_RECIPES.recipeBuilder("frothed" + material.getName() + "_to_purified")
+        var builder = CHEMICAL_BATH_RECIPES.recipeBuilder("frothed_" + material.getName() + "_to_purified")
                 .inputItems(prismaFrothed, material)
                 .inputFluids(Water.getFluid(1000))
                 .outputItems(pureStack);
