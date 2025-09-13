@@ -1,7 +1,8 @@
 package com.ghostipedia.cosmiccore.common.network;
 
 import com.ghostipedia.cosmiccore.CosmicCore;
-import com.ghostipedia.cosmiccore.common.network.packet.CosmicClientKeyDownPacket;
+import com.ghostipedia.cosmiccore.common.network.packet.AbyssTimeWarnPacket;
+import com.ghostipedia.cosmiccore.common.network.packet.SyncTimeBarPacket;
 
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceKey;
@@ -23,6 +24,7 @@ public class CCoreNetwork {
     private static final String PROTOCOL_VERSION = "1.0.0";
     private static final SimpleChannel INSTANCE = NetworkRegistry.newSimpleChannel(CosmicCore.id("network"),
             () -> PROTOCOL_VERSION, PROTOCOL_VERSION::equals, PROTOCOL_VERSION::equals);
+    private static boolean INITIALIZED = false;
 
     private static int nextPacketId = 0;
 
@@ -72,6 +74,9 @@ public class CCoreNetwork {
     }
 
     public static void init() {
-        register(CosmicClientKeyDownPacket.class, CosmicClientKeyDownPacket::new, NetworkDirection.PLAY_TO_SERVER);
+        if (INITIALIZED) return;
+        INITIALIZED = true;
+        register(SyncTimeBarPacket.class, SyncTimeBarPacket::new, NetworkDirection.PLAY_TO_CLIENT);
+        register(AbyssTimeWarnPacket.class, AbyssTimeWarnPacket::new, NetworkDirection.PLAY_TO_CLIENT);
     }
 }
