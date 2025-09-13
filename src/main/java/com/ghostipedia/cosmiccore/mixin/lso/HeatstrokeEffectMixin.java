@@ -20,7 +20,7 @@ public abstract class HeatstrokeEffectMixin extends MobEffect {
     @ModifyArg(method = "applyEffectTick",
                at = @At(
                         value = "INVOKE",
-                        target = "Lsfiomn/legendarysurvivaloverhaul/api/ModDamageTypes;hyperthermia(Lnet/minecraft/world/entity/Entity;F)V"),
+                        target = "Lnet/minecraft/world/entity/player/Player;hurt(Lnet/minecraft/world/damagesource/DamageSource;F)Z"),
                index = 1)
     private float cosmiccore$changeDamageAmount(float amount, @Local(argsOnly = true) int amplifier) {
         return amount + amplifier;
