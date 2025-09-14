@@ -10,7 +10,7 @@ import org.spongepowered.asm.mixin.injection.ModifyArg;
 import org.spongepowered.asm.mixin.injection.ModifyVariable;
 import sfiomn.legendarysurvivaloverhaul.common.effects.FrostbiteEffect;
 
-@Mixin(value = FrostbiteEffect.class)
+@Mixin(value = FrostbiteEffect.class, remap = false)
 public abstract class FrostbiteEffectMixin extends MobEffect {
 
     protected FrostbiteEffectMixin(MobEffectCategory category, int color) {
