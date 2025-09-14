@@ -29,6 +29,8 @@ public class CryogenicsChamber {
             .rotationState(RotationState.NON_Y_AXIS)
             .recipeType(CosmicRecipeTypes.CRYOGENICS_CHAMBER)
             .hasBER(true)
+            .partAppearance((controller, part, side) -> CRYOGENIC_CASING.getDefaultState())
+            .appearanceBlock(HEAVY_FROST_PROOF_CASING)
             .recipeModifiers(GTRecipeModifiers.PARALLEL_HATCH,
                     GTRecipeModifiers.ELECTRIC_OVERCLOCK.apply(OverclockingLogic.NON_PERFECT_OVERCLOCK_SUBTICK),
                     GTRecipeModifiers.BATCH_MODE)
@@ -71,9 +73,7 @@ public class CryogenicsChamber {
             .model(createSeparateControllerCasingMachineModel(
                     CosmicCore.id("block/casings/solid/heavy_frost_proof_casing"),
                     CosmicCore.id("block/casings/solid/cryogenic_casing"),
-                    GTCEu.id("block/multiblock/hpca")).andThen(
-                            model -> model
-                                    .addDynamicRenderer(CosmicDynamicRenderHelpers::createCryoChamberPartRender)))
+                    GTCEu.id("block/multiblock/hpca")))
             .register();
 
     public static void init() {}
