@@ -34,6 +34,7 @@ public class CosmicCoreClient {
         DynamicRenderManager.register(CosmicCore.id("concept_incinerator"), ConceptIncineratorRender.TYPE);
         DynamicRenderManager.register(CosmicCore.id("spirit_crucible"), SpiritCrucibleRender.TYPE);
         DynamicRenderManager.register(CosmicCore.id("biovat_render"), BioVatRender.TYPE);
+        DynamicRenderManager.register(CosmicCore.id("tester_render"), RenderTesterHelper.TYPE);
     }
 
     @Getter

@@ -1,6 +1,6 @@
 package com.ghostipedia.cosmiccore.common.data;
 
-import com.ghostipedia.cosmiccore.common.machine.multiblock.ExoticCombustionEngineMachine;
+import com.ghostipedia.cosmiccore.common.machine.multiblock.multi.logic.ExoticCombustionEngineMachine;
 
 import com.gregtechceu.gtceu.GTCEu;
 import com.gregtechceu.gtceu.api.GTValues;

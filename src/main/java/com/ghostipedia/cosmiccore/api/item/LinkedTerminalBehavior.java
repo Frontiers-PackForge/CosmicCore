@@ -1,6 +1,7 @@
 package com.ghostipedia.cosmiccore.api.item;
 
 import com.ghostipedia.cosmiccore.api.block.IBlockPattern;
+import com.ghostipedia.cosmiccore.common.data.CosmicItems;
 
 import com.gregtechceu.gtceu.api.item.component.IAddInformation;
 import com.gregtechceu.gtceu.api.item.component.IInteractionItem;
@@ -44,16 +45,18 @@ public class LinkedTerminalBehavior implements IInteractionItem, IAddInformation
 
     @Override
     public InteractionResult useOn(UseOnContext context) {
-        if (context.getPlayer() == null || !context.getPlayer().isShiftKeyDown()) return InteractionResult.PASS;
+        var player = context.getPlayer();
+        if (player == null || !player.isShiftKeyDown()) return InteractionResult.PASS;
         var level = context.getLevel();
         var pos = context.getClickedPos();
         var stack = context.getItemInHand();
         if (!(MetaMachine.getMachine(level, pos) instanceof IMultiController controller)) return InteractionResult.PASS;
         if (controller.isFormed() || level.isClientSide) return InteractionResult.PASS;
-        var grid = getLinkedGrid(stack, level, context.getPlayer());
+        var grid = getLinkedGrid(stack, level, player);
         if (grid == null) return InteractionResult.PASS;
-        ((IBlockPattern) controller.getPattern()).cosmiccore$autoBuild(context.getPlayer(),
+        ((IBlockPattern) controller.getPattern()).cosmiccore$autoBuild(player,
                 controller.getMultiblockState(), grid);
+        player.getCooldowns().addCooldown(CosmicItems.LINKED_TERMINAL.asItem(), 100);
         return InteractionResult.sidedSuccess(false);
     }
 

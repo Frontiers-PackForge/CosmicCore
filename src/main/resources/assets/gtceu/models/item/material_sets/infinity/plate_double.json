@@ -1,7 +1,8 @@
 {
-    "parent": "item/generated",
+    "parent": "gtceu:item/material_sets/infinity/plate",
     "textures": {
-        "layer0": "gtceu:item/material_sets/infinity/plate_double",
-        "layer1": "gtceu:item/material_sets/dull/plate_double_overlay"
+        "layer0": "gtceu:item/void",
+        "layer1": "gtceu:item/void",
+        "layer2": "gtceu:item/material_sets/infinity/plate_double"
     }
 }

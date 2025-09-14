@@ -83,8 +83,10 @@ public class CosmicLangHandler extends LangHandler {
                 "§7Accepts §6Laser Hatches§r");
 
         // recipe stuff
-        provider.add("cosmiccore.recipe.soulIn", "Soul Input: %s");
-        provider.add("cosmiccore.recipe.soulOut", "Soul Output: %s");
+        provider.add("cosmiccore.recipe.soul_in", "Soul Input: %s");
+        provider.add("cosmiccore.recipe.soul_out", "Soul Output: %s");
+        provider.add("cosmiccore.recipe.sterile_in", "Sterilizer: %s %s");
+        provider.add("cosmiccore.recipe.sterile_out", "ERROR?");
         provider.add("cosmiccore.wire_coil.magnet_capacity", "  §fMax Field Strength: §f%s Tesla");
         provider.add("cosmiccore.wire_coil.magnet_regen", "  §5Field Regen Rate: %s Tesla/t");
         provider.add("cosmiccore.wire_coil.eu_multiplier", "  §aMagnet EU Cost: §c%s EU/t");
@@ -94,6 +96,7 @@ public class CosmicLangHandler extends LangHandler {
         provider.add("tooltip.cosmiccore.thermia_hatch_limit", "§cTemp. Limit: %sK");
         provider.add("cosmiccore.multiblock.magnetic_field_strength", "§fMax Field Strength§f:§6 %s");
         provider.add("cosmiccore.multiblock.magnetic_regen", "§aField Recovery Rate§f:§6 %sT/t");
+        provider.add("gtceu.titan_fusion", "Titan Fusion Reactor"); // recipe type lang
 
         // gui lines
         provider.add("gui.cosmiccore.soul_hatch.label.import", "Soul Input Hatch");
@@ -109,11 +112,23 @@ public class CosmicLangHandler extends LangHandler {
         provider.add("cosmiccore.recipe.minField", "§fMin. Field Strength: %sT");
         provider.add("cosmiccore.recipe.fieldDecay", "§fField Decay: %sT/t");
         provider.add("cosmiccore.recipe.fieldSlam", "§fField Consumed: %sT");
+        provider.add("cosmiccore.recipe.condition.titan.tooltip", "Requires Titan Reactor Tier: %s");
 
         provider.add("cosmiccore.multiblock.current_contagion", "§6Contagion Strength: %s");
         provider.add("cosmiccore.multiblock.contagion_rate", "§cContagion Rate: %s/t");
         provider.add("cosmiccore.multiblock.cleaning_status", "§aCleaning Status: %s");
         provider.add("cosmiccore.multiblock.cleaning_status.error", "§cCleaning Status: §4No Cleaning Agent!");
+
+        provider.add("cosmic.multiblock.parallel",
+                "Overloading Parallels by 4x" + "\nMax Parallel: %d" + "\nOriginal Parallel: %d");
+        provider.add("cosmic.multiblock.parallel.exact", "Performing %d Recipes in Parallel");
+
+        provider.add("cosmic.multiblock.parallel_fixed_64", "Max Parallel: %d");
+        provider.add("cosmic.multiblock.parallel_fixed_64.exact", "Performing %d Recipes in Parallel");
+        provider.add("cosmic.multiblock.orvex_tier", "§fReactor Tier§7: §6%s");
+        provider.add("cosmic.multiblock.orvex_count", "§fOrvex Residue Extracted§7: %s");
+        provider.add("cosmic.multiblock.orvex_upgrade_requires", "§fUpgrade Requires§7: %s");
+        provider.add("cosmic.multiblock.orvex_upgrade_check", "§fUpgrade Status: §a%s");
 
         provider.add("cosmiccore.multiblock.fuel_star", "§a§lFuel Star Core");
         provider.add("cosmiccore.multiblock.send_orbit_data", "§a§lSend Research Payload");
@@ -320,6 +335,8 @@ public class CosmicLangHandler extends LangHandler {
         // JADE
         provider.add("config.jade.plugin_cosmiccore.drone_station", "[CC] Drone Station");
         provider.add("config.jade.plugin_cosmiccore.drone_maintenance_interface", "[CC] Drone Maintenance Interface");
+
+        provider.add("config.jade.plugin_cosmiccore.parallel_info_cc", "[CC] Parallel Info");
 
         provider.add("debug.owner.uuid", "§aOwner UUID:§a %s");
         provider.add("debug.team.uuid", "§aTeam UUID:§a %s");

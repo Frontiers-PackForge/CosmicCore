@@ -1,5 +1,6 @@
 package com.ghostipedia.cosmiccore.api.machine.multiblock;
 
+import com.ghostipedia.cosmiccore.CosmicCore;
 import com.ghostipedia.cosmiccore.api.machine.part.DroneMaintenanceInterfacePartMachine;
 import com.ghostipedia.cosmiccore.api.misc.DroneStationConnection;
 import com.ghostipedia.cosmiccore.common.data.CosmicItems;
@@ -166,15 +167,19 @@ public class DroneStationMachine extends WorkableElectricMultiblockMachine {
         var itemHandlers = getCapabilitiesFlat(IO.IN, ItemRecipeCapability.CAP);
         for (var handler : itemHandlers) {
             if (!(handler instanceof NotifiableItemStackHandler itemHandler)) continue;
-            var items = itemHandler.getContents();
-            for (var stackObject : items) {
-                ItemStack stack = (ItemStack) stackObject;
+            for (int i = 0; i < itemHandler.getSlots(); i++) {
+                ItemStack stack = itemHandler.getStackInSlot(i);
                 if (stack.getItem().equals(currentTier.item)) {
                     // We have found the stack with the drone, try consuming and return true
                     if (currentTier.consumptionChance == 0) return true;
                     float randomValue = GTValues.RNG.nextFloat();
                     if (randomValue < currentTier.consumptionChance) {
-                        stack.setCount(stack.getCount() - 1);
+                        var stackTaken = itemHandler.extractItemInternal(i, 1, false);
+                        if (!stackTaken.getItem().equals(currentTier.item) || stackTaken.getCount() != 1) {
+                            CosmicCore.LOGGER.error("Something went wrong when extracting done for Drone Multi: " +
+                                    stackTaken.getDisplayName());
+                            return false;
+                        }
                     }
                     return true;
                 }

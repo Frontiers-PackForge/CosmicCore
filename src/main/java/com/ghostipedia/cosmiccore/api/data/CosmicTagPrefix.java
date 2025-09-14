@@ -13,6 +13,7 @@ import net.minecraft.world.level.block.Block;
 
 import java.util.function.Predicate;
 
+import static com.gregtechceu.gtceu.api.data.chemical.material.info.MaterialFlags.GENERATE_ROD;
 import static com.gregtechceu.gtceu.api.data.tag.TagPrefix.Conditions.hasIngotProperty;
 import static com.gregtechceu.gtceu.api.data.tag.TagPrefix.Conditions.hasOreProperty;
 
@@ -32,7 +33,7 @@ public class CosmicTagPrefix {
 
     public static final Predicate<Material> hasWireProp = material -> material.hasProperty(PropertyKey.WIRE);
     public static final Predicate<Material> hasPlateProp = material -> material.hasFlag(MaterialFlags.GENERATE_PLATE);
-    public static final Predicate<Material> hasRodProp = material -> material.hasFlag(MaterialFlags.GENERATE_ROD);
+    public static final Predicate<Material> hasRodProp = material -> material.hasFlag(GENERATE_ROD);
     public static final Predicate<Material> hasFrameProp = material -> material.hasFlag(MaterialFlags.GENERATE_FRAME);
     public static final Predicate<Material> hasBoltProp = material -> material
             .hasFlag(MaterialFlags.GENERATE_BOLT_SCREW);
@@ -113,8 +114,8 @@ public class CosmicTagPrefix {
                 .materialIconType(CosmicCoreMaterialIconType.alveFoil)
                 .unificationEnabled(true)
                 .generateItem(true)
-                .maxStackSize(32)
-                .generationCondition(hasPlateProp);
+                .maxStackSize(64)
+                .generationCondition(hasPlateProp.and(hasFineWireProp));
 
         shapeMemoryFoil = new TagPrefix("shapeMemoryFoil")
                 .idPattern("%s_shape_memory_foil")
@@ -123,7 +124,7 @@ public class CosmicTagPrefix {
                 .materialIconType(CosmicCoreMaterialIconType.memoryFoil)
                 .unificationEnabled(true)
                 .generateItem(true)
-                .maxStackSize(32)
-                .generationCondition(hasBoltProp);
+                .maxStackSize(64)
+                .generationCondition(hasPlateProp.and(hasWireProp).and(hasBoltProp));
     }
 }

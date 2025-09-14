@@ -18,6 +18,7 @@ public class MultiblockInit {
         HemophagicTransfuser.init();
         PlasmiteDistillery.init();
         HeavyAssembler.init();
+        PCBFoundry.init();
         WelderMulti.init();
         StarLadder.init();
         VoidMiner.init();
@@ -37,7 +38,9 @@ public class MultiblockInit {
         IndustChemVat.init();
         IPBF.init();
         Laminator.init();
+        ComponentAssemblyLine.init();
         LargeSpoolingMachine.init();
+        LunarHammer.init();
         MantleBore.init();
         NPR.init();
         OrbitalForge.init();
@@ -46,5 +49,6 @@ public class MultiblockInit {
         SteamCaster.init();
         SteamMixer.init();
         SufferingChamber.init();
+        TitanFusion.init();
     }
 }

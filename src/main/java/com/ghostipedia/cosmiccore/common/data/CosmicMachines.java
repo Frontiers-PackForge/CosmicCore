@@ -28,6 +28,7 @@ import com.gregtechceu.gtceu.api.machine.MachineDefinition;
 import com.gregtechceu.gtceu.api.machine.MetaMachine;
 import com.gregtechceu.gtceu.api.machine.MultiblockMachineDefinition;
 import com.gregtechceu.gtceu.api.machine.multiblock.PartAbility;
+import com.gregtechceu.gtceu.api.machine.property.GTMachineModelProperties;
 import com.gregtechceu.gtceu.api.machine.steam.SimpleSteamMachine;
 import com.gregtechceu.gtceu.api.machine.trait.RecipeLogic;
 import com.gregtechceu.gtceu.api.pattern.FactoryBlockPattern;
@@ -143,8 +144,6 @@ public class CosmicMachines {
             CosmicParallelHatchPartMachine::new,
             (tier, builder) -> builder
                     .langValue(switch (tier) {
-                        case 7 -> "Ultimate";
-                        case 8 -> "Super";
                         case 9 -> "Extreme";
                         case 10 -> "WarpTech";
                         case 15 -> "Paradox";
@@ -212,6 +211,7 @@ public class CosmicMachines {
             .machine("hpca_indicator", HPCAIndicatorPartMachine::new)
             .langValue("HPCA Indicator")
             .appearanceBlock(COMPUTER_CASING)
+            .modelProperty(GTMachineModelProperties.IS_FORMED, false)
             .model(createOverlayTieredHullMachineModel(CosmicCore.id("block/machine/part/hpca_indicator"))
                     .andThen(b -> b.addDynamicRenderer(CosmicDynamicRenderHelpers::getHPCAIndicatorRender)))
             .tier(ZPM)
@@ -253,6 +253,7 @@ public class CosmicMachines {
                         .langValue(GTValues.VNF[tier] + ' ' + displayName)
                         .abilities(abilities)
                         .rotationState(RotationState.ALL)
+                        .modelProperty(GTMachineModelProperties.IS_FORMED, false)
                         .overlayTieredHullModel("soul_hatch")
                         .tooltipBuilder((item, tooltip) -> {
                             if (io == IO.IN)
@@ -273,6 +274,7 @@ public class CosmicMachines {
                 (tier, builder) -> builder
                         .langValue(VNF[tier] + ' ' + displayName)
                         .abilities(abilities)
+                        .modelProperty(GTMachineModelProperties.IS_FORMED, false)
                         .rotationState(RotationState.ALL)
                         .tooltips(WirelessEnergyHatchPartMachine.getTooltipComponents(tier, io, amperage))
                         .overlayTieredHullModel(model)
@@ -288,6 +290,7 @@ public class CosmicMachines {
                         .abilities(abilities)
                         .rotationState(RotationState.ALL)
                         .overlayTieredHullModel(model)
+                        .modelProperty(GTMachineModelProperties.IS_FORMED, false)
                         .tooltipBuilder((item, tooltip) -> {
                             if (io == IO.IN)
                                 tooltip.add(Component.translatable("tooltip.cosmiccore.thermia_hatch_limit",
@@ -303,6 +306,7 @@ public class CosmicMachines {
             .langValue("Crop Holder")
             .tier(HV)
             .rotationState(RotationState.ALL)
+            .modelProperty(GTMachineModelProperties.IS_FORMED, false)
             .abilities(PartAbility.IMPORT_ITEMS)
             .modelProperty(RecipeLogic.STATUS_PROPERTY, RecipeLogic.Status.IDLE)
             .model(createWorkableTieredHullMachineModel(GTCEu.id("block/machines/object_holder"))
@@ -315,6 +319,7 @@ public class CosmicMachines {
             .langValue("Sensor Hatch")
             .rotationState(RotationState.ALL)
             .abilities(CosmicPartAbility.PSS_SENSORS)
+            .modelProperty(GTMachineModelProperties.IS_FORMED, false)
             .modelProperty(RecipeLogic.STATUS_PROPERTY, RecipeLogic.Status.IDLE)
             .model(createWorkableTieredHullMachineModel(GTCEu.id("block/machines/object_holder"))
                     .andThen((ctx, prov, model) -> {
@@ -596,6 +601,7 @@ public class CosmicMachines {
             .langValue("Wireless Data Hatch")
             .rotationState(RotationState.ALL)
             .abilities(PartAbility.DATA_ACCESS)
+            .modelProperty(GTMachineModelProperties.IS_FORMED, false)
             .tier(UEV)
             .overlayTieredHullModel("wireless_data_hatch")
             .register();
@@ -607,18 +613,30 @@ public class CosmicMachines {
             .abilities(PartAbility.MAINTENANCE)
             .tooltips(Component.translatable("gtceu.part_sharing.disabled"))
             .tier(EV)
+            .modelProperty(GTMachineModelProperties.IS_FORMED, false)
             .overlayTieredHullModel("drone_hatch_maint")
             .langValue("Drone Maintenance Interface")
             .register();
 
     public static final MachineDefinition STERILIZATION_HATCH = REGISTRATE
-            .machine("sterilization_hatch", (holder) -> new SterilizationHatchPartMachine(holder, ZPM, IO.IN))
+            .machine("sterilization_hatch", (holder) -> new SterilizationHatchPartMachine(holder, ZPM, IO.IN, 16000))
             .langValue("Sterilzation Hatch")
             .rotationState(RotationState.ALL)
             .tier(ZPM)
+            .modelProperty(GTMachineModelProperties.IS_FORMED, false)
             .overlayTieredHullModel("cleaning_cover")
             .abilities(STERILIZE_HATCH)
+            .register();
 
+    public static final MachineDefinition HUGE_STERILIZATION_HATCH = REGISTRATE
+            .machine("huge_sterilization_hatch",
+                    (holder) -> new SterilizationHatchPartMachine(holder, ZPM, IO.IN, 16000))
+            .langValue("Sterilzation Hatch")
+            .rotationState(RotationState.ALL)
+            .tier(ZPM)
+            .modelProperty(GTMachineModelProperties.IS_FORMED, false)
+            .overlayTieredHullModel("cleaning_cover")
+            .abilities(STERILIZE_HATCH)
             .register();
 
     public static void init() {

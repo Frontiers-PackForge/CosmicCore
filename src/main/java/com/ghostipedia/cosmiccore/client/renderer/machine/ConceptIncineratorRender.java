@@ -1,7 +1,7 @@
 package com.ghostipedia.cosmiccore.client.renderer.machine;
 
 import com.ghostipedia.cosmiccore.CosmicCore;
-import com.ghostipedia.cosmiccore.common.machine.multiblock.VoraxReactorMachine;
+import com.ghostipedia.cosmiccore.common.machine.multiblock.multi.logic.VoraxReactorMachine;
 
 import com.gregtechceu.gtceu.api.machine.multiblock.WorkableElectricMultiblockMachine;
 import com.gregtechceu.gtceu.api.pattern.util.RelativeDirection;

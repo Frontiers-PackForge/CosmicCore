@@ -44,4 +44,9 @@ public class HPCACoolantProviderWrapper extends AbstractHPCAComponentHatchWrappe
 
         return (int) Math.floor(maxCoolant);
     }
+
+    @Override
+    public void setActive(boolean active) {
+        active = true;
+    }
 }

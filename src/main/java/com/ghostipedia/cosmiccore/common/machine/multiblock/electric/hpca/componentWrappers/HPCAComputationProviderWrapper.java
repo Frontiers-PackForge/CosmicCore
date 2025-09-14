@@ -39,4 +39,9 @@ public class HPCAComputationProviderWrapper extends AbstractHPCAComponentHatchWr
 
         return (int) Math.floor(coolingAmount);
     }
+
+    @Override
+    public void setActive(boolean active) {
+        active = true;
+    }
 }

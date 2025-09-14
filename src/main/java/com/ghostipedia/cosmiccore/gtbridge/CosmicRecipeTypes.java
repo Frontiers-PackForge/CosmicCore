@@ -41,6 +41,23 @@ public class CosmicRecipeTypes {
             .setMaxIOSize(1, 1, 1, 1)
             .setProgressBar(GuiTextures.PROGRESS_BAR_ARROW, ProgressTexture.FillDirection.LEFT_TO_RIGHT);
 
+    public static final GTRecipeType PCB_FABRICATOR = GTRecipeTypes
+            .register("pcb_fab", ELECTRIC)
+            .setMaxIOSize(8, 1, 4, 0)
+            .setProgressBar(GuiTextures.PROGRESS_BAR_ARROW_MULTIPLE, ProgressTexture.FillDirection.LEFT_TO_RIGHT);
+
+    public static final GTRecipeType TITAN_FUSION_RECIPES = GTRecipeTypes
+            .register("titan_fusion", ELECTRIC)
+            .setMaxIOSize(3, 3, 3, 6)
+            .setSound(GTSoundEntries.REPLICATOR)
+            .setProgressBar(GuiTextures.PROGRESS_BAR_ARROW_MULTIPLE, ProgressTexture.FillDirection.LEFT_TO_RIGHT);
+
+    public static final GTRecipeType LUNAR_HAMMER = GTRecipeTypes
+            .register("lunar_hammer", ELECTRIC)
+            .setMaxIOSize(3, 3, 2, 2)
+            .setSound(GTSoundEntries.JET_ENGINE)
+            .setProgressBar(GuiTextures.PROGRESS_BAR_ARROW_MULTIPLE, ProgressTexture.FillDirection.LEFT_TO_RIGHT);
+
     public static final GTRecipeType SOUL_TESTER_RECIPES = GTRecipeTypes
             .register("soul_tester", GTRecipeTypes.MULTIBLOCK)
             .setMaxSize(IO.IN, SoulRecipeCapability.CAP, 1)
@@ -81,6 +98,12 @@ public class CosmicRecipeTypes {
     public static final GTRecipeType MANA_DIGITIZER = GTRecipeTypes
             .register("mana_digitizer", GTRecipeTypes.MULTIBLOCK)
             .setMaxIOSize(1, 0, 2, 2)
+            .setSound(GAS_SUCC)
+            .setProgressBar(GuiTextures.PROGRESS_BAR_ARROW, ProgressTexture.FillDirection.LEFT_TO_RIGHT);
+
+    public static final GTRecipeType COMPONENT_ASSEMBLY_LINE = GTRecipeTypes
+            .register("component_assembly_line", GTRecipeTypes.MULTIBLOCK)
+            .setMaxIOSize(16, 1, 4, 2)
             .setSound(GAS_SUCC)
             .setProgressBar(GuiTextures.PROGRESS_BAR_ARROW, ProgressTexture.FillDirection.LEFT_TO_RIGHT);
     public static final GTRecipeType GROVE_RECIPES = GTRecipeTypes.register("drygmy_grove", GTRecipeTypes.MULTIBLOCK)
