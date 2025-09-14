@@ -113,7 +113,7 @@ public class StellarIrisRender extends DynamicRender<IrisMultiblockMachine, Stel
         }
 
         poseStack.translate(x0ffset, y0ffset, z0ffset);
-//        poseStack.mulPose(new Quaternionf().rotateAxis(totalTick * Mth.TWO_PI / 80, 0, 1, 0));
+        // poseStack.mulPose(new Quaternionf().rotateAxis(totalTick * Mth.TWO_PI / 80, 0, 1, 0));
         poseStack.scale(7.0f, 7, 7);
 
         if (machine.getStage() == IrisMultiblockMachine.Stage.STAR) {
@@ -123,20 +123,19 @@ public class StellarIrisRender extends DynamicRender<IrisMultiblockMachine, Stel
             renderStarShell(poseStack, consumer, totalTick, packedLight, packedOverlay);
             poseStack.popPose();
 
-        } else if (machine.getStage() == IrisMultiblockMachine.Stage.GROWING){
+        } else if (machine.getStage() == IrisMultiblockMachine.Stage.GROWING) {
             poseStack.mulPose(new Quaternionf().rotateAxis(-totalTick * Mth.TWO_PI / 80f, 0, 1, 0));
             renderStar(poseStack, consumer, totalTick, packedLight, packedOverlay);
             renderStarInsides(poseStack, consumer, totalTick, packedLight, packedOverlay);
             renderStarShell(poseStack, consumer, totalTick, packedLight, packedOverlay);
             renderMultiStarSystemRandomized(
                     machine, poseStack, buffer, totalTick, packedLight, packedOverlay,
-                    /*count*/ 5,
-                    /*meanRadius*/ 4.5f,
-                    /*radiusJitter*/ 0.75f,
-                    /*periodSec*/ 2000f,
-                    /*starMin*/ 0.05f, /*starMax*/ 0.6f,
-                    /*spinSelf*/ true
-            );
+                    /* count */ 5,
+                    /* meanRadius */ 4.5f,
+                    /* radiusJitter */ 0.75f,
+                    /* periodSec */ 2000f,
+                    /* starMin */ 0.05f, /* starMax */ 0.6f,
+                    /* spinSelf */ true);
             poseStack.popPose();
         } else if (machine.getStage() == IrisMultiblockMachine.Stage.SUPERSTAR) {
             poseStack.scale(2, 2, 2);
@@ -342,11 +341,10 @@ public class StellarIrisRender extends DynamicRender<IrisMultiblockMachine, Stel
         poseStack.popPose();
     }
 
-
     @OnlyIn(Dist.CLIENT)
     private void renderStarAt(PoseStack poseStack, VertexConsumer consumer,
-                                     float totalTick, int packedLight, int packedOverlay,
-                                     float sizeMul, String tempHexColor, boolean spinSelf) {
+                              float totalTick, int packedLight, int packedOverlay,
+                              float sizeMul, String tempHexColor, boolean spinSelf) {
         String old = this.hexColor;
         this.hexColor = tempHexColor != null ? tempHexColor : old;
 
@@ -372,19 +370,18 @@ public class StellarIrisRender extends DynamicRender<IrisMultiblockMachine, Stel
                                                  float periodSec,           // orbit period in seconds
                                                  float starMin, float starMax, // visual size range (e.g. 0.10..0.40)
                                                  boolean spinSelf) {
-
         if (count < 1) return;
         if (count > 6) count = 6;
 
         // --- params controlling look/feel ---
         final float holeFrac = 0.15f;      // keep at least this fraction of meanRadius clear in the center
-        final float eccMax   = 0.22f;      // max eccentricity per-star (subtle ellipse)
-        final float tiltMax  = 0.20f;      // max tilt per-star (radians) ~ 11.5°
+        final float eccMax = 0.22f;      // max eccentricity per-star (subtle ellipse)
+        final float tiltMax = 0.20f;      // max tilt per-star (radians) ~ 11.5°
         // ------------------------------------
 
         // Deterministic RNG per machine + count
         long seed = hashPos(machine.getPos()) ^ (count * 0x9E3779B97F4A7C15L);
-        long[] S = new long[]{ seed };
+        long[] S = new long[] { seed };
 
         // Masses ~ 0.6..2.0, then normalize → used for size and COM
         float[] m = new float[count];
@@ -397,30 +394,30 @@ public class StellarIrisRender extends DynamicRender<IrisMultiblockMachine, Stel
 
         // Per-star random base angle (0..2π), speed jitter, radius with jitter, eccentricity, and orbit orientation
         float[] baseAng = new float[count];
-        float[] wMul    = new float[count];
-        float[] rad     = new float[count];
-        float[] ecc     = new float[count];
-        float[] yaw     = new float[count]; // in-plane orientation
-        float[] tiltX   = new float[count]; // small 3D tilt
-        float[] tiltZ   = new float[count];
+        float[] wMul = new float[count];
+        float[] rad = new float[count];
+        float[] ecc = new float[count];
+        float[] yaw = new float[count]; // in-plane orientation
+        float[] tiltX = new float[count]; // small 3D tilt
+        float[] tiltZ = new float[count];
 
         final float minR = Math.max(0.05f, meanRadius * holeFrac); // enforce central hole
 
         for (int i = 0; i < count; i++) {
             baseAng[i] = rand01(S) * Mth.TWO_PI;              // random starting phase
-            wMul[i]    = 0.92f + 0.16f * rand01(S);           // ~0.92..1.08 angular speed jitter
+            wMul[i] = 0.92f + 0.16f * rand01(S);           // ~0.92..1.08 angular speed jitter
 
-            float rJ   = (rand01(S) * 2f - 1f) * radiusJitter; // [-jitter, +jitter]
-            rad[i]     = Math.max(minR, meanRadius * (1f + rJ));
+            float rJ = (rand01(S) * 2f - 1f) * radiusJitter; // [-jitter, +jitter]
+            rad[i] = Math.max(minR, meanRadius * (1f + rJ));
 
-            ecc[i]     = eccMax * rand01(S);                  // 0..eccMax (mild ellipse)
-            yaw[i]     = rand01(S) * Mth.TWO_PI;              // random ellipse orientation in-plane
-            tiltX[i]   = (rand01(S) - 0.5f) * 2f * tiltMax;   // small 3D tilt
-            tiltZ[i]   = (rand01(S) - 0.5f) * 2f * tiltMax;
+            ecc[i] = eccMax * rand01(S);                  // 0..eccMax (mild ellipse)
+            yaw[i] = rand01(S) * Mth.TWO_PI;              // random ellipse orientation in-plane
+            tiltX[i] = (rand01(S) - 0.5f) * 2f * tiltMax;   // small 3D tilt
+            tiltZ[i] = (rand01(S) - 0.5f) * 2f * tiltMax;
         }
 
         // Time → base phase
-        float tSec      = totalTick / 20.0f;
+        float tSec = totalTick / 20.0f;
         float baseTheta = (tSec / periodSec) * Mth.TWO_PI;
 
         // Compute 3D positions
@@ -478,23 +475,22 @@ public class StellarIrisRender extends DynamicRender<IrisMultiblockMachine, Stel
         }
 
         // Colors (fallback palette)
-        String[] palette = new String[]{ "#ffd28a", "#9ad0ff", "#ff9fb0", "#fff6a4", "#b4ffea", "#d2a0ff" };
+        String[] palette = new String[] { "#ffd28a", "#9ad0ff", "#ff9fb0", "#fff6a4", "#b4ffea", "#d2a0ff" };
         VertexConsumer consumer = buffer.getBuffer(Sheets.translucentCullBlockSheet());
 
         // Render stars with size ~ m^(1/3), mapped into [starMin, starMax]
         for (int i = 0; i < count; i++) {
-            float size01 = (float)Math.pow(m[i], 1f/3f);
+            float size01 = (float) Math.pow(m[i], 1f / 3f);
             float sizeMul = Mth.lerp(size01, starMin, starMax);
             String color = palette[i % palette.length];
 
             poseStack.pushPose();
             poseStack.translate(px[i], py[i], pz[i]);
             renderStarAt(poseStack, consumer, totalTick, packedLight, packedOverlay,
-                    sizeMul, color, /*spinSelf=*/spinSelf);
+                    sizeMul, color, /* spinSelf= */spinSelf);
             poseStack.popPose();
         }
     }
-
 
     @OnlyIn(Dist.CLIENT)
     public void renderStar(PoseStack poseStack, VertexConsumer consumer,

@@ -3,6 +3,7 @@ package com.ghostipedia.cosmiccore.common.machine.multiblock.multi;
 import com.ghostipedia.cosmiccore.CosmicCore;
 import com.ghostipedia.cosmiccore.client.renderer.machine.CosmicDynamicRenderHelpers;
 import com.ghostipedia.cosmiccore.gtbridge.CosmicRecipeTypes;
+
 import com.gregtechceu.gtceu.GTCEu;
 import com.gregtechceu.gtceu.api.data.RotationState;
 import com.gregtechceu.gtceu.api.machine.MultiblockMachineDefinition;
@@ -11,20 +12,13 @@ import com.gregtechceu.gtceu.api.machine.multiblock.WorkableElectricMultiblockMa
 import com.gregtechceu.gtceu.api.pattern.FactoryBlockPattern;
 import com.gregtechceu.gtceu.api.pattern.Predicates;
 import com.gregtechceu.gtceu.api.recipe.OverclockingLogic;
-import com.gregtechceu.gtceu.common.data.GTBlocks;
 import com.gregtechceu.gtceu.common.data.GTRecipeModifiers;
-import wayoftime.bloodmagic.BloodMagic;
 
-import static com.ghostipedia.cosmiccore.api.machine.part.CosmicPartAbility.IMPORT_SOUL;
 import static com.ghostipedia.cosmiccore.api.registries.CosmicRegistration.REGISTRATE;
 import static com.ghostipedia.cosmiccore.common.data.CosmicBlocks.*;
-import static com.ghostipedia.cosmiccore.common.data.CosmicBlocks.CYCLOZINE_CHEMICALLY_REPELLING_CASING;
 import static com.ghostipedia.cosmiccore.common.data.datagen.CosmicMachineModels.createSeparateControllerCasingMachineModel;
 import static com.gregtechceu.gtceu.api.pattern.Predicates.*;
 import static com.gregtechceu.gtceu.api.pattern.Predicates.blocks;
-import static com.gregtechceu.gtceu.common.data.GCYMBlocks.CASING_NONCONDUCTING;
-import static com.gregtechceu.gtceu.common.data.GCYMBlocks.CASING_STRESS_PROOF;
-import static com.gregtechceu.gtceu.common.data.models.GTMachineModels.createWorkableCasingMachineModel;
 
 public class CryogenicsChamber {
 
@@ -36,7 +30,8 @@ public class CryogenicsChamber {
             .recipeType(CosmicRecipeTypes.CRYOGENICS_CHAMBER)
             .hasBER(true)
             .recipeModifiers(GTRecipeModifiers.PARALLEL_HATCH,
-                    GTRecipeModifiers.ELECTRIC_OVERCLOCK.apply(OverclockingLogic.NON_PERFECT_OVERCLOCK_SUBTICK),GTRecipeModifiers.BATCH_MODE)
+                    GTRecipeModifiers.ELECTRIC_OVERCLOCK.apply(OverclockingLogic.NON_PERFECT_OVERCLOCK_SUBTICK),
+                    GTRecipeModifiers.BATCH_MODE)
             // spotless:off
             .pattern(definition -> FactoryBlockPattern.start()
 
@@ -76,10 +71,10 @@ public class CryogenicsChamber {
             .model(createSeparateControllerCasingMachineModel(
                     CosmicCore.id("block/casings/solid/heavy_frost_proof_casing"),
                     CosmicCore.id("block/casings/solid/cryogenic_casing"),
-                    GTCEu.id("block/multiblock/hpca")).andThen(model -> model
-                            .addDynamicRenderer(CosmicDynamicRenderHelpers::createCryoChamberPartRender)))
+                    GTCEu.id("block/multiblock/hpca")).andThen(
+                            model -> model
+                                    .addDynamicRenderer(CosmicDynamicRenderHelpers::createCryoChamberPartRender)))
             .register();
 
     public static void init() {}
-
 }

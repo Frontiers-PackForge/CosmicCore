@@ -122,8 +122,6 @@ public class CosmicBlocks {
     public static final BlockEntry<Block> HEAVY_FROST_PROOF_CASING = createCasingBlock("heavy_frost_proof_casing",
             CosmicCore.id("block/casings/solid/heavy_frost_proof_casing"));
 
-
-
     public static final BlockEntry<Block> NEUTRONIUM_BOUEY = createCasingBlock("neutronium_buoy",
             CosmicCore.id("block/casings/solid/neutronium_buoy"));
     public static final BlockEntry<Block> PTHANTERUM_WAVE_BREAKERS_CASING = createCasingBlock(
