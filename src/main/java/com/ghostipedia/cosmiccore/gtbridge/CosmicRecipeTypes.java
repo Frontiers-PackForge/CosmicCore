@@ -58,6 +58,14 @@ public class CosmicRecipeTypes {
             .setSound(GTSoundEntries.JET_ENGINE)
             .setProgressBar(GuiTextures.PROGRESS_BAR_ARROW_MULTIPLE, ProgressTexture.FillDirection.LEFT_TO_RIGHT);
 
+    public static final GTRecipeType CRYOGENICS_CHAMBER = GTRecipeTypes
+            .register("cryo_chamber", ELECTRIC)
+            .setMaxIOSize(6, 3, 3, 6)
+            .setSound(GTSoundEntries.JET_ENGINE)
+            .setProgressBar(GuiTextures.PROGRESS_BAR_ARROW_MULTIPLE, ProgressTexture.FillDirection.LEFT_TO_RIGHT);
+
+
+
     public static final GTRecipeType SOUL_TESTER_RECIPES = GTRecipeTypes
             .register("soul_tester", GTRecipeTypes.MULTIBLOCK)
             .setMaxSize(IO.IN, SoulRecipeCapability.CAP, 1)

@@ -38,6 +38,10 @@ public class CosmicDynamicRenderHelpers {
         return new HellFireFoundryPartRender(CosmicBlocks.HIGHLY_CONDUCTIVE_FISSION_CASING.getDefaultState());
     }
 
+    public static DynamicRender<?, ?> createCryoChamberPartRender() {
+        return new HellFireFoundryPartRender(CosmicBlocks.CRYOGENIC_CASING.getDefaultState());
+    }
+
     public static DynamicRender<?, ?> getSufferingChamberRenderer() {
         return SufferingChamberRenderer.INSTANCE;
     }
