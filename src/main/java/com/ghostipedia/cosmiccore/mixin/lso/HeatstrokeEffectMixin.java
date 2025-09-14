@@ -10,7 +10,7 @@ import org.spongepowered.asm.mixin.injection.ModifyArg;
 import org.spongepowered.asm.mixin.injection.ModifyVariable;
 import sfiomn.legendarysurvivaloverhaul.common.effects.HeatStrokeEffect;
 
-@Mixin(value = HeatStrokeEffect.class, remap = false)
+@Mixin(value = HeatStrokeEffect.class)
 public abstract class HeatstrokeEffectMixin extends MobEffect {
 
     protected HeatstrokeEffectMixin(MobEffectCategory category, int color) {
