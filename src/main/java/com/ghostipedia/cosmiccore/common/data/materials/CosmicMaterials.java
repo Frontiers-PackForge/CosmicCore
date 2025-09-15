@@ -136,9 +136,11 @@ public class CosmicMaterials {
                 .ingot()
                 .langValue("Nevramite")
                 .liquid(new FluidBuilder().temperature(9800))
+                .plasma(109000)
                 .formula("✫")
                 .color(0x372536)
                 .iconSet(CosmicMaterialSet.NEVRAMITE)
+                .components(Osmium, 8, Gadolinium, 3, Rhenium, 3, Molybdenum, 2, ActivatedCarbon, 1, StarMetal, 1)
                 .flags(GENERATE_BOLT_SCREW, GENERATE_ROUND, GENERATE_GEAR, GENERATE_SMALL_GEAR, GENERATE_RING,
                         GENERATE_FRAME, GENERATE_SPRING, GENERATE_SPRING_SMALL, GENERATE_FINE_WIRE, GENERATE_DENSE)
                 .cableProperties(GTValues.V[8], 4, 1)
@@ -241,6 +243,8 @@ public class CosmicMaterials {
                 .cableProperties(GTValues.V[6], 12, 4)
                 .fluidPipeProperties(65000, 3500, true, true, true, true)
                 .iconSet(CCoreMaterialIconSet.VIBRANIUM)// .color(0x489BC3).secondaryColor(0x51ADCA)
+                .toolStats(ToolProperty.Builder.of(90.0F, 50.0F, 65535, 6)
+                        .attackSpeed(0.5F).enchantability(33).magnetic().unbreakable().build())
                 .flags(
                         GENERATE_PLATE,
                         GENERATE_DENSE,

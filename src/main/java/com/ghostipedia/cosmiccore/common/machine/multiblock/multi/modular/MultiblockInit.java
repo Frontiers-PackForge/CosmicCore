@@ -20,6 +20,7 @@ public class MultiblockInit {
         HeavyAssembler.init();
         PCBFoundry.init();
         WelderMulti.init();
+        CryogenicsChamber.init();
         StarLadder.init();
         VoidMiner.init();
         VoraxReactor.init();
