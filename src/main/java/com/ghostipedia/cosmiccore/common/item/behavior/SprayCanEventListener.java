@@ -53,7 +53,7 @@ public class SprayCanEventListener {
     }
 
     // gets the bahavior to reduce repeated code
-    static InfiniteSprayCanBehavior getSprayCanBehavior(ItemStack stack) {
+    public static InfiniteSprayCanBehavior getSprayCanBehavior(ItemStack stack) {
         if (!(stack.getItem() instanceof ComponentItem compItem)) return null;
 
         for (var component : compItem.getComponents()) {

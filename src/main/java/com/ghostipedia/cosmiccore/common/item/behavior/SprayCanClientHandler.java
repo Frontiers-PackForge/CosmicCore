@@ -2,6 +2,9 @@ package com.ghostipedia.cosmiccore.common.item.behavior;
 
 import com.ghostipedia.cosmiccore.CosmicCore;
 
+import com.ghostipedia.cosmiccore.common.network.CCoreNetwork;
+import com.ghostipedia.cosmiccore.common.network.packet.SprayCanColorPacket;
+import com.ghostipedia.cosmiccore.common.network.packet.SprayCanLockPacket;
 import com.gregtechceu.gtceu.api.blockentity.IPaintable;
 import com.gregtechceu.gtceu.api.blockentity.MetaMachineBlockEntity;
 
@@ -104,8 +107,6 @@ public class SprayCanClientHandler {
             BlockState state = level.getBlockState(pos);
             MapColor mapColor = state.getMapColor(level, pos);
 
-
-
             // get the id of the map color
             int id = mapColor.id;
 
@@ -121,10 +122,8 @@ public class SprayCanClientHandler {
             }
             // white maps to snow????????????????????????????
             else if (id == 8 || id == 36) {
-
                 dyeID = 0;
                 color = ExtendedDyeColor.getColorFromDyeId(dyeID);
-
             }
 
         }
@@ -136,9 +135,7 @@ public class SprayCanClientHandler {
             // checks if it is locked first before anything
             if (!behavior.getIsLocked()) {
                 color = Objects.requireNonNullElse(color, ExtendedDyeColor.SOLVENT);
-                behavior.setColor(color);
-                behavior.sendColorToTag(player, behavior.color);
-            } else {
+                CCoreNetwork.sendToServer(new SprayCanColorPacket(color.getColorId()));            } else {
                 player.displayClientMessage(Component.literal("Spray Can locked!"), true);
             }
 
@@ -151,7 +148,7 @@ public class SprayCanClientHandler {
     @SubscribeEvent
     public static void onMouseInput(InputEvent.MouseButton event) {
         int button = event.getButton();
-        if ((button != 0 && button != 2) || event.getAction() != GLFW.GLFW_PRESS) return;
+        if ((button != 0 && button != 2) || event.getAction() != 1) return;
 
         Minecraft mc = Minecraft.getInstance();
         Player player = mc.player;
@@ -176,8 +173,7 @@ public class SprayCanClientHandler {
 
         // if its locked invert it
         boolean nowLocked = !behavior.getIsLocked();
-        behavior.setIsLocked(nowLocked);
-        event.setCanceled(true);
+        CCoreNetwork.sendToServer(new SprayCanLockPacket(nowLocked));        event.setCanceled(true);
 
         String message = "Spray Can " + (nowLocked ? "locked!" : "unlocked!");
         player.displayClientMessage(Component.literal(message), true);
