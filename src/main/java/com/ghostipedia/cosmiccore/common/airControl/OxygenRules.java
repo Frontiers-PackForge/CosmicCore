@@ -15,7 +15,7 @@ public final class OxygenRules {
         THIN,
         TOXIC,
         ABYSS,
-        NO_AIR;
+        NO_AIR
     }
 
     public static final class Rates {
@@ -32,20 +32,20 @@ public final class OxygenRules {
         }
     }
 
-    private static Rates rates(int drain, double regen, float dmg){
-        Rates rates = new Rates();
-        rates.oxygenDrainPerTick = drain;
-        rates.oxygenRecoveryPerTick = regen;
-        rates.suffocationDamage = dmg;
-        return rates;
+    private static Rates rates(int drain, double regen, float dmg) {
+        Rates result = new Rates();
+        result.oxygenDrainPerTick = drain;
+        result.oxygenRecoveryPerTick = regen;
+        result.suffocationDamage = dmg;
+        return result;
     }
 
     public static final Map<AirQuality, Rates> QUALITY_RATES = Map.of(
-            AirQuality.SAFE, rates(0,2,0),
-            AirQuality.THIN, rates(1,0,0),
-            AirQuality.TOXIC, rates(1,0.5,0),
-            AirQuality.ABYSS, rates(8,0,1000),
-            AirQuality.NO_AIR, rates(2,0,0)
+            AirQuality.SAFE,  rates(0, 2.0, 0f),
+            AirQuality.THIN,  rates(1, 0.0, 0f),
+            AirQuality.TOXIC, rates(1, 0.5, 0f),
+            AirQuality.ABYSS, rates(8, 0.0, 1000f),
+            AirQuality.NO_AIR,rates(2, 0.0, 0f)
     );
 
 
@@ -56,16 +56,19 @@ public final class OxygenRules {
         public final int maxY;
         public final AirQuality quality;
 
-        public final int drainPertickOverride;
-        public final double regenOverride;
-        public final float damageOverride;
-
+        // Use boxed types so null means "no override"
+        public final Integer drainPertickOverride;     // null -> use QUALITY_RATES default
+        public final Double  regenOverride;            // null -> use QUALITY_RATES default
+        public final Float   damageOverride;           // null -> use QUALITY_RATES default
 
         public AirRanges(int minY, int maxY, AirQuality quality){
-            this(minY, maxY, quality, 0, 0, 0);
+            this(minY, maxY, quality, null, null, null);
         }
 
-        public AirRanges(int minY, int maxY, AirQuality quality, int drainPertickOverride, double regenOverride, float damageOverride) {
+        public AirRanges(int minY, int maxY, AirQuality quality,
+                         Integer drainPertickOverride,
+                         Double regenOverride,
+                         Float damageOverride) {
             this.minY = minY;
             this.maxY = maxY;
             this.quality = quality;
@@ -75,14 +78,14 @@ public final class OxygenRules {
         }
 
         public boolean presentAtY(int yValue){
-            return minY < yValue && yValue <= maxY;
+            return yValue >= minY && yValue <= maxY;
         }
 
         public Rates airRangeRates() {
             Rates base = QUALITY_RATES.get(quality).copy();
-            if (drainPertickOverride == 0) base.oxygenDrainPerTick = drainPertickOverride;
-            if (regenOverride == 0) base.oxygenRecoveryPerTick = regenOverride;
-            if (damageOverride ==0 ) base.suffocationDamage = damageOverride;
+            if (drainPertickOverride != null) base.oxygenDrainPerTick = drainPertickOverride;
+            if (regenOverride != null)       base.oxygenRecoveryPerTick = regenOverride;
+            if (damageOverride != null)      base.suffocationDamage = damageOverride;
             return base;
         }
     }
@@ -95,24 +98,22 @@ public final class OxygenRules {
     }
 
     public static AirRanges getRanges(ResourceKey<Level> dimension, int y){
-        List<AirRanges> list = RANGES.get(dimension);
-        if (list == null || list.isEmpty()) return null;
-        for (AirRanges r : list) if (r.presentAtY(y)) return r;
+        List<AirRanges> airRangesList = RANGES.get(dimension);
+        if (airRangesList == null || airRangesList.isEmpty()) return null;
+        for (AirRanges range : airRangesList) if (range.presentAtY(y)) return range;
         return null;
     }
 
-    // Ranges and Dimensions
-
+    // Ranges
 
     public static void registerAirRanges() {
         addRanges(Level.OVERWORLD,
-                //<0 - Thin : Air will deplete
-                new AirRanges(Integer.MIN_VALUE, 0, AirQuality.NO_AIR, 2, 0.0, 2.0f),
-                //1 to 199 - Safe : Regen Air
-                new AirRanges(1, 199, AirQuality.SAFE, 0, 3.0,0),
-                //200 to World Height. - Thin : Air will deplete
-                new AirRanges(200, Integer.MAX_VALUE, AirQuality.THIN));
+                // y ≤ 0 : NO_AIR
+                new AirRanges(Integer.MIN_VALUE, 0,   AirQuality.NO_AIR, 2, 0.0, 2.0f),
+                // 1 to 199 : SAFE (regen 3)
+                new AirRanges(1, 199, AirQuality.SAFE, null, 3.0, null),
+                // 200 to WorldLimit : THIN (slow drain; defaults apply)
+                new AirRanges(200, Integer.MAX_VALUE, AirQuality.THIN)
+        );
     }
-
-
 }
