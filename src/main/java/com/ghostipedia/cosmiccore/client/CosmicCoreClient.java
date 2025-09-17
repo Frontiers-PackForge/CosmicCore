@@ -6,14 +6,18 @@ import com.ghostipedia.cosmiccore.client.renderer.machine.*;
 import com.gregtechceu.gtceu.client.renderer.machine.DynamicRenderManager;
 
 import net.minecraft.client.renderer.ShaderInstance;
+import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.ModelEvent;
 import net.minecraftforge.client.event.RegisterGuiOverlaysEvent;
 import net.minecraftforge.client.event.RegisterShadersEvent;
+import net.minecraftforge.client.event.RenderGuiOverlayEvent;
+import net.minecraftforge.client.gui.overlay.VanillaGuiOverlay;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 
 import com.mojang.blaze3d.vertex.DefaultVertexFormat;
 import lombok.Getter;
+import net.minecraftforge.fml.common.Mod;
 
 import java.io.IOException;
 
@@ -73,4 +77,16 @@ public class CosmicCoreClient {
         event.register(StarBallastRender.STAR_MODEL_INNER);
         event.register(StarBallastRender.STAR_MODEL_BEAM);
     }
+
+    @Mod.EventBusSubscriber(modid = CosmicCore.MOD_ID, value = Dist.CLIENT, bus = Mod.EventBusSubscriber.Bus.FORGE)
+    public static final class HideVanillaOverlays{
+        @SubscribeEvent
+        public static void onOverlayPre(RenderGuiOverlayEvent.Pre event) {
+            if (event.getOverlay() == VanillaGuiOverlay.AIR_LEVEL.type()) {
+                event.setCanceled(true);
+            }
+        }
+    }
+
+
 }

@@ -9,19 +9,19 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.network.NetworkEvent;
 
-public class SyncTimeBarPacket implements CCoreNetwork.INetPacket {
+public class SyncAbyssTimeBarPacket implements CCoreNetwork.INetPacket {
 
     private final ResourceLocation dimension;
     private final long ticksLeft;
     private final long maxTicks;
 
-    public SyncTimeBarPacket(ResourceLocation dimension, long ticksLeft, long maxTicks) {
+    public SyncAbyssTimeBarPacket(ResourceLocation dimension, long ticksLeft, long maxTicks) {
         this.dimension = dimension;
         this.ticksLeft = ticksLeft;
         this.maxTicks = maxTicks;
     }
 
-    public SyncTimeBarPacket(FriendlyByteBuf buffer) {
+    public SyncAbyssTimeBarPacket(FriendlyByteBuf buffer) {
         this.dimension = buffer.readResourceLocation();
         this.ticksLeft = buffer.readVarLong();
         this.maxTicks = buffer.readVarLong();

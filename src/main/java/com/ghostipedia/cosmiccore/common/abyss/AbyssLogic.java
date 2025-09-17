@@ -3,7 +3,7 @@ package com.ghostipedia.cosmiccore.common.abyss;
 import com.ghostipedia.cosmiccore.CosmicCore;
 import com.ghostipedia.cosmiccore.common.network.CCoreNetwork;
 import com.ghostipedia.cosmiccore.common.network.packet.AbyssTimeWarnPacket;
-import com.ghostipedia.cosmiccore.common.network.packet.SyncTimeBarPacket;
+import com.ghostipedia.cosmiccore.common.network.packet.SyncAbyssTimeBarPacket;
 
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
@@ -123,10 +123,10 @@ public final class AbyssLogic {
     }
 
     private static void sendHUD(ServerPlayer player, long remain, long max) {
-        CCoreNetwork.sendToPlayer(player, new SyncTimeBarPacket(AbyssRules.DIM.location(), remain, max));
+        CCoreNetwork.sendToPlayer(player, new SyncAbyssTimeBarPacket(AbyssRules.DIM.location(), remain, max));
     }
 
     private static void hideHUD(ServerPlayer player) {
-        CCoreNetwork.sendToPlayer(player, new SyncTimeBarPacket(AbyssRules.DIM.location(), -1, 0));
+        CCoreNetwork.sendToPlayer(player, new SyncAbyssTimeBarPacket(AbyssRules.DIM.location(), -1, 0));
     }
 }

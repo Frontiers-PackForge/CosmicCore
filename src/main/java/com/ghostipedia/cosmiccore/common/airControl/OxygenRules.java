@@ -41,11 +41,11 @@ public final class OxygenRules {
     }
 
     public static final Map<AirQuality, Rates> QUALITY_RATES = Map.of(
-            AirQuality.SAFE,  rates(0, 2.0, 0f),
-            AirQuality.THIN,  rates(1, 0.0, 0f),
-            AirQuality.TOXIC, rates(1, 0.5, 0f),
+            AirQuality.SAFE,  rates(0, 2.0, 5f),
+            AirQuality.THIN,  rates(1, 0.0, 5f),
+            AirQuality.TOXIC, rates(1, 0.5, 5f),
             AirQuality.ABYSS, rates(8, 0.0, 1000f),
-            AirQuality.NO_AIR,rates(2, 0.0, 0f)
+            AirQuality.NO_AIR,rates(2, 0.0, 5f)
     );
 
 
@@ -56,10 +56,9 @@ public final class OxygenRules {
         public final int maxY;
         public final AirQuality quality;
 
-        // Use boxed types so null means "no override"
-        public final Integer drainPertickOverride;     // null -> use QUALITY_RATES default
-        public final Double  regenOverride;            // null -> use QUALITY_RATES default
-        public final Float   damageOverride;           // null -> use QUALITY_RATES default
+        public final Integer drainPertickOverride;
+        public final Double  regenOverride;
+        public final Float   damageOverride;
 
         public AirRanges(int minY, int maxY, AirQuality quality){
             this(minY, maxY, quality, null, null, null);
@@ -116,4 +115,26 @@ public final class OxygenRules {
                 new AirRanges(200, Integer.MAX_VALUE, AirQuality.THIN)
         );
     }
+
+    public static final class ResolvedAirRange {
+        public final AirQuality airQuality;
+        public final Rates rates;
+
+        public ResolvedAirRange(AirQuality quality, Rates rates) {
+            this.airQuality = quality;
+            this.rates = rates;
+        }
+    }
+
+    public static ResolvedAirRange resolve(ResourceKey<Level> dimension, int yVal) {
+        AirRanges range = getRanges(dimension, yVal);
+        if (range == null) {
+            Rates safe = QUALITY_RATES.get(AirQuality.SAFE).copy();
+            return new ResolvedAirRange(AirQuality.SAFE, safe);
+        }
+        return  new ResolvedAirRange(range.quality, range.airRangeRates());
+    }
+
+
+
 }
