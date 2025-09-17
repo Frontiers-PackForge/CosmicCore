@@ -110,7 +110,7 @@ public class VoidPylonBehavior extends WorkableElectricMultiblockMachine {
                 double dz = z + 0.5 - cz;
                 double distance = Math.sqrt(dx * dx + dz * dz);
 
-                if (distance <= maxDistance) { // only inside circle
+                if (distance <= maxDistance) {
                     // exponential falloff
                     double factor = Math.exp(-distance / maxDistance);
                     int lightLevel = Mth.clamp(
