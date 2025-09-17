@@ -1060,11 +1060,19 @@ public class CosmicItems {
             .defaultModel()
             .register();
 
-    public static final ItemEntry<OxygenTankItem> OXYGEN_SUPPLY_TANK = REGISTRATE
-            .item("bronze_supply_tank", OxygenTankItem::new) // must be your subclass ctor
+    public static final ItemEntry<OxygenTankItem> OXYGEN_SUPPLY_TANK_BRONZE = REGISTRATE
+            .item("bronze_supply_tank", OxygenTankItem::new)
             .lang("Bronze Supply Tank")
             .properties(p -> p.stacksTo(1))
             .onRegister(attach(new OxygenSupplyTankBehavior(1000, 5, 10)))
+            .defaultModel()
+            .register();
+
+    public static final ItemEntry<OxygenTankItem> OXYGEN_SUPPLY_TANK_STEEL = REGISTRATE
+            .item("steel_supply_tank", OxygenTankItem::new)
+            .lang("Steel Supply Tank")
+            .properties(p -> p.stacksTo(1))
+            .onRegister(attach(new OxygenSupplyTankBehavior(2500, 5, 15)))
             .defaultModel()
             .register();
 
