@@ -37,8 +37,11 @@ public class CosmicHudGuiOverlay implements IGuiOverlay {
     private static long lastSampleOxygenTicks = -1;
     private static double lastRateTicksPerSecond = Double.NaN;
 
-    private static final int COLOR_DRAIN = 0xFF5555;
-    private static final int COLOR_REGEN = 0x55FF55;
+    //Designed it to support colors
+    //Then decided the colors were hard to read
+    //Keeping the functionality in because uhhhhh, maybe i'll use it?????? fuck if i know.
+    private static final int COLOR_DRAIN = 0xAAAAAA;
+    private static final int COLOR_REGEN = 0xAAAAAA;
     private static final int COLOR_IDLE  = 0xAAAAAA;
 
     public static void setTimeBar(ResourceLocation dim, long left, long max) {
@@ -116,7 +119,7 @@ public class CosmicHudGuiOverlay implements IGuiOverlay {
     private static final float OXY_WIDTH_FRACTION = 0.13f;
     private static final int   OXY_MIN_W          = 72;
     private static final int   OXY_MAX_W          = 128;
-    private static final int   OXY_HEIGHT         = 12;
+    private static final int   OXY_HEIGHT         = 11;
     private static final int CAP_SRC_PX = 4;
 
 
@@ -186,7 +189,7 @@ public class CosmicHudGuiOverlay implements IGuiOverlay {
         var font = Minecraft.getInstance().font;
         var comp = computeOxygenETA();
         int tx = x + barWidth / 2 - font.width(comp) / 2;
-        int ty = y + (barHeight - 8) / 2;
+        int ty = y + (barHeight - 8) / 2 +1;
         gg.drawString(font, comp, tx, ty, 0xFFFFFF, true);
 
         com.mojang.blaze3d.systems.RenderSystem.setShaderColor(1f, 1f, 1f, 1f);
