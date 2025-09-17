@@ -108,7 +108,7 @@ public final class OxygenRules {
     public static void registerAirRanges() {
         addRanges(Level.OVERWORLD,
                 // y ≤ 0 : NO_AIR
-                new AirRanges(Integer.MIN_VALUE, 0,   AirQuality.NO_AIR, 2, 0.0, 2.0f),
+                new AirRanges(Integer.MIN_VALUE, 0,   AirQuality.THIN, 1, 0.0, 2.0f),
                 // 1 to 199 : SAFE (regen 3)
                 new AirRanges(1, 199, AirQuality.SAFE, null, 3.0, null),
                 // 200 to WorldLimit : THIN (slow drain; defaults apply)

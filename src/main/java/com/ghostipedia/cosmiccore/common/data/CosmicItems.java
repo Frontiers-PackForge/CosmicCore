@@ -6,13 +6,11 @@ import com.ghostipedia.cosmiccore.api.item.armor.*;
 import com.ghostipedia.cosmiccore.api.registries.CosmicRegistration;
 import com.ghostipedia.cosmiccore.client.renderer.item.HaloItemRenderer;
 import com.ghostipedia.cosmiccore.common.data.tag.item.CosmicItemTags;
+import com.ghostipedia.cosmiccore.common.item.OxygenTankItem;
 import com.ghostipedia.cosmiccore.common.item.armor.ChestSanguineWarptechSuite;
 import com.ghostipedia.cosmiccore.common.item.armor.HelmetSanguineWarptechSuite;
 import com.ghostipedia.cosmiccore.common.item.armor.SanguineWarptechSuite;
-import com.ghostipedia.cosmiccore.common.item.behavior.EffectApplicationBehavior;
-import com.ghostipedia.cosmiccore.common.item.behavior.InfiniteSprayCanBehavior;
-import com.ghostipedia.cosmiccore.common.item.behavior.StructureWriteBehavior;
-import com.ghostipedia.cosmiccore.common.item.behavior.WirelessPDABehavior;
+import com.ghostipedia.cosmiccore.common.item.behavior.*;
 import com.ghostipedia.cosmiccore.utils.StringUtil;
 
 import com.gregtechceu.gtceu.GTCEu;
@@ -1061,6 +1059,16 @@ public class CosmicItems {
             .onRegister(attach(new WirelessPDABehavior()))
             .defaultModel()
             .register();
+
+    public static final ItemEntry<OxygenTankItem> OXYGEN_SUPPLY_TANK = REGISTRATE
+            .item("bronze_supply_tank", OxygenTankItem::new) // must be your subclass ctor
+            .lang("Bronze Supply Tank")
+            .properties(p -> p.stacksTo(1))
+            .onRegister(attach(new OxygenSupplyTankBehavior(1000, 1, 5)))
+            .defaultModel()
+            .register();
+
+
 
     public static ItemEntry<ComponentItem> THE_ONE_RING = REGISTRATE
             .item("the_one_ring", p -> (ComponentItem) new ComponentItem(p) {
