@@ -40,8 +40,8 @@ public class CosmicHudGuiOverlay implements IGuiOverlay {
     //Designed it to support colors
     //Then decided the colors were hard to read
     //Keeping the functionality in because uhhhhh, maybe i'll use it?????? fuck if i know.
-    private static final int COLOR_DRAIN = 0xAAAAAA;
-    private static final int COLOR_REGEN = 0xAAAAAA;
+    private static final int COLOR_DRAIN = 0xff6f00;
+    private static final int COLOR_REGEN = 0x00ff66;
     private static final int COLOR_IDLE  = 0xAAAAAA;
 
     public static void setTimeBar(ResourceLocation dim, long left, long max) {
@@ -49,27 +49,11 @@ public class CosmicHudGuiOverlay implements IGuiOverlay {
         timeMaxTicks = max;
     }
 
-    public static void setOxygenBar(long left, long max, boolean show) {
-        var mc = Minecraft.getInstance();
-        long nowGameTime = (mc.level != null) ? mc.level.getGameTime() : -1;
-
-        if (nowGameTime >= 0 && lastSampleGameTime >= 0) {
-            long dtTicks = Math.max(1, nowGameTime - lastSampleGameTime);
-            long dOxy    = left - lastSampleOxygenTicks;
-            double seconds = dtTicks / 20.0;
-            double r = dOxy / seconds;
-
-            if (Double.isFinite(r)) {
-                lastRateTicksPerSecond = Math.max(-200.0, Math.min(200.0, r));
-            }
-        }
-
-        lastSampleGameTime    = nowGameTime;
-        lastSampleOxygenTicks = left;
-
+    public static void setOxygenBar(long left, long max, boolean show, double ratePerSecond) {
         oxygenTicksLeft = left;
         oxygenMaxTicks  = max;
         oxygenShow      = show;
+        lastRateTicksPerSecond = ratePerSecond; // authoritative; no client-side slope needed
     }
 
 
@@ -199,30 +183,21 @@ public class CosmicHudGuiOverlay implements IGuiOverlay {
 
 
     private static Component computeOxygenETA() {
-        if (oxygenTicksLeft <= 0) {
-            return Component.literal("SUFFOCATING").withStyle(s -> s.withColor(COLOR_DRAIN));
-        }
-        if (oxygenTicksLeft >= oxygenMaxTicks) {
+        if (oxygenTicksLeft <= 0) return Component.literal("SUFFOCATING").withStyle(s -> s.withColor(COLOR_DRAIN));
+        if (oxygenTicksLeft >= oxygenMaxTicks) return Component.literal("--:--").withStyle(s -> s.withColor(COLOR_IDLE));
+
+        double r = lastRateTicksPerSecond; // signed ticks/sec from server
+        if (!Double.isFinite(r) || Math.abs(r) < 0.01) {
             return Component.literal("--:--").withStyle(s -> s.withColor(COLOR_IDLE));
         }
 
-        double rateTicksPerSecond = lastRateTicksPerSecond;
-        if (!Double.isFinite(rateTicksPerSecond)) {
-            return Component.literal("--:--").withStyle(s -> s.withColor(COLOR_IDLE));
-        }
-
-        final double EPS = 0.05;
-        if (rateTicksPerSecond < -EPS) {
-            long etaSec = (long) Math.ceil(oxygenTicksLeft / (-rateTicksPerSecond));
-            return Component.literal(formatSeconds(etaSec))
-                    .withStyle(s -> s.withColor(COLOR_DRAIN));
-        } else if (rateTicksPerSecond > EPS) {
-            long ticksNeeded = oxygenMaxTicks - oxygenTicksLeft;
-            long etaSec = (long) Math.ceil(ticksNeeded / rateTicksPerSecond);
-            return Component.literal(formatSeconds(etaSec))
-                    .withStyle(s -> s.withColor(COLOR_REGEN));
+        if (r < 0) {
+            long etaSec = (long)Math.ceil(oxygenTicksLeft / (-r));
+            return Component.literal("<- " + formatSeconds(etaSec)  + "  >").withStyle(s -> s.withColor(COLOR_DRAIN));
         } else {
-            return Component.literal("--:--").withStyle(s -> s.withColor(COLOR_IDLE));
+            long ticksNeeded = oxygenMaxTicks - oxygenTicksLeft;
+            long etaSec = (long)Math.ceil(ticksNeeded / r);
+            return Component.literal("<  " + formatSeconds(etaSec)  + " ->").withStyle(s -> s.withColor(COLOR_REGEN));
         }
     }
 
@@ -236,6 +211,4 @@ public class CosmicHudGuiOverlay implements IGuiOverlay {
     }
 
 
-
-    // -------------------------------------------------------------------------
 }

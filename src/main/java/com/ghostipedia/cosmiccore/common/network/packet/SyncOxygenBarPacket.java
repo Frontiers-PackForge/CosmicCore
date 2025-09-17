@@ -7,24 +7,36 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.network.NetworkEvent;
 
-public class SyncOxygenBarPacket  implements CCoreNetwork.INetPacket {
-    private final long ticksLeft, maxTicks;
+public class SyncOxygenBarPacket implements CCoreNetwork.INetPacket {
+    private final long left, max;
     private final boolean show;
+    private final double ratePerSecond; // signed ticks/sec; negative = draining
 
-    public SyncOxygenBarPacket(long ticksLeft, long maxTicks, boolean show){
-        this.ticksLeft = ticksLeft; this.maxTicks = maxTicks; this.show = show;
+    public SyncOxygenBarPacket(long left, long max, boolean show, double ratePerSecond) {
+        this.left = left;
+        this.max = max;
+        this.show = show;
+        this.ratePerSecond = ratePerSecond;
     }
-    public SyncOxygenBarPacket(FriendlyByteBuf b){
-        this.ticksLeft = b.readVarLong();
-        this.maxTicks  = b.readVarLong();
-        this.show      = b.readBoolean();
+
+    public SyncOxygenBarPacket(FriendlyByteBuf buf) {
+        this.left = buf.readVarLong();
+        this.max = buf.readVarLong();
+        this.show = buf.readBoolean();
+        this.ratePerSecond = buf.readDouble();
     }
-    @Override public void encode(FriendlyByteBuf b){
-        b.writeVarLong(ticksLeft); b.writeVarLong(maxTicks); b.writeBoolean(show);
+
+    @Override public void encode(FriendlyByteBuf buf) {
+        buf.writeVarLong(left);
+        buf.writeVarLong(max);
+        buf.writeBoolean(show);
+        buf.writeDouble(ratePerSecond);
     }
-    @Override public void execute(NetworkEvent.Context ctx){
-        DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () ->
-                CosmicHudGuiOverlay.setOxygenBar(ticksLeft, maxTicks, show)
+
+    @Override public void execute(NetworkEvent.Context ctx) {
+        net.minecraftforge.fml.DistExecutor.unsafeRunWhenOn(net.minecraftforge.api.distmarker.Dist.CLIENT, () -> () ->
+                com.ghostipedia.cosmiccore.client.CosmicHudGuiOverlay
+                        .setOxygenBar(left, max, show, ratePerSecond)
         );
     }
 }

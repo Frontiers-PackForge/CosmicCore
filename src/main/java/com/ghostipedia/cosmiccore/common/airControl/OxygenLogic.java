@@ -28,7 +28,6 @@ public final class OxygenLogic {
         ServerLevel level = player.serverLevel();
 
         player.getCapability(OxygenBudgetCap.CAP).ifPresent(cap -> {
-            // seed per-dimension bucket
             if (cap.getOxygenTicks(level.dimension()) < 0) {
                 cap.setOxygenTicks(level.dimension(), MAX_OXYGEN_TICKS);
                 cap.setRegenBuffer(level.dimension(), 0.0);
@@ -47,12 +46,10 @@ public final class OxygenLogic {
                 rates = range.airRangeRates();
             }
 
-            // If the player's eyes are inside ANY fluid, force at least NO_AIR behavior
             BlockPos eyePos = BlockPos.containing(player.getX(), player.getEyeY(), player.getZ());
             boolean eyesInFluid = !level.getFluidState(eyePos).isEmpty();
             if (eyesInFluid) {
                 OxygenRules.Rates noAir = OxygenRules.QUALITY_RATES.get(OxygenRules.AirQuality.NO_AIR).copy();
-                // take the stricter drain and damage
                 rates.oxygenDrainPerTick = Math.max(rates.oxygenDrainPerTick, noAir.oxygenDrainPerTick);
                 rates.suffocationDamage = Math.max(rates.suffocationDamage, 2.0f);
                 quality = OxygenRules.AirQuality.NO_AIR;
@@ -60,6 +57,7 @@ public final class OxygenLogic {
 
             long current = cap.getOxygenTicks(level.dimension());
             cap.setConsuming(level.dimension(), rates.oxygenDrainPerTick > 0);
+
             if (rates.oxygenDrainPerTick > 0) {
                 long next = Math.max(0, current - rates.oxygenDrainPerTick);
                 cap.setOxygenTicks(level.dimension(), next);
@@ -73,7 +71,6 @@ public final class OxygenLogic {
                         }
                     }
                 }
-                //TODO; Our Own damage source and death message?
                 if (next <= 0 && rates.suffocationDamage > 0f && (level.getGameTime() % 20) == 0) {
                     player.hurt(player.damageSources().drown(), rates.suffocationDamage);
                 }
@@ -89,11 +86,16 @@ public final class OxygenLogic {
                 cap.setRegenBuffer(level.dimension(), rem);
             }
 
-            // HUD update (every 10 ticks)
             if ((level.getGameTime() % 10) == 0) {
                 long remaining = cap.getOxygenTicks(level.dimension());
                 boolean show = (quality != OxygenRules.AirQuality.SAFE) || remaining < MAX_OXYGEN_TICKS;
-                CCoreNetwork.sendToPlayer(player, new SyncOxygenBarPacket(remaining, MAX_OXYGEN_TICKS, show));
+                double ratePerSecond = 0.0;
+                if (rates.oxygenDrainPerTick > 0) {
+                    ratePerSecond = -(rates.oxygenDrainPerTick * 20.0);
+                } else if (rates.oxygenRecoveryPerTick > 0 && remaining < MAX_OXYGEN_TICKS) {
+                    ratePerSecond = (rates.oxygenRecoveryPerTick * 20.0);
+                }
+                CCoreNetwork.sendToPlayer(player, new SyncOxygenBarPacket(remaining, MAX_OXYGEN_TICKS, show, ratePerSecond));
             }
         });
     }
@@ -112,7 +114,7 @@ public final class OxygenLogic {
             }
             long remaining = cap.getOxygenTicks(level.dimension());
             boolean show = remaining < MAX_OXYGEN_TICKS;
-            CCoreNetwork.sendToPlayer(player, new SyncOxygenBarPacket(remaining, MAX_OXYGEN_TICKS, show));
+            CCoreNetwork.sendToPlayer(player, new SyncOxygenBarPacket(remaining, MAX_OXYGEN_TICKS, show, 0.0));
         });
     }
 
@@ -127,9 +129,7 @@ public final class OxygenLogic {
             cap.setOxygenTicks(level.dimension(), MAX_OXYGEN_TICKS);
             cap.setRegenBuffer(level.dimension(), 0.0);
             cap.setConsuming(level.dimension(), false);
-
-            CCoreNetwork.sendToPlayer(player,
-                    new SyncOxygenBarPacket(MAX_OXYGEN_TICKS, MAX_OXYGEN_TICKS, false));
+            CCoreNetwork.sendToPlayer(player, new SyncOxygenBarPacket(MAX_OXYGEN_TICKS, MAX_OXYGEN_TICKS, false, 0.0));
         });
     }
 }
