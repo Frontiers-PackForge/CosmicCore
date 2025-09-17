@@ -1064,7 +1064,7 @@ public class CosmicItems {
             .item("bronze_supply_tank", OxygenTankItem::new) // must be your subclass ctor
             .lang("Bronze Supply Tank")
             .properties(p -> p.stacksTo(1))
-            .onRegister(attach(new OxygenSupplyTankBehavior(1000, 1, 5)))
+            .onRegister(attach(new OxygenSupplyTankBehavior(1000, 5, 10)))
             .defaultModel()
             .register();
 

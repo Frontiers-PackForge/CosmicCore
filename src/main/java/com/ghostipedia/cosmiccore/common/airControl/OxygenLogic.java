@@ -7,6 +7,7 @@ import com.ghostipedia.cosmiccore.common.network.packet.OxygenWarnPacket;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -21,6 +22,9 @@ public final class OxygenLogic {
 
     private static final long MAX_OXYGEN_TICKS = 20L * 90; // 90s
     private static final int[] WARNING_SECONDS = {60, 30, 15, 10, 5};
+
+    //Let's Tanks Refill the O2 Meter when 'protecting' the player.
+    private static final int TANK_TOPUP_TICKS_PER_TICK = 2;
 
     @SubscribeEvent
     public static void onPlayerTick(TickEvent.PlayerTickEvent event) {
@@ -50,7 +54,6 @@ public final class OxygenLogic {
 
             BlockPos eyePos = BlockPos.containing(player.getX(), player.getEyeY(), player.getZ());
             boolean eyesInFluid = !level.getFluidState(eyePos).isEmpty();
-            //If the Player is inside of a fluid
             if (eyesInFluid) {
                 OxygenRules.Rates thinAir = OxygenRules.QUALITY_RATES.get(OxygenRules.AirQuality.THIN).copy();
                 rates.oxygenDrainPerTick = Math.max(rates.oxygenDrainPerTick, thinAir.oxygenDrainPerTick);
@@ -62,15 +65,26 @@ public final class OxygenLogic {
             cap.setConsuming(level.dimension(), rates.oxygenDrainPerTick > 0);
 
             if (rates.oxygenDrainPerTick > 0) {
-                int requested = (int) Math.min(Integer.MAX_VALUE, Math.max(0L, rates.oxygenDrainPerTick));
-                int providedByTanks = drainFromCarriedTanks(player, requested); // new helper below
-                long remainingDrain = Math.max(0L, rates.oxygenDrainPerTick - providedByTanks);
+                // Tanks-first drain with optional top-up
+                int drain = (int) Math.min(Integer.MAX_VALUE, Math.max(0L, rates.oxygenDrainPerTick));
 
-                // 2) Only if tanks didn’t cover it all, drain the player’s internal oxygen
-                long next = Math.max(0L, current - remainingDrain);
+                int headroom = (int) Math.min(Integer.MAX_VALUE, Math.max(0L, MAX_OXYGEN_TICKS - current));
+                int topUpBudget = Math.min(headroom, TANK_TOPUP_TICKS_PER_TICK);
+
+                int providedByTanks = drainFromCarriedTanks(player, drain + topUpBudget);
+                int cover = Math.min(providedByTanks, drain);
+                int extraTopUp = Math.max(0, providedByTanks - cover);
+                if (extraTopUp > headroom) extraTopUp = headroom;
+
+                int remainingDrain = Math.max(0, drain - cover);
+
+                long next = current - remainingDrain + extraTopUp;
+                if (next < 0) next = 0;
+                if (next > MAX_OXYGEN_TICKS) next = MAX_OXYGEN_TICKS;
+
                 cap.setOxygenTicks(level.dimension(), next);
 
-                // existing warn/damage logic stays the same
+                // Warnings & damage
                 if (next % 20 == 0) {
                     int sec = (int) (next / 20);
                     for (int w : WARNING_SECONDS) {
@@ -85,6 +99,7 @@ public final class OxygenLogic {
                 }
 
             } else if (rates.oxygenRecoveryPerTick > 0 && current < MAX_OXYGEN_TICKS) {
+                // Passive recovery in safe air
                 double buffer = cap.getRegenBuffer(level.dimension()) + (rates.oxygenRecoveryPerTick / 20.0);
                 long gain = (long) (buffer * 20.0);
                 double rem = buffer - (gain / 20.0);
@@ -95,6 +110,7 @@ public final class OxygenLogic {
                 cap.setRegenBuffer(level.dimension(), rem);
             }
 
+            // HUD sync (unchanged)
             if ((level.getGameTime() % 10) == 0) {
                 long remaining = cap.getOxygenTicks(level.dimension());
                 boolean show = (quality != OxygenRules.AirQuality.SAFE) || remaining < MAX_OXYGEN_TICKS;
@@ -165,10 +181,9 @@ public final class OxygenLogic {
         return requestTicks - remaining;
     }
 
-    private static int drainFromStack(net.minecraft.world.item.ItemStack stack, int requestTicks) {
+    private static int drainFromStack(ItemStack stack, int requestTicks) {
         if (stack.isEmpty() || requestTicks <= 0) return requestTicks;
 
-        // Ask for our custom oxygen-supply cap the tank behavior exposes.
         return stack.getCapability(OXYGEN_SUPPLY)
                 .map(provider -> {
                     int got = Math.max(0, provider.drainOxygenTicks(stack, requestTicks));
@@ -177,5 +192,4 @@ public final class OxygenLogic {
                 })
                 .orElse(requestTicks);
     }
-
 }
