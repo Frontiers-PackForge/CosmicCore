@@ -34,9 +34,6 @@ public final class OxygenLogic {
                 cap.setRegenBuffer(level.dimension(), 0.0);
             }
 
-            // keep vanilla bubbles topped off so only our system matters
-            player.setAirSupply(player.getMaxAirSupply());
-
             int yValue = player.blockPosition().getY();
             OxygenRules.AirRanges range = OxygenRules.getRanges(level.dimension(), yValue);
 
@@ -51,22 +48,18 @@ public final class OxygenLogic {
             }
 
             // If the player's eyes are inside ANY fluid, force at least NO_AIR behavior
-            // (use the harsher of current vs NO_AIR). This covers water, lava, and modded fluids.
             BlockPos eyePos = BlockPos.containing(player.getX(), player.getEyeY(), player.getZ());
             boolean eyesInFluid = !level.getFluidState(eyePos).isEmpty();
             if (eyesInFluid) {
                 OxygenRules.Rates noAir = OxygenRules.QUALITY_RATES.get(OxygenRules.AirQuality.NO_AIR).copy();
                 // take the stricter drain and damage
                 rates.oxygenDrainPerTick = Math.max(rates.oxygenDrainPerTick, noAir.oxygenDrainPerTick);
-                // ensure there IS suffocation damage when empty while submerged (2.0f default)
                 rates.suffocationDamage = Math.max(rates.suffocationDamage, 2.0f);
                 quality = OxygenRules.AirQuality.NO_AIR;
             }
 
             long current = cap.getOxygenTicks(level.dimension());
             cap.setConsuming(level.dimension(), rates.oxygenDrainPerTick > 0);
-
-            // FIX: use > 0 here so SAFE (0) goes to regen path
             if (rates.oxygenDrainPerTick > 0) {
                 long next = Math.max(0, current - rates.oxygenDrainPerTick);
                 cap.setOxygenTicks(level.dimension(), next);
@@ -80,14 +73,12 @@ public final class OxygenLogic {
                         }
                     }
                 }
-
-                // damage when empty (once per second) — use drown for correct death message
+                //TODO; Our Own damage source and death message?
                 if (next <= 0 && rates.suffocationDamage > 0f && (level.getGameTime() % 20) == 0) {
                     player.hurt(player.damageSources().drown(), rates.suffocationDamage);
                 }
 
             } else if (rates.oxygenRecoveryPerTick > 0 && current < MAX_OXYGEN_TICKS) {
-                // fractional-friendly regen
                 double buffer = cap.getRegenBuffer(level.dimension()) + (rates.oxygenRecoveryPerTick / 20.0);
                 long gain = (long) (buffer * 20.0);
                 double rem = buffer - (gain / 20.0);
@@ -137,10 +128,6 @@ public final class OxygenLogic {
             cap.setRegenBuffer(level.dimension(), 0.0);
             cap.setConsuming(level.dimension(), false);
 
-            // Top off vanilla bubbles too (belt & suspenders).
-            player.setAirSupply(player.getMaxAirSupply());
-
-            // Optional: hide HUD on respawn since you're full.
             CCoreNetwork.sendToPlayer(player,
                     new SyncOxygenBarPacket(MAX_OXYGEN_TICKS, MAX_OXYGEN_TICKS, false));
         });
