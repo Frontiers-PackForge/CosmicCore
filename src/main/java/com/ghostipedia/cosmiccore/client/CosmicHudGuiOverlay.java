@@ -1,5 +1,6 @@
 package com.ghostipedia.cosmiccore.client;
 
+import com.ghostipedia.cosmiccore.CosmicCore;
 import com.ghostipedia.cosmiccore.common.item.behavior.WirelessPDABehavior;
 
 import com.gregtechceu.gtceu.api.item.ComponentItem;
@@ -20,6 +21,11 @@ import org.jetbrains.annotations.NotNull;
 @NoArgsConstructor
 public class CosmicHudGuiOverlay implements IGuiOverlay {
 
+    private static final ResourceLocation OXY_BG   = CosmicCore.id("textures/gui/oxygen_bg.png");
+    private static final ResourceLocation OXY_FILL = CosmicCore.id("textures/gui/oxygen_fill.png");
+    private static final int TEX_W = 64, TEX_H = 12;
+    private static final boolean USE_NINE_SLICE = true;
+
     private static long timeTicksLeft = -1;
     private static long timeMaxTicks = 0;
 
@@ -27,13 +33,12 @@ public class CosmicHudGuiOverlay implements IGuiOverlay {
     private static long oxygenMaxTicks  = 0;
     private static boolean oxygenShow   = true;
 
-    // --- ETA estimator state ---
     private static long lastSampleGameTime = -1;
     private static long lastSampleOxygenTicks = -1;
     private static double lastRateTicksPerSecond = Double.NaN;
 
-    private static final int COLOR_DRAIN = 0xFF5555; // red
-    private static final int COLOR_REGEN = 0x55FF55; // green
+    private static final int COLOR_DRAIN = 0xFF5555;
+    private static final int COLOR_REGEN = 0x55FF55;
     private static final int COLOR_IDLE  = 0xAAAAAA;
 
     public static void setTimeBar(ResourceLocation dim, long left, long max) {
@@ -52,7 +57,6 @@ public class CosmicHudGuiOverlay implements IGuiOverlay {
             double r = dOxy / seconds;
 
             if (Double.isFinite(r)) {
-                // clamp extreme spikes (teleports, lag) to keep ETA sane
                 lastRateTicksPerSecond = Math.max(-200.0, Math.min(200.0, r));
             }
         }
@@ -109,28 +113,85 @@ public class CosmicHudGuiOverlay implements IGuiOverlay {
                 y - 10, 0xFFFFFF, true);
     }
 
+    private static final float OXY_WIDTH_FRACTION = 0.13f;
+    private static final int   OXY_MIN_W          = 72;
+    private static final int   OXY_MAX_W          = 128;
+    private static final int   OXY_HEIGHT         = 12;
+    private static final int CAP_SRC_PX = 4;
+
+
     private static void renderOxygenBar(GuiGraphics gg, int screenWidth, int screenHeight) {
         if (!oxygenShow || oxygenTicksLeft < 0 || oxygenMaxTicks <= 0) return;
 
-        int barWidth = Math.max(60, Math.min(78, (int)(screenWidth * 0.35f)));
-        int barHeight = 10;
+        // size & position
+        int barWidth  = Math.max(OXY_MIN_W, Math.min(OXY_MAX_W, (int)(screenWidth * OXY_WIDTH_FRACTION)));
+        int barHeight = OXY_HEIGHT;
         int x = (screenWidth - barWidth) / 2 + 50;
+        int y = screenHeight - 50;
 
-        int bottomSafePad = 50;
-        int y = screenHeight - bottomSafePad;
-
+        // progress
         double frac = Math.max(0d, Math.min(1d, (double) oxygenTicksLeft / (double) oxygenMaxTicks));
-        int filled = (int) (barWidth * frac);
+        int filledW = (int)Math.round(barWidth * frac);
+        if (filledW < 0) filledW = 0;
+        if (filledW > barWidth) filledW = barWidth;
 
-        gg.fill(x, y, x + barWidth, y + barHeight, 0xAA000000);
-        gg.fill(x, y, x + filled,   y + barHeight, 0xAA55FFFF);
+        com.mojang.blaze3d.systems.RenderSystem.enableBlend();
+        com.mojang.blaze3d.systems.RenderSystem.defaultBlendFunc();
+        com.mojang.blaze3d.systems.RenderSystem.setShaderColor(1f, 1f, 1f, 1f);
+
+        gg.blit(OXY_BG,x, y,barWidth, barHeight,0f, 0f,TEX_W, TEX_H,TEX_W, TEX_H);
+
+        if (filledW > 0) {
+            int capDst = Math.max(1, (int)Math.round(CAP_SRC_PX * (barHeight / (double)TEX_H)));
+            int maxCaps = Math.min(capDst * 2, filledW);
+            int leftCapW = Math.min(capDst, filledW);
+            gg.blit(
+                    OXY_FILL,
+                    x, y,
+                    leftCapW, barHeight,
+                    0f, 0f,
+                    CAP_SRC_PX, TEX_H,
+                    TEX_W, TEX_H
+            );
+
+            if (filledW > capDst) {
+                int midSrcW = TEX_W - (2 * CAP_SRC_PX);
+                int midDstW = filledW - Math.min(maxCaps, capDst);
+
+                if (midDstW > 0) {
+                    gg.blit(
+                            OXY_FILL,
+                            x + capDst, y,
+                            midDstW, barHeight,
+                            CAP_SRC_PX, 0f,
+                            midSrcW, TEX_H,
+                            TEX_W, TEX_H
+                    );
+                }
+
+                if (filledW >= (capDst * 2)) {
+                    gg.blit(
+                            OXY_FILL,
+                            x + filledW - capDst, y,
+                            capDst, barHeight,
+                            TEX_W - CAP_SRC_PX, 0f,
+                            CAP_SRC_PX, TEX_H,
+                            TEX_W, TEX_H
+                    );
+                }
+            }
+        }
+
 
         var font = Minecraft.getInstance().font;
-        Component txt = computeOxygenETA();
-        int tx = x + barWidth / 2 - font.width(txt) / 2;
-        int ty = y + 1;
-        gg.drawString(font, txt, tx, ty, 0xFFFFFF, true);
+        var comp = computeOxygenETA();
+        int tx = x + barWidth / 2 - font.width(comp) / 2;
+        int ty = y + (barHeight - 8) / 2;
+        gg.drawString(font, comp, tx, ty, 0xFFFFFF, true);
+
+        com.mojang.blaze3d.systems.RenderSystem.setShaderColor(1f, 1f, 1f, 1f);
     }
+
 
 
 
@@ -142,19 +203,17 @@ public class CosmicHudGuiOverlay implements IGuiOverlay {
             return Component.literal("--:--").withStyle(s -> s.withColor(COLOR_IDLE));
         }
 
-        double rateTicksPerSecond = lastRateTicksPerSecond; // signed ticks/sec
+        double rateTicksPerSecond = lastRateTicksPerSecond;
         if (!Double.isFinite(rateTicksPerSecond)) {
             return Component.literal("--:--").withStyle(s -> s.withColor(COLOR_IDLE));
         }
 
-        final double EPS = 0.05; // deadzone
+        final double EPS = 0.05;
         if (rateTicksPerSecond < -EPS) {
-            // draining → "ETA m:ss" in red
             long etaSec = (long) Math.ceil(oxygenTicksLeft / (-rateTicksPerSecond));
             return Component.literal(formatSeconds(etaSec))
                     .withStyle(s -> s.withColor(COLOR_DRAIN));
         } else if (rateTicksPerSecond > EPS) {
-            // regenerating → "m:ss" in green
             long ticksNeeded = oxygenMaxTicks - oxygenTicksLeft;
             long etaSec = (long) Math.ceil(ticksNeeded / rateTicksPerSecond);
             return Component.literal(formatSeconds(etaSec))
