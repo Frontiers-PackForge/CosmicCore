@@ -154,9 +154,14 @@ public class CosmicRecipeModifiers {
                 }
             }
         }
-        return ModifierFunction.builder()
-                .parallels(extraParallels)
-                .build();
+
+        int actualParallel = ParallelLogic.getParallelAmount(machine, recipe, recipe.parallels + extraParallels);
+        // Not using the ModifierFunction builder because there parallels are multiplicative, and we want additive
+        return (functionRecipe) -> {
+            GTRecipe newRecipe = functionRecipe.copy();
+            newRecipe.parallels = actualParallel;
+            return newRecipe;
+        };
     }
     /*
      * public static @NotNull BiFunction<MetaMachine, GTRecipe, ModifierFunction> sterileHatch(FluidStack stack, boolean

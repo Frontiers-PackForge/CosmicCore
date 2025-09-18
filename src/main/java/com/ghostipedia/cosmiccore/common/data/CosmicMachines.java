@@ -159,7 +159,12 @@ public class CosmicMachines {
     public static final MachineDefinition[] COSMIC_MODULE_HATCH = registerTieredMachines("module_hatch",
             ModuleHatchPartMachine::new,
             (tier, builder) -> builder
-                    .langValue("Module Hatch Tier " + tier)
+                    .langValue(switch (tier) {
+                        case 8 -> "Basic";
+                        case 9 -> "Advanced";
+                        case 10 -> "Elite";
+                        default -> "Simple";
+                    } + "Module Hatch")
                     .rotationState(RotationState.ALL)
                     .abilities(CosmicPartAbility.MODULE_HATCH)
                     // TODO for ghosti: give tooltip and model
