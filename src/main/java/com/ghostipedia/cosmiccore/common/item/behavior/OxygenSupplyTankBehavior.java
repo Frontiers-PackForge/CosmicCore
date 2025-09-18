@@ -5,6 +5,7 @@ import com.gregtechceu.gtceu.api.item.component.forge.IComponentCapability;
 import com.gregtechceu.gtceu.common.data.GTMaterials;
 import com.ghostipedia.cosmiccore.common.airControl.IOxygenSupplyItem;
 import com.ghostipedia.cosmiccore.common.airControl.OxygenItemCap;
+import lombok.Getter;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.common.capabilities.Capability;
@@ -23,8 +24,11 @@ public class OxygenSupplyTankBehavior implements IItemComponent, IComponentCapab
     private static final String TAG_TPT  = "TransferPerTick"; // for tooltip
     private static final String TAG_TPM  = "TicksPerMb";      // for tooltip
 
+    @Getter
     private final int capacityMb;
+    @Getter
     private final int transferPerTick;     // max oxygen ticks we can output per game tick
+    @Getter
     private final int ticksPerMb;          // 1 mB -> this many oxygen ticks
 
     public OxygenSupplyTankBehavior(int capacityMb, int transferPerTick, int ticksPerMb) {
@@ -33,19 +37,13 @@ public class OxygenSupplyTankBehavior implements IItemComponent, IComponentCapab
         this.ticksPerMb = Math.max(1, ticksPerMb);
     }
 
-    public int getCapacityMb()      { return capacityMb; }
-    public int getTransferPerTick() { return transferPerTick; }
-    public int getTicksPerMb()      { return ticksPerMb; }
-
-    /** Drain up to requestTicks from this stack, respecting transferPerTick and ticksPerMb.
-     *  Uses a per-item tick buffer so we only consume whole mB when needed. */
+     //Create a buffer of ticks inside the item and only drain when that buffer is satisfied
     public int drainTicks(ItemStack stack, int requestTicks) {
         if (requestTicks <= 0) return 0;
 
         int outLimit = Math.min(requestTicks, transferPerTick);
 
-        IFluidHandlerItem h = getFluidHandler(stack);
-        if (h == null) return 0;
+        IFluidHandlerItem fluidHandler = getFluidHandler(stack);
 
         // Pull buffered ticks from NBT (how many oxygen ticks we have "ready")
         int buffer = getTickBuffer(stack);
@@ -53,7 +51,7 @@ public class OxygenSupplyTankBehavior implements IItemComponent, IComponentCapab
         // If buffer can't satisfy the output limit, top-up by draining at most 1 mB this call.
         if (buffer < outLimit) {
             // Drain exactly 1 mB (if available) and convert to ticks
-            FluidStack drained = h.drain(new FluidStack(GTMaterials.Oxygen.getFluid(), 1), IFluidHandlerItem.FluidAction.EXECUTE);
+            FluidStack drained = fluidHandler.drain(new FluidStack(GTMaterials.Oxygen.getFluid(), 1), IFluidHandlerItem.FluidAction.EXECUTE);
             if (!drained.isEmpty()) {
                 buffer += drained.getAmount() * ticksPerMb; // amount will be 1 mB here
             }
@@ -73,31 +71,30 @@ public class OxygenSupplyTankBehavior implements IItemComponent, IComponentCapab
 
     // ---- NBT helpers ----
     private int getTickBuffer(ItemStack stack) {
-        CompoundTag cc = stack.getOrCreateTag().getCompound(TAG_ROOT);
-        return cc.getInt(TAG_BUF);
+        CompoundTag compoundTag = stack.getOrCreateTag().getCompound(TAG_ROOT);
+        return compoundTag.getInt(TAG_BUF);
     }
 
     private void setTickBuffer(ItemStack stack, int value) {
         CompoundTag tag = stack.getOrCreateTag();
-        CompoundTag cc  = tag.getCompound(TAG_ROOT);
-        cc.putInt(TAG_BUF, Math.max(0, value));
-        tag.put(TAG_ROOT, cc);
+        CompoundTag compoundTag  = tag.getCompound(TAG_ROOT);
+        compoundTag.putInt(TAG_BUF, Math.max(0, value));
+        tag.put(TAG_ROOT, compoundTag);
     }
 
-    /** Ensure config values are written so tooltips can read them. */
+    //Values are written so tooltips can read them.
     private void ensureConfigWritten(ItemStack stack) {
         CompoundTag tag = stack.getOrCreateTag();
-        CompoundTag cc  = tag.getCompound(TAG_ROOT);
-        // Always (re)write to reflect the behavior instance parameters
-        cc.putInt(TAG_CAP, capacityMb);
-        cc.putInt(TAG_TPT, transferPerTick);
-        cc.putInt(TAG_TPM, ticksPerMb);
-        tag.put(TAG_ROOT, cc);
+        CompoundTag compoundTag  = tag.getCompound(TAG_ROOT);
+        compoundTag.putInt(TAG_CAP, capacityMb);
+        compoundTag.putInt(TAG_TPT, transferPerTick);
+        compoundTag.putInt(TAG_TPM, ticksPerMb);
+        tag.put(TAG_ROOT, compoundTag);
     }
 
     @Override
     public @NotNull <T> LazyOptional<T> getCapability(ItemStack stack, @NotNull Capability<T> cap) {
-        // Make sure our tuning is visible to the item tooltip
+        //Set our NBT
         ensureConfigWritten(stack);
 
         if (cap == ForgeCapabilities.FLUID_HANDLER_ITEM) {
@@ -111,7 +108,6 @@ public class OxygenSupplyTankBehavior implements IItemComponent, IComponentCapab
             ));
         }
 
-        // Expose oxygen supply view for OxygenLogic
         if (cap == OxygenItemCap.OXYGEN_SUPPLY) {
             IOxygenSupplyItem provider = new IOxygenSupplyItem() {
                 @Override

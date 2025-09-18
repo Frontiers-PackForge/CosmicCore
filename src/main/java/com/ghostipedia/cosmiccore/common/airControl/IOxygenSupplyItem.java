@@ -8,6 +8,5 @@ public interface IOxygenSupplyItem {
      * @return ticks actually provided (0..requestTicks)
      */
     int drainOxygenTicks(ItemStack stack, int requestTicks);
-    default int getTransferPerTick(ItemStack stack) { return -1; }
-    default int getTicksPerMb(ItemStack stack)      { return -1; }
+
 }

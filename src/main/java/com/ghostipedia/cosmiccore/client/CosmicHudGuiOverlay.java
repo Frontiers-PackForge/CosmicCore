@@ -134,7 +134,7 @@ public class CosmicHudGuiOverlay implements IGuiOverlay {
             int leftCapW = Math.min(capDst, filledW);
             gg.blit(
                     OXY_FILL,
-                    x, y,
+                    x+1, y,
                     leftCapW, barHeight,
                     0f, 0f,
                     CAP_SRC_PX, TEX_H,

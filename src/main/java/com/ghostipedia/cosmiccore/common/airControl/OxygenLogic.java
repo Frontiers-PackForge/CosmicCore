@@ -34,16 +34,18 @@ public final class OxygenLogic {
         ServerLevel level = player.serverLevel();
 
         player.getCapability(OxygenBudgetCap.CAP).ifPresent(cap -> {
+
             if (cap.getOxygenTicks(level.dimension()) < 0) {
                 cap.setOxygenTicks(level.dimension(), MAX_OXYGEN_TICKS);
                 cap.setRegenBuffer(level.dimension(), 0.0);
             }
-
+            //Get the Players Y Value, and the ranges of the dimension for draining rates
             int yValue = player.blockPosition().getY();
             OxygenRules.AirRanges range = OxygenRules.getRanges(level.dimension(), yValue);
 
             OxygenRules.AirQuality quality;
             OxygenRules.Rates rates;
+            //if there is no range assume safe, this should realistically never be hit as I should define bands for **EVERY** dimension.
             if (range == null) {
                 quality = OxygenRules.AirQuality.SAFE;
                 rates = OxygenRules.QUALITY_RATES.get(quality).copy();
@@ -51,7 +53,7 @@ public final class OxygenLogic {
                 quality = range.quality;
                 rates = range.airRangeRates();
             }
-
+            //Check if the Player is in a fluid
             BlockPos eyePos = BlockPos.containing(player.getX(), player.getEyeY(), player.getZ());
             boolean eyesInFluid = !level.getFluidState(eyePos).isEmpty();
             if (eyesInFluid) {
