@@ -31,6 +31,8 @@ import com.gregtechceu.gtceu.data.recipe.CustomTags;
 
 import com.lowdragmc.lowdraglib.utils.LocalizationUtils;
 
+import com.sammy.malum.common.item.curiosities.weapons.scythe.MagicScytheItem;
+import com.sammy.malum.common.item.curiosities.weapons.scythe.MalumScytheItem;
 import net.minecraft.client.renderer.item.ItemProperties;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -39,10 +41,7 @@ import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.ArmorItem;
-import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Rarity;
+import net.minecraft.world.item.*;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidUtil;
@@ -58,6 +57,7 @@ import com.tterrag.registrate.util.nullness.NonNullBiConsumer;
 import com.tterrag.registrate.util.nullness.NonNullConsumer;
 import earth.terrarium.adastra.common.items.rendered.RenderedBlockItem;
 import earth.terrarium.adastra.common.tags.ModItemTags;
+import net.minecraftforge.registries.RegistryObject;
 import team.lodestar.lodestone.systems.easing.Easing;
 import wayoftime.bloodmagic.common.item.BloodOrb;
 import wayoftime.bloodmagic.common.item.ItemBloodOrb;
@@ -70,6 +70,7 @@ import static com.ghostipedia.cosmiccore.CosmicUtils.attachRenderer;
 import static com.ghostipedia.cosmiccore.api.registries.CosmicRegistration.REGISTRATE;
 import static com.gregtechceu.gtceu.common.data.GTItems.attach;
 import static com.sammy.malum.registry.common.SpiritTypeRegistry.SPIRITS;
+import static com.sammy.malum.registry.common.item.ItemTiers.ItemTierEnum.SOUL_STAINED_STEEL;
 import static earth.terrarium.adastra.common.registry.ModItems.GLOBES;
 import static wayoftime.bloodmagic.common.item.BloodMagicItems.BLOOD_ORBS;
 
@@ -1062,6 +1063,18 @@ public class CosmicItems {
             .defaultModel()
             .register();
 
+
+
+    public static final ItemEntry<MalumScytheItem> NANO_SCYTHE = REGISTRATE
+            .item("wireless_pda", properties -> new MagicScytheItem(Tiers.NETHERITE, -2.5f, 0.1f, 4, properties))
+            .lang("Wireless Data PDA")
+            .properties(p -> p.stacksTo(1))
+            .tag()
+            .onRegister(attach(new MalumScytheItem(Tiers.IRON, 0, 0.1f, new Item.Properties().defaultDurability(9000))))
+            .defaultModel()
+            .register();
+
+    public static final RegistryObject<Item> SOUL_STAINED_STEEL_SCYTHE = register("soul_stained_steel_scythe", GEAR_PROPERTIES(), (p) -> new MagicScytheItem(SOUL_STAINED_STEEL, -2.5f, 0.1f, 4, p));
     public static ItemEntry<ComponentItem> THE_ONE_RING = REGISTRATE
             .item("the_one_ring", p -> (ComponentItem) new ComponentItem(p) {
 
