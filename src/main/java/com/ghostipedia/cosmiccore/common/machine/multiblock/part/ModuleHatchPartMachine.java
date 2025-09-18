@@ -2,6 +2,7 @@ package com.ghostipedia.cosmiccore.common.machine.multiblock.part;
 
 import com.ghostipedia.cosmiccore.common.data.CosmicItems;
 
+import com.gregtechceu.gtceu.api.GTValues;
 import com.gregtechceu.gtceu.api.capability.recipe.IO;
 import com.gregtechceu.gtceu.api.gui.GuiTextures;
 import com.gregtechceu.gtceu.api.gui.widget.SlotWidget;
@@ -66,7 +67,16 @@ public class ModuleHatchPartMachine extends TieredIOPartMachine implements IMach
 
     private int getSlots(int tier) {
         // Always have 4 slots, change this to give different slots per tier
-        return 4;
+        switch (tier) {
+            case GTValues.UV:
+                return 4;
+            case GTValues.UHV:
+                return 8;
+            case GTValues.UEV:
+                return 12;
+            default:
+                return 4;
+        }
     }
 
     //////////////////////////////////////
@@ -92,8 +102,8 @@ public class ModuleHatchPartMachine extends TieredIOPartMachine implements IMach
 
     @Override
     public Widget createUIWidget() {
-        int rowSize = (int) Math.sqrt(this.getInventory().getSlots());
-        int colSize = rowSize;
+        int rowSize = 4;
+        int colSize = this.getInventory().getSlots() / 4;
         var group = new WidgetGroup(0, 0, 18 * rowSize + 16, 18 * colSize + 16);
         var container = new WidgetGroup(4, 4, 18 * rowSize + 8, 18 * colSize + 8);
         int index = 0;
