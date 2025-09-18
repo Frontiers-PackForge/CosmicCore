@@ -64,6 +64,7 @@ import wayoftime.bloodmagic.common.item.ItemBloodOrb;
 import wayoftime.bloodmagic.common.registration.impl.BloodOrbRegistryObject;
 
 import java.awt.*;
+import java.util.List;
 import java.util.function.Function;
 
 import static com.ghostipedia.cosmiccore.CosmicUtils.attachRenderer;
