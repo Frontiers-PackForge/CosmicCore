@@ -32,8 +32,6 @@ import com.gregtechceu.gtceu.data.recipe.CustomTags;
 
 import com.lowdragmc.lowdraglib.utils.LocalizationUtils;
 
-import com.sammy.malum.common.item.curiosities.weapons.scythe.MagicScytheItem;
-import com.sammy.malum.common.item.curiosities.weapons.scythe.MalumScytheItem;
 import net.minecraft.client.renderer.item.ItemProperties;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -58,7 +56,6 @@ import com.tterrag.registrate.util.nullness.NonNullBiConsumer;
 import com.tterrag.registrate.util.nullness.NonNullConsumer;
 import earth.terrarium.adastra.common.items.rendered.RenderedBlockItem;
 import earth.terrarium.adastra.common.tags.ModItemTags;
-import net.minecraftforge.registries.RegistryObject;
 import team.lodestar.lodestone.systems.easing.Easing;
 import wayoftime.bloodmagic.common.item.BloodOrb;
 import wayoftime.bloodmagic.common.item.ItemBloodOrb;
@@ -1064,8 +1061,6 @@ public class CosmicItems {
             .defaultModel()
             .register();
 
-
-
     public static final ItemEntry<CosmicScytheItem> NANO_SCYTHE = REGISTRATE
             .item("nano_scythe",
                     props -> new CosmicScytheItem(
@@ -1075,7 +1070,6 @@ public class CosmicItems {
             .lang("Nano Scythe")
             .defaultModel()
             .register();
-
 
     public static final ItemEntry<CosmicScytheItem> QUANTUM_SCYTHE = REGISTRATE
             .item("quantum_scythe",
