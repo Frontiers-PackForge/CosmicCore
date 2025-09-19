@@ -22,6 +22,7 @@ import net.minecraftforge.common.capabilities.CapabilityToken;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.common.util.LazyOptional;
 
+import com.sammy.malum.common.enchantment.scythe.AscensionEnchantment;
 import com.sammy.malum.common.enchantment.scythe.ReboundEnchantment;
 import com.sammy.malum.common.item.curiosities.weapons.scythe.MalumScytheItem;
 import com.sammy.malum.registry.common.DamageTypeRegistry;
@@ -31,6 +32,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
+import static com.sammy.malum.registry.common.item.EnchantmentRegistry.ASCENSION;
 import static com.sammy.malum.registry.common.item.EnchantmentRegistry.REBOUND;
 
 public class CosmicScytheItem extends MalumScytheItem {
@@ -74,6 +76,13 @@ public class CosmicScytheItem extends MalumScytheItem {
         if (stack.getEnchantmentLevel(REBOUND.get()) > 0) {
             if (tryConsume(stack, USE_REBOUND)) {
                 ReboundEnchantment.throwScythe(level, player, hand, stack);
+                return InteractionResultHolder.success(stack);
+            }
+        }
+
+        if (stack.getEnchantmentLevel(ASCENSION.get()) > 0) {
+            if (tryConsume(stack, USE_ASCENSION)) {
+                AscensionEnchantment.triggerAscension(level, player, hand, stack);
                 return InteractionResultHolder.success(stack);
             }
         }
@@ -124,9 +133,7 @@ public class CosmicScytheItem extends MalumScytheItem {
 
     @Override
     public boolean isEnchantable(ItemStack stack) {
-
         return true;
-
     }
 
     @Override
@@ -137,7 +144,7 @@ public class CosmicScytheItem extends MalumScytheItem {
     // This works!
     @Override
     public boolean isBookEnchantable(ItemStack stack, ItemStack book) {
-      return true;
+        return true;
     }
 
     // This *kind of* works, it makes it so the anvil works but NOT the table!?!?!?!? AUGGGGHG
