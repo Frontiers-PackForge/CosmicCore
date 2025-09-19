@@ -124,7 +124,9 @@ public class CosmicScytheItem extends MalumScytheItem {
 
     @Override
     public boolean isEnchantable(ItemStack stack) {
-        return stack.getCount() == 1;
+
+        return true;
+
     }
 
     @Override
@@ -135,7 +137,7 @@ public class CosmicScytheItem extends MalumScytheItem {
     // This works!
     @Override
     public boolean isBookEnchantable(ItemStack stack, ItemStack book) {
-        return stack.getCount() == 1;
+      return true;
     }
 
     // This *kind of* works, it makes it so the anvil works but NOT the table!?!?!?!? AUGGGGHG
