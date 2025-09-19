@@ -6,6 +6,7 @@ import com.ghostipedia.cosmiccore.api.item.armor.*;
 import com.ghostipedia.cosmiccore.api.registries.CosmicRegistration;
 import com.ghostipedia.cosmiccore.client.renderer.item.HaloItemRenderer;
 import com.ghostipedia.cosmiccore.common.data.tag.item.CosmicItemTags;
+import com.ghostipedia.cosmiccore.common.item.CosmicScytheItem;
 import com.ghostipedia.cosmiccore.common.item.armor.ChestSanguineWarptechSuite;
 import com.ghostipedia.cosmiccore.common.item.armor.HelmetSanguineWarptechSuite;
 import com.ghostipedia.cosmiccore.common.item.armor.SanguineWarptechSuite;
@@ -1065,16 +1066,37 @@ public class CosmicItems {
 
 
 
-    public static final ItemEntry<MalumScytheItem> NANO_SCYTHE = REGISTRATE
-            .item("wireless_pda", properties -> new MagicScytheItem(Tiers.NETHERITE, -2.5f, 0.1f, 4, properties))
-            .lang("Wireless Data PDA")
+    public static final ItemEntry<CosmicScytheItem> NANO_SCYTHE = REGISTRATE
+            .item("nano_scythe",
+                    props -> new CosmicScytheItem(
+                            SOUL_STAINED_STEEL,
+                            10.5f, 0.5f, props))
             .properties(p -> p.stacksTo(1))
-            .tag()
-            .onRegister(attach(new MalumScytheItem(Tiers.IRON, 0, 0.1f, new Item.Properties().defaultDurability(9000))))
+            .lang("Nano Scythe")
             .defaultModel()
             .register();
 
-    public static final RegistryObject<Item> SOUL_STAINED_STEEL_SCYTHE = register("soul_stained_steel_scythe", GEAR_PROPERTIES(), (p) -> new MagicScytheItem(SOUL_STAINED_STEEL, -2.5f, 0.1f, 4, p));
+
+    public static final ItemEntry<CosmicScytheItem> QUANTUM_SCYTHE = REGISTRATE
+            .item("quantum_scythe",
+                    props -> new CosmicScytheItem(
+                            SOUL_STAINED_STEEL,
+                            25.5f, 0.5f, props))
+            .properties(p -> p.stacksTo(1))
+            .lang("Quark Scythe")
+            .defaultModel()
+            .register();
+
+    public static final ItemEntry<CosmicScytheItem> SANGUINE_SCYTHE = REGISTRATE
+            .item("sanguine_scythe",
+                    props -> new CosmicScytheItem(
+                            SOUL_STAINED_STEEL,
+                            100f, 0.5f, props))
+            .properties(p -> p.stacksTo(1))
+            .lang("Sanguine Scythe")
+            .defaultModel()
+            .register();
+
     public static ItemEntry<ComponentItem> THE_ONE_RING = REGISTRATE
             .item("the_one_ring", p -> (ComponentItem) new ComponentItem(p) {
 
