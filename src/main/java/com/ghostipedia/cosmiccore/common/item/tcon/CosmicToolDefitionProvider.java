@@ -28,6 +28,7 @@ public class CosmicToolDefitionProvider extends AbstractToolDefinitionDataProvid
         DefaultMaterialsModule defaultTwoParts = DefaultMaterialsModule.builder().material(tier1Material, tier1Material).build();
         DefaultMaterialsModule defaultThreeParts = DefaultMaterialsModule.builder().material(tier1Material, tier1Material, tier1Material).build();
         DefaultMaterialsModule defaultFourParts = DefaultMaterialsModule.builder().material(tier1Material, tier1Material, tier1Material, tier1Material).build();
+        DefaultMaterialsModule defaultFiveParts = DefaultMaterialsModule.builder().material(tier1Material, tier1Material, tier1Material, tier1Material, tier1Material).build();
         DefaultMaterialsModule ancientTwoParts = DefaultMaterialsModule.builder().material(randomMaterial, randomMaterial).build();
         DefaultMaterialsModule ancientThreeParts = DefaultMaterialsModule.builder().material(randomMaterial, randomMaterial, randomMaterial).build();
 
@@ -38,6 +39,7 @@ public class CosmicToolDefitionProvider extends AbstractToolDefinitionDataProvid
 
                 .module(PartStatsModule.parts()
                         .part(smallBlade)
+                        .part(smallBlade)
                         .part(toolBinding)
                         .part(toolHandle)
                         .part(toolHandle).build())
@@ -46,6 +48,23 @@ public class CosmicToolDefitionProvider extends AbstractToolDefinitionDataProvid
                         .set(ToolStats.ATTACK_SPEED, 0.9f)
                         .build()))
                 .module(IsEffectiveModule.tag(CustomTags.MINEABLE_WITH_WIRE_CUTTER));
+
+
+
+        define(CosmicToolDefinitions.WRENCHES)
+
+                .module(PartStatsModule.parts()
+                        .part(pickHead)
+                        .part(toughBinding)
+                        .part(toolBinding)
+                        .part(toolHandle).build())
+                .module(defaultFourParts)
+                .module(new SetStatsModule(StatsNBT.builder()
+                        .set(ToolStats.ATTACK_SPEED, 0.9f)
+                        .build()))
+                .module(IsEffectiveModule.tag(CustomTags.MINEABLE_WITH_WRENCH));
+
+
 
 
     }
