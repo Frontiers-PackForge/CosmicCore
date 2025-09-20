@@ -1,8 +1,10 @@
 package com.ghostipedia.cosmiccore.mixin.gtceu;
 
 import com.ghostipedia.cosmiccore.api.misc.IMetaMachineMixin;
+import com.ghostipedia.cosmiccore.common.item.tcon.TiconUtils;
 
 import com.gregtechceu.gtceu.api.block.MetaMachineBlock;
+import com.gregtechceu.gtceu.api.item.tool.ToolHelper;
 import com.gregtechceu.gtceu.api.machine.MetaMachine;
 
 import net.minecraft.core.BlockPos;
@@ -21,6 +23,7 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
+import slimeknights.tconstruct.library.tools.helper.ToolDamageUtil;
 import slimeknights.tconstruct.library.tools.item.ModifiableItem;
 
 @Mixin(value = MetaMachineBlock.class, remap = false)
@@ -37,12 +40,16 @@ public class MetaMachineBlockMixin {
         if (itemStack.getItem() instanceof ModifiableItem ticonTool) {
             var result = ((IMetaMachineMixin) machine).ccore$onToolClick(ticonTool,
                     new UseOnContext(player, hand, hit));
-            if (result == InteractionResult.CONSUME && player instanceof ServerPlayer serverPlayer) {
-                int a = 5;
+            if (result.getSecond() == InteractionResult.CONSUME && player instanceof ServerPlayer serverPlayer) {
+                ToolHelper.playToolSound(TiconUtils.getGTToolType(result.getFirst()), serverPlayer);
+
+                if (!serverPlayer.isCreative()) {
+                    ToolDamageUtil.handleDamageItem(itemStack, 1, player, p -> {});
+                }
             }
 
-            if (result != InteractionResult.PASS) {
-                cir.setReturnValue(result);
+            if (result.getSecond() != InteractionResult.PASS) {
+                cir.setReturnValue(result.getSecond());
                 cir.cancel();
             }
         }

@@ -1,9 +1,11 @@
 package com.ghostipedia.cosmiccore.mixin.gtceu;
 
 import com.ghostipedia.cosmiccore.api.misc.IPipeBlockEntityMixin;
+import com.ghostipedia.cosmiccore.common.item.tcon.TiconUtils;
 
 import com.gregtechceu.gtceu.api.block.PipeBlock;
 import com.gregtechceu.gtceu.api.blockentity.PipeBlockEntity;
+import com.gregtechceu.gtceu.api.item.tool.ToolHelper;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerPlayer;
@@ -21,10 +23,11 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
+import slimeknights.tconstruct.library.tools.helper.ToolDamageUtil;
 import slimeknights.tconstruct.library.tools.item.ModifiableItem;
 
 @Mixin(value = PipeBlock.class, remap = false)
-public class PipeBlockMixin implements IPipeBlockEntityMixin {
+public class PipeBlockMixin {
 
     @Inject(method = "use",
             at = @At(value = "INVOKE",
@@ -37,7 +40,11 @@ public class PipeBlockMixin implements IPipeBlockEntityMixin {
             var result = ((IPipeBlockEntityMixin) pipeBlockEntity).ccore$onToolClick(ticonTool,
                     new UseOnContext(player, hand, hit));
             if (result.getSecond() == InteractionResult.CONSUME && player instanceof ServerPlayer serverPlayer) {
-                int a = 5;
+                ToolHelper.playToolSound(TiconUtils.getGTToolType(result.getFirst()), serverPlayer);
+
+                if (!serverPlayer.isCreative()) {
+                    ToolDamageUtil.handleDamageItem(itemStack, 1, player, p -> {});
+                }
             }
 
             if (result.getSecond() != InteractionResult.PASS) {

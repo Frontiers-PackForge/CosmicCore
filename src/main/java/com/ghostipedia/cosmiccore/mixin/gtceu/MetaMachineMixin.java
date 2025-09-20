@@ -18,25 +18,28 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.phys.BlockHitResult;
 
+import com.mojang.datafixers.util.Pair;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
+import slimeknights.tconstruct.library.tools.definition.ToolDefinition;
 import slimeknights.tconstruct.library.tools.item.ModifiableItem;
 import slimeknights.tconstruct.library.tools.nbt.ToolStack;
 
 @Mixin(MetaMachine.class)
 public class MetaMachineMixin implements IMetaMachineMixin {
 
-    public InteractionResult ccore$onToolClick(ModifiableItem ticonItem, UseOnContext context) {
+    public Pair<ToolDefinition, InteractionResult> ccore$onToolClick(ModifiableItem ticonItem, UseOnContext context) {
         var hitResult = new BlockHitResult(context.getClickLocation(), context.getClickedFace(),
                 context.getClickedPos(), false);
         Direction gridSide = ICoverable.determineGridSideHit(hitResult);
         if (gridSide == null) gridSide = hitResult.getDirection();
-        if (context.getPlayer() == null) return InteractionResult.PASS;
+        if (context.getPlayer() == null) Pair.of(null, InteractionResult.PASS);
 
         if (ticonItem.getToolDefinition() == CosmicToolDefinitions.WRENCHES) {
-            return onWrenchClick(context.getPlayer(), context.getHand(), gridSide, hitResult);
+            return Pair.of(ticonItem.getToolDefinition(),
+                    onWrenchClick(context.getPlayer(), context.getHand(), gridSide, hitResult));
         }
-        return InteractionResult.PASS;
+        return Pair.of(null, InteractionResult.PASS);
     }
 
     @Unique

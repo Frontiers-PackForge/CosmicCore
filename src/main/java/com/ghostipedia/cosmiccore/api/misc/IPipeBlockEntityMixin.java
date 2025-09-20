@@ -9,8 +9,8 @@ import slimeknights.tconstruct.library.tools.item.ModifiableItem;
 
 public interface IPipeBlockEntityMixin {
 
-    public default Pair<ToolDefinition, InteractionResult> ccore$onToolClick(ModifiableItem ticonItem,
-                                                                             UseOnContext context) {
+    default Pair<ToolDefinition, InteractionResult> ccore$onToolClick(ModifiableItem ticonItem,
+                                                                      UseOnContext context) {
         return Pair.of(null, InteractionResult.PASS);
     }
 }
