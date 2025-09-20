@@ -12,6 +12,7 @@ public class CosmicToolDefinitions {
 
 
     public static final ToolDefinition WIRE_CUTTERS = ToolDefinition.create(CosmicTinkerTools.wireCutter);
+    public static final ToolDefinition WRENCHES = ToolDefinition.create(CosmicTinkerTools.wrench);
 
 
 }

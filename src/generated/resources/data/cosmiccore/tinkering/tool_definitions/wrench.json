@@ -3,10 +3,9 @@
     {
       "type": "tconstruct:part_stats",
       "parts": [
-        "tconstruct:small_blade",
-        "tconstruct:small_blade",
+        "tconstruct:pick_head",
+        "tconstruct:tough_binding",
         "tconstruct:tool_binding",
-        "tconstruct:tool_handle",
         "tconstruct:tool_handle"
       ],
       "primary_part": 0
@@ -41,7 +40,7 @@
     {
       "type": "tconstruct:is_effective",
       "predicate_type": "mantle:tag",
-      "tag": "forge:mineable/wire_cutter"
+      "tag": "forge:mineable/wrench"
     }
   ]
 }

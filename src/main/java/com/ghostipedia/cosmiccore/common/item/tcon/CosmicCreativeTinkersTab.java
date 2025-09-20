@@ -14,6 +14,7 @@ public class CosmicCreativeTinkersTab {
     public static void addCreativeTabItems(CreativeModeTab.ItemDisplayParameters itemDisplayParameters, CreativeModeTab.Output tab){
         Consumer<ItemStack> output = tab::accept;
         acceptTool(output, CosmicTinkerTools.wireCutter);
+        acceptTool(output, CosmicTinkerTools.wrench);
     }
 
 
