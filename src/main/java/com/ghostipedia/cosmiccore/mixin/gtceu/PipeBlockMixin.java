@@ -1,9 +1,9 @@
 package com.ghostipedia.cosmiccore.mixin.gtceu;
 
-import com.ghostipedia.cosmiccore.api.misc.IMetaMachineMixin;
+import com.ghostipedia.cosmiccore.api.misc.IPipeBlockEntityMixin;
 
-import com.gregtechceu.gtceu.api.block.MetaMachineBlock;
-import com.gregtechceu.gtceu.api.machine.MetaMachine;
+import com.gregtechceu.gtceu.api.block.PipeBlock;
+import com.gregtechceu.gtceu.api.blockentity.PipeBlockEntity;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerPlayer;
@@ -23,27 +23,25 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import slimeknights.tconstruct.library.tools.item.ModifiableItem;
 
-@Mixin(value = MetaMachineBlock.class, remap = false)
-public class MetaMachineBlockMixin {
+@Mixin(value = PipeBlock.class, remap = false)
+public class PipeBlockMixin implements IPipeBlockEntityMixin {
 
     @Inject(method = "use",
             at = @At(value = "INVOKE",
                      target = "Lcom/gregtechceu/gtceu/api/item/tool/ToolHelper;getToolTypes(Lnet/minecraft/world/item/ItemStack;)Ljava/util/Set;"),
             cancellable = true)
-    public void ccore$use(BlockState state, Level world, BlockPos pos, Player player, InteractionHand hand,
-                          BlockHitResult hit,
-                          CallbackInfoReturnable<InteractionResult> cir, @Local MetaMachine machine,
-                          @Local ItemStack itemStack) {
+    public void cc$use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand,
+                       BlockHitResult hit, CallbackInfoReturnable<InteractionResult> cir,
+                       @Local ItemStack itemStack, @Local PipeBlockEntity<?, ?> pipeBlockEntity) {
         if (itemStack.getItem() instanceof ModifiableItem ticonTool) {
-            var result = ((IMetaMachineMixin) machine).ccore$onToolClick(ticonTool,
+            var result = ((IPipeBlockEntityMixin) pipeBlockEntity).ccore$onToolClick(ticonTool,
                     new UseOnContext(player, hand, hit));
-            if (result == InteractionResult.CONSUME && player instanceof ServerPlayer serverPlayer) {
+            if (result.getSecond() == InteractionResult.CONSUME && player instanceof ServerPlayer serverPlayer) {
                 int a = 5;
             }
 
-            if (result != InteractionResult.PASS) {
-                cir.setReturnValue(result);
-                cir.cancel();
+            if (result.getSecond() != InteractionResult.PASS) {
+                cir.setReturnValue(result.getSecond());
             }
         }
     }

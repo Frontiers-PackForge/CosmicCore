@@ -41,6 +41,8 @@
     "emi.EmiApiMixin",
     "gtceu.MetaMachineBlockMixin",
     "gtceu.MetaMachineMixin",
+    "gtceu.PipeBlockEntityMixin",
+    "gtceu.PipeBlockMixin",
     "lso.FrostbiteEffectMixin",
     "lso.HeatstrokeEffectMixin",
     "lso.TemperatureCapabilityMixin",

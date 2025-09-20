@@ -48,7 +48,7 @@ public class WrenchModeSwitchModifier extends Modifier implements GeneralInterac
             player.displayClientMessage(Component.translatable("metaitem.machine_configuration.mode",
                     ToolModeSwitchBehavior.WrenchModeType.values()[nbt.getInt(MODE_SWITCH)].getName()), true);
         }
-        return InteractionResult.sidedSuccess(false);
+        return InteractionResult.PASS;
     }
 
     @Override
