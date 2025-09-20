@@ -3,16 +3,12 @@ package com.ghostipedia.cosmiccore.common.item.tcon;
 import com.ghostipedia.cosmiccore.CosmicCore;
 import com.ghostipedia.cosmiccore.common.item.tcon.modifiers.CosmicCoreModifiers;
 
-import com.ghostipedia.cosmiccore.common.item.tcon.modifiers.CosmicCoreModifiers;
-import com.ghostipedia.cosmiccore.common.item.tcon.modifiers.CosmicCoreModifiers;
-
 import net.minecraft.world.item.Item;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 
 import slimeknights.mantle.registration.object.ItemObject;
 import slimeknights.tconstruct.common.registration.ItemDeferredRegisterExtension;
 import slimeknights.tconstruct.library.tools.item.ModifiableItem;
-import slimeknights.tconstruct.tools.ToolDefinitions;
 
 public class CosmicTinkerTools {
 

@@ -29,7 +29,6 @@ public class CosmicCreativeTinkersTab {
         item.get().addVariants(output, "");
     }
 
-
     private static void acceptTools(Consumer<ItemStack> output, EnumObject<?, ? extends IModifiable> tools) {
         tools.forEach(tool -> ToolBuildHandler.addVariants(output, tool, ""));
     }

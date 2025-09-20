@@ -39,6 +39,8 @@
     "ae2.eudisplay.EUAddSettingMixin",
     "client.CosmicCoreRemainingAirOverlayMixin",
     "emi.EmiApiMixin",
+    "gtceu.MetaMachineBlockMixin",
+    "gtceu.MetaMachineMixin",
     "lso.FrostbiteEffectMixin",
     "lso.HeatstrokeEffectMixin",
     "lso.TemperatureCapabilityMixin",

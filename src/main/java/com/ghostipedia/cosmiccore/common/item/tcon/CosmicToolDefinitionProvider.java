@@ -3,8 +3,6 @@ package com.ghostipedia.cosmiccore.common.item.tcon;
 import com.ghostipedia.cosmiccore.CosmicCore;
 import com.ghostipedia.cosmiccore.common.item.tcon.modifiers.CosmicCoreModifiers;
 
-
-import com.ghostipedia.cosmiccore.common.item.tcon.modifiers.CosmicCoreModifiers;
 import com.gregtechceu.gtceu.data.recipe.CustomTags;
 
 import net.minecraft.data.PackOutput;
@@ -71,10 +69,6 @@ public class CosmicToolDefinitionProvider extends AbstractToolDefinitionDataProv
                         .build()))
                 .module(IsEffectiveModule.tag(CustomTags.MINEABLE_WITH_WRENCH))
                 .module(ToolTraitsModule.builder().trait(CosmicCoreModifiers.wrenchModeSwitch).build());;
-
-
-
-
     }
 
     @Override

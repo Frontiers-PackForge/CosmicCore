@@ -44,7 +44,7 @@ public class WrenchModeSwitchModifier extends Modifier implements GeneralInterac
         boolean shift = player.isShiftKeyDown();
         if (shift && source == InteractionSource.RIGHT_CLICK && !tool.isBroken()) {
             nbt.putInt(MODE_SWITCH,
-                    nbt.getInt(MODE_SWITCH) + 1 % ToolModeSwitchBehavior.WrenchModeType.values().length);
+                    (nbt.getInt(MODE_SWITCH) + 1) % ToolModeSwitchBehavior.WrenchModeType.values().length);
             player.displayClientMessage(Component.translatable("metaitem.machine_configuration.mode",
                     ToolModeSwitchBehavior.WrenchModeType.values()[nbt.getInt(MODE_SWITCH)].getName()), true);
         }
@@ -57,6 +57,11 @@ public class WrenchModeSwitchModifier extends Modifier implements GeneralInterac
         var nbt = tool.getPersistentData();
         tooltip.add(Component.translatable("metaitem.machine_configuration.mode",
                 ToolModeSwitchBehavior.WrenchModeType.values()[nbt.getInt(MODE_SWITCH)].getName()));
+    }
+
+    public ToolModeSwitchBehavior.WrenchModeType getType(IToolStackView tool) {
+        var nbt = tool.getPersistentData();
+        return ToolModeSwitchBehavior.WrenchModeType.values()[nbt.getInt(MODE_SWITCH)];
     }
 
     @Override
