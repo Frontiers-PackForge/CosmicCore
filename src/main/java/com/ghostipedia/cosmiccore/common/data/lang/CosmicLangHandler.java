@@ -14,6 +14,20 @@ public class CosmicLangHandler extends LangHandler {
         // machine tooltips/names/etc
         provider.add("gtceu.naquahine_reactor", "§bNaquahine Reactor");
 
+        provider.add("tooltip.gt_scythe.no_energy", "§cNot enough energy.");
+        provider.add("tooltip.gt_scythe.energy", "Energy: %s / %s EU");
+        provider.add("tooltip.gt_scythe.per_hit", "Cost: %s EU / hit");
+
+        multiLang(provider, "cosmiccore.machine.fluid_drilling_rig.description",
+                "§bDrills infinite fluid from",
+                "§bliquid pockets suspended throughout the void.");
+
+        provider.add("cosmiccore.universal.tooltip.energy_usage",
+                "§eConsumes 1 ZPM Amp while operating.");
+        provider.add("cosmiccore.machine.fluid_drilling_rig.production",
+                "§eProduction Multiplier: 256x");
+        provider.add("cosmiccore.machine.fluid_drilling_rig.depletion", "§bDepletion Rate: 0%");
+
         provider.add("block.gtceu.steam_mixing_vessel", "§6Large Steam Mixing Vessel");
         provider.add("block.gtceu.large_combustion_engine_cc", "Large Combustion Engine");
         provider.add("block.gtceu.extreme_combustion_engine_cc", "Extreme Combustion Engine");

@@ -23,6 +23,7 @@ public class MultiblockInit {
         CryogenicsChamber.init();
         StarLadder.init();
         VoidMiner.init();
+        FluidVoidRig.init();
         VoraxReactor.init();
         SpiritCrucible.init();
         AtmoPump.init();
