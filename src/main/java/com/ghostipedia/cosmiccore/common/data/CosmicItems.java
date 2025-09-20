@@ -6,6 +6,7 @@ import com.ghostipedia.cosmiccore.api.item.armor.*;
 import com.ghostipedia.cosmiccore.api.registries.CosmicRegistration;
 import com.ghostipedia.cosmiccore.client.renderer.item.HaloItemRenderer;
 import com.ghostipedia.cosmiccore.common.data.tag.item.CosmicItemTags;
+import com.ghostipedia.cosmiccore.common.item.CosmicScytheItem;
 import com.ghostipedia.cosmiccore.common.item.armor.ChestSanguineWarptechSuite;
 import com.ghostipedia.cosmiccore.common.item.armor.HelmetSanguineWarptechSuite;
 import com.ghostipedia.cosmiccore.common.item.armor.SanguineWarptechSuite;
@@ -39,10 +40,7 @@ import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.ArmorItem;
-import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Rarity;
+import net.minecraft.world.item.*;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidUtil;
@@ -70,6 +68,7 @@ import static com.ghostipedia.cosmiccore.CosmicUtils.attachRenderer;
 import static com.ghostipedia.cosmiccore.api.registries.CosmicRegistration.REGISTRATE;
 import static com.gregtechceu.gtceu.common.data.GTItems.attach;
 import static com.sammy.malum.registry.common.SpiritTypeRegistry.SPIRITS;
+import static com.sammy.malum.registry.common.item.ItemTiers.ItemTierEnum.SOUL_STAINED_STEEL;
 import static earth.terrarium.adastra.common.registry.ModItems.GLOBES;
 import static wayoftime.bloodmagic.common.item.BloodMagicItems.BLOOD_ORBS;
 
@@ -1059,6 +1058,36 @@ public class CosmicItems {
             .properties(p -> p.stacksTo(1))
             .tag()
             .onRegister(attach(new WirelessPDABehavior()))
+            .defaultModel()
+            .register();
+
+    public static final ItemEntry<CosmicScytheItem> NANO_SCYTHE = REGISTRATE
+            .item("nano_scythe",
+                    props -> new CosmicScytheItem(
+                            SOUL_STAINED_STEEL,
+                            10.5f, 0.5f, props))
+            .properties(p -> p.stacksTo(1))
+            .lang("Nano Scythe")
+            .defaultModel()
+            .register();
+
+    public static final ItemEntry<CosmicScytheItem> QUANTUM_SCYTHE = REGISTRATE
+            .item("quantum_scythe",
+                    props -> new CosmicScytheItem(
+                            SOUL_STAINED_STEEL,
+                            25.5f, 0.5f, props))
+            .properties(p -> p.stacksTo(1))
+            .lang("Quark Scythe")
+            .defaultModel()
+            .register();
+
+    public static final ItemEntry<CosmicScytheItem> SANGUINE_SCYTHE = REGISTRATE
+            .item("sanguine_scythe",
+                    props -> new CosmicScytheItem(
+                            SOUL_STAINED_STEEL,
+                            100f, 0.5f, props))
+            .properties(p -> p.stacksTo(1))
+            .lang("Sanguine Scythe")
             .defaultModel()
             .register();
 
