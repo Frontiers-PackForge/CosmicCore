@@ -369,5 +369,9 @@ public class CosmicLangHandler extends LangHandler {
         // Tinkers
         provider.add("item.cosmiccore.wire_cutter", "Wire Cutters");
         provider.add("item.cosmiccore.wire_cutter.description", "Snip wires cleanly with these cutters.");
+
+        provider.add("item.cosmiccore.wrench", "Wrench");
+        provider.add("item.cosmiccore.wrench_head", "Wrench Head");
+        provider.add("item.cosmiccore.wrench.description", "Rotate the World!");
     }
 }

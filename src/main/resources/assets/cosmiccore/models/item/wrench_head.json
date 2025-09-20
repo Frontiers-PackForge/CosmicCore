@@ -1,0 +1,11 @@
+{
+  "parent": "forge:item/default",
+  "loader": "tconstruct:material",
+  "offset": [
+    -2,
+    1
+  ],
+  "textures": {
+    "texture": "cosmiccore:item/tool/wrench/head"
+  }
+}

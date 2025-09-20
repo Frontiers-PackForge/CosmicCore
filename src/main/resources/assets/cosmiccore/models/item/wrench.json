@@ -1,0 +1,22 @@
+{
+  "loader": "tconstruct:tool",
+  "parent": "forge:item/default-tool",
+  "textures": {
+    "broken": "cosmiccore:item/tool/wrench/broken",
+    "head":   "cosmiccore:item/tool/wrench/head_tool",
+    "binding":"cosmiccore:item/tool/wrench/binding",
+    "handle": "cosmiccore:item/tool/wrench/handle"
+  },
+  "modifier_roots": [ "tconstruct:item/tool/pickaxe/modifiers/" ],
+  "parts": [
+    { "name": "handle",  "index": 2 },
+    { "name": "binding", "index": 1 },
+    { "name": "head",    "index": 0 }
+  ],
+  "overrides": [
+    {
+      "predicate": { "tconstruct:broken": 1 },
+      "model": "cosmiccore:item/tool/wrench/broken"
+    }
+  ]
+}

@@ -1,0 +1,7 @@
+{
+  "type": "tconstruct:table_casting_material",
+  "cast": { "tag": "cosmiccore:casts/multi_use/wrench_head" },
+  "cast_consumed": false,
+  "item_cost": 2,
+  "result": "cosmiccore:wrench_head"
+}

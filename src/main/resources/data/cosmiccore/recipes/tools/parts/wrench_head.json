@@ -1,7 +1,7 @@
 {
   "type": "tconstruct:part_builder",
-  "pattern": { "item": "tconstruct:pattern" },
-  "pattern_id": "cosmiccore:wrench_head",
-  "result": { "item": "cosmiccore:wrench_head" },
-  "cost": 1
+  "pattern": "cosmiccore:wrench_head",
+  "pattern_item": { "item": "tconstruct:pattern" },
+  "cost": 2,
+  "result": { "item": "cosmiccore:wrench_head" }
 }
