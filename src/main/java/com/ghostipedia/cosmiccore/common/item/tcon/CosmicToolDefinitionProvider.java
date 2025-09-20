@@ -1,7 +1,10 @@
 package com.ghostipedia.cosmiccore.common.item.tcon;
 
 import com.ghostipedia.cosmiccore.CosmicCore;
+import com.ghostipedia.cosmiccore.common.item.tcon.modifiers.CosmicCoreModifiers;
 
+
+import com.ghostipedia.cosmiccore.common.item.tcon.modifiers.CosmicCoreModifiers;
 import com.gregtechceu.gtceu.data.recipe.CustomTags;
 
 import net.minecraft.data.PackOutput;
@@ -9,6 +12,7 @@ import net.minecraft.data.PackOutput;
 import slimeknights.tconstruct.library.data.tinkering.AbstractToolDefinitionDataProvider;
 import slimeknights.tconstruct.library.materials.RandomMaterial;
 import slimeknights.tconstruct.library.tools.definition.module.build.SetStatsModule;
+import slimeknights.tconstruct.library.tools.definition.module.build.ToolTraitsModule;
 import slimeknights.tconstruct.library.tools.definition.module.material.DefaultMaterialsModule;
 import slimeknights.tconstruct.library.tools.definition.module.material.PartStatsModule;
 import slimeknights.tconstruct.library.tools.definition.module.mining.IsEffectiveModule;
@@ -18,9 +22,9 @@ import slimeknights.tconstruct.library.tools.stat.ToolStats;
 import static com.ghostipedia.cosmiccore.common.item.tcon.CosmicTinkerToolPart.wrenchHead;
 import static slimeknights.tconstruct.tools.TinkerToolParts.*;
 
-public class CosmicToolDefitionProvider extends AbstractToolDefinitionDataProvider {
+public class CosmicToolDefinitionProvider extends AbstractToolDefinitionDataProvider {
 
-    public CosmicToolDefitionProvider(PackOutput packOutput) {
+    public CosmicToolDefinitionProvider(PackOutput packOutput) {
         super(packOutput, CosmicCore.MOD_ID);
     }
 
@@ -44,7 +48,6 @@ public class CosmicToolDefitionProvider extends AbstractToolDefinitionDataProvid
         // pickaxes
 
         define(CosmicToolDefinitions.WIRE_CUTTERS)
-
                 .module(PartStatsModule.parts()
                         .part(smallBlade)
                         .part(smallBlade)
@@ -58,7 +61,6 @@ public class CosmicToolDefitionProvider extends AbstractToolDefinitionDataProvid
                 .module(IsEffectiveModule.tag(CustomTags.MINEABLE_WITH_WIRE_CUTTER));
 
         define(CosmicToolDefinitions.WRENCHES)
-
                 .module(PartStatsModule.parts()
                         .part(wrenchHead)
                         .part(toughBinding)
@@ -67,7 +69,12 @@ public class CosmicToolDefitionProvider extends AbstractToolDefinitionDataProvid
                 .module(new SetStatsModule(StatsNBT.builder()
                         .set(ToolStats.ATTACK_SPEED, 0.9f)
                         .build()))
-                .module(IsEffectiveModule.tag(CustomTags.MINEABLE_WITH_WRENCH));
+                .module(IsEffectiveModule.tag(CustomTags.MINEABLE_WITH_WRENCH))
+                .module(ToolTraitsModule.builder().trait(CosmicCoreModifiers.wrenchModeSwitch).build());;
+
+
+
+
     }
 
     @Override

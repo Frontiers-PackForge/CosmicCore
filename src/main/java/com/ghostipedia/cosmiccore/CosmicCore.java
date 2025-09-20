@@ -11,6 +11,9 @@ import com.ghostipedia.cosmiccore.common.data.*;
 import com.ghostipedia.cosmiccore.common.data.materials.CosmicMaterialSet;
 import com.ghostipedia.cosmiccore.common.data.materials.CosmicMaterials;
 import com.ghostipedia.cosmiccore.common.item.behavior.GravityCoreBehavior;
+import com.ghostipedia.cosmiccore.common.item.tcon.CosmicTconBlockTagProvider;
+import com.ghostipedia.cosmiccore.common.item.tcon.CosmicTconItemTagProvider;
+import com.ghostipedia.cosmiccore.common.item.tcon.CosmicTinkerTools;
 import com.ghostipedia.cosmiccore.common.item.tcon.*;
 import com.ghostipedia.cosmiccore.common.machine.multiblock.multi.modular.MultiblockInit;
 import com.ghostipedia.cosmiccore.common.network.CCoreNetwork;
@@ -94,22 +97,18 @@ public class CosmicCore {
     public static ResourceLocation id(String path) {
         return new ResourceLocation(MOD_ID, path);
     }
-
     @SubscribeEvent
-    public void gatherDataEvent(GatherDataEvent event) {
+    public void gatherDataEvent(GatherDataEvent event){
         DataGenerator generator = event.getGenerator();
         PackOutput packOutput = generator.getPackOutput();
         ExistingFileHelper existingFileHelper = event.getExistingFileHelper();
         boolean server = event.includeServer();
         boolean client = event.includeClient();
-        CosmicTconBlockTagProvider blockTags = new CosmicTconBlockTagProvider(packOutput, event.getLookupProvider(),
-                existingFileHelper);
-        generator.addProvider(server, blockTags);
+        CosmicTconBlockTagProvider blockTags = new CosmicTconBlockTagProvider(packOutput,event.getLookupProvider(),existingFileHelper);
+        generator.addProvider(server,blockTags);
         generator.addProvider(server, new CosmicToolDefitionProvider(packOutput));
-        generator.addProvider(server, new CosmicTconItemTagProvider(packOutput, event.getLookupProvider(),
-                blockTags.contentsGetter(), existingFileHelper));
+        generator.addProvider(server, new CosmicTconItemTagProvider(packOutput,event.getLookupProvider(),blockTags.contentsGetter(),existingFileHelper));
     }
-
     @SubscribeEvent
     public void registerMaterialRegistry(MaterialRegistryEvent event) {
         MATERIAL_REGISTRY = GTCEuAPI.materialManager.createRegistry(CosmicCore.MOD_ID);

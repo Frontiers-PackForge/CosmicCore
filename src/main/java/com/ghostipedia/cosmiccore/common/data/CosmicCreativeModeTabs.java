@@ -13,21 +13,20 @@ import static com.ghostipedia.cosmiccore.api.registries.CosmicRegistration.REGIS
 
 public class CosmicCreativeModeTabs {
 
-    public static final RegistryEntry<CreativeModeTab> COSMIC_CORE = REGISTRATE.defaultCreativeTab("main",
-            b -> b
-                    .displayItems(new GTCreativeModeTabs.RegistrateDisplayItemsGenerator("main", REGISTRATE))
-                    .title(REGISTRATE.addLang("itemGroup", CosmicCore.id("creative_tab"), "Cosmic Core Main Items"))
+    public static RegistryEntry<CreativeModeTab> COSMIC_CORE = REGISTRATE.defaultCreativeTab(CosmicCore.MOD_ID,
+            builder -> builder
+                    .displayItems(new GTCreativeModeTabs.RegistrateDisplayItemsGenerator(CosmicCore.MOD_ID, REGISTRATE))
+                    .title(REGISTRATE.addLang("itemGroup", CosmicCore.id("creative_tab"), "Cosmic Core"))
                     .icon(CosmicItems.DONK::asStack)
                     .build())
             .register();
 
-    // Tab id: cosmiccore:tinkers_tools
-    public static final RegistryEntry<CreativeModeTab> COSMIC_CORE_TINKERS_TOOLS = REGISTRATE
-            .defaultCreativeTab("tinkers_tools",
-                    b -> b
+    public static RegistryEntry<CreativeModeTab> COSMIC_CORE_TINKERS_TOOLS = REGISTRATE
+            .defaultCreativeTab(CosmicCore.MOD_ID,
+                    builder -> builder
                             .displayItems(CosmicCreativeTinkersTab::addCreativeTabItems)
-                            .title(REGISTRATE.addLang("itemGroup.tinkers.parts",
-                                    CosmicCore.id("creative_tab_tinker_tools"), "Cosmic Core Tinkers Compat"))
+                            .title(REGISTRATE.addLang("itemGroup", CosmicCore.id("creative_tab_tinker_tools"),
+                                    "Cosmic Core Tinkers Compat"))
                             .icon(CosmicItems.RUNE_CONJUNCTION_VALKRUTH::asStack)
                             .build())
             .register();
