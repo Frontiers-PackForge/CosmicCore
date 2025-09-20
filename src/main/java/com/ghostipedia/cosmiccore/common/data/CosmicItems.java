@@ -1789,7 +1789,6 @@ public class CosmicItems {
             .defaultModel()
             .register();
 
-
     public static final ItemEntry<ComponentItem> WRENCH_CAST_GOLD = REGISTRATE
             .item("wrench_head_cast", ComponentItem::create)
             .lang("Wrench Head Cast")
