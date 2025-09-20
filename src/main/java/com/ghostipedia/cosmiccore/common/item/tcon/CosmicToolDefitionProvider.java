@@ -12,6 +12,7 @@ import slimeknights.tconstruct.library.tools.definition.module.mining.IsEffectiv
 import slimeknights.tconstruct.library.tools.nbt.StatsNBT;
 import slimeknights.tconstruct.library.tools.stat.ToolStats;
 
+import static com.ghostipedia.cosmiccore.common.item.tcon.CosmicTinkerToolPart.wrenchHead;
 import static slimeknights.tconstruct.tools.TinkerToolParts.*;
 
 public class CosmicToolDefitionProvider extends AbstractToolDefinitionDataProvider {
@@ -54,11 +55,10 @@ public class CosmicToolDefitionProvider extends AbstractToolDefinitionDataProvid
         define(CosmicToolDefinitions.WRENCHES)
 
                 .module(PartStatsModule.parts()
-                        .part(pickHead)
+                        .part(wrenchHead)
                         .part(toughBinding)
-                        .part(toolBinding)
                         .part(toolHandle).build())
-                .module(defaultFourParts)
+                .module(defaultThreeParts)
                 .module(new SetStatsModule(StatsNBT.builder()
                         .set(ToolStats.ATTACK_SPEED, 0.9f)
                         .build()))

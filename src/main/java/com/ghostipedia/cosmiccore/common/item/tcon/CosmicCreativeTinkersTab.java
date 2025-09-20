@@ -1,5 +1,8 @@
 package com.ghostipedia.cosmiccore.common.item.tcon;
 
+import com.ghostipedia.cosmiccore.CosmicCore;
+import com.ghostipedia.cosmiccore.common.data.CosmicItems;
+import com.tterrag.registrate.util.entry.RegistryEntry;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.ItemStack;
 
@@ -11,7 +14,12 @@ import slimeknights.tconstruct.library.tools.part.IMaterialItem;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
+import static com.ghostipedia.cosmiccore.api.registries.CosmicRegistration.REGISTRATE;
+
 public class CosmicCreativeTinkersTab {
+
+
+
 
     public static void addCreativeTabItems(CreativeModeTab.ItemDisplayParameters itemDisplayParameters,
                                            CreativeModeTab.Output tab) {

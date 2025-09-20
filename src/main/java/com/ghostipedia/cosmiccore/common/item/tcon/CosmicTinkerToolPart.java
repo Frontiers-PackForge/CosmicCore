@@ -3,6 +3,7 @@ package com.ghostipedia.cosmiccore.common.item.tcon;
 import com.ghostipedia.cosmiccore.CosmicCore;
 import com.ghostipedia.cosmiccore.common.data.CosmicCreativeModeTabs;
 
+import com.ghostipedia.cosmiccore.common.data.CosmicCreativeModeTabs;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
