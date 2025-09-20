@@ -47,6 +47,14 @@ public interface CosmicCoreRecipeSchema {
             this.addDataBool("per_tick", true);
             return this;
         }
+
+        public GTRecipeSchema.GTRecipeJS emberInput(int embers) {
+            return this.input(SterileRecipeCapability.CAP, embers);
+        }
+
+        public GTRecipeSchema.GTRecipeJS emberOutput(int embers) {
+            return this.output(SterileRecipeCapability.CAP, embers);
+        }
     }
 
     RecipeSchema SCHEMA = new RecipeSchema(CosmicRecipeJS.class, CosmicRecipeJS::new, DURATION, DATA, CONDITIONS,
