@@ -416,6 +416,15 @@ public class CosmicLangHandler extends LangHandler {
         provider.add("cosmiccore.item.spraycan.tooltip.solvent_mode", "Spraycan in SOLVENT mode");
 
         provider.add("cosmiccore.item.linked_terminal.boundTo", "Bound to %s");
+
+        //Tinkers
+        provider.add("item.cosmiccore.wire_cutter", "Wire Cutters");
+        provider.add("item.cosmiccore.wire_cutter.description", "Snip wires cleanly with these cutters.");
+
+
+
+
+
         provider.add("allele.forestry.bee_species.cosmiccore.bee_oxygen", "Lofty Oxygen");
         provider.add("allele.forestry.bee_species.cosmiccore.bee_hydrogen", "Lofty Hydrogen");
         provider.add("allele.forestry.bee_species.cosmiccore.bee_nitrogen", "Lofty Nitrogen");
