@@ -3,6 +3,7 @@ package com.ghostipedia.cosmiccore;
 import com.ghostipedia.cosmiccore.api.capability.CosmicCapabilities;
 import com.ghostipedia.cosmiccore.api.item.LinkedTerminalBehavior;
 import com.ghostipedia.cosmiccore.api.pattern.CosmicPredicates;
+import com.ghostipedia.cosmiccore.api.recipe.ingredient.TinkerIngredient;
 import com.ghostipedia.cosmiccore.api.recipe.lookup.MapSoulIngredient;
 import com.ghostipedia.cosmiccore.api.registries.CosmicRegistration;
 import com.ghostipedia.cosmiccore.client.CosmicCoreClient;
@@ -10,6 +11,10 @@ import com.ghostipedia.cosmiccore.common.data.*;
 import com.ghostipedia.cosmiccore.common.data.materials.CosmicMaterialSet;
 import com.ghostipedia.cosmiccore.common.data.materials.CosmicMaterials;
 import com.ghostipedia.cosmiccore.common.item.behavior.GravityCoreBehavior;
+import com.ghostipedia.cosmiccore.common.item.tcon.CosmicTconBlockTagProvider;
+import com.ghostipedia.cosmiccore.common.item.tcon.CosmicTconItemTagProvider;
+import com.ghostipedia.cosmiccore.common.item.tcon.CosmicTinkerTools;
+import com.ghostipedia.cosmiccore.common.item.tcon.CosmicToolDefitionProvider;
 import com.ghostipedia.cosmiccore.common.machine.multiblock.multi.modular.MultiblockInit;
 import com.ghostipedia.cosmiccore.common.network.CCoreNetwork;
 import com.ghostipedia.cosmiccore.common.recipe.condition.CosmicConditions;
@@ -30,8 +35,13 @@ import com.gregtechceu.gtceu.config.ConfigHolder;
 
 import com.lowdragmc.lowdraglib.Platform;
 
+import net.minecraft.data.DataGenerator;
+import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.common.capabilities.RegisterCapabilitiesEvent;
+import net.minecraftforge.common.crafting.CraftingHelper;
+import net.minecraftforge.common.data.ExistingFileHelper;
+import net.minecraftforge.data.event.GatherDataEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
@@ -74,17 +84,30 @@ public class CosmicCore {
         CosmicBlocks.init();
         CosmicBlockEntities.init();
         CosmicItems.init();
+        CosmicTinkerTools.init();
         CosmicBotanyItemRegistration.init();
         CosmicRegistration.REGISTRATE.registerRegistrate();
         CosmicCoreDatagen.init();
         CosmicPredicates.init();
         CosmicMaterialSet.init();
+        CosmicCreativeModeTabs.init();
     }
 
     public static ResourceLocation id(String path) {
         return new ResourceLocation(MOD_ID, path);
     }
-
+    @SubscribeEvent
+    public void gatherDataEvent(GatherDataEvent event){
+        DataGenerator generator = event.getGenerator();
+        PackOutput packOutput = generator.getPackOutput();
+        ExistingFileHelper existingFileHelper = event.getExistingFileHelper();
+        boolean server = event.includeServer();
+        boolean client = event.includeClient();
+        CosmicTconBlockTagProvider blockTags = new CosmicTconBlockTagProvider(packOutput,event.getLookupProvider(),existingFileHelper);
+        generator.addProvider(server,blockTags);
+        generator.addProvider(server, new CosmicToolDefitionProvider(packOutput));
+        generator.addProvider(server, new CosmicTconItemTagProvider(packOutput,event.getLookupProvider(),blockTags.contentsGetter(),existingFileHelper));
+    }
     @SubscribeEvent
     public void registerMaterialRegistry(MaterialRegistryEvent event) {
         MATERIAL_REGISTRY = GTCEuAPI.materialManager.createRegistry(CosmicCore.MOD_ID);
@@ -105,6 +128,7 @@ public class CosmicCore {
         event.enqueueWork(() -> {
             MapIngredientTypeManager.registerMapIngredient(Integer.class, MapSoulIngredient::convertToMapIngredient);
             GridLinkables.register(CosmicItems.LINKED_TERMINAL, LinkedTerminalBehavior.handler);
+            CraftingHelper.register(TinkerIngredient.TYPE, TinkerIngredient.SERIALIZER);
             CCoreNetwork.init();
         });
     }

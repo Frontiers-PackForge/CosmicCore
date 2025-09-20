@@ -41,7 +41,8 @@
     "emi.EmiApiMixin",
     "lso.FrostbiteEffectMixin",
     "lso.HeatstrokeEffectMixin",
-    "lso.TemperatureCapabilityMixin"
+    "lso.TemperatureCapabilityMixin",
+    "tinkers.ModifiableItemMixin"
   ],
   "injectors": {
     "defaultRequire": 1,

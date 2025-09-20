@@ -8,6 +8,11 @@ dependencies {
 //    implementation(forge.botania)
 
 
+    //Tinkers
+    modImplementation(forge.tconstruct)
+    modImplementation(forge.mantle)
+
+
     // LDLib
     modImplementation(forge.ldlib)
 
