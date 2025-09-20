@@ -1,8 +1,11 @@
 package com.ghostipedia.cosmiccore.common.item.tcon;
 
 import com.ghostipedia.cosmiccore.CosmicCore;
+
 import com.gregtechceu.gtceu.data.recipe.CustomTags;
+
 import net.minecraft.data.PackOutput;
+
 import slimeknights.tconstruct.library.data.tinkering.AbstractToolDefinitionDataProvider;
 import slimeknights.tconstruct.library.materials.RandomMaterial;
 import slimeknights.tconstruct.library.tools.definition.module.build.SetStatsModule;
@@ -16,7 +19,6 @@ import static slimeknights.tconstruct.tools.TinkerToolParts.*;
 
 public class CosmicToolDefitionProvider extends AbstractToolDefinitionDataProvider {
 
-
     public CosmicToolDefitionProvider(PackOutput packOutput) {
         super(packOutput, CosmicCore.MOD_ID);
     }
@@ -25,15 +27,20 @@ public class CosmicToolDefitionProvider extends AbstractToolDefinitionDataProvid
     protected void addToolDefinitions() {
         RandomMaterial tier1Material = RandomMaterial.random().tier(1).build();
         RandomMaterial randomMaterial = RandomMaterial.random().allowHidden().build();
-        DefaultMaterialsModule defaultTwoParts = DefaultMaterialsModule.builder().material(tier1Material, tier1Material).build();
-        DefaultMaterialsModule defaultThreeParts = DefaultMaterialsModule.builder().material(tier1Material, tier1Material, tier1Material).build();
-        DefaultMaterialsModule defaultFourParts = DefaultMaterialsModule.builder().material(tier1Material, tier1Material, tier1Material, tier1Material).build();
-        DefaultMaterialsModule defaultFiveParts = DefaultMaterialsModule.builder().material(tier1Material, tier1Material, tier1Material, tier1Material, tier1Material).build();
-        DefaultMaterialsModule ancientTwoParts = DefaultMaterialsModule.builder().material(randomMaterial, randomMaterial).build();
-        DefaultMaterialsModule ancientThreeParts = DefaultMaterialsModule.builder().material(randomMaterial, randomMaterial, randomMaterial).build();
+        DefaultMaterialsModule defaultTwoParts = DefaultMaterialsModule.builder().material(tier1Material, tier1Material)
+                .build();
+        DefaultMaterialsModule defaultThreeParts = DefaultMaterialsModule.builder()
+                .material(tier1Material, tier1Material, tier1Material).build();
+        DefaultMaterialsModule defaultFourParts = DefaultMaterialsModule.builder()
+                .material(tier1Material, tier1Material, tier1Material, tier1Material).build();
+        DefaultMaterialsModule defaultFiveParts = DefaultMaterialsModule.builder()
+                .material(tier1Material, tier1Material, tier1Material, tier1Material, tier1Material).build();
+        DefaultMaterialsModule ancientTwoParts = DefaultMaterialsModule.builder()
+                .material(randomMaterial, randomMaterial).build();
+        DefaultMaterialsModule ancientThreeParts = DefaultMaterialsModule.builder()
+                .material(randomMaterial, randomMaterial, randomMaterial).build();
 
         // pickaxes
-
 
         define(CosmicToolDefinitions.WIRE_CUTTERS)
 
@@ -49,8 +56,6 @@ public class CosmicToolDefitionProvider extends AbstractToolDefinitionDataProvid
                         .build()))
                 .module(IsEffectiveModule.tag(CustomTags.MINEABLE_WITH_WIRE_CUTTER));
 
-
-
         define(CosmicToolDefinitions.WRENCHES)
 
                 .module(PartStatsModule.parts()
@@ -63,10 +68,6 @@ public class CosmicToolDefitionProvider extends AbstractToolDefinitionDataProvid
                         .set(ToolStats.ATTACK_SPEED, 0.9f)
                         .build()))
                 .module(IsEffectiveModule.tag(CustomTags.MINEABLE_WITH_WRENCH));
-
-
-
-
     }
 
     @Override

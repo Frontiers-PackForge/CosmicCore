@@ -96,18 +96,22 @@ public class CosmicCore {
     public static ResourceLocation id(String path) {
         return new ResourceLocation(MOD_ID, path);
     }
+
     @SubscribeEvent
-    public void gatherDataEvent(GatherDataEvent event){
+    public void gatherDataEvent(GatherDataEvent event) {
         DataGenerator generator = event.getGenerator();
         PackOutput packOutput = generator.getPackOutput();
         ExistingFileHelper existingFileHelper = event.getExistingFileHelper();
         boolean server = event.includeServer();
         boolean client = event.includeClient();
-        CosmicTconBlockTagProvider blockTags = new CosmicTconBlockTagProvider(packOutput,event.getLookupProvider(),existingFileHelper);
-        generator.addProvider(server,blockTags);
+        CosmicTconBlockTagProvider blockTags = new CosmicTconBlockTagProvider(packOutput, event.getLookupProvider(),
+                existingFileHelper);
+        generator.addProvider(server, blockTags);
         generator.addProvider(server, new CosmicToolDefitionProvider(packOutput));
-        generator.addProvider(server, new CosmicTconItemTagProvider(packOutput,event.getLookupProvider(),blockTags.contentsGetter(),existingFileHelper));
+        generator.addProvider(server, new CosmicTconItemTagProvider(packOutput, event.getLookupProvider(),
+                blockTags.contentsGetter(), existingFileHelper));
     }
+
     @SubscribeEvent
     public void registerMaterialRegistry(MaterialRegistryEvent event) {
         MATERIAL_REGISTRY = GTCEuAPI.materialManager.createRegistry(CosmicCore.MOD_ID);

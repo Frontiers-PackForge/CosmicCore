@@ -366,13 +366,8 @@ public class CosmicLangHandler extends LangHandler {
 
         provider.add("cosmiccore.item.linked_terminal.boundTo", "Bound to %s");
 
-        //Tinkers
+        // Tinkers
         provider.add("item.cosmiccore.wire_cutter", "Wire Cutters");
         provider.add("item.cosmiccore.wire_cutter.description", "Snip wires cleanly with these cutters.");
-
-
-
-
-
     }
 }
