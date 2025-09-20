@@ -176,6 +176,8 @@
   "block.cosmiccore.uxv_wireless_energy_hatch": "§eUXV Wireless Energy Hatch",
   "block.cosmiccore.vomahine_celestial_laser_bore": "Vomahine Celestial Laser Bore",
   "block.cosmiccore.wear_resistant_ruridit_casing": "Wear Resistant Ruridit Casing",
+  "block.cosmiccore.wireless_cwu_hatch": "Wireless Computation Receiver Hatch",
+  "block.cosmiccore.wireless_cwu_transmitter": "Wireless Computation Transmitter",
   "block.cosmiccore.wireless_data_hatch": "Wireless Data Hatch",
   "block.cosmiccore.wireless_data_transmitter": "Wireless Data Transmitter",
   "block.cosmiccore.zblan_glass": "Zblan Glass",

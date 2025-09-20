@@ -16,6 +16,7 @@ import com.ghostipedia.cosmiccore.common.data.recipe.CosmicRecipeModifiers;
 import com.ghostipedia.cosmiccore.common.machine.WirelessChargerMachine;
 import com.ghostipedia.cosmiccore.common.machine.multiblock.electric.MagneticFieldMachine;
 import com.ghostipedia.cosmiccore.common.machine.multiblock.electric.hpca.HPCAMachine;
+import com.ghostipedia.cosmiccore.common.machine.multiblock.multi.WirelessComputationTransmitter;
 import com.ghostipedia.cosmiccore.common.machine.multiblock.multi.WirelessDataBankMachine;
 import com.ghostipedia.cosmiccore.common.machine.multiblock.part.*;
 import com.ghostipedia.cosmiccore.common.machine.multiblock.steam.WeakSteamParallelMultiBlockMachine;
@@ -3486,6 +3487,27 @@ public class CosmicMachines {
             .workableCasingModel(GTCEu.id("block/casings/hpca/high_power_casing"),
                     CosmicCore.id("block/multiblock/wireless_data_transmitter"))
             .register();
+
+    public static final MultiblockMachineDefinition WIRELESS_CWU_TRANSMITTER = REGISTRATE
+            .multiblock("wireless_cwu_transmitter", WirelessComputationTransmitter::new)
+            .langValue("Wireless Computation Transmitter")
+            .rotationState(RotationState.NON_Y_AXIS)
+            .appearanceBlock(HIGH_POWER_CASING)
+            .recipeType(GTRecipeTypes.DUMMY_RECIPES)
+            .pattern(definition -> FactoryBlockPattern.start()
+                    .aisle("AAA", "RAR", "AAA")
+                    .aisle("AAA", "A A", "AIA")
+                    .aisle("AMA", "ACA", "AAA")
+                    .where("C", controller(blocks(definition.getBlock())))
+                    .where("I", abilities(PartAbility.INPUT_ENERGY))
+                    .where("M", abilities(PartAbility.MAINTENANCE))
+                    .where("R", abilities(PartAbility.COMPUTATION_DATA_RECEPTION))
+                    .where("A", blocks(HIGH_POWER_CASING.get()))
+                    .build())
+            .workableCasingModel(GTCEu.id("block/casings/hpca/high_power_casing"),
+                    CosmicCore.id("block/multiblock/wireless_data_transmitter"))
+            .register();
+
     public static final MultiblockMachineDefinition LOCAL_POWER_CAPACITOR = REGISTRATE
             .multiblock("capacitor_array", PowerSubstationMachine::new)
             .langValue("Capacitor Array")
@@ -3518,6 +3540,15 @@ public class CosmicMachines {
             .langValue("Wireless Data Hatch")
             .rotationState(RotationState.ALL)
             .abilities(PartAbility.DATA_ACCESS)
+            .tier(UEV)
+            .overlayTieredHullModel("wireless_data_hatch")
+            .register();
+
+    public static final MachineDefinition WIRELESS_CWU_HATCH = REGISTRATE
+            .machine("wireless_cwu_hatch", WirelessComputationReceiverHatchPartMachine::new)
+            .langValue("Wireless Computation Receiver Hatch")
+            .rotationState(RotationState.ALL)
+            .abilities(PartAbility.COMPUTATION_DATA_RECEPTION)
             .tier(UEV)
             .overlayTieredHullModel("wireless_data_hatch")
             .register();
