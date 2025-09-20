@@ -3,9 +3,13 @@ package com.ghostipedia.cosmiccore.common.item.tcon;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import slimeknights.tconstruct.library.tools.definition.ToolDefinition;
+import slimeknights.tconstruct.tools.TinkerTools;
+
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class CosmicToolDefinitions {
+
+
 
     public static final ToolDefinition WIRE_CUTTERS = ToolDefinition.create(CosmicTinkerTools.wireCutter);
     public static final ToolDefinition WRENCHES = ToolDefinition.create(CosmicTinkerTools.wrench);
@@ -16,4 +20,6 @@ public class CosmicToolDefinitions {
     public static final ToolDefinition SOFT_MALLETS = ToolDefinition.create(CosmicTinkerTools.softMallet);
     public static final ToolDefinition PLUNGERS = ToolDefinition.create(CosmicTinkerTools.plunger);
     public static final ToolDefinition CROWBARS = ToolDefinition.create(CosmicTinkerTools.crowbar);
+
+
 }

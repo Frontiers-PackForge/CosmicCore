@@ -94,6 +94,8 @@ public class CosmicCore {
         CosmicCoreDatagen.init();
         CosmicPredicates.init();
         CosmicMaterialSet.init();
+        // Register bargains early so they're available on both client and server
+        CosmicBargains.init();
         CosmicCreativeModeTabs.init();
     }
 

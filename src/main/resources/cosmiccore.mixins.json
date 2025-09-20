@@ -52,7 +52,6 @@
     "lso.FrostbiteEffectMixin",
     "lso.HeatstrokeEffectMixin",
     "lso.TemperatureCapabilityMixin",
-    "gtceu.MetaMachineBlockEntityMixin",
     "tinkers.ModifiableItemMixin"
   ],
   "injectors": {

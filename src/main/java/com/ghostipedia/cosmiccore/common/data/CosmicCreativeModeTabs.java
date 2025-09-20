@@ -3,6 +3,7 @@ package com.ghostipedia.cosmiccore.common.data;
 import com.ghostipedia.cosmiccore.CosmicCore;
 import com.ghostipedia.cosmiccore.common.item.tcon.CosmicCreativeTinkersTab;
 
+import com.ghostipedia.cosmiccore.common.item.tcon.CosmicCreativeTinkersTab;
 import com.gregtechceu.gtceu.common.data.GTCreativeModeTabs;
 
 import net.minecraft.world.item.CreativeModeTab;

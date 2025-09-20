@@ -7,16 +7,20 @@ import com.gregtechceu.gtceu.data.recipe.CustomTags;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.PackOutput;
 import net.minecraft.data.tags.ItemTagsProvider;
+import net.minecraft.tags.ItemTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.block.Block;
 import net.minecraftforge.common.data.ExistingFileHelper;
+import slimeknights.tconstruct.TConstruct;
+import slimeknights.tconstruct.tools.TinkerTools;
 
 import java.util.concurrent.CompletableFuture;
 
 import static net.minecraft.tags.ItemTags.CLUSTER_MAX_HARVESTABLES;
 import static slimeknights.tconstruct.common.TinkerTags.Items.*;
+
 
 public class CosmicTconItemTagProvider extends ItemTagsProvider {
 
@@ -31,6 +35,7 @@ public class CosmicTconItemTagProvider extends ItemTagsProvider {
         this.addTools();
     }
 
+
     private void addTools() {
         addToolTags(CosmicTinkerTools.wireCutter, MULTIPART_TOOL, DURABILITY, HARVEST_PRIMARY, CustomTags.WIRE_CUTTERS,
                 CustomTags.CRAFTING_WIRE_CUTTERS, MELEE_WEAPON, INTERACTABLE_RIGHT, AOE, CLUSTER_MAX_HARVESTABLES,
@@ -43,6 +48,7 @@ public class CosmicTconItemTagProvider extends ItemTagsProvider {
                 CustomTags.CRAFTING_SCREWDRIVERS, MELEE_WEAPON, INTERACTABLE_RIGHT, AOE, CLUSTER_MAX_HARVESTABLES,
                 SMALL_TOOLS, BONUS_SLOTS);
     }
+
 
     @SafeVarargs
     private void addToolTags(ItemLike tool, TagKey<Item>... tags) {
