@@ -1,0 +1,22 @@
+{
+  "loader": "tconstruct:tool",
+  "parent": "forge:item/default-tool",
+  "textures": {      
+    "broken": "cosmiccore:item/tool/wire_cutter/broken",     
+    "head": "cosmiccore:item/tool/wire_cutter/head",      
+    "handle": "cosmiccore:item/tool/wire_cutter/handle",     
+    "binding": "cosmiccore:item/tool/wire_cutter/binding"    
+  },
+  "modifier_roots": [ "tconstruct:item/tool/pickaxe/modifiers/" ],
+  "parts": [             
+    { "name": "head",   "index": 0 },
+    { "name": "handle", "index": 1 },
+    { "name": "binding","index": 2 }
+  ],
+  "overrides": [
+    {
+      "predicate": { "tconstruct:broken": 1 },
+      "model": "tconstruct:item/tool/pickaxe/broken"
+    }
+  ]
+}

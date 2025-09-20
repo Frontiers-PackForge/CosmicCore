@@ -1,0 +1,45 @@
+{
+  "icon": {
+    "item": "cosmiccore:wire_cutter",
+    "nbt": "{Damage:0,tic_broken:0b,tic_display:1b,tic_materials:[\"tconstruct:ui_render#head\",\"tconstruct:ui_render#head\",\"tconstruct:ui_render#extra\",\"tconstruct:ui_render#handle\",\"tconstruct:ui_render#handle\"]}"
+  },
+  "input_slots": [
+    {
+      "filter": { "item": "tconstruct:small_blade" },
+      "icon": "tconstruct:small_blade",
+      "translation_key": "item.tconstruct.small_blade",
+      "x": 44,
+      "y": 29
+    },
+    {
+      "filter": { "item": "tconstruct:small_blade" },
+      "icon": "tconstruct:small_blade",
+      "translation_key": "item.tconstruct.small_blade",
+      "x": 25,
+      "y": 20
+    },
+    {
+      "filter": { "item": "tconstruct:tool_binding" },
+      "icon": "tconstruct:tool_binding",
+      "translation_key": "item.tconstruct.tool_binding",
+      "x": 50,
+      "y": 48
+    },
+    {
+      "filter": { "item": "tconstruct:tool_handle" },
+      "icon": "tconstruct:tool_handle",
+      "translation_key": "item.tconstruct.tool_handle",
+      "x": 21,
+      "y": 52
+    },
+    {
+      "filter": { "item": "tconstruct:tool_handle" },
+      "icon": "tconstruct:tool_handle",
+      "translation_key": "item.tconstruct.tool_handle",
+      "x": 70,
+      "y": 36
+    }
+  ],
+  "sortIndex": 25,
+  "translation_key": "item.cosmiccore.wire_cutter"
+}

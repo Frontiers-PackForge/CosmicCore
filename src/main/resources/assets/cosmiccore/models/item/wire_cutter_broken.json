@@ -1,0 +1,7 @@
+{
+  "loader": "tconstruct:tool",
+  "textures": {
+    "broken": "cosmiccore:item/tool/wire_cutter/broken"
+  },
+  "parts": [ { "name": "broken" } ]
+}
