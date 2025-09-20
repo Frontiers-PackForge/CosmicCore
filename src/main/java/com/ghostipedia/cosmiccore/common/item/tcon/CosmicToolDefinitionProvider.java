@@ -1,11 +1,16 @@
 package com.ghostipedia.cosmiccore.common.item.tcon;
 
 import com.ghostipedia.cosmiccore.CosmicCore;
+import com.ghostipedia.cosmiccore.common.item.tcon.modifiers.CosmicCoreModifiers;
+
 import com.gregtechceu.gtceu.data.recipe.CustomTags;
+
 import net.minecraft.data.PackOutput;
+
 import slimeknights.tconstruct.library.data.tinkering.AbstractToolDefinitionDataProvider;
 import slimeknights.tconstruct.library.materials.RandomMaterial;
 import slimeknights.tconstruct.library.tools.definition.module.build.SetStatsModule;
+import slimeknights.tconstruct.library.tools.definition.module.build.ToolTraitsModule;
 import slimeknights.tconstruct.library.tools.definition.module.material.DefaultMaterialsModule;
 import slimeknights.tconstruct.library.tools.definition.module.material.PartStatsModule;
 import slimeknights.tconstruct.library.tools.definition.module.mining.IsEffectiveModule;
@@ -14,10 +19,9 @@ import slimeknights.tconstruct.library.tools.stat.ToolStats;
 
 import static slimeknights.tconstruct.tools.TinkerToolParts.*;
 
-public class CosmicToolDefitionProvider extends AbstractToolDefinitionDataProvider {
+public class CosmicToolDefinitionProvider extends AbstractToolDefinitionDataProvider {
 
-
-    public CosmicToolDefitionProvider(PackOutput packOutput) {
+    public CosmicToolDefinitionProvider(PackOutput packOutput) {
         super(packOutput, CosmicCore.MOD_ID);
     }
 
@@ -25,17 +29,20 @@ public class CosmicToolDefitionProvider extends AbstractToolDefinitionDataProvid
     protected void addToolDefinitions() {
         RandomMaterial tier1Material = RandomMaterial.random().tier(1).build();
         RandomMaterial randomMaterial = RandomMaterial.random().allowHidden().build();
-        DefaultMaterialsModule defaultTwoParts = DefaultMaterialsModule.builder().material(tier1Material, tier1Material).build();
-        DefaultMaterialsModule defaultThreeParts = DefaultMaterialsModule.builder().material(tier1Material, tier1Material, tier1Material).build();
-        DefaultMaterialsModule defaultFourParts = DefaultMaterialsModule.builder().material(tier1Material, tier1Material, tier1Material, tier1Material).build();
-        DefaultMaterialsModule ancientTwoParts = DefaultMaterialsModule.builder().material(randomMaterial, randomMaterial).build();
-        DefaultMaterialsModule ancientThreeParts = DefaultMaterialsModule.builder().material(randomMaterial, randomMaterial, randomMaterial).build();
+        DefaultMaterialsModule defaultTwoParts = DefaultMaterialsModule.builder().material(tier1Material, tier1Material)
+                .build();
+        DefaultMaterialsModule defaultThreeParts = DefaultMaterialsModule.builder()
+                .material(tier1Material, tier1Material, tier1Material).build();
+        DefaultMaterialsModule defaultFourParts = DefaultMaterialsModule.builder()
+                .material(tier1Material, tier1Material, tier1Material, tier1Material).build();
+        DefaultMaterialsModule ancientTwoParts = DefaultMaterialsModule.builder()
+                .material(randomMaterial, randomMaterial).build();
+        DefaultMaterialsModule ancientThreeParts = DefaultMaterialsModule.builder()
+                .material(randomMaterial, randomMaterial, randomMaterial).build();
 
         // pickaxes
 
-
         define(CosmicToolDefinitions.WIRE_CUTTERS)
-
                 .module(PartStatsModule.parts()
                         .part(smallBlade)
                         .part(smallBlade)
@@ -48,10 +55,7 @@ public class CosmicToolDefitionProvider extends AbstractToolDefinitionDataProvid
                         .build()))
                 .module(IsEffectiveModule.tag(CustomTags.MINEABLE_WITH_WIRE_CUTTER));
 
-
-
         define(CosmicToolDefinitions.WRENCHES)
-
                 .module(PartStatsModule.parts()
                         .part(pickHead)
                         .part(toughBinding)
@@ -61,11 +65,8 @@ public class CosmicToolDefitionProvider extends AbstractToolDefinitionDataProvid
                 .module(new SetStatsModule(StatsNBT.builder()
                         .set(ToolStats.ATTACK_SPEED, 0.9f)
                         .build()))
-                .module(IsEffectiveModule.tag(CustomTags.MINEABLE_WITH_WRENCH));
-
-
-
-
+                .module(IsEffectiveModule.tag(CustomTags.MINEABLE_WITH_WRENCH))
+                .module(ToolTraitsModule.builder().trait(CosmicCoreModifiers.wrenchModeSwitch).build());
     }
 
     @Override

@@ -13,7 +13,7 @@ import slimeknights.tconstruct.library.tools.item.ModifiableItem;
 import slimeknights.tconstruct.library.tools.nbt.ToolStack;
 
 @Debug(
-        export = true)
+       export = true)
 @Mixin(value = ModifiableItem.class, remap = false)
 public class ModifiableItemMixin extends TieredItem {
 

@@ -20,6 +20,7 @@ import slimeknights.tconstruct.library.tools.item.ModifiableItem;
 import slimeknights.tconstruct.library.tools.nbt.ToolStack;
 
 import java.util.stream.Stream;
+
 public class TinkerIngredient extends Ingredient {
 
     public static final ResourceLocation TYPE = CosmicCore.id("tool_ingredient");
