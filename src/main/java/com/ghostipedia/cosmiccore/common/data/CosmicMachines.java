@@ -92,10 +92,10 @@ public class CosmicMachines {
 
     public static final MachineDefinition[] EMBER_IMPORT_HATCH = registerEmberHatch(
             "ember_input_hatch", "Ember Input Hatch",
-            IO.IN, HIGH_TIERS, IMPORT_EMBER);
+            IO.IN, ELECTRIC_TIERS, IMPORT_EMBER);
     public static final MachineDefinition[] EMBER_EXPORT_HATCH = registerEmberHatch(
             "ember_output_hatch", "Ember Output Hatch",
-            IO.OUT, HIGH_TIERS, EXPORT_EMBER);
+            IO.OUT, ELECTRIC_TIERS, EXPORT_EMBER);
 
     public static final MachineDefinition[] THERMIA_VENT = registerThermiaTieredHatch(
             "thermia_export_hatch", "Thermia Vent", "thermia_output_hatch",
