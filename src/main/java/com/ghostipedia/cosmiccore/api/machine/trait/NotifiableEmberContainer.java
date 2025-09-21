@@ -8,31 +8,25 @@ import com.gregtechceu.gtceu.api.machine.MetaMachine;
 import com.gregtechceu.gtceu.api.machine.trait.NotifiableRecipeHandlerTrait;
 import com.gregtechceu.gtceu.api.recipe.GTRecipe;
 
-import com.lowdragmc.lowdraglib.syncdata.annotation.DescSynced;
 import com.lowdragmc.lowdraglib.syncdata.annotation.Persisted;
 import com.lowdragmc.lowdraglib.syncdata.field.ManagedFieldHolder;
 
-import com.rekindled.embers.api.capabilities.EmbersCapabilities;
+import net.minecraft.nbt.CompoundTag;
+
 import com.rekindled.embers.api.power.IEmberCapability;
 import com.rekindled.embers.power.DefaultEmberCapability;
-import net.minecraft.core.Direction;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.common.capabilities.ICapabilityProvider;
-import net.minecraftforge.common.util.LazyOptional;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.Collections;
 import java.util.List;
 
-public class NotifiableEmberContainer extends NotifiableRecipeHandlerTrait<Double>  {
+public class NotifiableEmberContainer extends NotifiableRecipeHandlerTrait<Double> {
 
     public static final ManagedFieldHolder MANAGED_FIELD_HOLDER = new ManagedFieldHolder(NotifiableEmberContainer.class,
             NotifiableRecipeHandlerTrait.MANAGED_FIELD_HOLDER);
 
-
     public IEmberCapability capability = new DefaultEmberCapability() {
+
         @Override
         public void onContentsChanged() {
             super.onContentsChanged();
@@ -40,16 +34,17 @@ public class NotifiableEmberContainer extends NotifiableRecipeHandlerTrait<Doubl
             NotifiableEmberContainer.this.notifyListeners();
         }
 
-        @Override
-        public double getEmber() {
-            return getTotalContentAmount();
-        }
-
-        @Override
-        public double addAmount(double value, boolean doAdd) {
-            return super.addAmount(value, doAdd);
-        }
-
+        /*
+         * @Override
+         * public double getEmber() {
+         * return getTotalContentAmount();
+         * }
+         * 
+         * @Override
+         * public double addAmount(double value, boolean doAdd) {
+         * return super.addAmount(value, doAdd);
+         * }
+         */
     };
 
     @Override
@@ -113,7 +108,6 @@ public class NotifiableEmberContainer extends NotifiableRecipeHandlerTrait<Doubl
         return capability.getEmber();
     }
 
-
     @Override
     public RecipeCapability<Double> getCapability() {
         return EmberRecipeCapability.CAP;
@@ -128,6 +122,4 @@ public class NotifiableEmberContainer extends NotifiableRecipeHandlerTrait<Doubl
     public int getSize() {
         return 1;
     }
-
-
 }

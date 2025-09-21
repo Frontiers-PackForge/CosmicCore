@@ -201,7 +201,7 @@ public class CosmicMachines {
             .pattern(definition -> FactoryBlockPattern.start()
                     .aisle("S", "C", "I")
                     .where("C", controller(blocks(definition.getBlock())))
-                    .where("S", abilities(IMPORT_SOUL).or(abilities(EXPORT_SOUL)))
+                    .where("S", abilities(IMPORT_EMBER).or(abilities(EXPORT_EMBER)))
                     .where("I", abilities(PartAbility.EXPORT_ITEMS).or(abilities(PartAbility.IMPORT_ITEMS)))
                     .build())
             .workableCasingModel(GTCEu.id("block/casings/solid/machine_casing_inert_ptfe"),

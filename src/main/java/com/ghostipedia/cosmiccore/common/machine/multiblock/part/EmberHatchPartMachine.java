@@ -26,7 +26,7 @@ public class EmberHatchPartMachine extends TieredIOPartMachine {
 
     @Persisted
     @DescSynced
-    private final NotifiableEmberContainer emberContainer;
+    public final NotifiableEmberContainer emberContainer;
 
     public EmberHatchPartMachine(IMachineBlockEntity holder, int tier, IO io) {
         super(holder, tier, io);
