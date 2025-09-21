@@ -8,24 +8,32 @@ import com.gregtechceu.gtceu.api.machine.MetaMachine;
 import com.gregtechceu.gtceu.api.machine.trait.NotifiableRecipeHandlerTrait;
 import com.gregtechceu.gtceu.api.recipe.GTRecipe;
 
+import com.lowdragmc.lowdraglib.syncdata.annotation.DescSynced;
 import com.lowdragmc.lowdraglib.syncdata.annotation.Persisted;
 import com.lowdragmc.lowdraglib.syncdata.field.ManagedFieldHolder;
 
+import com.rekindled.embers.api.capabilities.EmbersCapabilities;
 import com.rekindled.embers.api.power.IEmberCapability;
 import com.rekindled.embers.power.DefaultEmberCapability;
-import lombok.Getter;
+import net.minecraft.core.Direction;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.common.capabilities.ICapabilityProvider;
+import net.minecraftforge.common.util.LazyOptional;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Collections;
 import java.util.List;
 
-public class NotifiableEmberContainer extends NotifiableRecipeHandlerTrait<Double> {
+public class NotifiableEmberContainer extends NotifiableRecipeHandlerTrait<Double> implements ICapabilityProvider {
 
     public static final ManagedFieldHolder MANAGED_FIELD_HOLDER = new ManagedFieldHolder(NotifiableEmberContainer.class,
             NotifiableRecipeHandlerTrait.MANAGED_FIELD_HOLDER);
 
+    @Persisted
+    @DescSynced
     public IEmberCapability capability = new DefaultEmberCapability() {
-
         @Override
         public void onContentsChanged() {
             super.onContentsChanged();
@@ -33,7 +41,20 @@ public class NotifiableEmberContainer extends NotifiableRecipeHandlerTrait<Doubl
         }
     };
 
-    @Getter
+    @Override
+    public void saveCustomPersistedData(@NotNull CompoundTag tag, boolean forDrop) {
+        super.saveCustomPersistedData(tag, forDrop);
+        capability.writeToNBT(tag);
+    }
+
+    @Override
+    public void loadCustomPersistedData(@NotNull CompoundTag tag) {
+        super.loadCustomPersistedData(tag);
+        capability.deserializeNBT(tag);
+        if (capability.getEmberCapacity() == 0)
+            capability.setEmberCapacity(maxCapacity);
+    }
+
     private final IO handlerIO;
 
     @Persisted
@@ -94,5 +115,13 @@ public class NotifiableEmberContainer extends NotifiableRecipeHandlerTrait<Doubl
     @Override
     public int getSize() {
         return 1;
+    }
+
+    @Override
+    public @NotNull <T> LazyOptional<T> getCapability(@NotNull Capability<T> cap, @Nullable Direction direction) {
+        if (cap == EmbersCapabilities.EMBER_CAPABILITY) {
+            return capability.getCapability(cap, direction);
+        }
+        return this.getCapability(cap);
     }
 }
