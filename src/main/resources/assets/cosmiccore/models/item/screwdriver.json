@@ -1,0 +1,20 @@
+{
+  "loader": "tconstruct:tool",
+  "parent": "forge:item/default-tool",
+  "textures": {
+    "broken": "cosmiccore:item/tool/screwdriver/broken",
+    "head":   "cosmiccore:item/tool/screwdriver/head_tool",
+    "handle": "cosmiccore:item/tool/screwdriver/handle"
+  },
+  "modifier_roots": [ "tconstruct:item/tool/pickaxe/modifiers/" ],
+  "parts": [
+    { "name": "handle",  "index": 1 },
+    { "name": "head",    "index": 0 }
+  ],
+  "overrides": [
+    {
+      "predicate": { "tconstruct:broken": 1 },
+      "model": "cosmiccore:item/tool/screwdriver/broken"
+    }
+  ]
+}

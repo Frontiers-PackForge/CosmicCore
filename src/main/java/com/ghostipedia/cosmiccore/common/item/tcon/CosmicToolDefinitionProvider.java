@@ -17,6 +17,7 @@ import slimeknights.tconstruct.library.tools.definition.module.mining.IsEffectiv
 import slimeknights.tconstruct.library.tools.nbt.StatsNBT;
 import slimeknights.tconstruct.library.tools.stat.ToolStats;
 
+import static com.ghostipedia.cosmiccore.common.item.tcon.CosmicTinkerToolPart.screwdriverHead;
 import static com.ghostipedia.cosmiccore.common.item.tcon.CosmicTinkerToolPart.wrenchHead;
 import static slimeknights.tconstruct.tools.TinkerToolParts.*;
 
@@ -57,6 +58,17 @@ public class CosmicToolDefinitionProvider extends AbstractToolDefinitionDataProv
                         .set(ToolStats.ATTACK_SPEED, 0.9f)
                         .build()))
                 .module(IsEffectiveModule.tag(CustomTags.MINEABLE_WITH_CONFIG_VALID_PICKAXE_WIRE_CUTTER));
+
+        define(CosmicToolDefinitions.SCREWDRIVER)
+                .module(PartStatsModule.parts()
+                        .part(screwdriverHead)
+                        .part(toolHandle)
+                        .build())
+                .module(defaultTwoParts)
+                .module(new SetStatsModule(StatsNBT.builder()
+                        .set(ToolStats.ATTACK_SPEED, 0.9f)
+
+                        .build()));
 
         define(CosmicToolDefinitions.WRENCHES)
                 .module(PartStatsModule.parts()

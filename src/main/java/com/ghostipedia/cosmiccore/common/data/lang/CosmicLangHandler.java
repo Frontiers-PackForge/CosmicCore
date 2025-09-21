@@ -373,5 +373,9 @@ public class CosmicLangHandler extends LangHandler {
         provider.add("item.cosmiccore.wrench", "Wrench");
         provider.add("item.cosmiccore.wrench_head", "Wrench Head");
         provider.add("item.cosmiccore.wrench.description", "Rotate the World!");
+
+        provider.add("item.cosmiccore.screwdriver", "Screwdriver");
+        provider.add("item.cosmiccore.screwdriver_head", "Screwdriver Head");
+        provider.add("item.cosmiccore.screwdriver.description", "Twist and Turn!");
     }
 }

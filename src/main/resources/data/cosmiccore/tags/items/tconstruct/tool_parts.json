@@ -1,3 +1,6 @@
 {
-  "values": ["cosmiccore:wrench_head"]
+  "values": [
+    "cosmiccore:wrench_head",
+    "cosmiccore:screwdriver_head"
+  ]
 }

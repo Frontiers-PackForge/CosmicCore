@@ -11,4 +11,8 @@ public class CosmicItemTags {
     public static final TagKey<Item> QUARKTECH_SPACE_SUITE = TagUtil.createModItemTag("quantum_space_suite");
     public static final TagKey<Item> WRENCH_HEAD_CAST_MULTI = TagUtil.createModItemTag("casts/multi_use/wrench_head");
     public static final TagKey<Item> WRENCH_HEAD_CAST_SINGLE = TagUtil.createModItemTag("casts/single_use/wrench_head");
+    public static final TagKey<Item> SCREWDRIVER_HEAD_CAST_SINGLE = TagUtil
+            .createModItemTag("casts/single_use/screwdriver_head");
+    public static final TagKey<Item> SCREWDRIVER_HEAD_CAST_MULTI = TagUtil
+            .createModItemTag("casts/multi_use/screwdriver_head_sand");
 }
