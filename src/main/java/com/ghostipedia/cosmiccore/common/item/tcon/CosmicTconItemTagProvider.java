@@ -38,6 +38,10 @@ public class CosmicTconItemTagProvider extends ItemTagsProvider {
         addToolTags(CosmicTinkerTools.wrench, MULTIPART_TOOL, DURABILITY, HARVEST_PRIMARY, CustomTags.WRENCHES,
                 CustomTags.CRAFTING_WRENCHES, MELEE_WEAPON, INTERACTABLE_RIGHT, AOE, CLUSTER_MAX_HARVESTABLES,
                 SMALL_TOOLS, BONUS_SLOTS);
+
+        addToolTags(CosmicTinkerTools.screwdriver, MULTIPART_TOOL, DURABILITY, HARVEST_PRIMARY, CustomTags.SCREWDRIVERS,
+                CustomTags.CRAFTING_SCREWDRIVERS, MELEE_WEAPON, INTERACTABLE_RIGHT, AOE, CLUSTER_MAX_HARVESTABLES,
+                SMALL_TOOLS, BONUS_SLOTS);
     }
 
     @SafeVarargs

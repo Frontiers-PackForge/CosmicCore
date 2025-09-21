@@ -18,7 +18,10 @@ public class CosmicCreativeTinkersTab {
         Consumer<ItemStack> output = tab::accept;
         acceptTool(output, CosmicTinkerTools.wireCutter);
         acceptTool(output, CosmicTinkerTools.wrench);
+        acceptTool(output, CosmicTinkerTools.screwdriver);
+
         acceptPart(output, CosmicTinkerToolPart.wrenchHead);
+        acceptPart(output, CosmicTinkerToolPart.screwdriverHead);
     }
 
     private static void acceptTool(Consumer<ItemStack> output, Supplier<? extends IModifiable> tool) {

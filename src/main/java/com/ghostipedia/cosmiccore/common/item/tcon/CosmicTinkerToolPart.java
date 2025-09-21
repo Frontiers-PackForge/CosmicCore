@@ -31,6 +31,9 @@ public class CosmicTinkerToolPart {
     public static final ItemObject<ToolPartItem> wrenchHead = COSMIC_TINKER_PARTS.register("wrench_head",
             () -> new ToolPartItem(ITEM_PROPS, HeadMaterialStats.ID));
 
+    public static final ItemObject<ToolPartItem> screwdriverHead = COSMIC_TINKER_PARTS.register("screwdriver_head",
+            () -> new ToolPartItem(ITEM_PROPS, HeadMaterialStats.ID));
+
     public static void init() {
         COSMIC_TINKER_PARTS.register(FMLJavaModLoadingContext.get().getModEventBus());
     }

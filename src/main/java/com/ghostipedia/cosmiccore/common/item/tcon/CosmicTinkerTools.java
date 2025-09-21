@@ -23,6 +23,10 @@ public class CosmicTinkerTools {
 
     public static final ItemObject<ModifiableItem> wireCutter = COSMIC_TINKER_ITEM.register("wire_cutter",
             () -> new ModifiableItem(UNSTACKABLE_PROPS, CosmicToolDefinitions.WIRE_CUTTERS));
+
+    public static final ItemObject<ModifiableItem> screwdriver = COSMIC_TINKER_ITEM.register("screwdriver",
+            () -> new ModifiableItem(UNSTACKABLE_PROPS, CosmicToolDefinitions.SCREWDRIVER));
+
     public static final ItemObject<ModifiableItem> wrench = COSMIC_TINKER_ITEM.register("wrench",
             () -> new ModifiableItem(UNSTACKABLE_PROPS, CosmicToolDefinitions.WRENCHES) {
 

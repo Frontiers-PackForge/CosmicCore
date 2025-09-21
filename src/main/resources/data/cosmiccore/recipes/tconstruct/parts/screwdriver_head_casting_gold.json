@@ -1,0 +1,7 @@
+{
+  "type": "tconstruct:table_casting_material",
+  "cast": { "tag": "cosmiccore:casts/multi_use/screwdriver_head" },
+  "cast_consumed": false,
+  "item_cost": 2,
+  "result": "cosmiccore:screwdriver_head"
+}
