@@ -49,11 +49,11 @@ public interface CosmicCoreRecipeSchema {
             return this;
         }
 
-        public GTRecipeSchema.GTRecipeJS emberInput(int embers) {
+        public GTRecipeSchema.GTRecipeJS emberInput(double embers) {
             return this.input(EmberRecipeCapability.CAP, embers);
         }
 
-        public GTRecipeSchema.GTRecipeJS emberOutput(int embers) {
+        public GTRecipeSchema.GTRecipeJS emberOutput(double embers) {
             return this.output(EmberRecipeCapability.CAP, embers);
         }
     }

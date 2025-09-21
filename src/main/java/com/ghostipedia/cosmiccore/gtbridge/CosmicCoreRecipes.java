@@ -1,11 +1,8 @@
 package com.ghostipedia.cosmiccore.gtbridge;
 
-import com.ghostipedia.cosmiccore.api.capability.recipe.CosmicRecipeCapabilities;
-
 import com.gregtechceu.gtceu.api.GTValues;
 
 import net.minecraft.data.recipes.FinishedRecipe;
-import net.minecraft.world.item.Items;
 
 import java.util.function.Consumer;
 
@@ -28,10 +25,12 @@ public class CosmicCoreRecipes {
                 .duration(40)
                 .EUt(GTValues.VA[GTValues.HV])
                 .save(provider);
-        EMBER_TESTER_RECIPES.recipeBuilder("test")
-                .input(CosmicRecipeCapabilities.EMBER, 100d)
-                .outputItems(Items.COBBLESTONE)
-                .save(provider);
+        /*
+         * EMBER_TESTER_RECIPES.recipeBuilder("test")
+         * .input(CosmicRecipeCapabilities.EMBER, 100d)
+         * .outputItems(Items.COBBLESTONE)
+         * .save(provider);
+         */
 
         // GROVE_RECIPES.recipeBuilder("dirt_movement")
         // .input(SoulRecipeCapability.CAP, 100)

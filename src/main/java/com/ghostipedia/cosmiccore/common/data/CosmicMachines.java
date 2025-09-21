@@ -45,7 +45,6 @@ import com.gregtechceu.gtceu.common.data.models.GTModels;
 import com.gregtechceu.gtceu.common.machine.multiblock.electric.ActiveTransformerMachine;
 import com.gregtechceu.gtceu.common.machine.multiblock.electric.FusionReactorMachine;
 import com.gregtechceu.gtceu.common.machine.multiblock.electric.PowerSubstationMachine;
-import com.gregtechceu.gtceu.common.machine.multiblock.primitive.PrimitiveWorkableMachine;
 import com.gregtechceu.gtceu.config.ConfigHolder;
 import com.gregtechceu.gtceu.utils.FormattingUtil;
 
@@ -192,21 +191,22 @@ public class CosmicMachines {
     // .workableCasingModel(GTCEu.id("block/casings/solid/machine_casing_inert_ptfe"),
     // GTCEu.id("block/multiblock/coke_oven"))
     // .register();
-
-    public static final MultiblockMachineDefinition EMBER_TESTER = REGISTRATE.multiblock("ember_tester",
-            PrimitiveWorkableMachine::new)
-            .rotationState(RotationState.NON_Y_AXIS)
-            .recipeType(CosmicRecipeTypes.EMBER_TESTER_RECIPES)
-            .appearanceBlock(GTBlocks.CASING_PRIMITIVE_BRICKS)
-            .pattern(definition -> FactoryBlockPattern.start()
-                    .aisle("S", "C", "I")
-                    .where("C", controller(blocks(definition.getBlock())))
-                    .where("S", abilities(IMPORT_EMBER).or(abilities(EXPORT_EMBER)))
-                    .where("I", abilities(PartAbility.EXPORT_ITEMS).or(abilities(PartAbility.IMPORT_ITEMS)))
-                    .build())
-            .workableCasingModel(GTCEu.id("block/casings/solid/machine_casing_inert_ptfe"),
-                    GTCEu.id("block/multiblock/coke_oven"))
-            .register();
+    /*
+     * public static final MultiblockMachineDefinition EMBER_TESTER = REGISTRATE.multiblock("ember_tester",
+     * PrimitiveWorkableMachine::new)
+     * .rotationState(RotationState.NON_Y_AXIS)
+     * .recipeType(CosmicRecipeTypes.EMBER_TESTER_RECIPES)
+     * .appearanceBlock(GTBlocks.CASING_PRIMITIVE_BRICKS)
+     * .pattern(definition -> FactoryBlockPattern.start()
+     * .aisle("S", "C", "I")
+     * .where("C", controller(blocks(definition.getBlock())))
+     * .where("S", abilities(IMPORT_EMBER).or(abilities(EXPORT_EMBER)))
+     * .where("I", abilities(PartAbility.EXPORT_ITEMS).or(abilities(PartAbility.IMPORT_ITEMS)))
+     * .build())
+     * .workableCasingModel(GTCEu.id("block/casings/solid/machine_casing_inert_ptfe"),
+     * GTCEu.id("block/multiblock/coke_oven"))
+     * .register();
+     */
 
     public static final MultiblockMachineDefinition LARGE_COMBUSTION_ENGINE = registerCosmicLargeCombustionEngine(
             "large_combustion_engine_cc", EV,
