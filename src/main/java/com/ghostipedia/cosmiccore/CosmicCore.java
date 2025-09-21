@@ -12,6 +12,10 @@ import com.ghostipedia.cosmiccore.common.data.materials.CosmicMaterialSet;
 import com.ghostipedia.cosmiccore.common.data.materials.CosmicMaterials;
 import com.ghostipedia.cosmiccore.common.item.behavior.GravityCoreBehavior;
 import com.ghostipedia.cosmiccore.common.item.tcon.*;
+import com.ghostipedia.cosmiccore.common.item.tcon.CosmicTconBlockTagProvider;
+import com.ghostipedia.cosmiccore.common.item.tcon.CosmicTconItemTagProvider;
+import com.ghostipedia.cosmiccore.common.item.tcon.CosmicTinkerTools;
+import com.ghostipedia.cosmiccore.common.item.tcon.CosmicToolDefinitionProvider;
 import com.ghostipedia.cosmiccore.common.machine.multiblock.multi.modular.MultiblockInit;
 import com.ghostipedia.cosmiccore.common.network.CCoreNetwork;
 import com.ghostipedia.cosmiccore.common.recipe.condition.CosmicConditions;
@@ -105,7 +109,7 @@ public class CosmicCore {
         CosmicTconBlockTagProvider blockTags = new CosmicTconBlockTagProvider(packOutput, event.getLookupProvider(),
                 existingFileHelper);
         generator.addProvider(server, blockTags);
-        generator.addProvider(server, new CosmicToolDefitionProvider(packOutput));
+        generator.addProvider(server, new CosmicToolDefinitionProvider(packOutput));
         generator.addProvider(server, new CosmicTconItemTagProvider(packOutput, event.getLookupProvider(),
                 blockTags.contentsGetter(), existingFileHelper));
     }

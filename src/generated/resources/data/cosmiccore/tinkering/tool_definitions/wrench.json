@@ -36,6 +36,15 @@
       "type": "tconstruct:is_effective",
       "predicate_type": "mantle:tag",
       "tag": "forge:mineable/wrench"
+    },
+    {
+      "type": "tconstruct:traits",
+      "traits": [
+        {
+          "level": 1,
+          "name": "cosmiccore:wrench_switch"
+        }
+      ]
     }
   ]
 }

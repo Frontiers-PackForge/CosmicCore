@@ -18,7 +18,6 @@ public class CosmicCreativeTinkersTab {
         Consumer<ItemStack> output = tab::accept;
         acceptTool(output, CosmicTinkerTools.wireCutter);
         acceptTool(output, CosmicTinkerTools.wrench);
-
         acceptPart(output, CosmicTinkerToolPart.wrenchHead);
     }
 
