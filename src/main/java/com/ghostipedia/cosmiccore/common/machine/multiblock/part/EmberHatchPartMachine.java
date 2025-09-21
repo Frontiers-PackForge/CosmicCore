@@ -18,6 +18,7 @@ import com.lowdragmc.lowdraglib.syncdata.field.ManagedFieldHolder;
 
 import net.minecraft.client.resources.language.I18n;
 import net.minecraft.network.chat.Component;
+
 import org.jetbrains.annotations.NotNull;
 
 public class EmberHatchPartMachine extends TieredIOPartMachine {
