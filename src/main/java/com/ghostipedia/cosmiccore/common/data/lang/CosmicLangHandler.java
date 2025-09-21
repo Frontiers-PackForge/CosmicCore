@@ -1755,6 +1755,11 @@ public class CosmicLangHandler extends LangHandler {
 
         // Max speed tooltip
         provider.add("cosmiccore.boots.max_speed", "Max Speed: %s");
+
+        provider.add("item.cosmiccore.wrench", "Wrench");
+        provider.add("item.cosmiccore.wrench_head", "Wrench Head");
+        provider.add("item.cosmiccore.wrench.description", "Rotate the World!");
+
         provider.add("item.cosmiccore.screwdriver", "Screwdriver");
         provider.add("item.cosmiccore.screwdriver_head", "Screwdriver Head");
         provider.add("item.cosmiccore.screwdriver.description", "Twist and Turn!");

@@ -60,7 +60,7 @@ public class CosmicToolDefinitionProvider extends AbstractToolDefinitionDataProv
                         .build()))
                 .module(IsEffectiveModule.tag(CustomTags.MINEABLE_WITH_WIRE_CUTTER));
 
-        define(CosmicToolDefinitions.SCREWDRIVERS)
+        define(CosmicToolDefinitions.SCREWDRIVER)
                 .module(PartStatsModule.parts()
                         .part(screwdriverHead)
                         .part(toolHandle)
@@ -68,6 +68,7 @@ public class CosmicToolDefinitionProvider extends AbstractToolDefinitionDataProv
                 .module(defaultTwoParts)
                 .module(new SetStatsModule(StatsNBT.builder()
                         .set(ToolStats.ATTACK_SPEED, 0.9f)
+
                         .build()));
 
         define(CosmicToolDefinitions.WRENCHES)

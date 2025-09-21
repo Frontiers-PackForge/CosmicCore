@@ -2387,6 +2387,21 @@ public class CosmicItems {
             .defaultModel()
             .register();
 
+    public static final ItemEntry<ComponentItem> SCREWDRIVER_CAST_GOLD = REGISTRATE
+            .item("screwdriver_head_cast", ComponentItem::create)
+            .lang("Screwdriver Head Cast")
+            .properties(p -> p.stacksTo(1))
+            .tag(CosmicItemTags.SCREWDRIVER_HEAD_CAST_MULTI)
+            .defaultModel()
+            .register();
+    public static final ItemEntry<ComponentItem> SCREWDRIVER_CAST_SAND = REGISTRATE
+            .item("screwdriver_head_sand_cast", ComponentItem::create)
+            .lang("Screwdriver Head Sand Cast")
+            .tag(CosmicItemTags.SCREWDRIVER_HEAD_CAST_SINGLE)
+            .properties(p -> p.stacksTo(1))
+            .defaultModel()
+            .register();
+
     public static ItemEntry<ComponentItem> LINKED_TERMINAL = REGISTRATE
             .item("linked_terminal", ComponentItem::create)
             .lang("Linked Terminal")
