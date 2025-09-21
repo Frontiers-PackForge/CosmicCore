@@ -59,7 +59,7 @@ public class CosmicToolDefinitionProvider extends AbstractToolDefinitionDataProv
                         .build()))
                 .module(IsEffectiveModule.tag(CustomTags.MINEABLE_WITH_CONFIG_VALID_PICKAXE_WIRE_CUTTER));
 
-        define(CosmicToolDefinitions.SCREWDRIVER)
+        define(CosmicToolDefinitions.SCREWDRIVERS)
                 .module(PartStatsModule.parts()
                         .part(screwdriverHead)
                         .part(toolHandle)

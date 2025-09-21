@@ -25,6 +25,18 @@ public class TiconUtils {
             return GTToolType.WRENCH;
         } else if (def == CosmicToolDefinitions.WIRE_CUTTERS) {
             return GTToolType.WIRE_CUTTER;
+        } else if (def == CosmicToolDefinitions.SCREWDRIVERS) {
+            return GTToolType.SCREWDRIVER;
+        } else if (def == CosmicToolDefinitions.CROWBARS) {
+            return GTToolType.CROWBAR;
+        } else if (def == CosmicToolDefinitions.FILES) {
+            return GTToolType.FILE;
+        } else if (def == CosmicToolDefinitions.PLUNGERS) {
+            return GTToolType.PLUNGER;
+        } else if (def == CosmicToolDefinitions.SOFT_MALLETS) {
+            return GTToolType.SOFT_MALLET;
+        } else if (def == CosmicToolDefinitions.SAWS) {
+            return GTToolType.SAW;
         }
         return GTToolType.FILE;
     }
