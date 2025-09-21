@@ -1,6 +1,7 @@
 package com.ghostipedia.cosmiccore.api.machine.trait;
 
 import com.ghostipedia.cosmiccore.api.capability.recipe.EmberRecipeCapability;
+import com.ghostipedia.cosmiccore.common.machine.multiblock.part.EmberHatchPartMachine;
 
 import com.gregtechceu.gtceu.api.capability.recipe.IO;
 import com.gregtechceu.gtceu.api.capability.recipe.RecipeCapability;
@@ -25,11 +26,13 @@ public class NotifiableEmberContainer extends NotifiableRecipeHandlerTrait<Doubl
     public static final ManagedFieldHolder MANAGED_FIELD_HOLDER = new ManagedFieldHolder(NotifiableEmberContainer.class,
             NotifiableRecipeHandlerTrait.MANAGED_FIELD_HOLDER);
 
+    private EmberHatchPartMachine emberHatch;
     public IEmberCapability capability = new DefaultEmberCapability() {
 
         @Override
         public void onContentsChanged() {
             super.onContentsChanged();
+            emberHatch.cachedEmber = getEmber();
             notifyListeners();
             NotifiableEmberContainer.this.notifyListeners();
         }
@@ -71,6 +74,7 @@ public class NotifiableEmberContainer extends NotifiableRecipeHandlerTrait<Doubl
 
     public NotifiableEmberContainer(MetaMachine machine, IO io, double maxCapacity, double maxConsumption) {
         super(machine);
+        this.emberHatch = (EmberHatchPartMachine) machine;
         this.capability.setEmberCapacity(maxCapacity);
         this.capability.setEmber(0.0D);
         this.handlerIO = io;
