@@ -26,19 +26,30 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Collections;
 import java.util.List;
 
-public class NotifiableEmberContainer extends NotifiableRecipeHandlerTrait<Double> implements ICapabilityProvider {
+public class NotifiableEmberContainer extends NotifiableRecipeHandlerTrait<Double>  {
 
     public static final ManagedFieldHolder MANAGED_FIELD_HOLDER = new ManagedFieldHolder(NotifiableEmberContainer.class,
             NotifiableRecipeHandlerTrait.MANAGED_FIELD_HOLDER);
 
-    @Persisted
-    @DescSynced
+
     public IEmberCapability capability = new DefaultEmberCapability() {
         @Override
         public void onContentsChanged() {
             super.onContentsChanged();
             notifyListeners();
+            NotifiableEmberContainer.this.notifyListeners();
         }
+
+        @Override
+        public double getEmber() {
+            return getTotalContentAmount();
+        }
+
+        @Override
+        public double addAmount(double value, boolean doAdd) {
+            return super.addAmount(value, doAdd);
+        }
+
     };
 
     @Override
@@ -102,6 +113,7 @@ public class NotifiableEmberContainer extends NotifiableRecipeHandlerTrait<Doubl
         return capability.getEmber();
     }
 
+
     @Override
     public RecipeCapability<Double> getCapability() {
         return EmberRecipeCapability.CAP;
@@ -117,11 +129,5 @@ public class NotifiableEmberContainer extends NotifiableRecipeHandlerTrait<Doubl
         return 1;
     }
 
-    @Override
-    public @NotNull <T> LazyOptional<T> getCapability(@NotNull Capability<T> cap, @Nullable Direction direction) {
-        if (cap == EmbersCapabilities.EMBER_CAPABILITY) {
-            return capability.getCapability(cap, direction);
-        }
-        return this.getCapability(cap);
-    }
+
 }
