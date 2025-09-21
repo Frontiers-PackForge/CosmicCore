@@ -24,6 +24,7 @@ public class CosmicTinkersMaterials extends AbstractMaterialDataProvider {
         }
     }
 
+
     @Override
     public String getName() {
         return "Cosmic Core Materials";
