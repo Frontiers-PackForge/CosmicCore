@@ -71,6 +71,15 @@ public class CosmicRecipeTypes {
             .setMaxIOSize(1, 1, 0, 0)
             .setProgressBar(GuiTextures.PROGRESS_BAR_ARROW, ProgressTexture.FillDirection.LEFT_TO_RIGHT);
 
+    /*
+     * public static final GTRecipeType EMBER_TESTER_RECIPES = GTRecipeTypes
+     * .register("ember_tester", GTRecipeTypes.MULTIBLOCK)
+     * .setMaxSize(IO.IN, EmberRecipeCapability.CAP, 1)
+     * .setMaxSize(IO.OUT, EmberRecipeCapability.CAP, 1)
+     * .setMaxIOSize(1, 1, 0, 0)
+     * .setProgressBar(GuiTextures.PROGRESS_BAR_ARROW, ProgressTexture.FillDirection.LEFT_TO_RIGHT);
+     */
+
     public static final GTRecipeType VOID_MINER = GTRecipeTypes
             .register("void_miner", GTRecipeTypes.MULTIBLOCK)
             .setMaxIOSize(1, 27, 2, 0)
