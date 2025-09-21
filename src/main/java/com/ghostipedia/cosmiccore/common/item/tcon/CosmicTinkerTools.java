@@ -21,8 +21,24 @@ public class CosmicTinkerTools {
 
     private static final Item.Properties UNSTACKABLE_PROPS = new Item.Properties().stacksTo(1);
 
+    public static final ItemObject<ModifiableItem> file = COSMIC_TINKER_ITEM.register("file",
+            () -> new ModifiableItem(UNSTACKABLE_PROPS, CosmicToolDefinitions.FILES));
+    public static final ItemObject<ModifiableItem> saw = COSMIC_TINKER_ITEM.register("saw",
+            () -> new ModifiableItem(UNSTACKABLE_PROPS, CosmicToolDefinitions.SAWS));
+    public static final ItemObject<ModifiableItem> drill = COSMIC_TINKER_ITEM.register("drill",
+            () -> new ModifiableItem(UNSTACKABLE_PROPS, CosmicToolDefinitions.DRILLS));
+    public static final ItemObject<ModifiableItem> screwdriver = COSMIC_TINKER_ITEM.register("screwdriver",
+            () -> new ModifiableItem(UNSTACKABLE_PROPS, CosmicToolDefinitions.SCREWDRIVERS));
+    public static final ItemObject<ModifiableItem> softMallet = COSMIC_TINKER_ITEM.register("soft_mallet",
+            () -> new ModifiableItem(UNSTACKABLE_PROPS, CosmicToolDefinitions.SOFT_MALLETS));
+    public static final ItemObject<ModifiableItem> plunger = COSMIC_TINKER_ITEM.register("plunger",
+            () -> new ModifiableItem(UNSTACKABLE_PROPS, CosmicToolDefinitions.PLUNGERS));
+    public static final ItemObject<ModifiableItem> crowbar = COSMIC_TINKER_ITEM.register("crowbar",
+            () -> new ModifiableItem(UNSTACKABLE_PROPS, CosmicToolDefinitions.CROWBARS));
+
     public static final ItemObject<ModifiableItem> wireCutter = COSMIC_TINKER_ITEM.register("wire_cutter",
             () -> new ModifiableItem(UNSTACKABLE_PROPS, CosmicToolDefinitions.WIRE_CUTTERS));
+
     public static final ItemObject<ModifiableItem> wrench = COSMIC_TINKER_ITEM.register("wrench",
             () -> new ModifiableItem(UNSTACKABLE_PROPS, CosmicToolDefinitions.WRENCHES) {
 
