@@ -23,7 +23,7 @@ public class MetaMachineBlockEntityMixin {
 
 
     @Inject(method = "getCapability", at = @At("TAIL"), cancellable = true)
-    private @NotNull <T> LazyOptional<T> injectCapability(MetaMachine machine,
+    public  @NotNull <T> LazyOptional<T> injectCapability(MetaMachine machine,
                                                        @NotNull Capability<T> cap,
                                                        @Nullable Direction side) {
         if (cap == AbyssBudgetCap.CAP) {

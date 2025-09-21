@@ -1,6 +1,7 @@
 package com.ghostipedia.cosmiccore.api.recipe.lookup;
 
 import com.gregtechceu.gtceu.api.recipe.lookup.ingredient.AbstractMapIngredient;
+import lombok.ToString;
 
 public class MapAbyssIngredient extends AbstractMapIngredient {
 
@@ -13,6 +14,16 @@ public class MapAbyssIngredient extends AbstractMapIngredient {
     @Override
     protected int hash() {
         return MapAbyssIngredient.class.hashCode();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        return  o instanceof MapAbyssIngredient;
+    }
+
+    @Override
+    public String toString() {
+        return super.toString();
     }
 
     @Override
