@@ -63,7 +63,6 @@ import static com.ghostipedia.cosmiccore.api.machine.part.CosmicPartAbility.*;
 import static com.ghostipedia.cosmiccore.api.registries.CosmicRegistration.REGISTRATE;
 import static com.ghostipedia.cosmiccore.common.data.CosmicBlocks.*;
 import static com.ghostipedia.cosmiccore.common.data.CosmicMachinesUtils.*;
-import static com.ghostipedia.cosmiccore.common.data.datagen.CosmicMachineModels.*;
 import static com.ghostipedia.cosmiccore.common.machine.multiblock.electric.hpca.HPCAMachine.*;
 import static com.gregtechceu.gtceu.api.GTValues.*;
 import static com.gregtechceu.gtceu.api.pattern.Predicates.*;
@@ -88,14 +87,21 @@ public class CosmicMachines {
             IO.IN, HIGH_TIERS, IMPORT_SOUL);
     public static final MachineDefinition[] SOUL_EXPORT_HATCH = registerSoulHatch(
             "soul_output_hatch", "Soul Output Hatch",
-            IO.OUT, HIGH_TIERS, CosmicPartAbility.EXPORT_SOUL);
+            IO.OUT, HIGH_TIERS, EXPORT_SOUL);
+
+    public static final MachineDefinition[] EMBER_IMPORT_HATCH = registerEmberHatch(
+            "ember_input_hatch", "Ember Input Hatch",
+            IO.IN, ELECTRIC_TIERS, IMPORT_EMBER);
+    public static final MachineDefinition[] EMBER_EXPORT_HATCH = registerEmberHatch(
+            "ember_output_hatch", "Ember Output Hatch",
+            IO.OUT, ELECTRIC_TIERS, EXPORT_EMBER);
 
     public static final MachineDefinition[] THERMIA_VENT = registerThermiaTieredHatch(
             "thermia_export_hatch", "Thermia Vent", "thermia_output_hatch",
-            IO.OUT, HIGH_TIERS, CosmicPartAbility.EXPORT_THERMIA);
+            IO.OUT, HIGH_TIERS, EXPORT_THERMIA);
     public static final MachineDefinition[] THERMIA_SOCKET = registerThermiaTieredHatch(
             "thermia_import_hatch", "Thermia Socket", "thermia_input_hatch",
-            IO.IN, HIGH_TIERS, CosmicPartAbility.IMPORT_THERMIA);
+            IO.IN, HIGH_TIERS, IMPORT_THERMIA);
 
     public static final MachineDefinition[] WIRELESS_ENERGY_INPUT_HATCH = registerWirelessEnergyTieredHatch(
             "wireless_energy_hatch", "Wireless Energy Hatch", "wireless_energy_1a",
@@ -185,6 +191,22 @@ public class CosmicMachines {
     // .workableCasingModel(GTCEu.id("block/casings/solid/machine_casing_inert_ptfe"),
     // GTCEu.id("block/multiblock/coke_oven"))
     // .register();
+    /*
+     * public static final MultiblockMachineDefinition EMBER_TESTER = REGISTRATE.multiblock("ember_tester",
+     * PrimitiveWorkableMachine::new)
+     * .rotationState(RotationState.NON_Y_AXIS)
+     * .recipeType(CosmicRecipeTypes.EMBER_TESTER_RECIPES)
+     * .appearanceBlock(GTBlocks.CASING_PRIMITIVE_BRICKS)
+     * .pattern(definition -> FactoryBlockPattern.start()
+     * .aisle("S", "C", "I")
+     * .where("C", controller(blocks(definition.getBlock())))
+     * .where("S", abilities(IMPORT_EMBER).or(abilities(EXPORT_EMBER)))
+     * .where("I", abilities(PartAbility.EXPORT_ITEMS).or(abilities(PartAbility.IMPORT_ITEMS)))
+     * .build())
+     * .workableCasingModel(GTCEu.id("block/casings/solid/machine_casing_inert_ptfe"),
+     * GTCEu.id("block/multiblock/coke_oven"))
+     * .register();
+     */
 
     public static final MultiblockMachineDefinition LARGE_COMBUSTION_ENGINE = registerCosmicLargeCombustionEngine(
             "large_combustion_engine_cc", EV,
@@ -266,6 +288,29 @@ public class CosmicMachines {
                 tiers);
     }
 
+    private static MachineDefinition[] registerEmberHatch(String name, String displayName, IO io,
+                                                          int[] tiers, PartAbility... abilities) {
+        return registerTieredMachines(name,
+                (holder, tier) -> new EmberHatchPartMachine(holder, tier, io),
+                (tier, builder) -> builder
+                        .langValue(GTValues.VNF[tier] + ' ' + displayName)
+                        .abilities(abilities)
+                        .rotationState(RotationState.ALL)
+                        .modelProperty(GTMachineModelProperties.IS_FORMED, false)
+                        .overlayTieredHullModel("ember_hatch")
+                        .tooltipBuilder((item, tooltip) -> {
+                            if (io == IO.IN) {
+                                tooltip.add(Component.translatable("tooltip.cosmiccore.ember_hatch.capacity",
+                                        EmberHatchPartMachine.getMaxCapacity(tier)));
+                                tooltip.add(Component.translatable("tooltip.cosmiccore.ember_hatch.consumption",
+                                        EmberHatchPartMachine.getMaxConsumption(tier)));
+                            } else
+                                tooltip.add(Component.translatable("tooltip.cosmiccore.ember_hatch.capacity",
+                                        EmberHatchPartMachine.getMaxCapacity(tier)));
+                        }).register(),
+                tiers);
+    }
+
     private static MachineDefinition[] registerWirelessEnergyTieredHatch(String name, String displayName, String model,
                                                                          IO io, int[] tiers, int amperage,
                                                                          PartAbility... abilities) {
@@ -318,7 +363,7 @@ public class CosmicMachines {
     public static final MachineDefinition SENSOR_HATCH = REGISTRATE.machine("sensor_hatch", WirelessDataSensor::new)
             .langValue("Sensor Hatch")
             .rotationState(RotationState.ALL)
-            .abilities(CosmicPartAbility.PSS_SENSORS)
+            .abilities(PSS_SENSORS)
             .modelProperty(GTMachineModelProperties.IS_FORMED, false)
             .modelProperty(RecipeLogic.STATUS_PROPERTY, RecipeLogic.Status.IDLE)
             .model(createWorkableTieredHullMachineModel(GTCEu.id("block/machines/object_holder"))

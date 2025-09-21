@@ -14,4 +14,7 @@ public class CosmicPartAbility {
 
     public static final PartAbility IMPORT_THERMIA = new PartAbility("import_thermia");
     public static final PartAbility EXPORT_THERMIA = new PartAbility("export_thermia");
+
+    public static final PartAbility IMPORT_EMBER = new PartAbility("import_ember");
+    public static final PartAbility EXPORT_EMBER = new PartAbility("export_ember");
 }
