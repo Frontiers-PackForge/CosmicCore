@@ -49,7 +49,7 @@ public class SterilizationHatchPartMachine extends TieredIOPartMachine
 
     @Override
     public List<FluidIngredient> handleRecipeInner(IO io, GTRecipe recipe, List left, boolean simulate) {
-        return this.fluidTank.handleRecipeInner(io, recipe, left, !simulate);
+        return this.fluidTank.handleRecipeInner(io, recipe, left, simulate);
     }
 
     @Override

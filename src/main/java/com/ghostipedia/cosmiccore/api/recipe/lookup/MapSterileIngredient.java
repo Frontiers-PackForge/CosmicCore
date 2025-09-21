@@ -17,12 +17,13 @@ public class MapSterileIngredient extends AbstractMapIngredient {
 
     @Override
     protected int hash() {
-        return MapSterileIngredient.class.hashCode();
+        return sterileFluid.hashCode();
     }
 
     @Override
     public boolean equals(Object obj) {
-        return obj instanceof MapSterileIngredient;
+        if(!(obj instanceof MapSterileIngredient other)) return false;
+        return other.sterileFluid.equals(this.sterileFluid);
     }
 
     @Override
