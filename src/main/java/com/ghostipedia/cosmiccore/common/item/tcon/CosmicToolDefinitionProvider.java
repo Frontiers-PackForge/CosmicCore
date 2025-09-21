@@ -2,7 +2,6 @@ package com.ghostipedia.cosmiccore.common.item.tcon;
 
 import com.ghostipedia.cosmiccore.CosmicCore;
 import com.ghostipedia.cosmiccore.common.item.tcon.modifiers.CosmicCoreModifiers;
-
 import com.gregtechceu.gtceu.data.recipe.CustomTags;
 
 import net.minecraft.data.PackOutput;
@@ -22,6 +21,7 @@ import static com.ghostipedia.cosmiccore.common.item.tcon.CosmicTinkerToolPart.w
 import static slimeknights.tconstruct.tools.TinkerToolParts.*;
 
 public class CosmicToolDefinitionProvider extends AbstractToolDefinitionDataProvider {
+
 
     public CosmicToolDefinitionProvider(PackOutput packOutput) {
         super(packOutput, CosmicCore.MOD_ID);
@@ -46,6 +46,7 @@ public class CosmicToolDefinitionProvider extends AbstractToolDefinitionDataProv
 
         // pickaxes
 
+
         define(CosmicToolDefinitions.WIRE_CUTTERS)
                 .module(PartStatsModule.parts()
                         .part(smallBlade)
@@ -57,7 +58,7 @@ public class CosmicToolDefinitionProvider extends AbstractToolDefinitionDataProv
                 .module(new SetStatsModule(StatsNBT.builder()
                         .set(ToolStats.ATTACK_SPEED, 0.9f)
                         .build()))
-                .module(IsEffectiveModule.tag(CustomTags.MINEABLE_WITH_CONFIG_VALID_PICKAXE_WIRE_CUTTER));
+                .module(IsEffectiveModule.tag(CustomTags.MINEABLE_WITH_WIRE_CUTTER));
 
         define(CosmicToolDefinitions.SCREWDRIVERS)
                 .module(PartStatsModule.parts()
@@ -67,7 +68,6 @@ public class CosmicToolDefinitionProvider extends AbstractToolDefinitionDataProv
                 .module(defaultTwoParts)
                 .module(new SetStatsModule(StatsNBT.builder()
                         .set(ToolStats.ATTACK_SPEED, 0.9f)
-
                         .build()));
 
         define(CosmicToolDefinitions.WRENCHES)

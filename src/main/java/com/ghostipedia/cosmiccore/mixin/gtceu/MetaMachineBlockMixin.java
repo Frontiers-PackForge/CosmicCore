@@ -27,7 +27,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import slimeknights.tconstruct.library.tools.helper.ToolDamageUtil;
 import slimeknights.tconstruct.library.tools.item.ModifiableItem;
 
-@Mixin(value = MetaMachineBlock.class, remap = true)
+@Mixin(value = MetaMachineBlock.class, remap = false)
 public class MetaMachineBlockMixin {
 
     @Inject(method = "use",

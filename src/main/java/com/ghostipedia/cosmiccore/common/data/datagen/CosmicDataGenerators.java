@@ -3,6 +3,7 @@ package com.ghostipedia.cosmiccore.common.data.datagen;
 import com.ghostipedia.cosmiccore.CosmicCore;
 import com.ghostipedia.cosmiccore.common.item.tcon.TinkersMaterials;
 import com.ghostipedia.cosmiccore.common.item.tcon.modifiers.CosmicModifierProvider;
+import com.ghostipedia.cosmiccore.common.item.tcon.modifiers.CosmicModifierProvider;
 
 import com.gregtechceu.gtceu.api.registry.registrate.SoundEntryBuilder;
 

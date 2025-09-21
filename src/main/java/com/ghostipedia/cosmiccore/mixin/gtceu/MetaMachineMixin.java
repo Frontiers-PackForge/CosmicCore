@@ -35,6 +35,7 @@ public class MetaMachineMixin implements IMetaMachineMixin {
         Direction gridSide = ICoverable.determineGridSideHit(hitResult);
         if (gridSide == null) gridSide = hitResult.getDirection();
         if (context.getPlayer() == null) Pair.of(null, InteractionResult.PASS);
+
         if (ticonItem.getToolDefinition() == CosmicToolDefinitions.WRENCHES) {
             if (ticonItem instanceof ChargableModifiableItem electricItem) {
                 ItemStack stack = context.getItemInHand();
