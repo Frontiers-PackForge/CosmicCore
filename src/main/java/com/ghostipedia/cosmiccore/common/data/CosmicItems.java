@@ -1789,6 +1789,80 @@ public class CosmicItems {
             .defaultModel()
             .register();
 
+    // WildFire Cores
+    public static final ItemEntry<ComponentItem> LV_WILDFIRE_CORE = REGISTRATE
+            .item("lv_wildfire_core", ComponentItem::create)
+            .lang("LV Wildfire Core")
+            .properties(p -> p.stacksTo(64))
+            .defaultModel()
+            .register();
+    public static final ItemEntry<ComponentItem> MV_WILDFIRE_CORE = REGISTRATE
+            .item("mv_wildfire_core", ComponentItem::create)
+            .lang("MV Wildfire Core")
+            .properties(p -> p.stacksTo(64))
+            .defaultModel()
+            .register();
+    public static final ItemEntry<ComponentItem> HV_WILDFIRE_CORE = REGISTRATE
+            .item("hv_wildfire_core", ComponentItem::create)
+            .lang("HV Wildfire Core")
+            .properties(p -> p.stacksTo(64))
+            .defaultModel()
+            .register();
+    public static final ItemEntry<ComponentItem> EV_WILDFIRE_CORE = REGISTRATE
+            .item("ev_wildfire_core", ComponentItem::create)
+            .lang("EV Wildfire Core")
+            .properties(p -> p.stacksTo(64))
+            .defaultModel()
+            .register();
+    public static final ItemEntry<ComponentItem> IV_WILDFIRE_CORE = REGISTRATE
+            .item("iv_wildfire_core", ComponentItem::create)
+            .lang("IV Wildfire Core")
+            .properties(p -> p.stacksTo(64))
+            .defaultModel()
+            .register();
+    public static final ItemEntry<ComponentItem> LUV_WILDFIRE_CORE = REGISTRATE
+            .item("luv_wildfire_core", ComponentItem::create)
+            .lang("LuV Wildfire Core")
+            .properties(p -> p.stacksTo(64))
+            .defaultModel()
+            .register();
+    public static final ItemEntry<ComponentItem> ZPM_WILDFIRE_CORE = REGISTRATE
+            .item("zpm_wildfire_core", ComponentItem::create)
+            .lang("ZPM Wildfire Core")
+            .properties(p -> p.stacksTo(64))
+            .defaultModel()
+            .register();
+
+    public static final ItemEntry<ComponentItem> WRENCH_CAST_GOLD = REGISTRATE
+            .item("wrench_head_cast", ComponentItem::create)
+            .lang("Wrench Head Cast")
+            .properties(p -> p.stacksTo(1))
+            .tag(CosmicItemTags.WRENCH_HEAD_CAST_MULTI)
+            .defaultModel()
+            .register();
+    public static final ItemEntry<ComponentItem> WRENCH_CAST_SAND = REGISTRATE
+            .item("wrench_head_sand_cast", ComponentItem::create)
+            .lang("Wrench Head Sand Cast")
+            .tag(CosmicItemTags.WRENCH_HEAD_CAST_SINGLE)
+            .properties(p -> p.stacksTo(1))
+            .defaultModel()
+            .register();
+
+    public static final ItemEntry<ComponentItem> SCREWDRIVER_CAST_GOLD = REGISTRATE
+            .item("screwdriver_head_cast", ComponentItem::create)
+            .lang("Screwdriver Head Cast")
+            .properties(p -> p.stacksTo(1))
+            .tag(CosmicItemTags.SCREWDRIVER_HEAD_CAST_MULTI)
+            .defaultModel()
+            .register();
+    public static final ItemEntry<ComponentItem> SCREWDRIVER_CAST_SAND = REGISTRATE
+            .item("screwdriver_head_sand_cast", ComponentItem::create)
+            .lang("Screwdriver Head Sand Cast")
+            .tag(CosmicItemTags.SCREWDRIVER_HEAD_CAST_SINGLE)
+            .properties(p -> p.stacksTo(1))
+            .defaultModel()
+            .register();
+
     public static ItemEntry<ComponentItem> LINKED_TERMINAL = REGISTRATE
             .item("linked_terminal", ComponentItem::create)
             .lang("Linked Terminal")

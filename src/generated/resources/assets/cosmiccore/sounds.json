@@ -17,6 +17,15 @@
     ],
     "subtitle": "cosmiccore.subtitle.arcane_distil"
   },
+  "dawnforge": {
+    "sounds": [
+      {
+        "type": "file",
+        "name": "cosmiccore:dawnforge"
+      }
+    ],
+    "subtitle": "cosmiccore.subtitle.dawnforge"
+  },
   "dying_star": {
     "sounds": [
       {
