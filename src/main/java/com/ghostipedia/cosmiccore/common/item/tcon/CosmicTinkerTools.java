@@ -1,6 +1,7 @@
 package com.ghostipedia.cosmiccore.common.item.tcon;
 
 import com.ghostipedia.cosmiccore.CosmicCore;
+import com.ghostipedia.cosmiccore.common.item.tcon.base.ChargableModifiableItem;
 import com.ghostipedia.cosmiccore.common.item.tcon.modifiers.CosmicCoreModifiers;
 
 import net.minecraft.core.BlockPos;
@@ -40,7 +41,7 @@ public class CosmicTinkerTools {
             () -> new ModifiableItem(UNSTACKABLE_PROPS, CosmicToolDefinitions.WIRE_CUTTERS));
 
     public static final ItemObject<ModifiableItem> wrench = COSMIC_TINKER_ITEM.register("wrench",
-            () -> new ModifiableItem(UNSTACKABLE_PROPS, CosmicToolDefinitions.WRENCHES) {
+            () -> new ChargableModifiableItem(UNSTACKABLE_PROPS, CosmicToolDefinitions.WRENCHES) {
 
                 @Override
                 public boolean doesSneakBypassUse(ItemStack stack, LevelReader level, BlockPos pos, Player player) {
