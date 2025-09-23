@@ -1,0 +1,7 @@
+{
+  "loader": "tconstruct:tool",
+  "textures": {
+    "broken": "cosmiccore:item/tool/wrench/broken"
+  },
+  "parts": [ { "name": "broken" } ]
+}

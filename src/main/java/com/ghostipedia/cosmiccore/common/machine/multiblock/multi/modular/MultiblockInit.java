@@ -52,5 +52,6 @@ public class MultiblockInit {
         SteamMixer.init();
         SufferingChamber.init();
         TitanFusion.init();
+        DawnForge.init();
     }
 }

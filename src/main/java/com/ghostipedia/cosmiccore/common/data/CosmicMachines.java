@@ -502,6 +502,7 @@ public class CosmicMachines {
                     new ResourceLocation(GTCEu.MOD_ID, "block/overlay/machine/overlay_fluid_hatch"),
                     new ResourceLocation(GTCEu.MOD_ID, "block/overlay/machine/overlay_fluid_hatch"))
             .tooltips(Component.translatable("gtceu.machine.steam_fluid_hatch_notice"))
+            .modelProperty(GTMachineModelProperties.IS_FORMED, false)
             .langValue("Fluid Input Hatch (Steam)")
             .register();
     public static final MachineDefinition STEAM_EXPORT_HATCH = REGISTRATE
@@ -511,6 +512,7 @@ public class CosmicMachines {
             .colorOverlaySteamHullModel(new ResourceLocation(GTCEu.MOD_ID, "block/overlay/machine/overlay_pipe"),
                     new ResourceLocation(GTCEu.MOD_ID, "block/overlay/machine/overlay_fluid_hatch"),
                     new ResourceLocation(GTCEu.MOD_ID, "block/overlay/machine/overlay_fluid_hatch"))
+            .modelProperty(GTMachineModelProperties.IS_FORMED, false)
             .langValue("Fluid Output Hatch (Steam)")
             .register();
 

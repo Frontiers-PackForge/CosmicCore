@@ -19,6 +19,7 @@ public class CosmicSounds {
     public static final SoundEntry ORBITAL_FORGE = REGISTRATE.sound(CosmicCore.id("orbital_forge")).build();
     public static final SoundEntry CHEMVAT = REGISTRATE.sound(CosmicCore.id("icv")).build();
     public static final SoundEntry VOARX = REGISTRATE.sound(CosmicCore.id("vorax")).build();
+    public static final SoundEntry DAWN_FORGE_SFX = REGISTRATE.sound(CosmicCore.id("dawnforge")).build();
 
     public static void init() {}
 }

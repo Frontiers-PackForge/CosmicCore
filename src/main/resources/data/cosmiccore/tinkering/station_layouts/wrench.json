@@ -1,0 +1,15 @@
+{
+  "translation_key": "item.cosmiccore.wrench",
+  "sortIndex": 24,
+
+  "icon": {
+    "item": "cosmiccore:wrench",
+    "nbt": "{Damage:0,tic_broken:0b,tic_display:1b,tic_materials:[\"tconstruct:ui_render#head\",\"tconstruct:ui_render#extra\",\"tconstruct:ui_render#handle\"]}"
+  },
+
+  "input_slots": [
+    { "filter": { "item": "cosmiccore:wrench_head"      }, "icon": "cosmiccore:wrench_head",      "translation_key": "item.cosmiccore.wrench_head", "x": 25, "y": 20 },
+    { "filter": { "item": "tconstruct:tough_binding"     }, "icon": "tconstruct:tough_binding",     "translation_key": "item.tconstruct.tool_binding","x": 44, "y": 29},
+    { "filter": { "item": "tconstruct:tool_handle"      }, "icon": "tconstruct:tool_handle",      "translation_key": "item.tconstruct.tool_handle", "x": 21, "y": 52 }
+  ]
+}

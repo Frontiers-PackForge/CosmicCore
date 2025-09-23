@@ -6,7 +6,7 @@ configuration = "3.1.0-forge"
 mixinExtras = "0.2.0"
 
 jei = "15.20.0.105"
-emi = "1.1.13+1.20.1"
+emi = "1.1.22+1.20.1"
 ae2 = "15.4.7-cosmolite.12"
 expandedAE = "1.2.0-cosmolite.6"
 guideme = "20.1.11"
@@ -51,6 +51,8 @@ modernFix = "6025611"
 botania = "6366547"
 ae2wtlib = "5217955"
 clothConfig = "5729105"
+tconstruct = "1.20.1-3.9.2.37"
+mantle = "1.20.1-1.11.44"
 embers = "6953702"
 
 malum = "1.20.1-1.6.7.1"
@@ -58,6 +60,8 @@ lodestone = "1.20.1-1.6.4.1.256"
 
 [libraries]
 
+tconstruct                = { module = "slimeknights.tconstruct:TConstruct", version.ref = "tconstruct" }
+mantle                    = { module = "slimeknights.mantle:Mantle", version.ref = "mantle" }
 
 ldlib                     = { module = "com.lowdragmc.ldlib:ldlib-forge-1.20.1", version.ref = "ldlib" }
 gtceu                     = { module = "com.gregtechceu.gtceu:gtceu-1.20.1", version.ref = "gtceu" }

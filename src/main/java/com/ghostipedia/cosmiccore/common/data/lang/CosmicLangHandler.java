@@ -372,5 +372,17 @@ public class CosmicLangHandler extends LangHandler {
         provider.add("cosmiccore.item.spraycan.tooltip.solvent_mode", "Spraycan in SOLVENT mode");
 
         provider.add("cosmiccore.item.linked_terminal.boundTo", "Bound to %s");
+
+        // Tinkers
+        provider.add("item.cosmiccore.wire_cutter", "Wire Cutters");
+        provider.add("item.cosmiccore.wire_cutter.description", "Snip wires cleanly with these cutters.");
+
+        provider.add("item.cosmiccore.wrench", "Wrench");
+        provider.add("item.cosmiccore.wrench_head", "Wrench Head");
+        provider.add("item.cosmiccore.wrench.description", "Rotate the World!");
+
+        provider.add("item.cosmiccore.screwdriver", "Screwdriver");
+        provider.add("item.cosmiccore.screwdriver_head", "Screwdriver Head");
+        provider.add("item.cosmiccore.screwdriver.description", "Twist and Turn!");
     }
 }

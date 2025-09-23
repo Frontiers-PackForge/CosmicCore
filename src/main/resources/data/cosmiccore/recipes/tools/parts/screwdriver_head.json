@@ -1,0 +1,7 @@
+{
+  "type": "tconstruct:part_builder",
+  "pattern": "cosmiccore:screwdriver_head",
+  "pattern_item": { "item": "tconstruct:pattern" },
+  "cost": 1,
+  "result": { "item": "cosmiccore:screwdriver_head" }
+}
