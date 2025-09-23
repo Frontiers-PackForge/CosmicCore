@@ -3,9 +3,12 @@ package com.ghostipedia.cosmiccore.common.item.tcon.base;
 import com.gregtechceu.gtceu.api.GTValues;
 import com.gregtechceu.gtceu.api.capability.IElectricItem;
 import com.gregtechceu.gtceu.api.capability.forge.GTCapability;
+import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.CapabilityManager;
@@ -16,6 +19,8 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import slimeknights.tconstruct.library.tools.definition.ToolDefinition;
 import slimeknights.tconstruct.library.tools.item.ModifiableItem;
+
+import java.util.function.Consumer;
 
 public class ChargableModifiableItem extends ModifiableItem {
 
@@ -79,7 +84,7 @@ public class ChargableModifiableItem extends ModifiableItem {
 
         @Override
         public boolean canProvideChargeExternally() {
-            return false;
+            return true;
         }
 
         @Override
@@ -154,6 +159,20 @@ public class ChargableModifiableItem extends ModifiableItem {
         return stack.getCapability(ELECTRIC_CAP)
                 .map(IElectricItem::getCharge)
                 .orElse(0L);
+    }
+
+
+
+    @Override
+    public boolean onBlockStartBreak(ItemStack stack, BlockPos pos, Player player) {
+        return stack.getCapability(ELECTRIC_CAP).map(cap -> {
+            long extracted = cap.discharge(1, GTValues.LV, false, true, false);
+            if (extracted > 0) {
+                return false;
+            } else {
+                return super.onBlockStartBreak(stack, pos, player);
+            }
+        }).orElseGet(() -> super.onBlockStartBreak(stack, pos, player));
     }
 
 
