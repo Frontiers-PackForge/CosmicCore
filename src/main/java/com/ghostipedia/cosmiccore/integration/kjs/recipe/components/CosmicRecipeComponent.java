@@ -2,6 +2,7 @@ package com.ghostipedia.cosmiccore.integration.kjs.recipe.components;
 
 import com.ghostipedia.cosmiccore.api.capability.recipe.EmberRecipeCapability;
 import com.ghostipedia.cosmiccore.api.capability.recipe.SoulRecipeCapability;
+import com.ghostipedia.cosmiccore.api.capability.recipe.SourceRecipeCapability;
 
 import com.gregtechceu.gtceu.integration.kjs.recipe.components.ContentJS;
 
@@ -19,5 +20,12 @@ public class CosmicRecipeComponent {
             false);
     public static final ContentJS<Double> EMBER_OUT = new ContentJS<>(NumberComponent.ANY_DOUBLE,
             EmberRecipeCapability.CAP,
+            true);
+
+    public static final ContentJS<Integer> SOURCE_IN = new ContentJS<>(NumberComponent.ANY_INT,
+            SourceRecipeCapability.CAP,
+            false);
+    public static final ContentJS<Integer> SOURCE_OUT = new ContentJS<>(NumberComponent.ANY_INT,
+            SourceRecipeCapability.CAP,
             true);
 }

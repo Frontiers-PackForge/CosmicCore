@@ -52,6 +52,9 @@ public class CosmicCoreKubeJSPlugin extends KubeJSPlugin {
 
         event.register("cosmicEmberIn", CosmicRecipeComponent.EMBER_IN);
         event.register("cosmicEmberOut", CosmicRecipeComponent.EMBER_OUT);
+
+        event.register("cosmicSourceIn", CosmicRecipeComponent.SOURCE_IN);
+        event.register("cosmicSourceOut", CosmicRecipeComponent.SOURCE_OUT);
     }
 
     @Override

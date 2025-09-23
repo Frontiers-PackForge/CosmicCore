@@ -26,6 +26,8 @@ import static com.ghostipedia.cosmiccore.integration.kjs.recipe.components.Cosmi
 import static com.ghostipedia.cosmiccore.integration.kjs.recipe.components.CosmicRecipeComponent.EMBER_OUT;
 import static com.ghostipedia.cosmiccore.integration.kjs.recipe.components.CosmicRecipeComponent.SOUL_IN;
 import static com.ghostipedia.cosmiccore.integration.kjs.recipe.components.CosmicRecipeComponent.SOUL_OUT;
+import static com.ghostipedia.cosmiccore.integration.kjs.recipe.components.CosmicRecipeComponent.SOURCE_IN;
+import static com.ghostipedia.cosmiccore.integration.kjs.recipe.components.CosmicRecipeComponent.SOURCE_OUT;
 
 @GTAddon
 public class CosmicCoreGTAddon implements IGTAddon {
@@ -76,5 +78,6 @@ public class CosmicCoreGTAddon implements IGTAddon {
     public void registerRecipeKeys(KJSRecipeKeyEvent event) {
         event.registerKey(CosmicRecipeCapabilities.SOUL, Pair.of(SOUL_IN, SOUL_OUT));
         event.registerKey(CosmicRecipeCapabilities.EMBER, Pair.of(EMBER_IN, EMBER_OUT));
+        event.registerKey(CosmicRecipeCapabilities.SOURCE, Pair.of(SOURCE_IN, SOURCE_OUT));
     }
 }

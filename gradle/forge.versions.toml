@@ -31,6 +31,7 @@ apotheoticAttributes = "1.20.1-1.3.5"
 occultism = "1.140.2"
 modonomicon = "1.77.5"
 jcpp = "1.4.14" # required by occulus apparently
+ars = "4.12.7.264"
 
 ## modrinth maven ##
 jade = "11.12.3+forge"
@@ -96,6 +97,7 @@ apotheoticAttributes      = { module = "dev.shadowsoffire:ApothicAttributes", ve
 occultism                 = { module = "com.klikli_dev:occultism-1.20.1", version.ref = "occultism"}
 modonomicon               = { module = "com.klikli_dev:modonomicon-1.20.1-forge", version.ref = "modonomicon"}
 jcpp                      = { module = "org.anarres:jcpp", version.ref = "jcpp" } # required by occulus apparently
+ars                       = { module = "com.hollingsworth.ars_nouveau:ars_nouveau-1.20.1", version.ref = "ars" }
 
 malum                     = { module = "com.sammy.malum:malum", version.ref = "malum" }
 lodestone                 = { module = "team.lodestar.lodestone:lodestone", version.ref = "lodestone" }

@@ -2,6 +2,7 @@ package com.ghostipedia.cosmiccore.integration.kjs.recipe;
 
 import com.ghostipedia.cosmiccore.api.capability.recipe.EmberRecipeCapability;
 import com.ghostipedia.cosmiccore.api.capability.recipe.SoulRecipeCapability;
+import com.ghostipedia.cosmiccore.api.capability.recipe.SourceRecipeCapability;
 import com.ghostipedia.cosmiccore.api.capability.recipe.SterileRecipeCapability;
 import com.ghostipedia.cosmiccore.common.recipe.condition.TitanCondition;
 
@@ -55,6 +56,14 @@ public interface CosmicCoreRecipeSchema {
 
         public GTRecipeSchema.GTRecipeJS emberOutput(double embers) {
             return this.output(EmberRecipeCapability.CAP, embers);
+        }
+
+        public GTRecipeSchema.GTRecipeJS sourceInput(int source) {
+            return this.input(SourceRecipeCapability.CAP, source);
+        }
+
+        public GTRecipeSchema.GTRecipeJS sourceOutput(int source) {
+            return this.output(SourceRecipeCapability.CAP, source);
         }
     }
 

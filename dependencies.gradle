@@ -115,4 +115,7 @@ dependencies {
 
     // Embers
     modImplementation(forge.embers)
+
+    // Ars Nouveau
+    modImplementation(forge.ars)
 }

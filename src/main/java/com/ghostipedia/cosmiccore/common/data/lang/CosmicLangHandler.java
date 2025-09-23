@@ -103,6 +103,8 @@ public class CosmicLangHandler extends LangHandler {
         provider.add("cosmiccore.recipe.sterile_out", "ERROR?");
         provider.add("cosmiccore.recipe.ember_in", "Ember Input: %s");
         provider.add("cosmiccore.recipe.ember_out", "Ember Output: %s");
+        provider.add("cosmiccore.recipe.source_in", "Source Input: %s");
+        provider.add("cosmiccore.recipe.source_out", "Source Output: %s");
         provider.add("cosmiccore.wire_coil.magnet_capacity", "  §fMax Field Strength: §f%s Tesla");
         provider.add("cosmiccore.wire_coil.magnet_regen", "  §5Field Regen Rate: %s Tesla/t");
         provider.add("cosmiccore.wire_coil.eu_multiplier", "  §aMagnet EU Cost: §c%s EU/t");
@@ -111,6 +113,9 @@ public class CosmicLangHandler extends LangHandler {
         provider.add("tooltip.cosmiccore.soul_hatch.output", "§cMax Soul Network Capacity§f:§6 %s");
         provider.add("tooltip.cosmiccore.ember_hatch.consumption", "§cMax Ember Consumption§f:§6 %s");
         provider.add("tooltip.cosmiccore.ember_hatch.capacity", "§cMax Ember capacity§f:§6 %s");
+        provider.add("tooltip.cosmiccore.source_hatch.consumption", "§cMax Source Consumption§f:§6 %s");
+        provider.add("tooltip.cosmiccore.source_hatch.capacity", "§cMax Source capacity§f:§6 %s");
+
         provider.add("tooltip.cosmiccore.thermia_hatch_limit", "§cTemp. Limit: %sK");
         provider.add("cosmiccore.multiblock.magnetic_field_strength", "§fMax Field Strength§f:§6 %s");
         provider.add("cosmiccore.multiblock.magnetic_regen", "§aField Recovery Rate§f:§6 %sT/t");
@@ -121,11 +126,14 @@ public class CosmicLangHandler extends LangHandler {
         provider.add("gui.cosmiccore.soul_hatch.label.export", "Soul Output Hatch");
         provider.add("gui.cosmiccore.ember_hatch.label.import", "Ember Input Hatch");
         provider.add("gui.cosmiccore.ember_hatch.label.export", "Ember Output Hatch");
+        provider.add("gui.cosmiccore.source_hatch.label.import", "Source Input Hatch");
+        provider.add("gui.cosmiccore.source_hatch.label.export", "Source Output Hatch");
         provider.add("gui.cosmiccore.thermia_hatch.label.export", "§6Thermia Output Vent");
         provider.add("gui.cosmiccore.thermia_hatch.label.import", "§6Thermia Input Socket");
         provider.add("gui.cosmiccore.soul_hatch.owner", "Network Owner: %d");
         provider.add("gui.cosmiccore.soul_hatch.lp", "LP Stored: %s");
         provider.add("gui.cosmiccore.ember_hatch.ember", "Ember Stored: %s");
+        provider.add("gui.cosmiccore.source_hatch.source", "Source Stored: %s");
         provider.add("gui.cosmiccore.thermia_hatch.hatch_limit", "§cTemp. Limit:");
         provider.add("gui.cosmiccore.thermia_hatch.stored_temp", "§6Current Temp:");
         provider.add("gui.cosmiccore.sterilization_hatch", "Sterilization Hatch");

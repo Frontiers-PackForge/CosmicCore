@@ -2,6 +2,7 @@ package com.ghostipedia.cosmiccore.gtbridge;
 
 import com.ghostipedia.cosmiccore.api.CosmicGuiTextures;
 import com.ghostipedia.cosmiccore.api.capability.recipe.SoulRecipeCapability;
+import com.ghostipedia.cosmiccore.api.capability.recipe.SourceRecipeCapability;
 import com.ghostipedia.cosmiccore.common.data.CosmicSounds;
 
 import com.gregtechceu.gtceu.api.block.ICoilType;
@@ -79,6 +80,13 @@ public class CosmicRecipeTypes {
      * .setMaxIOSize(1, 1, 0, 0)
      * .setProgressBar(GuiTextures.PROGRESS_BAR_ARROW, ProgressTexture.FillDirection.LEFT_TO_RIGHT);
      */
+
+    public static final GTRecipeType SOURCE_TESTER_RECIPES = GTRecipeTypes
+            .register("source_tester", GTRecipeTypes.MULTIBLOCK)
+            .setMaxSize(IO.IN, SourceRecipeCapability.CAP, 1)
+            .setMaxSize(IO.OUT, SourceRecipeCapability.CAP, 1)
+            .setMaxIOSize(1, 1, 0, 0)
+            .setProgressBar(GuiTextures.PROGRESS_BAR_ARROW, ProgressTexture.FillDirection.LEFT_TO_RIGHT);
 
     public static final GTRecipeType VOID_MINER = GTRecipeTypes
             .register("void_miner", GTRecipeTypes.MULTIBLOCK)

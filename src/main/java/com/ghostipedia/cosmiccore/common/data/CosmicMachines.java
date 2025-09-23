@@ -45,6 +45,7 @@ import com.gregtechceu.gtceu.common.data.models.GTModels;
 import com.gregtechceu.gtceu.common.machine.multiblock.electric.ActiveTransformerMachine;
 import com.gregtechceu.gtceu.common.machine.multiblock.electric.FusionReactorMachine;
 import com.gregtechceu.gtceu.common.machine.multiblock.electric.PowerSubstationMachine;
+import com.gregtechceu.gtceu.common.machine.multiblock.primitive.PrimitiveWorkableMachine;
 import com.gregtechceu.gtceu.config.ConfigHolder;
 import com.gregtechceu.gtceu.utils.FormattingUtil;
 
@@ -95,6 +96,13 @@ public class CosmicMachines {
     public static final MachineDefinition[] EMBER_EXPORT_HATCH = registerEmberHatch(
             "ember_output_hatch", "Ember Output Hatch",
             IO.OUT, ELECTRIC_TIERS, EXPORT_EMBER);
+
+    public static final MachineDefinition[] SOURCE_IMPORT_HATCH = registerSourceHatch(
+            "source_input_hatch", "Source Input Hatch",
+            IO.IN, ELECTRIC_TIERS, IMPORT_SOURCE);
+    public static final MachineDefinition[] SOURCE_EXPORT_HATCH = registerSourceHatch(
+            "source_output_hatch", "Source Output Hatch",
+            IO.OUT, ELECTRIC_TIERS, EXPORT_SOURCE);
 
     public static final MachineDefinition[] THERMIA_VENT = registerThermiaTieredHatch(
             "thermia_export_hatch", "Thermia Vent", "thermia_output_hatch",
@@ -208,6 +216,21 @@ public class CosmicMachines {
      * .register();
      */
 
+    public static final MultiblockMachineDefinition SOURCE_TESTER = REGISTRATE.multiblock("source_tester",
+            PrimitiveWorkableMachine::new)
+            .rotationState(RotationState.NON_Y_AXIS)
+            .recipeType(CosmicRecipeTypes.SOURCE_TESTER_RECIPES)
+            .appearanceBlock(GTBlocks.CASING_PRIMITIVE_BRICKS)
+            .pattern(definition -> FactoryBlockPattern.start()
+                    .aisle("S", "C", "I")
+                    .where("C", controller(blocks(definition.getBlock())))
+                    .where("S", abilities(IMPORT_SOURCE).or(abilities(EXPORT_SOURCE)))
+                    .where("I", abilities(PartAbility.EXPORT_ITEMS).or(abilities(PartAbility.IMPORT_ITEMS)))
+                    .build())
+            .workableCasingModel(GTCEu.id("block/casings/solid/machine_casing_inert_ptfe"),
+                    GTCEu.id("block/multiblock/coke_oven"))
+            .register();
+
     public static final MultiblockMachineDefinition LARGE_COMBUSTION_ENGINE = registerCosmicLargeCombustionEngine(
             "large_combustion_engine_cc", EV,
             CASING_TITANIUM_STABLE, CASING_TITANIUM_GEARBOX, CASING_ENGINE_INTAKE,
@@ -307,6 +330,29 @@ public class CosmicMachines {
                             } else
                                 tooltip.add(Component.translatable("tooltip.cosmiccore.ember_hatch.capacity",
                                         EmberHatchPartMachine.getMaxCapacity(tier)));
+                        }).register(),
+                tiers);
+    }
+
+    private static MachineDefinition[] registerSourceHatch(String name, String displayName, IO io,
+                                                           int[] tiers, PartAbility... abilities) {
+        return registerTieredMachines(name,
+                (holder, tier) -> new SourceHatchPartMachine(holder, tier, io),
+                (tier, builder) -> builder
+                        .langValue(GTValues.VNF[tier] + ' ' + displayName)
+                        .abilities(abilities)
+                        .rotationState(RotationState.ALL)
+                        .modelProperty(GTMachineModelProperties.IS_FORMED, false)
+                        .overlayTieredHullModel("source_hatch")
+                        .tooltipBuilder((item, tooltip) -> {
+                            if (io == IO.IN) {
+                                tooltip.add(Component.translatable("tooltip.cosmiccore.source_hatch.capacity",
+                                        SourceHatchPartMachine.getMaxCapacity(tier)));
+                                tooltip.add(Component.translatable("tooltip.cosmiccore.source_hatch.consumption",
+                                        SourceHatchPartMachine.getMaxConsumption(tier)));
+                            } else
+                                tooltip.add(Component.translatable("tooltip.cosmiccore.source_hatch.capacity",
+                                        SourceHatchPartMachine.getMaxCapacity(tier)));
                         }).register(),
                 tiers);
     }

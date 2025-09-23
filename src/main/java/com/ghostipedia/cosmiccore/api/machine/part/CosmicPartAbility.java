@@ -17,4 +17,7 @@ public class CosmicPartAbility {
 
     public static final PartAbility IMPORT_EMBER = new PartAbility("import_ember");
     public static final PartAbility EXPORT_EMBER = new PartAbility("export_ember");
+
+    public static final PartAbility IMPORT_SOURCE = new PartAbility("import_source");
+    public static final PartAbility EXPORT_SOURCE = new PartAbility("export_source");
 }
