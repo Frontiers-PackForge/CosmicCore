@@ -26,16 +26,16 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import slimeknights.tconstruct.library.tools.helper.ToolDamageUtil;
 import slimeknights.tconstruct.library.tools.item.ModifiableItem;
 
-@Mixin(value = PipeBlock.class, remap = false)
+@Mixin(value = PipeBlock.class, remap = true)
 public class PipeBlockMixin {
 
     @Inject(method = "use",
             at = @At(value = "INVOKE",
                      target = "Lcom/gregtechceu/gtceu/api/item/tool/ToolHelper;getToolTypes(Lnet/minecraft/world/item/ItemStack;)Ljava/util/Set;"),
             cancellable = true)
-    public void cc$use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand,
-                       BlockHitResult hit, CallbackInfoReturnable<InteractionResult> cir,
-                       @Local ItemStack itemStack, @Local PipeBlockEntity<?, ?> pipeBlockEntity) {
+    public void cosmicCore$use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand,
+                               BlockHitResult hit, CallbackInfoReturnable<InteractionResult> cir,
+                               @Local ItemStack itemStack, @Local PipeBlockEntity<?, ?> pipeBlockEntity) {
         if (itemStack.getItem() instanceof ModifiableItem ticonTool) {
             var result = ((IPipeBlockEntityMixin) pipeBlockEntity).ccore$onToolClick(ticonTool,
                     new UseOnContext(player, hand, hit));
