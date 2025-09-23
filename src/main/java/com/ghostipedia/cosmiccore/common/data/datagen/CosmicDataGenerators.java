@@ -23,8 +23,6 @@ public class CosmicDataGenerators {
 
         boolean server = event.includeServer();
 
-        generator.addProvider(server, new CosmicModifierProvider(packOutput));
-
         // TODO DATAGEN FOR Materials + stats + traits (server)
         // generator.addProvider(server, new CosmicTinkersMaterials(packOutput));
         // generator.addProvider(server, new CosmicMaterialStats(packOutput));
