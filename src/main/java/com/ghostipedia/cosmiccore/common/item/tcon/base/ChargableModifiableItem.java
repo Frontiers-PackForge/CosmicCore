@@ -8,6 +8,8 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.common.capabilities.CapabilityManager;
+import net.minecraftforge.common.capabilities.CapabilityToken;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.common.util.LazyOptional;
 import org.jetbrains.annotations.NotNull;
@@ -16,6 +18,13 @@ import slimeknights.tconstruct.library.tools.definition.ToolDefinition;
 import slimeknights.tconstruct.library.tools.item.ModifiableItem;
 
 public class ChargableModifiableItem extends ModifiableItem {
+
+
+
+    public static final long CAPACITY = 100_000L;
+    private static final Capability<IElectricItem> ELECTRIC_CAP =
+            CapabilityManager.get(new CapabilityToken<IElectricItem>() {});
+
 
     public ChargableModifiableItem(Properties properties, ToolDefinition toolDefinition) {
         super(properties, toolDefinition);
@@ -54,10 +63,14 @@ public class ChargableModifiableItem extends ModifiableItem {
         public void setMaxChargeOverride(long charge) {
             getOrCreateTag().putLong("maxCharge", charge);
         }
+
+
         @Override
         public @NotNull <T> LazyOptional<T> getCapability(@NotNull Capability<T> capability, @Nullable Direction direction) {
-            return capability == GTCapability.CAPABILITY_ELECTRIC_ITEM ? holder.cast() : LazyOptional.empty();
+            if (capability == ELECTRIC_CAP) return holder.cast();
+            return LazyOptional.empty();
         }
+
 
         @Override
         public int getTier() {
@@ -118,6 +131,8 @@ public class ChargableModifiableItem extends ModifiableItem {
             return baseMaxCharge;
         }
 
+
+
         @Override
         public long getCharge() {
             var nbt = getOrCreateTag();
@@ -129,5 +144,26 @@ public class ChargableModifiableItem extends ModifiableItem {
             }
             return 0; // default empty
         }
+    }
+    @Override
+    public boolean isBarVisible(ItemStack stack) {
+        return true;
+    }
+
+    public long getCharge(ItemStack stack) {
+        return stack.getCapability(ELECTRIC_CAP)
+                .map(IElectricItem::getCharge)
+                .orElse(0L);
+    }
+
+
+    @Override
+    public int getBarWidth(ItemStack stack) {
+        return (int) Math.round(13.0 * getCharge(stack) / (double) CAPACITY);
+    }
+
+    @Override
+    public int getBarColor(ItemStack stack) {
+        return 0x55D8FF;
     }
 }
