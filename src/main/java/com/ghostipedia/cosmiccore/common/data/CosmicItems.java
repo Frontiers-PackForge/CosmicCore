@@ -1789,6 +1789,50 @@ public class CosmicItems {
             .defaultModel()
             .register();
 
+    // WildFire Cores
+    public static final ItemEntry<ComponentItem> LV_WILDFIRE_CORE = REGISTRATE
+            .item("lv_wildfire_core", ComponentItem::create)
+            .lang("LV Wildfire Core")
+            .properties(p -> p.stacksTo(64))
+            .defaultModel()
+            .register();
+    public static final ItemEntry<ComponentItem> MV_WILDFIRE_CORE = REGISTRATE
+            .item("mv_wildfire_core", ComponentItem::create)
+            .lang("MV Wildfire Core")
+            .properties(p -> p.stacksTo(64))
+            .defaultModel()
+            .register();
+    public static final ItemEntry<ComponentItem> HV_WILDFIRE_CORE = REGISTRATE
+            .item("hv_wildfire_core", ComponentItem::create)
+            .lang("HV Wildfire Core")
+            .properties(p -> p.stacksTo(64))
+            .defaultModel()
+            .register();
+    public static final ItemEntry<ComponentItem> EV_WILDFIRE_CORE = REGISTRATE
+            .item("ev_wildfire_core", ComponentItem::create)
+            .lang("EV Wildfire Core")
+            .properties(p -> p.stacksTo(64))
+            .defaultModel()
+            .register();
+    public static final ItemEntry<ComponentItem> IV_WILDFIRE_CORE = REGISTRATE
+            .item("iv_wildfire_core", ComponentItem::create)
+            .lang("IV Wildfire Core")
+            .properties(p -> p.stacksTo(64))
+            .defaultModel()
+            .register();
+    public static final ItemEntry<ComponentItem> LUV_WILDFIRE_CORE = REGISTRATE
+            .item("luv_wildfire_core", ComponentItem::create)
+            .lang("LuV Wildfire Core")
+            .properties(p -> p.stacksTo(64))
+            .defaultModel()
+            .register();
+    public static final ItemEntry<ComponentItem> ZPM_WILDFIRE_CORE = REGISTRATE
+            .item("zpm_wildfire_core", ComponentItem::create)
+            .lang("ZPM Wildfire Core")
+            .properties(p -> p.stacksTo(64))
+            .defaultModel()
+            .register();
+
     public static final ItemEntry<ComponentItem> WRENCH_CAST_GOLD = REGISTRATE
             .item("wrench_head_cast", ComponentItem::create)
             .lang("Wrench Head Cast")

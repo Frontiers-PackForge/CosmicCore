@@ -17,9 +17,8 @@ public class CosmicTinkersMaterials extends AbstractMaterialDataProvider {
 
     @Override
     protected void addMaterials() {
-        //todo figure this out
+        // todo figure this out
     }
-
 
     @Override
     public String getName() {

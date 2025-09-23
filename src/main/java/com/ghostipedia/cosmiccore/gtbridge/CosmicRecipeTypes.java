@@ -233,6 +233,12 @@ public class CosmicRecipeTypes {
                 }
                 return "";
             });
+    public static final GTRecipeType DAWN_FORGE = GTRecipeTypes.register("dawn_forge", GTRecipeTypes.MULTIBLOCK)
+            .setMaxIOSize(8, 1, 2, 0)
+            .setSound(DAWN_FORGE_SFX)
+            .setMaxTooltips(5)
+            .setProgressBar(CosmicGuiTextures.DAWN_FORGE, ProgressTexture.FillDirection.ALWAYS_FULL);
+
     public static final GTRecipeType STELLAR_IRIS = GTRecipeTypes.register("stellar_iris", GTRecipeTypes.MULTIBLOCK)
             .setMaxIOSize(16, 16, 16, 16)
             // .setSound(CosmicSounds.BLACK_HOLE_CRY)
