@@ -100,6 +100,7 @@ public class IndustrialApiaryMachine extends TieredEnergyMachine implements IAut
 
     // Vomitting over what this is. lord help me.
     // I HATE MAGIC NUMBERS WOOOO I LOVE GUI XY I LOVE IT SO MUCH WOOO YEAHHHH
+    //TODO MISSING CONFIG TABS ON THE SIDE AND THE NAME BAR ON THE TOP, NEED SOME HELP FINDING THESE LOL
     @Override
     public ModularUI createUI(Player entityPlayer) {
         // spotless:off
@@ -112,7 +113,7 @@ public class IndustrialApiaryMachine extends TieredEnergyMachine implements IAut
         int groupOutX = 113;
         int groupOutY = 25;
         var group = new WidgetGroup(0, 0, 176, 164);
-        //TODO: canTakeItems would probably be what we want to lock when running? idk can we do that dynamically???
+        //TODO: canTakeItems would probably be what we want to lock when running? idk can we do that dynamically??? We want to lock the queen to this Ind.Apiary to avoid people cycling them across several manually or otherwise!
         group.addWidget(new SlotWidget(this.inputInventory,0,8,groupOutY,true,true).setBackground(GuiTextures.SLOT));
         //TODO : PROGRESS WIDGET, I'm assuming we'll have a way to track progress in recipeLogic and then make the bar show// between the input slot and the outputs group.addWidget(new ProgressWidget());
         group.addWidget(new SlotWidget(this.outputInventory,0, groupOutX,groupOutY).setBackground(GuiTextures.SLOT));
