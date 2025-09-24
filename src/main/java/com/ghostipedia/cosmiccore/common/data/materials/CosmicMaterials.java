@@ -376,12 +376,13 @@ public class CosmicMaterials {
                 .buildAndRegister();
 
         PaleSteel = new Material.Builder(CosmicCore.id("pale_steel"))
-                .formula("⦿")
-                .liquid(new FluidBuilder().temperature(19500))
+                .formula("✧⚙")
+                .ingot()
+                .liquid(new FluidBuilder().temperature(50))
                 .flags(GENERATE_ROTOR, GENERATE_FRAME, GENERATE_BOLT_SCREW, GENERATE_ROUND, GENERATE_GEAR,
                         GENERATE_SMALL_GEAR, GENERATE_RING, GENERATE_FRAME, GENERATE_SPRING, GENERATE_SPRING_SMALL,
                         GENERATE_FINE_WIRE)
-                .color(0xfca103).secondaryColor(0xfcbe03).iconSet(MaterialIconSet.BRIGHT)
+                .color(0xE8F3FF).secondaryColor(0x1F2A36).iconSet(MaterialIconSet.METALLIC)
                 .buildAndRegister();
     }
 

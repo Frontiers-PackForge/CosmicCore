@@ -10,6 +10,7 @@ import com.ghostipedia.cosmiccore.api.machine.part.WirelessEnergyHatchPartMachin
 import com.ghostipedia.cosmiccore.api.registries.CosmicRegistration;
 import com.ghostipedia.cosmiccore.client.renderer.machine.CosmicDynamicRenderHelpers;
 import com.ghostipedia.cosmiccore.common.block.debug.CreativeThermiaContainerMachine;
+import com.ghostipedia.cosmiccore.common.machine.IndustrialApiaryMachine;
 import com.ghostipedia.cosmiccore.common.machine.WirelessChargerMachine;
 import com.ghostipedia.cosmiccore.common.machine.multiblock.electric.hpca.HPCAMachine;
 import com.ghostipedia.cosmiccore.common.machine.multiblock.multi.WirelessDataBankMachine;
@@ -168,13 +169,29 @@ public class CosmicMachines {
                     .langValue("%s Wireless Charger".formatted(VN[tier]))
                     .tooltipBuilder((stack, list) -> {
                         list.add(Component.translatable("cosmiccore.wireless_charger.range.single",
-                                FormattingUtil.formatNumbers(2048L * (tier - GTValues.HV))));
+                                FormattingUtil.formatNumbers(2048L * (tier - GTValues.MV))));
                         list.add(Component.translatable("cosmiccore.wireless_charger.range.mixed",
-                                FormattingUtil.formatNumbers(1024L * (tier - GTValues.HV))));
+                                FormattingUtil.formatNumbers(1024L * (tier - GTValues.MV))));
                     })
                     .workableTieredHullModel(CosmicCore.id("block/overlay/machine/wireless_charger"))
                     .register(),
             GTValues.tiersBetween(HV, UIV));
+
+    public static final MachineDefinition[] INDUSTRIAL_APIARY = registerTieredMachines("electric_apiary",
+            IndustrialApiaryMachine::new,
+            (tier, builder) -> builder
+                    .langValue("%s Industrial Apiary".formatted(VN[tier]))
+                    .tooltipBuilder((stack, list) -> {
+                        list.add(Component.translatable("cosmiccore.industrial_apiary.tier.description.0"));
+                        list.add(Component.translatable("cosmiccore.industrial_apiary.tier.description.1"));
+                        list.add(Component.translatable("cosmiccore.industrial_apiary.tier.description.2"));
+                        list.add(Component.translatable("cosmiccore.industrial_apiary.tier.description.3"));
+                        list.add(Component.translatable("cosmiccore.industrial_apiary.tier.description.4"));
+                        list.add(Component.translatable("cosmiccore.industrial_apiary.tier.description.5"));
+                    })
+                    .workableTieredHullModel(CosmicCore.id("block/overlay/machine/industrial_apiary"))
+                    .register(),
+            GTValues.tiersBetween(HV, LuV));
 
     // Enable If needed Inside of Dev
     // public static final MultiblockMachineDefinition SOUL_TESTER = REGISTRATE.multiblock("soul_tester",

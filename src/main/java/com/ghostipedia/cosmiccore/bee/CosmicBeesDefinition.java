@@ -112,7 +112,7 @@ public class CosmicBeesDefinition {
                         true, TextColor.fromRgb(0xC8E7F1))
                 .setBody(TextColor.fromRgb(0x3F3F3F))
                 .addProduct(CosmicBeesItems.BEE_COMBS.stack(CosmicBeesHoneyComb.PALE), 1)
-                .addProduct(ChemicalHelper.get(toolHeadBuzzSaw, CosmicMaterials.PaleSteel), 0.35f)
+                .addProduct(ChemicalHelper.get(toolHeadBuzzSaw, CosmicMaterials.PaleSteel, 1), 0.35f)
                 .addMutations(mutations -> {
                     mutations.add(ForestryBeeSpecies.PHANTASMAL, ForestryBeeSpecies.EDENIC, 35);
                 })

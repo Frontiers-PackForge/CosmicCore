@@ -397,5 +397,10 @@ public class CosmicLangHandler extends LangHandler {
         provider.add("item.cosmiccore.bee_comb_runic", "Runic Comb");
         provider.add("item.cosmiccore.bee_comb_ambrosic", "Ambrosic Comb");
         provider.add("item.cosmiccore.bee_comb_biohazard", "Biohazard Comb");
+
+        provider.add("gui.cosmiccore.iapiary", "Industrial Apiary");
+        provider.add("gui.cosmiccore.iapiary.yield", "Yield: %d");
+        provider.add("gui.cosmiccore.iapiary.duration", "Duration: %d");
+        provider.add("gui.cosmiccore.iapiary.production_amp", "Production Amp: %d");
     }
 }
