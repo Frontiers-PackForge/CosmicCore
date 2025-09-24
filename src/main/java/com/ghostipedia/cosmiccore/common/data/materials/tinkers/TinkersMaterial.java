@@ -24,7 +24,7 @@ public class TinkersMaterial {
     private HandleMaterialStats handleMaterialStats;
     private GripMaterialStats gripMaterialStats;
     private Set<StatlessMaterialStats> statlessMaterialStats;
-    private List<IMaterialStats> allStats;
+    private List<IMaterialStats> stats;
     private int sortOrder;
     private boolean craftable;
     private int tier;
@@ -43,13 +43,13 @@ public class TinkersMaterial {
         this.sortOrder = builder.sortOrder;
         this.craftable = builder.craftable;
         this.tier = builder.tier;
-        this.allStats = builder.stats;
+        this.stats = builder.stats;
         this.defaultTraits = builder.defaultTraits;
         this.traits = new HashMap<>(); // Simplified for this example
     }
 
-    public List<IMaterialStats> getAllStats() {
-        return this.allStats;
+    public List<IMaterialStats> getStats() {
+        return this.stats;
     }
 
     public static final class Builder {

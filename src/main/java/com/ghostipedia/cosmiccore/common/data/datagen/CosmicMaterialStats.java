@@ -18,7 +18,7 @@ public class CosmicMaterialStats extends AbstractMaterialStatsDataProvider {
 
         for (TinkersMaterial material : TinkersMaterial.MATERIALS){
 
-            addMaterialStats(material.getMaterialLocation(), material.MATERIALSTATS.toArray(new IMaterialStats[0]));
+            addMaterialStats(material.getMaterialLocation(), material.getStats().toArray(new IMaterialStats[0]));
 
         }
 
