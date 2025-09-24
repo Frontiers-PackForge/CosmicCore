@@ -21,25 +21,26 @@ class ToolHarvestLogicMixin {
 
     @WrapOperation(
             remap = false,
-            method = "mineBlock(Lnet/minecraft/world/item/ItemStack;Lnet/minecraft/world/level/Level;Lnet/minecraft/world/level/block/state/BlockState;Lnet/minecraft/core/BlockPos;Lnet/minecraft/world/entity/LivingEntity;)Z",
+            method = "breakBlock",
             at = @At(
                     value = "INVOKE",
                     target = "Lslimeknights/tconstruct/library/tools/helper/ToolDamageUtil;damageAnimated(Lslimeknights/tconstruct/library/tools/nbt/IToolStackView;ILnet/minecraft/world/entity/LivingEntity;)Z"
             )
     )
     private static boolean cosmiccore$RedirectDurability(IToolStackView tool, int amount, LivingEntity entity, Operation<Boolean> original) {
-        if(tool instanceof ToolStack toolStack){
+        if (tool instanceof ToolStack toolStack) {
             ItemStack stack = toolStack.createStack();
-            if(stack.getItem() instanceof ChargableModifiableItem) {
+            if (stack.getItem() instanceof ChargableModifiableItem) {
                 return stack.getCapability(GTCapability.CAPABILITY_ELECTRIC_ITEM)
                         .map(cap -> {
                             long energyCost = (long) amount * GTValues.VA[GTValues.LV];
                             long extracted = cap.discharge(energyCost, GTValues.LV, false, false, false);
-                            if(extracted >= energyCost){
+                            if (extracted >= energyCost) {
                                 return true; // skip durability
                             }
                             return original.call(tool, amount, entity);
-                        }).orElseGet(() -> original.call(tool, amount, entity));
+                        })
+                        .orElseGet(() -> original.call(tool, amount, entity));
             }
         }
         return original.call(tool, amount, entity);
