@@ -2,6 +2,7 @@ package com.ghostipedia.cosmiccore.mixin.gtceu;
 
 import com.ghostipedia.cosmiccore.api.misc.IPipeBlockEntityMixin;
 import com.ghostipedia.cosmiccore.common.item.tcon.TiconUtils;
+import com.ghostipedia.cosmiccore.common.item.tcon.base.ChargableModifiableItem;
 
 import com.gregtechceu.gtceu.api.block.PipeBlock;
 import com.gregtechceu.gtceu.api.blockentity.PipeBlockEntity;
@@ -43,7 +44,18 @@ public class PipeBlockMixin {
                 ToolHelper.playToolSound(TiconUtils.getGTToolType(result.getFirst()), serverPlayer);
 
                 if (!serverPlayer.isCreative()) {
-                    ToolDamageUtil.handleDamageItem(itemStack, 1, player, p -> {});
+                    if (ticonTool instanceof ChargableModifiableItem electricItem) {
+                        long energyCost = electricItem.ENERGY_COST;
+                        long available = electricItem.getCharge(itemStack);
+                        if (available >= energyCost) {
+                            electricItem.discharge(itemStack, energyCost, false);
+                        } else {
+                            ToolDamageUtil.handleDamageItem(itemStack, 1, player, p -> {});
+
+                        }
+                    } else {
+                        ToolDamageUtil.handleDamageItem(itemStack, 1, player, p -> {});
+                    }
                 }
             }
 

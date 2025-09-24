@@ -57,9 +57,9 @@ public class CosmicToolDefinitionProvider extends AbstractToolDefinitionDataProv
                 .module(new SetStatsModule(StatsNBT.builder()
                         .set(ToolStats.ATTACK_SPEED, 0.9f)
                         .build()))
-                .module(IsEffectiveModule.tag(CustomTags.MINEABLE_WITH_WIRE_CUTTER));
+                .module(IsEffectiveModule.tag(CustomTags.MINEABLE_WITH_CONFIG_VALID_PICKAXE_WIRE_CUTTER));
 
-        define(CosmicToolDefinitions.SCREWDRIVER)
+        define(CosmicToolDefinitions.SCREWDRIVERS)
                 .module(PartStatsModule.parts()
                         .part(screwdriverHead)
                         .part(toolHandle)
@@ -79,8 +79,8 @@ public class CosmicToolDefinitionProvider extends AbstractToolDefinitionDataProv
                 .module(new SetStatsModule(StatsNBT.builder()
                         .set(ToolStats.ATTACK_SPEED, 0.9f)
                         .build()))
-                .module(IsEffectiveModule.tag(CustomTags.MINEABLE_WITH_WRENCH))
-                .module(ToolTraitsModule.builder().trait(CosmicCoreModifiers.wrenchModeSwitch).build());;
+                .module(IsEffectiveModule.tag(CustomTags.MINEABLE_WITH_CONFIG_VALID_PICKAXE_WRENCH))
+                .module(ToolTraitsModule.builder().trait(CosmicCoreModifiers.wrenchModeSwitch).build());
     }
 
     @Override
