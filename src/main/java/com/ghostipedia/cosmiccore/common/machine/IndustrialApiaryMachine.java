@@ -1,19 +1,26 @@
 package com.ghostipedia.cosmiccore.common.machine;
 
+import com.ghostipedia.cosmiccore.CosmicCore;
 import com.gregtechceu.gtceu.api.capability.IWorkable;
 import com.gregtechceu.gtceu.api.capability.recipe.IO;
+import com.gregtechceu.gtceu.api.capability.recipe.ItemRecipeCapability;
 import com.gregtechceu.gtceu.api.gui.GuiTextures;
 import com.gregtechceu.gtceu.api.gui.UITemplate;
 import com.gregtechceu.gtceu.api.gui.fancy.TabsWidget;
 import com.gregtechceu.gtceu.api.gui.widget.SlotWidget;
 import com.gregtechceu.gtceu.api.machine.IMachineBlockEntity;
 import com.gregtechceu.gtceu.api.machine.TieredEnergyMachine;
+import com.gregtechceu.gtceu.api.machine.WorkableTieredMachine;
 import com.gregtechceu.gtceu.api.machine.fancyconfigurator.CombinedDirectionalFancyConfigurator;
 import com.gregtechceu.gtceu.api.machine.feature.IAutoOutputItem;
 import com.gregtechceu.gtceu.api.machine.feature.IFancyUIMachine;
 import com.gregtechceu.gtceu.api.machine.feature.IMachineLife;
+import com.gregtechceu.gtceu.api.machine.feature.IRecipeLogicMachine;
+import com.gregtechceu.gtceu.api.machine.feature.IUIMachine;
 import com.gregtechceu.gtceu.api.machine.trait.NotifiableItemStackHandler;
 
+import com.gregtechceu.gtceu.api.machine.trait.RecipeLogic;
+import com.gregtechceu.gtceu.api.recipe.GTRecipe;
 import com.lowdragmc.lowdraglib.gui.modular.ModularUI;
 import com.lowdragmc.lowdraglib.gui.widget.*;
 import com.lowdragmc.lowdraglib.syncdata.annotation.DescSynced;
@@ -27,11 +34,12 @@ import net.minecraft.world.entity.player.Player;
 
 import lombok.Getter;
 import lombok.Setter;
+import net.minecraft.world.item.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import java.util.Iterator;
 
-public class IndustrialApiaryMachine extends TieredEnergyMachine
-                                     implements IAutoOutputItem, IFancyUIMachine, IMachineLife, IWorkable {
+public class IndustrialApiaryMachine extends WorkableTieredMachine implements IAutoOutputItem, IFancyUIMachine, IMachineLife, IWorkable {
 
     private int tier;
 
@@ -70,10 +78,10 @@ public class IndustrialApiaryMachine extends TieredEnergyMachine
     protected boolean allowInputFromOutputSideItems;
 
     public static final ManagedFieldHolder MANAGED_FIELD_HOLDER = new ManagedFieldHolder(
-            IndustrialApiaryMachine.class, TieredEnergyMachine.MANAGED_FIELD_HOLDER);
+            IndustrialApiaryMachine.class, WorkableTieredMachine.MANAGED_FIELD_HOLDER);
 
-    public IndustrialApiaryMachine(IMachineBlockEntity holder, int tier, Object... args) {
-        super(holder, tier, args);
+    public IndustrialApiaryMachine(IMachineBlockEntity holder, int tier) {
+        super(holder, tier, (ignored) -> 0);
         this.tier = tier;
         this.inputInventory = new NotifiableItemStackHandler(this, 1, IO.NONE, IO.BOTH);
         this.outputInventory = new NotifiableItemStackHandler(this, 9, IO.NONE, IO.BOTH);
@@ -130,6 +138,11 @@ public class IndustrialApiaryMachine extends TieredEnergyMachine
 
     // TODO: HELP IM SCARED
     @Override
+    protected @NotNull RecipeLogic createRecipeLogic(Object @NotNull ... args) {
+        return new IndustrialApiaryMachine.BeeRecipeLogic(this);
+    }
+
+    @Override
     public boolean shouldWeatherOrTerrainExplosion() {
         return false;
     }
@@ -161,8 +174,33 @@ public class IndustrialApiaryMachine extends TieredEnergyMachine
     public void setAutoOutputItems(boolean allow) {}
 
     @Override
-    public void setOutputFacingItems(@Nullable Direction outputFacing) {}
-    // TODO:
+    public void setOutputFacingItems(@Nullable Direction outputFacing) {
+    }
+
+    public static class BeeRecipeLogic extends RecipeLogic {
+
+        public BeeRecipeLogic(IRecipeLogicMachine machine) {
+            super(machine);
+        }
+
+        @Override
+        public @NotNull Iterator<GTRecipe> searchRecipe() {
+            var itemHandlers = machine.getCapabilitiesFlat(IO.IN, ItemRecipeCapability.CAP);
+            for (var handler : itemHandlers) {
+                if (!(handler instanceof NotifiableItemStackHandler itemHandler)) continue;
+                for (var content : itemHandler.getContents()) {
+                    if (!(content instanceof ItemStack stack)) continue;
+                    CosmicCore.LOGGER.info("Stack: " + stack);
+                }
+            }
+
+
+
+            return machine.getRecipeType().searchRecipe(machine, r -> matchRecipe(r).isSuccess());
+        }
+    }
+
+// TODO:
     // Grab Species, Lifespan, Production Speed, Flower(?)
 
     // By default all I-Apiary runs are 60 seconds (Regardless of tier, tier will be used elsewhere)
