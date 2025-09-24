@@ -2,7 +2,6 @@ package com.ghostipedia.cosmiccore.common.data.materials.tinkers;
 
 import net.minecraft.world.item.Tier;
 
-import lombok.Builder;
 import lombok.Getter;
 import slimeknights.tconstruct.library.materials.definition.MaterialId;
 import slimeknights.tconstruct.library.materials.stats.MaterialStatsId;
@@ -25,11 +24,11 @@ public class TinkersMaterial {
     private HandleMaterialStats handleMaterialStats;
     private GripMaterialStats gripMaterialStats;
     private Set<StatlessMaterialStats> statlessMaterialStats = new HashSet<>();
-    private SkullStats skullStats;
-    private ToolStats toolStats;
     private int sortOrder;
+    private boolean craftable;
+    private int tier;
 
-    public MaterialId getMaterialName() {
+    public MaterialId getMaterialLocation() {
         return new MaterialId("cosmiccore", this.name);
     }
 
@@ -40,11 +39,12 @@ public class TinkersMaterial {
     }
 
     public static final class Builder {
-
+        private  boolean craftable = false;
+        private  int tier = 0;
         private String name;
         private Set<LazyModifier> modifiers = new HashSet<>();
         private int materialValue = 1;
-        private int sortOrder = 0; // Default to general
+        private int sortOrder = 0;
         private HeadMaterialStats headMaterialStats;
         private HandleMaterialStats handleMaterialStats;
         private GripMaterialStats gripMaterialStats;
@@ -56,6 +56,16 @@ public class TinkersMaterial {
 
         public Builder(String name) {
             this.name = name;
+        }
+
+        public Builder tier(int tier) {
+            this.tier = tier;
+            return this;
+        }
+
+        public Builder craftable(boolean craftable) {
+            this.craftable = craftable;
+            return this;
         }
 
         public Builder modifier(LazyModifier modifier) {

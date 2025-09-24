@@ -1,15 +1,12 @@
 package com.ghostipedia.cosmiccore.common.data.datagen;
 
 import com.ghostipedia.cosmiccore.common.data.materials.tinkers.TinkersMaterial;
-import com.ghostipedia.cosmiccore.common.data.materials.tinkers.TinkersMaterial.Builder;
-import com.ghostipedia.cosmiccore.common.item.tcon.modifiers.CosmicCoreModifiers;
 
 import net.minecraft.data.PackOutput;
 import net.minecraft.world.item.Tiers;
 
 import slimeknights.tconstruct.library.data.material.AbstractMaterialDataProvider;
 import slimeknights.tconstruct.library.data.material.AbstractMaterialTraitDataProvider;
-import slimeknights.tconstruct.library.materials.MaterialRegistry;
 import slimeknights.tconstruct.library.materials.stats.MaterialStatsId;
 import slimeknights.tconstruct.library.modifiers.ModifierEntry;
 import slimeknights.tconstruct.library.modifiers.util.LazyModifier;
@@ -32,9 +29,10 @@ public class CosmicMaterialTraits extends AbstractMaterialTraitDataProvider {
             .addStatlessType(StatlessMaterialStats.BINDING)
             .addStatlessType(StatlessMaterialStats.REPAIR_KIT)
             .addStatlessType(StatlessMaterialStats.BOWSTRING)
-            .defaultTrait(CosmicCoreModifiers.wrenchModeSwitch)
-            .trait(CosmicCoreModifiers.wrenchModeSwitch, 3, MaterialRegistry.RANGED)
+            //.defaultTrait(CosmicCoreModifiers.wrenchModeSwitch)
+            //.trait(CosmicCoreModifiers.wrenchModeSwitch, 3, MaterialRegistry.RANGED)
             .sortOrder(10)
+            .craftable(true)
             .build();
 
     @Override
@@ -42,14 +40,14 @@ public class CosmicMaterialTraits extends AbstractMaterialTraitDataProvider {
         for (TinkersMaterial material : TinkersMaterial.MATERIALS) {
             Set<LazyModifier> defaultTraits = material.getDefaultTraits();
             if (!defaultTraits.isEmpty()) {
-                addDefaultTraits(material.getMaterialName(),
+                addDefaultTraits(material.getMaterialLocation(),
                         material.getDefaultTraits().toArray(defaultTraits.toArray(new LazyModifier[0])));
             }
             Map<MaterialStatsId, Set<ModifierEntry>> statTraits = material.getTraits();
             if (!statTraits.isEmpty()) {
                 for (Map.Entry<MaterialStatsId, Set<ModifierEntry>> entry : statTraits.entrySet()) {
                     addTraits(
-                            material.getMaterialName(),
+                            material.getMaterialLocation(),
                             entry.getKey(),
                             entry.getValue().toArray(new ModifierEntry[0]));
                 }
