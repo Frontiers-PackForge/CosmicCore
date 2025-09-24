@@ -3,8 +3,10 @@ package com.ghostipedia.cosmiccore.mixin.gtceu;
 import com.ghostipedia.cosmiccore.api.misc.IMetaMachineMixin;
 import com.ghostipedia.cosmiccore.common.item.tcon.CosmicToolDefinitions;
 import com.ghostipedia.cosmiccore.common.item.tcon.TiconUtils;
+import com.ghostipedia.cosmiccore.common.item.tcon.base.ChargableModifiableItem;
 import com.ghostipedia.cosmiccore.common.item.tcon.modifiers.WrenchModeSwitchModifier;
 
+import com.gregtechceu.gtceu.api.GTValues;
 import com.gregtechceu.gtceu.api.capability.ICoverable;
 import com.gregtechceu.gtceu.api.machine.MetaMachine;
 import com.gregtechceu.gtceu.api.machine.feature.IAutoOutputFluid;
@@ -34,11 +36,22 @@ public class MetaMachineMixin implements IMetaMachineMixin {
         Direction gridSide = ICoverable.determineGridSideHit(hitResult);
         if (gridSide == null) gridSide = hitResult.getDirection();
         if (context.getPlayer() == null) Pair.of(null, InteractionResult.PASS);
-
-        if (ticonItem.getToolDefinition() == CosmicToolDefinitions.WRENCHES) {
-            return Pair.of(ticonItem.getToolDefinition(),
-                    onWrenchClick(context.getPlayer(), context.getHand(), gridSide, hitResult));
-        }
+            if (ticonItem.getToolDefinition() == CosmicToolDefinitions.WRENCHES) {
+                if(ticonItem instanceof ChargableModifiableItem electricItem) {
+                    ItemStack stack = context.getItemInHand();
+                    long energyCost = electricItem.ENERGY_COST;
+                    long available = electricItem.getCharge(stack);
+                    if (available >= energyCost) {
+                        electricItem.discharge(stack, energyCost, false);
+                        return Pair.of(ticonItem.getToolDefinition(),
+                                onWrenchClick(context.getPlayer(),context.getHand(), gridSide,hitResult));
+                    } else {
+                        return Pair.of(ticonItem.getToolDefinition(), InteractionResult.PASS);
+                    }
+                }
+                return Pair.of(ticonItem.getToolDefinition(),
+                        onWrenchClick(context.getPlayer(), context.getHand(), gridSide, hitResult));
+            }
         return Pair.of(null, InteractionResult.PASS);
     }
 
