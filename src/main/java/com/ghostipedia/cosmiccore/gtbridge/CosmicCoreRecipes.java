@@ -25,6 +25,12 @@ public class CosmicCoreRecipes {
                 .duration(40)
                 .EUt(GTValues.VA[GTValues.HV])
                 .save(provider);
+        /*
+         * EMBER_TESTER_RECIPES.recipeBuilder("test")
+         * .input(CosmicRecipeCapabilities.EMBER, 100d)
+         * .outputItems(Items.COBBLESTONE)
+         * .save(provider);
+         */
 
         // GROVE_RECIPES.recipeBuilder("dirt_movement")
         // .input(SoulRecipeCapability.CAP, 100)

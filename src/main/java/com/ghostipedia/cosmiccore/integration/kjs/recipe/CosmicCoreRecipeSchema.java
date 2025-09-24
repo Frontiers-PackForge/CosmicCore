@@ -1,5 +1,6 @@
 package com.ghostipedia.cosmiccore.integration.kjs.recipe;
 
+import com.ghostipedia.cosmiccore.api.capability.recipe.EmberRecipeCapability;
 import com.ghostipedia.cosmiccore.api.capability.recipe.SoulRecipeCapability;
 import com.ghostipedia.cosmiccore.api.capability.recipe.SterileRecipeCapability;
 import com.ghostipedia.cosmiccore.common.recipe.condition.TitanCondition;
@@ -46,6 +47,14 @@ public interface CosmicCoreRecipeSchema {
             this.addData("decay_rate", decayRate);
             this.addDataBool("per_tick", true);
             return this;
+        }
+
+        public GTRecipeSchema.GTRecipeJS emberInput(double embers) {
+            return this.input(EmberRecipeCapability.CAP, embers);
+        }
+
+        public GTRecipeSchema.GTRecipeJS emberOutput(double embers) {
+            return this.output(EmberRecipeCapability.CAP, embers);
         }
     }
 

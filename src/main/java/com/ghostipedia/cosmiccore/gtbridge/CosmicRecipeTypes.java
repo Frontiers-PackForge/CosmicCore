@@ -71,6 +71,15 @@ public class CosmicRecipeTypes {
             .setMaxIOSize(1, 1, 0, 0)
             .setProgressBar(GuiTextures.PROGRESS_BAR_ARROW, ProgressTexture.FillDirection.LEFT_TO_RIGHT);
 
+    /*
+     * public static final GTRecipeType EMBER_TESTER_RECIPES = GTRecipeTypes
+     * .register("ember_tester", GTRecipeTypes.MULTIBLOCK)
+     * .setMaxSize(IO.IN, EmberRecipeCapability.CAP, 1)
+     * .setMaxSize(IO.OUT, EmberRecipeCapability.CAP, 1)
+     * .setMaxIOSize(1, 1, 0, 0)
+     * .setProgressBar(GuiTextures.PROGRESS_BAR_ARROW, ProgressTexture.FillDirection.LEFT_TO_RIGHT);
+     */
+
     public static final GTRecipeType VOID_MINER = GTRecipeTypes
             .register("void_miner", GTRecipeTypes.MULTIBLOCK)
             .setMaxIOSize(1, 27, 2, 0)
@@ -224,6 +233,12 @@ public class CosmicRecipeTypes {
                 }
                 return "";
             });
+    public static final GTRecipeType DAWN_FORGE = GTRecipeTypes.register("dawn_forge", GTRecipeTypes.MULTIBLOCK)
+            .setMaxIOSize(8, 1, 2, 0)
+            .setSound(DAWN_FORGE_SFX)
+            .setMaxTooltips(5)
+            .setProgressBar(CosmicGuiTextures.DAWN_FORGE, ProgressTexture.FillDirection.ALWAYS_FULL);
+
     public static final GTRecipeType STELLAR_IRIS = GTRecipeTypes.register("stellar_iris", GTRecipeTypes.MULTIBLOCK)
             .setMaxIOSize(16, 16, 16, 16)
             // .setSound(CosmicSounds.BLACK_HOLE_CRY)

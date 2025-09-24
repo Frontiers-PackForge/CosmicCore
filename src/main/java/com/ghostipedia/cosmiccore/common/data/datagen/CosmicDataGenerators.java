@@ -26,6 +26,11 @@ public class CosmicDataGenerators {
 
         generator.addProvider(server, new CosmicModifierProvider(packOutput));
 
+        // TODO DATAGEN FOR Materials + stats + traits (server)
+        // generator.addProvider(server, new CosmicTinkersMaterials(packOutput));
+        // generator.addProvider(server, new CosmicMaterialStats(packOutput));
+        // generator.addProvider(server, new CosmicMaterialTraits(packOutput));
+
         if (event.includeClient()) {
             generator.addProvider(true, new SoundEntryBuilder.SoundEntryProvider(packOutput, CosmicCore.MOD_ID));
         }

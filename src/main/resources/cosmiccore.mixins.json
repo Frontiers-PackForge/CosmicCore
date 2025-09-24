@@ -45,9 +45,9 @@
     "gtceu.PipeBlockMixin",
     "lso.FrostbiteEffectMixin",
     "lso.HeatstrokeEffectMixin",
-    "lso.TemperatureCapabilityMixin",
     "tinkers.ModifiableItemMixin",
-    "tinkers.ToolHarvestLogicMixin"
+    "lso.TemperatureCapabilityMixin",
+    "gtceu.MetaMachineBlockEntityMixin"
   ],
   "injectors": {
     "defaultRequire": 1,
