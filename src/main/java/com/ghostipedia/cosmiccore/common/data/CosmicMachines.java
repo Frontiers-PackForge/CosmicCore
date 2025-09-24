@@ -189,6 +189,7 @@ public class CosmicMachines {
                         list.add(Component.translatable("cosmiccore.industrial_apiary.tier.description.4"));
                         list.add(Component.translatable("cosmiccore.industrial_apiary.tier.description.5"));
                     })
+                    .recipeType(CosmicRecipeTypes.BEES)
                     .workableTieredHullModel(CosmicCore.id("block/overlay/machine/industrial_apiary"))
                     .register(),
             GTValues.tiersBetween(HV, LuV));

@@ -288,6 +288,14 @@ public class CosmicRecipeTypes {
             .setMaxTooltips(6)
             .onRecipeBuild(ResearchManager::createDefaultResearchRecipe)
             .setProgressBar(GuiTextures.PROGRESS_BAR_ARROW_MULTIPLE, ProgressTexture.FillDirection.LEFT_TO_RIGHT);
+    // Dummy recipe. Maybe add recipes here? Either way it won't be used for recipe searching, that's taken care of by
+    // BeeRecipeLogic
+    public static final GTRecipeType BEES = GTRecipeTypes
+            .register("bees", GTRecipeTypes.MULTIBLOCK)
+            .setMaxIOSize(1, 9, 0, 0)
+            .setMaxTooltips(6)
+            .setProgressBar(GuiTextures.PROGRESS_BAR_ARROW_MULTIPLE, ProgressTexture.FillDirection.LEFT_TO_RIGHT);
+
     /*
      * TODO: Multiblocks that might not need a RecipeType or might use it to do really weird things
      * RIFTGENERATOR
