@@ -53,6 +53,7 @@ public class CosmicMaterials {
     public static Material SolSteel;
     public static Material StarMetal;
     public static Material Nevramite;
+    public static Material PaleSteel;
 
     public static void register() {
         Prisma = new Material.Builder(CosmicCore.id("prisma"))
@@ -372,6 +373,15 @@ public class CosmicMaterials {
         Spacetime = new Material.Builder(CosmicCore.id("spacetime"))
                 .liquid(new FluidBuilder().temperature(10))
                 .color(0xdb5e5e).secondaryColor(0x5e0f3d).iconSet(MaterialIconSet.SHINY)
+                .buildAndRegister();
+
+        PaleSteel = new Material.Builder(CosmicCore.id("pale_steel"))
+                .formula("⦿")
+                .liquid(new FluidBuilder().temperature(19500))
+                .flags(GENERATE_ROTOR, GENERATE_FRAME, GENERATE_BOLT_SCREW, GENERATE_ROUND, GENERATE_GEAR,
+                        GENERATE_SMALL_GEAR, GENERATE_RING, GENERATE_FRAME, GENERATE_SPRING, GENERATE_SPRING_SMALL,
+                        GENERATE_FINE_WIRE)
+                .color(0xfca103).secondaryColor(0xfcbe03).iconSet(MaterialIconSet.BRIGHT)
                 .buildAndRegister();
     }
 

@@ -4,6 +4,9 @@ dependencies {
     modRuntimeOnly("curse.maven:worldedit-225608:4586218") //Worldedit bc i'm lazy ty
     modRuntimeOnly("curse.maven:effortless-building-302113:4979089") //EB bc i'm lazy ty
 
+    //IDK if we need this fully yet...
+    modImplementation('com.github.thedarkcolour:ModKit:0302f9aa42')
+
     //Botania
 //    implementation(forge.botania)
 
@@ -115,4 +118,5 @@ dependencies {
 
     // Embers
     modImplementation(forge.embers)
+    modImplementation(forge.forestry)
 }

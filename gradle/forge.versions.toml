@@ -13,7 +13,7 @@ guideme = "20.1.11"
 kubejs = "2001.6.5-build.16"
 rhino = "2001.2.3-build.10"
 architectury = "9.2.14"
-patchouli = "1.20.1-81-FORGE"
+patchouli = "1.20.1-84-FORGE"
 curios = "5.9.0+1.20.1"
 ftblibrary = "2001.2.4"
 ftbteams = "2001.3.0"
@@ -31,6 +31,7 @@ apotheoticAttributes = "1.20.1-1.3.5"
 occultism = "1.140.2"
 modonomicon = "1.77.5"
 jcpp = "1.4.14" # required by occulus apparently
+forestry = "2.5.0"
 
 ## modrinth maven ##
 jade = "11.12.3+forge"
@@ -120,6 +121,7 @@ botania                   = { module = "curse.maven:botania-225643", version.ref
 ae2wtlib                  = { module = "curse.maven:applied-energistics-2-wireless-terminals-459929", version.ref = "ae2wtlib" }
 clothConfig               = { module = "curse.maven:cloth-config-348521", version.ref = "clothConfig" }
 embers                    = { module = "curse.maven:embers-300777", version.ref = "embers" }
+forestry                  = { module = "maven.modrinth:forestry-community-edition", version.ref = "forestry" }
 
 [bundles]
 jei = ["jei-common-api", "jei-forge-api", "jei-forge-impl"]
