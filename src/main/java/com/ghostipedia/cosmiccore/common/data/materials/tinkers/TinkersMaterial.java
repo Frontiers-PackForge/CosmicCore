@@ -1,9 +1,9 @@
 package com.ghostipedia.cosmiccore.common.data.materials.tinkers;
 
 import net.minecraft.world.item.Tier;
-
 import lombok.Getter;
 import slimeknights.tconstruct.library.materials.definition.MaterialId;
+import slimeknights.tconstruct.library.materials.stats.IMaterialStats;
 import slimeknights.tconstruct.library.materials.stats.MaterialStatsId;
 import slimeknights.tconstruct.library.modifiers.ModifierEntry;
 import slimeknights.tconstruct.library.modifiers.util.LazyModifier;
@@ -23,7 +23,8 @@ public class TinkersMaterial {
     private HeadMaterialStats headMaterialStats;
     private HandleMaterialStats handleMaterialStats;
     private GripMaterialStats gripMaterialStats;
-    private Set<StatlessMaterialStats> statlessMaterialStats = new HashSet<>();
+    private Set<StatlessMaterialStats> statlessMaterialStats;
+    private List<IMaterialStats> allStats;
     private int sortOrder;
     private boolean craftable;
     private int tier;
@@ -36,23 +37,37 @@ public class TinkersMaterial {
         this.name = builder.name;
         this.materialValue = builder.materialValue;
         this.headMaterialStats = builder.headMaterialStats;
+        this.handleMaterialStats = builder.handleMaterialStats;
+        this.gripMaterialStats = builder.gripMaterialStats;
+        this.statlessMaterialStats = builder.statlessMaterialStats;
+        this.sortOrder = builder.sortOrder;
+        this.craftable = builder.craftable;
+        this.tier = builder.tier;
+        this.allStats = builder.stats;
+        this.defaultTraits = builder.defaultTraits;
+        this.traits = new HashMap<>(); // Simplified for this example
+    }
+
+    public List<IMaterialStats> getAllStats() {
+        return this.allStats;
     }
 
     public static final class Builder {
-        private  boolean craftable = false;
-        private  int tier = 0;
+        private boolean craftable = false;
+        private int tier = 0;
         private String name;
         private Set<LazyModifier> modifiers = new HashSet<>();
         private int materialValue = 1;
         private int sortOrder = 0;
+        private final List<IMaterialStats> stats = new ArrayList<>();
         private HeadMaterialStats headMaterialStats;
         private HandleMaterialStats handleMaterialStats;
         private GripMaterialStats gripMaterialStats;
-        private Set<StatlessMaterialStats> statlessMaterialStats = new HashSet<>();
+        private final Set<StatlessMaterialStats> statlessMaterialStats = new HashSet<>();
         private SkullStats skullStats;
         private ToolStats toolStats;
-        private Set<LazyModifier> defaultTraits;
-        private Map<MaterialStatsId, List<ModifierEntry>> statSpecificTraits = new HashMap<>();
+        private final Set<LazyModifier> defaultTraits = new HashSet<>();
+        private final Map<MaterialStatsId, List<ModifierEntry>> statSpecificTraits = new HashMap<>();
 
         public Builder(String name) {
             this.name = name;
@@ -85,21 +100,25 @@ public class TinkersMaterial {
 
         public Builder headMaterialStats(int durability, float miningSpeed, Tier miningLevel, float attack) {
             this.headMaterialStats = new HeadMaterialStats(durability, miningSpeed, miningLevel, attack);
+            this.stats.add(this.headMaterialStats);
             return this;
         }
 
         public Builder handleMaterialStats(float durability, float attackDamage, float attackSpeed, float miningSpeed) {
             this.handleMaterialStats = new HandleMaterialStats(durability, attackDamage, attackSpeed, miningSpeed);
+            this.stats.add(this.handleMaterialStats);
             return this;
         }
 
         public Builder gripMaterialStats(float durability, float attackSpeed, float meleeAttack) {
             this.gripMaterialStats = new GripMaterialStats(durability, attackSpeed, meleeAttack);
+            this.stats.add(this.gripMaterialStats);
             return this;
         }
 
         public Builder addStatlessType(StatlessMaterialStats type) {
             this.statlessMaterialStats.add(type);
+            this.stats.add(type);
             return this;
         }
 
@@ -108,24 +127,11 @@ public class TinkersMaterial {
             return this;
         }
 
-        /**
-         * Adds a simple, level 1 trait. Corresponds to addDefaultTraits().
-         *
-         * @param modifier The modifier to add as a default trait.
-         * @return The builder instance.
-         */
         public Builder defaultTrait(LazyModifier modifier) {
             this.defaultTraits.add(modifier);
             return this;
         }
 
-        /**
-         * Adds a trait with a specific level. Corresponds to addTraits().
-         *
-         * @param modifier The modifier to add as a leveled trait.
-         * @param level    The level of the modifier.
-         * @return The builder instance.
-         */
         public Builder trait(LazyModifier modifier, int level, MaterialStatsId statsId) {
             List<ModifierEntry> traits = this.statSpecificTraits.computeIfAbsent(statsId, k -> new ArrayList<>());
             traits.add(new ModifierEntry(modifier.get(), level));
@@ -139,3 +145,4 @@ public class TinkersMaterial {
         }
     }
 }
+
