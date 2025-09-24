@@ -1,12 +1,15 @@
 package com.ghostipedia.cosmiccore.mixin.tinkers;
 
 import com.ghostipedia.cosmiccore.common.item.tcon.base.ChargableModifiableItem;
+
 import com.gregtechceu.gtceu.api.GTValues;
 import com.gregtechceu.gtceu.api.capability.forge.GTCapability;
-import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
-import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
+
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
+
+import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
+import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import org.spongepowered.asm.mixin.Debug;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -18,16 +21,14 @@ import slimeknights.tconstruct.library.tools.nbt.ToolStack;
 @Mixin(ToolHarvestLogic.class)
 class ToolHarvestLogicMixin {
 
-
     @WrapOperation(
-            remap = false,
-            method = "breakBlock",
-            at = @At(
-                    value = "INVOKE",
-                    target = "Lslimeknights/tconstruct/library/tools/helper/ToolDamageUtil;damageAnimated(Lslimeknights/tconstruct/library/tools/nbt/IToolStackView;ILnet/minecraft/world/entity/LivingEntity;)Z"
-            )
-    )
-    private static boolean cosmiccore$RedirectDurability(IToolStackView tool, int amount, LivingEntity entity, Operation<Boolean> original) {
+                   remap = false,
+                   method = "breakBlock",
+                   at = @At(
+                            value = "INVOKE",
+                            target = "Lslimeknights/tconstruct/library/tools/helper/ToolDamageUtil;damageAnimated(Lslimeknights/tconstruct/library/tools/nbt/IToolStackView;ILnet/minecraft/world/entity/LivingEntity;)Z"))
+    private static boolean cosmiccore$RedirectDurability(IToolStackView tool, int amount, LivingEntity entity,
+                                                         Operation<Boolean> original) {
         if (tool instanceof ToolStack toolStack) {
             ItemStack stack = toolStack.createStack();
             if (stack.getItem() instanceof ChargableModifiableItem) {

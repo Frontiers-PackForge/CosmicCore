@@ -2,8 +2,8 @@ package com.ghostipedia.cosmiccore.mixin.gtceu;
 
 import com.ghostipedia.cosmiccore.api.misc.IMetaMachineMixin;
 import com.ghostipedia.cosmiccore.common.item.tcon.TiconUtils;
-
 import com.ghostipedia.cosmiccore.common.item.tcon.base.ChargableModifiableItem;
+
 import com.gregtechceu.gtceu.api.block.MetaMachineBlock;
 import com.gregtechceu.gtceu.api.item.tool.ToolHelper;
 import com.gregtechceu.gtceu.api.machine.MetaMachine;
@@ -45,7 +45,7 @@ public class MetaMachineBlockMixin {
                 ToolHelper.playToolSound(TiconUtils.getGTToolType(result.getFirst()), serverPlayer);
 
                 if (!serverPlayer.isCreative()) {
-                    if(ticonTool instanceof ChargableModifiableItem electricItem) {
+                    if (ticonTool instanceof ChargableModifiableItem electricItem) {
 
                         long energyCost = electricItem.ENERGY_COST;
                         long available = electricItem.getCharge(itemStack);
@@ -54,8 +54,8 @@ public class MetaMachineBlockMixin {
 
                         } else {
                             ToolDamageUtil.handleDamageItem(itemStack, 1, player, p -> {});
+                        }
                     }
-                }
 
                 }
             }

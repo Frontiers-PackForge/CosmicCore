@@ -2,38 +2,33 @@ package com.ghostipedia.cosmiccore.common.item.tcon.base;
 
 import com.gregtechceu.gtceu.api.GTValues;
 import com.gregtechceu.gtceu.api.capability.IElectricItem;
-import com.gregtechceu.gtceu.api.capability.forge.GTCapability;
-import net.minecraft.core.BlockPos;
+
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
-import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.CapabilityManager;
 import net.minecraftforge.common.capabilities.CapabilityToken;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.common.util.LazyOptional;
+
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import slimeknights.tconstruct.library.tools.definition.ToolDefinition;
 import slimeknights.tconstruct.library.tools.item.ModifiableItem;
 
 import java.util.List;
-import java.util.function.Consumer;
 
 public class ChargableModifiableItem extends ModifiableItem {
 
     public static final long ENERGY_COST = 8 * GTValues.V[1];
     public static final long CAPACITY = 100_000L;
-    private static final Capability<IElectricItem> ELECTRIC_CAP =
-            CapabilityManager.get(new CapabilityToken<IElectricItem>() {});
-
+    private static final Capability<IElectricItem> ELECTRIC_CAP = CapabilityManager
+            .get(new CapabilityToken<IElectricItem>() {});
 
     public ChargableModifiableItem(Properties properties, ToolDefinition toolDefinition) {
         super(properties, toolDefinition);
@@ -73,13 +68,12 @@ public class ChargableModifiableItem extends ModifiableItem {
             getOrCreateTag().putLong("maxCharge", charge);
         }
 
-
         @Override
-        public @NotNull <T> LazyOptional<T> getCapability(@NotNull Capability<T> capability, @Nullable Direction direction) {
+        public @NotNull <T> LazyOptional<T> getCapability(@NotNull Capability<T> capability,
+                                                          @Nullable Direction direction) {
             if (capability == ELECTRIC_CAP) return holder.cast();
             return LazyOptional.empty();
         }
-
 
         @Override
         public int getTier() {
@@ -113,7 +107,8 @@ public class ChargableModifiableItem extends ModifiableItem {
         }
 
         @Override
-        public long discharge(long amount, int dischargerTier, boolean ignoreTransferLimit, boolean externally, boolean simulate) {
+        public long discharge(long amount, int dischargerTier, boolean ignoreTransferLimit, boolean externally,
+                              boolean simulate) {
             if (dischargerTier < tier) return 0;
 
             long transferLimit = ignoreTransferLimit ? amount : Math.min(amount, getTransferLimit());
@@ -140,8 +135,6 @@ public class ChargableModifiableItem extends ModifiableItem {
             return baseMaxCharge;
         }
 
-
-
         @Override
         public long getCharge() {
             var nbt = getOrCreateTag();
@@ -154,6 +147,7 @@ public class ChargableModifiableItem extends ModifiableItem {
             return 0; // default empty
         }
     }
+
     @Override
     public boolean isBarVisible(ItemStack stack) {
         return true;
@@ -164,7 +158,6 @@ public class ChargableModifiableItem extends ModifiableItem {
                 .map(IElectricItem::getCharge)
                 .orElse(0L);
     }
-
 
     @Override
     public void appendHoverText(ItemStack stack, @Nullable Level level, List<Component> tooltip, TooltipFlag flag) {
@@ -195,8 +188,6 @@ public class ChargableModifiableItem extends ModifiableItem {
                 .map(IElectricItem::getCharge)
                 .orElse(0L); // if no capability, nothing extracted
     }
-
-
 
     @Override
     public int getBarWidth(ItemStack stack) {
