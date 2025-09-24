@@ -234,6 +234,14 @@ public class CosmicItems {
             .defaultModel()
             .register();
 
+    public static final ItemEntry<ComponentItem> PALE_SAW = REGISTRATE
+            .item("pale_saw", ComponentItem::create)
+            .lang("Pale Saw")
+            .properties(p -> p.stacksTo(16))
+            .tag()
+            .defaultModel()
+            .register();
+
     public static final ItemEntry<ComponentItem> HARMONICALLY_TUNED_CIRCUIT_BOARD = REGISTRATE
             .item("harmonically_tuned_circuit_board",
                     ComponentItem::create)

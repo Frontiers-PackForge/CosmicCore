@@ -1,23 +1,17 @@
 package com.ghostipedia.cosmiccore.common.machine;
 
-import com.gregtechceu.gtceu.api.capability.IControllable;
 import com.gregtechceu.gtceu.api.capability.IWorkable;
 import com.gregtechceu.gtceu.api.capability.recipe.IO;
 import com.gregtechceu.gtceu.api.gui.GuiTextures;
 import com.gregtechceu.gtceu.api.gui.UITemplate;
-import com.gregtechceu.gtceu.api.gui.fancy.ConfiguratorPanel;
-import com.gregtechceu.gtceu.api.gui.fancy.FancyMachineUIWidget;
-import com.gregtechceu.gtceu.api.gui.fancy.IFancyConfiguratorButton;
 import com.gregtechceu.gtceu.api.gui.fancy.TabsWidget;
 import com.gregtechceu.gtceu.api.gui.widget.SlotWidget;
 import com.gregtechceu.gtceu.api.machine.IMachineBlockEntity;
-import com.gregtechceu.gtceu.api.machine.MetaMachine;
 import com.gregtechceu.gtceu.api.machine.TieredEnergyMachine;
 import com.gregtechceu.gtceu.api.machine.fancyconfigurator.CombinedDirectionalFancyConfigurator;
 import com.gregtechceu.gtceu.api.machine.feature.IAutoOutputItem;
 import com.gregtechceu.gtceu.api.machine.feature.IFancyUIMachine;
 import com.gregtechceu.gtceu.api.machine.feature.IMachineLife;
-import com.gregtechceu.gtceu.api.machine.feature.IUIMachine;
 import com.gregtechceu.gtceu.api.machine.trait.NotifiableItemStackHandler;
 
 import com.lowdragmc.lowdraglib.gui.modular.ModularUI;
@@ -27,25 +21,17 @@ import com.lowdragmc.lowdraglib.syncdata.annotation.Persisted;
 import com.lowdragmc.lowdraglib.syncdata.annotation.RequireRerender;
 import com.lowdragmc.lowdraglib.syncdata.field.ManagedFieldHolder;
 
-import com.lowdragmc.lowdraglib.utils.BlockInfo;
-import com.lowdragmc.lowdraglib.utils.TrackedDummyWorld;
-import lombok.Setter;
-import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Player;
 
 import lombok.Getter;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
+import lombok.Setter;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.List;
-import java.util.Objects;
-
-public class IndustrialApiaryMachine extends TieredEnergyMachine implements IAutoOutputItem, IFancyUIMachine, IMachineLife, IWorkable {
+public class IndustrialApiaryMachine extends TieredEnergyMachine
+                                     implements IAutoOutputItem, IFancyUIMachine, IMachineLife, IWorkable {
 
     private int tier;
 
@@ -67,7 +53,7 @@ public class IndustrialApiaryMachine extends TieredEnergyMachine implements IAut
 
     @Getter
     int productionAmplifier;
-    //Yoinked from Fisher
+    // Yoinked from Fisher
     @Getter
     @Persisted
     @DescSynced
@@ -100,7 +86,7 @@ public class IndustrialApiaryMachine extends TieredEnergyMachine implements IAut
 
     // Vomitting over what this is. lord help me.
     // I HATE MAGIC NUMBERS WOOOO I LOVE GUI XY I LOVE IT SO MUCH WOOO YEAHHHH
-    //TODO MISSING CONFIG TABS ON THE SIDE AND THE NAME BAR ON THE TOP, NEED SOME HELP FINDING THESE LOL
+    // TODO MISSING CONFIG TABS ON THE SIDE AND THE NAME BAR ON THE TOP, NEED SOME HELP FINDING THESE LOL
     @Override
     public ModularUI createUI(Player entityPlayer) {
         // spotless:off
@@ -142,7 +128,7 @@ public class IndustrialApiaryMachine extends TieredEnergyMachine implements IAut
             sideTabs.attachSubTab(directionalConfigurator);
     }
 
-    //TODO: HELP IM SCARED
+    // TODO: HELP IM SCARED
     @Override
     public boolean shouldWeatherOrTerrainExplosion() {
         return false;
@@ -169,20 +155,14 @@ public class IndustrialApiaryMachine extends TieredEnergyMachine implements IAut
     }
 
     @Override
-    public void setWorkingEnabled(boolean isWorkingAllowed) {
-
-    }
+    public void setWorkingEnabled(boolean isWorkingAllowed) {}
 
     @Override
-    public void setAutoOutputItems(boolean allow) {
-
-    }
+    public void setAutoOutputItems(boolean allow) {}
 
     @Override
-    public void setOutputFacingItems(@Nullable Direction outputFacing) {
-
-    }
-// TODO:
+    public void setOutputFacingItems(@Nullable Direction outputFacing) {}
+    // TODO:
     // Grab Species, Lifespan, Production Speed, Flower(?)
 
     // By default all I-Apiary runs are 60 seconds (Regardless of tier, tier will be used elsewhere)

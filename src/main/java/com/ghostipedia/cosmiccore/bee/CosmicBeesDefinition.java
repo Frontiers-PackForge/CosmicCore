@@ -1,17 +1,13 @@
 package com.ghostipedia.cosmiccore.bee;
 
 import com.ghostipedia.cosmiccore.bee.feature.CosmicBeesItems;
-import com.ghostipedia.cosmiccore.common.data.materials.CosmicMaterials;
+import com.ghostipedia.cosmiccore.common.data.CosmicItems;
 import com.ghostipedia.cosmiccore.common.item.CosmicBeesHoneyComb;
-
-import com.gregtechceu.gtceu.api.data.chemical.ChemicalHelper;
 
 import net.minecraft.network.chat.TextColor;
 
 import forestry.api.apiculture.ForestryBeeSpecies;
 import forestry.api.plugin.IApicultureRegistration;
-
-import static com.gregtechceu.gtceu.api.data.tag.TagPrefix.toolHeadBuzzSaw;
 
 public class CosmicBeesDefinition {
 
@@ -112,7 +108,7 @@ public class CosmicBeesDefinition {
                         true, TextColor.fromRgb(0xC8E7F1))
                 .setBody(TextColor.fromRgb(0x3F3F3F))
                 .addProduct(CosmicBeesItems.BEE_COMBS.stack(CosmicBeesHoneyComb.PALE), 1)
-                .addProduct(ChemicalHelper.get(toolHeadBuzzSaw, CosmicMaterials.PaleSteel, 1), 0.35f)
+                .addProduct(CosmicItems.PALE_SAW.asStack(), 0.35f)
                 .addMutations(mutations -> {
                     mutations.add(ForestryBeeSpecies.PHANTASMAL, ForestryBeeSpecies.EDENIC, 35);
                 })
