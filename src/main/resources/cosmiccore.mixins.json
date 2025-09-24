@@ -46,7 +46,8 @@
     "lso.FrostbiteEffectMixin",
     "lso.HeatstrokeEffectMixin",
     "lso.TemperatureCapabilityMixin",
-    "tinkers.ModifiableItemMixin"
+    "tinkers.ModifiableItemMixin",
+    "tinkers.ToolHarvestLogicMixin"
   ],
   "injectors": {
     "defaultRequire": 1,

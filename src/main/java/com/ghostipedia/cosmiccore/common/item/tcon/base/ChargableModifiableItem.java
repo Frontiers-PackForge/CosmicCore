@@ -10,6 +10,8 @@ import net.minecraft.nbt.Tag;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.CapabilityManager;
 import net.minecraftforge.common.capabilities.CapabilityToken;
@@ -162,18 +164,6 @@ public class ChargableModifiableItem extends ModifiableItem {
     }
 
 
-
-    @Override
-    public boolean onBlockStartBreak(ItemStack stack, BlockPos pos, Player player) {
-        return stack.getCapability(ELECTRIC_CAP).map(cap -> {
-            long extracted = cap.discharge(1, GTValues.LV, false, true, false);
-            if (extracted > 0) {
-                return false;
-            } else {
-                return super.onBlockStartBreak(stack, pos, player);
-            }
-        }).orElseGet(() -> super.onBlockStartBreak(stack, pos, player));
-    }
 
 
     @Override
