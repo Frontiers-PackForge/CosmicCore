@@ -11,11 +11,13 @@ import com.gregtechceu.gtceu.api.gui.GuiTextures;
 import com.gregtechceu.gtceu.api.gui.UITemplate;
 import com.gregtechceu.gtceu.api.gui.fancy.TabsWidget;
 import com.gregtechceu.gtceu.api.gui.widget.SlotWidget;
+import com.gregtechceu.gtceu.api.gui.widget.TankWidget;
 import com.gregtechceu.gtceu.api.machine.IMachineBlockEntity;
 import com.gregtechceu.gtceu.api.machine.WorkableTieredMachine;
 import com.gregtechceu.gtceu.api.machine.fancyconfigurator.CombinedDirectionalFancyConfigurator;
 import com.gregtechceu.gtceu.api.machine.feature.IFancyUIMachine;
 import com.gregtechceu.gtceu.api.machine.feature.IMachineLife;
+import com.gregtechceu.gtceu.api.machine.trait.NotifiableFluidTank;
 import com.gregtechceu.gtceu.api.machine.trait.NotifiableItemStackHandler;
 import com.gregtechceu.gtceu.api.machine.trait.RecipeLogic;
 import com.gregtechceu.gtceu.api.recipe.GTRecipe;
@@ -23,11 +25,12 @@ import com.gregtechceu.gtceu.api.recipe.chance.logic.ChanceLogic;
 import com.gregtechceu.gtceu.data.recipe.builder.GTRecipeBuilder;
 
 import com.lowdragmc.lowdraglib.gui.modular.ModularUI;
+import com.lowdragmc.lowdraglib.gui.texture.ProgressTexture;
 import com.lowdragmc.lowdraglib.gui.widget.*;
+import com.lowdragmc.lowdraglib.syncdata.annotation.Persisted;
 import com.lowdragmc.lowdraglib.syncdata.field.ManagedFieldHolder;
 
 import net.minecraft.core.Direction;
-import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 
@@ -37,6 +40,7 @@ import forestry.api.apiculture.genetics.IBeeSpecies;
 import forestry.api.genetics.alleles.BeeChromosomes;
 import forestry.api.genetics.alleles.ForestryAlleles;
 import lombok.Getter;
+import lombok.Setter;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Collections;
@@ -50,6 +54,10 @@ public class IndustrialApiaryMachine extends WorkableTieredMachine implements IF
     @Getter
     private int beeTier;
 
+    @Getter
+    @Setter
+    protected int beeProduct;
+
     // TODO; Might need more vars for the math behind the logic, but these i put in for the TL keys
 
     @Getter
@@ -57,6 +65,18 @@ public class IndustrialApiaryMachine extends WorkableTieredMachine implements IF
 
     @Getter
     private int duration;
+
+    @Persisted
+    @Getter
+    protected final NotifiableFluidTank tank;
+
+    @Persisted
+    @Getter
+    protected final NotifiableItemStackHandler itemCacheIn;
+
+    @Persisted
+    @Getter
+    protected final NotifiableItemStackHandler itemCacheOut;
 
     @Getter
     int productionAmplifier;
@@ -68,11 +88,25 @@ public class IndustrialApiaryMachine extends WorkableTieredMachine implements IF
     public IndustrialApiaryMachine(IMachineBlockEntity holder, int beeTier) {
         super(holder, beeTier, (ignored) -> 0);
         this.beeTier = beeTier;
+        this.tank = createTank();
+        this.itemCacheIn = createStorageCache();
+        this.itemCacheOut = createStorageOut();
     }
 
     @Override
     public @NotNull ManagedFieldHolder getFieldHolder() {
         return MANAGED_FIELD_HOLDER;
+    }
+
+    protected NotifiableFluidTank createTank(Object... args) {
+        return new NotifiableFluidTank(this, 1, 16000, IO.BOTH);
+    }
+    //For Input i tems
+    protected NotifiableItemStackHandler createStorageCache(Object... args) {
+        return new NotifiableItemStackHandler(this, 1, IO.IN, IO.IN);
+    }
+    protected NotifiableItemStackHandler createStorageOut(Object... args) {
+        return new NotifiableItemStackHandler(this, 12, IO.OUT, IO.OUT);
     }
 
     // Vomitting over what this is. lord help me.
@@ -84,32 +118,31 @@ public class IndustrialApiaryMachine extends WorkableTieredMachine implements IF
 
         var text = new WidgetGroup(0, 0, 176, 164);
         text.addWidget(new LabelWidget(9, 5, "gui.cosmiccore.iapiary")); //Note: canTakeItems would probably be what we want to lock? idk can we do that dynamically???
-        text.addWidget(new LabelWidget(9, 50, Component.translatable("gui.cosmiccore.iapiary.yield"))); //Note: canTakeItems would probably be what we want to lock? idk can we do that dynamically???
-        text.addWidget(new LabelWidget(9, 59, Component.translatable("gui.cosmiccore.iapiary.duration"))); //Note: canTakeItems would probably be what we want to lock? idk can we do that dynamically???
-        text.addWidget(new LabelWidget(9, 68, Component.translatable("gui.cosmiccore.iapiary.production_amp"))); //Note: canTakeItems would probably be what we want to lock? idk can we do that dynamically???
-
-        //For Moving all Output Slots by the same amount, references, the top left slot
         int groupOutX = 113;
         int groupOutY = 25;
         var group = new WidgetGroup(0, 0, 176, 164);
         //TODO: canTakeItems would probably be what we want to lock when running? idk can we do that dynamically??? We want to lock the queen to this Ind.Apiary to avoid people cycling them across several manually or otherwise!
-        group.addWidget(new SlotWidget(this.importItems,0,8,groupOutY).setBackground(GuiTextures.SLOT));
+        group.addWidget(new SlotWidget(getItemCacheIn().storage,0,8,groupOutY,true,true).setBackground(GuiTextures.SLOT));
         //TODO : PROGRESS WIDGET, I'm assuming we'll have a way to track progress in recipeLogic and then make the bar show// between the input slot and the outputs group.addWidget(new ProgressWidget());
-        group.addWidget(new SlotWidget(this.exportItems,0, groupOutX,groupOutY).setBackground(GuiTextures.SLOT));
-        group.addWidget(new SlotWidget(this.exportItems,1,groupOutX + 18,groupOutY).setBackground(GuiTextures.SLOT));
-        group.addWidget(new SlotWidget(this.exportItems,2,groupOutX + 36,groupOutY).setBackground(GuiTextures.SLOT));
-        group.addWidget(new SlotWidget(this.exportItems,3, groupOutX,groupOutY + 18).setBackground(GuiTextures.SLOT));
-        group.addWidget(new SlotWidget(this.exportItems,4,groupOutX + 18,groupOutY + 18).setBackground(GuiTextures.SLOT));
-        group.addWidget(new SlotWidget(this.exportItems,5,groupOutX + 36,groupOutY + 18).setBackground(GuiTextures.SLOT));
-        group.addWidget(new SlotWidget(this.exportItems,6,groupOutX,groupOutY + 36).setBackground(GuiTextures.SLOT));
-        group.addWidget(new SlotWidget(this.exportItems,7,groupOutX + 18,groupOutY + 36).setBackground(GuiTextures.SLOT));
-        group.addWidget(new SlotWidget(this.exportItems,8,groupOutX + 36,groupOutY + 36).setBackground(GuiTextures.SLOT));
+        group.addWidget(new SlotWidget(this.exportItems,0, groupOutX,groupOutY,true,false).setBackground(GuiTextures.SLOT));
+        group.addWidget(new SlotWidget(this.exportItems,1,groupOutX + 18,groupOutY,true,false).setBackground(GuiTextures.SLOT));
+        group.addWidget(new SlotWidget(this.exportItems,2,groupOutX + 36,groupOutY,true,false).setBackground(GuiTextures.SLOT));
+        group.addWidget(new SlotWidget(this.exportItems,3, groupOutX,groupOutY + 18,true,false).setBackground(GuiTextures.SLOT));
+        group.addWidget(new SlotWidget(this.exportItems,4,groupOutX + 18,groupOutY + 18,true,false).setBackground(GuiTextures.SLOT));
+        group.addWidget(new SlotWidget(this.exportItems,5,groupOutX + 36,groupOutY + 18,true,false).setBackground(GuiTextures.SLOT));
+        group.addWidget(new SlotWidget(this.exportItems,6,groupOutX,groupOutY + 36,true,false).setBackground(GuiTextures.SLOT));
+        group.addWidget(new SlotWidget(this.exportItems,7,groupOutX + 18,groupOutY + 36,true,false).setBackground(GuiTextures.SLOT));
+        group.addWidget(new SlotWidget(this.exportItems,8,groupOutX + 36,groupOutY + 36,true,false).setBackground(GuiTextures.SLOT));
+//        group.addWidget(new SlotWidget(this.exportItems,9,groupOutX,groupOutY + 54,true,false).setBackground(GuiTextures.SLOT));
+//        group.addWidget(new SlotWidget(this.exportItems,10,groupOutX + 18,groupOutY + 54,true,false).setBackground(GuiTextures.SLOT));
+//        group.addWidget(new SlotWidget(this.exportItems,11,groupOutX + 36,groupOutY + 54,true,false).setBackground(GuiTextures.SLOT));
         group.addWidget(new DraggableScrollableWidgetGroup(6,46,104,34).setBackground(GuiTextures.BACKGROUND_INVERSE));
+
 
         return new ModularUI(176, 164, this, entityPlayer)
                 .background(GuiTextures.BACKGROUND)
                 .widget(group)
-                //.widget(text)
+                .widget(text)
                 .widget(UITemplate.bindPlayerInventory(entityPlayer.getInventory(), GuiTextures.SLOT, 7, 84, true));
         // spotless:on
     }
@@ -135,14 +168,15 @@ public class IndustrialApiaryMachine extends WorkableTieredMachine implements IF
     public static class BeeRecipeLogic extends RecipeLogic {
 
         int beeTier;
+        public int beeProduct;
 
         public BeeRecipeLogic(IndustrialApiaryMachine machine) {
             super(machine);
-            this.beeTier = machine.getBeeTier();
+            this.beeTier = machine.getTier();
         }
 
         // Just doing production Mult now
-        private List<Float> productionMultipliers = List.of(0.25f, 0.5f, 0.75f, 1f, 1.25f, 1.5f, 2f);
+        private final List<Float> productionMultipliers = List.of(0.25f, 0.5f, 0.75f, 1f, 1.25f, 2.5f, 4f);
 
         @Override
         public @NotNull Iterator<GTRecipe> searchRecipe() {
@@ -188,13 +222,13 @@ public class IndustrialApiaryMachine extends WorkableTieredMachine implements IF
                     var builder = GTRecipeBuilder
                             .of(CosmicCore.id("bee_recipe_"), CosmicRecipeTypes.BEES)
                             .EUt(GTValues.VA[GTValues.LV])
-                            .duration((int) (20 * 240));
+                            .duration((int) (20 * 480));
 
                     for (var product : primary.getProducts()) {
                         builder.chancedOutput(
                                 new ItemStack(
                                         product.item(),
-                                        (int) (10 + (productionMultiplier * 15))),
+                                        (int) (16 + (productionMultiplier * 8) + (beeTier * 16))),
                                 (int) (product.chance() * ChanceLogic.getMaxChancedValue()),
                                 0);
                     }
