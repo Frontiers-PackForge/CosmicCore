@@ -27,6 +27,7 @@ import com.lowdragmc.lowdraglib.gui.widget.*;
 import com.lowdragmc.lowdraglib.syncdata.field.ManagedFieldHolder;
 
 import net.minecraft.core.Direction;
+import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 
@@ -80,19 +81,19 @@ public class IndustrialApiaryMachine extends WorkableTieredMachine implements IF
     @Override
     public ModularUI createUI(Player entityPlayer) {
         // spotless:off
-        /*
+
         var text = new WidgetGroup(0, 0, 176, 164);
         text.addWidget(new LabelWidget(9, 5, "gui.cosmiccore.iapiary")); //Note: canTakeItems would probably be what we want to lock? idk can we do that dynamically???
         text.addWidget(new LabelWidget(9, 50, Component.translatable("gui.cosmiccore.iapiary.yield"))); //Note: canTakeItems would probably be what we want to lock? idk can we do that dynamically???
         text.addWidget(new LabelWidget(9, 59, Component.translatable("gui.cosmiccore.iapiary.duration"))); //Note: canTakeItems would probably be what we want to lock? idk can we do that dynamically???
         text.addWidget(new LabelWidget(9, 68, Component.translatable("gui.cosmiccore.iapiary.production_amp"))); //Note: canTakeItems would probably be what we want to lock? idk can we do that dynamically???
-         */
+
         //For Moving all Output Slots by the same amount, references, the top left slot
         int groupOutX = 113;
         int groupOutY = 25;
         var group = new WidgetGroup(0, 0, 176, 164);
         //TODO: canTakeItems would probably be what we want to lock when running? idk can we do that dynamically??? We want to lock the queen to this Ind.Apiary to avoid people cycling them across several manually or otherwise!
-        group.addWidget(new SlotWidget(this.importItems,0,8,groupOutY,true,true).setBackground(GuiTextures.SLOT));
+        group.addWidget(new SlotWidget(this.importItems,0,8,groupOutY).setBackground(GuiTextures.SLOT));
         //TODO : PROGRESS WIDGET, I'm assuming we'll have a way to track progress in recipeLogic and then make the bar show// between the input slot and the outputs group.addWidget(new ProgressWidget());
         group.addWidget(new SlotWidget(this.exportItems,0, groupOutX,groupOutY).setBackground(GuiTextures.SLOT));
         group.addWidget(new SlotWidget(this.exportItems,1,groupOutX + 18,groupOutY).setBackground(GuiTextures.SLOT));
@@ -140,9 +141,7 @@ public class IndustrialApiaryMachine extends WorkableTieredMachine implements IF
             this.beeTier = machine.getBeeTier();
         }
 
-        // TODO: Last value is for "immortal", tweak this
-        private List<Float> lifespanMultipliers = List.of(0.25f, 0.5f, 0.75f, 1f, 1.5f, 2.5f, 3f, 3f);
-        // TODO: 7 values were given, but there's 11 values. Tweak this. See comment above productionIndex
+        // Just doing production Mult now
         private List<Float> productionMultipliers = List.of(0.25f, 0.5f, 0.75f, 1f, 1.25f, 1.5f, 2f);
 
         @Override
@@ -176,9 +175,6 @@ public class IndustrialApiaryMachine extends WorkableTieredMachine implements IF
                     var lifespan = genome.getActiveAllele(BeeChromosomes.LIFESPAN);
                     // List.of(LIFESPAN_SHORTEST, LIFESPAN_SHORTER, LIFESPAN_SHORT, LIFESPAN_SHORTENED, LIFESPAN_NORMAL,
                     // LIFESPAN_ELONGATED, LIFESPAN_LONG, LIFESPAN_LONGER, LIFESPAN_LONGEST, LIFESPAN_IMMORTAL);
-                    // 0 = shortest, 1 = shorter, etc
-                    var lifespanIndex = ForestryAlleles.DEFAULT_LIFESPANS.indexOf(lifespan);
-                    var lifespanMultiplier = lifespanMultipliers.get(lifespanIndex);
 
                     var production = genome.getActiveAllele(BeeChromosomes.SPEED);
                     // List.of(SPEED_SLOWEST, SPEED_SLOWER, SPEED_SLOW, SPEED_NORMAL, SPEED_FAST, SPEED_FASTER,
@@ -190,15 +186,15 @@ public class IndustrialApiaryMachine extends WorkableTieredMachine implements IF
 
                     // Define the builder, add the outputs dynamically
                     var builder = GTRecipeBuilder
-                            .of(CosmicCore.id("bee_recipe_" + primary.getSpeciesName()), CosmicRecipeTypes.BEES)
-                            .EUt(GTValues.VA[GTValues.HV])
-                            .duration((int) (20 * 60 * lifespanMultiplier));
+                            .of(CosmicCore.id("bee_recipe_"), CosmicRecipeTypes.BEES)
+                            .EUt(GTValues.VA[GTValues.LV])
+                            .duration((int) (20 * 240));
 
                     for (var product : primary.getProducts()) {
                         builder.chancedOutput(
                                 new ItemStack(
                                         product.item(),
-                                        (int) (20 * productionMultiplier * (2 * lifespanMultiplier) + 10 * beeTier)),
+                                        (int) (10 + (productionMultiplier * 15))),
                                 (int) (product.chance() * ChanceLogic.getMaxChancedValue()),
                                 0);
                     }

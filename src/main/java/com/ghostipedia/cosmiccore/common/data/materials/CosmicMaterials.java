@@ -54,6 +54,8 @@ public class CosmicMaterials {
     public static Material StarMetal;
     public static Material Nevramite;
     public static Material PaleSteel;
+    public static Material PaleOil;
+    public static Material PaleOreBad;
 
     public static void register() {
         Prisma = new Material.Builder(CosmicCore.id("prisma"))
@@ -382,6 +384,18 @@ public class CosmicMaterials {
                 .flags(GENERATE_ROTOR, GENERATE_FRAME, GENERATE_BOLT_SCREW, GENERATE_ROUND, GENERATE_GEAR,
                         GENERATE_SMALL_GEAR, GENERATE_RING, GENERATE_FRAME, GENERATE_SPRING, GENERATE_SPRING_SMALL,
                         GENERATE_FINE_WIRE)
+                .color(0xE8F3FF).secondaryColor(0x1F2A36).iconSet(MaterialIconSet.METALLIC)
+                .buildAndRegister();
+        PaleOil = new Material.Builder(CosmicCore.id("pale_oil"))
+                .formula("✧⚙")
+                .liquid(new FluidBuilder().state(FluidState.LIQUID).customStill())
+                .color(0xE8F3FF).secondaryColor(0x1F2A36).iconSet(MaterialIconSet.METALLIC)
+                .buildAndRegister();
+        PaleOreBad = new Material.Builder(CosmicCore.id("reclaimed_pale_ore"))
+                .formula("✧⚙")
+                .ore()
+                .flags(DISABLE_DECOMPOSITION, NO_SMELTING, NO_UNIFICATION, NO_SMELTING, NO_ORE_SMELTING,
+                        NO_ORE_PROCESSING_TAB, NO_SMASHING)
                 .color(0xE8F3FF).secondaryColor(0x1F2A36).iconSet(MaterialIconSet.METALLIC)
                 .buildAndRegister();
     }

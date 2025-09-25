@@ -13,22 +13,13 @@ public class CosmicBeesDefinition {
 
     public static void defineBees(IApicultureRegistration apicultureRegistration) {
         apicultureRegistration
-                .registerSpecies(CosmicBeesSpecies.COBBLED, CosmicBeesTaxa.GENUS_STONY, CosmicBeesTaxa.SPECIES_WEIGHTY,
-                        true, TextColor.fromRgb(0x9c5faff))
-                .setBody(TextColor.fromRgb(0X105aff))
-                .addProduct(CosmicBeesItems.BEE_COMBS.stack(CosmicBeesHoneyComb.ROCKY), 1)
-                .addMutations(mutations -> {
-                    mutations.add(ForestryBeeSpecies.ABYSSAL, ForestryBeeSpecies.COMMON, 10);
-                })
-                .setAuthority("Ghostipedia");
-        apicultureRegistration
                 .registerSpecies(CosmicBeesSpecies.LOFTY_OXYGEN, CosmicBeesTaxa.GENUS_LOFTY,
                         CosmicBeesTaxa.SPECIES_OXYGEN,
                         true, TextColor.fromRgb(0x8080FF))
                 .setBody(TextColor.fromRgb(0x4242FF))
                 .addProduct(CosmicBeesItems.BEE_COMBS.stack(CosmicBeesHoneyComb.LOFTY_OXYGEN), 1)
                 .addMutations(mutations -> {
-                    mutations.add(ForestryBeeSpecies.ABYSSAL, ForestryBeeSpecies.COMMON, 10);
+                    mutations.add(ForestryBeeSpecies.ABYSSAL, ForestryBeeSpecies.IMPERIAL, 10);
                 })
                 .setAuthority("Ghostipedia");
 
@@ -39,7 +30,7 @@ public class CosmicBeesDefinition {
                 .setBody(TextColor.fromRgb(0x4242FF))
                 .addProduct(CosmicBeesItems.BEE_COMBS.stack(CosmicBeesHoneyComb.LOFTY_HYDROGEN), 1)
                 .addMutations(mutations -> {
-                    mutations.add(ForestryBeeSpecies.ABYSSAL, ForestryBeeSpecies.COMMON, 10);
+                    mutations.add(ForestryBeeSpecies.ABYSSAL, ForestryBeeSpecies.AGRARIAN, 10);
                 })
                 .setAuthority("Ghostipedia");
         apicultureRegistration
@@ -49,7 +40,7 @@ public class CosmicBeesDefinition {
                 .setBody(TextColor.fromRgb(0x4242FF))
                 .addProduct(CosmicBeesItems.BEE_COMBS.stack(CosmicBeesHoneyComb.LOFTY_NITROGEN), 1)
                 .addMutations(mutations -> {
-                    mutations.add(ForestryBeeSpecies.ABYSSAL, ForestryBeeSpecies.COMMON, 10);
+                    mutations.add(ForestryBeeSpecies.ABYSSAL, ForestryBeeSpecies.CULTIVATED, 10);
                 })
                 .setAuthority("Ghostipedia");
         apicultureRegistration

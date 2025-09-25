@@ -180,7 +180,7 @@ public class CosmicMachines {
     public static final MachineDefinition[] INDUSTRIAL_APIARY = registerTieredMachines("electric_apiary",
             IndustrialApiaryMachine::new,
             (tier, builder) -> builder
-                    .langValue("%s Industrial Apiary".formatted(VN[tier]))
+                    .langValue("%s Industrial Production Apiary".formatted(VN[tier]))
                     .tooltipBuilder((stack, list) -> {
                         list.add(Component.translatable("cosmiccore.industrial_apiary.tier.description.0"));
                         list.add(Component.translatable("cosmiccore.industrial_apiary.tier.description.1"));
@@ -192,7 +192,7 @@ public class CosmicMachines {
                     .recipeType(CosmicRecipeTypes.BEES)
                     .workableTieredHullModel(CosmicCore.id("block/overlay/machine/industrial_apiary"))
                     .register(),
-            GTValues.tiersBetween(HV, LuV));
+            GTValues.tiersBetween(LV, LuV));
 
     // Enable If needed Inside of Dev
     // public static final MultiblockMachineDefinition SOUL_TESTER = REGISTRATE.multiblock("soul_tester",
