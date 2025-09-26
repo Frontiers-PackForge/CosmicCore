@@ -1,9 +1,7 @@
 package com.ghostipedia.cosmiccore.common.machine.multiblock.multi;
 
-import com.ghostipedia.cosmiccore.CosmicCore;
 import com.ghostipedia.cosmiccore.api.machine.part.CosmicPartAbility;
-import com.ghostipedia.cosmiccore.common.data.CosmicMachines;
-import com.ghostipedia.cosmiccore.gtbridge.CosmicRecipeTypes;
+
 import com.gregtechceu.gtceu.GTCEu;
 import com.gregtechceu.gtceu.api.data.RotationState;
 import com.gregtechceu.gtceu.api.machine.MultiblockMachineDefinition;
@@ -11,14 +9,11 @@ import com.gregtechceu.gtceu.api.machine.multiblock.PartAbility;
 import com.gregtechceu.gtceu.api.machine.multiblock.WorkableElectricMultiblockMachine;
 import com.gregtechceu.gtceu.api.pattern.FactoryBlockPattern;
 import com.gregtechceu.gtceu.api.pattern.util.RelativeDirection;
-import com.gregtechceu.gtceu.api.recipe.GTRecipeType;
 import com.gregtechceu.gtceu.api.recipe.OverclockingLogic;
-import com.gregtechceu.gtceu.common.data.GTBlocks;
 import com.gregtechceu.gtceu.common.data.GTMaterials;
 import com.gregtechceu.gtceu.common.data.GTRecipeModifiers;
 import com.gregtechceu.gtceu.common.data.GTRecipeTypes;
-import com.sammy.malum.registry.common.block.BlockRegistry;
-import forestry.apiculture.blocks.BlockHoneyComb;
+
 import net.minecraft.world.level.block.Blocks;
 
 import static com.ghostipedia.cosmiccore.api.registries.CosmicRegistration.REGISTRATE;
@@ -27,7 +22,6 @@ import static com.gregtechceu.gtceu.api.pattern.Predicates.*;
 import static com.gregtechceu.gtceu.common.data.GTBlocks.*;
 
 public class MegaProductionAlveary {
-
 
     public final static MultiblockMachineDefinition MEGA_PRODUCTION_ALVEARY = REGISTRATE
             .multiblock("honey_alveary",
@@ -75,6 +69,4 @@ public class MegaProductionAlveary {
             .register();
 
     public static void init() {}
-
-
 }

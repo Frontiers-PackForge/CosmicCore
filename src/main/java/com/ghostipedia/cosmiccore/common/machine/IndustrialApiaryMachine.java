@@ -11,11 +11,9 @@ import com.gregtechceu.gtceu.api.gui.GuiTextures;
 import com.gregtechceu.gtceu.api.gui.UITemplate;
 import com.gregtechceu.gtceu.api.gui.fancy.TabsWidget;
 import com.gregtechceu.gtceu.api.gui.widget.SlotWidget;
-import com.gregtechceu.gtceu.api.gui.widget.TankWidget;
 import com.gregtechceu.gtceu.api.machine.IMachineBlockEntity;
 import com.gregtechceu.gtceu.api.machine.WorkableTieredMachine;
 import com.gregtechceu.gtceu.api.machine.fancyconfigurator.CombinedDirectionalFancyConfigurator;
-import com.gregtechceu.gtceu.api.machine.feature.IAutoOutputItem;
 import com.gregtechceu.gtceu.api.machine.feature.IFancyUIMachine;
 import com.gregtechceu.gtceu.api.machine.feature.IMachineLife;
 import com.gregtechceu.gtceu.api.machine.trait.NotifiableFluidTank;
@@ -26,7 +24,6 @@ import com.gregtechceu.gtceu.api.recipe.chance.logic.ChanceLogic;
 import com.gregtechceu.gtceu.data.recipe.builder.GTRecipeBuilder;
 
 import com.lowdragmc.lowdraglib.gui.modular.ModularUI;
-import com.lowdragmc.lowdraglib.gui.texture.ProgressTexture;
 import com.lowdragmc.lowdraglib.gui.widget.*;
 import com.lowdragmc.lowdraglib.syncdata.annotation.Persisted;
 import com.lowdragmc.lowdraglib.syncdata.field.ManagedFieldHolder;
@@ -97,12 +94,13 @@ public class IndustrialApiaryMachine extends WorkableTieredMachine implements IF
     protected NotifiableFluidTank createTank(Object... args) {
         return new NotifiableFluidTank(this, 1, 16000, IO.BOTH);
     }
-    //For Input i tems
+
+    // For Input i tems
     protected NotifiableItemStackHandler createStorageCache(Object... args) {
         return new NotifiableItemStackHandler(this, 1, IO.IN, IO.IN);
     }
 
-    //Attempting to set the non-override from 9 to 12 (with override)
+    // Attempting to set the non-override from 9 to 12 (with override)
     @Override
     protected @NotNull NotifiableItemStackHandler createExportItemHandler(Object... args) {
         return new NotifiableItemStackHandler(this, 12, IO.OUT, IO.OUT);
@@ -152,7 +150,7 @@ public class IndustrialApiaryMachine extends WorkableTieredMachine implements IF
 
     // TODO: HELP IM SCARED
     @Override
-    protected @NotNull RecipeLogic createRecipeLogic(Object @NotNull ... args) {
+    protected @NotNull RecipeLogic createRecipeLogic(Object @NotNull... args) {
         return new IndustrialApiaryMachine.BeeRecipeLogic(this);
     }
 
