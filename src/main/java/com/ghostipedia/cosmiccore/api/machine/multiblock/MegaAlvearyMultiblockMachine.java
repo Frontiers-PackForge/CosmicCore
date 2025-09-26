@@ -34,6 +34,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -205,6 +206,7 @@ public class MegaAlvearyMultiblockMachine extends WorkableElectricMultiblockMach
             // ====== Get and process Bees from holders =====
             var alveary = (MegaAlvearyMultiblockMachine) machine;
             int totalbees = 0;
+            Map<IBeeSpecies, Integer> beeCounter = new HashMap<>();
             for (var holder : alveary.getBeeHolders()) {
                 for (var content : holder.getHeldBees().getContents()) {
                     if (!(content instanceof ItemStack stack)) continue;
@@ -220,27 +222,22 @@ public class MegaAlvearyMultiblockMachine extends WorkableElectricMultiblockMach
                     if (!(individual instanceof IBee bee)) continue;
                     var genome = bee.getGenome();
 
-                    // Generate recipe from bee
-                    // TODO: Do we also want to do stuff with secondary species? reject if not equal? output a mix of
-                    // both?
                     IBeeSpecies primary = genome.getActiveValue(BeeChromosomes.SPECIES);
-                    IBeeSpecies secondary = genome.getInactiveValue(BeeChromosomes.SPECIES);
 
-                    // Forestry Genome Values:
-
-                    // Define the builder, add the outputs dynamically
-
-                    // I could group these in some way and then make one output instead of many, but eh cba.
-                    // It's a negligible speedup while sacrificing readability.
-                    for (var product : primary.getProducts()) {
-                        builder.chancedOutput(
-                                new ItemStack(
-                                        product.item(),
-                                        (int) (256 * productivityMultiplier)),
-                                (int) (product.chance() * ChanceLogic.getMaxChancedValue()),
-                                0);
-                    }
+                    beeCounter.put(primary, beeCounter.getOrDefault(primary, 0) + 1);
                     totalbees += 1;
+                }
+            }
+
+            // ===== Add outputs from bee species counter =====
+            for (var beeEntry : beeCounter.entrySet()) {
+                for (var product : beeEntry.getKey().getProducts()) {
+                    builder.chancedOutput(
+                            new ItemStack(
+                                    product.item(),
+                                    (int) (256 * productivityMultiplier * beeEntry.getValue())),
+                            (int) (product.chance() * ChanceLogic.getMaxChancedValue()),
+                            0);
                 }
             }
 
