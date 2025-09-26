@@ -1,12 +1,13 @@
 package com.ghostipedia.cosmiccore.common.data.materials.tinkers;
 
 import net.minecraft.world.item.Tier;
+
 import lombok.Getter;
 import slimeknights.tconstruct.library.materials.definition.MaterialId;
 import slimeknights.tconstruct.library.materials.stats.IMaterialStats;
 import slimeknights.tconstruct.library.materials.stats.MaterialStatsId;
+import slimeknights.tconstruct.library.modifiers.Modifier;
 import slimeknights.tconstruct.library.modifiers.ModifierEntry;
-import slimeknights.tconstruct.library.modifiers.util.LazyModifier;
 import slimeknights.tconstruct.library.tools.stat.ToolStats;
 import slimeknights.tconstruct.tools.stats.*;
 
@@ -17,7 +18,7 @@ public class TinkersMaterial {
 
     public static final Set<TinkersMaterial> MATERIALS = new HashSet<>();
     private String name;
-    private Set<LazyModifier> defaultTraits = new HashSet<>();
+    private Set<Modifier> defaultTraits = new HashSet<>();
     private Map<MaterialStatsId, Set<ModifierEntry>> traits = new HashMap<>();
     private int materialValue;
     private HeadMaterialStats headMaterialStats;
@@ -45,7 +46,7 @@ public class TinkersMaterial {
         this.tier = builder.tier;
         this.stats = builder.stats;
         this.defaultTraits = builder.defaultTraits;
-        this.traits = new HashMap<>(); // Simplified for this example
+        this.traits = new HashMap<>(); // Simplified for now
     }
 
     public List<IMaterialStats> getStats() {
@@ -53,10 +54,11 @@ public class TinkersMaterial {
     }
 
     public static final class Builder {
+
         private boolean craftable = false;
         private int tier = 0;
         private String name;
-        private Set<LazyModifier> modifiers = new HashSet<>();
+        private Set<Modifier> modifiers = new HashSet<>();
         private int materialValue = 1;
         private int sortOrder = 0;
         private final List<IMaterialStats> stats = new ArrayList<>();
@@ -66,7 +68,7 @@ public class TinkersMaterial {
         private final Set<StatlessMaterialStats> statlessMaterialStats = new HashSet<>();
         private SkullStats skullStats;
         private ToolStats toolStats;
-        private final Set<LazyModifier> defaultTraits = new HashSet<>();
+        private final Set<Modifier> defaultTraits = new HashSet<>();
         private final Map<MaterialStatsId, List<ModifierEntry>> statSpecificTraits = new HashMap<>();
 
         public Builder(String name) {
@@ -83,7 +85,7 @@ public class TinkersMaterial {
             return this;
         }
 
-        public Builder modifier(LazyModifier modifier) {
+        public Builder modifier(Modifier modifier) {
             modifiers.add(modifier);
             return this;
         }
@@ -127,14 +129,14 @@ public class TinkersMaterial {
             return this;
         }
 
-        public Builder defaultTrait(LazyModifier modifier) {
+        public Builder defaultTrait(Modifier modifier) {
             this.defaultTraits.add(modifier);
             return this;
         }
 
-        public Builder trait(LazyModifier modifier, int level, MaterialStatsId statsId) {
+        public Builder trait(Modifier modifier, int level, MaterialStatsId statsId) {
             List<ModifierEntry> traits = this.statSpecificTraits.computeIfAbsent(statsId, k -> new ArrayList<>());
-            traits.add(new ModifierEntry(modifier.get(), level));
+            traits.add(new ModifierEntry(modifier, level));
             return this;
         }
 
@@ -145,4 +147,3 @@ public class TinkersMaterial {
         }
     }
 }
-

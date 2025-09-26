@@ -1,5 +1,6 @@
 package com.ghostipedia.cosmiccore.common.item.tcon.modifiers;
 
+import com.ghostipedia.cosmiccore.common.item.tcon.TinkersMaterials;
 import net.minecraft.data.PackOutput;
 
 import slimeknights.tconstruct.library.data.tinkering.AbstractModifierProvider;
@@ -17,8 +18,9 @@ public class CosmicModifierProvider extends AbstractModifierProvider {
                 .levelDisplay(ModifierLevelDisplay.NO_LEVELS);
     }
 
+
     @Override
     public String getName() {
-        return "";
+        return "cosmic modifiers";
     }
 }

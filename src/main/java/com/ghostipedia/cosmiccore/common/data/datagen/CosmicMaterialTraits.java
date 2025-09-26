@@ -2,14 +2,18 @@ package com.ghostipedia.cosmiccore.common.data.datagen;
 
 import com.ghostipedia.cosmiccore.common.data.materials.tinkers.TinkersMaterial;
 
+import com.ghostipedia.cosmiccore.common.item.tcon.modifiers.CosmicCoreModifiers;
 import net.minecraft.data.PackOutput;
-import net.minecraft.world.item.Tiers;
 
+import net.minecraft.world.item.Tiers;
 import slimeknights.tconstruct.library.data.material.AbstractMaterialDataProvider;
 import slimeknights.tconstruct.library.data.material.AbstractMaterialTraitDataProvider;
+import slimeknights.tconstruct.library.materials.MaterialRegistry;
 import slimeknights.tconstruct.library.materials.stats.MaterialStatsId;
+import slimeknights.tconstruct.library.modifiers.Modifier;
 import slimeknights.tconstruct.library.modifiers.ModifierEntry;
 import slimeknights.tconstruct.library.modifiers.util.LazyModifier;
+import slimeknights.tconstruct.tools.TinkerModifiers;
 import slimeknights.tconstruct.tools.stats.StatlessMaterialStats;
 
 import java.util.Map;
@@ -23,22 +27,23 @@ public class CosmicMaterialTraits extends AbstractMaterialTraitDataProvider {
 
     public static final TinkersMaterial TEST_MATERIAL = new TinkersMaterial.Builder("shiboubouya_dn_tube")
             .materialValue(2)
-            .headMaterialStats(2200, 10.0f, Tiers.IRON, 5.0f)
+             .headMaterialStats(2200, 10.0f, Tiers.IRON, 5.0f)
             .gripMaterialStats(3000, 10.0f, 20)
             .handleMaterialStats(3000, 10, 4, 10)
             .addStatlessType(StatlessMaterialStats.BINDING)
-            .addStatlessType(StatlessMaterialStats.REPAIR_KIT)
+             .addStatlessType(StatlessMaterialStats.REPAIR_KIT)
             .addStatlessType(StatlessMaterialStats.BOWSTRING)
-            //.defaultTrait(CosmicCoreModifiers.wrenchModeSwitch)
-            //.trait(CosmicCoreModifiers.wrenchModeSwitch, 3, MaterialRegistry.RANGED)
-            .sortOrder(10)
-            .craftable(true)
-            .build();
+            .defaultTrait(CosmicCoreModifiers.wrenchModeSwitch.get())
+             .trait(CosmicCoreModifiers.wrenchModeSwitch.get(), 3, MaterialRegistry.RANGED)
+            .trait(TinkerModifiers.decay.get() , 1, MaterialRegistry.MELEE_HARVEST )
+          .sortOrder(10)
+           .craftable(true)
+          .build();
 
     @Override
     protected void addMaterialTraits() {
         for (TinkersMaterial material : TinkersMaterial.MATERIALS) {
-            Set<LazyModifier> defaultTraits = material.getDefaultTraits();
+            Set<Modifier> defaultTraits = material.getDefaultTraits();
             if (!defaultTraits.isEmpty()) {
                 addDefaultTraits(material.getMaterialLocation(),
                         material.getDefaultTraits().toArray(defaultTraits.toArray(new LazyModifier[0])));
@@ -58,6 +63,6 @@ public class CosmicMaterialTraits extends AbstractMaterialTraitDataProvider {
 
     @Override
     public String getName() {
-        return "";
+        return "Cosmic Material Traits ";
     }
 }
