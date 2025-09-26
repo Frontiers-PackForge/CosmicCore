@@ -1,5 +1,6 @@
 package com.ghostipedia.cosmiccore.common.machine.multiblock.multi;
 
+import com.ghostipedia.cosmiccore.api.machine.multiblock.MegaAlvearyMultiblockMachine;
 import com.ghostipedia.cosmiccore.api.machine.part.CosmicPartAbility;
 
 import com.gregtechceu.gtceu.GTCEu;
@@ -25,14 +26,13 @@ public class MegaProductionAlveary {
 
     public final static MultiblockMachineDefinition MEGA_PRODUCTION_ALVEARY = REGISTRATE
             .multiblock("honey_alveary",
-                    WorkableElectricMultiblockMachine::new)
+                    MegaAlvearyMultiblockMachine::new)
             .langValue("§eHyper Optimized Nectar Extraction Yard [HONEY]")
             .rotationState(RotationState.NON_Y_AXIS)
             .recipeType(GTRecipeTypes.DUMMY_RECIPES) // IDK HOW WE GET RID OF THIS? I THOUGHT WE COULD!
             .appearanceBlock(CASING_STEEL_SOLID)
             .partAppearance((controller, part, side) -> CASING_STEEL_SOLID.getDefaultState())
-            .recipeModifiers(GTRecipeModifiers.PARALLEL_HATCH,
-                    GTRecipeModifiers.ELECTRIC_OVERCLOCK.apply(OverclockingLogic.NON_PERFECT_OVERCLOCK_SUBTICK))
+            .recipeModifiers() // No modifiers, forcefully remove default list
             // spotless:off
             .pattern(definition -> FactoryBlockPattern.start(RelativeDirection.LEFT,RelativeDirection.UP,RelativeDirection.FRONT)
                     .aisle("           AAAAA    ", "           AAAAA    ", "                    ", "                    ", "                    ", "                    ", "                    ", "                    ", "                    ", "                    ", "                    ", "                    ", "                    ", "                    ", "                    ", "                    ", "                    ", "                    ", "                    ")

@@ -36,6 +36,7 @@ import org.jetbrains.annotations.NotNull;
 public class BeeHolderPartMachine extends MultiblockPartMachine implements IMachineLife, IFancyUIMachine {
 
     @Persisted
+    @Getter
     private final BeeHolderHandler heldBees;
     @Getter
     @Setter
@@ -51,7 +52,7 @@ public class BeeHolderPartMachine extends MultiblockPartMachine implements IMach
         heldBees = new BeeHolderHandler(this);
     }
 
-    private class BeeHolderHandler extends NotifiableItemStackHandler {
+    public class BeeHolderHandler extends NotifiableItemStackHandler {
 
         public BeeHolderHandler(MetaMachine machine) {
             super(machine, 4, IO.IN, IO.BOTH, size -> new CustomItemStackHandler(size) {

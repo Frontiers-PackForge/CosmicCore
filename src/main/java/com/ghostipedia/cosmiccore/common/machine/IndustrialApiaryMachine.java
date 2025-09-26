@@ -214,7 +214,7 @@ public class IndustrialApiaryMachine extends WorkableTieredMachine implements IF
 
                     // Define the builder, add the outputs dynamically
                     var builder = GTRecipeBuilder
-                            .of(CosmicCore.id("bee_recipe_"), CosmicRecipeTypes.BEES)
+                            .of(CosmicCore.id("bee_recipe"), CosmicRecipeTypes.BEES)
                             .EUt(GTValues.VA[GTValues.LV])
                             .duration((int) (20 * 480));
 
