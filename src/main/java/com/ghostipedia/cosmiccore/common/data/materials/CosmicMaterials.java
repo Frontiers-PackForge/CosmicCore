@@ -68,8 +68,7 @@ public class CosmicMaterials {
     public static Material perfectedNutrientOverclockFluid;
 
     public static void register() {
-
-        //Nutrient Fluids (Production)
+        // Nutrient Fluids (Production)
 
         basicNutrientProductionFluid = new Material.Builder(CosmicCore.id("basic_production_nutrient"))
                 .liquid(new FluidBuilder().state(FluidState.LIQUID).customStill())
@@ -112,7 +111,6 @@ public class CosmicMaterials {
                 .formula("\uD80C\uDDA6")
                 .langValue("Perfected Overclocking Nutrient")
                 .buildAndRegister();
-
 
         Prisma = new Material.Builder(CosmicCore.id("prisma"))
                 .liquid(new FluidBuilder().state(FluidState.LIQUID).customStill())
