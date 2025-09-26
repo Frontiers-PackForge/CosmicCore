@@ -385,6 +385,14 @@ public class CosmicLangHandler extends LangHandler {
         provider.add("allele.forestry.bee_species.cosmiccore.bee_ambrosic", "Ambrosic");
         provider.add("allele.forestry.bee_species.cosmiccore.bee_biohazard", "Biohazard");
 
+        provider.add("allele.forestry.bee_species.cosmiccore.bee_abrasive", "Abrasive");
+        provider.add("allele.forestry.bee_species.cosmiccore.bee_energized", "Energized");
+        provider.add("allele.forestry.bee_species.cosmiccore.bee_slick", "Slick");
+        provider.add("allele.forestry.bee_species.cosmiccore.bee_pyrolytic", "Pyrolytic");
+        provider.add("allele.forestry.bee_species.cosmiccore.bee_lunar", "Lunar");
+        provider.add("allele.forestry.bee_species.cosmiccore.bee_solar", "Solar");
+        provider.add("allele.forestry.bee_species.cosmiccore.bee_cosmos", "Cosmos");
+
         provider.add("item.cosmiccore.bee_comb_lofty_oxygen", "Lofty Oxygen Comb");
         provider.add("item.cosmiccore.bee_comb_lofty_hydrogen", "Lofty Hydrogen Comb");
         provider.add("item.cosmiccore.bee_comb_lofty_nitrogen", "Lofty Nitrogen Comb");
@@ -397,6 +405,14 @@ public class CosmicLangHandler extends LangHandler {
         provider.add("item.cosmiccore.bee_comb_runic", "Runic Comb");
         provider.add("item.cosmiccore.bee_comb_ambrosic", "Ambrosic Comb");
         provider.add("item.cosmiccore.bee_comb_biohazard", "Biohazard Comb");
+
+        provider.add("item.cosmiccore.bee_comb_abrasive", "Abrasive Comb");
+        provider.add("item.cosmiccore.bee_comb_energized", "Energized Comb");
+        provider.add("item.cosmiccore.bee_comb_slick", "Slick Comb");
+        provider.add("item.cosmiccore.bee_comb_pyrolytic", "Pyrolytic Comb");
+        provider.add("item.cosmiccore.bee_comb_lunar", "Lunar Comb");
+        provider.add("item.cosmiccore.bee_comb_solar", "Solar Comb");
+        provider.add("item.cosmiccore.bee_comb_cosmos", "Cosmos Comb");
 
         provider.add("gui.cosmiccore.iapiary", "Industrial Apiary");
         provider.add("gui.cosmiccore.iapiary.yield", "Yield: %d");

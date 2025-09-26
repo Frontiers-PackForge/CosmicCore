@@ -1,6 +1,7 @@
 package com.ghostipedia.cosmiccore.api.machine.multiblock;
 
 import com.ghostipedia.cosmiccore.CosmicCore;
+import com.ghostipedia.cosmiccore.common.data.materials.CosmicMaterials;
 import com.ghostipedia.cosmiccore.common.machine.multiblock.part.BeeHolderPartMachine;
 import com.ghostipedia.cosmiccore.gtbridge.CosmicRecipeTypes;
 
@@ -99,7 +100,7 @@ public class MegaAlvearyMultiblockMachine extends WorkableElectricMultiblockMach
         }
 
         // Constant now, maybe change to be dependent on bee amount, etc.
-        private int productivityFluidConsumptionAmount = 1000;
+        private int productivityFluidConsumptionAmount = 100;
 
         private Map<Fluid, Float> productivityFluids = null;
 
@@ -108,7 +109,11 @@ public class MegaAlvearyMultiblockMachine extends WorkableElectricMultiblockMach
             if (productivityFluids == null) {
                 // To update the productivity values, edit these below.
                 productivityFluids = new Object2FloatOpenHashMap<>();
-                productivityFluids.put(Fluids.WATER, 1.5f);
+                productivityFluids.put(CosmicMaterials.basicNutrientProductionFluid.getFluid(), 8f);
+                productivityFluids.put(CosmicMaterials.advancedNutrientProductionFluid.getFluid(), 16f);
+                productivityFluids.put(CosmicMaterials.superNutrientProductionFluid.getFluid(), 32f);
+                productivityFluids.put(CosmicMaterials.perfectedNutrientProductionFluid.getFluid(), 64f);
+
             }
             return productivityFluids;
         }
@@ -124,7 +129,10 @@ public class MegaAlvearyMultiblockMachine extends WorkableElectricMultiblockMach
                 // To update the overclock values, edit these below.
                 overclockFluids = new Object2FloatOpenHashMap<>();
                 // These are multipliers, so 0.7f would reduce the recipe time by 30%
-                overclockFluids.put(Fluids.LAVA, 0.7f);
+                overclockFluids.put(CosmicMaterials.basicNutrientOverclockFluid.getFluid(), 0.80f);
+                overclockFluids.put(CosmicMaterials.advancedNutrientOverclockFluid.getFluid(), 0.60f);
+                overclockFluids.put(CosmicMaterials.superNutrientOverclockFluid.getFluid(), 0.40f);
+                overclockFluids.put(CosmicMaterials.perfectedNutrientOverclockFluid.getFluid(), 0.25f);
 
             }
             return overclockFluids;
@@ -201,7 +209,7 @@ public class MegaAlvearyMultiblockMachine extends WorkableElectricMultiblockMach
                 // This drains in 1 go at the start. To drain per tick, add .perTick(true).....perTick(false)
                 builder.inputFluids(overclockFluid);
             }
-            builder.duration((int) (5 * 20 * overclockMultiplier));
+            builder.duration((int) (60 * 20 * overclockMultiplier));
 
             // ====== Get and process Bees from holders =====
             var alveary = (MegaAlvearyMultiblockMachine) machine;
