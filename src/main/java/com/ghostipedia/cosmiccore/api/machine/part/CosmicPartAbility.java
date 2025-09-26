@@ -17,4 +17,5 @@ public class CosmicPartAbility {
 
     public static final PartAbility IMPORT_EMBER = new PartAbility("import_ember");
     public static final PartAbility EXPORT_EMBER = new PartAbility("export_ember");
+    public static final PartAbility BEE_HOLDER = new PartAbility("bee_holder");
 }

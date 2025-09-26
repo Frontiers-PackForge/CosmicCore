@@ -6,6 +6,11 @@ public class CosmicGuiTextures {
 
     public static final ResourceTexture PLANT_OVERLAY = new ResourceTexture(
             "cosmiccore:textures/gui/overlay/crop_overlay.png");
+    public static final ResourceTexture BEE_OVERLAY = new ResourceTexture(
+            "cosmiccore:textures/gui/overlay/bee_overlay.png");
+    public static final ResourceTexture BEE_HOLDER_OVERLAY = new ResourceTexture(
+            "cosmiccore:textures/gui/overlay/overlay_bee_holder.png");
+
     public static final ResourceTexture SIGILI_PROGRESS_BAR = new ResourceTexture(
             "cosmiccore:textures/gui/overlay/sigil_overlay.png");
     public static final ResourceTexture PROGRESS_BAR_HEAVY = new ResourceTexture(

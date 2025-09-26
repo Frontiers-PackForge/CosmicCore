@@ -180,7 +180,7 @@ public class CosmicMachines {
     public static final MachineDefinition[] INDUSTRIAL_APIARY = registerTieredMachines("electric_apiary",
             IndustrialApiaryMachine::new,
             (tier, builder) -> builder
-                    .langValue("%s Industrial Apiary".formatted(VN[tier]))
+                    .langValue("%s Industrial Production Apiary".formatted(VN[tier]))
                     .tooltipBuilder((stack, list) -> {
                         list.add(Component.translatable("cosmiccore.industrial_apiary.tier.description.0"));
                         list.add(Component.translatable("cosmiccore.industrial_apiary.tier.description.1"));
@@ -189,9 +189,10 @@ public class CosmicMachines {
                         list.add(Component.translatable("cosmiccore.industrial_apiary.tier.description.4"));
                         list.add(Component.translatable("cosmiccore.industrial_apiary.tier.description.5"));
                     })
+                    .recipeType(CosmicRecipeTypes.BEES)
                     .workableTieredHullModel(CosmicCore.id("block/overlay/machine/industrial_apiary"))
                     .register(),
-            GTValues.tiersBetween(HV, LuV));
+            GTValues.tiersBetween(LV, LuV));
 
     // Enable If needed Inside of Dev
     // public static final MultiblockMachineDefinition SOUL_TESTER = REGISTRATE.multiblock("soul_tester",
@@ -370,6 +371,19 @@ public class CosmicMachines {
             .rotationState(RotationState.ALL)
             .modelProperty(GTMachineModelProperties.IS_FORMED, false)
             .abilities(PartAbility.IMPORT_ITEMS)
+            .modelProperty(RecipeLogic.STATUS_PROPERTY, RecipeLogic.Status.IDLE)
+            .model(createWorkableTieredHullMachineModel(GTCEu.id("block/machines/object_holder"))
+                    .andThen((ctx, prov, model) -> {
+                        model.addReplaceableTextures("bottom", "top", "side");
+                    }))
+            .register();
+
+    public static final MachineDefinition BEE_HOLDER = REGISTRATE.machine("bee_holder", BeeHolderPartMachine::new)
+            .langValue("Bee Holder")
+            .tier(UV)
+            .rotationState(RotationState.NON_Y_AXIS)
+            .modelProperty(GTMachineModelProperties.IS_FORMED, false)
+            .abilities(CosmicPartAbility.BEE_HOLDER)
             .modelProperty(RecipeLogic.STATUS_PROPERTY, RecipeLogic.Status.IDLE)
             .model(createWorkableTieredHullMachineModel(GTCEu.id("block/machines/object_holder"))
                     .andThen((ctx, prov, model) -> {

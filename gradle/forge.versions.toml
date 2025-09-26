@@ -1,6 +1,6 @@
 [versions]
 ldlib = "1.0.40.b"
-gtceu = "7.2.0-SNAPSHOT"
+gtceu = "7.2.0"
 registrate = "MC1.20-1.3.11"
 configuration = "3.1.0-forge"
 mixinExtras = "0.2.0"

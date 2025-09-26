@@ -54,8 +54,66 @@ public class CosmicMaterials {
     public static Material StarMetal;
     public static Material Nevramite;
     public static Material PaleSteel;
+    public static Material PaleOil;
+    public static Material PaleOreBad;
+
+    public static Material basicNutrientProductionFluid;
+    public static Material advancedNutrientProductionFluid;
+    public static Material superNutrientProductionFluid;
+    public static Material perfectedNutrientProductionFluid;
+
+    public static Material basicNutrientOverclockFluid;
+    public static Material advancedNutrientOverclockFluid;
+    public static Material superNutrientOverclockFluid;
+    public static Material perfectedNutrientOverclockFluid;
 
     public static void register() {
+
+        //Nutrient Fluids (Production)
+
+        basicNutrientProductionFluid = new Material.Builder(CosmicCore.id("basic_production_nutrient"))
+                .liquid(new FluidBuilder().state(FluidState.LIQUID).customStill())
+                .formula("\uD80C\uDDA6")
+                .langValue("Basic Production Nutrient")
+                .buildAndRegister();
+        advancedNutrientProductionFluid = new Material.Builder(CosmicCore.id("advanced_production_nutrient"))
+                .liquid(new FluidBuilder().state(FluidState.LIQUID).customStill())
+                .formula("\uD80C\uDDA6")
+                .langValue("Advanced Production Nutrient")
+                .buildAndRegister();
+        superNutrientProductionFluid = new Material.Builder(CosmicCore.id("super_production_nutrient"))
+                .liquid(new FluidBuilder().state(FluidState.LIQUID).customStill())
+                .formula("\uD80C\uDDA6")
+                .langValue("Super Production Nutrient")
+                .buildAndRegister();
+        perfectedNutrientProductionFluid = new Material.Builder(CosmicCore.id("perfect_production_nutrient"))
+                .liquid(new FluidBuilder().state(FluidState.LIQUID).customStill())
+                .formula("\uD80C\uDDA6")
+                .langValue("Super Production Nutrient")
+                .buildAndRegister();
+
+        basicNutrientOverclockFluid = new Material.Builder(CosmicCore.id("basic_overclock_nutrient"))
+                .liquid(new FluidBuilder().state(FluidState.LIQUID).customStill())
+                .formula("\uD80C\uDDA6")
+                .langValue("Basic Overclocking Nutrient")
+                .buildAndRegister();
+        advancedNutrientOverclockFluid = new Material.Builder(CosmicCore.id("advanced_overclock_nutrient"))
+                .liquid(new FluidBuilder().state(FluidState.LIQUID).customStill())
+                .formula("\uD80C\uDDA6")
+                .langValue("Advanced Overclocking Nutrient")
+                .buildAndRegister();
+        superNutrientOverclockFluid = new Material.Builder(CosmicCore.id("super_overclock_nutrient"))
+                .liquid(new FluidBuilder().state(FluidState.LIQUID).customStill())
+                .formula("\uD80C\uDDA6")
+                .langValue("Super Overclocking Nutrient")
+                .buildAndRegister();
+        perfectedNutrientOverclockFluid = new Material.Builder(CosmicCore.id("perfect_overclock_nutrient"))
+                .liquid(new FluidBuilder().state(FluidState.LIQUID).customStill())
+                .formula("\uD80C\uDDA6")
+                .langValue("Perfected Overclocking Nutrient")
+                .buildAndRegister();
+
+
         Prisma = new Material.Builder(CosmicCore.id("prisma"))
                 .liquid(new FluidBuilder().state(FluidState.LIQUID).customStill())
                 .formula("֍")
@@ -382,6 +440,18 @@ public class CosmicMaterials {
                 .flags(GENERATE_ROTOR, GENERATE_FRAME, GENERATE_BOLT_SCREW, GENERATE_ROUND, GENERATE_GEAR,
                         GENERATE_SMALL_GEAR, GENERATE_RING, GENERATE_FRAME, GENERATE_SPRING, GENERATE_SPRING_SMALL,
                         GENERATE_FINE_WIRE)
+                .color(0xE8F3FF).secondaryColor(0x1F2A36).iconSet(MaterialIconSet.METALLIC)
+                .buildAndRegister();
+        PaleOil = new Material.Builder(CosmicCore.id("pale_oil"))
+                .formula("✧⚙")
+                .liquid(new FluidBuilder().state(FluidState.LIQUID).customStill())
+                .color(0xE8F3FF).secondaryColor(0x1F2A36).iconSet(MaterialIconSet.METALLIC)
+                .buildAndRegister();
+        PaleOreBad = new Material.Builder(CosmicCore.id("reclaimed_pale_ore"))
+                .formula("✧⚙")
+                .ore()
+                .flags(DISABLE_DECOMPOSITION, NO_SMELTING, NO_UNIFICATION, NO_SMELTING, NO_ORE_SMELTING,
+                        NO_ORE_PROCESSING_TAB, NO_SMASHING)
                 .color(0xE8F3FF).secondaryColor(0x1F2A36).iconSet(MaterialIconSet.METALLIC)
                 .buildAndRegister();
     }

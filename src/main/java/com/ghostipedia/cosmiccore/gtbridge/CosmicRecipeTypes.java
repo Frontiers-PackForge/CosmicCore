@@ -288,6 +288,14 @@ public class CosmicRecipeTypes {
             .setMaxTooltips(6)
             .onRecipeBuild(ResearchManager::createDefaultResearchRecipe)
             .setProgressBar(GuiTextures.PROGRESS_BAR_ARROW_MULTIPLE, ProgressTexture.FillDirection.LEFT_TO_RIGHT);
+    // Dummy recipe. Maybe add recipes here? Either way it won't be used for recipe searching, that's taken care of by
+    // BeeRecipeLogic
+    public static final GTRecipeType BEES = GTRecipeTypes
+            .register("bees", GTRecipeTypes.MULTIBLOCK)
+            .setMaxIOSize(1, 9, 0, 0)
+            .setMaxTooltips(6)
+            .setProgressBar(GuiTextures.PROGRESS_BAR_ARROW_MULTIPLE, ProgressTexture.FillDirection.LEFT_TO_RIGHT);
+
     /*
      * TODO: Multiblocks that might not need a RecipeType or might use it to do really weird things
      * RIFTGENERATOR
@@ -343,23 +351,24 @@ public class CosmicRecipeTypes {
      * This Thing is meant to allow the deconstruction of concepts into laws, and laws are meant to be dissolved with
      * their counterparts. Every Hebrew Letter needs a Pairing Counterlaw.
      */
-    public static final GTRecipeType CONCEPT_INCINERATOR = GTRecipeTypes
-            .register("concept_incinerator", GTRecipeTypes.MULTIBLOCK)
-            .setMaxIOSize(4, 4, 4, 4)
-            .setHasResearchSlot(true)
-            .setSound(GTSoundEntries.CHEMICAL) // TODO - Sounds
-            .setProgressBar(GuiTextures.PROGRESS_BAR_ARROW_MULTIPLE, ProgressTexture.FillDirection.LEFT_TO_RIGHT);
+    // public static final GTRecipeType CONCEPT_INCINERATOR = GTRecipeTypes
+    // .register("concept_incinerator", GTRecipeTypes.MULTIBLOCK)
+    // .setMaxIOSize(4, 4, 4, 4)
+    // .setHasResearchSlot(true)
+    // .setSound(GTSoundEntries.CHEMICAL) // TODO - Sounds
+    // .setProgressBar(GuiTextures.PROGRESS_BAR_ARROW_MULTIPLE, ProgressTexture.FillDirection.LEFT_TO_RIGHT);
     /*
      * TODO
      * Retcon Hashers allow the player to target potential sequence breaks in the already established environment
      * Every sequence break is recorded to a teams data and should be semi-random with mandatory breaks needed for
      * progression
      */
-    public static final GTRecipeType RETCON_HASHER = GTRecipeTypes.register("retcon_hasher", GTRecipeTypes.MULTIBLOCK)
-            .setMaxIOSize(4, 4, 4, 4)
-            .setHasResearchSlot(true)
-            .setSound(GTSoundEntries.CHEMICAL) // TODO - Sounds
-            .setProgressBar(GuiTextures.PROGRESS_BAR_ARROW_MULTIPLE, ProgressTexture.FillDirection.LEFT_TO_RIGHT);
+    // public static final GTRecipeType RETCON_HASHER = GTRecipeTypes.register("retcon_hasher",
+    // GTRecipeTypes.MULTIBLOCK)
+    // .setMaxIOSize(4, 4, 4, 4)
+    // .setHasResearchSlot(true)
+    // .setSound(GTSoundEntries.CHEMICAL) // TODO - Sounds
+    // .setProgressBar(GuiTextures.PROGRESS_BAR_ARROW_MULTIPLE, ProgressTexture.FillDirection.LEFT_TO_RIGHT);
 
     public static void init() {
         LASER_ENGRAVER_RECIPES.setMaxIOSize(2, 2, 1, 1);
