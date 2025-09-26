@@ -378,6 +378,19 @@ public class CosmicMachines {
                     }))
             .register();
 
+    public static final MachineDefinition BEE_HOLDER = REGISTRATE.machine("bee_holder", BeeHolderPartMachine::new)
+            .langValue("Bee Holder")
+            .tier(UV)
+            .rotationState(RotationState.NON_Y_AXIS)
+            .modelProperty(GTMachineModelProperties.IS_FORMED, false)
+            .abilities(PartAbility.IMPORT_ITEMS)
+            .modelProperty(RecipeLogic.STATUS_PROPERTY, RecipeLogic.Status.IDLE)
+            .model(createWorkableTieredHullMachineModel(GTCEu.id("block/machines/object_holder"))
+                    .andThen((ctx, prov, model) -> {
+                        model.addReplaceableTextures("bottom", "top", "side");
+                    }))
+            .register();
+
     public static final MachineDefinition SENSOR_HATCH = REGISTRATE.machine("sensor_hatch", WirelessDataSensor::new)
             .langValue("Sensor Hatch")
             .rotationState(RotationState.ALL)

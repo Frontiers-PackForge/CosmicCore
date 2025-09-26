@@ -15,6 +15,7 @@ import com.gregtechceu.gtceu.api.gui.widget.TankWidget;
 import com.gregtechceu.gtceu.api.machine.IMachineBlockEntity;
 import com.gregtechceu.gtceu.api.machine.WorkableTieredMachine;
 import com.gregtechceu.gtceu.api.machine.fancyconfigurator.CombinedDirectionalFancyConfigurator;
+import com.gregtechceu.gtceu.api.machine.feature.IAutoOutputItem;
 import com.gregtechceu.gtceu.api.machine.feature.IFancyUIMachine;
 import com.gregtechceu.gtceu.api.machine.feature.IMachineLife;
 import com.gregtechceu.gtceu.api.machine.trait.NotifiableFluidTank;
@@ -74,10 +75,6 @@ public class IndustrialApiaryMachine extends WorkableTieredMachine implements IF
     @Getter
     protected final NotifiableItemStackHandler itemCacheIn;
 
-    @Persisted
-    @Getter
-    protected final NotifiableItemStackHandler itemCacheOut;
-
     @Getter
     int productionAmplifier;
     protected boolean allowInputFromOutputSideItems;
@@ -90,7 +87,6 @@ public class IndustrialApiaryMachine extends WorkableTieredMachine implements IF
         this.beeTier = beeTier;
         this.tank = createTank();
         this.itemCacheIn = createStorageCache();
-        this.itemCacheOut = createStorageOut();
     }
 
     @Override
@@ -105,13 +101,13 @@ public class IndustrialApiaryMachine extends WorkableTieredMachine implements IF
     protected NotifiableItemStackHandler createStorageCache(Object... args) {
         return new NotifiableItemStackHandler(this, 1, IO.IN, IO.IN);
     }
-    protected NotifiableItemStackHandler createStorageOut(Object... args) {
+
+    //Attempting to set the non-override from 9 to 12 (with override)
+    @Override
+    protected @NotNull NotifiableItemStackHandler createExportItemHandler(Object... args) {
         return new NotifiableItemStackHandler(this, 12, IO.OUT, IO.OUT);
     }
 
-    // Vomitting over what this is. lord help me.
-    // I HATE MAGIC NUMBERS WOOOO I LOVE GUI XY I LOVE IT SO MUCH WOOO YEAHHHH
-    // TODO MISSING CONFIG TABS ON THE SIDE AND THE NAME BAR ON THE TOP, NEED SOME HELP FINDING THESE LOL
     @Override
     public ModularUI createUI(Player entityPlayer) {
         // spotless:off
@@ -119,24 +115,24 @@ public class IndustrialApiaryMachine extends WorkableTieredMachine implements IF
         var text = new WidgetGroup(0, 0, 176, 164);
         text.addWidget(new LabelWidget(9, 5, "gui.cosmiccore.iapiary")); //Note: canTakeItems would probably be what we want to lock? idk can we do that dynamically???
         int groupOutX = 113;
-        int groupOutY = 25;
+        int groupOutY = 7;
         var group = new WidgetGroup(0, 0, 176, 164);
         //TODO: canTakeItems would probably be what we want to lock when running? idk can we do that dynamically??? We want to lock the queen to this Ind.Apiary to avoid people cycling them across several manually or otherwise!
-        group.addWidget(new SlotWidget(getItemCacheIn().storage,0,8,groupOutY,true,true).setBackground(GuiTextures.SLOT));
+        group.addWidget(new SlotWidget(getItemCacheIn().storage, 0, 8, groupOutY+15, true, true).setBackground(GuiTextures.SLOT));
         //TODO : PROGRESS WIDGET, I'm assuming we'll have a way to track progress in recipeLogic and then make the bar show// between the input slot and the outputs group.addWidget(new ProgressWidget());
-        group.addWidget(new SlotWidget(this.exportItems,0, groupOutX,groupOutY,true,false).setBackground(GuiTextures.SLOT));
-        group.addWidget(new SlotWidget(this.exportItems,1,groupOutX + 18,groupOutY,true,false).setBackground(GuiTextures.SLOT));
-        group.addWidget(new SlotWidget(this.exportItems,2,groupOutX + 36,groupOutY,true,false).setBackground(GuiTextures.SLOT));
-        group.addWidget(new SlotWidget(this.exportItems,3, groupOutX,groupOutY + 18,true,false).setBackground(GuiTextures.SLOT));
-        group.addWidget(new SlotWidget(this.exportItems,4,groupOutX + 18,groupOutY + 18,true,false).setBackground(GuiTextures.SLOT));
-        group.addWidget(new SlotWidget(this.exportItems,5,groupOutX + 36,groupOutY + 18,true,false).setBackground(GuiTextures.SLOT));
-        group.addWidget(new SlotWidget(this.exportItems,6,groupOutX,groupOutY + 36,true,false).setBackground(GuiTextures.SLOT));
-        group.addWidget(new SlotWidget(this.exportItems,7,groupOutX + 18,groupOutY + 36,true,false).setBackground(GuiTextures.SLOT));
-        group.addWidget(new SlotWidget(this.exportItems,8,groupOutX + 36,groupOutY + 36,true,false).setBackground(GuiTextures.SLOT));
-//        group.addWidget(new SlotWidget(this.exportItems,9,groupOutX,groupOutY + 54,true,false).setBackground(GuiTextures.SLOT));
-//        group.addWidget(new SlotWidget(this.exportItems,10,groupOutX + 18,groupOutY + 54,true,false).setBackground(GuiTextures.SLOT));
-//        group.addWidget(new SlotWidget(this.exportItems,11,groupOutX + 36,groupOutY + 54,true,false).setBackground(GuiTextures.SLOT));
-        group.addWidget(new DraggableScrollableWidgetGroup(6,46,104,34).setBackground(GuiTextures.BACKGROUND_INVERSE));
+        group.addWidget(new SlotWidget(this.exportItems, 0, groupOutX, groupOutY, true, false).setBackground(GuiTextures.SLOT));
+        group.addWidget(new SlotWidget(this.exportItems, 1, groupOutX + 18, groupOutY, true, false).setBackground(GuiTextures.SLOT));
+        group.addWidget(new SlotWidget(this.exportItems, 2, groupOutX + 36, groupOutY, true, false).setBackground(GuiTextures.SLOT));
+        group.addWidget(new SlotWidget(this.exportItems, 3, groupOutX, groupOutY + 18, true, false).setBackground(GuiTextures.SLOT));
+        group.addWidget(new SlotWidget(this.exportItems, 4, groupOutX + 18, groupOutY + 18, true, false).setBackground(GuiTextures.SLOT));
+        group.addWidget(new SlotWidget(this.exportItems, 5, groupOutX + 36, groupOutY + 18, true, false).setBackground(GuiTextures.SLOT));
+        group.addWidget(new SlotWidget(this.exportItems, 6, groupOutX, groupOutY + 36, true, false).setBackground(GuiTextures.SLOT));
+        group.addWidget(new SlotWidget(this.exportItems, 7, groupOutX + 18, groupOutY + 36, true, false).setBackground(GuiTextures.SLOT));
+        group.addWidget(new SlotWidget(this.exportItems, 8, groupOutX + 36, groupOutY + 36, true, false).setBackground(GuiTextures.SLOT));
+        group.addWidget(new SlotWidget(this.exportItems,9,groupOutX,groupOutY + 54,true,false).setBackground(GuiTextures.SLOT));
+        group.addWidget(new SlotWidget(this.exportItems,10,groupOutX + 18,groupOutY + 54,true,false).setBackground(GuiTextures.SLOT));
+        group.addWidget(new SlotWidget(this.exportItems,11,groupOutX + 36,groupOutY + 54,true,false).setBackground(GuiTextures.SLOT));
+        group.addWidget(new DraggableScrollableWidgetGroup(6, 46, 104, 34).setBackground(GuiTextures.BACKGROUND_INVERSE));
 
 
         return new ModularUI(176, 164, this, entityPlayer)
@@ -156,7 +152,7 @@ public class IndustrialApiaryMachine extends WorkableTieredMachine implements IF
 
     // TODO: HELP IM SCARED
     @Override
-    protected @NotNull RecipeLogic createRecipeLogic(Object @NotNull... args) {
+    protected @NotNull RecipeLogic createRecipeLogic(Object @NotNull ... args) {
         return new IndustrialApiaryMachine.BeeRecipeLogic(this);
     }
 
@@ -280,10 +276,10 @@ public class IndustrialApiaryMachine extends WorkableTieredMachine implements IF
     // feels obnoxious!
 
     // TODO: Current Issues
-    // Fix UI text to not crash UI loading
-    // Tweak values (see above todo)
-    // Decide about second species
-    // Re-implement IAutoOutputItem
+    // Fix UI text to not crash UI loading - can't reproduce!
+    // Tweak values (see above todo) - values tweaked
+    // Decide about second species - Don't do anything with them
+    // Re-implement IAutoOutputItem - will need help
     // No configurable output for the output
     // The UI doesn't have that top bar piece of the EIO selector thingy and idk where it is :cri:
 }
