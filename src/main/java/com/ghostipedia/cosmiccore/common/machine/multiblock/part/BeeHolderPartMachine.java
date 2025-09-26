@@ -42,7 +42,7 @@ public class BeeHolderPartMachine extends MultiblockPartMachine implements IMach
     @Setter
     @Persisted
     @DescSynced
-    private boolean isLocked;
+    public boolean isLocked;
 
     protected static final ManagedFieldHolder MANAGED_FIELD_HOLDER = new ManagedFieldHolder(
             BeeHolderPartMachine.class, MultiblockPartMachine.MANAGED_FIELD_HOLDER);

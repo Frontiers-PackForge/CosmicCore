@@ -383,7 +383,7 @@ public class CosmicMachines {
             .tier(UV)
             .rotationState(RotationState.NON_Y_AXIS)
             .modelProperty(GTMachineModelProperties.IS_FORMED, false)
-            .abilities(PartAbility.IMPORT_ITEMS)
+            .abilities(CosmicPartAbility.BEE_HOLDER)
             .modelProperty(RecipeLogic.STATUS_PROPERTY, RecipeLogic.Status.IDLE)
             .model(createWorkableTieredHullMachineModel(GTCEu.id("block/machines/object_holder"))
                     .andThen((ctx, prov, model) -> {
