@@ -9,7 +9,6 @@ import java.util.Locale;
 
 public enum CosmicBeesHoneyComb implements StringRepresentable, IItemSubtype {
 
-    ROCKY(new Color(0x2B2BFF), new Color(0x9B0738)),
     LOFTY_OXYGEN(new Color(0x8080FF), new Color(0x4242FF)),
     LOFTY_HYDROGEN(new Color(0x80FFE1), new Color(0x4242FF)),
     LOFTY_NITROGEN(new Color(0xFF80F9), new Color(0x4242FF)),
@@ -24,6 +23,14 @@ public enum CosmicBeesHoneyComb implements StringRepresentable, IItemSubtype {
     SOUL(new Color(0x3FEBF1), new Color(0x3A3A3A)),
     RUNIC(new Color(0xA68941), new Color(0xA2A2A2)),
     AMBROSIC(new Color(0xD7C238), new Color(0x314234)),
+
+    ABRASIVE(new Color(0x834500), new Color(0x312E2B)),
+    ENERGIZED(new Color(0xD7C238), new Color(0x312E2B)),
+    SLICK(new Color(0x251531), new Color(0x312E2B)),
+    PYROLYTIC(new Color(0x5B4B3F), new Color(0x312E2B)),
+    LUNAR(new Color(0x10735F), new Color(0x223149)),
+    SOLAR(new Color(0xF3DC4C), new Color(0x223149)),
+    COSMOS(new Color(0xA276CB), new Color(0x223149)),
 
     ;
 
