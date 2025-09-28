@@ -162,6 +162,23 @@ public class CosmicMachines {
                     .register(),
             ZPM, UV, UHV, UEV, UIV);
 
+    public static final MachineDefinition[] COSMIC_MODULE_HATCH = registerTieredMachines("module_hatch",
+            ModuleHatchPartMachine::new,
+            (tier, builder) -> builder
+                    .langValue(switch (tier) {
+                        case 8 -> "Basic";
+                        case 9 -> "Advanced";
+                        case 10 -> "Elite";
+                        default -> "Simple";
+                    } + "Module Hatch")
+                    .rotationState(RotationState.ALL)
+                    .abilities(CosmicPartAbility.MODULE_HATCH)
+                    // TODO for ghosti: give tooltip and model
+                    .workableTieredHullModel(GTCEu.id("block/machines/parallel_hatch_mk_1"))
+                    .tooltips(Component.translatable("gtceu.machine.parallel_hatch_mk_1.tooltip"))
+                    .register(),
+            UV, UHV, UEV);
+
     public static final MachineDefinition[] WIRELESS_CHARGER = registerTieredMachines("wireless_charger",
             WirelessChargerMachine::new,
             (tier, builder) -> builder

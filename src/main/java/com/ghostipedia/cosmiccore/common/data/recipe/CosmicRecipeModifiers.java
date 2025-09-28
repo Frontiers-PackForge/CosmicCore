@@ -1,12 +1,15 @@
 package com.ghostipedia.cosmiccore.common.data.recipe;
 
+import com.ghostipedia.cosmiccore.common.data.CosmicItems;
 import com.ghostipedia.cosmiccore.common.machine.multiblock.electric.MagneticFieldMachine;
 import com.ghostipedia.cosmiccore.common.machine.multiblock.multi.logic.TitanFusionReactorMachine;
+import com.ghostipedia.cosmiccore.common.machine.multiblock.part.ModuleHatchPartMachine;
 
 import com.gregtechceu.gtceu.api.capability.recipe.IO;
 import com.gregtechceu.gtceu.api.capability.recipe.ItemRecipeCapability;
 import com.gregtechceu.gtceu.api.machine.MetaMachine;
 import com.gregtechceu.gtceu.api.machine.feature.IRecipeLogicMachine;
+import com.gregtechceu.gtceu.api.machine.multiblock.MultiblockControllerMachine;
 import com.gregtechceu.gtceu.api.machine.multiblock.WorkableMultiblockMachine;
 import com.gregtechceu.gtceu.api.recipe.GTRecipe;
 import com.gregtechceu.gtceu.api.recipe.RecipeHelper;
@@ -20,9 +23,11 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 
+import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Collections;
+import java.util.Map;
 
 public class CosmicRecipeModifiers {
 
@@ -123,6 +128,40 @@ public class CosmicRecipeModifiers {
                     .build();
         }
         return ModifierFunction.IDENTITY;
+    }
+
+    private static Map<String, Integer> moduleParallels = null;
+
+    public static Map<String, Integer> getModuleParallels() {
+        if (moduleParallels == null) {
+            moduleParallels = new Object2IntOpenHashMap<>();
+            moduleParallels.put(CosmicItems.PARA_MOD_1.asItem().getDescriptionId(), 16);
+            moduleParallels.put(CosmicItems.PARA_MOD_2.asItem().getDescriptionId(), 32);
+            moduleParallels.put(CosmicItems.PARA_MOD_3.asItem().getDescriptionId(), 64);
+            moduleParallels.put(CosmicItems.PARA_MOD_4.asItem().getDescriptionId(), 256);
+        }
+        return moduleParallels;
+    }
+
+    public static @NotNull ModifierFunction moduleParallel(MetaMachine machine, GTRecipe recipe) {
+        if (!(machine instanceof MultiblockControllerMachine multi)) return ModifierFunction.IDENTITY;
+        int extraParallels = 0;
+        for (var part : multi.getParts()) {
+            if (part instanceof ModuleHatchPartMachine modulePart) {
+                for (int i = 0; i < modulePart.getInventory().getSlots(); i++) {
+                    ItemStack stack = modulePart.getInventory().getStackInSlot(i);
+                    extraParallels += getModuleParallels().getOrDefault(stack.getDescriptionId(), 0);
+                }
+            }
+        }
+
+        int actualParallel = ParallelLogic.getParallelAmount(machine, recipe, recipe.parallels + extraParallels);
+        // Not using the ModifierFunction builder because there parallels are multiplicative, and we want additive
+        return (functionRecipe) -> {
+            GTRecipe newRecipe = functionRecipe.copy();
+            newRecipe.parallels = actualParallel;
+            return newRecipe;
+        };
     }
     /*
      * public static @NotNull BiFunction<MetaMachine, GTRecipe, ModifierFunction> sterileHatch(FluidStack stack, boolean
