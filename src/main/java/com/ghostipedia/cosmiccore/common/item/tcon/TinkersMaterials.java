@@ -2,9 +2,11 @@ package com.ghostipedia.cosmiccore.common.item.tcon;
 
 import com.ghostipedia.cosmiccore.common.data.materials.tinkers.TinkersMaterial;
 
+import com.ghostipedia.cosmiccore.common.item.tcon.modifiers.CosmicCoreModifiers;
 import net.minecraft.world.item.Tiers;
 
 import slimeknights.tconstruct.library.materials.MaterialRegistry;
+import slimeknights.tconstruct.library.modifiers.ModifierEntry;
 import slimeknights.tconstruct.tools.TinkerModifiers;
 
 public class TinkersMaterials {
@@ -13,9 +15,10 @@ public class TinkersMaterials {
         new TinkersMaterial.Builder("one")
                 .headMaterialStats(100, 5.0f, Tiers.WOOD, 1.0f)
                 .craftable(true).tier(1)
-                .trait(TinkerModifiers.decay.get(), 1, MaterialRegistry.MELEE_HARVEST)
+                .trait( () -> new ModifierEntry(TinkerModifiers.decay.get(), 1), MaterialRegistry.MELEE_HARVEST)
+                .defaultTrait(CosmicCoreModifiers.wrenchModeSwitch.getId())
                 .build();
-
+        /*
         new TinkersMaterial.Builder("two")
                 .headMaterialStats(120, 5.5f, Tiers.WOOD, 1.2f)
                 .craftable(true).tier(1)
@@ -189,5 +192,6 @@ public class TinkersMaterials {
                 .craftable(true).tier(5)
                 .trait(TinkerModifiers.decay.get(), 1, MaterialRegistry.MELEE_HARVEST)
                 .build();
+         */
     }
 }

@@ -6,18 +6,21 @@ import com.ghostipedia.cosmiccore.common.item.tcon.modifiers.CosmicCoreModifiers
 import net.minecraft.data.PackOutput;
 import net.minecraft.world.item.Tiers;
 
+import slimeknights.tconstruct.common.TinkerTags;
 import slimeknights.tconstruct.library.data.material.AbstractMaterialDataProvider;
 import slimeknights.tconstruct.library.data.material.AbstractMaterialTraitDataProvider;
 import slimeknights.tconstruct.library.materials.MaterialRegistry;
 import slimeknights.tconstruct.library.materials.stats.MaterialStatsId;
 import slimeknights.tconstruct.library.modifiers.Modifier;
 import slimeknights.tconstruct.library.modifiers.ModifierEntry;
+import slimeknights.tconstruct.library.modifiers.ModifierId;
 import slimeknights.tconstruct.library.modifiers.util.LazyModifier;
 import slimeknights.tconstruct.tools.TinkerModifiers;
 import slimeknights.tconstruct.tools.stats.StatlessMaterialStats;
 
 import java.util.Map;
 import java.util.Set;
+import java.util.function.Supplier;
 
 public class CosmicMaterialTraits extends AbstractMaterialTraitDataProvider {
 
@@ -33,9 +36,9 @@ public class CosmicMaterialTraits extends AbstractMaterialTraitDataProvider {
             .addStatlessType(StatlessMaterialStats.BINDING)
             .addStatlessType(StatlessMaterialStats.REPAIR_KIT)
             .addStatlessType(StatlessMaterialStats.BOWSTRING)
-            .defaultTrait(CosmicCoreModifiers.wrenchModeSwitch.get())
-            .trait(CosmicCoreModifiers.wrenchModeSwitch.get(), 3, MaterialRegistry.RANGED)
-            .trait(TinkerModifiers.decay.get(), 1, MaterialRegistry.MELEE_HARVEST)
+            .defaultTrait(CosmicCoreModifiers.wrenchModeSwitch.getId())
+            .trait(()->new ModifierEntry(CosmicCoreModifiers.wrenchModeSwitch.get(), 3), MaterialRegistry.RANGED)
+            .trait(()->new ModifierEntry(TinkerModifiers.decay.get(), 1), MaterialRegistry.MELEE_HARVEST)
             .sortOrder(10)
             .craftable(true)
             .build();
@@ -43,10 +46,11 @@ public class CosmicMaterialTraits extends AbstractMaterialTraitDataProvider {
     @Override
     protected void addMaterialTraits() {
         for (TinkersMaterial material : TinkersMaterial.MATERIALS) {
-            Set<Modifier> defaultTraits = material.getDefaultTraits();
+            Set<LazyModifier> defaultTraits = material.getDefaultTraits();
             if (!defaultTraits.isEmpty()) {
-                addDefaultTraits(material.getMaterialLocation(),
-                        material.getDefaultTraits().toArray(defaultTraits.toArray(new LazyModifier[0])));
+                for(var defaultTrait : defaultTraits){
+                    addDefaultTraits(material.getMaterialLocation(), defaultTrait);
+                }
             }
             Map<MaterialStatsId, Set<ModifierEntry>> statTraits = material.getTraits();
             if (!statTraits.isEmpty()) {

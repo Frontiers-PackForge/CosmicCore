@@ -8,23 +8,27 @@ import slimeknights.tconstruct.library.materials.stats.IMaterialStats;
 import slimeknights.tconstruct.library.materials.stats.MaterialStatsId;
 import slimeknights.tconstruct.library.modifiers.Modifier;
 import slimeknights.tconstruct.library.modifiers.ModifierEntry;
+import slimeknights.tconstruct.library.modifiers.ModifierId;
+import slimeknights.tconstruct.library.modifiers.util.LazyModifier;
 import slimeknights.tconstruct.library.tools.stat.ToolStats;
 import slimeknights.tconstruct.tools.stats.*;
 
 import java.util.*;
+import java.util.function.Supplier;
 
 @Getter
 public class TinkersMaterial {
 
     public static final Set<TinkersMaterial> MATERIALS = new HashSet<>();
     private String name;
-    private Set<Modifier> defaultTraits = new HashSet<>();
+    private Set<LazyModifier> defaultTraits = new HashSet<>();
     private Map<MaterialStatsId, Set<ModifierEntry>> traits = new HashMap<>();
     private int materialValue;
     private HeadMaterialStats headMaterialStats;
     private HandleMaterialStats handleMaterialStats;
     private GripMaterialStats gripMaterialStats;
     private Set<StatlessMaterialStats> statlessMaterialStats;
+    private Map<MaterialStatsId, List<Supplier<ModifierEntry>>> statSpecificTraits = new HashMap<>();
     private List<IMaterialStats> stats;
     private int sortOrder;
     private boolean craftable;
@@ -68,8 +72,8 @@ public class TinkersMaterial {
         private final Set<StatlessMaterialStats> statlessMaterialStats = new HashSet<>();
         private SkullStats skullStats;
         private ToolStats toolStats;
-        private final Set<Modifier> defaultTraits = new HashSet<>();
-        private final Map<MaterialStatsId, List<ModifierEntry>> statSpecificTraits = new HashMap<>();
+        private final Set<LazyModifier> defaultTraits = new HashSet<>();
+        private final Map<MaterialStatsId, List<Supplier<ModifierEntry>>> statSpecificTraits = new HashMap<>();
 
         public Builder(String name) {
             this.name = name;
@@ -129,14 +133,24 @@ public class TinkersMaterial {
             return this;
         }
 
+        public Builder defaultTrait(ModifierId modifier) {
+            this.defaultTraits.add(new LazyModifier(modifier));
+            return this;
+        }
+
         public Builder defaultTrait(Modifier modifier) {
-            this.defaultTraits.add(modifier);
+            this.defaultTraits.add(new LazyModifier(modifier.getId()));
             return this;
         }
 
         public Builder trait(Modifier modifier, int level, MaterialStatsId statsId) {
-            List<ModifierEntry> traits = this.statSpecificTraits.computeIfAbsent(statsId, k -> new ArrayList<>());
-            traits.add(new ModifierEntry(modifier, level));
+            List<Supplier<ModifierEntry>> traits = this.statSpecificTraits.computeIfAbsent(statsId, k -> new ArrayList<>());
+            traits.add(() -> new ModifierEntry(modifier, level));
+            return this;
+        }
+        public Builder trait(Supplier<ModifierEntry> modifier, MaterialStatsId statsId) {
+            List<Supplier<ModifierEntry>> traits = this.statSpecificTraits.computeIfAbsent(statsId, k -> new ArrayList<>());
+            traits.add(modifier);
             return this;
         }
 
