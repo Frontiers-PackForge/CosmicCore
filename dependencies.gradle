@@ -112,4 +112,7 @@ dependencies {
 
     //Modern Fix
     modImplementation(forge.modernFix)
+
+    // Embers
+    modImplementation(forge.embers)
 }

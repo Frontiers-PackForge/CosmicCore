@@ -41,7 +41,8 @@
     "emi.EmiApiMixin",
     "lso.FrostbiteEffectMixin",
     "lso.HeatstrokeEffectMixin",
-    "lso.TemperatureCapabilityMixin"
+    "lso.TemperatureCapabilityMixin",
+    "gtceu.MetaMachineBlockEntityMixin"
   ],
   "injectors": {
     "defaultRequire": 1,

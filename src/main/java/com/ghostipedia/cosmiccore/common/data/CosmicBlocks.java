@@ -130,6 +130,15 @@ public class CosmicBlocks {
     public static final BlockEntry<Block> CYCLOZINE_HIGH_RIGIDITY_CASING = createCasingBlock(
             "cyclozine_high_rigidity_casing",
             CosmicCore.id("block/casings/solid/cyclozine_high_rigidity_casing"));
+
+    public static final BlockEntry<Block> LIGHT_DAWNSTONE_CASING = createCasingBlock(
+            "light_dawnstone_casing",
+            CosmicCore.id("block/casings/solid/light_dawnstone_casing"));
+
+    public static final BlockEntry<Block> REINFORCED_DAWNSTONE_CASING = createCasingBlock(
+            "reinforced_dawnstone_casing",
+            CosmicCore.id("block/casings/solid/reinforced_dawnstone_casing"));
+
     // public static final BlockEntry<Block> SOMAPLASTIC_HEAVY_FRAMES = createCasingBlock("somaplastic_heavy_frames",
     // CosmicCore.id("block/casings/solid/cyclozine_high_rigidity_casing"));
     // public static final BlockEntry<Block> MOON_DIVE_CASING = createCasingBlock("moon_dive_casing",

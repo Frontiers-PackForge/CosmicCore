@@ -23,6 +23,7 @@ public class MultiblockInit {
         CryogenicsChamber.init();
         StarLadder.init();
         VoidMiner.init();
+        FluidVoidRig.init();
         VoraxReactor.init();
         SpiritCrucible.init();
         AtmoPump.init();
@@ -51,5 +52,6 @@ public class MultiblockInit {
         SteamMixer.init();
         SufferingChamber.init();
         TitanFusion.init();
+        DawnForge.init();
     }
 }

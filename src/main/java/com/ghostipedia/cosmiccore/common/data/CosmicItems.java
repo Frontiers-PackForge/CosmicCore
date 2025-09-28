@@ -6,6 +6,7 @@ import com.ghostipedia.cosmiccore.api.item.armor.*;
 import com.ghostipedia.cosmiccore.api.registries.CosmicRegistration;
 import com.ghostipedia.cosmiccore.client.renderer.item.HaloItemRenderer;
 import com.ghostipedia.cosmiccore.common.data.tag.item.CosmicItemTags;
+import com.ghostipedia.cosmiccore.common.item.CosmicScytheItem;
 import com.ghostipedia.cosmiccore.common.item.armor.ChestSanguineWarptechSuite;
 import com.ghostipedia.cosmiccore.common.item.armor.HelmetSanguineWarptechSuite;
 import com.ghostipedia.cosmiccore.common.item.armor.SanguineWarptechSuite;
@@ -39,10 +40,7 @@ import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.ArmorItem;
-import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Rarity;
+import net.minecraft.world.item.*;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidUtil;
@@ -70,6 +68,7 @@ import static com.ghostipedia.cosmiccore.CosmicUtils.attachRenderer;
 import static com.ghostipedia.cosmiccore.api.registries.CosmicRegistration.REGISTRATE;
 import static com.gregtechceu.gtceu.common.data.GTItems.attach;
 import static com.sammy.malum.registry.common.SpiritTypeRegistry.SPIRITS;
+import static com.sammy.malum.registry.common.item.ItemTiers.ItemTierEnum.SOUL_STAINED_STEEL;
 import static earth.terrarium.adastra.common.registry.ModItems.GLOBES;
 import static wayoftime.bloodmagic.common.item.BloodMagicItems.BLOOD_ORBS;
 
@@ -1062,6 +1061,36 @@ public class CosmicItems {
             .defaultModel()
             .register();
 
+    public static final ItemEntry<CosmicScytheItem> NANO_SCYTHE = REGISTRATE
+            .item("nano_scythe",
+                    props -> new CosmicScytheItem(
+                            SOUL_STAINED_STEEL,
+                            10.5f, 0.5f, props))
+            .properties(p -> p.stacksTo(1))
+            .lang("Nano Scythe")
+            .defaultModel()
+            .register();
+
+    public static final ItemEntry<CosmicScytheItem> QUANTUM_SCYTHE = REGISTRATE
+            .item("quantum_scythe",
+                    props -> new CosmicScytheItem(
+                            SOUL_STAINED_STEEL,
+                            25.5f, 0.5f, props))
+            .properties(p -> p.stacksTo(1))
+            .lang("Quark Scythe")
+            .defaultModel()
+            .register();
+
+    public static final ItemEntry<CosmicScytheItem> SANGUINE_SCYTHE = REGISTRATE
+            .item("sanguine_scythe",
+                    props -> new CosmicScytheItem(
+                            SOUL_STAINED_STEEL,
+                            100f, 0.5f, props))
+            .properties(p -> p.stacksTo(1))
+            .lang("Sanguine Scythe")
+            .defaultModel()
+            .register();
+
     public static ItemEntry<ComponentItem> THE_ONE_RING = REGISTRATE
             .item("the_one_ring", p -> (ComponentItem) new ComponentItem(p) {
 
@@ -1757,6 +1786,80 @@ public class CosmicItems {
             .item("plasmatic_drone", ComponentItem::create)
             .lang("plasmatic_drone")
             .properties(p -> p.stacksTo(64))
+            .defaultModel()
+            .register();
+
+    // WildFire Cores
+    public static final ItemEntry<ComponentItem> LV_WILDFIRE_CORE = REGISTRATE
+            .item("lv_wildfire_core", ComponentItem::create)
+            .lang("LV Wildfire Core")
+            .properties(p -> p.stacksTo(64))
+            .defaultModel()
+            .register();
+    public static final ItemEntry<ComponentItem> MV_WILDFIRE_CORE = REGISTRATE
+            .item("mv_wildfire_core", ComponentItem::create)
+            .lang("MV Wildfire Core")
+            .properties(p -> p.stacksTo(64))
+            .defaultModel()
+            .register();
+    public static final ItemEntry<ComponentItem> HV_WILDFIRE_CORE = REGISTRATE
+            .item("hv_wildfire_core", ComponentItem::create)
+            .lang("HV Wildfire Core")
+            .properties(p -> p.stacksTo(64))
+            .defaultModel()
+            .register();
+    public static final ItemEntry<ComponentItem> EV_WILDFIRE_CORE = REGISTRATE
+            .item("ev_wildfire_core", ComponentItem::create)
+            .lang("EV Wildfire Core")
+            .properties(p -> p.stacksTo(64))
+            .defaultModel()
+            .register();
+    public static final ItemEntry<ComponentItem> IV_WILDFIRE_CORE = REGISTRATE
+            .item("iv_wildfire_core", ComponentItem::create)
+            .lang("IV Wildfire Core")
+            .properties(p -> p.stacksTo(64))
+            .defaultModel()
+            .register();
+    public static final ItemEntry<ComponentItem> LUV_WILDFIRE_CORE = REGISTRATE
+            .item("luv_wildfire_core", ComponentItem::create)
+            .lang("LuV Wildfire Core")
+            .properties(p -> p.stacksTo(64))
+            .defaultModel()
+            .register();
+    public static final ItemEntry<ComponentItem> ZPM_WILDFIRE_CORE = REGISTRATE
+            .item("zpm_wildfire_core", ComponentItem::create)
+            .lang("ZPM Wildfire Core")
+            .properties(p -> p.stacksTo(64))
+            .defaultModel()
+            .register();
+
+    public static final ItemEntry<ComponentItem> WRENCH_CAST_GOLD = REGISTRATE
+            .item("wrench_head_cast", ComponentItem::create)
+            .lang("Wrench Head Cast")
+            .properties(p -> p.stacksTo(1))
+//            .tag(CosmicItemTags.WRENCH_HEAD_CAST_MULTI)
+            .defaultModel()
+            .register();
+    public static final ItemEntry<ComponentItem> WRENCH_CAST_SAND = REGISTRATE
+            .item("wrench_head_sand_cast", ComponentItem::create)
+            .lang("Wrench Head Sand Cast")
+//            .tag(CosmicItemTags.WRENCH_HEAD_CAST_SINGLE)
+            .properties(p -> p.stacksTo(1))
+            .defaultModel()
+            .register();
+
+    public static final ItemEntry<ComponentItem> SCREWDRIVER_CAST_GOLD = REGISTRATE
+            .item("screwdriver_head_cast", ComponentItem::create)
+            .lang("Screwdriver Head Cast")
+            .properties(p -> p.stacksTo(1))
+//            .tag(CosmicItemTags.SCREWDRIVER_HEAD_CAST_MULTI)
+            .defaultModel()
+            .register();
+    public static final ItemEntry<ComponentItem> SCREWDRIVER_CAST_SAND = REGISTRATE
+            .item("screwdriver_head_sand_cast", ComponentItem::create)
+            .lang("Screwdriver Head Sand Cast")
+//            .tag(CosmicItemTags.SCREWDRIVER_HEAD_CAST_SINGLE)
+            .properties(p -> p.stacksTo(1))
             .defaultModel()
             .register();
 

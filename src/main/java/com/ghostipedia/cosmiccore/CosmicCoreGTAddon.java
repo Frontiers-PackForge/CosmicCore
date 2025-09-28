@@ -22,6 +22,8 @@ import com.mojang.datafixers.util.Pair;
 
 import java.util.function.Consumer;
 
+import static com.ghostipedia.cosmiccore.integration.kjs.recipe.components.CosmicRecipeComponent.EMBER_IN;
+import static com.ghostipedia.cosmiccore.integration.kjs.recipe.components.CosmicRecipeComponent.EMBER_OUT;
 import static com.ghostipedia.cosmiccore.integration.kjs.recipe.components.CosmicRecipeComponent.SOUL_IN;
 import static com.ghostipedia.cosmiccore.integration.kjs.recipe.components.CosmicRecipeComponent.SOUL_OUT;
 
@@ -73,5 +75,6 @@ public class CosmicCoreGTAddon implements IGTAddon {
     @Override
     public void registerRecipeKeys(KJSRecipeKeyEvent event) {
         event.registerKey(CosmicRecipeCapabilities.SOUL, Pair.of(SOUL_IN, SOUL_OUT));
+        event.registerKey(CosmicRecipeCapabilities.EMBER, Pair.of(EMBER_IN, EMBER_OUT));
     }
 }

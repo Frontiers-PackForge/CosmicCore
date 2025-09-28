@@ -20,6 +20,14 @@ public class CosmicDataGenerators {
         PackOutput packOutput = generator.getPackOutput();
         ExistingFileHelper existingFileHelper = event.getExistingFileHelper();
         var registries = event.getLookupProvider();
+
+        boolean server = event.includeServer();
+
+        // TODO DATAGEN FOR Materials + stats + traits (server)
+        // generator.addProvider(server, new CosmicTinkersMaterials(packOutput));
+        // generator.addProvider(server, new CosmicMaterialStats(packOutput));
+        // generator.addProvider(server, new CosmicMaterialTraits(packOutput));
+
         if (event.includeClient()) {
             generator.addProvider(true, new SoundEntryBuilder.SoundEntryProvider(packOutput, CosmicCore.MOD_ID));
         }
