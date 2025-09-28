@@ -3,6 +3,7 @@ package com.ghostipedia.cosmiccore.common.data.materials.tinkers;
 import net.minecraft.world.item.Tier;
 
 import lombok.Getter;
+import net.minecraft.world.item.crafting.Ingredient;
 import slimeknights.tconstruct.library.client.data.spritetransformer.IColorMapping;
 import slimeknights.tconstruct.library.materials.definition.MaterialId;
 import slimeknights.tconstruct.library.materials.stats.IMaterialStats;
@@ -37,6 +38,9 @@ public class TinkersMaterial {
     private IColorMapping colorMapping;
     private int color;
     private  List<String> fallbacks;
+    private Ingredient ingredient;
+    private int value;
+    private int needed;
 
     public MaterialId getMaterialLocation() {
         return new MaterialId("cosmiccore", this.name);
@@ -58,6 +62,9 @@ public class TinkersMaterial {
         this.traits = new HashMap<>();
         this.color = builder.color;
         this.fallbacks = new ArrayList<>(builder.fallbacks);
+        this.ingredient = builder.ingredient;
+        this.value = builder.value;
+        this.needed = builder.needed;
     }
 
     public List<IMaterialStats> getStats() {
@@ -84,10 +91,20 @@ public class TinkersMaterial {
         private final Map<MaterialStatsId, List<Supplier<ModifierEntry>>> statSpecificTraits = new HashMap<>();
         private int color;
         private final List<String> fallbacks = new ArrayList<>();
+        private Ingredient ingredient;
+        private int value;
+        private int needed;
 
 
         public Builder(String name) {
             this.name = name;
+        }
+
+        public Builder Ingredient(Ingredient ingredient, int value, int needed) {
+            this.ingredient = ingredient;
+            this.value = value;
+            this.needed = needed;
+            return this;
         }
 
         public Builder tier(int tier) {

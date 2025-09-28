@@ -3,9 +3,12 @@ package com.ghostipedia.cosmiccore.common.data.datagen;
 import com.ghostipedia.cosmiccore.common.data.materials.tinkers.TinkersMaterial;
 import com.ghostipedia.cosmiccore.common.item.tcon.modifiers.CosmicCoreModifiers;
 
+import com.gregtechceu.gtceu.api.data.tag.TagPrefix;
+import com.gregtechceu.gtceu.common.data.GTMaterials;
 import net.minecraft.data.PackOutput;
 import net.minecraft.world.item.Tiers;
 
+import net.minecraft.world.item.crafting.Ingredient;
 import slimeknights.tconstruct.common.TinkerTags;
 import slimeknights.tconstruct.library.client.data.spritetransformer.GreyToColorMapping;
 import slimeknights.tconstruct.library.data.material.AbstractMaterialDataProvider;
@@ -53,6 +56,7 @@ public class CosmicMaterialTraits extends AbstractMaterialTraitDataProvider {
             .fallback("silver")
             .fallback("iron")
             .color(0xFFADD8E6)
+            .Ingredient(Ingredient.of(TagPrefix.ingot.getItemTags(GTMaterials.Neutronium)[0]), 1, 2)
             .build();
 
     @Override
