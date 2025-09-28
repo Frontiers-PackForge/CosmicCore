@@ -46,6 +46,7 @@ public class CosmicMaterialTraits extends AbstractMaterialTraitDataProvider {
     @Override
     protected void addMaterialTraits() {
         for (TinkersMaterial material : TinkersMaterial.MATERIALS) {
+            noTraits(material.getMaterialLocation());
             Set<LazyModifier> defaultTraits = material.getDefaultTraits();
             if (!defaultTraits.isEmpty()) {
                 for(var defaultTrait : defaultTraits){

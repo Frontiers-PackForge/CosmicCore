@@ -16,7 +16,6 @@ public class TinkersMaterials {
                 .headMaterialStats(100, 5.0f, Tiers.WOOD, 1.0f)
                 .craftable(true).tier(1)
                 .trait( () -> new ModifierEntry(TinkerModifiers.decay.get(), 1), MaterialRegistry.MELEE_HARVEST)
-                .defaultTrait(CosmicCoreModifiers.wrenchModeSwitch.getId())
                 .build();
         /*
         new TinkersMaterial.Builder("two")
