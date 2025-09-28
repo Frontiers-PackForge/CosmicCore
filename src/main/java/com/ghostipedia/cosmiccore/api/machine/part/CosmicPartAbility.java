@@ -8,6 +8,7 @@ public class CosmicPartAbility {
     public static final PartAbility IMPORT_SOUL = new PartAbility("import_soul");
     public static final PartAbility EXPORT_SOUL = new PartAbility("export_soul");
     public static final PartAbility COSMIC_PARALLEL_HATCH = new PartAbility("cosmic_parallel_hatch");
+    public static final PartAbility MODULE_HATCH = new PartAbility("module_hatch");
     public static final PartAbility PSS_SENSORS = new PartAbility("pss_sensors");
 
     public static final PartAbility STERILIZE_HATCH = new PartAbility("sterilization_hatch");
