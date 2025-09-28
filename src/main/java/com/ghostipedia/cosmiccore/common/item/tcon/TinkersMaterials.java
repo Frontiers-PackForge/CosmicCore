@@ -1,12 +1,13 @@
 package com.ghostipedia.cosmiccore.common.item.tcon;
 
 import com.ghostipedia.cosmiccore.common.data.materials.tinkers.TinkersMaterial;
+
 import net.minecraft.world.item.Tiers;
+
 import slimeknights.tconstruct.library.materials.MaterialRegistry;
 import slimeknights.tconstruct.tools.TinkerModifiers;
 
 public class TinkersMaterials {
-
 
     public static void init() {
         new TinkersMaterial.Builder("one")
@@ -189,5 +190,4 @@ public class TinkersMaterials {
                 .trait(TinkerModifiers.decay.get(), 1, MaterialRegistry.MELEE_HARVEST)
                 .build();
     }
-
 }

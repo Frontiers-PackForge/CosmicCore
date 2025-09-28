@@ -81,7 +81,6 @@ public class CosmicCore {
     }
 
     public static void init() {
-
         ConfigHolder.init();
         CosmicCreativeModeTabs.init();
         CosmicBlocks.init();
