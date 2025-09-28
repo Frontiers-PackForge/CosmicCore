@@ -3,6 +3,7 @@ package com.ghostipedia.cosmiccore.common.data.datagen;
 import com.ghostipedia.cosmiccore.common.data.materials.tinkers.TinkersMaterial;
 import com.ghostipedia.cosmiccore.common.item.tcon.modifiers.CosmicCoreModifiers;
 
+import com.gregtechceu.gtceu.api.data.chemical.ChemicalHelper;
 import com.gregtechceu.gtceu.api.data.tag.TagPrefix;
 import com.gregtechceu.gtceu.common.data.GTMaterials;
 
@@ -29,7 +30,7 @@ public class CosmicMaterialTraits extends AbstractMaterialTraitDataProvider {
         super(packOutput, materials);
     }
 
-    public static final TinkersMaterial TEST_MATERIAL = new TinkersMaterial.Builder("shiboubouya_dn_tube")
+       public static final TinkersMaterial TEST_MATERIAL = new TinkersMaterial.Builder("shiboubouya_dn_tube")
             .materialValue(2)
             .headMaterialStats(2200, 10.0f, Tiers.IRON, 5.0f)
             .gripMaterialStats(3000, 10.0f, 20)
@@ -52,7 +53,7 @@ public class CosmicMaterialTraits extends AbstractMaterialTraitDataProvider {
             .fallback("silver")
             .fallback("iron")
             .color(0xFFADD8E6)
-            .Ingredient(Ingredient.of(TagPrefix.ingot.getItemTags(GTMaterials.Neutronium)[0]), 1, 2)
+            .Ingredient(Ingredient.of(ChemicalHelper.getIngot(GTMaterials.Neutronium, 1)), 1, 2)
             .build();
 
     @Override
