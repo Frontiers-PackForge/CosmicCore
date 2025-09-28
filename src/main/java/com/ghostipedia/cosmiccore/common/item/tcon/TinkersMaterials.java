@@ -12,12 +12,13 @@ import slimeknights.tconstruct.tools.TinkerModifiers;
 public class TinkersMaterials {
 
     public static void init() {
+    /*
         new TinkersMaterial.Builder("one")
                 .headMaterialStats(100, 5.0f, Tiers.WOOD, 1.0f)
                 .craftable(true).tier(1)
                 .trait( () -> new ModifierEntry(TinkerModifiers.decay.get(), 1), MaterialRegistry.MELEE_HARVEST)
                 .build();
-        /*
+
         new TinkersMaterial.Builder("two")
                 .headMaterialStats(120, 5.5f, Tiers.WOOD, 1.2f)
                 .craftable(true).tier(1)

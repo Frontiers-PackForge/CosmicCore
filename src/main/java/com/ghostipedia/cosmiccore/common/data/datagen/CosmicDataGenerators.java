@@ -8,6 +8,7 @@ import com.gregtechceu.gtceu.api.registry.registrate.SoundEntryBuilder;
 
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.PackOutput;
+import net.minecraftforge.common.data.ExistingFileHelper;
 import net.minecraftforge.data.event.GatherDataEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -19,6 +20,8 @@ public class CosmicDataGenerators {
     public static void gatherData(GatherDataEvent event) {
         DataGenerator generator = event.getGenerator();
         PackOutput packOutput = generator.getPackOutput();
+        ExistingFileHelper existingFileHelper = event.getExistingFileHelper();
+
 
         boolean server = event.includeServer();
         generator.addProvider(server, new CosmicModifierProvider(packOutput));
@@ -26,12 +29,14 @@ public class CosmicDataGenerators {
         var materials = new CosmicTinkersMaterials(packOutput);
         var traits = new CosmicMaterialTraits(packOutput, materials);
         var stats = new CosmicMaterialStats(packOutput, materials);
-
+        var spriteProvider = new CosmicMaterialSpriteProvider();
+        var renderInfoProvider = new CosmicMaterialRenderInfoProvider(packOutput, spriteProvider, existingFileHelper );
         // TODO DATAGEN FOR Materials + stats + traits (server)
 
         generator.addProvider(server, materials);
         generator.addProvider(server, traits);
         generator.addProvider(server, stats);
+        generator.addProvider(server, renderInfoProvider);
 
         if (event.includeClient()) {
             generator.addProvider(true, new SoundEntryBuilder.SoundEntryProvider(packOutput, CosmicCore.MOD_ID));

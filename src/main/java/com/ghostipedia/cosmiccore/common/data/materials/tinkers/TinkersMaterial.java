@@ -3,6 +3,7 @@ package com.ghostipedia.cosmiccore.common.data.materials.tinkers;
 import net.minecraft.world.item.Tier;
 
 import lombok.Getter;
+import slimeknights.tconstruct.library.client.data.spritetransformer.IColorMapping;
 import slimeknights.tconstruct.library.materials.definition.MaterialId;
 import slimeknights.tconstruct.library.materials.stats.IMaterialStats;
 import slimeknights.tconstruct.library.materials.stats.MaterialStatsId;
@@ -33,6 +34,9 @@ public class TinkersMaterial {
     private int sortOrder;
     private boolean craftable;
     private int tier;
+    private IColorMapping colorMapping;
+    private int color;
+    private  List<String> fallbacks;
 
     public MaterialId getMaterialLocation() {
         return new MaterialId("cosmiccore", this.name);
@@ -50,7 +54,10 @@ public class TinkersMaterial {
         this.tier = builder.tier;
         this.stats = builder.stats;
         this.defaultTraits = builder.defaultTraits;
-        this.traits = new HashMap<>(); // Simplified for now
+        this.colorMapping = builder.colorMapping;
+        this.traits = new HashMap<>();
+        this.color = builder.color;
+        this.fallbacks = new ArrayList<>(builder.fallbacks);
     }
 
     public List<IMaterialStats> getStats() {
@@ -59,6 +66,7 @@ public class TinkersMaterial {
 
     public static final class Builder {
 
+        private IColorMapping colorMapping;
         private boolean craftable = false;
         private int tier = 0;
         private String name;
@@ -74,6 +82,9 @@ public class TinkersMaterial {
         private ToolStats toolStats;
         private final Set<LazyModifier> defaultTraits = new HashSet<>();
         private final Map<MaterialStatsId, List<Supplier<ModifierEntry>>> statSpecificTraits = new HashMap<>();
+        private int color;
+        private final List<String> fallbacks = new ArrayList<>();
+
 
         public Builder(String name) {
             this.name = name;
@@ -83,6 +94,12 @@ public class TinkersMaterial {
             this.tier = tier;
             return this;
         }
+
+        public Builder color (int color){
+            this.color = color;
+            return this;
+        }
+
 
         public Builder craftable(boolean craftable) {
             this.craftable = craftable;
@@ -151,6 +168,21 @@ public class TinkersMaterial {
         public Builder trait(Supplier<ModifierEntry> modifier, MaterialStatsId statsId) {
             List<Supplier<ModifierEntry>> traits = this.statSpecificTraits.computeIfAbsent(statsId, k -> new ArrayList<>());
             traits.add(modifier);
+            return this;
+        }
+
+        public Builder colorMapping(IColorMapping colorMapping) {
+            this.colorMapping = colorMapping;
+            return this;
+        }
+
+        public Builder fallback(String fallback) {
+            this.fallbacks.add(fallback);
+            return this;
+        }
+
+        public Builder fallbacks(Collection<String> fallbacks) {
+            this.fallbacks.addAll(fallbacks);
             return this;
         }
 

@@ -7,6 +7,7 @@ import net.minecraft.data.PackOutput;
 import net.minecraft.world.item.Tiers;
 
 import slimeknights.tconstruct.common.TinkerTags;
+import slimeknights.tconstruct.library.client.data.spritetransformer.GreyToColorMapping;
 import slimeknights.tconstruct.library.data.material.AbstractMaterialDataProvider;
 import slimeknights.tconstruct.library.data.material.AbstractMaterialTraitDataProvider;
 import slimeknights.tconstruct.library.materials.MaterialRegistry;
@@ -41,6 +42,17 @@ public class CosmicMaterialTraits extends AbstractMaterialTraitDataProvider {
             .trait(()->new ModifierEntry(TinkerModifiers.decay.get(), 1), MaterialRegistry.MELEE_HARVEST)
             .sortOrder(10)
             .craftable(true)
+            .colorMapping(
+                    GreyToColorMapping.builder()
+                            .addARGB(0,   0xFFFF66CC)
+                            .addARGB(85,  0xFFFF99DD)
+                            .addARGB(170, 0xFF99CCFF)
+                            .addARGB(255, 0xFF66CCFF)
+                            .build()
+            )
+            .fallback("silver")
+            .fallback("iron")
+            .color(0xFFADD8E6)
             .build();
 
     @Override
