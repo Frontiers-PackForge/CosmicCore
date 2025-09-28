@@ -12,12 +12,15 @@ import com.gregtechceu.gtceu.api.machine.feature.IRecipeLogicMachine;
 import com.gregtechceu.gtceu.api.machine.multiblock.MultiblockControllerMachine;
 import com.gregtechceu.gtceu.api.machine.multiblock.WorkableMultiblockMachine;
 import com.gregtechceu.gtceu.api.recipe.GTRecipe;
+import com.gregtechceu.gtceu.api.recipe.GTRecipeType;
 import com.gregtechceu.gtceu.api.recipe.RecipeHelper;
 import com.gregtechceu.gtceu.api.recipe.content.ContentModifier;
 import com.gregtechceu.gtceu.api.recipe.modifier.ModifierFunction;
 import com.gregtechceu.gtceu.api.recipe.modifier.ParallelLogic;
 import com.gregtechceu.gtceu.api.recipe.modifier.RecipeModifier;
 
+import com.gregtechceu.gtceu.common.data.GTRecipeTypes;
+import com.gregtechceu.gtceu.common.data.machines.GTMultiMachines;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
@@ -30,6 +33,10 @@ import java.util.Collections;
 import java.util.Map;
 
 public class CosmicRecipeModifiers {
+
+
+    public static final RecipeModifier COSMIC_MODULES = CosmicRecipeModifiers::moduleParallel;
+
 
     public static ModifierFunction vomahineReactorOC(MetaMachine machine, GTRecipe recipe) {
         if (!(machine instanceof MagneticFieldMachine magnetMachine)) {
@@ -154,12 +161,18 @@ public class CosmicRecipeModifiers {
                 }
             }
         }
-
         int actualParallel = ParallelLogic.getParallelAmount(machine, recipe, recipe.parallels + extraParallels);
+        if (recipe.getType() == GTRecipeTypes.ASSEMBLY_LINE_RECIPES) {
+            if (actualParallel > 64) {
+                actualParallel = 64;
+            }
+        }
+
         // Not using the ModifierFunction builder because there parallels are multiplicative, and we want additive
+        int finalActualParallel = actualParallel;
         return (functionRecipe) -> {
             GTRecipe newRecipe = functionRecipe.copy();
-            newRecipe.parallels = actualParallel;
+            newRecipe.parallels = finalActualParallel;
             return newRecipe;
         };
     }
