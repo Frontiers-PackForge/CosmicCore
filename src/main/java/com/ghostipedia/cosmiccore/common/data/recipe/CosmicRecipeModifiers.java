@@ -161,18 +161,33 @@ public class CosmicRecipeModifiers {
                 }
             }
         }
-        int actualParallel = ParallelLogic.getParallelAmount(machine, recipe, recipe.parallels + extraParallels);
-        if (recipe.getType() == GTRecipeTypes.ASSEMBLY_LINE_RECIPES) {
-            if (actualParallel > 64) {
-                actualParallel = 64;
-            }
-        }
+        if(extraParallels == 0) return ModifierFunction.IDENTITY;
 
-        // Not using the ModifierFunction builder because there parallels are multiplicative, and we want additive
-        int finalActualParallel = actualParallel;
+        final int finalExtraParallels = extraParallels;
         return (functionRecipe) -> {
-            GTRecipe newRecipe = functionRecipe.copy();
-            newRecipe.parallels = finalActualParallel;
+            // If we are at only 1 parallel so far,
+            // set the max parallels to extraParallels instead of adding to functionRecipe.parallels
+            int actualParallel;
+            if(functionRecipe.parallels == 1) {
+                actualParallel = ParallelLogic.getParallelAmount(machine, recipe, finalExtraParallels);
+            } else {
+                actualParallel = ParallelLogic.getParallelAmount(machine, recipe, functionRecipe.parallels + finalExtraParallels);
+
+            }
+
+            if (recipe.getType() == GTRecipeTypes.ASSEMBLY_LINE_RECIPES) {
+                if (actualParallel > 64) {
+                    actualParallel = 64;
+                }
+            }
+
+            // Set the contents to actualParallel, which means adding actualParallel-1
+            var newRecipe = ModifierFunction.builder()
+                    .modifyAllContents(ContentModifier.addition(actualParallel-1))
+                    .eutModifier(ContentModifier.addition(actualParallel-1))
+                    .parallels(actualParallel-1)
+                    .build().apply(functionRecipe);
+            newRecipe.parallels = actualParallel;
             return newRecipe;
         };
     }
