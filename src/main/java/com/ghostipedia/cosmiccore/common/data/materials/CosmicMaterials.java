@@ -88,7 +88,7 @@ public class CosmicMaterials {
         perfectedNutrientProductionFluid = new Material.Builder(CosmicCore.id("perfect_production_nutrient"))
                 .liquid(new FluidBuilder().state(FluidState.LIQUID).customStill())
                 .formula("\uD80C\uDDA6")
-                .langValue("Super Production Nutrient")
+                .langValue("Perfect Production Nutrient")
                 .buildAndRegister();
 
         basicNutrientOverclockFluid = new Material.Builder(CosmicCore.id("basic_overclock_nutrient"))

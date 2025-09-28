@@ -237,13 +237,35 @@ public class CosmicItems {
     public static final ItemEntry<ComponentItem> PALE_SAW = REGISTRATE
             .item("pale_saw", ComponentItem::create)
             .lang("Pale Saw")
-            .properties(p -> p.stacksTo(16))
+            .properties(p -> p.stacksTo(64))
             .tag()
             .defaultModel()
             .register();
     public static final ItemEntry<ComponentItem> PALE_SCRAP = REGISTRATE
             .item("pale_scrap", ComponentItem::create)
             .lang("Pale Scrap")
+            .properties(p -> p.stacksTo(64))
+            .tag()
+            .defaultModel()
+            .register();
+    public static final ItemEntry<ComponentItem> ABRASIVE_ROSIN_MILLSTONES = REGISTRATE
+            .item("abrasive_rosin_millstones", ComponentItem::create)
+            .lang("Abrasive Rosin Millstones")
+            .properties(p -> p.stacksTo(64))
+            .tag()
+            .defaultModel()
+            .register();
+
+    public static final ItemEntry<ComponentItem> BITUMEN_WAX = REGISTRATE
+            .item("bitumen_wax", ComponentItem::create)
+            .lang("Bitumen Wax")
+            .properties(p -> p.stacksTo(64))
+            .tag()
+            .defaultModel()
+            .register();
+    public static final ItemEntry<ComponentItem> ENERGIZED_SILK = REGISTRATE
+            .item("energized_silk", ComponentItem::create)
+            .lang("Energized Silk")
             .properties(p -> p.stacksTo(64))
             .tag()
             .defaultModel()

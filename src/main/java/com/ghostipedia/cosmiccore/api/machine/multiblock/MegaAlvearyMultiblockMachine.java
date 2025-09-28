@@ -99,7 +99,7 @@ public class MegaAlvearyMultiblockMachine extends WorkableElectricMultiblockMach
         }
 
         // Constant now, maybe change to be dependent on bee amount, etc.
-        private int productivityFluidConsumptionAmount = 100;
+        private int productivityFluidConsumptionAmount = 10000;
 
         private Map<Fluid, Float> productivityFluids = null;
 

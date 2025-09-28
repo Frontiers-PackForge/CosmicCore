@@ -32,6 +32,26 @@ public enum CosmicBeesHoneyComb implements StringRepresentable, IItemSubtype {
     SOLAR(new Color(0xF3DC4C), new Color(0x223149)),
     COSMOS(new Color(0xA276CB), new Color(0x223149)),
 
+    HADAL(new Color(0x01015B), new Color(0x000000)),
+    SHAMAN(new Color(0xE0099B), new Color(0x720303)),
+    ASHEN(new Color(0x6D6872), new Color(0x223149)),
+    FRACKING(new Color(0xDAD3B8), new Color(0x223149)),
+    FATE(new Color(0x06B64D), new Color(0x193D05)),
+    GRAND_GARDEN(new Color(0x42801D), new Color(0x1D5703)),
+    ARCHITECT(new Color(0xD0FFE9), new Color(0x003588)),
+    INQUISITIVE(new Color(0xDCA260), new Color(0x666C77)),
+    HELLSMITH(new Color(0xEA5555), new Color(0x640529)),
+    RADOXIA(new Color(0x4D0E88), new Color(0x55647E)),
+    ABSENT(new Color(0xE1E1E1), new Color(0x9A9A9A)),
+    ILLUSIVE(new Color(0xEFFAAC), new Color(0x7C92B6)),
+    CONSTRUCTIVE(new Color(0xCBA676), new Color(0x464922)),
+    PRISMATIC(new Color(0x76CB87), new Color(0x436CAD)),
+    HYDRAULIC(new Color(0x715F81), new Color(0x0F521F)),
+    COBBLED(new Color(0x6A6272), new Color(0x323741)),
+    EXHAUSTIVE(new Color(0x4F625B), new Color(0x3A4350)),
+    VIRTUE(new Color(0x6BD1D5), new Color(0x223149)),
+
+
     ;
 
     public static final CosmicBeesHoneyComb[] VALUES = values();

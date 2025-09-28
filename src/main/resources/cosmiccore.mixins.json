@@ -23,6 +23,7 @@
     "ComponentItemMixin",
     "DivingHelmetItemMixin",
     "GTValuesMixin",
+    "IndustrialApiaryBeeModifierMixin",
     "MAE2GTIntegrationMixin",
     "PlayerBreathingMixin",
     "TagPrefixItemMixin",
@@ -39,10 +40,10 @@
     "ae2.eudisplay.EUAddSettingMixin",
     "client.CosmicCoreRemainingAirOverlayMixin",
     "emi.EmiApiMixin",
+    "gtceu.MetaMachineBlockEntityMixin",
     "lso.FrostbiteEffectMixin",
     "lso.HeatstrokeEffectMixin",
-    "lso.TemperatureCapabilityMixin",
-    "gtceu.MetaMachineBlockEntityMixin"
+    "lso.TemperatureCapabilityMixin"
   ],
   "injectors": {
     "defaultRequire": 1,

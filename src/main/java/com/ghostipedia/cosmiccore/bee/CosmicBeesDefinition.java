@@ -135,6 +135,9 @@ public class CosmicBeesDefinition {
                     mutations.add(ForestryBeeSpecies.UNWEARY, ForestryBeeSpecies.TIPSY, 35);
                 })
                 .setAuthority("Ghostipedia");
+
+        //TODO - MUTATIONS
+
         apicultureRegistration
                 .registerSpecies(CosmicBeesSpecies.ABRASIVE, CosmicBeesTaxa.GENUS_INDUSTRIAL,
                         CosmicBeesTaxa.SPECIES_ABRASIVE,
@@ -188,6 +191,150 @@ public class CosmicBeesDefinition {
                         true, TextColor.fromRgb(0xA276CB))
                 .setBody(TextColor.fromRgb(0x223149))
                 .addProduct(CosmicBeesItems.BEE_COMBS.stack(CosmicBeesHoneyComb.COSMOS), 0.75f)
+                .setAuthority("Ghostipedia");
+
+        apicultureRegistration
+                .registerSpecies(CosmicBeesSpecies.HADAL, CosmicBeesTaxa.GENUS_ESOTERIC,
+                        CosmicBeesTaxa.SPECIES_HADAL,
+                        true, TextColor.fromRgb(0xE0099B))
+                .setBody(TextColor.fromRgb(0x720303))
+                .addProduct(CosmicBeesItems.BEE_COMBS.stack(CosmicBeesHoneyComb.HADAL), 0.75f)
+                .setAuthority("Ghostipedia");
+
+        apicultureRegistration
+                .registerSpecies(CosmicBeesSpecies.SHAMAN, CosmicBeesTaxa.GENUS_ESOTERIC,
+                        CosmicBeesTaxa.SPECIES_SHAMAN,
+                        true, TextColor.fromRgb(0xE0099B))
+                .setBody(TextColor.fromRgb(0x720303))
+                .addProduct(CosmicBeesItems.BEE_COMBS.stack(CosmicBeesHoneyComb.SHAMAN), 0.75f)
+                .setAuthority("Ghostipedia");
+
+        apicultureRegistration
+                .registerSpecies(CosmicBeesSpecies.ASHEN, CosmicBeesTaxa.GENUS_INDUSTRIAL,
+                        CosmicBeesTaxa.SPECIES_ASHEN,
+                        true, TextColor.fromRgb(0x6D6872))
+                .setBody(TextColor.fromRgb(0x223149))
+                .addProduct(CosmicBeesItems.BEE_COMBS.stack(CosmicBeesHoneyComb.HADAL), 0.75f)
+                .setAuthority("Ghostipedia");
+
+        apicultureRegistration
+                .registerSpecies(CosmicBeesSpecies.FRACKING, CosmicBeesTaxa.GENUS_INDUSTRIAL,
+                        CosmicBeesTaxa.SPECIES_FRACKING,
+                        true, TextColor.fromRgb(0xDAD3B8))
+                .setBody(TextColor.fromRgb(0x223149))
+                .addProduct(CosmicBeesItems.BEE_COMBS.stack(CosmicBeesHoneyComb.FRACKING), 0.75f)
+                .setAuthority("Ghostipedia");
+
+        apicultureRegistration
+                .registerSpecies(CosmicBeesSpecies.FATE, CosmicBeesTaxa.GENUS_ESOTERIC,
+                        CosmicBeesTaxa.SPECIES_FATE,
+                        true, TextColor.fromRgb(0x06B64D))
+                .setBody(TextColor.fromRgb(0x193D05))
+                .addProduct(CosmicBeesItems.BEE_COMBS.stack(CosmicBeesHoneyComb.HADAL), 0.75f)
+                .setAuthority("Ghostipedia");
+
+        apicultureRegistration
+                .registerSpecies(CosmicBeesSpecies.GRAND_GARDEN, CosmicBeesTaxa.GENUS_LOFTY,
+                        CosmicBeesTaxa.SPECIES_HADAL,
+                        true, TextColor.fromRgb(0x42801D))
+                .setBody(TextColor.fromRgb(0x1D5703))
+                .addProduct(CosmicBeesItems.BEE_COMBS.stack(CosmicBeesHoneyComb.GRAND_GARDEN), 0.9f)
+                .setAuthority("Ghostipedia");
+
+        apicultureRegistration
+                .registerSpecies(CosmicBeesSpecies.ARCHITECT, CosmicBeesTaxa.GENUS_FORGE_KIN,
+                        CosmicBeesTaxa.SPECIES_ARCHITECT,
+                        true, TextColor.fromRgb(0xD0FFE9))
+                .setBody(TextColor.fromRgb(0x003588))
+                .addProduct(CosmicBeesItems.BEE_COMBS.stack(CosmicBeesHoneyComb.ARCHITECT), 0.9f)
+                .setAuthority("Ghostipedia");
+
+        apicultureRegistration
+                .registerSpecies(CosmicBeesSpecies.INQUISITIVE, CosmicBeesTaxa.GENUS_FORGE_KIN,
+                        CosmicBeesTaxa.SPECIES_INQUISITIVE,
+                        true, TextColor.fromRgb(0xDCA260))
+                .setBody(TextColor.fromRgb(0x666C77))
+                .addProduct(CosmicBeesItems.BEE_COMBS.stack(CosmicBeesHoneyComb.INQUISITIVE), 0.9f)
+                .setAuthority("Ghostipedia");
+
+        apicultureRegistration
+                .registerSpecies(CosmicBeesSpecies.HELLSMITH, CosmicBeesTaxa.GENUS_FORGE_KIN,
+                        CosmicBeesTaxa.SPECIES_HELLSMITH,
+                        true, TextColor.fromRgb(0xEA5555))
+                .setBody(TextColor.fromRgb(0x640529))
+                .addProduct(CosmicBeesItems.BEE_COMBS.stack(CosmicBeesHoneyComb.HELLSMITH), 0.9f)
+                .setAuthority("Ghostipedia");
+
+        apicultureRegistration
+                .registerSpecies(CosmicBeesSpecies.RADOXIA, CosmicBeesTaxa.GENUS_FORGE_KIN,
+                        CosmicBeesTaxa.SPECIES_RADOXIA,
+                        true, TextColor.fromRgb(0x4D0E88))
+                .setBody(TextColor.fromRgb(0x55647E))
+                .addProduct(CosmicBeesItems.BEE_COMBS.stack(CosmicBeesHoneyComb.RADOXIA), 0.9f)
+                .setAuthority("Ghostipedia");
+
+        apicultureRegistration
+                .registerSpecies(CosmicBeesSpecies.ABSENT, CosmicBeesTaxa.GENUS_ESOTERIC,
+                        CosmicBeesTaxa.SPECIES_ABSENT,
+                        true, TextColor.fromRgb(0xE1E1E1))
+                .setBody(TextColor.fromRgb(0x9A9A9A))
+                .addProduct(CosmicBeesItems.BEE_COMBS.stack(CosmicBeesHoneyComb.ABSENT), 0.9f)
+                .setAuthority("Ghostipedia");
+
+        apicultureRegistration
+                .registerSpecies(CosmicBeesSpecies.ILLUSIVE, CosmicBeesTaxa.GENUS_ESOTERIC,
+                        CosmicBeesTaxa.SPECIES_ILLUSIVE,
+                        true, TextColor.fromRgb(0xEFFAAC))
+                .setBody(TextColor.fromRgb(0x7C92B6))
+                .addProduct(CosmicBeesItems.BEE_COMBS.stack(CosmicBeesHoneyComb.ILLUSIVE), 0.9f)
+                .setAuthority("Ghostipedia");
+
+        apicultureRegistration
+                .registerSpecies(CosmicBeesSpecies.CONSTRUCTIVE, CosmicBeesTaxa.GENUS_INDUSTRIAL,
+                        CosmicBeesTaxa.SPECIES_CONSTRUCTIVE,
+                        true, TextColor.fromRgb(0xCBA676))
+                .setBody(TextColor.fromRgb(0x464922))
+                .addProduct(CosmicBeesItems.BEE_COMBS.stack(CosmicBeesHoneyComb.CONSTRUCTIVE), 0.9f)
+                .setAuthority("Ghostipedia");
+
+        apicultureRegistration
+                .registerSpecies(CosmicBeesSpecies.PRISMATIC, CosmicBeesTaxa.GENUS_ESOTERIC,
+                        CosmicBeesTaxa.SPECIES_PRISMATIC,
+                        true, TextColor.fromRgb(0x76CB87))
+                .setBody(TextColor.fromRgb(0x436CAD))
+                .addProduct(CosmicBeesItems.BEE_COMBS.stack(CosmicBeesHoneyComb.PRISMATIC), 0.9f)
+                .setAuthority("Ghostipedia");
+
+        apicultureRegistration
+                .registerSpecies(CosmicBeesSpecies.HYDRAULIC, CosmicBeesTaxa.GENUS_INDUSTRIAL,
+                        CosmicBeesTaxa.SPECIES_HYDRAULIC,
+                        true, TextColor.fromRgb(0x715F81))
+                .setBody(TextColor.fromRgb(0x0F521F))
+                .addProduct(CosmicBeesItems.BEE_COMBS.stack(CosmicBeesHoneyComb.HYDRAULIC), 0.9f)
+                .setAuthority("Ghostipedia");
+
+        apicultureRegistration
+                .registerSpecies(CosmicBeesSpecies.COBBLED, CosmicBeesTaxa.GENUS_INDUSTRIAL,
+                        CosmicBeesTaxa.SPECIES_COBBLED,
+                        true, TextColor.fromRgb(0x6A6272))
+                .setBody(TextColor.fromRgb(0x323741))
+                .addProduct(CosmicBeesItems.BEE_COMBS.stack(CosmicBeesHoneyComb.COBBLED), 0.9f)
+                .setAuthority("Ghostipedia");
+
+        apicultureRegistration
+                .registerSpecies(CosmicBeesSpecies.EXHAUSTIVE, CosmicBeesTaxa.GENUS_ESOTERIC,
+                        CosmicBeesTaxa.SPECIES_EXHAUSTIVE,
+                        true, TextColor.fromRgb(0x4F625B))
+                .setBody(TextColor.fromRgb(0x3A4350))
+                .addProduct(CosmicBeesItems.BEE_COMBS.stack(CosmicBeesHoneyComb.EXHAUSTIVE), 0.9f)
+                .setAuthority("Ghostipedia");
+
+        apicultureRegistration
+                .registerSpecies(CosmicBeesSpecies.VIRTUE, CosmicBeesTaxa.GENUS_ESOTERIC,
+                        CosmicBeesTaxa.SPECIES_VIRTUE,
+                        true, TextColor.fromRgb(0x6BD1D5))
+                .setBody(TextColor.fromRgb(0x223149))
+                .addProduct(CosmicBeesItems.BEE_COMBS.stack(CosmicBeesHoneyComb.VIRTUE), 0.9f)
                 .setAuthority("Ghostipedia");
     }
 }

@@ -239,6 +239,12 @@ public class CosmicRecipeTypes {
             .setMaxTooltips(5)
             .setProgressBar(CosmicGuiTextures.DAWN_FORGE, ProgressTexture.FillDirection.ALWAYS_FULL);
 
+    public static final GTRecipeType BIO_LAB = GTRecipeTypes.register("bio_lab", ELECTRIC)
+            .setMaxIOSize(6, 2, 3, 2)
+            .setSound(DAWN_FORGE_SFX)
+            .setMaxTooltips(5)
+            .setProgressBar(GuiTextures.PROGRESS_BAR_CRYSTALLIZATION, LEFT_TO_RIGHT);
+
     public static final GTRecipeType STELLAR_IRIS = GTRecipeTypes.register("stellar_iris", GTRecipeTypes.MULTIBLOCK)
             .setMaxIOSize(16, 16, 16, 16)
             // .setSound(CosmicSounds.BLACK_HOLE_CRY)

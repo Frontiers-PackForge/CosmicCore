@@ -24,10 +24,7 @@ import com.gregtechceu.gtceu.api.GTValues;
 import com.gregtechceu.gtceu.api.capability.recipe.IO;
 import com.gregtechceu.gtceu.api.capability.recipe.ItemRecipeCapability;
 import com.gregtechceu.gtceu.api.data.RotationState;
-import com.gregtechceu.gtceu.api.machine.IMachineBlockEntity;
-import com.gregtechceu.gtceu.api.machine.MachineDefinition;
-import com.gregtechceu.gtceu.api.machine.MetaMachine;
-import com.gregtechceu.gtceu.api.machine.MultiblockMachineDefinition;
+import com.gregtechceu.gtceu.api.machine.*;
 import com.gregtechceu.gtceu.api.machine.multiblock.PartAbility;
 import com.gregtechceu.gtceu.api.machine.property.GTMachineModelProperties;
 import com.gregtechceu.gtceu.api.machine.steam.SimpleSteamMachine;
@@ -65,6 +62,7 @@ import static com.ghostipedia.cosmiccore.api.registries.CosmicRegistration.REGIS
 import static com.ghostipedia.cosmiccore.common.data.CosmicBlocks.*;
 import static com.ghostipedia.cosmiccore.common.data.CosmicMachinesUtils.*;
 import static com.ghostipedia.cosmiccore.common.machine.multiblock.electric.hpca.HPCAMachine.*;
+import static com.ghostipedia.cosmiccore.gtbridge.CosmicRecipeTypes.BIO_LAB;
 import static com.gregtechceu.gtceu.api.GTValues.*;
 import static com.gregtechceu.gtceu.api.pattern.Predicates.*;
 import static com.gregtechceu.gtceu.api.pattern.util.RelativeDirection.*;
@@ -74,6 +72,7 @@ import static com.gregtechceu.gtceu.common.data.GTMachines.CREATIVE_TOOLTIPS;
 import static com.gregtechceu.gtceu.common.data.GTRecipeTypes.CENTRIFUGE_RECIPES;
 import static com.gregtechceu.gtceu.common.data.GTRecipeTypes.DUMMY_RECIPES;
 import static com.gregtechceu.gtceu.common.data.machines.GTMachineUtils.*;
+import static com.gregtechceu.gtceu.common.data.machines.GTMachineUtils.registerTieredMachines;
 import static com.gregtechceu.gtceu.common.data.machines.GTMultiMachines.FUSION_REACTOR;
 import static com.gregtechceu.gtceu.common.data.models.GTMachineModels.*;
 
@@ -193,6 +192,20 @@ public class CosmicMachines {
                     .workableTieredHullModel(CosmicCore.id("block/overlay/machine/industrial_apiary"))
                     .register(),
             GTValues.tiersBetween(LV, LuV));
+
+    public static final MachineDefinition[] BIO_LAB_SINGLE = registerTieredMachines("biolab",
+            (holder, tier) -> new SimpleTieredMachine(holder, tier, defaultTankSizeFunction), (tier, builder) -> builder
+                    .langValue("%s Bio Lab %s".formatted(VLVH[tier], VLVT[tier]))
+                    .editableUI(SimpleTieredMachine.EDITABLE_UI_CREATOR.apply(GTCEu.id("biolab"),
+                            BIO_LAB))
+                    .rotationState(RotationState.NON_Y_AXIS)
+                    .recipeType(BIO_LAB)
+                    .recipeModifier(GTRecipeModifiers.OC_NON_PERFECT)
+                    .workableTieredHullModel(GTCEu.id("block/machines/brewery"))
+                    .tooltips(workableTiered(tier, GTValues.V[tier], GTValues.V[tier] * 64,
+                            BIO_LAB, defaultTankSizeFunction.applyAsInt(tier), true))
+                    .register(),
+            EV, IV, LuV, ZPM, UV);
 
     // Enable If needed Inside of Dev
     // public static final MultiblockMachineDefinition SOUL_TESTER = REGISTRATE.multiblock("soul_tester",
