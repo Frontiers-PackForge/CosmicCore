@@ -1,9 +1,9 @@
 package com.ghostipedia.cosmiccore.common.data.materials.tinkers;
 
 import net.minecraft.world.item.Tier;
+import net.minecraft.world.item.crafting.Ingredient;
 
 import lombok.Getter;
-import net.minecraft.world.item.crafting.Ingredient;
 import slimeknights.tconstruct.library.client.data.spritetransformer.IColorMapping;
 import slimeknights.tconstruct.library.materials.definition.MaterialId;
 import slimeknights.tconstruct.library.materials.stats.IMaterialStats;
@@ -37,7 +37,7 @@ public class TinkersMaterial {
     private int tier;
     private IColorMapping colorMapping;
     private int color;
-    private  List<String> fallbacks;
+    private List<String> fallbacks;
     private Ingredient ingredient;
     private int value;
     private int needed;
@@ -95,7 +95,6 @@ public class TinkersMaterial {
         private int value;
         private int needed;
 
-
         public Builder(String name) {
             this.name = name;
         }
@@ -112,11 +111,10 @@ public class TinkersMaterial {
             return this;
         }
 
-        public Builder color (int color){
+        public Builder color(int color) {
             this.color = color;
             return this;
         }
-
 
         public Builder craftable(boolean craftable) {
             this.craftable = craftable;
@@ -178,12 +176,15 @@ public class TinkersMaterial {
         }
 
         public Builder trait(Modifier modifier, int level, MaterialStatsId statsId) {
-            List<Supplier<ModifierEntry>> traits = this.statSpecificTraits.computeIfAbsent(statsId, k -> new ArrayList<>());
+            List<Supplier<ModifierEntry>> traits = this.statSpecificTraits.computeIfAbsent(statsId,
+                    k -> new ArrayList<>());
             traits.add(() -> new ModifierEntry(modifier, level));
             return this;
         }
+
         public Builder trait(Supplier<ModifierEntry> modifier, MaterialStatsId statsId) {
-            List<Supplier<ModifierEntry>> traits = this.statSpecificTraits.computeIfAbsent(statsId, k -> new ArrayList<>());
+            List<Supplier<ModifierEntry>> traits = this.statSpecificTraits.computeIfAbsent(statsId,
+                    k -> new ArrayList<>());
             traits.add(modifier);
             return this;
         }

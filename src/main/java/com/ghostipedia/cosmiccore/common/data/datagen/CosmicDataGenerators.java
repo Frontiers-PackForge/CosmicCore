@@ -12,7 +12,6 @@ import net.minecraftforge.common.data.ExistingFileHelper;
 import net.minecraftforge.data.event.GatherDataEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
-import slimeknights.tconstruct.tools.data.material.MaterialRecipeProvider;
 
 @Mod.EventBusSubscriber(bus = Mod.EventBusSubscriber.Bus.MOD)
 public class CosmicDataGenerators {
@@ -23,7 +22,6 @@ public class CosmicDataGenerators {
         PackOutput packOutput = generator.getPackOutput();
         ExistingFileHelper existingFileHelper = event.getExistingFileHelper();
 
-
         boolean server = event.includeServer();
         generator.addProvider(server, new CosmicModifierProvider(packOutput));
         TinkersMaterials.init();
@@ -31,7 +29,7 @@ public class CosmicDataGenerators {
         var traits = new CosmicMaterialTraits(packOutput, materials);
         var stats = new CosmicMaterialStats(packOutput, materials);
         var spriteProvider = new CosmicMaterialSpriteProvider();
-        var renderInfoProvider = new CosmicMaterialRenderInfoProvider(packOutput, spriteProvider, existingFileHelper );
+        var renderInfoProvider = new CosmicMaterialRenderInfoProvider(packOutput, spriteProvider, existingFileHelper);
         var materialRecipeProvider = new CosmicTinkersRecipeProvider(packOutput);
 
         // TODO DATAGEN FOR Materials + stats + traits (server)

@@ -5,26 +5,23 @@ import com.ghostipedia.cosmiccore.common.item.tcon.modifiers.CosmicCoreModifiers
 
 import com.gregtechceu.gtceu.api.data.tag.TagPrefix;
 import com.gregtechceu.gtceu.common.data.GTMaterials;
+
 import net.minecraft.data.PackOutput;
 import net.minecraft.world.item.Tiers;
-
 import net.minecraft.world.item.crafting.Ingredient;
-import slimeknights.tconstruct.common.TinkerTags;
+
 import slimeknights.tconstruct.library.client.data.spritetransformer.GreyToColorMapping;
 import slimeknights.tconstruct.library.data.material.AbstractMaterialDataProvider;
 import slimeknights.tconstruct.library.data.material.AbstractMaterialTraitDataProvider;
 import slimeknights.tconstruct.library.materials.MaterialRegistry;
 import slimeknights.tconstruct.library.materials.stats.MaterialStatsId;
-import slimeknights.tconstruct.library.modifiers.Modifier;
 import slimeknights.tconstruct.library.modifiers.ModifierEntry;
-import slimeknights.tconstruct.library.modifiers.ModifierId;
 import slimeknights.tconstruct.library.modifiers.util.LazyModifier;
 import slimeknights.tconstruct.tools.TinkerModifiers;
 import slimeknights.tconstruct.tools.stats.StatlessMaterialStats;
 
 import java.util.Map;
 import java.util.Set;
-import java.util.function.Supplier;
 
 public class CosmicMaterialTraits extends AbstractMaterialTraitDataProvider {
 
@@ -41,18 +38,17 @@ public class CosmicMaterialTraits extends AbstractMaterialTraitDataProvider {
             .addStatlessType(StatlessMaterialStats.REPAIR_KIT)
             .addStatlessType(StatlessMaterialStats.BOWSTRING)
             .defaultTrait(CosmicCoreModifiers.wrenchModeSwitch.getId())
-            .trait(()->new ModifierEntry(CosmicCoreModifiers.wrenchModeSwitch.get(), 3), MaterialRegistry.RANGED)
-            .trait(()->new ModifierEntry(TinkerModifiers.decay.get(), 1), MaterialRegistry.MELEE_HARVEST)
+            .trait(() -> new ModifierEntry(CosmicCoreModifiers.wrenchModeSwitch.get(), 3), MaterialRegistry.RANGED)
+            .trait(() -> new ModifierEntry(TinkerModifiers.decay.get(), 1), MaterialRegistry.MELEE_HARVEST)
             .sortOrder(10)
             .craftable(true)
             .colorMapping(
                     GreyToColorMapping.builder()
-                            .addARGB(0,   0xFFFF66CC)
-                            .addARGB(85,  0xFFFF99DD)
+                            .addARGB(0, 0xFFFF66CC)
+                            .addARGB(85, 0xFFFF99DD)
                             .addARGB(170, 0xFF99CCFF)
                             .addARGB(255, 0xFF66CCFF)
-                            .build()
-            )
+                            .build())
             .fallback("silver")
             .fallback("iron")
             .color(0xFFADD8E6)
@@ -65,7 +61,7 @@ public class CosmicMaterialTraits extends AbstractMaterialTraitDataProvider {
             noTraits(material.getMaterialLocation());
             Set<LazyModifier> defaultTraits = material.getDefaultTraits();
             if (!defaultTraits.isEmpty()) {
-                for(var defaultTrait : defaultTraits){
+                for (var defaultTrait : defaultTraits) {
                     addDefaultTraits(material.getMaterialLocation(), defaultTrait);
                 }
             }
