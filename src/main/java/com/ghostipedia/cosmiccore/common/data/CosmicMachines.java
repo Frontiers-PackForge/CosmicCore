@@ -10,6 +10,7 @@ import com.ghostipedia.cosmiccore.api.machine.part.WirelessEnergyHatchPartMachin
 import com.ghostipedia.cosmiccore.api.registries.CosmicRegistration;
 import com.ghostipedia.cosmiccore.client.renderer.machine.CosmicDynamicRenderHelpers;
 import com.ghostipedia.cosmiccore.common.ae2gt.CosmicStockingBusPartMachine;
+import com.ghostipedia.cosmiccore.common.ae2gt.CosmicStockingHatchPartMachine;
 import com.ghostipedia.cosmiccore.common.block.debug.CreativeThermiaContainerMachine;
 import com.ghostipedia.cosmiccore.common.data.recipe.CosmicRecipeModifiers;
 import com.ghostipedia.cosmiccore.common.machine.IndustrialApiaryMachine;
@@ -183,7 +184,7 @@ public class CosmicMachines {
                     .modelProperty(GTMachineModelProperties.IS_FORMED, false)
                     .abilities(CosmicPartAbility.MODULE_HATCH)
                     // TODO for ghosti: give tooltip and model
-                    .workableTieredHullModel(CosmicCore.id("block/machine/module_hatch"))
+                    .overlayTieredHullModel("module_hatch")
                     .tooltips(Component.translatable("gtceu.machine.parallel_hatch_mk_1.tooltip"))
                     .register(),
             UV, UHV, UEV);
@@ -234,20 +235,42 @@ public class CosmicMachines {
             EV, IV, LuV, ZPM, UV);
 
 
-    public final static MachineDefinition COSMIC_STOCKING_ME_PART_BUS = GTRegistration.REGISTRATE
+    public final static MachineDefinition COSMIC_STOCKING_ME_PART_BUS = REGISTRATE
             .machine("cosmic_me_assemblyline_bus", CosmicStockingBusPartMachine::new)
-            .langValue("ME Assembly Line Autopull Bus")
+            .langValue("ME Assembly Line Bus")
             .tier(UV)
             .rotationState(RotationState.ALL)
             .abilities(ME_ASSEMBLY_PARTS)
             .modelProperty(GTMachineModelProperties.IS_FORMED, false)
-            .colorOverlayTieredHullModel(GTCEu.id("block/overlay/appeng/me_input_bus"))
+            .overlayTieredHullModel("item_me_assemblyline")
             .tooltips(
-                    Component.translatable("gtceu.machine.item_bus.import.tooltip"),
-                    Component.translatable("gtceu.machine.me.stocking_item.tooltip.0"),
-                    Component.translatable("gtceu.machine.me_import_item_hatch.configs.tooltip"),
-                    Component.translatable("gtceu.machine.me.copy_paste.tooltip"),
-                    Component.translatable("gtceu.machine.me.stocking_item.tooltip.1"),
+                    Component.translatable("cosmiccore.machine.me.stocking_item.tooltip.0"),
+                    Component.translatable("cosmiccore.machine.me.stocking_item.tooltip.1"),
+                    Component.translatable("cosmiccore.machine.me.stocking_item.tooltip.2"),
+                    Component.translatable("cosmiccore.machine.me.stocking_item.tooltip.3"),
+                    Component.translatable("cosmiccore.machine.me.stocking_item.tooltip.4"),
+                    Component.translatable("cosmiccore.machine.me.stocking_item.tooltip.5"),
+                    Component.translatable("cosmiccore.machine.me.stocking_item.tooltip.6"),
+                    Component.translatable("gtceu.part_sharing.enabled"))
+            .register();
+
+
+    public final static MachineDefinition COSMIC_STOCKING_ME_PART_HATCH = REGISTRATE
+            .machine("cosmic_me_assemblyline_hatch", CosmicStockingHatchPartMachine::new)
+            .langValue("ME Assembly Line Hatch")
+            .tier(UV)
+            .rotationState(RotationState.ALL)
+            .abilities(ME_ASSEMBLY_PARTS_FLUID)
+            .modelProperty(GTMachineModelProperties.IS_FORMED, false)
+            .overlayTieredHullModel("fluid_me_assemblyline")
+            .tooltips(
+                    Component.translatable("cosmiccore.machine.me.stocking_item.tooltip.0"),
+                    Component.translatable("cosmiccore.machine.me.stocking_item.tooltip.1"),
+                    Component.translatable("cosmiccore.machine.me.stocking_item.tooltip.2"),
+                    Component.translatable("cosmiccore.machine.me.stocking_item.tooltip.3"),
+                    Component.translatable("cosmiccore.machine.me.stocking_item.tooltip.4"),
+                    Component.translatable("cosmiccore.machine.me.stocking_item.tooltip.5"),
+                    Component.translatable("cosmiccore.machine.me.stocking_item.tooltip.6"),
                     Component.translatable("gtceu.part_sharing.enabled"))
             .register();
 
@@ -852,10 +875,7 @@ public class CosmicMachines {
                 .aisle("FOF", "RTR", "DAG", "#Y#")
                 .where('S', Predicates.controller(blocks(GTMultiMachines.ASSEMBLY_LINE.getBlock())))
                 .where('F', blocks(CASING_STEEL_SOLID.get())
-                        .or(!ConfigHolder.INSTANCE.machines.orderedAssemblyLineFluids ?
-                                Predicates.abilities(PartAbility.IMPORT_FLUIDS_1X,
-                                        PartAbility.IMPORT_FLUIDS_4X, PartAbility.IMPORT_FLUIDS_9X) :
-                                Predicates.abilities(PartAbility.IMPORT_FLUIDS_1X).setMaxGlobalLimited(4)))
+                        .or(Predicates.abilities(PartAbility.IMPORT_FLUIDS_1X, ME_ASSEMBLY_PARTS_FLUID).setMaxGlobalLimited(4)))
                 .where('O',
                         Predicates.abilities(PartAbility.EXPORT_ITEMS)
                                 .addTooltips(Component.translatable("gtceu.multiblock.pattern.location_end")))

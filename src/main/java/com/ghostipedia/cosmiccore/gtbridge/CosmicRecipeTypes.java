@@ -26,6 +26,13 @@ import static com.lowdragmc.lowdraglib.gui.texture.ProgressTexture.FillDirection
 
 public class CosmicRecipeTypes {
 
+
+    public static final GTRecipeType COSMIC_DUMMY_SPAM_YEETER = GTRecipeTypes
+            .register("fuckassbeeball", ELECTRIC)
+            .setMaxIOSize(54, 54, 54, 54);
+
+
+
     public static final GTRecipeType LAMINATOR = GTRecipeTypes
             .register("laminator", ELECTRIC)
             .setSound(CosmicSounds.LAMINATOR)

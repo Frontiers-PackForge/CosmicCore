@@ -465,5 +465,19 @@ public class CosmicLangHandler extends LangHandler {
 
         provider.add("item.cosmiccore.wailing_cosmic_upgrade", "Wailing Upgrade");
         provider.add("item.cosmiccore.wailing_cosmic_upgrade.tooltip", "§cMaximum Mutation");
+
+
+        multiLang(provider, "cosmiccore.machine.me.stocking_item.tooltip",
+                "§fAutomatically pulls products into a singular item slot§r",
+                        "§bAllows Advanced Automation of the Assembly line§r",
+                        "§fCan be set to automatically pull the first item from AE2§r",
+                        "§bor manually filtered.§r",
+                        "§fFilter data can be copy/pasted with a data stick§r",
+                        "§b'If you're wondering how to parallel assembly lines§r",
+                        "§fthis is how. Welcome to subnets!§r"
+        );
+
+
+
     }
 }

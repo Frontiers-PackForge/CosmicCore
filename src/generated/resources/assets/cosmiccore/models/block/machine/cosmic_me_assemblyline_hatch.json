@@ -1,7 +1,7 @@
 {
   "parent": "minecraft:block/block",
   "loader": "gtceu:machine",
-  "machine": "cosmiccore:uv_module_hatch",
+  "machine": "cosmiccore:cosmic_me_assemblyline_hatch",
   "replaceable_textures": [
     "bottom",
     "top",
@@ -10,7 +10,7 @@
   "variants": {
     "is_formed=false": {
       "model": {
-        "parent": "cosmiccore:block/machine/part/module_hatch",
+        "parent": "cosmiccore:block/machine/part/fluid_me_assemblyline",
         "textures": {
           "bottom": "gtceu:block/casings/voltage/uv/bottom",
           "side": "gtceu:block/casings/voltage/uv/side",
@@ -20,7 +20,7 @@
     },
     "is_formed=true": {
       "model": {
-        "parent": "cosmiccore:block/machine/part/module_hatch",
+        "parent": "cosmiccore:block/machine/part/fluid_me_assemblyline",
         "textures": {
           "bottom": "gtceu:block/casings/voltage/uv/bottom",
           "side": "gtceu:block/casings/voltage/uv/side",
