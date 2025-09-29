@@ -1837,13 +1837,13 @@ public class CosmicItems {
             .item("wrench_head_cast", ComponentItem::create)
             .lang("Wrench Head Cast")
             .properties(p -> p.stacksTo(1))
-//            .tag(CosmicItemTags.WRENCH_HEAD_CAST_MULTI)
+            // .tag(CosmicItemTags.WRENCH_HEAD_CAST_MULTI)
             .defaultModel()
             .register();
     public static final ItemEntry<ComponentItem> WRENCH_CAST_SAND = REGISTRATE
             .item("wrench_head_sand_cast", ComponentItem::create)
             .lang("Wrench Head Sand Cast")
-//            .tag(CosmicItemTags.WRENCH_HEAD_CAST_SINGLE)
+            // .tag(CosmicItemTags.WRENCH_HEAD_CAST_SINGLE)
             .properties(p -> p.stacksTo(1))
             .defaultModel()
             .register();
@@ -1852,13 +1852,13 @@ public class CosmicItems {
             .item("screwdriver_head_cast", ComponentItem::create)
             .lang("Screwdriver Head Cast")
             .properties(p -> p.stacksTo(1))
-//            .tag(CosmicItemTags.SCREWDRIVER_HEAD_CAST_MULTI)
+            // .tag(CosmicItemTags.SCREWDRIVER_HEAD_CAST_MULTI)
             .defaultModel()
             .register();
     public static final ItemEntry<ComponentItem> SCREWDRIVER_CAST_SAND = REGISTRATE
             .item("screwdriver_head_sand_cast", ComponentItem::create)
             .lang("Screwdriver Head Sand Cast")
-//            .tag(CosmicItemTags.SCREWDRIVER_HEAD_CAST_SINGLE)
+            // .tag(CosmicItemTags.SCREWDRIVER_HEAD_CAST_SINGLE)
             .properties(p -> p.stacksTo(1))
             .defaultModel()
             .register();
