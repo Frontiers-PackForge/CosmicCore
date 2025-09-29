@@ -286,11 +286,6 @@ public class CosmicLangHandler extends LangHandler {
         provider.add("cosmiccore.lore.broken_virtue.0", "Perpetuity Shudders Softly");
         provider.add("cosmiccore.lore.broken_virtue.1", "Something has gone very wrong.");
 
-        provider.add("coscore.pattern.multiply", "§b%dx§f");
-        provider.add("coscore.pattern.div", "§c%d÷§f");
-        provider.add("coscore.pattern.tooltip.div", "Divides contents by §b%d§f");
-        provider.add("coscore.pattern.tooltip.multiply", "Multiplies contents by §c%d§f");
-
         // Sanguine Warptech
         provider.add("cosmiccore.armor.sanguinewarptech.hud.LP", "§4Life Force: §c%s");
         provider.add("cosmiccore.armor.sanguinewarptech.hud.shieldstate", "Sanguine Shield: %s");
