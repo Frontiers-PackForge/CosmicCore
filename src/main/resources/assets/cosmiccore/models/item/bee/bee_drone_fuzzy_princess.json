@@ -1,0 +1,9 @@
+{
+  "parent": "forestry:item/mirror_hands",
+  "textures": {
+    "layer0": "cosmiccore:item/bee/princess.outline",
+    "layer1": "cosmiccore:item/bee/body1",
+    "layer2": "cosmiccore:item/bee/stripes",
+    "layer3": "cosmiccore:item/bee/princess.body2"
+  }
+}

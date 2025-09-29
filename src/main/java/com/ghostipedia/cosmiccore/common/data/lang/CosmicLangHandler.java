@@ -367,5 +367,112 @@ public class CosmicLangHandler extends LangHandler {
         provider.add("cosmiccore.item.spraycan.tooltip.solvent_mode", "Spraycan in SOLVENT mode");
 
         provider.add("cosmiccore.item.linked_terminal.boundTo", "Bound to %s");
+        provider.add("allele.forestry.bee_species.cosmiccore.bee_oxygen", "Lofty Oxygen");
+        provider.add("allele.forestry.bee_species.cosmiccore.bee_hydrogen", "Lofty Hydrogen");
+        provider.add("allele.forestry.bee_species.cosmiccore.bee_nitrogen", "Lofty Nitrogen");
+        provider.add("allele.forestry.bee_species.cosmiccore.bee_argon", "Lofty Argon");
+        provider.add("allele.forestry.bee_species.cosmiccore.bee_rose_polymer", "Rose Polymer");
+        provider.add("allele.forestry.bee_species.cosmiccore.bee_citrus_polymer", "Citrus Polymer");
+        provider.add("allele.forestry.bee_species.cosmiccore.bee_waxy_polymer", "Waxy Polymer");
+        provider.add("allele.forestry.bee_species.cosmiccore.bee_pale", "Pale");
+        provider.add("allele.forestry.bee_species.cosmiccore.bee_soul", "Soul");
+        provider.add("allele.forestry.bee_species.cosmiccore.bee_runic", "Runic");
+        provider.add("allele.forestry.bee_species.cosmiccore.bee_ambrosic", "Ambrosic");
+        provider.add("allele.forestry.bee_species.cosmiccore.bee_biohazard", "Biohazard");
+
+        provider.add("allele.forestry.bee_species.cosmiccore.bee_abrasive", "Abrasive");
+        provider.add("allele.forestry.bee_species.cosmiccore.bee_energized", "Energized");
+        provider.add("allele.forestry.bee_species.cosmiccore.bee_slick", "Slick");
+        provider.add("allele.forestry.bee_species.cosmiccore.bee_pyrolytic", "Pyrolytic");
+        provider.add("allele.forestry.bee_species.cosmiccore.bee_lunar", "Lunar");
+        provider.add("allele.forestry.bee_species.cosmiccore.bee_solar", "Solar");
+        provider.add("allele.forestry.bee_species.cosmiccore.bee_cosmos", "Cosmos");
+
+        provider.add("allele.forestry.bee_species.cosmiccore.bee_hadal", "Hadal");
+        provider.add("allele.forestry.bee_species.cosmiccore.bee_shaman", "Shaman");
+        provider.add("allele.forestry.bee_species.cosmiccore.bee_ashen", "Ashen");
+        provider.add("allele.forestry.bee_species.cosmiccore.bee_fracking", "Fracking");
+        provider.add("allele.forestry.bee_species.cosmiccore.bee_fate", "Fate");
+        provider.add("allele.forestry.bee_species.cosmiccore.bee_grand_garden", "Grand Garden");
+        provider.add("allele.forestry.bee_species.cosmiccore.bee_architect", "Architect");
+        provider.add("allele.forestry.bee_species.cosmiccore.bee_inquisitive", "Inquisitive");
+        provider.add("allele.forestry.bee_species.cosmiccore.bee_hellsmith", "Hellsmith");
+        provider.add("allele.forestry.bee_species.cosmiccore.bee_radoxia", "Radoxia");
+        provider.add("allele.forestry.bee_species.cosmiccore.bee_absent", "Absent");
+        provider.add("allele.forestry.bee_species.cosmiccore.bee_illusive", "Illusive");
+        provider.add("allele.forestry.bee_species.cosmiccore.bee_constructive", "Constructive");
+        provider.add("allele.forestry.bee_species.cosmiccore.bee_prismatic", "Prismatic");
+        provider.add("allele.forestry.bee_species.cosmiccore.bee_hydraulic", "Hydraulic");
+        provider.add("allele.forestry.bee_species.cosmiccore.bee_cobbled", "Cobbled");
+        provider.add("allele.forestry.bee_species.cosmiccore.bee_exhaustive", "Exhaustive");
+        provider.add("allele.forestry.bee_species.cosmiccore.bee_virtue", "Virtue");
+
+
+        provider.add("item.cosmiccore.bee_comb_lofty_oxygen", "Lofty Oxygen Comb");
+        provider.add("item.cosmiccore.bee_comb_lofty_hydrogen", "Lofty Hydrogen Comb");
+        provider.add("item.cosmiccore.bee_comb_lofty_nitrogen", "Lofty Nitrogen Comb");
+        provider.add("item.cosmiccore.bee_comb_lofty_argon", "Lofty Argon Comb");
+        provider.add("item.cosmiccore.bee_comb_rose_polymer", "Rose Polymer Comb");
+        provider.add("item.cosmiccore.bee_comb_citrus_polymer", "Citrus Polymer Comb");
+        provider.add("item.cosmiccore.bee_comb_waxy_polymer", "Waxy Polymer Comb");
+        provider.add("item.cosmiccore.bee_comb_pale", "Pale Comb");
+        provider.add("item.cosmiccore.bee_comb_soul", "Soul Comb");
+        provider.add("item.cosmiccore.bee_comb_runic", "Runic Comb");
+        provider.add("item.cosmiccore.bee_comb_ambrosic", "Ambrosic Comb");
+        provider.add("item.cosmiccore.bee_comb_biohazard", "Biohazard Comb");
+
+        provider.add("item.cosmiccore.bee_comb_abrasive", "Abrasive Comb");
+        provider.add("item.cosmiccore.bee_comb_energized", "Energized Comb");
+        provider.add("item.cosmiccore.bee_comb_slick", "Slick Comb");
+        provider.add("item.cosmiccore.bee_comb_pyrolytic", "Pyrolytic Comb");
+        provider.add("item.cosmiccore.bee_comb_lunar", "Lunar Comb");
+        provider.add("item.cosmiccore.bee_comb_solar", "Solar Comb");
+        provider.add("item.cosmiccore.bee_comb_cosmos", "Cosmos Comb");
+
+        provider.add("item.cosmiccore.bee_comb_hadal", "Hadal Comb");
+        provider.add("item.cosmiccore.bee_comb_shaman", "Shaman Comb");
+        provider.add("item.cosmiccore.bee_comb_ashen", "Ashen Comb");
+        provider.add("item.cosmiccore.bee_comb_fracking", "Fracking Comb");
+        provider.add("item.cosmiccore.bee_comb_fate", "Fate Comb");
+        provider.add("item.cosmiccore.bee_comb_grand_garden", "Grand Garden Comb");
+        provider.add("item.cosmiccore.bee_comb_architect", "Architect Comb");
+        provider.add("item.cosmiccore.bee_comb_inquisitive", "Inquisitive Comb");
+        provider.add("item.cosmiccore.bee_comb_hellsmith", "Hellsmith Comb");
+        provider.add("item.cosmiccore.bee_comb_radoxia", "Radoxia Comb");
+        provider.add("item.cosmiccore.bee_comb_absent", "Absent Comb");
+        provider.add("item.cosmiccore.bee_comb_illusive", "Illusive Comb");
+        provider.add("item.cosmiccore.bee_comb_constructive", "Constructive Comb");
+        provider.add("item.cosmiccore.bee_comb_prismatic", "Prismatic Comb");
+        provider.add("item.cosmiccore.bee_comb_hydraulic", "Hydraulic Comb");
+        provider.add("item.cosmiccore.bee_comb_cobbled", "Cobbled Comb");
+        provider.add("item.cosmiccore.bee_comb_exhaustive", "Exhaustive Comb");
+        provider.add("item.cosmiccore.bee_comb_virtue", "Virtue Comb");
+
+
+        provider.add("gui.cosmiccore.iapiary", "Industrial Apiary");
+        provider.add("gui.cosmiccore.iapiary.yield", "Yield: %d");
+        provider.add("gui.cosmiccore.iapiary.duration", "Duration: %d");
+        provider.add("gui.cosmiccore.iapiary.production_amp", "Production Amp: %d");
+
+        provider.add("item.cosmicbees.bee.modifier.aging_multiplier", "Age Multiplier");
+        provider.add("item.cosmiccore.decaying_cosmic_upgrade", "Decaying Upgrade");
+        provider.add("item.cosmiccore.decaying_cosmic_upgrade.tooltip", "§cInstantly Kills Bees and overloads the lifetime cycle");
+
+        provider.add("item.cosmiccore.wailing_cosmic_upgrade", "Wailing Upgrade");
+        provider.add("item.cosmiccore.wailing_cosmic_upgrade.tooltip", "§cMaximum Mutation");
+
+
+        multiLang(provider, "cosmiccore.machine.me.stocking_item.tooltip",
+                "§fAutomatically pulls products into a singular item slot§r",
+                        "§bAllows Advanced Automation of the Assembly line§r",
+                        "§fCan be set to automatically pull the first item from AE2§r",
+                        "§bor manually filtered.§r",
+                        "§fFilter data can be copy/pasted with a data stick§r",
+                        "§b'If you're wondering how to parallel assembly lines§r",
+                        "§fthis is how. Welcome to subnets!§r"
+        );
+
+
+
     }
 }

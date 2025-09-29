@@ -53,5 +53,6 @@ public class MultiblockInit {
         SufferingChamber.init();
         TitanFusion.init();
         DawnForge.init();
+        MegaProductionAlveary.init();
     }
 }

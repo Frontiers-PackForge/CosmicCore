@@ -115,6 +115,13 @@ public class CosmicMachinesUtils {
                 tiers);
     }
 
+    public static MachineDefinition[] registerTieredSingleBlockMachines(String name,
+                                                                        BiFunction<IMachineBlockEntity, Integer, MetaMachine> factory,
+                                                                        BiFunction<Integer, MachineBuilder<MachineDefinition>, MachineDefinition> builder,
+                                                                        int... tiers) {
+        return registerTieredMachines(name, factory, builder, tiers);
+    }
+
     public static MachineDefinition[] registerTieredMachines(String name,
                                                              BiFunction<IMachineBlockEntity, Integer, MetaMachine> factory,
                                                              BiFunction<Integer, MachineBuilder<MachineDefinition>, MachineDefinition> builder,

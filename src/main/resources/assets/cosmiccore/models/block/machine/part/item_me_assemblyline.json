@@ -1,0 +1,7 @@
+{
+  "parent": "gtceu:block/overlay/2_layer/front_emissive",
+  "textures": {
+    "overlay": "cosmiccore:block/overlay/me_assemblyline_overlay_base",
+    "overlay_emissive": "cosmiccore:block/overlay/me_assemblyline_overlay_item_emissive"
+  }
+}

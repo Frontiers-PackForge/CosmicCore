@@ -3,7 +3,6 @@ package com.ghostipedia.cosmiccore.common.machine.multiblock.multi;
 import com.ghostipedia.cosmiccore.CosmicCore;
 import com.ghostipedia.cosmiccore.api.machine.part.CosmicPartAbility;
 import com.ghostipedia.cosmiccore.common.data.CosmicBlocks;
-import com.ghostipedia.cosmiccore.common.data.recipe.CosmicRecipeModifiers;
 import com.ghostipedia.cosmiccore.gtbridge.CosmicRecipeTypes;
 
 import com.gregtechceu.gtceu.api.data.RotationState;
@@ -17,6 +16,7 @@ import com.gregtechceu.gtceu.api.pattern.Predicates;
 import com.gregtechceu.gtceu.api.recipe.OverclockingLogic;
 import com.gregtechceu.gtceu.common.data.GTBlocks;
 import com.gregtechceu.gtceu.common.data.GTMaterials;
+import com.gregtechceu.gtceu.common.data.GTRecipeModifiers;
 import com.gregtechceu.gtceu.common.data.GTRecipeTypes;
 
 import net.minecraft.network.chat.Component;
@@ -32,9 +32,9 @@ public class IndustChemVat {
             .multiblock("industrial_chemical_vat", WorkableElectricMultiblockMachine::new)
             .rotationState(RotationState.ALL)
             .recipeTypes(CosmicRecipeTypes.INDUSTRIAL_CHEMVAT, GTRecipeTypes.CRACKING_RECIPES)
-            .recipeModifiers(CosmicRecipeModifiers::chemicalVatLogic, PARALLEL_HATCH,
-                    ELECTRIC_OVERCLOCK.apply(OverclockingLogic.PERFECT_OVERCLOCK_SUBTICK),
-                    BATCH_MODE)
+            .recipeModifiers(GTRecipeModifiers.PARALLEL_HATCH,
+                    GTRecipeModifiers.ELECTRIC_OVERCLOCK.apply(OverclockingLogic.NON_PERFECT_OVERCLOCK_SUBTICK),
+                    GTRecipeModifiers.BATCH_MODE)
             .appearanceBlock(CYCLOZINE_CHEMICALLY_REPELLING_CASING)
             // spotless:off
             .pattern(definition -> FactoryBlockPattern.start()
