@@ -1,11 +1,5 @@
 package com.ghostipedia.cosmiccore.common.ae2gt;
 
-import appeng.api.config.Actionable;
-import appeng.api.networking.IGrid;
-import appeng.api.stacks.AEFluidKey;
-import appeng.api.stacks.AEKey;
-import appeng.api.stacks.GenericStack;
-import appeng.api.storage.MEStorage;
 import com.gregtechceu.gtceu.api.gui.fancy.ConfiguratorPanel;
 import com.gregtechceu.gtceu.api.gui.fancy.TabsWidget;
 import com.gregtechceu.gtceu.api.machine.IMachineBlockEntity;
@@ -22,13 +16,12 @@ import com.gregtechceu.gtceu.integration.ae2.slot.ExportOnlyAEFluidSlot;
 import com.gregtechceu.gtceu.integration.ae2.slot.ExportOnlyAESlot;
 import com.gregtechceu.gtceu.integration.ae2.slot.IConfigurableSlotList;
 import com.gregtechceu.gtceu.integration.ae2.utils.AEUtil;
+
 import com.lowdragmc.lowdraglib.syncdata.annotation.DescSynced;
 import com.lowdragmc.lowdraglib.syncdata.annotation.DropSaved;
 import com.lowdragmc.lowdraglib.syncdata.annotation.Persisted;
 import com.lowdragmc.lowdraglib.syncdata.field.ManagedFieldHolder;
-import it.unimi.dsi.fastutil.objects.Object2LongMap;
-import lombok.Getter;
-import lombok.Setter;
+
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
@@ -37,6 +30,16 @@ import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraftforge.fluids.FluidStack;
+
+import appeng.api.config.Actionable;
+import appeng.api.networking.IGrid;
+import appeng.api.stacks.AEFluidKey;
+import appeng.api.stacks.AEKey;
+import appeng.api.stacks.GenericStack;
+import appeng.api.storage.MEStorage;
+import it.unimi.dsi.fastutil.objects.Object2LongMap;
+import lombok.Getter;
+import lombok.Setter;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Comparator;
@@ -44,7 +47,6 @@ import java.util.PriorityQueue;
 import java.util.function.Predicate;
 
 public class CosmicStockingHatchPartMachine extends CosmicInputHatchPartMachine implements IMEStockingPart {
-
 
     protected static final ManagedFieldHolder MANAGED_FIELD_HOLDER = new ManagedFieldHolder(
             CosmicStockingHatchPartMachine.class, CosmicInputHatchPartMachine.MANAGED_FIELD_HOLDER);
@@ -75,7 +77,6 @@ public class CosmicStockingHatchPartMachine extends CosmicInputHatchPartMachine 
         super(holder, args);
         this.autoPullTest = $ -> false;
     }
-
 
     @Override
     public void addedToController(IMultiController controller) {
@@ -247,7 +248,7 @@ public class CosmicStockingHatchPartMachine extends CosmicInputHatchPartMachine 
     @Override
     public void attachConfigurators(ConfiguratorPanel configuratorPanel) {
         IMEStockingPart.super.attachConfigurators(configuratorPanel);
-//        super.attachConfigurators(configuratorPanel);
+        // super.attachConfigurators(configuratorPanel);
         configuratorPanel.attachConfigurators(new AutoStockingFancyConfigurator(this));
     }
 
@@ -378,5 +379,4 @@ public class CosmicStockingHatchPartMachine extends CosmicInputHatchPartMachine 
             return FluidStack.EMPTY;
         }
     }
-    
 }

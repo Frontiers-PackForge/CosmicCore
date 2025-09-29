@@ -407,7 +407,6 @@ public class CosmicLangHandler extends LangHandler {
         provider.add("allele.forestry.bee_species.cosmiccore.bee_exhaustive", "Exhaustive");
         provider.add("allele.forestry.bee_species.cosmiccore.bee_virtue", "Virtue");
 
-
         provider.add("item.cosmiccore.bee_comb_lofty_oxygen", "Lofty Oxygen Comb");
         provider.add("item.cosmiccore.bee_comb_lofty_hydrogen", "Lofty Hydrogen Comb");
         provider.add("item.cosmiccore.bee_comb_lofty_nitrogen", "Lofty Nitrogen Comb");
@@ -448,7 +447,6 @@ public class CosmicLangHandler extends LangHandler {
         provider.add("item.cosmiccore.bee_comb_exhaustive", "Exhaustive Comb");
         provider.add("item.cosmiccore.bee_comb_virtue", "Virtue Comb");
 
-
         provider.add("gui.cosmiccore.iapiary", "Industrial Apiary");
         provider.add("gui.cosmiccore.iapiary.yield", "Yield: %d");
         provider.add("gui.cosmiccore.iapiary.duration", "Duration: %d");
@@ -456,23 +454,19 @@ public class CosmicLangHandler extends LangHandler {
 
         provider.add("item.cosmicbees.bee.modifier.aging_multiplier", "Age Multiplier");
         provider.add("item.cosmiccore.decaying_cosmic_upgrade", "Decaying Upgrade");
-        provider.add("item.cosmiccore.decaying_cosmic_upgrade.tooltip", "§cInstantly Kills Bees and overloads the lifetime cycle");
+        provider.add("item.cosmiccore.decaying_cosmic_upgrade.tooltip",
+                "§cInstantly Kills Bees and overloads the lifetime cycle");
 
         provider.add("item.cosmiccore.wailing_cosmic_upgrade", "Wailing Upgrade");
         provider.add("item.cosmiccore.wailing_cosmic_upgrade.tooltip", "§cMaximum Mutation");
 
-
         multiLang(provider, "cosmiccore.machine.me.stocking_item.tooltip",
                 "§fAutomatically pulls products into a singular item slot§r",
-                        "§bAllows Advanced Automation of the Assembly line§r",
-                        "§fCan be set to automatically pull the first item from AE2§r",
-                        "§bor manually filtered.§r",
-                        "§fFilter data can be copy/pasted with a data stick§r",
-                        "§b'If you're wondering how to parallel assembly lines§r",
-                        "§fthis is how. Welcome to subnets!§r"
-        );
-
-
-
+                "§bAllows Advanced Automation of the Assembly line§r",
+                "§fCan be set to automatically pull the first item from AE2§r",
+                "§bor manually filtered.§r",
+                "§fFilter data can be copy/pasted with a data stick§r",
+                "§b'If you're wondering how to parallel assembly lines§r",
+                "§fthis is how. Welcome to subnets!§r");
     }
 }

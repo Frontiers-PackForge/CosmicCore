@@ -1,11 +1,5 @@
 package com.ghostipedia.cosmiccore.common.ae2gt;
 
-import appeng.api.config.Actionable;
-import appeng.api.networking.IGrid;
-import appeng.api.stacks.AEItemKey;
-import appeng.api.stacks.AEKey;
-import appeng.api.stacks.GenericStack;
-import appeng.api.storage.MEStorage;
 import com.gregtechceu.gtceu.api.gui.fancy.ConfiguratorPanel;
 import com.gregtechceu.gtceu.api.gui.fancy.TabsWidget;
 import com.gregtechceu.gtceu.api.machine.IMachineBlockEntity;
@@ -14,20 +8,18 @@ import com.gregtechceu.gtceu.api.machine.fancyconfigurator.AutoStockingFancyConf
 import com.gregtechceu.gtceu.api.machine.feature.multiblock.IMultiController;
 import com.gregtechceu.gtceu.api.machine.feature.multiblock.IMultiPart;
 import com.gregtechceu.gtceu.api.machine.trait.NotifiableItemStackHandler;
-import com.gregtechceu.gtceu.common.item.IntCircuitBehaviour;
 import com.gregtechceu.gtceu.config.ConfigHolder;
 import com.gregtechceu.gtceu.integration.ae2.machine.feature.multiblock.IMEStockingPart;
 import com.gregtechceu.gtceu.integration.ae2.slot.ExportOnlyAEItemList;
 import com.gregtechceu.gtceu.integration.ae2.slot.ExportOnlyAEItemSlot;
 import com.gregtechceu.gtceu.integration.ae2.slot.ExportOnlyAESlot;
 import com.gregtechceu.gtceu.integration.ae2.slot.IConfigurableSlotList;
+
 import com.lowdragmc.lowdraglib.syncdata.annotation.DescSynced;
 import com.lowdragmc.lowdraglib.syncdata.annotation.DropSaved;
 import com.lowdragmc.lowdraglib.syncdata.annotation.Persisted;
 import com.lowdragmc.lowdraglib.syncdata.field.ManagedFieldHolder;
-import it.unimi.dsi.fastutil.objects.Object2LongMap;
-import lombok.Getter;
-import lombok.Setter;
+
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
@@ -36,6 +28,16 @@ import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.BlockHitResult;
+
+import appeng.api.config.Actionable;
+import appeng.api.networking.IGrid;
+import appeng.api.stacks.AEItemKey;
+import appeng.api.stacks.AEKey;
+import appeng.api.stacks.GenericStack;
+import appeng.api.storage.MEStorage;
+import it.unimi.dsi.fastutil.objects.Object2LongMap;
+import lombok.Getter;
+import lombok.Setter;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Comparator;
@@ -46,7 +48,7 @@ public class CosmicStockingBusPartMachine extends CosmicInputBusPartMachine impl
 
     protected static final ManagedFieldHolder MANAGED_FIELD_HOLDER = new ManagedFieldHolder(
             CosmicStockingBusPartMachine.class, CosmicInputBusPartMachine.MANAGED_FIELD_HOLDER);
-    
+
     @DescSynced
     @Persisted
     @Getter
@@ -70,7 +72,7 @@ public class CosmicStockingBusPartMachine extends CosmicInputBusPartMachine impl
         super(holder, args);
         this.autoPullTest = $ -> false;
     }
-/////////////////////////////////
+    /////////////////////////////////
     // ***** Machine LifeCycle ****//
     /////////////////////////////////
 
@@ -265,7 +267,7 @@ public class CosmicStockingBusPartMachine extends CosmicInputBusPartMachine impl
     @Override
     public void attachConfigurators(ConfiguratorPanel configuratorPanel) {
         IMEStockingPart.super.attachConfigurators(configuratorPanel);
-//        super.attachConfigurators(configuratorPanel);
+        // super.attachConfigurators(configuratorPanel);
         configuratorPanel.attachConfigurators(new AutoStockingFancyConfigurator(this));
     }
 
@@ -391,5 +393,4 @@ public class CosmicStockingBusPartMachine extends CosmicInputBusPartMachine impl
                     this.stock == null ? null : copy(this.stock));
         }
     }
-
 }

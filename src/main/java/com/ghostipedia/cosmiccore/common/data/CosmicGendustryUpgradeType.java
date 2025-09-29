@@ -6,11 +6,9 @@ import thedarkcolour.gendustry.item.IGendustryUpgradeType;
 import java.util.Locale;
 
 public enum CosmicGendustryUpgradeType implements IItemSubtype, IGendustryUpgradeType {
-    WAILING(1,2048),
-    DECAYING(1,2048)
-    ;
 
-
+    WAILING(1, 2048),
+    DECAYING(1, 2048);
 
     private final String name;
     private final int maxStackSize;
@@ -21,10 +19,12 @@ public enum CosmicGendustryUpgradeType implements IItemSubtype, IGendustryUpgrad
         this.maxStackSize = maxStackSize;
         this.energyCost = energyCost;
     }
+
     @Override
     public String getSerializedName() {
         return this.name;
     }
+
     public int maxStackSize() {
         return this.maxStackSize;
     }

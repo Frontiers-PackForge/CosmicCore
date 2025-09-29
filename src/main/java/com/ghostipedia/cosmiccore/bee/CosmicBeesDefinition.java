@@ -136,7 +136,7 @@ public class CosmicBeesDefinition {
                 })
                 .setAuthority("Ghostipedia");
 
-        //TODO - MUTATIONS
+        // TODO - MUTATIONS
 
         apicultureRegistration
                 .registerSpecies(CosmicBeesSpecies.ABRASIVE, CosmicBeesTaxa.GENUS_INDUSTRIAL,

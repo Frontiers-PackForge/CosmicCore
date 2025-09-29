@@ -1,8 +1,5 @@
 package com.ghostipedia.cosmiccore.common.ae2gt;
 
-import appeng.api.config.Actionable;
-import appeng.api.stacks.GenericStack;
-import appeng.api.storage.MEStorage;
 import com.gregtechceu.gtceu.api.capability.recipe.IO;
 import com.gregtechceu.gtceu.api.gui.fancy.FancyMachineUIWidget;
 import com.gregtechceu.gtceu.api.machine.IMachineBlockEntity;
@@ -12,25 +9,31 @@ import com.gregtechceu.gtceu.api.machine.trait.NotifiableItemStackHandler;
 import com.gregtechceu.gtceu.common.item.IntCircuitBehaviour;
 import com.gregtechceu.gtceu.integration.ae2.gui.widget.AEItemConfigWidget;
 import com.gregtechceu.gtceu.integration.ae2.machine.MEBusPartMachine;
-import com.gregtechceu.gtceu.integration.ae2.machine.MEInputBusPartMachine;
 import com.gregtechceu.gtceu.integration.ae2.slot.ExportOnlyAEItemList;
 import com.gregtechceu.gtceu.integration.ae2.slot.ExportOnlyAEItemSlot;
 import com.gregtechceu.gtceu.utils.GTMath;
+
 import com.lowdragmc.lowdraglib.gui.modular.ModularUI;
 import com.lowdragmc.lowdraglib.gui.widget.LabelWidget;
 import com.lowdragmc.lowdraglib.gui.widget.Widget;
 import com.lowdragmc.lowdraglib.gui.widget.WidgetGroup;
 import com.lowdragmc.lowdraglib.syncdata.field.ManagedFieldHolder;
 import com.lowdragmc.lowdraglib.utils.Position;
+
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 
+import appeng.api.config.Actionable;
+import appeng.api.stacks.GenericStack;
+import appeng.api.storage.MEStorage;
+
 public class CosmicInputBusPartMachine extends MEBusPartMachine implements IDataStickInteractable, IMachineLife {
 
-    protected static final ManagedFieldHolder MANAGED_FIELD_HOLDER = new ManagedFieldHolder(CosmicInputBusPartMachine.class,
+    protected static final ManagedFieldHolder MANAGED_FIELD_HOLDER = new ManagedFieldHolder(
+            CosmicInputBusPartMachine.class,
             MEBusPartMachine.MANAGED_FIELD_HOLDER);
 
     protected final static int CONFIG_SIZE = 1;
@@ -40,7 +43,6 @@ public class CosmicInputBusPartMachine extends MEBusPartMachine implements IData
     public CosmicInputBusPartMachine(IMachineBlockEntity holder, Object... args) {
         super(holder, IO.IN, args);
         super.circuitSlotEnabled = false;
-
     }
 
     /////////////////////////////////
@@ -141,7 +143,7 @@ public class CosmicInputBusPartMachine extends MEBusPartMachine implements IData
     public ModularUI createUI(Player entityPlayer) {
         return new ModularUI(176, 50, this, entityPlayer).widget(new FancyMachineUIWidget(this, 176, 50));
     }
-////////////////////////////////
+    ////////////////////////////////
     // ******* Interaction *******//
     ////////////////////////////////
 
@@ -215,8 +217,4 @@ public class CosmicInputBusPartMachine extends MEBusPartMachine implements IData
             setDistinct(tag.getBoolean("DistinctBuses"));
         }
     }
-
-
-
-
 }
