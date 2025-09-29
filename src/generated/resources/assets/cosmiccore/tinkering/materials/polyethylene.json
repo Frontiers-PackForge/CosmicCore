@@ -1,0 +1,37 @@
+{
+  "color": "FFC8C8C8",
+  "fallbacks": [
+    "silver",
+    "iron"
+  ],
+  "generator": {
+    "supported_stats": [
+      "tconstruct:repair_kit",
+      "tconstruct:binding"
+    ],
+    "transformer": {
+      "type": "tconstruct:recolor_sprite",
+      "color_mapping": {
+        "type": "tconstruct:grey_to_color",
+        "palette": [
+          {
+            "color": "FFFF66CC",
+            "grey": 0
+          },
+          {
+            "color": "FFFF99DD",
+            "grey": 85
+          },
+          {
+            "color": "FF99CCFF",
+            "grey": 170
+          },
+          {
+            "color": "FF66CCFF",
+            "grey": 255
+          }
+        ]
+      }
+    }
+  }
+}

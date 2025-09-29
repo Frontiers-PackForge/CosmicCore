@@ -67,10 +67,6 @@ public class TinkersMaterial {
         this.needed = builder.needed;
     }
 
-    public List<IMaterialStats> getStats() {
-        return this.stats;
-    }
-
     public static final class Builder {
 
         private IColorMapping colorMapping;

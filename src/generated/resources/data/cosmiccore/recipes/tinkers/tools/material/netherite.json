@@ -1,0 +1,9 @@
+{
+  "type": "tconstruct:material",
+  "ingredient": {
+    "item": "minecraft:netherite_ingot"
+  },
+  "material": "cosmiccore:netherite",
+  "needed": 2,
+  "value": 1
+}

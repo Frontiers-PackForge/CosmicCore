@@ -1,0 +1,9 @@
+{
+  "type": "tconstruct:material",
+  "ingredient": {
+    "item": "gtceu:stainless_steel_ingot"
+  },
+  "material": "cosmiccore:stainless_steel",
+  "needed": 2,
+  "value": 1
+}

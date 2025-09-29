@@ -1,0 +1,9 @@
+{
+  "type": "tconstruct:material",
+  "ingredient": {
+    "item": "gtceu:tungsten_carbide_ingot"
+  },
+  "material": "cosmiccore:tungsten_carbide",
+  "needed": 2,
+  "value": 1
+}

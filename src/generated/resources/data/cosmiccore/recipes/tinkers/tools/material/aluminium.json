@@ -1,9 +1,9 @@
 {
   "type": "tconstruct:material",
   "ingredient": {
-    "tag": "forge:ingots/neutronium"
+    "item": "gtceu:aluminium_ingot"
   },
-  "material": "cosmiccore:shiboubouya_dn_tube",
+  "material": "cosmiccore:aluminium",
   "needed": 2,
   "value": 1
 }

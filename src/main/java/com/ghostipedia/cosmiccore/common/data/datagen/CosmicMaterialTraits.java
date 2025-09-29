@@ -30,32 +30,6 @@ public class CosmicMaterialTraits extends AbstractMaterialTraitDataProvider {
         super(packOutput, materials);
     }
 
-       public static final TinkersMaterial TEST_MATERIAL = new TinkersMaterial.Builder("shiboubouya_dn_tube")
-            .materialValue(2)
-            .headMaterialStats(2200, 10.0f, Tiers.IRON, 5.0f)
-            .gripMaterialStats(3000, 10.0f, 20)
-            .handleMaterialStats(3000, 10, 4, 10)
-            .addStatlessType(StatlessMaterialStats.BINDING)
-            .addStatlessType(StatlessMaterialStats.REPAIR_KIT)
-            .addStatlessType(StatlessMaterialStats.BOWSTRING)
-            .defaultTrait(CosmicCoreModifiers.wrenchModeSwitch.getId())
-            .trait(() -> new ModifierEntry(CosmicCoreModifiers.wrenchModeSwitch.get(), 3), MaterialRegistry.RANGED)
-            .trait(() -> new ModifierEntry(TinkerModifiers.decay.get(), 1), MaterialRegistry.MELEE_HARVEST)
-            .sortOrder(10)
-            .craftable(true)
-            .colorMapping(
-                    GreyToColorMapping.builder()
-                            .addARGB(0, 0xFFFF66CC)
-                            .addARGB(85, 0xFFFF99DD)
-                            .addARGB(170, 0xFF99CCFF)
-                            .addARGB(255, 0xFF66CCFF)
-                            .build())
-            .fallback("silver")
-            .fallback("iron")
-            .color(0xFFADD8E6)
-            .Ingredient(Ingredient.of(ChemicalHelper.getIngot(GTMaterials.Neutronium, 1)), 1, 2)
-            .build();
-
     @Override
     protected void addMaterialTraits() {
         for (TinkersMaterial material : TinkersMaterial.MATERIALS) {

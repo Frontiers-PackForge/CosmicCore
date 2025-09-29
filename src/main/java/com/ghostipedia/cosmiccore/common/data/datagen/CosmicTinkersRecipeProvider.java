@@ -23,7 +23,7 @@ public class CosmicTinkersRecipeProvider extends RecipeProvider implements IReci
     @Override
     protected void buildRecipes(Consumer<FinishedRecipe> consumer) {
         for (TinkersMaterial tinkersMaterial : TinkersMaterial.MATERIALS) {
-            String folder = "tools/material/";
+            String folder = "tinkers/tools/material/";
             materialRecipe(consumer, tinkersMaterial.getMaterialLocation(), tinkersMaterial.getIngredient(),
                     tinkersMaterial.getValue(), tinkersMaterial.getNeeded(), folder + tinkersMaterial.getName());
         }

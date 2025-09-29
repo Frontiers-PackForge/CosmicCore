@@ -1,0 +1,9 @@
+{
+  "type": "tconstruct:material",
+  "ingredient": {
+    "item": "gtceu:neutronium_ingot"
+  },
+  "material": "cosmiccore:neutronium",
+  "needed": 2,
+  "value": 1
+}
