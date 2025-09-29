@@ -2,25 +2,30 @@
   "parent": "minecraft:block/block",
   "loader": "gtceu:machine",
   "machine": "cosmiccore:uv_module_hatch",
+  "replaceable_textures": [
+    "bottom",
+    "top",
+    "side"
+  ],
   "variants": {
-    "recipe_logic_status=idle": {
+    "is_formed=false": {
       "model": {
-        "parent": "gtceu:block/casings/voltage/uv"
+        "parent": "cosmiccore:block/machine/part/module_hatch",
+        "textures": {
+          "bottom": "gtceu:block/casings/voltage/uv/bottom",
+          "side": "gtceu:block/casings/voltage/uv/side",
+          "top": "gtceu:block/casings/voltage/uv/top"
+        }
       }
     },
-    "recipe_logic_status=suspend": {
+    "is_formed=true": {
       "model": {
-        "parent": "gtceu:block/casings/voltage/uv"
-      }
-    },
-    "recipe_logic_status=waiting": {
-      "model": {
-        "parent": "gtceu:block/casings/voltage/uv"
-      }
-    },
-    "recipe_logic_status=working": {
-      "model": {
-        "parent": "gtceu:block/casings/voltage/uv"
+        "parent": "cosmiccore:block/machine/part/module_hatch",
+        "textures": {
+          "bottom": "gtceu:block/casings/voltage/uv/bottom",
+          "side": "gtceu:block/casings/voltage/uv/side",
+          "top": "gtceu:block/casings/voltage/uv/top"
+        }
       }
     }
   }

@@ -234,6 +234,43 @@ public class CosmicItems {
             .defaultModel()
             .register();
 
+    public static final ItemEntry<ComponentItem> PALE_SAW = REGISTRATE
+            .item("pale_saw", ComponentItem::create)
+            .lang("Pale Saw")
+            .properties(p -> p.stacksTo(64))
+            .tag()
+            .defaultModel()
+            .register();
+    public static final ItemEntry<ComponentItem> PALE_SCRAP = REGISTRATE
+            .item("pale_scrap", ComponentItem::create)
+            .lang("Pale Scrap")
+            .properties(p -> p.stacksTo(64))
+            .tag()
+            .defaultModel()
+            .register();
+    public static final ItemEntry<ComponentItem> ABRASIVE_ROSIN_MILLSTONES = REGISTRATE
+            .item("abrasive_rosin_millstones", ComponentItem::create)
+            .lang("Abrasive Rosin Millstones")
+            .properties(p -> p.stacksTo(64))
+            .tag()
+            .defaultModel()
+            .register();
+
+    public static final ItemEntry<ComponentItem> BITUMEN_WAX = REGISTRATE
+            .item("bitumen_wax", ComponentItem::create)
+            .lang("Bitumen Wax")
+            .properties(p -> p.stacksTo(64))
+            .tag()
+            .defaultModel()
+            .register();
+    public static final ItemEntry<ComponentItem> ENERGIZED_SILK = REGISTRATE
+            .item("energized_silk", ComponentItem::create)
+            .lang("Energized Silk")
+            .properties(p -> p.stacksTo(64))
+            .tag()
+            .defaultModel()
+            .register();
+
     public static final ItemEntry<ComponentItem> HARMONICALLY_TUNED_CIRCUIT_BOARD = REGISTRATE
             .item("harmonically_tuned_circuit_board",
                     ComponentItem::create)
@@ -1832,37 +1869,6 @@ public class CosmicItems {
             .properties(p -> p.stacksTo(64))
             .defaultModel()
             .register();
-
-    public static final ItemEntry<ComponentItem> WRENCH_CAST_GOLD = REGISTRATE
-            .item("wrench_head_cast", ComponentItem::create)
-            .lang("Wrench Head Cast")
-            .properties(p -> p.stacksTo(1))
-            // .tag(CosmicItemTags.WRENCH_HEAD_CAST_MULTI)
-            .defaultModel()
-            .register();
-    public static final ItemEntry<ComponentItem> WRENCH_CAST_SAND = REGISTRATE
-            .item("wrench_head_sand_cast", ComponentItem::create)
-            .lang("Wrench Head Sand Cast")
-            // .tag(CosmicItemTags.WRENCH_HEAD_CAST_SINGLE)
-            .properties(p -> p.stacksTo(1))
-            .defaultModel()
-            .register();
-
-    public static final ItemEntry<ComponentItem> SCREWDRIVER_CAST_GOLD = REGISTRATE
-            .item("screwdriver_head_cast", ComponentItem::create)
-            .lang("Screwdriver Head Cast")
-            .properties(p -> p.stacksTo(1))
-            // .tag(CosmicItemTags.SCREWDRIVER_HEAD_CAST_MULTI)
-            .defaultModel()
-            .register();
-    public static final ItemEntry<ComponentItem> SCREWDRIVER_CAST_SAND = REGISTRATE
-            .item("screwdriver_head_sand_cast", ComponentItem::create)
-            .lang("Screwdriver Head Sand Cast")
-            // .tag(CosmicItemTags.SCREWDRIVER_HEAD_CAST_SINGLE)
-            .properties(p -> p.stacksTo(1))
-            .defaultModel()
-            .register();
-
     public static ItemEntry<ComponentItem> LINKED_TERMINAL = REGISTRATE
             .item("linked_terminal", ComponentItem::create)
             .lang("Linked Terminal")
