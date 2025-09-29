@@ -21,6 +21,7 @@
     "ComponentItemMixin",
     "DivingHelmetItemMixin",
     "GTValuesMixin",
+    "IndustrialApiaryBeeModifierMixin",
     "MAE2GTIntegrationMixin",
     "PlayerBreathingMixin",
     "TagPrefixItemMixin",
@@ -41,6 +42,7 @@
     "lso.FrostbiteEffectMixin",
     "lso.HeatstrokeEffectMixin",
     "lso.TemperatureCapabilityMixin",
+    "gtceu.MetaMachineBlockEntityMixin",
     "tinkers.ModifiableItemMixin"
   ],
   "injectors": {

@@ -9,7 +9,11 @@ import com.ghostipedia.cosmiccore.api.machine.part.SteamFluidHatchPartMachine;
 import com.ghostipedia.cosmiccore.api.machine.part.WirelessEnergyHatchPartMachine;
 import com.ghostipedia.cosmiccore.api.registries.CosmicRegistration;
 import com.ghostipedia.cosmiccore.client.renderer.machine.CosmicDynamicRenderHelpers;
+import com.ghostipedia.cosmiccore.common.ae2gt.CosmicStockingBusPartMachine;
+import com.ghostipedia.cosmiccore.common.ae2gt.CosmicStockingHatchPartMachine;
 import com.ghostipedia.cosmiccore.common.block.debug.CreativeThermiaContainerMachine;
+import com.ghostipedia.cosmiccore.common.data.recipe.CosmicRecipeModifiers;
+import com.ghostipedia.cosmiccore.common.machine.IndustrialApiaryMachine;
 import com.ghostipedia.cosmiccore.common.machine.WirelessChargerMachine;
 import com.ghostipedia.cosmiccore.common.machine.multiblock.electric.hpca.HPCAMachine;
 import com.ghostipedia.cosmiccore.common.machine.multiblock.multi.WirelessDataBankMachine;
@@ -23,10 +27,7 @@ import com.gregtechceu.gtceu.api.GTValues;
 import com.gregtechceu.gtceu.api.capability.recipe.IO;
 import com.gregtechceu.gtceu.api.capability.recipe.ItemRecipeCapability;
 import com.gregtechceu.gtceu.api.data.RotationState;
-import com.gregtechceu.gtceu.api.machine.IMachineBlockEntity;
-import com.gregtechceu.gtceu.api.machine.MachineDefinition;
-import com.gregtechceu.gtceu.api.machine.MetaMachine;
-import com.gregtechceu.gtceu.api.machine.MultiblockMachineDefinition;
+import com.gregtechceu.gtceu.api.machine.*;
 import com.gregtechceu.gtceu.api.machine.multiblock.PartAbility;
 import com.gregtechceu.gtceu.api.machine.property.GTMachineModelProperties;
 import com.gregtechceu.gtceu.api.machine.steam.SimpleSteamMachine;
@@ -36,6 +37,7 @@ import com.gregtechceu.gtceu.api.pattern.MultiblockShapeInfo;
 import com.gregtechceu.gtceu.api.pattern.Predicates;
 import com.gregtechceu.gtceu.api.pattern.util.RelativeDirection;
 import com.gregtechceu.gtceu.api.recipe.GTRecipeType;
+import com.gregtechceu.gtceu.api.recipe.modifier.RecipeModifierList;
 import com.gregtechceu.gtceu.api.registry.registrate.MachineBuilder;
 import com.gregtechceu.gtceu.client.util.TooltipHelper;
 import com.gregtechceu.gtceu.common.data.*;
@@ -45,7 +47,9 @@ import com.gregtechceu.gtceu.common.data.models.GTModels;
 import com.gregtechceu.gtceu.common.machine.multiblock.electric.ActiveTransformerMachine;
 import com.gregtechceu.gtceu.common.machine.multiblock.electric.FusionReactorMachine;
 import com.gregtechceu.gtceu.common.machine.multiblock.electric.PowerSubstationMachine;
+import com.gregtechceu.gtceu.common.registry.GTRegistration;
 import com.gregtechceu.gtceu.config.ConfigHolder;
+import com.gregtechceu.gtceu.integration.ae2.machine.MEStockingBusPartMachine;
 import com.gregtechceu.gtceu.utils.FormattingUtil;
 
 import net.minecraft.core.Direction;
@@ -63,16 +67,21 @@ import static com.ghostipedia.cosmiccore.api.machine.part.CosmicPartAbility.*;
 import static com.ghostipedia.cosmiccore.api.registries.CosmicRegistration.REGISTRATE;
 import static com.ghostipedia.cosmiccore.common.data.CosmicBlocks.*;
 import static com.ghostipedia.cosmiccore.common.data.CosmicMachinesUtils.*;
+import static com.ghostipedia.cosmiccore.common.data.recipe.CosmicRecipeModifiers.COSMIC_MODULES;
 import static com.ghostipedia.cosmiccore.common.machine.multiblock.electric.hpca.HPCAMachine.*;
+import static com.ghostipedia.cosmiccore.gtbridge.CosmicRecipeTypes.BIO_LAB;
 import static com.gregtechceu.gtceu.api.GTValues.*;
 import static com.gregtechceu.gtceu.api.pattern.Predicates.*;
 import static com.gregtechceu.gtceu.api.pattern.util.RelativeDirection.*;
 import static com.gregtechceu.gtceu.common.data.GCYMBlocks.*;
 import static com.gregtechceu.gtceu.common.data.GTBlocks.*;
 import static com.gregtechceu.gtceu.common.data.GTMachines.CREATIVE_TOOLTIPS;
+import static com.gregtechceu.gtceu.common.data.GTMachines.ITEM_IMPORT_BUS;
+import static com.gregtechceu.gtceu.common.data.GTRecipeModifiers.*;
 import static com.gregtechceu.gtceu.common.data.GTRecipeTypes.CENTRIFUGE_RECIPES;
 import static com.gregtechceu.gtceu.common.data.GTRecipeTypes.DUMMY_RECIPES;
 import static com.gregtechceu.gtceu.common.data.machines.GTMachineUtils.*;
+import static com.gregtechceu.gtceu.common.data.machines.GTMachineUtils.registerTieredMachines;
 import static com.gregtechceu.gtceu.common.data.machines.GTMultiMachines.FUSION_REACTOR;
 import static com.gregtechceu.gtceu.common.data.models.GTMachineModels.*;
 
@@ -170,11 +179,12 @@ public class CosmicMachines {
                         case 9 -> "Advanced";
                         case 10 -> "Elite";
                         default -> "Simple";
-                    } + "Module Hatch")
+                    } + " Module Hatch")
                     .rotationState(RotationState.ALL)
+                    .modelProperty(GTMachineModelProperties.IS_FORMED, false)
                     .abilities(CosmicPartAbility.MODULE_HATCH)
                     // TODO for ghosti: give tooltip and model
-                    .workableTieredHullModel(GTCEu.id("block/machines/parallel_hatch_mk_1"))
+                    .overlayTieredHullModel("module_hatch")
                     .tooltips(Component.translatable("gtceu.machine.parallel_hatch_mk_1.tooltip"))
                     .register(),
             UV, UHV, UEV);
@@ -185,13 +195,85 @@ public class CosmicMachines {
                     .langValue("%s Wireless Charger".formatted(VN[tier]))
                     .tooltipBuilder((stack, list) -> {
                         list.add(Component.translatable("cosmiccore.wireless_charger.range.single",
-                                FormattingUtil.formatNumbers(2048L * (tier - GTValues.HV))));
+                                FormattingUtil.formatNumbers(2048L * (tier - GTValues.MV))));
                         list.add(Component.translatable("cosmiccore.wireless_charger.range.mixed",
-                                FormattingUtil.formatNumbers(1024L * (tier - GTValues.HV))));
+                                FormattingUtil.formatNumbers(1024L * (tier - GTValues.MV))));
                     })
                     .workableTieredHullModel(CosmicCore.id("block/overlay/machine/wireless_charger"))
                     .register(),
             GTValues.tiersBetween(HV, UIV));
+
+    public static final MachineDefinition[] INDUSTRIAL_APIARY = registerTieredMachines("electric_apiary",
+            IndustrialApiaryMachine::new,
+            (tier, builder) -> builder
+                    .langValue("%s Industrial Production Apiary".formatted(VN[tier]))
+                    .tooltipBuilder((stack, list) -> {
+                        list.add(Component.translatable("cosmiccore.industrial_apiary.tier.description.0"));
+                        list.add(Component.translatable("cosmiccore.industrial_apiary.tier.description.1"));
+                        list.add(Component.translatable("cosmiccore.industrial_apiary.tier.description.2"));
+                        list.add(Component.translatable("cosmiccore.industrial_apiary.tier.description.3"));
+                        list.add(Component.translatable("cosmiccore.industrial_apiary.tier.description.4"));
+                        list.add(Component.translatable("cosmiccore.industrial_apiary.tier.description.5"));
+                    })
+                    .recipeType(CosmicRecipeTypes.BEES)
+                    .workableTieredHullModel(CosmicCore.id("block/overlay/machine/industrial_apiary"))
+                    .register(),
+            GTValues.tiersBetween(LV, LuV));
+
+    public static final MachineDefinition[] BIO_LAB_SINGLE = registerTieredMachines("biolab",
+            (holder, tier) -> new SimpleTieredMachine(holder, tier, defaultTankSizeFunction), (tier, builder) -> builder
+                    .langValue("%s Bio Lab %s".formatted(VLVH[tier], VLVT[tier]))
+                    .editableUI(SimpleTieredMachine.EDITABLE_UI_CREATOR.apply(GTCEu.id("biolab"),
+                            BIO_LAB))
+                    .rotationState(RotationState.NON_Y_AXIS)
+                    .recipeType(BIO_LAB)
+                    .recipeModifier(OC_NON_PERFECT)
+                    .workableTieredHullModel(GTCEu.id("block/machines/brewery"))
+                    .tooltips(workableTiered(tier, GTValues.V[tier], GTValues.V[tier] * 64,
+                            BIO_LAB, defaultTankSizeFunction.applyAsInt(tier), true))
+                    .register(),
+            EV, IV, LuV, ZPM, UV);
+
+
+    public final static MachineDefinition COSMIC_STOCKING_ME_PART_BUS = REGISTRATE
+            .machine("cosmic_me_assemblyline_bus", CosmicStockingBusPartMachine::new)
+            .langValue("ME Assembly Line Bus")
+            .tier(UV)
+            .rotationState(RotationState.ALL)
+            .abilities(ME_ASSEMBLY_PARTS)
+            .modelProperty(GTMachineModelProperties.IS_FORMED, false)
+            .overlayTieredHullModel("item_me_assemblyline")
+            .tooltips(
+                    Component.translatable("cosmiccore.machine.me.stocking_item.tooltip.0"),
+                    Component.translatable("cosmiccore.machine.me.stocking_item.tooltip.1"),
+                    Component.translatable("cosmiccore.machine.me.stocking_item.tooltip.2"),
+                    Component.translatable("cosmiccore.machine.me.stocking_item.tooltip.3"),
+                    Component.translatable("cosmiccore.machine.me.stocking_item.tooltip.4"),
+                    Component.translatable("cosmiccore.machine.me.stocking_item.tooltip.5"),
+                    Component.translatable("cosmiccore.machine.me.stocking_item.tooltip.6"),
+                    Component.translatable("gtceu.part_sharing.enabled"))
+            .register();
+
+
+    public final static MachineDefinition COSMIC_STOCKING_ME_PART_HATCH = REGISTRATE
+            .machine("cosmic_me_assemblyline_hatch", CosmicStockingHatchPartMachine::new)
+            .langValue("ME Assembly Line Hatch")
+            .tier(UV)
+            .rotationState(RotationState.ALL)
+            .abilities(ME_ASSEMBLY_PARTS_FLUID)
+            .modelProperty(GTMachineModelProperties.IS_FORMED, false)
+            .overlayTieredHullModel("fluid_me_assemblyline")
+            .tooltips(
+                    Component.translatable("cosmiccore.machine.me.stocking_item.tooltip.0"),
+                    Component.translatable("cosmiccore.machine.me.stocking_item.tooltip.1"),
+                    Component.translatable("cosmiccore.machine.me.stocking_item.tooltip.2"),
+                    Component.translatable("cosmiccore.machine.me.stocking_item.tooltip.3"),
+                    Component.translatable("cosmiccore.machine.me.stocking_item.tooltip.4"),
+                    Component.translatable("cosmiccore.machine.me.stocking_item.tooltip.5"),
+                    Component.translatable("cosmiccore.machine.me.stocking_item.tooltip.6"),
+                    Component.translatable("gtceu.part_sharing.enabled"))
+            .register();
+
 
     // Enable If needed Inside of Dev
     // public static final MultiblockMachineDefinition SOUL_TESTER = REGISTRATE.multiblock("soul_tester",
@@ -370,6 +452,19 @@ public class CosmicMachines {
             .rotationState(RotationState.ALL)
             .modelProperty(GTMachineModelProperties.IS_FORMED, false)
             .abilities(PartAbility.IMPORT_ITEMS)
+            .modelProperty(RecipeLogic.STATUS_PROPERTY, RecipeLogic.Status.IDLE)
+            .model(createWorkableTieredHullMachineModel(GTCEu.id("block/machines/object_holder"))
+                    .andThen((ctx, prov, model) -> {
+                        model.addReplaceableTextures("bottom", "top", "side");
+                    }))
+            .register();
+
+    public static final MachineDefinition BEE_HOLDER = REGISTRATE.machine("bee_holder", BeeHolderPartMachine::new)
+            .langValue("Bee Holder")
+            .tier(UV)
+            .rotationState(RotationState.NON_Y_AXIS)
+            .modelProperty(GTMachineModelProperties.IS_FORMED, false)
+            .abilities(CosmicPartAbility.BEE_HOLDER)
             .modelProperty(RecipeLogic.STATUS_PROPERTY, RecipeLogic.Status.IDLE)
             .model(createWorkableTieredHullMachineModel(GTCEu.id("block/machines/object_holder"))
                     .andThen((ctx, prov, model) -> {
@@ -713,6 +808,8 @@ public class CosmicMachines {
         GTMultiMachines.EXTREME_COMBUSTION_ENGINE.setRecipeTypes(new GTRecipeType[] { DUMMY_RECIPES });
         GTMultiMachines.EXTREME_COMBUSTION_ENGINE.setRenderXEIPreview(false);
         GTMultiMachines.EXTREME_COMBUSTION_ENGINE.setRenderWorldPreview(false);
+        GTMultiMachines.ASSEMBLY_LINE.setRecipeModifier(new RecipeModifierList(COSMIC_MODULES,OC_NON_PERFECT));
+        GTMultiMachines.ASSEMBLY_LINE.setAlwaysTryModifyRecipe(true);
         // GCYMMachines.MEGA_BLAST_FURNACE.setRecipeTypes(new GTRecipeType[] { DUMMY_RECIPES });
         // GCYMMachines.MEGA_BLAST_FURNACE.setRenderXEIPreview(false);
         // GCYMMachines.MEGA_BLAST_FURNACE.setRenderWorldPreview(false);
@@ -771,5 +868,34 @@ public class CosmicMachines {
                 .where('A', Predicates.air())
                 .where('#', Predicates.any())
                 .build());
+
+        GTMultiMachines.ASSEMBLY_LINE.setPatternFactory(() -> FactoryBlockPattern.start(BACK, UP, RIGHT)
+                .aisle("FIF", "RTR", "SAG", "#Y#")
+                .aisle("FIF", "RTR", "DAG", "#Y#").setRepeatable(3, 15)
+                .aisle("FOF", "RTR", "DAG", "#Y#")
+                .where('S', Predicates.controller(blocks(GTMultiMachines.ASSEMBLY_LINE.getBlock())))
+                .where('F', blocks(CASING_STEEL_SOLID.get())
+                        .or(Predicates.abilities(PartAbility.IMPORT_FLUIDS_1X, ME_ASSEMBLY_PARTS_FLUID).setMaxGlobalLimited(4)))
+                .where('O',
+                        Predicates.abilities(PartAbility.EXPORT_ITEMS)
+                                .addTooltips(Component.translatable("gtceu.multiblock.pattern.location_end")))
+                .where('Y',
+                        blocks(CASING_STEEL_SOLID.get()).or(Predicates.abilities(PartAbility.INPUT_ENERGY)
+                                .setMinGlobalLimited(1).setMaxGlobalLimited(2)))
+                .where('I', blocks(ITEM_IMPORT_BUS[0].getBlock()).or(Predicates.abilities(ME_ASSEMBLY_PARTS)))
+                .where('G', blocks(CASING_GRATE.get()))
+                .where('A', blocks(CASING_ASSEMBLY_CONTROL.get()))
+                .where('R', blocks(CASING_LAMINATED_GLASS.get()))
+                .where('T', blocks(CASING_ASSEMBLY_LINE.get()))
+                .where('D', Predicates.abilities(PartAbility.DATA_ACCESS, PartAbility.OPTICAL_DATA_RECEPTION).setExactLimit(1)
+                        .or(Predicates.abilities(MODULE_HATCH).setExactLimit(1))
+                        .or(blocks(CASING_GRATE.get()))
+                )
+                .where('#', Predicates.any())
+                .build());
+
     }
+
+
+
 }

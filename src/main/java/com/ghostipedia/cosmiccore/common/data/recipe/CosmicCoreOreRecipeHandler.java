@@ -1,5 +1,7 @@
 package com.ghostipedia.cosmiccore.common.data.recipe;
 
+import com.ghostipedia.cosmiccore.common.data.CosmicItems;
+
 import com.gregtechceu.gtceu.api.GTValues;
 import com.gregtechceu.gtceu.api.data.chemical.ChemicalHelper;
 import com.gregtechceu.gtceu.api.data.chemical.material.Material;
@@ -24,11 +26,13 @@ import static com.gregtechceu.gtceu.common.data.GTRecipeTypes.*;
 public class CosmicCoreOreRecipeHandler {
 
     public static void init(Consumer<FinishedRecipe> provider, @NotNull Material material) {
-        processcrushedLeached(provider, material);
+        processCrushedLeachedBad(provider, material);
+        processCrushedLeachedGood(provider, material);
         processRefinedFrothed(provider, material);
         processLeachedRefined(provider, material);
         processFrothedPure(provider, material);
         processRawOretoFinalStates(provider, material);
+        processRawOretoFinalStatesAugmented(provider, material);
         // todo old
         // crushed.executeHandler(provider, PropertyKey.ORE, CosmicCoreOreRecipeHandler::processcrushedLeached);
         // crushedRefined.executeHandler(provider, PropertyKey.ORE, CosmicCoreOreRecipeHandler::processRefinedFrothed);
@@ -36,7 +40,7 @@ public class CosmicCoreOreRecipeHandler {
         // prismaFrothed.executeHandler(provider, PropertyKey.ORE, CosmicCoreOreRecipeHandler::processFrothedPure);
     }
 
-    public static void processcrushedLeached(Consumer<FinishedRecipe> provider, Material material) {
+    public static void processCrushedLeachedBad(Consumer<FinishedRecipe> provider, Material material) {
         if (!material.shouldGenerateRecipesFor(crushed) || !material.hasProperty(PropertyKey.ORE)) return;
         var property = material.getProperty(PropertyKey.ORE);
         ItemStack leachedStack = ChemicalHelper.get(crushedLeached, material);
@@ -48,8 +52,34 @@ public class CosmicCoreOreRecipeHandler {
                 .inputItems(crushedPurified, material)
                 .inputFluids(Water.getFluid(100))
                 .inputFluids(SulfuricAcid.getFluid(200))
+                .circuitMeta(1)
                 .outputItems(leachedStack)
                 .chancedOutput(leachedStack, 5500, 750);
+        if (byproduct != GTMaterials.NULL && !ChemicalHelper.get(dustPure, byproduct).isEmpty()) {
+            builder.chancedOutput(dustPure, byproduct, 1500, 1350);
+        }
+        if (byproduct2 != GTMaterials.NULL && !ChemicalHelper.get(dustPure, byproduct2).isEmpty()) {
+            builder.chancedOutput(dustPure, byproduct2, 2200, 1150);
+        }
+        builder.outputFluids(DilutedSulfuricAcid.getFluid(300));
+        builder.duration(60).EUt(GTValues.VA[GTValues.HV]).save(provider);
+    }
+
+    public static void processCrushedLeachedGood(Consumer<FinishedRecipe> provider, Material material) {
+        if (!material.shouldGenerateRecipesFor(crushed) || !material.hasProperty(PropertyKey.ORE)) return;
+        var property = material.getProperty(PropertyKey.ORE);
+        ItemStack leachedStack = ChemicalHelper.get(crushedLeached, material);
+
+        Material byproduct = property.getOreByProduct(0);
+        Material byproduct2 = property.getOreByProduct(1);
+
+        var builder = LEACHING_PLANT.recipeBuilder("crushed_" + material.getName() + "_to_crushedleached_optimized")
+                .inputItems(crushedPurified, material)
+                .chancedInput(CosmicItems.ABRASIVE_ROSIN_MILLSTONES.asStack(), 2500, 0)
+                .inputFluids(Water.getFluid(100))
+                .inputFluids(SulfuricAcid.getFluid(200))
+                .circuitMeta(2)
+                .outputItems(leachedStack, 2);
         if (byproduct != GTMaterials.NULL && !ChemicalHelper.get(dustPure, byproduct).isEmpty()) {
             builder.chancedOutput(dustPure, byproduct, 1500, 1350);
         }
@@ -141,6 +171,7 @@ public class CosmicCoreOreRecipeHandler {
                 .inputItems(rawOre, material)
                 .inputFluids(GTMaterials.Blaze.getFluid(250))
                 .inputFluids(Water.getFluid(2750))
+                .circuitMeta(1)
                 .outputItems(frothedStack.copyWithCount(6));
         if (byproduct != GTMaterials.NULL && !ChemicalHelper.get(dust, byproduct).isEmpty()) {
             builder.chancedOutput(dust, byproduct, 3, 3500, 0);
@@ -153,6 +184,38 @@ public class CosmicCoreOreRecipeHandler {
         }
         if (byproduct4 != GTMaterials.NULL && !ChemicalHelper.get(dust, byproduct4).isEmpty()) {
             builder.chancedOutput(dust, byproduct4, 3, 3500, 0);
+        }
+        builder.duration(40).EUt(GTValues.V[GTValues.HV]).save(provider);
+    }
+
+    public static void processRawOretoFinalStatesAugmented(Consumer<FinishedRecipe> provider, Material material) {
+        if (!material.shouldGenerateRecipesFor(rawOre) || !material.hasProperty(PropertyKey.ORE)) return;
+        var property = material.getProperty(PropertyKey.ORE);
+        ItemStack frothedStack = ChemicalHelper.get(dust, material);
+
+        Material byproduct = property.getOreByProduct(0);
+        Material byproduct2 = property.getOreByProduct(1);
+        Material byproduct3 = property.getOreByProduct(2);
+        Material byproduct4 = property.getOreByProduct(Integer.MAX_VALUE);
+
+        var builder = PRISMA_FOUNDRY.recipeBuilder("raw_ore_prismf_" + material.getName() + "_to_dusts_improved")
+                .inputItems(rawOre, material)
+                .chancedInput(CosmicItems.ABRASIVE_ROSIN_MILLSTONES.asStack(), 5500, 0)
+                .inputFluids(GTMaterials.Blaze.getFluid(25))
+                .inputFluids(Water.getFluid(2750))
+                .circuitMeta(2)
+                .outputItems(frothedStack.copyWithCount(9));
+        if (byproduct != GTMaterials.NULL && !ChemicalHelper.get(dust, byproduct).isEmpty()) {
+            builder.chancedOutput(dust, byproduct, 5, 5500, 0);
+        }
+        if (byproduct2 != GTMaterials.NULL && !ChemicalHelper.get(dust, byproduct2).isEmpty()) {
+            builder.chancedOutput(dust, byproduct2, 5, 5500, 0);
+        }
+        if (byproduct3 != GTMaterials.NULL && !ChemicalHelper.get(dust, byproduct3).isEmpty()) {
+            builder.chancedOutput(dust, byproduct3, 5, 5500, 0);
+        }
+        if (byproduct4 != GTMaterials.NULL && !ChemicalHelper.get(dust, byproduct4).isEmpty()) {
+            builder.chancedOutput(dust, byproduct4, 5, 5500, 0);
         }
         builder.duration(40).EUt(GTValues.V[GTValues.HV]).save(provider);
     }

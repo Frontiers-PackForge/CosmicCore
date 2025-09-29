@@ -1,6 +1,7 @@
 package com.ghostipedia.cosmiccore.client;
 
 import com.ghostipedia.cosmiccore.CosmicCore;
+import com.ghostipedia.cosmiccore.bee.CosmicBeesSpecies;
 import com.ghostipedia.cosmiccore.client.renderer.machine.*;
 
 import com.gregtechceu.gtceu.client.renderer.machine.DynamicRenderManager;
@@ -13,9 +14,14 @@ import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 
 import com.mojang.blaze3d.vertex.DefaultVertexFormat;
+import forestry.api.apiculture.genetics.BeeLifeStage;
+import forestry.api.client.plugin.IClientRegistration;
 import lombok.Getter;
 
 import java.io.IOException;
+import java.util.function.Consumer;
+
+import static dev.ftb.mods.ftblibrary.util.KnownServerRegistries.client;
 
 public class CosmicCoreClient {
 
@@ -72,5 +78,287 @@ public class CosmicCoreClient {
         event.register(StarBallastRender.STAR_MODEL_OUTER);
         event.register(StarBallastRender.STAR_MODEL_INNER);
         event.register(StarBallastRender.STAR_MODEL_BEAM);
+    }
+
+    public static class CosmicBeesClientRegistration implements Consumer<IClientRegistration> {
+
+        @Override
+        public void accept(IClientRegistration client) {
+            registerApiculture(client);
+        }
+
+        // Spotless: off
+        private static void registerApiculture(IClientRegistration client) {
+            client.setCustomBeeModel(CosmicBeesSpecies.LOFTY_OXYGEN, BeeLifeStage.DRONE,
+                    CosmicCore.id("item/bee/bee_drone_fuzzy"));
+            client.setCustomBeeModel(CosmicBeesSpecies.LOFTY_OXYGEN, BeeLifeStage.PRINCESS,
+                    CosmicCore.id("item/bee/bee_drone_fuzzy_princess"));
+            client.setCustomBeeModel(CosmicBeesSpecies.LOFTY_OXYGEN, BeeLifeStage.QUEEN,
+                    CosmicCore.id("item/bee/bee_drone_fuzzy_queen"));
+
+            client.setCustomBeeModel(CosmicBeesSpecies.LOFTY_HYDROGEN, BeeLifeStage.DRONE,
+                    CosmicCore.id("item/bee/bee_drone_fuzzy"));
+            client.setCustomBeeModel(CosmicBeesSpecies.LOFTY_HYDROGEN, BeeLifeStage.PRINCESS,
+                    CosmicCore.id("item/bee/bee_drone_fuzzy_princess"));
+            client.setCustomBeeModel(CosmicBeesSpecies.LOFTY_HYDROGEN, BeeLifeStage.QUEEN,
+                    CosmicCore.id("item/bee/bee_drone_fuzzy_queen"));
+
+            client.setCustomBeeModel(CosmicBeesSpecies.LOFTY_NITROGEN, BeeLifeStage.DRONE,
+                    CosmicCore.id("item/bee/bee_drone_fuzzy"));
+            client.setCustomBeeModel(CosmicBeesSpecies.LOFTY_NITROGEN, BeeLifeStage.PRINCESS,
+                    CosmicCore.id("item/bee/bee_drone_fuzzy_princess"));
+            client.setCustomBeeModel(CosmicBeesSpecies.LOFTY_NITROGEN, BeeLifeStage.QUEEN,
+                    CosmicCore.id("item/bee/bee_drone_fuzzy_queen"));
+
+            client.setCustomBeeModel(CosmicBeesSpecies.LOFTY_ARGON, BeeLifeStage.DRONE,
+                    CosmicCore.id("item/bee/bee_drone_fuzzy"));
+            client.setCustomBeeModel(CosmicBeesSpecies.LOFTY_ARGON, BeeLifeStage.PRINCESS,
+                    CosmicCore.id("item/bee/bee_drone_fuzzy_princess"));
+            client.setCustomBeeModel(CosmicBeesSpecies.LOFTY_ARGON, BeeLifeStage.QUEEN,
+                    CosmicCore.id("item/bee/bee_drone_fuzzy_queen"));
+
+            client.setCustomBeeModel(CosmicBeesSpecies.ROSE_POLYMER, BeeLifeStage.DRONE,
+                    CosmicCore.id("item/bee/bee_drone_fuzzy"));
+            client.setCustomBeeModel(CosmicBeesSpecies.ROSE_POLYMER, BeeLifeStage.PRINCESS,
+                    CosmicCore.id("item/bee/bee_drone_fuzzy_princess"));
+            client.setCustomBeeModel(CosmicBeesSpecies.ROSE_POLYMER, BeeLifeStage.QUEEN,
+                    CosmicCore.id("item/bee/bee_drone_fuzzy_queen"));
+
+            client.setCustomBeeModel(CosmicBeesSpecies.CITRUS_POLYMER, BeeLifeStage.DRONE,
+                    CosmicCore.id("item/bee/bee_drone_fuzzy"));
+            client.setCustomBeeModel(CosmicBeesSpecies.CITRUS_POLYMER, BeeLifeStage.PRINCESS,
+                    CosmicCore.id("item/bee/bee_drone_fuzzy_princess"));
+            client.setCustomBeeModel(CosmicBeesSpecies.CITRUS_POLYMER, BeeLifeStage.QUEEN,
+                    CosmicCore.id("item/bee/bee_drone_fuzzy_queen"));
+
+            client.setCustomBeeModel(CosmicBeesSpecies.WAXY_POLYMER, BeeLifeStage.DRONE,
+                    CosmicCore.id("item/bee/bee_drone_fuzzy"));
+            client.setCustomBeeModel(CosmicBeesSpecies.WAXY_POLYMER, BeeLifeStage.PRINCESS,
+                    CosmicCore.id("item/bee/bee_drone_fuzzy_princess"));
+            client.setCustomBeeModel(CosmicBeesSpecies.WAXY_POLYMER, BeeLifeStage.QUEEN,
+                    CosmicCore.id("item/bee/bee_drone_fuzzy_queen"));
+
+            client.setCustomBeeModel(CosmicBeesSpecies.BIOHAZARD, BeeLifeStage.DRONE,
+                    CosmicCore.id("item/bee/bee_drone_fuzzy"));
+            client.setCustomBeeModel(CosmicBeesSpecies.BIOHAZARD, BeeLifeStage.PRINCESS,
+                    CosmicCore.id("item/bee/bee_drone_fuzzy_princess"));
+            client.setCustomBeeModel(CosmicBeesSpecies.BIOHAZARD, BeeLifeStage.QUEEN,
+                    CosmicCore.id("item/bee/bee_drone_fuzzy_queen"));
+
+            client.setCustomBeeModel(CosmicBeesSpecies.PALE, BeeLifeStage.DRONE,
+                    CosmicCore.id("item/bee/bee_drone_fuzzy"));
+            client.setCustomBeeModel(CosmicBeesSpecies.PALE, BeeLifeStage.PRINCESS,
+                    CosmicCore.id("item/bee/bee_drone_fuzzy_princess"));
+            client.setCustomBeeModel(CosmicBeesSpecies.PALE, BeeLifeStage.QUEEN,
+                    CosmicCore.id("item/bee/bee_drone_fuzzy_queen"));
+
+            client.setCustomBeeModel(CosmicBeesSpecies.SOUL, BeeLifeStage.DRONE,
+                    CosmicCore.id("item/bee/bee_drone_fuzzy"));
+            client.setCustomBeeModel(CosmicBeesSpecies.SOUL, BeeLifeStage.PRINCESS,
+                    CosmicCore.id("item/bee/bee_drone_fuzzy_princess"));
+            client.setCustomBeeModel(CosmicBeesSpecies.SOUL, BeeLifeStage.QUEEN,
+                    CosmicCore.id("item/bee/bee_drone_fuzzy_queen"));
+
+            client.setCustomBeeModel(CosmicBeesSpecies.RUNIC, BeeLifeStage.DRONE,
+                    CosmicCore.id("item/bee/bee_drone_fuzzy"));
+            client.setCustomBeeModel(CosmicBeesSpecies.RUNIC, BeeLifeStage.PRINCESS,
+                    CosmicCore.id("item/bee/bee_drone_fuzzy_princess"));
+            client.setCustomBeeModel(CosmicBeesSpecies.RUNIC, BeeLifeStage.QUEEN,
+                    CosmicCore.id("item/bee/bee_drone_fuzzy_queen"));
+
+            client.setCustomBeeModel(CosmicBeesSpecies.AMBROSIC, BeeLifeStage.DRONE,
+                    CosmicCore.id("item/bee/bee_drone_fuzzy"));
+            client.setCustomBeeModel(CosmicBeesSpecies.AMBROSIC, BeeLifeStage.PRINCESS,
+                    CosmicCore.id("item/bee/bee_drone_fuzzy_princess"));
+            client.setCustomBeeModel(CosmicBeesSpecies.AMBROSIC, BeeLifeStage.QUEEN,
+                    CosmicCore.id("item/bee/bee_drone_fuzzy_queen"));
+
+            client.setCustomBeeModel(CosmicBeesSpecies.ABRASIVE, BeeLifeStage.DRONE,
+                    CosmicCore.id("item/bee/bee_drone_fuzzy"));
+            client.setCustomBeeModel(CosmicBeesSpecies.ABRASIVE, BeeLifeStage.PRINCESS,
+                    CosmicCore.id("item/bee/bee_drone_fuzzy_princess"));
+            client.setCustomBeeModel(CosmicBeesSpecies.ABRASIVE, BeeLifeStage.QUEEN,
+                    CosmicCore.id("item/bee/bee_drone_fuzzy_queen"));
+
+            client.setCustomBeeModel(CosmicBeesSpecies.ENERGIZED, BeeLifeStage.DRONE,
+                    CosmicCore.id("item/bee/bee_drone_fuzzy"));
+            client.setCustomBeeModel(CosmicBeesSpecies.ENERGIZED, BeeLifeStage.PRINCESS,
+                    CosmicCore.id("item/bee/bee_drone_fuzzy_princess"));
+            client.setCustomBeeModel(CosmicBeesSpecies.ENERGIZED, BeeLifeStage.QUEEN,
+                    CosmicCore.id("item/bee/bee_drone_fuzzy_queen"));
+
+            client.setCustomBeeModel(CosmicBeesSpecies.SLICK, BeeLifeStage.DRONE,
+                    CosmicCore.id("item/bee/bee_drone_fuzzy"));
+            client.setCustomBeeModel(CosmicBeesSpecies.SLICK, BeeLifeStage.PRINCESS,
+                    CosmicCore.id("item/bee/bee_drone_fuzzy_princess"));
+            client.setCustomBeeModel(CosmicBeesSpecies.SLICK, BeeLifeStage.QUEEN,
+                    CosmicCore.id("item/bee/bee_drone_fuzzy_queen"));
+
+            client.setCustomBeeModel(CosmicBeesSpecies.PYROLYTIC, BeeLifeStage.DRONE,
+                    CosmicCore.id("item/bee/bee_drone_fuzzy"));
+            client.setCustomBeeModel(CosmicBeesSpecies.PYROLYTIC, BeeLifeStage.PRINCESS,
+                    CosmicCore.id("item/bee/bee_drone_fuzzy_princess"));
+            client.setCustomBeeModel(CosmicBeesSpecies.PYROLYTIC, BeeLifeStage.QUEEN,
+                    CosmicCore.id("item/bee/bee_drone_fuzzy_queen"));
+
+            client.setCustomBeeModel(CosmicBeesSpecies.LUNAR, BeeLifeStage.DRONE,
+                    CosmicCore.id("item/bee/bee_drone_fuzzy"));
+            client.setCustomBeeModel(CosmicBeesSpecies.LUNAR, BeeLifeStage.PRINCESS,
+                    CosmicCore.id("item/bee/bee_drone_fuzzy_princess"));
+            client.setCustomBeeModel(CosmicBeesSpecies.LUNAR, BeeLifeStage.QUEEN,
+                    CosmicCore.id("item/bee/bee_drone_fuzzy_queen"));
+
+            client.setCustomBeeModel(CosmicBeesSpecies.SOLAR, BeeLifeStage.DRONE,
+                    CosmicCore.id("item/bee/bee_drone_fuzzy"));
+            client.setCustomBeeModel(CosmicBeesSpecies.SOLAR, BeeLifeStage.PRINCESS,
+                    CosmicCore.id("item/bee/bee_drone_fuzzy_princess"));
+            client.setCustomBeeModel(CosmicBeesSpecies.SOLAR, BeeLifeStage.QUEEN,
+                    CosmicCore.id("item/bee/bee_drone_fuzzy_queen"));
+
+            client.setCustomBeeModel(CosmicBeesSpecies.COSMOS, BeeLifeStage.DRONE,
+                    CosmicCore.id("item/bee/bee_drone_fuzzy"));
+            client.setCustomBeeModel(CosmicBeesSpecies.COSMOS, BeeLifeStage.PRINCESS,
+                    CosmicCore.id("item/bee/bee_drone_fuzzy_princess"));
+            client.setCustomBeeModel(CosmicBeesSpecies.COSMOS, BeeLifeStage.QUEEN,
+                    CosmicCore.id("item/bee/bee_drone_fuzzy_queen"));
+
+            //NEW BEES
+            client.setCustomBeeModel(CosmicBeesSpecies.HADAL, BeeLifeStage.DRONE,
+                    CosmicCore.id("item/bee/bee_drone_fuzzy"));
+            client.setCustomBeeModel(CosmicBeesSpecies.HADAL, BeeLifeStage.PRINCESS,
+                    CosmicCore.id("item/bee/bee_drone_fuzzy_princess"));
+            client.setCustomBeeModel(CosmicBeesSpecies.HADAL, BeeLifeStage.QUEEN,
+                    CosmicCore.id("item/bee/bee_drone_fuzzy_queen"));
+
+            client.setCustomBeeModel(CosmicBeesSpecies.SHAMAN, BeeLifeStage.DRONE,
+                    CosmicCore.id("item/bee/bee_drone_fuzzy"));
+            client.setCustomBeeModel(CosmicBeesSpecies.SHAMAN, BeeLifeStage.PRINCESS,
+                    CosmicCore.id("item/bee/bee_drone_fuzzy_princess"));
+            client.setCustomBeeModel(CosmicBeesSpecies.SHAMAN, BeeLifeStage.QUEEN,
+                    CosmicCore.id("item/bee/bee_drone_fuzzy_queen"));
+
+            client.setCustomBeeModel(CosmicBeesSpecies.COSMOS, BeeLifeStage.DRONE,
+                    CosmicCore.id("item/bee/bee_drone_fuzzy"));
+            client.setCustomBeeModel(CosmicBeesSpecies.COSMOS, BeeLifeStage.PRINCESS,
+                    CosmicCore.id("item/bee/bee_drone_fuzzy_princess"));
+            client.setCustomBeeModel(CosmicBeesSpecies.COSMOS, BeeLifeStage.QUEEN,
+                    CosmicCore.id("item/bee/bee_drone_fuzzy_queen"));
+
+            client.setCustomBeeModel(CosmicBeesSpecies.ASHEN, BeeLifeStage.DRONE,
+                    CosmicCore.id("item/bee/bee_drone_fuzzy"));
+            client.setCustomBeeModel(CosmicBeesSpecies.ASHEN, BeeLifeStage.PRINCESS,
+                    CosmicCore.id("item/bee/bee_drone_fuzzy_princess"));
+            client.setCustomBeeModel(CosmicBeesSpecies.ASHEN, BeeLifeStage.QUEEN,
+                    CosmicCore.id("item/bee/bee_drone_fuzzy_queen"));
+
+            client.setCustomBeeModel(CosmicBeesSpecies.FRACKING, BeeLifeStage.DRONE,
+                    CosmicCore.id("item/bee/bee_drone_fuzzy"));
+            client.setCustomBeeModel(CosmicBeesSpecies.FRACKING, BeeLifeStage.PRINCESS,
+                    CosmicCore.id("item/bee/bee_drone_fuzzy_princess"));
+            client.setCustomBeeModel(CosmicBeesSpecies.FRACKING, BeeLifeStage.QUEEN,
+                    CosmicCore.id("item/bee/bee_drone_fuzzy_queen"));
+
+            client.setCustomBeeModel(CosmicBeesSpecies.FATE, BeeLifeStage.DRONE,
+                    CosmicCore.id("item/bee/bee_drone_fuzzy"));
+            client.setCustomBeeModel(CosmicBeesSpecies.FATE, BeeLifeStage.PRINCESS,
+                    CosmicCore.id("item/bee/bee_drone_fuzzy_princess"));
+            client.setCustomBeeModel(CosmicBeesSpecies.FATE, BeeLifeStage.QUEEN,
+                    CosmicCore.id("item/bee/bee_drone_fuzzy_queen"));
+
+            client.setCustomBeeModel(CosmicBeesSpecies.GRAND_GARDEN, BeeLifeStage.DRONE,
+                    CosmicCore.id("item/bee/bee_drone_fuzzy"));
+            client.setCustomBeeModel(CosmicBeesSpecies.GRAND_GARDEN, BeeLifeStage.PRINCESS,
+                    CosmicCore.id("item/bee/bee_drone_fuzzy_princess"));
+            client.setCustomBeeModel(CosmicBeesSpecies.GRAND_GARDEN, BeeLifeStage.QUEEN,
+                    CosmicCore.id("item/bee/bee_drone_fuzzy_queen"));
+
+            client.setCustomBeeModel(CosmicBeesSpecies.ARCHITECT, BeeLifeStage.DRONE,
+                    CosmicCore.id("item/bee/bee_drone_fuzzy"));
+            client.setCustomBeeModel(CosmicBeesSpecies.ARCHITECT, BeeLifeStage.PRINCESS,
+                    CosmicCore.id("item/bee/bee_drone_fuzzy_princess"));
+            client.setCustomBeeModel(CosmicBeesSpecies.ARCHITECT, BeeLifeStage.QUEEN,
+                    CosmicCore.id("item/bee/bee_drone_fuzzy_queen"));
+
+            client.setCustomBeeModel(CosmicBeesSpecies.INQUISITIVE, BeeLifeStage.DRONE,
+                    CosmicCore.id("item/bee/bee_drone_fuzzy"));
+            client.setCustomBeeModel(CosmicBeesSpecies.INQUISITIVE, BeeLifeStage.PRINCESS,
+                    CosmicCore.id("item/bee/bee_drone_fuzzy_princess"));
+            client.setCustomBeeModel(CosmicBeesSpecies.INQUISITIVE, BeeLifeStage.QUEEN,
+                    CosmicCore.id("item/bee/bee_drone_fuzzy_queen"));
+
+            client.setCustomBeeModel(CosmicBeesSpecies.HELLSMITH, BeeLifeStage.DRONE,
+                    CosmicCore.id("item/bee/bee_drone_fuzzy"));
+            client.setCustomBeeModel(CosmicBeesSpecies.HELLSMITH, BeeLifeStage.PRINCESS,
+                    CosmicCore.id("item/bee/bee_drone_fuzzy_princess"));
+            client.setCustomBeeModel(CosmicBeesSpecies.HELLSMITH, BeeLifeStage.QUEEN,
+                    CosmicCore.id("item/bee/bee_drone_fuzzy_queen"));
+
+            client.setCustomBeeModel(CosmicBeesSpecies.RADOXIA, BeeLifeStage.DRONE,
+                    CosmicCore.id("item/bee/bee_drone_fuzzy"));
+            client.setCustomBeeModel(CosmicBeesSpecies.RADOXIA, BeeLifeStage.PRINCESS,
+                    CosmicCore.id("item/bee/bee_drone_fuzzy_princess"));
+            client.setCustomBeeModel(CosmicBeesSpecies.RADOXIA, BeeLifeStage.QUEEN,
+                    CosmicCore.id("item/bee/bee_drone_fuzzy_queen"));
+
+            client.setCustomBeeModel(CosmicBeesSpecies.ABSENT, BeeLifeStage.DRONE,
+                    CosmicCore.id("item/bee/bee_drone_fuzzy"));
+            client.setCustomBeeModel(CosmicBeesSpecies.ABSENT, BeeLifeStage.PRINCESS,
+                    CosmicCore.id("item/bee/bee_drone_fuzzy_princess"));
+            client.setCustomBeeModel(CosmicBeesSpecies.ABSENT, BeeLifeStage.QUEEN,
+                    CosmicCore.id("item/bee/bee_drone_fuzzy_queen"));
+
+            client.setCustomBeeModel(CosmicBeesSpecies.ILLUSIVE, BeeLifeStage.DRONE,
+                    CosmicCore.id("item/bee/bee_drone_fuzzy"));
+            client.setCustomBeeModel(CosmicBeesSpecies.ILLUSIVE, BeeLifeStage.PRINCESS,
+                    CosmicCore.id("item/bee/bee_drone_fuzzy_princess"));
+            client.setCustomBeeModel(CosmicBeesSpecies.ILLUSIVE, BeeLifeStage.QUEEN,
+                    CosmicCore.id("item/bee/bee_drone_fuzzy_queen"));
+
+            client.setCustomBeeModel(CosmicBeesSpecies.CONSTRUCTIVE, BeeLifeStage.DRONE,
+                    CosmicCore.id("item/bee/bee_drone_fuzzy"));
+            client.setCustomBeeModel(CosmicBeesSpecies.CONSTRUCTIVE, BeeLifeStage.PRINCESS,
+                    CosmicCore.id("item/bee/bee_drone_fuzzy_princess"));
+            client.setCustomBeeModel(CosmicBeesSpecies.CONSTRUCTIVE, BeeLifeStage.QUEEN,
+                    CosmicCore.id("item/bee/bee_drone_fuzzy_queen"));
+
+            client.setCustomBeeModel(CosmicBeesSpecies.PRISMATIC, BeeLifeStage.DRONE,
+                    CosmicCore.id("item/bee/bee_drone_fuzzy"));
+            client.setCustomBeeModel(CosmicBeesSpecies.PRISMATIC, BeeLifeStage.PRINCESS,
+                    CosmicCore.id("item/bee/bee_drone_fuzzy_princess"));
+            client.setCustomBeeModel(CosmicBeesSpecies.PRISMATIC, BeeLifeStage.QUEEN,
+                    CosmicCore.id("item/bee/bee_drone_fuzzy_queen"));
+
+            client.setCustomBeeModel(CosmicBeesSpecies.HYDRAULIC, BeeLifeStage.DRONE,
+                    CosmicCore.id("item/bee/bee_drone_fuzzy"));
+            client.setCustomBeeModel(CosmicBeesSpecies.HYDRAULIC, BeeLifeStage.PRINCESS,
+                    CosmicCore.id("item/bee/bee_drone_fuzzy_princess"));
+            client.setCustomBeeModel(CosmicBeesSpecies.HYDRAULIC, BeeLifeStage.QUEEN,
+                    CosmicCore.id("item/bee/bee_drone_fuzzy_queen"));
+
+            client.setCustomBeeModel(CosmicBeesSpecies.COBBLED, BeeLifeStage.DRONE,
+                    CosmicCore.id("item/bee/bee_drone_fuzzy"));
+            client.setCustomBeeModel(CosmicBeesSpecies.COBBLED, BeeLifeStage.PRINCESS,
+                    CosmicCore.id("item/bee/bee_drone_fuzzy_princess"));
+            client.setCustomBeeModel(CosmicBeesSpecies.COBBLED, BeeLifeStage.QUEEN,
+                    CosmicCore.id("item/bee/bee_drone_fuzzy_queen"));
+
+            client.setCustomBeeModel(CosmicBeesSpecies.EXHAUSTIVE, BeeLifeStage.DRONE,
+                    CosmicCore.id("item/bee/bee_drone_fuzzy"));
+            client.setCustomBeeModel(CosmicBeesSpecies.EXHAUSTIVE, BeeLifeStage.PRINCESS,
+                    CosmicCore.id("item/bee/bee_drone_fuzzy_princess"));
+            client.setCustomBeeModel(CosmicBeesSpecies.EXHAUSTIVE, BeeLifeStage.QUEEN,
+                    CosmicCore.id("item/bee/bee_drone_fuzzy_queen"));
+
+            client.setCustomBeeModel(CosmicBeesSpecies.VIRTUE, BeeLifeStage.DRONE,
+                    CosmicCore.id("item/bee/bee_drone_fuzzy"));
+            client.setCustomBeeModel(CosmicBeesSpecies.VIRTUE, BeeLifeStage.PRINCESS,
+                    CosmicCore.id("item/bee/bee_drone_fuzzy_princess"));
+            client.setCustomBeeModel(CosmicBeesSpecies.VIRTUE, BeeLifeStage.QUEEN,
+                    CosmicCore.id("item/bee/bee_drone_fuzzy_queen"));
+
+
+
+
+        }
     }
 }

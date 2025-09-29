@@ -5,6 +5,9 @@ dependencies {
     modRuntimeOnly("curse.maven:effortless-building-302113:4979089") //EB bc i'm lazy ty
     modRuntimeOnly("curse.maven:tmrv-1194921:6856065") //EB bc i'm lazy ty
 
+    //IDK if we need this fully yet...
+    modImplementation('com.github.thedarkcolour:ModKit:0302f9aa42')
+
     //Botania
 //    implementation(forge.botania)
 
@@ -116,9 +119,12 @@ dependencies {
     modRuntimeOnly(forge.emi)
 //     modRuntimeOnly(forge.jei.forge.impl)
 
-    //Modern Fix
+    //Modern FixG
     modImplementation(forge.modernFix)
 
     // Embers
     modImplementation(forge.embers)
+    modImplementation(forge.forestry)
+    modImplementation(forge.gendustry)
+    api(forge.gendustry)
 }

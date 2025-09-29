@@ -26,6 +26,13 @@ import static com.lowdragmc.lowdraglib.gui.texture.ProgressTexture.FillDirection
 
 public class CosmicRecipeTypes {
 
+
+    public static final GTRecipeType COSMIC_DUMMY_SPAM_YEETER = GTRecipeTypes
+            .register("fuckassbeeball", ELECTRIC)
+            .setMaxIOSize(54, 54, 54, 54);
+
+
+
     public static final GTRecipeType LAMINATOR = GTRecipeTypes
             .register("laminator", ELECTRIC)
             .setSound(CosmicSounds.LAMINATOR)
@@ -239,6 +246,12 @@ public class CosmicRecipeTypes {
             .setMaxTooltips(5)
             .setProgressBar(CosmicGuiTextures.DAWN_FORGE, ProgressTexture.FillDirection.ALWAYS_FULL);
 
+    public static final GTRecipeType BIO_LAB = GTRecipeTypes.register("bio_lab", ELECTRIC)
+            .setMaxIOSize(6, 2, 3, 2)
+            .setSound(DAWN_FORGE_SFX)
+            .setMaxTooltips(5)
+            .setProgressBar(GuiTextures.PROGRESS_BAR_CRYSTALLIZATION, LEFT_TO_RIGHT);
+
     public static final GTRecipeType STELLAR_IRIS = GTRecipeTypes.register("stellar_iris", GTRecipeTypes.MULTIBLOCK)
             .setMaxIOSize(16, 16, 16, 16)
             // .setSound(CosmicSounds.BLACK_HOLE_CRY)
@@ -288,6 +301,14 @@ public class CosmicRecipeTypes {
             .setMaxTooltips(6)
             .onRecipeBuild(ResearchManager::createDefaultResearchRecipe)
             .setProgressBar(GuiTextures.PROGRESS_BAR_ARROW_MULTIPLE, ProgressTexture.FillDirection.LEFT_TO_RIGHT);
+    // Dummy recipe. Maybe add recipes here? Either way it won't be used for recipe searching, that's taken care of by
+    // BeeRecipeLogic
+    public static final GTRecipeType BEES = GTRecipeTypes
+            .register("bees", GTRecipeTypes.MULTIBLOCK)
+            .setMaxIOSize(1, 9, 0, 0)
+            .setMaxTooltips(6)
+            .setProgressBar(GuiTextures.PROGRESS_BAR_ARROW_MULTIPLE, ProgressTexture.FillDirection.LEFT_TO_RIGHT);
+
     /*
      * TODO: Multiblocks that might not need a RecipeType or might use it to do really weird things
      * RIFTGENERATOR
@@ -343,23 +364,24 @@ public class CosmicRecipeTypes {
      * This Thing is meant to allow the deconstruction of concepts into laws, and laws are meant to be dissolved with
      * their counterparts. Every Hebrew Letter needs a Pairing Counterlaw.
      */
-    public static final GTRecipeType CONCEPT_INCINERATOR = GTRecipeTypes
-            .register("concept_incinerator", GTRecipeTypes.MULTIBLOCK)
-            .setMaxIOSize(4, 4, 4, 4)
-            .setHasResearchSlot(true)
-            .setSound(GTSoundEntries.CHEMICAL) // TODO - Sounds
-            .setProgressBar(GuiTextures.PROGRESS_BAR_ARROW_MULTIPLE, ProgressTexture.FillDirection.LEFT_TO_RIGHT);
+    // public static final GTRecipeType CONCEPT_INCINERATOR = GTRecipeTypes
+    // .register("concept_incinerator", GTRecipeTypes.MULTIBLOCK)
+    // .setMaxIOSize(4, 4, 4, 4)
+    // .setHasResearchSlot(true)
+    // .setSound(GTSoundEntries.CHEMICAL) // TODO - Sounds
+    // .setProgressBar(GuiTextures.PROGRESS_BAR_ARROW_MULTIPLE, ProgressTexture.FillDirection.LEFT_TO_RIGHT);
     /*
      * TODO
      * Retcon Hashers allow the player to target potential sequence breaks in the already established environment
      * Every sequence break is recorded to a teams data and should be semi-random with mandatory breaks needed for
      * progression
      */
-    public static final GTRecipeType RETCON_HASHER = GTRecipeTypes.register("retcon_hasher", GTRecipeTypes.MULTIBLOCK)
-            .setMaxIOSize(4, 4, 4, 4)
-            .setHasResearchSlot(true)
-            .setSound(GTSoundEntries.CHEMICAL) // TODO - Sounds
-            .setProgressBar(GuiTextures.PROGRESS_BAR_ARROW_MULTIPLE, ProgressTexture.FillDirection.LEFT_TO_RIGHT);
+    // public static final GTRecipeType RETCON_HASHER = GTRecipeTypes.register("retcon_hasher",
+    // GTRecipeTypes.MULTIBLOCK)
+    // .setMaxIOSize(4, 4, 4, 4)
+    // .setHasResearchSlot(true)
+    // .setSound(GTSoundEntries.CHEMICAL) // TODO - Sounds
+    // .setProgressBar(GuiTextures.PROGRESS_BAR_ARROW_MULTIPLE, ProgressTexture.FillDirection.LEFT_TO_RIGHT);
 
     public static void init() {
         LASER_ENGRAVER_RECIPES.setMaxIOSize(2, 2, 1, 1);

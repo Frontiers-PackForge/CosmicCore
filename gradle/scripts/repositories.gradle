@@ -49,7 +49,11 @@ repositories {
             includeGroup "dev.latvian.apps"
         }
     }
-
+    maven {
+        name = 'ModKit'
+        url 'https://jitpack.io'
+        content { includeGroup 'com.github.thedarkcolour' }
+    }
     maven { // saps.dev Maven (KubeJS and Rhino)
         url 'https://jitpack.io'
         content {

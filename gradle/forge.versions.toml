@@ -1,6 +1,6 @@
 [versions]
 ldlib = "1.0.40.b"
-gtceu = "7.2.0-SNAPSHOT"
+gtceu = "7.2.0"
 registrate = "MC1.20-1.3.11"
 configuration = "3.1.0-forge"
 mixinExtras = "0.2.0"
@@ -13,7 +13,7 @@ guideme = "20.1.11"
 kubejs = "2001.6.5-build.16"
 rhino = "2001.2.3-build.10"
 architectury = "9.2.14"
-patchouli = "1.20.1-81-FORGE"
+patchouli = "1.20.1-84-FORGE"
 curios = "5.9.0+1.20.1"
 ftblibrary = "2001.2.4"
 ftbteams = "2001.3.0"
@@ -32,11 +32,14 @@ occultism = "1.140.2"
 modonomicon = "1.77.5"
 jcpp = "1.4.14" # required by occulus apparently
 
+
 ## modrinth maven ##
 jade = "11.12.3+forge"
 bloodMagic = "1.20.1-3.3.3-45"
 embeddium = "0.3.31+mc1.20.1"
 oculus = "1.20.1-1.7.0"
+forestry = "2.5.0"
+gendustry = "1.0.3"
 
 ## cursemaven ##
 ftblibrary-cm = "5567591"
@@ -109,6 +112,9 @@ jade                      = { module = "maven.modrinth:jade", version.ref = "jad
 bloodMagic                = { module = "maven.modrinth:blood-magic", version.ref = "bloodMagic" }
 embeddium                 = { module = "maven.modrinth:embeddium", version.ref = "embeddium" }
 oculus                    = { module = "maven.modrinth:oculus", version.ref = "oculus" }
+forestry                  = { module = "maven.modrinth:forestry-community-edition", version.ref = "forestry" }
+gendustry                  = { module = "maven.modrinth:gendustry-community-edition", version.ref = "gendustry" }
+
 
 ## cursemaven ##
 ftblibrary-cm             = { module = "curse.maven:ftb-library-forge-404465", version.ref = "ftblibrary-cm" }
