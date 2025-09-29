@@ -40,7 +40,6 @@ public class CosmicBeesTaxa {
     public static final String SPECIES_EXHAUSTIVE = "Exhaustive";
     public static final String SPECIES_VIRTUE = "Virtue";
 
-
     // Industry Bees
     public static final String SPECIES_ABRASIVE = "Abrasive"; // OreProc Bee
     public static final String SPECIES_ENERGIZED = "Energized"; // Booster T3 Bee
@@ -51,8 +50,6 @@ public class CosmicBeesTaxa {
     public static final String SPECIES_LUNAR = "Lunar"; // Early planet dusts for processing en masse
     public static final String SPECIES_SOLAR = "Solar"; // Mid planet dusts for processing en masse
     public static final String SPECIES_COSMOS = "Cosmos"; // IDK - Probably for something relating to deep space
-
-
 
     // GENUS
     public static final String GENUS_STONY = "Stony";

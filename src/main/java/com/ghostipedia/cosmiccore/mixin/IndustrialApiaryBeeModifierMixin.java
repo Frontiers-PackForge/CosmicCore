@@ -1,10 +1,11 @@
 package com.ghostipedia.cosmiccore.mixin;
 
-
 import com.ghostipedia.cosmiccore.common.data.CosmicGendustryUpgradeType;
-import forestry.core.inventory.IInventoryAdapter;
+
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+
+import forestry.core.inventory.IInventoryAdapter;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
@@ -13,28 +14,43 @@ import thedarkcolour.gendustry.item.GendustryUpgradeItem;
 import thedarkcolour.gendustry.item.GendustryUpgradeType;
 import thedarkcolour.gendustry.item.IGendustryUpgradeType;
 
-
 @Mixin(targets = "thedarkcolour.gendustry.blockentity.IndustrialApiaryBeeModifier", remap = false)
 class IndustrialApiaryBeeModifierMixin {
 
-
-    @Shadow float territory;
-    @Shadow float mutation;
-    @Shadow float lifespan;
-    @Shadow float productivity;
-    @Shadow float pollination;
-    @Shadow int throttle;
-    @Shadow int fertility;
-    @Shadow int temperature;
-    @Shadow int humidity;
-    @Shadow boolean automated;
-    @Shadow boolean stabilized;
-    @Shadow boolean weatherproof;
-    @Shadow boolean lighting;
-    @Shadow boolean sky;
-    @Shadow boolean nether;
-    @Shadow boolean scrubber;
-    @Shadow boolean sieve;
+    @Shadow
+    float territory;
+    @Shadow
+    float mutation;
+    @Shadow
+    float lifespan;
+    @Shadow
+    float productivity;
+    @Shadow
+    float pollination;
+    @Shadow
+    int throttle;
+    @Shadow
+    int fertility;
+    @Shadow
+    int temperature;
+    @Shadow
+    int humidity;
+    @Shadow
+    boolean automated;
+    @Shadow
+    boolean stabilized;
+    @Shadow
+    boolean weatherproof;
+    @Shadow
+    boolean lighting;
+    @Shadow
+    boolean sky;
+    @Shadow
+    boolean nether;
+    @Shadow
+    boolean scrubber;
+    @Shadow
+    boolean sieve;
 
     @Shadow
     private void reset() {
@@ -66,7 +82,7 @@ class IndustrialApiaryBeeModifierMixin {
         this.reset();
         int energyCost = 0;
 
-        for(int i = 0; i < 4; ++i) {
+        for (int i = 0; i < 4; ++i) {
             ItemStack stack = inventory.getItem(2 + i);
             Item item = stack.getItem();
             int count = stack.getCount();
@@ -74,7 +90,7 @@ class IndustrialApiaryBeeModifierMixin {
                 IGendustryUpgradeType upgradeType = upgrade.getType();
                 energyCost += upgradeType.energyCost() * count;
                 if (upgradeType instanceof GendustryUpgradeType) {
-                    GendustryUpgradeType type = (GendustryUpgradeType)upgradeType;
+                    GendustryUpgradeType type = (GendustryUpgradeType) upgradeType;
                     switch (type) {
                         case AUTOMATION:
                             this.automated = true;
@@ -92,7 +108,7 @@ class IndustrialApiaryBeeModifierMixin {
                             this.humidity -= count;
                             break;
                         case POLLINATION:
-                            this.pollination += 0.25F * (float)count;
+                            this.pollination += 0.25F * (float) count;
                             break;
                         case SCRUBBER:
                             this.scrubber = true;
@@ -101,13 +117,13 @@ class IndustrialApiaryBeeModifierMixin {
                             this.nether = true;
                             break;
                         case LIFESPAN:
-                            this.lifespan += 2.0F * (float)count;
+                            this.lifespan += 2.0F * (float) count;
                             break;
                         case LIGHTING:
                             this.lighting = true;
                             break;
                         case PRODUCTIVITY:
-                            this.productivity += 0.25F * (float)count;
+                            this.productivity += 0.25F * (float) count;
                             break;
                         case WEATHERPROOF:
                             this.weatherproof = true;
@@ -122,10 +138,10 @@ class IndustrialApiaryBeeModifierMixin {
                             this.stabilized = true;
                             break;
                         case TERRITORY:
-                            this.territory += 0.25F * (float)count;
+                            this.territory += 0.25F * (float) count;
                     }
                 } else if (upgradeType instanceof EliteGendustryUpgradeType) {
-                    EliteGendustryUpgradeType type = (EliteGendustryUpgradeType)upgradeType;
+                    EliteGendustryUpgradeType type = (EliteGendustryUpgradeType) upgradeType;
                     switch (type) {
                         case MUTATION:
                             this.mutation += 0.25F;
@@ -136,20 +152,20 @@ class IndustrialApiaryBeeModifierMixin {
                             this.weatherproof = true;
                             break;
                         case PRODUCTIVITY:
-                            this.productivity += 0.25F * (float)count;
+                            this.productivity += 0.25F * (float) count;
                             this.throttle += 15 * count;
                             break;
                         case TERRITORY:
-                            this.territory += 0.25F * (float)count;
+                            this.territory += 0.25F * (float) count;
                             break;
                         case YOUTH:
-                            this.mutation -= 0.2F * (float)count;
+                            this.mutation -= 0.2F * (float) count;
                             break;
                         case FERTILITY:
                             this.fertility += count;
                     }
-                } else if (upgradeType instanceof CosmicGendustryUpgradeType){
-                    CosmicGendustryUpgradeType type = (CosmicGendustryUpgradeType)upgradeType;
+                } else if (upgradeType instanceof CosmicGendustryUpgradeType) {
+                    CosmicGendustryUpgradeType type = (CosmicGendustryUpgradeType) upgradeType;
                     switch (type) {
                         case WAILING:
                             this.mutation = 1000F;

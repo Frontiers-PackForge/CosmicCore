@@ -1,26 +1,23 @@
 package com.ghostipedia.cosmiccore.common.ae2gt;
 
-import appeng.api.config.Actionable;
-import appeng.api.stacks.GenericStack;
-import appeng.api.storage.MEStorage;
 import com.gregtechceu.gtceu.api.capability.recipe.IO;
 import com.gregtechceu.gtceu.api.machine.IMachineBlockEntity;
 import com.gregtechceu.gtceu.api.machine.feature.IDataStickInteractable;
 import com.gregtechceu.gtceu.api.machine.feature.IHasCircuitSlot;
 import com.gregtechceu.gtceu.api.machine.feature.IMachineLife;
 import com.gregtechceu.gtceu.api.machine.trait.NotifiableFluidTank;
-import com.gregtechceu.gtceu.common.item.IntCircuitBehaviour;
 import com.gregtechceu.gtceu.integration.ae2.gui.widget.AEFluidConfigWidget;
 import com.gregtechceu.gtceu.integration.ae2.machine.MEHatchPartMachine;
-import com.gregtechceu.gtceu.integration.ae2.machine.MEInputHatchPartMachine;
 import com.gregtechceu.gtceu.integration.ae2.slot.ExportOnlyAEFluidList;
 import com.gregtechceu.gtceu.integration.ae2.slot.ExportOnlyAEFluidSlot;
 import com.gregtechceu.gtceu.utils.GTMath;
+
 import com.lowdragmc.lowdraglib.gui.widget.LabelWidget;
 import com.lowdragmc.lowdraglib.gui.widget.Widget;
 import com.lowdragmc.lowdraglib.gui.widget.WidgetGroup;
 import com.lowdragmc.lowdraglib.syncdata.field.ManagedFieldHolder;
 import com.lowdragmc.lowdraglib.utils.Position;
+
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
@@ -29,13 +26,16 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 
-import javax.annotation.ParametersAreNonnullByDefault;
+import appeng.api.config.Actionable;
+import appeng.api.stacks.GenericStack;
+import appeng.api.storage.MEStorage;
 
+import javax.annotation.ParametersAreNonnullByDefault;
 
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
 public class CosmicInputHatchPartMachine extends MEHatchPartMachine
-        implements IDataStickInteractable, IMachineLife, IHasCircuitSlot {
+                                         implements IDataStickInteractable, IMachineLife, IHasCircuitSlot {
 
     protected static final ManagedFieldHolder MANAGED_FIELD_HOLDER = new ManagedFieldHolder(
             CosmicInputHatchPartMachine.class, MEHatchPartMachine.MANAGED_FIELD_HOLDER);
@@ -46,6 +46,7 @@ public class CosmicInputHatchPartMachine extends MEHatchPartMachine
         super(holder, IO.IN, args);
         super.circuitSlotEnabled = false;
     }
+
     @Override
     public void onMachineRemoved() {
         flushInventory();

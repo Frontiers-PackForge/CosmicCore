@@ -222,7 +222,7 @@ public class CosmicCoreClient {
             client.setCustomBeeModel(CosmicBeesSpecies.COSMOS, BeeLifeStage.QUEEN,
                     CosmicCore.id("item/bee/bee_drone_fuzzy_queen"));
 
-            //NEW BEES
+            // NEW BEES
             client.setCustomBeeModel(CosmicBeesSpecies.HADAL, BeeLifeStage.DRONE,
                     CosmicCore.id("item/bee/bee_drone_fuzzy"));
             client.setCustomBeeModel(CosmicBeesSpecies.HADAL, BeeLifeStage.PRINCESS,
@@ -355,10 +355,6 @@ public class CosmicCoreClient {
                     CosmicCore.id("item/bee/bee_drone_fuzzy_princess"));
             client.setCustomBeeModel(CosmicBeesSpecies.VIRTUE, BeeLifeStage.QUEEN,
                     CosmicCore.id("item/bee/bee_drone_fuzzy_queen"));
-
-
-
-
         }
     }
 }

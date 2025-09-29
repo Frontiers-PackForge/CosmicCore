@@ -51,7 +51,6 @@ public enum CosmicBeesHoneyComb implements StringRepresentable, IItemSubtype {
     EXHAUSTIVE(new Color(0x4F625B), new Color(0x3A4350)),
     VIRTUE(new Color(0x6BD1D5), new Color(0x223149)),
 
-
     ;
 
     public static final CosmicBeesHoneyComb[] VALUES = values();

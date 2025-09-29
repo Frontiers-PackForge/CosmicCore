@@ -12,7 +12,6 @@ import com.ghostipedia.cosmiccore.client.renderer.machine.CosmicDynamicRenderHel
 import com.ghostipedia.cosmiccore.common.ae2gt.CosmicStockingBusPartMachine;
 import com.ghostipedia.cosmiccore.common.ae2gt.CosmicStockingHatchPartMachine;
 import com.ghostipedia.cosmiccore.common.block.debug.CreativeThermiaContainerMachine;
-import com.ghostipedia.cosmiccore.common.data.recipe.CosmicRecipeModifiers;
 import com.ghostipedia.cosmiccore.common.machine.IndustrialApiaryMachine;
 import com.ghostipedia.cosmiccore.common.machine.WirelessChargerMachine;
 import com.ghostipedia.cosmiccore.common.machine.multiblock.electric.hpca.HPCAMachine;
@@ -47,9 +46,7 @@ import com.gregtechceu.gtceu.common.data.models.GTModels;
 import com.gregtechceu.gtceu.common.machine.multiblock.electric.ActiveTransformerMachine;
 import com.gregtechceu.gtceu.common.machine.multiblock.electric.FusionReactorMachine;
 import com.gregtechceu.gtceu.common.machine.multiblock.electric.PowerSubstationMachine;
-import com.gregtechceu.gtceu.common.registry.GTRegistration;
 import com.gregtechceu.gtceu.config.ConfigHolder;
-import com.gregtechceu.gtceu.integration.ae2.machine.MEStockingBusPartMachine;
 import com.gregtechceu.gtceu.utils.FormattingUtil;
 
 import net.minecraft.core.Direction;
@@ -234,7 +231,6 @@ public class CosmicMachines {
                     .register(),
             EV, IV, LuV, ZPM, UV);
 
-
     public final static MachineDefinition COSMIC_STOCKING_ME_PART_BUS = REGISTRATE
             .machine("cosmic_me_assemblyline_bus", CosmicStockingBusPartMachine::new)
             .langValue("ME Assembly Line Bus")
@@ -254,7 +250,6 @@ public class CosmicMachines {
                     Component.translatable("gtceu.part_sharing.enabled"))
             .register();
 
-
     public final static MachineDefinition COSMIC_STOCKING_ME_PART_HATCH = REGISTRATE
             .machine("cosmic_me_assemblyline_hatch", CosmicStockingHatchPartMachine::new)
             .langValue("ME Assembly Line Hatch")
@@ -273,7 +268,6 @@ public class CosmicMachines {
                     Component.translatable("cosmiccore.machine.me.stocking_item.tooltip.6"),
                     Component.translatable("gtceu.part_sharing.enabled"))
             .register();
-
 
     // Enable If needed Inside of Dev
     // public static final MultiblockMachineDefinition SOUL_TESTER = REGISTRATE.multiblock("soul_tester",
@@ -808,7 +802,7 @@ public class CosmicMachines {
         GTMultiMachines.EXTREME_COMBUSTION_ENGINE.setRecipeTypes(new GTRecipeType[] { DUMMY_RECIPES });
         GTMultiMachines.EXTREME_COMBUSTION_ENGINE.setRenderXEIPreview(false);
         GTMultiMachines.EXTREME_COMBUSTION_ENGINE.setRenderWorldPreview(false);
-        GTMultiMachines.ASSEMBLY_LINE.setRecipeModifier(new RecipeModifierList(COSMIC_MODULES,OC_NON_PERFECT));
+        GTMultiMachines.ASSEMBLY_LINE.setRecipeModifier(new RecipeModifierList(COSMIC_MODULES, OC_NON_PERFECT));
         GTMultiMachines.ASSEMBLY_LINE.setAlwaysTryModifyRecipe(true);
         // GCYMMachines.MEGA_BLAST_FURNACE.setRecipeTypes(new GTRecipeType[] { DUMMY_RECIPES });
         // GCYMMachines.MEGA_BLAST_FURNACE.setRenderXEIPreview(false);
@@ -875,7 +869,8 @@ public class CosmicMachines {
                 .aisle("FOF", "RTR", "DAG", "#Y#")
                 .where('S', Predicates.controller(blocks(GTMultiMachines.ASSEMBLY_LINE.getBlock())))
                 .where('F', blocks(CASING_STEEL_SOLID.get())
-                        .or(Predicates.abilities(PartAbility.IMPORT_FLUIDS_1X, ME_ASSEMBLY_PARTS_FLUID).setMaxGlobalLimited(4)))
+                        .or(Predicates.abilities(PartAbility.IMPORT_FLUIDS_1X, ME_ASSEMBLY_PARTS_FLUID)
+                                .setMaxGlobalLimited(4)))
                 .where('O',
                         Predicates.abilities(PartAbility.EXPORT_ITEMS)
                                 .addTooltips(Component.translatable("gtceu.multiblock.pattern.location_end")))
@@ -887,15 +882,12 @@ public class CosmicMachines {
                 .where('A', blocks(CASING_ASSEMBLY_CONTROL.get()))
                 .where('R', blocks(CASING_LAMINATED_GLASS.get()))
                 .where('T', blocks(CASING_ASSEMBLY_LINE.get()))
-                .where('D', Predicates.abilities(PartAbility.DATA_ACCESS, PartAbility.OPTICAL_DATA_RECEPTION).setExactLimit(1)
-                        .or(Predicates.abilities(MODULE_HATCH).setExactLimit(1))
-                        .or(blocks(CASING_GRATE.get()))
-                )
+                .where('D',
+                        Predicates.abilities(PartAbility.DATA_ACCESS, PartAbility.OPTICAL_DATA_RECEPTION)
+                                .setExactLimit(1)
+                                .or(Predicates.abilities(MODULE_HATCH).setExactLimit(1))
+                                .or(blocks(CASING_GRATE.get())))
                 .where('#', Predicates.any())
                 .build());
-
     }
-
-
-
 }
