@@ -885,7 +885,7 @@ public class CosmicMachines {
                 .where('D',
                         Predicates.abilities(PartAbility.DATA_ACCESS, PartAbility.OPTICAL_DATA_RECEPTION)
                                 .setExactLimit(1)
-                                .or(Predicates.abilities(MODULE_HATCH).setExactLimit(1))
+                                .or(Predicates.abilities(MODULE_HATCH).setMinGlobalLimited(1))
                                 .or(blocks(CASING_GRATE.get())))
                 .where('#', Predicates.any())
                 .build());
