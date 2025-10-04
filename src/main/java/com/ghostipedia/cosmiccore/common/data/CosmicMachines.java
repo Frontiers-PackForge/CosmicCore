@@ -14,6 +14,7 @@ import com.ghostipedia.cosmiccore.common.block.debug.CreativeThermiaContainerMac
 import com.ghostipedia.cosmiccore.common.data.materials.CosmicMaterials;
 import com.ghostipedia.cosmiccore.common.data.recipe.CosmicRecipeModifiers;
 import com.ghostipedia.cosmiccore.common.machine.WirelessChargerMachine;
+import com.ghostipedia.cosmiccore.common.machine.multiblock.TemporaryResearchStationMachine;
 import com.ghostipedia.cosmiccore.common.machine.multiblock.electric.MagneticFieldMachine;
 import com.ghostipedia.cosmiccore.common.machine.multiblock.electric.hpca.HPCAMachine;
 import com.ghostipedia.cosmiccore.common.machine.multiblock.multi.WirelessComputationTransmitter;
@@ -51,11 +52,15 @@ import com.gregtechceu.gtceu.client.util.TooltipHelper;
 import com.gregtechceu.gtceu.common.block.BoilerFireboxType;
 import com.gregtechceu.gtceu.common.data.*;
 import com.gregtechceu.gtceu.common.data.machines.GTMultiMachines;
+import com.gregtechceu.gtceu.common.data.machines.GTResearchMachines;
 import com.gregtechceu.gtceu.common.data.models.GTModels;
 import com.gregtechceu.gtceu.common.machine.multiblock.electric.ActiveTransformerMachine;
 import com.gregtechceu.gtceu.common.machine.multiblock.electric.FusionReactorMachine;
 import com.gregtechceu.gtceu.common.machine.multiblock.electric.PowerSubstationMachine;
+import com.gregtechceu.gtceu.common.machine.multiblock.electric.research.ResearchStationMachine;
+import com.gregtechceu.gtceu.common.registry.GTRegistration;
 import com.gregtechceu.gtceu.config.ConfigHolder;
+import com.gregtechceu.gtceu.data.lang.LangHandler;
 import com.gregtechceu.gtceu.utils.FormattingUtil;
 
 import net.minecraft.ChatFormatting;
@@ -3551,6 +3556,58 @@ public class CosmicMachines {
             .abilities(PartAbility.COMPUTATION_DATA_RECEPTION)
             .tier(UEV)
             .overlayTieredHullModel("wireless_data_hatch")
+            .register();
+
+    public static final MultiblockMachineDefinition TMP_RESEARCH_STATION = GTRegistration.REGISTRATE
+            .multiblock("tmp_research_station", TemporaryResearchStationMachine::new)
+            .rotationState(RotationState.NON_Y_AXIS)
+            .recipeType(GTRecipeTypes.RESEARCH_STATION_RECIPES)
+            .appearanceBlock(ADVANCED_COMPUTER_CASING)
+            .tooltips(LangHandler.getMultiLang("gtceu.machine.research_station.tooltip"))
+            .pattern(definition -> FactoryBlockPattern.start()
+                    .aisle("XXX", "VVV", "PPP", "PPP", "PPP", "VVV", "XXX")
+                    .aisle("XXX", "VAV", "AAA", "AAA", "AAA", "VAV", "XXX")
+                    .aisle("XXX", "VAV", "XAX", "XSX", "XAX", "VAV", "XXX")
+                    .aisle("XXX", "XAX", "---", "---", "---", "XAX", "XXX")
+                    .aisle(" X ", "XAX", "---", "---", "---", "XAX", " X ")
+                    .aisle(" X ", "XAX", "-A-", "-H-", "-A-", "XAX", " X ")
+                    .aisle("   ", "XXX", "---", "---", "---", "XXX", "   ")
+                    .where('S', controller(blocks(definition.getBlock())))
+                    .where('X', blocks(COMPUTER_CASING.get()))
+                    .where(' ', any())
+                    .where('-', air())
+                    .where('V', blocks(COMPUTER_HEAT_VENT.get()))
+                    .where('A', blocks(ADVANCED_COMPUTER_CASING.get()))
+                    .where('P', blocks(COMPUTER_CASING.get())
+                            .or(abilities(PartAbility.INPUT_ENERGY).setMinGlobalLimited(1).setMaxGlobalLimited(2, 1))
+                            .or(abilities(PartAbility.COMPUTATION_DATA_RECEPTION).setExactLimit(1))
+                            .or(autoAbilities(true, false, false)))
+                    .where('H', abilities(PartAbility.OBJECT_HOLDER))
+                    .build())
+            .shapeInfo(definition -> MultiblockShapeInfo.builder()
+                    .aisle("---", "XXX", "---", "---", "---", "XXX", "---")
+                    .aisle("-X-", "XAX", "-A-", "-H-", "-A-", "XAX", "-X-")
+                    .aisle("-X-", "XAX", "---", "---", "---", "XAX", "-X-")
+                    .aisle("XXX", "XAX", "---", "---", "---", "XAX", "XXX")
+                    .aisle("XXX", "VAV", "XAX", "XSX", "XAX", "VAV", "XXX")
+                    .aisle("XXX", "VAV", "AAA", "AAA", "AAA", "VAV", "XXX")
+                    .aisle("XXX", "VVV", "POP", "PEP", "PMP", "VVV", "XXX")
+                    .where('S', GTResearchMachines.RESEARCH_STATION, Direction.NORTH)
+                    .where('X', COMPUTER_CASING.get())
+                    .where('-', Blocks.AIR)
+                    .where('V', COMPUTER_HEAT_VENT.get())
+                    .where('A', ADVANCED_COMPUTER_CASING.get())
+                    .where('P', COMPUTER_CASING.get())
+                    .where('O', GTResearchMachines.COMPUTATION_HATCH_RECEIVER, Direction.SOUTH)
+                    .where('E', GTMachines.ENERGY_INPUT_HATCH[GTValues.LuV], Direction.SOUTH)
+                    .where('M', ConfigHolder.INSTANCE.machines.enableMaintenance ?
+                            GTMachines.MAINTENANCE_HATCH.getBlock().defaultBlockState().setValue(
+                                    GTMachines.MAINTENANCE_HATCH.get().getRotationState().property, Direction.SOUTH) :
+                            COMPUTER_CASING.getDefaultState())
+                    .where('H', GTResearchMachines.OBJECT_HOLDER, Direction.SOUTH)
+                    .build())
+            .sidedWorkableCasingModel(GTCEu.id("block/casings/hpca/advanced_computer_casing"),
+                    GTCEu.id("block/multiblock/research_station"))
             .register();
 
     public static void init() {
