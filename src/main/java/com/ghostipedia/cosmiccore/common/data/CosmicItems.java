@@ -5,7 +5,9 @@ import com.ghostipedia.cosmiccore.api.item.LinkedTerminalBehavior;
 import com.ghostipedia.cosmiccore.api.item.armor.*;
 import com.ghostipedia.cosmiccore.api.registries.CosmicRegistration;
 import com.ghostipedia.cosmiccore.client.renderer.item.HaloItemRenderer;
+import com.ghostipedia.cosmiccore.common.ascension.AscensionConsumables;
 import com.ghostipedia.cosmiccore.common.data.tag.item.CosmicItemTags;
+import com.ghostipedia.cosmiccore.common.item.CosmicCurrencyItem;
 import com.ghostipedia.cosmiccore.common.item.CosmicScytheItem;
 import com.ghostipedia.cosmiccore.common.item.armor.ChestSanguineWarptechSuite;
 import com.ghostipedia.cosmiccore.common.item.armor.HelmetSanguineWarptechSuite;
@@ -1058,8 +1060,8 @@ public class CosmicItems {
             .properties(p -> p.stacksTo(64))
             .defaultModel()
             .register();
-    public static final ItemEntry<ComponentItem> PERPETUITY_SHARD = REGISTRATE
-            .item("shard_of_perpetuity", ComponentItem::create)
+    public static final ItemEntry<CosmicCurrencyItem> PERPETUITY_SHARD = REGISTRATE
+            .item("shard_of_perpetuity", p -> new CosmicCurrencyItem(p, AscensionConsumables.SOUL, 1))
             .lang("Shard of Perpetuity")
             .properties(p -> p.stacksTo(64))
             .onRegister(attach(new TooltipBehavior(tooltips -> {
