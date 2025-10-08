@@ -6,6 +6,7 @@ dependencies {
 
     //IDK if we need this fully yet...
     modImplementation('com.github.thedarkcolour:ModKit:0302f9aa42')
+    modImplementation('curse.maven:tmrv-1194921:6856065')
 
     //Botania
 //    implementation(forge.botania)
