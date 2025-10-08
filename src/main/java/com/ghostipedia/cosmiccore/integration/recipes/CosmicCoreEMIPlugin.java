@@ -1,4 +1,4 @@
-package com.ghostipedia.cosmiccore.integration.emi;
+package com.ghostipedia.cosmiccore.integration.recipes;
 
 import dev.emi.emi.api.EmiEntrypoint;
 import dev.emi.emi.api.EmiPlugin;
@@ -8,6 +8,7 @@ import thedarkcolour.gendustry.registry.GItems;
 
 @EmiEntrypoint
 public class CosmicCoreEMIPlugin implements EmiPlugin {
+
     @Override
     public void register(EmiRegistry registry) {
         registry.setDefaultComparison(GItems.GENE_SAMPLE.item(), Comparison.compareNbt());

@@ -4,7 +4,6 @@ import com.ghostipedia.cosmiccore.utils.FluidUtilities;
 
 import com.gregtechceu.gtceu.api.item.ComponentItem;
 
-import forestry.api.genetics.alleles.IAllele;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.world.item.BucketItem;
@@ -18,9 +17,6 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.ModifyVariable;
-import thedarkcolour.gendustry.item.GeneSampleItem;
-import thedarkcolour.gendustry.registry.GItems;
-
 // Credits ; GTOCore - Thank you for this amazing mixin!
 
 @Mixin(value = EmiApi.class, remap = false)
