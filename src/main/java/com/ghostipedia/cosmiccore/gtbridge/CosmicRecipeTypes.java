@@ -242,7 +242,12 @@ public class CosmicRecipeTypes {
             .setSound(DAWN_FORGE_SFX)
             .setMaxTooltips(5)
             .setProgressBar(CosmicGuiTextures.DAWN_FORGE, ProgressTexture.FillDirection.ALWAYS_FULL);
-
+    public static final GTRecipeType MANA_ETCHING_FACTORY = GTRecipeTypes
+            .register("mana_etching", GTRecipeTypes.MULTIBLOCK)
+            .setMaxIOSize(3, 2, 3, 0)
+            .setSound(DAWN_FORGE_SFX)
+            .setMaxTooltips(5)
+            .setProgressBar(GuiTextures.PROGRESS_BAR_CRYSTALLIZATION, LEFT_TO_RIGHT);
     public static final GTRecipeType BIO_LAB = GTRecipeTypes.register("bio_lab", ELECTRIC)
             .setMaxIOSize(6, 2, 3, 2)
             .setSound(DAWN_FORGE_SFX)

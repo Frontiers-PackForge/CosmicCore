@@ -18,14 +18,15 @@ import com.gregtechceu.gtceu.data.recipe.CustomTags;
 
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.packs.resources.Resource;
+import net.minecraft.tags.BlockTags;
 import net.minecraft.world.item.BlockItem;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.GlassBlock;
-import net.minecraft.world.level.block.SoundType;
+import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockBehaviour;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.NoteBlockInstrument;
 import net.minecraft.world.level.material.MapColor;
+import net.minecraftforge.client.model.generators.ConfiguredModel;
 import net.minecraftforge.client.model.generators.ModelFile;
 
 import com.teamresourceful.resourcefullib.common.registry.RegistryEntry;
@@ -36,6 +37,7 @@ import com.tterrag.registrate.util.nullness.NonNullBiConsumer;
 import com.tterrag.registrate.util.nullness.NonNullFunction;
 import com.tterrag.registrate.util.nullness.NonNullSupplier;
 import earth.terrarium.adastra.common.blocks.GlobeBlock;
+import net.minecraftforge.common.Tags;
 
 import java.util.function.Supplier;
 
@@ -121,6 +123,11 @@ public class CosmicBlocks {
 
     public static final BlockEntry<Block> HEAVY_FROST_PROOF_CASING = createCasingBlock("heavy_frost_proof_casing",
             CosmicCore.id("block/casings/solid/heavy_frost_proof_casing"));
+    public static final BlockEntry<Block> SOUL_STAINED_STEEL_ALU_CASING = createCasingBlock(
+            "soul_stained_steel_aluminium_plated_casing",
+            CosmicCore.id("block/casings/solid/soul_stained_steel_aluminium_plated_casing"));
+    public static final BlockEntry<Block> LIVING_ROCK_TILES = createCasingBlock("livingrock_tiles",
+            CosmicCore.id("block/casings/solid/livingrock_tiles"));
 
     public static final BlockEntry<Block> NEUTRONIUM_BOUEY = createCasingBlock("neutronium_buoy",
             CosmicCore.id("block/casings/solid/neutronium_buoy"));
@@ -206,6 +213,41 @@ public class CosmicBlocks {
             "radioactive_filter_casing",
             "block/variant/radioactive_filter_casing");
 
+
+
+    public static final BlockEntry<LanternBlock> STEEL_ROSE_LANTERN =
+            createLantern("steel_rose_lantern",
+                    CosmicCore.id("block/lanterns/steel_rose_lantern"),
+                    CosmicCore.id("block/lanterns/steel_rose_lantern_hanging"));
+
+
+
+    public static final BlockEntry<Block> STEEL_ROSE_LIGHT = createStoneBuildingBlock(
+            "steel_rose_light",
+            CosmicCore.id("block/casings/cosmetic/steel_rose_light"));
+
+
+    public static final BlockEntry<Block> IRON_PLATED_DEEPSLATE_BLOCK = createStoneBuildingBlock(
+            "iron_plated_deepslate_tile",
+            CosmicCore.id("block/casings/cosmetic/iron_plated_deepslate_tile"));
+
+    public static final BlockEntry<StairBlock> IRON_PLATED_DEEPSLATE_STAIRS = REGISTRATE
+            .block("iron_plated_deepslate_tile_stairs", properties -> new StairBlock(IRON_PLATED_DEEPSLATE_BLOCK::getDefaultState, properties))
+            .initialProperties(IRON_PLATED_DEEPSLATE_BLOCK)
+            .properties(p ->
+                    p.isValidSpawn(((blockState, blockGetter, blockPos, entityType) -> false))
+                            .speedFactor(1.25f)
+                            .requiresCorrectToolForDrops()
+                            .strength(5, 6)
+                            .sound(SoundType.NETHERITE_BLOCK))
+            .blockstate((ctx, prov) -> prov.stairsBlock(ctx.get(), new ResourceLocation("cosmiccore:block/casings/cosmetic/iron_plated_deepslate_tile")))
+            .item()
+            .build()
+            .register();
+
+
+
+
     // GLASS BLOCKS
     public static final BlockEntry<Block> ZBLAN_REINFORCED_GLASS = createGlassCasingBlock(
             "zblan_glass", CosmicCore.id("block/casings/glass/zblan_glass"), () -> RenderType::translucent);
@@ -224,6 +266,37 @@ public class CosmicBlocks {
                 .build()
                 .register();
     }
+
+
+
+
+    public static BlockEntry<Block> createStoneBuildingBlock(String name, ResourceLocation texture){
+        return createStoneBuildingBlock(name, Block::new, texture, () -> Blocks.DEEPSLATE_BRICKS,
+                () -> RenderType::solid);
+    }
+
+    public static BlockEntry<Block> createStoneBuildingBlock(String name,
+                                                             NonNullFunction<BlockBehaviour.Properties, Block> blockSupplier,
+                                                             ResourceLocation texture,
+                                                             NonNullSupplier<? extends Block> properties,
+                                                             Supplier<Supplier<RenderType>> type) {
+        return REGISTRATE.block(name, blockSupplier)
+            .initialProperties(properties)
+                .properties(p ->
+            p.isValidSpawn(((blockState, blockGetter, blockPos, entityType) -> false))
+            .speedFactor(1.25f)
+                        .requiresCorrectToolForDrops()
+                        .strength(5, 6)
+                        .sound(SoundType.NETHERITE_BLOCK))
+            .addLayer(type)
+                .exBlockstate(GTModels.cubeAllModel(texture))
+            .tag(BlockTags.MINEABLE_WITH_PICKAXE)
+                .item(BlockItem::new)
+                .build()
+                .register();
+}
+
+
 
     public static BlockEntry<Block> createCasingBlock(String name, ResourceLocation texture) {
         return createCasingBlock(name, Block::new, texture, () -> Blocks.IRON_BLOCK,
@@ -338,6 +411,71 @@ public class CosmicBlocks {
                 .strength(5, 6)
                 .sound(SoundType.COPPER);
     }
+
+    public static BlockEntry<LanternBlock> createLantern(String name, ResourceLocation texture, ResourceLocation textureHanging){
+        return createLantern(
+                name,
+                LanternBlock::new,
+                texture,
+                textureHanging,
+                () -> Blocks.LANTERN,
+                () -> RenderType::cutout,
+                15
+        );
+    }
+
+    public static BlockEntry<LanternBlock> createLantern(String name,
+                                                         NonNullFunction<BlockBehaviour.Properties, LanternBlock> blockSupplier,
+                                                         ResourceLocation texture, ResourceLocation hangingTexture,
+                                                         NonNullSupplier<? extends Block> properties,
+                                                         java.util.function.Supplier<java.util.function.Supplier<RenderType>> type,
+                                                         int lightLevel)
+    {
+        return REGISTRATE.block(name, blockSupplier)
+                .initialProperties(properties)
+                .properties(prop -> prop
+                        .strength(3.5f)
+                        .sound(SoundType.LANTERN)
+                        .requiresCorrectToolForDrops()
+                        .noOcclusion()
+                        .lightLevel(l -> lightLevel)
+                )
+                .addLayer(type)
+                .blockstate((context,provider) -> {
+
+                    var standing = provider.models()
+                            .withExistingParent(context.getName(),provider.mcLoc("block/lantern"))
+                            .texture("lantern",texture)
+                            .texture("particle",texture);
+
+                    var hanging = provider.models()
+                            .withExistingParent(context.getName(),provider.mcLoc("block/lantern_hanging"))
+                            .texture("lantern",hangingTexture)
+                            .texture("particle",hangingTexture);
+
+                    provider.getVariantBuilder(context.get())
+                            .forAllStates( state -> {
+                                boolean isHanging = state.getValue(BlockStateProperties.HANGING);
+                                return new ConfiguredModel[]{
+                                        new ConfiguredModel(
+                                                isHanging ? hanging : standing,
+                                                0,
+                                                isHanging ? 180 : 0,
+                                                false
+                                        )
+                                };
+                            });
+                })
+                .tag(BlockTags.MINEABLE_WITH_SHOVEL)
+                .item(BlockItem::new).model((context,provider) ->
+                        provider.withExistingParent(context.getName(),provider.modLoc("block/"+context.getName())))
+                .build()
+                .register();
+    }
+
+
+
+
 
     public static void init() {}
 }

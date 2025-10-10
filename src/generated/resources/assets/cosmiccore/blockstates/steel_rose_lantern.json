@@ -1,0 +1,18 @@
+{
+  "variants": {
+    "hanging=false,waterlogged=false": {
+      "model": "cosmiccore:block/steel_rose_lantern"
+    },
+    "hanging=false,waterlogged=true": {
+      "model": "cosmiccore:block/steel_rose_lantern"
+    },
+    "hanging=true,waterlogged=false": {
+      "model": "cosmiccore:block/steel_rose_lantern",
+      "y": 180
+    },
+    "hanging=true,waterlogged=true": {
+      "model": "cosmiccore:block/steel_rose_lantern",
+      "y": 180
+    }
+  }
+}
