@@ -1,6 +1,7 @@
 {
   "values": [
-    "cosmiccore:steel_rose_light",
-    "cosmiccore:iron_plated_deepslate_tile"
+    "cosmiccore:iron_plated_deepslate_tile",
+    "cosmiccore:iron_plated_deepslate_tile_stairs",
+    "cosmiccore:iron_plated_deepslate_tile_slab"
   ]
 }

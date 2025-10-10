@@ -18,7 +18,6 @@ import com.gregtechceu.gtceu.data.recipe.CustomTags;
 
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.server.packs.resources.Resource;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.level.block.*;
@@ -37,7 +36,6 @@ import com.tterrag.registrate.util.nullness.NonNullBiConsumer;
 import com.tterrag.registrate.util.nullness.NonNullFunction;
 import com.tterrag.registrate.util.nullness.NonNullSupplier;
 import earth.terrarium.adastra.common.blocks.GlobeBlock;
-import net.minecraftforge.common.Tags;
 
 import java.util.function.Supplier;
 
@@ -213,46 +211,38 @@ public class CosmicBlocks {
             "radioactive_filter_casing",
             "block/variant/radioactive_filter_casing");
 
+    public static final BlockEntry<LanternBlock> STEEL_ROSE_LANTERN = createLantern("steel_rose_lantern",
+            CosmicCore.id("block/lanterns/steel_rose_lantern"),
+            CosmicCore.id("block/lanterns/steel_rose_lantern_hanging"));
 
-
-    public static final BlockEntry<LanternBlock> STEEL_ROSE_LANTERN =
-            createLantern("steel_rose_lantern",
-                    CosmicCore.id("block/lanterns/steel_rose_lantern"),
-                    CosmicCore.id("block/lanterns/steel_rose_lantern_hanging"));
-
-
-
-    public static final BlockEntry<Block> STEEL_ROSE_LIGHT = createStoneBuildingBlock(
+    public static final BlockGroup STEEL_ROSE_LIGHT = createStoneBuildingBlock(
             "steel_rose_light",
             CosmicCore.id("block/casings/cosmetic/steel_rose_light"));
 
-
-    public static final BlockEntry<Block> IRON_PLATED_DEEPSLATE_BLOCK = createStoneBuildingBlock(
+    public static final BlockGroup IRON_PLATED_DEEPSLATE_BLOCK = createStoneBuildingBlock(
             "iron_plated_deepslate_tile",
             CosmicCore.id("block/casings/cosmetic/iron_plated_deepslate_tile"));
 
-    public static final BlockEntry<StairBlock> IRON_PLATED_DEEPSLATE_STAIRS = REGISTRATE
-            .block("iron_plated_deepslate_tile_stairs", properties -> new StairBlock(IRON_PLATED_DEEPSLATE_BLOCK::getDefaultState, properties))
-            .initialProperties(IRON_PLATED_DEEPSLATE_BLOCK)
-            .properties(p ->
-                    p.isValidSpawn(((blockState, blockGetter, blockPos, entityType) -> false))
-                            .speedFactor(1.25f)
-                            .requiresCorrectToolForDrops()
-                            .strength(5, 6)
-                            .sound(SoundType.NETHERITE_BLOCK))
-            .blockstate((ctx, prov) -> prov.stairsBlock(ctx.get(), new ResourceLocation("cosmiccore:block/casings/cosmetic/iron_plated_deepslate_tile")))
-            .item()
-            .build()
-            .register();
-
-
-
+    // public static final BlockEntry<StairBlock> IRON_PLATED_DEEPSLATE_STAIRS = REGISTRATE
+    // .block("iron_plated_deepslate_tile_stairs", properties -> new
+    // StairBlock(IRON_PLATED_DEEPSLATE_BLOCK::getDefaultState, properties))
+    // .initialProperties(IRON_PLATED_DEEPSLATE_BLOCK)
+    // .properties(p ->
+    // p.isValidSpawn(((blockState, blockGetter, blockPos, entityType) -> false))
+    // .speedFactor(1.25f)
+    // .requiresCorrectToolForDrops()
+    // .strength(5, 6)
+    // .sound(SoundType.NETHERITE_BLOCK))
+    // .blockstate((ctx, prov) -> prov.stairsBlock(ctx.get(), new
+    // ResourceLocation("cosmiccore:block/casings/cosmetic/iron_plated_deepslate_tile")))
+    // .item()
+    // .build()
+    // .register();
 
     // GLASS BLOCKS
     public static final BlockEntry<Block> ZBLAN_REINFORCED_GLASS = createGlassCasingBlock(
             "zblan_glass", CosmicCore.id("block/casings/glass/zblan_glass"), () -> RenderType::translucent);
 
-    // This is a Bunch of Rendering Magic I barely understand (See: I Don't understand at all) ~Ghost
     private static BlockEntry<Block> createGlassCasingBlock(String name, ResourceLocation texture,
                                                             Supplier<Supplier<RenderType>> type) {
         NonNullFunction<BlockBehaviour.Properties, Block> supplier = GlassBlock::new;
@@ -267,36 +257,68 @@ public class CosmicBlocks {
                 .register();
     }
 
+    public record BlockGroup(BlockEntry<Block> block, BlockEntry<StairBlock> stairs, BlockEntry<SlabBlock> slab) {}
 
-
-
-    public static BlockEntry<Block> createStoneBuildingBlock(String name, ResourceLocation texture){
-        return createStoneBuildingBlock(name, Block::new, texture, () -> Blocks.DEEPSLATE_BRICKS,
+    public static BlockGroup createStoneBuildingBlock(String name, ResourceLocation texture) {
+        return createStoneBuildingBlocks(name, texture, () -> Blocks.DEEPSLATE_BRICKS,
                 () -> RenderType::solid);
     }
 
-    public static BlockEntry<Block> createStoneBuildingBlock(String name,
-                                                             NonNullFunction<BlockBehaviour.Properties, Block> blockSupplier,
-                                                             ResourceLocation texture,
-                                                             NonNullSupplier<? extends Block> properties,
-                                                             Supplier<Supplier<RenderType>> type) {
-        return REGISTRATE.block(name, blockSupplier)
-            .initialProperties(properties)
-                .properties(p ->
-            p.isValidSpawn(((blockState, blockGetter, blockPos, entityType) -> false))
-            .speedFactor(1.25f)
+    public static BlockGroup createStoneBuildingBlocks(String name,
+                                                       ResourceLocation texture,
+                                                       NonNullSupplier<? extends Block> properties,
+                                                       Supplier<Supplier<RenderType>> type) {
+        BlockEntry<Block> fullBlock = REGISTRATE.block(name, Block::new)
+                .initialProperties(properties)
+                .properties(p -> p.isValidSpawn(((blockState, blockGetter, blockPos, entityType) -> false))
+                        .speedFactor(1.25f)
                         .requiresCorrectToolForDrops()
                         .strength(5, 6)
                         .sound(SoundType.NETHERITE_BLOCK))
-            .addLayer(type)
+                .addLayer(type)
                 .exBlockstate(GTModels.cubeAllModel(texture))
-            .tag(BlockTags.MINEABLE_WITH_PICKAXE)
+                .tag(BlockTags.MINEABLE_WITH_PICKAXE)
                 .item(BlockItem::new)
                 .build()
                 .register();
-}
 
+        BlockEntry<StairBlock> stairBlock = REGISTRATE
+                .block(name + "_stairs", s -> new StairBlock(() -> fullBlock.get().defaultBlockState(), s))
+                .initialProperties(fullBlock)
+                .properties(p -> p.isValidSpawn(((blockState, blockGetter, blockPos, entityType) -> false))
+                        .speedFactor(1.25f)
+                        .requiresCorrectToolForDrops()
+                        .strength(5, 6)
+                        .sound(SoundType.NETHERITE_BLOCK))
+                .addLayer(type)
+                .blockstate((ctx, prov) -> prov.stairsBlock(ctx.get(), texture))
+                .tag(BlockTags.MINEABLE_WITH_PICKAXE)
+                .item(BlockItem::new)
+                .build()
+                .register();
 
+        BlockEntry<SlabBlock> slabBlock = REGISTRATE.block(name + "_slab", SlabBlock::new)
+                .initialProperties(fullBlock)
+                .properties(p -> p.isValidSpawn(((blockState, blockGetter, blockPos, entityType) -> false))
+                        .speedFactor(1.25f)
+                        .requiresCorrectToolForDrops()
+                        .strength(5, 6)
+                        .sound(SoundType.NETHERITE_BLOCK))
+                .addLayer(type)
+                .blockstate((ctx, prov) -> {
+                    var slab = prov.models().slab(ctx.getName(), texture, texture, texture);
+                    var slabTop = prov.models().slabTop(ctx.getName() + "_top", texture, texture, texture);
+                    var fullModel = prov.models().cubeAll(name, texture);
+
+                    prov.slabBlock((SlabBlock) ctx.get(), slab, slabTop, fullModel);
+                })
+                .tag(BlockTags.MINEABLE_WITH_PICKAXE)
+                .item(BlockItem::new)
+                .build()
+                .register();
+
+        return new BlockGroup(fullBlock, stairBlock, slabBlock);
+    }
 
     public static BlockEntry<Block> createCasingBlock(String name, ResourceLocation texture) {
         return createCasingBlock(name, Block::new, texture, () -> Blocks.IRON_BLOCK,
@@ -412,7 +434,8 @@ public class CosmicBlocks {
                 .sound(SoundType.COPPER);
     }
 
-    public static BlockEntry<LanternBlock> createLantern(String name, ResourceLocation texture, ResourceLocation textureHanging){
+    public static BlockEntry<LanternBlock> createLantern(String name, ResourceLocation texture,
+                                                         ResourceLocation textureHanging) {
         return createLantern(
                 name,
                 LanternBlock::new,
@@ -420,8 +443,7 @@ public class CosmicBlocks {
                 textureHanging,
                 () -> Blocks.LANTERN,
                 () -> RenderType::cutout,
-                15
-        );
+                15);
     }
 
     public static BlockEntry<LanternBlock> createLantern(String name,
@@ -429,8 +451,7 @@ public class CosmicBlocks {
                                                          ResourceLocation texture, ResourceLocation hangingTexture,
                                                          NonNullSupplier<? extends Block> properties,
                                                          java.util.function.Supplier<java.util.function.Supplier<RenderType>> type,
-                                                         int lightLevel)
-    {
+                                                         int lightLevel) {
         return REGISTRATE.block(name, blockSupplier)
                 .initialProperties(properties)
                 .properties(prop -> prop
@@ -438,44 +459,36 @@ public class CosmicBlocks {
                         .sound(SoundType.LANTERN)
                         .requiresCorrectToolForDrops()
                         .noOcclusion()
-                        .lightLevel(l -> lightLevel)
-                )
+                        .lightLevel(l -> lightLevel))
                 .addLayer(type)
-                .blockstate((context,provider) -> {
+                .blockstate((context, provider) -> {
 
                     var standing = provider.models()
-                            .withExistingParent(context.getName(),provider.mcLoc("block/lantern"))
-                            .texture("lantern",texture)
-                            .texture("particle",texture);
+                            .withExistingParent(context.getName(), provider.mcLoc("block/lantern"))
+                            .texture("lantern", texture)
+                            .texture("particle", texture);
 
                     var hanging = provider.models()
-                            .withExistingParent(context.getName(),provider.mcLoc("block/lantern_hanging"))
-                            .texture("lantern",hangingTexture)
-                            .texture("particle",hangingTexture);
+                            .withExistingParent(context.getName() + "_hanging", provider.mcLoc("block/lantern_hanging"))
+                            .texture("lantern", hangingTexture)
+                            .texture("particle", hangingTexture);
 
                     provider.getVariantBuilder(context.get())
-                            .forAllStates( state -> {
+                            .forAllStates(state -> {
                                 boolean isHanging = state.getValue(BlockStateProperties.HANGING);
-                                return new ConfiguredModel[]{
+                                return new ConfiguredModel[] {
                                         new ConfiguredModel(
-                                                isHanging ? hanging : standing,
-                                                0,
-                                                isHanging ? 180 : 0,
-                                                false
-                                        )
+                                                isHanging ? hanging : standing)
                                 };
                             });
                 })
                 .tag(BlockTags.MINEABLE_WITH_SHOVEL)
-                .item(BlockItem::new).model((context,provider) ->
-                        provider.withExistingParent(context.getName(),provider.modLoc("block/"+context.getName())))
+                .item(BlockItem::new)
+                .model((context, provider) -> provider.withExistingParent(context.getName(),
+                        provider.modLoc("block/" + context.getName())))
                 .build()
                 .register();
     }
-
-
-
-
 
     public static void init() {}
 }
