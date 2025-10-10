@@ -1,6 +1,7 @@
 package com.ghostipedia.cosmiccore.common.machine.multiblock.multi;
 
 import com.ghostipedia.cosmiccore.CosmicCore;
+import com.ghostipedia.cosmiccore.api.machine.part.CosmicPartAbility;
 import com.ghostipedia.cosmiccore.common.machine.multiblock.steam.WeakSteamParallelMultiBlockMachine;
 
 import com.gregtechceu.gtceu.GTCEu;
@@ -28,7 +29,7 @@ public class SteamMixer {
             .addOutputLimit(ItemRecipeCapability.CAP, 1)
             .pattern(definition -> FactoryBlockPattern.start()
                     .aisle("AAA", "BCB", "BCB", " B ")
-                    .aisle("AAA", "CEC", "CEC", "BBB")
+                    .aisle("AAA", "CEC", "CEC", "BXB")
                     .aisle("ADA", "BCB", "BCB", " B ")
                     .where('D', Predicates.controller(blocks(definition.getBlock())))
                     .where('#', Predicates.air())
@@ -42,6 +43,9 @@ public class SteamMixer {
                     .where('B', blocks(CASING_BRONZE_BRICKS.get()))
                     .where('C', blocks(BRONZE_HULL.get()))
                     .where('E', blocks(CASING_BRONZE_GEARBOX.get()))
+                    .where('X',
+                            blocks(CASING_BRONZE_BRICKS.get())
+                                    .or(Predicates.abilities(CosmicPartAbility.IMPORT_EMBER).setPreviewCount(1)))
                     .build())
             .model(createWorkableCasingMachineModel(GTCEu.id("block/casings/solid/machine_casing_bronze_plated_bricks"),
                     CosmicCore.id("block/multiblock/mixing_vessel")))
