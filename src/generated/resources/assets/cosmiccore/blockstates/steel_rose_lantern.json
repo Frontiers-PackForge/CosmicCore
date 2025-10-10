@@ -7,12 +7,10 @@
       "model": "cosmiccore:block/steel_rose_lantern"
     },
     "hanging=true,waterlogged=false": {
-      "model": "cosmiccore:block/steel_rose_lantern",
-      "y": 180
+      "model": "cosmiccore:block/steel_rose_lantern_hanging"
     },
     "hanging=true,waterlogged=true": {
-      "model": "cosmiccore:block/steel_rose_lantern",
-      "y": 180
+      "model": "cosmiccore:block/steel_rose_lantern_hanging"
     }
   }
 }
