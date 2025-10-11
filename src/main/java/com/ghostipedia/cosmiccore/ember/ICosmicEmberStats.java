@@ -6,7 +6,4 @@ public interface ICosmicEmberStats {
 
     double pull();
 
-    int capacity();
-
-
 }

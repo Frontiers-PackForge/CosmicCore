@@ -7,6 +7,7 @@ import com.ghostipedia.cosmiccore.client.renderer.block.NebulaeCoilRenderer;
 import com.ghostipedia.cosmiccore.common.block.MagnetBlock;
 import com.ghostipedia.cosmiccore.common.blockentity.CosmicCoilBlockEntity;
 
+import com.ghostipedia.cosmiccore.ember.CosmicEmberEmitterBlock;
 import com.gregtechceu.gtceu.GTCEu;
 import com.gregtechceu.gtceu.api.GTCEuAPI;
 import com.gregtechceu.gtceu.api.block.ActiveBlock;
@@ -16,6 +17,7 @@ import com.gregtechceu.gtceu.common.block.CoilBlock;
 import com.gregtechceu.gtceu.common.data.models.GTModels;
 import com.gregtechceu.gtceu.data.recipe.CustomTags;
 
+import com.rekindled.embers.RegistryManager;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.BlockTags;
@@ -222,6 +224,18 @@ public class CosmicBlocks {
     public static final BlockGroup IRON_PLATED_DEEPSLATE_BLOCK = createStoneBuildingBlock(
             "iron_plated_deepslate_tile",
             CosmicCore.id("block/casings/cosmetic/iron_plated_deepslate_tile"));
+
+
+    public static final BlockEntry<CosmicEmberEmitterBlock> COSMIC_EMBER_EMITTER_STEAM = REGISTRATE
+            .block("steam_ember_emitter", (properties) -> new CosmicEmberEmitterBlock(properties, 0))
+            .initialProperties(RegistryManager.EMBER_EMITTER::get)
+            .exBlockstate((ctx, prov)
+                    -> { prov.directionalBlock(ctx.getEntry(),prov.models().getExistingFile(CosmicCore.id("steam_ember_emitter")));
+
+            })
+            .item(BlockItem::new)
+            .build()
+            .register();
 
     // GLASS BLOCKS
     public static final BlockEntry<Block> ZBLAN_REINFORCED_GLASS = createGlassCasingBlock(
