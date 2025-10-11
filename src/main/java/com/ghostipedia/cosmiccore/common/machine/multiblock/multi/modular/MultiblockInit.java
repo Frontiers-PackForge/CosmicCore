@@ -55,5 +55,6 @@ public class MultiblockInit {
         DawnForge.init();
         MegaProductionAlveary.init();
         ManaEtchingFactory.init();
+        ArcaneCrucible.init();
     }
 }
