@@ -56,6 +56,8 @@ public class CosmicMaterials {
     public static Material PaleSteel;
     public static Material PaleOil;
     public static Material PaleOreBad;
+    public static Material Moondrop;
+    public static Material Somanone;
 
     public static Material basicNutrientProductionFluid;
     public static Material advancedNutrientProductionFluid;
@@ -451,6 +453,22 @@ public class CosmicMaterials {
                 .flags(DISABLE_DECOMPOSITION, NO_SMELTING, NO_UNIFICATION, NO_SMELTING, NO_ORE_SMELTING,
                         NO_ORE_PROCESSING_TAB, NO_SMASHING)
                 .color(0xE8F3FF).secondaryColor(0x1F2A36).iconSet(MaterialIconSet.METALLIC)
+                .buildAndRegister();
+
+        Somanone = new Material.Builder(CosmicCore.id("somanone"))
+                .formula("✧+")
+                .ore()
+                .gem()
+                .dust()
+                .color(0x36E3C3).secondaryColor(0x111827).iconSet(MaterialIconSet.DIAMOND)
+                .buildAndRegister();
+
+        Moondrop = new Material.Builder(CosmicCore.id("moondrop"))
+                .formula("☽")
+                .ore()
+                .gem()
+                .dust()
+                .color(0xE8F1FF).secondaryColor(0x2A2F6E).iconSet(MaterialIconSet.EMERALD)
                 .buildAndRegister();
     }
 

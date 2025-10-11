@@ -18,14 +18,14 @@ import com.gregtechceu.gtceu.data.recipe.CustomTags;
 
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.tags.BlockTags;
 import net.minecraft.world.item.BlockItem;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.GlassBlock;
-import net.minecraft.world.level.block.SoundType;
+import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockBehaviour;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.NoteBlockInstrument;
 import net.minecraft.world.level.material.MapColor;
+import net.minecraftforge.client.model.generators.ConfiguredModel;
 import net.minecraftforge.client.model.generators.ModelFile;
 
 import com.teamresourceful.resourcefullib.common.registry.RegistryEntry;
@@ -121,6 +121,11 @@ public class CosmicBlocks {
 
     public static final BlockEntry<Block> HEAVY_FROST_PROOF_CASING = createCasingBlock("heavy_frost_proof_casing",
             CosmicCore.id("block/casings/solid/heavy_frost_proof_casing"));
+    public static final BlockEntry<Block> SOUL_STAINED_STEEL_ALU_CASING = createCasingBlock(
+            "soul_stained_steel_aluminium_plated_casing",
+            CosmicCore.id("block/casings/solid/soul_stained_steel_aluminium_plated_casing"));
+    public static final BlockEntry<Block> LIVING_ROCK_TILES = createCasingBlock("livingrock_tiles",
+            CosmicCore.id("block/casings/solid/livingrock_tiles"));
 
     public static final BlockEntry<Block> NEUTRONIUM_BOUEY = createCasingBlock("neutronium_buoy",
             CosmicCore.id("block/casings/solid/neutronium_buoy"));
@@ -206,11 +211,22 @@ public class CosmicBlocks {
             "radioactive_filter_casing",
             "block/variant/radioactive_filter_casing");
 
+    public static final BlockEntry<LanternBlock> STEEL_ROSE_LANTERN = createLantern("steel_rose_lantern",
+            CosmicCore.id("block/lanterns/steel_rose_lantern"),
+            CosmicCore.id("block/lanterns/steel_rose_lantern_hanging"));
+
+    public static final BlockGroup STEEL_ROSE_LIGHT = createStoneBuildingBlock(
+            "steel_rose_light",
+            CosmicCore.id("block/casings/cosmetic/steel_rose_light"));
+
+    public static final BlockGroup IRON_PLATED_DEEPSLATE_BLOCK = createStoneBuildingBlock(
+            "iron_plated_deepslate_tile",
+            CosmicCore.id("block/casings/cosmetic/iron_plated_deepslate_tile"));
+
     // GLASS BLOCKS
     public static final BlockEntry<Block> ZBLAN_REINFORCED_GLASS = createGlassCasingBlock(
             "zblan_glass", CosmicCore.id("block/casings/glass/zblan_glass"), () -> RenderType::translucent);
 
-    // This is a Bunch of Rendering Magic I barely understand (See: I Don't understand at all) ~Ghost
     private static BlockEntry<Block> createGlassCasingBlock(String name, ResourceLocation texture,
                                                             Supplier<Supplier<RenderType>> type) {
         NonNullFunction<BlockBehaviour.Properties, Block> supplier = GlassBlock::new;
@@ -223,6 +239,69 @@ public class CosmicBlocks {
                 .item(BlockItem::new)
                 .build()
                 .register();
+    }
+
+    public record BlockGroup(BlockEntry<Block> block, BlockEntry<StairBlock> stairs, BlockEntry<SlabBlock> slab) {}
+
+    public static BlockGroup createStoneBuildingBlock(String name, ResourceLocation texture) {
+        return createStoneBuildingBlocks(name, texture, () -> Blocks.DEEPSLATE_BRICKS,
+                () -> RenderType::solid);
+    }
+
+    public static BlockGroup createStoneBuildingBlocks(String name,
+                                                       ResourceLocation texture,
+                                                       NonNullSupplier<? extends Block> properties,
+                                                       Supplier<Supplier<RenderType>> type) {
+        BlockEntry<Block> fullBlock = REGISTRATE.block(name, Block::new)
+                .initialProperties(properties)
+                .properties(p -> p.isValidSpawn(((blockState, blockGetter, blockPos, entityType) -> false))
+                        .speedFactor(1.25f)
+                        .requiresCorrectToolForDrops()
+                        .strength(5, 6)
+                        .sound(SoundType.NETHERITE_BLOCK))
+                .addLayer(type)
+                .exBlockstate(GTModels.cubeAllModel(texture))
+                .tag(BlockTags.MINEABLE_WITH_PICKAXE)
+                .item(BlockItem::new)
+                .build()
+                .register();
+
+        BlockEntry<StairBlock> stairBlock = REGISTRATE
+                .block(name + "_stairs", s -> new StairBlock(() -> fullBlock.get().defaultBlockState(), s))
+                .initialProperties(fullBlock)
+                .properties(p -> p.isValidSpawn(((blockState, blockGetter, blockPos, entityType) -> false))
+                        .speedFactor(1.25f)
+                        .requiresCorrectToolForDrops()
+                        .strength(5, 6)
+                        .sound(SoundType.NETHERITE_BLOCK))
+                .addLayer(type)
+                .blockstate((ctx, prov) -> prov.stairsBlock(ctx.get(), texture))
+                .tag(BlockTags.MINEABLE_WITH_PICKAXE)
+                .item(BlockItem::new)
+                .build()
+                .register();
+
+        BlockEntry<SlabBlock> slabBlock = REGISTRATE.block(name + "_slab", SlabBlock::new)
+                .initialProperties(fullBlock)
+                .properties(p -> p.isValidSpawn(((blockState, blockGetter, blockPos, entityType) -> false))
+                        .speedFactor(1.25f)
+                        .requiresCorrectToolForDrops()
+                        .strength(5, 6)
+                        .sound(SoundType.NETHERITE_BLOCK))
+                .addLayer(type)
+                .blockstate((ctx, prov) -> {
+                    var slab = prov.models().slab(ctx.getName(), texture, texture, texture);
+                    var slabTop = prov.models().slabTop(ctx.getName() + "_top", texture, texture, texture);
+                    var fullModel = prov.models().cubeAll(name, texture);
+
+                    prov.slabBlock((SlabBlock) ctx.get(), slab, slabTop, fullModel);
+                })
+                .tag(BlockTags.MINEABLE_WITH_PICKAXE)
+                .item(BlockItem::new)
+                .build()
+                .register();
+
+        return new BlockGroup(fullBlock, stairBlock, slabBlock);
     }
 
     public static BlockEntry<Block> createCasingBlock(String name, ResourceLocation texture) {
@@ -337,6 +416,62 @@ public class CosmicBlocks {
                 .requiresCorrectToolForDrops()
                 .strength(5, 6)
                 .sound(SoundType.COPPER);
+    }
+
+    public static BlockEntry<LanternBlock> createLantern(String name, ResourceLocation texture,
+                                                         ResourceLocation textureHanging) {
+        return createLantern(
+                name,
+                LanternBlock::new,
+                texture,
+                textureHanging,
+                () -> Blocks.LANTERN,
+                () -> RenderType::cutout,
+                15);
+    }
+
+    public static BlockEntry<LanternBlock> createLantern(String name,
+                                                         NonNullFunction<BlockBehaviour.Properties, LanternBlock> blockSupplier,
+                                                         ResourceLocation texture, ResourceLocation hangingTexture,
+                                                         NonNullSupplier<? extends Block> properties,
+                                                         java.util.function.Supplier<java.util.function.Supplier<RenderType>> type,
+                                                         int lightLevel) {
+        return REGISTRATE.block(name, blockSupplier)
+                .initialProperties(properties)
+                .properties(prop -> prop
+                        .strength(3.5f)
+                        .sound(SoundType.LANTERN)
+                        .requiresCorrectToolForDrops()
+                        .noOcclusion()
+                        .lightLevel(l -> lightLevel))
+                .addLayer(type)
+                .blockstate((context, provider) -> {
+
+                    var standing = provider.models()
+                            .withExistingParent(context.getName(), provider.mcLoc("block/lantern"))
+                            .texture("lantern", texture)
+                            .texture("particle", texture);
+
+                    var hanging = provider.models()
+                            .withExistingParent(context.getName() + "_hanging", provider.mcLoc("block/lantern_hanging"))
+                            .texture("lantern", hangingTexture)
+                            .texture("particle", hangingTexture);
+
+                    provider.getVariantBuilder(context.get())
+                            .forAllStates(state -> {
+                                boolean isHanging = state.getValue(BlockStateProperties.HANGING);
+                                return new ConfiguredModel[] {
+                                        new ConfiguredModel(
+                                                isHanging ? hanging : standing)
+                                };
+                            });
+                })
+                .tag(BlockTags.MINEABLE_WITH_SHOVEL)
+                .item(BlockItem::new)
+                .model((context, provider) -> provider.withExistingParent(context.getName(),
+                        provider.modLoc("block/" + context.getName())))
+                .build()
+                .register();
     }
 
     public static void init() {}

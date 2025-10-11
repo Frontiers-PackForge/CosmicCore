@@ -1,0 +1,13 @@
+{
+  "variants": {
+    "type=bottom": {
+      "model": "cosmiccore:block/steel_rose_light"
+    },
+    "type=double": {
+      "model": "cosmiccore:block/steel_rose_light"
+    },
+    "type=top": {
+      "model": "cosmiccore:block/steel_rose_light"
+    }
+  }
+}

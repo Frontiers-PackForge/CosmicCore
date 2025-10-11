@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:block/lantern_hanging",
+  "textures": {
+    "lantern": "cosmiccore:block/lanterns/steel_rose_lantern_hanging",
+    "particle": "cosmiccore:block/lanterns/steel_rose_lantern_hanging"
+  }
+}

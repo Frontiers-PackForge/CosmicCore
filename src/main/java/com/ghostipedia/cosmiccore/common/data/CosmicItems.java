@@ -1869,6 +1869,92 @@ public class CosmicItems {
             .properties(p -> p.stacksTo(64))
             .defaultModel()
             .register();
+
+    public static final ItemEntry<ComponentItem> BASIC_GENE_KIT = REGISTRATE
+            .item("basic_gene_kit", ComponentItem::create)
+            .lang("Basic Gene Kit")
+            .properties(p -> p.stacksTo(16))
+            .defaultModel()
+            .register();
+
+    public static final ItemEntry<ComponentItem> INTERMEDIATE_GENE_KIT = REGISTRATE
+            .item("intermediate_gene_kit", ComponentItem::create)
+            .lang("Intermediate Gene Kit")
+            .properties(p -> p.stacksTo(16))
+            .defaultModel()
+            .register();
+
+    public static final ItemEntry<ComponentItem> ADVANCED_GENE_KIT = REGISTRATE
+            .item("advanced_gene_kit", ComponentItem::create)
+            .lang("Advanced Gene Kit")
+            .properties(p -> p.stacksTo(16))
+            .defaultModel()
+            .register();
+
+    // MANA WAFERS AND CHIPS
+    public static final ItemEntry<ComponentItem> LATENT_CAPACITY_WAFER = REGISTRATE
+            .item("latent_capacity_wafer", ComponentItem::create)
+            .lang("Latent Capacity Wafer")
+            .properties(p -> p.stacksTo(64))
+            .defaultModel()
+            .register();
+    public static final ItemEntry<ComponentItem> LATENT_EFFICACY_WAFER = REGISTRATE
+            .item("latent_efficacy_wafer", ComponentItem::create)
+            .lang("Latent Efficacy Wafer")
+            .properties(p -> p.stacksTo(64))
+            .defaultModel()
+            .register();
+    public static final ItemEntry<ComponentItem> LATENT_POTENCY_WAFER = REGISTRATE
+            .item("latent_potency_wafer", ComponentItem::create)
+            .lang("Latent Potency Wafer")
+            .properties(p -> p.stacksTo(64))
+            .defaultModel()
+            .register();
+    public static final ItemEntry<ComponentItem> LATENT_VERBOSITY_WAFER = REGISTRATE
+            .item("latent_verbosity_wafer", ComponentItem::create)
+            .lang("Latent Verbosity Wafer")
+            .properties(p -> p.stacksTo(64))
+            .defaultModel()
+            .register();
+    // BOULE AND WAFER
+    public static final ItemEntry<ComponentItem> LIVINGROCK_ALUMINATE_BOULE = REGISTRATE
+            .item("livingrock_aluminate_boule", ComponentItem::create)
+            .lang("Livingrock Aluminate Boule")
+            .properties(p -> p.stacksTo(64))
+            .defaultModel()
+            .register();
+    public static final ItemEntry<ComponentItem> LIVINGROCK_ALUMINATE_WAFER = REGISTRATE
+            .item("livirock_aluminite_wafer", ComponentItem::create)
+            .lang("Livingrock Aluminate Wafer")
+            .properties(p -> p.stacksTo(64))
+            .defaultModel()
+            .register();
+    // CHIPS
+    public static final ItemEntry<ComponentItem> CAPACITY_CHIP = REGISTRATE
+            .item("capacity_chip", ComponentItem::create)
+            .lang("Capacity Chip")
+            .properties(p -> p.stacksTo(64))
+            .defaultModel()
+            .register();
+    public static final ItemEntry<ComponentItem> EFFICACY_CHIP = REGISTRATE
+            .item("efficacy_chip", ComponentItem::create)
+            .lang("Efficacy Chip")
+            .properties(p -> p.stacksTo(64))
+            .defaultModel()
+            .register();
+    public static final ItemEntry<ComponentItem> POTENCY_CHIP = REGISTRATE
+            .item("potency_chip", ComponentItem::create)
+            .lang("Potency Chip")
+            .properties(p -> p.stacksTo(64))
+            .defaultModel()
+            .register();
+    public static final ItemEntry<ComponentItem> VERBOSITY_CHIP = REGISTRATE
+            .item("verbosity_chip", ComponentItem::create)
+            .lang("Verbosity Chip")
+            .properties(p -> p.stacksTo(64))
+            .defaultModel()
+            .register();
+
     public static ItemEntry<ComponentItem> LINKED_TERMINAL = REGISTRATE
             .item("linked_terminal", ComponentItem::create)
             .lang("Linked Terminal")

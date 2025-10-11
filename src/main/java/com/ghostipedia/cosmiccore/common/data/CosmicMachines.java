@@ -1,6 +1,7 @@
 package com.ghostipedia.cosmiccore.common.data;
 
 import com.ghostipedia.cosmiccore.CosmicCore;
+import com.ghostipedia.cosmiccore.api.capability.recipe.EmberRecipeCapability;
 import com.ghostipedia.cosmiccore.api.machine.multiblock.DimensionalEnergyCapacitor;
 import com.ghostipedia.cosmiccore.api.machine.multiblock.DimensionalEnergyInterface;
 import com.ghostipedia.cosmiccore.api.machine.part.CosmicPartAbility;
@@ -729,8 +730,7 @@ public class CosmicMachines {
             .appearanceBlock(CASING_PALLADIUM_SUBSTATION)
             .recipeType(GTRecipeTypes.DUMMY_RECIPES)
             .tooltips(Component.translatable("cosmiccore.machine.capacitor_array.tooltip.0"),
-                    Component.translatable("cosmiccore.machine.capacitor_array.tooltip.1"),
-                    Component.translatable("cosmiccore.machine.capacitor_array.tooltip.2"))
+                    Component.translatable("cosmiccore.machine.capacitor_array.tooltip.1"))
             .pattern(definition -> FactoryBlockPattern.start(RIGHT, BACK, UP)
                     .aisle("ACA", "AAA", "AAA")
                     .aisle("ABA", "BDB", "ABA")
@@ -804,6 +804,7 @@ public class CosmicMachines {
         GTMultiMachines.EXTREME_COMBUSTION_ENGINE.setRenderWorldPreview(false);
         GTMultiMachines.ASSEMBLY_LINE.setRecipeModifier(new RecipeModifierList(COSMIC_MODULES, OC_NON_PERFECT));
         GTMultiMachines.ASSEMBLY_LINE.setAlwaysTryModifyRecipe(true);
+        GTRecipeTypes.MIXER_RECIPES.setMaxSize(IO.IN, EmberRecipeCapability.CAP, 1);
         // GCYMMachines.MEGA_BLAST_FURNACE.setRecipeTypes(new GTRecipeType[] { DUMMY_RECIPES });
         // GCYMMachines.MEGA_BLAST_FURNACE.setRenderXEIPreview(false);
         // GCYMMachines.MEGA_BLAST_FURNACE.setRenderWorldPreview(false);
@@ -885,7 +886,7 @@ public class CosmicMachines {
                 .where('D',
                         Predicates.abilities(PartAbility.DATA_ACCESS, PartAbility.OPTICAL_DATA_RECEPTION)
                                 .setExactLimit(1)
-                                .or(Predicates.abilities(MODULE_HATCH).setMinGlobalLimited(1))
+                                .or(Predicates.abilities(MODULE_HATCH).setMaxGlobalLimited(1, 1))
                                 .or(blocks(CASING_GRATE.get())))
                 .where('#', Predicates.any())
                 .build());
