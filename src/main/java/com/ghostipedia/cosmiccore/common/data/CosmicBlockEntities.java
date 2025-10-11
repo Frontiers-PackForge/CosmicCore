@@ -2,6 +2,7 @@ package com.ghostipedia.cosmiccore.common.data;
 
 import com.ghostipedia.cosmiccore.ember.CosmicEmberEmitterBlock;
 import com.ghostipedia.cosmiccore.ember.blockentity.CosmicEmberEmitterBlockEntity;
+import com.ghostipedia.cosmiccore.ember.blockentity.CosmicEmberReceptorBlockEntity;
 import com.tterrag.registrate.util.entry.BlockEntityEntry;
 
 import static com.ghostipedia.cosmiccore.api.registries.CosmicRegistration.REGISTRATE;
@@ -14,6 +15,15 @@ public class CosmicBlockEntities {
             REGISTRATE.<CosmicEmberEmitterBlockEntity>blockEntity("cosmic_ember_emitter_be", (type,pos,state)
                     -> new CosmicEmberEmitterBlockEntity(type,pos,state,0))
                     .validBlocks(COSMIC_EMBER_EMITTER_STEAM)
+                    .register();
+
+
+    public static final BlockEntityEntry<CosmicEmberReceptorBlockEntity> COSMIC_EMBER_RECEIVER_BE =
+            REGISTRATE.<CosmicEmberReceptorBlockEntity>blockEntity("cosmic_ember_receiver_be", (type,pos,state)
+                            -> new CosmicEmberReceptorBlockEntity(type,pos,state,0))
+                    .validBlocks(
+                            COSMIC_EMBER_EMITTER_STEAM
+                    )
                     .register();
 
 

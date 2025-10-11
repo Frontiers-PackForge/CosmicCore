@@ -1,9 +1,9 @@
 {
 	"parent": "block/block",
 	"textures": {
-		"0": "cosmiccore:block/puff_plating",
-		"1": "cosmiccore:block/puff_tex",
-		"particle": "cosmiccore:block/puff_tex"
+		"0": "cosmiccore:block/puff_plating_mv",
+		"1": "cosmiccore:block/puff_tex_mv",
+		"particle": "cosmiccore:block/puff_tex_mv"
 	},
 	"elements": [
 		{

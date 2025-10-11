@@ -8,6 +8,7 @@ import com.ghostipedia.cosmiccore.common.block.MagnetBlock;
 import com.ghostipedia.cosmiccore.common.blockentity.CosmicCoilBlockEntity;
 
 import com.ghostipedia.cosmiccore.ember.CosmicEmberEmitterBlock;
+import com.ghostipedia.cosmiccore.ember.CosmicEmberReceptorBlock;
 import com.gregtechceu.gtceu.GTCEu;
 import com.gregtechceu.gtceu.api.GTCEuAPI;
 import com.gregtechceu.gtceu.api.block.ActiveBlock;
@@ -226,16 +227,308 @@ public class CosmicBlocks {
             CosmicCore.id("block/casings/cosmetic/iron_plated_deepslate_tile"));
 
 
-    public static final BlockEntry<CosmicEmberEmitterBlock> COSMIC_EMBER_EMITTER_STEAM = REGISTRATE
-            .block("steam_ember_emitter", (properties) -> new CosmicEmberEmitterBlock(properties, 0))
-            .initialProperties(RegistryManager.EMBER_EMITTER::get)
-            .exBlockstate((ctx, prov)
-                    -> { prov.directionalBlock(ctx.getEntry(),prov.models().getExistingFile(CosmicCore.id("steam_ember_emitter")));
-
+    //RECIEVERS
+    public static final BlockEntry<CosmicEmberReceptorBlock> COSMIC_EMBER_RECEIVER_STEAM = REGISTRATE
+            .block("steam_ember_receptor", props -> new CosmicEmberReceptorBlock(props, 0))
+            .initialProperties(RegistryManager.EMBER_RECEIVER::get)
+            .exBlockstate((ctx, prov) -> {
+                prov.directionalBlock(ctx.getEntry(), prov.models().getExistingFile(CosmicCore.id("steam_ember_receptor")));
             })
             .item(BlockItem::new)
             .build()
             .register();
+
+    public static final BlockEntry<CosmicEmberReceptorBlock> COSMIC_EMBER_RECEIVER_LV = REGISTRATE
+            .block("lv_ember_receptor", props -> new CosmicEmberReceptorBlock(props, 1))
+            .initialProperties(RegistryManager.EMBER_RECEIVER::get)
+            .exBlockstate((ctx, prov) -> {
+                prov.directionalBlock(ctx.getEntry(), prov.models().getExistingFile(CosmicCore.id("lv_ember_receptor")));
+            })
+            .item(BlockItem::new)
+            .build()
+            .register();
+
+    public static final BlockEntry<CosmicEmberReceptorBlock> COSMIC_EMBER_RECEIVER_MV = REGISTRATE
+            .block("mv_ember_receptor", props -> new CosmicEmberReceptorBlock(props, 2))
+            .initialProperties(RegistryManager.EMBER_RECEIVER::get)
+            .exBlockstate((ctx, prov) -> {
+                prov.directionalBlock(ctx.getEntry(), prov.models().getExistingFile(CosmicCore.id("mv_ember_receptor")));
+            })
+            .item(BlockItem::new)
+            .build()
+            .register();
+
+    public static final BlockEntry<CosmicEmberReceptorBlock> COSMIC_EMBER_RECEIVER_HV = REGISTRATE
+            .block("hv_ember_receptor", props -> new CosmicEmberReceptorBlock(props, 3))
+            .initialProperties(RegistryManager.EMBER_RECEIVER::get)
+            .exBlockstate((ctx, prov) -> {
+                prov.directionalBlock(ctx.getEntry(), prov.models().getExistingFile(CosmicCore.id("hv_ember_receptor")));
+            })
+            .item(BlockItem::new)
+            .build()
+            .register();
+
+    public static final BlockEntry<CosmicEmberReceptorBlock> COSMIC_EMBER_RECEIVER_EV = REGISTRATE
+            .block("ev_ember_receptor", props -> new CosmicEmberReceptorBlock(props, 4))
+            .initialProperties(RegistryManager.EMBER_RECEIVER::get)
+            .exBlockstate((ctx, prov) -> {
+                prov.directionalBlock(ctx.getEntry(), prov.models().getExistingFile(CosmicCore.id("ev_ember_receptor")));
+            })
+            .item(BlockItem::new)
+            .build()
+            .register();
+
+    public static final BlockEntry<CosmicEmberReceptorBlock> COSMIC_EMBER_RECEIVER_IV = REGISTRATE
+            .block("iv_ember_receptor", props -> new CosmicEmberReceptorBlock(props, 5))
+            .initialProperties(RegistryManager.EMBER_RECEIVER::get)
+            .exBlockstate((ctx, prov) -> {
+                prov.directionalBlock(ctx.getEntry(), prov.models().getExistingFile(CosmicCore.id("iv_ember_receptor")));
+            })
+            .item(BlockItem::new)
+            .build()
+            .register();
+
+    public static final BlockEntry<CosmicEmberReceptorBlock> COSMIC_EMBER_RECEIVER_LUV = REGISTRATE
+            .block("luv_ember_receptor", props -> new CosmicEmberReceptorBlock(props, 6))
+            .initialProperties(RegistryManager.EMBER_RECEIVER::get)
+            .exBlockstate((ctx, prov) -> {
+                prov.directionalBlock(ctx.getEntry(), prov.models().getExistingFile(CosmicCore.id("luv_ember_receptor")));
+            })
+            .item(BlockItem::new)
+            .build()
+            .register();
+
+    public static final BlockEntry<CosmicEmberReceptorBlock> COSMIC_EMBER_RECEIVER_ZPM = REGISTRATE
+            .block("zpm_ember_receptor", props -> new CosmicEmberReceptorBlock(props, 7))
+            .initialProperties(RegistryManager.EMBER_RECEIVER::get)
+            .exBlockstate((ctx, prov) -> {
+                prov.directionalBlock(ctx.getEntry(), prov.models().getExistingFile(CosmicCore.id("zpm_ember_receptor")));
+            })
+            .item(BlockItem::new)
+            .build()
+            .register();
+
+    public static final BlockEntry<CosmicEmberReceptorBlock> COSMIC_EMBER_RECEIVER_UV = REGISTRATE
+            .block("uv_ember_receptor", props -> new CosmicEmberReceptorBlock(props, 8))
+            .initialProperties(RegistryManager.EMBER_RECEIVER::get)
+            .exBlockstate((ctx, prov) -> {
+                prov.directionalBlock(ctx.getEntry(), prov.models().getExistingFile(CosmicCore.id("uv_ember_receptor")));
+            })
+            .item(BlockItem::new)
+            .build()
+            .register();
+
+    public static final BlockEntry<CosmicEmberReceptorBlock> COSMIC_EMBER_RECEIVER_UHV = REGISTRATE
+            .block("uhv_ember_receptor", props -> new CosmicEmberReceptorBlock(props, 9))
+            .initialProperties(RegistryManager.EMBER_RECEIVER::get)
+            .exBlockstate((ctx, prov) -> {
+                prov.directionalBlock(ctx.getEntry(), prov.models().getExistingFile(CosmicCore.id("uhv_ember_receptor")));
+            })
+            .item(BlockItem::new)
+            .build()
+            .register();
+
+    public static final BlockEntry<CosmicEmberReceptorBlock> COSMIC_EMBER_RECEIVER_UEV = REGISTRATE
+            .block("uev_ember_receptor", props -> new CosmicEmberReceptorBlock(props, 10))
+            .initialProperties(RegistryManager.EMBER_RECEIVER::get)
+            .exBlockstate((ctx, prov) -> {
+                prov.directionalBlock(ctx.getEntry(), prov.models().getExistingFile(CosmicCore.id("uev_ember_receptor")));
+            })
+            .item(BlockItem::new)
+            .build()
+            .register();
+
+    public static final BlockEntry<CosmicEmberReceptorBlock> COSMIC_EMBER_RECEIVER_UIV = REGISTRATE
+            .block("uiv_ember_receptor", props -> new CosmicEmberReceptorBlock(props, 11))
+            .initialProperties(RegistryManager.EMBER_RECEIVER::get)
+            .exBlockstate((ctx, prov) -> {
+                prov.directionalBlock(ctx.getEntry(), prov.models().getExistingFile(CosmicCore.id("uiv_ember_receptor")));
+            })
+            .item(BlockItem::new)
+            .build()
+            .register();
+
+    public static final BlockEntry<CosmicEmberReceptorBlock> COSMIC_EMBER_RECEIVER_UXV = REGISTRATE
+            .block("uxv_ember_receptor", props -> new CosmicEmberReceptorBlock(props, 12))
+            .initialProperties(RegistryManager.EMBER_RECEIVER::get)
+            .exBlockstate((ctx, prov) -> {
+                prov.directionalBlock(ctx.getEntry(), prov.models().getExistingFile(CosmicCore.id("uxv_ember_receptor")));
+            })
+            .item(BlockItem::new)
+            .build()
+            .register();
+
+    public static final BlockEntry<CosmicEmberReceptorBlock> COSMIC_EMBER_RECEIVER_OPV = REGISTRATE
+            .block("opv_ember_receptor", props -> new CosmicEmberReceptorBlock(props, 13))
+            .initialProperties(RegistryManager.EMBER_RECEIVER::get)
+            .exBlockstate((ctx, prov) -> {
+                prov.directionalBlock(ctx.getEntry(), prov.models().getExistingFile(CosmicCore.id("opv_ember_receptor")));
+            })
+            .item(BlockItem::new)
+            .build()
+            .register();
+
+    public static final BlockEntry<CosmicEmberReceptorBlock> COSMIC_EMBER_RECEIVER_MAX = REGISTRATE
+            .block("max_ember_receptor", props -> new CosmicEmberReceptorBlock(props, 14))
+            .initialProperties(RegistryManager.EMBER_RECEIVER::get)
+            .exBlockstate((ctx, prov) -> {
+                prov.directionalBlock(ctx.getEntry(), prov.models().getExistingFile(CosmicCore.id("max_ember_receptor")));
+            })
+            .item(BlockItem::new)
+            .build()
+            .register();
+
+    //EMITTERS
+    public static final BlockEntry<CosmicEmberEmitterBlock> COSMIC_EMBER_EMITTER_STEAM = REGISTRATE
+            .block("steam_ember_emitter", props -> new CosmicEmberEmitterBlock(props, 0))
+            .initialProperties(RegistryManager.EMBER_EMITTER::get)
+            .exBlockstate((ctx, prov) -> {
+                prov.directionalBlock(ctx.getEntry(), prov.models().getExistingFile(CosmicCore.id("steam_ember_emitter")));
+            })
+            .item(BlockItem::new)
+            .build()
+            .register();
+
+    public static final BlockEntry<CosmicEmberEmitterBlock> COSMIC_EMBER_EMITTER_LV = REGISTRATE
+            .block("lv_ember_emitter", props -> new CosmicEmberEmitterBlock(props, 1))
+            .initialProperties(RegistryManager.EMBER_EMITTER::get)
+            .exBlockstate((ctx, prov) -> {
+                prov.directionalBlock(ctx.getEntry(), prov.models().getExistingFile(CosmicCore.id("lv_ember_emitter")));
+            })
+            .item(BlockItem::new)
+            .build()
+            .register();
+
+    public static final BlockEntry<CosmicEmberEmitterBlock> COSMIC_EMBER_EMITTER_MV = REGISTRATE
+            .block("mv_ember_emitter", props -> new CosmicEmberEmitterBlock(props, 2))
+            .initialProperties(RegistryManager.EMBER_EMITTER::get)
+            .exBlockstate((ctx, prov) -> {
+                prov.directionalBlock(ctx.getEntry(), prov.models().getExistingFile(CosmicCore.id("mv_ember_emitter")));
+            })
+            .item(BlockItem::new)
+            .build()
+            .register();
+
+    public static final BlockEntry<CosmicEmberEmitterBlock> COSMIC_EMBER_EMITTER_HV = REGISTRATE
+            .block("hv_ember_emitter", props -> new CosmicEmberEmitterBlock(props, 3))
+            .initialProperties(RegistryManager.EMBER_EMITTER::get)
+            .exBlockstate((ctx, prov) -> {
+                prov.directionalBlock(ctx.getEntry(), prov.models().getExistingFile(CosmicCore.id("hv_ember_emitter")));
+            })
+            .item(BlockItem::new)
+            .build()
+            .register();
+
+    public static final BlockEntry<CosmicEmberEmitterBlock> COSMIC_EMBER_EMITTER_EV = REGISTRATE
+            .block("ev_ember_emitter", props -> new CosmicEmberEmitterBlock(props, 4))
+            .initialProperties(RegistryManager.EMBER_EMITTER::get)
+            .exBlockstate((ctx, prov) -> {
+                prov.directionalBlock(ctx.getEntry(), prov.models().getExistingFile(CosmicCore.id("ev_ember_emitter")));
+            })
+            .item(BlockItem::new)
+            .build()
+            .register();
+
+    public static final BlockEntry<CosmicEmberEmitterBlock> COSMIC_EMBER_EMITTER_IV = REGISTRATE
+            .block("iv_ember_emitter", props -> new CosmicEmberEmitterBlock(props, 5))
+            .initialProperties(RegistryManager.EMBER_EMITTER::get)
+            .exBlockstate((ctx, prov) -> {
+                prov.directionalBlock(ctx.getEntry(), prov.models().getExistingFile(CosmicCore.id("iv_ember_emitter")));
+            })
+            .item(BlockItem::new)
+            .build()
+            .register();
+
+    public static final BlockEntry<CosmicEmberEmitterBlock> COSMIC_EMBER_EMITTER_LUV = REGISTRATE
+            .block("luv_ember_emitter", props -> new CosmicEmberEmitterBlock(props, 6))
+            .initialProperties(RegistryManager.EMBER_EMITTER::get)
+            .exBlockstate((ctx, prov) -> {
+                prov.directionalBlock(ctx.getEntry(), prov.models().getExistingFile(CosmicCore.id("luv_ember_emitter")));
+            })
+            .item(BlockItem::new)
+            .build()
+            .register();
+
+    public static final BlockEntry<CosmicEmberEmitterBlock> COSMIC_EMBER_EMITTER_ZPM = REGISTRATE
+            .block("zpm_ember_emitter", props -> new CosmicEmberEmitterBlock(props, 7))
+            .initialProperties(RegistryManager.EMBER_EMITTER::get)
+            .exBlockstate((ctx, prov) -> {
+                prov.directionalBlock(ctx.getEntry(), prov.models().getExistingFile(CosmicCore.id("zpm_ember_emitter")));
+            })
+            .item(BlockItem::new)
+            .build()
+            .register();
+
+    public static final BlockEntry<CosmicEmberEmitterBlock> COSMIC_EMBER_EMITTER_UV = REGISTRATE
+            .block("uv_ember_emitter", props -> new CosmicEmberEmitterBlock(props, 8))
+            .initialProperties(RegistryManager.EMBER_EMITTER::get)
+            .exBlockstate((ctx, prov) -> {
+                prov.directionalBlock(ctx.getEntry(), prov.models().getExistingFile(CosmicCore.id("uv_ember_emitter")));
+            })
+            .item(BlockItem::new)
+            .build()
+            .register();
+
+    public static final BlockEntry<CosmicEmberEmitterBlock> COSMIC_EMBER_EMITTER_UHV = REGISTRATE
+            .block("uhv_ember_emitter", props -> new CosmicEmberEmitterBlock(props, 9))
+            .initialProperties(RegistryManager.EMBER_EMITTER::get)
+            .exBlockstate((ctx, prov) -> {
+                prov.directionalBlock(ctx.getEntry(), prov.models().getExistingFile(CosmicCore.id("uhv_ember_emitter")));
+            })
+            .item(BlockItem::new)
+            .build()
+            .register();
+
+    public static final BlockEntry<CosmicEmberEmitterBlock> COSMIC_EMBER_EMITTER_UEV = REGISTRATE
+            .block("uev_ember_emitter", props -> new CosmicEmberEmitterBlock(props, 10))
+            .initialProperties(RegistryManager.EMBER_EMITTER::get)
+            .exBlockstate((ctx, prov) -> {
+                prov.directionalBlock(ctx.getEntry(), prov.models().getExistingFile(CosmicCore.id("uev_ember_emitter")));
+            })
+            .item(BlockItem::new)
+            .build()
+            .register();
+
+    public static final BlockEntry<CosmicEmberEmitterBlock> COSMIC_EMBER_EMITTER_UIV = REGISTRATE
+            .block("uiv_ember_emitter", props -> new CosmicEmberEmitterBlock(props, 11))
+            .initialProperties(RegistryManager.EMBER_EMITTER::get)
+            .exBlockstate((ctx, prov) -> {
+                prov.directionalBlock(ctx.getEntry(), prov.models().getExistingFile(CosmicCore.id("uiv_ember_emitter")));
+            })
+            .item(BlockItem::new)
+            .build()
+            .register();
+
+    public static final BlockEntry<CosmicEmberEmitterBlock> COSMIC_EMBER_EMITTER_UXV = REGISTRATE
+            .block("uxv_ember_emitter", props -> new CosmicEmberEmitterBlock(props, 12))
+            .initialProperties(RegistryManager.EMBER_EMITTER::get)
+            .exBlockstate((ctx, prov) -> {
+                prov.directionalBlock(ctx.getEntry(), prov.models().getExistingFile(CosmicCore.id("uxv_ember_emitter")));
+            })
+            .item(BlockItem::new)
+            .build()
+            .register();
+
+    public static final BlockEntry<CosmicEmberEmitterBlock> COSMIC_EMBER_EMITTER_OPV = REGISTRATE
+            .block("opv_ember_emitter", props -> new CosmicEmberEmitterBlock(props, 13))
+            .initialProperties(RegistryManager.EMBER_EMITTER::get)
+            .exBlockstate((ctx, prov) -> {
+                prov.directionalBlock(ctx.getEntry(), prov.models().getExistingFile(CosmicCore.id("opv_ember_emitter")));
+            })
+            .item(BlockItem::new)
+            .build()
+            .register();
+
+    public static final BlockEntry<CosmicEmberEmitterBlock> COSMIC_EMBER_EMITTER_MAX = REGISTRATE
+            .block("max_ember_emitter", props -> new CosmicEmberEmitterBlock(props, 14))
+            .initialProperties(RegistryManager.EMBER_EMITTER::get)
+            .exBlockstate((ctx, prov) -> {
+                prov.directionalBlock(ctx.getEntry(), prov.models().getExistingFile(CosmicCore.id("max_ember_emitter")));
+            })
+            .item(BlockItem::new)
+            .build()
+            .register();
+
 
     // GLASS BLOCKS
     public static final BlockEntry<Block> ZBLAN_REINFORCED_GLASS = createGlassCasingBlock(
