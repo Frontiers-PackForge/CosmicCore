@@ -1916,7 +1916,19 @@ public class CosmicItems {
             .properties(p -> p.stacksTo(64))
             .defaultModel()
             .register();
-
+    // BOULE AND WAFER
+    public static final ItemEntry<ComponentItem> LIVINGROCK_ALUMINATE_BOULE = REGISTRATE
+            .item("livingrock_aluminate_boule", ComponentItem::create)
+            .lang("Livingrock Aluminate Boule")
+            .properties(p -> p.stacksTo(64))
+            .defaultModel()
+            .register();
+    public static final ItemEntry<ComponentItem> LIVINGROCK_ALUMINATE_WAFER = REGISTRATE
+            .item("livirock_aluminite_wafer", ComponentItem::create)
+            .lang("Livingrock Aluminate Wafer")
+            .properties(p -> p.stacksTo(64))
+            .defaultModel()
+            .register();
     // CHIPS
     public static final ItemEntry<ComponentItem> CAPACITY_CHIP = REGISTRATE
             .item("capacity_chip", ComponentItem::create)

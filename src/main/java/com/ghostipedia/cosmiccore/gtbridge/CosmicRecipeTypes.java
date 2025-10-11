@@ -1,6 +1,7 @@
 package com.ghostipedia.cosmiccore.gtbridge;
 
 import com.ghostipedia.cosmiccore.api.CosmicGuiTextures;
+import com.ghostipedia.cosmiccore.api.capability.recipe.EmberRecipeCapability;
 import com.ghostipedia.cosmiccore.api.capability.recipe.SoulRecipeCapability;
 import com.ghostipedia.cosmiccore.common.data.CosmicSounds;
 
@@ -239,12 +240,24 @@ public class CosmicRecipeTypes {
             });
     public static final GTRecipeType DAWN_FORGE = GTRecipeTypes.register("dawn_forge", GTRecipeTypes.MULTIBLOCK)
             .setMaxIOSize(8, 1, 2, 0)
+            .setMaxSize(IO.IN, EmberRecipeCapability.CAP, 1)
             .setSound(DAWN_FORGE_SFX)
             .setMaxTooltips(5)
             .setProgressBar(CosmicGuiTextures.DAWN_FORGE, ProgressTexture.FillDirection.ALWAYS_FULL);
+
+    public static final GTRecipeType ARCANE_CRUCIBLE = GTRecipeTypes
+            .register("arcane_crucible", GTRecipeTypes.MULTIBLOCK)
+            .setMaxIOSize(6, 4, 3, 3)
+            .setMaxSize(IO.IN, EmberRecipeCapability.CAP, 1)
+            .setMaxSize(IO.IN, SoulRecipeCapability.CAP, 1)
+            .setSound(DAWN_FORGE_SFX)
+            .setMaxTooltips(7)
+            .setProgressBar(GuiTextures.PROGRESS_BAR_MASS_FAB, LEFT_TO_RIGHT);
+
     public static final GTRecipeType MANA_ETCHING_FACTORY = GTRecipeTypes
             .register("mana_etching", GTRecipeTypes.MULTIBLOCK)
             .setMaxIOSize(3, 2, 3, 0)
+            .setMaxSize(IO.IN, EmberRecipeCapability.CAP, 1)
             .setSound(DAWN_FORGE_SFX)
             .setMaxTooltips(5)
             .setProgressBar(GuiTextures.PROGRESS_BAR_CRYSTALLIZATION, LEFT_TO_RIGHT);

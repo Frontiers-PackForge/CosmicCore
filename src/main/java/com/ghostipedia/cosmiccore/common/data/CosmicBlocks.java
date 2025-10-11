@@ -223,22 +223,6 @@ public class CosmicBlocks {
             "iron_plated_deepslate_tile",
             CosmicCore.id("block/casings/cosmetic/iron_plated_deepslate_tile"));
 
-    // public static final BlockEntry<StairBlock> IRON_PLATED_DEEPSLATE_STAIRS = REGISTRATE
-    // .block("iron_plated_deepslate_tile_stairs", properties -> new
-    // StairBlock(IRON_PLATED_DEEPSLATE_BLOCK::getDefaultState, properties))
-    // .initialProperties(IRON_PLATED_DEEPSLATE_BLOCK)
-    // .properties(p ->
-    // p.isValidSpawn(((blockState, blockGetter, blockPos, entityType) -> false))
-    // .speedFactor(1.25f)
-    // .requiresCorrectToolForDrops()
-    // .strength(5, 6)
-    // .sound(SoundType.NETHERITE_BLOCK))
-    // .blockstate((ctx, prov) -> prov.stairsBlock(ctx.get(), new
-    // ResourceLocation("cosmiccore:block/casings/cosmetic/iron_plated_deepslate_tile")))
-    // .item()
-    // .build()
-    // .register();
-
     // GLASS BLOCKS
     public static final BlockEntry<Block> ZBLAN_REINFORCED_GLASS = createGlassCasingBlock(
             "zblan_glass", CosmicCore.id("block/casings/glass/zblan_glass"), () -> RenderType::translucent);
