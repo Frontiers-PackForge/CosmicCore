@@ -5,5 +5,4 @@ public interface ICosmicEmberStats {
     double transfer();
 
     double pull();
-
 }

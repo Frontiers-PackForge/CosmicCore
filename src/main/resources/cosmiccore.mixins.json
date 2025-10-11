@@ -9,6 +9,7 @@
     "client.MinecraftMixin",
     "client.SoundManagerMixin",
     "emi.RecipeScreenMixin",
+    "embers.EmberDialBlockMixin",
     "ldlib.CustomBakedModelMixin"
   ],
   "mixins": [
