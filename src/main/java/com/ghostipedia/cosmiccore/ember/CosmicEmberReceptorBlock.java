@@ -51,8 +51,8 @@ public class CosmicEmberReceptorBlock extends EmberReceiverBlock {
     @Override
     public void appendHoverText(ItemStack stack, @Nullable BlockGetter level, List<Component> tooltip,
                                 TooltipFlag flag) {
-        long capacity = (long) (1000 * Math.pow(4, tier));
-        long transfer = (long) (1000 * Math.pow(4, tier + 2));
+        long capacity = (long) (50 * Math.pow(4, tier));
+        long transfer = (long) (250 * Math.pow(4, tier + 2));
         tooltip.add(Component.translatable("cosmiccore.ember.capacity",
                 Component.literal(FormattingUtil.formatNumberReadable(capacity)).withStyle(ChatFormatting.GOLD)));
         tooltip.add(Component.translatable("cosmiccore.ember.transfer",

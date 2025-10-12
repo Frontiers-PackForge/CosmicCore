@@ -58,11 +58,11 @@ public class EmberHatchPartMachine extends TieredIOPartMachine {
     }
 
     public static double getMaxCapacity(int tier) {
-        return 4000 * Math.pow(4, tier);
+        return 1000 * Math.pow(4, tier);
     }
 
     public static double getMaxConsumption(int tier) {
-        return 2000 * Math.pow(4, tier);
+        return 500 * Math.pow(4, tier);
     }
 
     @Override

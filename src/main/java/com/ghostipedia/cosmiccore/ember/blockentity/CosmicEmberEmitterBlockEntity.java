@@ -33,17 +33,17 @@ public class CosmicEmberEmitterBlockEntity extends EmberEmitterBlockEntity imple
 
     @Override
     public double transfer() {
-        return 1000 * Math.pow(4, tier);
+        return 250 * Math.pow(4, tier);
     }
 
     @Override
     public double pull() {
-        return 250 * Math.pow(4, tier);
+        return 50 * Math.pow(4, tier);
     }
 
     public CosmicEmberEmitterBlockEntity(BlockEntityType<?> type, BlockPos pPos, BlockState pBlockState, int tier) {
         super(type, pPos, pBlockState);
-        capability.setEmberCapacity(1000 * Math.pow(4, tier + 2));
+        capability.setEmberCapacity(250 * Math.pow(4, tier + 2));
         this.tier = tier;
     }
 

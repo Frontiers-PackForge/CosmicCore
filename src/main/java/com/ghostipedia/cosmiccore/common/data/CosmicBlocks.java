@@ -205,6 +205,12 @@ public class CosmicBlocks {
     public static final BlockEntry<Block> GEARBOX_NAQUADRIA = createCasingBlock(
             "machine_casing_gearbox_naquadria",
             CosmicCore.id("block/casings/gearbox/machine_casing_gearbox_naquadria"));
+
+
+    public static final BlockEntry<Block> ETHERSTEEL_PLATED_ASH_TILES = createStoneCasingBlock(
+            "ethersteel_plated_ash_tiles",
+            CosmicCore.id("block/casings/solid/ethersteel_plated_ash_tiles"));
+
     // I think i deleted the uh, yeah..
     public static final BlockEntry<ActiveBlock> CASING_HEAT_VENT = createActiveCasing("heat_fan",
             "block/variant/heat_fan");
@@ -871,6 +877,26 @@ public class CosmicBlocks {
                 .build()
                 .register();
     }
+
+    public static BlockEntry<Block> createStoneCasingBlock(String name,
+                                                       ResourceLocation texture) {
+        return REGISTRATE.block(name, Block::new)
+                .initialProperties( () -> Blocks.DEEPSLATE)
+                .properties(p -> p.isValidSpawn(((blockState, blockGetter, blockPos, entityType) -> false))
+                        .requiresCorrectToolForDrops()
+                        .strength(5, 6)
+                        .sound(SoundType.DEEPSLATE_TILES))
+                .addLayer(() -> RenderType::solid)
+                .exBlockstate(GTModels.cubeAllModel(texture))
+                .tag(BlockTags.MINEABLE_WITH_PICKAXE)
+                .item(BlockItem::new)
+                .build()
+                .register();
+
+
+    }
+
+
 
     public static void init() {}
 }
