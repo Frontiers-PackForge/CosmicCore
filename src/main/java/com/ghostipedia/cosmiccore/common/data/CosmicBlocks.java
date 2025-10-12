@@ -587,7 +587,7 @@ public class CosmicBlocks {
             .build()
             .register();
 
-    {
+    static {
         EMBER_EMITTER_BLOCKS.put(0, COSMIC_EMBER_EMITTER_STEAM);
         EMBER_EMITTER_BLOCKS.put(1, COSMIC_EMBER_EMITTER_LV);
         EMBER_EMITTER_BLOCKS.put(2, COSMIC_EMBER_EMITTER_MV);
