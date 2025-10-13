@@ -33,7 +33,7 @@ public class CosmicEmberReceptorBlockEntity extends EmberReceiverBlockEntity imp
 
     public CosmicEmberReceptorBlockEntity(BlockEntityType<?> type, BlockPos pPos, BlockState pBlockState, int tier) {
         super(type, pPos, pBlockState);
-        capability.setEmberCapacity(50 * Math.pow(4, tier + 2));
+        capability.setEmberCapacity(250 * Math.pow(4, tier + 2));
         this.tier = tier;
     }
 

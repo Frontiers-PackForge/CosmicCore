@@ -206,7 +206,6 @@ public class CosmicBlocks {
             "machine_casing_gearbox_naquadria",
             CosmicCore.id("block/casings/gearbox/machine_casing_gearbox_naquadria"));
 
-
     public static final BlockEntry<Block> ETHERSTEEL_PLATED_ASH_TILES = createStoneCasingBlock(
             "ethersteel_plated_ash_tiles",
             CosmicCore.id("block/casings/solid/ethersteel_plated_ash_tiles"));
@@ -879,9 +878,9 @@ public class CosmicBlocks {
     }
 
     public static BlockEntry<Block> createStoneCasingBlock(String name,
-                                                       ResourceLocation texture) {
+                                                           ResourceLocation texture) {
         return REGISTRATE.block(name, Block::new)
-                .initialProperties( () -> Blocks.DEEPSLATE)
+                .initialProperties(() -> Blocks.DEEPSLATE)
                 .properties(p -> p.isValidSpawn(((blockState, blockGetter, blockPos, entityType) -> false))
                         .requiresCorrectToolForDrops()
                         .strength(5, 6)
@@ -892,11 +891,7 @@ public class CosmicBlocks {
                 .item(BlockItem::new)
                 .build()
                 .register();
-
-
     }
-
-
 
     public static void init() {}
 }

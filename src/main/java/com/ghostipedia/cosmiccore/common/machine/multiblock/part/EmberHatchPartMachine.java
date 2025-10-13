@@ -28,6 +28,7 @@ public class EmberHatchPartMachine extends TieredIOPartMachine {
 
     // Cache that updates when emberContainer.capability updates, synced for the UI
     @DescSynced
+    @Persisted
     public double cachedEmber = 0;
 
     @Persisted
