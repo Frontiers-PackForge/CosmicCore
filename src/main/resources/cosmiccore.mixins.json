@@ -49,6 +49,7 @@
     "gtceu.RecipeOutputProviderMixin",
     "gtceu.WorkableBlockProviderMixin",
     "emi.EmiApiMixin",
+    "gtceu.MetaMachineBlockEntityMixin",
     "gtceu.MetaMachineBlockMixin",
     "gtceu.MetaMachineMixin",
     "gtceu.PipeBlockEntityMixin",
