@@ -20,6 +20,7 @@
     "ApotheosisRecipeHelperMixin",
     "ApothSmithingCategoryMixin",
     "BlockPatternMixin",
+    "BlocksMixin",
     "ComponentItemMixin",
     "DivingHelmetItemMixin",
     "GTValuesMixin",
@@ -39,15 +40,15 @@
     "ae2.eudisplay.EUAddSettingMixin",
     "client.CosmicCoreRemainingAirOverlayMixin",
     "emi.EmiApiMixin",
+    "gtceu.MetaMachineBlockEntityMixin",
     "gtceu.MetaMachineBlockMixin",
     "gtceu.MetaMachineMixin",
     "gtceu.PipeBlockEntityMixin",
     "gtceu.PipeBlockMixin",
     "lso.FrostbiteEffectMixin",
     "lso.HeatstrokeEffectMixin",
-    "tinkers.ModifiableItemMixin",
     "lso.TemperatureCapabilityMixin",
-    "gtceu.MetaMachineBlockEntityMixin"
+    "tinkers.ModifiableItemMixin"
   ],
   "injectors": {
     "defaultRequire": 1,
