@@ -12,7 +12,7 @@ import org.spongepowered.asm.mixin.injection.*;
  */
 
 @Unique
-@Mixin(value = Blocks.class, remap = false)
+@Mixin(value = Blocks.class, remap = true)
 public class BlocksMixin {
 
     @ModifyArg(
