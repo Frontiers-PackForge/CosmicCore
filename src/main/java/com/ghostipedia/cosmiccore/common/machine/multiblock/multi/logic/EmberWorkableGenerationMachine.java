@@ -2,8 +2,6 @@ package com.ghostipedia.cosmiccore.common.machine.multiblock.multi.logic;
 
 import com.gregtechceu.gtceu.api.machine.IMachineBlockEntity;
 import com.gregtechceu.gtceu.api.machine.multiblock.WorkableElectricMultiblockMachine;
-import com.gregtechceu.gtceu.api.machine.trait.RecipeLogic;
-import com.gregtechceu.gtceu.api.recipe.RecipeHelper;
 
 public class EmberWorkableGenerationMachine extends WorkableElectricMultiblockMachine {
 
@@ -19,18 +17,18 @@ public class EmberWorkableGenerationMachine extends WorkableElectricMultiblockMa
     // TODO: Machine Fails and recipe voids if per-Tick is not satisfied.
     @Override
     public boolean onWorking() {
-//        var logic = this.getRecipeLogic();
-//        var recipe = recipeLogic.getLastRecipe();
-//
-//        if (recipe != null && recipeLogic.isWorking()) {
-//            var validIngredients = RecipeHelper.matchTickRecipe(this.getRecipeLogic().machine, recipe);
-//            if (!validIngredients.isSuccess()) {
-//                recipeLogic.interruptRecipe();
-//                recipeLogic.setStatus(RecipeLogic.Status.SUSPEND);
-//                return false;
-//            }
-//            return super.onWorking();
-//        }
+        // var logic = this.getRecipeLogic();
+        // var recipe = recipeLogic.getLastRecipe();
+        //
+        // if (recipe != null && recipeLogic.isWorking()) {
+        // var validIngredients = RecipeHelper.matchTickRecipe(this.getRecipeLogic().machine, recipe);
+        // if (!validIngredients.isSuccess()) {
+        // recipeLogic.interruptRecipe();
+        // recipeLogic.setStatus(RecipeLogic.Status.SUSPEND);
+        // return false;
+        // }
+        // return super.onWorking();
+        // }
         return super.onWorking();
     }
 }

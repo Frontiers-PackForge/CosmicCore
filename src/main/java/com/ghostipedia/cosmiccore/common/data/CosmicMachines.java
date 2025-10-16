@@ -276,8 +276,6 @@ public class CosmicMachines {
                     Component.translatable("gtceu.part_sharing.enabled"))
             .register();
 
-
-
     public static final MachineDefinition[] ENERGY_OUTPUT_HATCH_4A = registerTieredMachines("energy_output_hatch_4a",
             (holder, tier) -> new EnergyHatchPartMachine(holder, tier, OUT, 4),
             (tier, builder) -> builder
@@ -286,7 +284,7 @@ public class CosmicMachines {
                     .abilities(PartAbility.OUTPUT_ENERGY)
                     .modelProperty(IS_FORMED, false)
                     .tooltips(Component.translatable("gtceu.universal.tooltip.voltage_out",
-                                    FormattingUtil.formatNumbers(V[tier]), VNF[tier]),
+                            FormattingUtil.formatNumbers(V[tier]), VNF[tier]),
                             Component.translatable("gtceu.universal.tooltip.amperage_out", 4),
                             Component.translatable("gtceu.universal.tooltip.energy_storage_capacity",
                                     FormattingUtil
@@ -304,7 +302,7 @@ public class CosmicMachines {
                     .abilities(PartAbility.OUTPUT_ENERGY)
                     .modelProperty(IS_FORMED, false)
                     .tooltips(Component.translatable("gtceu.universal.tooltip.voltage_out",
-                                    FormattingUtil.formatNumbers(V[tier]), VNF[tier]),
+                            FormattingUtil.formatNumbers(V[tier]), VNF[tier]),
                             Component.translatable("gtceu.universal.tooltip.amperage_out", 16),
                             Component.translatable("gtceu.universal.tooltip.energy_storage_capacity",
                                     FormattingUtil
@@ -870,10 +868,6 @@ public class CosmicMachines {
         // GCYMMachines.MEGA_BLAST_FURNACE.setRenderWorldPreview(false);
         GTMultiMachines.POWER_SUBSTATION.setRenderXEIPreview(false);
         GTMultiMachines.POWER_SUBSTATION.setRenderWorldPreview(false);
-
-
-
-
 
         for (MultiblockMachineDefinition definition : FUSION_REACTOR) {
             if (definition == null) continue;
