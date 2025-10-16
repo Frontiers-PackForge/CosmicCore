@@ -16,19 +16,21 @@ public class EmberWorkableGenerationMachine extends WorkableElectricMultiblockMa
         return false;
     }
 
-    //Machine Fails and recipe voids if per-Tick is not satisfied.
+    // TODO: Machine Fails and recipe voids if per-Tick is not satisfied.
     @Override
     public boolean onWorking() {
-        var recipe = recipeLogic.getLastRecipe();
-        if (recipe != null) {
-            var validIngredients = RecipeHelper.matchTickRecipe(this.getRecipeLogic().machine, recipe);
-            if (!validIngredients.isSuccess()){
-                recipeLogic.interruptRecipe();
-                recipeLogic.setStatus(RecipeLogic.Status.SUSPEND);
-                return false;
-            }
-            return true;
-        }
+//        var logic = this.getRecipeLogic();
+//        var recipe = recipeLogic.getLastRecipe();
+//
+//        if (recipe != null && recipeLogic.isWorking()) {
+//            var validIngredients = RecipeHelper.matchTickRecipe(this.getRecipeLogic().machine, recipe);
+//            if (!validIngredients.isSuccess()) {
+//                recipeLogic.interruptRecipe();
+//                recipeLogic.setStatus(RecipeLogic.Status.SUSPEND);
+//                return false;
+//            }
+//            return super.onWorking();
+//        }
         return super.onWorking();
     }
 }
