@@ -96,6 +96,7 @@ public class NotifiableEmberContainer extends NotifiableRecipeHandlerTrait<Doubl
             ember -= canOutput;
         } else if (io == IO.OUT) {
             var canInput = maxCapacity - capability.getEmber();
+            if (canInput <= 0) return Collections.singletonList(ember);
             if (!simulate) ember = capability.addAmount(Math.min(canInput, ember), true);
             ember -= canInput;
         }

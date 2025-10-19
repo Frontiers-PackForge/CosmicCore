@@ -28,6 +28,7 @@ public class EmberHatchPartMachine extends TieredIOPartMachine {
 
     // Cache that updates when emberContainer.capability updates, synced for the UI
     @DescSynced
+    @Persisted
     public double cachedEmber = 0;
 
     @Persisted
@@ -58,11 +59,11 @@ public class EmberHatchPartMachine extends TieredIOPartMachine {
     }
 
     public static double getMaxCapacity(int tier) {
-        return Math.pow(tier, 2) * 1000;
+        return 1000 * Math.pow(4, tier);
     }
 
     public static double getMaxConsumption(int tier) {
-        return Math.pow(tier, 2) * 250;
+        return 500 * Math.pow(4, tier);
     }
 
     @Override
