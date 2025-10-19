@@ -1,34 +1,32 @@
 package com.ghostipedia.cosmiccore.common.machine.multiblock.multi.modular;
 
-import com.ghostipedia.cosmiccore.common.data.CosmicModularMachines;
 import com.ghostipedia.cosmiccore.common.machine.multiblock.multi.*;
-import com.ghostipedia.cosmiccore.common.machine.multiblock.multi.modular.VomahineShredder.ShredderMultiblock;
 
 // Class for Bulk-Init
 public class MultiblockInit {
 
     public static void init() {
         // Vomahine Modular Hardware
-        ShredderMultiblock.init();
+        // ShredderMultiblock.init();
 
         // MegaStructures
         PrismaticOreFoundry.init();
         StellarIris.init();
-        StellarStarBallast.init();
+        // StellarStarBallast.init();
         HemophagicTransfuser.init();
         PlasmiteDistillery.init();
         HeavyAssembler.init();
         PCBFoundry.init();
         WelderMulti.init();
         CryogenicsChamber.init();
-        StarLadder.init();
+        // StarLadder.init();
         VoidMiner.init();
         FluidVoidRig.init();
         VoraxReactor.init();
         SpiritCrucible.init();
         AtmoPump.init();
         DroneStation.init();
-        CosmicModularMachines.init();
+        // CosmicModularMachines.init();
         ManaDigitizer.init();
         ArcaneDistillery.init();
         BioVat.init();
@@ -57,5 +55,6 @@ public class MultiblockInit {
         ManaEtchingFactory.init();
         ArcaneCrucible.init();
         CinderHearth.init();
+        PyrothermicRefinery.init();
     }
 }

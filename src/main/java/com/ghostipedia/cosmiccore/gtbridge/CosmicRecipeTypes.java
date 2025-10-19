@@ -263,6 +263,15 @@ public class CosmicRecipeTypes {
             .setMaxTooltips(7)
             .setProgressBar(GuiTextures.PROGRESS_BAR_MASS_FAB, LEFT_TO_RIGHT);
 
+    public static final GTRecipeType PYROTHERMIC_REFINERY = GTRecipeTypes
+            .register("pyrothermic_refinery", GTRecipeTypes.MULTIBLOCK)
+            .setMaxIOSize(3, 3, 3, 3)
+            .setMaxSize(IO.IN, EmberRecipeCapability.CAP, 1)
+            .setMaxSize(IO.IN, SoulRecipeCapability.CAP, 1)
+            .setSound(GTSoundEntries.JET_ENGINE)
+            .setMaxTooltips(3)
+            .setProgressBar(GuiTextures.PROGRESS_BAR_MASS_FAB, LEFT_TO_RIGHT);
+
     public static final GTRecipeType MANA_ETCHING_FACTORY = GTRecipeTypes
             .register("mana_etching", GTRecipeTypes.MULTIBLOCK)
             .setMaxIOSize(3, 2, 3, 0)

@@ -48,9 +48,7 @@ import com.gregtechceu.gtceu.common.machine.multiblock.electric.ActiveTransforme
 import com.gregtechceu.gtceu.common.machine.multiblock.electric.FusionReactorMachine;
 import com.gregtechceu.gtceu.common.machine.multiblock.electric.PowerSubstationMachine;
 import com.gregtechceu.gtceu.common.machine.multiblock.part.EnergyHatchPartMachine;
-import com.gregtechceu.gtceu.common.machine.multiblock.part.RotorHolderPartMachine;
 import com.gregtechceu.gtceu.config.ConfigHolder;
-import com.gregtechceu.gtceu.data.lang.LangHandler;
 import com.gregtechceu.gtceu.utils.FormattingUtil;
 
 import net.minecraft.core.Direction;
@@ -74,7 +72,6 @@ import static com.ghostipedia.cosmiccore.gtbridge.CosmicRecipeTypes.BIO_LAB;
 import static com.gregtechceu.gtceu.api.GTValues.*;
 import static com.gregtechceu.gtceu.api.capability.recipe.IO.OUT;
 import static com.gregtechceu.gtceu.api.machine.property.GTMachineModelProperties.*;
-import static com.gregtechceu.gtceu.api.machine.property.GTMachineModelProperties.IS_EMISSIVE_ROTOR;
 import static com.gregtechceu.gtceu.api.pattern.Predicates.*;
 import static com.gregtechceu.gtceu.api.pattern.util.RelativeDirection.*;
 import static com.gregtechceu.gtceu.common.data.GCYMBlocks.*;
@@ -311,22 +308,6 @@ public class CosmicMachines {
                     .overlayTieredHullModel("energy_output_hatch_16a")
                     .register(),
             GTValues.tiersBetween(ULV, HV));
-
-    public static final MachineDefinition[] ROTOR_HOLDER = registerTieredMachines("rotor_holder",
-            RotorHolderPartMachine::new,
-            (tier, builder) -> builder
-                    .langValue("%s Rotor Holder".formatted(VNF[tier]))
-                    .rotationState(RotationState.ALL)
-                    .abilities(PartAbility.ROTOR_HOLDER)
-                    .modelProperty(IS_FORMED, false)
-                    .modelProperty(HAS_ROTOR, false)
-                    .modelProperty(IS_ROTOR_SPINNING, false)
-                    .modelProperty(IS_EMISSIVE_ROTOR, false)
-                    .model(createRotorHolderModel())
-                    .tooltips(LangHandler.getMultiLang("gtceu.machine.rotor_holder.tooltip"))
-                    .tooltips(Component.translatable("gtceu.part_sharing.disabled"))
-                    .register(),
-            GTValues.tiersBetween(LV, MV));
 
     // Enable If needed Inside of Dev
     // public static final MultiblockMachineDefinition SOUL_TESTER = REGISTRATE.multiblock("soul_tester",

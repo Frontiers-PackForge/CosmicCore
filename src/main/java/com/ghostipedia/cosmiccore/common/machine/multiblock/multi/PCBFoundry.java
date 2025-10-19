@@ -30,7 +30,7 @@ public class PCBFoundry {
             .recipeType(CosmicRecipeTypes.PCB_FABRICATOR)
             .appearanceBlock(BICHROMAL_NEVRAMITE_CASING)
             .partAppearance((controller, part, side) -> BICHROMAL_NEVRAMITE_CASING.getDefaultState())
-            .recipeModifiers(CosmicRecipeModifiers::innateParallel,
+            .recipeModifiers(CosmicRecipeModifiers::innateParallel4x,
                     GTRecipeModifiers.ELECTRIC_OVERCLOCK.apply(OverclockingLogic.NON_PERFECT_OVERCLOCK_SUBTICK),
                     GTRecipeModifiers.BATCH_MODE)
             // spotless:off

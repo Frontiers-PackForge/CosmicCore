@@ -3,9 +3,9 @@ package com.ghostipedia.cosmiccore.common.machine.multiblock.multi.logic;
 import com.gregtechceu.gtceu.api.machine.IMachineBlockEntity;
 import com.gregtechceu.gtceu.api.machine.multiblock.WorkableElectricMultiblockMachine;
 
-public class EmberWorkableGenerationMachine extends WorkableElectricMultiblockMachine {
+public class RegressionPersistentWorkableElectricMachine extends WorkableElectricMultiblockMachine {
 
-    public EmberWorkableGenerationMachine(IMachineBlockEntity holder, Object... args) {
+    public RegressionPersistentWorkableElectricMachine(IMachineBlockEntity holder, Object... args) {
         super(holder, args);
     }
 

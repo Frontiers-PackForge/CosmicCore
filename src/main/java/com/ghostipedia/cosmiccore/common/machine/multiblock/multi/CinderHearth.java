@@ -2,7 +2,7 @@ package com.ghostipedia.cosmiccore.common.machine.multiblock.multi;
 
 import com.ghostipedia.cosmiccore.CosmicCore;
 import com.ghostipedia.cosmiccore.common.data.CosmicBlocks;
-import com.ghostipedia.cosmiccore.common.machine.multiblock.multi.logic.EmberWorkableGenerationMachine;
+import com.ghostipedia.cosmiccore.common.machine.multiblock.multi.logic.RegressionPersistentWorkableElectricMachine;
 import com.ghostipedia.cosmiccore.gtbridge.CosmicRecipeTypes;
 
 import com.gregtechceu.gtceu.api.data.RotationState;
@@ -20,7 +20,7 @@ import static com.gregtechceu.gtceu.api.pattern.Predicates.*;
 public class CinderHearth {
 
     public final static MultiblockMachineDefinition CINDER_HEARTH = REGISTRATE
-            .multiblock("cinder_hearth", EmberWorkableGenerationMachine::new)
+            .multiblock("cinder_hearth", RegressionPersistentWorkableElectricMachine::new)
             .rotationState(RotationState.NON_Y_AXIS)
             .recipeType(CosmicRecipeTypes.CINDER_HEARTH)
             .appearanceBlock(RegistryManager.CAMINITE_TILES)
