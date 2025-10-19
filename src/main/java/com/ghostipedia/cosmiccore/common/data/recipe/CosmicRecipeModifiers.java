@@ -103,7 +103,7 @@ public class CosmicRecipeModifiers {
                 .build();
     }
 
-    public static @NotNull ModifierFunction innateParallel(MetaMachine machine, GTRecipe recipe) {
+    public static @NotNull ModifierFunction innateParallel4x(MetaMachine machine, GTRecipe recipe) {
         if (machine instanceof WorkableMultiblockMachine parallelMachine) {
             if (parallelMachine.getParallelHatch().isPresent()) {
                 int actualParallel = ParallelLogic.getParallelAmount(parallelMachine, recipe,
@@ -113,7 +113,6 @@ public class CosmicRecipeModifiers {
                         .modifyAllContents(ContentModifier.multiplier(actualParallel))
                         .eutMultiplier(actualParallel)
                         .parallels(actualParallel)
-                        // .durationMultiplier(actualParallel/4f)
                         .build();
             }
         }

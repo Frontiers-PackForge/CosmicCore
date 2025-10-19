@@ -245,6 +245,15 @@ public class CosmicRecipeTypes {
             .setMaxTooltips(5)
             .setProgressBar(CosmicGuiTextures.DAWN_FORGE, ProgressTexture.FillDirection.ALWAYS_FULL);
 
+    public static final GTRecipeType CINDER_HEARTH = GTRecipeTypes
+            .register("cinder_hearth", GTRecipeTypes.MULTIBLOCK)
+            .setMaxIOSize(3, 0, 3, 3)
+            .setMaxSize(IO.OUT, EmberRecipeCapability.CAP, 1)
+            .setMaxSize(IO.IN, SoulRecipeCapability.CAP, 1)
+            .setSound(DAWN_FORGE_SFX)
+            .setMaxTooltips(7)
+            .setProgressBar(GuiTextures.PROGRESS_BAR_BOILER_HEAT, ProgressTexture.FillDirection.DOWN_TO_UP);
+
     public static final GTRecipeType ARCANE_CRUCIBLE = GTRecipeTypes
             .register("arcane_crucible", GTRecipeTypes.MULTIBLOCK)
             .setMaxIOSize(6, 4, 3, 3)
@@ -252,6 +261,15 @@ public class CosmicRecipeTypes {
             .setMaxSize(IO.IN, SoulRecipeCapability.CAP, 1)
             .setSound(DAWN_FORGE_SFX)
             .setMaxTooltips(7)
+            .setProgressBar(GuiTextures.PROGRESS_BAR_MASS_FAB, LEFT_TO_RIGHT);
+
+    public static final GTRecipeType PYROTHERMIC_REFINERY = GTRecipeTypes
+            .register("pyrothermic_refinery", GTRecipeTypes.MULTIBLOCK)
+            .setMaxIOSize(3, 3, 3, 3)
+            .setMaxSize(IO.IN, EmberRecipeCapability.CAP, 1)
+            .setMaxSize(IO.IN, SoulRecipeCapability.CAP, 1)
+            .setSound(GTSoundEntries.JET_ENGINE)
+            .setMaxTooltips(3)
             .setProgressBar(GuiTextures.PROGRESS_BAR_MASS_FAB, LEFT_TO_RIGHT);
 
     public static final GTRecipeType MANA_ETCHING_FACTORY = GTRecipeTypes
