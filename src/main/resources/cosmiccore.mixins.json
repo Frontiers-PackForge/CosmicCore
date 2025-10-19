@@ -17,6 +17,7 @@
     "ApotheosisRecipeHelperMixin",
     "ApothSmithingCategoryMixin",
     "BlockPatternMixin",
+    "BlocksMixin",
     "ComponentItemMixin",
     "DivingHelmetItemMixin",
     "GendustryJEIPluginMixin",
