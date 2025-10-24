@@ -36,6 +36,11 @@ public class CosmicRecipeTypes {
             .setSound(CosmicSounds.LAMINATOR)
             .setMaxIOSize(3, 2, 2, 0)
             .setProgressBar(GuiTextures.PROGRESS_BAR_ARROW, ProgressTexture.FillDirection.LEFT_TO_RIGHT);
+    public static final GTRecipeType DAWNFORGE_ECLIPSED = GTRecipeTypes
+            .register("eclipsed_dawnforge", ELECTRIC)
+            .setSound(CosmicSounds.LAMINATOR)
+            .setMaxIOSize(12, 1, 3, 1)
+            .setProgressBar(GuiTextures.PROGRESS_BAR_ARROW, ProgressTexture.FillDirection.LEFT_TO_RIGHT);
     public static final GTRecipeType VORAX = GTRecipeTypes
             .register("vorax", ELECTRIC)
             .setSound(CosmicSounds.VOARX)
@@ -434,6 +439,11 @@ public class CosmicRecipeTypes {
         });
         LARGE_CHEMICAL_RECIPES.onRecipeBuild((builder, provider) -> {
             INDUSTRIAL_CHEMVAT.copyFrom(builder)
+                    .save(provider);
+        });
+
+        DAWN_FORGE.onRecipeBuild((builder, provider) -> {
+            DAWNFORGE_ECLIPSED.copyFrom(builder)
                     .save(provider);
         });
 

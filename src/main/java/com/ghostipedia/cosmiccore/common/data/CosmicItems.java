@@ -1218,6 +1218,31 @@ public class CosmicItems {
             .properties(p -> p.stacksTo(64))
             .defaultModel()
             .register();
+
+    public static final ItemEntry<ComponentItem> RUNEWOVEN_PCB = REGISTRATE
+            .item("runewoven_plastic_circuit_board", ComponentItem::create)
+            .lang("Runewoven Plastic Circuit Board")
+            .properties(p -> p.stacksTo(64))
+            .defaultModel()
+            .register();
+    public static final ItemEntry<ComponentItem> MANA_PCB = REGISTRATE
+            .item("plastic_circuit_board", ComponentItem::create)
+            .lang("Mana-doped Plastic Circuit Board")
+            .properties(p -> p.stacksTo(64))
+            .defaultModel()
+            .register();
+    public static final ItemEntry<ComponentItem> RUNIC_HEX_CPU = REGISTRATE.item("runic_hex_cpu", ComponentItem::create)
+            .lang("Hex Etched CPU Chip")
+            .properties(p -> p.stacksTo(64))
+            .defaultModel()
+            .register();
+    public static final ItemEntry<ComponentItem> RUNIC_HEX_CPU_WAFER = REGISTRATE
+            .item("runic_hex_cpu_wafer", ComponentItem::create)
+            .lang("Hex Etched CPU Wafer")
+            .properties(p -> p.stacksTo(64))
+            .defaultModel()
+            .register();
+
     public static final ItemEntry<ComponentItem> BLACKSTONE_PUSTULE = REGISTRATE
             .item("blackstone_pustule", ComponentItem::create)
             .lang("Blackstone Pustule")
@@ -1233,6 +1258,36 @@ public class CosmicItems {
     // .register();
 
     // New Circuits
+
+    // Hex circuits
+    public static final ItemEntry<ComponentItem> HEX_PROCESSOR = REGISTRATE
+            .item("hex_processor", ComponentItem::create)
+            .lang("Hex Processor")
+            .tag(CustomTags.MV_CIRCUITS)
+            .properties(p -> p.stacksTo(64))
+            .defaultModel()
+            .register();
+    public static final ItemEntry<ComponentItem> HEX_PROCESSOR_ASSEMBLY = REGISTRATE
+            .item("hex_processor_assembly", ComponentItem::create)
+            .lang("Hex Processor Assembly")
+            .tag(CustomTags.HV_CIRCUITS)
+            .properties(p -> p.stacksTo(64))
+            .defaultModel()
+            .register();
+    public static final ItemEntry<ComponentItem> HEX_PROCESSOR_SUPERCOMPUTER = REGISTRATE
+            .item("hex_processor_supercomputer", ComponentItem::create)
+            .lang("Hex Processor Supercomputer")
+            .tag(CustomTags.EV_CIRCUITS)
+            .properties(p -> p.stacksTo(64))
+            .defaultModel()
+            .register();
+    public static final ItemEntry<ComponentItem> HEX_PROCESSOR_MAINFRAME = REGISTRATE
+            .item("hex_processor_mainframe", ComponentItem::create)
+            .lang("Hex Processor Mainframe")
+            .tag(CustomTags.IV_CIRCUITS)
+            .properties(p -> p.stacksTo(64))
+            .defaultModel()
+            .register();
     // Harmonic (ZPM-UEV)
     public static final ItemEntry<ComponentItem> SONAR_PROCESSOR = REGISTRATE
             .item("harmonic_processor", ComponentItem::create)

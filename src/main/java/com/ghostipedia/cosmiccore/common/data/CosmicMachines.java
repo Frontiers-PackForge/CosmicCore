@@ -48,6 +48,7 @@ import com.gregtechceu.gtceu.common.machine.multiblock.electric.ActiveTransforme
 import com.gregtechceu.gtceu.common.machine.multiblock.electric.FusionReactorMachine;
 import com.gregtechceu.gtceu.common.machine.multiblock.electric.PowerSubstationMachine;
 import com.gregtechceu.gtceu.common.machine.multiblock.part.EnergyHatchPartMachine;
+import com.gregtechceu.gtceu.common.machine.multiblock.part.FluidHatchPartMachine;
 import com.gregtechceu.gtceu.config.ConfigHolder;
 import com.gregtechceu.gtceu.utils.FormattingUtil;
 
@@ -70,6 +71,7 @@ import static com.ghostipedia.cosmiccore.common.data.recipe.CosmicRecipeModifier
 import static com.ghostipedia.cosmiccore.common.machine.multiblock.electric.hpca.HPCAMachine.*;
 import static com.ghostipedia.cosmiccore.gtbridge.CosmicRecipeTypes.BIO_LAB;
 import static com.gregtechceu.gtceu.api.GTValues.*;
+import static com.gregtechceu.gtceu.api.capability.recipe.IO.IN;
 import static com.gregtechceu.gtceu.api.capability.recipe.IO.OUT;
 import static com.gregtechceu.gtceu.api.machine.property.GTMachineModelProperties.*;
 import static com.gregtechceu.gtceu.api.pattern.Predicates.*;
@@ -831,6 +833,18 @@ public class CosmicMachines {
             .abilities(STERILIZE_HATCH)
             .register();
 
+    public static final MachineDefinition[] FLUID_IMPORT_HATCH_4X_HV = CosmicMachinesUtils.registerFluidHatches(
+            "input_hatch_4x", "Quadruple Input Hatch", "fluid_hatch.import",
+            IO.IN, FluidHatchPartMachine.INITIAL_TANK_CAPACITY_4X, 4,
+            new int[] { GTValues.HV },
+            PartAbility.IMPORT_FLUIDS, PartAbility.IMPORT_FLUIDS_4X);
+
+    public static final MachineDefinition[] FLUID_EXPORT_HATCH_4X_HV = CosmicMachinesUtils.registerFluidHatches(
+            "output_hatch_4x", "Quadruple Output Hatch", "fluid_hatch.export",
+            IO.OUT, FluidHatchPartMachine.INITIAL_TANK_CAPACITY_4X, 4,
+            new int[] { GTValues.HV },                                   // only HV
+            PartAbility.EXPORT_FLUIDS, PartAbility.EXPORT_FLUIDS_4X);
+
     public static void init() {
         GTMultiMachines.LARGE_COMBUSTION_ENGINE.setRecipeTypes(new GTRecipeType[] { DUMMY_RECIPES });
         GTMultiMachines.LARGE_COMBUSTION_ENGINE.setRenderXEIPreview(false);
@@ -844,9 +858,9 @@ public class CosmicMachines {
         GTMultiMachines.ASSEMBLY_LINE.setRecipeModifier(new RecipeModifierList(COSMIC_MODULES, OC_NON_PERFECT));
         GTMultiMachines.ASSEMBLY_LINE.setAlwaysTryModifyRecipe(true);
         GTRecipeTypes.MIXER_RECIPES.setMaxSize(IO.IN, EmberRecipeCapability.CAP, 1);
-        // GCYMMachines.MEGA_BLAST_FURNACE.setRecipeTypes(new GTRecipeType[] { DUMMY_RECIPES });
-        // GCYMMachines.MEGA_BLAST_FURNACE.setRenderXEIPreview(false);
-        // GCYMMachines.MEGA_BLAST_FURNACE.setRenderWorldPreview(false);
+        GCYMMachines.MEGA_BLAST_FURNACE.setRecipeTypes(new GTRecipeType[] { DUMMY_RECIPES });
+        GCYMMachines.MEGA_BLAST_FURNACE.setRenderXEIPreview(false);
+        GCYMMachines.MEGA_BLAST_FURNACE.setRenderWorldPreview(false);
         GTMultiMachines.POWER_SUBSTATION.setRenderXEIPreview(false);
         GTMultiMachines.POWER_SUBSTATION.setRenderWorldPreview(false);
 

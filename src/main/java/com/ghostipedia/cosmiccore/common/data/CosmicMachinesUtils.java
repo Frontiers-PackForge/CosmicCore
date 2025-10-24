@@ -5,17 +5,20 @@ import com.ghostipedia.cosmiccore.common.machine.multiblock.multi.logic.ExoticCo
 import com.gregtechceu.gtceu.GTCEu;
 import com.gregtechceu.gtceu.api.GTValues;
 import com.gregtechceu.gtceu.api.capability.recipe.FluidRecipeCapability;
+import com.gregtechceu.gtceu.api.capability.recipe.IO;
 import com.gregtechceu.gtceu.api.capability.recipe.ItemRecipeCapability;
 import com.gregtechceu.gtceu.api.data.RotationState;
 import com.gregtechceu.gtceu.api.data.tag.TagPrefix;
 import com.gregtechceu.gtceu.api.machine.*;
 import com.gregtechceu.gtceu.api.machine.multiblock.PartAbility;
+import com.gregtechceu.gtceu.api.machine.property.GTMachineModelProperties;
 import com.gregtechceu.gtceu.api.pattern.FactoryBlockPattern;
 import com.gregtechceu.gtceu.api.recipe.GTRecipeType;
 import com.gregtechceu.gtceu.api.registry.registrate.MachineBuilder;
 import com.gregtechceu.gtceu.common.data.GTMaterialItems;
 import com.gregtechceu.gtceu.common.data.GTMaterials;
 import com.gregtechceu.gtceu.common.data.GTRecipeTypes;
+import com.gregtechceu.gtceu.common.machine.multiblock.part.FluidHatchPartMachine;
 import com.gregtechceu.gtceu.utils.FormattingUtil;
 
 import net.minecraft.network.chat.Component;
@@ -37,6 +40,8 @@ import static com.gregtechceu.gtceu.api.GTValues.V;
 import static com.gregtechceu.gtceu.api.pattern.Predicates.*;
 import static com.gregtechceu.gtceu.api.pattern.Predicates.blocks;
 import static com.gregtechceu.gtceu.common.data.machines.GTMachineUtils.workableTiered;
+import static com.gregtechceu.gtceu.common.data.models.GTMachineModels.OVERLAY_FLUID_HATCH_HALF_PX_TEX;
+import static com.gregtechceu.gtceu.common.data.models.GTMachineModels.OVERLAY_FLUID_HATCH_TEX;
 import static com.gregtechceu.gtceu.utils.FormattingUtil.toEnglishName;
 
 public class CosmicMachinesUtils {
@@ -149,5 +154,45 @@ public class CosmicMachinesUtils {
                         .langValue("High Pressure " + FormattingUtil.toEnglishName(name))
                         .tier(1));
         return Pair.of(lowTier, highTier);
+    }
+
+    /** Fluid hatch helper that uses our mod's REGISTRATE (keeps datagen happy). */
+    public static MachineDefinition[] registerFluidHatches(String name, String displayName, String tooltip,
+                                                           IO io, int initialCapacity, int slots,
+                                                           int[] tiers, PartAbility... abilities) {
+        final String pipeOverlay;
+        if (slots >= 9) {
+            pipeOverlay = "overlay_pipe_9x";
+        } else if (slots >= 4) {
+            pipeOverlay = "overlay_pipe_4x";
+        } else {
+            pipeOverlay = null;
+        }
+        final String ioOverlay = io == IO.OUT ? "overlay_pipe_out_emissive" : "overlay_pipe_in_emissive";
+        final String emissiveOverlay = slots > 4 ? OVERLAY_FLUID_HATCH_HALF_PX_TEX : OVERLAY_FLUID_HATCH_TEX;
+
+        return registerTieredMachines(
+                name,
+                (holder, tier) -> new FluidHatchPartMachine(holder, tier, io, initialCapacity, slots),
+                (tier, builder) -> builder
+                        .langValue(VNF[tier] + ' ' + displayName)
+                        .rotationState(RotationState.ALL)
+                        .colorOverlayTieredHullModel(ioOverlay, pipeOverlay, emissiveOverlay)
+                        .abilities(abilities)
+                        .modelProperty(GTMachineModelProperties.IS_FORMED, false)
+                        .tooltips(Component.translatable("gtceu.machine." + tooltip + ".tooltip"))
+                        .allowCoverOnFront(true)
+                        .tooltips(
+                                slots == 1 ? Component.translatable(
+                                        "gtceu.universal.tooltip.fluid_storage_capacity",
+                                        FormattingUtil.formatNumbers(
+                                                FluidHatchPartMachine.getTankCapacity(initialCapacity, tier))) :
+                                        Component.translatable(
+                                                "gtceu.universal.tooltip.fluid_storage_capacity_mult",
+                                                slots,
+                                                FormattingUtil.formatNumbers(
+                                                        FluidHatchPartMachine.getTankCapacity(initialCapacity, tier))))
+                        .register(),
+                tiers);
     }
 }
