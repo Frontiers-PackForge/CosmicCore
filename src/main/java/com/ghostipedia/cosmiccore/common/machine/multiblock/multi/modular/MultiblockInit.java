@@ -56,5 +56,6 @@ public class MultiblockInit {
         ArcaneCrucible.init();
         CinderHearth.init();
         PyrothermicRefinery.init();
+        EclipsedDawnForge.init();
     }
 }

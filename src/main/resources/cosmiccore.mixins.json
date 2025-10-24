@@ -8,8 +8,8 @@
     "client.AdAstraPlanetsScreenMixin",
     "client.MinecraftMixin",
     "client.SoundManagerMixin",
-    "emi.RecipeScreenMixin",
     "embers.EmberDialBlockMixin",
+    "emi.RecipeScreenMixin",
     "ldlib.CustomBakedModelMixin"
   ],
   "mixins": [
