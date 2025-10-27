@@ -3,7 +3,6 @@ package com.ghostipedia.cosmiccore.common.machine.multiblock.steam;
 import com.gregtechceu.gtceu.api.GTValues;
 import com.gregtechceu.gtceu.api.machine.IMachineBlockEntity;
 import com.gregtechceu.gtceu.api.machine.MetaMachine;
-import com.gregtechceu.gtceu.api.machine.feature.multiblock.IDisplayUIMachine;
 import com.gregtechceu.gtceu.common.machine.multiblock.steam.SteamParallelMultiblockMachine;
 import com.gregtechceu.gtceu.api.recipe.GTRecipe;
 import com.gregtechceu.gtceu.api.recipe.RecipeHelper;
@@ -13,7 +12,7 @@ import com.gregtechceu.gtceu.api.recipe.modifier.ParallelLogic;
 
 import org.jetbrains.annotations.NotNull;
 
-public class WeakSteamParallelMultiBlockMachine extends SteamParallelMultiblockMachine implements IDisplayUIMachine {
+public class WeakSteamParallelMultiBlockMachine extends SteamParallelMultiblockMachine {
 
     // if in millibuckets, this is 0.5, Meaning 0.5mb of steam -> 1 EU
     private static final double CONVERSION_RATE = 0.5D;
