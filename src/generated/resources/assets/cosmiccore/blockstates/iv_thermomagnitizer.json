@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=east": {
+      "model": "cosmiccore:block/machine/iv_thermomagnitizer",
+      "y": 90
+    },
+    "facing=north": {
+      "model": "cosmiccore:block/machine/iv_thermomagnitizer"
+    },
+    "facing=south": {
+      "model": "cosmiccore:block/machine/iv_thermomagnitizer",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "cosmiccore:block/machine/iv_thermomagnitizer",
+      "y": 270
+    }
+  }
+}

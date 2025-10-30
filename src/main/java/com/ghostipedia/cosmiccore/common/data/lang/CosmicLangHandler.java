@@ -116,6 +116,13 @@ public class CosmicLangHandler extends LangHandler {
         provider.add("cosmiccore.multiblock.magnetic_regen", "§aField Recovery Rate§f:§6 %sT/t");
         provider.add("gtceu.titan_fusion", "Titan Fusion Reactor"); // recipe type lang
 
+        // SB Flavor Texts
+        provider.add("cosmiccore.vaccum_bubbler.desc", "Floatation Station Machination");
+        provider.add("cosmiccore.thermomagnitizer.desc", "Heating and Magnets, what could go wrong");
+        provider.add("cosmiccore.calx_reactor.desc", "Working wonders with the Arcane");
+        provider.add("cosmiccore.mana_leaching_tub.desc", "Mana Soaker 9000");
+        provider.add("cosmiccore.roaster.desc", "Marshmallows not included");
+
         // gui lines
         provider.add("gui.cosmiccore.soul_hatch.label.import", "Soul Input Hatch");
         provider.add("gui.cosmiccore.soul_hatch.label.export", "Soul Output Hatch");
@@ -134,6 +141,9 @@ public class CosmicLangHandler extends LangHandler {
         provider.add("cosmiccore.recipe.fieldDecay", "§fField Decay: %sT/t");
         provider.add("cosmiccore.recipe.fieldSlam", "§fField Consumed: %sT");
         provider.add("cosmiccore.recipe.condition.titan.tooltip", "Requires Titan Reactor Tier: %s");
+
+        provider.add("cosmiccore.multiblock.heat_value", "§6Current Heat: %s");
+        provider.add("cosmiccore.multiblock.heat_capacity", "§cMax Heat: %s");
 
         provider.add("cosmiccore.multiblock.current_contagion", "§6Contagion Strength: %s");
         provider.add("cosmiccore.multiblock.contagion_rate", "§cContagion Rate: %s/t");

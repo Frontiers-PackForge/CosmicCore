@@ -198,6 +198,28 @@ public class CosmicRecipeTypes {
             .setSound(CosmicSounds.LAMINATOR)
             .setProgressBar(GuiTextures.PROGRESS_BAR_ARROW, ProgressTexture.FillDirection.LEFT_TO_RIGHT);
 
+    public static final GTRecipeType CALX_REACTOR = GTRecipeTypes
+            .register("calx_reactor", ELECTRIC)
+            .setMaxIOSize(2, 2, 1, 0)
+            .setProgressBar(GuiTextures.PROGRESS_BAR_ARROW, ProgressTexture.FillDirection.LEFT_TO_RIGHT);
+
+    public static final GTRecipeType ROASTER = GTRecipeTypes
+            .register("roaster", ELECTRIC)
+            .setMaxIOSize(2, 3, 1, 0)
+            .setProgressBar(GuiTextures.PROGRESS_BAR_ARROW, ProgressTexture.FillDirection.LEFT_TO_RIGHT);
+    public static final GTRecipeType MANA_LEACHING_TUB = GTRecipeTypes
+            .register("mana_leaching_tub", ELECTRIC)
+            .setMaxIOSize(1, 1, 2, 2)
+            .setProgressBar(GuiTextures.PROGRESS_BAR_ARROW, ProgressTexture.FillDirection.LEFT_TO_RIGHT);
+    public static final GTRecipeType THERMOMAG = GTRecipeTypes
+            .register("thermomagnitizer", ELECTRIC)
+            .setMaxIOSize(3, 2, 0, 0)
+            .setProgressBar(GuiTextures.PROGRESS_BAR_ARROW, ProgressTexture.FillDirection.LEFT_TO_RIGHT);
+    public static final GTRecipeType VAC_BUBBLER = GTRecipeTypes
+            .register("vacuum_bubbler", ELECTRIC)
+            .setMaxIOSize(2, 3, 2, 3)
+            .setProgressBar(GuiTextures.PROGRESS_BAR_ARROW, ProgressTexture.FillDirection.LEFT_TO_RIGHT);
+
     public static final GTRecipeType SPOOLING_MACHINE = GTRecipeTypes
             .register("spooling_machine", ELECTRIC)
             .setMaxIOSize(2, 2, 1, 0)
