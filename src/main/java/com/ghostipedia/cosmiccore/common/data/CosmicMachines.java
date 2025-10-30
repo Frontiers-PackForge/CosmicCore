@@ -191,6 +191,79 @@ public class CosmicMachines {
                     .tooltips(Component.translatable("gtceu.machine.parallel_hatch_mk_1.tooltip"))
                     .register(),
             UV, UHV, UEV);
+    public static final MachineDefinition[] CALX_REACTOR = registerTieredMachines("calx_reactor",
+            (holder, tier) -> new SimpleTieredMachine(holder, tier, defaultTankSizeFunction),
+            (tier, builder) -> builder
+                    .recipeType(CENTRIFUGE_RECIPES)
+                    .editableUI(SimpleTieredMachine.EDITABLE_UI_CREATOR.apply(CosmicCore.id("calx_reactor"),
+                            CosmicRecipeTypes.CALX_REACTOR))
+                    .tooltipBuilder((stack, list) -> {
+                        list.add(Component.translatable("cosmiccore.calx_reactor.desc"));
+                    })
+                    .tooltips(workableTiered(tier, GTValues.V[tier], GTValues.V[tier] * 64,
+                            CosmicRecipeTypes.CALX_REACTOR,
+                            defaultTankSizeFunction.applyAsInt(tier), true))
+                    .workableTieredHullModel(CosmicCore.id("block/overlay/machine/calx_reactor"))
+                    .register(),
+            ELECTRIC_TIERS);
+
+    public static final MachineDefinition[] MANA_LEACHING_TUB = registerTieredMachines("mana_leaching_tub",
+            (holder, tier) -> new SimpleTieredMachine(holder, tier, defaultTankSizeFunction),
+            (tier, builder) -> builder.recipeType(CENTRIFUGE_RECIPES)
+                    .editableUI(SimpleTieredMachine.EDITABLE_UI_CREATOR.apply(CosmicCore.id("mana_leaching_tub"),
+                            CosmicRecipeTypes.MANA_LEACHING_TUB))
+                    .tooltipBuilder((stack, list) -> {
+                        list.add(Component.translatable("cosmiccore.mana_leaching_tub.desc"));
+                    })
+                    .tooltips(workableTiered(tier, GTValues.V[tier], GTValues.V[tier] * 64,
+                            CosmicRecipeTypes.MANA_LEACHING_TUB,
+                            defaultTankSizeFunction.applyAsInt(tier), true))
+                    .workableTieredHullModel(CosmicCore.id("block/overlay/machine/mana_leaching_tub"))
+                    .register(),
+            ELECTRIC_TIERS);
+    public static final MachineDefinition[] ROASTER = registerTieredMachines("roaster",
+            (holder, tier) -> new SimpleTieredMachine(holder, tier, defaultTankSizeFunction),
+            (tier, builder) -> builder.recipeType(CENTRIFUGE_RECIPES)
+                    .editableUI(SimpleTieredMachine.EDITABLE_UI_CREATOR.apply(CosmicCore.id("roaster"),
+                            CosmicRecipeTypes.ROASTER))
+                    .tooltipBuilder((stack, list) -> {
+                        list.add(Component.translatable("cosmiccore.roaster.desc"));
+                    })
+                    .tooltips(workableTiered(tier, GTValues.V[tier], GTValues.V[tier] * 64, CosmicRecipeTypes.ROASTER,
+                            defaultTankSizeFunction.applyAsInt(tier), true))
+                    .workableTieredHullModel(CosmicCore.id("block/overlay/machine/roaster"))
+                    .register(),
+            ELECTRIC_TIERS);
+
+    public static final MachineDefinition[] THERMOMAG = registerTieredMachines("thermomagnitizer",
+            (holder, tier) -> new SimpleTieredMachine(holder, tier, defaultTankSizeFunction),
+            (tier, builder) -> builder.recipeType(CENTRIFUGE_RECIPES)
+                    .editableUI(SimpleTieredMachine.EDITABLE_UI_CREATOR.apply(CosmicCore.id("thermomagnitizer"),
+                            CosmicRecipeTypes.THERMOMAG))
+                    .tooltipBuilder((stack, list) -> {
+                        list.add(Component.translatable("cosmiccore.thermomagnitizer.desc"));
+                    })
+                    .tooltips(workableTiered(tier, GTValues.V[tier], GTValues.V[tier] * 64, CosmicRecipeTypes.THERMOMAG,
+                            defaultTankSizeFunction.applyAsInt(tier), true))
+                    .workableTieredHullModel(CosmicCore.id("block/overlay/machine/thermomagnitizer"))
+                    .register(),
+            ELECTRIC_TIERS);
+
+    public static final MachineDefinition[] VAC_BUBBLER = registerTieredMachines("vacuum_bubbler",
+            (holder, tier) -> new SimpleTieredMachine(holder, tier, defaultTankSizeFunction),
+            (tier, builder) -> builder
+                    .recipeType(CENTRIFUGE_RECIPES)
+                    .editableUI(SimpleTieredMachine.EDITABLE_UI_CREATOR.apply(CosmicCore.id("vacuum_bubbler"),
+                            CosmicRecipeTypes.VAC_BUBBLER))
+                    .tooltipBuilder((stack, list) -> {
+                        list.add(Component.translatable("cosmiccore.vacuum_bubbler.desc"));
+                    })
+                    .tooltips(
+                            workableTiered(tier, GTValues.V[tier], GTValues.V[tier] * 64, CosmicRecipeTypes.VAC_BUBBLER,
+                                    defaultTankSizeFunction.applyAsInt(tier), true))
+                    .workableTieredHullModel(CosmicCore.id("block/overlay/machine/vacuum_bubbler"))
+                    .register(),
+            ELECTRIC_TIERS);
 
     public static final MachineDefinition[] WIRELESS_CHARGER = registerTieredMachines("wireless_charger",
             WirelessChargerMachine::new,
@@ -845,6 +918,15 @@ public class CosmicMachines {
             new int[] { GTValues.HV },                                   // only HV
             PartAbility.EXPORT_FLUIDS, PartAbility.EXPORT_FLUIDS_4X);
 
+    public static final MultiblockMachineDefinition LARGE_STEAM_TURBINE = registerLargeTurbineCosmic(
+            "steam_large_turbine",
+            HV,
+            GTRecipeTypes.STEAM_TURBINE_FUELS,
+            CASING_STEEL_TURBINE, CASING_STEEL_GEARBOX,
+            GTCEu.id("block/casings/mechanic/machine_casing_turbine_steel"),
+            GTCEu.id("block/multiblock/generator/large_steam_turbine"),
+            false);
+
     public static void init() {
         GTMultiMachines.LARGE_COMBUSTION_ENGINE.setRecipeTypes(new GTRecipeType[] { DUMMY_RECIPES });
         GTMultiMachines.LARGE_COMBUSTION_ENGINE.setRenderXEIPreview(false);
@@ -863,6 +945,10 @@ public class CosmicMachines {
         GCYMMachines.MEGA_BLAST_FURNACE.setRenderWorldPreview(false);
         GTMultiMachines.POWER_SUBSTATION.setRenderXEIPreview(false);
         GTMultiMachines.POWER_SUBSTATION.setRenderWorldPreview(false);
+
+        GTMultiMachines.LARGE_STEAM_TURBINE.setRecipeTypes(new GTRecipeType[] { DUMMY_RECIPES });
+        GTMultiMachines.LARGE_STEAM_TURBINE.setRenderXEIPreview(false);
+        GTMultiMachines.LARGE_STEAM_TURBINE.setRenderWorldPreview(false);
 
         for (MultiblockMachineDefinition definition : FUSION_REACTOR) {
             if (definition == null) continue;

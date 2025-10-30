@@ -8,6 +8,8 @@ dependencies {
     //IDK if we need this fully yet...
     modImplementation('com.github.thedarkcolour:ModKit:0302f9aa42')
     modImplementation('curse.maven:tmrv-1194921:6856065')
+    modImplementation("curse.maven:travel-anchors-413234:4683662")
+    modImplementation("curse.maven:libx-412525:4947474")
 
     //Botania
 //    implementation(forge.botania)

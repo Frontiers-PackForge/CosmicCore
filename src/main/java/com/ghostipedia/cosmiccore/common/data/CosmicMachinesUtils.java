@@ -1,5 +1,6 @@
 package com.ghostipedia.cosmiccore.common.data;
 
+import com.ghostipedia.cosmiccore.common.machine.multiblock.multi.logic.CosmicLargeTurbineMachine;
 import com.ghostipedia.cosmiccore.common.machine.multiblock.multi.logic.ExoticCombustionEngineMachine;
 
 import com.gregtechceu.gtceu.GTCEu;
@@ -10,9 +11,12 @@ import com.gregtechceu.gtceu.api.capability.recipe.ItemRecipeCapability;
 import com.gregtechceu.gtceu.api.data.RotationState;
 import com.gregtechceu.gtceu.api.data.tag.TagPrefix;
 import com.gregtechceu.gtceu.api.machine.*;
+import com.gregtechceu.gtceu.api.machine.feature.multiblock.IRotorHolderMachine;
 import com.gregtechceu.gtceu.api.machine.multiblock.PartAbility;
 import com.gregtechceu.gtceu.api.machine.property.GTMachineModelProperties;
 import com.gregtechceu.gtceu.api.pattern.FactoryBlockPattern;
+import com.gregtechceu.gtceu.api.pattern.TraceabilityPredicate;
+import com.gregtechceu.gtceu.api.pattern.predicates.SimplePredicate;
 import com.gregtechceu.gtceu.api.recipe.GTRecipeType;
 import com.gregtechceu.gtceu.api.registry.registrate.MachineBuilder;
 import com.gregtechceu.gtceu.common.data.GTMaterialItems;
@@ -20,6 +24,8 @@ import com.gregtechceu.gtceu.common.data.GTMaterials;
 import com.gregtechceu.gtceu.common.data.GTRecipeTypes;
 import com.gregtechceu.gtceu.common.machine.multiblock.part.FluidHatchPartMachine;
 import com.gregtechceu.gtceu.utils.FormattingUtil;
+
+import com.lowdragmc.lowdraglib.utils.BlockInfo;
 
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -94,6 +100,56 @@ public class CosmicMachinesUtils {
                         Component.translatable("cosmiccore.universal.boosting_agents.1"),
                         Component.translatable("cosmiccore.universal.boosting_agents.2"),
                         Component.translatable("cosmiccore.universal.boosting_agents.3"))
+                .register();
+    }
+
+    public static MultiblockMachineDefinition registerLargeTurbineCosmic(
+                                                                         String name, int tier, GTRecipeType recipeType,
+                                                                         Supplier<? extends Block> casing,
+                                                                         Supplier<? extends Block> gear,
+                                                                         ResourceLocation casingTexture,
+                                                                         ResourceLocation overlayModel,
+                                                                         boolean needsMuffler) {
+        return REGISTRATE.multiblock(name, holder -> new CosmicLargeTurbineMachine(holder, tier))
+                .rotationState(RotationState.ALL)
+                .recipeType(recipeType)
+                .generator(true)
+                .recipeModifier(CosmicLargeTurbineMachine::recipeModifier, true)
+                .appearanceBlock(casing)
+                .pattern(definition -> FactoryBlockPattern.start()
+                        .aisle("CCCC", "CHHC", "CCCC")
+                        .aisle("CHHC", "RGGR", "CHHC")
+                        .aisle("CCCC", "CSHC", "CCCC")
+                        .where('S', controller(blocks(definition.getBlock())))
+                        .where('G', blocks(gear.get()))
+                        .where('C', blocks(casing.get()))
+                        .where('R',
+                                new TraceabilityPredicate(
+                                        new SimplePredicate(
+                                                state -> MetaMachine.getMachine(state.getWorld(),
+                                                        state.getPos()) instanceof IRotorHolderMachine rotorHolder &&
+                                                        state.getWorld()
+                                                                .getBlockState(state.getPos()
+                                                                        .relative(rotorHolder.self().getFrontFacing()))
+                                                                .isAir(),
+                                                () -> PartAbility.ROTOR_HOLDER.getAllBlocks().stream()
+                                                        .map(BlockInfo::fromBlock).toArray(BlockInfo[]::new)))
+                                        .addTooltips(Component.translatable("gtceu.multiblock.pattern.clear_amount_3"))
+                                        .addTooltips(Component.translatable("gtceu.multiblock.pattern.error.limited.1",
+                                                VN[tier]))
+                                        .setExactLimit(1)
+                                        .or(abilities(PartAbility.OUTPUT_ENERGY)).setExactLimit(1))
+                        .where('H', blocks(casing.get())
+                                .or(autoAbilities(definition.getRecipeTypes(), false, false, true, true, true, true))
+                                .or(autoAbilities(true, needsMuffler, false)))
+                        .build())
+                .recoveryItems(
+                        () -> new ItemLike[] {
+                                GTMaterialItems.MATERIAL_ITEMS.get(TagPrefix.dustTiny, GTMaterials.Ash).get() })
+                .workableCasingModel(casingTexture, overlayModel)
+                .tooltips(
+                        Component.translatable("gtceu.universal.tooltip.base_production_eut", 3072),
+                        Component.translatable("gtceu.multiblock.turbine.efficiency_tooltip", VNF[tier]))
                 .register();
     }
 
