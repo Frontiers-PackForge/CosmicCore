@@ -219,6 +219,10 @@ public class CosmicRecipeTypes {
             .register("vacuum_bubbler", ELECTRIC)
             .setMaxIOSize(2, 3, 2, 3)
             .setProgressBar(GuiTextures.PROGRESS_BAR_ARROW, ProgressTexture.FillDirection.LEFT_TO_RIGHT);
+    public static final GTRecipeType LARGE_ROASTER = GTRecipeTypes
+            .register("large_roaster", ELECTRIC)
+            .setMaxIOSize(4, 4, 4, 4)
+            .setProgressBar(GuiTextures.PROGRESS_BAR_ARROW, ProgressTexture.FillDirection.LEFT_TO_RIGHT);
 
     public static final GTRecipeType SPOOLING_MACHINE = GTRecipeTypes
             .register("spooling_machine", ELECTRIC)
