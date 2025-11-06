@@ -2010,6 +2010,252 @@ public class CosmicItems {
             .defaultModel()
             .register();
 
+    // Project Star Eater
+
+    public static final ItemEntry<ComponentItem> HAULER_PROBE_GRADE_1 = REGISTRATE
+            .item("freight_beetle_grade_1", ComponentItem::create)
+            .lang("Hauler Probe Mk.1")
+            .properties(p -> p.stacksTo(64).durability(1024))
+            .tag()
+            .defaultModel()
+            .register();
+
+    public static final ItemEntry<ComponentItem> ARMORED_HAULER_PROBE_GRADE_1 = REGISTRATE
+            .item("armored_freight_beetle_grade_1", ComponentItem::create)
+            .lang("Armored Hauler Probe Mk.1")
+            .properties(p -> p.stacksTo(64).durability(1024))
+            .tag()
+            .defaultModel()
+            .register();
+
+    public static final ItemEntry<ComponentItem> CRUSHER_WASPS_GRADE_1 = REGISTRATE
+            .item("crusher_wasps_grade_1", ComponentItem::create)
+            .lang("Crusher Wasps Mk.1")
+            .properties(p -> p.stacksTo(64).durability(1024))
+            .tag()
+            .defaultModel()
+            .register();
+
+    public static final ItemEntry<ComponentItem> RAZOR_HORNET_GRADE_1 = REGISTRATE
+            .item("razor_hornet_grade_1", ComponentItem::create)
+            .lang("Razor Hornet Mk.1")
+            .properties(p -> p.stacksTo(64).durability(1024))
+            .tag()
+            .defaultModel()
+            .register();
+
+    public static final ItemEntry<ComponentItem> PULVERIZING_BEETLE_GRADE_1 = REGISTRATE
+            .item("pulverizing_beetle_grade_1", ComponentItem::create)
+            .lang("Pulverizing Beetle Mk.1")
+            .properties(p -> p.stacksTo(64).durability(1024))
+            .tag()
+            .defaultModel()
+            .register();
+
+    public static final ItemEntry<ComponentItem> CRUCIBLE_MANTIS_GRADE_1 = REGISTRATE
+            .item("crucible_mantis_grade_1", ComponentItem::create)
+            .lang("Crucible Mantis Mk.1")
+            .properties(p -> p.stacksTo(64).durability(1024))
+            .tag()
+            .defaultModel()
+            .register();
+
+    public static final ItemEntry<ComponentItem> HAULER_PROBE_GRADE_2 = REGISTRATE
+            .item("freight_beetle_grade_2", ComponentItem::create)
+            .lang("Hauler Probe Mk.2")
+            .properties(p -> p.stacksTo(64).durability(1024))
+            .tag()
+            .defaultModel()
+            .register();
+
+    public static final ItemEntry<ComponentItem> ARMORED_HAULER_PROBE_GRADE_2 = REGISTRATE
+            .item("armored_freight_beetle_grade_2", ComponentItem::create)
+            .lang("Armored Hauler Probe Mk.2")
+            .properties(p -> p.stacksTo(64).durability(1024))
+            .tag()
+            .defaultModel()
+            .register();
+
+    public static final ItemEntry<ComponentItem> CRUSHER_WASPS_GRADE_2 = REGISTRATE
+            .item("crusher_wasps_grade_2", ComponentItem::create)
+            .lang("Crusher Wasps Mk.2")
+            .properties(p -> p.stacksTo(64).durability(1024))
+            .tag()
+            .defaultModel()
+            .register();
+
+    public static final ItemEntry<ComponentItem> RAZOR_HORNET_GRADE_2 = REGISTRATE
+            .item("razor_hornet_grade_2", ComponentItem::create)
+            .lang("Razor Hornet Mk.2")
+            .properties(p -> p.stacksTo(64).durability(1024))
+            .tag()
+            .defaultModel()
+            .register();
+
+    public static final ItemEntry<ComponentItem> PULVERIZING_BEETLE_GRADE_2 = REGISTRATE
+            .item("pulverizing_beetle_grade_2", ComponentItem::create)
+            .lang("Pulverizing Beetle Mk.2")
+            .properties(p -> p.stacksTo(64).durability(1024))
+            .tag()
+            .defaultModel()
+            .register();
+
+    public static final ItemEntry<ComponentItem> CRUCIBLE_MANTIS_GRADE_2 = REGISTRATE
+            .item("razor_hornet_grade_2", ComponentItem::create)
+            .lang("Crucible Mantis Mk.2")
+            .properties(p -> p.stacksTo(64).durability(1024))
+            .tag()
+            .defaultModel()
+            .register();
+
+    // GRADE 3
+
+    public static final ItemEntry<ComponentItem> HAULER_PROBE_GRADE_3 = REGISTRATE
+            .item("freight_beetle_grade_3", ComponentItem::create)
+            .lang("Hauler Probe Mk.3")
+            .properties(p -> p.stacksTo(64).durability(1024))
+            .tag()
+            .defaultModel()
+            .register();
+
+    public static final ItemEntry<ComponentItem> ARMORED_HAULER_PROBE_GRADE_3 = REGISTRATE
+            .item("armored_freight_beetle_grade_3", ComponentItem::create)
+            .lang("Armored Hauler Probe Mk.3")
+            .properties(p -> p.stacksTo(64).durability(1024))
+            .tag()
+            .defaultModel()
+            .register();
+
+    public static final ItemEntry<ComponentItem> CRUSHER_WASPS_GRADE_3 = REGISTRATE
+            .item("crusher_wasps_grade_3", ComponentItem::create)
+            .lang("Crusher Wasps Mk.3")
+            .properties(p -> p.stacksTo(64).durability(1024))
+            .tag()
+            .defaultModel()
+            .register();
+
+    public static final ItemEntry<ComponentItem> RAZOR_HORNET_GRADE_3 = REGISTRATE
+            .item("razor_hornet_grade_3", ComponentItem::create)
+            .lang("Razor Hornet Mk.3")
+            .properties(p -> p.stacksTo(64).durability(1024))
+            .tag()
+            .defaultModel()
+            .register();
+
+    public static final ItemEntry<ComponentItem> PULVERIZING_BEETLE_GRADE_3 = REGISTRATE
+            .item("pulverizing_beetle_grade_3", ComponentItem::create)
+            .lang("Pulverizing Beetle Mk.3")
+            .properties(p -> p.stacksTo(64).durability(1024))
+            .tag()
+            .defaultModel()
+            .register();
+
+    public static final ItemEntry<ComponentItem> CRUCIBLE_MANTIS_GRADE_3 = REGISTRATE
+            .item("razor_hornet_grade_3", ComponentItem::create)
+            .lang("Crucible Mantis Mk.3")
+            .properties(p -> p.stacksTo(64).durability(1024))
+            .tag()
+            .defaultModel()
+            .register();
+
+    // GRADE 4
+
+    public static final ItemEntry<ComponentItem> HAULER_PROBE_GRADE_4 = REGISTRATE
+            .item("freight_beetle_grade_4", ComponentItem::create)
+            .lang("Hauler Probe Mk.4")
+            .properties(p -> p.stacksTo(64).durability(1024))
+            .tag()
+            .defaultModel()
+            .register();
+
+    public static final ItemEntry<ComponentItem> ARMORED_HAULER_PROBE_GRADE_4 = REGISTRATE
+            .item("armored_freight_beetle_grade_4", ComponentItem::create)
+            .lang("Armored Hauler Probe Mk.4")
+            .properties(p -> p.stacksTo(64).durability(1024))
+            .tag()
+            .defaultModel()
+            .register();
+
+    public static final ItemEntry<ComponentItem> CRUSHER_WASPS_GRADE_4 = REGISTRATE
+            .item("crusher_wasps_grade_4", ComponentItem::create)
+            .lang("Crusher Wasps Mk.4")
+            .properties(p -> p.stacksTo(64).durability(1024))
+            .tag()
+            .defaultModel()
+            .register();
+
+    public static final ItemEntry<ComponentItem> RAZOR_HORNET_GRADE_4 = REGISTRATE
+            .item("razor_hornet_grade_4", ComponentItem::create)
+            .lang("Razor Hornet Mk.4")
+            .properties(p -> p.stacksTo(64).durability(1024))
+            .tag()
+            .defaultModel()
+            .register();
+
+    public static final ItemEntry<ComponentItem> PULVERIZING_BEETLE_GRADE_4 = REGISTRATE
+            .item("pulverizing_beetle_grade_4", ComponentItem::create)
+            .lang("Pulverizing Beetle Mk.4")
+            .properties(p -> p.stacksTo(64).durability(1024))
+            .tag()
+            .defaultModel()
+            .register();
+
+    public static final ItemEntry<ComponentItem> CRUCIBLE_MANTIS_GRADE_4 = REGISTRATE
+            .item("razor_hornet_grade_4", ComponentItem::create)
+            .lang("Crucible Mantis Mk.4")
+            .properties(p -> p.stacksTo(64).durability(1024))
+            .tag()
+            .defaultModel()
+            .register();
+
+    public static final ItemEntry<ComponentItem> HAULER_PROBE_GRADE_5 = REGISTRATE
+            .item("freight_beetle_grade_5", ComponentItem::create)
+            .lang("Hauler Probe Mk.5")
+            .properties(p -> p.stacksTo(64).durability(1024))
+            .tag()
+            .defaultModel()
+            .register();
+
+    public static final ItemEntry<ComponentItem> ARMORED_HAULER_PROBE_GRADE_5 = REGISTRATE
+            .item("armored_freight_beetle_grade_5", ComponentItem::create)
+            .lang("Armored Hauler Probe Mk.5")
+            .properties(p -> p.stacksTo(64).durability(1024))
+            .tag()
+            .defaultModel()
+            .register();
+
+    public static final ItemEntry<ComponentItem> CRUSHER_WASPS_GRADE_5 = REGISTRATE
+            .item("crusher_wasps_grade_5", ComponentItem::create)
+            .lang("Crusher Wasps Mk.5")
+            .properties(p -> p.stacksTo(64).durability(1024))
+            .tag()
+            .defaultModel()
+            .register();
+
+    public static final ItemEntry<ComponentItem> RAZOR_HORNET_GRADE_5 = REGISTRATE
+            .item("razor_hornet_grade_5", ComponentItem::create)
+            .lang("Razor Hornet Mk.5")
+            .properties(p -> p.stacksTo(64).durability(1024))
+            .tag()
+            .defaultModel()
+            .register();
+
+    public static final ItemEntry<ComponentItem> PULVERIZING_BEETLE_GRADE_5 = REGISTRATE
+            .item("pulverizing_beetle_grade_5", ComponentItem::create)
+            .lang("Pulverizing Beetle Mk.5")
+            .properties(p -> p.stacksTo(64).durability(1024))
+            .tag()
+            .defaultModel()
+            .register();
+
+    public static final ItemEntry<ComponentItem> CRUCIBLE_MANTIS_GRADE_5 = REGISTRATE
+            .item("razor_hornet_grade_5", ComponentItem::create)
+            .lang("Crucible Mantis Mk.5")
+            .properties(p -> p.stacksTo(64).durability(1024))
+            .tag()
+            .defaultModel()
+            .register();
+
     public static ItemEntry<ComponentItem> LINKED_TERMINAL = REGISTRATE
             .item("linked_terminal", ComponentItem::create)
             .lang("Linked Terminal")
