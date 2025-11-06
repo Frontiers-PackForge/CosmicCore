@@ -1,19 +1,15 @@
 package com.ghostipedia.cosmiccore.common.machine.multiblock.multi;
 
-import com.ghostipedia.cosmiccore.CosmicCore;
 import com.ghostipedia.cosmiccore.gtbridge.CosmicRecipeTypes;
+
 import com.gregtechceu.gtceu.GTCEu;
 import com.gregtechceu.gtceu.api.data.RotationState;
 import com.gregtechceu.gtceu.api.machine.MultiblockMachineDefinition;
 import com.gregtechceu.gtceu.api.machine.multiblock.PartAbility;
 import com.gregtechceu.gtceu.api.machine.multiblock.WorkableElectricMultiblockMachine;
 import com.gregtechceu.gtceu.api.pattern.FactoryBlockPattern;
-import com.gregtechceu.gtceu.api.pattern.util.RelativeDirection;
 import com.gregtechceu.gtceu.api.recipe.OverclockingLogic;
-import com.gregtechceu.gtceu.common.data.GTBlocks;
-import com.gregtechceu.gtceu.common.data.GTMaterials;
 import com.gregtechceu.gtceu.common.data.GTRecipeModifiers;
-import com.sammy.malum.registry.common.block.BlockRegistry;
 
 import static com.ghostipedia.cosmiccore.api.registries.CosmicRegistration.REGISTRATE;
 import static com.ghostipedia.cosmiccore.common.data.CosmicBlocks.CYCLOZINE_CHEMICALLY_REPELLING_CASING;
@@ -31,7 +27,9 @@ public class Roaster {
             .recipeType(CosmicRecipeTypes.LARGE_ROASTER)
             .appearanceBlock(CASING_INVAR_HEATPROOF)
             .partAppearance((controller, part, side) -> CASING_INVAR_HEATPROOF.getDefaultState())
-            .recipeModifiers(GTRecipeModifiers.ELECTRIC_OVERCLOCK.apply(OverclockingLogic.NON_PERFECT_OVERCLOCK_SUBTICK),GTRecipeModifiers.BATCH_MODE)
+            .recipeModifiers(
+                    GTRecipeModifiers.ELECTRIC_OVERCLOCK.apply(OverclockingLogic.NON_PERFECT_OVERCLOCK_SUBTICK),
+                    GTRecipeModifiers.BATCH_MODE)
             // spotless:off
             .pattern(definition -> FactoryBlockPattern.start()
                     .aisle("A A", "ABA", "BBB", "BBB", " B ")
