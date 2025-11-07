@@ -6,6 +6,7 @@ import com.ghostipedia.cosmiccore.gtbridge.CosmicRecipeTypes;
 import com.gregtechceu.gtceu.api.GTValues;
 import com.gregtechceu.gtceu.api.capability.recipe.FluidRecipeCapability;
 import com.gregtechceu.gtceu.api.capability.recipe.IO;
+import com.gregtechceu.gtceu.api.capability.recipe.ItemRecipeCapability;
 import com.gregtechceu.gtceu.api.machine.IMachineBlockEntity;
 import com.gregtechceu.gtceu.api.machine.multiblock.WorkableElectricMultiblockMachine;
 import com.gregtechceu.gtceu.api.machine.trait.NotifiableFluidTank;
@@ -113,7 +114,7 @@ public class LarvaMachine extends WorkableElectricMultiblockMachine {
                 }
             }
 
-            var itemHandlers = machine.getCapabilitiesFlat(IO.IN, FluidRecipeCapability.CAP);
+            var itemHandlers = machine.getCapabilitiesFlat(IO.IN, ItemRecipeCapability.CAP);
             for (var handler : itemHandlers) {
                 if (!(handler instanceof NotifiableItemStackHandler itemHandler)) continue;
                 for (var content : itemHandler.getContents()) {
@@ -139,16 +140,17 @@ public class LarvaMachine extends WorkableElectricMultiblockMachine {
 
                 for (var content : itemBus.getInventory().getContents()) {
                     if (!(content instanceof ItemStack stack)) continue;
-                    if (!tiers.containsKey(stack)) continue;
-                    tier = tiers.get(stack);
+                    var tempTier = mapGet(tiers, stack);
+                    if (tempTier == null) continue;
+                    tier = tempTier;
                 }
                 if (tier == -1) continue;
 
                 for (var content : itemBus.getInventory().getContents()) {
                     if (!(content instanceof ItemStack stack)) continue;
-                    if (!(lootTable.containsKey(stack))) continue;
-                    var loot = lootTable.get(stack);
-                    // Throw here? Let the user know somehow?
+                    var loot = mapGet(lootTable, stack);
+                    if (loot == null) continue;
+                    // Tier is lower than needed for recipe; Throw here? Let the user know somehow?
                     if (tier < loot.getFirst()) continue;
                     output = loot.getSecond();
                 }
@@ -204,6 +206,18 @@ public class LarvaMachine extends WorkableElectricMultiblockMachine {
             }
 
             return Collections.singleton(builder.buildRawRecipe()).iterator();
+        }
+
+        // Helper function for accessing map based on Itemstack.isSameItemSameTags
+
+        private static <V> V mapGet(Map<ItemStack, V> map, ItemStack item) {
+            if (item == null) return null;
+            for (var entry : map.entrySet()) {
+                if (ItemStack.isSameItemSameTags(item, entry.getKey())) {
+                    return entry.getValue();
+                }
+            }
+            return null;
         }
 
         /**
