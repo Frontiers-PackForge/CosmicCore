@@ -3,7 +3,7 @@ package com.ghostipedia.cosmiccore.common.machine.multiblock.multi;
 import com.ghostipedia.cosmiccore.CosmicCore;
 import com.ghostipedia.cosmiccore.client.renderer.machine.CosmicDynamicRenderHelpers;
 import com.ghostipedia.cosmiccore.common.data.CosmicBlocks;
-import com.ghostipedia.cosmiccore.common.machine.multiblock.multi.logic.AlchemicalFissionReactor;
+import com.ghostipedia.cosmiccore.common.machine.multiblock.multi.logic.LarvaMachine;
 
 import com.gregtechceu.gtceu.GTCEu;
 import com.gregtechceu.gtceu.api.data.RotationState;
@@ -25,7 +25,7 @@ import static com.gregtechceu.gtceu.common.data.models.GTMachineModels.createWor
 public class MantleBore {
 
     public final static MultiblockMachineDefinition MANTLE_BORE = REGISTRATE
-            .multiblock("mantle_bore", AlchemicalFissionReactor::new)
+            .multiblock("mantle_bore", LarvaMachine::new)
             .rotationState(RotationState.NON_Y_AXIS)
             .recipeType(GTRecipeTypes.ELECTROLYZER_RECIPES)
             .recipeModifier(ELECTRIC_OVERCLOCK.apply(OverclockingLogic.NON_PERFECT_OVERCLOCK))

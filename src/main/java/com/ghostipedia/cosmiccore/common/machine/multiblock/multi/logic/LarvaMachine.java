@@ -1,0 +1,306 @@
+package com.ghostipedia.cosmiccore.common.machine.multiblock.multi.logic;
+
+import com.ghostipedia.cosmiccore.CosmicCore;
+import com.ghostipedia.cosmiccore.gtbridge.CosmicRecipeTypes;
+
+import com.gregtechceu.gtceu.api.GTValues;
+import com.gregtechceu.gtceu.api.capability.recipe.FluidRecipeCapability;
+import com.gregtechceu.gtceu.api.capability.recipe.IO;
+import com.gregtechceu.gtceu.api.machine.IMachineBlockEntity;
+import com.gregtechceu.gtceu.api.machine.multiblock.WorkableElectricMultiblockMachine;
+import com.gregtechceu.gtceu.api.machine.trait.NotifiableFluidTank;
+import com.gregtechceu.gtceu.api.machine.trait.NotifiableItemStackHandler;
+import com.gregtechceu.gtceu.api.machine.trait.RecipeLogic;
+import com.gregtechceu.gtceu.api.recipe.GTRecipe;
+import com.gregtechceu.gtceu.common.machine.multiblock.part.ItemBusPartMachine;
+import com.gregtechceu.gtceu.data.recipe.builder.GTRecipeBuilder;
+
+import net.minecraft.network.chat.Component;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.level.material.Fluids;
+import net.minecraftforge.fluids.FluidStack;
+
+import com.mojang.datafixers.util.Pair;
+import org.jetbrains.annotations.NotNull;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+
+import static com.gregtechceu.gtceu.common.item.IntCircuitBehaviour.getCircuitConfiguration;
+
+public class LarvaMachine extends WorkableElectricMultiblockMachine {
+
+    private static ItemStack getNamedPaper(String name) {
+        ItemStack stack = new ItemStack(Items.PAPER);
+        stack.setHoverName(Component.literal(name));
+        return stack;
+    }
+
+    public LarvaMachine(IMachineBlockEntity holder, Object... args) {
+        super(holder, args);
+    }
+
+    private static Map<ItemStack, Pair<Integer, ItemStack>> LARVA_LOOTTABLE = null;
+    private static Map<ItemStack, Integer> LARVA_TIERS = null;
+    private static Map<Integer, Pair<ItemStack, FluidStack>> LARVA_INPUTS = null;
+
+    private static Map<ItemStack, Pair<Integer, ItemStack>> getLarvaLoottable() {
+        if (LARVA_LOOTTABLE == null) {
+            LARVA_LOOTTABLE = new HashMap<>();
+            // Beetle Data Orb (NC) -> Tier (0-based)-> -> Astroid
+            LARVA_LOOTTABLE.put(getNamedPaper("Iron Beetle"), Pair.of(0, getNamedPaper("Iron Astroid")));
+
+        }
+        return LARVA_LOOTTABLE;
+    }
+
+    private static Map<ItemStack, Integer> getLarvaTiers() {
+        if (LARVA_TIERS == null) {
+            LARVA_TIERS = new HashMap<>();
+            LARVA_TIERS.put(getNamedPaper("tier1"), 0);
+            LARVA_TIERS.put(getNamedPaper("tier2"), 1);
+            LARVA_TIERS.put(getNamedPaper("tier3"), 2);
+        }
+        return LARVA_TIERS;
+    }
+
+    private static Map<Integer, Pair<ItemStack, FluidStack>> getLarvaInputs() {
+        if (LARVA_INPUTS == null) {
+            LARVA_INPUTS = new HashMap<>();
+            LARVA_INPUTS.put(0, Pair.of(getNamedPaper("input1"), new FluidStack(Fluids.WATER, 1000)));
+        }
+        return LARVA_INPUTS;
+    }
+
+    @Override
+    protected @NotNull RecipeLogic createRecipeLogic(Object @NotNull... args) {
+        return new LarvaRecipeLogic(this);
+    }
+
+    public static class LarvaRecipeLogic extends RecipeLogic {
+
+        public LarvaRecipeLogic(LarvaMachine machine) {
+            super(machine);
+        }
+
+        @Override
+        public @NotNull Iterator<GTRecipe> searchRecipe() {
+            var larvaMachine = (LarvaMachine) machine;
+
+            // Available Fluid Stacks in the multiblock (for checking cable+coolant)
+            var availableFluids = new ArrayList<FluidStack>();
+            // Available Item Stacks in the multiblock (for checking cable+coolant)
+            var availableItems = new ArrayList<ItemStack>();
+
+            // Inputs set to be consumed
+            var finalRecipeItemInputs = new ArrayList<ItemStack>();
+            var finalRecipeFluidInputs = new ArrayList<FluidStack>();
+
+            // Outputs for the recipe
+            var finalRecipeItemOutputs = new ArrayList<ItemStack>();
+
+            var fluidHandlers = machine.getCapabilitiesFlat(IO.IN, FluidRecipeCapability.CAP);
+            for (var handler : fluidHandlers) {
+                if (!(handler instanceof NotifiableFluidTank itemHandler)) continue;
+                for (var content : itemHandler.getContents()) {
+                    if (!(content instanceof FluidStack stack)) continue;
+                    availableFluids.add(stack.copy());
+                }
+            }
+
+            var itemHandlers = machine.getCapabilitiesFlat(IO.IN, FluidRecipeCapability.CAP);
+            for (var handler : itemHandlers) {
+                if (!(handler instanceof NotifiableItemStackHandler itemHandler)) continue;
+                for (var content : itemHandler.getContents()) {
+                    if (!(content instanceof ItemStack stack)) continue;
+                    availableItems.add(stack.copy());
+                }
+            }
+
+            var tiers = getLarvaTiers();
+            var lootTable = getLarvaLoottable();
+            var inputs = getLarvaInputs();
+
+            var parts = larvaMachine.getParts();
+            for (var part : parts) {
+                // TODO: Make this specifically be our new bus
+                if (!(part instanceof ItemBusPartMachine itemBus)) continue;
+                if (!itemBus.getInventory().handlerIO.equals(IO.IN)) continue;
+
+                // Find tier and output
+                // Enforced through the filters in the bus: 1 larva and 1 data orb per bus
+                var tier = -1;
+                ItemStack output = null;
+
+                for (var content : itemBus.getInventory().getContents()) {
+                    if (!(content instanceof ItemStack stack)) continue;
+                    if (!tiers.containsKey(stack)) continue;
+                    tier = tiers.get(stack);
+                }
+                if (tier == -1) continue;
+
+                for (var content : itemBus.getInventory().getContents()) {
+                    if (!(content instanceof ItemStack stack)) continue;
+                    if (!(lootTable.containsKey(stack))) continue;
+                    var loot = lootTable.get(stack);
+                    // Throw here? Let the user know somehow?
+                    if (tier < loot.getFirst()) continue;
+                    output = loot.getSecond();
+                }
+                if (output == null) continue;
+
+                // TODO: For now circuit is a dumb parallel with 0 being 1x, 1 being 2x etc
+
+                var circuit = itemBus.getCircuitInventory();
+                var circuitStack = circuit.getStackInSlot(0);
+                var multiplier = getCircuitConfiguration(circuitStack) + 1;
+
+                var recipeInputs = inputs.get(tier);
+                var itemInput = recipeInputs.getFirst().copy();
+                var fluidInput = recipeInputs.getSecond().copy();
+                var itemOutput = output.copy();
+                itemInput.setCount(recipeInputs.getFirst().getCount() * multiplier);
+                fluidInput.setAmount(recipeInputs.getSecond().getAmount() * multiplier);
+                // TODO: change this to use NBT / modify output in different way
+                itemOutput.setCount(itemOutput.getCount() * multiplier);
+
+                if (canConsumeItem(availableItems, itemInput) &&
+                        canConsumeFluid(availableFluids, fluidInput)) {
+                    // Subtract the inputs from our list of available inputs
+                    consumeItem(availableItems, itemInput);
+                    consumeFluid(availableFluids, fluidInput);
+
+                    // actually add inputs and outputs to the lists for the final recipe
+                    finalRecipeItemInputs.add(itemInput);
+                    finalRecipeFluidInputs.add(fluidInput);
+                    finalRecipeItemOutputs.add(itemOutput);
+                } else {
+                    // not enough inputs
+                }
+
+            }
+            if (finalRecipeItemOutputs.isEmpty()) {
+                return Collections.emptyIterator();
+            }
+
+            var builder = GTRecipeBuilder
+                    .of(CosmicCore.id("larva_recipe"), CosmicRecipeTypes.BEES)
+                    .EUt(GTValues.VA[GTValues.LV])
+                    .duration(20 * 60);
+
+            for (var itemInput : finalRecipeItemInputs) {
+                builder.inputItems(itemInput);
+            }
+            for (var inputFluid : finalRecipeFluidInputs) {
+                builder.inputFluids(inputFluid);
+            }
+            for (var outputItem : finalRecipeItemOutputs) {
+                builder.outputItems(outputItem);
+            }
+
+            return Collections.singleton(builder.buildRawRecipe()).iterator();
+        }
+
+        /**
+         * Checks if the given item can be fully consumed from the list.
+         */
+        private static boolean canConsumeItem(List<ItemStack> available, ItemStack toConsume) {
+            if (toConsume.isEmpty()) {
+                return true;
+            }
+
+            int remaining = toConsume.getCount();
+
+            for (ItemStack stack : available) {
+                if (ItemStack.isSameItemSameTags(stack, toConsume)) {
+                    remaining -= stack.getCount();
+                    if (remaining <= 0) {
+                        return true;
+                    }
+                }
+            }
+
+            return false;
+        }
+
+        /**
+         * Attempts to consume the given item from the list.
+         * Returns true if the full amount was successfully removed, false otherwise.
+         * Mutates the list’s stack counts and empties stacks as needed.
+         */
+        private static boolean consumeItem(List<ItemStack> available, ItemStack toConsume) {
+            if (toConsume.isEmpty()) {
+                return true;
+            }
+
+            int remaining = toConsume.getCount();
+
+            for (ItemStack stack : available) {
+                if (ItemStack.isSameItemSameTags(stack, toConsume)) {
+                    int taken = Math.min(stack.getCount(), remaining);
+                    stack.shrink(taken);
+                    remaining -= taken;
+                    if (remaining <= 0) {
+                        return true;
+                    }
+                }
+            }
+
+            return false; // not enough found
+        }
+
+        /**
+         * Checks if the given fluid can be fully consumed from the list.
+         */
+        private static boolean canConsumeFluid(List<FluidStack> available, FluidStack toConsume) {
+            if (toConsume.isEmpty()) {
+                return true;
+            }
+
+            int needed = toConsume.getAmount();
+
+            for (FluidStack stack : available) {
+                if (toConsume.isFluidEqual(stack)) {
+                    needed -= stack.getAmount();
+                    if (needed <= 0) {
+                        return true;
+                    }
+                }
+            }
+
+            return false;
+        }
+
+        /**
+         * Removes the given fluid amount from matching stacks in the list.
+         * Returns true if the full amount was successfully removed, false otherwise.
+         * Mutates the list’s FluidStacks.
+         */
+        private static boolean consumeFluid(List<FluidStack> available, FluidStack toConsume) {
+            if (toConsume.isEmpty()) {
+                return true;
+            }
+
+            int remaining = toConsume.getAmount();
+
+            for (FluidStack stack : available) {
+                if (toConsume.isFluidEqual(stack)) {
+                    int taken = Math.min(stack.getAmount(), remaining);
+                    stack.shrink(taken);
+                    remaining -= taken;
+
+                    if (remaining <= 0) {
+                        return true;
+                    }
+                }
+            }
+
+            return false;
+        }
+    }
+}
