@@ -5,6 +5,7 @@ import com.ghostipedia.cosmiccore.api.item.LinkedTerminalBehavior;
 import com.ghostipedia.cosmiccore.api.item.armor.*;
 import com.ghostipedia.cosmiccore.api.registries.CosmicRegistration;
 import com.ghostipedia.cosmiccore.client.renderer.item.HaloItemRenderer;
+import com.ghostipedia.cosmiccore.client.renderer.item.RadianceItemRenderer;
 import com.ghostipedia.cosmiccore.common.data.tag.item.CosmicItemTags;
 import com.ghostipedia.cosmiccore.common.item.CosmicScytheItem;
 import com.ghostipedia.cosmiccore.common.item.armor.ChestSanguineWarptechSuite;
@@ -2107,7 +2108,6 @@ public class CosmicItems {
             .tag()
             .defaultModel()
             .register();
-
     // GRADE 3
 
     public static final ItemEntry<ComponentItem> HAULER_PROBE_GRADE_3 = REGISTRATE
@@ -2265,6 +2265,32 @@ public class CosmicItems {
                     prov.modLoc("item/terminal/terminal_overlay")))
             .properties(p -> p.stacksTo(1))
             .onRegister(attach(new LinkedTerminalBehavior()))
+            .register();
+
+    public static final ItemEntry<ComponentItem> CARBON_ASTEROID = REGISTRATE
+            .item("carbon_asteroid_base", ComponentItem::create)
+            .lang("Carbonic Asteroid")
+            .properties(p -> p.stacksTo(1))
+            .tag()
+            .defaultModel()
+            .onRegister(attachRenderer(() -> RadianceItemRenderer.INSTANCE))
+            .register();
+    public static final ItemEntry<ComponentItem> FERRIC_ASTEROID = REGISTRATE
+            .item("ferric_asteroid", ComponentItem::create)
+            .lang("Ferric Asteroid")
+            .properties(p -> p.stacksTo(1))
+            .tag()
+            .defaultModel()
+            .onRegister(attachRenderer(() -> RadianceItemRenderer.INSTANCE))
+            .register();
+
+    public static final ItemEntry<ComponentItem> RARE_METAL_ASTEROID = REGISTRATE
+            .item("rare_metals_asteroid", ComponentItem::create)
+            .lang("Exotic Metals Asteroid")
+            .properties(p -> p.stacksTo(1))
+            .tag()
+            .defaultModel()
+            .onRegister(attachRenderer(() -> RadianceItemRenderer.INSTANCE))
             .register();
 
     public static ICustomDescriptionId cellName() {
