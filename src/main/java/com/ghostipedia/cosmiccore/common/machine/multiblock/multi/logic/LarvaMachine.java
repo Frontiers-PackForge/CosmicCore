@@ -56,7 +56,11 @@ public class LarvaMachine extends WorkableElectricMultiblockMachine {
         if (LARVA_LOOTTABLE == null) {
             LARVA_LOOTTABLE = new HashMap<>();
             // Beetle Data Orb (NC) -> Tier (0-based)-> -> Astroid
-            LARVA_LOOTTABLE.put(getNamedPaper("Iron Beetle"), Pair.of(0, CosmicItems.FERRIC_ASTEROID.asStack()));
+            LARVA_LOOTTABLE.put(CosmicItems.HAULER_PROBE_GRADE_1.asStack(), Pair.of(0, CosmicItems.FERRIC_ASTEROID.asStack()));
+            LARVA_LOOTTABLE.put(CosmicItems.HAULER_PROBE_GRADE_2.asStack(), Pair.of(0, CosmicItems.FERRIC_ASTEROID.asStack()));
+            LARVA_LOOTTABLE.put(CosmicItems.HAULER_PROBE_GRADE_3.asStack(), Pair.of(0, CosmicItems.FERRIC_ASTEROID.asStack()));
+            LARVA_LOOTTABLE.put(CosmicItems.HAULER_PROBE_GRADE_4.asStack(), Pair.of(0, CosmicItems.FERRIC_ASTEROID.asStack()));
+            LARVA_LOOTTABLE.put(CosmicItems.HAULER_PROBE_GRADE_5.asStack(), Pair.of(0, CosmicItems.FERRIC_ASTEROID.asStack()));
 
         }
         return LARVA_LOOTTABLE;
@@ -77,7 +81,7 @@ public class LarvaMachine extends WorkableElectricMultiblockMachine {
     private static Map<Integer, Pair<ItemStack, FluidStack>> getLarvaInputs() {
         if (LARVA_INPUTS == null) {
             LARVA_INPUTS = new HashMap<>();
-            LARVA_INPUTS.put(0, Pair.of(getNamedPaper("input1"), GTMaterials.RocketFuel.getFluid(1000)));
+            LARVA_INPUTS.put(0, Pair.of(CosmicItems.ESCHATON_PROCESSOR_SUPERCOMPUTER.asStack(), GTMaterials.RocketFuel.getFluid(1000)));
         }
         return LARVA_INPUTS;
     }
@@ -177,6 +181,8 @@ public class LarvaMachine extends WorkableElectricMultiblockMachine {
 
                 if (canConsumeItem(availableItems, itemInput) &&
                         canConsumeFluid(availableFluids, fluidInput)) {
+                    // Subtract the inputs from our list of available inputs
+                    consumeItem(availableItems, itemInput);
                     // Subtract the inputs from our list of available inputs
                     consumeItem(availableItems, itemInput);
                     consumeFluid(availableFluids, fluidInput);
