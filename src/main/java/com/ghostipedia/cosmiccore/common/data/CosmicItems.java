@@ -2015,7 +2015,7 @@ public class CosmicItems {
 
     public static final ItemEntry<ComponentItem> HAULER_PROBE_GRADE_1 = REGISTRATE
             .item("freight_beetle_grade_1", ComponentItem::create)
-            .lang("Hauler Probe Mk.1")
+            .lang("Freight Beetle Mk.1")
             .properties(p -> p.stacksTo(64).durability(1024))
             .tag()
             .defaultModel()
@@ -2023,7 +2023,7 @@ public class CosmicItems {
 
     public static final ItemEntry<ComponentItem> ARMORED_HAULER_PROBE_GRADE_1 = REGISTRATE
             .item("armored_freight_beetle_grade_1", ComponentItem::create)
-            .lang("Armored Hauler Probe Mk.1")
+            .lang("Armored Freight Beetle Mk.1")
             .properties(p -> p.stacksTo(64).durability(1024))
             .tag()
             .defaultModel()
@@ -2063,7 +2063,7 @@ public class CosmicItems {
 
     public static final ItemEntry<ComponentItem> HAULER_PROBE_GRADE_2 = REGISTRATE
             .item("freight_beetle_grade_2", ComponentItem::create)
-            .lang("Hauler Probe Mk.2")
+            .lang("Freight Beetle Mk.2")
             .properties(p -> p.stacksTo(64).durability(1024))
             .tag()
             .defaultModel()
@@ -2071,7 +2071,7 @@ public class CosmicItems {
 
     public static final ItemEntry<ComponentItem> ARMORED_HAULER_PROBE_GRADE_2 = REGISTRATE
             .item("armored_freight_beetle_grade_2", ComponentItem::create)
-            .lang("Armored Hauler Probe Mk.2")
+            .lang("Armored Freight Beetle Mk.2")
             .properties(p -> p.stacksTo(64).durability(1024))
             .tag()
             .defaultModel()
@@ -2112,7 +2112,7 @@ public class CosmicItems {
 
     public static final ItemEntry<ComponentItem> HAULER_PROBE_GRADE_3 = REGISTRATE
             .item("freight_beetle_grade_3", ComponentItem::create)
-            .lang("Hauler Probe Mk.3")
+            .lang("Freight Beetle Mk.3")
             .properties(p -> p.stacksTo(64).durability(1024))
             .tag()
             .defaultModel()
@@ -2120,7 +2120,7 @@ public class CosmicItems {
 
     public static final ItemEntry<ComponentItem> ARMORED_HAULER_PROBE_GRADE_3 = REGISTRATE
             .item("armored_freight_beetle_grade_3", ComponentItem::create)
-            .lang("Armored Hauler Probe Mk.3")
+            .lang("Armored Freight Beetle Mk.3")
             .properties(p -> p.stacksTo(64).durability(1024))
             .tag()
             .defaultModel()
@@ -2162,7 +2162,7 @@ public class CosmicItems {
 
     public static final ItemEntry<ComponentItem> HAULER_PROBE_GRADE_4 = REGISTRATE
             .item("freight_beetle_grade_4", ComponentItem::create)
-            .lang("Hauler Probe Mk.4")
+            .lang("Freight Beetle Mk.4")
             .properties(p -> p.stacksTo(64).durability(1024))
             .tag()
             .defaultModel()
@@ -2170,7 +2170,7 @@ public class CosmicItems {
 
     public static final ItemEntry<ComponentItem> ARMORED_HAULER_PROBE_GRADE_4 = REGISTRATE
             .item("armored_freight_beetle_grade_4", ComponentItem::create)
-            .lang("Armored Hauler Probe Mk.4")
+            .lang("Armored Freight Beetle Mk.4")
             .properties(p -> p.stacksTo(64).durability(1024))
             .tag()
             .defaultModel()
@@ -2210,7 +2210,7 @@ public class CosmicItems {
 
     public static final ItemEntry<ComponentItem> HAULER_PROBE_GRADE_5 = REGISTRATE
             .item("freight_beetle_grade_5", ComponentItem::create)
-            .lang("Hauler Probe Mk.5")
+            .lang("Freight Beetle Mk.5")
             .properties(p -> p.stacksTo(64).durability(1024))
             .tag()
             .defaultModel()
@@ -2218,7 +2218,7 @@ public class CosmicItems {
 
     public static final ItemEntry<ComponentItem> ARMORED_HAULER_PROBE_GRADE_5 = REGISTRATE
             .item("armored_freight_beetle_grade_5", ComponentItem::create)
-            .lang("Armored Hauler Probe Mk.5")
+            .lang("Armored Freight Beetle Mk.5")
             .properties(p -> p.stacksTo(64).durability(1024))
             .tag()
             .defaultModel()
@@ -2291,6 +2291,113 @@ public class CosmicItems {
             .tag()
             .defaultModel()
             .onRegister(attachRenderer(() -> RadianceItemRenderer.INSTANCE))
+            .register();
+
+    public static final ItemEntry<ComponentItem> AURIC_ASTEROID = REGISTRATE
+            .item("auric_asteroid", ComponentItem::create)
+            .lang("Auric Asteroid")
+            .properties(p -> p.stacksTo(1))
+            .tag()
+            .defaultModel()
+            .onRegister(attachRenderer(() -> RadianceItemRenderer.INSTANCE))
+            .register();
+
+    public static final ItemEntry<ComponentItem> BRIMSTONE_ASTEROID = REGISTRATE
+            .item("brimstone_asteroid", ComponentItem::create)
+            .lang("Brimstone Asteroid")
+            .properties(p -> p.stacksTo(1))
+            .tag()
+            .defaultModel()
+            .onRegister(attachRenderer(() -> RadianceItemRenderer.INSTANCE))
+            .register();
+
+    public static final ItemEntry<ComponentItem> LITH_ASTEROID = REGISTRATE
+            .item("lith_asteroid", ComponentItem::create)
+            .lang("Lith Asteroid")
+            .properties(p -> p.stacksTo(1))
+            .tag()
+            .defaultModel()
+            .onRegister(attachRenderer(() -> RadianceItemRenderer.INSTANCE))
+            .register();
+
+    public static final ItemEntry<ComponentItem> MAFIC_ASTEROID = REGISTRATE
+            .item("mafic_asteroid", ComponentItem::create)
+            .lang("Mafic Asteroid")
+            .properties(p -> p.stacksTo(1))
+            .tag()
+            .defaultModel()
+            .onRegister(attachRenderer(() -> RadianceItemRenderer.INSTANCE))
+            .register();
+
+    public static final ItemEntry<ComponentItem> MOSSY_ASTEROID = REGISTRATE
+            .item("mossy_asteroid", ComponentItem::create)
+            .lang("Mossy Asteroid")
+            .properties(p -> p.stacksTo(1))
+            .tag()
+            .defaultModel()
+            .onRegister(attachRenderer(() -> RadianceItemRenderer.INSTANCE))
+            .register();
+
+    public static final ItemEntry<ComponentItem> OCCULT_ASTEROID = REGISTRATE
+            .item("occult_asteroid", ComponentItem::create)
+            .lang("Occult Asteroid")
+            .properties(p -> p.stacksTo(1))
+            .tag()
+            .defaultModel()
+            .onRegister(attachRenderer(() -> RadianceItemRenderer.INSTANCE))
+            .register();
+
+    public static final ItemEntry<ComponentItem> OXIDE_ASTEROID = REGISTRATE
+            .item("oxide_asteroid", ComponentItem::create)
+            .lang("Oxide Asteroid")
+            .properties(p -> p.stacksTo(1))
+            .tag()
+            .defaultModel()
+            .onRegister(attachRenderer(() -> RadianceItemRenderer.INSTANCE))
+            .register();
+
+    public static final ItemEntry<ComponentItem> SANGUINE_ASTEROID = REGISTRATE
+            .item("sanguine_asteroid", ComponentItem::create)
+            .lang("Sanguine Asteroid")
+            .properties(p -> p.stacksTo(1))
+            .tag()
+            .defaultModel()
+            .onRegister(attachRenderer(() -> RadianceItemRenderer.INSTANCE))
+            .register();
+
+    public static final ItemEntry<ComponentItem> WASTELAND_ASTEROID = REGISTRATE
+            .item("wasteland_asteroid", ComponentItem::create)
+            .lang("Wasteland Asteroid")
+            .properties(p -> p.stacksTo(1))
+            .tag()
+            .defaultModel()
+            .onRegister(attachRenderer(() -> RadianceItemRenderer.INSTANCE))
+            .register();
+
+    public static final ItemEntry<ComponentItem> TUNGSTENSTEEL_NANOLATTICE_SPOOL = REGISTRATE
+            .item("tungstensteel_nanolattice_spool", ComponentItem::create)
+            .lang("Tungstensteel Nanolattice Spool")
+            .properties(p -> p.stacksTo(16))
+            .tag()
+            .defaultModel()
+            .onRegister(attachRenderer(() -> RadianceItemRenderer.INSTANCE))
+            .register();
+
+    public static final ItemEntry<ComponentItem> TRINAVINE_NANOLATTICE_SPOOL = REGISTRATE
+            .item("trinavine_nanolattice_spool", ComponentItem::create)
+            .lang("Trinavine Nanolattice Spool")
+            .properties(p -> p.stacksTo(16))
+            .tag()
+            .defaultModel()
+            .onRegister(attachRenderer(() -> RadianceItemRenderer.INSTANCE))
+            .register();
+    //What we'd write our NBT ON and Read in LARVA
+    public static final ItemEntry<ComponentItem> TARGETING_CHIP = REGISTRATE
+            .item("targeting_chip", ComponentItem::create)
+            .lang("Asteroid Targeting Chip")
+            .properties(p -> p.stacksTo(1))
+            .tag()
+            .defaultModel()
             .register();
 
     public static ICustomDescriptionId cellName() {

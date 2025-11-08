@@ -56,11 +56,20 @@ public class LarvaMachine extends WorkableElectricMultiblockMachine {
         if (LARVA_LOOTTABLE == null) {
             LARVA_LOOTTABLE = new HashMap<>();
             // Beetle Data Orb (NC) -> Tier (0-based)-> -> Astroid
-            LARVA_LOOTTABLE.put(CosmicItems.HAULER_PROBE_GRADE_1.asStack(), Pair.of(0, CosmicItems.FERRIC_ASTEROID.asStack()));
-            LARVA_LOOTTABLE.put(CosmicItems.HAULER_PROBE_GRADE_2.asStack(), Pair.of(0, CosmicItems.FERRIC_ASTEROID.asStack()));
-            LARVA_LOOTTABLE.put(CosmicItems.HAULER_PROBE_GRADE_3.asStack(), Pair.of(0, CosmicItems.FERRIC_ASTEROID.asStack()));
-            LARVA_LOOTTABLE.put(CosmicItems.HAULER_PROBE_GRADE_4.asStack(), Pair.of(0, CosmicItems.FERRIC_ASTEROID.asStack()));
-            LARVA_LOOTTABLE.put(CosmicItems.HAULER_PROBE_GRADE_5.asStack(), Pair.of(0, CosmicItems.FERRIC_ASTEROID.asStack()));
+            //TODO: FIGURE OUT HOW TO USE NBT HERE, or WHERE???
+            //TODO: Make Machine Like scanner or use Scanner recipes to write NBT like `asteroid:"whatever"` (idk the format lol)
+            LARVA_LOOTTABLE.put(CosmicItems.TARGETING_CHIP.asStack(), Pair.of(0, CosmicItems.CARBON_ASTEROID.asStack()));
+            LARVA_LOOTTABLE.put(CosmicItems.TARGETING_CHIP.asStack(), Pair.of(0, CosmicItems.FERRIC_ASTEROID.asStack()));
+            LARVA_LOOTTABLE.put(CosmicItems.TARGETING_CHIP.asStack(), Pair.of(0, CosmicItems.RARE_METAL_ASTEROID.asStack()));
+            LARVA_LOOTTABLE.put(CosmicItems.TARGETING_CHIP.asStack(), Pair.of(0, CosmicItems.AURIC_ASTEROID.asStack()));
+            LARVA_LOOTTABLE.put(CosmicItems.TARGETING_CHIP.asStack(), Pair.of(0, CosmicItems.BRIMSTONE_ASTEROID.asStack()));
+            LARVA_LOOTTABLE.put(CosmicItems.TARGETING_CHIP.asStack(), Pair.of(0, CosmicItems.LITH_ASTEROID.asStack()));
+            LARVA_LOOTTABLE.put(CosmicItems.TARGETING_CHIP.asStack(), Pair.of(0, CosmicItems.MAFIC_ASTEROID.asStack()));
+            LARVA_LOOTTABLE.put(CosmicItems.TARGETING_CHIP.asStack(), Pair.of(0, CosmicItems.MOSSY_ASTEROID.asStack()));
+            LARVA_LOOTTABLE.put(CosmicItems.TARGETING_CHIP.asStack(), Pair.of(0, CosmicItems.OCCULT_ASTEROID.asStack()));
+            LARVA_LOOTTABLE.put(CosmicItems.TARGETING_CHIP.asStack(), Pair.of(0, CosmicItems.OXIDE_ASTEROID.asStack()));
+            LARVA_LOOTTABLE.put(CosmicItems.TARGETING_CHIP.asStack(), Pair.of(0, CosmicItems.SANGUINE_ASTEROID.asStack()));
+            LARVA_LOOTTABLE.put(CosmicItems.TARGETING_CHIP.asStack(), Pair.of(0, CosmicItems.WASTELAND_ASTEROID.asStack()));
 
         }
         return LARVA_LOOTTABLE;
@@ -81,7 +90,11 @@ public class LarvaMachine extends WorkableElectricMultiblockMachine {
     private static Map<Integer, Pair<ItemStack, FluidStack>> getLarvaInputs() {
         if (LARVA_INPUTS == null) {
             LARVA_INPUTS = new HashMap<>();
-            LARVA_INPUTS.put(0, Pair.of(CosmicItems.ESCHATON_PROCESSOR_SUPERCOMPUTER.asStack(), GTMaterials.RocketFuel.getFluid(1000)));
+            LARVA_INPUTS.put(0, Pair.of(CosmicItems.TUNGSTENSTEEL_NANOLATTICE_SPOOL.asStack(16), GTMaterials.RocketFuel.getFluid(8000)));
+            LARVA_INPUTS.put(1, Pair.of(CosmicItems.TUNGSTENSTEEL_NANOLATTICE_SPOOL.asStack(64), GTMaterials.RocketFuel.getFluid(16000)));
+            LARVA_INPUTS.put(2, Pair.of(CosmicItems.TUNGSTENSTEEL_NANOLATTICE_SPOOL.asStack(256), GTMaterials.RocketFuel.getFluid(64000)));
+            LARVA_INPUTS.put(3, Pair.of(CosmicItems.TUNGSTENSTEEL_NANOLATTICE_SPOOL.asStack(1024), GTMaterials.RocketFuel.getFluid(256000)));
+            LARVA_INPUTS.put(4, Pair.of(CosmicItems.TUNGSTENSTEEL_NANOLATTICE_SPOOL.asStack(4096), GTMaterials.RocketFuel.getFluid(1024000)));
         }
         return LARVA_INPUTS;
     }

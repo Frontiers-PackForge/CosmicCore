@@ -221,6 +221,7 @@ public class CosmicRecipeTypes {
             .setProgressBar(GuiTextures.PROGRESS_BAR_ARROW, ProgressTexture.FillDirection.LEFT_TO_RIGHT);
     public static final GTRecipeType LARGE_ROASTER = GTRecipeTypes
             .register("large_roaster", ELECTRIC)
+            .setMaxSize(IO.IN, EmberRecipeCapability.CAP, 1)
             .setMaxIOSize(4, 4, 4, 4)
             .setProgressBar(GuiTextures.PROGRESS_BAR_ARROW, ProgressTexture.FillDirection.LEFT_TO_RIGHT);
 
@@ -468,8 +469,14 @@ public class CosmicRecipeTypes {
                     .save(provider);
         });
 
+        //Eclipsed Forge is the big EU powered version of the Dawn Forge
         DAWN_FORGE.onRecipeBuild((builder, provider) -> {
             DAWNFORGE_ECLIPSED.copyFrom(builder)
+                    .save(provider);
+        });
+        //Large Roaster can do all the small Roaster can, but also allows Ember :)
+        ROASTER.onRecipeBuild((builder, provider) -> {
+            LARGE_ROASTER.copyFrom(builder)
                     .save(provider);
         });
 
