@@ -1,6 +1,7 @@
 package com.ghostipedia.cosmiccore.common.machine.multiblock.multi.logic;
 
 import com.ghostipedia.cosmiccore.CosmicCore;
+import com.ghostipedia.cosmiccore.common.data.CosmicItems;
 import com.ghostipedia.cosmiccore.gtbridge.CosmicRecipeTypes;
 
 import com.gregtechceu.gtceu.api.GTValues;
@@ -13,6 +14,7 @@ import com.gregtechceu.gtceu.api.machine.trait.NotifiableFluidTank;
 import com.gregtechceu.gtceu.api.machine.trait.NotifiableItemStackHandler;
 import com.gregtechceu.gtceu.api.machine.trait.RecipeLogic;
 import com.gregtechceu.gtceu.api.recipe.GTRecipe;
+import com.gregtechceu.gtceu.common.data.GTMaterials;
 import com.gregtechceu.gtceu.common.machine.multiblock.part.ItemBusPartMachine;
 import com.gregtechceu.gtceu.data.recipe.builder.GTRecipeBuilder;
 
@@ -54,7 +56,7 @@ public class LarvaMachine extends WorkableElectricMultiblockMachine {
         if (LARVA_LOOTTABLE == null) {
             LARVA_LOOTTABLE = new HashMap<>();
             // Beetle Data Orb (NC) -> Tier (0-based)-> -> Astroid
-            LARVA_LOOTTABLE.put(getNamedPaper("Iron Beetle"), Pair.of(0, getNamedPaper("Iron Astroid")));
+            LARVA_LOOTTABLE.put(getNamedPaper("Iron Beetle"), Pair.of(0, CosmicItems.FERRIC_ASTEROID.asStack()));
 
         }
         return LARVA_LOOTTABLE;
@@ -63,9 +65,11 @@ public class LarvaMachine extends WorkableElectricMultiblockMachine {
     private static Map<ItemStack, Integer> getLarvaTiers() {
         if (LARVA_TIERS == null) {
             LARVA_TIERS = new HashMap<>();
-            LARVA_TIERS.put(getNamedPaper("tier1"), 0);
-            LARVA_TIERS.put(getNamedPaper("tier2"), 1);
-            LARVA_TIERS.put(getNamedPaper("tier3"), 2);
+            LARVA_TIERS.put(CosmicItems.HAULER_PROBE_GRADE_1.asStack(), 0);
+            LARVA_TIERS.put(CosmicItems.HAULER_PROBE_GRADE_2.asStack(), 1);
+            LARVA_TIERS.put(CosmicItems.HAULER_PROBE_GRADE_3.asStack(), 2);
+            LARVA_TIERS.put(CosmicItems.HAULER_PROBE_GRADE_4.asStack(), 3);
+            LARVA_TIERS.put(CosmicItems.HAULER_PROBE_GRADE_5.asStack(), 4);
         }
         return LARVA_TIERS;
     }
@@ -73,7 +77,7 @@ public class LarvaMachine extends WorkableElectricMultiblockMachine {
     private static Map<Integer, Pair<ItemStack, FluidStack>> getLarvaInputs() {
         if (LARVA_INPUTS == null) {
             LARVA_INPUTS = new HashMap<>();
-            LARVA_INPUTS.put(0, Pair.of(getNamedPaper("input1"), new FluidStack(Fluids.WATER, 1000)));
+            LARVA_INPUTS.put(0, Pair.of(getNamedPaper("input1"), GTMaterials.RocketFuel.getFluid(1000)));
         }
         return LARVA_INPUTS;
     }
