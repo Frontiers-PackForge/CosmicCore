@@ -71,6 +71,7 @@ public class LarvaMachine extends WorkableElectricMultiblockMachine {
     public static void generateTargettingChipRecipes(Consumer<FinishedRecipe> provider) {
         SCANNER_RECIPES.recipeBuilder(CosmicCore.id("iron_astroid"))
                 .inputItems(new ItemStack(Blocks.IRON_ORE.asItem(), 1))
+                .inputItems(CosmicItems.TARGETING_CHIP.asStack())
                 .outputItems(getAstroidDataChip("iron_astroid"))
                 .duration(40)
                 .EUt(GTValues.VA[GTValues.HV])
