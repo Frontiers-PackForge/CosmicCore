@@ -18,10 +18,11 @@ import com.gregtechceu.gtceu.common.data.GTMaterials;
 import com.gregtechceu.gtceu.common.machine.multiblock.part.ItemBusPartMachine;
 import com.gregtechceu.gtceu.data.recipe.builder.GTRecipeBuilder;
 
+import net.minecraft.data.recipes.FinishedRecipe;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
-import net.minecraft.world.level.material.Fluids;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraftforge.fluids.FluidStack;
 
 import com.mojang.datafixers.util.Pair;
@@ -33,7 +34,12 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Consumer;
 
+import static com.ghostipedia.cosmiccore.common.data.materials.CosmicMaterials.DilutedPrisma;
+import static com.ghostipedia.cosmiccore.common.data.materials.CosmicMaterials.Prisma;
+import static com.gregtechceu.gtceu.common.data.GTMaterials.Water;
+import static com.gregtechceu.gtceu.common.data.GTRecipeTypes.SCANNER_RECIPES;
 import static com.gregtechceu.gtceu.common.item.IntCircuitBehaviour.getCircuitConfiguration;
 
 public class LarvaMachine extends WorkableElectricMultiblockMachine {
@@ -48,17 +54,35 @@ public class LarvaMachine extends WorkableElectricMultiblockMachine {
         super(holder, args);
     }
 
+    public static String ASTROID_NBT = "cosmic_core_astroid";
+
     private static Map<ItemStack, Pair<Integer, ItemStack>> LARVA_LOOTTABLE = null;
     private static Map<ItemStack, Integer> LARVA_TIERS = null;
     private static Map<Integer, Pair<ItemStack, FluidStack>> LARVA_INPUTS = null;
+    private static Map<ItemStack, ItemStack> RESEARCH_RECIPES = null;
+
+    private static ItemStack getAstroidDataChip(String id){
+        ItemStack stack = CosmicItems.TARGETING_CHIP.asStack();
+        stack.getOrCreateTag().putString(ASTROID_NBT, id);
+        return stack;
+    }
+
+    // This gets called from our CosmicRecipes class, not anywhere here. Put here to centralize recipe creation.
+    public static void generateTargettingChipRecipes(Consumer<FinishedRecipe> provider) {
+        SCANNER_RECIPES.recipeBuilder(CosmicCore.id("iron_astroid"))
+                .inputItems(new ItemStack(Blocks.IRON_ORE.asItem(), 1))
+                .outputItems(getAstroidDataChip("iron_astroid"))
+                .duration(40)
+                .EUt(GTValues.VA[GTValues.HV])
+                .save(provider);
+    }
+
 
     private static Map<ItemStack, Pair<Integer, ItemStack>> getLarvaLoottable() {
         if (LARVA_LOOTTABLE == null) {
             LARVA_LOOTTABLE = new HashMap<>();
             // Beetle Data Orb (NC) -> Tier (0-based)-> -> Astroid
-            //TODO: FIGURE OUT HOW TO USE NBT HERE, or WHERE???
-            //TODO: Make Machine Like scanner or use Scanner recipes to write NBT like `asteroid:"whatever"` (idk the format lol)
-            LARVA_LOOTTABLE.put(CosmicItems.TARGETING_CHIP.asStack(), Pair.of(0, CosmicItems.CARBON_ASTEROID.asStack()));
+            LARVA_LOOTTABLE.put(getAstroidDataChip("iron_astroid"), Pair.of(0, CosmicItems.CARBON_ASTEROID.asStack()));
             LARVA_LOOTTABLE.put(CosmicItems.TARGETING_CHIP.asStack(), Pair.of(0, CosmicItems.FERRIC_ASTEROID.asStack()));
             LARVA_LOOTTABLE.put(CosmicItems.TARGETING_CHIP.asStack(), Pair.of(0, CosmicItems.RARE_METAL_ASTEROID.asStack()));
             LARVA_LOOTTABLE.put(CosmicItems.TARGETING_CHIP.asStack(), Pair.of(0, CosmicItems.AURIC_ASTEROID.asStack()));
