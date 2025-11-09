@@ -96,6 +96,10 @@ public class CosmicLangHandler extends LangHandler {
                 "§7Can use any capacitor and be expanded vertically up to 18 times§r",
                 "§7Accepts §6Laser Hatches§r");
 
+
+        provider.add("emi.category.cosmiccore.asteroid_mining", "Asteroid Mining Operations");
+
+
         // recipe stuff
         provider.add("cosmiccore.recipe.soul_in", "Soul Input: %s");
         provider.add("cosmiccore.recipe.soul_out", "Soul Output: %s");

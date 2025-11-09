@@ -30,14 +30,6 @@ public class AsteroidTargetingChipItem extends Item {
             return;
         }
 
-        // Example NBT schema (adapt as needed)
-        // String: AsteroidType = "lith|mafic|mossy|occult|oxide|sanguine|wasteland"
-        // Long: TargetId
-        // Int: Tier
-        // Float: LockStrength (0..1)
-        // String: Sector
-        // String: Mode = "survey|capture|disassemble"
-
         String rawType = tag.getString("AsteroidType");
         String asteroidType = prettyType(rawType);
         int tier = tag.getInt("Tier");
@@ -63,7 +55,7 @@ public class AsteroidTargetingChipItem extends Item {
             case "ferric", "ferric_asteroid" -> "Ferric Asteroid";
 
             // Exotic / Rare Metals
-            case "rare", "rare_metal", "rare_metals", "rare_metals_asteroid", "exotic", "exotic_metals" -> "Exotic Metals Asteroid";
+            case "rare", "rare_metal", "rare_metals", "rare_metal_asteroid", "exotic", "exotic_metals" -> "Rare Metals Asteroid";
 
             // Auric
             case "auric", "auric_asteroid" -> "Auric Asteroid";

@@ -2381,7 +2381,6 @@ public class CosmicItems {
             .properties(p -> p.stacksTo(16))
             .tag()
             .defaultModel()
-            .onRegister(attachRenderer(() -> RadianceItemRenderer.INSTANCE))
             .register();
 
     public static final ItemEntry<ComponentItem> TRINAVINE_NANOLATTICE_SPOOL = REGISTRATE
@@ -2390,7 +2389,6 @@ public class CosmicItems {
             .properties(p -> p.stacksTo(16))
             .tag()
             .defaultModel()
-            .onRegister(attachRenderer(() -> RadianceItemRenderer.INSTANCE))
             .register();
     // What we'd write our NBT ON and Read in LARVA
     public static final ItemEntry<AsteroidTargetingChipItem> TARGETING_CHIP = REGISTRATE
