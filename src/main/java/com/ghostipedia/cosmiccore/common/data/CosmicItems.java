@@ -7,6 +7,7 @@ import com.ghostipedia.cosmiccore.api.registries.CosmicRegistration;
 import com.ghostipedia.cosmiccore.client.renderer.item.HaloItemRenderer;
 import com.ghostipedia.cosmiccore.client.renderer.item.RadianceItemRenderer;
 import com.ghostipedia.cosmiccore.common.data.tag.item.CosmicItemTags;
+import com.ghostipedia.cosmiccore.common.item.AsteroidTargetingChipItem;
 import com.ghostipedia.cosmiccore.common.item.CosmicScytheItem;
 import com.ghostipedia.cosmiccore.common.item.armor.ChestSanguineWarptechSuite;
 import com.ghostipedia.cosmiccore.common.item.armor.HelmetSanguineWarptechSuite;
@@ -2391,9 +2392,9 @@ public class CosmicItems {
             .defaultModel()
             .onRegister(attachRenderer(() -> RadianceItemRenderer.INSTANCE))
             .register();
-    //What we'd write our NBT ON and Read in LARVA
-    public static final ItemEntry<ComponentItem> TARGETING_CHIP = REGISTRATE
-            .item("targeting_chip", ComponentItem::create)
+    // What we'd write our NBT ON and Read in LARVA
+    public static final ItemEntry<AsteroidTargetingChipItem> TARGETING_CHIP = REGISTRATE
+            .item("asteroid_targeting_chip", props -> new AsteroidTargetingChipItem(props.stacksTo(1)))
             .lang("Asteroid Targeting Chip")
             .properties(p -> p.stacksTo(1))
             .tag()

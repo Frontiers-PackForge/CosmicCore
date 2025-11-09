@@ -36,9 +36,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.Consumer;
 
-import static com.ghostipedia.cosmiccore.common.data.materials.CosmicMaterials.DilutedPrisma;
-import static com.ghostipedia.cosmiccore.common.data.materials.CosmicMaterials.Prisma;
-import static com.gregtechceu.gtceu.common.data.GTMaterials.Water;
 import static com.gregtechceu.gtceu.common.data.GTRecipeTypes.SCANNER_RECIPES;
 import static com.gregtechceu.gtceu.common.item.IntCircuitBehaviour.getCircuitConfiguration;
 
@@ -54,47 +51,55 @@ public class LarvaMachine extends WorkableElectricMultiblockMachine {
         super(holder, args);
     }
 
-    public static String ASTROID_NBT = "cosmic_core_astroid";
+    public static String ASTROID_NBT_TYPE = "AsteroidType";
+    public static String ASTROID_NBT_TIER = "Tier";
 
     private static Map<ItemStack, Pair<Integer, ItemStack>> LARVA_LOOTTABLE = null;
     private static Map<ItemStack, Integer> LARVA_TIERS = null;
     private static Map<Integer, Pair<ItemStack, FluidStack>> LARVA_INPUTS = null;
     private static Map<ItemStack, ItemStack> RESEARCH_RECIPES = null;
 
-    private static ItemStack getAstroidDataChip(String id){
+    private static ItemStack getAstroidDataChip(String id, int tier) {
         ItemStack stack = CosmicItems.TARGETING_CHIP.asStack();
-        stack.getOrCreateTag().putString(ASTROID_NBT, id);
+        stack.getOrCreateTag().putString(ASTROID_NBT_TYPE, id);
+        stack.getOrCreateTag().putInt(ASTROID_NBT_TIER, tier);
         return stack;
     }
 
     // This gets called from our CosmicRecipes class, not anywhere here. Put here to centralize recipe creation.
     public static void generateTargettingChipRecipes(Consumer<FinishedRecipe> provider) {
-        SCANNER_RECIPES.recipeBuilder(CosmicCore.id("iron_astroid"))
+        SCANNER_RECIPES.recipeBuilder(CosmicCore.id("ferric_asteroid"))
                 .inputItems(new ItemStack(Blocks.IRON_ORE.asItem(), 1))
                 .inputItems(CosmicItems.TARGETING_CHIP.asStack())
-                .outputItems(getAstroidDataChip("iron_astroid"))
+                .outputItems(getAstroidDataChip("ferric_asteroid", 1))
                 .duration(40)
                 .EUt(GTValues.VA[GTValues.HV])
                 .save(provider);
     }
 
-
     private static Map<ItemStack, Pair<Integer, ItemStack>> getLarvaLoottable() {
         if (LARVA_LOOTTABLE == null) {
             LARVA_LOOTTABLE = new HashMap<>();
             // Beetle Data Orb (NC) -> Tier (0-based)-> -> Astroid
-            LARVA_LOOTTABLE.put(getAstroidDataChip("iron_astroid"), Pair.of(0, CosmicItems.CARBON_ASTEROID.asStack()));
-            LARVA_LOOTTABLE.put(CosmicItems.TARGETING_CHIP.asStack(), Pair.of(0, CosmicItems.FERRIC_ASTEROID.asStack()));
-            LARVA_LOOTTABLE.put(CosmicItems.TARGETING_CHIP.asStack(), Pair.of(0, CosmicItems.RARE_METAL_ASTEROID.asStack()));
+            LARVA_LOOTTABLE.put(getAstroidDataChip("ferric_asteroid", 1),
+                    Pair.of(0, CosmicItems.FERRIC_ASTEROID.asStack()));
+            LARVA_LOOTTABLE.put(CosmicItems.TARGETING_CHIP.asStack(),
+                    Pair.of(0, CosmicItems.FERRIC_ASTEROID.asStack()));
+            LARVA_LOOTTABLE.put(CosmicItems.TARGETING_CHIP.asStack(),
+                    Pair.of(0, CosmicItems.RARE_METAL_ASTEROID.asStack()));
             LARVA_LOOTTABLE.put(CosmicItems.TARGETING_CHIP.asStack(), Pair.of(0, CosmicItems.AURIC_ASTEROID.asStack()));
-            LARVA_LOOTTABLE.put(CosmicItems.TARGETING_CHIP.asStack(), Pair.of(0, CosmicItems.BRIMSTONE_ASTEROID.asStack()));
+            LARVA_LOOTTABLE.put(CosmicItems.TARGETING_CHIP.asStack(),
+                    Pair.of(0, CosmicItems.BRIMSTONE_ASTEROID.asStack()));
             LARVA_LOOTTABLE.put(CosmicItems.TARGETING_CHIP.asStack(), Pair.of(0, CosmicItems.LITH_ASTEROID.asStack()));
             LARVA_LOOTTABLE.put(CosmicItems.TARGETING_CHIP.asStack(), Pair.of(0, CosmicItems.MAFIC_ASTEROID.asStack()));
             LARVA_LOOTTABLE.put(CosmicItems.TARGETING_CHIP.asStack(), Pair.of(0, CosmicItems.MOSSY_ASTEROID.asStack()));
-            LARVA_LOOTTABLE.put(CosmicItems.TARGETING_CHIP.asStack(), Pair.of(0, CosmicItems.OCCULT_ASTEROID.asStack()));
+            LARVA_LOOTTABLE.put(CosmicItems.TARGETING_CHIP.asStack(),
+                    Pair.of(0, CosmicItems.OCCULT_ASTEROID.asStack()));
             LARVA_LOOTTABLE.put(CosmicItems.TARGETING_CHIP.asStack(), Pair.of(0, CosmicItems.OXIDE_ASTEROID.asStack()));
-            LARVA_LOOTTABLE.put(CosmicItems.TARGETING_CHIP.asStack(), Pair.of(0, CosmicItems.SANGUINE_ASTEROID.asStack()));
-            LARVA_LOOTTABLE.put(CosmicItems.TARGETING_CHIP.asStack(), Pair.of(0, CosmicItems.WASTELAND_ASTEROID.asStack()));
+            LARVA_LOOTTABLE.put(CosmicItems.TARGETING_CHIP.asStack(),
+                    Pair.of(0, CosmicItems.SANGUINE_ASTEROID.asStack()));
+            LARVA_LOOTTABLE.put(CosmicItems.TARGETING_CHIP.asStack(),
+                    Pair.of(0, CosmicItems.WASTELAND_ASTEROID.asStack()));
 
         }
         return LARVA_LOOTTABLE;
@@ -115,11 +120,16 @@ public class LarvaMachine extends WorkableElectricMultiblockMachine {
     private static Map<Integer, Pair<ItemStack, FluidStack>> getLarvaInputs() {
         if (LARVA_INPUTS == null) {
             LARVA_INPUTS = new HashMap<>();
-            LARVA_INPUTS.put(0, Pair.of(CosmicItems.TUNGSTENSTEEL_NANOLATTICE_SPOOL.asStack(16), GTMaterials.RocketFuel.getFluid(8000)));
-            LARVA_INPUTS.put(1, Pair.of(CosmicItems.TUNGSTENSTEEL_NANOLATTICE_SPOOL.asStack(64), GTMaterials.RocketFuel.getFluid(16000)));
-            LARVA_INPUTS.put(2, Pair.of(CosmicItems.TUNGSTENSTEEL_NANOLATTICE_SPOOL.asStack(256), GTMaterials.RocketFuel.getFluid(64000)));
-            LARVA_INPUTS.put(3, Pair.of(CosmicItems.TUNGSTENSTEEL_NANOLATTICE_SPOOL.asStack(1024), GTMaterials.RocketFuel.getFluid(256000)));
-            LARVA_INPUTS.put(4, Pair.of(CosmicItems.TUNGSTENSTEEL_NANOLATTICE_SPOOL.asStack(4096), GTMaterials.RocketFuel.getFluid(1024000)));
+            LARVA_INPUTS.put(0, Pair.of(CosmicItems.TUNGSTENSTEEL_NANOLATTICE_SPOOL.asStack(16),
+                    GTMaterials.RocketFuel.getFluid(8000)));
+            LARVA_INPUTS.put(1, Pair.of(CosmicItems.TUNGSTENSTEEL_NANOLATTICE_SPOOL.asStack(64),
+                    GTMaterials.RocketFuel.getFluid(16000)));
+            LARVA_INPUTS.put(2, Pair.of(CosmicItems.TUNGSTENSTEEL_NANOLATTICE_SPOOL.asStack(256),
+                    GTMaterials.RocketFuel.getFluid(64000)));
+            LARVA_INPUTS.put(3, Pair.of(CosmicItems.TUNGSTENSTEEL_NANOLATTICE_SPOOL.asStack(1024),
+                    GTMaterials.RocketFuel.getFluid(256000)));
+            LARVA_INPUTS.put(4, Pair.of(CosmicItems.TUNGSTENSTEEL_NANOLATTICE_SPOOL.asStack(4096),
+                    GTMaterials.RocketFuel.getFluid(1024000)));
         }
         return LARVA_INPUTS;
     }

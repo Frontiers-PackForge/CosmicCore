@@ -1,6 +1,7 @@
 package com.ghostipedia.cosmiccore.gtbridge;
 
 import com.ghostipedia.cosmiccore.common.machine.multiblock.multi.logic.LarvaMachine;
+
 import com.gregtechceu.gtceu.api.GTValues;
 
 import net.minecraft.data.recipes.FinishedRecipe;

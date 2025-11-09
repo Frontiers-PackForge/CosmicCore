@@ -469,12 +469,12 @@ public class CosmicRecipeTypes {
                     .save(provider);
         });
 
-        //Eclipsed Forge is the big EU powered version of the Dawn Forge
+        // Eclipsed Forge is the big EU powered version of the Dawn Forge
         DAWN_FORGE.onRecipeBuild((builder, provider) -> {
             DAWNFORGE_ECLIPSED.copyFrom(builder)
                     .save(provider);
         });
-        //Large Roaster can do all the small Roaster can, but also allows Ember :)
+        // Large Roaster can do all the small Roaster can, but also allows Ember :)
         ROASTER.onRecipeBuild((builder, provider) -> {
             LARGE_ROASTER.copyFrom(builder)
                     .save(provider);

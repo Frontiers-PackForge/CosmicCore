@@ -123,6 +123,14 @@ public class CosmicLangHandler extends LangHandler {
         provider.add("cosmiccore.mana_leaching_tub.desc", "Mana Soaker 9000");
         provider.add("cosmiccore.roaster.desc", "Marshmallows not included");
 
+        provider.add("tooltip.cosmiccore.asteroid_chip.unprogrammed", "Unprogrammed — no target data");
+        provider.add("tooltip.cosmiccore.asteroid_chip.type", "Type: %s");
+        provider.add("tooltip.cosmiccore.asteroid_chip.target", "Target ID: %s");
+        provider.add("tooltip.cosmiccore.asteroid_chip.tier", "Acquisition Tier: %s");
+        provider.add("tooltip.cosmiccore.asteroid_chip.lock", "Lock Strength: %s%%");
+        provider.add("tooltip.cosmiccore.asteroid_chip.sector", "Sector: %s");
+        provider.add("tooltip.cosmiccore.asteroid_chip.mode", "Mode: %s");
+
         // gui lines
         provider.add("gui.cosmiccore.soul_hatch.label.import", "Soul Input Hatch");
         provider.add("gui.cosmiccore.soul_hatch.label.export", "Soul Output Hatch");
