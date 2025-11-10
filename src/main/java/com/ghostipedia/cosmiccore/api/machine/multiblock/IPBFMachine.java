@@ -1,5 +1,6 @@
 package com.ghostipedia.cosmiccore.api.machine.multiblock;
 
+import com.ghostipedia.cosmiccore.common.machine.multiblock.multi.IPBF;
 import com.gregtechceu.gtceu.api.GTValues;
 import com.gregtechceu.gtceu.api.capability.recipe.EURecipeCapability;
 import com.gregtechceu.gtceu.api.capability.recipe.IO;
@@ -8,16 +9,34 @@ import com.gregtechceu.gtceu.api.gui.UITemplate;
 import com.gregtechceu.gtceu.api.machine.IMachineBlockEntity;
 import com.gregtechceu.gtceu.api.machine.MetaMachine;
 import com.gregtechceu.gtceu.api.machine.TickableSubscription;
+import com.gregtechceu.gtceu.api.machine.feature.IMuiMachine;
 import com.gregtechceu.gtceu.api.machine.feature.multiblock.IDisplayUIMachine;
 import com.gregtechceu.gtceu.api.machine.feature.multiblock.IFluidRenderMulti;
 import com.gregtechceu.gtceu.api.machine.multiblock.WorkableMultiblockMachine;
 import com.gregtechceu.gtceu.api.machine.steam.SteamEnergyRecipeHandler;
 import com.gregtechceu.gtceu.api.machine.trait.RecipeLogic;
+import com.gregtechceu.gtceu.api.mui.base.drawable.IKey;
+import com.gregtechceu.gtceu.api.mui.drawable.ItemDrawable;
+import com.gregtechceu.gtceu.api.mui.factory.PosGuiData;
+import com.gregtechceu.gtceu.api.mui.utils.Alignment;
+import com.gregtechceu.gtceu.api.mui.value.sync.PanelSyncManager;
+import com.gregtechceu.gtceu.api.mui.widget.ParentWidget;
+import com.gregtechceu.gtceu.api.mui.widgets.PageButton;
+import com.gregtechceu.gtceu.api.mui.widgets.PagedWidget;
+import com.gregtechceu.gtceu.api.mui.widgets.ScrollingTextWidget;
+import com.gregtechceu.gtceu.api.mui.widgets.layout.Column;
+import com.gregtechceu.gtceu.api.mui.widgets.layout.Flow;
+import com.gregtechceu.gtceu.api.mui.widgets.layout.Row;
 import com.gregtechceu.gtceu.api.recipe.GTRecipe;
 import com.gregtechceu.gtceu.api.recipe.RecipeHelper;
 import com.gregtechceu.gtceu.api.recipe.content.ContentModifier;
 import com.gregtechceu.gtceu.api.recipe.modifier.ModifierFunction;
 import com.gregtechceu.gtceu.api.recipe.modifier.ParallelLogic;
+import com.gregtechceu.gtceu.client.mui.screen.ModularPanel;
+import com.gregtechceu.gtceu.client.mui.screen.UISettings;
+import com.gregtechceu.gtceu.common.data.mui.GTMuiPanels;
+import com.gregtechceu.gtceu.common.mui.GTGuiTextures;
+import com.gregtechceu.gtceu.common.mui.GTGuis;
 import com.gregtechceu.gtceu.config.ConfigHolder;
 import com.gregtechceu.gtceu.utils.GTUtil;
 
@@ -53,7 +72,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-public class IPBFMachine extends WorkableMultiblockMachine implements IDisplayUIMachine, IFluidRenderMulti {
+public class IPBFMachine extends WorkableMultiblockMachine implements IMuiMachine, IFluidRenderMulti  {
 
     public static final int MAX_PARALLELS = 8;
 
@@ -88,59 +107,63 @@ public class IPBFMachine extends WorkableMultiblockMachine implements IDisplayUI
         IFluidRenderMulti.super.onStructureInvalid();
     }
 
-    @Override
-    public void addDisplayText(List<Component> textList) {
-        IDisplayUIMachine.super.addDisplayText(textList);
-        if (isFormed()) {
-            var handlers = getCapabilitiesFlat(IO.IN, EURecipeCapability.CAP);
-            if (!handlers.isEmpty() && handlers.get(0) instanceof SteamEnergyRecipeHandler steamHandler) {
-                if (steamHandler.getCapacity() > 0) {
-                    long steamStored = steamHandler.getStored();
-                    textList.add(Component.translatable("gtceu.multiblock.steam.steam_stored", steamStored,
-                            steamHandler.getCapacity()));
-                }
-            }
+//    @Override
+//    public void addDisplayText(List<Component> textList) {
+//        IDisplayUIMachine.super.addDisplayText(textList);
+//        if (isFormed()) {
+//            var handlers = getCapabilitiesFlat(IO.IN, EURecipeCapability.CAP);
+//            if (!handlers.isEmpty() && handlers.get(0) instanceof SteamEnergyRecipeHandler steamHandler) {
+//                if (steamHandler.getCapacity() > 0) {
+//                    long steamStored = steamHandler.getStored();
+//                    textList.add(Component.translatable("gtceu.multiblock.steam.steam_stored", steamStored,
+//                            steamHandler.getCapacity()));
+//                }
+//            }
+//
+//            if (!isWorkingEnabled()) {
+//                textList.add(Component.translatable("gtceu.multiblock.work_paused"));
+//
+//            } else if (isActive()) {
+//                textList.add(Component.translatable("gtceu.multiblock.running"));
+//                double currentInSec = (float) recipeLogic.getProgress() / 20.0f;
+//                double maxInSec = (float) recipeLogic.getDuration() / 20.0f;
+//                int currentProgress = (int) (recipeLogic.getProgressPercent() * 100);
+//                textList.add(Component.translatable("gtceu.multiblock.parallel", MAX_PARALLELS));
+//                textList.add(
+//                        Component.translatable(
+//                                "gtceu.multiblock.progress",
+//                                String.format("%.2f", (float) currentInSec),
+//                                String.format("%.2f", (float) maxInSec),
+//                                currentProgress));
+//            } else {
+//                textList.add(Component.translatable("gtceu.multiblock.idling"));
+//            }
+//
+//            if (recipeLogic.isWaiting()) {
+//                textList.add(Component.translatable("gtceu.multiblock.steam.low_steam")
+//                        .setStyle(Style.EMPTY.withColor(ChatFormatting.RED)));
+//            }
+//        }
+//    }
+//
+//    @Override
+//    public ModularUI createUI(Player entityPlayer) {
+//        var screen = new DraggableScrollableWidgetGroup(7, 4, 182, 121).setBackground(getScreenTexture());
+//        screen.addWidget(new LabelWidget(4, 5, self().getBlockState().getBlock().getDescriptionId()));
+//        screen.addWidget(new ComponentPanelWidget(4, 17, this::addDisplayText)
+//                .setMaxWidthLimit(150)
+//                .clickHandler(this::handleDisplayClick));
+//        return new ModularUI(196, 216, this, entityPlayer)
+//                .background(GuiTextures.BACKGROUND_STEAM.get(true))
+//                .widget(screen)
+//                .widget(UITemplate.bindPlayerInventory(entityPlayer.getInventory(),
+//                        GuiTextures.SLOT_STEAM.get(true), 7, 134,
+//                        true));
+//    }
 
-            if (!isWorkingEnabled()) {
-                textList.add(Component.translatable("gtceu.multiblock.work_paused"));
 
-            } else if (isActive()) {
-                textList.add(Component.translatable("gtceu.multiblock.running"));
-                double currentInSec = (float) recipeLogic.getProgress() / 20.0f;
-                double maxInSec = (float) recipeLogic.getDuration() / 20.0f;
-                int currentProgress = (int) (recipeLogic.getProgressPercent() * 100);
-                textList.add(Component.translatable("gtceu.multiblock.parallel", MAX_PARALLELS));
-                textList.add(
-                        Component.translatable(
-                                "gtceu.multiblock.progress",
-                                String.format("%.2f", (float) currentInSec),
-                                String.format("%.2f", (float) maxInSec),
-                                currentProgress));
-            } else {
-                textList.add(Component.translatable("gtceu.multiblock.idling"));
-            }
 
-            if (recipeLogic.isWaiting()) {
-                textList.add(Component.translatable("gtceu.multiblock.steam.low_steam")
-                        .setStyle(Style.EMPTY.withColor(ChatFormatting.RED)));
-            }
-        }
-    }
 
-    @Override
-    public ModularUI createUI(Player entityPlayer) {
-        var screen = new DraggableScrollableWidgetGroup(7, 4, 182, 121).setBackground(getScreenTexture());
-        screen.addWidget(new LabelWidget(4, 5, self().getBlockState().getBlock().getDescriptionId()));
-        screen.addWidget(new ComponentPanelWidget(4, 17, this::addDisplayText)
-                .setMaxWidthLimit(150)
-                .clickHandler(this::handleDisplayClick));
-        return new ModularUI(196, 216, this, entityPlayer)
-                .background(GuiTextures.BACKGROUND_STEAM.get(true))
-                .widget(screen)
-                .widget(UITemplate.bindPlayerInventory(entityPlayer.getInventory(),
-                        GuiTextures.SLOT_STEAM.get(true), 7, 134,
-                        true));
-    }
 
     @Override
     public void notifyStatusChanged(RecipeLogic.Status oldStatus, RecipeLogic.Status newStatus) {
@@ -180,11 +203,6 @@ public class IPBFMachine extends WorkableMultiblockMachine implements IDisplayUI
                 .durationMultiplier(parallel * 0.75)
                 .parallels(parallel)
                 .build();
-    }
-
-    @Override
-    public IGuiTexture getScreenTexture() {
-        return GuiTextures.DISPLAY_STEAM.get(true);
     }
 
     @Override
@@ -229,5 +247,75 @@ public class IPBFMachine extends WorkableMultiblockMachine implements IDisplayUI
     @Override
     public @NotNull Set<BlockPos> saveOffsets() {
         return Collections.singleton(new BlockPos(getFrontFacing().getOpposite().getNormal()));
+    }
+
+    @Override
+    public ModularPanel buildUI(PosGuiData posGuiData, PanelSyncManager panelSyncManager, UISettings uiSettings) {
+        PagedWidget.Controller tabController = new PagedWidget.Controller();
+        return new ModularPanel("ipbf")
+                .bindPlayerInventory()
+                .height(GTGuis.DEFAULT_HEIGHT + 50)
+                .width(166 + 21*2)
+                .child(new Column()
+                        .name("background_inverse")
+                        .leftRel(0.55f)
+                        .top(4)
+                        .width(200)
+                        .height(GTGuis.DEFAULT_HEIGHT-44)
+                        .background(GTGuiTextures.BACKGROUND_INVERSE))
+                .child(new Column()
+                        .name("background")
+                        .leftRel(0.55f)
+                        .top(6)
+                        .width(194)
+                        .height(GTGuis.DEFAULT_HEIGHT-48)
+                        .background(GTGuiTextures.DISPLAY)
+                )
+                .child(new Row()
+                        .size(150,16)
+                        .pos(0,-14)
+                        .horizontalCenter()
+                        .background(GTGuiTextures.BACKGROUND)
+                        .child(new Row()
+                                .child(new ScrollingTextWidget(IKey.str("Machine Name"))
+                                        .padding(40,0,0,0)
+                                        .width(150).height(16))
+                        )
+
+                )
+                .child(new Column()
+                        .name("Tab Row")
+                        .coverChildren()
+                        .leftRel(0,4,1f)
+                        .child(new PageButton(0,tabController)
+                                .tab(GTGuiTextures.TAB_LEFT,-1)
+                                .overlay(new ItemDrawable(IPBF.INDUSTRIAL_PRIMITIVE_BLAST_FURNACE.getItem()).asIcon()))
+                        .child(new PageButton(1,tabController)
+                                .tab(GTGuiTextures.TAB_LEFT,0)
+                                .overlay(new ItemDrawable(IPBF.INDUSTRIAL_PRIMITIVE_BLAST_FURNACE.getItem()).asIcon()))
+
+
+
+                )
+
+
+
+
+
+                //Main Page
+                .child(Flow.column()
+                        .child(new ParentWidget<>()
+                                .pos(3,3)
+                                .child(new PagedWidget<>()
+                                        .controller(tabController)
+                                        .addPage(new ParentWidget<>()
+
+                                        )
+                                        .addPage(new ParentWidget<>()
+
+                                        )
+                                )
+                        )
+                );
     }
 }

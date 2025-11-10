@@ -28,7 +28,7 @@ dependencies {
     modImplementation(forge.configuration)
 
     // GTCEu
-    modImplementation(forge.gtceu)
+    modImplementation("libs:gtceu-1.20.1-7.2.1-dev")
 
     // Mixin (& Extras)
     annotationProcessor(variantOf(libs.mixin) { classifier("processor") })
