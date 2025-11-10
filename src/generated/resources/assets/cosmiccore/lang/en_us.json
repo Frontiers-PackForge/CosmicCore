@@ -1062,6 +1062,8 @@
   "tagprefix.prisma_frothed_ore": "Prisma Frothed %s Ore",
   "tagprefix.ultradense_plate": "Ultradense %s Plate",
   "tagprefix.wire_spool": "%s Wire Spool",
+  "tooltip.cosmiccore.asteroid.tier": "Asteroid Size: %s Kilotons",
+  "tooltip.cosmiccore.asteroid.tiny": "Asteroid Size: <1 Kiloton",
   "tooltip.cosmiccore.asteroid_chip.lock": "Lock Strength: %s%%",
   "tooltip.cosmiccore.asteroid_chip.mode": "Mode: %s",
   "tooltip.cosmiccore.asteroid_chip.sector": "Sector: %s",

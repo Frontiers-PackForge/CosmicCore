@@ -96,9 +96,7 @@ public class CosmicLangHandler extends LangHandler {
                 "§7Can use any capacitor and be expanded vertically up to 18 times§r",
                 "§7Accepts §6Laser Hatches§r");
 
-
         provider.add("emi.category.cosmiccore.asteroid_mining", "Asteroid Mining Operations");
-
 
         // recipe stuff
         provider.add("cosmiccore.recipe.soul_in", "Soul Input: %s");
@@ -134,6 +132,9 @@ public class CosmicLangHandler extends LangHandler {
         provider.add("tooltip.cosmiccore.asteroid_chip.lock", "Lock Strength: %s%%");
         provider.add("tooltip.cosmiccore.asteroid_chip.sector", "Sector: %s");
         provider.add("tooltip.cosmiccore.asteroid_chip.mode", "Mode: %s");
+
+        provider.add("tooltip.cosmiccore.asteroid.tiny", "Asteroid Size: <1 Kiloton");
+        provider.add("tooltip.cosmiccore.asteroid.tier", "Asteroid Size: %s Kilotons");
 
         // gui lines
         provider.add("gui.cosmiccore.soul_hatch.label.import", "Soul Input Hatch");

@@ -8,7 +8,6 @@ import com.gregtechceu.gtceu.api.GTValues;
 import com.gregtechceu.gtceu.api.capability.recipe.FluidRecipeCapability;
 import com.gregtechceu.gtceu.api.capability.recipe.IO;
 import com.gregtechceu.gtceu.api.capability.recipe.ItemRecipeCapability;
-import com.gregtechceu.gtceu.api.data.chemical.material.properties.PropertyKey;
 import com.gregtechceu.gtceu.api.data.tag.TagPrefix;
 import com.gregtechceu.gtceu.api.machine.IMachineBlockEntity;
 import com.gregtechceu.gtceu.api.machine.multiblock.WorkableElectricMultiblockMachine;
@@ -55,11 +54,18 @@ public class LarvaMachine extends WorkableElectricMultiblockMachine {
 
     public static String ASTROID_NBT_TYPE = "AsteroidType";
     public static String ASTROID_NBT_TIER = "Tier";
+    private static final String ASTEROID_SIZE = "Size";
 
     private static Map<ItemStack, Pair<Integer, ItemStack>> LARVA_LOOTTABLE = null;
     private static Map<ItemStack, Integer> LARVA_TIERS = null;
     private static Map<Integer, Pair<ItemStack, FluidStack>> LARVA_INPUTS = null;
     private static Map<ItemStack, ItemStack> RESEARCH_RECIPES = null;
+
+    private static ItemStack setAsteroidSize(ItemStack stack, int size) {
+        if (stack.isEmpty()) return stack;
+        stack.getOrCreateTag().putInt(ASTEROID_SIZE, size);
+        return stack;
+    }
 
     public static ItemStack getAstroidDataChip(String id, int tier) {
         ItemStack stack = CosmicItems.TARGETING_CHIP.asStack();
@@ -118,21 +124,33 @@ public class LarvaMachine extends WorkableElectricMultiblockMachine {
     private static Map<ItemStack, Pair<Integer, ItemStack>> getLarvaLoottable() {
         if (LARVA_LOOTTABLE == null) {
             LARVA_LOOTTABLE = new HashMap<>();
-            //spotless: off
+            // spotless: off
             // Beetle Data Orb (NC) -> Tier (0-based)-> -> Astroid
-            LARVA_LOOTTABLE.put(getAstroidDataChip("carbonic_asteroid", 1), Pair.of(0, CosmicItems.CARBON_ASTEROID.asStack()));
-            LARVA_LOOTTABLE.put(getAstroidDataChip("ferric_asteroid", 1), Pair.of(0, CosmicItems.FERRIC_ASTEROID.asStack()));
-            LARVA_LOOTTABLE.put(getAstroidDataChip("rare_metal_asteroid", 1), Pair.of(0, CosmicItems.RARE_METAL_ASTEROID.asStack()));
-            LARVA_LOOTTABLE.put(getAstroidDataChip("auric_asteroid", 1), Pair.of(0, CosmicItems.AURIC_ASTEROID.asStack()));
-            LARVA_LOOTTABLE.put(getAstroidDataChip("brimstone_asteroid", 1), Pair.of(0, CosmicItems.BRIMSTONE_ASTEROID.asStack()));
-            LARVA_LOOTTABLE.put(getAstroidDataChip("lith_asteroid", 1), Pair.of(0, CosmicItems.LITH_ASTEROID.asStack()));
-            LARVA_LOOTTABLE.put(getAstroidDataChip("mafic_asteroid", 1), Pair.of(0, CosmicItems.MAFIC_ASTEROID.asStack()));
-            LARVA_LOOTTABLE.put(getAstroidDataChip("mossy_asteroid", 1), Pair.of(0, CosmicItems.MOSSY_ASTEROID.asStack()));
-            LARVA_LOOTTABLE.put(getAstroidDataChip("occult_asteroid", 1), Pair.of(0, CosmicItems.OCCULT_ASTEROID.asStack()));
-            LARVA_LOOTTABLE.put(getAstroidDataChip("oxide_asteroid", 1), Pair.of(0, CosmicItems.OXIDE_ASTEROID.asStack()));
-            LARVA_LOOTTABLE.put(getAstroidDataChip("sanguine_asteroid", 1), Pair.of(0, CosmicItems.SANGUINE_ASTEROID.asStack()));
-            LARVA_LOOTTABLE.put(getAstroidDataChip("wasteland_asteroid", 1), Pair.of(0, CosmicItems.WASTELAND_ASTEROID.asStack()));
-            //spotless: on
+            LARVA_LOOTTABLE.put(getAstroidDataChip("carbonic_asteroid", 1),
+                    Pair.of(0, CosmicItems.CARBON_ASTEROID.asStack()));
+            LARVA_LOOTTABLE.put(getAstroidDataChip("ferric_asteroid", 1),
+                    Pair.of(0, CosmicItems.FERRIC_ASTEROID.asStack()));
+            LARVA_LOOTTABLE.put(getAstroidDataChip("rare_metal_asteroid", 1),
+                    Pair.of(0, CosmicItems.RARE_METAL_ASTEROID.asStack()));
+            LARVA_LOOTTABLE.put(getAstroidDataChip("auric_asteroid", 1),
+                    Pair.of(0, CosmicItems.AURIC_ASTEROID.asStack()));
+            LARVA_LOOTTABLE.put(getAstroidDataChip("brimstone_asteroid", 1),
+                    Pair.of(0, CosmicItems.BRIMSTONE_ASTEROID.asStack()));
+            LARVA_LOOTTABLE.put(getAstroidDataChip("lith_asteroid", 1),
+                    Pair.of(0, CosmicItems.LITH_ASTEROID.asStack()));
+            LARVA_LOOTTABLE.put(getAstroidDataChip("mafic_asteroid", 1),
+                    Pair.of(0, CosmicItems.MAFIC_ASTEROID.asStack()));
+            LARVA_LOOTTABLE.put(getAstroidDataChip("mossy_asteroid", 1),
+                    Pair.of(0, CosmicItems.MOSSY_ASTEROID.asStack()));
+            LARVA_LOOTTABLE.put(getAstroidDataChip("occult_asteroid", 1),
+                    Pair.of(0, CosmicItems.OCCULT_ASTEROID.asStack()));
+            LARVA_LOOTTABLE.put(getAstroidDataChip("oxide_asteroid", 1),
+                    Pair.of(0, CosmicItems.OXIDE_ASTEROID.asStack()));
+            LARVA_LOOTTABLE.put(getAstroidDataChip("sanguine_asteroid", 1),
+                    Pair.of(0, CosmicItems.SANGUINE_ASTEROID.asStack()));
+            LARVA_LOOTTABLE.put(getAstroidDataChip("wasteland_asteroid", 1),
+                    Pair.of(0, CosmicItems.WASTELAND_ASTEROID.asStack()));
+            // spotless: on
         }
         return LARVA_LOOTTABLE;
     }
@@ -256,8 +274,8 @@ public class LarvaMachine extends WorkableElectricMultiblockMachine {
                 var itemOutput = output.copy();
                 itemInput.setCount(recipeInputs.getFirst().getCount() * multiplier);
                 fluidInput.setAmount(recipeInputs.getSecond().getAmount() * multiplier);
-                // TODO: change this to use NBT / modify output in different way
-                itemOutput.setCount(itemOutput.getCount() * multiplier);
+                // Should do it? This'll set the NBT of the asteroid appropriately
+                var sizedAsteroid = setAsteroidSize(itemOutput, getCircuitConfiguration(circuitStack));
 
                 if (canConsumeItem(availableItems, itemInput) &&
                         canConsumeFluid(availableFluids, fluidInput)) {
@@ -270,7 +288,7 @@ public class LarvaMachine extends WorkableElectricMultiblockMachine {
                     // actually add inputs and outputs to the lists for the final recipe
                     finalRecipeItemInputs.add(itemInput);
                     finalRecipeFluidInputs.add(fluidInput);
-                    finalRecipeItemOutputs.add(itemOutput);
+                    finalRecipeItemOutputs.add(sizedAsteroid);
                 } else {
                     // not enough inputs
                 }

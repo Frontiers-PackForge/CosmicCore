@@ -1062,6 +1062,8 @@
   "tagprefix.prisma_frothed_ore": "ǝɹO %s pǝɥʇoɹℲ ɐɯsıɹԀ",
   "tagprefix.ultradense_plate": "ǝʇɐןԀ %s ǝsuǝpɐɹʇן∩",
   "tagprefix.wire_spool": "ןoodS ǝɹıM %s",
+  "tooltip.cosmiccore.asteroid.tier": "suoʇoןıʞ %s :ǝzıS pıoɹǝʇsⱯ",
+  "tooltip.cosmiccore.asteroid.tiny": "uoʇoןıʞ Ɩ< :ǝzıS pıoɹǝʇsⱯ",
   "tooltip.cosmiccore.asteroid_chip.lock": "%s%% :ɥʇbuǝɹʇS ʞɔoꞀ",
   "tooltip.cosmiccore.asteroid_chip.mode": "%s :ǝpoW",
   "tooltip.cosmiccore.asteroid_chip.sector": "%s :ɹoʇɔǝS",

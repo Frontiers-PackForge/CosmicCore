@@ -7,6 +7,7 @@ import com.ghostipedia.cosmiccore.api.registries.CosmicRegistration;
 import com.ghostipedia.cosmiccore.client.renderer.item.HaloItemRenderer;
 import com.ghostipedia.cosmiccore.client.renderer.item.RadianceItemRenderer;
 import com.ghostipedia.cosmiccore.common.data.tag.item.CosmicItemTags;
+import com.ghostipedia.cosmiccore.common.item.AsteroidItem;
 import com.ghostipedia.cosmiccore.common.item.AsteroidTargetingChipItem;
 import com.ghostipedia.cosmiccore.common.item.CosmicScytheItem;
 import com.ghostipedia.cosmiccore.common.item.armor.ChestSanguineWarptechSuite;
@@ -2268,16 +2269,16 @@ public class CosmicItems {
             .onRegister(attach(new LinkedTerminalBehavior()))
             .register();
 
-    public static final ItemEntry<ComponentItem> CARBON_ASTEROID = REGISTRATE
-            .item("carbon_asteroid_base", ComponentItem::create)
+    public static final ItemEntry<AsteroidItem> CARBON_ASTEROID = REGISTRATE
+            .item("carbon_asteroid_base", AsteroidItem::new)
             .lang("Carbonic Asteroid")
             .properties(p -> p.stacksTo(1))
             .tag()
             .defaultModel()
             .onRegister(attachRenderer(() -> RadianceItemRenderer.INSTANCE))
             .register();
-    public static final ItemEntry<ComponentItem> FERRIC_ASTEROID = REGISTRATE
-            .item("ferric_asteroid", ComponentItem::create)
+    public static final ItemEntry<AsteroidItem> FERRIC_ASTEROID = REGISTRATE
+            .item("ferric_asteroid", AsteroidItem::new)
             .lang("Ferric Asteroid")
             .properties(p -> p.stacksTo(1))
             .tag()
@@ -2285,8 +2286,8 @@ public class CosmicItems {
             .onRegister(attachRenderer(() -> RadianceItemRenderer.INSTANCE))
             .register();
 
-    public static final ItemEntry<ComponentItem> RARE_METAL_ASTEROID = REGISTRATE
-            .item("rare_metals_asteroid", ComponentItem::create)
+    public static final ItemEntry<AsteroidItem> RARE_METAL_ASTEROID = REGISTRATE
+            .item("rare_metals_asteroid", AsteroidItem::new)
             .lang("Exotic Metals Asteroid")
             .properties(p -> p.stacksTo(1))
             .tag()
@@ -2294,8 +2295,8 @@ public class CosmicItems {
             .onRegister(attachRenderer(() -> RadianceItemRenderer.INSTANCE))
             .register();
 
-    public static final ItemEntry<ComponentItem> AURIC_ASTEROID = REGISTRATE
-            .item("auric_asteroid", ComponentItem::create)
+    public static final ItemEntry<AsteroidItem> AURIC_ASTEROID = REGISTRATE
+            .item("auric_asteroid", AsteroidItem::new)
             .lang("Auric Asteroid")
             .properties(p -> p.stacksTo(1))
             .tag()
@@ -2303,8 +2304,8 @@ public class CosmicItems {
             .onRegister(attachRenderer(() -> RadianceItemRenderer.INSTANCE))
             .register();
 
-    public static final ItemEntry<ComponentItem> BRIMSTONE_ASTEROID = REGISTRATE
-            .item("brimstone_asteroid", ComponentItem::create)
+    public static final ItemEntry<AsteroidItem> BRIMSTONE_ASTEROID = REGISTRATE
+            .item("brimstone_asteroid", AsteroidItem::new)
             .lang("Brimstone Asteroid")
             .properties(p -> p.stacksTo(1))
             .tag()
@@ -2312,8 +2313,8 @@ public class CosmicItems {
             .onRegister(attachRenderer(() -> RadianceItemRenderer.INSTANCE))
             .register();
 
-    public static final ItemEntry<ComponentItem> LITH_ASTEROID = REGISTRATE
-            .item("lith_asteroid", ComponentItem::create)
+    public static final ItemEntry<AsteroidItem> LITH_ASTEROID = REGISTRATE
+            .item("lith_asteroid", AsteroidItem::new)
             .lang("Lith Asteroid")
             .properties(p -> p.stacksTo(1))
             .tag()
@@ -2321,8 +2322,8 @@ public class CosmicItems {
             .onRegister(attachRenderer(() -> RadianceItemRenderer.INSTANCE))
             .register();
 
-    public static final ItemEntry<ComponentItem> MAFIC_ASTEROID = REGISTRATE
-            .item("mafic_asteroid", ComponentItem::create)
+    public static final ItemEntry<AsteroidItem> MAFIC_ASTEROID = REGISTRATE
+            .item("mafic_asteroid", AsteroidItem::new)
             .lang("Mafic Asteroid")
             .properties(p -> p.stacksTo(1))
             .tag()
@@ -2330,8 +2331,8 @@ public class CosmicItems {
             .onRegister(attachRenderer(() -> RadianceItemRenderer.INSTANCE))
             .register();
 
-    public static final ItemEntry<ComponentItem> MOSSY_ASTEROID = REGISTRATE
-            .item("mossy_asteroid", ComponentItem::create)
+    public static final ItemEntry<AsteroidItem> MOSSY_ASTEROID = REGISTRATE
+            .item("mossy_asteroid", AsteroidItem::new)
             .lang("Mossy Asteroid")
             .properties(p -> p.stacksTo(1))
             .tag()
@@ -2339,8 +2340,8 @@ public class CosmicItems {
             .onRegister(attachRenderer(() -> RadianceItemRenderer.INSTANCE))
             .register();
 
-    public static final ItemEntry<ComponentItem> OCCULT_ASTEROID = REGISTRATE
-            .item("occult_asteroid", ComponentItem::create)
+    public static final ItemEntry<AsteroidItem> OCCULT_ASTEROID = REGISTRATE
+            .item("occult_asteroid", AsteroidItem::new)
             .lang("Occult Asteroid")
             .properties(p -> p.stacksTo(1))
             .tag()
@@ -2348,8 +2349,8 @@ public class CosmicItems {
             .onRegister(attachRenderer(() -> RadianceItemRenderer.INSTANCE))
             .register();
 
-    public static final ItemEntry<ComponentItem> OXIDE_ASTEROID = REGISTRATE
-            .item("oxide_asteroid", ComponentItem::create)
+    public static final ItemEntry<AsteroidItem> OXIDE_ASTEROID = REGISTRATE
+            .item("oxide_asteroid", AsteroidItem::new)
             .lang("Oxide Asteroid")
             .properties(p -> p.stacksTo(1))
             .tag()
@@ -2357,8 +2358,8 @@ public class CosmicItems {
             .onRegister(attachRenderer(() -> RadianceItemRenderer.INSTANCE))
             .register();
 
-    public static final ItemEntry<ComponentItem> SANGUINE_ASTEROID = REGISTRATE
-            .item("sanguine_asteroid", ComponentItem::create)
+    public static final ItemEntry<AsteroidItem> SANGUINE_ASTEROID = REGISTRATE
+            .item("sanguine_asteroid", AsteroidItem::new)
             .lang("Sanguine Asteroid")
             .properties(p -> p.stacksTo(1))
             .tag()
@@ -2366,8 +2367,8 @@ public class CosmicItems {
             .onRegister(attachRenderer(() -> RadianceItemRenderer.INSTANCE))
             .register();
 
-    public static final ItemEntry<ComponentItem> WASTELAND_ASTEROID = REGISTRATE
-            .item("wasteland_asteroid", ComponentItem::create)
+    public static final ItemEntry<AsteroidItem> WASTELAND_ASTEROID = REGISTRATE
+            .item("wasteland_asteroid", AsteroidItem::new)
             .lang("Wasteland Asteroid")
             .properties(p -> p.stacksTo(1))
             .tag()
