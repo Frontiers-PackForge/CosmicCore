@@ -2,6 +2,7 @@ package com.ghostipedia.cosmiccore.common.machine.multiblock.multi.logic;
 
 import com.ghostipedia.cosmiccore.CosmicCore;
 import com.ghostipedia.cosmiccore.common.data.CosmicItems;
+import com.ghostipedia.cosmiccore.common.data.materials.CosmicMaterials;
 import com.ghostipedia.cosmiccore.gtbridge.CosmicRecipeTypes;
 
 import com.gregtechceu.gtceu.api.GTValues;
@@ -54,12 +55,17 @@ public class LarvaMachine extends WorkableElectricMultiblockMachine {
 
     public static String ASTROID_NBT_TYPE = "AsteroidType";
     public static String ASTROID_NBT_TIER = "Tier";
-    private static final String ASTEROID_SIZE = "Size";
+    public static String ASTEROID_SIZE = "Size";
 
     private static Map<ItemStack, Pair<Integer, ItemStack>> LARVA_LOOTTABLE = null;
     private static Map<ItemStack, Integer> LARVA_TIERS = null;
     private static Map<Integer, Pair<ItemStack, FluidStack>> LARVA_INPUTS = null;
     private static Map<ItemStack, ItemStack> RESEARCH_RECIPES = null;
+
+    public static int getAsteroidSize(ItemStack stack) {
+        if (stack.isEmpty() || !stack.hasTag()) return 0;
+        return stack.getOrCreateTag().getInt(ASTEROID_SIZE);
+    }
 
     private static ItemStack setAsteroidSize(ItemStack stack, int size) {
         if (stack.isEmpty()) return stack;
@@ -106,7 +112,7 @@ public class LarvaMachine extends WorkableElectricMultiblockMachine {
                 .EUt(GTValues.VA[GTValues.HV])
                 .save(provider);
         SCANNER_RECIPES.recipeBuilder(CosmicCore.id("brimstone_asteroid"))
-                .inputItems(TagPrefix.rawOre, GTMaterials.CertusQuartz)
+                .inputItems(TagPrefix.dust, GTMaterials.Netherrack)
                 .inputItems(CosmicItems.TARGETING_CHIP.asStack())
                 .outputItems(getAstroidDataChip("brimstone_asteroid", 1))
                 .duration(40)
@@ -116,6 +122,48 @@ public class LarvaMachine extends WorkableElectricMultiblockMachine {
                 .inputItems(TagPrefix.rawOre, GTMaterials.CertusQuartz)
                 .inputItems(CosmicItems.TARGETING_CHIP.asStack())
                 .outputItems(getAstroidDataChip("lith_asteroid", 1))
+                .duration(40)
+                .EUt(GTValues.VA[GTValues.HV])
+                .save(provider);
+        SCANNER_RECIPES.recipeBuilder(CosmicCore.id("mafic_asteroid"))
+                .inputItems(TagPrefix.rawOre, GTMaterials.Tungstate)
+                .inputItems(CosmicItems.TARGETING_CHIP.asStack())
+                .outputItems(getAstroidDataChip("mafic_asteroid", 1))
+                .duration(40)
+                .EUt(GTValues.VA[GTValues.HV])
+                .save(provider);
+        SCANNER_RECIPES.recipeBuilder(CosmicCore.id("mossy_asteroid"))
+                .inputItems(TagPrefix.rawOre, GTMaterials.Emerald)
+                .inputItems(CosmicItems.TARGETING_CHIP.asStack())
+                .outputItems(getAstroidDataChip("mossy_asteroid", 1))
+                .duration(40)
+                .EUt(GTValues.VA[GTValues.HV])
+                .save(provider);
+        SCANNER_RECIPES.recipeBuilder(CosmicCore.id("occult_asteroid"))
+                .inputItems(TagPrefix.rawOre, GTMaterials.Alunite)
+                .inputItems(CosmicItems.TARGETING_CHIP.asStack())
+                .outputItems(getAstroidDataChip("occult_asteroid", 1))
+                .duration(40)
+                .EUt(GTValues.VA[GTValues.HV])
+                .save(provider);
+        SCANNER_RECIPES.recipeBuilder(CosmicCore.id("oxide_asteroid"))
+                .inputFluids(GTMaterials.Ice, 1000)
+                .inputItems(CosmicItems.TARGETING_CHIP.asStack())
+                .outputItems(getAstroidDataChip("oxide_asteroid", 1))
+                .duration(40)
+                .EUt(GTValues.VA[GTValues.HV])
+                .save(provider);
+        SCANNER_RECIPES.recipeBuilder(CosmicCore.id("sanguine_asteroid"))
+                .inputItems(TagPrefix.rawOre, CosmicMaterials.Moondrop)
+                .inputItems(CosmicItems.TARGETING_CHIP.asStack())
+                .outputItems(getAstroidDataChip("sanguine_asteroid", 1))
+                .duration(40)
+                .EUt(GTValues.VA[GTValues.HV])
+                .save(provider);
+        SCANNER_RECIPES.recipeBuilder(CosmicCore.id("wasteland_asteroid"))
+                .inputItems(TagPrefix.rawOre, CosmicMaterials.PaleOreBad)
+                .inputItems(CosmicItems.TARGETING_CHIP.asStack())
+                .outputItems(getAstroidDataChip("wasteland_asteroid", 1))
                 .duration(40)
                 .EUt(GTValues.VA[GTValues.HV])
                 .save(provider);
@@ -170,15 +218,15 @@ public class LarvaMachine extends WorkableElectricMultiblockMachine {
     private static Map<Integer, Pair<ItemStack, FluidStack>> getLarvaInputs() {
         if (LARVA_INPUTS == null) {
             LARVA_INPUTS = new HashMap<>();
-            LARVA_INPUTS.put(0, Pair.of(CosmicItems.TUNGSTENSTEEL_NANOLATTICE_SPOOL.asStack(16),
+            LARVA_INPUTS.put(0, Pair.of(CosmicItems.TUNGSTENSTEEL_NANOLATTICE_SPOOL.asStack(4),
                     GTMaterials.RocketFuel.getFluid(8000)));
-            LARVA_INPUTS.put(1, Pair.of(CosmicItems.TUNGSTENSTEEL_NANOLATTICE_SPOOL.asStack(64),
+            LARVA_INPUTS.put(1, Pair.of(CosmicItems.TUNGSTENSTEEL_NANOLATTICE_SPOOL.asStack(16),
                     GTMaterials.RocketFuel.getFluid(16000)));
-            LARVA_INPUTS.put(2, Pair.of(CosmicItems.TUNGSTENSTEEL_NANOLATTICE_SPOOL.asStack(256),
+            LARVA_INPUTS.put(2, Pair.of(CosmicItems.TUNGSTENSTEEL_NANOLATTICE_SPOOL.asStack(64),
                     GTMaterials.RocketFuel.getFluid(64000)));
-            LARVA_INPUTS.put(3, Pair.of(CosmicItems.TUNGSTENSTEEL_NANOLATTICE_SPOOL.asStack(1024),
+            LARVA_INPUTS.put(3, Pair.of(CosmicItems.TUNGSTENSTEEL_NANOLATTICE_SPOOL.asStack(256),
                     GTMaterials.RocketFuel.getFluid(256000)));
-            LARVA_INPUTS.put(4, Pair.of(CosmicItems.TUNGSTENSTEEL_NANOLATTICE_SPOOL.asStack(4096),
+            LARVA_INPUTS.put(4, Pair.of(CosmicItems.TUNGSTENSTEEL_NANOLATTICE_SPOOL.asStack(1024),
                     GTMaterials.RocketFuel.getFluid(1024000)));
         }
         return LARVA_INPUTS;
@@ -300,7 +348,7 @@ public class LarvaMachine extends WorkableElectricMultiblockMachine {
 
             var builder = GTRecipeBuilder
                     .of(CosmicCore.id("larva_recipe"), CosmicRecipeTypes.BEES)
-                    .EUt(GTValues.VA[GTValues.LV])
+                    .EUt(GTValues.VA[GTValues.ZPM])
                     .duration(20 * 60);
 
             for (var itemInput : finalRecipeItemInputs) {

@@ -1,21 +1,16 @@
 {
   "parent": "minecraft:block/block",
-  "dynamic_renders": [
-    {
-      "type": "cosmiccore:tester_render"
-    }
-  ],
   "loader": "gtceu:machine",
-  "machine": "cosmiccore:mantle_bore",
+  "machine": "cosmiccore:wasp",
   "texture_overrides": {
-    "all": "cosmiccore:block/casings/solid/vomahine_certified_chemically_resistant_casing"
+    "all": "cosmiccore:block/casings/solid/highly_flexible_reinforced_trinavine_casing"
   },
   "variants": {
     "is_formed=false,recipe_logic_status=idle": {
       "model": {
         "parent": "gtceu:block/machine/template/cube_all/sided",
         "textures": {
-          "all": "cosmiccore:block/casings/solid/vomahine_certified_chemically_resistant_casing",
+          "all": "cosmiccore:block/casings/solid/highly_flexible_reinforced_trinavine_casing",
           "overlay_top": "cosmiccore:block/multiblock/mantle_bore/overlay_top",
           "overlay_top_emissive": "cosmiccore:block/multiblock/mantle_bore/overlay_top_emissive"
         }
@@ -25,7 +20,7 @@
       "model": {
         "parent": "gtceu:block/machine/template/cube_all/sided",
         "textures": {
-          "all": "cosmiccore:block/casings/solid/vomahine_certified_chemically_resistant_casing",
+          "all": "cosmiccore:block/casings/solid/highly_flexible_reinforced_trinavine_casing",
           "overlay_top": "cosmiccore:block/multiblock/mantle_bore/overlay_top_paused",
           "overlay_top_emissive": "cosmiccore:block/multiblock/mantle_bore/overlay_top_paused_emissive"
         }
@@ -35,7 +30,7 @@
       "model": {
         "parent": "gtceu:block/machine/template/cube_all/sided",
         "textures": {
-          "all": "cosmiccore:block/casings/solid/vomahine_certified_chemically_resistant_casing",
+          "all": "cosmiccore:block/casings/solid/highly_flexible_reinforced_trinavine_casing",
           "overlay_top": "cosmiccore:block/multiblock/mantle_bore/overlay_top_active",
           "overlay_top_emissive": "cosmiccore:block/multiblock/mantle_bore/overlay_top_active_emissive"
         }
@@ -45,7 +40,7 @@
       "model": {
         "parent": "gtceu:block/machine/template/cube_all/sided",
         "textures": {
-          "all": "cosmiccore:block/casings/solid/vomahine_certified_chemically_resistant_casing",
+          "all": "cosmiccore:block/casings/solid/highly_flexible_reinforced_trinavine_casing",
           "overlay_top": "cosmiccore:block/multiblock/mantle_bore/overlay_top_active",
           "overlay_top_emissive": "cosmiccore:block/multiblock/mantle_bore/overlay_top_active_emissive"
         }
@@ -55,7 +50,7 @@
       "model": {
         "parent": "gtceu:block/machine/template/cube_all/sided",
         "textures": {
-          "all": "cosmiccore:block/casings/solid/vomahine_certified_chemically_resistant_casing",
+          "all": "cosmiccore:block/casings/solid/highly_flexible_reinforced_trinavine_casing",
           "overlay_top": "cosmiccore:block/multiblock/mantle_bore/overlay_top",
           "overlay_top_emissive": "cosmiccore:block/multiblock/mantle_bore/overlay_top_emissive"
         }
@@ -65,7 +60,7 @@
       "model": {
         "parent": "gtceu:block/machine/template/cube_all/sided",
         "textures": {
-          "all": "cosmiccore:block/casings/solid/vomahine_certified_chemically_resistant_casing",
+          "all": "cosmiccore:block/casings/solid/highly_flexible_reinforced_trinavine_casing",
           "overlay_top": "cosmiccore:block/multiblock/mantle_bore/overlay_top_paused",
           "overlay_top_emissive": "cosmiccore:block/multiblock/mantle_bore/overlay_top_paused_emissive"
         }
@@ -75,7 +70,7 @@
       "model": {
         "parent": "gtceu:block/machine/template/cube_all/sided",
         "textures": {
-          "all": "cosmiccore:block/casings/solid/vomahine_certified_chemically_resistant_casing",
+          "all": "cosmiccore:block/casings/solid/highly_flexible_reinforced_trinavine_casing",
           "overlay_top": "cosmiccore:block/multiblock/mantle_bore/overlay_top_active",
           "overlay_top_emissive": "cosmiccore:block/multiblock/mantle_bore/overlay_top_active_emissive"
         }
@@ -85,7 +80,7 @@
       "model": {
         "parent": "gtceu:block/machine/template/cube_all/sided",
         "textures": {
-          "all": "cosmiccore:block/casings/solid/vomahine_certified_chemically_resistant_casing",
+          "all": "cosmiccore:block/casings/solid/highly_flexible_reinforced_trinavine_casing",
           "overlay_top": "cosmiccore:block/multiblock/mantle_bore/overlay_top_active",
           "overlay_top_emissive": "cosmiccore:block/multiblock/mantle_bore/overlay_top_active_emissive"
         }

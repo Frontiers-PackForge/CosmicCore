@@ -57,6 +57,8 @@ public class MultiblockInit {
         CinderHearth.init();
         PyrothermicRefinery.init();
         EclipsedDawnForge.init();
+        WASP.init();
+        LARVA.init();
         // Roaster.init();
         // KryosynCrackingChamber.init();
     }

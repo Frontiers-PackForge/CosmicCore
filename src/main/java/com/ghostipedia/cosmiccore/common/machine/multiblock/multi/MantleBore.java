@@ -5,7 +5,6 @@ import com.ghostipedia.cosmiccore.client.renderer.machine.CosmicDynamicRenderHel
 import com.ghostipedia.cosmiccore.common.data.CosmicBlocks;
 import com.ghostipedia.cosmiccore.common.machine.multiblock.multi.logic.LarvaMachine;
 
-import com.gregtechceu.gtceu.GTCEu;
 import com.gregtechceu.gtceu.api.data.RotationState;
 import com.gregtechceu.gtceu.api.machine.MultiblockMachineDefinition;
 import com.gregtechceu.gtceu.api.machine.multiblock.PartAbility;
@@ -48,7 +47,7 @@ public class MantleBore {
                     .build())
             .model(createWorkableCasingMachineModel(
                     CosmicCore.id("block/casings/solid/vomahine_certified_chemically_resistant_casing"),
-                    GTCEu.id("block/multiblock/fusion_reactor"))
+                    CosmicCore.id("block/multiblock/mantle_bore"))
                     .andThen(model -> model.addDynamicRenderer(CosmicDynamicRenderHelpers::getRenderTesterHelper)))
             .hasBER(true)
             .register();

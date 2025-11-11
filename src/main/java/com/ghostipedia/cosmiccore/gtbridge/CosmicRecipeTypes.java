@@ -366,6 +366,14 @@ public class CosmicRecipeTypes {
             .setMaxTooltips(6)
             .onRecipeBuild(ResearchManager::createDefaultResearchRecipe)
             .setProgressBar(GuiTextures.PROGRESS_BAR_ARROW_MULTIPLE, ProgressTexture.FillDirection.LEFT_TO_RIGHT);
+
+    public static final GTRecipeType WASP_RECIPES = GTRecipeTypes
+            .register("wasp", GTRecipeTypes.MULTIBLOCK)
+            .addDataInfo(data -> LocalizationUtils.format("cosmiccore.recipe.asteroid_weight_greater_1"))
+            .setMaxIOSize(2, 15, 3, 5)
+            .setMaxTooltips(4)
+            .setProgressBar(GuiTextures.PROGRESS_BAR_SIFT, ProgressTexture.FillDirection.UP_TO_DOWN);
+
     // Dummy recipe. Maybe add recipes here? Either way it won't be used for recipe searching, that's taken care of by
     // BeeRecipeLogic
     public static final GTRecipeType BEES = GTRecipeTypes

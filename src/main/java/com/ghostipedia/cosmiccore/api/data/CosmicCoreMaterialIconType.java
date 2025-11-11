@@ -4,6 +4,7 @@ import com.gregtechceu.gtceu.api.data.chemical.material.info.MaterialIconType;
 
 public class CosmicCoreMaterialIconType {
 
+    public static final MaterialIconType rawOreCubic = new MaterialIconType("rawOreCubic");
     public static final MaterialIconType crushedLeached = new MaterialIconType("crushedLeached");
     public static final MaterialIconType prismaFrothed = new MaterialIconType("prismaFrothed");
     public static final MaterialIconType ultraDense = new MaterialIconType("ultraDense");

@@ -133,8 +133,9 @@ public class CosmicLangHandler extends LangHandler {
         provider.add("tooltip.cosmiccore.asteroid_chip.sector", "Sector: %s");
         provider.add("tooltip.cosmiccore.asteroid_chip.mode", "Mode: %s");
 
-        provider.add("tooltip.cosmiccore.asteroid.tiny", "Asteroid Size: <1 Kiloton");
+        provider.add("tooltip.cosmiccore.asteroid.tiny", "Asteroid Size: Unknown");
         provider.add("tooltip.cosmiccore.asteroid.tier", "Asteroid Size: %s Kilotons");
+        provider.add("cosmiccore.recipe.asteroid_weight_greater_1", "Greater Yields\nfrom Larger Asteroids");
 
         // gui lines
         provider.add("gui.cosmiccore.soul_hatch.label.import", "Soul Input Hatch");
@@ -191,6 +192,9 @@ public class CosmicLangHandler extends LangHandler {
         provider.add("tagprefix.modular_shelling", "%s Modular Shelling");
         provider.add("tagprefix.plasmites", "%s Plasmites");
         provider.add("tagprefix.wire_spool", "%s Wire Spool");
+        provider.add("tagprefix.shape_memory_foil", "%s Shaping Memory Foil");
+        provider.add("tagprefix.alve_foil_insulator", "%s Alve Insulator");
+        provider.add("tagprefix.raw_ore_cubic", "Cubic %s Ore");
 
         provider.add("cosmiccore.multiblock.reboot_powergrid", "§aReboot All Connected Machines");
         provider.add("cosmiccore.multiblock.sleep_powergrid", "§cSuspend All Connected Machines");

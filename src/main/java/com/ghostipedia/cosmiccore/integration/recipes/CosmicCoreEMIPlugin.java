@@ -2,6 +2,7 @@ package com.ghostipedia.cosmiccore.integration.recipes;
 
 import com.ghostipedia.cosmiccore.CosmicCore;
 import com.ghostipedia.cosmiccore.common.data.CosmicItems;
+import com.ghostipedia.cosmiccore.common.machine.multiblock.multi.LARVA;
 import com.ghostipedia.cosmiccore.common.machine.multiblock.multi.logic.LarvaMachine;
 import com.ghostipedia.cosmiccore.integration.recipes.emi.AsteroidEmiRecipe;
 
@@ -34,7 +35,7 @@ public class CosmicCoreEMIPlugin implements EmiPlugin {
         registry.setDefaultComparison(CosmicItems.TARGETING_CHIP.asStack(), Comparison.compareNbt());
 
         registry.addCategory(ASTEROID_CATEGORY);
-        registry.addWorkstation(ASTEROID_CATEGORY, EmiStack.of(CosmicItems.TARGETING_CHIP));
+        registry.addWorkstation(ASTEROID_CATEGORY, EmiStack.of(LARVA.LARVA.getBlock()));
 
         addAsteroidRecipe(registry, "carbonic_asteroid", CosmicItems.TUNGSTENSTEEL_NANOLATTICE_SPOOL.asStack(),
                 List.of(EmiStack.of(CosmicItems.CARBON_ASTEROID.asStack())), CosmicItems.CARBON_ASTEROID.asStack());
