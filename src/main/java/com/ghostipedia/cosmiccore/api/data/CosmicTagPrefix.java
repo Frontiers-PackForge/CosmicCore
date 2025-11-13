@@ -28,6 +28,7 @@ public class CosmicTagPrefix {
     public static TagPrefix largeWireSpool;
     public static TagPrefix alveFoilInsulator;
     public static TagPrefix shapeMemoryFoil;
+    public static TagPrefix rawOreCubic;
     public static final TagKey<Block> STAR_LADDER_BLOCKS = TagUtil.createBlockTag("starladder_blocks");
     public static final TagKey<Item> STAR_LADDER_ITEMS = TagUtil.createItemTag("starladder_items");
 
@@ -41,6 +42,15 @@ public class CosmicTagPrefix {
             .hasFlag(MaterialFlags.GENERATE_FINE_WIRE);
 
     public static void initTagPrefixes() {
+        rawOreCubic = new TagPrefix("rawOreCubic")
+                .idPattern("raw_%s_cubic_ore")
+                .defaultTagPath("cubic_ores/%s")
+                .defaultTagPath("cubic_ores")
+                .materialIconType(CosmicCoreMaterialIconType.rawOreCubic)
+                .unificationEnabled(true)
+                .generateItem(true)
+                .generationCondition(hasOreProperty);
+
         crushedLeached = new TagPrefix("leachedOre")
                 .idPattern("leached_%s_ore")
                 .defaultTagPath("leached_ores/%s")
