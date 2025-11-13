@@ -1,5 +1,7 @@
 package com.ghostipedia.cosmiccore.gtbridge;
 
+import com.ghostipedia.cosmiccore.common.machine.multiblock.multi.logic.LarvaMachine;
+
 import com.gregtechceu.gtceu.api.GTValues;
 
 import net.minecraft.data.recipes.FinishedRecipe;
@@ -25,6 +27,8 @@ public class CosmicCoreRecipes {
                 .duration(40)
                 .EUt(GTValues.VA[GTValues.HV])
                 .save(provider);
+
+        LarvaMachine.generateTargettingChipRecipes(provider);
         /*
          * EMBER_TESTER_RECIPES.recipeBuilder("test")
          * .input(CosmicRecipeCapabilities.EMBER, 100d)

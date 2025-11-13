@@ -96,6 +96,8 @@ public class CosmicLangHandler extends LangHandler {
                 "§7Can use any capacitor and be expanded vertically up to 18 times§r",
                 "§7Accepts §6Laser Hatches§r");
 
+        provider.add("emi.category.cosmiccore.asteroid_mining", "Asteroid Mining Operations");
+
         // recipe stuff
         provider.add("cosmiccore.recipe.soul_in", "Soul Input: %s");
         provider.add("cosmiccore.recipe.soul_out", "Soul Output: %s");
@@ -122,6 +124,18 @@ public class CosmicLangHandler extends LangHandler {
         provider.add("cosmiccore.calx_reactor.desc", "Working wonders with the Arcane");
         provider.add("cosmiccore.mana_leaching_tub.desc", "Mana Soaker 9000");
         provider.add("cosmiccore.roaster.desc", "Marshmallows not included");
+
+        provider.add("tooltip.cosmiccore.asteroid_chip.unprogrammed", "Unprogrammed — no target data");
+        provider.add("tooltip.cosmiccore.asteroid_chip.type", "Type: %s");
+        provider.add("tooltip.cosmiccore.asteroid_chip.target", "Target ID: %s");
+        provider.add("tooltip.cosmiccore.asteroid_chip.tier", "Acquisition Tier: %s");
+        provider.add("tooltip.cosmiccore.asteroid_chip.lock", "Lock Strength: %s%%");
+        provider.add("tooltip.cosmiccore.asteroid_chip.sector", "Sector: %s");
+        provider.add("tooltip.cosmiccore.asteroid_chip.mode", "Mode: %s");
+
+        provider.add("tooltip.cosmiccore.asteroid.tiny", "Asteroid Size: Unknown");
+        provider.add("tooltip.cosmiccore.asteroid.tier", "Asteroid Size: %s Kilotons");
+        provider.add("cosmiccore.recipe.asteroid_weight_greater_1", "Greater Yields\nfrom Larger Asteroids");
 
         // gui lines
         provider.add("gui.cosmiccore.soul_hatch.label.import", "Soul Input Hatch");
@@ -178,6 +192,9 @@ public class CosmicLangHandler extends LangHandler {
         provider.add("tagprefix.modular_shelling", "%s Modular Shelling");
         provider.add("tagprefix.plasmites", "%s Plasmites");
         provider.add("tagprefix.wire_spool", "%s Wire Spool");
+        provider.add("tagprefix.shape_memory_foil", "%s Shaping Memory Foil");
+        provider.add("tagprefix.alve_foil_insulator", "%s Alve Insulator");
+        provider.add("tagprefix.raw_ore_cubic", "Cubic %s Ore");
 
         provider.add("cosmiccore.multiblock.reboot_powergrid", "§aReboot All Connected Machines");
         provider.add("cosmiccore.multiblock.sleep_powergrid", "§cSuspend All Connected Machines");
