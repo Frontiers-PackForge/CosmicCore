@@ -365,7 +365,7 @@ public class CosmicMaterials {
         Chronon = new Material.Builder(CosmicCore.id("chronon"))
                 .ingot()
                 .liquid(new FluidBuilder().temperature(100000000))
-                .iconSet(CosmicMaterialSet.CHRONON)
+                .iconSet(CCoreMaterialIconSet.CHRONIC)
                 .flags(GENERATE_BOLT_SCREW, GENERATE_ROUND, GENERATE_GEAR, GENERATE_SMALL_GEAR, GENERATE_RING,
                         GENERATE_FRAME, GENERATE_SPRING, GENERATE_SPRING_SMALL, GENERATE_FINE_WIRE)
                 .cableProperties(GTValues.V[12], 64, 0, true)
