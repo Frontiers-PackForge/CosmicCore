@@ -55,6 +55,12 @@ public class CCoreMaterialIconSet extends MaterialIconSet implements IRenderer {
                     true,
                     false));
 
+    public static final CCoreMaterialIconSet CHRONIC = new CCoreMaterialIconSet("chronic", CosmicMaterialSet.CHRONON,
+            false,
+            HaloItemRenderer.create(8, 0xFF1c1926, new ResourceLocation(CosmicCore.MOD_ID, "block/iris/rnd/time_halo"),
+                    true,
+                    false));
+
     public static final CCoreMaterialIconSet VOIDSPARKICO = new CCoreMaterialIconSet("voidspark_special",
             CosmicMaterialSet.VOIDSPARK, false,
             HaloItemRenderer.create(4, 0xFFFFFFFF,

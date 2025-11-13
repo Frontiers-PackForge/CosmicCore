@@ -1,7 +1,5 @@
 package com.ghostipedia.cosmiccore.client.renderer.item;
 
-import com.gregtechceu.gtceu.api.GTValues;
-
 import com.lowdragmc.lowdraglib.client.renderer.IItemRendererProvider;
 import com.lowdragmc.lowdraglib.client.renderer.IRenderer;
 
@@ -19,6 +17,7 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import org.embeddedt.modernfix.render.RenderState;
+import org.joml.Quaternionf;
 
 public class RadianceItemRenderer implements IRenderer {
 
@@ -30,8 +29,9 @@ public class RadianceItemRenderer implements IRenderer {
                            MultiBufferSource buffer, int combinedLight, int combinedOverlay, BakedModel model) {
         poseStack.pushPose();
         if (transformType == ItemDisplayContext.GUI) {
-            float scalefactor = GTValues.RNG.nextFloat() * 0.2F + 0.95F;
-            poseStack.scale(scalefactor, scalefactor, 1F);
+            poseStack.scale(1.4F, 1.4F, 1F);
+            poseStack.mulPose(
+                    new Quaternionf().fromAxisAngleDeg(0.0f, 0.0f, 0.3f, (System.currentTimeMillis() / 25) % 360));
         }
 
         RenderState.IS_RENDERING_LEVEL = true;
