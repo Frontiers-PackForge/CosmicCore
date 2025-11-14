@@ -47,7 +47,7 @@ public class KryosynCrackingChamber {
                             .or(abilities(PartAbility.INPUT_ENERGY).setExactLimit(1))
                             .or(abilities(PartAbility.PARALLEL_HATCH).setExactLimit(1))
                             .or(abilities(PartAbility.MAINTENANCE).setExactLimit(1)))
-                    .where('A', blocks(GTBlocks.CASING_ALUMINIUM_FROSTPROOF.get()))
+                    .where('C', blocks(GTBlocks.CASING_ALUMINIUM_FROSTPROOF.get()))
                     .build())
             // spotless:on
             .workableCasingModel(GTCEu.id("block/casings/solid/machine_casing_sturdy_hsse"),
