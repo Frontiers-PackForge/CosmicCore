@@ -53,7 +53,7 @@ public class CosmicMaterialRecipeHandlers {
         HEAVY_ASSEMBLER.recipeBuilder("heavy_assemble_" + material.getName() + "_modular_shelling")
 
                 .inputItems(frameGt, material, 4)
-                .outputItems(heavyBeam, 4)
+                .inputItems(heavyBeam, material, 4)
                 .inputItems(plate, material, 16)
                 .inputItems(bolt, material, 32)
                 .outputItems(modularShelling, material, 1)
