@@ -2,6 +2,7 @@ package com.ghostipedia.cosmiccore.common.data.recipe;
 
 import com.ghostipedia.cosmiccore.common.data.CosmicItems;
 import com.ghostipedia.cosmiccore.common.machine.multiblock.electric.MagneticFieldMachine;
+import com.ghostipedia.cosmiccore.common.machine.multiblock.multi.logic.LarvaMachine;
 import com.ghostipedia.cosmiccore.common.machine.multiblock.multi.logic.TitanFusionReactorMachine;
 import com.ghostipedia.cosmiccore.common.machine.multiblock.part.ModuleHatchPartMachine;
 
@@ -33,6 +34,30 @@ import java.util.Map;
 public class CosmicRecipeModifiers {
 
     public static final RecipeModifier COSMIC_MODULES = CosmicRecipeModifiers::moduleParallel;
+
+    public static ModifierFunction asteroidYieldModifier(MetaMachine machine, GTRecipe recipe) {
+        if (!(machine instanceof IRecipeLogicMachine recipeLogicMachine)) {
+            return ModifierFunction.NULL;
+        }
+        int size = 1;
+        var handlers = recipeLogicMachine.getCapabilitiesFlat(IO.IN, ItemRecipeCapability.CAP);
+        for (var handler : handlers) {
+            for (var content : handler.getContents()) {
+                if (content instanceof ItemStack stack && !stack.isEmpty()) {
+                    size = Math.max(size, LarvaMachine.getAsteroidSize(stack));
+
+                }
+            }
+        }
+        if (size == 1) return ModifierFunction.IDENTITY;
+        int cap = ParallelLogic.limitByOutputMerging(recipeLogicMachine, recipe, size,
+                recipeLogicMachine::canVoidRecipeOutputs, Collections.emptyList());
+        if (cap <= 1) return ModifierFunction.IDENTITY;
+
+        return ModifierFunction.builder()
+                .outputModifier(ContentModifier.multiplier(cap))
+                .build();
+    }
 
     public static ModifierFunction vomahineReactorOC(MetaMachine machine, GTRecipe recipe) {
         if (!(machine instanceof MagneticFieldMachine magnetMachine)) {

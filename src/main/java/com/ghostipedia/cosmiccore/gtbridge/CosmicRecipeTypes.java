@@ -219,6 +219,11 @@ public class CosmicRecipeTypes {
             .register("vacuum_bubbler", ELECTRIC)
             .setMaxIOSize(2, 3, 2, 3)
             .setProgressBar(GuiTextures.PROGRESS_BAR_ARROW, ProgressTexture.FillDirection.LEFT_TO_RIGHT);
+    public static final GTRecipeType LARGE_ROASTER = GTRecipeTypes
+            .register("large_roaster", ELECTRIC)
+            .setMaxSize(IO.IN, EmberRecipeCapability.CAP, 1)
+            .setMaxIOSize(4, 4, 4, 4)
+            .setProgressBar(GuiTextures.PROGRESS_BAR_ARROW, ProgressTexture.FillDirection.LEFT_TO_RIGHT);
 
     public static final GTRecipeType SPOOLING_MACHINE = GTRecipeTypes
             .register("spooling_machine", ELECTRIC)
@@ -361,6 +366,14 @@ public class CosmicRecipeTypes {
             .setMaxTooltips(6)
             .onRecipeBuild(ResearchManager::createDefaultResearchRecipe)
             .setProgressBar(GuiTextures.PROGRESS_BAR_ARROW_MULTIPLE, ProgressTexture.FillDirection.LEFT_TO_RIGHT);
+
+    public static final GTRecipeType WASP_RECIPES = GTRecipeTypes
+            .register("wasp", GTRecipeTypes.MULTIBLOCK)
+            .addDataInfo(data -> LocalizationUtils.format("cosmiccore.recipe.asteroid_weight_greater_1"))
+            .setMaxIOSize(2, 15, 3, 5)
+            .setMaxTooltips(4)
+            .setProgressBar(GuiTextures.PROGRESS_BAR_SIFT, ProgressTexture.FillDirection.UP_TO_DOWN);
+
     // Dummy recipe. Maybe add recipes here? Either way it won't be used for recipe searching, that's taken care of by
     // BeeRecipeLogic
     public static final GTRecipeType BEES = GTRecipeTypes
@@ -464,8 +477,14 @@ public class CosmicRecipeTypes {
                     .save(provider);
         });
 
+        // Eclipsed Forge is the big EU powered version of the Dawn Forge
         DAWN_FORGE.onRecipeBuild((builder, provider) -> {
             DAWNFORGE_ECLIPSED.copyFrom(builder)
+                    .save(provider);
+        });
+        // Large Roaster can do all the small Roaster can, but also allows Ember :)
+        ROASTER.onRecipeBuild((builder, provider) -> {
+            LARGE_ROASTER.copyFrom(builder)
                     .save(provider);
         });
 

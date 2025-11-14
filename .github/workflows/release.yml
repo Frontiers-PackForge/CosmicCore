@@ -63,7 +63,7 @@ jobs:
           github-generate-changelog: true
           github-tag: "${{ steps.toml_properties.outputs.value }}-${{ steps.gradle_properties.outputs.mod_version }}"
 
-          files: ./build/libs/!(*-@(dev|sources|dev-slim)).jar
+          files: ./build/libs/!(*-@(dev|sources|dev-slim|slim)).jar
           name: "Cosmic Core ${{ steps.gradle_properties.outputs.mod_version }}"
           version: ${{ steps.gradle_properties.outputs.mod_version }}
           version-type: ${{ inputs.version_type }}

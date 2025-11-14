@@ -5,7 +5,10 @@ import com.ghostipedia.cosmiccore.api.item.LinkedTerminalBehavior;
 import com.ghostipedia.cosmiccore.api.item.armor.*;
 import com.ghostipedia.cosmiccore.api.registries.CosmicRegistration;
 import com.ghostipedia.cosmiccore.client.renderer.item.HaloItemRenderer;
+import com.ghostipedia.cosmiccore.client.renderer.item.RadianceItemRenderer;
 import com.ghostipedia.cosmiccore.common.data.tag.item.CosmicItemTags;
+import com.ghostipedia.cosmiccore.common.item.AsteroidItem;
+import com.ghostipedia.cosmiccore.common.item.AsteroidTargetingChipItem;
 import com.ghostipedia.cosmiccore.common.item.CosmicScytheItem;
 import com.ghostipedia.cosmiccore.common.item.armor.ChestSanguineWarptechSuite;
 import com.ghostipedia.cosmiccore.common.item.armor.HelmetSanguineWarptechSuite;
@@ -1231,6 +1234,32 @@ public class CosmicItems {
             .properties(p -> p.stacksTo(64))
             .defaultModel()
             .register();
+    public static final ItemEntry<ComponentItem> ENTHELIC_BOARD = REGISTRATE
+            .item("multilayered_enthel_circuit_board", ComponentItem::create)
+            .lang("Multilayered Enthel Circuit Board")
+            .properties(p -> p.stacksTo(64))
+            .defaultModel()
+            .register();
+    public static final ItemEntry<ComponentItem> ENTHELIC_PCB = REGISTRATE
+            .item("spirit_engraved_enthel_circuit_board", ComponentItem::create)
+            .lang("Spirit Engraved Enthel Circuit Board")
+            .properties(p -> p.stacksTo(64))
+            .defaultModel()
+            .register();
+
+    public static final ItemEntry<ComponentItem> ENTHEL_CPU = REGISTRATE
+            .item("spirit_runed_enthel_cpu", ComponentItem::create)
+            .lang("Spirit Runed Enthel CPU")
+            .properties(p -> p.stacksTo(64))
+            .defaultModel()
+            .register();
+    public static final ItemEntry<ComponentItem> ENTHEL_CPU_WAFER = REGISTRATE
+            .item("spirit_runed_enthel_cpu_wafer", ComponentItem::create)
+            .lang("Spirit Runed Enthel CPU Wafer")
+            .properties(p -> p.stacksTo(64))
+            .defaultModel()
+            .register();
+
     public static final ItemEntry<ComponentItem> RUNIC_HEX_CPU = REGISTRATE.item("runic_hex_cpu", ComponentItem::create)
             .lang("Hex Etched CPU Chip")
             .properties(p -> p.stacksTo(64))
@@ -1285,6 +1314,35 @@ public class CosmicItems {
             .item("hex_processor_mainframe", ComponentItem::create)
             .lang("Hex Processor Mainframe")
             .tag(CustomTags.IV_CIRCUITS)
+            .properties(p -> p.stacksTo(64))
+            .defaultModel()
+            .register();
+    // Enthelic
+    public static final ItemEntry<ComponentItem> ENTHELIC_PROCESSOR = REGISTRATE
+            .item("enthelic_processor", ComponentItem::create)
+            .lang("Enthelic Processor")
+            .tag(CustomTags.HV_CIRCUITS)
+            .properties(p -> p.stacksTo(64))
+            .defaultModel()
+            .register();
+    public static final ItemEntry<ComponentItem> ENTHELIC_PROCESSOR_ASSEMBLY = REGISTRATE
+            .item("enthelic_processor_assembly", ComponentItem::create)
+            .lang("Enthelic Processor Assembly")
+            .tag(CustomTags.EV_CIRCUITS)
+            .properties(p -> p.stacksTo(64))
+            .defaultModel()
+            .register();
+    public static final ItemEntry<ComponentItem> ENTHELIC_PROCESSOR_SUPERCOMPUTER = REGISTRATE
+            .item("enthelic_processor_supercomputer", ComponentItem::create)
+            .lang("Enthelic Processor Supercomputer")
+            .tag(CustomTags.IV_CIRCUITS)
+            .properties(p -> p.stacksTo(64))
+            .defaultModel()
+            .register();
+    public static final ItemEntry<ComponentItem> ENTHELIC_PROCESSOR_MAINFRAME = REGISTRATE
+            .item("enthelic_processor_mainframe", ComponentItem::create)
+            .lang("Enthelic Processor Mainframe")
+            .tag(CustomTags.LuV_CIRCUITS)
             .properties(p -> p.stacksTo(64))
             .defaultModel()
             .register();
@@ -2010,6 +2068,251 @@ public class CosmicItems {
             .defaultModel()
             .register();
 
+    // Project Star Eater
+
+    public static final ItemEntry<ComponentItem> HAULER_PROBE_GRADE_1 = REGISTRATE
+            .item("freight_beetle_grade_1", ComponentItem::create)
+            .lang("Freight Beetle Mk.1")
+            .properties(p -> p.stacksTo(64).durability(1024))
+            .tag()
+            .defaultModel()
+            .register();
+
+    public static final ItemEntry<ComponentItem> ARMORED_HAULER_PROBE_GRADE_1 = REGISTRATE
+            .item("armored_freight_beetle_grade_1", ComponentItem::create)
+            .lang("Armored Freight Beetle Mk.1")
+            .properties(p -> p.stacksTo(64).durability(1024))
+            .tag()
+            .defaultModel()
+            .register();
+
+    public static final ItemEntry<ComponentItem> CRUSHER_WASPS_GRADE_1 = REGISTRATE
+            .item("crusher_wasps_grade_1", ComponentItem::create)
+            .lang("Crusher Wasps Mk.1")
+            .properties(p -> p.stacksTo(64).durability(1024))
+            .tag()
+            .defaultModel()
+            .register();
+
+    public static final ItemEntry<ComponentItem> RAZOR_HORNET_GRADE_1 = REGISTRATE
+            .item("razor_hornet_grade_1", ComponentItem::create)
+            .lang("Razor Hornet Mk.1")
+            .properties(p -> p.stacksTo(64).durability(1024))
+            .tag()
+            .defaultModel()
+            .register();
+
+    public static final ItemEntry<ComponentItem> PULVERIZING_BEETLE_GRADE_1 = REGISTRATE
+            .item("pulverizing_beetle_grade_1", ComponentItem::create)
+            .lang("Pulverizing Beetle Mk.1")
+            .properties(p -> p.stacksTo(64).durability(1024))
+            .tag()
+            .defaultModel()
+            .register();
+
+    public static final ItemEntry<ComponentItem> CRUCIBLE_MANTIS_GRADE_1 = REGISTRATE
+            .item("crucible_mantis_grade_1", ComponentItem::create)
+            .lang("Crucible Mantis Mk.1")
+            .properties(p -> p.stacksTo(64).durability(1024))
+            .tag()
+            .defaultModel()
+            .register();
+
+    public static final ItemEntry<ComponentItem> HAULER_PROBE_GRADE_2 = REGISTRATE
+            .item("freight_beetle_grade_2", ComponentItem::create)
+            .lang("Freight Beetle Mk.2")
+            .properties(p -> p.stacksTo(64).durability(1024))
+            .tag()
+            .defaultModel()
+            .register();
+
+    public static final ItemEntry<ComponentItem> ARMORED_HAULER_PROBE_GRADE_2 = REGISTRATE
+            .item("armored_freight_beetle_grade_2", ComponentItem::create)
+            .lang("Armored Freight Beetle Mk.2")
+            .properties(p -> p.stacksTo(64).durability(1024))
+            .tag()
+            .defaultModel()
+            .register();
+
+    public static final ItemEntry<ComponentItem> CRUSHER_WASPS_GRADE_2 = REGISTRATE
+            .item("crusher_wasps_grade_2", ComponentItem::create)
+            .lang("Crusher Wasps Mk.2")
+            .properties(p -> p.stacksTo(64).durability(1024))
+            .tag()
+            .defaultModel()
+            .register();
+
+    public static final ItemEntry<ComponentItem> RAZOR_HORNET_GRADE_2 = REGISTRATE
+            .item("razor_hornet_grade_2", ComponentItem::create)
+            .lang("Razor Hornet Mk.2")
+            .properties(p -> p.stacksTo(64).durability(1024))
+            .tag()
+            .defaultModel()
+            .register();
+
+    public static final ItemEntry<ComponentItem> PULVERIZING_BEETLE_GRADE_2 = REGISTRATE
+            .item("pulverizing_beetle_grade_2", ComponentItem::create)
+            .lang("Pulverizing Beetle Mk.2")
+            .properties(p -> p.stacksTo(64).durability(1024))
+            .tag()
+            .defaultModel()
+            .register();
+
+    public static final ItemEntry<ComponentItem> CRUCIBLE_MANTIS_GRADE_2 = REGISTRATE
+            .item("razor_hornet_grade_2", ComponentItem::create)
+            .lang("Crucible Mantis Mk.2")
+            .properties(p -> p.stacksTo(64).durability(1024))
+            .tag()
+            .defaultModel()
+            .register();
+    // GRADE 3
+
+    public static final ItemEntry<ComponentItem> HAULER_PROBE_GRADE_3 = REGISTRATE
+            .item("freight_beetle_grade_3", ComponentItem::create)
+            .lang("Freight Beetle Mk.3")
+            .properties(p -> p.stacksTo(64).durability(1024))
+            .tag()
+            .defaultModel()
+            .register();
+
+    public static final ItemEntry<ComponentItem> ARMORED_HAULER_PROBE_GRADE_3 = REGISTRATE
+            .item("armored_freight_beetle_grade_3", ComponentItem::create)
+            .lang("Armored Freight Beetle Mk.3")
+            .properties(p -> p.stacksTo(64).durability(1024))
+            .tag()
+            .defaultModel()
+            .register();
+
+    public static final ItemEntry<ComponentItem> CRUSHER_WASPS_GRADE_3 = REGISTRATE
+            .item("crusher_wasps_grade_3", ComponentItem::create)
+            .lang("Crusher Wasps Mk.3")
+            .properties(p -> p.stacksTo(64).durability(1024))
+            .tag()
+            .defaultModel()
+            .register();
+
+    public static final ItemEntry<ComponentItem> RAZOR_HORNET_GRADE_3 = REGISTRATE
+            .item("razor_hornet_grade_3", ComponentItem::create)
+            .lang("Razor Hornet Mk.3")
+            .properties(p -> p.stacksTo(64).durability(1024))
+            .tag()
+            .defaultModel()
+            .register();
+
+    public static final ItemEntry<ComponentItem> PULVERIZING_BEETLE_GRADE_3 = REGISTRATE
+            .item("pulverizing_beetle_grade_3", ComponentItem::create)
+            .lang("Pulverizing Beetle Mk.3")
+            .properties(p -> p.stacksTo(64).durability(1024))
+            .tag()
+            .defaultModel()
+            .register();
+
+    public static final ItemEntry<ComponentItem> CRUCIBLE_MANTIS_GRADE_3 = REGISTRATE
+            .item("razor_hornet_grade_3", ComponentItem::create)
+            .lang("Crucible Mantis Mk.3")
+            .properties(p -> p.stacksTo(64).durability(1024))
+            .tag()
+            .defaultModel()
+            .register();
+
+    // GRADE 4
+
+    public static final ItemEntry<ComponentItem> HAULER_PROBE_GRADE_4 = REGISTRATE
+            .item("freight_beetle_grade_4", ComponentItem::create)
+            .lang("Freight Beetle Mk.4")
+            .properties(p -> p.stacksTo(64).durability(1024))
+            .tag()
+            .defaultModel()
+            .register();
+
+    public static final ItemEntry<ComponentItem> ARMORED_HAULER_PROBE_GRADE_4 = REGISTRATE
+            .item("armored_freight_beetle_grade_4", ComponentItem::create)
+            .lang("Armored Freight Beetle Mk.4")
+            .properties(p -> p.stacksTo(64).durability(1024))
+            .tag()
+            .defaultModel()
+            .register();
+
+    public static final ItemEntry<ComponentItem> CRUSHER_WASPS_GRADE_4 = REGISTRATE
+            .item("crusher_wasps_grade_4", ComponentItem::create)
+            .lang("Crusher Wasps Mk.4")
+            .properties(p -> p.stacksTo(64).durability(1024))
+            .tag()
+            .defaultModel()
+            .register();
+
+    public static final ItemEntry<ComponentItem> RAZOR_HORNET_GRADE_4 = REGISTRATE
+            .item("razor_hornet_grade_4", ComponentItem::create)
+            .lang("Razor Hornet Mk.4")
+            .properties(p -> p.stacksTo(64).durability(1024))
+            .tag()
+            .defaultModel()
+            .register();
+
+    public static final ItemEntry<ComponentItem> PULVERIZING_BEETLE_GRADE_4 = REGISTRATE
+            .item("pulverizing_beetle_grade_4", ComponentItem::create)
+            .lang("Pulverizing Beetle Mk.4")
+            .properties(p -> p.stacksTo(64).durability(1024))
+            .tag()
+            .defaultModel()
+            .register();
+
+    public static final ItemEntry<ComponentItem> CRUCIBLE_MANTIS_GRADE_4 = REGISTRATE
+            .item("razor_hornet_grade_4", ComponentItem::create)
+            .lang("Crucible Mantis Mk.4")
+            .properties(p -> p.stacksTo(64).durability(1024))
+            .tag()
+            .defaultModel()
+            .register();
+
+    public static final ItemEntry<ComponentItem> HAULER_PROBE_GRADE_5 = REGISTRATE
+            .item("freight_beetle_grade_5", ComponentItem::create)
+            .lang("Freight Beetle Mk.5")
+            .properties(p -> p.stacksTo(64).durability(1024))
+            .tag()
+            .defaultModel()
+            .register();
+
+    public static final ItemEntry<ComponentItem> ARMORED_HAULER_PROBE_GRADE_5 = REGISTRATE
+            .item("armored_freight_beetle_grade_5", ComponentItem::create)
+            .lang("Armored Freight Beetle Mk.5")
+            .properties(p -> p.stacksTo(64).durability(1024))
+            .tag()
+            .defaultModel()
+            .register();
+
+    public static final ItemEntry<ComponentItem> CRUSHER_WASPS_GRADE_5 = REGISTRATE
+            .item("crusher_wasps_grade_5", ComponentItem::create)
+            .lang("Crusher Wasps Mk.5")
+            .properties(p -> p.stacksTo(64).durability(1024))
+            .tag()
+            .defaultModel()
+            .register();
+
+    public static final ItemEntry<ComponentItem> RAZOR_HORNET_GRADE_5 = REGISTRATE
+            .item("razor_hornet_grade_5", ComponentItem::create)
+            .lang("Razor Hornet Mk.5")
+            .properties(p -> p.stacksTo(64).durability(1024))
+            .tag()
+            .defaultModel()
+            .register();
+
+    public static final ItemEntry<ComponentItem> PULVERIZING_BEETLE_GRADE_5 = REGISTRATE
+            .item("pulverizing_beetle_grade_5", ComponentItem::create)
+            .lang("Pulverizing Beetle Mk.5")
+            .properties(p -> p.stacksTo(64).durability(1024))
+            .tag()
+            .defaultModel()
+            .register();
+
+    public static final ItemEntry<ComponentItem> CRUCIBLE_MANTIS_GRADE_5 = REGISTRATE
+            .item("razor_hornet_grade_5", ComponentItem::create)
+            .lang("Crucible Mantis Mk.5")
+            .properties(p -> p.stacksTo(64).durability(1024))
+            .tag()
+            .defaultModel()
+            .register();
+
     public static ItemEntry<ComponentItem> LINKED_TERMINAL = REGISTRATE
             .item("linked_terminal", ComponentItem::create)
             .lang("Linked Terminal")
@@ -2019,6 +2322,137 @@ public class CosmicItems {
                     prov.modLoc("item/terminal/terminal_overlay")))
             .properties(p -> p.stacksTo(1))
             .onRegister(attach(new LinkedTerminalBehavior()))
+            .register();
+
+    public static final ItemEntry<AsteroidItem> CARBON_ASTEROID = REGISTRATE
+            .item("carbon_asteroid_base", AsteroidItem::new)
+            .lang("Carbonic Asteroid")
+            .properties(p -> p.stacksTo(1))
+            .tag()
+            .defaultModel()
+            .onRegister(attachRenderer(() -> RadianceItemRenderer.INSTANCE))
+            .register();
+    public static final ItemEntry<AsteroidItem> FERRIC_ASTEROID = REGISTRATE
+            .item("ferric_asteroid", AsteroidItem::new)
+            .lang("Ferric Asteroid")
+            .properties(p -> p.stacksTo(1))
+            .tag()
+            .defaultModel()
+            .onRegister(attachRenderer(() -> RadianceItemRenderer.INSTANCE))
+            .register();
+
+    public static final ItemEntry<AsteroidItem> RARE_METAL_ASTEROID = REGISTRATE
+            .item("rare_metals_asteroid", AsteroidItem::new)
+            .lang("Exotic Metals Asteroid")
+            .properties(p -> p.stacksTo(1))
+            .tag()
+            .defaultModel()
+            .onRegister(attachRenderer(() -> RadianceItemRenderer.INSTANCE))
+            .register();
+
+    public static final ItemEntry<AsteroidItem> AURIC_ASTEROID = REGISTRATE
+            .item("auric_asteroid", AsteroidItem::new)
+            .lang("Auric Asteroid")
+            .properties(p -> p.stacksTo(1))
+            .tag()
+            .defaultModel()
+            .onRegister(attachRenderer(() -> RadianceItemRenderer.INSTANCE))
+            .register();
+
+    public static final ItemEntry<AsteroidItem> BRIMSTONE_ASTEROID = REGISTRATE
+            .item("brimstone_asteroid", AsteroidItem::new)
+            .lang("Brimstone Asteroid")
+            .properties(p -> p.stacksTo(1))
+            .tag()
+            .defaultModel()
+            .onRegister(attachRenderer(() -> RadianceItemRenderer.INSTANCE))
+            .register();
+
+    public static final ItemEntry<AsteroidItem> LITH_ASTEROID = REGISTRATE
+            .item("lith_asteroid", AsteroidItem::new)
+            .lang("Lith Asteroid")
+            .properties(p -> p.stacksTo(1))
+            .tag()
+            .defaultModel()
+            .onRegister(attachRenderer(() -> RadianceItemRenderer.INSTANCE))
+            .register();
+
+    public static final ItemEntry<AsteroidItem> MAFIC_ASTEROID = REGISTRATE
+            .item("mafic_asteroid", AsteroidItem::new)
+            .lang("Mafic Asteroid")
+            .properties(p -> p.stacksTo(1))
+            .tag()
+            .defaultModel()
+            .onRegister(attachRenderer(() -> RadianceItemRenderer.INSTANCE))
+            .register();
+
+    public static final ItemEntry<AsteroidItem> MOSSY_ASTEROID = REGISTRATE
+            .item("mossy_asteroid", AsteroidItem::new)
+            .lang("Mossy Asteroid")
+            .properties(p -> p.stacksTo(1))
+            .tag()
+            .defaultModel()
+            .onRegister(attachRenderer(() -> RadianceItemRenderer.INSTANCE))
+            .register();
+
+    public static final ItemEntry<AsteroidItem> OCCULT_ASTEROID = REGISTRATE
+            .item("occult_asteroid", AsteroidItem::new)
+            .lang("Occult Asteroid")
+            .properties(p -> p.stacksTo(1))
+            .tag()
+            .defaultModel()
+            .onRegister(attachRenderer(() -> RadianceItemRenderer.INSTANCE))
+            .register();
+
+    public static final ItemEntry<AsteroidItem> OXIDE_ASTEROID = REGISTRATE
+            .item("oxide_asteroid", AsteroidItem::new)
+            .lang("Oxide Asteroid")
+            .properties(p -> p.stacksTo(1))
+            .tag()
+            .defaultModel()
+            .onRegister(attachRenderer(() -> RadianceItemRenderer.INSTANCE))
+            .register();
+
+    public static final ItemEntry<AsteroidItem> SANGUINE_ASTEROID = REGISTRATE
+            .item("sanguine_asteroid", AsteroidItem::new)
+            .lang("Sanguine Asteroid")
+            .properties(p -> p.stacksTo(1))
+            .tag()
+            .defaultModel()
+            .onRegister(attachRenderer(() -> RadianceItemRenderer.INSTANCE))
+            .register();
+
+    public static final ItemEntry<AsteroidItem> WASTELAND_ASTEROID = REGISTRATE
+            .item("wasteland_asteroid", AsteroidItem::new)
+            .lang("Wasteland Asteroid")
+            .properties(p -> p.stacksTo(1))
+            .tag()
+            .defaultModel()
+            .onRegister(attachRenderer(() -> RadianceItemRenderer.INSTANCE))
+            .register();
+
+    public static final ItemEntry<ComponentItem> TUNGSTENSTEEL_NANOLATTICE_SPOOL = REGISTRATE
+            .item("tungstensteel_nanolattice_spool", ComponentItem::create)
+            .lang("Tungstensteel Nanolattice Spool")
+            .properties(p -> p.stacksTo(16))
+            .tag()
+            .defaultModel()
+            .register();
+
+    public static final ItemEntry<ComponentItem> TRINAVINE_NANOLATTICE_SPOOL = REGISTRATE
+            .item("trinavine_nanolattice_spool", ComponentItem::create)
+            .lang("Trinavine Nanolattice Spool")
+            .properties(p -> p.stacksTo(16))
+            .tag()
+            .defaultModel()
+            .register();
+    // What we'd write our NBT ON and Read in LARVA
+    public static final ItemEntry<AsteroidTargetingChipItem> TARGETING_CHIP = REGISTRATE
+            .item("asteroid_targeting_chip", props -> new AsteroidTargetingChipItem(props.stacksTo(1)))
+            .lang("Asteroid Targeting Chip")
+            .properties(p -> p.stacksTo(1))
+            .tag()
+            .defaultModel()
             .register();
 
     public static ICustomDescriptionId cellName() {
