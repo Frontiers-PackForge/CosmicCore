@@ -1231,6 +1231,32 @@ public class CosmicItems {
             .properties(p -> p.stacksTo(64))
             .defaultModel()
             .register();
+    public static final ItemEntry<ComponentItem> ENTHELIC_BOARD = REGISTRATE
+            .item("multilayered_enthel_circuit_board", ComponentItem::create)
+            .lang("Multilayered Enthel Circuit Board")
+            .properties(p -> p.stacksTo(64))
+            .defaultModel()
+            .register();
+    public static final ItemEntry<ComponentItem> ENTHELIC_PCB = REGISTRATE
+            .item("spirit_engraved_enthel_circuit_board", ComponentItem::create)
+            .lang("Spirit Engraved Enthel Circuit Board")
+            .properties(p -> p.stacksTo(64))
+            .defaultModel()
+            .register();
+
+    public static final ItemEntry<ComponentItem> ENTHEL_CPU = REGISTRATE
+            .item("spirit_runed_enthel_cpu", ComponentItem::create)
+            .lang("Spirit Runed Enthel CPU")
+            .properties(p -> p.stacksTo(64))
+            .defaultModel()
+            .register();
+    public static final ItemEntry<ComponentItem> ENTHEL_CPU_WAFER = REGISTRATE
+            .item("spirit_runed_enthel_cpu_wafer", ComponentItem::create)
+            .lang("Spirit Runed Enthel CPU Wafer")
+            .properties(p -> p.stacksTo(64))
+            .defaultModel()
+            .register();
+
     public static final ItemEntry<ComponentItem> RUNIC_HEX_CPU = REGISTRATE.item("runic_hex_cpu", ComponentItem::create)
             .lang("Hex Etched CPU Chip")
             .properties(p -> p.stacksTo(64))
@@ -1285,6 +1311,35 @@ public class CosmicItems {
             .item("hex_processor_mainframe", ComponentItem::create)
             .lang("Hex Processor Mainframe")
             .tag(CustomTags.IV_CIRCUITS)
+            .properties(p -> p.stacksTo(64))
+            .defaultModel()
+            .register();
+    // Enthelic
+    public static final ItemEntry<ComponentItem> ENTHELIC_PROCESSOR = REGISTRATE
+            .item("enthelic_processor", ComponentItem::create)
+            .lang("Enthelic Processor")
+            .tag(CustomTags.HV_CIRCUITS)
+            .properties(p -> p.stacksTo(64))
+            .defaultModel()
+            .register();
+    public static final ItemEntry<ComponentItem> ENTHELIC_PROCESSOR_ASSEMBLY = REGISTRATE
+            .item("enthelic_processor_assembly", ComponentItem::create)
+            .lang("Enthelic Processor Assembly")
+            .tag(CustomTags.EV_CIRCUITS)
+            .properties(p -> p.stacksTo(64))
+            .defaultModel()
+            .register();
+    public static final ItemEntry<ComponentItem> ENTHELIC_PROCESSOR_SUPERCOMPUTER = REGISTRATE
+            .item("enthelic_processor_supercomputer", ComponentItem::create)
+            .lang("Enthelic Processor Supercomputer")
+            .tag(CustomTags.IV_CIRCUITS)
+            .properties(p -> p.stacksTo(64))
+            .defaultModel()
+            .register();
+    public static final ItemEntry<ComponentItem> ENTHELIC_PROCESSOR_MAINFRAME = REGISTRATE
+            .item("enthelic_processor_mainframe", ComponentItem::create)
+            .lang("Enthelic Processor Mainframe")
+            .tag(CustomTags.LuV_CIRCUITS)
             .properties(p -> p.stacksTo(64))
             .defaultModel()
             .register();

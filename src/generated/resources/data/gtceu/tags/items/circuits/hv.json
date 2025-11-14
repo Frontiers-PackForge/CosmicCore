@@ -1,6 +1,7 @@
 {
   "values": [
     "cosmiccore:hex_processor_assembly",
+    "cosmiccore:enthelic_processor",
     "cosmiccore:omnia_circuit_hv"
   ]
 }
