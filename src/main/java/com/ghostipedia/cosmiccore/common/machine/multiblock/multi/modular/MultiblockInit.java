@@ -59,7 +59,10 @@ public class MultiblockInit {
         EclipsedDawnForge.init();
         WASP.init();
         LARVA.init();
-        // Roaster.init();
+        Roaster.init();
+        VileFissionReactor.init();
+        VoidSaltReactor.init();
+        AtomicReconstructor.init();
         // KryosynCrackingChamber.init();
     }
 }
