@@ -1,9 +1,11 @@
-
 package com.ghostipedia.cosmiccore.common.machine.multiblock.multi;
 
 import com.ghostipedia.cosmiccore.CosmicCore;
+import com.ghostipedia.cosmiccore.client.renderer.machine.CosmicDynamicRenderHelpers;
 import com.ghostipedia.cosmiccore.common.data.CosmicBlocks;
 import com.ghostipedia.cosmiccore.gtbridge.CosmicRecipeTypes;
+
+import com.gregtechceu.gtceu.GTCEu;
 import com.gregtechceu.gtceu.api.data.RotationState;
 import com.gregtechceu.gtceu.api.machine.MultiblockMachineDefinition;
 import com.gregtechceu.gtceu.api.machine.multiblock.PartAbility;
@@ -12,10 +14,14 @@ import com.gregtechceu.gtceu.api.pattern.FactoryBlockPattern;
 import com.gregtechceu.gtceu.api.recipe.OverclockingLogic;
 import com.gregtechceu.gtceu.common.data.GTBlocks;
 import com.gregtechceu.gtceu.common.data.GTRecipeModifiers;
+
 import com.sammy.malum.registry.common.block.BlockRegistry;
+import wayoftime.bloodmagic.BloodMagic;
 
 import static com.ghostipedia.cosmiccore.api.registries.CosmicRegistration.REGISTRATE;
+import static com.ghostipedia.cosmiccore.common.data.CosmicBlocks.ETHERSTEEL_PLATED_ASH_TILES;
 import static com.ghostipedia.cosmiccore.common.data.CosmicBlocks.HIGH_TEMP_FISSION_CASING;
+import static com.ghostipedia.cosmiccore.common.data.datagen.CosmicMachineModels.createSeparateControllerCasingMachineModel;
 import static com.gregtechceu.gtceu.api.pattern.Predicates.*;
 
 public class AtomicReconstructor {
@@ -23,15 +29,15 @@ public class AtomicReconstructor {
     public final static MultiblockMachineDefinition ATOMIC_RECONSTRUCTOR = REGISTRATE
             .multiblock("atomic_reconstructor",
                     WorkableElectricMultiblockMachine::new)
-            .langValue("§5Voidtouched Salt Fission Reactor")
+            .langValue("§6Radbolt Atomic Reconstructor")
             .rotationState(RotationState.NON_Y_AXIS)
             .recipeType(CosmicRecipeTypes.VILE_FISSION)
-            .appearanceBlock(HIGH_TEMP_FISSION_CASING)
-            .partAppearance((controller, part, side) -> HIGH_TEMP_FISSION_CASING.getDefaultState())
+            .appearanceBlock(ETHERSTEEL_PLATED_ASH_TILES)
+            .partAppearance((controller, part, side) -> ETHERSTEEL_PLATED_ASH_TILES.getDefaultState())
             .recipeModifiers(
                     GTRecipeModifiers.ELECTRIC_OVERCLOCK.apply(OverclockingLogic.NON_PERFECT_OVERCLOCK_SUBTICK),
                     GTRecipeModifiers.BATCH_MODE)
-            // spotless: off
+            // spotless:off
             .pattern(definition -> FactoryBlockPattern.start()
                     .aisle("      AAAAAAA      ", "      DAAAAAD      ", "      DA   AD      ", "      DA   AD      ", "      D     D      ", "      D     D      ", "      D     D      ", "      D     D      ", "      D     D      ", "      DA   AD      ", "      DA   AD      ", "      DAAAAAD      ", "      AAAAAAA      ", "                   ")
                     .aisle("AAAAA ADAAADA  DDD ", "A   A ADDDDDA  GGG ", "A   A A     A  DDD ", "A   A A     A  GGG ", "A   A          DDD ", "A   A       A      ", "A   A       A      ", "A   A       A      ", "A   A              ", "A   A A     A      ", "AAAAA A     A      ", "      ADDDDDA      ", "      ADAAADA      ", "       AAAAA       ")
@@ -43,20 +49,23 @@ public class AtomicReconstructor {
 
                     .where(' ', any())
                     .where('Q', controller(blocks(definition.getBlock())))
-                    .where('A', blocks(HIGH_TEMP_FISSION_CASING.get())
+                    .where('A', blocks(CosmicBlocks.SOUL_STAINED_STEEL_ALU_CASING.get()))
+                    .where('B', blocks(ETHERSTEEL_PLATED_ASH_TILES.get())
                             .or(autoAbilities(CosmicRecipeTypes.VOID_SALT_FISSION))
                             .or(abilities(PartAbility.INPUT_ENERGY).setMaxGlobalLimited(2,2))
                             .or(abilities(PartAbility.MAINTENANCE).setExactLimit(1)))
-                    .where('B', blocks(BlockRegistry.BLOCK_OF_SOULSTONE.get()))
-                    .where('C', blocks(CosmicBlocks.HIGHLY_CONDUCTIVE_FISSION_CASING.get()))
-                    .where('D', blocks(GTBlocks.CASING_LAMINATED_GLASS.get()))
-                    .where('E', blocks(BlockRegistry.BLOCK_OF_VOID_SALTS.get()))
-                    .where('F', blocks(BlockRegistry.BLOCK_OF_MALIGNANT_LEAD.get()))
-                    .where('G', blocks(BlockRegistry.BLOCK_OF_MALIGNANT_PEWTER.get()))
+                    .where('C', blocks(GTBlocks.CASING_STAINLESS_CLEAN.get()))
+                    .where('D', blocks(ETHERSTEEL_PLATED_ASH_TILES.get()))
+                    .where('F', blocks(GTBlocks.COIL_CUPRONICKEL.get()))
+                    .where('G', blocks(GTBlocks.CASING_LAMINATED_GLASS.get()))
                     .build())
-            // spotless: on
-            .workableCasingModel(CosmicCore.id("block/casings/solid/high_temperature_fission_casing"),
-                    CosmicCore.id("block/overlay/machine/roaster"))
+            // spotless:on
+            .model(createSeparateControllerCasingMachineModel(
+                    CosmicCore.id("block/casings/solid/soul_stained_steel_aluminium_plated_casing"),
+                    CosmicCore.id("block/casings/solid/ethersteel_plated_ash_tiles"),
+                    GTCEu.id("block/multiblock/network_switch"))
+                    .andThen(model -> model
+                            .addDynamicRenderer(CosmicDynamicRenderHelpers::createHellfireFoundryPartRender)))
             .register();
 
     public static void init() {}

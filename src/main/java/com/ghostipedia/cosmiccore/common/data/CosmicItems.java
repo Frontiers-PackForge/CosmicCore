@@ -1377,7 +1377,6 @@ public class CosmicItems {
             .defaultModel()
             .register();
 
-
     // Harmonic (ZPM-UEV)
     public static final ItemEntry<ComponentItem> SONAR_PROCESSOR = REGISTRATE
             .item("harmonic_processor", ComponentItem::create)
@@ -2527,6 +2526,7 @@ public class CosmicItems {
             .properties(p -> p.stacksTo(1))
             .defaultModel()
             .register();
+
     public static ICustomDescriptionId cellName() {
         return new ICustomDescriptionId() {
 

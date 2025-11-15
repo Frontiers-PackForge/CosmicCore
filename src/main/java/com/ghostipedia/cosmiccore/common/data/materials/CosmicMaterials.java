@@ -198,7 +198,9 @@ public class CosmicMaterials {
 
         VibrantAlloy = new Material.Builder(CosmicCore.id("vibrant_alloy"))
                 .ingot()
-                .formula("Au((CuAu4)(ZnCu3)Fe2(Ni(AuAgCu3)Fe3)4)?4(Ma2FeMnNi(Si(Fe2S2)5(Cr2(ZiAbAl)Hg3)(Ti2LPt)(BeK4N5)(CS)",true)
+                .formula(
+                        "Au((CuAu4)(ZnCu3)Fe2(Ni(AuAgCu3)Fe3)4)?4(Ma2FeMnNi(Si(Fe2S2)5(Cr2(ZiAbAl)Hg3)(Ti2LPt)(BeK4N5)(CS)",
+                        true)
                 .liquid(new FluidBuilder().temperature(1100))
                 .color(0xa4ff70).secondaryColor(0x24e048).iconSet(MaterialIconSet.METALLIC)
                 .flags(GENERATE_BOLT_SCREW, GENERATE_ROUND, GENERATE_GEAR, GENERATE_SMALL_GEAR, GENERATE_RING,
@@ -212,7 +214,7 @@ public class CosmicMaterials {
                 .color(0xc48aff).secondaryColor(0x6A3CBF).iconSet(MaterialIconSet.METALLIC)
                 .flags(GENERATE_BOLT_SCREW, GENERATE_ROUND, GENERATE_GEAR, GENERATE_SMALL_GEAR, GENERATE_RING,
                         GENERATE_FRAME, GENERATE_SPRING, GENERATE_SPRING_SMALL, GENERATE_FINE_WIRE, GENERATE_DENSE)
-                .components(BlackSteel, 2, Moondrop, 4, EnderPearl, 2, Hafnium,3)
+                .components(BlackSteel, 2, Moondrop, 4, EnderPearl, 2, Hafnium, 3)
                 .blastTemp(4500, BlastProperty.GasTier.HIGHER, GTValues.VA[GTValues.IV], 2430)
                 .buildAndRegister();
 
