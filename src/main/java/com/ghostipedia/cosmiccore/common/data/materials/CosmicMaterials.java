@@ -14,6 +14,7 @@ import com.gregtechceu.gtceu.api.fluids.FluidBuilder;
 import com.gregtechceu.gtceu.api.fluids.FluidState;
 import com.gregtechceu.gtceu.api.fluids.store.FluidStorageKeys;
 
+import static com.ghostipedia.cosmiccore.common.data.materials.CosmicMaterialSet.MAGIC;
 import static com.gregtechceu.gtceu.api.data.chemical.material.info.MaterialFlags.*;
 import static com.gregtechceu.gtceu.common.data.GTMaterials.*;
 
@@ -58,6 +59,29 @@ public class CosmicMaterials {
     public static Material PaleOreBad;
     public static Material Moondrop;
     public static Material Somanone;
+
+    public static Material AuricForcinium;
+    public static Material SuperheavyBedrockAlloy;
+    public static Material Chlorophyte;
+    public static Material DraconicTarragon;
+    public static Material Kuvite;
+    public static Material BlinkwardAlloy;
+
+    public static Material Lumium;
+    public static Material Signalum;
+    public static Material Enderium;
+
+    public static Material VibrantAlloy;
+    public static Material EnergeticAlloy;
+    public static Material MelodicAlloy;
+    public static Material StarstruckHalite;
+
+    public static Material Lignite;
+    public static Material Anthracene;
+
+    // Homage Fluids
+    public static Material EssenceOfTerraFirmaGreg;
+    public static Material EssenceOfMoni;
 
     public static Material basicNutrientProductionFluid;
     public static Material advancedNutrientProductionFluid;
@@ -130,6 +154,13 @@ public class CosmicMaterials {
                 .components(Prisma, 1, Water, 4)
                 .flags(DISABLE_DECOMPOSITION)
                 .buildAndRegister();
+        Moondrop = new Material.Builder(CosmicCore.id("moondrop"))
+                .formula("☽")
+                .ore()
+                .gem()
+                .dust()
+                .color(0xE8F1FF).secondaryColor(0x2A2F6E).iconSet(MaterialIconSet.EMERALD)
+                .buildAndRegister();
         Virtue = new Material.Builder(CosmicCore.id("virtue_meld"))
                 .liquid(new FluidBuilder().temperature(666))
                 .formula("߷")
@@ -153,6 +184,117 @@ public class CosmicMaterials {
                 .cableProperties(GTValues.V[4], 1, 1)
                 .fluidPipeProperties(1166, 100, true)
                 .blastTemp(3600, BlastProperty.GasTier.HIGH, GTValues.VA[GTValues.EV], 1200)
+                .buildAndRegister();
+
+        EnergeticAlloy = new Material.Builder(CosmicCore.id("energetic_alloy"))
+                .ingot()
+                .liquid(new FluidBuilder().temperature(933))
+                .color(0xffb545).secondaryColor(0xe13923).iconSet(MaterialIconSet.METALLIC)
+                .flags(GENERATE_BOLT_SCREW, GENERATE_ROUND, GENERATE_GEAR, GENERATE_SMALL_GEAR, GENERATE_RING,
+                        GENERATE_FRAME, GENERATE_SPRING, GENERATE_SPRING_SMALL, GENERATE_FINE_WIRE, GENERATE_DENSE)
+                .components(Gold, 1, RedSteel, 1, Glowstone, 4)
+                .blastTemp(2700, BlastProperty.GasTier.HIGH, GTValues.VA[GTValues.HV], 1200)
+                .buildAndRegister();
+
+        VibrantAlloy = new Material.Builder(CosmicCore.id("vibrant_alloy"))
+                .ingot()
+                .formula("Au((CuAu4)(ZnCu3)Fe2(Ni(AuAgCu3)Fe3)4)?4(Ma2FeMnNi(Si(Fe2S2)5(Cr2(ZiAbAl)Hg3)(Ti2LPt)(BeK4N5)(CS)",true)
+                .liquid(new FluidBuilder().temperature(1100))
+                .color(0xa4ff70).secondaryColor(0x24e048).iconSet(MaterialIconSet.METALLIC)
+                .flags(GENERATE_BOLT_SCREW, GENERATE_ROUND, GENERATE_GEAR, GENERATE_SMALL_GEAR, GENERATE_RING,
+                        GENERATE_FRAME, GENERATE_SPRING, GENERATE_SPRING_SMALL, GENERATE_FINE_WIRE, GENERATE_DENSE)
+                .blastTemp(3600, BlastProperty.GasTier.HIGH, GTValues.VA[GTValues.EV], 1200)
+                .buildAndRegister();
+
+        MelodicAlloy = new Material.Builder(CosmicCore.id("melodic_alloy"))
+                .ingot()
+                .liquid(new FluidBuilder().temperature(1340))
+                .color(0xc48aff).secondaryColor(0x6A3CBF).iconSet(MaterialIconSet.METALLIC)
+                .flags(GENERATE_BOLT_SCREW, GENERATE_ROUND, GENERATE_GEAR, GENERATE_SMALL_GEAR, GENERATE_RING,
+                        GENERATE_FRAME, GENERATE_SPRING, GENERATE_SPRING_SMALL, GENERATE_FINE_WIRE, GENERATE_DENSE)
+                .components(BlackSteel, 2, Moondrop, 4, EnderPearl, 2, Hafnium,3)
+                .blastTemp(4500, BlastProperty.GasTier.HIGHER, GTValues.VA[GTValues.IV], 2430)
+                .buildAndRegister();
+
+        SuperheavyBedrockAlloy = new Material.Builder(CosmicCore.id("superheavy_bedrock_alloy"))
+                .ingot()
+                .liquid(new FluidBuilder().temperature(1340))
+                .color(0x2F2C3A).secondaryColor(0x424145).iconSet(MAGIC)
+                .flags(GENERATE_BOLT_SCREW, GENERATE_ROUND, GENERATE_GEAR, GENERATE_SMALL_GEAR, GENERATE_RING,
+                        GENERATE_FRAME, GENERATE_SPRING, GENERATE_SPRING_SMALL, GENERATE_FINE_WIRE, GENERATE_DENSE)
+                .blastTemp(4500, BlastProperty.GasTier.HIGH, GTValues.VA[GTValues.EV], 1200)
+                .buildAndRegister();
+
+        Chlorophyte = new Material.Builder(CosmicCore.id("chlorophyte"))
+                .ingot()
+                .liquid(new FluidBuilder().temperature(1340))
+                .color(0x3A8F5B).secondaryColor(0x6BB78A).iconSet(MaterialIconSet.METALLIC)
+                .flags(GENERATE_BOLT_SCREW, GENERATE_ROUND, GENERATE_GEAR, GENERATE_SMALL_GEAR, GENERATE_RING,
+                        GENERATE_FRAME, GENERATE_SPRING, GENERATE_SPRING_SMALL, GENERATE_FINE_WIRE, GENERATE_DENSE)
+                .blastTemp(4500, BlastProperty.GasTier.HIGH, GTValues.VA[GTValues.EV], 1200)
+                .buildAndRegister();
+
+        DraconicTarragon = new Material.Builder(CosmicCore.id("draconic_tarragon"))
+                .ingot()
+                .liquid(new FluidBuilder().temperature(1340))
+                .color(0x86045).secondaryColor(0xA0684E).iconSet(MAGIC)
+                .flags(GENERATE_BOLT_SCREW, GENERATE_ROUND, GENERATE_GEAR, GENERATE_SMALL_GEAR, GENERATE_RING,
+                        GENERATE_FRAME, GENERATE_SPRING, GENERATE_SPRING_SMALL, GENERATE_FINE_WIRE, GENERATE_DENSE)
+                .blastTemp(4500, BlastProperty.GasTier.HIGH, GTValues.VA[GTValues.EV], 1200)
+                .buildAndRegister();
+
+        Kuvite = new Material.Builder(CosmicCore.id("kuvite"))
+                .ingot()
+                .liquid(new FluidBuilder().temperature(1340))
+                .color(0xff6a4d).secondaryColor(0xa1311b).iconSet(CosmicMaterialSet.CRYSTAL)
+                .flags(GENERATE_BOLT_SCREW, GENERATE_ROUND, GENERATE_GEAR, GENERATE_SMALL_GEAR, GENERATE_RING,
+                        GENERATE_FRAME, GENERATE_SPRING, GENERATE_SPRING_SMALL, GENERATE_FINE_WIRE, GENERATE_DENSE)
+                .blastTemp(4500, BlastProperty.GasTier.HIGH, GTValues.VA[GTValues.EV], 1200)
+                .buildAndRegister();
+
+        BlinkwardAlloy = new Material.Builder(CosmicCore.id("blinkward_alloy"))
+                .ingot()
+                .liquid(new FluidBuilder().temperature(1340))
+                .color(0xb4c267).secondaryColor(0x2abd6c).iconSet(CosmicMaterialSet.CRYSTAL)
+                .flags(GENERATE_BOLT_SCREW, GENERATE_ROUND, GENERATE_GEAR, GENERATE_SMALL_GEAR, GENERATE_RING,
+                        GENERATE_FRAME, GENERATE_SPRING, GENERATE_SPRING_SMALL, GENERATE_FINE_WIRE, GENERATE_DENSE)
+                .blastTemp(4500, BlastProperty.GasTier.HIGH, GTValues.VA[GTValues.EV], 1200)
+                .buildAndRegister();
+
+        StarstruckHalite = new Material.Builder(CosmicCore.id("starstruck_halite"))
+                .ingot()
+                .liquid(new FluidBuilder().temperature(1340))
+                .color(0x45a2ff).secondaryColor(0x3fa115).iconSet(CosmicMaterialSet.CRYSTAL)
+                .flags(GENERATE_BOLT_SCREW, GENERATE_ROUND, GENERATE_GEAR, GENERATE_SMALL_GEAR, GENERATE_RING,
+                        GENERATE_FRAME, GENERATE_SPRING, GENERATE_SPRING_SMALL, GENERATE_FINE_WIRE, GENERATE_DENSE)
+                .blastTemp(4500, BlastProperty.GasTier.HIGH, GTValues.VA[GTValues.EV], 1200)
+                .buildAndRegister();
+
+        Lumium = new Material.Builder(CosmicCore.id("lumium"))
+                .ingot()
+                .liquid(new FluidBuilder().temperature(1340))
+                .color(0xf6ff99).secondaryColor(0xff7400).iconSet(MaterialIconSet.SHINY)
+                .flags(GENERATE_BOLT_SCREW, GENERATE_ROUND, GENERATE_GEAR, GENERATE_SMALL_GEAR, GENERATE_RING,
+                        GENERATE_FRAME, GENERATE_SPRING, GENERATE_SPRING_SMALL, GENERATE_FINE_WIRE, GENERATE_DENSE)
+                .blastTemp(4500, BlastProperty.GasTier.HIGH, GTValues.VA[GTValues.EV], 1200)
+                .buildAndRegister();
+
+        Signalum = new Material.Builder(CosmicCore.id("signalum"))
+                .ingot()
+                .liquid(new FluidBuilder().temperature(1340))
+                .color(0xff6b0f).secondaryColor(0xc32e00).iconSet(MaterialIconSet.SHINY)
+                .flags(GENERATE_BOLT_SCREW, GENERATE_ROUND, GENERATE_GEAR, GENERATE_SMALL_GEAR, GENERATE_RING,
+                        GENERATE_FRAME, GENERATE_SPRING, GENERATE_SPRING_SMALL, GENERATE_FINE_WIRE, GENERATE_DENSE)
+                .blastTemp(4500, BlastProperty.GasTier.HIGH, GTValues.VA[GTValues.EV], 1200)
+                .buildAndRegister();
+
+        Enderium = new Material.Builder(CosmicCore.id("enderium"))
+                .ingot()
+                .liquid(new FluidBuilder().temperature(1340))
+                .color(0x1f6b62).secondaryColor(0x16455f).iconSet(MaterialIconSet.SHINY)
+                .flags(GENERATE_BOLT_SCREW, GENERATE_ROUND, GENERATE_GEAR, GENERATE_SMALL_GEAR, GENERATE_RING,
+                        GENERATE_FRAME, GENERATE_SPRING, GENERATE_SPRING_SMALL, GENERATE_FINE_WIRE, GENERATE_DENSE)
+                .blastTemp(4500, BlastProperty.GasTier.HIGH, GTValues.VA[GTValues.EV], 1200)
                 .buildAndRegister();
 
         VoidSpark = new Material.Builder(CosmicCore.id("voidspark"))
@@ -461,14 +603,6 @@ public class CosmicMaterials {
                 .gem()
                 .dust()
                 .color(0x36E3C3).secondaryColor(0x111827).iconSet(MaterialIconSet.DIAMOND)
-                .buildAndRegister();
-
-        Moondrop = new Material.Builder(CosmicCore.id("moondrop"))
-                .formula("☽")
-                .ore()
-                .gem()
-                .dust()
-                .color(0xE8F1FF).secondaryColor(0x2A2F6E).iconSet(MaterialIconSet.EMERALD)
                 .buildAndRegister();
     }
 

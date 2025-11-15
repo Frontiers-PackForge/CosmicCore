@@ -1346,6 +1346,38 @@ public class CosmicItems {
             .properties(p -> p.stacksTo(64))
             .defaultModel()
             .register();
+
+    // Lucidic
+    public static final ItemEntry<ComponentItem> LUCIDIC_PROCESSOR = REGISTRATE
+            .item("lucidic_processor", ComponentItem::create)
+            .lang("Lucidic Processor")
+            .tag(CustomTags.EV_CIRCUITS)
+            .properties(p -> p.stacksTo(64))
+            .defaultModel()
+            .register();
+    public static final ItemEntry<ComponentItem> LUCIDIC_PROCESSOR_ASSEMBLY = REGISTRATE
+            .item("lucidic_processor_assembly", ComponentItem::create)
+            .lang("Lucidic Processor Assembly")
+            .tag(CustomTags.IV_CIRCUITS)
+            .properties(p -> p.stacksTo(64))
+            .defaultModel()
+            .register();
+    public static final ItemEntry<ComponentItem> LUCIDIC_PROCESSOR_SUPERCOMPUTER = REGISTRATE
+            .item("lucidic_processor_supercomputer", ComponentItem::create)
+            .lang("Lucidic Processor Supercomputer")
+            .tag(CustomTags.LuV_CIRCUITS)
+            .properties(p -> p.stacksTo(64))
+            .defaultModel()
+            .register();
+    public static final ItemEntry<ComponentItem> LUCIDIC_PROCESSOR_MAINFRAME = REGISTRATE
+            .item("lucidic_processor_mainframe", ComponentItem::create)
+            .lang("Lucidic Processor Mainframe")
+            .tag(CustomTags.ZPM_CIRCUITS)
+            .properties(p -> p.stacksTo(64))
+            .defaultModel()
+            .register();
+
+
     // Harmonic (ZPM-UEV)
     public static final ItemEntry<ComponentItem> SONAR_PROCESSOR = REGISTRATE
             .item("harmonic_processor", ComponentItem::create)
@@ -2454,7 +2486,47 @@ public class CosmicItems {
             .tag()
             .defaultModel()
             .register();
+    public static final ItemEntry<ComponentItem> FLESH_PACKED_PLUTONIUM_FUEL = REGISTRATE
+            .item("flesh_packed_plutonium_fuel", ComponentItem::create)
+            .lang("Flesh Packed Plutonium Fuel")
+            .properties(p -> p.stacksTo(1))
+            .defaultModel()
+            .register();
 
+    public static final ItemEntry<ComponentItem> FLESH_PACKED_URANIUM_FUEL = REGISTRATE
+            .item("flesh_packed_uranium_fuel", ComponentItem::create)
+            .lang("Flesh Packed Uranium Fuel")
+            .properties(p -> p.stacksTo(1))
+            .defaultModel()
+            .register();
+
+    public static final ItemEntry<ComponentItem> FLESH_PACKED_NEPTUNIUM_FUEL = REGISTRATE
+            .item("flesh_packed_neptunium_fuel", ComponentItem::create)
+            .lang("Flesh Packed Neptunium Fuel")
+            .properties(p -> p.stacksTo(1))
+            .defaultModel()
+            .register();
+
+    public static final ItemEntry<ComponentItem> SPENT_FLESH_PACKED_PLUTONIUM_FUEL = REGISTRATE
+            .item("spent_flesh_packed_plutonium_fuel", ComponentItem::create)
+            .lang("Spent Flesh Packed Plutonium Fuel")
+            .properties(p -> p.stacksTo(1))
+            .defaultModel()
+            .register();
+
+    public static final ItemEntry<ComponentItem> SPENT_FLESH_PACKED_URANIUM_FUEL = REGISTRATE
+            .item("spent_flesh_packed_uranium_fuel", ComponentItem::create)
+            .lang("Spent Flesh Packed Uranium Fuel")
+            .properties(p -> p.stacksTo(1))
+            .defaultModel()
+            .register();
+
+    public static final ItemEntry<ComponentItem> SPENT_FLESH_PACKED_NEPTUNIUM_FUEL = REGISTRATE
+            .item("spent_flesh_packed_neptunium_fuel", ComponentItem::create)
+            .lang("Spent Flesh Packed Neptunium Fuel")
+            .properties(p -> p.stacksTo(1))
+            .defaultModel()
+            .register();
     public static ICustomDescriptionId cellName() {
         return new ICustomDescriptionId() {
 

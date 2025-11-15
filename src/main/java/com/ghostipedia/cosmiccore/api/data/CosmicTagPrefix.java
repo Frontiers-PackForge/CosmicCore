@@ -135,6 +135,6 @@ public class CosmicTagPrefix {
                 .unificationEnabled(true)
                 .generateItem(true)
                 .maxStackSize(64)
-                .generationCondition(hasPlateProp.and(hasWireProp).and(hasBoltProp));
+                .generationCondition(hasPlateProp.and(hasBoltProp));
     }
 }

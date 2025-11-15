@@ -23,6 +23,6 @@ public class BlocksMixin {
                         ordinal = 127),
                index = 0)
     private static float cosmiccore$modifyNetherrackHardness(float originalHardness) {
-        return .8f;
+        return 2.5f;
     }
 }

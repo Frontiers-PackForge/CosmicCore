@@ -221,6 +221,7 @@ public class CosmicMachines {
                     .workableTieredHullModel(CosmicCore.id("block/overlay/machine/mana_leaching_tub"))
                     .register(),
             ELECTRIC_TIERS);
+
     public static final MachineDefinition[] ROASTER = registerTieredMachines("roaster",
             (holder, tier) -> new SimpleTieredMachine(holder, tier, defaultTankSizeFunction),
             (tier, builder) -> builder.recipeType(CENTRIFUGE_RECIPES)
