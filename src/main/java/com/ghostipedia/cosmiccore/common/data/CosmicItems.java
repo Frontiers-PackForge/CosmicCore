@@ -1374,7 +1374,6 @@ public class CosmicItems {
             .defaultModel()
             .register();
 
-
     // Harmonic (ZPM-UEV)
     public static final ItemEntry<ComponentItem> SONAR_PROCESSOR = REGISTRATE
             .item("harmonic_processor", ComponentItem::create)

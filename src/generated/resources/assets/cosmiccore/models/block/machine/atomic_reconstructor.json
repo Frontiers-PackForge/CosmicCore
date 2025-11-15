@@ -1,17 +1,26 @@
 {
   "parent": "minecraft:block/block",
+  "dynamic_renders": [
+    {
+      "type": "cosmiccore:hellfire_foundry_parts",
+      "casing_block": {
+        "Name": "cosmiccore:highly_conductive_fission_casing"
+      }
+    }
+  ],
   "loader": "gtceu:machine",
   "machine": "cosmiccore:atomic_reconstructor",
   "texture_overrides": {
-    "all": "cosmiccore:block/casings/solid/high_temperature_fission_casing"
+    "all": "cosmiccore:block/casings/solid/ethersteel_plated_ash_tiles"
   },
   "variants": {
     "is_formed=false,recipe_logic_status=idle": {
       "model": {
         "parent": "gtceu:block/machine/template/cube_all/sided",
         "textures": {
-          "all": "cosmiccore:block/casings/solid/high_temperature_fission_casing",
-          "overlay_front": "cosmiccore:block/overlay/machine/roaster/overlay_front"
+          "all": "cosmiccore:block/casings/solid/soul_stained_steel_aluminium_plated_casing",
+          "overlay_front": "gtceu:block/multiblock/network_switch/overlay_front",
+          "overlay_front_emissive": "gtceu:block/multiblock/network_switch/overlay_front_emissive"
         }
       }
     },
@@ -19,8 +28,9 @@
       "model": {
         "parent": "gtceu:block/machine/template/cube_all/sided",
         "textures": {
-          "all": "cosmiccore:block/casings/solid/high_temperature_fission_casing",
-          "overlay_front": "cosmiccore:block/overlay/machine/roaster/overlay_front"
+          "all": "cosmiccore:block/casings/solid/soul_stained_steel_aluminium_plated_casing",
+          "overlay_front": "gtceu:block/multiblock/network_switch/overlay_front",
+          "overlay_front_emissive": "gtceu:block/multiblock/network_switch/overlay_front_emissive"
         }
       }
     },
@@ -28,8 +38,9 @@
       "model": {
         "parent": "gtceu:block/machine/template/cube_all/sided",
         "textures": {
-          "all": "cosmiccore:block/casings/solid/high_temperature_fission_casing",
-          "overlay_front": "cosmiccore:block/overlay/machine/roaster/overlay_front"
+          "all": "cosmiccore:block/casings/solid/soul_stained_steel_aluminium_plated_casing",
+          "overlay_front": "gtceu:block/multiblock/network_switch/overlay_front_active",
+          "overlay_front_emissive": "gtceu:block/multiblock/network_switch/overlay_front_active_emissive"
         }
       }
     },
@@ -37,8 +48,9 @@
       "model": {
         "parent": "gtceu:block/machine/template/cube_all/sided",
         "textures": {
-          "all": "cosmiccore:block/casings/solid/high_temperature_fission_casing",
-          "overlay_front": "cosmiccore:block/overlay/machine/roaster/overlay_front"
+          "all": "cosmiccore:block/casings/solid/soul_stained_steel_aluminium_plated_casing",
+          "overlay_front": "gtceu:block/multiblock/network_switch/overlay_front_active",
+          "overlay_front_emissive": "gtceu:block/multiblock/network_switch/overlay_front_active_emissive"
         }
       }
     },
@@ -46,8 +58,9 @@
       "model": {
         "parent": "gtceu:block/machine/template/cube_all/sided",
         "textures": {
-          "all": "cosmiccore:block/casings/solid/high_temperature_fission_casing",
-          "overlay_front": "cosmiccore:block/overlay/machine/roaster/overlay_front"
+          "all": "cosmiccore:block/casings/solid/soul_stained_steel_aluminium_plated_casing",
+          "overlay_front": "gtceu:block/multiblock/network_switch/overlay_front",
+          "overlay_front_emissive": "gtceu:block/multiblock/network_switch/overlay_front_emissive"
         }
       }
     },
@@ -55,8 +68,9 @@
       "model": {
         "parent": "gtceu:block/machine/template/cube_all/sided",
         "textures": {
-          "all": "cosmiccore:block/casings/solid/high_temperature_fission_casing",
-          "overlay_front": "cosmiccore:block/overlay/machine/roaster/overlay_front"
+          "all": "cosmiccore:block/casings/solid/soul_stained_steel_aluminium_plated_casing",
+          "overlay_front": "gtceu:block/multiblock/network_switch/overlay_front",
+          "overlay_front_emissive": "gtceu:block/multiblock/network_switch/overlay_front_emissive"
         }
       }
     },
@@ -64,8 +78,9 @@
       "model": {
         "parent": "gtceu:block/machine/template/cube_all/sided",
         "textures": {
-          "all": "cosmiccore:block/casings/solid/high_temperature_fission_casing",
-          "overlay_front": "cosmiccore:block/overlay/machine/roaster/overlay_front"
+          "all": "cosmiccore:block/casings/solid/soul_stained_steel_aluminium_plated_casing",
+          "overlay_front": "gtceu:block/multiblock/network_switch/overlay_front_active",
+          "overlay_front_emissive": "gtceu:block/multiblock/network_switch/overlay_front_active_emissive"
         }
       }
     },
@@ -73,8 +88,9 @@
       "model": {
         "parent": "gtceu:block/machine/template/cube_all/sided",
         "textures": {
-          "all": "cosmiccore:block/casings/solid/high_temperature_fission_casing",
-          "overlay_front": "cosmiccore:block/overlay/machine/roaster/overlay_front"
+          "all": "cosmiccore:block/casings/solid/soul_stained_steel_aluminium_plated_casing",
+          "overlay_front": "gtceu:block/multiblock/network_switch/overlay_front_active",
+          "overlay_front_emissive": "gtceu:block/multiblock/network_switch/overlay_front_active_emissive"
         }
       }
     }
