@@ -2525,6 +2525,41 @@ public class CosmicItems {
             .defaultModel()
             .register();
 
+    public static final ItemEntry<ComponentItem> SUPERHEATED_FUEL_ROD = REGISTRATE
+            .item("superheated_fuel_rod", ComponentItem::create)
+            .lang("Superheated Fuel Rod")
+            .properties(p -> p.stacksTo(1))
+            .defaultModel()
+            .register();
+
+    public static final ItemEntry<ComponentItem> EMPTY_FUEL_ROD = REGISTRATE
+            .item("empty_fuel_rod", ComponentItem::create)
+            .lang("Empty Fuel Rod")
+            .properties(p -> p.stacksTo(16))
+            .defaultModel()
+            .register();
+
+    public static final ItemEntry<ComponentItem> FLESH_WASTE_URANIUM = REGISTRATE
+            .item("fleshy_uranium_waste", ComponentItem::create)
+            .lang("Bio-Metallic Fleshy Uranium Waste")
+            .properties(p -> p.stacksTo(64))
+            .defaultModel()
+            .register();
+
+    public static final ItemEntry<ComponentItem> FLESH_WASTE_PLUTONIUM = REGISTRATE
+            .item("fleshy_plutonium_waste", ComponentItem::create)
+            .lang("Bio-Metallic Fleshy Plutonium Waste")
+            .properties(p -> p.stacksTo(64))
+            .defaultModel()
+            .register();
+
+    public static final ItemEntry<ComponentItem> FLESH_WASTE_NEPTUNIUM = REGISTRATE
+            .item("fleshy_neptunium_waste", ComponentItem::create)
+            .lang("Bio-Metallic Fleshy Neptunium Waste")
+            .properties(p -> p.stacksTo(64))
+            .defaultModel()
+            .register();
+
     public static ICustomDescriptionId cellName() {
         return new ICustomDescriptionId() {
 

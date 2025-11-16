@@ -235,6 +235,12 @@ public class CosmicRecipeTypes {
             .setMaxSize(IO.IN, EmberRecipeCapability.CAP, 1)
             .setMaxIOSize(2, 3, 2, 2)
             .setProgressBar(GuiTextures.PROGRESS_BAR_ARROW, ProgressTexture.FillDirection.LEFT_TO_RIGHT);
+
+    public static final GTRecipeType RADBOLT_RECONSTRUCTOR = GTRecipeTypes
+            .register("reconstructor", ELECTRIC)
+            .setMaxIOSize(3, 2, 1, 1)
+            .setProgressBar(GuiTextures.PROGRESS_BAR_ARROW, ProgressTexture.FillDirection.LEFT_TO_RIGHT);
+
     public static final GTRecipeType SPOOLING_MACHINE = GTRecipeTypes
             .register("spooling_machine", ELECTRIC)
             .setMaxIOSize(2, 2, 1, 0)

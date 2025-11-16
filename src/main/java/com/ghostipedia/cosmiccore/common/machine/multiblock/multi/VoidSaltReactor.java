@@ -26,7 +26,7 @@ public class VoidSaltReactor {
                     WorkableElectricMultiblockMachine::new)
             .langValue("§5Voidtouched Salt Fission Reactor")
             .rotationState(RotationState.NON_Y_AXIS)
-            .recipeType(CosmicRecipeTypes.VILE_FISSION)
+            .recipeType(CosmicRecipeTypes.VOID_SALT_FISSION)
             .appearanceBlock(HIGH_TEMP_FISSION_CASING)
             .partAppearance((controller, part, side) -> HIGH_TEMP_FISSION_CASING.getDefaultState())
             .recipeModifiers(
