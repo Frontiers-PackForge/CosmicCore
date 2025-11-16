@@ -27,7 +27,7 @@ public class AtomicReconstructor {
                     WorkableElectricMultiblockMachine::new)
             .langValue("§6Radbolt Atomic Reconstructor")
             .rotationState(RotationState.NON_Y_AXIS)
-            .recipeType(CosmicRecipeTypes.VILE_FISSION)
+            .recipeType(CosmicRecipeTypes.RADBOLT_RECONSTRUCTOR)
             .appearanceBlock(ETHERSTEEL_PLATED_ASH_TILES)
             .partAppearance((controller, part, side) -> ETHERSTEEL_PLATED_ASH_TILES.getDefaultState())
             .recipeModifiers(
