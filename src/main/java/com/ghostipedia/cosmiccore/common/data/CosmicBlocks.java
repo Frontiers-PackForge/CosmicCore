@@ -11,7 +11,6 @@ import com.ghostipedia.cosmiccore.ember.CosmicEmberReceptorBlock;
 
 import com.gregtechceu.gtceu.GTCEu;
 import com.gregtechceu.gtceu.api.GTCEuAPI;
-import com.gregtechceu.gtceu.api.GTValues;
 import com.gregtechceu.gtceu.api.block.ActiveBlock;
 import com.gregtechceu.gtceu.api.block.ICoilType;
 import com.gregtechceu.gtceu.api.block.property.GTBlockStateProperties;
@@ -621,7 +620,6 @@ public class CosmicBlocks {
             .item(BlockItem::new)
             .build()
             .register();
-
 
     static {
         EMBER_EMITTER_BLOCKS.put(0, COSMIC_EMBER_EMITTER_STEAM);
