@@ -28,8 +28,6 @@ public class CosmicDataGenerators {
         // generator.addProvider(server, new CosmicMaterialStats(packOutput));
         // generator.addProvider(server, new CosmicMaterialTraits(packOutput));
 
-        generator.addProvider(server, new CosmicLootTables(packOutput));
-
         if (event.includeClient()) {
             generator.addProvider(true, new SoundEntryBuilder.SoundEntryProvider(packOutput, CosmicCore.MOD_ID));
         }
