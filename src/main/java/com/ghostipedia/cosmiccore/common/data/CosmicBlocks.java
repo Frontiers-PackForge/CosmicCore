@@ -630,6 +630,9 @@ public class CosmicBlocks {
     public static final BlockEntry<Block> ZBLAN_REINFORCED_GLASS = createGlassCasingBlock(
             "zblan_glass", CosmicCore.id("block/casings/glass/zblan_glass"), () -> RenderType::translucent);
 
+    public static final BlockEntry<Block> SANGUINE_GLASS = createGlassCasingBlock(
+            "sanguine_glass", CosmicCore.id("block/casings/glass/sanguine_glass"), () -> RenderType::translucent);
+
     private static BlockEntry<Block> createGlassCasingBlock(String name, ResourceLocation texture,
                                                             Supplier<Supplier<RenderType>> type) {
         NonNullFunction<BlockBehaviour.Properties, Block> supplier = GlassBlock::new;

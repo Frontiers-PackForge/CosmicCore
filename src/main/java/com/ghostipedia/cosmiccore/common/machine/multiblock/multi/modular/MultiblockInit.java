@@ -43,6 +43,7 @@ public class MultiblockInit {
         LunarHammer.init();
         MantleBore.init();
         NPR.init();
+        BloodHomogenizer.init();
         OrbitalForge.init();
         Polymerizer.init();
         SteamAssembler.init();

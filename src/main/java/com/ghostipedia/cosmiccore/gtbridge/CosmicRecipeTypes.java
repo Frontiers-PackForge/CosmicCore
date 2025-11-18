@@ -165,6 +165,12 @@ public class CosmicRecipeTypes {
             .setMaxTooltips(4)
             .setSound(CosmicSounds.ARCANE_DISTIL)
             .setProgressBar(GuiTextures.PROGRESS_BAR_ARROW_MULTIPLE, LEFT_TO_RIGHT);
+    public static final GTRecipeType BLOOD_HOMOGENIZER = GTRecipeTypes
+            .register("blood_homogenizer", GTRecipeTypes.MULTIBLOCK)
+            .setMaxIOSize(0, 0, 4, 2)
+            .setMaxSize(IO.IN, EmberRecipeCapability.CAP, 1)
+            .setMaxTooltips(4)
+            .setProgressBar(GuiTextures.PROGRESS_BAR_ARROW_MULTIPLE, LEFT_TO_RIGHT);
     public static final GTRecipeType ARCANE_FOLDING = GTRecipeTypes
             .register("arcane_folding", GTRecipeTypes.MULTIBLOCK)
             .setMaxIOSize(3, 2, 1, 0)
