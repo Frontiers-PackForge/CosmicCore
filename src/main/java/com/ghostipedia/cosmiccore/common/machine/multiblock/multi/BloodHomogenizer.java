@@ -10,33 +10,28 @@ import com.gregtechceu.gtceu.api.machine.multiblock.WorkableElectricMultiblockMa
 import com.gregtechceu.gtceu.api.pattern.FactoryBlockPattern;
 import com.gregtechceu.gtceu.api.pattern.Predicates;
 import com.gregtechceu.gtceu.api.recipe.OverclockingLogic;
-import com.gregtechceu.gtceu.common.data.GTRecipeModifiers;
 
 import wayoftime.bloodmagic.BloodMagic;
 
-import static com.ghostipedia.cosmiccore.api.machine.part.CosmicPartAbility.IMPORT_EMBER;
 import static com.ghostipedia.cosmiccore.api.registries.CosmicRegistration.REGISTRATE;
 import static com.ghostipedia.cosmiccore.common.data.CosmicBlocks.HIGHLY_CONDUCTIVE_FISSION_CASING;
 import static com.ghostipedia.cosmiccore.common.data.CosmicBlocks.SANGUINE_GLASS;
 import static com.gregtechceu.gtceu.api.pattern.Predicates.*;
-import static com.gregtechceu.gtceu.common.data.GTRecipeModifiers.BATCH_MODE;
 import static com.gregtechceu.gtceu.common.data.GTRecipeModifiers.ELECTRIC_OVERCLOCK;
 import static com.klikli_dev.occultism.registry.OccultismBlocks.IESNIUM_BLOCK;
 import static wayoftime.bloodmagic.common.block.BloodMagicBlocks.BLANK_RUNE;
 import static wayoftime.bloodmagic.common.fluid.BloodMagicFluids.LIFE_ESSENCE_FLUID;
+import static wayoftime.bloodmagic.common.fluid.BloodMagicFluids.LIFE_ESSENCE_FLUID_FLOWING;
 
 public class BloodHomogenizer {
 
     public static final MultiblockMachineDefinition BLOOD_HOMOGENIZER = REGISTRATE
             .multiblock("blood_homogenizer", WorkableElectricMultiblockMachine::new)
-            .langValue("§cBlood Homogenizer")
-            .recipeType(CosmicRecipeTypes.BLOOD_HOMOGENIZER)
             .rotationState(RotationState.NON_Y_AXIS)
+            .recipeType(CosmicRecipeTypes.BLOOD_HOMOGENIZER)
             .appearanceBlock(HIGHLY_CONDUCTIVE_FISSION_CASING)
             .partAppearance((controller, part, side) -> HIGHLY_CONDUCTIVE_FISSION_CASING.getDefaultState())
-            .recipeModifiers(GTRecipeModifiers.PARALLEL_HATCH,
-                    ELECTRIC_OVERCLOCK.apply(OverclockingLogic.PERFECT_OVERCLOCK), BATCH_MODE)
-            // spotless:off
+            .recipeModifiers(ELECTRIC_OVERCLOCK.apply(OverclockingLogic.NON_PERFECT_OVERCLOCK))
             .pattern(definition -> FactoryBlockPattern.start()
                     .aisle("       ", " AAAAA ", "  AAA  ", "       ", "       ", "       ", "       ", "       ")
                     .aisle("  A A  ", "ABBBBBA", " BGGGB ", " CGGGC ", "  GGG  ", "       ", "       ", "       ")
@@ -51,15 +46,15 @@ public class BloodHomogenizer {
                             .setMinGlobalLimited(10)
                             .or(autoAbilities(CosmicRecipeTypes.BLOOD_HOMOGENIZER))
                             .or(abilities(PartAbility.MAINTENANCE).setExactLimit(1))
-                            .or(abilities(PartAbility.INPUT_ENERGY).setExactLimit(1))
-                            .or(abilities(IMPORT_EMBER).setMinGlobalLimited(1, 1).setMaxGlobalLimited(1)))
+                            .or(abilities(PartAbility.INPUT_ENERGY).setExactLimit(1)))
                     .where('C', blocks(IESNIUM_BLOCK.get()))
                     .where('G', blocks(SANGUINE_GLASS.get()))
-                    .where('L', fluids(LIFE_ESSENCE_FLUID.get()))
-                    .where(' ', Predicates.any())
+                    .where('L', fluids(LIFE_ESSENCE_FLUID.get())
+                            .or(fluids(LIFE_ESSENCE_FLUID_FLOWING.get())))
+                    .where(' ', any())
                     .build())
             .workableCasingModel(BloodMagic.rl("block/blankrune"),
-                    GTCEu.id("block/multiblock/network_switch"))
+                    GTCEu.id("block/multiblock/power_substation"))
             .register();
 
     public static void init() {}
