@@ -11,6 +11,7 @@ import com.ghostipedia.cosmiccore.ember.CosmicEmberReceptorBlock;
 
 import com.gregtechceu.gtceu.GTCEu;
 import com.gregtechceu.gtceu.api.GTCEuAPI;
+import com.gregtechceu.gtceu.api.GTValues;
 import com.gregtechceu.gtceu.api.block.ActiveBlock;
 import com.gregtechceu.gtceu.api.block.ICoilType;
 import com.gregtechceu.gtceu.api.block.property.GTBlockStateProperties;
@@ -241,12 +242,11 @@ public class CosmicBlocks {
             .block("steam_ember_receptor", props -> new CosmicEmberReceptorBlock(props, 0))
             .lang("Steam Ember Receptor")
             .initialProperties(RegistryManager.EMBER_RECEIVER::get)
-            .properties(BlockBehaviour.Properties::requiresCorrectToolForDrops)
             .exBlockstate((ctx, prov) -> {
                 prov.directionalBlock(ctx.getEntry(),
                         prov.models().getExistingFile(CosmicCore.id("steam_ember_receptor")));
             })
-            .tag(CustomTags.MINEABLE_WITH_CONFIG_VALID_PICKAXE_WRENCH)
+            .tag(BlockTags.MINEABLE_WITH_PICKAXE)
             .item(BlockItem::new)
             .build()
             .register();
@@ -259,7 +259,7 @@ public class CosmicBlocks {
                 prov.directionalBlock(ctx.getEntry(),
                         prov.models().getExistingFile(CosmicCore.id("lv_ember_receptor")));
             })
-            .tag(CustomTags.MINEABLE_WITH_CONFIG_VALID_PICKAXE_WRENCH)
+            .tag(BlockTags.MINEABLE_WITH_PICKAXE)
             .item(BlockItem::new)
             .build()
             .register();
@@ -272,7 +272,7 @@ public class CosmicBlocks {
                 prov.directionalBlock(ctx.getEntry(),
                         prov.models().getExistingFile(CosmicCore.id("mv_ember_receptor")));
             })
-            .tag(CustomTags.MINEABLE_WITH_CONFIG_VALID_PICKAXE_WRENCH)
+            .tag(BlockTags.MINEABLE_WITH_PICKAXE)
             .item(BlockItem::new)
             .build()
             .register();
@@ -285,7 +285,7 @@ public class CosmicBlocks {
                 prov.directionalBlock(ctx.getEntry(),
                         prov.models().getExistingFile(CosmicCore.id("hv_ember_receptor")));
             })
-            .tag(CustomTags.MINEABLE_WITH_CONFIG_VALID_PICKAXE_WRENCH)
+            .tag(BlockTags.MINEABLE_WITH_PICKAXE)
             .item(BlockItem::new)
             .build()
             .register();
@@ -298,7 +298,7 @@ public class CosmicBlocks {
                 prov.directionalBlock(ctx.getEntry(),
                         prov.models().getExistingFile(CosmicCore.id("ev_ember_receptor")));
             })
-            .tag(CustomTags.MINEABLE_WITH_CONFIG_VALID_PICKAXE_WRENCH)
+            .tag(BlockTags.MINEABLE_WITH_PICKAXE)
             .item(BlockItem::new)
             .build()
             .register();
@@ -311,7 +311,7 @@ public class CosmicBlocks {
                 prov.directionalBlock(ctx.getEntry(),
                         prov.models().getExistingFile(CosmicCore.id("iv_ember_receptor")));
             })
-            .tag(CustomTags.MINEABLE_WITH_CONFIG_VALID_PICKAXE_WRENCH)
+            .tag(BlockTags.MINEABLE_WITH_PICKAXE)
             .item(BlockItem::new)
             .build()
             .register();
@@ -324,7 +324,7 @@ public class CosmicBlocks {
                 prov.directionalBlock(ctx.getEntry(),
                         prov.models().getExistingFile(CosmicCore.id("luv_ember_receptor")));
             })
-            .tag(CustomTags.MINEABLE_WITH_CONFIG_VALID_PICKAXE_WRENCH)
+            .tag(BlockTags.MINEABLE_WITH_PICKAXE)
             .item(BlockItem::new)
             .build()
             .register();
@@ -337,7 +337,7 @@ public class CosmicBlocks {
                 prov.directionalBlock(ctx.getEntry(),
                         prov.models().getExistingFile(CosmicCore.id("zpm_ember_receptor")));
             })
-            .tag(CustomTags.MINEABLE_WITH_CONFIG_VALID_PICKAXE_WRENCH)
+            .tag(BlockTags.MINEABLE_WITH_PICKAXE)
             .item(BlockItem::new)
             .build()
             .register();
@@ -350,7 +350,7 @@ public class CosmicBlocks {
                 prov.directionalBlock(ctx.getEntry(),
                         prov.models().getExistingFile(CosmicCore.id("uv_ember_receptor")));
             })
-            .tag(CustomTags.MINEABLE_WITH_CONFIG_VALID_PICKAXE_WRENCH)
+            .tag(BlockTags.MINEABLE_WITH_PICKAXE)
             .item(BlockItem::new)
             .build()
             .register();
@@ -363,7 +363,7 @@ public class CosmicBlocks {
                 prov.directionalBlock(ctx.getEntry(),
                         prov.models().getExistingFile(CosmicCore.id("uhv_ember_receptor")));
             })
-            .tag(CustomTags.MINEABLE_WITH_CONFIG_VALID_PICKAXE_WRENCH)
+            .tag(BlockTags.MINEABLE_WITH_PICKAXE)
             .item(BlockItem::new)
             .build()
             .register();
@@ -376,7 +376,7 @@ public class CosmicBlocks {
                 prov.directionalBlock(ctx.getEntry(),
                         prov.models().getExistingFile(CosmicCore.id("uev_ember_receptor")));
             })
-            .tag(CustomTags.MINEABLE_WITH_CONFIG_VALID_PICKAXE_WRENCH)
+            .tag(BlockTags.MINEABLE_WITH_PICKAXE)
             .item(BlockItem::new)
             .build()
             .register();
@@ -401,7 +401,7 @@ public class CosmicBlocks {
                 prov.directionalBlock(ctx.getEntry(),
                         prov.models().getExistingFile(CosmicCore.id("uxv_ember_receptor")));
             })
-            .tag(CustomTags.MINEABLE_WITH_CONFIG_VALID_PICKAXE_WRENCH)
+            .tag(BlockTags.MINEABLE_WITH_PICKAXE)
             .item(BlockItem::new)
             .build()
             .register();
@@ -414,7 +414,7 @@ public class CosmicBlocks {
                 prov.directionalBlock(ctx.getEntry(),
                         prov.models().getExistingFile(CosmicCore.id("opv_ember_receptor")));
             })
-            .tag(CustomTags.MINEABLE_WITH_CONFIG_VALID_PICKAXE_WRENCH)
+            .tag(BlockTags.MINEABLE_WITH_PICKAXE)
             .item(BlockItem::new)
             .build()
             .register();
@@ -427,7 +427,7 @@ public class CosmicBlocks {
                 prov.directionalBlock(ctx.getEntry(),
                         prov.models().getExistingFile(CosmicCore.id("max_ember_receptor")));
             })
-            .tag(CustomTags.MINEABLE_WITH_CONFIG_VALID_PICKAXE_WRENCH)
+            .tag(BlockTags.MINEABLE_WITH_PICKAXE)
             .item(BlockItem::new)
             .build()
             .register();
@@ -441,7 +441,7 @@ public class CosmicBlocks {
                 prov.directionalBlock(ctx.getEntry(),
                         prov.models().getExistingFile(CosmicCore.id("steam_ember_emitter")));
             })
-            .tag(CustomTags.MINEABLE_WITH_CONFIG_VALID_PICKAXE_WRENCH)
+            .tag(BlockTags.MINEABLE_WITH_PICKAXE)
             .item(BlockItem::new)
             .build()
             .register();
@@ -453,7 +453,7 @@ public class CosmicBlocks {
             .exBlockstate((ctx, prov) -> {
                 prov.directionalBlock(ctx.getEntry(), prov.models().getExistingFile(CosmicCore.id("lv_ember_emitter")));
             })
-            .tag(CustomTags.MINEABLE_WITH_CONFIG_VALID_PICKAXE_WRENCH)
+            .tag(BlockTags.MINEABLE_WITH_PICKAXE)
             .item(BlockItem::new)
             .build()
             .register();
@@ -465,7 +465,7 @@ public class CosmicBlocks {
             .exBlockstate((ctx, prov) -> {
                 prov.directionalBlock(ctx.getEntry(), prov.models().getExistingFile(CosmicCore.id("mv_ember_emitter")));
             })
-            .tag(CustomTags.MINEABLE_WITH_CONFIG_VALID_PICKAXE_WRENCH)
+            .tag(BlockTags.MINEABLE_WITH_PICKAXE)
             .item(BlockItem::new)
             .build()
             .register();
@@ -477,7 +477,7 @@ public class CosmicBlocks {
             .exBlockstate((ctx, prov) -> {
                 prov.directionalBlock(ctx.getEntry(), prov.models().getExistingFile(CosmicCore.id("hv_ember_emitter")));
             })
-            .tag(CustomTags.MINEABLE_WITH_CONFIG_VALID_PICKAXE_WRENCH)
+            .tag(BlockTags.MINEABLE_WITH_PICKAXE)
             .item(BlockItem::new)
             .build()
             .register();
@@ -489,7 +489,7 @@ public class CosmicBlocks {
             .exBlockstate((ctx, prov) -> {
                 prov.directionalBlock(ctx.getEntry(), prov.models().getExistingFile(CosmicCore.id("ev_ember_emitter")));
             })
-            .tag(CustomTags.MINEABLE_WITH_CONFIG_VALID_PICKAXE_WRENCH)
+            .tag(BlockTags.MINEABLE_WITH_PICKAXE)
             .item(BlockItem::new)
             .build()
             .register();
@@ -501,7 +501,7 @@ public class CosmicBlocks {
             .exBlockstate((ctx, prov) -> {
                 prov.directionalBlock(ctx.getEntry(), prov.models().getExistingFile(CosmicCore.id("iv_ember_emitter")));
             })
-            .tag(CustomTags.MINEABLE_WITH_CONFIG_VALID_PICKAXE_WRENCH)
+            .tag(BlockTags.MINEABLE_WITH_PICKAXE)
             .item(BlockItem::new)
             .build()
             .register();
@@ -514,7 +514,7 @@ public class CosmicBlocks {
                 prov.directionalBlock(ctx.getEntry(),
                         prov.models().getExistingFile(CosmicCore.id("luv_ember_emitter")));
             })
-            .tag(CustomTags.MINEABLE_WITH_CONFIG_VALID_PICKAXE_WRENCH)
+            .tag(BlockTags.MINEABLE_WITH_PICKAXE)
             .item(BlockItem::new)
             .build()
             .register();
@@ -527,7 +527,7 @@ public class CosmicBlocks {
                 prov.directionalBlock(ctx.getEntry(),
                         prov.models().getExistingFile(CosmicCore.id("zpm_ember_emitter")));
             })
-            .tag(CustomTags.MINEABLE_WITH_CONFIG_VALID_PICKAXE_WRENCH)
+            .tag(BlockTags.MINEABLE_WITH_PICKAXE)
             .item(BlockItem::new)
             .build()
             .register();
@@ -539,7 +539,7 @@ public class CosmicBlocks {
             .exBlockstate((ctx, prov) -> {
                 prov.directionalBlock(ctx.getEntry(), prov.models().getExistingFile(CosmicCore.id("uv_ember_emitter")));
             })
-            .tag(CustomTags.MINEABLE_WITH_CONFIG_VALID_PICKAXE_WRENCH)
+            .tag(BlockTags.MINEABLE_WITH_PICKAXE)
             .item(BlockItem::new)
             .build()
             .register();
@@ -552,7 +552,7 @@ public class CosmicBlocks {
                 prov.directionalBlock(ctx.getEntry(),
                         prov.models().getExistingFile(CosmicCore.id("uhv_ember_emitter")));
             })
-            .tag(CustomTags.MINEABLE_WITH_CONFIG_VALID_PICKAXE_WRENCH)
+            .tag(BlockTags.MINEABLE_WITH_PICKAXE)
             .item(BlockItem::new)
             .build()
             .register();
@@ -565,7 +565,7 @@ public class CosmicBlocks {
                 prov.directionalBlock(ctx.getEntry(),
                         prov.models().getExistingFile(CosmicCore.id("uev_ember_emitter")));
             })
-            .tag(CustomTags.MINEABLE_WITH_CONFIG_VALID_PICKAXE_WRENCH)
+            .tag(BlockTags.MINEABLE_WITH_PICKAXE)
             .item(BlockItem::new)
             .build()
             .register();
@@ -578,7 +578,7 @@ public class CosmicBlocks {
                 prov.directionalBlock(ctx.getEntry(),
                         prov.models().getExistingFile(CosmicCore.id("uiv_ember_emitter")));
             })
-            .tag(CustomTags.MINEABLE_WITH_CONFIG_VALID_PICKAXE_WRENCH)
+            .tag(BlockTags.MINEABLE_WITH_PICKAXE)
             .item(BlockItem::new)
             .build()
             .register();
@@ -591,7 +591,7 @@ public class CosmicBlocks {
                 prov.directionalBlock(ctx.getEntry(),
                         prov.models().getExistingFile(CosmicCore.id("uxv_ember_emitter")));
             })
-            .tag(CustomTags.MINEABLE_WITH_CONFIG_VALID_PICKAXE_WRENCH)
+            .tag(BlockTags.MINEABLE_WITH_PICKAXE)
             .item(BlockItem::new)
             .build()
             .register();
@@ -604,7 +604,7 @@ public class CosmicBlocks {
                 prov.directionalBlock(ctx.getEntry(),
                         prov.models().getExistingFile(CosmicCore.id("opv_ember_emitter")));
             })
-            .tag(CustomTags.MINEABLE_WITH_CONFIG_VALID_PICKAXE_WRENCH)
+            .tag(BlockTags.MINEABLE_WITH_PICKAXE)
             .item(BlockItem::new)
             .build()
             .register();
@@ -617,10 +617,11 @@ public class CosmicBlocks {
                 prov.directionalBlock(ctx.getEntry(),
                         prov.models().getExistingFile(CosmicCore.id("max_ember_emitter")));
             })
-            .tag(CustomTags.MINEABLE_WITH_CONFIG_VALID_PICKAXE_WRENCH)
+            .tag(BlockTags.MINEABLE_WITH_PICKAXE)
             .item(BlockItem::new)
             .build()
             .register();
+
 
     static {
         EMBER_EMITTER_BLOCKS.put(0, COSMIC_EMBER_EMITTER_STEAM);
