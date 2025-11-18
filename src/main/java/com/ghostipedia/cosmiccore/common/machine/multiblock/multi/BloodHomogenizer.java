@@ -13,6 +13,7 @@ import com.gregtechceu.gtceu.api.recipe.OverclockingLogic;
 
 import wayoftime.bloodmagic.BloodMagic;
 
+import static com.ghostipedia.cosmiccore.api.machine.part.CosmicPartAbility.IMPORT_EMBER;
 import static com.ghostipedia.cosmiccore.api.registries.CosmicRegistration.REGISTRATE;
 import static com.ghostipedia.cosmiccore.common.data.CosmicBlocks.HIGHLY_CONDUCTIVE_FISSION_CASING;
 import static com.ghostipedia.cosmiccore.common.data.CosmicBlocks.SANGUINE_GLASS;
@@ -46,7 +47,8 @@ public class BloodHomogenizer {
                             .setMinGlobalLimited(10)
                             .or(autoAbilities(CosmicRecipeTypes.BLOOD_HOMOGENIZER))
                             .or(abilities(PartAbility.MAINTENANCE).setExactLimit(1))
-                            .or(abilities(PartAbility.INPUT_ENERGY).setExactLimit(1)))
+                            .or(abilities(PartAbility.INPUT_ENERGY).setExactLimit(1))
+                            .or(abilities(IMPORT_EMBER).setExactLimit(1)))
                     .where('C', blocks(IESNIUM_BLOCK.get()))
                     .where('G', blocks(SANGUINE_GLASS.get()))
                     .where('L', fluids(LIFE_ESSENCE_FLUID.get())
