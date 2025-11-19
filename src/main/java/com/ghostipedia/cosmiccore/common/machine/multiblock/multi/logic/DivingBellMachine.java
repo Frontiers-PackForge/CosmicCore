@@ -1,7 +1,5 @@
 package com.ghostipedia.cosmiccore.common.machine.multiblock.multi.logic;
 
-import com.ghostipedia.cosmiccore.common.abyss.AbyssBudgetCap;
-import com.ghostipedia.cosmiccore.common.abyss.AbyssRules;
 import com.ghostipedia.cosmiccore.common.data.CosmicBlocks;
 import com.ghostipedia.cosmiccore.common.teleporter.LandingZoneHelper;
 import com.ghostipedia.cosmiccore.common.teleporter.SafeTeleporter;
@@ -169,9 +167,9 @@ public class DivingBellMachine extends WorkableElectricMultiblockMachine {
 
         // Set Abyss decay flag
         // Don't think this is necessary...
-//        player.getCapability(AbyssBudgetCap.CAP).ifPresent(cap -> {
-//            cap.setDecaying(AbyssRules.DIM, true);
-//        });
+        // player.getCapability(AbyssBudgetCap.CAP).ifPresent(cap -> {
+        // cap.setDecaying(AbyssRules.DIM, true);
+        // });
 
         // Teleport (SafeTeleporter handles safety effects)
         player.changeDimension(deepBelow, new SafeTeleporter(landingPos));
@@ -185,7 +183,6 @@ public class DivingBellMachine extends WorkableElectricMultiblockMachine {
 
     // Get the target dimension (Deep Below).
     private ResourceKey<Level> getTargetDimension() {
-
         ResourceLocation dimLoc = new ResourceLocation(TARGET_DIMENSION);
         return ResourceKey.create(net.minecraft.core.registries.Registries.DIMENSION, dimLoc);
     }
@@ -221,5 +218,4 @@ public class DivingBellMachine extends WorkableElectricMultiblockMachine {
 
         return safePos;
     }
-
 }

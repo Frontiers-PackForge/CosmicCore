@@ -12,7 +12,8 @@ import net.minecraft.world.phys.Vec3;
 
 import org.jetbrains.annotations.Nullable;
 
-// Implementation of the teleport origin capability - Stores origin dimension, position, and rotation for teleport return trips.
+// Implementation of the teleport origin capability - Stores origin dimension, position, and rotation for teleport
+// return trips.
 public class TeleportOrigin implements ITeleportOrigin {
 
     @Nullable

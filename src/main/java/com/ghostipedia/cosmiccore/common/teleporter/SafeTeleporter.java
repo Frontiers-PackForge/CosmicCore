@@ -64,6 +64,5 @@ public class SafeTeleporter implements ITeleporter {
 
         // Reset fall distance to prevent fall damage
         entity.fallDistance = 0;
-
     }
 }

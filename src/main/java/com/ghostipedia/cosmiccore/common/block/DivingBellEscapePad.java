@@ -1,6 +1,5 @@
 package com.ghostipedia.cosmiccore.common.block;
 
-import com.ghostipedia.cosmiccore.common.abyss.AbyssRules;
 import com.ghostipedia.cosmiccore.common.teleporter.SafeTeleporter;
 import com.ghostipedia.cosmiccore.common.teleporter.TeleportOriginCap;
 
@@ -80,10 +79,10 @@ public class DivingBellEscapePad extends Block {
 
             // Clear Abyss decay flag
             // Don't think this is needed...
-//            serverPlayer.getCapability(com.ghostipedia.cosmiccore.common.abyss.AbyssBudgetCap.CAP)
-//                    .ifPresent(abyssCap -> {
-//                        abyssCap.setDecaying(AbyssRules.DIM, false);
-//                    });
+            // serverPlayer.getCapability(com.ghostipedia.cosmiccore.common.abyss.AbyssBudgetCap.CAP)
+            // .ifPresent(abyssCap -> {
+            // abyssCap.setDecaying(AbyssRules.DIM, false);
+            // });
 
             // Success message
             serverPlayer.displayClientMessage(
@@ -112,13 +111,13 @@ public class DivingBellEscapePad extends Block {
         BlockState at = level.getBlockState(pos);
         BlockState above = level.getBlockState(pos.above());
 
-//        if (at.isSuffocating(level, pos)) {
-//            return false;
-//        }
-//
-//        if (!at.getFluidState().isEmpty()) {
-//            return false;
-//        }
+        // if (at.isSuffocating(level, pos)) {
+        // return false;
+        // }
+        //
+        // if (!at.getFluidState().isEmpty()) {
+        // return false;
+        // }
 
         // Head level: same checks to ensure full 2-block clearance
         if (above.isSuffocating(level, pos.above())) {
