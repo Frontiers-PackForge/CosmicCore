@@ -63,6 +63,7 @@ public class MultiblockInit {
         VileFissionReactor.init();
         VoidSaltReactor.init();
         AtomicReconstructor.init();
+        DivingBell.init();
         // KryosynCrackingChamber.init();
     }
 }

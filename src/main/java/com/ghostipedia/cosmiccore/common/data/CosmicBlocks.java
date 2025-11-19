@@ -4,6 +4,7 @@ import com.ghostipedia.cosmiccore.CosmicCore;
 import com.ghostipedia.cosmiccore.api.CosmicCoreAPI;
 import com.ghostipedia.cosmiccore.api.block.IMagnetType;
 import com.ghostipedia.cosmiccore.client.renderer.block.NebulaeCoilRenderer;
+import com.ghostipedia.cosmiccore.common.block.DivingBellEscapePad;
 import com.ghostipedia.cosmiccore.common.block.MagnetBlock;
 import com.ghostipedia.cosmiccore.common.blockentity.CosmicCoilBlockEntity;
 import com.ghostipedia.cosmiccore.ember.CosmicEmberEmitterBlock;
@@ -629,6 +630,12 @@ public class CosmicBlocks {
     // GLASS BLOCKS
     public static final BlockEntry<Block> ZBLAN_REINFORCED_GLASS = createGlassCasingBlock(
             "zblan_glass", CosmicCore.id("block/casings/glass/zblan_glass"), () -> RenderType::translucent);
+
+    public static final BlockEntry<DivingBellEscapePad> DIVING_BELL_ESCAPE_PAD = REGISTRATE
+            .block("diving_bell_escape_pad", DivingBellEscapePad::new)
+            .initialProperties(() -> Blocks.STONE)
+            .simpleItem()
+            .register();
 
     private static BlockEntry<Block> createGlassCasingBlock(String name, ResourceLocation texture,
                                                             Supplier<Supplier<RenderType>> type) {
