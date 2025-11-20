@@ -64,6 +64,14 @@ public class CosmicLangHandler extends LangHandler {
                 "§6Accepts Laser hatches.",
                 "§6Accepts Cosmic Parallel Hatches.");
 
+
+        multiLang(provider, "cosmiccore.multiblock.star_ladder.tooltip",
+                "§cThe peaks of creation reach out into the stars",
+                "§c§lDANGER: DATA LOSS PRESENT",
+                "§c§lDANGER: RECOVERY IS POSSIBLE",
+                "§aPinacle Multiblock : The Final Goal of ACT1 (Steam to IV)");
+
+
         multiLang(provider, "cosmiccore.multiblock.iris.tooltip",
                 "§cYour Mind Shatters Trying to Understand This",
                 "§c§lDANGER: DO NOT RENDER THE JEI PREVIEW",
@@ -184,7 +192,7 @@ public class CosmicLangHandler extends LangHandler {
         provider.add("cosmiccore.multiblock.iris.star_stage_sustain",
                 "§cStar Requires \n§r%s \n§cto avoid §lcataclysmic failure!");
         provider.add("cosmiccore.multiblock.advanced.star_ladder_tier",
-                "§aVomahine StarLadder Tether Tier§f: §b%s \n §aMax Research Modules§f: §b%s");
+                "§aVomahine StarLadderOld Tether Tier§f: §b%s \n §aMax Research Modules§f: §b%s");
         provider.add("tagprefix.leached_ore", "Leached %s Ore");
         provider.add("tagprefix.prisma_frothed_ore", "Prisma Frothed %s Ore");
         provider.add("tagprefix.ultradense_plate", "Ultradense %s Plate");

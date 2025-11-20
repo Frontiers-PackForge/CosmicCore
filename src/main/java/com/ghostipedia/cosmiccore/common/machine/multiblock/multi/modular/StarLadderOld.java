@@ -41,9 +41,9 @@ import javax.annotation.Nullable;
 import static com.ghostipedia.cosmiccore.api.registries.CosmicRegistration.REGISTRATE;
 import static com.gregtechceu.gtceu.api.pattern.Predicates.*;
 
-public class StarLadder extends WorkableElectricMultiblockMachine implements IMultiblockProvider {
+public class StarLadderOld extends WorkableElectricMultiblockMachine implements IMultiblockProvider {
 
-    protected static final ManagedFieldHolder MANAGED_FIELD_HOLDER = new ManagedFieldHolder(StarLadder.class,
+    protected static final ManagedFieldHolder MANAGED_FIELD_HOLDER = new ManagedFieldHolder(StarLadderOld.class,
             WorkableElectricMultiblockMachine.MANAGED_FIELD_HOLDER);
     @Nullable
     protected EnergyContainerList inputEnergyContainers;
@@ -52,7 +52,7 @@ public class StarLadder extends WorkableElectricMultiblockMachine implements IMu
     protected boolean isFuelable;
     private final Collection<IMultiblockReciever> starLadderReceivers = ConcurrentHashMap.newKeySet();
 
-    public StarLadder(IMachineBlockEntity holder, Object... args) {
+    public StarLadderOld(IMachineBlockEntity holder, Object... args) {
         super(holder, args);
     }
 
@@ -126,7 +126,7 @@ public class StarLadder extends WorkableElectricMultiblockMachine implements IMu
     // .addTooltips(Component.translatable("gtceu.multiblock.pattern.error.coils"));
     // }
 
-    public static final MultiblockMachineDefinition STAR_LADDER = REGISTRATE.multiblock("star_ladder", StarLadder::new)
+    public static final MultiblockMachineDefinition STAR_LADDER = REGISTRATE.multiblock("star_ladder", StarLadderOld::new)
             .rotationState(RotationState.NON_Y_AXIS)
             .recipeType(GTRecipeTypes.DUMMY_RECIPES)
             .recipeModifier(GTRecipeModifiers.ELECTRIC_OVERCLOCK.apply(OverclockingLogic.NON_PERFECT_OVERCLOCK_SUBTICK))
