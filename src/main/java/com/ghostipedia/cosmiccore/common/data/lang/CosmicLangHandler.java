@@ -64,13 +64,11 @@ public class CosmicLangHandler extends LangHandler {
                 "§6Accepts Laser hatches.",
                 "§6Accepts Cosmic Parallel Hatches.");
 
-
         multiLang(provider, "cosmiccore.multiblock.star_ladder.tooltip",
                 "§cThe peaks of creation reach out into the stars",
                 "§c§lDANGER: DATA LOSS PRESENT",
                 "§c§lDANGER: RECOVERY IS POSSIBLE",
                 "§aPinacle Multiblock : The Final Goal of ACT1 (Steam to IV)");
-
 
         multiLang(provider, "cosmiccore.multiblock.iris.tooltip",
                 "§cYour Mind Shatters Trying to Understand This",

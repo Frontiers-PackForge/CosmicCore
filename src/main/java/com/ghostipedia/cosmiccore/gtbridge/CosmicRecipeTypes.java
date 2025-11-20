@@ -333,8 +333,8 @@ public class CosmicRecipeTypes {
             .setMaxTooltips(5)
             .setProgressBar(GuiTextures.PROGRESS_BAR_CRYSTALLIZATION, LEFT_TO_RIGHT);
 
-
-    public static final GTRecipeType STAR_LADDER_RESEARCH = GTRecipeTypes.register("star_ladder_research", GTRecipeTypes.MULTIBLOCK)
+    public static final GTRecipeType STAR_LADDER_RESEARCH = GTRecipeTypes
+            .register("star_ladder_research", GTRecipeTypes.MULTIBLOCK)
             .setMaxIOSize(16, 16, 16, 16)
             // .setSound(CosmicSounds.BLACK_HOLE_CRY)
             .setProgressBar(GuiTextures.PROGRESS_BAR_ARROW, ProgressTexture.FillDirection.LEFT_TO_RIGHT);
