@@ -206,9 +206,7 @@ public class CosmicBlocks {
             "machine_casing_gearbox_naquadria",
             CosmicCore.id("block/casings/gearbox/machine_casing_gearbox_naquadria"));
 
-
-
-    //Star Ladder Casings
+    // Star Ladder Casings
 
     public static final BlockEntry<Block> SUPERHEAVY_STEEL_CASING = createCasingBlock(
             "superheavy_steel_casing",
@@ -221,11 +219,6 @@ public class CosmicBlocks {
     public static final BlockEntry<Block> BOLTED_HEAVY_FRAME_CASING = createCasingBlock(
             "bolted_heavy_frame_casing",
             CosmicCore.id("block/casings/solid/bolted_heavy_frame_casing"));
-
-
-
-
-
 
     public static final BlockEntry<Block> ETHERSTEEL_PLATED_ASH_TILES = createStoneCasingBlock(
             "ethersteel_plated_ash_tiles",

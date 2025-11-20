@@ -126,7 +126,8 @@ public class StarLadderOld extends WorkableElectricMultiblockMachine implements 
     // .addTooltips(Component.translatable("gtceu.multiblock.pattern.error.coils"));
     // }
 
-    public static final MultiblockMachineDefinition STAR_LADDER = REGISTRATE.multiblock("star_ladder", StarLadderOld::new)
+    public static final MultiblockMachineDefinition STAR_LADDER = REGISTRATE
+            .multiblock("star_ladder", StarLadderOld::new)
             .rotationState(RotationState.NON_Y_AXIS)
             .recipeType(GTRecipeTypes.DUMMY_RECIPES)
             .recipeModifier(GTRecipeModifiers.ELECTRIC_OVERCLOCK.apply(OverclockingLogic.NON_PERFECT_OVERCLOCK_SUBTICK))
