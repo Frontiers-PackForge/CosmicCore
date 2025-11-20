@@ -19,7 +19,7 @@ public class MultiblockInit {
         PCBFoundry.init();
         WelderMulti.init();
         CryogenicsChamber.init();
-        // StarLadder.init();
+        // StarLadderOld.init();
         VoidMiner.init();
         FluidVoidRig.init();
         VoraxReactor.init();
@@ -63,6 +63,7 @@ public class MultiblockInit {
         VileFissionReactor.init();
         VoidSaltReactor.init();
         AtomicReconstructor.init();
+        StarLadder.init();
         // KryosynCrackingChamber.init();
     }
 }
