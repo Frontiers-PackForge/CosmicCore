@@ -42,7 +42,7 @@ public class ArcaneCrucible {
                             .or(abilities(PartAbility.IMPORT_FLUIDS).setPreviewCount(1))
                             .or(abilities(EXPORT_FLUIDS).setPreviewCount(1))
                             .or(abilities(IMPORT_EMBER).setPreviewCount(1))
-                            .or(Predicates.abilities(PartAbility.INPUT_ENERGY).setExactLimit(1)))
+                            .or(Predicates.abilities(PartAbility.INPUT_ENERGY).setMinGlobalLimited(1).setMaxGlobalLimited(2)))
                     .where('B', blocks(CosmicBlocks.STEEL_ROSE_LIGHT.block().get()))
                     //
                     .build())
