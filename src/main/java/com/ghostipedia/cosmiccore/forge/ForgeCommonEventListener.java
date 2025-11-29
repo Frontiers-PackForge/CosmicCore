@@ -46,15 +46,6 @@ import static com.ghostipedia.cosmiccore.common.item.armor.ChestSanguineWarptech
 public class ForgeCommonEventListener {
 
     @SubscribeEvent
-    public static void entityPlacementEventHandler(BlockEvent.EntityPlaceEvent event) {
-        if (event.getPlacedBlock().getBlock() instanceof MetaMachineBlock block &&
-                block.getMachine(event.getLevel(), event.getPos()) instanceof SoulHatchPartMachine soulHatch &&
-                event.getEntity() instanceof Player player) {
-            soulHatch.attachSoulNetwork(player);
-        }
-    }
-
-    @SubscribeEvent
     public static void onPlayerTick(final TickEvent.PlayerTickEvent event) {
         if (event.phase != TickEvent.Phase.END) {
             return;

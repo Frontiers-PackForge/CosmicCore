@@ -3,6 +3,8 @@ package com.ghostipedia.cosmiccore.api.machine.trait;
 import com.ghostipedia.cosmiccore.api.capability.ISoulContainer;
 import com.ghostipedia.cosmiccore.api.capability.recipe.SoulRecipeCapability;
 
+import com.ghostipedia.cosmiccore.api.data.souls.SoulNetwork;
+import com.ghostipedia.cosmiccore.api.data.souls.SoulNetworkSavedData;
 import com.gregtechceu.gtceu.api.capability.recipe.IO;
 import com.gregtechceu.gtceu.api.capability.recipe.RecipeCapability;
 import com.gregtechceu.gtceu.api.machine.ConditionalSubscriptionHandler;
@@ -10,14 +12,12 @@ import com.gregtechceu.gtceu.api.machine.MetaMachine;
 import com.gregtechceu.gtceu.api.machine.trait.NotifiableRecipeHandlerTrait;
 import com.gregtechceu.gtceu.api.recipe.GTRecipe;
 
+import com.gregtechceu.gtceu.common.machine.owner.FTBOwner;
 import com.lowdragmc.lowdraglib.syncdata.annotation.DescSynced;
 import com.lowdragmc.lowdraglib.syncdata.annotation.Persisted;
 import com.lowdragmc.lowdraglib.syncdata.field.ManagedFieldHolder;
 
 import lombok.Getter;
-import wayoftime.bloodmagic.core.data.SoulNetwork;
-import wayoftime.bloodmagic.core.data.SoulTicket;
-import wayoftime.bloodmagic.util.helper.NetworkHelper;
 
 import java.util.Collections;
 import java.util.List;
@@ -31,11 +31,6 @@ public class NotifiableSoulContainer extends NotifiableRecipeHandlerTrait<Intege
     @Getter
     private final IO handlerIO;
     private final ConditionalSubscriptionHandler conditionalSubscriptionHandler;
-
-    @Getter
-    @Persisted
-    @DescSynced
-    private UUID owner;
 
     @Getter
     @DescSynced
@@ -53,8 +48,8 @@ public class NotifiableSoulContainer extends NotifiableRecipeHandlerTrait<Intege
         this.currentEssence = -1;
         this.maxCapacity = maxCapacity;
         this.maxConsumption = maxConsumption;
-        conditionalSubscriptionHandler = new ConditionalSubscriptionHandler(machine, this::querySoulNetwork,
-                () -> owner != null);
+        // TODO: simplify to remove conditional that is not needed
+        conditionalSubscriptionHandler = new ConditionalSubscriptionHandler(machine, this::querySoulNetwork, () -> true);
     }
 
     private void querySoulNetwork() {
@@ -63,7 +58,7 @@ public class NotifiableSoulContainer extends NotifiableRecipeHandlerTrait<Intege
         var network = this.getSoulNetwork();
         if (network == null) return;
 
-        var essence = network.getCurrentEssence();
+        var essence = network.getCurrentSouls();
         if (this.currentEssence == essence) return;
 
         this.currentEssence = essence;
@@ -71,23 +66,17 @@ public class NotifiableSoulContainer extends NotifiableRecipeHandlerTrait<Intege
     }
 
     @Override
-    public List<Integer> handleRecipeInner(IO io, GTRecipe recipe, List<Integer> left,
-                                           boolean simulate) {
+    public List<Integer> handleRecipeInner(IO io, GTRecipe recipe, List<Integer> left, boolean simulate) {
         ISoulContainer container = this;
-        if (container.getOwner() == null) return null;
 
         int lifeEssence = left.stream().reduce(0, Integer::sum);
         if (io == IO.IN) {
-            var canOutput = Math.min(this.maxConsumption, container.getSoulNetwork().getCurrentEssence());
-            if (!simulate) lifeEssence = container.getSoulNetwork().syphon(
-                    SoulTicket.block(this.machine.getLevel(), this.machine.getPos(), Math.min(canOutput, lifeEssence)),
-                    false);
+            var canOutput = Math.min(this.maxConsumption, container.getSoulNetwork().getCurrentSouls());
+            if (!simulate) lifeEssence = container.getSoulNetwork().syphon(Math.min(canOutput, lifeEssence));
             lifeEssence = lifeEssence - canOutput;
         } else if (io == IO.OUT) {
-            var canInput = this.maxCapacity - container.getSoulNetwork().getCurrentEssence();
-            if (!simulate) lifeEssence = container.getSoulNetwork().add(
-                    SoulTicket.block(this.machine.getLevel(), this.machine.getPos(), Math.min(canInput, lifeEssence)),
-                    this.maxCapacity);
+            var canInput = this.maxCapacity - container.getSoulNetwork().getCurrentSouls();
+            if (!simulate) lifeEssence = container.getSoulNetwork().add(Math.min(canInput, lifeEssence), this.maxCapacity);
             lifeEssence = lifeEssence - canInput;
         }
 
@@ -96,14 +85,12 @@ public class NotifiableSoulContainer extends NotifiableRecipeHandlerTrait<Intege
 
     @Override
     public List<Object> getContents() {
-        if (this.owner == null) return Collections.emptyList();
-        return List.of(this.getSoulNetwork().getCurrentEssence());
+        return List.of(this.getSoulNetwork().getCurrentSouls());
     }
 
     @Override
     public double getTotalContentAmount() {
-        if (this.owner == null) return 0;
-        return this.getSoulNetwork().getCurrentEssence();
+        return this.getSoulNetwork().getCurrentSouls();
     }
 
     @Override
@@ -118,18 +105,17 @@ public class NotifiableSoulContainer extends NotifiableRecipeHandlerTrait<Intege
 
     @Override
     public SoulNetwork getSoulNetwork() {
-        return NetworkHelper.getSoulNetwork(this.owner);
+        return SoulNetworkSavedData.getSoulNetwork(getOwner());
+    }
+
+    public UUID getOwner() {
+        var team = ((FTBOwner) this.machine.getOwner()).getPlayerTeam(this.machine.getOwnerUUID());
+        return team != null ? team.getTeamId() : this.machine.getOwnerUUID();
     }
 
     @Override
     public int getSize() {
         return 1;
-    }
-
-    @Override
-    public void setOwner(UUID owner) {
-        this.owner = owner;
-        conditionalSubscriptionHandler.updateSubscription();
     }
 
     @Override
