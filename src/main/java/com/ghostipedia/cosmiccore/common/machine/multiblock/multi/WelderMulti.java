@@ -34,7 +34,7 @@ public class WelderMulti {
             .hasBER(true)
             .partAppearance((controller, part, side) -> CYCLOZINE_CHEMICALLY_REPELLING_CASING.getDefaultState())
             .recipeModifiers(GTRecipeModifiers.PARALLEL_HATCH,
-                    GTRecipeModifiers.ELECTRIC_OVERCLOCK.apply(OverclockingLogic.PERFECT_OVERCLOCK_SUBTICK), GTRecipeModifiers.BATCH_MODE)
+                    GTRecipeModifiers.ELECTRIC_OVERCLOCK.apply(OverclockingLogic.PERFECT_OVERCLOCK_SUBTICK))
             // spotless:off
             .pattern(definition -> FactoryBlockPattern.start()
                     .aisle("AAAA       AAAA", "               ", "               ", "               ", "               ", "               ", "               ", "               ", "               ")

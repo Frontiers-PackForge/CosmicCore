@@ -33,7 +33,7 @@ public class SufferingChamber {
             .rotationState(RotationState.NON_Y_AXIS)
             .partAppearance((controller, part, side) -> CASING_STRESS_PROOF.getDefaultState())
             .recipeModifiers(GTRecipeModifiers.PARALLEL_HATCH,
-                    ELECTRIC_OVERCLOCK.apply(OverclockingLogic.PERFECT_OVERCLOCK), GTRecipeModifiers.BATCH_MODE)
+                    ELECTRIC_OVERCLOCK.apply(OverclockingLogic.PERFECT_OVERCLOCK))
             // spotless:off
             .pattern(definition -> FactoryBlockPattern.start()
                     .aisle("AAA     AAA", "AA       AA", "A         A", "A         A", "           ", "           ", "           ", "           ")
