@@ -1131,5 +1131,11 @@
   "tooltip.cosmiccore.thermia_hatch_limit": "§cTemp. Limit: %sK",
   "tooltip.gt_scythe.energy": "Energy: %s / %s EU",
   "tooltip.gt_scythe.no_energy": "§cNot enough energy.",
-  "tooltip.gt_scythe.per_hit": "Cost: %s EU / hit"
+  "tooltip.gt_scythe.per_hit": "Cost: %s EU / hit",
+  "cosmiccore.multiblock.drone_station_machine.tier.0": "Plasmatic",
+  "cosmiccore.multiblock.drone_station_machine.tier.1": "Sanguine",
+  "cosmiccore.multiblock.drone_station_machine.tier.2": "Industrial",
+  "cosmiccore.multiblock.drone_station_machine.tier.3": "Robust",
+  "cosmiccore.multiblock.drone_station_machine.tier.4": "Rusty",
+  "cosmiccore.multiblock.drone_station_machine.tier.5": "None"
 }

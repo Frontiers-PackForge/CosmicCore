@@ -505,5 +505,12 @@ public class CosmicLangHandler extends LangHandler {
                 "§fFilter data can be copy/pasted with a data stick§r",
                 "§b'If you're wondering how to parallel assembly lines§r",
                 "§fthis is how. Welcome to subnets!§r");
+
+        provider.add("cosmiccore.multiblock.drone_station_machine.tier.0", "Plasmatic");
+        provider.add("cosmiccore.multiblock.drone_station_machine.tier.1", "Sanguine");
+        provider.add("cosmiccore.multiblock.drone_station_machine.tier.2", "Industrial");
+        provider.add("cosmiccore.multiblock.drone_station_machine.tier.3", "Robust");
+        provider.add("cosmiccore.multiblock.drone_station_machine.tier.4", "Rusty");
+        provider.add("cosmiccore.multiblock.drone_station_machine.tier.5", "None");
     }
 }
