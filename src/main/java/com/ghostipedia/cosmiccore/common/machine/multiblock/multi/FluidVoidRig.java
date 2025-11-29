@@ -33,7 +33,7 @@ public class FluidVoidRig {
             .appearanceBlock(GILDED_PTHANTERUM_CASING)
             .partAppearance((controller, part, side) -> GILDED_PTHANTERUM_CASING.getDefaultState())
             .recipeModifiers(
-                    GTRecipeModifiers.ELECTRIC_OVERCLOCK.apply(OverclockingLogic.NON_PERFECT_OVERCLOCK_SUBTICK))
+                    GTRecipeModifiers.ELECTRIC_OVERCLOCK.apply(OverclockingLogic.NON_PERFECT_OVERCLOCK_SUBTICK), GTRecipeModifiers.BATCH_MODE)
             // spotless:off
             .pattern(definition -> FactoryBlockPattern.start()
                     .aisle("  A     A  ", "  A     A  ", "           ", "           ", "           ", "           ", "           ", "           ", "           ", "           ", "           ", "           ", "           ")

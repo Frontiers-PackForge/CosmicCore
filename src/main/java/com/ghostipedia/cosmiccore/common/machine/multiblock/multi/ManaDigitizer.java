@@ -34,7 +34,7 @@ public class ManaDigitizer {
             .appearanceBlock(CYCLOZINE_CHEMICALLY_REPELLING_CASING)
             .partAppearance((controller, part, side) -> CYCLOZINE_CHEMICALLY_REPELLING_CASING.getDefaultState())
             .recipeModifiers(GTRecipeModifiers.PARALLEL_HATCH,
-                    GTRecipeModifiers.ELECTRIC_OVERCLOCK.apply(OverclockingLogic.NON_PERFECT_OVERCLOCK_SUBTICK))
+                    GTRecipeModifiers.ELECTRIC_OVERCLOCK.apply(OverclockingLogic.NON_PERFECT_OVERCLOCK_SUBTICK), GTRecipeModifiers.BATCH_MODE)
             // spotless:off
             .pattern(definition -> FactoryBlockPattern.start(RelativeDirection.LEFT,RelativeDirection.UP,RelativeDirection.FRONT)
                     .aisle(" AA   AA ", "         ", "         ", "         ", "         ", "         ", "         ", "         ", " AA   AA ")
