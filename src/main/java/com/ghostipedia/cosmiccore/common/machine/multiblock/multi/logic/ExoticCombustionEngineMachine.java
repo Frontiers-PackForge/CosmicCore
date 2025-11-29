@@ -61,8 +61,10 @@ public class ExoticCombustionEngineMachine extends WorkableElectricMultiblockMac
     @Getter
     private final int tier;
     // Probably a bad idea, most likely a better way to do this
+    @Getter
     @DescSynced
     private static final Object2IntMap<FluidStack> lubricantTiers = new Object2IntOpenHashMap<>();
+    @Getter
     @DescSynced
     private static final Object2IntMap<FluidStack> boostingTiers = new Object2IntOpenHashMap<>();
     private int runningTimer = 0;
