@@ -1,10 +1,13 @@
 package com.ghostipedia.cosmiccore.gtbridge;
 
+import com.ghostipedia.cosmiccore.api.capability.CosmicCapabilities;
+import com.ghostipedia.cosmiccore.api.capability.recipe.CosmicRecipeCapabilities;
 import com.ghostipedia.cosmiccore.common.machine.multiblock.multi.logic.LarvaMachine;
 
 import com.gregtechceu.gtceu.api.GTValues;
 
 import net.minecraft.data.recipes.FinishedRecipe;
+import net.minecraft.world.item.Items;
 
 import java.util.function.Consumer;
 
@@ -29,12 +32,19 @@ public class CosmicCoreRecipes {
                 .save(provider);
 
         LarvaMachine.generateTargettingChipRecipes(provider);
+
         /*
          * EMBER_TESTER_RECIPES.recipeBuilder("test")
          * .input(CosmicRecipeCapabilities.EMBER, 100d)
          * .outputItems(Items.COBBLESTONE)
          * .save(provider);
          */
+
+        SOUL_TESTER_RECIPES.recipeBuilder("generate_soul")
+                .notConsumable(Items.DIRT)
+                .output(CosmicRecipeCapabilities.SOUL, 10)
+                .duration(20)
+                .save(provider);
 
         // GROVE_RECIPES.recipeBuilder("dirt_movement")
         // .input(SoulRecipeCapability.CAP, 100)

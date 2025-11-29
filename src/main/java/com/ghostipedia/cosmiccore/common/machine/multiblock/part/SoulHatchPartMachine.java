@@ -47,21 +47,17 @@ public class SoulHatchPartMachine extends TieredIOPartMachine {
         group.addWidget(new LabelWidget(8, 8,
                 Component.translatable("gui.cosmiccore.soul_hatch.label." + (this.io == IO.IN ? "import" : "export"))));
 
-        if (soulContainer.getOwner() == null) {
-            group.addWidget(
-                    new LabelWidget(8, 18, I18n.get("gui.cosmiccore.soul_hatch.no_network")).setClientSideWidget());
-        } else {
-            group.addWidget(
-                    new LabelWidget(8, 18,
-                            () -> I18n.get("gui.cosmiccore.soul_hatch.owner",
-                                    PlayerHelper.getUsernameFromUUID(this.soulContainer.getOwner())))
-                            .setClientSideWidget());
-            group.addWidget(
-                    new LabelWidget(8, 28,
-                            () -> I18n.get("gui.cosmiccore.soul_hatch.lp",
-                                    FormattingUtil.formatNumbers(soulContainer.getCurrentEssence())))
-                            .setClientSideWidget());
-        }
+        // TODO: Get and display proper player/team Name
+//        group.addWidget(
+//                new LabelWidget(8, 18,
+//                        () -> I18n.get("gui.cosmiccore.soul_hatch.owner",
+//                                PlayerHelper.getUsernameFromUUID(this.soulContainer.getOwner())))
+//                        .setClientSideWidget());
+        group.addWidget(
+                new LabelWidget(8, 28,
+                        () -> I18n.get("gui.cosmiccore.soul_hatch.lp",
+                                FormattingUtil.formatNumbers(soulContainer.getCurrentEssence())))
+                        .setClientSideWidget());
 
         group.setBackground(GuiTextures.BACKGROUND_INVERSE);
         return group;
@@ -97,10 +93,6 @@ public class SoulHatchPartMachine extends TieredIOPartMachine {
             case GTValues.MAX -> Integer.MAX_VALUE;
             default -> 0;
         };
-    }
-
-    public void attachSoulNetwork(Player player) {
-        this.soulContainer.setOwner(player.getUUID());
     }
 
     @Override
