@@ -30,7 +30,8 @@ public class ComponentAssemblyLine {
             .appearanceBlock(BICHROMAL_NEVRAMITE_CASING)
             .partAppearance((controller, part, side) -> BICHROMAL_NEVRAMITE_CASING.getDefaultState())
             .recipeModifiers(GTRecipeModifiers.PARALLEL_HATCH,
-                    GTRecipeModifiers.ELECTRIC_OVERCLOCK.apply(OverclockingLogic.NON_PERFECT_OVERCLOCK_SUBTICK), GTRecipeModifiers.BATCH_MODE)
+                    GTRecipeModifiers.ELECTRIC_OVERCLOCK.apply(OverclockingLogic.NON_PERFECT_OVERCLOCK_SUBTICK),
+                    GTRecipeModifiers.BATCH_MODE)
             // spotless:off
             .pattern(definition -> FactoryBlockPattern.start(RelativeDirection.LEFT,RelativeDirection.UP,RelativeDirection.FRONT)
                     .aisle("  AAAAA     IIIIIII     AAAAA  ", "  AAAAA     IIIIIII     AAAAA  ", "  AAAAA     IIIIIII     AAAAA  ", "  AAAAA     IIIIIII     AAAAA  ", "  AAAAA     IIIIIII     AAAAA  ", "    A A      IIIII      A A    ", "    A A                 A A    ", "    A A                 A A    ", "    A A                 A A    ", "    A AA               AA A    ", "    A AA               AA A    ", "  AAAAAAAA           AAAAAAAA  ", "  AAAAAAAAAAA     AAAAAAAAAAA  ", "  AAAAAAAAAAAAAAAAAAAAAAAAAAA  ", "  AAAAAAAAAAAAAAAAAAAAAAAAAAA  ", "  AAAAA                 AAAAA  ", "                               ", "                               ", "                               ")

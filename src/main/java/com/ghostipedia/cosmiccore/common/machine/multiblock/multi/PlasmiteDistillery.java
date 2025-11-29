@@ -33,7 +33,8 @@ public class PlasmiteDistillery {
             .appearanceBlock(HIGHLY_FLEXIBLE_REINFORCED_TRINAVINE_CASING)
             .partAppearance((controller, part, side) -> HIGHLY_FLEXIBLE_REINFORCED_TRINAVINE_CASING.getDefaultState())
             .recipeModifiers(GTRecipeModifiers.PARALLEL_HATCH,
-                    GTRecipeModifiers.ELECTRIC_OVERCLOCK.apply(OverclockingLogic.NON_PERFECT_OVERCLOCK_SUBTICK), GTRecipeModifiers.BATCH_MODE)
+                    GTRecipeModifiers.ELECTRIC_OVERCLOCK.apply(OverclockingLogic.NON_PERFECT_OVERCLOCK_SUBTICK),
+                    GTRecipeModifiers.BATCH_MODE)
             // spotless:off
             .pattern(definition -> FactoryBlockPattern.start()
                     .aisle(" AAAEEEEEEEEEEE", " AAAEFFFFFFFFFE", " AAAEFFFFFFFFFE", " AAAEFFFFFFFFFE", " AAAEEEEEEEEEEE", " AAA           ", " AAA           ", " AAA           ", " AAA           ", " AAA           ", " AAA           ", "               ")
