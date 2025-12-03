@@ -172,7 +172,7 @@ public class CosmicLargeTurbineMachine extends WorkableElectricMultiblockMachine
 
     @Override
     public boolean canVoidRecipeOutputs(RecipeCapability<?> capability) {
-        return capability != EURecipeCapability.CAP;
+        return true;
     }
 
     //////////////////////////////////////
