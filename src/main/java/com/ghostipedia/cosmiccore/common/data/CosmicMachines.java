@@ -489,9 +489,6 @@ public class CosmicMachines {
                             if (io == IO.IN)
                                 tooltip.add(Component.translatable("tooltip.cosmiccore.soul_hatch.input",
                                         SoulHatchPartMachine.getMaxConsumption(tier)));
-                            else
-                                tooltip.add(Component.translatable("tooltip.cosmiccore.soul_hatch.output",
-                                        SoulHatchPartMachine.getMaxCapacity(tier)));
                         }).register(),
                 tiers);
     }
