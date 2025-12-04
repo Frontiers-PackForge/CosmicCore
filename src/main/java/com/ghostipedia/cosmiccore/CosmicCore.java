@@ -3,6 +3,7 @@ package com.ghostipedia.cosmiccore;
 import com.ghostipedia.cosmiccore.api.capability.CosmicCapabilities;
 import com.ghostipedia.cosmiccore.api.item.LinkedTerminalBehavior;
 import com.ghostipedia.cosmiccore.api.pattern.CosmicPredicates;
+import com.ghostipedia.cosmiccore.api.recipe.ingredient.SoulIngredient;
 import com.ghostipedia.cosmiccore.api.recipe.lookup.MapEmberIngredient;
 import com.ghostipedia.cosmiccore.api.recipe.lookup.MapSoulIngredient;
 import com.ghostipedia.cosmiccore.api.registries.CosmicRegistration;
@@ -32,6 +33,7 @@ import com.gregtechceu.gtceu.config.ConfigHolder;
 import com.lowdragmc.lowdraglib.Platform;
 
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraftforge.common.capabilities.RegisterCapabilitiesEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -104,7 +106,7 @@ public class CosmicCore {
     @SubscribeEvent
     public void commonSetup(FMLCommonSetupEvent event) {
         event.enqueueWork(() -> {
-            MapIngredientTypeManager.registerMapIngredient(Integer.class, MapSoulIngredient::convertToMapIngredient);
+            MapIngredientTypeManager.registerMapIngredient(SoulIngredient.class, MapSoulIngredient::from);
             MapIngredientTypeManager.registerMapIngredient(Double.class, MapEmberIngredient::convertToMapIngredient);
             GridLinkables.register(CosmicItems.LINKED_TERMINAL, LinkedTerminalBehavior.handler);
             CCoreNetwork.init();

@@ -36,7 +36,7 @@ public class SoulHatchPartMachine extends TieredIOPartMachine {
 
     public SoulHatchPartMachine(IMachineBlockEntity holder, int tier, IO io) {
         super(holder, tier, io);
-        this.soulContainer = new NotifiableSoulContainer(this, io, getMaxCapacity(tier), getMaxConsumption(tier));
+        this.soulContainer = new NotifiableSoulContainer(this, io, getMaxConsumption(tier));
     }
 
     @Override
@@ -53,30 +53,14 @@ public class SoulHatchPartMachine extends TieredIOPartMachine {
 //                        () -> I18n.get("gui.cosmiccore.soul_hatch.owner",
 //                                PlayerHelper.getUsernameFromUUID(this.soulContainer.getOwner())))
 //                        .setClientSideWidget());
-        group.addWidget(
-                new LabelWidget(8, 28,
-                        () -> I18n.get("gui.cosmiccore.soul_hatch.lp",
-                                FormattingUtil.formatNumbers(soulContainer.getCurrentEssence())))
-                        .setClientSideWidget());
+//        group.addWidget(
+//                new LabelWidget(8, 28,
+//                        () -> I18n.get("gui.cosmiccore.soul_hatch.lp",
+//                                FormattingUtil.formatNumbers(soulContainer.getCurrentEssence())))
+//                        .setClientSideWidget());
 
         group.setBackground(GuiTextures.BACKGROUND_INVERSE);
         return group;
-    }
-
-    public static int getMaxCapacity(int tier) {
-        return switch (tier) {
-            case GTValues.IV -> 5000000;
-            case GTValues.LuV -> 10000000;
-            case GTValues.ZPM -> 20000000;
-            case GTValues.UV -> 30000000;
-            case GTValues.UHV -> 50000000;
-            case GTValues.UEV -> 100000000;
-            case GTValues.UIV -> 250000000;
-            case GTValues.UXV -> 500000000;
-            case GTValues.OpV -> 1000000000;
-            case GTValues.MAX -> Integer.MAX_VALUE;
-            default -> 0;
-        };
     }
 
     public static int getMaxConsumption(int tier) {

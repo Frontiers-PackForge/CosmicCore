@@ -2,6 +2,9 @@ package com.ghostipedia.cosmiccore.gtbridge;
 
 import com.ghostipedia.cosmiccore.api.capability.CosmicCapabilities;
 import com.ghostipedia.cosmiccore.api.capability.recipe.CosmicRecipeCapabilities;
+import com.ghostipedia.cosmiccore.api.capability.souls.SoulType;
+import com.ghostipedia.cosmiccore.api.recipe.ingredient.SoulIngredient;
+import com.ghostipedia.cosmiccore.api.recipe.ingredient.SoulStack;
 import com.ghostipedia.cosmiccore.common.machine.multiblock.multi.logic.LarvaMachine;
 
 import com.gregtechceu.gtceu.api.GTValues;
@@ -42,7 +45,8 @@ public class CosmicCoreRecipes {
 
         SOUL_TESTER_RECIPES.recipeBuilder("generate_soul")
                 .notConsumable(Items.DIRT)
-                .output(CosmicRecipeCapabilities.SOUL, 10)
+                .output(CosmicRecipeCapabilities.SOUL, SoulIngredient.of(SoulType.Impure, 10))
+                .output(CosmicRecipeCapabilities.SOUL, SoulIngredient.of(SoulType.Temporal, 10))
                 .duration(20)
                 .save(provider);
 
