@@ -46,7 +46,7 @@ public class CosmicCoreRecipes {
         SOUL_TESTER_RECIPES.recipeBuilder("generate_soul")
                 .notConsumable(Items.DIRT)
                 .output(CosmicRecipeCapabilities.SOUL, SoulIngredient.of(SoulType.Impure, 10))
-                .output(CosmicRecipeCapabilities.SOUL, SoulIngredient.of(SoulType.Temporal, 10))
+                .output(CosmicRecipeCapabilities.SOUL, SoulIngredient.of(SoulType.Temporal, 50))
                 .duration(20)
                 .save(provider);
 
