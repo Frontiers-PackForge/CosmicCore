@@ -59,14 +59,13 @@ public class NotifiableSoulContainer extends NotifiableRecipeHandlerTrait<SoulIn
                     result.add(SoulIngredient.of(requiredStack.withAmount(requiredStack.amount() - consumedStack.amount())));
                 }
             } else {
-                SoulStack remainder = network.add(requiredStack, throughput, simulate);
-                if (remainder.amount() > 0) {
-                    result.add(SoulIngredient.of(remainder));
-                }
+                SoulStack canInput = network.add(requiredStack, throughput, simulate);
+                SoulStack reminder = requiredStack.withAmount(requiredStack.amount() - canInput.amount());
+                if (reminder.amount() > 0) result.add(SoulIngredient.of(reminder));
             }
         }
 
-        return List.of();
+        return result.isEmpty() ? null : result;
     }
 
     @Override
