@@ -10,6 +10,7 @@ import com.ghostipedia.cosmiccore.common.data.tag.item.CosmicItemTags;
 import com.ghostipedia.cosmiccore.common.item.AsteroidItem;
 import com.ghostipedia.cosmiccore.common.item.AsteroidTargetingChipItem;
 import com.ghostipedia.cosmiccore.common.item.CosmicScytheItem;
+import com.ghostipedia.cosmiccore.common.item.SoulNetworkReaderItem;
 import com.ghostipedia.cosmiccore.common.item.armor.ChestSanguineWarptechSuite;
 import com.ghostipedia.cosmiccore.common.item.armor.HelmetSanguineWarptechSuite;
 import com.ghostipedia.cosmiccore.common.item.armor.SanguineWarptechSuite;
@@ -100,6 +101,14 @@ public class CosmicItems {
     public static final CosmicBloodOrbDeferredRegister COSMIC_BLOOD_ORBS = new CosmicBloodOrbDeferredRegister(
             "cosmiccore");
     // Modules
+
+    public static final ItemEntry<SoulNetworkReaderItem> SOUL_READER = REGISTRATE
+            .item("soul_reader", SoulNetworkReaderItem::new)
+            .lang("Soul Network Reader")
+            .properties(p -> p.stacksTo(1))
+            .tag()
+            .defaultModel()
+            .register();
 
     public static final ItemEntry<SpiritShardItem> ETHERIC_SPIRIT_ITEM = REGISTRATE
             .item("etheric_spirit", (properties -> new SpiritShardItem(properties, CosmicItems.ETHERIC_SPIRIT)))

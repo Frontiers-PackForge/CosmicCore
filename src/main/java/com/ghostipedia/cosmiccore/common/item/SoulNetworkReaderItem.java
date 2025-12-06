@@ -1,0 +1,45 @@
+package com.ghostipedia.cosmiccore.common.item;
+
+import com.ghostipedia.cosmiccore.api.data.souls.SoulNetwork;
+import com.ghostipedia.cosmiccore.api.data.souls.SoulNetworkSavedData;
+import com.ghostipedia.cosmiccore.api.recipe.ingredient.SoulStack;
+import net.minecraft.ChatFormatting;
+import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResultHolder;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
+
+import java.util.List;
+
+public class SoulNetworkReaderItem extends Item {
+
+    public SoulNetworkReaderItem(Properties properties) {
+        super(properties);
+    }
+
+    @Override
+    public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
+        if (!level.isClientSide() && player instanceof ServerPlayer serverPlayer) {
+            //TODO: get team or player uuid
+            SoulNetwork soulNetwork = SoulNetworkSavedData.getSoulNetwork(player.getUUID());
+            List<SoulStack> contents = soulNetwork.getContents();
+
+            player.sendSystemMessage(Component.literal("--- Soul Network Contents ---").withStyle(ChatFormatting.GOLD));
+
+            if (contents.isEmpty()) {
+                player.sendSystemMessage(Component.literal("Network is empty.").withStyle(ChatFormatting.GRAY));
+            } else {
+                for (SoulStack stack : contents) {
+                    Component message = Component.literal(String.format("%s: %,d", stack.type().getSerializedName(), stack.amount()))
+                            .withStyle(ChatFormatting.AQUA);
+                    player.sendSystemMessage(message);
+                }
+            }
+        }
+        return InteractionResultHolder.success(player.getItemInHand(hand));
+    }
+}
