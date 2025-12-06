@@ -49,8 +49,6 @@ public class ExoticCombustionEngineMachine extends WorkableElectricMultiblockMac
     protected static final ManagedFieldHolder MANAGED_FIELD_HOLDER = new ManagedFieldHolder(
             ExoticCombustionEngineMachine.class, WorkableMultiblockMachine.MANAGED_FIELD_HOLDER);
 
-    // TODO: CosmicCore Lubricants for efficiency bonus
-
     private String currentLubricant;
     private String currentBooster;
     @Getter
