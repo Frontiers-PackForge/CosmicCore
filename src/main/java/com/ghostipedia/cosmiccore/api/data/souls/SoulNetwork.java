@@ -53,12 +53,12 @@ public class SoulNetwork implements INBTSerializable<CompoundTag> {
 
     public int getSize() {
         return switch (tier) {
-            case 0 -> 1_000;
-            case 1 -> 100_000;
-            case 2 -> 1_000_000;
-            case 4 -> 10_000_000;
-            case 5 -> 100_000_000;
-            case 6 -> 1_000_000_000;
+            case 0 -> 10_000;
+            case 1 -> 50_000;
+            case 2 -> 150_000;
+            case 4 -> 1_000_000;
+            case 5 -> 10_000_000;
+            case 6 -> 100_000_000;
             default -> Integer.MAX_VALUE;
         };
     }
