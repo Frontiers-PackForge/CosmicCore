@@ -3,9 +3,7 @@ package com.ghostipedia.cosmiccore.common.machine.multiblock.multi.logic;
 import com.ghostipedia.cosmiccore.common.data.materials.CosmicMaterials;
 
 import com.gregtechceu.gtceu.api.GTValues;
-import com.gregtechceu.gtceu.api.capability.recipe.FluidRecipeCapability;
 import com.gregtechceu.gtceu.api.capability.recipe.IO;
-import com.gregtechceu.gtceu.api.capability.recipe.IRecipeHandler;
 import com.gregtechceu.gtceu.api.fluids.store.FluidStorageKeys;
 import com.gregtechceu.gtceu.api.gui.GuiTextures;
 import com.gregtechceu.gtceu.api.gui.fancy.IFancyTooltip;
@@ -23,11 +21,11 @@ import com.gregtechceu.gtceu.api.recipe.modifier.ModifierFunction;
 import com.gregtechceu.gtceu.api.recipe.modifier.ParallelLogic;
 import com.gregtechceu.gtceu.api.recipe.modifier.RecipeModifier;
 import com.gregtechceu.gtceu.common.data.GTMaterials;
+import com.gregtechceu.gtceu.data.recipe.builder.GTRecipeBuilder;
 import com.gregtechceu.gtceu.utils.FormattingUtil;
 import com.gregtechceu.gtceu.utils.GTMath;
 import com.gregtechceu.gtceu.utils.GTUtil;
 
-import com.lowdragmc.lowdraglib.syncdata.annotation.DescSynced;
 import com.lowdragmc.lowdraglib.syncdata.field.ManagedFieldHolder;
 
 import net.minecraft.ChatFormatting;
@@ -37,10 +35,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.Style;
 import net.minecraftforge.fluids.FluidStack;
 
-import it.unimi.dsi.fastutil.objects.Object2IntMap;
-import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
 import lombok.Getter;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
@@ -56,27 +51,49 @@ public class ExoticCombustionEngineMachine extends WorkableElectricMultiblockMac
 
     // TODO: CosmicCore Lubricants for efficiency bonus
 
-    private FluidStack currentLubricant;
-    private FluidStack currentBooster;
+    private String currentLubricant;
+    private String currentBooster;
     @Getter
     private final int tier;
-    // Probably a bad idea, most likely a better way to do this
-    @DescSynced
-    private static final Object2IntMap<FluidStack> lubricantTiers = new Object2IntOpenHashMap<>();
-    @DescSynced
-    private static final Object2IntMap<FluidStack> boostingTiers = new Object2IntOpenHashMap<>();
-    private int runningTimer = 0;
     static {
         // Boosting Tiers
-        boostingTiers.put(GTMaterials.Oxygen.getFluid(1), 1);
-        boostingTiers.put(GTMaterials.Oxygen.getFluid(FluidStorageKeys.LIQUID, 1), 2);
-        boostingTiers.put(CosmicMaterials.Ichor.getFluid(1), 3);
+        boostRecipes = new ArrayList<>();
+        addBooster(CosmicMaterials.Ichor.getFluid(1), 3, 2);
+        addBooster(GTMaterials.Oxygen.getFluid(FluidStorageKeys.LIQUID, 1), 2, 1);
+        addBooster(GTMaterials.Oxygen.getFluid(1), 1, 1);
         // Lubricant Tiers
-        lubricantTiers.put(GTMaterials.Lubricant.getFluid(1), 2);
-        lubricantTiers.put(CosmicMaterials.Triphenylphosphine.getFluid(FluidStorageKeys.LIQUID, 1), 3);
-        lubricantTiers.put(CosmicMaterials.TearsOfTheUniverse.getFluid(FluidStorageKeys.LIQUID, 1), 4);
+        lubricantRecipes = new ArrayList<>();
+        addLube(CosmicMaterials.TearsOfTheUniverse.getFluid(FluidStorageKeys.LIQUID, 1), 4, 288);
+        addLube(CosmicMaterials.Triphenylphosphine.getFluid(FluidStorageKeys.LIQUID, 1), 3, 144);
+        addLube(GTMaterials.Lubricant.getFluid(1), 2, 72);
 
     }
+
+    static List<GTRecipe> lubricantRecipes;
+    static List<GTRecipe> boostRecipes;
+    static final String LUBRICATION_KEY = "lubrication";
+    static final String BOOST_KEY = "boost";
+    static final String DURATION_KEY = "duration";
+    static void addLube(FluidStack lube, int lubrication, int duration){
+        lubricantRecipes.add(GTRecipeBuilder.ofRaw()
+            .inputFluids(lube)
+            .addData(LUBRICATION_KEY, lubrication)
+            .addData(DURATION_KEY, duration)
+            .buildRawRecipe());
+    }
+    static void addBooster(FluidStack booster, int boost, int duration){
+        boostRecipes.add(GTRecipeBuilder.ofRaw()
+            .inputFluids(booster)
+            .addData(BOOST_KEY, boost)
+            .addData(DURATION_KEY, duration)
+            .buildRawRecipe());
+    }
+
+
+    private int runningTimer = 0;
+    private int boostAmount = 0, boostDuration = 0;
+    private int lubeDuration = 0;
+
 
     public ExoticCombustionEngineMachine(IMachineBlockEntity holder, int tier) {
         super(holder);
@@ -92,6 +109,7 @@ public class ExoticCombustionEngineMachine extends WorkableElectricMultiblockMac
                 if (x == 0 && y == 0)
                     continue;
                 var blockPos = centerPos.offset(mutableXZ ? x : 0, y, mutableXZ ? 0 : x);
+                @SuppressWarnings("DataFlowIssue")
                 var blockState = this.getLevel().getBlockState(blockPos);
                 if (!blockState.isAir())
                     return true;
@@ -105,7 +123,7 @@ public class ExoticCombustionEngineMachine extends WorkableElectricMultiblockMac
         return GTValues.V[tier];
     }
 
-    public static ModifierFunction recipeModifier(@NotNull MetaMachine machine, @NotNull GTRecipe recipe) {
+    public static ModifierFunction recipeModifier(MetaMachine machine, GTRecipe recipe) {
         if (!(machine instanceof ExoticCombustionEngineMachine engineMachine)) {
             return RecipeModifier.nullWrongType(ExoticCombustionEngineMachine.class, machine);
         }
@@ -113,45 +131,23 @@ public class ExoticCombustionEngineMachine extends WorkableElectricMultiblockMac
         if (EUt * recipe.duration < 720) {
             return ModifierFunction.NULL;
         }
-        var fluidHolders = Objects
-                .requireNonNullElseGet(engineMachine.getCapabilitiesFlat(IO.IN, FluidRecipeCapability.CAP),
-                        Collections::<IRecipeHandler<?>>emptyList)
-                .stream()
-                .map(container -> container.getContents().stream().filter(FluidStack.class::isInstance)
-                        .map(FluidStack.class::cast).toList())
-                .filter(container -> !container.isEmpty())
-                .toList();
 
-        for (var fluidHolder : fluidHolders) {
-            for (var fluidStack : fluidHolder) {
-                if (boostingTiers.containsKey(fluidStack)) {
-                    if (engineMachine.currentBooster == null || engineMachine.currentBooster.isEmpty() ||
-                            boostingTiers.getInt(fluidStack) > boostingTiers.getInt(engineMachine.currentBooster)) {
-                        engineMachine.currentBooster = fluidStack;
-                    }
-                } else if (lubricantTiers.containsKey(fluidStack)) {
-                    if (engineMachine.currentLubricant == null || engineMachine.currentLubricant.isEmpty() ||
-                            lubricantTiers.getInt(fluidStack) > lubricantTiers.getInt(engineMachine.currentLubricant)) {
-                        engineMachine.currentLubricant = fluidStack;
-                    }
-                }
-            }
-        }
+        Optional<GTRecipe> lubeRecipe = lubricantRecipes.stream().filter(
+                lr -> RecipeHelper.matchRecipe(engineMachine, lr).isSuccess()).findFirst();
 
         // Has a variant of lubricant
-        if (EUt > 0 && !engineMachine.isIntakesObstructed() && engineMachine.currentLubricant != null &&
-                !engineMachine.currentLubricant.isEmpty()) {
+        if (EUt > 0 && !engineMachine.isIntakesObstructed() && lubeRecipe.isPresent()) {
             int maxParallel = (int) (engineMachine.getOverclockVoltage() / EUt);
             int actualParallel = ParallelLogic.getParallelAmount(engineMachine, recipe, maxParallel);
-            int tier = lubricantTiers.getInt(engineMachine.currentLubricant);
-            float durationModifier = (lubricantTiers.getInt(engineMachine.currentLubricant) / 2.0F);
-            double eutMultiplier = 1;
+            int tier = lubeRecipe.get().data.getInt(LUBRICATION_KEY);
+            float durationModifier = (tier / 2.0F);
+            double eutMultiplier;
             int consumptionMult = 1;
-            if (engineMachine.currentBooster == null || engineMachine.currentBooster.isEmpty()) {
+            if (engineMachine.boostAmount == 0) {
                 eutMultiplier = actualParallel;
             } else {
-                consumptionMult = boostingTiers.getInt(engineMachine.currentBooster) * 2;
-                eutMultiplier = actualParallel * (boostingTiers.getInt(engineMachine.currentBooster) * 3);
+                consumptionMult = engineMachine.boostAmount * 2;
+                eutMultiplier = actualParallel * engineMachine.boostAmount * 3;
             }
 
             return ModifierFunction.builder()
@@ -178,53 +174,39 @@ public class ExoticCombustionEngineMachine extends WorkableElectricMultiblockMac
 
             }
         }
-        if (currentBooster != null && !currentBooster.isEmpty()) {
-            int consumptionRate = -1;
-            int tickCycle = -1;
-            if (currentBooster.isFluidEqual(GTMaterials.Oxygen.getFluid(1))) {
-                consumptionRate = 1;
-                tickCycle = 1;
-            } else if (currentBooster.isFluidEqual(GTMaterials.Oxygen.getFluid(FluidStorageKeys.LIQUID, 1))) {
-                consumptionRate = 4;
-                tickCycle = 1;
-            } else if (currentBooster.isFluidEqual(CosmicMaterials.Ichor.getFluid(1))) {
-                tickCycle = 2;
-                consumptionRate = 1;
+
+        if (lubeDuration <= 0){
+            for (GTRecipe lubeRecipe : lubricantRecipes){
+                if (RecipeHelper.matchRecipe(this, lubeRecipe).isSuccess() &&
+                RecipeHelper.handleRecipeIO(this, lubeRecipe, IO.IN, getRecipeLogic().getChanceCaches()).isSuccess()){
+                    lubeDuration = lubeRecipe.data.getInt(DURATION_KEY);
+                    currentLubricant = RecipeHelper.getInputFluids(lubeRecipe).get(0).getTranslationKey();
+                    break;
+                }
             }
-            if (tickCycle != -1 && runningTimer % tickCycle == 0) {
-                if (consumptionRate != -1 && currentBooster.getAmount() >= consumptionRate) {
-                    currentBooster.shrink(consumptionRate);
+            // no lubricant matched
+            if (lubeDuration == 0){
+                recipeLogic.interruptRecipe();
+                return false;
+            }
+        }
+        lubeDuration--;
+
+        if (boostDuration <= 0){
+            boostDuration  = 1;
+            boostAmount = 0;
+            for (GTRecipe boostRecipe : boostRecipes){
+                if (RecipeHelper.matchRecipe(this, boostRecipe).isSuccess() &&
+                RecipeHelper.handleRecipeIO(this, boostRecipe, IO.IN, getRecipeLogic().getChanceCaches()).isSuccess()){
+                    boostAmount = boostRecipe.data.getInt(BOOST_KEY);
+                    boostDuration = boostRecipe.data.getInt(DURATION_KEY);
+                    currentBooster = RecipeHelper.getInputFluids(boostRecipe).get(0).getTranslationKey();
+                    break;
                 }
             }
         }
-        // Currently all lubricants are the same, however this may change, so assume this is left this way intentionally
-        // (Anyone else who reads this)
-        if (currentLubricant != null && !currentLubricant.isEmpty()) {
-            int consumptionRate = -1;
-            int tickCycle = -1;
-            if (currentLubricant.containsFluid(GTMaterials.Lubricant.getFluid(1))) {
-                tickCycle = 72;
-                consumptionRate = 1; // 1000/hr
-            } else if (currentLubricant
-                    .containsFluid(CosmicMaterials.Triphenylphosphine.getFluid(FluidStorageKeys.LIQUID, 1))) {
-                        tickCycle = 144;
-                        consumptionRate = 1; // 500/hr
-                    } else
-                if (currentLubricant.containsFluid(
-                        CosmicMaterials.TearsOfTheUniverse.getFluid(FluidStorageKeys.LIQUID, 1))) {
-                            tickCycle = 288;
-                            consumptionRate = 1; // 250/hr
-                        }
-            if (tickCycle != -1 && runningTimer % tickCycle == 0) {
-                if (consumptionRate != -1 && currentLubricant.getAmount() >= consumptionRate) {
-                    currentLubricant.shrink(consumptionRate);
-                } else {
-                    recipeLogic.interruptRecipe();
-                }
-            }
-        } else if (currentLubricant != null) {
-            recipeLogic.interruptRecipe();
-        }
+        boostDuration--;
+
         runningTimer++;
         if (runningTimer > 72000) runningTimer %= 72000;
 
@@ -241,7 +223,7 @@ public class ExoticCombustionEngineMachine extends WorkableElectricMultiblockMac
         MultiblockDisplayText.Builder builder = MultiblockDisplayText.builder(textList, isFormed())
                 .setWorkingStatus(recipeLogic.isWorkingEnabled(), recipeLogic.isActive());
         var voltageName = Component.literal(GTValues.VNF[GTUtil.getFloorTierByVoltage(getOverclockVoltage())]);
-        var amperageName = currentBooster != null ? boostingTiers.getInt(currentBooster) * 3 : 1;
+        var amperageName = boostAmount != 0 ? boostAmount * 3 : boostAmount;
         if (recipeLogic.isSuspend() && !recipeLogic.getFancyTooltip().isEmpty()) {
             builder.addCustom(t -> t.add(recipeLogic.getFancyTooltip().get(0)));
             return;
@@ -259,14 +241,14 @@ public class ExoticCombustionEngineMachine extends WorkableElectricMultiblockMac
         if (isFormed && currentBooster != null) {
             builder.addCustom(tl -> tl.add(Component
                     .translatable("cosmiccore.multiblock.booster_used",
-                            Component.translatable(currentBooster.getTranslationKey()))
+                            Component.translatable(currentBooster))
                     .withStyle(ChatFormatting.AQUA)));
         }
 
         if (isFormed && currentLubricant != null) {
             builder.addCustom(tl -> tl.add(Component
                     .translatable("cosmiccore.multiblock.lubricant_used",
-                            Component.translatable(currentLubricant.getTranslationKey()))
+                            Component.translatable(currentLubricant))
                     .withStyle(ChatFormatting.YELLOW)));
         }
 
@@ -279,6 +261,7 @@ public class ExoticCombustionEngineMachine extends WorkableElectricMultiblockMac
         GTRecipe recipe = recipeLogic.getLastRecipe();
         if (recipe == null) {
             Iterator<GTRecipe> iterator = recipeLogic.searchRecipe();
+            //noinspection ConstantValue
             recipe = iterator != null && iterator.hasNext() ? iterator.next() : null;
             if (recipe == null) return null;
         }
