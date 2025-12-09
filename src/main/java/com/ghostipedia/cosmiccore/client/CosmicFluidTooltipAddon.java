@@ -30,17 +30,17 @@ public class CosmicFluidTooltipAddon {
     static String prefix = ".tooltip.prefix";
     public static HashMap<String, HashMap<String, Double>> data = new HashMap<>();
 
-    public static void appendFluidTooltip(ItemStack itemStack, HashMap<String, HashMap<String, Double>> hashMap) {
+    public static void appendFluidTooltip(ItemStack itemStack) {
         if (itemStack.getItem() instanceof BucketItem bucketItem) {
             Fluid fluid = bucketItem.getFluid();
             String fluidID = ForgeRegistries.FLUIDS.getKey(fluid).toString();
-            if (hashMap.isEmpty()) {
-                hashMapInit(hashMap);
+            if (data.isEmpty()) {
+                hashMapInit(data);
             }
-            Set<String> keySet = hashMap.keySet();
+            Set<String> keySet = data.keySet();
             for (String i : keySet) {
-                if (hashMap.get(i).containsKey(fluidID)) {
-                    HashMap<String, Double> tmp = hashMap.get(i);
+                if (data.get(i).containsKey(fluidID)) {
+                    HashMap<String, Double> tmp = data.get(i);
                     ResourceLocation fluidResource = new ResourceLocation(fluidID);
                     if (fluid instanceof GTFluid attributeFluid) {
                         FluidAttribute attribute;
@@ -68,7 +68,7 @@ public class CosmicFluidTooltipAddon {
         hashMap.put(".calorific", getFuelEnergy());
         hashMap.put(".lubricant", getLubricantTier());
         hashMap.put(".booster", getBoosterTier());
-        CosmicCore.LOGGER.info("Finish Additional Fluid Tooltip Init!");
+        CosmicCore.LOGGER.info("Cosmic Additional Fluid Tooltip Init Finished!");
     }
 
     public static HashMap<String, Double> getFuelEnergy() {
