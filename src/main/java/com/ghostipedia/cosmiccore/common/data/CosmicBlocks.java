@@ -206,6 +206,23 @@ public class CosmicBlocks {
             "machine_casing_gearbox_naquadria",
             CosmicCore.id("block/casings/gearbox/machine_casing_gearbox_naquadria"));
 
+    public static final BlockEntry<Block> RUST_WEAVE_CASING = createCasingBlock(
+            "rust_weave_casing",
+            CosmicCore.id("block/casings/solid/rust_weave_casing"));
+
+    public static final BlockEntry<Block> RUST_STAINED_CASING = createCasingBlock(
+            "rust_stained_casing",
+            CosmicCore.id("block/casings/solid/rust_stained_casing"));
+
+    public static final BlockEntry<Block> SOMARUST_CASING = createCasingBlock(
+            "somarust_casing",
+            CosmicCore.id("block/casings/solid/somarust_casing"));
+
+    public static final BlockEntry<Block> SOUL_MUTED_CASING = createCasingBlock(
+            "soul_muted_casing",
+            CosmicCore.id("block/casings/solid/soul_muted_casing"));
+
+
     // Star Ladder Casings
 
     public static final BlockEntry<Block> SUPERHEAVY_STEEL_CASING = createCasingBlock(
