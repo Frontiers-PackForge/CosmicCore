@@ -1135,5 +1135,8 @@
   "tooltip.cosmiccore.thermia_hatch_limit": "§cTemp. Limit: %sK",
   "tooltip.gt_scythe.energy": "Energy: %s / %s EU",
   "tooltip.gt_scythe.no_energy": "§cNot enough energy.",
-  "tooltip.gt_scythe.per_hit": "Cost: %s EU / hit"
+  "tooltip.gt_scythe.per_hit": "Cost: %s EU / hit",
+  "cosmiccore.calorific.tooltip.prefix": "§6Calorific:§r %s",
+  "cosmiccore.lubricant.tooltip.prefix": "§eLubricant:§r Tier %s",
+  "cosmiccore.booster.tooltip.prefix": "§bBooster:§r Tier %s"
 }

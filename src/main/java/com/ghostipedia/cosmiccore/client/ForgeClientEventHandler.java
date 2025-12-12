@@ -8,6 +8,7 @@ import net.minecraft.client.renderer.FogRenderer;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.RenderLevelStageEvent;
 import net.minecraftforge.client.event.ViewportEvent;
+import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
@@ -51,5 +52,10 @@ public class ForgeClientEventHandler {
             event.setGreen(0.792F);
             event.setBlue(0.855F);
         }
+    }
+
+    @SubscribeEvent
+    public static void onTooltipEvent(ItemTooltipEvent event) {
+        CosmicFluidTooltipAddon.appendFluidTooltip(event.getItemStack());
     }
 }

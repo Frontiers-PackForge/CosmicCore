@@ -505,5 +505,9 @@ public class CosmicLangHandler extends LangHandler {
                 "§fFilter data can be copy/pasted with a data stick§r",
                 "§b'If you're wondering how to parallel assembly lines§r",
                 "§fthis is how. Welcome to subnets!§r");
+
+        provider.add("cosmiccore.calorific.tooltip.prefix", "§5Calorific:§r %s");
+        provider.add("cosmiccore.lubricant.tooltip.prefix", "§6Lubricant:§r Tier %s");
+        provider.add("cosmiccore.booster.tooltip.prefix", "§bBooster:§r Tier %s");
     }
 }
