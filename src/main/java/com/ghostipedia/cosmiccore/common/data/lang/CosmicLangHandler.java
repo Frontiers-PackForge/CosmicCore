@@ -506,6 +506,12 @@ public class CosmicLangHandler extends LangHandler {
                 "§b'If you're wondering how to parallel assembly lines§r",
                 "§fthis is how. Welcome to subnets!§r");
 
+        provider.add("cosmiccore.multiblock.drone_station_machine.tier.0", "Plasmatic");
+        provider.add("cosmiccore.multiblock.drone_station_machine.tier.1", "Sanguine");
+        provider.add("cosmiccore.multiblock.drone_station_machine.tier.2", "Industrial");
+        provider.add("cosmiccore.multiblock.drone_station_machine.tier.3", "Robust");
+        provider.add("cosmiccore.multiblock.drone_station_machine.tier.4", "Rusty");
+        provider.add("cosmiccore.multiblock.drone_station_machine.tier.5", "None");
         provider.add("cosmiccore.calorific.tooltip.prefix", "§5Calorific:§r %s");
         provider.add("cosmiccore.lubricant.tooltip.prefix", "§6Lubricant:§r Tier %s");
         provider.add("cosmiccore.booster.tooltip.prefix", "§bBooster:§r Tier %s");

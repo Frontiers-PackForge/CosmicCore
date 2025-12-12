@@ -44,9 +44,9 @@ public class DroneStationProvider extends CapabilityBlockProvider<DroneStationMa
     protected void write(CompoundTag compoundTag, DroneStationMachine droneStation) {
         compoundTag.putLong("connections", droneStation.connections.size());
         if (droneStation.currentTier == null) {
-            compoundTag.putString("currentTier", "None");
+            compoundTag.putString("currentTier", "cosmiccore.multiblock.drone_station_machine.tier.5");
         } else {
-            compoundTag.putString("currentTier", toTitleCase(droneStation.currentTier.name()));
+            compoundTag.putString("currentTier", toKey(droneStation.currentTier.ordinal()));
         }
     }
 
@@ -58,6 +58,10 @@ public class DroneStationProvider extends CapabilityBlockProvider<DroneStationMa
         String first = input.substring(0, 1).toUpperCase();
         String rest = input.substring(1).toLowerCase();
         return first + rest;
+    }
+
+    private String toKey(int input) {
+        return "cosmiccore.multiblock.drone_station_machine.tier." + input;
     }
 
     @Override
@@ -77,7 +81,7 @@ public class DroneStationProvider extends CapabilityBlockProvider<DroneStationMa
         if (compoundTag.contains("currentTier")) {
             iTooltip.add(Component
                     .translatable("cosmiccore.multiblock.drone_station_machine.current_tier",
-                            compoundTag.getString("currentTier"))
+                            Component.translatable(compoundTag.getString("currentTier")))
                     .setStyle(Style.EMPTY.withColor(ChatFormatting.GREEN)));
         }
     }
