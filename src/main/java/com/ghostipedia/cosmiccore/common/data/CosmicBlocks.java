@@ -222,7 +222,6 @@ public class CosmicBlocks {
             "soul_muted_casing",
             CosmicCore.id("block/casings/solid/soul_muted_casing"));
 
-
     // Star Ladder Casings
 
     public static final BlockEntry<Block> SUPERHEAVY_STEEL_CASING = createCasingBlock(

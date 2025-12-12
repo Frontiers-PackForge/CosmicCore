@@ -14,10 +14,10 @@ import com.gregtechceu.gtceu.api.machine.TickableSubscription;
 import com.gregtechceu.gtceu.api.machine.feature.multiblock.IMultiController;
 import com.gregtechceu.gtceu.api.machine.multiblock.WorkableElectricMultiblockMachine;
 import com.gregtechceu.gtceu.api.machine.trait.RecipeLogic;
-
 import com.gregtechceu.gtceu.api.recipe.GTRecipe;
 import com.gregtechceu.gtceu.api.recipe.RecipeHelper;
 import com.gregtechceu.gtceu.data.recipe.builder.GTRecipeBuilder;
+
 import com.lowdragmc.lowdraglib.gui.modular.ModularUI;
 import com.lowdragmc.lowdraglib.gui.texture.GuiTextureGroup;
 import com.lowdragmc.lowdraglib.gui.texture.TextTexture;
@@ -78,16 +78,17 @@ public class DroneStationMachine extends WorkableElectricMultiblockMachine {
             this.item = item;
         }
     }
+
     static List<GTRecipe> droneTierRecipes = new ArrayList<>();
     static final String TIER_KEY = "drone_tier";
     static {
-        for (DroneTier tier: DroneTier.values()){
+        for (DroneTier tier : DroneTier.values()) {
 
             droneTierRecipes.add(GTRecipeBuilder.ofRaw()
-                .notConsumable(tier.item) // we need this so it doesn't match empty stuff
-                .chancedInput(tier.item, (int) (tier.consumptionChance * 10000), 0)
-                .addData(TIER_KEY, tier.ordinal())
-                .buildRawRecipe());
+                    .notConsumable(tier.item) // we need this so it doesn't match empty stuff
+                    .chancedInput(tier.item, (int) (tier.consumptionChance * 10000), 0)
+                    .addData(TIER_KEY, tier.ordinal())
+                    .buildRawRecipe());
         }
     }
 
@@ -136,21 +137,21 @@ public class DroneStationMachine extends WorkableElectricMultiblockMachine {
         if (maybeDroneRecipe.isEmpty()) return;
         GTRecipe droneRecipe = maybeDroneRecipe.get();
         currentTier = DroneTier.values()[droneRecipe.data.getInt(TIER_KEY)];
-//        var itemHandlers = getCapabilitiesFlat(IO.IN, ItemRecipeCapability.CAP);
-//        boolean found = false;
-//        for (DroneTier tier : DroneTier.values()) {
-//            for (var handler : itemHandlers) {
-//                if (!(handler instanceof NotifiableItemStackHandler itemHandler)) continue;
-//                for (var content : itemHandler.getContents()) {
-//                    if (tier.item.equals(((ItemStack) content).getItem())) {
-//                        this.currentTier = tier;
-//                        found = true;
-//                        break;
-//                    }
-//                }
-//            }
-//            if (found) break;
-//        }
+        // var itemHandlers = getCapabilitiesFlat(IO.IN, ItemRecipeCapability.CAP);
+        // boolean found = false;
+        // for (DroneTier tier : DroneTier.values()) {
+        // for (var handler : itemHandlers) {
+        // if (!(handler instanceof NotifiableItemStackHandler itemHandler)) continue;
+        // for (var content : itemHandler.getContents()) {
+        // if (tier.item.equals(((ItemStack) content).getItem())) {
+        // this.currentTier = tier;
+        // found = true;
+        // break;
+        // }
+        // }
+        // }
+        // if (found) break;
+        // }
     }
 
     public long getBlockLimit() {
@@ -180,30 +181,31 @@ public class DroneStationMachine extends WorkableElectricMultiblockMachine {
     public boolean fixMaintenanceIssue() {
         // Note that this tries to consume a drone of the currentTier, which is only updated once per second.
         if (currentTier == null) return false;
-        return RecipeHelper.handleRecipeIO(this, droneTierRecipes.get(currentTier.ordinal()), IO.IN, getRecipeLogic().getChanceCaches()).isSuccess();
-//        var itemHandlers = getCapabilitiesFlat(IO.IN, ItemRecipeCapability.CAP);
-//        for (var handler : itemHandlers) {
-//            if (!(handler instanceof NotifiableItemStackHandler itemHandler)) continue;
-//            for (int i = 0; i < itemHandler.getSlots(); i++) {
-//                ItemStack stack = itemHandler.getStackInSlot(i);
-//                if (stack.getItem().equals(currentTier.item)) {
-//                    // We have found the stack with the drone, try consuming and return true
-//                    if (currentTier.consumptionChance == 0) return true;
-//                    float randomValue = GTValues.RNG.nextFloat();
-//                    if (randomValue < currentTier.consumptionChance) {
-//                        var stackTaken = itemHandler.extractItemInternal(i, 1, false);
-//                        if (!stackTaken.getItem().equals(currentTier.item) || stackTaken.getCount() != 1) {
-//                            CosmicCore.LOGGER.error("Something went wrong when extracting done for Drone Multi: " +
-//                                    stackTaken.getDisplayName());
-//                            return false;
-//                        }
-//                    }
-//                    return true;
-//                }
-//            }
-//
-//        }
-//        return false;
+        return RecipeHelper.handleRecipeIO(this, droneTierRecipes.get(currentTier.ordinal()), IO.IN,
+                getRecipeLogic().getChanceCaches()).isSuccess();
+        // var itemHandlers = getCapabilitiesFlat(IO.IN, ItemRecipeCapability.CAP);
+        // for (var handler : itemHandlers) {
+        // if (!(handler instanceof NotifiableItemStackHandler itemHandler)) continue;
+        // for (int i = 0; i < itemHandler.getSlots(); i++) {
+        // ItemStack stack = itemHandler.getStackInSlot(i);
+        // if (stack.getItem().equals(currentTier.item)) {
+        // // We have found the stack with the drone, try consuming and return true
+        // if (currentTier.consumptionChance == 0) return true;
+        // float randomValue = GTValues.RNG.nextFloat();
+        // if (randomValue < currentTier.consumptionChance) {
+        // var stackTaken = itemHandler.extractItemInternal(i, 1, false);
+        // if (!stackTaken.getItem().equals(currentTier.item) || stackTaken.getCount() != 1) {
+        // CosmicCore.LOGGER.error("Something went wrong when extracting done for Drone Multi: " +
+        // stackTaken.getDisplayName());
+        // return false;
+        // }
+        // }
+        // return true;
+        // }
+        // }
+        //
+        // }
+        // return false;
     }
 
     @Override
