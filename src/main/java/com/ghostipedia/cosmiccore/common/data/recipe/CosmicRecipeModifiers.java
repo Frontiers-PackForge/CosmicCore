@@ -99,7 +99,7 @@ public class CosmicRecipeModifiers {
                         .modifyAllContents(ContentModifier.multiplier(actualParallel))
                         .eutMultiplier(actualParallel * 0.75F)
                         .parallels(actualParallel)
-                        .durationMultiplier(actualParallel / 8F)
+                        .durationMultiplier(actualParallel / 4F)
                         .build();
             }
         }
