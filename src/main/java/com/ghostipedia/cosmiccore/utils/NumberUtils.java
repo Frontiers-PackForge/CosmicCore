@@ -28,4 +28,23 @@ public class NumberUtils {
             return DF.format((double) number / 1_000_000_000_000_000.0) + "P";
         }
     }
+
+    public static String formatThousandsSeparators(double number) {
+        int num_int = (int) number;
+        double decimal = number - (int) number;
+        StringBuilder res = new StringBuilder();
+        if (0d != decimal) {
+            if (0d != (int) ((100 * decimal) % 10)) {
+                res.insert(0, String.format("%.2f", decimal)).deleteCharAt(0);
+            } else {
+                res.insert(0, String.format("%.1f", decimal)).deleteCharAt(0);
+            }
+        }
+        while (num_int > 999) {
+            res.insert(0, "," + String.format("%03d", num_int % 1000));
+            num_int /= 1000;
+        }
+        res.insert(0, num_int);
+        return res.toString();
+    }
 }
