@@ -1,6 +1,5 @@
 package com.ghostipedia.cosmiccore.api.machine.multiblock;
 
-import com.ghostipedia.cosmiccore.CosmicCore;
 import com.ghostipedia.cosmiccore.api.machine.part.DroneMaintenanceInterfacePartMachine;
 import com.ghostipedia.cosmiccore.api.misc.DroneStationConnection;
 import com.ghostipedia.cosmiccore.common.data.CosmicItems;
@@ -8,16 +7,17 @@ import com.ghostipedia.cosmiccore.common.data.CosmicItems;
 import com.gregtechceu.gtceu.api.GTValues;
 import com.gregtechceu.gtceu.api.capability.IControllable;
 import com.gregtechceu.gtceu.api.capability.recipe.IO;
-import com.gregtechceu.gtceu.api.capability.recipe.ItemRecipeCapability;
 import com.gregtechceu.gtceu.api.gui.GuiTextures;
 import com.gregtechceu.gtceu.api.gui.fancy.FancyMachineUIWidget;
 import com.gregtechceu.gtceu.api.machine.IMachineBlockEntity;
 import com.gregtechceu.gtceu.api.machine.TickableSubscription;
 import com.gregtechceu.gtceu.api.machine.feature.multiblock.IMultiController;
 import com.gregtechceu.gtceu.api.machine.multiblock.WorkableElectricMultiblockMachine;
-import com.gregtechceu.gtceu.api.machine.trait.NotifiableItemStackHandler;
 import com.gregtechceu.gtceu.api.machine.trait.RecipeLogic;
 
+import com.gregtechceu.gtceu.api.recipe.GTRecipe;
+import com.gregtechceu.gtceu.api.recipe.RecipeHelper;
+import com.gregtechceu.gtceu.data.recipe.builder.GTRecipeBuilder;
 import com.lowdragmc.lowdraglib.gui.modular.ModularUI;
 import com.lowdragmc.lowdraglib.gui.texture.GuiTextureGroup;
 import com.lowdragmc.lowdraglib.gui.texture.TextTexture;
@@ -31,7 +31,6 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.BlockHitResult;
 
@@ -40,6 +39,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 public class DroneStationMachine extends WorkableElectricMultiblockMachine {
 
@@ -58,24 +58,36 @@ public class DroneStationMachine extends WorkableElectricMultiblockMachine {
         // for the case of having multiple drones in a hatch
 
         // spotless:off
-        PLASMATIC(  4096,   GTValues.V[GTValues.UV],    0f,     CosmicItems.PLASMATIC_DRONE.asItem()),
-        SANGUINE(   2048,   GTValues.V[GTValues.ZPM],   0.25f,  CosmicItems.SANGUINE_DRONE.asItem()),
-        INDUSTRIAL( 1024,    GTValues.V[GTValues.LuV],   0.5f,   CosmicItems.INDUSTRIAL_DRONE.asItem()),
-        ROBUST(     512,    GTValues.V[GTValues.IV],    0.75f,  CosmicItems.ROBUST_DRONE.asItem()),
-        RUSTY(      256,     GTValues.V[GTValues.EV],    1,      CosmicItems.RUSTY_DRONE.asItem()),
+        PLASMATIC(  4096,   GTValues.V[GTValues.UV],    0f,     CosmicItems.PLASMATIC_DRONE.asStack(1)),
+        SANGUINE(   2048,   GTValues.V[GTValues.ZPM],   0.25f,  CosmicItems.SANGUINE_DRONE.asStack(1)),
+        INDUSTRIAL( 1024,   GTValues.V[GTValues.LuV],   0.5f,   CosmicItems.INDUSTRIAL_DRONE.asStack(1)),
+        ROBUST(     512,    GTValues.V[GTValues.IV],    0.75f,  CosmicItems.ROBUST_DRONE.asStack(1)),
+        RUSTY(      256,    GTValues.V[GTValues.EV],    1,      CosmicItems.RUSTY_DRONE.asStack(1)),
         // spotless:on
         ;
 
-        public long range;
-        public long EUt;
-        public float consumptionChance;
-        public Item item;
+        public final long range;
+        public final long EUt;
+        public final float consumptionChance;
+        public final ItemStack item;
 
-        DroneTier(long range, long EUt, float consumptionChance, Item item) {
+        DroneTier(long range, long EUt, float consumptionChance, ItemStack item) {
             this.range = range;
             this.EUt = EUt;
             this.consumptionChance = consumptionChance;
             this.item = item;
+        }
+    }
+    static List<GTRecipe> droneTierRecipes = new ArrayList<>();
+    static final String TIER_KEY = "drone_tier";
+    static {
+        for (DroneTier tier: DroneTier.values()){
+
+            droneTierRecipes.add(GTRecipeBuilder.ofRaw()
+                .notConsumable(tier.item) // we need this so it doesn't match empty stuff
+                .chancedInput(tier.item, (int) (tier.consumptionChance * 10000), 0)
+                .addData(TIER_KEY, tier.ordinal())
+                .buildRawRecipe());
         }
     }
 
@@ -119,21 +131,26 @@ public class DroneStationMachine extends WorkableElectricMultiblockMachine {
     // Update the multi's currentTier
     private void updateDroneTier() {
         // Find current highest drone in bus
-        var itemHandlers = getCapabilitiesFlat(IO.IN, ItemRecipeCapability.CAP);
-        boolean found = false;
-        for (DroneTier tier : DroneTier.values()) {
-            for (var handler : itemHandlers) {
-                if (!(handler instanceof NotifiableItemStackHandler itemHandler)) continue;
-                for (var content : itemHandler.getContents()) {
-                    if (tier.item.equals(((ItemStack) content).getItem())) {
-                        this.currentTier = tier;
-                        found = true;
-                        break;
-                    }
-                }
-            }
-            if (found) break;
-        }
+        Optional<GTRecipe> maybeDroneRecipe = droneTierRecipes.stream().filter(
+                dr -> RecipeHelper.matchRecipe(this, dr).isSuccess()).findFirst();
+        if (maybeDroneRecipe.isEmpty()) return;
+        GTRecipe droneRecipe = maybeDroneRecipe.get();
+        currentTier = DroneTier.values()[droneRecipe.data.getInt(TIER_KEY)];
+//        var itemHandlers = getCapabilitiesFlat(IO.IN, ItemRecipeCapability.CAP);
+//        boolean found = false;
+//        for (DroneTier tier : DroneTier.values()) {
+//            for (var handler : itemHandlers) {
+//                if (!(handler instanceof NotifiableItemStackHandler itemHandler)) continue;
+//                for (var content : itemHandler.getContents()) {
+//                    if (tier.item.equals(((ItemStack) content).getItem())) {
+//                        this.currentTier = tier;
+//                        found = true;
+//                        break;
+//                    }
+//                }
+//            }
+//            if (found) break;
+//        }
     }
 
     public long getBlockLimit() {
@@ -163,30 +180,30 @@ public class DroneStationMachine extends WorkableElectricMultiblockMachine {
     public boolean fixMaintenanceIssue() {
         // Note that this tries to consume a drone of the currentTier, which is only updated once per second.
         if (currentTier == null) return false;
-
-        var itemHandlers = getCapabilitiesFlat(IO.IN, ItemRecipeCapability.CAP);
-        for (var handler : itemHandlers) {
-            if (!(handler instanceof NotifiableItemStackHandler itemHandler)) continue;
-            for (int i = 0; i < itemHandler.getSlots(); i++) {
-                ItemStack stack = itemHandler.getStackInSlot(i);
-                if (stack.getItem().equals(currentTier.item)) {
-                    // We have found the stack with the drone, try consuming and return true
-                    if (currentTier.consumptionChance == 0) return true;
-                    float randomValue = GTValues.RNG.nextFloat();
-                    if (randomValue < currentTier.consumptionChance) {
-                        var stackTaken = itemHandler.extractItemInternal(i, 1, false);
-                        if (!stackTaken.getItem().equals(currentTier.item) || stackTaken.getCount() != 1) {
-                            CosmicCore.LOGGER.error("Something went wrong when extracting done for Drone Multi: " +
-                                    stackTaken.getDisplayName());
-                            return false;
-                        }
-                    }
-                    return true;
-                }
-            }
-
-        }
-        return false;
+        return RecipeHelper.handleRecipeIO(this, droneTierRecipes.get(currentTier.ordinal()), IO.IN, getRecipeLogic().getChanceCaches()).isSuccess();
+//        var itemHandlers = getCapabilitiesFlat(IO.IN, ItemRecipeCapability.CAP);
+//        for (var handler : itemHandlers) {
+//            if (!(handler instanceof NotifiableItemStackHandler itemHandler)) continue;
+//            for (int i = 0; i < itemHandler.getSlots(); i++) {
+//                ItemStack stack = itemHandler.getStackInSlot(i);
+//                if (stack.getItem().equals(currentTier.item)) {
+//                    // We have found the stack with the drone, try consuming and return true
+//                    if (currentTier.consumptionChance == 0) return true;
+//                    float randomValue = GTValues.RNG.nextFloat();
+//                    if (randomValue < currentTier.consumptionChance) {
+//                        var stackTaken = itemHandler.extractItemInternal(i, 1, false);
+//                        if (!stackTaken.getItem().equals(currentTier.item) || stackTaken.getCount() != 1) {
+//                            CosmicCore.LOGGER.error("Something went wrong when extracting done for Drone Multi: " +
+//                                    stackTaken.getDisplayName());
+//                            return false;
+//                        }
+//                    }
+//                    return true;
+//                }
+//            }
+//
+//        }
+//        return false;
     }
 
     @Override
