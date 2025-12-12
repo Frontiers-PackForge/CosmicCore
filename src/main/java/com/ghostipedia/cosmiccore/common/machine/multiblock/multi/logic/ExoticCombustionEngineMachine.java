@@ -26,15 +26,17 @@ import com.gregtechceu.gtceu.utils.FormattingUtil;
 import com.gregtechceu.gtceu.utils.GTMath;
 import com.gregtechceu.gtceu.utils.GTUtil;
 
+import com.lowdragmc.lowdraglib.syncdata.annotation.DescSynced;
 import com.lowdragmc.lowdraglib.syncdata.field.ManagedFieldHolder;
 
 import net.minecraft.ChatFormatting;
 import net.minecraft.MethodsReturnNonnullByDefault;
-import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.Style;
 import net.minecraftforge.fluids.FluidStack;
 
+import it.unimi.dsi.fastutil.objects.Object2IntMap;
+import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
 import lombok.Getter;
 import org.jetbrains.annotations.Nullable;
 
@@ -60,7 +62,7 @@ public class ExoticCombustionEngineMachine extends WorkableElectricMultiblockMac
     @Getter
     @DescSynced
     private static final Object2IntMap<FluidStack> boostingTiers = new Object2IntOpenHashMap<>();
-    private int runningTimer = 0;
+
     static {
         // Boosting Tiers
         boostRecipes = new ArrayList<>();
@@ -80,26 +82,26 @@ public class ExoticCombustionEngineMachine extends WorkableElectricMultiblockMac
     static final String LUBRICATION_KEY = "lubrication";
     static final String BOOST_KEY = "boost";
     static final String DURATION_KEY = "duration";
-    static void addLube(FluidStack lube, int lubrication, int duration){
+
+    static void addLube(FluidStack lube, int lubrication, int duration) {
         lubricantRecipes.add(GTRecipeBuilder.ofRaw()
-            .inputFluids(lube)
-            .addData(LUBRICATION_KEY, lubrication)
-            .addData(DURATION_KEY, duration)
-            .buildRawRecipe());
-    }
-    static void addBooster(FluidStack booster, int boost, int duration){
-        boostRecipes.add(GTRecipeBuilder.ofRaw()
-            .inputFluids(booster)
-            .addData(BOOST_KEY, boost)
-            .addData(DURATION_KEY, duration)
-            .buildRawRecipe());
+                .inputFluids(lube)
+                .addData(LUBRICATION_KEY, lubrication)
+                .addData(DURATION_KEY, duration)
+                .buildRawRecipe());
     }
 
+    static void addBooster(FluidStack booster, int boost, int duration) {
+        boostRecipes.add(GTRecipeBuilder.ofRaw()
+                .inputFluids(booster)
+                .addData(BOOST_KEY, boost)
+                .addData(DURATION_KEY, duration)
+                .buildRawRecipe());
+    }
 
     private int runningTimer = 0;
     private int boostAmount = 0, boostDuration = 0;
     private int lubeDuration = 0;
-
 
     public ExoticCombustionEngineMachine(IMachineBlockEntity holder, int tier) {
         super(holder);
@@ -184,29 +186,31 @@ public class ExoticCombustionEngineMachine extends WorkableElectricMultiblockMac
             }
         }
 
-        if (lubeDuration <= 0){
-            for (GTRecipe lubeRecipe : lubricantRecipes){
+        if (lubeDuration <= 0) {
+            for (GTRecipe lubeRecipe : lubricantRecipes) {
                 if (RecipeHelper.matchRecipe(this, lubeRecipe).isSuccess() &&
-                RecipeHelper.handleRecipeIO(this, lubeRecipe, IO.IN, getRecipeLogic().getChanceCaches()).isSuccess()){
+                        RecipeHelper.handleRecipeIO(this, lubeRecipe, IO.IN, getRecipeLogic().getChanceCaches())
+                                .isSuccess()) {
                     lubeDuration = lubeRecipe.data.getInt(DURATION_KEY);
                     currentLubricant = RecipeHelper.getInputFluids(lubeRecipe).get(0).getTranslationKey();
                     break;
                 }
             }
             // no lubricant matched
-            if (lubeDuration == 0){
+            if (lubeDuration == 0) {
                 recipeLogic.interruptRecipe();
                 return false;
             }
         }
         lubeDuration--;
 
-        if (boostDuration <= 0){
-            boostDuration  = 1;
+        if (boostDuration <= 0) {
+            boostDuration = 1;
             boostAmount = 0;
-            for (GTRecipe boostRecipe : boostRecipes){
+            for (GTRecipe boostRecipe : boostRecipes) {
                 if (RecipeHelper.matchRecipe(this, boostRecipe).isSuccess() &&
-                RecipeHelper.handleRecipeIO(this, boostRecipe, IO.IN, getRecipeLogic().getChanceCaches()).isSuccess()){
+                        RecipeHelper.handleRecipeIO(this, boostRecipe, IO.IN, getRecipeLogic().getChanceCaches())
+                                .isSuccess()) {
                     boostAmount = boostRecipe.data.getInt(BOOST_KEY);
                     boostDuration = boostRecipe.data.getInt(DURATION_KEY);
                     currentBooster = RecipeHelper.getInputFluids(boostRecipe).get(0).getTranslationKey();
@@ -270,7 +274,7 @@ public class ExoticCombustionEngineMachine extends WorkableElectricMultiblockMac
         GTRecipe recipe = recipeLogic.getLastRecipe();
         if (recipe == null) {
             Iterator<GTRecipe> iterator = recipeLogic.searchRecipe();
-            //noinspection ConstantValue
+            // noinspection ConstantValue
             recipe = iterator != null && iterator.hasNext() ? iterator.next() : null;
             if (recipe == null) return null;
         }
