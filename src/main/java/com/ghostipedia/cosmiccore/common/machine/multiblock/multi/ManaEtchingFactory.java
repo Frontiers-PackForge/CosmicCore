@@ -30,7 +30,7 @@ public class ManaEtchingFactory {
             .appearanceBlock(LIVING_ROCK_TILES)
             .partAppearance((controller, part, side) -> LIVING_ROCK_TILES.getDefaultState())
             .recipeModifiers(GTRecipeModifiers.PARALLEL_HATCH,
-                    ELECTRIC_OVERCLOCK.apply(OverclockingLogic.NON_PERFECT_OVERCLOCK))
+                    ELECTRIC_OVERCLOCK.apply(OverclockingLogic.NON_PERFECT_OVERCLOCK), GTRecipeModifiers.BATCH_MODE)
             .pattern(definition -> FactoryBlockPattern.start()
                     .aisle(" AAAAA ", " CCCCC ", " CCCCC ", " DDDDD ")
                     .aisle("AADDDAA", "D     D", "D     D", "DDDDDDD")
