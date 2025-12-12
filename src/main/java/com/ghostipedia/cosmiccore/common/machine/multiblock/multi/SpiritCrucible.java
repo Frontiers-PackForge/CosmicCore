@@ -18,6 +18,7 @@ import static com.ghostipedia.cosmiccore.gtbridge.CosmicRecipeTypes.SOUL_FOUNDRY
 import static com.gregtechceu.gtceu.api.pattern.Predicates.*;
 import static com.gregtechceu.gtceu.common.data.GCYMBlocks.CASING_ATOMIC;
 import static com.gregtechceu.gtceu.common.data.GTMaterials.TungstenCarbide;
+import static com.gregtechceu.gtceu.common.data.GTRecipeModifiers.BATCH_MODE;
 import static com.gregtechceu.gtceu.common.data.GTRecipeModifiers.ELECTRIC_OVERCLOCK;
 import static com.gregtechceu.gtceu.common.data.models.GTMachineModels.createWorkableCasingMachineModel;
 
@@ -27,7 +28,7 @@ public class SpiritCrucible {
             .multiblock("spirit_crucible", WorkableElectricMultiblockMachine::new)
             .rotationState(RotationState.NON_Y_AXIS)
             .recipeTypes(CosmicRecipeTypes.SPIRIT_CRUCIBLE, SOUL_FOUNDRY)
-            .recipeModifier(ELECTRIC_OVERCLOCK.apply(OverclockingLogic.NON_PERFECT_OVERCLOCK))
+            .recipeModifiers(ELECTRIC_OVERCLOCK.apply(OverclockingLogic.NON_PERFECT_OVERCLOCK), BATCH_MODE)
             .appearanceBlock(CASING_ATOMIC)
             .partAppearance((controller, part, side) -> CASING_ATOMIC.getDefaultState())
             // spotless:off

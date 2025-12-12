@@ -261,9 +261,13 @@
   "block.cosmiccore.resonantly_tuned_virtue_meld_casing": "Resonantly Tuned Virtue Meld Casing",
   "block.cosmiccore.rigid_high_speed_steel_casing": "Rigid High Speed Steel Casing",
   "block.cosmiccore.royal_ichorium_casing": "Royal Ichorium Casing",
+  "block.cosmiccore.rust_stained_casing": "Rust Stained Casing",
+  "block.cosmiccore.rust_weave_casing": "Rust Weave Casing",
   "block.cosmiccore.self_healing_pthanterum_casing": "Self Healing Pthanterum Casing",
   "block.cosmiccore.sensor_hatch": "Sensor Hatch",
   "block.cosmiccore.shimmering_neutronium_coil_block": "Shimmering Neutronium Coil Block",
+  "block.cosmiccore.somarust_casing": "Somarust Casing",
+  "block.cosmiccore.soul_muted_casing": "Soul Muted Casing",
   "block.cosmiccore.soul_stained_steel_aluminium_plated_casing": "Soul Stained Steel Aluminium Plated Casing",
   "block.cosmiccore.spirit_crucible": "Spirit Crucible",
   "block.cosmiccore.star_ladder": "Star Ladder",
@@ -1131,5 +1135,14 @@
   "tooltip.cosmiccore.thermia_hatch_limit": "§cTemp. Limit: %sK",
   "tooltip.gt_scythe.energy": "Energy: %s / %s EU",
   "tooltip.gt_scythe.no_energy": "§cNot enough energy.",
-  "tooltip.gt_scythe.per_hit": "Cost: %s EU / hit"
+  "tooltip.gt_scythe.per_hit": "Cost: %s EU / hit",
+  "cosmiccore.multiblock.drone_station_machine.tier.0": "Plasmatic",
+  "cosmiccore.multiblock.drone_station_machine.tier.1": "Sanguine",
+  "cosmiccore.multiblock.drone_station_machine.tier.2": "Industrial",
+  "cosmiccore.multiblock.drone_station_machine.tier.3": "Robust",
+  "cosmiccore.multiblock.drone_station_machine.tier.4": "Rusty",
+  "cosmiccore.multiblock.drone_station_machine.tier.5": "None"
+  "cosmiccore.calorific.tooltip.prefix": "§6Calorific:§r %s",
+  "cosmiccore.lubricant.tooltip.prefix": "§eLubricant:§r Tier %s",
+  "cosmiccore.booster.tooltip.prefix": "§bBooster:§r Tier %s"
 }

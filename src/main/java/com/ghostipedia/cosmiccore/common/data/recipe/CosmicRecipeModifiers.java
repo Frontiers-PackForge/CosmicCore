@@ -99,7 +99,7 @@ public class CosmicRecipeModifiers {
                         .modifyAllContents(ContentModifier.multiplier(actualParallel))
                         .eutMultiplier(actualParallel * 0.75F)
                         .parallels(actualParallel)
-                        .durationMultiplier(actualParallel / 8F)
+                        .durationMultiplier(actualParallel / 4F)
                         .build();
             }
         }
@@ -123,6 +123,7 @@ public class CosmicRecipeModifiers {
         int multiplier = ParallelLogic.limitByOutputMerging(rlm, recipe, count, rlm::canVoidRecipeOutputs,
                 Collections.emptyList());
         if (multiplier == 1) return ModifierFunction.IDENTITY;
+        if (multiplier == 0) return ModifierFunction.NULL;
         return ModifierFunction.builder()
                 .outputModifier(ContentModifier.multiplier(multiplier))
                 .build();
