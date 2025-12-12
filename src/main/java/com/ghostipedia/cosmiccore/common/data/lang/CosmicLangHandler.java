@@ -499,6 +499,16 @@ public class CosmicLangHandler extends LangHandler {
 
         multiLang(provider, "cosmiccore.machine.me.stocking_item.tooltip",
                 "§fAutomatically pulls products into a singular item slot§r",
+                "§bAllows Advanced Automation of the Assembly line§r",
+                "§fCan be set to automatically pull the first item from AE2§r",
+                "§bor manually filtered.§r",
+                "§fFilter data can be copy/pasted with a data stick§r",
+                "§b'If you're wondering how to parallel assembly lines§r",
+                "§fthis is how. Welcome to subnets!§r");
+
+        provider.add("cosmiccore.calorific.tooltip.prefix", "§5Calorific:§r %s");
+        provider.add("cosmiccore.lubricant.tooltip.prefix", "§6Lubricant:§r Tier %s");
+        provider.add("cosmiccore.booster.tooltip.prefix", "§bBooster:§r Tier %s");
                         "§bAllows Advanced Automation of the Assembly line§r",
                         "§fCan be set to automatically pull the first item from AE2§r",
                         "§bor manually filtered.§r",
