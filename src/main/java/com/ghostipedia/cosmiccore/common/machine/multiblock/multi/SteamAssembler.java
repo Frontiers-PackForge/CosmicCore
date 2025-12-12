@@ -1,5 +1,6 @@
 package com.ghostipedia.cosmiccore.common.machine.multiblock.multi;
 
+import com.ghostipedia.cosmiccore.CosmicCore;
 import com.ghostipedia.cosmiccore.common.machine.multiblock.steam.WeakSteamParallelMultiBlockMachine;
 
 import com.gregtechceu.gtceu.GTCEu;
@@ -44,7 +45,7 @@ public class SteamAssembler {
                             .or(Predicates.abilities(PartAbility.STEAM).setExactLimit(1)))
                     .where('D', blocks(CASING_STEEL_GEARBOX.get()))
                     .build())
-            .model(createWorkableCasingMachineModel(GTCEu.id("block/casings/solid/machine_casing_bronze_plated_bricks"),
+            .model(createWorkableCasingMachineModel(CosmicCore.id("block/casings/solid/steel_plated_bronze_casing"),
                     GTCEu.id("block/multiblock/steam_oven"))
                     .andThen(b -> b.addDynamicRenderer(
                             () -> DynamicRenderHelper.makeBoilerPartRender(

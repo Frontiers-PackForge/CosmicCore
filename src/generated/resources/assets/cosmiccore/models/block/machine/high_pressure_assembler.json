@@ -23,14 +23,14 @@
   "loader": "gtceu:machine",
   "machine": "cosmiccore:high_pressure_assembler",
   "texture_overrides": {
-    "all": "gtceu:block/casings/solid/machine_casing_bronze_plated_bricks"
+    "all": "cosmiccore:block/casings/solid/steel_plated_bronze_casing"
   },
   "variants": {
     "is_formed=false,recipe_logic_status=idle": {
       "model": {
         "parent": "gtceu:block/machine/template/cube_all/sided",
         "textures": {
-          "all": "gtceu:block/casings/solid/machine_casing_bronze_plated_bricks",
+          "all": "cosmiccore:block/casings/solid/steel_plated_bronze_casing",
           "overlay_front": "gtceu:block/multiblock/steam_oven/overlay_front",
           "overlay_front_emissive": "gtceu:block/multiblock/steam_oven/overlay_front_emissive"
         }
@@ -40,7 +40,7 @@
       "model": {
         "parent": "gtceu:block/machine/template/cube_all/sided",
         "textures": {
-          "all": "gtceu:block/casings/solid/machine_casing_bronze_plated_bricks",
+          "all": "cosmiccore:block/casings/solid/steel_plated_bronze_casing",
           "overlay_front": "gtceu:block/multiblock/steam_oven/overlay_front",
           "overlay_front_emissive": "gtceu:block/multiblock/steam_oven/overlay_front_emissive"
         }
@@ -50,7 +50,7 @@
       "model": {
         "parent": "gtceu:block/machine/template/cube_all/sided",
         "textures": {
-          "all": "gtceu:block/casings/solid/machine_casing_bronze_plated_bricks",
+          "all": "cosmiccore:block/casings/solid/steel_plated_bronze_casing",
           "overlay_front": "gtceu:block/multiblock/steam_oven/overlay_front_active",
           "overlay_front_emissive": "gtceu:block/multiblock/steam_oven/overlay_front_active_emissive"
         }
@@ -60,7 +60,7 @@
       "model": {
         "parent": "gtceu:block/machine/template/cube_all/sided",
         "textures": {
-          "all": "gtceu:block/casings/solid/machine_casing_bronze_plated_bricks",
+          "all": "cosmiccore:block/casings/solid/steel_plated_bronze_casing",
           "overlay_front": "gtceu:block/multiblock/steam_oven/overlay_front_active",
           "overlay_front_emissive": "gtceu:block/multiblock/steam_oven/overlay_front_active_emissive"
         }
@@ -70,7 +70,7 @@
       "model": {
         "parent": "gtceu:block/machine/template/cube_all/sided",
         "textures": {
-          "all": "gtceu:block/casings/solid/machine_casing_bronze_plated_bricks",
+          "all": "cosmiccore:block/casings/solid/steel_plated_bronze_casing",
           "overlay_front": "gtceu:block/multiblock/steam_oven/overlay_front",
           "overlay_front_emissive": "gtceu:block/multiblock/steam_oven/overlay_front_emissive"
         }
@@ -80,7 +80,7 @@
       "model": {
         "parent": "gtceu:block/machine/template/cube_all/sided",
         "textures": {
-          "all": "gtceu:block/casings/solid/machine_casing_bronze_plated_bricks",
+          "all": "cosmiccore:block/casings/solid/steel_plated_bronze_casing",
           "overlay_front": "gtceu:block/multiblock/steam_oven/overlay_front",
           "overlay_front_emissive": "gtceu:block/multiblock/steam_oven/overlay_front_emissive"
         }
@@ -90,7 +90,7 @@
       "model": {
         "parent": "gtceu:block/machine/template/cube_all/sided",
         "textures": {
-          "all": "gtceu:block/casings/solid/machine_casing_bronze_plated_bricks",
+          "all": "cosmiccore:block/casings/solid/steel_plated_bronze_casing",
           "overlay_front": "gtceu:block/multiblock/steam_oven/overlay_front_active",
           "overlay_front_emissive": "gtceu:block/multiblock/steam_oven/overlay_front_active_emissive"
         }
@@ -100,7 +100,7 @@
       "model": {
         "parent": "gtceu:block/machine/template/cube_all/sided",
         "textures": {
-          "all": "gtceu:block/casings/solid/machine_casing_bronze_plated_bricks",
+          "all": "cosmiccore:block/casings/solid/steel_plated_bronze_casing",
           "overlay_front": "gtceu:block/multiblock/steam_oven/overlay_front_active",
           "overlay_front_emissive": "gtceu:block/multiblock/steam_oven/overlay_front_active_emissive"
         }
