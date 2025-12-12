@@ -87,13 +87,17 @@ public class ExoticCombustionEngineMachine extends WorkableElectricMultiblockMac
 
     private boolean isIntakesObstructed() {
         var dir = this.getFrontFacing();
-        boolean mutableXZ = dir.getAxis() == Direction.Axis.Z;
+        var axis = dir.getAxis();
         var centerPos = this.getPos().relative(dir);
         for (int x = -1; x < 2; x++) {
             for (int y = -1; y < 2; y++) {
                 if (x == 0 && y == 0)
                     continue;
-                var blockPos = centerPos.offset(mutableXZ ? x : 0, y, mutableXZ ? 0 : x);
+                var blockPos = switch (axis) {
+                    case X -> centerPos.offset(0, x, y);
+                    case Y -> centerPos.offset(x, 0, y);
+                    case Z -> centerPos.offset(x, y, 0);
+                };
                 var blockState = this.getLevel().getBlockState(blockPos);
                 if (!blockState.isAir())
                     return true;
