@@ -17,6 +17,7 @@ import static com.ghostipedia.cosmiccore.api.registries.CosmicRegistration.REGIS
 import static com.ghostipedia.cosmiccore.common.data.CosmicBlocks.SOUL_STAINED_STEEL_ALU_CASING;
 import static com.gregtechceu.gtceu.api.machine.multiblock.PartAbility.EXPORT_FLUIDS;
 import static com.gregtechceu.gtceu.api.pattern.Predicates.*;
+import static com.gregtechceu.gtceu.common.data.GTRecipeModifiers.BATCH_MODE;
 import static com.gregtechceu.gtceu.common.data.GTRecipeModifiers.ELECTRIC_OVERCLOCK;
 
 public class ArcaneCrucible {
@@ -27,7 +28,7 @@ public class ArcaneCrucible {
             .recipeType(CosmicRecipeTypes.ARCANE_CRUCIBLE)
             .appearanceBlock(SOUL_STAINED_STEEL_ALU_CASING)
             .partAppearance((controller, part, side) -> SOUL_STAINED_STEEL_ALU_CASING.getDefaultState())
-            .recipeModifier(ELECTRIC_OVERCLOCK.apply(OverclockingLogic.NON_PERFECT_OVERCLOCK))
+            .recipeModifiers(ELECTRIC_OVERCLOCK.apply(OverclockingLogic.NON_PERFECT_OVERCLOCK), BATCH_MODE)
             .pattern(definition -> FactoryBlockPattern.start()
                     .aisle(" AAA ", " ABA ", " BBB ", " BBB ", " ABA ", " AAA ")
                     .aisle("AAAAA", "A   A", "B   B", "B   B", "A   A", "AAAAA")
