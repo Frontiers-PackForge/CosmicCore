@@ -5,6 +5,7 @@ import com.ghostipedia.cosmiccore.common.data.CosmicBlocks;
 import com.ghostipedia.cosmiccore.common.machine.multiblock.steam.WeakSteamParallelMultiBlockMachine;
 import com.ghostipedia.cosmiccore.gtbridge.CosmicRecipeTypes;
 
+import com.gregtechceu.gtceu.api.GTValues;
 import com.gregtechceu.gtceu.api.data.RotationState;
 import com.gregtechceu.gtceu.api.machine.MultiblockMachineDefinition;
 import com.gregtechceu.gtceu.api.machine.multiblock.PartAbility;
@@ -16,7 +17,6 @@ import static com.ghostipedia.cosmiccore.api.registries.CosmicRegistration.REGIS
 import static com.ghostipedia.cosmiccore.common.data.CosmicBlocks.LIGHT_DAWNSTONE_CASING;
 import static com.gregtechceu.gtceu.api.machine.multiblock.PartAbility.EXPORT_FLUIDS;
 import static com.gregtechceu.gtceu.api.pattern.Predicates.*;
-import static com.gregtechceu.gtceu.api.pattern.util.RelativeDirection.*;
 import static com.rekindled.embers.RegistryManager.DAWNSTONE_ANVIL;
 
 public class DawnForge {
@@ -27,7 +27,7 @@ public class DawnForge {
             .recipeType(CosmicRecipeTypes.DAWN_FORGE)
             .appearanceBlock(LIGHT_DAWNSTONE_CASING)
             .partAppearance((controller, part, side) -> LIGHT_DAWNSTONE_CASING.getDefaultState())
-            .recipeModifier(WeakSteamParallelMultiBlockMachine::recipeModifier)
+            .recipeModifier(WeakSteamParallelMultiBlockMachine.recipeModifierCanRunAtMost(GTValues.MV))
             .pattern(definition -> FactoryBlockPattern.start()
                     .aisle("ABBBA", "A   A", "AA AA", " BBB ", "     ")
                     .aisle("BAAAB", "     ", "A   A", "BABAB", "  B  ")
