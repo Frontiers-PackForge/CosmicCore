@@ -72,7 +72,6 @@ import static com.ghostipedia.cosmiccore.common.data.recipe.CosmicRecipeModifier
 import static com.ghostipedia.cosmiccore.common.machine.multiblock.electric.hpca.HPCAMachine.*;
 import static com.ghostipedia.cosmiccore.gtbridge.CosmicRecipeTypes.BIO_LAB;
 import static com.gregtechceu.gtceu.api.GTValues.*;
-import static com.gregtechceu.gtceu.api.capability.recipe.IO.IN;
 import static com.gregtechceu.gtceu.api.capability.recipe.IO.OUT;
 import static com.gregtechceu.gtceu.api.machine.property.GTMachineModelProperties.*;
 import static com.gregtechceu.gtceu.api.pattern.Predicates.*;
@@ -85,7 +84,6 @@ import static com.gregtechceu.gtceu.common.data.GTRecipeModifiers.*;
 import static com.gregtechceu.gtceu.common.data.GTRecipeTypes.CENTRIFUGE_RECIPES;
 import static com.gregtechceu.gtceu.common.data.GTRecipeTypes.DUMMY_RECIPES;
 import static com.gregtechceu.gtceu.common.data.machines.GTMachineUtils.*;
-import static com.gregtechceu.gtceu.common.data.machines.GTMachineUtils.registerTieredMachines;
 import static com.gregtechceu.gtceu.common.data.machines.GTMultiMachines.FUSION_REACTOR;
 import static com.gregtechceu.gtceu.common.data.models.GTMachineModels.*;
 
@@ -397,8 +395,10 @@ public class CosmicMachines {
         .where("S", abilities(CosmicPartAbility.IMPORT_SOUL).or(abilities(CosmicPartAbility.EXPORT_SOUL)))
         .where("I", abilities(PartAbility.EXPORT_ITEMS).or(abilities(PartAbility.IMPORT_ITEMS)))
         .build())
-        .workableCasingModel(GTCEu.id("block/casings/solid/machine_casing_inert_ptfe"), GTCEu.id("block/multiblock/coke_oven"))
+        .workableCasingModel(GTCEu.id("block/casings/solid/machine_casing_inert_ptfe"),
+        GTCEu.id("block/multiblock/coke_oven"))
         .register();
+
     /*
      * public static final MultiblockMachineDefinition EMBER_TESTER = REGISTRATE.multiblock("ember_tester",
      * PrimitiveWorkableMachine::new)

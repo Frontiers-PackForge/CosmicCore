@@ -28,16 +28,11 @@ public class SoulNetworkReaderItem extends Item {
             SoulNetwork soulNetwork = SoulNetworkSavedData.getSoulNetwork(player.getUUID());
             List<SoulStack> contents = soulNetwork.getContents();
 
-            player.sendSystemMessage(Component.literal("--- Soul Network Contents ---").withStyle(ChatFormatting.GOLD));
-
             if (contents.isEmpty()) {
                 player.sendSystemMessage(Component.literal("Network is empty.").withStyle(ChatFormatting.GRAY));
             } else {
-                for (SoulStack stack : contents) {
-                    Component message = Component.literal(String.format("%s: %,d", stack.type().getSerializedName(), stack.amount()))
-                            .withStyle(ChatFormatting.AQUA);
-                    player.sendSystemMessage(message);
-                }
+                player.sendSystemMessage(Component.literal("--- Soul Network Contents ---").withStyle(ChatFormatting.GOLD));
+                for (SoulStack stack : contents) player.sendSystemMessage(stack.type().toComponent(stack.amount()));
             }
         }
         return InteractionResultHolder.success(player.getItemInHand(hand));
