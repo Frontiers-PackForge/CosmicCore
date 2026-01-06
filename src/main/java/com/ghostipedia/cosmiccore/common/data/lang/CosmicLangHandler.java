@@ -512,8 +512,8 @@ public class CosmicLangHandler extends LangHandler {
         provider.add("cosmiccore.multiblock.drone_station_machine.tier.3", "Robust");
         provider.add("cosmiccore.multiblock.drone_station_machine.tier.4", "Rusty");
         provider.add("cosmiccore.multiblock.drone_station_machine.tier.5", "None");
-        provider.add("cosmiccore.calorific.tooltip.prefix", "§5Calorific:§r %s");
-        provider.add("cosmiccore.lubricant.tooltip.prefix", "§6Lubricant:§r Tier %s");
-        provider.add("cosmiccore.booster.tooltip.prefix", "§bBooster:§r Tier %s");
+        provider.add("cosmiccore.calorific.tooltip.prefix", "§5Calorific:§r %d");
+        provider.add("cosmiccore.lubricant.tooltip.prefix", "§6Lubricant:§r Tier %d");
+        provider.add("cosmiccore.booster.tooltip.prefix", "§bBooster:§r Tier %d");
     }
 }

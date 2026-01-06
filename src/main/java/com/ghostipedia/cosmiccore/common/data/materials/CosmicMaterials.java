@@ -2,9 +2,15 @@ package com.ghostipedia.cosmiccore.common.data.materials;
 
 import com.ghostipedia.cosmiccore.CosmicCore;
 import com.ghostipedia.cosmiccore.api.data.material.property.CCoreMaterialIconSet;
+import com.ghostipedia.cosmiccore.api.data.material.property.CosmicCorePropertyKeys;
+import com.ghostipedia.cosmiccore.api.data.material.property.FluidTooltipProperty;
 import com.ghostipedia.cosmiccore.api.item.MeldingOmniTool;
 
+import com.ghostipedia.cosmiccore.common.machine.multiblock.multi.logic.ExoticCombustionEngineMachine;
+import com.ghostipedia.cosmiccore.gtbridge.CosmicRecipeTypes;
 import com.gregtechceu.gtceu.api.GTValues;
+import com.gregtechceu.gtceu.api.capability.recipe.FluidRecipeCapability;
+import com.gregtechceu.gtceu.api.data.chemical.ChemicalHelper;
 import com.gregtechceu.gtceu.api.data.chemical.material.Material;
 import com.gregtechceu.gtceu.api.data.chemical.material.info.MaterialIconSet;
 import com.gregtechceu.gtceu.api.data.chemical.material.properties.BlastProperty;
@@ -13,6 +19,10 @@ import com.gregtechceu.gtceu.api.data.chemical.material.properties.ToolProperty;
 import com.gregtechceu.gtceu.api.fluids.FluidBuilder;
 import com.gregtechceu.gtceu.api.fluids.FluidState;
 import com.gregtechceu.gtceu.api.fluids.store.FluidStorageKeys;
+import com.gregtechceu.gtceu.api.recipe.GTRecipeType;
+import com.gregtechceu.gtceu.api.recipe.RecipeHelper;
+import com.gregtechceu.gtceu.common.data.GTRecipeTypes;
+import net.minecraftforge.fluids.FluidStack;
 
 import static com.ghostipedia.cosmiccore.common.data.materials.CosmicMaterialSet.MAGIC;
 import static com.gregtechceu.gtceu.api.data.chemical.material.info.MaterialFlags.*;
@@ -637,5 +647,43 @@ public class CosmicMaterials {
         Neutronium.setProperty(PropertyKey.BLAST, new BlastProperty(15000));
         Chlorine.getProperty(PropertyKey.FLUID).getStorage().enqueueRegistration(FluidStorageKeys.PLASMA,
                 new FluidBuilder().state(FluidState.PLASMA));
+
+        GTRecipeType[] turbineMaps = {
+                GTRecipeTypes.STEAM_TURBINE_FUELS,
+                GTRecipeTypes.GAS_TURBINE_FUELS,
+                GTRecipeTypes.COMBUSTION_GENERATOR_FUELS,
+                CosmicRecipeTypes.NAQUAHINE_REACTOR
+        };
+
+        for (var map : turbineMaps) {
+            for (var cat : map.getCategories()) {
+                for (var recipe : map.getRecipesInCategory(cat)) {
+                    var fluids = RecipeHelper.getInputFluids(recipe);
+                    if (fluids.isEmpty()) continue;
+                    FluidStack stack = fluids.get(0);
+                    Material mat = ChemicalHelper.getMaterial(stack.getFluid());
+                    if (mat.isNull()) continue;
+                    long amount = stack.getAmount();
+                    long eu = recipe.getOutputEUt().getTotalEU();
+                    int duration = recipe.duration;
+                    double v = (double)(eu * duration) / (double)amount;
+                    mat.setProperty(CosmicCorePropertyKeys.FLUID_TOOLTIPS, new FluidTooltipProperty("cosmiccore.calorific.tooltip.prefix", v));
+                }
+            }
+        }
+
+        for (var entry : ExoticCombustionEngineMachine.getLubricantTiers().object2IntEntrySet()) {
+            Material mat = ChemicalHelper.getMaterial(entry.getKey().getFluid());
+            if (mat.isNull()) continue;
+
+            mat.setProperty(CosmicCorePropertyKeys.FLUID_TOOLTIPS, new FluidTooltipProperty("cosmiccore.lubricant.tooltip.prefix", entry.getIntValue()));
+        }
+
+        for (var entry : ExoticCombustionEngineMachine.getBoostingTiers().object2IntEntrySet()) {
+            Material mat = ChemicalHelper.getMaterial(entry.getKey().getFluid());
+            if (mat.isNull()) continue;
+
+            mat.setProperty(CosmicCorePropertyKeys.FLUID_TOOLTIPS, new FluidTooltipProperty("cosmiccore.booster.tooltip.prefix", entry.getIntValue()));
+        }
     }
 }
