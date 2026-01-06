@@ -1,9 +1,12 @@
 package com.ghostipedia.cosmiccore.common.machine.multiblock.multi.logic;
 
+import com.ghostipedia.cosmiccore.api.data.material.property.CosmicCorePropertyKeys;
+import com.ghostipedia.cosmiccore.api.data.material.property.FluidTooltipProperty;
 import com.ghostipedia.cosmiccore.common.data.materials.CosmicMaterials;
 
 import com.gregtechceu.gtceu.api.GTValues;
 import com.gregtechceu.gtceu.api.capability.recipe.IO;
+import com.gregtechceu.gtceu.api.data.chemical.ChemicalHelper;
 import com.gregtechceu.gtceu.api.fluids.store.FluidStorageKeys;
 import com.gregtechceu.gtceu.api.gui.GuiTextures;
 import com.gregtechceu.gtceu.api.gui.fancy.IFancyTooltip;
@@ -77,6 +80,10 @@ public class ExoticCombustionEngineMachine extends WorkableElectricMultiblockMac
 
     }
 
+    public static void init() {
+        // load the static map
+    }
+
     static List<GTRecipe> lubricantRecipes;
     static List<GTRecipe> boostRecipes;
     static final String LUBRICATION_KEY = "lubrication";
@@ -84,6 +91,9 @@ public class ExoticCombustionEngineMachine extends WorkableElectricMultiblockMac
     static final String DURATION_KEY = "duration";
 
     static void addLube(FluidStack lube, int lubrication, int duration) {
+        var mat = ChemicalHelper.getMaterial(lube.getFluid());
+        mat.setProperty(CosmicCorePropertyKeys.FLUID_TOOLTIPS,
+                new FluidTooltipProperty("cosmiccore.lubricant.tooltip.prefix", lubrication));
         lubricantTiers.put(lube, lubrication);
         lubricantRecipes.add(GTRecipeBuilder.ofRaw()
                 .inputFluids(lube)
@@ -93,6 +103,9 @@ public class ExoticCombustionEngineMachine extends WorkableElectricMultiblockMac
     }
 
     static void addBooster(FluidStack booster, int boost, int duration) {
+        var mat = ChemicalHelper.getMaterial(booster.getFluid());
+        mat.setProperty(CosmicCorePropertyKeys.FLUID_TOOLTIPS,
+                new FluidTooltipProperty("cosmiccore.booster.tooltip.prefix", boost));
         boostingTiers.put(booster, boost);
         boostRecipes.add(GTRecipeBuilder.ofRaw()
                 .inputFluids(booster)

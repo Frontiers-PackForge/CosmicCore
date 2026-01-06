@@ -672,23 +672,5 @@ public class CosmicMaterials {
                 }
             }
         }
-
-        for (var entry : ExoticCombustionEngineMachine.getLubricantTiers().object2IntEntrySet()) {
-            if (entry.getKey() == null) continue;
-            Material mat = ChemicalHelper.getMaterial(entry.getKey().getFluid());
-            if (mat.isNull()) continue;
-
-            mat.setProperty(CosmicCorePropertyKeys.FLUID_TOOLTIPS,
-                    new FluidTooltipProperty("cosmiccore.lubricant.tooltip.prefix", entry.getIntValue()));
-        }
-
-        for (var entry : ExoticCombustionEngineMachine.getBoostingTiers().object2IntEntrySet()) {
-            if (entry.getKey() == null) continue;
-            Material mat = ChemicalHelper.getMaterial(entry.getKey().getFluid());
-            if (mat.isNull()) continue;
-
-            mat.setProperty(CosmicCorePropertyKeys.FLUID_TOOLTIPS,
-                    new FluidTooltipProperty("cosmiccore.booster.tooltip.prefix", entry.getIntValue()));
-        }
     }
 }

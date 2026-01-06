@@ -33,6 +33,7 @@ import com.lowdragmc.lowdraglib.Platform;
 
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.common.capabilities.RegisterCapabilitiesEvent;
+import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
@@ -96,7 +97,7 @@ public class CosmicCore {
         CosmicMaterials.register();
     }
 
-    @SubscribeEvent
+    @SubscribeEvent(priority = EventPriority.LOWEST)
     public void modifyExistingMaterials(PostMaterialEvent event) {
         CosmicMaterials.modifyMaterials();
     }
