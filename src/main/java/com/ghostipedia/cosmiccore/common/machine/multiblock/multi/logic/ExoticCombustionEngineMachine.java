@@ -84,6 +84,7 @@ public class ExoticCombustionEngineMachine extends WorkableElectricMultiblockMac
     static final String DURATION_KEY = "duration";
 
     static void addLube(FluidStack lube, int lubrication, int duration) {
+        lubricantTiers.put(lube, lubrication);
         lubricantRecipes.add(GTRecipeBuilder.ofRaw()
                 .inputFluids(lube)
                 .addData(LUBRICATION_KEY, lubrication)
@@ -92,6 +93,7 @@ public class ExoticCombustionEngineMachine extends WorkableElectricMultiblockMac
     }
 
     static void addBooster(FluidStack booster, int boost, int duration) {
+        boostingTiers.put(booster, boost);
         boostRecipes.add(GTRecipeBuilder.ofRaw()
                 .inputFluids(booster)
                 .addData(BOOST_KEY, boost)

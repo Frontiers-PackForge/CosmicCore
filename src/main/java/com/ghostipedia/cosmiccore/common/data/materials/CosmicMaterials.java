@@ -5,11 +5,10 @@ import com.ghostipedia.cosmiccore.api.data.material.property.CCoreMaterialIconSe
 import com.ghostipedia.cosmiccore.api.data.material.property.CosmicCorePropertyKeys;
 import com.ghostipedia.cosmiccore.api.data.material.property.FluidTooltipProperty;
 import com.ghostipedia.cosmiccore.api.item.MeldingOmniTool;
-
 import com.ghostipedia.cosmiccore.common.machine.multiblock.multi.logic.ExoticCombustionEngineMachine;
 import com.ghostipedia.cosmiccore.gtbridge.CosmicRecipeTypes;
+
 import com.gregtechceu.gtceu.api.GTValues;
-import com.gregtechceu.gtceu.api.capability.recipe.FluidRecipeCapability;
 import com.gregtechceu.gtceu.api.data.chemical.ChemicalHelper;
 import com.gregtechceu.gtceu.api.data.chemical.material.Material;
 import com.gregtechceu.gtceu.api.data.chemical.material.info.MaterialIconSet;
@@ -22,6 +21,7 @@ import com.gregtechceu.gtceu.api.fluids.store.FluidStorageKeys;
 import com.gregtechceu.gtceu.api.recipe.GTRecipeType;
 import com.gregtechceu.gtceu.api.recipe.RecipeHelper;
 import com.gregtechceu.gtceu.common.data.GTRecipeTypes;
+
 import net.minecraftforge.fluids.FluidStack;
 
 import static com.ghostipedia.cosmiccore.common.data.materials.CosmicMaterialSet.MAGIC;
@@ -666,24 +666,29 @@ public class CosmicMaterials {
                     long amount = stack.getAmount();
                     long eu = recipe.getOutputEUt().getTotalEU();
                     int duration = recipe.duration;
-                    double v = (double)(eu * duration) / (double)amount;
-                    mat.setProperty(CosmicCorePropertyKeys.FLUID_TOOLTIPS, new FluidTooltipProperty("cosmiccore.calorific.tooltip.prefix", v));
+                    double v = (double) (eu * duration) / (double) amount;
+                    mat.setProperty(CosmicCorePropertyKeys.FLUID_TOOLTIPS,
+                            new FluidTooltipProperty("cosmiccore.calorific.tooltip.prefix", v));
                 }
             }
         }
 
         for (var entry : ExoticCombustionEngineMachine.getLubricantTiers().object2IntEntrySet()) {
+            if (entry.getKey() == null) continue;
             Material mat = ChemicalHelper.getMaterial(entry.getKey().getFluid());
             if (mat.isNull()) continue;
 
-            mat.setProperty(CosmicCorePropertyKeys.FLUID_TOOLTIPS, new FluidTooltipProperty("cosmiccore.lubricant.tooltip.prefix", entry.getIntValue()));
+            mat.setProperty(CosmicCorePropertyKeys.FLUID_TOOLTIPS,
+                    new FluidTooltipProperty("cosmiccore.lubricant.tooltip.prefix", entry.getIntValue()));
         }
 
         for (var entry : ExoticCombustionEngineMachine.getBoostingTiers().object2IntEntrySet()) {
+            if (entry.getKey() == null) continue;
             Material mat = ChemicalHelper.getMaterial(entry.getKey().getFluid());
             if (mat.isNull()) continue;
 
-            mat.setProperty(CosmicCorePropertyKeys.FLUID_TOOLTIPS, new FluidTooltipProperty("cosmiccore.booster.tooltip.prefix", entry.getIntValue()));
+            mat.setProperty(CosmicCorePropertyKeys.FLUID_TOOLTIPS,
+                    new FluidTooltipProperty("cosmiccore.booster.tooltip.prefix", entry.getIntValue()));
         }
     }
 }
