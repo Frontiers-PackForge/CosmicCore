@@ -42,7 +42,7 @@ import javax.annotation.ParametersAreNonnullByDefault;
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
 public class StarLadderRender extends
-                                DynamicRender<WorkableElectricMultiblockMachine, StarLadderRender> {
+                              DynamicRender<WorkableElectricMultiblockMachine, StarLadderRender> {
 
     public static final StarLadderRender INSTANCE = new StarLadderRender();
     public static final Codec<StarLadderRender> CODEC = Codec.unit(INSTANCE);
@@ -408,7 +408,7 @@ public class StarLadderRender extends
             VertexConsumer strandConsumer = buffer.getBuffer(GTRenderTypes.getLightRing());
             float strandAngleOffset = (strand / (float) numStrands) * Mth.TWO_PI;
             renderBraidedStrand(poseStack, strandConsumer, pillarHeight, helixRadius, strandRadius,
-                             strandAngleOffset, animTime, windingSpeed, packedLight, packedOverlay, true);
+                    strandAngleOffset, animTime, windingSpeed, packedLight, packedOverlay, true);
         }
 
         // Second layer - counter-clockwise spiral (creates woven/braided effect)
@@ -416,15 +416,15 @@ public class StarLadderRender extends
             VertexConsumer strandConsumer = buffer.getBuffer(GTRenderTypes.getLightRing());
             float strandAngleOffset = (strand / (float) numStrands) * Mth.TWO_PI + (Mth.PI / numStrands);
             renderBraidedStrand(poseStack, strandConsumer, pillarHeight, helixRadius * 0.95f, strandRadius * 0.8f,
-                             strandAngleOffset, animTime, -windingSpeed, packedLight, packedOverlay, false);
+                    strandAngleOffset, animTime, -windingSpeed, packedLight, packedOverlay, false);
         }
     }
 
     @OnlyIn(Dist.CLIENT)
     private void renderBraidedStrand(PoseStack poseStack, VertexConsumer consumer, float height,
-                                   float helixRadius, float strandRadius, float angleOffset,
-                                   float animTime, float windingSpeed, int packedLight, int packedOverlay,
-                                   boolean isClockwise) {
+                                     float helixRadius, float strandRadius, float angleOffset,
+                                     float animTime, float windingSpeed, int packedLight, int packedOverlay,
+                                     boolean isClockwise) {
         int segments = 256;
         float segmentHeight = height / segments;
 
@@ -454,7 +454,7 @@ public class StarLadderRender extends
 
     @OnlyIn(Dist.CLIENT)
     private void renderCoreColumn(PoseStack poseStack, VertexConsumer consumer, float height,
-                                   float radius, float totalTick, int packedLight, int packedOverlay) {
+                                  float radius, float totalTick, int packedLight, int packedOverlay) {
         int segments = 256;
         float segmentHeight = height / segments;
 
@@ -468,7 +468,7 @@ public class StarLadderRender extends
 
             // Draw central glowing column
             drawTubeSegment(mat, consumer, 0, y1, 0, 0, y2, 0, radius,
-                          0.3f * glow, 0.45f * glow, 0.6f * glow, 1f);
+                    0.3f * glow, 0.45f * glow, 0.6f * glow, 1f);
         }
     }
 

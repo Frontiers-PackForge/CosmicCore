@@ -211,6 +211,7 @@ public class StellarIrisRender extends DynamicRender<IrisMultiblockMachine, Stel
 
     private final java.util.Map<BlockPos, Float> irisFadeStartSec = new java.util.HashMap<>();
     private static final float IRIS_FADE_DURATION_SEC = 10f;
+
     private void startIrisFade(BlockPos pos, float partialTick) {
         float tSec = (Minecraft.getInstance().player.tickCount + partialTick) / 20.0f;
         irisFadeStartSec.put(pos, tSec);
