@@ -444,6 +444,16 @@ public class CosmicRecipeTypes {
             .setHasResearchSlot(true)
             .setSound(GTSoundEntries.REPLICATOR) // TODO - Sounds
             .setProgressBar(GuiTextures.PROGRESS_BAR_ARROW_MULTIPLE, ProgressTexture.FillDirection.LEFT_TO_RIGHT);
+
+    /**
+     * Recipe type for the Multithreaded Processor test machine.
+     * This machine can run multiple unique recipes simultaneously using color-coded input buses.
+     */
+    public static final GTRecipeType MULTITHREADED_PROCESSOR = GTRecipeTypes
+            .register("dream_basin", GTRecipeTypes.MULTIBLOCK)
+            .setMaxIOSize(9, 9, 9, 9)
+            .setSound(GTSoundEntries.ASSEMBLER)
+            .setProgressBar(GuiTextures.PROGRESS_BAR_ARROW_MULTIPLE, ProgressTexture.FillDirection.LEFT_TO_RIGHT);
     /*
      * TODO - Allow This block to replace the Master Ritual stone, and then set the structure shape based on the ritual
      */

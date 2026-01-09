@@ -515,5 +515,34 @@ public class CosmicLangHandler extends LangHandler {
         provider.add("cosmiccore.calorific.tooltip.prefix", "§5Calorific:§r %s");
         provider.add("cosmiccore.lubricant.tooltip.prefix", "§6Lubricant:§r Tier %s");
         provider.add("cosmiccore.booster.tooltip.prefix", "§bBooster:§r Tier %s");
+
+        // Dreamer's Basin - Multithreaded Machine
+        multiLang(provider, "cosmiccore.machine.dreamers_basin.tooltip",
+                "§bRuns multiple unique recipes simultaneously",
+                "§fEach thread requires a uniquely §6colored§f input bus/hatch",
+                "§fMax threads = Energy Hatch amperage (4A=4, 16A=16)",
+                "§aAll threads share output buses/hatches");
+
+        // Multithreaded Machine Display (base)
+        provider.add("cosmiccore.machine.multithreaded.thread_status", "§b=== Thread Status ===");
+        provider.add("cosmiccore.machine.multithreaded.max_threads", "§7Max Threads: §f%s");
+        provider.add("cosmiccore.machine.multithreaded.active_threads", "§7Active: §a%s§7/§f%s");
+
+        // Dreamer's Basin Custom UI
+        provider.add("cosmiccore.machine.dreamers_basin.thread_header", "Thread Status");
+        provider.add("cosmiccore.machine.dreamers_basin.threads_summary", "%s running / %s active / %s max");
+        provider.add("cosmiccore.machine.dreamers_basin.eu_budget_header", "Energy Budget");
+        provider.add("cosmiccore.machine.dreamers_basin.eu_per_thread", "%s EU/t per thread (%s)");
+        provider.add("cosmiccore.machine.dreamers_basin.time_remaining", "Time: %s remaining");
+        provider.add("cosmiccore.machine.dreamers_basin.status_idle", "Idle - No recipe");
+        provider.add("cosmiccore.machine.dreamers_basin.status_waiting", "Waiting for inputs");
+        provider.add("cosmiccore.machine.dreamers_basin.status_suspended", "Suspended");
+        provider.add("cosmiccore.machine.dreamers_basin.status_unknown", "Unknown");
+
+        // Dreamer's Basin Hover Tooltips
+        provider.add("cosmiccore.machine.dreamers_basin.tooltip.crafting", "Crafting:");
+        provider.add("cosmiccore.machine.dreamers_basin.tooltip.no_recipe", "No recipe data");
+        provider.add("cosmiccore.machine.dreamers_basin.tooltip.processing", "  Processing...");
+        provider.add("cosmiccore.machine.dreamers_basin.tooltip.duration", "Recipe duration: %s");
     }
 }
