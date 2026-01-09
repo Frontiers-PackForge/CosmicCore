@@ -402,23 +402,38 @@ public class StarLadderRender extends
         VertexConsumer coreConsumer = buffer.getBuffer(GTRenderTypes.getLightRing());
         renderCoreColumn(poseStack, coreConsumer, pillarHeight, coreRadius, totalTick, packedLight, packedOverlay);
 
-        // Render helical strands - each gets its own consumer to prevent z-fighting
+        // Render counter-rotating helix layers for structural stability look
+        // First layer - clockwise spiral
         for (int strand = 0; strand < numStrands; strand++) {
             VertexConsumer strandConsumer = buffer.getBuffer(GTRenderTypes.getLightRing());
             float strandAngleOffset = (strand / (float) numStrands) * Mth.TWO_PI;
-            renderHelixStrand(poseStack, strandConsumer, pillarHeight, helixRadius, strandRadius,
-                             strandAngleOffset, animTime, windingSpeed, packedLight, packedOverlay);
+            renderBraidedStrand(poseStack, strandConsumer, pillarHeight, helixRadius, strandRadius,
+                             strandAngleOffset, animTime, windingSpeed, packedLight, packedOverlay, true);
+        }
+
+        // Second layer - counter-clockwise spiral (creates woven/braided effect)
+        for (int strand = 0; strand < numStrands; strand++) {
+            VertexConsumer strandConsumer = buffer.getBuffer(GTRenderTypes.getLightRing());
+            float strandAngleOffset = (strand / (float) numStrands) * Mth.TWO_PI + (Mth.PI / numStrands);
+            renderBraidedStrand(poseStack, strandConsumer, pillarHeight, helixRadius * 0.95f, strandRadius * 0.8f,
+                             strandAngleOffset, animTime, -windingSpeed, packedLight, packedOverlay, false);
         }
     }
 
     @OnlyIn(Dist.CLIENT)
-    private void renderHelixStrand(PoseStack poseStack, VertexConsumer consumer, float height,
+    private void renderBraidedStrand(PoseStack poseStack, VertexConsumer consumer, float height,
                                    float helixRadius, float strandRadius, float angleOffset,
-                                   float animTime, float windingSpeed, int packedLight, int packedOverlay) {
-        int segments = 1024;
+                                   float animTime, float windingSpeed, int packedLight, int packedOverlay,
+                                   boolean isClockwise) {
+        int segments = 256;
         float segmentHeight = height / segments;
 
         Matrix4f mat = poseStack.last().pose();
+
+        // Different colors for each layer to show the braiding
+        float r = isClockwise ? 0.1f : 0.15f;
+        float g = isClockwise ? 0.1f : 0.15f;
+        float b = isClockwise ? 0.1f : 0.15f;
 
         for (int i = 0; i < segments; i++) {
             float y1 = i * segmentHeight;
@@ -433,15 +448,14 @@ public class StarLadderRender extends
             float z2 = helixRadius * Mth.sin(angle2);
 
             // Draw cylindrical tube segment
-            drawTubeSegment(mat, consumer, x1, y1, z1, x2, y2, z2, strandRadius,
-                          0.1f, 0.1f, 0.1f, 1f);
+            drawTubeSegment(mat, consumer, x1, y1, z1, x2, y2, z2, strandRadius, r, g, b, 1f);
         }
     }
 
     @OnlyIn(Dist.CLIENT)
     private void renderCoreColumn(PoseStack poseStack, VertexConsumer consumer, float height,
                                    float radius, float totalTick, int packedLight, int packedOverlay) {
-        int segments = 512;
+        int segments = 256;
         float segmentHeight = height / segments;
 
         Matrix4f mat = poseStack.last().pose();
@@ -462,7 +476,7 @@ public class StarLadderRender extends
     private void drawTubeSegment(Matrix4f mat, VertexConsumer consumer,
                                  float x1, float y1, float z1, float x2, float y2, float z2,
                                  float radius, float r, float g, float b, float a) {
-        int sides = 6;
+        int sides = 4;
         float angleStep = Mth.TWO_PI / sides;
 
         for (int i = 0; i < sides; i++) {
