@@ -131,7 +131,7 @@ public class StellarIrisRender extends DynamicRender<IrisMultiblockMachine, Stel
 
             renderMultiStarSystemRandomized(
                     machine, poseStack, buffer, totalTick, packedLight, packedOverlay,
-                    5,
+                    10,
                     4.5f,
                     0.75f,
                     5f,
@@ -365,7 +365,7 @@ public class StellarIrisRender extends DynamicRender<IrisMultiblockMachine, Stel
                                                  float starMin, float starMax,
                                                  boolean spinSelf) {
         if (count < 1) return;
-        if (count > 6) count = 6;
+        if (count > 5) count = 5;
 
         long seed = hashPos(machine.getPos()) ^ (count * 0x9E3779B97F4A7C15L);
         long[] S = new long[] { seed };

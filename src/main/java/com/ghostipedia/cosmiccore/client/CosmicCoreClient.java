@@ -41,6 +41,7 @@ public class CosmicCoreClient {
         DynamicRenderManager.register(CosmicCore.id("spirit_crucible"), SpiritCrucibleRender.TYPE);
         DynamicRenderManager.register(CosmicCore.id("biovat_render"), BioVatRender.TYPE);
         DynamicRenderManager.register(CosmicCore.id("tester_render"), RenderTesterHelper.TYPE);
+        DynamicRenderManager.register(CosmicCore.id("star_ladder_render"), StarLadderRender.TYPE);
     }
 
     @Getter
