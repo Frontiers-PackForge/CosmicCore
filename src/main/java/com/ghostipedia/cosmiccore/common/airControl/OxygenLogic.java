@@ -233,7 +233,8 @@ public final class OxygenLogic {
 
     /**
      * Drain oxygen from all available sources.
-     * Priority: Space suit chestplate > Ad Astra suit > Curios back slot > Carried tanks
+     * Priority: Space suit chestplate > Ad Astra suit > Curios back slot
+     * Note: Tanks in inventory do NOT work - must be equipped in Curios back slot
      */
     private static int drainFromCarriedTanks(ServerPlayer player, int requestTicks) {
         if (requestTicks <= 0) return 0;
@@ -249,23 +250,8 @@ public final class OxygenLogic {
         if (remaining <= 0) return requestTicks;
 
         // 3. Check Curios back slot (oxygen tanks worn on back)
+        // Tanks MUST be equipped in Curios back slot to work - inventory tanks are ignored
         remaining = drainFromCuriosBackSlot(player, remaining);
-        if (remaining <= 0) return requestTicks;
-
-        // 4. Check carried oxygen supply tanks (GTCEu-style)
-        // offhand first
-        remaining = drainFromStack(player.getOffhandItem(), remaining);
-        // mainhand
-        remaining = drainFromStack(player.getMainHandItem(), remaining);
-
-        // hotbar 0..8
-        for (int i = 0; i < 9 && remaining > 0; i++) {
-            remaining = drainFromStack(player.getInventory().getItem(i), remaining);
-        }
-        // rest of inventory
-        for (int i = 9; i < player.getInventory().getContainerSize() && remaining > 0; i++) {
-            remaining = drainFromStack(player.getInventory().getItem(i), remaining);
-        }
 
         return requestTicks - remaining;
     }
