@@ -4,6 +4,7 @@ package com.ghostipedia.cosmiccore.common.airControl;
  * Configuration constants for the oxygen system.
  */
 public final class OxygenConfig {
+
     private OxygenConfig() {}
 
     // -------------------------------------------------------------------------
@@ -14,7 +15,7 @@ public final class OxygenConfig {
     public static final long MAX_OXYGEN_TICKS = 20L * 90;
 
     /** Seconds remaining at which to show warnings */
-    public static final int[] WARNING_SECONDS = {60, 30, 15, 10, 5};
+    public static final int[] WARNING_SECONDS = { 60, 30, 15, 10, 5 };
 
     // -------------------------------------------------------------------------
     // Tank Behavior

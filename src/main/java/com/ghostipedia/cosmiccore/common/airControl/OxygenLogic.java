@@ -4,8 +4,8 @@ import com.ghostipedia.cosmiccore.CosmicCore;
 import com.ghostipedia.cosmiccore.api.item.armor.SpaceArmorComponentItem;
 import com.ghostipedia.cosmiccore.common.airControl.RebreatherHelper.RebreatherType;
 import com.ghostipedia.cosmiccore.common.network.CCoreNetwork;
-import com.ghostipedia.cosmiccore.common.network.packet.SyncOxygenBarPacket;
 import com.ghostipedia.cosmiccore.common.network.packet.OxygenWarnPacket;
+import com.ghostipedia.cosmiccore.common.network.packet.SyncOxygenBarPacket;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
@@ -43,7 +43,8 @@ public final class OxygenLogic {
         if (player.isCreative() || player.isSpectator()) {
             // Send hide packet if needed
             if ((player.serverLevel().getGameTime() % HUD_SYNC_INTERVAL) == 0) {
-                CCoreNetwork.sendToPlayer(player, new SyncOxygenBarPacket(MAX_OXYGEN_TICKS, MAX_OXYGEN_TICKS, false, 0.0));
+                CCoreNetwork.sendToPlayer(player,
+                        new SyncOxygenBarPacket(MAX_OXYGEN_TICKS, MAX_OXYGEN_TICKS, false, 0.0));
             }
             return;
         }
@@ -137,7 +138,8 @@ public final class OxygenLogic {
                         }
                     }
                 }
-                if (next <= 0 && rates.suffocationDamage > 0f && (level.getGameTime() % SUFFOCATION_DAMAGE_INTERVAL) == 0) {
+                if (next <= 0 && rates.suffocationDamage > 0f &&
+                        (level.getGameTime() % SUFFOCATION_DAMAGE_INTERVAL) == 0) {
                     player.hurt(player.damageSources().drown(), rates.suffocationDamage);
                 }
 
@@ -178,7 +180,8 @@ public final class OxygenLogic {
                 lastSyncOxygenValue.put(playerId, remaining);
                 lastSyncGameTime.put(playerId, currentGameTime);
 
-                CCoreNetwork.sendToPlayer(player, new SyncOxygenBarPacket(remaining, MAX_OXYGEN_TICKS, show, ratePerSecond));
+                CCoreNetwork.sendToPlayer(player,
+                        new SyncOxygenBarPacket(remaining, MAX_OXYGEN_TICKS, show, ratePerSecond));
             }
         });
     }

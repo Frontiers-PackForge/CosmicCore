@@ -16,11 +16,13 @@ import javax.annotation.Nullable;
 
 @Mod.EventBusSubscriber(modid = CosmicCore.MOD_ID)
 public class OxygenBudgetCap {
+
     private OxygenBudgetCap() {}
 
-    public static final Capability<IOxygen> CAP = CapabilityManager.get(new CapabilityToken<>(){});
+    public static final Capability<IOxygen> CAP = CapabilityManager.get(new CapabilityToken<>() {});
 
     public static class Provider implements ICapabilityProvider, ICapabilitySerializable<CompoundTag> {
+
         private final OxygenBudget impl = new OxygenBudget();
         private final LazyOptional<IOxygen> opt = LazyOptional.of(() -> impl);
 
@@ -54,13 +56,11 @@ public class OxygenBudgetCap {
     @SubscribeEvent
     public static void clone(PlayerEvent.Clone event) {
         event.getOriginal().reviveCaps();
-        event.getOriginal().getCapability(CAP).ifPresent(old ->
-                event.getEntity().getCapability(CAP).ifPresent(now -> {
-                    if (now instanceof OxygenBudget newCap && old instanceof OxygenBudget oldCap) {
-                        newCap.loadTag(oldCap.saveTag());
-                    }
-                })
-        );
+        event.getOriginal().getCapability(CAP).ifPresent(old -> event.getEntity().getCapability(CAP).ifPresent(now -> {
+            if (now instanceof OxygenBudget newCap && old instanceof OxygenBudget oldCap) {
+                newCap.loadTag(oldCap.saveTag());
+            }
+        }));
         event.getOriginal().invalidateCaps();
     }
 }

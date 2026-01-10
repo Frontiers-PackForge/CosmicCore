@@ -1,8 +1,8 @@
 package com.ghostipedia.cosmiccore.common.machine.multiblock.multi.logic;
 
+import com.gregtechceu.gtceu.api.capability.recipe.IO;
 import com.gregtechceu.gtceu.api.capability.recipe.IRecipeCapabilityHolder;
 import com.gregtechceu.gtceu.api.capability.recipe.IRecipeHandler;
-import com.gregtechceu.gtceu.api.capability.recipe.IO;
 import com.gregtechceu.gtceu.api.capability.recipe.RecipeCapability;
 import com.gregtechceu.gtceu.api.machine.feature.IRecipeLogicMachine;
 import com.gregtechceu.gtceu.api.machine.trait.RecipeHandlerList;
@@ -12,19 +12,17 @@ import com.gregtechceu.gtceu.api.recipe.GTRecipe;
 import com.gregtechceu.gtceu.api.recipe.RecipeHelper;
 import com.gregtechceu.gtceu.api.recipe.modifier.ModifierFunction;
 
-import org.jetbrains.annotations.NotNull;
-
 import com.lowdragmc.lowdraglib.syncdata.annotation.DescSynced;
-
-import java.util.Iterator;
 import com.lowdragmc.lowdraglib.syncdata.annotation.Persisted;
 import com.lowdragmc.lowdraglib.syncdata.field.ManagedFieldHolder;
 
 import lombok.Getter;
 import lombok.Setter;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
+import java.util.Iterator;
 
 /**
  * A RecipeLogic instance that represents a single "thread" in a MultithreadedMachine.

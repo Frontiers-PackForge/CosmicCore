@@ -7,10 +7,10 @@ import net.minecraftforge.common.capabilities.RegisterCapabilitiesEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 
 public class OxygenItemCap {
+
     private OxygenItemCap() {}
 
-    public static final Capability<IOxygenSupplyItem> OXYGEN_SUPPLY =
-            CapabilityManager.get(new CapabilityToken<>() {});
+    public static final Capability<IOxygenSupplyItem> OXYGEN_SUPPLY = CapabilityManager.get(new CapabilityToken<>() {});
 
     @SubscribeEvent
     public static void onRegisterCaps(RegisterCapabilitiesEvent event) {

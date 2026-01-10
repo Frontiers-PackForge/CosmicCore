@@ -9,6 +9,7 @@ import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.network.NetworkEvent;
 
 public class SyncOxygenBarPacket implements CCoreNetwork.INetPacket {
+
     private final long left;
     private final long max;
     private final boolean show;
@@ -38,8 +39,7 @@ public class SyncOxygenBarPacket implements CCoreNetwork.INetPacket {
 
     @Override
     public void execute(NetworkEvent.Context ctx) {
-        DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () ->
-                CosmicHudGuiOverlay.setOxygenBar(left, max, show, ratePerSecond)
-        );
+        DistExecutor.unsafeRunWhenOn(Dist.CLIENT,
+                () -> () -> CosmicHudGuiOverlay.setOxygenBar(left, max, show, ratePerSecond));
     }
 }

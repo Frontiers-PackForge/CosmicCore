@@ -57,8 +57,7 @@ public class OxygenSupplyTankBehavior implements IItemComponent, IComponentCapab
         if (buffer < outLimit) {
             FluidStack drained = fluidHandler.drain(
                     new FluidStack(GTMaterials.Oxygen.getFluid(), 1),
-                    IFluidHandlerItem.FluidAction.EXECUTE
-            );
+                    IFluidHandlerItem.FluidAction.EXECUTE);
             if (!drained.isEmpty()) {
                 buffer += drained.getAmount() * ticksPerMb;
             }
@@ -101,14 +100,14 @@ public class OxygenSupplyTankBehavior implements IItemComponent, IComponentCapab
         ensureConfigWritten(stack);
 
         if (cap == ForgeCapabilities.FLUID_HANDLER_ITEM) {
-            return ForgeCapabilities.FLUID_HANDLER_ITEM.orEmpty(cap, LazyOptional.of(() ->
-                    new FluidHandlerItemStack(stack, capacityMb) {
+            return ForgeCapabilities.FLUID_HANDLER_ITEM.orEmpty(cap,
+                    LazyOptional.of(() -> new FluidHandlerItemStack(stack, capacityMb) {
+
                         @Override
                         public boolean isFluidValid(int tank, FluidStack fluidStack) {
                             return fluidStack.getFluid() == GTMaterials.Oxygen.getFluid();
                         }
-                    }
-            ));
+                    }));
         }
 
         if (cap == OxygenItemCap.OXYGEN_SUPPLY) {

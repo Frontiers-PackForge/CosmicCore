@@ -7,8 +7,6 @@ import com.gregtechceu.gtceu.api.item.ComponentItem;
 import com.gregtechceu.gtceu.api.item.component.IItemComponent;
 import com.gregtechceu.gtceu.api.item.component.IItemHUDProvider;
 
-import com.mojang.blaze3d.systems.RenderSystem;
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
@@ -17,6 +15,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.client.gui.overlay.ForgeGui;
 import net.minecraftforge.client.gui.overlay.IGuiOverlay;
 
+import com.mojang.blaze3d.systems.RenderSystem;
 import lombok.NoArgsConstructor;
 import org.jetbrains.annotations.NotNull;
 

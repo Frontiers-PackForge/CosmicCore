@@ -11,7 +11,8 @@ public interface IOxygenProvider {
 
     /**
      * Check if this item can currently provide oxygen.
-     * @param stack The item stack
+     * 
+     * @param stack  The item stack
      * @param player The player wearing/holding the item
      * @return true if oxygen is available
      */
@@ -19,7 +20,8 @@ public interface IOxygenProvider {
 
     /**
      * Consume oxygen from this provider.
-     * @param stack The item stack
+     * 
+     * @param stack  The item stack
      * @param player The player
      * @param amount Amount to consume (in millibuckets for fluid tanks, or ticks for other systems)
      * @return Amount actually consumed
@@ -28,6 +30,7 @@ public interface IOxygenProvider {
 
     /**
      * Get current oxygen amount.
+     * 
      * @param stack The item stack
      * @return Current oxygen in millibuckets (or equivalent units)
      */
@@ -35,6 +38,7 @@ public interface IOxygenProvider {
 
     /**
      * Get maximum oxygen capacity.
+     * 
      * @param stack The item stack
      * @return Maximum capacity in millibuckets (or equivalent units)
      */

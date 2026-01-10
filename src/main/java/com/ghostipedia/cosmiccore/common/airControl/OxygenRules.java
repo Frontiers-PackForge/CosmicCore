@@ -1,14 +1,15 @@
 package com.ghostipedia.cosmiccore.common.airControl;
 
+import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.core.registries.Registries;
 import net.minecraft.world.level.Level;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
 public final class OxygenRules {
+
     private OxygenRules() {}
 
     public enum AirQuality {
@@ -20,6 +21,7 @@ public final class OxygenRules {
     }
 
     public static final class Rates {
+
         public int oxygenDrainPerTick;
         public double oxygenRecoveryPerTick;
         public float suffocationDamage;
@@ -46,12 +48,12 @@ public final class OxygenRules {
             AirQuality.THIN, rates(1, 0.0, 5f),
             AirQuality.TOXIC, rates(1, 0.5, 5f),
             AirQuality.ABYSS, rates(8, 0.0, 1000f),
-            AirQuality.NO_AIR, rates(2, 0.0, 5f)
-    );
+            AirQuality.NO_AIR, rates(2, 0.0, 5f));
 
     // Air Ranges
 
     public static final class AirRanges {
+
         public final int minY;
         public final int maxY;
         public final AirQuality quality;
@@ -131,12 +133,12 @@ public final class OxygenRules {
                 // 1 to 199 : SAFE (faster regen)
                 new AirRanges(1, 199, AirQuality.SAFE, null, 3.0, null),
                 // 200+ : THIN at high altitude
-                new AirRanges(200, Integer.MAX_VALUE, AirQuality.THIN)
-        );
+                new AirRanges(200, Integer.MAX_VALUE, AirQuality.THIN));
 
         // --- Space (no atmosphere) ---
         // All orbit dimensions have no air at all Y levels
-        for (ResourceKey<Level> orbit : List.of(EARTH_ORBIT, MOON_ORBIT, MARS_ORBIT, VENUS_ORBIT, MERCURY_ORBIT, GLACIO_ORBIT)) {
+        for (ResourceKey<Level> orbit : List.of(EARTH_ORBIT, MOON_ORBIT, MARS_ORBIT, VENUS_ORBIT, MERCURY_ORBIT,
+                GLACIO_ORBIT)) {
             addRanges(orbit, new AirRanges(Integer.MIN_VALUE, Integer.MAX_VALUE, AirQuality.NO_AIR));
         }
 
@@ -153,11 +155,11 @@ public final class OxygenRules {
         addRanges(GLACIO,
                 new AirRanges(Integer.MIN_VALUE, 0, AirQuality.THIN, 1, 0.0, 2.0f),
                 new AirRanges(1, 127, AirQuality.SAFE, null, 1.5, null),
-                new AirRanges(128, Integer.MAX_VALUE, AirQuality.THIN)
-        );
+                new AirRanges(128, Integer.MAX_VALUE, AirQuality.THIN));
     }
 
     public static final class ResolvedAirRange {
+
         public final AirQuality airQuality;
         public final Rates rates;
 

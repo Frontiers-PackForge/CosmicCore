@@ -32,10 +32,7 @@ public class OxygenWarnPacket implements CCoreNetwork.INetPacket {
 
     @Override
     public void execute(NetworkEvent.Context context) {
-        DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () ->
-                Minecraft.getInstance().execute(() ->
-                        Minecraft.getInstance().gui.setOverlayMessage(Component.translatable(message, seconds), false)
-                )
-        );
+        DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> Minecraft.getInstance().execute(
+                () -> Minecraft.getInstance().gui.setOverlayMessage(Component.translatable(message, seconds), false)));
     }
 }

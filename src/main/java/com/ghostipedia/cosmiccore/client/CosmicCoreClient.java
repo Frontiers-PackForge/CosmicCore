@@ -369,6 +369,7 @@ public class CosmicCoreClient {
      */
     @Mod.EventBusSubscriber(modid = CosmicCore.MOD_ID, value = Dist.CLIENT, bus = Mod.EventBusSubscriber.Bus.FORGE)
     public static final class HideVanillaOverlays {
+
         @SubscribeEvent
         public static void onOverlayPre(RenderGuiOverlayEvent.Pre event) {
             if (event.getOverlay() == VanillaGuiOverlay.AIR_LEVEL.type()) {

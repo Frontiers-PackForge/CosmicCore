@@ -71,7 +71,8 @@ public class OxygenTankItem extends ComponentItem {
 
         tooltip.add(line("Max Output", transferPerTick + " O\u2082/t (" + ticksPerSec + "/s)", ChatFormatting.GRAY));
         tooltip.add(line("Conversion", ticksPerMb + " O\u2082-ticks per mB", ChatFormatting.GRAY));
-        tooltip.add(line("Use @ Max", fmt(mbPerTickAtMax) + " mB/t (" + fmt(mbPerSecAtMax) + " mB/s)", ChatFormatting.DARK_GRAY));
+        tooltip.add(line("Use @ Max", fmt(mbPerTickAtMax) + " mB/t (" + fmt(mbPerSecAtMax) + " mB/s)",
+                ChatFormatting.DARK_GRAY));
 
         if (cap > 0 && transferPerTick > 0) {
             long totalOTicks = (long) amt * (long) ticksPerMb;

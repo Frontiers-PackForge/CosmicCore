@@ -11,6 +11,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class OxygenBudget implements IOxygen {
+
     private final Map<ResourceLocation, Long> oxygenTicksByDimension = new HashMap<>();
     private final Map<ResourceLocation, Boolean> consumingByDimension = new HashMap<>();
     private final Map<ResourceLocation, Double> regenBufferByDimension = new HashMap<>();

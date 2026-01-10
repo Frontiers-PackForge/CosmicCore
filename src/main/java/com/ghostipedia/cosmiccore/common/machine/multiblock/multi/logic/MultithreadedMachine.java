@@ -2,7 +2,6 @@ package com.ghostipedia.cosmiccore.common.machine.multiblock.multi.logic;
 
 import com.ghostipedia.cosmiccore.api.machine.multiblock.IMultithreadedMachine;
 
-import com.gregtechceu.gtceu.api.capability.IEnergyContainer;
 import com.gregtechceu.gtceu.api.capability.recipe.EURecipeCapability;
 import com.gregtechceu.gtceu.api.capability.recipe.FluidRecipeCapability;
 import com.gregtechceu.gtceu.api.capability.recipe.IO;
@@ -14,7 +13,6 @@ import com.gregtechceu.gtceu.api.machine.TickableSubscription;
 import com.gregtechceu.gtceu.api.machine.feature.multiblock.IMultiPart;
 import com.gregtechceu.gtceu.api.machine.multiblock.MultiblockDisplayText;
 import com.gregtechceu.gtceu.api.machine.multiblock.WorkableElectricMultiblockMachine;
-import com.gregtechceu.gtceu.api.machine.trait.IRecipeHandlerTrait;
 import com.gregtechceu.gtceu.api.machine.trait.RecipeHandlerList;
 import com.gregtechceu.gtceu.api.machine.trait.RecipeLogic;
 import com.gregtechceu.gtceu.api.recipe.GTRecipe;
@@ -116,6 +114,7 @@ public class MultithreadedMachine extends WorkableElectricMultiblockMachine impl
         // We don't use the default recipe logic - we manage multiple thread logics instead
         // Return a dummy that does nothing, actual work is done by thread logics
         return new RecipeLogic(this) {
+
             @Override
             public void serverTick() {
                 // Do nothing - threading is handled separately
@@ -303,9 +302,8 @@ public class MultithreadedMachine extends WorkableElectricMultiblockMachine impl
      * Must add to both proxy and flat maps for full compatibility.
      */
     private void addEnergyHandlersToThread(
-            Map<IO, List<RecipeHandlerList>> threadProxy,
-            Map<IO, Map<RecipeCapability<?>, List<IRecipeHandler<?>>>> threadFlat) {
-
+                                           Map<IO, List<RecipeHandlerList>> threadProxy,
+                                           Map<IO, Map<RecipeCapability<?>, List<IRecipeHandler<?>>>> threadFlat) {
         // Get energy handlers from the machine's global capabilities (proxy)
         var machineProxy = getCapabilitiesProxy();
         if (machineProxy != null && machineProxy.containsKey(IO.IN)) {
@@ -426,11 +424,11 @@ public class MultithreadedMachine extends WorkableElectricMultiblockMachine impl
                 tl.add(Component.translatable("cosmiccore.machine.multithreaded.thread_status")
                         .withStyle(ChatFormatting.AQUA));
                 tl.add(Component.translatable("cosmiccore.machine.multithreaded.max_threads",
-                                FormattingUtil.formatNumbers(maxThreads))
+                        FormattingUtil.formatNumbers(maxThreads))
                         .withStyle(ChatFormatting.GRAY));
                 tl.add(Component.translatable("cosmiccore.machine.multithreaded.active_threads",
-                                FormattingUtil.formatNumbers(getRunningThreadCount()),
-                                FormattingUtil.formatNumbers(threadLogics.size()))
+                        FormattingUtil.formatNumbers(getRunningThreadCount()),
+                        FormattingUtil.formatNumbers(threadLogics.size()))
                         .withStyle(ChatFormatting.GRAY));
             });
 

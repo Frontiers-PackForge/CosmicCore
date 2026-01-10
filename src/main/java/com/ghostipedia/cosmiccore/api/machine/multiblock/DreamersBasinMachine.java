@@ -30,7 +30,6 @@ import net.minecraft.world.item.crafting.Ingredient;
 
 import org.jetbrains.annotations.NotNull;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -209,7 +208,7 @@ public class DreamersBasinMachine extends MultithreadedMachine implements IDispl
                 float secondsRemaining = ticksRemaining / 20.0f;
                 MutableComponent timeLine = Component.literal("    ")
                         .append(Component.translatable("cosmiccore.machine.dreamers_basin.time_remaining",
-                                        String.format("%.1fs", secondsRemaining))
+                                String.format("%.1fs", secondsRemaining))
                                 .withStyle(Style.EMPTY
                                         .withColor(ChatFormatting.DARK_GRAY)
                                         .withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, hoverTooltip))));

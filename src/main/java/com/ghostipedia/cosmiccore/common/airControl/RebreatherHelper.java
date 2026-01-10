@@ -19,6 +19,7 @@ import java.util.Optional;
  * Helper class for detecting and interacting with rebreather equipment.
  */
 public final class RebreatherHelper {
+
     private RebreatherHelper() {}
 
     /**
