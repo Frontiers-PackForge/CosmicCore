@@ -284,6 +284,8 @@ public class CosmicLangHandler extends LangHandler {
 
         // generic machine tooltips
         provider.add("item.cosmiccore.space_radio.tooltip", "§6Lets you hear sounds in space!");
+        provider.add("item.cosmiccore.simple_rebreather.tooltip", "§7Reduces oxygen drain in §bThin Air§7 environments.");
+        provider.add("item.cosmiccore.pressurized_rebreather.tooltip", "§6Enables oxygen tank usage. Works in §cNo Air§6 environments.");
         provider.add("cosmiccore.universal.tooltip.lube_info.0",
                 "§aProviding Better Lubricants increases the total EU created");
         provider.add("cosmiccore.universal.tooltip.lube_info.1", "§eLubricant§f: §c1x §fEU total @ 1000mb/hr");
