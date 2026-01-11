@@ -51,11 +51,29 @@ public class CosmicCoreClient {
     @Getter
     private static ShaderInstance nebulaeShader;
 
+    @Getter
+    private static ShaderInstance soulAuraShader;
+
+    @Getter
+    private static ShaderInstance voidBgShader;
+
+    @Getter
+    private static ShaderInstance galaxyBgShader;
+
     @SubscribeEvent
     public static void shaderRegistry(RegisterShadersEvent event) {
         try {
             event.registerShader(new ShaderInstance(event.getResourceProvider(), CosmicCore.id("rendertype_nebulae"),
                     DefaultVertexFormat.POSITION), (shaderInstance) -> nebulaeShader = shaderInstance);
+
+            event.registerShader(new ShaderInstance(event.getResourceProvider(), CosmicCore.id("soul_aura"),
+                    DefaultVertexFormat.POSITION_TEX), (shaderInstance) -> soulAuraShader = shaderInstance);
+
+            event.registerShader(new ShaderInstance(event.getResourceProvider(), CosmicCore.id("void_bg"),
+                    DefaultVertexFormat.POSITION_TEX), (shaderInstance) -> voidBgShader = shaderInstance);
+
+            event.registerShader(new ShaderInstance(event.getResourceProvider(), CosmicCore.id("galaxy_bg"),
+                    DefaultVertexFormat.POSITION_TEX), (shaderInstance) -> galaxyBgShader = shaderInstance);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

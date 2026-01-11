@@ -6,6 +6,7 @@ import com.ghostipedia.cosmiccore.common.airControl.RebreatherHelper.RebreatherT
 import com.ghostipedia.cosmiccore.common.network.CCoreNetwork;
 import com.ghostipedia.cosmiccore.common.network.packet.OxygenWarnPacket;
 import com.ghostipedia.cosmiccore.common.network.packet.SyncOxygenBarPacket;
+import com.ghostipedia.cosmiccore.common.reflection.bargain.impl.DepthsBargain;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
@@ -43,8 +44,9 @@ public final class OxygenLogic {
         if (player.isCreative() || player.isSpectator()) {
             // Send hide packet if needed
             if ((player.serverLevel().getGameTime() % HUD_SYNC_INTERVAL) == 0) {
+                long playerMaxOxygen = getMaxOxygenTicks(player);
                 CCoreNetwork.sendToPlayer(player,
-                        new SyncOxygenBarPacket(MAX_OXYGEN_TICKS, MAX_OXYGEN_TICKS, false, 0.0));
+                        new SyncOxygenBarPacket(playerMaxOxygen, playerMaxOxygen, false, 0.0));
             }
             return;
         }
@@ -52,9 +54,12 @@ public final class OxygenLogic {
         ServerLevel level = player.serverLevel();
 
         player.getCapability(OxygenBudgetCap.CAP).ifPresent(cap -> {
+            // Get player-specific max capacity (may be modified by bargains)
+            long playerMaxOxygen = getMaxOxygenTicks(player);
+
             // Initialize if needed
             if (cap.getOxygenTicks(level.dimension()) < 0) {
-                cap.setOxygenTicks(level.dimension(), MAX_OXYGEN_TICKS);
+                cap.setOxygenTicks(level.dimension(), playerMaxOxygen);
                 cap.setRegenBuffer(level.dimension(), 0.0);
             }
 
@@ -124,7 +129,7 @@ public final class OxygenLogic {
                 int remainingDrain = Math.max(0, drain - cover);
 
                 long next = current - remainingDrain;
-                next = Math.max(0, Math.min(MAX_OXYGEN_TICKS, next));
+                next = Math.max(0, Math.min(playerMaxOxygen, next));
 
                 cap.setOxygenTicks(level.dimension(), next);
 
@@ -140,17 +145,22 @@ public final class OxygenLogic {
                 }
                 if (next <= 0 && rates.suffocationDamage > 0f &&
                         (level.getGameTime() % SUFFOCATION_DAMAGE_INTERVAL) == 0) {
-                    player.hurt(player.damageSources().drown(), rates.suffocationDamage);
+                    // Check for Depths bargain - instant death instead of gradual damage
+                    if (DepthsBargain.shouldInstantKillOnSuffocation(player)) {
+                        DepthsBargain.executeInstantSuffocation(player);
+                    } else {
+                        player.hurt(player.damageSources().drown(), rates.suffocationDamage);
+                    }
                 }
 
-            } else if (rates.oxygenRecoveryPerTick > 0 && current < MAX_OXYGEN_TICKS) {
+            } else if (rates.oxygenRecoveryPerTick > 0 && current < playerMaxOxygen) {
                 // Passive recovery in safe air
                 double buffer = cap.getRegenBuffer(level.dimension()) + (rates.oxygenRecoveryPerTick / 20.0);
                 long gain = (long) (buffer * 20.0);
                 double rem = buffer - (gain / 20.0);
 
                 if (gain > 0) {
-                    long next = Math.min(MAX_OXYGEN_TICKS, current + gain);
+                    long next = Math.min(playerMaxOxygen, current + gain);
                     cap.setOxygenTicks(level.dimension(), next);
                 }
                 cap.setRegenBuffer(level.dimension(), rem);
@@ -159,7 +169,7 @@ public final class OxygenLogic {
             // HUD sync - calculate rate based on change since last sync
             if ((level.getGameTime() % HUD_SYNC_INTERVAL) == 0) {
                 long remaining = cap.getOxygenTicks(level.dimension());
-                boolean show = (quality != OxygenRules.AirQuality.SAFE) || remaining < MAX_OXYGEN_TICKS;
+                boolean show = (quality != OxygenRules.AirQuality.SAFE) || remaining < playerMaxOxygen;
 
                 // Calculate rate based on actual change over the sync interval
                 java.util.UUID playerId = player.getUUID();
@@ -181,7 +191,7 @@ public final class OxygenLogic {
                 lastSyncGameTime.put(playerId, currentGameTime);
 
                 CCoreNetwork.sendToPlayer(player,
-                        new SyncOxygenBarPacket(remaining, MAX_OXYGEN_TICKS, show, ratePerSecond));
+                        new SyncOxygenBarPacket(remaining, playerMaxOxygen, show, ratePerSecond));
             }
         });
     }
@@ -199,13 +209,14 @@ public final class OxygenLogic {
         lastSyncGameTime.remove(playerId);
 
         player.getCapability(OxygenBudgetCap.CAP).ifPresent(cap -> {
+            long playerMaxOxygen = getMaxOxygenTicks(player);
             if (cap.getOxygenTicks(level.dimension()) < 0) {
-                cap.setOxygenTicks(level.dimension(), MAX_OXYGEN_TICKS);
+                cap.setOxygenTicks(level.dimension(), playerMaxOxygen);
                 cap.setRegenBuffer(level.dimension(), 0.0);
             }
             long remaining = cap.getOxygenTicks(level.dimension());
-            boolean show = remaining < MAX_OXYGEN_TICKS;
-            CCoreNetwork.sendToPlayer(player, new SyncOxygenBarPacket(remaining, MAX_OXYGEN_TICKS, show, 0.0));
+            boolean show = remaining < playerMaxOxygen;
+            CCoreNetwork.sendToPlayer(player, new SyncOxygenBarPacket(remaining, playerMaxOxygen, show, 0.0));
         });
     }
 
@@ -225,10 +236,11 @@ public final class OxygenLogic {
         ServerLevel level = player.serverLevel();
 
         player.getCapability(OxygenBudgetCap.CAP).ifPresent(cap -> {
-            cap.setOxygenTicks(level.dimension(), MAX_OXYGEN_TICKS);
+            long playerMaxOxygen = getMaxOxygenTicks(player);
+            cap.setOxygenTicks(level.dimension(), playerMaxOxygen);
             cap.setRegenBuffer(level.dimension(), 0.0);
             cap.setConsuming(level.dimension(), false);
-            CCoreNetwork.sendToPlayer(player, new SyncOxygenBarPacket(MAX_OXYGEN_TICKS, MAX_OXYGEN_TICKS, false, 0.0));
+            CCoreNetwork.sendToPlayer(player, new SyncOxygenBarPacket(playerMaxOxygen, playerMaxOxygen, false, 0.0));
         });
     }
 

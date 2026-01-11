@@ -11,6 +11,8 @@ import com.ghostipedia.cosmiccore.common.machine.multiblock.multi.SteamAssembler
 import com.ghostipedia.cosmiccore.common.machine.multiblock.multi.SteamCaster;
 import com.ghostipedia.cosmiccore.common.machine.multiblock.multi.SteamMixer;
 import com.ghostipedia.cosmiccore.common.machine.multiblock.part.SoulHatchPartMachine;
+import com.ghostipedia.cosmiccore.common.reflection.ReflectionCommand;
+import com.ghostipedia.cosmiccore.common.reflection.ReflectionCommands;
 import com.ghostipedia.cosmiccore.mixin.accessor.LivingEntityAccessor;
 
 import com.gregtechceu.gtceu.GTCEu;
@@ -121,6 +123,8 @@ public class ForgeCommonEventListener {
     @SubscribeEvent
     public static void registerCommand(RegisterCommandsEvent event) {
         WirelessEnergyCommand.register(event.getDispatcher(), event.getBuildContext());
+        ReflectionCommand.register(event.getDispatcher());
+        ReflectionCommands.register(event.getDispatcher());
     }
 
     @SubscribeEvent

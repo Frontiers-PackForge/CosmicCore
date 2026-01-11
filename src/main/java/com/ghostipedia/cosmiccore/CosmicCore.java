@@ -16,6 +16,8 @@ import com.ghostipedia.cosmiccore.common.item.behavior.GravityCoreBehavior;
 import com.ghostipedia.cosmiccore.common.machine.multiblock.multi.modular.MultiblockInit;
 import com.ghostipedia.cosmiccore.common.network.CCoreNetwork;
 import com.ghostipedia.cosmiccore.common.recipe.condition.CosmicConditions;
+import com.ghostipedia.cosmiccore.common.reflection.ReflectionCapability;
+import com.ghostipedia.cosmiccore.common.reflection.bargain.CosmicBargains;
 import com.ghostipedia.cosmiccore.gtbridge.CosmicRecipeTypes;
 
 import com.gregtechceu.gtceu.api.GTCEuAPI;
@@ -82,6 +84,8 @@ public class CosmicCore {
         CosmicCoreDatagen.init();
         CosmicPredicates.init();
         CosmicMaterialSet.init();
+        // Register bargains early so they're available on both client and server
+        CosmicBargains.init();
     }
 
     public static ResourceLocation id(String path) {
@@ -146,5 +150,6 @@ public class CosmicCore {
     public void registerCapabilities(RegisterCapabilitiesEvent event) {
         CosmicCapabilities.register(event);
         OxygenItemCap.onRegisterCaps(event);
+        ReflectionCapability.registerCaps(event);
     }
 }

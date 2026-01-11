@@ -19,6 +19,7 @@ import com.ghostipedia.cosmiccore.common.item.behavior.InfiniteSprayCanBehavior;
 import com.ghostipedia.cosmiccore.common.item.behavior.OxygenSupplyTankBehavior;
 import com.ghostipedia.cosmiccore.common.item.behavior.StructureWriteBehavior;
 import com.ghostipedia.cosmiccore.common.item.behavior.WirelessPDABehavior;
+import com.ghostipedia.cosmiccore.common.reflection.item.MirrorItem;
 import com.ghostipedia.cosmiccore.utils.StringUtil;
 
 import com.gregtechceu.gtceu.GTCEu;
@@ -1067,31 +1068,37 @@ public class CosmicItems {
             .item("shard_of_perpetuity", ComponentItem::create)
             .lang("Shard of Perpetuity")
             .properties(p -> p.stacksTo(64))
-            .onRegister(attach(new TooltipBehavior(tooltips -> {
-                tooltips.add(Component.translatable("cosmiccore.lore.shard_small.0"));
-                tooltips.add(Component.translatable("cosmiccore.lore.shard_small.1"));
-            })))
+            .onRegister(attach(
+                    new TooltipBehavior(tooltips -> {
+                        tooltips.add(Component.translatable("cosmiccore.lore.shard_small.0"));
+                        tooltips.add(Component.translatable("cosmiccore.lore.shard_small.1"));
+                    }),
+                    new com.ghostipedia.cosmiccore.common.reflection.item.ShardConsumeBehavior(1)))
             .defaultModel()
             .register();
     public static final ItemEntry<ComponentItem> PERPETUITY_SHARD_LARGE = REGISTRATE
             .item("large_shard_of_perpetuity", ComponentItem::create)
             .lang("Large Shard of Perpetuity")
             .properties(p -> p.stacksTo(64))
-            .onRegister(attach(new TooltipBehavior(tooltips -> {
-                tooltips.add(Component.translatable("cosmiccore.lore.shard_large.0"));
-                tooltips.add(Component.translatable("cosmiccore.lore.shard_large.1"));
-            })))
+            .onRegister(attach(
+                    new TooltipBehavior(tooltips -> {
+                        tooltips.add(Component.translatable("cosmiccore.lore.shard_large.0"));
+                        tooltips.add(Component.translatable("cosmiccore.lore.shard_large.1"));
+                    }),
+                    new com.ghostipedia.cosmiccore.common.reflection.item.ShardConsumeBehavior(8)))
             .defaultModel()
             .register();
     public static final ItemEntry<ComponentItem> PERPETUITY_SHARD_MASSIVE = REGISTRATE
             .item("cluster_of_perpetuity", ComponentItem::create)
             .lang("Cluster of Perpetuity")
             .properties(p -> p.stacksTo(60))
-            .onRegister(attach(new TooltipBehavior(tooltips -> {
-                tooltips.add(Component.translatable("cosmiccore.lore.shard_huge.0"));
-                tooltips.add(Component.translatable("cosmiccore.lore.shard_huge.1"));
-                tooltips.add(Component.translatable("cosmiccore.lore.shard_huge.2"));
-            })))
+            .onRegister(attach(
+                    new TooltipBehavior(tooltips -> {
+                        tooltips.add(Component.translatable("cosmiccore.lore.shard_huge.0"));
+                        tooltips.add(Component.translatable("cosmiccore.lore.shard_huge.1"));
+                        tooltips.add(Component.translatable("cosmiccore.lore.shard_huge.2"));
+                    }),
+                    new com.ghostipedia.cosmiccore.common.reflection.item.ShardConsumeBehavior(64)))
             .defaultModel()
             .register();
     public static final ItemEntry<ComponentItem> WIRELESS_PDA = REGISTRATE
@@ -2618,6 +2625,17 @@ public class CosmicItems {
     public static <T extends ComponentItem> NonNullConsumer<T> attach(IItemComponent... components) {
         return item -> item.attachComponents(components);
     }
+
+    // -------------------------------------------------------------------------
+    // Reflection System
+    // -------------------------------------------------------------------------
+
+    public static final ItemEntry<MirrorItem> REFLECTION_MIRROR = REGISTRATE
+            .item("reflection_mirror", MirrorItem::new)
+            .lang("Mirror of Erosion")
+            .properties(p -> p.stacksTo(1))
+            .defaultModel()
+            .register();
 
     public static <T extends Item> NonNullConsumer<T> modelPredicate(ResourceLocation predicate,
                                                                      Function<ItemStack, Float> property) {
