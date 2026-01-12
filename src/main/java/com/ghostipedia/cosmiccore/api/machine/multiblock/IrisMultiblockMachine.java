@@ -1,10 +1,12 @@
 package com.ghostipedia.cosmiccore.api.machine.multiblock;
 
+import com.ghostipedia.cosmiccore.client.gui.widget.stellar.StellarBackgroundWidget;
+import com.ghostipedia.cosmiccore.client.gui.widget.stellar.StellarFancyUIWidget;
+import com.ghostipedia.cosmiccore.client.gui.widget.stellar.StellarIrisWidget;
 import com.ghostipedia.cosmiccore.common.data.CosmicSounds;
 
 import com.gregtechceu.gtceu.api.capability.recipe.IO;
 import com.gregtechceu.gtceu.api.gui.GuiTextures;
-import com.gregtechceu.gtceu.api.gui.fancy.FancyMachineUIWidget;
 import com.gregtechceu.gtceu.api.gui.widget.SlotWidget;
 import com.gregtechceu.gtceu.api.machine.IMachineBlockEntity;
 import com.gregtechceu.gtceu.api.machine.MetaMachine;
@@ -139,26 +141,7 @@ public class IrisMultiblockMachine extends WorkableElectricMultiblockMachine {
 
     @Override
     public Widget createUIWidget() {
-        var group = new WidgetGroup(0, 0, 182 + 8, 117 + 8);
-        group.addWidget(new DraggableScrollableWidgetGroup(4, 4, 182, 117).setBackground(getScreenTexture())
-                .addWidget(new LabelWidget(4, 5, self().getBlockState().getBlock().getDescriptionId()))
-                .addWidget(new ComponentPanelWidget(4, 17, this::addDisplayText)
-                        .textSupplier(this.getLevel().isClientSide ? null : this::addDisplayText)
-                        .setMaxWidthLimit(150)
-                        .clickHandler(this::handleDisplayClick)));
-        group.addWidget(new SlotWidget(inventory.storage, 0, 7, 101, true, true)
-                .setBackground(GuiTextures.SLOT, GuiTextures.ATOMIC_OVERLAY_1));
-        group.setBackground(GuiTextures.BACKGROUND_INVERSE);
-        group.addWidget(new ButtonWidget(
-                27,
-                100,
-                158,
-                20,
-                new GuiTextureGroup(
-                        GuiTextures.BUTTON,
-                        new TextTexture("Change Stage")),
-                clickData -> setStarStage()));
-        return group;
+        return new StellarIrisWidget(() -> this);
     }
 
     @Override
@@ -171,6 +154,18 @@ public class IrisMultiblockMachine extends WorkableElectricMultiblockMachine {
 
     @Override
     public ModularUI createUI(Player entityPlayer) {
-        return new ModularUI(198, 208, this, entityPlayer).widget(new FancyMachineUIWidget(this, 198, 208));
+        // Use larger UI size to accommodate StellarIrisWidget
+        int uiWidth = StellarIrisWidget.WIDTH + 20;
+        int uiHeight = StellarIrisWidget.HEIGHT + 100; // Extra space for player inventory
+
+        // Create our custom stellar-themed fancy widget
+        StellarFancyUIWidget fancyWidget = new StellarFancyUIWidget(this, uiWidth, uiHeight, this::getStage);
+
+        // Add our custom background that covers the full UI including inventory gutters
+        StellarBackgroundWidget bgWidget = new StellarBackgroundWidget(0, 0, uiWidth, uiHeight, this::getStage);
+
+        return new ModularUI(uiWidth, uiHeight, this, entityPlayer)
+                .widget(bgWidget)
+                .widget(fancyWidget);
     }
 }
