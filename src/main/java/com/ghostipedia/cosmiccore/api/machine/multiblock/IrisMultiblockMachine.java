@@ -1,13 +1,10 @@
 package com.ghostipedia.cosmiccore.api.machine.multiblock;
 
-import com.ghostipedia.cosmiccore.client.gui.widget.stellar.StellarBackgroundWidget;
 import com.ghostipedia.cosmiccore.client.gui.widget.stellar.StellarFancyUIWidget;
 import com.ghostipedia.cosmiccore.client.gui.widget.stellar.StellarIrisWidget;
 import com.ghostipedia.cosmiccore.common.data.CosmicSounds;
 
 import com.gregtechceu.gtceu.api.capability.recipe.IO;
-import com.gregtechceu.gtceu.api.gui.GuiTextures;
-import com.gregtechceu.gtceu.api.gui.widget.SlotWidget;
 import com.gregtechceu.gtceu.api.machine.IMachineBlockEntity;
 import com.gregtechceu.gtceu.api.machine.MetaMachine;
 import com.gregtechceu.gtceu.api.machine.multiblock.WorkableElectricMultiblockMachine;
@@ -17,9 +14,7 @@ import com.gregtechceu.gtceu.api.pattern.util.RelativeDirection;
 import com.gregtechceu.gtceu.api.sound.AutoReleasedSound;
 
 import com.lowdragmc.lowdraglib.gui.modular.ModularUI;
-import com.lowdragmc.lowdraglib.gui.texture.GuiTextureGroup;
-import com.lowdragmc.lowdraglib.gui.texture.TextTexture;
-import com.lowdragmc.lowdraglib.gui.widget.*;
+import com.lowdragmc.lowdraglib.gui.widget.Widget;
 import com.lowdragmc.lowdraglib.syncdata.annotation.DescSynced;
 import com.lowdragmc.lowdraglib.syncdata.annotation.Persisted;
 import com.lowdragmc.lowdraglib.syncdata.annotation.UpdateListener;
@@ -154,18 +149,7 @@ public class IrisMultiblockMachine extends WorkableElectricMultiblockMachine {
 
     @Override
     public ModularUI createUI(Player entityPlayer) {
-        // Use larger UI size to accommodate StellarIrisWidget
-        int uiWidth = StellarIrisWidget.WIDTH + 20;
-        int uiHeight = StellarIrisWidget.HEIGHT + 100; // Extra space for player inventory
-
-        // Create our custom stellar-themed fancy widget
-        StellarFancyUIWidget fancyWidget = new StellarFancyUIWidget(this, uiWidth, uiHeight, this::getStage);
-
-        // Add our custom background that covers the full UI including inventory gutters
-        StellarBackgroundWidget bgWidget = new StellarBackgroundWidget(0, 0, uiWidth, uiHeight, this::getStage);
-
-        return new ModularUI(uiWidth, uiHeight, this, entityPlayer)
-                .widget(bgWidget)
-                .widget(fancyWidget);
+        return new ModularUI(176, 166, this, entityPlayer)
+                .widget(new StellarFancyUIWidget(this, 176, 166, this::getStage));
     }
 }

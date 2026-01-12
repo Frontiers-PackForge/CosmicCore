@@ -17,8 +17,8 @@ import java.util.function.Supplier;
 
 public class StellarIrisWidget extends WidgetGroup {
 
-    public static final int WIDTH = 320;
-    public static final int HEIGHT = 180;
+    public static final int WIDTH = 310;
+    public static final int HEIGHT = 160;
 
     private final Supplier<IrisMultiblockMachine> machineSupplier;
 
@@ -39,15 +39,27 @@ public class StellarIrisWidget extends WidgetGroup {
     }
 
     private void initWidgets() {
-        int coreSize = 140;
-        int coreX = 15;
+        addWidget(new StarfieldBackgroundWidget(0, 0, WIDTH, HEIGHT, this::getCurrentStage));
+
+        int margin = 5;
+        int gap = 5;
+
+        int coreSize = 130;
+        int panelWidth = 135;
+
+        int panelX = WIDTH - margin - panelWidth;
+        int panelY = margin;
+        int panelH = HEIGHT - (margin * 2);
+
+        int coreX = panelX - gap - coreSize;
         int coreY = (HEIGHT - coreSize) / 2;
+
+        addWidget(new OrbitalRingsWidget(coreX - 5, coreY - 5, coreSize + 10, coreSize + 10, this::getCurrentStage));
+
         coreWidget = new StellarCoreWidget(coreX, coreY, coreSize, this::getCurrentStage);
         addWidget(coreWidget);
 
-        int panelX = coreX + coreSize + 20;
-        int panelWidth = WIDTH - panelX - 15;
-        contextPanel = new StageContextPanel(panelX, 10, panelWidth, HEIGHT - 20, machineSupplier, this);
+        contextPanel = new StageContextPanel(panelX, panelY, panelWidth, panelH, machineSupplier, this);
         addWidget(contextPanel);
 
         initDebugButtons();
@@ -189,13 +201,11 @@ public class StellarIrisWidget extends WidgetGroup {
         int w = getSize().width;
         int h = getSize().height;
 
-        DrawerHelper.drawGradientRect(graphics, x, y, w, h, 0xFF0a0a12, 0xFF050508, false);
-
-        int borderColor = getStageAccentColor(lastSyncedStage, 0.3f);
+        int borderColor = getStageAccentColor(lastSyncedStage, 0.4f);
         DrawerHelper.drawBorder(graphics, x, y, w, h, borderColor, 1);
 
         if (lastSyncedStage != Stage.EMPTY) {
-            int glowColor = getStageAccentColor(lastSyncedStage, 0.1f);
+            int glowColor = getStageAccentColor(lastSyncedStage, 0.15f);
             DrawerHelper.drawGradientRect(graphics, x + 1, y + 1, w - 2, 20, glowColor, 0x00000000, false);
         }
 

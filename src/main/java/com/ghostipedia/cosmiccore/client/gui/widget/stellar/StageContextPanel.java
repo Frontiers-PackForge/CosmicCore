@@ -6,6 +6,9 @@ import com.ghostipedia.cosmiccore.api.machine.multiblock.IrisMultiblockMachine.S
 import com.gregtechceu.gtceu.api.gui.GuiTextures;
 import com.gregtechceu.gtceu.api.gui.widget.SlotWidget;
 
+import com.lowdragmc.lowdraglib.gui.texture.ColorBorderTexture;
+import com.lowdragmc.lowdraglib.gui.texture.ColorRectTexture;
+import com.lowdragmc.lowdraglib.gui.texture.GuiTextureGroup;
 import com.lowdragmc.lowdraglib.gui.util.DrawerHelper;
 import com.lowdragmc.lowdraglib.gui.widget.LabelWidget;
 import com.lowdragmc.lowdraglib.gui.widget.WidgetGroup;
@@ -47,7 +50,10 @@ public class StageContextPanel extends WidgetGroup {
         IrisMultiblockMachine machine = machineSupplier.get();
         if (machine != null) {
             SlotWidget starSeedSlot = new SlotWidget(machine.getInventory().storage, 0, 5, 88, true, true);
-            starSeedSlot.setBackground(GuiTextures.SLOT, GuiTextures.ATOMIC_OVERLAY_1);
+            starSeedSlot.setBackground(new GuiTextureGroup(
+                new ColorRectTexture(0xC0101018),
+                new ColorBorderTexture(1, 0xFF505070)
+            ), GuiTextures.ATOMIC_OVERLAY_1);
             addWidget(starSeedSlot);
             addWidget(new LabelWidget(28, 92, "Star Seed").setTextColor(0xFF808090));
         }
