@@ -165,12 +165,6 @@ public class DivingBellMachine extends WorkableElectricMultiblockMachine {
         // Find or create safe landing
         BlockPos landingPos = getOrCreateSafeLanding(deepBelow, player);
 
-        // Set Abyss decay flag
-        // Don't think this is necessary...
-        // player.getCapability(AbyssBudgetCap.CAP).ifPresent(cap -> {
-        // cap.setDecaying(AbyssRules.DIM, true);
-        // });
-
         // Teleport (SafeTeleporter handles safety effects)
         player.changeDimension(deepBelow, new SafeTeleporter(landingPos));
 

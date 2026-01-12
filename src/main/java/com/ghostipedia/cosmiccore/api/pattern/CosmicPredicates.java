@@ -3,6 +3,7 @@ package com.ghostipedia.cosmiccore.api.pattern;
 import com.ghostipedia.cosmiccore.api.CosmicCoreAPI;
 import com.ghostipedia.cosmiccore.api.block.IMagnetType;
 import com.ghostipedia.cosmiccore.common.block.MagnetBlock;
+import com.ghostipedia.cosmiccore.common.machine.multiblock.multi.MothCargoStation;
 
 import com.gregtechceu.gtceu.api.pattern.TraceabilityPredicate;
 import com.gregtechceu.gtceu.api.pattern.error.PatternStringError;
@@ -10,13 +11,19 @@ import com.gregtechceu.gtceu.api.pattern.util.PatternMatchContext;
 
 import com.lowdragmc.lowdraglib.utils.BlockInfo;
 
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
 
 import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
 
 import java.util.Comparator;
 import java.util.Map;
 import java.util.function.Supplier;
+
+import static com.gregtechceu.gtceu.common.data.GTBlocks.CASING_STEEL_SOLID;
 
 public class CosmicPredicates {
 
@@ -61,6 +68,39 @@ public class CosmicPredicates {
                 .map(blockSupplier -> BlockInfo.fromBlockState(blockSupplier.get().defaultBlockState()))
                 .toArray(BlockInfo[]::new))
                 .addTooltips(Component.translatable("gtceu.multiblock.pattern.error.filters"));
+    }
+
+    /**
+     * Predicate for Moth Cargo Station moth homes (Forestry beehives or steel casing).
+     * Looks up blocks lazily at match time so Forestry blocks are properly resolved.
+     */
+    public static TraceabilityPredicate mothHomes() {
+        return new TraceabilityPredicate(blockWorldState -> {
+            var blockState = blockWorldState.getBlockState();
+            // Check if it's steel casing (always allowed as placeholder)
+            if (blockState.is(CASING_STEEL_SOLID.get())) {
+                return true;
+            }
+            // Check if it's a valid Forestry beehive
+            return MothCargoStation.isMothHome(blockState);
+        }, () -> {
+            // Provide block previews for JEI - look up Forestry blocks at render time
+            return new BlockInfo[] {
+                    BlockInfo.fromBlockState(getBlockOrFallback(MothCargoStation.BEEHIVE_FOREST)),
+                    BlockInfo.fromBlockState(getBlockOrFallback(MothCargoStation.BEEHIVE_LUSH)),
+                    BlockInfo.fromBlockState(getBlockOrFallback(MothCargoStation.BEEHIVE_DESERT)),
+                    BlockInfo.fromBlockState(getBlockOrFallback(MothCargoStation.BEEHIVE_END)),
+                    BlockInfo.fromBlockState(CASING_STEEL_SOLID.get().defaultBlockState())
+            };
+        }).addTooltips(Component.literal("Forestry Beehive or Steel Casing"));
+    }
+
+    /**
+     * Get a block by ResourceLocation, or vanilla beehive as fallback.
+     */
+    private static net.minecraft.world.level.block.state.BlockState getBlockOrFallback(ResourceLocation loc) {
+        Block block = BuiltInRegistries.BLOCK.get(loc);
+        return (block != Blocks.AIR ? block : Blocks.BEEHIVE).defaultBlockState();
     }
 
     public static void init() {}
