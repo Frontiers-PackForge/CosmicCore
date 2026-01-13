@@ -7,6 +7,8 @@ import com.ghostipedia.cosmiccore.api.recipe.lookup.MapEmberIngredient;
 import com.ghostipedia.cosmiccore.api.recipe.lookup.MapSoulIngredient;
 import com.ghostipedia.cosmiccore.api.registries.CosmicRegistration;
 import com.ghostipedia.cosmiccore.client.CosmicCoreClient;
+import com.ghostipedia.cosmiccore.common.airControl.OxygenItemCap;
+import com.ghostipedia.cosmiccore.common.airControl.OxygenRules;
 import com.ghostipedia.cosmiccore.common.data.*;
 import com.ghostipedia.cosmiccore.common.data.materials.CosmicMaterialSet;
 import com.ghostipedia.cosmiccore.common.data.materials.CosmicMaterials;
@@ -14,6 +16,8 @@ import com.ghostipedia.cosmiccore.common.item.behavior.GravityCoreBehavior;
 import com.ghostipedia.cosmiccore.common.machine.multiblock.multi.modular.MultiblockInit;
 import com.ghostipedia.cosmiccore.common.network.CCoreNetwork;
 import com.ghostipedia.cosmiccore.common.recipe.condition.CosmicConditions;
+import com.ghostipedia.cosmiccore.common.reflection.ReflectionCapability;
+import com.ghostipedia.cosmiccore.common.reflection.bargain.CosmicBargains;
 import com.ghostipedia.cosmiccore.gtbridge.CosmicRecipeTypes;
 
 import com.gregtechceu.gtceu.api.GTCEuAPI;
@@ -80,6 +84,8 @@ public class CosmicCore {
         CosmicCoreDatagen.init();
         CosmicPredicates.init();
         CosmicMaterialSet.init();
+        // Register bargains early so they're available on both client and server
+        CosmicBargains.init();
     }
 
     public static ResourceLocation id(String path) {
@@ -108,6 +114,7 @@ public class CosmicCore {
             MapIngredientTypeManager.registerMapIngredient(Double.class, MapEmberIngredient::convertToMapIngredient);
             GridLinkables.register(CosmicItems.LINKED_TERMINAL, LinkedTerminalBehavior.handler);
             CCoreNetwork.init();
+            OxygenRules.registerAirRanges();
         });
     }
 
@@ -142,5 +149,7 @@ public class CosmicCore {
     @SubscribeEvent
     public void registerCapabilities(RegisterCapabilitiesEvent event) {
         CosmicCapabilities.register(event);
+        OxygenItemCap.onRegisterCaps(event);
+        ReflectionCapability.registerCaps(event);
     }
 }

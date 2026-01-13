@@ -53,4 +53,8 @@ public class CosmicDynamicRenderHelpers {
     public static DynamicRender<?, ?> getBioVatRenderer() {
         return BioVatRender.INSTANCE;
     }
+
+    public static DynamicRender<?, ?> getStarLadderRender() {
+        return StarLadderRender.INSTANCE;
+    }
 }

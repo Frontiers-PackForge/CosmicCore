@@ -28,6 +28,7 @@
     "MAE2GTIntegrationMixin",
     "PlayerBreathingMixin",
     "TagPrefixItemMixin",
+    "frontiers.MinecraftRemoveOxygenMixin",
     "accessor.GTMMEBufferAccessor",
     "accessor.LivingEntityAccessor",
     "accessor.LootTableAccessor",

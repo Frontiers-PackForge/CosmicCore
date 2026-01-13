@@ -1,5 +1,10 @@
 {
   "parent": "minecraft:block/block",
+  "dynamic_renders": [
+    {
+      "type": "cosmiccore:star_ladder_render"
+    }
+  ],
   "loader": "gtceu:machine",
   "machine": "cosmiccore:star_ladder",
   "texture_overrides": {

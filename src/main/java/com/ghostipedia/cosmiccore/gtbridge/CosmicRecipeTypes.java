@@ -343,6 +343,13 @@ public class CosmicRecipeTypes {
             .setMaxIOSize(16, 16, 16, 16)
             // .setSound(CosmicSounds.BLACK_HOLE_CRY)
             .setProgressBar(GuiTextures.PROGRESS_BAR_ARROW, ProgressTexture.FillDirection.LEFT_TO_RIGHT);
+
+    // Stellar Iris Module Recipe Types
+    public static final GTRecipeType STELLAR_SMELTING = GTRecipeTypes
+            .register("stellar_smelting", GTRecipeTypes.MULTIBLOCK)
+            .setMaxIOSize(9, 9, 3, 3)
+            .setProgressBar(GuiTextures.PROGRESS_BAR_ARROW, ProgressTexture.FillDirection.LEFT_TO_RIGHT);
+
     public static final GTRecipeType CHROMATIC_DISTILLATION_PLANT = GTRecipeTypes
             .register("chormatic_distillation_plant", GTRecipeTypes.MULTIBLOCK)
             .setMaxIOSize(1, 1, 1, 16)
@@ -443,6 +450,16 @@ public class CosmicRecipeTypes {
             .setMaxIOSize(12, 12, 12, 12)
             .setHasResearchSlot(true)
             .setSound(GTSoundEntries.REPLICATOR) // TODO - Sounds
+            .setProgressBar(GuiTextures.PROGRESS_BAR_ARROW_MULTIPLE, ProgressTexture.FillDirection.LEFT_TO_RIGHT);
+
+    /**
+     * Recipe type for the Multithreaded Processor test machine.
+     * This machine can run multiple unique recipes simultaneously using color-coded input buses.
+     */
+    public static final GTRecipeType MULTITHREADED_PROCESSOR = GTRecipeTypes
+            .register("dream_basin", GTRecipeTypes.MULTIBLOCK)
+            .setMaxIOSize(9, 9, 9, 9)
+            .setSound(GTSoundEntries.ASSEMBLER)
             .setProgressBar(GuiTextures.PROGRESS_BAR_ARROW_MULTIPLE, ProgressTexture.FillDirection.LEFT_TO_RIGHT);
     /*
      * TODO - Allow This block to replace the Master Ritual stone, and then set the structure shape based on the ritual

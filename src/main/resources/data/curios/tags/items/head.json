@@ -1,5 +1,7 @@
 {
   "values": [
-    "cosmiccore:space_radio"
+    "cosmiccore:space_radio",
+    "cosmiccore:simple_rebreather",
+    "cosmiccore:pressurized_rebreather"
   ]
 }
