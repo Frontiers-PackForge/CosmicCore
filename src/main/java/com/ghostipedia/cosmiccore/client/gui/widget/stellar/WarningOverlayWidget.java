@@ -4,14 +4,15 @@ import com.ghostipedia.cosmiccore.api.machine.multiblock.IrisMultiblockMachine.S
 
 import com.lowdragmc.lowdraglib.gui.widget.Widget;
 
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.util.Mth;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
+
+import java.util.function.Supplier;
 
 import javax.annotation.Nonnull;
-import java.util.function.Supplier;
 
 public class WarningOverlayWidget extends Widget {
 
@@ -127,7 +128,8 @@ public class WarningOverlayWidget extends Widget {
         String bottomText = "GRAVITATIONAL ANOMALY DETECTED";
         int bottomTextW = font.width(bottomText);
         int glitchOffset = (int) (textGlitch * 3);
-        graphics.drawString(font, bottomText, x + (w - bottomTextW) / 2 + glitchOffset, bottomBannerY + 4, 0xFFAA77FF, false);
+        graphics.drawString(font, bottomText, x + (w - bottomTextW) / 2 + glitchOffset, bottomBannerY + 4, 0xFFAA77FF,
+                false);
 
         drawCornerBrackets(graphics, x + 10, topBannerY - 5, w - 20, bannerH + 10, 0xAA8040FF);
     }
@@ -166,7 +168,8 @@ public class WarningOverlayWidget extends Widget {
         if (textGlitch > 0.2f) {
             int ghostAlpha = (int) (0x40 * textGlitch);
             int ghostColor = (ghostAlpha << 24) | 0x00FFFF;
-            graphics.drawString(font, criticalText, x + (w - textW) / 2 + glitchX + 2, topY + 6 + glitchY, ghostColor, false);
+            graphics.drawString(font, criticalText, x + (w - textW) / 2 + glitchX + 2, topY + 6 + glitchY, ghostColor,
+                    false);
         }
 
         String evacuateText = "EVACUATE IMMEDIATELY";

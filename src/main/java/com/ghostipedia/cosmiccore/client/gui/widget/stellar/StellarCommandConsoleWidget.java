@@ -9,20 +9,16 @@ import com.gregtechceu.gtceu.api.gui.widget.SlotWidget;
 import com.lowdragmc.lowdraglib.gui.util.DrawerHelper;
 import com.lowdragmc.lowdraglib.gui.widget.WidgetGroup;
 
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
-import javax.annotation.Nonnull;
 import java.util.function.Supplier;
 
-/**
- * The main command console for the Stellar Iris.
- * A fully immersive deep-space station aesthetic with holographic displays,
- * pulsing energy conduits, warning systems, and live telemetry.
- */
+import javax.annotation.Nonnull;
+
 public class StellarCommandConsoleWidget extends WidgetGroup {
 
     public static final int WIDTH = 360;
@@ -107,30 +103,30 @@ public class StellarCommandConsoleWidget extends WidgetGroup {
         Stage currentStage = machine.getStage();
         if (currentStage != lastSyncedStage) {
             lastSyncedStage = currentStage;
-            writeUpdateInfo(1, buf -> buf.writeEnum(currentStage));
+            writeUpdateInfo(203, buf -> buf.writeEnum(currentStage));
         }
 
         float newFuelLevel = calculateFuelLevel(machine);
         if (Math.abs(newFuelLevel - fuelLevel) > 0.01f) {
             fuelLevel = newFuelLevel;
-            writeUpdateInfo(2, buf -> buf.writeFloat(fuelLevel));
+            writeUpdateInfo(204, buf -> buf.writeFloat(fuelLevel));
         }
 
         boolean newCanIgnite = checkIgnitionRequirements(machine);
         if (newCanIgnite != canIgnite) {
             canIgnite = newCanIgnite;
-            writeUpdateInfo(3, buf -> buf.writeBoolean(canIgnite));
+            writeUpdateInfo(205, buf -> buf.writeBoolean(canIgnite));
         }
     }
 
     @Override
     @OnlyIn(Dist.CLIENT)
     public void readUpdateInfo(int id, FriendlyByteBuf buffer) {
-        if (id == 1) {
+        if (id == 203) {
             lastSyncedStage = buffer.readEnum(Stage.class);
-        } else if (id == 2) {
+        } else if (id == 204) {
             fuelLevel = buffer.readFloat();
-        } else if (id == 3) {
+        } else if (id == 205) {
             canIgnite = buffer.readBoolean();
         } else {
             super.readUpdateInfo(id, buffer);
@@ -264,9 +260,6 @@ public class StellarCommandConsoleWidget extends WidgetGroup {
         };
     }
 
-    /**
-     * Inner control panel with ignition controls and star seed slot
-     */
     private static class ControlPanelWidget extends WidgetGroup {
 
         private final Supplier<IrisMultiblockMachine> machineSupplier;
@@ -288,8 +281,7 @@ public class StellarCommandConsoleWidget extends WidgetGroup {
                     5, 30, getSize().width - 75, 22,
                     parent::canIgnite,
                     () -> parent.getCurrentStage() == Stage.EMPTY || parent.canIgnite(),
-                    parent::requestIgnition
-            ));
+                    parent::requestIgnition));
 
             IrisMultiblockMachine machine = machineSupplier.get();
             if (machine != null) {

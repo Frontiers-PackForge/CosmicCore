@@ -3,14 +3,15 @@ package com.ghostipedia.cosmiccore.client.gui.widget.stellar;
 import com.lowdragmc.lowdraglib.gui.util.DrawerHelper;
 import com.lowdragmc.lowdraglib.gui.widget.Widget;
 
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.util.Mth;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
+
+import java.util.function.Supplier;
 
 import javax.annotation.Nonnull;
-import java.util.function.Supplier;
 
 public class FuelGaugeWidget extends Widget {
 
@@ -63,7 +64,7 @@ public class FuelGaugeWidget extends Widget {
             int fillColorDark = darkenColor(fillColor, 0.6f);
 
             DrawerHelper.drawGradientRect(graphics, x + 1, gaugeY + 1, fillW - 2, gaugeH - 2,
-                fillColorDark, fillColor, true);
+                    fillColorDark, fillColor, true);
 
             // Animated shimmer
             float shimmerPos = (animPhase % (w * 2)) - w;
@@ -71,7 +72,7 @@ public class FuelGaugeWidget extends Widget {
                 int shimmerX = x + (int) shimmerPos;
                 int shimmerW = Math.min(10, fillW - (int) shimmerPos);
                 graphics.fill(shimmerX, gaugeY + 1, shimmerX + shimmerW, gaugeY + gaugeH - 1,
-                    0x20FFFFFF);
+                        0x20FFFFFF);
             }
         }
 
@@ -84,7 +85,7 @@ public class FuelGaugeWidget extends Widget {
         int textX = x + w - font.width(percentStr) - 2;
         int textColor = displayedLevel >= 0.8f ? 0xFF80FF80 : 0xFFFFFFFF;
         graphics.drawString(font, percentStr, textX, gaugeY + (gaugeH - font.lineHeight) / 2 + 1,
-            textColor, false);
+                textColor, false);
     }
 
     private void drawThresholdMarker(GuiGraphics graphics, int x, int y, int w, int h,

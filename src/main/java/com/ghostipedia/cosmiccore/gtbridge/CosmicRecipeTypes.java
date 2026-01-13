@@ -343,6 +343,13 @@ public class CosmicRecipeTypes {
             .setMaxIOSize(16, 16, 16, 16)
             // .setSound(CosmicSounds.BLACK_HOLE_CRY)
             .setProgressBar(GuiTextures.PROGRESS_BAR_ARROW, ProgressTexture.FillDirection.LEFT_TO_RIGHT);
+
+    // Stellar Iris Module Recipe Types
+    public static final GTRecipeType STELLAR_SMELTING = GTRecipeTypes
+            .register("stellar_smelting", GTRecipeTypes.MULTIBLOCK)
+            .setMaxIOSize(9, 9, 3, 3)
+            .setProgressBar(GuiTextures.PROGRESS_BAR_ARROW, ProgressTexture.FillDirection.LEFT_TO_RIGHT);
+
     public static final GTRecipeType CHROMATIC_DISTILLATION_PLANT = GTRecipeTypes
             .register("chormatic_distillation_plant", GTRecipeTypes.MULTIBLOCK)
             .setMaxIOSize(1, 1, 1, 16)

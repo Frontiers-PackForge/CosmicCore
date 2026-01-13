@@ -4,16 +4,17 @@ import com.ghostipedia.cosmiccore.api.machine.multiblock.IrisMultiblockMachine.S
 
 import com.lowdragmc.lowdraglib.gui.widget.Widget;
 
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.util.Mth;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
-import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 import java.util.function.Supplier;
+
+import javax.annotation.Nonnull;
 
 public class StarfieldBackgroundWidget extends Widget {
 
@@ -26,6 +27,7 @@ public class StarfieldBackgroundWidget extends Widget {
     private float nebulaPhase = 0f;
 
     private static class BackgroundStar {
+
         float x, y;
         float baseX, baseY;
         float size;
@@ -36,6 +38,7 @@ public class StarfieldBackgroundWidget extends Widget {
     }
 
     private static class Nebula {
+
         float x, y;
         float radius;
         int color;
@@ -82,7 +85,7 @@ public class StarfieldBackgroundWidget extends Widget {
 
     private void initNebulae(int w, int h) {
         int nebulaCount = 4;
-        int[] nebulaColors = {0x4020A0, 0xA02040, 0x204080, 0x802060};
+        int[] nebulaColors = { 0x4020A0, 0xA02040, 0x204080, 0x802060 };
 
         for (int i = 0; i < nebulaCount; i++) {
             Nebula nebula = new Nebula();

@@ -40,8 +40,12 @@ import static com.ghostipedia.cosmiccore.client.renderer.machine.StarBallastRend
 public class StellarIrisRender extends DynamicRender<IrisMultiblockMachine, StellarIrisRender> {
 
     public static final StellarIrisRender INSTANCE = new StellarIrisRender();
-    public String hexColor = "#a262e3";
+    // Default star color - will be overridden by machine's customStarColor if set
+    public static final String DEFAULT_STAR_COLOR = "#FFCC44"; // Golden yellow
     public static final Codec<StellarIrisRender> CODEC = Codec.unit(StellarIrisRender.INSTANCE);
+
+    // Current hex color being used for rendering (set per-render from machine or default)
+    private String hexColor = DEFAULT_STAR_COLOR;
     public static final DynamicRenderType<IrisMultiblockMachine, StellarIrisRender> TYPE = new DynamicRenderType<>(
             StellarIrisRender.CODEC);
 
@@ -76,40 +80,37 @@ public class StellarIrisRender extends DynamicRender<IrisMultiblockMachine, Stel
         return TYPE;
     }
 
+    /**
+     * Gets the star color from the machine, converting from int to hex string.
+     * Returns DEFAULT_STAR_COLOR if machine has no custom color set (-1).
+     */
+    private String getStarColorFromMachine(IrisMultiblockMachine machine) {
+        int customColor = machine.getCustomStarColor();
+        if (customColor == -1) {
+            return DEFAULT_STAR_COLOR;
+        }
+        // Convert int color (0xRRGGBB) to hex string (#RRGGBB)
+        return String.format("#%06X", customColor & 0xFFFFFF);
+    }
+
     @OnlyIn(Dist.CLIENT)
     @Override
     public void render(IrisMultiblockMachine machine, float partialTick, PoseStack poseStack, MultiBufferSource buffer,
                        int packedLight, int packedOverlay) {
-        if (!machine.isFormed()) return;
+        // if (!machine.isFormed()) return;
+
+        // Set the star color from the machine's custom color (or default)
+        this.hexColor = getStarColorFromMachine(machine);
 
         float totalTick = (Minecraft.getInstance().player.tickCount + partialTick);
         VertexConsumer consumer = buffer.getBuffer(Sheets.translucentCullBlockSheet());
         poseStack.pushPose();
 
-        Direction front = machine.getFrontFacing();
-        Direction upwards = machine.getUpwardsFacing();
-
-        float x0ffset = 0, y0ffset = -2.5f, z0ffset = 0;
-
-        if (front.getAxis() == Direction.Axis.X) {
-            if (front.getAxisDirection() == Direction.AxisDirection.POSITIVE) {
-                x0ffset = -45.5f;
-                z0ffset = 0.5f;
-            } else {
-                x0ffset = 46.5f;
-                z0ffset = 0.5f;
-            }
-        }
-
-        if (front.getAxis() == Direction.Axis.Z) {
-            if (front.getAxisDirection() == Direction.AxisDirection.POSITIVE) {
-                z0ffset = -45.55f;
-                x0ffset = 0.5f;
-            } else {
-                z0ffset = 46.5f;
-                x0ffset = 0.5f;
-            }
-        }
+        // Controller is now on top spire - star renders 23 blocks below controller
+        // Center offset: controller is at top, star center is 23 blocks down
+        float x0ffset = 0.5f;
+        float y0ffset = -23f;
+        float z0ffset = 0.5f;
 
         poseStack.translate(x0ffset, y0ffset, z0ffset);
         poseStack.scale(7.0f, 7, 7);
@@ -147,7 +148,7 @@ public class StellarIrisRender extends DynamicRender<IrisMultiblockMachine, Stel
 
         } else if (machine.getStage() == IrisMultiblockMachine.Stage.BLACK_HOLE) {
             renderIris(poseStack, consumer, packedLight, packedOverlay);
-            renderRing(poseStack, consumer, packedLight, packedOverlay);
+            renderAccretionDisk(poseStack, consumer, totalTick, packedLight, packedOverlay);
             poseStack.popPose();
 
             renderRingSmall(machine, poseStack, consumer, totalTick, packedLight, packedOverlay);
@@ -277,34 +278,41 @@ public class StellarIrisRender extends DynamicRender<IrisMultiblockMachine, Stel
         poseStack.popPose();
     }
 
+    /**
+     * Renders the main accretion disk with rotation around the black hole.
+     */
+    @OnlyIn(Dist.CLIENT)
+    public void renderAccretionDisk(PoseStack poseStack, VertexConsumer consumer,
+                                    float totalTick, int packedLight, int packedOverlay) {
+        poseStack.pushPose();
+
+        // Offset slightly down to avoid z-fighting with the fast spinning ring
+        poseStack.translate(0, -0.05f, 0);
+
+        // Slow rotation around Y axis (orbital motion)
+        float rotationSpeed = totalTick * Mth.TWO_PI / 200f; // Full rotation every 10 seconds
+        poseStack.mulPose(new Quaternionf().rotateY(rotationSpeed));
+
+        poseStack.scale(2.0f, 2.0f, 2.0f);
+
+        List<BakedQuad> quads = irisRingModel.getQuads(null, null, random, ModelData.EMPTY, null);
+        for (BakedQuad quad : quads) {
+            consumer.putBulkData(poseStack.last(), quad, 1f, 1f, 1f, packedLight, packedOverlay);
+        }
+
+        poseStack.popPose();
+    }
+
     @OnlyIn(Dist.CLIENT)
     public void renderRingSmall(IrisMultiblockMachine machine, PoseStack poseStack, VertexConsumer consumer,
                                 float totalTick, int packedLight, int packedOverlay) {
         poseStack.pushPose();
 
-        Direction front = machine.getFrontFacing();
-        Direction upwards = machine.getUpwardsFacing();
-        float x0ffset = 0, y0ffset = -2.3f, z0ffset = 0;
+        // Controller is now on top spire - ring renders at star center (23 blocks below controller)
+        float x0ffset = 0.5f;
+        float y0ffset = -23f;
+        float z0ffset = 0.5f;
 
-        if (front.getAxis() == Direction.Axis.X) {
-            if (front.getAxisDirection() == Direction.AxisDirection.POSITIVE) {
-                x0ffset = -46.5f;
-                z0ffset = -0.5f;
-            } else {
-                x0ffset = 46.5f;
-                z0ffset = 0.5f;
-            }
-        }
-
-        if (front.getAxis() == Direction.Axis.Z) {
-            if (front.getAxisDirection() == Direction.AxisDirection.POSITIVE) {
-                z0ffset = -46.5f;
-                x0ffset = -0.5f;
-            } else {
-                z0ffset = 46.5f;
-                x0ffset = 0.5f;
-            }
-        }
         poseStack.translate(x0ffset, y0ffset, z0ffset);
         poseStack.mulPose(new Quaternionf().rotateAxis(totalTick * Mth.TWO_PI / 20, 0, 1, 0));
         poseStack.scale(13.0f, 13.0f, 13.0f);

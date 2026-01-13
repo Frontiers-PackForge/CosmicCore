@@ -4,13 +4,14 @@ import com.ghostipedia.cosmiccore.api.machine.multiblock.IrisMultiblockMachine.S
 
 import com.lowdragmc.lowdraglib.gui.widget.Widget;
 
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.util.Mth;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
+
+import java.util.function.Supplier;
 
 import javax.annotation.Nonnull;
-import java.util.function.Supplier;
 
 public class OrbitalRingsWidget extends Widget {
 
@@ -240,17 +241,29 @@ public class OrbitalRingsWidget extends Widget {
 
         float r, g, b;
         if (h < 1f / 6) {
-            r = c; g = x; b = 0;
+            r = c;
+            g = x;
+            b = 0;
         } else if (h < 2f / 6) {
-            r = x; g = c; b = 0;
+            r = x;
+            g = c;
+            b = 0;
         } else if (h < 3f / 6) {
-            r = 0; g = c; b = x;
+            r = 0;
+            g = c;
+            b = x;
         } else if (h < 4f / 6) {
-            r = 0; g = x; b = c;
+            r = 0;
+            g = x;
+            b = c;
         } else if (h < 5f / 6) {
-            r = x; g = 0; b = c;
+            r = x;
+            g = 0;
+            b = c;
         } else {
-            r = c; g = 0; b = x;
+            r = c;
+            g = 0;
+            b = x;
         }
 
         int ri = (int) ((r + m) * 255);

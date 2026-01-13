@@ -13,18 +13,29 @@ import com.lowdragmc.lowdraglib.gui.util.DrawerHelper;
 import com.lowdragmc.lowdraglib.gui.widget.LabelWidget;
 import com.lowdragmc.lowdraglib.gui.widget.WidgetGroup;
 
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.chat.Component;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
+
+import java.util.function.Supplier;
 
 import javax.annotation.Nonnull;
-import java.util.function.Supplier;
 
 public class StageContextPanel extends WidgetGroup {
 
+    private static final int UPDATE_ID_PRESTIGE_STATE = 100;
+
     private final Supplier<IrisMultiblockMachine> machineSupplier;
     private final StellarIrisWidget parentWidget;
+
+    private IgnitionButtonWidget normalIgnitionButton;
+    private PrestigeIgnitionButton prestigeIgnitionButton;
+
+    private boolean hasPrestigeItem = false;
+    private boolean hasActiveStar = false;
 
     public StageContextPanel(int x, int y, int width, int height,
                              Supplier<IrisMultiblockMachine> machineSupplier,
@@ -40,23 +51,101 @@ public class StageContextPanel extends WidgetGroup {
 
         addWidget(new FuelGaugeWidget(5, 22, getSize().width - 10, 30, parentWidget::getFuelLevel));
 
-        addWidget(new IgnitionButtonWidget(
-            5, 58, getSize().width - 10, 24,
-            parentWidget::canIgnite,
-            () -> getCurrentStage() == Stage.EMPTY || parentWidget.canIgnite(),
-            parentWidget::requestIgnition
-        ));
+        normalIgnitionButton = new IgnitionButtonWidget(
+                5, 58, getSize().width - 10, 24,
+                parentWidget::canIgnite,
+                () -> !hasPrestigeItem && (getCurrentStage() == Stage.EMPTY || parentWidget.canIgnite()),
+                parentWidget::requestIgnition);
+        addWidget(normalIgnitionButton);
+
+        prestigeIgnitionButton = new PrestigeIgnitionButton(
+                5, 58, getSize().width - 10, 24,
+                () -> hasPrestigeItem,
+                () -> hasActiveStar,
+                this::onPrestigeTriggered);
+        addWidget(prestigeIgnitionButton);
 
         IrisMultiblockMachine machine = machineSupplier.get();
         if (machine != null) {
             SlotWidget starSeedSlot = new SlotWidget(machine.getInventory().storage, 0, 5, 88, true, true);
             starSeedSlot.setBackground(new GuiTextureGroup(
-                new ColorRectTexture(0xC0101018),
-                new ColorBorderTexture(1, 0xFF505070)
-            ), GuiTextures.ATOMIC_OVERLAY_1);
+                    new ColorRectTexture(0xC0101018),
+                    new ColorBorderTexture(1, 0xFF505070)), GuiTextures.ATOMIC_OVERLAY_1);
             addWidget(starSeedSlot);
-            addWidget(new LabelWidget(28, 92, "Star Seed").setTextColor(0xFF808090));
+            addWidget(new LabelWidget(28, 92,
+                    () -> Component.translatable("cosmiccore.stellar.slot.star_seed").getString())
+                    .setTextColor(0xFF808090));
         }
+    }
+
+    private void onPrestigeTriggered() {
+        parentWidget.triggerPrestigeAnimation();
+    }
+
+    @Override
+    public void writeInitialData(FriendlyByteBuf buffer) {
+        super.writeInitialData(buffer);
+        IrisMultiblockMachine machine = machineSupplier.get();
+        if (machine != null) {
+            buffer.writeBoolean(machine.hasPrestigeItem());
+            buffer.writeBoolean(machine.hasActiveStar());
+        } else {
+            buffer.writeBoolean(false);
+            buffer.writeBoolean(false);
+        }
+    }
+
+    @Override
+    @OnlyIn(Dist.CLIENT)
+    public void readInitialData(FriendlyByteBuf buffer) {
+        super.readInitialData(buffer);
+        hasPrestigeItem = buffer.readBoolean();
+        hasActiveStar = buffer.readBoolean();
+        updateButtonVisibility();
+    }
+
+    @Override
+    public void detectAndSendChanges() {
+        super.detectAndSendChanges();
+
+        IrisMultiblockMachine machine = machineSupplier.get();
+        if (machine == null) return;
+
+        boolean newHasPrestigeItem = machine.hasPrestigeItem();
+        boolean newHasActiveStar = machine.hasActiveStar();
+
+        if (newHasPrestigeItem != hasPrestigeItem || newHasActiveStar != hasActiveStar) {
+            hasPrestigeItem = newHasPrestigeItem;
+            hasActiveStar = newHasActiveStar;
+            writeUpdateInfo(UPDATE_ID_PRESTIGE_STATE, buf -> {
+                buf.writeBoolean(hasPrestigeItem);
+                buf.writeBoolean(hasActiveStar);
+            });
+        }
+    }
+
+    @Override
+    @OnlyIn(Dist.CLIENT)
+    public void readUpdateInfo(int id, FriendlyByteBuf buffer) {
+        if (id == UPDATE_ID_PRESTIGE_STATE) {
+            hasPrestigeItem = buffer.readBoolean();
+            hasActiveStar = buffer.readBoolean();
+            updateButtonVisibility();
+
+            if (!hasPrestigeItem) {
+                prestigeIgnitionButton.reset();
+            }
+        } else {
+            super.readUpdateInfo(id, buffer);
+        }
+    }
+
+    @OnlyIn(Dist.CLIENT)
+    private void updateButtonVisibility() {
+        normalIgnitionButton.setVisible(!hasPrestigeItem);
+        normalIgnitionButton.setActive(!hasPrestigeItem);
+        prestigeIgnitionButton.setVisible(hasPrestigeItem);
+        prestigeIgnitionButton.setActive(hasPrestigeItem);
     }
 
     private Stage getCurrentStage() {
@@ -66,13 +155,13 @@ public class StageContextPanel extends WidgetGroup {
 
     private String getStagePanelTitle() {
         return switch (getCurrentStage()) {
-            case EMPTY -> "INITIALIZATION";
-            case GROWING -> "STELLAR IGNITION";
-            case STAR -> "STELLAR OPERATIONS";
-            case SUPERSTAR -> "CRITICAL MASS";
-            case BLACK_HOLE -> "SINGULARITY CONTROL";
-            case DEATH -> "EMERGENCY PROTOCOLS";
-            case DEATH_GRACEFUL -> "CONTROLLED SHUTDOWN";
+            case EMPTY -> Component.translatable("cosmiccore.stellar.stage.initialization").getString();
+            case GROWING -> Component.translatable("cosmiccore.stellar.stage.stellar_ignition").getString();
+            case STAR -> Component.translatable("cosmiccore.stellar.stage.stellar_operations").getString();
+            case SUPERSTAR -> Component.translatable("cosmiccore.stellar.stage.critical_mass").getString();
+            case BLACK_HOLE -> Component.translatable("cosmiccore.stellar.stage.singularity_control").getString();
+            case DEATH -> Component.translatable("cosmiccore.stellar.stage.emergency_protocols").getString();
+            case DEATH_GRACEFUL -> Component.translatable("cosmiccore.stellar.stage.controlled_shutdown").getString();
         };
     }
 
@@ -101,36 +190,59 @@ public class StageContextPanel extends WidgetGroup {
 
         switch (getCurrentStage()) {
             case EMPTY -> {
-                graphics.drawString(font, "Insert star seed and", x + 5, infoY, textColor, false);
-                graphics.drawString(font, "provide stellar gases", x + 5, infoY + 10, textColor, false);
-                graphics.drawString(font, "to begin ignition.", x + 5, infoY + 20, textColor, false);
+                graphics.drawString(font, Component.translatable("cosmiccore.stellar.context.empty_line1").getString(),
+                        x + 5, infoY, textColor, false);
+                graphics.drawString(font, Component.translatable("cosmiccore.stellar.context.empty_line2").getString(),
+                        x + 5, infoY + 10, textColor, false);
+                graphics.drawString(font, Component.translatable("cosmiccore.stellar.context.empty_line3").getString(),
+                        x + 5, infoY + 20, textColor, false);
             }
             case GROWING -> {
-                graphics.drawString(font, "Stellar fusion", x + 5, infoY, 0xFFAAAAFF, false);
-                graphics.drawString(font, "initiating...", x + 5, infoY + 10, 0xFFAAAAFF, false);
+                graphics.drawString(font,
+                        Component.translatable("cosmiccore.stellar.context.growing_line1").getString(), x + 5, infoY,
+                        0xFFAAAAFF, false);
+                graphics.drawString(font,
+                        Component.translatable("cosmiccore.stellar.context.growing_line2").getString(), x + 5,
+                        infoY + 10, 0xFFAAAAFF, false);
             }
             case STAR -> {
-                graphics.drawString(font, "Stable fusion active", x + 5, infoY, 0xFFFFCC44, false);
-                graphics.drawString(font, "Processing available", x + 5, infoY + 10, textColor, false);
+                graphics.drawString(font, Component.translatable("cosmiccore.stellar.context.star_line1").getString(),
+                        x + 5, infoY, 0xFFFFCC44, false);
+                graphics.drawString(font, Component.translatable("cosmiccore.stellar.context.star_line2").getString(),
+                        x + 5, infoY + 10, textColor, false);
             }
             case SUPERSTAR -> {
-                graphics.drawString(font, "WARNING: Critical mass", x + 5, infoY, 0xFFFF8844, false);
-                graphics.drawString(font, "Collapse imminent", x + 5, infoY + 10, 0xFFFF6622, false);
+                graphics.drawString(font,
+                        Component.translatable("cosmiccore.stellar.context.superstar_line1").getString(), x + 5, infoY,
+                        0xFFFF8844, false);
+                graphics.drawString(font,
+                        Component.translatable("cosmiccore.stellar.context.superstar_line2").getString(), x + 5,
+                        infoY + 10, 0xFFFF6622, false);
             }
             case BLACK_HOLE -> {
-                graphics.drawString(font, "Singularity contained", x + 5, infoY, 0xFFAA66FF, false);
-                graphics.drawString(font, "Exotic processing", x + 5, infoY + 10, 0xFF8844DD, false);
+                graphics.drawString(font,
+                        Component.translatable("cosmiccore.stellar.context.blackhole_line1").getString(), x + 5, infoY,
+                        0xFFAA66FF, false);
+                graphics.drawString(font,
+                        Component.translatable("cosmiccore.stellar.context.blackhole_line2").getString(), x + 5,
+                        infoY + 10, 0xFF8844DD, false);
             }
             case DEATH -> {
                 if (parentWidget.getTickCounter() % 20 < 10) {
                     graphics.fill(x + 1, y + 1, x + w - 1, y + h - 1, 0x30FF0000);
                 }
-                graphics.drawString(font, "CRITICAL FAILURE", x + 5, infoY, 0xFFFF0000, false);
-                graphics.drawString(font, "EVACUATE AREA", x + 5, infoY + 10, 0xFFFF4444, false);
+                graphics.drawString(font, Component.translatable("cosmiccore.stellar.context.death_line1").getString(),
+                        x + 5, infoY, 0xFFFF0000, false);
+                graphics.drawString(font, Component.translatable("cosmiccore.stellar.context.death_line2").getString(),
+                        x + 5, infoY + 10, 0xFFFF4444, false);
             }
             case DEATH_GRACEFUL -> {
-                graphics.drawString(font, "Controlled shutdown", x + 5, infoY, 0xFF884444, false);
-                graphics.drawString(font, "in progress...", x + 5, infoY + 10, textColor, false);
+                graphics.drawString(font,
+                        Component.translatable("cosmiccore.stellar.context.death_graceful_line1").getString(), x + 5,
+                        infoY, 0xFF884444, false);
+                graphics.drawString(font,
+                        Component.translatable("cosmiccore.stellar.context.death_graceful_line2").getString(), x + 5,
+                        infoY + 10, textColor, false);
             }
         }
     }

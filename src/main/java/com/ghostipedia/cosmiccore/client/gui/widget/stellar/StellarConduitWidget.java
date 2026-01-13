@@ -4,15 +4,16 @@ import com.ghostipedia.cosmiccore.api.machine.multiblock.IrisMultiblockMachine.S
 
 import com.lowdragmc.lowdraglib.gui.widget.Widget;
 
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.util.Mth;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
-import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Supplier;
+
+import javax.annotation.Nonnull;
 
 public class StellarConduitWidget extends Widget {
 
@@ -24,6 +25,7 @@ public class StellarConduitWidget extends Widget {
     private float flowPhase = 0f;
 
     private static class EnergyPulse {
+
         float position;
         float speed;
         float intensity;
@@ -132,10 +134,12 @@ public class StellarConduitWidget extends Widget {
         drawHorizontalConduit(graphics, cx + coreRadius, cy + 20, px - (cx + coreRadius), lineColor, glowColor);
 
         drawVerticalConduit(graphics, px + pw / 2, py, oy + 5 - py, lineColor, glowColor);
-        drawVerticalConduit(graphics, px + pw / 2, py + ph, oy + getSize().height - 5 - (py + ph), lineColor, glowColor);
+        drawVerticalConduit(graphics, px + pw / 2, py + ph, oy + getSize().height - 5 - (py + ph), lineColor,
+                glowColor);
 
         drawVerticalConduit(graphics, ox + coreX + coreSize / 2, oy + 5, coreY - 10, lineColor, glowColor);
-        drawVerticalConduit(graphics, ox + coreX + coreSize / 2, oy + coreY + coreSize + 5, getSize().height - coreY - coreSize - 10, lineColor, glowColor);
+        drawVerticalConduit(graphics, ox + coreX + coreSize / 2, oy + coreY + coreSize + 5,
+                getSize().height - coreY - coreSize - 10, lineColor, glowColor);
     }
 
     private void drawHorizontalConduit(GuiGraphics graphics, int x, int y, int length, int lineColor, int glowColor) {
@@ -217,7 +221,8 @@ public class StellarConduitWidget extends Widget {
                 }
                 default -> {
                     pulseX = ox + coreX + coreSize / 2;
-                    pulseY = oy + coreY + coreSize + 5 + (int) ((getSize().height - coreY - coreSize - 10) * pulse.position);
+                    pulseY = oy + coreY + coreSize + 5 +
+                            (int) ((getSize().height - coreY - coreSize - 10) * pulse.position);
                 }
             }
 
@@ -241,14 +246,14 @@ public class StellarConduitWidget extends Widget {
         int ph = panelH;
 
         int[][] nodes = {
-            {cx + coreRadius, cy - 20},
-            {cx + coreRadius, cy + 20},
-            {px, cy - 20},
-            {px, cy + 20},
-            {px + pw / 2, py},
-            {px + pw / 2, py + ph},
-            {cx, oy + 5},
-            {cx, oy + getSize().height - 5},
+                { cx + coreRadius, cy - 20 },
+                { cx + coreRadius, cy + 20 },
+                { px, cy - 20 },
+                { px, cy + 20 },
+                { px + pw / 2, py },
+                { px + pw / 2, py + ph },
+                { cx, oy + 5 },
+                { cx, oy + getSize().height - 5 },
         };
 
         for (int[] node : nodes) {

@@ -4,15 +4,16 @@ import com.ghostipedia.cosmiccore.api.machine.multiblock.IrisMultiblockMachine.S
 
 import com.lowdragmc.lowdraglib.gui.widget.Widget;
 
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.util.Mth;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
-import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Supplier;
+
+import javax.annotation.Nonnull;
 
 public class EnergyConduitWidget extends Widget {
 
@@ -23,6 +24,7 @@ public class EnergyConduitWidget extends Widget {
     private float pulseSpawnTimer = 0f;
 
     private static class EnergyPulse {
+
         float position;
         float speed;
         float intensity;
@@ -200,10 +202,10 @@ public class EnergyConduitWidget extends Widget {
         int nodeGlow = (nodeAlpha / 2 << 24) | (baseColor & 0x00FFFFFF);
 
         int[][] nodePositions = {
-            {x + 8, y + 8},
-            {x + w - 8, y + 8},
-            {x + 8, y + h - 8},
-            {x + w - 8, y + h - 8}
+                { x + 8, y + 8 },
+                { x + w - 8, y + 8 },
+                { x + 8, y + h - 8 },
+                { x + w - 8, y + h - 8 }
         };
 
         for (int[] pos : nodePositions) {

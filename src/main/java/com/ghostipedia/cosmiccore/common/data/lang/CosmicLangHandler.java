@@ -394,6 +394,7 @@ public class CosmicLangHandler extends LangHandler {
         provider.add("config.jade.plugin_cosmiccore.drone_maintenance_interface", "[CC] Drone Maintenance Interface");
 
         provider.add("config.jade.plugin_cosmiccore.parallel_info_cc", "[CC] Parallel Info");
+        provider.add("config.jade.plugin_cosmiccore.stellar_module", "[CC] Stellar Module");
 
         provider.add("debug.owner.uuid", "§aOwner UUID:§a %s");
         provider.add("debug.team.uuid", "§aTeam UUID:§a %s");
@@ -548,6 +549,79 @@ public class CosmicLangHandler extends LangHandler {
         provider.add("cosmiccore.machine.dreamers_basin.tooltip.no_recipe", "No recipe data");
         provider.add("cosmiccore.machine.dreamers_basin.tooltip.processing", "  Processing...");
         provider.add("cosmiccore.machine.dreamers_basin.tooltip.duration", "Recipe duration: %s");
+
+        // Stellar Iris Widget UI
+        provider.add("cosmiccore.stellar.prestige.title", "STELLAR CONVERGENCE");
+        provider.add("cosmiccore.stellar.prestige.points_earned", "POINTS EARNED");
+        provider.add("cosmiccore.stellar.prestige.total_points", "Total: %s points");
+        provider.add("cosmiccore.stellar.prestige.current_tier", "CURRENT TIER");
+        provider.add("cosmiccore.stellar.prestige.next_tier", "%s pts for %s");
+        provider.add("cosmiccore.stellar.prestige.max_tier", "MAXIMUM TIER REACHED");
+        provider.add("cosmiccore.stellar.prestige.tier_up", "TIER UP!");
+        provider.add("cosmiccore.stellar.prestige.continue", "[Click anywhere to continue]");
+
+        provider.add("cosmiccore.stellar.prestige.tier.novice", "NOVICE");
+        provider.add("cosmiccore.stellar.prestige.tier.apprentice", "APPRENTICE");
+        provider.add("cosmiccore.stellar.prestige.tier.journeyman", "JOURNEYMAN");
+        provider.add("cosmiccore.stellar.prestige.tier.expert", "EXPERT");
+        provider.add("cosmiccore.stellar.prestige.tier.master", "MASTER");
+        provider.add("cosmiccore.stellar.prestige.tier.grandmaster", "GRANDMASTER");
+        provider.add("cosmiccore.stellar.prestige.tier.unknown", "UNKNOWN");
+
+        provider.add("cosmiccore.stellar.ignition.requires_star", "REQUIRES ACTIVE STAR");
+        provider.add("cosmiccore.stellar.ignition.breaking", "!!! BREAKING !!!");
+        provider.add("cosmiccore.stellar.ignition.ignite", "IGNITE");
+
+        provider.add("cosmiccore.stellar.module.status", "Status");
+        provider.add("cosmiccore.stellar.module.status.processing", "PROCESSING");
+        provider.add("cosmiccore.stellar.module.status.idle", "IDLE");
+        provider.add("cosmiccore.stellar.module.status.offline", "OFFLINE");
+        provider.add("cosmiccore.stellar.module.status.ready", "READY");
+        provider.add("cosmiccore.stellar.module.status.iris_inactive", "IRIS INACTIVE");
+        provider.add("cosmiccore.stellar.module.status.disconnected", "DISCONNECTED");
+        provider.add("cosmiccore.stellar.module.status.power_fail", "POWER FAIL");
+        provider.add("cosmiccore.stellar.module.status.no_wireless", "NO WIRELESS");
+
+        provider.add("cosmiccore.stellar.module.max_eut", "Max EU/t");
+        provider.add("cosmiccore.stellar.module.parallel", "Parallel");
+        provider.add("cosmiccore.stellar.module.parallel_max", "%sx (max %s)");
+        provider.add("cosmiccore.stellar.module.current", "Current");
+        provider.add("cosmiccore.stellar.module.speed_bonus", "Speed Bonus");
+        provider.add("cosmiccore.stellar.module.iris_limit", "Iris Limit");
+        provider.add("cosmiccore.stellar.module.stage", "Stage");
+        provider.add("cosmiccore.stellar.module.waiting_iris", "Waiting for Iris");
+        provider.add("cosmiccore.stellar.module.not_linked", "Not linked to Stellar Iris");
+        provider.add("cosmiccore.stellar.module.config", "Module Config");
+
+        provider.add("cosmiccore.stellar.power.title", "Power Control Panel");
+        provider.add("cosmiccore.stellar.power.max_parallel", "Maximum Parallel");
+        provider.add("cosmiccore.stellar.power.voltage_per_parallel", "Voltage Per Parallel");
+
+        provider.add("cosmiccore.stellar.stage.initialization", "INITIALIZATION");
+        provider.add("cosmiccore.stellar.stage.stellar_ignition", "STELLAR IGNITION");
+        provider.add("cosmiccore.stellar.stage.stellar_operations", "STELLAR OPERATIONS");
+        provider.add("cosmiccore.stellar.stage.critical_mass", "CRITICAL MASS");
+        provider.add("cosmiccore.stellar.stage.singularity_control", "SINGULARITY CONTROL");
+        provider.add("cosmiccore.stellar.stage.emergency_protocols", "EMERGENCY PROTOCOLS");
+        provider.add("cosmiccore.stellar.stage.controlled_shutdown", "CONTROLLED SHUTDOWN");
+
+        provider.add("cosmiccore.stellar.context.empty_line1", "Insert star seed and");
+        provider.add("cosmiccore.stellar.context.empty_line2", "provide stellar gases");
+        provider.add("cosmiccore.stellar.context.empty_line3", "to begin ignition.");
+        provider.add("cosmiccore.stellar.context.growing_line1", "Stellar fusion");
+        provider.add("cosmiccore.stellar.context.growing_line2", "initiating...");
+        provider.add("cosmiccore.stellar.context.star_line1", "Stable fusion active");
+        provider.add("cosmiccore.stellar.context.star_line2", "Processing available");
+        provider.add("cosmiccore.stellar.context.superstar_line1", "WARNING: Critical mass");
+        provider.add("cosmiccore.stellar.context.superstar_line2", "Collapse imminent");
+        provider.add("cosmiccore.stellar.context.blackhole_line1", "Singularity contained");
+        provider.add("cosmiccore.stellar.context.blackhole_line2", "Exotic processing");
+        provider.add("cosmiccore.stellar.context.death_line1", "CRITICAL FAILURE");
+        provider.add("cosmiccore.stellar.context.death_line2", "SOUL FUSE ENGAGED");
+        provider.add("cosmiccore.stellar.context.death_graceful_line1", "Controlled shutdown");
+        provider.add("cosmiccore.stellar.context.death_graceful_line2", "in progress...");
+
+        provider.add("cosmiccore.stellar.slot.star_seed", "Star Seed");
 
         // =========================================================================
         // REFLECTION SYSTEM
@@ -1272,5 +1346,33 @@ public class CosmicLangHandler extends LangHandler {
         provider.add("reflection.cosmiccore.threshold.9.dialogue.3", "Only power. Only hunger. Only me.");
         provider.add("reflection.cosmiccore.threshold.9.question", "What do you see when you look at yourself?");
         provider.add("reflection.cosmiccore.threshold.9.response", "Nothing. Because there's nothing left to see.");
+
+        // Stellar Iris Module System
+        provider.add("cosmiccore.multiblock.stellar_module.not_connected", "§cNot Connected to Stellar Iris");
+        provider.add("cosmiccore.multiblock.stellar_module.iris_not_formed", "§cStellar Iris Not Formed");
+        provider.add("cosmiccore.multiblock.stellar_module.iris_not_ready", "§eStellar Iris Not Ready");
+        provider.add("cosmiccore.multiblock.stellar_module.connected", "§aConnected to Stellar Iris");
+        provider.add("cosmiccore.multiblock.stellar_module.stage", "§7Iris Stage: §e%s");
+        provider.add("cosmiccore.multiblock.stellar_module.speed_bonus", "§7Speed Bonus: §a%s");
+        provider.add("cosmiccore.multiblock.stellar_module.parallel", "§7Parallel Limit: §b%s");
+        provider.add("cosmiccore.multiblock.stellar_module.no_wireless", "§cNo Wireless Energy Network");
+        provider.add("cosmiccore.multiblock.stellar_module.energy_usage", "§eWireless EU/t: §f%s");
+        provider.add("cosmiccore.multiblock.stellar_module.loading", "§7Loading...");
+        provider.add("cosmiccore.multiblock.stellar_module.power_failure", "§c§lPOWER FAILURE - Insufficient Energy!");
+        provider.add("cosmiccore.multiblock.stellar_module.power_config", "§7Config: §b%s §7@ §a%dx §7Parallel");
+        provider.add("cosmiccore.multiblock.pattern.stellar_module_slot", "§7Module Slot (Air or Formed Module)");
+
+        // JADE Stellar Module Provider
+        provider.add("cosmiccore.jade.stellar_module.not_connected", "Iris: Not Connected");
+        provider.add("cosmiccore.jade.stellar_module.iris_not_ready", "Iris: Not Ready");
+        provider.add("cosmiccore.jade.stellar_module.connected", "Iris: Connected");
+        provider.add("cosmiccore.jade.stellar_module.stage", "Stage: %s");
+        provider.add("cosmiccore.jade.stellar_module.speed_bonus", "Speed: %s");
+        provider.add("cosmiccore.jade.stellar_module.no_wireless", "No Wireless Network");
+        provider.add("cosmiccore.jade.stellar_module.energy_usage", "Usage: %s");
+
+        // Stellar Iris GUI - Module Toggle
+        provider.add("cosmiccore.gui.stellar.show_star", "Show Star View");
+        provider.add("cosmiccore.gui.stellar.show_modules", "Show Module Control");
     }
 }

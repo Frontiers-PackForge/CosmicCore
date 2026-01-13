@@ -6,16 +6,17 @@ import com.ghostipedia.cosmiccore.api.machine.multiblock.IrisMultiblockMachine.S
 import com.lowdragmc.lowdraglib.gui.util.DrawerHelper;
 import com.lowdragmc.lowdraglib.gui.widget.Widget;
 
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.util.Mth;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
-import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Supplier;
+
+import javax.annotation.Nonnull;
 
 public class TelemetryPanelWidget extends Widget {
 
@@ -148,46 +149,46 @@ public class TelemetryPanelWidget extends Widget {
             case EMPTY -> timestamp + " [IDLE] Awaiting ignition sequence";
             case GROWING -> {
                 String[] msgs = {
-                    " [CORE] Fusion rate increasing",
-                    " [FUEL] Hydrogen consumption nominal",
-                    " [TEMP] Core temperature rising",
-                    " [STAB] Plasma containment stable"
+                        " [CORE] Fusion rate increasing",
+                        " [FUEL] Hydrogen consumption nominal",
+                        " [TEMP] Core temperature rising",
+                        " [STAB] Plasma containment stable"
                 };
                 yield timestamp + msgs[(int) (tick % msgs.length)];
             }
             case STAR -> {
                 String[] msgs = {
-                    " [CORE] Main sequence fusion active",
-                    " [OUT] Energy output: " + (int) displayedEnergy + " TW",
-                    " [FUEL] Helium ash accumulating",
-                    " [STAB] All systems nominal"
+                        " [CORE] Main sequence fusion active",
+                        " [OUT] Energy output: " + (int) displayedEnergy + " TW",
+                        " [FUEL] Helium ash accumulating",
+                        " [STAB] All systems nominal"
                 };
                 yield timestamp + msgs[(int) (tick % msgs.length)];
             }
             case SUPERSTAR -> {
                 String[] msgs = {
-                    " [WARN] Core pressure critical",
-                    " [WARN] Mass exceeding safe limits",
-                    " [ALERT] Collapse threshold approaching",
-                    " [CORE] Heavy element fusion detected"
+                        " [WARN] Core pressure critical",
+                        " [WARN] Mass exceeding safe limits",
+                        " [ALERT] Collapse threshold approaching",
+                        " [CORE] Heavy element fusion detected"
                 };
                 yield timestamp + msgs[(int) (tick % msgs.length)];
             }
             case BLACK_HOLE -> {
                 String[] msgs = {
-                    " [SING] Event horizon stable",
-                    " [GRAV] Hawking radiation detected",
-                    " [CONT] Exotic matter containment active",
-                    " [DATA] Spacetime curvature nominal"
+                        " [SING] Event horizon stable",
+                        " [GRAV] Hawking radiation detected",
+                        " [CONT] Exotic matter containment active",
+                        " [DATA] Spacetime curvature nominal"
                 };
                 yield timestamp + msgs[(int) (tick % msgs.length)];
             }
             case DEATH -> {
                 String[] msgs = {
-                    " [CRIT] CONTAINMENT FAILURE",
-                    " [CRIT] EMERGENCY PROTOCOLS ACTIVE",
-                    " [CRIT] EVACUATE IMMEDIATELY",
-                    " [CRIT] SYSTEM FAILURE IMMINENT"
+                        " [CRIT] CONTAINMENT FAILURE",
+                        " [CRIT] EMERGENCY PROTOCOLS ACTIVE",
+                        " [CRIT] EVACUATE IMMEDIATELY",
+                        " [CRIT] SYSTEM FAILURE IMMINENT"
                 };
                 yield timestamp + msgs[(int) (tick % msgs.length)];
             }
@@ -238,7 +239,8 @@ public class TelemetryPanelWidget extends Widget {
         int valueColor = 0xFFCCCCCC;
 
         graphics.drawString(font, "CORE TEMP:", col1, row1, labelColor, false);
-        graphics.drawString(font, formatTemperature(displayedTemp), col1 + 60, row1, getTemperatureColor(displayedTemp), false);
+        graphics.drawString(font, formatTemperature(displayedTemp), col1 + 60, row1, getTemperatureColor(displayedTemp),
+                false);
 
         graphics.drawString(font, "PRESSURE:", col1, row2, labelColor, false);
         graphics.drawString(font, String.format("%.1f GPa", displayedPressure), col1 + 60, row2, valueColor, false);

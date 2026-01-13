@@ -2,8 +2,12 @@ package com.ghostipedia.cosmiccore.api.pattern;
 
 import com.ghostipedia.cosmiccore.api.CosmicCoreAPI;
 import com.ghostipedia.cosmiccore.api.block.IMagnetType;
+import com.ghostipedia.cosmiccore.api.machine.feature.IStellarModuleReceiver;
 import com.ghostipedia.cosmiccore.common.block.MagnetBlock;
 
+import com.gregtechceu.gtceu.api.machine.IMachineBlockEntity;
+import com.gregtechceu.gtceu.api.machine.MetaMachine;
+import com.gregtechceu.gtceu.api.machine.feature.multiblock.IMultiController;
 import com.gregtechceu.gtceu.api.pattern.TraceabilityPredicate;
 import com.gregtechceu.gtceu.api.pattern.error.PatternStringError;
 import com.gregtechceu.gtceu.api.pattern.util.PatternMatchContext;
@@ -11,11 +15,14 @@ import com.gregtechceu.gtceu.api.pattern.util.PatternMatchContext;
 import com.lowdragmc.lowdraglib.utils.BlockInfo;
 
 import net.minecraft.network.chat.Component;
+import net.minecraft.world.level.block.Blocks;
 
 import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
 
 import java.util.Comparator;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 import java.util.function.Supplier;
 
 public class CosmicPredicates {
@@ -61,6 +68,46 @@ public class CosmicPredicates {
                 .map(blockSupplier -> BlockInfo.fromBlockState(blockSupplier.get().defaultBlockState()))
                 .toArray(BlockInfo[]::new))
                 .addTooltips(Component.translatable("gtceu.multiblock.pattern.error.filters"));
+    }
+
+    /**
+     * Predicate for Stellar Iris module slots.
+     * Accepts air (empty slot) or a Stellar Module controller (formed or not).
+     * When a module is found, adds it to the "stellarModules" set in match context.
+     * The module doesn't need to be formed - the Iris will establish the connection,
+     * allowing the module to then form using the Iris as its provider.
+     */
+    public static TraceabilityPredicate stellarModuleSlot() {
+        return new TraceabilityPredicate(blockWorldState -> {
+            var blockState = blockWorldState.getBlockState();
+
+            // Accept air (empty slot)
+            if (blockState.isAir()) {
+                return true;
+            }
+
+            // Check if this is a stellar module controller
+            var blockEntity = blockWorldState.getTileEntity();
+            if (blockEntity instanceof IMachineBlockEntity machineBlockEntity) {
+                MetaMachine machine = machineBlockEntity.getMetaMachine();
+
+                // Must be a multiblock controller that implements IStellarModuleReceiver
+                if (machine instanceof IMultiController &&
+                        machine instanceof IStellarModuleReceiver moduleReceiver) {
+
+                    // Add to the set of connected modules (formed or not)
+                    // The Iris will establish the connection during onStructureFormed
+                    Set<IStellarModuleReceiver> modules = blockWorldState.getMatchContext()
+                            .getOrCreate("stellarModules", HashSet::new);
+                    modules.add(moduleReceiver);
+                    return true;
+                }
+            }
+
+            // Invalid block - not air and not a valid module
+            return false;
+        }, () -> new BlockInfo[] { BlockInfo.fromBlockState(Blocks.AIR.defaultBlockState()) })
+                .addTooltips(Component.translatable("cosmiccore.multiblock.pattern.stellar_module_slot"));
     }
 
     public static void init() {}

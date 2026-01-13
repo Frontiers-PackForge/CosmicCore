@@ -14,13 +14,14 @@ import com.lowdragmc.lowdraglib.gui.widget.SlotWidget;
 import com.lowdragmc.lowdraglib.gui.widget.Widget;
 import com.lowdragmc.lowdraglib.gui.widget.WidgetGroup;
 
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
+
+import java.util.function.Supplier;
 
 import javax.annotation.Nonnull;
-import java.util.function.Supplier;
 
 public class StellarFancyUIWidget extends FancyMachineUIWidget {
 
@@ -41,9 +42,8 @@ public class StellarFancyUIWidget extends FancyMachineUIWidget {
 
     private void applyDarkTheme() {
         IGuiTexture titleBarBg = new GuiTextureGroup(
-            new ColorRectTexture(BG_COLOR),
-            new ColorBorderTexture(1, BORDER_COLOR)
-        );
+                new ColorRectTexture(BG_COLOR),
+                new ColorBorderTexture(1, BORDER_COLOR));
 
         if (titleBar != null) {
             titleBar.setBackground((IGuiTexture) null);
@@ -67,9 +67,8 @@ public class StellarFancyUIWidget extends FancyMachineUIWidget {
         if (playerInventory != null) {
             playerInventory.setBackground((IGuiTexture) null);
             IGuiTexture darkSlot = new GuiTextureGroup(
-                new ColorRectTexture(SLOT_BG_COLOR),
-                new ColorBorderTexture(1, SLOT_BORDER_COLOR)
-            );
+                    new ColorRectTexture(SLOT_BG_COLOR),
+                    new ColorBorderTexture(1, SLOT_BORDER_COLOR));
             for (Widget widget : playerInventory.widgets) {
                 if (widget instanceof SlotWidget slotWidget) {
                     slotWidget.setBackground(darkSlot);
@@ -85,17 +84,14 @@ public class StellarFancyUIWidget extends FancyMachineUIWidget {
         int accentColorDim = dimColor(accentColor, 0.6f);
 
         IGuiTexture tabNormal = new GuiTextureGroup(
-            new ColorRectTexture(0xA0080812),
-            new ColorBorderTexture(1, accentColorDim)
-        );
+                new ColorRectTexture(0xA0080812),
+                new ColorBorderTexture(1, accentColorDim));
         IGuiTexture tabHover = new GuiTextureGroup(
-            new ColorRectTexture(0xC0151525),
-            new ColorBorderTexture(1, accentColor)
-        );
+                new ColorRectTexture(0xC0151525),
+                new ColorBorderTexture(1, accentColor));
         IGuiTexture tabPressed = new GuiTextureGroup(
-            new ColorRectTexture(0xE0101020),
-            new ColorBorderTexture(1, accentColor)
-        );
+                new ColorRectTexture(0xE0101020),
+                new ColorBorderTexture(1, accentColor));
 
         sideTabsWidget.setTabTexture(tabNormal);
         sideTabsWidget.setTabHoverTexture(tabHover);
@@ -115,9 +111,8 @@ public class StellarFancyUIWidget extends FancyMachineUIWidget {
         super.initWidget();
         if (playerInventory != null) {
             IGuiTexture darkSlot = new GuiTextureGroup(
-                new ColorRectTexture(SLOT_BG_COLOR),
-                new ColorBorderTexture(1, SLOT_BORDER_COLOR)
-            );
+                    new ColorRectTexture(SLOT_BG_COLOR),
+                    new ColorBorderTexture(1, SLOT_BORDER_COLOR));
             for (Widget widget : playerInventory.widgets) {
                 if (widget instanceof SlotWidget slotWidget) {
                     slotWidget.setBackground(darkSlot);

@@ -3,16 +3,17 @@ package com.ghostipedia.cosmiccore.client.gui.widget.stellar;
 import com.lowdragmc.lowdraglib.gui.util.DrawerHelper;
 import com.lowdragmc.lowdraglib.gui.widget.Widget;
 
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.resources.sounds.SimpleSoundInstance;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.Mth;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
+
+import java.util.function.BooleanSupplier;
 
 import javax.annotation.Nonnull;
-import java.util.function.BooleanSupplier;
 
 public class IgnitionButtonWidget extends Widget {
 
@@ -39,7 +40,6 @@ public class IgnitionButtonWidget extends Widget {
         this.onIgnite = onIgnite;
     }
 
-
     @Override
     @OnlyIn(Dist.CLIENT)
     public void updateScreen() {
@@ -54,7 +54,7 @@ public class IgnitionButtonWidget extends Widget {
 
         if (hovered && !wasHovered && isVisible()) {
             Minecraft.getInstance().getSoundManager().play(
-                SimpleSoundInstance.forUI(SoundEvents.UI_BUTTON_CLICK.value(), 1.5f, 0.3f));
+                    SimpleSoundInstance.forUI(SoundEvents.UI_BUTTON_CLICK.value(), 1.5f, 0.3f));
         }
         wasHovered = hovered;
 
@@ -67,7 +67,7 @@ public class IgnitionButtonWidget extends Widget {
                 chargeTicks = 0;
                 chargeProgress = 0f;
                 Minecraft.getInstance().getSoundManager().play(
-                    SimpleSoundInstance.forUI(SoundEvents.RESPAWN_ANCHOR_SET_SPAWN, 0.8f, 1.0f));
+                        SimpleSoundInstance.forUI(SoundEvents.RESPAWN_ANCHOR_SET_SPAWN, 0.8f, 1.0f));
             }
         } else if (isCharging) {
             isCharging = false;
@@ -252,7 +252,7 @@ public class IgnitionButtonWidget extends Widget {
             isCharging = true;
             chargeTicks = 0;
             Minecraft.getInstance().getSoundManager().play(
-                SimpleSoundInstance.forUI(SoundEvents.RESPAWN_ANCHOR_CHARGE, 1.2f, 0.8f));
+                    SimpleSoundInstance.forUI(SoundEvents.RESPAWN_ANCHOR_CHARGE, 1.2f, 0.8f));
             return true;
         }
         return false;
@@ -265,7 +265,7 @@ public class IgnitionButtonWidget extends Widget {
             isCharging = false;
             if (chargeTicks < CHARGE_TICKS) {
                 Minecraft.getInstance().getSoundManager().play(
-                    SimpleSoundInstance.forUI(SoundEvents.FIRE_EXTINGUISH, 1.0f, 0.5f));
+                        SimpleSoundInstance.forUI(SoundEvents.FIRE_EXTINGUISH, 1.0f, 0.5f));
             }
             return true;
         }
