@@ -1,6 +1,7 @@
 package com.ghostipedia.cosmiccore.common.machine.multiblock.multi;
 
 import com.ghostipedia.cosmiccore.CosmicCore;
+import com.ghostipedia.cosmiccore.client.renderer.machine.CosmicDynamicRenderHelpers;
 import com.ghostipedia.cosmiccore.common.data.CosmicBlocks;
 import com.ghostipedia.cosmiccore.gtbridge.CosmicRecipeTypes;
 
@@ -21,6 +22,7 @@ import net.minecraft.network.chat.Component;
 import static com.ghostipedia.cosmiccore.api.registries.CosmicRegistration.REGISTRATE;
 import static com.ghostipedia.cosmiccore.common.data.CosmicBlocks.*;
 import static com.gregtechceu.gtceu.api.pattern.Predicates.*;
+import static com.gregtechceu.gtceu.common.data.models.GTMachineModels.createWorkableCasingMachineModel;
 
 public class StarLadder {
 
@@ -172,8 +174,11 @@ public class StarLadder {
                     .where('E', frames(GTMaterials.TungstenSteel))
                     .where('A', blocks(SUPERHEAVY_STEEL_CASING.get()))
                     .build())
-            .workableCasingModel(CosmicCore.id("block/casings/solid/rigid_high_speed_steel_casing"),
+            .model(createWorkableCasingMachineModel(
+                    CosmicCore.id("block/casings/solid/rigid_high_speed_steel_casing"),
                     GTCEu.id("block/multiblock/generator/large_gas_turbine"))
+                    .andThen(model -> model.addDynamicRenderer(CosmicDynamicRenderHelpers::getStarLadderRender)))
+
             .hasBER(true)
             .tooltips(Component.translatable("cosmiccore.multiblock.star_ladder.tooltip.0"),
                     Component.translatable("cosmiccore.multiblock.star_ladder.tooltip.1"),

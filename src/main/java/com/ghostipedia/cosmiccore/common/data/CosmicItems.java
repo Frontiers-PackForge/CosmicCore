@@ -7,13 +7,16 @@ import com.ghostipedia.cosmiccore.api.registries.CosmicRegistration;
 import com.ghostipedia.cosmiccore.client.renderer.item.HaloItemRenderer;
 import com.ghostipedia.cosmiccore.common.data.tag.item.CosmicItemTags;
 import com.ghostipedia.cosmiccore.common.item.CosmicScytheItem;
+import com.ghostipedia.cosmiccore.common.item.OxygenTankItem;
 import com.ghostipedia.cosmiccore.common.item.armor.ChestSanguineWarptechSuite;
 import com.ghostipedia.cosmiccore.common.item.armor.HelmetSanguineWarptechSuite;
 import com.ghostipedia.cosmiccore.common.item.armor.SanguineWarptechSuite;
 import com.ghostipedia.cosmiccore.common.item.behavior.EffectApplicationBehavior;
 import com.ghostipedia.cosmiccore.common.item.behavior.InfiniteSprayCanBehavior;
+import com.ghostipedia.cosmiccore.common.item.behavior.OxygenSupplyTankBehavior;
 import com.ghostipedia.cosmiccore.common.item.behavior.StructureWriteBehavior;
 import com.ghostipedia.cosmiccore.common.item.behavior.WirelessPDABehavior;
+import com.ghostipedia.cosmiccore.common.reflection.item.MirrorItem;
 import com.ghostipedia.cosmiccore.utils.StringUtil;
 
 import com.gregtechceu.gtceu.GTCEu;
@@ -1062,31 +1065,37 @@ public class CosmicItems {
             .item("shard_of_perpetuity", ComponentItem::create)
             .lang("Shard of Perpetuity")
             .properties(p -> p.stacksTo(64))
-            .onRegister(attach(new TooltipBehavior(tooltips -> {
-                tooltips.add(Component.translatable("cosmiccore.lore.shard_small.0"));
-                tooltips.add(Component.translatable("cosmiccore.lore.shard_small.1"));
-            })))
+            .onRegister(attach(
+                    new TooltipBehavior(tooltips -> {
+                        tooltips.add(Component.translatable("cosmiccore.lore.shard_small.0"));
+                        tooltips.add(Component.translatable("cosmiccore.lore.shard_small.1"));
+                    }),
+                    new com.ghostipedia.cosmiccore.common.reflection.item.ShardConsumeBehavior(1)))
             .defaultModel()
             .register();
     public static final ItemEntry<ComponentItem> PERPETUITY_SHARD_LARGE = REGISTRATE
             .item("large_shard_of_perpetuity", ComponentItem::create)
             .lang("Large Shard of Perpetuity")
             .properties(p -> p.stacksTo(64))
-            .onRegister(attach(new TooltipBehavior(tooltips -> {
-                tooltips.add(Component.translatable("cosmiccore.lore.shard_large.0"));
-                tooltips.add(Component.translatable("cosmiccore.lore.shard_large.1"));
-            })))
+            .onRegister(attach(
+                    new TooltipBehavior(tooltips -> {
+                        tooltips.add(Component.translatable("cosmiccore.lore.shard_large.0"));
+                        tooltips.add(Component.translatable("cosmiccore.lore.shard_large.1"));
+                    }),
+                    new com.ghostipedia.cosmiccore.common.reflection.item.ShardConsumeBehavior(8)))
             .defaultModel()
             .register();
     public static final ItemEntry<ComponentItem> PERPETUITY_SHARD_MASSIVE = REGISTRATE
             .item("cluster_of_perpetuity", ComponentItem::create)
             .lang("Cluster of Perpetuity")
             .properties(p -> p.stacksTo(60))
-            .onRegister(attach(new TooltipBehavior(tooltips -> {
-                tooltips.add(Component.translatable("cosmiccore.lore.shard_huge.0"));
-                tooltips.add(Component.translatable("cosmiccore.lore.shard_huge.1"));
-                tooltips.add(Component.translatable("cosmiccore.lore.shard_huge.2"));
-            })))
+            .onRegister(attach(
+                    new TooltipBehavior(tooltips -> {
+                        tooltips.add(Component.translatable("cosmiccore.lore.shard_huge.0"));
+                        tooltips.add(Component.translatable("cosmiccore.lore.shard_huge.1"));
+                        tooltips.add(Component.translatable("cosmiccore.lore.shard_huge.2"));
+                    }),
+                    new com.ghostipedia.cosmiccore.common.reflection.item.ShardConsumeBehavior(64)))
             .defaultModel()
             .register();
     public static final ItemEntry<ComponentItem> WIRELESS_PDA = REGISTRATE
@@ -1193,6 +1202,25 @@ public class CosmicItems {
             .properties(p -> p.stacksTo(1).fireResistant())
             .onRegister(attach(new TooltipBehavior(list -> {
                 list.add(Component.translatable("item.cosmiccore.space_radio.tooltip"));
+            })))
+            .register();
+
+    public static ItemEntry<ComponentItem> SIMPLE_REBREATHER = REGISTRATE
+            .item("simple_rebreather", ComponentItem::create)
+            .lang("Simple Rebreather")
+            .properties(p -> p.stacksTo(1).fireResistant())
+            .onRegister(attach(new TooltipBehavior(list -> {
+                list.add(Component.translatable("item.cosmiccore.simple_rebreather.tooltip"));
+            })))
+            .register();
+
+    public static ItemEntry<ComponentItem> PRESSURIZED_REBREATHER = REGISTRATE
+            .item("pressurized_rebreather", ComponentItem::create)
+            .lang("Pressurized Rebreather")
+            .properties(p -> p.stacksTo(1).fireResistant())
+            .onRegister(attach(new TooltipBehavior(list -> {
+                list.add(Component.translatable("item.cosmiccore.simple_rebreather.tooltip"));
+                list.add(Component.translatable("item.cosmiccore.pressurized_rebreather.tooltip"));
             })))
             .register();
 
@@ -2560,6 +2588,26 @@ public class CosmicItems {
             .defaultModel()
             .register();
 
+    // -------------------------------------------------------------------------
+    // Oxygen Supply Tanks
+    // -------------------------------------------------------------------------
+
+    public static final ItemEntry<OxygenTankItem> OXYGEN_SUPPLY_TANK_BRONZE = REGISTRATE
+            .item("bronze_supply_tank", OxygenTankItem::new)
+            .lang("Bronze Supply Tank")
+            .properties(p -> p.stacksTo(1))
+            .onRegister(attach(new OxygenSupplyTankBehavior(1000, 5, 10)))
+            .defaultModel()
+            .register();
+
+    public static final ItemEntry<OxygenTankItem> OXYGEN_SUPPLY_TANK_STEEL = REGISTRATE
+            .item("steel_supply_tank", OxygenTankItem::new)
+            .lang("Steel Supply Tank")
+            .properties(p -> p.stacksTo(1))
+            .onRegister(attach(new OxygenSupplyTankBehavior(2500, 5, 15)))
+            .defaultModel()
+            .register();
+
     public static ICustomDescriptionId cellName() {
         return new ICustomDescriptionId() {
 
@@ -2575,6 +2623,17 @@ public class CosmicItems {
     public static <T extends ComponentItem> NonNullConsumer<T> attach(IItemComponent... components) {
         return item -> item.attachComponents(components);
     }
+
+    // -------------------------------------------------------------------------
+    // Reflection System
+    // -------------------------------------------------------------------------
+
+    public static final ItemEntry<MirrorItem> REFLECTION_MIRROR = REGISTRATE
+            .item("reflection_mirror", MirrorItem::new)
+            .lang("Mirror of Erosion")
+            .properties(p -> p.stacksTo(1))
+            .defaultModel()
+            .register();
 
     public static <T extends Item> NonNullConsumer<T> modelPredicate(ResourceLocation predicate,
                                                                      Function<ItemStack, Float> property) {

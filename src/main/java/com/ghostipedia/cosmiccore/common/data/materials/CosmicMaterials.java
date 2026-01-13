@@ -70,6 +70,9 @@ public class CosmicMaterials {
     public static Material Lumium;
     public static Material Signalum;
     public static Material Enderium;
+    public static Material Tenbrium;
+    public static Material Halizine;
+    public static Material Rosmotosin;
 
     public static Material VibrantAlloy;
     public static Material EnergeticAlloy;
@@ -294,6 +297,33 @@ public class CosmicMaterials {
                 .ingot()
                 .liquid(new FluidBuilder().temperature(1340))
                 .color(0x1f6b62).secondaryColor(0x16455f).iconSet(MaterialIconSet.SHINY)
+                .flags(GENERATE_BOLT_SCREW, GENERATE_ROUND, GENERATE_GEAR, GENERATE_SMALL_GEAR, GENERATE_RING,
+                        GENERATE_FRAME, GENERATE_SPRING, GENERATE_SPRING_SMALL, GENERATE_FINE_WIRE, GENERATE_DENSE)
+                .blastTemp(4500, BlastProperty.GasTier.HIGH, GTValues.VA[GTValues.EV], 1200)
+                .buildAndRegister();
+
+        Tenbrium = new Material.Builder(CosmicCore.id("tenbrium"))
+                .ingot()
+                .liquid(new FluidBuilder().temperature(1340))
+                .color(0x8a8a8a).secondaryColor(0x404040).iconSet(MaterialIconSet.SHINY)
+                .flags(GENERATE_BOLT_SCREW, GENERATE_ROUND, GENERATE_GEAR, GENERATE_SMALL_GEAR, GENERATE_RING,
+                        GENERATE_FRAME, GENERATE_SPRING, GENERATE_SPRING_SMALL, GENERATE_FINE_WIRE, GENERATE_DENSE)
+                .blastTemp(4500, BlastProperty.GasTier.HIGH, GTValues.VA[GTValues.EV], 1200)
+                .buildAndRegister();
+
+        Halizine = new Material.Builder(CosmicCore.id("halizine"))
+                .ingot()
+                .liquid(new FluidBuilder().temperature(1340))
+                .color(0x8b1a7d).secondaryColor(0x3d0835).iconSet(MaterialIconSet.SHINY)
+                .flags(GENERATE_BOLT_SCREW, GENERATE_ROUND, GENERATE_GEAR, GENERATE_SMALL_GEAR, GENERATE_RING,
+                        GENERATE_FRAME, GENERATE_SPRING, GENERATE_SPRING_SMALL, GENERATE_FINE_WIRE, GENERATE_DENSE)
+                .blastTemp(4500, BlastProperty.GasTier.HIGH, GTValues.VA[GTValues.EV], 1200)
+                .buildAndRegister();
+
+        Rosmotosin = new Material.Builder(CosmicCore.id("rosmotosin"))
+                .ingot()
+                .liquid(new FluidBuilder().temperature(1340))
+                .color(0xdc143c).secondaryColor(0x8b0000).iconSet(CosmicMaterialSet.CRYSTAL)
                 .flags(GENERATE_BOLT_SCREW, GENERATE_ROUND, GENERATE_GEAR, GENERATE_SMALL_GEAR, GENERATE_RING,
                         GENERATE_FRAME, GENERATE_SPRING, GENERATE_SPRING_SMALL, GENERATE_FINE_WIRE, GENERATE_DENSE)
                 .blastTemp(4500, BlastProperty.GasTier.HIGH, GTValues.VA[GTValues.EV], 1200)

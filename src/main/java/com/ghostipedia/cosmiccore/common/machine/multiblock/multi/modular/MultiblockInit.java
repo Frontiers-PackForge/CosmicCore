@@ -12,6 +12,7 @@ public class MultiblockInit {
         // MegaStructures
         PrismaticOreFoundry.init();
         StellarIris.init();
+        StellarSmeltingModule.init();
         // StellarStarBallast.init();
         HemophagicTransfuser.init();
         PlasmiteDistillery.init();

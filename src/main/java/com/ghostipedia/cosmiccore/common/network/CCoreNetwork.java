@@ -2,7 +2,11 @@ package com.ghostipedia.cosmiccore.common.network;
 
 import com.ghostipedia.cosmiccore.CosmicCore;
 import com.ghostipedia.cosmiccore.common.network.packet.AbyssTimeWarnPacket;
+import com.ghostipedia.cosmiccore.common.network.packet.OxygenWarnPacket;
+import com.ghostipedia.cosmiccore.common.network.packet.SyncOxygenBarPacket;
 import com.ghostipedia.cosmiccore.common.network.packet.SyncTimeBarPacket;
+import com.ghostipedia.cosmiccore.common.reflection.network.SyncQuakeMovementPacket;
+import com.ghostipedia.cosmiccore.common.reflection.ui.VoidUIPackets;
 
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceKey;
@@ -78,5 +82,11 @@ public class CCoreNetwork {
         INITIALIZED = true;
         register(SyncTimeBarPacket.class, SyncTimeBarPacket::new, NetworkDirection.PLAY_TO_CLIENT);
         register(AbyssTimeWarnPacket.class, AbyssTimeWarnPacket::new, NetworkDirection.PLAY_TO_CLIENT);
+        register(SyncOxygenBarPacket.class, SyncOxygenBarPacket::new, NetworkDirection.PLAY_TO_CLIENT);
+        register(OxygenWarnPacket.class, OxygenWarnPacket::new, NetworkDirection.PLAY_TO_CLIENT);
+        register(SyncQuakeMovementPacket.class, SyncQuakeMovementPacket::new, NetworkDirection.PLAY_TO_CLIENT);
+
+        // Void UI packets
+        VoidUIPackets.register();
     }
 }
