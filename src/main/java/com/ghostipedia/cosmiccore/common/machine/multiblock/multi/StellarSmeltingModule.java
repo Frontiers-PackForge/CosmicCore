@@ -7,7 +7,9 @@ import com.ghostipedia.cosmiccore.gtbridge.CosmicRecipeTypes;
 import com.gregtechceu.gtceu.GTCEu;
 import com.gregtechceu.gtceu.api.data.RotationState;
 import com.gregtechceu.gtceu.api.machine.MultiblockMachineDefinition;
+import com.gregtechceu.gtceu.api.machine.multiblock.PartAbility;
 import com.gregtechceu.gtceu.api.pattern.FactoryBlockPattern;
+import com.gregtechceu.gtceu.api.pattern.Predicates;
 
 import static com.ghostipedia.cosmiccore.api.registries.CosmicRegistration.REGISTRATE;
 import static com.ghostipedia.cosmiccore.common.data.CosmicBlocks.*;
@@ -47,7 +49,13 @@ public class StellarSmeltingModule {
                     .where('D', blocks(CASING_HIGH_TEMPERATURE_SMELTING.get()))  // Shared ring blocks
                     .where('E', blocks(MULTIPURPOSE_INTERSTELLAR_GRADE_CASING.get()))
                     .where('F', blocks(ULTRA_POWERED_CASING.get()))
-                    .where('G', blocks(MULTIPURPOSE_INTERSTELLAR_GRADE_CASING.get()))
+                    .where('G', blocks(BOLTED_HEAVY_FRAME_CASING.get())
+                            .or(Predicates.abilities(PartAbility.EXPORT_ITEMS))
+                            .or(Predicates.abilities(PartAbility.EXPORT_FLUIDS))
+                            .or(Predicates.abilities(PartAbility.IMPORT_FLUIDS))
+                            .or(Predicates.abilities(PartAbility.IMPORT_ITEMS))
+
+                    )
                     .where('A', blocks(SOMARUST_CASING.get()))
                     .build())
             // spotless:on
