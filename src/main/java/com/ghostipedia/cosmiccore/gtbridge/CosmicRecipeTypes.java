@@ -346,7 +346,7 @@ public class CosmicRecipeTypes {
 
     // Stellar Iris Module Recipe Types
     public static final GTRecipeType STELLAR_SMELTING = GTRecipeTypes
-            .register("stellar_smelting", GTRecipeTypes.MULTIBLOCK)
+            .register("ignition_complex", GTRecipeTypes.MULTIBLOCK)
             .setMaxIOSize(9, 9, 3, 3)
             .setProgressBar(GuiTextures.PROGRESS_BAR_ARROW, ProgressTexture.FillDirection.LEFT_TO_RIGHT);
 

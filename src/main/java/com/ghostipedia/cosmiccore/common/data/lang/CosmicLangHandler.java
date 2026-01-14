@@ -1374,5 +1374,11 @@ public class CosmicLangHandler extends LangHandler {
         // Stellar Iris GUI - Module Toggle
         provider.add("cosmiccore.gui.stellar.show_star", "Show Star View");
         provider.add("cosmiccore.gui.stellar.show_modules", "Show Module Control");
+
+        // EMI Bookmark Keybinds
+        provider.add("key.categories.cosmiccore.emi", "CosmicCore - EMI");
+        provider.add("key.cosmiccore.emi.next_bookmark_group", "Next Bookmark Group");
+        provider.add("key.cosmiccore.emi.prev_bookmark_group", "Previous Bookmark Group");
+        provider.add("key.cosmiccore.emi.create_bookmark_group", "Create Bookmark Group");
     }
 }

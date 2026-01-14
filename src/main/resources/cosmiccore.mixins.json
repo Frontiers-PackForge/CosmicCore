@@ -10,6 +10,11 @@
     "client.MinecraftMixin",
     "client.SoundManagerMixin",
     "embers.EmberDialBlockMixin",
+    "emi.EmiFavoritesMixin",
+    "emi.EmiPersistentDataMixin",
+    "emi.EmiScreenManagerMixin",
+    "emi.EmiScreenSpaceMixin",
+    "emi.EmiSidebarPanelMixin",
     "emi.RecipeScreenMixin",
     "ldlib.CustomBakedModelMixin"
   ],

@@ -3,6 +3,8 @@ package com.ghostipedia.cosmiccore.client;
 import com.ghostipedia.cosmiccore.CosmicCore;
 import com.ghostipedia.cosmiccore.bee.CosmicBeesSpecies;
 import com.ghostipedia.cosmiccore.client.renderer.machine.*;
+import com.ghostipedia.cosmiccore.integration.emi.favorites.CosmicBookmarkKeybinds;
+import com.ghostipedia.cosmiccore.integration.emi.favorites.CosmicBookmarkManager;
 
 import com.gregtechceu.gtceu.client.renderer.machine.DynamicRenderManager;
 
@@ -10,6 +12,7 @@ import net.minecraft.client.renderer.ShaderInstance;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.ModelEvent;
 import net.minecraftforge.client.event.RegisterGuiOverlaysEvent;
+import net.minecraftforge.client.event.RegisterKeyMappingsEvent;
 import net.minecraftforge.client.event.RegisterShadersEvent;
 import net.minecraftforge.client.event.RenderGuiOverlayEvent;
 import net.minecraftforge.client.gui.overlay.VanillaGuiOverlay;
@@ -33,6 +36,9 @@ public class CosmicCoreClient {
 
     public static void init(IEventBus modBus) {
         modBus.register(CosmicCoreClient.class);
+
+        // Initialize the bookmark manager for EMI integration
+        CosmicBookmarkManager.init();
 
         DynamicRenderManager.register(CosmicCore.id("hpca_indicator"), HPCAIndicatorRender.TYPE);
         DynamicRenderManager.register(CosmicCore.id("hellfire_foundry_parts"), HellFireFoundryPartRender.TYPE);
@@ -82,6 +88,11 @@ public class CosmicCoreClient {
     @SubscribeEvent
     public static void onGUIRegisterUIOverlays(RegisterGuiOverlaysEvent event) {
         event.registerAboveAll("cosmichud", new CosmicHudGuiOverlay());
+    }
+
+    @SubscribeEvent
+    public static void registerKeyMappings(RegisterKeyMappingsEvent event) {
+        CosmicBookmarkKeybinds.registerKeyMappings(event);
     }
 
     @SubscribeEvent
