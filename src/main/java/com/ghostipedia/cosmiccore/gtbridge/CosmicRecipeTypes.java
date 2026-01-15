@@ -347,6 +347,7 @@ public class CosmicRecipeTypes {
     // Stellar Iris Module Recipe Types
     public static final GTRecipeType STELLAR_SMELTING = GTRecipeTypes
             .register("ignition_complex", GTRecipeTypes.MULTIBLOCK)
+            .setSound(GAS_SUCC)
             .setMaxIOSize(9, 9, 3, 3)
             .setProgressBar(GuiTextures.PROGRESS_BAR_ARROW, ProgressTexture.FillDirection.LEFT_TO_RIGHT);
 
@@ -452,10 +453,6 @@ public class CosmicRecipeTypes {
             .setSound(GTSoundEntries.REPLICATOR) // TODO - Sounds
             .setProgressBar(GuiTextures.PROGRESS_BAR_ARROW_MULTIPLE, ProgressTexture.FillDirection.LEFT_TO_RIGHT);
 
-    /**
-     * Recipe type for the Multithreaded Processor test machine.
-     * This machine can run multiple unique recipes simultaneously using color-coded input buses.
-     */
     public static final GTRecipeType MULTITHREADED_PROCESSOR = GTRecipeTypes
             .register("dream_basin", GTRecipeTypes.MULTIBLOCK)
             .setMaxIOSize(9, 9, 9, 9)
@@ -540,6 +537,14 @@ public class CosmicRecipeTypes {
                         .save(provider);
             }
         });
+
+//        BLAST_RECIPES.onRecipeBuild((builder, provider) -> {
+//            STELLAR_SMELTING.copyFrom(builder)
+//                    .save(provider);
+//        });
+
+
+
         ALLOY_BLAST_RECIPES.onRecipeBuild((builder, provider) -> {
             var orbitBuilderABS = ORBITAL_FORGE_ABS.copyFrom(builder);
             // Orbital Forge ONLY copies Standard ABS recipes, if an ABS recipe contains a dimension condition, it is

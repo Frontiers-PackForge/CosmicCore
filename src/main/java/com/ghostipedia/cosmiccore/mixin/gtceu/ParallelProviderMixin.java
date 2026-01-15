@@ -1,5 +1,6 @@
 package com.ghostipedia.cosmiccore.mixin.gtceu;
 
+import com.ghostipedia.cosmiccore.api.machine.multiblock.StellarBaseModule;
 import com.ghostipedia.cosmiccore.common.machine.multiblock.multi.logic.PCBFoundryMachine;
 
 import com.gregtechceu.gtceu.api.blockentity.MetaMachineBlockEntity;
@@ -21,6 +22,15 @@ import snownee.jade.api.BlockAccessor;
 @Debug(export = true)
 @Mixin(value = ParallelProvider.class, remap = false)
 public abstract class ParallelProviderMixin {
+
+    @Inject(method = "appendServerData", at = @At("HEAD"), cancellable = true)
+    public void cosmicCore$skipStellarModule(CompoundTag compoundTag, BlockAccessor blockAccessor, CallbackInfo ci) {
+        if (blockAccessor.getBlockEntity() instanceof MetaMachineBlockEntity blockEntity) {
+            if (blockEntity.getMetaMachine() instanceof StellarBaseModule) {
+                ci.cancel();
+            }
+        }
+    }
 
     @Inject(method = "appendServerData",
             at = @At(value = "INVOKE",
