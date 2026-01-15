@@ -21,17 +21,13 @@ public class StellarSmeltingModule {
 
     public static final MultiblockMachineDefinition STELLAR_SMELTING_MODULE = REGISTRATE
             .multiblock("stellar_smelting_module", StellarBaseModule::new)
-            .langValue("Godsbane Hyper-tensor Platform")
+            .langValue("Ignition Complex : GRAND FORGE")
             .rotationState(RotationState.NON_Y_AXIS)
             .recipeType(CosmicRecipeTypes.STELLAR_SMELTING)
             .appearanceBlock(CASING_HIGH_TEMPERATURE_SMELTING)
             .recipeModifiers(CosmicRecipeModifiers.STELLAR_MODULE_OVERCLOCK)
             // spotless:off
             .pattern(definition -> FactoryBlockPattern.start(RIGHT, BACK, UP)
-                    // The module has a compact structure that extends from the Iris ring
-                    // 'A' = CASING_HIGH_TEMPERATURE_SMELTING (shared with Iris ring structure)
-                    // 'B' = MULTIPURPOSE_INTERSTELLAR_GRADE_CASING
-                    // 'C' = Controller
                     .aisle("  AAAAA  ", " ACCCCCA ", "AFCFFFCFA", "AFCFFFCFA", "AFCFFFCFA", " ACCCCCA ", "  AAAAA  ")
                     .aisle("  B   B  ", "DDDDDDDDD", "DDDDDDDDD", "GGGGGGGGG", "DDDDDDDDD", "DDDDDDDDD", "  B   B  ")
                     .aisle("  B   B  ", "BCCCCCCCB", "GGGGGGGGG", "GGGGGGGGG", "GGGGGGGGG", "BCC   CCB", "  B   B  ")
@@ -47,13 +43,13 @@ public class StellarSmeltingModule {
                     .where('B', blocks(ROYAL_ICHORIUM_CASING.get()))  // Shared ring blocks
                     .where('C', blocks(CYCLOZINE_CHEMICALLY_REPELLING_CASING.get()))// Shared ring blocks
                     .where('D', blocks(CASING_HIGH_TEMPERATURE_SMELTING.get()))  // Shared ring blocks
-                    .where('E', blocks(MULTIPURPOSE_INTERSTELLAR_GRADE_CASING.get()))
-                    .where('F', blocks(ULTRA_POWERED_CASING.get()))
-                    .where('G', blocks(BOLTED_HEAVY_FRAME_CASING.get())
+                    .where('E', blocks(BOLTED_HEAVY_FRAME_CASING.get())
                             .or(Predicates.abilities(PartAbility.EXPORT_ITEMS))
                             .or(Predicates.abilities(PartAbility.EXPORT_FLUIDS))
                             .or(Predicates.abilities(PartAbility.IMPORT_FLUIDS))
-                            .or(Predicates.abilities(PartAbility.IMPORT_ITEMS))
+                            .or(Predicates.abilities(PartAbility.IMPORT_ITEMS)))
+                    .where('F', blocks(ULTRA_POWERED_CASING.get()))
+                    .where('G', blocks(MULTIPURPOSE_INTERSTELLAR_GRADE_CASING.get())
 
                     )
                     .where('A', blocks(SOMARUST_CASING.get()))

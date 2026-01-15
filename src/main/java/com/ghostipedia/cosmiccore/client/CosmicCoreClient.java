@@ -4,7 +4,6 @@ import com.ghostipedia.cosmiccore.CosmicCore;
 import com.ghostipedia.cosmiccore.bee.CosmicBeesSpecies;
 import com.ghostipedia.cosmiccore.client.renderer.machine.*;
 import com.ghostipedia.cosmiccore.integration.emi.favorites.CosmicBookmarkKeybinds;
-import com.ghostipedia.cosmiccore.integration.emi.favorites.CosmicBookmarkManager;
 
 import com.gregtechceu.gtceu.client.renderer.machine.DynamicRenderManager;
 
@@ -36,9 +35,6 @@ public class CosmicCoreClient {
 
     public static void init(IEventBus modBus) {
         modBus.register(CosmicCoreClient.class);
-
-        // Initialize the bookmark manager for EMI integration
-        CosmicBookmarkManager.init();
 
         DynamicRenderManager.register(CosmicCore.id("hpca_indicator"), HPCAIndicatorRender.TYPE);
         DynamicRenderManager.register(CosmicCore.id("hellfire_foundry_parts"), HellFireFoundryPartRender.TYPE);
@@ -392,10 +388,6 @@ public class CosmicCoreClient {
         }
     }
 
-    /**
-     * Hides vanilla GUI overlays that are replaced by CosmicCore's custom HUD.
-     * Specifically hides the vanilla air bubble bar since we use our own oxygen bar.
-     */
     @Mod.EventBusSubscriber(modid = CosmicCore.MOD_ID, value = Dist.CLIENT, bus = Mod.EventBusSubscriber.Bus.FORGE)
     public static final class HideVanillaOverlays {
 

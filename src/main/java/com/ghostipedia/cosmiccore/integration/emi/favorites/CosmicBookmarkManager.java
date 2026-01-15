@@ -38,6 +38,9 @@ public class CosmicBookmarkManager {
 
     public static CosmicBookmarkManager getInstance() {
         if (instance == null) {
+            if (Minecraft.getInstance() == null) {
+                throw new IllegalStateException("CosmicBookmarkManager accessed before Minecraft initialized");
+            }
             instance = new CosmicBookmarkManager();
             instance.load();
         }
@@ -330,9 +333,5 @@ public class CosmicBookmarkManager {
             instance.save();
             instance = null;
         }
-    }
-
-    public static void init() {
-        getInstance();
     }
 }

@@ -23,7 +23,6 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 public class MetaMachineBlockEntityMixin {
 
-    // Specifically target the getCapability(Machine, Capability, Direction) method
     @Inject(method = "getCapability(Lcom/gregtechceu/gtceu/api/machine/MetaMachine;Lnet/minecraftforge/common/capabilities/Capability;Lnet/minecraft/core/Direction;)Lnet/minecraftforge/common/util/LazyOptional;",
             at = @At("TAIL"),
             cancellable = true)
@@ -31,14 +30,9 @@ public class MetaMachineBlockEntityMixin {
                                              @NotNull Capability<T> cap,
                                              @Nullable Direction side,
                                              CallbackInfoReturnable<LazyOptional<T>> cir) {
-        if (cap == EmbersCapabilities.EMBER_CAPABILITY) {
-            if (machine instanceof EmberHatchPartMachine emberHatch) {
-                cir.setReturnValue(EmbersCapabilities.EMBER_CAPABILITY.orEmpty(cap,
-                        LazyOptional.of(() -> emberHatch.emberContainer.capability)));
-                return;
-            }
-
+        if (cap == EmbersCapabilities.EMBER_CAPABILITY && machine instanceof EmberHatchPartMachine emberHatch) {
+            cir.setReturnValue(EmbersCapabilities.EMBER_CAPABILITY.orEmpty(cap,
+                    LazyOptional.of(() -> emberHatch.emberContainer.capability)));
         }
-        cir.setReturnValue(LazyOptional.empty());
     }
 }

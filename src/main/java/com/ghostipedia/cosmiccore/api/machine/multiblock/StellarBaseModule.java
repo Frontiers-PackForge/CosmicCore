@@ -7,11 +7,16 @@ import com.ghostipedia.cosmiccore.client.gui.widget.stellar.StellarModuleContent
 import com.ghostipedia.cosmiccore.client.gui.widget.stellar.StellarModuleUIWidget;
 
 import com.gregtechceu.gtceu.api.GTValues;
+import com.gregtechceu.gtceu.api.capability.recipe.EURecipeCapability;
+import com.gregtechceu.gtceu.api.capability.recipe.IO;
+import com.gregtechceu.gtceu.api.capability.recipe.IRecipeHandler;
+import com.gregtechceu.gtceu.api.capability.recipe.RecipeCapability;
 import com.gregtechceu.gtceu.api.machine.IMachineBlockEntity;
 import com.gregtechceu.gtceu.api.machine.feature.IFancyUIMachine;
 import com.gregtechceu.gtceu.api.machine.feature.IOverclockMachine;
 import com.gregtechceu.gtceu.api.machine.feature.multiblock.IDisplayUIMachine;
 import com.gregtechceu.gtceu.api.machine.multiblock.WorkableMultiblockMachine;
+import com.gregtechceu.gtceu.api.machine.trait.NotifiableEnergyContainer;
 import com.gregtechceu.gtceu.api.recipe.GTRecipe;
 import com.gregtechceu.gtceu.api.recipe.RecipeHelper;
 import com.gregtechceu.gtceu.common.machine.owner.FTBOwner;
@@ -37,12 +42,12 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.math.BigInteger;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
-/**
- * Base class for Stellar Iris modules. Energy is drawn from the owner's wireless EU network.
- */
 @Getter
 public class StellarBaseModule extends WorkableMultiblockMachine
                                implements IStellarModuleReceiver, IDisplayUIMachine, IFancyUIMachine,
@@ -75,8 +80,14 @@ public class StellarBaseModule extends WorkableMultiblockMachine
     @DescSynced
     private long configuredVoltagePerParallel = 32;
 
+    private NotifiableEnergyContainer virtualEnergyContainer;
+
     public StellarBaseModule(IMachineBlockEntity holder) {
         super(holder);
+        this.virtualEnergyContainer = new NotifiableEnergyContainer(this,
+                Long.MAX_VALUE, Long.MAX_VALUE, Long.MAX_VALUE, 0, 0);
+        this.virtualEnergyContainer.setSideInputCondition(side -> false);
+        this.virtualEnergyContainer.setSideOutputCondition(side -> false);
     }
 
     @Override
@@ -122,7 +133,11 @@ public class StellarBaseModule extends WorkableMultiblockMachine
         }
 
         BigInteger leftover = data.addEUToGlobalWirelessEnergy(owner, BigInteger.valueOf(-amount));
-        return leftover.equals(BigInteger.ZERO);
+        if (leftover.equals(BigInteger.ZERO)) {
+            data.setEnergyOutput(owner, getPos(), amount);
+            return true;
+        }
+        return false;
     }
 
     protected boolean checkWirelessEnergyAvailable() {
@@ -154,10 +169,46 @@ public class StellarBaseModule extends WorkableMultiblockMachine
     }
 
     @Override
+    public void onLoad() {
+        super.onLoad();
+        if (isFormed() && stellarIris == null) {
+            findAndRegisterWithIris();
+        }
+        virtualEnergyContainer.setEnergyStored(Long.MAX_VALUE / 2);
+        this.wirelessEnergyAvailable = checkWirelessEnergyAvailable();
+
+        if (isFormed() && getLevel() instanceof ServerLevel serverLevel) {
+            serverLevel.getServer().tell(new net.minecraft.server.TickTask(
+                    serverLevel.getServer().getTickCount() + 20,
+                    () -> {
+                        if (isFormed() && stellarIris == null) {
+                            findAndRegisterWithIris();
+                        }
+                        getRecipeLogic().updateTickSubscription();
+                    }));
+        }
+    }
+
+    @Override
     public void onStructureFormed() {
         super.onStructureFormed();
         this.wirelessEnergyAvailable = checkWirelessEnergyAvailable();
         findAndRegisterWithIris();
+        virtualEnergyContainer.setEnergyStored(Long.MAX_VALUE / 2);
+    }
+
+    @Override
+    public Map<IO, Map<RecipeCapability<?>, List<IRecipeHandler<?>>>> getCapabilitiesFlat() {
+        Map<IO, Map<RecipeCapability<?>, List<IRecipeHandler<?>>>> flat = super.getCapabilitiesFlat();
+        Map<RecipeCapability<?>, List<IRecipeHandler<?>>> inputCaps = flat.get(IO.IN);
+        boolean hasEnergy = inputCaps != null && inputCaps.containsKey(EURecipeCapability.CAP)
+                && !inputCaps.get(EURecipeCapability.CAP).isEmpty();
+        if (!hasEnergy) {
+            flat.computeIfAbsent(IO.IN, k -> new HashMap<>())
+                    .computeIfAbsent(EURecipeCapability.CAP, k -> new ArrayList<>())
+                    .add(virtualEnergyContainer);
+        }
+        return flat;
     }
 
     protected void findAndRegisterWithIris() {
@@ -200,6 +251,7 @@ public class StellarBaseModule extends WorkableMultiblockMachine
         this.stellarIris = null;
         this.wirelessEnergyAvailable = false;
         this.energyConsumedPerTick = 0;
+        clearEnergyOutput();
     }
 
     @Override
@@ -209,6 +261,11 @@ public class StellarBaseModule extends WorkableMultiblockMachine
         }
 
         IStellarIrisProvider iris = getStellarIris();
+        if (iris == null) {
+            findAndRegisterWithIris();
+            iris = getStellarIris();
+        }
+
         if (iris == null || !iris.isFormed()) {
             return false;
         }
@@ -225,7 +282,8 @@ public class StellarBaseModule extends WorkableMultiblockMachine
     public boolean beforeWorking(@Nullable GTRecipe recipe) {
         if (recipe == null) return false;
 
-        long euPerTick = getRecipeEUPerTick(recipe);
+        long euPerTick = RecipeHelper.getRealEUt(recipe).getTotalEU();
+        euPerTick = applyEnergyDiscount(euPerTick);
 
         if (!drainWirelessEnergy(euPerTick)) {
             this.powerFailure = true;
@@ -243,8 +301,15 @@ public class StellarBaseModule extends WorkableMultiblockMachine
             return false;
         }
 
-        if (energyConsumedPerTick > 0) {
-            if (!drainWirelessEnergy(energyConsumedPerTick)) {
+        virtualEnergyContainer.setEnergyStored(Long.MAX_VALUE / 2);
+
+        GTRecipe lastRecipe = getRecipeLogic().getLastRecipe();
+        if (lastRecipe != null) {
+            long euPerTick = RecipeHelper.getRealEUt(lastRecipe).getTotalEU();
+            euPerTick = applyEnergyDiscount(euPerTick);
+            this.energyConsumedPerTick = euPerTick;
+
+            if (!drainWirelessEnergy(euPerTick)) {
                 this.powerFailure = true;
                 return false;
             }
@@ -254,23 +319,33 @@ public class StellarBaseModule extends WorkableMultiblockMachine
         return true;
     }
 
-    @Override
-    public void afterWorking() {
-        super.afterWorking();
-        this.energyConsumedPerTick = 0;
-        this.powerFailure = false;
-    }
-
-    protected long getRecipeEUPerTick(GTRecipe recipe) {
-        long baseEU = RecipeHelper.getRealEUt(recipe).getTotalEU();
-
+    private long applyEnergyDiscount(long baseEU) {
         IStellarIrisProvider iris = getStellarIris();
         if (iris != null && iris.canProcess()) {
             double discount = iris.getEnergyDiscount();
             baseEU = (long) (baseEU * discount);
         }
-
         return Math.max(1, baseEU);
+    }
+
+    @Override
+    public void afterWorking() {
+        super.afterWorking();
+        this.energyConsumedPerTick = 0;
+        this.powerFailure = false;
+        clearEnergyOutput();
+    }
+
+    private void clearEnergyOutput() {
+        if (!(getLevel() instanceof ServerLevel serverLevel)) {
+            return;
+        }
+        UUID owner = getTeamUUID();
+        if (owner == MachineOwner.EMPTY) {
+            return;
+        }
+        WirelessEnergySavedData data = WirelessEnergySavedData.getOrCreate(serverLevel);
+        data.removeEnergyOutput(owner, getPos());
     }
 
     @Override
