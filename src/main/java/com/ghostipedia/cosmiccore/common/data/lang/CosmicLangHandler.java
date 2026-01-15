@@ -1380,5 +1380,354 @@ public class CosmicLangHandler extends LangHandler {
         provider.add("key.cosmiccore.emi.next_bookmark_group", "Next Bookmark Group");
         provider.add("key.cosmiccore.emi.prev_bookmark_group", "Previous Bookmark Group");
         provider.add("key.cosmiccore.emi.create_bookmark_group", "Create Bookmark Group");
+
+        // =========================================================================
+        // STELLAR IRIS UPGRADE TREE
+        // =========================================================================
+
+        // Branch names
+        provider.add("cosmiccore.stellar.branch.ignition", "Ignition");
+        provider.add("cosmiccore.stellar.branch.fusion", "Fusion");
+        provider.add("cosmiccore.stellar.branch.collapse", "Collapse");
+        provider.add("cosmiccore.stellar.branch.void", "Void");
+
+        // UI strings
+        provider.add("cosmiccore.stellar.convergence.title", "Stellar Convergence");
+        provider.add("cosmiccore.stellar.upgrade.cost", "Cost: %d pts");
+        provider.add("cosmiccore.stellar.upgrade.tier_required", "Requires Tier %d");
+        provider.add("cosmiccore.stellar.upgrade.level", "Level %d / %d");
+        provider.add("cosmiccore.stellar.upgrade.max_level", "MAX LEVEL");
+        provider.add("cosmiccore.stellar.upgrade.owned", "OWNED");
+        provider.add("cosmiccore.stellar.upgrade.available", "Click to unlock");
+        provider.add("cosmiccore.stellar.upgrade.locked", "Locked");
+        provider.add("cosmiccore.stellar.upgrade.tier_locked", "Tier too low");
+        provider.add("cosmiccore.stellar.upgrade.not_enough_points", "Not enough points");
+        provider.add("cosmiccore.stellar.upgrade.prereqs_needed", "Prerequisites needed");
+
+        // === IGNITION BRANCH (Star Lifecycle) ===
+        provider.add("cosmiccore.stellar.upgrade.thermal_stabilizer", "Thermal Stabilizer");
+        provider.add("cosmiccore.stellar.upgrade.thermal_stabilizer.desc", "Stars decay 15% slower");
+
+        provider.add("cosmiccore.stellar.upgrade.plasma_conduits", "Plasma Conduits");
+        provider.add("cosmiccore.stellar.upgrade.plasma_conduits.desc", "-10% fuel consumption per tick");
+
+        provider.add("cosmiccore.stellar.upgrade.fusion_catalyst", "Fusion Catalyst");
+        provider.add("cosmiccore.stellar.upgrade.fusion_catalyst.desc", "Stars grow to next stage 25% faster");
+
+        provider.add("cosmiccore.stellar.upgrade.magnetic_confinement", "Magnetic Confinement");
+        provider.add("cosmiccore.stellar.upgrade.magnetic_confinement.desc",
+                "Star stage cannot drop during active processing");
+
+        provider.add("cosmiccore.stellar.upgrade.core_harmonics", "Core Harmonics");
+        provider.add("cosmiccore.stellar.upgrade.core_harmonics.desc", "-20% additional fuel consumption");
+
+        provider.add("cosmiccore.stellar.upgrade.proton_recycler", "Proton Recycler");
+        provider.add("cosmiccore.stellar.upgrade.proton_recycler.desc", "8% chance to not consume fuel on tick");
+
+        provider.add("cosmiccore.stellar.upgrade.stellar_regeneration", "Stellar Regeneration");
+        provider.add("cosmiccore.stellar.upgrade.stellar_regeneration.desc",
+                "3% chance per tick for star to gain stage");
+
+        provider.add("cosmiccore.stellar.upgrade.eternal_ember", "Eternal Ember");
+        provider.add("cosmiccore.stellar.upgrade.eternal_ember.desc", "Stars at STAR stage never naturally decay");
+
+        provider.add("cosmiccore.stellar.upgrade.phoenix_protocol", "Phoenix Protocol");
+        provider.add("cosmiccore.stellar.upgrade.phoenix_protocol.desc",
+                "When star would die, 25% chance to return to STAR stage instead");
+
+        provider.add("cosmiccore.stellar.upgrade.solar_dominion", "Solar Dominion");
+        provider.add("cosmiccore.stellar.upgrade.solar_dominion.desc", "All star lifecycle bonuses increased by 50%");
+
+        provider.add("cosmiccore.stellar.upgrade.perpetual_ignition", "Perpetual Ignition");
+        provider.add("cosmiccore.stellar.upgrade.perpetual_ignition.desc",
+                "Stars are immune to decay. Fuel costs halved.");
+
+        provider.add("cosmiccore.stellar.upgrade.supernova_core", "Supernova Core");
+        provider.add("cosmiccore.stellar.upgrade.supernova_core.desc",
+                "Stars at SUPERSTAR+ generate bonus prestige shards passively");
+
+        provider.add("cosmiccore.stellar.upgrade.plasma_hurricane", "Plasma Hurricane");
+        provider.add("cosmiccore.stellar.upgrade.plasma_hurricane.desc",
+                "Star growth speed increased by 40%");
+
+        provider.add("cosmiccore.stellar.upgrade.stellar_nursery", "Stellar Nursery");
+        provider.add("cosmiccore.stellar.upgrade.stellar_nursery.desc",
+                "New stars begin at GROWING stage instead of EMPTY");
+
+        provider.add("cosmiccore.stellar.upgrade.corona_expansion", "Corona Expansion");
+        provider.add("cosmiccore.stellar.upgrade.corona_expansion.desc",
+                "Module connection range doubled");
+
+        provider.add("cosmiccore.stellar.upgrade.helios_forge", "Helios Forge");
+        provider.add("cosmiccore.stellar.upgrade.helios_forge.desc",
+                "Unlock Helios-tier recipes requiring extreme stellar conditions");
+
+        provider.add("cosmiccore.stellar.upgrade.fusion_overdrive", "Fusion Overdrive");
+        provider.add("cosmiccore.stellar.upgrade.fusion_overdrive.desc",
+                "+50% processing speed, +25% fuel consumption");
+
+        provider.add("cosmiccore.stellar.upgrade.dyson_lattice", "Dyson Lattice");
+        provider.add("cosmiccore.stellar.upgrade.dyson_lattice.desc",
+                "Passive energy generation scales with star stage (up to 32k EU/t)");
+
+        provider.add("cosmiccore.stellar.upgrade.solar_genesis", "Solar Genesis");
+        provider.add("cosmiccore.stellar.upgrade.solar_genesis.desc",
+                "Can spawn secondary micro-stars that provide bonus parallels");
+
+        provider.add("cosmiccore.stellar.upgrade.primordial_flame", "Primordial Flame");
+        provider.add("cosmiccore.stellar.upgrade.primordial_flame.desc",
+                "The first fire. All Ignition bonuses doubled. Stars cannot die.");
+
+        // === FUSION BRANCH (Processing Power) ===
+        provider.add("cosmiccore.stellar.upgrade.graviton_lens", "Graviton Lens");
+        provider.add("cosmiccore.stellar.upgrade.graviton_lens.desc", "+1 parallel per star stage");
+
+        provider.add("cosmiccore.stellar.upgrade.superconducting_grid", "Superconducting Grid");
+        provider.add("cosmiccore.stellar.upgrade.superconducting_grid.desc", "-10% energy cost for all recipes");
+
+        provider.add("cosmiccore.stellar.upgrade.temporal_acceleration", "Temporal Acceleration");
+        provider.add("cosmiccore.stellar.upgrade.temporal_acceleration.desc", "+15% processing speed");
+
+        provider.add("cosmiccore.stellar.upgrade.parallel_manifold", "Parallel Manifold");
+        provider.add("cosmiccore.stellar.upgrade.parallel_manifold.desc", "+2 base parallel limit");
+
+        provider.add("cosmiccore.stellar.upgrade.stellar_compression", "Stellar Compression");
+        provider.add("cosmiccore.stellar.upgrade.stellar_compression.desc", "+25% speed at SUPERSTAR or higher");
+
+        provider.add("cosmiccore.stellar.upgrade.mass_efficiency", "Mass Efficiency");
+        provider.add("cosmiccore.stellar.upgrade.mass_efficiency.desc", "-15% additional energy cost");
+
+        provider.add("cosmiccore.stellar.upgrade.relativistic_processing", "Relativistic Processing");
+        provider.add("cosmiccore.stellar.upgrade.relativistic_processing.desc",
+                "Recipes under 20 ticks complete instantly");
+
+        provider.add("cosmiccore.stellar.upgrade.quantum_tunneling", "Quantum Tunneling");
+        provider.add("cosmiccore.stellar.upgrade.quantum_tunneling.desc", "10% chance to complete recipe instantly");
+
+        provider.add("cosmiccore.stellar.upgrade.hyperdense_core", "Hyperdense Core");
+        provider.add("cosmiccore.stellar.upgrade.hyperdense_core.desc", "+50% parallel limit from all sources");
+
+        provider.add("cosmiccore.stellar.upgrade.tachyon_weave", "Tachyon Weave");
+        provider.add("cosmiccore.stellar.upgrade.tachyon_weave.desc", "+30% processing speed, stacks additively");
+
+        provider.add("cosmiccore.stellar.upgrade.singularity_engine", "Singularity Engine");
+        provider.add("cosmiccore.stellar.upgrade.singularity_engine.desc",
+                "Double all speed/parallel bonuses. Energy costs -40%.");
+
+        provider.add("cosmiccore.stellar.upgrade.neutron_cascade", "Neutron Cascade");
+        provider.add("cosmiccore.stellar.upgrade.neutron_cascade.desc",
+                "Recipe completions have 15% chance to trigger twice");
+
+        provider.add("cosmiccore.stellar.upgrade.warp_field_matrix", "Warp Field Matrix");
+        provider.add("cosmiccore.stellar.upgrade.warp_field_matrix.desc",
+                "Items teleport directly to output buses (no transport needed)");
+
+        provider.add("cosmiccore.stellar.upgrade.particle_storm", "Particle Storm");
+        provider.add("cosmiccore.stellar.upgrade.particle_storm.desc",
+                "+4 base parallels, unlocks particle storm recipes");
+
+        provider.add("cosmiccore.stellar.upgrade.subspace_harmonics", "Subspace Harmonics");
+        provider.add("cosmiccore.stellar.upgrade.subspace_harmonics.desc",
+                "Energy costs scale inversely with recipe duration");
+
+        provider.add("cosmiccore.stellar.upgrade.antimatter_injection", "Antimatter Injection");
+        provider.add("cosmiccore.stellar.upgrade.antimatter_injection.desc",
+                "Unlock antimatter fuel. +100% speed when fueled with antimatter");
+
+        provider.add("cosmiccore.stellar.upgrade.zero_point_tap", "Zero Point Tap");
+        provider.add("cosmiccore.stellar.upgrade.zero_point_tap.desc",
+                "5% of energy cost is refunded after recipe completion");
+
+        provider.add("cosmiccore.stellar.upgrade.quark_gluon_plasma", "Quark-Gluon Plasma");
+        provider.add("cosmiccore.stellar.upgrade.quark_gluon_plasma.desc",
+                "Unlock QGP recipes. +8 parallels for QGP recipes only");
+
+        provider.add("cosmiccore.stellar.upgrade.planck_resonance", "Planck Resonance");
+        provider.add("cosmiccore.stellar.upgrade.planck_resonance.desc",
+                "Minimum recipe time reduced to 1 tick");
+
+        provider.add("cosmiccore.stellar.upgrade.omega_compression", "Omega Compression");
+        provider.add("cosmiccore.stellar.upgrade.omega_compression.desc",
+                "Ultimate processing. All Fusion bonuses tripled. Unlock Omega recipes.");
+
+        // === COLLAPSE BRANCH (Prestige & Points) ===
+        provider.add("cosmiccore.stellar.upgrade.shard_collector", "Shard Collector");
+        provider.add("cosmiccore.stellar.upgrade.shard_collector.desc", "+20% prestige points earned");
+
+        provider.add("cosmiccore.stellar.upgrade.resonant_sacrifice", "Resonant Sacrifice");
+        provider.add("cosmiccore.stellar.upgrade.resonant_sacrifice.desc",
+                "Prestige at SUPERSTAR gives BLACK_HOLE rewards");
+
+        provider.add("cosmiccore.stellar.upgrade.early_harvest", "Early Harvest");
+        provider.add("cosmiccore.stellar.upgrade.early_harvest.desc", "Can prestige at STAR stage (50% points)");
+
+        provider.add("cosmiccore.stellar.upgrade.efficient_consumption", "Efficient Consumption");
+        provider.add("cosmiccore.stellar.upgrade.efficient_consumption.desc",
+                "15% chance prestige doesn't consume prestige item");
+
+        provider.add("cosmiccore.stellar.upgrade.point_amplifier", "Point Amplifier");
+        provider.add("cosmiccore.stellar.upgrade.point_amplifier.desc",
+                "+30% prestige points (stacks with Shard Collector)");
+
+        provider.add("cosmiccore.stellar.upgrade.dual_sacrifice", "Dual Sacrifice");
+        provider.add("cosmiccore.stellar.upgrade.dual_sacrifice.desc", "Can consume 2 prestige items for 2.5x points");
+
+        provider.add("cosmiccore.stellar.upgrade.prestige_momentum", "Prestige Momentum");
+        provider.add("cosmiccore.stellar.upgrade.prestige_momentum.desc",
+                "Each consecutive prestige gives +10% points (max 50%)");
+
+        provider.add("cosmiccore.stellar.upgrade.echo_of_collapse", "Echo of Collapse");
+        provider.add("cosmiccore.stellar.upgrade.echo_of_collapse.desc",
+                "Prestige grants a temporary 20% speed boost for 5 minutes");
+
+        provider.add("cosmiccore.stellar.upgrade.entropy_harvest", "Entropy Harvest");
+        provider.add("cosmiccore.stellar.upgrade.entropy_harvest.desc",
+                "Gain bonus points based on star lifetime before prestige");
+
+        provider.add("cosmiccore.stellar.upgrade.infinite_recursion", "Infinite Recursion");
+        provider.add("cosmiccore.stellar.upgrade.infinite_recursion.desc",
+                "Prestige gives 2x points. 25% chance to keep prestige item.");
+
+        provider.add("cosmiccore.stellar.upgrade.cascading_collapse", "Cascading Collapse");
+        provider.add("cosmiccore.stellar.upgrade.cascading_collapse.desc",
+                "Prestige triggers grant bonus points to connected modules");
+
+        provider.add("cosmiccore.stellar.upgrade.temporal_echo", "Temporal Echo");
+        provider.add("cosmiccore.stellar.upgrade.temporal_echo.desc",
+                "Store up to 3 prestige charges, release all at once for 3x value");
+
+        provider.add("cosmiccore.stellar.upgrade.mass_conversion", "Mass Conversion");
+        provider.add("cosmiccore.stellar.upgrade.mass_conversion.desc",
+                "Convert excess materials into prestige points (1000:1 ratio)");
+
+        provider.add("cosmiccore.stellar.upgrade.stellar_debt", "Stellar Debt");
+        provider.add("cosmiccore.stellar.upgrade.stellar_debt.desc",
+                "Borrow prestige points from future prestiges (150% payback)");
+
+        provider.add("cosmiccore.stellar.upgrade.entropy_engine", "Entropy Engine");
+        provider.add("cosmiccore.stellar.upgrade.entropy_engine.desc",
+                "Failed recipes contribute to prestige point pool");
+
+        provider.add("cosmiccore.stellar.upgrade.sacrifice_amplifier", "Sacrifice Amplifier");
+        provider.add("cosmiccore.stellar.upgrade.sacrifice_amplifier.desc",
+                "Prestige items give 4x points but are always consumed");
+
+        provider.add("cosmiccore.stellar.upgrade.cosmic_tithe", "Cosmic Tithe");
+        provider.add("cosmiccore.stellar.upgrade.cosmic_tithe.desc",
+                "Passively generate prestige points (1/min per tier)");
+
+        provider.add("cosmiccore.stellar.upgrade.annihilation_yield", "Annihilation Yield");
+        provider.add("cosmiccore.stellar.upgrade.annihilation_yield.desc",
+                "BLACK_HOLE prestige gives 5x base points, destroys the star");
+
+        provider.add("cosmiccore.stellar.upgrade.heat_death", "Heat Death");
+        provider.add("cosmiccore.stellar.upgrade.heat_death.desc",
+                "The end of all things. All Collapse bonuses tripled. Prestige is instant.");
+
+        // === VOID BRANCH (Exotic Abilities) ===
+        provider.add("cosmiccore.stellar.upgrade.hawking_radiator", "Hawking Radiator");
+        provider.add("cosmiccore.stellar.upgrade.hawking_radiator.desc", "BLACK_HOLE generates 2048 EU/t passively");
+
+        provider.add("cosmiccore.stellar.upgrade.chromatic_tuning", "Chromatic Tuning");
+        provider.add("cosmiccore.stellar.upgrade.chromatic_tuning.desc",
+                "Custom star color provides +5% to matching element recipes");
+
+        provider.add("cosmiccore.stellar.upgrade.exotic_matter_tap", "Exotic Matter Tap");
+        provider.add("cosmiccore.stellar.upgrade.exotic_matter_tap.desc", "Unlock exotic matter processing recipes");
+
+        provider.add("cosmiccore.stellar.upgrade.void_whispers", "Void Whispers");
+        provider.add("cosmiccore.stellar.upgrade.void_whispers.desc", "BLACK_HOLE stage provides +50% speed bonus");
+
+        provider.add("cosmiccore.stellar.upgrade.event_horizon_lock", "Event Horizon Lock");
+        provider.add("cosmiccore.stellar.upgrade.event_horizon_lock.desc", "BLACK_HOLE never decays to DEATH");
+
+        provider.add("cosmiccore.stellar.upgrade.singularity_siphon", "Singularity Siphon");
+        provider.add("cosmiccore.stellar.upgrade.singularity_siphon.desc",
+                "BLACK_HOLE stage reduces recipe energy cost by 20%");
+
+        provider.add("cosmiccore.stellar.upgrade.gravitational_mastery", "Gravitational Mastery");
+        provider.add("cosmiccore.stellar.upgrade.gravitational_mastery.desc",
+                "BLACK_HOLE stage grants +3 parallels");
+
+        provider.add("cosmiccore.stellar.upgrade.void_harvester", "Void Harvester");
+        provider.add("cosmiccore.stellar.upgrade.void_harvester.desc", "BLACK_HOLE prestige gives 3x base points");
+
+        provider.add("cosmiccore.stellar.upgrade.eldritch_insight", "Eldritch Insight");
+        provider.add("cosmiccore.stellar.upgrade.eldritch_insight.desc",
+                "Reveals hidden recipe bonuses based on star configuration");
+
+        provider.add("cosmiccore.stellar.upgrade.abyss_walker", "Abyss Walker");
+        provider.add("cosmiccore.stellar.upgrade.abyss_walker.desc",
+                "Void energy passively accumulates, boosting exotic recipes");
+
+        provider.add("cosmiccore.stellar.upgrade.eternal_void", "Eternal Void");
+        provider.add("cosmiccore.stellar.upgrade.eternal_void.desc",
+                "All BLACK_HOLE bonuses are doubled. Void effects persist 30s after leaving BLACK_HOLE.");
+
+        provider.add("cosmiccore.stellar.upgrade.dark_matter_lens", "Dark Matter Lens");
+        provider.add("cosmiccore.stellar.upgrade.dark_matter_lens.desc",
+                "BLACK_HOLE passively produces Dark Matter (1/min)");
+
+        provider.add("cosmiccore.stellar.upgrade.negative_mass", "Negative Mass");
+        provider.add("cosmiccore.stellar.upgrade.negative_mass.desc",
+                "Recipes in BLACK_HOLE have inverted energy costs (gain EU)");
+
+        provider.add("cosmiccore.stellar.upgrade.vacuum_decay", "Vacuum Decay");
+        provider.add("cosmiccore.stellar.upgrade.vacuum_decay.desc",
+                "Chance to void input items for 10x output");
+
+        provider.add("cosmiccore.stellar.upgrade.photon_sphere", "Photon Sphere");
+        provider.add("cosmiccore.stellar.upgrade.photon_sphere.desc",
+                "Light-based recipes get +200% speed in BLACK_HOLE");
+
+        provider.add("cosmiccore.stellar.upgrade.schwarzschild_radius", "Schwarzschild Radius");
+        provider.add("cosmiccore.stellar.upgrade.schwarzschild_radius.desc",
+                "Increase BLACK_HOLE event horizon - more items can process simultaneously");
+
+        provider.add("cosmiccore.stellar.upgrade.ergosphere_tap", "Ergosphere Tap");
+        provider.add("cosmiccore.stellar.upgrade.ergosphere_tap.desc",
+                "Extract rotational energy from BLACK_HOLE (8192 EU/t passive)");
+
+        provider.add("cosmiccore.stellar.upgrade.penrose_process", "Penrose Process");
+        provider.add("cosmiccore.stellar.upgrade.penrose_process.desc",
+                "Throw matter into BLACK_HOLE to extract 130% of its energy value");
+
+        provider.add("cosmiccore.stellar.upgrade.kerr_extraction", "Kerr Extraction");
+        provider.add("cosmiccore.stellar.upgrade.kerr_extraction.desc",
+                "Spinning BLACK_HOLE grants +6 parallels and exotic byproducts");
+
+        provider.add("cosmiccore.stellar.upgrade.false_vacuum", "False Vacuum");
+        provider.add("cosmiccore.stellar.upgrade.false_vacuum.desc",
+                "Reality unravels. All Void bonuses tripled. Unlock False Vacuum recipes.");
+
+        // === REPEATABLE UPGRADES ===
+        provider.add("cosmiccore.stellar.upgrade.stellar_efficiency", "Stellar Efficiency");
+        provider.add("cosmiccore.stellar.upgrade.stellar_efficiency.desc", "+2% speed per level (max 10 levels)");
+
+        provider.add("cosmiccore.stellar.upgrade.parallel_threading", "Parallel Threading");
+        provider.add("cosmiccore.stellar.upgrade.parallel_threading.desc", "+1 parallel per level (max 8 levels)");
+
+        provider.add("cosmiccore.stellar.upgrade.energy_optimization", "Energy Optimization");
+        provider.add("cosmiccore.stellar.upgrade.energy_optimization.desc",
+                "-3% energy cost per level (max 10 levels)");
+
+        provider.add("cosmiccore.stellar.upgrade.fuel_efficiency", "Fuel Efficiency");
+        provider.add("cosmiccore.stellar.upgrade.fuel_efficiency.desc",
+                "-2% fuel consumption per level (max 10 levels)");
+
+        provider.add("cosmiccore.stellar.upgrade.prestige_amplifier", "Prestige Amplifier");
+        provider.add("cosmiccore.stellar.upgrade.prestige_amplifier.desc",
+                "+5% prestige points per level (max 10 levels)");
+
+        provider.add("cosmiccore.stellar.upgrade.decay_resistance", "Decay Resistance");
+        provider.add("cosmiccore.stellar.upgrade.decay_resistance.desc",
+                "+3% decay resistance per level (max 10 levels)");
+
+        provider.add("cosmiccore.stellar.upgrade.growth_catalyst", "Growth Catalyst");
+        provider.add("cosmiccore.stellar.upgrade.growth_catalyst.desc", "+3% growth speed per level (max 10 levels)");
+
+        provider.add("cosmiccore.stellar.upgrade.void_attunement", "Void Attunement");
+        provider.add("cosmiccore.stellar.upgrade.void_attunement.desc",
+                "+2% bonus from void effects per level (max 10 levels)");
     }
 }
