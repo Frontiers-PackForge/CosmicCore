@@ -5,6 +5,7 @@ import com.ghostipedia.cosmiccore.api.machine.feature.IStellarModuleReceiver;
 import com.ghostipedia.cosmiccore.api.machine.multiblock.IrisMultiblockMachine;
 import com.ghostipedia.cosmiccore.api.machine.multiblock.IrisMultiblockMachine.Stage;
 import com.ghostipedia.cosmiccore.api.machine.multiblock.StellarBaseModule;
+import com.ghostipedia.cosmiccore.client.gui.screen.StellarConvergenceScreen;
 
 import com.lowdragmc.lowdraglib.gui.util.DrawerHelper;
 import com.lowdragmc.lowdraglib.gui.widget.WidgetGroup;
@@ -45,6 +46,8 @@ public class StellarIrisWidget extends WidgetGroup {
 
     private PrestigeAnimationOverlay prestigeAnimationOverlay;
     private PrestigeWindow prestigeWindow;
+    private UpgradeTreeWidget upgradeTreeWidget;
+    private UpgradeTreeButton upgradeTreeButton;
     private boolean prestigeAnimationTriggered = false;
     private Stage stageBeforePrestige = Stage.EMPTY;
 
@@ -155,6 +158,7 @@ public class StellarIrisWidget extends WidgetGroup {
         initModuleToggle();
         initStarColorButton();
         initPrestigeWidgets();
+        initUpgradeTreeWidgets();
     }
 
     private void initPrestigeWidgets() {
@@ -171,6 +175,29 @@ public class StellarIrisWidget extends WidgetGroup {
                 machineSupplier, this::onPrestigeAnimationComplete, this::onShowPrestigeWindow);
         prestigeAnimationOverlay.setCoreWidget(coreWidget);
         addWidget(prestigeAnimationOverlay);
+    }
+
+    private void initUpgradeTreeWidgets() {
+        // Upgrade tree button - positioned next to other buttons
+        int btnSize = 18;
+        int btnX = 5 + 18 + 4 + 18 + 4; // After module toggle and color button
+        int btnY = HEIGHT - btnSize - 5;
+
+        upgradeTreeButton = new UpgradeTreeButton(btnX, btnY, btnSize, btnSize,
+                this::onUpgradeTreeButtonClicked, machineSupplier);
+        addWidget(upgradeTreeButton);
+
+        // Note: Widget is no longer used - we open a full screen instead
+        upgradeTreeWidget = null;
+    }
+
+    @OnlyIn(Dist.CLIENT)
+    private void onUpgradeTreeButtonClicked(boolean ignored) {
+        // Open the full-screen upgrade tree
+        IrisMultiblockMachine machine = machineSupplier.get();
+        if (machine != null) {
+            StellarConvergenceScreen.open(machine);
+        }
     }
 
     private void initDebugButtons() {
@@ -560,7 +587,7 @@ public class StellarIrisWidget extends WidgetGroup {
         IrisMultiblockMachine machine = machineSupplier.get();
         if (machine != null) {
             int earned = machine.getLastPrestigePointsEarned();
-            int total = machine.getPrestigePoints() + earned;
+            int total = machine.getSpendablePoints() + earned;
             int tier = machine.getPrestigeTier();
             int prevTier = tier;
 
@@ -650,7 +677,7 @@ public class StellarIrisWidget extends WidgetGroup {
 
             com.ghostipedia.cosmiccore.CosmicCore.LOGGER.info(
                     "[StellarIrisWidget] SERVER prestige completed. Points: {}, Tier: {}",
-                    machine.getPrestigePoints(), machine.getPrestigeTier());
+                    machine.getSpendablePoints(), machine.getPrestigeTier());
         } else {
             super.handleClientAction(id, buffer);
         }
