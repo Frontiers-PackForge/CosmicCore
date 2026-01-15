@@ -201,8 +201,8 @@ public class StellarBaseModule extends WorkableMultiblockMachine
     public Map<IO, Map<RecipeCapability<?>, List<IRecipeHandler<?>>>> getCapabilitiesFlat() {
         Map<IO, Map<RecipeCapability<?>, List<IRecipeHandler<?>>>> flat = super.getCapabilitiesFlat();
         Map<RecipeCapability<?>, List<IRecipeHandler<?>>> inputCaps = flat.get(IO.IN);
-        boolean hasEnergy = inputCaps != null && inputCaps.containsKey(EURecipeCapability.CAP)
-                && !inputCaps.get(EURecipeCapability.CAP).isEmpty();
+        boolean hasEnergy = inputCaps != null && inputCaps.containsKey(EURecipeCapability.CAP) &&
+                !inputCaps.get(EURecipeCapability.CAP).isEmpty();
         if (!hasEnergy) {
             flat.computeIfAbsent(IO.IN, k -> new HashMap<>())
                     .computeIfAbsent(EURecipeCapability.CAP, k -> new ArrayList<>())
