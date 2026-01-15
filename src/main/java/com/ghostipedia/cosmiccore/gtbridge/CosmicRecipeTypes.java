@@ -538,12 +538,10 @@ public class CosmicRecipeTypes {
             }
         });
 
-//        BLAST_RECIPES.onRecipeBuild((builder, provider) -> {
-//            STELLAR_SMELTING.copyFrom(builder)
-//                    .save(provider);
-//        });
-
-
+        // BLAST_RECIPES.onRecipeBuild((builder, provider) -> {
+        // STELLAR_SMELTING.copyFrom(builder)
+        // .save(provider);
+        // });
 
         ALLOY_BLAST_RECIPES.onRecipeBuild((builder, provider) -> {
             var orbitBuilderABS = ORBITAL_FORGE_ABS.copyFrom(builder);
