@@ -2,7 +2,7 @@ dependencies {
     compileOnly(libs.jetbrains.annotations)
 
     modRuntimeOnly("curse.maven:worldedit-225608:4586218") //Worldedit bc i'm lazy ty
-    modRuntimeOnly("curse.maven:effortless-building-302113:4979089") //EB bc i'm lazy ty
+    modRuntimeOnly("curse.maven:effortless-building-302113:6330928") //EB bc i'm lazy ty
 
     //IDK if we need this fully yet...
     modImplementation('com.github.thedarkcolour:ModKit:0302f9aa42')
@@ -78,8 +78,8 @@ dependencies {
     modImplementation(forge.bloodMagic)
 
     // Create
-    modCompileOnly(forge.create)
-    modCompileOnly(forge.flywheel)
+    modImplementation(forge.create)
+    modImplementation(forge.flywheel)
     modImplementation(forge.geckoLib)
 
     // Thin air

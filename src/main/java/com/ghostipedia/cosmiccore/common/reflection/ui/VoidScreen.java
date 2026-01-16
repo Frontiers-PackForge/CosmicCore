@@ -1080,9 +1080,6 @@ public class VoidScreen extends Screen {
             // LATE tier - darker/ominous
             case "void_anchor" -> new int[] { 120, 60, 180 };      // Deep purple - void resistance
 
-            // EXTREME tier - dangerous red/black
-            case "ascension" -> new int[] { 255, 255, 220 };       // Pale gold - flight (heavenly)
-
             default -> {
                 // Hash-based unique color as fallback
                 int hash = path.hashCode();

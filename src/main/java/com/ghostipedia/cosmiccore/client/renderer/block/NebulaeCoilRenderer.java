@@ -32,6 +32,11 @@ public class NebulaeCoilRenderer implements BlockEntityRenderer<CosmicCoilBlockE
 
     public static final ResourceLocation NEBULAE_LOCATION = CosmicCore.id("textures/entity/nebulae.png");
 
+    // Small offset to prevent Z-fighting with the block model
+    private static final float OFFSET = 0.001F;
+    private static final float MIN = OFFSET;
+    private static final float MAX = 1.0F - OFFSET;
+
     public NebulaeCoilRenderer(BlockEntityRendererProvider.Context context) {}
 
     @Override
@@ -50,62 +55,74 @@ public class NebulaeCoilRenderer implements BlockEntityRenderer<CosmicCoilBlockE
             // animation with a period of 20 seconds. note that texture coordinates are wrapping, not clamping.
             float progress = (SystemTimeUniforms.TIMER.getFrameTimeCounter() * 0.05f) % 1f;
 
+            // UP face (Y = MAX)
             this.renderFaceOculus(blockEntity, pose, normal, consumer, progress,
-                    0.0F, 1.0F, 1.0F,
-                    1.0F, 1.0F, 1.0F,
-                    1.0F, 1.0F, 0.0F,
-                    0.0F, 1.0F, 0.0F,
+                    MIN, MAX, MAX,
+                    MAX, MAX, MAX,
+                    MAX, MAX, MIN,
+                    MIN, MAX, MIN,
                     Direction.UP);
+            // DOWN face (Y = MIN)
             this.renderFaceOculus(blockEntity, pose, normal, consumer, progress,
-                    0.0F, 0.0F, 1.0F,
-                    0.0F, 0.0F, 0.0F,
-                    1.0F, 0.0F, 0.0F,
-                    1.0F, 0.0F, 1.0F,
+                    MIN, MIN, MAX,
+                    MIN, MIN, MIN,
+                    MAX, MIN, MIN,
+                    MAX, MIN, MAX,
                     Direction.DOWN);
+            // NORTH face (Z = MIN)
             this.renderFaceOculus(blockEntity, pose, normal, consumer, progress,
-                    0.0F, 1.0F, 0.0F,
-                    1.0F, 1.0F, 0.0F,
-                    1.0F, 0.0F, 0.0F,
-                    0.0F, 0.0F, 0.0F,
+                    MIN, MAX, MIN,
+                    MAX, MAX, MIN,
+                    MAX, MIN, MIN,
+                    MIN, MIN, MIN,
                     Direction.NORTH);
+            // WEST face (X = MIN)
             this.renderFaceOculus(blockEntity, pose, normal, consumer, progress,
-                    0.0F, 1.0F, 1.0F,
-                    0.0F, 1.0F, 0.0F,
-                    0.0F, 0.0F, 0.0F,
-                    0.0F, 0.0F, 1.0F,
+                    MIN, MAX, MAX,
+                    MIN, MAX, MIN,
+                    MIN, MIN, MIN,
+                    MIN, MIN, MAX,
                     Direction.WEST);
+            // SOUTH face (Z = MAX)
             this.renderFaceOculus(blockEntity, pose, normal, consumer, progress,
-                    0.0F, 1.0F, 1.0F,
-                    0.0F, 0.0F, 1.0F,
-                    1.0F, 0.0F, 1.0F,
-                    1.0F, 1.0F, 1.0F,
+                    MIN, MAX, MAX,
+                    MIN, MIN, MAX,
+                    MAX, MIN, MAX,
+                    MAX, MAX, MAX,
                     Direction.SOUTH);
+            // EAST face (X = MAX)
             this.renderFaceOculus(blockEntity, pose, normal, consumer, progress,
-                    1.0F, 1.0F, 1.0F,
-                    1.0F, 0.0F, 1.0F,
-                    1.0F, 0.0F, 0.0F,
-                    1.0F, 1.0F, 0.0F,
+                    MAX, MAX, MAX,
+                    MAX, MIN, MAX,
+                    MAX, MIN, MIN,
+                    MAX, MAX, MIN,
                     Direction.EAST);
         } else {
             VertexConsumer consumer = buffer.getBuffer(CosmicCoreRenderTypes.nebulae());
 
+            // SOUTH face (Z = MAX)
             this.renderFace(blockEntity, pose, consumer,
-                    0.0F, 1.0F, 0.0F, 1.0F, 1.0F, 1.0F, 1.0F, 1.0F,
+                    MIN, MAX, MIN, MAX, MAX, MAX, MAX, MAX,
                     Direction.SOUTH);
+            // NORTH face (Z = MIN)
             this.renderFace(blockEntity, pose, consumer,
-                    0.0F, 1.0F, 1.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F,
+                    MIN, MAX, MAX, MIN, MIN, MIN, MIN, MIN,
                     Direction.NORTH);
+            // EAST face (X = MAX)
             this.renderFace(blockEntity, pose, consumer,
-                    1.0F, 1.0F, 1.0F, 0.0F, 0.0F, 1.0F, 1.0F, 0.0F,
+                    MAX, MAX, MAX, MIN, MIN, MAX, MAX, MIN,
                     Direction.EAST);
+            // WEST face (X = MIN)
             this.renderFace(blockEntity, pose, consumer,
-                    0.0F, 0.0F, 0.0F, 1.0F, 0.0F, 1.0F, 1.0F, 0.0F,
+                    MIN, MIN, MIN, MAX, MIN, MAX, MAX, MIN,
                     Direction.WEST);
+            // DOWN face (Y = MIN)
             this.renderFace(blockEntity, pose, consumer,
-                    0.0F, 1.0F, 0.0F, 0.0F, 0.0F, 0.0F, 1.0F, 1.0F,
+                    MIN, MAX, MIN, MIN, MIN, MIN, MAX, MAX,
                     Direction.DOWN);
+            // UP face (Y = MAX)
             this.renderFace(blockEntity, pose, consumer,
-                    0.0F, 1.0F, 1.0F, 1.0F, 1.0F, 1.0F, 0.0F, 0.0F,
+                    MIN, MAX, MAX, MAX, MAX, MAX, MIN, MIN,
                     Direction.UP);
         }
 
