@@ -93,9 +93,6 @@ public final class OxygenLogic {
             cap.setConsuming(level.dimension(), rates.oxygenDrainPerTick > 0);
 
             if (rates.oxygenDrainPerTick > 0) {
-                // Clear regen buffer when draining - prevents accumulated regen from triggering later
-                cap.setRegenBuffer(level.dimension(), 0.0);
-
                 // Check for rebreather equipment and apply drain modifiers
                 RebreatherType rebreather = RebreatherHelper.getEquippedRebreather(player);
                 double drainMult = 1.0;
@@ -116,9 +113,20 @@ public final class OxygenLogic {
                 }
                 // TOXIC and ABYSS are not affected by rebreathers
 
-                // Apply multiplier to drain rate
-                int baseDrain = (int) Math.min(Integer.MAX_VALUE, Math.max(0L, rates.oxygenDrainPerTick));
-                int drain = (int) Math.ceil(baseDrain * drainMult);
+                // Apply multiplier to drain rate using fractional accumulation
+                // This ensures rebreathers actually reduce effective drain (e.g., 0.5x means drain every other tick)
+                double baseDrain = rates.oxygenDrainPerTick;
+                double fractionalDrain = baseDrain * drainMult;
+
+                // Use the regen buffer to accumulate fractional drain (stored as negative when draining)
+                double buffer = cap.getRegenBuffer(level.dimension());
+                // If buffer was positive (from regen), reset it since we're now draining
+                if (buffer > 0) buffer = 0;
+                // Buffer is stored as negative during drain, so negate to get positive accumulator
+                double drainAccum = -buffer + fractionalDrain;
+                int drain = (int) drainAccum; // Integer part is actual drain this tick
+                double remainder = drainAccum - drain; // Fractional part carries over
+                cap.setRegenBuffer(level.dimension(), -remainder); // Store negative to indicate drain mode
 
                 // Tanks can only be used with pressurized rebreather
                 int providedByTanks = 0;
@@ -155,7 +163,10 @@ public final class OxygenLogic {
 
             } else if (rates.oxygenRecoveryPerTick > 0 && current < playerMaxOxygen) {
                 // Passive recovery in safe air
-                double buffer = cap.getRegenBuffer(level.dimension()) + (rates.oxygenRecoveryPerTick / 20.0);
+                double buffer = cap.getRegenBuffer(level.dimension());
+                // If buffer was negative (from drain mode), reset it since we're now recovering
+                if (buffer < 0) buffer = 0;
+                buffer += (rates.oxygenRecoveryPerTick / 20.0);
                 long gain = (long) (buffer * 20.0);
                 double rem = buffer - (gain / 20.0);
 

@@ -2,6 +2,7 @@ package com.ghostipedia.cosmiccore.client;
 
 import com.ghostipedia.cosmiccore.CosmicCore;
 import com.ghostipedia.cosmiccore.bee.CosmicBeesSpecies;
+import com.ghostipedia.cosmiccore.client.keybind.BootsKeybinds;
 import com.ghostipedia.cosmiccore.client.renderer.machine.*;
 import com.ghostipedia.cosmiccore.integration.emi.favorites.CosmicBookmarkKeybinds;
 
@@ -89,6 +90,7 @@ public class CosmicCoreClient {
     @SubscribeEvent
     public static void registerKeyMappings(RegisterKeyMappingsEvent event) {
         CosmicBookmarkKeybinds.registerKeyMappings(event);
+        BootsKeybinds.registerKeyMappings(event);
     }
 
     @SubscribeEvent

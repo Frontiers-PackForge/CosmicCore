@@ -1681,6 +1681,35 @@ public class CosmicLangHandler extends LangHandler {
         provider.add("cosmiccore.stellar.upgrade.void_attunement", "Void Attunement");
         provider.add("cosmiccore.stellar.upgrade.void_attunement.desc",
                 "+2% bonus from void effects per level (max 10 levels)");
+
+        // Cosmic Boots
+        provider.add("key.categories.cosmiccore.boots", "Cosmic Boots");
+        provider.add("key.cosmiccore.boots.speed_increase", "Boots: Increase Speed");
+        provider.add("key.cosmiccore.boots.speed_decrease", "Boots: Decrease Speed");
+        provider.add("key.cosmiccore.boots.jump_increase", "Boots: Increase Jump");
+        provider.add("key.cosmiccore.boots.jump_decrease", "Boots: Decrease Jump");
+        provider.add("key.cosmiccore.boots.toggle_step", "Boots: Toggle Step Assist");
+        provider.add("key.cosmiccore.boots.toggle_inertia", "Boots: Toggle Inertia Dampening");
+
+        // Boot tooltips
+        provider.add("cosmiccore.boots.speed_modifier", "Speed Modifier: %s");
+        provider.add("cosmiccore.boots.jump_modifier", "Jump Modifier: %s");
+        provider.add("cosmiccore.boots.step_assist", "Step Assist: %s");
+        provider.add("cosmiccore.boots.inertia_cancel", "Inertia Dampening: %s");
+
+        // Boot HUD
+        provider.add("cosmiccore.boots.hud.speed", "Speed: %s %s");
+        provider.add("cosmiccore.boots.hud.speed_simple", "Speed: %s");
+        provider.add("cosmiccore.boots.hud.jump", "Jump: %s");
+
+        // Boot action messages
+        provider.add("cosmiccore.boots.message.speed", "Speed Modifier: %s");
+        provider.add("cosmiccore.boots.message.jump", "Jump Modifier: %s");
+        provider.add("cosmiccore.boots.message.step", "Step Assist: %s");
+        provider.add("cosmiccore.boots.message.inertia", "Inertia Dampening: %s");
+
+        // Max speed tooltip
+        provider.add("cosmiccore.boots.max_speed", "Max Speed: %s");
         provider.add("item.cosmiccore.screwdriver", "Screwdriver");
         provider.add("item.cosmiccore.screwdriver_head", "Screwdriver Head");
         provider.add("item.cosmiccore.screwdriver.description", "Twist and Turn!");

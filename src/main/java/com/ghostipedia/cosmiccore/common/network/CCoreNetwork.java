@@ -2,6 +2,7 @@ package com.ghostipedia.cosmiccore.common.network;
 
 import com.ghostipedia.cosmiccore.CosmicCore;
 import com.ghostipedia.cosmiccore.common.network.packet.AbyssTimeWarnPacket;
+import com.ghostipedia.cosmiccore.common.network.packet.BootsControlPacket;
 import com.ghostipedia.cosmiccore.common.network.packet.OxygenWarnPacket;
 import com.ghostipedia.cosmiccore.common.network.packet.StellarUpgradePacket;
 import com.ghostipedia.cosmiccore.common.network.packet.SyncOxygenBarPacket;
@@ -89,6 +90,9 @@ public class CCoreNetwork {
 
         // Stellar IRIS upgrade packet (client -> server)
         register(StellarUpgradePacket.class, StellarUpgradePacket::new, NetworkDirection.PLAY_TO_SERVER);
+
+        // Boots control packet (client -> server)
+        register(BootsControlPacket.class, BootsControlPacket::new, NetworkDirection.PLAY_TO_SERVER);
 
         // Void UI packets
         VoidUIPackets.register();

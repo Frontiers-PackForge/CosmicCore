@@ -18,6 +18,7 @@ import com.ghostipedia.cosmiccore.common.item.tcon.CosmicTconItemTagProvider;
 import com.ghostipedia.cosmiccore.common.item.tcon.CosmicTinkerTools;
 import com.ghostipedia.cosmiccore.common.item.tcon.CosmicToolDefinitionProvider;
 import com.ghostipedia.cosmiccore.common.machine.multiblock.multi.modular.MultiblockInit;
+import com.ghostipedia.cosmiccore.common.mob.DimensionMobScaling;
 import com.ghostipedia.cosmiccore.common.network.CCoreNetwork;
 import com.ghostipedia.cosmiccore.common.recipe.condition.CosmicConditions;
 import com.ghostipedia.cosmiccore.gtbridge.CosmicRecipeTypes;
@@ -139,6 +140,8 @@ public class CosmicCore {
             GridLinkables.register(CosmicItems.LINKED_TERMINAL, LinkedTerminalBehavior.handler);
             CraftingHelper.register(TinkerIngredient.TYPE, TinkerIngredient.SERIALIZER);
             CCoreNetwork.init();
+            OxygenRules.registerAirRanges();
+            DimensionMobScaling.registerScaling();
         });
     }
 
