@@ -2,13 +2,10 @@ package com.ghostipedia.cosmiccore.common.item.armor.boots;
 
 import com.ghostipedia.cosmiccore.CosmicCore;
 
-import com.gregtechceu.gtceu.GTCEu;
 import com.gregtechceu.gtceu.api.capability.GTCapabilityHelper;
 import com.gregtechceu.gtceu.api.capability.IElectricItem;
 import com.gregtechceu.gtceu.api.item.armor.ArmorLogicSuite;
-import com.gregtechceu.gtceu.api.item.armor.ArmorUtils;
 
-import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -25,8 +22,6 @@ import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.ForgeMod;
 
 import org.jetbrains.annotations.NotNull;
@@ -49,9 +44,6 @@ public class CosmicBootsArmorLogic extends ArmorLogicSuite implements ICosmicBoo
 
     private static final double SPRINT_BOOST = 2.5;
 
-    @OnlyIn(Dist.CLIENT)
-    protected ArmorUtils.ModularHUD HUD;
-
     public CosmicBootsArmorLogic(int energyPerUse, long maxCapacity, int tier,
                                  double maxSpeed, double groundAcceleration,
                                  double groundDeceleration, double airControl,
@@ -65,16 +57,6 @@ public class CosmicBootsArmorLogic extends ArmorLogicSuite implements ICosmicBoo
         this.jumpPower = jumpPower;
         this.fallNegation = fallNegation;
         this.texturePath = texturePath;
-
-        if (GTCEu.isClientSide() && this.shouldDrawHUD()) {
-            // noinspection DataFlowIssue
-            HUD = new ArmorUtils.ModularHUD();
-        }
-    }
-
-    @Override
-    public boolean shouldDrawHUD() {
-        return true;
     }
 
     @Override
@@ -329,24 +311,5 @@ public class CosmicBootsArmorLogic extends ArmorLogicSuite implements ICosmicBoo
 
         lines.add(Component.translatable("cosmiccore.boots.max_speed",
                 String.format("%.1f", getEffectiveMaxSpeed(stack) * 20) + " b/s"));
-    }
-
-    @OnlyIn(Dist.CLIENT)
-    @Override
-    public void drawHUD(ItemStack stack, GuiGraphics guiGraphics) {
-        if (this.HUD == null) return;
-
-        addCapacityHUD(stack, this.HUD);
-
-        double speedMod = ICosmicBoots.getSpeedModifier(stack);
-        double jumpMod = ICosmicBoots.getJumpModifier(stack);
-
-        this.HUD.newString(Component.translatable("cosmiccore.boots.hud.speed_simple",
-                String.format("%.0f%%", speedMod * 100)));
-        this.HUD.newString(Component.translatable("cosmiccore.boots.hud.jump",
-                String.format("%.0f%%", jumpMod * 100)));
-
-        this.HUD.draw(guiGraphics);
-        this.HUD.reset();
     }
 }
