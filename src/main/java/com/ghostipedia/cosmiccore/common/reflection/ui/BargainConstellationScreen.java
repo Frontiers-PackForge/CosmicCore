@@ -469,7 +469,21 @@ public class BargainConstellationScreen extends Screen {
         int maxTextWidth = panelWidth - 20; // 10px padding on each side
 
         // Calculate dynamic height based on content
-        int contentHeight = 58; // Header space (title + tier + cost + divider)
+        int contentHeight = 36; // Header space (title + tier)
+
+        // Cost section height (variable based on what costs exist)
+        // These are reused later for rendering and affordability checks
+        int shardCost = bargain.getShardCost();
+        int weightCost = bargain.getWeight();
+        int erosionCost = bargain.getErosionCost();
+        int remainingCapacity = totalCapacity - usedCapacity;
+        int costLines = 0;
+        if (shardCost > 0) costLines++;
+        if (weightCost > 0) costLines++;
+        if (erosionCost > 0) costLines++;
+        if (costLines == 0) costLines = 1; // "Free" line
+        contentHeight += costLines * 11 + 12; // costs + divider spacing
+
         for (Component line : bargain.getPowerDescriptions()) {
             contentHeight += wrapText(line.getString(), maxTextWidth).size() * 11;
         }
@@ -503,19 +517,44 @@ public class BargainConstellationScreen extends Screen {
         int titleColor = (textAlpha << 24) | (nodeColor[0] << 16) | (nodeColor[1] << 8) | nodeColor[2];
         graphics.drawString(font, title, panelX + 10, panelY + 10, titleColor, false);
 
-        // Tier and cost
+        // Tier
         String tierStr = bargain.getTier().name();
-        String costStr = "Cost: " + bargain.getBaseCost() + " erosion";
         int subtitleColor = (textAlpha << 24) | 0x888888;
         graphics.drawString(font, tierStr, panelX + 10, panelY + 24, subtitleColor, false);
-        graphics.drawString(font, costStr, panelX + 10, panelY + 36, subtitleColor, false);
 
-        // Divider
+        // Costs with affordability coloring (reusing variables from height calculation)
+        int costY = panelY + 36;
+
+        if (shardCost > 0) {
+            boolean canAfford = shardBalance >= shardCost;
+            int shardTextColor = (textAlpha << 24) | (canAfford ? 0x55FFFF : 0xFF5555);
+            graphics.drawString(font, "\u2726 " + shardCost + " shards", panelX + 10, costY, shardTextColor, false);
+            costY += 11;
+        }
+        if (weightCost > 0) {
+            boolean canFit = remainingCapacity >= weightCost;
+            int weightTextColor = (textAlpha << 24) | (canFit ? 0xAA55FF : 0xFF5555);
+            graphics.drawString(font, "\u25C6 " + weightCost + " weight", panelX + 10, costY, weightTextColor, false);
+            costY += 11;
+        }
+        if (erosionCost > 0) {
+            int erosionTextColor = (textAlpha << 24) | 0xAA6666;
+            graphics.drawString(font, "+" + erosionCost + " erosion", panelX + 10, costY, erosionTextColor, false);
+            costY += 11;
+        }
+        if (shardCost == 0 && weightCost == 0 && erosionCost == 0) {
+            int freeColor = (textAlpha << 24) | 0x55FF55;
+            graphics.drawString(font, "Free", panelX + 10, costY, freeColor, false);
+            costY += 11;
+        }
+
+        // Divider (dynamic position based on cost content)
+        int dividerY = costY + 4;
         int dividerColor = ((textAlpha / 2) << 24) | 0x606080;
-        graphics.fill(panelX + 10, panelY + 50, panelX + panelWidth - 10, panelY + 51, dividerColor);
+        graphics.fill(panelX + 10, dividerY, panelX + panelWidth - 10, dividerY + 1, dividerColor);
 
         // Description / power with word wrapping
-        int descY = panelY + 58;
+        int descY = dividerY + 8;
         int descColor = (textAlpha << 24) | 0xBBBBBB;
         for (Component line : bargain.getPowerDescriptions()) {
             for (String wrappedLine : wrapText(line.getString(), maxTextWidth)) {
@@ -531,9 +570,20 @@ public class BargainConstellationScreen extends Screen {
         boolean isClickable = false;
         switch (selectedNode.state) {
             case AVAILABLE -> {
-                actionHint = "[Click to make bargain]";
-                hintColor = 0x80FF80;
-                isClickable = true;
+                // Check affordability (reuse variables from cost section above)
+                if (shardCost > shardBalance) {
+                    actionHint = "Not enough shards (" + shardBalance + "/" + shardCost + ")";
+                    hintColor = 0x888888;
+                    isClickable = false;
+                } else if (weightCost > remainingCapacity) {
+                    actionHint = "Not enough soul capacity (" + remainingCapacity + "/" + weightCost + ")";
+                    hintColor = 0x888888;
+                    isClickable = false;
+                } else {
+                    actionHint = "[Click to make bargain]";
+                    hintColor = 0x80FF80;
+                    isClickable = true;
+                }
             }
             case ACTIVE -> {
                 actionHint = "[Click to defy - costs " + BargainRegistry.calculateDefianceCost(bargain) + "]";
@@ -800,6 +850,20 @@ public class BargainConstellationScreen extends Screen {
     private void performNodeAction(BargainNode node) {
         switch (node.state) {
             case AVAILABLE -> {
+                // Check if player can afford this bargain
+                int shardCost = node.bargain.getShardCost();
+                int weight = node.bargain.getWeight();
+                int remainingCapacity = totalCapacity - usedCapacity;
+
+                if (shardCost > shardBalance) {
+                    // Can't afford - not enough shards
+                    return;
+                }
+                if (weight > remainingCapacity) {
+                    // Can't fit - not enough soul capacity
+                    return;
+                }
+
                 // Open bargain offer dialogue in VoidScreen with economy data
                 VoidScreen.openWithBargain(node.bargain, erosion, activeBargains,
                         shardBalance, usedCapacity, totalCapacity);
@@ -926,9 +990,6 @@ public class BargainConstellationScreen extends Screen {
 
                 // LATE tier - darker/ominous
                 case "void_anchor" -> new int[] { 120, 60, 180 };      // Deep purple - void resistance
-
-                // EXTREME tier - dangerous red/black
-                case "ascension" -> new int[] { 255, 255, 220 };       // Pale gold - flight (heavenly)
 
                 default -> {
                     // Hash-based unique color as ultimate fallback

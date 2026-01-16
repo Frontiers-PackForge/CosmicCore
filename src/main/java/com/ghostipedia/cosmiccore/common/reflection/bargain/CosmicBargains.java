@@ -6,7 +6,6 @@ import com.ghostipedia.cosmiccore.common.reflection.bargain.impl.BackBargain;
 import com.ghostipedia.cosmiccore.common.reflection.bargain.impl.DepthsBargain;
 import com.ghostipedia.cosmiccore.common.reflection.bargain.impl.FallImmunityBargain;
 import com.ghostipedia.cosmiccore.common.reflection.bargain.impl.FireImmunityBargain;
-import com.ghostipedia.cosmiccore.common.reflection.bargain.impl.FlightBargain;
 import com.ghostipedia.cosmiccore.common.reflection.bargain.impl.HealthBargain;
 import com.ghostipedia.cosmiccore.common.reflection.bargain.impl.HomeBargain;
 import com.ghostipedia.cosmiccore.common.reflection.bargain.impl.HungerBargain;
@@ -51,9 +50,6 @@ public final class CosmicBargains {
 
         // LATE TIER - Deep corruption (300-750)
         safeRegister("VoidResistanceBargain", () -> BargainRegistry.register(VoidResistanceBargain.INSTANCE));
-
-        // EXTREME TIER - Point of no return (500+)
-        safeRegister("FlightBargain", () -> BargainRegistry.register(FlightBargain.INSTANCE));
 
         CosmicCore.LOGGER.info("Registered {} bargains", BargainRegistry.getAll().size());
     }

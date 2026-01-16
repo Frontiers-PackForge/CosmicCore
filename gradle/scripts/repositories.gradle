@@ -64,10 +64,13 @@ repositories {
         url = "https://maven.tterrag.com/"
         content {
             // need to be specific here due to version overlaps
-            includeGroup("com.jozufozu.flywheel")
             includeGroup("com.tterrag.registrate")
             includeGroup("com.simibubi.create")
         }
+    }
+    maven {
+        name "createmod maven"
+        url "https://maven.createmod.net/"
     }
     maven { // Patchouli, JEI
         name = "BlameJared"
