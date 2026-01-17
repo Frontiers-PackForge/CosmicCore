@@ -2,8 +2,8 @@ package com.ghostipedia.cosmiccore.mixin.emi;
 
 import net.minecraft.client.Minecraft;
 
-import dev.emi.emi.screen.EmiScreenBase;
 import dev.emi.emi.registry.EmiExclusionAreas;
+import dev.emi.emi.screen.EmiScreenBase;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
