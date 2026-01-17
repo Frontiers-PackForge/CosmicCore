@@ -1,8 +1,8 @@
 package com.ghostipedia.cosmiccore.mixin.emi;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.screens.Screen;
 
+import dev.emi.emi.screen.EmiScreenBase;
 import dev.emi.emi.registry.EmiExclusionAreas;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -20,7 +20,7 @@ import java.util.List;
 public class EmiExclusionAreasMixin {
 
     @Inject(method = "getExclusion", at = @At("HEAD"), cancellable = true)
-    private static void cosmiccore$guardGetExclusion(Screen screen, CallbackInfoReturnable<List<?>> cir) {
+    private static void cosmiccore$guardGetExclusion(EmiScreenBase screen, CallbackInfoReturnable<List<?>> cir) {
         // Guard against null screen passed during EMI reload
         if (screen == null) {
             cir.setReturnValue(Collections.emptyList());
