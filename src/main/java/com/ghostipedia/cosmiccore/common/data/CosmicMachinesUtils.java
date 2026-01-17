@@ -178,14 +178,14 @@ public class CosmicMachinesUtils {
 
     public static MachineDefinition[] registerTieredSingleBlockMachines(String name,
                                                                         BiFunction<IMachineBlockEntity, Integer, MetaMachine> factory,
-                                                                        BiFunction<Integer, MachineBuilder<MachineDefinition>, MachineDefinition> builder,
+                                                                        BiFunction<Integer, MachineBuilder<MachineDefinition, ?>, MachineDefinition> builder,
                                                                         int... tiers) {
         return registerTieredMachines(name, factory, builder, tiers);
     }
 
     public static MachineDefinition[] registerTieredMachines(String name,
                                                              BiFunction<IMachineBlockEntity, Integer, MetaMachine> factory,
-                                                             BiFunction<Integer, MachineBuilder<MachineDefinition>, MachineDefinition> builder,
+                                                             BiFunction<Integer, MachineBuilder<MachineDefinition, ?>, MachineDefinition> builder,
                                                              int... tiers) {
         MachineDefinition[] definitions = new MachineDefinition[GTValues.TIER_COUNT];
         for (int tier : tiers) {
@@ -200,7 +200,7 @@ public class CosmicMachinesUtils {
 
     public static Pair<MachineDefinition, MachineDefinition> registerSteamMachines(String name,
                                                                                    BiFunction<IMachineBlockEntity, Boolean, MetaMachine> factory,
-                                                                                   BiFunction<Boolean, MachineBuilder<MachineDefinition>, MachineDefinition> builder) {
+                                                                                   BiFunction<Boolean, MachineBuilder<MachineDefinition, ?>, MachineDefinition> builder) {
         MachineDefinition lowTier = builder.apply(false,
                 REGISTRATE.machine("lp_%s".formatted(name), holder -> factory.apply(holder, false))
                         .langValue("I DO NOT EXIST")
