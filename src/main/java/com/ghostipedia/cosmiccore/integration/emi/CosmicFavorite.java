@@ -25,6 +25,16 @@ public class CosmicFavorite extends EmiFavorite {
         this.amount = Math.max(1, amount + delta);
     }
 
+    public long getScrollStep(boolean large) {
+        if (!large) return 1;
+        return isFluid() ? 1000 : 64;
+    }
+
+    private boolean isFluid() {
+        if (getStack().getEmiStacks().isEmpty()) return false;
+        return getStack().getEmiStacks().get(0).getKey() instanceof Fluid;
+    }
+
     @Override
     public long getAmount() {
         return amount;
@@ -67,33 +77,26 @@ public class CosmicFavorite extends EmiFavorite {
     }
 
     private String formatCompact(long amount) {
-        EmiIngredient stack = getStack();
-        if (!stack.getEmiStacks().isEmpty()) {
-            EmiStack first = stack.getEmiStacks().get(0);
-            if (first.getKey() instanceof Fluid) {
-                if (amount >= 1000) {
-                    double buckets = amount / 1000.0;
-                    if (buckets >= 1_000_000_000) {
-                        return String.format("%.1fBB", buckets / 1_000_000_000);
-                    } else if (buckets >= 1_000_000) {
-                        return String.format("%.1fMB", buckets / 1_000_000);
-                    } else if (buckets >= 1000) {
-                        return String.format("%.1fKB", buckets / 1000);
-                    } else {
-                        return String.format("%.1fB", buckets);
-                    }
-                }
-                return amount + "mB";
-            }
+        if (isFluid()) {
+            return formatFluidAmount(amount);
         }
-        if (amount >= 1_000_000_000) {
-            return String.format("%.1fB", amount / 1_000_000_000.0);
-        } else if (amount >= 1_000_000) {
-            return String.format("%.1fM", amount / 1_000_000.0);
-        } else if (amount >= 1000) {
-            return String.format("%.1fK", amount / 1000.0);
-        }
-        return String.valueOf(amount);
+        return formatItemAmount(amount);
+    }
+
+    private String formatFluidAmount(long mB) {
+        if (mB < 1000) return mB + "mB";
+        double buckets = mB / 1000.0;
+        if (buckets >= 1_000_000_000) return String.format("%.1fBB", buckets / 1_000_000_000);
+        if (buckets >= 1_000_000) return String.format("%.1fMB", buckets / 1_000_000);
+        if (buckets >= 1000) return String.format("%.1fKB", buckets / 1000);
+        return String.format("%.1fB", buckets);
+    }
+
+    private String formatItemAmount(long count) {
+        if (count >= 1_000_000_000) return String.format("%.1fB", count / 1_000_000_000.0);
+        if (count >= 1_000_000) return String.format("%.1fM", count / 1_000_000.0);
+        if (count >= 1000) return String.format("%.1fK", count / 1000.0);
+        return String.valueOf(count);
     }
 
     @Override

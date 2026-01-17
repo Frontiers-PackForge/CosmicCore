@@ -1,10 +1,9 @@
 package com.ghostipedia.cosmiccore.mixin.emi;
 
-import com.ghostipedia.cosmiccore.CosmicCore;
 import com.ghostipedia.cosmiccore.integration.emi.CosmicFavorite;
+import com.ghostipedia.cosmiccore.integration.emi.RecipeScreenAccessor;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.world.level.material.Fluid;
 
 import dev.emi.emi.api.stack.EmiIngredient;
 import dev.emi.emi.api.stack.EmiStack;
@@ -15,7 +14,6 @@ import dev.emi.emi.input.EmiInput;
 import dev.emi.emi.registry.EmiStackProviders;
 import dev.emi.emi.runtime.EmiFavorites;
 import dev.emi.emi.screen.EmiScreenManager;
-import dev.emi.emi.screen.RecipeScreen;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
@@ -52,11 +50,6 @@ public abstract class EmiScreenManagerMixin {
         boolean shift = EmiInput.isShiftDown();
         boolean isFavKey = cosmiccore$isFavoriteKey(keyCode);
 
-        if (ctrl || isFavKey) {
-            CosmicCore.LOGGER.info("[EMI Debug] keyPressed: keyCode={}, ctrl={}, shift={}, isFavKey={}",
-                    keyCode, ctrl, shift, isFavKey);
-        }
-
         if (!ctrl || shift) return;
         if (!isFavKey) return;
 
@@ -68,7 +61,7 @@ public abstract class EmiScreenManagerMixin {
             hoveredIngredient = sidebarHovered.getStack();
         } else {
             var screen = Minecraft.getInstance().screen;
-            if (screen instanceof RecipeScreen recipeScreen) {
+            if (screen instanceof RecipeScreenAccessor recipeScreen) {
                 hoveredIngredient = recipeScreen.getHoveredStack();
             }
             if (hoveredIngredient.isEmpty() && screen != null) {
@@ -76,21 +69,17 @@ public abstract class EmiScreenManagerMixin {
             }
         }
 
-        CosmicCore.LOGGER.info("[EMI Debug] hovered stack empty: {}, mouseX={}, mouseY={}",
-                hoveredIngredient.isEmpty(), lastMouseX, lastMouseY);
         if (hoveredIngredient.isEmpty()) return;
 
         long amount = hoveredIngredient.getEmiStacks().isEmpty() ? 1 :
                 hoveredIngredient.getEmiStacks().get(0).getAmount();
         if (amount <= 0) amount = 1;
 
-        CosmicCore.LOGGER.info("[EMI Debug] Adding favorite with amount: {}", amount);
         EmiFavorites.addFavorite(new CosmicFavorite(hoveredIngredient, amount), null);
         repopulatePanels(SidebarType.FAVORITES);
         cir.setReturnValue(true);
     }
 
-    // CTRL+scroll: adjust amount on CosmicFavorites
     @Inject(method = "mouseScrolled", at = @At("HEAD"), cancellable = true)
     private static void cosmiccore$ctrlScrollAdjust(double mouseX, double mouseY, double scrollDelta,
                                                     CallbackInfoReturnable<Boolean> cir) {
@@ -99,7 +88,7 @@ public abstract class EmiScreenManagerMixin {
         EmiStackInteraction hovered = getHoveredStack((int) mouseX, (int) mouseY, true);
         if (!(hovered.getStack() instanceof CosmicFavorite fav)) return;
 
-        long step = EmiInput.isShiftDown() ? cosmiccore$bigStep(fav) : 1;
+        long step = fav.getScrollStep(EmiInput.isShiftDown());
         fav.adjustAmount((long) scrollDelta * step);
 
         repopulatePanels(SidebarType.FAVORITES);
@@ -110,12 +99,5 @@ public abstract class EmiScreenManagerMixin {
     private static boolean cosmiccore$isFavoriteKey(int keyCode) {
         return EmiConfig.favorite.boundKeys.stream()
                 .anyMatch(k -> k.key().getValue() == keyCode);
-    }
-
-    @Unique
-    private static long cosmiccore$bigStep(EmiIngredient stack) {
-        if (stack.getEmiStacks().isEmpty()) return 64;
-        EmiStack first = stack.getEmiStacks().get(0);
-        return first.getKey() instanceof Fluid ? 1000 : 64;
     }
 }

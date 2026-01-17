@@ -4,12 +4,14 @@
   "package": "com.ghostipedia.cosmiccore.mixin",
   "compatibilityLevel": "JAVA_17",
   "minVersion": "0.8",
+  "plugin": "com.ghostipedia.cosmiccore.mixin.CosmicCoreMixinPlugin",
   "client": [
     "StarKillerMixin",
     "client.AdAstraPlanetsScreenMixin",
     "client.MinecraftMixin",
     "client.SoundManagerMixin",
     "embers.EmberDialBlockMixin",
+    "emi.EmiApiMixin",
     "emi.EmiScreenManagerMixin",
     "emi.RecipeScreenMixin",
     "ldlib.CustomBakedModelMixin"
@@ -37,7 +39,6 @@
     "ae2.eudisplay.EUAddPowerUnitMixin",
     "ae2.eudisplay.EUAddSettingMixin",
     "client.CosmicCoreRemainingAirOverlayMixin",
-    "emi.EmiApiMixin",
     "gtceu.ElectricContainerBlockProviderMixin",
     "gtceu.MetaMachineBlockEntityMixin",
     "gtceu.ParallelProviderMixin",
