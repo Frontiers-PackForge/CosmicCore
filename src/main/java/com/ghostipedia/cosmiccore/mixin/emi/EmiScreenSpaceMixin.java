@@ -66,6 +66,11 @@ public abstract class EmiScreenSpaceMixin {
             return;
         }
 
+        // Safety check - don't run during EMI reload when screen might be null
+        if (Minecraft.getInstance() == null || Minecraft.getInstance().screen == null) {
+            return;
+        }
+
         // Check if we're in TODO_LIST mode
         CosmicBookmarkManager manager = CosmicBookmarkManager.getInstance();
         if (manager.getActiveViewMode() != CosmicBookmarkGroup.ViewMode.TODO_LIST) {

@@ -87,6 +87,16 @@ public abstract class EmiScreenManagerMixin {
     private static final int ARROW_V_HOVER = 16;
     @Unique
     private static final int ARROW_SIZE = 16;
+    @Unique
+    private static final int PLUS_U = 82;
+    @Unique
+    private static final int PLUS_V = 0;
+    @Unique
+    private static final int PLUS_SIZE = 13;
+    @Unique
+    private static int cosmiccore$plusButtonX = 0;
+    @Unique
+    private static int cosmiccore$plusButtonY = 0;
 
     @Inject(method = "keyPressed", at = @At("HEAD"), cancellable = true)
     private static void cosmiccore$onKeyPressed(int keyCode, int scanCode, int modifiers,
@@ -274,11 +284,14 @@ public abstract class EmiScreenManagerMixin {
     @Inject(method = "render", at = @At("RETURN"))
     private static void cosmiccore$renderGroupArrows(EmiDrawContext context, int mouseX, int mouseY, float delta,
                                                      CallbackInfo ci) {
-        CosmicBookmarkManager manager = CosmicBookmarkManager.getInstance();
-        if (manager.getGroupCount() <= 1) {
+        // Safety check - don't run during EMI reload when screen might be null
+        Minecraft mc = Minecraft.getInstance();
+        if (mc == null || mc.screen == null) {
             cosmiccore$arrowsVisible = false;
             return;
         }
+
+        CosmicBookmarkManager manager = CosmicBookmarkManager.getInstance();
 
         EmiScreenManager.SidebarPanel favPanel = getPanelFor(SidebarType.FAVORITES);
         if (favPanel == null) {
@@ -313,6 +326,24 @@ public abstract class EmiScreenManagerMixin {
         context.drawTexture(EmiRenderHelper.BUTTONS, rightArrowX, arrowY, ARROW_RIGHT_U, rightV,
                 ARROW_SIZE, ARROW_SIZE);
 
+        // Draw + button to the right of the right arrow
+        int plusX = rightArrowX + ARROW_SIZE + 2;
+        int plusY = arrowY + (ARROW_SIZE - PLUS_SIZE) / 2;
+        cosmiccore$plusButtonX = plusX;
+        cosmiccore$plusButtonY = plusY;
+
+        boolean hoverPlus = mouseX >= plusX && mouseX < plusX + PLUS_SIZE &&
+                mouseY >= plusY && mouseY < plusY + PLUS_SIZE;
+        int plusColor = hoverPlus ? 0xFFFFFF00 : 0xFFFFFFFF;
+
+        // Draw the plus from EMI's widgets texture
+        context.push();
+        if (hoverPlus) {
+            context.matrices().translate(0, 0, 100);
+        }
+        context.drawTexture(EmiRenderHelper.WIDGETS, plusX, plusY, PLUS_U, PLUS_V, PLUS_SIZE, PLUS_SIZE);
+        context.pop();
+
         String groupName = manager.getActiveGroup().getName();
         int current = manager.getActiveGroupIndex() + 1;
         int total = manager.getGroupCount();
@@ -320,7 +351,6 @@ public abstract class EmiScreenManagerMixin {
         String modeIndicator = manager.getActiveViewMode() == CosmicBookmarkGroup.ViewMode.TODO_LIST ? " [L]" : "";
         String text = groupName + " (" + current + "/" + total + ")" + modeIndicator;
 
-        Minecraft mc = Minecraft.getInstance();
         int textWidth = mc.font.width(text);
         int textX = bounds.x() + (bounds.width() - textWidth) / 2;
         int textY = arrowY + 4;
@@ -396,6 +426,26 @@ public abstract class EmiScreenManagerMixin {
             CosmicBookmarkManager manager = CosmicBookmarkManager.getInstance();
             manager.nextGroup();
             cosmiccore$showGroupChangeMessage(manager);
+            cir.setReturnValue(true);
+            return;
+        }
+
+        // Handle + button click to create new group
+        if (mx >= cosmiccore$plusButtonX && mx < cosmiccore$plusButtonX + PLUS_SIZE &&
+                my >= cosmiccore$plusButtonY && my < cosmiccore$plusButtonY + PLUS_SIZE) {
+            CosmicBookmarkManager manager = CosmicBookmarkManager.getInstance();
+            int newGroupNum = manager.getGroupCount() + 1;
+            CosmicBookmarkGroup newGroup = manager.createGroup("Group " + newGroupNum);
+            manager.setActiveGroup(manager.getGroupCount() - 1);
+
+            Minecraft mc = Minecraft.getInstance();
+            if (mc.player != null) {
+                mc.player.displayClientMessage(
+                        Component.literal("§6[Bookmarks]§r Created new group: §e" + newGroup.getName()),
+                        true);
+            }
+
+            repopulatePanels(SidebarType.FAVORITES);
             cir.setReturnValue(true);
             return;
         }
