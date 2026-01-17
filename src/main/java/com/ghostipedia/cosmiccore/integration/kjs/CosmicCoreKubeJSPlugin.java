@@ -1,6 +1,7 @@
 package com.ghostipedia.cosmiccore.integration.kjs;
 
 import com.ghostipedia.cosmiccore.CosmicCore;
+import com.ghostipedia.cosmiccore.api.capability.souls.SoulType;
 import com.ghostipedia.cosmiccore.common.data.CosmicBlocks;
 import com.ghostipedia.cosmiccore.common.data.CosmicItems;
 import com.ghostipedia.cosmiccore.common.data.CosmicMachines;
@@ -63,6 +64,7 @@ public class CosmicCoreKubeJSPlugin extends KubeJSPlugin {
         event.add("CosmicMachines", CosmicMachines.class);
         event.add("CosmicItems", CosmicItems.class);
         event.add("CosmicRecipeTypes", CosmicRecipeTypes.class);
+        event.add("CosmicSoulTypes", SoulType.class);
 
         event.add("CosmicCore", CosmicCore.class);
     }
