@@ -56,6 +56,24 @@ public abstract class EmiScreenManagerMixin {
         throw new AssertionError();
     }
 
+    @Inject(method = "recalculate", at = @At("HEAD"), cancellable = true)
+    private static void cosmiccore$guardRecalculate(CallbackInfo ci) {
+        // Guard against EMI bug where recalculate is called during reload with null screen
+        Minecraft mc = Minecraft.getInstance();
+        if (mc == null || mc.screen == null) {
+            ci.cancel();
+        }
+    }
+
+    @Inject(method = "forceRecalculate", at = @At("HEAD"), cancellable = true)
+    private static void cosmiccore$guardForceRecalculate(CallbackInfo ci) {
+        // Guard against EMI bug where forceRecalculate is called during reload with null screen
+        Minecraft mc = Minecraft.getInstance();
+        if (mc == null || mc.screen == null) {
+            ci.cancel();
+        }
+    }
+
     @Unique
     private static int cosmiccore$groupArrowLeftX = 0;
     @Unique
