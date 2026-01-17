@@ -15,10 +15,11 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 
 public enum SoulType implements StringRepresentable {
-    Impure("impure", ChatFormatting.DARK_GRAY),
-    Rusted("rusted", ChatFormatting.GRAY),
+    Raw("raw", ChatFormatting.DARK_RED),
+    Refined("refined", ChatFormatting.GRAY),
     Proud("proud", ChatFormatting.DARK_PURPLE),
     Greedy("greedy", ChatFormatting.YELLOW),
+    Lustful("lustful", ChatFormatting.LIGHT_PURPLE),
     Envious("envious", ChatFormatting.GREEN),
     Gluttonous("gluttonous", ChatFormatting.GOLD),
     Wrathful("wrathful", ChatFormatting.RED),
