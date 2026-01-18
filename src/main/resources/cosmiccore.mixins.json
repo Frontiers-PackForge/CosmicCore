@@ -12,6 +12,7 @@
     "client.SoundManagerMixin",
     "embers.EmberDialBlockMixin",
     "emi.EmiApiMixin",
+    "emi.EmiFavoritesMixin",
     "emi.EmiScreenManagerMixin",
     "emi.RecipeScreenMixin",
     "ldlib.CustomBakedModelMixin"
