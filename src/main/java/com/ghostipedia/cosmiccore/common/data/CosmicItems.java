@@ -1083,20 +1083,20 @@ public class CosmicItems {
                         tooltips.add(Component.translatable("cosmiccore.lore.shard_large.0"));
                         tooltips.add(Component.translatable("cosmiccore.lore.shard_large.1"));
                     }),
-                    new com.ghostipedia.cosmiccore.common.reflection.item.ShardConsumeBehavior(8)))
+                    new com.ghostipedia.cosmiccore.common.reflection.item.CapacityShardBehavior(10)))
             .defaultModel()
             .register();
     public static final ItemEntry<ComponentItem> PERPETUITY_SHARD_MASSIVE = REGISTRATE
             .item("cluster_of_perpetuity", ComponentItem::create)
             .lang("Cluster of Perpetuity")
-            .properties(p -> p.stacksTo(60))
+            .properties(p -> p.stacksTo(16))
             .onRegister(attach(
                     new TooltipBehavior(tooltips -> {
                         tooltips.add(Component.translatable("cosmiccore.lore.shard_huge.0"));
                         tooltips.add(Component.translatable("cosmiccore.lore.shard_huge.1"));
                         tooltips.add(Component.translatable("cosmiccore.lore.shard_huge.2"));
                     }),
-                    new com.ghostipedia.cosmiccore.common.reflection.item.ShardConsumeBehavior(64)))
+                    new com.ghostipedia.cosmiccore.common.reflection.item.ScarRemovalBehavior()))
             .defaultModel()
             .register();
     public static final ItemEntry<ComponentItem> WIRELESS_PDA = REGISTRATE

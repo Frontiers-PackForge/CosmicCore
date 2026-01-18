@@ -140,6 +140,12 @@ public interface IReflection {
      */
     boolean hasDefianceScar(ResourceLocation bargainId);
 
+    /**
+     * Remove a defiance scar, allowing the bargain to be accepted again.
+     * Used by Clusters of Perpetuity.
+     */
+    void removeScar(ResourceLocation bargainId);
+
     // ---- Threshold Tracking ----
 
     /**
