@@ -21,6 +21,7 @@ import static com.ghostipedia.cosmiccore.common.data.CosmicBlocks.ETHERSTEEL_PLA
 import static com.gregtechceu.gtceu.api.machine.multiblock.PartAbility.EXPORT_FLUIDS;
 import static com.gregtechceu.gtceu.api.machine.multiblock.PartAbility.IMPORT_FLUIDS;
 import static com.gregtechceu.gtceu.api.pattern.Predicates.*;
+import static com.gregtechceu.gtceu.common.data.GTRecipeModifiers.BATCH_MODE;
 import static com.gregtechceu.gtceu.common.data.GTRecipeModifiers.ELECTRIC_OVERCLOCK;
 import static com.rekindled.embers.RegistryManager.DAWNSTONE_ANVIL;
 
@@ -34,7 +35,7 @@ public class EclipsedDawnForge {
             .appearanceBlock(ETHERSTEEL_PLATED_ASH_TILES)
             .partAppearance((controller, part, side) -> ETHERSTEEL_PLATED_ASH_TILES.getDefaultState())
             .recipeModifiers(CosmicRecipeModifiers::innateParallel4x,
-                    ELECTRIC_OVERCLOCK.apply(OverclockingLogic.NON_PERFECT_OVERCLOCK))
+                    ELECTRIC_OVERCLOCK.apply(OverclockingLogic.NON_PERFECT_OVERCLOCK), BATCH_MODE)
             .pattern(definition -> FactoryBlockPattern.start()
                     // spotless:off
                     .aisle("  AAAAA  ", "   AAA   ", "         ", "         ", "         ", "         ", "   AAA   ", "         ")

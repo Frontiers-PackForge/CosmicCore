@@ -1,5 +1,6 @@
 package com.ghostipedia.cosmiccore.common.data.recipe;
 
+import com.ghostipedia.cosmiccore.api.machine.multiblock.StellarBaseModule;
 import com.ghostipedia.cosmiccore.common.data.CosmicItems;
 import com.ghostipedia.cosmiccore.common.machine.multiblock.electric.MagneticFieldMachine;
 import com.ghostipedia.cosmiccore.common.machine.multiblock.multi.logic.LarvaMachine;
@@ -13,6 +14,7 @@ import com.gregtechceu.gtceu.api.machine.feature.IRecipeLogicMachine;
 import com.gregtechceu.gtceu.api.machine.multiblock.MultiblockControllerMachine;
 import com.gregtechceu.gtceu.api.machine.multiblock.WorkableMultiblockMachine;
 import com.gregtechceu.gtceu.api.recipe.GTRecipe;
+import com.gregtechceu.gtceu.api.recipe.OverclockingLogic;
 import com.gregtechceu.gtceu.api.recipe.RecipeHelper;
 import com.gregtechceu.gtceu.api.recipe.content.ContentModifier;
 import com.gregtechceu.gtceu.api.recipe.modifier.ModifierFunction;
@@ -34,6 +36,61 @@ import java.util.Map;
 public class CosmicRecipeModifiers {
 
     public static final RecipeModifier COSMIC_MODULES = CosmicRecipeModifiers::moduleParallel;
+
+    /**
+     * Recipe modifier for Stellar Modules.
+     * Uses the module's configured voltage and parallel settings.
+     * - Applies overclocking based on configured voltage per parallel
+     * - Applies parallelization up to the effective parallel limit (min of configured and Iris limit)
+     */
+    public static final RecipeModifier STELLAR_MODULE_OVERCLOCK = CosmicRecipeModifiers::stellarModuleOverclock;
+
+    /**
+     * Stellar module overclock logic.
+     * Uses configuredVoltagePerParallel for OC tier and configuredMaxParallel for parallels.
+     */
+    public static @NotNull ModifierFunction stellarModuleOverclock(MetaMachine machine, GTRecipe recipe) {
+        if (!(machine instanceof StellarBaseModule module)) {
+            return ModifierFunction.NULL;
+        }
+
+        // Check if recipe tier is within our configured tier
+        int recipeTier = RecipeHelper.getRecipeEUtTier(recipe);
+        int moduleTier = module.getOverclockTier();
+        if (recipeTier > moduleTier) {
+            return ModifierFunction.NULL; // Recipe requires higher tier than configured
+        }
+
+        // Get the effective parallel limit (min of user config and Iris limit)
+        int maxParallels = module.getEffectiveParallelLimit();
+
+        // Calculate actual parallels based on available resources
+        int actualParallels = ParallelLogic.getParallelAmount(machine, recipe, maxParallels);
+        if (actualParallels == 0) {
+            return ModifierFunction.NULL;
+        }
+
+        // Calculate maximum voltage for overclocking
+        // Total voltage = voltage per parallel * number of parallels
+        long maxVoltage = module.getConfiguredVoltagePerParallel() * actualParallels;
+
+        // Apply overclock using non-perfect subtick logic
+        // This uses the configured voltage as the maximum
+        var ocModifier = OverclockingLogic.NON_PERFECT_OVERCLOCK_SUBTICK.getModifier(
+                machine, recipe, maxVoltage, false); // Don't let OC logic add more parallels
+
+        // Apply parallel modifier
+        if (actualParallels > 1) {
+            var parallelModifier = ModifierFunction.builder()
+                    .modifyAllContents(ContentModifier.multiplier(actualParallels))
+                    .eutMultiplier(actualParallels)
+                    .parallels(actualParallels)
+                    .build();
+            return ocModifier.andThen(parallelModifier);
+        }
+
+        return ocModifier;
+    }
 
     public static ModifierFunction asteroidYieldModifier(MetaMachine machine, GTRecipe recipe) {
         if (!(machine instanceof IRecipeLogicMachine recipeLogicMachine)) {
@@ -99,7 +156,7 @@ public class CosmicRecipeModifiers {
                         .modifyAllContents(ContentModifier.multiplier(actualParallel))
                         .eutMultiplier(actualParallel * 0.75F)
                         .parallels(actualParallel)
-                        .durationMultiplier(actualParallel / 8F)
+                        .durationMultiplier(actualParallel / 4F)
                         .build();
             }
         }
@@ -123,6 +180,7 @@ public class CosmicRecipeModifiers {
         int multiplier = ParallelLogic.limitByOutputMerging(rlm, recipe, count, rlm::canVoidRecipeOutputs,
                 Collections.emptyList());
         if (multiplier == 1) return ModifierFunction.IDENTITY;
+        if (multiplier == 0) return ModifierFunction.NULL;
         return ModifierFunction.builder()
                 .outputModifier(ContentModifier.multiplier(multiplier))
                 .build();

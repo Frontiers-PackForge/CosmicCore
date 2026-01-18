@@ -52,4 +52,9 @@ public class ForgeClientEventHandler {
             event.setBlue(0.855F);
         }
     }
+
+    // @SubscribeEvent
+    // public static void onTooltipEvent(ItemTooltipEvent event) {
+    // CosmicFluidTooltipAddon.appendFluidTooltip(event.getItemStack());
+    // }
 }

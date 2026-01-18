@@ -1,10 +1,16 @@
 package com.ghostipedia.cosmiccore.mixin.emi;
 
+import com.ghostipedia.cosmiccore.integration.emi.RecipeScreenAccessor;
+
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
 
 import dev.emi.emi.api.EmiApi;
+import dev.emi.emi.api.stack.EmiIngredient;
+import dev.emi.emi.api.stack.EmiStack;
 import dev.emi.emi.api.widget.Bounds;
+import dev.emi.emi.api.widget.SlotWidget;
+import dev.emi.emi.api.widget.Widget;
 import dev.emi.emi.config.EmiConfig;
 import dev.emi.emi.config.SidebarSide;
 import dev.emi.emi.screen.RecipeScreen;
@@ -19,8 +25,8 @@ import org.spongepowered.asm.mixin.injection.ModifyArg;
 
 import java.util.List;
 
-@Mixin(RecipeScreen.class)
-public abstract class RecipeScreenMixin extends Screen {
+@Mixin(value = RecipeScreen.class, remap = false)
+public abstract class RecipeScreenMixin extends Screen implements RecipeScreenAccessor {
 
     @Shadow(remap = false)
     int x;
@@ -47,10 +53,6 @@ public abstract class RecipeScreenMixin extends Screen {
     @Shadow(remap = false)
     private int tab;
 
-    @Override
-    @Shadow(remap = false)
-    public abstract void onClose();
-
     @Shadow(remap = false)
     private List<WidgetGroup> currentPage;
 
@@ -59,7 +61,8 @@ public abstract class RecipeScreenMixin extends Screen {
                         target = "Ldev/emi/emi/EmiRenderHelper;drawNinePatch(Ldev/emi/emi/runtime/EmiDrawContext;Lnet/minecraft/resources/ResourceLocation;IIIIIIII)V",
                         ordinal = 4,
                         remap = false),
-               index = 2)
+               index = 2,
+               require = 0)
     private int modifyx(int x) {
         return x + 18 - 18 * cosmicCore$getList(cosmicCore$getWorkstationAmount());
     }
@@ -69,7 +72,8 @@ public abstract class RecipeScreenMixin extends Screen {
                         target = "Ldev/emi/emi/EmiRenderHelper;drawNinePatch(Ldev/emi/emi/runtime/EmiDrawContext;Lnet/minecraft/resources/ResourceLocation;IIIIIIII)V",
                         ordinal = 4,
                         remap = false),
-               index = 4)
+               index = 4,
+               require = 0)
     private int modifyw(int x) {
         return x - 18 + 18 * cosmicCore$getList(cosmicCore$getWorkstationAmount());
     }
@@ -79,7 +83,8 @@ public abstract class RecipeScreenMixin extends Screen {
                         target = "Ldev/emi/emi/EmiRenderHelper;drawNinePatch(Ldev/emi/emi/runtime/EmiDrawContext;Lnet/minecraft/resources/ResourceLocation;IIIIIIII)V",
                         ordinal = 4,
                         remap = false),
-               index = 5)
+               index = 5,
+               require = 0)
     private int modifyh(int x) {
         return 10 + Math.min(cosmicCore$getWorkstationAmount(), cosmicCore$maxWorkstations()) * 18 + getResolveOffset();
     }
@@ -134,5 +139,30 @@ public abstract class RecipeScreenMixin extends Screen {
             case BOTTOM -> (backgroundWidth - getResolveOffset() - 18) / 18;
             default -> 0;
         };
+    }
+
+    /**
+     * Gets the hovered stack from the recipe screen for CTRL+A pinning.
+     * Iterates through current page widgets to find SlotWidgets under the mouse.
+     */
+    @Unique
+    public EmiIngredient getHoveredStack() {
+        if (currentPage == null) return EmiStack.EMPTY;
+
+        double mouseX = minecraft.mouseHandler.xpos() * (double) width / (double) minecraft.getWindow().getWidth();
+        double mouseY = minecraft.mouseHandler.ypos() * (double) height / (double) minecraft.getWindow().getHeight();
+
+        for (WidgetGroup group : currentPage) {
+            for (Widget widget : group.widgets) {
+                if (widget instanceof SlotWidget slot) {
+                    Bounds bounds = slot.getBounds();
+                    if (mouseX >= bounds.x() && mouseX < bounds.x() + bounds.width() && mouseY >= bounds.y() &&
+                            mouseY < bounds.y() + bounds.height()) {
+                        return slot.getStack();
+                    }
+                }
+            }
+        }
+        return EmiStack.EMPTY;
     }
 }

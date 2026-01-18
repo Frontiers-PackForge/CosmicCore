@@ -5,17 +5,22 @@ import com.ghostipedia.cosmiccore.CosmicUtils;
 import com.ghostipedia.cosmiccore.common.commands.WirelessEnergyCommand;
 import com.ghostipedia.cosmiccore.common.data.CosmicItems;
 import com.ghostipedia.cosmiccore.common.data.CosmicMachines;
+import com.ghostipedia.cosmiccore.common.item.armor.boots.ICosmicBoots;
 import com.ghostipedia.cosmiccore.common.item.behavior.EffectApplicationBehavior;
 import com.ghostipedia.cosmiccore.common.machine.multiblock.multi.IPBF;
 import com.ghostipedia.cosmiccore.common.machine.multiblock.multi.SteamAssembler;
 import com.ghostipedia.cosmiccore.common.machine.multiblock.multi.SteamCaster;
 import com.ghostipedia.cosmiccore.common.machine.multiblock.multi.SteamMixer;
 import com.ghostipedia.cosmiccore.common.machine.multiblock.part.SoulHatchPartMachine;
+import com.ghostipedia.cosmiccore.common.reflection.ReflectionCommand;
+import com.ghostipedia.cosmiccore.common.reflection.ReflectionCommands;
 import com.ghostipedia.cosmiccore.mixin.accessor.LivingEntityAccessor;
 
 import com.gregtechceu.gtceu.GTCEu;
 import com.gregtechceu.gtceu.api.GTValues;
 import com.gregtechceu.gtceu.api.block.MetaMachineBlock;
+import com.gregtechceu.gtceu.api.capability.GTCapabilityHelper;
+import com.gregtechceu.gtceu.api.item.armor.ArmorComponentItem;
 import com.gregtechceu.gtceu.api.machine.MachineDefinition;
 import com.gregtechceu.gtceu.api.machine.MultiblockMachineDefinition;
 
@@ -28,11 +33,14 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.event.RegisterCommandsEvent;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.living.LivingDamageEvent;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.living.LivingEquipmentChangeEvent;
+import net.minecraftforge.event.entity.living.LivingEvent;
+import net.minecraftforge.event.entity.living.LivingFallEvent;
 import net.minecraftforge.event.level.BlockEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -121,6 +129,66 @@ public class ForgeCommonEventListener {
     @SubscribeEvent
     public static void registerCommand(RegisterCommandsEvent event) {
         WirelessEnergyCommand.register(event.getDispatcher(), event.getBuildContext());
+        ReflectionCommand.register(event.getDispatcher());
+        ReflectionCommands.register(event.getDispatcher());
+    }
+
+    /**
+     * Apply jump boost from Cosmic Boots when player jumps.
+     * The jump power is a multiplier on the base jump velocity.
+     */
+    @SubscribeEvent
+    public static void onLivingJump(LivingEvent.LivingJumpEvent event) {
+        if (!(event.getEntity() instanceof Player player)) return;
+
+        ItemStack boots = player.getItemBySlot(EquipmentSlot.FEET);
+        if (boots.isEmpty()) return;
+
+        // Check if wearing Cosmic Boots
+        if (!(boots.getItem() instanceof ArmorComponentItem armorItem)) return;
+        if (!(armorItem.getArmorLogic() instanceof ICosmicBoots cosmicBoots)) return;
+
+        // Check if boots have power
+        var electric = GTCapabilityHelper.getElectricItem(boots);
+        if (electric == null || electric.getCharge() <= 0) return;
+
+        // Get jump power multiplier (accounting for user's jump modifier setting)
+        double jumpPower = cosmicBoots.getEffectiveJumpPower(boots);
+        if (jumpPower <= 1.0) return; // No boost needed
+
+        // Apply the jump boost by scaling the Y velocity
+        // Vanilla jump gives ~0.42 Y velocity
+        var motion = player.getDeltaMovement();
+        double boostedY = motion.y * jumpPower;
+        player.setDeltaMovement(motion.x, boostedY, motion.z);
+    }
+
+    /**
+     * Cancel fall damage for players wearing Cosmic Boots with fall negation enabled.
+     * This handles the actual damage cancellation that negatesFallDamage() promises.
+     */
+    @SubscribeEvent(priority = EventPriority.HIGH)
+    public static void onLivingFall(LivingFallEvent event) {
+        if (!(event.getEntity() instanceof Player player)) return;
+
+        ItemStack boots = player.getItemBySlot(EquipmentSlot.FEET);
+        if (boots.isEmpty()) return;
+
+        // Check if wearing Cosmic Boots
+        if (!(boots.getItem() instanceof ArmorComponentItem armorItem)) return;
+        if (!(armorItem.getArmorLogic() instanceof ICosmicBoots cosmicBoots)) return;
+
+        // Check if boots have power
+        var electric = GTCapabilityHelper.getElectricItem(boots);
+        if (electric == null || electric.getCharge() <= 0) return;
+
+        // Check if fall negation is enabled for these boots
+        if (cosmicBoots.negatesFallDamage()) {
+            // Cancel the fall damage entirely
+            event.setCanceled(true);
+            // Reset fall distance so no damage accumulates
+            player.fallDistance = 0;
+        }
     }
 
     @SubscribeEvent

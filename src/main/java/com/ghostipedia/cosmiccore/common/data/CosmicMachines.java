@@ -604,7 +604,7 @@ public class CosmicMachines {
 
     private static MachineDefinition[] registerTieredMachines(String name,
                                                               BiFunction<IMachineBlockEntity, Integer, MetaMachine> factory,
-                                                              BiFunction<Integer, MachineBuilder<MachineDefinition>, MachineDefinition> builder,
+                                                              BiFunction<Integer, MachineBuilder<MachineDefinition, ?>, MachineDefinition> builder,
                                                               int... tiers) {
         MachineDefinition[] definitions = new MachineDefinition[GTValues.TIER_COUNT];
         for (int tier : tiers) {
@@ -928,7 +928,11 @@ public class CosmicMachines {
             GTCEu.id("block/multiblock/generator/large_steam_turbine"),
             false);
 
+    // Dreamer's Basin is now registered in DreamersBasin.java
+
     public static void init() {
+        // Initialize DreamersBasin
+        com.ghostipedia.cosmiccore.common.machine.multiblock.multi.DreamersBasin.init();
         GTMultiMachines.LARGE_COMBUSTION_ENGINE.setRecipeTypes(new GTRecipeType[] { DUMMY_RECIPES });
         GTMultiMachines.LARGE_COMBUSTION_ENGINE.setRenderXEIPreview(false);
         GTMultiMachines.LARGE_COMBUSTION_ENGINE.setRenderWorldPreview(false);

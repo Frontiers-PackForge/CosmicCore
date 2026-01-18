@@ -31,7 +31,7 @@ public class LargeSpoolingMachine {
             .rotationState(RotationState.NON_Y_AXIS)
             .recipeType(CosmicRecipeTypes.SPOOLING_MACHINE)
             .recipeModifiers(GTRecipeModifiers.PARALLEL_HATCH,
-                    ELECTRIC_OVERCLOCK.apply(OverclockingLogic.NON_PERFECT_OVERCLOCK))
+                    ELECTRIC_OVERCLOCK.apply(OverclockingLogic.NON_PERFECT_OVERCLOCK), GTRecipeModifiers.BATCH_MODE)
             .appearanceBlock(WEAR_RESISTANT_RURIDIT_CASING)
             .pattern(definition -> FactoryBlockPattern.start()
                     .aisle("  AAAA", "     F", "  DDDF", "     F", "     F", "     F", "     F", "  AAAA", "      ")

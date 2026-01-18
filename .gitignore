@@ -36,3 +36,7 @@ runs/
 
 # forge generated resources cache
 /src/generated/resources/.cache/
+# Agenic Support Tools - Debug Only
+/.claude/
+# Personal Notes I Keep in my Local
+/docs/

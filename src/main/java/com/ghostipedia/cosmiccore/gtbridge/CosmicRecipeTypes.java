@@ -333,10 +333,24 @@ public class CosmicRecipeTypes {
             .setMaxTooltips(5)
             .setProgressBar(GuiTextures.PROGRESS_BAR_CRYSTALLIZATION, LEFT_TO_RIGHT);
 
+    public static final GTRecipeType STAR_LADDER_RESEARCH = GTRecipeTypes
+            .register("star_ladder_research", GTRecipeTypes.MULTIBLOCK)
+            .setMaxIOSize(16, 16, 16, 16)
+            // .setSound(CosmicSounds.BLACK_HOLE_CRY)
+            .setProgressBar(GuiTextures.PROGRESS_BAR_ARROW, ProgressTexture.FillDirection.LEFT_TO_RIGHT);
+
     public static final GTRecipeType STELLAR_IRIS = GTRecipeTypes.register("stellar_iris", GTRecipeTypes.MULTIBLOCK)
             .setMaxIOSize(16, 16, 16, 16)
             // .setSound(CosmicSounds.BLACK_HOLE_CRY)
             .setProgressBar(GuiTextures.PROGRESS_BAR_ARROW, ProgressTexture.FillDirection.LEFT_TO_RIGHT);
+
+    // Stellar Iris Module Recipe Types
+    public static final GTRecipeType STELLAR_SMELTING = GTRecipeTypes
+            .register("ignition_complex", GTRecipeTypes.MULTIBLOCK)
+            .setSound(GAS_SUCC)
+            .setMaxIOSize(9, 9, 3, 3)
+            .setProgressBar(GuiTextures.PROGRESS_BAR_ARROW, ProgressTexture.FillDirection.LEFT_TO_RIGHT);
+
     public static final GTRecipeType CHROMATIC_DISTILLATION_PLANT = GTRecipeTypes
             .register("chormatic_distillation_plant", GTRecipeTypes.MULTIBLOCK)
             .setMaxIOSize(1, 1, 1, 16)
@@ -438,6 +452,12 @@ public class CosmicRecipeTypes {
             .setHasResearchSlot(true)
             .setSound(GTSoundEntries.REPLICATOR) // TODO - Sounds
             .setProgressBar(GuiTextures.PROGRESS_BAR_ARROW_MULTIPLE, ProgressTexture.FillDirection.LEFT_TO_RIGHT);
+
+    public static final GTRecipeType MULTITHREADED_PROCESSOR = GTRecipeTypes
+            .register("dream_basin", GTRecipeTypes.MULTIBLOCK)
+            .setMaxIOSize(9, 9, 9, 9)
+            .setSound(GTSoundEntries.ASSEMBLER)
+            .setProgressBar(GuiTextures.PROGRESS_BAR_ARROW_MULTIPLE, ProgressTexture.FillDirection.LEFT_TO_RIGHT);
     /*
      * TODO - Allow This block to replace the Master Ritual stone, and then set the structure shape based on the ritual
      */
@@ -524,6 +544,12 @@ public class CosmicRecipeTypes {
                         .save(provider);
             }
         });
+
+        // BLAST_RECIPES.onRecipeBuild((builder, provider) -> {
+        // STELLAR_SMELTING.copyFrom(builder)
+        // .save(provider);
+        // });
+
         ALLOY_BLAST_RECIPES.onRecipeBuild((builder, provider) -> {
             var orbitBuilderABS = ORBITAL_FORGE_ABS.copyFrom(builder);
             // Orbital Forge ONLY copies Standard ABS recipes, if an ABS recipe contains a dimension condition, it is

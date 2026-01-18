@@ -10,13 +10,17 @@ import com.ghostipedia.cosmiccore.common.data.tag.item.CosmicItemTags;
 import com.ghostipedia.cosmiccore.common.item.AsteroidItem;
 import com.ghostipedia.cosmiccore.common.item.AsteroidTargetingChipItem;
 import com.ghostipedia.cosmiccore.common.item.CosmicScytheItem;
+import com.ghostipedia.cosmiccore.common.item.OxygenTankItem;
 import com.ghostipedia.cosmiccore.common.item.armor.ChestSanguineWarptechSuite;
 import com.ghostipedia.cosmiccore.common.item.armor.HelmetSanguineWarptechSuite;
 import com.ghostipedia.cosmiccore.common.item.armor.SanguineWarptechSuite;
+import com.ghostipedia.cosmiccore.common.item.armor.boots.CosmicBootsArmorLogic;
 import com.ghostipedia.cosmiccore.common.item.behavior.EffectApplicationBehavior;
 import com.ghostipedia.cosmiccore.common.item.behavior.InfiniteSprayCanBehavior;
+import com.ghostipedia.cosmiccore.common.item.behavior.OxygenSupplyTankBehavior;
 import com.ghostipedia.cosmiccore.common.item.behavior.StructureWriteBehavior;
 import com.ghostipedia.cosmiccore.common.item.behavior.WirelessPDABehavior;
+import com.ghostipedia.cosmiccore.common.reflection.item.MirrorItem;
 import com.ghostipedia.cosmiccore.utils.StringUtil;
 
 import com.gregtechceu.gtceu.GTCEu;
@@ -1065,31 +1069,37 @@ public class CosmicItems {
             .item("shard_of_perpetuity", ComponentItem::create)
             .lang("Shard of Perpetuity")
             .properties(p -> p.stacksTo(64))
-            .onRegister(attach(new TooltipBehavior(tooltips -> {
-                tooltips.add(Component.translatable("cosmiccore.lore.shard_small.0"));
-                tooltips.add(Component.translatable("cosmiccore.lore.shard_small.1"));
-            })))
+            .onRegister(attach(
+                    new TooltipBehavior(tooltips -> {
+                        tooltips.add(Component.translatable("cosmiccore.lore.shard_small.0"));
+                        tooltips.add(Component.translatable("cosmiccore.lore.shard_small.1"));
+                    }),
+                    new com.ghostipedia.cosmiccore.common.reflection.item.ShardConsumeBehavior(1)))
             .defaultModel()
             .register();
     public static final ItemEntry<ComponentItem> PERPETUITY_SHARD_LARGE = REGISTRATE
             .item("large_shard_of_perpetuity", ComponentItem::create)
             .lang("Large Shard of Perpetuity")
             .properties(p -> p.stacksTo(64))
-            .onRegister(attach(new TooltipBehavior(tooltips -> {
-                tooltips.add(Component.translatable("cosmiccore.lore.shard_large.0"));
-                tooltips.add(Component.translatable("cosmiccore.lore.shard_large.1"));
-            })))
+            .onRegister(attach(
+                    new TooltipBehavior(tooltips -> {
+                        tooltips.add(Component.translatable("cosmiccore.lore.shard_large.0"));
+                        tooltips.add(Component.translatable("cosmiccore.lore.shard_large.1"));
+                    }),
+                    new com.ghostipedia.cosmiccore.common.reflection.item.ShardConsumeBehavior(8)))
             .defaultModel()
             .register();
     public static final ItemEntry<ComponentItem> PERPETUITY_SHARD_MASSIVE = REGISTRATE
             .item("cluster_of_perpetuity", ComponentItem::create)
             .lang("Cluster of Perpetuity")
             .properties(p -> p.stacksTo(60))
-            .onRegister(attach(new TooltipBehavior(tooltips -> {
-                tooltips.add(Component.translatable("cosmiccore.lore.shard_huge.0"));
-                tooltips.add(Component.translatable("cosmiccore.lore.shard_huge.1"));
-                tooltips.add(Component.translatable("cosmiccore.lore.shard_huge.2"));
-            })))
+            .onRegister(attach(
+                    new TooltipBehavior(tooltips -> {
+                        tooltips.add(Component.translatable("cosmiccore.lore.shard_huge.0"));
+                        tooltips.add(Component.translatable("cosmiccore.lore.shard_huge.1"));
+                        tooltips.add(Component.translatable("cosmiccore.lore.shard_huge.2"));
+                    }),
+                    new com.ghostipedia.cosmiccore.common.reflection.item.ShardConsumeBehavior(64)))
             .defaultModel()
             .register();
     public static final ItemEntry<ComponentItem> WIRELESS_PDA = REGISTRATE
@@ -1196,6 +1206,25 @@ public class CosmicItems {
             .properties(p -> p.stacksTo(1).fireResistant())
             .onRegister(attach(new TooltipBehavior(list -> {
                 list.add(Component.translatable("item.cosmiccore.space_radio.tooltip"));
+            })))
+            .register();
+
+    public static ItemEntry<ComponentItem> SIMPLE_REBREATHER = REGISTRATE
+            .item("simple_rebreather", ComponentItem::create)
+            .lang("Simple Rebreather")
+            .properties(p -> p.stacksTo(1).fireResistant())
+            .onRegister(attach(new TooltipBehavior(list -> {
+                list.add(Component.translatable("item.cosmiccore.simple_rebreather.tooltip"));
+            })))
+            .register();
+
+    public static ItemEntry<ComponentItem> PRESSURIZED_REBREATHER = REGISTRATE
+            .item("pressurized_rebreather", ComponentItem::create)
+            .lang("Pressurized Rebreather")
+            .properties(p -> p.stacksTo(1).fireResistant())
+            .onRegister(attach(new TooltipBehavior(list -> {
+                list.add(Component.translatable("item.cosmiccore.simple_rebreather.tooltip"));
+                list.add(Component.translatable("item.cosmiccore.pressurized_rebreather.tooltip"));
             })))
             .register();
 
@@ -2562,6 +2591,26 @@ public class CosmicItems {
             .defaultModel()
             .register();
 
+    // -------------------------------------------------------------------------
+    // Oxygen Supply Tanks
+    // -------------------------------------------------------------------------
+
+    public static final ItemEntry<OxygenTankItem> OXYGEN_SUPPLY_TANK_BRONZE = REGISTRATE
+            .item("bronze_supply_tank", OxygenTankItem::new)
+            .lang("Bronze Supply Tank")
+            .properties(p -> p.stacksTo(1))
+            .onRegister(attach(new OxygenSupplyTankBehavior(1000, 5, 10)))
+            .defaultModel()
+            .register();
+
+    public static final ItemEntry<OxygenTankItem> OXYGEN_SUPPLY_TANK_STEEL = REGISTRATE
+            .item("steel_supply_tank", OxygenTankItem::new)
+            .lang("Steel Supply Tank")
+            .properties(p -> p.stacksTo(1))
+            .onRegister(attach(new OxygenSupplyTankBehavior(2500, 5, 15)))
+            .defaultModel()
+            .register();
+
     public static ICustomDescriptionId cellName() {
         return new ICustomDescriptionId() {
 
@@ -2577,6 +2626,107 @@ public class CosmicItems {
     public static <T extends ComponentItem> NonNullConsumer<T> attach(IItemComponent... components) {
         return item -> item.attachComponents(components);
     }
+
+    // -------------------------------------------------------------------------
+    // Cosmic Boots - Additive movement bonuses that stack with Quake movement
+    // Tiers: Hydraulic (LV), Nano (HV), Quark (IV), Sanguine (ZPM)
+    // All boots have +1 step height via attribute modifier
+    // -------------------------------------------------------------------------
+
+    // Hydraulic Boots (LV) - Entry level mobility boots
+    // Feels like a nice upgrade from vanilla - snappy and responsive
+    public static ItemEntry<ArmorComponentItem> HYDRAULIC_BOOTS = REGISTRATE
+            .item("hydraulic_boots",
+                    (p) -> new ArmorComponentItem(GTArmorMaterials.ARMOR, ArmorItem.Type.BOOTS, p)
+                            .setArmorLogic(new CosmicBootsArmorLogic(
+                                    128, // energyPerUse
+                                    400_000L, // capacity (LV tier)
+                                    1, // tier (LV)
+                                    0.8, // maxSpeed cap (b/t)
+                                    2.0, // groundAcceleration bonus
+                                    0.5, // groundDeceleration
+                                    0.8, // airControl bonus
+                                    3.0, // jumpPower - ~4 blocks high
+                                    true, // fallNegation
+                                    "textures/armor/hydraulic_boots.png")))
+            .lang("Hydraulic Globetrotters Boots")
+            .properties(p -> p.rarity(Rarity.UNCOMMON))
+            .tag(CustomTags.PPE_ARMOR)
+            .register();
+
+    // Nano Boots (HV) - Mid-tier, noticeably quick
+    // Clear upgrade from Hydraulic - you feel the difference immediately
+    public static ItemEntry<ArmorComponentItem> NANO_BOOTS = REGISTRATE
+            .item("nano_boots",
+                    (p) -> new ArmorComponentItem(GTArmorMaterials.ARMOR, ArmorItem.Type.BOOTS, p)
+                            .setArmorLogic(new CosmicBootsArmorLogic(
+                                    512, // energyPerUse
+                                    6_400_000L, // capacity (HV tier)
+                                    3, // tier (HV)
+                                    1.5, // maxSpeed cap (b/t)
+                                    4.0, // groundAcceleration bonus
+                                    0.6, // groundDeceleration
+                                    1.0, // airControl bonus
+                                    4.0, // jumpPower - ~5 blocks high
+                                    true, // fallNegation
+                                    "textures/armor/nano_boots.png")))
+            .lang("NanoMuscle\u2122 Globetrotters Boots")
+            .properties(p -> p.rarity(Rarity.RARE))
+            .tag(CustomTags.PPE_ARMOR)
+            .register();
+
+    // Quark Boots (IV) - High-tier, fast as hell
+    // Like riding a motorcycle - exhilarating speed with control
+    public static ItemEntry<ArmorComponentItem> QUARK_BOOTS = REGISTRATE
+            .item("quark_boots",
+                    (p) -> new ArmorComponentItem(GTArmorMaterials.ARMOR, ArmorItem.Type.BOOTS, p)
+                            .setArmorLogic(new CosmicBootsArmorLogic(
+                                    2048, // energyPerUse
+                                    25_600_000L, // capacity (IV tier)
+                                    5, // tier (IV)
+                                    1.25, // maxSpeed cap (b/t)
+                                    3.5, // groundAcceleration bonus
+                                    0.75, // groundDeceleration
+                                    1.2, // airControl bonus
+                                    3.5, // jumpPower - ~4.5 blocks high
+                                    true, // fallNegation
+                                    "textures/armor/quark_boots.png")))
+            .lang("QuarkTech\u2122 Globetrotters Boots")
+            .properties(p -> p.rarity(Rarity.EPIC))
+            .tag(CustomTags.PPE_ARMOR)
+            .register();
+
+    // Sanguine Boots (ZPM) - Ultimate tier, very fast
+    // Shot out of a cannon - high speed with great control
+    public static ItemEntry<ArmorComponentItem> SANGUINE_BOOTS = REGISTRATE
+            .item("sanguine_boots",
+                    (p) -> new ArmorComponentItem(GTArmorMaterials.ARMOR, ArmorItem.Type.BOOTS, p)
+                            .setArmorLogic(new CosmicBootsArmorLogic(
+                                    8192, // energyPerUse
+                                    409_600_000L, // capacity (ZPM tier)
+                                    7, // tier (ZPM)
+                                    2.25, // maxSpeed cap (b/t)
+                                    6.0, // groundAcceleration bonus
+                                    0.9, // groundDeceleration - can stop on a dime
+                                    1.5, // airControl bonus - full air control
+                                    6.5, // jumpPower - ~8 blocks high
+                                    true, // fallNegation
+                                    "textures/armor/sanguine_boots.png")))
+            .lang("Sanguine Globetrotters Boots")
+            .properties(p -> p.rarity(Rarity.EPIC))
+            .tag(CustomTags.PPE_ARMOR)
+            .register();
+
+    // -------------------------------------------------------------------------
+    // Reflection System
+    // -------------------------------------------------------------------------
+
+    public static final ItemEntry<MirrorItem> REFLECTION_MIRROR = REGISTRATE
+            .item("reflection_mirror", MirrorItem::new)
+            .lang("Mirror of Erosion")
+            .properties(p -> p.stacksTo(1))
+            .defaultModel()
+            .register();
 
     public static <T extends Item> NonNullConsumer<T> modelPredicate(ResourceLocation predicate,
                                                                      Function<ItemStack, Float> property) {

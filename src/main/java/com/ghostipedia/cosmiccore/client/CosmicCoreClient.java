@@ -2,16 +2,22 @@ package com.ghostipedia.cosmiccore.client;
 
 import com.ghostipedia.cosmiccore.CosmicCore;
 import com.ghostipedia.cosmiccore.bee.CosmicBeesSpecies;
+import com.ghostipedia.cosmiccore.client.keybind.BootsKeybinds;
 import com.ghostipedia.cosmiccore.client.renderer.machine.*;
 
 import com.gregtechceu.gtceu.client.renderer.machine.DynamicRenderManager;
 
 import net.minecraft.client.renderer.ShaderInstance;
+import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.ModelEvent;
 import net.minecraftforge.client.event.RegisterGuiOverlaysEvent;
+import net.minecraftforge.client.event.RegisterKeyMappingsEvent;
 import net.minecraftforge.client.event.RegisterShadersEvent;
+import net.minecraftforge.client.event.RenderGuiOverlayEvent;
+import net.minecraftforge.client.gui.overlay.VanillaGuiOverlay;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.common.Mod;
 
 import com.mojang.blaze3d.vertex.DefaultVertexFormat;
 import forestry.api.apiculture.genetics.BeeLifeStage;
@@ -41,16 +47,35 @@ public class CosmicCoreClient {
         DynamicRenderManager.register(CosmicCore.id("spirit_crucible"), SpiritCrucibleRender.TYPE);
         DynamicRenderManager.register(CosmicCore.id("biovat_render"), BioVatRender.TYPE);
         DynamicRenderManager.register(CosmicCore.id("tester_render"), RenderTesterHelper.TYPE);
+        DynamicRenderManager.register(CosmicCore.id("star_ladder_render"), StarLadderRender.TYPE);
     }
 
     @Getter
     private static ShaderInstance nebulaeShader;
+
+    @Getter
+    private static ShaderInstance soulAuraShader;
+
+    @Getter
+    private static ShaderInstance voidBgShader;
+
+    @Getter
+    private static ShaderInstance galaxyBgShader;
 
     @SubscribeEvent
     public static void shaderRegistry(RegisterShadersEvent event) {
         try {
             event.registerShader(new ShaderInstance(event.getResourceProvider(), CosmicCore.id("rendertype_nebulae"),
                     DefaultVertexFormat.POSITION), (shaderInstance) -> nebulaeShader = shaderInstance);
+
+            event.registerShader(new ShaderInstance(event.getResourceProvider(), CosmicCore.id("soul_aura"),
+                    DefaultVertexFormat.POSITION_TEX), (shaderInstance) -> soulAuraShader = shaderInstance);
+
+            event.registerShader(new ShaderInstance(event.getResourceProvider(), CosmicCore.id("void_bg"),
+                    DefaultVertexFormat.POSITION_TEX), (shaderInstance) -> voidBgShader = shaderInstance);
+
+            event.registerShader(new ShaderInstance(event.getResourceProvider(), CosmicCore.id("galaxy_bg"),
+                    DefaultVertexFormat.POSITION_TEX), (shaderInstance) -> galaxyBgShader = shaderInstance);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -59,6 +84,11 @@ public class CosmicCoreClient {
     @SubscribeEvent
     public static void onGUIRegisterUIOverlays(RegisterGuiOverlaysEvent event) {
         event.registerAboveAll("cosmichud", new CosmicHudGuiOverlay());
+    }
+
+    @SubscribeEvent
+    public static void registerKeyMappings(RegisterKeyMappingsEvent event) {
+        BootsKeybinds.registerKeyMappings(event);
     }
 
     @SubscribeEvent
@@ -355,6 +385,17 @@ public class CosmicCoreClient {
                     CosmicCore.id("item/bee/bee_drone_fuzzy_princess"));
             client.setCustomBeeModel(CosmicBeesSpecies.VIRTUE, BeeLifeStage.QUEEN,
                     CosmicCore.id("item/bee/bee_drone_fuzzy_queen"));
+        }
+    }
+
+    @Mod.EventBusSubscriber(modid = CosmicCore.MOD_ID, value = Dist.CLIENT, bus = Mod.EventBusSubscriber.Bus.FORGE)
+    public static final class HideVanillaOverlays {
+
+        @SubscribeEvent
+        public static void onOverlayPre(RenderGuiOverlayEvent.Pre event) {
+            if (event.getOverlay() == VanillaGuiOverlay.AIR_LEVEL.type()) {
+                event.setCanceled(true);
+            }
         }
     }
 }

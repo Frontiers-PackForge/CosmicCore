@@ -2,11 +2,11 @@ dependencies {
     compileOnly(libs.jetbrains.annotations)
 
     modRuntimeOnly("curse.maven:worldedit-225608:4586218") //Worldedit bc i'm lazy ty
-    modRuntimeOnly("curse.maven:effortless-building-302113:4979089") //EB bc i'm lazy ty
+    modRuntimeOnly("curse.maven:effortless-building-302113:6330928") //EB bc i'm lazy ty
 
     //IDK if we need this fully yet...
     modImplementation('com.github.thedarkcolour:ModKit:0302f9aa42')
-    modImplementation('curse.maven:tmrv-1194921:6856065')
+    modImplementation('curse.maven:tmrv-1194921:7259315')
     modImplementation("curse.maven:travel-anchors-413234:4683662")
     modImplementation("curse.maven:libx-412525:4947474")
 
@@ -78,8 +78,8 @@ dependencies {
     modImplementation(forge.bloodMagic)
 
     // Create
-    modCompileOnly(forge.create)
-    modCompileOnly(forge.flywheel)
+    modImplementation(forge.create)
+    modImplementation(forge.flywheel)
     modImplementation(forge.geckoLib)
 
     // Thin air
@@ -114,7 +114,7 @@ dependencies {
     modImplementation(forge.smartBrainLib)
     // Runtime Recipe Viewers - uncomment whichever one you want to use //
     modRuntimeOnly(forge.emi)
-//     modRuntimeOnly(forge.jei.forge.impl)
+
 
     //Modern FixG
     modImplementation(forge.modernFix)

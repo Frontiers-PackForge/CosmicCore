@@ -1,0 +1,8 @@
+{
+    "parent": "gtceu:item/generated",
+    "textures": {
+        "layer0": "gtceu:item/material_sets/chonky/shape_memory_foil",
+        "layer1": "gtceu:item/material_sets/chonky/shape_memory_foil_secondary",
+        "layer2": "gtceu:item/material_sets/chonky/shape_memory_foil_overlay"
+    }
+}

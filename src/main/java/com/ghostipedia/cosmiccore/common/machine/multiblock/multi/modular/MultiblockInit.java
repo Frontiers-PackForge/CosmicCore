@@ -12,6 +12,7 @@ public class MultiblockInit {
         // MegaStructures
         PrismaticOreFoundry.init();
         StellarIris.init();
+        StellarSmeltingModule.init();
         // StellarStarBallast.init();
         HemophagicTransfuser.init();
         PlasmiteDistillery.init();
@@ -19,7 +20,7 @@ public class MultiblockInit {
         PCBFoundry.init();
         WelderMulti.init();
         CryogenicsChamber.init();
-        // StarLadder.init();
+        // StarLadderOld.init();
         VoidMiner.init();
         FluidVoidRig.init();
         VoraxReactor.init();
@@ -65,6 +66,7 @@ public class MultiblockInit {
         AtomicReconstructor.init();
         DivingBell.init();
         LinkTestStation.init();
+        StarLadder.init();
         // KryosynCrackingChamber.init();
 
         // Cargo Moths System
