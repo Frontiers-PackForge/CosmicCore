@@ -8,6 +8,7 @@ import com.ghostipedia.cosmiccore.common.network.packet.StellarUpgradePacket;
 import com.ghostipedia.cosmiccore.common.network.packet.SyncOxygenBarPacket;
 import com.ghostipedia.cosmiccore.common.network.packet.SyncTimeBarPacket;
 import com.ghostipedia.cosmiccore.common.reflection.network.SyncQuakeMovementPacket;
+import com.ghostipedia.cosmiccore.common.reflection.ui.ScarSelectionPackets;
 import com.ghostipedia.cosmiccore.common.reflection.ui.VoidUIPackets;
 
 import net.minecraft.network.FriendlyByteBuf;
@@ -96,5 +97,8 @@ public class CCoreNetwork {
 
         // Void UI packets
         VoidUIPackets.register();
+
+        // Scar selection packets (Cluster of Perpetuity)
+        ScarSelectionPackets.register();
     }
 }

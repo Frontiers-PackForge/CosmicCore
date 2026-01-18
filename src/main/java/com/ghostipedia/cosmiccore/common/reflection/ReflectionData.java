@@ -157,6 +157,11 @@ public class ReflectionData implements IReflection {
         return defianceScars.contains(bargainId);
     }
 
+    @Override
+    public void removeScar(ResourceLocation bargainId) {
+        defianceScars.remove(bargainId);
+    }
+
     // ---- Threshold Tracking ----
 
     @Override
