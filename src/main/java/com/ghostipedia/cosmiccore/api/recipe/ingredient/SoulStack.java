@@ -14,7 +14,7 @@ public record SoulStack(SoulType type, int amount) {
             Codec.INT.fieldOf("amount").forGetter(SoulStack::amount)
     ).apply(instance, SoulStack::new));
 
-    public static final SoulStack EMPTY = new SoulStack(SoulType.Impure, 0);
+    public static final SoulStack EMPTY = new SoulStack(SoulType.Raw, 0);
 
     public boolean isEmpty() {
         return this.amount <= 0;
