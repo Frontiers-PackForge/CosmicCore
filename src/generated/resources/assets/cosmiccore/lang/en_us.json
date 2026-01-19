@@ -641,7 +641,7 @@
   "cosmiccore.multiblock.ipbf.tooltip.0": "§7§oTurn up the heat!",
   "cosmiccore.multiblock.ipbf.tooltip.1": "§fConsumes creosote with recipes to improve efficiency.",
   "cosmiccore.multiblock.ipbf.tooltip.2": "§aRecipes are §f25% §aFaster.",
-  "cosmiccore.multiblock.ipbf.tooltip.3": "§aParallel Amount§f: §b8x§r",
+  "cosmiccore.multiblock.ipbf.tooltip.3": "§aBatch Amount§f: §b8x§r",
   "cosmiccore.multiblock.iris.star_stage_early_star": "§aStar Core Stage§f: §6Infant Star",
   "cosmiccore.multiblock.iris.star_stage_empty": "§aStar Core Stage§f: §6Compressed Gas Cloud",
   "cosmiccore.multiblock.iris.star_stage_request": "§cStar Core Requires \n§r%s \n§cfor Next Stage.",
