@@ -50,6 +50,12 @@ public class CosmicCoreRecipes {
                 .duration(20)
                 .save(provider);
 
+        SOUL_TESTER_RECIPES.recipeBuilder("generate_soul")
+                .input(CosmicRecipeCapabilities.SOUL, SoulIngredient.of(SoulType.Raw, 10))
+                .outputItems(ingot, Steel)
+                .duration(20)
+                .save(provider);
+
         // GROVE_RECIPES.recipeBuilder("dirt_movement")
         // .input(SoulRecipeCapability.CAP, 100)
         // .notConsumable(CosmicItems.DONK)
