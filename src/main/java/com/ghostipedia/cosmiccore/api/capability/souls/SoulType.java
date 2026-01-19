@@ -54,7 +54,7 @@ public enum SoulType implements StringRepresentable {
     }
 
     public Component toComponent(int amount, boolean formatted) {
-        MutableComponent nameComp = Component.translatable("cosmiccore.gui.soul." + name + ".name");
+        MutableComponent nameComp = Component.translatable("gui.cosmiccore.soul." + name + ".name");
         MutableComponent amountComp = Component.literal(" : " + amount).withStyle(Style.EMPTY);
         if (formatted) {
             nameComp = nameComp.withStyle(ChatFormatting.BOLD, this.color);

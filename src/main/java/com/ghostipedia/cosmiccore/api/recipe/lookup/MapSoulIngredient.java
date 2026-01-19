@@ -22,7 +22,7 @@ public class MapSoulIngredient extends AbstractMapIngredient {
     @Override
     public boolean equals(Object o) {
         if (!(o instanceof MapSoulIngredient other)) return false;
-        return stack.equals(other.stack);
+        return stack.type().equals(other.stack.type());
     }
 
     public static List<AbstractMapIngredient> from(SoulIngredient soulIngredient) {

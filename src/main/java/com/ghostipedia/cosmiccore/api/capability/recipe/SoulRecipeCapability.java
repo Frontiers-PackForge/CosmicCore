@@ -10,8 +10,10 @@ import com.gregtechceu.gtceu.api.recipe.content.Content;
 import com.gregtechceu.gtceu.api.recipe.content.ContentModifier;
 import com.gregtechceu.gtceu.api.recipe.content.IContentSerializer;
 
+import com.lowdragmc.lowdraglib.gui.widget.LabelWidget;
 import com.lowdragmc.lowdraglib.gui.widget.WidgetGroup;
 
+import com.lowdragmc.lowdraglib.utils.LocalizationUtils;
 import com.mojang.serialization.Codec;
 import org.apache.commons.lang3.mutable.MutableInt;
 
@@ -67,16 +69,16 @@ public class SoulRecipeCapability extends RecipeCapability<SoulIngredient> {
     @Override
     public void addXEIInfo(WidgetGroup group, int xOffset, GTRecipe recipe, List<Content> contents, boolean perTick,
                            boolean isInput, MutableInt yOffset) {
-        //TODO: ADD XEI info
-//        String type = contents.stream().map(Content::getContent).map(SoulRecipeCapability.CAP::of).map(SoulStack::type).map(SoulType::getSerializedName).findFirst().orElse("");
-//        long soul = contents.stream().map(Content::getContent).map(SoulRecipeCapability.CAP::of).mapToLong(SoulStack::amount).sum();
-//        if (isInput) {
-//            group.addWidget(new LabelWidget(3 - xOffset, yOffset.addAndGet(10),
-//                    LocalizationUtils.format("cosmiccore.recipe." + type + "_soul_in", soul)));
-//        } else {
-//            group.addWidget(new LabelWidget(3 - xOffset, yOffset.addAndGet(10),
-//                    LocalizationUtils.format("cosmiccore.recipe." + type + "_soul_out", soul)));
-//        }
+
+        String type = contents.stream().map(Content::getContent).map(SoulRecipeCapability.CAP::of).map(SoulIngredient::stack).map(SoulStack::type).map(SoulType::getSerializedName).findFirst().orElse("");
+        long soul = contents.stream().map(Content::getContent).map(SoulRecipeCapability.CAP::of).map(SoulIngredient::stack).mapToLong(SoulStack::amount).sum();
+        if (isInput) {
+            group.addWidget(new LabelWidget(3 - xOffset, yOffset.addAndGet(10),
+                    LocalizationUtils.format("recipe.cosmiccore." + type + "_soul_in", soul)));
+        } else {
+            group.addWidget(new LabelWidget(3 - xOffset, yOffset.addAndGet(10),
+                    LocalizationUtils.format("recipe.cosmiccore." + type + "_soul_out", soul)));
+        }
     }
 
     private static class SerializerSoulIngredient implements IContentSerializer<SoulIngredient> {
