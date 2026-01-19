@@ -12,11 +12,11 @@ import com.gregtechceu.gtceu.api.recipe.GTRecipe;
 import com.lowdragmc.lowdraglib.syncdata.annotation.Persisted;
 import com.lowdragmc.lowdraglib.syncdata.field.ManagedFieldHolder;
 
-import lombok.Getter;
 import net.minecraft.nbt.CompoundTag;
 
 import com.rekindled.embers.api.power.IEmberCapability;
 import com.rekindled.embers.power.DefaultEmberCapability;
+import lombok.Getter;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Collections;
