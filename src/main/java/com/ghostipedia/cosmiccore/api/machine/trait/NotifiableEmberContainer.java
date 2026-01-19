@@ -12,6 +12,7 @@ import com.gregtechceu.gtceu.api.recipe.GTRecipe;
 import com.lowdragmc.lowdraglib.syncdata.annotation.Persisted;
 import com.lowdragmc.lowdraglib.syncdata.field.ManagedFieldHolder;
 
+import lombok.Getter;
 import net.minecraft.nbt.CompoundTag;
 
 import com.rekindled.embers.api.power.IEmberCapability;
@@ -67,9 +68,11 @@ public class NotifiableEmberContainer extends NotifiableRecipeHandlerTrait<Doubl
     private final IO handlerIO;
 
     @Persisted
+    @Getter
     private double maxCapacity;
 
     @Persisted
+    @Getter
     private double maxConsumption;
 
     public NotifiableEmberContainer(MetaMachine machine, IO io, double maxCapacity, double maxConsumption) {
