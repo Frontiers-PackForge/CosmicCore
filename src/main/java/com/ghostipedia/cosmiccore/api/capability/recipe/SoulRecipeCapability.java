@@ -54,7 +54,7 @@ public class SoulRecipeCapability extends RecipeCapability<SoulIngredient> {
             if (item instanceof SoulIngredient soul) {
                 var isEqual = false;
                 for (Object obj : list) {
-                    if (obj instanceof SoulIngredient soulIngredient && soul.equals(soulIngredient)) {
+                    if (obj instanceof SoulIngredient soulIngredient && soul.stack().type().equals(soulIngredient.stack().type())) {
                         isEqual = true;
                         break;
                     }

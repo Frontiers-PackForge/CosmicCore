@@ -6,6 +6,7 @@ import com.gregtechceu.gtceu.api.GTValues;
 import com.gregtechceu.gtceu.api.capability.recipe.IO;
 import com.gregtechceu.gtceu.api.gui.GuiTextures;
 import com.gregtechceu.gtceu.api.machine.IMachineBlockEntity;
+import com.gregtechceu.gtceu.api.machine.feature.multiblock.IMultiController;
 import com.gregtechceu.gtceu.api.machine.multiblock.part.TieredIOPartMachine;
 import com.gregtechceu.gtceu.utils.FormattingUtil;
 
@@ -37,6 +38,15 @@ public class SoulHatchPartMachine extends TieredIOPartMachine {
     public SoulHatchPartMachine(IMachineBlockEntity holder, int tier, IO io) {
         super(holder, tier, io);
         this.soulContainer = new NotifiableSoulContainer(this, io, getMaxConsumption(tier));
+    }
+
+    @Override
+    public void addedToController(IMultiController controller) {
+        super.addedToController(controller);
+        boolean hasDuplicate = controller.getParts().stream()
+                .filter(part -> part != this)
+                .anyMatch(part -> part instanceof SoulHatchPartMachine soulHatch && soulHatch.io == this.io);
+        if (hasDuplicate) controller.onStructureInvalid();
     }
 
     @Override
