@@ -34,8 +34,8 @@ public class WeakSteamParallelMultiBlockMachine extends SteamParallelMultiblockM
         // double eutMulti = (euTick * 0.5 * parallel <= 32) ? (parallel * 0.5) : (32.0 / euTick);
 
         return ModifierFunction.builder()
-                .inputModifier(ContentModifier.multiplier(parallel))
-                .outputModifier(ContentModifier.multiplier(parallel))
+                .modifyAllContents(ContentModifier.multiplier(parallel))
+                .eutModifier(ContentModifier.multiplier(parallel))
                 .durationMultiplier(parallel * 0.75)
                 .parallels(parallel)
                 .build();
