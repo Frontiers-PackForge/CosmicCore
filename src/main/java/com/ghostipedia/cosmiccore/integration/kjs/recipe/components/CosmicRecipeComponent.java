@@ -46,6 +46,8 @@ public class CosmicRecipeComponent {
             if (o instanceof  SoulIngredient soulIngredient) {
                 return soulIngredient;
             } else {
+                System.out.println("Shit we have a problem !");
+                System.out.println("object type: " + o.getClass().descriptorString());
                 return null;
             }
         }

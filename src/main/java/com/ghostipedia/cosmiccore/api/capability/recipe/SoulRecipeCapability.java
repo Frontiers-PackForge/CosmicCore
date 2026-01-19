@@ -87,12 +87,12 @@ public class SoulRecipeCapability extends RecipeCapability<SoulIngredient> {
         public SoulIngredient of(Object o) {
             if (o instanceof SoulStack stack) return SoulIngredient.of(stack);
             else if (o instanceof SoulIngredient ingredient) return  ingredient;
-            return SoulIngredient.of(new SoulStack(SoulType.Impure, 0));
+            return SoulIngredient.of(new SoulStack(SoulType.Raw, 0));
         }
 
         @Override
         public SoulIngredient defaultValue() {
-            return SoulIngredient.of(new SoulStack(SoulType.Impure, 0));
+            return SoulIngredient.of(new SoulStack(SoulType.Raw, 0));
         }
 
         @Override
