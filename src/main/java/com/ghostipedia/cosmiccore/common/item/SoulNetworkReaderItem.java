@@ -25,7 +25,6 @@ public class SoulNetworkReaderItem extends Item {
     @Override
     public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
         if (!level.isClientSide() && player instanceof ServerPlayer serverPlayer) {
-            //TODO: get team or player uuid
             SoulNetwork soulNetwork = SoulNetworkSavedData.getSoulNetwork((ServerLevel) level, player.getUUID());
             List<SoulStack> contents = soulNetwork.getContents();
 
