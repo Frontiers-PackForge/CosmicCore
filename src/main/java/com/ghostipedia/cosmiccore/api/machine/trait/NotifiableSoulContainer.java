@@ -12,6 +12,7 @@ import com.gregtechceu.gtceu.api.machine.trait.NotifiableRecipeHandlerTrait;
 import com.gregtechceu.gtceu.api.recipe.GTRecipe;
 import com.gregtechceu.gtceu.common.machine.owner.FTBOwner;
 import lombok.Getter;
+import net.minecraft.server.level.ServerLevel;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -33,7 +34,10 @@ public class NotifiableSoulContainer extends NotifiableRecipeHandlerTrait<SoulIn
     }
 
     private SoulNetwork getSoulNetwork() {
-        return SoulNetworkSavedData.getSoulNetwork(getOwner());
+        if (this.machine.getLevel() instanceof ServerLevel serverLevel) {
+            return SoulNetworkSavedData.getSoulNetwork(serverLevel, getOwner());
+        }
+        return new SoulNetwork();
     }
 
     private UUID getOwner() {

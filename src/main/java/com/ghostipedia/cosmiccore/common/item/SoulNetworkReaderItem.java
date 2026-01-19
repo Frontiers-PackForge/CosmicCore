@@ -5,6 +5,7 @@ import com.ghostipedia.cosmiccore.api.data.souls.SoulNetworkSavedData;
 import com.ghostipedia.cosmiccore.api.recipe.ingredient.SoulStack;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
@@ -25,7 +26,7 @@ public class SoulNetworkReaderItem extends Item {
     public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
         if (!level.isClientSide() && player instanceof ServerPlayer serverPlayer) {
             //TODO: get team or player uuid
-            SoulNetwork soulNetwork = SoulNetworkSavedData.getSoulNetwork(player.getUUID());
+            SoulNetwork soulNetwork = SoulNetworkSavedData.getSoulNetwork((ServerLevel) level, player.getUUID());
             List<SoulStack> contents = soulNetwork.getContents();
 
             if (contents.isEmpty()) {

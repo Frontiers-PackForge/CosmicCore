@@ -3,6 +3,7 @@ package com.ghostipedia.cosmiccore.api.data.souls;
 import com.ghostipedia.cosmiccore.api.capability.souls.SoulType;
 import com.ghostipedia.cosmiccore.api.recipe.ingredient.SoulStack;
 import lombok.Getter;
+import lombok.Setter;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
@@ -17,6 +18,9 @@ public class SoulNetwork implements INBTSerializable<CompoundTag> {
     @Getter
     private int tier = 0;
 
+    @Setter
+    private Runnable dirtyCallback;
+
     private final Map<SoulType, Integer> contents = new ConcurrentHashMap<>();
 
     public SoulNetwork() {}
@@ -29,7 +33,10 @@ public class SoulNetwork implements INBTSerializable<CompoundTag> {
         amountToAdd = Math.min(amountToAdd, getSize() - totalAmount); // Respect network capacity
         amountToAdd = Math.max(0, amountToAdd); // Ensure we don't add a negative amount
 
-        if (!simulate && amountToAdd > 0) this.contents.put(stack.type(), currentAmount + amountToAdd);
+        if (!simulate && amountToAdd > 0) {
+            this.contents.put(stack.type(), currentAmount + amountToAdd);
+            if (dirtyCallback != null) dirtyCallback.run();
+        }
 
         System.out.println(this);
 
@@ -40,7 +47,10 @@ public class SoulNetwork implements INBTSerializable<CompoundTag> {
         var currentSoulContent = this.contents.getOrDefault(stack.type(), 0);
         int amountToSyphon = Math.min(stack.amount(), currentSoulContent);
 
-        if (!simulate && amountToSyphon > 0) this.contents.put(stack.type(), currentSoulContent - amountToSyphon);
+        if (!simulate && amountToSyphon > 0) {
+            this.contents.put(stack.type(), currentSoulContent - amountToSyphon);
+            if (dirtyCallback != null) dirtyCallback.run();
+        }
 
         return stack.withAmount(amountToSyphon);
     }
