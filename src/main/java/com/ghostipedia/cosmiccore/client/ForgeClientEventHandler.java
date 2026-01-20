@@ -2,12 +2,14 @@ package com.ghostipedia.cosmiccore.client;
 
 import com.ghostipedia.cosmiccore.CosmicCore;
 import com.ghostipedia.cosmiccore.CosmicUtils;
+import com.ghostipedia.cosmiccore.client.renderer.RingUpgradePreviewRenderer;
 import com.ghostipedia.cosmiccore.client.renderer.StructureBoundingBox;
 
 import net.minecraft.client.renderer.FogRenderer;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.RenderLevelStageEvent;
 import net.minecraftforge.client.event.ViewportEvent;
+import net.minecraftforge.event.level.LevelEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
@@ -22,6 +24,15 @@ public class ForgeClientEventHandler {
         var stage = event.getStage();
         if (stage == RenderLevelStageEvent.Stage.AFTER_TRIPWIRE_BLOCKS) {
             StructureBoundingBox.renderStructureSelect(event.getPoseStack(), event.getCamera());
+            RingUpgradePreviewRenderer.renderPreviews(event.getPoseStack(), event.getCamera());
+        }
+    }
+
+    @SubscribeEvent
+    public static void onWorldUnload(LevelEvent.Unload event) {
+        // Clear all previews when world unloads to prevent stale data
+        if (event.getLevel().isClientSide()) {
+            RingUpgradePreviewRenderer.clearAllPreviews();
         }
     }
 

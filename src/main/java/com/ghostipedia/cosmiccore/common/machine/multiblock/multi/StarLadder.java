@@ -3,13 +3,13 @@ package com.ghostipedia.cosmiccore.common.machine.multiblock.multi;
 import com.ghostipedia.cosmiccore.CosmicCore;
 import com.ghostipedia.cosmiccore.client.renderer.machine.CosmicDynamicRenderHelpers;
 import com.ghostipedia.cosmiccore.common.data.CosmicBlocks;
+import com.ghostipedia.cosmiccore.common.machine.multiblock.multi.logic.StarLadderMachine;
 import com.ghostipedia.cosmiccore.gtbridge.CosmicRecipeTypes;
 
 import com.gregtechceu.gtceu.GTCEu;
 import com.gregtechceu.gtceu.api.data.RotationState;
 import com.gregtechceu.gtceu.api.machine.MultiblockMachineDefinition;
 import com.gregtechceu.gtceu.api.machine.multiblock.PartAbility;
-import com.gregtechceu.gtceu.api.machine.multiblock.WorkableElectricMultiblockMachine;
 import com.gregtechceu.gtceu.api.pattern.FactoryBlockPattern;
 import com.gregtechceu.gtceu.api.pattern.Predicates;
 import com.gregtechceu.gtceu.api.recipe.OverclockingLogic;
@@ -27,7 +27,7 @@ import static com.gregtechceu.gtceu.common.data.models.GTMachineModels.createWor
 public class StarLadder {
 
     public final static MultiblockMachineDefinition STAR_LADDER = REGISTRATE
-            .multiblock("star_ladder", WorkableElectricMultiblockMachine::new)
+            .multiblock("star_ladder", StarLadderMachine::new)
             .rotationState(RotationState.NON_Y_AXIS)
             .recipeType(CosmicRecipeTypes.STAR_LADDER_RESEARCH)
             .recipeModifier(GTRecipeModifiers.ELECTRIC_OVERCLOCK.apply(OverclockingLogic.NON_PERFECT_OVERCLOCK_SUBTICK))

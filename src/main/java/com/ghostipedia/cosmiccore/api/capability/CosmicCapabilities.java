@@ -10,7 +10,11 @@ public class CosmicCapabilities {
     public static Capability<ISoulContainer> CAPABILITY_SOUL_CONTAINER = CapabilityManager
             .get(new CapabilityToken<>() {});
 
+    public static Capability<ITeleportOrigin> CAPABILITY_TELEPORT_ORIGIN = CapabilityManager
+            .get(new CapabilityToken<>() {});
+
     public static void register(RegisterCapabilitiesEvent event) {
         event.register(ISoulContainer.class);
+        event.register(ITeleportOrigin.class);
     }
 }
