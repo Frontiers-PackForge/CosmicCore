@@ -13,7 +13,6 @@ import com.gregtechceu.gtceu.common.data.GTRecipeTypes;
 import static com.ghostipedia.cosmiccore.api.registries.CosmicRegistration.REGISTRATE;
 import static com.ghostipedia.cosmiccore.common.data.CosmicBlocks.*;
 import static com.gregtechceu.gtceu.api.pattern.Predicates.*;
-import static com.gregtechceu.gtceu.common.data.models.GTMachineModels.createWorkableCasingMachineModel;
 
 public class DivingBell {
 
@@ -39,10 +38,8 @@ public class DivingBell {
                             .or(abilities(PartAbility.MAINTENANCE).setExactLimit(1)))
                     .build())
             // spotless:on
-            .model(
-                    createWorkableCasingMachineModel(
-                            CosmicCore.id("block/casings/solid/reinforced_naquadria_casing"),
-                            GTCEu.id("block/multiblock/generator/large_gas_turbine")))
+            .workableCasingModel(CosmicCore.id("block/casings/solid/highly_flexible_reinforced_trinavine_casing"),
+                    GTCEu.id("block/multiblock/generator/large_gas_turbine"))
             .register();
 
     public static void init() {}

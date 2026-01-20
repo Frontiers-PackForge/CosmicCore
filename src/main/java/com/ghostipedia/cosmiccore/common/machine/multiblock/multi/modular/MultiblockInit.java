@@ -67,6 +67,7 @@ public class MultiblockInit {
         DivingBell.init();
         LinkTestStation.init();
         StarLadder.init();
+        StarLadderResearchHub.init();
         // KryosynCrackingChamber.init();
 
         // Cargo Moths System

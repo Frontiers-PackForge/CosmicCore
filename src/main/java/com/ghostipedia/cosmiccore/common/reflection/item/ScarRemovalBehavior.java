@@ -32,8 +32,7 @@ import java.util.Set;
  */
 public class ScarRemovalBehavior implements IInteractionItem, IAddInformation {
 
-    public ScarRemovalBehavior() {
-    }
+    public ScarRemovalBehavior() {}
 
     @Override
     public InteractionResultHolder<ItemStack> use(Item item, Level level, Player player, InteractionHand hand) {
@@ -51,7 +50,8 @@ public class ScarRemovalBehavior implements IInteractionItem, IAddInformation {
         return ReflectionCapability.get(player).map(reflection -> {
             if (!reflection.hasAwakened()) {
                 player.displayClientMessage(
-                        Component.literal("The cluster feels... dormant. Perhaps after you've seen yourself in the mirror.")
+                        Component.literal(
+                                "The cluster feels... dormant. Perhaps after you've seen yourself in the mirror.")
                                 .withStyle(ChatFormatting.GRAY, ChatFormatting.ITALIC),
                         true);
                 return InteractionResultHolder.fail(stack);

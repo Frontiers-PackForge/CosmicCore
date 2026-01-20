@@ -694,6 +694,7 @@ public class CosmicBlocks {
     public static final BlockEntry<DivingBellEscapePad> DIVING_BELL_ESCAPE_PAD = REGISTRATE
             .block("diving_bell_escape_pad", DivingBellEscapePad::new)
             .initialProperties(() -> Blocks.STONE)
+            .exBlockstate(GTModels.cubeAllModel(CosmicCore.id("block/diving_bell_escape_pad")))
             .simpleItem()
             .register();
 
@@ -713,6 +714,7 @@ public class CosmicBlocks {
                 .lang("Moth Home (T" + tier + ")")
                 .initialProperties(() -> Blocks.IRON_BLOCK)
                 .properties(p -> p.strength(3.0f, 6.0f))
+                .exBlockstate(GTModels.cubeAllModel(CosmicCore.id("block/casings/moth/moth_home_t" + tier)))
                 .simpleItem()
                 .register();
     }
