@@ -1,7 +1,10 @@
 package com.ghostipedia.cosmiccore.api.capability.recipe;
 
+import com.ghostipedia.cosmiccore.api.machine.trait.NotifiableEmberContainer;
 import com.ghostipedia.cosmiccore.api.recipe.lookup.MapEmberIngredient;
 
+import com.gregtechceu.gtceu.api.capability.recipe.IO;
+import com.gregtechceu.gtceu.api.capability.recipe.IRecipeCapabilityHolder;
 import com.gregtechceu.gtceu.api.capability.recipe.RecipeCapability;
 import com.gregtechceu.gtceu.api.recipe.GTRecipe;
 import com.gregtechceu.gtceu.api.recipe.content.Content;
@@ -50,6 +53,56 @@ public class EmberRecipeCapability extends RecipeCapability<Double> {
     public List<Object> compressIngredients(Collection<Object> ingredients) {
         // TODO: Figure out what it needs to do
         return super.compressIngredients(ingredients);
+    }
+
+    private static double getInputContents(IRecipeCapabilityHolder holder) {
+        var handlerLists = holder.getCapabilitiesForIO(IO.IN);
+        if (handlerLists.isEmpty()) return 0d;
+
+        double total = 0d;
+
+        for (var handlerList : handlerLists) {
+            if (!handlerList.hasCapability(EmberRecipeCapability.CAP)) continue;
+            var emberHandlers = handlerList.getCapability(EmberRecipeCapability.CAP);
+            for (var handler : emberHandlers) {
+                var emberHandler = (NotifiableEmberContainer) handler;
+                for (var content : handler.getContents()) {
+                    // At most, an ember hatch can contribute the minimum of the max allowed consumption per tick, or
+                    // the current amount stored
+                    total += Math.min((double) content, emberHandler.getMaxConsumption());
+                }
+            }
+        }
+        return total;
+    }
+
+    @Override
+    public int getMaxParallelByInput(IRecipeCapabilityHolder holder, GTRecipe recipe, int limit, boolean tick) {
+        if (!holder.hasCapabilityProxies()) return 0;
+
+        var inputs = (tick ? recipe.tickInputs : recipe.inputs).get(this);
+        if (inputs == null || inputs.isEmpty()) return limit;
+
+        double totalEmberInHatches = getInputContents(holder);
+        if (totalEmberInHatches == 0) return 0;
+
+        var nonConsumable = 0d;
+        var consumable = 0d;
+        for (Content content : inputs) {
+            double required = (double) content.content;
+
+            if (content.chance == 0) {
+                nonConsumable += required;
+            } else {
+                consumable += required;
+            }
+        }
+
+        if (consumable == 0 && nonConsumable == 0) return limit;
+
+        if (nonConsumable > totalEmberInHatches) return 0;
+        if (consumable == 0) return limit;
+        return (int) Math.min(limit, (totalEmberInHatches - nonConsumable) / consumable);
     }
 
     @Override
