@@ -222,94 +222,46 @@ public class CosmicPredicates {
         return 0;
     }
 
-    // ===== Star Ladder Research Hub Tier Predicates =====
-    // These predicates accept either air OR the tier-specific block, tracking what was found.
-    // Tier mapping:
-    //   T0: A, B, C, D blocks (core structure)
-    //   T1: E blocks (bichromal_nevramite)
-    //   T2: F, G blocks (oscillating_gilded_pthanterum, highly_flexible_reinforced_trinavine)
-    //   T3: H, I, J blocks (royal_ichorium, multipurpose_interstellar, ultra_powered)
+    // SLRH tier predicates - accept air or tier block, track in context
 
-    /**
-     * Predicate for T0 blocks (A = superheavy_steel).
-     * Accepts air or the required block, tracking presence in context.
-     */
     public static TraceabilityPredicate slrhTier0BlockA() {
-        Block requiredBlock = CosmicBlocks.SUPERHEAVY_STEEL_CASING.get();
-        return slrhTierBlock(requiredBlock, 0);
+        return slrhTierBlock(CosmicBlocks.SUPERHEAVY_STEEL_CASING.get(), 0);
     }
 
-    /**
-     * Predicate for T0 blocks (B = bolted_heavy_frame).
-     */
     public static TraceabilityPredicate slrhTier0BlockB() {
-        Block requiredBlock = CosmicBlocks.BOLTED_HEAVY_FRAME_CASING.get();
-        return slrhTierBlock(requiredBlock, 0);
+        return slrhTierBlock(CosmicBlocks.BOLTED_HEAVY_FRAME_CASING.get(), 0);
     }
 
-    /**
-     * Predicate for T0 blocks (C = somarust).
-     */
     public static TraceabilityPredicate slrhTier0BlockC() {
-        Block requiredBlock = CosmicBlocks.SOMARUST_CASING.get();
-        return slrhTierBlock(requiredBlock, 0);
+        return slrhTierBlock(CosmicBlocks.SOMARUST_CASING.get(), 0);
     }
 
-    /**
-     * Predicate for T0 blocks (D = soul_muted).
-     */
     public static TraceabilityPredicate slrhTier0BlockD() {
-        Block requiredBlock = CosmicBlocks.SOUL_MUTED_CASING.get();
-        return slrhTierBlock(requiredBlock, 0);
+        return slrhTierBlock(CosmicBlocks.SOUL_MUTED_CASING.get(), 0);
     }
 
-    /**
-     * Predicate for T1+ blocks (E = bichromal_nevramite).
-     * Accepts air or the required block, tracking presence in context.
-     */
     public static TraceabilityPredicate slrhTier1Block() {
-        Block requiredBlock = CosmicBlocks.BICHROMAL_NEVRAMITE_CASING.get();
-        return slrhTierBlock(requiredBlock, 1);
+        return slrhTierBlock(CosmicBlocks.BICHROMAL_NEVRAMITE_CASING.get(), 1);
     }
 
-    /**
-     * Predicate for T2+ blocks (F = oscillating_gilded_pthanterum).
-     */
     public static TraceabilityPredicate slrhTier2BlockF() {
-        Block requiredBlock = CosmicBlocks.OSCILLATING_GILDED_PTHANTERUM_CASING.get();
-        return slrhTierBlock(requiredBlock, 2);
+        return slrhTierBlock(CosmicBlocks.OSCILLATING_GILDED_PTHANTERUM_CASING.get(), 2);
     }
 
-    /**
-     * Predicate for T2+ blocks (G = highly_flexible_reinforced_trinavine).
-     */
     public static TraceabilityPredicate slrhTier2BlockG() {
-        Block requiredBlock = CosmicBlocks.HIGHLY_FLEXIBLE_REINFORCED_TRINAVINE_CASING.get();
-        return slrhTierBlock(requiredBlock, 2);
+        return slrhTierBlock(CosmicBlocks.HIGHLY_FLEXIBLE_REINFORCED_TRINAVINE_CASING.get(), 2);
     }
 
-    /**
-     * Predicate for T3+ blocks (H = royal_ichorium).
-     */
     public static TraceabilityPredicate slrhTier3BlockH() {
-        Block requiredBlock = CosmicBlocks.ROYAL_ICHORIUM_CASING.get();
-        return slrhTierBlock(requiredBlock, 3);
+        return slrhTierBlock(CosmicBlocks.ROYAL_ICHORIUM_CASING.get(), 3);
     }
 
-    /**
-     * Predicate for T3+ blocks (I = multipurpose_interstellar).
-     */
     public static TraceabilityPredicate slrhTier3BlockI() {
-        Block requiredBlock = CosmicBlocks.MULTIPURPOSE_INTERSTELLAR_GRADE_CASING.get();
-        return slrhTierBlock(requiredBlock, 3);
+        return slrhTierBlock(CosmicBlocks.MULTIPURPOSE_INTERSTELLAR_GRADE_CASING.get(), 3);
     }
 
-    /**
-     * Predicate for T3+ blocks (J = ultra_powered).
-     */
     public static TraceabilityPredicate slrhTier3BlockJ() {
-        Block requiredBlock = CosmicBlocks.ULTRA_POWERED_CASING.get();
-        return slrhTierBlock(requiredBlock, 3);
+        return slrhTierBlock(CosmicBlocks.ULTRA_POWERED_CASING.get(), 3);
     }
 
     private static TraceabilityPredicate slrhTierBlock(Block requiredBlock, int tier) {
@@ -333,56 +285,34 @@ public class CosmicPredicates {
         }).addTooltips(Component.translatable("cosmiccore.multiblock.pattern.slrh_tier_block"));
     }
 
-    /**
-     * Validates the SLRH tier configuration and returns the highest complete tier (-1 to 3).
-     * A tier is "complete" if all positions have blocks (no air).
-     * Partial tiers are allowed - they just don't count toward the tier level.
-     * Returns -1 if not even T0 is complete (controller-only state).
-     * Always allows structure to form - tier just reflects build progress.
-     */
     public static int validateSLRHTier(PatternMatchContext ctx) {
         Set<Integer> tiersWithBlocks = ctx.get("SLRHTiersWithBlocks");
         Set<Integer> tiersWithAir = ctx.get("SLRHTiersWithAir");
 
-        // No blocks at all = pre-T0 (controller only)
         if (tiersWithBlocks == null || tiersWithBlocks.isEmpty()) {
             return -1;
         }
 
-        // Check if T0 (core structure) is complete
         boolean t0HasBlocks = tiersWithBlocks.contains(0);
         boolean t0HasAir = tiersWithAir != null && tiersWithAir.contains(0);
 
         if (!t0HasBlocks || t0HasAir) {
-            // T0 not complete - still in pre-T0 or building T0
             return -1;
         }
 
-        // T0 is complete, now check higher tiers
         int highestCompleteTier = 0;
         for (int tier = 1; tier <= 3; tier++) {
             boolean hasBlocks = tiersWithBlocks.contains(tier);
             boolean hasAir = tiersWithAir != null && tiersWithAir.contains(tier);
 
-            if (hasBlocks && !hasAir) {
-                // This tier is complete - but only count it if previous tier was complete
-                if (tier == highestCompleteTier + 1) {
-                    highestCompleteTier = tier;
-                }
-                // If there's a gap, we just stop counting (don't invalidate)
+            if (hasBlocks && !hasAir && tier == highestCompleteTier + 1) {
+                highestCompleteTier = tier;
             }
-            // Partial or empty tiers just mean we stop here
         }
 
         return highestCompleteTier;
     }
 
-    /**
-     * Gets the partial tier index (tier currently being built) for SLRH.
-     * Returns -1 if building T0 (some T0 blocks but not complete).
-     * Returns 0 if T0 complete but no higher tier being built.
-     * Returns 1-3 for partial higher tiers.
-     */
     public static int getSLRHPartialTierIndex(PatternMatchContext ctx) {
         Set<Integer> tiersWithBlocks = ctx.get("SLRHTiersWithBlocks");
         Set<Integer> tiersWithAir = ctx.get("SLRHTiersWithAir");
@@ -391,15 +321,12 @@ public class CosmicPredicates {
             return 0;
         }
 
-        // Check T0 first
         boolean t0HasBlocks = tiersWithBlocks != null && tiersWithBlocks.contains(0);
         boolean t0HasAir = tiersWithAir.contains(0);
         if (t0HasAir) {
-            // Building T0
             return t0HasBlocks ? 0 : -1;
         }
 
-        // T0 complete, check higher tiers
         for (int tier = 1; tier <= 3; tier++) {
             boolean hasBlocks = tiersWithBlocks != null && tiersWithBlocks.contains(tier);
             boolean hasAir = tiersWithAir.contains(tier);
