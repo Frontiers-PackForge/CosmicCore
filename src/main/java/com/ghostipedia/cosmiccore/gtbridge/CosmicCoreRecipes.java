@@ -1,10 +1,16 @@
 package com.ghostipedia.cosmiccore.gtbridge;
 
 import com.ghostipedia.cosmiccore.common.machine.multiblock.multi.logic.LarvaMachine;
+import com.ghostipedia.cosmiccore.common.recipe.condition.LinkedPartnerCondition;
+import com.ghostipedia.cosmiccore.common.recipe.condition.LinkedPartnerDimensionCondition;
+import com.ghostipedia.cosmiccore.common.recipe.condition.LinkedPartnerDimensionFluidCondition;
+import com.ghostipedia.cosmiccore.common.recipe.condition.LinkedPartnerDimensionItemCondition;
 
 import com.gregtechceu.gtceu.api.GTValues;
 
 import net.minecraft.data.recipes.FinishedRecipe;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.level.material.Fluids;
 
 import java.util.function.Consumer;
 
@@ -29,6 +35,70 @@ public class CosmicCoreRecipes {
                 .save(provider);
 
         LarvaMachine.generateTargettingChipRecipes(provider);
+
+        // === Link Test Station Recipes ===
+        // Basic recipe - no partner required (verifies machine works)
+        LINK_TEST_RECIPES.recipeBuilder("link_test_basic")
+                .inputItems(Items.IRON_INGOT)
+                .outputItems(Items.IRON_NUGGET, 9)
+                .duration(100)
+                .EUt(GTValues.VA[GTValues.LV])
+                .save(provider);
+
+        // Linked recipe - requires at least 1 linked partner
+        LINK_TEST_RECIPES.recipeBuilder("link_test_linked")
+                .inputItems(Items.GOLD_INGOT)
+                .outputItems(Items.DIAMOND)
+                .duration(200)
+                .EUt(GTValues.VA[GTValues.MV])
+                .addCondition(new LinkedPartnerCondition(1))
+                .save(provider);
+
+        // Linked recipe - requires partner to be formed
+        LINK_TEST_RECIPES.recipeBuilder("link_test_formed_partner")
+                .inputItems(Items.EMERALD)
+                .outputItems(Items.NETHER_STAR)
+                .duration(400)
+                .EUt(GTValues.VA[GTValues.HV])
+                .addCondition(new LinkedPartnerCondition(1, true, false))
+                .save(provider);
+
+        // Linked recipe - requires partner in Moon dimension
+        LINK_TEST_RECIPES.recipeBuilder("link_test_moon_partner")
+                .inputItems(Items.LAPIS_LAZULI, 4)
+                .outputItems(Items.ENDER_PEARL)
+                .duration(200)
+                .EUt(GTValues.VA[GTValues.MV])
+                .addCondition(new LinkedPartnerDimensionCondition("ad_astra:moon"))
+                .save(provider);
+
+        // Linked recipe - requires partner in Overworld (for testing from other dimensions)
+        LINK_TEST_RECIPES.recipeBuilder("link_test_overworld_partner")
+                .inputItems(Items.REDSTONE, 4)
+                .outputItems(Items.GLOWSTONE_DUST, 4)
+                .duration(200)
+                .EUt(GTValues.VA[GTValues.MV])
+                .addCondition(new LinkedPartnerDimensionCondition("minecraft:overworld"))
+                .save(provider);
+
+        // Linked recipe - requires partner in Overworld with diamonds in input
+        LINK_TEST_RECIPES.recipeBuilder("link_test_dimension_item")
+                .inputItems(Items.COAL, 8)
+                .outputItems(Items.DIAMOND)
+                .duration(400)
+                .EUt(GTValues.VA[GTValues.HV])
+                .addCondition(new LinkedPartnerDimensionItemCondition("minecraft:overworld", Items.DIAMOND, 1))
+                .save(provider);
+
+        // Linked recipe - requires partner in Overworld with water in input
+        LINK_TEST_RECIPES.recipeBuilder("link_test_dimension_fluid")
+                .inputItems(Items.SPONGE)
+                .outputItems(Items.WET_SPONGE)
+                .duration(100)
+                .EUt(GTValues.VA[GTValues.LV])
+                .addCondition(new LinkedPartnerDimensionFluidCondition("minecraft:overworld", Fluids.WATER, 1000))
+                .save(provider);
+
         /*
          * EMBER_TESTER_RECIPES.recipeBuilder("test")
          * .input(CosmicRecipeCapabilities.EMBER, 100d)

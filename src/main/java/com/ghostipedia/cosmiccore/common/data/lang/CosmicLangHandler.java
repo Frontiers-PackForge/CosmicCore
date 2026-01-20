@@ -162,6 +162,18 @@ public class CosmicLangHandler extends LangHandler {
         provider.add("cosmiccore.recipe.fieldSlam", "§fField Consumed: %sT");
         provider.add("cosmiccore.recipe.condition.titan.tooltip", "Requires Titan Reactor Tier: %s");
 
+        // Linked Partner Condition
+        provider.add("cosmiccore.recipe.condition.linked_partner.tooltip", "Requires %s linked partner(s)");
+        provider.add("cosmiccore.recipe.condition.linked_partner.formed",
+                "Requires %s linked partner(s) with valid structure");
+        provider.add("cosmiccore.recipe.condition.linked_partner.working",
+                "Requires %s linked partner(s) actively working");
+        provider.add("cosmiccore.recipe.condition.linked_partner_dimension.tooltip", "Requires linked partner in %s");
+        provider.add("cosmiccore.recipe.condition.linked_partner_dimension_item.tooltip",
+                "Requires %sx %s in partner in %s");
+        provider.add("cosmiccore.recipe.condition.linked_partner_dimension_fluid.tooltip",
+                "Requires %smB %s in partner in %s");
+
         provider.add("cosmiccore.multiblock.heat_value", "§6Current Heat: %s");
         provider.add("cosmiccore.multiblock.heat_capacity", "§cMax Heat: %s");
 
@@ -506,6 +518,30 @@ public class CosmicLangHandler extends LangHandler {
                 "§b'If you're wondering how to parallel assembly lines§r",
                 "§fthis is how. Welcome to subnets!§r");
 
+        // Cross-Dimensional Multiblock Linking
+        provider.add("cosmiccore.datastick.link_copied", "Link: %s");
+        provider.add("cosmiccore.link.copied", "Link data copied from %s");
+        provider.add("cosmiccore.link.established", "Link established: %s ↔ %s");
+
+        // Link validation errors
+        provider.add("cosmiccore.link.not_ready", "Machine not ready for linking");
+        provider.add("cosmiccore.link.invalid_data", "Invalid link data on datastick");
+        provider.add("cosmiccore.link.cannot_self_link", "Cannot link a machine to itself");
+        provider.add("cosmiccore.link.partner_not_loaded", "Partner machine must be loaded to establish link");
+        provider.add("cosmiccore.link.partner_missing", "Partner machine no longer exists");
+        provider.add("cosmiccore.link.not_linkable", "Target machine does not support linking");
+        provider.add("cosmiccore.link.different_owner", "Cannot link machines owned by different teams");
+        provider.add("cosmiccore.link.incompatible_roles", "Incompatible link roles: %s cannot link to %s");
+        provider.add("cosmiccore.link.limit_reached_self", "This machine has reached its link limit");
+        provider.add("cosmiccore.link.limit_reached_partner", "Partner machine has reached its link limit");
+        provider.add("cosmiccore.link.incompatible_self", "This machine cannot link to that type");
+        provider.add("cosmiccore.link.incompatible_partner", "Partner machine cannot link to this type");
+        provider.add("cosmiccore.link.already_linked", "These machines are already linked");
+        provider.add("cosmiccore.link.too_far", "Partner is too far away to force-load for linking");
+
+        // Link runtime status
+        provider.add("cosmiccore.recipe.waiting_for_partner", "Waiting for linked partner");
+        provider.add("cosmiccore.link.partner_offline", "Linked partner offline");
         provider.add("cosmiccore.multiblock.drone_station_machine.tier.0", "Plasmatic");
         provider.add("cosmiccore.multiblock.drone_station_machine.tier.1", "Sanguine");
         provider.add("cosmiccore.multiblock.drone_station_machine.tier.2", "Industrial");

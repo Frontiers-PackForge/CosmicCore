@@ -64,7 +64,14 @@ public class MultiblockInit {
         VileFissionReactor.init();
         VoidSaltReactor.init();
         AtomicReconstructor.init();
+        DivingBell.init();
+        LinkTestStation.init();
         StarLadder.init();
+        StarLadderResearchHub.init();
         // KryosynCrackingChamber.init();
+
+        // Cargo Moths System
+        MothCargoStation.init();
+        MothCargoDropOff.init();
     }
 }

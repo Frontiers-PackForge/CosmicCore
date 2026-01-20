@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:block/cube_all",
+  "textures": {
+    "all": "cosmiccore:block/diving_bell_escape_pad"
+  }
+}

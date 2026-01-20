@@ -126,6 +126,16 @@ public class StructureWriteBehavior implements IItemUIFactory {
                 builder.append(".aisle(\"%s\")\n".formatted(Joiner.on("\", \"").join(strings)));
             }
 
+            // Add legend mapping characters to block resource locations
+            builder.append("\n// Block Legend:\n");
+            blockPattern.charToBlockMap.forEach((character, resourceLocation) -> {
+                if (character == ' ') {
+                    builder.append("// ' ' (space) - %s\n".formatted(resourceLocation));
+                } else {
+                    builder.append("// %c - %s\n".formatted(character, resourceLocation));
+                }
+            });
+
             GTCEu.LOGGER.info("\n" + builder.toString());
         }
     }
