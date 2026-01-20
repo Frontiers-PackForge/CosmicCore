@@ -1926,5 +1926,12 @@
   "gui.cosmiccore.soul.gluttonous.name": "Gluttonous souls",
   "gui.cosmiccore.soul.wrathful.name": "Wrathful souls",
   "gui.cosmiccore.soul.slothful.name": "Slothful souls",
-  "gui.cosmiccore.soul.temporal.name": "Temporal souls"
+  "gui.cosmiccore.soul.temporal.name": "Temporal souls",
+  "gui.cosmiccore.soul.empty_network": "Network is empty",
+  "gui.cosmiccore.soul.network_contents": "--- Network Contents ---",
+  "gui.cosmiccore.soul.reset": "Soul network has been reset",
+  "gui.cosmiccore.soul.add": "Added %s %s souls to the network",
+  "gui.cosmiccore.soul.remove": "removed %s %s souls to the network",
+  "gui.cosmiccore.soul.capacity": "Capacity: %s souls",
+  "gui.cosmiccore.soul.set_tier": "the network is now tier %s"
 }

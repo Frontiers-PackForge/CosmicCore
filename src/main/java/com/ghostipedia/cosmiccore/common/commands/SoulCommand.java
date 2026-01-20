@@ -1,17 +1,20 @@
 package com.ghostipedia.cosmiccore.common.commands;
 
+import com.ghostipedia.cosmiccore.api.capability.souls.SoulType;
+import com.ghostipedia.cosmiccore.api.data.souls.SoulNetworkSavedData;
+import com.ghostipedia.cosmiccore.api.recipe.ingredient.SoulStack;
+import com.ghostipedia.cosmiccore.common.commands.argument.SoulTypeArgument;
+import com.ghostipedia.cosmiccore.common.item.SoulNetworkReaderItem;
 import com.mojang.brigadier.CommandDispatcher;
-import com.mojang.brigadier.builder.LiteralArgumentBuilder;
+import com.mojang.brigadier.arguments.IntegerArgumentType;
 import com.mojang.brigadier.context.CommandContext;
-import dev.ftb.mods.ftbteams.api.FTBTeamsAPI;
-import dev.ftb.mods.ftbteams.api.Team;
 import dev.ftb.mods.ftbteams.data.TeamArgument;
 import net.minecraft.commands.CommandBuildContext;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.arguments.EntityArgument;
-import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.network.chat.Component;
 
-import java.util.function.BiFunction;
+import java.util.UUID;
 
 import static net.minecraft.commands.Commands.*;
 
@@ -19,46 +22,66 @@ public class SoulCommand {
 
     public static void register(CommandDispatcher<CommandSourceStack> dispatcher, CommandBuildContext buildContext) {
         dispatcher.register(
-            literal("wireless")
-                .then(soulLiteral("info", LEVEL_ALL, SoulCommand::displayPlayerInfo, SoulCommand::displayTeamInfo))
+            literal("soul")
+                    .requires(source -> source.hasPermission(LEVEL_ADMINS))
+                    .then(literal("player")
+                            .then(argument("player", EntityArgument.player())
+                                    .then(literal("info").executes(ctx -> displayInfo(ctx, EntityArgument.getPlayer(ctx, "player").getUUID())))
+                                    .then(literal("reset").executes(ctx -> resetNetwork(ctx, EntityArgument.getPlayer(ctx, "player").getUUID())))
+                                    .then(literal("set-tier").then(argument("tier", IntegerArgumentType.integer(0, 6))
+                                            .executes(ctx -> setTier(ctx, EntityArgument.getPlayer(ctx, "player").getUUID(), IntegerArgumentType.getInteger(ctx, "tier")))))
+                                    .then(literal("add").then(argument("type", SoulTypeArgument.soulType()).then(argument("amount", IntegerArgumentType.integer())
+                                            .executes(ctx -> addSouls(ctx, EntityArgument.getPlayer(ctx, "player").getUUID(), SoulTypeArgument.get(ctx, "type"), IntegerArgumentType.getInteger(ctx, "amount"))))))
+                                    .then(literal("syphon").then(argument("type", SoulTypeArgument.soulType()).then(argument("amount", IntegerArgumentType.integer())
+                                            .executes(ctx -> syphon(ctx, EntityArgument.getPlayer(ctx, "player").getUUID(), SoulTypeArgument.get(ctx, "type"), IntegerArgumentType.getInteger(ctx, "amount"))))))
+                            )
+                    )
+                    .then(literal("team")
+                            .then(argument("team", TeamArgument.create())
+                                    .then(literal("info").executes(ctx -> displayInfo(ctx, TeamArgument.get(ctx, "team").getTeamId())))
+                                    .then(literal("reset").executes(ctx -> resetNetwork(ctx, TeamArgument.get(ctx, "team").getTeamId())))
+                                    .then(literal("set-tier").then(argument("tier", IntegerArgumentType.integer(0, 6))
+                                            .executes(ctx -> setTier(ctx, TeamArgument.get(ctx, "team").getTeamId(), IntegerArgumentType.getInteger(ctx, "tier")))))
+                                    .then(literal("add").then(argument("type", SoulTypeArgument.soulType()).then(argument("amount", IntegerArgumentType.integer())
+                                            .executes(ctx -> addSouls(ctx, TeamArgument.get(ctx, "team").getTeamId(), SoulTypeArgument.get(ctx, "type"), IntegerArgumentType.getInteger(ctx, "amount"))))))
+                                    .then(literal("syphon").then(argument("type", SoulTypeArgument.soulType()).then(argument("amount", IntegerArgumentType.integer())
+                                            .executes(ctx -> syphon(ctx, TeamArgument.get(ctx, "team").getTeamId(), SoulTypeArgument.get(ctx, "type"), IntegerArgumentType.getInteger(ctx, "amount"))))))
+                            )
+                    )
         );
     }
 
-    private static LiteralArgumentBuilder<CommandSourceStack> soulLiteral(String name, int permissionLevel,
-                                                                          BiFunction<CommandContext<CommandSourceStack>, ServerPlayer, Integer> playerCommand,
-                                                                          BiFunction<CommandContext<CommandSourceStack>, Team, Integer> teamCommand) {
-        return literal(name)
-                .requires(source -> source.hasPermission(permissionLevel))
-                .then(literal("player").then(argument("player", EntityArgument.player())
-                        .executes(ctx -> playerCommand.apply(ctx, EntityArgument.getPlayer(ctx, "player")))))
-                .then(literal("team").then(argument("team", TeamArgument.create())
-                        .executes(ctx -> teamCommand.apply(ctx, TeamArgument.get(ctx, "team")))))
-                .executes(ctx -> sourceCommand(ctx, playerCommand, teamCommand));
-    }
-
-    private static int sourceCommand(CommandContext<CommandSourceStack> context,
-                                     BiFunction<CommandContext<CommandSourceStack>, ServerPlayer, Integer> playerCommand,
-                                     BiFunction<CommandContext<CommandSourceStack>, Team, Integer> teamCommand) {
-        var owner = getPlayerOrTeam(context.getSource().getPlayer());
-        if (owner instanceof ServerPlayer player) return playerCommand.apply(context, player);
-        else if (owner instanceof Team team) return teamCommand.apply(context, team);
-        else return -1;
-    }
-
-    private static Object getPlayerOrTeam(ServerPlayer player) {
-        var team = FTBTeamsAPI.api().getManager().getTeamForPlayer(player);
-        return (team.isPresent() && !team.get().isPlayerTeam()) ? team.get() : player;
-    }
-
-    // ####################################
-    // Display Info
-    // ####################################
-
-    private static int displayPlayerInfo(CommandContext<CommandSourceStack> context, ServerPlayer player) {
+    private static int displayInfo(CommandContext<CommandSourceStack> context, UUID owner) {
+        var network = SoulNetworkSavedData.getSoulNetwork(context.getSource().getLevel(), owner);
+        context.getSource().sendSuccess(() ->SoulNetworkReaderItem.displaySoulNetworkInfo(network), false);
         return 1;
     }
 
-    private static int displayTeamInfo(CommandContext<CommandSourceStack> context, Team team) {
+    private static int setTier(CommandContext<CommandSourceStack> context, UUID owner, int tier) {
+        var network = SoulNetworkSavedData.getSoulNetwork(context.getSource().getLevel(), owner);
+        network.setTier(tier);
+        context.getSource().sendSuccess(() ->Component.translatable("gui.cosmiccore.soul.set_tier", tier), false);
+        return 1;
+    }
+
+    private static int resetNetwork(CommandContext<CommandSourceStack> context, UUID owner) {
+        var network = SoulNetworkSavedData.getSoulNetwork(context.getSource().getLevel(), owner);
+        network.reset();
+        context.getSource().sendSuccess(() -> Component.translatable("gui.cosmiccore.soul.reset"), false);
+        return 1;
+    }
+
+    private static int addSouls(CommandContext<CommandSourceStack> context, UUID owner, SoulType type, int amount) {
+        var network = SoulNetworkSavedData.getSoulNetwork(context.getSource().getLevel(), owner);
+        network.add(new SoulStack(type, amount), Integer.MAX_VALUE, false);
+        context.getSource().sendSuccess(() -> Component.translatable("gui.cosmiccore.soul.add", amount, type.getSerializedName()), false);
+        return 1;
+    }
+
+    private static int syphon(CommandContext<CommandSourceStack> context, UUID owner, SoulType type, int amount) {
+        var network = SoulNetworkSavedData.getSoulNetwork(context.getSource().getLevel(), owner);
+        network.syphon(new SoulStack(type, amount), false);
+        context.getSource().sendSuccess(() -> Component.translatable("gui.cosmiccore.soul.remove", amount, type.getSerializedName()), false);
         return 1;
     }
 }

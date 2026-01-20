@@ -26,15 +26,22 @@ public class SoulNetworkReaderItem extends Item {
     public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
         if (!level.isClientSide() && player instanceof ServerPlayer serverPlayer) {
             SoulNetwork soulNetwork = SoulNetworkSavedData.getSoulNetwork((ServerLevel) level, player.getUUID());
-            List<SoulStack> contents = soulNetwork.getContents();
-
-            if (contents.isEmpty()) {
-                player.sendSystemMessage(Component.literal("Network is empty.").withStyle(ChatFormatting.GRAY));
-            } else {
-                player.sendSystemMessage(Component.literal("--- Soul Network Contents ---").withStyle(ChatFormatting.GOLD));
-                for (SoulStack stack : contents) player.sendSystemMessage(stack.type().toComponent(stack.amount()));
-            }
+            player.sendSystemMessage(displaySoulNetworkInfo(soulNetwork));
         }
         return InteractionResultHolder.success(player.getItemInHand(hand));
     }
+
+    public static Component displaySoulNetworkInfo(SoulNetwork network) {
+        var message = Component.empty();
+        List<SoulStack> contents = network.getContents();
+        if (contents.isEmpty()) {
+            message.append(Component.translatable("gui.cosmiccore.soul.empty_network").withStyle(ChatFormatting.GRAY));
+        } else {
+            message.append(Component.translatable("gui.cosmiccore.soul.network_contents").withStyle(ChatFormatting.GOLD)).append("\n");
+            message.append(Component.translatable("gui.cosmiccore.soul.capacity", network.getSize()).withStyle(ChatFormatting.GRAY));
+            for (SoulStack stack : contents) message.append("\n").append(stack.type().toComponent(stack.amount()));
+        }
+        return message;
+    }
+
 }

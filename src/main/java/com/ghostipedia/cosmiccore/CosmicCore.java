@@ -10,6 +10,7 @@ import com.ghostipedia.cosmiccore.api.registries.CosmicRegistration;
 import com.ghostipedia.cosmiccore.client.CosmicCoreClient;
 import com.ghostipedia.cosmiccore.common.airControl.OxygenItemCap;
 import com.ghostipedia.cosmiccore.common.airControl.OxygenRules;
+import com.ghostipedia.cosmiccore.common.commands.argument.SoulTypeArgument;
 import com.ghostipedia.cosmiccore.common.data.*;
 import com.ghostipedia.cosmiccore.common.data.materials.CosmicMaterialSet;
 import com.ghostipedia.cosmiccore.common.data.materials.CosmicMaterials;
@@ -37,6 +38,8 @@ import com.gregtechceu.gtceu.config.ConfigHolder;
 
 import com.lowdragmc.lowdraglib.Platform;
 
+import net.minecraft.commands.synchronization.ArgumentTypeInfos;
+import net.minecraft.commands.synchronization.SingletonArgumentInfo;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraftforge.common.capabilities.RegisterCapabilitiesEvent;
@@ -119,6 +122,7 @@ public class CosmicCore {
             CCoreNetwork.init();
             OxygenRules.registerAirRanges();
             DimensionMobScaling.registerScaling();
+            ArgumentTypeInfos.registerByClass(SoulTypeArgument.class, SingletonArgumentInfo.contextFree(SoulTypeArgument::soulType));
         });
     }
 

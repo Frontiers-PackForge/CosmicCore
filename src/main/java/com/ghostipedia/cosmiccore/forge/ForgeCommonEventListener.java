@@ -2,6 +2,7 @@ package com.ghostipedia.cosmiccore.forge;
 
 import com.ghostipedia.cosmiccore.CosmicCore;
 import com.ghostipedia.cosmiccore.CosmicUtils;
+import com.ghostipedia.cosmiccore.common.commands.SoulCommand;
 import com.ghostipedia.cosmiccore.common.commands.WirelessEnergyCommand;
 import com.ghostipedia.cosmiccore.common.data.CosmicItems;
 import com.ghostipedia.cosmiccore.common.data.CosmicMachines;
@@ -120,6 +121,7 @@ public class ForgeCommonEventListener {
     @SubscribeEvent
     public static void registerCommand(RegisterCommandsEvent event) {
         WirelessEnergyCommand.register(event.getDispatcher(), event.getBuildContext());
+        SoulCommand.register(event.getDispatcher(), event.getBuildContext());
         ReflectionCommand.register(event.getDispatcher());
         ReflectionCommands.register(event.getDispatcher());
     }

@@ -27,6 +27,8 @@ public class SoulNetwork implements INBTSerializable<CompoundTag> {
 
     public SoulStack add(SoulStack stack, int throughput, boolean simulate) {
         int currentAmount = this.contents.getOrDefault(stack.type(), 0);
+
+        // TODO check with ghosti if we should do a total volume or a volume per type
         int totalAmount = this.contents.values().stream().mapToInt(Integer::intValue).sum();
 
         int amountToAdd = Math.min(stack.amount(), throughput); // Respect throughput
@@ -55,10 +57,20 @@ public class SoulNetwork implements INBTSerializable<CompoundTag> {
         return stack.withAmount(amountToSyphon);
     }
 
+    public void reset() {
+        this.contents.clear();
+        if (dirtyCallback != null) dirtyCallback.run();
+    }
+
     public List<SoulStack> getContents() {
         return contents.entrySet().stream()
             .map(kvp -> new SoulStack(kvp.getKey(), kvp.getValue()))
             .toList();
+    }
+
+    public void setTier(int tier) {
+        this.tier = tier;
+        if (dirtyCallback != null) dirtyCallback.run();
     }
 
     public int getSize() {

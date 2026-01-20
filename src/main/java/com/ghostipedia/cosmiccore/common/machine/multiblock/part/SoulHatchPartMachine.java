@@ -58,16 +58,11 @@ public class SoulHatchPartMachine extends TieredIOPartMachine {
                 Component.translatable("gui.cosmiccore.soul_hatch.label." + (this.io == IO.IN ? "import" : "export"))));
 
         // TODO: Get and display proper player/team Name
-//        group.addWidget(
-//                new LabelWidget(8, 18,
-//                        () -> I18n.get("gui.cosmiccore.soul_hatch.owner",
-//                                PlayerHelper.getUsernameFromUUID(this.soulContainer.getOwner())))
-//                        .setClientSideWidget());
-//        group.addWidget(
-//                new LabelWidget(8, 28,
-//                        () -> I18n.get("gui.cosmiccore.soul_hatch.lp",
-//                                FormattingUtil.formatNumbers(soulContainer.getCurrentEssence())))
-//                        .setClientSideWidget());
+        group.addWidget(
+                new LabelWidget(8, 18,
+                        () -> I18n.get("gui.cosmiccore.soul_hatch.owner",
+                                PlayerHelper.getUsernameFromUUID(this.soulContainer.getMachine().getOwnerUUID())))
+                        .setClientSideWidget());
 
         group.setBackground(GuiTextures.BACKGROUND_INVERSE);
         return group;

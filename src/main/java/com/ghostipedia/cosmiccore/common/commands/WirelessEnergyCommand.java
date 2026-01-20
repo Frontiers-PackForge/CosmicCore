@@ -98,7 +98,7 @@ public class WirelessEnergyCommand {
     private static Component generateInfoMessage(ServerLevel serverLevel, UUID owner, Component ownerName) {
         var wirelessData = WirelessEnergySavedData.getOrCreate(serverLevel);
 
-        var message = Component.translatable("cosmic.command.wireless.energy.header", ownerName).append("\n")
+        var message =   Component.translatable("cosmic.command.wireless.energy.header", ownerName).append("\n")
                 .append(Component.translatable("cosmic.command.wireless.energy.capacity",
                         FormattingUtil.formatNumbers(wirelessData.getEnergyCapacity(owner))))
                 .append("\n")
