@@ -16,6 +16,7 @@ import net.minecraft.nbt.CompoundTag;
 
 import com.rekindled.embers.api.power.IEmberCapability;
 import com.rekindled.embers.power.DefaultEmberCapability;
+import lombok.Getter;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Collections;
@@ -67,9 +68,11 @@ public class NotifiableEmberContainer extends NotifiableRecipeHandlerTrait<Doubl
     private final IO handlerIO;
 
     @Persisted
+    @Getter
     private double maxCapacity;
 
     @Persisted
+    @Getter
     private double maxConsumption;
 
     public NotifiableEmberContainer(MetaMachine machine, IO io, double maxCapacity, double maxConsumption) {
