@@ -492,6 +492,13 @@ public class CosmicRecipeTypes {
     // .setSound(GTSoundEntries.CHEMICAL) // TODO - Sounds
     // .setProgressBar(GuiTextures.PROGRESS_BAR_ARROW_MULTIPLE, ProgressTexture.FillDirection.LEFT_TO_RIGHT);
 
+    // Link Test Station recipe type for testing cross-dimensional linking
+    public static final GTRecipeType LINK_TEST_RECIPES = GTRecipeTypes
+            .register("link_test", ELECTRIC)
+            .setMaxIOSize(2, 2, 0, 0)
+            .setSound(GTSoundEntries.ASSEMBLER)
+            .setProgressBar(GuiTextures.PROGRESS_BAR_ARROW, ProgressTexture.FillDirection.LEFT_TO_RIGHT);
+
     public static void init() {
         LASER_ENGRAVER_RECIPES.setMaxIOSize(2, 2, 1, 1);
         // Oh my God

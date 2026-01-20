@@ -4,6 +4,8 @@ import com.ghostipedia.cosmiccore.api.CosmicCoreAPI;
 import com.ghostipedia.cosmiccore.api.block.IMagnetType;
 import com.ghostipedia.cosmiccore.api.machine.feature.IStellarModuleReceiver;
 import com.ghostipedia.cosmiccore.common.block.MagnetBlock;
+import com.ghostipedia.cosmiccore.common.data.CosmicBlocks;
+import com.ghostipedia.cosmiccore.common.machine.multiblock.multi.MothCargoStation;
 
 import com.gregtechceu.gtceu.api.machine.IMachineBlockEntity;
 import com.gregtechceu.gtceu.api.machine.MetaMachine;
@@ -14,7 +16,10 @@ import com.gregtechceu.gtceu.api.pattern.util.PatternMatchContext;
 
 import com.lowdragmc.lowdraglib.utils.BlockInfo;
 
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 
 import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
@@ -25,7 +30,24 @@ import java.util.Map;
 import java.util.Set;
 import java.util.function.Supplier;
 
+import static com.gregtechceu.gtceu.common.data.GTBlocks.*;
+
 public class CosmicPredicates {
+
+    private static Block[] researchHubRingTiers;
+
+    public static Block[] getResearchHubRingTiers() {
+        if (researchHubRingTiers == null) {
+            researchHubRingTiers = new Block[] {
+                    CASING_STEEL_SOLID.get(),           // T1
+                    CASING_ALUMINIUM_FROSTPROOF.get(),  // T2
+                    CASING_STAINLESS_CLEAN.get(),       // T3
+                    CASING_TITANIUM_STABLE.get(),       // T4
+                    CASING_TUNGSTENSTEEL_ROBUST.get()   // T5
+            };
+        }
+        return researchHubRingTiers;
+    }
 
     public static TraceabilityPredicate magnetCoils() {
         return new TraceabilityPredicate(blockWorldState -> {
@@ -70,44 +92,322 @@ public class CosmicPredicates {
                 .addTooltips(Component.translatable("gtceu.multiblock.pattern.error.filters"));
     }
 
-    /**
-     * Predicate for Stellar Iris module slots.
-     * Accepts air (empty slot) or a Stellar Module controller (formed or not).
-     * When a module is found, adds it to the "stellarModules" set in match context.
-     * The module doesn't need to be formed - the Iris will establish the connection,
-     * allowing the module to then form using the Iris as its provider.
-     */
+    public static TraceabilityPredicate mothHomes() {
+        return new TraceabilityPredicate(blockWorldState -> {
+            var blockState = blockWorldState.getBlockState();
+            // Check if it's steel casing (always allowed as placeholder)
+            if (blockState.is(CASING_STEEL_SOLID.get())) {
+                return true;
+            }
+            // Check if it's a valid Forestry beehive
+            return MothCargoStation.isMothHome(blockState);
+        }, () -> {
+            // Provide block previews for JEI - look up Forestry blocks at render time
+            return new BlockInfo[] {
+                    BlockInfo.fromBlockState(getBlockOrFallback(MothCargoStation.BEEHIVE_FOREST)),
+                    BlockInfo.fromBlockState(getBlockOrFallback(MothCargoStation.BEEHIVE_LUSH)),
+                    BlockInfo.fromBlockState(getBlockOrFallback(MothCargoStation.BEEHIVE_DESERT)),
+                    BlockInfo.fromBlockState(getBlockOrFallback(MothCargoStation.BEEHIVE_END)),
+                    BlockInfo.fromBlockState(CASING_STEEL_SOLID.get().defaultBlockState())
+            };
+        }).addTooltips(Component.literal("Forestry Beehive or Steel Casing"));
+    }
+
+    private static net.minecraft.world.level.block.state.BlockState getBlockOrFallback(ResourceLocation loc) {
+        Block block = BuiltInRegistries.BLOCK.get(loc);
+        return (block != Blocks.AIR ? block : Blocks.BEEHIVE).defaultBlockState();
+    }
+
     public static TraceabilityPredicate stellarModuleSlot() {
         return new TraceabilityPredicate(blockWorldState -> {
             var blockState = blockWorldState.getBlockState();
+            if (blockState.isAir()) return true;
 
-            // Accept air (empty slot)
-            if (blockState.isAir()) {
-                return true;
-            }
-
-            // Check if this is a stellar module controller
             var blockEntity = blockWorldState.getTileEntity();
             if (blockEntity instanceof IMachineBlockEntity machineBlockEntity) {
                 MetaMachine machine = machineBlockEntity.getMetaMachine();
-
-                // Must be a multiblock controller that implements IStellarModuleReceiver
-                if (machine instanceof IMultiController &&
-                        machine instanceof IStellarModuleReceiver moduleReceiver) {
-
-                    // Add to the set of connected modules (formed or not)
-                    // The Iris will establish the connection during onStructureFormed
+                if (machine instanceof IMultiController && machine instanceof IStellarModuleReceiver moduleReceiver) {
                     Set<IStellarModuleReceiver> modules = blockWorldState.getMatchContext()
                             .getOrCreate("stellarModules", HashSet::new);
                     modules.add(moduleReceiver);
                     return true;
                 }
             }
-
-            // Invalid block - not air and not a valid module
             return false;
         }, () -> new BlockInfo[] { BlockInfo.fromBlockState(Blocks.AIR.defaultBlockState()) })
                 .addTooltips(Component.translatable("cosmiccore.multiblock.pattern.stellar_module_slot"));
+    }
+
+    public static TraceabilityPredicate researchHubRing(int ringIndex) {
+        return new TraceabilityPredicate(blockWorldState -> {
+            var blockState = blockWorldState.getBlockState();
+            PatternMatchContext ctx = blockWorldState.getMatchContext();
+
+            if (blockState.isAir()) {
+                ctx.getOrCreate("ResearchHubRingsWithAir", HashSet<Integer>::new).add(ringIndex);
+                return true;
+            }
+
+            Block requiredBlock = getResearchHubRingTiers()[ringIndex - 1];
+            if (blockState.is(requiredBlock)) {
+                ctx.getOrCreate("ResearchHubRingsWithBlocks", HashSet<Integer>::new).add(ringIndex);
+                return true;
+            }
+            return false;
+        }, () -> {
+            Block requiredBlock = getResearchHubRingTiers()[ringIndex - 1];
+            return new BlockInfo[] {
+                    BlockInfo.fromBlockState(requiredBlock.defaultBlockState()),
+                    BlockInfo.fromBlockState(Blocks.AIR.defaultBlockState())
+            };
+        }).addTooltips(Component.translatable("cosmiccore.multiblock.pattern.research_hub_ring"));
+    }
+
+    public static int validateResearchHubRings(PatternMatchContext ctx) {
+        Set<Integer> ringsWithBlocks = ctx.get("ResearchHubRingsWithBlocks");
+        Set<Integer> ringsWithAir = ctx.get("ResearchHubRingsWithAir");
+
+        if (ringsWithBlocks == null || ringsWithBlocks.isEmpty()) {
+            return 0;
+        }
+
+        int highestCompleteRing = 0;
+        for (int ring = 1; ring <= 4; ring++) {
+            boolean hasBlocks = ringsWithBlocks.contains(ring);
+            boolean hasAir = ringsWithAir != null && ringsWithAir.contains(ring);
+
+            if (hasBlocks && !hasAir) {
+                if (ring == highestCompleteRing + 1) {
+                    highestCompleteRing = ring;
+                } else {
+                    return -1;
+                }
+            } else if (hasBlocks && hasAir) {
+                for (int higherRing = ring + 1; higherRing <= 4; higherRing++) {
+                    boolean higherHasBlocks = ringsWithBlocks.contains(higherRing);
+                    boolean higherHasAir = ringsWithAir != null && ringsWithAir.contains(higherRing);
+                    if (higherHasBlocks && !higherHasAir) {
+                        return -1;
+                    }
+                }
+                break;
+            } else {
+                for (int higherRing = ring + 1; higherRing <= 4; higherRing++) {
+                    if (ringsWithBlocks.contains(higherRing)) {
+                        return -1;
+                    }
+                }
+                break;
+            }
+        }
+
+        return highestCompleteRing;
+    }
+
+    public static int getPartialRingIndex(PatternMatchContext ctx) {
+        Set<Integer> ringsWithBlocks = ctx.get("ResearchHubRingsWithBlocks");
+        Set<Integer> ringsWithAir = ctx.get("ResearchHubRingsWithAir");
+
+        if (ringsWithBlocks == null || ringsWithAir == null) {
+            return 0;
+        }
+
+        for (int ring = 1; ring <= 4; ring++) {
+            boolean hasBlocks = ringsWithBlocks.contains(ring);
+            boolean hasAir = ringsWithAir.contains(ring);
+            if (hasBlocks && hasAir) {
+                return ring;
+            }
+        }
+        return 0;
+    }
+
+    // ===== Star Ladder Research Hub Tier Predicates =====
+    // These predicates accept either air OR the tier-specific block, tracking what was found.
+    // Tier mapping:
+    //   T0: A, B, C, D blocks (core structure)
+    //   T1: E blocks (bichromal_nevramite)
+    //   T2: F, G blocks (oscillating_gilded_pthanterum, highly_flexible_reinforced_trinavine)
+    //   T3: H, I, J blocks (royal_ichorium, multipurpose_interstellar, ultra_powered)
+
+    /**
+     * Predicate for T0 blocks (A = superheavy_steel).
+     * Accepts air or the required block, tracking presence in context.
+     */
+    public static TraceabilityPredicate slrhTier0BlockA() {
+        Block requiredBlock = CosmicBlocks.SUPERHEAVY_STEEL_CASING.get();
+        return slrhTierBlock(requiredBlock, 0);
+    }
+
+    /**
+     * Predicate for T0 blocks (B = bolted_heavy_frame).
+     */
+    public static TraceabilityPredicate slrhTier0BlockB() {
+        Block requiredBlock = CosmicBlocks.BOLTED_HEAVY_FRAME_CASING.get();
+        return slrhTierBlock(requiredBlock, 0);
+    }
+
+    /**
+     * Predicate for T0 blocks (C = somarust).
+     */
+    public static TraceabilityPredicate slrhTier0BlockC() {
+        Block requiredBlock = CosmicBlocks.SOMARUST_CASING.get();
+        return slrhTierBlock(requiredBlock, 0);
+    }
+
+    /**
+     * Predicate for T0 blocks (D = soul_muted).
+     */
+    public static TraceabilityPredicate slrhTier0BlockD() {
+        Block requiredBlock = CosmicBlocks.SOUL_MUTED_CASING.get();
+        return slrhTierBlock(requiredBlock, 0);
+    }
+
+    /**
+     * Predicate for T1+ blocks (E = bichromal_nevramite).
+     * Accepts air or the required block, tracking presence in context.
+     */
+    public static TraceabilityPredicate slrhTier1Block() {
+        Block requiredBlock = CosmicBlocks.BICHROMAL_NEVRAMITE_CASING.get();
+        return slrhTierBlock(requiredBlock, 1);
+    }
+
+    /**
+     * Predicate for T2+ blocks (F = oscillating_gilded_pthanterum).
+     */
+    public static TraceabilityPredicate slrhTier2BlockF() {
+        Block requiredBlock = CosmicBlocks.OSCILLATING_GILDED_PTHANTERUM_CASING.get();
+        return slrhTierBlock(requiredBlock, 2);
+    }
+
+    /**
+     * Predicate for T2+ blocks (G = highly_flexible_reinforced_trinavine).
+     */
+    public static TraceabilityPredicate slrhTier2BlockG() {
+        Block requiredBlock = CosmicBlocks.HIGHLY_FLEXIBLE_REINFORCED_TRINAVINE_CASING.get();
+        return slrhTierBlock(requiredBlock, 2);
+    }
+
+    /**
+     * Predicate for T3+ blocks (H = royal_ichorium).
+     */
+    public static TraceabilityPredicate slrhTier3BlockH() {
+        Block requiredBlock = CosmicBlocks.ROYAL_ICHORIUM_CASING.get();
+        return slrhTierBlock(requiredBlock, 3);
+    }
+
+    /**
+     * Predicate for T3+ blocks (I = multipurpose_interstellar).
+     */
+    public static TraceabilityPredicate slrhTier3BlockI() {
+        Block requiredBlock = CosmicBlocks.MULTIPURPOSE_INTERSTELLAR_GRADE_CASING.get();
+        return slrhTierBlock(requiredBlock, 3);
+    }
+
+    /**
+     * Predicate for T3+ blocks (J = ultra_powered).
+     */
+    public static TraceabilityPredicate slrhTier3BlockJ() {
+        Block requiredBlock = CosmicBlocks.ULTRA_POWERED_CASING.get();
+        return slrhTierBlock(requiredBlock, 3);
+    }
+
+    private static TraceabilityPredicate slrhTierBlock(Block requiredBlock, int tier) {
+        return new TraceabilityPredicate(blockWorldState -> {
+            var blockState = blockWorldState.getBlockState();
+            PatternMatchContext ctx = blockWorldState.getMatchContext();
+
+            if (blockState.isAir()) {
+                ctx.getOrCreate("SLRHTiersWithAir", HashSet<Integer>::new).add(tier);
+                return true;
+            }
+
+            if (blockState.is(requiredBlock)) {
+                ctx.getOrCreate("SLRHTiersWithBlocks", HashSet<Integer>::new).add(tier);
+                return true;
+            }
+            return false;
+        }, () -> new BlockInfo[] {
+                BlockInfo.fromBlockState(requiredBlock.defaultBlockState()),
+                BlockInfo.fromBlockState(Blocks.AIR.defaultBlockState())
+        }).addTooltips(Component.translatable("cosmiccore.multiblock.pattern.slrh_tier_block"));
+    }
+
+    /**
+     * Validates the SLRH tier configuration and returns the highest complete tier (-1 to 3).
+     * A tier is "complete" if all positions have blocks (no air).
+     * Partial tiers are allowed - they just don't count toward the tier level.
+     * Returns -1 if not even T0 is complete (controller-only state).
+     * Always allows structure to form - tier just reflects build progress.
+     */
+    public static int validateSLRHTier(PatternMatchContext ctx) {
+        Set<Integer> tiersWithBlocks = ctx.get("SLRHTiersWithBlocks");
+        Set<Integer> tiersWithAir = ctx.get("SLRHTiersWithAir");
+
+        // No blocks at all = pre-T0 (controller only)
+        if (tiersWithBlocks == null || tiersWithBlocks.isEmpty()) {
+            return -1;
+        }
+
+        // Check if T0 (core structure) is complete
+        boolean t0HasBlocks = tiersWithBlocks.contains(0);
+        boolean t0HasAir = tiersWithAir != null && tiersWithAir.contains(0);
+
+        if (!t0HasBlocks || t0HasAir) {
+            // T0 not complete - still in pre-T0 or building T0
+            return -1;
+        }
+
+        // T0 is complete, now check higher tiers
+        int highestCompleteTier = 0;
+        for (int tier = 1; tier <= 3; tier++) {
+            boolean hasBlocks = tiersWithBlocks.contains(tier);
+            boolean hasAir = tiersWithAir != null && tiersWithAir.contains(tier);
+
+            if (hasBlocks && !hasAir) {
+                // This tier is complete - but only count it if previous tier was complete
+                if (tier == highestCompleteTier + 1) {
+                    highestCompleteTier = tier;
+                }
+                // If there's a gap, we just stop counting (don't invalidate)
+            }
+            // Partial or empty tiers just mean we stop here
+        }
+
+        return highestCompleteTier;
+    }
+
+    /**
+     * Gets the partial tier index (tier currently being built) for SLRH.
+     * Returns -1 if building T0 (some T0 blocks but not complete).
+     * Returns 0 if T0 complete but no higher tier being built.
+     * Returns 1-3 for partial higher tiers.
+     */
+    public static int getSLRHPartialTierIndex(PatternMatchContext ctx) {
+        Set<Integer> tiersWithBlocks = ctx.get("SLRHTiersWithBlocks");
+        Set<Integer> tiersWithAir = ctx.get("SLRHTiersWithAir");
+
+        if (tiersWithAir == null) {
+            return 0;
+        }
+
+        // Check T0 first
+        boolean t0HasBlocks = tiersWithBlocks != null && tiersWithBlocks.contains(0);
+        boolean t0HasAir = tiersWithAir.contains(0);
+        if (t0HasAir) {
+            // Building T0
+            return t0HasBlocks ? 0 : -1;
+        }
+
+        // T0 complete, check higher tiers
+        for (int tier = 1; tier <= 3; tier++) {
+            boolean hasBlocks = tiersWithBlocks != null && tiersWithBlocks.contains(tier);
+            boolean hasAir = tiersWithAir.contains(tier);
+            if (hasBlocks && hasAir) {
+                return tier;
+            }
+        }
+        return 0;
     }
 
     public static void init() {}

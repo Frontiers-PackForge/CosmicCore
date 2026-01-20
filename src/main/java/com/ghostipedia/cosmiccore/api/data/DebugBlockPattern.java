@@ -8,8 +8,12 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 
+import net.minecraft.resources.ResourceLocation;
+import net.minecraftforge.registries.ForgeRegistries;
+
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Set;
 
@@ -19,9 +23,11 @@ public class DebugBlockPattern {
     public String[][] pattern;
     public int[][] aisleRepetitions;
     public Map<Character, Set<String>> symbolMap;
+    public Map<Character, ResourceLocation> charToBlockMap;
 
     public DebugBlockPattern() {
         symbolMap = new HashMap<>();
+        charToBlockMap = new LinkedHashMap<>();
         structureDir = new RelativeDirection[] {
                 RelativeDirection.LEFT, RelativeDirection.UP, RelativeDirection.FRONT
         };
@@ -39,6 +45,7 @@ public class DebugBlockPattern {
 
         Map<BlockState, Character> map = new HashMap<>();
         map.put(Blocks.AIR.defaultBlockState(), ' ');
+        charToBlockMap.put(' ', ForgeRegistries.BLOCKS.getKey(Blocks.AIR));
 
         char c = 'A'; // auto
 
@@ -52,6 +59,8 @@ public class DebugBlockPattern {
                         map.put(state, c);
                         String name = String.valueOf(c);
                         symbolMap.computeIfAbsent(c, key -> new HashSet<>()).add(name); // any
+                        ResourceLocation blockKey = ForgeRegistries.BLOCKS.getKey(state.getBlock());
+                        charToBlockMap.put(c, blockKey);
                         c++;
                     }
                     builder.append(map.get(state));
@@ -207,6 +216,7 @@ public class DebugBlockPattern {
         }
 
         symbolMap.forEach((k, v) -> newPattern.symbolMap.put(k, new HashSet<>(v)));
+        newPattern.charToBlockMap.putAll(this.charToBlockMap);
 
         return newPattern;
     }

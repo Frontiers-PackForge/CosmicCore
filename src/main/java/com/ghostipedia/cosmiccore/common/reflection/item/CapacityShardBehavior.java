@@ -43,7 +43,9 @@ public class CapacityShardBehavior implements IInteractionItem, IAddInformation 
         return ReflectionCapability.get(player).map(reflection -> {
             if (!reflection.hasAwakened()) {
                 player.displayClientMessage(
-                        Component.literal("The shard feels... dormant. Perhaps after you've seen yourself in the mirror.")
+                        Component
+                                .literal(
+                                        "The shard feels... dormant. Perhaps after you've seen yourself in the mirror.")
                                 .withStyle(ChatFormatting.GRAY, ChatFormatting.ITALIC),
                         true);
                 return InteractionResultHolder.fail(stack);

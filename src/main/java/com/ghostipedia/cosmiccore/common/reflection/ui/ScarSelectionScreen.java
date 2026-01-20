@@ -84,7 +84,8 @@ public class ScarSelectionScreen extends Screen {
         graphics.drawCenteredString(font, title, width / 2, listStartY - 30, withAlpha(0xFFBB99DD, 1f));
 
         // Subtitle
-        graphics.drawCenteredString(font, "Choose which scar to heal", width / 2, listStartY - 16, withAlpha(0xFF888888, 1f));
+        graphics.drawCenteredString(font, "Choose which scar to heal", width / 2, listStartY - 16,
+                withAlpha(0xFF888888, 1f));
 
         // Entries
         hoveredIndex = -1;
@@ -98,8 +99,7 @@ public class ScarSelectionScreen extends Screen {
             int x = (width - ENTRY_WIDTH) / 2;
             int y = listStartY + i * (ENTRY_HEIGHT + ENTRY_SPACING);
 
-            boolean hovered = mouseX >= x && mouseX < x + ENTRY_WIDTH
-                    && mouseY >= y && mouseY < y + ENTRY_HEIGHT;
+            boolean hovered = mouseX >= x && mouseX < x + ENTRY_WIDTH && mouseY >= y && mouseY < y + ENTRY_HEIGHT;
             if (hovered) hoveredIndex = entryIndex;
 
             renderEntry(graphics, entry, x, y, hovered);
