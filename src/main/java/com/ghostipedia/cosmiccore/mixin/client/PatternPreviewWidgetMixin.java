@@ -1,6 +1,7 @@
 package com.ghostipedia.cosmiccore.mixin.client;
 
 import com.ghostipedia.cosmiccore.mixin.accessor.MBPatternAccessor;
+
 import com.gregtechceu.gtceu.api.gui.widget.PatternPreviewWidget;
 
 import net.minecraft.core.BlockPos;

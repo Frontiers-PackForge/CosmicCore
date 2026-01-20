@@ -1,12 +1,10 @@
 package com.ghostipedia.cosmiccore.common.machine.multiblock.multi;
 
 import com.ghostipedia.cosmiccore.CosmicCore;
-import com.ghostipedia.cosmiccore.api.pattern.CosmicPredicates;
 import com.ghostipedia.cosmiccore.common.data.CosmicBlocks;
 import com.ghostipedia.cosmiccore.common.machine.multiblock.multi.logic.StarLadderResearchHubMachine;
 import com.ghostipedia.cosmiccore.gtbridge.CosmicRecipeTypes;
 
-import com.gregtechceu.gtceu.GTCEu;
 import com.gregtechceu.gtceu.api.data.RotationState;
 import com.gregtechceu.gtceu.api.machine.MultiblockMachineDefinition;
 import com.gregtechceu.gtceu.api.machine.multiblock.PartAbility;
@@ -14,7 +12,6 @@ import com.gregtechceu.gtceu.api.pattern.BlockPattern;
 import com.gregtechceu.gtceu.api.pattern.FactoryBlockPattern;
 import com.gregtechceu.gtceu.api.pattern.MultiblockShapeInfo;
 import com.gregtechceu.gtceu.api.pattern.TraceabilityPredicate;
-import com.gregtechceu.gtceu.common.data.GTBlocks;
 import com.gregtechceu.gtceu.common.data.GTMachines;
 
 import net.minecraft.ChatFormatting;
@@ -57,7 +54,8 @@ public class StarLadderResearchHub {
                     Component.literal("Link to a Star Ladder using a datastick"),
                     Component.literal("Build larger structures to increase tier (T0-T3)"),
                     Component.literal("Do NOT use the terminal to automatically build"),
-                    Component.literal("Use the Inbuilt multiblock build system (Screwdriver) otherwise you'll experience wrong block placement"),
+                    Component.literal(
+                            "Use the Inbuilt multiblock build system (Screwdriver) otherwise you'll experience wrong block placement"),
                     Component.literal("TODO: ACTUAL LANG KEYS LMAO")
                             .withStyle(ChatFormatting.RED))
             .rotationState(RotationState.NON_Y_AXIS)
@@ -73,12 +71,8 @@ public class StarLadderResearchHub {
                     .where('C', blocks(CosmicBlocks.SOMARUST_CASING.get()))
                     .where('D', blocks(CosmicBlocks.SOUL_MUTED_CASING.get()))
                     .build())
-            // Each tier has its own correctly-sized shapeInfo
-            // The mixin prevents crashes when clicking blocks in previews that don't match the main pattern - disgusting yes i know
             .shapeInfos(definition -> {
                 List<MultiblockShapeInfo> shapeInfos = new ArrayList<>();
-
-                // T0 preview
                 shapeInfos.add(tier0ShapeInfo(definition)
                         .where(' ', Blocks.AIR.defaultBlockState())
                         .where('@', GTMachines.ENERGY_INPUT_HATCH[3], Direction.NORTH)

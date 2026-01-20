@@ -62,10 +62,14 @@ public class RingUpgradePreviewRenderer {
 
     private static void computeDeltas() {
         // Parse each tier's pattern
-        Map<BlockPos, Character> t0Blocks = parsePatternRelativeToController(StarLadderResearchHubPatterns.TIER_0, "T0");
-        Map<BlockPos, Character> t1Blocks = parsePatternRelativeToController(StarLadderResearchHubPatterns.TIER_1, "T1");
-        Map<BlockPos, Character> t2Blocks = parsePatternRelativeToController(StarLadderResearchHubPatterns.TIER_2, "T2");
-        Map<BlockPos, Character> t3Blocks = parsePatternRelativeToController(StarLadderResearchHubPatterns.TIER_3, "T3");
+        Map<BlockPos, Character> t0Blocks = parsePatternRelativeToController(StarLadderResearchHubPatterns.TIER_0,
+                "T0");
+        Map<BlockPos, Character> t1Blocks = parsePatternRelativeToController(StarLadderResearchHubPatterns.TIER_1,
+                "T1");
+        Map<BlockPos, Character> t2Blocks = parsePatternRelativeToController(StarLadderResearchHubPatterns.TIER_2,
+                "T2");
+        Map<BlockPos, Character> t3Blocks = parsePatternRelativeToController(StarLadderResearchHubPatterns.TIER_3,
+                "T3");
 
         // Compute deltas between consecutive tiers
         // Delta from nothing (controller-only) to T0 is just all T0 blocks
@@ -124,7 +128,8 @@ public class RingUpgradePreviewRenderer {
         return blocks;
     }
 
-    private static Map<BlockPos, Block> computeDelta(Map<BlockPos, Character> prevTier, Map<BlockPos, Character> nextTier) {
+    private static Map<BlockPos, Block> computeDelta(Map<BlockPos, Character> prevTier,
+                                                     Map<BlockPos, Character> nextTier) {
         Map<BlockPos, Block> delta = new HashMap<>();
 
         for (Map.Entry<BlockPos, Character> entry : nextTier.entrySet()) {
@@ -301,7 +306,8 @@ public class RingUpgradePreviewRenderer {
         return positions;
     }
 
-    public static Map<BlockPos, Block> calculateRingPositionsWithBlocks(BlockPos controllerPos, Direction facing, int targetTier) {
+    public static Map<BlockPos, Block> calculateRingPositionsWithBlocks(BlockPos controllerPos, Direction facing,
+                                                                        int targetTier) {
         Map<BlockPos, Block> delta = getDeltaForTier(targetTier - 1);
         if (delta == null || delta.isEmpty()) return new HashMap<>();
 
