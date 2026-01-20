@@ -32,7 +32,6 @@ public class ChromaticFlotationPlant {
             .recipeModifiers(ELECTRIC_OVERCLOCK.apply(OverclockingLogic.NON_PERFECT_OVERCLOCK),
                     GTRecipeModifiers.PARALLEL_HATCH, GTRecipeModifiers.BATCH_MODE)
             .appearanceBlock(GCYMBlocks.CASING_WATERTIGHT)
-            .generator(true)
             .pattern(definition -> FactoryBlockPattern.start()
                     .aisle("AAAAAAA", "AAAAAAA", "AAAAAAA", "AAAAAAA", "AAAAAAA")
                     .aisle("AAAAAAA", "ABCBCBA", "ABBBBBA", "ABBBBBA", "ABBBBBA")
