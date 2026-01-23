@@ -22,7 +22,6 @@ public class CosmicDataGenerators {
         DataGenerator generator = event.getGenerator();
         PackOutput packOutput = generator.getPackOutput();
         ExistingFileHelper existingFileHelper = event.getExistingFileHelper();
-        var registries = event.getLookupProvider();
 
         boolean server = event.includeServer();
         generator.addProvider(server, new CosmicModifierProvider(packOutput));
