@@ -1,0 +1,9 @@
+{
+  "type": "tconstruct:material",
+  "ingredient": {
+    "item": "gtceu:styrene_butadiene_rubber_ingot"
+  },
+  "material": "cosmiccore:styrene_butadiene_rubber",
+  "needed": 2,
+  "value": 1
+}

@@ -1,0 +1,9 @@
+{
+  "type": "tconstruct:material",
+  "ingredient": {
+    "item": "gtceu:naquadah_alloy_ingot"
+  },
+  "material": "cosmiccore:naquadah_alloy",
+  "needed": 2,
+  "value": 1
+}

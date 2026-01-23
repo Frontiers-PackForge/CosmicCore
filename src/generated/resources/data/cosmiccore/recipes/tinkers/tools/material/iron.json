@@ -1,0 +1,9 @@
+{
+  "type": "tconstruct:material",
+  "ingredient": {
+    "item": "minecraft:iron_ingot"
+  },
+  "material": "cosmiccore:iron",
+  "needed": 2,
+  "value": 1
+}

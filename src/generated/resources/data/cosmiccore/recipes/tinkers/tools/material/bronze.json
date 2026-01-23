@@ -1,0 +1,9 @@
+{
+  "type": "tconstruct:material",
+  "ingredient": {
+    "item": "gtceu:bronze_ingot"
+  },
+  "material": "cosmiccore:bronze",
+  "needed": 2,
+  "value": 1
+}

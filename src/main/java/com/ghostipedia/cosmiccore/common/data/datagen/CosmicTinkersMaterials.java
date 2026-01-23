@@ -1,6 +1,7 @@
 package com.ghostipedia.cosmiccore.common.data.datagen;
 
 import com.ghostipedia.cosmiccore.CosmicCore;
+import com.ghostipedia.cosmiccore.common.data.materials.tinkers.TinkersMaterial;
 
 import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceLocation;
@@ -17,11 +18,14 @@ public class CosmicTinkersMaterials extends AbstractMaterialDataProvider {
 
     @Override
     protected void addMaterials() {
-        // todo figure this out
+        for (TinkersMaterial material : TinkersMaterial.MATERIALS) {
+            addMaterial(material.getMaterialLocation(), material.getTier(), material.getSortOrder(),
+                    material.isCraftable());
+        }
     }
 
     @Override
     public String getName() {
-        return "";
+        return "Cosmic Core Materials";
     }
 }

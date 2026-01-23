@@ -1,0 +1,9 @@
+{
+  "type": "tconstruct:material",
+  "ingredient": {
+    "item": "gtceu:ultimet_ingot"
+  },
+  "material": "cosmiccore:ultimet",
+  "needed": 2,
+  "value": 1
+}

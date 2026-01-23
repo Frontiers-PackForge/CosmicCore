@@ -19,6 +19,6 @@ public class CosmicModifierProvider extends AbstractModifierProvider {
 
     @Override
     public String getName() {
-        return "";
+        return "cosmic modifiers";
     }
 }

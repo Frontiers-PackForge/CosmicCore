@@ -1,0 +1,9 @@
+{
+  "type": "tconstruct:material",
+  "ingredient": {
+    "item": "cosmiccore:trinavine_ingot"
+  },
+  "material": "cosmiccore:trinavine",
+  "needed": 2,
+  "value": 1
+}

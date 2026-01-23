@@ -1,0 +1,9 @@
+{
+  "type": "tconstruct:material",
+  "ingredient": {
+    "item": "gtceu:duranium_ingot"
+  },
+  "material": "cosmiccore:duranium",
+  "needed": 2,
+  "value": 1
+}

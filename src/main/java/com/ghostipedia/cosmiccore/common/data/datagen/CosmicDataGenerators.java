@@ -1,6 +1,7 @@
 package com.ghostipedia.cosmiccore.common.data.datagen;
 
 import com.ghostipedia.cosmiccore.CosmicCore;
+import com.ghostipedia.cosmiccore.common.item.tcon.TinkersMaterials;
 import com.ghostipedia.cosmiccore.common.item.tcon.modifiers.CosmicModifierProvider;
 
 import com.gregtechceu.gtceu.api.registry.registrate.SoundEntryBuilder;
@@ -20,17 +21,24 @@ public class CosmicDataGenerators {
         DataGenerator generator = event.getGenerator();
         PackOutput packOutput = generator.getPackOutput();
         ExistingFileHelper existingFileHelper = event.getExistingFileHelper();
-        var registries = event.getLookupProvider();
 
         boolean server = event.includeServer();
-
         generator.addProvider(server, new CosmicModifierProvider(packOutput));
+        TinkersMaterials.init();
+        var materials = new CosmicTinkersMaterials(packOutput);
+        var traits = new CosmicMaterialTraits(packOutput, materials);
+        var stats = new CosmicMaterialStats(packOutput, materials);
+        var spriteProvider = new CosmicMaterialSpriteProvider();
+        var renderInfoProvider = new CosmicMaterialRenderInfoProvider(packOutput, spriteProvider, existingFileHelper);
+        var materialRecipeProvider = new CosmicTinkersRecipeProvider(packOutput);
 
         // TODO DATAGEN FOR Materials + stats + traits (server)
-        // generator.addProvider(server, new CosmicTinkersMaterials(packOutput));
-        // generator.addProvider(server, new CosmicMaterialStats(packOutput));
-        // generator.addProvider(server, new CosmicMaterialTraits(packOutput));
 
+        generator.addProvider(server, materials);
+        generator.addProvider(server, traits);
+        generator.addProvider(server, stats);
+        generator.addProvider(server, renderInfoProvider);
+        generator.addProvider(server, materialRecipeProvider);
         if (event.includeClient()) {
             generator.addProvider(true, new SoundEntryBuilder.SoundEntryProvider(packOutput, CosmicCore.MOD_ID));
         }

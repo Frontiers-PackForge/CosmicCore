@@ -1,0 +1,9 @@
+{
+  "type": "tconstruct:material",
+  "ingredient": {
+    "item": "gtceu:polybenzimidazole_ingot"
+  },
+  "material": "cosmiccore:polybenzimidazole",
+  "needed": 2,
+  "value": 1
+}

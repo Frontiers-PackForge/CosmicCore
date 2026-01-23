@@ -1,0 +1,9 @@
+{
+  "type": "tconstruct:material",
+  "ingredient": {
+    "item": "gtceu:polytetrafluoroethylene_ingot"
+  },
+  "material": "cosmiccore:polytetrafluoroethylene",
+  "needed": 2,
+  "value": 1
+}

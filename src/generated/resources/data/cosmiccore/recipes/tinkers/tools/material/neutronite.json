@@ -1,0 +1,9 @@
+{
+  "type": "tconstruct:material",
+  "ingredient": {
+    "item": "cosmiccore:neutronite_ingot"
+  },
+  "material": "cosmiccore:neutronite",
+  "needed": 2,
+  "value": 1
+}

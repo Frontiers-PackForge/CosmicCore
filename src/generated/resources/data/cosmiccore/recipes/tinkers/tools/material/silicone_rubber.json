@@ -1,0 +1,9 @@
+{
+  "type": "tconstruct:material",
+  "ingredient": {
+    "item": "gtceu:silicone_rubber_ingot"
+  },
+  "material": "cosmiccore:silicone_rubber",
+  "needed": 2,
+  "value": 1
+}

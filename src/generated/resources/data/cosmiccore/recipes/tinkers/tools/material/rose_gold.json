@@ -1,0 +1,9 @@
+{
+  "type": "tconstruct:material",
+  "ingredient": {
+    "item": "gtceu:rose_gold_ingot"
+  },
+  "material": "cosmiccore:rose_gold",
+  "needed": 2,
+  "value": 1
+}

@@ -1,0 +1,9 @@
+{
+  "type": "tconstruct:material",
+  "ingredient": {
+    "item": "gtceu:damascus_steel_ingot"
+  },
+  "material": "cosmiccore:damascus_steel",
+  "needed": 2,
+  "value": 1
+}

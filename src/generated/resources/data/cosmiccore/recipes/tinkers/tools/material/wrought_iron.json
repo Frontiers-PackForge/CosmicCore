@@ -1,0 +1,9 @@
+{
+  "type": "tconstruct:material",
+  "ingredient": {
+    "item": "gtceu:wrought_iron_ingot"
+  },
+  "material": "cosmiccore:wrought_iron",
+  "needed": 2,
+  "value": 1
+}
