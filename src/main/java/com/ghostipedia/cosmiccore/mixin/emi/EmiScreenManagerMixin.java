@@ -1,10 +1,14 @@
 package com.ghostipedia.cosmiccore.mixin.emi;
 
 import com.ghostipedia.cosmiccore.integration.emi.CosmicFavorite;
+import com.ghostipedia.cosmiccore.integration.emi.CosmicRecipeFavorite;
 import com.ghostipedia.cosmiccore.integration.emi.RecipeScreenAccessor;
+import com.ghostipedia.cosmiccore.integration.emi.favorites.CosmicBookmarkGroup;
+import com.ghostipedia.cosmiccore.integration.emi.favorites.CosmicBookmarkManager;
 
 import net.minecraft.client.Minecraft;
 
+import dev.emi.emi.api.recipe.EmiRecipe;
 import dev.emi.emi.api.stack.EmiIngredient;
 import dev.emi.emi.api.stack.EmiStack;
 import dev.emi.emi.api.stack.EmiStackInteraction;
@@ -14,6 +18,8 @@ import dev.emi.emi.input.EmiInput;
 import dev.emi.emi.registry.EmiStackProviders;
 import dev.emi.emi.runtime.EmiFavorites;
 import dev.emi.emi.screen.EmiScreenManager;
+import dev.emi.emi.screen.EmiScreenManager.SidebarPanel;
+import org.lwjgl.glfw.GLFW;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
@@ -21,8 +27,12 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
- * Adds CTRL+A to pin stacks with their amount, and CTRL+scroll to adjust pinned amounts.
+ * Adds CTRL+A to pin stacks with their amount, CTRL+scroll to adjust pinned amounts,
+ * and [ / ] keys to cycle bookmark groups.
  */
 @Mixin(value = EmiScreenManager.class, remap = false)
 public abstract class EmiScreenManagerMixin {
@@ -42,7 +52,114 @@ public abstract class EmiScreenManagerMixin {
         throw new AssertionError();
     }
 
-    // CTRL+A: pin with amount
+    @Shadow
+    private static List<SidebarPanel> panels;
+
+    // SHIFT+click on page arrows to cycle groups, MMB to create/delete groups
+    @Inject(method = "mouseClicked", at = @At("HEAD"), cancellable = true)
+    private static void cosmiccore$groupMouseControls(double mouseX, double mouseY, int button,
+                                                      CallbackInfoReturnable<Boolean> cir) {
+        CosmicBookmarkManager manager = CosmicBookmarkManager.getInstance();
+
+        // Block CTRL+click drag reordering for recipe groups - EMI's slot-based drag doesn't work
+        // with our multi-slot recipe layout
+        if (button == 0 && EmiInput.isControlDown() && manager.getActiveGroup().isRecipeGroup()) {
+            for (SidebarPanel panel : panels) {
+                if (panel.getType() != SidebarType.FAVORITES) continue;
+                if (panel.space == null) continue;
+
+                int px = panel.space.tx;
+                int py = panel.space.ty;
+                int pw = panel.space.tw * 18;
+                int ph = panel.space.th * 18;
+
+                if (mouseX >= px && mouseX < px + pw && mouseY >= py && mouseY < py + ph) {
+                    // Consume the click to prevent EMI's drag from starting
+                    cir.setReturnValue(true);
+                    return;
+                }
+            }
+        }
+
+        // Middle mouse button on favorites panel header:
+        // MMB = create regular group
+        // SHIFT+MMB = create recipe group
+        // CTRL+SHIFT+MMB = delete group
+        if (button == 2) {
+            for (SidebarPanel panel : panels) {
+                if (panel.getType() != SidebarType.FAVORITES) continue;
+                if (!cosmiccore$isOverFavoritesHeader(panel, mouseX, mouseY)) continue;
+
+                if (EmiInput.isControlDown() && EmiInput.isShiftDown()) {
+                    manager.removeGroup(manager.getActiveIndex());
+                } else if (EmiInput.isShiftDown()) {
+                    manager.addGroup("Recipe " + (manager.getGroupCount() + 1), CosmicBookmarkGroup.GroupType.RECIPE);
+                } else {
+                    manager.addGroup("Group " + (manager.getGroupCount() + 1));
+                }
+                repopulatePanels(SidebarType.FAVORITES);
+                cir.setReturnValue(true);
+                return;
+            }
+        }
+
+        // SHIFT+left click on page arrows to cycle groups
+        if (button == 0 && EmiInput.isShiftDown() && !EmiInput.isControlDown()) {
+            for (SidebarPanel panel : panels) {
+                if (panel.getType() != SidebarType.FAVORITES) continue;
+
+                if (panel.pageLeft.isMouseOver(mouseX, mouseY)) {
+                    manager.prevGroup();
+                    repopulatePanels(SidebarType.FAVORITES);
+                    cir.setReturnValue(true);
+                    return;
+                } else if (panel.pageRight.isMouseOver(mouseX, mouseY)) {
+                    manager.nextGroup();
+                    repopulatePanels(SidebarType.FAVORITES);
+                    cir.setReturnValue(true);
+                    return;
+                }
+            }
+        }
+    }
+
+    @Unique
+    private static boolean cosmiccore$isOverFavoritesHeader(SidebarPanel panel, double mouseX, double mouseY) {
+        if (panel.space == null) return false;
+        int headerY = panel.space.ty - 18;
+        int headerHeight = 18;
+        int headerX = panel.space.tx;
+        int headerWidth = panel.space.tw * 18;
+        return mouseX >= headerX && mouseX < headerX + headerWidth && mouseY >= headerY &&
+                mouseY < headerY + headerHeight;
+    }
+
+    // [ and ] keys to cycle bookmark groups
+    @Inject(method = "keyPressed", at = @At("HEAD"), cancellable = true)
+    private static void cosmiccore$cycleGroups(int keyCode, int scanCode, int modifiers,
+                                               CallbackInfoReturnable<Boolean> cir) {
+        CosmicBookmarkManager manager = CosmicBookmarkManager.getInstance();
+
+        if (keyCode == GLFW.GLFW_KEY_RIGHT_BRACKET) {
+            manager.nextGroup();
+            repopulatePanels(SidebarType.FAVORITES);
+            cir.setReturnValue(true);
+        } else if (keyCode == GLFW.GLFW_KEY_LEFT_BRACKET) {
+            manager.prevGroup();
+            repopulatePanels(SidebarType.FAVORITES);
+            cir.setReturnValue(true);
+        } else if (keyCode == GLFW.GLFW_KEY_BACKSLASH && EmiInput.isControlDown()) {
+            if (EmiInput.isShiftDown()) {
+                manager.addGroup("Recipe " + (manager.getGroupCount() + 1), CosmicBookmarkGroup.GroupType.RECIPE);
+            } else {
+                manager.addGroup("Group " + (manager.getGroupCount() + 1));
+            }
+            repopulatePanels(SidebarType.FAVORITES);
+            cir.setReturnValue(true);
+        }
+    }
+
+    // CTRL+A: pin with amount, CTRL+SHIFT+A: pin recipe with inputs to recipe group
     @Inject(method = "keyPressed", at = @At("HEAD"), cancellable = true)
     private static void cosmiccore$ctrlAPin(int keyCode, int scanCode, int modifiers,
                                             CallbackInfoReturnable<Boolean> cir) {
@@ -50,19 +167,56 @@ public abstract class EmiScreenManagerMixin {
         boolean shift = EmiInput.isShiftDown();
         boolean isFavKey = cosmiccore$isFavoriteKey(keyCode);
 
-        if (!ctrl || shift) return;
-        if (!isFavKey) return;
+        if (!ctrl || !isFavKey) return;
 
-        // Try sidebar first, then recipe screen, then stack providers
+        var screen = Minecraft.getInstance().screen;
+        CosmicBookmarkManager manager = CosmicBookmarkManager.getInstance();
+
+        // CTRL+SHIFT+A: Pin recipe with inputs
+        if (shift && screen instanceof RecipeScreenAccessor recipeScreen) {
+            EmiRecipe recipe = recipeScreen.getHoveredRecipe(lastMouseX, lastMouseY);
+            if (recipe != null && !recipe.getOutputs().isEmpty()) {
+
+                // Switch to recipe group if needed
+                if (!manager.getActiveGroup().isRecipeGroup()) {
+                    int recipeGroupIndex = cosmiccore$findOrCreateRecipeGroup(manager);
+                    manager.setActiveIndex(recipeGroupIndex);
+                }
+
+                // Get output
+                EmiStack output = recipe.getOutputs().get(0);
+                long outputAmount = output.getAmount();
+                if (outputAmount <= 0) outputAmount = 1;
+
+                // Build input list
+                List<CosmicRecipeFavorite.InputEntry> inputs = new ArrayList<>();
+                for (EmiIngredient input : recipe.getInputs()) {
+                    if (input.isEmpty()) continue;
+                    long inputAmount = input.getEmiStacks().isEmpty() ? 1 : input.getEmiStacks().get(0).getAmount();
+                    if (inputAmount <= 0) inputAmount = 1;
+                    inputs.add(new CosmicRecipeFavorite.InputEntry(input, inputAmount));
+                }
+
+                CosmicRecipeFavorite recipeFav = new CosmicRecipeFavorite(output, outputAmount, inputs);
+
+                // Add directly to list - addFavorite() may transform the object
+                EmiFavorites.favorites.add(recipeFav);
+
+                repopulatePanels(SidebarType.FAVORITES);
+                cir.setReturnValue(true);
+                return;
+            }
+        }
+
+        // CTRL+A: Pin stack with amount (existing behavior)
         EmiIngredient hoveredIngredient = EmiStack.EMPTY;
 
         EmiStackInteraction sidebarHovered = getHoveredStack(lastMouseX, lastMouseY, true);
         if (!sidebarHovered.getStack().isEmpty()) {
             hoveredIngredient = sidebarHovered.getStack();
         } else {
-            var screen = Minecraft.getInstance().screen;
             if (screen instanceof RecipeScreenAccessor recipeScreen) {
-                hoveredIngredient = recipeScreen.getHoveredStack();
+                hoveredIngredient = recipeScreen.getHoveredStack(lastMouseX, lastMouseY);
             }
             if (hoveredIngredient.isEmpty() && screen != null) {
                 hoveredIngredient = EmiStackProviders.getStackAt(screen, lastMouseX, lastMouseY, true).getStack();
@@ -78,6 +232,19 @@ public abstract class EmiScreenManagerMixin {
         EmiFavorites.addFavorite(new CosmicFavorite(hoveredIngredient, amount), null);
         repopulatePanels(SidebarType.FAVORITES);
         cir.setReturnValue(true);
+    }
+
+    @Unique
+    private static int cosmiccore$findOrCreateRecipeGroup(CosmicBookmarkManager manager) {
+        // Find first recipe group
+        for (int i = 0; i < manager.getGroupCount(); i++) {
+            if (manager.getGroupAt(i).isRecipeGroup()) {
+                return i;
+            }
+        }
+        // No recipe group exists, create one
+        manager.addGroup("Recipe " + (manager.getGroupCount() + 1), CosmicBookmarkGroup.GroupType.RECIPE);
+        return manager.getGroupCount() - 1;
     }
 
     @Inject(method = "mouseScrolled", at = @At("HEAD"), cancellable = true)

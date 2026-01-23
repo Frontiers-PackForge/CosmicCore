@@ -14,57 +14,57 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 
-import snownee.jade.api.BlockAccessor;
-import snownee.jade.api.IBlockComponentProvider;
-import snownee.jade.api.IServerDataProvider;
-import snownee.jade.api.ITooltip;
+import snownee.jade.api.*;
 import snownee.jade.api.config.IPluginConfig;
 
 public class PCBParallelProvider implements IBlockComponentProvider, IServerDataProvider<BlockAccessor> {
 
-    @Override
-    public void appendTooltip(ITooltip iTooltip, BlockAccessor blockAccessor, IPluginConfig iPluginConfig) {
-        if (blockAccessor.getServerData().contains("parallelCosmic")) {
-            int parallel = blockAccessor.getServerData().getInt("parallelCosmic");
-            if (parallel > 1) {
-                Component parallels = Component.literal(FormattingUtil.formatNumbers(parallel))
-                        .withStyle(ChatFormatting.DARK_PURPLE);
-                String key = "gtceu.multiblock.parallel";
-                if (blockAccessor.getServerData().getBoolean("exact")) key += ".exact";
-                iTooltip.add(Component.translatable(key, parallels));
-            }
-        }
-    }
-
-    @Override
-    public void appendServerData(CompoundTag compoundTag, BlockAccessor blockAccessor) {
-        if (blockAccessor.getBlockEntity() instanceof MetaMachineBlockEntity blockEntity) {
-            if (blockEntity.getMetaMachine() instanceof IParallelHatch parallelHatch) {
-                if (parallelHatch instanceof ParallelHatchPartMachine multiParallelHatch) {
-                    if (multiParallelHatch.getControllers().size() == 1) {
-                        if (multiParallelHatch.getControllers().first() instanceof PCBFoundryMachine multiContoller) {
-                            compoundTag.putInt("parallelCosmic", parallelHatch.getCurrentParallel() * 4);
-                        }
-                    }
-                }
-            } else if (blockEntity.getMetaMachine() instanceof IMultiController controller &&
-                    controller instanceof PCBFoundryMachine foundryMachine) {
-                        if (foundryMachine.getRecipeLogic().isActive() &&
-                                foundryMachine.getRecipeLogic().getLastRecipe() != null) {
-                            compoundTag.putInt("parallelCosmic",
-                                    foundryMachine.getRecipeLogic().getLastRecipe().parallels);
-                            compoundTag.putBoolean("exact", true);
-                        } else {
-                            controller.getParallelHatch()
-                                    .ifPresent(parallelHatch -> compoundTag.putInt("parallelCosmic",
-                                            parallelHatch.getCurrentParallel() * 4));
-                        }
-                    }
-        }
-    }
+    private static final ResourceLocation UID = CosmicCore.id("pcb_parallel");
+    private static final String DATA_KEY = UID.toString();
 
     @Override
     public ResourceLocation getUid() {
-        return CosmicCore.id("parallel_info_cc");
+        return UID;
+    }
+
+    @Override
+    public void appendServerData(CompoundTag data, BlockAccessor accessor) {
+        if (!(accessor.getBlockEntity() instanceof MetaMachineBlockEntity be)) return;
+        var machine = be.getMetaMachine();
+
+        if (machine instanceof IParallelHatch hatch &&
+                hatch instanceof ParallelHatchPartMachine part &&
+                part.getControllers().size() == 1 &&
+                part.getControllers().first() instanceof PCBFoundryMachine) {
+            CompoundTag tag = new CompoundTag();
+            tag.putInt("parallel", hatch.getCurrentParallel() * 4);
+            data.put(DATA_KEY, tag);
+            return;
+        }
+
+        if (machine instanceof PCBFoundryMachine foundry && machine instanceof IMultiController controller) {
+            CompoundTag tag = new CompoundTag();
+            var logic = foundry.getRecipeLogic();
+            if (logic.isActive() && logic.getLastRecipe() != null) {
+                tag.putInt("parallel", logic.getLastRecipe().parallels);
+                tag.putBoolean("exact", true);
+            } else {
+                controller.getParallelHatch().ifPresent(h -> tag.putInt("parallel", h.getCurrentParallel() * 4));
+            }
+            if (tag.contains("parallel")) data.put(DATA_KEY, tag);
+        }
+    }
+
+    @Override
+    public void appendTooltip(ITooltip tooltip, BlockAccessor accessor, IPluginConfig config) {
+        CompoundTag tag = accessor.getServerData().getCompound(DATA_KEY);
+        if (tag.isEmpty() || !tag.contains("parallel")) return;
+
+        int parallel = tag.getInt("parallel");
+        if (parallel <= 1) return;
+
+        String key = tag.getBoolean("exact") ? "gtceu.multiblock.parallel.exact" : "gtceu.multiblock.parallel";
+        tooltip.add(Component.translatable(key,
+                Component.literal(FormattingUtil.formatNumbers(parallel)).withStyle(ChatFormatting.DARK_PURPLE)));
     }
 }

@@ -3,6 +3,7 @@ package com.ghostipedia.cosmiccore.client;
 import com.ghostipedia.cosmiccore.CosmicCore;
 import com.ghostipedia.cosmiccore.bee.CosmicBeesSpecies;
 import com.ghostipedia.cosmiccore.client.keybind.BootsKeybinds;
+import com.ghostipedia.cosmiccore.client.keybind.QuakeMovementKeybinds;
 import com.ghostipedia.cosmiccore.client.renderer.machine.*;
 
 import com.gregtechceu.gtceu.client.renderer.machine.DynamicRenderManager;
@@ -89,6 +90,7 @@ public class CosmicCoreClient {
     @SubscribeEvent
     public static void registerKeyMappings(RegisterKeyMappingsEvent event) {
         BootsKeybinds.registerKeyMappings(event);
+        QuakeMovementKeybinds.registerKeyMappings(event);
     }
 
     @SubscribeEvent

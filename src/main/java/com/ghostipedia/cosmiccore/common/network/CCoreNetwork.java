@@ -7,6 +7,7 @@ import com.ghostipedia.cosmiccore.common.network.packet.OxygenWarnPacket;
 import com.ghostipedia.cosmiccore.common.network.packet.StellarUpgradePacket;
 import com.ghostipedia.cosmiccore.common.network.packet.SyncOxygenBarPacket;
 import com.ghostipedia.cosmiccore.common.network.packet.SyncTimeBarPacket;
+import com.ghostipedia.cosmiccore.common.reflection.network.DashPacket;
 import com.ghostipedia.cosmiccore.common.reflection.network.SyncQuakeMovementPacket;
 import com.ghostipedia.cosmiccore.common.reflection.ui.ScarSelectionPackets;
 import com.ghostipedia.cosmiccore.common.reflection.ui.VoidUIPackets;
@@ -88,6 +89,9 @@ public class CCoreNetwork {
         register(SyncOxygenBarPacket.class, SyncOxygenBarPacket::new, NetworkDirection.PLAY_TO_CLIENT);
         register(OxygenWarnPacket.class, OxygenWarnPacket::new, NetworkDirection.PLAY_TO_CLIENT);
         register(SyncQuakeMovementPacket.class, SyncQuakeMovementPacket::new, NetworkDirection.PLAY_TO_CLIENT);
+
+        // Dash packet (client -> server) - for Celeste-style dash
+        register(DashPacket.class, DashPacket::new, NetworkDirection.PLAY_TO_SERVER);
 
         // Stellar IRIS upgrade packet (client -> server)
         register(StellarUpgradePacket.class, StellarUpgradePacket::new, NetworkDirection.PLAY_TO_SERVER);

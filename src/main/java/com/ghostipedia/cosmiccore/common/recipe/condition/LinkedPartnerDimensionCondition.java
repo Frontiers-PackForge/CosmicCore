@@ -24,7 +24,7 @@ import org.jetbrains.annotations.NotNull;
  * - "Requires partner in The Deep Below" for mining operations
  * - "Requires partner in Moon" for low-gravity processing
  */
-public class LinkedPartnerDimensionCondition extends RecipeCondition {
+public class LinkedPartnerDimensionCondition extends RecipeCondition<LinkedPartnerDimensionCondition> {
 
     /** The dimension the partner must be in */
     public ResourceLocation dimension;
@@ -59,7 +59,7 @@ public class LinkedPartnerDimensionCondition extends RecipeCondition {
     }
 
     @Override
-    public RecipeConditionType<?> getType() {
+    public RecipeConditionType<LinkedPartnerDimensionCondition> getType() {
         return TYPE;
     }
 
@@ -86,7 +86,7 @@ public class LinkedPartnerDimensionCondition extends RecipeCondition {
     }
 
     @Override
-    public RecipeCondition createTemplate() {
+    public LinkedPartnerDimensionCondition createTemplate() {
         return new LinkedPartnerDimensionCondition();
     }
 }

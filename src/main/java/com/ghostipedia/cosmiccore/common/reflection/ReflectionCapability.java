@@ -54,12 +54,15 @@ public class ReflectionCapability {
 
         @Override
         public CompoundTag serializeNBT() {
-            return impl.saveTag();
+            CompoundTag tag = impl.saveTag();
+            return tag != null ? tag : new CompoundTag();
         }
 
         @Override
         public void deserializeNBT(CompoundTag nbt) {
-            impl.loadTag(nbt);
+            if (nbt != null) {
+                impl.loadTag(nbt);
+            }
         }
     }
 

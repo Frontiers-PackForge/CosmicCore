@@ -2,6 +2,8 @@ package com.ghostipedia.cosmiccore.common.machine.multiblock.multi.logic;
 
 import com.ghostipedia.cosmiccore.api.capability.ILinkedMultiblock;
 import com.ghostipedia.cosmiccore.api.machine.multiblock.LinkedWorkableElectricMultiblockMachine;
+import com.ghostipedia.cosmiccore.client.gui.widget.starladder.StarLadderFancyUIWidget;
+import com.ghostipedia.cosmiccore.client.gui.widget.starladder.StarLadderResearchHubWidget;
 import com.ghostipedia.cosmiccore.client.renderer.RingUpgradePreviewRenderer;
 import com.ghostipedia.cosmiccore.common.machine.multiblock.LinkedMultiblockHelper;
 import com.ghostipedia.cosmiccore.common.machine.multiblock.multi.StarLadderResearchHub;
@@ -9,6 +11,8 @@ import com.ghostipedia.cosmiccore.common.machine.multiblock.multi.StarLadderRese
 import com.gregtechceu.gtceu.api.machine.IMachineBlockEntity;
 import com.gregtechceu.gtceu.api.pattern.BlockPattern;
 
+import com.lowdragmc.lowdraglib.gui.modular.ModularUI;
+import com.lowdragmc.lowdraglib.gui.widget.Widget;
 import com.lowdragmc.lowdraglib.syncdata.annotation.DescSynced;
 import com.lowdragmc.lowdraglib.syncdata.annotation.Persisted;
 import com.lowdragmc.lowdraglib.syncdata.annotation.UpdateListener;
@@ -494,6 +498,10 @@ public class StarLadderResearchHubMachine extends LinkedWorkableElectricMultiblo
         return partnerMachine instanceof StarLadderMachine;
     }
 
+    public ILinkedMultiblock getLinkedPartnerMachine(GlobalPos partner) {
+        return getPartnerMachine(partner);
+    }
+
     @Override
     public void addDisplayText(List<Component> textList) {
         super.addDisplayText(textList);
@@ -543,5 +551,18 @@ public class StarLadderResearchHubMachine extends LinkedWorkableElectricMultiblo
         textList.add(Component.literal("  [%d, %d, %d]".formatted(
                 ladder.pos().getX(), ladder.pos().getY(), ladder.pos().getZ()))
                 .withStyle(ChatFormatting.GRAY));
+    }
+
+    @Override
+    public Widget createUIWidget() {
+        return new StarLadderResearchHubWidget(() -> this);
+    }
+
+    @Override
+    public ModularUI createUI(Player entityPlayer) {
+        return new ModularUI(StarLadderResearchHubWidget.WIDTH + 16, StarLadderResearchHubWidget.HEIGHT + 70, this,
+                entityPlayer)
+                .widget(new StarLadderFancyUIWidget(this, StarLadderResearchHubWidget.WIDTH + 16,
+                        StarLadderResearchHubWidget.HEIGHT + 70, this::getRingTier));
     }
 }

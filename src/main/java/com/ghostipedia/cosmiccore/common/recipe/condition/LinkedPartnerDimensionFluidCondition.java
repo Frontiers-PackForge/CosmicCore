@@ -31,7 +31,7 @@ import java.util.UUID;
  * - "Requires partner in Sun Orbit with Solar Plasma"
  * - "Requires partner in Deep Below with Molten Core fluid"
  */
-public class LinkedPartnerDimensionFluidCondition extends RecipeCondition {
+public class LinkedPartnerDimensionFluidCondition extends RecipeCondition<LinkedPartnerDimensionFluidCondition> {
 
     public ResourceLocation dimension;
     public ResourceLocation fluidId;
@@ -79,7 +79,7 @@ public class LinkedPartnerDimensionFluidCondition extends RecipeCondition {
     }
 
     @Override
-    public RecipeConditionType<?> getType() {
+    public RecipeConditionType<LinkedPartnerDimensionFluidCondition> getType() {
         return TYPE;
     }
 
@@ -130,7 +130,7 @@ public class LinkedPartnerDimensionFluidCondition extends RecipeCondition {
     }
 
     @Override
-    public RecipeCondition createTemplate() {
+    public LinkedPartnerDimensionFluidCondition createTemplate() {
         return new LinkedPartnerDimensionFluidCondition();
     }
 }

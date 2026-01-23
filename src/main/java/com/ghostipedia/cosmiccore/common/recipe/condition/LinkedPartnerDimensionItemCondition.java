@@ -31,7 +31,7 @@ import java.util.UUID;
  * - "Requires partner in Sun Orbit with Solar Collector item"
  * - "Requires partner in Moon with Helium-3 canister"
  */
-public class LinkedPartnerDimensionItemCondition extends RecipeCondition {
+public class LinkedPartnerDimensionItemCondition extends RecipeCondition<LinkedPartnerDimensionItemCondition> {
 
     public ResourceLocation dimension;
     public ResourceLocation itemId;
@@ -79,7 +79,7 @@ public class LinkedPartnerDimensionItemCondition extends RecipeCondition {
     }
 
     @Override
-    public RecipeConditionType<?> getType() {
+    public RecipeConditionType<LinkedPartnerDimensionItemCondition> getType() {
         return TYPE;
     }
 
@@ -130,7 +130,7 @@ public class LinkedPartnerDimensionItemCondition extends RecipeCondition {
     }
 
     @Override
-    public RecipeCondition createTemplate() {
+    public LinkedPartnerDimensionItemCondition createTemplate() {
         return new LinkedPartnerDimensionItemCondition();
     }
 }

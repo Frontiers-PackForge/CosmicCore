@@ -22,7 +22,7 @@ import org.jetbrains.annotations.NotNull;
  * - At least one partner to be formed (structure valid)
  * - At least one partner to be actively working (running a recipe)
  */
-public class LinkedPartnerCondition extends RecipeCondition {
+public class LinkedPartnerCondition extends RecipeCondition<LinkedPartnerCondition> {
 
     /** Minimum number of linked partners required */
     public int minPartners;
@@ -65,7 +65,7 @@ public class LinkedPartnerCondition extends RecipeCondition {
     }
 
     @Override
-    public RecipeConditionType<?> getType() {
+    public RecipeConditionType<LinkedPartnerCondition> getType() {
         return TYPE;
     }
 
@@ -110,7 +110,7 @@ public class LinkedPartnerCondition extends RecipeCondition {
     }
 
     @Override
-    public RecipeCondition createTemplate() {
+    public LinkedPartnerCondition createTemplate() {
         return new LinkedPartnerCondition();
     }
 }
