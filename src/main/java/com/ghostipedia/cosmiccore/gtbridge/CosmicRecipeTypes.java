@@ -18,6 +18,8 @@ import com.lowdragmc.lowdraglib.gui.texture.ProgressTexture;
 import com.lowdragmc.lowdraglib.utils.LocalizationUtils;
 
 import net.minecraft.client.resources.language.I18n;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 
 import static com.ghostipedia.cosmiccore.common.data.CosmicSounds.*;
@@ -540,7 +542,9 @@ public class CosmicRecipeTypes {
                 // Do Nothing if the recipe Contains a Dimension
             } else {
                 // If It Doesn't have a Dimension, add the recipe and give it an dimension req of 'Sun Orbit'
-                orbitBuilderEBF.addCondition(new DimensionCondition(new ResourceLocation("frontiers:sun_orbit")))
+                orbitBuilderEBF
+                        .addCondition(new DimensionCondition(
+                                ResourceKey.create(Registries.DIMENSION, new ResourceLocation("frontiers:sun_orbit"))))
                         .save(provider);
             }
         });
@@ -559,7 +563,9 @@ public class CosmicRecipeTypes {
                 // Do Nothing if the recipe Contains a Dimension
             } else {
                 // If It Doesn't have a Dimension, add the recipe and give it an dimension req of 'Sun Orbit'
-                orbitBuilderABS.addCondition(new DimensionCondition(new ResourceLocation("frontiers:sun_orbit")))
+                orbitBuilderABS
+                        .addCondition(new DimensionCondition(
+                                ResourceKey.create(Registries.DIMENSION, new ResourceLocation("frontiers:sun_orbit"))))
                         .save(provider);
             }
         });

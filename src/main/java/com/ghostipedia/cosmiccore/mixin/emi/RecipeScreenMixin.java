@@ -6,6 +6,7 @@ import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
 
 import dev.emi.emi.api.EmiApi;
+import dev.emi.emi.api.recipe.EmiRecipe;
 import dev.emi.emi.api.stack.EmiIngredient;
 import dev.emi.emi.api.stack.EmiStack;
 import dev.emi.emi.api.widget.Bounds;
@@ -16,6 +17,7 @@ import dev.emi.emi.config.SidebarSide;
 import dev.emi.emi.screen.RecipeScreen;
 import dev.emi.emi.screen.RecipeTab;
 import dev.emi.emi.screen.WidgetGroup;
+import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
@@ -56,67 +58,85 @@ public abstract class RecipeScreenMixin extends Screen implements RecipeScreenAc
     @Shadow(remap = false)
     private List<WidgetGroup> currentPage;
 
-    @ModifyArg(method = "render",
+    @ModifyArg(method = "m_88315_",
                at = @At(value = "INVOKE",
                         target = "Ldev/emi/emi/EmiRenderHelper;drawNinePatch(Ldev/emi/emi/runtime/EmiDrawContext;Lnet/minecraft/resources/ResourceLocation;IIIIIIII)V",
                         ordinal = 4,
                         remap = false),
                index = 2,
+               remap = false,
                require = 0)
-    private int modifyx(int x) {
-        return x + 18 - 18 * cosmicCore$getList(cosmicCore$getWorkstationAmount());
+    private int modifyX(int originalX) {
+        if (EmiConfig.workstationLocation == SidebarSide.LEFT) {
+            int columns = cosmicCore$getColumnCount();
+            return x - 5 - 18 * columns;
+        }
+        return originalX;
     }
 
-    @ModifyArg(method = "render",
+    @ModifyArg(method = "m_88315_",
                at = @At(value = "INVOKE",
                         target = "Ldev/emi/emi/EmiRenderHelper;drawNinePatch(Ldev/emi/emi/runtime/EmiDrawContext;Lnet/minecraft/resources/ResourceLocation;IIIIIIII)V",
                         ordinal = 4,
                         remap = false),
                index = 4,
+               remap = false,
                require = 0)
-    private int modifyw(int x) {
-        return x - 18 + 18 * cosmicCore$getList(cosmicCore$getWorkstationAmount());
+    private int modifyw(int originalWidth) {
+        return 10 + 18 * cosmicCore$getColumnCount();
     }
 
-    @ModifyArg(method = "render",
+    @ModifyArg(method = "m_88315_",
                at = @At(value = "INVOKE",
                         target = "Ldev/emi/emi/EmiRenderHelper;drawNinePatch(Ldev/emi/emi/runtime/EmiDrawContext;Lnet/minecraft/resources/ResourceLocation;IIIIIIII)V",
                         ordinal = 4,
                         remap = false),
                index = 5,
+               remap = false,
                require = 0)
-    private int modifyh(int x) {
-        return 10 + Math.min(cosmicCore$getWorkstationAmount(), cosmicCore$maxWorkstations()) * 18 + getResolveOffset();
+    private int modifyh(int originalHeight) {
+        int workstations = cosmicCore$getWorkstationAmount();
+        int maxPerColumn = cosmicCore$maxWorkstations();
+        int rows = Math.min(workstations, maxPerColumn);
+        return 10 + rows * 18 + getResolveOffset();
     }
 
-    /**
-     * @author .
-     * @reason .
-     */
     @Overwrite(remap = false)
     public Bounds getWorkstationBounds(int i) {
-        Bounds bounds = Bounds.EMPTY;
         int offset = 0;
-        if (i == -1) {
+        boolean isBackground = (i == -1);
+        if (isBackground) {
             i = 0;
             offset = -getResolveOffset();
         }
+
+        int maxPerColumn = cosmicCore$maxWorkstations();
+        int column = maxPerColumn > 0 ? i / maxPerColumn : 0;
+        int row = maxPerColumn > 0 ? i % maxPerColumn : i;
+        int columns = cosmicCore$getColumnCount();
+
         if (EmiConfig.workstationLocation == SidebarSide.LEFT) {
-            bounds = new Bounds(x - (cosmicCore$getList(i) * 18),
-                    y + 9 + getResolveOffset() + (i % cosmicCore$maxWorkstations() * 18) + offset, 18, 18);
+            int slotX;
+            if (isBackground) {
+                slotX = x - 18 * columns;
+            } else {
+                slotX = x - 18 * (column + 1);
+            }
+            return new Bounds(slotX, y + 9 + getResolveOffset() + row * 18 + offset, 18, 18);
         } else if (EmiConfig.workstationLocation == SidebarSide.RIGHT) {
-            bounds = new Bounds(x + (cosmicCore$getList(i) * backgroundWidth),
-                    y + 9 + getResolveOffset() + (i % cosmicCore$maxWorkstations() * 18) + offset, 18, 18);
+            int slotX;
+            if (isBackground) {
+                slotX = x + backgroundWidth;
+            } else {
+                slotX = x + backgroundWidth + 18 * column;
+            }
+            return new Bounds(slotX, y + 9 + getResolveOffset() + row * 18 + offset, 18, 18);
         } else if (EmiConfig.workstationLocation == SidebarSide.BOTTOM) {
-            bounds = new Bounds(x + 5 + getResolveOffset() + i * 18 + offset, y + backgroundHeight - 23, 18, 18);
+            return new Bounds(x + 5 + getResolveOffset() + i * 18 + offset, y + backgroundHeight - 23, 18, 18);
         }
-        return bounds;
+        return Bounds.EMPTY;
     }
 
-    /**
-     * @author .
-     * @reason .
-     */
     @Overwrite(remap = false)
     public int getMaxWorkstations() {
         return 23;
@@ -128,11 +148,6 @@ public abstract class RecipeScreenMixin extends Screen implements RecipeScreenAc
     }
 
     @Unique
-    private int cosmicCore$getList(int i) {
-        return Math.min((int) Math.floor((double) i / cosmicCore$maxWorkstations()), 1) + 1;
-    }
-
-    @Unique
     private int cosmicCore$maxWorkstations() {
         return switch (EmiConfig.workstationLocation) {
             case LEFT, RIGHT -> (backgroundHeight - getResolveOffset() - 18) / 18;
@@ -141,28 +156,62 @@ public abstract class RecipeScreenMixin extends Screen implements RecipeScreenAc
         };
     }
 
+    @Unique
+    private int cosmicCore$getColumnCount() {
+        int workstations = cosmicCore$getWorkstationAmount();
+        int maxPerColumn = cosmicCore$maxWorkstations();
+        if (maxPerColumn <= 0) return 1;
+        return (workstations + maxPerColumn - 1) / maxPerColumn; // ceil division
+    }
+
     /**
      * Gets the hovered stack from the recipe screen for CTRL+A pinning.
      * Iterates through current page widgets to find SlotWidgets under the mouse.
      */
     @Unique
-    public EmiIngredient getHoveredStack() {
+    public EmiIngredient getHoveredStack(int mouseX, int mouseY) {
         if (currentPage == null) return EmiStack.EMPTY;
-
-        double mouseX = minecraft.mouseHandler.xpos() * (double) width / (double) minecraft.getWindow().getWidth();
-        double mouseY = minecraft.mouseHandler.ypos() * (double) height / (double) minecraft.getWindow().getHeight();
 
         for (WidgetGroup group : currentPage) {
             for (Widget widget : group.widgets) {
                 if (widget instanceof SlotWidget slot) {
                     Bounds bounds = slot.getBounds();
-                    if (mouseX >= bounds.x() && mouseX < bounds.x() + bounds.width() && mouseY >= bounds.y() &&
-                            mouseY < bounds.y() + bounds.height()) {
+                    if (mouseX >= bounds.x() && mouseX < bounds.x() + bounds.width() &&
+                            mouseY >= bounds.y() && mouseY < bounds.y() + bounds.height()) {
                         return slot.getStack();
                     }
                 }
             }
         }
         return EmiStack.EMPTY;
+    }
+
+    /**
+     * Gets the recipe containing the currently hovered stack for CTRL+SHIFT+A pinning.
+     * Checks if mouse is within the widget group's bounds, not individual slots.
+     */
+    @Unique
+    @Nullable
+    public EmiRecipe getHoveredRecipe(int mouseX, int mouseY) {
+        if (currentPage == null) return null;
+
+        EmiRecipe fallback = null;
+
+        for (WidgetGroup group : currentPage) {
+            if (group.recipe == null) continue;
+
+            if (fallback == null) {
+                fallback = group.recipe;
+            }
+
+            // Check if mouse is within the group's bounds (x, y, width, height are public fields)
+            if (mouseX >= group.x && mouseX < group.x + group.width &&
+                    mouseY >= group.y && mouseY < group.y + group.height) {
+                return group.recipe;
+            }
+        }
+
+        // Fall back to first recipe on page if none matched
+        return fallback;
     }
 }

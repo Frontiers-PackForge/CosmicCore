@@ -4,11 +4,10 @@ import com.ghostipedia.cosmiccore.common.network.CCoreNetwork;
 import com.ghostipedia.cosmiccore.common.reflection.bargain.impl.QuakeMovementHandler;
 
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.network.NetworkEvent;
 
-/**
- * Syncs Quake movement bargain state from server to client.
- */
 public class SyncQuakeMovementPacket implements CCoreNetwork.INetPacket {
 
     private final boolean hasQuakeMovement;
@@ -28,7 +27,8 @@ public class SyncQuakeMovementPacket implements CCoreNetwork.INetPacket {
 
     @Override
     public void execute(NetworkEvent.Context context) {
-        // This runs on the client
-        QuakeMovementHandler.setClientHasQuakeMovement(hasQuakeMovement);
+        DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> {
+            QuakeMovementHandler.setClientHasQuakeMovement(hasQuakeMovement);
+        });
     }
 }

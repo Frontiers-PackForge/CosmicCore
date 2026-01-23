@@ -7,6 +7,8 @@ import com.ghostipedia.cosmiccore.api.registries.CosmicRegistration;
 import com.ghostipedia.cosmiccore.common.data.materials.CosmicElements;
 import com.ghostipedia.cosmiccore.common.data.recipe.CosmicCoreOreRecipeHandler;
 import com.ghostipedia.cosmiccore.common.data.recipe.CosmicMaterialRecipeHandlers;
+import com.ghostipedia.cosmiccore.common.data.worldgen.CosmicWorldGenLayers;
+import com.ghostipedia.cosmiccore.common.data.worldgen.generator.CosmicVeinGenerators;
 import com.ghostipedia.cosmiccore.gtbridge.CosmicCoreRecipes;
 import com.ghostipedia.cosmiccore.gtbridge.CosmicRecipeTypes;
 
@@ -76,5 +78,20 @@ public class CosmicCoreGTAddon implements IGTAddon {
     public void registerRecipeKeys(KJSRecipeKeyEvent event) {
         event.registerKey(CosmicRecipeCapabilities.SOUL, Pair.of(SOUL_IN, SOUL_OUT));
         event.registerKey(CosmicRecipeCapabilities.EMBER, Pair.of(EMBER_IN, EMBER_OUT));
+    }
+
+    @Override
+    public void registerWorldgenLayers() {
+        CosmicWorldGenLayers.init();
+    }
+
+    @Override
+    public void registerVeinGenerators() {
+        CosmicVeinGenerators.init();
+    }
+
+    @Override
+    public void registerOreVeins() {
+        CosmicWorldGenLayers.migrateOreVeinsToOverworldLayer();
     }
 }

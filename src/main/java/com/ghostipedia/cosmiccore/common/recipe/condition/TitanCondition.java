@@ -14,7 +14,7 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import org.jetbrains.annotations.NotNull;
 
-public class TitanCondition extends RecipeCondition {
+public class TitanCondition extends RecipeCondition<TitanCondition> {
 
     public int tier;
 
@@ -44,7 +44,7 @@ public class TitanCondition extends RecipeCondition {
     }
 
     @Override
-    public RecipeConditionType<?> getType() {
+    public RecipeConditionType<TitanCondition> getType() {
         return TYPE;
     }
 
@@ -60,7 +60,7 @@ public class TitanCondition extends RecipeCondition {
     }
 
     @Override
-    public RecipeCondition createTemplate() {
+    public TitanCondition createTemplate() {
         return new TitanCondition();
     }
 }

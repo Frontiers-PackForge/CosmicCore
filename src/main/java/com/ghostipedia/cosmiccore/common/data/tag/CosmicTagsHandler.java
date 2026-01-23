@@ -1,5 +1,6 @@
 package com.ghostipedia.cosmiccore.common.data.tag;
 
+import com.ghostipedia.cosmiccore.common.data.tag.block.CosmicBlockTagsLoader;
 import com.ghostipedia.cosmiccore.common.data.tag.item.CosmicItemTagsLoader;
 
 import net.minecraft.world.entity.EntityType;
@@ -15,7 +16,9 @@ public class CosmicTagsHandler {
         CosmicItemTagsLoader.init(provider);
     }
 
-    public static void initBlock(RegistrateTagsProvider<Block> provider) {}
+    public static void initBlock(RegistrateTagsProvider<Block> provider) {
+        CosmicBlockTagsLoader.init(provider);
+    }
 
     public static void initFluid(RegistrateTagsProvider<Fluid> provider) {}
 

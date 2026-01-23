@@ -13,6 +13,7 @@ import net.minecraftforge.common.capabilities.CapabilityManager;
 import net.minecraftforge.common.capabilities.CapabilityToken;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.common.capabilities.ICapabilitySerializable;
+import net.minecraftforge.common.capabilities.RegisterCapabilitiesEvent;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
@@ -43,13 +44,21 @@ public class TeleportOriginCap {
 
         @Override
         public CompoundTag serializeNBT() {
-            return impl.save();
+            CompoundTag tag = impl.save();
+            return tag != null ? tag : new CompoundTag();
         }
 
         @Override
         public void deserializeNBT(CompoundTag tag) {
-            impl.load(tag);
+            if (tag != null) {
+                impl.load(tag);
+            }
         }
+    }
+
+    @SubscribeEvent
+    public static void registerCaps(RegisterCapabilitiesEvent event) {
+        event.register(ITeleportOrigin.class);
     }
 
     // Attach capability to all players.
