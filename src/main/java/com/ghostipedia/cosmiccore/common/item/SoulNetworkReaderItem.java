@@ -38,7 +38,6 @@ public class SoulNetworkReaderItem extends Item {
             message.append(Component.translatable("gui.cosmiccore.soul.empty_network").withStyle(ChatFormatting.GRAY));
         } else {
             message.append(Component.translatable("gui.cosmiccore.soul.network_contents").withStyle(ChatFormatting.GOLD)).append("\n");
-            message.append(Component.translatable("gui.cosmiccore.soul.capacity", network.getSize()).withStyle(ChatFormatting.GRAY));
             for (SoulStack stack : contents) message.append("\n").append(stack.type().toComponent(stack.amount()));
         }
         return message;

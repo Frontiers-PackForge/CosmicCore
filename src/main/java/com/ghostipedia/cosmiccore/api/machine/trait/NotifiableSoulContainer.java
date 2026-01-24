@@ -28,10 +28,14 @@ public class NotifiableSoulContainer extends NotifiableRecipeHandlerTrait<SoulIn
     @Getter
     private final int throughput;
 
-    public NotifiableSoulContainer(MetaMachine machine, IO io, int throughput) {
+    @Getter
+    private final int capacity;
+
+    public NotifiableSoulContainer(MetaMachine machine, IO io, int throughput, int capacity) {
         super(machine);
         this.handlerIO = io;
         this.throughput = throughput;
+        this.capacity = capacity;
     }
 
     private SoulNetwork getSoulNetwork() {
@@ -64,7 +68,7 @@ public class NotifiableSoulContainer extends NotifiableRecipeHandlerTrait<SoulIn
                     result.add(SoulIngredient.of(requiredStack.withAmount(requiredStack.amount() - consumedStack.amount())));
                 }
             } else {
-                SoulStack canInput = network.add(requiredStack, throughput, simulate);
+                SoulStack canInput = network.add(requiredStack, throughput, capacity, simulate);
                 SoulStack reminder = requiredStack.withAmount(requiredStack.amount() - canInput.amount());
                 if (reminder.amount() > 0) result.add(SoulIngredient.of(reminder));
             }

@@ -28,8 +28,6 @@ public class SoulCommand {
                             .then(argument("player", EntityArgument.player())
                                     .then(literal("info").executes(ctx -> displayInfo(ctx, EntityArgument.getPlayer(ctx, "player").getUUID())))
                                     .then(literal("reset").executes(ctx -> resetNetwork(ctx, EntityArgument.getPlayer(ctx, "player").getUUID())))
-                                    .then(literal("set-tier").then(argument("tier", IntegerArgumentType.integer(0, 6))
-                                            .executes(ctx -> setTier(ctx, EntityArgument.getPlayer(ctx, "player").getUUID(), IntegerArgumentType.getInteger(ctx, "tier")))))
                                     .then(literal("add").then(argument("type", SoulTypeArgument.soulType()).then(argument("amount", IntegerArgumentType.integer())
                                             .executes(ctx -> addSouls(ctx, EntityArgument.getPlayer(ctx, "player").getUUID(), SoulTypeArgument.get(ctx, "type"), IntegerArgumentType.getInteger(ctx, "amount"))))))
                                     .then(literal("syphon").then(argument("type", SoulTypeArgument.soulType()).then(argument("amount", IntegerArgumentType.integer())
@@ -40,8 +38,6 @@ public class SoulCommand {
                             .then(argument("team", TeamArgument.create())
                                     .then(literal("info").executes(ctx -> displayInfo(ctx, TeamArgument.get(ctx, "team").getTeamId())))
                                     .then(literal("reset").executes(ctx -> resetNetwork(ctx, TeamArgument.get(ctx, "team").getTeamId())))
-                                    .then(literal("set-tier").then(argument("tier", IntegerArgumentType.integer(0, 6))
-                                            .executes(ctx -> setTier(ctx, TeamArgument.get(ctx, "team").getTeamId(), IntegerArgumentType.getInteger(ctx, "tier")))))
                                     .then(literal("add").then(argument("type", SoulTypeArgument.soulType()).then(argument("amount", IntegerArgumentType.integer())
                                             .executes(ctx -> addSouls(ctx, TeamArgument.get(ctx, "team").getTeamId(), SoulTypeArgument.get(ctx, "type"), IntegerArgumentType.getInteger(ctx, "amount"))))))
                                     .then(literal("syphon").then(argument("type", SoulTypeArgument.soulType()).then(argument("amount", IntegerArgumentType.integer())
@@ -57,13 +53,6 @@ public class SoulCommand {
         return 1;
     }
 
-    private static int setTier(CommandContext<CommandSourceStack> context, UUID owner, int tier) {
-        var network = SoulNetworkSavedData.getSoulNetwork(context.getSource().getLevel(), owner);
-        network.setTier(tier);
-        context.getSource().sendSuccess(() ->Component.translatable("gui.cosmiccore.soul.set_tier", tier), false);
-        return 1;
-    }
-
     private static int resetNetwork(CommandContext<CommandSourceStack> context, UUID owner) {
         var network = SoulNetworkSavedData.getSoulNetwork(context.getSource().getLevel(), owner);
         network.reset();
@@ -73,7 +62,7 @@ public class SoulCommand {
 
     private static int addSouls(CommandContext<CommandSourceStack> context, UUID owner, SoulType type, int amount) {
         var network = SoulNetworkSavedData.getSoulNetwork(context.getSource().getLevel(), owner);
-        network.add(new SoulStack(type, amount), Integer.MAX_VALUE, false);
+        network.add(new SoulStack(type, amount), Integer.MAX_VALUE, Integer.MAX_VALUE, false);
         context.getSource().sendSuccess(() -> Component.translatable("gui.cosmiccore.soul.add", amount, type.getSerializedName()), false);
         return 1;
     }

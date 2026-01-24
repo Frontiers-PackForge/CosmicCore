@@ -15,9 +15,6 @@ import java.util.Map;
 
 public class SoulNetwork implements INBTSerializable<CompoundTag> {
 
-    @Getter
-    private int tier = 0;
-
     @Setter
     private Runnable dirtyCallback;
 
@@ -25,14 +22,11 @@ public class SoulNetwork implements INBTSerializable<CompoundTag> {
 
     public SoulNetwork() {}
 
-    public SoulStack add(SoulStack stack, int throughput, boolean simulate) {
+    public SoulStack add(SoulStack stack, int throughput, int capacity, boolean simulate) {
         int currentAmount = this.contents.getOrDefault(stack.type(), 0);
 
-        // TODO check with ghosti if we should do a total volume or a volume per type
-        int totalAmount = this.contents.values().stream().mapToInt(Integer::intValue).sum();
-
         int amountToAdd = Math.min(stack.amount(), throughput); // Respect throughput
-        amountToAdd = Math.min(amountToAdd, getSize() - totalAmount); // Respect network capacity
+        amountToAdd = Math.min(amountToAdd, capacity - this.contents.get(stack.type())); // Respect network capacity
         amountToAdd = Math.max(0, amountToAdd); // Ensure we don't add a negative amount
 
         if (!simulate && amountToAdd > 0) {
@@ -68,34 +62,14 @@ public class SoulNetwork implements INBTSerializable<CompoundTag> {
             .toList();
     }
 
-    public void setTier(int tier) {
-        this.tier = tier;
-        if (dirtyCallback != null) dirtyCallback.run();
-    }
-
-    public int getSize() {
-        return switch (tier) {
-            case 0 -> 10_000;
-            case 1 -> 50_000;
-            case 2 -> 150_000;
-            case 4 -> 1_000_000;
-            case 5 -> 10_000_000;
-            case 6 -> 100_000_000;
-            default -> Integer.MAX_VALUE;
-        };
-    }
-
     @Override
     public String toString() {
-        return "SoulNetwork{" +
-                "tier=" + tier +
-                ", contents=" + contents + '}';
+        return "SoulNetwork{contents=" + contents + '}';
     }
 
     @Override
     public CompoundTag serializeNBT() {
         var tag = new CompoundTag();
-        tag.putInt("tier", this.tier);
         var listTag = new ListTag();
         this.contents.forEach((soulType, amount) -> {
             var contentTag = new CompoundTag();
@@ -109,7 +83,6 @@ public class SoulNetwork implements INBTSerializable<CompoundTag> {
 
     @Override
     public void deserializeNBT(CompoundTag compoundTag) {
-        this.tier = compoundTag.getInt("tier");
         this.contents.clear();
         ListTag listTag = compoundTag.getList("contents", Tag.TAG_COMPOUND);
         for (Tag t : listTag) {

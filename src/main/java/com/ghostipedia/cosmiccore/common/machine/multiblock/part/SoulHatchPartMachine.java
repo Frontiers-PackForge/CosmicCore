@@ -37,7 +37,7 @@ public class SoulHatchPartMachine extends TieredIOPartMachine {
 
     public SoulHatchPartMachine(IMachineBlockEntity holder, int tier, IO io) {
         super(holder, tier, io);
-        this.soulContainer = new NotifiableSoulContainer(this, io, getMaxConsumption(tier));
+        this.soulContainer = new NotifiableSoulContainer(this, io, getMaxConsumption(tier), getMaxCapacity(tier));
     }
 
     @Override
@@ -70,15 +70,31 @@ public class SoulHatchPartMachine extends TieredIOPartMachine {
 
     public static int getMaxConsumption(int tier) {
         return switch (tier) {
-            case GTValues.IV -> 10000;
-            case GTValues.LuV -> 50000;
-            case GTValues.ZPM -> 5000000;
-            case GTValues.UV -> 10000000;
-            case GTValues.UHV -> 25000000;
-            case GTValues.UEV -> 50000000;
-            case GTValues.UIV -> 125000000;
-            case GTValues.UXV -> 250000000;
-            case GTValues.OpV -> 500000000;
+            case GTValues.IV  -> 10_000;
+            case GTValues.LuV -> 50_000;
+            case GTValues.ZPM -> 5_000_000;
+            case GTValues.UV  -> 10_000_000;
+            case GTValues.UHV -> 25_000_000;
+            case GTValues.UEV -> 50_000_000;
+            case GTValues.UIV -> 125_000_000;
+            case GTValues.UXV -> 250_000_000;
+            case GTValues.OpV -> 500_000_000;
+            case GTValues.MAX -> Integer.MAX_VALUE;
+            default -> 0;
+        };
+    }
+
+    public static int getMaxCapacity(int tier) {
+        return switch (tier) {
+            case GTValues.IV  -> 1_000_000;
+            case GTValues.LuV -> 10_000_000;
+            case GTValues.ZPM -> 50_000_000;
+            case GTValues.UV  -> 100_000_000;
+            case GTValues.UHV -> 250_000_000;
+            case GTValues.UEV -> 500_000_000;
+            case GTValues.UIV -> 1_000_000_000;
+            case GTValues.UXV -> 1_500_000_000;
+            case GTValues.OpV -> 2_000_000_000;
             case GTValues.MAX -> Integer.MAX_VALUE;
             default -> 0;
         };
