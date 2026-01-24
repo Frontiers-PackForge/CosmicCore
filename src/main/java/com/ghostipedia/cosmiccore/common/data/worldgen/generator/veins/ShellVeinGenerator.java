@@ -96,8 +96,8 @@ public class ShellVeinGenerator extends VeinGenerator {
 
         int size = entry.clusterSize().sample(random);
         // Shell veins are medium spherical layered structures
-        // Style multiplier: 0.4x, minimum 25 blocks radius
-        int radius = Math.max(25, Mth.ceil(size * 0.4f));
+        // Style multiplier: 0.5x, minimum 32 blocks radius
+        int radius = Math.max(32, Mth.ceil(size * 0.5f));
 
         float innerRadius = radius * innerRadiusRatio;
         float outerRadius = radius * outerRadiusRatio;
@@ -148,7 +148,7 @@ public class ShellVeinGenerator extends VeinGenerator {
             }
 
             // Density penalty - reduce ore count without shrinking vein footprint
-            if (random.nextFloat() > 0.5f) continue;
+            if (random.nextFloat() > 0.45f) continue;
 
             BlockPos.MutableBlockPos mutablePos = new BlockPos.MutableBlockPos(pos.getX(), pos.getY(), pos.getZ());
             long randomSeed = random.nextLong();
