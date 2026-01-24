@@ -1,9 +1,12 @@
 package com.ghostipedia.cosmiccore.api.capability.recipe;
 
 import com.ghostipedia.cosmiccore.api.capability.souls.SoulType;
+import com.ghostipedia.cosmiccore.api.machine.trait.NotifiableSoulContainer;
 import com.ghostipedia.cosmiccore.api.recipe.ingredient.SoulIngredient;
 import com.ghostipedia.cosmiccore.api.recipe.ingredient.SoulStack;
 
+import com.gregtechceu.gtceu.api.capability.recipe.IO;
+import com.gregtechceu.gtceu.api.capability.recipe.IRecipeCapabilityHolder;
 import com.gregtechceu.gtceu.api.capability.recipe.RecipeCapability;
 import com.gregtechceu.gtceu.api.recipe.GTRecipe;
 import com.gregtechceu.gtceu.api.recipe.content.Content;
@@ -17,9 +20,8 @@ import com.lowdragmc.lowdraglib.utils.LocalizationUtils;
 import com.mojang.serialization.Codec;
 import org.apache.commons.lang3.mutable.MutableInt;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
+import java.util.*;
+import java.util.stream.Collectors;
 
 
 public class SoulRecipeCapability extends RecipeCapability<SoulIngredient> {
@@ -64,6 +66,69 @@ public class SoulRecipeCapability extends RecipeCapability<SoulIngredient> {
             }
         }
         return list;
+    }
+
+    /// Get the total available input of each soul type.
+    /// The value is the sum of the available amount in each hatch.
+    /// The available amount is the minimum between the contained souls and the available throughput.
+    private static Map<SoulType, Integer> getInputContents(IRecipeCapabilityHolder holder) {
+        var handlerLists = holder.getCapabilitiesForIO(IO.IN);
+        if (handlerLists.isEmpty()) return new HashMap<>();
+        
+        
+        var totalThroughput = 0;
+        var totalSouls = new HashMap<SoulType, Integer>();
+        
+        for (var handlerList : handlerLists) {
+            if (!handlerList.hasCapability(SoulRecipeCapability.CAP)) continue;
+            var soulHandlers = handlerList.getCapability(SoulRecipeCapability.CAP);
+            for (var handler : soulHandlers) {
+                var soulHandler = (NotifiableSoulContainer) handler;
+                totalThroughput += soulHandler.getThroughput();
+                for (var content : soulHandler.getContents()) {
+                    if (content instanceof SoulIngredient soulIngredient) {
+                        totalSouls.put(soulIngredient.stack().type(), soulIngredient.stack().amount());
+                    } else throw new IllegalArgumentException("Invalid content type");
+                }
+            }
+        }
+
+        final int finalTotalThroughput = totalThroughput;
+        return totalSouls.entrySet().stream()
+                .collect(Collectors.toMap(
+                        Map.Entry::getKey,
+                        entry -> Math.min(entry.getValue(), finalTotalThroughput)
+                ));
+    }
+
+
+    @Override
+    public int getMaxParallelByInput(IRecipeCapabilityHolder holder, GTRecipe recipe, int limit, boolean tick) {
+        if (!holder.hasCapabilityProxies()) return 0;
+
+        var inputs = (tick ? recipe.tickInputs : recipe.inputs).get(this);
+        if (inputs == null || inputs.isEmpty()) return 0;
+
+        var totalInputs = getInputContents(holder);
+
+        var parallelMap = inputs.stream()
+                .map(content -> (SoulIngredient) content.getContent())
+                .collect(Collectors.toMap(
+                        ingredient -> ingredient.stack().type(),
+                        ingredient -> {
+                            int available = totalInputs.getOrDefault(ingredient.stack().type(), 0);
+                            int required = ingredient.stack().amount();
+                            return required == 0 ? Integer.MAX_VALUE : available / required;
+                        },
+                        Math::min
+                ));
+
+        int maxParallel = parallelMap.values().stream()
+                .mapToInt(Integer::intValue)
+                .min()
+                .orElse(0);
+
+        return Math.min(limit, maxParallel);
     }
 
     @Override

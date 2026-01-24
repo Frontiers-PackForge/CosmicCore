@@ -25,6 +25,7 @@ public class NotifiableSoulContainer extends NotifiableRecipeHandlerTrait<SoulIn
     @Getter
     public final IO handlerIO;
 
+    @Getter
     private final int throughput;
 
     public NotifiableSoulContainer(MetaMachine machine, IO io, int throughput) {
