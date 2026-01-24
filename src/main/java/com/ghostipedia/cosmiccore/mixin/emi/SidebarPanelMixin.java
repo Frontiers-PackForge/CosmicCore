@@ -76,6 +76,7 @@ public abstract class SidebarPanelMixin {
                     cosmiccore$currentRecipePage = cosmiccore$recipePageCount - 1;
                 }
                 displayPage = cosmiccore$currentRecipePage;
+                manager.setCurrentRecipePage(cosmiccore$currentRecipePage);
             }
 
             Component pageText = EmiRenderHelper.getPageText(displayPage, displayTotal, maxWidth);

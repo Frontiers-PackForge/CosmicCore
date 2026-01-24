@@ -4,7 +4,9 @@ import com.ghostipedia.cosmiccore.integration.emi.RecipeScreenAccessor;
 
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
 
+import dev.emi.emi.EmiRenderHelper;
 import dev.emi.emi.api.EmiApi;
 import dev.emi.emi.api.recipe.EmiRecipe;
 import dev.emi.emi.api.stack.EmiIngredient;
@@ -14,6 +16,7 @@ import dev.emi.emi.api.widget.SlotWidget;
 import dev.emi.emi.api.widget.Widget;
 import dev.emi.emi.config.EmiConfig;
 import dev.emi.emi.config.SidebarSide;
+import dev.emi.emi.runtime.EmiDrawContext;
 import dev.emi.emi.screen.RecipeScreen;
 import dev.emi.emi.screen.RecipeTab;
 import dev.emi.emi.screen.WidgetGroup;
@@ -23,7 +26,7 @@ import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.ModifyArg;
+import org.spongepowered.asm.mixin.injection.Redirect;
 
 import java.util.List;
 
@@ -58,49 +61,6 @@ public abstract class RecipeScreenMixin extends Screen implements RecipeScreenAc
     @Shadow(remap = false)
     private List<WidgetGroup> currentPage;
 
-    @ModifyArg(method = "m_88315_",
-               at = @At(value = "INVOKE",
-                        target = "Ldev/emi/emi/EmiRenderHelper;drawNinePatch(Ldev/emi/emi/runtime/EmiDrawContext;Lnet/minecraft/resources/ResourceLocation;IIIIIIII)V",
-                        ordinal = 4,
-                        remap = false),
-               index = 2,
-               remap = false,
-               require = 0)
-    private int modifyX(int originalX) {
-        if (EmiConfig.workstationLocation == SidebarSide.LEFT) {
-            int columns = cosmicCore$getColumnCount();
-            return x - 5 - 18 * columns;
-        }
-        return originalX;
-    }
-
-    @ModifyArg(method = "m_88315_",
-               at = @At(value = "INVOKE",
-                        target = "Ldev/emi/emi/EmiRenderHelper;drawNinePatch(Ldev/emi/emi/runtime/EmiDrawContext;Lnet/minecraft/resources/ResourceLocation;IIIIIIII)V",
-                        ordinal = 4,
-                        remap = false),
-               index = 4,
-               remap = false,
-               require = 0)
-    private int modifyw(int originalWidth) {
-        return 10 + 18 * cosmicCore$getColumnCount();
-    }
-
-    @ModifyArg(method = "m_88315_",
-               at = @At(value = "INVOKE",
-                        target = "Ldev/emi/emi/EmiRenderHelper;drawNinePatch(Ldev/emi/emi/runtime/EmiDrawContext;Lnet/minecraft/resources/ResourceLocation;IIIIIIII)V",
-                        ordinal = 4,
-                        remap = false),
-               index = 5,
-               remap = false,
-               require = 0)
-    private int modifyh(int originalHeight) {
-        int workstations = cosmicCore$getWorkstationAmount();
-        int maxPerColumn = cosmicCore$maxWorkstations();
-        int rows = Math.min(workstations, maxPerColumn);
-        return 10 + rows * 18 + getResolveOffset();
-    }
-
     @Overwrite(remap = false)
     public Bounds getWorkstationBounds(int i) {
         int offset = 0;
@@ -113,23 +73,12 @@ public abstract class RecipeScreenMixin extends Screen implements RecipeScreenAc
         int maxPerColumn = cosmicCore$maxWorkstations();
         int column = maxPerColumn > 0 ? i / maxPerColumn : 0;
         int row = maxPerColumn > 0 ? i % maxPerColumn : i;
-        int columns = cosmicCore$getColumnCount();
 
         if (EmiConfig.workstationLocation == SidebarSide.LEFT) {
-            int slotX;
-            if (isBackground) {
-                slotX = x - 18 * columns;
-            } else {
-                slotX = x - 18 * (column + 1);
-            }
+            int slotX = isBackground ? x - 18 : x - 18 * (column + 1);
             return new Bounds(slotX, y + 9 + getResolveOffset() + row * 18 + offset, 18, 18);
         } else if (EmiConfig.workstationLocation == SidebarSide.RIGHT) {
-            int slotX;
-            if (isBackground) {
-                slotX = x + backgroundWidth;
-            } else {
-                slotX = x + backgroundWidth + 18 * column;
-            }
+            int slotX = isBackground ? x + backgroundWidth : x + backgroundWidth + 18 * column;
             return new Bounds(slotX, y + 9 + getResolveOffset() + row * 18 + offset, 18, 18);
         } else if (EmiConfig.workstationLocation == SidebarSide.BOTTOM) {
             return new Bounds(x + 5 + getResolveOffset() + i * 18 + offset, y + backgroundHeight - 23, 18, 18);
@@ -144,7 +93,8 @@ public abstract class RecipeScreenMixin extends Screen implements RecipeScreenAc
 
     @Unique
     private int cosmicCore$getWorkstationAmount() {
-        return EmiApi.getRecipeManager().getWorkstations(tabs.get(tab).category).size();
+        int total = EmiApi.getRecipeManager().getWorkstations(tabs.get(tab).category).size();
+        return Math.min(total, getMaxWorkstations());
     }
 
     @Unique
@@ -161,13 +111,38 @@ public abstract class RecipeScreenMixin extends Screen implements RecipeScreenAc
         int workstations = cosmicCore$getWorkstationAmount();
         int maxPerColumn = cosmicCore$maxWorkstations();
         if (maxPerColumn <= 0) return 1;
-        return (workstations + maxPerColumn - 1) / maxPerColumn; // ceil division
+        return (workstations + maxPerColumn - 1) / maxPerColumn;
     }
 
-    /**
-     * Gets the hovered stack from the recipe screen for CTRL+A pinning.
-     * Iterates through current page widgets to find SlotWidgets under the mouse.
-     */
+    @Redirect(
+              method = "render",
+              at = @At(value = "INVOKE",
+                       target = "Ldev/emi/emi/EmiRenderHelper;drawNinePatch(Ldev/emi/emi/runtime/EmiDrawContext;Lnet/minecraft/resources/ResourceLocation;IIIIIIII)V"),
+              remap = false)
+    private void cosmicCore$widenWorkstationBackground(EmiDrawContext context, ResourceLocation texture, int x, int y,
+                                                       int width, int height, int u, int v, int cornerSize,
+                                                       int centerSize) {
+        if (v == 0 && (u == 36 || u == 47 || u == 58)) {
+            int columns = cosmicCore$getColumnCount();
+            if (columns > 1) {
+                int maxPerColumn = cosmicCore$maxWorkstations();
+                int workstations = cosmicCore$getWorkstationAmount();
+                int resolveOffset = (workstations > 0) ? 0 : getResolveOffset();
+                int correctHeight = 10 + 18 * maxPerColumn + resolveOffset;
+
+                if (u == 36) {
+                    x -= 18 * (columns - 1);
+                    width += 18 * (columns - 1);
+                    height = correctHeight;
+                } else if (u == 47) {
+                    width += 18 * (columns - 1);
+                    height = correctHeight;
+                }
+            }
+        }
+        EmiRenderHelper.drawNinePatch(context, texture, x, y, width, height, u, v, cornerSize, centerSize);
+    }
+
     @Unique
     public EmiIngredient getHoveredStack(int mouseX, int mouseY) {
         if (currentPage == null) return EmiStack.EMPTY;
@@ -186,10 +161,6 @@ public abstract class RecipeScreenMixin extends Screen implements RecipeScreenAc
         return EmiStack.EMPTY;
     }
 
-    /**
-     * Gets the recipe containing the currently hovered stack for CTRL+SHIFT+A pinning.
-     * Checks if mouse is within the widget group's bounds, not individual slots.
-     */
     @Unique
     @Nullable
     public EmiRecipe getHoveredRecipe(int mouseX, int mouseY) {
@@ -204,14 +175,12 @@ public abstract class RecipeScreenMixin extends Screen implements RecipeScreenAc
                 fallback = group.recipe;
             }
 
-            // Check if mouse is within the group's bounds (x, y, width, height are public fields)
             if (mouseX >= group.x && mouseX < group.x + group.width &&
                     mouseY >= group.y && mouseY < group.y + group.height) {
                 return group.recipe;
             }
         }
 
-        // Fall back to first recipe on page if none matched
         return fallback;
     }
 }

@@ -669,6 +669,57 @@ public class CosmicItems {
             .tag()
             .defaultModel()
             .register();
+
+    // Lucid Circuit Components
+    public static final ItemEntry<ComponentItem> TEMPORAL_STABLE_THUNDERING_WAFER = REGISTRATE
+            .item("temporal_stable_thundering_wafer", ComponentItem::create)
+            .lang("Temporal Stable Thundering Wafer")
+            .properties(p -> p.stacksTo(64))
+            .defaultModel()
+            .register();
+    public static final ItemEntry<ComponentItem> LUCIDITY_CPU_MASK = REGISTRATE
+            .item("lucidity_cpu_mask", ComponentItem::create)
+            .lang("Lucidity CPU Mask")
+            .properties(p -> p.stacksTo(64))
+            .defaultModel()
+            .register();
+    public static final ItemEntry<ComponentItem> PREPARED_LUCID_WAFER = REGISTRATE
+            .item("prepared_lucid_wafer", ComponentItem::create)
+            .lang("Prepared Lucid Wafer")
+            .properties(p -> p.stacksTo(64))
+            .defaultModel()
+            .register();
+    public static final ItemEntry<ComponentItem> LUCID_CPU_WAFER = REGISTRATE
+            .item("lucid_cpu_wafer", ComponentItem::create)
+            .lang("Lucid CPU Wafer")
+            .properties(p -> p.stacksTo(64))
+            .defaultModel()
+            .register();
+    public static final ItemEntry<ComponentItem> SOUL_CUT_LUCID_CPU_CHIP = REGISTRATE
+            .item("soul_cut_lucid_cpu_chip", ComponentItem::create)
+            .lang("Soul Cut Lucid CPU Chip")
+            .properties(p -> p.stacksTo(64))
+            .defaultModel()
+            .register();
+    public static final ItemEntry<ComponentItem> TEMPORAL_REINFORCED_LUCID_CIRCUIT_BOARD = REGISTRATE
+            .item("temporal_reinforced_lucid_circuit_board", ComponentItem::create)
+            .lang("Temporal Reinforced Lucid Circuit Board")
+            .properties(p -> p.stacksTo(64))
+            .defaultModel()
+            .register();
+    public static final ItemEntry<ComponentItem> TEMPORAL_REINFORCED_LUCID_PRINTED_CIRCUIT_BOARD = REGISTRATE
+            .item("temporal_reinforced_lucid_printed_circuit_board", ComponentItem::create)
+            .lang("Temporal Reinforced Lucid Printed Circuit Board")
+            .properties(p -> p.stacksTo(64))
+            .defaultModel()
+            .register();
+    public static final ItemEntry<ComponentItem> FIBER_MESH_INGOT_FRAME = REGISTRATE
+            .item("fiber_mesh_ingot_frame", ComponentItem::create)
+            .lang("Fiber Mesh Ingot Frame")
+            .properties(p -> p.stacksTo(64))
+            .defaultModel()
+            .register();
+
     public static final ItemEntry<ItemBloodOrb> ITEM_ORB_ASCENDANT = REGISTRATE
             .item("asc_blood_orb", (p) -> new ItemBloodOrb(ORB_ASCENDANT))
             .lang("Ascendant Blood Orb")

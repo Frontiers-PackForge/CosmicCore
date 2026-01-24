@@ -149,4 +149,15 @@ public class CosmicRecipeFavorite extends EmiFavorite {
     public EmiIngredient copy() {
         return new CosmicRecipeFavorite(getStack(), outputAmount, inputs);
     }
+
+    @Override
+    public boolean strictEquals(EmiIngredient other) {
+        if (other instanceof CosmicRecipeFavorite otherRecipe) {
+            return getStack().equals(otherRecipe.getStack());
+        }
+        if (other != null && !other.isEmpty()) {
+            return getStack().equals(other);
+        }
+        return false;
+    }
 }
