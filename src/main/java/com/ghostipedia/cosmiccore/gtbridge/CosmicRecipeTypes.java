@@ -18,6 +18,8 @@ import com.lowdragmc.lowdraglib.gui.texture.ProgressTexture;
 import com.lowdragmc.lowdraglib.utils.LocalizationUtils;
 
 import net.minecraft.client.resources.language.I18n;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 
 import static com.ghostipedia.cosmiccore.common.data.CosmicSounds.*;
@@ -492,6 +494,13 @@ public class CosmicRecipeTypes {
     // .setSound(GTSoundEntries.CHEMICAL) // TODO - Sounds
     // .setProgressBar(GuiTextures.PROGRESS_BAR_ARROW_MULTIPLE, ProgressTexture.FillDirection.LEFT_TO_RIGHT);
 
+    // Link Test Station recipe type for testing cross-dimensional linking
+    public static final GTRecipeType LINK_TEST_RECIPES = GTRecipeTypes
+            .register("link_test", ELECTRIC)
+            .setMaxIOSize(2, 2, 0, 0)
+            .setSound(GTSoundEntries.ASSEMBLER)
+            .setProgressBar(GuiTextures.PROGRESS_BAR_ARROW, ProgressTexture.FillDirection.LEFT_TO_RIGHT);
+
     public static void init() {
         LASER_ENGRAVER_RECIPES.setMaxIOSize(2, 2, 1, 1);
         // Oh my God
@@ -533,7 +542,9 @@ public class CosmicRecipeTypes {
                 // Do Nothing if the recipe Contains a Dimension
             } else {
                 // If It Doesn't have a Dimension, add the recipe and give it an dimension req of 'Sun Orbit'
-                orbitBuilderEBF.addCondition(new DimensionCondition(new ResourceLocation("frontiers:sun_orbit")))
+                orbitBuilderEBF
+                        .addCondition(new DimensionCondition(
+                                ResourceKey.create(Registries.DIMENSION, new ResourceLocation("frontiers:sun_orbit"))))
                         .save(provider);
             }
         });
@@ -552,7 +563,9 @@ public class CosmicRecipeTypes {
                 // Do Nothing if the recipe Contains a Dimension
             } else {
                 // If It Doesn't have a Dimension, add the recipe and give it an dimension req of 'Sun Orbit'
-                orbitBuilderABS.addCondition(new DimensionCondition(new ResourceLocation("frontiers:sun_orbit")))
+                orbitBuilderABS
+                        .addCondition(new DimensionCondition(
+                                ResourceKey.create(Registries.DIMENSION, new ResourceLocation("frontiers:sun_orbit"))))
                         .save(provider);
             }
         });

@@ -7,14 +7,19 @@
   "plugin": "com.ghostipedia.cosmiccore.mixin.CosmicCoreMixinPlugin",
   "client": [
     "StarKillerMixin",
+    "quake.QuakeMovementMixin",
+    "accessor.MBPatternAccessor",
     "client.AdAstraPlanetsScreenMixin",
     "client.MinecraftMixin",
+    "client.PatternPreviewWidgetMixin",
     "client.SoundManagerMixin",
     "embers.EmberDialBlockMixin",
     "emi.EmiApiMixin",
     "emi.EmiFavoritesMixin",
     "emi.EmiScreenManagerMixin",
     "emi.RecipeScreenMixin",
+    "emi.ScreenSpaceMixin",
+    "emi.SidebarPanelMixin",
     "ldlib.CustomBakedModelMixin"
   ],
   "mixins": [

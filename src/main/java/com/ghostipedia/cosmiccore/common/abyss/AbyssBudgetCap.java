@@ -34,12 +34,15 @@ public class AbyssBudgetCap {
 
         @Override
         public CompoundTag serializeNBT() {
-            return impl.tagSave();
+            CompoundTag tag = impl.tagSave();
+            return tag != null ? tag : new CompoundTag();
         }
 
         @Override
         public void deserializeNBT(CompoundTag compoundTag) {
-            impl.tagLoad(compoundTag);
+            if (compoundTag != null) {
+                impl.tagLoad(compoundTag);
+            }
         }
     }
 

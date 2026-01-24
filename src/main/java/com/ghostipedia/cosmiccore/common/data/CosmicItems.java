@@ -20,13 +20,16 @@ import com.ghostipedia.cosmiccore.common.item.behavior.EffectApplicationBehavior
 import com.ghostipedia.cosmiccore.common.item.behavior.InfiniteSprayCanBehavior;
 import com.ghostipedia.cosmiccore.common.item.behavior.OxygenSupplyTankBehavior;
 import com.ghostipedia.cosmiccore.common.item.behavior.StructureWriteBehavior;
+import com.ghostipedia.cosmiccore.common.item.behavior.VeinSurveyBehavior;
 import com.ghostipedia.cosmiccore.common.item.behavior.WirelessPDABehavior;
 import com.ghostipedia.cosmiccore.common.reflection.item.MirrorItem;
 import com.ghostipedia.cosmiccore.utils.StringUtil;
 
 import com.gregtechceu.gtceu.GTCEu;
+import com.gregtechceu.gtceu.api.GTValues;
 import com.gregtechceu.gtceu.api.item.ComponentItem;
 import com.gregtechceu.gtceu.api.item.armor.ArmorComponentItem;
+import com.gregtechceu.gtceu.api.item.component.ElectricStats;
 import com.gregtechceu.gtceu.api.item.component.ICustomDescriptionId;
 import com.gregtechceu.gtceu.api.item.component.IItemComponent;
 import com.gregtechceu.gtceu.api.item.component.ThermalFluidStats;
@@ -2734,6 +2737,43 @@ public class CosmicItems {
             .item("reflection_mirror", MirrorItem::new)
             .lang("Mirror of Erosion")
             .properties(p -> p.stacksTo(1))
+            .defaultModel()
+            .register();
+
+    // -------------------------------------------------------------------------
+    // Vein Survey Scanner
+    // -------------------------------------------------------------------------
+
+    // LV tier - shows vein type + distance only
+    public static final ItemEntry<ComponentItem> VEIN_SURVEY_SCANNER_LV = REGISTRATE
+            .item("vein_survey_scanner_lv", ComponentItem::create)
+            .lang("Vein Survey Scanner (LV)")
+            .properties(p -> p.stacksTo(1))
+            .onRegister(attach(
+                    ElectricStats.createElectricItem(100_000L, GTValues.LV),
+                    new VeinSurveyBehavior(2000, GTValues.V[GTValues.LV] * 4, VeinSurveyBehavior.DetailLevel.BASIC)))
+            .defaultModel()
+            .register();
+
+    // MV tier - also shows compass direction
+    public static final ItemEntry<ComponentItem> VEIN_SURVEY_SCANNER_MV = REGISTRATE
+            .item("vein_survey_scanner_mv", ComponentItem::create)
+            .lang("Advanced Vein Survey Scanner (MV)")
+            .properties(p -> p.stacksTo(1))
+            .onRegister(attach(
+                    ElectricStats.createElectricItem(400_000L, GTValues.MV),
+                    new VeinSurveyBehavior(2000, GTValues.V[GTValues.MV] * 4, VeinSurveyBehavior.DetailLevel.COMPASS)))
+            .defaultModel()
+            .register();
+
+    // HV tier - shows exact coordinates
+    public static final ItemEntry<ComponentItem> VEIN_SURVEY_SCANNER_HV = REGISTRATE
+            .item("vein_survey_scanner_hv", ComponentItem::create)
+            .lang("Precision Vein Survey Scanner (HV)")
+            .properties(p -> p.stacksTo(1))
+            .onRegister(attach(
+                    ElectricStats.createElectricItem(1_600_000L, GTValues.HV),
+                    new VeinSurveyBehavior(2000, GTValues.V[GTValues.HV] * 4, VeinSurveyBehavior.DetailLevel.PRECISE)))
             .defaultModel()
             .register();
 

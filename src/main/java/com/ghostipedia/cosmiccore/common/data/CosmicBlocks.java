@@ -4,7 +4,9 @@ import com.ghostipedia.cosmiccore.CosmicCore;
 import com.ghostipedia.cosmiccore.api.CosmicCoreAPI;
 import com.ghostipedia.cosmiccore.api.block.IMagnetType;
 import com.ghostipedia.cosmiccore.client.renderer.block.NebulaeCoilRenderer;
+import com.ghostipedia.cosmiccore.common.block.DivingBellEscapePad;
 import com.ghostipedia.cosmiccore.common.block.MagnetBlock;
+import com.ghostipedia.cosmiccore.common.block.MothHomeBlock;
 import com.ghostipedia.cosmiccore.common.blockentity.CosmicCoilBlockEntity;
 import com.ghostipedia.cosmiccore.ember.CosmicEmberEmitterBlock;
 import com.ghostipedia.cosmiccore.ember.CosmicEmberReceptorBlock;
@@ -688,6 +690,34 @@ public class CosmicBlocks {
     // GLASS BLOCKS
     public static final BlockEntry<Block> ZBLAN_REINFORCED_GLASS = createGlassCasingBlock(
             "zblan_glass", CosmicCore.id("block/casings/glass/zblan_glass"), () -> RenderType::translucent);
+
+    public static final BlockEntry<DivingBellEscapePad> DIVING_BELL_ESCAPE_PAD = REGISTRATE
+            .block("diving_bell_escape_pad", DivingBellEscapePad::new)
+            .initialProperties(() -> Blocks.STONE)
+            .exBlockstate(GTModels.cubeAllModel(CosmicCore.id("block/diving_bell_escape_pad")))
+            .simpleItem()
+            .register();
+
+    // MOTH HOME BLOCKS - For Cargo Moths system
+    public static final BlockEntry<MothHomeBlock> MOTH_HOME_T1 = createMothHomeBlock(1);
+    public static final BlockEntry<MothHomeBlock> MOTH_HOME_T2 = createMothHomeBlock(2);
+    public static final BlockEntry<MothHomeBlock> MOTH_HOME_T3 = createMothHomeBlock(3);
+    public static final BlockEntry<MothHomeBlock> MOTH_HOME_T4 = createMothHomeBlock(4);
+
+    // Moth Station Casing
+    public static final BlockEntry<Block> MOTH_STATION_CASING = createCasingBlock("moth_station_casing",
+            CosmicCore.id("block/casings/solid/moth_station_casing"));
+
+    private static BlockEntry<MothHomeBlock> createMothHomeBlock(int tier) {
+        return REGISTRATE
+                .block("moth_home_t" + tier, p -> new MothHomeBlock(p, tier))
+                .lang("Moth Home (T" + tier + ")")
+                .initialProperties(() -> Blocks.IRON_BLOCK)
+                .properties(p -> p.strength(3.0f, 6.0f))
+                .exBlockstate(GTModels.cubeAllModel(CosmicCore.id("block/casings/moth/moth_home_t" + tier)))
+                .simpleItem()
+                .register();
+    }
 
     private static BlockEntry<Block> createGlassCasingBlock(String name, ResourceLocation texture,
                                                             Supplier<Supplier<RenderType>> type) {

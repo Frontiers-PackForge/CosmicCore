@@ -7,6 +7,37 @@ import com.tterrag.registrate.providers.RegistrateLangProvider;
 public class CosmicLangHandler extends LangHandler {
 
     public static void init(RegistrateLangProvider provider) {
+        // Vein Survey Scanner
+        provider.add("cosmiccore.survey.mode.radial", "Mode: Radial Scan (360°)");
+        provider.add("cosmiccore.survey.mode.directional", "Mode: Directional Cone (90°)");
+        provider.add("cosmiccore.survey.mode.nearest", "Mode: Nearest Vein");
+        provider.add("cosmiccore.survey.no_energy", "Not enough energy to scan!");
+        provider.add("cosmiccore.survey.tooltip.radius", "Scan Radius: %d blocks");
+        provider.add("cosmiccore.survey.tooltip.mode", "Current Mode: ");
+        provider.add("cosmiccore.survey.tooltip.filter", "Vein Filter: ");
+        provider.add("cosmiccore.survey.tooltip.use", "§7Use: Scan for veins");
+        provider.add("cosmiccore.survey.tooltip.shift", "§7Shift+Use: Change mode");
+        provider.add("cosmiccore.survey.header", "═══ Vein Survey ═══");
+        provider.add("cosmiccore.survey.found", "Found %d veins within %dm");
+        provider.add("cosmiccore.survey.found.directional", " (directional)");
+        provider.add("cosmiccore.survey.types", "Types: ");
+        provider.add("cosmiccore.survey.nearest", "Nearest:");
+        provider.add("cosmiccore.survey.nearest_vein", "Nearest vein:");
+        provider.add("cosmiccore.survey.nearest_vein.filtered", "Nearest vein (%s):");
+        provider.add("cosmiccore.survey.more", "  ... and %d more");
+        provider.add("cosmiccore.survey.no_veins", "No veins found");
+        provider.add("cosmiccore.survey.no_veins.filtered", "No veins found matching '%s'");
+        provider.add("cosmiccore.survey.no_veins.directional", "No veins found in that direction");
+        provider.add("cosmiccore.survey.click_tp", "Click to teleport");
+        provider.add("cosmiccore.survey.command.scanning", "Surveying veins within %d blocks...");
+        provider.add("cosmiccore.survey.command.results", "=== Vein Survey Results ===");
+        provider.add("cosmiccore.survey.command.vein_types", "Vein types: ");
+        provider.add("cosmiccore.survey.command.nearest_veins", "Nearest veins:");
+        provider.add("cosmiccore.survey.command.more", "... and %d more veins");
+        provider.add("cosmiccore.survey.command.no_veins_dimension", "No vein types registered for this dimension.");
+        provider.add("cosmiccore.survey.command.available_types", "Available vein types (%d):");
+        provider.add("cosmiccore.survey.command.player_only", "This command must be run by a player.");
+
         // items
         replace(provider, "item.gtceu.tool.luv_meld_tool", "%s Meld Multitool");
         provider.add("item.cosmiccore.portable_gravity_core.tooltip", "§aNormalizes Gravity to Match Earth.");
@@ -161,6 +192,18 @@ public class CosmicLangHandler extends LangHandler {
         provider.add("cosmiccore.recipe.fieldDecay", "§fField Decay: %sT/t");
         provider.add("cosmiccore.recipe.fieldSlam", "§fField Consumed: %sT");
         provider.add("cosmiccore.recipe.condition.titan.tooltip", "Requires Titan Reactor Tier: %s");
+
+        // Linked Partner Condition
+        provider.add("cosmiccore.recipe.condition.linked_partner.tooltip", "Requires %s linked partner(s)");
+        provider.add("cosmiccore.recipe.condition.linked_partner.formed",
+                "Requires %s linked partner(s) with valid structure");
+        provider.add("cosmiccore.recipe.condition.linked_partner.working",
+                "Requires %s linked partner(s) actively working");
+        provider.add("cosmiccore.recipe.condition.linked_partner_dimension.tooltip", "Requires linked partner in %s");
+        provider.add("cosmiccore.recipe.condition.linked_partner_dimension_item.tooltip",
+                "Requires %sx %s in partner in %s");
+        provider.add("cosmiccore.recipe.condition.linked_partner_dimension_fluid.tooltip",
+                "Requires %smB %s in partner in %s");
 
         provider.add("cosmiccore.multiblock.heat_value", "§6Current Heat: %s");
         provider.add("cosmiccore.multiblock.heat_capacity", "§cMax Heat: %s");
@@ -389,13 +432,6 @@ public class CosmicLangHandler extends LangHandler {
                 "Currently connected to (%s, %s, %s)");
         provider.add("cosmiccore.multiblock.drone_maintenance_interface.no_connection", "Not connected");
 
-        // JADE
-        provider.add("config.jade.plugin_cosmiccore.drone_station", "[CC] Drone Station");
-        provider.add("config.jade.plugin_cosmiccore.drone_maintenance_interface", "[CC] Drone Maintenance Interface");
-
-        provider.add("config.jade.plugin_cosmiccore.parallel_info_cc", "[CC] Parallel Info");
-        provider.add("config.jade.plugin_cosmiccore.stellar_module", "[CC] Stellar Module");
-
         provider.add("debug.owner.uuid", "§aOwner UUID:§a %s");
         provider.add("debug.team.uuid", "§aTeam UUID:§a %s");
 
@@ -511,6 +547,30 @@ public class CosmicLangHandler extends LangHandler {
                 "§b'If you're wondering how to parallel assembly lines§r",
                 "§fthis is how. Welcome to subnets!§r");
 
+        // Cross-Dimensional Multiblock Linking
+        provider.add("cosmiccore.datastick.link_copied", "Link: %s");
+        provider.add("cosmiccore.link.copied", "Link data copied from %s");
+        provider.add("cosmiccore.link.established", "Link established: %s ↔ %s");
+
+        // Link validation errors
+        provider.add("cosmiccore.link.not_ready", "Machine not ready for linking");
+        provider.add("cosmiccore.link.invalid_data", "Invalid link data on datastick");
+        provider.add("cosmiccore.link.cannot_self_link", "Cannot link a machine to itself");
+        provider.add("cosmiccore.link.partner_not_loaded", "Partner machine must be loaded to establish link");
+        provider.add("cosmiccore.link.partner_missing", "Partner machine no longer exists");
+        provider.add("cosmiccore.link.not_linkable", "Target machine does not support linking");
+        provider.add("cosmiccore.link.different_owner", "Cannot link machines owned by different teams");
+        provider.add("cosmiccore.link.incompatible_roles", "Incompatible link roles: %s cannot link to %s");
+        provider.add("cosmiccore.link.limit_reached_self", "This machine has reached its link limit");
+        provider.add("cosmiccore.link.limit_reached_partner", "Partner machine has reached its link limit");
+        provider.add("cosmiccore.link.incompatible_self", "This machine cannot link to that type");
+        provider.add("cosmiccore.link.incompatible_partner", "Partner machine cannot link to this type");
+        provider.add("cosmiccore.link.already_linked", "These machines are already linked");
+        provider.add("cosmiccore.link.too_far", "Partner is too far away to force-load for linking");
+
+        // Link runtime status
+        provider.add("cosmiccore.recipe.waiting_for_partner", "Waiting for linked partner");
+        provider.add("cosmiccore.link.partner_offline", "Linked partner offline");
         provider.add("cosmiccore.multiblock.drone_station_machine.tier.0", "Plasmatic");
         provider.add("cosmiccore.multiblock.drone_station_machine.tier.1", "Sanguine");
         provider.add("cosmiccore.multiblock.drone_station_machine.tier.2", "Industrial");
@@ -1362,6 +1422,13 @@ public class CosmicLangHandler extends LangHandler {
         provider.add("cosmiccore.multiblock.stellar_module.power_config", "§7Config: §b%s §7@ §a%dx §7Parallel");
         provider.add("cosmiccore.multiblock.pattern.stellar_module_slot", "§7Module Slot (Air or Formed Module)");
 
+        // JADE
+        provider.add("config.jade.plugin_cosmiccore.pcb_parallel", "[CosmicCore] PCB Foundry Parallel");
+        provider.add("config.jade.plugin_cosmiccore.stellar_module", "[CosmicCore] Stellar Module Info");
+        provider.add("config.jade.plugin_cosmiccore.drone_station", "[CosmicCore] Drone Station Info");
+        provider.add("config.jade.plugin_cosmiccore.drone_maintenance_interface",
+                "[CosmicCore] Drone Maintenance Interface");
+
         // JADE Stellar Module Provider
         provider.add("cosmiccore.jade.stellar_module.not_connected", "Iris: Not Connected");
         provider.add("cosmiccore.jade.stellar_module.iris_not_ready", "Iris: Not Ready");
@@ -1738,6 +1805,10 @@ public class CosmicLangHandler extends LangHandler {
         provider.add("key.cosmiccore.boots.jump_decrease", "Boots: Decrease Jump");
         provider.add("key.cosmiccore.boots.toggle_step", "Boots: Toggle Step Assist");
         provider.add("key.cosmiccore.boots.toggle_inertia", "Boots: Toggle Inertia Dampening");
+
+        // Quake Movement (Reflection Bargain)
+        provider.add("key.categories.cosmiccore.movement", "Quake Movement");
+        provider.add("key.cosmiccore.movement.dash", "Dash");
 
         // Boot tooltips
         provider.add("cosmiccore.boots.speed_modifier", "Speed Modifier: %s");

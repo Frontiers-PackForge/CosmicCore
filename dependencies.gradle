@@ -9,6 +9,7 @@ dependencies {
     modImplementation('curse.maven:tmrv-1194921:7259315')
     modImplementation("curse.maven:travel-anchors-413234:4683662")
     modImplementation("curse.maven:libx-412525:4947474")
+//    modImplementation("curse.maven:world-stripper-250603:4578579")
 
     //Botania
 //    implementation(forge.botania)

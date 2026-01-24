@@ -988,7 +988,6 @@ public class CosmicMachines {
                         .build();
             });
         }
-
         GCYMMachines.LARGE_CENTRIFUGE.setPatternFactory(() -> FactoryBlockPattern.start()
                 .aisle("#XXX#", "XXXXX", "#XXX#")
                 .aisle("XXXXX", "XAPAX", "XXXXX")
