@@ -30,6 +30,7 @@ public class CosmicBookmarkManager {
 
     private List<CosmicBookmarkGroup> groups = new ArrayList<>();
     private int activeIndex = 0;
+    private int currentRecipePage = 0;
 
     private CosmicBookmarkManager() {
         groups.add(new CosmicBookmarkGroup("Default"));
@@ -55,6 +56,14 @@ public class CosmicBookmarkManager {
             return groups.get(activeIndex);
         }
         return groups.get(0);
+    }
+
+    public int getCurrentRecipePage() {
+        return currentRecipePage;
+    }
+
+    public void setCurrentRecipePage(int page) {
+        this.currentRecipePage = page;
     }
 
     public CosmicBookmarkGroup getGroupAt(int index) {
@@ -115,6 +124,76 @@ public class CosmicBookmarkManager {
         CosmicBookmarkGroup group = getActiveGroup();
         EmiFavorites.favorites.clear();
         EmiFavorites.favorites.addAll(group.getFavorites());
+    }
+
+    /**
+     * Find which recipe favorite is at the given screen position.
+     * Returns null if no recipe at that position or not in a recipe group.
+     */
+    public CosmicRecipeFavorite getRecipeAtPosition(int mouseX, int mouseY, int tx, int ty, int tw, int th,
+                                                    int currentPage) {
+        if (!getActiveGroup().isRecipeGroup()) return null;
+
+        int slotSize = 18;
+        if (mouseX < tx || mouseX >= tx + tw * slotSize || mouseY < ty || mouseY >= ty + th * slotSize) {
+            return null;
+        }
+
+        int hoveredRow = (mouseY - ty) / slotSize;
+        int hoveredCol = (mouseX - tx) / slotSize;
+
+        List<CosmicRecipeFavorite> recipes = EmiFavorites.favorites.stream()
+                .filter(f -> f instanceof CosmicRecipeFavorite)
+                .map(f -> (CosmicRecipeFavorite) f)
+                .toList();
+
+        if (recipes.isEmpty()) return null;
+
+        List<RecipeRenderInfo> pageLayout = calculatePageLayout(recipes, tw, th, currentPage);
+
+        for (RecipeRenderInfo info : pageLayout) {
+            if (hoveredRow >= info.startRow() && hoveredRow < info.startRow() + info.rowCount()) {
+                int relativeRow = hoveredRow - info.startRow();
+                int slotIndex = relativeRow * tw + hoveredCol;
+                if (slotIndex >= 0 && slotIndex < info.recipe().getTotalSlots()) {
+                    return info.recipe();
+                }
+            }
+        }
+
+        return null;
+    }
+
+    private List<RecipeRenderInfo> calculatePageLayout(List<CosmicRecipeFavorite> recipes, int gridWidth, int totalRows,
+                                                       int page) {
+        List<RecipeRenderInfo> result = new ArrayList<>();
+
+        List<Integer> recipeRowCounts = new ArrayList<>();
+        for (CosmicRecipeFavorite recipe : recipes) {
+            recipeRowCounts.add(recipe.getRowCount(gridWidth));
+        }
+
+        int rowsUsed = 0;
+        int currentPage = 0;
+
+        for (int i = 0; i < recipes.size(); i++) {
+            int rowsNeeded = recipeRowCounts.get(i);
+
+            if (rowsUsed + rowsNeeded > totalRows && rowsUsed > 0) {
+                currentPage++;
+                rowsUsed = 0;
+            }
+
+            if (currentPage == page) {
+                result.add(new RecipeRenderInfo(recipes.get(i), rowsUsed, rowsNeeded));
+            } else if (currentPage > page) {
+                break;
+            }
+
+            rowsUsed += rowsNeeded;
+        }
+
+        return result;
     }
 
     /**
