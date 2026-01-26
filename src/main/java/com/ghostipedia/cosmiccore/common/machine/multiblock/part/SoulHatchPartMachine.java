@@ -41,15 +41,15 @@ public class SoulHatchPartMachine extends TieredIOPartMachine {
         this.soulContainer = new NotifiableSoulContainer(this, io, getMaxConsumption(tier), getMaxCapacity(tier));
     }
 
-    @Override
-    public void addedToController(IMultiController controller) {
-        if (getLevel() instanceof DummyWorld) return;
-        super.addedToController(controller);
-        boolean hasDuplicate = controller.getParts().stream()
-                .filter(part -> part != this)
-                .anyMatch(part -> part instanceof SoulHatchPartMachine soulHatch && soulHatch.io == this.io);
-        if (hasDuplicate) controller.onStructureInvalid();
-    }
+//    @Override
+//    public void addedToController(IMultiController controller) {
+//        if (getLevel() instanceof DummyWorld) return;
+//        super.addedToController(controller);
+//        boolean hasDuplicate = controller.getParts().stream()
+//                .filter(part -> part != this)
+//                .anyMatch(part -> part instanceof SoulHatchPartMachine soulHatch && soulHatch.io == this.io);
+//        if (hasDuplicate) controller.onStructureInvalid();
+//    }
 
     @Override
     public Widget createUIWidget() {
