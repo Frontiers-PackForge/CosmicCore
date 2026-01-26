@@ -1,5 +1,8 @@
 package com.ghostipedia.cosmiccore.gtbridge;
 
+import com.ghostipedia.cosmiccore.api.capability.recipe.CosmicRecipeCapabilities;
+import com.ghostipedia.cosmiccore.api.capability.souls.SoulType;
+import com.ghostipedia.cosmiccore.api.recipe.ingredient.SoulIngredient;
 import com.ghostipedia.cosmiccore.common.machine.multiblock.multi.logic.LarvaMachine;
 import com.ghostipedia.cosmiccore.common.recipe.condition.LinkedPartnerCondition;
 import com.ghostipedia.cosmiccore.common.recipe.condition.LinkedPartnerDimensionCondition;
@@ -105,6 +108,20 @@ public class CosmicCoreRecipes {
          * .outputItems(Items.COBBLESTONE)
          * .save(provider);
          */
+
+        SOUL_TESTER_RECIPES.recipeBuilder("generate_soul")
+                .notConsumable(Items.DIRT)
+                .output(CosmicRecipeCapabilities.SOUL, SoulIngredient.of(SoulType.Raw, 10))
+                .output(CosmicRecipeCapabilities.SOUL, SoulIngredient.of(SoulType.Temporal, 50))
+                .duration(20)
+                .save(provider);
+
+        SOUL_TESTER_RECIPES.recipeBuilder("generate_soul_2")
+                .notConsumable(Items.STONE)
+                .input(CosmicRecipeCapabilities.SOUL, SoulIngredient.of(SoulType.Raw, 10))
+                .outputItems(ingot, Steel)
+                .duration(20)
+                .save(provider);
 
         // GROVE_RECIPES.recipeBuilder("dirt_movement")
         // .input(SoulRecipeCapability.CAP, 100)

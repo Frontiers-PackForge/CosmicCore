@@ -1,34 +1,38 @@
 package com.ghostipedia.cosmiccore.api.recipe.lookup;
 
+import com.ghostipedia.cosmiccore.api.recipe.ingredient.SoulIngredient;
+import com.ghostipedia.cosmiccore.api.recipe.ingredient.SoulStack;
+
 import com.gregtechceu.gtceu.api.recipe.lookup.ingredient.AbstractMapIngredient;
 
-import java.util.Collections;
 import java.util.List;
 
 public class MapSoulIngredient extends AbstractMapIngredient {
 
-    public final Integer souls;
+    public final SoulStack stack;
 
-    public MapSoulIngredient(Integer souls) {
-        this.souls = souls;
+    public MapSoulIngredient(SoulStack stack) {
+        this.stack = stack;
     }
 
     @Override
     protected int hash() {
-        return MapSoulIngredient.class.hashCode();
+        return 0;
     }
 
     @Override
-    public boolean equals(Object obj) {
-        return obj instanceof MapSoulIngredient;
+    public boolean equals(Object o) {
+        if (!(o instanceof MapSoulIngredient other)) return false;
+        return stack.type().equals(other.stack.type());
+    }
+
+    public static List<AbstractMapIngredient> from(SoulIngredient soulIngredient) {
+        SoulStack stack = soulIngredient.stack();
+        return List.of(new MapSoulIngredient(stack));
     }
 
     @Override
     public String toString() {
-        return "MapSoulIngredient{" + "souls=" + souls + '}';
-    }
-
-    public static List<AbstractMapIngredient> convertToMapIngredient(Integer essence) {
-        return Collections.singletonList(new MapSoulIngredient(essence));
+        return "MapSoulIngredient{stack=" + stack + "}";
     }
 }
