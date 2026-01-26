@@ -15,14 +15,13 @@ import com.gregtechceu.gtceu.api.recipe.content.IContentSerializer;
 
 import com.lowdragmc.lowdraglib.gui.widget.LabelWidget;
 import com.lowdragmc.lowdraglib.gui.widget.WidgetGroup;
-
 import com.lowdragmc.lowdraglib.utils.LocalizationUtils;
+
 import com.mojang.serialization.Codec;
 import org.apache.commons.lang3.mutable.MutableInt;
 
 import java.util.*;
 import java.util.stream.Collectors;
-
 
 public class SoulRecipeCapability extends RecipeCapability<SoulIngredient> {
 
@@ -37,7 +36,7 @@ public class SoulRecipeCapability extends RecipeCapability<SoulIngredient> {
         return true;
     }
 
-    //TODO: try to remove
+    // TODO: try to remove
     @Override
     public SoulIngredient copyInner(SoulIngredient content) {
         return super.copyInner(content);
@@ -56,7 +55,8 @@ public class SoulRecipeCapability extends RecipeCapability<SoulIngredient> {
             if (item instanceof SoulIngredient soul) {
                 var isEqual = false;
                 for (Object obj : list) {
-                    if (obj instanceof SoulIngredient soulIngredient && soul.stack().type().equals(soulIngredient.stack().type())) {
+                    if (obj instanceof SoulIngredient soulIngredient &&
+                            soul.stack().type().equals(soulIngredient.stack().type())) {
                         isEqual = true;
                         break;
                     }
@@ -74,11 +74,10 @@ public class SoulRecipeCapability extends RecipeCapability<SoulIngredient> {
     private static Map<SoulType, Integer> getInputContents(IRecipeCapabilityHolder holder) {
         var handlerLists = holder.getCapabilitiesForIO(IO.IN);
         if (handlerLists.isEmpty()) return new HashMap<>();
-        
-        
+
         var totalThroughput = 0;
         var totalSouls = new HashMap<SoulType, Integer>();
-        
+
         for (var handlerList : handlerLists) {
             if (!handlerList.hasCapability(SoulRecipeCapability.CAP)) continue;
             var soulHandlers = handlerList.getCapability(SoulRecipeCapability.CAP);
@@ -97,10 +96,8 @@ public class SoulRecipeCapability extends RecipeCapability<SoulIngredient> {
         return totalSouls.entrySet().stream()
                 .collect(Collectors.toMap(
                         Map.Entry::getKey,
-                        entry -> Math.min(entry.getValue(), finalTotalThroughput)
-                ));
+                        entry -> Math.min(entry.getValue(), finalTotalThroughput)));
     }
-
 
     @Override
     public int getMaxParallelByInput(IRecipeCapabilityHolder holder, GTRecipe recipe, int limit, boolean tick) {
@@ -120,8 +117,7 @@ public class SoulRecipeCapability extends RecipeCapability<SoulIngredient> {
                             int required = ingredient.stack().amount();
                             return required == 0 ? Integer.MAX_VALUE : available / required;
                         },
-                        Math::min
-                ));
+                        Math::min));
 
         int maxParallel = parallelMap.values().stream()
                 .mapToInt(Integer::intValue)
@@ -134,9 +130,11 @@ public class SoulRecipeCapability extends RecipeCapability<SoulIngredient> {
     @Override
     public void addXEIInfo(WidgetGroup group, int xOffset, GTRecipe recipe, List<Content> contents, boolean perTick,
                            boolean isInput, MutableInt yOffset) {
-
-        String type = contents.stream().map(Content::getContent).map(SoulRecipeCapability.CAP::of).map(SoulIngredient::stack).map(SoulStack::type).map(SoulType::getSerializedName).findFirst().orElse("");
-        long soul = contents.stream().map(Content::getContent).map(SoulRecipeCapability.CAP::of).map(SoulIngredient::stack).mapToLong(SoulStack::amount).sum();
+        String type = contents.stream().map(Content::getContent).map(SoulRecipeCapability.CAP::of)
+                .map(SoulIngredient::stack).map(SoulStack::type).map(SoulType::getSerializedName).findFirst()
+                .orElse("");
+        long soul = contents.stream().map(Content::getContent).map(SoulRecipeCapability.CAP::of)
+                .map(SoulIngredient::stack).mapToLong(SoulStack::amount).sum();
         if (isInput) {
             group.addWidget(new LabelWidget(3 - xOffset, yOffset.addAndGet(10),
                     LocalizationUtils.format("recipe.cosmiccore." + type + "_soul_in", soul)));
@@ -153,7 +151,7 @@ public class SoulRecipeCapability extends RecipeCapability<SoulIngredient> {
         @Override
         public SoulIngredient of(Object o) {
             if (o instanceof SoulStack stack) return SoulIngredient.of(stack);
-            else if (o instanceof SoulIngredient ingredient) return  ingredient;
+            else if (o instanceof SoulIngredient ingredient) return ingredient;
             return SoulIngredient.of(new SoulStack(SoulType.Raw, 0));
         }
 

@@ -1,18 +1,20 @@
 package com.ghostipedia.cosmiccore.api.data.souls;
 
 import com.ghostipedia.cosmiccore.CosmicCore;
+
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.saveddata.SavedData;
+
 import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
 import java.util.UUID;
 
 public class SoulNetworkSavedData extends SavedData {
-    
+
     private static final String DATA_NAME = CosmicCore.MOD_ID + "_soul_network_data";
     private static final String SOUL_NETWORK_MAPPING = "soul_network_mapping";
     private static final String SOUL_NETWORK_UUID = "soul_network_uuid";
@@ -21,7 +23,8 @@ public class SoulNetworkSavedData extends SavedData {
     private final HashMap<UUID, SoulNetwork> soulNetworkMapping = new HashMap<>(20, 0.9f);
 
     public static SoulNetworkSavedData getOrCreate(ServerLevel serverLevel) {
-        return serverLevel.getDataStorage().computeIfAbsent(SoulNetworkSavedData::new, SoulNetworkSavedData::new, DATA_NAME);
+        return serverLevel.getDataStorage().computeIfAbsent(SoulNetworkSavedData::new, SoulNetworkSavedData::new,
+                DATA_NAME);
     }
 
     public static SoulNetwork getSoulNetwork(ServerLevel level, UUID owner) {

@@ -1,12 +1,12 @@
 package com.ghostipedia.cosmiccore.api.capability.souls;
 
-import com.mojang.serialization.Codec;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.chat.Style;
 import net.minecraft.util.StringRepresentable;
-import net.minecraftforge.client.event.RenderTooltipEvent;
+
+import com.mojang.serialization.Codec;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;
@@ -15,6 +15,7 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 
 public enum SoulType implements StringRepresentable {
+
     Raw("raw", ChatFormatting.DARK_RED),
     Refined("refined", ChatFormatting.GRAY),
     Proud("proud", ChatFormatting.DARK_PURPLE),
@@ -26,7 +27,6 @@ public enum SoulType implements StringRepresentable {
     Slothful("slothful", ChatFormatting.AQUA),
     Temporal("temporal", ChatFormatting.DARK_AQUA);
 
-
     private final String name;
     private final ChatFormatting color;
 
@@ -35,7 +35,6 @@ public enum SoulType implements StringRepresentable {
         this.color = color;
     }
 
-
     @Override
     public @NotNull String getSerializedName() {
         return this.name;
@@ -43,7 +42,8 @@ public enum SoulType implements StringRepresentable {
 
     public static final Codec<SoulType> CODEC = StringRepresentable.fromEnum(SoulType::values);
 
-    private static final Map<String, SoulType> BY_NAME = Arrays.stream(values()).collect(Collectors.toMap(SoulType::getSerializedName, Function.identity()));
+    private static final Map<String, SoulType> BY_NAME = Arrays.stream(values())
+            .collect(Collectors.toMap(SoulType::getSerializedName, Function.identity()));
 
     public static SoulType byName(String name) {
         return BY_NAME.get(name);

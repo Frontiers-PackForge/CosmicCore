@@ -1,6 +1,11 @@
 package com.ghostipedia.cosmiccore.common.commands.argument;
 
 import com.ghostipedia.cosmiccore.api.capability.souls.SoulType;
+
+import net.minecraft.commands.CommandSourceStack;
+import net.minecraft.commands.SharedSuggestionProvider;
+import net.minecraft.network.chat.Component;
+
 import com.mojang.brigadier.StringReader;
 import com.mojang.brigadier.arguments.ArgumentType;
 import com.mojang.brigadier.context.CommandContext;
@@ -8,9 +13,6 @@ import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.exceptions.DynamicCommandExceptionType;
 import com.mojang.brigadier.suggestion.Suggestions;
 import com.mojang.brigadier.suggestion.SuggestionsBuilder;
-import net.minecraft.commands.CommandSourceStack;
-import net.minecraft.commands.SharedSuggestionProvider;
-import net.minecraft.network.chat.Component;
 
 import java.util.Arrays;
 import java.util.Collection;
@@ -24,8 +26,7 @@ public class SoulTypeArgument implements ArgumentType<SoulType> {
             .collect(Collectors.toList());
 
     public static final DynamicCommandExceptionType ERROR_INVALID_VALUE = new DynamicCommandExceptionType(
-            (object) -> Component.translatable("argument.enum.invalid", object)
-    );
+            (object) -> Component.translatable("argument.enum.invalid", object));
 
     public static SoulTypeArgument soulType() {
         return new SoulTypeArgument();

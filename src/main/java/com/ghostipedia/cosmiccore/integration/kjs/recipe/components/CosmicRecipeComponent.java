@@ -2,11 +2,11 @@ package com.ghostipedia.cosmiccore.integration.kjs.recipe.components;
 
 import com.ghostipedia.cosmiccore.api.capability.recipe.EmberRecipeCapability;
 import com.ghostipedia.cosmiccore.api.capability.recipe.SoulRecipeCapability;
-
 import com.ghostipedia.cosmiccore.api.recipe.ingredient.SoulIngredient;
-import com.google.gson.JsonElement;
+
 import com.gregtechceu.gtceu.integration.kjs.recipe.components.ContentJS;
 
+import com.google.gson.JsonElement;
 import com.mojang.serialization.JsonOps;
 import dev.latvian.mods.kubejs.recipe.RecipeJS;
 import dev.latvian.mods.kubejs.recipe.component.NumberComponent;
@@ -43,7 +43,7 @@ public class CosmicRecipeComponent {
         public SoulIngredient read(RecipeJS recipeJS, Object o) {
             if (o instanceof Wrapper w) o = w.unwrap();
 
-            if (o instanceof  SoulIngredient soulIngredient) {
+            if (o instanceof SoulIngredient soulIngredient) {
                 return soulIngredient;
             } else {
                 System.out.println("Shit we have a problem !");

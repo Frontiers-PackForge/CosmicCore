@@ -5,20 +5,22 @@ import com.ghostipedia.cosmiccore.api.data.souls.SoulNetwork;
 import com.ghostipedia.cosmiccore.api.data.souls.SoulNetworkSavedData;
 import com.ghostipedia.cosmiccore.api.recipe.ingredient.SoulIngredient;
 import com.ghostipedia.cosmiccore.api.recipe.ingredient.SoulStack;
+
 import com.gregtechceu.gtceu.api.capability.recipe.IO;
 import com.gregtechceu.gtceu.api.capability.recipe.RecipeCapability;
 import com.gregtechceu.gtceu.api.machine.MetaMachine;
 import com.gregtechceu.gtceu.api.machine.trait.NotifiableRecipeHandlerTrait;
 import com.gregtechceu.gtceu.api.recipe.GTRecipe;
 import com.gregtechceu.gtceu.common.machine.owner.FTBOwner;
-import lombok.Getter;
+
 import net.minecraft.server.level.ServerLevel;
+
+import lombok.Getter;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
-
 
 public class NotifiableSoulContainer extends NotifiableRecipeHandlerTrait<SoulIngredient> {
 
@@ -64,8 +66,9 @@ public class NotifiableSoulContainer extends NotifiableRecipeHandlerTrait<SoulIn
 
             if (io == IO.IN) {
                 SoulStack consumedStack = network.syphon(requiredStack, simulate);
-                if (consumedStack.amount() < requiredStack.amount()){
-                    result.add(SoulIngredient.of(requiredStack.withAmount(requiredStack.amount() - consumedStack.amount())));
+                if (consumedStack.amount() < requiredStack.amount()) {
+                    result.add(SoulIngredient
+                            .of(requiredStack.withAmount(requiredStack.amount() - consumedStack.amount())));
                 }
             } else {
                 SoulStack canInput = network.add(requiredStack, throughput, capacity, simulate);

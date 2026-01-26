@@ -3,6 +3,7 @@ package com.ghostipedia.cosmiccore.common.item;
 import com.ghostipedia.cosmiccore.api.data.souls.SoulNetwork;
 import com.ghostipedia.cosmiccore.api.data.souls.SoulNetworkSavedData;
 import com.ghostipedia.cosmiccore.api.recipe.ingredient.SoulStack;
+
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
@@ -37,10 +38,11 @@ public class SoulNetworkReaderItem extends Item {
         if (contents.isEmpty()) {
             message.append(Component.translatable("gui.cosmiccore.soul.empty_network").withStyle(ChatFormatting.GRAY));
         } else {
-            message.append(Component.translatable("gui.cosmiccore.soul.network_contents").withStyle(ChatFormatting.GOLD)).append("\n");
+            message.append(
+                    Component.translatable("gui.cosmiccore.soul.network_contents").withStyle(ChatFormatting.GOLD))
+                    .append("\n");
             for (SoulStack stack : contents) message.append("\n").append(stack.type().toComponent(stack.amount()));
         }
         return message;
     }
-
 }

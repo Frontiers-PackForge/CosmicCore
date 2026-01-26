@@ -8,18 +8,16 @@ import com.gregtechceu.gtceu.api.gui.GuiTextures;
 import com.gregtechceu.gtceu.api.machine.IMachineBlockEntity;
 import com.gregtechceu.gtceu.api.machine.feature.multiblock.IMultiController;
 import com.gregtechceu.gtceu.api.machine.multiblock.part.TieredIOPartMachine;
-import com.gregtechceu.gtceu.utils.FormattingUtil;
 
 import com.lowdragmc.lowdraglib.gui.widget.*;
 import com.lowdragmc.lowdraglib.syncdata.annotation.DescSynced;
 import com.lowdragmc.lowdraglib.syncdata.annotation.Persisted;
 import com.lowdragmc.lowdraglib.syncdata.field.ManagedFieldHolder;
 
-import com.lowdragmc.lowdraglib.utils.DummyWorld;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.client.resources.language.I18n;
 import net.minecraft.network.chat.Component;
-import net.minecraft.world.entity.player.Player;
+import net.minecraft.server.TickTask;
 
 import wayoftime.bloodmagic.util.helper.PlayerHelper;
 
@@ -41,15 +39,22 @@ public class SoulHatchPartMachine extends TieredIOPartMachine {
         this.soulContainer = new NotifiableSoulContainer(this, io, getMaxConsumption(tier), getMaxCapacity(tier));
     }
 
-//    @Override
-//    public void addedToController(IMultiController controller) {
-//        if (getLevel() instanceof DummyWorld) return;
-//        super.addedToController(controller);
-//        boolean hasDuplicate = controller.getParts().stream()
-//                .filter(part -> part != this)
-//                .anyMatch(part -> part instanceof SoulHatchPartMachine soulHatch && soulHatch.io == this.io);
-//        if (hasDuplicate) controller.onStructureInvalid();
-//    }
+    @Override
+    public void addedToController(IMultiController controller) {
+        super.addedToController(controller);
+        controller.self().getLevel().getServer().tell(new TickTask(0, this::invalidateIfDuplicate));
+    }
+
+    private void invalidateIfDuplicate() {
+        for (var controller : getControllers()) {
+            for (var part : controller.getParts()) {
+                if (part == this) continue;
+                if (part instanceof SoulHatchPartMachine soulHatch && soulHatch.io == this.io) {
+                    controller.onStructureInvalid();
+                }
+            }
+        }
+    }
 
     @Override
     public Widget createUIWidget() {
@@ -72,10 +77,10 @@ public class SoulHatchPartMachine extends TieredIOPartMachine {
 
     public static int getMaxConsumption(int tier) {
         return switch (tier) {
-            case GTValues.IV  -> 10_000;
+            case GTValues.IV -> 10_000;
             case GTValues.LuV -> 50_000;
             case GTValues.ZPM -> 5_000_000;
-            case GTValues.UV  -> 10_000_000;
+            case GTValues.UV -> 10_000_000;
             case GTValues.UHV -> 25_000_000;
             case GTValues.UEV -> 50_000_000;
             case GTValues.UIV -> 125_000_000;
@@ -88,10 +93,10 @@ public class SoulHatchPartMachine extends TieredIOPartMachine {
 
     public static int getMaxCapacity(int tier) {
         return switch (tier) {
-            case GTValues.IV  -> 1_000_000;
+            case GTValues.IV -> 1_000_000;
             case GTValues.LuV -> 10_000_000;
             case GTValues.ZPM -> 50_000_000;
-            case GTValues.UV  -> 100_000_000;
+            case GTValues.UV -> 100_000_000;
             case GTValues.UHV -> 250_000_000;
             case GTValues.UEV -> 500_000_000;
             case GTValues.UIV -> 1_000_000_000;

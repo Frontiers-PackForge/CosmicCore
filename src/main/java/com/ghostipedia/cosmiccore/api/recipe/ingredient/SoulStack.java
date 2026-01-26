@@ -1,18 +1,20 @@
 package com.ghostipedia.cosmiccore.api.recipe.ingredient;
 
 import com.ghostipedia.cosmiccore.api.capability.souls.SoulType;
+
+import net.minecraft.network.FriendlyByteBuf;
+
 import com.google.common.base.Preconditions;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import lombok.With;
-import net.minecraft.network.FriendlyByteBuf;
 
 @With
 public record SoulStack(SoulType type, int amount) {
+
     public static final Codec<SoulStack> CODEC = RecordCodecBuilder.create(instance -> instance.group(
             SoulType.CODEC.fieldOf("type").forGetter(SoulStack::type),
-            Codec.INT.fieldOf("amount").forGetter(SoulStack::amount)
-    ).apply(instance, SoulStack::new));
+            Codec.INT.fieldOf("amount").forGetter(SoulStack::amount)).apply(instance, SoulStack::new));
 
     public static final SoulStack EMPTY = new SoulStack(SoulType.Raw, 0);
 

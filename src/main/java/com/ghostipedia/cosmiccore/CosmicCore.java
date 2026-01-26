@@ -41,7 +41,6 @@ import com.lowdragmc.lowdraglib.Platform;
 import net.minecraft.commands.synchronization.ArgumentTypeInfos;
 import net.minecraft.commands.synchronization.SingletonArgumentInfo;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraftforge.common.capabilities.RegisterCapabilitiesEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -122,7 +121,8 @@ public class CosmicCore {
             CCoreNetwork.init();
             OxygenRules.registerAirRanges();
             DimensionMobScaling.registerScaling();
-            ArgumentTypeInfos.registerByClass(SoulTypeArgument.class, SingletonArgumentInfo.contextFree(SoulTypeArgument::soulType));
+            ArgumentTypeInfos.registerByClass(SoulTypeArgument.class,
+                    SingletonArgumentInfo.contextFree(SoulTypeArgument::soulType));
         });
     }
 

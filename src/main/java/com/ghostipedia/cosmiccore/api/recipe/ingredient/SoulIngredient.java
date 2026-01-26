@@ -1,7 +1,7 @@
 package com.ghostipedia.cosmiccore.api.recipe.ingredient;
 
-
 import com.ghostipedia.cosmiccore.api.capability.souls.SoulType;
+
 import com.mojang.serialization.Codec;
 import org.jetbrains.annotations.NotNull;
 
@@ -21,8 +21,7 @@ public record SoulIngredient(SoulStack stack) implements Predicate<SoulStack> {
 
     @Override
     public boolean test(SoulStack soulStack) {
-        return this.stack.type() == soulStack.type()
-                && this.stack.amount() <= soulStack.amount();
+        return this.stack.type() == soulStack.type() && this.stack.amount() <= soulStack.amount();
     }
 
     @Override
@@ -33,7 +32,7 @@ public record SoulIngredient(SoulStack stack) implements Predicate<SoulStack> {
     @Override
     public boolean equals(Object obj) {
         if (!(obj instanceof SoulIngredient other)) {
-            return  false;
+            return false;
         }
         return stack.equals(other.stack);
     }

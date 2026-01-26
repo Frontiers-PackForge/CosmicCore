@@ -2,6 +2,7 @@ package com.ghostipedia.cosmiccore.api.recipe.lookup;
 
 import com.ghostipedia.cosmiccore.api.recipe.ingredient.SoulIngredient;
 import com.ghostipedia.cosmiccore.api.recipe.ingredient.SoulStack;
+
 import com.gregtechceu.gtceu.api.recipe.lookup.ingredient.AbstractMapIngredient;
 
 import java.util.List;

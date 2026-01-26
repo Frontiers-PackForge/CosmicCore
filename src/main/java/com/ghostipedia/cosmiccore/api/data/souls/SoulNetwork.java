@@ -2,16 +2,17 @@ package com.ghostipedia.cosmiccore.api.data.souls;
 
 import com.ghostipedia.cosmiccore.api.capability.souls.SoulType;
 import com.ghostipedia.cosmiccore.api.recipe.ingredient.SoulStack;
-import lombok.Getter;
-import lombok.Setter;
+
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
 import net.minecraftforge.common.util.INBTSerializable;
 
-import java.util.concurrent.ConcurrentHashMap;
+import lombok.Setter;
+
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class SoulNetwork implements INBTSerializable<CompoundTag> {
 
@@ -58,8 +59,8 @@ public class SoulNetwork implements INBTSerializable<CompoundTag> {
 
     public List<SoulStack> getContents() {
         return contents.entrySet().stream()
-            .map(kvp -> new SoulStack(kvp.getKey(), kvp.getValue()))
-            .toList();
+                .map(kvp -> new SoulStack(kvp.getKey(), kvp.getValue()))
+                .toList();
     }
 
     @Override

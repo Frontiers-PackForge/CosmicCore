@@ -1,16 +1,18 @@
 package com.ghostipedia.cosmiccore.api.recipe.content;
 
-import com.ghostipedia.cosmiccore.api.capability.souls.SoulType;
 import com.ghostipedia.cosmiccore.api.recipe.ingredient.SoulStack;
+
 import com.gregtechceu.gtceu.api.recipe.content.IContentSerializer;
-import com.mojang.serialization.Codec;
+
 import net.minecraft.network.FriendlyByteBuf;
+
+import com.mojang.serialization.Codec;
 
 public class SerializerSoulStack implements IContentSerializer<SoulStack> {
 
     public static SerializerSoulStack INSTANCE = new SerializerSoulStack();
 
-    private  SerializerSoulStack() {}
+    private SerializerSoulStack() {}
 
     @Override
     public void toNetwork(FriendlyByteBuf buf, SoulStack content) {
