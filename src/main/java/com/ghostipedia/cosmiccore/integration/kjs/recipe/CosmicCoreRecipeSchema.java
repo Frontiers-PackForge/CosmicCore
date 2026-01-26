@@ -3,6 +3,8 @@ package com.ghostipedia.cosmiccore.integration.kjs.recipe;
 import com.ghostipedia.cosmiccore.api.capability.recipe.EmberRecipeCapability;
 import com.ghostipedia.cosmiccore.api.capability.recipe.SoulRecipeCapability;
 import com.ghostipedia.cosmiccore.api.capability.recipe.SterileRecipeCapability;
+import com.ghostipedia.cosmiccore.api.capability.souls.SoulType;
+import com.ghostipedia.cosmiccore.api.recipe.ingredient.SoulIngredient;
 import com.ghostipedia.cosmiccore.common.recipe.condition.TitanCondition;
 
 import com.gregtechceu.gtceu.integration.kjs.recipe.GTRecipeSchema;
@@ -19,12 +21,12 @@ public interface CosmicCoreRecipeSchema {
     @Accessors(chain = true, fluent = true)
     class CosmicRecipeJS extends GTRecipeSchema.GTRecipeJS {
 
-        public GTRecipeSchema.GTRecipeJS soulInput(int souls) {
-            return this.input(SoulRecipeCapability.CAP, souls);
+        public GTRecipeSchema.GTRecipeJS soulInput(SoulType type, int souls) {
+            return this.input(SoulRecipeCapability.CAP, SoulIngredient.of(type, souls));
         }
 
-        public GTRecipeSchema.GTRecipeJS soulOutput(int souls) {
-            return this.output(SoulRecipeCapability.CAP, souls);
+        public GTRecipeSchema.GTRecipeJS soulOutput(SoulType type, int souls) {
+            return this.output(SoulRecipeCapability.CAP, SoulIngredient.of(type, souls));
         }
 
         public GTRecipeSchema.GTRecipeJS titanTier(int tier) {

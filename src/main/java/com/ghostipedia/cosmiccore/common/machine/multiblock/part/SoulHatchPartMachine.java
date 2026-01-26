@@ -6,8 +6,8 @@ import com.gregtechceu.gtceu.api.GTValues;
 import com.gregtechceu.gtceu.api.capability.recipe.IO;
 import com.gregtechceu.gtceu.api.gui.GuiTextures;
 import com.gregtechceu.gtceu.api.machine.IMachineBlockEntity;
+import com.gregtechceu.gtceu.api.machine.feature.multiblock.IMultiController;
 import com.gregtechceu.gtceu.api.machine.multiblock.part.TieredIOPartMachine;
-import com.gregtechceu.gtceu.utils.FormattingUtil;
 
 import com.lowdragmc.lowdraglib.gui.widget.*;
 import com.lowdragmc.lowdraglib.syncdata.annotation.DescSynced;
@@ -17,7 +17,7 @@ import com.lowdragmc.lowdraglib.syncdata.field.ManagedFieldHolder;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.client.resources.language.I18n;
 import net.minecraft.network.chat.Component;
-import net.minecraft.world.entity.player.Player;
+import net.minecraft.server.TickTask;
 
 import wayoftime.bloodmagic.util.helper.PlayerHelper;
 
@@ -36,7 +36,24 @@ public class SoulHatchPartMachine extends TieredIOPartMachine {
 
     public SoulHatchPartMachine(IMachineBlockEntity holder, int tier, IO io) {
         super(holder, tier, io);
-        this.soulContainer = new NotifiableSoulContainer(this, io, getMaxCapacity(tier), getMaxConsumption(tier));
+        this.soulContainer = new NotifiableSoulContainer(this, io, getMaxConsumption(tier), getMaxCapacity(tier));
+    }
+
+    @Override
+    public void addedToController(IMultiController controller) {
+        super.addedToController(controller);
+        controller.self().getLevel().getServer().tell(new TickTask(0, this::invalidateIfDuplicate));
+    }
+
+    private void invalidateIfDuplicate() {
+        for (var controller : getControllers()) {
+            for (var part : controller.getParts()) {
+                if (part == this) continue;
+                if (part instanceof SoulHatchPartMachine soulHatch && soulHatch.io == this.io) {
+                    controller.onStructureInvalid();
+                }
+            }
+        }
     }
 
     @Override
@@ -47,60 +64,47 @@ public class SoulHatchPartMachine extends TieredIOPartMachine {
         group.addWidget(new LabelWidget(8, 8,
                 Component.translatable("gui.cosmiccore.soul_hatch.label." + (this.io == IO.IN ? "import" : "export"))));
 
-        if (soulContainer.getOwner() == null) {
-            group.addWidget(
-                    new LabelWidget(8, 18, I18n.get("gui.cosmiccore.soul_hatch.no_network")).setClientSideWidget());
-        } else {
-            group.addWidget(
-                    new LabelWidget(8, 18,
-                            () -> I18n.get("gui.cosmiccore.soul_hatch.owner",
-                                    PlayerHelper.getUsernameFromUUID(this.soulContainer.getOwner())))
-                            .setClientSideWidget());
-            group.addWidget(
-                    new LabelWidget(8, 28,
-                            () -> I18n.get("gui.cosmiccore.soul_hatch.lp",
-                                    FormattingUtil.formatNumbers(soulContainer.getCurrentEssence())))
-                            .setClientSideWidget());
-        }
+        // TODO: Get and display proper player/team Name
+        group.addWidget(
+                new LabelWidget(8, 18,
+                        () -> I18n.get("gui.cosmiccore.soul_hatch.owner",
+                                PlayerHelper.getUsernameFromUUID(this.soulContainer.getMachine().getOwnerUUID())))
+                        .setClientSideWidget());
 
         group.setBackground(GuiTextures.BACKGROUND_INVERSE);
         return group;
     }
 
-    public static int getMaxCapacity(int tier) {
-        return switch (tier) {
-            case GTValues.IV -> 5000000;
-            case GTValues.LuV -> 10000000;
-            case GTValues.ZPM -> 20000000;
-            case GTValues.UV -> 30000000;
-            case GTValues.UHV -> 50000000;
-            case GTValues.UEV -> 100000000;
-            case GTValues.UIV -> 250000000;
-            case GTValues.UXV -> 500000000;
-            case GTValues.OpV -> 1000000000;
-            case GTValues.MAX -> Integer.MAX_VALUE;
-            default -> 0;
-        };
-    }
-
     public static int getMaxConsumption(int tier) {
         return switch (tier) {
-            case GTValues.IV -> 10000;
-            case GTValues.LuV -> 50000;
-            case GTValues.ZPM -> 5000000;
-            case GTValues.UV -> 10000000;
-            case GTValues.UHV -> 25000000;
-            case GTValues.UEV -> 50000000;
-            case GTValues.UIV -> 125000000;
-            case GTValues.UXV -> 250000000;
-            case GTValues.OpV -> 500000000;
+            case GTValues.IV -> 10_000;
+            case GTValues.LuV -> 50_000;
+            case GTValues.ZPM -> 5_000_000;
+            case GTValues.UV -> 10_000_000;
+            case GTValues.UHV -> 25_000_000;
+            case GTValues.UEV -> 50_000_000;
+            case GTValues.UIV -> 125_000_000;
+            case GTValues.UXV -> 250_000_000;
+            case GTValues.OpV -> 500_000_000;
             case GTValues.MAX -> Integer.MAX_VALUE;
             default -> 0;
         };
     }
 
-    public void attachSoulNetwork(Player player) {
-        this.soulContainer.setOwner(player.getUUID());
+    public static int getMaxCapacity(int tier) {
+        return switch (tier) {
+            case GTValues.IV -> 1_000_000;
+            case GTValues.LuV -> 10_000_000;
+            case GTValues.ZPM -> 50_000_000;
+            case GTValues.UV -> 100_000_000;
+            case GTValues.UHV -> 250_000_000;
+            case GTValues.UEV -> 500_000_000;
+            case GTValues.UIV -> 1_000_000_000;
+            case GTValues.UXV -> 1_500_000_000;
+            case GTValues.OpV -> 2_000_000_000;
+            case GTValues.MAX -> Integer.MAX_VALUE;
+            default -> 0;
+        };
     }
 
     @Override

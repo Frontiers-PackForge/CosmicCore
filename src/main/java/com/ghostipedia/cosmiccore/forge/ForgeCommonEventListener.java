@@ -2,6 +2,7 @@ package com.ghostipedia.cosmiccore.forge;
 
 import com.ghostipedia.cosmiccore.CosmicCore;
 import com.ghostipedia.cosmiccore.CosmicUtils;
+import com.ghostipedia.cosmiccore.common.commands.SoulCommand;
 import com.ghostipedia.cosmiccore.common.commands.VeinSurveyCommand;
 import com.ghostipedia.cosmiccore.common.commands.WirelessEnergyCommand;
 import com.ghostipedia.cosmiccore.common.data.CosmicItems;
@@ -12,14 +13,12 @@ import com.ghostipedia.cosmiccore.common.machine.multiblock.multi.IPBF;
 import com.ghostipedia.cosmiccore.common.machine.multiblock.multi.SteamAssembler;
 import com.ghostipedia.cosmiccore.common.machine.multiblock.multi.SteamCaster;
 import com.ghostipedia.cosmiccore.common.machine.multiblock.multi.SteamMixer;
-import com.ghostipedia.cosmiccore.common.machine.multiblock.part.SoulHatchPartMachine;
 import com.ghostipedia.cosmiccore.common.reflection.ReflectionCommand;
 import com.ghostipedia.cosmiccore.common.reflection.ReflectionCommands;
 import com.ghostipedia.cosmiccore.mixin.accessor.LivingEntityAccessor;
 
 import com.gregtechceu.gtceu.GTCEu;
 import com.gregtechceu.gtceu.api.GTValues;
-import com.gregtechceu.gtceu.api.block.MetaMachineBlock;
 import com.gregtechceu.gtceu.api.capability.GTCapabilityHelper;
 import com.gregtechceu.gtceu.api.item.armor.ArmorComponentItem;
 import com.gregtechceu.gtceu.api.machine.MachineDefinition;
@@ -42,7 +41,6 @@ import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.living.LivingEquipmentChangeEvent;
 import net.minecraftforge.event.entity.living.LivingEvent;
 import net.minecraftforge.event.entity.living.LivingFallEvent;
-import net.minecraftforge.event.level.BlockEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -53,15 +51,6 @@ import static com.ghostipedia.cosmiccore.common.item.armor.ChestSanguineWarptech
 @SuppressWarnings("unused")
 @Mod.EventBusSubscriber(modid = CosmicCore.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE)
 public class ForgeCommonEventListener {
-
-    @SubscribeEvent
-    public static void entityPlacementEventHandler(BlockEvent.EntityPlaceEvent event) {
-        if (event.getPlacedBlock().getBlock() instanceof MetaMachineBlock block &&
-                block.getMachine(event.getLevel(), event.getPos()) instanceof SoulHatchPartMachine soulHatch &&
-                event.getEntity() instanceof Player player) {
-            soulHatch.attachSoulNetwork(player);
-        }
-    }
 
     @SubscribeEvent
     public static void onPlayerTick(final TickEvent.PlayerTickEvent event) {
@@ -130,6 +119,7 @@ public class ForgeCommonEventListener {
     @SubscribeEvent
     public static void registerCommand(RegisterCommandsEvent event) {
         WirelessEnergyCommand.register(event.getDispatcher(), event.getBuildContext());
+        SoulCommand.register(event.getDispatcher(), event.getBuildContext());
         ReflectionCommand.register(event.getDispatcher());
         ReflectionCommands.register(event.getDispatcher());
         VeinSurveyCommand.register(event.getDispatcher());
