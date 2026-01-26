@@ -119,7 +119,6 @@ public class CosmicCoreRecipes {
                 .save(provider);
 
         SOUL_TESTER_RECIPES.recipeBuilder("generate_soul_2")
-                .inputItems(Items.DIRT)
                 .input(CosmicRecipeCapabilities.SOUL, SoulIngredient.of(SoulType.Raw, 10))
                 .outputItems(ingot, Steel)
                 .duration(20)
