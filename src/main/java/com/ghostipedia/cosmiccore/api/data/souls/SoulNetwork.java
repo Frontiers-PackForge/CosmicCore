@@ -26,7 +26,7 @@ public class SoulNetwork implements INBTSerializable<CompoundTag> {
         int currentAmount = this.contents.getOrDefault(stack.type(), 0);
 
         int amountToAdd = Math.min(stack.amount(), throughput); // Respect throughput
-        amountToAdd = Math.min(amountToAdd, capacity - this.contents.get(stack.type())); // Respect network capacity
+        amountToAdd = Math.min(amountToAdd, capacity - currentAmount); // Respect network capacity
         amountToAdd = Math.max(0, amountToAdd); // Ensure we don't add a negative amount
 
         if (!simulate && amountToAdd > 0) {
