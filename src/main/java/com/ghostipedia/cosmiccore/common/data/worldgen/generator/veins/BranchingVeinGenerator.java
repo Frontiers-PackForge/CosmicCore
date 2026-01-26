@@ -177,10 +177,8 @@ public class BranchingVeinGenerator extends VeinGenerator {
 
             if (!inNode && !inSegment) continue;
 
-            // Density falloff based on distance from origin
-            float normalizedDist = distFromOrigin / baseRadius;
-            float falloff = edgeFalloff(normalizedDist, 0.8f);
-            if (random.nextFloat() > Math.max(0.5f, falloff) * entry.density()) continue;
+            // Density penalty - reduce ore count without shrinking vein footprint
+            if (random.nextFloat() > 0.15f) continue;
 
             BlockPos.MutableBlockPos mutablePos = new BlockPos.MutableBlockPos(pos.getX(), pos.getY(), pos.getZ());
             long randomSeed = random.nextLong();

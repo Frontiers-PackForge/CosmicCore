@@ -159,7 +159,7 @@ public abstract class EmiScreenManagerMixin {
         }
     }
 
-    // CTRL+A: pin with amount, CTRL+SHIFT+A: pin recipe with inputs to recipe group
+    // Handle favorite key: plain A removes CosmicRecipeFavorite, CTRL+A pins with amount, CTRL+SHIFT+A pins recipe
     @Inject(method = "keyPressed", at = @At("HEAD"), cancellable = true)
     private static void cosmiccore$ctrlAPin(int keyCode, int scanCode, int modifiers,
                                             CallbackInfoReturnable<Boolean> cir) {
@@ -167,15 +167,44 @@ public abstract class EmiScreenManagerMixin {
         boolean shift = EmiInput.isShiftDown();
         boolean isFavKey = cosmiccore$isFavoriteKey(keyCode);
 
-        if (!ctrl || !isFavKey) return;
+        if (!isFavKey) return;
 
-        var screen = Minecraft.getInstance().screen;
         CosmicBookmarkManager manager = CosmicBookmarkManager.getInstance();
 
-        // CTRL+SHIFT+A: Pin recipe with inputs
+        // Plain A on recipe group: find and remove the hovered recipe
+        if (!ctrl && !shift && manager.getActiveGroup().isRecipeGroup()) {
+            CosmicRecipeFavorite recipe = cosmiccore$getHoveredRecipeFavorite();
+            if (recipe != null) {
+                EmiFavorites.favorites.remove(recipe);
+                repopulatePanels(SidebarType.FAVORITES);
+                cir.setReturnValue(true);
+                return;
+            }
+        }
+
+        // Plain A on regular favorites: let EMI handle it
+        if (!ctrl && !shift) {
+            return;
+        }
+
+        if (!ctrl) return;
+
+        var screen = Minecraft.getInstance().screen;
+
+        // CTRL+SHIFT+A: Toggle recipe favorite (add or remove)
         if (shift && screen instanceof RecipeScreenAccessor recipeScreen) {
             EmiRecipe recipe = recipeScreen.getHoveredRecipe(lastMouseX, lastMouseY);
             if (recipe != null && !recipe.getOutputs().isEmpty()) {
+                EmiStack output = recipe.getOutputs().get(0);
+
+                // Check if a matching recipe favorite already exists - remove it if so
+                int existingIndex = cosmiccore$findRecipeFavoriteIndex(output);
+                if (existingIndex >= 0) {
+                    EmiFavorites.favorites.remove(existingIndex);
+                    repopulatePanels(SidebarType.FAVORITES);
+                    cir.setReturnValue(true);
+                    return;
+                }
 
                 // Switch to recipe group if needed
                 if (!manager.getActiveGroup().isRecipeGroup()) {
@@ -183,8 +212,6 @@ public abstract class EmiScreenManagerMixin {
                     manager.setActiveIndex(recipeGroupIndex);
                 }
 
-                // Get output
-                EmiStack output = recipe.getOutputs().get(0);
                 long outputAmount = output.getAmount();
                 if (outputAmount <= 0) outputAmount = 1;
 
@@ -198,8 +225,6 @@ public abstract class EmiScreenManagerMixin {
                 }
 
                 CosmicRecipeFavorite recipeFav = new CosmicRecipeFavorite(output, outputAmount, inputs);
-
-                // Add directly to list - addFavorite() may transform the object
                 EmiFavorites.favorites.add(recipeFav);
 
                 repopulatePanels(SidebarType.FAVORITES);
@@ -236,15 +261,25 @@ public abstract class EmiScreenManagerMixin {
 
     @Unique
     private static int cosmiccore$findOrCreateRecipeGroup(CosmicBookmarkManager manager) {
-        // Find first recipe group
         for (int i = 0; i < manager.getGroupCount(); i++) {
             if (manager.getGroupAt(i).isRecipeGroup()) {
                 return i;
             }
         }
-        // No recipe group exists, create one
         manager.addGroup("Recipe " + (manager.getGroupCount() + 1), CosmicBookmarkGroup.GroupType.RECIPE);
         return manager.getGroupCount() - 1;
+    }
+
+    @Unique
+    private static int cosmiccore$findRecipeFavoriteIndex(EmiIngredient output) {
+        for (int i = 0; i < EmiFavorites.favorites.size(); i++) {
+            if (EmiFavorites.favorites.get(i) instanceof CosmicRecipeFavorite recipeFav) {
+                if (recipeFav.strictEquals(output)) {
+                    return i;
+                }
+            }
+        }
+        return -1;
     }
 
     @Inject(method = "mouseScrolled", at = @At("HEAD"), cancellable = true)
@@ -266,5 +301,29 @@ public abstract class EmiScreenManagerMixin {
     private static boolean cosmiccore$isFavoriteKey(int keyCode) {
         return EmiConfig.favorite.boundKeys.stream()
                 .anyMatch(k -> k.key().getValue() == keyCode);
+    }
+
+    @Unique
+    private static CosmicRecipeFavorite cosmiccore$getHoveredRecipeFavorite() {
+        CosmicBookmarkManager manager = CosmicBookmarkManager.getInstance();
+        if (!manager.getActiveGroup().isRecipeGroup()) return null;
+
+        for (SidebarPanel panel : panels) {
+            if (panel.getType() != SidebarType.FAVORITES) continue;
+            if (panel.space == null) continue;
+
+            int tx = panel.space.tx;
+            int ty = panel.space.ty;
+            int tw = panel.space.tw;
+            int th = panel.space.th;
+
+            CosmicRecipeFavorite recipe = manager.getRecipeAtPosition(
+                    lastMouseX, lastMouseY, tx, ty, tw, th, manager.getCurrentRecipePage());
+            if (recipe != null) {
+                return recipe;
+            }
+        }
+
+        return null;
     }
 }

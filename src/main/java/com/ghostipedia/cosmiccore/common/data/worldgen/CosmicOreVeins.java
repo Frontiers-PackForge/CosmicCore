@@ -129,7 +129,7 @@ public class CosmicOreVeins {
         // Garnet - shell layers
         register("garnet_vein", () -> {
             var gen = new ShellVeinGenerator(new ArrayList<>(), new ArrayList<>(), new ArrayList<>(),
-                    0.2f, 0.45f, 0.25f, 0.2f);
+                    0.25f, 0.55f, 0.3f, 0.25f);
             gen.coreBlock(GTMaterials.GarnetRed, 3);
             gen.innerBlock(GTMaterials.GarnetYellow, 3);
             gen.outerBlock(GTMaterials.Amethyst, 2);
