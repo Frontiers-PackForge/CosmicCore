@@ -61,6 +61,10 @@ public abstract class RecipeScreenMixin extends Screen implements RecipeScreenAc
     @Shadow(remap = false)
     private List<WidgetGroup> currentPage;
 
+    /**
+     * @author CosmicCore
+     * @reason Multi-column workstation layout for categories with many workstations
+     */
     @Overwrite(remap = false)
     public Bounds getWorkstationBounds(int i) {
         int offset = 0;
@@ -86,6 +90,10 @@ public abstract class RecipeScreenMixin extends Screen implements RecipeScreenAc
         return Bounds.EMPTY;
     }
 
+    /**
+     * @author CosmicCore
+     * @reason Increase max workstations for multi-column layout
+     */
     @Overwrite(remap = false)
     public int getMaxWorkstations() {
         return 23;
@@ -115,10 +123,12 @@ public abstract class RecipeScreenMixin extends Screen implements RecipeScreenAc
     }
 
     @Redirect(
-              method = "render",
+              method = { "render(Lnet/minecraft/client/gui/GuiGraphics;IIF)V",
+                      "m_88315_(Lnet/minecraft/client/gui/GuiGraphics;IIF)V" },
               at = @At(value = "INVOKE",
                        target = "Ldev/emi/emi/EmiRenderHelper;drawNinePatch(Ldev/emi/emi/runtime/EmiDrawContext;Lnet/minecraft/resources/ResourceLocation;IIIIIIII)V"),
-              remap = false)
+              remap = false,
+              require = 0)
     private void cosmicCore$widenWorkstationBackground(EmiDrawContext context, ResourceLocation texture, int x, int y,
                                                        int width, int height, int u, int v, int cornerSize,
                                                        int centerSize) {

@@ -1,5 +1,7 @@
 package com.ghostipedia.cosmiccore.common.reflection;
 
+import com.ghostipedia.cosmiccore.common.reflection.soul.SoulShape;
+
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.StringTag;
@@ -33,6 +35,16 @@ public class ReflectionData implements IReflection {
     private final Map<String, Integer> commandUsageCount = new HashMap<>();
     private final Map<String, Long> commandLastUseTime = new HashMap<>();
     private final Map<String, Integer> memory = new HashMap<>();
+
+    // Void resistance tracking
+    private int voidSaveCount = 0;
+
+    // Soul Shape
+    private SoulShape soulShape = SoulShape.UNSHAPED;
+
+    // Soul Super state
+    private long superCooldownStart = 0;
+    private long superActiveUntil = 0;
 
     // ---- Shards (Currency) ----
 
@@ -219,6 +231,23 @@ public class ReflectionData implements IReflection {
         return commandLastUseTime.getOrDefault(commandId, 0L);
     }
 
+    // ---- Void Save Tracking ----
+
+    @Override
+    public int getVoidSaveCount() {
+        return voidSaveCount;
+    }
+
+    @Override
+    public void incrementVoidSaveCount() {
+        voidSaveCount++;
+    }
+
+    @Override
+    public void resetVoidSaveCount() {
+        voidSaveCount = 0;
+    }
+
     // ---- Memory / Context ----
 
     @Override
@@ -234,6 +263,40 @@ public class ReflectionData implements IReflection {
     @Override
     public int getMemoryCount(String eventKey) {
         return memory.getOrDefault(eventKey, 0);
+    }
+
+    // ---- Soul Shape ----
+
+    @Override
+    public SoulShape getSoulShape() {
+        return soulShape;
+    }
+
+    @Override
+    public void setSoulShape(SoulShape shape) {
+        this.soulShape = shape != null ? shape : SoulShape.UNSHAPED;
+    }
+
+    // ---- Soul Super ----
+
+    @Override
+    public long getSuperCooldownStart() {
+        return superCooldownStart;
+    }
+
+    @Override
+    public void setSuperCooldownStart(long gameTime) {
+        this.superCooldownStart = gameTime;
+    }
+
+    @Override
+    public long getSuperActiveUntil() {
+        return superActiveUntil;
+    }
+
+    @Override
+    public void setSuperActiveUntil(long gameTime) {
+        this.superActiveUntil = gameTime;
     }
 
     // ---- NBT Persistence ----
@@ -252,6 +315,10 @@ public class ReflectionData implements IReflection {
         root.putInt("highestThresholdSeen", highestThresholdSeen);
         root.putBoolean("awakened", awakened);
         root.putBoolean("awakeningSequenceCompleted", awakeningSequenceCompleted);
+        root.putInt("voidSaveCount", voidSaveCount);
+        root.putString("soulShape", soulShape.getId());
+        root.putLong("superCooldownStart", superCooldownStart);
+        root.putLong("superActiveUntil", superActiveUntil);
 
         // Active bargains
         ListTag bargainList = new ListTag();
@@ -302,6 +369,10 @@ public class ReflectionData implements IReflection {
         highestThresholdSeen = root.getInt("highestThresholdSeen");
         awakened = root.getBoolean("awakened");
         awakeningSequenceCompleted = root.getBoolean("awakeningSequenceCompleted");
+        voidSaveCount = root.getInt("voidSaveCount");
+        soulShape = root.contains("soulShape") ? SoulShape.fromId(root.getString("soulShape")) : SoulShape.UNSHAPED;
+        superCooldownStart = root.getLong("superCooldownStart");
+        superActiveUntil = root.getLong("superActiveUntil");
 
         // Active bargains
         activeBargains.clear();

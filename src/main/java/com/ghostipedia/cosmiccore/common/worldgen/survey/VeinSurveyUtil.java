@@ -3,9 +3,11 @@ package com.ghostipedia.cosmiccore.common.worldgen.survey;
 import com.gregtechceu.gtceu.api.data.worldgen.GTOreDefinition;
 import com.gregtechceu.gtceu.api.data.worldgen.IWorldGenLayer;
 import com.gregtechceu.gtceu.api.data.worldgen.WorldGeneratorUtils;
+import com.gregtechceu.gtceu.api.data.worldgen.ores.GeneratedVeinMetadata;
 import com.gregtechceu.gtceu.api.data.worldgen.ores.OreVeinUtil;
 import com.gregtechceu.gtceu.api.registry.GTRegistries;
 import com.gregtechceu.gtceu.config.ConfigHolder;
+import com.gregtechceu.gtceu.integration.map.cache.server.ServerCache;
 import com.gregtechceu.gtceu.utils.GTUtil;
 
 import net.minecraft.core.BlockPos;
@@ -18,17 +20,25 @@ import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.levelgen.XoroshiroRandomSource;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 public class VeinSurveyUtil {
+
+    public enum VeinConfidence {
+        CONFIRMED,
+        PREDICTED
+    }
 
     public record VeinInfo(
                            BlockPos center,
                            ChunkPos originChunk,
                            GTOreDefinition definition,
                            ResourceLocation veinId,
-                           int estimatedRadius) {
+                           int estimatedRadius,
+                           VeinConfidence confidence) {
 
         public String getVeinName() {
             return veinId != null ? veinId.getPath() : "unknown";
@@ -48,12 +58,43 @@ public class VeinSurveyUtil {
             if (ns.isEmpty() && ew.isEmpty()) return "HERE";
             return ns + ew;
         }
+
+        public boolean isConfirmed() {
+            return confidence == VeinConfidence.CONFIRMED;
+        }
     }
 
     public static List<VeinInfo> surveyVeins(ServerLevel level, BlockPos centerPos, int radiusBlocks,
-                                             IWorldGenLayer layer) {
+                                             IWorldGenLayer targetLayer) {
         List<VeinInfo> results = new ArrayList<>();
+        Set<ChunkPos> confirmedGridPositions = new HashSet<>();
 
+        // Phase 1: Query GT's ServerCache for confirmed veins
+        List<GeneratedVeinMetadata> cachedVeins = ServerCache.instance.getNearbyVeins(
+                level.dimension(), centerPos, radiusBlocks);
+
+        for (GeneratedVeinMetadata metadata : cachedVeins) {
+            if (targetLayer != null && !metadata.definition().layer().equals(targetLayer)) {
+                continue;
+            }
+
+            BlockPos veinCenter = metadata.center();
+            if (distanceXZ(veinCenter, centerPos) > radiusBlocks) {
+                continue;
+            }
+
+            confirmedGridPositions.add(metadata.originChunk());
+
+            results.add(new VeinInfo(
+                    veinCenter,
+                    metadata.originChunk(),
+                    metadata.definition(),
+                    metadata.id(),
+                    metadata.definition().clusterSize().getMaxValue(),
+                    VeinConfidence.CONFIRMED));
+        }
+
+        // Phase 2: For grid positions not in cache, use prediction
         long worldSeed = level.getSeed();
         int gridSize = ConfigHolder.INSTANCE.worldgen.oreVeins.oreVeinGridSize;
         int randomOffset = ConfigHolder.INSTANCE.worldgen.oreVeins.oreVeinRandomOffset;
@@ -70,9 +111,14 @@ public class VeinSurveyUtil {
         for (int gridX = gridStartX; gridX <= gridEndX; gridX += gridSize) {
             for (int gridZ = gridStartZ; gridZ <= gridEndZ; gridZ += gridSize) {
                 ChunkPos chunkPos = new ChunkPos(gridX, gridZ);
-                List<VeinInfo> veinsAtPos = calculateVeinsAtGridPos(level, worldSeed, chunkPos, layer);
 
-                for (VeinInfo info : veinsAtPos) {
+                if (confirmedGridPositions.contains(chunkPos)) {
+                    continue;
+                }
+
+                List<VeinInfo> predictedVeins = predictVeinsAtGridPos(level, worldSeed, chunkPos, targetLayer);
+
+                for (VeinInfo info : predictedVeins) {
                     if (info.horizontalDistanceFrom(centerPos) <= radiusBlocks) {
                         results.add(info);
                     }
@@ -87,13 +133,19 @@ public class VeinSurveyUtil {
         return results;
     }
 
-    // Must match GT's OreGenerator.createConfigs() random sequence:
-    // 1. seed ^ chunkPos -> getVeinCenter() consumes 0-2 randoms
-    // 2. For each layer: getRandomItem() consumes 1 random (if non-empty)
-    // 3. If vein selected: computeVeinOrigin() consumes random.nextLong()
-    private static List<VeinInfo> calculateVeinsAtGridPos(
-                                                          ServerLevel level, long worldSeed, ChunkPos chunkPos,
-                                                          IWorldGenLayer targetLayer) {
+    private static int distanceXZ(BlockPos a, BlockPos b) {
+        int dx = a.getX() - b.getX();
+        int dz = a.getZ() - b.getZ();
+        return (int) Math.sqrt(dx * dx + dz * dz);
+    }
+
+    /**
+     * Prediction algorithm for ungenerated chunks.
+     * Must match GT's OreGenerator.createConfigs() random sequence exactly.
+     */
+    private static List<VeinInfo> predictVeinsAtGridPos(
+                                                        ServerLevel level, long worldSeed, ChunkPos chunkPos,
+                                                        IWorldGenLayer targetLayer) {
         List<VeinInfo> results = new ArrayList<>();
         RandomSource random = new XoroshiroRandomSource(worldSeed ^ chunkPos.toLong());
 
@@ -115,7 +167,6 @@ public class VeinSurveyUtil {
             var selectedWeightedVein = GTUtil.getRandomItem(random, biomeVeins);
             if (selectedWeightedVein == null) continue;
 
-            // Match GT's computeVeinOrigin random consumption
             random.nextLong();
 
             if (targetLayer != null && !layer.equals(targetLayer)) continue;
@@ -125,7 +176,8 @@ public class VeinSurveyUtil {
             BlockPos finalCenter = new BlockPos(veinCenter.getX(), 0, veinCenter.getZ());
             int estimatedRadius = selectedVein.clusterSize().getMaxValue();
 
-            results.add(new VeinInfo(finalCenter, chunkPos, selectedVein, veinId, estimatedRadius));
+            results.add(new VeinInfo(finalCenter, chunkPos, selectedVein, veinId, estimatedRadius,
+                    VeinConfidence.PREDICTED));
         }
 
         return results;

@@ -4,6 +4,7 @@ import com.ghostipedia.cosmiccore.CosmicCore;
 import com.ghostipedia.cosmiccore.common.reflection.ReflectionCapability;
 import com.ghostipedia.cosmiccore.common.reflection.ReflectionLang;
 import com.ghostipedia.cosmiccore.common.reflection.bargain.Bargain;
+import com.ghostipedia.cosmiccore.common.reflection.bargain.BargainCategory;
 
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -12,31 +13,19 @@ import net.minecraft.world.entity.player.Player;
 
 import java.util.List;
 
-/**
- * Depths Bargain: Enhanced lung capacity, but instant death on suffocation.
- *
- * POWER: +50% oxygen capacity (90 seconds -> 135 seconds base air)
- * DRAWBACK: When oxygen reaches 0, you instantly die instead of taking gradual damage.
- *
- * Thematically: Your lungs have been remade by the depths. They can hold more,
- * but they've forgotten how to struggle - when they fail, they fail completely.
- *
- * This replaces the old "infinite water breathing" bargain with something more
- * interesting and balanced - a meaningful power boost with a meaningful risk.
- */
 public class DepthsBargain extends Bargain {
 
     public static final ResourceLocation ID = CosmicCore.id("depths");
     public static final DepthsBargain INSTANCE = new DepthsBargain();
     private static final String BARGAIN_ID = "depths";
 
-    /** Multiplier for max oxygen capacity (1.5 = 50% more) */
     public static final float OXYGEN_CAPACITY_MULTIPLIER = 1.5f;
 
     private DepthsBargain() {
         super(
                 ID,
                 BargainTier.EARLY_MID,
+                BargainCategory.DEFENSE,
                 64,   // shardCost
                 15,   // weight
                 75    // erosion
@@ -105,41 +94,22 @@ public class DepthsBargain extends Bargain {
         return BargainVisual.of("gills", "depths_visual");
     }
 
-    // =========================================================================
-    // Static helper methods for OxygenLogic integration
-    // =========================================================================
-
-    /**
-     * Check if a player has the Depths bargain active.
-     */
     public static boolean hasBargain(Player player) {
         return ReflectionCapability.get(player)
                 .map(reflection -> reflection.hasBargain(ID))
                 .orElse(false);
     }
 
-    /**
-     * Get the oxygen capacity multiplier for a player.
-     * Returns 1.0 if they don't have the bargain.
-     */
     public static float getCapacityMultiplier(Player player) {
         return hasBargain(player) ? OXYGEN_CAPACITY_MULTIPLIER : 1.0f;
     }
 
-    /**
-     * Check if this player should die instantly when oxygen reaches 0.
-     * Returns true if they have the bargain (the drawback).
-     */
     public static boolean shouldInstantKillOnSuffocation(Player player) {
         return hasBargain(player);
     }
 
-    /**
-     * Execute instant death for suffocation (for use in OxygenLogic).
-     */
     public static void executeInstantSuffocation(ServerPlayer player) {
         player.displayClientMessage(ReflectionLang.bargainSuffocation(BARGAIN_ID), false);
-        // Deal massive damage to ensure death - using drown damage type
         player.hurt(player.damageSources().drown(), Float.MAX_VALUE);
     }
 }

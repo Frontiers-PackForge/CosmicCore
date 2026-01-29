@@ -42,7 +42,10 @@ public class SoulHatchPartMachine extends TieredIOPartMachine {
     @Override
     public void addedToController(IMultiController controller) {
         super.addedToController(controller);
-        controller.self().getLevel().getServer().tell(new TickTask(0, this::invalidateIfDuplicate));
+        var level = controller.self().getLevel();
+        if (level != null && level.getServer() != null) {
+            level.getServer().tell(new TickTask(0, this::invalidateIfDuplicate));
+        }
     }
 
     private void invalidateIfDuplicate() {

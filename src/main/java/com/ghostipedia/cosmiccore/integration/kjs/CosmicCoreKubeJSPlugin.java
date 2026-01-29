@@ -7,6 +7,13 @@ import com.ghostipedia.cosmiccore.common.data.CosmicItems;
 import com.ghostipedia.cosmiccore.common.data.CosmicMachines;
 import com.ghostipedia.cosmiccore.common.data.materials.CosmicElements;
 import com.ghostipedia.cosmiccore.common.data.materials.CosmicMaterials;
+import com.ghostipedia.cosmiccore.common.data.worldgen.CosmicWorldGenLayers;
+import com.ghostipedia.cosmiccore.common.data.worldgen.generator.veins.BranchingVeinGenerator;
+import com.ghostipedia.cosmiccore.common.data.worldgen.generator.veins.ClusterVeinGenerator;
+import com.ghostipedia.cosmiccore.common.data.worldgen.generator.veins.FractureVeinGenerator;
+import com.ghostipedia.cosmiccore.common.data.worldgen.generator.veins.LensVeinGenerator;
+import com.ghostipedia.cosmiccore.common.data.worldgen.generator.veins.ShellVeinGenerator;
+import com.ghostipedia.cosmiccore.common.data.worldgen.generator.veins.StringerVeinGenerator;
 import com.ghostipedia.cosmiccore.gtbridge.CosmicRecipeTypes;
 import com.ghostipedia.cosmiccore.integration.kjs.recipe.CosmicCoreRecipeSchema;
 import com.ghostipedia.cosmiccore.integration.kjs.recipe.components.CosmicRecipeComponent;
@@ -65,6 +72,17 @@ public class CosmicCoreKubeJSPlugin extends KubeJSPlugin {
         event.add("CosmicItems", CosmicItems.class);
         event.add("CosmicRecipeTypes", CosmicRecipeTypes.class);
         event.add("CosmicSoulTypes", SoulType.class);
+
+        // Vein generators for custom ore vein definitions
+        event.add("FractureVeinGenerator", FractureVeinGenerator.class);
+        event.add("BranchingVeinGenerator", BranchingVeinGenerator.class);
+        event.add("LensVeinGenerator", LensVeinGenerator.class);
+        event.add("ClusterVeinGenerator", ClusterVeinGenerator.class);
+        event.add("StringerVeinGenerator", StringerVeinGenerator.class);
+        event.add("ShellVeinGenerator", ShellVeinGenerator.class);
+
+        // World gen layers for dimension targeting
+        event.add("CosmicWorldGenLayers", CosmicWorldGenLayers.class);
 
         event.add("CosmicCore", CosmicCore.class);
     }

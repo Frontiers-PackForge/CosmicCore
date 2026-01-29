@@ -4,6 +4,7 @@ import com.ghostipedia.cosmiccore.CosmicCore;
 import com.ghostipedia.cosmiccore.common.reflection.ReflectionCapability;
 import com.ghostipedia.cosmiccore.common.reflection.ReflectionLang;
 import com.ghostipedia.cosmiccore.common.reflection.bargain.Bargain;
+import com.ghostipedia.cosmiccore.common.reflection.bargain.BargainCategory;
 
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -14,19 +15,6 @@ import net.minecraft.world.entity.player.Player;
 import java.util.List;
 import java.util.UUID;
 
-/**
- * Armor Bargain: More armor, but slower movement.
- *
- * POWER: +8 armor (equivalent to full iron armor)
- * DRAWBACK: 15% slower movement speed
- *
- * Thematically: Your flesh has calcified, hardened against blows. But that
- * hardness comes with weight. Every step is heavier. You're safer... but
- * slower. A walking fortress that can't flee.
- *
- * This creates tank gameplay - you can stand and fight but can't escape.
- * Good for holding ground, bad for kiting or hit-and-run.
- */
 public class ArmorBargain extends Bargain {
 
     public static final ResourceLocation ID = CosmicCore.id("carapace");
@@ -35,13 +23,13 @@ public class ArmorBargain extends Bargain {
     private static final UUID ARMOR_MODIFIER_UUID = UUID.fromString("e2a9b0c8-5678-8901-cdef-012345678901");
     private static final UUID SPEED_MODIFIER_UUID = UUID.fromString("e2a9b0c8-5678-8901-cdef-012345678902");
 
-    /** Movement speed penalty (0.15 = 15% slower) */
     public static final float SPEED_PENALTY = -0.15f;
 
     private ArmorBargain() {
         super(
                 ID,
                 BargainTier.MID,
+                BargainCategory.DEFENSE,
                 64,   // shardCost
                 25,   // weight
                 100   // erosion
@@ -143,13 +131,6 @@ public class ArmorBargain extends Bargain {
         }
     }
 
-    // =========================================================================
-    // Static helper methods
-    // =========================================================================
-
-    /**
-     * Check if a player has the Calcified Flesh bargain active.
-     */
     public static boolean hasBargain(Player player) {
         return ReflectionCapability.get(player)
                 .map(reflection -> reflection.hasBargain(ID))

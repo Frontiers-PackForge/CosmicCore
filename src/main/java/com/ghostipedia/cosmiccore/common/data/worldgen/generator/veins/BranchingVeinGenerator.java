@@ -32,11 +32,6 @@ import javax.annotation.ParametersAreNonnullByDefault;
 
 import static com.ghostipedia.cosmiccore.common.data.worldgen.generator.veins.VeinGeneratorUtil.*;
 
-/**
- * Branching vein generator - creates meandering river-like ore veins that snake through
- * the ground with recursive branching. Like tree roots, river deltas, or lightning bolts.
- * Each branch meanders randomly and can split into smaller sub-branches.
- */
 @MethodsReturnNonnullByDefault
 @ParametersAreNonnullByDefault
 @Accessors(fluent = true, chain = true)
@@ -68,6 +63,8 @@ public class BranchingVeinGenerator extends VeinGenerator {
     @Setter
     public float rareBlockChance = 0.08f;
 
+    public BranchingVeinGenerator() {}
+
     public BranchingVeinGenerator(GTOreDefinition entry) {
         super(entry);
     }
@@ -95,9 +92,7 @@ public class BranchingVeinGenerator extends VeinGenerator {
 
     private static class Segment {
 
-        float x1, y1, z1;
-        float x2, y2, z2;
-        float thickness;
+        float x1, y1, z1, x2, y2, z2, thickness;
         int depth;
     }
 
@@ -134,7 +129,6 @@ public class BranchingVeinGenerator extends VeinGenerator {
                     subBranchChance);
         }
 
-        // Calculate bounding box from all segments
         float minX = 0, maxX = 0, minY = 0, maxY = 0, minZ = 0, maxZ = 0;
         for (Segment seg : allSegments) {
             minX = Math.min(minX, Math.min(seg.x1, seg.x2) - seg.thickness);
@@ -155,12 +149,10 @@ public class BranchingVeinGenerator extends VeinGenerator {
 
             float distFromOrigin = (float) Math.sqrt(dx * dx + dy * dy + dz * dz);
 
-            // Check starting node (blobby)
             float noise = noise3D(pos.getX() * 0.12f, pos.getY() * 0.12f, pos.getZ() * 0.12f, noiseSeed);
             float noisyNodeRadius = nodeRadius * (1.0f + noise * coreNoiseIntensity);
             boolean inNode = distFromOrigin <= noisyNodeRadius;
 
-            // Check all segments
             boolean inSegment = false;
             int closestDepth = 0;
             if (!inNode) {
@@ -177,7 +169,6 @@ public class BranchingVeinGenerator extends VeinGenerator {
 
             if (!inNode && !inSegment) continue;
 
-            // Density penalty - reduce ore count without shrinking vein footprint
             if (random.nextFloat() > 0.15f) continue;
 
             BlockPos.MutableBlockPos mutablePos = new BlockPos.MutableBlockPos(pos.getX(), pos.getY(), pos.getZ());
@@ -191,9 +182,6 @@ public class BranchingVeinGenerator extends VeinGenerator {
         return generatedBlocks;
     }
 
-    /**
-     * Recursively generate a meandering branch with possible sub-branches
-     */
     private void generateMeanderingBranch(List<Segment> segments, RandomSource random,
                                           float startX, float startY, float startZ,
                                           float dirX, float dirY, float dirZ,
@@ -219,10 +207,9 @@ public class BranchingVeinGenerator extends VeinGenerator {
         float newRemaining = remainingLength - segmentLength;
         float turnAmount = 0.3f + random.nextFloat() * 0.4f;
         float newDirX = dirX + (random.nextFloat() - 0.5f) * turnAmount * 2;
-        float newDirY = dirY + (random.nextFloat() - 0.5f) * turnAmount * 0.5f; // Less vertical change
+        float newDirY = dirY + (random.nextFloat() - 0.5f) * turnAmount * 0.5f;
         float newDirZ = dirZ + (random.nextFloat() - 0.5f) * turnAmount * 2;
 
-        // Normalize it so it doesn't look like it had a heart attack
         float len = (float) Math.sqrt(newDirX * newDirX + newDirY * newDirY + newDirZ * newDirZ);
         if (len > 0) {
             newDirX /= len;
@@ -230,7 +217,6 @@ public class BranchingVeinGenerator extends VeinGenerator {
             newDirZ /= len;
         }
 
-        // Tapers and Branches
         float newThickness = thickness * (0.92f + random.nextFloat() * 0.08f);
         if (depth < maxDepth && random.nextFloat() < splitChance && newRemaining > 20) {
             float splitAngle = (random.nextBoolean() ? 1 : -1) * (0.5f + random.nextFloat() * 0.7f);
@@ -250,7 +236,7 @@ public class BranchingVeinGenerator extends VeinGenerator {
                     newThickness * (0.5f + random.nextFloat() * 0.3f),
                     newRemaining * (0.4f + random.nextFloat() * 0.3f),
                     depth + 1, maxDepth,
-                    splitChance * 0.7f); // Lower chance for deeper splits
+                    splitChance * 0.7f);
         }
         if (newRemaining > 0) {
             generateMeanderingBranch(
@@ -305,9 +291,7 @@ public class BranchingVeinGenerator extends VeinGenerator {
 
         BlockState current = section.getBlockState(sectionX, sectionY, sectionZ);
 
-        // Higher rare chance in main branches
         float adjustedRareChance = isMainBranch ? rareBlockChance * 1.5f : rareBlockChance;
-
         if (!rareBlocks.isEmpty() && random.nextFloat() < adjustedRareChance) {
             var ore = GTUtil.getRandomItem(random, rareBlocks);
             if (ore != null) placeOre(ore.block(), current, access, section, random, pos, entry);
@@ -341,6 +325,26 @@ public class BranchingVeinGenerator extends VeinGenerator {
 
     public BranchingVeinGenerator rareBlock(Material mat, int weight) {
         rareBlocks.add(new OreBlockDef(Either.right(mat), weight));
+        return this;
+    }
+
+    public BranchingVeinGenerator branchAngleVariance(float variance) {
+        this.coreNoiseIntensity = variance;
+        return this;
+    }
+
+    public BranchingVeinGenerator branchSplitChance(float chance) {
+        this.subBranchChance = chance;
+        return this;
+    }
+
+    public BranchingVeinGenerator widthDecay(float decay) {
+        this.branchThicknessRatio = decay;
+        return this;
+    }
+
+    public BranchingVeinGenerator lengthMultiplier(float multiplier) {
+        this.coreRadiusRatio = multiplier;
         return this;
     }
 }

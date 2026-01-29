@@ -5,6 +5,7 @@ import com.ghostipedia.cosmiccore.common.reflection.bargain.Bargain;
 import com.ghostipedia.cosmiccore.common.reflection.bargain.BargainRegistry;
 import com.ghostipedia.cosmiccore.common.reflection.bargain.impl.QuakeMovementBargain;
 import com.ghostipedia.cosmiccore.common.reflection.network.SyncQuakeMovementPacket;
+import com.ghostipedia.cosmiccore.common.reflection.soul.SoulShape;
 import com.ghostipedia.cosmiccore.common.reflection.ui.VoidUIPackets;
 
 import net.minecraft.commands.CommandSourceStack;
@@ -56,7 +57,14 @@ public class ReflectionCommand {
                                 .executes(ctx -> openMirror(ctx.getSource()))
                                 .then(Commands.argument("bargain", StringArgumentType.string())
                                         .executes(ctx -> openMirrorWithBargain(ctx.getSource(),
-                                                StringArgumentType.getString(ctx, "bargain"))))));
+                                                StringArgumentType.getString(ctx, "bargain")))))
+                        .then(Commands.literal("soulshape")
+                                .then(Commands.literal("set")
+                                        .then(Commands.argument("shape", StringArgumentType.string())
+                                                .executes(ctx -> setSoulShape(ctx.getSource(),
+                                                        StringArgumentType.getString(ctx, "shape")))))
+                                .then(Commands.literal("reset")
+                                        .executes(ctx -> resetSoulShape(ctx.getSource())))));
     }
 
     private static int showStatus(CommandSourceStack source) {
@@ -77,6 +85,8 @@ public class ReflectionCommand {
                     () -> Component
                             .literal("Color Tier: " + ReflectionConstants.getSoulColorTier(reflection.getErosion())),
                     false);
+            SoulShape shape = reflection.getSoulShape();
+            source.sendSuccess(() -> Component.literal("Soul Shape: ").append(shape.getFormattedName()), false);
 
             source.sendSuccess(() -> Component.literal("Active Bargains:"), false);
             if (reflection.getActiveBargains().isEmpty()) {
@@ -307,5 +317,37 @@ public class ReflectionCommand {
             source.sendFailure(Component.literal("Unknown bargain: " + id));
             return 0;
         });
+    }
+
+    private static int setSoulShape(CommandSourceStack source, String shapeId) {
+        ServerPlayer player = source.getPlayer();
+        if (player == null) {
+            source.sendFailure(Component.literal("Must be run by a player"));
+            return 0;
+        }
+
+        SoulShape shape = SoulShape.fromId(shapeId);
+        ReflectionCapability.get(player).ifPresentOrElse(reflection -> {
+            reflection.setSoulShape(shape);
+            source.sendSuccess(() -> Component.literal("Soul shape set to: ")
+                    .append(shape.getFormattedName()), false);
+        }, () -> source.sendFailure(Component.literal("No reflection data found")));
+
+        return 1;
+    }
+
+    private static int resetSoulShape(CommandSourceStack source) {
+        ServerPlayer player = source.getPlayer();
+        if (player == null) {
+            source.sendFailure(Component.literal("Must be run by a player"));
+            return 0;
+        }
+
+        ReflectionCapability.get(player).ifPresentOrElse(reflection -> {
+            reflection.setSoulShape(SoulShape.UNSHAPED);
+            source.sendSuccess(() -> Component.literal("Soul shape reset to Unshaped."), false);
+        }, () -> source.sendFailure(Component.literal("No reflection data found")));
+
+        return 1;
     }
 }

@@ -32,11 +32,6 @@ import javax.annotation.ParametersAreNonnullByDefault;
 
 import static com.ghostipedia.cosmiccore.common.data.worldgen.generator.veins.VeinGeneratorUtil.*;
 
-/**
- * Shell vein generator - creates layered spherical veins with noisy boundaries.
- * Each shell layer (core, inner, outer) has ore variation using noise functions
- * to create organic, natural-looking ore distributions.
- */
 @MethodsReturnNonnullByDefault
 @ParametersAreNonnullByDefault
 @Accessors(fluent = true, chain = true)
@@ -60,9 +55,11 @@ public class ShellVeinGenerator extends VeinGenerator {
     @Setter
     public float outerRadiusRatio = 0.7f;
     @Setter
-    public float shellNoiseIntensity = 0.25f; // How noisy shell boundaries are
+    public float shellNoiseIntensity = 0.25f;
     @Setter
-    public float oreMixingChance = 0.15f; // Chance to place ore from adjacent shell
+    public float oreMixingChance = 0.15f;
+
+    public ShellVeinGenerator() {}
 
     public ShellVeinGenerator(GTOreDefinition entry) {
         super(entry);
@@ -95,14 +92,11 @@ public class ShellVeinGenerator extends VeinGenerator {
         Map<BlockPos, OreBlockPlacer> generatedBlocks = new Object2ObjectOpenHashMap<>();
 
         int size = entry.clusterSize().sample(random);
-        // Shell veins are medium spherical layered structures
-        // Style multiplier: 0.5x, minimum 32 blocks radius
         int radius = Math.max(32, Mth.ceil(size * 0.5f));
 
         float innerRadius = radius * innerRadiusRatio;
         float outerRadius = radius * outerRadiusRatio;
 
-        // Noise seeds for organic shell boundaries
         long noiseSeed = random.nextLong();
 
         var posMin = origin.offset(-radius, -radius, -radius);
@@ -120,34 +114,27 @@ public class ShellVeinGenerator extends VeinGenerator {
             float falloff = edgeFalloff(normalizedDist, 0.6f);
             if (random.nextFloat() > falloff * entry.density()) continue;
 
-            // Apply multi-octave noise to shell boundaries for organic look
             float noise1 = noise3D(pos.getX() * 0.12f, pos.getY() * 0.12f, pos.getZ() * 0.12f, noiseSeed);
             float noise2 = noise3D(pos.getX() * 0.25f, pos.getY() * 0.25f, pos.getZ() * 0.25f, noiseSeed + 100);
             float combinedNoise = noise1 * 0.7f + noise2 * 0.3f;
 
-            // Noisy shell boundaries - each boundary shifts based on noise
             float noisyInnerRadius = innerRadius * (1.0f + combinedNoise * shellNoiseIntensity);
             float noisyOuterRadius = outerRadius * (1.0f + combinedNoise * shellNoiseIntensity * 0.8f);
 
-            // Determine primary zone with noisy boundaries
             final Zone primaryZone;
             final boolean nearBoundary;
 
             if (dist <= noisyInnerRadius) {
                 primaryZone = Zone.CORE;
-                // Check if near inner boundary
                 nearBoundary = dist > noisyInnerRadius * 0.75f;
             } else if (dist <= noisyOuterRadius) {
                 primaryZone = Zone.INNER;
-                // Check if near either boundary
                 nearBoundary = dist < noisyInnerRadius * 1.25f || dist > noisyOuterRadius * 0.85f;
             } else {
                 primaryZone = Zone.OUTER;
-                // Check if near outer-inner boundary
                 nearBoundary = dist < noisyOuterRadius * 1.15f;
             }
 
-            // Density penalty - reduce ore count without shrinking vein footprint
             if (random.nextFloat() > 0.45f) continue;
 
             BlockPos.MutableBlockPos mutablePos = new BlockPos.MutableBlockPos(pos.getX(), pos.getY(), pos.getZ());
@@ -161,7 +148,6 @@ public class ShellVeinGenerator extends VeinGenerator {
         return generatedBlocks;
     }
 
-    // Simple 3D noise function for organic boundaries
     private float noise3D(float x, float y, float z, long seed) {
         long posHash = Float.floatToIntBits(x * 73856093) ^
                 Float.floatToIntBits(y * 19349663) ^
@@ -179,14 +165,12 @@ public class ShellVeinGenerator extends VeinGenerator {
 
         BlockState current = section.getBlockState(sectionX, sectionY, sectionZ);
 
-        // Get primary blocks for this zone
         List<OreBlockDef> primaryBlocks = switch (zone) {
             case CORE -> coreBlocks.isEmpty() ? innerBlocks : coreBlocks;
             case INNER -> innerBlocks.isEmpty() ? outerBlocks : innerBlocks;
             case OUTER -> outerBlocks.isEmpty() ? innerBlocks : outerBlocks;
         };
 
-        // Get adjacent zone blocks for mixing
         List<OreBlockDef> adjacentBlocks = switch (zone) {
             case CORE -> innerBlocks.isEmpty() ? outerBlocks : innerBlocks;
             case INNER -> random.nextBoolean() ?
@@ -197,7 +181,6 @@ public class ShellVeinGenerator extends VeinGenerator {
 
         if (primaryBlocks.isEmpty()) return;
 
-        // Near boundaries, there's a chance to use adjacent zone's ore for natural blending
         List<OreBlockDef> blocksToUse;
         if (nearBoundary && random.nextFloat() < oreMixingChance && !adjacentBlocks.isEmpty()) {
             blocksToUse = adjacentBlocks;

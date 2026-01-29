@@ -3,21 +3,13 @@ package com.ghostipedia.cosmiccore.common.reflection.bargain.impl;
 import com.ghostipedia.cosmiccore.CosmicCore;
 import com.ghostipedia.cosmiccore.common.reflection.ReflectionLang;
 import com.ghostipedia.cosmiccore.common.reflection.bargain.Bargain;
+import com.ghostipedia.cosmiccore.common.reflection.bargain.BargainCategory;
 
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Player;
 
 import java.util.List;
 
-/**
- * The First Bargain: Quake Movement
- *
- * Offered after the player dies a few times and realizes they're immortal.
- * They're running from the realization of what they are.
- *
- * Power: Bunny hopping, air strafing, momentum preservation.
- * Cost: Chose denial - some self-understanding paths locked.
- */
 public class QuakeMovementBargain extends Bargain {
 
     public static final QuakeMovementBargain INSTANCE = new QuakeMovementBargain();
@@ -27,10 +19,8 @@ public class QuakeMovementBargain extends Bargain {
         super(
                 CosmicCore.id("quake_movement"),
                 BargainTier.EARLY,
-                0,    // shardCost - FREE (the hook to get players into the system)
-                0,    // weight - FREE (doesn't consume soul capacity)
-                0     // erosion - FREE (truly no cost)
-        );
+                BargainCategory.MOBILITY,
+                0, 0, 0);
     }
 
     @Override
@@ -77,14 +67,11 @@ public class QuakeMovementBargain extends Bargain {
 
     @Override
     public boolean isContextuallyRelevant(Player player, BargainContext context) {
-        // This bargain is always relevant for the first encounter
         return true;
     }
 
     @Override
     public void onAccept(Player player, BargainAnswer answer) {
-        // The quake movement effect is applied via the movement handler
-        // This just marks the bargain as accepted
         CosmicCore.LOGGER.info("Player {} accepted Quake Movement bargain with answer: {}",
                 player.getName().getString(), answer.id());
     }
@@ -92,7 +79,6 @@ public class QuakeMovementBargain extends Bargain {
     @Override
     public void onDefy(Player player) {
         CosmicCore.LOGGER.info("Player {} defied Quake Movement bargain", player.getName().getString());
-        // Movement returns to normal, but they still remember running
     }
 
     @Override

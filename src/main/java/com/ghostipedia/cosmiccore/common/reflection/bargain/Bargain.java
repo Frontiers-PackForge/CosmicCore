@@ -20,13 +20,16 @@ public abstract class Bargain {
 
     private final ResourceLocation id;
     private final BargainTier tier;
+    private final BargainCategory category;
     private final int shardCost;
     private final int weight;
     private final int erosionCost;
 
-    protected Bargain(ResourceLocation id, BargainTier tier, int shardCost, int weight, int erosionCost) {
+    protected Bargain(ResourceLocation id, BargainTier tier, BargainCategory category, int shardCost, int weight,
+                      int erosionCost) {
         this.id = id;
         this.tier = tier;
+        this.category = category;
         this.shardCost = shardCost;
         this.weight = weight;
         this.erosionCost = erosionCost;
@@ -34,12 +37,22 @@ public abstract class Bargain {
 
     /**
      * Legacy constructor for backwards compatibility during migration.
-     * 
-     * @deprecated Use the new constructor with shardCost, weight, and erosionCost
+     *
+     * @deprecated Use the new constructor with category, shardCost, weight, and erosionCost
      */
     @Deprecated
     protected Bargain(ResourceLocation id, BargainTier tier, int baseCost) {
-        this(id, tier, 0, 0, baseCost);
+        this(id, tier, BargainCategory.UTILITY, 0, 0, baseCost);
+    }
+
+    /**
+     * Legacy constructor without category - defaults to UTILITY.
+     *
+     * @deprecated Use the new constructor with category
+     */
+    @Deprecated
+    protected Bargain(ResourceLocation id, BargainTier tier, int shardCost, int weight, int erosionCost) {
+        this(id, tier, BargainCategory.UTILITY, shardCost, weight, erosionCost);
     }
 
     /**
@@ -54,6 +67,13 @@ public abstract class Bargain {
      */
     public BargainTier getTier() {
         return tier;
+    }
+
+    /**
+     * @return what category this bargain belongs to (for affinity system)
+     */
+    public BargainCategory getCategory() {
+        return category;
     }
 
     /**

@@ -111,6 +111,10 @@ public class ReflectionLang {
         return Component.translatable(PREFIX + "ui." + key);
     }
 
+    public static MutableComponent ui(String key, Object... args) {
+        return Component.translatable(PREFIX + "ui." + key, args);
+    }
+
     // Common UI strings
     public static MutableComponent uiYourBargains() {
         return ui("your_bargains");

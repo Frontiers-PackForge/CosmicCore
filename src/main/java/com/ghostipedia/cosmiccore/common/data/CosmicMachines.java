@@ -41,6 +41,7 @@ import com.gregtechceu.gtceu.api.recipe.modifier.RecipeModifierList;
 import com.gregtechceu.gtceu.api.registry.registrate.MachineBuilder;
 import com.gregtechceu.gtceu.client.util.TooltipHelper;
 import com.gregtechceu.gtceu.common.data.*;
+import com.gregtechceu.gtceu.common.data.GTMachines;
 import com.gregtechceu.gtceu.common.data.machines.GCYMMachines;
 import com.gregtechceu.gtceu.common.data.machines.GTMultiMachines;
 import com.gregtechceu.gtceu.common.data.models.GTModels;
@@ -930,6 +931,8 @@ public class CosmicMachines {
     public static void init() {
         // Initialize DreamersBasin
         com.ghostipedia.cosmiccore.common.machine.multiblock.multi.DreamersBasin.init();
+        // Initialize Ore Extraction Drills
+        com.ghostipedia.cosmiccore.common.machine.multiblock.multi.OreExtractionDrill.init();
         GTMultiMachines.LARGE_COMBUSTION_ENGINE.setRecipeTypes(new GTRecipeType[] { DUMMY_RECIPES });
         GTMultiMachines.LARGE_COMBUSTION_ENGINE.setRenderXEIPreview(false);
         GTMultiMachines.LARGE_COMBUSTION_ENGINE.setRenderWorldPreview(false);
@@ -951,6 +954,20 @@ public class CosmicMachines {
         GTMultiMachines.LARGE_STEAM_TURBINE.setRecipeTypes(new GTRecipeType[] { DUMMY_RECIPES });
         GTMultiMachines.LARGE_STEAM_TURBINE.setRenderXEIPreview(false);
         GTMultiMachines.LARGE_STEAM_TURBINE.setRenderWorldPreview(false);
+
+        for (MachineDefinition miner : GTMachines.MINER) {
+            if (miner == null) continue;
+            miner.setRecipeTypes(new GTRecipeType[] { DUMMY_RECIPES });
+        }
+        GTMachines.STEAM_MINER.first().setRecipeTypes(new GTRecipeType[] { DUMMY_RECIPES });
+        GTMachines.STEAM_MINER.second().setRecipeTypes(new GTRecipeType[] { DUMMY_RECIPES });
+
+        for (MultiblockMachineDefinition largeMiner : GTMultiMachines.LARGE_MINER) {
+            if (largeMiner == null) continue;
+            largeMiner.setRecipeTypes(new GTRecipeType[] { DUMMY_RECIPES });
+            largeMiner.setRenderXEIPreview(false);
+            largeMiner.setRenderWorldPreview(false);
+        }
 
         for (MultiblockMachineDefinition definition : FUSION_REACTOR) {
             if (definition == null) continue;
