@@ -3,6 +3,7 @@ package com.ghostipedia.cosmiccore.common.reflection.bargain.impl;
 import com.ghostipedia.cosmiccore.CosmicCore;
 import com.ghostipedia.cosmiccore.common.reflection.ReflectionLang;
 import com.ghostipedia.cosmiccore.common.reflection.bargain.Bargain;
+import com.ghostipedia.cosmiccore.common.reflection.bargain.BargainCategory;
 
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -13,12 +14,6 @@ import net.minecraftforge.common.ForgeMod;
 import java.util.List;
 import java.util.UUID;
 
-/**
- * Reach Bargain: +2 block reach for mining/attacking
- *
- * Your arms stretch. Just a little. Just enough.
- * Very useful QoL for building and combat.
- */
 public class ReachBargain extends Bargain {
 
     public static final ResourceLocation ID = CosmicCore.id("reach");
@@ -31,6 +26,7 @@ public class ReachBargain extends Bargain {
         super(
                 ID,
                 BargainTier.MID,
+                BargainCategory.OFFENSE,
                 64,   // shardCost
                 25,   // weight
                 100   // erosion

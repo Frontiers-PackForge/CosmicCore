@@ -5,6 +5,7 @@ import com.ghostipedia.cosmiccore.common.reflection.ReflectionCapability;
 import com.ghostipedia.cosmiccore.common.reflection.ReflectionConstants;
 import com.ghostipedia.cosmiccore.common.reflection.ReflectionLang;
 import com.ghostipedia.cosmiccore.common.reflection.bargain.Bargain;
+import com.ghostipedia.cosmiccore.common.reflection.bargain.BargainCategory;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
@@ -20,17 +21,6 @@ import net.minecraft.world.phys.Vec3;
 import java.util.List;
 import java.util.Optional;
 
-/**
- * The /home bargain - teleport to spawn/bed.
- *
- * This is the "poisoned apple" - offered early, seems cheap, but costs escalate
- * with repeated quick use. The Reflection knows you'll become dependent on it.
- *
- * Base cost: 1 erosion (seems cheap!)
- * Quick use penalty: Doubles each time used within 15 minutes (1 -> 2 -> 4 -> 8 -> 16)
- * Ceiling: 16 erosion per use
- * Reset: After 15 minutes of no use, resets to base cost
- */
 public class HomeBargain extends Bargain {
 
     private static final ResourceLocation ID = CosmicCore.id("home");
@@ -38,13 +28,7 @@ public class HomeBargain extends Bargain {
     private static final String BARGAIN_ID = "home";
 
     private HomeBargain() {
-        super(
-                ID,
-                BargainTier.EARLY,
-                0,    // shardCost - FREE (poisoned apple - per-use costs add up)
-                0,    // weight - FREE (doesn't consume soul capacity)
-                100   // erosion - significant upfront cost + per-use escalation
-        );
+        super(ID, BargainTier.EARLY, BargainCategory.UTILITY, 0, 0, 100);
     }
 
     @Override
@@ -105,16 +89,8 @@ public class HomeBargain extends Bargain {
     }
 
     @Override
-    public void tick(Player player) {
-        // No passive effects - this is an on-demand ability
-    }
+    public void tick(Player player) {}
 
-    /**
-     * Execute the /home teleport.
-     * Called when player uses the command (if they have the bargain).
-     *
-     * @return true if teleport succeeded, false otherwise
-     */
     public static boolean executeHome(ServerPlayer player) {
         return ReflectionCapability.get(player).map(reflection -> {
             if (!reflection.hasBargain(ID)) {
@@ -124,10 +100,7 @@ public class HomeBargain extends Bargain {
                 return false;
             }
 
-            // Calculate current cost based on usage
             int cost = ReflectionConstants.getCommandCost(reflection, "home");
-
-            // Find home location (bed or world spawn)
             Optional<Vec3> homePos = findHomePosition(player);
             if (homePos.isEmpty()) {
                 player.displayClientMessage(
@@ -137,19 +110,13 @@ public class HomeBargain extends Bargain {
             }
 
             Vec3 home = homePos.get();
-
-            // Apply erosion cost
             reflection.addErosion(cost);
             reflection.recordCommandUse("home");
 
-            // Teleport
             player.teleportTo(home.x, home.y, home.z);
-
-            // Effects
             player.level().playSound(null, player.blockPosition(),
                     SoundEvents.ENDERMAN_TELEPORT, SoundSource.PLAYERS, 1.0f, 0.8f);
 
-            // Feedback based on cost
             if (cost <= 2) {
                 player.displayClientMessage(
                         Component.literal("\u00A77\u00A7o*You feel the familiar pull of home.*"),
@@ -165,22 +132,16 @@ public class HomeBargain extends Bargain {
                         true);
             }
 
-            // Show cost in chat
-            player.displayClientMessage(
-                    Component.literal("\u00A78[Erosion +" + cost + "]"),
-                    false);
-
+            player.displayClientMessage(Component.literal("\u00A78[Erosion +" + cost + "]"), false);
             return true;
         }).orElse(false);
     }
 
     private static Optional<Vec3> findHomePosition(ServerPlayer player) {
-        // Check for bed spawn first
         BlockPos bedPos = player.getRespawnPosition();
         if (bedPos != null) {
             ServerLevel respawnLevel = player.server.getLevel(player.getRespawnDimension());
             if (respawnLevel != null) {
-                // Find safe spawn near bed
                 Optional<Vec3> bedSpawn = Player.findRespawnPositionAndUseSpawnBlock(
                         respawnLevel, bedPos, player.getRespawnAngle(), true, false);
                 if (bedSpawn.isPresent()) {
@@ -189,7 +150,6 @@ public class HomeBargain extends Bargain {
             }
         }
 
-        // Fall back to world spawn
         ServerLevel overworld = player.server.getLevel(Level.OVERWORLD);
         if (overworld != null) {
             BlockPos spawnPos = overworld.getSharedSpawnPos();

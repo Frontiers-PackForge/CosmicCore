@@ -42,14 +42,12 @@ public class CosmicRecipeComponent {
         @Override
         public SoulIngredient read(RecipeJS recipeJS, Object o) {
             if (o instanceof Wrapper w) o = w.unwrap();
+            if (o == null) return null;
 
             if (o instanceof SoulIngredient soulIngredient) {
                 return soulIngredient;
-            } else {
-                System.out.println("Shit we have a problem !");
-                System.out.println("object type: " + o.getClass().descriptorString());
-                return null;
             }
+            return null;
         }
     };
 

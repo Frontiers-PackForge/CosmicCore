@@ -1,5 +1,7 @@
 package com.ghostipedia.cosmiccore.common.reflection;
 
+import com.ghostipedia.cosmiccore.common.reflection.soul.SoulShape;
+
 import net.minecraft.resources.ResourceLocation;
 
 import java.util.Map;
@@ -205,6 +207,23 @@ public interface IReflection {
      */
     long getLastCommandUseTime(String commandId);
 
+    // ---- Void Save Tracking ----
+
+    /**
+     * @return number of times void resistance has saved this player
+     */
+    int getVoidSaveCount();
+
+    /**
+     * Increment void save count.
+     */
+    void incrementVoidSaveCount();
+
+    /**
+     * Reset void save count (on bargain acceptance/defiance).
+     */
+    void resetVoidSaveCount();
+
     // ---- Memory / Context ----
 
     /**
@@ -222,4 +241,67 @@ public interface IReflection {
      * Get count for a specific memory.
      */
     int getMemoryCount(String eventKey);
+
+    // ---- Soul Shape ----
+
+    /**
+     * @return the current soul shape (UNSHAPED if not yet mutilated)
+     */
+    SoulShape getSoulShape();
+
+    /**
+     * Set the soul shape. This is a significant, permanent choice.
+     */
+    void setSoulShape(SoulShape shape);
+
+    /**
+     * @return true if the soul has been shaped (not UNSHAPED)
+     */
+    default boolean hasSoulShape() {
+        return getSoulShape().isShaped();
+    }
+
+    // ---- Soul Super ----
+
+    /**
+     * @return game time when the super ability last started its cooldown
+     */
+    long getSuperCooldownStart();
+
+    /**
+     * Set the super cooldown start time.
+     */
+    void setSuperCooldownStart(long gameTime);
+
+    /**
+     * @return remaining ticks until super is ready, or 0 if ready
+     */
+    default long getSuperCooldownRemaining(long currentGameTime, int cooldownTicks) {
+        long elapsed = currentGameTime - getSuperCooldownStart();
+        return Math.max(0, cooldownTicks - elapsed);
+    }
+
+    /**
+     * @return true if super ability is off cooldown
+     */
+    default boolean isSuperReady(long currentGameTime, int cooldownTicks) {
+        return getSuperCooldownRemaining(currentGameTime, cooldownTicks) <= 0;
+    }
+
+    /**
+     * @return game time when the super effect ends, or 0 if not active
+     */
+    long getSuperActiveUntil();
+
+    /**
+     * Set when the super effect ends.
+     */
+    void setSuperActiveUntil(long gameTime);
+
+    /**
+     * @return true if super effect is currently active
+     */
+    default boolean isSuperActive(long currentGameTime) {
+        return getSuperActiveUntil() > currentGameTime;
+    }
 }

@@ -1,5 +1,6 @@
 package com.ghostipedia.cosmiccore.common.reflection.ui;
 
+import com.ghostipedia.cosmiccore.common.data.CosmicItems;
 import com.ghostipedia.cosmiccore.common.network.CCoreNetwork;
 import com.ghostipedia.cosmiccore.common.reflection.ReflectionCapability;
 import com.ghostipedia.cosmiccore.common.reflection.bargain.Bargain;
@@ -7,6 +8,7 @@ import com.ghostipedia.cosmiccore.common.reflection.bargain.Bargain.BargainAnswe
 import com.ghostipedia.cosmiccore.common.reflection.bargain.BargainRegistry;
 import com.ghostipedia.cosmiccore.common.reflection.bargain.impl.QuakeMovementBargain;
 import com.ghostipedia.cosmiccore.common.reflection.network.SyncQuakeMovementPacket;
+import com.ghostipedia.cosmiccore.common.reflection.soul.SoulShape;
 
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
@@ -28,6 +30,7 @@ public class VoidUIPackets {
                 NetworkDirection.PLAY_TO_CLIENT);
         CCoreNetwork.register(OpenHubPacket.class, OpenHubPacket::new, NetworkDirection.PLAY_TO_CLIENT);
         CCoreNetwork.register(DefianceChoicePacket.class, DefianceChoicePacket::new, NetworkDirection.PLAY_TO_SERVER);
+        CCoreNetwork.register(SoulShapeChoicePacket.class, SoulShapeChoicePacket::new, NetworkDirection.PLAY_TO_SERVER);
     }
 
     public static void sendOpenVoidScreen(ServerPlayer player, ResourceLocation bargainId) {
@@ -74,9 +77,15 @@ public class VoidUIPackets {
             int shardBalance = reflection.getShardBalance();
             int usedCapacity = reflection.getUsedCapacity();
             int totalCapacity = reflection.getTotalCapacity();
+            SoulShape soulShape = reflection.getSoulShape();
+            boolean hasMutilator = player.getInventory().contains(CosmicItems.SOUL_MUTILATOR.asStack());
             CCoreNetwork.sendToPlayer(player, new OpenHubPacket(erosion, activeBargains, defianceScars,
-                    shardBalance, usedCapacity, totalCapacity));
+                    shardBalance, usedCapacity, totalCapacity, soulShape, hasMutilator));
         });
+    }
+
+    public static void sendSoulShapeChoice(SoulShape shape) {
+        CCoreNetwork.sendToServer(new SoulShapeChoicePacket(shape));
     }
 
     public static void sendDefianceChoice(ResourceLocation bargainId) {
@@ -304,15 +313,20 @@ public class VoidUIPackets {
         private final int shardBalance;
         private final int usedCapacity;
         private final int totalCapacity;
+        private final SoulShape soulShape;
+        private final boolean hasMutilator;
 
         public OpenHubPacket(int erosion, Set<ResourceLocation> activeBargains, Set<ResourceLocation> defianceScars,
-                             int shardBalance, int usedCapacity, int totalCapacity) {
+                             int shardBalance, int usedCapacity, int totalCapacity,
+                             SoulShape soulShape, boolean hasMutilator) {
             this.erosion = erosion;
             this.activeBargains = activeBargains != null ? activeBargains : Set.of();
             this.defianceScars = defianceScars != null ? defianceScars : Set.of();
             this.shardBalance = shardBalance;
             this.usedCapacity = usedCapacity;
             this.totalCapacity = totalCapacity;
+            this.soulShape = soulShape != null ? soulShape : SoulShape.UNSHAPED;
+            this.hasMutilator = hasMutilator;
         }
 
         public OpenHubPacket(FriendlyByteBuf buf) {
@@ -335,6 +349,8 @@ public class VoidUIPackets {
             this.shardBalance = buf.readVarInt();
             this.usedCapacity = buf.readVarInt();
             this.totalCapacity = buf.readVarInt();
+            this.soulShape = SoulShape.fromId(buf.readUtf());
+            this.hasMutilator = buf.readBoolean();
         }
 
         @Override
@@ -354,13 +370,15 @@ public class VoidUIPackets {
             buf.writeVarInt(shardBalance);
             buf.writeVarInt(usedCapacity);
             buf.writeVarInt(totalCapacity);
+            buf.writeUtf(soulShape.getId());
+            buf.writeBoolean(hasMutilator);
         }
 
         @Override
         public void execute(NetworkEvent.Context ctx) {
             DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> {
                 VoidScreen.openForHub(erosion, activeBargains, defianceScars,
-                        shardBalance, usedCapacity, totalCapacity);
+                        shardBalance, usedCapacity, totalCapacity, soulShape, hasMutilator);
             });
         }
     }
@@ -400,6 +418,57 @@ public class VoidUIPackets {
                         CCoreNetwork.sendToPlayer(player, new SyncQuakeMovementPacket(false));
                     }
                 });
+            });
+        }
+    }
+
+    public static class SoulShapeChoicePacket implements CCoreNetwork.INetPacket {
+
+        private final SoulShape shape;
+
+        public SoulShapeChoicePacket(SoulShape shape) {
+            this.shape = shape;
+        }
+
+        public SoulShapeChoicePacket(FriendlyByteBuf buf) {
+            this.shape = SoulShape.fromId(buf.readUtf());
+        }
+
+        @Override
+        public void encode(FriendlyByteBuf buf) {
+            buf.writeUtf(shape.getId());
+        }
+
+        @Override
+        public void execute(NetworkEvent.Context ctx) {
+            ServerPlayer player = ctx.getSender();
+            if (player == null) return;
+
+            if (shape == SoulShape.UNSHAPED) return;
+
+            ReflectionCapability.get(player).ifPresent(reflection -> {
+                if (!reflection.hasAwakened()) return;
+                if (reflection.hasSoulShape()) return;
+
+                // Find and consume the Soul Mutilator
+                var inventory = player.getInventory();
+                int mutilatorSlot = -1;
+                for (int i = 0; i < inventory.getContainerSize(); i++) {
+                    if (inventory.getItem(i).is(CosmicItems.SOUL_MUTILATOR.get())) {
+                        mutilatorSlot = i;
+                        break;
+                    }
+                }
+                if (mutilatorSlot == -1) return; // No mutilator, can't shape
+
+                // Consume the mutilator
+                inventory.removeItem(mutilatorSlot, 1);
+
+                reflection.setSoulShape(shape);
+
+                player.level().playSound(null, player.blockPosition(),
+                        net.minecraft.sounds.SoundEvents.TOTEM_USE,
+                        net.minecraft.sounds.SoundSource.PLAYERS, 0.8f, 0.6f);
             });
         }
     }

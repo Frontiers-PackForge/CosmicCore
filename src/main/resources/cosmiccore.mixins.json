@@ -23,6 +23,8 @@
     "ldlib.CustomBakedModelMixin"
   ],
   "mixins": [
+    "adastra.AdAstraFluidOptimizationMixin",
+    "adastra.AdAstraGravityOptimizationMixin",
     "AdAstraOverlayScreenMixin",
     "AdAstraSpaceSuitItemMixin",
     "ApotheosisRecipeHelperMixin",
@@ -40,12 +42,14 @@
     "frontiers.MinecraftRemoveOxygenMixin",
     "accessor.GTMMEBufferAccessor",
     "accessor.LivingEntityAccessor",
+    "accessor.CubicSplineMultipointAccessor",
     "accessor.LootTableAccessor",
     "ae2.eudisplay.EUAddAppearanceMixin",
     "ae2.eudisplay.EUAddPowerUnitMixin",
     "ae2.eudisplay.EUAddSettingMixin",
     "client.CosmicCoreRemainingAirOverlayMixin",
     "gtceu.ElectricContainerBlockProviderMixin",
+    "gtceu.GTOreDefinitionMixin",
     "gtceu.MetaMachineBlockEntityMixin",
     "gtceu.ParallelProviderMixin",
     "gtceu.RecipeLogicProviderMixin",
@@ -53,7 +57,8 @@
     "gtceu.WorkableBlockProviderMixin",
     "lso.FrostbiteEffectMixin",
     "lso.HeatstrokeEffectMixin",
-    "lso.TemperatureCapabilityMixin"
+    "lso.TemperatureCapabilityMixin",
+    "worldgen.CubicSplineMultipointMixin"
   ],
   "injectors": {
     "defaultRequire": 1,

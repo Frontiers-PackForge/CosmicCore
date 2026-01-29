@@ -4,6 +4,7 @@ import com.ghostipedia.cosmiccore.CosmicCore;
 import com.ghostipedia.cosmiccore.common.reflection.ReflectionCapability;
 import com.ghostipedia.cosmiccore.common.reflection.ReflectionLang;
 import com.ghostipedia.cosmiccore.common.reflection.bargain.Bargain;
+import com.ghostipedia.cosmiccore.common.reflection.bargain.BargainCategory;
 
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -14,19 +15,6 @@ import net.minecraft.world.entity.player.Player;
 import java.util.List;
 import java.util.UUID;
 
-/**
- * Health Bargain: More max health, but healing is less effective.
- *
- * POWER: +10 max health (5 hearts)
- * DRAWBACK: Healing from potions and instant health is 50% less effective
- *
- * Thematically: Your body has expanded beyond its natural limits. There's more
- * of you now... but that borrowed flesh resists healing. Potions can't fully
- * reach it. Regeneration struggles against what shouldn't exist.
- *
- * This creates interesting gameplay - you can tank more hits, but recovering
- * from damage is harder. Good for exploration, risky for extended combat.
- */
 public class HealthBargain extends Bargain {
 
     public static final ResourceLocation ID = CosmicCore.id("vitality");
@@ -34,13 +22,13 @@ public class HealthBargain extends Bargain {
     private static final String BARGAIN_ID = "vitality";
     private static final UUID MODIFIER_UUID = UUID.fromString("a8c5b6d4-1234-4567-89ab-cdef01234567");
 
-    /** Healing reduction multiplier (0.5 = 50% less healing from potions) */
     public static final float HEALING_REDUCTION = 0.5f;
 
     private HealthBargain() {
         super(
                 ID,
                 BargainTier.EARLY_MID,
+                BargainCategory.DEFENSE,
                 64,   // shardCost
                 25,   // weight
                 100   // erosion
@@ -124,23 +112,12 @@ public class HealthBargain extends Bargain {
         }
     }
 
-    // =========================================================================
-    // Static helper methods for healing integration
-    // =========================================================================
-
-    /**
-     * Check if a player has the Borrowed Vitality bargain active.
-     */
     public static boolean hasBargain(Player player) {
         return ReflectionCapability.get(player)
                 .map(reflection -> reflection.hasBargain(ID))
                 .orElse(false);
     }
 
-    /**
-     * Modify healing amount for a player with this bargain.
-     * Returns the modified healing amount.
-     */
     public static float modifyHealing(Player player, float originalHealing) {
         if (hasBargain(player)) {
             return originalHealing * HEALING_REDUCTION;

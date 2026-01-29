@@ -334,8 +334,8 @@ public class CosmicOreVeins {
             return gen.build();
         });
 
-        // Certus Quartz - cluster
-        register("certus_quartz_vein", () -> {
+        // Certus Quartz - cluster (GTCEu uses "certus_quartz" not "certus_quartz_vein")
+        register("certus_quartz", () -> {
             var gen = new ClusterVeinGenerator(new ArrayList<>(), new ArrayList<>(),
                     8, 0.06f, 0.028f, 0.85f, 0.06f);
             gen.oreBlock(GTMaterials.Quartzite, 3);
@@ -402,70 +402,6 @@ public class CosmicOreVeins {
             gen.coreBlock(GTMaterials.BlueTopaz, 2);
             gen.coreBlock(GTMaterials.Topaz, 2);
             gen.innerBlock(GTMaterials.Chalcocite, 3);
-            gen.outerBlock(GTMaterials.Bornite, 3);
-            return gen.build();
-        });
-
-        // ============================================
-        // END
-        // ============================================
-
-        // Bauxite (End) - cluster
-        register("bauxite_vein_end", () -> {
-            var gen = new ClusterVeinGenerator(new ArrayList<>(), new ArrayList<>(),
-                    10, 0.07f, 0.03f, 0.85f, 0.08f);
-            gen.oreBlock(GTMaterials.Bauxite, 3);
-            gen.oreBlock(GTMaterials.Ilmenite, 2);
-            gen.rareBlock(GTMaterials.Aluminium, 1);
-            return gen.build();
-        });
-
-        // Magnetite (End) - branching
-        register("magnetite_vein_end", () -> {
-            var gen = new BranchingVeinGenerator(new ArrayList<>(), new ArrayList<>(),
-                    5, 0.15f, 0.18f, 0.4f, 0.6f, 0.12f);
-            gen.oreBlock(GTMaterials.Magnetite, 3);
-            gen.oreBlock(GTMaterials.VanadiumMagnetite, 2);
-            gen.oreBlock(GTMaterials.Chromite, 2);
-            gen.rareBlock(GTMaterials.Gold, 1);
-            return gen.build();
-        });
-
-        // Naquadah - fracture (rare exotic)
-        register("naquadah_vein", () -> {
-            var gen = new FractureVeinGenerator(new ArrayList<>(), new ArrayList<>(),
-                    10.0f, 0.15f, 6, 5.0f);
-            gen.oreBlock(GTMaterials.Naquadah, 3);
-            gen.rareBlock(GTMaterials.Plutonium239, 1);
-            return gen.build();
-        });
-
-        // Pitchblende/Uranium - fracture
-        register("pitchblende_vein", () -> {
-            var gen = new FractureVeinGenerator(new ArrayList<>(), new ArrayList<>(),
-                    11.0f, 0.12f, 7, 5.5f);
-            gen.oreBlock(GTMaterials.Pitchblende, 3);
-            gen.oreBlock(GTMaterials.Uraninite, 2);
-            return gen.build();
-        });
-
-        // Scheelite (Tungsten) - stringer
-        register("scheelite_vein", () -> {
-            var gen = new StringerVeinGenerator(new ArrayList<>(), new ArrayList<>(),
-                    14, 0.26f, 0.055f, 0.55f, 0.5f, 0.1f);
-            gen.oreBlock(GTMaterials.Scheelite, 3);
-            gen.oreBlock(GTMaterials.Tungstate, 2);
-            gen.rareBlock(GTMaterials.Lithium, 1);
-            return gen.build();
-        });
-
-        // Sheldonite (Platinum group) - shell
-        register("sheldonite_vein", () -> {
-            var gen = new ShellVeinGenerator(new ArrayList<>(), new ArrayList<>(), new ArrayList<>(),
-                    0.2f, 0.5f, 0.2f, 0.1f);
-            gen.coreBlock(GTMaterials.Cooperite, 2);
-            gen.coreBlock(GTMaterials.Platinum, 1);
-            gen.innerBlock(GTMaterials.Palladium, 2);
             gen.outerBlock(GTMaterials.Bornite, 3);
             return gen.build();
         });

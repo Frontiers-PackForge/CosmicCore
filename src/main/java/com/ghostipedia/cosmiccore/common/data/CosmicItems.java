@@ -23,6 +23,7 @@ import com.ghostipedia.cosmiccore.common.item.behavior.StructureWriteBehavior;
 import com.ghostipedia.cosmiccore.common.item.behavior.VeinSurveyBehavior;
 import com.ghostipedia.cosmiccore.common.item.behavior.WirelessPDABehavior;
 import com.ghostipedia.cosmiccore.common.reflection.item.MirrorItem;
+import com.ghostipedia.cosmiccore.common.reflection.item.SoulMutilatorItem;
 import com.ghostipedia.cosmiccore.utils.StringUtil;
 
 import com.gregtechceu.gtceu.GTCEu;
@@ -2787,6 +2788,13 @@ public class CosmicItems {
     public static final ItemEntry<MirrorItem> REFLECTION_MIRROR = REGISTRATE
             .item("reflection_mirror", MirrorItem::new)
             .lang("Mirror of Erosion")
+            .properties(p -> p.stacksTo(1))
+            .defaultModel()
+            .register();
+
+    public static final ItemEntry<SoulMutilatorItem> SOUL_MUTILATOR = REGISTRATE
+            .item("soul_mutilator", SoulMutilatorItem::new)
+            .lang("Soul Mutilator")
             .properties(p -> p.stacksTo(1))
             .defaultModel()
             .register();

@@ -4,6 +4,7 @@ import com.ghostipedia.cosmiccore.CosmicCore;
 import com.ghostipedia.cosmiccore.common.reflection.ReflectionCapability;
 import com.ghostipedia.cosmiccore.common.reflection.ReflectionLang;
 import com.ghostipedia.cosmiccore.common.reflection.bargain.Bargain;
+import com.ghostipedia.cosmiccore.common.reflection.bargain.BargainCategory;
 
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -16,19 +17,6 @@ import net.minecraft.world.entity.player.Player;
 import java.util.List;
 import java.util.UUID;
 
-/**
- * Strength Bargain: More damage dealt, but more damage taken from mobs.
- *
- * POWER: +4 attack damage
- * DRAWBACK: Take 25% more damage from hostile mobs
- *
- * Thematically: Violence begets violence. Your strikes carry borrowed fury...
- * but that fury makes you a magnet for aggression. Mobs sense the violence
- * in you and strike harder, as if responding to a challenge.
- *
- * This creates glass-cannon gameplay - you hit harder but can't afford to
- * get hit. Rewards skilled combat but punishes mistakes.
- */
 public class StrengthBargain extends Bargain {
 
     public static final ResourceLocation ID = CosmicCore.id("violence");
@@ -36,13 +24,13 @@ public class StrengthBargain extends Bargain {
     private static final String BARGAIN_ID = "violence";
     private static final UUID MODIFIER_UUID = UUID.fromString("b9d6c7e5-2345-5678-9abc-def012345678");
 
-    /** Damage increase from mobs (1.25 = 25% more damage taken) */
     public static final float MOB_DAMAGE_MULTIPLIER = 1.25f;
 
     private StrengthBargain() {
         super(
                 ID,
                 BargainTier.EARLY_MID,
+                BargainCategory.OFFENSE,
                 64,   // shardCost
                 25,   // weight
                 100   // erosion
@@ -126,33 +114,19 @@ public class StrengthBargain extends Bargain {
         }
     }
 
-    // =========================================================================
-    // Static helper methods for damage integration
-    // =========================================================================
-
-    /**
-     * Check if a player has the Inherited Violence bargain active.
-     */
     public static boolean hasBargain(Player player) {
         return ReflectionCapability.get(player)
                 .map(reflection -> reflection.hasBargain(ID))
                 .orElse(false);
     }
 
-    /**
-     * Modify damage from mobs for a player with this bargain.
-     * Returns the modified damage amount.
-     */
-    public static float modifyMobDamage(Player player, float originalDamage, DamageSource source) {
-        if (hasBargain(player) && isMobDamage(source)) {
+    public static float modifyMobDamage(Player player, float originalDamage) {
+        if (hasBargain(player)) {
             return originalDamage * MOB_DAMAGE_MULTIPLIER;
         }
         return originalDamage;
     }
 
-    /**
-     * Check if a damage source is from a hostile mob.
-     */
     public static boolean isMobDamage(DamageSource source) {
         return source.getEntity() instanceof Monster;
     }

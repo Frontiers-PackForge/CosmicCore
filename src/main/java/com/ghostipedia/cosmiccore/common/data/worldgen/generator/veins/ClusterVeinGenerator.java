@@ -32,12 +32,6 @@ import javax.annotation.ParametersAreNonnullByDefault;
 
 import static com.ghostipedia.cosmiccore.common.data.worldgen.generator.veins.VeinGeneratorUtil.*;
 
-/**
- * Cluster vein generator - creates multiple ore-rich nodes/pockets scattered
- * throughout the vein volume, connected by mineral channels.
- * Like finding a system of geodes or ore pockets in a mineral formation.
- * Replaces the boring flat disk/lens shape with something worth exploring.
- */
 @MethodsReturnNonnullByDefault
 @ParametersAreNonnullByDefault
 @Accessors(fluent = true, chain = true)
@@ -56,15 +50,17 @@ public class ClusterVeinGenerator extends VeinGenerator {
     public List<OreBlockDef> oreBlocks = new ArrayList<>();
     public List<OreBlockDef> rareBlocks = new ArrayList<>();
     @Setter
-    public int nodeCount = 10; // Distinct node pockets spread throughout large volume
+    public int nodeCount = 10;
     @Setter
-    public float nodeSizeRatio = 0.06f; // Small nodes relative to large radius
+    public float nodeSizeRatio = 0.06f;
     @Setter
-    public float channelThicknessRatio = 0.025f; // Thin channels connecting nodes
+    public float channelThicknessRatio = 0.025f;
     @Setter
-    public float scatterAmount = 0.9f; // Push nodes far apart
+    public float scatterAmount = 0.9f;
     @Setter
     public float rareBlockChance = 0.06f;
+
+    public ClusterVeinGenerator() {}
 
     public ClusterVeinGenerator(GTOreDefinition entry) {
         super(entry);
@@ -90,12 +86,9 @@ public class ClusterVeinGenerator extends VeinGenerator {
         return entries;
     }
 
-    // Node data structure
     private static class Node {
 
-        float x, y, z;
-        float radius;
-        float noiseSeed;
+        float x, y, z, radius, noiseSeed;
     }
 
     @Override
@@ -104,62 +97,47 @@ public class ClusterVeinGenerator extends VeinGenerator {
         Map<BlockPos, OreBlockPlacer> generatedBlocks = new Object2ObjectOpenHashMap<>();
 
         int size = entry.clusterSize().sample(random);
-        // Cluster veins: moderate spread with distinct nodes
-        // 1.5x size, minimum 80 blocks radius - balanced for performance and visibility
         int radius = Math.max(80, Mth.ceil(size * 1.5f));
-        int actualNodeCount = nodeCount + random.nextInt(4) - 2; // 10-14 nodes
-
-        // Node sizes scale with radius for visibility (8-15 blocks)
+        int actualNodeCount = nodeCount + random.nextInt(4) - 2;
         float baseNodeSize = Math.max(8.0f, Math.min(15.0f, radius * 0.12f));
-        // Channel thickness (4-8 blocks)
         float channelThickness = Math.max(4.0f, Math.min(8.0f, radius * 0.06f));
 
-        // Generate node positions scattered throughout the volume
         List<Node> nodes = new ArrayList<>();
         long noiseSeed = random.nextLong();
 
-        // First node is near center - slightly larger as the "main" pocket
         Node centerNode = new Node();
         centerNode.x = (random.nextFloat() - 0.5f) * radius * 0.2f;
         centerNode.y = (random.nextFloat() - 0.5f) * radius * 0.2f;
         centerNode.z = (random.nextFloat() - 0.5f) * radius * 0.2f;
-        centerNode.radius = baseNodeSize * (1.2f + random.nextFloat() * 0.3f); // Central node slightly larger
+        centerNode.radius = baseNodeSize * (1.2f + random.nextFloat() * 0.3f);
         centerNode.noiseSeed = random.nextFloat() * 1000;
         nodes.add(centerNode);
 
-        // Generate scattered nodes - ensure minimum spacing between nodes
         for (int i = 1; i < actualNodeCount; i++) {
             Node node = new Node();
-            // Scatter nodes throughout the volume with minimum separation
             float scatter = scatterAmount * radius;
+            float minSeparation = baseNodeSize * 4.0f;
 
-            // Try to place node with minimum distance from others
-            int attempts = 0;
-            boolean validPlacement = false;
-            while (!validPlacement && attempts < 10) {
+            for (int attempts = 0; attempts < 10; attempts++) {
                 float theta = random.nextFloat() * (float) Math.PI * 2;
                 float phi = (random.nextFloat() - 0.5f) * (float) Math.PI;
-                // Push nodes toward outer regions for better spacing
                 float dist = scatter * (0.4f + random.nextFloat() * 0.6f);
 
                 node.x = (float) (Math.cos(theta) * Math.cos(phi) * dist);
-                node.y = (float) (Math.sin(phi) * dist * 0.5f); // Vertical compression
+                node.y = (float) (Math.sin(phi) * dist * 0.5f);
                 node.z = (float) (Math.sin(theta) * Math.cos(phi) * dist);
 
-                // Check minimum distance from existing nodes (at least 4x node size for clear separation)
-                validPlacement = true;
-                float minSeparation = baseNodeSize * 4.0f;
+                boolean valid = true;
                 for (Node existing : nodes) {
                     float dx = node.x - existing.x;
                     float dy = node.y - existing.y;
                     float dz = node.z - existing.z;
-                    float distToOther = (float) Math.sqrt(dx * dx + dy * dy + dz * dz);
-                    if (distToOther < minSeparation) {
-                        validPlacement = false;
+                    if (Math.sqrt(dx * dx + dy * dy + dz * dz) < minSeparation) {
+                        valid = false;
                         break;
                     }
                 }
-                attempts++;
+                if (valid) break;
             }
 
             node.radius = baseNodeSize * (0.7f + random.nextFloat() * 0.6f);
@@ -167,7 +145,6 @@ public class ClusterVeinGenerator extends VeinGenerator {
             nodes.add(node);
         }
 
-        // Pre-compute channel connections (connect nearby nodes)
         List<int[]> channels = new ArrayList<>();
         for (int i = 0; i < nodes.size(); i++) {
             int connections = 1 + random.nextInt(3);
@@ -189,12 +166,8 @@ public class ClusterVeinGenerator extends VeinGenerator {
             }
         }
 
-        // OPTIMIZED: Instead of iterating 300^3 positions, iterate only around nodes and channels
-        // This reduces iterations from ~27 million to ~50-100k
-
-        // Generate blocks for each node (spherical iteration)
         for (Node node : nodes) {
-            int nodeRadius = Mth.ceil(node.radius * 1.4f); // Slightly larger for noise
+            int nodeRadius = Mth.ceil(node.radius * 1.4f);
             int nodeCenterX = origin.getX() + Mth.floor(node.x);
             int nodeCenterY = origin.getY() + Mth.floor(node.y);
             int nodeCenterZ = origin.getZ() + Mth.floor(node.z);
@@ -227,7 +200,6 @@ public class ClusterVeinGenerator extends VeinGenerator {
             }
         }
 
-        // Generate blocks for each channel (cylinder iteration along line segment)
         int channelRadius = Mth.ceil(channelThickness * 1.3f);
         for (int[] channel : channels) {
             Node n1 = nodes.get(channel[0]);
@@ -238,7 +210,6 @@ public class ClusterVeinGenerator extends VeinGenerator {
             float length = (float) Math
                     .sqrt((cx2 - cx1) * (cx2 - cx1) + (cy2 - cy1) * (cy2 - cy1) + (cz2 - cz1) * (cz2 - cz1));
 
-            // Step along channel
             int steps = Mth.ceil(length);
             for (int step = 0; step <= steps; step++) {
                 float t = steps > 0 ? (float) step / steps : 0;
@@ -250,7 +221,6 @@ public class ClusterVeinGenerator extends VeinGenerator {
                 int centerY = origin.getY() + Mth.floor(cy);
                 int centerZ = origin.getZ() + Mth.floor(cz);
 
-                // Fill cylinder cross-section at this point
                 for (int lx = -channelRadius; lx <= channelRadius; lx++) {
                     for (int ly = -channelRadius; ly <= channelRadius; ly++) {
                         for (int lz = -channelRadius; lz <= channelRadius; lz++) {
@@ -284,10 +254,7 @@ public class ClusterVeinGenerator extends VeinGenerator {
     }
 
     private List<Integer> findNearestNodes(List<Node> nodes, int fromIndex, int count) {
-        List<Integer> result = new ArrayList<>();
         Node from = nodes.get(fromIndex);
-
-        // Simple O(n) nearest neighbor search
         List<float[]> distances = new ArrayList<>();
         for (int i = 0; i < nodes.size(); i++) {
             if (i == fromIndex) continue;
@@ -297,40 +264,13 @@ public class ClusterVeinGenerator extends VeinGenerator {
                     (from.z - to.z) * (from.z - to.z);
             distances.add(new float[] { i, dist });
         }
-
-        // Sort by distance
         distances.sort((a, b) -> Float.compare(a[1], b[1]));
 
+        List<Integer> result = new ArrayList<>();
         for (int i = 0; i < Math.min(count, distances.size()); i++) {
             result.add((int) distances.get(i)[0]);
         }
         return result;
-    }
-
-    private float distanceToLineSegment(float px, float py, float pz,
-                                        float x1, float y1, float z1,
-                                        float x2, float y2, float z2) {
-        float dx = x2 - x1;
-        float dy = y2 - y1;
-        float dz = z2 - z1;
-        float lengthSq = dx * dx + dy * dy + dz * dz;
-
-        if (lengthSq == 0) {
-            // Degenerate segment
-            return (float) Math.sqrt((px - x1) * (px - x1) + (py - y1) * (py - y1) + (pz - z1) * (pz - z1));
-        }
-
-        float t = Math.max(0, Math.min(1,
-                ((px - x1) * dx + (py - y1) * dy + (pz - z1) * dz) / lengthSq));
-
-        float closestX = x1 + t * dx;
-        float closestY = y1 + t * dy;
-        float closestZ = z1 + t * dz;
-
-        return (float) Math.sqrt(
-                (px - closestX) * (px - closestX) +
-                        (py - closestY) * (py - closestY) +
-                        (pz - closestZ) * (pz - closestZ));
     }
 
     private float noise3D(float x, float y, float z, long seed) {
@@ -350,7 +290,6 @@ public class ClusterVeinGenerator extends VeinGenerator {
 
         BlockState current = section.getBlockState(sectionX, sectionY, sectionZ);
 
-        // Higher rare chance in nodes (the ore pockets)
         float adjustedRareChance = isNode ? rareBlockChance * 2.5f : rareBlockChance;
         if (!rareBlocks.isEmpty() && random.nextFloat() < adjustedRareChance) {
             var ore = GTUtil.getRandomItem(random, rareBlocks);
@@ -384,6 +323,26 @@ public class ClusterVeinGenerator extends VeinGenerator {
 
     public ClusterVeinGenerator rareBlock(Material mat, int weight) {
         rareBlocks.add(new OreBlockDef(Either.right(mat), weight));
+        return this;
+    }
+
+    public ClusterVeinGenerator pocketCount(int count) {
+        this.nodeCount = count;
+        return this;
+    }
+
+    public ClusterVeinGenerator pocketRadius(float radius) {
+        this.nodeSizeRatio = radius;
+        return this;
+    }
+
+    public ClusterVeinGenerator channelRadius(float radius) {
+        this.channelThicknessRatio = radius;
+        return this;
+    }
+
+    public ClusterVeinGenerator pocketDensity(float density) {
+        this.scatterAmount = density;
         return this;
     }
 }

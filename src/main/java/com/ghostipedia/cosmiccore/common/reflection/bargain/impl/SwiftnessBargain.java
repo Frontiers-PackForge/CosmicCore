@@ -1,8 +1,10 @@
 package com.ghostipedia.cosmiccore.common.reflection.bargain.impl;
 
 import com.ghostipedia.cosmiccore.CosmicCore;
+import com.ghostipedia.cosmiccore.common.reflection.AffinityHelper;
 import com.ghostipedia.cosmiccore.common.reflection.ReflectionLang;
 import com.ghostipedia.cosmiccore.common.reflection.bargain.Bargain;
+import com.ghostipedia.cosmiccore.common.reflection.bargain.BargainCategory;
 
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -13,12 +15,6 @@ import net.minecraft.world.entity.player.Player;
 import java.util.List;
 import java.util.UUID;
 
-/**
- * Swiftness Bargain: +20% movement speed
- *
- * A minor stat boost for those who want to move faster.
- * Less dramatic than Quake Movement, but always active.
- */
 public class SwiftnessBargain extends Bargain {
 
     public static final ResourceLocation ID = CosmicCore.id("swiftness");
@@ -30,6 +26,7 @@ public class SwiftnessBargain extends Bargain {
         super(
                 ID,
                 BargainTier.EARLY,
+                BargainCategory.MOBILITY,
                 16,   // shardCost - cheap starter
                 10,   // weight
                 50    // erosion
@@ -96,8 +93,12 @@ public class SwiftnessBargain extends Bargain {
         var attribute = player.getAttribute(Attributes.MOVEMENT_SPEED);
         if (attribute != null) {
             attribute.removeModifier(MODIFIER_UUID);
+            // Base: 20% speed boost, modified by soul shape affinity
+            float baseBoost = 0.2f;
+            float affinity = AffinityHelper.getMultiplier(player, BargainCategory.MOBILITY);
+            float actualBoost = baseBoost * affinity;
             attribute.addPermanentModifier(new AttributeModifier(
-                    MODIFIER_UUID, "Reflection Swiftness", 0.2, AttributeModifier.Operation.MULTIPLY_TOTAL));
+                    MODIFIER_UUID, "Reflection Swiftness", actualBoost, AttributeModifier.Operation.MULTIPLY_TOTAL));
         }
     }
 

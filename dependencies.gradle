@@ -125,4 +125,8 @@ dependencies {
     modImplementation(forge.forestry)
     modImplementation(forge.gendustry)
     api(forge.gendustry)
+
+    // JourneyMap
+    modCompileOnly(forge.journeymapApi)
+    modRuntimeOnly(forge.journeymapForge)
 }

@@ -32,11 +32,6 @@ import javax.annotation.ParametersAreNonnullByDefault;
 
 import static com.ghostipedia.cosmiccore.common.data.worldgen.generator.veins.VeinGeneratorUtil.*;
 
-/**
- * Stringer vein generator - creates a noisy, blobby central mass with
- * spread-out tendrils radiating outward in all directions.
- * Designed for massive veins that players explore over time.
- */
 @MethodsReturnNonnullByDefault
 @ParametersAreNonnullByDefault
 @Accessors(fluent = true, chain = true)
@@ -56,17 +51,19 @@ public class StringerVeinGenerator extends VeinGenerator {
     public List<OreBlockDef> oreBlocks = new ArrayList<>();
     public List<OreBlockDef> rareBlocks = new ArrayList<>();
     @Setter
-    public int stringerCount = 16; // Fewer but more spread out
+    public int stringerCount = 16;
     @Setter
-    public float coreRadiusRatio = 0.25f; // Smaller core
+    public float coreRadiusRatio = 0.25f;
     @Setter
-    public float stringerThicknessRatio = 0.1f; // Thinner stringers
+    public float stringerThicknessRatio = 0.1f;
     @Setter
-    public float coreNoiseIntensity = 0.6f; // More blobby/noisy core
+    public float coreNoiseIntensity = 0.6f;
     @Setter
-    public float oreDensity = 0.6f; // Not perfectly dense - some gaps
+    public float oreDensity = 0.6f;
     @Setter
     public float rareBlockChance = 0.04f;
+
+    public StringerVeinGenerator() {}
 
     public StringerVeinGenerator(GTOreDefinition entry) {
         super(entry);
@@ -99,31 +96,23 @@ public class StringerVeinGenerator extends VeinGenerator {
         Map<BlockPos, OreBlockPlacer> generatedBlocks = new Object2ObjectOpenHashMap<>();
 
         int size = entry.clusterSize().sample(random);
-        // Stringer veins are large with big blobby cores and thin tendrils reaching far
-        // Style multiplier: 0.7x size, minimum 55 blocks radius - larger than branch veins
         int radius = Math.max(55, Mth.ceil(size * 0.7f));
         float coreRadius = Math.max(5.0f, radius * coreRadiusRatio);
         float baseStringerThickness = Math.max(2.0f, radius * stringerThicknessRatio);
         int actualStringerCount = stringerCount + random.nextInt(6) - 3;
 
-        // Generate noise seeds for core irregularity
         long noiseSeed = random.nextLong();
-
-        // Generate stringer directions - spread apart evenly then add randomness
         double[][] stringerDirs = new double[actualStringerCount][3];
         float[] stringerThickness = new float[actualStringerCount];
         float[] stringerLengths = new float[actualStringerCount];
 
         for (int i = 0; i < actualStringerCount; i++) {
-            // Use golden angle distribution for more even spread
-            double theta = i * 2.399963 + random.nextDouble() * 0.5; // Golden angle + jitter
-            double phi = (random.nextDouble() - 0.5) * 1.4; // More vertical variation
+            double theta = i * 2.399963 + random.nextDouble() * 0.5;
+            double phi = (random.nextDouble() - 0.5) * 1.4;
             stringerDirs[i][0] = Math.cos(theta) * Math.cos(phi);
             stringerDirs[i][1] = Math.sin(phi) * 0.6;
             stringerDirs[i][2] = Math.sin(theta) * Math.cos(phi);
-            // Varied thickness
             stringerThickness[i] = baseStringerThickness * (0.5f + random.nextFloat() * 0.7f);
-            // Varied lengths - extend to full radius or beyond
             stringerLengths[i] = 0.8f + random.nextFloat() * 0.4f;
         }
 
@@ -138,14 +127,12 @@ public class StringerVeinGenerator extends VeinGenerator {
 
             if (distFromOrigin > radius) continue;
 
-            // Blobby core using multi-octave noise for organic shape
             float noise1 = noise3D(pos.getX() * 0.15f, pos.getY() * 0.15f, pos.getZ() * 0.15f, noiseSeed);
             float noise2 = noise3D(pos.getX() * 0.3f, pos.getY() * 0.3f, pos.getZ() * 0.3f, noiseSeed + 100);
             float combinedNoise = noise1 * 0.7f + noise2 * 0.3f;
             float noisyRadius = coreRadius * (1.0f + combinedNoise * coreNoiseIntensity);
             boolean inCore = distFromOrigin <= noisyRadius;
 
-            // Add satellite blobs around core
             boolean inBlob = false;
             if (!inCore && distFromOrigin <= coreRadius * 2.0f) {
                 float blobNoise = noise3D(pos.getX() * 0.2f, pos.getY() * 0.2f, pos.getZ() * 0.2f, noiseSeed + 50);
@@ -160,13 +147,11 @@ public class StringerVeinGenerator extends VeinGenerator {
             boolean inStringer = false;
 
             if (!inCore && !inBlob) {
-                // Check if within any stringer
                 for (int i = 0; i < actualStringerCount; i++) {
                     float maxLen = radius * stringerLengths[i];
                     float distToStringer = distanceToRay(dx, dy, dz,
                             stringerDirs[i][0], stringerDirs[i][1], stringerDirs[i][2], (int) maxLen);
 
-                    // Stringers taper as they extend
                     float progress = Math.max(0, distFromOrigin - coreRadius) / (maxLen - coreRadius);
                     float taperFactor = 1.0f - progress * 0.5f;
 
@@ -181,7 +166,6 @@ public class StringerVeinGenerator extends VeinGenerator {
 
             if (!inCore && !inBlob && !inStringer) continue;
 
-            // Apply ore density - not every position gets ore
             if (random.nextFloat() > oreDensity) continue;
 
             float normalizedDist = distFromOrigin / radius;
@@ -199,7 +183,6 @@ public class StringerVeinGenerator extends VeinGenerator {
         return generatedBlocks;
     }
 
-    // Simple 3D noise function
     private float noise3D(float x, float y, float z, long seed) {
         long posHash = Float.floatToIntBits(x * 73856093) ^
                 Float.floatToIntBits(y * 19349663) ^
@@ -228,7 +211,6 @@ public class StringerVeinGenerator extends VeinGenerator {
 
         BlockState current = section.getBlockState(sectionX, sectionY, sectionZ);
 
-        // Higher rare chance in core
         float adjustedRareChance = isCore ? rareBlockChance * 2 : rareBlockChance;
         if (!rareBlocks.isEmpty() && random.nextFloat() < adjustedRareChance) {
             var ore = GTUtil.getRandomItem(random, rareBlocks);
@@ -263,6 +245,31 @@ public class StringerVeinGenerator extends VeinGenerator {
 
     public StringerVeinGenerator rareBlock(Material mat, int weight) {
         rareBlocks.add(new OreBlockDef(Either.right(mat), weight));
+        return this;
+    }
+
+    public StringerVeinGenerator tendrilCount(int count) {
+        this.stringerCount = count;
+        return this;
+    }
+
+    public StringerVeinGenerator coreRadius(float radius) {
+        this.coreRadiusRatio = radius;
+        return this;
+    }
+
+    public StringerVeinGenerator tendrilRadius(float radius) {
+        this.stringerThicknessRatio = radius;
+        return this;
+    }
+
+    public StringerVeinGenerator coreDensity(float density) {
+        this.oreDensity = density;
+        return this;
+    }
+
+    public StringerVeinGenerator tendrilCurvature(float curvature) {
+        this.coreNoiseIntensity = curvature;
         return this;
     }
 }

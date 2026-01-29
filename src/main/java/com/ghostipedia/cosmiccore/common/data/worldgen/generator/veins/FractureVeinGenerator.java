@@ -31,12 +31,6 @@ import javax.annotation.ParametersAreNonnullByDefault;
 
 import static com.ghostipedia.cosmiccore.common.data.worldgen.generator.veins.VeinGeneratorUtil.*;
 
-/**
- * Fracture vein generator - creates a "Shattered Geode" pattern.
- * Central hollow geode shell with crystal spikes pointing inward,
- * surrounded by radiating cracks/fractures extending outward like
- * shattered glass from an impact point.
- */
 @MethodsReturnNonnullByDefault
 @ParametersAreNonnullByDefault
 @Accessors(fluent = true, chain = true)
@@ -54,13 +48,15 @@ public class FractureVeinGenerator extends VeinGenerator {
     public List<OreBlockDef> oreBlocks = new ArrayList<>();
     public List<OreBlockDef> rareBlocks = new ArrayList<>();
     @Setter
-    public float geodeRadius = 12.0f; // Radius of the central geode shell
+    public float geodeRadius = 12.0f;
     @Setter
-    public float rareBlockChance = 0.08f; // Higher chance for rare blocks in geode center
+    public float rareBlockChance = 0.08f;
     @Setter
-    public int crackCount = 8; // Number of radiating cracks
+    public int crackCount = 8;
     @Setter
-    public float spikeLength = 6.0f; // Length of crystal spikes pointing inward
+    public float spikeLength = 6.0f;
+
+    public FractureVeinGenerator() {}
 
     public FractureVeinGenerator(GTOreDefinition entry) {
         super(entry);
@@ -84,22 +80,14 @@ public class FractureVeinGenerator extends VeinGenerator {
         return entries;
     }
 
-    // Radiating crack data
     private static class Crack {
 
-        float dirX, dirY, dirZ; // Direction from center
-        float length; // How far the crack extends
-        float thickness; // Thickness of the crack
-        float noiseSeed;
+        float dirX, dirY, dirZ, length, thickness, noiseSeed;
     }
 
-    // Crystal spike data
     private static class Spike {
 
-        float dirX, dirY, dirZ; // Direction pointing inward
-        float baseX, baseY, baseZ; // Starting point on geode shell
-        float length;
-        float thickness;
+        float dirX, dirY, dirZ, baseX, baseY, baseZ, length, thickness;
     }
 
     @Override
@@ -110,25 +98,20 @@ public class FractureVeinGenerator extends VeinGenerator {
         int size = entry.clusterSize().sample(random);
         long noiseSeed = random.nextLong();
 
-        // Scale geode based on vein size
         float actualGeodeRadius = geodeRadius * (0.8f + (size / 100.0f) * 0.4f);
-        float shellThickness = 3.0f + random.nextFloat() * 2.0f; // 3-5 block thick shell
+        float shellThickness = 3.0f + random.nextFloat() * 2.0f;
         float innerRadius = actualGeodeRadius - shellThickness;
 
-        // === PART 1: GEODE SHELL ===
-        // Hollow sphere with ore on the shell
         int geodeRadiusInt = Mth.ceil(actualGeodeRadius * 1.2f);
         for (int lx = -geodeRadiusInt; lx <= geodeRadiusInt; lx++) {
             for (int ly = -geodeRadiusInt; ly <= geodeRadiusInt; ly++) {
                 for (int lz = -geodeRadiusInt; lz <= geodeRadiusInt; lz++) {
                     float dist = (float) Math.sqrt(lx * lx + ly * ly + lz * lz);
 
-                    // Noise for irregular geode shape
                     float noise = noise3D(lx * 0.2f, ly * 0.2f, lz * 0.2f, noiseSeed);
                     float noisyOuterRadius = actualGeodeRadius * (1.0f + noise * 0.15f);
                     float noisyInnerRadius = innerRadius * (1.0f + noise * 0.2f);
 
-                    // Only place on shell (between inner and outer radius)
                     if (dist < noisyInnerRadius || dist > noisyOuterRadius) continue;
 
                     int px = origin.getX() + lx;
@@ -140,7 +123,6 @@ public class FractureVeinGenerator extends VeinGenerator {
                     if (random.nextFloat() > 0.92f * entry.density()) continue;
 
                     long randomSeed = random.nextLong();
-                    // Rare blocks more common on inner surface of geode
                     boolean isInnerSurface = dist < (noisyInnerRadius + noisyOuterRadius) / 2;
                     generatedBlocks.put(blockPos,
                             (access, section) -> placeBlock(section, randomSeed, entry,
@@ -149,15 +131,12 @@ public class FractureVeinGenerator extends VeinGenerator {
             }
         }
 
-        // === PART 2: CRYSTAL SPIKES POINTING INWARD ===
-        // Generate spikes on the inner surface pointing toward center
-        int actualSpikeCount = 12 + random.nextInt(8); // 12-20 spikes
+        int actualSpikeCount = 12 + random.nextInt(8);
         List<Spike> spikes = new ArrayList<>();
 
         for (int i = 0; i < actualSpikeCount; i++) {
             Spike spike = new Spike();
 
-            // Random point on sphere surface using spherical coordinates
             float theta = random.nextFloat() * (float) (2 * Math.PI);
             float phi = (float) Math.acos(2 * random.nextFloat() - 1);
 
@@ -165,21 +144,18 @@ public class FractureVeinGenerator extends VeinGenerator {
             spike.dirY = (float) Math.cos(phi);
             spike.dirZ = (float) (Math.sin(phi) * Math.sin(theta));
 
-            // Base is on inner surface of geode
             float baseNoise = noise3D(spike.dirX * 10, spike.dirY * 10, spike.dirZ * 10, noiseSeed + 100);
             float baseRadius = innerRadius * (1.0f + baseNoise * 0.15f);
             spike.baseX = spike.dirX * baseRadius;
             spike.baseY = spike.dirY * baseRadius;
             spike.baseZ = spike.dirZ * baseRadius;
 
-            // Spike points inward (negative direction)
-            spike.length = spikeLength * (0.5f + random.nextFloat() * 1.0f); // 50-150% of base length
-            spike.thickness = 1.5f + random.nextFloat() * 1.5f; // 1.5-3 blocks thick at base
+            spike.length = spikeLength * (0.5f + random.nextFloat() * 1.0f);
+            spike.thickness = 1.5f + random.nextFloat() * 1.5f;
 
             spikes.add(spike);
         }
 
-        // Generate spike blocks
         for (Spike spike : spikes) {
             int steps = Mth.ceil(spike.length);
             for (int step = 0; step <= steps; step++) {
@@ -190,11 +166,9 @@ public class FractureVeinGenerator extends VeinGenerator {
                 float cy = spike.baseY - spike.dirY * spike.length * t;
                 float cz = spike.baseZ - spike.dirZ * spike.length * t;
 
-                // Spike tapers toward tip
                 float currentThickness = spike.thickness * (1.0f - t * 0.7f);
                 int thicknessInt = Math.max(1, Mth.ceil(currentThickness));
 
-                // Fill cross-section
                 for (int lx = -thicknessInt; lx <= thicknessInt; lx++) {
                     for (int ly = -thicknessInt; ly <= thicknessInt; ly++) {
                         for (int lz = -thicknessInt; lz <= thicknessInt; lz++) {
@@ -210,7 +184,6 @@ public class FractureVeinGenerator extends VeinGenerator {
                             if (random.nextFloat() > 0.95f * entry.density()) continue;
 
                             long randomSeed = random.nextLong();
-                            // Tips of spikes have higher rare chance
                             boolean isTip = t > 0.7f;
                             generatedBlocks.put(blockPos,
                                     (access, section) -> placeBlock(section, randomSeed, entry,
@@ -221,45 +194,39 @@ public class FractureVeinGenerator extends VeinGenerator {
             }
         }
 
-        // === PART 3: RADIATING CRACKS EXTENDING OUTWARD ===
-        // Cracks originate from geode surface and extend outward
-        int actualCrackCount = crackCount + random.nextInt(5); // 8-12 cracks
+        int actualCrackCount = crackCount + random.nextInt(5);
         List<Crack> cracks = new ArrayList<>();
 
         for (int i = 0; i < actualCrackCount; i++) {
             Crack crack = new Crack();
 
-            // Random direction outward from center
             float theta = random.nextFloat() * (float) (2 * Math.PI);
             float phi = (float) Math.acos(2 * random.nextFloat() - 1);
 
             crack.dirX = (float) (Math.sin(phi) * Math.cos(theta));
-            crack.dirY = (float) Math.cos(phi) * 0.6f; // Bias toward horizontal
+            crack.dirY = (float) Math.cos(phi) * 0.6f;
             crack.dirZ = (float) (Math.sin(phi) * Math.sin(theta));
 
-            // Normalize
             float len = (float) Math.sqrt(crack.dirX * crack.dirX + crack.dirY * crack.dirY + crack.dirZ * crack.dirZ);
             crack.dirX /= len;
             crack.dirY /= len;
             crack.dirZ /= len;
 
-            crack.length = actualGeodeRadius * (1.5f + random.nextFloat() * 2.0f); // 1.5-3.5x geode radius
-            crack.thickness = 2.0f + random.nextFloat() * 2.0f; // 2-4 blocks thick
+            crack.length = actualGeodeRadius * (1.5f + random.nextFloat() * 2.0f);
+            crack.thickness = 2.0f + random.nextFloat() * 2.0f;
             crack.noiseSeed = random.nextFloat() * 1000;
 
             cracks.add(crack);
         }
 
-        // Generate crack blocks
         for (Crack crack : cracks) {
             int steps = Mth.ceil(crack.length);
-            float startDist = actualGeodeRadius; // Start at geode surface
+            float startDist = actualGeodeRadius;
 
             for (int step = 0; step <= steps; step++) {
                 float t = steps > 0 ? (float) step / steps : 0;
                 float dist = startDist + crack.length * t;
 
-                // Add wobble to crack path
                 float wobbleX = noise3D(t * 5 + crack.noiseSeed, 0, 0, noiseSeed) * 3.0f;
                 float wobbleY = noise3D(0, t * 5 + crack.noiseSeed, 0, noiseSeed) * 2.0f;
                 float wobbleZ = noise3D(0, 0, t * 5 + crack.noiseSeed, noiseSeed) * 3.0f;
@@ -268,11 +235,8 @@ public class FractureVeinGenerator extends VeinGenerator {
                 float cy = crack.dirY * dist + wobbleY;
                 float cz = crack.dirZ * dist + wobbleZ;
 
-                // Crack tapers and becomes more sparse toward end
                 float currentThickness = crack.thickness * (1.0f - t * 0.6f);
                 int thicknessInt = Math.max(1, Mth.ceil(currentThickness));
-
-                // Cracks become more sparse toward tips
                 float placementChance = 0.9f - t * 0.4f;
 
                 for (int lx = -thicknessInt; lx <= thicknessInt; lx++) {
@@ -302,7 +266,6 @@ public class FractureVeinGenerator extends VeinGenerator {
         return generatedBlocks;
     }
 
-    // Simple 3D noise function
     private float noise3D(float x, float y, float z, long seed) {
         long posHash = Float.floatToIntBits(x * 73856093) ^
                 Float.floatToIntBits(y * 19349663) ^
@@ -321,7 +284,6 @@ public class FractureVeinGenerator extends VeinGenerator {
 
         BlockState current = section.getBlockState(sectionX, sectionY, sectionZ);
 
-        // Higher rare chance at fracture intersections
         float adjustedRareChance = atIntersection ? rareBlockChance * 3.0f : rareBlockChance;
         if (!rareBlocks.isEmpty() && random.nextFloat() < adjustedRareChance) {
             var ore = GTUtil.getRandomItem(random, rareBlocks);
@@ -355,6 +317,20 @@ public class FractureVeinGenerator extends VeinGenerator {
 
     public FractureVeinGenerator rareBlock(Material mat, int weight) {
         rareBlocks.add(new OreBlockDef(Either.right(mat), weight));
+        return this;
+    }
+
+    public FractureVeinGenerator shellRadius(float radius) {
+        this.geodeRadius = radius;
+        return this;
+    }
+
+    public FractureVeinGenerator shellThickness(float thickness) {
+        return this;
+    }
+
+    public FractureVeinGenerator spikeCount(int count) {
+        this.crackCount = count;
         return this;
     }
 }

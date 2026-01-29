@@ -1,5 +1,7 @@
 package com.ghostipedia.cosmiccore.common.item.behavior;
 
+import com.ghostipedia.cosmiccore.common.network.CCoreNetwork;
+import com.ghostipedia.cosmiccore.common.network.packet.SyncPredictedVeinsPacket;
 import com.ghostipedia.cosmiccore.common.worldgen.survey.VeinSurveyUtil;
 import com.ghostipedia.cosmiccore.common.worldgen.survey.VeinSurveyUtil.VeinInfo;
 
@@ -180,6 +182,8 @@ public class VeinSurveyBehavior implements IInteractionItem, IAddInformation {
         } else {
             displayScanResults(player, allVeins, center, mode, filter);
         }
+
+        CCoreNetwork.sendToPlayer(player, new SyncPredictedVeinsPacket(allVeins, true));
     }
 
     private boolean isInCone(BlockPos from, BlockPos to, double facingYaw, int coneAngle) {
@@ -272,9 +276,12 @@ public class VeinSurveyBehavior implements IInteractionItem, IAddInformation {
         int distance = vein.horizontalDistanceFrom(from);
         String direction = vein.directionFrom(from);
 
+        ChatFormatting nameColor = vein.isConfirmed() ? ChatFormatting.AQUA : ChatFormatting.GRAY;
+        String confidenceIndicator = vein.isConfirmed() ? "" : "? ";
+
         MutableComponent entry = Component.literal("  " + index + ". ")
                 .withStyle(ChatFormatting.GRAY)
-                .append(Component.literal(vein.getVeinName()).withStyle(ChatFormatting.AQUA))
+                .append(Component.literal(confidenceIndicator + vein.getVeinName()).withStyle(nameColor))
                 .append(Component.literal(" - ").withStyle(ChatFormatting.DARK_GRAY))
                 .append(Component.literal(distance + "m").withStyle(ChatFormatting.WHITE));
 

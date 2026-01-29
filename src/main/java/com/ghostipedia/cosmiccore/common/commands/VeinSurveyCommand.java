@@ -215,11 +215,14 @@ public class VeinSurveyCommand {
         int distance = vein.horizontalDistanceFrom(from);
         String direction = vein.directionFrom(from);
 
+        ChatFormatting nameColor = vein.isConfirmed() ? ChatFormatting.AQUA : ChatFormatting.GRAY;
+        String confidenceIndicator = vein.isConfirmed() ? "" : "? ";
+
         String tpCommand = "/tp @s " + pos.getX() + " ~ " + pos.getZ();
 
         MutableComponent entry = Component.literal(index + ". ")
                 .withStyle(ChatFormatting.GRAY)
-                .append(Component.literal(vein.getVeinName()).withStyle(ChatFormatting.AQUA))
+                .append(Component.literal(confidenceIndicator + vein.getVeinName()).withStyle(nameColor))
                 .append(Component.literal(" - ").withStyle(ChatFormatting.GRAY))
                 .append(Component.literal(distance + "m " + direction).withStyle(ChatFormatting.WHITE))
                 .append(Component.literal(" [").withStyle(ChatFormatting.DARK_GRAY))

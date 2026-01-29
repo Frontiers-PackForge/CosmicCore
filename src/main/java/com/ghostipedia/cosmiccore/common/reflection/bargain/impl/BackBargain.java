@@ -5,6 +5,7 @@ import com.ghostipedia.cosmiccore.common.reflection.ReflectionCapability;
 import com.ghostipedia.cosmiccore.common.reflection.ReflectionConstants;
 import com.ghostipedia.cosmiccore.common.reflection.ReflectionLang;
 import com.ghostipedia.cosmiccore.common.reflection.bargain.Bargain;
+import com.ghostipedia.cosmiccore.common.reflection.bargain.BargainCategory;
 
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
@@ -22,34 +23,16 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
-/**
- * The /back bargain - return to your last death location.
- *
- * Even more of a trap than /home. You WILL die. You WILL want your stuff back.
- * And every time you use it, the cost grows.
- *
- * Base cost: 2 erosion
- * Quick use penalty: Doubles each time used within 15 minutes (2 -> 4 -> 8 -> 16 -> 32)
- * Ceiling: 32 erosion per use
- * Reset: After 15 minutes of no use, resets to base cost
- */
 public class BackBargain extends Bargain {
 
     private static final ResourceLocation ID = CosmicCore.id("back");
     public static final BackBargain INSTANCE = new BackBargain();
     private static final String BARGAIN_ID = "back";
 
-    // Track last death positions per player
     private static final Map<UUID, DeathLocation> lastDeathLocations = new HashMap<>();
 
     private BackBargain() {
-        super(
-                ID,
-                BargainTier.EARLY,
-                0,    // shardCost - FREE (poisoned apple - per-use costs add up)
-                0,    // weight - FREE (doesn't consume soul capacity)
-                100   // erosion - significant upfront cost + per-use escalation
-        );
+        super(ID, BargainTier.EARLY, BargainCategory.UTILITY, 0, 0, 100);
     }
 
     @Override
@@ -110,26 +93,14 @@ public class BackBargain extends Bargain {
     }
 
     @Override
-    public void tick(Player player) {
-        // No passive effects
-    }
+    public void tick(Player player) {}
 
-    /**
-     * Record a death location for a player.
-     * Called from death event handler.
-     */
     public static void recordDeath(ServerPlayer player) {
         lastDeathLocations.put(player.getUUID(), new DeathLocation(
                 player.level().dimension(),
                 player.position()));
     }
 
-    /**
-     * Execute the /back teleport.
-     * Called when player uses the command (if they have the bargain).
-     *
-     * @return true if teleport succeeded, false otherwise
-     */
     public static boolean executeBack(ServerPlayer player) {
         return ReflectionCapability.get(player).map(reflection -> {
             if (!reflection.hasBargain(ID)) {
@@ -139,7 +110,6 @@ public class BackBargain extends Bargain {
                 return false;
             }
 
-            // Check for death location
             DeathLocation deathLoc = lastDeathLocations.get(player.getUUID());
             if (deathLoc == null) {
                 player.displayClientMessage(
@@ -148,7 +118,6 @@ public class BackBargain extends Bargain {
                 return false;
             }
 
-            // Get the target dimension
             ServerLevel targetLevel = player.server.getLevel(deathLoc.dimension);
             if (targetLevel == null) {
                 player.displayClientMessage(
@@ -157,14 +126,10 @@ public class BackBargain extends Bargain {
                 return false;
             }
 
-            // Calculate current cost based on usage
             int cost = ReflectionConstants.getCommandCost(reflection, "back");
-
-            // Apply erosion cost
             reflection.addErosion(cost);
             reflection.recordCommandUse("back");
 
-            // Teleport (handling cross-dimension)
             Vec3 pos = deathLoc.position;
             if (player.level().dimension() != deathLoc.dimension) {
                 player.teleportTo(targetLevel, pos.x, pos.y, pos.z, player.getYRot(), player.getXRot());
@@ -172,11 +137,9 @@ public class BackBargain extends Bargain {
                 player.teleportTo(pos.x, pos.y, pos.z);
             }
 
-            // Effects
             player.level().playSound(null, player.blockPosition(),
                     SoundEvents.ENDERMAN_TELEPORT, SoundSource.PLAYERS, 1.0f, 0.5f);
 
-            // Feedback based on cost - gets increasingly ominous
             if (cost <= 4) {
                 player.displayClientMessage(
                         Component.literal("\u00A77\u00A7o*You return to where you fell.*"),
@@ -195,28 +158,20 @@ public class BackBargain extends Bargain {
                         true);
             }
 
-            // Show cost in chat
             player.displayClientMessage(
                     Component.literal("\u00A78[Erosion +" + cost + "]"),
                     false);
 
-            // Clear the death location after use (can't spam back to same spot)
             lastDeathLocations.remove(player.getUUID());
 
             return true;
         }).orElse(false);
     }
 
-    /**
-     * Check if a player has a death location recorded.
-     */
     public static boolean hasDeathLocation(UUID playerId) {
         return lastDeathLocations.containsKey(playerId);
     }
 
-    /**
-     * Clear death location (on logout, etc.)
-     */
     public static void clearDeathLocation(UUID playerId) {
         lastDeathLocations.remove(playerId);
     }

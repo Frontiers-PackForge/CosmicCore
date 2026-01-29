@@ -6,8 +6,10 @@ import com.ghostipedia.cosmiccore.common.network.packet.BootsControlPacket;
 import com.ghostipedia.cosmiccore.common.network.packet.OxygenWarnPacket;
 import com.ghostipedia.cosmiccore.common.network.packet.StellarUpgradePacket;
 import com.ghostipedia.cosmiccore.common.network.packet.SyncOxygenBarPacket;
+import com.ghostipedia.cosmiccore.common.network.packet.SyncPredictedVeinsPacket;
 import com.ghostipedia.cosmiccore.common.network.packet.SyncTimeBarPacket;
 import com.ghostipedia.cosmiccore.common.reflection.network.DashPacket;
+import com.ghostipedia.cosmiccore.common.reflection.network.SoulSuperPacket;
 import com.ghostipedia.cosmiccore.common.reflection.network.SyncQuakeMovementPacket;
 import com.ghostipedia.cosmiccore.common.reflection.ui.ScarSelectionPackets;
 import com.ghostipedia.cosmiccore.common.reflection.ui.VoidUIPackets;
@@ -93,11 +95,17 @@ public class CCoreNetwork {
         // Dash packet (client -> server) - for Celeste-style dash
         register(DashPacket.class, DashPacket::new, NetworkDirection.PLAY_TO_SERVER);
 
+        // Soul Super packet (client -> server) - activate soul shape super ability
+        register(SoulSuperPacket.class, SoulSuperPacket::new, NetworkDirection.PLAY_TO_SERVER);
+
         // Stellar IRIS upgrade packet (client -> server)
         register(StellarUpgradePacket.class, StellarUpgradePacket::new, NetworkDirection.PLAY_TO_SERVER);
 
         // Boots control packet (client -> server)
         register(BootsControlPacket.class, BootsControlPacket::new, NetworkDirection.PLAY_TO_SERVER);
+
+        // Predicted veins sync (server -> client) for JourneyMap integration
+        register(SyncPredictedVeinsPacket.class, SyncPredictedVeinsPacket::new, NetworkDirection.PLAY_TO_CLIENT);
 
         // Void UI packets
         VoidUIPackets.register();

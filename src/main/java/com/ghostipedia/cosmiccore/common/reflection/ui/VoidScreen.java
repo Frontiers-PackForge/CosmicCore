@@ -8,6 +8,7 @@ import com.ghostipedia.cosmiccore.common.reflection.ThresholdEncounter;
 import com.ghostipedia.cosmiccore.common.reflection.bargain.Bargain;
 import com.ghostipedia.cosmiccore.common.reflection.bargain.Bargain.BargainAnswer;
 import com.ghostipedia.cosmiccore.common.reflection.bargain.BargainRegistry;
+import com.ghostipedia.cosmiccore.common.reflection.soul.SoulShape;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
@@ -16,6 +17,8 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+
+import com.mojang.blaze3d.systems.RenderSystem;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -73,6 +76,14 @@ public class VoidScreen extends Screen {
     // Defiance scars for display
     private Set<ResourceLocation> defianceScars = Set.of();
 
+    // Soul shape state
+    private SoulShape currentSoulShape = SoulShape.UNSHAPED;
+    private boolean hasMutilator = false;
+    @Nullable
+    private SoulShape selectedShape = null;
+    private int shapeTransformTicks = 0;
+    private boolean isTransforming = false;
+
     // Flag to open constellation after dialogue
     private boolean pendingConstellationOpen = false;
 
@@ -104,6 +115,20 @@ public class VoidScreen extends Screen {
     private static final int TICKS_BETWEEN_CHARS = 1;
     private static final int MAX_LINE_WIDTH = 350;
     private static final int PARTICLE_COUNT = 30; // Restored for better atmosphere
+
+    // Soul shape textures - using GTCEU item textures for distinct silhouettes
+    private static final ResourceLocation TEXTURE_REVENANT = new ResourceLocation("gtceu",
+            "textures/item/material_sets/dull/dust.png");
+    private static final ResourceLocation TEXTURE_HOLLOW = new ResourceLocation("gtceu",
+            "textures/item/material_sets/dull/ring.png");
+    private static final ResourceLocation TEXTURE_ENGINE = new ResourceLocation("gtceu",
+            "textures/item/material_sets/dull/gear.png");
+    private static final ResourceLocation TEXTURE_GLOBEDANCER = new ResourceLocation("gtceu",
+            "textures/item/material_sets/dull/lens.png");
+    private static final ResourceLocation TEXTURE_BULWARK = new ResourceLocation("gtceu",
+            "textures/item/material_sets/dull/plate.png");
+    private static final ResourceLocation TEXTURE_BLOODTHIRST = new ResourceLocation("gtceu",
+            "textures/item/material_sets/dull/crushed.png");
 
     public VoidScreen(int erosion) {
         super(ReflectionLang.ui("void_title"));
@@ -182,12 +207,22 @@ public class VoidScreen extends Screen {
     public static void openForHub(int erosion, Set<ResourceLocation> activeBargains,
                                   Set<ResourceLocation> defianceScars,
                                   int shardBalance, int usedCapacity, int totalCapacity) {
+        openForHub(erosion, activeBargains, defianceScars, shardBalance, usedCapacity, totalCapacity,
+                SoulShape.UNSHAPED, false);
+    }
+
+    public static void openForHub(int erosion, Set<ResourceLocation> activeBargains,
+                                  Set<ResourceLocation> defianceScars,
+                                  int shardBalance, int usedCapacity, int totalCapacity,
+                                  SoulShape soulShape, boolean hasMutilator) {
         VoidScreen screen = new VoidScreen(erosion, activeBargains);
         screen.mode = VoidMode.HUB;
         screen.defianceScars = defianceScars != null ? defianceScars : Set.of();
         screen.shardBalance = shardBalance;
         screen.usedCapacity = usedCapacity;
         screen.totalCapacity = totalCapacity;
+        screen.currentSoulShape = soulShape != null ? soulShape : SoulShape.UNSHAPED;
+        screen.hasMutilator = hasMutilator;
         screen.setupHubDialogue();
         Minecraft.getInstance().setScreen(screen);
     }
@@ -339,12 +374,19 @@ public class VoidScreen extends Screen {
                 "browse_bargains",
                 browseText));
 
-        // Option 3: Just reflect (always available)
+        // Option 3: Soul mutation (only if has mutilator and not yet shaped)
+        if (hasMutilator && !currentSoulShape.isShaped()) {
+            menuOptions.add(new BargainAnswer(
+                    "mutilate_soul",
+                    ReflectionLang.ui("hub.mutilate_soul")));
+        }
+
+        // Option 4: Just reflect (always available)
         menuOptions.add(new BargainAnswer(
                 "just_reflect",
                 ReflectionLang.uiJustLook()));
 
-        // Option 4: Leave
+        // Option 5: Leave
         menuOptions.add(new BargainAnswer(
                 "leave",
                 ReflectionLang.uiLeave()));
@@ -493,6 +535,110 @@ public class VoidScreen extends Screen {
         }
     }
 
+    private void setupSoulShapeSelection() {
+        answerButtons.clear();
+
+        int buttonWidth = 140;
+        int buttonHeight = 28;
+        int startY = height / 2 + 50; // Push down to avoid header overlap
+        int spacingX = 10;
+        int spacingY = 35;
+        int columns = 2;
+
+        List<BargainAnswer> shapeOptions = new ArrayList<>();
+
+        // Create a button for each soul shape (excluding UNSHAPED)
+        for (SoulShape shape : SoulShape.values()) {
+            if (shape == SoulShape.UNSHAPED) continue;
+
+            // Get the shape's color code
+            String colorCode = getShapeColorCode(shape);
+
+            shapeOptions.add(new BargainAnswer(
+                    "shape_" + shape.getId(),
+                    Component.literal(colorCode + shape.getFormattedName().getString()),
+                    Optional.of(Component.translatable("cosmiccore.soul_shape." + shape.getId() + ".tagline")),
+                    false, 0,
+                    List.of(shape.getDescription(),
+                            Component.literal("\u00A76Super: ").append(shape.getSuperName()),
+                            shape.getSuperDescription()),
+                    List.of(ReflectionLang.ui("soul_shape.warning_permanent"))));
+        }
+
+        // Layout shape options in 2x3 grid
+        int totalWidth = (buttonWidth * columns) + (spacingX * (columns - 1));
+        int startX = (width - totalWidth) / 2;
+
+        for (int i = 0; i < shapeOptions.size(); i++) {
+            BargainAnswer option = shapeOptions.get(i);
+            int col = i % columns;
+            int row = i / columns;
+            int x = startX + (col * (buttonWidth + spacingX));
+            int y = startY + (row * spacingY);
+            answerButtons.add(new AnswerButton(x, y, buttonWidth, buttonHeight, option, i));
+        }
+
+        // Back button centered below the grid
+        int rows = (shapeOptions.size() + columns - 1) / columns;
+        int backY = startY + (rows * spacingY) - 5; // Tighter spacing to fit on screen
+        int backWidth = 120;
+        BargainAnswer backOption = new BargainAnswer("back", ReflectionLang.uiBack());
+        answerButtons.add(new AnswerButton((width - backWidth) / 2, backY, backWidth, buttonHeight,
+                backOption, shapeOptions.size()));
+    }
+
+    private void handleSoulShapeChoice(BargainAnswer answer) {
+        answerButtons.clear();
+
+        if (answer.id().equals("back")) {
+            transitionTo(VoidState.HUB_MENU);
+            setupHubMenu();
+            return;
+        }
+
+        if (answer.id().startsWith("shape_")) {
+            String shapeId = answer.id().substring(6); // Remove "shape_"
+            SoulShape shape = SoulShape.fromId(shapeId);
+
+            if (shape != SoulShape.UNSHAPED) {
+                selectedShape = shape;
+
+                // Send the choice to the server
+                VoidUIPackets.sendSoulShapeChoice(shape);
+
+                // DON'T update currentSoulShape yet - wait until transformation completes
+
+                // Show transformation dialogue then animate
+                dialogueQueue.clear();
+                dialogueQueue.add(ReflectionLang.ui("soul_shape.transforming.0").getString());
+                dialogueQueue.add(ReflectionLang.ui("soul_shape.transforming.1",
+                        shape.getFormattedName().getString()).getString());
+                currentDialogueIndex = 0;
+                charIndex = 0;
+                displayedText = "";
+
+                pendingNextState = VoidState.SOUL_TRANSFORMING;
+                pendingSetup = () -> {
+                    isTransforming = true;
+                    shapeTransformTicks = 0;
+                };
+                transitionTo(VoidState.DIALOGUE);
+            }
+        }
+    }
+
+    private String getShapeColorCode(SoulShape shape) {
+        return switch (shape.getColor()) {
+            case DARK_RED -> "\u00A74";
+            case DARK_PURPLE -> "\u00A75";
+            case GOLD -> "\u00A76";
+            case AQUA -> "\u00A7b";
+            case DARK_GRAY -> "\u00A78";
+            case RED -> "\u00A7c";
+            default -> "\u00A7f";
+        };
+    }
+
     private String getTierString(Bargain.BargainTier tier) {
         return switch (tier) {
             case EARLY -> "\u00A77";      // Gray - early game
@@ -532,8 +678,37 @@ public class VoidScreen extends Screen {
             case DIALOGUE -> {
                 tickDialogue();
             }
-            case AWAITING_CHOICE, HUB_MENU, BROWSE_BARGAINS, VIEW_ACTIVE, DEFIANCE_CONFIRM -> {
+            case AWAITING_CHOICE, HUB_MENU, BROWSE_BARGAINS, VIEW_ACTIVE, DEFIANCE_CONFIRM, SOUL_SHAPE_SELECT -> {
                 // Just wait for button interaction
+            }
+            case SOUL_TRANSFORMING -> {
+                shapeTransformTicks++;
+                // Animation duration: 100 ticks (5 seconds) - longer for smoother transition
+                // Phase 1 (0-30): Breaking apart
+                // Phase 2 (30-60): Chaos/morphing
+                // Phase 3 (60-90): Reforming
+                // Phase 4 (90-100): Settling/stabilizing
+                if (shapeTransformTicks >= 100) {
+                    isTransforming = false;
+
+                    // NOW update the visual shape after animation completes
+                    if (selectedShape != null) {
+                        currentSoulShape = selectedShape;
+                    }
+
+                    // Show completion dialogue then fade out
+                    dialogueQueue.clear();
+                    if (selectedShape != null) {
+                        dialogueQueue.add(ReflectionLang.ui("soul_shape.complete.0",
+                                selectedShape.getFormattedName().getString()).getString());
+                        dialogueQueue.add(ReflectionLang.ui("soul_shape.complete.1").getString());
+                    }
+                    currentDialogueIndex = 0;
+                    charIndex = 0;
+                    displayedText = "";
+                    mode = VoidMode.REFLECTION;
+                    transitionTo(VoidState.DIALOGUE);
+                }
             }
             case FADE_OUT -> {
                 fadeAlpha = Math.max(0f, 1f - (float) ticksInState / FADE_TICKS);
@@ -678,6 +853,12 @@ public class VoidScreen extends Screen {
             return;
         }
 
+        // Handle soul shape selection
+        if (state == VoidState.SOUL_SHAPE_SELECT) {
+            handleSoulShapeChoice(answer);
+            return;
+        }
+
         if (currentBargain == null) return;
 
         // Send packet to server to process the choice
@@ -714,6 +895,19 @@ public class VoidScreen extends Screen {
                 // Open the constellation browser with economy data
                 BargainConstellationScreen.openFromVoid(erosion, activeBargains, defianceScars,
                         shardBalance, usedCapacity, totalCapacity);
+            }
+            case "mutilate_soul" -> {
+                // Show soul shape selection dialogue then menu
+                dialogueQueue.clear();
+                dialogueQueue.add(ReflectionLang.ui("soul_shape.intro.0").getString());
+                dialogueQueue.add(ReflectionLang.ui("soul_shape.intro.1").getString());
+                dialogueQueue.add(ReflectionLang.ui("soul_shape.intro.2").getString());
+                currentDialogueIndex = 0;
+                charIndex = 0;
+                displayedText = "";
+                pendingNextState = VoidState.SOUL_SHAPE_SELECT;
+                pendingSetup = this::setupSoulShapeSelection;
+                transitionTo(VoidState.DIALOGUE);
             }
             case "just_reflect" -> {
                 // Just fade out
@@ -870,8 +1064,14 @@ public class VoidScreen extends Screen {
 
         // Render dialogue text
         if (state == VoidState.DIALOGUE || state == VoidState.AWAITING_CHOICE ||
-                state == VoidState.HUB_MENU || state == VoidState.DEFIANCE_CONFIRM) {
+                state == VoidState.HUB_MENU || state == VoidState.DEFIANCE_CONFIRM ||
+                state == VoidState.SOUL_SHAPE_SELECT) {
             renderDialogue(graphics);
+        }
+
+        // Render transformation effect
+        if (state == VoidState.SOUL_TRANSFORMING && isTransforming) {
+            renderTransformationEffect(graphics);
         }
 
         // Render state-specific headers
@@ -893,7 +1093,7 @@ public class VoidScreen extends Screen {
         // Render answer buttons for all interactive states
         if (state == VoidState.AWAITING_CHOICE || state == VoidState.HUB_MENU ||
                 state == VoidState.BROWSE_BARGAINS || state == VoidState.VIEW_ACTIVE ||
-                state == VoidState.DEFIANCE_CONFIRM) {
+                state == VoidState.DEFIANCE_CONFIRM || state == VoidState.SOUL_SHAPE_SELECT) {
             renderAnswerButtons(graphics, mouseX, mouseY);
         }
 
@@ -933,9 +1133,6 @@ public class VoidScreen extends Screen {
         int centerX = width / 2;
         int centerY = height / 2 - 40;
 
-        // Calculate orb color based on erosion
-        int[] rgb = getSoulColor();
-
         // Breathing + pulsing animation - interpolate with partialTick for smooth 60fps animation
         float smoothBreath = soulBreath + (0.03f * partialTick);
         float smoothPulse = soulPulse + (0.08f * partialTick);
@@ -944,19 +1141,34 @@ public class VoidScreen extends Screen {
         int baseRadius = 35;
         int radius = (int) (baseRadius * breath * pulse);
 
-        int alpha = (int) (fadeAlpha * 255);
-
         // Render ethereal flame aura BEHIND the soul orb
-        int auraRadius = (int) (baseRadius * 1.8f); // Aura is larger than the orb
+        int auraRadius = (int) (baseRadius * 1.8f);
         SoulAuraRenderer.render(
                 graphics.pose(),
                 centerX, centerY,
                 auraRadius,
                 erosion,
-                fadeAlpha * 0.8f, // Slightly reduced intensity
+                fadeAlpha * 0.8f,
                 width, height);
 
-        // Outer glow - use 4px steps for smoother appearance
+        // Render shape-specific soul
+        if (currentSoulShape.isShaped()) {
+            renderShapedSoul(graphics, centerX, centerY, radius, currentSoulShape, 1.0f);
+        } else {
+            renderUnshapedSoul(graphics, centerX, centerY, radius);
+        }
+
+        // Erosion cracks at high levels
+        if (erosion >= 100) {
+            renderCracks(graphics, centerX, centerY, radius);
+        }
+    }
+
+    private void renderUnshapedSoul(GuiGraphics graphics, int centerX, int centerY, int radius) {
+        int[] rgb = getSoulColor();
+        int alpha = (int) (fadeAlpha * 255);
+
+        // Outer glow
         for (int r = radius + 35; r > radius; r -= 4) {
             float glowProgress = (float) (r - radius) / 35f;
             int glowAlpha = (int) ((1f - glowProgress) * 40 * fadeAlpha);
@@ -964,7 +1176,7 @@ public class VoidScreen extends Screen {
             drawCircleFast(graphics, centerX, centerY, r, color);
         }
 
-        // Core - use 3px steps for smoother appearance
+        // Core
         for (int r = radius; r > 0; r -= 3) {
             float coreProgress = (float) r / radius;
             int coreAlpha = (int) (alpha * (0.6f + 0.4f * coreProgress));
@@ -975,18 +1187,69 @@ public class VoidScreen extends Screen {
             drawCircleFast(graphics, centerX, centerY, r, color);
         }
 
-        // Inner bright highlight
+        // Inner highlight
         int highlightRadius = radius / 4;
         int hx = centerX - radius / 3;
         int hy = centerY - radius / 3;
         int hAlpha = (int) (alpha * 0.4f);
         int hColor = (hAlpha << 24) | 0xFFFFFF;
         drawCircleFast(graphics, hx, hy, highlightRadius, hColor);
+    }
 
-        // Erosion cracks at high levels
-        if (erosion >= 100) {
-            renderCracks(graphics, centerX, centerY, radius);
+    private void renderShapedSoul(GuiGraphics graphics, int centerX, int centerY, int radius,
+                                  SoulShape shape, float shapeProgress) {
+        int[] rgb = getShapeRGB(shape);
+        float alpha = fadeAlpha * shapeProgress;
+
+        // Get the texture for this shape
+        ResourceLocation texture = getShapeTexture(shape);
+        if (texture == null) {
+            renderUnshapedSoul(graphics, centerX, centerY, radius);
+            return;
         }
+
+        // Outer glow effect (color-tinted circles)
+        for (int r = radius + 30; r > radius; r -= 5) {
+            float progress = (float) (r - radius) / 30f;
+            int gAlpha = (int) ((1f - progress) * 40 * alpha);
+            int gColor = (gAlpha << 24) | (rgb[0] << 16) | (rgb[1] << 8) | rgb[2];
+            drawCircleFast(graphics, centerX, centerY, r, gColor);
+        }
+
+        // Shape-specific animations
+        float scale = 1.0f;
+        switch (shape) {
+            case BLOODTHIRST -> scale = 1.0f + (float) Math.sin(ticksInState * 0.15f) * 0.05f; // Pulse
+            default -> {}
+        }
+
+        // Render the texture with color tinting
+        int size = (int) (radius * 2.2f * scale);
+        int x = centerX - size / 2;
+        int y = centerY - size / 2;
+
+        // Set color tint
+        RenderSystem.enableBlend();
+        RenderSystem.setShaderColor(rgb[0] / 255f, rgb[1] / 255f, rgb[2] / 255f, alpha);
+        graphics.blit(texture, x, y, 0, 0, size, size, size, size);
+        RenderSystem.setShaderColor(1f, 1f, 1f, 1f);
+
+        // Inner core glow for depth
+        int coreAlpha = (int) (alpha * 150);
+        int coreColor = (coreAlpha << 24) | (rgb[0] << 16) | (rgb[1] << 8) | rgb[2];
+        drawCircleFast(graphics, centerX, centerY, radius / 3, coreColor);
+    }
+
+    private ResourceLocation getShapeTexture(SoulShape shape) {
+        return switch (shape) {
+            case REVENANT -> TEXTURE_REVENANT;
+            case HOLLOW -> TEXTURE_HOLLOW;
+            case ENGINE -> TEXTURE_ENGINE;
+            case GLOBEDANCER -> TEXTURE_GLOBEDANCER;
+            case BULWARK -> TEXTURE_BULWARK;
+            case BLOODTHIRST -> TEXTURE_BLOODTHIRST;
+            default -> null;
+        };
     }
 
     private void renderCracks(GuiGraphics graphics, int cx, int cy, int radius) {
@@ -1433,11 +1696,186 @@ public class VoidScreen extends Screen {
         }
     }
 
+    private void renderTransformationEffect(GuiGraphics graphics) {
+        if (selectedShape == null) return;
+
+        int centerX = width / 2;
+        int centerY = height / 2 - 40;
+
+        // Progress through transformation (0.0 to 1.0) over 100 ticks
+        float progress = Math.min(1.0f, shapeTransformTicks / 100.0f);
+
+        // Get the shape's color
+        int[] shapeColor = getShapeRGB(selectedShape);
+        int baseRadius = 35;
+
+        // Phase 1 (0-0.25): Soul starts to distort and crack - old shape breaking apart
+        // Phase 2 (0.25-0.5): Soul warps and shifts color - chaotic transition
+        // Phase 3 (0.5-0.85): Soul reforms in new shape - new shape emerges
+        // Phase 4 (0.85-1.0): Settling - soul stabilizes with gentle pulse
+
+        if (progress < 0.25f) {
+            // Phase 1: Distortion - old soul breaking apart
+            float phase1Progress = progress / 0.25f;
+            int shake = (int) (Math.sin(shapeTransformTicks * 0.8) * 5 * phase1Progress);
+
+            // Render fading old soul (unshaped circle) with shake
+            float oldSoulFade = 1.0f - phase1Progress * 0.5f;
+            int[] oldRgb = getSoulColor();
+            int oldAlpha = (int) (fadeAlpha * 255 * oldSoulFade);
+            for (int r = baseRadius; r > 0; r -= 3) {
+                float coreProgress = (float) r / baseRadius;
+                int cAlpha = (int) (oldAlpha * (0.6f + 0.4f * coreProgress));
+                int color = (cAlpha << 24) | (oldRgb[0] << 16) | (oldRgb[1] << 8) | oldRgb[2];
+                drawCircleFast(graphics, centerX + shake, centerY, r, color);
+            }
+
+            // Draw distortion cracks radiating from center
+            int crackAlpha = (int) (fadeAlpha * 200 * phase1Progress);
+            int crackColor = (crackAlpha << 24) | 0x200010;
+
+            Random crackRandom = new Random(42);
+            for (int i = 0; i < 8; i++) {
+                double angle = crackRandom.nextDouble() * Math.PI * 2;
+                int length = (int) (50 * phase1Progress);
+                int x1 = centerX + shake;
+                int y1 = centerY;
+
+                for (int j = 0; j < length; j += 4) {
+                    angle += (crackRandom.nextDouble() - 0.5) * 0.6;
+                    int x2 = x1 + (int) (Math.cos(angle) * 4);
+                    int y2 = y1 + (int) (Math.sin(angle) * 4);
+                    graphics.fill(x1, y1, x2 + 2, y2 + 2, crackColor);
+                    x1 = x2;
+                    y1 = y2;
+                }
+            }
+
+        } else if (progress < 0.5f) {
+            // Phase 2: Warp - chaotic transition, colors shifting
+            float phase2Progress = (progress - 0.25f) / 0.25f;
+
+            // Warping waves emanating from center
+            for (int wave = 0; wave < 3; wave++) {
+                float waveProgress = (phase2Progress + wave * 0.3f) % 1.0f;
+                int radius = (int) (30 + 100 * waveProgress);
+                int waveAlpha = (int) (fadeAlpha * 150 * (1.0f - waveProgress));
+
+                // Blend between old soul color and new shape color
+                int[] oldColor = getSoulColor();
+                int r = (int) (oldColor[0] + (shapeColor[0] - oldColor[0]) * phase2Progress);
+                int g = (int) (oldColor[1] + (shapeColor[1] - oldColor[1]) * phase2Progress);
+                int b = (int) (oldColor[2] + (shapeColor[2] - oldColor[2]) * phase2Progress);
+
+                int color = (waveAlpha << 24) | (r << 16) | (g << 8) | b;
+                drawCircleFast(graphics, centerX, centerY, radius, color);
+            }
+
+            // Central chaotic vortex - flickering between shapes
+            int vortexRadius = (int) (baseRadius * (1.0f - Math.abs(phase2Progress - 0.5f) * 0.5f));
+            float shapeFlicker = (float) Math.sin(shapeTransformTicks * 0.5f) * 0.5f + 0.5f;
+
+            if (shapeFlicker > 0.5f) {
+                // Brief glimpse of new shape
+                renderShapedSoul(graphics, centerX, centerY, vortexRadius, selectedShape,
+                        (shapeFlicker - 0.5f) * 2 * phase2Progress);
+            } else {
+                // Old shape fading
+                int vortexAlpha = (int) (fadeAlpha * 200 * (1f - phase2Progress));
+                int[] oldRgb = getSoulColor();
+                int vortexColor = (vortexAlpha << 24) | (oldRgb[0] << 16) | (oldRgb[1] << 8) | oldRgb[2];
+                drawCircleFast(graphics, centerX, centerY, vortexRadius, vortexColor);
+            }
+
+        } else if (progress < 0.85f) {
+            // Phase 3: Reform - new shape emerges and solidifies
+            float phase3Progress = (progress - 0.5f) / 0.35f;
+
+            // Glowing outer aura fading in with shape's color
+            int auraRadius = (int) (60 * (2.0f - phase3Progress));
+            int auraAlpha = (int) (fadeAlpha * 100 * (1.0f - phase3Progress * 0.7f));
+            int auraColor = (auraAlpha << 24) | (shapeColor[0] << 16) | (shapeColor[1] << 8) | shapeColor[2];
+            drawCircleFast(graphics, centerX, centerY, auraRadius, auraColor);
+
+            // Render the new shape forming
+            int formingRadius = (int) (baseRadius * phase3Progress);
+            if (formingRadius > 5) {
+                renderShapedSoul(graphics, centerX, centerY, formingRadius, selectedShape, phase3Progress);
+            }
+
+            // Particle burst at peak formation
+            if (phase3Progress > 0.3f && phase3Progress < 0.7f) {
+                float burstProgress = (phase3Progress - 0.3f) / 0.4f;
+                int particleCount = 12;
+                for (int i = 0; i < particleCount; i++) {
+                    double angle = (i * Math.PI * 2 / particleCount) + shapeTransformTicks * 0.1f;
+                    int dist = (int) (baseRadius + 30 * burstProgress);
+                    int px = centerX + (int) (Math.cos(angle) * dist);
+                    int py = centerY + (int) (Math.sin(angle) * dist);
+                    int pAlpha = (int) (fadeAlpha * 150 * (1.0f - burstProgress));
+                    int pColor = (pAlpha << 24) | (shapeColor[0] << 16) | (shapeColor[1] << 8) | shapeColor[2];
+                    drawCircleFast(graphics, px, py, 3, pColor);
+                }
+            }
+        } else {
+            // Phase 4: Settling - soul stabilizes with gentle pulse, graceful fade to final state
+            float phase4Progress = (progress - 0.85f) / 0.15f;
+
+            // Render fully formed shape at full size
+            renderShapedSoul(graphics, centerX, centerY, baseRadius, selectedShape, 1.0f);
+
+            // Gentle pulsing aura that fades out
+            float pulse = (float) Math.sin(shapeTransformTicks * 0.3f) * 0.5f + 0.5f;
+            int auraRadius = (int) (baseRadius + 10 + 5 * pulse * (1.0f - phase4Progress));
+            int auraAlpha = (int) (fadeAlpha * 80 * (1.0f - phase4Progress));
+            int auraColor = (auraAlpha << 24) | (shapeColor[0] << 16) | (shapeColor[1] << 8) | shapeColor[2];
+            drawCircleFast(graphics, centerX, centerY, auraRadius, auraColor);
+
+            // Fading sparkle particles settling around the shape
+            if (phase4Progress < 0.7f) {
+                int particleCount = 6;
+                float sparkleProgress = phase4Progress / 0.7f;
+                for (int i = 0; i < particleCount; i++) {
+                    double angle = (i * Math.PI * 2 / particleCount) + shapeTransformTicks * 0.05f;
+                    int dist = (int) (baseRadius + 20 * (1.0f - sparkleProgress));
+                    int px = centerX + (int) (Math.cos(angle) * dist);
+                    int py = centerY + (int) (Math.sin(angle) * dist);
+                    int pAlpha = (int) (fadeAlpha * 100 * (1.0f - sparkleProgress));
+                    int pColor = (pAlpha << 24) | (shapeColor[0] << 16) | (shapeColor[1] << 8) | shapeColor[2];
+                    drawCircleFast(graphics, px, py, 2, pColor);
+                }
+            }
+        }
+
+        // Render the shape name fading in during phase 3-4
+        if (progress > 0.6f) {
+            float textProgress = Math.min(1.0f, (progress - 0.6f) / 0.25f);
+            int textAlpha = (int) (fadeAlpha * 255 * textProgress);
+            Component shapeName = selectedShape.getFormattedName();
+            int textWidth = font.width(shapeName);
+            int textColor = (textAlpha << 24) | (shapeColor[0] << 16) | (shapeColor[1] << 8) | shapeColor[2];
+            graphics.drawString(font, shapeName, centerX - textWidth / 2, centerY + 60, textColor, false);
+        }
+    }
+
+    private int[] getShapeRGB(SoulShape shape) {
+        return switch (shape) {
+            case REVENANT -> new int[] { 170, 0, 0 };       // Dark red
+            case HOLLOW -> new int[] { 170, 0, 170 };       // Dark purple
+            case ENGINE -> new int[] { 255, 170, 0 };       // Gold
+            case GLOBEDANCER -> new int[] { 85, 255, 255 }; // Aqua
+            case BULWARK -> new int[] { 85, 85, 85 };       // Dark gray
+            case BLOODTHIRST -> new int[] { 255, 85, 85 };  // Red
+            default -> new int[] { 180, 180, 200 };         // Pale
+        };
+    }
+
     private void renderStateHeader(GuiGraphics graphics) {
         Component header = switch (state) {
             case BROWSE_BARGAINS -> ReflectionLang.uiAvailableBargains();
             case VIEW_ACTIVE -> ReflectionLang.uiYourBargains();
             case DEFIANCE_CONFIRM -> ReflectionLang.uiDefiance();
+            case SOUL_SHAPE_SELECT -> ReflectionLang.ui("soul_shape.select_header");
             default -> null;
         };
 
@@ -1448,7 +1886,8 @@ public class VoidScreen extends Screen {
 
         int headerWidth = font.width(header);
         int x = (width - headerWidth) / 2;
-        int y = height / 2 + 40;  // Just above the buttons area
+        // Position header based on state - soul shape select needs more room for 2x3 grid
+        int y = (state == VoidState.SOUL_SHAPE_SELECT) ? height / 2 + 35 : height / 2 + 40;
 
         graphics.drawString(font, header, x, y, color, false);
 
@@ -1492,7 +1931,7 @@ public class VoidScreen extends Screen {
         // Check answer buttons for all interactive states
         if (state == VoidState.AWAITING_CHOICE || state == VoidState.HUB_MENU ||
                 state == VoidState.BROWSE_BARGAINS || state == VoidState.VIEW_ACTIVE ||
-                state == VoidState.DEFIANCE_CONFIRM) {
+                state == VoidState.DEFIANCE_CONFIRM || state == VoidState.SOUL_SHAPE_SELECT) {
             for (AnswerButton answerButton : answerButtons) {
                 if (answerButton.isMouseOver((int) mouseX, (int) mouseY)) {
                     onAnswerSelected(answerButton.answer);
@@ -1579,10 +2018,12 @@ public class VoidScreen extends Screen {
         FADE_IN,
         DIALOGUE,
         AWAITING_CHOICE,
-        HUB_MENU,        // Hub menu with options
-        BROWSE_BARGAINS, // Browsing available bargains
-        VIEW_ACTIVE,     // Viewing player's active bargains
-        DEFIANCE_CONFIRM,// Confirming defiance of a bargain
+        HUB_MENU,           // Hub menu with options
+        BROWSE_BARGAINS,    // Browsing available bargains
+        VIEW_ACTIVE,        // Viewing player's active bargains
+        DEFIANCE_CONFIRM,   // Confirming defiance of a bargain
+        SOUL_SHAPE_SELECT,  // Selecting a soul shape
+        SOUL_TRANSFORMING,  // Playing transformation animation
         FADE_OUT
     }
 

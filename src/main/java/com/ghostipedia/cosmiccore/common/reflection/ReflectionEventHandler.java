@@ -4,9 +4,7 @@ import com.ghostipedia.cosmiccore.CosmicCore;
 import com.ghostipedia.cosmiccore.common.network.CCoreNetwork;
 import com.ghostipedia.cosmiccore.common.reflection.bargain.Bargain;
 import com.ghostipedia.cosmiccore.common.reflection.bargain.BargainRegistry;
-import com.ghostipedia.cosmiccore.common.reflection.bargain.impl.BackBargain;
-import com.ghostipedia.cosmiccore.common.reflection.bargain.impl.HomeBargain;
-import com.ghostipedia.cosmiccore.common.reflection.bargain.impl.QuakeMovementBargain;
+import com.ghostipedia.cosmiccore.common.reflection.bargain.impl.*;
 import com.ghostipedia.cosmiccore.common.reflection.network.SyncQuakeMovementPacket;
 import com.ghostipedia.cosmiccore.common.reflection.ui.VoidUIPackets;
 import com.ghostipedia.cosmiccore.common.reflection.whisper.WhisperSystem;
@@ -14,7 +12,9 @@ import com.ghostipedia.cosmiccore.common.reflection.whisper.WhisperSystem;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraftforge.event.TickEvent;
+import net.minecraftforge.event.entity.living.LivingDamageEvent;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
+import net.minecraftforge.event.entity.living.LivingHealEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -192,7 +192,6 @@ public class ReflectionEventHandler {
         if (!(event.getEntity() instanceof ServerPlayer player)) return;
 
         ReflectionCapability.get(player).ifPresent(reflection -> {
-            // Reflection is always awakened now
             if (!reflection.hasAwakened()) {
                 reflection.setAwakened(true);
             }
@@ -202,13 +201,90 @@ public class ReflectionEventHandler {
                     reflection.getErosion(),
                     reflection.getDeathCount());
 
+            reapplyBargainEffects(player, reflection);
             syncBargainStates(player, reflection);
         });
+    }
+
+    private static void reapplyBargainEffects(ServerPlayer player, IReflection reflection) {
+        if (reflection.hasBargain(SwiftnessBargain.ID)) {
+            SwiftnessBargain.applySpeedBoost(player);
+        }
+        if (reflection.hasBargain(StepAssistBargain.ID)) {
+            StepAssistBargain.applyStepAssist(player);
+        }
+        if (reflection.hasBargain(HealthBargain.ID)) {
+            HealthBargain.applyHealthBoost(player);
+        }
+        if (reflection.hasBargain(StrengthBargain.ID)) {
+            StrengthBargain.applyStrengthBoost(player);
+        }
+        if (reflection.hasBargain(ReachBargain.ID)) {
+            ReachBargain.applyReachBoost(player);
+        }
+        if (reflection.hasBargain(ArmorBargain.ID)) {
+            ArmorBargain.applyArmorBoost(player);
+            ArmorBargain.applySpeedPenalty(player);
+        }
     }
 
     private static void syncBargainStates(ServerPlayer player, IReflection reflection) {
         boolean hasQuake = reflection.hasBargain(QuakeMovementBargain.INSTANCE.getId());
         CCoreNetwork.sendToPlayer(player, new SyncQuakeMovementPacket(hasQuake));
+    }
+
+    @SubscribeEvent
+    public static void onLivingDamage(LivingDamageEvent event) {
+        if (!(event.getEntity() instanceof ServerPlayer player)) return;
+
+        float damage = event.getAmount();
+
+        // FallImmunityBargain: 80% fall damage reduction
+        if (FallImmunityBargain.isFallDamage(event.getSource())) {
+            damage = FallImmunityBargain.modifyFallDamage(player, damage);
+        }
+
+        // FallImmunityBargain: 50% more damage from combat
+        if (FallImmunityBargain.isCombatDamage(event.getSource())) {
+            damage = FallImmunityBargain.modifyCombatDamage(player, damage);
+        }
+
+        // StrengthBargain: 25% more damage from mobs
+        if (StrengthBargain.isMobDamage(event.getSource())) {
+            damage = StrengthBargain.modifyMobDamage(player, damage);
+        }
+
+        // FireImmunityBargain: 75% less fire damage, 2x freeze damage
+        if (FireImmunityBargain.isFireDamage(event.getSource())) {
+            damage = FireImmunityBargain.modifyFireDamage(player, damage);
+        }
+        if (FireImmunityBargain.isColdDamage(event.getSource())) {
+            damage = FireImmunityBargain.modifyColdDamage(player, damage);
+        }
+
+        event.setAmount(damage);
+    }
+
+    @SubscribeEvent
+    public static void onLivingHeal(LivingHealEvent event) {
+        if (!(event.getEntity() instanceof ServerPlayer player)) return;
+
+        float healing = event.getAmount();
+
+        // HealthBargain: 50% less healing from potions
+        healing = HealthBargain.modifyHealing(player, healing);
+
+        // HungerBargain: Block natural regeneration (food-based healing)
+        // Natural regen gives 1 HP when food >= 18 and saturation > 0
+        // We detect this by checking if it's a small heal amount and player is well-fed
+        if (HungerBargain.shouldBlockNaturalRegen(player)) {
+            if (healing <= 1.0f && player.getFoodData().getFoodLevel() >= 18) {
+                event.setCanceled(true);
+                return;
+            }
+        }
+
+        event.setAmount(healing);
     }
 
     private static String categorizeDeathCause(String msgId) {

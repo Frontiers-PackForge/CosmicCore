@@ -3,6 +3,7 @@ package com.ghostipedia.cosmiccore.common.reflection.bargain.impl;
 import com.ghostipedia.cosmiccore.CosmicCore;
 import com.ghostipedia.cosmiccore.common.reflection.ReflectionLang;
 import com.ghostipedia.cosmiccore.common.reflection.bargain.Bargain;
+import com.ghostipedia.cosmiccore.common.reflection.bargain.BargainCategory;
 
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -13,12 +14,6 @@ import net.minecraftforge.common.ForgeMod;
 import java.util.List;
 import java.util.UUID;
 
-/**
- * Step Assist Bargain: Auto-step up 1.5 blocks
- *
- * Small obstacles no longer impede you.
- * A minor convenience with a minor cost.
- */
 public class StepAssistBargain extends Bargain {
 
     public static final ResourceLocation ID = CosmicCore.id("stride");
@@ -30,6 +25,7 @@ public class StepAssistBargain extends Bargain {
         super(
                 ID,
                 BargainTier.EARLY,
+                BargainCategory.MOBILITY,
                 16,   // shardCost - cheap starter
                 10,   // weight
                 50    // erosion
