@@ -11,6 +11,7 @@ import com.ghostipedia.cosmiccore.common.reflection.bargain.impl.DepthsBargain;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.event.TickEvent;
@@ -81,7 +82,7 @@ public final class OxygenLogic {
             // Check if player is in a fluid (eyes submerged)
             BlockPos eyePos = BlockPos.containing(player.getX(), player.getEyeY(), player.getZ());
             boolean eyesInFluid = !level.getFluidState(eyePos).isEmpty();
-            if (eyesInFluid) {
+            if (eyesInFluid && !player.hasEffect(MobEffects.WATER_BREATHING)) {
                 OxygenRules.Rates thinAir = OxygenRules.QUALITY_RATES.get(OxygenRules.AirQuality.THIN).copy();
                 rates.oxygenDrainPerTick = Math.max(rates.oxygenDrainPerTick, thinAir.oxygenDrainPerTick);
                 rates.oxygenRecoveryPerTick = 0.0; // No passive regen while submerged

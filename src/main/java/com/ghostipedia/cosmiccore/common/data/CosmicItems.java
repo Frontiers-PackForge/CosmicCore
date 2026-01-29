@@ -6,7 +6,9 @@ import com.ghostipedia.cosmiccore.api.item.armor.*;
 import com.ghostipedia.cosmiccore.api.registries.CosmicRegistration;
 import com.ghostipedia.cosmiccore.client.renderer.item.HaloItemRenderer;
 import com.ghostipedia.cosmiccore.client.renderer.item.RadianceItemRenderer;
+import com.ghostipedia.cosmiccore.common.airControl.OxygenConfig;
 import com.ghostipedia.cosmiccore.common.data.tag.item.CosmicItemTags;
+import com.ghostipedia.cosmiccore.common.item.AirBladderItem;
 import com.ghostipedia.cosmiccore.common.item.AsteroidItem;
 import com.ghostipedia.cosmiccore.common.item.AsteroidTargetingChipItem;
 import com.ghostipedia.cosmiccore.common.item.CosmicScytheItem;
@@ -2653,6 +2655,20 @@ public class CosmicItems {
             .lang("Bio-Metallic Fleshy Neptunium Waste")
             .properties(p -> p.stacksTo(64))
             .defaultModel()
+            .register();
+
+    // -------------------------------------------------------------------------
+    // Air Bladder - pre-LV portable air
+    // -------------------------------------------------------------------------
+
+    public static final ItemEntry<AirBladderItem> AIR_BLADDER = REGISTRATE
+            .item("air_bladder", AirBladderItem::new)
+            .lang("Air Bladder")
+            .properties(p -> p.stacksTo(1))
+            .model((ctx, prov) -> {})
+            .onRegister(modelPredicate(
+                    new ResourceLocation(CosmicCore.MOD_ID, "charges"),
+                    stack -> (float) AirBladderItem.getCharges(stack) / OxygenConfig.AIR_BLADDER_MAX_CHARGES))
             .register();
 
     // -------------------------------------------------------------------------
