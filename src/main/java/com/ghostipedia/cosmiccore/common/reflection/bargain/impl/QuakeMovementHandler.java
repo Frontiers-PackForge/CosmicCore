@@ -41,12 +41,13 @@ public class QuakeMovementHandler {
     private static final double GROUND_ACCELERATE = 15.0;
     private static final double AIR_ACCELERATE = 200.0;
     private static final double AIR_WISH_SPEED = 0.25;
-    private static final double BHOP_BOOST = 1.18;
+    private static final double BHOP_BOOST = 1.12;
     private static final double HARD_CAP_SPEED = 1.25;    // 25 b/s
     private static final double BHOP_SOFT_CAP = 0.5;      // 10 b/s - pure bhop caps here
     private static final double SOFT_CAP_SPEED = 1.0;     // 20 b/s
     private static final double SOFT_CAP_DEGEN = 0.7;
     private static final double MIN_BHOP_SPEED = 0.10;
+    private static final int MIN_BHOP_AIRTIME = 5;
     private static final double TRIMP_MULTIPLIER = 1.6;
 
     // Debug
@@ -124,17 +125,20 @@ public class QuakeMovementHandler {
             wasJumping.put(uuid, false);
         }
 
-        // Bhop on landing
+        // Bhop on landing (requires minimum airtime to filter stair/step spam)
         if (onGround && !wasGrounded && horizontalSpeed > MIN_BHOP_SPEED) {
-            double oldSpeed = horizontalSpeed;
-            motion = applyBunnyHop(player, motion, horizontalSpeed);
-            player.setDeltaMovement(motion);
-            double newSpeed = getHorizontalSpeed(motion);
-            horizontalSpeed = newSpeed;
+            int air = airTime.getOrDefault(uuid, 0);
+            if (air >= MIN_BHOP_AIRTIME) {
+                double oldSpeed = horizontalSpeed;
+                motion = applyBunnyHop(player, motion, horizontalSpeed);
+                player.setDeltaMovement(motion);
+                double newSpeed = getHorizontalSpeed(motion);
+                horizontalSpeed = newSpeed;
 
-            if (newSpeed > oldSpeed) {
-                spawnBhopParticles(player, 4);
-                if (DEBUG_MODE) lastBhopTick = player.tickCount;
+                if (newSpeed > oldSpeed) {
+                    spawnBhopParticles(player, 4);
+                    if (DEBUG_MODE) lastBhopTick = player.tickCount;
+                }
             }
         }
 
@@ -176,7 +180,9 @@ public class QuakeMovementHandler {
         double targetSpeed = currentSpeed;
 
         if (currentSpeed < SOFT_CAP_SPEED) {
-            double boostedSpeed = currentSpeed * BHOP_BOOST;
+            double speedRatio = Math.min(currentSpeed / BHOP_SOFT_CAP, 1.0);
+            double dynamicMultiplier = 1.0 + (BHOP_BOOST - 1.0) * (1.0 - speedRatio * speedRatio);
+            double boostedSpeed = currentSpeed * dynamicMultiplier;
             if (boostedSpeed > SOFT_CAP_SPEED) {
                 double excess = boostedSpeed - SOFT_CAP_SPEED;
                 boostedSpeed = SOFT_CAP_SPEED + excess * SOFT_CAP_DEGEN;

@@ -131,9 +131,20 @@ public abstract class QuakeMovementMixin {
         if (Math.abs(targetSpeed - postSpeed) < 0.001) return;
 
         if (postSpeed > 0.001) {
-            double scale = targetSpeed / postSpeed;
-            player.setDeltaMovement(postVel.x * scale, postVel.y, postVel.z * scale);
-        } else if (preSpeed > 0.001) {
+            double effectiveTarget = targetSpeed;
+
+            if (player.horizontalCollision && preSpeed > 0.001) {
+                double dot = (preVel.x / preSpeed) * (postVel.x / postSpeed) +
+                        (preVel.z / preSpeed) * (postVel.z / postSpeed);
+                dot = Math.max(dot, 0.0);
+                effectiveTarget = targetSpeed * dot;
+            }
+
+            if (effectiveTarget > 0.001) {
+                double scale = effectiveTarget / postSpeed;
+                player.setDeltaMovement(postVel.x * scale, postVel.y, postVel.z * scale);
+            }
+        } else if (preSpeed > 0.001 && !player.horizontalCollision) {
             double scale = targetSpeed / preSpeed;
             player.setDeltaMovement(preVel.x * scale, postVel.y, preVel.z * scale);
         }
