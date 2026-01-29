@@ -63,4 +63,12 @@ public final class OxygenConfig {
 
     /** Drain reduction multiplier for pressurized rebreather (0.25 = quarter drain) */
     public static final double PRESSURIZED_REBREATHER_DRAIN_MULT = 0.25;
+
+    // -------------------------------------------------------------------------
+    // Air Bladder
+    // -------------------------------------------------------------------------
+
+    public static final long AIR_BLADDER_RESTORE_TICKS = 1200;  // 60 seconds of air per charge
+    public static final int AIR_BLADDER_MAX_CHARGES = 3;        // 3 uses before empty
+    public static final int AIR_BLADDER_COOLDOWN = 40;          // 2 second use cooldown
 }

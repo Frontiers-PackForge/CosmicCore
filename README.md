@@ -61,3 +61,4 @@ Using code/assets from this project requires attribution in both cases and requi
 Credits;
 Thanks to [Gregtech Modern](https://github.com/GregTechCEu/GregTech-Modern) for plenty of useful code references and invaluable knowledge in learning Java.
 Thanks to ULSTICK's [GregTech: Refreshed](https://modrinth.com/resourcepack/gregtech-refreshed) for helping me learn how to make Jappa-style pixel art.
+Thanks to TFC Water Flasks for the Air Bladder Texture (Re-used the water bladder texture)

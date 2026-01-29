@@ -1,0 +1,26 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "cosmiccore:item/bladder/bladder-0"
+  },
+  "overrides": [
+    {
+      "predicate": {
+        "cosmiccore:charges": 0.33
+      },
+      "model": "cosmiccore:item/air_bladder_1"
+    },
+    {
+      "predicate": {
+        "cosmiccore:charges": 0.66
+      },
+      "model": "cosmiccore:item/air_bladder_2"
+    },
+    {
+      "predicate": {
+        "cosmiccore:charges": 1.0
+      },
+      "model": "cosmiccore:item/air_bladder_3"
+    }
+  ]
+}
