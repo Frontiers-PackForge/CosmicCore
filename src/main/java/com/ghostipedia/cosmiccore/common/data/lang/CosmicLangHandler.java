@@ -972,7 +972,7 @@ public class CosmicLangHandler extends LangHandler {
         provider.add("reflection.cosmiccore.bargain.darksight.answer.yes.drawback.0",
                 "Blindness effect in bright sunlight");
         provider.add("reflection.cosmiccore.bargain.darksight.answer.yes.drawback.1",
-                "Must wear helmet or stay underground during day");
+                "Must stay underground during day");
         provider.add("reflection.cosmiccore.bargain.darksight.answer.refuse.text", "The light serves me well enough.");
         provider.add("reflection.cosmiccore.bargain.darksight.answer.refuse.response",
                 "Cling to your torch then. See how long it lasts in the deep places.");
@@ -1031,8 +1031,8 @@ public class CosmicLangHandler extends LangHandler {
         provider.add("reflection.cosmiccore.bargain.soft_landing.answer.yes.text", "Take away my fear of falling.");
         provider.add("reflection.cosmiccore.bargain.soft_landing.answer.yes.response",
                 "Jump. Go ahead. The ground will embrace you like a mother.");
-        provider.add("reflection.cosmiccore.bargain.soft_landing.answer.yes.power.0", "Complete fall damage immunity");
-        provider.add("reflection.cosmiccore.bargain.soft_landing.answer.yes.power.1", "Safe drops from any height");
+        provider.add("reflection.cosmiccore.bargain.soft_landing.answer.yes.power.0", "80% fall damage immunity");
+        provider.add("reflection.cosmiccore.bargain.soft_landing.answer.yes.power.1", "Short falls do almost nothing");
         provider.add("reflection.cosmiccore.bargain.soft_landing.answer.yes.drawback.0",
                 "+15% damage taken from all sources");
         provider.add("reflection.cosmiccore.bargain.soft_landing.answer.yes.drawback.1",
@@ -1134,7 +1134,7 @@ public class CosmicLangHandler extends LangHandler {
         provider.add("reflection.cosmiccore.bargain.satiated.answer.empty.power.0", "Hunger depletes 80% slower");
         provider.add("reflection.cosmiccore.bargain.satiated.answer.empty.power.1", "Food provides 3x saturation");
         provider.add("reflection.cosmiccore.bargain.satiated.answer.empty.drawback.0",
-                "Food restores 50% less hunger bars");
+                "You can not regenerate health normally");
         provider.add("reflection.cosmiccore.bargain.satiated.answer.empty.drawback.1",
                 "Cannot benefit from food-based buffs");
         provider.add("reflection.cosmiccore.bargain.satiated.answer.refuse.text",
