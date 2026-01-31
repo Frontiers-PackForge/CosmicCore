@@ -9,6 +9,7 @@ import com.ghostipedia.cosmiccore.common.reflection.bargain.BargainCategory;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -101,19 +102,33 @@ public class HomeBargain extends Bargain {
             }
 
             int cost = ReflectionConstants.getCommandCost(reflection, "home");
-            Optional<Vec3> homePos = findHomePosition(player);
-            if (homePos.isEmpty()) {
+            Optional<HomeLocation> homeLoc = findHomePosition(player);
+            if (homeLoc.isEmpty()) {
                 player.displayClientMessage(
                         Component.literal("\u00A7cYou have no home to return to."),
                         false);
                 return false;
             }
 
-            Vec3 home = homePos.get();
+            HomeLocation home = homeLoc.get();
+            ServerLevel targetLevel = player.server.getLevel(home.dimension);
+            if (targetLevel == null) {
+                player.displayClientMessage(
+                        Component.literal("\u00A7cThat place no longer exists."),
+                        false);
+                return false;
+            }
+
             reflection.addErosion(cost);
             reflection.recordCommandUse("home");
 
-            player.teleportTo(home.x, home.y, home.z);
+            Vec3 pos = home.position;
+            if (player.level().dimension() != home.dimension) {
+                player.teleportTo(targetLevel, pos.x, pos.y, pos.z, player.getYRot(), player.getXRot());
+            } else {
+                player.teleportTo(pos.x, pos.y, pos.z);
+            }
+
             player.level().playSound(null, player.blockPosition(),
                     SoundEvents.ENDERMAN_TELEPORT, SoundSource.PLAYERS, 1.0f, 0.8f);
 
@@ -137,15 +152,16 @@ public class HomeBargain extends Bargain {
         }).orElse(false);
     }
 
-    private static Optional<Vec3> findHomePosition(ServerPlayer player) {
+    private static Optional<HomeLocation> findHomePosition(ServerPlayer player) {
         BlockPos bedPos = player.getRespawnPosition();
         if (bedPos != null) {
-            ServerLevel respawnLevel = player.server.getLevel(player.getRespawnDimension());
+            ResourceKey<Level> respawnDim = player.getRespawnDimension();
+            ServerLevel respawnLevel = player.server.getLevel(respawnDim);
             if (respawnLevel != null) {
                 Optional<Vec3> bedSpawn = Player.findRespawnPositionAndUseSpawnBlock(
                         respawnLevel, bedPos, player.getRespawnAngle(), true, false);
                 if (bedSpawn.isPresent()) {
-                    return bedSpawn;
+                    return Optional.of(new HomeLocation(respawnDim, bedSpawn.get()));
                 }
             }
         }
@@ -153,9 +169,12 @@ public class HomeBargain extends Bargain {
         ServerLevel overworld = player.server.getLevel(Level.OVERWORLD);
         if (overworld != null) {
             BlockPos spawnPos = overworld.getSharedSpawnPos();
-            return Optional.of(new Vec3(spawnPos.getX() + 0.5, spawnPos.getY(), spawnPos.getZ() + 0.5));
+            return Optional.of(new HomeLocation(Level.OVERWORLD,
+                    new Vec3(spawnPos.getX() + 0.5, spawnPos.getY(), spawnPos.getZ() + 0.5)));
         }
 
         return Optional.empty();
     }
+
+    private record HomeLocation(ResourceKey<Level> dimension, Vec3 position) {}
 }
