@@ -148,17 +148,6 @@ public class CosmicOreVeins {
             return gen.build();
         });
 
-        // Nickel - shell layers
-        register("nickel_vein", () -> {
-            var gen = new ShellVeinGenerator(new ArrayList<>(), new ArrayList<>(), new ArrayList<>(),
-                    0.28f, 0.58f, 0.25f, 0.18f);
-            gen.coreBlock(GTMaterials.Garnierite, 3);
-            gen.innerBlock(GTMaterials.Nickel, 3);
-            gen.innerBlock(GTMaterials.Cobaltite, 1);
-            gen.outerBlock(GTMaterials.Pentlandite, 3);
-            return gen.build();
-        });
-
         // Lubricant materials - shell
         register("lubricant_vein", () -> {
             var gen = new ShellVeinGenerator(new ArrayList<>(), new ArrayList<>(), new ArrayList<>(),
