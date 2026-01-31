@@ -122,6 +122,7 @@ public class ReflectionEventHandler {
         if (!(event.getEntity() instanceof ServerPlayer player)) return;
 
         ReflectionCapability.get(player).ifPresent(reflection -> {
+            reapplyBargainEffects(player, reflection);
             syncBargainStates(player, reflection);
 
             RespawnEvent pendingEvent = pendingRespawnEvents.remove(player.getUUID());
