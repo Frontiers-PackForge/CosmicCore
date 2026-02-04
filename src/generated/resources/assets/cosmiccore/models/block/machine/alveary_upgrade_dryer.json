@@ -1,0 +1,79 @@
+{
+  "parent": "minecraft:block/block",
+  "loader": "gtceu:machine",
+  "machine": "cosmiccore:alveary_upgrade_dryer",
+  "variants": {
+    "active=false,hpca_part_damaged=false,is_formed=false": {
+      "model": {
+        "parent": "cosmiccore:block/alveary_upgrade_dryer_base",
+        "textures": {
+          "overlay": "cosmiccore:block/overlay/alveary/dryer",
+          "overlay_emissive": "gtceu:block/void"
+        }
+      }
+    },
+    "active=false,hpca_part_damaged=false,is_formed=true": {
+      "model": {
+        "parent": "cosmiccore:block/alveary_upgrade_dryer_base",
+        "textures": {
+          "overlay": "cosmiccore:block/overlay/alveary/dryer",
+          "overlay_emissive": "gtceu:block/void"
+        }
+      }
+    },
+    "active=false,hpca_part_damaged=true,is_formed=false": {
+      "model": {
+        "parent": "cosmiccore:block/alveary_upgrade_dryer_base",
+        "textures": {
+          "overlay": "cosmiccore:block/overlay/alveary/dryer",
+          "overlay_emissive": "gtceu:block/void"
+        }
+      }
+    },
+    "active=false,hpca_part_damaged=true,is_formed=true": {
+      "model": {
+        "parent": "cosmiccore:block/alveary_upgrade_dryer_base",
+        "textures": {
+          "overlay": "cosmiccore:block/overlay/alveary/dryer",
+          "overlay_emissive": "gtceu:block/void"
+        }
+      }
+    },
+    "active=true,hpca_part_damaged=false,is_formed=false": {
+      "model": {
+        "parent": "cosmiccore:block/alveary_upgrade_dryer_base",
+        "textures": {
+          "overlay": "cosmiccore:block/overlay/alveary/dryer",
+          "overlay_emissive": "gtceu:block/void"
+        }
+      }
+    },
+    "active=true,hpca_part_damaged=false,is_formed=true": {
+      "model": {
+        "parent": "cosmiccore:block/alveary_upgrade_dryer_base",
+        "textures": {
+          "overlay": "cosmiccore:block/overlay/alveary/dryer",
+          "overlay_emissive": "gtceu:block/void"
+        }
+      }
+    },
+    "active=true,hpca_part_damaged=true,is_formed=false": {
+      "model": {
+        "parent": "cosmiccore:block/alveary_upgrade_dryer_base",
+        "textures": {
+          "overlay": "cosmiccore:block/overlay/alveary/dryer",
+          "overlay_emissive": "gtceu:block/void"
+        }
+      }
+    },
+    "active=true,hpca_part_damaged=true,is_formed=true": {
+      "model": {
+        "parent": "cosmiccore:block/alveary_upgrade_dryer_base",
+        "textures": {
+          "overlay": "cosmiccore:block/overlay/alveary/dryer",
+          "overlay_emissive": "gtceu:block/void"
+        }
+      }
+    }
+  }
+}

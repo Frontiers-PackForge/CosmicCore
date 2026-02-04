@@ -1,0 +1,8 @@
+{
+  "parent": "cosmiccore:block/machine/template/part/alveary_part_machine",
+  "textures": {
+    "bottom": "cosmiccore:block/casings/solid/alveary_casing",
+    "side": "cosmiccore:block/casings/solid/alveary_casing",
+    "top": "cosmiccore:block/casings/solid/alveary_casing"
+  }
+}
