@@ -17,6 +17,7 @@ import com.ghostipedia.cosmiccore.common.machine.IndustrialApiaryMachine;
 import com.ghostipedia.cosmiccore.common.machine.WirelessChargerMachine;
 import com.ghostipedia.cosmiccore.common.machine.multiblock.electric.hpca.HPCAMachine;
 import com.ghostipedia.cosmiccore.common.machine.multiblock.multi.WirelessDataBankMachine;
+import com.ghostipedia.cosmiccore.common.machine.multiblock.multi.bee.AlvearyModifierType;
 import com.ghostipedia.cosmiccore.common.machine.multiblock.part.*;
 import com.ghostipedia.cosmiccore.common.machine.part.WirelessDataSensor;
 import com.ghostipedia.cosmiccore.gtbridge.CosmicRecipeTypes;
@@ -928,11 +929,76 @@ public class CosmicMachines {
 
     // Dreamer's Basin is now registered in DreamersBasin.java
 
+    // Alveary casing texture (single texture for all faces)
+    private static final ResourceLocation ALVEARY_CASING_TEXTURE = CosmicCore.id("block/casings/solid/alveary_casing");
+
+    /**
+     * Creates an alveary part model with overlay on all 4 horizontal faces.
+     * Uses custom template that renders overlay on north/south/east/west.
+     */
+    public static MachineBuilder.ModelInitializer createAlvearyPartModel(
+                                                                         ResourceLocation casingTexture,
+                                                                         ResourceLocation overlayTexture) {
+        return (ctx, prov, builder) -> {
+            ResourceLocation alvearyTemplate = CosmicCore.id("block/machine/template/part/alveary_part_machine");
+
+            var baseModel = prov.models().withExistingParent(ctx.getName() + "_base", alvearyTemplate);
+            baseModel.texture("bottom", casingTexture);
+            baseModel.texture("top", casingTexture);
+            baseModel.texture("side", casingTexture);
+
+            builder.forAllStatesModels(state -> prov.models().nested().parent(baseModel)
+                    .texture("overlay", overlayTexture)
+                    .texture("overlay_emissive", GTCEu.id("block/void")));
+        };
+    }
+
+    // Alveary Modifier Casings
+    public static final MachineDefinition ALVEARY_HEATER_PART = registerAlvearyModifier(AlvearyModifierType.HEATER);
+    public static final MachineDefinition ALVEARY_COOLER_PART = registerAlvearyModifier(AlvearyModifierType.COOLER);
+    public static final MachineDefinition ALVEARY_HUMIDIFIER_PART = registerAlvearyModifier(
+            AlvearyModifierType.HUMIDIFIER);
+    public static final MachineDefinition ALVEARY_DRYER_PART = registerAlvearyModifier(AlvearyModifierType.DRYER);
+    public static final MachineDefinition ALVEARY_PRODUCTIVITY_PART = registerAlvearyModifier(
+            AlvearyModifierType.PRODUCTIVITY);
+    public static final MachineDefinition ALVEARY_SIEVE_PART = registerAlvearyModifier(AlvearyModifierType.SIEVE);
+    public static final MachineDefinition ALVEARY_WEATHERPROOF_PART = registerAlvearyModifier(
+            AlvearyModifierType.WEATHERPROOF);
+    public static final MachineDefinition ALVEARY_LIGHTING_PART = registerAlvearyModifier(AlvearyModifierType.LIGHTING);
+    public static final MachineDefinition ALVEARY_MUTAGENIC_PART = registerAlvearyModifier(
+            AlvearyModifierType.MUTAGENIC);
+    public static final MachineDefinition ALVEARY_ACCELERANT_PART = registerAlvearyModifier(
+            AlvearyModifierType.ACCELERANT);
+    public static final MachineDefinition ALVEARY_LONGEVITY_PART = registerAlvearyModifier(
+            AlvearyModifierType.LONGEVITY);
+    public static final MachineDefinition ALVEARY_STABILISER_PART = registerAlvearyModifier(
+            AlvearyModifierType.STABILISER);
+    public static final MachineDefinition ALVEARY_TERRITORY_PART = registerAlvearyModifier(
+            AlvearyModifierType.TERRITORY);
+    public static final MachineDefinition ALVEARY_SEALING_PART = registerAlvearyModifier(AlvearyModifierType.SEALING);
+
+    private static MachineDefinition registerAlvearyModifier(AlvearyModifierType type) {
+        return REGISTRATE.machine("alveary_upgrade_" + type.getId(),
+                holder -> new AlvearyModifierPartMachine(holder, type))
+                .langValue("Alveary " + type.getDisplayName() + " Casing")
+                .rotationState(RotationState.ALL)
+                .abilities(ALVEARY_MODIFIER)
+                .modelProperty(GTMachineModelProperties.IS_FORMED, false)
+                .modelProperty(GTMachineModelProperties.IS_HPCA_PART_DAMAGED, false)
+                .modelProperty(GTMachineModelProperties.IS_ACTIVE, false)
+                .model(createAlvearyPartModel(
+                        ALVEARY_CASING_TEXTURE,
+                        CosmicCore.id("block/overlay/alveary/" + type.getId())))
+                .register();
+    }
+
     public static void init() {
         // Initialize DreamersBasin
         com.ghostipedia.cosmiccore.common.machine.multiblock.multi.DreamersBasin.init();
         // Initialize Ore Extraction Drills
         com.ghostipedia.cosmiccore.common.machine.multiblock.multi.OreExtractionDrill.init();
+        // Initialize Mechanical Alveary
+        com.ghostipedia.cosmiccore.common.machine.multiblock.multi.bee.MechanicalAlveary.init();
         GTMultiMachines.LARGE_COMBUSTION_ENGINE.setRecipeTypes(new GTRecipeType[] { DUMMY_RECIPES });
         GTMultiMachines.LARGE_COMBUSTION_ENGINE.setRenderXEIPreview(false);
         GTMultiMachines.LARGE_COMBUSTION_ENGINE.setRenderWorldPreview(false);

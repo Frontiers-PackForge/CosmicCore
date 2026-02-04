@@ -151,6 +151,11 @@ public class CosmicBlocks {
             "reinforced_dawnstone_casing",
             CosmicCore.id("block/casings/solid/reinforced_dawnstone_casing"));
 
+    // Mechanical Alveary
+    public static final BlockEntry<Block> ALVEARY_CASING = createCasingBlock(
+            "alveary_casing",
+            CosmicCore.id("block/casings/solid/alveary_casing"));
+
     // public static final BlockEntry<Block> SOMAPLASTIC_HEAVY_FRAMES = createCasingBlock("somaplastic_heavy_frames",
     // CosmicCore.id("block/casings/solid/cyclozine_high_rigidity_casing"));
     // public static final BlockEntry<Block> MOON_DIVE_CASING = createCasingBlock("moon_dive_casing",

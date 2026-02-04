@@ -1,0 +1,49 @@
+{
+    "parent": "gtceu:block/overlay/2_layer/front_emissive",
+    "elements": [
+        {
+            "from": [  0,  0,  0 ],
+            "to":   [ 16, 16, 16 ],
+            "faces": {
+                "down":  { "texture": "#bottom", "cullface": "down"  },
+                "up":    { "texture": "#top",    "cullface": "up"    },
+                "north": { "texture": "#side",   "cullface": "north" },
+                "south": { "texture": "#side",   "cullface": "south" },
+                "west":  { "texture": "#side",   "cullface": "west"  },
+                "east":  { "texture": "#side",   "cullface": "east"  }
+            }
+        },
+        {
+            "comment": "North overlay",
+            "from": [ -0.002, -0.002, -0.002 ],
+            "to":   [ 16.002, 16.002, -0.002 ],
+            "faces": {
+                "north": { "uv": [0, 0, 16, 16], "texture": "#overlay", "cullface": "north" }
+            }
+        },
+        {
+            "comment": "South overlay",
+            "from": [ -0.002, -0.002, 16.002 ],
+            "to":   [ 16.002, 16.002, 16.002 ],
+            "faces": {
+                "south": { "uv": [0, 0, 16, 16], "texture": "#overlay", "cullface": "south" }
+            }
+        },
+        {
+            "comment": "West overlay",
+            "from": [ -0.002, -0.002, -0.002 ],
+            "to":   [ -0.002, 16.002, 16.002 ],
+            "faces": {
+                "west": { "uv": [0, 0, 16, 16], "texture": "#overlay", "cullface": "west" }
+            }
+        },
+        {
+            "comment": "East overlay",
+            "from": [ 16.002, -0.002, -0.002 ],
+            "to":   [ 16.002, 16.002, 16.002 ],
+            "faces": {
+                "east": { "uv": [0, 0, 16, 16], "texture": "#overlay", "cullface": "east" }
+            }
+        }
+    ]
+}

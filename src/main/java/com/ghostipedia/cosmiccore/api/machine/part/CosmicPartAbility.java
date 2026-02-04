@@ -21,4 +21,6 @@ public class CosmicPartAbility {
     public static final PartAbility BEE_HOLDER = new PartAbility("bee_holder");
     public static final PartAbility ME_ASSEMBLY_PARTS = new PartAbility("me_assembly_parts");
     public static final PartAbility ME_ASSEMBLY_PARTS_FLUID = new PartAbility("me_assembly_parts_fluid");
+
+    public static final PartAbility ALVEARY_MODIFIER = new PartAbility("alveary_modifier");
 }
