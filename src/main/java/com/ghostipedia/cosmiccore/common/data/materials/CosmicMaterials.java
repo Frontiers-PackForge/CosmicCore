@@ -232,8 +232,8 @@ public class CosmicMaterials {
 
         Chlorophyte = new Material.Builder(CosmicCore.id("chlorophyte"))
                 .ingot()
-                .liquid(new FluidBuilder().temperature(1340))
-                .color(0x3A8F5B).secondaryColor(0x6BB78A).iconSet(MaterialIconSet.METALLIC)
+                .liquid(new FluidBuilder().temperature(1340).customStill())
+                .iconSet(CosmicMaterialSet.CHLOROPHYTE)
                 .flags(GENERATE_BOLT_SCREW, GENERATE_ROUND, GENERATE_GEAR, GENERATE_SMALL_GEAR, GENERATE_RING,
                         GENERATE_FRAME, GENERATE_SPRING, GENERATE_SPRING_SMALL, GENERATE_FINE_WIRE, GENERATE_DENSE)
                 .blastTemp(4500, BlastProperty.GasTier.HIGH, GTValues.VA[GTValues.EV], 1200)
