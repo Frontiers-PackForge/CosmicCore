@@ -1,11 +1,13 @@
 package com.ghostipedia.cosmiccore.common.item.behavior;
 
 import com.ghostipedia.cosmiccore.CosmicCore;
+import com.ghostipedia.cosmiccore.common.data.CosmicSounds;
 
 import com.gregtechceu.gtceu.api.blockentity.IPaintable;
 import com.gregtechceu.gtceu.api.blockentity.MetaMachineBlockEntity;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.resources.sounds.SimpleSoundInstance;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Player;
@@ -97,15 +99,12 @@ public class SprayCanClientHandler {
                         }
                     }
                 } else if (entity instanceof MetaMachineBlockEntity meta) {
-
-                    var Machinecolor = meta.getMetaMachine().getPaintingColor();
-                    System.out.println(Machinecolor);
+                    var machineColor = meta.getMetaMachine().getPaintingColor();
                     for (DyeColor dye : DyeColor.values()) {
-                        if (Machinecolor == -1) {
+                        if (machineColor == -1) {
                             color = ExtendedDyeColor.SOLVENT;
                             break;
-
-                        } else if (Machinecolor == dye.getTextColor()) {
+                        } else if (machineColor == dye.getTextColor()) {
                             color = ExtendedDyeColor.fromDyeColor(dye);
                         }
                     }
@@ -147,8 +146,10 @@ public class SprayCanClientHandler {
                 color = Objects.requireNonNullElse(color, ExtendedDyeColor.SOLVENT);
                 behavior.setColor(color);
                 behavior.sendColorToTag(player, behavior.color);
+                Minecraft.getInstance().getSoundManager().play(
+                        SimpleSoundInstance.forUI(CosmicSounds.SHAKE_CAN.getMainEvent(), 1.0f, 1.0f));
             } else {
-                player.displayClientMessage(Component.literal("Spray Can locked!"), true);
+                player.displayClientMessage(Component.translatable("cosmiccore.item.spraycan.locked"), true);
             }
 
             event.setCanceled(true);
@@ -188,7 +189,7 @@ public class SprayCanClientHandler {
         behavior.setIsLocked(nowLocked);
         event.setCanceled(true);
 
-        String message = "Spray Can " + (nowLocked ? "locked!" : "unlocked!");
-        player.displayClientMessage(Component.literal(message), true);
+        String langKey = nowLocked ? "cosmiccore.item.spraycan.now_locked" : "cosmiccore.item.spraycan.now_unlocked";
+        player.displayClientMessage(Component.translatable(langKey), true);
     }
 }

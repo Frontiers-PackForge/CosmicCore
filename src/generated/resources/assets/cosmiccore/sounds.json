@@ -98,6 +98,15 @@
     ],
     "subtitle": "cosmiccore.subtitle.orbital_forge"
   },
+  "shake": {
+    "sounds": [
+      {
+        "type": "file",
+        "name": "cosmiccore:shake"
+      }
+    ],
+    "subtitle": "cosmiccore.subtitle.shake"
+  },
   "vorax": {
     "sounds": [
       {
