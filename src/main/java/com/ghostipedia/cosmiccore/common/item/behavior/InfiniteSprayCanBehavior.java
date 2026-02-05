@@ -1,25 +1,24 @@
 package com.ghostipedia.cosmiccore.common.item.behavior;
 
+import com.ghostipedia.cosmiccore.client.gui.SprayCanScreen;
+import com.ghostipedia.cosmiccore.common.data.CosmicSounds;
+
 import com.gregtechceu.gtceu.GTCEu;
 import com.gregtechceu.gtceu.api.GTValues;
 import com.gregtechceu.gtceu.api.blockentity.IPaintable;
 import com.gregtechceu.gtceu.api.blockentity.MetaMachineBlockEntity;
 import com.gregtechceu.gtceu.api.blockentity.PipeBlockEntity;
-import com.gregtechceu.gtceu.api.gui.GuiTextures;
 import com.gregtechceu.gtceu.api.item.component.IAddInformation;
 import com.gregtechceu.gtceu.api.item.component.IInteractionItem;
-import com.gregtechceu.gtceu.api.item.component.IItemUIFactory;
 import com.gregtechceu.gtceu.common.data.GTSoundEntries;
 import com.gregtechceu.gtceu.config.ConfigHolder;
 import com.gregtechceu.gtceu.data.recipe.CustomTags;
 import com.gregtechceu.gtceu.utils.BreadthFirstBlockSearch;
 
-import com.lowdragmc.lowdraglib.gui.factory.HeldItemUIFactory;
-import com.lowdragmc.lowdraglib.gui.modular.ModularUI;
-import com.lowdragmc.lowdraglib.gui.widget.ButtonWidget;
-import com.lowdragmc.lowdraglib.syncdata.annotation.DescSynced;
-
 import net.minecraft.ChatFormatting;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.client.resources.sounds.SimpleSoundInstance;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -66,17 +65,16 @@ import java.util.Map;
 import java.util.Set;
 import java.util.function.BiPredicate;
 
-public class InfiniteSprayCanBehavior implements IInteractionItem, IAddInformation, IItemUIFactory {
+public class InfiniteSprayCanBehavior implements IInteractionItem, IAddInformation {
 
     @Getter
     @Setter
-    @DescSynced
     public ExtendedDyeColor color;
+
     @Getter
     @Setter
     private Boolean isLocked = false;
 
-    @DescSynced
     public boolean isSwinging = false;
 
     public static final String ColorTag = "color";
@@ -94,41 +92,16 @@ public class InfiniteSprayCanBehavior implements IInteractionItem, IAddInformati
     }
 
     @Override
-    public ModularUI createUI(HeldItemUIFactory.HeldItemHolder holder, Player player) {
-        var ui = new ModularUI(152, 64, holder, player).background(GuiTextures.BACKGROUND);
-
-        for (ExtendedDyeColor dyeColor : ExtendedDyeColor.values()) {
-            int id = dyeColor.getColorId();
-            if (id == -1) id = 17;
-            if (id != 17) {
-                int x = ((id + 1) % 8) * 18 + 4;
-                int y = (id / 8) * 18 + 4;
-                ui.widget(new ButtonWidget(x, y, 16, 18, dyeColor.getTexture(), cd -> {
-                    int colorId = dyeColor.getColorId();
-                    DyeColor dyeColorVanilla = DyeColor.byId(colorId + 1);
-                    ExtendedDyeColor extendedColor = ExtendedDyeColor.fromDyeColor(dyeColorVanilla);
-                    setColor(extendedColor);
-                    sendColorToTag(player, this.color);
-
-                }));
-            } else {
-                ui.widget(new ButtonWidget(65, 40, 16, 18, dyeColor.getTexture(),
-                        cd -> {
-
-                            setColor(ExtendedDyeColor.SOLVENT);
-                            sendColorToTag(player, this.color);
-                        }));
-            }
-        }
-        return ui;
-    }
-
-    @Override
     public InteractionResultHolder<ItemStack> use(Item item, Level level, Player player, InteractionHand usedHand) {
-        if (player.isCrouching()) {
-            return IItemUIFactory.super.use(item, level, player, usedHand);
+        if (level.isClientSide && Screen.hasShiftDown()) {
+            openScreen(player);
+            return InteractionResultHolder.success(player.getItemInHand(usedHand));
         }
         return InteractionResultHolder.pass(player.getItemInHand(usedHand));
+    }
+
+    private void openScreen(Player player) {
+        Minecraft.getInstance().setScreen(new SprayCanScreen(player, this));
     }
 
     @Override
@@ -144,7 +117,7 @@ public class InfiniteSprayCanBehavior implements IInteractionItem, IAddInformati
             handleBlocks(pos, maxBlocksToRecolor, context);
         }
         GTSoundEntries.SPRAY_CAN_TOOL.play(level, null, player.position(), 1.0f, 1.0f);
-        return InteractionResult.PASS;
+        return InteractionResult.SUCCESS;
     }
 
     @Override
@@ -160,8 +133,12 @@ public class InfiniteSprayCanBehavior implements IInteractionItem, IAddInformati
 
             this.color = ExtendedDyeColor.values()[nextColor];
             sendColorToTag(player, this.color);
+            if (player.level().isClientSide) {
+                Minecraft.getInstance().getSoundManager().play(
+                        SimpleSoundInstance.forUI(CosmicSounds.SHAKE_CAN.getMainEvent(), 1.0f, 1.0f));
+            }
         } else {
-            player.displayClientMessage(Component.literal("THE SPRAYCAN IS LOCKED")
+            player.displayClientMessage(Component.translatable("cosmiccore.item.spraycan.locked")
                     .withStyle(style -> style
                             .withColor(ChatFormatting.RED)
                             .withBold(true)),
@@ -172,15 +149,14 @@ public class InfiniteSprayCanBehavior implements IInteractionItem, IAddInformati
     }
 
     public void PrintColorToActionBar(Player player, ExtendedDyeColor color) {
-        MutableComponent message = Component.literal("Spray Can Color is: ");
-        MutableComponent colorComponent = Component.literal(color.toString())
+        String colorName = color.name().replace('_', ' ');
+        MutableComponent colorComponent = Component.literal(colorName)
                 .setStyle(
-                        color == ExtendedDyeColor.SOLVENT ? Style.EMPTY.withColor(TextColor.fromRgb(0xFFFFFF)) // white
-                                : Style.EMPTY.withColor(TextColor.fromRgb(color.getTextColor())));
+                        color == ExtendedDyeColor.SOLVENT ? Style.EMPTY.withColor(TextColor.fromRgb(0xFFFFFF)) :
+                                Style.EMPTY.withColor(TextColor.fromRgb(color.getTextColor())));
 
-        message.append(colorComponent);
-
-        player.displayClientMessage(message, true);
+        player.displayClientMessage(
+                Component.translatable("cosmiccore.item.spraycan.actionbar.color", colorComponent), true);
     }
 
     // vanilla

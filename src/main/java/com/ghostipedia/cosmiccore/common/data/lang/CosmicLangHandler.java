@@ -415,7 +415,7 @@ public class CosmicLangHandler extends LangHandler {
         provider.add("cosmic.gui.wireless.energy.no.capacitor", "No Formed Capacitor");
         provider.add("cosmic.gui.wireless.energy.capacitor", "  §bCapacitor Location:§b ");
 
-        replace(provider, "item.cosmiccore.infinite_spray_can", "§lInfinite Spray Can");
+        replace(provider, "item.cosmiccore.infinite_spray_can", "§lPrismatic Spray Can");
 
         // AE2 EU Display Mixin
         provider.add("gui.ae2.units.eu", "EU");
@@ -443,6 +443,12 @@ public class CosmicLangHandler extends LangHandler {
         provider.add("cosmiccore.item.spraycan.tooltip.locked", "Spraycan is locked");
         provider.add("cosmiccore.item.spraycan.tooltip.current_color", "Current Color: %s");
         provider.add("cosmiccore.item.spraycan.tooltip.solvent_mode", "Spraycan in SOLVENT mode");
+        provider.add("cosmiccore.item.spraycan.gui.title", "Prismatic Spray Can");
+        provider.add("cosmiccore.item.spraycan.gui.solvent", "Solvent (Strip Color)");
+        provider.add("cosmiccore.item.spraycan.locked", "Spray Can is locked");
+        provider.add("cosmiccore.item.spraycan.actionbar.color", "Spray Can Color: %s");
+        provider.add("cosmiccore.item.spraycan.now_locked", "Spray Can locked");
+        provider.add("cosmiccore.item.spraycan.now_unlocked", "Spray Can unlocked");
 
         provider.add("cosmiccore.item.linked_terminal.boundTo", "Bound to %s");
         provider.add("allele.forestry.bee_species.cosmiccore.bee_oxygen", "Lofty Oxygen");
