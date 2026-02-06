@@ -107,12 +107,13 @@ public class WirelessComputationStore implements IOpticalComputationProvider {
             boolean canBridge = provider.canBridge(bridgeSeen);
             int providerCWU = canBridge ? provider.getMaxCWUt(seen) : 0;
             com.ghostipedia.cosmiccore.CosmicCore.LOGGER.info("Provider {} (class={}) canBridge={} CWU={}",
-                provider, provider.getClass().getName(), canBridge, providerCWU);
+                    provider, provider.getClass().getName(), canBridge, providerCWU);
             if (!canBridge) continue;
             maximumCWUt += providerCWU;
         }
 
-        com.ghostipedia.cosmiccore.CosmicCore.LOGGER.info("Total max CWU from {} providers: {}", providers.size(), maximumCWUt);
+        com.ghostipedia.cosmiccore.CosmicCore.LOGGER.info("Total max CWU from {} providers: {}", providers.size(),
+                maximumCWUt);
         return maximumCWUt;
     }
 

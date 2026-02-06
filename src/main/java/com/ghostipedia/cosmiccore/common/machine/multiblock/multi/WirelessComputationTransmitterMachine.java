@@ -43,7 +43,7 @@ import javax.annotation.ParametersAreNonnullByDefault;
 @MethodsReturnNonnullByDefault
 @ParametersAreNonnullByDefault
 public class WirelessComputationTransmitterMachine extends WorkableElectricMultiblockMachine
-        implements IFancyUIMachine, IDisplayUIMachine, IControllable {
+                                                   implements IFancyUIMachine, IDisplayUIMachine, IControllable {
 
     public static final int EUT_PER_HATCH = GTValues.VA[GTValues.LuV];
 
@@ -170,16 +170,19 @@ public class WirelessComputationTransmitterMachine extends WorkableElectricMulti
     private int calculateEnergyUsage() {
         int receivers = computationHatches.size();
         boolean hasMaintenance = ConfigHolder.INSTANCE.machines.enableMaintenance && this.maintenance != null;
-        var maintenanceMultiplier = hasMaintenance ? (1 + ((float) this.maintenance.getNumMaintenanceProblems() / 10)) : 1;
+        var maintenanceMultiplier = hasMaintenance ? (1 + ((float) this.maintenance.getNumMaintenanceProblems() / 10)) :
+                1;
         return (int) Math.floor(receivers * maintenanceMultiplier * EUT_PER_HATCH);
     }
 
     private void addHatchesToWirelessNetwork() {
         var uuid = getTeamUUID();
-        com.ghostipedia.cosmiccore.CosmicCore.LOGGER.info("Adding {} computation hatches to wireless network for team {}", computationHatches.size(), uuid);
+        com.ghostipedia.cosmiccore.CosmicCore.LOGGER
+                .info("Adding {} computation hatches to wireless network for team {}", computationHatches.size(), uuid);
         WirelessComputationStore.addHatches(uuid, computationHatches);
         var store = WirelessComputationStore.getStore(uuid);
-        com.ghostipedia.cosmiccore.CosmicCore.LOGGER.info("Store now has {} providers, max CWU: {}", store.getProviderCount(), store.getMaxCWUt());
+        com.ghostipedia.cosmiccore.CosmicCore.LOGGER.info("Store now has {} providers, max CWU: {}",
+                store.getProviderCount(), store.getMaxCWUt());
     }
 
     private void removeHatchesFromWirelessNetwork() {
@@ -201,8 +204,11 @@ public class WirelessComputationTransmitterMachine extends WorkableElectricMulti
                         "cosmiccore.multiblock.wireless_computation_transmitter.transmitting")
                 .addEnergyUsageExactLine(calculateEnergyUsage())
                 .addCustom(list -> {
-                    list.add(Component.translatable("cosmiccore.multiblock.wireless_computation_transmitter.network_providers", totalProviders));
-                    list.add(Component.translatable("cosmiccore.multiblock.wireless_computation_transmitter.cwu_usage", allocatedCWU, maxCWU));
+                    list.add(Component.translatable(
+                            "cosmiccore.multiblock.wireless_computation_transmitter.network_providers",
+                            totalProviders));
+                    list.add(Component.translatable("cosmiccore.multiblock.wireless_computation_transmitter.cwu_usage",
+                            allocatedCWU, maxCWU));
                 })
                 .addWorkingStatusLine()
                 .addEmptyLine()

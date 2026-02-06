@@ -97,7 +97,8 @@ public class WirelessComputationHatchMachine extends MultiblockPartMachine {
 
         MultiblockDisplayText.builder(textList, isFormed())
                 .addCustom(list -> {
-                    list.add(Component.translatable("cosmiccore.machine.wireless_computation_hatch.providers", providerCount));
+                    list.add(Component.translatable("cosmiccore.machine.wireless_computation_hatch.providers",
+                            providerCount));
                     list.add(Component.translatable("cosmiccore.machine.wireless_computation_hatch.max_cwu", maxCWU));
                 })
                 .addCustom(list -> OwnershipUtils.addOwnerLine(list, getOwner(), true));
@@ -107,7 +108,7 @@ public class WirelessComputationHatchMachine extends MultiblockPartMachine {
      * Custom computation container that routes requests to WirelessComputationStore.
      */
     protected class WirelessComputationContainer extends NotifiableRecipeHandlerTrait<Integer>
-            implements IOpticalComputationHatch, IOpticalComputationReceiver {
+                                                 implements IOpticalComputationHatch, IOpticalComputationReceiver {
 
         @Getter
         protected final IO handlerIO = IO.IN;
@@ -162,8 +163,9 @@ public class WirelessComputationHatchMachine extends MultiblockPartMachine {
 
             int sum = left.stream().mapToInt(Integer::intValue).sum();
             if (!simulate) {
-                com.ghostipedia.cosmiccore.CosmicCore.LOGGER.info("handleRecipeInner: io={}, sum={}, teamUUID={}, providers={}, maxCWU={}",
-                    io, sum, teamUUID, store.getProviderCount(), store.getMaxCWUt());
+                com.ghostipedia.cosmiccore.CosmicCore.LOGGER.info(
+                        "handleRecipeInner: io={}, sum={}, teamUUID={}, providers={}, maxCWU={}",
+                        io, sum, teamUUID, store.getProviderCount(), store.getMaxCWUt());
             }
             if (io == IO.IN) {
                 int availableCWUt = store.requestCWUt(Integer.MAX_VALUE, true);

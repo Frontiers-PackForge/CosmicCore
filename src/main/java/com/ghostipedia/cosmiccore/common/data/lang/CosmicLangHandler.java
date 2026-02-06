@@ -377,8 +377,10 @@ public class CosmicLangHandler extends LangHandler {
         provider.add("cosmiccore.multiblock.wireless_computation_transmitter.tooltip.2",
                 "Consumes LuV tier EU per receiver hatch");
         provider.add("cosmiccore.multiblock.wireless_computation_transmitter.transmitting", "Transmitting Computation");
-        provider.add("cosmiccore.multiblock.wireless_computation_transmitter.local_hatches", "Local Receiver Hatches: %d");
-        provider.add("cosmiccore.multiblock.wireless_computation_transmitter.network_providers", "Network Providers: %d");
+        provider.add("cosmiccore.multiblock.wireless_computation_transmitter.local_hatches",
+                "Local Receiver Hatches: %d");
+        provider.add("cosmiccore.multiblock.wireless_computation_transmitter.network_providers",
+                "Network Providers: %d");
         provider.add("cosmiccore.multiblock.wireless_computation_transmitter.max_cwu", "Max CWU/t: %d");
         provider.add("cosmiccore.multiblock.wireless_computation_transmitter.cwu_usage", "CWU Usage: %d / %d CWU/t");
 
