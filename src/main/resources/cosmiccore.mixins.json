@@ -44,6 +44,7 @@
     "accessor.LivingEntityAccessor",
     "accessor.CubicSplineMultipointAccessor",
     "accessor.LootTableAccessor",
+    "accessor.RecipeLogicAccessor",
     "ae2.eudisplay.EUAddAppearanceMixin",
     "ae2.eudisplay.EUAddPowerUnitMixin",
     "ae2.eudisplay.EUAddSettingMixin",

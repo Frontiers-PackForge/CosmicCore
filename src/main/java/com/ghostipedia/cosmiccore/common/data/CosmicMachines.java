@@ -16,6 +16,7 @@ import com.ghostipedia.cosmiccore.common.block.debug.CreativeThermiaContainerMac
 import com.ghostipedia.cosmiccore.common.machine.IndustrialApiaryMachine;
 import com.ghostipedia.cosmiccore.common.machine.WirelessChargerMachine;
 import com.ghostipedia.cosmiccore.common.machine.multiblock.electric.hpca.HPCAMachine;
+import com.ghostipedia.cosmiccore.common.machine.multiblock.multi.WirelessComputationTransmitterMachine;
 import com.ghostipedia.cosmiccore.common.machine.multiblock.multi.WirelessDataBankMachine;
 import com.ghostipedia.cosmiccore.common.machine.multiblock.multi.bee.AlvearyModifierType;
 import com.ghostipedia.cosmiccore.common.machine.multiblock.part.*;
@@ -871,6 +872,44 @@ public class CosmicMachines {
             .modelProperty(GTMachineModelProperties.IS_FORMED, false)
             .tier(UEV)
             .overlayTieredHullModel("wireless_data_hatch")
+            .register();
+
+    public static final MachineDefinition WIRELESS_COMPUTATION_HATCH = REGISTRATE
+            .machine("wireless_computation_hatch", WirelessComputationHatchMachine::new)
+            .langValue("Wireless Computation Hatch")
+            .rotationState(RotationState.ALL)
+            .abilities(PartAbility.COMPUTATION_DATA_RECEPTION)
+            .modelProperty(GTMachineModelProperties.IS_FORMED, false)
+            .tier(UEV)
+            .overlayTieredHullModel("wireless_computation_hatch")
+            .tooltips(
+                    Component.translatable("cosmiccore.machine.wireless_computation_hatch.tooltip.0"),
+                    Component.translatable("cosmiccore.machine.wireless_computation_hatch.tooltip.1"))
+            .register();
+
+    public static final MultiblockMachineDefinition WIRELESS_COMPUTATION_TRANSMITTER = REGISTRATE
+            .multiblock("wireless_computation_transmitter", WirelessComputationTransmitterMachine::new)
+            .langValue("Wireless Computation Transmitter")
+            .rotationState(RotationState.NON_Y_AXIS)
+            .appearanceBlock(COMPUTER_CASING)
+            .recipeType(GTRecipeTypes.DUMMY_RECIPES)
+            .tooltips(
+                    Component.translatable("cosmiccore.multiblock.wireless_computation_transmitter.tooltip.0"),
+                    Component.translatable("cosmiccore.multiblock.wireless_computation_transmitter.tooltip.1"),
+                    Component.translatable("cosmiccore.multiblock.wireless_computation_transmitter.tooltip.2"))
+            .pattern(definition -> FactoryBlockPattern.start()
+                    .aisle("CCC", "CCC", "CCC")
+                    .aisle("CCC", "CAC", "CCC")
+                    .aisle("CCC", "CSC", "CCC")
+                    .where('S', controller(blocks(definition.getBlock())))
+                    .where('A', blocks(ADVANCED_COMPUTER_CASING.get()))
+                    .where('C', blocks(COMPUTER_CASING.get()).setMinGlobalLimited(12)
+                            .or(abilities(PartAbility.INPUT_ENERGY).setMinGlobalLimited(1).setMaxGlobalLimited(2))
+                            .or(abilities(PartAbility.COMPUTATION_DATA_RECEPTION).setMinGlobalLimited(1))
+                            .or(abilities(PartAbility.MAINTENANCE).setExactLimit(1)))
+                    .build())
+            .workableCasingModel(GTCEu.id("block/casings/hpca/high_power_casing"),
+                    GTCEu.id("block/multiblock/data_bank"))
             .register();
 
     public static final MachineDefinition DRONE_MAINTENANCE_INTERFACE = REGISTRATE
