@@ -1,8 +1,6 @@
 {
   "parent": "item/generated",
   "textures": {
-    "layer0": "gtceu:item/material_sets/trinavine/bolt",
-    "layer1": "gtceu:item/material_sets/trinavine/bolt_secondary",
-    "layer2": "gtceu:item/material_sets/trinavine/bolt_overlay"
+    "layer0": "gtceu:item/material_sets/trinavine/bolt"
   }
 }

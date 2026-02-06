@@ -1,8 +1,6 @@
 {
   "parent": "item/generated",
   "textures": {
-    "layer0": "gtceu:item/material_sets/trinavine/ring",
-    "layer1": "gtceu:item/material_sets/trinavine/ring_secondary",
-    "layer2": "gtceu:item/material_sets/trinavine/ring_overlay"
+    "layer0": "gtceu:item/material_sets/trinavine/ring"
   }
 }

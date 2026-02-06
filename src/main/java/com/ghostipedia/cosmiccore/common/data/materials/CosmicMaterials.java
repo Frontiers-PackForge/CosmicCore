@@ -408,8 +408,8 @@ public class CosmicMaterials {
         Trinavine = new Material.Builder(CosmicCore.id("trinavine"))
                 .ingot()
                 .formula("⋖Tv⋗")
-                .liquid(new FluidBuilder().temperature(1500))
-                .color(0xfe2d2d).secondaryColor(0x353535).iconSet(CosmicMaterialSet.TRINAVINE)
+                .liquid(new FluidBuilder().temperature(1500).customStill())
+                .iconSet(CosmicMaterialSet.TRINAVINE)
                 .flags(GENERATE_BOLT_SCREW, GENERATE_ROUND, GENERATE_GEAR, GENERATE_SMALL_GEAR, GENERATE_RING,
                         GENERATE_FRAME, GENERATE_SPRING, GENERATE_SPRING_SMALL, GENERATE_FINE_WIRE, GENERATE_DENSE)
                 .cableProperties(GTValues.V[7], 4, 3)

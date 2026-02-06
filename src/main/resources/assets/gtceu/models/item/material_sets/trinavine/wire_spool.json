@@ -1,8 +1,7 @@
 {
   "parent": "item/generated",
   "textures": {
-    "layer0":  "gtceu:item/material_sets/trinavine/wire_spool",
-    "layer1": "gtceu:item/void",
-    "layer2": "gtceu:item/material_sets/dull/wire_spool_overlay"
+    "layer0": "gtceu:item/material_sets/trinavine/wire_spool",
+    "layer1": "gtceu:item/material_sets/trinavine/wire_spool_overlay"
   }
 }
