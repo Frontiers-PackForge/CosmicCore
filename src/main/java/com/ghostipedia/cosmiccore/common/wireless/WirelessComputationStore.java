@@ -10,19 +10,13 @@ import java.util.*;
 
 import static com.ghostipedia.cosmiccore.common.wireless.GlobalWirelessVariableStorage.GlobalWirelessComputation;
 
-/**
- * In-memory store for wireless computation providers, keyed by Team UUID.
- * Aggregates computation from all registered transmitter multiblocks for a team.
- */
 public class WirelessComputationStore implements IOpticalComputationProvider {
 
     private final Set<IOpticalComputationHatch> providers = new ObjectOpenHashSet<>();
 
-    // Per-tick saturation tracking to avoid redundant computation requests
     private boolean tickSaturated;
     private long timerCWUt = -1;
 
-    // Track allocated CWU for display purposes
     private int lastAllocatedCWUt = 0;
     private int currentAllocatedCWUt = 0;
     private long allocationTimer = -1;
@@ -57,8 +51,7 @@ public class WirelessComputationStore implements IOpticalComputationProvider {
 
         if (cwut == 0) return 0;
 
-        // Per-tick saturation check using game time
-        long currentTime = System.currentTimeMillis() / 50; // Approximate tick time
+        long currentTime = System.currentTimeMillis() / 50;
         if (timerCWUt == currentTime) {
             if (tickSaturated) {
                 return 0;
@@ -68,7 +61,6 @@ public class WirelessComputationStore implements IOpticalComputationProvider {
             tickSaturated = false;
         }
 
-        // Reset allocation tracking each tick
         if (allocationTimer != currentTime) {
             lastAllocatedCWUt = currentAllocatedCWUt;
             currentAllocatedCWUt = 0;
@@ -104,16 +96,10 @@ public class WirelessComputationStore implements IOpticalComputationProvider {
         int maximumCWUt = 0;
 
         for (var provider : providers) {
-            boolean canBridge = provider.canBridge(bridgeSeen);
-            int providerCWU = canBridge ? provider.getMaxCWUt(seen) : 0;
-            com.ghostipedia.cosmiccore.CosmicCore.LOGGER.info("Provider {} (class={}) canBridge={} CWU={}",
-                    provider, provider.getClass().getName(), canBridge, providerCWU);
-            if (!canBridge) continue;
-            maximumCWUt += providerCWU;
+            if (!provider.canBridge(bridgeSeen)) continue;
+            maximumCWUt += provider.getMaxCWUt(seen);
         }
 
-        com.ghostipedia.cosmiccore.CosmicCore.LOGGER.info("Total max CWU from {} providers: {}", providers.size(),
-                maximumCWUt);
         return maximumCWUt;
     }
 
@@ -128,8 +114,6 @@ public class WirelessComputationStore implements IOpticalComputationProvider {
         }
         return false;
     }
-
-    // Static access methods
 
     public static WirelessComputationStore getStore(UUID uuid) {
         if (GlobalWirelessComputation.get(uuid) == null) {

@@ -41,10 +41,6 @@ import java.util.UUID;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 
-/**
- * Wireless computation hatch that routes computation requests to WirelessComputationStore.
- * Acts as a drop-in replacement for wired computation hatches in consumer multiblocks.
- */
 @MethodsReturnNonnullByDefault
 @ParametersAreNonnullByDefault
 public class WirelessComputationHatchMachine extends MultiblockPartMachine {
@@ -104,9 +100,6 @@ public class WirelessComputationHatchMachine extends MultiblockPartMachine {
                 .addCustom(list -> OwnershipUtils.addOwnerLine(list, getOwner(), true));
     }
 
-    /**
-     * Custom computation container that routes requests to WirelessComputationStore.
-     */
     protected class WirelessComputationContainer extends NotifiableRecipeHandlerTrait<Integer>
                                                  implements IOpticalComputationHatch, IOpticalComputationReceiver {
 
@@ -123,7 +116,7 @@ public class WirelessComputationHatchMachine extends MultiblockPartMachine {
 
         @Override
         public boolean isTransmitter() {
-            return false; // Acts as receiver - receives computation from wireless network
+            return false;
         }
 
         @Override
@@ -137,7 +130,6 @@ public class WirelessComputationHatchMachine extends MultiblockPartMachine {
 
             seen.add(this);
 
-            // Route to wireless computation store
             var store = WirelessComputationStore.getStore(getTeamUUID());
             return store.requestCWUt(cwut, simulate, seen);
         }
@@ -162,11 +154,6 @@ public class WirelessComputationHatchMachine extends MultiblockPartMachine {
             var store = WirelessComputationStore.getStore(teamUUID);
 
             int sum = left.stream().mapToInt(Integer::intValue).sum();
-            if (!simulate) {
-                com.ghostipedia.cosmiccore.CosmicCore.LOGGER.info(
-                        "handleRecipeInner: io={}, sum={}, teamUUID={}, providers={}, maxCWU={}",
-                        io, sum, teamUUID, store.getProviderCount(), store.getMaxCWUt());
-            }
             if (io == IO.IN) {
                 int availableCWUt = store.requestCWUt(Integer.MAX_VALUE, true);
                 if (availableCWUt >= sum) {

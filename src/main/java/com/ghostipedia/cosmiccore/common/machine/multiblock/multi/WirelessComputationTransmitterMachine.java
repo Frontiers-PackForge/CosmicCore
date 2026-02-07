@@ -36,10 +36,6 @@ import java.util.*;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 
-/**
- * Wireless Computation Transmitter multiblock.
- * Aggregates computation from receiver hatches and makes it available wirelessly to the team's network.
- */
 @MethodsReturnNonnullByDefault
 @ParametersAreNonnullByDefault
 public class WirelessComputationTransmitterMachine extends WorkableElectricMultiblockMachine
@@ -81,13 +77,11 @@ public class WirelessComputationTransmitterMachine extends WorkableElectricMulti
             getRecipeLogic().setStatus(RecipeLogic.Status.WORKING);
             energyContainer.removeEnergy(calculateEnergyUsage());
 
-            // Only register hatches when state changes to working
             if (!hatchesRegistered) {
                 addHatchesToWirelessNetwork();
                 hatchesRegistered = true;
             }
         } else {
-            // Only unregister hatches when state changes to not working
             if (hatchesRegistered) {
                 removeHatchesFromWirelessNetwork();
                 hatchesRegistered = false;
@@ -114,7 +108,6 @@ public class WirelessComputationTransmitterMachine extends WorkableElectricMulti
 
             if (io == IO.NONE || io == IO.OUT) continue;
 
-            // Collect energy containers
             for (var handler : part.getRecipeHandlers()) {
                 var handlerIO = handler.getHandlerIO();
                 if (io != IO.BOTH && handlerIO != IO.BOTH && io != handlerIO) continue;
@@ -124,7 +117,6 @@ public class WirelessComputationTransmitterMachine extends WorkableElectricMulti
                 }
             }
 
-            // Collect computation hatches (receivers only)
             Block block = part.self().getBlockState().getBlock();
             if (PartAbility.COMPUTATION_DATA_RECEPTION.isApplicable(block)) {
                 if (part instanceof IOpticalComputationHatch hatch) {
@@ -176,13 +168,7 @@ public class WirelessComputationTransmitterMachine extends WorkableElectricMulti
     }
 
     private void addHatchesToWirelessNetwork() {
-        var uuid = getTeamUUID();
-        com.ghostipedia.cosmiccore.CosmicCore.LOGGER
-                .info("Adding {} computation hatches to wireless network for team {}", computationHatches.size(), uuid);
-        WirelessComputationStore.addHatches(uuid, computationHatches);
-        var store = WirelessComputationStore.getStore(uuid);
-        com.ghostipedia.cosmiccore.CosmicCore.LOGGER.info("Store now has {} providers, max CWU: {}",
-                store.getProviderCount(), store.getMaxCWUt());
+        WirelessComputationStore.addHatches(getTeamUUID(), computationHatches);
     }
 
     private void removeHatchesFromWirelessNetwork() {
