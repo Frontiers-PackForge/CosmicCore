@@ -1,0 +1,26 @@
+{
+    "blend": {
+        "func": "add",
+        "srcrgb": "srcalpha",
+        "dstrgb": "1_minus_srcalpha"
+    },
+    "vertex": "cosmiccore:soul_core",
+    "fragment": "cosmiccore:soul_core",
+    "attributes": [
+        "Position",
+        "UV0"
+    ],
+    "samplers": [],
+    "uniforms": [
+        { "name": "ModelViewMat", "type": "matrix4x4", "count": 16, "values": [ 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0 ] },
+        { "name": "ProjMat", "type": "matrix4x4", "count": 16, "values": [ 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0 ] },
+        { "name": "GameTime", "type": "float", "count": 1, "values": [ 0.0 ] },
+        { "name": "ScreenSize", "type": "float", "count": 2, "values": [ 1.0, 1.0 ] },
+        { "name": "Center", "type": "float", "count": 2, "values": [ 0.5, 0.5 ] },
+        { "name": "CoreColor", "type": "float", "count": 3, "values": [ 1.0, 0.9, 0.7 ] },
+        { "name": "ShellColor", "type": "float", "count": 3, "values": [ 0.85, 0.85, 0.92 ] },
+        { "name": "Intensity", "type": "float", "count": 1, "values": [ 1.0 ] },
+        { "name": "Radius", "type": "float", "count": 1, "values": [ 0.08 ] },
+        { "name": "Erosion", "type": "float", "count": 1, "values": [ 0.0 ] }
+    ]
+}

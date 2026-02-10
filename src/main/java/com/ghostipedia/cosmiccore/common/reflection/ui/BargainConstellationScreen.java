@@ -1,6 +1,7 @@
 package com.ghostipedia.cosmiccore.common.reflection.ui;
 
 import com.ghostipedia.cosmiccore.client.renderer.BackgroundRenderer;
+import com.ghostipedia.cosmiccore.client.renderer.ChainRenderer;
 import com.ghostipedia.cosmiccore.client.renderer.SoulAuraRenderer;
 import com.ghostipedia.cosmiccore.common.reflection.ReflectionConstants;
 import com.ghostipedia.cosmiccore.common.reflection.ReflectionLang;
@@ -75,6 +76,10 @@ public class BargainConstellationScreen extends Screen {
     private final List<StarParticle> stars = new ArrayList<>();
     private final Random random = new Random();
 
+    // Chain connections
+    private final ChainRenderer chainRenderer = new ChainRenderer();
+    private float lastMouseX, lastMouseY;
+
     // Pan and zoom state
     private float viewOffsetX = 0f;
     private float viewOffsetY = 0f;
@@ -136,6 +141,26 @@ public class BargainConstellationScreen extends Screen {
 
         // Build bargain nodes
         buildConstellationNodes();
+
+        // Build chains from soul to each node
+        initChains();
+    }
+
+    private static final int[] CHAIN_NEUTRAL_COLOR = { 140, 145, 160 };
+
+    private void initChains() {
+        chainRenderer.clear();
+        int centerX = width / 2;
+        int centerY = height / 2;
+
+        for (BargainNode node : nodes) {
+            float scaledRadius = node.orbitRadius * zoom;
+            float nodeX = centerX + viewOffsetX + (float) Math.cos(node.baseAngle) * scaledRadius;
+            float nodeY = centerY + viewOffsetY + (float) Math.sin(node.baseAngle) * scaledRadius;
+
+            int[] color = node.state == BargainNode.NodeState.ACTIVE ? node.getColor() : CHAIN_NEUTRAL_COLOR;
+            chainRenderer.addChain(centerX + viewOffsetX, centerY + viewOffsetY, nodeX, nodeY, color);
+        }
     }
 
     private void buildConstellationNodes() {
@@ -228,6 +253,10 @@ public class BargainConstellationScreen extends Screen {
             node.tick();
         }
 
+        // Tick chain physics and update anchor positions
+        updateChainAnchors();
+        chainRenderer.tick(lastMouseX, lastMouseY);
+
         // Panel slide animation - save previous for interpolation
         panelSlidePrev = panelSlide;
         selectionAnimationPrev = selectionAnimation;
@@ -240,8 +269,26 @@ public class BargainConstellationScreen extends Screen {
         }
     }
 
+    private void updateChainAnchors() {
+        int centerX = width / 2;
+        int centerY = height / 2;
+        float cx = centerX + viewOffsetX;
+        float cy = centerY + viewOffsetY;
+
+        for (int i = 0; i < nodes.size() && i < chainRenderer.getChainCount(); i++) {
+            BargainNode node = nodes.get(i);
+            float scaledRadius = node.orbitRadius * zoom;
+            float nodeX = centerX + viewOffsetX + (float) Math.cos(node.baseAngle) * scaledRadius;
+            float nodeY = centerY + viewOffsetY + (float) Math.sin(node.baseAngle) * scaledRadius;
+            chainRenderer.updateAnchors(i, cx, cy, nodeX, nodeY);
+        }
+    }
+
     @Override
     public void render(GuiGraphics graphics, int mouseX, int mouseY, float partialTick) {
+        lastMouseX = mouseX;
+        lastMouseY = mouseY;
+
         // Deep space galaxy background shader
         BackgroundRenderer.render(graphics.pose(), BackgroundRenderer.BackgroundType.GALAXY, fadeAlpha, width, height);
 
@@ -259,7 +306,7 @@ public class BargainConstellationScreen extends Screen {
         renderOrbitalRings(graphics);
 
         // Render connecting lines between nodes
-        renderConnections(graphics);
+        renderConnections(graphics, partialTick);
 
         // Update and render all nodes
         // Update screen positions every frame for smooth dragging
@@ -335,43 +382,8 @@ public class BargainConstellationScreen extends Screen {
         }
     }
 
-    private void renderConnections(GuiGraphics graphics) {
-        // Draw faint lines from soul to each bargain (brighter for active)
-        int centerX = width / 2 + (int) viewOffsetX;
-        int centerY = height / 2 + (int) viewOffsetY;
-
-        for (BargainNode node : nodes) {
-            int[] color = node.getColor();
-            int alpha;
-
-            // Different visibility based on state
-            switch (node.state) {
-                case ACTIVE -> alpha = (int) (fadeAlpha * 60);  // Brightest
-                case AVAILABLE -> alpha = (int) (fadeAlpha * 20); // Dim
-                case SCARRED -> alpha = (int) (fadeAlpha * 10);   // Very faint
-                default -> alpha = (int) (fadeAlpha * 15);
-            }
-
-            int lineColor = (alpha << 24) | (color[0] << 16) | (color[1] << 8) | color[2];
-
-            // Line from center to node
-            drawLine(graphics, centerX, centerY, (int) node.screenX, (int) node.screenY, lineColor);
-        }
-    }
-
-    private void drawLine(GuiGraphics graphics, int x1, int y1, int x2, int y2, int color) {
-        int dx = Math.abs(x2 - x1);
-        int dy = Math.abs(y2 - y1);
-        int steps = Math.max(dx, dy);
-        if (steps == 0) return;
-
-        // Draw fewer, larger dots for performance
-        int dotSpacing = Math.max(8, steps / 12); // Max ~12 dots per line
-        for (int i = 0; i <= steps; i += dotSpacing) {
-            int x = x1 + (x2 - x1) * i / steps;
-            int y = y1 + (y2 - y1) * i / steps;
-            graphics.fill(x, y, x + 2, y + 2, color);
-        }
+    private void renderConnections(GuiGraphics graphics, float partialTick) {
+        chainRenderer.render(graphics, fadeAlpha, lastMouseX, lastMouseY, partialTick);
     }
 
     private void renderSoulOrb(GuiGraphics graphics, float partialTick) {

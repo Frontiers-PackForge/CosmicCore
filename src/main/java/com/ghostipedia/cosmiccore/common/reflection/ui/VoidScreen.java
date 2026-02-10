@@ -1,7 +1,10 @@
 package com.ghostipedia.cosmiccore.common.reflection.ui;
 
 import com.ghostipedia.cosmiccore.client.renderer.BackgroundRenderer;
+import com.ghostipedia.cosmiccore.client.renderer.ChainRenderer;
 import com.ghostipedia.cosmiccore.client.renderer.SoulAuraRenderer;
+import com.ghostipedia.cosmiccore.client.renderer.SoulCoreRenderer;
+import com.ghostipedia.cosmiccore.client.renderer.SoulThreadsRenderer;
 import com.ghostipedia.cosmiccore.common.reflection.ReflectionConstants;
 import com.ghostipedia.cosmiccore.common.reflection.ReflectionLang;
 import com.ghostipedia.cosmiccore.common.reflection.ThresholdEncounter;
@@ -101,9 +104,12 @@ public class VoidScreen extends Screen {
     private int usedCapacity = 0;
     private int totalCapacity = 100;
 
-    // Particles
-    private final List<VoidParticle> particles = new ArrayList<>();
     private final Random random = new Random();
+
+    // Chain physics
+    private final ChainRenderer chainRenderer = new ChainRenderer();
+
+    private float lastMouseX, lastMouseY;
 
     // Answer button state (custom rendering)
     private final List<AnswerButton> answerButtons = new ArrayList<>();
@@ -114,7 +120,6 @@ public class VoidScreen extends Screen {
     private static final int CHARS_PER_TICK = 2;
     private static final int TICKS_BETWEEN_CHARS = 1;
     private static final int MAX_LINE_WIDTH = 350;
-    private static final int PARTICLE_COUNT = 30; // Restored for better atmosphere
 
     // Soul shape textures - using GTCEU item textures for distinct silhouettes
     private static final ResourceLocation TEXTURE_REVENANT = new ResourceLocation("gtceu",
@@ -236,10 +241,41 @@ public class VoidScreen extends Screen {
     @Override
     protected void init() {
         super.init();
-        // Initialize particles
-        particles.clear();
-        for (int i = 0; i < PARTICLE_COUNT; i++) {
-            particles.add(new VoidParticle(width, height, random));
+        initChains();
+    }
+
+    private static final int PIN_SCREEN_BUFFER = 30;
+
+    private float[] getPinPosition(ResourceLocation bargainId, int centerX, int centerY) {
+        int hash = bargainId.hashCode();
+
+        // Restrict pins to left and right zones — avoid directly above/below the orb
+        // Map hash to angle within two side arcs: left (-120° to -60°) or right (60° to 120°)
+        // Expressed in radians: left = π±60°, right = 0±60°
+        boolean leftSide = (hash & 1) == 0;
+        float spread = ((hash & 0xFF) / 255.0f - 0.5f) * (float) (Math.PI * 0.65f);
+        float pinAngle = leftSide ? (float) Math.PI + spread : spread;
+
+        float pinDist = 120 + ((hash >> 8) & 0x7F);
+        float pinX = centerX + (float) Math.cos(pinAngle) * pinDist;
+        float pinY = centerY + (float) Math.sin(pinAngle) * pinDist;
+
+        pinX = Math.max(PIN_SCREEN_BUFFER, Math.min(width - PIN_SCREEN_BUFFER, pinX));
+        pinY = Math.max(PIN_SCREEN_BUFFER, Math.min(height - PIN_SCREEN_BUFFER, pinY));
+        return new float[] { pinX, pinY };
+    }
+
+    private void initChains() {
+        chainRenderer.clear();
+        if (activeBargains.isEmpty()) return;
+
+        int centerX = width / 2;
+        int centerY = height / 2 - 40;
+
+        for (ResourceLocation bargainId : activeBargains) {
+            float[] pin = getPinPosition(bargainId, centerX, centerY);
+            int[] color = getBargainMarkColor(bargainId);
+            chainRenderer.addChain(centerX, centerY, pin[0], pin[1], color);
         }
     }
 
@@ -660,13 +696,8 @@ public class VoidScreen extends Screen {
         soulPulse += 0.08f;
         soulBreath += 0.03f;
 
-        // Update particles
-        for (VoidParticle particle : particles) {
-            particle.tick();
-            if (particle.isDead()) {
-                particle.reset(width, height, random);
-            }
-        }
+        // Tick chain physics
+        chainRenderer.tick(lastMouseX, lastMouseY);
 
         switch (state) {
             case FADE_IN -> {
@@ -1050,17 +1081,17 @@ public class VoidScreen extends Screen {
             return;
         }
 
-        // Render void particles (on top of shader background)
-        renderParticles(graphics, partialTick);
-
-        // Render vignette
         renderVignette(graphics);
+
+        // Track mouse for chain physics
+        lastMouseX = mouseX;
+        lastMouseY = mouseY;
+
+        chainRenderer.render(graphics, fadeAlpha, mouseX, mouseY, partialTick);
+        renderBargainPins(graphics);
 
         // Render soul orb in center
         renderSoulOrb(graphics, partialTick);
-
-        // Render active bargain marks around soul
-        renderBargainMarks(graphics, partialTick);
 
         // Render dialogue text
         if (state == VoidState.DIALOGUE || state == VoidState.AWAITING_CHOICE ||
@@ -1101,12 +1132,6 @@ public class VoidScreen extends Screen {
         renderErosionIndicator(graphics);
     }
 
-    private void renderParticles(GuiGraphics graphics, float partialTick) {
-        for (VoidParticle particle : particles) {
-            particle.render(graphics, fadeAlpha);
-        }
-    }
-
     private void renderVignette(GuiGraphics graphics) {
         // Create a vignette effect using gradient bands (2px bands for smooth gradients)
         int vignetteStrength = (int) (fadeAlpha * 180);
@@ -1141,7 +1166,6 @@ public class VoidScreen extends Screen {
         int baseRadius = 35;
         int radius = (int) (baseRadius * breath * pulse);
 
-        // Render ethereal flame aura BEHIND the soul orb
         int auraRadius = (int) (baseRadius * 1.8f);
         SoulAuraRenderer.render(
                 graphics.pose(),
@@ -1157,43 +1181,24 @@ public class VoidScreen extends Screen {
         } else {
             renderUnshapedSoul(graphics, centerX, centerY, radius);
         }
-
-        // Erosion cracks at high levels
-        if (erosion >= 100) {
-            renderCracks(graphics, centerX, centerY, radius);
-        }
     }
 
     private void renderUnshapedSoul(GuiGraphics graphics, int centerX, int centerY, int radius) {
-        int[] rgb = getSoulColor();
-        int alpha = (int) (fadeAlpha * 255);
-
-        // Outer glow
-        for (int r = radius + 35; r > radius; r -= 4) {
-            float glowProgress = (float) (r - radius) / 35f;
-            int glowAlpha = (int) ((1f - glowProgress) * 40 * fadeAlpha);
-            int color = (glowAlpha << 24) | (rgb[0] << 16) | (rgb[1] << 8) | rgb[2];
-            drawCircleFast(graphics, centerX, centerY, r, color);
-        }
-
-        // Core
-        for (int r = radius; r > 0; r -= 3) {
-            float coreProgress = (float) r / radius;
-            int coreAlpha = (int) (alpha * (0.6f + 0.4f * coreProgress));
-            int lr = Math.min(255, rgb[0] + (int) ((255 - rgb[0]) * (1f - coreProgress) * 0.3f));
-            int lg = Math.min(255, rgb[1] + (int) ((255 - rgb[1]) * (1f - coreProgress) * 0.3f));
-            int lb = Math.min(255, rgb[2] + (int) ((255 - rgb[2]) * (1f - coreProgress) * 0.3f));
-            int color = (coreAlpha << 24) | (lr << 16) | (lg << 8) | lb;
-            drawCircleFast(graphics, centerX, centerY, r, color);
-        }
-
-        // Inner highlight
-        int highlightRadius = radius / 4;
-        int hx = centerX - radius / 3;
-        int hy = centerY - radius / 3;
-        int hAlpha = (int) (alpha * 0.4f);
-        int hColor = (hAlpha << 24) | 0xFFFFFF;
-        drawCircleFast(graphics, hx, hy, highlightRadius, hColor);
+        graphics.flush();
+        SoulCoreRenderer.render(
+                graphics.pose(),
+                centerX, centerY,
+                radius,
+                erosion,
+                fadeAlpha,
+                width, height);
+        SoulThreadsRenderer.render(
+                graphics.pose(),
+                centerX, centerY,
+                radius,
+                erosion,
+                fadeAlpha,
+                width, height);
     }
 
     private void renderShapedSoul(GuiGraphics graphics, int centerX, int centerY, int radius,
@@ -1252,68 +1257,45 @@ public class VoidScreen extends Screen {
         };
     }
 
-    private void renderCracks(GuiGraphics graphics, int cx, int cy, int radius) {
-        int crackAlpha = (int) (fadeAlpha * Math.min(200, erosion / 5));
-        int crackColor = (crackAlpha << 24) | 0x200010;
-
-        // Draw some jagged crack lines - reduced frequency
-        Random crackRandom = new Random(42); // Consistent cracks
-        int numCracks = Math.min(5, erosion / 200 + 1); // Fewer cracks
-
-        for (int i = 0; i < numCracks; i++) {
-            double angle = crackRandom.nextDouble() * Math.PI * 2;
-            int length = radius / 2 + crackRandom.nextInt(radius / 2);
-
-            int x1 = cx;
-            int y1 = cy;
-
-            // Larger step for fewer draw calls
-            for (int j = 0; j < length; j += 5) {
-                angle += (crackRandom.nextDouble() - 0.5) * 0.5;
-                int x2 = x1 + (int) (Math.cos(angle) * 5);
-                int y2 = y1 + (int) (Math.sin(angle) * 5);
-
-                graphics.fill(x1, y1, x2 + 2, y2 + 2, crackColor);
-                x1 = x2;
-                y1 = y2;
-            }
-        }
-    }
-
-    private void renderBargainMarks(GuiGraphics graphics, float partialTick) {
+    private void renderBargainPins(GuiGraphics graphics) {
         if (activeBargains.isEmpty()) return;
 
         int centerX = width / 2;
         int centerY = height / 2 - 40;
-        int orbitRadius = 55;
 
-        int markIndex = 0;
+        int index = 0;
         for (ResourceLocation bargainId : activeBargains) {
-            // Position marks in orbit around the soul - smooth with partialTick
-            double smoothTicks = totalTicks + partialTick;
-            double angle = (smoothTicks * 0.02) + (markIndex * Math.PI * 2 / activeBargains.size());
-            int mx = centerX + (int) (Math.cos(angle) * orbitRadius);
-            int my = centerY + (int) (Math.sin(angle) * orbitRadius);
+            float[] pin = getPinPosition(bargainId, centerX, centerY);
+            float pinX = pin[0];
+            float pinY = pin[1];
 
-            // Each bargain type has a different mark color
             int[] markColor = getBargainMarkColor(bargainId);
-            int alpha = (int) (fadeAlpha * 200);
-            int color = (alpha << 24) | (markColor[0] << 16) | (markColor[1] << 8) | markColor[2];
+            int alpha = (int) (fadeAlpha * 180);
 
-            // Draw small orbiting mark as a circle
-            drawCircle(graphics, mx, my, 4, color);
+            // Check if this chain is hovered
+            boolean hovered = index < chainRenderer.getChainCount() &&
+                    chainRenderer.getChain(index).isHovered();
 
-            // Trail - 2 fading points for smooth effect
-            for (int t = 1; t <= 2; t++) {
-                double trailAngle = angle - (t * 0.18);
-                int tx = centerX + (int) (Math.cos(trailAngle) * orbitRadius);
-                int ty = centerY + (int) (Math.sin(trailAngle) * orbitRadius);
-                int trailAlpha = (int) (alpha * (1f - t * 0.35f) * 0.5f);
-                int trailColor = (trailAlpha << 24) | (markColor[0] << 16) | (markColor[1] << 8) | markColor[2];
-                drawCircle(graphics, tx, ty, 3 - t, trailColor);
-            }
+            // Outer glow
+            int glowRadius = hovered ? 8 : 5;
+            int glowAlpha = (int) (fadeAlpha * (hovered ? 80 : 40));
+            int glowColor = (glowAlpha << 24) | (markColor[0] << 16) | (markColor[1] << 8) | markColor[2];
+            drawCircle(graphics, (int) pinX, (int) pinY, glowRadius, glowColor);
 
-            markIndex++;
+            // Core pin
+            int coreAlpha = (int) (fadeAlpha * (hovered ? 255 : 200));
+            int coreColor = (coreAlpha << 24) | (markColor[0] << 16) | (markColor[1] << 8) | markColor[2];
+            drawCircle(graphics, (int) pinX, (int) pinY, 3, coreColor);
+
+            // Bright center
+            int brightAlpha = (int) (fadeAlpha * (hovered ? 255 : 180));
+            int brightR = Math.min(255, markColor[0] + 80);
+            int brightG = Math.min(255, markColor[1] + 80);
+            int brightB = Math.min(255, markColor[2] + 80);
+            int brightColor = (brightAlpha << 24) | (brightR << 16) | (brightG << 8) | brightB;
+            graphics.fill((int) pinX - 1, (int) pinY - 1, (int) pinX + 2, (int) pinY + 2, brightColor);
+
+            index++;
         }
     }
 
@@ -2032,62 +2014,6 @@ public class VoidScreen extends Screen {
         BARGAIN_OFFER,  // Offering a specific bargain
         THRESHOLD,      // Erosion threshold encounter
         HUB             // Mirror hub - browse/manage bargains
-    }
-
-    private static class VoidParticle {
-
-        float x, y;
-        float vx, vy;
-        float size;
-        float alpha;
-        float maxAlpha;
-        int lifetime;
-        int age;
-
-        VoidParticle(int screenWidth, int screenHeight, Random random) {
-            reset(screenWidth, screenHeight, random);
-        }
-
-        void reset(int screenWidth, int screenHeight, Random random) {
-            x = random.nextFloat() * screenWidth;
-            y = random.nextFloat() * screenHeight;
-            vx = (random.nextFloat() - 0.5f) * 0.5f;
-            vy = (random.nextFloat() - 0.5f) * 0.3f - 0.2f; // Slight upward drift
-            size = 1 + random.nextFloat() * 2;
-            maxAlpha = 0.2f + random.nextFloat() * 0.3f;
-            alpha = 0;
-            lifetime = 100 + random.nextInt(200);
-            age = 0;
-        }
-
-        void tick() {
-            x += vx;
-            y += vy;
-            age++;
-
-            // Fade in and out
-            float progress = (float) age / lifetime;
-            if (progress < 0.2f) {
-                alpha = maxAlpha * (progress / 0.2f);
-            } else if (progress > 0.8f) {
-                alpha = maxAlpha * (1f - (progress - 0.8f) / 0.2f);
-            } else {
-                alpha = maxAlpha;
-            }
-        }
-
-        boolean isDead() {
-            return age >= lifetime;
-        }
-
-        void render(GuiGraphics graphics, float screenAlpha) {
-            int a = (int) (alpha * screenAlpha * 255);
-            if (a <= 0) return;
-
-            int color = (a << 24) | 0x404050;
-            int s = (int) size;
-            graphics.fill((int) x, (int) y, (int) x + s, (int) y + s, color);
-        }
     }
 
     private class AnswerButton {

@@ -64,6 +64,12 @@ public class CosmicCoreClient {
     @Getter
     private static ShaderInstance galaxyBgShader;
 
+    @Getter
+    private static ShaderInstance soulCoreShader;
+
+    @Getter
+    private static ShaderInstance soulThreadsShader;
+
     @SubscribeEvent
     public static void shaderRegistry(RegisterShadersEvent event) {
         try {
@@ -78,6 +84,12 @@ public class CosmicCoreClient {
 
             event.registerShader(new ShaderInstance(event.getResourceProvider(), CosmicCore.id("galaxy_bg"),
                     DefaultVertexFormat.POSITION_TEX), (shaderInstance) -> galaxyBgShader = shaderInstance);
+
+            event.registerShader(new ShaderInstance(event.getResourceProvider(), CosmicCore.id("soul_core"),
+                    DefaultVertexFormat.POSITION_TEX), (shaderInstance) -> soulCoreShader = shaderInstance);
+
+            event.registerShader(new ShaderInstance(event.getResourceProvider(), CosmicCore.id("soul_threads"),
+                    DefaultVertexFormat.POSITION_TEX), (shaderInstance) -> soulThreadsShader = shaderInstance);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
