@@ -709,8 +709,8 @@ public class CosmicLangHandler extends LangHandler {
 
     private static void initReflectionLang(RegistrateLangProvider provider) {
         // UI Elements - Basic
-        provider.add("reflection.cosmiccore.ui.void_title", "The Void Between");
-        provider.add("reflection.cosmiccore.ui.constellation_title", "The Constellation of Bargains");
+        provider.add("reflection.cosmiccore.ui.void_title", "The Mirror");
+        provider.add("reflection.cosmiccore.ui.constellation_title", "The Threads");
         provider.add("reflection.cosmiccore.ui.available_bargains", "Available Bargains");
         provider.add("reflection.cosmiccore.ui.your_bargains", "Your Bargains");
         provider.add("reflection.cosmiccore.ui.defiance", "Defiance");
@@ -735,7 +735,7 @@ public class CosmicLangHandler extends LangHandler {
         provider.add("reflection.cosmiccore.ui.soul_erosion_display", "Soul Erosion: %s%%");
         provider.add("reflection.cosmiccore.ui.soul_label", "Soul");
         provider.add("reflection.cosmiccore.ui.dialogue_continue", "Click to continue...");
-        provider.add("reflection.cosmiccore.ui.no_available_bargains", "The void has nothing to offer you... for now.");
+        provider.add("reflection.cosmiccore.ui.no_available_bargains", "No threads within reach... for now.");
         provider.add("reflection.cosmiccore.ui.select_to_view", "Select a bargain to view details");
         provider.add("reflection.cosmiccore.ui.cost", "Cost: %d erosion");
         provider.add("reflection.cosmiccore.ui.erosion", "erosion");
@@ -748,78 +748,98 @@ public class CosmicLangHandler extends LangHandler {
         provider.add("reflection.cosmiccore.ui.scroll_down", "\u25BC Scroll down");
 
         // Hub menu options
-        provider.add("reflection.cosmiccore.ui.review_bargains", "[Review your %s bargains]");
-        provider.add("reflection.cosmiccore.ui.browse_bargains", "[Browse %s available bargains]");
-        provider.add("reflection.cosmiccore.ui.gaze_constellation", "[Gaze upon the constellation]");
+        provider.add("reflection.cosmiccore.ui.review_bargains", "[Examine your %s threads]");
+        provider.add("reflection.cosmiccore.ui.browse_bargains", "[Reach for %s threads]");
+        provider.add("reflection.cosmiccore.ui.gaze_constellation", "[Look at the threads]");
         provider.add("reflection.cosmiccore.ui.just_look", "[Just... look at yourself]");
         provider.add("reflection.cosmiccore.ui.unlock_cost", "Cost: %d soul erosion");
         provider.add("reflection.cosmiccore.ui.defiance_cost", "Defiance will cost %d erosion");
 
         // Hub option details
-        provider.add("reflection.cosmiccore.ui.hub.review.power", "See what you've given away");
-        provider.add("reflection.cosmiccore.ui.hub.review.drawback", "Consider defying a bargain");
-        provider.add("reflection.cosmiccore.ui.hub.browse.power", "See what the void offers");
-        provider.add("reflection.cosmiccore.ui.hub.browse.response", "So many choices... so little soul.");
-        provider.add("reflection.cosmiccore.ui.hub.browse.response_empty", "Nothing for you. Yet.");
-        provider.add("reflection.cosmiccore.ui.hub.reflect.power", "Contemplate your existence");
-        provider.add("reflection.cosmiccore.ui.hub.review_response", "Let's see what you've become.");
-        provider.add("reflection.cosmiccore.ui.hub.reflect_response", "Gazing into the abyss, are we?");
-        provider.add("reflection.cosmiccore.ui.hub.leave_response", "Running away? How predictable.");
+        provider.add("reflection.cosmiccore.ui.hub.review.power", "See what you've pulled loose");
+        provider.add("reflection.cosmiccore.ui.hub.review.drawback", "Consider defying a thread");
+        provider.add("reflection.cosmiccore.ui.hub.browse.power", "See what threads are within reach");
+        provider.add("reflection.cosmiccore.ui.hub.browse.response", "Threads scatter in the dark. So many.");
+        provider.add("reflection.cosmiccore.ui.hub.browse.response_empty", "Nothing within reach. Yet.");
+        provider.add("reflection.cosmiccore.ui.hub.reflect.power", "Look at what you've become");
+        provider.add("reflection.cosmiccore.ui.hub.review_response", "The pulled threads glow faintly.");
+        provider.add("reflection.cosmiccore.ui.hub.reflect_response", "You look at yourself. Really look.");
+        provider.add("reflection.cosmiccore.ui.hub.leave_response", "You turn away from the mirror.");
 
-        // Hub greetings
-        provider.add("reflection.cosmiccore.ui.hub.greeting.many_bargains_high.0", "Look at you. So much given away.");
+        // Hub greetings — self-observations, not entity dialogue
+        provider.add("reflection.cosmiccore.ui.hub.greeting.many_bargains_high.0",
+                "So many gaps in the shell. You can see your core through them.");
         provider.add("reflection.cosmiccore.ui.hub.greeting.many_bargains_high.1",
-                "Do you even remember what you were?");
-        provider.add("reflection.cosmiccore.ui.hub.greeting.many_bargains.0", "Back again. Of course you are.");
-        provider.add("reflection.cosmiccore.ui.hub.greeting.many_bargains.1", "Your soul grows thinner each time.");
-        provider.add("reflection.cosmiccore.ui.hub.greeting.has_bargains.0", "Ah, you return. Hungry for more?");
-        provider.add("reflection.cosmiccore.ui.hub.greeting.has_bargains.1", "I have plenty left to offer.");
-        provider.add("reflection.cosmiccore.ui.hub.greeting.has_scars.0", "I see the scars of defiance.");
-        provider.add("reflection.cosmiccore.ui.hub.greeting.has_scars.1", "You took power, then threw it away.");
-        provider.add("reflection.cosmiccore.ui.hub.greeting.has_scars.2", "Was the cost of keeping it too high?");
+                "Do you even remember what the shell looked like whole?");
+        provider.add("reflection.cosmiccore.ui.hub.greeting.many_bargains.0",
+                "The shell is thinning. Threads trail outward into the dark.");
+        provider.add("reflection.cosmiccore.ui.hub.greeting.many_bargains.1",
+                "Each thread pulled leaves a little more exposed.");
+        provider.add("reflection.cosmiccore.ui.hub.greeting.has_bargains.0",
+                "Threads trail from you into the starfield. You've been busy.");
+        provider.add("reflection.cosmiccore.ui.hub.greeting.has_bargains.1",
+                "More threads still wait. Pinned in the dark.");
+        provider.add("reflection.cosmiccore.ui.hub.greeting.has_scars.0",
+                "Scars where threads were defied. Knots that won't untangle.");
+        provider.add("reflection.cosmiccore.ui.hub.greeting.has_scars.1",
+                "You pulled, then pushed back. The marks remain.");
+        provider.add("reflection.cosmiccore.ui.hub.greeting.has_scars.2",
+                "Was the cost of keeping them too high?");
         provider.add("reflection.cosmiccore.ui.hub.greeting.erosion_no_bargains.0",
-                "Erosion without bargains? Curious.");
+                "Your shell is worn, but no threads trail from it. Strange.");
         provider.add("reflection.cosmiccore.ui.hub.greeting.erosion_no_bargains.1",
-                "Something else has been taking from you.");
+                "Something else has been wearing at you.");
         provider.add("reflection.cosmiccore.ui.hub.greeting.erosion_no_bargains.2",
-                "Perhaps you should let me help instead.");
-        provider.add("reflection.cosmiccore.ui.hub.greeting.fresh.0", "A pristine soul. How rare.");
-        provider.add("reflection.cosmiccore.ui.hub.greeting.fresh.1", "Don't worry. That won't last.");
-        provider.add("reflection.cosmiccore.ui.hub.greeting.question", "What brings you to my domain?");
+                "The threads still wait. Maybe it's time.");
+        provider.add("reflection.cosmiccore.ui.hub.greeting.fresh.0",
+                "The shell is whole. Dense. Untouched.");
+        provider.add("reflection.cosmiccore.ui.hub.greeting.fresh.1",
+                "Threads pin the starfield around you. Waiting.");
+        provider.add("reflection.cosmiccore.ui.hub.greeting.question", "You look into the mirror.");
 
-        // Reflection dialogues (erosion-based)
-        provider.add("reflection.cosmiccore.ui.reflection.no_erosion.0", "Untouched. Pure. How boring.");
-        provider.add("reflection.cosmiccore.ui.reflection.no_erosion.1", "You come here with nothing to show?");
-        provider.add("reflection.cosmiccore.ui.reflection.no_erosion.2", "That will change. They always change.");
-        provider.add("reflection.cosmiccore.ui.reflection.low_erosion.0", "Just a taste. That's how it starts.");
-        provider.add("reflection.cosmiccore.ui.reflection.low_erosion.1", "You'll be back for more.");
-        provider.add("reflection.cosmiccore.ui.reflection.mid_erosion.0", "Getting comfortable with the darkness?");
-        provider.add("reflection.cosmiccore.ui.reflection.mid_erosion.1", "I can see it settling into you.");
-        provider.add("reflection.cosmiccore.ui.reflection.high_erosion.0", "So much of you is gone now.");
-        provider.add("reflection.cosmiccore.ui.reflection.high_erosion.1", "Do you remember what you were?");
-        provider.add("reflection.cosmiccore.ui.reflection.extreme_erosion.0", "Almost nothing left. Almost.");
+        // Reflection dialogues (erosion-based) — self-observations
+        provider.add("reflection.cosmiccore.ui.reflection.no_erosion.0", "Whole. Dense. Untouched.");
+        provider.add("reflection.cosmiccore.ui.reflection.no_erosion.1",
+                "The threads wait in the dark, pinned and patient.");
+        provider.add("reflection.cosmiccore.ui.reflection.no_erosion.2", "You haven't pulled anything yet.");
+        provider.add("reflection.cosmiccore.ui.reflection.low_erosion.0",
+                "A thread or two trails from the shell. Just the start.");
+        provider.add("reflection.cosmiccore.ui.reflection.low_erosion.1", "The gaps are small. Barely visible.");
+        provider.add("reflection.cosmiccore.ui.reflection.mid_erosion.0",
+                "The shell is thinning. Your core glows through the gaps.");
+        provider.add("reflection.cosmiccore.ui.reflection.mid_erosion.1",
+                "You're getting used to the feeling of less.");
+        provider.add("reflection.cosmiccore.ui.reflection.high_erosion.0",
+                "So many threads pulled loose. The shell is fragile now.");
+        provider.add("reflection.cosmiccore.ui.reflection.high_erosion.1",
+                "Your core is almost fully visible. Raw. Exposed.");
+        provider.add("reflection.cosmiccore.ui.reflection.extreme_erosion.0",
+                "Almost nothing left to pull. The shell is threadbare.");
         provider.add("reflection.cosmiccore.ui.reflection.extreme_erosion.1",
-                "One more push and you're mine completely.");
-        provider.add("reflection.cosmiccore.ui.reflection.has_bargains.0", "I see you've made some... arrangements.");
-        provider.add("reflection.cosmiccore.ui.reflection.has_bargains.1", "Each one a piece of you given away.");
+                "One more thread and there's nothing between your core and the void.");
+        provider.add("reflection.cosmiccore.ui.reflection.has_bargains.0",
+                "Threads trail from you into the starfield.");
+        provider.add("reflection.cosmiccore.ui.reflection.has_bargains.1",
+                "Each one a piece of yourself, pulled loose.");
 
         // Browsing bargains
-        provider.add("reflection.cosmiccore.ui.browse.interesting_choice", "An interesting choice. Let me show you.");
+        provider.add("reflection.cosmiccore.ui.browse.interesting_choice", "You reach for a thread.");
 
-        // Defiance UI
-        provider.add("reflection.cosmiccore.ui.defiance.question", "You wish to break this bargain?");
-        provider.add("reflection.cosmiccore.ui.defiance.lose_power", "You will lose all powers from this bargain");
-        provider.add("reflection.cosmiccore.ui.defiance.scar_remains", "A scar will remain on your soul forever");
-        provider.add("reflection.cosmiccore.ui.defiance.confirm", "[Yes, I defy this bargain]");
-        provider.add("reflection.cosmiccore.ui.defiance.cancel", "[No, I've changed my mind]");
-        provider.add("reflection.cosmiccore.ui.defiance.so_be_it", "So be it. Feel the pain of reclamation.");
-        provider.add("reflection.cosmiccore.ui.defiance.wise", "Wise. The power is worth more than your principles.");
+        // Defiance UI — self-talk, not entity warning
+        provider.add("reflection.cosmiccore.ui.defiance.question", "Push this thread back?");
+        provider.add("reflection.cosmiccore.ui.defiance.lose_power", "The power from this thread will fade");
+        provider.add("reflection.cosmiccore.ui.defiance.scar_remains",
+                "A knot will remain where it was \u2014 forever");
+        provider.add("reflection.cosmiccore.ui.defiance.confirm", "[Yes, push it back]");
+        provider.add("reflection.cosmiccore.ui.defiance.cancel", "[No, leave it]");
+        provider.add("reflection.cosmiccore.ui.defiance.so_be_it", "The thread tears loose. It hurts.");
+        provider.add("reflection.cosmiccore.ui.defiance.wise", "You let it stay. The thread holds.");
         provider.add("reflection.cosmiccore.ui.defiance.will_lose", "You will lose: %s");
-        provider.add("reflection.cosmiccore.ui.defiance.cost_amount", "This will cost you %d erosion");
+        provider.add("reflection.cosmiccore.ui.defiance.cost_amount", "This will cost %d erosion");
         provider.add("reflection.cosmiccore.ui.defiance.cannot_undo", "This cannot be undone");
-        provider.add("reflection.cosmiccore.ui.defiance.warning1", "You would break the bargain of %s?");
+        provider.add("reflection.cosmiccore.ui.defiance.warning1", "Push back the thread of %s?");
         provider.add("reflection.cosmiccore.ui.defiance.warning2", "The cost of defiance is %d erosion.");
-        provider.add("reflection.cosmiccore.ui.defiance.warning3", "The power will leave you. The scar will not.");
+        provider.add("reflection.cosmiccore.ui.defiance.warning3", "The power will leave. The scar will not.");
         provider.add("reflection.cosmiccore.ui.defiance.warning4", "Are you certain?");
 
         // Constellation UI
@@ -834,23 +854,22 @@ public class CosmicLangHandler extends LangHandler {
         // =========================================================================
 
         // --- Quake Movement Bargain (quake_movement) ---
-        // Answers: yes, refuse | Dialogues: 4
         provider.add("reflection.cosmiccore.bargain.quake_movement.name", "Velocity");
         provider.add("reflection.cosmiccore.bargain.quake_movement.description",
-                "Master momentum itself through unnatural locomotion");
+                "Something in your legs remembers a different way to move");
         provider.add("reflection.cosmiccore.bargain.quake_movement.dialogue.0",
-                "You move like prey. Hesitant. Fearful.");
+                "This thread hums with motion. Your legs ache just touching it.");
         provider.add("reflection.cosmiccore.bargain.quake_movement.dialogue.1",
-                "I remember when things moved differently. Before physics became so... rigid.");
+                "There's a memory in it \u2014 of moving differently. Before physics became rigid.");
         provider.add("reflection.cosmiccore.bargain.quake_movement.dialogue.2",
-                "I can teach your legs to remember that older way.");
+                "Your muscles twitch. They want to remember.");
         provider.add("reflection.cosmiccore.bargain.quake_movement.dialogue.3",
-                "But once they learn, they will never be content with stillness again.");
+                "Pull it, and your body will never be content with stillness again.");
         provider.add("reflection.cosmiccore.bargain.quake_movement.question",
-                "Will you embrace the velocity that waits within you?");
-        provider.add("reflection.cosmiccore.bargain.quake_movement.answer.yes.text", "Teach me to move like the wind.");
+                "Your legs remember something. Do you let them?");
+        provider.add("reflection.cosmiccore.bargain.quake_movement.answer.yes.text", "Let them remember.");
         provider.add("reflection.cosmiccore.bargain.quake_movement.answer.yes.response",
-                "Feel it now - your muscles rewiring, learning trajectories they were never meant to know.");
+                "Your joints crack. Your muscles rewire. Movement becomes instinct.");
         provider.add("reflection.cosmiccore.bargain.quake_movement.answer.yes.power.0",
                 "Bunny hopping preserves and builds momentum");
         provider.add("reflection.cosmiccore.bargain.quake_movement.answer.yes.power.1",
@@ -858,34 +877,34 @@ public class CosmicLangHandler extends LangHandler {
         provider.add("reflection.cosmiccore.bargain.quake_movement.answer.yes.drawback.0",
                 "Movement feels unnatural to observers");
         provider.add("reflection.cosmiccore.bargain.quake_movement.answer.refuse.text",
-                "My feet know their own rhythm.");
+                "Leave it. My feet know their own rhythm.");
         provider.add("reflection.cosmiccore.bargain.quake_movement.answer.refuse.response",
-                "Such faith in the pedestrian. We shall see how long that serves you.");
+                "The thread stills. The ache fades. For now.");
         provider.add("reflection.cosmiccore.bargain.quake_movement.on_accept",
-                "Your joints crack and reform. Movement becomes instinct.");
+                "Something unravels. Your stride breaks open into something new.");
         provider.add("reflection.cosmiccore.bargain.quake_movement.on_defy",
-                "Your legs remember what it was to walk normally. The speed fades like a dream.");
+                "The speed fades like a dream you can't quite hold onto.");
 
         // --- Depths Bargain (depths) ---
-        // Answers: embrace, refuse | Dialogues: 6
         provider.add("reflection.cosmiccore.bargain.depths.name", "The Depths");
-        provider.add("reflection.cosmiccore.bargain.depths.description", "Enhanced breath with fatal consequences");
+        provider.add("reflection.cosmiccore.bargain.depths.description", "Your breath stretches beyond mortal limits");
         provider.add("reflection.cosmiccore.bargain.depths.dialogue.0",
-                "You've felt the water closing over your head.");
+                "This thread is cold. Wet. It smells like deep water.");
         provider.add("reflection.cosmiccore.bargain.depths.dialogue.1",
-                "That desperate burn in your lungs. The panic.");
+                "You remember the burn in your lungs. The panic of drowning.");
         provider.add("reflection.cosmiccore.bargain.depths.dialogue.2",
-                "I can remake those fragile organs. Give them capacity beyond mortal limits.");
+                "Something in this thread could stretch your breath. Remake it.");
         provider.add("reflection.cosmiccore.bargain.depths.dialogue.3",
-                "Your breath will stretch to fill the void between heartbeats.");
+                "But there's a sharpness at the end. A finality.");
         provider.add("reflection.cosmiccore.bargain.depths.dialogue.4",
-                "But understand - when they finally empty, there will be no warning.");
+                "When the breath runs out, there will be no warning.");
         provider.add("reflection.cosmiccore.bargain.depths.dialogue.5",
-                "No desperate gasps. No gradual fading. Just... silence.");
-        provider.add("reflection.cosmiccore.bargain.depths.question", "Will you let me reshape your breath?");
-        provider.add("reflection.cosmiccore.bargain.depths.answer.embrace.text", "Remake me for the depths.");
+                "No gasps. No fading. Just silence.");
+        provider.add("reflection.cosmiccore.bargain.depths.question",
+                "The thread could reshape your breath. Do you pull it?");
+        provider.add("reflection.cosmiccore.bargain.depths.answer.embrace.text", "Pull it. Remake me for the depths.");
         provider.add("reflection.cosmiccore.bargain.depths.answer.embrace.response",
-                "Your chest feels hollow now. That's normal. The new capacity needs room.");
+                "Your chest feels hollow. The new capacity needs room.");
         provider.add("reflection.cosmiccore.bargain.depths.answer.embrace.power.0", "5x oxygen capacity underwater");
         provider.add("reflection.cosmiccore.bargain.depths.answer.embrace.power.1",
                 "Extended breath in toxic atmospheres");
@@ -893,84 +912,86 @@ public class CosmicLangHandler extends LangHandler {
                 "Instant death when oxygen fully depletes");
         provider.add("reflection.cosmiccore.bargain.depths.answer.embrace.drawback.1",
                 "No drowning damage warning - just death");
-        provider.add("reflection.cosmiccore.bargain.depths.answer.refuse.text", "I'll keep my mortal breath.");
+        provider.add("reflection.cosmiccore.bargain.depths.answer.refuse.text",
+                "Leave it. I'll keep my mortal breath.");
         provider.add("reflection.cosmiccore.bargain.depths.answer.refuse.response",
-                "The depths wait patiently. They always have.");
+                "The thread sinks back into the dark. The depths wait.");
         provider.add("reflection.cosmiccore.bargain.depths.on_accept",
                 "Something shifts in your chest. The air tastes different now.");
         provider.add("reflection.cosmiccore.bargain.depths.on_defy",
-                "You gasp - your lungs remember panic, remember struggle. You are mortal again.");
+                "Your lungs remember panic, remember struggle. You are mortal again.");
 
         // --- Swiftness Bargain (swiftness) ---
-        // Answers: accept, refuse | Dialogues: 3
         provider.add("reflection.cosmiccore.bargain.swiftness.name", "Swiftness");
         provider.add("reflection.cosmiccore.bargain.swiftness.description",
-                "Supernatural speed courses through your veins");
+                "The world slows down around you");
         provider.add("reflection.cosmiccore.bargain.swiftness.dialogue.0",
-                "The world moves so slowly around you, doesn't it?");
+                "This thread vibrates. Fast. Everything around it seems sluggish.");
         provider.add("reflection.cosmiccore.bargain.swiftness.dialogue.1",
-                "Everyone else trudging through molasses while you ache to run.");
+                "Your blood aches to race. Your legs want to blur.");
         provider.add("reflection.cosmiccore.bargain.swiftness.dialogue.2",
-                "I can accelerate you. Make the world blur past like a fading dream.");
-        provider.add("reflection.cosmiccore.bargain.swiftness.question", "Do you wish to leave the slow world behind?");
-        provider.add("reflection.cosmiccore.bargain.swiftness.answer.accept.text", "Make me swift beyond measure.");
+                "But speed has a hunger to it. Stillness will gnaw at you.");
+        provider.add("reflection.cosmiccore.bargain.swiftness.question",
+                "The thread hums with speed. Do you pull it?");
+        provider.add("reflection.cosmiccore.bargain.swiftness.answer.accept.text", "Pull it. Let me run.");
         provider.add("reflection.cosmiccore.bargain.swiftness.answer.accept.response",
-                "Your blood sings now. Feel it racing faster than any heart should allow.");
+                "Lightning arcs through your muscles. You twitch with restless energy.");
         provider.add("reflection.cosmiccore.bargain.swiftness.answer.accept.power.0", "+40% movement speed");
         provider.add("reflection.cosmiccore.bargain.swiftness.answer.accept.power.1", "Sprint without hunger drain");
         provider.add("reflection.cosmiccore.bargain.swiftness.answer.accept.drawback.0",
                 "Increased hunger when standing still");
-        provider.add("reflection.cosmiccore.bargain.swiftness.answer.refuse.text", "I am content with my pace.");
+        provider.add("reflection.cosmiccore.bargain.swiftness.answer.refuse.text",
+                "Leave it. I'm content with my pace.");
         provider.add("reflection.cosmiccore.bargain.swiftness.answer.refuse.response",
-                "Content. Such a mortal sentiment. It will fade.");
+                "The vibration stills. The world keeps its pace.");
         provider.add("reflection.cosmiccore.bargain.swiftness.on_accept",
-                "Lightning arcs through your muscles. You twitch with restless energy.");
+                "Something unwinds. The world blurs at the edges.");
         provider.add("reflection.cosmiccore.bargain.swiftness.on_defy",
-                "The world speeds up around you. You are merely human once more.");
+                "The world speeds back up around you. Merely human once more.");
 
         // --- Stride Bargain (stride) ---
-        // Answers: accept, suspicious, refuse | Dialogues: 4
         provider.add("reflection.cosmiccore.bargain.stride.name", "Stride");
-        provider.add("reflection.cosmiccore.bargain.stride.description", "Walk over obstacles as if they were nothing");
+        provider.add("reflection.cosmiccore.bargain.stride.description", "The ground rises to meet your feet");
         provider.add("reflection.cosmiccore.bargain.stride.dialogue.0",
-                "Every ledge. Every block. Every small obstacle.");
-        provider.add("reflection.cosmiccore.bargain.stride.dialogue.1", "They mock you with their need to be climbed.");
+                "A smooth thread. Flat. The ground seems to yield just touching it.");
+        provider.add("reflection.cosmiccore.bargain.stride.dialogue.1",
+                "Every ledge, every small obstacle \u2014 they'd simply accommodate you.");
         provider.add("reflection.cosmiccore.bargain.stride.dialogue.2",
-                "What if the world simply... accommodated your stride?");
+                "Your feet would never need to leave the ground.");
         provider.add("reflection.cosmiccore.bargain.stride.dialogue.3",
-                "Your feet need never leave the ground. The ground will rise to meet them.");
-        provider.add("reflection.cosmiccore.bargain.stride.question", "Shall obstacles bow before your passage?");
-        provider.add("reflection.cosmiccore.bargain.stride.answer.accept.text", "Let the world flatten before me.");
+                "But edges would lose their grip on you too. No catching yourself.");
+        provider.add("reflection.cosmiccore.bargain.stride.question",
+                "The ground could flatten before you. Do you pull?");
+        provider.add("reflection.cosmiccore.bargain.stride.answer.accept.text", "Pull it. Let the world flatten.");
         provider.add("reflection.cosmiccore.bargain.stride.answer.accept.response",
-                "Walk now. Feel how terrain reshapes itself for your convenience.");
+                "The earth shifts slightly. Terrain reshapes itself for your step.");
         provider.add("reflection.cosmiccore.bargain.stride.answer.accept.power.0", "Auto step-up to 1 block height");
         provider.add("reflection.cosmiccore.bargain.stride.answer.accept.power.1", "Smooth terrain traversal");
         provider.add("reflection.cosmiccore.bargain.stride.answer.accept.drawback.0", "Cannot crouch-walk off edges");
-        provider.add("reflection.cosmiccore.bargain.stride.answer.refuse.text", "I'll climb my own way.");
+        provider.add("reflection.cosmiccore.bargain.stride.answer.refuse.text", "Leave it. I'll climb my own way.");
         provider.add("reflection.cosmiccore.bargain.stride.answer.refuse.response",
-                "Such determination. It will erode. They always do.");
+                "The thread settles back. The world keeps its edges.");
         provider.add("reflection.cosmiccore.bargain.stride.on_accept",
-                "The earth seems to shift slightly, eager to smooth your path.");
+                "Something loosens underfoot. The world smooths itself for you.");
         provider.add("reflection.cosmiccore.bargain.stride.on_defy",
-                "Gravity reasserts itself. Every ledge is a challenge again.");
+                "Every ledge is a challenge again. The ground doesn't care about you.");
 
         // --- Darksight Bargain (darksight) ---
-        // Answers: yes, refuse | Dialogues: 5
         provider.add("reflection.cosmiccore.bargain.darksight.name", "Darksight");
-        provider.add("reflection.cosmiccore.bargain.darksight.description", "See through the deepest darkness");
+        provider.add("reflection.cosmiccore.bargain.darksight.description", "Your eyes learn to drink the shadow");
         provider.add("reflection.cosmiccore.bargain.darksight.dialogue.0",
-                "You fear the dark. Every creature does, at first.");
+                "This thread is dark. Obviously. But it's warm somehow.");
         provider.add("reflection.cosmiccore.bargain.darksight.dialogue.1",
-                "But darkness is merely the absence of something. Not presence.");
+                "You can feel what it offers \u2014 the shadow surrendering its secrets.");
         provider.add("reflection.cosmiccore.bargain.darksight.dialogue.2",
-                "I can teach your eyes to drink the shadow. To see what lurks unseen.");
+                "Every hidden corner, laid bare. No torch needed.");
         provider.add("reflection.cosmiccore.bargain.darksight.dialogue.3",
-                "Every hidden corner will surrender its secrets to you.");
+                "But there's a sting at the other end. The sun. It would burn.");
         provider.add("reflection.cosmiccore.bargain.darksight.dialogue.4",
-                "But be warned - the light will begin to burn.");
+                "Trade daylight for the gift of seeing in the dark.");
         provider.add("reflection.cosmiccore.bargain.darksight.question",
-                "Will you trade the sun for the gift of shadow-sight?");
-        provider.add("reflection.cosmiccore.bargain.darksight.answer.yes.text", "Let me see in the darkness.");
+                "The thread would open your eyes to the dark. Do you pull?");
+        provider.add("reflection.cosmiccore.bargain.darksight.answer.yes.text", "Pull it. Let me see.");
         provider.add("reflection.cosmiccore.bargain.darksight.answer.yes.response",
                 "Your pupils dilate... and keep dilating. The dark becomes your domain.");
         provider.add("reflection.cosmiccore.bargain.darksight.answer.yes.power.0", "Permanent Night Vision effect");
@@ -979,31 +1000,34 @@ public class CosmicLangHandler extends LangHandler {
                 "Blindness effect in bright sunlight");
         provider.add("reflection.cosmiccore.bargain.darksight.answer.yes.drawback.1",
                 "Must stay underground during day");
-        provider.add("reflection.cosmiccore.bargain.darksight.answer.refuse.text", "The light serves me well enough.");
+        provider.add("reflection.cosmiccore.bargain.darksight.answer.refuse.text",
+                "Leave it. The light serves me well enough.");
         provider.add("reflection.cosmiccore.bargain.darksight.answer.refuse.response",
-                "Cling to your torch then. See how long it lasts in the deep places.");
+                "The thread fades. The torchlight feels brighter for a moment.");
         provider.add("reflection.cosmiccore.bargain.darksight.on_accept",
                 "The shadows retreat from your vision. You see everything now.");
         provider.add("reflection.cosmiccore.bargain.darksight.on_defy",
                 "Light floods back. The darkness closes its secrets to you once more.");
 
         // --- Carapace Bargain (carapace) ---
-        // Answers: survive, feel | Dialogues: 5
         provider.add("reflection.cosmiccore.bargain.carapace.name", "Carapace");
-        provider.add("reflection.cosmiccore.bargain.carapace.description", "Your flesh hardens into living armor");
-        provider.add("reflection.cosmiccore.bargain.carapace.dialogue.0", "Your skin is so soft. So vulnerable.");
+        provider.add("reflection.cosmiccore.bargain.carapace.description",
+                "Your flesh hardens into something enduring");
+        provider.add("reflection.cosmiccore.bargain.carapace.dialogue.0",
+                "This thread is rigid. Hard. Your skin tightens just touching it.");
         provider.add("reflection.cosmiccore.bargain.carapace.dialogue.1",
-                "Every blade, every claw, every falling stone - they all threaten you.");
+                "It would harden you. Blows would glance off. Damage would diminish.");
         provider.add("reflection.cosmiccore.bargain.carapace.dialogue.2",
-                "I can harden your flesh. Make it something more... enduring.");
+                "But there's a numbness woven through it.");
         provider.add("reflection.cosmiccore.bargain.carapace.dialogue.3",
-                "Blows will glance off. Damage will diminish.");
+                "Touch would become distant. Healing, slower.");
         provider.add("reflection.cosmiccore.bargain.carapace.dialogue.4",
-                "But you will feel less. Touch will become... distant.");
-        provider.add("reflection.cosmiccore.bargain.carapace.question", "Will you sacrifice sensation for survival?");
-        provider.add("reflection.cosmiccore.bargain.carapace.answer.survive.text", "Harden me. I choose survival.");
+                "Survival at the cost of sensation.");
+        provider.add("reflection.cosmiccore.bargain.carapace.question",
+                "The thread would harden your flesh. Do you pull?");
+        provider.add("reflection.cosmiccore.bargain.carapace.answer.survive.text", "Pull it. I choose survival.");
         provider.add("reflection.cosmiccore.bargain.carapace.answer.survive.response",
-                "Your skin tightens. Hardens. You are becoming something more durable.");
+                "Your skin tightens. Hardens. Something more durable.");
         provider.add("reflection.cosmiccore.bargain.carapace.answer.survive.power.0",
                 "+8 armor points (4 full armor icons)");
         provider.add("reflection.cosmiccore.bargain.carapace.answer.survive.power.1", "Stacks with worn armor");
@@ -1012,31 +1036,34 @@ public class CosmicLangHandler extends LangHandler {
         provider.add("reflection.cosmiccore.bargain.carapace.answer.survive.drawback.1",
                 "Reduced potion effectiveness");
         provider.add("reflection.cosmiccore.bargain.carapace.answer.refuse.text",
-                "I would rather feel than merely endure.");
+                "Leave it. I'd rather feel than merely endure.");
         provider.add("reflection.cosmiccore.bargain.carapace.answer.refuse.response",
-                "Feeling. How fragile. How mortal. How temporary.");
+                "The rigidity eases. Your skin stays soft. Fragile. Yours.");
         provider.add("reflection.cosmiccore.bargain.carapace.on_accept",
                 "Your flesh ripples and tightens. It doesn't hurt. That's the point.");
         provider.add("reflection.cosmiccore.bargain.carapace.on_defy",
-                "Sensation floods back - every breeze, every texture. You are soft again.");
+                "Sensation floods back \u2014 every breeze, every texture. You are soft again.");
 
         // --- Soft Landing Bargain (soft_landing) ---
-        // Answers: yes, careful | Dialogues: 5
         provider.add("reflection.cosmiccore.bargain.soft_landing.name", "Soft Landing");
         provider.add("reflection.cosmiccore.bargain.soft_landing.description",
-                "The ground welcomes you gently from any height");
+                "Gravity loosens its grip on you");
         provider.add("reflection.cosmiccore.bargain.soft_landing.dialogue.0",
-                "Heights terrify you. The primal fear of falling.");
+                "This thread is light. Weightless. It drifts when you touch it.");
         provider.add("reflection.cosmiccore.bargain.soft_landing.dialogue.1",
-                "That sickening moment when gravity claims you.");
-        provider.add("reflection.cosmiccore.bargain.soft_landing.dialogue.2", "But what if the ground... forgave you?");
+                "You remember falling. The sickening moment before impact.");
+        provider.add("reflection.cosmiccore.bargain.soft_landing.dialogue.2",
+                "This would soften every landing. The ground would forgive you.");
         provider.add("reflection.cosmiccore.bargain.soft_landing.dialogue.3",
-                "What if every fall ended softly, no matter the height?");
-        provider.add("reflection.cosmiccore.bargain.soft_landing.dialogue.4", "You need never fear the drop again.");
-        provider.add("reflection.cosmiccore.bargain.soft_landing.question", "Will you let the earth catch you?");
-        provider.add("reflection.cosmiccore.bargain.soft_landing.answer.yes.text", "Take away my fear of falling.");
+                "But something else loosens with it. You'd be more fragile overall.");
+        provider.add("reflection.cosmiccore.bargain.soft_landing.dialogue.4",
+                "Lighter. Softer. Easier to break in other ways.");
+        provider.add("reflection.cosmiccore.bargain.soft_landing.question",
+                "The thread would catch your falls. Do you pull?");
+        provider.add("reflection.cosmiccore.bargain.soft_landing.answer.yes.text",
+                "Pull it. Take away the fear of falling.");
         provider.add("reflection.cosmiccore.bargain.soft_landing.answer.yes.response",
-                "Jump. Go ahead. The ground will embrace you like a mother.");
+                "Weight leaves you. The ground will catch you now.");
         provider.add("reflection.cosmiccore.bargain.soft_landing.answer.yes.power.0", "80% fall damage immunity");
         provider.add("reflection.cosmiccore.bargain.soft_landing.answer.yes.power.1", "Short falls do almost nothing");
         provider.add("reflection.cosmiccore.bargain.soft_landing.answer.yes.drawback.0",
@@ -1044,33 +1071,32 @@ public class CosmicLangHandler extends LangHandler {
         provider.add("reflection.cosmiccore.bargain.soft_landing.answer.yes.drawback.1",
                 "Reduced knockback resistance");
         provider.add("reflection.cosmiccore.bargain.soft_landing.answer.refuse.text",
-                "Fear keeps me cautious. I'll keep it.");
+                "Leave it. Fear keeps me cautious.");
         provider.add("reflection.cosmiccore.bargain.soft_landing.answer.refuse.response",
-                "Caution. A slow path to nowhere. But walk it if you must.");
+                "The thread settles. Gravity keeps its hold.");
         provider.add("reflection.cosmiccore.bargain.soft_landing.on_accept",
                 "Your relationship with gravity shifts. It still pulls, but gently now.");
         provider.add("reflection.cosmiccore.bargain.soft_landing.on_defy",
                 "Weight crashes back into your bones. Every fall matters again.");
 
         // --- Cinder Bargain (cinder) ---
-        // Answers: burn, refuse | Dialogues: 5
         provider.add("reflection.cosmiccore.bargain.cinder.name", "Cinder");
         provider.add("reflection.cosmiccore.bargain.cinder.description", "Fire cannot harm what has already burned");
         provider.add("reflection.cosmiccore.bargain.cinder.dialogue.0",
-                "Fire consumes. It is in its nature to destroy.");
+                "This thread is hot. It smolders. Your fingers don't burn \u2014 they should.");
         provider.add("reflection.cosmiccore.bargain.cinder.dialogue.1",
-                "Every flame that touches you leaves its mark.");
+                "Ash and ember. Something in this thread has already burned completely.");
         provider.add("reflection.cosmiccore.bargain.cinder.dialogue.2",
-                "But what if you had already burned? Completely. Utterly.");
+                "Pull it, and fire would lose its claim on you. You'd walk through infernos.");
         provider.add("reflection.cosmiccore.bargain.cinder.dialogue.3",
-                "Fire cannot consume what is already ash and ember.");
+                "But the cold would sharpen. Water would sting. Heat is a one-way door.");
         provider.add("reflection.cosmiccore.bargain.cinder.dialogue.4",
-                "Let me burn away your vulnerability. You will walk through infernos unscathed.");
+                "Burn once, completely, and never burn again.");
         provider.add("reflection.cosmiccore.bargain.cinder.question",
-                "Will you let the flame claim you, so it can never hurt you again?");
-        provider.add("reflection.cosmiccore.bargain.cinder.answer.burn.text", "Burn me completely. Make me immune.");
+                "The thread smolders with old fire. Do you pull?");
+        provider.add("reflection.cosmiccore.bargain.cinder.answer.burn.text", "Pull it. Burn me completely.");
         provider.add("reflection.cosmiccore.bargain.cinder.answer.burn.response",
-                "It hurts. Just for a moment. Then the pain becomes a memory, and fire becomes a friend.");
+                "Heat floods through you, then recedes. Fire will never frighten you again.");
         provider.add("reflection.cosmiccore.bargain.cinder.answer.burn.power.0", "Complete fire and lava immunity");
         provider.add("reflection.cosmiccore.bargain.cinder.answer.burn.power.1", "Can swim in lava safely");
         provider.add("reflection.cosmiccore.bargain.cinder.answer.burn.drawback.0",
@@ -1078,30 +1104,30 @@ public class CosmicLangHandler extends LangHandler {
         provider.add("reflection.cosmiccore.bargain.cinder.answer.burn.drawback.1",
                 "Water extinguishes slower, feels unpleasant");
         provider.add("reflection.cosmiccore.bargain.cinder.answer.refuse.text",
-                "Fire should be respected, not befriended.");
+                "Leave it. Fire should be respected.");
         provider.add("reflection.cosmiccore.bargain.cinder.answer.refuse.response",
-                "Respect. For something that would consume you without thought. How noble.");
+                "The thread cools. The heat stays outside where it belongs.");
         provider.add("reflection.cosmiccore.bargain.cinder.on_accept",
-                "Heat floods through you, then recedes. Fire will never frighten you again.");
+                "Something inside ignites and dies in the same instant. Ash. Freedom.");
         provider.add("reflection.cosmiccore.bargain.cinder.on_defy",
                 "The warmth drains away. Flames flicker hungrily when they see you now.");
 
         // --- Vitality Bargain (vitality) ---
-        // Answers: accept, refuse | Dialogues: 5
         provider.add("reflection.cosmiccore.bargain.vitality.name", "Vitality");
-        provider.add("reflection.cosmiccore.bargain.vitality.description", "Life force beyond mortal limits");
+        provider.add("reflection.cosmiccore.bargain.vitality.description", "More life, but slower to mend");
         provider.add("reflection.cosmiccore.bargain.vitality.dialogue.0",
-                "Your body has limits. A fixed amount of life.");
+                "This thread throbs. You can feel a pulse in it. A second heartbeat.");
         provider.add("reflection.cosmiccore.bargain.vitality.dialogue.1",
-                "When it empties, you die. Simple. Brutal. Final.");
-        provider.add("reflection.cosmiccore.bargain.vitality.dialogue.2",
-                "I can give you more. Stretch your life force beyond its natural bounds.");
-        provider.add("reflection.cosmiccore.bargain.vitality.dialogue.3",
                 "More blood. More breath. More heartbeats before the end.");
+        provider.add("reflection.cosmiccore.bargain.vitality.dialogue.2",
+                "But the excess stretches you thin. Healing would slow.");
+        provider.add("reflection.cosmiccore.bargain.vitality.dialogue.3",
+                "A bigger vessel, but one that takes longer to refill.");
         provider.add("reflection.cosmiccore.bargain.vitality.dialogue.4",
-                "But maintaining excess takes effort. You will heal... slower.");
-        provider.add("reflection.cosmiccore.bargain.vitality.question", "Will you trade recovery for resilience?");
-        provider.add("reflection.cosmiccore.bargain.vitality.answer.accept.text", "Give me more life to spend.");
+                "Recovery for resilience. That's the trade.");
+        provider.add("reflection.cosmiccore.bargain.vitality.question",
+                "The thread pulses with life. Do you pull?");
+        provider.add("reflection.cosmiccore.bargain.vitality.answer.accept.text", "Pull it. Give me more life.");
         provider.add("reflection.cosmiccore.bargain.vitality.answer.accept.response",
                 "Your heart swells. Literally. It has more to pump now.");
         provider.add("reflection.cosmiccore.bargain.vitality.answer.accept.power.0", "+10 max health (5 extra hearts)");
@@ -1111,32 +1137,33 @@ public class CosmicLangHandler extends LangHandler {
                 "-50% natural regeneration rate");
         provider.add("reflection.cosmiccore.bargain.vitality.answer.accept.drawback.1",
                 "Healing potions 30% less effective");
-        provider.add("reflection.cosmiccore.bargain.vitality.answer.refuse.text", "I'll work with what I was given.");
+        provider.add("reflection.cosmiccore.bargain.vitality.answer.refuse.text",
+                "Leave it. I'll work with what I have.");
         provider.add("reflection.cosmiccore.bargain.vitality.answer.refuse.response",
-                "Given. As if anyone gave you anything. You simply are. For now.");
+                "The pulse fades. Your heart keeps its rhythm.");
         provider.add("reflection.cosmiccore.bargain.vitality.on_accept",
-                "Your veins surge with new vigor. Everything feels more... present.");
+                "Your veins surge with new vigor. Everything feels more present.");
         provider.add("reflection.cosmiccore.bargain.vitality.on_defy",
                 "The excess drains away. You are mortal-sized once more.");
 
         // --- Satiated Bargain (satiated) ---
-        // Answers: empty, food | Dialogues: 5
         provider.add("reflection.cosmiccore.bargain.satiated.name", "Satiated");
-        provider.add("reflection.cosmiccore.bargain.satiated.description", "Hunger becomes a distant memory");
+        provider.add("reflection.cosmiccore.bargain.satiated.description", "Hunger fades to a distant memory");
         provider.add("reflection.cosmiccore.bargain.satiated.dialogue.0",
-                "The constant gnawing. The endless need to consume.");
-        provider.add("reflection.cosmiccore.bargain.satiated.dialogue.1", "Your stomach rules you like a tyrant.");
+                "This thread is hollow. Empty. Your stomach quiets near it.");
+        provider.add("reflection.cosmiccore.bargain.satiated.dialogue.1",
+                "The constant gnawing would stop. Fullness would be your natural state.");
         provider.add("reflection.cosmiccore.bargain.satiated.dialogue.2",
-                "What if I could silence it? Make fullness your natural state?");
+                "You'd eat for taste, for ritual \u2014 never for need.");
         provider.add("reflection.cosmiccore.bargain.satiated.dialogue.3",
-                "You would eat for taste, for ritual - never for need.");
+                "But taste itself would dull. Food becomes fuel. Nothing more.");
         provider.add("reflection.cosmiccore.bargain.satiated.dialogue.4",
-                "But taste itself would fade. Food becomes... fuel. Nothing more.");
+                "And without hunger's edge, your body forgets how to mend itself.");
         provider.add("reflection.cosmiccore.bargain.satiated.question",
-                "Will you trade the pleasure of eating for freedom from hunger?");
-        provider.add("reflection.cosmiccore.bargain.satiated.answer.empty.text", "Free me from this hunger.");
+                "The thread would silence your hunger. Do you pull?");
+        provider.add("reflection.cosmiccore.bargain.satiated.answer.empty.text", "Pull it. Free me from this hunger.");
         provider.add("reflection.cosmiccore.bargain.satiated.answer.empty.response",
-                "The emptiness fades. You will never truly need to eat again.");
+                "The gnawing stops. Silence in your belly. Freedom.");
         provider.add("reflection.cosmiccore.bargain.satiated.answer.empty.power.0", "Hunger depletes 80% slower");
         provider.add("reflection.cosmiccore.bargain.satiated.answer.empty.power.1", "Food provides 3x saturation");
         provider.add("reflection.cosmiccore.bargain.satiated.answer.empty.drawback.0",
@@ -1144,83 +1171,88 @@ public class CosmicLangHandler extends LangHandler {
         provider.add("reflection.cosmiccore.bargain.satiated.answer.empty.drawback.1",
                 "Cannot benefit from food-based buffs");
         provider.add("reflection.cosmiccore.bargain.satiated.answer.refuse.text",
-                "I enjoy my meals. I'll keep the hunger.");
+                "Leave it. I enjoy my meals.");
         provider.add("reflection.cosmiccore.bargain.satiated.answer.refuse.response",
-                "Enjoy. Such a mortal word. The hunger will remind you of your place.");
+                "The emptiness settles back. Your stomach growls. Familiar.");
         provider.add("reflection.cosmiccore.bargain.satiated.on_accept",
                 "The gnawing stops. Silence in your belly. Freedom.");
         provider.add("reflection.cosmiccore.bargain.satiated.on_defy",
                 "Hunger returns with a vengeance. You remember what need feels like.");
 
         // --- Back Bargain (back) ---
-        // Answers: accept, refuse | Dialogues: 3
         provider.add("reflection.cosmiccore.bargain.back.name", "The Way Back");
-        provider.add("reflection.cosmiccore.bargain.back.description", "Return to where you fell");
+        provider.add("reflection.cosmiccore.bargain.back.description", "A thread to where you last fell");
         provider.add("reflection.cosmiccore.bargain.back.dialogue.0",
-                "Death scatters you. Sends you back to beds, to spawns, to arbitrary points.");
+                "This thread feels like deja vu. Like remembering where you left something.");
         provider.add("reflection.cosmiccore.bargain.back.dialogue.1",
-                "But what if you could return to where you fell?");
+                "Death scatters you. But this would leave a trail back.");
         provider.add("reflection.cosmiccore.bargain.back.dialogue.2",
-                "I can teach you to remember. To reach back through death itself.");
-        provider.add("reflection.cosmiccore.bargain.back.question", "Will you learn to retrace death's path?");
-        provider.add("reflection.cosmiccore.bargain.back.answer.accept.text", "Teach me to find my way back.");
+                "A connection to where you fell. Follow it back, once per death.");
+        provider.add("reflection.cosmiccore.bargain.back.question",
+                "The thread would remember your deaths. Do you pull?");
+        provider.add("reflection.cosmiccore.bargain.back.answer.accept.text", "Pull it. Let me find my way back.");
         provider.add("reflection.cosmiccore.bargain.back.answer.accept.response",
-                "Death becomes a waypoint now. Not an ending - a detour.");
+                "Death becomes a waypoint now. Not an ending \u2014 a detour.");
         provider.add("reflection.cosmiccore.bargain.back.answer.accept.power.0",
                 "Teleport to death location (once per death)");
         provider.add("reflection.cosmiccore.bargain.back.answer.accept.power.1", "Death marker visible through walls");
         provider.add("reflection.cosmiccore.bargain.back.answer.accept.drawback.0", "5 erosion cost per teleport use");
         provider.add("reflection.cosmiccore.bargain.back.answer.accept.drawback.1", "Marker fades after 10 minutes");
-        provider.add("reflection.cosmiccore.bargain.back.answer.refuse.text", "Death should have consequences.");
+        provider.add("reflection.cosmiccore.bargain.back.answer.refuse.text",
+                "Leave it. Death should have consequences.");
         provider.add("reflection.cosmiccore.bargain.back.answer.refuse.response",
-                "Consequences. You'll have plenty of those regardless.");
+                "The thread dims. Death keeps its finality.");
         provider.add("reflection.cosmiccore.bargain.back.on_accept",
                 "A thread connects you to your last breath. You can follow it back.");
         provider.add("reflection.cosmiccore.bargain.back.on_defy", "The thread snaps. Death becomes final once more.");
 
         // --- Home Bargain (home) ---
-        // Answers: accept, refuse | Dialogues: 3
         provider.add("reflection.cosmiccore.bargain.home.name", "Homeward");
-        provider.add("reflection.cosmiccore.bargain.home.description", "The way home is always open");
-        provider.add("reflection.cosmiccore.bargain.home.dialogue.0", "Home. Such a powerful concept for mortals.");
+        provider.add("reflection.cosmiccore.bargain.home.description", "Home is never more than a thought away");
+        provider.add("reflection.cosmiccore.bargain.home.dialogue.0",
+                "This thread is warm. Familiar. It smells like your bed, your walls.");
         provider.add("reflection.cosmiccore.bargain.home.dialogue.1",
-                "The place you return to. The anchor that grounds you.");
+                "Home. The anchor. It could be instant. Unbreakable.");
         provider.add("reflection.cosmiccore.bargain.home.dialogue.2",
-                "I can make that connection stronger. Instant. Unbreakable.");
+                "But the tether costs something each time. And wandering far dulls you.");
         provider.add("reflection.cosmiccore.bargain.home.question",
-                "Will you bind yourself to your home with chains of void?");
-        provider.add("reflection.cosmiccore.bargain.home.answer.accept.text", "Bind me to my home.");
+                "The thread leads home. Do you pull?");
+        provider.add("reflection.cosmiccore.bargain.home.answer.accept.text", "Pull it. Bind me to home.");
         provider.add("reflection.cosmiccore.bargain.home.answer.accept.response",
-                "Feel the pull now? Home is never more than a thought away.");
+                "A cord stretches between you and home. Pull it anytime.");
         provider.add("reflection.cosmiccore.bargain.home.answer.accept.power.0", "Instant teleport to spawn/bed point");
         provider.add("reflection.cosmiccore.bargain.home.answer.accept.power.1", "5 minute cooldown between uses");
         provider.add("reflection.cosmiccore.bargain.home.answer.accept.drawback.0", "10 erosion cost per teleport");
         provider.add("reflection.cosmiccore.bargain.home.answer.accept.drawback.1", "-10% XP gain while far from home");
-        provider.add("reflection.cosmiccore.bargain.home.answer.refuse.text", "Home should be earned, not summoned.");
+        provider.add("reflection.cosmiccore.bargain.home.answer.refuse.text",
+                "Leave it. Home should be earned.");
         provider.add("reflection.cosmiccore.bargain.home.answer.refuse.response",
-                "Earned. Through miles of walking. How charmingly primitive.");
+                "The warmth fades. Home stays where it is. You'll walk.");
         provider.add("reflection.cosmiccore.bargain.home.on_accept",
                 "A cord of void stretches between you and home. Pull it anytime.");
         provider.add("reflection.cosmiccore.bargain.home.on_defy",
-                "The cord dissolves. Home is a journey again, not a destination.");
+                "The cord dissolves. Home is a journey again, not a shortcut.");
 
         // --- Ascension Bargain (ascension) ---
-        // Answers: ready, refuse | Dialogues: 6
         provider.add("reflection.cosmiccore.bargain.ascension.name", "Ascension");
-        provider.add("reflection.cosmiccore.bargain.ascension.description", "Rise above the crawling earth");
+        provider.add("reflection.cosmiccore.bargain.ascension.description", "The sky opens. The ground becomes alien.");
         provider.add("reflection.cosmiccore.bargain.ascension.dialogue.0",
-                "You are bound to the ground. Chained by gravity's petty tyranny.");
-        provider.add("reflection.cosmiccore.bargain.ascension.dialogue.1", "You dream of flight. All mortals do.");
-        provider.add("reflection.cosmiccore.bargain.ascension.dialogue.2", "I can sever those chains. Let you rise.");
-        provider.add("reflection.cosmiccore.bargain.ascension.dialogue.3",
+                "This thread drifts upward. It tugs at you. Your feet feel heavy.");
+        provider.add("reflection.cosmiccore.bargain.ascension.dialogue.1",
                 "Not gliding. Not falling with style. True flight.");
-        provider.add("reflection.cosmiccore.bargain.ascension.dialogue.4", "The sky will open to you like a door.");
+        provider.add("reflection.cosmiccore.bargain.ascension.dialogue.2",
+                "The sky would open like a door. You'd never need the ground again.");
+        provider.add("reflection.cosmiccore.bargain.ascension.dialogue.3",
+                "But the ground would become alien. Uncomfortable. Wrong.");
+        provider.add("reflection.cosmiccore.bargain.ascension.dialogue.4",
+                "Your legs would grow sluggish. Walking would feel like punishment.");
         provider.add("reflection.cosmiccore.bargain.ascension.dialogue.5",
-                "But the ground... the ground will become alien. Uncomfortable. Wrong.");
-        provider.add("reflection.cosmiccore.bargain.ascension.question", "Will you abandon the earth for the sky?");
-        provider.add("reflection.cosmiccore.bargain.ascension.answer.ready.text", "I am ready to fly.");
+                "You'd belong to the sky. Not the earth.");
+        provider.add("reflection.cosmiccore.bargain.ascension.question",
+                "The thread pulls upward. Do you follow it?");
+        provider.add("reflection.cosmiccore.bargain.ascension.answer.ready.text", "Pull it. I'm ready to fly.");
         provider.add("reflection.cosmiccore.bargain.ascension.answer.ready.response",
-                "Then rise. The ground has no claim on you anymore.");
+                "Weight leaves you. The sky opens. You are no longer earth-bound.");
         provider.add("reflection.cosmiccore.bargain.ascension.answer.ready.power.0",
                 "Creative-style flight (toggle with jump while airborne)");
         provider.add("reflection.cosmiccore.bargain.ascension.answer.ready.power.1",
@@ -1233,96 +1265,101 @@ public class CosmicLangHandler extends LangHandler {
                 "-30% movement speed when not flying");
         provider.add("reflection.cosmiccore.bargain.ascension.answer.ready.drawback.1",
                 "Vulnerable in no-fly zones or enclosed spaces");
-        provider.add("reflection.cosmiccore.bargain.ascension.answer.refuse.text", "The ground has served me well.");
+        provider.add("reflection.cosmiccore.bargain.ascension.answer.refuse.text",
+                "Leave it. The ground has served me well.");
         provider.add("reflection.cosmiccore.bargain.ascension.answer.refuse.response",
-                "Served. Like a servant. How long until you realize you were the servant all along?");
+                "The thread floats back. Your feet stay heavy. Grounded.");
         provider.add("reflection.cosmiccore.bargain.ascension.on_accept",
-                "Weight leaves you. The sky opens. You are no longer earth-bound.");
+                "Something unravels downward. The sky opens. You rise.");
         provider.add("reflection.cosmiccore.bargain.ascension.on_defy",
-                "Gravity reclaims you. The ground welcomes you back, possessively.");
+                "Gravity reclaims you. The ground pulls you back, possessively.");
 
         // --- Violence Bargain (violence) ---
-        // Answers: accept, refuse | Dialogues: 5
         provider.add("reflection.cosmiccore.bargain.violence.name", "Violence");
         provider.add("reflection.cosmiccore.bargain.violence.description",
-                "Strike with the force of something terrible");
-        provider.add("reflection.cosmiccore.bargain.violence.dialogue.0", "Your blows are so... restrained. Hesitant.");
+                "Your restraints dissolve. Everything becomes breakable.");
+        provider.add("reflection.cosmiccore.bargain.violence.dialogue.0",
+                "This thread is sharp. Ragged. It wants to cut something.");
         provider.add("reflection.cosmiccore.bargain.violence.dialogue.1",
-                "You hold back. Every swing. Some part of you fears the damage.");
+                "You hold back every swing. Some part of you fears the damage you could do.");
         provider.add("reflection.cosmiccore.bargain.violence.dialogue.2",
-                "I can remove that restraint. Let your violence flow freely.");
-        provider.add("reflection.cosmiccore.bargain.violence.dialogue.3", "Your enemies will shatter before you.");
+                "This would remove that restraint. Let it flow freely.");
+        provider.add("reflection.cosmiccore.bargain.violence.dialogue.3",
+                "But violence flows both ways. You'd break things easier \u2014 and break easier.");
         provider.add("reflection.cosmiccore.bargain.violence.dialogue.4",
-                "But violence is a river that flows both ways.");
+                "No shields. No hiding. Just force.");
         provider.add("reflection.cosmiccore.bargain.violence.question",
-                "Will you embrace true, unrestrained violence?");
-        provider.add("reflection.cosmiccore.bargain.violence.answer.accept.text", "Remove my restraints.");
+                "The thread is sharp and eager. Do you pull?");
+        provider.add("reflection.cosmiccore.bargain.violence.answer.accept.text", "Pull it. Remove my restraints.");
         provider.add("reflection.cosmiccore.bargain.violence.answer.accept.response",
-                "Feel it now? The urge to destroy? Don't fight it. It's yours.");
+                "Power surges through your arms. Everything looks so breakable now.");
         provider.add("reflection.cosmiccore.bargain.violence.answer.accept.power.0", "+30% melee damage dealt");
         provider.add("reflection.cosmiccore.bargain.violence.answer.accept.power.1", "+15% attack speed");
         provider.add("reflection.cosmiccore.bargain.violence.answer.accept.drawback.0",
                 "+20% damage taken from all sources");
         provider.add("reflection.cosmiccore.bargain.violence.answer.accept.drawback.1", "Cannot use shields");
-        provider.add("reflection.cosmiccore.bargain.violence.answer.refuse.text", "Restraint is its own strength.");
+        provider.add("reflection.cosmiccore.bargain.violence.answer.refuse.text",
+                "Leave it. Restraint is its own strength.");
         provider.add("reflection.cosmiccore.bargain.violence.answer.refuse.response",
-                "Restraint. A leash you put on yourself. How adorable.");
+                "The sharpness dulls. Your fists unclench.");
         provider.add("reflection.cosmiccore.bargain.violence.on_accept",
-                "Power surges through your arms. Everything looks so... breakable now.");
+                "Something snaps loose inside. The rage was always there. Now it's free.");
         provider.add("reflection.cosmiccore.bargain.violence.on_defy",
                 "The rage drains away. Your blows return to mortal weight.");
 
         // --- Reach Bargain (reach) ---
-        // Answers: further, practical, refuse | Dialogues: 4
         provider.add("reflection.cosmiccore.bargain.reach.name", "Reach");
-        provider.add("reflection.cosmiccore.bargain.reach.description", "Your grasp extends beyond natural limits");
+        provider.add("reflection.cosmiccore.bargain.reach.description", "Your grasp extends beyond what's natural");
         provider.add("reflection.cosmiccore.bargain.reach.dialogue.0",
-                "So close, yet so far. The eternal frustration of short arms.");
+                "This thread stretches. Long. Your arms ache near it.");
         provider.add("reflection.cosmiccore.bargain.reach.dialogue.1",
-                "Everything just slightly out of reach. Mocking you.");
+                "Everything just slightly out of reach \u2014 this thread would close that gap.");
         provider.add("reflection.cosmiccore.bargain.reach.dialogue.2",
-                "I can extend you. Stretch your grasp beyond mortal limits.");
+                "Build farther. Strike farther. But your hands would feel wrong.");
         provider.add("reflection.cosmiccore.bargain.reach.dialogue.3",
-                "Your arms will find what they seek. But others may find them... unsettling.");
-        provider.add("reflection.cosmiccore.bargain.reach.question", "Will you extend your reach into the unnatural?");
+                "Slower to work. Harder to pick things up close. The price of extension.");
+        provider.add("reflection.cosmiccore.bargain.reach.question",
+                "The thread stretches outward. Do you pull?");
         provider.add("reflection.cosmiccore.bargain.reach.answer.further.text",
-                "Stretch me further. I want to grasp everything.");
+                "Pull it. Stretch me further.");
         provider.add("reflection.cosmiccore.bargain.reach.answer.further.response",
-                "There. Don't look at your hands too closely. It's easier that way.");
+                "Something shifts in your shoulders. Your arms remember being longer.");
         provider.add("reflection.cosmiccore.bargain.reach.answer.further.power.0",
                 "+3 block reach (build from further)");
         provider.add("reflection.cosmiccore.bargain.reach.answer.further.power.1", "+2 attack reach");
         provider.add("reflection.cosmiccore.bargain.reach.answer.further.drawback.0", "-15% mining speed");
         provider.add("reflection.cosmiccore.bargain.reach.answer.further.drawback.1", "Item pickup range reduced");
-        provider.add("reflection.cosmiccore.bargain.reach.answer.refuse.text", "My reach is sufficient.");
+        provider.add("reflection.cosmiccore.bargain.reach.answer.refuse.text",
+                "Leave it. My reach is sufficient.");
         provider.add("reflection.cosmiccore.bargain.reach.answer.refuse.response",
-                "For now. But you'll want more. They always do.");
+                "The thread contracts. The world stays at arm's length.");
         provider.add("reflection.cosmiccore.bargain.reach.on_accept",
                 "Something shifts in your shoulders. Your arms remember being longer.");
         provider.add("reflection.cosmiccore.bargain.reach.on_defy",
                 "Your arms contract back to normal. The world feels close and small again.");
 
         // --- Void Anchor Bargain (void_anchor) ---
-        // Answers: anchor, refuse | Dialogues: 6
         provider.add("reflection.cosmiccore.bargain.void_anchor.name", "Void Anchor");
         provider.add("reflection.cosmiccore.bargain.void_anchor.description",
-                "The void cannot claim what is already its own");
+                "The void cannot destroy what belongs to it");
         provider.add("reflection.cosmiccore.bargain.void_anchor.dialogue.0",
-                "You've felt it. The pull of the void beneath the world.");
+                "This thread is cold. Not cold like ice \u2014 cold like absence. Like nothing.");
         provider.add("reflection.cosmiccore.bargain.void_anchor.dialogue.1",
-                "That endless fall. That final darkness that swallows everything.");
+                "You've felt the pull of the void beneath the world. That endless fall.");
         provider.add("reflection.cosmiccore.bargain.void_anchor.dialogue.2",
-                "I dwell there. In that space between existence and nothing.");
+                "This thread would mark you. Make you part of that darkness.");
         provider.add("reflection.cosmiccore.bargain.void_anchor.dialogue.3",
-                "I can mark you. Make you mine. And what is mine, the void cannot destroy.");
+                "The void can't destroy what it recognizes as its own.");
         provider.add("reflection.cosmiccore.bargain.void_anchor.dialogue.4",
-                "Fall as far as you like. The darkness will recognize you. Welcome you.");
+                "Fall as far as you like. The darkness would catch you. Welcome you.");
         provider.add("reflection.cosmiccore.bargain.void_anchor.dialogue.5",
-                "But being marked by the void... it changes how existence sees you.");
-        provider.add("reflection.cosmiccore.bargain.void_anchor.question", "Will you become an anchor in the nothing?");
-        provider.add("reflection.cosmiccore.bargain.void_anchor.answer.anchor.text", "Mark me. Make me yours.");
+                "But the light would sting. Sunlight would feel wrong on marked skin.");
+        provider.add("reflection.cosmiccore.bargain.void_anchor.question",
+                "The thread reaches into the nothing. Do you pull?");
+        provider.add("reflection.cosmiccore.bargain.void_anchor.answer.anchor.text",
+                "Pull it. Mark me for the void.");
         provider.add("reflection.cosmiccore.bargain.void_anchor.answer.anchor.response",
-                "Done. The void knows your name now. It will not harm what belongs to it.");
+                "Something cold touches your soul. The void knows you now.");
         provider.add("reflection.cosmiccore.bargain.void_anchor.answer.anchor.power.0", "Void damage immunity (Y < 0)");
         provider.add("reflection.cosmiccore.bargain.void_anchor.answer.anchor.power.1",
                 "Teleport to surface when entering void");
@@ -1331,99 +1368,16 @@ public class CosmicLangHandler extends LangHandler {
         provider.add("reflection.cosmiccore.bargain.void_anchor.answer.anchor.drawback.1",
                 "Takes damage from direct sunlight exposure");
         provider.add("reflection.cosmiccore.bargain.void_anchor.answer.refuse.text",
-                "I'll stay in the light, thank you.");
+                "Leave it. I'll stay in the light.");
         provider.add("reflection.cosmiccore.bargain.void_anchor.answer.refuse.response",
-                "The light. Yes. Such a thin shield against the endless dark. Good luck.");
+                "The cold recedes. The void forgets you were here. For now.");
         provider.add("reflection.cosmiccore.bargain.void_anchor.on_accept",
-                "Something cold touches your soul. Marks it. The void knows you now.");
+                "Something cold marks you. Deep. Permanent. The void won't hurt you now.");
         provider.add("reflection.cosmiccore.bargain.void_anchor.on_defy",
                 "The mark burns away. The void forgets you. It will not be merciful next time.");
 
-        // =========================================================================
-        // THRESHOLD ENCOUNTERS
-        // =========================================================================
-
-        // --- Threshold 0 (10% erosion) ---
-        provider.add("reflection.cosmiccore.threshold.0.dialogue.0", "You took something that wasn't freely given.");
-        provider.add("reflection.cosmiccore.threshold.0.dialogue.1", "Did it feel good? The power flooding in?");
-        provider.add("reflection.cosmiccore.threshold.0.dialogue.2", "Of course it did. That's the point.");
-        provider.add("reflection.cosmiccore.threshold.0.dialogue.3",
-                "I'll be watching now. We have business together.");
-        provider.add("reflection.cosmiccore.threshold.0.question", "Do you understand what you've started?");
-        provider.add("reflection.cosmiccore.threshold.0.response", "Good. Or not. It doesn't matter now.");
-
-        // --- Threshold 1 (20% erosion) ---
-        provider.add("reflection.cosmiccore.threshold.1.dialogue.0", "Already back for more. I'm not surprised.");
-        provider.add("reflection.cosmiccore.threshold.1.dialogue.1", "Your soul stretches thinner. Can you feel it?");
-        provider.add("reflection.cosmiccore.threshold.1.dialogue.2", "Like taffy. Like mist. Like a memory fading.");
-        provider.add("reflection.cosmiccore.threshold.1.dialogue.3", "Don't worry. You have plenty left. For now.");
-        provider.add("reflection.cosmiccore.threshold.1.question", "Still comfortable?");
-        provider.add("reflection.cosmiccore.threshold.1.response", "Comfort is overrated anyway.");
-
-        // --- Threshold 2 (30% erosion) ---
-        provider.add("reflection.cosmiccore.threshold.2.dialogue.0", "A third of you belongs to me now.");
-        provider.add("reflection.cosmiccore.threshold.2.dialogue.1", "That's not metaphor. I can see it. Taste it.");
-        provider.add("reflection.cosmiccore.threshold.2.dialogue.2", "Your edges blur. Your definition softens.");
-        provider.add("reflection.cosmiccore.threshold.2.dialogue.3", "Others might start to notice soon.");
-        provider.add("reflection.cosmiccore.threshold.2.question", "Having second thoughts?");
-        provider.add("reflection.cosmiccore.threshold.2.response",
-                "Second thoughts require a first. You never had one.");
-
-        // --- Threshold 3 (40% erosion) ---
-        provider.add("reflection.cosmiccore.threshold.3.dialogue.0", "The dreams are starting, aren't they?");
-        provider.add("reflection.cosmiccore.threshold.3.dialogue.1", "The ones where you fall and never land.");
-        provider.add("reflection.cosmiccore.threshold.3.dialogue.2",
-                "Where you look in a mirror and something else looks back.");
-        provider.add("reflection.cosmiccore.threshold.3.dialogue.3", "That's not a dream. That's prophecy.");
-        provider.add("reflection.cosmiccore.threshold.3.question", "Do you still know who you are?");
-        provider.add("reflection.cosmiccore.threshold.3.response", "Keep telling yourself that name means something.");
-
-        // --- Threshold 4 (50% erosion) ---
-        provider.add("reflection.cosmiccore.threshold.4.dialogue.0", "Halfway. The point of no return approaches.");
-        provider.add("reflection.cosmiccore.threshold.4.dialogue.1", "Half of you, gone. Given away for trinkets.");
-        provider.add("reflection.cosmiccore.threshold.4.dialogue.2", "Was it worth it? Don't answer. I don't care.");
-        provider.add("reflection.cosmiccore.threshold.4.dialogue.3", "What matters is what comes next.");
-        provider.add("reflection.cosmiccore.threshold.4.question", "Ready to see what's on the other side?");
-        provider.add("reflection.cosmiccore.threshold.4.response", "No one ever is. But they cross anyway.");
-
-        // --- Threshold 5 (60% erosion) ---
-        provider.add("reflection.cosmiccore.threshold.5.dialogue.0", "More of you is mine than yours now.");
-        provider.add("reflection.cosmiccore.threshold.5.dialogue.1", "Does that frighten you? It should.");
-        provider.add("reflection.cosmiccore.threshold.5.dialogue.2", "I know thoughts you haven't had yet.");
-        provider.add("reflection.cosmiccore.threshold.5.dialogue.3", "I feel feelings you've forgotten.");
-        provider.add("reflection.cosmiccore.threshold.5.question", "Who's really in control?");
-        provider.add("reflection.cosmiccore.threshold.5.response", "Keep pretending you still have choice.");
-
-        // --- Threshold 6 (70% erosion) ---
-        provider.add("reflection.cosmiccore.threshold.6.dialogue.0", "Your reflection doesn't quite match anymore.");
-        provider.add("reflection.cosmiccore.threshold.6.dialogue.1", "The delay is slight. Others might not notice.");
-        provider.add("reflection.cosmiccore.threshold.6.dialogue.2", "But you know. You feel it.");
-        provider.add("reflection.cosmiccore.threshold.6.question", "What stares back at you in mirrors?");
-        provider.add("reflection.cosmiccore.threshold.6.response", "Me. Always me now.");
-
-        // --- Threshold 7 (80% erosion) ---
-        provider.add("reflection.cosmiccore.threshold.7.dialogue.0", "So little left of what you were.");
-        provider.add("reflection.cosmiccore.threshold.7.dialogue.1", "Fragments. Echoes. Shadows of intention.");
-        provider.add("reflection.cosmiccore.threshold.7.dialogue.2", "The body walks. The mind calculates.");
-        provider.add("reflection.cosmiccore.threshold.7.dialogue.3", "But the soul? The soul is almost spent.");
-        provider.add("reflection.cosmiccore.threshold.7.question", "Can you remember your mother's face?");
-        provider.add("reflection.cosmiccore.threshold.7.response", "No. You can't. I took that already.");
-
-        // --- Threshold 8 (90% erosion) ---
-        provider.add("reflection.cosmiccore.threshold.8.dialogue.0", "One step from the edge now.");
-        provider.add("reflection.cosmiccore.threshold.8.dialogue.1", "Ten percent. A sliver. A thread.");
-        provider.add("reflection.cosmiccore.threshold.8.dialogue.2", "That's all that separates you from... me.");
-        provider.add("reflection.cosmiccore.threshold.8.dialogue.3", "One more bargain. Just one more.");
-        provider.add("reflection.cosmiccore.threshold.8.question", "Will you take that final step?");
-        provider.add("reflection.cosmiccore.threshold.8.response", "We both know you will. The question is when.");
-
-        // --- Threshold 9 (100% erosion) ---
-        provider.add("reflection.cosmiccore.threshold.9.dialogue.0", "Finally.");
-        provider.add("reflection.cosmiccore.threshold.9.dialogue.1", "You gave everything. Every last piece.");
-        provider.add("reflection.cosmiccore.threshold.9.dialogue.2", "There's nothing left of what walked in here.");
-        provider.add("reflection.cosmiccore.threshold.9.dialogue.3", "Only power. Only hunger. Only me.");
-        provider.add("reflection.cosmiccore.threshold.9.question", "What do you see when you look at yourself?");
-        provider.add("reflection.cosmiccore.threshold.9.response", "Nothing. Because there's nothing left to see.");
+        // THRESHOLD ENCOUNTERS — REMOVED
+        // The shell visual progression tells this story now. No narrated milestones needed.
 
         // Stellar Iris Module System
         provider.add("cosmiccore.multiblock.stellar_module.not_connected", "§cNot Connected to Stellar Iris");
@@ -1911,21 +1865,22 @@ public class CosmicLangHandler extends LangHandler {
         provider.add("cosmiccore.soul_mutilator.shape_selected", "Your soul has been mutilated into %s.");
 
         // Soul Shape UI (Mirror of Erosion integration)
-        provider.add("reflection.cosmiccore.ui.hub.mutilate_soul", "[Mutilate Your Soul]");
+        provider.add("reflection.cosmiccore.ui.hub.mutilate_soul", "[Reshape Your Core]");
         provider.add("reflection.cosmiccore.ui.soul_shape.select_header", "Choose Your Shape");
         provider.add("reflection.cosmiccore.ui.soul_shape.warning_permanent",
                 "This choice is permanent and cannot be undone.");
         provider.add("reflection.cosmiccore.ui.soul_shape.intro.0",
-                "Wait a moment, you don't intend to stab yourself with that, do you?");
+                "The blade rests against your core. This will redefine what you are.");
         provider.add("reflection.cosmiccore.ui.soul_shape.intro.1",
-                "The Soul Mutilator can redefine what we are, but never again will we be able to change our core.");
+                "Once cut, the shape is permanent. Your core can only be shaped once.");
         provider.add("reflection.cosmiccore.ui.soul_shape.intro.2",
-                "Think through this carefully, there's no g oing back..");
-        provider.add("reflection.cosmiccore.ui.soul_shape.transforming.0", "Look at you, you did it.");
+                "Think through this carefully. There's no going back.");
+        provider.add("reflection.cosmiccore.ui.soul_shape.transforming.0", "You cut.");
         provider.add("reflection.cosmiccore.ui.soul_shape.transforming.1",
                 "Your entire being feels on fire as you shift into %s...");
-        provider.add("reflection.cosmiccore.ui.soul_shape.complete.0", "You are now %s, a new saga unfolds");
+        provider.add("reflection.cosmiccore.ui.soul_shape.complete.0",
+                "You are now %s. Something fundamental changed.");
         provider.add("reflection.cosmiccore.ui.soul_shape.complete.1",
-                "I hope we made the right choice, there's no returning here.");
+                "There's no returning to what you were.");
     }
 }

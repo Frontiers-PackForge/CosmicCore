@@ -10,10 +10,6 @@ uniform vec3 BaseColor;
 uniform float Intensity;
 uniform float Radius;
 
-float hash(vec2 p) {
-    return fract(sin(dot(p, vec2(127.1, 311.7))) * 43758.5453);
-}
-
 void main() {
     float time = GameTime * 1200.0;
 
@@ -25,7 +21,7 @@ void main() {
     float alpha = 0.0;
     vec3 color = BaseColor;
 
-    // Slow water ripples
+    // Slow water ripples — expanding ring pulses
     float ringSpeed = 0.12;
     for (int i = 0; i < 3; i++) {
         float phase = float(i) * 2.5 + time * ringSpeed;
@@ -36,28 +32,7 @@ void main() {
         alpha += ring * 0.15;
     }
 
-    // Orbiting wisps
-    for (int i = 0; i < 4; i++) {
-        float fi = float(i);
-        float orbitSpeed = 0.3 + fi * 0.1;
-        float orbitRadius = Radius * (0.7 + fi * 0.15);
-        float orbitAngle = time * orbitSpeed + fi * 1.571;
-
-        vec2 wispPos = vec2(cos(orbitAngle), sin(orbitAngle)) * orbitRadius;
-        float wispDist = length(uv - wispPos);
-
-        float wispCore = smoothstep(Radius * 0.2, 0.0, wispDist);
-        wispCore = wispCore * wispCore;
-
-        float trailAngle = orbitAngle - 0.4;
-        vec2 trailPos = vec2(cos(trailAngle), sin(trailAngle)) * orbitRadius;
-        float trailDist = length(uv - trailPos);
-        float trail = smoothstep(Radius * 0.25, 0.0, trailDist) * 0.3;
-
-        alpha += (wispCore + trail) * 0.2;
-    }
-
-    // Aurora flow (cartesian to avoid atan discontinuity)
+    // Aurora flow (cartesian wave bands)
     float flow1 = sin(uv.x * 8.0 + uv.y * 6.0 + time * 0.6 + dist * 4.0) * 0.5 + 0.5;
     flow1 = flow1 * flow1;
     flow1 *= smoothstep(Radius * 1.6, Radius * 0.6, dist);
@@ -69,47 +44,6 @@ void main() {
     flow2 *= smoothstep(Radius * 0.25, Radius * 0.6, dist);
 
     alpha += (flow1 + flow2) * 0.1;
-
-    // Floating embers
-    for (int i = 0; i < 6; i++) {
-        float fi = float(i);
-        float seed = fi * 127.1;
-
-        float px = (hash(vec2(seed, 0.0)) - 0.5) * Radius * 1.6;
-        float baseY = hash(vec2(seed, 1.0)) * Radius * 2.0;
-        float py = mod(baseY - time * 0.15 - fi * 0.15, Radius * 2.5) - Radius * 0.3;
-        px += sin(time * 0.3 + fi * 2.0) * Radius * 0.08;
-
-        vec2 emberPos = vec2(px, -py);
-        float emberDist = length(uv - emberPos);
-
-        float ember = smoothstep(Radius * 0.1, 0.0, emberDist);
-        ember = ember * ember;
-
-        float heightFade = smoothstep(Radius * 1.8, Radius * 0.3, -py);
-
-        alpha += ember * heightFade * 0.25;
-        color = mix(color, vec3(1.0, 0.95, 0.85), ember * heightFade * 0.2);
-    }
-
-    // Soft tendrils
-    for (int i = 0; i < 4; i++) {
-        float fi = float(i);
-        float tendrilAngle = fi * 1.571 + time * 0.1 + sin(time * 0.2 + fi) * 0.2;
-
-        float alongTendril = dot(uv, vec2(cos(tendrilAngle), sin(tendrilAngle)));
-        float perpTendril = length(uv - vec2(cos(tendrilAngle), sin(tendrilAngle)) * max(alongTendril, 0.0));
-
-        float tendrilWidth = Radius * 0.1 * (1.0 - alongTendril / (Radius * 1.8));
-        tendrilWidth = max(tendrilWidth, 0.02);
-
-        float tendril = smoothstep(tendrilWidth, 0.0, perpTendril);
-        tendril *= smoothstep(0.0, Radius * 0.5, alongTendril);
-        tendril *= smoothstep(Radius * 1.6, Radius * 0.7, alongTendril);
-        tendril *= 0.6 + 0.4 * sin(alongTendril * 5.0 - time * 1.5);
-
-        alpha += tendril * 0.1;
-    }
 
     // Core glow
     float core = 1.0 - smoothstep(0.0, Radius * 0.6, dist);

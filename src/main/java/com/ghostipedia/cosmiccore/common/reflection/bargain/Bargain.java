@@ -210,14 +210,14 @@ public abstract class Bargain {
      * @return dialogue the reflection says after accepting
      */
     public List<Component> getAcceptDialogue(Player player, BargainAnswer answer) {
-        return List.of(Component.literal("How does it feel?"));
+        return List.of(Component.literal("Something shifted."));
     }
 
     /**
-     * @return dialogue the reflection says if the player refuses
+     * @return dialogue shown if the player refuses
      */
     public List<Component> getRefuseDialogue(Player player) {
-        return List.of(Component.literal("...Maybe next time."));
+        return List.of(Component.literal("The thread settles back."));
     }
 
     /**

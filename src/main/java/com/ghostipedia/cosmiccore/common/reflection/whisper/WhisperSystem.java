@@ -25,7 +25,7 @@ public final class WhisperSystem {
     private static final Map<UUID, Long> lastWhisperTime = new HashMap<>();
     private static final long WHISPER_COOLDOWN = 30000L; // 30 seconds minimum between whispers
 
-    // Style for whispers
+    // Style for whispers — trailing thoughts, not a voice
     private static final Style WHISPER_STYLE = Style.EMPTY.withItalic(true).withColor(0x9966CC);
 
     /**
@@ -64,7 +64,7 @@ public final class WhisperSystem {
     public static void sendWhisper(ServerPlayer player, String text) {
         if (isOnCooldown(player)) return;
 
-        Component message = Component.literal("* " + text + " *").withStyle(WHISPER_STYLE);
+        Component message = Component.literal("..." + text).withStyle(WHISPER_STYLE);
         player.sendSystemMessage(message);
         lastWhisperTime.put(player.getUUID(), System.currentTimeMillis());
     }
@@ -130,32 +130,26 @@ public final class WhisperSystem {
     }
 
     private static List<String> getDeathLines(IReflection reflection, int tier) {
-        int deathCount = reflection.getDeathCount();
-
         List<String> lines = new ArrayList<>();
 
-        // Low corruption
         if (tier <= 1) {
-            lines.add("Welcome back.");
-            lines.add("That one was faster than usual.");
-            lines.add("I felt it too. I always do.");
-            lines.add("Does it still hurt? I can never tell.");
+            lines.add("cold");
+            lines.add("that ached");
+            lines.add("the ground felt wrong");
+            lines.add("something lingers");
         }
 
-        // Mid corruption
         if (tier >= 2 && tier <= 4) {
-            lines.add("Again. And again.");
-            lines.add("We're getting used to this, aren't we?");
-            lines.add("That's " + deathCount + " now. I've been counting.");
-            lines.add("The dying is easy. It's the coming back that wears on us.");
+            lines.add("again");
+            lines.add("familiar");
+            lines.add("barely felt it");
+            lines.add("the coming back is the hard part");
         }
 
-        // High corruption
         if (tier >= 5) {
-            lines.add("Another one.");
-            lines.add("Do you even notice anymore?");
-            lines.add("We've done this " + deathCount + " times. It means nothing now.");
-            lines.add("Death is just... punctuation.");
+            lines.add("nothing");
+            lines.add("just punctuation");
+            lines.add("barely noticed");
         }
 
         return lines;
@@ -165,15 +159,15 @@ public final class WhisperSystem {
         List<String> lines = new ArrayList<>();
 
         if (tier <= 2) {
-            lines.add("Careful. That looks like it hurts.");
-            lines.add("You're bleeding. Well, we're bleeding.");
-            lines.add("Should I be worried? Should we?");
+            lines.add("hands are shaking");
+            lines.add("pulse in your ears");
+            lines.add("something's wrong");
         }
 
         if (tier >= 3) {
-            lines.add("Pain is just information.");
-            lines.add("We've felt worse.");
-            lines.add("This body is temporary anyway.");
+            lines.add("just numbers");
+            lines.add("temporary");
+            lines.add("you've felt worse");
         }
 
         return lines;
@@ -183,15 +177,15 @@ public final class WhisperSystem {
         List<String> lines = new ArrayList<>();
 
         if (tier <= 2) {
-            lines.add("Breathe. Oh wait.");
-            lines.add("The air is thin here. Or is it us?");
-            lines.add("Mortals panic when this happens. What do we do?");
+            lines.add("chest tightening");
+            lines.add("the air is thin");
+            lines.add("breathe");
         }
 
         if (tier >= 3) {
-            lines.add("Still clinging to that breathing habit.");
-            lines.add("We don't need air. We just think we do.");
-            lines.add("Let go. It won't hurt for long.");
+            lines.add("still clinging to that habit");
+            lines.add("do you even need it anymore?");
+            lines.add("let go");
         }
 
         return lines;
@@ -201,21 +195,20 @@ public final class WhisperSystem {
         List<String> lines = new ArrayList<>();
 
         if (tier <= 2) {
-            lines.add("Thinking? Or avoiding?");
-            lines.add("I'm still here, Whenever you're ready.");
-            lines.add("Take your time, We have plenty.");
+            lines.add("quiet");
+            lines.add("what was that sound?");
+            lines.add("the air feels heavy");
         }
 
         if (tier >= 3) {
-            lines.add("You can't run from me by standing still.");
-            lines.add("I'm right here, I'm always right here.");
-            lines.add("The silence between us speaks volumes.");
+            lines.add("something moved");
+            lines.add("who were you before this?");
+            lines.add("the stillness has a weight to it");
         }
 
         if (tier >= 5) {
-            lines.add("Are you listening? Or am I talking to myself?");
-            lines.add("Sometimes I forget which one of us is which.");
-            lines.add("...");
+            lines.add("are you listening to yourself?");
+            lines.add("when did it get so quiet?");
         }
 
         return lines;
@@ -224,10 +217,10 @@ public final class WhisperSystem {
     private static List<String> getDimensionLines(int tier) {
         List<String> lines = new ArrayList<>();
 
-        lines.add("Somewhere new. Somewhere dangerous. Good.");
-        lines.add("What do you think we'll find here?");
-        lines.add("This place remembers things. Be careful what you show it.");
-        lines.add("The rules are different here. Can you feel it?");
+        lines.add("the rules are different here");
+        lines.add("the air tastes wrong");
+        lines.add("something remembers this place");
+        lines.add("not home");
 
         return lines;
     }
@@ -235,10 +228,10 @@ public final class WhisperSystem {
     private static List<String> getPostBargainLines(int tier) {
         List<String> lines = new ArrayList<>();
 
-        lines.add("How does it feel?");
-        lines.add("We're changing. Can you tell?");
-        lines.add("No going back now. Isn't that freeing?");
-        lines.add("Look at us. Look at what we're becoming.");
+        lines.add("lighter");
+        lines.add("something's different");
+        lines.add("the thread pulled clean");
+        lines.add("can't undo that");
 
         return lines;
     }
@@ -247,21 +240,20 @@ public final class WhisperSystem {
         List<String> lines = new ArrayList<>();
 
         if (tier <= 1) {
-            lines.add("...");
-            lines.add("I'm watching.");
-            lines.add("Interesting choice.");
+            lines.add("hm");
+            lines.add("something flickered");
         }
 
         if (tier >= 2 && tier <= 4) {
-            lines.add("We're doing well. Aren't we?");
-            lines.add("Keep going. I want to see what happens.");
-            lines.add("You're stronger than you think. We both are.");
+            lines.add("getting used to this");
+            lines.add("familiar");
+            lines.add("how long has it been?");
         }
 
         if (tier >= 5) {
-            lines.add("Beautiful, isn't it? What we've become?");
-            lines.add("They wouldn't understand. Only we do.");
-            lines.add("Almost there. Almost...");
+            lines.add("is this what you wanted?");
+            lines.add("almost");
+            lines.add("what's left?");
         }
 
         return lines;
@@ -271,14 +263,13 @@ public final class WhisperSystem {
         List<String> lines = new ArrayList<>();
 
         if (tier <= 2) {
-            lines.add("That was necessary. Wasn't it?");
-            lines.add("They're gone. We're still here.");
+            lines.add("necessary");
+            lines.add("gone");
         }
 
         if (tier >= 3) {
-            lines.add("More.");
-            lines.add("Again.");
-            lines.add("Good.");
+            lines.add("easy");
+            lines.add("next");
         }
 
         return lines;
