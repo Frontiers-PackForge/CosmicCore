@@ -1,6 +1,7 @@
 package com.ghostipedia.cosmiccore.common.item.behavior;
 
 import com.ghostipedia.cosmiccore.CosmicCore;
+import com.ghostipedia.cosmiccore.client.gui.SprayCanScreen;
 import com.ghostipedia.cosmiccore.common.data.CosmicSounds;
 
 import com.gregtechceu.gtceu.api.blockentity.IPaintable;
@@ -191,5 +192,16 @@ public class SprayCanClientHandler {
 
         String langKey = nowLocked ? "cosmiccore.item.spraycan.now_locked" : "cosmiccore.item.spraycan.now_unlocked";
         player.displayClientMessage(Component.translatable(langKey), true);
+    }
+
+    @OnlyIn(Dist.CLIENT)
+    public static void openScreen(Player player, InfiniteSprayCanBehavior behavior) {
+        Minecraft.getInstance().setScreen(new SprayCanScreen(player, behavior));
+    }
+
+    @OnlyIn(Dist.CLIENT)
+    public static void playShakeSound() {
+        Minecraft.getInstance().getSoundManager().play(
+                SimpleSoundInstance.forUI(CosmicSounds.SHAKE_CAN.getMainEvent(), 1.0f, 1.0f));
     }
 }
