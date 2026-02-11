@@ -1,5 +1,6 @@
 package com.ghostipedia.cosmiccore.common.machine.multiblock.multi;
 
+import com.ghostipedia.cosmiccore.CosmicCore;
 import com.ghostipedia.cosmiccore.api.machine.multiblock.DreamersBasinMachine;
 import com.ghostipedia.cosmiccore.common.data.CosmicBlocks;
 import com.ghostipedia.cosmiccore.gtbridge.CosmicRecipeTypes;
@@ -97,7 +98,7 @@ public class DreamersBasin {
                     .where('C', blocks(CosmicBlocks.SOMARUST_CASING.get()))
                     .build())
             .workableCasingModel(
-                    GTCEu.id("block/casings/solid/machine_casing_solid_steel"),
+                    CosmicCore.id("block/casings/solid/superheavy_steel_casing"),
                     GTCEu.id("block/multiblock/implosion_compressor"))
             .register();
 

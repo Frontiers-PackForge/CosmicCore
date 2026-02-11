@@ -195,7 +195,7 @@ public class CosmicMachines {
     public static final MachineDefinition[] CALX_REACTOR = registerTieredMachines("calx_reactor",
             (holder, tier) -> new SimpleTieredMachine(holder, tier, defaultTankSizeFunction),
             (tier, builder) -> builder
-                    .recipeType(CENTRIFUGE_RECIPES)
+                    .recipeType(CosmicRecipeTypes.CALX_REACTOR)
                     .editableUI(SimpleTieredMachine.EDITABLE_UI_CREATOR.apply(CosmicCore.id("calx_reactor"),
                             CosmicRecipeTypes.CALX_REACTOR))
                     .tooltipBuilder((stack, list) -> {
@@ -210,7 +210,7 @@ public class CosmicMachines {
 
     public static final MachineDefinition[] MANA_LEACHING_TUB = registerTieredMachines("mana_leaching_tub",
             (holder, tier) -> new SimpleTieredMachine(holder, tier, defaultTankSizeFunction),
-            (tier, builder) -> builder.recipeType(CENTRIFUGE_RECIPES)
+            (tier, builder) -> builder.recipeType(CosmicRecipeTypes.MANA_LEACHING_TUB)
                     .editableUI(SimpleTieredMachine.EDITABLE_UI_CREATOR.apply(CosmicCore.id("mana_leaching_tub"),
                             CosmicRecipeTypes.MANA_LEACHING_TUB))
                     .tooltipBuilder((stack, list) -> {
@@ -225,7 +225,7 @@ public class CosmicMachines {
 
     public static final MachineDefinition[] ROASTER = registerTieredMachines("roaster",
             (holder, tier) -> new SimpleTieredMachine(holder, tier, defaultTankSizeFunction),
-            (tier, builder) -> builder.recipeType(CENTRIFUGE_RECIPES)
+            (tier, builder) -> builder.recipeType(CosmicRecipeTypes.ROASTER)
                     .editableUI(SimpleTieredMachine.EDITABLE_UI_CREATOR.apply(CosmicCore.id("roaster"),
                             CosmicRecipeTypes.ROASTER))
                     .tooltipBuilder((stack, list) -> {
@@ -239,7 +239,7 @@ public class CosmicMachines {
 
     public static final MachineDefinition[] THERMOMAG = registerTieredMachines("thermomagnitizer",
             (holder, tier) -> new SimpleTieredMachine(holder, tier, defaultTankSizeFunction),
-            (tier, builder) -> builder.recipeType(CENTRIFUGE_RECIPES)
+            (tier, builder) -> builder.recipeType(CosmicRecipeTypes.THERMOMAG)
                     .editableUI(SimpleTieredMachine.EDITABLE_UI_CREATOR.apply(CosmicCore.id("thermomagnitizer"),
                             CosmicRecipeTypes.THERMOMAG))
                     .tooltipBuilder((stack, list) -> {
@@ -254,7 +254,7 @@ public class CosmicMachines {
     public static final MachineDefinition[] VAC_BUBBLER = registerTieredMachines("vacuum_bubbler",
             (holder, tier) -> new SimpleTieredMachine(holder, tier, defaultTankSizeFunction),
             (tier, builder) -> builder
-                    .recipeType(CENTRIFUGE_RECIPES)
+                    .recipeType(CosmicRecipeTypes.VAC_BUBBLER)
                     .editableUI(SimpleTieredMachine.EDITABLE_UI_CREATOR.apply(CosmicCore.id("vacuum_bubbler"),
                             CosmicRecipeTypes.VAC_BUBBLER))
                     .tooltipBuilder((stack, list) -> {
@@ -993,12 +993,6 @@ public class CosmicMachines {
     }
 
     public static void init() {
-        // Initialize DreamersBasin
-        com.ghostipedia.cosmiccore.common.machine.multiblock.multi.DreamersBasin.init();
-        // Initialize Ore Extraction Drills
-        com.ghostipedia.cosmiccore.common.machine.multiblock.multi.OreExtractionDrill.init();
-        // Initialize Mechanical Alveary
-        com.ghostipedia.cosmiccore.common.machine.multiblock.multi.bee.MechanicalAlveary.init();
         GTMultiMachines.LARGE_COMBUSTION_ENGINE.setRecipeTypes(new GTRecipeType[] { DUMMY_RECIPES });
         GTMultiMachines.LARGE_COMBUSTION_ENGINE.setRenderXEIPreview(false);
         GTMultiMachines.LARGE_COMBUSTION_ENGINE.setRenderWorldPreview(false);
