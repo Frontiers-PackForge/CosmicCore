@@ -3,7 +3,8 @@ package com.ghostipedia.cosmiccore.common.reflection.ui;
 import com.ghostipedia.cosmiccore.client.renderer.BackgroundRenderer;
 import com.ghostipedia.cosmiccore.client.renderer.ChainRenderer;
 import com.ghostipedia.cosmiccore.client.renderer.SoulAuraRenderer;
-import com.ghostipedia.cosmiccore.common.reflection.ReflectionConstants;
+import com.ghostipedia.cosmiccore.client.renderer.SoulCoreRenderer;
+import com.ghostipedia.cosmiccore.client.renderer.SoulThreadsRenderer;
 import com.ghostipedia.cosmiccore.common.reflection.ReflectionLang;
 import com.ghostipedia.cosmiccore.common.reflection.bargain.Bargain;
 import com.ghostipedia.cosmiccore.common.reflection.bargain.BargainRegistry;
@@ -15,6 +16,8 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+
+import com.mojang.blaze3d.systems.RenderSystem;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -390,9 +393,6 @@ public class BargainConstellationScreen extends Screen {
         int centerX = width / 2 + (int) viewOffsetX;
         int centerY = height / 2 + (int) viewOffsetY;
 
-        int[] rgb = getSoulColor();
-
-        // Smooth animation with partialTick for 60fps fluidity
         float smoothBreath = soulBreath + (0.03f * partialTick);
         float smoothPulse = soulPulse + (0.08f * partialTick);
         float breath = (float) Math.sin(smoothBreath) * 0.05f + 1f;
@@ -400,9 +400,6 @@ public class BargainConstellationScreen extends Screen {
         int baseRadius = (int) (30 * zoom);
         int radius = (int) (baseRadius * breath * pulse);
 
-        int alpha = (int) (fadeAlpha * 255);
-
-        // Render ethereal flame aura BEHIND the soul orb
         int auraRadius = (int) (baseRadius * 1.8f * zoom);
         SoulAuraRenderer.render(
                 graphics.pose(),
@@ -412,63 +409,21 @@ public class BargainConstellationScreen extends Screen {
                 fadeAlpha * 0.8f,
                 width, height);
 
-        // Outer glow - use 4px steps
-        for (int r = radius + 30; r > radius; r -= 4) {
-            float glowProgress = (float) (r - radius) / 30f;
-            int glowAlpha = (int) ((1f - glowProgress) * 35 * fadeAlpha);
-            int color = (glowAlpha << 24) | (rgb[0] << 16) | (rgb[1] << 8) | rgb[2];
-            drawCircleFast(graphics, centerX, centerY, r, color);
-        }
-
-        // Core - use 3px steps
-        for (int r = radius; r > 0; r -= 3) {
-            float coreProgress = (float) r / radius;
-            int coreAlpha = (int) (alpha * (0.6f + 0.4f * coreProgress));
-            int lr = Math.min(255, rgb[0] + (int) ((255 - rgb[0]) * (1f - coreProgress) * 0.3f));
-            int lg = Math.min(255, rgb[1] + (int) ((255 - rgb[1]) * (1f - coreProgress) * 0.3f));
-            int lb = Math.min(255, rgb[2] + (int) ((255 - rgb[2]) * (1f - coreProgress) * 0.3f));
-            int color = (coreAlpha << 24) | (lr << 16) | (lg << 8) | lb;
-            drawCircleFast(graphics, centerX, centerY, r, color);
-        }
-    }
-
-    private void drawCircle(GuiGraphics graphics, int cx, int cy, int radius, int color) {
-        for (int y = -radius; y <= radius; y++) {
-            int halfWidth = (int) Math.sqrt(radius * radius - y * y);
-            graphics.fill(cx - halfWidth, cy + y, cx + halfWidth + 1, cy + y + 1, color);
-        }
-    }
-
-    private void drawCircleFast(GuiGraphics graphics, int cx, int cy, int radius, int color) {
-        if (radius <= 0) return;
-
-        // For small radii, use precise 1px drawing
-        if (radius <= 6) {
-            drawCircle(graphics, cx, cy, radius, color);
-            return;
-        }
-
-        // Use 2px bands for good quality
-        int bandSize = 2;
-
-        for (int y = -radius; y <= radius; y += bandSize) {
-            int halfWidth = (int) Math.sqrt(radius * radius - y * y);
-            int bandEnd = Math.min(y + bandSize, radius + 1);
-            graphics.fill(cx - halfWidth, cy + y, cx + halfWidth + 1, cy + bandEnd, color);
-        }
-    }
-
-    private int[] getSoulColor() {
-        int tier = ReflectionConstants.getSoulColorTier(erosion);
-        return switch (tier) {
-            case 0 -> new int[] { 220, 220, 235 };
-            case 1 -> new int[] { 180, 200, 255 };
-            case 2 -> new int[] { 140, 120, 220 };
-            case 3 -> new int[] { 180, 80, 160 };
-            case 4 -> new int[] { 160, 50, 50 };
-            case 5 -> new int[] { 80, 30, 30 };
-            default -> new int[] { 20, 10, 30 };
-        };
+        graphics.flush();
+        SoulCoreRenderer.render(
+                graphics.pose(),
+                centerX, centerY,
+                radius,
+                erosion,
+                fadeAlpha,
+                width, height);
+        SoulThreadsRenderer.render(
+                graphics.pose(),
+                centerX, centerY,
+                radius,
+                erosion,
+                fadeAlpha,
+                width, height);
     }
 
     private void renderDetailPanel(GuiGraphics graphics, int mouseX, int mouseY, float smoothPanelSlide) {
@@ -911,6 +866,9 @@ public class BargainConstellationScreen extends Screen {
 
     private static class BargainNode {
 
+        private static final ResourceLocation NODE_TEXTURE = new ResourceLocation("cosmiccore",
+                "textures/item/reflection_mirror.png");
+
         final Bargain bargain;
         final int centerX, centerY;
         final float orbitRadius;
@@ -1017,48 +975,65 @@ public class BargainConstellationScreen extends Screen {
         void render(GuiGraphics graphics, net.minecraft.client.gui.Font font, float fadeAlpha,
                     boolean hovered, boolean selected, int ticks, float zoom, float partialTick) {
             int[] rgb = getColor();
-            float radius = getRadius(zoom);
 
-            // Pulse effect for active/hovered - smooth with partialTick
             float pulse = 1f;
             if (state == NodeState.ACTIVE || hovered || selected) {
                 float smoothPulse = pulsePhase + (0.1f * partialTick);
                 pulse = 1f + (float) Math.sin(smoothPulse) * 0.15f;
             }
-            int renderRadius = (int) (radius * pulse);
 
-            // Alpha based on state
             float stateAlpha = switch (state) {
                 case ACTIVE -> 1f;
                 case AVAILABLE -> hovered ? 0.9f : 0.5f;
                 case SCARRED -> 0.3f;
             };
 
-            int alpha = (int) (fadeAlpha * stateAlpha * 255);
+            int sx = (int) screenX;
+            int sy = (int) screenY;
 
-            // Outer glow - only 3 bands instead of 8 for performance
-            if (state == NodeState.ACTIVE || hovered || selected) {
-                for (int r = renderRadius + 8; r > renderRadius; r -= 3) {
-                    float glowProgress = (float) (r - renderRadius) / 8f;
-                    int glowAlpha = (int) ((1f - glowProgress) * 60 * fadeAlpha * stateAlpha);
-                    int color = (glowAlpha << 24) | (rgb[0] << 16) | (rgb[1] << 8) | rgb[2];
-                    drawNodeCircle(graphics, (int) screenX, (int) screenY, r, color);
+            // Colored glow halo behind the texture
+            float glowIntensity = (state == NodeState.ACTIVE || hovered || selected) ? 0.4f : 0.15f;
+            int glowRadius = (int) (12 * zoom * pulse);
+            for (int r = glowRadius; r > 0; r -= 2) {
+                float t = (float) r / glowRadius;
+                int glowAlpha = (int) (fadeAlpha * stateAlpha * glowIntensity * (1f - t * t) * 255);
+                if (glowAlpha <= 0) continue;
+                int color = (glowAlpha << 24) | (rgb[0] << 16) | (rgb[1] << 8) | rgb[2];
+                for (int y = -r; y <= r; y += 2) {
+                    int halfW = (int) Math.sqrt(r * r - y * y);
+                    int bandEnd = Math.min(y + 2, r + 1);
+                    graphics.fill(sx - halfW, sy + y, sx + halfW + 1, sy + bandEnd, color);
                 }
             }
 
-            // Core
-            int coreColor = (alpha << 24) | (rgb[0] << 16) | (rgb[1] << 8) | rgb[2];
-            drawNodeCircle(graphics, (int) screenX, (int) screenY, renderRadius, coreColor);
+            // Mirror texture, tinted to bargain color
+            int texSize = (int) (16 * zoom * pulse);
+            int halfTex = texSize / 2;
+            float tintR = rgb[0] / 255f;
+            float tintG = rgb[1] / 255f;
+            float tintB = rgb[2] / 255f;
+            float tintA = fadeAlpha * stateAlpha;
 
-            // Selection ring - only 8 points instead of 12, smooth with partialTick
+            // Brighten the tint so the texture isn't too dark
+            float brighten = (state == NodeState.ACTIVE || hovered) ? 0.5f : 0.3f;
+            tintR = Math.min(1f, tintR + brighten);
+            tintG = Math.min(1f, tintG + brighten);
+            tintB = Math.min(1f, tintB + brighten);
+
+            RenderSystem.setShaderColor(tintR, tintG, tintB, tintA);
+            graphics.blit(NODE_TEXTURE, sx - halfTex, sy - halfTex, 0, 0, texSize, texSize, texSize, texSize);
+            RenderSystem.setShaderColor(1f, 1f, 1f, 1f);
+
+            // Selection ring
             if (selected) {
                 int ringAlpha = (int) (fadeAlpha * 200);
                 int ringColor = (ringAlpha << 24) | 0xFFFFFF;
                 float smoothTicks = ticks + partialTick;
                 for (int i = 0; i < 8; i++) {
                     float angle = (float) (2 * Math.PI * i / 8) + smoothTicks * 0.05f;
-                    int rx = (int) (screenX + Math.cos(angle) * (renderRadius + 5));
-                    int ry = (int) (screenY + Math.sin(angle) * (renderRadius + 5));
+                    int ringDist = halfTex + 4;
+                    int rx = (int) (screenX + Math.cos(angle) * ringDist);
+                    int ry = (int) (screenY + Math.sin(angle) * ringDist);
                     graphics.fill(rx, ry, rx + 2, ry + 2, ringColor);
                 }
             }
@@ -1070,17 +1045,10 @@ public class BargainConstellationScreen extends Screen {
                 Random crackRandom = new Random(bargain.getId().hashCode());
                 for (int i = 0; i < 3; i++) {
                     float crackAngle = crackRandom.nextFloat() * (float) Math.PI * 2;
-                    int cx = (int) (screenX + Math.cos(crackAngle) * radius * 0.5f);
-                    int cy = (int) (screenY + Math.sin(crackAngle) * radius * 0.5f);
+                    int cx = (int) (screenX + Math.cos(crackAngle) * halfTex * 0.6f);
+                    int cy = (int) (screenY + Math.sin(crackAngle) * halfTex * 0.6f);
                     graphics.fill(cx - 1, cy - 1, cx + 2, cy + 2, crackColor);
                 }
-            }
-        }
-
-        private void drawNodeCircle(GuiGraphics graphics, int cx, int cy, int radius, int color) {
-            for (int y = -radius; y <= radius; y++) {
-                int halfWidth = (int) Math.sqrt(radius * radius - y * y);
-                graphics.fill(cx - halfWidth, cy + y, cx + halfWidth + 1, cy + y + 1, color);
             }
         }
     }
