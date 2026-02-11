@@ -70,6 +70,8 @@ public class CosmicCore {
         bus.addGenericListener(MachineDefinition.class, this::registerMachines);
         bus.addGenericListener(SoundEntry.class, this::registerSounds);
         AdAstraEvents.EntityGravityEvent.register(GravityCoreBehavior::clampGravity);
+        AdAstraEvents.OxygenTickEvent
+                .register((level, entity) -> !(entity instanceof net.minecraft.world.entity.player.Player));
 
         CosmicLootModifiers.register(bus);
 

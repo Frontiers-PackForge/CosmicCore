@@ -31,7 +31,12 @@ public final class OxygenLogic {
 
     private OxygenLogic() {}
 
-    // Track the oxygen value at last HUD sync to calculate accurate rate (per-player)
+    private static final ThreadLocal<Boolean> CONSUME_BYPASS = ThreadLocal.withInitial(() -> false);
+
+    public static boolean isConsumeBypass() {
+        return CONSUME_BYPASS.get();
+    }
+
     private static final java.util.Map<java.util.UUID, Long> lastSyncOxygenValue = new java.util.concurrent.ConcurrentHashMap<>();
     private static final java.util.Map<java.util.UUID, Long> lastSyncGameTime = new java.util.concurrent.ConcurrentHashMap<>();
 
@@ -129,13 +134,8 @@ public final class OxygenLogic {
                 double remainder = drainAccum - drain; // Fractional part carries over
                 cap.setRegenBuffer(level.dimension(), -remainder); // Store negative to indicate drain mode
 
-                // Tanks can only be used with pressurized rebreather
-                int providedByTanks = 0;
-                if (rebreather == RebreatherType.PRESSURIZED) {
-                    providedByTanks = drainFromCarriedTanks(player, drain);
-                }
-                int cover = Math.min(providedByTanks, drain);
-                int remainingDrain = Math.max(0, drain - cover);
+                int provided = drainFromOxygenSources(player, drain, rebreather);
+                int remainingDrain = Math.max(0, drain - provided);
 
                 long next = current - remainingDrain;
                 next = Math.max(0, Math.min(playerMaxOxygen, next));
@@ -260,25 +260,23 @@ public final class OxygenLogic {
 
     /**
      * Drain oxygen from all available sources.
-     * Priority: Space suit chestplate > Ad Astra suit > Curios back slot
-     * Note: Tanks in inventory do NOT work - must be equipped in Curios back slot
+     * Priority: Space suit chestplate > Ad Astra suit > Curios back slot tanks
+     * Suits always provide protection. Tanks require pressurized rebreather.
      */
-    private static int drainFromCarriedTanks(ServerPlayer player, int requestTicks) {
+    private static int drainFromOxygenSources(ServerPlayer player, int requestTicks, RebreatherType rebreather) {
         if (requestTicks <= 0) return 0;
 
         int remaining = requestTicks;
 
-        // 1. Check CosmicCore space suit chestplate first (highest priority)
         remaining = drainFromSpaceSuit(player, remaining);
         if (remaining <= 0) return requestTicks;
 
-        // 2. Check vanilla Ad Astra space suit
         remaining = drainFromAdAstraSuit(player, remaining);
         if (remaining <= 0) return requestTicks;
 
-        // 3. Check Curios back slot (oxygen tanks worn on back)
-        // Tanks MUST be equipped in Curios back slot to work - inventory tanks are ignored
-        remaining = drainFromCuriosBackSlot(player, remaining);
+        if (rebreather == RebreatherType.PRESSURIZED) {
+            remaining = drainFromCuriosBackSlot(player, remaining);
+        }
 
         return requestTicks - remaining;
     }
@@ -330,10 +328,6 @@ public final class OxygenLogic {
         return suit.hasOxygen(player) ? 0 : requestTicks;
     }
 
-    /**
-     * Drain from vanilla Ad Astra SpaceSuitItem.
-     * Consumes 1 mB every SPACE_SUIT_TICKS_PER_MB game ticks to slow drain rate.
-     */
     private static int drainFromAdAstraSuit(ServerPlayer player, int requestTicks) {
         if (requestTicks <= 0) return 0;
 
@@ -343,12 +337,15 @@ public final class OxygenLogic {
 
         if (!SpaceSuitItem.hasOxygen(player)) return requestTicks;
 
-        // Only drain 1 mB every SPACE_SUIT_TICKS_PER_MB game ticks
         if ((player.serverLevel().getGameTime() % SPACE_SUIT_TICKS_PER_MB) == 0) {
-            suit.consumeOxygen(chestStack, 1);
+            CONSUME_BYPASS.set(true);
+            try {
+                suit.consumeOxygen(chestStack, 1);
+            } finally {
+                CONSUME_BYPASS.set(false);
+            }
         }
 
-        // Return 0 remaining if suit still has oxygen
         return SpaceSuitItem.hasOxygen(player) ? 0 : requestTicks;
     }
 

@@ -1,8 +1,5 @@
 package com.ghostipedia.cosmiccore.common.item.behavior;
 
-import com.ghostipedia.cosmiccore.client.gui.SprayCanScreen;
-import com.ghostipedia.cosmiccore.common.data.CosmicSounds;
-
 import com.gregtechceu.gtceu.GTCEu;
 import com.gregtechceu.gtceu.api.GTValues;
 import com.gregtechceu.gtceu.api.blockentity.IPaintable;
@@ -16,9 +13,6 @@ import com.gregtechceu.gtceu.data.recipe.CustomTags;
 import com.gregtechceu.gtceu.utils.BreadthFirstBlockSearch;
 
 import net.minecraft.ChatFormatting;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.screens.Screen;
-import net.minecraft.client.resources.sounds.SimpleSoundInstance;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -93,15 +87,11 @@ public class InfiniteSprayCanBehavior implements IInteractionItem, IAddInformati
 
     @Override
     public InteractionResultHolder<ItemStack> use(Item item, Level level, Player player, InteractionHand usedHand) {
-        if (level.isClientSide && Screen.hasShiftDown()) {
-            openScreen(player);
+        if (level.isClientSide && player.isShiftKeyDown()) {
+            SprayCanClientHandler.openScreen(player, this);
             return InteractionResultHolder.success(player.getItemInHand(usedHand));
         }
         return InteractionResultHolder.pass(player.getItemInHand(usedHand));
-    }
-
-    private void openScreen(Player player) {
-        Minecraft.getInstance().setScreen(new SprayCanScreen(player, this));
     }
 
     @Override
@@ -134,8 +124,7 @@ public class InfiniteSprayCanBehavior implements IInteractionItem, IAddInformati
             this.color = ExtendedDyeColor.values()[nextColor];
             sendColorToTag(player, this.color);
             if (player.level().isClientSide) {
-                Minecraft.getInstance().getSoundManager().play(
-                        SimpleSoundInstance.forUI(CosmicSounds.SHAKE_CAN.getMainEvent(), 1.0f, 1.0f));
+                SprayCanClientHandler.playShakeSound();
             }
         } else {
             player.displayClientMessage(Component.translatable("cosmiccore.item.spraycan.locked")
