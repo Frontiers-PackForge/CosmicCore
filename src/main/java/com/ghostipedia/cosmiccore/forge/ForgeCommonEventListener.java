@@ -2,6 +2,7 @@ package com.ghostipedia.cosmiccore.forge;
 
 import com.ghostipedia.cosmiccore.CosmicCore;
 import com.ghostipedia.cosmiccore.CosmicUtils;
+import com.ghostipedia.cosmiccore.common.commands.ExportRegistryCommand;
 import com.ghostipedia.cosmiccore.common.commands.SoulCommand;
 import com.ghostipedia.cosmiccore.common.commands.VeinSurveyCommand;
 import com.ghostipedia.cosmiccore.common.commands.WirelessEnergyCommand;
@@ -123,6 +124,7 @@ public class ForgeCommonEventListener {
         ReflectionCommand.register(event.getDispatcher());
         ReflectionCommands.register(event.getDispatcher());
         VeinSurveyCommand.register(event.getDispatcher());
+        ExportRegistryCommand.register(event.getDispatcher());
     }
 
     /**
