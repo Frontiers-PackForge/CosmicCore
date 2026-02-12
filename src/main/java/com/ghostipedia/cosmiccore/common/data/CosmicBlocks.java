@@ -229,6 +229,17 @@ public class CosmicBlocks {
             "soul_muted_casing",
             CosmicCore.id("block/casings/solid/soul_muted_casing"));
 
+    // Blood Magic replacement blocks
+    public static final BlockEntry<Block> BLANK_RUNE = createCasingBlock(
+            "blank_rune",
+            CosmicCore.id("block/casings/solid/soul_muted_casing"));
+    public static final BlockEntry<Block> RITUAL_STONE = createCasingBlock(
+            "ritual_stone",
+            CosmicCore.id("block/casings/solid/soul_muted_casing"));
+    public static final BlockEntry<Block> LIGHT_RITUAL_STONE = createCasingBlock(
+            "light_ritual_stone",
+            CosmicCore.id("block/casings/solid/soul_muted_casing"));
+
     // Star Ladder Casings
 
     public static final BlockEntry<Block> SUPERHEAVY_STEEL_CASING = createCasingBlock(

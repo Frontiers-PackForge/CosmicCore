@@ -18,7 +18,7 @@
       "model": {
         "parent": "gtceu:block/machine/template/cube_all/sided",
         "textures": {
-          "all": "bloodmagic:block/blankrune",
+          "all": "cosmiccore:block/casings/solid/soul_muted_casing",
           "overlay_front": "gtceu:block/multiblock/network_switch/overlay_front",
           "overlay_front_emissive": "gtceu:block/multiblock/network_switch/overlay_front_emissive"
         }
@@ -28,7 +28,7 @@
       "model": {
         "parent": "gtceu:block/machine/template/cube_all/sided",
         "textures": {
-          "all": "bloodmagic:block/blankrune",
+          "all": "cosmiccore:block/casings/solid/soul_muted_casing",
           "overlay_front": "gtceu:block/multiblock/network_switch/overlay_front",
           "overlay_front_emissive": "gtceu:block/multiblock/network_switch/overlay_front_emissive"
         }
@@ -38,7 +38,7 @@
       "model": {
         "parent": "gtceu:block/machine/template/cube_all/sided",
         "textures": {
-          "all": "bloodmagic:block/blankrune",
+          "all": "cosmiccore:block/casings/solid/soul_muted_casing",
           "overlay_front": "gtceu:block/multiblock/network_switch/overlay_front_active",
           "overlay_front_emissive": "gtceu:block/multiblock/network_switch/overlay_front_active_emissive"
         }
@@ -48,7 +48,7 @@
       "model": {
         "parent": "gtceu:block/machine/template/cube_all/sided",
         "textures": {
-          "all": "bloodmagic:block/blankrune",
+          "all": "cosmiccore:block/casings/solid/soul_muted_casing",
           "overlay_front": "gtceu:block/multiblock/network_switch/overlay_front_active",
           "overlay_front_emissive": "gtceu:block/multiblock/network_switch/overlay_front_active_emissive"
         }
@@ -58,7 +58,7 @@
       "model": {
         "parent": "gtceu:block/machine/template/cube_all/sided",
         "textures": {
-          "all": "bloodmagic:block/blankrune",
+          "all": "cosmiccore:block/casings/solid/soul_muted_casing",
           "overlay_front": "gtceu:block/multiblock/network_switch/overlay_front",
           "overlay_front_emissive": "gtceu:block/multiblock/network_switch/overlay_front_emissive"
         }
@@ -68,7 +68,7 @@
       "model": {
         "parent": "gtceu:block/machine/template/cube_all/sided",
         "textures": {
-          "all": "bloodmagic:block/blankrune",
+          "all": "cosmiccore:block/casings/solid/soul_muted_casing",
           "overlay_front": "gtceu:block/multiblock/network_switch/overlay_front",
           "overlay_front_emissive": "gtceu:block/multiblock/network_switch/overlay_front_emissive"
         }
@@ -78,7 +78,7 @@
       "model": {
         "parent": "gtceu:block/machine/template/cube_all/sided",
         "textures": {
-          "all": "bloodmagic:block/blankrune",
+          "all": "cosmiccore:block/casings/solid/soul_muted_casing",
           "overlay_front": "gtceu:block/multiblock/network_switch/overlay_front_active",
           "overlay_front_emissive": "gtceu:block/multiblock/network_switch/overlay_front_active_emissive"
         }
@@ -88,7 +88,7 @@
       "model": {
         "parent": "gtceu:block/machine/template/cube_all/sided",
         "textures": {
-          "all": "bloodmagic:block/blankrune",
+          "all": "cosmiccore:block/casings/solid/soul_muted_casing",
           "overlay_front": "gtceu:block/multiblock/network_switch/overlay_front_active",
           "overlay_front_emissive": "gtceu:block/multiblock/network_switch/overlay_front_active_emissive"
         }

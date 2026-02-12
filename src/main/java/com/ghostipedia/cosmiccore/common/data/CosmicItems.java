@@ -71,9 +71,6 @@ import com.tterrag.registrate.util.nullness.NonNullConsumer;
 import earth.terrarium.adastra.common.items.rendered.RenderedBlockItem;
 import earth.terrarium.adastra.common.tags.ModItemTags;
 import team.lodestar.lodestone.systems.easing.Easing;
-import wayoftime.bloodmagic.common.item.BloodOrb;
-import wayoftime.bloodmagic.common.item.ItemBloodOrb;
-import wayoftime.bloodmagic.common.registration.impl.BloodOrbRegistryObject;
 
 import java.awt.*;
 import java.util.function.Function;
@@ -84,32 +81,15 @@ import static com.gregtechceu.gtceu.common.data.GTItems.attach;
 import static com.sammy.malum.registry.common.SpiritTypeRegistry.SPIRITS;
 import static com.sammy.malum.registry.common.item.ItemTiers.ItemTierEnum.SOUL_STAINED_STEEL;
 import static earth.terrarium.adastra.common.registry.ModItems.GLOBES;
-import static wayoftime.bloodmagic.common.item.BloodMagicItems.BLOOD_ORBS;
 
 public class CosmicItems {
-
-    public static final BloodOrbRegistryObject<BloodOrb> ORB_ASCENDANT;
-    public static final BloodOrbRegistryObject<BloodOrb> ORB_VOIDSENT;
-    public static final BloodOrbRegistryObject<BloodOrb> ORB_SOVEREIGN;
 
     public static final RegistryEntry<Item> SUN_GLOBE = GLOBES.register("sun_globe",
             () -> new RenderedBlockItem(CosmicBlocks.SUN_GLOBE.get(),
                     new Item.Properties().stacksTo(1).rarity(Rarity.RARE)));
     static {
         CosmicRegistration.REGISTRATE.creativeModeTab(() -> CosmicCreativeModeTabs.COSMIC_CORE);
-        ORB_ASCENDANT = BLOOD_ORBS.register("ascendantbloodorb", () -> {
-            return new BloodOrb(new ResourceLocation("bloodmagic", "ascendantbloodorb"), 6, 25000000, 1000);
-        });
-        ORB_VOIDSENT = BLOOD_ORBS.register("voidsentbloodorb", () -> {
-            return new BloodOrb(new ResourceLocation("bloodmagic", "voidsentbloodorb"), 7, 50000000, 1000);
-        });
-        ORB_SOVEREIGN = BLOOD_ORBS.register("sovereignbloodorb", () -> {
-            return new BloodOrb(new ResourceLocation("bloodmagic", "sovereignbloodorb"), 8, 100000000, 10000);
-        });
     }
-
-    public static final CosmicBloodOrbDeferredRegister COSMIC_BLOOD_ORBS = new CosmicBloodOrbDeferredRegister(
-            "cosmiccore");
     // Modules
 
     public static final ItemEntry<SoulNetworkReaderItem> SOUL_READER = REGISTRATE
@@ -175,14 +155,6 @@ public class CosmicItems {
             MALICE_SPIRIT_ITEM)
             .setItemColor(SpiritVisualMotif::getPrimaryColor)
             .build());
-    //
-    // public static final ItemEntry<ItemBloodOrb> ITEM_ORB_SOVEREIGN = REGISTRATE
-    // .item("sov_blood_orb", (p) -> new ItemBloodOrb(ORB_SOVEREIGN))
-    // .lang("Sovereign Blood Orb")
-    // .properties(p -> p.stacksTo(1))
-    // .defaultModel()
-    // .register();
-
     public static final ItemEntry<ComponentItem> PROD_MOD_1 = REGISTRATE.item("prod_mod_1", ComponentItem::create)
             .lang("Productivity Module Mk.1")
             .properties(p -> p.stacksTo(1))
@@ -729,25 +701,6 @@ public class CosmicItems {
             .item("fiber_mesh_ingot_frame", ComponentItem::create)
             .lang("Fiber Mesh Ingot Frame")
             .properties(p -> p.stacksTo(64))
-            .defaultModel()
-            .register();
-
-    public static final ItemEntry<ItemBloodOrb> ITEM_ORB_ASCENDANT = REGISTRATE
-            .item("asc_blood_orb", (p) -> new ItemBloodOrb(ORB_ASCENDANT))
-            .lang("Ascendant Blood Orb")
-            .properties(p -> p.stacksTo(1))
-            .defaultModel()
-            .register();
-    public static final ItemEntry<ItemBloodOrb> ITEM_ORB_VOIDSENT = REGISTRATE
-            .item("void_blood_orb", (p) -> new ItemBloodOrb(ORB_VOIDSENT))
-            .lang("Voidsent Blood Orb")
-            .properties(p -> p.stacksTo(1))
-            .defaultModel()
-            .register();
-    public static final ItemEntry<ItemBloodOrb> ITEM_ORB_SOVEREIGN = REGISTRATE
-            .item("sov_blood_orb", (p) -> new ItemBloodOrb(ORB_SOVEREIGN))
-            .lang("Sovereign Blood Orb")
-            .properties(p -> p.stacksTo(1))
             .defaultModel()
             .register();
 
@@ -2849,6 +2802,214 @@ public class CosmicItems {
             .onRegister(attach(
                     ElectricStats.createElectricItem(1_600_000L, GTValues.HV),
                     new VeinSurveyBehavior(2000, GTValues.V[GTValues.HV] * 4, VeinSurveyBehavior.DetailLevel.PRECISE)))
+            .defaultModel()
+            .register();
+
+    // Oneiric Signets — non-consumed gate items (Blood Orb replacement)
+    public static final ItemEntry<ComponentItem> ONEIRIC_SIGNET_T1 = REGISTRATE
+            .item("oneiric_signet_t1", ComponentItem::create)
+            .lang("Oneiric Signet Mk.I")
+            .properties(p -> p.stacksTo(1))
+            .defaultModel()
+            .register();
+    public static final ItemEntry<ComponentItem> ONEIRIC_SIGNET_T2 = REGISTRATE
+            .item("oneiric_signet_t2", ComponentItem::create)
+            .lang("Oneiric Signet Mk.II")
+            .properties(p -> p.stacksTo(1))
+            .defaultModel()
+            .register();
+    public static final ItemEntry<ComponentItem> ONEIRIC_SIGNET_T3 = REGISTRATE
+            .item("oneiric_signet_t3", ComponentItem::create)
+            .lang("Oneiric Signet Mk.III")
+            .properties(p -> p.stacksTo(1))
+            .defaultModel()
+            .register();
+    public static final ItemEntry<ComponentItem> ONEIRIC_SIGNET_T4 = REGISTRATE
+            .item("oneiric_signet_t4", ComponentItem::create)
+            .lang("Oneiric Signet Mk.IV")
+            .properties(p -> p.stacksTo(1))
+            .defaultModel()
+            .register();
+    public static final ItemEntry<ComponentItem> ONEIRIC_SIGNET_T5 = REGISTRATE
+            .item("oneiric_signet_t5", ComponentItem::create)
+            .lang("Oneiric Signet Mk.V")
+            .properties(p -> p.stacksTo(1))
+            .defaultModel()
+            .register();
+
+    // Soul Motes — tiered crafting ingredients (Slate replacement)
+    public static final ItemEntry<ComponentItem> FAINT_MOTE = REGISTRATE
+            .item("faint_mote", ComponentItem::create)
+            .lang("Faint Mote")
+            .properties(p -> p.stacksTo(64))
+            .defaultModel()
+            .register();
+    public static final ItemEntry<ComponentItem> DIM_MOTE = REGISTRATE
+            .item("dim_mote", ComponentItem::create)
+            .lang("Dim Mote")
+            .properties(p -> p.stacksTo(64))
+            .defaultModel()
+            .register();
+    public static final ItemEntry<ComponentItem> PALE_MOTE = REGISTRATE
+            .item("pale_mote", ComponentItem::create)
+            .lang("Pale Mote")
+            .properties(p -> p.stacksTo(64))
+            .defaultModel()
+            .register();
+    public static final ItemEntry<ComponentItem> CLEAR_MOTE = REGISTRATE
+            .item("clear_mote", ComponentItem::create)
+            .lang("Clear Mote")
+            .properties(p -> p.stacksTo(64))
+            .defaultModel()
+            .register();
+    public static final ItemEntry<ComponentItem> BRIGHT_MOTE = REGISTRATE
+            .item("bright_mote", ComponentItem::create)
+            .lang("Bright Mote")
+            .properties(p -> p.stacksTo(64))
+            .defaultModel()
+            .register();
+    public static final ItemEntry<ComponentItem> RADIANT_MOTE = REGISTRATE
+            .item("radiant_mote", ComponentItem::create)
+            .lang("Radiant Mote")
+            .properties(p -> p.stacksTo(64))
+            .defaultModel()
+            .register();
+    public static final ItemEntry<ComponentItem> VIVID_MOTE = REGISTRATE
+            .item("vivid_mote", ComponentItem::create)
+            .lang("Vivid Mote")
+            .properties(p -> p.stacksTo(64))
+            .defaultModel()
+            .register();
+    public static final ItemEntry<ComponentItem> BLAZING_MOTE = REGISTRATE
+            .item("blazing_mote", ComponentItem::create)
+            .lang("Blazing Mote")
+            .properties(p -> p.stacksTo(64))
+            .defaultModel()
+            .register();
+    public static final ItemEntry<ComponentItem> INCANDESCENT_MOTE = REGISTRATE
+            .item("incandescent_mote", ComponentItem::create)
+            .lang("Incandescent Mote")
+            .properties(p -> p.stacksTo(64))
+            .defaultModel()
+            .register();
+    public static final ItemEntry<ComponentItem> TRANSCENDENT_MOTE = REGISTRATE
+            .item("transcendent_mote", ComponentItem::create)
+            .lang("Transcendent Mote")
+            .properties(p -> p.stacksTo(64))
+            .defaultModel()
+            .register();
+
+    // Wrapped Soul Motes — intermediate crafting step between mote tiers
+    public static final ItemEntry<ComponentItem> WRAPPED_FAINT_MOTE = REGISTRATE
+            .item("wrapped_faint_mote", ComponentItem::create)
+            .lang("Wrapped Faint Mote")
+            .properties(p -> p.stacksTo(64))
+            .defaultModel()
+            .register();
+    public static final ItemEntry<ComponentItem> WRAPPED_DIM_MOTE = REGISTRATE
+            .item("wrapped_dim_mote", ComponentItem::create)
+            .lang("Wrapped Dim Mote")
+            .properties(p -> p.stacksTo(64))
+            .defaultModel()
+            .register();
+    public static final ItemEntry<ComponentItem> WRAPPED_PALE_MOTE = REGISTRATE
+            .item("wrapped_pale_mote", ComponentItem::create)
+            .lang("Wrapped Pale Mote")
+            .properties(p -> p.stacksTo(64))
+            .defaultModel()
+            .register();
+    public static final ItemEntry<ComponentItem> WRAPPED_CLEAR_MOTE = REGISTRATE
+            .item("wrapped_clear_mote", ComponentItem::create)
+            .lang("Wrapped Clear Mote")
+            .properties(p -> p.stacksTo(64))
+            .defaultModel()
+            .register();
+    public static final ItemEntry<ComponentItem> WRAPPED_BRIGHT_MOTE = REGISTRATE
+            .item("wrapped_bright_mote", ComponentItem::create)
+            .lang("Wrapped Bright Mote")
+            .properties(p -> p.stacksTo(64))
+            .defaultModel()
+            .register();
+    public static final ItemEntry<ComponentItem> WRAPPED_RADIANT_MOTE = REGISTRATE
+            .item("wrapped_radiant_mote", ComponentItem::create)
+            .lang("Wrapped Radiant Mote")
+            .properties(p -> p.stacksTo(64))
+            .defaultModel()
+            .register();
+    public static final ItemEntry<ComponentItem> WRAPPED_VIVID_MOTE = REGISTRATE
+            .item("wrapped_vivid_mote", ComponentItem::create)
+            .lang("Wrapped Vivid Mote")
+            .properties(p -> p.stacksTo(64))
+            .defaultModel()
+            .register();
+    public static final ItemEntry<ComponentItem> WRAPPED_BLAZING_MOTE = REGISTRATE
+            .item("wrapped_blazing_mote", ComponentItem::create)
+            .lang("Wrapped Blazing Mote")
+            .properties(p -> p.stacksTo(64))
+            .defaultModel()
+            .register();
+    public static final ItemEntry<ComponentItem> WRAPPED_INCANDESCENT_MOTE = REGISTRATE
+            .item("wrapped_incandescent_mote", ComponentItem::create)
+            .lang("Wrapped Incandescent Mote")
+            .properties(p -> p.stacksTo(64))
+            .defaultModel()
+            .register();
+    public static final ItemEntry<ComponentItem> WRAPPED_TRANSCENDENT_MOTE = REGISTRATE
+            .item("wrapped_transcendent_mote", ComponentItem::create)
+            .lang("Wrapped Transcendent Mote")
+            .properties(p -> p.stacksTo(64))
+            .defaultModel()
+            .register();
+
+    // Soul Reagents — BM reagent replacements
+    public static final ItemEntry<ComponentItem> SOMNOLENT_DEW = REGISTRATE
+            .item("somnolent_dew", ComponentItem::create)
+            .lang("Somnolent Dew")
+            .properties(p -> p.stacksTo(64))
+            .defaultModel()
+            .register();
+    public static final ItemEntry<ComponentItem> PYRETIC_ICHOR = REGISTRATE
+            .item("pyretic_ichor", ComponentItem::create)
+            .lang("Pyretic Ichor")
+            .properties(p -> p.stacksTo(64))
+            .defaultModel()
+            .register();
+    public static final ItemEntry<ComponentItem> ETHER_WISP = REGISTRATE
+            .item("ether_wisp", ComponentItem::create)
+            .lang("Ether Wisp")
+            .properties(p -> p.stacksTo(64))
+            .defaultModel()
+            .register();
+    public static final ItemEntry<ComponentItem> VERDANT_ANIMA = REGISTRATE
+            .item("verdant_anima", ComponentItem::create)
+            .lang("Verdant Anima")
+            .properties(p -> p.stacksTo(64))
+            .defaultModel()
+            .register();
+    public static final ItemEntry<ComponentItem> TETHERING_RESIN = REGISTRATE
+            .item("tethering_resin", ComponentItem::create)
+            .lang("Tethering Resin")
+            .properties(p -> p.stacksTo(64))
+            .defaultModel()
+            .register();
+    public static final ItemEntry<ComponentItem> STASIS_BRINE = REGISTRATE
+            .item("stasis_brine", ComponentItem::create)
+            .lang("Stasis Brine")
+            .properties(p -> p.stacksTo(64))
+            .defaultModel()
+            .register();
+
+    // Tau items — BM tau replacements
+    public static final ItemEntry<ComponentItem> TAU_OIL = REGISTRATE
+            .item("tau_oil", ComponentItem::create)
+            .lang("Tau Oil")
+            .properties(p -> p.stacksTo(64))
+            .defaultModel()
+            .register();
+    public static final ItemEntry<ComponentItem> TAU_FRUIT = REGISTRATE
+            .item("tau_fruit", ComponentItem::create)
+            .lang("Tau Fruit")
+            .properties(p -> p.stacksTo(64))
             .defaultModel()
             .register();
 

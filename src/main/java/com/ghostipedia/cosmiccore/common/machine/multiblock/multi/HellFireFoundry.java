@@ -14,17 +14,15 @@ import com.gregtechceu.gtceu.api.pattern.Predicates;
 import com.gregtechceu.gtceu.api.recipe.OverclockingLogic;
 import com.gregtechceu.gtceu.common.data.GTRecipeModifiers;
 
-import wayoftime.bloodmagic.BloodMagic;
-
 import static com.ghostipedia.cosmiccore.api.machine.part.CosmicPartAbility.IMPORT_SOUL;
 import static com.ghostipedia.cosmiccore.api.registries.CosmicRegistration.REGISTRATE;
+import static com.ghostipedia.cosmiccore.common.data.CosmicBlocks.BLANK_RUNE;
 import static com.ghostipedia.cosmiccore.common.data.CosmicBlocks.HIGHLY_CONDUCTIVE_FISSION_CASING;
 import static com.ghostipedia.cosmiccore.common.data.datagen.CosmicMachineModels.createSeparateControllerCasingMachineModel;
 import static com.gregtechceu.gtceu.api.pattern.Predicates.*;
 import static com.gregtechceu.gtceu.common.data.GTRecipeModifiers.BATCH_MODE;
 import static com.gregtechceu.gtceu.common.data.GTRecipeModifiers.ELECTRIC_OVERCLOCK;
 import static com.klikli_dev.occultism.registry.OccultismBlocks.IESNIUM_BLOCK;
-import static wayoftime.bloodmagic.common.block.BloodMagicBlocks.BLANK_RUNE;
 
 public class HellFireFoundry {
 
@@ -57,7 +55,7 @@ public class HellFireFoundry {
                     .where('C', blocks(IESNIUM_BLOCK.get()))
                     .build())
             .model(createSeparateControllerCasingMachineModel(
-                    BloodMagic.rl("block/blankrune"),
+                    CosmicCore.id("block/casings/solid/soul_muted_casing"),
                     CosmicCore.id("block/casings/solid/highly_conductive_fission_casing"),
                     GTCEu.id("block/multiblock/network_switch"))
                     .andThen(model -> model

@@ -35,8 +35,6 @@ public class SoulNetwork implements INBTSerializable<CompoundTag> {
             if (dirtyCallback != null) dirtyCallback.run();
         }
 
-        System.out.println(this);
-
         return stack.withAmount(amountToAdd);
     }
 
