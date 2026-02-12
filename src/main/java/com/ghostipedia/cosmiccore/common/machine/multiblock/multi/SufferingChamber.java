@@ -1,5 +1,6 @@
 package com.ghostipedia.cosmiccore.common.machine.multiblock.multi;
 
+import com.ghostipedia.cosmiccore.CosmicCore;
 import com.ghostipedia.cosmiccore.client.renderer.machine.CosmicDynamicRenderHelpers;
 import com.ghostipedia.cosmiccore.gtbridge.CosmicRecipeTypes;
 
@@ -13,16 +14,13 @@ import com.gregtechceu.gtceu.api.pattern.Predicates;
 import com.gregtechceu.gtceu.api.recipe.OverclockingLogic;
 import com.gregtechceu.gtceu.common.data.GTRecipeModifiers;
 
-import wayoftime.bloodmagic.BloodMagic;
-import wayoftime.bloodmagic.common.block.BloodMagicBlocks;
-
 import static com.ghostipedia.cosmiccore.api.machine.part.CosmicPartAbility.EXPORT_SOUL;
 import static com.ghostipedia.cosmiccore.api.registries.CosmicRegistration.REGISTRATE;
+import static com.ghostipedia.cosmiccore.common.data.CosmicBlocks.*;
 import static com.ghostipedia.cosmiccore.common.data.datagen.CosmicMachineModels.createSeparateControllerCasingMachineModel;
 import static com.gregtechceu.gtceu.api.pattern.Predicates.*;
 import static com.gregtechceu.gtceu.common.data.GCYMBlocks.CASING_STRESS_PROOF;
 import static com.gregtechceu.gtceu.common.data.GTRecipeModifiers.ELECTRIC_OVERCLOCK;
-import static wayoftime.bloodmagic.common.block.BloodMagicBlocks.BLANK_RUNE;
 
 public class SufferingChamber {
 
@@ -53,16 +51,16 @@ public class SufferingChamber {
                             .or(autoAbilities(CosmicRecipeTypes.SUFFERING_CHAMBER))
                             .or(abilities(PartAbility.INPUT_ENERGY).setExactLimit(1)))
                     .where('B', blocks(BLANK_RUNE.get()))
-                    .where('D', blocks(BloodMagicBlocks.WATER_RITUAL_STONE.get()))
-                    .where('E', blocks(BloodMagicBlocks.AIR_RITUAL_STONE.get()))
-                    .where('F', blocks(BloodMagicBlocks.DUSK_RITUAL_STONE.get()))
-                    .where('G', blocks(BloodMagicBlocks.FIRE_RITUAL_STONE.get()))
-                    .where('H', blocks(BloodMagicBlocks.EARTH_RITUAL_STONE.get()))
-                    .where('I', blocks(BloodMagicBlocks.MASTER_RITUAL_STONE.get()))
+                    .where('D', blocks(RITUAL_STONE.get()))
+                    .where('E', blocks(LIGHT_RITUAL_STONE.get()))
+                    .where('F', blocks(RITUAL_STONE.get()))
+                    .where('G', blocks(LIGHT_RITUAL_STONE.get()))
+                    .where('H', blocks(RITUAL_STONE.get()))
+                    .where('I', blocks(LIGHT_RITUAL_STONE.get()))
                     .where('X', abilities(EXPORT_SOUL).setMinGlobalLimited(1, 1).setMaxGlobalLimited(1))
                     .build())
             // spotless:on
-            .model(createSeparateControllerCasingMachineModel(BloodMagic.rl("block/blankrune"),
+            .model(createSeparateControllerCasingMachineModel(CosmicCore.id("block/casings/solid/soul_muted_casing"),
                     GTCEu.id("block/casings/gcym/stress_proof_casing"),
                     GTCEu.id("block/multiblock/network_switch"))
                     .andThen(model -> model

@@ -14,9 +14,6 @@ import com.gregtechceu.gtceu.api.pattern.Predicates;
 import com.gregtechceu.gtceu.api.recipe.OverclockingLogic;
 import com.gregtechceu.gtceu.common.data.GTRecipeModifiers;
 
-import wayoftime.bloodmagic.BloodMagic;
-import wayoftime.bloodmagic.common.block.BloodMagicBlocks;
-
 import static com.ghostipedia.cosmiccore.api.machine.part.CosmicPartAbility.IMPORT_SOUL;
 import static com.ghostipedia.cosmiccore.api.registries.CosmicRegistration.REGISTRATE;
 import static com.ghostipedia.cosmiccore.common.data.CosmicBlocks.*;
@@ -50,9 +47,9 @@ public class HemophagicTransfuser {
                     .aisle("AAAA   AAAA", "A  AAQAA  A", "A         A", "AA       AA", " A       A ", " A       A ", " A       A ", "AA       AA", "A         A", "A  AAAAA  A", "AAAA   AAAA")
                     .where(' ', any())
                     .where('Q', controller(blocks(definition.getBlock())))
-                    .where('A', blocks(BloodMagicBlocks.BLANK_RUNE.get()))
-                    .where('B', blocks(BloodMagicBlocks.DAWN_RITUAL_STONE.get()))
-                    .where('C', blocks(BloodMagicBlocks.DUSK_RITUAL_STONE.get()))
+                    .where('A', blocks(BLANK_RUNE.get()))
+                    .where('B', blocks(RITUAL_STONE.get()))
+                    .where('C', blocks(LIGHT_RITUAL_STONE.get()))
                     .where('F', blocks(CASING_STRESS_PROOF.get()))
                     .where('E', blocks(CASING_STRESS_PROOF.get()))
                     .where('D', blocks(CYCLOZINE_CHEMICALLY_REPELLING_CASING.get()).setMinGlobalLimited(28)
@@ -70,7 +67,7 @@ public class HemophagicTransfuser {
                             .or(abilities(IMPORT_SOUL)))
                     .build())
             // spotless:on
-            .model(createSeparateControllerCasingMachineModel(BloodMagic.rl("block/blankrune"),
+            .model(createSeparateControllerCasingMachineModel(CosmicCore.id("block/casings/solid/soul_muted_casing"),
                     CosmicCore.id("block/casings/solid/vomahine_certified_chemically_resistant_casing"),
                     GTCEu.id("block/multiblock/network_switch"))
                     .andThen(model -> model

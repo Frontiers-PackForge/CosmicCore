@@ -75,9 +75,6 @@ dependencies {
     modImplementation(forge.botarium)
     modImplementation(forge.adAstra)
 
-    // Blood Magic
-    modImplementation(forge.bloodMagic)
-
     // Create
     modImplementation(forge.create)
     modImplementation(forge.flywheel)

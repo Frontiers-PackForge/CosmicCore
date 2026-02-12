@@ -1,7 +1,11 @@
 package com.ghostipedia.cosmiccore.common.item.armor;
 
 import com.ghostipedia.cosmiccore.CosmicCore;
+import com.ghostipedia.cosmiccore.api.capability.souls.SoulType;
+import com.ghostipedia.cosmiccore.api.data.souls.SoulNetwork;
+import com.ghostipedia.cosmiccore.api.data.souls.SoulNetworkSavedData;
 import com.ghostipedia.cosmiccore.api.item.armor.AdvancedQuarkTechSpaceSuite;
+import com.ghostipedia.cosmiccore.api.recipe.ingredient.SoulStack;
 
 import com.gregtechceu.gtceu.api.capability.GTCapabilityHelper;
 import com.gregtechceu.gtceu.api.capability.IElectricItem;
@@ -19,6 +23,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.protocol.game.ClientboundPlayerAbilitiesPacket;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
@@ -35,9 +40,6 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 
 import com.mojang.datafixers.util.Pair;
 import it.unimi.dsi.fastutil.ints.IntList;
-import wayoftime.bloodmagic.core.data.SoulNetwork;
-import wayoftime.bloodmagic.core.data.SoulTicket;
-import wayoftime.bloodmagic.util.helper.NetworkHelper;
 
 import java.util.List;
 
@@ -181,19 +183,26 @@ public class ChestSanguineWarptechSuite extends AdvancedQuarkTechSpaceSuite {
             performFlying(player, jetpackEnabled, false, item);
         }
 
-        // Sanguine shield, update every 10 seconds
+        // Sanguine shield, update every second
         if (!world.isClientSide && timer % (20 * SECONDS_PER_UPDATE) == 0) {
-            SoulNetwork network = NetworkHelper.getSoulNetwork(player);
+            SoulNetwork network = SoulNetworkSavedData.getSoulNetwork(
+                    (ServerLevel) world, player.getUUID());
+            int drainAmount = SANGUINE_SHIELD_DRAIN_PER_SECOND * SECONDS_PER_UPDATE;
+            SoulStack available = network.syphon(new SoulStack(SoulType.Raw, drainAmount), true);
             boolean isSanguineShieldOn;
-            if (network.getCurrentEssence() < SANGUINE_SHIELD_DRAIN_PER_SECOND * SECONDS_PER_UPDATE) {
+            if (available.amount() < drainAmount) {
                 isSanguineShieldOn = false;
             } else {
-                network.syphon(new SoulTicket(SANGUINE_SHIELD_DRAIN_PER_SECOND * SECONDS_PER_UPDATE));
+                network.syphon(new SoulStack(SoulType.Raw, drainAmount), false);
                 isSanguineShieldOn = true;
             }
 
+            int currentSoul = network.getContents().stream()
+                    .filter(s -> s.type() == SoulType.Raw)
+                    .mapToInt(SoulStack::amount)
+                    .findFirst().orElse(0);
             data.putBoolean("isSanguineShieldOn", isSanguineShieldOn);
-            data.putLong("currentLP", network.getCurrentEssence());
+            data.putLong("currentLP", currentSoul);
             player.getPersistentData().putBoolean(SANGUINE_SHIELD_NBT_KEY, isSanguineShieldOn);
         }
 

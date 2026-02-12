@@ -17,9 +17,9 @@ import com.lowdragmc.lowdraglib.syncdata.field.ManagedFieldHolder;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.client.resources.language.I18n;
 import net.minecraft.network.chat.Component;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.TickTask;
-
-import wayoftime.bloodmagic.util.helper.PlayerHelper;
+import net.minecraft.server.level.ServerLevel;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 
@@ -67,15 +67,25 @@ public class SoulHatchPartMachine extends TieredIOPartMachine {
         group.addWidget(new LabelWidget(8, 8,
                 Component.translatable("gui.cosmiccore.soul_hatch.label." + (this.io == IO.IN ? "import" : "export"))));
 
-        // TODO: Get and display proper player/team Name
         group.addWidget(
                 new LabelWidget(8, 18,
                         () -> I18n.get("gui.cosmiccore.soul_hatch.owner",
-                                PlayerHelper.getUsernameFromUUID(this.soulContainer.getMachine().getOwnerUUID())))
+                                getOwnerName()))
                         .setClientSideWidget());
 
         group.setBackground(GuiTextures.BACKGROUND_INVERSE);
         return group;
+    }
+
+    private String getOwnerName() {
+        var uuid = this.soulContainer.getMachine().getOwnerUUID();
+        if (uuid == null) return "Unknown";
+        if (getLevel() instanceof ServerLevel serverLevel) {
+            MinecraftServer server = serverLevel.getServer();
+            var profile = server.getProfileCache().get(uuid);
+            if (profile.isPresent()) return profile.get().getName();
+        }
+        return uuid.toString().substring(0, 8);
     }
 
     public static int getMaxConsumption(int tier) {
