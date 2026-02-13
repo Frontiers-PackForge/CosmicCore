@@ -4,6 +4,7 @@ import com.ghostipedia.cosmiccore.CosmicCore;
 import com.ghostipedia.cosmiccore.common.network.packet.AbyssTimeWarnPacket;
 import com.ghostipedia.cosmiccore.common.network.packet.BootsControlPacket;
 import com.ghostipedia.cosmiccore.common.network.packet.OxygenWarnPacket;
+import com.ghostipedia.cosmiccore.common.network.packet.StarLadderUplinkPackets;
 import com.ghostipedia.cosmiccore.common.network.packet.StellarUpgradePacket;
 import com.ghostipedia.cosmiccore.common.network.packet.SyncOxygenBarPacket;
 import com.ghostipedia.cosmiccore.common.network.packet.SyncPredictedVeinsPacket;
@@ -112,5 +113,8 @@ public class CCoreNetwork {
 
         // Scar selection packets (Cluster of Perpetuity)
         ScarSelectionPackets.register();
+
+        // Star Ladder uplink fight packets
+        StarLadderUplinkPackets.register();
     }
 }
