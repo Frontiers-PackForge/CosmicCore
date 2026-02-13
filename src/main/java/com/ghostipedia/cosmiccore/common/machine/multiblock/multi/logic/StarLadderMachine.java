@@ -14,8 +14,11 @@ import com.lowdragmc.lowdraglib.syncdata.field.ManagedFieldHolder;
 
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.GlobalPos;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Player;
+
+import lombok.Getter;
 
 import java.util.List;
 
@@ -24,6 +27,9 @@ public class StarLadderMachine extends LinkedWorkableElectricMultiblockMachine {
     protected static final ManagedFieldHolder MANAGED_FIELD_HOLDER = new ManagedFieldHolder(
             StarLadderMachine.class,
             LinkedWorkableElectricMultiblockMachine.MANAGED_FIELD_HOLDER);
+
+    @Getter
+    private final StarLadderUplinkManager uplinkManager = new StarLadderUplinkManager(this);
 
     public StarLadderMachine(IMachineBlockEntity holder, Object... args) {
         super(holder, args);
@@ -54,6 +60,32 @@ public class StarLadderMachine extends LinkedWorkableElectricMultiblockMachine {
     }
 
     @Override
+    public void onLoad() {
+        super.onLoad();
+        if (!isRemote()) {
+            subscribeServerTick(this::tickUplink);
+        }
+    }
+
+    private void tickUplink() {
+        uplinkManager.tick();
+    }
+
+    @Override
+    public void saveCustomPersistedData(CompoundTag tag, boolean forDrop) {
+        super.saveCustomPersistedData(tag, forDrop);
+        tag.put("uplinkManager", uplinkManager.serializeNBT());
+    }
+
+    @Override
+    public void loadCustomPersistedData(CompoundTag tag) {
+        super.loadCustomPersistedData(tag);
+        if (tag.contains("uplinkManager")) {
+            uplinkManager.deserializeNBT(tag.getCompound("uplinkManager"));
+        }
+    }
+
+    @Override
     public void addDisplayText(List<Component> textList) {
         super.addDisplayText(textList);
         if (!isFormed()) return;
@@ -72,6 +104,17 @@ public class StarLadderMachine extends LinkedWorkableElectricMultiblockMachine {
         textList.add(Component.literal("  [%d, %d, %d]".formatted(
                 hub.pos().getX(), hub.pos().getY(), hub.pos().getZ()))
                 .withStyle(ChatFormatting.GRAY));
+
+        StarLadderUplinkState uplinkState = uplinkManager.getState();
+        if (uplinkState.isFightState()) {
+            textList.add(Component.literal("Uplink: ACTIVE")
+                    .withStyle(ChatFormatting.RED, ChatFormatting.BOLD));
+            textList.add(Component.literal("  Progress: " + (uplinkManager.getProgress() * 100 / 6000) + "%")
+                    .withStyle(ChatFormatting.GOLD));
+        } else if (uplinkState == StarLadderUplinkState.COMPLETED) {
+            textList.add(Component.literal("Uplink: ESTABLISHED")
+                    .withStyle(ChatFormatting.GREEN, ChatFormatting.BOLD));
+        }
     }
 
     @Override
