@@ -18,7 +18,9 @@ public class CosmicMaterialSet {
     public static final MaterialIconSet SOL = new MaterialIconSet("sol", DULL);
     public static final MaterialIconSet CHLOROPHYTE = new MaterialIconSet("chlorophyte", SHINY);
     public static final MaterialIconSet CRYSTAL = new MaterialIconSet("crystal", DULL);
+    public static final MaterialIconSet CHONKY = new MaterialIconSet("chonky", DULL);
     public static final MaterialIconSet MAGIC = new MaterialIconSet("magic", DULL);
+    public static final MaterialIconSet MAGIC_TERRA = new MaterialIconSet("magic_terrs", DULL);
 
     public static void init() {}
 }
