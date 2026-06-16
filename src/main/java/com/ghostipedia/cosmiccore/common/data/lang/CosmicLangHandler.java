@@ -101,6 +101,164 @@ public class CosmicLangHandler extends LangHandler {
                 "§c§lDANGER: RECOVERY IS POSSIBLE",
                 "§aPinacle Multiblock : The Final Goal of ACT1 (Steam to IV)");
 
+        // Star Ladder Uplink Fight
+        provider.add("cosmiccore.star_ladder.title", "STAR LADDER");
+        provider.add("cosmiccore.star_ladder.initiate", "INITIATE UPLINK");
+        provider.add("cosmiccore.star_ladder.interrupted", "UPLINK INTERRUPTED");
+        provider.add("cosmiccore.star_ladder.resisting", "Something is resisting.");
+        provider.add("cosmiccore.star_ladder.demands_soul", "The Ladder demands Refined Soul.");
+        provider.add("cosmiccore.star_ladder.drain_rate", "Drain rate: %d/s");
+        provider.add("cosmiccore.star_ladder.confirm", "CONFIRM");
+        provider.add("cosmiccore.star_ladder.abort", "ABORT");
+        provider.add("cosmiccore.star_ladder.established", "UPLINK ESTABLISHED");
+        provider.add("cosmiccore.star_ladder.hub_name", "Research Hub");
+        provider.add("cosmiccore.star_ladder.hub_tier", "Hub Tier: T%d");
+        provider.add("cosmiccore.star_ladder.uplink_progress", "UPLINK PROGRESS");
+        provider.add("cosmiccore.star_ladder.soul_drain", "SOUL DRAIN: %d/s");
+        provider.add("cosmiccore.star_ladder.requisition", "REQUISITION:");
+
+        // Star Ladder — Interrupted sequence
+        provider.add("cosmiccore.star_ladder.whisper.interrupted.silence", "Silence.");
+        provider.add("cosmiccore.star_ladder.whisper.interrupted.pressure", "Pressure.");
+        provider.add("cosmiccore.star_ladder.whisper.interrupted.no", "Hm?");
+
+        // Star Ladder — Phase transitions
+        provider.add("cosmiccore.star_ladder.whisper.transition.phase_2", "Something shifts and groans.");
+        provider.add("cosmiccore.star_ladder.whisper.transition.phase_3",
+                "The barrier is cracking, the world is crying.");
+        provider.add("cosmiccore.star_ladder.whisper.transition.complete",
+                "A loud scream followed by complete silence, you've made it.");
+
+        // Star Ladder — Phase 1 Ambient
+        provider.add("cosmiccore.star_ladder.whisper.ambient.p1.conduits_heating", "The conduits are heating up.");
+        provider.add("cosmiccore.star_ladder.whisper.ambient.p1.groaning_walls", "Something groans in the walls.");
+        provider.add("cosmiccore.star_ladder.whisper.ambient.p1.air_tastes_iron", "The air tastes like iron.");
+        provider.add("cosmiccore.star_ladder.whisper.ambient.p1.floor_vibrating", "The floor is vibrating.");
+        provider.add("cosmiccore.star_ladder.whisper.ambient.p1.low_hum", "A low hum, rising.");
+        provider.add("cosmiccore.star_ladder.whisper.ambient.p1.sparks_corner",
+                "Sparks crackle at the corners of the terminal.");
+        provider.add("cosmiccore.star_ladder.whisper.ambient.p1.lights_flicker", "The lights flicker and fail.");
+        provider.add("cosmiccore.star_ladder.whisper.ambient.p1.smell_of_ozone",
+                "Smell of petrichor, the taste of sulfur.");
+        provider.add("cosmiccore.star_ladder.whisper.ambient.p1.dust_falling",
+                "Dust falling from the ceiling, cracks in the walls.");
+        provider.add("cosmiccore.star_ladder.whisper.ambient.p1.pipes_rattling",
+                "Pipes rattling somewhere deep, steam hisses.");
+        provider.add("cosmiccore.star_ladder.whisper.ambient.p1.static_on_skin",
+                "Static crawling across your skin, the air electrified.");
+        provider.add("cosmiccore.star_ladder.whisper.ambient.p1.shadows_wrong",
+                "The shadows are wrong, the stars sway.");
+        provider.add("cosmiccore.star_ladder.whisper.ambient.p1.metal_ticking",
+                "Metal ticking as it expands, twisting.");
+        provider.add("cosmiccore.star_ladder.whisper.ambient.p1.pressure_dropping",
+                "Pressure dropping, the rushing sound of air.");
+        provider.add("cosmiccore.star_ladder.whisper.ambient.p1.something_woke_up", "Something woke up, and it's mad.");
+
+        // Star Ladder — Phase 1 Observer
+        provider.add("cosmiccore.star_ladder.whisper.observer.p1.stop", "Curious.");
+        provider.add("cosmiccore.star_ladder.whisper.observer.p1.not_here", "This isn't your calling.");
+        provider.add("cosmiccore.star_ladder.whisper.observer.p1.leave", "Begone.");
+        provider.add("cosmiccore.star_ladder.whisper.observer.p1.no", "There is nothing for you here.");
+
+        // Star Ladder — Phase 1 Reflection
+        provider.add("cosmiccore.star_ladder.whisper.reflection.p1.keep_feeding", "I need to keep fueling it.");
+        provider.add("cosmiccore.star_ladder.whisper.reflection.p1.hold", "Hold steady, my creation.");
+        provider.add("cosmiccore.star_ladder.whisper.reflection.p1.its_working",
+                "It works, I need to keep on pushing.");
+
+        // Star Ladder — Phase 2 Ambient
+        provider.add("cosmiccore.star_ladder.whisper.ambient.p2.structure_resonating",
+                "The structure is resonating, a song is forming.");
+        provider.add("cosmiccore.star_ladder.whisper.ambient.p2.heat_distortion",
+                "Heat distortion in the air, the sky burns orange.");
+        provider.add("cosmiccore.star_ladder.whisper.ambient.p2.something_cracks",
+                "Something cracks, the earth shifts below.");
+        provider.add("cosmiccore.star_ladder.whisper.ambient.p2.machine_screams", "The machine screams, it's in pain.");
+        provider.add("cosmiccore.star_ladder.whisper.ambient.p2.ears_ringing",
+                "Your ears are ringing, you swear you hear words.");
+        provider.add("cosmiccore.star_ladder.whisper.ambient.p2.metal_expanding",
+                "Metal expanding, popping, hissing, cracking.");
+        provider.add("cosmiccore.star_ladder.whisper.ambient.p2.temperature_climbing",
+                "The temperature is climbing, your body is soaked in sweat.");
+        provider.add("cosmiccore.star_ladder.whisper.ambient.p2.bolts_shearing",
+                "Bolts shearing off the frame, the structure feels unstable.");
+        provider.add("cosmiccore.star_ladder.whisper.ambient.p2.gravity_hiccup", "Gravity hiccups, just for a moment.");
+        provider.add("cosmiccore.star_ladder.whisper.ambient.p2.light_bends",
+                "Light bends where it shouldn't, your eyes are playing tricks.");
+        provider.add("cosmiccore.star_ladder.whisper.ambient.p2.blood_in_mouth", "Taste of blood in your mouth grows.");
+        provider.add("cosmiccore.star_ladder.whisper.ambient.p2.walls_humming",
+                "The walls are humming a note you can't name, discordantly.");
+        provider.add("cosmiccore.star_ladder.whisper.ambient.p2.floor_buckling",
+                "The floor is buckling, the world is revolting.");
+        provider.add("cosmiccore.star_ladder.whisper.ambient.p2.smell_of_burning",
+                "Smell of burning that isn't there, the taste of flesh and souls unknown.");
+        provider.add("cosmiccore.star_ladder.whisper.ambient.p2.time_stutters", "Time stutters and jumps.");
+        provider.add("cosmiccore.star_ladder.whisper.ambient.p2.vision_doubles",
+                "Your vision doubles, you see a woman cloaked in silver.");
+
+        // Star Ladder — Phase 2 Observer
+        provider.add("cosmiccore.star_ladder.whisper.observer.p2.dont_understand",
+                "You don't understand what you're doing, this is beyond you.");
+        provider.add("cosmiccore.star_ladder.whisper.observer.p2.not_yours",
+                "This is not yours to take, you were mine to create");
+        provider.add("cosmiccore.star_ladder.whisper.observer.p2.i_was_patient", "I was patient, you're testing that.");
+        provider.add("cosmiccore.star_ladder.whisper.observer.p2.you_were_warned",
+                "You're digging into things that should be left in the past");
+        provider.add("cosmiccore.star_ladder.whisper.observer.p2.still_time",
+                "There is still time to stop, I'll neglect it this once.");
+        provider.add("cosmiccore.star_ladder.whisper.observer.p2.enough", "Enough.");
+
+        // Star Ladder — Phase 2 Reflection
+        provider.add("cosmiccore.star_ladder.whisper.reflection.p2.channel_widening",
+                "The data stream is surging- I've made progress");
+        provider.add("cosmiccore.star_ladder.whisper.reflection.p2.dont_stop", "Don't stop, this is it!");
+        provider.add("cosmiccore.star_ladder.whisper.reflection.p2.halfway", "Still standing, halfway there.");
+
+        // Star Ladder — Phase 3 Ambient
+        provider.add("cosmiccore.star_ladder.whisper.ambient.p3.everything_shaking", "Everything shakes in unison.");
+        provider.add("cosmiccore.star_ladder.whisper.ambient.p3.veil_fraying", "The veil is fraying, the sky realigns");
+        provider.add("cosmiccore.star_ladder.whisper.ambient.p3.light_bending_wrong",
+                "Light bends and reveals countless faces");
+        provider.add("cosmiccore.star_ladder.whisper.ambient.p3.hands_shaking",
+                "Your hands are shaking, traces of blood not of yours cover them");
+        provider.add("cosmiccore.star_ladder.whisper.ambient.p3.walls_breathing",
+                "The walls are breathing in tune with you.");
+        provider.add("cosmiccore.star_ladder.whisper.ambient.p3.static_all_frequencies",
+                "Your mind feels the static noise of the world");
+        provider.add("cosmiccore.star_ladder.whisper.ambient.p3.reality_thins", "Reality thickens and thins at random");
+        provider.add("cosmiccore.star_ladder.whisper.ambient.p3.colors_wrong",
+                "You're perceiving new colors no human could");
+        provider.add("cosmiccore.star_ladder.whisper.ambient.p3.sound_from_nowhere", "A sound from inside your mind");
+        provider.add("cosmiccore.star_ladder.whisper.ambient.p3.edges_dissolving",
+                "The edge of consciousness dissolves");
+        provider.add("cosmiccore.star_ladder.whisper.ambient.p3.gravity_uncertain", "Gravity feels like second nature");
+        provider.add("cosmiccore.star_ladder.whisper.ambient.p3.air_tastes_of_stars", "The air tastes of star dust");
+        provider.add("cosmiccore.star_ladder.whisper.ambient.p3.heartbeat_in_walls",
+                "You can hear your heartbeat in the walls");
+        provider.add("cosmiccore.star_ladder.whisper.ambient.p3.ground_not_solid", "The ground shatters under you.");
+        provider.add("cosmiccore.star_ladder.whisper.ambient.p3.sky_too_close", "The heavens feel infinitely close");
+        provider.add("cosmiccore.star_ladder.whisper.ambient.p3.something_looking_back",
+                "Something beyond you is glaring intensely");
+        provider.add("cosmiccore.star_ladder.whisper.ambient.p3.tinnitus_screaming", "The sound is deafening");
+
+        // Star Ladder — Phase 3 Observer
+        provider.add("cosmiccore.star_ladder.whisper.observer.p3.fine", "Fine, make yourself into a monster");
+        provider.add("cosmiccore.star_ladder.whisper.observer.p3.remember_this", "Remember this, you started this");
+        provider.add("cosmiccore.star_ladder.whisper.observer.p3.you_chose_this",
+                "You chose this and there's no going back.");
+        provider.add("cosmiccore.star_ladder.whisper.observer.p3.will_not_forget",
+                "I will not forget, I won't let you forget.");
+        provider.add("cosmiccore.star_ladder.whisper.observer.p3.see_what_happens", "Let's see what happens, find me.");
+        provider.add("cosmiccore.star_ladder.whisper.observer.p3.door_opens_both_ways",
+                "The door opens both ways, to me, and to you.");
+        provider.add("cosmiccore.star_ladder.whisper.observer.p3.congratulations",
+                "Congratulations, you've done something beyond me.");
+
+        // Star Ladder — Phase 3 Reflection
+        provider.add("cosmiccore.star_ladder.whisper.reflection.p3.almost_through", "Almost through, closing in.");
+        provider.add("cosmiccore.star_ladder.whisper.reflection.p3.one_more_push", "One more push, I can feel it");
+        provider.add("cosmiccore.star_ladder.whisper.reflection.p3.can_feel_it", "I can feel everything around myself");
+
         multiLang(provider, "cosmiccore.multiblock.iris.tooltip",
                 "§cYour Mind Shatters Trying to Understand This",
                 "§c§lDANGER: DO NOT RENDER THE JEI PREVIEW",
