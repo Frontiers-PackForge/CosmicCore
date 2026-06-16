@@ -88,6 +88,11 @@ public class NotifiableSoulContainer extends NotifiableRecipeHandlerTrait<SoulIn
                 .toList();
     }
 
+    /** Server-only access to the underlying network's stacks for UI display. */
+    public List<SoulStack> getStacks() {
+        return getSoulNetwork().getContents();
+    }
+
     @Override
     public int getSize() {
         return getSoulNetwork().getContents().size();

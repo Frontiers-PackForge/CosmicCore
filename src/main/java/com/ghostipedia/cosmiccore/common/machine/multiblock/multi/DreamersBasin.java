@@ -14,9 +14,10 @@ import com.gregtechceu.gtceu.api.pattern.Predicates;
 
 import net.minecraft.network.chat.Component;
 
+import static com.ghostipedia.cosmiccore.api.machine.part.CosmicPartAbility.EXPORT_SOUL;
 import static com.ghostipedia.cosmiccore.api.registries.CosmicRegistration.REGISTRATE;
+import static com.ghostipedia.cosmiccore.common.data.CosmicBlocks.SUPERHEAVY_STEEL_CASING;
 import static com.gregtechceu.gtceu.api.pattern.Predicates.*;
-import static com.gregtechceu.gtceu.common.data.GTBlocks.CASING_STEEL_SOLID;
 
 /**
  * The Dreamer's Basin - A multithreaded processing machine.
@@ -31,16 +32,16 @@ import static com.gregtechceu.gtceu.common.data.GTBlocks.CASING_STEEL_SOLID;
  */
 public class DreamersBasin {
 
-    // ===== Machine Definition =====
-
     public static final MultiblockMachineDefinition DREAMERS_BASIN = REGISTRATE
             .multiblock("dreamers_basin", DreamersBasinMachine::new)
             .langValue("Dreamer's Basin")
             .rotationState(RotationState.NON_Y_AXIS)
             .recipeType(CosmicRecipeTypes.MULTITHREADED_PROCESSOR)
-            // CRITICAL: Disable default overclock modifier - we handle overclocking per-thread
+            // CRITICAL: Disable default overclock modifier - we handle overclocking per-thread, under no circumstance
+            // should anyone change this ~G
             .noRecipeModifier()
-            .appearanceBlock(CASING_STEEL_SOLID)
+            .appearanceBlock(SUPERHEAVY_STEEL_CASING)
+            .partAppearance((controller, part, side) -> SUPERHEAVY_STEEL_CASING.getDefaultState())
             .tooltips(
                     Component.translatable("cosmiccore.machine.dreamers_basin.tooltip.0"),
                     Component.translatable("cosmiccore.machine.dreamers_basin.tooltip.1"),
@@ -90,11 +91,12 @@ public class DreamersBasin {
                     .where('D', controller(blocks(definition.getBlock())))
                     .where(' ', any())
                     .where('A', blocks(CosmicBlocks.SOUL_MUTED_CASING.get()))
-                    .where('B', blocks(CosmicBlocks.SUPERHEAVY_STEEL_CASING.get()).setMinGlobalLimited(200)
+                    .where('B', blocks(SUPERHEAVY_STEEL_CASING.get()).setMinGlobalLimited(200)
                             .or(autoAbilities(CosmicRecipeTypes.MULTITHREADED_PROCESSOR))
                             .or(Predicates.abilities(PartAbility.INPUT_ENERGY).setMinGlobalLimited(1)
                                     .setMaxGlobalLimited(2))
-                            .or(Predicates.abilities(PartAbility.MAINTENANCE).setExactLimit(1)))
+                            .or(Predicates.abilities(PartAbility.MAINTENANCE).setExactLimit(1))
+                            .or(abilities(EXPORT_SOUL).setExactLimit(1)))
                     .where('C', blocks(CosmicBlocks.SOMARUST_CASING.get()))
                     .build())
             .workableCasingModel(

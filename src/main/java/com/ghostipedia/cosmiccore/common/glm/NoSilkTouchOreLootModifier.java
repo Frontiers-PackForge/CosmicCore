@@ -4,6 +4,7 @@ import com.gregtechceu.gtceu.api.data.chemical.ChemicalHelper;
 import com.gregtechceu.gtceu.api.data.chemical.material.properties.PropertyKey;
 
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.storage.loot.LootContext;
@@ -24,6 +25,17 @@ public class NoSilkTouchOreLootModifier extends LootModifier {
     public static final Codec<NoSilkTouchOreLootModifier> CODEC = RecordCodecBuilder.create(inst -> codecStart(inst)
             .apply(inst, NoSilkTouchOreLootModifier::new));
 
+    /**
+     * Re-entry guard. We re-run the block's loot table with a "fake" tool to get the
+     * non-silk-touch drops, but that re-fires every global loot modifier — including this one.
+     * For tools whose silk-touch comes from a non-Forge source (e.g. Tinkers' modifier system),
+     * stripping the standard enchantment NBT doesn't make {@code getEnchantmentLevel(SILK_TOUCH)}
+     * return 0, so the bailout at the top doesn't trigger and we'd recurse forever (StackOverflow,
+     * server crash). The flag short-circuits the inner call cleanly without depending on how the
+     * tool reports enchantments.
+     */
+    private static final ThreadLocal<Boolean> REENTRY = ThreadLocal.withInitial(() -> false);
+
     protected NoSilkTouchOreLootModifier(LootItemCondition[] conditionsIn) {
         super(conditionsIn);
     }
@@ -31,6 +43,8 @@ public class NoSilkTouchOreLootModifier extends LootModifier {
     @Override
     protected @NotNull ObjectArrayList<ItemStack> doApply(ObjectArrayList<ItemStack> generatedLoot,
                                                           LootContext context) {
+        if (REENTRY.get()) return generatedLoot;
+
         ItemStack tool = context.getParamOrNull(LootContextParams.TOOL);
         if (tool == null || tool.getEnchantmentLevel(Enchantments.SILK_TOUCH) <= 0) {
             return generatedLoot;
@@ -51,12 +65,16 @@ public class NoSilkTouchOreLootModifier extends LootModifier {
             return generatedLoot;
         }
 
-        ItemStack fakeTool = tool.copy();
-        fakeTool.getEnchantmentTags().clear();
-        for (var entry : tool.getAllEnchantments().entrySet()) {
-            if (entry.getKey() != Enchantments.SILK_TOUCH) {
-                fakeTool.enchant(entry.getKey(), entry.getValue());
-            }
+        // Use a vanilla netherite pickaxe as the fake tool. Copying the original tool and stripping
+        // its enchantment NBT doesn't actually remove silk-touch behavior for tools whose silk
+        // touch lives outside Forge's enchantment system (Tinkers' Silky modifier, Apotheosis
+        // affixes, any other modded tool). A clean vanilla pickaxe has none of those layers, mines
+        // any tier, and gets the recipient ore's natural non-silk-touch drops. Fortune is the only
+        // enchantment that affects ore drop counts, so we forward that and drop everything else.
+        ItemStack fakeTool = new ItemStack(Items.NETHERITE_PICKAXE);
+        int fortune = tool.getEnchantmentLevel(Enchantments.BLOCK_FORTUNE);
+        if (fortune > 0) {
+            fakeTool.enchant(Enchantments.BLOCK_FORTUNE, fortune);
         }
 
         LootParams.Builder builder = new LootParams.Builder(context.getLevel())
@@ -74,8 +92,13 @@ public class NoSilkTouchOreLootModifier extends LootModifier {
             builder.withOptionalParameter(LootContextParams.EXPLOSION_RADIUS, explosionRadius);
         }
 
-        generatedLoot.clear();
-        generatedLoot.addAll(state.getDrops(builder));
+        REENTRY.set(true);
+        try {
+            generatedLoot.clear();
+            generatedLoot.addAll(state.getDrops(builder));
+        } finally {
+            REENTRY.set(false);
+        }
         return generatedLoot;
     }
 

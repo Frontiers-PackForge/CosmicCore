@@ -7,7 +7,6 @@ import com.ghostipedia.cosmiccore.common.reflection.bargain.BargainRegistry;
 import com.ghostipedia.cosmiccore.common.reflection.bargain.impl.*;
 import com.ghostipedia.cosmiccore.common.reflection.network.SyncQuakeMovementPacket;
 import com.ghostipedia.cosmiccore.common.reflection.ui.VoidUIPackets;
-import com.ghostipedia.cosmiccore.common.reflection.whisper.WhisperSystem;
 
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
@@ -27,7 +26,6 @@ import java.util.UUID;
 @Mod.EventBusSubscriber(modid = CosmicCore.MOD_ID)
 public class ReflectionEventHandler {
 
-    private static final Map<UUID, String> pendingDeathWhispers = new HashMap<>();
     private static final Map<UUID, RespawnEvent> pendingRespawnEvents = new HashMap<>();
 
     private enum RespawnEventType {
@@ -84,10 +82,6 @@ public class ReflectionEventHandler {
                 }
             }
 
-            if (!pendingRespawnEvents.containsKey(player.getUUID())) {
-                pendingDeathWhispers.put(player.getUUID(), deathCause);
-            }
-
             CosmicCore.LOGGER.debug("Player {} died. Deaths: {}, Erosion: {}",
                     player.getName().getString(), reflection.getDeathCount(), reflection.getErosion());
         });
@@ -128,13 +122,6 @@ public class ReflectionEventHandler {
             RespawnEvent pendingEvent = pendingRespawnEvents.remove(player.getUUID());
             if (pendingEvent != null) {
                 player.getServer().execute(() -> processRespawnEvent(player, reflection, pendingEvent));
-                pendingDeathWhispers.remove(player.getUUID());
-            } else {
-                String deathCause = pendingDeathWhispers.remove(player.getUUID());
-                if (deathCause != null) {
-                    player.getServer()
-                            .execute(() -> WhisperSystem.triggerEvent(player, WhisperSystem.WhisperEvent.DEATH));
-                }
             }
         });
     }
@@ -182,10 +169,6 @@ public class ReflectionEventHandler {
                 }
             }
         });
-
-        if (player.tickCount % 100 == 0) {
-            WhisperSystem.tick(player);
-        }
     }
 
     @SubscribeEvent
