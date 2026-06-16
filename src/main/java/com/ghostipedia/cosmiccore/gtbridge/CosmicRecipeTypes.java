@@ -192,6 +192,7 @@ public class CosmicRecipeTypes {
             .register("oneiric_sieve", GTRecipeTypes.MULTIBLOCK)
             .setMaxIOSize(3, 1, 2, 2)
             .setMaxSize(IO.IN, SoulRecipeCapability.CAP, 1)
+            .setMaxSize(IO.OUT, SoulRecipeCapability.CAP, 1)
             .setProgressBar(GuiTextures.PROGRESS_BAR_ARROW, ProgressTexture.FillDirection.LEFT_TO_RIGHT);
 
     public static final GTRecipeType SPIRIT_CRUCIBLE = GTRecipeTypes

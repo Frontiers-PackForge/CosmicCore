@@ -1,5 +1,8 @@
 package com.ghostipedia.cosmiccore.common.machine.multiblock.multi.logic;
 
+import com.ghostipedia.cosmiccore.CosmicCore;
+
+import com.gregtechceu.gtceu.api.capability.recipe.EURecipeCapability;
 import com.gregtechceu.gtceu.api.capability.recipe.IO;
 import com.gregtechceu.gtceu.api.capability.recipe.IRecipeCapabilityHolder;
 import com.gregtechceu.gtceu.api.capability.recipe.IRecipeHandler;
@@ -35,6 +38,19 @@ public class MultithreadedRecipeLogic extends RecipeLogic implements IRecipeCapa
 
     public static final ManagedFieldHolder MANAGED_FIELD_HOLDER = new ManagedFieldHolder(
             MultithreadedRecipeLogic.class, RecipeLogic.MANAGED_FIELD_HOLDER);
+
+    /**
+     * Toggle to log per-thread recipe matching and tick-drain decisions. Flip on when investigating thread behavior.
+     */
+    public static boolean DEBUG = false;
+
+    private static String describe(ActionResult r) {
+        StringBuilder sb = new StringBuilder();
+        sb.append(r.reason() == null ? "<no reason>" : r.reason().getString());
+        if (r.capability() != null) sb.append(" cap=").append(r.capability().name);
+        if (r.io() != null) sb.append(" io=").append(r.io());
+        return sb.toString();
+    }
 
     @Getter
     private final int threadIndex;
@@ -123,13 +139,20 @@ public class MultithreadedRecipeLogic extends RecipeLogic implements IRecipeCapa
     public void serverTick() {
         if (!canWork()) {
             if (isWorking()) {
-                // Thread was deactivated mid-recipe, pause it
                 setStatus(Status.SUSPEND);
             }
             return;
         }
         super.serverTick();
     }
+
+    /**
+     * MTRL already has it's own ticksub, this fuckass no-op prevents double dipping into the EU pool the machine has
+     * and breaking thread EU alloc
+     * this took me 2hrs to realize this fucking override existed again, ugh.
+     */
+    @Override
+    public void updateTickSubscription() {}
 
     /**
      * Get the parent MultithreadedMachine.
@@ -222,41 +245,50 @@ public class MultithreadedRecipeLogic extends RecipeLogic implements IRecipeCapa
      */
     @Override
     public boolean checkMatchedRecipeAvailable(GTRecipe match) {
-        // Get the BASE recipe EU/t before any modification
         long baseEUt = match.getInputEUt().getTotalEU();
 
-        // Check if base recipe fits within thread's budget
         if (baseEUt > maxEUtPerThread && maxEUtPerThread > 0) {
-            // Base recipe too expensive for this thread
+            if (DEBUG) CosmicCore.LOGGER.info("[basin t#{} c=0x{}] reject {}: EU {} > budget {}",
+                    threadIndex, Integer.toHexString(threadColor), match.getId(), baseEUt, maxEUtPerThread);
             return false;
         }
 
-        // Apply our custom overclock within thread's energy budget
         GTRecipe modified = applyThreadOverclock(match);
         if (modified == null) {
+            if (DEBUG) CosmicCore.LOGGER.info("[basin t#{} c=0x{}] reject {}: overclock returned null",
+                    threadIndex, Integer.toHexString(threadColor), match.getId());
             return false;
         }
 
-        // Trim outputs to fit in output slots
         GTRecipe trimmed = RecipeHelper.trimRecipeOutputs(modified, machine.getOutputLimits());
         if (trimmed == null) {
+            if (DEBUG) CosmicCore.LOGGER.info("[basin t#{} c=0x{}] reject {}: trimRecipeOutputs returned null",
+                    threadIndex, Integer.toHexString(threadColor), match.getId());
             return false;
         }
 
-        // Check if the modified recipe matches our thread's inputs
         ActionResult result = checkRecipe(trimmed);
-        if (result.isSuccess()) {
-            // Store the modified recipe for execution
-            setupRecipe(trimmed);
-
-            // IMPORTANT: Store the original (unmodified) recipe for later re-application
-            // This is used by onRecipeFinish to re-overclock when repeating the recipe
-            if (lastRecipe != null && getStatus() == Status.WORKING) {
-                lastOriginRecipe = match;
-                lastFailedMatches = null;
-                return true;
-            }
+        if (!result.isSuccess()) {
+            if (DEBUG) CosmicCore.LOGGER.info("[basin t#{} c=0x{}] reject {}: checkRecipe -> {}",
+                    threadIndex, Integer.toHexString(threadColor), match.getId(),
+                    describe(result));
+            return false;
         }
+
+        setupRecipe(trimmed);
+
+        if (lastRecipe != null && getStatus() == Status.WORKING) {
+            lastOriginRecipe = match;
+            lastFailedMatches = null;
+            if (DEBUG) CosmicCore.LOGGER.info("[basin t#{} c=0x{}] STARTED {}",
+                    threadIndex, Integer.toHexString(threadColor), match.getId());
+            return true;
+        }
+
+        if (DEBUG) CosmicCore.LOGGER.info(
+                "[basin t#{} c=0x{}] reject {}: setupRecipe finished but lastRecipe={} status={}",
+                threadIndex, Integer.toHexString(threadColor), match.getId(),
+                lastRecipe == null ? "null" : "<set>", getStatus());
         return false;
     }
 
@@ -266,8 +298,23 @@ public class MultithreadedRecipeLogic extends RecipeLogic implements IRecipeCapa
      */
     @Override
     public @NotNull Iterator<GTRecipe> searchRecipe() {
-        // Use THIS thread as the capability holder for recipe searching
-        return machine.getRecipeType().searchRecipe(this, r -> matchRecipe(r).isSuccess());
+        if (DEBUG) {
+            var flat = getCapabilitiesFlat();
+            var inMap = flat.getOrDefault(IO.IN, java.util.Collections.emptyMap());
+            var outMap = flat.getOrDefault(IO.OUT, java.util.Collections.emptyMap());
+            CosmicCore.LOGGER.info("[basin t#{} c=0x{}] searchRecipe: IN caps={} OUT caps={} budget={}",
+                    threadIndex, Integer.toHexString(threadColor),
+                    inMap.keySet(), outMap.keySet(), maxEUtPerThread);
+        }
+        return machine.getRecipeType().searchRecipe(this, r -> {
+            ActionResult res = matchRecipe(r);
+            if (DEBUG && !res.isSuccess()) {
+                CosmicCore.LOGGER.info("[basin t#{} c=0x{}] match-fail {}: {}",
+                        threadIndex, Integer.toHexString(threadColor), r.getId(),
+                        describe(res));
+            }
+            return res.isSuccess();
+        });
     }
 
     /**
@@ -338,8 +385,31 @@ public class MultithreadedRecipeLogic extends RecipeLogic implements IRecipeCapa
      */
     @Override
     protected ActionResult handleTickRecipeIO(GTRecipe recipe, IO io) {
-        // Use this thread as the capability holder instead of the machine
+        if (DEBUG && io == IO.IN && machine instanceof MultithreadedMachine mtm) {
+            var ec = mtm.getEnergyContainer();
+            long before = ec != null ? ec.getEnergyStored() : -1;
+            long requested = sumEURequest(recipe);
+            ActionResult result = RecipeHelper.handleTickRecipeIO(this, recipe, io, chanceCaches);
+            long after = ec != null ? ec.getEnergyStored() : -1;
+            CosmicCore.LOGGER.info(
+                    "[basin t#{} c=0x{}] tick drain: req={} drained={} buffer {} -> {} {}",
+                    threadIndex, Integer.toHexString(threadColor), requested, before - after, before, after,
+                    result.isSuccess() ? "OK" : "FAIL: " + describe(result));
+            return result;
+        }
         return RecipeHelper.handleTickRecipeIO(this, recipe, io, chanceCaches);
+    }
+
+    private static long sumEURequest(GTRecipe recipe) {
+        var euList = recipe.tickInputs.get(EURecipeCapability.CAP);
+        if (euList == null) return 0;
+        long total = 0;
+        for (var content : euList) {
+            if (content.getContent() instanceof com.gregtechceu.gtceu.api.recipe.ingredient.EnergyStack es) {
+                total += es.getTotalEU();
+            }
+        }
+        return total;
     }
 
     /**
@@ -349,19 +419,15 @@ public class MultithreadedRecipeLogic extends RecipeLogic implements IRecipeCapa
      */
     @Override
     public ActionResult handleTickRecipe(GTRecipe recipe) {
-        if (recipe.hasTick()) {
-            // Use this thread as the capability holder for matching
-            var result = RecipeHelper.matchTickRecipe(this, recipe);
-            if (!result.isSuccess()) {
-                return result;
-            }
-            result = handleTickRecipeIO(recipe, IO.IN);
-            if (!result.isSuccess()) {
-                return result;
-            }
-            return handleTickRecipeIO(recipe, IO.OUT);
-        }
-        return ActionResult.SUCCESS;
+        if (!recipe.hasTick()) return ActionResult.SUCCESS;
+
+        var result = RecipeHelper.matchTickRecipe(this, recipe);
+        if (!result.isSuccess()) return result;
+
+        result = handleTickRecipeIO(recipe, IO.IN);
+        if (!result.isSuccess()) return result;
+
+        return handleTickRecipeIO(recipe, IO.OUT);
     }
 
     /**

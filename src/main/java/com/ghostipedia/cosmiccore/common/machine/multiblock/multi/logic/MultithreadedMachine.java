@@ -3,13 +3,12 @@ package com.ghostipedia.cosmiccore.common.machine.multiblock.multi.logic;
 import com.ghostipedia.cosmiccore.api.machine.multiblock.IMultithreadedMachine;
 
 import com.gregtechceu.gtceu.api.capability.recipe.EURecipeCapability;
-import com.gregtechceu.gtceu.api.capability.recipe.FluidRecipeCapability;
 import com.gregtechceu.gtceu.api.capability.recipe.IO;
 import com.gregtechceu.gtceu.api.capability.recipe.IRecipeHandler;
-import com.gregtechceu.gtceu.api.capability.recipe.ItemRecipeCapability;
 import com.gregtechceu.gtceu.api.capability.recipe.RecipeCapability;
 import com.gregtechceu.gtceu.api.machine.IMachineBlockEntity;
 import com.gregtechceu.gtceu.api.machine.TickableSubscription;
+import com.gregtechceu.gtceu.api.machine.feature.multiblock.IMaintenanceMachine;
 import com.gregtechceu.gtceu.api.machine.feature.multiblock.IMultiPart;
 import com.gregtechceu.gtceu.api.machine.multiblock.MultiblockDisplayText;
 import com.gregtechceu.gtceu.api.machine.multiblock.WorkableElectricMultiblockMachine;
@@ -29,6 +28,8 @@ import net.minecraft.world.item.DyeColor;
 
 import it.unimi.dsi.fastutil.ints.Int2ObjectLinkedOpenHashMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
+import it.unimi.dsi.fastutil.ints.IntArrayList;
+import it.unimi.dsi.fastutil.ints.IntList;
 import it.unimi.dsi.fastutil.longs.Long2ObjectMaps;
 import lombok.Getter;
 import org.jetbrains.annotations.NotNull;
@@ -98,6 +99,11 @@ public class MultithreadedMachine extends WorkableElectricMultiblockMachine impl
 
     @Nullable
     private TickableSubscription threadTickSubscription;
+
+    /**
+     * Rotates the per-tick iteration start so the same threads aren't always last in line for the shared energy pool.
+     */
+    private int tickRotation = 0;
 
     public MultithreadedMachine(IMachineBlockEntity holder) {
         super(holder);
@@ -193,22 +199,17 @@ public class MultithreadedMachine extends WorkableElectricMultiblockMachine impl
 
     /**
      * Partition input handlers by their paint color.
-     * Each unique color becomes a potential thread.
+     * Reads color from the part directly because RecipeHandlerList caches its color at first
+     * access and never updates after a repaint.
      */
     private void partitionHandlersByColor() {
         for (IMultiPart part : getParts()) {
-            var handlerLists = part.getRecipeHandlers();
-            for (RecipeHandlerList handlerList : handlerLists) {
-                if (handlerList.getHandlerIO() == IO.IN || handlerList.getHandlerIO() == IO.BOTH) {
-                    // Check if this handler has item or fluid capability (not just energy)
-                    boolean hasItemOrFluid = handlerList.hasCapability(ItemRecipeCapability.CAP) ||
-                            handlerList.hasCapability(FluidRecipeCapability.CAP);
-
-                    if (hasItemOrFluid) {
-                        int color = handlerList.getColor();
-                        threadInputHandlers.computeIfAbsent(color, k -> new ArrayList<>()).add(handlerList);
-                    }
-                }
+            if (part instanceof IMaintenanceMachine) continue;
+            int color = part.self().getPaintingColor();
+            for (RecipeHandlerList handlerList : part.getRecipeHandlers()) {
+                if (handlerList.getHandlerIO() != IO.IN && handlerList.getHandlerIO() != IO.BOTH) continue;
+                if (!hasRecipeCapability(handlerList)) continue;
+                threadInputHandlers.computeIfAbsent(color, k -> new ArrayList<>()).add(handlerList);
             }
         }
     }
@@ -218,27 +219,32 @@ public class MultithreadedMachine extends WorkableElectricMultiblockMachine impl
      */
     private void collectOutputHandlers() {
         for (IMultiPart part : getParts()) {
-            var handlerLists = part.getRecipeHandlers();
-            for (RecipeHandlerList handlerList : handlerLists) {
-                if (handlerList.getHandlerIO() == IO.OUT || handlerList.getHandlerIO() == IO.BOTH) {
-                    // Check if this handler has item or fluid capability
-                    boolean hasItemOrFluid = handlerList.hasCapability(ItemRecipeCapability.CAP) ||
-                            handlerList.hasCapability(FluidRecipeCapability.CAP);
-
-                    if (hasItemOrFluid) {
-                        sharedOutputHandlers.add(handlerList);
-                    }
-                }
+            if (part instanceof IMaintenanceMachine) continue;
+            for (RecipeHandlerList handlerList : part.getRecipeHandlers()) {
+                if (handlerList.getHandlerIO() != IO.OUT && handlerList.getHandlerIO() != IO.BOTH) continue;
+                if (!hasRecipeCapability(handlerList)) continue;
+                sharedOutputHandlers.add(handlerList);
             }
         }
+    }
+
+    /**
+     * True if the handler list carries any recipe capability other than EU. Energy is wired in
+     * separately via {@link #addEnergyHandlersToThread} so it must be excluded here, but every
+     * other capability — items, fluids, souls, embers, heat, sterile, future ones — is fair game
+     * for thread partitioning and shared outputs.
+     */
+    private static boolean hasRecipeCapability(RecipeHandlerList handlerList) {
+        for (RecipeCapability<?> cap : handlerList.getHandlerMap().keySet()) {
+            if (cap != EURecipeCapability.CAP) return true;
+        }
+        return false;
     }
 
     /**
      * Create a MultithreadedRecipeLogic for each color group, up to maxThreads.
      */
     private void createThreadLogics() {
-        int threadIndex = 0;
-
         // Calculate EU/t budget per thread
         // Each thread gets 1A of voltage from the total amperage pool
         // With 16A UV hatch and 16 threads, each gets 1A UV = 524,288 EU/t
@@ -247,54 +253,45 @@ public class MultithreadedMachine extends WorkableElectricMultiblockMachine impl
         long euPerThread = energyContainer != null ? energyContainer.getHighestInputVoltage() : 0;
 
         for (Int2ObjectMap.Entry<List<RecipeHandlerList>> entry : threadInputHandlers.int2ObjectEntrySet()) {
-            if (threadIndex >= maxThreads) break;
+            if (threadLogics.size() >= maxThreads) break;
 
             int color = entry.getIntKey();
-            List<RecipeHandlerList> inputHandlers = entry.getValue();
-
-            MultithreadedRecipeLogic logic = new MultithreadedRecipeLogic(this, threadIndex, color);
-
-            // Set the EU/t budget for this thread
+            MultithreadedRecipeLogic logic = new MultithreadedRecipeLogic(this, threadLogics.size(), color);
             logic.setMaxEUtPerThread(euPerThread);
-
-            // Build capability maps for this thread
-            Map<IO, List<RecipeHandlerList>> threadProxy = new EnumMap<>(IO.class);
-            Map<IO, Map<RecipeCapability<?>, List<IRecipeHandler<?>>>> threadFlat = new EnumMap<>(IO.class);
-
-            // Add input handlers (thread-specific, color-coded)
-            threadProxy.put(IO.IN, new ArrayList<>(inputHandlers));
-
-            // Add output handlers (shared)
-            threadProxy.put(IO.OUT, new ArrayList<>(sharedOutputHandlers));
-
-            // Build flattened map from proxy
-            for (Map.Entry<IO, List<RecipeHandlerList>> proxyEntry : threadProxy.entrySet()) {
-                IO io = proxyEntry.getKey();
-                Map<RecipeCapability<?>, List<IRecipeHandler<?>>> capMap = new HashMap<>();
-
-                for (RecipeHandlerList handlerList : proxyEntry.getValue()) {
-                    for (var capEntry : handlerList.getHandlerMap().entrySet()) {
-                        RecipeCapability<?> cap = capEntry.getKey();
-                        List<IRecipeHandler<?>> handlers = capEntry.getValue();
-                        capMap.computeIfAbsent(cap, k -> new ArrayList<>()).addAll(handlers);
-                    }
-                }
-
-                threadFlat.put(io, capMap);
-            }
-
-            // Also add energy handlers from machine for recipe EU consumption
-            addEnergyHandlersToThread(threadProxy, threadFlat);
-
-            logic.setThreadCapabilitiesProxy(threadProxy);
-            logic.setThreadCapabilitiesFlat(threadFlat);
+            applyThreadHandlers(logic, entry.getValue());
             logic.activateThread();
-
             threadLogics.put(color, logic);
-            threadIndex++;
         }
 
         activeThreadCount = threadLogics.size();
+    }
+
+    /**
+     * Build and assign the per-thread proxy + flat capability maps for the given input handlers.
+     * Output handlers and energy handlers are shared across threads.
+     */
+    private void applyThreadHandlers(MultithreadedRecipeLogic logic, List<RecipeHandlerList> inputHandlers) {
+        Map<IO, List<RecipeHandlerList>> threadProxy = new EnumMap<>(IO.class);
+        Map<IO, Map<RecipeCapability<?>, List<IRecipeHandler<?>>>> threadFlat = new EnumMap<>(IO.class);
+
+        threadProxy.put(IO.IN, new ArrayList<>(inputHandlers));
+        threadProxy.put(IO.OUT, new ArrayList<>(sharedOutputHandlers));
+
+        for (Map.Entry<IO, List<RecipeHandlerList>> proxyEntry : threadProxy.entrySet()) {
+            IO io = proxyEntry.getKey();
+            Map<RecipeCapability<?>, List<IRecipeHandler<?>>> capMap = new HashMap<>();
+            for (RecipeHandlerList handlerList : proxyEntry.getValue()) {
+                for (var capEntry : handlerList.getHandlerMap().entrySet()) {
+                    capMap.computeIfAbsent(capEntry.getKey(), k -> new ArrayList<>()).addAll(capEntry.getValue());
+                }
+            }
+            threadFlat.put(io, capMap);
+        }
+
+        addEnergyHandlersToThread(threadProxy, threadFlat);
+
+        logic.setThreadCapabilitiesProxy(threadProxy);
+        logic.setThreadCapabilitiesFlat(threadFlat);
     }
 
     /**
@@ -329,6 +326,59 @@ public class MultithreadedMachine extends WorkableElectricMultiblockMachine impl
     }
 
     /**
+     * Re-run input partitioning after a part's paint color changes. Preserves in-progress
+     * recipes on threads whose color still exists, only colors that disappeared from the
+     * structure get their threads torn down. New colors that appear get fresh threads
+     * (subject to the maxThreads cap).
+     * This might be a genuinely hacky solution, I'm not sure lmoa :icant:
+     */
+    public void refreshThreadPartitioning() {
+        if (!isFormed()) return;
+        if (getLevel() == null || getLevel().isClientSide) return;
+
+        Int2ObjectMap<List<RecipeHandlerList>> newPartition = new Int2ObjectLinkedOpenHashMap<>();
+        for (IMultiPart part : getParts()) {
+            if (part instanceof IMaintenanceMachine) continue;
+            int color = part.self().getPaintingColor();
+            for (RecipeHandlerList handlerList : part.getRecipeHandlers()) {
+                if (handlerList.getHandlerIO() != IO.IN && handlerList.getHandlerIO() != IO.BOTH) continue;
+                if (!hasRecipeCapability(handlerList)) continue;
+                newPartition.computeIfAbsent(color, k -> new ArrayList<>()).add(handlerList);
+            }
+        }
+
+        IntList staleColors = new IntArrayList();
+        for (int color : threadLogics.keySet()) {
+            if (!newPartition.containsKey(color)) staleColors.add(color);
+        }
+        for (int color : staleColors) {
+            MultithreadedRecipeLogic stale = threadLogics.remove(color);
+            if (stale != null) stale.deactivateThread();
+            threadInputHandlers.remove(color);
+        }
+
+        long euPerThread = energyContainer != null ? energyContainer.getHighestInputVoltage() : 0;
+        for (Int2ObjectMap.Entry<List<RecipeHandlerList>> entry : newPartition.int2ObjectEntrySet()) {
+            int color = entry.getIntKey();
+            List<RecipeHandlerList> inputHandlers = entry.getValue();
+            threadInputHandlers.put(color, inputHandlers);
+
+            MultithreadedRecipeLogic logic = threadLogics.get(color);
+            if (logic == null) {
+                if (threadLogics.size() >= maxThreads) continue;
+                logic = new MultithreadedRecipeLogic(this, threadLogics.size(), color);
+                logic.activateThread();
+                threadLogics.put(color, logic);
+            }
+            logic.setMaxEUtPerThread(euPerThread);
+            applyThreadHandlers(logic, inputHandlers);
+        }
+
+        activeThreadCount = threadLogics.size();
+        updateThreadSubscription();
+    }
+
+    /**
      * Update the tick subscription for thread processing.
      */
     private void updateThreadSubscription() {
@@ -341,19 +391,15 @@ public class MultithreadedMachine extends WorkableElectricMultiblockMachine impl
     }
 
     /**
-     * Called every server tick to process all thread logics.
+     * Called every server tick to process all thread logics. If this fails to be called I and everyone else should
+     * panic
      */
     private void tickThreads() {
         if (!isFormed() || !isWorkingEnabled()) return;
 
-        // Calculate energy per thread
-        long availableEnergy = getEnergyPerThread();
-
-        // Tick each active thread
         int runningThreads = 0;
         for (MultithreadedRecipeLogic logic : threadLogics.values()) {
             if (logic.isThreadActive()) {
-                // Each thread gets its share of energy
                 logic.serverTick();
                 if (logic.isWorking()) {
                     runningThreads++;
@@ -366,7 +412,7 @@ public class MultithreadedMachine extends WorkableElectricMultiblockMachine impl
 
     /**
      * Calculate energy available per thread.
-     * Energy is split evenly among all active threads.
+     * Energy is split evenly among all active threads, should be evenly but for all i knwo this is wrong
      */
     private long getEnergyPerThread() {
         if (energyContainer == null || activeThreadCount == 0) return 0;

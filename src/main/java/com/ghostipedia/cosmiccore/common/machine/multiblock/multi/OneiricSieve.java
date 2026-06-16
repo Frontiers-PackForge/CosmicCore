@@ -14,6 +14,8 @@ import com.gregtechceu.gtceu.api.recipe.OverclockingLogic;
 import com.gregtechceu.gtceu.common.data.GTBlocks;
 import com.gregtechceu.gtceu.common.data.GTRecipeModifiers;
 
+import static com.ghostipedia.cosmiccore.api.machine.part.CosmicPartAbility.EXPORT_SOUL;
+import static com.ghostipedia.cosmiccore.api.machine.part.CosmicPartAbility.IMPORT_SOUL;
 import static com.ghostipedia.cosmiccore.api.registries.CosmicRegistration.REGISTRATE;
 import static com.ghostipedia.cosmiccore.common.data.CosmicBlocks.*;
 import static com.gregtechceu.gtceu.api.pattern.Predicates.*;
@@ -46,7 +48,10 @@ public class OneiricSieve {
                             .or(autoAbilities(CosmicRecipeTypes.ONEIRIC_SIEVE))
                             .or(autoAbilities(true, false, false))
                             .or(Predicates.abilities(PartAbility.INPUT_ENERGY).setMinGlobalLimited(1)
-                                    .setMaxGlobalLimited(2)))
+                                    .setMaxGlobalLimited(2))
+                            .or(abilities(IMPORT_SOUL))
+                            .or(abilities(EXPORT_SOUL))
+                    )
                     .where('D', blocks(GTBlocks.CASING_GRATE.get()))
                     .build())
             // spotless:on

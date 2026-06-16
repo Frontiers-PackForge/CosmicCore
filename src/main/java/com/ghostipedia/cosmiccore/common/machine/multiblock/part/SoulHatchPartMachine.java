@@ -1,6 +1,7 @@
 package com.ghostipedia.cosmiccore.common.machine.multiblock.part;
 
 import com.ghostipedia.cosmiccore.api.machine.trait.NotifiableSoulContainer;
+import com.ghostipedia.cosmiccore.utils.OwnershipUtils;
 
 import com.gregtechceu.gtceu.api.GTValues;
 import com.gregtechceu.gtceu.api.capability.recipe.IO;
@@ -14,12 +15,12 @@ import com.lowdragmc.lowdraglib.syncdata.annotation.DescSynced;
 import com.lowdragmc.lowdraglib.syncdata.annotation.Persisted;
 import com.lowdragmc.lowdraglib.syncdata.field.ManagedFieldHolder;
 
+import net.minecraft.ChatFormatting;
 import net.minecraft.MethodsReturnNonnullByDefault;
-import net.minecraft.client.resources.language.I18n;
 import net.minecraft.network.chat.Component;
-import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.TickTask;
-import net.minecraft.server.level.ServerLevel;
+
+import java.util.List;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 
@@ -61,31 +62,34 @@ public class SoulHatchPartMachine extends TieredIOPartMachine {
 
     @Override
     public Widget createUIWidget() {
-        var group = new WidgetGroup(0, 0, 128, 63);
+        var group = new WidgetGroup(0, 0, 176, 117);
 
-        group.addWidget(new ImageWidget(4, 4, 120, 55, GuiTextures.DISPLAY));
-        group.addWidget(new LabelWidget(8, 8,
-                Component.translatable("gui.cosmiccore.soul_hatch.label." + (this.io == IO.IN ? "import" : "export"))));
+        var scrollable = new DraggableScrollableWidgetGroup(4, 4, 168, 109).setBackground(GuiTextures.DISPLAY);
+        scrollable.addWidget(new LabelWidget(4, 5,
+                "gui.cosmiccore.soul_hatch.label." + (this.io == IO.IN ? "import" : "export")));
+        scrollable.addWidget(new ComponentPanelWidget(4, 17, this::addDisplayText)
+                .textSupplier(getLevel() != null && !getLevel().isClientSide ? this::addDisplayText : null)
+                .setMaxWidthLimit(160));
 
-        group.addWidget(
-                new LabelWidget(8, 18,
-                        () -> I18n.get("gui.cosmiccore.soul_hatch.owner",
-                                getOwnerName()))
-                        .setClientSideWidget());
-
+        group.addWidget(scrollable);
         group.setBackground(GuiTextures.BACKGROUND_INVERSE);
         return group;
     }
 
-    private String getOwnerName() {
-        var uuid = this.soulContainer.getMachine().getOwnerUUID();
-        if (uuid == null) return "Unknown";
-        if (getLevel() instanceof ServerLevel serverLevel) {
-            MinecraftServer server = serverLevel.getServer();
-            var profile = server.getProfileCache().get(uuid);
-            if (profile.isPresent()) return profile.get().getName();
+    private void addDisplayText(List<Component> textList) {
+        textList.add(Component.translatable("gui.cosmiccore.soul_hatch.owner",
+                OwnershipUtils.getName(getOwner())));
+
+        var stacks = this.soulContainer.getStacks();
+        textList.add(Component.empty());
+        if (stacks.isEmpty()) {
+            textList.add(Component.translatable("gui.cosmiccore.soul.empty_network").withStyle(ChatFormatting.GRAY));
+        } else {
+            textList.add(Component.translatable("gui.cosmiccore.soul.network_contents").withStyle(ChatFormatting.GOLD));
+            for (var stack : stacks) {
+                textList.add(Component.literal("  ").append(stack.type().toComponent(stack.amount())));
+            }
         }
-        return uuid.toString().substring(0, 8);
     }
 
     public static int getMaxConsumption(int tier) {
