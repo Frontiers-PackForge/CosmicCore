@@ -9,7 +9,7 @@ import com.ghostipedia.cosmiccore.common.machine.multiblock.multi.MothCargoStati
 
 import com.gregtechceu.gtceu.api.blockentity.BlockEntityCreationInfo;
 import com.gregtechceu.gtceu.api.machine.MetaMachine;
-import com.gregtechceu.gtceu.api.machine.feature.multiblock.IMultiController;
+import com.gregtechceu.gtceu.api.machine.multiblock.MultiblockControllerMachine;
 import com.gregtechceu.gtceu.api.pattern.TraceabilityPredicate;
 import com.gregtechceu.gtceu.api.pattern.error.PatternStringError;
 import com.gregtechceu.gtceu.api.pattern.util.PatternMatchContext;
@@ -126,7 +126,7 @@ public class CosmicPredicates {
             var blockEntity = blockWorldState.getTileEntity();
             if (blockEntity instanceof BlockEntityCreationInfo machineBlockEntity) {
                 MetaMachine machine = machineBlockEntity.getMetaMachine();
-                if (machine instanceof IMultiController && machine instanceof IStellarModuleReceiver moduleReceiver) {
+                if (machine instanceof MultiblockControllerMachine && machine instanceof IStellarModuleReceiver moduleReceiver) {
                     Set<IStellarModuleReceiver> modules = blockWorldState.getMatchContext()
                             .getOrCreate("stellarModules", HashSet::new);
                     modules.add(moduleReceiver);

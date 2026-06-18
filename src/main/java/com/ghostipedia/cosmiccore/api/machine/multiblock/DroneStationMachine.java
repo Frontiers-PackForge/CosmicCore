@@ -11,7 +11,7 @@ import com.gregtechceu.gtceu.api.gui.GuiTextures;
 import com.gregtechceu.gtceu.api.gui.fancy.FancyMachineUIWidget;
 import com.gregtechceu.gtceu.api.blockentity.BlockEntityCreationInfo;
 import com.gregtechceu.gtceu.api.machine.TickableSubscription;
-import com.gregtechceu.gtceu.api.machine.feature.multiblock.IMultiController;
+import com.gregtechceu.gtceu.api.machine.multiblock.MultiblockControllerMachine;
 import com.gregtechceu.gtceu.api.machine.multiblock.WorkableElectricMultiblockMachine;
 import com.gregtechceu.gtceu.api.machine.trait.RecipeLogic;
 import com.gregtechceu.gtceu.api.recipe.GTRecipe;
@@ -276,7 +276,7 @@ public class DroneStationMachine extends WorkableElectricMultiblockMachine {
         if (!connection.isValid()) return false;
         if (connection.machine == null) return false;
         if (!(connection.machine instanceof DroneMaintenanceInterfacePartMachine droneInterface)) return false;
-        IMultiController controller = droneInterface.getControllers().first();
+        MultiblockControllerMachine controller = droneInterface.getControllers().first();
         if (!(controller instanceof IControllable controllable)) return false;
         controllable.setWorkingEnabled(!controllable.isWorkingEnabled());
         return true;
@@ -294,7 +294,7 @@ public class DroneStationMachine extends WorkableElectricMultiblockMachine {
         if (!connection.isValid()) return false;
         if (connection.machine == null) return false;
         if (!(connection.machine instanceof DroneMaintenanceInterfacePartMachine droneInterface)) return false;
-        IMultiController controller = droneInterface.getControllers().first();
+        MultiblockControllerMachine controller = droneInterface.getControllers().first();
         if (!(controller instanceof IControllable controllable)) return false;
         if (controllable.isWorkingEnabled()) return false;
         controllable.setWorkingEnabled(true);
@@ -313,7 +313,7 @@ public class DroneStationMachine extends WorkableElectricMultiblockMachine {
         if (!connection.isValid()) return false;
         if (connection.machine == null) return false;
         if (!(connection.machine instanceof DroneMaintenanceInterfacePartMachine droneInterface)) return false;
-        IMultiController controller = droneInterface.getControllers().first();
+        MultiblockControllerMachine controller = droneInterface.getControllers().first();
         if (!(controller instanceof IControllable controllable)) return false;
         if (!controllable.isWorkingEnabled()) return false;
         controllable.setSuspendAfterFinish(true);

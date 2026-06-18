@@ -58,7 +58,7 @@ public abstract class ParallelProviderMixin {
 
     @Inject(method = "appendServerData",
             at = @At(value = "INVOKE",
-                     target = "Lcom/gregtechceu/gtceu/api/machine/feature/multiblock/IMultiController;getParallelHatch()Ljava/util/Optional;"),
+                     target = "Lcom/gregtechceu/gtceu/api/machine/feature/multiblock/MultiblockControllerMachine;getParallelHatch()Ljava/util/Optional;"),
             locals = LocalCapture.CAPTURE_FAILSOFT,
             cancellable = true,
             require = 0)

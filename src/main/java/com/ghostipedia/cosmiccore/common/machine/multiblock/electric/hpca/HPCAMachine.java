@@ -17,7 +17,6 @@ import com.gregtechceu.gtceu.api.gui.widget.ExtendedProgressWidget;
 import com.gregtechceu.gtceu.api.blockentity.BlockEntityCreationInfo;
 import com.gregtechceu.gtceu.api.machine.TickableSubscription;
 import com.gregtechceu.gtceu.api.machine.feature.IDropSaveMachine;
-import com.gregtechceu.gtceu.api.machine.feature.IMachineLife;
 import com.gregtechceu.gtceu.api.machine.feature.multiblock.IMaintenanceMachine;
 import com.gregtechceu.gtceu.api.machine.feature.multiblock.IMultiPart;
 import com.gregtechceu.gtceu.api.machine.multiblock.MultiblockDisplayText;
@@ -56,7 +55,7 @@ import java.util.*;
 import java.util.function.Supplier;
 
 public class HPCAMachine extends WorkableElectricMultiblockMachine
-                         implements IOpticalComputationProvider, IControllable, IMachineLife, IDropSaveMachine {
+                         implements IOpticalComputationProvider, IControllable, IDropSaveMachine {
 
     private static final ManagedFieldHolder MANAGED_FIELD_HOLDER = new ManagedFieldHolder(
             HPCAMachine.class, WorkableElectricMultiblockMachine.MANAGED_FIELD_HOLDER);
@@ -90,7 +89,7 @@ public class HPCAMachine extends WorkableElectricMultiblockMachine
 
     @Override
     public void onMachinePlaced(@Nullable LivingEntity player, ItemStack stack) {
-        IMachineLife.super.onMachinePlaced(player, stack);
+        super.onMachinePlaced(player, stack);
         if (seed == 0L) this.seed = GTValues.RNG.nextLong();
     }
 

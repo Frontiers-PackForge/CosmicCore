@@ -4,7 +4,7 @@ import com.ghostipedia.cosmiccore.common.machine.multiblock.electric.hpca.HPCAMa
 import com.ghostipedia.cosmiccore.common.machine.multiblock.electric.hpca.HPCAModifier;
 import com.ghostipedia.cosmiccore.common.machine.multiblock.part.HPCAIndicatorPartMachine;
 
-import com.gregtechceu.gtceu.api.machine.feature.multiblock.IMultiController;
+import com.gregtechceu.gtceu.api.machine.multiblock.MultiblockControllerMachine;
 import com.gregtechceu.gtceu.api.pattern.util.RelativeDirection;
 import com.gregtechceu.gtceu.client.renderer.machine.DynamicRender;
 import com.gregtechceu.gtceu.client.renderer.machine.DynamicRenderType;
@@ -67,7 +67,7 @@ public class HPCAIndicatorRender extends DynamicRender<HPCAIndicatorPartMachine,
                                                    @NotNull ModelData modelData, @Nullable RenderType renderType) {
         if (machine == null) return Collections.emptyList();
 
-        SortedSet<IMultiController> controllers = machine.getControllers();
+        SortedSet<MultiblockControllerMachine> controllers = machine.getControllers();
         if (controllers.isEmpty() || !(controllers.first() instanceof HPCAMachine controller)) {
             return Collections.emptyList();
         }

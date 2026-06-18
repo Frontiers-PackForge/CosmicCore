@@ -6,7 +6,6 @@ import com.gregtechceu.gtceu.api.GTValues;
 import com.gregtechceu.gtceu.api.capability.recipe.IO;
 import com.gregtechceu.gtceu.api.blockentity.BlockEntityCreationInfo;
 import com.gregtechceu.gtceu.api.machine.TickableSubscription;
-import com.gregtechceu.gtceu.api.machine.feature.IMachineLife;
 import com.gregtechceu.gtceu.api.machine.multiblock.part.TieredIOPartMachine;
 import com.gregtechceu.gtceu.api.machine.trait.NotifiableEnergyContainer;
 import com.gregtechceu.gtceu.common.machine.owner.FTBOwner;
@@ -36,7 +35,7 @@ import javax.annotation.ParametersAreNonnullByDefault;
 
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
-public class WirelessEnergyHatchPartMachine extends TieredIOPartMachine implements IMachineLife {
+public class WirelessEnergyHatchPartMachine extends TieredIOPartMachine {
 
     protected static final long ticks_between_save_data_operations = 5L * 20L;
 
@@ -116,7 +115,7 @@ public class WirelessEnergyHatchPartMachine extends TieredIOPartMachine implemen
 
     @Override
     public void onMachinePlaced(@org.jetbrains.annotations.Nullable LivingEntity player, ItemStack stack) {
-        IMachineLife.super.onMachinePlaced(player, stack);
+        super.onMachinePlaced(player, stack);
         if (getLevel() instanceof ServerLevel serverLevel) {
             if (io == IO.IN) {
                 var data = WirelessEnergySavedData.getOrCreate(serverLevel);
@@ -130,8 +129,8 @@ public class WirelessEnergyHatchPartMachine extends TieredIOPartMachine implemen
     }
 
     @Override
-    public void onMachineRemoved() {
-        IMachineLife.super.onMachineRemoved();
+    public void onMachineDestroyed() {
+        super.onMachineDestroyed();
         if (getLevel() instanceof ServerLevel serverLevel) {
             var data = WirelessEnergySavedData.getOrCreate(serverLevel);
             var owner = getTeamUUID();

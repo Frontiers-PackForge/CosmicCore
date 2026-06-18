@@ -2,7 +2,7 @@ package com.ghostipedia.cosmiccore.client.renderer.machine;
 
 import com.ghostipedia.cosmiccore.common.machine.multiblock.part.SoulHatchPartMachine;
 
-import com.gregtechceu.gtceu.api.machine.feature.multiblock.IMultiController;
+import com.gregtechceu.gtceu.api.machine.multiblock.MultiblockControllerMachine;
 import com.gregtechceu.gtceu.api.machine.feature.multiblock.IMultiPart;
 import com.gregtechceu.gtceu.api.machine.multiblock.MultiblockControllerMachine;
 import com.gregtechceu.gtceu.api.machine.multiblock.WorkableElectricMultiblockMachine;
@@ -70,7 +70,7 @@ public class HellFireFoundryPartRender extends
     }
 
     @Override
-    public void renderPartModel(List<BakedQuad> quads, IMultiController controller,
+    public void renderPartModel(List<BakedQuad> quads, MultiblockControllerMachine controller,
                                 IMultiPart part, Direction frontFacing, @Nullable Direction side,
                                 RandomSource rand, ModelData modelData, @Nullable RenderType renderType) {
         BlockPos partPos = part.self().getBlockPos();

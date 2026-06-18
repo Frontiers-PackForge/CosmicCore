@@ -5,7 +5,7 @@ import com.gregtechceu.gtceu.api.gui.fancy.TabsWidget;
 import com.gregtechceu.gtceu.api.blockentity.BlockEntityCreationInfo;
 import com.gregtechceu.gtceu.api.machine.MetaMachine;
 import com.gregtechceu.gtceu.api.machine.fancyconfigurator.AutoStockingFancyConfigurator;
-import com.gregtechceu.gtceu.api.machine.feature.multiblock.IMultiController;
+import com.gregtechceu.gtceu.api.machine.multiblock.MultiblockControllerMachine;
 import com.gregtechceu.gtceu.api.machine.feature.multiblock.IMultiPart;
 import com.gregtechceu.gtceu.api.machine.trait.NotifiableFluidTank;
 import com.gregtechceu.gtceu.common.item.IntCircuitBehaviour;
@@ -79,13 +79,13 @@ public class CosmicStockingHatchPartMachine extends CosmicInputHatchPartMachine 
     }
 
     @Override
-    public void addedToController(IMultiController controller) {
+    public void addedToController(MultiblockControllerMachine controller) {
         super.addedToController(controller);
         IMEStockingPart.super.addedToController(controller);
     }
 
     @Override
-    public void removedFromController(IMultiController controller) {
+    public void removedFromController(MultiblockControllerMachine controller) {
         IMEStockingPart.super.removedFromController(controller);
         super.removedFromController(controller);
     }
@@ -156,7 +156,7 @@ public class CosmicStockingHatchPartMachine extends CosmicInputHatchPartMachine 
         if (config == null) return false;
         if (!isFormed()) return false;
 
-        for (IMultiController controller : getControllers()) {
+        for (MultiblockControllerMachine controller : getControllers()) {
             for (IMultiPart part : controller.getParts()) {
                 if (part instanceof CosmicStockingHatchPartMachine hatch) {
                     if (hatch == this) continue;

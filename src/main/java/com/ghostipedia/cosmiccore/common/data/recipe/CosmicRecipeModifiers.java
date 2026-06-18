@@ -274,7 +274,7 @@ public class CosmicRecipeModifiers {
      * public static @NotNull BiFunction<MetaMachine, GTRecipe, ModifierFunction> sterileHatch(FluidStack stack, boolean
      * perTick) {
      * return (machine, recipe) -> {
-     * if (machine instanceof IMultiController controller && controller.isFormed()) {
+     * if (machine instanceof MultiblockControllerMachine controller && controller.isFormed()) {
      * var parts = controller.getParts();
      * var sterileHatch = parts.stream()
      * .filter(part -> part instanceof SterilizationHatchPartMachine)

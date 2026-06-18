@@ -4,7 +4,7 @@ import com.ghostipedia.cosmiccore.CosmicCore;
 import com.ghostipedia.cosmiccore.api.machine.multiblock.DroneStationMachine;
 
 import com.gregtechceu.gtceu.api.machine.MetaMachine;
-import com.gregtechceu.gtceu.api.machine.feature.multiblock.IMultiController;
+import com.gregtechceu.gtceu.api.machine.multiblock.MultiblockControllerMachine;
 import com.gregtechceu.gtceu.integration.jade.provider.CapabilityBlockProvider;
 
 import net.minecraft.ChatFormatting;
@@ -32,7 +32,7 @@ public class DroneStationProvider extends CapabilityBlockProvider<DroneStationMa
     @Nullable
     @Override
     protected DroneStationMachine getCapability(Level level, BlockPos blockPos, @Nullable Direction direction) {
-        if (MetaMachine.getMachine(level, blockPos) instanceof IMultiController controller) {
+        if (MetaMachine.getMachine(level, blockPos) instanceof MultiblockControllerMachine controller) {
             if (controller instanceof DroneStationMachine maintenanceMachine) {
                 return maintenanceMachine;
             }

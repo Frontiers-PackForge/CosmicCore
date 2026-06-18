@@ -6,7 +6,7 @@ import com.ghostipedia.cosmiccore.common.data.CosmicItems;
 import com.gregtechceu.gtceu.api.item.component.IAddInformation;
 import com.gregtechceu.gtceu.api.item.component.IInteractionItem;
 import com.gregtechceu.gtceu.api.machine.MetaMachine;
-import com.gregtechceu.gtceu.api.machine.feature.multiblock.IMultiController;
+import com.gregtechceu.gtceu.api.machine.multiblock.MultiblockControllerMachine;
 
 import net.minecraft.ChatFormatting;
 import net.minecraft.Util;
@@ -50,7 +50,7 @@ public class LinkedTerminalBehavior implements IInteractionItem, IAddInformation
         var level = context.getLevel();
         var pos = context.getClickedPos();
         var stack = context.getItemInHand();
-        if (!(MetaMachine.getMachine(level, pos) instanceof IMultiController controller)) return InteractionResult.PASS;
+        if (!(MetaMachine.getMachine(level, pos) instanceof MultiblockControllerMachine controller)) return InteractionResult.PASS;
         if (controller.isFormed() || level.isClientSide) return InteractionResult.PASS;
         var grid = getLinkedGrid(stack, level, player);
         if (grid == null) return InteractionResult.PASS;

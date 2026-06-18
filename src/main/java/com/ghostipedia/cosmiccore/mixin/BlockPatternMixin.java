@@ -5,7 +5,7 @@ import com.ghostipedia.cosmiccore.api.block.IBlockPattern;
 import com.gregtechceu.gtceu.api.item.MetaMachineItem;
 import com.gregtechceu.gtceu.api.blockentity.BlockEntityCreationInfo;
 import com.gregtechceu.gtceu.api.machine.MetaMachine;
-import com.gregtechceu.gtceu.api.machine.feature.multiblock.IMultiController;
+import com.gregtechceu.gtceu.api.machine.multiblock.MultiblockControllerMachine;
 import com.gregtechceu.gtceu.api.pattern.BlockPattern;
 import com.gregtechceu.gtceu.api.pattern.MultiblockState;
 import com.gregtechceu.gtceu.api.pattern.TraceabilityPredicate;
@@ -87,7 +87,7 @@ public abstract class BlockPatternMixin implements IBlockPattern {
         Level world = player.level();
         int minZ = -centerOffset[4];
         worldState.clean();
-        IMultiController controller = worldState.getController();
+        MultiblockControllerMachine controller = worldState.getController();
         BlockPos centerPos = controller.self().getPos();
         Direction facing = controller.self().getFrontFacing();
         Direction upwardsFacing = controller.self().getUpwardsFacing();
@@ -230,7 +230,7 @@ public abstract class BlockPatternMixin implements IBlockPattern {
         Direction frontFacing = controller.self().getFrontFacing();
         blocks.forEach((pos, block) -> {
             // adjust facing
-            if (!(block instanceof IMultiController)) {
+            if (!(block instanceof MultiblockControllerMachine)) {
                 if (block instanceof BlockState && placeBlockPos.contains(pos)) {
                     resetFacing(pos, (BlockState) block, frontFacing, (p, f) -> {
                         Object object = blocks.get(p.relative(f));

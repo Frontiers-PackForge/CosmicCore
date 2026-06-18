@@ -2,7 +2,7 @@ package com.ghostipedia.cosmiccore.common.machine.part;
 
 import com.gregtechceu.gtceu.api.machine.ConditionalSubscriptionHandler;
 import com.gregtechceu.gtceu.api.blockentity.BlockEntityCreationInfo;
-import com.gregtechceu.gtceu.api.machine.feature.multiblock.IMultiController;
+import com.gregtechceu.gtceu.api.machine.multiblock.MultiblockControllerMachine;
 import com.gregtechceu.gtceu.api.machine.multiblock.part.TieredPartMachine;
 
 import net.minecraft.core.Direction;
@@ -27,13 +27,13 @@ public class SensorPartMachine extends TieredPartMachine {
     }
 
     @Override
-    public void removedFromController(@NotNull IMultiController controller) {
+    public void removedFromController(@NotNull MultiblockControllerMachine controller) {
         super.removedFromController(controller);
         signalUpdateHandler.updateSubscription();
     }
 
     @Override
-    public void addedToController(@NotNull IMultiController controller) {
+    public void addedToController(@NotNull MultiblockControllerMachine controller) {
         super.addedToController(controller);
         signalUpdateHandler.updateSubscription();
     }
