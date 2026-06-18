@@ -59,7 +59,7 @@ public class LinkedPartnerDimensionItemCondition extends RecipeCondition<LinkedP
     }
 
     public LinkedPartnerDimensionItemCondition(String dimension, Item item, int minCount) {
-        this(false, ResourceLocation.fromNamespaceAndPath(dimension), BuiltInRegistries.ITEM.getKey(item), minCount);
+        this(false, ResourceLocation.parse(dimension), BuiltInRegistries.ITEM.getKey(item), minCount);
     }
 
     public LinkedPartnerDimensionItemCondition(String dimension, Item item) {

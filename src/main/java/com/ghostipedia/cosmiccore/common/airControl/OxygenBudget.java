@@ -73,7 +73,7 @@ public class OxygenBudget implements IOxygen {
         ListTag list = root.getList("entries", Tag.TAG_COMPOUND);
         for (Tag element : list) {
             CompoundTag tag = (CompoundTag) element;
-            ResourceLocation dim = ResourceLocation.fromNamespaceAndPath(tag.getString("dimension"));
+            ResourceLocation dim = ResourceLocation.parse(tag.getString("dimension"));
             oxygenTicksByDimension.put(dim, tag.getLong("oxygenTicks"));
             consumingByDimension.put(dim, tag.getBoolean("consuming"));
             regenBufferByDimension.put(dim, tag.getDouble("regenBuffer"));

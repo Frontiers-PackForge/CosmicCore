@@ -3,7 +3,7 @@ package com.ghostipedia.cosmiccore.common.commands;
 import net.minecraft.ChatFormatting;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.network.chat.Component;
-import net.minecraftforge.registries.ForgeRegistries;
+import net.minecraft.core.registries.BuiltInRegistries;
 
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.context.CommandContext;
@@ -102,8 +102,8 @@ public class ExportRegistryCommand {
 
     private static List<String> collectItems() {
         List<String> entries = new ArrayList<>();
-        ForgeRegistries.ITEMS.forEach(item -> {
-            var id = ForgeRegistries.ITEMS.getKey(item);
+        BuiltInRegistries.ITEM.forEach(item -> {
+            var id = BuiltInRegistries.ITEM.getKey(item);
             if (id != null) {
                 String displayName = item.getDescription().getString();
                 entries.add(id + " | " + displayName);
@@ -115,8 +115,8 @@ public class ExportRegistryCommand {
 
     private static List<String> collectFluids() {
         List<String> entries = new ArrayList<>();
-        ForgeRegistries.FLUIDS.forEach(fluid -> {
-            var id = ForgeRegistries.FLUIDS.getKey(fluid);
+        BuiltInRegistries.FLUID.forEach(fluid -> {
+            var id = BuiltInRegistries.FLUID.getKey(fluid);
             if (id != null) {
                 String displayName = fluid.getFluidType().getDescription().getString();
                 entries.add(id + " | " + displayName);

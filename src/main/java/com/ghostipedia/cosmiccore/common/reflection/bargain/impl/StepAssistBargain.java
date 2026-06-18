@@ -9,17 +9,16 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.player.Player;
-import net.minecraftforge.common.ForgeMod;
+import net.minecraft.world.entity.ai.attributes.Attributes;
 
 import java.util.List;
-import java.util.UUID;
 
 public class StepAssistBargain extends Bargain {
 
     public static final ResourceLocation ID = CosmicCore.id("stride");
     public static final StepAssistBargain INSTANCE = new StepAssistBargain();
     private static final String BARGAIN_ID = "stride";
-    private static final UUID MODIFIER_UUID = UUID.fromString("f3b0c1d9-6789-9012-def0-123456789012");
+    private static final ResourceLocation MODIFIER_ID = CosmicCore.id("reflection_stride");
 
     private StepAssistBargain() {
         super(
@@ -90,18 +89,18 @@ public class StepAssistBargain extends Bargain {
     }
 
     public static void applyStepAssist(Player player) {
-        var attribute = player.getAttribute(ForgeMod.STEP_HEIGHT_ADDITION.get());
+        var attribute = player.getAttribute(Attributes.STEP_HEIGHT);
         if (attribute != null) {
-            attribute.removeModifier(MODIFIER_UUID);
+            attribute.removeModifier(MODIFIER_ID);
             attribute.addPermanentModifier(new AttributeModifier(
-                    MODIFIER_UUID, "Reflection Stride", 1.0, AttributeModifier.Operation.ADDITION));
+                    MODIFIER_ID, 1.0, AttributeModifier.Operation.ADD_VALUE));
         }
     }
 
     public static void removeStepAssist(Player player) {
-        var attribute = player.getAttribute(ForgeMod.STEP_HEIGHT_ADDITION.get());
+        var attribute = player.getAttribute(Attributes.STEP_HEIGHT);
         if (attribute != null) {
-            attribute.removeModifier(MODIFIER_UUID);
+            attribute.removeModifier(MODIFIER_ID);
         }
     }
 }

@@ -177,7 +177,7 @@ public class DivingBellMachine extends WorkableElectricMultiblockMachine {
 
     // Get the target dimension (Deep Below).
     private ResourceKey<Level> getTargetDimension() {
-        ResourceLocation dimLoc = ResourceLocation.fromNamespaceAndPath(TARGET_DIMENSION);
+        ResourceLocation dimLoc = ResourceLocation.parse(TARGET_DIMENSION);
         return ResourceKey.create(net.minecraft.core.registries.Registries.DIMENSION, dimLoc);
     }
 

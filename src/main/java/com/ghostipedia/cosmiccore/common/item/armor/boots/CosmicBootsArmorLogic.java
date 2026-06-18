@@ -22,17 +22,17 @@ import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.common.ForgeMod;
+import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.neoforged.neoforge.common.NeoForgeMod;
 
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
-import java.util.UUID;
 
 public class CosmicBootsArmorLogic extends ArmorLogicSuite implements ICosmicBoots {
 
-    protected static final UUID STEP_HEIGHT_UUID = UUID.fromString("c05a1cb0-b007-5433-9000-57e93e190001");
-    protected static final UUID SWIM_SPEED_UUID = UUID.fromString("c05a1cb0-b007-5433-9000-57e93e190002");
+    protected static final ResourceLocation STEP_HEIGHT_ID = CosmicCore.id("cosmic_boots_step_height");
+    protected static final ResourceLocation SWIM_SPEED_ID = CosmicCore.id("cosmic_boots_swim_speed");
 
     protected final double maxSpeed;
     protected final double groundAcceleration;
@@ -136,20 +136,19 @@ public class CosmicBootsArmorLogic extends ArmorLogicSuite implements ICosmicBoo
     }
 
     protected void applyStepHeight(Player player) {
-        AttributeInstance attribute = player.getAttribute(ForgeMod.STEP_HEIGHT_ADDITION.get());
-        if (attribute != null && attribute.getModifier(STEP_HEIGHT_UUID) == null) {
+        AttributeInstance attribute = player.getAttribute(Attributes.STEP_HEIGHT);
+        if (attribute != null && attribute.getModifier(STEP_HEIGHT_ID) == null) {
             attribute.addPermanentModifier(new AttributeModifier(
-                    STEP_HEIGHT_UUID,
-                    "Cosmic Boots Step Height",
+                    STEP_HEIGHT_ID,
                     1.0,
-                    AttributeModifier.Operation.ADDITION));
+                    AttributeModifier.Operation.ADD_VALUE));
         }
     }
 
     protected void removeStepHeight(Player player) {
-        AttributeInstance attribute = player.getAttribute(ForgeMod.STEP_HEIGHT_ADDITION.get());
+        AttributeInstance attribute = player.getAttribute(Attributes.STEP_HEIGHT);
         if (attribute != null) {
-            attribute.removeModifier(STEP_HEIGHT_UUID);
+            attribute.removeModifier(STEP_HEIGHT_ID);
         }
     }
 
@@ -162,21 +161,20 @@ public class CosmicBootsArmorLogic extends ArmorLogicSuite implements ICosmicBoo
 
         double swimBoost = groundAcceleration * speedMod * 0.5;
 
-        AttributeInstance attribute = player.getAttribute(ForgeMod.SWIM_SPEED.get());
+        AttributeInstance attribute = player.getAttribute(NeoForgeMod.SWIM_SPEED);
         if (attribute != null) {
-            attribute.removeModifier(SWIM_SPEED_UUID);
+            attribute.removeModifier(SWIM_SPEED_ID);
             attribute.addTransientModifier(new AttributeModifier(
-                    SWIM_SPEED_UUID,
-                    "Cosmic Boots Swim Speed",
+                    SWIM_SPEED_ID,
                     swimBoost,
-                    AttributeModifier.Operation.MULTIPLY_TOTAL));
+                    AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL));
         }
     }
 
     protected void removeSwimSpeed(Player player) {
-        AttributeInstance attribute = player.getAttribute(ForgeMod.SWIM_SPEED.get());
+        AttributeInstance attribute = player.getAttribute(NeoForgeMod.SWIM_SPEED);
         if (attribute != null) {
-            attribute.removeModifier(SWIM_SPEED_UUID);
+            attribute.removeModifier(SWIM_SPEED_ID);
         }
     }
 

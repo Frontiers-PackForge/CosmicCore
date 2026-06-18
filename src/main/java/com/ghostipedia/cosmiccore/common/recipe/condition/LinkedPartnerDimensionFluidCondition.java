@@ -59,7 +59,7 @@ public class LinkedPartnerDimensionFluidCondition extends RecipeCondition<Linked
     }
 
     public LinkedPartnerDimensionFluidCondition(String dimension, Fluid fluid, int minAmount) {
-        this(false, ResourceLocation.fromNamespaceAndPath(dimension), BuiltInRegistries.FLUID.getKey(fluid), minAmount);
+        this(false, ResourceLocation.parse(dimension), BuiltInRegistries.FLUID.getKey(fluid), minAmount);
     }
 
     public LinkedPartnerDimensionFluidCondition(String dimension, Fluid fluid) {

@@ -14,7 +14,7 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.level.block.Block;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
-import net.minecraftforge.registries.ForgeRegistries;
+import net.minecraft.core.registries.BuiltInRegistries;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -128,7 +128,7 @@ public class StarLadderResearchHubWidget extends WidgetGroup {
         Map<Block, Integer> reqs = machine.getNextRingBlockCounts();
         buffer.writeInt(reqs.size());
         for (Map.Entry<Block, Integer> entry : reqs.entrySet()) {
-            buffer.writeResourceLocation(ForgeRegistries.BLOCKS.getKey(entry.getKey()));
+            buffer.writeResourceLocation(BuiltInRegistries.BLOCK.getKey(entry.getKey()));
             buffer.writeInt(entry.getValue());
         }
     }
@@ -153,7 +153,7 @@ public class StarLadderResearchHubWidget extends WidgetGroup {
         nextTierRequirements.clear();
         int reqCount = buffer.readInt();
         for (int i = 0; i < reqCount; i++) {
-            Block block = ForgeRegistries.BLOCKS.getValue(buffer.readResourceLocation());
+            Block block = BuiltInRegistries.BLOCK.get(buffer.readResourceLocation());
             int count = buffer.readInt();
             if (block != null) {
                 nextTierRequirements.put(block, count);

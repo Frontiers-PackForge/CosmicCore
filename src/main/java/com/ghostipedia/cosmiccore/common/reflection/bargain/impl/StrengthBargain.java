@@ -15,14 +15,13 @@ import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.player.Player;
 
 import java.util.List;
-import java.util.UUID;
 
 public class StrengthBargain extends Bargain {
 
     public static final ResourceLocation ID = CosmicCore.id("violence");
     public static final StrengthBargain INSTANCE = new StrengthBargain();
     private static final String BARGAIN_ID = "violence";
-    private static final UUID MODIFIER_UUID = UUID.fromString("b9d6c7e5-2345-5678-9abc-def012345678");
+    private static final ResourceLocation MODIFIER_ID = CosmicCore.id("reflection_strength");
 
     public static final float MOB_DAMAGE_MULTIPLIER = 1.25f;
 
@@ -101,16 +100,16 @@ public class StrengthBargain extends Bargain {
     public static void applyStrengthBoost(Player player) {
         var attribute = player.getAttribute(Attributes.ATTACK_DAMAGE);
         if (attribute != null) {
-            attribute.removeModifier(MODIFIER_UUID);
+            attribute.removeModifier(MODIFIER_ID);
             attribute.addPermanentModifier(new AttributeModifier(
-                    MODIFIER_UUID, "Reflection Violence", 4.0, AttributeModifier.Operation.ADDITION));
+                    MODIFIER_ID, 4.0, AttributeModifier.Operation.ADD_VALUE));
         }
     }
 
     public static void removeStrengthBoost(Player player) {
         var attribute = player.getAttribute(Attributes.ATTACK_DAMAGE);
         if (attribute != null) {
-            attribute.removeModifier(MODIFIER_UUID);
+            attribute.removeModifier(MODIFIER_ID);
         }
     }
 
