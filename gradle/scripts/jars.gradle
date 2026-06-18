@@ -1,42 +1,19 @@
-tasks.register('slimJar', Jar) {
-    archiveClassifier = "dev-slim"
-    from sourceSets.main.output
+base {
+    archivesName = "${mod_id}-${libs.versions.minecraft.get()}"
 }
 
-obfuscation {
-    reobfuscate(tasks.named('slimJar'), sourceSets.main) {
-        archiveClassifier = "slim"
-    }
-}
-
-// Add slim and sources jar to components.java
 java {
-    artifacts.archives(reobfSlimJar)
     withSourcesJar()
 }
 
-// Use delombok's files for sources
-sourcesJar {
-    exclude {
-        sourceSets.main.allSource.contains it.file
-    }
-    from delombok
-}
-jar.archiveClassifier = "dev"
-base {
-    archivesName = "${project.name}-${libs.versions.minecraft.get()}"
-}
-
 afterEvaluate {
-    reobfJar.archiveClassifier = ""
     tasks.withType(org.gradle.jvm.tasks.Jar).configureEach {
         destinationDirectory = file('build/libs/')
         manifest.attributes([
-                'MixinConfigs': 'cosmiccore.mixins.json',
-                'Specification-Title': project.name,
+                'Specification-Title'  : mod_name,
                 'Specification-Version': mod_version,
-                'Specification-Vendor': mod_authors,
-                'Implementation-Title': base.archivesName,
+                'Specification-Vendor' : mod_authors,
+                'Implementation-Title' : base.archivesName.get(),
                 'Implementation-Version': version,
                 'Implementation-Vendor': mod_authors,
         ])

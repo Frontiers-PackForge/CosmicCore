@@ -1,19 +1,13 @@
-mixin {
-    var refMap = add sourceSets.main, "cosmiccore.refmap.json"
-    slimJar.from refMap
-    config 'cosmiccore.mixins.json'
-}
-
-legacyForge {
-    // Specify Forge version
-    version = libs.versions.minecraftForge.get()
+neoForge {
+    // Specify NeoForge version
+    version = libs.versions.neoForge.get()
 
     parchment {
         minecraftVersion = libs.versions.minecraft.get()
         mappingsVersion = libs.versions.parchment.get()
     }
 
-    accessTransformers = project.files('src/main/resources/META-INF/accesstransformer.cfg')
+    // Access Transformers are auto-detected at src/main/resources/META-INF/accesstransformer.cfg
 
     mods {
         // define mod <-> source bindings
@@ -29,7 +23,7 @@ legacyForge {
             ideName = "Client"
 
             gameDirectory.set(file("runs/client"))
-            systemProperty('forge.enabledGameTestNamespaces', project.mod_id)
+            systemProperty('neoforge.enabledGameTestNamespaces', project.mod_id)
         }
 
         client2 {
@@ -39,7 +33,7 @@ legacyForge {
 
             programArguments.addAll('--username', 'YoungOnion')
             gameDirectory.set(file("runs/client2"))
-            systemProperty('forge.enabledGameTestNamespaces', project.mod_id)
+            systemProperty('neoforge.enabledGameTestNamespaces', project.mod_id)
         }
 
         server {
@@ -49,7 +43,7 @@ legacyForge {
 
             gameDirectory.set(file("runs/server"))
             programArgument '--nogui'
-            systemProperty('forge.enabledGameTestNamespaces', project.mod_id)
+            systemProperty('neoforge.enabledGameTestNamespaces', project.mod_id)
         }
 
         data {
@@ -66,16 +60,7 @@ legacyForge {
         }
 
         configureEach {
-            // Recommended logging data for a userdev environment
-            // The markers can be added/remove as needed separated by commas.
-            // "SCAN": For mods scan.
-            // "REGISTRIES": For firing of registry events.
-            // "REGISTRYDUMP": For getting the contents of all registries.
             systemProperty 'forge.logging.markers', 'REGISTRIES'
-
-            // Recommended logging level for the console
-            // You can set various levels here.
-            // Please read: https://stackoverflow.com/questions/2031163/when-to-use-the-different-log-levels
             logLevel = org.slf4j.event.Level.INFO
         }
     }

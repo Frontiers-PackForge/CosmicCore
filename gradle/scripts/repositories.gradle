@@ -1,124 +1,110 @@
 repositories {
-    flatDir {
-        dir "libs"
-    }
     mavenLocal()
     mavenCentral()
-    maven {
-        name = "BlameJared maven"
-        url = uri("https://maven.blamejared.com/")
-    }
-    maven {
+
+    maven { // GTCEu
         name = 'GTCEu Maven'
         url = 'https://maven.gtceu.com'
-        content {
-            includeGroup 'com.gregtechceu.gtceu'
-            includeGroup 'appeng'
-            includeGroup 'lu.kolja'
-        }
+        content { includeGroup 'com.gregtechceu.gtceu' }
     }
-    maven { // Curse Forge File
-        url = "https://cursemaven.com/"
-        content {
-            includeGroup "curse.maven"
-        }
-    }
-    maven { // Ad Astra
-        url = "https://maven.teamresourceful.com/repository/maven-public/"
-    }
-    maven {
-        name = "Modmaven"
+    maven { // AE2 (upstream), GuideME, AE2WTLib (Mari023), JEI mirror
+        name = "ModMaven"
         url = "https://modmaven.dev/"
         content {
-            includeGroup 'appeng'
+            includeGroup 'org.appliedenergistics'
+            includeGroup 'de.mari_023'
+            includeGroup 'mezz.jei'
         }
     }
-    maven {
-        name = "TerraformersMC"
-        url = "https://maven.terraformersmc.com/releases/"
+    maven { // LDLib, Shimmer
+        name = "FirstDarkDev"
+        url = "https://maven.firstdark.dev/snapshots"
     }
-    maven {
-        name = 'FirstDarkDev'
-        url = 'https://maven.firstdarkdev.xyz/snapshots/'
-    }
-
-    maven { // saps.dev Maven (KubeJS and Rhino)
-        url "https://maven.latvian.dev/releases"
-        content {
-            includeGroup "dev.latvian.mods"
-            includeGroup "dev.latvian.apps"
-        }
-    }
-    maven {
-        name = 'ModKit'
-        url 'https://jitpack.io'
-        content { includeGroup 'com.github.thedarkcolour' }
-    }
-    maven { // saps.dev Maven (KubeJS and Rhino)
-        url 'https://jitpack.io'
-        content {
-            includeGroup "com.github.rtyley"
-        }
-    }
-    maven { // Registrate
-        url = "https://maven.tterrag.com/"
-        content {
-            // need to be specific here due to version overlaps
-            includeGroup("com.tterrag.registrate")
-            includeGroup("com.simibubi.create")
-        }
-    }
-    maven {
-        name "createmod maven"
-        url "https://maven.createmod.net/"
-    }
-    maven { // Patchouli, JEI
+    maven { // JEI, Patchouli
         name = "BlameJared"
         url = "https://maven.blamejared.com/"
     }
-    maven { // Curios
-        url = "https://maven.theillusivec4.top/"
-    }
-    maven {
-        url = "https://maven.shadowsoffire.dev/releases"
-    }
-    maven {
-        name = 'GeckoLib'
-        url = 'https://dl.cloudsmith.io/public/geckolib3/geckolib/maven/'
-    }
-    maven {
-        name = "tterrag maven"
-        url = "https://maven.tterrag.com/"
-    }
-    maven {
-        url = "https://api.modrinth.com/maven"
-    }
-    maven {
-        url = "https://maven.architectury.dev"
-    }
-    maven {
-        url = "https://thedarkcolour.github.io/KotlinForForge/"
-    }
-    maven {
-        url "https://dl.cloudsmith.io/public/klikli-dev/mods/maven/"
-        content {
-            includeGroup "com.klikli_dev"
+    exclusiveContent { // Create, Ponder, Flywheel
+        forRepository { maven { url = "https://maven.createmod.net" } }
+        filter {
+            includeGroup("net.createmod.ponder")
+            includeGroup("com.simibubi.create")
+            includeGroupAndSubgroups("dev.engine-room")
         }
     }
-    maven {
+    exclusiveContent { // Configuration
+        forRepository { maven { url = "https://repo.repsy.io/mvn/toma/public" } }
+        filter { includeGroup("dev.toma.configuration") }
+    }
+    exclusiveContent { // KubeJS and Rhino
+        forRepository { maven { url = "https://maven.latvian.dev/releases" } }
+        filter {
+            includeGroup("dev.latvian.mods")
+            includeGroup("dev.latvian.apps")
+        }
+    }
+    exclusiveContent { // FTB mods
+        forRepository { maven { url = "https://maven.ftb.dev/releases/" } }
+        filter { includeGroup("dev.ftb.mods") }
+    }
+    exclusiveContent { // EMI
+        forRepository { maven { url = "https://maven.terraformersmc.com/releases/" } }
+        filter { includeGroup("dev.emi") }
+    }
+    exclusiveContent { // architectury, cloth-config
+        forRepository { maven { url = "https://maven.shedaniel.me/" } }
+        filter {
+            includeGroupAndSubgroups("me.shedaniel")
+            includeGroup("dev.architectury")
+        }
+    }
+    exclusiveContent { // registrate
+        forRepository { maven { url = "https://mvn.devos.one/snapshots/" } }
+        filter { includeGroup("com.tterrag.registrate") }
+    }
+    exclusiveContent { // Curios
+        forRepository { maven { url = "https://maven.theillusivec4.top/" } }
+        filter { includeGroup('top.theillusivec4.curios') }
+    }
+    maven { // Apotheosis / Shadows of Fire
+        name = "Shadows of Fire"
+        url = "https://maven.shadowsoffire.dev/releases"
+    }
+    maven { // GeckoLib
         name = 'GeckoLib'
-        url 'https://dl.cloudsmith.io/public/geckolib3/geckolib/maven/'
+        url = 'https://dl.cloudsmith.io/public/geckolib3/geckolib/maven/'
         content {
             includeGroupByRegex("software\\.bernie.*")
             includeGroup("com.eliotlash.mclib")
         }
     }
-    exclusiveContent { // Configuration
-        forRepository { maven { url = "https://repo.repsy.io/mvn/toma/public" } }
-        filter { includeGroup("dev.toma.configuration")}
+    maven { // Occultism, Modonomicon
+        name = "Klikli"
+        url = "https://dl.cloudsmith.io/public/klikli-dev/mods/maven/"
+        content { includeGroup("com.klikli_dev") }
     }
-    exclusiveContent { // JourneyMap
+    exclusiveContent { // JourneyMap API
         forRepository { maven { url = "https://jm.gserv.me/repository/maven-public/" } }
         filter { includeGroup("info.journeymap") }
+    }
+    exclusiveContent { // KubeJS transitive (animated-gif-lib-for-java)
+        forRepository { maven { url = "https://jitpack.io/" } }
+        filter { includeGroup("com.github.rtyley") }
+    }
+    exclusiveContent { // CC: Tweaked (KubeJS transitive)
+        forRepository { maven { url = "https://maven.squiddev.cc" } }
+        filter { includeGroup("cc.tweaked") }
+    }
+    exclusiveContent { // Team Resourceful (resourcefullib)
+        forRepository { maven { url = "https://maven.teamresourceful.com/repository/maven-public/" } }
+        filter { includeGroupAndSubgroups("com.teamresourceful") }
+    }
+    exclusiveContent { // Modrinth maven (content mods)
+        forRepository { maven { url = "https://api.modrinth.com/maven/" } }
+        filter { includeGroup("maven.modrinth") }
+    }
+    exclusiveContent { // Curseforge maven
+        forRepository { maven { url = "https://cursemaven.com/" } }
+        filter { includeGroup("curse.maven") }
     }
 }

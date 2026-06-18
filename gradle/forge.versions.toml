@@ -1,134 +1,93 @@
 [versions]
-ldlib = "1.0.40.b"
-gtceu = "7.5.0-SNAPSHOT"
-registrate = "MC1.20-1.3.11"
-configuration = "3.1.0-forge"
-mixinExtras = "0.2.0"
+# --- shared GTCEu ecosystem (coordinates verbatim from GregTech-Modern 1.21 forge.versions.toml) ---
+# gtceu itself comes from the local flat jar in libs/ (gtceu-1.21.1-8.0.0.jar); version kept for mods.toml placeholder
+gtceu = "8.0.0"
+ldlib = "1.0.35.a"
+registrate = "MC1.21-1.3.0+67"
+configuration = "3.1.1-neoforge"
 
-jei = "15.20.0.115"
-emi = "1.1.22+1.20.1"
-ae2 = "15.4.10-cosmolite.34"
-expandedAE = "1.2.0-cosmolite.6"
-guideme = "20.1.11"
-kubejs = "2001.6.5-build.16"
-rhino = "2001.2.3-build.10"
-architectury = "9.2.14"
-patchouli = "1.20.1-84-FORGE"
-curios = "5.9.0+1.20.1"
-ftblibrary = "2001.2.4"
-ftbteams = "2001.3.0"
-adAstra = "1.15.20"
-botarium = "2.3.3"
-resourcefullLib = "2.1.23"
-resourcefullConfig = "2.1.2"
-yabn = "1.0.3"
-byteCodecs = "1.0.2"
-geckoLib = "4.7"
+jei = "19.25.1.328"
+emi = "1.1.24+1.21.1"
+ae2 = "19.2.17"
+guideme = "21.1.16"
+ae2wtlib = "19.5.0"
+expandedae = "2.1.1"
+kubejs = "2101.7.2-build.368"
+rhino = "2101.2.7-build.85"
+architectury = "13.0.8"
+clothconfig = "15.0.140"
+create = "6.0.8-168"   # compileOnly; pack runtime ships 6.0.10
+ponder = "1.0.64"
 flywheel = "1.0.5"
-apotheosis = "1.20.1-7.4.2"
-placebo = "1.20.1-8.6.2"
-apotheoticAttributes = "1.20.1-1.3.5"
-occultism = "1.140.2"
-modonomicon = "1.77.5"
-jcpp = "1.4.14" # required by occulus apparently
+curios = "9.5.1+1.21.1"
+ftblibrary = "2101.1.32"
+ftbteams = "2101.1.10"
+resourcefullib = "3.0.12"
+tmrv = "0.8.1+mc.21.1"
 
-
-## modrinth maven ##
-jade = "11.12.3+forge"
-embeddium = "0.3.31+mc1.20.1"
-oculus = "1.20.1-1.7.0"
-forestry = "2.5.0"
-gendustry = "1.0.3"
-
-## cursemaven ##
-ftblibrary-cm = "5567591"
-ftbteams-cm = "6130786"
-modernAe2Additions = "5826205"
-legendarySurvivalOverhaul = "6954536"
-create = "7178761"
-newThinAir = "4848005"
-puzzlesLib = "4924184"
-smartBrainLib = "5654964"
-modernFix = "6025611"
-botania = "6366547"
-ae2wtlib = "5217955"
-clothConfig = "5729105"
-embers = "6953702"
-journeymapApi = "1.20-1.9-SNAPSHOT"
-journeymapForge = "5789363"
-
-malum = "1.20.1-1.6.7.1"
-lodestone = "1.20.1-1.6.4.1.256"
+## content mods (versions verified resolvable for NeoForge 1.21.1) ##
+malum = "1.8.2"
+lodestone = "1.8.2"
+occultism = "1.221.0"
+modonomicon = "1.120.1"
+smartbrainlib = "1.16.11"
+geckolib = "4.8.4"
+patchouli = "1.21.1-93-NEOFORGE"
+placebo = "9.9.1"
+apothicattributes = "1.21.1-2.9.1"
+apothicenchanting = "1.21.1-1.5.3"
+apothicspawners = "1.21.1-1.3.4"
+lso = "1.21.1-2.4.2"
+jade = "15.10.5+neoforge"
+journeymapapi = "2.0.0-1.21.1-SNAPSHOT"
+effortless = "4.1"
 
 [libraries]
+gtceu               = { module = "com.gregtechceu.gtceu:gtceu-1.21.1", version.ref = "gtceu" }
+ldlib               = { module = "com.lowdragmc.ldlib:ldlib-neoforge-1.21.1", version.ref = "ldlib" }
+registrate          = { module = "com.tterrag.registrate:Registrate", version.ref = "registrate" }
+configuration       = { module = "dev.toma.configuration:configuration-1.21.1", version.ref = "configuration" }
 
+jei-common-api      = { module = "mezz.jei:jei-1.21.1-common-api", version.ref = "jei" }
+jei-neoforge-api    = { module = "mezz.jei:jei-1.21.1-neoforge-api", version.ref = "jei" }
+jei-neoforge-impl   = { module = "mezz.jei:jei-1.21.1-neoforge", version.ref = "jei" }
+emi                 = { module = "dev.emi:emi-neoforge", version.ref = "emi" }
+tmrv                = { module = "maven.modrinth:toomanyrecipeviewers", version.ref = "tmrv" }
 
-ldlib                     = { module = "com.lowdragmc.ldlib:ldlib-forge-1.20.1", version.ref = "ldlib" }
-gtceu                     = { module = "com.gregtechceu.gtceu:gtceu-1.20.1", version.ref = "gtceu" }
-registrate                = { module = "com.tterrag.registrate:Registrate", version.ref = "registrate" }
-configuration             = { module = "dev.toma.configuration:configuration-1.20.1", version.ref = "configuration" }
-mixinExtras-common        = { module = "io.github.llamalad7:mixinextras-common", version.ref = "mixinExtras" }
-mixinExtras-forge         = { module = "io.github.llamalad7:mixinextras-forge", version.ref = "mixinExtras" }
+ae2                 = { module = "org.appliedenergistics:appliedenergistics2", version.ref = "ae2" }
+guideme             = { module = "org.appliedenergistics:guideme", version.ref = "guideme" }
+ae2wtlib            = { module = "de.mari_023:ae2wtlib", version.ref = "ae2wtlib" }
+ae2wtlib-api        = { module = "de.mari_023:ae2wtlib_api", version.ref = "ae2wtlib" }
+expandedae          = { module = "maven.modrinth:expanded-ae", version.ref = "expandedae" }
+kubejs              = { module = "dev.latvian.mods:kubejs-neoforge", version.ref = "kubejs" }
+rhino               = { module = "dev.latvian.mods:rhino", version.ref = "rhino" }
+architectury        = { module = "dev.architectury:architectury-neoforge", version.ref = "architectury" }
+clothconfig         = { module = "me.shedaniel.cloth:cloth-config-neoforge", version.ref = "clothconfig" }
+create              = { module = "com.simibubi.create:create-1.21.1", version.ref = "create" }
+ponder              = { module = "net.createmod.ponder:Ponder-NeoForge-1.21.1", version.ref = "ponder" }
+flywheel-api        = { module = "dev.engine-room.flywheel:flywheel-neoforge-api-1.21.1", version.ref = "flywheel" }
+flywheel-impl       = { module = "dev.engine-room.flywheel:flywheel-neoforge-1.21.1", version.ref = "flywheel" }
+curios              = { module = "top.theillusivec4.curios:curios-neoforge", version.ref = "curios" }
+ftblibrary          = { module = "dev.ftb.mods:ftb-library-neoforge", version.ref = "ftblibrary" }
+ftbteams            = { module = "dev.ftb.mods:ftb-teams-neoforge", version.ref = "ftbteams" }
+resourcefullib      = { module = "com.teamresourceful.resourcefullib:resourcefullib-neoforge-1.21", version.ref = "resourcefullib" }
 
-jei-common-api            = { module = "mezz.jei:jei-1.20.1-common-api", version.ref = "jei" }
-jei-forge-api             = { module = "mezz.jei:jei-1.20.1-forge-api", version.ref = "jei" }
-jei-forge-impl            = { module = "mezz.jei:jei-1.20.1-forge", version.ref = "jei" }
-emi                       = { module = "dev.emi:emi-forge", version.ref = "emi" }
-
-ae2                       = { module = "appeng:appliedenergistics2-forge", version.ref = "ae2" }
-expandedAE                = { module = "lu.kolja:expandedae", version.ref = "expandedAE" }
-guideme                   = { module = "org.appliedenergistics:guideme", version.ref = "guideme" }
-kubejs                    = { module = "dev.latvian.mods:kubejs-forge", version.ref = "kubejs" }
-rhino                     = { module = "dev.latvian.mods:rhino-forge", version.ref = "rhino" }
-architectury              = { module = "dev.architectury:architectury-forge", version.ref = "architectury" }
-patchouli                 = { module = "vazkii.patchouli:Patchouli", version.ref = "patchouli" }
-curios                    = { module = "top.theillusivec4.curios:curios-forge", version.ref = "curios" }
-yabn                      = { module = "com.teamresourceful:yabn", version.ref = "yabn" }
-byteCodecs                = { module = "com.teamresourceful:bytecodecs", version.ref = "byteCodecs" }
-resourcefullLib           = { module = "com.teamresourceful.resourcefullib:resourcefullib-forge-1.20.1", version.ref = "resourcefullLib" }
-resourcefullConfig        = { module = "com.teamresourceful.resourcefulconfig:resourcefulconfig-forge-1.20.1", version.ref = "resourcefullConfig" }
-botarium                  = { module = "earth.terrarium.botarium:botarium-forge-1.20.1", version.ref = "botarium" }
-adAstra                   = { module = "earth.terrarium.adastra:ad_astra-forge-1.20.1", version.ref = "adAstra" }
-ftblibrary                = { module = "dev.ftb.mods:ftb-library-forge", version.ref = "ftblibrary" }
-ftbteams                  = { module = "dev.ftb.mods:ftb-teams-forge", version.ref = "ftbteams" }
-geckoLib                  = { module = "software.bernie.geckolib:geckolib-forge-1.20.1", version.ref = "geckoLib" }
-flywheel                  = { module = "dev.engine-room.flywheel:flywheel-forge-1.20.1", version.ref = "flywheel" }
-
-apotheosis                = { module = "dev.shadowsoffire:Apotheosis", version.ref = "apotheosis" }
-placebo                   = { module = "dev.shadowsoffire:Placebo", version.ref = "placebo" }
-apotheoticAttributes      = { module = "dev.shadowsoffire:ApothicAttributes", version.ref = "apotheoticAttributes" }
-occultism                 = { module = "com.klikli_dev:occultism-1.20.1", version.ref = "occultism"}
-modonomicon               = { module = "com.klikli_dev:modonomicon-1.20.1-forge", version.ref = "modonomicon"}
-jcpp                      = { module = "org.anarres:jcpp", version.ref = "jcpp" } # required by occulus apparently
-
-malum                     = { module = "com.sammy.malum:malum", version.ref = "malum" }
-lodestone                 = { module = "team.lodestar.lodestone:lodestone", version.ref = "lodestone" }
-
-## modrinth maven ##
-jade                      = { module = "maven.modrinth:jade", version.ref = "jade" }
-embeddium                 = { module = "maven.modrinth:embeddium", version.ref = "embeddium" }
-oculus                    = { module = "maven.modrinth:oculus", version.ref = "oculus" }
-forestry                  = { module = "maven.modrinth:forestry-community-edition", version.ref = "forestry" }
-gendustry                  = { module = "maven.modrinth:gendustry-community-edition", version.ref = "gendustry" }
-
-
-## cursemaven ##
-ftblibrary-cm             = { module = "curse.maven:ftb-library-forge-404465", version.ref = "ftblibrary-cm" }
-ftbteams-cm               = { module = "curse.maven:ftb-teams-forge-404468", version.ref = "ftbteams-cm" }
-modernAe2Additions        = { module = "curse.maven:modern-ae2-additions-1028068", version.ref = "modernAe2Additions" }
-legendarySurvivalOverhaul = { module = "curse.maven:legendary-survival-overhaul-840254", version.ref = "legendarySurvivalOverhaul" }
-create                    = { module = "curse.maven:create-328085", version.ref = "create" }
-newThinAir                = { module = "curse.maven:new-thin-air-878379", version.ref = "newThinAir" }
-puzzlesLib                = { module = "curse.maven:puzzles-lib-495476", version.ref = "puzzlesLib" }
-smartBrainLib             = { module = "curse.maven:smartbrainlib-661293", version.ref = "smartBrainLib" }
-modernFix                 = { module = "curse.maven:modernfix-790626", version.ref = "modernFix" }
-botania                   = { module = "curse.maven:botania-225643", version.ref = "botania" }
-ae2wtlib                  = { module = "curse.maven:applied-energistics-2-wireless-terminals-459929", version.ref = "ae2wtlib" }
-clothConfig               = { module = "curse.maven:cloth-config-348521", version.ref = "clothConfig" }
-embers                    = { module = "curse.maven:embers-300777", version.ref = "embers" }
-journeymapApi             = { module = "info.journeymap:journeymap-api", version.ref = "journeymapApi" }
-journeymapForge           = { module = "curse.maven:journeymap-32274", version.ref = "journeymapForge" }
+malum               = { module = "maven.modrinth:malum", version.ref = "malum" }
+lodestone           = { module = "maven.modrinth:lodestonelib", version.ref = "lodestone" }
+occultism           = { module = "com.klikli_dev:occultism-1.21.1-neoforge", version.ref = "occultism" }
+modonomicon         = { module = "com.klikli_dev:modonomicon-1.21.1-neoforge", version.ref = "modonomicon" }
+smartbrainlib       = { module = "maven.modrinth:smartbrainlib", version.ref = "smartbrainlib" }
+geckolib            = { module = "software.bernie.geckolib:geckolib-neoforge-1.21.1", version.ref = "geckolib" }
+patchouli           = { module = "vazkii.patchouli:Patchouli", version.ref = "patchouli" }
+placebo             = { module = "maven.modrinth:placebo", version.ref = "placebo" }
+apothicattributes   = { module = "dev.shadowsoffire:ApothicAttributes", version.ref = "apothicattributes" }
+apothicenchanting   = { module = "dev.shadowsoffire:ApothicEnchanting", version.ref = "apothicenchanting" }
+apothicspawners     = { module = "dev.shadowsoffire:ApothicSpawners", version.ref = "apothicspawners" }
+lso                 = { module = "maven.modrinth:legendary-survival-overhaul", version.ref = "lso" }
+jade                = { module = "maven.modrinth:jade", version.ref = "jade" }
+journeymap-api      = { module = "info.journeymap:journeymap-api-neoforge", version.ref = "journeymapapi" }
+effortless          = { module = "maven.modrinth:effortless-building", version.ref = "effortless" }
 
 [bundles]
-jei = ["jei-common-api", "jei-forge-api", "jei-forge-impl"]
+jei = ["jei-common-api", "jei-neoforge-api", "jei-neoforge-impl"]
 kjs = ["kubejs", "rhino", "architectury"]
