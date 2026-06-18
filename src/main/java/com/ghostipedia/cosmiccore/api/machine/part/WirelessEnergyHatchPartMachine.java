@@ -13,8 +13,6 @@ import com.gregtechceu.gtceu.utils.FormattingUtil;
 
 import com.lowdragmc.lowdraglib.syncdata.ISubscription;
 import com.lowdragmc.lowdraglib.syncdata.annotation.Persisted;
-import com.lowdragmc.lowdraglib.syncdata.field.ManagedFieldHolder;
-
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.TickTask;
@@ -39,9 +37,6 @@ public class WirelessEnergyHatchPartMachine extends TieredIOPartMachine {
 
     protected static final long ticks_between_save_data_operations = 5L * 20L;
 
-    protected static final ManagedFieldHolder MANAGED_FIELD_HOLDER = new ManagedFieldHolder(
-            WirelessEnergyHatchPartMachine.class,
-            TieredIOPartMachine.MANAGED_FIELD_HOLDER);
 
     @Persisted
     public final NotifiableEnergyContainer energyContainer;

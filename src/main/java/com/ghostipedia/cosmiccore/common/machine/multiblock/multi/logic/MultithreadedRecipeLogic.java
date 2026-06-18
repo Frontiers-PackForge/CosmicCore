@@ -17,8 +17,6 @@ import com.gregtechceu.gtceu.api.recipe.modifier.ModifierFunction;
 
 import com.lowdragmc.lowdraglib.syncdata.annotation.DescSynced;
 import com.lowdragmc.lowdraglib.syncdata.annotation.Persisted;
-import com.lowdragmc.lowdraglib.syncdata.field.ManagedFieldHolder;
-
 import lombok.Getter;
 import lombok.Setter;
 import org.jetbrains.annotations.NotNull;
@@ -36,8 +34,6 @@ import java.util.Iterator;
  */
 public class MultithreadedRecipeLogic extends RecipeLogic implements IRecipeCapabilityHolder {
 
-    public static final ManagedFieldHolder MANAGED_FIELD_HOLDER = new ManagedFieldHolder(
-            MultithreadedRecipeLogic.class, RecipeLogic.MANAGED_FIELD_HOLDER);
 
     /**
      * Toggle to log per-thread recipe matching and tick-drain decisions. Flip on when investigating thread behavior.
@@ -90,10 +86,6 @@ public class MultithreadedRecipeLogic extends RecipeLogic implements IRecipeCapa
         this.threadColor = threadColor;
     }
 
-    @Override
-    public ManagedFieldHolder getFieldHolder() {
-        return MANAGED_FIELD_HOLDER;
-    }
 
     // === IRecipeCapabilityHolder implementation ===
     // These methods provide a filtered view of handlers for this thread only

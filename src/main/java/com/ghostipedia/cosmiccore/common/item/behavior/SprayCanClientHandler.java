@@ -5,7 +5,7 @@ import com.ghostipedia.cosmiccore.client.gui.SprayCanScreen;
 import com.ghostipedia.cosmiccore.common.data.CosmicSounds;
 
 import com.gregtechceu.gtceu.api.blockentity.IPaintable;
-import com.gregtechceu.gtceu.api.blockentity.MetaMachineBlockEntity;
+import com.gregtechceu.gtceu.api.machine.MetaMachine;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.sounds.SimpleSoundInstance;
@@ -99,8 +99,8 @@ public class SprayCanClientHandler {
                             color = ExtendedDyeColor.getColorFromDyeId(dye.getId());
                         }
                     }
-                } else if (entity instanceof MetaMachineBlockEntity meta) {
-                    var machineColor = meta.getMetaMachine().getPaintingColor();
+                } else if (entity instanceof MetaMachine meta) {
+                    var machineColor = meta.getPaintingColor();
                     for (DyeColor dye : DyeColor.values()) {
                         if (machineColor == -1) {
                             color = ExtendedDyeColor.SOLVENT;

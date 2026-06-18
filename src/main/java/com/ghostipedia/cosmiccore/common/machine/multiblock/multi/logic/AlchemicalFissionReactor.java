@@ -13,8 +13,6 @@ import com.gregtechceu.gtceu.utils.FormattingUtil;
 
 import com.lowdragmc.lowdraglib.syncdata.annotation.DescSynced;
 import com.lowdragmc.lowdraglib.syncdata.annotation.Persisted;
-import com.lowdragmc.lowdraglib.syncdata.field.ManagedFieldHolder;
-
 import net.minecraft.network.chat.Component;
 import net.neoforged.neoforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.IFluidHandler;
@@ -69,9 +67,6 @@ public class AlchemicalFissionReactor extends WorkableElectricMultiblockMachine 
         coolantTiers.put(GTMaterials.Helium.getFluid(FluidStorageKeys.LIQUID, 1), 64);
     }
 
-    protected static final ManagedFieldHolder MANAGED_FIELD_HOLDER = new ManagedFieldHolder(
-            AlchemicalFissionReactor.class,
-            WorkableElectricMultiblockMachine.MANAGED_FIELD_HOLDER);
 
     public AlchemicalFissionReactor(BlockEntityCreationInfo holder, Object... args) {
         super(holder, args);
@@ -79,9 +74,6 @@ public class AlchemicalFissionReactor extends WorkableElectricMultiblockMachine 
 
     @Override
     @NotNull
-    public ManagedFieldHolder getFieldHolder() {
-        return MANAGED_FIELD_HOLDER;
-    }
 
     @Override
     public void onStructureFormed() {

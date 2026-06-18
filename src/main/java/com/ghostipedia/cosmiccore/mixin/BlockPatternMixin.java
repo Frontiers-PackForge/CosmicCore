@@ -217,7 +217,7 @@ public abstract class BlockPatternMixin implements IBlockPattern {
                                 }
                             }
                             if (world.getBlockEntity(pos) instanceof BlockEntityCreationInfo machineBlockEntity) {
-                                blocks.put(pos, machineBlockEntity.getMetaMachine());
+                                blocks.put(pos, machineBlockEntity);
                             } else {
                                 blocks.put(pos, world.getBlockState(pos));
                             }

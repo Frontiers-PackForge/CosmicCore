@@ -25,8 +25,6 @@ import com.gregtechceu.gtceu.common.data.GTRecipeTypes;
 import com.lowdragmc.lowdraglib.gui.texture.GuiTextureGroup;
 import com.lowdragmc.lowdraglib.gui.texture.TextTexture;
 import com.lowdragmc.lowdraglib.gui.widget.*;
-import com.lowdragmc.lowdraglib.syncdata.field.ManagedFieldHolder;
-
 import net.minecraft.network.chat.Component;
 
 import lombok.Getter;
@@ -43,8 +41,6 @@ import static com.gregtechceu.gtceu.api.pattern.Predicates.*;
 
 public class StarLadderOld extends WorkableElectricMultiblockMachine implements IMultiblockProvider {
 
-    protected static final ManagedFieldHolder MANAGED_FIELD_HOLDER = new ManagedFieldHolder(StarLadderOld.class,
-            WorkableElectricMultiblockMachine.MANAGED_FIELD_HOLDER);
     @Nullable
     protected EnergyContainerList inputEnergyContainers;
     // assuming a collection is just like a map, but it lost the actual mapping
@@ -58,9 +54,6 @@ public class StarLadderOld extends WorkableElectricMultiblockMachine implements 
 
     @Override
     @NotNull
-    public ManagedFieldHolder getFieldHolder() {
-        return MANAGED_FIELD_HOLDER;
-    }
 
     protected int tetherTier = 0;
 

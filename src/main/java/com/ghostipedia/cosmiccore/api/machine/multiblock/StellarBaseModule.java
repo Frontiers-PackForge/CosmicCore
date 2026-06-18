@@ -27,8 +27,6 @@ import com.lowdragmc.lowdraglib.gui.modular.ModularUI;
 import com.lowdragmc.lowdraglib.gui.widget.Widget;
 import com.lowdragmc.lowdraglib.syncdata.annotation.DescSynced;
 import com.lowdragmc.lowdraglib.syncdata.annotation.Persisted;
-import com.lowdragmc.lowdraglib.syncdata.field.ManagedFieldHolder;
-
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
@@ -53,8 +51,6 @@ public class StellarBaseModule extends WorkableMultiblockMachine
                                implements IStellarModuleReceiver, IDisplayUIMachine, IFancyUIMachine,
                                IOverclockMachine {
 
-    public static final ManagedFieldHolder MANAGED_FIELD_HOLDER = new ManagedFieldHolder(
-            StellarBaseModule.class, WorkableMultiblockMachine.MANAGED_FIELD_HOLDER);
 
     @Setter
     private IStellarIrisProvider stellarIris;
@@ -90,10 +86,6 @@ public class StellarBaseModule extends WorkableMultiblockMachine
         this.virtualEnergyContainer.setSideOutputCondition(side -> false);
     }
 
-    @Override
-    public @NotNull ManagedFieldHolder getFieldHolder() {
-        return MANAGED_FIELD_HOLDER;
-    }
 
     protected UUID getTeamUUID() {
         var owner = getOwner();
@@ -227,7 +219,7 @@ public class StellarBaseModule extends WorkableMultiblockMachine
                         var blockEntity = getLevel().getBlockEntity(checkPos);
 
                         if (blockEntity instanceof BlockEntityCreationInfo machineBlockEntity) {
-                            var machine = machineBlockEntity.getMetaMachine();
+                            var machine = machineBlockEntity;
                             if (machine instanceof IrisMultiblockMachine iris && iris.isFormed()) {
                                 if (iris.registerModule(this)) {
                                     return;

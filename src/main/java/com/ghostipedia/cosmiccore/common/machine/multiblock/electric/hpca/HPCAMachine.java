@@ -35,8 +35,6 @@ import com.lowdragmc.lowdraglib.gui.widget.*;
 import com.lowdragmc.lowdraglib.syncdata.annotation.DescSynced;
 import com.lowdragmc.lowdraglib.syncdata.annotation.DropSaved;
 import com.lowdragmc.lowdraglib.syncdata.annotation.Persisted;
-import com.lowdragmc.lowdraglib.syncdata.field.ManagedFieldHolder;
-
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
@@ -57,8 +55,6 @@ import java.util.function.Supplier;
 public class HPCAMachine extends WorkableElectricMultiblockMachine
                          implements IOpticalComputationProvider, IControllable, IDropSaveMachine {
 
-    private static final ManagedFieldHolder MANAGED_FIELD_HOLDER = new ManagedFieldHolder(
-            HPCAMachine.class, WorkableElectricMultiblockMachine.MANAGED_FIELD_HOLDER);
 
     public static final int MIN_COMPONENTS_SLICES = 3;
     public static final int MAX_COMPONENTS_SLICES = 15;
@@ -334,10 +330,6 @@ public class HPCAMachine extends WorkableElectricMultiblockMachine
         return ChatFormatting.RED;
     }
 
-    @Override
-    public @NotNull ManagedFieldHolder getFieldHolder() {
-        return MANAGED_FIELD_HOLDER;
-    }
 
     private int getModifierIndex(BlockPos pos) {
         var index = 0;

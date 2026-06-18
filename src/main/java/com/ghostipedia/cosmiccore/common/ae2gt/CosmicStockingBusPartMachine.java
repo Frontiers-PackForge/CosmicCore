@@ -18,8 +18,6 @@ import com.gregtechceu.gtceu.integration.ae2.slot.IConfigurableSlotList;
 import com.lowdragmc.lowdraglib.syncdata.annotation.DescSynced;
 import com.lowdragmc.lowdraglib.syncdata.annotation.DropSaved;
 import com.lowdragmc.lowdraglib.syncdata.annotation.Persisted;
-import com.lowdragmc.lowdraglib.syncdata.field.ManagedFieldHolder;
-
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
@@ -46,8 +44,6 @@ import java.util.function.Predicate;
 
 public class CosmicStockingBusPartMachine extends CosmicInputBusPartMachine implements IMEStockingPart {
 
-    protected static final ManagedFieldHolder MANAGED_FIELD_HOLDER = new ManagedFieldHolder(
-            CosmicStockingBusPartMachine.class, CosmicInputBusPartMachine.MANAGED_FIELD_HOLDER);
 
     @DescSynced
     @Persisted
@@ -94,10 +90,6 @@ public class CosmicStockingBusPartMachine extends CosmicInputBusPartMachine impl
         return this.aeItemHandler;
     }
 
-    @Override
-    public ManagedFieldHolder getFieldHolder() {
-        return MANAGED_FIELD_HOLDER;
-    }
 
     /////////////////////////////////
     // ********** Sync ME *********//

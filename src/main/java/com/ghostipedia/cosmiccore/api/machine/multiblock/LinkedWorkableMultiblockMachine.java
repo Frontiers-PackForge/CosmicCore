@@ -13,8 +13,6 @@ import com.gregtechceu.gtceu.api.machine.feature.multiblock.IDisplayUIMachine;
 import com.gregtechceu.gtceu.api.machine.multiblock.WorkableMultiblockMachine;
 import com.gregtechceu.gtceu.common.machine.owner.FTBOwner;
 
-import com.lowdragmc.lowdraglib.syncdata.field.ManagedFieldHolder;
-
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.GlobalPos;
 import net.minecraft.nbt.CompoundTag;
@@ -49,9 +47,6 @@ import java.util.function.Predicate;
 public abstract class LinkedWorkableMultiblockMachine extends WorkableMultiblockMachine
                                                       implements ILinkedMultiblock, IDisplayUIMachine {
 
-    protected static final ManagedFieldHolder MANAGED_FIELD_HOLDER = new ManagedFieldHolder(
-            LinkedWorkableMultiblockMachine.class,
-            WorkableMultiblockMachine.MANAGED_FIELD_HOLDER);
 
     private static final String DATASTICK_TAG_KEY = "cosmiccore:link_data";
     private static final String TAG_POS = "Pos";
@@ -68,10 +63,6 @@ public abstract class LinkedWorkableMultiblockMachine extends WorkableMultiblock
         super(holder, args);
     }
 
-    @Override
-    public ManagedFieldHolder getFieldHolder() {
-        return MANAGED_FIELD_HOLDER;
-    }
 
     // ==================== ILinkedMultiblock Implementation ====================
 

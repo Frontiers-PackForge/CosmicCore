@@ -20,8 +20,6 @@ import com.gregtechceu.gtceu.utils.FormattingUtil;
 
 import com.lowdragmc.lowdraglib.syncdata.annotation.DescSynced;
 import com.lowdragmc.lowdraglib.syncdata.annotation.Persisted;
-import com.lowdragmc.lowdraglib.syncdata.field.ManagedFieldHolder;
-
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.DyeColor;
@@ -51,8 +49,6 @@ import java.util.*;
  */
 public class MultithreadedMachine extends WorkableElectricMultiblockMachine implements IMultithreadedMachine {
 
-    protected static final ManagedFieldHolder MANAGED_FIELD_HOLDER = new ManagedFieldHolder(
-            MultithreadedMachine.class, WorkableElectricMultiblockMachine.MANAGED_FIELD_HOLDER);
 
     /**
      * Maximum possible threads (limited by largest energy hatch amperage)
@@ -111,9 +107,6 @@ public class MultithreadedMachine extends WorkableElectricMultiblockMachine impl
 
     @Override
     @NotNull
-    public ManagedFieldHolder getFieldHolder() {
-        return MANAGED_FIELD_HOLDER;
-    }
 
     @Override
     protected RecipeLogic createRecipeLogic(Object... args) {

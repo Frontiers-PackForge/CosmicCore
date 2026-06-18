@@ -10,8 +10,6 @@ import com.gregtechceu.gtceu.api.blockentity.BlockEntityCreationInfo;
 
 import com.lowdragmc.lowdraglib.gui.modular.ModularUI;
 import com.lowdragmc.lowdraglib.gui.widget.Widget;
-import com.lowdragmc.lowdraglib.syncdata.field.ManagedFieldHolder;
-
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.GlobalPos;
 import net.minecraft.nbt.CompoundTag;
@@ -24,9 +22,6 @@ import java.util.List;
 
 public class StarLadderMachine extends LinkedWorkableElectricMultiblockMachine {
 
-    protected static final ManagedFieldHolder MANAGED_FIELD_HOLDER = new ManagedFieldHolder(
-            StarLadderMachine.class,
-            LinkedWorkableElectricMultiblockMachine.MANAGED_FIELD_HOLDER);
 
     @Getter
     private final StarLadderUplinkManager uplinkManager = new StarLadderUplinkManager(this);
@@ -35,10 +30,6 @@ public class StarLadderMachine extends LinkedWorkableElectricMultiblockMachine {
         super(holder, args);
     }
 
-    @Override
-    public ManagedFieldHolder getFieldHolder() {
-        return MANAGED_FIELD_HOLDER;
-    }
 
     @Override
     public LinkRole getLinkRole() {

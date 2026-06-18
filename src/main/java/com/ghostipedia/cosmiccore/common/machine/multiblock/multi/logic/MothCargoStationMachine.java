@@ -17,8 +17,6 @@ import com.gregtechceu.gtceu.api.machine.trait.NotifiableItemStackHandler;
 
 import com.lowdragmc.lowdraglib.syncdata.annotation.DescSynced;
 import com.lowdragmc.lowdraglib.syncdata.annotation.Persisted;
-import com.lowdragmc.lowdraglib.syncdata.field.ManagedFieldHolder;
-
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -60,9 +58,6 @@ import java.util.*;
  */
 public class MothCargoStationMachine extends LinkedWorkableMultiblockMachine {
 
-    protected static final ManagedFieldHolder MANAGED_FIELD_HOLDER = new ManagedFieldHolder(
-            MothCargoStationMachine.class,
-            LinkedWorkableMultiblockMachine.MANAGED_FIELD_HOLDER);
 
     // ==================== Constants ====================
 
@@ -129,10 +124,6 @@ public class MothCargoStationMachine extends LinkedWorkableMultiblockMachine {
         super(holder, args);
     }
 
-    @Override
-    public ManagedFieldHolder getFieldHolder() {
-        return MANAGED_FIELD_HOLDER;
-    }
 
     // ==================== Linking Overrides ====================
 

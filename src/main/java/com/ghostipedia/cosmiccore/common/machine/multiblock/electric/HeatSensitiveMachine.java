@@ -14,8 +14,6 @@ import com.gregtechceu.gtceu.api.machine.feature.ITieredMachine;
 import com.gregtechceu.gtceu.api.machine.feature.multiblock.IMultiPart;
 import com.gregtechceu.gtceu.api.misc.EnergyContainerList;
 
-import com.lowdragmc.lowdraglib.syncdata.field.ManagedFieldHolder;
-
 import it.unimi.dsi.fastutil.longs.Long2ObjectMaps;
 import lombok.Getter;
 import org.jetbrains.annotations.NotNull;
@@ -28,8 +26,6 @@ import javax.annotation.Nullable;
 
 public class HeatSensitiveMachine extends HeatWorkableElectricMultiblockMachine implements ITieredMachine {
 
-    protected static final ManagedFieldHolder MANAGED_FIELD_HOLDER = new ManagedFieldHolder(MagneticFieldMachine.class,
-            MagnetWorkableElectricMultiblockMachine.MANAGED_FIELD_HOLDER);
     @Getter
     private long overHeatLimit;
     @Getter
@@ -45,9 +41,6 @@ public class HeatSensitiveMachine extends HeatWorkableElectricMultiblockMachine 
 
     @Override
     @NotNull
-    public ManagedFieldHolder getFieldHolder() {
-        return MANAGED_FIELD_HOLDER;
-    }
 
     @Override
     public void onStructureFormed() {

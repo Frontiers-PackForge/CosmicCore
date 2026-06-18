@@ -15,8 +15,6 @@ import com.gregtechceu.gtceu.api.misc.EnergyContainerList;
 import com.gregtechceu.gtceu.common.data.GTMaterials;
 
 import com.lowdragmc.lowdraglib.syncdata.annotation.DescSynced;
-import com.lowdragmc.lowdraglib.syncdata.field.ManagedFieldHolder;
-
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -34,8 +32,6 @@ import javax.annotation.Nullable;
 
 public class ManaDigitizerMachine extends WorkableElectricMultiblockMachine {
 
-    protected static final ManagedFieldHolder MANAGED_FIELD_HOLDER = new ManagedFieldHolder(
-            ManaDigitizerMachine.class, WorkableMultiblockMachine.MANAGED_FIELD_HOLDER);
     @Nullable
     protected EnergyContainerList inputEnergyContainers;
     @DescSynced
