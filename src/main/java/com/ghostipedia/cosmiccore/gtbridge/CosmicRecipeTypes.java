@@ -1,7 +1,6 @@
 package com.ghostipedia.cosmiccore.gtbridge;
 
 import com.ghostipedia.cosmiccore.api.CosmicGuiTextures;
-import com.ghostipedia.cosmiccore.api.capability.recipe.EmberRecipeCapability;
 import com.ghostipedia.cosmiccore.api.capability.recipe.SoulRecipeCapability;
 import com.ghostipedia.cosmiccore.common.data.CosmicSounds;
 
@@ -86,8 +85,6 @@ public class CosmicRecipeTypes {
     /*
      * public static final GTRecipeType EMBER_TESTER_RECIPES = GTRecipeTypes
      * .register("ember_tester", GTRecipeTypes.MULTIBLOCK)
-     * .setMaxSize(IO.IN, EmberRecipeCapability.CAP, 1)
-     * .setMaxSize(IO.OUT, EmberRecipeCapability.CAP, 1)
      * .setMaxIOSize(1, 1, 0, 0)
      * .setProgressBar(GuiTextures.PROGRESS_BAR_ARROW, ProgressTexture.FillDirection.LEFT_TO_RIGHT);
      */
@@ -230,18 +227,15 @@ public class CosmicRecipeTypes {
             .setProgressBar(GuiTextures.PROGRESS_BAR_ARROW, ProgressTexture.FillDirection.LEFT_TO_RIGHT);
     public static final GTRecipeType LARGE_ROASTER = GTRecipeTypes
             .register("large_roaster", ELECTRIC)
-            .setMaxSize(IO.IN, EmberRecipeCapability.CAP, 1)
             .setMaxIOSize(4, 4, 4, 4)
             .setProgressBar(GuiTextures.PROGRESS_BAR_ARROW, ProgressTexture.FillDirection.LEFT_TO_RIGHT);
     public static final GTRecipeType VILE_FISSION = GTRecipeTypes
             .register("vile_fission", ELECTRIC)
-            .setMaxSize(IO.IN, EmberRecipeCapability.CAP, 1)
             .setMaxIOSize(1, 1, 1, 1)
             .setProgressBar(GuiTextures.PROGRESS_BAR_ARROW, ProgressTexture.FillDirection.LEFT_TO_RIGHT);
 
     public static final GTRecipeType VOID_SALT_FISSION = GTRecipeTypes
             .register("void_salt_fission", ELECTRIC)
-            .setMaxSize(IO.IN, EmberRecipeCapability.CAP, 1)
             .setMaxIOSize(2, 3, 2, 2)
             .setProgressBar(GuiTextures.PROGRESS_BAR_ARROW, ProgressTexture.FillDirection.LEFT_TO_RIGHT);
 
@@ -297,7 +291,6 @@ public class CosmicRecipeTypes {
             });
     public static final GTRecipeType DAWN_FORGE = GTRecipeTypes.register("dawn_forge", GTRecipeTypes.MULTIBLOCK)
             .setMaxIOSize(8, 1, 2, 0)
-            .setMaxSize(IO.IN, EmberRecipeCapability.CAP, 1)
             .setSound(DAWN_FORGE_SFX)
             .setMaxTooltips(5)
             .setProgressBar(CosmicGuiTextures.DAWN_FORGE, ProgressTexture.FillDirection.ALWAYS_FULL);
@@ -305,7 +298,6 @@ public class CosmicRecipeTypes {
     public static final GTRecipeType CINDER_HEARTH = GTRecipeTypes
             .register("cinder_hearth", GTRecipeTypes.MULTIBLOCK)
             .setMaxIOSize(3, 0, 3, 3)
-            .setMaxSize(IO.OUT, EmberRecipeCapability.CAP, 1)
             .setMaxSize(IO.IN, SoulRecipeCapability.CAP, 1)
             .setSound(DAWN_FORGE_SFX)
             .setMaxTooltips(7)
@@ -314,7 +306,6 @@ public class CosmicRecipeTypes {
     public static final GTRecipeType ARCANE_CRUCIBLE = GTRecipeTypes
             .register("arcane_crucible", GTRecipeTypes.MULTIBLOCK)
             .setMaxIOSize(6, 4, 3, 3)
-            .setMaxSize(IO.IN, EmberRecipeCapability.CAP, 1)
             .setMaxSize(IO.IN, SoulRecipeCapability.CAP, 1)
             .setSound(DAWN_FORGE_SFX)
             .setMaxTooltips(7)
@@ -323,7 +314,6 @@ public class CosmicRecipeTypes {
     public static final GTRecipeType PYROTHERMIC_REFINERY = GTRecipeTypes
             .register("pyrothermic_refinery", GTRecipeTypes.MULTIBLOCK)
             .setMaxIOSize(3, 3, 3, 3)
-            .setMaxSize(IO.IN, EmberRecipeCapability.CAP, 1)
             .setMaxSize(IO.IN, SoulRecipeCapability.CAP, 1)
             .setSound(GTSoundEntries.JET_ENGINE)
             .setMaxTooltips(3)
@@ -332,7 +322,6 @@ public class CosmicRecipeTypes {
     public static final GTRecipeType MANA_ETCHING_FACTORY = GTRecipeTypes
             .register("mana_etching", GTRecipeTypes.MULTIBLOCK)
             .setMaxIOSize(3, 2, 3, 0)
-            .setMaxSize(IO.IN, EmberRecipeCapability.CAP, 1)
             .setSound(DAWN_FORGE_SFX)
             .setMaxTooltips(5)
             .setProgressBar(GuiTextures.PROGRESS_BAR_CRYSTALLIZATION, LEFT_TO_RIGHT);

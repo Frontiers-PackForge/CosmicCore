@@ -8,8 +8,6 @@ import com.ghostipedia.cosmiccore.common.block.DivingBellEscapePad;
 import com.ghostipedia.cosmiccore.common.block.MagnetBlock;
 import com.ghostipedia.cosmiccore.common.block.MothHomeBlock;
 import com.ghostipedia.cosmiccore.common.blockentity.CosmicCoilBlockEntity;
-import com.ghostipedia.cosmiccore.ember.CosmicEmberEmitterBlock;
-import com.ghostipedia.cosmiccore.ember.CosmicEmberReceptorBlock;
 
 import com.gregtechceu.gtceu.GTCEu;
 import com.gregtechceu.gtceu.api.GTCEuAPI;
@@ -32,7 +30,6 @@ import net.minecraft.world.level.material.MapColor;
 import net.minecraftforge.client.model.generators.ConfiguredModel;
 import net.minecraftforge.client.model.generators.ModelFile;
 
-import com.rekindled.embers.RegistryManager;
 import com.teamresourceful.resourcefullib.common.registry.RegistryEntry;
 import com.tterrag.registrate.providers.DataGenContext;
 import com.tterrag.registrate.providers.RegistrateBlockstateProvider;
@@ -40,7 +37,6 @@ import com.tterrag.registrate.util.entry.BlockEntry;
 import com.tterrag.registrate.util.nullness.NonNullBiConsumer;
 import com.tterrag.registrate.util.nullness.NonNullFunction;
 import com.tterrag.registrate.util.nullness.NonNullSupplier;
-import earth.terrarium.adastra.common.blocks.GlobeBlock;
 import it.unimi.dsi.fastutil.ints.Int2ReferenceArrayMap;
 
 import java.util.Map;
@@ -48,7 +44,6 @@ import java.util.function.Supplier;
 
 import static com.ghostipedia.cosmiccore.api.registries.CosmicRegistration.REGISTRATE;
 import static com.gregtechceu.gtceu.api.block.property.GTBlockStateProperties.ACTIVE;
-import static earth.terrarium.adastra.common.registry.ModBlocks.GLOBES;
 
 public class CosmicBlocks {
 
@@ -57,8 +52,7 @@ public class CosmicBlocks {
 
     }
     // Coil Register
-    public static final RegistryEntry<Block> SUN_GLOBE = GLOBES.register("sun_globe",
-            () -> new GlobeBlock(ironProperties().noOcclusion()));
+    // TODO(stellaris): SUN_GLOBE used Ad Astra GLOBES registry + GlobeBlock — dropped with Ad Astra (bead cosmiccore-42.13)
 
     public static final BlockEntry<CoilBlock> COIL_PRISMATIC_TUNGSTENSTEEL = createCoilBlock(
             CosmicCoilBlock.CoilType.PRISMATIC_TUNGSTENSTEEL);
@@ -281,6 +275,7 @@ public class CosmicBlocks {
             "iron_plated_deepslate_tile",
             CosmicCore.id("block/casings/cosmetic/iron_plated_deepslate_tile"));
 
+    /* SHELVED ember blocks — Embers dropped on 1.21.1 (beads cosmiccore-42.13 / 42.14)
     public static final Map<Integer, BlockEntry<CosmicEmberEmitterBlock>> EMBER_EMITTER_BLOCKS = new Int2ReferenceArrayMap<>();
     public static final Map<Integer, BlockEntry<CosmicEmberReceptorBlock>> EMBER_RECEPTOR_BLOCKS = new Int2ReferenceArrayMap<>();
 
@@ -702,6 +697,7 @@ public class CosmicBlocks {
         EMBER_RECEPTOR_BLOCKS.put(13, COSMIC_EMBER_RECEIVER_OPV);
         EMBER_RECEPTOR_BLOCKS.put(14, COSMIC_EMBER_RECEIVER_MAX);
     }
+    */
 
     // GLASS BLOCKS
     public static final BlockEntry<Block> ZBLAN_REINFORCED_GLASS = createGlassCasingBlock(

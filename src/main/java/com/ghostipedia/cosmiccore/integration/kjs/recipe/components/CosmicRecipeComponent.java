@@ -1,6 +1,5 @@
 package com.ghostipedia.cosmiccore.integration.kjs.recipe.components;
 
-import com.ghostipedia.cosmiccore.api.capability.recipe.EmberRecipeCapability;
 import com.ghostipedia.cosmiccore.api.capability.recipe.SoulRecipeCapability;
 import com.ghostipedia.cosmiccore.api.recipe.ingredient.SoulIngredient;
 
@@ -15,12 +14,7 @@ import dev.latvian.mods.rhino.Wrapper;
 
 public class CosmicRecipeComponent {
 
-    public static final ContentJS<Double> EMBER_IN = new ContentJS<>(NumberComponent.ANY_DOUBLE,
-            EmberRecipeCapability.CAP,
-            false);
-    public static final ContentJS<Double> EMBER_OUT = new ContentJS<>(NumberComponent.ANY_DOUBLE,
-            EmberRecipeCapability.CAP,
-            true);
+    // TODO(embers): EMBER_IN / EMBER_OUT recipe components shelved with Embers (bead cosmiccore-42.14)
 
     public static final RecipeComponent<SoulIngredient> SOUL_STACK = new RecipeComponent<>() {
 

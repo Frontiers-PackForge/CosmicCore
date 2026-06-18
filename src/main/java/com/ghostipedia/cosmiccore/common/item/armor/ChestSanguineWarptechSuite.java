@@ -4,10 +4,10 @@ import com.ghostipedia.cosmiccore.CosmicCore;
 import com.ghostipedia.cosmiccore.api.capability.souls.SoulType;
 import com.ghostipedia.cosmiccore.api.data.souls.SoulNetwork;
 import com.ghostipedia.cosmiccore.api.data.souls.SoulNetworkSavedData;
-import com.ghostipedia.cosmiccore.api.item.armor.AdvancedQuarkTechSpaceSuite;
 import com.ghostipedia.cosmiccore.api.recipe.ingredient.SoulStack;
 
 import com.gregtechceu.gtceu.api.capability.GTCapabilityHelper;
+import com.gregtechceu.gtceu.common.item.armor.QuarkTechSuite;
 import com.gregtechceu.gtceu.api.capability.IElectricItem;
 import com.gregtechceu.gtceu.api.item.armor.ArmorUtils;
 import com.gregtechceu.gtceu.core.IFireImmuneEntity;
@@ -43,7 +43,7 @@ import it.unimi.dsi.fastutil.ints.IntList;
 
 import java.util.List;
 
-public class ChestSanguineWarptechSuite extends AdvancedQuarkTechSpaceSuite {
+public class ChestSanguineWarptechSuite extends QuarkTechSuite {
 
     public static final String SANGUINE_SHIELD_NBT_KEY = CosmicCore.MOD_ID + ":sanguine_shield";
     public static final int SANGUINE_SHIELD_DRAIN_PER_SECOND = 10;
@@ -53,7 +53,7 @@ public class ChestSanguineWarptechSuite extends AdvancedQuarkTechSpaceSuite {
     private List<Pair<NonNullList<ItemStack>, IntList>> inventoryIndexMap;
 
     public ChestSanguineWarptechSuite(int energyPerUse, long capacity, int tier) {
-        super(energyPerUse, capacity, tier);
+        super(ArmorItem.Type.CHESTPLATE, energyPerUse, capacity, tier);
     }
 
     @OnlyIn(Dist.CLIENT)

@@ -1,7 +1,6 @@
 package com.ghostipedia.cosmiccore.common.data;
 
 import com.ghostipedia.cosmiccore.CosmicCore;
-import com.ghostipedia.cosmiccore.api.capability.recipe.EmberRecipeCapability;
 import com.ghostipedia.cosmiccore.api.machine.multiblock.DimensionalEnergyCapacitor;
 import com.ghostipedia.cosmiccore.api.machine.multiblock.DimensionalEnergyInterface;
 import com.ghostipedia.cosmiccore.api.machine.part.CosmicPartAbility;
@@ -13,11 +12,9 @@ import com.ghostipedia.cosmiccore.client.renderer.machine.CosmicDynamicRenderHel
 import com.ghostipedia.cosmiccore.common.ae2gt.CosmicStockingBusPartMachine;
 import com.ghostipedia.cosmiccore.common.ae2gt.CosmicStockingHatchPartMachine;
 import com.ghostipedia.cosmiccore.common.block.debug.CreativeThermiaContainerMachine;
-import com.ghostipedia.cosmiccore.common.machine.IndustrialApiaryMachine;
 import com.ghostipedia.cosmiccore.common.machine.WirelessChargerMachine;
 import com.ghostipedia.cosmiccore.common.machine.multiblock.electric.hpca.HPCAMachine;
 import com.ghostipedia.cosmiccore.common.machine.multiblock.multi.WirelessDataBankMachine;
-import com.ghostipedia.cosmiccore.common.machine.multiblock.multi.bee.AlvearyModifierType;
 import com.ghostipedia.cosmiccore.common.machine.multiblock.part.*;
 import com.ghostipedia.cosmiccore.common.machine.part.WirelessDataSensor;
 import com.ghostipedia.cosmiccore.gtbridge.CosmicRecipeTypes;
@@ -102,12 +99,7 @@ public class CosmicMachines {
             "soul_output_hatch", "Soul Output Hatch",
             IO.OUT, HIGH_TIERS, EXPORT_SOUL);
 
-    public static final MachineDefinition[] EMBER_IMPORT_HATCH = registerEmberHatch(
-            "ember_input_hatch", "Ember Input Hatch",
-            IO.IN, ELECTRIC_TIERS, IMPORT_EMBER);
-    public static final MachineDefinition[] EMBER_EXPORT_HATCH = registerEmberHatch(
-            "ember_output_hatch", "Ember Output Hatch",
-            IO.OUT, ELECTRIC_TIERS, EXPORT_EMBER);
+    // TODO(embers): EMBER_IMPORT_HATCH / EMBER_EXPORT_HATCH shelved with Embers (bead cosmiccore-42.14)
 
     public static final MachineDefinition[] THERMIA_VENT = registerThermiaTieredHatch(
             "thermia_export_hatch", "Thermia Vent", "thermia_output_hatch",
@@ -281,22 +273,7 @@ public class CosmicMachines {
                     .register(),
             GTValues.tiersBetween(HV, UIV));
 
-    public static final MachineDefinition[] INDUSTRIAL_APIARY = registerTieredMachines("electric_apiary",
-            IndustrialApiaryMachine::new,
-            (tier, builder) -> builder
-                    .langValue("%s Industrial Production Apiary".formatted(VN[tier]))
-                    .tooltipBuilder((stack, list) -> {
-                        list.add(Component.translatable("cosmiccore.industrial_apiary.tier.description.0"));
-                        list.add(Component.translatable("cosmiccore.industrial_apiary.tier.description.1"));
-                        list.add(Component.translatable("cosmiccore.industrial_apiary.tier.description.2"));
-                        list.add(Component.translatable("cosmiccore.industrial_apiary.tier.description.3"));
-                        list.add(Component.translatable("cosmiccore.industrial_apiary.tier.description.4"));
-                        list.add(Component.translatable("cosmiccore.industrial_apiary.tier.description.5"));
-                    })
-                    .recipeType(CosmicRecipeTypes.BEES)
-                    .workableTieredHullModel(CosmicCore.id("block/overlay/machine/industrial_apiary"))
-                    .register(),
-            GTValues.tiersBetween(LV, LuV));
+    // TODO(forestry): INDUSTRIAL_APIARY (IndustrialApiaryMachine + BEES recipes) shelved with Forestry (bead cosmiccore-42.13)
 
     public static final MachineDefinition[] BIO_LAB_SINGLE = registerTieredMachines("biolab",
             (holder, tier) -> new SimpleTieredMachine(holder, tier, defaultTankSizeFunction), (tier, builder) -> builder
@@ -496,28 +473,7 @@ public class CosmicMachines {
                 tiers);
     }
 
-    private static MachineDefinition[] registerEmberHatch(String name, String displayName, IO io,
-                                                          int[] tiers, PartAbility... abilities) {
-        return registerTieredMachines(name,
-                (holder, tier) -> new EmberHatchPartMachine(holder, tier, io),
-                (tier, builder) -> builder
-                        .langValue(GTValues.VNF[tier] + ' ' + displayName)
-                        .abilities(abilities)
-                        .rotationState(RotationState.ALL)
-                        .modelProperty(GTMachineModelProperties.IS_FORMED, false)
-                        .overlayTieredHullModel("ember_hatch")
-                        .tooltipBuilder((item, tooltip) -> {
-                            if (io == IO.IN) {
-                                tooltip.add(Component.translatable("tooltip.cosmiccore.ember_hatch.capacity",
-                                        EmberHatchPartMachine.getMaxCapacity(tier)));
-                                tooltip.add(Component.translatable("tooltip.cosmiccore.ember_hatch.consumption",
-                                        EmberHatchPartMachine.getMaxConsumption(tier)));
-                            } else
-                                tooltip.add(Component.translatable("tooltip.cosmiccore.ember_hatch.capacity",
-                                        EmberHatchPartMachine.getMaxCapacity(tier)));
-                        }).register(),
-                tiers);
-    }
+    // TODO(embers): registerEmberHatch (EmberHatchPartMachine) shelved with Embers (bead cosmiccore-42.14)
 
     private static MachineDefinition[] registerWirelessEnergyTieredHatch(String name, String displayName, String model,
                                                                          IO io, int[] tiers, int amperage,
@@ -568,18 +524,7 @@ public class CosmicMachines {
                     }))
             .register();
 
-    public static final MachineDefinition BEE_HOLDER = REGISTRATE.machine("bee_holder", BeeHolderPartMachine::new)
-            .langValue("Bee Holder")
-            .tier(UV)
-            .rotationState(RotationState.NON_Y_AXIS)
-            .modelProperty(GTMachineModelProperties.IS_FORMED, false)
-            .abilities(CosmicPartAbility.BEE_HOLDER)
-            .modelProperty(RecipeLogic.STATUS_PROPERTY, RecipeLogic.Status.IDLE)
-            .model(createWorkableTieredHullMachineModel(GTCEu.id("block/machines/object_holder"))
-                    .andThen((ctx, prov, model) -> {
-                        model.addReplaceableTextures("bottom", "top", "side");
-                    }))
-            .register();
+    // TODO(forestry): BEE_HOLDER (BeeHolderPartMachine) shelved with Forestry (bead cosmiccore-42.13)
 
     public static final MachineDefinition SENSOR_HATCH = REGISTRATE.machine("sensor_hatch", WirelessDataSensor::new)
             .langValue("Sensor Hatch")
@@ -953,44 +898,7 @@ public class CosmicMachines {
         };
     }
 
-    // Alveary Modifier Casings
-    public static final MachineDefinition ALVEARY_HEATER_PART = registerAlvearyModifier(AlvearyModifierType.HEATER);
-    public static final MachineDefinition ALVEARY_COOLER_PART = registerAlvearyModifier(AlvearyModifierType.COOLER);
-    public static final MachineDefinition ALVEARY_HUMIDIFIER_PART = registerAlvearyModifier(
-            AlvearyModifierType.HUMIDIFIER);
-    public static final MachineDefinition ALVEARY_DRYER_PART = registerAlvearyModifier(AlvearyModifierType.DRYER);
-    public static final MachineDefinition ALVEARY_PRODUCTIVITY_PART = registerAlvearyModifier(
-            AlvearyModifierType.PRODUCTIVITY);
-    public static final MachineDefinition ALVEARY_SIEVE_PART = registerAlvearyModifier(AlvearyModifierType.SIEVE);
-    public static final MachineDefinition ALVEARY_WEATHERPROOF_PART = registerAlvearyModifier(
-            AlvearyModifierType.WEATHERPROOF);
-    public static final MachineDefinition ALVEARY_LIGHTING_PART = registerAlvearyModifier(AlvearyModifierType.LIGHTING);
-    public static final MachineDefinition ALVEARY_MUTAGENIC_PART = registerAlvearyModifier(
-            AlvearyModifierType.MUTAGENIC);
-    public static final MachineDefinition ALVEARY_ACCELERANT_PART = registerAlvearyModifier(
-            AlvearyModifierType.ACCELERANT);
-    public static final MachineDefinition ALVEARY_LONGEVITY_PART = registerAlvearyModifier(
-            AlvearyModifierType.LONGEVITY);
-    public static final MachineDefinition ALVEARY_STABILISER_PART = registerAlvearyModifier(
-            AlvearyModifierType.STABILISER);
-    public static final MachineDefinition ALVEARY_TERRITORY_PART = registerAlvearyModifier(
-            AlvearyModifierType.TERRITORY);
-    public static final MachineDefinition ALVEARY_SEALING_PART = registerAlvearyModifier(AlvearyModifierType.SEALING);
-
-    private static MachineDefinition registerAlvearyModifier(AlvearyModifierType type) {
-        return REGISTRATE.machine("alveary_upgrade_" + type.getId(),
-                holder -> new AlvearyModifierPartMachine(holder, type))
-                .langValue("Alveary " + type.getDisplayName() + " Casing")
-                .rotationState(RotationState.ALL)
-                .abilities(ALVEARY_MODIFIER)
-                .modelProperty(GTMachineModelProperties.IS_FORMED, false)
-                .modelProperty(GTMachineModelProperties.IS_HPCA_PART_DAMAGED, false)
-                .modelProperty(GTMachineModelProperties.IS_ACTIVE, false)
-                .model(createAlvearyPartModel(
-                        ALVEARY_CASING_TEXTURE,
-                        CosmicCore.id("block/overlay/alveary/" + type.getId())))
-                .register();
-    }
+    // TODO(forestry): Alveary modifier casings (14 ALVEARY_*_PART + registerAlvearyModifier / AlvearyModifierPartMachine) shelved with Forestry (bead cosmiccore-42.13)
 
     public static void init() {
         GTMultiMachines.LARGE_COMBUSTION_ENGINE.setRecipeTypes(new GTRecipeType[] { DUMMY_RECIPES });
@@ -1004,7 +912,6 @@ public class CosmicMachines {
         GTMultiMachines.EXTREME_COMBUSTION_ENGINE.setRenderWorldPreview(false);
         GTMultiMachines.ASSEMBLY_LINE.setRecipeModifier(new RecipeModifierList(COSMIC_MODULES, OC_NON_PERFECT));
         GTMultiMachines.ASSEMBLY_LINE.setAlwaysTryModifyRecipe(true);
-        GTRecipeTypes.MIXER_RECIPES.setMaxSize(IO.IN, EmberRecipeCapability.CAP, 1);
         GCYMMachines.MEGA_BLAST_FURNACE.setRecipeTypes(new GTRecipeType[] { DUMMY_RECIPES });
         GCYMMachines.MEGA_BLAST_FURNACE.setRenderXEIPreview(false);
         GCYMMachines.MEGA_BLAST_FURNACE.setRenderWorldPreview(false);

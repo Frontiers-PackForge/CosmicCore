@@ -12,12 +12,11 @@ public class CosmicRecipeCapabilities {
 
     public static final SoulRecipeCapability SOUL = SoulRecipeCapability.CAP;
     public static final SterileRecipeCapability STERILE = SterileRecipeCapability.CAP;
-    public static final EmberRecipeCapability EMBER = EmberRecipeCapability.CAP;
+    // TODO(embers): EMBER recipe capability shelved with Embers (bead cosmiccore-42.14)
 
     public static void init() {
         GTRegistries.RECIPE_CAPABILITIES.register(SOUL.name, SOUL);
         GTRegistries.RECIPE_CAPABILITIES.register(STERILE.name, STERILE);
-        GTRegistries.RECIPE_CAPABILITIES.register(EMBER.name, EMBER);
 
         VALID_CAPS.put(STERILE, Pair.of(FLUID_IN, FLUID_OUT));
     }
