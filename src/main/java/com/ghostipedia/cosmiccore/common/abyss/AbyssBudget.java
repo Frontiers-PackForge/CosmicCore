@@ -72,7 +72,7 @@ public class AbyssBudget implements IAbyssTimer {
 
         for (Tag tagDat : listTag) {
             CompoundTag compoundTag = (CompoundTag) tagDat;
-            var resLoc = ResourceLocation.fromNamespaceAndPath(compoundTag.getString("dimension"));
+            var resLoc = ResourceLocation.parse(compoundTag.getString("dimension"));
             timeRemaining.put(resLoc, compoundTag.getLong("ticks"));
             decay.put(resLoc, compoundTag.getBoolean("decaying"));
             cleanse.put(resLoc, compoundTag.getDouble("cleanse"));

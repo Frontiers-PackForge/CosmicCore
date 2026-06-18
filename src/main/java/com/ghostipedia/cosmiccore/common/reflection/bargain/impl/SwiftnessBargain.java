@@ -13,14 +13,13 @@ import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
 
 import java.util.List;
-import java.util.UUID;
 
 public class SwiftnessBargain extends Bargain {
 
     public static final ResourceLocation ID = CosmicCore.id("swiftness");
     public static final SwiftnessBargain INSTANCE = new SwiftnessBargain();
     private static final String BARGAIN_ID = "swiftness";
-    private static final UUID MODIFIER_UUID = UUID.fromString("c0e7d8f6-3456-6789-abcd-ef0123456789");
+    private static final ResourceLocation MODIFIER_ID = CosmicCore.id("reflection_swiftness");
 
     private SwiftnessBargain() {
         super(
@@ -92,20 +91,20 @@ public class SwiftnessBargain extends Bargain {
     public static void applySpeedBoost(Player player) {
         var attribute = player.getAttribute(Attributes.MOVEMENT_SPEED);
         if (attribute != null) {
-            attribute.removeModifier(MODIFIER_UUID);
+            attribute.removeModifier(MODIFIER_ID);
             // Base: 20% speed boost, modified by soul shape affinity
             float baseBoost = 0.2f;
             float affinity = AffinityHelper.getMultiplier(player, BargainCategory.MOBILITY);
             float actualBoost = baseBoost * affinity;
             attribute.addPermanentModifier(new AttributeModifier(
-                    MODIFIER_UUID, "Reflection Swiftness", actualBoost, AttributeModifier.Operation.MULTIPLY_TOTAL));
+                    MODIFIER_ID, actualBoost, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL));
         }
     }
 
     public static void removeSpeedBoost(Player player) {
         var attribute = player.getAttribute(Attributes.MOVEMENT_SPEED);
         if (attribute != null) {
-            attribute.removeModifier(MODIFIER_UUID);
+            attribute.removeModifier(MODIFIER_ID);
         }
     }
 }

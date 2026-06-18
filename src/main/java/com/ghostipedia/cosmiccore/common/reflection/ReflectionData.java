@@ -378,14 +378,14 @@ public class ReflectionData implements IReflection {
         activeBargains.clear();
         ListTag bargainList = root.getList("activeBargains", Tag.TAG_STRING);
         for (Tag tag : bargainList) {
-            activeBargains.add(ResourceLocation.fromNamespaceAndPath(tag.getAsString()));
+            activeBargains.add(ResourceLocation.parse(tag.getAsString()));
         }
 
         // Defiance scars
         defianceScars.clear();
         ListTag scarList = root.getList("defianceScars", Tag.TAG_STRING);
         for (Tag tag : scarList) {
-            defianceScars.add(ResourceLocation.fromNamespaceAndPath(tag.getAsString()));
+            defianceScars.add(ResourceLocation.parse(tag.getAsString()));
         }
 
         // Command usage

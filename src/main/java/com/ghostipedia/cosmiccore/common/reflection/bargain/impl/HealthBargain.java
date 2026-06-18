@@ -13,14 +13,13 @@ import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
 
 import java.util.List;
-import java.util.UUID;
 
 public class HealthBargain extends Bargain {
 
     public static final ResourceLocation ID = CosmicCore.id("vitality");
     public static final HealthBargain INSTANCE = new HealthBargain();
     private static final String BARGAIN_ID = "vitality";
-    private static final UUID MODIFIER_UUID = UUID.fromString("a8c5b6d4-1234-4567-89ab-cdef01234567");
+    private static final ResourceLocation MODIFIER_ID = CosmicCore.id("reflection_vitality");
 
     public static final float HEALING_REDUCTION = 0.5f;
 
@@ -99,16 +98,16 @@ public class HealthBargain extends Bargain {
     public static void applyHealthBoost(Player player) {
         var attribute = player.getAttribute(Attributes.MAX_HEALTH);
         if (attribute != null) {
-            attribute.removeModifier(MODIFIER_UUID);
+            attribute.removeModifier(MODIFIER_ID);
             attribute.addPermanentModifier(new AttributeModifier(
-                    MODIFIER_UUID, "Reflection Vitality", 10.0, AttributeModifier.Operation.ADDITION));
+                    MODIFIER_ID, 10.0, AttributeModifier.Operation.ADD_VALUE));
         }
     }
 
     public static void removeHealthBoost(Player player) {
         var attribute = player.getAttribute(Attributes.MAX_HEALTH);
         if (attribute != null) {
-            attribute.removeModifier(MODIFIER_UUID);
+            attribute.removeModifier(MODIFIER_ID);
         }
     }
 

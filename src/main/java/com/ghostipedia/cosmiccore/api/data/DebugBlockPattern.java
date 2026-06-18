@@ -8,7 +8,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraftforge.registries.ForgeRegistries;
+import net.minecraft.core.registries.BuiltInRegistries;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -44,7 +44,7 @@ public class DebugBlockPattern {
 
         Map<BlockState, Character> map = new HashMap<>();
         map.put(Blocks.AIR.defaultBlockState(), ' ');
-        charToBlockMap.put(' ', ForgeRegistries.BLOCKS.getKey(Blocks.AIR));
+        charToBlockMap.put(' ', BuiltInRegistries.BLOCK.getKey(Blocks.AIR));
 
         char c = 'A'; // auto
 
@@ -58,7 +58,7 @@ public class DebugBlockPattern {
                         map.put(state, c);
                         String name = String.valueOf(c);
                         symbolMap.computeIfAbsent(c, key -> new HashSet<>()).add(name); // any
-                        ResourceLocation blockKey = ForgeRegistries.BLOCKS.getKey(state.getBlock());
+                        ResourceLocation blockKey = BuiltInRegistries.BLOCK.getKey(state.getBlock());
                         charToBlockMap.put(c, blockKey);
                         c++;
                     }

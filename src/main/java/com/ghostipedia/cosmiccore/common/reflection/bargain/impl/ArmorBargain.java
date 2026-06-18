@@ -13,15 +13,14 @@ import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
 
 import java.util.List;
-import java.util.UUID;
 
 public class ArmorBargain extends Bargain {
 
     public static final ResourceLocation ID = CosmicCore.id("carapace");
     public static final ArmorBargain INSTANCE = new ArmorBargain();
     private static final String BARGAIN_ID = "carapace";
-    private static final UUID ARMOR_MODIFIER_UUID = UUID.fromString("e2a9b0c8-5678-8901-cdef-012345678901");
-    private static final UUID SPEED_MODIFIER_UUID = UUID.fromString("e2a9b0c8-5678-8901-cdef-012345678902");
+    private static final ResourceLocation ARMOR_MODIFIER_ID = CosmicCore.id("reflection_armor");
+    private static final ResourceLocation SPEED_MODIFIER_ID = CosmicCore.id("reflection_speed_penalty");
 
     public static final float SPEED_PENALTY = -0.15f;
 
@@ -102,32 +101,32 @@ public class ArmorBargain extends Bargain {
     public static void applyArmorBoost(Player player) {
         var attribute = player.getAttribute(Attributes.ARMOR);
         if (attribute != null) {
-            attribute.removeModifier(ARMOR_MODIFIER_UUID);
+            attribute.removeModifier(ARMOR_MODIFIER_ID);
             attribute.addPermanentModifier(new AttributeModifier(
-                    ARMOR_MODIFIER_UUID, "Reflection Carapace", 8.0, AttributeModifier.Operation.ADDITION));
+                    ARMOR_MODIFIER_ID, 8.0, AttributeModifier.Operation.ADD_VALUE));
         }
     }
 
     public static void removeArmorBoost(Player player) {
         var attribute = player.getAttribute(Attributes.ARMOR);
         if (attribute != null) {
-            attribute.removeModifier(ARMOR_MODIFIER_UUID);
+            attribute.removeModifier(ARMOR_MODIFIER_ID);
         }
     }
 
     public static void applySpeedPenalty(Player player) {
         var attribute = player.getAttribute(Attributes.MOVEMENT_SPEED);
         if (attribute != null) {
-            attribute.removeModifier(SPEED_MODIFIER_UUID);
+            attribute.removeModifier(SPEED_MODIFIER_ID);
             attribute.addPermanentModifier(new AttributeModifier(
-                    SPEED_MODIFIER_UUID, "Carapace Weight", SPEED_PENALTY, AttributeModifier.Operation.MULTIPLY_TOTAL));
+                    SPEED_MODIFIER_ID, SPEED_PENALTY, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL));
         }
     }
 
     public static void removeSpeedPenalty(Player player) {
         var attribute = player.getAttribute(Attributes.MOVEMENT_SPEED);
         if (attribute != null) {
-            attribute.removeModifier(SPEED_MODIFIER_UUID);
+            attribute.removeModifier(SPEED_MODIFIER_ID);
         }
     }
 

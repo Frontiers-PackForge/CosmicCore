@@ -46,7 +46,7 @@ public class LinkedPartnerDimensionCondition extends RecipeCondition<LinkedPartn
     }
 
     public LinkedPartnerDimensionCondition(String dimension) {
-        this(false, ResourceLocation.fromNamespaceAndPath(dimension));
+        this(false, ResourceLocation.parse(dimension));
     }
 
     public LinkedPartnerDimensionCondition() {
