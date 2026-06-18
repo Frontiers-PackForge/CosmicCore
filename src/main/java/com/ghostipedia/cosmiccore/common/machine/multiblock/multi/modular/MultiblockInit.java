@@ -1,7 +1,6 @@
 package com.ghostipedia.cosmiccore.common.machine.multiblock.multi.modular;
 
 import com.ghostipedia.cosmiccore.common.machine.multiblock.multi.*;
-import com.ghostipedia.cosmiccore.common.machine.multiblock.multi.bee.MechanicalAlveary;
 
 // Class for Bulk-Init
 public class MultiblockInit {
@@ -30,7 +29,6 @@ public class MultiblockInit {
         DroneStation.init();
         DreamersBasin.init();
         OreExtractionDrill.init();
-        MechanicalAlveary.init();
         OneiricSieve.init();
         // CosmicModularMachines.init();
         ManaDigitizer.init();

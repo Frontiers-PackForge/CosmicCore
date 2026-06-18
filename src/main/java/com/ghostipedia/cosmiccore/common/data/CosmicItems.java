@@ -68,8 +68,6 @@ import com.tterrag.registrate.providers.ProviderType;
 import com.tterrag.registrate.util.entry.ItemEntry;
 import com.tterrag.registrate.util.nullness.NonNullBiConsumer;
 import com.tterrag.registrate.util.nullness.NonNullConsumer;
-import earth.terrarium.adastra.common.items.rendered.RenderedBlockItem;
-import earth.terrarium.adastra.common.tags.ModItemTags;
 import team.lodestar.lodestone.systems.easing.Easing;
 
 import java.awt.*;
@@ -80,13 +78,10 @@ import static com.ghostipedia.cosmiccore.api.registries.CosmicRegistration.REGIS
 import static com.gregtechceu.gtceu.common.data.GTItems.attach;
 import static com.sammy.malum.registry.common.SpiritTypeRegistry.SPIRITS;
 import static com.sammy.malum.registry.common.item.ItemTiers.ItemTierEnum.SOUL_STAINED_STEEL;
-import static earth.terrarium.adastra.common.registry.ModItems.GLOBES;
 
 public class CosmicItems {
 
-    public static final RegistryEntry<Item> SUN_GLOBE = GLOBES.register("sun_globe",
-            () -> new RenderedBlockItem(CosmicBlocks.SUN_GLOBE.get(),
-                    new Item.Properties().stacksTo(1).rarity(Rarity.RARE)));
+    // TODO(stellaris): SUN_GLOBE item used Ad Astra GLOBES registry + RenderedBlockItem — dropped with Ad Astra (bead cosmiccore-42.13)
     static {
         CosmicRegistration.REGISTRATE.creativeModeTab(() -> CosmicCreativeModeTabs.COSMIC_CORE);
     }
@@ -1613,7 +1608,8 @@ public class CosmicItems {
             .onRegister(attach(StructureWriteBehavior.INSTANCE))
             .register();
 
-    // Space Suite
+    // Space Suite — TODO(stellaris): AA/Botarium oxygen space-suit chestplates shelved (see _shelved/api/item/armor, bead cosmiccore-42.13)
+    /* SHELVED (AA/Botarium space suits — armor logic moved to _shelved):
     public static ItemEntry<SpaceArmorComponentItem> SPACE_NANO_CHESTPLATE = REGISTRATE
             .item("space_nanomuscle_chestplate",
                     (p) -> new SpaceArmorComponentItem(GTArmorMaterials.ARMOR, ArmorItem.Type.CHESTPLATE, 5000, p)
@@ -1662,6 +1658,7 @@ public class CosmicItems {
             .lang("Advanced QuarkTech™ Space Suite Chestplate")
             .properties(p -> p.rarity(Rarity.EPIC))
             .register();
+    */
     // Oiled up white girl trying to understand what the FUCK an armor tag is, i'm doing to fucking shove a whole
     // pineapple up the ass of whatever mojang employee thought these were **OKAY TO CODE**
 
@@ -1677,15 +1674,15 @@ public class CosmicItems {
             .tag(CustomTags.PPE_ARMOR)
             .register();
 
-    public static ItemEntry<SpaceArmorComponentItem> SANGUINE_WARPTECH_CHESTPLATE = REGISTRATE
+    public static ItemEntry<ArmorComponentItem> SANGUINE_WARPTECH_CHESTPLATE = REGISTRATE
             .item("sanguine_warptech_chestplate",
-                    (p) -> new SpaceArmorComponentItem(GTArmorMaterials.ARMOR, ArmorItem.Type.CHESTPLATE, 100000, p)
+                    (p) -> new ArmorComponentItem(GTArmorMaterials.ARMOR, ArmorItem.Type.CHESTPLATE, p)
                             .setArmorLogic(new ChestSanguineWarptechSuite(8192,
                                     10_000_000_000L * (long) Math.max(1,
                                             Math.pow(4, ConfigHolder.INSTANCE.tools.voltageTierAdvQuarkTech - 6)),
                                     ConfigHolder.INSTANCE.tools.voltageTierAdvQuarkTech)))
-            .tag(CosmicItemTags.QUARKTECH_SPACE_SUITE, ModItemTags.SPACE_SUITS, ModItemTags.FREEZE_RESISTANT_ARMOR,
-                    ModItemTags.HEAT_RESISTANT_ARMOR)
+            // TODO(stellaris): AA ModItemTags (SPACE_SUITS/FREEZE/HEAT) dropped with Ad Astra; oxygen-tank sub-feature removed (now plain armor)
+            .tag(CosmicItemTags.QUARKTECH_SPACE_SUITE)
             .lang("Sanguine WarpTech Gravplate")
             .properties(p -> p.rarity(Rarity.EPIC))
             .register();

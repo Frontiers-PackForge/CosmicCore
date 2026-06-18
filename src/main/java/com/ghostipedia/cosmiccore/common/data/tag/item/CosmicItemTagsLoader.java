@@ -8,7 +8,6 @@ import net.minecraft.world.item.Item;
 
 import com.tterrag.registrate.providers.RegistrateTagsProvider;
 import com.tterrag.registrate.util.entry.ItemEntry;
-import earth.terrarium.adastra.common.tags.ModItemTags;
 
 import java.util.stream.Stream;
 
@@ -23,10 +22,7 @@ public class CosmicItemTagsLoader {
     public static void init(RegistrateTagsProvider<Item> provider) {
         create(provider, CosmicItemTags.NANOMUSCLE_SPACE_SUITE, NANO_SPACE_SUITE);
         create(provider, CosmicItemTags.QUARKTECH_SPACE_SUITE, QUANTUM_SPACE_SUITE);
-
-        create(provider, ModItemTags.SPACE_SUITS, SPACE_SUITES);
-        create(provider, ModItemTags.FREEZE_RESISTANT_ARMOR, SPACE_SUITES);
-        create(provider, ModItemTags.HEAT_RESISTANT_ARMOR, SPACE_SUITES);
+        // TODO(stellaris): re-add AA ModItemTags (SPACE_SUITS / FREEZE_RESISTANT_ARMOR / HEAT_RESISTANT_ARMOR) post-Ad-Astra
     }
 
     private static void create(RegistrateTagsProvider<Item> provider, TagKey<Item> tagKey, ItemEntry<?>... items) {

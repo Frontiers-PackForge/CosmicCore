@@ -1,7 +1,6 @@
 package com.ghostipedia.cosmiccore.common.airControl;
 
 import com.ghostipedia.cosmiccore.CosmicCore;
-import com.ghostipedia.cosmiccore.api.item.armor.SpaceArmorComponentItem;
 import com.ghostipedia.cosmiccore.common.airControl.RebreatherHelper.RebreatherType;
 import com.ghostipedia.cosmiccore.common.network.CCoreNetwork;
 import com.ghostipedia.cosmiccore.common.network.packet.OxygenWarnPacket;
@@ -19,7 +18,6 @@ import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
-import earth.terrarium.adastra.common.items.armor.SpaceSuitItem;
 import top.theillusivec4.curios.api.CuriosApi;
 import top.theillusivec4.curios.api.type.inventory.IDynamicStackHandler;
 
@@ -268,12 +266,7 @@ public final class OxygenLogic {
 
         int remaining = requestTicks;
 
-        remaining = drainFromSpaceSuit(player, remaining);
-        if (remaining <= 0) return requestTicks;
-
-        remaining = drainFromAdAstraSuit(player, remaining);
-        if (remaining <= 0) return requestTicks;
-
+        // TODO(stellaris): re-add space-suit oxygen drain when the AA/Botarium fluid-suit system is reworked (bead cosmiccore-42.13)
         if (rebreather == RebreatherType.PRESSURIZED) {
             remaining = drainFromCuriosBackSlot(player, remaining);
         }
@@ -303,50 +296,6 @@ public final class OxygenLogic {
         }
 
         return remaining;
-    }
-
-    /**
-     * Drain from CosmicCore SpaceArmorComponentItem (nano/quantum/sanguine suits).
-     * Consumes 1 mB every SPACE_SUIT_TICKS_PER_MB game ticks to slow drain rate.
-     */
-    private static int drainFromSpaceSuit(ServerPlayer player, int requestTicks) {
-        if (requestTicks <= 0) return 0;
-
-        ItemStack chestStack = player.getItemBySlot(EquipmentSlot.CHEST);
-        if (chestStack.isEmpty()) return requestTicks;
-        if (!(chestStack.getItem() instanceof SpaceArmorComponentItem suit)) return requestTicks;
-
-        if (!suit.hasOxygen(player)) return requestTicks;
-
-        // Only drain 1 mB every SPACE_SUIT_TICKS_PER_MB game ticks
-        // This makes suits last much longer than basic tanks
-        if ((player.serverLevel().getGameTime() % SPACE_SUIT_TICKS_PER_MB) == 0) {
-            suit.consumeOxygen(chestStack, 1);
-        }
-
-        // Return 0 remaining if we have oxygen (suit provides full coverage)
-        return suit.hasOxygen(player) ? 0 : requestTicks;
-    }
-
-    private static int drainFromAdAstraSuit(ServerPlayer player, int requestTicks) {
-        if (requestTicks <= 0) return 0;
-
-        ItemStack chestStack = player.getItemBySlot(EquipmentSlot.CHEST);
-        if (chestStack.isEmpty()) return requestTicks;
-        if (!(chestStack.getItem() instanceof SpaceSuitItem suit)) return requestTicks;
-
-        if (!SpaceSuitItem.hasOxygen(player)) return requestTicks;
-
-        if ((player.serverLevel().getGameTime() % SPACE_SUIT_TICKS_PER_MB) == 0) {
-            CONSUME_BYPASS.set(true);
-            try {
-                suit.consumeOxygen(chestStack, 1);
-            } finally {
-                CONSUME_BYPASS.set(false);
-            }
-        }
-
-        return SpaceSuitItem.hasOxygen(player) ? 0 : requestTicks;
     }
 
     /**

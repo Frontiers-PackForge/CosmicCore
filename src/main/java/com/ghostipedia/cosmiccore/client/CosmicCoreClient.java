@@ -1,7 +1,6 @@
 package com.ghostipedia.cosmiccore.client;
 
 import com.ghostipedia.cosmiccore.CosmicCore;
-import com.ghostipedia.cosmiccore.bee.CosmicBeesSpecies;
 import com.ghostipedia.cosmiccore.client.keybind.BootsKeybinds;
 import com.ghostipedia.cosmiccore.client.keybind.QuakeMovementKeybinds;
 import com.ghostipedia.cosmiccore.client.keybind.SoulSuperKeybind;
@@ -22,8 +21,6 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
 import com.mojang.blaze3d.vertex.DefaultVertexFormat;
-import forestry.api.apiculture.genetics.BeeLifeStage;
-import forestry.api.client.plugin.IClientRegistration;
 import lombok.Getter;
 
 import java.io.IOException;
@@ -126,6 +123,7 @@ public class CosmicCoreClient {
         event.register(StarBallastRender.STAR_MODEL_BEAM);
     }
 
+    /* SHELVED bee client registration — Forestry dropped on 1.21.1 (bead cosmiccore-42.13)
     public static class CosmicBeesClientRegistration implements Consumer<IClientRegistration> {
 
         @Override
@@ -403,6 +401,7 @@ public class CosmicCoreClient {
                     CosmicCore.id("item/bee/bee_drone_fuzzy_queen"));
         }
     }
+    */
 
     @Mod.EventBusSubscriber(modid = CosmicCore.MOD_ID, value = Dist.CLIENT, bus = Mod.EventBusSubscriber.Bus.FORGE)
     public static final class HideVanillaOverlays {
