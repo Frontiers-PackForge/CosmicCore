@@ -25,7 +25,7 @@ import com.lowdragmc.lowdraglib.utils.Position;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.ItemNameBlockItem;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.common.IPlantable;
+import net.neoforged.neoforge.common.IPlantable;
 
 import lombok.Getter;
 import lombok.Setter;
