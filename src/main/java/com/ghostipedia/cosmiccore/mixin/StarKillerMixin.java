@@ -25,7 +25,7 @@ public class StarKillerMixin {
     @Final
     private static ResourceLocation SUN_LOCATION;
 
-    private static final ResourceLocation COSMIC_SUN = new ResourceLocation("cosmiccore",
+    private static final ResourceLocation COSMIC_SUN = ResourceLocation.fromNamespaceAndPath("cosmiccore",
             "textures/environment/blackhole.png");
 
     // Redirect the exact moment vanilla binds a sky texture; swap only when it's the sun

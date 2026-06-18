@@ -28,7 +28,7 @@ import org.jetbrains.annotations.Nullable;
 @Mod.EventBusSubscriber(modid = CosmicCore.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE)
 public class TeleportOriginCap {
 
-    public static final ResourceLocation KEY = new ResourceLocation("cosmiccore", "teleport_origin");
+    public static final ResourceLocation KEY = ResourceLocation.fromNamespaceAndPath("cosmiccore", "teleport_origin");
     public static final Capability<ITeleportOrigin> CAP = CapabilityManager.get(new CapabilityToken<>() {});
 
     public static class Provider implements ICapabilityProvider, ICapabilitySerializable<CompoundTag> {

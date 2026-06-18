@@ -12,8 +12,8 @@ public class PlanetKeys {
     public static final ResourceKey<Level> SATURN;
 
     static {
-        SUN = ResourceKey.create(Registries.DIMENSION, new ResourceLocation("frontiers", "sun"));
-        JUPITER = ResourceKey.create(Registries.DIMENSION, new ResourceLocation("frontiers", "jupiter"));
-        SATURN = ResourceKey.create(Registries.DIMENSION, new ResourceLocation("frontiers", "saturn"));
+        SUN = ResourceKey.create(Registries.DIMENSION, ResourceLocation.fromNamespaceAndPath("frontiers", "sun"));
+        JUPITER = ResourceKey.create(Registries.DIMENSION, ResourceLocation.fromNamespaceAndPath("frontiers", "jupiter"));
+        SATURN = ResourceKey.create(Registries.DIMENSION, ResourceLocation.fromNamespaceAndPath("frontiers", "saturn"));
     }
 }

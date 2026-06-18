@@ -37,8 +37,8 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.phys.BlockHitResult;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
 
 import lombok.Getter;
 
@@ -53,7 +53,7 @@ public class StarLadderResearchHubMachine extends LinkedWorkableElectricMultiblo
             LinkedWorkableElectricMultiblockMachine.MANAGED_FIELD_HOLDER);
 
     private static final ResourceKey<Level> REQUIRED_DIMENSION = ResourceKey.create(
-            Registries.DIMENSION, new ResourceLocation("ad_astra", "earth_orbit"));
+            Registries.DIMENSION, ResourceLocation.fromNamespaceAndPath("ad_astra", "earth_orbit"));
 
     @Persisted
     @DescSynced

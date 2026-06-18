@@ -59,7 +59,7 @@ public class LinkedPartnerDimensionFluidCondition extends RecipeCondition<Linked
     }
 
     public LinkedPartnerDimensionFluidCondition(String dimension, Fluid fluid, int minAmount) {
-        this(false, new ResourceLocation(dimension), BuiltInRegistries.FLUID.getKey(fluid), minAmount);
+        this(false, ResourceLocation.fromNamespaceAndPath(dimension), BuiltInRegistries.FLUID.getKey(fluid), minAmount);
     }
 
     public LinkedPartnerDimensionFluidCondition(String dimension, Fluid fluid) {
@@ -67,8 +67,8 @@ public class LinkedPartnerDimensionFluidCondition extends RecipeCondition<Linked
     }
 
     public LinkedPartnerDimensionFluidCondition() {
-        this.dimension = new ResourceLocation("minecraft:overworld");
-        this.fluidId = new ResourceLocation("minecraft:water");
+        this.dimension = ResourceLocation.parse("minecraft:overworld");
+        this.fluidId = ResourceLocation.parse("minecraft:water");
         this.minAmount = 1000;
     }
 

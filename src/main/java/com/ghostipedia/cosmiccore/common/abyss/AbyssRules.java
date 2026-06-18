@@ -11,7 +11,7 @@ public final class AbyssRules {
 
     // Dimension to Target.
     public static final ResourceKey<Level> DIM = ResourceKey.create(Registries.DIMENSION,
-            new ResourceLocation("frontiers", "the_deep_below"));
+            ResourceLocation.fromNamespaceAndPath("frontiers", "the_deep_below"));
 
     public static final long MAX_TICKS = 20L * 3600; // Max 1HR
     public static final long FIRST_ENTRY_TICKS = 20L * 600; // 10M

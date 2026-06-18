@@ -149,7 +149,7 @@ public class ReflectionCommand {
             return 0;
         }
 
-        ResourceLocation id = new ResourceLocation("cosmiccore", bargainId);
+        ResourceLocation id = ResourceLocation.fromNamespaceAndPath("cosmiccore", bargainId);
 
         return BargainRegistry.get(id).map(bargain -> {
             ReflectionCapability.get(player).ifPresentOrElse(reflection -> {
@@ -188,7 +188,7 @@ public class ReflectionCommand {
             return 0;
         }
 
-        ResourceLocation id = new ResourceLocation("cosmiccore", bargainId);
+        ResourceLocation id = ResourceLocation.fromNamespaceAndPath("cosmiccore", bargainId);
 
         return BargainRegistry.get(id).map(bargain -> {
             ReflectionCapability.get(player).ifPresentOrElse(reflection -> {
@@ -299,7 +299,7 @@ public class ReflectionCommand {
             return 0;
         }
 
-        ResourceLocation id = new ResourceLocation("cosmiccore", bargainId);
+        ResourceLocation id = ResourceLocation.fromNamespaceAndPath("cosmiccore", bargainId);
 
         return BargainRegistry.get(id).map(bargain -> {
             // Force awaken if not already

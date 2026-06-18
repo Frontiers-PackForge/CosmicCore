@@ -106,7 +106,7 @@ public class TeleportOrigin implements ITeleportOrigin {
     // Load capability data from NBT.
     public void load(CompoundTag tag) {
         if (tag.contains("OriginDimension")) {
-            ResourceLocation dimLoc = new ResourceLocation(tag.getString("OriginDimension"));
+            ResourceLocation dimLoc = ResourceLocation.fromNamespaceAndPath(tag.getString("OriginDimension"));
             this.originDimension = ResourceKey.create(Registries.DIMENSION, dimLoc);
         } else {
             this.originDimension = null;

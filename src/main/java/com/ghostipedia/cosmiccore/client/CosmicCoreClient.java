@@ -10,7 +10,7 @@ import com.ghostipedia.cosmiccore.client.renderer.machine.*;
 import com.gregtechceu.gtceu.client.renderer.machine.DynamicRenderManager;
 
 import net.minecraft.client.renderer.ShaderInstance;
-import net.minecraftforge.api.distmarker.Dist;
+import net.neoforged.api.distmarker.Dist;
 import net.minecraftforge.client.event.ModelEvent;
 import net.minecraftforge.client.event.RegisterGuiOverlaysEvent;
 import net.minecraftforge.client.event.RegisterKeyMappingsEvent;

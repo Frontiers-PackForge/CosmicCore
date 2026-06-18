@@ -109,7 +109,7 @@ public final class OxygenRules {
 
     // --- Ad Astra dimension keys ---
     private static ResourceKey<Level> adAstraDim(String name) {
-        return ResourceKey.create(Registries.DIMENSION, new ResourceLocation("ad_astra", name));
+        return ResourceKey.create(Registries.DIMENSION, ResourceLocation.fromNamespaceAndPath("ad_astra", name));
     }
 
     public static final ResourceKey<Level> MOON = adAstraDim("moon");

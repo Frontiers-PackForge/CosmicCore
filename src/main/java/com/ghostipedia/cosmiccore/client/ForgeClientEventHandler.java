@@ -6,7 +6,7 @@ import com.ghostipedia.cosmiccore.client.renderer.RingUpgradePreviewRenderer;
 import com.ghostipedia.cosmiccore.client.renderer.StructureBoundingBox;
 
 import net.minecraft.client.renderer.FogRenderer;
-import net.minecraftforge.api.distmarker.Dist;
+import net.neoforged.api.distmarker.Dist;
 import net.minecraftforge.client.event.RenderLevelStageEvent;
 import net.minecraftforge.client.event.ViewportEvent;
 import net.minecraftforge.event.level.LevelEvent;

@@ -14,8 +14,8 @@ import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
 
 import java.util.function.BiConsumer;
 import java.util.function.Supplier;
@@ -28,7 +28,7 @@ public class StellarModuleContentWidget extends WidgetGroup {
     public static final int HEIGHT = 100;
 
     private static final int GEAR_BUTTON_SIZE = 20;
-    private static final ResourceLocation GEAR_TEXTURE = new ResourceLocation("gtceu",
+    private static final ResourceLocation GEAR_TEXTURE = ResourceLocation.fromNamespaceAndPath("gtceu",
             "textures/item/material_sets/dull/gear_small.png");
 
     private final Supplier<StellarBaseModule> moduleSupplier;

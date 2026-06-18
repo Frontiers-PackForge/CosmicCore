@@ -18,7 +18,7 @@ import org.jetbrains.annotations.Nullable;
 @Mod.EventBusSubscriber
 public class AbyssBudgetCap {
 
-    public static final ResourceLocation KEY = new ResourceLocation("cosmiccore", "abyss_budget");
+    public static final ResourceLocation KEY = ResourceLocation.fromNamespaceAndPath("cosmiccore", "abyss_budget");
     public static final Capability<IAbyssTimer> CAP = CapabilityManager.get(new CapabilityToken<>() {});
 
     public static class Provider implements ICapabilityProvider, ICapabilitySerializable<CompoundTag> {
