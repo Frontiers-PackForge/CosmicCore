@@ -291,7 +291,7 @@ public class LinkedMultiblockHelper {
             if (handlers == null) return false;
 
             for (Object handler : handlers) {
-                if (handler instanceof net.minecraftforge.items.IItemHandler itemHandler) {
+                if (handler instanceof net.neoforged.neoforge.items.IItemHandler itemHandler) {
                     for (int i = 0; i < itemHandler.getSlots(); i++) {
                         if (itemPredicate.test(itemHandler.getStackInSlot(i))) {
                             return true;
@@ -315,7 +315,7 @@ public class LinkedMultiblockHelper {
             if (handlers == null) return false;
 
             for (Object handler : handlers) {
-                if (handler instanceof net.minecraftforge.fluids.capability.IFluidHandler fluidHandler) {
+                if (handler instanceof net.neoforged.neoforge.fluids.capability.IFluidHandler fluidHandler) {
                     for (int i = 0; i < fluidHandler.getTanks(); i++) {
                         if (fluidPredicate.test(fluidHandler.getFluidInTank(i))) {
                             return true;
