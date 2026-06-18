@@ -1,6 +1,5 @@
 package com.ghostipedia.cosmiccore;
 
-import com.ghostipedia.cosmiccore.api.capability.CosmicCapabilities;
 import com.ghostipedia.cosmiccore.api.capability.recipe.CosmicRecipeCapabilities;
 import com.ghostipedia.cosmiccore.api.data.CosmicCoreMaterialIconType;
 import com.ghostipedia.cosmiccore.api.data.CosmicTagPrefix;
@@ -130,7 +129,6 @@ public class CosmicCore {
 
     @SubscribeEvent
     public void registerCapabilities(RegisterCapabilitiesEvent event) {
-        CosmicCapabilities.register(event);
         OxygenItemCap.onRegisterCaps(event);
     }
 }

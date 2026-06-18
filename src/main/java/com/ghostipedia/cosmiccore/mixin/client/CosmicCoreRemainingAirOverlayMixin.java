@@ -3,7 +3,7 @@ package com.ghostipedia.cosmiccore.mixin.client;
 import com.ghostipedia.cosmiccore.common.breath.OxygenHelper;
 
 import net.minecraft.client.player.LocalPlayer;
-import net.minecraftforge.fluids.FluidType;
+import net.neoforged.neoforge.fluids.FluidType;
 
 import com.simibubi.create.content.equipment.armor.RemainingAirOverlay;
 import org.spongepowered.asm.mixin.Mixin;
