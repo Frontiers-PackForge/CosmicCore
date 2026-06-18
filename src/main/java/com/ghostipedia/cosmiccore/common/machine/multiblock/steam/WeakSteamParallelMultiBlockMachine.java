@@ -1,7 +1,7 @@
 package com.ghostipedia.cosmiccore.common.machine.multiblock.steam;
 
 import com.gregtechceu.gtceu.api.GTValues;
-import com.gregtechceu.gtceu.api.machine.IMachineBlockEntity;
+import com.gregtechceu.gtceu.api.blockentity.BlockEntityCreationInfo;
 import com.gregtechceu.gtceu.api.machine.MetaMachine;
 import com.gregtechceu.gtceu.api.recipe.GTRecipe;
 import com.gregtechceu.gtceu.api.recipe.RecipeHelper;
@@ -18,7 +18,7 @@ public class WeakSteamParallelMultiBlockMachine extends SteamParallelMultiblockM
     // if in millibuckets, this is 0.5, Meaning 0.5mb of steam -> 1 EU
     private static final double CONVERSION_RATE = 0.5D;
 
-    public WeakSteamParallelMultiBlockMachine(IMachineBlockEntity holder, Object... args) {
+    public WeakSteamParallelMultiBlockMachine(BlockEntityCreationInfo holder, Object... args) {
         super(holder, args);
         setMaxParallels(4);
     }

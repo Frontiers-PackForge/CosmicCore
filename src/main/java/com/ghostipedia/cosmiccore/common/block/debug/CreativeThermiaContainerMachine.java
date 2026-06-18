@@ -6,7 +6,7 @@ import com.ghostipedia.cosmiccore.api.machine.trait.NotifiableThermiaContainer;
 import com.gregtechceu.gtceu.api.GTValues;
 import com.gregtechceu.gtceu.api.capability.recipe.IO;
 import com.gregtechceu.gtceu.api.gui.GuiTextures;
-import com.gregtechceu.gtceu.api.machine.IMachineBlockEntity;
+import com.gregtechceu.gtceu.api.blockentity.BlockEntityCreationInfo;
 import com.gregtechceu.gtceu.api.machine.MetaMachine;
 import com.gregtechceu.gtceu.api.machine.feature.IUIMachine;
 
@@ -48,7 +48,7 @@ public class CreativeThermiaContainerMachine extends MetaMachine implements IHea
     @DescSynced
     private final NotifiableThermiaContainer thermiaContainer;
 
-    public CreativeThermiaContainerMachine(IMachineBlockEntity holder) {
+    public CreativeThermiaContainerMachine(BlockEntityCreationInfo holder) {
         super(holder);
         long currentTemp = 0;
         this.thermiaContainer = new NotifiableThermiaContainer(this, IO.BOTH, getThermiaLimits(GTValues.MAX),

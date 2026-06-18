@@ -2,7 +2,7 @@ package com.ghostipedia.cosmiccore.common.machine.multiblock.multi.logic;
 
 import com.gregtechceu.gtceu.api.gui.GuiTextures;
 import com.gregtechceu.gtceu.api.gui.fancy.FancyMachineUIWidget;
-import com.gregtechceu.gtceu.api.machine.IMachineBlockEntity;
+import com.gregtechceu.gtceu.api.blockentity.BlockEntityCreationInfo;
 import com.gregtechceu.gtceu.api.machine.feature.IRecipeLogicMachine;
 import com.gregtechceu.gtceu.api.machine.feature.multiblock.IDisplayUIMachine;
 import com.gregtechceu.gtceu.api.machine.multiblock.MultiblockDisplayText;
@@ -57,7 +57,7 @@ public class TitanFusionReactorMachine extends WorkableElectricMultiblockMachine
         return MANAGED_FIELD_HOLDER;
     }
 
-    public TitanFusionReactorMachine(IMachineBlockEntity holder) {
+    public TitanFusionReactorMachine(BlockEntityCreationInfo holder) {
         super(holder);
     }
 

@@ -4,7 +4,7 @@ import com.ghostipedia.cosmiccore.api.data.wireless.WirelessEnergySavedData;
 
 import com.gregtechceu.gtceu.api.GTValues;
 import com.gregtechceu.gtceu.api.capability.recipe.IO;
-import com.gregtechceu.gtceu.api.machine.IMachineBlockEntity;
+import com.gregtechceu.gtceu.api.blockentity.BlockEntityCreationInfo;
 import com.gregtechceu.gtceu.api.machine.TickableSubscription;
 import com.gregtechceu.gtceu.api.machine.feature.IMachineLife;
 import com.gregtechceu.gtceu.api.machine.multiblock.part.TieredIOPartMachine;
@@ -52,7 +52,7 @@ public class WirelessEnergyHatchPartMachine extends TieredIOPartMachine implemen
     @Getter
     protected int amperage;
 
-    public WirelessEnergyHatchPartMachine(IMachineBlockEntity holder, int tier, IO io, int amperage) {
+    public WirelessEnergyHatchPartMachine(BlockEntityCreationInfo holder, int tier, IO io, int amperage) {
         super(holder, tier, io);
         this.amperage = amperage;
         this.energyContainer = createEnergyContainer();
@@ -135,9 +135,9 @@ public class WirelessEnergyHatchPartMachine extends TieredIOPartMachine implemen
         if (getLevel() instanceof ServerLevel serverLevel) {
             var data = WirelessEnergySavedData.getOrCreate(serverLevel);
             var owner = getTeamUUID();
-            data.removeEnergyBuffered(owner, getPos());
-            if (io == IO.OUT) data.removeEnergyInput(owner, getPos());
-            if (io == IO.IN) data.removeEnergyOutput(owner, getPos());
+            data.removeEnergyBuffered(owner, getBlockPos());
+            if (io == IO.OUT) data.removeEnergyInput(owner, getBlockPos());
+            if (io == IO.IN) data.removeEnergyOutput(owner, getBlockPos());
             data.addEUToGlobalWirelessEnergy(owner, energyContainer.getEnergyStored());
             energyContainer.setEnergyStored(0L);
         }
@@ -149,9 +149,9 @@ public class WirelessEnergyHatchPartMachine extends TieredIOPartMachine implemen
                 if (getOffsetTimer() % 20 == 0) {
                     var data = WirelessEnergySavedData.getOrCreate(serverLevel);
                     var owner = getTeamUUID();
-                    data.setEnergyBuffered(owner, getPos(), energyContainer.getEnergyStored());
-                    if (io == IO.IN) data.setEnergyOutput(owner, getPos(), energyContainer.getOutputPerSec() / 20);
-                    if (io == IO.OUT) data.setEnergyInput(owner, getPos(), energyContainer.getInputPerSec() / 20);
+                    data.setEnergyBuffered(owner, getBlockPos(), energyContainer.getEnergyStored());
+                    if (io == IO.IN) data.setEnergyOutput(owner, getBlockPos(), energyContainer.getOutputPerSec() / 20);
+                    if (io == IO.OUT) data.setEnergyInput(owner, getBlockPos(), energyContainer.getInputPerSec() / 20);
                 }
                 if (getOffsetTimer() % ticks_between_save_data_operations == 0) {
                     var data = WirelessEnergySavedData.getOrCreate(serverLevel);

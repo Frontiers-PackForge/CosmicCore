@@ -11,7 +11,7 @@ import com.gregtechceu.gtceu.api.GTValues;
 import com.gregtechceu.gtceu.api.capability.IEnergyContainer;
 import com.gregtechceu.gtceu.api.data.RotationState;
 import com.gregtechceu.gtceu.api.gui.GuiTextures;
-import com.gregtechceu.gtceu.api.machine.IMachineBlockEntity;
+import com.gregtechceu.gtceu.api.blockentity.BlockEntityCreationInfo;
 import com.gregtechceu.gtceu.api.machine.MultiblockMachineDefinition;
 import com.gregtechceu.gtceu.api.machine.multiblock.PartAbility;
 import com.gregtechceu.gtceu.api.machine.multiblock.WorkableElectricMultiblockMachine;
@@ -52,7 +52,7 @@ public class StarLadderOld extends WorkableElectricMultiblockMachine implements 
     protected boolean isFuelable;
     private final Collection<IMultiblockReciever> starLadderReceivers = ConcurrentHashMap.newKeySet();
 
-    public StarLadderOld(IMachineBlockEntity holder, Object... args) {
+    public StarLadderOld(BlockEntityCreationInfo holder, Object... args) {
         super(holder, args);
     }
 

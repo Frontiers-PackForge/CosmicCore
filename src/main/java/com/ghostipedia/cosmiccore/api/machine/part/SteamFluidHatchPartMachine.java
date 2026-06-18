@@ -3,7 +3,7 @@ package com.ghostipedia.cosmiccore.api.machine.part;
 import com.ghostipedia.cosmiccore.common.data.CosmicMachines;
 
 import com.gregtechceu.gtceu.api.capability.recipe.IO;
-import com.gregtechceu.gtceu.api.machine.IMachineBlockEntity;
+import com.gregtechceu.gtceu.api.blockentity.BlockEntityCreationInfo;
 import com.gregtechceu.gtceu.api.machine.MachineDefinition;
 import com.gregtechceu.gtceu.common.machine.multiblock.part.FluidHatchPartMachine;
 
@@ -12,7 +12,7 @@ import net.minecraft.world.level.block.state.BlockState;
 
 public class SteamFluidHatchPartMachine extends FluidHatchPartMachine {
 
-    public SteamFluidHatchPartMachine(IMachineBlockEntity holder, IO io, long initialCapacity, int slots,
+    public SteamFluidHatchPartMachine(BlockEntityCreationInfo holder, IO io, long initialCapacity, int slots,
                                       Object... args) {
         super(holder, 1, io, 2000, 1, args);
     }
@@ -33,7 +33,7 @@ public class SteamFluidHatchPartMachine extends FluidHatchPartMachine {
 
         getLevel().setBlockAndUpdate(blockPos, newBlockState);
 
-        if (getLevel().getBlockEntity(blockPos) instanceof IMachineBlockEntity newHolder) {
+        if (getLevel().getBlockEntity(blockPos) instanceof BlockEntityCreationInfo newHolder) {
             if (newHolder.getMetaMachine() instanceof SteamFluidHatchPartMachine newMachine) {
                 newMachine.setFrontFacing(this.getFrontFacing());
                 newMachine.setUpwardsFacing(this.getUpwardsFacing());

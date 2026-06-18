@@ -3,7 +3,7 @@ package com.ghostipedia.cosmiccore.api.machine.multiblock;
 import com.ghostipedia.cosmiccore.api.capability.recipe.IHeatContainer;
 
 import com.gregtechceu.gtceu.api.capability.recipe.IO;
-import com.gregtechceu.gtceu.api.machine.IMachineBlockEntity;
+import com.gregtechceu.gtceu.api.blockentity.BlockEntityCreationInfo;
 import com.gregtechceu.gtceu.api.machine.feature.multiblock.IMultiPart;
 import com.gregtechceu.gtceu.api.machine.multiblock.WorkableElectricMultiblockMachine;
 
@@ -18,7 +18,7 @@ public class HeatWorkableElectricMultiblockMachine extends WorkableElectricMulti
     @Getter
     private IHeatContainer heatContainer = null;
 
-    public HeatWorkableElectricMultiblockMachine(IMachineBlockEntity holder) {
+    public HeatWorkableElectricMultiblockMachine(BlockEntityCreationInfo holder) {
         super(holder);
     }
 
@@ -27,7 +27,7 @@ public class HeatWorkableElectricMultiblockMachine extends WorkableElectricMulti
         super.onStructureFormed();
         Map<Long, IO> ioMap = getMultiblockState().getMatchContext().getOrCreate("ioMap", Long2ObjectMaps::emptyMap);
         for (IMultiPart part : getParts()) {
-            IO io = ioMap.getOrDefault(part.self().getPos().asLong(), IO.BOTH);
+            IO io = ioMap.getOrDefault(part.self().getBlockPos().asLong(), IO.BOTH);
             if (part instanceof IHeatContainer container) {
                 this.heatContainer = container;
             }

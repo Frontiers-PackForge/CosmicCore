@@ -6,7 +6,7 @@ import com.gregtechceu.gtceu.api.capability.recipe.EURecipeCapability;
 import com.gregtechceu.gtceu.api.capability.recipe.IO;
 import com.gregtechceu.gtceu.api.capability.recipe.IRecipeHandler;
 import com.gregtechceu.gtceu.api.capability.recipe.RecipeCapability;
-import com.gregtechceu.gtceu.api.machine.IMachineBlockEntity;
+import com.gregtechceu.gtceu.api.blockentity.BlockEntityCreationInfo;
 import com.gregtechceu.gtceu.api.machine.TickableSubscription;
 import com.gregtechceu.gtceu.api.machine.feature.multiblock.IMaintenanceMachine;
 import com.gregtechceu.gtceu.api.machine.feature.multiblock.IMultiPart;
@@ -105,7 +105,7 @@ public class MultithreadedMachine extends WorkableElectricMultiblockMachine impl
      */
     private int tickRotation = 0;
 
-    public MultithreadedMachine(IMachineBlockEntity holder) {
+    public MultithreadedMachine(BlockEntityCreationInfo holder) {
         super(holder);
     }
 
@@ -186,7 +186,7 @@ public class MultithreadedMachine extends WorkableElectricMultiblockMachine impl
 
         for (IMultiPart part : getParts()) {
             if (part instanceof EnergyHatchPartMachine energyHatch) {
-                IO io = ioMap.getOrDefault(part.self().getPos().asLong(), IO.IN);
+                IO io = ioMap.getOrDefault(part.self().getBlockPos().asLong(), IO.IN);
                 if (io == IO.IN || io == IO.BOTH) {
                     totalAmperage += energyHatch.getAmperage();
                 }

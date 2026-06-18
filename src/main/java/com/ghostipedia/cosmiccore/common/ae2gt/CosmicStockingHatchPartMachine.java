@@ -2,7 +2,7 @@ package com.ghostipedia.cosmiccore.common.ae2gt;
 
 import com.gregtechceu.gtceu.api.gui.fancy.ConfiguratorPanel;
 import com.gregtechceu.gtceu.api.gui.fancy.TabsWidget;
-import com.gregtechceu.gtceu.api.machine.IMachineBlockEntity;
+import com.gregtechceu.gtceu.api.blockentity.BlockEntityCreationInfo;
 import com.gregtechceu.gtceu.api.machine.MetaMachine;
 import com.gregtechceu.gtceu.api.machine.fancyconfigurator.AutoStockingFancyConfigurator;
 import com.gregtechceu.gtceu.api.machine.feature.multiblock.IMultiController;
@@ -29,7 +29,7 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.phys.BlockHitResult;
-import net.minecraftforge.fluids.FluidStack;
+import net.neoforged.neoforge.fluids.FluidStack;
 
 import appeng.api.config.Actionable;
 import appeng.api.networking.IGrid;
@@ -73,7 +73,7 @@ public class CosmicStockingHatchPartMachine extends CosmicInputHatchPartMachine 
     @Setter
     private Predicate<GenericStack> autoPullTest;
 
-    public CosmicStockingHatchPartMachine(IMachineBlockEntity holder, Object... args) {
+    public CosmicStockingHatchPartMachine(BlockEntityCreationInfo holder, Object... args) {
         super(holder, args);
         this.autoPullTest = $ -> false;
     }

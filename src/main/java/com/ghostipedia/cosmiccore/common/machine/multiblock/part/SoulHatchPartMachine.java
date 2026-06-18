@@ -6,7 +6,7 @@ import com.ghostipedia.cosmiccore.utils.OwnershipUtils;
 import com.gregtechceu.gtceu.api.GTValues;
 import com.gregtechceu.gtceu.api.capability.recipe.IO;
 import com.gregtechceu.gtceu.api.gui.GuiTextures;
-import com.gregtechceu.gtceu.api.machine.IMachineBlockEntity;
+import com.gregtechceu.gtceu.api.blockentity.BlockEntityCreationInfo;
 import com.gregtechceu.gtceu.api.machine.feature.multiblock.IMultiController;
 import com.gregtechceu.gtceu.api.machine.multiblock.part.TieredIOPartMachine;
 
@@ -35,7 +35,7 @@ public class SoulHatchPartMachine extends TieredIOPartMachine {
     @DescSynced
     private final NotifiableSoulContainer soulContainer;
 
-    public SoulHatchPartMachine(IMachineBlockEntity holder, int tier, IO io) {
+    public SoulHatchPartMachine(BlockEntityCreationInfo holder, int tier, IO io) {
         super(holder, tier, io);
         this.soulContainer = new NotifiableSoulContainer(this, io, getMaxConsumption(tier), getMaxCapacity(tier));
     }

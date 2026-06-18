@@ -127,7 +127,7 @@ public class OreExtractionDrillLogic extends RecipeLogic {
     }
 
     private void initializeBounds() {
-        BlockPos machinePos = getMachine().getPos();
+        BlockPos machinePos = getMachine().getBlockPos();
         int halfArea = AREA_SIZE / 2;
 
         minX = machinePos.getX() - halfArea;
@@ -337,7 +337,7 @@ public class OreExtractionDrillLogic extends RecipeLogic {
     private void loadChunk(ServerLevel level, ChunkPos chunk) {
         if (ourLoadedChunks.contains(chunk)) return;
 
-        BlockPos ownerPos = getMachine().getPos();
+        BlockPos ownerPos = getMachine().getBlockPos();
         boolean success = ForgeChunkManager.forceChunk(
                 level,
                 CosmicCore.MOD_ID,
@@ -356,7 +356,7 @@ public class OreExtractionDrillLogic extends RecipeLogic {
         if (structureChunks.contains(chunk)) return;
         if (!ourLoadedChunks.remove(chunk)) return;
 
-        BlockPos ownerPos = getMachine().getPos();
+        BlockPos ownerPos = getMachine().getBlockPos();
         ForgeChunkManager.forceChunk(
                 level,
                 CosmicCore.MOD_ID,
@@ -372,7 +372,7 @@ public class OreExtractionDrillLogic extends RecipeLogic {
 
         structureChunks.clear();
 
-        BlockPos machinePos = getMachine().getPos();
+        BlockPos machinePos = getMachine().getBlockPos();
         for (int dx = -2; dx <= 2; dx++) {
             for (int dz = -2; dz <= 2; dz++) {
                 ChunkPos chunk = new ChunkPos(machinePos.offset(dx, 0, dz));
@@ -402,7 +402,7 @@ public class OreExtractionDrillLogic extends RecipeLogic {
         if (!(getMachine().getLevel() instanceof ServerLevel serverLevel)) return;
 
         for (ChunkPos chunk : ourLoadedChunks) {
-            BlockPos ownerPos = getMachine().getPos();
+            BlockPos ownerPos = getMachine().getBlockPos();
             ForgeChunkManager.forceChunk(
                     serverLevel,
                     CosmicCore.MOD_ID,

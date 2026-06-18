@@ -6,7 +6,7 @@ import com.ghostipedia.cosmiccore.common.data.CosmicBotanyItemRegistration;
 import com.gregtechceu.gtceu.api.capability.recipe.IO;
 import com.gregtechceu.gtceu.api.gui.GuiTextures;
 import com.gregtechceu.gtceu.api.gui.widget.BlockableSlotWidget;
-import com.gregtechceu.gtceu.api.machine.IMachineBlockEntity;
+import com.gregtechceu.gtceu.api.blockentity.BlockEntityCreationInfo;
 import com.gregtechceu.gtceu.api.machine.MetaMachine;
 import com.gregtechceu.gtceu.api.machine.feature.IFancyUIMachine;
 import com.gregtechceu.gtceu.api.machine.feature.IMachineLife;
@@ -45,7 +45,7 @@ public class CropHolderPartMachines extends MultiblockPartMachine implements IMa
     protected static final ManagedFieldHolder MANAGED_FIELD_HOLDER = new ManagedFieldHolder(
             CropHolderPartMachines.class, MultiblockPartMachine.MANAGED_FIELD_HOLDER);
 
-    public CropHolderPartMachines(IMachineBlockEntity holder) {
+    public CropHolderPartMachines(BlockEntityCreationInfo holder) {
         super(holder);
         heldCrops = new CropHolderHandler(this);
     }

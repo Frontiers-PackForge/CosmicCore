@@ -6,7 +6,7 @@ import com.ghostipedia.cosmiccore.client.gui.widget.starladder.StarLadderFancyUI
 import com.ghostipedia.cosmiccore.client.gui.widget.starladder.StarLadderWidget;
 import com.ghostipedia.cosmiccore.common.machine.multiblock.LinkedMultiblockHelper;
 
-import com.gregtechceu.gtceu.api.machine.IMachineBlockEntity;
+import com.gregtechceu.gtceu.api.blockentity.BlockEntityCreationInfo;
 
 import com.lowdragmc.lowdraglib.gui.modular.ModularUI;
 import com.lowdragmc.lowdraglib.gui.widget.Widget;
@@ -31,7 +31,7 @@ public class StarLadderMachine extends LinkedWorkableElectricMultiblockMachine {
     @Getter
     private final StarLadderUplinkManager uplinkManager = new StarLadderUplinkManager(this);
 
-    public StarLadderMachine(IMachineBlockEntity holder, Object... args) {
+    public StarLadderMachine(BlockEntityCreationInfo holder, Object... args) {
         super(holder, args);
     }
 

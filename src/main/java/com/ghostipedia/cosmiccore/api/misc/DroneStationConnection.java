@@ -21,9 +21,9 @@ public class DroneStationConnection {
 
     public DroneStationConnection(MetaMachine machine, DroneStationMachine droneStation) {
         this.machine = machine;
-        this.machinePos = machine.getPos();
+        this.machinePos = machine.getBlockPos();
         this.droneStation = droneStation;
-        this.droneStationPos = droneStation.getPos();
+        this.droneStationPos = droneStation.getBlockPos();
         this.world = machine.getLevel();
     }
 

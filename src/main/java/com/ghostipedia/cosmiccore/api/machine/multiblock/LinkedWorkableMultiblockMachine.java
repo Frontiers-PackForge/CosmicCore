@@ -7,7 +7,7 @@ import com.ghostipedia.cosmiccore.api.data.savedData.LinkedMultiblockSavedData;
 import com.ghostipedia.cosmiccore.common.machine.multiblock.LinkedMultiblockHelper;
 import com.ghostipedia.cosmiccore.common.machine.multiblock.LinkedMultiblockHelper.RolePair;
 
-import com.gregtechceu.gtceu.api.machine.IMachineBlockEntity;
+import com.gregtechceu.gtceu.api.blockentity.BlockEntityCreationInfo;
 import com.gregtechceu.gtceu.api.machine.MetaMachine;
 import com.gregtechceu.gtceu.api.machine.feature.IMachineLife;
 import com.gregtechceu.gtceu.api.machine.feature.multiblock.IDisplayUIMachine;
@@ -26,7 +26,7 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.fluids.FluidStack;
+import net.neoforged.neoforge.fluids.FluidStack;
 
 import org.jetbrains.annotations.Nullable;
 
@@ -65,7 +65,7 @@ public abstract class LinkedWorkableMultiblockMachine extends WorkableMultiblock
      */
     protected Set<GlobalPos> knownPartners = new HashSet<>();
 
-    public LinkedWorkableMultiblockMachine(IMachineBlockEntity holder, Object... args) {
+    public LinkedWorkableMultiblockMachine(BlockEntityCreationInfo holder, Object... args) {
         super(holder, args);
     }
 
@@ -79,7 +79,7 @@ public abstract class LinkedWorkableMultiblockMachine extends WorkableMultiblock
     @Override
     public GlobalPos getGlobalPos() {
         if (getLevel() instanceof ServerLevel serverLevel) {
-            return GlobalPos.of(serverLevel.dimension(), getPos());
+            return GlobalPos.of(serverLevel.dimension(), getBlockPos());
         }
         return null;
     }

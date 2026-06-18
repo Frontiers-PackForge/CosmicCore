@@ -26,7 +26,7 @@ import net.minecraft.world.level.BlockAndTintGetter;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.client.model.data.ModelData;
+import net.neoforged.neoforge.client.model.data.ModelData;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.serialization.Codec;
@@ -73,7 +73,7 @@ public class HPCAIndicatorRender extends DynamicRender<HPCAIndicatorPartMachine,
         }
 
         Direction front = machine.getFrontFacing();
-        HPCAModifier modifier = controller.getModifier(machine.getPos());
+        HPCAModifier modifier = controller.getModifier(machine.getBlockPos());
 
         BakedQuad q = StaticFaceBakery.bakeFace(SLIGHTLY_OVER_BLOCK, front,
                 MODIFIER_SPRITES.get(modifier), BlockModelRotation.X0_Y0, -1, 15, true, false);

@@ -2,7 +2,7 @@ package com.ghostipedia.cosmiccore.common.machine.multiblock.multi.logic;
 
 import com.gregtechceu.gtceu.api.capability.ITurbineMachine;
 import com.gregtechceu.gtceu.api.capability.recipe.RecipeCapability;
-import com.gregtechceu.gtceu.api.machine.IMachineBlockEntity;
+import com.gregtechceu.gtceu.api.blockentity.BlockEntityCreationInfo;
 import com.gregtechceu.gtceu.api.machine.MetaMachine;
 import com.gregtechceu.gtceu.api.machine.feature.ITieredMachine;
 import com.gregtechceu.gtceu.api.machine.feature.multiblock.IMultiPart;
@@ -36,7 +36,7 @@ public class CosmicLargeTurbineMachine extends WorkableElectricMultiblockMachine
     @Getter
     private final int tier;
 
-    public CosmicLargeTurbineMachine(IMachineBlockEntity holder, int tier) {
+    public CosmicLargeTurbineMachine(BlockEntityCreationInfo holder, int tier) {
         super(holder);
         this.tier = tier;
         this.BASE_EU_OUTPUT = 3072;

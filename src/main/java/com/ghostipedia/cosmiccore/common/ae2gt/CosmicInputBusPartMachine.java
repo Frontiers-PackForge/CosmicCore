@@ -2,7 +2,7 @@ package com.ghostipedia.cosmiccore.common.ae2gt;
 
 import com.gregtechceu.gtceu.api.capability.recipe.IO;
 import com.gregtechceu.gtceu.api.gui.fancy.FancyMachineUIWidget;
-import com.gregtechceu.gtceu.api.machine.IMachineBlockEntity;
+import com.gregtechceu.gtceu.api.blockentity.BlockEntityCreationInfo;
 import com.gregtechceu.gtceu.api.machine.feature.IDataStickInteractable;
 import com.gregtechceu.gtceu.api.machine.feature.IMachineLife;
 import com.gregtechceu.gtceu.api.machine.trait.NotifiableItemStackHandler;
@@ -40,7 +40,7 @@ public class CosmicInputBusPartMachine extends MEBusPartMachine implements IData
 
     protected ExportOnlyAEItemList aeItemHandler;
 
-    public CosmicInputBusPartMachine(IMachineBlockEntity holder, Object... args) {
+    public CosmicInputBusPartMachine(BlockEntityCreationInfo holder, Object... args) {
         super(holder, IO.IN, args);
         super.circuitSlotEnabled = false;
     }

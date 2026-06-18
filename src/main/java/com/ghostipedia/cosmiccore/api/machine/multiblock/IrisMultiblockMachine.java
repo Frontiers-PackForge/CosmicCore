@@ -8,7 +8,7 @@ import com.ghostipedia.cosmiccore.common.data.CosmicItems;
 import com.ghostipedia.cosmiccore.common.data.CosmicSounds;
 
 import com.gregtechceu.gtceu.api.capability.recipe.IO;
-import com.gregtechceu.gtceu.api.machine.IMachineBlockEntity;
+import com.gregtechceu.gtceu.api.blockentity.BlockEntityCreationInfo;
 import com.gregtechceu.gtceu.api.machine.MetaMachine;
 import com.gregtechceu.gtceu.api.machine.multiblock.WorkableElectricMultiblockMachine;
 import com.gregtechceu.gtceu.api.machine.trait.NotifiableItemStackHandler;
@@ -152,7 +152,7 @@ public class IrisMultiblockMachine extends WorkableElectricMultiblockMachine imp
         DEATH_GRACEFUL;
     }
 
-    public IrisMultiblockMachine(IMachineBlockEntity holder) {
+    public IrisMultiblockMachine(BlockEntityCreationInfo holder) {
         super(holder);
         this.inventory = new NotifiableItemStackHandler(this, 1, IO.NONE, IO.BOTH);
         // Debug: log initial stage
@@ -208,13 +208,13 @@ public class IrisMultiblockMachine extends WorkableElectricMultiblockMachine imp
 
             // Store position for tracking
             if (module instanceof MetaMachine metaMachine) {
-                moduleSlotPositions.add(metaMachine.getPos().immutable());
+                moduleSlotPositions.add(metaMachine.getBlockPos().immutable());
                 // Debug logging
                 if (getLevel() != null && !getLevel().isClientSide) {
                     com.ghostipedia.cosmiccore.CosmicCore.LOGGER.info(
                             "[StellarIris] Module registered: {} at {}. Total modules: {}",
                             metaMachine.getBlockState().getBlock().getDescriptionId(),
-                            metaMachine.getPos(),
+                            metaMachine.getBlockPos(),
                             connectedModules.size());
                 }
             }
@@ -236,7 +236,7 @@ public class IrisMultiblockMachine extends WorkableElectricMultiblockMachine imp
 
             // Remove position tracking
             if (module instanceof MetaMachine metaMachine) {
-                moduleSlotPositions.remove(metaMachine.getPos());
+                moduleSlotPositions.remove(metaMachine.getBlockPos());
             }
         }
     }
@@ -411,7 +411,7 @@ public class IrisMultiblockMachine extends WorkableElectricMultiblockMachine imp
         if (getLevel() != null && !getLevel().isClientSide) {
             com.ghostipedia.cosmiccore.CosmicCore.LOGGER.info(
                     "[StellarIris] PRESTIGE TRIGGERED at {} - Stage: {}, Points: {}",
-                    getPos(), stage, lastPrestigePointsEarned);
+                    getBlockPos(), stage, lastPrestigePointsEarned);
         }
 
         // Start the animation - UI will handle the visual sequence
@@ -645,9 +645,9 @@ public class IrisMultiblockMachine extends WorkableElectricMultiblockMachine imp
             if (sound != null) {
                 workingSound = sound.playAutoReleasedSound(
                         () -> this.shouldWorkingPlaySound() && !this.isInValid() &&
-                                this.getLevel().isLoaded(this.getPos()) &&
-                                MetaMachine.getMachine(this.getLevel(), this.getPos()) == this,
-                        RelativeDirection.offsetPos(this.getPos(), getFrontFacing(), getUpwardsFacing(), isFlipped, 0,
+                                this.getLevel().isLoaded(this.getBlockPos()) &&
+                                MetaMachine.getMachine(this.getLevel(), this.getBlockPos()) == this,
+                        RelativeDirection.offsetPos(this.getBlockPos(), getFrontFacing(), getUpwardsFacing(), isFlipped, 0,
                                 0, -47),
                         true, 0, 1, 1);
             }

@@ -8,7 +8,7 @@ import com.gregtechceu.gtceu.api.capability.ICleanroomReceiver;
 import com.gregtechceu.gtceu.api.gui.GuiTextures;
 import com.gregtechceu.gtceu.api.gui.fancy.IFancyTooltip;
 import com.gregtechceu.gtceu.api.gui.fancy.TooltipsPanel;
-import com.gregtechceu.gtceu.api.machine.IMachineBlockEntity;
+import com.gregtechceu.gtceu.api.blockentity.BlockEntityCreationInfo;
 import com.gregtechceu.gtceu.api.machine.TickableSubscription;
 import com.gregtechceu.gtceu.api.machine.feature.ICleanroomProvider;
 import com.gregtechceu.gtceu.api.machine.feature.IInteractedMachine;
@@ -68,7 +68,7 @@ public class DroneMaintenanceInterfacePartMachine extends TieredPartMachine
     @DescSynced
     private long syncedConnectionPos;
 
-    public DroneMaintenanceInterfacePartMachine(IMachineBlockEntity holder) {
+    public DroneMaintenanceInterfacePartMachine(BlockEntityCreationInfo holder) {
         super(holder, GTValues.HV);
         DUMMY_CLEANROOM = DummyCleanroom.createForTypes(Collections.singletonList(CleanroomType.CLEANROOM));
     }
@@ -167,7 +167,7 @@ public class DroneMaintenanceInterfacePartMachine extends TieredPartMachine
             // (faster)?
             // the speed difference should be negligible :P
             long blockLimit = station.getBlockLimit();
-            if (station.getPos().distSqr(this.getPos()) > blockLimit * blockLimit) continue;
+            if (station.getBlockPos().distSqr(this.getBlockPos()) > blockLimit * blockLimit) continue;
             if (!station.isActive()) continue;
             connection = new DroneStationConnection(this, station);
             station.connections.add(connection);

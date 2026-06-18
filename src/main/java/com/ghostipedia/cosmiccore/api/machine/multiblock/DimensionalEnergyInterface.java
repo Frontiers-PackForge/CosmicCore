@@ -9,7 +9,7 @@ import com.gregtechceu.gtceu.api.capability.recipe.IO;
 import com.gregtechceu.gtceu.api.gui.GuiTextures;
 import com.gregtechceu.gtceu.api.gui.fancy.FancyMachineUIWidget;
 import com.gregtechceu.gtceu.api.machine.ConditionalSubscriptionHandler;
-import com.gregtechceu.gtceu.api.machine.IMachineBlockEntity;
+import com.gregtechceu.gtceu.api.blockentity.BlockEntityCreationInfo;
 import com.gregtechceu.gtceu.api.machine.feature.IFancyUIMachine;
 import com.gregtechceu.gtceu.api.machine.feature.multiblock.IDisplayUIMachine;
 import com.gregtechceu.gtceu.api.machine.feature.multiblock.IMaintenanceMachine;
@@ -78,7 +78,7 @@ public class DimensionalEnergyInterface extends WorkableMultiblockMachine
 
     protected ConditionalSubscriptionHandler tickSubscription;
 
-    public DimensionalEnergyInterface(IMachineBlockEntity holder) {
+    public DimensionalEnergyInterface(BlockEntityCreationInfo holder) {
         super(holder);
         this.tickSubscription = new ConditionalSubscriptionHandler(this, this::transferEnergyTick, this::isActive);
         this.localDisplay = true;
@@ -101,7 +101,7 @@ public class DimensionalEnergyInterface extends WorkableMultiblockMachine
 
         Map<Long, IO> ioMap = getMultiblockState().getMatchContext().getOrCreate("ioMap", Long2ObjectMaps::emptyMap);
         for (IMultiPart part : getParts()) {
-            IO io = ioMap.getOrDefault(part.self().getPos().asLong(), IO.BOTH);
+            IO io = ioMap.getOrDefault(part.self().getBlockPos().asLong(), IO.BOTH);
             if (io == IO.NONE) continue;
 
             var handlerLists = part.getRecipeHandlers();
@@ -152,10 +152,10 @@ public class DimensionalEnergyInterface extends WorkableMultiblockMachine
                     data.addEUToGlobalWirelessEnergy(owner, energyBuffer.getEnergyStored());
                     energyBuffer.removeEnergy(energyBuffer.getEnergyStored());
                 }
-                data.removeEnergyBuffered(owner, getPos());
-                data.removeEnergyInput(owner, getPos());
-                data.removeEnergyOutput(owner, getPos());
-                data.removePassiveDrain(owner, getPos());
+                data.removeEnergyBuffered(owner, getBlockPos());
+                data.removeEnergyInput(owner, getBlockPos());
+                data.removeEnergyOutput(owner, getBlockPos());
+                data.removePassiveDrain(owner, getBlockPos());
             }
             this.inputHatches = null;
             this.outputHatches = null;
@@ -256,9 +256,9 @@ public class DimensionalEnergyInterface extends WorkableMultiblockMachine
                     netOutLastSec = 0;
 
                     // Send IO values to global Storage to display in the Dimensional Storage.
-                    data.setEnergyInput(owner, getPos(), averageInLastSec);
-                    data.setEnergyOutput(owner, getPos(), averageOutLastSec);
-                    data.setEnergyBuffered(owner, getPos(), energyBuffer.getEnergyStored());
+                    data.setEnergyInput(owner, getBlockPos(), averageInLastSec);
+                    data.setEnergyOutput(owner, getBlockPos(), averageOutLastSec);
+                    data.setEnergyBuffered(owner, getBlockPos(), energyBuffer.getEnergyStored());
                 }
 
                 // Handle inputs
@@ -283,15 +283,15 @@ public class DimensionalEnergyInterface extends WorkableMultiblockMachine
                         var euToTransfer = energyBuffer.getEnergyStored() - (energyBuffer.getEnergyCapacity() / 2);
                         var euTransferred = data.addEUToGlobalWirelessEnergy(owner, euToTransfer);
                         energyBuffer.changeEnergy(-(euToTransfer - euTransferred));
-                        data.setEnergyBuffered(owner, getPos(), energyBuffer.getEnergyStored());
-                        data.setPassiveDrain(owner, getPos(), getPassiveDrain());
+                        data.setEnergyBuffered(owner, getBlockPos(), energyBuffer.getEnergyStored());
+                        data.setPassiveDrain(owner, getBlockPos(), getPassiveDrain());
                     }
                 }
             } else {
-                data.removeEnergyBuffered(owner, getPos());
-                data.removeEnergyInput(owner, getPos());
-                data.removeEnergyOutput(owner, getPos());
-                data.removePassiveDrain(owner, getPos());
+                data.removeEnergyBuffered(owner, getBlockPos());
+                data.removeEnergyInput(owner, getBlockPos());
+                data.removeEnergyOutput(owner, getBlockPos());
+                data.removePassiveDrain(owner, getBlockPos());
             }
         }
     }
@@ -347,7 +347,7 @@ public class DimensionalEnergyInterface extends WorkableMultiblockMachine
                         avgOut = averageOutLastSec;
                         passiveDrain = getPassiveDrain();
                     } else {
-                        energyBuffered = data.getEnergyBufferedExceptLocal(owner, getPos());
+                        energyBuffered = data.getEnergyBufferedExceptLocal(owner, getBlockPos());
                         energyBuffered = energyBuffered.add(BigInteger.valueOf(energyBuffer.getEnergyStored()));
                         avgIn = data.getEnergyInput(owner);
                         avgOut = data.getEnergyOutput(owner);

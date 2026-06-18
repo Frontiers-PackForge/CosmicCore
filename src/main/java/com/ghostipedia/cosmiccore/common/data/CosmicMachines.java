@@ -547,7 +547,7 @@ public class CosmicMachines {
             .register();
 
     private static MachineDefinition[] registerTieredMachines(String name,
-                                                              BiFunction<IMachineBlockEntity, Integer, MetaMachine> factory,
+                                                              BiFunction<BlockEntityCreationInfo, Integer, MetaMachine> factory,
                                                               BiFunction<Integer, MachineBuilder<MachineDefinition, ?>, MachineDefinition> builder,
                                                               int... tiers) {
         MachineDefinition[] definitions = new MachineDefinition[GTValues.TIER_COUNT];

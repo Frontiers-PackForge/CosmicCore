@@ -5,7 +5,7 @@ import com.ghostipedia.cosmiccore.api.machine.multiblock.MagnetWorkableElectricM
 import com.gregtechceu.gtceu.api.capability.IEnergyContainer;
 import com.gregtechceu.gtceu.api.capability.recipe.EURecipeCapability;
 import com.gregtechceu.gtceu.api.capability.recipe.IO;
-import com.gregtechceu.gtceu.api.machine.IMachineBlockEntity;
+import com.gregtechceu.gtceu.api.blockentity.BlockEntityCreationInfo;
 import com.gregtechceu.gtceu.api.machine.TickableSubscription;
 import com.gregtechceu.gtceu.api.machine.feature.ITieredMachine;
 import com.gregtechceu.gtceu.api.machine.feature.multiblock.IMultiPart;
@@ -44,7 +44,7 @@ public class MagneticFieldMachine extends MagnetWorkableElectricMultiblockMachin
     @Nullable
     protected TickableSubscription preMagnetSubs;
 
-    public MagneticFieldMachine(IMachineBlockEntity holder) {
+    public MagneticFieldMachine(BlockEntityCreationInfo holder) {
         super(holder);
     }
 
@@ -61,7 +61,7 @@ public class MagneticFieldMachine extends MagnetWorkableElectricMultiblockMachin
         List<IEnergyContainer> inputEnergyContainers = new ArrayList<>();
         Map<Long, IO> ioMap = getMultiblockState().getMatchContext().getOrCreate("ioMap", Long2ObjectMaps::emptyMap);
         for (IMultiPart part : getParts()) {
-            IO io = ioMap.getOrDefault(part.self().getPos().asLong(), IO.IN);
+            IO io = ioMap.getOrDefault(part.self().getBlockPos().asLong(), IO.IN);
             if (io == IO.NONE || io == IO.OUT) continue;
             var handlers = part.getRecipeHandlers();
             for (var handler : handlers) {

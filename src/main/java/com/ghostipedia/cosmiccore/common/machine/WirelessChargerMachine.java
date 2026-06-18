@@ -3,7 +3,7 @@ package com.ghostipedia.cosmiccore.common.machine;
 import com.gregtechceu.gtceu.GTCEu;
 import com.gregtechceu.gtceu.api.GTValues;
 import com.gregtechceu.gtceu.api.capability.GTCapabilityHelper;
-import com.gregtechceu.gtceu.api.machine.IMachineBlockEntity;
+import com.gregtechceu.gtceu.api.blockentity.BlockEntityCreationInfo;
 import com.gregtechceu.gtceu.api.machine.TickableSubscription;
 import com.gregtechceu.gtceu.api.machine.TieredEnergyMachine;
 import com.gregtechceu.gtceu.api.machine.trait.NotifiableEnergyContainer;
@@ -45,7 +45,7 @@ public class WirelessChargerMachine extends TieredEnergyMachine {
 
     List<Player> oldPlayerList = new ArrayList<>();
 
-    public WirelessChargerMachine(IMachineBlockEntity holder, int tier, Object... args) {
+    public WirelessChargerMachine(BlockEntityCreationInfo holder, int tier, Object... args) {
         super(holder, tier, args);
         this.tier = tier;
         mode = ChargeMode.SUPER_CHARGED;
@@ -166,8 +166,8 @@ public class WirelessChargerMachine extends TieredEnergyMachine {
 
     private boolean isPlayerInRange(Player player) {
         int radius = mode == ChargeMode.SUPER_CHARGED ? (int) shortRange : (int) longRange;
-        BlockPos a = new BlockPos(getPos().offset(new Vec3i(-radius, -radius, -radius)));
-        BlockPos b = new BlockPos(getPos().offset(new Vec3i(radius, radius, radius)));
+        BlockPos a = new BlockPos(getBlockPos().offset(new Vec3i(-radius, -radius, -radius)));
+        BlockPos b = new BlockPos(getBlockPos().offset(new Vec3i(radius, radius, radius)));
         var entityList = getLevel().getEntities(null, new AABB(a, b));
         return entityList.contains(player);
     }

@@ -22,7 +22,7 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.phys.AABB;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
-import net.minecraftforge.client.model.data.ModelData;
+import net.neoforged.neoforge.client.model.data.ModelData;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
@@ -162,7 +162,7 @@ public class StellarIrisRender extends DynamicRender<IrisMultiblockMachine, Stel
             poseStack.popPose();
 
         } else if (machine.getStage() == IrisMultiblockMachine.Stage.DEATH_GRACEFUL) {
-            BlockPos pos = machine.getPos();
+            BlockPos pos = machine.getBlockPos();
 
             if (!irisFadeStartSec.containsKey(pos)) {
                 PoseStack.Pose pose = poseStack.last();
@@ -198,7 +198,7 @@ public class StellarIrisRender extends DynamicRender<IrisMultiblockMachine, Stel
 
     @Override
     public AABB getRenderBoundingBox(IrisMultiblockMachine machine) {
-        return new AABB(machine.getPos()).inflate(getViewDistance(), 16, getViewDistance());
+        return new AABB(machine.getBlockPos()).inflate(getViewDistance(), 16, getViewDistance());
     }
 
     @OnlyIn(Dist.CLIENT)
@@ -376,7 +376,7 @@ public class StellarIrisRender extends DynamicRender<IrisMultiblockMachine, Stel
         if (count < 1) return;
         if (count > 5) count = 5;
 
-        long seed = hashPos(machine.getPos()) ^ (count * 0x9E3779B97F4A7C15L);
+        long seed = hashPos(machine.getBlockPos()) ^ (count * 0x9E3779B97F4A7C15L);
         long[] S = new long[] { seed };
 
         String[] palette = new String[] { "#ffd28a", "#9ad0ff", "#ff9fb0", "#fff6a4", "#b4ffea", "#d2a0ff" };
@@ -520,7 +520,7 @@ public class StellarIrisRender extends DynamicRender<IrisMultiblockMachine, Stel
         float tSec = (Minecraft.getInstance().player.tickCount + partial) / 20.0f;
 
         if (!seedInit) {
-            pulseSeed = hashPos(machine.getPos());
+            pulseSeed = hashPos(machine.getBlockPos());
             seedInit = true;
             nextSpikeT = tSec + 0.2f;
         }

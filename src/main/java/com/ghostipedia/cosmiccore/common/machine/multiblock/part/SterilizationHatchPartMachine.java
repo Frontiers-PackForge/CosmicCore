@@ -9,7 +9,7 @@ import com.gregtechceu.gtceu.api.capability.recipe.RecipeCapability;
 import com.gregtechceu.gtceu.api.gui.GuiTextures;
 import com.gregtechceu.gtceu.api.gui.UITemplate;
 import com.gregtechceu.gtceu.api.gui.widget.TankWidget;
-import com.gregtechceu.gtceu.api.machine.IMachineBlockEntity;
+import com.gregtechceu.gtceu.api.blockentity.BlockEntityCreationInfo;
 import com.gregtechceu.gtceu.api.machine.TickableSubscription;
 import com.gregtechceu.gtceu.api.machine.feature.IUIMachine;
 import com.gregtechceu.gtceu.api.machine.multiblock.part.TieredIOPartMachine;
@@ -42,7 +42,7 @@ public class SterilizationHatchPartMachine extends TieredIOPartMachine
     protected ISubscription tankSubs;
     public final NotifiableFluidTank fluidTank;
 
-    public SterilizationHatchPartMachine(IMachineBlockEntity holder, int tier, IO io, int tankSize) {
+    public SterilizationHatchPartMachine(BlockEntityCreationInfo holder, int tier, IO io, int tankSize) {
         super(holder, tier, io);
         fluidTank = new NotifiableSterileTank(this, 1, tankSize, IO.IN, IO.IN);
     }
@@ -85,7 +85,7 @@ public class SterilizationHatchPartMachine extends TieredIOPartMachine
 
     protected void updateTankSubscription(Direction newFacing) {
         if (isWorkingEnabled() && ((io.support(IO.OUT) && !fluidTank.isEmpty()) || io.support(IO.IN)) &&
-                GTTransferUtils.hasAdjacentFluidHandler(getLevel(), getPos(), newFacing)) {
+                GTTransferUtils.hasAdjacentFluidHandler(getLevel(), getBlockPos(), newFacing)) {
             autoIOSubs = subscribeServerTick(autoIOSubs, this::autoIO);
         } else if (autoIOSubs != null) {
             autoIOSubs.unsubscribe();

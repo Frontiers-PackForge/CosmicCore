@@ -91,7 +91,7 @@ public class StarLadderRender extends
 
     @Override
     public AABB getRenderBoundingBox(WorkableElectricMultiblockMachine multi) {
-        return new AABB(multi.getPos()).inflate(getViewDistance(), 256, getViewDistance());
+        return new AABB(multi.getBlockPos()).inflate(getViewDistance(), 256, getViewDistance());
     }
 
     @Override
