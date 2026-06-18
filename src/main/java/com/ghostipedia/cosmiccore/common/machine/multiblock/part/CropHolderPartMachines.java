@@ -9,7 +9,6 @@ import com.gregtechceu.gtceu.api.gui.widget.BlockableSlotWidget;
 import com.gregtechceu.gtceu.api.blockentity.BlockEntityCreationInfo;
 import com.gregtechceu.gtceu.api.machine.MetaMachine;
 import com.gregtechceu.gtceu.api.machine.feature.IFancyUIMachine;
-import com.gregtechceu.gtceu.api.machine.feature.IMachineLife;
 import com.gregtechceu.gtceu.api.machine.multiblock.part.MultiblockPartMachine;
 import com.gregtechceu.gtceu.api.machine.trait.NotifiableItemStackHandler;
 import com.gregtechceu.gtceu.api.transfer.item.CustomItemStackHandler;
@@ -33,7 +32,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;
 
-public class CropHolderPartMachines extends MultiblockPartMachine implements IMachineLife, IFancyUIMachine {
+public class CropHolderPartMachines extends MultiblockPartMachine implements IFancyUIMachine {
 
     @Persisted
     private final CropHolderHandler heldCrops;

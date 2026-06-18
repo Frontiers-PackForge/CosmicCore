@@ -9,7 +9,6 @@ import com.ghostipedia.cosmiccore.common.machine.multiblock.LinkedMultiblockHelp
 
 import com.gregtechceu.gtceu.api.blockentity.BlockEntityCreationInfo;
 import com.gregtechceu.gtceu.api.machine.MetaMachine;
-import com.gregtechceu.gtceu.api.machine.feature.IMachineLife;
 import com.gregtechceu.gtceu.api.machine.multiblock.WorkableElectricMultiblockMachine;
 import com.gregtechceu.gtceu.common.machine.owner.FTBOwner;
 
@@ -45,7 +44,7 @@ import java.util.function.Predicate;
  * </ul>
  */
 public abstract class LinkedWorkableElectricMultiblockMachine extends WorkableElectricMultiblockMachine
-                                                              implements ILinkedMultiblock, IMachineLife {
+                                                              implements ILinkedMultiblock {
 
     protected static final ManagedFieldHolder MANAGED_FIELD_HOLDER = new ManagedFieldHolder(
             LinkedWorkableElectricMultiblockMachine.class,
@@ -145,8 +144,8 @@ public abstract class LinkedWorkableElectricMultiblockMachine extends WorkableEl
     }
 
     @Override
-    public void onMachineRemoved() {
-        IMachineLife.super.onMachineRemoved();
+    public void onMachineDestroyed() {
+        super.onMachineDestroyed();
 
         if (getLevel() instanceof ServerLevel serverLevel) {
             UUID owner = getTeamUUID();

@@ -12,7 +12,6 @@ import com.gregtechceu.gtceu.api.blockentity.BlockEntityCreationInfo;
 import com.gregtechceu.gtceu.api.machine.TickableSubscription;
 import com.gregtechceu.gtceu.api.machine.feature.ICleanroomProvider;
 import com.gregtechceu.gtceu.api.machine.feature.IInteractedMachine;
-import com.gregtechceu.gtceu.api.machine.feature.IMachineLife;
 import com.gregtechceu.gtceu.api.machine.feature.multiblock.IMaintenanceMachine;
 import com.gregtechceu.gtceu.api.machine.multiblock.CleanroomType;
 import com.gregtechceu.gtceu.api.machine.multiblock.DummyCleanroom;
@@ -38,7 +37,7 @@ import java.util.List;
 import java.util.Set;
 
 public class DroneMaintenanceInterfacePartMachine extends TieredPartMachine
-                                                  implements IMachineLife, IMaintenanceMachine, IInteractedMachine {
+                                                  implements IMaintenanceMachine, IInteractedMachine {
 
     protected static final ManagedFieldHolder MANAGED_FIELD_HOLDER = new ManagedFieldHolder(
             DroneMaintenanceInterfacePartMachine.class,
@@ -112,8 +111,8 @@ public class DroneMaintenanceInterfacePartMachine extends TieredPartMachine
     }
 
     @Override
-    public void onMachineRemoved() {
-        IMachineLife.super.onMachineRemoved();
+    public void onMachineDestroyed() {
+        super.onMachineDestroyed();
         if (hasConnection()) connection.machine = null;
     }
 

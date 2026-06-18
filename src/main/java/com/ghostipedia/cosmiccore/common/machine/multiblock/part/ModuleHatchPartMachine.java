@@ -7,7 +7,6 @@ import com.gregtechceu.gtceu.api.capability.recipe.IO;
 import com.gregtechceu.gtceu.api.gui.GuiTextures;
 import com.gregtechceu.gtceu.api.gui.widget.SlotWidget;
 import com.gregtechceu.gtceu.api.blockentity.BlockEntityCreationInfo;
-import com.gregtechceu.gtceu.api.machine.feature.IMachineLife;
 import com.gregtechceu.gtceu.api.machine.multiblock.part.TieredIOPartMachine;
 import com.gregtechceu.gtceu.api.machine.trait.NotifiableItemStackHandler;
 import com.gregtechceu.gtceu.api.machine.trait.RecipeHandlerList;
@@ -30,7 +29,7 @@ import javax.annotation.ParametersAreNonnullByDefault;
 
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
-public class ModuleHatchPartMachine extends TieredIOPartMachine implements IMachineLife {
+public class ModuleHatchPartMachine extends TieredIOPartMachine {
 
     protected static final ManagedFieldHolder MANAGED_FIELD_HOLDER = new ManagedFieldHolder(
             ModuleHatchPartMachine.class,
@@ -88,7 +87,7 @@ public class ModuleHatchPartMachine extends TieredIOPartMachine implements IMach
     }
 
     @Override
-    public void onMachineRemoved() {
+    public void onMachineDestroyed() {
         clearInventory(getInventory().storage);
     }
 

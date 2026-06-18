@@ -4,7 +4,6 @@ import com.gregtechceu.gtceu.api.capability.recipe.IO;
 import com.gregtechceu.gtceu.api.gui.fancy.FancyMachineUIWidget;
 import com.gregtechceu.gtceu.api.blockentity.BlockEntityCreationInfo;
 import com.gregtechceu.gtceu.api.machine.feature.IDataStickInteractable;
-import com.gregtechceu.gtceu.api.machine.feature.IMachineLife;
 import com.gregtechceu.gtceu.api.machine.trait.NotifiableItemStackHandler;
 import com.gregtechceu.gtceu.common.item.IntCircuitBehaviour;
 import com.gregtechceu.gtceu.integration.ae2.gui.widget.AEItemConfigWidget;
@@ -30,7 +29,7 @@ import appeng.api.config.Actionable;
 import appeng.api.stacks.GenericStack;
 import appeng.api.storage.MEStorage;
 
-public class CosmicInputBusPartMachine extends MEBusPartMachine implements IDataStickInteractable, IMachineLife {
+public class CosmicInputBusPartMachine extends MEBusPartMachine implements IDataStickInteractable {
 
     protected static final ManagedFieldHolder MANAGED_FIELD_HOLDER = new ManagedFieldHolder(
             CosmicInputBusPartMachine.class,
@@ -50,7 +49,7 @@ public class CosmicInputBusPartMachine extends MEBusPartMachine implements IData
     /////////////////////////////////
 
     @Override
-    public void onMachineRemoved() {
+    public void onMachineDestroyed() {
         flushInventory();
     }
 

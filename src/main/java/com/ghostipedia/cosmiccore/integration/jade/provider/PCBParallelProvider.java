@@ -5,7 +5,7 @@ import com.ghostipedia.cosmiccore.common.machine.multiblock.multi.logic.PCBFound
 
 import com.gregtechceu.gtceu.api.blockentity.MetaMachineBlockEntity;
 import com.gregtechceu.gtceu.api.capability.IParallelHatch;
-import com.gregtechceu.gtceu.api.machine.feature.multiblock.IMultiController;
+import com.gregtechceu.gtceu.api.machine.multiblock.MultiblockControllerMachine;
 import com.gregtechceu.gtceu.common.machine.multiblock.part.ParallelHatchPartMachine;
 import com.gregtechceu.gtceu.utils.FormattingUtil;
 
@@ -42,7 +42,7 @@ public class PCBParallelProvider implements IBlockComponentProvider, IServerData
             return;
         }
 
-        if (machine instanceof PCBFoundryMachine foundry && machine instanceof IMultiController controller) {
+        if (machine instanceof PCBFoundryMachine foundry && machine instanceof MultiblockControllerMachine controller) {
             CompoundTag tag = new CompoundTag();
             var logic = foundry.getRecipeLogic();
             if (logic.isActive() && logic.getLastRecipe() != null) {
