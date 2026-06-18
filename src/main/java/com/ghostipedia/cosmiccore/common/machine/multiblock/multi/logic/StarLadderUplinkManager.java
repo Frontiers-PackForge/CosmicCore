@@ -19,6 +19,7 @@ import com.gregtechceu.gtceu.common.data.GTItems;
 import com.gregtechceu.gtceu.common.data.GTMaterials;
 import com.gregtechceu.gtceu.common.machine.owner.FTBOwner;
 
+import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -572,7 +573,7 @@ public class StarLadderUplinkManager implements INBTSerializable<CompoundTag> {
     // ---- NBT ----
 
     @Override
-    public CompoundTag serializeNBT() {
+    public CompoundTag serializeNBT(HolderLookup.Provider provider) {
         var tag = new CompoundTag();
         tag.putString("state", state.name());
         tag.putInt("progress", progress);
@@ -581,7 +582,7 @@ public class StarLadderUplinkManager implements INBTSerializable<CompoundTag> {
     }
 
     @Override
-    public void deserializeNBT(CompoundTag tag) {
+    public void deserializeNBT(HolderLookup.Provider provider, CompoundTag tag) {
         try {
             state = StarLadderUplinkState.valueOf(tag.getString("state"));
         } catch (IllegalArgumentException e) {

@@ -60,8 +60,8 @@ public class CosmicCore {
     public CosmicCore(IEventBus modBus) {
         modBus.register(this);
         CosmicRegistration.REGISTRATE.registerEventListeners(modBus);
+        CosmicAttachmentTypes.ATTACHMENT_TYPES.register(modBus);
         CosmicLootModifiers.register(modBus);
-        // Register bargains early so they're available on both client and server
         CosmicBargains.init();
 
         if (Platform.isClient()) {
@@ -132,6 +132,5 @@ public class CosmicCore {
     public void registerCapabilities(RegisterCapabilitiesEvent event) {
         CosmicCapabilities.register(event);
         OxygenItemCap.onRegisterCaps(event);
-        ReflectionCapability.registerCaps(event);
     }
 }

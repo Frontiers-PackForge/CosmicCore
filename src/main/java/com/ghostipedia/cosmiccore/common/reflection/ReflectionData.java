@@ -2,11 +2,13 @@ package com.ghostipedia.cosmiccore.common.reflection;
 
 import com.ghostipedia.cosmiccore.common.reflection.soul.SoulShape;
 
+import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.StringTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.resources.ResourceLocation;
+import net.neoforged.neoforge.common.util.INBTSerializable;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -16,7 +18,7 @@ import java.util.Set;
 /**
  * Implementation of IReflection - stores all soul/erosion/bargain data for a player.
  */
-public class ReflectionData implements IReflection {
+public class ReflectionData implements IReflection, INBTSerializable<CompoundTag> {
 
     // Currency and capacity
     private int shardBalance = 0;
@@ -355,6 +357,19 @@ public class ReflectionData implements IReflection {
         root.put("memory", memoryTag);
 
         return root;
+    }
+
+    @Override
+    public CompoundTag serializeNBT(HolderLookup.Provider provider) {
+        CompoundTag tag = saveTag();
+        return tag != null ? tag : new CompoundTag();
+    }
+
+    @Override
+    public void deserializeNBT(HolderLookup.Provider provider, CompoundTag nbt) {
+        if (nbt != null) {
+            loadTag(nbt);
+        }
     }
 
     public void loadTag(CompoundTag root) {

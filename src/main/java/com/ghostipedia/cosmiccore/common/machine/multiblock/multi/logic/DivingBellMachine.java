@@ -1,9 +1,11 @@
 package com.ghostipedia.cosmiccore.common.machine.multiblock.multi.logic;
 
+import java.util.Optional;
+import com.ghostipedia.cosmiccore.common.data.CosmicAttachmentTypes;
+
 import com.ghostipedia.cosmiccore.common.data.CosmicBlocks;
 import com.ghostipedia.cosmiccore.common.teleporter.LandingZoneHelper;
 import com.ghostipedia.cosmiccore.common.teleporter.SafeTeleporter;
-import com.ghostipedia.cosmiccore.common.teleporter.TeleportOriginCap;
 import com.ghostipedia.cosmiccore.common.teleporter.TeleportPadRegistry;
 
 import com.gregtechceu.gtceu.api.blockentity.BlockEntityCreationInfo;
@@ -138,7 +140,7 @@ public class DivingBellMachine extends WorkableElectricMultiblockMachine {
         }
 
         // Save origin data to player capability
-        player.getCapability(TeleportOriginCap.CAP).ifPresent(cap -> {
+        Optional.of(player.getData(CosmicAttachmentTypes.TELEPORT_ORIGIN)).ifPresent(cap -> {
             cap.setOriginDimension(currentLevel.dimension());
             cap.setOriginPosition(player.position());
             cap.setOriginRotation(player.getYRot(), player.getXRot());

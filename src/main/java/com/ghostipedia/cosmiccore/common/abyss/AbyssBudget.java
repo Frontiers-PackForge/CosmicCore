@@ -1,16 +1,31 @@
 package com.ghostipedia.cosmiccore.common.abyss;
 
+import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.Level;
+import net.neoforged.neoforge.common.util.INBTSerializable;
 
 import java.util.HashMap;
 import java.util.Map;
 
-public class AbyssBudget implements IAbyssTimer {
+public class AbyssBudget implements IAbyssTimer, INBTSerializable<CompoundTag> {
+
+    @Override
+    public CompoundTag serializeNBT(HolderLookup.Provider provider) {
+        CompoundTag tag = tagSave();
+        return tag != null ? tag : new CompoundTag();
+    }
+
+    @Override
+    public void deserializeNBT(HolderLookup.Provider provider, CompoundTag nbt) {
+        if (nbt != null) {
+            tagLoad(nbt);
+        }
+    }
 
     private final Map<ResourceLocation, Long> timeRemaining = new HashMap<>();
     private final Map<ResourceLocation, Boolean> decay = new HashMap<>();

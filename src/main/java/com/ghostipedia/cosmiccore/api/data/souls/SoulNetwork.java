@@ -3,6 +3,7 @@ package com.ghostipedia.cosmiccore.api.data.souls;
 import com.ghostipedia.cosmiccore.api.capability.souls.SoulType;
 import com.ghostipedia.cosmiccore.api.recipe.ingredient.SoulStack;
 
+import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
@@ -67,7 +68,7 @@ public class SoulNetwork implements INBTSerializable<CompoundTag> {
     }
 
     @Override
-    public CompoundTag serializeNBT() {
+    public CompoundTag serializeNBT(HolderLookup.Provider provider) {
         var tag = new CompoundTag();
         var listTag = new ListTag();
         this.contents.forEach((soulType, amount) -> {
@@ -81,7 +82,7 @@ public class SoulNetwork implements INBTSerializable<CompoundTag> {
     }
 
     @Override
-    public void deserializeNBT(CompoundTag compoundTag) {
+    public void deserializeNBT(HolderLookup.Provider provider, CompoundTag compoundTag) {
         this.contents.clear();
         ListTag listTag = compoundTag.getList("contents", Tag.TAG_COMPOUND);
         for (Tag t : listTag) {

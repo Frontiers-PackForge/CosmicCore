@@ -1,6 +1,8 @@
 package com.ghostipedia.cosmiccore.common.item;
 
-import com.ghostipedia.cosmiccore.common.airControl.OxygenBudgetCap;
+import java.util.Optional;
+import com.ghostipedia.cosmiccore.common.data.CosmicAttachmentTypes;
+
 import com.ghostipedia.cosmiccore.common.airControl.OxygenConfig;
 import com.ghostipedia.cosmiccore.common.airControl.OxygenRules;
 
@@ -63,7 +65,7 @@ public class AirBladderItem extends Item {
 
             if (charges > 0) {
                 ServerLevel serverLevel = serverPlayer.serverLevel();
-                serverPlayer.getCapability(OxygenBudgetCap.CAP).ifPresent(cap -> {
+                Optional.of(serverPlayer.getData(CosmicAttachmentTypes.OXYGEN_BUDGET)).ifPresent(cap -> {
                     long current = cap.getOxygenTicks(serverLevel.dimension());
                     long max = OxygenConfig.getMaxOxygenTicks(serverPlayer);
 

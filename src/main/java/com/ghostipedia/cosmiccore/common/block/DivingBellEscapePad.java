@@ -1,7 +1,9 @@
 package com.ghostipedia.cosmiccore.common.block;
 
+import java.util.Optional;
+import com.ghostipedia.cosmiccore.common.data.CosmicAttachmentTypes;
+
 import com.ghostipedia.cosmiccore.common.teleporter.SafeTeleporter;
-import com.ghostipedia.cosmiccore.common.teleporter.TeleportOriginCap;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
@@ -32,7 +34,7 @@ public class DivingBellEscapePad extends Block {
         }
 
         ServerPlayer serverPlayer = (ServerPlayer) player;
-        serverPlayer.getCapability(TeleportOriginCap.CAP).ifPresent(cap -> {
+        Optional.of(serverPlayer.getData(CosmicAttachmentTypes.TELEPORT_ORIGIN)).ifPresent(cap -> {
             if (!cap.hasValidOrigin()) {
                 // No valid origin data - send to respawn point
                 serverPlayer.displayClientMessage(

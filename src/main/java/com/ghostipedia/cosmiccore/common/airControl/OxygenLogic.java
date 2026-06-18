@@ -1,5 +1,8 @@
 package com.ghostipedia.cosmiccore.common.airControl;
 
+import java.util.Optional;
+import com.ghostipedia.cosmiccore.common.data.CosmicAttachmentTypes;
+
 import com.ghostipedia.cosmiccore.CosmicCore;
 import com.ghostipedia.cosmiccore.common.airControl.RebreatherHelper.RebreatherType;
 import com.ghostipedia.cosmiccore.common.network.CCoreNetwork;
@@ -57,7 +60,7 @@ public final class OxygenLogic {
 
         ServerLevel level = player.serverLevel();
 
-        player.getCapability(OxygenBudgetCap.CAP).ifPresent(cap -> {
+        Optional.of(player.getData(CosmicAttachmentTypes.OXYGEN_BUDGET)).ifPresent(cap -> {
             // Get player-specific max capacity (may be modified by bargains)
             long playerMaxOxygen = getMaxOxygenTicks(player);
 
@@ -218,7 +221,7 @@ public final class OxygenLogic {
         lastSyncOxygenValue.remove(playerId);
         lastSyncGameTime.remove(playerId);
 
-        player.getCapability(OxygenBudgetCap.CAP).ifPresent(cap -> {
+        Optional.of(player.getData(CosmicAttachmentTypes.OXYGEN_BUDGET)).ifPresent(cap -> {
             long playerMaxOxygen = getMaxOxygenTicks(player);
             if (cap.getOxygenTicks(level.dimension()) < 0) {
                 cap.setOxygenTicks(level.dimension(), playerMaxOxygen);
@@ -245,7 +248,7 @@ public final class OxygenLogic {
         ServerPlayer player = (ServerPlayer) event.getEntity();
         ServerLevel level = player.serverLevel();
 
-        player.getCapability(OxygenBudgetCap.CAP).ifPresent(cap -> {
+        Optional.of(player.getData(CosmicAttachmentTypes.OXYGEN_BUDGET)).ifPresent(cap -> {
             long playerMaxOxygen = getMaxOxygenTicks(player);
             cap.setOxygenTicks(level.dimension(), playerMaxOxygen);
             cap.setRegenBuffer(level.dimension(), 0.0);
