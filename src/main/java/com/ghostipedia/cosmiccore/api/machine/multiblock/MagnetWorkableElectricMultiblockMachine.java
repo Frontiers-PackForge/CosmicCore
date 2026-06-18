@@ -3,7 +3,7 @@ package com.ghostipedia.cosmiccore.api.machine.multiblock;
 import com.ghostipedia.cosmiccore.api.block.IMagnetType;
 import com.ghostipedia.cosmiccore.common.block.MagnetBlock;
 
-import com.gregtechceu.gtceu.api.machine.IMachineBlockEntity;
+import com.gregtechceu.gtceu.api.blockentity.BlockEntityCreationInfo;
 import com.gregtechceu.gtceu.api.machine.multiblock.WorkableElectricMultiblockMachine;
 
 import lombok.Getter;
@@ -14,7 +14,7 @@ public class MagnetWorkableElectricMultiblockMachine extends WorkableElectricMul
     @Getter
     private IMagnetType magnetType = MagnetBlock.MagnetType.HIGH_POWERED;
 
-    public MagnetWorkableElectricMultiblockMachine(IMachineBlockEntity holder) {
+    public MagnetWorkableElectricMultiblockMachine(BlockEntityCreationInfo holder) {
         super(holder);
     }
 

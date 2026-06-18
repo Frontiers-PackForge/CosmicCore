@@ -6,7 +6,7 @@ import com.ghostipedia.cosmiccore.api.machine.multiblock.LinkedWorkableMultibloc
 import com.gregtechceu.gtceu.api.capability.recipe.FluidRecipeCapability;
 import com.gregtechceu.gtceu.api.capability.recipe.IO;
 import com.gregtechceu.gtceu.api.capability.recipe.ItemRecipeCapability;
-import com.gregtechceu.gtceu.api.machine.IMachineBlockEntity;
+import com.gregtechceu.gtceu.api.blockentity.BlockEntityCreationInfo;
 import com.gregtechceu.gtceu.api.machine.trait.NotifiableFluidTank;
 import com.gregtechceu.gtceu.api.machine.trait.NotifiableItemStackHandler;
 
@@ -38,7 +38,7 @@ public class MothCargoDropOffMachine extends LinkedWorkableMultiblockMachine {
 
     // ==================== Constructor ====================
 
-    public MothCargoDropOffMachine(IMachineBlockEntity holder, Object... args) {
+    public MothCargoDropOffMachine(BlockEntityCreationInfo holder, Object... args) {
         super(holder, args);
     }
 

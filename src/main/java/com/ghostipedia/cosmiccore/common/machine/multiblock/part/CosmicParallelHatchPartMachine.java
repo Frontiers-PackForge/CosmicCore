@@ -3,7 +3,7 @@ package com.ghostipedia.cosmiccore.common.machine.multiblock.part;
 import com.gregtechceu.gtceu.api.GTValues;
 import com.gregtechceu.gtceu.api.capability.IParallelHatch;
 import com.gregtechceu.gtceu.api.gui.widget.IntInputWidget;
-import com.gregtechceu.gtceu.api.machine.IMachineBlockEntity;
+import com.gregtechceu.gtceu.api.blockentity.BlockEntityCreationInfo;
 import com.gregtechceu.gtceu.api.machine.feature.IFancyUIMachine;
 import com.gregtechceu.gtceu.api.machine.feature.IRecipeLogicMachine;
 import com.gregtechceu.gtceu.api.machine.feature.multiblock.IMultiController;
@@ -32,7 +32,7 @@ public class CosmicParallelHatchPartMachine extends TieredPartMachine implements
     @Getter
     private int currentParallel;
 
-    public CosmicParallelHatchPartMachine(IMachineBlockEntity holder, int tier) {
+    public CosmicParallelHatchPartMachine(BlockEntityCreationInfo holder, int tier) {
         super(holder, tier);
         this.maxParallel = (int) Math.pow(4, tier - GTValues.EV);
     }

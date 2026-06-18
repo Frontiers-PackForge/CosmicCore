@@ -223,10 +223,10 @@ public class StarLadderWidget extends WidgetGroup {
                 StarLadderMachine machine = machineSupplier.get();
                 if (machine != null) {
                     if (isHoldingInitiate) {
-                        StarLadderUplinkPackets.sendInitiate(machine.getPos());
+                        StarLadderUplinkPackets.sendInitiate(machine.getBlockPos());
                         playUISound(SoundEvents.UI_BUTTON_CLICK.value(), 0.7f, 0.6f);
                     } else {
-                        StarLadderUplinkPackets.sendConfirm(machine.getPos());
+                        StarLadderUplinkPackets.sendConfirm(machine.getBlockPos());
                         playUISound(SoundEvents.BEACON_ACTIVATE, 0.5f, 1.5f);
                     }
                 }
@@ -312,7 +312,7 @@ public class StarLadderWidget extends WidgetGroup {
             if (isInRect(mouseX, mouseY, abortX, abortY, ABORT_BUTTON_W, ABORT_BUTTON_H)) {
                 StarLadderMachine machine = machineSupplier.get();
                 if (machine != null) {
-                    StarLadderUplinkPackets.sendAbort(machine.getPos());
+                    StarLadderUplinkPackets.sendAbort(machine.getBlockPos());
                     StarLadderUplinkClientState.reset();
                     uplinkState = StarLadderUplinkState.IDLE;
                     playUISound(SoundEvents.BEACON_DEACTIVATE, 0.5f, 1.2f);

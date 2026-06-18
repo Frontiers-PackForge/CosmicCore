@@ -90,7 +90,7 @@ public class RenderTesterHelper extends
 
     @Override
     public AABB getRenderBoundingBox(WorkableElectricMultiblockMachine multi) {
-        return new AABB(multi.getPos()).inflate(getViewDistance(), 16, getViewDistance());
+        return new AABB(multi.getBlockPos()).inflate(getViewDistance(), 16, getViewDistance());
     }
 
     @Override

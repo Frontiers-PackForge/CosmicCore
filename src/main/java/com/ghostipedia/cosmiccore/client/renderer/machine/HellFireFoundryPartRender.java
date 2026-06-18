@@ -23,7 +23,7 @@ import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.BlockAndTintGetter;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.client.model.data.ModelData;
+import net.neoforged.neoforge.client.model.data.ModelData;
 
 import com.klikli_dev.occultism.registry.OccultismBlocks;
 import com.mojang.blaze3d.vertex.PoseStack;
@@ -73,7 +73,7 @@ public class HellFireFoundryPartRender extends
     public void renderPartModel(List<BakedQuad> quads, IMultiController controller,
                                 IMultiPart part, Direction frontFacing, @Nullable Direction side,
                                 RandomSource rand, ModelData modelData, @Nullable RenderType renderType) {
-        BlockPos partPos = part.self().getPos();
+        BlockPos partPos = part.self().getBlockPos();
         MultiblockControllerMachine machine = controller.self();
         BakedModel model = part instanceof SoulHatchPartMachine ? iesniumBlockModel : casingModel;
         emitQuads(quads, model, machine.getLevel(), partPos, casing, side, rand, modelData, renderType);

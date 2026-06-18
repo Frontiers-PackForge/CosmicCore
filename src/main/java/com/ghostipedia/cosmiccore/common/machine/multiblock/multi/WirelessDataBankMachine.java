@@ -10,7 +10,7 @@ import com.gregtechceu.gtceu.api.capability.IEnergyContainer;
 import com.gregtechceu.gtceu.api.capability.recipe.EURecipeCapability;
 import com.gregtechceu.gtceu.api.capability.recipe.IO;
 import com.gregtechceu.gtceu.api.machine.ConditionalSubscriptionHandler;
-import com.gregtechceu.gtceu.api.machine.IMachineBlockEntity;
+import com.gregtechceu.gtceu.api.blockentity.BlockEntityCreationInfo;
 import com.gregtechceu.gtceu.api.machine.feature.IFancyUIMachine;
 import com.gregtechceu.gtceu.api.machine.feature.multiblock.IDisplayUIMachine;
 import com.gregtechceu.gtceu.api.machine.feature.multiblock.IMaintenanceMachine;
@@ -47,7 +47,7 @@ public class WirelessDataBankMachine extends WorkableElectricMultiblockMachine
         return team != null ? team.getTeamId() : getOwnerUUID();
     }
 
-    public WirelessDataBankMachine(IMachineBlockEntity holder) {
+    public WirelessDataBankMachine(BlockEntityCreationInfo holder) {
         super(holder);
         this.energyContainer = new EnergyContainerList(new ArrayList<>());
         this.tickSubscription = new ConditionalSubscriptionHandler(this, this::tick, this::isSubscriptionActive);
@@ -77,7 +77,7 @@ public class WirelessDataBankMachine extends WorkableElectricMultiblockMachine
         Map<Long, IO> ioMap = getMultiblockState().getMatchContext().getOrCreate("ioMap", Long2ObjectMaps::emptyMap);
 
         for (IMultiPart part : getParts()) {
-            IO io = ioMap.getOrDefault(part.self().getPos().asLong(), IO.BOTH);
+            IO io = ioMap.getOrDefault(part.self().getBlockPos().asLong(), IO.BOTH);
             if (part instanceof IMaintenanceMachine maintenanceMachine)
                 this.maintenance = maintenanceMachine;
             if (io == IO.NONE || io == IO.OUT) continue;

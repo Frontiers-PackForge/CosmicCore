@@ -9,7 +9,7 @@ import com.ghostipedia.cosmiccore.common.machine.multiblock.multi.MothCargoStati
 import com.gregtechceu.gtceu.api.capability.recipe.FluidRecipeCapability;
 import com.gregtechceu.gtceu.api.capability.recipe.IO;
 import com.gregtechceu.gtceu.api.capability.recipe.ItemRecipeCapability;
-import com.gregtechceu.gtceu.api.machine.IMachineBlockEntity;
+import com.gregtechceu.gtceu.api.blockentity.BlockEntityCreationInfo;
 import com.gregtechceu.gtceu.api.machine.MetaMachine;
 import com.gregtechceu.gtceu.api.machine.TickableSubscription;
 import com.gregtechceu.gtceu.api.machine.trait.NotifiableFluidTank;
@@ -35,7 +35,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.phys.BlockHitResult;
-import net.minecraftforge.fluids.FluidStack;
+import net.neoforged.neoforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.items.IItemHandler;
 
@@ -125,7 +125,7 @@ public class MothCargoStationMachine extends LinkedWorkableMultiblockMachine {
 
     // ==================== Constructor ====================
 
-    public MothCargoStationMachine(IMachineBlockEntity holder, Object... args) {
+    public MothCargoStationMachine(BlockEntityCreationInfo holder, Object... args) {
         super(holder, args);
     }
 
@@ -208,7 +208,7 @@ public class MothCargoStationMachine extends LinkedWorkableMultiblockMachine {
             return;
         }
 
-        BlockPos controllerPos = getPos();
+        BlockPos controllerPos = getBlockPos();
         int foundTier = 0;
         int foundCount = 0;
         boolean mixedTiers = false;

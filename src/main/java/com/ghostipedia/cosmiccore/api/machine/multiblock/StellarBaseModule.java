@@ -11,7 +11,7 @@ import com.gregtechceu.gtceu.api.capability.recipe.EURecipeCapability;
 import com.gregtechceu.gtceu.api.capability.recipe.IO;
 import com.gregtechceu.gtceu.api.capability.recipe.IRecipeHandler;
 import com.gregtechceu.gtceu.api.capability.recipe.RecipeCapability;
-import com.gregtechceu.gtceu.api.machine.IMachineBlockEntity;
+import com.gregtechceu.gtceu.api.blockentity.BlockEntityCreationInfo;
 import com.gregtechceu.gtceu.api.machine.feature.IFancyUIMachine;
 import com.gregtechceu.gtceu.api.machine.feature.IOverclockMachine;
 import com.gregtechceu.gtceu.api.machine.feature.multiblock.IDisplayUIMachine;
@@ -82,7 +82,7 @@ public class StellarBaseModule extends WorkableMultiblockMachine
 
     private NotifiableEnergyContainer virtualEnergyContainer;
 
-    public StellarBaseModule(IMachineBlockEntity holder) {
+    public StellarBaseModule(BlockEntityCreationInfo holder) {
         super(holder);
         this.virtualEnergyContainer = new NotifiableEnergyContainer(this,
                 Long.MAX_VALUE, Long.MAX_VALUE, Long.MAX_VALUE, 0, 0);
@@ -134,7 +134,7 @@ public class StellarBaseModule extends WorkableMultiblockMachine
 
         BigInteger leftover = data.addEUToGlobalWirelessEnergy(owner, BigInteger.valueOf(-amount));
         if (leftover.equals(BigInteger.ZERO)) {
-            data.setEnergyOutput(owner, getPos(), amount);
+            data.setEnergyOutput(owner, getBlockPos(), amount);
             return true;
         }
         return false;
@@ -214,7 +214,7 @@ public class StellarBaseModule extends WorkableMultiblockMachine
     protected void findAndRegisterWithIris() {
         if (getLevel() == null || stellarIris != null) return;
 
-        BlockPos modulePos = getPos();
+        BlockPos modulePos = getBlockPos();
         int maxRadius = 80;
 
         for (int radius = 1; radius <= maxRadius; radius++) {
@@ -226,7 +226,7 @@ public class StellarBaseModule extends WorkableMultiblockMachine
                         BlockPos checkPos = modulePos.offset(x, y, z);
                         var blockEntity = getLevel().getBlockEntity(checkPos);
 
-                        if (blockEntity instanceof IMachineBlockEntity machineBlockEntity) {
+                        if (blockEntity instanceof BlockEntityCreationInfo machineBlockEntity) {
                             var machine = machineBlockEntity.getMetaMachine();
                             if (machine instanceof IrisMultiblockMachine iris && iris.isFormed()) {
                                 if (iris.registerModule(this)) {
@@ -345,7 +345,7 @@ public class StellarBaseModule extends WorkableMultiblockMachine
             return;
         }
         WirelessEnergySavedData data = WirelessEnergySavedData.getOrCreate(serverLevel);
-        data.removeEnergyOutput(owner, getPos());
+        data.removeEnergyOutput(owner, getBlockPos());
     }
 
     @Override

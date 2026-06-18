@@ -7,7 +7,7 @@ import com.gregtechceu.gtceu.api.GTValues;
 import com.gregtechceu.gtceu.api.capability.recipe.FluidRecipeCapability;
 import com.gregtechceu.gtceu.api.capability.recipe.ItemRecipeCapability;
 import com.gregtechceu.gtceu.api.gui.GuiTextures;
-import com.gregtechceu.gtceu.api.machine.IMachineBlockEntity;
+import com.gregtechceu.gtceu.api.blockentity.BlockEntityCreationInfo;
 import com.gregtechceu.gtceu.api.machine.feature.multiblock.IDisplayUIMachine;
 import com.gregtechceu.gtceu.api.machine.multiblock.MultiblockDisplayText;
 import com.gregtechceu.gtceu.api.recipe.GTRecipe;
@@ -47,7 +47,7 @@ public class DreamersBasinMachine extends MultithreadedMachine implements IDispl
     protected static final ManagedFieldHolder MANAGED_FIELD_HOLDER = new ManagedFieldHolder(
             DreamersBasinMachine.class, MultithreadedMachine.MANAGED_FIELD_HOLDER);
 
-    public DreamersBasinMachine(IMachineBlockEntity holder) {
+    public DreamersBasinMachine(BlockEntityCreationInfo holder) {
         super(holder);
     }
 

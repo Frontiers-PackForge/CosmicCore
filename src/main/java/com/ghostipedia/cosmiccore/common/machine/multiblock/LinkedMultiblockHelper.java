@@ -309,7 +309,7 @@ public class LinkedMultiblockHelper {
                                           UUID owner,
                                           GlobalPos requester,
                                           GlobalPos target,
-                                          java.util.function.Predicate<net.minecraftforge.fluids.FluidStack> fluidPredicate) {
+                                          java.util.function.Predicate<net.neoforged.neoforge.fluids.FluidStack> fluidPredicate) {
         Boolean result = queryPartner(server, owner, requester, target, partner -> {
             var handlers = partner.getCapabilitiesFlat(IO.IN, FluidRecipeCapability.CAP);
             if (handlers == null) return false;

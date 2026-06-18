@@ -1,11 +1,11 @@
 package com.ghostipedia.cosmiccore.common.machine.multiblock.multi.logic;
 
-import com.gregtechceu.gtceu.api.machine.IMachineBlockEntity;
+import com.gregtechceu.gtceu.api.blockentity.BlockEntityCreationInfo;
 import com.gregtechceu.gtceu.api.machine.multiblock.WorkableElectricMultiblockMachine;
 
 public class RegressionPersistentWorkableElectricMachine extends WorkableElectricMultiblockMachine {
 
-    public RegressionPersistentWorkableElectricMachine(IMachineBlockEntity holder, Object... args) {
+    public RegressionPersistentWorkableElectricMachine(BlockEntityCreationInfo holder, Object... args) {
         super(holder, args);
     }
 

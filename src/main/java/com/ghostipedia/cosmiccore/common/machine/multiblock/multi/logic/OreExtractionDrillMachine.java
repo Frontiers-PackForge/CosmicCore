@@ -7,7 +7,7 @@ import com.gregtechceu.gtceu.api.GTValues;
 import com.gregtechceu.gtceu.api.capability.IEnergyContainer;
 import com.gregtechceu.gtceu.api.capability.recipe.EURecipeCapability;
 import com.gregtechceu.gtceu.api.capability.recipe.IO;
-import com.gregtechceu.gtceu.api.machine.IMachineBlockEntity;
+import com.gregtechceu.gtceu.api.blockentity.BlockEntityCreationInfo;
 import com.gregtechceu.gtceu.api.machine.multiblock.WorkableElectricMultiblockMachine;
 import com.gregtechceu.gtceu.api.machine.trait.RecipeLogic;
 import com.gregtechceu.gtceu.api.misc.EnergyContainerList;
@@ -34,7 +34,7 @@ public class OreExtractionDrillMachine extends WorkableElectricMultiblockMachine
     @Getter
     private final int tier;
 
-    public OreExtractionDrillMachine(IMachineBlockEntity holder, int tier) {
+    public OreExtractionDrillMachine(BlockEntityCreationInfo holder, int tier) {
         super(holder);
         this.tier = tier;
     }

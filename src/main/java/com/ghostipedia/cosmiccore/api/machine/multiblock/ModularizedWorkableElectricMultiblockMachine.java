@@ -4,7 +4,7 @@ import com.ghostipedia.cosmiccore.api.block.IMultiblockProvider;
 import com.ghostipedia.cosmiccore.api.block.IMultiblockReciever;
 
 import com.gregtechceu.gtceu.api.capability.IEnergyContainer;
-import com.gregtechceu.gtceu.api.machine.IMachineBlockEntity;
+import com.gregtechceu.gtceu.api.blockentity.BlockEntityCreationInfo;
 import com.gregtechceu.gtceu.api.machine.multiblock.WorkableElectricMultiblockMachine;
 import com.gregtechceu.gtceu.api.machine.trait.NotifiableEnergyContainer;
 
@@ -33,7 +33,7 @@ public abstract class ModularizedWorkableElectricMultiblockMachine extends Worka
 
     protected boolean isActive;
 
-    public ModularizedWorkableElectricMultiblockMachine(IMachineBlockEntity holder, int tier, int moduleTier,
+    public ModularizedWorkableElectricMultiblockMachine(BlockEntityCreationInfo holder, int tier, int moduleTier,
                                                         int minModuleTier) {
         super(holder);
         this.tier = tier;

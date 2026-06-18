@@ -2,7 +2,7 @@ package com.ghostipedia.cosmiccore.api.machine.multiblock;
 
 import com.ghostipedia.cosmiccore.api.data.savedData.UniqueMultiblockSavedData;
 
-import com.gregtechceu.gtceu.api.machine.IMachineBlockEntity;
+import com.gregtechceu.gtceu.api.blockentity.BlockEntityCreationInfo;
 import com.gregtechceu.gtceu.api.machine.multiblock.WorkableElectricMultiblockMachine;
 import com.gregtechceu.gtceu.api.machine.trait.RecipeLogic;
 import com.gregtechceu.gtceu.common.machine.owner.FTBOwner;
@@ -23,7 +23,7 @@ public class UniqueWorkableElectricMultiblockMachine extends WorkableElectricMul
     protected static final ManagedFieldHolder MANAGED_FIELD_HOLDER = new ManagedFieldHolder(
             UniqueWorkableElectricMultiblockMachine.class, WorkableElectricMultiblockMachine.MANAGED_FIELD_HOLDER);
 
-    public UniqueWorkableElectricMultiblockMachine(IMachineBlockEntity holder, Object... args) {
+    public UniqueWorkableElectricMultiblockMachine(BlockEntityCreationInfo holder, Object... args) {
         super(holder, args);
     }
 
@@ -41,10 +41,10 @@ public class UniqueWorkableElectricMultiblockMachine extends WorkableElectricMul
             var uniqueMultiblockMapping = UniqueMultiblockSavedData.getOrCreate(serverLevel);
 
             if (uniqueMultiblockMapping.hasData(owner, multiblockId, getDimension())) {
-                this.isDuplicate = !uniqueMultiblockMapping.isUnique(owner, multiblockId, getDimension(), getPos());
+                this.isDuplicate = !uniqueMultiblockMapping.isUnique(owner, multiblockId, getDimension(), getBlockPos());
                 if (isDuplicate) recipeLogic.setStatus(RecipeLogic.Status.SUSPEND);
             } else uniqueMultiblockMapping.addMultiblock(owner, getDefinition().getId().toString(), getDimension(),
-                    getPos());
+                    getBlockPos());
 
         }
     }
@@ -61,7 +61,7 @@ public class UniqueWorkableElectricMultiblockMachine extends WorkableElectricMul
             var owner = getTeamUUID();
             var uniqueMultiblockMapping = UniqueMultiblockSavedData.getOrCreate(serverLevel);
             uniqueMultiblockMapping.removeMultiblock(owner, getDefinition().getId().toString(), getDimension(),
-                    getPos());
+                    getBlockPos());
         }
     }
 

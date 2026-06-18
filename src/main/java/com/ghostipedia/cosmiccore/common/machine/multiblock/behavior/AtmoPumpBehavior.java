@@ -1,6 +1,6 @@
 package com.ghostipedia.cosmiccore.common.machine.multiblock.behavior;
 
-import com.gregtechceu.gtceu.api.machine.IMachineBlockEntity;
+import com.gregtechceu.gtceu.api.blockentity.BlockEntityCreationInfo;
 import com.gregtechceu.gtceu.api.machine.TickableSubscription;
 import com.gregtechceu.gtceu.api.machine.multiblock.WorkableElectricMultiblockMachine;
 import com.gregtechceu.gtceu.api.pattern.util.RelativeDirection;
@@ -19,13 +19,13 @@ public class AtmoPumpBehavior extends WorkableElectricMultiblockMachine {
     private TickableSubscription hurtSub;
     private int Damage = 1;
 
-    public AtmoPumpBehavior(IMachineBlockEntity holder, Object... args) {
+    public AtmoPumpBehavior(BlockEntityCreationInfo holder, Object... args) {
         super(holder, args);
     }
 
     private void updateBounds(int multiplier) {
-        var flt = RelativeDirection.offsetPos(getPos(), getFrontFacing(), getUpwardsFacing(), isFlipped(), 3, 14, -14);
-        var brb = RelativeDirection.offsetPos(getPos(), getFrontFacing(), getUpwardsFacing(), isFlipped(), -14, -14,
+        var flt = RelativeDirection.offsetPos(getBlockPos(), getFrontFacing(), getUpwardsFacing(), isFlipped(), 3, 14, -14);
+        var brb = RelativeDirection.offsetPos(getBlockPos(), getFrontFacing(), getUpwardsFacing(), isFlipped(), -14, -14,
                 14);
         killzone = new AABB(flt, brb);
     }

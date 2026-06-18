@@ -5,7 +5,7 @@ import com.ghostipedia.cosmiccore.common.machine.multiblock.part.SterilizationHa
 import com.gregtechceu.gtceu.api.capability.IEnergyContainer;
 import com.gregtechceu.gtceu.api.capability.recipe.EURecipeCapability;
 import com.gregtechceu.gtceu.api.capability.recipe.IO;
-import com.gregtechceu.gtceu.api.machine.IMachineBlockEntity;
+import com.gregtechceu.gtceu.api.blockentity.BlockEntityCreationInfo;
 import com.gregtechceu.gtceu.api.machine.TickableSubscription;
 import com.gregtechceu.gtceu.api.machine.feature.IExplosionMachine;
 import com.gregtechceu.gtceu.api.machine.feature.multiblock.IMultiPart;
@@ -19,7 +19,7 @@ import com.lowdragmc.lowdraglib.syncdata.annotation.Persisted;
 import com.lowdragmc.lowdraglib.syncdata.field.ManagedFieldHolder;
 
 import net.minecraft.network.chat.Component;
-import net.minecraftforge.fluids.FluidStack;
+import net.neoforged.neoforge.fluids.FluidStack;
 
 import it.unimi.dsi.fastutil.longs.Long2ObjectMaps;
 import lombok.Getter;
@@ -58,7 +58,7 @@ public class VoraxReactorMachine extends WorkableElectricMultiblockMachine imple
     @Nullable
     protected EnergyContainerList outputEnergyContainers;
 
-    public VoraxReactorMachine(IMachineBlockEntity holder) {
+    public VoraxReactorMachine(BlockEntityCreationInfo holder) {
         super(holder);
     }
 
@@ -78,7 +78,7 @@ public class VoraxReactorMachine extends WorkableElectricMultiblockMachine imple
             if (part instanceof SterilizationHatchPartMachine) {
                 sterileHatch = (SterilizationHatchPartMachine) part;
             }
-            IO io = ioMap.getOrDefault(part.self().getPos().asLong(), IO.IN);
+            IO io = ioMap.getOrDefault(part.self().getBlockPos().asLong(), IO.IN);
             if (io == IO.NONE || io == IO.IN) continue;
             var handlers = part.getRecipeHandlers();
             for (var handler : handlers) {

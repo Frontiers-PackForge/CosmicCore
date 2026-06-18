@@ -9,7 +9,7 @@ import com.gregtechceu.gtceu.api.capability.IControllable;
 import com.gregtechceu.gtceu.api.capability.recipe.IO;
 import com.gregtechceu.gtceu.api.gui.GuiTextures;
 import com.gregtechceu.gtceu.api.gui.fancy.FancyMachineUIWidget;
-import com.gregtechceu.gtceu.api.machine.IMachineBlockEntity;
+import com.gregtechceu.gtceu.api.blockentity.BlockEntityCreationInfo;
 import com.gregtechceu.gtceu.api.machine.TickableSubscription;
 import com.gregtechceu.gtceu.api.machine.feature.multiblock.IMultiController;
 import com.gregtechceu.gtceu.api.machine.multiblock.WorkableElectricMultiblockMachine;
@@ -92,7 +92,7 @@ public class DroneStationMachine extends WorkableElectricMultiblockMachine {
         }
     }
 
-    public DroneStationMachine(IMachineBlockEntity holder, Object... args) {
+    public DroneStationMachine(BlockEntityCreationInfo holder, Object... args) {
         super(holder, args);
     }
 

@@ -12,7 +12,7 @@ import com.gregtechceu.gtceu.data.recipe.builder.GTRecipeBuilder;
 import net.minecraft.core.SectionPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.material.Fluid;
-import net.minecraftforge.fluids.FluidStack;
+import net.neoforged.neoforge.fluids.FluidStack;
 
 import lombok.Getter;
 import org.jetbrains.annotations.Nullable;
@@ -132,10 +132,10 @@ public class VoidFluidDrillLogic extends RecipeLogic {
     }
 
     private int getChunkX() {
-        return SectionPos.blockToSectionCoord(getMachine().getPos().getX());
+        return SectionPos.blockToSectionCoord(getMachine().getBlockPos().getX());
     }
 
     private int getChunkZ() {
-        return SectionPos.blockToSectionCoord(getMachine().getPos().getZ());
+        return SectionPos.blockToSectionCoord(getMachine().getBlockPos().getZ());
     }
 }

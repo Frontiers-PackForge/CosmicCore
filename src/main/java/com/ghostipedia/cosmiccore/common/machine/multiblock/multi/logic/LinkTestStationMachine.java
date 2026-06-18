@@ -4,7 +4,7 @@ import com.ghostipedia.cosmiccore.CosmicCore;
 import com.ghostipedia.cosmiccore.api.capability.ILinkedMultiblock;
 import com.ghostipedia.cosmiccore.api.machine.multiblock.LinkedWorkableElectricMultiblockMachine;
 
-import com.gregtechceu.gtceu.api.machine.IMachineBlockEntity;
+import com.gregtechceu.gtceu.api.blockentity.BlockEntityCreationInfo;
 
 import com.lowdragmc.lowdraglib.syncdata.field.ManagedFieldHolder;
 
@@ -25,7 +25,7 @@ public class LinkTestStationMachine extends LinkedWorkableElectricMultiblockMach
             LinkTestStationMachine.class,
             LinkedWorkableElectricMultiblockMachine.MANAGED_FIELD_HOLDER);
 
-    public LinkTestStationMachine(IMachineBlockEntity holder, Object... args) {
+    public LinkTestStationMachine(BlockEntityCreationInfo holder, Object... args) {
         super(holder, args);
     }
 

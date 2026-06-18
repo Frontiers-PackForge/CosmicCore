@@ -4,7 +4,7 @@ import com.ghostipedia.cosmiccore.api.capability.HeatCapability;
 
 import com.gregtechceu.gtceu.api.GTValues;
 import com.gregtechceu.gtceu.api.block.ICoilType;
-import com.gregtechceu.gtceu.api.machine.IMachineBlockEntity;
+import com.gregtechceu.gtceu.api.blockentity.BlockEntityCreationInfo;
 import com.gregtechceu.gtceu.api.machine.TickableSubscription;
 import com.gregtechceu.gtceu.api.machine.multiblock.CoilWorkableElectricMultiblockMachine;
 import com.gregtechceu.gtceu.api.machine.multiblock.WorkableElectricMultiblockMachine;
@@ -51,7 +51,7 @@ public abstract class CoilWorkableElectricMultiblockMachineMixin extends Workabl
     @Unique
     private TickableSubscription frontiers$temperatureTick = null;
 
-    public CoilWorkableElectricMultiblockMachineMixin(IMachineBlockEntity holder, Object... args) {
+    public CoilWorkableElectricMultiblockMachineMixin(BlockEntityCreationInfo holder, Object... args) {
         super(holder, args);
     }
 
@@ -68,7 +68,7 @@ public abstract class CoilWorkableElectricMultiblockMachineMixin extends Workabl
     public void onLoad() {
         super.onLoad();
         if (getTemperature() == 0 && this.getLevel() instanceof ServerLevel level) {
-            setTemperature(level.getBiome(this.getPos()).get().getBaseTemperature());
+            setTemperature(level.getBiome(this.getBlockPos()).get().getBaseTemperature());
         }
         if (frontiers$temperatureTick == null) {
             frontiers$temperatureTick = subscribeServerTick(this::frontiers$temperatureTick);
@@ -88,7 +88,7 @@ public abstract class CoilWorkableElectricMultiblockMachineMixin extends Workabl
     private void frontiers$temperatureTick() {
         if (this.getLevel() instanceof ServerLevel level) {
             setTemperature(HeatCapability.adjustTempTowards(getTemperature(),
-                    level.getBiome(this.getPos()).get().getBaseTemperature(), 0.5f));
+                    level.getBiome(this.getBlockPos()).get().getBaseTemperature(), 0.5f));
         }
     }
 

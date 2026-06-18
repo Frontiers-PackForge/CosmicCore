@@ -3,7 +3,7 @@ package com.ghostipedia.cosmiccore.mixin;
 import com.ghostipedia.cosmiccore.api.block.IBlockPattern;
 
 import com.gregtechceu.gtceu.api.item.MetaMachineItem;
-import com.gregtechceu.gtceu.api.machine.IMachineBlockEntity;
+import com.gregtechceu.gtceu.api.blockentity.BlockEntityCreationInfo;
 import com.gregtechceu.gtceu.api.machine.MetaMachine;
 import com.gregtechceu.gtceu.api.machine.feature.multiblock.IMultiController;
 import com.gregtechceu.gtceu.api.pattern.BlockPattern;
@@ -216,7 +216,7 @@ public abstract class BlockPatternMixin implements IBlockPattern {
                                             IActionSource.ofPlayer(player));
                                 }
                             }
-                            if (world.getBlockEntity(pos) instanceof IMachineBlockEntity machineBlockEntity) {
+                            if (world.getBlockEntity(pos) instanceof BlockEntityCreationInfo machineBlockEntity) {
                                 blocks.put(pos, machineBlockEntity.getMetaMachine());
                             } else {
                                 blocks.put(pos, world.getBlockState(pos));

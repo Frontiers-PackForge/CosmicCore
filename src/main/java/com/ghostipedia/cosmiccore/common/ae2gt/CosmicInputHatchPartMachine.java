@@ -1,7 +1,7 @@
 package com.ghostipedia.cosmiccore.common.ae2gt;
 
 import com.gregtechceu.gtceu.api.capability.recipe.IO;
-import com.gregtechceu.gtceu.api.machine.IMachineBlockEntity;
+import com.gregtechceu.gtceu.api.blockentity.BlockEntityCreationInfo;
 import com.gregtechceu.gtceu.api.machine.feature.IDataStickInteractable;
 import com.gregtechceu.gtceu.api.machine.feature.IHasCircuitSlot;
 import com.gregtechceu.gtceu.api.machine.feature.IMachineLife;
@@ -42,7 +42,7 @@ public class CosmicInputHatchPartMachine extends MEHatchPartMachine
 
     protected ExportOnlyAEFluidList aeFluidHandler;
 
-    public CosmicInputHatchPartMachine(IMachineBlockEntity holder, Object... args) {
+    public CosmicInputHatchPartMachine(BlockEntityCreationInfo holder, Object... args) {
         super(holder, IO.IN, args);
         super.circuitSlotEnabled = false;
     }

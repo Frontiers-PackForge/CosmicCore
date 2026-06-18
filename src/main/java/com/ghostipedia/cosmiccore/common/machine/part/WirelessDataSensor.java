@@ -7,7 +7,7 @@ import com.gregtechceu.gtceu.api.GTValues;
 import com.gregtechceu.gtceu.api.gui.GuiTextures;
 import com.gregtechceu.gtceu.api.gui.widget.LongInputWidget;
 import com.gregtechceu.gtceu.api.gui.widget.ToggleButtonWidget;
-import com.gregtechceu.gtceu.api.machine.IMachineBlockEntity;
+import com.gregtechceu.gtceu.api.blockentity.BlockEntityCreationInfo;
 import com.gregtechceu.gtceu.common.machine.owner.FTBOwner;
 import com.gregtechceu.gtceu.common.machine.owner.MachineOwner;
 
@@ -74,7 +74,7 @@ public class WirelessDataSensor extends SensorPartMachine {
     private LongInputWidget minValueInput;
     private LongInputWidget maxValueInput;
 
-    public WirelessDataSensor(IMachineBlockEntity holder) {
+    public WirelessDataSensor(BlockEntityCreationInfo holder) {
         super(holder, GTValues.EV);
         this.minValue = DEFAULT_MIN_PERCENT;
         this.maxValue = DEFAULT_MAX_PERCENT;

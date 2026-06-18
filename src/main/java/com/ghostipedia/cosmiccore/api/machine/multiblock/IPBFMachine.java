@@ -5,7 +5,7 @@ import com.gregtechceu.gtceu.api.capability.recipe.EURecipeCapability;
 import com.gregtechceu.gtceu.api.capability.recipe.IO;
 import com.gregtechceu.gtceu.api.gui.GuiTextures;
 import com.gregtechceu.gtceu.api.gui.UITemplate;
-import com.gregtechceu.gtceu.api.machine.IMachineBlockEntity;
+import com.gregtechceu.gtceu.api.blockentity.BlockEntityCreationInfo;
 import com.gregtechceu.gtceu.api.machine.MetaMachine;
 import com.gregtechceu.gtceu.api.machine.TickableSubscription;
 import com.gregtechceu.gtceu.api.machine.feature.multiblock.IDisplayUIMachine;
@@ -65,7 +65,7 @@ public class IPBFMachine extends WorkableMultiblockMachine implements IDisplayUI
     @RequireRerender
     private @NotNull Set<BlockPos> fluidBlockOffsets = new HashSet<>();
 
-    public IPBFMachine(IMachineBlockEntity holder, Object... args) {
+    public IPBFMachine(BlockEntityCreationInfo holder, Object... args) {
         super(holder, args);
     }
 
@@ -159,7 +159,7 @@ public class IPBFMachine extends WorkableMultiblockMachine implements IDisplayUI
     public void clientTick() {
         super.clientTick();
         if (recipeLogic.isWorking()) {
-            var pos = this.getPos();
+            var pos = this.getBlockPos();
             var facing = this.getFrontFacing().getOpposite();
             float xPos = facing.getStepX() * 0.76F + pos.getX() + 0.5F;
             float yPos = facing.getStepY() * 0.76F + pos.getY() + 0.25F;
@@ -190,7 +190,7 @@ public class IPBFMachine extends WorkableMultiblockMachine implements IDisplayUI
     @Override
     public void animateTick(RandomSource random) {
         if (this.isActive()) {
-            final BlockPos pos = getPos();
+            final BlockPos pos = getBlockPos();
             float x = pos.getX() + 0.5F;
             float z = pos.getZ() + 0.5F;
 
@@ -217,7 +217,7 @@ public class IPBFMachine extends WorkableMultiblockMachine implements IDisplayUI
     }
 
     private void hurtEntitiesAndBreakSnow() {
-        BlockPos middlePos = self().getPos().offset(getFrontFacing().getOpposite().getNormal());
+        BlockPos middlePos = self().getBlockPos().offset(getFrontFacing().getOpposite().getNormal());
         getLevel().getEntities(null, new AABB(middlePos)).forEach(e -> e.hurt(e.damageSources().lava(), 3.0f));
 
         if (getOffsetTimer() % 10 == 0) {

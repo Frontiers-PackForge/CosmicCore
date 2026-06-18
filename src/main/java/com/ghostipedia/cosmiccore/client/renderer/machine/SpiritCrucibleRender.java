@@ -24,7 +24,7 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.phys.AABB;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
-import net.minecraftforge.client.model.data.ModelData;
+import net.neoforged.neoforge.client.model.data.ModelData;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
@@ -240,6 +240,6 @@ public class SpiritCrucibleRender extends DynamicRender<WorkableElectricMultiblo
 
     @Override
     public AABB getRenderBoundingBox(WorkableElectricMultiblockMachine machine) {
-        return new AABB(machine.getPos()).inflate(getViewDistance(), 16, getViewDistance());
+        return new AABB(machine.getBlockPos()).inflate(getViewDistance(), 16, getViewDistance());
     }
 }

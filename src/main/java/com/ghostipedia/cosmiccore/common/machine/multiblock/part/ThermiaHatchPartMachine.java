@@ -6,7 +6,7 @@ import com.ghostipedia.cosmiccore.api.machine.trait.NotifiableThermiaContainer;
 import com.gregtechceu.gtceu.api.GTValues;
 import com.gregtechceu.gtceu.api.capability.recipe.IO;
 import com.gregtechceu.gtceu.api.gui.GuiTextures;
-import com.gregtechceu.gtceu.api.machine.IMachineBlockEntity;
+import com.gregtechceu.gtceu.api.blockentity.BlockEntityCreationInfo;
 import com.gregtechceu.gtceu.api.machine.multiblock.part.TieredIOPartMachine;
 import com.gregtechceu.gtceu.utils.FormattingUtil;
 
@@ -31,7 +31,7 @@ public class ThermiaHatchPartMachine extends TieredIOPartMachine implements IHea
     @DescSynced
     private final NotifiableThermiaContainer thermiaContainer;
 
-    public ThermiaHatchPartMachine(IMachineBlockEntity holder, int tier, IO io) {
+    public ThermiaHatchPartMachine(BlockEntityCreationInfo holder, int tier, IO io) {
         super(holder, tier, io);
         long currentTemp = 0;
         this.thermiaContainer = createThermiaContainer();

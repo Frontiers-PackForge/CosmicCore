@@ -1,6 +1,6 @@
 package com.ghostipedia.cosmiccore.common.machine.multiblock.multi.logic;
 
-import com.gregtechceu.gtceu.api.machine.IMachineBlockEntity;
+import com.gregtechceu.gtceu.api.blockentity.BlockEntityCreationInfo;
 import com.gregtechceu.gtceu.api.machine.feature.multiblock.IDisplayUIMachine;
 import com.gregtechceu.gtceu.api.machine.multiblock.MultiblockDisplayText;
 import com.gregtechceu.gtceu.api.machine.multiblock.WorkableElectricMultiblockMachine;
@@ -15,7 +15,7 @@ import java.util.List;
 
 public class PCBFoundryMachine extends WorkableElectricMultiblockMachine implements IDisplayUIMachine {
 
-    public PCBFoundryMachine(IMachineBlockEntity holder) {
+    public PCBFoundryMachine(BlockEntityCreationInfo holder) {
         super(holder);
     }
 

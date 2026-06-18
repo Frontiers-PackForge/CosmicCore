@@ -76,7 +76,7 @@ public class SufferingChamberRenderer extends
     public AABB getRenderBoundingBox(WorkableElectricMultiblockMachine multi) {
         if (multi.isFormed()) {
             AABB bounds = renderBoundCache.apply(multi.getFrontFacing(), multi.getUpwardsFacing());
-            return bounds.move(multi.getPos());
+            return bounds.move(multi.getBlockPos());
         }
         return super.getRenderBoundingBox(multi);
     }

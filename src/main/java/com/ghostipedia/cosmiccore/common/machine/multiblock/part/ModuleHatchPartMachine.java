@@ -6,7 +6,7 @@ import com.gregtechceu.gtceu.api.GTValues;
 import com.gregtechceu.gtceu.api.capability.recipe.IO;
 import com.gregtechceu.gtceu.api.gui.GuiTextures;
 import com.gregtechceu.gtceu.api.gui.widget.SlotWidget;
-import com.gregtechceu.gtceu.api.machine.IMachineBlockEntity;
+import com.gregtechceu.gtceu.api.blockentity.BlockEntityCreationInfo;
 import com.gregtechceu.gtceu.api.machine.feature.IMachineLife;
 import com.gregtechceu.gtceu.api.machine.multiblock.part.TieredIOPartMachine;
 import com.gregtechceu.gtceu.api.machine.trait.NotifiableItemStackHandler;
@@ -39,7 +39,7 @@ public class ModuleHatchPartMachine extends TieredIOPartMachine implements IMach
     @Persisted
     private final NotifiableItemStackHandler inventory;
 
-    public ModuleHatchPartMachine(IMachineBlockEntity holder, int tier) {
+    public ModuleHatchPartMachine(BlockEntityCreationInfo holder, int tier) {
         super(holder, tier, IO.IN);
         this.inventory = new NotifiableItemStackHandler(this, getSlots(tier), IO.IN);
         this.inventory.setFilter(ModuleHatchPartMachine::isModule);

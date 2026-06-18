@@ -5,7 +5,7 @@ import com.ghostipedia.cosmiccore.utils.OwnershipUtils;
 
 import com.gregtechceu.gtceu.api.capability.IDataAccessHatch;
 import com.gregtechceu.gtceu.api.gui.GuiTextures;
-import com.gregtechceu.gtceu.api.machine.IMachineBlockEntity;
+import com.gregtechceu.gtceu.api.blockentity.BlockEntityCreationInfo;
 import com.gregtechceu.gtceu.api.machine.multiblock.MultiblockDisplayText;
 import com.gregtechceu.gtceu.api.machine.multiblock.part.MultiblockPartMachine;
 import com.gregtechceu.gtceu.api.recipe.GTRecipe;
@@ -29,7 +29,7 @@ import javax.annotation.ParametersAreNonnullByDefault;
 @ParametersAreNonnullByDefault
 public class WirelessDataHatchPartMachine extends MultiblockPartMachine implements IDataAccessHatch {
 
-    public WirelessDataHatchPartMachine(IMachineBlockEntity holder) {
+    public WirelessDataHatchPartMachine(BlockEntityCreationInfo holder) {
         super(holder);
     }
 

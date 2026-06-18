@@ -7,7 +7,7 @@ import com.gregtechceu.gtceu.api.capability.IHPCAComponentHatch;
 import com.gregtechceu.gtceu.api.capability.IHPCAComputationProvider;
 import com.gregtechceu.gtceu.api.capability.IHPCACoolantProvider;
 import com.gregtechceu.gtceu.api.gui.GuiTextures;
-import com.gregtechceu.gtceu.api.machine.IMachineBlockEntity;
+import com.gregtechceu.gtceu.api.blockentity.BlockEntityCreationInfo;
 import com.gregtechceu.gtceu.api.machine.MetaMachine;
 import com.gregtechceu.gtceu.api.pattern.util.RelativeDirection;
 import com.gregtechceu.gtceu.common.data.GTMaterials;
@@ -27,7 +27,7 @@ import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.material.Fluid;
-import net.minecraftforge.fluids.FluidStack;
+import net.neoforged.neoforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 
 import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
@@ -417,7 +417,7 @@ public class HPCAGridHandler implements IManaged {
                 BlockEntity be = world.getBlockEntity(tempPos);
                 if (be instanceof IHPCAComponentHatch hatch) {
                     components[index] = hatch;
-                } else if (be instanceof IMachineBlockEntity machineBE) {
+                } else if (be instanceof BlockEntityCreationInfo machineBE) {
                     MetaMachine machine = machineBE.getMetaMachine();
                     if (machine instanceof IHPCAComponentHatch hatch) {
                         components[index] = hatch;

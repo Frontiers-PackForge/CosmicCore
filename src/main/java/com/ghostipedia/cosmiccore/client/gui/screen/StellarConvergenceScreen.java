@@ -89,7 +89,7 @@ public class StellarConvergenceScreen extends Screen {
 
         Set<StellarIrisUpgrade> upgrades = machine.getUnlockedUpgrades();
         StellarConvergenceScreen screen = new StellarConvergenceScreen(
-                machine.getPos(),
+                machine.getBlockPos(),
                 machine.getSpendablePoints(),
                 machine.getLifetimePrestigePoints(),
                 machine.getPrestigeTier(),

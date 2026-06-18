@@ -6,7 +6,7 @@ import com.ghostipedia.cosmiccore.common.teleporter.SafeTeleporter;
 import com.ghostipedia.cosmiccore.common.teleporter.TeleportOriginCap;
 import com.ghostipedia.cosmiccore.common.teleporter.TeleportPadRegistry;
 
-import com.gregtechceu.gtceu.api.machine.IMachineBlockEntity;
+import com.gregtechceu.gtceu.api.blockentity.BlockEntityCreationInfo;
 import com.gregtechceu.gtceu.api.machine.TickableSubscription;
 import com.gregtechceu.gtceu.api.machine.multiblock.WorkableElectricMultiblockMachine;
 
@@ -55,7 +55,7 @@ public class DivingBellMachine extends WorkableElectricMultiblockMachine {
 
     protected TickableSubscription tickSubscription;
 
-    public DivingBellMachine(IMachineBlockEntity holder, Object... args) {
+    public DivingBellMachine(BlockEntityCreationInfo holder, Object... args) {
         super(holder, args);
     }
 
@@ -128,7 +128,7 @@ public class DivingBellMachine extends WorkableElectricMultiblockMachine {
         }
 
         // Detection zone is 1 block directly above the controller
-        BlockPos controllerPos = getPos();
+        BlockPos controllerPos = getBlockPos();
         BlockPos detectionPos = controllerPos.above(1);
 
         // 1x1 detection area (requires players to stand on top of the controller)

@@ -8,7 +8,7 @@ import com.gregtechceu.gtceu.api.fluids.store.FluidStorageKeys;
 import com.gregtechceu.gtceu.api.gui.GuiTextures;
 import com.gregtechceu.gtceu.api.gui.fancy.IFancyTooltip;
 import com.gregtechceu.gtceu.api.gui.fancy.TooltipsPanel;
-import com.gregtechceu.gtceu.api.machine.IMachineBlockEntity;
+import com.gregtechceu.gtceu.api.blockentity.BlockEntityCreationInfo;
 import com.gregtechceu.gtceu.api.machine.MetaMachine;
 import com.gregtechceu.gtceu.api.machine.feature.ITieredMachine;
 import com.gregtechceu.gtceu.api.machine.multiblock.MultiblockDisplayText;
@@ -33,7 +33,7 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.Style;
-import net.minecraftforge.fluids.FluidStack;
+import net.neoforged.neoforge.fluids.FluidStack;
 
 import it.unimi.dsi.fastutil.objects.Object2IntMap;
 import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
@@ -103,7 +103,7 @@ public class ExoticCombustionEngineMachine extends WorkableElectricMultiblockMac
     private int boostAmount = 0, boostDuration = 0;
     private int lubeDuration = 0;
 
-    public ExoticCombustionEngineMachine(IMachineBlockEntity holder, int tier) {
+    public ExoticCombustionEngineMachine(BlockEntityCreationInfo holder, int tier) {
         super(holder);
         this.tier = tier;
     }
@@ -111,7 +111,7 @@ public class ExoticCombustionEngineMachine extends WorkableElectricMultiblockMac
     private boolean isIntakesObstructed() {
         var dir = this.getFrontFacing();
         var axis = dir.getAxis();
-        var centerPos = this.getPos().relative(dir);
+        var centerPos = this.getBlockPos().relative(dir);
         for (int x = -1; x < 2; x++) {
             for (int y = -1; y < 2; y++) {
                 if (x == 0 && y == 0)

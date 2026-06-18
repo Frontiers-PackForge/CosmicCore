@@ -8,7 +8,7 @@ import com.ghostipedia.cosmiccore.client.renderer.RingUpgradePreviewRenderer;
 import com.ghostipedia.cosmiccore.common.machine.multiblock.LinkedMultiblockHelper;
 import com.ghostipedia.cosmiccore.common.machine.multiblock.multi.StarLadderResearchHub;
 
-import com.gregtechceu.gtceu.api.machine.IMachineBlockEntity;
+import com.gregtechceu.gtceu.api.blockentity.BlockEntityCreationInfo;
 import com.gregtechceu.gtceu.api.pattern.BlockPattern;
 
 import com.lowdragmc.lowdraglib.gui.modular.ModularUI;
@@ -72,7 +72,7 @@ public class StarLadderResearchHubMachine extends LinkedWorkableElectricMultiblo
     @Getter
     private int partialRingIndex = 0;
 
-    public StarLadderResearchHubMachine(IMachineBlockEntity holder, Object... args) {
+    public StarLadderResearchHubMachine(BlockEntityCreationInfo holder, Object... args) {
         super(holder, args);
     }
 
@@ -80,9 +80,9 @@ public class StarLadderResearchHubMachine extends LinkedWorkableElectricMultiblo
     @SuppressWarnings("unused")
     protected void onRingPreviewSynced(boolean newValue, boolean oldValue) {
         if (newValue) {
-            RingUpgradePreviewRenderer.enablePreview(getPos(), getFrontFacing(), ringTier);
+            RingUpgradePreviewRenderer.enablePreview(getBlockPos(), getFrontFacing(), ringTier);
         } else {
-            RingUpgradePreviewRenderer.disablePreview(getPos());
+            RingUpgradePreviewRenderer.disablePreview(getBlockPos());
         }
     }
 
@@ -90,7 +90,7 @@ public class StarLadderResearchHubMachine extends LinkedWorkableElectricMultiblo
     @SuppressWarnings("unused")
     protected void onRingTierSynced(int newValue, int oldValue) {
         if (ringPreviewEnabled) {
-            RingUpgradePreviewRenderer.updatePreview(getPos(), getFrontFacing(), newValue);
+            RingUpgradePreviewRenderer.updatePreview(getBlockPos(), getFrontFacing(), newValue);
         }
     }
 
@@ -120,12 +120,12 @@ public class StarLadderResearchHubMachine extends LinkedWorkableElectricMultiblo
 
     public Set<BlockPos> getNextRingPositions() {
         if (!canUpgrade()) return Set.of();
-        return RingUpgradePreviewRenderer.calculateRingPositions(getPos(), getFrontFacing(), ringTier + 1);
+        return RingUpgradePreviewRenderer.calculateRingPositions(getBlockPos(), getFrontFacing(), ringTier + 1);
     }
 
     public Map<BlockPos, Block> getNextRingPositionsWithBlocks() {
         if (!canUpgrade()) return Map.of();
-        return RingUpgradePreviewRenderer.calculateRingPositionsWithBlocks(getPos(), getFrontFacing(), ringTier + 1);
+        return RingUpgradePreviewRenderer.calculateRingPositionsWithBlocks(getBlockPos(), getFrontFacing(), ringTier + 1);
     }
 
     public int autoBuildNextRing(Player player) {
@@ -357,7 +357,7 @@ public class StarLadderResearchHubMachine extends LinkedWorkableElectricMultiblo
                                     .withStyle(ChatFormatting.WHITE)),
                     true);
             // Play a completion sound
-            getLevel().playSound(null, getPos(), SoundEvents.PLAYER_LEVELUP, SoundSource.BLOCKS, 0.5F, 1.0F);
+            getLevel().playSound(null, getBlockPos(), SoundEvents.PLAYER_LEVELUP, SoundSource.BLOCKS, 0.5F, 1.0F);
 
             // Force structure re-evaluation by invalidating first, then rechecking
             // This ensures onStructureFormed() is called again with the new tier
@@ -392,7 +392,7 @@ public class StarLadderResearchHubMachine extends LinkedWorkableElectricMultiblo
         if (getLevel() == null) return InteractionResult.PASS;
 
         Map<BlockPos, Block> t0Positions = RingUpgradePreviewRenderer.calculateRingPositionsWithBlocks(
-                getPos(), getFrontFacing(), 0);
+                getBlockPos(), getFrontFacing(), 0);
 
         if (t0Positions.isEmpty()) {
             player.displayClientMessage(
@@ -427,7 +427,7 @@ public class StarLadderResearchHubMachine extends LinkedWorkableElectricMultiblo
                                 .withStyle(ChatFormatting.WHITE)),
                 true);
 
-        getLevel().playSound(null, getPos(), SoundEvents.PLAYER_LEVELUP, SoundSource.BLOCKS, 0.5F, 1.2F);
+        getLevel().playSound(null, getBlockPos(), SoundEvents.PLAYER_LEVELUP, SoundSource.BLOCKS, 0.5F, 1.2F);
 
         // Force structure re-evaluation
         onStructureInvalid();

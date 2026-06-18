@@ -2,7 +2,7 @@ package com.ghostipedia.cosmiccore.common.ae2gt;
 
 import com.gregtechceu.gtceu.api.gui.fancy.ConfiguratorPanel;
 import com.gregtechceu.gtceu.api.gui.fancy.TabsWidget;
-import com.gregtechceu.gtceu.api.machine.IMachineBlockEntity;
+import com.gregtechceu.gtceu.api.blockentity.BlockEntityCreationInfo;
 import com.gregtechceu.gtceu.api.machine.MetaMachine;
 import com.gregtechceu.gtceu.api.machine.fancyconfigurator.AutoStockingFancyConfigurator;
 import com.gregtechceu.gtceu.api.machine.feature.multiblock.IMultiController;
@@ -68,7 +68,7 @@ public class CosmicStockingBusPartMachine extends CosmicInputBusPartMachine impl
     @Setter
     private Predicate<GenericStack> autoPullTest;
 
-    public CosmicStockingBusPartMachine(IMachineBlockEntity holder, Object... args) {
+    public CosmicStockingBusPartMachine(BlockEntityCreationInfo holder, Object... args) {
         super(holder, args);
         this.autoPullTest = $ -> false;
     }

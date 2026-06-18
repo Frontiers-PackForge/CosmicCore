@@ -1,7 +1,7 @@
 package com.ghostipedia.cosmiccore.common.machine.part;
 
 import com.gregtechceu.gtceu.api.machine.ConditionalSubscriptionHandler;
-import com.gregtechceu.gtceu.api.machine.IMachineBlockEntity;
+import com.gregtechceu.gtceu.api.blockentity.BlockEntityCreationInfo;
 import com.gregtechceu.gtceu.api.machine.feature.multiblock.IMultiController;
 import com.gregtechceu.gtceu.api.machine.multiblock.part.TieredPartMachine;
 
@@ -16,7 +16,7 @@ public class SensorPartMachine extends TieredPartMachine {
 
     private final ConditionalSubscriptionHandler signalUpdateHandler;
 
-    public SensorPartMachine(IMachineBlockEntity holder, int tier) {
+    public SensorPartMachine(BlockEntityCreationInfo holder, int tier) {
         super(holder, tier);
         this.signalUpdateHandler = new ConditionalSubscriptionHandler(this, this::updateSignal, () -> true);
     }

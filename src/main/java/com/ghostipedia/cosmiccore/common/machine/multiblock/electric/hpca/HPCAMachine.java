@@ -14,7 +14,7 @@ import com.gregtechceu.gtceu.api.capability.recipe.IO;
 import com.gregtechceu.gtceu.api.gui.GuiTextures;
 import com.gregtechceu.gtceu.api.gui.util.TimedProgressSupplier;
 import com.gregtechceu.gtceu.api.gui.widget.ExtendedProgressWidget;
-import com.gregtechceu.gtceu.api.machine.IMachineBlockEntity;
+import com.gregtechceu.gtceu.api.blockentity.BlockEntityCreationInfo;
 import com.gregtechceu.gtceu.api.machine.TickableSubscription;
 import com.gregtechceu.gtceu.api.machine.feature.IDropSaveMachine;
 import com.gregtechceu.gtceu.api.machine.feature.IMachineLife;
@@ -94,7 +94,7 @@ public class HPCAMachine extends WorkableElectricMultiblockMachine
         if (seed == 0L) this.seed = GTValues.RNG.nextLong();
     }
 
-    public HPCAMachine(IMachineBlockEntity holder, Object... args) {
+    public HPCAMachine(BlockEntityCreationInfo holder, Object... args) {
         super(holder, args);
         this.energyContainer = new EnergyContainerList(new ArrayList<>());
         this.progressSupplier = new TimedProgressSupplier(200, 47, false);
@@ -112,7 +112,7 @@ public class HPCAMachine extends WorkableElectricMultiblockMachine
 
         Map<Long, IO> ioMap = getMultiblockState().getMatchContext().getOrCreate("ioMap", Long2ObjectMaps::emptyMap);
         for (IMultiPart part : getParts()) {
-            var pos = part.self().getPos();
+            var pos = part.self().getBlockPos();
             IO io = ioMap.getOrDefault(pos.asLong(), IO.BOTH);
             if (part instanceof IHPCAComponentHatch componentHatch) {
                 componentHatches.add(
@@ -274,7 +274,7 @@ public class HPCAMachine extends WorkableElectricMultiblockMachine
         // we need to know what components we have on the client
         if (getLevel().isClientSide) {
             if (isFormed) {
-                hpcaHandler.tryGatherClientComponents(this.getLevel(), this.getPos(), this.getFrontFacing(),
+                hpcaHandler.tryGatherClientComponents(this.getLevel(), this.getBlockPos(), this.getFrontFacing(),
                         this.getUpwardsFacing(), this.isFlipped);
             } else {
                 hpcaHandler.clearClientComponents();
@@ -342,8 +342,8 @@ public class HPCAMachine extends WorkableElectricMultiblockMachine
 
     private int getModifierIndex(BlockPos pos) {
         var index = 0;
-        var verticalDelta = Math.abs(pos.getY() - getPos().getY());
-        var horizontalDelta = Math.abs(pos.getX() - getPos().getX()) + Math.abs(pos.getZ() - getPos().getZ());
+        var verticalDelta = Math.abs(pos.getY() - getBlockPos().getY());
+        var horizontalDelta = Math.abs(pos.getX() - getBlockPos().getX()) + Math.abs(pos.getZ() - getBlockPos().getZ());
         if (verticalDelta < 4) index = verticalDelta;
         else index = horizontalDelta + 3;
         return index - 1;
@@ -361,14 +361,14 @@ public class HPCAMachine extends WorkableElectricMultiblockMachine
 
     public HPCAModifier getColumnModifier(BlockPos pos) {
         var state = getModifierState();
-        var horizontalDelta = Math.abs(pos.getX() - getPos().getX()) + Math.abs(pos.getZ() - getPos().getZ());
+        var horizontalDelta = Math.abs(pos.getX() - getBlockPos().getX()) + Math.abs(pos.getZ() - getBlockPos().getZ());
         if (horizontalDelta > MAX_COMPONENTS_SLICES) throw new IllegalStateException();
         return state[horizontalDelta + 3 - 1];
     }
 
     public HPCAModifier getRowModifier(BlockPos pos) {
         var state = getModifierState();
-        var verticalDelta = Math.abs(pos.getY() - getPos().getY());
+        var verticalDelta = Math.abs(pos.getY() - getBlockPos().getY());
         if (verticalDelta > 3) throw new IllegalStateException();
         return state[verticalDelta - 1];
     }

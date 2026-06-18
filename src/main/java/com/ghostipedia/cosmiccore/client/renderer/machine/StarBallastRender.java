@@ -17,7 +17,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.phys.AABB;
-import net.minecraftforge.client.model.data.ModelData;
+import net.neoforged.neoforge.client.model.data.ModelData;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
@@ -76,7 +76,7 @@ public class StarBallastRender extends DynamicRender<IrisMultiblockMachine, Star
 
     @Override
     public AABB getRenderBoundingBox(IrisMultiblockMachine machine) {
-        return new AABB(machine.getPos()).inflate(getViewDistance(), 16, getViewDistance());
+        return new AABB(machine.getBlockPos()).inflate(getViewDistance(), 16, getViewDistance());
     }
 
     @Override

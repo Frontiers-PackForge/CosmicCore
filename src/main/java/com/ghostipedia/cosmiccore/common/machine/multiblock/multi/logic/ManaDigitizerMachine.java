@@ -6,7 +6,7 @@ import com.gregtechceu.gtceu.api.GTValues;
 import com.gregtechceu.gtceu.api.capability.IEnergyContainer;
 import com.gregtechceu.gtceu.api.capability.recipe.*;
 import com.gregtechceu.gtceu.api.fluids.store.FluidStorageKeys;
-import com.gregtechceu.gtceu.api.machine.IMachineBlockEntity;
+import com.gregtechceu.gtceu.api.blockentity.BlockEntityCreationInfo;
 import com.gregtechceu.gtceu.api.machine.TickableSubscription;
 import com.gregtechceu.gtceu.api.machine.feature.multiblock.IMultiPart;
 import com.gregtechceu.gtceu.api.machine.multiblock.WorkableElectricMultiblockMachine;
@@ -20,7 +20,7 @@ import com.lowdragmc.lowdraglib.syncdata.field.ManagedFieldHolder;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
-import net.minecraftforge.fluids.FluidStack;
+import net.neoforged.neoforge.fluids.FluidStack;
 
 import it.unimi.dsi.fastutil.longs.Long2ObjectMaps;
 import it.unimi.dsi.fastutil.objects.Object2IntMap;
@@ -52,7 +52,7 @@ public class ManaDigitizerMachine extends WorkableElectricMultiblockMachine {
         validIngredientsFluids.put(GTMaterials.Argon.getFluid(FluidStorageKeys.PLASMA, 1), 3);
     }
 
-    public ManaDigitizerMachine(IMachineBlockEntity holder, Object... args) {
+    public ManaDigitizerMachine(BlockEntityCreationInfo holder, Object... args) {
         super(holder, args);
     }
 
@@ -63,7 +63,7 @@ public class ManaDigitizerMachine extends WorkableElectricMultiblockMachine {
         List<IEnergyContainer> inputEnergyContainers = new ArrayList<>();
         Map<Long, IO> ioMap = getMultiblockState().getMatchContext().getOrCreate("ioMap", Long2ObjectMaps::emptyMap);
         for (IMultiPart part : getParts()) {
-            IO io = ioMap.getOrDefault(part.self().getPos().asLong(), IO.IN);
+            IO io = ioMap.getOrDefault(part.self().getBlockPos().asLong(), IO.IN);
             if (io == IO.NONE || io == IO.OUT) continue;
             var handlers = part.getRecipeHandlers();
             for (var handler : handlers) {

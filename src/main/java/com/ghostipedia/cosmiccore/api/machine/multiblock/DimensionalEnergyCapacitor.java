@@ -7,7 +7,7 @@ import com.ghostipedia.cosmiccore.api.data.wireless.WirelessEnergySavedData;
 import com.gregtechceu.gtceu.api.gui.GuiTextures;
 import com.gregtechceu.gtceu.api.gui.fancy.IFancyTooltip;
 import com.gregtechceu.gtceu.api.gui.fancy.TooltipsPanel;
-import com.gregtechceu.gtceu.api.machine.IMachineBlockEntity;
+import com.gregtechceu.gtceu.api.blockentity.BlockEntityCreationInfo;
 import com.gregtechceu.gtceu.api.machine.multiblock.IBatteryData;
 import com.gregtechceu.gtceu.api.machine.trait.RecipeLogic;
 import com.gregtechceu.gtceu.common.machine.multiblock.electric.PowerSubstationMachine;
@@ -49,7 +49,7 @@ public class DimensionalEnergyCapacitor extends DimensionalEnergyInterface {
     @Persisted
     private long[] capacities;
 
-    public DimensionalEnergyCapacitor(IMachineBlockEntity holder) {
+    public DimensionalEnergyCapacitor(BlockEntityCreationInfo holder) {
         super(holder);
         this.localDisplay = false;
     }
@@ -69,13 +69,13 @@ public class DimensionalEnergyCapacitor extends DimensionalEnergyInterface {
             var uniqueMultiblockMapping = UniqueMultiblockSavedData.getOrCreate(serverLevel);
 
             if (uniqueMultiblockMapping.hasData(owner, multiblockId, getDimension())) {
-                this.isDuplicate = !uniqueMultiblockMapping.isUnique(owner, multiblockId, getDimension(), getPos());
+                this.isDuplicate = !uniqueMultiblockMapping.isUnique(owner, multiblockId, getDimension(), getBlockPos());
                 if (isDuplicate) {
                     recipeLogic.setStatus(RecipeLogic.Status.SUSPEND);
                     return;
                 }
             } else uniqueMultiblockMapping.addMultiblock(owner, getDefinition().getId().toString(), getDimension(),
-                    getPos());
+                    getBlockPos());
 
             List<IBatteryData> batteries = new ArrayList<>();
             for (Map.Entry<String, Object> battery : getMultiblockState().getMatchContext().entrySet()) {
@@ -114,7 +114,7 @@ public class DimensionalEnergyCapacitor extends DimensionalEnergyInterface {
                 var uniqueMultiblockMapping = UniqueMultiblockSavedData.getOrCreate(serverLevel);
                 wirelessData.setActive(owner, false);
                 uniqueMultiblockMapping.removeMultiblock(owner, getDefinition().getId().toString(), getDimension(),
-                        getPos());
+                        getBlockPos());
             }
         }
         this.capacities = null;
