@@ -719,9 +719,9 @@ public class CosmicMachines {
             .machine("steam_fluid_input_hatch", holder -> new SteamFluidHatchPartMachine(holder, IO.IN, 4000, 1))
             .rotationState(RotationState.ALL)
             .abilities(PartAbility.IMPORT_FLUIDS)
-            .colorOverlaySteamHullModel(new ResourceLocation(GTCEu.MOD_ID, "block/overlay/machine/overlay_pipe"),
-                    new ResourceLocation(GTCEu.MOD_ID, "block/overlay/machine/overlay_fluid_hatch"),
-                    new ResourceLocation(GTCEu.MOD_ID, "block/overlay/machine/overlay_fluid_hatch"))
+            .colorOverlaySteamHullModel(ResourceLocation.fromNamespaceAndPath(GTCEu.MOD_ID, "block/overlay/machine/overlay_pipe"),
+                    ResourceLocation.fromNamespaceAndPath(GTCEu.MOD_ID, "block/overlay/machine/overlay_fluid_hatch"),
+                    ResourceLocation.fromNamespaceAndPath(GTCEu.MOD_ID, "block/overlay/machine/overlay_fluid_hatch"))
             .tooltips(Component.translatable("gtceu.machine.steam_fluid_hatch_notice"))
             .modelProperty(GTMachineModelProperties.IS_FORMED, false)
             .langValue("Fluid Input Hatch (Steam)")
@@ -730,9 +730,9 @@ public class CosmicMachines {
             .machine("steam_fluid_output_hatch", holder -> new SteamFluidHatchPartMachine(holder, IO.OUT, 4000, 1))
             .rotationState(RotationState.ALL)
             .abilities(PartAbility.EXPORT_FLUIDS)
-            .colorOverlaySteamHullModel(new ResourceLocation(GTCEu.MOD_ID, "block/overlay/machine/overlay_pipe"),
-                    new ResourceLocation(GTCEu.MOD_ID, "block/overlay/machine/overlay_fluid_hatch"),
-                    new ResourceLocation(GTCEu.MOD_ID, "block/overlay/machine/overlay_fluid_hatch"))
+            .colorOverlaySteamHullModel(ResourceLocation.fromNamespaceAndPath(GTCEu.MOD_ID, "block/overlay/machine/overlay_pipe"),
+                    ResourceLocation.fromNamespaceAndPath(GTCEu.MOD_ID, "block/overlay/machine/overlay_fluid_hatch"),
+                    ResourceLocation.fromNamespaceAndPath(GTCEu.MOD_ID, "block/overlay/machine/overlay_fluid_hatch"))
             .modelProperty(GTMachineModelProperties.IS_FORMED, false)
             .langValue("Fluid Output Hatch (Steam)")
             .register();

@@ -73,7 +73,7 @@ public class CosmicMaterialRecipeHandlers {
                 .EUt(GTValues.VA[GTValues.LuV], 6)
                 .blastFurnaceTemp(9500)
                 .circuitMeta(7)
-                .dimension(new ResourceLocation("frontiers:sun_orbit"))
+                .dimension(ResourceLocation.parse("frontiers:sun_orbit"))
                 .save(provider);
     }
 

@@ -14,7 +14,6 @@ import com.ghostipedia.cosmiccore.common.commands.argument.SoulTypeArgument;
 import com.ghostipedia.cosmiccore.common.data.*;
 import com.ghostipedia.cosmiccore.common.data.materials.CosmicMaterialSet;
 import com.ghostipedia.cosmiccore.common.data.materials.CosmicMaterials;
-import com.ghostipedia.cosmiccore.common.item.behavior.GravityCoreBehavior;
 import com.ghostipedia.cosmiccore.common.machine.multiblock.multi.modular.MultiblockInit;
 import com.ghostipedia.cosmiccore.common.mob.DimensionMobScaling;
 import com.ghostipedia.cosmiccore.common.network.CCoreNetwork;
@@ -49,7 +48,6 @@ import net.minecraftforge.fml.event.lifecycle.FMLLoadCompleteEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 
 import appeng.api.features.GridLinkables;
-import earth.terrarium.adastra.api.events.AdAstraEvents;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -69,9 +67,8 @@ public class CosmicCore {
         bus.addGenericListener(RecipeConditionType.class, this::registerConditions);
         bus.addGenericListener(MachineDefinition.class, this::registerMachines);
         bus.addGenericListener(SoundEntry.class, this::registerSounds);
-        AdAstraEvents.EntityGravityEvent.register(GravityCoreBehavior::clampGravity);
-        AdAstraEvents.OxygenTickEvent
-                .register((level, entity) -> !(entity instanceof net.minecraft.world.entity.player.Player));
+        // TODO(stellaris): re-wire gravity + oxygen-tick hooks (GravityCoreBehavior::clampGravity + non-player oxygen)
+        // when migrating off Ad Astra to Stellaris — see bead cosmiccore-42.13. Ad Astra has no 1.21.1 release.
 
         CosmicLootModifiers.register(bus);
 
@@ -96,7 +93,7 @@ public class CosmicCore {
     }
 
     public static ResourceLocation id(String path) {
-        return new ResourceLocation(MOD_ID, path);
+        return ResourceLocation.fromNamespaceAndPath(MOD_ID, path);
     }
 
     @SubscribeEvent

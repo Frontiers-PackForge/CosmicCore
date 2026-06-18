@@ -13,7 +13,7 @@ import com.ghostipedia.cosmiccore.common.reflection.soul.SoulShape;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraftforge.api.distmarker.Dist;
+import net.neoforged.api.distmarker.Dist;
 import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.network.NetworkDirection;
 import net.minecraftforge.network.NetworkEvent;

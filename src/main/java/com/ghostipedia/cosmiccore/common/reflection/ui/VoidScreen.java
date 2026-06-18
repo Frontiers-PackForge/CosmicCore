@@ -18,8 +18,8 @@ import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 
@@ -122,17 +122,17 @@ public class VoidScreen extends Screen {
     private static final int MAX_LINE_WIDTH = 350;
 
     // Soul shape textures - using GTCEU item textures for distinct silhouettes
-    private static final ResourceLocation TEXTURE_REVENANT = new ResourceLocation("gtceu",
+    private static final ResourceLocation TEXTURE_REVENANT = ResourceLocation.fromNamespaceAndPath("gtceu",
             "textures/item/material_sets/dull/dust.png");
-    private static final ResourceLocation TEXTURE_HOLLOW = new ResourceLocation("gtceu",
+    private static final ResourceLocation TEXTURE_HOLLOW = ResourceLocation.fromNamespaceAndPath("gtceu",
             "textures/item/material_sets/dull/ring.png");
-    private static final ResourceLocation TEXTURE_ENGINE = new ResourceLocation("gtceu",
+    private static final ResourceLocation TEXTURE_ENGINE = ResourceLocation.fromNamespaceAndPath("gtceu",
             "textures/item/material_sets/dull/gear.png");
-    private static final ResourceLocation TEXTURE_GLOBEDANCER = new ResourceLocation("gtceu",
+    private static final ResourceLocation TEXTURE_GLOBEDANCER = ResourceLocation.fromNamespaceAndPath("gtceu",
             "textures/item/material_sets/dull/lens.png");
-    private static final ResourceLocation TEXTURE_BULWARK = new ResourceLocation("gtceu",
+    private static final ResourceLocation TEXTURE_BULWARK = ResourceLocation.fromNamespaceAndPath("gtceu",
             "textures/item/material_sets/dull/plate.png");
-    private static final ResourceLocation TEXTURE_BLOODTHIRST = new ResourceLocation("gtceu",
+    private static final ResourceLocation TEXTURE_BLOODTHIRST = ResourceLocation.fromNamespaceAndPath("gtceu",
             "textures/item/material_sets/dull/crushed.png");
 
     public VoidScreen(int erosion) {

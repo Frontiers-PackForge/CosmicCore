@@ -62,21 +62,21 @@ public final class DimensionMobScaling {
 
     // Aether
     private static ResourceKey<Level> aetherDim(String name) {
-        return ResourceKey.create(Registries.DIMENSION, new ResourceLocation("aether", name));
+        return ResourceKey.create(Registries.DIMENSION, ResourceLocation.fromNamespaceAndPath("aether", name));
     }
 
     public static final ResourceKey<Level> AETHER = aetherDim("the_aether");
 
     // Undergarden
     private static ResourceKey<Level> undergardenDim(String name) {
-        return ResourceKey.create(Registries.DIMENSION, new ResourceLocation("undergarden", name));
+        return ResourceKey.create(Registries.DIMENSION, ResourceLocation.fromNamespaceAndPath("undergarden", name));
     }
 
     public static final ResourceKey<Level> UNDERGARDEN = undergardenDim("undergarden");
 
     // Ad Astra
     private static ResourceKey<Level> adAstraDim(String name) {
-        return ResourceKey.create(Registries.DIMENSION, new ResourceLocation("ad_astra", name));
+        return ResourceKey.create(Registries.DIMENSION, ResourceLocation.fromNamespaceAndPath("ad_astra", name));
     }
 
     public static final ResourceKey<Level> MOON = adAstraDim("moon");
@@ -93,7 +93,7 @@ public final class DimensionMobScaling {
 
     // Frontiers - The Deep Below
     private static ResourceKey<Level> frontiersDim(String name) {
-        return ResourceKey.create(Registries.DIMENSION, new ResourceLocation("frontiers", name));
+        return ResourceKey.create(Registries.DIMENSION, ResourceLocation.fromNamespaceAndPath("frontiers", name));
     }
 
     public static final ResourceKey<Level> DEEP_BELOW = frontiersDim("the_deep_below");

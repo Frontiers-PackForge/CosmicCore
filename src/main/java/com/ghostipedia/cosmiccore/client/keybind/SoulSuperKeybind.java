@@ -7,7 +7,7 @@ import com.ghostipedia.cosmiccore.common.reflection.network.SoulSuperPacket;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
 import net.minecraft.world.entity.player.Player;
-import net.minecraftforge.api.distmarker.Dist;
+import net.neoforged.api.distmarker.Dist;
 import net.minecraftforge.client.event.RegisterKeyMappingsEvent;
 import net.minecraftforge.client.settings.KeyConflictContext;
 import net.minecraftforge.event.TickEvent;

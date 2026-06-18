@@ -165,7 +165,7 @@ public class CosmicRecipeModifiers {
 
     public static @NotNull ModifierFunction groveMulti(@NotNull MetaMachine machine, @NotNull GTRecipe recipe) {
         if (!(machine instanceof IRecipeLogicMachine rlm)) return ModifierFunction.NULL;
-        final Item match = BuiltInRegistries.ITEM.get(new ResourceLocation("ars_nouveau:drygmy_charm"));
+        final Item match = BuiltInRegistries.ITEM.get(ResourceLocation.parse("ars_nouveau:drygmy_charm"));
         var handlers = rlm.getCapabilitiesFlat(IO.IN, ItemRecipeCapability.CAP);
         int count = 0;
         for (var handler : handlers) {

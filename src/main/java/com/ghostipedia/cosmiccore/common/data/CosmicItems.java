@@ -1531,7 +1531,7 @@ public class CosmicItems {
             .lang("Eschaton Processor")
             .properties(p -> p.stacksTo(64))
             .onRegister(attachRenderer(() -> HaloItemRenderer.create(6, 0xFFFFFFFF,
-                    new ResourceLocation(CosmicCore.MOD_ID, "block/iris/rnd/tentacle_halo"), true,
+                    ResourceLocation.fromNamespaceAndPath(CosmicCore.MOD_ID, "block/iris/rnd/tentacle_halo"), true,
                     false)))
             .defaultModel()
             .register();
@@ -1540,7 +1540,7 @@ public class CosmicItems {
             .lang("Eschaton Processor Assembly")
             .properties(p -> p.stacksTo(64))
             .onRegister(attachRenderer(() -> HaloItemRenderer.create(6, 0xFFFFFFFF,
-                    new ResourceLocation(CosmicCore.MOD_ID, "block/iris/rnd/tentacle_halo"), true,
+                    ResourceLocation.fromNamespaceAndPath(CosmicCore.MOD_ID, "block/iris/rnd/tentacle_halo"), true,
                     false)))
             .defaultModel()
             .register();
@@ -1549,7 +1549,7 @@ public class CosmicItems {
             .lang("Eschaton Processor Supercomputer")
             .properties(p -> p.stacksTo(64))
             .onRegister(attachRenderer(() -> HaloItemRenderer.create(6, 0xFFFFFFFF,
-                    new ResourceLocation(CosmicCore.MOD_ID, "block/iris/rnd/tentacle_halo"), true,
+                    ResourceLocation.fromNamespaceAndPath(CosmicCore.MOD_ID, "block/iris/rnd/tentacle_halo"), true,
                     false)))
             .defaultModel()
             .register();
@@ -1558,7 +1558,7 @@ public class CosmicItems {
             .lang("Eschaton Processor Mainframe")
             .properties(p -> p.stacksTo(64))
             .onRegister(attachRenderer(() -> HaloItemRenderer.create(6, 0xFFFFFFFF,
-                    new ResourceLocation(CosmicCore.MOD_ID, "block/iris/rnd/tentacle_halo"), true,
+                    ResourceLocation.fromNamespaceAndPath(CosmicCore.MOD_ID, "block/iris/rnd/tentacle_halo"), true,
                     false)))
             .onRegister(attach(new TooltipBehavior(lines -> {
                 lines.add(Component.literal(StringUtil
@@ -2620,7 +2620,7 @@ public class CosmicItems {
             .properties(p -> p.stacksTo(1))
             .model((ctx, prov) -> {})
             .onRegister(modelPredicate(
-                    new ResourceLocation(CosmicCore.MOD_ID, "charges"),
+                    ResourceLocation.fromNamespaceAndPath(CosmicCore.MOD_ID, "charges"),
                     stack -> (float) AirBladderItem.getCharges(stack) / OxygenConfig.AIR_BLADDER_MAX_CHARGES))
             .register();
 

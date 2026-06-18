@@ -35,7 +35,7 @@ public class CosmicVeinGenerators {
                                                                String name,
                                                                Codec<T> codec,
                                                                Function<GTOreDefinition, T> factory) {
-        ResourceLocation id = new ResourceLocation(CosmicCore.MOD_ID, name);
+        ResourceLocation id = ResourceLocation.fromNamespaceAndPath(CosmicCore.MOD_ID, name);
         WorldGeneratorUtils.VEIN_GENERATORS.put(id, codec);
         WorldGeneratorUtils.VEIN_GENERATOR_FUNCTIONS.put(id, factory);
         return codec;

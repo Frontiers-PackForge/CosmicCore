@@ -17,7 +17,7 @@ public class CosmicFluidTooltipAddon {
     // for (String i : keySet) {
     // if (data.get(i).containsKey(fluidID)) {
     // HashMap<String, Double> tmp = data.get(i);
-    // ResourceLocation fluidResource = new ResourceLocation(fluidID);
+    // ResourceLocation fluidResource = ResourceLocation.fromNamespaceAndPath(fluidID);
     // if (fluid instanceof GTFluid attributeFluid) {
     // FluidAttribute attribute;
     // if (".calorific".equals(i)) {

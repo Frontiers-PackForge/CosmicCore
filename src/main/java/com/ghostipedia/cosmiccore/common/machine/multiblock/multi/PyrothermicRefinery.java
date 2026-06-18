@@ -13,7 +13,6 @@ import com.gregtechceu.gtceu.api.pattern.FactoryBlockPattern;
 import com.gregtechceu.gtceu.api.pattern.Predicates;
 import com.gregtechceu.gtceu.api.recipe.OverclockingLogic;
 
-import com.rekindled.embers.RegistryManager;
 
 import static com.ghostipedia.cosmiccore.api.machine.part.CosmicPartAbility.IMPORT_EMBER;
 import static com.ghostipedia.cosmiccore.api.registries.CosmicRegistration.REGISTRATE;
@@ -49,8 +48,8 @@ public class PyrothermicRefinery {
                     // spotless:on
                     .where(' ', any())
                     .where("Q", controller(blocks(definition.getBlock())))
-                    .where('A', blocks(RegistryManager.ARCHAIC_LARGE_BRICKS.get()))
-                    .where('B', blocks(RegistryManager.CAMINITE_TILES.get()))
+                    .where('A', blocks(CosmicBlocks.REINFORCED_DAWNSTONE_CASING.get()))
+                    .where('B', blocks(CosmicBlocks.LIGHT_DAWNSTONE_CASING.get()))
                     .where('C', blocks(CosmicBlocks.STEEL_PLATED_BRONZE.get()))
                     .where('D', blocks(CosmicBlocks.LIGHT_DAWNSTONE_CASING.get())
                             .or(abilities(PartAbility.IMPORT_ITEMS).setPreviewCount(1))

@@ -46,11 +46,11 @@ public class LinkedPartnerDimensionCondition extends RecipeCondition<LinkedPartn
     }
 
     public LinkedPartnerDimensionCondition(String dimension) {
-        this(false, new ResourceLocation(dimension));
+        this(false, ResourceLocation.fromNamespaceAndPath(dimension));
     }
 
     public LinkedPartnerDimensionCondition() {
-        this.dimension = new ResourceLocation("minecraft:overworld");
+        this.dimension = ResourceLocation.parse("minecraft:overworld");
     }
 
     public static void register() {

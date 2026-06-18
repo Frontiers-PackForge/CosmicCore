@@ -11,7 +11,6 @@ import com.gregtechceu.gtceu.api.machine.multiblock.PartAbility;
 import com.gregtechceu.gtceu.api.pattern.FactoryBlockPattern;
 import com.gregtechceu.gtceu.api.pattern.Predicates;
 
-import com.rekindled.embers.RegistryManager;
 
 import static com.ghostipedia.cosmiccore.api.machine.part.CosmicPartAbility.EXPORT_EMBER;
 import static com.ghostipedia.cosmiccore.api.registries.CosmicRegistration.REGISTRATE;
@@ -23,8 +22,8 @@ public class CinderHearth {
             .multiblock("cinder_hearth", RegressionPersistentWorkableElectricMachine::new)
             .rotationState(RotationState.NON_Y_AXIS)
             .recipeType(CosmicRecipeTypes.CINDER_HEARTH)
-            .appearanceBlock(RegistryManager.CAMINITE_TILES)
-            .partAppearance((controller, part, side) -> RegistryManager.CAMINITE_TILES.get().defaultBlockState())
+            .appearanceBlock(CosmicBlocks.LIGHT_DAWNSTONE_CASING)
+            .partAppearance((controller, part, side) -> CosmicBlocks.LIGHT_DAWNSTONE_CASING.get().defaultBlockState())
             .pattern(definition -> FactoryBlockPattern.start()
                     .aisle("AAAAAAAAAA", "A   A    A", "A   A    A", "A   A    A", "AAAAAAAAAA", "          ",
                             "          ")
@@ -38,15 +37,15 @@ public class CinderHearth {
                             "          ")
                     .where(' ', any())
                     .where("Q", controller(blocks(definition.getBlock())))
-                    .where('A', blocks(RegistryManager.ARCHAIC_LARGE_BRICKS.get())
+                    .where('A', blocks(CosmicBlocks.REINFORCED_DAWNSTONE_CASING.get())
                             .or(abilities(PartAbility.IMPORT_ITEMS).setPreviewCount(1))
                             .or(abilities(PartAbility.IMPORT_FLUIDS).setPreviewCount(1))
                             .or(Predicates.abilities(PartAbility.INPUT_ENERGY).setExactLimit(1)))
                     .where('B',
-                            abilities(EXPORT_EMBER).setPreviewCount(8).or(blocks(RegistryManager.CAMINITE_TILES.get())))
-                    .where('C', blocks(RegistryManager.CAMINITE_TILES.get()))
+                            abilities(EXPORT_EMBER).setPreviewCount(8).or(blocks(CosmicBlocks.LIGHT_DAWNSTONE_CASING.get())))
+                    .where('C', blocks(CosmicBlocks.LIGHT_DAWNSTONE_CASING.get()))
                     .where('D', blocks(CosmicBlocks.REINFORCED_DAWNSTONE_CASING.get()))
-                    .where('F', blocks(RegistryManager.ARCHAIC_LIGHT.get()))
+                    .where('F', blocks(CosmicBlocks.LIGHT_DAWNSTONE_CASING.get()))
                     //
                     .build())
             .workableCasingModel(CosmicCore.id("block/embers/archaic_large_bricks"),

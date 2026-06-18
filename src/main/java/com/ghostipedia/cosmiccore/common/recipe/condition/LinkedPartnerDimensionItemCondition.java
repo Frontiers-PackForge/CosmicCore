@@ -59,7 +59,7 @@ public class LinkedPartnerDimensionItemCondition extends RecipeCondition<LinkedP
     }
 
     public LinkedPartnerDimensionItemCondition(String dimension, Item item, int minCount) {
-        this(false, new ResourceLocation(dimension), BuiltInRegistries.ITEM.getKey(item), minCount);
+        this(false, ResourceLocation.fromNamespaceAndPath(dimension), BuiltInRegistries.ITEM.getKey(item), minCount);
     }
 
     public LinkedPartnerDimensionItemCondition(String dimension, Item item) {
@@ -67,8 +67,8 @@ public class LinkedPartnerDimensionItemCondition extends RecipeCondition<LinkedP
     }
 
     public LinkedPartnerDimensionItemCondition() {
-        this.dimension = new ResourceLocation("minecraft:overworld");
-        this.itemId = new ResourceLocation("minecraft:stone");
+        this.dimension = ResourceLocation.parse("minecraft:overworld");
+        this.itemId = ResourceLocation.parse("minecraft:stone");
         this.minCount = 1;
     }
 

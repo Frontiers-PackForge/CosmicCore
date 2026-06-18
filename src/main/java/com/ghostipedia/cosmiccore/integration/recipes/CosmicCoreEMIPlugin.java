@@ -16,7 +16,6 @@ import dev.emi.emi.api.recipe.EmiRecipeCategory;
 import dev.emi.emi.api.stack.Comparison;
 import dev.emi.emi.api.stack.EmiIngredient;
 import dev.emi.emi.api.stack.EmiStack;
-import thedarkcolour.gendustry.registry.GItems;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,8 +29,6 @@ public class CosmicCoreEMIPlugin implements EmiPlugin {
 
     @Override
     public void register(EmiRegistry registry) {
-        registry.setDefaultComparison(GItems.GENE_SAMPLE.item(), Comparison.compareNbt());
-
         registry.setDefaultComparison(CosmicItems.TARGETING_CHIP.asStack(), Comparison.compareNbt());
 
         registry.addCategory(ASTEROID_CATEGORY);

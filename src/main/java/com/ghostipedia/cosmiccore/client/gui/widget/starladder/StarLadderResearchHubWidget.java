@@ -12,8 +12,8 @@ import net.minecraft.core.GlobalPos;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.util.Mth;
 import net.minecraft.world.level.block.Block;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
 import net.minecraftforge.registries.ForgeRegistries;
 
 import java.util.HashMap;

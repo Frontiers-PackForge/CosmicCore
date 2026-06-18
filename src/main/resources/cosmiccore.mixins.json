@@ -43,7 +43,6 @@
     "gtceu.ElectricContainerBlockProviderMixin",
     "gtceu.GTOreDefinitionMixin",
     "gtceu.GTRecipeSerializerMixin",
-    "gtceu.MetaMachineBlockEntityMixin",
     "gtceu.MetaMachinePaintMixin",
     "gtceu.ParallelProviderMixin",
     "gtceu.RecipeLogicProviderMixin",

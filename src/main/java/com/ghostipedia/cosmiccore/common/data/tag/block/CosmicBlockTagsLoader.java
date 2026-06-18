@@ -13,12 +13,12 @@ public class CosmicBlockTagsLoader {
                 .addTag(BlockTags.STONE_ORE_REPLACEABLES)
                 .addTag(BlockTags.DEEPSLATE_ORE_REPLACEABLES);
 
-        overworldTag.addOptional(new ResourceLocation("create", "scoria"));
-        overworldTag.addOptional(new ResourceLocation("create", "scorchia"));
-        overworldTag.addOptional(new ResourceLocation("create", "crimsite"));
-        overworldTag.addOptional(new ResourceLocation("create", "limestone"));
-        overworldTag.addOptional(new ResourceLocation("create", "asurine"));
-        overworldTag.addOptional(new ResourceLocation("create", "ochrum"));
-        overworldTag.addOptional(new ResourceLocation("create", "veridium"));
+        overworldTag.addOptional(ResourceLocation.fromNamespaceAndPath("create", "scoria"));
+        overworldTag.addOptional(ResourceLocation.fromNamespaceAndPath("create", "scorchia"));
+        overworldTag.addOptional(ResourceLocation.fromNamespaceAndPath("create", "crimsite"));
+        overworldTag.addOptional(ResourceLocation.fromNamespaceAndPath("create", "limestone"));
+        overworldTag.addOptional(ResourceLocation.fromNamespaceAndPath("create", "asurine"));
+        overworldTag.addOptional(ResourceLocation.fromNamespaceAndPath("create", "ochrum"));
+        overworldTag.addOptional(ResourceLocation.fromNamespaceAndPath("create", "veridium"));
     }
 }

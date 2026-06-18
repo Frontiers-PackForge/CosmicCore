@@ -3,8 +3,8 @@ package com.ghostipedia.cosmiccore.client.renderer;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.BufferBuilder;
@@ -28,7 +28,7 @@ public class ChainRenderer {
     private static final float MOUSE_PUSH_STRENGTH = 2.0f;
     private static final int BASE_LINK_SIZE = 14;
 
-    private static final ResourceLocation CHAIN_TEXTURE = new ResourceLocation("minecraft",
+    private static final ResourceLocation CHAIN_TEXTURE = ResourceLocation.fromNamespaceAndPath("minecraft",
             "textures/item/chain.png");
 
     private final List<Chain> chains = new ArrayList<>();

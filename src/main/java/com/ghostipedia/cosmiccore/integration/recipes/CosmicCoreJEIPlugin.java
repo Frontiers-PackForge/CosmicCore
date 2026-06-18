@@ -12,7 +12,6 @@ import mezz.jei.api.IModPlugin;
 import mezz.jei.api.JeiPlugin;
 import mezz.jei.api.registration.ISubtypeRegistration;
 import mezz.jei.api.runtime.IJeiRuntime;
-import thedarkcolour.gendustry.registry.GItems;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 
@@ -37,6 +36,5 @@ public class CosmicCoreJEIPlugin implements IModPlugin {
     @Override
     public void registerItemSubtypes(ISubtypeRegistration registration) {
         if (GTCEu.Mods.isREILoaded() || GTCEu.Mods.isEMILoaded()) return;
-        registration.useNbtForSubtypes(GItems.GENE_SAMPLE.asItem());
     }
 }

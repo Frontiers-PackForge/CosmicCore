@@ -10,8 +10,8 @@ import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 
@@ -23,7 +23,7 @@ import javax.annotation.Nonnull;
 
 public class ModuleToggleButton extends Widget {
 
-    private static final ResourceLocation GEAR_TEXTURE = new ResourceLocation("gtceu",
+    private static final ResourceLocation GEAR_TEXTURE = ResourceLocation.fromNamespaceAndPath("gtceu",
             "textures/item/material_sets/dull/gear_small.png");
 
     private final Consumer<Boolean> onToggle;

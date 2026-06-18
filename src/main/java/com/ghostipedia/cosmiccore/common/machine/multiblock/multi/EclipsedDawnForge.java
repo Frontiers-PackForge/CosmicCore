@@ -13,7 +13,6 @@ import com.gregtechceu.gtceu.api.pattern.Predicates;
 import com.gregtechceu.gtceu.api.recipe.OverclockingLogic;
 import com.gregtechceu.gtceu.common.data.GTBlocks;
 
-import com.rekindled.embers.RegistryManager;
 
 import static com.ghostipedia.cosmiccore.api.machine.part.CosmicPartAbility.IMPORT_EMBER;
 import static com.ghostipedia.cosmiccore.api.registries.CosmicRegistration.REGISTRATE;
@@ -23,7 +22,6 @@ import static com.gregtechceu.gtceu.api.machine.multiblock.PartAbility.IMPORT_FL
 import static com.gregtechceu.gtceu.api.pattern.Predicates.*;
 import static com.gregtechceu.gtceu.common.data.GTRecipeModifiers.BATCH_MODE;
 import static com.gregtechceu.gtceu.common.data.GTRecipeModifiers.ELECTRIC_OVERCLOCK;
-import static com.rekindled.embers.RegistryManager.DAWNSTONE_ANVIL;
 
 public class EclipsedDawnForge {
 
@@ -57,10 +55,10 @@ public class EclipsedDawnForge {
                             .or(abilities(EXPORT_FLUIDS).setPreviewCount(1))
                             .or(abilities(IMPORT_EMBER).setPreviewCount(1))
                             .or(Predicates.abilities(PartAbility.INPUT_ENERGY).setExactLimit(1)))
-                    .where('C', blocks(RegistryManager.CAMINITE_TILES.get()))
+                    .where('C', blocks(ETHERSTEEL_PLATED_ASH_TILES.get()))
                     .where('D', blocks(GTBlocks.CASING_PTFE_INERT.get()))
                     .where('E', blocks(GTBlocks.CASING_LAMINATED_GLASS.get()))
-                    .where('F', blocks(DAWNSTONE_ANVIL.get()))
+                    .where('F', blocks(net.minecraft.world.level.block.Blocks.ANVIL))
 
                     .build())
             .workableCasingModel(CosmicCore.id("block/casings/solid/ethersteel_plated_ash_tiles"),

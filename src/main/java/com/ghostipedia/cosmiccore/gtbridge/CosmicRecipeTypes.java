@@ -551,7 +551,7 @@ public class CosmicRecipeTypes {
                 // If It Doesn't have a Dimension, add the recipe and give it an dimension req of 'Sun Orbit'
                 orbitBuilderEBF
                         .addCondition(new DimensionCondition(
-                                ResourceKey.create(Registries.DIMENSION, new ResourceLocation("frontiers:sun_orbit"))))
+                                ResourceKey.create(Registries.DIMENSION, ResourceLocation.parse("frontiers:sun_orbit"))))
                         .save(provider);
             }
         });
@@ -572,7 +572,7 @@ public class CosmicRecipeTypes {
                 // If It Doesn't have a Dimension, add the recipe and give it an dimension req of 'Sun Orbit'
                 orbitBuilderABS
                         .addCondition(new DimensionCondition(
-                                ResourceKey.create(Registries.DIMENSION, new ResourceLocation("frontiers:sun_orbit"))))
+                                ResourceKey.create(Registries.DIMENSION, ResourceLocation.parse("frontiers:sun_orbit"))))
                         .save(provider);
             }
         });

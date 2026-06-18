@@ -14,8 +14,8 @@ import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 
@@ -866,7 +866,7 @@ public class BargainConstellationScreen extends Screen {
 
     private static class BargainNode {
 
-        private static final ResourceLocation NODE_TEXTURE = new ResourceLocation("cosmiccore",
+        private static final ResourceLocation NODE_TEXTURE = ResourceLocation.fromNamespaceAndPath("cosmiccore",
                 "textures/item/reflection_mirror.png");
 
         final Bargain bargain;
