@@ -98,7 +98,7 @@ public class CosmicScytheItem extends MalumScytheItem {
     }
 
     @Override
-    public void hurtEvent(net.minecraftforge.event.entity.living.LivingHurtEvent event, LivingEntity attacker,
+    public void hurtEvent(net.neoforged.neoforge.event.entity.living.LivingHurtEvent event, LivingEntity attacker,
                           LivingEntity target, ItemStack stack) {
         super.hurtEvent(event, attacker, target, stack);
         if (event.getSource().is(DamageTypeRegistry.SCYTHE_SWEEP)) {

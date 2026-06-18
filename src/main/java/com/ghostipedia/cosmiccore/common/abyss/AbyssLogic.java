@@ -8,21 +8,21 @@ import com.ghostipedia.cosmiccore.common.network.packet.SyncTimeBarPacket;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraftforge.event.TickEvent;
-import net.minecraftforge.event.entity.player.PlayerEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
+import net.neoforged.neoforge.event.entity.player.PlayerEvent;
+import net.neoforged.neoforge.event.tick.PlayerTickEvent;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.EventBusSubscriber;
 
 import static com.ghostipedia.cosmiccore.common.abyss.AbyssRules.WARNINGS;
 
-@Mod.EventBusSubscriber(modid = CosmicCore.MOD_ID)
+@EventBusSubscriber(modid = CosmicCore.MOD_ID)
 public final class AbyssLogic {
 
     @SubscribeEvent
-    public static void onPlayerTick(TickEvent.PlayerTickEvent event) {
-        if (event.phase != TickEvent.Phase.END || event.player.level().isClientSide) return;
+    public static void onPlayerTick(PlayerTickEvent.Post event) {
+        if (event.getEntity().level().isClientSide) return;
 
-        ServerPlayer player = (ServerPlayer) event.player;
+        ServerPlayer player = (ServerPlayer) event.getEntity();
         ServerLevel level = player.serverLevel();
 
         player.getCapability(AbyssBudgetCap.CAP).ifPresent(cap -> {

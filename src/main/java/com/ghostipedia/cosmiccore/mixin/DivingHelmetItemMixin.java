@@ -3,7 +3,7 @@ package com.ghostipedia.cosmiccore.mixin;
 import com.ghostipedia.cosmiccore.common.breath.OxygenHelper;
 
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraftforge.event.entity.living.LivingBreatheEvent;
+import net.neoforged.neoforge.event.entity.living.LivingBreatheEvent;
 
 import com.simibubi.create.content.equipment.armor.DivingHelmetItem;
 import org.spongepowered.asm.mixin.Mixin;
