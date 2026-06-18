@@ -20,15 +20,15 @@ import net.minecraft.world.level.block.RenderShape;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
-import net.minecraftforge.event.TickEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
+import net.neoforged.neoforge.event.tick.PlayerTickEvent;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.EventBusSubscriber;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
-@Mod.EventBusSubscriber(modid = CosmicCore.MOD_ID)
+@EventBusSubscriber(modid = CosmicCore.MOD_ID)
 public class QuakeMovementHandler {
 
     private static final Map<UUID, Boolean> wasOnGround = new HashMap<>();
@@ -79,10 +79,8 @@ public class QuakeMovementHandler {
     }
 
     @SubscribeEvent
-    public static void onPlayerTick(TickEvent.PlayerTickEvent event) {
-        if (event.phase != TickEvent.Phase.START) return;
-
-        Player player = event.player;
+    public static void onPlayerTick(PlayerTickEvent.Pre event) {
+        Player player = event.getEntity();
         if (!player.level().isClientSide()) return;
         if (!clientHasQuakeMovement) return;
         if (player != Minecraft.getInstance().player) return;

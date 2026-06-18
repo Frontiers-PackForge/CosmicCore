@@ -13,10 +13,10 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.event.TickEvent;
-import net.minecraftforge.event.entity.player.PlayerEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
+import net.neoforged.neoforge.event.entity.player.PlayerEvent;
+import net.neoforged.neoforge.event.tick.PlayerTickEvent;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.EventBusSubscriber;
 
 import top.theillusivec4.curios.api.CuriosApi;
 import top.theillusivec4.curios.api.type.inventory.IDynamicStackHandler;
@@ -24,7 +24,7 @@ import top.theillusivec4.curios.api.type.inventory.IDynamicStackHandler;
 import static com.ghostipedia.cosmiccore.common.airControl.OxygenConfig.*;
 import static com.ghostipedia.cosmiccore.common.airControl.OxygenItemCap.OXYGEN_SUPPLY;
 
-@Mod.EventBusSubscriber(modid = CosmicCore.MOD_ID)
+@EventBusSubscriber(modid = CosmicCore.MOD_ID)
 public final class OxygenLogic {
 
     private OxygenLogic() {}
@@ -39,10 +39,10 @@ public final class OxygenLogic {
     private static final java.util.Map<java.util.UUID, Long> lastSyncGameTime = new java.util.concurrent.ConcurrentHashMap<>();
 
     @SubscribeEvent
-    public static void onPlayerTick(TickEvent.PlayerTickEvent event) {
-        if (event.phase != TickEvent.Phase.END || event.player.level().isClientSide) return;
+    public static void onPlayerTick(PlayerTickEvent.Post event) {
+        if (event.getEntity().level().isClientSide) return;
 
-        ServerPlayer player = (ServerPlayer) event.player;
+        ServerPlayer player = (ServerPlayer) event.getEntity();
 
         // Skip oxygen logic for creative/spectator players
         if (player.isCreative() || player.isSpectator()) {

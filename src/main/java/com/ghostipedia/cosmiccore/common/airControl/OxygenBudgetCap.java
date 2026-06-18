@@ -8,13 +8,13 @@ import net.minecraft.world.entity.Entity;
 import net.minecraftforge.common.capabilities.*;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
-import net.minecraftforge.event.entity.player.PlayerEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
+import net.neoforged.neoforge.event.entity.player.PlayerEvent;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.EventBusSubscriber;
 
 import javax.annotation.Nullable;
 
-@Mod.EventBusSubscriber(modid = CosmicCore.MOD_ID)
+@EventBusSubscriber(modid = CosmicCore.MOD_ID)
 public class OxygenBudgetCap {
 
     private OxygenBudgetCap() {}
