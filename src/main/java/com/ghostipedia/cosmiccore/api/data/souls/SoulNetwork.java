@@ -6,7 +6,7 @@ import com.ghostipedia.cosmiccore.api.recipe.ingredient.SoulStack;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
-import net.minecraftforge.common.util.INBTSerializable;
+import net.neoforged.neoforge.common.util.INBTSerializable;
 
 import lombok.Setter;
 

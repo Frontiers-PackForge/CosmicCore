@@ -10,7 +10,7 @@ import static com.ghostipedia.cosmiccore.api.registries.CosmicRegistration.REGIS
 
 public class CosmicBotanyItemRegistration {
 
-    public static final ItemEntry<ComponentItem> DULIA_LILY = REGISTRATE.item("dulia_lily", ComponentItem::create)
+    public static final ItemEntry<ComponentItem> DULIA_LILY = REGISTRATE.item("dulia_lily", ComponentItem::new)
             .lang("Dulia Lily")
             .properties(p -> p.stacksTo(16))
             .tag()
@@ -18,7 +18,7 @@ public class CosmicBotanyItemRegistration {
             .register();
 
     public static final ItemEntry<ComponentItem> RAYMARCHING_DANDILIFEON = REGISTRATE
-            .item("raymarching_dandilifeon", ComponentItem::create)
+            .item("raymarching_dandilifeon", ComponentItem::new)
             .lang("Dulia Lily")
             .properties(p -> p.stacksTo(16))
             .tag()
