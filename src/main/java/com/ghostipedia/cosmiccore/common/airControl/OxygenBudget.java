@@ -1,16 +1,31 @@
 package com.ghostipedia.cosmiccore.common.airControl;
 
+import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.Level;
+import net.neoforged.neoforge.common.util.INBTSerializable;
 
 import java.util.HashMap;
 import java.util.Map;
 
-public class OxygenBudget implements IOxygen {
+public class OxygenBudget implements IOxygen, INBTSerializable<CompoundTag> {
+
+    @Override
+    public CompoundTag serializeNBT(HolderLookup.Provider provider) {
+        CompoundTag tag = saveTag();
+        return tag != null ? tag : new CompoundTag();
+    }
+
+    @Override
+    public void deserializeNBT(HolderLookup.Provider provider, CompoundTag nbt) {
+        if (nbt != null) {
+            loadTag(nbt);
+        }
+    }
 
     private final Map<ResourceLocation, Long> oxygenTicksByDimension = new HashMap<>();
     private final Map<ResourceLocation, Boolean> consumingByDimension = new HashMap<>();

@@ -3,18 +3,31 @@ package com.ghostipedia.cosmiccore.common.teleporter;
 import com.ghostipedia.cosmiccore.api.capability.ITeleportOrigin;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
+import net.neoforged.neoforge.common.util.INBTSerializable;
 
 import org.jetbrains.annotations.Nullable;
 
-// Implementation of the teleport origin capability - Stores origin dimension, position, and rotation for teleport
-// return trips.
-public class TeleportOrigin implements ITeleportOrigin {
+public class TeleportOrigin implements ITeleportOrigin, INBTSerializable<CompoundTag> {
+
+    @Override
+    public CompoundTag serializeNBT(HolderLookup.Provider provider) {
+        CompoundTag tag = save();
+        return tag != null ? tag : new CompoundTag();
+    }
+
+    @Override
+    public void deserializeNBT(HolderLookup.Provider provider, CompoundTag nbt) {
+        if (nbt != null) {
+            load(nbt);
+        }
+    }
 
     @Nullable
     private ResourceKey<Level> originDimension;

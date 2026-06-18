@@ -1,5 +1,8 @@
 package com.ghostipedia.cosmiccore.common.abyss;
 
+import java.util.Optional;
+import com.ghostipedia.cosmiccore.common.data.CosmicAttachmentTypes;
+
 import com.ghostipedia.cosmiccore.CosmicCore;
 import com.ghostipedia.cosmiccore.common.network.CCoreNetwork;
 import com.ghostipedia.cosmiccore.common.network.packet.AbyssTimeWarnPacket;
@@ -25,7 +28,7 @@ public final class AbyssLogic {
         ServerPlayer player = (ServerPlayer) event.getEntity();
         ServerLevel level = player.serverLevel();
 
-        player.getCapability(AbyssBudgetCap.CAP).ifPresent(cap -> {
+        Optional.of(player.getData(CosmicAttachmentTypes.ABYSS_BUDGET)).ifPresent(cap -> {
             if (cap.getRemainingTicks(AbyssRules.DIM) < 0) {
                 cap.setRemainingTicks(AbyssRules.DIM, AbyssRules.FIRST_ENTRY_TICKS);
                 cap.setDecaying(AbyssRules.DIM, level.dimension().equals(AbyssRules.DIM));
@@ -73,7 +76,7 @@ public final class AbyssLogic {
         if (event.getEntity().level().isClientSide) return;
         ServerPlayer player = (ServerPlayer) event.getEntity();
 
-        player.getCapability(AbyssBudgetCap.CAP).ifPresent(cap -> {
+        Optional.of(player.getData(CosmicAttachmentTypes.ABYSS_BUDGET)).ifPresent(cap -> {
             boolean nowInAbyss = player.level().dimension().equals(AbyssRules.DIM);
             cap.setDecaying(AbyssRules.DIM, nowInAbyss);
 
@@ -90,7 +93,7 @@ public final class AbyssLogic {
         if (event.getEntity().level().isClientSide) return;
         ServerPlayer player = (ServerPlayer) event.getEntity();
 
-        player.getCapability(AbyssBudgetCap.CAP).ifPresent(cap -> {
+        Optional.of(player.getData(CosmicAttachmentTypes.ABYSS_BUDGET)).ifPresent(cap -> {
             if (cap.getRemainingTicks(AbyssRules.DIM) < 0) {
                 cap.setRemainingTicks(AbyssRules.DIM, AbyssRules.FIRST_ENTRY_TICKS);
             }
