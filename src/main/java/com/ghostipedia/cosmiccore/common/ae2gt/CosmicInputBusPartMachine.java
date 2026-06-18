@@ -16,7 +16,6 @@ import com.lowdragmc.lowdraglib.gui.modular.ModularUI;
 import com.lowdragmc.lowdraglib.gui.widget.LabelWidget;
 import com.lowdragmc.lowdraglib.gui.widget.Widget;
 import com.lowdragmc.lowdraglib.gui.widget.WidgetGroup;
-import com.lowdragmc.lowdraglib.syncdata.field.ManagedFieldHolder;
 import com.lowdragmc.lowdraglib.utils.Position;
 
 import net.minecraft.nbt.CompoundTag;
@@ -31,9 +30,6 @@ import appeng.api.storage.MEStorage;
 
 public class CosmicInputBusPartMachine extends MEBusPartMachine implements IDataStickInteractable {
 
-    protected static final ManagedFieldHolder MANAGED_FIELD_HOLDER = new ManagedFieldHolder(
-            CosmicInputBusPartMachine.class,
-            MEBusPartMachine.MANAGED_FIELD_HOLDER);
 
     protected final static int CONFIG_SIZE = 1;
 
@@ -59,10 +55,6 @@ public class CosmicInputBusPartMachine extends MEBusPartMachine implements IData
         return this.aeItemHandler;
     }
 
-    @Override
-    public ManagedFieldHolder getFieldHolder() {
-        return MANAGED_FIELD_HOLDER;
-    }
 
     /////////////////////////////////
     // ********** Sync ME *********//

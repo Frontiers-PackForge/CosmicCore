@@ -11,8 +11,6 @@ import com.gregtechceu.gtceu.api.machine.TickableSubscription;
 import com.gregtechceu.gtceu.api.machine.multiblock.WorkableElectricMultiblockMachine;
 
 import com.lowdragmc.lowdraglib.syncdata.annotation.Persisted;
-import com.lowdragmc.lowdraglib.syncdata.field.ManagedFieldHolder;
-
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
@@ -37,9 +35,6 @@ import java.util.List;
  */
 public class DivingBellMachine extends WorkableElectricMultiblockMachine {
 
-    protected static final ManagedFieldHolder MANAGED_FIELD_HOLDER = new ManagedFieldHolder(
-            DivingBellMachine.class,
-            WorkableElectricMultiblockMachine.MANAGED_FIELD_HOLDER);
 
     // Configuration values
     private static final int TELEPORT_COST_EU = 500000; // 500k EU per teleport
@@ -61,9 +56,6 @@ public class DivingBellMachine extends WorkableElectricMultiblockMachine {
 
     @Override
     @NotNull
-    public ManagedFieldHolder getFieldHolder() {
-        return MANAGED_FIELD_HOLDER;
-    }
 
     @Override
     public void onStructureFormed() {

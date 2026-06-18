@@ -14,8 +14,6 @@ import com.gregtechceu.gtceu.api.recipe.GTRecipe;
 import com.gregtechceu.gtceu.utils.FormattingUtil;
 
 import com.lowdragmc.lowdraglib.syncdata.annotation.Persisted;
-import com.lowdragmc.lowdraglib.syncdata.field.ManagedFieldHolder;
-
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.Style;
@@ -32,8 +30,6 @@ import javax.annotation.Nullable;
 
 public class MagneticFieldMachine extends MagnetWorkableElectricMultiblockMachine implements ITieredMachine {
 
-    protected static final ManagedFieldHolder MANAGED_FIELD_HOLDER = new ManagedFieldHolder(MagneticFieldMachine.class,
-            MagnetWorkableElectricMultiblockMachine.MANAGED_FIELD_HOLDER);
     @Getter
     private int fieldChargeRate;
     @Getter
@@ -50,9 +46,6 @@ public class MagneticFieldMachine extends MagnetWorkableElectricMultiblockMachin
 
     @Override
     @NotNull
-    public ManagedFieldHolder getFieldHolder() {
-        return MANAGED_FIELD_HOLDER;
-    }
 
     @Override
     public void onStructureFormed() {

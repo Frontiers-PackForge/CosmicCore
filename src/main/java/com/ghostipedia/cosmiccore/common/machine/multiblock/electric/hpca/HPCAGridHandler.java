@@ -17,8 +17,6 @@ import com.lowdragmc.lowdraglib.gui.texture.ResourceTexture;
 import com.lowdragmc.lowdraglib.syncdata.IManaged;
 import com.lowdragmc.lowdraglib.syncdata.annotation.DescSynced;
 import com.lowdragmc.lowdraglib.syncdata.field.FieldManagedStorage;
-import com.lowdragmc.lowdraglib.syncdata.field.ManagedFieldHolder;
-
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -38,7 +36,6 @@ import java.util.*;
 
 public class HPCAGridHandler implements IManaged {
 
-    public static final ManagedFieldHolder MANAGED_FIELD_HOLDER = new ManagedFieldHolder(HPCAGridHandler.class);
     @Getter
     private final FieldManagedStorage syncStorage = new FieldManagedStorage(this);
 
@@ -418,7 +415,7 @@ public class HPCAGridHandler implements IManaged {
                 if (be instanceof IHPCAComponentHatch hatch) {
                     components[index] = hatch;
                 } else if (be instanceof BlockEntityCreationInfo machineBE) {
-                    MetaMachine machine = machineBE.getMetaMachine();
+                    MetaMachine machine = machineBE;
                     if (machine instanceof IHPCAComponentHatch hatch) {
                         components[index] = hatch;
                     }
@@ -431,10 +428,6 @@ public class HPCAGridHandler implements IManaged {
         components = new IHPCAComponentHatch[0];
     }
 
-    @Override
-    public ManagedFieldHolder getFieldHolder() {
-        return MANAGED_FIELD_HOLDER;
-    }
 
     @Override
     public void onChanged() {

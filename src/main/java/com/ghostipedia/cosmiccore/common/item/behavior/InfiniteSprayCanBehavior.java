@@ -3,7 +3,7 @@ package com.ghostipedia.cosmiccore.common.item.behavior;
 import com.gregtechceu.gtceu.GTCEu;
 import com.gregtechceu.gtceu.api.GTValues;
 import com.gregtechceu.gtceu.api.blockentity.IPaintable;
-import com.gregtechceu.gtceu.api.blockentity.MetaMachineBlockEntity;
+import com.gregtechceu.gtceu.api.machine.MetaMachine;
 import com.gregtechceu.gtceu.api.blockentity.PipeBlockEntity;
 import com.gregtechceu.gtceu.api.item.component.IAddInformation;
 import com.gregtechceu.gtceu.api.item.component.IInteractionItem;
@@ -280,11 +280,11 @@ public class InfiniteSprayCanBehavior implements IInteractionItem, IAddInformati
                     continue;
                 }
             }
-        } else if (first instanceof MetaMachineBlockEntity mmbe) {
-            var collected = BreadthFirstBlockSearch.conditionalBlockEntitySearch(MetaMachineBlockEntity.class, mmbe,
+        } else if (first instanceof MetaMachine mmbe) {
+            var collected = BreadthFirstBlockSearch.conditionalBlockEntitySearch(MetaMachine.class, mmbe,
                     gtMetaMachinePredicate, limit, limit * 6);
             for (var c : collected) {
-                if (!paintPaintable(c.getMetaMachine(), color)) {
+                if (!paintPaintable(c, color)) {
                     continue;
                 }
             }
@@ -499,12 +499,12 @@ public class InfiniteSprayCanBehavior implements IInteractionItem, IAddInformati
         return parent.isConnected(direction) && child.isConnected(direction.getOpposite());
     };
 
-    private static final TriPredicate<MetaMachineBlockEntity, MetaMachineBlockEntity, Direction> gtMetaMachinePredicate = (parent,
+    private static final TriPredicate<MetaMachine, MetaMachine, Direction> gtMetaMachinePredicate = (parent,
                                                                                                                            child,
                                                                                                                            direction) -> {
         if (parent == null) return true;
-        return paintablePredicate.test(parent.getMetaMachine(), child.getMetaMachine()) &&
-                parent.getMetaMachine().getDefinition().equals(child.getMetaMachine().getDefinition());
+        return paintablePredicate.test(parent, child) &&
+                parent.getDefinition().equals(child.getDefinition());
     };
 
     private static class AE2CallWrapper {

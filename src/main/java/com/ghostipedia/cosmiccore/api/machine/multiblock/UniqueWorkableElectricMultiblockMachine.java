@@ -8,8 +8,6 @@ import com.gregtechceu.gtceu.api.machine.trait.RecipeLogic;
 import com.gregtechceu.gtceu.common.machine.owner.FTBOwner;
 
 import com.lowdragmc.lowdraglib.syncdata.annotation.Persisted;
-import com.lowdragmc.lowdraglib.syncdata.field.ManagedFieldHolder;
-
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.Style;
@@ -20,8 +18,6 @@ import java.util.UUID;
 
 public class UniqueWorkableElectricMultiblockMachine extends WorkableElectricMultiblockMachine {
 
-    protected static final ManagedFieldHolder MANAGED_FIELD_HOLDER = new ManagedFieldHolder(
-            UniqueWorkableElectricMultiblockMachine.class, WorkableElectricMultiblockMachine.MANAGED_FIELD_HOLDER);
 
     public UniqueWorkableElectricMultiblockMachine(BlockEntityCreationInfo holder, Object... args) {
         super(holder, args);

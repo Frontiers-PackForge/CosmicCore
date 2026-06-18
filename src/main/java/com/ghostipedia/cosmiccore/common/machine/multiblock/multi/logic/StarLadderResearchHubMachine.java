@@ -16,8 +16,6 @@ import com.lowdragmc.lowdraglib.gui.widget.Widget;
 import com.lowdragmc.lowdraglib.syncdata.annotation.DescSynced;
 import com.lowdragmc.lowdraglib.syncdata.annotation.Persisted;
 import com.lowdragmc.lowdraglib.syncdata.annotation.UpdateListener;
-import com.lowdragmc.lowdraglib.syncdata.field.ManagedFieldHolder;
-
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -48,9 +46,6 @@ import java.util.Set;
 
 public class StarLadderResearchHubMachine extends LinkedWorkableElectricMultiblockMachine {
 
-    protected static final ManagedFieldHolder MANAGED_FIELD_HOLDER = new ManagedFieldHolder(
-            StarLadderResearchHubMachine.class,
-            LinkedWorkableElectricMultiblockMachine.MANAGED_FIELD_HOLDER);
 
     private static final ResourceKey<Level> REQUIRED_DIMENSION = ResourceKey.create(
             Registries.DIMENSION, ResourceLocation.fromNamespaceAndPath("ad_astra", "earth_orbit"));
@@ -227,10 +222,6 @@ public class StarLadderResearchHubMachine extends LinkedWorkableElectricMultiblo
         return RingUpgradePreviewRenderer.getDeltaBlockCounts(ringTier);
     }
 
-    @Override
-    public ManagedFieldHolder getFieldHolder() {
-        return MANAGED_FIELD_HOLDER;
-    }
 
     @Override
     public void onStructureFormed() {

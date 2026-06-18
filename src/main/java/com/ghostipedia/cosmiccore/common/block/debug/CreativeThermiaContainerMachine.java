@@ -17,8 +17,6 @@ import com.lowdragmc.lowdraglib.gui.texture.TextTexture;
 import com.lowdragmc.lowdraglib.gui.widget.*;
 import com.lowdragmc.lowdraglib.syncdata.annotation.DescSynced;
 import com.lowdragmc.lowdraglib.syncdata.annotation.Persisted;
-import com.lowdragmc.lowdraglib.syncdata.field.ManagedFieldHolder;
-
 import net.minecraft.core.Direction;
 import net.minecraft.world.entity.player.Player;
 
@@ -29,8 +27,6 @@ import static com.ghostipedia.cosmiccore.common.machine.multiblock.part.ThermiaH
 public class CreativeThermiaContainerMachine extends MetaMachine implements IHeatContainer, IUIMachine {
 
     // FieldHolder
-    public static final ManagedFieldHolder MANAGED_FIELD_HOLDER = new ManagedFieldHolder(
-            CreativeThermiaContainerMachine.class, MetaMachine.MANAGED_FIELD_HOLDER);
     @Persisted
     private long heat = 0;
     @Persisted
@@ -39,10 +35,6 @@ public class CreativeThermiaContainerMachine extends MetaMachine implements IHea
     private boolean source = true;
     private long lastAverageHeatIOPerTick = 0;
 
-    @Override
-    public @NotNull ManagedFieldHolder getFieldHolder() {
-        return MANAGED_FIELD_HOLDER;
-    }
 
     @Persisted
     @DescSynced

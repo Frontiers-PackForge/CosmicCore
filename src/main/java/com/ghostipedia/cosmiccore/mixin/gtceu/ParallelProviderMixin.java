@@ -3,9 +3,9 @@ package com.ghostipedia.cosmiccore.mixin.gtceu;
 import com.ghostipedia.cosmiccore.api.machine.multiblock.StellarBaseModule;
 import com.ghostipedia.cosmiccore.common.machine.multiblock.multi.logic.PCBFoundryMachine;
 
-import com.gregtechceu.gtceu.api.blockentity.MetaMachineBlockEntity;
-import com.gregtechceu.gtceu.api.capability.IParallelHatch;
 import com.gregtechceu.gtceu.api.machine.MetaMachine;
+import com.gregtechceu.gtceu.api.capability.IParallelHatch;
+
 import com.gregtechceu.gtceu.common.machine.multiblock.part.ParallelHatchPartMachine;
 import com.gregtechceu.gtceu.integration.jade.provider.ParallelProvider;
 
@@ -94,8 +94,8 @@ public abstract class ParallelProviderMixin {
 
     @Unique
     private MetaMachine cosmicCore$getMachine(BlockAccessor blockAccessor) {
-        if (blockAccessor.getBlockEntity() instanceof MetaMachineBlockEntity blockEntity) {
-            return blockEntity.getMetaMachine();
+        if (blockAccessor.getBlockEntity() instanceof MetaMachine blockEntity) {
+            return blockEntity;
         }
         return null;
     }

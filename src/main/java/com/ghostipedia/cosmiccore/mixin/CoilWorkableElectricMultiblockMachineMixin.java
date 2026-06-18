@@ -13,8 +13,6 @@ import com.gregtechceu.gtceu.api.recipe.GTRecipe;
 
 import com.lowdragmc.lowdraglib.syncdata.annotation.DescSynced;
 import com.lowdragmc.lowdraglib.syncdata.annotation.Persisted;
-import com.lowdragmc.lowdraglib.syncdata.field.ManagedFieldHolder;
-
 import net.minecraft.server.level.ServerLevel;
 
 import com.mojang.blaze3d.MethodsReturnNonnullByDefault;
@@ -31,8 +29,6 @@ import javax.annotation.ParametersAreNonnullByDefault;
 @Mixin(value = CoilWorkableElectricMultiblockMachine.class, remap = false)
 public abstract class CoilWorkableElectricMultiblockMachineMixin extends WorkableElectricMultiblockMachine {
 
-    private static final ManagedFieldHolder MANAGED_FIELD_HOLDER = new ManagedFieldHolder(
-            CoilWorkableElectricMultiblockMachine.class, WorkableMultiblockMachine.MANAGED_FIELD_HOLDER);
 
     @Shadow
     private ICoilType coilType;
@@ -113,8 +109,4 @@ public abstract class CoilWorkableElectricMultiblockMachineMixin extends Workabl
         return super.onWorking();
     }
 
-    @Override
-    public ManagedFieldHolder getFieldHolder() {
-        return MANAGED_FIELD_HOLDER;
-    }
 }

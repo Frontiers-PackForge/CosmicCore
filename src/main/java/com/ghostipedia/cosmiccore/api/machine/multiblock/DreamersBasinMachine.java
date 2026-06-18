@@ -17,8 +17,6 @@ import com.gregtechceu.gtceu.utils.GTUtil;
 
 import com.lowdragmc.lowdraglib.gui.widget.*;
 import com.lowdragmc.lowdraglib.side.fluid.FluidStack;
-import com.lowdragmc.lowdraglib.syncdata.field.ManagedFieldHolder;
-
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.HoverEvent;
@@ -44,8 +42,6 @@ import java.util.List;
  */
 public class DreamersBasinMachine extends MultithreadedMachine implements IDisplayUIMachine {
 
-    protected static final ManagedFieldHolder MANAGED_FIELD_HOLDER = new ManagedFieldHolder(
-            DreamersBasinMachine.class, MultithreadedMachine.MANAGED_FIELD_HOLDER);
 
     public DreamersBasinMachine(BlockEntityCreationInfo holder) {
         super(holder);
@@ -53,9 +49,6 @@ public class DreamersBasinMachine extends MultithreadedMachine implements IDispl
 
     @Override
     @NotNull
-    public ManagedFieldHolder getFieldHolder() {
-        return MANAGED_FIELD_HOLDER;
-    }
 
     // ===== Custom UI Implementation =====
 

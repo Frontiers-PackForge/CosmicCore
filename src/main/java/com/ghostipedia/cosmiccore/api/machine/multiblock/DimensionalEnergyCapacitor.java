@@ -14,7 +14,6 @@ import com.gregtechceu.gtceu.common.machine.multiblock.electric.PowerSubstationM
 import com.gregtechceu.gtceu.common.machine.owner.MachineOwner;
 
 import com.lowdragmc.lowdraglib.syncdata.annotation.Persisted;
-import com.lowdragmc.lowdraglib.syncdata.field.ManagedFieldHolder;
 import com.lowdragmc.lowdraglib.utils.DummyWorld;
 
 import net.minecraft.ChatFormatting;
@@ -30,8 +29,6 @@ import java.util.Map;
 
 public class DimensionalEnergyCapacitor extends DimensionalEnergyInterface {
 
-    protected static final ManagedFieldHolder MANAGED_FIELD_HOLDER = new ManagedFieldHolder(
-            DimensionalEnergyCapacitor.class, DimensionalEnergyInterface.MANAGED_FIELD_HOLDER);
 
     public static final int MAX_BATTERY_LAYER = 18;
     public static final int MIN_CASINGS = 14;

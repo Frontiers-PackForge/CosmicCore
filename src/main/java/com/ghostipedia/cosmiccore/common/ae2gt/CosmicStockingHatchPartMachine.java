@@ -20,8 +20,6 @@ import com.gregtechceu.gtceu.integration.ae2.utils.AEUtil;
 import com.lowdragmc.lowdraglib.syncdata.annotation.DescSynced;
 import com.lowdragmc.lowdraglib.syncdata.annotation.DropSaved;
 import com.lowdragmc.lowdraglib.syncdata.annotation.Persisted;
-import com.lowdragmc.lowdraglib.syncdata.field.ManagedFieldHolder;
-
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
@@ -48,8 +46,6 @@ import java.util.function.Predicate;
 
 public class CosmicStockingHatchPartMachine extends CosmicInputHatchPartMachine implements IMEStockingPart {
 
-    protected static final ManagedFieldHolder MANAGED_FIELD_HOLDER = new ManagedFieldHolder(
-            CosmicStockingHatchPartMachine.class, CosmicInputHatchPartMachine.MANAGED_FIELD_HOLDER);
 
     private static final int CONFIG_SIZE = 1;
 
@@ -96,10 +92,6 @@ public class CosmicStockingHatchPartMachine extends CosmicInputHatchPartMachine 
         return this.aeFluidHandler;
     }
 
-    @Override
-    public ManagedFieldHolder getFieldHolder() {
-        return MANAGED_FIELD_HOLDER;
-    }
 
     /////////////////////////////////
     // ********** Sync ME *********//

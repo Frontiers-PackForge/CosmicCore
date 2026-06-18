@@ -10,8 +10,6 @@ import com.gregtechceu.gtceu.api.blockentity.BlockEntityCreationInfo;
 import com.gregtechceu.gtceu.api.machine.trait.NotifiableFluidTank;
 import com.gregtechceu.gtceu.api.machine.trait.NotifiableItemStackHandler;
 
-import com.lowdragmc.lowdraglib.syncdata.field.ManagedFieldHolder;
-
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.GlobalPos;
 import net.minecraft.network.chat.Component;
@@ -32,9 +30,6 @@ import java.util.List;
  */
 public class MothCargoDropOffMachine extends LinkedWorkableMultiblockMachine {
 
-    protected static final ManagedFieldHolder MANAGED_FIELD_HOLDER = new ManagedFieldHolder(
-            MothCargoDropOffMachine.class,
-            LinkedWorkableMultiblockMachine.MANAGED_FIELD_HOLDER);
 
     // ==================== Constructor ====================
 
@@ -42,10 +37,6 @@ public class MothCargoDropOffMachine extends LinkedWorkableMultiblockMachine {
         super(holder, args);
     }
 
-    @Override
-    public ManagedFieldHolder getFieldHolder() {
-        return MANAGED_FIELD_HOLDER;
-    }
 
     // ==================== Linking Overrides ====================
 

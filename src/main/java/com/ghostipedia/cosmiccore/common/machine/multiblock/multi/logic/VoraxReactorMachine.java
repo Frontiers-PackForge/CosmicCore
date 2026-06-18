@@ -16,8 +16,6 @@ import com.gregtechceu.gtceu.utils.FormattingUtil;
 
 import com.lowdragmc.lowdraglib.syncdata.annotation.DescSynced;
 import com.lowdragmc.lowdraglib.syncdata.annotation.Persisted;
-import com.lowdragmc.lowdraglib.syncdata.field.ManagedFieldHolder;
-
 import net.minecraft.network.chat.Component;
 import net.neoforged.neoforge.fluids.FluidStack;
 
@@ -50,8 +48,6 @@ public class VoraxReactorMachine extends WorkableElectricMultiblockMachine imple
 
     private SterilizationHatchPartMachine sterileHatch = null;
 
-    protected static final ManagedFieldHolder MANAGED_FIELD_HOLDER = new ManagedFieldHolder(VoraxReactorMachine.class,
-            WorkableElectricMultiblockMachine.MANAGED_FIELD_HOLDER);
 
     @Nullable
     protected TickableSubscription contagionSubscription;
@@ -64,9 +60,6 @@ public class VoraxReactorMachine extends WorkableElectricMultiblockMachine imple
 
     @Override
     @NotNull
-    public ManagedFieldHolder getFieldHolder() {
-        return MANAGED_FIELD_HOLDER;
-    }
 
     @Override
     public void onStructureFormed() {

@@ -14,7 +14,6 @@ import com.gregtechceu.gtceu.utils.GTMath;
 import com.lowdragmc.lowdraglib.gui.widget.LabelWidget;
 import com.lowdragmc.lowdraglib.gui.widget.Widget;
 import com.lowdragmc.lowdraglib.gui.widget.WidgetGroup;
-import com.lowdragmc.lowdraglib.syncdata.field.ManagedFieldHolder;
 import com.lowdragmc.lowdraglib.utils.Position;
 
 import net.minecraft.MethodsReturnNonnullByDefault;
@@ -36,8 +35,6 @@ import javax.annotation.ParametersAreNonnullByDefault;
 public class CosmicInputHatchPartMachine extends MEHatchPartMachine
                                          implements IDataStickInteractable, IHasCircuitSlot {
 
-    protected static final ManagedFieldHolder MANAGED_FIELD_HOLDER = new ManagedFieldHolder(
-            CosmicInputHatchPartMachine.class, MEHatchPartMachine.MANAGED_FIELD_HOLDER);
 
     protected ExportOnlyAEFluidList aeFluidHandler;
 
@@ -57,10 +54,6 @@ public class CosmicInputHatchPartMachine extends MEHatchPartMachine
         return aeFluidHandler;
     }
 
-    @Override
-    public ManagedFieldHolder getFieldHolder() {
-        return MANAGED_FIELD_HOLDER;
-    }
 
     /////////////////////////////////
     // ********** Sync ME *********//

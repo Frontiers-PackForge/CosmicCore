@@ -6,8 +6,6 @@ import com.ghostipedia.cosmiccore.api.machine.multiblock.LinkedWorkableElectricM
 
 import com.gregtechceu.gtceu.api.blockentity.BlockEntityCreationInfo;
 
-import com.lowdragmc.lowdraglib.syncdata.field.ManagedFieldHolder;
-
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.GlobalPos;
 import net.minecraft.network.chat.Component;
@@ -21,18 +19,11 @@ import java.util.Set;
  */
 public class LinkTestStationMachine extends LinkedWorkableElectricMultiblockMachine {
 
-    protected static final ManagedFieldHolder MANAGED_FIELD_HOLDER = new ManagedFieldHolder(
-            LinkTestStationMachine.class,
-            LinkedWorkableElectricMultiblockMachine.MANAGED_FIELD_HOLDER);
 
     public LinkTestStationMachine(BlockEntityCreationInfo holder, Object... args) {
         super(holder, args);
     }
 
-    @Override
-    public ManagedFieldHolder getFieldHolder() {
-        return MANAGED_FIELD_HOLDER;
-    }
 
     // ==================== Link Configuration ====================
 

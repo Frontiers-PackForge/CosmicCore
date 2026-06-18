@@ -3,7 +3,7 @@ package com.ghostipedia.cosmiccore.integration.jade.provider;
 import com.ghostipedia.cosmiccore.CosmicCore;
 import com.ghostipedia.cosmiccore.common.machine.multiblock.multi.logic.PCBFoundryMachine;
 
-import com.gregtechceu.gtceu.api.blockentity.MetaMachineBlockEntity;
+import com.gregtechceu.gtceu.api.machine.MetaMachine;
 import com.gregtechceu.gtceu.api.capability.IParallelHatch;
 import com.gregtechceu.gtceu.api.machine.multiblock.MultiblockControllerMachine;
 import com.gregtechceu.gtceu.common.machine.multiblock.part.ParallelHatchPartMachine;
@@ -29,8 +29,8 @@ public class PCBParallelProvider implements IBlockComponentProvider, IServerData
 
     @Override
     public void appendServerData(CompoundTag data, BlockAccessor accessor) {
-        if (!(accessor.getBlockEntity() instanceof MetaMachineBlockEntity be)) return;
-        var machine = be.getMetaMachine();
+        if (!(accessor.getBlockEntity() instanceof MetaMachine be)) return;
+        var machine = be;
 
         if (machine instanceof IParallelHatch hatch &&
                 hatch instanceof ParallelHatchPartMachine part &&

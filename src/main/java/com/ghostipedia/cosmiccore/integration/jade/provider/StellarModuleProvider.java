@@ -4,7 +4,7 @@ import com.ghostipedia.cosmiccore.CosmicCore;
 import com.ghostipedia.cosmiccore.api.machine.feature.IStellarIrisProvider;
 import com.ghostipedia.cosmiccore.api.machine.multiblock.StellarBaseModule;
 
-import com.gregtechceu.gtceu.api.blockentity.MetaMachineBlockEntity;
+import com.gregtechceu.gtceu.api.machine.MetaMachine;
 import com.gregtechceu.gtceu.api.capability.recipe.FluidRecipeCapability;
 import com.gregtechceu.gtceu.api.capability.recipe.ItemRecipeCapability;
 import com.gregtechceu.gtceu.api.machine.trait.RecipeLogic;
@@ -45,8 +45,8 @@ public class StellarModuleProvider implements IBlockComponentProvider, IServerDa
 
     @Override
     public void appendServerData(CompoundTag data, BlockAccessor accessor) {
-        if (!(accessor.getBlockEntity() instanceof MetaMachineBlockEntity be)) return;
-        if (!(be.getMetaMachine() instanceof StellarBaseModule module)) return;
+        if (!(accessor.getBlockEntity() instanceof MetaMachine be)) return;
+        if (!(be instanceof StellarBaseModule module)) return;
 
         CompoundTag tag = new CompoundTag();
         writeModuleData(tag, module);

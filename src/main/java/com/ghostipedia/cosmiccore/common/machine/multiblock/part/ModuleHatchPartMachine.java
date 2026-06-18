@@ -15,8 +15,6 @@ import com.lowdragmc.lowdraglib.gui.widget.Widget;
 import com.lowdragmc.lowdraglib.gui.widget.WidgetGroup;
 import com.lowdragmc.lowdraglib.jei.IngredientIO;
 import com.lowdragmc.lowdraglib.syncdata.annotation.Persisted;
-import com.lowdragmc.lowdraglib.syncdata.field.ManagedFieldHolder;
-
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -31,9 +29,6 @@ import javax.annotation.ParametersAreNonnullByDefault;
 @MethodsReturnNonnullByDefault
 public class ModuleHatchPartMachine extends TieredIOPartMachine {
 
-    protected static final ManagedFieldHolder MANAGED_FIELD_HOLDER = new ManagedFieldHolder(
-            ModuleHatchPartMachine.class,
-            TieredIOPartMachine.MANAGED_FIELD_HOLDER);
     @Getter
     @Persisted
     private final NotifiableItemStackHandler inventory;
@@ -81,10 +76,6 @@ public class ModuleHatchPartMachine extends TieredIOPartMachine {
     //////////////////////////////////////
     // ***** Initialization ******//
     //////////////////////////////////////
-    @Override
-    public ManagedFieldHolder getFieldHolder() {
-        return MANAGED_FIELD_HOLDER;
-    }
 
     @Override
     public void onMachineDestroyed() {

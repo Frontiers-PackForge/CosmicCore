@@ -2,8 +2,8 @@ package com.ghostipedia.cosmiccore.api.misc;
 
 import com.ghostipedia.cosmiccore.api.machine.multiblock.DroneStationMachine;
 
-import com.gregtechceu.gtceu.api.blockentity.MetaMachineBlockEntity;
 import com.gregtechceu.gtceu.api.machine.MetaMachine;
+
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.Level;
@@ -44,8 +44,8 @@ public class DroneStationConnection {
     private MetaMachine getMetaMachineAt(@NotNull BlockPos pos, Level level) {
         BlockEntity blockEntity = level.getBlockEntity(pos);
         if (blockEntity == null) return null;
-        if (blockEntity instanceof MetaMachineBlockEntity machineBlockEntity) {
-            return machineBlockEntity.getMetaMachine();
+        if (blockEntity instanceof MetaMachine machineBlockEntity) {
+            return machineBlockEntity;
         }
         return null;
     }

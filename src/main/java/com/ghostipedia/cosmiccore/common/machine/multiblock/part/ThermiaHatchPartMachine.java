@@ -16,16 +16,12 @@ import com.lowdragmc.lowdraglib.gui.widget.Widget;
 import com.lowdragmc.lowdraglib.gui.widget.WidgetGroup;
 import com.lowdragmc.lowdraglib.syncdata.annotation.DescSynced;
 import com.lowdragmc.lowdraglib.syncdata.annotation.Persisted;
-import com.lowdragmc.lowdraglib.syncdata.field.ManagedFieldHolder;
-
 import net.minecraft.client.resources.language.I18n;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
 
 public class ThermiaHatchPartMachine extends TieredIOPartMachine implements IHeatContainer {
 
-    protected static final ManagedFieldHolder MANAGED_FIELD_HOLDER = new ManagedFieldHolder(
-            ThermiaHatchPartMachine.class, TieredIOPartMachine.MANAGED_FIELD_HOLDER);
 
     @Persisted
     @DescSynced

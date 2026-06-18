@@ -21,8 +21,6 @@ import com.lowdragmc.lowdraglib.gui.widget.Widget;
 import com.lowdragmc.lowdraglib.syncdata.annotation.DescSynced;
 import com.lowdragmc.lowdraglib.syncdata.annotation.Persisted;
 import com.lowdragmc.lowdraglib.syncdata.annotation.UpdateListener;
-import com.lowdragmc.lowdraglib.syncdata.field.ManagedFieldHolder;
-
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Player;
@@ -46,8 +44,6 @@ import static com.ghostipedia.cosmiccore.api.machine.multiblock.IrisMultiblockMa
 @Getter
 public class IrisMultiblockMachine extends WorkableElectricMultiblockMachine implements IStellarIrisProvider {
 
-    public static final ManagedFieldHolder MANAGED_FIELD_HOLDER = new ManagedFieldHolder(
-            IrisMultiblockMachine.class, WorkableElectricMultiblockMachine.MANAGED_FIELD_HOLDER);
 
     @Getter
     @Persisted
@@ -167,10 +163,6 @@ public class IrisMultiblockMachine extends WorkableElectricMultiblockMachine imp
         soundTick();
     }
 
-    @Override
-    public @NotNull ManagedFieldHolder getFieldHolder() {
-        return MANAGED_FIELD_HOLDER;
-    }
 
     @Override
     public void onStructureFormed() {

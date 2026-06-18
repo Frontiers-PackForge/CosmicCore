@@ -20,8 +20,6 @@ import com.gregtechceu.gtceu.api.machine.multiblock.part.TieredPartMachine;
 
 import com.lowdragmc.lowdraglib.syncdata.annotation.DescSynced;
 import com.lowdragmc.lowdraglib.syncdata.annotation.Persisted;
-import com.lowdragmc.lowdraglib.syncdata.field.ManagedFieldHolder;
-
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
@@ -39,9 +37,6 @@ import java.util.Set;
 public class DroneMaintenanceInterfacePartMachine extends TieredPartMachine
                                                   implements IMaintenanceMachine, IInteractedMachine {
 
-    protected static final ManagedFieldHolder MANAGED_FIELD_HOLDER = new ManagedFieldHolder(
-            DroneMaintenanceInterfacePartMachine.class,
-            MultiblockPartMachine.MANAGED_FIELD_HOLDER);
 
     private final ICleanroomProvider DUMMY_CLEANROOM;
 
@@ -76,10 +71,6 @@ public class DroneMaintenanceInterfacePartMachine extends TieredPartMachine
     // ****** Initialization ******//
     //////////////////////////////////////
 
-    @Override
-    public ManagedFieldHolder getFieldHolder() {
-        return MANAGED_FIELD_HOLDER;
-    }
 
     @Override
     public byte startProblems() {
