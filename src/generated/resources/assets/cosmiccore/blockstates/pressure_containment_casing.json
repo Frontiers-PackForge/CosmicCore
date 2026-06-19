@@ -1,7 +1,7 @@
 {
-  "variants": {
-    "": {
-      "model": "cosmiccore:block/pressure_containment_casing"
+    "variants": {
+        "": {
+            "model": "cosmiccore:block/pressure_containment_casing"
+        }
     }
-  }
 }

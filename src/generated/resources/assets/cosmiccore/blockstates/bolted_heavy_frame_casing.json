@@ -1,7 +1,7 @@
 {
-  "variants": {
-    "": {
-      "model": "cosmiccore:block/bolted_heavy_frame_casing"
+    "variants": {
+        "": {
+            "model": "cosmiccore:block/bolted_heavy_frame_casing"
+        }
     }
-  }
 }

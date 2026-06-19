@@ -1,6 +1,6 @@
 {
-  "parent": "minecraft:item/generated",
-  "textures": {
-    "layer0": "cosmiccore:item/ether_wisp"
-  }
+    "parent": "minecraft:item/generated",
+    "textures": {
+        "layer0": "cosmiccore:item/ether_wisp"
+    }
 }

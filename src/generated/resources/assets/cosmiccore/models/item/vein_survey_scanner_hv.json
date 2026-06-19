@@ -1,6 +1,6 @@
 {
-  "parent": "minecraft:item/generated",
-  "textures": {
-    "layer0": "cosmiccore:item/vein_survey_scanner_hv"
-  }
+    "parent": "minecraft:item/generated",
+    "textures": {
+        "layer0": "cosmiccore:item/vein_survey_scanner_hv"
+    }
 }

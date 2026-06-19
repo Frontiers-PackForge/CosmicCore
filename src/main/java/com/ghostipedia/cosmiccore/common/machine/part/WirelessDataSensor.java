@@ -110,7 +110,7 @@ public class WirelessDataSensor extends SensorPartMachine {
         if (wirelessUUID == null) {
             var owner = this.getOwner();
             if (owner == null) return 0;
-            var team = ((FTBOwner) MachineOwner.getOwner(owner.getPlayerUUID())).getTeam();
+            var team = MachineOwner.getOwner(owner.getPlayerUUID()) instanceof FTBOwner ftbOwner ? ftbOwner.getTeam() : null;
             wirelessUUID = team != null ? team.getTeamId() : playerUUID;
         }
         if (side == getFrontFacing().getOpposite()) {

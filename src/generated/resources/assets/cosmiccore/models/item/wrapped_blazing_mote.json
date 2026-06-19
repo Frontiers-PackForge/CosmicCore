@@ -1,6 +1,6 @@
 {
-  "parent": "minecraft:item/generated",
-  "textures": {
-    "layer0": "cosmiccore:item/wrapped_blazing_mote"
-  }
+    "parent": "minecraft:item/generated",
+    "textures": {
+        "layer0": "cosmiccore:item/wrapped_blazing_mote"
+    }
 }

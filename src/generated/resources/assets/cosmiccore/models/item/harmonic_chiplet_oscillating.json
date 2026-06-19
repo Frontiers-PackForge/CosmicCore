@@ -1,6 +1,6 @@
 {
-  "parent": "minecraft:item/generated",
-  "textures": {
-    "layer0": "cosmiccore:item/harmonic_chiplet_oscillating"
-  }
+    "parent": "minecraft:item/generated",
+    "textures": {
+        "layer0": "cosmiccore:item/harmonic_chiplet_oscillating"
+    }
 }

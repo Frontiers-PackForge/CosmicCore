@@ -1,10 +1,10 @@
 {
-  "variants": {
-    "active=false": {
-      "model": "cosmiccore:block/variant/ultimate_intake"
-    },
-    "active=true": {
-      "model": "cosmiccore:block/variant/ultimate_intake_active"
+    "variants": {
+        "active=false": {
+            "model": "cosmiccore:block/variant/ultimate_intake"
+        },
+        "active=true": {
+            "model": "cosmiccore:block/variant/ultimate_intake_active"
+        }
     }
-  }
 }

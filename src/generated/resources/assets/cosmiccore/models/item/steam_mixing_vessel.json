@@ -1,3 +1,3 @@
 {
-  "parent": "cosmiccore:block/machine/steam_mixing_vessel"
+    "parent": "cosmiccore:block/machine/steam_mixing_vessel"
 }

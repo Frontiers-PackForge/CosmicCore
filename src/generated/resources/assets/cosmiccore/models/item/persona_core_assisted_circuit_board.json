@@ -1,6 +1,6 @@
 {
-  "parent": "minecraft:item/generated",
-  "textures": {
-    "layer0": "cosmiccore:item/persona_core_assisted_circuit_board"
-  }
+    "parent": "minecraft:item/generated",
+    "textures": {
+        "layer0": "cosmiccore:item/persona_core_assisted_circuit_board"
+    }
 }

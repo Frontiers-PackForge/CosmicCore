@@ -1,19 +1,19 @@
 {
-  "variants": {
-    "facing=east": {
-      "model": "cosmiccore:block/machine/lv_mana_leaching_tub",
-      "y": 90
-    },
-    "facing=north": {
-      "model": "cosmiccore:block/machine/lv_mana_leaching_tub"
-    },
-    "facing=south": {
-      "model": "cosmiccore:block/machine/lv_mana_leaching_tub",
-      "y": 180
-    },
-    "facing=west": {
-      "model": "cosmiccore:block/machine/lv_mana_leaching_tub",
-      "y": 270
+    "variants": {
+        "facing=east": {
+            "model": "cosmiccore:block/machine/lv_mana_leaching_tub",
+            "y": 90
+        },
+        "facing=north": {
+            "model": "cosmiccore:block/machine/lv_mana_leaching_tub"
+        },
+        "facing=south": {
+            "model": "cosmiccore:block/machine/lv_mana_leaching_tub",
+            "y": 180
+        },
+        "facing=west": {
+            "model": "cosmiccore:block/machine/lv_mana_leaching_tub",
+            "y": 270
+        }
     }
-  }
 }

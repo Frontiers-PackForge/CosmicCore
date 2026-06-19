@@ -1,7 +1,7 @@
 {
-  "variants": {
-    "": {
-      "model": "cosmiccore:block/tritanium_lined_heavy_neutronium_casing"
+    "variants": {
+        "": {
+            "model": "cosmiccore:block/tritanium_lined_heavy_neutronium_casing"
+        }
     }
-  }
 }

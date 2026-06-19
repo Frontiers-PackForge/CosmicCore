@@ -2,7 +2,10 @@ package com.ghostipedia.cosmiccore.common.data;
 
 import com.ghostipedia.cosmiccore.CosmicCore;
 
+import com.gregtechceu.gtceu.api.registry.GTRegistries;
 import com.gregtechceu.gtceu.api.sound.SoundEntry;
+
+import net.minecraft.core.registries.BuiltInRegistries;
 
 import static com.gregtechceu.gtceu.common.registry.GTRegistration.REGISTRATE;
 
@@ -22,5 +25,18 @@ public class CosmicSounds {
     public static final SoundEntry DAWN_FORGE_SFX = REGISTRATE.sound(CosmicCore.id("dawnforge")).build();
     public static final SoundEntry SHAKE_CAN = REGISTRATE.sound(CosmicCore.id("shake")).build();
 
-    public static void init() {}
+    /**
+     * GTCEu registers every SoundEntry's SoundEvent in a single pass ({@code GTSoundEntries.init}) during its
+     * own RegisterEvent, which fires before ours (gtceu loads before cosmiccore), so our entries are built too
+     * late to be picked up. Register our own namespace's sounds here; GTCEu's pass has already run and will not
+     * run again, so there is no double registration.
+     */
+    public static void init() {
+        for (SoundEntry entry : GTRegistries.SOUNDS) {
+            if (!entry.getId().getNamespace().equals(CosmicCore.MOD_ID)) continue;
+            entry.prepare();
+            entry.register(soundEvent ->
+                    GTRegistries.register(BuiltInRegistries.SOUND_EVENT, soundEvent.getLocation(), soundEvent));
+        }
+    }
 }

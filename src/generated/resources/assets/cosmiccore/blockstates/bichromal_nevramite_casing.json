@@ -1,7 +1,7 @@
 {
-  "variants": {
-    "": {
-      "model": "cosmiccore:block/bichromal_nevramite_casing"
+    "variants": {
+        "": {
+            "model": "cosmiccore:block/bichromal_nevramite_casing"
+        }
     }
-  }
 }

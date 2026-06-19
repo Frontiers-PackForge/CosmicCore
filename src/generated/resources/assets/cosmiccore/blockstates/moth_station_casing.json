@@ -1,7 +1,7 @@
 {
-  "variants": {
-    "": {
-      "model": "cosmiccore:block/moth_station_casing"
+    "variants": {
+        "": {
+            "model": "cosmiccore:block/moth_station_casing"
+        }
     }
-  }
 }

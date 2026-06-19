@@ -1,32 +1,32 @@
 {
-  "parent": "minecraft:block/block",
-  "loader": "gtceu:machine",
-  "machine": "cosmiccore:opv_4a_wireless_energy_hatch",
-  "replaceable_textures": [
-    "bottom",
-    "top",
-    "side"
-  ],
-  "variants": {
-    "is_formed=false": {
-      "model": {
-        "parent": "cosmiccore:block/machine/part/wireless_energy_4a",
-        "textures": {
-          "bottom": "gtceu:block/casings/voltage/opv/bottom",
-          "side": "gtceu:block/casings/voltage/opv/side",
-          "top": "gtceu:block/casings/voltage/opv/top"
+    "parent": "minecraft:block/block",
+    "loader": "gtceu:machine",
+    "machine": "cosmiccore:opv_4a_wireless_energy_hatch",
+    "replaceable_textures": [
+        "bottom",
+        "top",
+        "side"
+    ],
+    "variants": {
+        "is_formed=false": {
+            "model": {
+                "parent": "cosmiccore:block/machine/part/wireless_energy_4a",
+                "textures": {
+                    "bottom": "gtceu:block/casings/voltage/opv/bottom",
+                    "side": "gtceu:block/casings/voltage/opv/side",
+                    "top": "gtceu:block/casings/voltage/opv/top"
+                }
+            }
+        },
+        "is_formed=true": {
+            "model": {
+                "parent": "cosmiccore:block/machine/part/wireless_energy_4a",
+                "textures": {
+                    "bottom": "gtceu:block/casings/voltage/opv/bottom",
+                    "side": "gtceu:block/casings/voltage/opv/side",
+                    "top": "gtceu:block/casings/voltage/opv/top"
+                }
+            }
         }
-      }
-    },
-    "is_formed=true": {
-      "model": {
-        "parent": "cosmiccore:block/machine/part/wireless_energy_4a",
-        "textures": {
-          "bottom": "gtceu:block/casings/voltage/opv/bottom",
-          "side": "gtceu:block/casings/voltage/opv/side",
-          "top": "gtceu:block/casings/voltage/opv/top"
-        }
-      }
     }
-  }
 }

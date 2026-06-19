@@ -1,7 +1,7 @@
 {
-  "variants": {
-    "": {
-      "model": "cosmiccore:block/dyson_solar_cell"
+    "variants": {
+        "": {
+            "model": "cosmiccore:block/dyson_solar_cell"
+        }
     }
-  }
 }

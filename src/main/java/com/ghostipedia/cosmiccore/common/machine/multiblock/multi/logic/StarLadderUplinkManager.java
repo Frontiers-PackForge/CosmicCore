@@ -263,7 +263,7 @@ public class StarLadderUplinkManager implements INBTSerializable<CompoundTag> {
         UUID ownerUUID = machine.getOwnerUUID();
         if (ownerUUID == null) return false;
 
-        var team = ((FTBOwner) machine.getOwner()).getPlayerTeam(ownerUUID);
+        var team = machine.getOwner() instanceof FTBOwner ftbOwner ? ftbOwner.getPlayerTeam(ownerUUID) : null;
         UUID networkId = team != null ? team.getTeamId() : ownerUUID;
 
         int drainPerTick = getSoulDrainPerSecond() / TICKS_PER_SECOND;

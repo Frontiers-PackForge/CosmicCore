@@ -1,13 +1,13 @@
 {
-  "variants": {
-    "type=bottom": {
-      "model": "cosmiccore:block/steel_rose_light_slab"
-    },
-    "type=double": {
-      "model": "cosmiccore:block/steel_rose_light"
-    },
-    "type=top": {
-      "model": "cosmiccore:block/steel_rose_light_slab_top"
+    "variants": {
+        "type=bottom": {
+            "model": "cosmiccore:block/steel_rose_light_slab"
+        },
+        "type=double": {
+            "model": "cosmiccore:block/steel_rose_light"
+        },
+        "type=top": {
+            "model": "cosmiccore:block/steel_rose_light_slab_top"
+        }
     }
-  }
 }

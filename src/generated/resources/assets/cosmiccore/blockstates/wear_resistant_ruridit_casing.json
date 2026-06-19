@@ -1,7 +1,7 @@
 {
-  "variants": {
-    "": {
-      "model": "cosmiccore:block/wear_resistant_ruridit_casing"
+    "variants": {
+        "": {
+            "model": "cosmiccore:block/wear_resistant_ruridit_casing"
+        }
     }
-  }
 }

@@ -1,7 +1,7 @@
 {
-  "variants": {
-    "": {
-      "model": "cosmiccore:block/vibrant_rubidium_casing"
+    "variants": {
+        "": {
+            "model": "cosmiccore:block/vibrant_rubidium_casing"
+        }
     }
-  }
 }

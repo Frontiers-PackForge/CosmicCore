@@ -69,8 +69,11 @@ public class NotifiableSoulContainer extends NotifiableRecipeHandlerTrait<SoulIn
     }
 
     private UUID getOwner() {
-        var team = ((FTBOwner) this.machine.getOwner()).getPlayerTeam(this.machine.getOwnerUUID());
-        return team != null ? team.getTeamId() : this.machine.getOwnerUUID();
+        if (this.machine.getOwner() instanceof FTBOwner ftbOwner) {
+            var team = ftbOwner.getPlayerTeam(this.machine.getOwnerUUID());
+            if (team != null) return team.getTeamId();
+        }
+        return this.machine.getOwnerUUID();
     }
 
     @Override

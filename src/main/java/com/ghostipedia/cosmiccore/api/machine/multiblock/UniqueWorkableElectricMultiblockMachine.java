@@ -46,7 +46,7 @@ public class UniqueWorkableElectricMultiblockMachine extends WorkableElectricMul
     }
 
     protected UUID getTeamUUID() {
-        var team = ((FTBOwner) getOwner()).getPlayerTeam(getOwnerUUID());
+        var team = getOwner() instanceof FTBOwner ftbOwner ? ftbOwner.getPlayerTeam(getOwnerUUID()) : null;
         return team != null ? team.getTeamId() : getOwnerUUID();
     }
 

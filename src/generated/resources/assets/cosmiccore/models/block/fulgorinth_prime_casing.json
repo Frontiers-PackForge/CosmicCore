@@ -1,6 +1,6 @@
 {
-  "parent": "minecraft:block/cube_all",
-  "textures": {
-    "all": "cosmiccore:block/casings/solid/fulgorinth_prime_casing"
-  }
+    "parent": "minecraft:block/cube_all",
+    "textures": {
+        "all": "cosmiccore:block/casings/solid/fulgorinth_prime_casing"
+    }
 }

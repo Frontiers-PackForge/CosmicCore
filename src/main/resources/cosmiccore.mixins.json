@@ -16,7 +16,8 @@
     "emi.EmiScreenManagerMixin",
     "emi.RecipeScreenMixin",
     "emi.ScreenSpaceMixin",
-    "emi.SidebarPanelMixin"
+    "emi.SidebarPanelMixin",
+    "jei.TagInfoRecipeCategoryMixin"
   ],
   "mixins": [
     "BlockPatternMixin",

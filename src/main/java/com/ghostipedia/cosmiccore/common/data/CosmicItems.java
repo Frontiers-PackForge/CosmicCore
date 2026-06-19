@@ -22,6 +22,7 @@ import com.ghostipedia.cosmiccore.common.item.behavior.OxygenSupplyTankBehavior;
 import com.ghostipedia.cosmiccore.common.item.behavior.StructureWriteBehavior;
 import com.ghostipedia.cosmiccore.common.item.behavior.VeinSurveyBehavior;
 import com.ghostipedia.cosmiccore.common.item.behavior.WirelessPDABehavior;
+import com.ghostipedia.cosmiccore.gtbridge.recipemaker.RecipeMakerBehavior;
 import com.ghostipedia.cosmiccore.common.reflection.item.MirrorItem;
 import com.ghostipedia.cosmiccore.common.reflection.item.SoulMutilatorItem;
 import com.ghostipedia.cosmiccore.utils.ItemData;
@@ -559,6 +560,7 @@ public class CosmicItems {
     public static final ItemEntry<ComponentItem> DONK = REGISTRATE.item("donk", ComponentItem::new)
             .lang("Donk")
             .properties(p -> p.stacksTo(16))
+            .onRegister(attach(new RecipeMakerBehavior()))
             .tag()
             .defaultModel()
             .register();

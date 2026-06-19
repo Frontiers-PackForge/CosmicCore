@@ -1,7 +1,7 @@
 {
-  "variants": {
-    "": {
-      "model": "cosmiccore:block/self_healing_pthanterum_casing"
+    "variants": {
+        "": {
+            "model": "cosmiccore:block/self_healing_pthanterum_casing"
+        }
     }
-  }
 }
