@@ -1,7 +1,7 @@
 {
-  "parent": "minecraft:block/lantern",
-  "textures": {
-    "lantern": "cosmiccore:block/lanterns/steel_rose_lantern",
-    "particle": "cosmiccore:block/lanterns/steel_rose_lantern"
-  }
+    "parent": "minecraft:block/lantern",
+    "textures": {
+        "lantern": "cosmiccore:block/lanterns/steel_rose_lantern",
+        "particle": "cosmiccore:block/lanterns/steel_rose_lantern"
+    }
 }

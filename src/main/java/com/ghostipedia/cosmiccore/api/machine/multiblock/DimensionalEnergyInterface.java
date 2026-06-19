@@ -131,7 +131,7 @@ public class DimensionalEnergyInterface extends WorkableMultiblockMachine
         if (ownerUUID == null) return MachineOwner.EMPTY;
 
         // CosmicCore.LOGGER.warn("Owner UUID: " + ownerUUID.toString());
-        var team = ((FTBOwner) owner).getPlayerTeam(ownerUUID);
+        var team = owner instanceof FTBOwner ftbOwner ? ftbOwner.getPlayerTeam(ownerUUID) : null;
         if (team == null) return ownerUUID;
 
         // CosmicCore.LOGGER.warn("Team UUID: " + team);

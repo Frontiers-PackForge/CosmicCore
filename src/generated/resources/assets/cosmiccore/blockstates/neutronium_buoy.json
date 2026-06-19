@@ -1,7 +1,7 @@
 {
-  "variants": {
-    "": {
-      "model": "cosmiccore:block/neutronium_buoy"
+    "variants": {
+        "": {
+            "model": "cosmiccore:block/neutronium_buoy"
+        }
     }
-  }
 }

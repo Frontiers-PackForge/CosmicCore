@@ -14,12 +14,15 @@ import java.util.Set;
 public class CosmicCoreMixinPlugin implements IMixinConfigPlugin {
 
     private static final boolean EMI_LOADED;
+    private static final boolean JEI_LOADED;
 
     static {
         // Check if EMI is present by looking for a resource file, not a class
         // This avoids loading any class too early which would break mixins
         EMI_LOADED = CosmicCoreMixinPlugin.class.getClassLoader()
                 .getResource("dev/emi/emi/api/EmiApi.class") != null;
+        JEI_LOADED = CosmicCoreMixinPlugin.class.getClassLoader()
+                .getResource("mezz/jei/library/plugins/jei/tags/TagInfoRecipeCategory.class") != null;
     }
 
     @Override
@@ -34,6 +37,10 @@ public class CosmicCoreMixinPlugin implements IMixinConfigPlugin {
     public boolean shouldApplyMixin(String targetClassName, String mixinClassName) {
         // Skip EMI mixins if EMI is not loaded
         if (mixinClassName.contains(".emi.") && !EMI_LOADED) {
+            return false;
+        }
+        // Skip JEI mixins if JEI is not loaded
+        if (mixinClassName.contains(".jei.") && !JEI_LOADED) {
             return false;
         }
 

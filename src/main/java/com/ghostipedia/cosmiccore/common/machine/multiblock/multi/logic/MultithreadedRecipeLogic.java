@@ -9,6 +9,7 @@ import com.gregtechceu.gtceu.api.capability.recipe.IRecipeHandler;
 import com.gregtechceu.gtceu.api.capability.recipe.RecipeCapability;
 import com.gregtechceu.gtceu.api.machine.feature.IRecipeLogicMachine;
 import com.gregtechceu.gtceu.api.machine.trait.RecipeHandlerList;
+import com.gregtechceu.gtceu.api.machine.trait.MachineTraitType;
 import com.gregtechceu.gtceu.api.machine.trait.RecipeLogic;
 import com.gregtechceu.gtceu.api.recipe.ActionResult;
 import com.gregtechceu.gtceu.api.recipe.GTRecipe;
@@ -37,6 +38,13 @@ public class MultithreadedRecipeLogic extends RecipeLogic implements IRecipeCapa
      * Toggle to log per-thread recipe matching and tick-drain decisions. Flip on when investigating thread behavior.
      */
     public static boolean DEBUG = false;
+
+    /**
+     * A multithreaded machine attaches one of these per thread, so unlike the base {@link RecipeLogic#TYPE} this
+     * trait type must permit multiple instances on a single machine. GTCEu 8.0's MachineTraitHolder otherwise
+     * rejects the second attach, which aborts EMI's multiblock-preview build and with it all GT recipe display.
+     */
+    public static final MachineTraitType<RecipeLogic> TYPE = new MachineTraitType<>(RecipeLogic.class, true);
 
     private static String describe(ActionResult r) {
         StringBuilder sb = new StringBuilder();
@@ -75,6 +83,11 @@ public class MultithreadedRecipeLogic extends RecipeLogic implements IRecipeCapa
         super(machine);
         this.threadIndex = threadIndex;
         this.threadColor = threadColor;
+    }
+
+    @Override
+    public MachineTraitType<RecipeLogic> getTraitType() {
+        return TYPE;
     }
 
     public int getThreadIndex() {

@@ -1,7 +1,7 @@
 {
-  "variants": {
-    "": {
-      "model": "cosmiccore:block/machine_casing_gearbox_pthanterum"
+    "variants": {
+        "": {
+            "model": "cosmiccore:block/machine_casing_gearbox_pthanterum"
+        }
     }
-  }
 }

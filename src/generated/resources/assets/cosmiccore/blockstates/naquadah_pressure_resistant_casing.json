@@ -1,7 +1,7 @@
 {
-  "variants": {
-    "": {
-      "model": "cosmiccore:block/naquadah_pressure_resistant_casing"
+    "variants": {
+        "": {
+            "model": "cosmiccore:block/naquadah_pressure_resistant_casing"
+        }
     }
-  }
 }

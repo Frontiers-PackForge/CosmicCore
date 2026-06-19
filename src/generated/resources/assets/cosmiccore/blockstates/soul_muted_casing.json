@@ -1,7 +1,7 @@
 {
-  "variants": {
-    "": {
-      "model": "cosmiccore:block/soul_muted_casing"
+    "variants": {
+        "": {
+            "model": "cosmiccore:block/soul_muted_casing"
+        }
     }
-  }
 }

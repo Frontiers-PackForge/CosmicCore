@@ -1,7 +1,7 @@
 {
-  "variants": {
-    "": {
-      "model": "cosmiccore:block/iron_plated_deepslate_tile"
+    "variants": {
+        "": {
+            "model": "cosmiccore:block/iron_plated_deepslate_tile"
+        }
     }
-  }
 }

@@ -1,7 +1,7 @@
 {
-  "variants": {
-    "": {
-      "model": "cosmiccore:block/superheavy_steel_casing"
+    "variants": {
+        "": {
+            "model": "cosmiccore:block/superheavy_steel_casing"
+        }
     }
-  }
 }

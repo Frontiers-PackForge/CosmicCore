@@ -1,3 +1,3 @@
 {
-  "parent": "cosmiccore:block/machine/opv_thermia_export_hatch"
+    "parent": "cosmiccore:block/machine/opv_thermia_export_hatch"
 }

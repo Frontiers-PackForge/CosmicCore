@@ -1,32 +1,32 @@
 {
-  "parent": "minecraft:block/block",
-  "loader": "gtceu:machine",
-  "machine": "cosmiccore:drone_maintenance_interface",
-  "replaceable_textures": [
-    "bottom",
-    "top",
-    "side"
-  ],
-  "variants": {
-    "is_formed=false": {
-      "model": {
-        "parent": "cosmiccore:block/machine/part/drone_hatch_maint",
-        "textures": {
-          "bottom": "gtceu:block/casings/voltage/ev/bottom",
-          "side": "gtceu:block/casings/voltage/ev/side",
-          "top": "gtceu:block/casings/voltage/ev/top"
+    "parent": "minecraft:block/block",
+    "loader": "gtceu:machine",
+    "machine": "cosmiccore:drone_maintenance_interface",
+    "replaceable_textures": [
+        "bottom",
+        "top",
+        "side"
+    ],
+    "variants": {
+        "is_formed=false": {
+            "model": {
+                "parent": "cosmiccore:block/machine/part/drone_hatch_maint",
+                "textures": {
+                    "bottom": "gtceu:block/casings/voltage/ev/bottom",
+                    "side": "gtceu:block/casings/voltage/ev/side",
+                    "top": "gtceu:block/casings/voltage/ev/top"
+                }
+            }
+        },
+        "is_formed=true": {
+            "model": {
+                "parent": "cosmiccore:block/machine/part/drone_hatch_maint",
+                "textures": {
+                    "bottom": "gtceu:block/casings/voltage/ev/bottom",
+                    "side": "gtceu:block/casings/voltage/ev/side",
+                    "top": "gtceu:block/casings/voltage/ev/top"
+                }
+            }
         }
-      }
-    },
-    "is_formed=true": {
-      "model": {
-        "parent": "cosmiccore:block/machine/part/drone_hatch_maint",
-        "textures": {
-          "bottom": "gtceu:block/casings/voltage/ev/bottom",
-          "side": "gtceu:block/casings/voltage/ev/side",
-          "top": "gtceu:block/casings/voltage/ev/top"
-        }
-      }
     }
-  }
 }

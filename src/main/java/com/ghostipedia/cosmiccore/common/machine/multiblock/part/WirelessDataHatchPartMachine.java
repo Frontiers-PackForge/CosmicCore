@@ -45,7 +45,7 @@ public class WirelessDataHatchPartMachine extends MultiblockPartMachine implemen
 
     @Override
     public boolean isRecipeAvailable(@NotNull GTRecipe recipe, @NotNull Collection<IDataAccessHatch> seen) {
-        var team = ((FTBOwner) getOwner()).getPlayerTeam(getOwnerUUID());
+        var team = getOwner() instanceof FTBOwner ftbOwner ? ftbOwner.getPlayerTeam(getOwnerUUID()) : null;
         var owner = team != null ? team.getTeamId() : getOwnerUUID();
 
         seen.add(this);
@@ -55,7 +55,7 @@ public class WirelessDataHatchPartMachine extends MultiblockPartMachine implemen
     }
 
     private UUID getTeamUUID() {
-        var team = ((FTBOwner) getOwner()).getPlayerTeam(getOwnerUUID());
+        var team = getOwner() instanceof FTBOwner ftbOwner ? ftbOwner.getPlayerTeam(getOwnerUUID()) : null;
         return team != null ? team.getTeamId() : getOwnerUUID();
     }
 

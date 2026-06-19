@@ -1,3 +1,3 @@
 {
-  "parent": "cosmiccore:block/machine/pcb_foundry"
+    "parent": "cosmiccore:block/machine/pcb_foundry"
 }

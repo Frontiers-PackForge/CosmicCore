@@ -1,6 +1,6 @@
 {
-  "parent": "minecraft:block/cube_all",
-  "textures": {
-    "all": "cosmiccore:block/casings/solid/rust_weave_casing"
-  }
+    "parent": "minecraft:block/cube_all",
+    "textures": {
+        "all": "cosmiccore:block/casings/solid/rust_weave_casing"
+    }
 }

@@ -76,7 +76,7 @@ public abstract class LinkedWorkableElectricMultiblockMachine extends WorkableEl
     @Override
     @Nullable
     public UUID getTeamUUID() {
-        var team = ((FTBOwner) getOwner()).getPlayerTeam(getOwnerUUID());
+        var team = getOwner() instanceof FTBOwner ftbOwner ? ftbOwner.getPlayerTeam(getOwnerUUID()) : null;
         return team != null ? team.getTeamId() : getOwnerUUID();
     }
 

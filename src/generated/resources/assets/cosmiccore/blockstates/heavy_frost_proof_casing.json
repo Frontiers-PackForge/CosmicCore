@@ -1,7 +1,7 @@
 {
-  "variants": {
-    "": {
-      "model": "cosmiccore:block/heavy_frost_proof_casing"
+    "variants": {
+        "": {
+            "model": "cosmiccore:block/heavy_frost_proof_casing"
+        }
     }
-  }
 }

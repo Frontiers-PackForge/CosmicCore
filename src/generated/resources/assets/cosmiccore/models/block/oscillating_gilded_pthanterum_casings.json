@@ -1,6 +1,6 @@
 {
-  "parent": "minecraft:block/cube_all",
-  "textures": {
-    "all": "cosmiccore:block/casings/solid/oscillating_gilded_pthanterum_casings"
-  }
+    "parent": "minecraft:block/cube_all",
+    "textures": {
+        "all": "cosmiccore:block/casings/solid/oscillating_gilded_pthanterum_casings"
+    }
 }

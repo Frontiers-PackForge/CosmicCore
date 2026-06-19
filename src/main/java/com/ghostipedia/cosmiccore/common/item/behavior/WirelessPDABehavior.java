@@ -42,7 +42,7 @@ public class WirelessPDABehavior implements IItemHUDProvider, IItemLifeCycle {
 
     public static void setOwner(Player player) {
         playerUUID = player.getUUID();
-        var team = ((FTBOwner) MachineOwner.getOwner(playerUUID)).getTeam();
+        var team = MachineOwner.getOwner(playerUUID) instanceof FTBOwner ftbOwner ? ftbOwner.getTeam() : null;
         wirelessUUID = team != null ? team.getTeamId() : playerUUID;
     }
 

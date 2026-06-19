@@ -1,7 +1,7 @@
 {
-  "variants": {
-    "": {
-      "model": "cosmiccore:block/cyclozine_high_rigidity_casing"
+    "variants": {
+        "": {
+            "model": "cosmiccore:block/cyclozine_high_rigidity_casing"
+        }
     }
-  }
 }
