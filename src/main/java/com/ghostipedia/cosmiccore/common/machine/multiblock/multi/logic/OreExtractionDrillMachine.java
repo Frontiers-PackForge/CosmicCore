@@ -35,13 +35,8 @@ public class OreExtractionDrillMachine extends WorkableElectricMultiblockMachine
     private final int tier;
 
     public OreExtractionDrillMachine(BlockEntityCreationInfo holder, int tier) {
-        super(holder);
+        super(holder, m -> new OreExtractionDrillLogic((OreExtractionDrillMachine) m));
         this.tier = tier;
-    }
-
-    @Override
-    protected RecipeLogic createRecipeLogic(Object... args) {
-        return new OreExtractionDrillLogic(this);
     }
 
     @NotNull
@@ -120,13 +115,12 @@ public class OreExtractionDrillMachine extends WorkableElectricMultiblockMachine
     }
 
     @Override
-    protected net.minecraft.world.InteractionResult onScrewdriverClick(net.minecraft.world.entity.player.Player playerIn,
-                                                                       net.minecraft.world.InteractionHand hand,
-                                                                       net.minecraft.core.Direction gridSide,
-                                                                       net.minecraft.world.phys.BlockHitResult hitResult) {
+    protected net.minecraft.world.InteractionResult onScrewdriverClick(
+                                                                       com.gregtechceu.gtceu.utils.ExtendedUseOnContext context) {
         if (!isRemote()) {
             getRecipeLogic().restartDrill();
-            playerIn.sendSystemMessage(Component.translatable("cosmiccore.machine.ore_extraction_drill.restarted"));
+            context.getPlayer().sendSystemMessage(
+                    Component.translatable("cosmiccore.machine.ore_extraction_drill.restarted"));
         }
         return net.minecraft.world.InteractionResult.sidedSuccess(isRemote());
     }

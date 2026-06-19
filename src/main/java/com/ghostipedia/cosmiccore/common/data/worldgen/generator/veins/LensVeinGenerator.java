@@ -19,6 +19,7 @@ import net.minecraft.world.level.levelgen.XoroshiroRandomSource;
 
 import com.mojang.datafixers.util.Either;
 import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import lombok.Setter;
@@ -37,7 +38,7 @@ import static com.ghostipedia.cosmiccore.common.data.worldgen.generator.veins.Ve
 @Accessors(fluent = true, chain = true)
 public class LensVeinGenerator extends VeinGenerator {
 
-    public static final Codec<LensVeinGenerator> CODEC = RecordCodecBuilder.create(instance -> instance.group(
+    public static final MapCodec<LensVeinGenerator> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
             OreBlockDef.CODEC.listOf().fieldOf("ore_blocks").forGetter(it -> it.oreBlocks),
             OreBlockDef.CODEC.listOf().fieldOf("rare_blocks").forGetter(it -> it.rareBlocks),
             Codec.FLOAT.fieldOf("vertical_scale").orElse(0.3f).forGetter(it -> it.verticalScale),
@@ -51,9 +52,7 @@ public class LensVeinGenerator extends VeinGenerator {
     @Setter
     public float rareBlockChance = 0.05f;
 
-    public LensVeinGenerator(GTOreDefinition entry) {
-        super(entry);
-    }
+    public LensVeinGenerator() {}
 
     public LensVeinGenerator(List<OreBlockDef> oreBlocks, List<OreBlockDef> rareBlocks,
                              float verticalScale, float rareBlockChance) {
@@ -143,7 +142,7 @@ public class LensVeinGenerator extends VeinGenerator {
     }
 
     @Override
-    public Codec<? extends VeinGenerator> codec() {
+    public MapCodec<? extends VeinGenerator> codec() {
         return CODEC;
     }
 

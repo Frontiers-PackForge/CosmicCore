@@ -7,14 +7,14 @@ import com.gregtechceu.gtceu.data.recipe.CustomTags;
 
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.ItemTags;
+import net.neoforged.neoforge.common.Tags;
 
 public final class MeldingOmniTool {
 
     public static final GTToolType MELD_TOOL_LUV = GTToolType.builder("luv_meld_tool")
             .idFormat("%s_meld_tool")
-            .toolTag(CustomTags.WRENCHES)
-            .toolTag(CustomTags.WRENCH)
-            .toolTag(CustomTags.WIRE_CUTTERS)
+            .toolTag(Tags.Items.TOOLS_WRENCH)
+            .toolTag(CustomTags.TOOLS_WIRE_CUTTER)
             .toolTag(ItemTags.PICKAXES)
             .toolTag(ItemTags.SHOVELS)
             .toolTag(ItemTags.HOES)
@@ -25,7 +25,7 @@ public final class MeldingOmniTool {
             .harvestTag(BlockTags.MINEABLE_WITH_SHOVEL)
             .harvestTag(CustomTags.MINEABLE_WITH_CONFIG_VALID_PICKAXE_WIRE_CUTTER)
             .harvestTag(CustomTags.MINEABLE_WITH_CONFIG_VALID_PICKAXE_WRENCH)
-            .toolStats(s -> s.crafting().blockBreaking().sneakBypassUse().attacking().attackSpeed(3.5F)
+            .definition(s -> s.crafting().blockBreaking().sneakBypassUse().attacking().attackSpeed(3.5F)
                     .behaviors(DisableShieldBehavior.INSTANCE, ToolModeSwitchBehavior.INSTANCE))
             .toolClasses(GTToolType.WRENCH, GTToolType.WIRE_CUTTER, GTToolType.PICKAXE, GTToolType.SHEARS,
                     GTToolType.AXE)

@@ -2,22 +2,22 @@ package com.ghostipedia.cosmiccore.common.item.behavior;
 
 import com.ghostipedia.cosmiccore.common.airControl.IOxygenSupplyItem;
 import com.ghostipedia.cosmiccore.common.airControl.OxygenItemCap;
+import com.ghostipedia.cosmiccore.utils.ItemData;
 
+import com.gregtechceu.gtceu.api.item.component.IComponentCapability;
 import com.gregtechceu.gtceu.api.item.component.IItemComponent;
-import com.gregtechceu.gtceu.api.item.component.forge.IComponentCapability;
 import com.gregtechceu.gtceu.common.data.GTMaterials;
+import com.gregtechceu.gtceu.common.data.item.GTDataComponents;
 
-import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.common.capabilities.ForgeCapabilities;
-import net.minecraftforge.common.util.LazyOptional;
+import net.neoforged.neoforge.capabilities.Capabilities;
+import net.neoforged.neoforge.capabilities.RegisterCapabilitiesEvent;
 import net.neoforged.neoforge.fluids.FluidStack;
 import net.neoforged.neoforge.fluids.capability.IFluidHandlerItem;
 import net.neoforged.neoforge.fluids.capability.templates.FluidHandlerItemStack;
 
 import lombok.Getter;
-import org.jetbrains.annotations.NotNull;
 
 public class OxygenSupplyTankBehavior implements IItemComponent, IComponentCapability {
 
@@ -53,7 +53,6 @@ public class OxygenSupplyTankBehavior implements IItemComponent, IComponentCapab
 
         int buffer = getTickBuffer(stack);
 
-        // If buffer can't satisfy the output limit, top-up by draining 1 mB
         if (buffer < outLimit) {
             FluidStack drained = fluidHandler.drain(
                     new FluidStack(GTMaterials.Oxygen.getFluid(), 1),
@@ -71,50 +70,41 @@ public class OxygenSupplyTankBehavior implements IItemComponent, IComponentCapab
     }
 
     private IFluidHandlerItem getFluidHandler(ItemStack stack) {
-        return stack.getCapability(ForgeCapabilities.FLUID_HANDLER_ITEM).orElse(null);
+        return stack.getCapability(Capabilities.FluidHandler.ITEM);
     }
 
     private int getTickBuffer(ItemStack stack) {
-        CompoundTag compoundTag = stack.getOrCreateTag().getCompound(TAG_ROOT);
-        return compoundTag.getInt(TAG_BUF);
+        return ItemData.readElement(stack, TAG_ROOT).getInt(TAG_BUF);
     }
 
     private void setTickBuffer(ItemStack stack, int value) {
-        CompoundTag tag = stack.getOrCreateTag();
-        CompoundTag compoundTag = tag.getCompound(TAG_ROOT);
-        compoundTag.putInt(TAG_BUF, Math.max(0, value));
-        tag.put(TAG_ROOT, compoundTag);
+        ItemData.mutateElement(stack, TAG_ROOT, tag -> tag.putInt(TAG_BUF, Math.max(0, value)));
     }
 
     private void ensureConfigWritten(ItemStack stack) {
-        CompoundTag tag = stack.getOrCreateTag();
-        CompoundTag compoundTag = tag.getCompound(TAG_ROOT);
-        compoundTag.putInt(TAG_CAP, capacityMb);
-        compoundTag.putInt(TAG_TPT, transferPerTick);
-        compoundTag.putInt(TAG_TPM, ticksPerMb);
-        tag.put(TAG_ROOT, compoundTag);
+        ItemData.mutateElement(stack, TAG_ROOT, tag -> {
+            tag.putInt(TAG_CAP, capacityMb);
+            tag.putInt(TAG_TPT, transferPerTick);
+            tag.putInt(TAG_TPM, ticksPerMb);
+        });
     }
 
     @Override
-    public @NotNull <T> LazyOptional<T> getCapability(ItemStack stack, @NotNull Capability<T> cap) {
-        ensureConfigWritten(stack);
+    public void attachCapabilities(RegisterCapabilitiesEvent event, Item item) {
+        event.registerItem(Capabilities.FluidHandler.ITEM, (stack, ctx) -> {
+            ensureConfigWritten(stack);
+            return new FluidHandlerItemStack(GTDataComponents.FLUID_CONTENT, stack, capacityMb) {
 
-        if (cap == ForgeCapabilities.FLUID_HANDLER_ITEM) {
-            return ForgeCapabilities.FLUID_HANDLER_ITEM.orEmpty(cap,
-                    LazyOptional.of(() -> new FluidHandlerItemStack(stack, capacityMb) {
+                @Override
+                public boolean isFluidValid(int tank, FluidStack fluidStack) {
+                    return fluidStack.getFluid() == GTMaterials.Oxygen.getFluid();
+                }
+            };
+        }, item);
 
-                        @Override
-                        public boolean isFluidValid(int tank, FluidStack fluidStack) {
-                            return fluidStack.getFluid() == GTMaterials.Oxygen.getFluid();
-                        }
-                    }));
-        }
-
-        if (cap == OxygenItemCap.OXYGEN_SUPPLY) {
-            IOxygenSupplyItem provider = (stk, req) -> drainTicks(stk, req);
-            return OxygenItemCap.OXYGEN_SUPPLY.orEmpty(cap, LazyOptional.of(() -> provider));
-        }
-
-        return LazyOptional.empty();
+        event.registerItem(OxygenItemCap.OXYGEN_SUPPLY, (stack, ctx) -> {
+            ensureConfigWritten(stack);
+            return (IOxygenSupplyItem) this::drainTicks;
+        }, item);
     }
 }

@@ -7,27 +7,29 @@ import com.ghostipedia.cosmiccore.client.gui.widget.starladder.StarLadderWidget;
 import com.ghostipedia.cosmiccore.common.machine.multiblock.LinkedMultiblockHelper;
 
 import com.gregtechceu.gtceu.api.blockentity.BlockEntityCreationInfo;
+import com.gregtechceu.gtceu.api.sync_system.annotations.SaveField;
 
 import com.lowdragmc.lowdraglib.gui.modular.ModularUI;
 import com.lowdragmc.lowdraglib.gui.widget.Widget;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.GlobalPos;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Player;
-
-import lombok.Getter;
 
 import java.util.List;
 
 public class StarLadderMachine extends LinkedWorkableElectricMultiblockMachine {
 
 
-    @Getter
+    @SaveField
     private final StarLadderUplinkManager uplinkManager = new StarLadderUplinkManager(this);
 
-    public StarLadderMachine(BlockEntityCreationInfo holder, Object... args) {
-        super(holder, args);
+    public StarLadderMachine(BlockEntityCreationInfo holder) {
+        super(holder);
+    }
+
+    public StarLadderUplinkManager getUplinkManager() {
+        return uplinkManager;
     }
 
 
@@ -60,20 +62,6 @@ public class StarLadderMachine extends LinkedWorkableElectricMultiblockMachine {
 
     private void tickUplink() {
         uplinkManager.tick();
-    }
-
-    @Override
-    public void saveCustomPersistedData(CompoundTag tag, boolean forDrop) {
-        super.saveCustomPersistedData(tag, forDrop);
-        tag.put("uplinkManager", uplinkManager.serializeNBT());
-    }
-
-    @Override
-    public void loadCustomPersistedData(CompoundTag tag) {
-        super.loadCustomPersistedData(tag);
-        if (tag.contains("uplinkManager")) {
-            uplinkManager.deserializeNBT(tag.getCompound("uplinkManager"));
-        }
     }
 
     @Override

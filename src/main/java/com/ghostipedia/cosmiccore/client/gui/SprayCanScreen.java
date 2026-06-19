@@ -51,7 +51,7 @@ public class SprayCanScreen extends Screen {
 
     @Override
     public void render(GuiGraphics graphics, int mouseX, int mouseY, float partialTick) {
-        renderBackground(graphics);
+        renderBackground(graphics, mouseX, mouseY, partialTick);
         drawBackground(graphics);
         drawColorGrid(graphics, mouseX, mouseY);
         drawSolventButton(graphics, mouseX, mouseY);

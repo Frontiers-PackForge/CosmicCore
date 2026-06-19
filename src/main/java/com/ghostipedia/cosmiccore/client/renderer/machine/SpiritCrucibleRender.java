@@ -28,7 +28,7 @@ import net.neoforged.neoforge.client.model.data.ModelData;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 import org.joml.Quaternionf;
 
 import java.util.EnumSet;
@@ -39,7 +39,7 @@ import static com.ghostipedia.cosmiccore.client.renderer.machine.StarBallastRend
 public class SpiritCrucibleRender extends DynamicRender<WorkableElectricMultiblockMachine, SpiritCrucibleRender> {
 
     public static final SpiritCrucibleRender INSTANCE = new SpiritCrucibleRender();
-    public static final Codec<SpiritCrucibleRender> CODEC = Codec.unit(SpiritCrucibleRender.INSTANCE);
+    public static final MapCodec<SpiritCrucibleRender> CODEC = MapCodec.unit(SpiritCrucibleRender.INSTANCE);
     public static final DynamicRenderType<WorkableElectricMultiblockMachine, SpiritCrucibleRender> TYPE = new DynamicRenderType<>(
             SpiritCrucibleRender.CODEC);
 

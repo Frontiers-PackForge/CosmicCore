@@ -6,16 +6,16 @@ import com.ghostipedia.cosmiccore.common.block.MagnetBlock;
 import com.gregtechceu.gtceu.api.blockentity.BlockEntityCreationInfo;
 import com.gregtechceu.gtceu.api.machine.multiblock.WorkableElectricMultiblockMachine;
 
-import lombok.Getter;
-
-@Getter
 public class MagnetWorkableElectricMultiblockMachine extends WorkableElectricMultiblockMachine {
 
-    @Getter
     private IMagnetType magnetType = MagnetBlock.MagnetType.HIGH_POWERED;
 
     public MagnetWorkableElectricMultiblockMachine(BlockEntityCreationInfo holder) {
         super(holder);
+    }
+
+    public IMagnetType getMagnetType() {
+        return magnetType;
     }
 
     @Override

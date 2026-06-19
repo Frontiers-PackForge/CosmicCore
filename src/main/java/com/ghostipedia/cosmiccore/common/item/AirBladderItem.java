@@ -5,8 +5,10 @@ import com.ghostipedia.cosmiccore.common.data.CosmicAttachmentTypes;
 
 import com.ghostipedia.cosmiccore.common.airControl.OxygenConfig;
 import com.ghostipedia.cosmiccore.common.airControl.OxygenRules;
+import com.ghostipedia.cosmiccore.utils.ItemData;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
@@ -27,14 +29,15 @@ public class AirBladderItem extends Item {
     }
 
     public static int getCharges(ItemStack stack) {
-        if (!stack.hasTag() || !stack.getTag().contains(TAG_CHARGES)) {
+        CompoundTag tag = ItemData.readTag(stack);
+        if (!tag.contains(TAG_CHARGES)) {
             return OxygenConfig.AIR_BLADDER_MAX_CHARGES;
         }
-        return stack.getTag().getInt(TAG_CHARGES);
+        return tag.getInt(TAG_CHARGES);
     }
 
     private static void setCharges(ItemStack stack, int charges) {
-        stack.getOrCreateTag().putInt(TAG_CHARGES, charges);
+        ItemData.mutateTag(stack, tag -> tag.putInt(TAG_CHARGES, charges));
     }
 
     private static boolean isInSafeAir(ServerPlayer player) {

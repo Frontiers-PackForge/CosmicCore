@@ -5,8 +5,8 @@ import com.gregtechceu.gtceu.api.machine.multiblock.WorkableElectricMultiblockMa
 
 public class RegressionPersistentWorkableElectricMachine extends WorkableElectricMultiblockMachine {
 
-    public RegressionPersistentWorkableElectricMachine(BlockEntityCreationInfo holder, Object... args) {
-        super(holder, args);
+    public RegressionPersistentWorkableElectricMachine(BlockEntityCreationInfo holder) {
+        super(holder);
     }
 
     @Override

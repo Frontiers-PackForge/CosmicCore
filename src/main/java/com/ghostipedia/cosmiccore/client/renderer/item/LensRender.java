@@ -18,7 +18,6 @@ import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import org.embeddedt.modernfix.render.RenderState;
 
 public class LensRender implements IRenderer {
 
@@ -34,9 +33,7 @@ public class LensRender implements IRenderer {
             poseStack.scale(scalefactor, scalefactor, 1F);
         }
 
-        RenderState.IS_RENDERING_LEVEL = true;
         vanillaRender(stack, transformType, leftHand, poseStack, buffer, combinedLight, combinedOverlay, model);
-        RenderState.IS_RENDERING_LEVEL = false;
         poseStack.popPose();
     }
 

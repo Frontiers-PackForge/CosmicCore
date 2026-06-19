@@ -1,5 +1,6 @@
 package com.ghostipedia.cosmiccore.common.reflection.ui;
 
+import com.ghostipedia.cosmiccore.CosmicCore;
 import com.ghostipedia.cosmiccore.common.data.CosmicItems;
 import com.ghostipedia.cosmiccore.common.network.CCoreNetwork;
 import com.ghostipedia.cosmiccore.common.reflection.ReflectionCapability;
@@ -11,27 +12,21 @@ import com.ghostipedia.cosmiccore.common.reflection.network.SyncQuakeMovementPac
 import com.ghostipedia.cosmiccore.common.reflection.soul.SoulShape;
 
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
-import net.neoforged.api.distmarker.Dist;
-import net.minecraftforge.fml.DistExecutor;
-import net.minecraftforge.network.NetworkDirection;
-import net.minecraftforge.network.NetworkEvent;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
+import net.neoforged.neoforge.network.handling.IPayloadContext;
+
+import org.jetbrains.annotations.NotNull;
 
 import java.util.HashSet;
 import java.util.Set;
 
 public class VoidUIPackets {
-
-    public static void register() {
-        CCoreNetwork.register(OpenVoidScreenPacket.class, OpenVoidScreenPacket::new, NetworkDirection.PLAY_TO_CLIENT);
-        CCoreNetwork.register(BargainChoicePacket.class, BargainChoicePacket::new, NetworkDirection.PLAY_TO_SERVER);
-        CCoreNetwork.register(ThresholdEncounterPacket.class, ThresholdEncounterPacket::new,
-                NetworkDirection.PLAY_TO_CLIENT);
-        CCoreNetwork.register(OpenHubPacket.class, OpenHubPacket::new, NetworkDirection.PLAY_TO_CLIENT);
-        CCoreNetwork.register(DefianceChoicePacket.class, DefianceChoicePacket::new, NetworkDirection.PLAY_TO_SERVER);
-        CCoreNetwork.register(SoulShapeChoicePacket.class, SoulShapeChoicePacket::new, NetworkDirection.PLAY_TO_SERVER);
-    }
 
     public static void sendOpenVoidScreen(ServerPlayer player, ResourceLocation bargainId) {
         ReflectionCapability.get(player).ifPresent(reflection -> {
@@ -92,7 +87,11 @@ public class VoidUIPackets {
         CCoreNetwork.sendToServer(new DefianceChoicePacket(bargainId));
     }
 
-    public static class OpenVoidScreenPacket implements CCoreNetwork.INetPacket {
+    public static class OpenVoidScreenPacket implements CustomPacketPayload {
+
+        public static final Type<OpenVoidScreenPacket> TYPE = new Type<>(CosmicCore.id("void_open_screen"));
+        public static final StreamCodec<FriendlyByteBuf, OpenVoidScreenPacket> CODEC =
+                StreamCodec.ofMember(OpenVoidScreenPacket::encode, OpenVoidScreenPacket::new);
 
         private final ResourceLocation bargainId;
         private final int erosion;
@@ -131,7 +130,6 @@ public class VoidUIPackets {
             this.totalCapacity = buf.readVarInt();
         }
 
-        @Override
         public void encode(FriendlyByteBuf buf) {
             buf.writeBoolean(bargainId != null);
             if (bargainId != null) {
@@ -148,22 +146,28 @@ public class VoidUIPackets {
             buf.writeVarInt(totalCapacity);
         }
 
+        public void execute(IPayloadContext ctx) {
+            if (bargainId != null) {
+                BargainRegistry.get(bargainId)
+                        .ifPresent(bargain -> VoidScreen.openWithBargain(bargain, erosion, activeBargains,
+                                shardBalance, usedCapacity, totalCapacity));
+            } else {
+                VoidScreen.openForReflection(erosion, activeBargains,
+                        shardBalance, usedCapacity, totalCapacity);
+            }
+        }
+
         @Override
-        public void execute(NetworkEvent.Context ctx) {
-            DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> {
-                if (bargainId != null) {
-                    BargainRegistry.get(bargainId)
-                            .ifPresent(bargain -> VoidScreen.openWithBargain(bargain, erosion, activeBargains,
-                                    shardBalance, usedCapacity, totalCapacity));
-                } else {
-                    VoidScreen.openForReflection(erosion, activeBargains,
-                            shardBalance, usedCapacity, totalCapacity);
-                }
-            });
+        public @NotNull Type<OpenVoidScreenPacket> type() {
+            return TYPE;
         }
     }
 
-    public static class BargainChoicePacket implements CCoreNetwork.INetPacket {
+    public static class BargainChoicePacket implements CustomPacketPayload {
+
+        public static final Type<BargainChoicePacket> TYPE = new Type<>(CosmicCore.id("void_bargain_choice"));
+        public static final StreamCodec<FriendlyByteBuf, BargainChoicePacket> CODEC =
+                StreamCodec.ofMember(BargainChoicePacket::encode, BargainChoicePacket::new);
 
         private final ResourceLocation bargainId;
         private final String answerId;
@@ -178,16 +182,13 @@ public class VoidUIPackets {
             this.answerId = buf.readUtf();
         }
 
-        @Override
         public void encode(FriendlyByteBuf buf) {
             buf.writeResourceLocation(bargainId);
             buf.writeUtf(answerId);
         }
 
-        @Override
-        public void execute(NetworkEvent.Context ctx) {
-            ServerPlayer player = ctx.getSender();
-            if (player == null) return;
+        public void execute(IPayloadContext ctx) {
+            if (!(ctx.player() instanceof ServerPlayer player)) return;
 
             BargainRegistry.get(bargainId).ifPresent(bargain -> {
                 processBargainChoice(player, bargain, answerId);
@@ -195,7 +196,6 @@ public class VoidUIPackets {
         }
 
         private void processBargainChoice(ServerPlayer player, Bargain bargain, String answerId) {
-            // Find the answer
             BargainAnswer foundAnswer = null;
             for (BargainAnswer answer : bargain.getAnswers()) {
                 if (answer.id().equals(answerId)) {
@@ -206,7 +206,6 @@ public class VoidUIPackets {
 
             if (foundAnswer == null) return;
 
-            // Make final for lambda
             final BargainAnswer selectedAnswer = foundAnswer;
 
             ReflectionCapability.get(player).ifPresent(reflection -> {
@@ -220,16 +219,15 @@ public class VoidUIPackets {
 
                         if (shardCost > 0 && reflection.getShardBalance() < shardCost) {
                             player.displayClientMessage(
-                                    net.minecraft.network.chat.Component
-                                            .literal("\u00A7cInsufficient shards. You need " + shardCost + " shards."),
+                                    Component.literal("§cInsufficient shards. You need " + shardCost + " shards."),
                                     false);
                             return;
                         }
 
                         if (weight > 0 && !reflection.canFitBargain(weight)) {
                             player.displayClientMessage(
-                                    net.minecraft.network.chat.Component.literal(
-                                            "\u00A7cInsufficient soul capacity. Need " + weight + " weight, have " +
+                                    Component.literal(
+                                            "§cInsufficient soul capacity. Need " + weight + " weight, have " +
                                                     reflection.getRemainingCapacity() + " remaining."),
                                     false);
                             return;
@@ -249,9 +247,6 @@ public class VoidUIPackets {
                         syncBargainState(player, bargain, true);
                     }
                 }
-                // Note: Refusing a bargain offer does NOT call onDefy.
-                // onDefy is only for breaking an existing bargain you've already accepted.
-                // Refusing simply declines the offer with no mechanical effect.
             });
         }
 
@@ -260,9 +255,18 @@ public class VoidUIPackets {
                 CCoreNetwork.sendToPlayer(player, new SyncQuakeMovementPacket(active));
             }
         }
+
+        @Override
+        public @NotNull Type<BargainChoicePacket> type() {
+            return TYPE;
+        }
     }
 
-    public static class ThresholdEncounterPacket implements CCoreNetwork.INetPacket {
+    public static class ThresholdEncounterPacket implements CustomPacketPayload {
+
+        public static final Type<ThresholdEncounterPacket> TYPE = new Type<>(CosmicCore.id("void_threshold_encounter"));
+        public static final StreamCodec<FriendlyByteBuf, ThresholdEncounterPacket> CODEC =
+                StreamCodec.ofMember(ThresholdEncounterPacket::encode, ThresholdEncounterPacket::new);
 
         private final int thresholdIndex;
         private final int erosion;
@@ -286,7 +290,6 @@ public class VoidUIPackets {
             this.activeBargains = bargains;
         }
 
-        @Override
         public void encode(FriendlyByteBuf buf) {
             buf.writeVarInt(thresholdIndex);
             buf.writeVarInt(erosion);
@@ -297,15 +300,21 @@ public class VoidUIPackets {
             }
         }
 
+        public void execute(IPayloadContext ctx) {
+            VoidScreen.openForThreshold(thresholdIndex, erosion, activeBargains);
+        }
+
         @Override
-        public void execute(NetworkEvent.Context ctx) {
-            DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> {
-                VoidScreen.openForThreshold(thresholdIndex, erosion, activeBargains);
-            });
+        public @NotNull Type<ThresholdEncounterPacket> type() {
+            return TYPE;
         }
     }
 
-    public static class OpenHubPacket implements CCoreNetwork.INetPacket {
+    public static class OpenHubPacket implements CustomPacketPayload {
+
+        public static final Type<OpenHubPacket> TYPE = new Type<>(CosmicCore.id("void_open_hub"));
+        public static final StreamCodec<FriendlyByteBuf, OpenHubPacket> CODEC =
+                StreamCodec.ofMember(OpenHubPacket::encode, OpenHubPacket::new);
 
         private final int erosion;
         private final Set<ResourceLocation> activeBargains;
@@ -353,7 +362,6 @@ public class VoidUIPackets {
             this.hasMutilator = buf.readBoolean();
         }
 
-        @Override
         public void encode(FriendlyByteBuf buf) {
             buf.writeVarInt(erosion);
 
@@ -374,16 +382,22 @@ public class VoidUIPackets {
             buf.writeBoolean(hasMutilator);
         }
 
+        public void execute(IPayloadContext ctx) {
+            VoidScreen.openForHub(erosion, activeBargains, defianceScars,
+                    shardBalance, usedCapacity, totalCapacity, soulShape, hasMutilator);
+        }
+
         @Override
-        public void execute(NetworkEvent.Context ctx) {
-            DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> {
-                VoidScreen.openForHub(erosion, activeBargains, defianceScars,
-                        shardBalance, usedCapacity, totalCapacity, soulShape, hasMutilator);
-            });
+        public @NotNull Type<OpenHubPacket> type() {
+            return TYPE;
         }
     }
 
-    public static class DefianceChoicePacket implements CCoreNetwork.INetPacket {
+    public static class DefianceChoicePacket implements CustomPacketPayload {
+
+        public static final Type<DefianceChoicePacket> TYPE = new Type<>(CosmicCore.id("void_defiance_choice"));
+        public static final StreamCodec<FriendlyByteBuf, DefianceChoicePacket> CODEC =
+                StreamCodec.ofMember(DefianceChoicePacket::encode, DefianceChoicePacket::new);
 
         private final ResourceLocation bargainId;
 
@@ -395,15 +409,12 @@ public class VoidUIPackets {
             this.bargainId = buf.readResourceLocation();
         }
 
-        @Override
         public void encode(FriendlyByteBuf buf) {
             buf.writeResourceLocation(bargainId);
         }
 
-        @Override
-        public void execute(NetworkEvent.Context ctx) {
-            ServerPlayer player = ctx.getSender();
-            if (player == null) return;
+        public void execute(IPayloadContext ctx) {
+            if (!(ctx.player() instanceof ServerPlayer player)) return;
 
             BargainRegistry.get(bargainId).ifPresent(bargain -> {
                 ReflectionCapability.get(player).ifPresent(reflection -> {
@@ -420,9 +431,18 @@ public class VoidUIPackets {
                 });
             });
         }
+
+        @Override
+        public @NotNull Type<DefianceChoicePacket> type() {
+            return TYPE;
+        }
     }
 
-    public static class SoulShapeChoicePacket implements CCoreNetwork.INetPacket {
+    public static class SoulShapeChoicePacket implements CustomPacketPayload {
+
+        public static final Type<SoulShapeChoicePacket> TYPE = new Type<>(CosmicCore.id("void_soul_shape_choice"));
+        public static final StreamCodec<FriendlyByteBuf, SoulShapeChoicePacket> CODEC =
+                StreamCodec.ofMember(SoulShapeChoicePacket::encode, SoulShapeChoicePacket::new);
 
         private final SoulShape shape;
 
@@ -434,15 +454,12 @@ public class VoidUIPackets {
             this.shape = SoulShape.fromId(buf.readUtf());
         }
 
-        @Override
         public void encode(FriendlyByteBuf buf) {
             buf.writeUtf(shape.getId());
         }
 
-        @Override
-        public void execute(NetworkEvent.Context ctx) {
-            ServerPlayer player = ctx.getSender();
-            if (player == null) return;
+        public void execute(IPayloadContext ctx) {
+            if (!(ctx.player() instanceof ServerPlayer player)) return;
 
             if (shape == SoulShape.UNSHAPED) return;
 
@@ -450,7 +467,6 @@ public class VoidUIPackets {
                 if (!reflection.hasAwakened()) return;
                 if (reflection.hasSoulShape()) return;
 
-                // Find and consume the Soul Mutilator
                 var inventory = player.getInventory();
                 int mutilatorSlot = -1;
                 for (int i = 0; i < inventory.getContainerSize(); i++) {
@@ -459,17 +475,20 @@ public class VoidUIPackets {
                         break;
                     }
                 }
-                if (mutilatorSlot == -1) return; // No mutilator, can't shape
+                if (mutilatorSlot == -1) return;
 
-                // Consume the mutilator
                 inventory.removeItem(mutilatorSlot, 1);
 
                 reflection.setSoulShape(shape);
 
                 player.level().playSound(null, player.blockPosition(),
-                        net.minecraft.sounds.SoundEvents.TOTEM_USE,
-                        net.minecraft.sounds.SoundSource.PLAYERS, 0.8f, 0.6f);
+                        SoundEvents.TOTEM_USE, SoundSource.PLAYERS, 0.8f, 0.6f);
             });
+        }
+
+        @Override
+        public @NotNull Type<SoulShapeChoicePacket> type() {
+            return TYPE;
         }
     }
 }

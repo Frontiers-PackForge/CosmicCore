@@ -44,8 +44,6 @@ import net.minecraft.world.phys.AABB;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
 
-import lombok.Getter;
-import lombok.Setter;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Collections;
@@ -59,14 +57,22 @@ public class IPBFMachine extends WorkableMultiblockMachine implements IDisplayUI
 
     private TickableSubscription hurtSubscription;
 
-    @Getter
-    @Setter
     @DescSynced
     @RequireRerender
     private @NotNull Set<BlockPos> fluidBlockOffsets = new HashSet<>();
 
-    public IPBFMachine(BlockEntityCreationInfo holder, Object... args) {
-        super(holder, args);
+    public IPBFMachine(BlockEntityCreationInfo holder) {
+        super(holder);
+    }
+
+    @Override
+    public @NotNull Set<BlockPos> getFluidBlockOffsets() {
+        return fluidBlockOffsets;
+    }
+
+    @Override
+    public void setFluidBlockOffsets(@NotNull Set<BlockPos> fluidBlockOffsets) {
+        this.fluidBlockOffsets = fluidBlockOffsets;
     }
 
     @Override

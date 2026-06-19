@@ -8,6 +8,9 @@ import com.gregtechceu.gtceu.api.data.worldgen.generator.VeinGenerator;
 import com.gregtechceu.gtceu.api.registry.GTRegistries;
 import com.gregtechceu.gtceu.common.data.GTMaterials;
 
+import net.minecraft.core.Holder;
+import net.minecraft.core.Registry;
+import net.minecraft.core.RegistryAccess;
 import net.minecraft.resources.ResourceLocation;
 
 import org.slf4j.Logger;
@@ -406,39 +409,37 @@ public class CosmicOreVeins {
         REGISTERED_VEIN_IDS.add(lowerId);
     }
 
-    public static void applyOverrides() {
+    public static void applyOverrides(RegistryAccess registryAccess) {
         int replaced = 0;
-        int removed = 0;
+        int skipped = 0;
 
-        List<ResourceLocation> keysToProcess = new ArrayList<>(GTRegistries.ORE_VEINS.keys());
+        Registry<GTOreDefinition> registry = registryAccess.registryOrThrow(GTRegistries.ORE_VEIN_REGISTRY);
 
-        for (ResourceLocation id : keysToProcess) {
+        for (Holder.Reference<GTOreDefinition> holder : registry.holders().toList()) {
+            ResourceLocation id = holder.key().location();
             if (!id.getNamespace().equals("gtceu")) continue;
 
             String path = id.getPath().toLowerCase();
             Supplier<VeinGenerator> generatorSupplier = VEIN_GENERATORS.get(path);
 
             if (generatorSupplier != null) {
-                GTOreDefinition vein = GTRegistries.ORE_VEINS.get(id);
-                if (vein != null) {
-                    VeinGenerator generator = generatorSupplier.get();
-                    if (generator != null) {
-                        vein.veinGenerator(generator);
-                        replaced++;
-                        LOGGER.debug("Replaced vein generator for: {}", id);
-                    }
+                VeinGenerator generator = generatorSupplier.get();
+                if (generator != null) {
+                    holder.value().veinGenerator(generator);
+                    replaced++;
+                    LOGGER.debug("Replaced vein generator for: {}", id);
                 }
             } else {
-                boolean success = GTRegistries.ORE_VEINS.remove(id);
-                if (success) {
-                    removed++;
-                    LOGGER.debug("Removed GT vein (no custom definition): {}", id);
-                }
+                // TODO(cosmiccore-42): GTCEu 8.0 turned ore veins into a frozen datapack registry;
+                // there is no supported runtime removal (IMappedRegistryAccess#gtceu$remove is @TestOnly
+                // and throws on frozen registries). Veins without a custom override can no longer be
+                // removed here -- this needs a datapack/server-load hook redesign to suppress them.
+                skipped++;
             }
         }
 
-        LOGGER.info("CosmicOreVeins: Replaced {} vein generators, removed {} default GT veins",
-                replaced, removed);
+        LOGGER.info("CosmicOreVeins: Replaced {} vein generators, {} GT veins left intact (removal unsupported)",
+                replaced, skipped);
     }
 
     public static boolean hasOverride(String veinId) {

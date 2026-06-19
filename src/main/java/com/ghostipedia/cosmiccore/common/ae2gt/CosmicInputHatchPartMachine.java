@@ -5,6 +5,7 @@ import com.gregtechceu.gtceu.api.blockentity.BlockEntityCreationInfo;
 import com.gregtechceu.gtceu.api.machine.feature.IDataStickInteractable;
 import com.gregtechceu.gtceu.api.machine.feature.IHasCircuitSlot;
 import com.gregtechceu.gtceu.api.machine.trait.NotifiableFluidTank;
+import com.gregtechceu.gtceu.common.data.item.GTDataComponents;
 import com.gregtechceu.gtceu.integration.ae2.gui.widget.AEFluidConfigWidget;
 import com.gregtechceu.gtceu.integration.ae2.machine.MEHatchPartMachine;
 import com.gregtechceu.gtceu.integration.ae2.slot.ExportOnlyAEFluidList;
@@ -17,11 +18,14 @@ import com.lowdragmc.lowdraglib.gui.widget.WidgetGroup;
 import com.lowdragmc.lowdraglib.utils.Position;
 
 import net.minecraft.MethodsReturnNonnullByDefault;
+import net.minecraft.core.HolderLookup;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.component.CustomData;
 import net.neoforged.neoforge.fluids.capability.IFluidHandler;
 
 import appeng.api.config.Actionable;
@@ -38,8 +42,8 @@ public class CosmicInputHatchPartMachine extends MEHatchPartMachine
 
     protected ExportOnlyAEFluidList aeFluidHandler;
 
-    public CosmicInputHatchPartMachine(BlockEntityCreationInfo holder, Object... args) {
-        super(holder, IO.IN, args);
+    public CosmicInputHatchPartMachine(BlockEntityCreationInfo holder) {
+        super(holder, IO.IN);
         super.circuitSlotEnabled = false;
     }
 
@@ -49,7 +53,7 @@ public class CosmicInputHatchPartMachine extends MEHatchPartMachine
     }
 
     @Override
-    protected NotifiableFluidTank createTank(int initialCapacity, int slots, Object... args) {
+    protected NotifiableFluidTank createTank(int initialCapacity, int slots) {
         this.aeFluidHandler = new ExportOnlyAEFluidList(this, slots);
         return aeFluidHandler;
     }
@@ -138,9 +142,10 @@ public class CosmicInputHatchPartMachine extends MEHatchPartMachine
     public final InteractionResult onDataStickShiftUse(Player player, ItemStack dataStick) {
         if (!isRemote()) {
             CompoundTag tag = new CompoundTag();
-            tag.put("MEInputHatch", writeConfigToTag());
-            dataStick.setTag(tag);
-            dataStick.setHoverName(Component.translatable("gtceu.machine.me.fluid_import.data_stick.name"));
+            tag.put("MEInputHatch", writeConfigToTag(player.registryAccess()));
+            dataStick.set(GTDataComponents.DATA_COPY_TAG, CustomData.of(tag));
+            dataStick.set(DataComponents.CUSTOM_NAME,
+                    Component.translatable("gtceu.machine.me.fluid_import.data_stick.name"));
             player.sendSystemMessage(Component.translatable("gtceu.machine.me.import_copy_settings"));
         }
         return InteractionResult.SUCCESS;
@@ -148,13 +153,13 @@ public class CosmicInputHatchPartMachine extends MEHatchPartMachine
 
     @Override
     public final InteractionResult onDataStickUse(Player player, ItemStack dataStick) {
-        CompoundTag tag = dataStick.getTag();
+        CustomData tag = dataStick.get(GTDataComponents.DATA_COPY_TAG);
         if (tag == null || !tag.contains("MEInputHatch")) {
             return InteractionResult.PASS;
         }
 
         if (!isRemote()) {
-            readConfigFromTag(tag.getCompound("MEInputHatch"));
+            readConfigFromTag(player.registryAccess(), tag.copyTag().getCompound("MEInputHatch"));
             this.updateTankSubscription();
             player.sendSystemMessage(Component.translatable("gtceu.machine.me.import_paste_settings"));
         }
@@ -165,7 +170,7 @@ public class CosmicInputHatchPartMachine extends MEHatchPartMachine
     // ****** Configuration ******//
     ////////////////////////////////
 
-    protected CompoundTag writeConfigToTag() {
+    protected CompoundTag writeConfigToTag(HolderLookup.Provider provider) {
         CompoundTag tag = new CompoundTag();
         CompoundTag configStacks = new CompoundTag();
         tag.put("ConfigStacks", configStacks);
@@ -175,20 +180,20 @@ public class CosmicInputHatchPartMachine extends MEHatchPartMachine
             if (config == null) {
                 continue;
             }
-            CompoundTag stackTag = GenericStack.writeTag(config);
+            CompoundTag stackTag = GenericStack.writeTag(provider, config);
             configStacks.put(Integer.toString(i), stackTag);
         }
         return tag;
     }
 
-    protected void readConfigFromTag(CompoundTag tag) {
+    protected void readConfigFromTag(HolderLookup.Provider provider, CompoundTag tag) {
         if (tag.contains("ConfigStacks")) {
             CompoundTag configStacks = tag.getCompound("ConfigStacks");
             for (int i = 0; i < CONFIG_SIZE; i++) {
                 String key = Integer.toString(i);
                 if (configStacks.contains(key)) {
                     CompoundTag configTag = configStacks.getCompound(key);
-                    this.aeFluidHandler.getInventory()[i].setConfig(GenericStack.readTag(configTag));
+                    this.aeFluidHandler.getInventory()[i].setConfig(GenericStack.readTag(provider, configTag));
                 } else {
                     this.aeFluidHandler.getInventory()[i].setConfig(null);
                 }

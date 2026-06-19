@@ -13,7 +13,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.resources.sounds.SimpleSoundInstance;
 import net.minecraft.core.GlobalPos;
-import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.Mth;
@@ -82,7 +82,7 @@ public class StarLadderWidget extends WidgetGroup {
     // ---- Data Sync ----
 
     @Override
-    public void writeInitialData(FriendlyByteBuf buffer) {
+    public void writeInitialData(RegistryFriendlyByteBuf buffer) {
         super.writeInitialData(buffer);
         syncPartnerData(buffer);
         syncUplinkState(buffer);
@@ -90,13 +90,13 @@ public class StarLadderWidget extends WidgetGroup {
 
     @Override
     @OnlyIn(Dist.CLIENT)
-    public void readInitialData(FriendlyByteBuf buffer) {
+    public void readInitialData(RegistryFriendlyByteBuf buffer) {
         super.readInitialData(buffer);
         readPartnerData(buffer);
         readUplinkState(buffer);
     }
 
-    private void syncPartnerData(FriendlyByteBuf buffer) {
+    private void syncPartnerData(RegistryFriendlyByteBuf buffer) {
         StarLadderMachine machine = machineSupplier.get();
         if (machine == null) {
             buffer.writeBoolean(false);
@@ -124,7 +124,7 @@ public class StarLadderWidget extends WidgetGroup {
         }
     }
 
-    private void syncUplinkState(FriendlyByteBuf buffer) {
+    private void syncUplinkState(RegistryFriendlyByteBuf buffer) {
         StarLadderMachine machine = machineSupplier.get();
         if (machine == null) {
             buffer.writeEnum(StarLadderUplinkState.IDLE);
@@ -133,7 +133,7 @@ public class StarLadderWidget extends WidgetGroup {
         buffer.writeEnum(machine.getUplinkManager().getState());
     }
 
-    private void readPartnerData(FriendlyByteBuf buffer) {
+    private void readPartnerData(RegistryFriendlyByteBuf buffer) {
         isLinked = buffer.readBoolean();
 
         if (isLinked) {
@@ -151,7 +151,7 @@ public class StarLadderWidget extends WidgetGroup {
         }
     }
 
-    private void readUplinkState(FriendlyByteBuf buffer) {
+    private void readUplinkState(RegistryFriendlyByteBuf buffer) {
         uplinkState = buffer.readEnum(StarLadderUplinkState.class);
     }
 
@@ -190,7 +190,7 @@ public class StarLadderWidget extends WidgetGroup {
 
     @Override
     @OnlyIn(Dist.CLIENT)
-    public void readUpdateInfo(int id, FriendlyByteBuf buffer) {
+    public void readUpdateInfo(int id, RegistryFriendlyByteBuf buffer) {
         if (id == 401) {
             readPartnerData(buffer);
         } else if (id == 402) {

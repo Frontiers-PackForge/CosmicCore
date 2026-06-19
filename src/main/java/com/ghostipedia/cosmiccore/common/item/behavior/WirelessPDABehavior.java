@@ -5,7 +5,6 @@ import com.ghostipedia.cosmiccore.api.data.wireless.WirelessEnergySavedData;
 import com.gregtechceu.gtceu.api.item.IComponentItem;
 import com.gregtechceu.gtceu.api.item.component.IItemHUDProvider;
 import com.gregtechceu.gtceu.api.item.component.IItemLifeCycle;
-import com.gregtechceu.gtceu.common.item.ItemMagnetBehavior;
 import com.gregtechceu.gtceu.common.machine.owner.FTBOwner;
 import com.gregtechceu.gtceu.common.machine.owner.MachineOwner;
 import com.gregtechceu.gtceu.utils.FormattingUtil;

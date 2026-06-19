@@ -3,7 +3,6 @@ package com.ghostipedia.cosmiccore.mixin;
 import com.ghostipedia.cosmiccore.api.block.IBlockPattern;
 
 import com.gregtechceu.gtceu.api.item.MetaMachineItem;
-import com.gregtechceu.gtceu.api.blockentity.BlockEntityCreationInfo;
 import com.gregtechceu.gtceu.api.machine.MetaMachine;
 import com.gregtechceu.gtceu.api.machine.multiblock.MultiblockControllerMachine;
 import com.gregtechceu.gtceu.api.pattern.BlockPattern;
@@ -88,10 +87,10 @@ public abstract class BlockPatternMixin implements IBlockPattern {
         int minZ = -centerOffset[4];
         worldState.clean();
         MultiblockControllerMachine controller = worldState.getController();
-        BlockPos centerPos = controller.self().getPos();
-        Direction facing = controller.self().getFrontFacing();
-        Direction upwardsFacing = controller.self().getUpwardsFacing();
-        boolean isFlipped = controller.self().isFlipped();
+        BlockPos centerPos = controller.getBlockPos();
+        Direction facing = controller.getFrontFacing();
+        Direction upwardsFacing = controller.getUpwardsFacing();
+        boolean isFlipped = controller.isFlipped();
         Map<SimplePredicate, Integer> cacheGlobal = worldState.getGlobalCount();
         Map<SimplePredicate, Integer> cacheLayer = worldState.getLayerCount();
         Map<BlockPos, Object> blocks = new HashMap<>();
@@ -216,7 +215,7 @@ public abstract class BlockPatternMixin implements IBlockPattern {
                                             IActionSource.ofPlayer(player));
                                 }
                             }
-                            if (world.getBlockEntity(pos) instanceof BlockEntityCreationInfo machineBlockEntity) {
+                            if (world.getBlockEntity(pos) instanceof MetaMachine machineBlockEntity) {
                                 blocks.put(pos, machineBlockEntity);
                             } else {
                                 blocks.put(pos, world.getBlockState(pos));

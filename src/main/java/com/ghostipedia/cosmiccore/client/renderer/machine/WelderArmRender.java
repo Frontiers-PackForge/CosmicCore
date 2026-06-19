@@ -18,7 +18,7 @@ import net.minecraft.world.phys.AABB;
 import net.neoforged.neoforge.client.model.data.ModelData;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -27,7 +27,7 @@ import java.util.List;
 public class WelderArmRender extends DynamicRender<WorkableElectricMultiblockMachine, WelderArmRender> {
 
     public static final WelderArmRender INSTANCE = new WelderArmRender();
-    public static final Codec<WelderArmRender> CODEC = Codec.unit(INSTANCE);
+    public static final MapCodec<WelderArmRender> CODEC = MapCodec.unit(INSTANCE);
     public static final DynamicRenderType<WorkableElectricMultiblockMachine, WelderArmRender> TYPE = new DynamicRenderType<>(
             WelderArmRender.CODEC);
 

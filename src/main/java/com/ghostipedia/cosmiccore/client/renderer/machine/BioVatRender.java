@@ -26,13 +26,13 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.client.extensions.common.IClientFluidTypeExtensions;
+import net.neoforged.neoforge.client.extensions.common.IClientFluidTypeExtensions;
 import net.neoforged.neoforge.client.model.data.ModelData;
 import net.neoforged.neoforge.fluids.FluidStack;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -42,7 +42,7 @@ public class BioVatRender extends DynamicRender<WorkableElectricMultiblockMachin
 
     // spotless:off
     public static final BioVatRender INSTANCE = new BioVatRender();
-    public static final Codec<BioVatRender> CODEC = Codec.unit(INSTANCE);
+    public static final MapCodec<BioVatRender> CODEC = MapCodec.unit(INSTANCE);
     public static final DynamicRenderType<WorkableElectricMultiblockMachine, BioVatRender> TYPE = new DynamicRenderType<>(BioVatRender.CODEC);
     //spotless:on
 
@@ -58,7 +58,7 @@ public class BioVatRender extends DynamicRender<WorkableElectricMultiblockMachin
     private @Nullable ResourceLocation cachedRecipe;
 
     @Override
-    public DynamicRenderType getType() {
+    public DynamicRenderType<WorkableElectricMultiblockMachine, BioVatRender> getType() {
         return TYPE;
     }
 

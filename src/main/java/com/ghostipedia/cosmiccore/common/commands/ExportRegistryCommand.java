@@ -63,7 +63,7 @@ public class ExportRegistryCommand {
         source.sendSuccess(() -> Component.literal("Exporting registries...")
                 .withStyle(ChatFormatting.GREEN), true);
 
-        Path gameDir = source.getServer().getServerDirectory().toPath();
+        Path gameDir = source.getServer().getServerDirectory();
         Path dumpDir = gameDir.resolve("registry-dump");
 
         try {

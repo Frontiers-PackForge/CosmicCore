@@ -28,7 +28,7 @@ import net.neoforged.api.distmarker.OnlyIn;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 import org.jetbrains.annotations.NotNull;
 import org.joml.Matrix4f;
 import org.joml.Quaternionf;
@@ -44,7 +44,7 @@ public class RenderTesterHelper extends
                                 DynamicRender<WorkableElectricMultiblockMachine, RenderTesterHelper> {
 
     public static final RenderTesterHelper INSTANCE = new RenderTesterHelper();
-    public static final Codec<RenderTesterHelper> CODEC = Codec.unit(INSTANCE);
+    public static final MapCodec<RenderTesterHelper> CODEC = MapCodec.unit(INSTANCE);
     public static final DynamicRenderType<WorkableElectricMultiblockMachine, RenderTesterHelper> TYPE = new DynamicRenderType<>(
             RenderTesterHelper.CODEC);
 
@@ -60,7 +60,7 @@ public class RenderTesterHelper extends
         BlockPos.MutableBlockPos maxPos = new BlockPos.MutableBlockPos()
                 .move(left, -3).move(up, 7).move(back, 8);
 
-        return new AABB(minPos, maxPos);
+        return AABB.encapsulatingFullBlocks(minPos, maxPos);
     });
 
     public static final ResourceLocation BLOOD_CUBE_TEXTURE = CosmicCore.id("block/iris/blood_cube");
@@ -226,8 +226,8 @@ public class RenderTesterHelper extends
             }
         final float eps = edge2 * 1.0015f;
 
-        var mat = poseStack.last().pose();
-        var nrm = poseStack.last().normal();
+        PoseStack.Pose pose = poseStack.last();
+        Matrix4f mat = pose.pose();
         VertexConsumer vc = buffer.getBuffer(net.minecraft.client.renderer.RenderType.lines());
 
         for (int i = 0; i < 20; i++)
@@ -238,10 +238,10 @@ public class RenderTesterHelper extends
                     float len = (float) Math.sqrt(d2);
                     float nx = dx / len, ny = dy / len, nz = dz / len;
 
-                    vc.vertex(mat, V[i][0], V[i][1], V[i][2])
-                            .color(r, g, b, alpha).normal(nrm, nx, ny, nz).endVertex();
-                    vc.vertex(mat, V[j][0], V[j][1], V[j][2])
-                            .color(r, g, b, alpha).normal(nrm, nx, ny, nz).endVertex();
+                    vc.addVertex(mat, V[i][0], V[i][1], V[i][2])
+                            .setColor(r, g, b, alpha).setNormal(pose, nx, ny, nz);
+                    vc.addVertex(mat, V[j][0], V[j][1], V[j][2])
+                            .setColor(r, g, b, alpha).setNormal(pose, nx, ny, nz);
                 }
             }
     }
@@ -334,14 +334,14 @@ public class RenderTesterHelper extends
             float dxq = x1 - ox, dyq = y1 - oy, dzq = z1 - oz;
 
             // Tri 1: A,B,C
-            vertexConsumer.vertex(mat, ax, ay, az).color(r, g, b, a).endVertex();
-            vertexConsumer.vertex(mat, bx, by, bz).color(r, g, b, a).endVertex();
-            vertexConsumer.vertex(mat, cx, cy, cz).color(r, g, b, a).endVertex();
+            vertexConsumer.addVertex(mat, ax, ay, az).setColor(r, g, b, a);
+            vertexConsumer.addVertex(mat, bx, by, bz).setColor(r, g, b, a);
+            vertexConsumer.addVertex(mat, cx, cy, cz).setColor(r, g, b, a);
 
             // Tri 2: A,C,D
-            vertexConsumer.vertex(mat, ax, ay, az).color(r, g, b, a).endVertex();
-            vertexConsumer.vertex(mat, cx, cy, cz).color(r, g, b, a).endVertex();
-            vertexConsumer.vertex(mat, dxq, dyq, dzq).color(r, g, b, a).endVertex();
+            vertexConsumer.addVertex(mat, ax, ay, az).setColor(r, g, b, a);
+            vertexConsumer.addVertex(mat, cx, cy, cz).setColor(r, g, b, a);
+            vertexConsumer.addVertex(mat, dxq, dyq, dzq).setColor(r, g, b, a);
         }
     }
 
@@ -406,8 +406,8 @@ public class RenderTesterHelper extends
                 float z1 = cz + radius * sin1 * sinp;
 
                 // order chosen for typical backface cull; swap if it looks inside-out
-                vc.vertex(mat, x0, y0, z0).color(r, g, b, a).endVertex();
-                vc.vertex(mat, x1, y1, z1).color(r, g, b, a).endVertex();
+                vc.addVertex(mat, x0, y0, z0).setColor(r, g, b, a);
+                vc.addVertex(mat, x1, y1, z1).setColor(r, g, b, a);
             }
         }
     }

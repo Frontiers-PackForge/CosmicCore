@@ -19,6 +19,7 @@ import net.minecraft.world.level.levelgen.XoroshiroRandomSource;
 
 import com.mojang.datafixers.util.Either;
 import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import lombok.Setter;
@@ -37,7 +38,7 @@ import static com.ghostipedia.cosmiccore.common.data.worldgen.generator.veins.Ve
 @Accessors(fluent = true, chain = true)
 public class StringerVeinGenerator extends VeinGenerator {
 
-    public static final Codec<StringerVeinGenerator> CODEC = RecordCodecBuilder.create(instance -> instance.group(
+    public static final MapCodec<StringerVeinGenerator> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
             OreBlockDef.CODEC.listOf().fieldOf("ore_blocks").forGetter(it -> it.oreBlocks),
             OreBlockDef.CODEC.listOf().fieldOf("rare_blocks").forGetter(it -> it.rareBlocks),
             Codec.INT.fieldOf("stringer_count").orElse(16).forGetter(it -> it.stringerCount),
@@ -64,10 +65,6 @@ public class StringerVeinGenerator extends VeinGenerator {
     public float rareBlockChance = 0.04f;
 
     public StringerVeinGenerator() {}
-
-    public StringerVeinGenerator(GTOreDefinition entry) {
-        super(entry);
-    }
 
     public StringerVeinGenerator(List<OreBlockDef> oreBlocks, List<OreBlockDef> rareBlocks,
                                  int stringerCount, float coreRadiusRatio, float stringerThicknessRatio,
@@ -234,7 +231,7 @@ public class StringerVeinGenerator extends VeinGenerator {
     }
 
     @Override
-    public Codec<? extends VeinGenerator> codec() {
+    public MapCodec<? extends VeinGenerator> codec() {
         return CODEC;
     }
 

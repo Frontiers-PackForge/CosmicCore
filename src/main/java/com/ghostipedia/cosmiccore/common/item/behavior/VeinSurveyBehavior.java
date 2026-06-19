@@ -4,6 +4,7 @@ import com.ghostipedia.cosmiccore.common.network.CCoreNetwork;
 import com.ghostipedia.cosmiccore.common.network.packet.SyncPredictedVeinsPacket;
 import com.ghostipedia.cosmiccore.common.worldgen.survey.VeinSurveyUtil;
 import com.ghostipedia.cosmiccore.common.worldgen.survey.VeinSurveyUtil.VeinInfo;
+import com.ghostipedia.cosmiccore.utils.ItemData;
 
 import com.gregtechceu.gtceu.api.capability.GTCapabilityHelper;
 import com.gregtechceu.gtceu.api.capability.IElectricItem;
@@ -79,31 +80,31 @@ public class VeinSurveyBehavior implements IInteractionItem, IAddInformation {
     }
 
     public ScanMode getMode(ItemStack stack) {
-        if (stack.isEmpty() || !stack.hasTag()) return ScanMode.RADIAL;
-        int modeIdx = stack.getTag().getInt("ScanMode") % ScanMode.values().length;
+        if (stack.isEmpty()) return ScanMode.RADIAL;
+        int modeIdx = ItemData.readTag(stack).getInt("ScanMode") % ScanMode.values().length;
         return ScanMode.values()[modeIdx];
     }
 
     public void setNextMode(ItemStack stack) {
-        var tag = stack.getOrCreateTag();
-        int nextMode = (tag.getInt("ScanMode") + 1) % ScanMode.values().length;
-        tag.putInt("ScanMode", nextMode);
+        int nextMode = (ItemData.readTag(stack).getInt("ScanMode") + 1) % ScanMode.values().length;
+        ItemData.mutateTag(stack, tag -> tag.putInt("ScanMode", nextMode));
     }
 
     @Nullable
     public String getVeinFilter(ItemStack stack) {
-        if (stack.isEmpty() || !stack.hasTag()) return null;
-        String filter = stack.getTag().getString("VeinFilter");
+        if (stack.isEmpty()) return null;
+        String filter = ItemData.readTag(stack).getString("VeinFilter");
         return filter.isEmpty() ? null : filter;
     }
 
     public void setVeinFilter(ItemStack stack, @Nullable String filter) {
-        var tag = stack.getOrCreateTag();
-        if (filter == null || filter.isEmpty()) {
-            tag.remove("VeinFilter");
-        } else {
-            tag.putString("VeinFilter", filter);
-        }
+        ItemData.mutateTag(stack, tag -> {
+            if (filter == null || filter.isEmpty()) {
+                tag.remove("VeinFilter");
+            } else {
+                tag.putString("VeinFilter", filter);
+            }
+        });
     }
 
     public boolean drainEnergy(ItemStack stack, boolean simulate) {
@@ -113,7 +114,7 @@ public class VeinSurveyBehavior implements IInteractionItem, IAddInformation {
     }
 
     @Override
-    public InteractionResultHolder<ItemStack> use(Item item, Level level, Player player, InteractionHand usedHand) {
+    public InteractionResultHolder<ItemStack> use(ItemStack item, Level level, Player player, InteractionHand usedHand) {
         ItemStack stack = player.getItemInHand(usedHand);
 
         if (player.isShiftKeyDown()) {
@@ -122,7 +123,7 @@ public class VeinSurveyBehavior implements IInteractionItem, IAddInformation {
                 ScanMode mode = getMode(stack);
                 player.sendSystemMessage(Component.translatable(mode.translationKey)
                         .withStyle(ChatFormatting.YELLOW));
-                level.playSound(null, player.blockPosition(), SoundEvents.UI_BUTTON_CLICK.get(),
+                level.playSound(null, player.blockPosition(), SoundEvents.UI_BUTTON_CLICK.value(),
                         SoundSource.PLAYERS, 0.5f, 1.2f);
             }
             return InteractionResultHolder.success(stack);
@@ -154,7 +155,7 @@ public class VeinSurveyBehavior implements IInteractionItem, IAddInformation {
         BlockPos center = player.blockPosition();
 
         IWorldGenLayer layer = WorldGeneratorUtils.WORLD_GEN_LAYERS.values().stream()
-                .filter(l -> l.isApplicableForLevel(level.dimension().location()))
+                .filter(l -> l.isApplicableForLevel(level.dimension()))
                 .findFirst()
                 .orElse(null);
 
@@ -311,7 +312,7 @@ public class VeinSurveyBehavior implements IInteractionItem, IAddInformation {
     }
 
     @Override
-    public void appendHoverText(ItemStack stack, @Nullable Level level, List<Component> tooltipComponents,
+    public void appendHoverText(ItemStack stack, Item.TooltipContext context, List<Component> tooltipComponents,
                                 TooltipFlag isAdvanced) {
         ScanMode mode = getMode(stack);
         String filter = getVeinFilter(stack);

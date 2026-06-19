@@ -15,7 +15,6 @@ import net.minecraft.world.level.block.EntityBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 
-import lombok.Getter;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -56,22 +55,16 @@ public class CosmicCoilBlock extends CoilBlock implements EntityBlock {
                 CosmicCore.id("block/casings/coils/causal_fabric"));
 
         @NotNull
-        @Getter
         private final String name;
         // electric blast furnace properties
-        @Getter
         private final int coilTemperature;
-        @Getter
         private final int tier;
         // multi smelter properties
-        @Getter
         private final int level;
-        @Getter
         private final int energyDiscount;
         @NotNull
         private final Supplier<Material> material;
         @NotNull
-        @Getter
         private final ResourceLocation texture;
 
         CoilType(String name, int coilTemperature, int tier, int level, int energyDiscount, Supplier<Material> material,
@@ -85,6 +78,39 @@ public class CosmicCoilBlock extends CoilBlock implements EntityBlock {
             this.texture = texture;
         }
 
+        @NotNull
+        @Override
+        public String getName() {
+            return name;
+        }
+
+        @Override
+        public int getCoilTemperature() {
+            return coilTemperature;
+        }
+
+        @Override
+        public int getTier() {
+            return tier;
+        }
+
+        @Override
+        public int getLevel() {
+            return level;
+        }
+
+        @Override
+        public int getEnergyDiscount() {
+            return energyDiscount;
+        }
+
+        @NotNull
+        @Override
+        public ResourceLocation getTexture() {
+            return texture;
+        }
+
+        @Override
         public Material getMaterial() {
             return material.get();
         }

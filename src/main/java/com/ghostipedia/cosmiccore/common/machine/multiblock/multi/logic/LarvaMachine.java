@@ -10,7 +10,10 @@ import com.gregtechceu.gtceu.api.capability.recipe.FluidRecipeCapability;
 import com.gregtechceu.gtceu.api.capability.recipe.IO;
 import com.gregtechceu.gtceu.api.capability.recipe.ItemRecipeCapability;
 import com.gregtechceu.gtceu.api.data.tag.TagPrefix;
+import com.ghostipedia.cosmiccore.utils.ItemData;
+
 import com.gregtechceu.gtceu.api.blockentity.BlockEntityCreationInfo;
+import com.gregtechceu.gtceu.api.machine.feature.IRecipeLogicMachine;
 import com.gregtechceu.gtceu.api.machine.multiblock.WorkableElectricMultiblockMachine;
 import com.gregtechceu.gtceu.api.machine.trait.NotifiableFluidTank;
 import com.gregtechceu.gtceu.api.machine.trait.NotifiableItemStackHandler;
@@ -20,7 +23,8 @@ import com.gregtechceu.gtceu.common.data.GTMaterials;
 import com.gregtechceu.gtceu.common.machine.multiblock.part.ItemBusPartMachine;
 import com.gregtechceu.gtceu.data.recipe.builder.GTRecipeBuilder;
 
-import net.minecraft.data.recipes.FinishedRecipe;
+import net.minecraft.core.component.DataComponents;
+import net.minecraft.data.recipes.RecipeOutput;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -36,21 +40,20 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.function.Consumer;
 
 import static com.gregtechceu.gtceu.common.data.GTRecipeTypes.SCANNER_RECIPES;
-import static com.gregtechceu.gtceu.common.item.IntCircuitBehaviour.getCircuitConfiguration;
+import static com.gregtechceu.gtceu.common.item.behavior.IntCircuitBehaviour.getCircuitConfiguration;
 
 public class LarvaMachine extends WorkableElectricMultiblockMachine {
 
     private static ItemStack getNamedPaper(String name) {
         ItemStack stack = new ItemStack(Items.PAPER);
-        stack.setHoverName(Component.literal(name));
+        stack.set(DataComponents.CUSTOM_NAME, Component.literal(name));
         return stack;
     }
 
-    public LarvaMachine(BlockEntityCreationInfo holder, Object... args) {
-        super(holder, args);
+    public LarvaMachine(BlockEntityCreationInfo holder) {
+        super(holder, m -> new LarvaRecipeLogic((LarvaMachine) m));
     }
 
     public static String ASTROID_NBT_TYPE = "AsteroidType";
@@ -63,25 +66,27 @@ public class LarvaMachine extends WorkableElectricMultiblockMachine {
     private static Map<ItemStack, ItemStack> RESEARCH_RECIPES = null;
 
     public static int getAsteroidSize(ItemStack stack) {
-        if (stack.isEmpty() || !stack.hasTag()) return 0;
-        return stack.getOrCreateTag().getInt(ASTEROID_SIZE);
+        if (stack.isEmpty()) return 0;
+        return ItemData.readTag(stack).getInt(ASTEROID_SIZE);
     }
 
     private static ItemStack setAsteroidSize(ItemStack stack, int size) {
         if (stack.isEmpty()) return stack;
-        stack.getOrCreateTag().putInt(ASTEROID_SIZE, size);
+        ItemData.mutateTag(stack, tag -> tag.putInt(ASTEROID_SIZE, size));
         return stack;
     }
 
     public static ItemStack getAstroidDataChip(String id, int tier) {
         ItemStack stack = CosmicItems.TARGETING_CHIP.asStack();
-        stack.getOrCreateTag().putString(ASTROID_NBT_TYPE, id);
-        stack.getOrCreateTag().putInt(ASTROID_NBT_TIER, tier);
+        ItemData.mutateTag(stack, tag -> {
+            tag.putString(ASTROID_NBT_TYPE, id);
+            tag.putInt(ASTROID_NBT_TIER, tier);
+        });
         return stack;
     }
 
     // This gets called from our CosmicRecipes class, not anywhere here. Put here to centralize recipe creation.
-    public static void generateTargettingChipRecipes(Consumer<FinishedRecipe> provider) {
+    public static void generateTargettingChipRecipes(RecipeOutput provider) {
         SCANNER_RECIPES.recipeBuilder(CosmicCore.id("carbonic_asteroid"))
                 .inputItems(new ItemStack(Blocks.IRON_ORE.asItem(), 1))
                 .inputItems(CosmicItems.TARGETING_CHIP.asStack())
@@ -232,11 +237,6 @@ public class LarvaMachine extends WorkableElectricMultiblockMachine {
         return LARVA_INPUTS;
     }
 
-    @Override
-    protected @NotNull RecipeLogic createRecipeLogic(Object @NotNull... args) {
-        return new LarvaRecipeLogic(this);
-    }
-
     public static class LarvaRecipeLogic extends RecipeLogic {
 
         public LarvaRecipeLogic(LarvaMachine machine) {
@@ -361,7 +361,7 @@ public class LarvaMachine extends WorkableElectricMultiblockMachine {
                 builder.outputItems(outputItem);
             }
 
-            return Collections.singleton(builder.buildRawRecipe()).iterator();
+            return Collections.singleton(builder.build()).iterator();
         }
 
         // Helper function for accessing map based on Itemstack.isSameItemSameTags
@@ -369,7 +369,7 @@ public class LarvaMachine extends WorkableElectricMultiblockMachine {
         private static <V> V mapGet(Map<ItemStack, V> map, ItemStack item) {
             if (item == null) return null;
             for (var entry : map.entrySet()) {
-                if (ItemStack.isSameItemSameTags(item, entry.getKey())) {
+                if (ItemStack.isSameItemSameComponents(item, entry.getKey())) {
                     return entry.getValue();
                 }
             }
@@ -387,7 +387,7 @@ public class LarvaMachine extends WorkableElectricMultiblockMachine {
             int remaining = toConsume.getCount();
 
             for (ItemStack stack : available) {
-                if (ItemStack.isSameItemSameTags(stack, toConsume)) {
+                if (ItemStack.isSameItemSameComponents(stack, toConsume)) {
                     remaining -= stack.getCount();
                     if (remaining <= 0) {
                         return true;
@@ -411,7 +411,7 @@ public class LarvaMachine extends WorkableElectricMultiblockMachine {
             int remaining = toConsume.getCount();
 
             for (ItemStack stack : available) {
-                if (ItemStack.isSameItemSameTags(stack, toConsume)) {
+                if (ItemStack.isSameItemSameComponents(stack, toConsume)) {
                     int taken = Math.min(stack.getCount(), remaining);
                     stack.shrink(taken);
                     remaining -= taken;

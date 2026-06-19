@@ -1,5 +1,6 @@
 package com.ghostipedia.cosmiccore.common.wireless;
 
+import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.saveddata.SavedData;
@@ -11,8 +12,10 @@ public class GlobalWirelessSavedData extends SavedData {
     private final ServerLevel serverLevel;
 
     public static GlobalWirelessSavedData getOrCreate(ServerLevel serverLevel) {
-        return serverLevel.getDataStorage().computeIfAbsent(tag -> new GlobalWirelessSavedData(serverLevel, tag),
-                () -> new GlobalWirelessSavedData(serverLevel), "gtceu_global_wireless");
+        return serverLevel.getDataStorage().computeIfAbsent(
+                new SavedData.Factory<>(() -> new GlobalWirelessSavedData(serverLevel),
+                        (tag, provider) -> new GlobalWirelessSavedData(serverLevel, tag)),
+                "gtceu_global_wireless");
     }
 
     private GlobalWirelessSavedData(ServerLevel serverLevel) {
@@ -25,7 +28,7 @@ public class GlobalWirelessSavedData extends SavedData {
 
     @NotNull
     @Override
-    public CompoundTag save(@NotNull CompoundTag compound) {
+    public CompoundTag save(@NotNull CompoundTag compound, @NotNull HolderLookup.Provider provider) {
         return compound;
     }
 }

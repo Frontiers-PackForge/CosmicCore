@@ -257,7 +257,7 @@ public class NextTierRequirementsWidget extends Widget {
 
     @Override
     @OnlyIn(Dist.CLIENT)
-    public boolean mouseWheelMove(double mouseX, double mouseY, double wheelDelta) {
+    public boolean mouseWheelMove(double mouseX, double mouseY, double scrollX, double scrollY) {
         if (isMouseOverElement(mouseX, mouseY) && !cachedRequirements.isEmpty()) {
             int h = getSize().height;
             int contentH = h - HEADER_HEIGHT - 2;
@@ -266,11 +266,11 @@ public class NextTierRequirementsWidget extends Widget {
 
             if (totalItems > visibleItems) {
                 int maxScroll = totalItems - visibleItems;
-                scrollOffset = Mth.clamp(scrollOffset - (int) Math.signum(wheelDelta), 0, maxScroll);
+                scrollOffset = Mth.clamp(scrollOffset - (int) Math.signum(scrollY), 0, maxScroll);
                 return true;
             }
         }
-        return super.mouseWheelMove(mouseX, mouseY, wheelDelta);
+        return super.mouseWheelMove(mouseX, mouseY, scrollX, scrollY);
     }
 
     private int getTierColor(int tier) {

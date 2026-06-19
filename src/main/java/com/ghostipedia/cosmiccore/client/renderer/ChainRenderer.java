@@ -108,10 +108,9 @@ public class ChainRenderer {
             RenderSystem.setShaderColor(chain.color[0] / 255f, chain.color[1] / 255f,
                     chain.color[2] / 255f, alpha);
 
-            BufferBuilder buffer = Tesselator.getInstance().getBuilder();
-            buffer.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX);
+            BufferBuilder buffer = Tesselator.getInstance().begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX);
             emitChainQuads(buffer, matrix, chain, partialTick);
-            BufferUploader.drawWithShader(buffer.end());
+            BufferUploader.drawWithShader(buffer.buildOrThrow());
         }
 
         RenderSystem.enableDepthTest();
@@ -142,10 +141,10 @@ public class ChainRenderer {
             float c11x = hs * cos - hs * sin, c11y = hs * sin + hs * cos;
             float c10x = hs * cos + hs * sin, c10y = hs * sin - hs * cos;
 
-            buffer.vertex(matrix, midX + c00x, midY + c00y, 0).uv(0, 0).endVertex();
-            buffer.vertex(matrix, midX + c01x, midY + c01y, 0).uv(0, 1).endVertex();
-            buffer.vertex(matrix, midX + c11x, midY + c11y, 0).uv(1, 1).endVertex();
-            buffer.vertex(matrix, midX + c10x, midY + c10y, 0).uv(1, 0).endVertex();
+            buffer.addVertex(matrix, midX + c00x, midY + c00y, 0).setUv(0, 0);
+            buffer.addVertex(matrix, midX + c01x, midY + c01y, 0).setUv(0, 1);
+            buffer.addVertex(matrix, midX + c11x, midY + c11y, 0).setUv(1, 1);
+            buffer.addVertex(matrix, midX + c10x, midY + c10y, 0).setUv(1, 0);
         }
     }
 

@@ -12,8 +12,6 @@ import com.gregtechceu.gtceu.api.registry.registrate.GTRegistrate;
 
 import net.minecraft.data.recipes.RecipeOutput;
 
-import static com.ghostipedia.cosmiccore.integration.kjs.recipe.components.CosmicRecipeComponent.SOUL_IN;
-
 @GTAddon(CosmicCore.MOD_ID)
 public class CosmicCoreGTAddon implements IGTAddon {
 
@@ -40,14 +38,16 @@ public class CosmicCoreGTAddon implements IGTAddon {
 
     @Override
     public void registerRecipeKeys(KJSRecipeKeyEvent event) {
-        // 8.0: registerKey takes a single ContentJS (was Pair<in,out>); in/out handled by schema soulInput/soulOutput.
-        event.registerKey(CosmicRecipeCapabilities.SOUL, SOUL_IN);
+        // TODO(cosmiccore-42.14): re-register the SOUL recipe key once the KubeJS integration
+        // (integration.kjs.recipe.components.CosmicRecipeComponent) is ported to the 1.21 KJS API.
     }
 
     @Override
     public void registerWorldgenLayers() {
+        // Register the layer here (registration-time hook). The ore-vein reassignment that depends on the
+        // gtceu:ore_vein datapack registry runs later, in CosmicWorldGenLayers#onAddReloadListeners, once
+        // that registry is populated.
         CosmicWorldGenLayers.init();
-        CosmicWorldGenLayers.migrateOreVeinsToOverworldLayer();
     }
 
     @Override

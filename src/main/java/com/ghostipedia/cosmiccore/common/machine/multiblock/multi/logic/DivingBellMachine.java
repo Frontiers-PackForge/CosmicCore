@@ -52,12 +52,10 @@ public class DivingBellMachine extends WorkableElectricMultiblockMachine {
 
     protected TickableSubscription tickSubscription;
 
-    public DivingBellMachine(BlockEntityCreationInfo holder, Object... args) {
-        super(holder, args);
+    public DivingBellMachine(BlockEntityCreationInfo holder) {
+        super(holder);
     }
 
-    @Override
-    @NotNull
 
     @Override
     public void onStructureFormed() {
@@ -125,10 +123,7 @@ public class DivingBellMachine extends WorkableElectricMultiblockMachine {
         BlockPos controllerPos = getBlockPos();
         BlockPos detectionPos = controllerPos.above(1);
 
-        // 1x1 detection area (requires players to stand on top of the controller)
-        AABB detectionZone = new AABB(
-                detectionPos,
-                detectionPos.offset(1, 1, 1));
+        AABB detectionZone = new AABB(detectionPos);
 
         return serverLevel.getEntitiesOfClass(ServerPlayer.class, detectionZone);
     }
@@ -156,11 +151,9 @@ public class DivingBellMachine extends WorkableElectricMultiblockMachine {
             return false;
         }
 
-        // Find or create safe landing
         BlockPos landingPos = getOrCreateSafeLanding(deepBelow, player);
 
-        // Teleport (SafeTeleporter handles safety effects)
-        player.changeDimension(deepBelow, new SafeTeleporter(landingPos));
+        player.changeDimension(SafeTeleporter.toSafe(deepBelow, landingPos, player));
 
         // Success message
         player.displayClientMessage(

@@ -1,14 +1,22 @@
 package com.ghostipedia.cosmiccore.common.reflection.network;
 
-import com.ghostipedia.cosmiccore.common.network.CCoreNetwork;
+import com.ghostipedia.cosmiccore.CosmicCore;
 import com.ghostipedia.cosmiccore.common.reflection.bargain.impl.CelesteDashHandler;
 import com.ghostipedia.cosmiccore.common.reflection.bargain.impl.QuakeMovementHandler;
 
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraftforge.network.NetworkEvent;
+import net.neoforged.neoforge.network.handling.IPayloadContext;
 
-public class DashPacket implements CCoreNetwork.INetPacket {
+import org.jetbrains.annotations.NotNull;
+
+public class DashPacket implements CustomPacketPayload {
+
+    public static final Type<DashPacket> TYPE = new Type<>(CosmicCore.id("dash"));
+    public static final StreamCodec<FriendlyByteBuf, DashPacket> CODEC =
+            StreamCodec.ofMember(DashPacket::encode, DashPacket::new);
 
     private final float xRot;
     private final float yRot;
@@ -29,7 +37,6 @@ public class DashPacket implements CCoreNetwork.INetPacket {
         this.strafeInput = buffer.readFloat();
     }
 
-    @Override
     public void encode(FriendlyByteBuf buffer) {
         buffer.writeFloat(xRot);
         buffer.writeFloat(yRot);
@@ -37,12 +44,15 @@ public class DashPacket implements CCoreNetwork.INetPacket {
         buffer.writeFloat(strafeInput);
     }
 
-    @Override
-    public void execute(NetworkEvent.Context context) {
-        ServerPlayer player = context.getSender();
-        if (player == null) return;
+    public void execute(IPayloadContext context) {
+        if (!(context.player() instanceof ServerPlayer player)) return;
         if (!QuakeMovementHandler.hasQuakeMovement(player)) return;
 
         CelesteDashHandler.executeDashServer(player, xRot, yRot, forwardInput, strafeInput);
+    }
+
+    @Override
+    public @NotNull Type<DashPacket> type() {
+        return TYPE;
     }
 }

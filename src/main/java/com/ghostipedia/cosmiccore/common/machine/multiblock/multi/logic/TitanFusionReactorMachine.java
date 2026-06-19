@@ -46,11 +46,9 @@ public class TitanFusionReactorMachine extends WorkableElectricMultiblockMachine
     private boolean canUpgrade = false;
 
 
-    @Override
-    @NotNull
 
     public TitanFusionReactorMachine(BlockEntityCreationInfo holder) {
-        super(holder);
+        super(holder, HelixFusionRecipeLogic::new);
     }
 
     long cost = upgradeCost(reactorTier);
@@ -89,11 +87,6 @@ public class TitanFusionReactorMachine extends WorkableElectricMultiblockMachine
     @Override // IDEK if this does anything
     public ModularUI createUI(Player entityPlayer) {
         return new ModularUI(330, 208, this, entityPlayer).widget(new FancyMachineUIWidget(this, 300, 208));
-    }
-
-    @Override
-    protected RecipeLogic createRecipeLogic(Object... args) {
-        return new HelixFusionRecipeLogic(this);
     }
 
     public void increaseEUConsumed(long EUSpent) {

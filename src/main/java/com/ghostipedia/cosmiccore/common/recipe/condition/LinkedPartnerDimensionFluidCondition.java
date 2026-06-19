@@ -1,5 +1,6 @@
 package com.ghostipedia.cosmiccore.common.recipe.condition;
 
+import com.ghostipedia.cosmiccore.CosmicCore;
 import com.ghostipedia.cosmiccore.api.machine.multiblock.LinkedWorkableElectricMultiblockMachine;
 import com.ghostipedia.cosmiccore.common.machine.multiblock.LinkedMultiblockHelper;
 
@@ -18,6 +19,7 @@ import net.minecraft.world.level.material.Fluid;
 import net.neoforged.neoforge.fluids.FluidStack;
 
 import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import org.jetbrains.annotations.NotNull;
 
@@ -37,8 +39,8 @@ public class LinkedPartnerDimensionFluidCondition extends RecipeCondition<Linked
     public ResourceLocation fluidId;
     public int minAmount;
 
-    public static final Codec<LinkedPartnerDimensionFluidCondition> CODEC = RecordCodecBuilder
-            .create(instance -> RecipeCondition.isReverse(instance)
+    public static final MapCodec<LinkedPartnerDimensionFluidCondition> CODEC = RecordCodecBuilder
+            .mapCodec(instance -> RecipeCondition.isReverse(instance)
                     .and(ResourceLocation.CODEC.fieldOf("dimension").forGetter(val -> val.dimension))
                     .and(ResourceLocation.CODEC.fieldOf("fluid").forGetter(val -> val.fluidId))
                     .and(Codec.INT.optionalFieldOf("amount", 1000).forGetter(val -> val.minAmount))
@@ -73,7 +75,8 @@ public class LinkedPartnerDimensionFluidCondition extends RecipeCondition<Linked
     }
 
     public static void register() {
-        TYPE = GTRegistries.RECIPE_CONDITIONS.register("linked_partner_dimension_fluid",
+        TYPE = GTRegistries.register(GTRegistries.RECIPE_CONDITIONS,
+                CosmicCore.id("linked_partner_dimension_fluid"),
                 new RecipeConditionType<>(LinkedPartnerDimensionFluidCondition::new,
                         LinkedPartnerDimensionFluidCondition.CODEC));
     }

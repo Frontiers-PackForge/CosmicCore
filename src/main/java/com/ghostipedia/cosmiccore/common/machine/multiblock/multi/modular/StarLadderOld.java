@@ -48,12 +48,10 @@ public class StarLadderOld extends WorkableElectricMultiblockMachine implements 
     protected boolean isFuelable;
     private final Collection<IMultiblockReciever> starLadderReceivers = ConcurrentHashMap.newKeySet();
 
-    public StarLadderOld(BlockEntityCreationInfo holder, Object... args) {
-        super(holder, args);
+    public StarLadderOld(BlockEntityCreationInfo holder) {
+        super(holder);
     }
 
-    @Override
-    @NotNull
 
     protected int tetherTier = 0;
 

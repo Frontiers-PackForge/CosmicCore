@@ -9,9 +9,8 @@ import com.lowdragmc.lowdraglib.gui.widget.WidgetGroup;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.core.GlobalPos;
-import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.util.Mth;
-import net.minecraft.world.level.block.Block;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -36,7 +35,7 @@ public class StarLadderResearchHubWidget extends WidgetGroup {
     private String partnerCoords = "";
     private boolean previewEnabled = false;
     private boolean canUpgrade = false;
-    private Map<Block, Integer> nextTierRequirements = new HashMap<>();
+    private Map<net.minecraft.world.level.block.Block, Integer> nextTierRequirements = new HashMap<>();
 
     private float animPhase = 0f;
 
@@ -85,19 +84,19 @@ public class StarLadderResearchHubWidget extends WidgetGroup {
     }
 
     @Override
-    public void writeInitialData(FriendlyByteBuf buffer) {
+    public void writeInitialData(RegistryFriendlyByteBuf buffer) {
         super.writeInitialData(buffer);
         syncAllData(buffer);
     }
 
     @Override
     @OnlyIn(Dist.CLIENT)
-    public void readInitialData(FriendlyByteBuf buffer) {
+    public void readInitialData(RegistryFriendlyByteBuf buffer) {
         super.readInitialData(buffer);
         readAllData(buffer);
     }
 
-    private void syncAllData(FriendlyByteBuf buffer) {
+    private void syncAllData(RegistryFriendlyByteBuf buffer) {
         StarLadderResearchHubMachine machine = machineSupplier.get();
         if (machine == null) {
             buffer.writeInt(0);
@@ -125,15 +124,15 @@ public class StarLadderResearchHubWidget extends WidgetGroup {
         }
 
         // Sync next tier requirements
-        Map<Block, Integer> reqs = machine.getNextRingBlockCounts();
+        Map<net.minecraft.world.level.block.Block, Integer> reqs = machine.getNextRingBlockCounts();
         buffer.writeInt(reqs.size());
-        for (Map.Entry<Block, Integer> entry : reqs.entrySet()) {
+        for (Map.Entry<net.minecraft.world.level.block.Block, Integer> entry : reqs.entrySet()) {
             buffer.writeResourceLocation(BuiltInRegistries.BLOCK.getKey(entry.getKey()));
             buffer.writeInt(entry.getValue());
         }
     }
 
-    private void readAllData(FriendlyByteBuf buffer) {
+    private void readAllData(RegistryFriendlyByteBuf buffer) {
         ringTier = buffer.readInt();
         previewEnabled = buffer.readBoolean();
         canUpgrade = buffer.readBoolean();
@@ -153,7 +152,7 @@ public class StarLadderResearchHubWidget extends WidgetGroup {
         nextTierRequirements.clear();
         int reqCount = buffer.readInt();
         for (int i = 0; i < reqCount; i++) {
-            Block block = BuiltInRegistries.BLOCK.get(buffer.readResourceLocation());
+            net.minecraft.world.level.block.Block block = BuiltInRegistries.BLOCK.get(buffer.readResourceLocation());
             int count = buffer.readInt();
             if (block != null) {
                 nextTierRequirements.put(block, count);
@@ -195,7 +194,7 @@ public class StarLadderResearchHubWidget extends WidgetGroup {
 
     @Override
     @OnlyIn(Dist.CLIENT)
-    public void readUpdateInfo(int id, FriendlyByteBuf buffer) {
+    public void readUpdateInfo(int id, RegistryFriendlyByteBuf buffer) {
         if (id == 501) {
             readAllData(buffer);
         } else {

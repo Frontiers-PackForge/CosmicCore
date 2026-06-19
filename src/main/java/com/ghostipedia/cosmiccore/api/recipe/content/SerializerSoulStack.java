@@ -4,7 +4,7 @@ import com.ghostipedia.cosmiccore.api.recipe.ingredient.SoulStack;
 
 import com.gregtechceu.gtceu.api.recipe.content.IContentSerializer;
 
-import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.RegistryFriendlyByteBuf;
 
 import com.mojang.serialization.Codec;
 
@@ -15,12 +15,12 @@ public class SerializerSoulStack implements IContentSerializer<SoulStack> {
     private SerializerSoulStack() {}
 
     @Override
-    public void toNetwork(FriendlyByteBuf buf, SoulStack content) {
+    public void toNetwork(RegistryFriendlyByteBuf buf, SoulStack content) {
         content.toNetwork(buf);
     }
 
     @Override
-    public SoulStack fromNetwork(FriendlyByteBuf buf) {
+    public SoulStack fromNetwork(RegistryFriendlyByteBuf buf) {
         return SoulStack.fromNetwork(buf);
     }
 

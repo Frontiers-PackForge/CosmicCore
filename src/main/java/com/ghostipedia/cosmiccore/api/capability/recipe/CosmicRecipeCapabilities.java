@@ -1,11 +1,10 @@
 package com.ghostipedia.cosmiccore.api.capability.recipe;
 
+import com.ghostipedia.cosmiccore.CosmicCore;
+
 import com.gregtechceu.gtceu.api.registry.GTRegistries;
 
-import com.mojang.datafixers.util.Pair;
-
-import static com.gregtechceu.gtceu.integration.kjs.recipe.components.GTRecipeComponents.FLUID_IN;
-import static com.gregtechceu.gtceu.integration.kjs.recipe.components.GTRecipeComponents.FLUID_OUT;
+import static com.gregtechceu.gtceu.integration.kjs.recipe.components.GTRecipeComponents.FLUID;
 import static com.gregtechceu.gtceu.integration.kjs.recipe.components.GTRecipeComponents.VALID_CAPS;
 
 public class CosmicRecipeCapabilities {
@@ -15,9 +14,9 @@ public class CosmicRecipeCapabilities {
     // TODO(embers): EMBER recipe capability shelved with Embers (bead cosmiccore-42.14)
 
     public static void init() {
-        GTRegistries.RECIPE_CAPABILITIES.register(SOUL.name, SOUL);
-        GTRegistries.RECIPE_CAPABILITIES.register(STERILE.name, STERILE);
+        GTRegistries.register(GTRegistries.RECIPE_CAPABILITIES, CosmicCore.id(SOUL.name), SOUL);
+        GTRegistries.register(GTRegistries.RECIPE_CAPABILITIES, CosmicCore.id(STERILE.name), STERILE);
 
-        VALID_CAPS.put(STERILE, Pair.of(FLUID_IN, FLUID_OUT));
+        VALID_CAPS.put(STERILE, FLUID);
     }
 }

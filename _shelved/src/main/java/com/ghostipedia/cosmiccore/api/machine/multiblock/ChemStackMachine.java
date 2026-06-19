@@ -1,8 +1,8 @@
 package com.ghostipedia.cosmiccore.api.machine.multiblock;
 
-import com.gregtechceu.gtceu.api.capability.IParallelHatch;
 import com.gregtechceu.gtceu.api.machine.feature.multiblock.IDisplayUIMachine;
 import com.gregtechceu.gtceu.api.machine.feature.multiblock.IMultiPart;
+import com.gregtechceu.gtceu.common.machine.multiblock.part.ParallelHatchPartMachine;
 import com.gregtechceu.gtceu.api.pattern.MultiblockState;
 
 import org.jetbrains.annotations.NotNull;
@@ -46,7 +46,7 @@ public class ChemStackMachine implements IDisplayUIMachine {
     }
 
     @Override
-    public Optional<IParallelHatch> getParallelHatch() {
+    public Optional<ParallelHatchPartMachine> getParallelHatch() {
         return Optional.empty();
     }
 

@@ -13,7 +13,7 @@ import com.gregtechceu.gtceu.api.recipe.OverclockingLogic;
 import com.gregtechceu.gtceu.common.data.GTBlocks;
 import com.gregtechceu.gtceu.common.data.GTRecipeModifiers;
 
-import com.sammy.malum.registry.common.block.BlockRegistry;
+import com.sammy.malum.registry.common.block.MalumBlocks;
 
 import static com.ghostipedia.cosmiccore.api.registries.CosmicRegistration.REGISTRATE;
 import static com.ghostipedia.cosmiccore.common.data.CosmicBlocks.HIGH_TEMP_FISSION_CASING;
@@ -46,10 +46,10 @@ public class VoidSaltReactor {
                             .or(autoAbilities(CosmicRecipeTypes.VOID_SALT_FISSION))
                             .or(abilities(PartAbility.INPUT_ENERGY).setMaxGlobalLimited(2,2))
                             .or(abilities(PartAbility.MAINTENANCE).setExactLimit(1)))
-                    .where('B', blocks(BlockRegistry.BLOCK_OF_SOULSTONE.get()))
+                    .where('B', blocks(MalumBlocks.BLOCK_OF_SOULSTONE.get()))
                     .where('C', blocks(CosmicBlocks.HIGHLY_CONDUCTIVE_FISSION_CASING.get()))
                     .where('D', blocks(GTBlocks.CASING_LAMINATED_GLASS.get()))
-                    .where('E', blocks(BlockRegistry.BLOCK_OF_VOID_SALTS.get()))
+                    .where('E', blocks(MalumBlocks.BLOCK_OF_VOID_SALTS.get()))
                     .build())
             // spotless:on
             .workableCasingModel(CosmicCore.id("block/casings/solid/high_temperature_fission_casing"),

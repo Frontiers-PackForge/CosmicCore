@@ -14,19 +14,22 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.material.Fluid;
 import net.neoforged.neoforge.fluids.FluidStack;
 
-import lombok.Getter;
 import org.jetbrains.annotations.Nullable;
 
 public class VoidFluidDrillLogic extends RecipeLogic {
 
     public static final int MAX_PROGRESS = 20;
 
-    @Getter
     @Nullable
     private Fluid veinFluid;
 
     public VoidFluidDrillLogic(VoidFluidDrillMachine machine) {
         super(machine);
+    }
+
+    @Nullable
+    public Fluid getVeinFluid() {
+        return veinFluid;
     }
 
     @Override
@@ -67,7 +70,7 @@ public class VoidFluidDrillLogic extends RecipeLogic {
                     .EUt(GTValues.V[7])
                     .outputFluids(new FluidStack(veinFluid,
                             getFluidToProduce(data.getFluidVeinWorldEntry(getChunkX(), getChunkZ()))))
-                    .buildRawRecipe();
+                    .build();
             if (RecipeHelper.matchContents(getMachine(), recipe).isSuccess()) {
                 return recipe;
             }
@@ -86,7 +89,7 @@ public class VoidFluidDrillLogic extends RecipeLogic {
     private int getFluidToProduce(FluidVeinWorldEntry entry) {
         var definition = entry.getDefinition();
         if (definition != null) {
-            int depletedYield = definition.getDepletedYield();
+            int depletedYield = definition.value().getDepletedYield();
             int regularYield = entry.getFluidYield();
             int remainingOperations = entry.getOperationsRemaining();
 

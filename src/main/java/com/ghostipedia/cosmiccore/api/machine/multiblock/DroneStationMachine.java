@@ -17,6 +17,7 @@ import com.gregtechceu.gtceu.api.machine.trait.RecipeLogic;
 import com.gregtechceu.gtceu.api.recipe.GTRecipe;
 import com.gregtechceu.gtceu.api.recipe.RecipeHelper;
 import com.gregtechceu.gtceu.data.recipe.builder.GTRecipeBuilder;
+import com.gregtechceu.gtceu.utils.ExtendedUseOnContext;
 
 import com.lowdragmc.lowdraglib.gui.modular.ModularUI;
 import com.lowdragmc.lowdraglib.gui.texture.GuiTextureGroup;
@@ -24,15 +25,12 @@ import com.lowdragmc.lowdraglib.gui.texture.TextTexture;
 import com.lowdragmc.lowdraglib.gui.widget.*;
 
 import net.minecraft.ChatFormatting;
-import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.Style;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.phys.BlockHitResult;
 
 import com.google.common.collect.HashMultimap;
 import org.jetbrains.annotations.NotNull;
@@ -88,12 +86,12 @@ public class DroneStationMachine extends WorkableElectricMultiblockMachine {
                     .notConsumable(tier.item) // we need this so it doesn't match empty stuff
                     .chancedInput(tier.item, (int) (tier.consumptionChance * 10000), 0)
                     .addData(TIER_KEY, tier.ordinal())
-                    .buildRawRecipe());
+                    .build());
         }
     }
 
-    public DroneStationMachine(BlockEntityCreationInfo holder, Object... args) {
-        super(holder, args);
+    public DroneStationMachine(BlockEntityCreationInfo holder) {
+        super(holder);
     }
 
     @Override
@@ -231,8 +229,7 @@ public class DroneStationMachine extends WorkableElectricMultiblockMachine {
     // EXAMPLE CODE, REMOVE LATER MAYBE?
     // Or keep in, in which case, this should be a feature and remove this comment :eugeneThumbsUpCool:
     @Override
-    protected InteractionResult onScrewdriverClick(Player playerIn, InteractionHand hand, Direction gridSide,
-                                                   BlockHitResult hitResult) {
+    protected InteractionResult onScrewdriverClick(ExtendedUseOnContext context) {
         int i = 0;
         System.out.println("Toggling all multis");
         for (var con : connections) {

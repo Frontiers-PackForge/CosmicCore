@@ -11,7 +11,6 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.Mth;
-import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
@@ -19,6 +18,7 @@ import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ArmorItem;
+import net.minecraft.world.item.ArmorMaterial;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
@@ -273,7 +273,7 @@ public class CosmicBootsArmorLogic extends ArmorLogicSuite implements ICosmicBoo
     }
 
     @Override
-    public int damageArmor(LivingEntity entity, ItemStack boots, DamageSource source, int damage,
+    public int damageArmor(LivingEntity entity, ItemStack boots, int damage,
                            EquipmentSlot slot) {
         IElectricItem electric = GTCapabilityHelper.getElectricItem(boots);
         if (electric != null) {
@@ -283,7 +283,8 @@ public class CosmicBootsArmorLogic extends ArmorLogicSuite implements ICosmicBoo
     }
 
     @Override
-    public ResourceLocation getArmorTexture(ItemStack stack, Entity entity, EquipmentSlot slot, String type) {
+    public ResourceLocation getArmorTexture(ItemStack stack, Entity entity, EquipmentSlot slot,
+                                            ArmorMaterial.Layer layer) {
         return CosmicCore.id(texturePath);
     }
 

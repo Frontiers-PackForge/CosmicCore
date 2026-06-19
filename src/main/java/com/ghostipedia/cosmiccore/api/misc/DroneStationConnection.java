@@ -51,6 +51,6 @@ public class DroneStationConnection {
     }
 
     public boolean isValid() {
-        return machine != null && !machine.isInValid() && droneStation != null && !droneStation.isInValid();
+        return machine != null && !machine.isRemoved() && droneStation != null && !droneStation.isRemoved();
     }
 }

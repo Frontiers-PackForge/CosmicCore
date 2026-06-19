@@ -10,7 +10,6 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
@@ -27,8 +26,8 @@ public class DivingBellEscapePad extends Block {
     }
 
     @Override
-    public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player,
-                                 InteractionHand hand, BlockHitResult hit) {
+    public InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos, Player player,
+                                            BlockHitResult hit) {
         if (level.isClientSide) {
             return InteractionResult.SUCCESS;
         }
@@ -72,10 +71,8 @@ public class DivingBellEscapePad extends Block {
                 return;
             }
 
-            // Teleport back to origin
-            serverPlayer.changeDimension(originLevel, new SafeTeleporter(originBlockPos));
+            serverPlayer.changeDimension(SafeTeleporter.toSafe(originLevel, originBlockPos, serverPlayer));
 
-            // Restore rotation
             serverPlayer.setYRot(originYaw);
             serverPlayer.setXRot(originPitch);
 

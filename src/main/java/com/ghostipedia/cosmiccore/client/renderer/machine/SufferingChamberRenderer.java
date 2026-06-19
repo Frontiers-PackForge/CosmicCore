@@ -25,7 +25,7 @@ import net.minecraft.world.phys.AABB;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 import org.joml.Quaternionf;
 
 import java.util.EnumSet;
@@ -40,7 +40,7 @@ public class SufferingChamberRenderer extends
 
     // spotless:off
     public static final SufferingChamberRenderer INSTANCE = new SufferingChamberRenderer();
-    public static final Codec<SufferingChamberRenderer> CODEC = Codec.unit(INSTANCE);
+    public static final MapCodec<SufferingChamberRenderer> CODEC = MapCodec.unit(INSTANCE);
     public static final DynamicRenderType<WorkableElectricMultiblockMachine, SufferingChamberRenderer> TYPE = new DynamicRenderType<>(SufferingChamberRenderer.CODEC);
     // spotless:on
 
@@ -58,7 +58,7 @@ public class SufferingChamberRenderer extends
         BlockPos.MutableBlockPos maxPos = new BlockPos.MutableBlockPos()
                 .move(left, -4).move(up, 5).move(back, 7);
 
-        return new AABB(minPos, maxPos);
+        return AABB.encapsulatingFullBlocks(minPos, maxPos);
     });
 
     private SufferingChamberRenderer() {

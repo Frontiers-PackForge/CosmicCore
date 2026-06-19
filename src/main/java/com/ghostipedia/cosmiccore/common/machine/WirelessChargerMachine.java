@@ -10,20 +10,18 @@ import com.gregtechceu.gtceu.api.machine.trait.NotifiableEnergyContainer;
 import com.gregtechceu.gtceu.common.machine.owner.ArgonautsOwner;
 import com.gregtechceu.gtceu.common.machine.owner.FTBOwner;
 import com.gregtechceu.gtceu.common.machine.owner.PlayerOwner;
+import com.gregtechceu.gtceu.utils.ExtendedUseOnContext;
 import com.gregtechceu.gtceu.utils.FormattingUtil;
 
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Direction;
 import net.minecraft.core.Vec3i;
 import net.minecraft.network.chat.Component;
-import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.phys.AABB;
-import net.minecraft.world.phys.BlockHitResult;
 import net.neoforged.neoforge.items.IItemHandler;
-import net.neoforged.neoforge.items.wrapper.EmptyHandler;
-import net.minecraftforge.server.ServerLifecycleHooks;
+import net.neoforged.neoforge.items.wrapper.EmptyItemHandler;
+import net.neoforged.neoforge.server.ServerLifecycleHooks;
 
 import dev.ftb.mods.ftbteams.data.PlayerTeam;
 import top.theillusivec4.curios.api.CuriosApi;
@@ -45,28 +43,25 @@ public class WirelessChargerMachine extends TieredEnergyMachine {
 
     List<Player> oldPlayerList = new ArrayList<>();
 
-    public WirelessChargerMachine(BlockEntityCreationInfo holder, int tier, Object... args) {
-        super(holder, tier, args);
+    public WirelessChargerMachine(BlockEntityCreationInfo holder, int tier) {
+        super(holder, tier, m -> {
+            long chargeAmount = GTValues.V[tier];
+            return new NotifiableEnergyContainer(m, chargeAmount * 64L, chargeAmount, 4, 0L, 0L) {
+
+                @Override
+                public long getInputAmperage() {
+                    if (((WirelessChargerMachine) m).mode == ChargeMode.SUPER_CHARGED) {
+                        return 4;
+                    }
+                    return 1;
+                }
+            };
+        });
         this.tier = tier;
         mode = ChargeMode.SUPER_CHARGED;
         longRange = 1024L * (tier - GTValues.MV);
         shortRange = 512L * (tier - GTValues.MV);
         chargeAmount = GTValues.V[tier];
-    }
-
-    @Override
-    protected NotifiableEnergyContainer createEnergyContainer(Object... args) {
-        long chargeAmount = GTValues.V[getTier()];
-        return new NotifiableEnergyContainer(this, chargeAmount * 64L, chargeAmount, 4, 0L, 0L) {
-
-            @Override
-            public long getInputAmperage() {
-                if (mode == ChargeMode.SUPER_CHARGED) {
-                    return 4;
-                }
-                return 1;
-            };
-        };
     }
 
     @Override
@@ -123,7 +118,7 @@ public class WirelessChargerMachine extends TieredEnergyMachine {
                     if (GTCEu.Mods.isCuriosLoaded()) {
                         IItemHandler curios = CuriosApi.getCuriosInventory(player)
                                 .<IItemHandler>map(ICuriosItemHandler::getEquippedCurios)
-                                .orElse(EmptyHandler.INSTANCE);
+                                .orElse(EmptyItemHandler.INSTANCE);
                         for (int i = 0; i < curios.getSlots(); i++) {
                             var itemInSlot = curios.getStackInSlot(i);
                             var slotElectricItem = GTCapabilityHelper.getElectricItem(itemInSlot);
@@ -168,25 +163,24 @@ public class WirelessChargerMachine extends TieredEnergyMachine {
         int radius = mode == ChargeMode.SUPER_CHARGED ? (int) shortRange : (int) longRange;
         BlockPos a = new BlockPos(getBlockPos().offset(new Vec3i(-radius, -radius, -radius)));
         BlockPos b = new BlockPos(getBlockPos().offset(new Vec3i(radius, radius, radius)));
-        var entityList = getLevel().getEntities(null, new AABB(a, b));
+        var entityList = getLevel().getEntities(null, AABB.encapsulatingFullBlocks(a, b));
         return entityList.contains(player);
     }
 
     @Override
-    protected InteractionResult onScrewdriverClick(Player playerIn, InteractionHand hand, Direction gridSide,
-                                                   BlockHitResult hitResult) {
+    protected InteractionResult onScrewdriverClick(ExtendedUseOnContext context) {
         if (!getLevel().isClientSide) {
             mode = ChargeMode.values()[((mode.ordinal() + 1) % ChargeMode.values().length)];
             if (mode == ChargeMode.SUPER_CHARGED) {
-                playerIn.displayClientMessage(Component.translatable("cosmiccore.wireless_charger.mode.0",
+                context.getPlayer().displayClientMessage(Component.translatable("cosmiccore.wireless_charger.mode.0",
                         FormattingUtil.formatNumbers(shortRange)), false);
             } else if (mode == ChargeMode.MIXED) {
-                playerIn.displayClientMessage(Component.translatable("cosmiccore.wireless_charger.mode.1",
+                context.getPlayer().displayClientMessage(Component.translatable("cosmiccore.wireless_charger.mode.1",
                         FormattingUtil.formatNumbers(longRange)), false);
             }
         }
 
-        return super.onScrewdriverClick(playerIn, hand, gridSide, hitResult);
+        return super.onScrewdriverClick(context);
     }
 
     enum ChargeMode {

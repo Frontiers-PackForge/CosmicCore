@@ -1,15 +1,21 @@
 package com.ghostipedia.cosmiccore.common.network.packet;
 
-import com.ghostipedia.cosmiccore.common.network.CCoreNetwork;
+import com.ghostipedia.cosmiccore.CosmicCore;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
-import net.neoforged.api.distmarker.Dist;
-import net.minecraftforge.fml.DistExecutor;
-import net.minecraftforge.network.NetworkEvent;
+import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
+import net.neoforged.neoforge.network.handling.IPayloadContext;
 
-public class AbyssTimeWarnPacket implements CCoreNetwork.INetPacket {
+import org.jetbrains.annotations.NotNull;
+
+public class AbyssTimeWarnPacket implements CustomPacketPayload {
+
+    public static final Type<AbyssTimeWarnPacket> TYPE = new Type<>(CosmicCore.id("abyss_time_warn"));
+    public static final StreamCodec<FriendlyByteBuf, AbyssTimeWarnPacket> CODEC =
+            StreamCodec.ofMember(AbyssTimeWarnPacket::encode, AbyssTimeWarnPacket::new);
 
     private final String message;
 
@@ -21,14 +27,16 @@ public class AbyssTimeWarnPacket implements CCoreNetwork.INetPacket {
         this.message = buffer.readUtf();
     }
 
-    @Override
     public void encode(FriendlyByteBuf buffer) {
         buffer.writeUtf(message);
     }
 
+    public void execute(IPayloadContext context) {
+        Minecraft.getInstance().gui.setOverlayMessage(Component.literal(message), false);
+    }
+
     @Override
-    public void execute(NetworkEvent.Context context) {
-        DistExecutor.unsafeRunWhenOn(Dist.CLIENT,
-                () -> () -> Minecraft.getInstance().gui.setOverlayMessage(Component.literal(message), false));
+    public @NotNull Type<AbyssTimeWarnPacket> type() {
+        return TYPE;
     }
 }

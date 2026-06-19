@@ -23,8 +23,6 @@ import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.Level;
 
-import lombok.Getter;
-import lombok.Setter;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -44,28 +42,57 @@ public class WirelessDataSensor extends SensorPartMachine {
     private static final int DEFAULT_MAX_PERCENT = 66;
 
     @Persisted
-    @Getter
-    @Setter
     public long minValue, maxValue;
 
     @Persisted
-    @Getter
     private boolean usePercent;
 
     @Persisted
     @DescSynced
-    @Getter
-    @Setter
     private boolean isInverted;
 
     @Persisted
     @DescSynced
-    @Getter
-    @Setter
     private int signal;
 
     private LongInputWidget minValueInput;
     private LongInputWidget maxValueInput;
+
+    public long getMinValue() {
+        return minValue;
+    }
+
+    public void setMinValue(long minValue) {
+        this.minValue = minValue;
+    }
+
+    public long getMaxValue() {
+        return maxValue;
+    }
+
+    public void setMaxValue(long maxValue) {
+        this.maxValue = maxValue;
+    }
+
+    public boolean isUsePercent() {
+        return usePercent;
+    }
+
+    public boolean isInverted() {
+        return isInverted;
+    }
+
+    public void setInverted(boolean inverted) {
+        this.isInverted = inverted;
+    }
+
+    public int getSignal() {
+        return signal;
+    }
+
+    public void setSignal(int signal) {
+        this.signal = signal;
+    }
 
     public WirelessDataSensor(BlockEntityCreationInfo holder) {
         super(holder, GTValues.EV);

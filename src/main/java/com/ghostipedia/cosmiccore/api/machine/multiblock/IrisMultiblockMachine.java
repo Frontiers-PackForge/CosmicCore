@@ -28,8 +28,6 @@ import net.minecraft.world.item.ItemStack;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
 
-import lombok.Getter;
-import lombok.Setter;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -41,17 +39,13 @@ import java.util.Set;
 import static com.ghostipedia.cosmiccore.api.machine.multiblock.IrisMultiblockMachine.Stage.BLACK_HOLE;
 import static com.ghostipedia.cosmiccore.api.machine.multiblock.IrisMultiblockMachine.Stage.DEATH;
 
-@Getter
 public class IrisMultiblockMachine extends WorkableElectricMultiblockMachine implements IStellarIrisProvider {
 
 
-    @Getter
     @Persisted
     private final NotifiableItemStackHandler inventory;
 
-    @Getter
     protected boolean ignite;
-    @Getter
     protected boolean isFuelable;
     protected Object workingSound;
 
@@ -92,14 +86,38 @@ public class IrisMultiblockMachine extends WorkableElectricMultiblockMachine imp
         }
     }
 
+    @Override
+    public Stage getStage() {
+        return stage;
+    }
+
+    public NotifiableItemStackHandler getInventory() {
+        return inventory;
+    }
+
+    public boolean isIgnite() {
+        return ignite;
+    }
+
+    public boolean isFuelable() {
+        return isFuelable;
+    }
+
     /**
      * Custom star color (RGB, no alpha). -1 means use default stage-based color.
      * Persisted and synced to client for rendering.
      */
-    @Setter
     @Persisted
     @DescSynced
     private int customStarColor = -1;
+
+    public int getCustomStarColor() {
+        return customStarColor;
+    }
+
+    public void setCustomStarColor(int customStarColor) {
+        this.customStarColor = customStarColor;
+    }
 
     @Persisted
     @DescSynced
@@ -636,7 +654,7 @@ public class IrisMultiblockMachine extends WorkableElectricMultiblockMachine imp
             }
             if (sound != null) {
                 workingSound = sound.playAutoReleasedSound(
-                        () -> this.shouldWorkingPlaySound() && !this.isInValid() &&
+                        () -> this.shouldWorkingPlaySound() && !this.isRemoved() &&
                                 this.getLevel().isLoaded(this.getBlockPos()) &&
                                 MetaMachine.getMachine(this.getLevel(), this.getBlockPos()) == this,
                         RelativeDirection.offsetPos(this.getBlockPos(), getFrontFacing(), getUpwardsFacing(), isFlipped, 0,

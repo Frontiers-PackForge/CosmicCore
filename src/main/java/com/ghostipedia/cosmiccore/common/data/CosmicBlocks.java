@@ -27,8 +27,8 @@ import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.NoteBlockInstrument;
 import net.minecraft.world.level.material.MapColor;
-import net.minecraftforge.client.model.generators.ConfiguredModel;
-import net.minecraftforge.client.model.generators.ModelFile;
+import net.neoforged.neoforge.client.model.generators.ConfiguredModel;
+import net.neoforged.neoforge.client.model.generators.ModelFile;
 
 import com.teamresourceful.resourcefullib.common.registry.RegistryEntry;
 import com.tterrag.registrate.providers.DataGenContext;
@@ -733,7 +733,7 @@ public class CosmicBlocks {
 
     private static BlockEntry<Block> createGlassCasingBlock(String name, ResourceLocation texture,
                                                             Supplier<Supplier<RenderType>> type) {
-        NonNullFunction<BlockBehaviour.Properties, Block> supplier = GlassBlock::new;
+        NonNullFunction<BlockBehaviour.Properties, Block> supplier = TransparentBlock::new;
         return REGISTRATE.block(name, supplier)
                 .initialProperties(() -> Blocks.GLASS)
                 .properties(p -> p.isValidSpawn((state, level, pos, ent) -> false))
@@ -771,7 +771,7 @@ public class CosmicBlocks {
                 .register();
 
         BlockEntry<StairBlock> stairBlock = REGISTRATE
-                .block(name + "_stairs", s -> new StairBlock(() -> fullBlock.get().defaultBlockState(), s))
+                .block(name + "_stairs", s -> new StairBlock(fullBlock.getDefaultState(), s))
                 .initialProperties(fullBlock)
                 .properties(p -> p.isValidSpawn(((blockState, blockGetter, blockPos, entityType) -> false))
                         .speedFactor(1.25f)

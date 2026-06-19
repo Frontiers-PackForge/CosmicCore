@@ -40,11 +40,11 @@ public class VeinSurveyCommand {
     private static final SuggestionProvider<CommandSourceStack> VEIN_SUGGESTIONS = (context, builder) -> {
         var level = context.getSource().getLevel();
         var layers = WorldGeneratorUtils.WORLD_GEN_LAYERS.values().stream()
-                .filter(l -> l.isApplicableForLevel(level.dimension().location()))
+                .filter(l -> l.isApplicableForLevel(level.dimension()))
                 .toList();
 
         for (var layer : layers) {
-            for (String veinType : VeinSurveyUtil.getAvailableVeinTypes(layer)) {
+            for (String veinType : VeinSurveyUtil.getAvailableVeinTypes(level, layer)) {
                 if (veinType.toLowerCase().startsWith(builder.getRemainingLowerCase())) {
                     builder.suggest(veinType);
                 }
@@ -110,7 +110,7 @@ public class VeinSurveyCommand {
                 .withStyle(ChatFormatting.YELLOW), false);
 
         IWorldGenLayer layer = WorldGeneratorUtils.WORLD_GEN_LAYERS.values().stream()
-                .filter(l -> l.isApplicableForLevel(level.dimension().location()))
+                .filter(l -> l.isApplicableForLevel(level.dimension()))
                 .findFirst()
                 .orElse(null);
 
@@ -184,7 +184,7 @@ public class VeinSurveyCommand {
         BlockPos center = player.blockPosition();
 
         IWorldGenLayer layer = WorldGeneratorUtils.WORLD_GEN_LAYERS.values().stream()
-                .filter(l -> l.isApplicableForLevel(level.dimension().location()))
+                .filter(l -> l.isApplicableForLevel(level.dimension()))
                 .findFirst()
                 .orElse(null);
 
@@ -242,11 +242,11 @@ public class VeinSurveyCommand {
         ServerLevel level = ctx.getSource().getLevel();
 
         IWorldGenLayer layer = WorldGeneratorUtils.WORLD_GEN_LAYERS.values().stream()
-                .filter(l -> l.isApplicableForLevel(level.dimension().location()))
+                .filter(l -> l.isApplicableForLevel(level.dimension()))
                 .findFirst()
                 .orElse(null);
 
-        List<String> types = VeinSurveyUtil.getAvailableVeinTypes(layer);
+        List<String> types = VeinSurveyUtil.getAvailableVeinTypes(level, layer);
 
         if (types.isEmpty()) {
             ctx.getSource().sendSuccess(() -> Component.translatable("cosmiccore.survey.command.no_veins_dimension")

@@ -10,7 +10,6 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.common.util.LazyOptional;
 
 import com.tterrag.registrate.util.nullness.NonNullConsumer;
 import org.jetbrains.annotations.Nullable;
@@ -44,9 +43,9 @@ public class CosmicUtils {
             return false;
         }
 
-        LazyOptional<ICuriosItemHandler> cap = CuriosApi.getCuriosInventory(living);
+        Optional<ICuriosItemHandler> cap = CuriosApi.getCuriosInventory(living);
         if (cap.isPresent()) {
-            ICuriosItemHandler curioHandler = cap.resolve().get();
+            ICuriosItemHandler curioHandler = cap.get();
             Optional<ICurioStacksHandler> handler = curioHandler.getStacksHandler(curioSlot);
             if (handler.isPresent()) {
                 IDynamicStackHandler stackHandler = handler.get().getStacks();

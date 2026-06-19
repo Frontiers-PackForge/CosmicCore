@@ -8,7 +8,7 @@ import com.gregtechceu.gtceu.api.machine.fancyconfigurator.AutoStockingFancyConf
 import com.gregtechceu.gtceu.api.machine.multiblock.MultiblockControllerMachine;
 import com.gregtechceu.gtceu.api.machine.feature.multiblock.IMultiPart;
 import com.gregtechceu.gtceu.api.machine.trait.NotifiableFluidTank;
-import com.gregtechceu.gtceu.common.item.IntCircuitBehaviour;
+import com.gregtechceu.gtceu.common.item.behavior.IntCircuitBehaviour;
 import com.gregtechceu.gtceu.config.ConfigHolder;
 import com.gregtechceu.gtceu.integration.ae2.machine.feature.multiblock.IMEStockingPart;
 import com.gregtechceu.gtceu.integration.ae2.slot.ExportOnlyAEFluidList;
@@ -16,17 +16,15 @@ import com.gregtechceu.gtceu.integration.ae2.slot.ExportOnlyAEFluidSlot;
 import com.gregtechceu.gtceu.integration.ae2.slot.ExportOnlyAESlot;
 import com.gregtechceu.gtceu.integration.ae2.slot.IConfigurableSlotList;
 import com.gregtechceu.gtceu.integration.ae2.utils.AEUtil;
+import com.gregtechceu.gtceu.utils.ExtendedUseOnContext;
 
 import com.lowdragmc.lowdraglib.syncdata.annotation.DescSynced;
 import com.lowdragmc.lowdraglib.syncdata.annotation.DropSaved;
 import com.lowdragmc.lowdraglib.syncdata.annotation.Persisted;
-import net.minecraft.core.Direction;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
-import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
-import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.phys.BlockHitResult;
 import net.neoforged.neoforge.fluids.FluidStack;
 
 import appeng.api.config.Actionable;
@@ -69,9 +67,39 @@ public class CosmicStockingHatchPartMachine extends CosmicInputHatchPartMachine 
     @Setter
     private Predicate<GenericStack> autoPullTest;
 
-    public CosmicStockingHatchPartMachine(BlockEntityCreationInfo holder, Object... args) {
-        super(holder, args);
+    public CosmicStockingHatchPartMachine(BlockEntityCreationInfo holder) {
+        super(holder);
         this.autoPullTest = $ -> false;
+    }
+
+    @Override
+    public boolean isAutoPull() {
+        return autoPull;
+    }
+
+    @Override
+    public void setAutoPullTest(Predicate<GenericStack> autoPullTest) {
+        this.autoPullTest = autoPullTest;
+    }
+
+    @Override
+    public int getMinStackSize() {
+        return minStackSize;
+    }
+
+    @Override
+    public void setMinStackSize(int minStackSize) {
+        this.minStackSize = minStackSize;
+    }
+
+    @Override
+    public int getTicksPerCycle() {
+        return ticksPerCycle;
+    }
+
+    @Override
+    public void setTicksPerCycle(int ticksPerCycle) {
+        this.ticksPerCycle = ticksPerCycle;
     }
 
     @Override
@@ -87,7 +115,7 @@ public class CosmicStockingHatchPartMachine extends CosmicInputHatchPartMachine 
     }
 
     @Override
-    protected NotifiableFluidTank createTank(int initialCapacity, int slots, Object... args) {
+    protected NotifiableFluidTank createTank(int initialCapacity, int slots) {
         this.aeFluidHandler = new CosmicStockingHatchPartMachine.ExportOnlyAEStockingFluidList(this, CONFIG_SIZE);
         return this.aeFluidHandler;
     }
@@ -249,15 +277,14 @@ public class CosmicStockingHatchPartMachine extends CosmicInputHatchPartMachine 
     ////////////////////////////////
 
     @Override
-    protected InteractionResult onScrewdriverClick(Player playerIn, InteractionHand hand, Direction gridSide,
-                                                   BlockHitResult hitResult) {
+    protected InteractionResult onScrewdriverClick(ExtendedUseOnContext context) {
         if (!isRemote()) {
             setAutoPull(!autoPull);
             if (autoPull) {
-                playerIn.sendSystemMessage(
+                context.getPlayer().sendSystemMessage(
                         Component.translatable("gtceu.machine.me.stocking_auto_pull_enabled"));
             } else {
-                playerIn.sendSystemMessage(
+                context.getPlayer().sendSystemMessage(
                         Component.translatable("gtceu.machine.me.stocking_auto_pull_disabled"));
             }
         }
@@ -269,9 +296,9 @@ public class CosmicStockingHatchPartMachine extends CosmicInputHatchPartMachine 
     ////////////////////////////////
 
     @Override
-    protected CompoundTag writeConfigToTag() {
+    protected CompoundTag writeConfigToTag(HolderLookup.Provider provider) {
         if (!autoPull) {
-            CompoundTag tag = super.writeConfigToTag();
+            CompoundTag tag = super.writeConfigToTag(provider);
             tag.putBoolean("AutoPull", false);
             return tag;
         }
@@ -284,7 +311,7 @@ public class CosmicStockingHatchPartMachine extends CosmicInputHatchPartMachine 
     }
 
     @Override
-    protected void readConfigFromTag(CompoundTag tag) {
+    protected void readConfigFromTag(HolderLookup.Provider provider, CompoundTag tag) {
         if (tag.getBoolean("AutoPull")) {
             // if being set to auto-pull, no need to read the configured slots
             this.setAutoPull(true);
@@ -293,7 +320,7 @@ public class CosmicStockingHatchPartMachine extends CosmicInputHatchPartMachine 
         }
         // set auto pull first to avoid issues with clearing the config after reading from the data stick
         this.setAutoPull(false);
-        super.readConfigFromTag(tag);
+        super.readConfigFromTag(provider, tag);
     }
 
     private class ExportOnlyAEStockingFluidList extends ExportOnlyAEFluidList {

@@ -1,6 +1,7 @@
 package com.ghostipedia.cosmiccore.common.teleporter;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
@@ -26,8 +27,7 @@ public class TeleportPadRegistry extends SavedData {
     // Get the saved data instance for a specific dimension.
     public static TeleportPadRegistry get(ServerLevel level) {
         return level.getDataStorage().computeIfAbsent(
-                TeleportPadRegistry::load,
-                TeleportPadRegistry::new,
+                new SavedData.Factory<>(TeleportPadRegistry::new, TeleportPadRegistry::load),
                 DATA_NAME);
     }
 
@@ -51,7 +51,7 @@ public class TeleportPadRegistry extends SavedData {
     }
 
     @Override
-    public @NotNull CompoundTag save(@NotNull CompoundTag tag) {
+    public @NotNull CompoundTag save(@NotNull CompoundTag tag, @NotNull HolderLookup.Provider provider) {
         ListTag padsList = new ListTag();
 
         for (BlockPos pos : pads) {
@@ -64,7 +64,7 @@ public class TeleportPadRegistry extends SavedData {
         return tag;
     }
 
-    public static TeleportPadRegistry load(CompoundTag tag) {
+    public static TeleportPadRegistry load(CompoundTag tag, HolderLookup.Provider provider) {
         TeleportPadRegistry registry = new TeleportPadRegistry();
 
         ListTag padsList = tag.getList("Pads", Tag.TAG_COMPOUND);

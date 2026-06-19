@@ -1,23 +1,28 @@
 package com.ghostipedia.cosmiccore.common.network.packet;
 
-import com.ghostipedia.cosmiccore.common.network.CCoreNetwork;
+import com.ghostipedia.cosmiccore.CosmicCore;
 import com.ghostipedia.cosmiccore.common.worldgen.survey.VeinSurveyUtil.VeinConfidence;
 import com.ghostipedia.cosmiccore.common.worldgen.survey.VeinSurveyUtil.VeinInfo;
-import com.ghostipedia.cosmiccore.integration.journeymap.PredictedVeinRenderer;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.ChunkPos;
-import net.neoforged.api.distmarker.Dist;
-import net.minecraftforge.fml.DistExecutor;
-import net.minecraftforge.network.NetworkEvent;
+import net.neoforged.neoforge.network.handling.IPayloadContext;
+
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class SyncPredictedVeinsPacket implements CCoreNetwork.INetPacket {
+public class SyncPredictedVeinsPacket implements CustomPacketPayload {
+
+    public static final Type<SyncPredictedVeinsPacket> TYPE = new Type<>(CosmicCore.id("sync_predicted_veins"));
+    public static final StreamCodec<FriendlyByteBuf, SyncPredictedVeinsPacket> CODEC =
+            StreamCodec.ofMember(SyncPredictedVeinsPacket::encode, SyncPredictedVeinsPacket::new);
 
     private final List<PredictedVeinData> veins;
     private final boolean clearExisting;
@@ -39,7 +44,6 @@ public class SyncPredictedVeinsPacket implements CCoreNetwork.INetPacket {
         }
     }
 
-    @Override
     public void encode(FriendlyByteBuf buffer) {
         buffer.writeBoolean(clearExisting);
         buffer.writeVarInt(veins.size());
@@ -48,24 +52,15 @@ public class SyncPredictedVeinsPacket implements CCoreNetwork.INetPacket {
         }
     }
 
-    @Override
-    public void execute(NetworkEvent.Context context) {
-        DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> handleClient());
-    }
-
-    private void handleClient() {
+    public void execute(IPayloadContext context) {
         var mc = Minecraft.getInstance();
         if (mc.level == null) return;
+        // TODO(cosmiccore-42.14): re-wire predicted-vein markers when the JourneyMap integration is ported.
+    }
 
-        if (clearExisting) {
-            PredictedVeinRenderer.clear();
-        }
-
-        var dim = mc.level.dimension();
-        for (PredictedVeinData data : veins) {
-            VeinInfo veinInfo = data.toVeinInfo();
-            PredictedVeinRenderer.addPredictedVein(dim, veinInfo);
-        }
+    @Override
+    public @NotNull Type<SyncPredictedVeinsPacket> type() {
+        return TYPE;
     }
 
     private record PredictedVeinData(

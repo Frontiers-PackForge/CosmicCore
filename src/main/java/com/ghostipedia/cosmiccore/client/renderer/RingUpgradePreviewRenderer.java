@@ -17,6 +17,7 @@ import net.minecraft.world.phys.Vec3;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.BufferBuilder;
+import com.mojang.blaze3d.vertex.BufferUploader;
 import com.mojang.blaze3d.vertex.DefaultVertexFormat;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.Tesselator;
@@ -212,7 +213,7 @@ public class RingUpgradePreviewRenderer {
         Vec3 camPos = camera.getPosition();
         BlockRenderDispatcher dispatcher = mc.getBlockRenderer();
         Tesselator tesselator = Tesselator.getInstance();
-        BufferBuilder buffer = tesselator.getBuilder();
+        BufferBuilder buffer = null;
 
         poseStack.pushPose();
         poseStack.translate(-camPos.x, -camPos.y, -camPos.z);
@@ -251,9 +252,9 @@ public class RingUpgradePreviewRenderer {
         for (RenderType renderType : RenderType.chunkBufferLayers()) {
             if (!ItemBlockRenderTypes.getRenderLayers(state).contains(renderType)) continue;
             renderType.setupRenderState();
-            buffer.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.BLOCK);
+            buffer = tesselator.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.BLOCK);
             dispatcher.renderBatched(state, pos, Minecraft.getInstance().level, poseStack, buffer, false, RANDOM);
-            tesselator.end();
+            BufferUploader.drawWithShader(buffer.buildOrThrow());
             renderType.clearRenderState();
         }
         poseStack.popPose();

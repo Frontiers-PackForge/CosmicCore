@@ -16,7 +16,6 @@ import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import org.embeddedt.modernfix.render.RenderState;
 import org.joml.Quaternionf;
 
 public class RadianceItemRenderer implements IRenderer {
@@ -34,9 +33,7 @@ public class RadianceItemRenderer implements IRenderer {
                     new Quaternionf().fromAxisAngleDeg(0.0f, 0.0f, 0.3f, (System.currentTimeMillis() / 25) % 360));
         }
 
-        RenderState.IS_RENDERING_LEVEL = true;
         vanillaRender(stack, transformType, leftHand, poseStack, buffer, combinedLight, combinedOverlay, model);
-        RenderState.IS_RENDERING_LEVEL = false;
         poseStack.popPose();
     }
 

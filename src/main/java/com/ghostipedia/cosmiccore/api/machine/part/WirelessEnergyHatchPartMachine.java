@@ -11,7 +11,7 @@ import com.gregtechceu.gtceu.api.machine.trait.NotifiableEnergyContainer;
 import com.gregtechceu.gtceu.common.machine.owner.FTBOwner;
 import com.gregtechceu.gtceu.utils.FormattingUtil;
 
-import com.lowdragmc.lowdraglib.syncdata.ISubscription;
+import com.gregtechceu.gtceu.utils.ISubscription;
 import com.lowdragmc.lowdraglib.syncdata.annotation.Persisted;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.network.chat.Component;
@@ -104,8 +104,11 @@ public class WirelessEnergyHatchPartMachine extends TieredIOPartMachine {
     }
 
     protected UUID getTeamUUID() {
-        var team = ((FTBOwner) getOwner()).getPlayerTeam(getOwnerUUID());
-        return team != null ? team.getTeamId() : getOwnerUUID();
+        if (getOwner() instanceof FTBOwner ftbOwner) {
+            var team = ftbOwner.getPlayerTeam(getOwnerUUID());
+            if (team != null) return team.getTeamId();
+        }
+        return getOwnerUUID();
     }
 
     @Override

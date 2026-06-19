@@ -5,7 +5,7 @@ import com.gregtechceu.gtceu.common.machine.owner.MachineOwner;
 import com.gregtechceu.gtceu.common.machine.owner.PlayerOwner;
 
 import net.minecraft.network.chat.Component;
-import net.minecraftforge.common.UsernameCache;
+import net.neoforged.neoforge.common.UsernameCache;
 
 import java.util.List;
 

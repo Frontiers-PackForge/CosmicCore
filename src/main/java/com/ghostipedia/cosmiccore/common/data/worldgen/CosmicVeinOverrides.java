@@ -128,9 +128,10 @@ public class CosmicVeinOverrides {
     }
 
     public static void applyVeinOverrides() {
-        for (GTOreDefinition vein : GTRegistries.ORE_VEINS) {
-            ResourceLocation id = GTRegistries.ORE_VEINS.getKey(vein);
-            if (id == null) continue;
+        var registry = GTRegistries.builtinRegistry().registryOrThrow(GTRegistries.ORE_VEIN_REGISTRY);
+        for (var holder : registry.holders().toList()) {
+            GTOreDefinition vein = holder.value();
+            ResourceLocation id = holder.key().location();
 
             VeinShape shape = determineVeinShape(id, vein);
             if (shape != null) {

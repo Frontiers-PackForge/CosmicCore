@@ -2,6 +2,7 @@ package com.ghostipedia.cosmiccore.api.data.savedData;
 
 import com.ghostipedia.cosmiccore.CosmicCore;
 
+import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
@@ -34,11 +35,14 @@ public class StarLadderSavedData extends SavedData {
         }
     }
 
+    public static StarLadderSavedData load(CompoundTag tag, HolderLookup.Provider provider) {
+        return new StarLadderSavedData(tag);
+    }
+
     public static StarLadderSavedData getOrCreate(MinecraftServer server) {
         ServerLevel overworld = server.overworld();
         return overworld.getDataStorage().computeIfAbsent(
-                StarLadderSavedData::new,
-                StarLadderSavedData::new,
+                new SavedData.Factory<>(StarLadderSavedData::new, StarLadderSavedData::load),
                 DATA_NAME);
     }
 
@@ -65,7 +69,7 @@ public class StarLadderSavedData extends SavedData {
     }
 
     @Override
-    public @NotNull CompoundTag save(@NotNull CompoundTag tag) {
+    public @NotNull CompoundTag save(@NotNull CompoundTag tag, @NotNull HolderLookup.Provider provider) {
         var list = new ListTag();
         for (UUID uuid : establishedTeams) {
             var entry = new CompoundTag();

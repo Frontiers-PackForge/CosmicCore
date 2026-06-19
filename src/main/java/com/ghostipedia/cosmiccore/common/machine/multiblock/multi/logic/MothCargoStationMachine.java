@@ -14,25 +14,21 @@ import com.gregtechceu.gtceu.api.machine.MetaMachine;
 import com.gregtechceu.gtceu.api.machine.TickableSubscription;
 import com.gregtechceu.gtceu.api.machine.trait.NotifiableFluidTank;
 import com.gregtechceu.gtceu.api.machine.trait.NotifiableItemStackHandler;
+import com.gregtechceu.gtceu.utils.ExtendedUseOnContext;
 
 import com.lowdragmc.lowdraglib.syncdata.annotation.DescSynced;
 import com.lowdragmc.lowdraglib.syncdata.annotation.Persisted;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Direction;
 import net.minecraft.core.GlobalPos;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.Style;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.phys.BlockHitResult;
 import net.neoforged.neoforge.fluids.FluidStack;
 import net.neoforged.neoforge.fluids.capability.IFluidHandler;
 import net.neoforged.neoforge.items.IItemHandler;
@@ -120,8 +116,8 @@ public class MothCargoStationMachine extends LinkedWorkableMultiblockMachine {
 
     // ==================== Constructor ====================
 
-    public MothCargoStationMachine(BlockEntityCreationInfo holder, Object... args) {
-        super(holder, args);
+    public MothCargoStationMachine(BlockEntityCreationInfo holder) {
+        super(holder);
     }
 
 
@@ -210,7 +206,7 @@ public class MothCargoStationMachine extends LinkedWorkableMultiblockMachine {
             for (int y = -scanRadius; y <= scanRadius; y++) {
                 for (int z = -scanRadius; z <= scanRadius; z++) {
                     BlockPos checkPos = controllerPos.offset(x, y, z);
-                    Block block = level.getBlockState(checkPos).getBlock();
+                    net.minecraft.world.level.block.Block block = level.getBlockState(checkPos).getBlock();
                     ResourceLocation blockId = BuiltInRegistries.BLOCK.getKey(block);
 
                     int tier = getBeehiveTier(blockId);
@@ -512,7 +508,7 @@ public class MothCargoStationMachine extends LinkedWorkableMultiblockMachine {
                 if (available.isEmpty()) continue;
 
                 int toDrain = Math.min(available.getAmount(), remaining);
-                FluidStack drained = source.drain(new FluidStack(available, toDrain),
+                FluidStack drained = source.drain(available.copyWithAmount(toDrain),
                         IFluidHandler.FluidAction.SIMULATE);
                 if (drained.isEmpty()) continue;
 
@@ -527,7 +523,7 @@ public class MothCargoStationMachine extends LinkedWorkableMultiblockMachine {
 
                 // Actually drain what we inserted
                 if (filled > 0) {
-                    source.drain(new FluidStack(available, filled), IFluidHandler.FluidAction.EXECUTE);
+                    source.drain(available.copyWithAmount(filled), IFluidHandler.FluidAction.EXECUTE);
                     remaining -= filled;
                 }
             }
@@ -630,15 +626,14 @@ public class MothCargoStationMachine extends LinkedWorkableMultiblockMachine {
     }
 
     @Override
-    protected InteractionResult onScrewdriverClick(Player playerIn, InteractionHand hand, Direction gridSide,
-                                                   BlockHitResult hitResult) {
+    protected InteractionResult onScrewdriverClick(ExtendedUseOnContext context) {
         if (!isRemote()) {
             // Cycle through distribution modes
             DistributionMode[] modes = DistributionMode.values();
             int nextIndex = (distributionMode.ordinal() + 1) % modes.length;
             distributionMode = modes[nextIndex];
 
-            playerIn.displayClientMessage(
+            context.getPlayer().displayClientMessage(
                     Component.literal("Distribution Mode: " + distributionMode.name())
                             .setStyle(Style.EMPTY.withColor(ChatFormatting.AQUA)),
                     true);

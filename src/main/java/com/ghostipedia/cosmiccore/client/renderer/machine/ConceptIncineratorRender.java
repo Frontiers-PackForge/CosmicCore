@@ -24,7 +24,7 @@ import net.neoforged.neoforge.client.model.data.ModelData;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 import org.joml.Quaternionf;
 
 import java.util.List;
@@ -35,7 +35,7 @@ public class ConceptIncineratorRender extends
                                       DynamicRender<WorkableElectricMultiblockMachine, ConceptIncineratorRender> {
 
     public static final ConceptIncineratorRender INSTANCE = new ConceptIncineratorRender();
-    public static final Codec<ConceptIncineratorRender> CODEC = Codec.unit(ConceptIncineratorRender.INSTANCE);
+    public static final MapCodec<ConceptIncineratorRender> CODEC = MapCodec.unit(ConceptIncineratorRender.INSTANCE);
     public static final DynamicRenderType<WorkableElectricMultiblockMachine, ConceptIncineratorRender> TYPE = new DynamicRenderType<>(
             ConceptIncineratorRender.CODEC);
 
@@ -218,8 +218,7 @@ public class ConceptIncineratorRender extends
         PoseStack.Pose pose = poseStack.last();
         List<BakedQuad> quads = irisCoreModel.getQuads(null, null, random, ModelData.EMPTY, null);
         for (BakedQuad quad : quads) {
-            consumer.putBulkData(pose, quad, 0.016F + (percent / 4), 0.094F, 0.125F, 1, packedLight, packedOverlay,
-                    false);
+            consumer.putBulkData(pose, quad, 0.016F + (percent / 4), 0.094F, 0.125F, 1, packedLight, packedOverlay);
         }
     }
 
@@ -228,7 +227,7 @@ public class ConceptIncineratorRender extends
         PoseStack.Pose pose = poseStack.last();
         List<BakedQuad> quads = irisCoreModel.getQuads(null, null, random, ModelData.EMPTY, null);
         for (BakedQuad quad : quads) {
-            consumer.putBulkData(pose, quad, 0.1f, 0.1f, 0.1f, packedLight, packedOverlay);
+            consumer.putBulkData(pose, quad, 0.1f, 0.1f, 0.1f, 1f, packedLight, packedOverlay);
         }
     }
 
@@ -238,8 +237,7 @@ public class ConceptIncineratorRender extends
         PoseStack.Pose pose = poseStack.last();
         List<BakedQuad> quads = irisCoreModel.getQuads(null, null, random, ModelData.EMPTY, null);
         for (BakedQuad quad : quads) {
-            consumer.putBulkData(pose, quad, 0.2f + percent, 0.2f, 0.7f + -percent, 1, packedLight, packedOverlay,
-                    false);
+            consumer.putBulkData(pose, quad, 0.2f + percent, 0.2f, 0.7f + -percent, 1, packedLight, packedOverlay);
         }
     }
 
@@ -248,7 +246,7 @@ public class ConceptIncineratorRender extends
         poseStack.scale(2.0f, 2.0f, 2.0f);
         List<BakedQuad> quads = irisRingModel.getQuads(null, null, random, ModelData.EMPTY, null);
         for (BakedQuad quad : quads) {
-            consumer.putBulkData(poseStack.last(), quad, 1f, 1f, 1f, 1, packedOverlay);
+            consumer.putBulkData(poseStack.last(), quad, 1f, 1f, 1f, 1f, packedLight, packedOverlay);
         }
 
         poseStack.popPose();
@@ -268,7 +266,7 @@ public class ConceptIncineratorRender extends
         poseStack.mulPose(new Quaternionf().rotateAxis(totalTick * Mth.TWO_PI / 20, 0, 1, 0));
         List<BakedQuad> quads = irisSmallRingModel.getQuads(null, null, random, ModelData.EMPTY, null);
         for (BakedQuad quad : quads) {
-            consumer.putBulkData(poseStack.last(), quad, 1f, 1f, 1f, packedLight, packedOverlay);
+            consumer.putBulkData(poseStack.last(), quad, 1f, 1f, 1f, 1f, packedLight, packedOverlay);
         }
 
         poseStack.popPose();

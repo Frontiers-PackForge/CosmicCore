@@ -6,7 +6,6 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.common.util.LazyOptional;
 
 import top.theillusivec4.curios.api.CuriosApi;
 import top.theillusivec4.curios.api.type.capability.ICuriosItemHandler;
@@ -76,9 +75,9 @@ public final class RebreatherHelper {
      * Check if a specific item is in a curio slot.
      */
     private static boolean hasCurioItem(LivingEntity entity, String slotId, Item item) {
-        LazyOptional<ICuriosItemHandler> cap = CuriosApi.getCuriosInventory(entity);
+        Optional<ICuriosItemHandler> cap = CuriosApi.getCuriosInventory(entity);
         if (cap.isPresent()) {
-            ICuriosItemHandler curioHandler = cap.resolve().get();
+            ICuriosItemHandler curioHandler = cap.get();
             Optional<ICurioStacksHandler> handler = curioHandler.getStacksHandler(slotId);
             if (handler.isPresent()) {
                 IDynamicStackHandler stackHandler = handler.get().getStacks();

@@ -11,11 +11,11 @@ import com.gregtechceu.gtceu.utils.GTUtil;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.StringRepresentable;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.BlockGetter;
 
-import lombok.Getter;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -34,9 +34,9 @@ public class MagnetBlock extends ActiveBlock {
     }
 
     @Override
-    public void appendHoverText(ItemStack stack, @Nullable BlockGetter level, List<Component> tooltip,
+    public void appendHoverText(ItemStack stack, Item.TooltipContext context, List<Component> tooltip,
                                 TooltipFlag flag) {
-        super.appendHoverText(stack, level, tooltip, flag);
+        super.appendHoverText(stack, context, tooltip, flag);
         if (GTUtil.isShiftDown()) {
             tooltip.add(Component.translatable("cosmiccore.wire_coil.magnet_stats"));
             tooltip.add(Component.translatable("cosmiccore.wire_coil.magnet_capacity",
@@ -65,18 +65,12 @@ public class MagnetBlock extends ActiveBlock {
         // CosmicCore.id("block/casings/solid/galvorn_magnet"));
 
         @NotNull
-        @Getter
         private final String name;
-        @Getter
         private final int magnetStrength;
-        @Getter
         private final int regenRate;
-        @Getter
         private final int energyConsumed;
-        @Getter
         private final Material material;
         @NotNull
-        @Getter
         private final ResourceLocation texture;
 
         MagnetType(String name, int magnetStrength, int regenRate, int energyConsumed, Material material,
@@ -87,6 +81,32 @@ public class MagnetBlock extends ActiveBlock {
             this.energyConsumed = energyConsumed;
             this.material = material;
             this.texture = texture;
+        }
+
+        public String getName() {
+            return name;
+        }
+
+        public int getMagnetStrength() {
+            return magnetStrength;
+        }
+
+        public int getRegenRate() {
+            return regenRate;
+        }
+
+        public int getEnergyConsumed() {
+            return energyConsumed;
+        }
+
+        public Material getMaterial() {
+            return material;
+        }
+
+        @NotNull
+        @Override
+        public ResourceLocation getTexture() {
+            return texture;
         }
 
         @NotNull

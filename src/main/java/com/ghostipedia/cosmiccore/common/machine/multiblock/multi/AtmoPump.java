@@ -7,7 +7,7 @@ import com.ghostipedia.cosmiccore.gtbridge.CosmicRecipeTypes;
 import com.gregtechceu.gtceu.api.data.RotationState;
 import com.gregtechceu.gtceu.api.machine.MetaMachine;
 import com.gregtechceu.gtceu.api.machine.MultiblockMachineDefinition;
-import com.gregtechceu.gtceu.api.machine.feature.multiblock.IRotorHolderMachine;
+import com.gregtechceu.gtceu.common.machine.multiblock.part.RotorHolderPartMachine;
 import com.gregtechceu.gtceu.api.machine.multiblock.PartAbility;
 import com.gregtechceu.gtceu.api.pattern.FactoryBlockPattern;
 import com.gregtechceu.gtceu.api.pattern.TraceabilityPredicate;
@@ -79,7 +79,7 @@ public class AtmoPump {
                             new TraceabilityPredicate(
                                     new SimplePredicate(
                                             state -> MetaMachine.getMachine(state.getWorld(),
-                                                    state.getPos()) instanceof IRotorHolderMachine rotorHolder &&
+                                                    state.getPos()) instanceof RotorHolderPartMachine rotorHolder &&
                                                     state.getWorld()
                                                             .getBlockState(state.getPos()
                                                                     .relative(rotorHolder.self().getFrontFacing()))

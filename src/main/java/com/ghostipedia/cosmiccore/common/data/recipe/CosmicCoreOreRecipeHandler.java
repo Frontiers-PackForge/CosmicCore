@@ -8,12 +8,10 @@ import com.gregtechceu.gtceu.api.data.chemical.material.Material;
 import com.gregtechceu.gtceu.api.data.chemical.material.properties.PropertyKey;
 import com.gregtechceu.gtceu.common.data.GTMaterials;
 
-import net.minecraft.data.recipes.FinishedRecipe;
+import net.minecraft.data.recipes.RecipeOutput;
 import net.minecraft.world.item.ItemStack;
 
 import org.jetbrains.annotations.NotNull;
-
-import java.util.function.Consumer;
 
 import static com.ghostipedia.cosmiccore.api.data.CosmicTagPrefix.*;
 import static com.ghostipedia.cosmiccore.common.data.materials.CosmicMaterials.DilutedPrisma;
@@ -25,7 +23,7 @@ import static com.gregtechceu.gtceu.common.data.GTRecipeTypes.*;
 
 public class CosmicCoreOreRecipeHandler {
 
-    public static void init(Consumer<FinishedRecipe> provider, @NotNull Material material) {
+    public static void init(RecipeOutput provider, @NotNull Material material) {
         processCrushedLeachedBad(provider, material);
         processCrushedLeachedGood(provider, material);
         processRefinedFrothed(provider, material);
@@ -40,7 +38,7 @@ public class CosmicCoreOreRecipeHandler {
         // prismaFrothed.executeHandler(provider, PropertyKey.ORE, CosmicCoreOreRecipeHandler::processFrothedPure);
     }
 
-    public static void processCrushedLeachedBad(Consumer<FinishedRecipe> provider, Material material) {
+    public static void processCrushedLeachedBad(RecipeOutput provider, Material material) {
         if (!material.shouldGenerateRecipesFor(crushed) || !material.hasProperty(PropertyKey.ORE)) return;
         var property = material.getProperty(PropertyKey.ORE);
         ItemStack leachedStack = ChemicalHelper.get(crushedLeached, material);
@@ -65,7 +63,7 @@ public class CosmicCoreOreRecipeHandler {
         builder.duration(60).EUt(GTValues.VA[GTValues.HV]).save(provider);
     }
 
-    public static void processCrushedLeachedGood(Consumer<FinishedRecipe> provider, Material material) {
+    public static void processCrushedLeachedGood(RecipeOutput provider, Material material) {
         if (!material.shouldGenerateRecipesFor(crushed) || !material.hasProperty(PropertyKey.ORE)) return;
         var property = material.getProperty(PropertyKey.ORE);
         ItemStack leachedStack = ChemicalHelper.get(crushedLeached, material);
@@ -90,7 +88,7 @@ public class CosmicCoreOreRecipeHandler {
         builder.duration(60).EUt(GTValues.VA[GTValues.HV]).save(provider);
     }
 
-    public static void processRefinedFrothed(Consumer<FinishedRecipe> provider, Material material) {
+    public static void processRefinedFrothed(RecipeOutput provider, Material material) {
         if (!material.shouldGenerateRecipesFor(crushedRefined) || !material.hasProperty(PropertyKey.ORE)) return;
         var property = material.getProperty(PropertyKey.ORE);
         ItemStack frothedStack = ChemicalHelper.get(prismaFrothed, material);
@@ -120,7 +118,7 @@ public class CosmicCoreOreRecipeHandler {
         builder.duration(40).EUt(GTValues.VA[GTValues.IV]).save(provider);
     }
 
-    public static void processLeachedRefined(Consumer<FinishedRecipe> provider, Material material) {
+    public static void processLeachedRefined(RecipeOutput provider, Material material) {
         if (!material.shouldGenerateRecipesFor(crushedLeached) || !material.hasProperty(PropertyKey.ORE)) return;
         ItemStack refinedStack = ChemicalHelper.get(crushedRefined, material);
         var property = material.getProperty(PropertyKey.ORE);
@@ -136,7 +134,7 @@ public class CosmicCoreOreRecipeHandler {
         builder.duration(40).EUt(GTValues.VA[GTValues.HV]).save(provider);
     }
 
-    public static void processFrothedPure(Consumer<FinishedRecipe> provider, Material material) {
+    public static void processFrothedPure(RecipeOutput provider, Material material) {
         if (!material.shouldGenerateRecipesFor(prismaFrothed) || !material.hasProperty(PropertyKey.ORE)) return;
         ItemStack refinedStack = ChemicalHelper.get(prismaFrothed, material);
         ItemStack pureStack = ChemicalHelper.get(dustPure, material);
@@ -157,7 +155,7 @@ public class CosmicCoreOreRecipeHandler {
 
     // Prismatic Foundry
 
-    public static void processRawOretoFinalStates(Consumer<FinishedRecipe> provider, Material material) {
+    public static void processRawOretoFinalStates(RecipeOutput provider, Material material) {
         if (!material.shouldGenerateRecipesFor(rawOre) || !material.hasProperty(PropertyKey.ORE)) return;
         var property = material.getProperty(PropertyKey.ORE);
         ItemStack frothedStack = ChemicalHelper.get(dust, material);
@@ -188,7 +186,7 @@ public class CosmicCoreOreRecipeHandler {
         builder.duration(40).EUt(GTValues.V[GTValues.HV]).save(provider);
     }
 
-    public static void processRawOretoFinalStatesAugmented(Consumer<FinishedRecipe> provider, Material material) {
+    public static void processRawOretoFinalStatesAugmented(RecipeOutput provider, Material material) {
         if (!material.shouldGenerateRecipesFor(rawOre) || !material.hasProperty(PropertyKey.ORE)) return;
         var property = material.getProperty(PropertyKey.ORE);
         ItemStack frothedStack = ChemicalHelper.get(dust, material);

@@ -7,20 +7,20 @@ import com.gregtechceu.gtceu.api.item.ComponentItem;
 import com.gregtechceu.gtceu.api.item.component.IItemComponent;
 import com.gregtechceu.gtceu.api.item.component.IItemHUDProvider;
 
+import net.minecraft.client.DeltaTracker;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.LayeredDraw;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.client.gui.overlay.ForgeGui;
-import net.minecraftforge.client.gui.overlay.IGuiOverlay;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import lombok.NoArgsConstructor;
 import org.jetbrains.annotations.NotNull;
 
 @NoArgsConstructor
-public class CosmicHudGuiOverlay implements IGuiOverlay {
+public class CosmicHudGuiOverlay implements LayeredDraw.Layer {
 
     // Oxygen bar textures
     private static final ResourceLocation OXY_BG = CosmicCore.id("textures/gui/oxygen_bg.png");
@@ -74,10 +74,11 @@ public class CosmicHudGuiOverlay implements IGuiOverlay {
     }
 
     @Override
-    public void render(ForgeGui forgeGui, GuiGraphics guiGraphics, float partialTick, int screenWidth,
-                       int screenHeight) {
+    public void render(GuiGraphics guiGraphics, DeltaTracker deltaTracker) {
         Minecraft mc = Minecraft.getInstance();
-        if (mc.level != null && !mc.options.renderDebug && !mc.options.hideGui) {
+        if (mc.level != null && !mc.gui.getDebugOverlay().showDebugScreen() && !mc.options.hideGui) {
+            int screenWidth = guiGraphics.guiWidth();
+            int screenHeight = guiGraphics.guiHeight();
             renderHUDWirelessPDA(WirelessPDABehavior.CosmicCuriosUtils.getPDACurio(mc.player), guiGraphics);
             renderTimeBudgetBar(guiGraphics, screenWidth, screenHeight);
             renderOxygenBar(guiGraphics, screenWidth, screenHeight);

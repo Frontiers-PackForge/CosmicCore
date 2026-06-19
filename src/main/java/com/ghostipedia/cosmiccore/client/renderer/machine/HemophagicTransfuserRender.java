@@ -28,7 +28,7 @@ import net.neoforged.api.distmarker.OnlyIn;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 import org.joml.Quaternionf;
 
 import java.util.function.BiFunction;
@@ -41,7 +41,7 @@ public class HemophagicTransfuserRender extends
                                         DynamicRender<WorkableElectricMultiblockMachine, HemophagicTransfuserRender> {
 
     public static final HemophagicTransfuserRender INSTANCE = new HemophagicTransfuserRender();
-    public static final Codec<HemophagicTransfuserRender> CODEC = Codec.unit(INSTANCE);
+    public static final MapCodec<HemophagicTransfuserRender> CODEC = MapCodec.unit(INSTANCE);
     public static final DynamicRenderType<WorkableElectricMultiblockMachine, HemophagicTransfuserRender> TYPE = new DynamicRenderType<>(
             HemophagicTransfuserRender.CODEC);
 
@@ -57,7 +57,7 @@ public class HemophagicTransfuserRender extends
         BlockPos.MutableBlockPos maxPos = new BlockPos.MutableBlockPos()
                 .move(left, -3).move(up, 7).move(back, 8);
 
-        return new AABB(minPos, maxPos);
+        return AABB.encapsulatingFullBlocks(minPos, maxPos);
     });
 
     public static final ResourceLocation BLOOD_CUBE_TEXTURE = CosmicCore.id("block/iris/blood_cube");

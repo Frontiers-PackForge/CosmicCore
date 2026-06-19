@@ -16,10 +16,7 @@ import com.lowdragmc.lowdraglib.gui.widget.WidgetGroup;
 import com.lowdragmc.lowdraglib.jei.IngredientIO;
 import com.lowdragmc.lowdraglib.syncdata.annotation.Persisted;
 import net.minecraft.MethodsReturnNonnullByDefault;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-
-import lombok.Getter;
 
 import java.util.List;
 
@@ -29,7 +26,6 @@ import javax.annotation.ParametersAreNonnullByDefault;
 @MethodsReturnNonnullByDefault
 public class ModuleHatchPartMachine extends TieredIOPartMachine {
 
-    @Getter
     @Persisted
     private final NotifiableItemStackHandler inventory;
 
@@ -39,7 +35,11 @@ public class ModuleHatchPartMachine extends TieredIOPartMachine {
         this.inventory.setFilter(ModuleHatchPartMachine::isModule);
     }
 
-    private static List<Item> MODULES = null;
+    public NotifiableItemStackHandler getInventory() {
+        return inventory;
+    }
+
+    private static List<net.minecraft.world.item.Item> MODULES = null;
 
     private static boolean isModule(ItemStack stack) {
         if (MODULES == null) {
@@ -79,7 +79,8 @@ public class ModuleHatchPartMachine extends TieredIOPartMachine {
 
     @Override
     public void onMachineDestroyed() {
-        clearInventory(getInventory().storage);
+        super.onMachineDestroyed();
+        getInventory().dropInventoryInWorld();
     }
 
     protected RecipeHandlerList getHandlerList() {

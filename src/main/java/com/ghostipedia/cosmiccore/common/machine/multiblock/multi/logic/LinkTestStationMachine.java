@@ -20,8 +20,8 @@ import java.util.Set;
 public class LinkTestStationMachine extends LinkedWorkableElectricMultiblockMachine {
 
 
-    public LinkTestStationMachine(BlockEntityCreationInfo holder, Object... args) {
-        super(holder, args);
+    public LinkTestStationMachine(BlockEntityCreationInfo holder) {
+        super(holder);
     }
 
 

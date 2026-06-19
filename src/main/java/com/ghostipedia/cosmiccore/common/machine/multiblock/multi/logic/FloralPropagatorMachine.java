@@ -7,7 +7,7 @@ import com.gregtechceu.gtceu.api.machine.multiblock.WorkableMultiblockMachine;
 public class FloralPropagatorMachine extends WorkableElectricMultiblockMachine {
 
 
-    public FloralPropagatorMachine(BlockEntityCreationInfo holder, Object... args) {
-        super(holder, args);
+    public FloralPropagatorMachine(BlockEntityCreationInfo holder) {
+        super(holder);
     }
 }

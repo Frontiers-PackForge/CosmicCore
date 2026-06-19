@@ -12,6 +12,8 @@ import com.gregtechceu.gtceu.utils.GTUtil;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
+import net.minecraft.core.Registry;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;
@@ -74,7 +76,8 @@ public class VeinSurveyUtil {
                 level.dimension(), centerPos, radiusBlocks);
 
         for (GeneratedVeinMetadata metadata : cachedVeins) {
-            if (targetLayer != null && !metadata.definition().layer().equals(targetLayer)) {
+            GTOreDefinition definition = metadata.definition().value();
+            if (targetLayer != null && !definition.layer().equals(targetLayer)) {
                 continue;
             }
 
@@ -85,12 +88,16 @@ public class VeinSurveyUtil {
 
             confirmedGridPositions.add(metadata.originChunk());
 
+            ResourceLocation veinId = metadata.definition().unwrapKey()
+                    .map(ResourceKey::location)
+                    .orElse(null);
+
             results.add(new VeinInfo(
                     veinCenter,
                     metadata.originChunk(),
-                    metadata.definition(),
-                    metadata.id(),
-                    metadata.definition().clusterSize().getMaxValue(),
+                    definition,
+                    veinId,
+                    definition.clusterSize().getMaxValue(),
                     VeinConfidence.CONFIRMED));
         }
 
@@ -156,12 +163,12 @@ public class VeinSurveyUtil {
         Holder<Biome> biome = level.getBiome(veinCenter);
 
         var applicableLayers = WorldGeneratorUtils.WORLD_GEN_LAYERS.values().stream()
-                .filter(l -> l.isApplicableForLevel(level.dimension().location()))
+                .filter(l -> l.isApplicableForLevel(level.dimension()))
                 .toList();
 
         for (IWorldGenLayer layer : applicableLayers) {
             var biomeVeins = WorldGeneratorUtils.getCachedBiomeVeins(level, biome).stream()
-                    .filter(wv -> wv.vein().layer().equals(layer))
+                    .filter(wv -> wv.vein().value().layer().equals(layer))
                     .toList();
 
             var selectedWeightedVein = GTUtil.getRandomItem(random, biomeVeins);
@@ -171,12 +178,14 @@ public class VeinSurveyUtil {
 
             if (targetLayer != null && !layer.equals(targetLayer)) continue;
 
-            GTOreDefinition selectedVein = selectedWeightedVein.vein();
-            ResourceLocation veinId = GTRegistries.ORE_VEINS.getKey(selectedVein);
+            Holder<GTOreDefinition> selectedVein = selectedWeightedVein.vein();
+            ResourceLocation veinId = selectedVein.unwrapKey()
+                    .map(ResourceKey::location)
+                    .orElse(null);
             BlockPos finalCenter = new BlockPos(veinCenter.getX(), 0, veinCenter.getZ());
-            int estimatedRadius = selectedVein.clusterSize().getMaxValue();
+            int estimatedRadius = selectedVein.value().clusterSize().getMaxValue();
 
-            results.add(new VeinInfo(finalCenter, chunkPos, selectedVein, veinId, estimatedRadius,
+            results.add(new VeinInfo(finalCenter, chunkPos, selectedVein.value(), veinId, estimatedRadius,
                     VeinConfidence.PREDICTED));
         }
 
@@ -198,14 +207,14 @@ public class VeinSurveyUtil {
         return veins.isEmpty() ? Optional.empty() : Optional.of(veins.get(0));
     }
 
-    public static List<String> getAvailableVeinTypes(IWorldGenLayer layer) {
+    public static List<String> getAvailableVeinTypes(ServerLevel level, IWorldGenLayer layer) {
         List<String> types = new ArrayList<>();
-        for (GTOreDefinition vein : GTRegistries.ORE_VEINS) {
+        Registry<GTOreDefinition> registry = level.registryAccess()
+                .registryOrThrow(GTRegistries.ORE_VEIN_REGISTRY);
+        for (Holder.Reference<GTOreDefinition> holder : registry.holders().toList()) {
+            GTOreDefinition vein = holder.value();
             if ((layer == null || vein.layer() == layer) && vein.weight() > 0) {
-                ResourceLocation id = GTRegistries.ORE_VEINS.getKey(vein);
-                if (id != null) {
-                    types.add(id.getPath());
-                }
+                types.add(holder.key().location().getPath());
             }
         }
         return types;

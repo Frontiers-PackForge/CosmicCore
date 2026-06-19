@@ -796,10 +796,10 @@ public class BargainConstellationScreen extends Screen {
     }
 
     @Override
-    public boolean mouseScrolled(double mouseX, double mouseY, double delta) {
+    public boolean mouseScrolled(double mouseX, double mouseY, double scrollX, double scrollY) {
         // Zoom in/out with scroll wheel
         float oldZoom = zoom;
-        zoom += (float) delta * 0.1f;
+        zoom += (float) scrollY * 0.1f;
         zoom = Math.max(MIN_ZOOM, Math.min(MAX_ZOOM, zoom));
 
         // Adjust offset to zoom toward mouse position

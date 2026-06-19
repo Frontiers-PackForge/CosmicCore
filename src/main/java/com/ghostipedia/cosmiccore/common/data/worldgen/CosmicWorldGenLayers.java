@@ -1,5 +1,6 @@
 package com.ghostipedia.cosmiccore.common.data.worldgen;
 
+import com.ghostipedia.cosmiccore.CosmicCore;
 import com.ghostipedia.cosmiccore.common.data.tag.block.CosmicBlockTags;
 
 import com.gregtechceu.gtceu.api.data.worldgen.GTOreDefinition;
@@ -8,14 +9,20 @@ import com.gregtechceu.gtceu.api.data.worldgen.SimpleWorldGenLayer;
 import com.gregtechceu.gtceu.api.data.worldgen.WorldGenLayers;
 import com.gregtechceu.gtceu.api.registry.GTRegistries;
 
+import net.minecraft.core.RegistryAccess;
 import net.minecraft.util.valueproviders.ConstantInt;
 import net.minecraft.util.valueproviders.IntProvider;
 import net.minecraft.util.valueproviders.UniformInt;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.levelgen.structure.templatesystem.TagMatchTest;
 
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.neoforge.event.AddReloadListenerEvent;
+
 import java.util.Set;
 
+@EventBusSubscriber(modid = CosmicCore.MOD_ID)
 public class CosmicWorldGenLayers {
 
     public static SimpleWorldGenLayer OVERWORLD;
@@ -24,18 +31,27 @@ public class CosmicWorldGenLayers {
         OVERWORLD = new SimpleWorldGenLayer(
                 "overworld",
                 () -> new TagMatchTest(CosmicBlockTags.OVERWORLD_ORE_REPLACEABLES),
-                Set.of(Level.OVERWORLD.location()));
+                Set.of(Level.OVERWORLD));
 
         WorldGenLayers.STONE.setLevels(Set.of());
         WorldGenLayers.DEEPSLATE.setLevels(Set.of());
     }
 
-    public static void migrateOreVeinsToOverworldLayer() {
+    @SubscribeEvent
+    public static void onAddReloadListeners(AddReloadListenerEvent event) {
+        // GTCEu 8.0 turned ore veins into a datapack registry (gtceu:ore_vein) that is only populated
+        // once datapacks load. AddReloadListenerEvent is where GTCEu itself refreshes its frozen registry,
+        // so it is the earliest point our vein post-processing can safely read gtceu:ore_vein.
+        migrateOreVeinsToOverworldLayer(event.getRegistryAccess());
+    }
+
+    public static void migrateOreVeinsToOverworldLayer(RegistryAccess registryAccess) {
         // Initialize our vein definitions first
         CosmicOreVeins.init();
 
-        // Migrate overworld veins to our unified layer and scale cluster sizes
-        for (GTOreDefinition vein : GTRegistries.ORE_VEINS) {
+        var registry = registryAccess.registryOrThrow(GTRegistries.ORE_VEIN_REGISTRY);
+        for (var holder : registry.holders().toList()) {
+            GTOreDefinition vein = holder.value();
             IWorldGenLayer currentLayer = vein.layer();
             if (currentLayer == WorldGenLayers.STONE || currentLayer == WorldGenLayers.DEEPSLATE) {
                 vein.layer(OVERWORLD);
@@ -44,7 +60,7 @@ public class CosmicWorldGenLayers {
         }
 
         // Apply our custom vein generators (replaces GT generators, disables veins we don't have)
-        CosmicOreVeins.applyOverrides();
+        CosmicOreVeins.applyOverrides(registryAccess);
     }
 
     private static IntProvider scaleIntProvider(IntProvider provider) {

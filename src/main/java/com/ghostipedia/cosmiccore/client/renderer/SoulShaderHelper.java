@@ -81,13 +81,12 @@ public final class SoulShaderHelper {
 
         Matrix4f matrix = poseStack.last().pose();
 
-        BufferBuilder buffer = Tesselator.getInstance().getBuilder();
-        buffer.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX);
-        buffer.vertex(matrix, x1, y2, 0).uv(u1, v2).endVertex();
-        buffer.vertex(matrix, x2, y2, 0).uv(u2, v2).endVertex();
-        buffer.vertex(matrix, x2, y1, 0).uv(u2, v1).endVertex();
-        buffer.vertex(matrix, x1, y1, 0).uv(u1, v1).endVertex();
-        BufferUploader.drawWithShader(buffer.end());
+        BufferBuilder buffer = Tesselator.getInstance().begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX);
+        buffer.addVertex(matrix, x1, y2, 0).setUv(u1, v2);
+        buffer.addVertex(matrix, x2, y2, 0).setUv(u2, v2);
+        buffer.addVertex(matrix, x2, y1, 0).setUv(u2, v1);
+        buffer.addVertex(matrix, x1, y1, 0).setUv(u1, v1);
+        BufferUploader.drawWithShader(buffer.buildOrThrow());
 
         RenderSystem.disableBlend();
         RenderSystem.setShader(GameRenderer::getPositionTexShader);

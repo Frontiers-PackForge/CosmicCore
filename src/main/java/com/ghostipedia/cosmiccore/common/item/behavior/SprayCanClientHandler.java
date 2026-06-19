@@ -160,7 +160,7 @@ public class SprayCanClientHandler {
     // this event is used here because the other one needs a b lock to be clicked on this one works in the air
     @OnlyIn(Dist.CLIENT)
     @SubscribeEvent
-    public static void onMouseInput(InputEvent.MouseButton event) {
+    public static void onMouseInput(InputEvent.MouseButton.Pre event) {
         int button = event.getButton();
         if ((button != 0 && button != 2) || event.getAction() != GLFW.GLFW_PRESS) return;
 

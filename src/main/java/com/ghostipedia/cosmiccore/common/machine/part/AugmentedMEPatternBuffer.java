@@ -7,8 +7,8 @@ import com.gregtechceu.gtceu.integration.ae2.machine.MEPatternBufferPartMachine;
 
 public class AugmentedMEPatternBuffer extends MEPatternBufferPartMachine {
 
-    public AugmentedMEPatternBuffer(BlockEntityCreationInfo holder, Object... args) {
-        super(holder, args);
+    public AugmentedMEPatternBuffer(BlockEntityCreationInfo holder) {
+        super(holder);
         GTMMEBufferAccessor.setMaxPatternCount(45);
     }
 }

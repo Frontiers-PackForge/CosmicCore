@@ -14,7 +14,7 @@ import com.gregtechceu.gtceu.api.recipe.OverclockingLogic;
 import com.gregtechceu.gtceu.common.data.GTBlocks;
 import com.gregtechceu.gtceu.common.data.GTRecipeModifiers;
 
-import com.sammy.malum.registry.common.block.BlockRegistry;
+import com.sammy.malum.registry.common.block.MalumBlocks;
 
 import static com.ghostipedia.cosmiccore.api.registries.CosmicRegistration.REGISTRATE;
 import static com.ghostipedia.cosmiccore.common.data.CosmicBlocks.HIGH_TEMP_FISSION_CASING;
@@ -52,7 +52,7 @@ public class VileFissionReactor {
                             .or(abilities(PartAbility.MAINTENANCE).setExactLimit(1)))
                     .where('B', blocks(CosmicBlocks.HIGHLY_CONDUCTIVE_FISSION_CASING.get()))
                     .where('C', blocks(GTBlocks.CASING_LAMINATED_GLASS.get()))
-                    .where('D', blocks(BlockRegistry.BLOCK_OF_LIVING_FLESH.get()))
+                    .where('D', blocks(MalumBlocks.BLOCK_OF_LIVING_FLESH.get()))
                     .build())
             // spotless:on
             .workableCasingModel(CosmicCore.id("block/casings/solid/high_temperature_fission_casing"),

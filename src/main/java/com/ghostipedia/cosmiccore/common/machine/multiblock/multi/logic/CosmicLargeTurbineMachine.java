@@ -1,12 +1,11 @@
 package com.ghostipedia.cosmiccore.common.machine.multiblock.multi.logic;
 
-import com.gregtechceu.gtceu.api.capability.ITurbineMachine;
 import com.gregtechceu.gtceu.api.capability.recipe.RecipeCapability;
 import com.gregtechceu.gtceu.api.blockentity.BlockEntityCreationInfo;
 import com.gregtechceu.gtceu.api.machine.MetaMachine;
 import com.gregtechceu.gtceu.api.machine.feature.ITieredMachine;
 import com.gregtechceu.gtceu.api.machine.feature.multiblock.IMultiPart;
-import com.gregtechceu.gtceu.api.machine.feature.multiblock.IRotorHolderMachine;
+import com.gregtechceu.gtceu.common.machine.multiblock.part.RotorHolderPartMachine;
 import com.gregtechceu.gtceu.api.machine.multiblock.WorkableElectricMultiblockMachine;
 import com.gregtechceu.gtceu.api.recipe.GTRecipe;
 import com.gregtechceu.gtceu.api.recipe.content.ContentModifier;
@@ -28,7 +27,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.List;
 
 public class CosmicLargeTurbineMachine extends WorkableElectricMultiblockMachine
-                                       implements ITieredMachine, ITurbineMachine {
+                                       implements ITieredMachine {
 
     public static final int MIN_DURABILITY_TO_WARN = 10;
 
@@ -43,9 +42,9 @@ public class CosmicLargeTurbineMachine extends WorkableElectricMultiblockMachine
     }
 
     @Nullable
-    private IRotorHolderMachine getRotorHolder() {
+    private RotorHolderPartMachine getRotorHolder() {
         for (IMultiPart part : getParts()) {
-            if (part instanceof IRotorHolderMachine rotorHolder) {
+            if (part instanceof RotorHolderPartMachine rotorHolder) {
                 return rotorHolder;
             }
         }
@@ -74,13 +73,11 @@ public class CosmicLargeTurbineMachine extends WorkableElectricMultiblockMachine
         return 0;
     }
 
-    @Override
     public boolean hasRotor() {
         var rotorHolder = getRotorHolder();
         return rotorHolder != null && rotorHolder.hasRotor();
     }
 
-    @Override
     public int getRotorSpeed() {
         var rotorHolder = getRotorHolder();
         if (rotorHolder != null && rotorHolder.hasRotor()) {
@@ -89,7 +86,6 @@ public class CosmicLargeTurbineMachine extends WorkableElectricMultiblockMachine
         return 0;
     }
 
-    @Override
     public int getMaxRotorHolderSpeed() {
         var rotorHolder = getRotorHolder();
         if (rotorHolder != null && rotorHolder.hasRotor()) {
@@ -98,7 +94,6 @@ public class CosmicLargeTurbineMachine extends WorkableElectricMultiblockMachine
         return 0;
     }
 
-    @Override
     public int getTotalEfficiency() {
         var rotorHolder = getRotorHolder();
         if (rotorHolder != null && rotorHolder.hasRotor()) {
@@ -107,13 +102,11 @@ public class CosmicLargeTurbineMachine extends WorkableElectricMultiblockMachine
         return -1;
     }
 
-    @Override
     public long getCurrentProduction() {
         return isActive() && recipeLogic.getLastRecipe() != null ?
                 recipeLogic.getLastRecipe().getOutputEUt().voltage() : 0;
     }
 
-    @Override
     public int getRotorDurabilityPercent() {
         var rotorHolder = getRotorHolder();
         if (rotorHolder != null && rotorHolder.hasRotor()) {

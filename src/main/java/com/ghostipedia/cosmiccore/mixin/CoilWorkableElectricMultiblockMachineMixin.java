@@ -47,8 +47,8 @@ public abstract class CoilWorkableElectricMultiblockMachineMixin extends Workabl
     @Unique
     private TickableSubscription frontiers$temperatureTick = null;
 
-    public CoilWorkableElectricMultiblockMachineMixin(BlockEntityCreationInfo holder, Object... args) {
-        super(holder, args);
+    public CoilWorkableElectricMultiblockMachineMixin(BlockEntityCreationInfo holder) {
+        super(holder);
     }
 
     public float getTemperature() {
@@ -57,14 +57,14 @@ public abstract class CoilWorkableElectricMultiblockMachineMixin extends Workabl
 
     public void setTemperature(float temp) {
         frontiers$currentTemp = temp + 273;
-        this.onChanged();
+        this.markAsChanged();
     }
 
     @Override
     public void onLoad() {
         super.onLoad();
         if (getTemperature() == 0 && this.getLevel() instanceof ServerLevel level) {
-            setTemperature(level.getBiome(this.getBlockPos()).get().getBaseTemperature());
+            setTemperature(level.getBiome(this.getBlockPos()).value().getBaseTemperature());
         }
         if (frontiers$temperatureTick == null) {
             frontiers$temperatureTick = subscribeServerTick(this::frontiers$temperatureTick);
@@ -84,7 +84,7 @@ public abstract class CoilWorkableElectricMultiblockMachineMixin extends Workabl
     private void frontiers$temperatureTick() {
         if (this.getLevel() instanceof ServerLevel level) {
             setTemperature(HeatCapability.adjustTempTowards(getTemperature(),
-                    level.getBiome(this.getBlockPos()).get().getBaseTemperature(), 0.5f));
+                    level.getBiome(this.getBlockPos()).value().getBaseTemperature(), 0.5f));
         }
     }
 

@@ -5,7 +5,7 @@ import com.gregtechceu.gtceu.api.registry.registrate.MachineBuilder;
 import com.gregtechceu.gtceu.client.model.machine.overlays.WorkableOverlays;
 
 import net.minecraft.resources.ResourceLocation;
-import net.minecraftforge.client.model.generators.BlockModelBuilder;
+import net.neoforged.neoforge.client.model.generators.BlockModelBuilder;
 
 import static com.gregtechceu.gtceu.common.data.models.GTMachineModels.*;
 

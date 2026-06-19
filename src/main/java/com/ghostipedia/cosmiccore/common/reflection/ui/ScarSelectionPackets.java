@@ -1,5 +1,6 @@
 package com.ghostipedia.cosmiccore.common.reflection.ui;
 
+import com.ghostipedia.cosmiccore.CosmicCore;
 import com.ghostipedia.cosmiccore.common.data.CosmicItems;
 import com.ghostipedia.cosmiccore.common.network.CCoreNetwork;
 import com.ghostipedia.cosmiccore.common.reflection.ReflectionCapability;
@@ -8,15 +9,16 @@ import com.ghostipedia.cosmiccore.utils.StringUtil;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.item.ItemStack;
-import net.neoforged.api.distmarker.Dist;
-import net.minecraftforge.fml.DistExecutor;
-import net.minecraftforge.network.NetworkDirection;
-import net.minecraftforge.network.NetworkEvent;
+import net.neoforged.neoforge.network.handling.IPayloadContext;
+
+import org.jetbrains.annotations.NotNull;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -26,13 +28,6 @@ import java.util.Set;
  */
 public class ScarSelectionPackets {
 
-    public static void register() {
-        CCoreNetwork.register(OpenScarSelectionPacket.class, OpenScarSelectionPacket::new,
-                NetworkDirection.PLAY_TO_CLIENT);
-        CCoreNetwork.register(ScarRemovalPacket.class, ScarRemovalPacket::new,
-                NetworkDirection.PLAY_TO_SERVER);
-    }
-
     public static void sendOpenScarSelection(ServerPlayer player, Set<ResourceLocation> scars) {
         CCoreNetwork.sendToPlayer(player, new OpenScarSelectionPacket(scars));
     }
@@ -41,8 +36,11 @@ public class ScarSelectionPackets {
         CCoreNetwork.sendToServer(new ScarRemovalPacket(scarId));
     }
 
-    // Server -> Client: Open the scar selection screen
-    public static class OpenScarSelectionPacket implements CCoreNetwork.INetPacket {
+    public static class OpenScarSelectionPacket implements CustomPacketPayload {
+
+        public static final Type<OpenScarSelectionPacket> TYPE = new Type<>(CosmicCore.id("scar_open_selection"));
+        public static final StreamCodec<FriendlyByteBuf, OpenScarSelectionPacket> CODEC =
+                StreamCodec.ofMember(OpenScarSelectionPacket::encode, OpenScarSelectionPacket::new);
 
         private final Set<ResourceLocation> scars;
 
@@ -59,7 +57,6 @@ public class ScarSelectionPackets {
             this.scars = readScars;
         }
 
-        @Override
         public void encode(FriendlyByteBuf buf) {
             buf.writeVarInt(scars.size());
             for (ResourceLocation id : scars) {
@@ -67,14 +64,21 @@ public class ScarSelectionPackets {
             }
         }
 
+        public void execute(IPayloadContext ctx) {
+            ScarSelectionScreen.open(scars);
+        }
+
         @Override
-        public void execute(NetworkEvent.Context ctx) {
-            DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> ScarSelectionScreen.open(scars));
+        public @NotNull Type<OpenScarSelectionPacket> type() {
+            return TYPE;
         }
     }
 
-    // Client -> Server: Remove a specific scar (consumes Cluster from inventory)
-    public static class ScarRemovalPacket implements CCoreNetwork.INetPacket {
+    public static class ScarRemovalPacket implements CustomPacketPayload {
+
+        public static final Type<ScarRemovalPacket> TYPE = new Type<>(CosmicCore.id("scar_removal"));
+        public static final StreamCodec<FriendlyByteBuf, ScarRemovalPacket> CODEC =
+                StreamCodec.ofMember(ScarRemovalPacket::encode, ScarRemovalPacket::new);
 
         private final ResourceLocation scarId;
 
@@ -86,15 +90,12 @@ public class ScarSelectionPackets {
             this.scarId = buf.readResourceLocation();
         }
 
-        @Override
         public void encode(FriendlyByteBuf buf) {
             buf.writeResourceLocation(scarId);
         }
 
-        @Override
-        public void execute(NetworkEvent.Context ctx) {
-            ServerPlayer player = ctx.getSender();
-            if (player == null) return;
+        public void execute(IPayloadContext ctx) {
+            if (!(ctx.player() instanceof ServerPlayer player)) return;
 
             ReflectionCapability.get(player).ifPresent(reflection -> {
                 if (!reflection.hasDefianceScar(scarId)) {
@@ -127,11 +128,9 @@ public class ScarSelectionPackets {
         }
 
         private ItemStack findCluster(ServerPlayer player) {
-            // Check hands first
             if (isCluster(player.getMainHandItem())) return player.getMainHandItem();
             if (isCluster(player.getOffhandItem())) return player.getOffhandItem();
 
-            // Search inventory
             for (int i = 0; i < player.getInventory().getContainerSize(); i++) {
                 ItemStack stack = player.getInventory().getItem(i);
                 if (isCluster(stack)) return stack;
@@ -141,6 +140,11 @@ public class ScarSelectionPackets {
 
         private boolean isCluster(ItemStack stack) {
             return !stack.isEmpty() && stack.is(CosmicItems.PERPETUITY_SHARD_MASSIVE.get());
+        }
+
+        @Override
+        public @NotNull Type<ScarRemovalPacket> type() {
+            return TYPE;
         }
     }
 }

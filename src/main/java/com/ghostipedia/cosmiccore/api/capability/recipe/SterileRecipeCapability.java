@@ -8,7 +8,7 @@ import com.gregtechceu.gtceu.api.recipe.GTRecipe;
 import com.gregtechceu.gtceu.api.recipe.content.Content;
 import com.gregtechceu.gtceu.api.recipe.content.ContentModifier;
 import com.gregtechceu.gtceu.api.recipe.content.SerializerFluidIngredient;
-import com.gregtechceu.gtceu.api.recipe.ingredient.FluidIngredient;
+import com.gregtechceu.gtceu.api.recipe.ingredient.SizedIngredientExtensions;
 import com.gregtechceu.gtceu.api.recipe.lookup.ingredient.AbstractMapIngredient;
 
 import com.lowdragmc.lowdraglib.gui.widget.LabelWidget;
@@ -16,6 +16,7 @@ import com.lowdragmc.lowdraglib.gui.widget.WidgetGroup;
 import com.lowdragmc.lowdraglib.utils.LocalizationUtils;
 
 import net.neoforged.neoforge.fluids.FluidStack;
+import net.neoforged.neoforge.fluids.crafting.SizedFluidIngredient;
 
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import org.apache.commons.lang3.mutable.MutableInt;
@@ -24,7 +25,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Collection;
 import java.util.List;
 
-public class SterileRecipeCapability extends RecipeCapability<FluidIngredient> {
+public class SterileRecipeCapability extends RecipeCapability<SizedFluidIngredient> {
 
     public final static SterileRecipeCapability CAP = new SterileRecipeCapability();
 
@@ -33,12 +34,12 @@ public class SterileRecipeCapability extends RecipeCapability<FluidIngredient> {
     }
 
     @Override
-    public FluidIngredient copyInner(FluidIngredient content) {
-        return content.copy();
+    public SizedFluidIngredient copyInner(SizedFluidIngredient content) {
+        return SizedIngredientExtensions.copy(content);
     }
 
     @Override
-    public FluidIngredient copyWithModifier(FluidIngredient content, ContentModifier modifier) {
+    public SizedFluidIngredient copyWithModifier(SizedFluidIngredient content, ContentModifier modifier) {
         return FluidRecipeCapability.CAP.copyWithModifier(content, modifier);
     }
 
@@ -68,13 +69,13 @@ public class SterileRecipeCapability extends RecipeCapability<FluidIngredient> {
             if (isInput) {
                 group.addWidget(new LabelWidget(3 - xOffset, yOffset.addAndGet(10),
                         LocalizationUtils.format("cosmiccore.recipe.sterile_in",
-                                sterileIngredient.getStacks()[0].getDisplayName().getString(),
-                                sterileIngredient.getStacks()[0].getAmount() + (perTick ? "/t" : ""))));
+                                sterileIngredient.getFluids()[0].getHoverName().getString(),
+                                sterileIngredient.getFluids()[0].getAmount() + (perTick ? "/t" : ""))));
             } else {
                 group.addWidget(new LabelWidget(3 - xOffset, yOffset.addAndGet(10),
                         LocalizationUtils.format("cosmiccore.recipe.sterile_out",
-                                sterileIngredient.getStacks()[0].getDisplayName().getString(),
-                                sterileIngredient.getStacks()[0].getAmount() + (perTick ? "/t" : ""))));
+                                sterileIngredient.getFluids()[0].getHoverName().getString(),
+                                sterileIngredient.getFluids()[0].getAmount() + (perTick ? "/t" : ""))));
             }
 
         }

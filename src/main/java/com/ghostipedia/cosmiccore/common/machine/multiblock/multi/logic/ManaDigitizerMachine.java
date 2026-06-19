@@ -15,7 +15,6 @@ import com.gregtechceu.gtceu.api.misc.EnergyContainerList;
 import com.gregtechceu.gtceu.common.data.GTMaterials;
 
 import com.lowdragmc.lowdraglib.syncdata.annotation.DescSynced;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.neoforged.neoforge.fluids.FluidStack;
@@ -35,7 +34,7 @@ public class ManaDigitizerMachine extends WorkableElectricMultiblockMachine {
     @Nullable
     protected EnergyContainerList inputEnergyContainers;
     @DescSynced
-    private static final Object2IntMap<Item> validIngredients = new Object2IntOpenHashMap<>();
+    private static final Object2IntMap<net.minecraft.world.item.Item> validIngredients = new Object2IntOpenHashMap<>();
     @DescSynced
     private static final Object2IntMap<FluidStack> validIngredientsFluids = new Object2IntOpenHashMap<>();
 
@@ -48,8 +47,8 @@ public class ManaDigitizerMachine extends WorkableElectricMultiblockMachine {
         validIngredientsFluids.put(GTMaterials.Argon.getFluid(FluidStorageKeys.PLASMA, 1), 3);
     }
 
-    public ManaDigitizerMachine(BlockEntityCreationInfo holder, Object... args) {
-        super(holder, args);
+    public ManaDigitizerMachine(BlockEntityCreationInfo holder) {
+        super(holder);
     }
 
     @Override
@@ -81,11 +80,11 @@ public class ManaDigitizerMachine extends WorkableElectricMultiblockMachine {
 
     protected void updateBotanySubscription() {
         if (isFormed) {
-            botanySubs = subscribeServerTick(botanySubs, this::updateTick);
+            botanySubs = subscribeServerTick(botanySubs, this::updateBotanyTick);
         }
     }
 
-    protected void updateTick() {
+    protected void updateBotanyTick() {
         if (!isWorkingEnabled() || inputEnergyContainers == null) {
             return;
         }

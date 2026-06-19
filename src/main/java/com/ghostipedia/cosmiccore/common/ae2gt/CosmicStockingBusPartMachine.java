@@ -14,18 +14,16 @@ import com.gregtechceu.gtceu.integration.ae2.slot.ExportOnlyAEItemList;
 import com.gregtechceu.gtceu.integration.ae2.slot.ExportOnlyAEItemSlot;
 import com.gregtechceu.gtceu.integration.ae2.slot.ExportOnlyAESlot;
 import com.gregtechceu.gtceu.integration.ae2.slot.IConfigurableSlotList;
+import com.gregtechceu.gtceu.utils.ExtendedUseOnContext;
 
 import com.lowdragmc.lowdraglib.syncdata.annotation.DescSynced;
 import com.lowdragmc.lowdraglib.syncdata.annotation.DropSaved;
 import com.lowdragmc.lowdraglib.syncdata.annotation.Persisted;
-import net.minecraft.core.Direction;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
-import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.phys.BlockHitResult;
 
 import appeng.api.config.Actionable;
 import appeng.api.networking.IGrid;
@@ -64,9 +62,39 @@ public class CosmicStockingBusPartMachine extends CosmicInputBusPartMachine impl
     @Setter
     private Predicate<GenericStack> autoPullTest;
 
-    public CosmicStockingBusPartMachine(BlockEntityCreationInfo holder, Object... args) {
-        super(holder, args);
+    public CosmicStockingBusPartMachine(BlockEntityCreationInfo holder) {
+        super(holder);
         this.autoPullTest = $ -> false;
+    }
+
+    @Override
+    public boolean isAutoPull() {
+        return autoPull;
+    }
+
+    @Override
+    public void setAutoPullTest(Predicate<GenericStack> autoPullTest) {
+        this.autoPullTest = autoPullTest;
+    }
+
+    @Override
+    public int getMinStackSize() {
+        return minStackSize;
+    }
+
+    @Override
+    public void setMinStackSize(int minStackSize) {
+        this.minStackSize = minStackSize;
+    }
+
+    @Override
+    public int getTicksPerCycle() {
+        return ticksPerCycle;
+    }
+
+    @Override
+    public void setTicksPerCycle(int ticksPerCycle) {
+        this.ticksPerCycle = ticksPerCycle;
     }
     /////////////////////////////////
     // ***** Machine LifeCycle ****//
@@ -85,7 +113,7 @@ public class CosmicStockingBusPartMachine extends CosmicInputBusPartMachine impl
     }
 
     @Override
-    protected NotifiableItemStackHandler createInventory(Object... args) {
+    protected NotifiableItemStackHandler createInventory() {
         this.aeItemHandler = new CosmicStockingBusPartMachine.ExportOnlyAEStockingItemList(this, CONFIG_SIZE);
         return this.aeItemHandler;
     }
@@ -264,15 +292,14 @@ public class CosmicStockingBusPartMachine extends CosmicInputBusPartMachine impl
     }
 
     @Override
-    protected InteractionResult onScrewdriverClick(Player playerIn, InteractionHand hand, Direction gridSide,
-                                                   BlockHitResult hitResult) {
+    protected InteractionResult onScrewdriverClick(ExtendedUseOnContext context) {
         if (!isRemote()) {
             setAutoPull(!autoPull);
             if (autoPull) {
-                playerIn.sendSystemMessage(
+                context.getPlayer().sendSystemMessage(
                         Component.translatable("gtceu.machine.me.stocking_auto_pull_enabled"));
             } else {
-                playerIn.sendSystemMessage(
+                context.getPlayer().sendSystemMessage(
                         Component.translatable("gtceu.machine.me.stocking_auto_pull_disabled"));
             }
         }
@@ -284,9 +311,9 @@ public class CosmicStockingBusPartMachine extends CosmicInputBusPartMachine impl
     ////////////////////////////////
 
     @Override
-    protected CompoundTag writeConfigToTag() {
+    protected CompoundTag writeConfigToTag(HolderLookup.Provider provider) {
         if (!autoPull) {
-            CompoundTag tag = super.writeConfigToTag();
+            CompoundTag tag = super.writeConfigToTag(provider);
             tag.putBoolean("AutoPull", false);
             return tag;
         }
@@ -297,7 +324,7 @@ public class CosmicStockingBusPartMachine extends CosmicInputBusPartMachine impl
     }
 
     @Override
-    protected void readConfigFromTag(CompoundTag tag) {
+    protected void readConfigFromTag(HolderLookup.Provider provider, CompoundTag tag) {
         if (tag.getBoolean("AutoPull")) {
             // if being set to auto-pull, no need to read the configured slots
             this.setAutoPull(true);
@@ -305,7 +332,7 @@ public class CosmicStockingBusPartMachine extends CosmicInputBusPartMachine impl
         }
         // set auto pull first to avoid issues with clearing the config after reading from the data stick
         this.setAutoPull(false);
-        super.readConfigFromTag(tag);
+        super.readConfigFromTag(provider, tag);
     }
 
     private class ExportOnlyAEStockingItemList extends ExportOnlyAEItemList {

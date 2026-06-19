@@ -137,7 +137,7 @@ public class PrestigeIgnitionButton extends Widget {
             Minecraft.getInstance().getSoundManager().play(
                     SimpleSoundInstance.forUI(SoundEvents.GLASS_BREAK, 0.4f, 1.0f));
             Minecraft.getInstance().getSoundManager().play(
-                    SimpleSoundInstance.forUI(SoundEvents.GENERIC_EXPLODE, 0.7f, 0.5f));
+                    SimpleSoundInstance.forUI(SoundEvents.GENERIC_EXPLODE.value(), 0.7f, 0.5f));
             Minecraft.getInstance().getSoundManager().play(
                     SimpleSoundInstance.forUI(SoundEvents.TOTEM_USE, 1.2f, 0.8f));
         }

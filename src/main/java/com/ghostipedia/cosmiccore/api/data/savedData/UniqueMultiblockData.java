@@ -4,15 +4,12 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 
-import lombok.Getter;
-
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
 public class UniqueMultiblockData {
 
-    @Getter
     public static class UniqueMultiblockId {
 
         private final String multiblockType;
@@ -21,6 +18,14 @@ public class UniqueMultiblockData {
         protected UniqueMultiblockId(String multiblockType, String multiblockDimension) {
             this.multiblockType = multiblockType;
             this.multiblockDimension = multiblockDimension;
+        }
+
+        public String getMultiblockType() {
+            return multiblockType;
+        }
+
+        public String getMultiblockDimension() {
+            return multiblockDimension;
         }
 
         @Override
