@@ -1,7 +1,5 @@
 package com.ghostipedia.cosmiccore.common.machine.multiblock.multi.logic;
 
-import com.ghostipedia.cosmiccore.CosmicCore;
-
 import com.gregtechceu.gtceu.api.capability.recipe.IO;
 import com.gregtechceu.gtceu.api.capability.recipe.ItemRecipeCapability;
 import com.gregtechceu.gtceu.api.data.chemical.ChemicalHelper;
@@ -22,10 +20,8 @@ import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.neoforge.common.Tags;
-import net.minecraftforge.common.world.ForgeChunkManager;
 import net.neoforged.neoforge.items.IItemHandlerModifiable;
 
-import lombok.Getter;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
@@ -46,7 +42,6 @@ public class OreExtractionDrillLogic extends RecipeLogic {
         COMPLETE
     }
 
-    @Getter
     @Persisted
     private DrillPhase phase = DrillPhase.IDLE;
 
@@ -76,7 +71,6 @@ public class OreExtractionDrillLogic extends RecipeLogic {
     private Set<ChunkPos> ourLoadedChunks = new HashSet<>();
     private Set<ChunkPos> structureChunks = new HashSet<>();
 
-    @Getter
     private Map<String, Integer> oreTypeCounts = new LinkedHashMap<>();
 
     @Persisted
@@ -329,34 +323,15 @@ public class OreExtractionDrillLogic extends RecipeLogic {
     private void loadChunk(ServerLevel level, ChunkPos chunk) {
         if (ourLoadedChunks.contains(chunk)) return;
 
-        BlockPos ownerPos = getMachine().getBlockPos();
-        boolean success = ForgeChunkManager.forceChunk(
-                level,
-                CosmicCore.MOD_ID,
-                ownerPos,
-                chunk.x,
-                chunk.z,
-                true,
-                true);
-
-        if (success) {
-            ourLoadedChunks.add(chunk);
-        }
+        level.setChunkForced(chunk.x, chunk.z, true);
+        ourLoadedChunks.add(chunk);
     }
 
     private void unloadChunk(ServerLevel level, ChunkPos chunk) {
         if (structureChunks.contains(chunk)) return;
         if (!ourLoadedChunks.remove(chunk)) return;
 
-        BlockPos ownerPos = getMachine().getBlockPos();
-        ForgeChunkManager.forceChunk(
-                level,
-                CosmicCore.MOD_ID,
-                ownerPos,
-                chunk.x,
-                chunk.z,
-                false,
-                true);
+        level.setChunkForced(chunk.x, chunk.z, false);
     }
 
     public void loadStructureChunks() {
@@ -394,15 +369,7 @@ public class OreExtractionDrillLogic extends RecipeLogic {
         if (!(getMachine().getLevel() instanceof ServerLevel serverLevel)) return;
 
         for (ChunkPos chunk : ourLoadedChunks) {
-            BlockPos ownerPos = getMachine().getBlockPos();
-            ForgeChunkManager.forceChunk(
-                    serverLevel,
-                    CosmicCore.MOD_ID,
-                    ownerPos,
-                    chunk.x,
-                    chunk.z,
-                    false,
-                    true);
+            serverLevel.setChunkForced(chunk.x, chunk.z, false);
         }
 
         ourLoadedChunks.clear();
@@ -481,6 +448,14 @@ public class OreExtractionDrillLogic extends RecipeLogic {
             }
         }
         return result.toString();
+    }
+
+    public DrillPhase getPhase() {
+        return phase;
+    }
+
+    public Map<String, Integer> getOreTypeCounts() {
+        return oreTypeCounts;
     }
 
     public int getPendingOreCount() {

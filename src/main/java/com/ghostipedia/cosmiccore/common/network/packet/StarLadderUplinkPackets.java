@@ -1,5 +1,6 @@
 package com.ghostipedia.cosmiccore.common.network.packet;
 
+import com.ghostipedia.cosmiccore.CosmicCore;
 import com.ghostipedia.cosmiccore.common.machine.multiblock.multi.logic.StarLadderMachine;
 import com.ghostipedia.cosmiccore.common.machine.multiblock.multi.logic.StarLadderUplinkManager.DemandSlot;
 import com.ghostipedia.cosmiccore.common.machine.multiblock.multi.logic.StarLadderUplinkState;
@@ -10,26 +11,19 @@ import com.gregtechceu.gtceu.api.machine.MetaMachine;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.Style;
+import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.item.ItemStack;
-import net.neoforged.api.distmarker.Dist;
-import net.minecraftforge.fml.DistExecutor;
-import net.minecraftforge.network.NetworkDirection;
-import net.minecraftforge.network.NetworkEvent;
+import net.neoforged.neoforge.network.handling.IPayloadContext;
+
+import org.jetbrains.annotations.NotNull;
 
 public class StarLadderUplinkPackets {
-
-    public static void register() {
-        CCoreNetwork.register(UplinkActionPacket.class, UplinkActionPacket::new, NetworkDirection.PLAY_TO_SERVER);
-        CCoreNetwork.register(CloseScreenPacket.class, CloseScreenPacket::new, NetworkDirection.PLAY_TO_CLIENT);
-        CCoreNetwork.register(UplinkSyncPacket.class, UplinkSyncPacket::new, NetworkDirection.PLAY_TO_CLIENT);
-        CCoreNetwork.register(ObserverWhisperPacket.class, ObserverWhisperPacket::new, NetworkDirection.PLAY_TO_CLIENT);
-    }
-
-    // ---- Client → Server: Player actions ----
 
     public enum UplinkAction {
         INITIATE,
@@ -37,7 +31,11 @@ public class StarLadderUplinkPackets {
         ABORT
     }
 
-    public static class UplinkActionPacket implements CCoreNetwork.INetPacket {
+    public static class UplinkActionPacket implements CustomPacketPayload {
+
+        public static final Type<UplinkActionPacket> TYPE = new Type<>(CosmicCore.id("uplink_action"));
+        public static final StreamCodec<FriendlyByteBuf, UplinkActionPacket> CODEC =
+                StreamCodec.ofMember(UplinkActionPacket::encode, UplinkActionPacket::new);
 
         private final BlockPos machinePos;
         private final UplinkAction action;
@@ -52,16 +50,13 @@ public class StarLadderUplinkPackets {
             this.action = buf.readEnum(UplinkAction.class);
         }
 
-        @Override
         public void encode(FriendlyByteBuf buf) {
             buf.writeBlockPos(machinePos);
             buf.writeEnum(action);
         }
 
-        @Override
-        public void execute(NetworkEvent.Context ctx) {
-            ServerPlayer player = ctx.getSender();
-            if (player == null) return;
+        public void execute(IPayloadContext ctx) {
+            if (!(ctx.player() instanceof ServerPlayer player)) return;
 
             if (!(player.level() instanceof ServerLevel serverLevel)) return;
             var machine = MetaMachine.getMachine(serverLevel, machinePos);
@@ -73,30 +68,40 @@ public class StarLadderUplinkPackets {
                 case ABORT -> starLadder.getUplinkManager().abort(player);
             }
         }
+
+        @Override
+        public @NotNull Type<UplinkActionPacket> type() {
+            return TYPE;
+        }
     }
 
-    // ---- Server → Client: Force close the Star Ladder screen ----
+    public static class CloseScreenPacket implements CustomPacketPayload {
 
-    public static class CloseScreenPacket implements CCoreNetwork.INetPacket {
+        public static final Type<CloseScreenPacket> TYPE = new Type<>(CosmicCore.id("uplink_close_screen"));
+        public static final StreamCodec<FriendlyByteBuf, CloseScreenPacket> CODEC =
+                StreamCodec.ofMember(CloseScreenPacket::encode, CloseScreenPacket::new);
 
         public CloseScreenPacket() {}
 
         public CloseScreenPacket(FriendlyByteBuf buf) {}
 
-        @Override
         public void encode(FriendlyByteBuf buf) {}
 
+        public void execute(IPayloadContext ctx) {
+            Minecraft.getInstance().setScreen(null);
+        }
+
         @Override
-        public void execute(NetworkEvent.Context ctx) {
-            DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> {
-                Minecraft.getInstance().setScreen(null);
-            });
+        public @NotNull Type<CloseScreenPacket> type() {
+            return TYPE;
         }
     }
 
-    // ---- Server → Client: Sync uplink fight state ----
+    public static class UplinkSyncPacket implements CustomPacketPayload {
 
-    public static class UplinkSyncPacket implements CCoreNetwork.INetPacket {
+        public static final Type<UplinkSyncPacket> TYPE = new Type<>(CosmicCore.id("uplink_sync"));
+        public static final StreamCodec<RegistryFriendlyByteBuf, UplinkSyncPacket> CODEC =
+                StreamCodec.ofMember(UplinkSyncPacket::encode, UplinkSyncPacket::new);
 
         private final StarLadderUplinkState state;
         private final int progress;
@@ -125,46 +130,45 @@ public class StarLadderUplinkPackets {
             this.complexTimerMax = complex.timerMax;
         }
 
-        public UplinkSyncPacket(FriendlyByteBuf buf) {
+        public UplinkSyncPacket(RegistryFriendlyByteBuf buf) {
             this.state = buf.readEnum(StarLadderUplinkState.class);
             this.progress = buf.readVarInt();
             this.drainRate = buf.readVarInt();
-            this.bulkItem = buf.readItem();
+            this.bulkItem = ItemStack.OPTIONAL_STREAM_CODEC.decode(buf);
             this.bulkQtyRemaining = buf.readVarInt();
             this.bulkTimer = buf.readVarInt();
             this.bulkTimerMax = buf.readVarInt();
-            this.complexItem = buf.readItem();
+            this.complexItem = ItemStack.OPTIONAL_STREAM_CODEC.decode(buf);
             this.complexQtyRemaining = buf.readVarInt();
             this.complexTimer = buf.readVarInt();
             this.complexTimerMax = buf.readVarInt();
         }
 
-        @Override
-        public void encode(FriendlyByteBuf buf) {
+        public void encode(RegistryFriendlyByteBuf buf) {
             buf.writeEnum(state);
             buf.writeVarInt(progress);
             buf.writeVarInt(drainRate);
-            buf.writeItemStack(bulkItem, false);
+            ItemStack.OPTIONAL_STREAM_CODEC.encode(buf, bulkItem);
             buf.writeVarInt(bulkQtyRemaining);
             buf.writeVarInt(bulkTimer);
             buf.writeVarInt(bulkTimerMax);
-            buf.writeItemStack(complexItem, false);
+            ItemStack.OPTIONAL_STREAM_CODEC.encode(buf, complexItem);
             buf.writeVarInt(complexQtyRemaining);
             buf.writeVarInt(complexTimer);
             buf.writeVarInt(complexTimerMax);
         }
 
+        public void execute(IPayloadContext ctx) {
+            StarLadderUplinkClientState.update(state, progress, drainRate,
+                    bulkItem, bulkQtyRemaining, bulkTimer, bulkTimerMax,
+                    complexItem, complexQtyRemaining, complexTimer, complexTimerMax);
+        }
+
         @Override
-        public void execute(NetworkEvent.Context ctx) {
-            DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> {
-                StarLadderUplinkClientState.update(state, progress, drainRate,
-                        bulkItem, bulkQtyRemaining, bulkTimer, bulkTimerMax,
-                        complexItem, complexQtyRemaining, complexTimer, complexTimerMax);
-            });
+        public @NotNull Type<UplinkSyncPacket> type() {
+            return TYPE;
         }
     }
-
-    // ---- Server → Client: Observer whisper message ----
 
     public enum WhisperStyle {
         REFLECTION,
@@ -172,7 +176,11 @@ public class StarLadderUplinkPackets {
         AMBIENT
     }
 
-    public static class ObserverWhisperPacket implements CCoreNetwork.INetPacket {
+    public static class ObserverWhisperPacket implements CustomPacketPayload {
+
+        public static final Type<ObserverWhisperPacket> TYPE = new Type<>(CosmicCore.id("uplink_observer_whisper"));
+        public static final StreamCodec<FriendlyByteBuf, ObserverWhisperPacket> CODEC =
+                StreamCodec.ofMember(ObserverWhisperPacket::encode, ObserverWhisperPacket::new);
 
         private static final Style REFLECTION_STYLE = Style.EMPTY.withItalic(true).withColor(0x9966CC);
         private static final Style OBSERVER_STYLE = Style.EMPTY.withColor(0x88CCFF).withBold(false);
@@ -191,30 +199,29 @@ public class StarLadderUplinkPackets {
             this.style = buf.readEnum(WhisperStyle.class);
         }
 
-        @Override
         public void encode(FriendlyByteBuf buf) {
             buf.writeUtf(text);
             buf.writeEnum(style);
         }
 
-        @Override
-        public void execute(NetworkEvent.Context ctx) {
-            DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> {
-                var player = Minecraft.getInstance().player;
-                if (player == null) return;
+        public void execute(IPayloadContext ctx) {
+            var player = Minecraft.getInstance().player;
+            if (player == null) return;
 
-                Component translated = Component.translatable(text);
-                Component message = switch (style) {
-                    case REFLECTION -> Component.literal("...").append(translated).withStyle(REFLECTION_STYLE);
-                    case OBSERVER -> translated.copy().withStyle(OBSERVER_STYLE);
-                    case AMBIENT -> translated.copy().withStyle(AMBIENT_STYLE);
-                };
-                player.sendSystemMessage(message);
-            });
+            Component translated = Component.translatable(text);
+            Component message = switch (style) {
+                case REFLECTION -> Component.literal("...").append(translated).withStyle(REFLECTION_STYLE);
+                case OBSERVER -> translated.copy().withStyle(OBSERVER_STYLE);
+                case AMBIENT -> translated.copy().withStyle(AMBIENT_STYLE);
+            };
+            player.sendSystemMessage(message);
+        }
+
+        @Override
+        public @NotNull Type<ObserverWhisperPacket> type() {
+            return TYPE;
         }
     }
-
-    // ---- Client-side state holder for synced uplink data ----
 
     public static class ClientDemand {
 
@@ -296,8 +303,6 @@ public class StarLadderUplinkPackets {
             complex.reset();
         }
     }
-
-    // ---- Sending helpers ----
 
     public static void sendInitiate(BlockPos machinePos) {
         CCoreNetwork.sendToServer(new UplinkActionPacket(machinePos, UplinkAction.INITIATE));

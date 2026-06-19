@@ -661,9 +661,9 @@ public class StellarConvergenceScreen extends Screen {
     }
 
     @Override
-    public boolean mouseScrolled(double mouseX, double mouseY, double delta) {
+    public boolean mouseScrolled(double mouseX, double mouseY, double scrollX, double scrollY) {
         float oldZoom = zoom;
-        zoom = Mth.clamp(zoom + (float) delta * 0.15f, MIN_ZOOM, MAX_ZOOM);
+        zoom = Mth.clamp(zoom + (float) scrollY * 0.15f, MIN_ZOOM, MAX_ZOOM);
 
         // Zoom toward mouse
         if (oldZoom != zoom) {

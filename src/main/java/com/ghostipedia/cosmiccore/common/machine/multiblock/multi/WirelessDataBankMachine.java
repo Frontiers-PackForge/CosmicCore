@@ -26,7 +26,6 @@ import com.gregtechceu.gtceu.config.ConfigHolder;
 import com.lowdragmc.lowdraglib.utils.DummyWorld;
 
 import net.minecraft.network.chat.Component;
-import net.minecraft.world.level.block.Block;
 
 import it.unimi.dsi.fastutil.longs.Long2ObjectMaps;
 
@@ -145,7 +144,7 @@ public class WirelessDataBankMachine extends WorkableElectricMultiblockMachine
         List<IDataAccessHatch> hatches = new ArrayList<>();
 
         for (var part : getParts()) {
-            Block block = part.self().getBlockState().getBlock();
+            net.minecraft.world.level.block.Block block = part.self().getBlockState().getBlock();
             if (part instanceof IDataAccessHatch hatch && PartAbility.OPTICAL_DATA_RECEPTION.isApplicable(block)) {
                 hatches.add(hatch);
             }

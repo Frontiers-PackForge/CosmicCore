@@ -20,45 +20,39 @@ public abstract class DelegatingVertexConsumer implements ISpriteAwareVertexCons
         }
     }
 
-    public @NotNull VertexConsumer vertex(double x, double y, double z) {
-        this.delegate.vertex(x, y, z);
+    @Override
+    public @NotNull VertexConsumer addVertex(float x, float y, float z) {
+        this.delegate.addVertex(x, y, z);
         return this;
     }
 
-    public @NotNull VertexConsumer color(int r, int g, int b, int a) {
-        this.delegate.color(r, g, b, a);
+    @Override
+    public @NotNull VertexConsumer setColor(int r, int g, int b, int a) {
+        this.delegate.setColor(r, g, b, a);
         return this;
     }
 
-    public @NotNull VertexConsumer uv(float u, float v) {
-        this.delegate.uv(u, v);
+    @Override
+    public @NotNull VertexConsumer setUv(float u, float v) {
+        this.delegate.setUv(u, v);
         return this;
     }
 
-    public @NotNull VertexConsumer overlayCoords(int u, int v) {
-        this.delegate.overlayCoords(u, v);
+    @Override
+    public @NotNull VertexConsumer setUv1(int u, int v) {
+        this.delegate.setUv1(u, v);
         return this;
     }
 
-    public @NotNull VertexConsumer uv2(int u, int v) {
-        this.delegate.uv2(u, v);
+    @Override
+    public @NotNull VertexConsumer setUv2(int u, int v) {
+        this.delegate.setUv2(u, v);
         return this;
     }
 
-    public @NotNull VertexConsumer normal(float x, float y, float z) {
-        this.delegate.normal(x, y, z);
+    @Override
+    public @NotNull VertexConsumer setNormal(float x, float y, float z) {
+        this.delegate.setNormal(x, y, z);
         return this;
-    }
-
-    public void endVertex() {
-        this.delegate.endVertex();
-    }
-
-    public void defaultColor(int r, int g, int b, int a) {
-        this.delegate.defaultColor(r, g, b, a);
-    }
-
-    public void unsetDefaultColor() {
-        this.delegate.unsetDefaultColor();
     }
 }

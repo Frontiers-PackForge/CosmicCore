@@ -10,7 +10,7 @@ import net.neoforged.fml.common.EventBusSubscriber;
 public class EndPortalInteractionEvent {
 
     @SubscribeEvent
-    public static void denyRightClick(PlayerInteractEvent event) {
+    public static void denyRightClick(PlayerInteractEvent.RightClickBlock event) {
         var player = event.getEntity();
         var level = event.getLevel();
         var hand = event.getHand();

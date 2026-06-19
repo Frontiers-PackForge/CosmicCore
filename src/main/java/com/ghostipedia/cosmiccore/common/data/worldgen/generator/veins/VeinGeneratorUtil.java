@@ -1,10 +1,10 @@
 package com.ghostipedia.cosmiccore.common.data.worldgen.generator.veins;
 
-import com.gregtechceu.gtceu.api.GTCEuAPI;
 import com.gregtechceu.gtceu.api.data.chemical.ChemicalHelper;
 import com.gregtechceu.gtceu.api.data.chemical.material.Material;
 import com.gregtechceu.gtceu.api.data.worldgen.GTOreDefinition;
 import com.gregtechceu.gtceu.api.data.worldgen.ores.OreVeinUtil;
+import com.gregtechceu.gtceu.api.registry.GTRegistries;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.SectionPos;
@@ -24,7 +24,7 @@ import java.util.List;
 public final class VeinGeneratorUtil {
 
     public static final Codec<Either<List<TargetBlockState>, Material>> BLOCK_ENTRY_CODEC = Codec
-            .either(TargetBlockState.CODEC.listOf(), GTCEuAPI.materialManager.codec());
+            .either(TargetBlockState.CODEC.listOf(), GTRegistries.MATERIALS.byNameCodec());
 
     private VeinGeneratorUtil() {}
 

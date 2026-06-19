@@ -26,7 +26,7 @@ public abstract class FrostbiteEffectMixin extends MobEffect {
         return amount + amplifier;
     }
 
-    @ModifyVariable(method = "isDurationEffectTick", at = @At(value = "STORE"), ordinal = 2, name = "time")
+    @ModifyVariable(method = "shouldApplyEffectTickThisTick", at = @At(value = "STORE"), ordinal = 2, name = "time")
     private int cosmiccore$modifyDamageIncrement(int time) {
         return 50;
     }

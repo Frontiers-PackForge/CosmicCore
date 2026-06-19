@@ -17,8 +17,6 @@ import com.gregtechceu.gtceu.api.recipe.modifier.ModifierFunction;
 
 import com.lowdragmc.lowdraglib.syncdata.annotation.DescSynced;
 import com.lowdragmc.lowdraglib.syncdata.annotation.Persisted;
-import lombok.Getter;
-import lombok.Setter;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -48,42 +46,64 @@ public class MultithreadedRecipeLogic extends RecipeLogic implements IRecipeCapa
         return sb.toString();
     }
 
-    @Getter
     private final int threadIndex;
 
-    @Getter
     private final int threadColor;
 
     @Persisted
     @DescSynced
-    @Getter
     private boolean threadActive = false;
 
     /**
      * Maximum EU/t this thread can use.
      * Set by the parent MultithreadedMachine based on energy hatch amperage / thread count.
      */
-    @Setter
-    @Getter
     private long maxEUtPerThread = 0;
 
     /**
      * This thread's capability proxy - filtered to only include its handlers.
      * Set by the parent MultithreadedMachine.
      */
-    @Setter
     private Map<IO, List<RecipeHandlerList>> threadCapabilitiesProxy = new EnumMap<>(IO.class);
 
     /**
      * Flattened capability map for this thread.
      */
-    @Setter
     private Map<IO, Map<RecipeCapability<?>, List<IRecipeHandler<?>>>> threadCapabilitiesFlat = new EnumMap<>(IO.class);
 
     public MultithreadedRecipeLogic(IRecipeLogicMachine machine, int threadIndex, int threadColor) {
         super(machine);
         this.threadIndex = threadIndex;
         this.threadColor = threadColor;
+    }
+
+    public int getThreadIndex() {
+        return threadIndex;
+    }
+
+    public int getThreadColor() {
+        return threadColor;
+    }
+
+    public boolean isThreadActive() {
+        return threadActive;
+    }
+
+    public long getMaxEUtPerThread() {
+        return maxEUtPerThread;
+    }
+
+    public void setMaxEUtPerThread(long maxEUtPerThread) {
+        this.maxEUtPerThread = maxEUtPerThread;
+    }
+
+    public void setThreadCapabilitiesProxy(Map<IO, List<RecipeHandlerList>> threadCapabilitiesProxy) {
+        this.threadCapabilitiesProxy = threadCapabilitiesProxy;
+    }
+
+    public void setThreadCapabilitiesFlat(
+                                          Map<IO, Map<RecipeCapability<?>, List<IRecipeHandler<?>>>> threadCapabilitiesFlat) {
+        this.threadCapabilitiesFlat = threadCapabilitiesFlat;
     }
 
 

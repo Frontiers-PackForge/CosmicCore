@@ -42,4 +42,11 @@ public class SensorPartMachine extends TieredPartMachine {
     public boolean shouldOpenUI(Player player, InteractionHand hand, BlockHitResult hit) {
         return true;
     }
+
+    /**
+     * Called to update the redstone signal output. Subclasses should override this.
+     */
+    protected void updateSignal() {
+        // Subclasses implement actual signal logic
+    }
 }

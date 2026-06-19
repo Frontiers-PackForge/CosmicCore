@@ -2,6 +2,7 @@ package com.ghostipedia.cosmiccore.api.data.souls;
 
 import com.ghostipedia.cosmiccore.CosmicCore;
 
+import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
@@ -23,7 +24,8 @@ public class SoulNetworkSavedData extends SavedData {
     private final HashMap<UUID, SoulNetwork> soulNetworkMapping = new HashMap<>(20, 0.9f);
 
     public static SoulNetworkSavedData getOrCreate(ServerLevel serverLevel) {
-        return serverLevel.getDataStorage().computeIfAbsent(SoulNetworkSavedData::new, SoulNetworkSavedData::new,
+        return serverLevel.getDataStorage().computeIfAbsent(
+                new SavedData.Factory<>(SoulNetworkSavedData::new, SoulNetworkSavedData::load),
                 DATA_NAME);
     }
 
@@ -43,26 +45,28 @@ public class SoulNetworkSavedData extends SavedData {
 
     public SoulNetworkSavedData() {}
 
-    public SoulNetworkSavedData(CompoundTag nbt) {
+    public static SoulNetworkSavedData load(CompoundTag nbt, HolderLookup.Provider provider) {
+        SoulNetworkSavedData savedData = new SoulNetworkSavedData();
         var list = nbt.getList(SOUL_NETWORK_MAPPING, CompoundTag.TAG_COMPOUND);
         for (Tag tag : list) {
             if (tag instanceof CompoundTag compoundTag) {
                 var uuid = UUID.fromString(compoundTag.getString(SOUL_NETWORK_UUID));
                 var data = new SoulNetwork();
-                data.deserializeNBT(compoundTag.getCompound(SOUL_NETWORK_DATA));
-                data.setDirtyCallback(this::setDirty);
-                soulNetworkMapping.put(uuid, data);
+                data.deserializeNBT(provider, compoundTag.getCompound(SOUL_NETWORK_DATA));
+                data.setDirtyCallback(savedData::setDirty);
+                savedData.soulNetworkMapping.put(uuid, data);
             }
         }
+        return savedData;
     }
 
     @Override
-    public @NotNull CompoundTag save(@NotNull CompoundTag compoundTag) {
+    public @NotNull CompoundTag save(@NotNull CompoundTag compoundTag, @NotNull HolderLookup.Provider provider) {
         var soulNetworkDataList = new ListTag();
         for (var entry : soulNetworkMapping.entrySet()) {
             var tag = new CompoundTag();
             tag.putString(SOUL_NETWORK_UUID, entry.getKey().toString());
-            tag.put(SOUL_NETWORK_DATA, entry.getValue().serializeNBT());
+            tag.put(SOUL_NETWORK_DATA, entry.getValue().serializeNBT(provider));
             soulNetworkDataList.add(tag);
         }
         compoundTag.put(SOUL_NETWORK_MAPPING, soulNetworkDataList);

@@ -1,5 +1,6 @@
 package com.ghostipedia.cosmiccore.common.recipe.condition;
 
+import com.ghostipedia.cosmiccore.CosmicCore;
 import com.ghostipedia.cosmiccore.api.machine.multiblock.LinkedWorkableElectricMultiblockMachine;
 
 import com.gregtechceu.gtceu.api.machine.trait.RecipeLogic;
@@ -11,6 +12,7 @@ import com.gregtechceu.gtceu.api.registry.GTRegistries;
 import net.minecraft.network.chat.Component;
 
 import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import org.jetbrains.annotations.NotNull;
 
@@ -31,8 +33,8 @@ public class LinkedPartnerCondition extends RecipeCondition<LinkedPartnerConditi
     /** If true, at least one partner must be actively running a recipe */
     public boolean requireWorking;
 
-    public static final Codec<LinkedPartnerCondition> CODEC = RecordCodecBuilder
-            .create(instance -> RecipeCondition.isReverse(instance)
+    public static final MapCodec<LinkedPartnerCondition> CODEC = RecordCodecBuilder
+            .mapCodec(instance -> RecipeCondition.isReverse(instance)
                     .and(Codec.INT.optionalFieldOf("min_partners", 1).forGetter(val -> val.minPartners))
                     .and(Codec.BOOL.optionalFieldOf("require_formed", false).forGetter(val -> val.requireFormed))
                     .and(Codec.BOOL.optionalFieldOf("require_working", false).forGetter(val -> val.requireWorking))
@@ -60,7 +62,8 @@ public class LinkedPartnerCondition extends RecipeCondition<LinkedPartnerConditi
     }
 
     public static void register() {
-        TYPE = GTRegistries.RECIPE_CONDITIONS.register("linked_partner",
+        TYPE = GTRegistries.register(GTRegistries.RECIPE_CONDITIONS,
+                CosmicCore.id("linked_partner"),
                 new RecipeConditionType<>(LinkedPartnerCondition::new, LinkedPartnerCondition.CODEC));
     }
 

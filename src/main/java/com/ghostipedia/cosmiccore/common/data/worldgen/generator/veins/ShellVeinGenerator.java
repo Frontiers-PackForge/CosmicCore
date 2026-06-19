@@ -19,6 +19,7 @@ import net.minecraft.world.level.levelgen.XoroshiroRandomSource;
 
 import com.mojang.datafixers.util.Either;
 import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import lombok.Setter;
@@ -37,7 +38,7 @@ import static com.ghostipedia.cosmiccore.common.data.worldgen.generator.veins.Ve
 @Accessors(fluent = true, chain = true)
 public class ShellVeinGenerator extends VeinGenerator {
 
-    public static final Codec<ShellVeinGenerator> CODEC = RecordCodecBuilder.create(instance -> instance.group(
+    public static final MapCodec<ShellVeinGenerator> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
             OreBlockDef.CODEC.listOf().fieldOf("inner_blocks").forGetter(it -> it.innerBlocks),
             OreBlockDef.CODEC.listOf().fieldOf("outer_blocks").forGetter(it -> it.outerBlocks),
             OreBlockDef.CODEC.listOf().fieldOf("core_blocks").forGetter(it -> it.coreBlocks),
@@ -60,10 +61,6 @@ public class ShellVeinGenerator extends VeinGenerator {
     public float oreMixingChance = 0.15f;
 
     public ShellVeinGenerator() {}
-
-    public ShellVeinGenerator(GTOreDefinition entry) {
-        super(entry);
-    }
 
     public ShellVeinGenerator(List<OreBlockDef> innerBlocks, List<OreBlockDef> outerBlocks,
                               List<OreBlockDef> coreBlocks, float innerRadiusRatio, float outerRadiusRatio,
@@ -210,7 +207,7 @@ public class ShellVeinGenerator extends VeinGenerator {
     }
 
     @Override
-    public Codec<? extends VeinGenerator> codec() {
+    public MapCodec<? extends VeinGenerator> codec() {
         return CODEC;
     }
 

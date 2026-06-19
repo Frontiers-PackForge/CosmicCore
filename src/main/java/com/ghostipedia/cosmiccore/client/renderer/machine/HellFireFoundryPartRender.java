@@ -2,7 +2,6 @@ package com.ghostipedia.cosmiccore.client.renderer.machine;
 
 import com.ghostipedia.cosmiccore.common.machine.multiblock.part.SoulHatchPartMachine;
 
-import com.gregtechceu.gtceu.api.machine.multiblock.MultiblockControllerMachine;
 import com.gregtechceu.gtceu.api.machine.feature.multiblock.IMultiPart;
 import com.gregtechceu.gtceu.api.machine.multiblock.MultiblockControllerMachine;
 import com.gregtechceu.gtceu.api.machine.multiblock.WorkableElectricMultiblockMachine;
@@ -27,9 +26,8 @@ import net.neoforged.neoforge.client.model.data.ModelData;
 
 import com.klikli_dev.occultism.registry.OccultismBlocks;
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import lombok.Getter;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
@@ -43,17 +41,20 @@ public class HellFireFoundryPartRender extends
                                        implements IControllerModelRenderer {
 
     // spotless:off
-    public static final Codec<HellFireFoundryPartRender> CODEC = RecordCodecBuilder.create(instance -> instance.group(
+    public static final MapCodec<HellFireFoundryPartRender> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
             BlockState.CODEC.fieldOf("casing_block").forGetter(HellFireFoundryPartRender::getCasing)
     ).apply(instance, HellFireFoundryPartRender::new));
     public static final DynamicRenderType<WorkableElectricMultiblockMachine, HellFireFoundryPartRender> TYPE = new DynamicRenderType<>(CODEC);
     // spotless:on
 
     private final BlockState iesniumBlock;
-    @Getter
     private final BlockState casing;
     private BakedModel iesniumBlockModel;
     private BakedModel casingModel;
+
+    public BlockState getCasing() {
+        return casing;
+    }
 
     public HellFireFoundryPartRender(BlockState casing) {
         this.iesniumBlock = OccultismBlocks.IESNIUM_BLOCK.get().defaultBlockState();
@@ -74,7 +75,7 @@ public class HellFireFoundryPartRender extends
                                 IMultiPart part, Direction frontFacing, @Nullable Direction side,
                                 RandomSource rand, ModelData modelData, @Nullable RenderType renderType) {
         BlockPos partPos = part.self().getBlockPos();
-        MultiblockControllerMachine machine = controller.self();
+        MultiblockControllerMachine machine = controller;
         BakedModel model = part instanceof SoulHatchPartMachine ? iesniumBlockModel : casingModel;
         emitQuads(quads, model, machine.getLevel(), partPos, casing, side, rand, modelData, renderType);
     }

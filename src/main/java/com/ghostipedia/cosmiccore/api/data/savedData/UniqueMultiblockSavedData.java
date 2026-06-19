@@ -1,6 +1,7 @@
 package com.ghostipedia.cosmiccore.api.data.savedData;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
@@ -25,8 +26,9 @@ public class UniqueMultiblockSavedData extends SavedData {
 
     public static UniqueMultiblockSavedData getOrCreate(ServerLevel serverLevel) {
         return serverLevel.getDataStorage().computeIfAbsent(
-                tag -> new UniqueMultiblockSavedData(serverLevel, tag),
-                () -> new UniqueMultiblockSavedData(serverLevel), DATA_NAME);
+                new SavedData.Factory<>(() -> new UniqueMultiblockSavedData(serverLevel),
+                        (tag, provider) -> new UniqueMultiblockSavedData(serverLevel, tag)),
+                DATA_NAME);
     }
 
     private UniqueMultiblockSavedData(ServerLevel serverLevel) {
@@ -46,7 +48,7 @@ public class UniqueMultiblockSavedData extends SavedData {
     }
 
     @Override
-    public @NotNull CompoundTag save(@NotNull CompoundTag compoundTag) {
+    public @NotNull CompoundTag save(@NotNull CompoundTag compoundTag, @NotNull HolderLookup.Provider provider) {
         var uniqueMultiDataList = new ListTag();
         for (var entry : UniqueMultiblockMapping.entrySet()) {
             var tag = new CompoundTag();

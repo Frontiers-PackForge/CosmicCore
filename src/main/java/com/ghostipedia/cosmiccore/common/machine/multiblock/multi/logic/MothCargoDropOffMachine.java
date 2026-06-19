@@ -33,8 +33,8 @@ public class MothCargoDropOffMachine extends LinkedWorkableMultiblockMachine {
 
     // ==================== Constructor ====================
 
-    public MothCargoDropOffMachine(BlockEntityCreationInfo holder, Object... args) {
-        super(holder, args);
+    public MothCargoDropOffMachine(BlockEntityCreationInfo holder) {
+        super(holder);
     }
 
 

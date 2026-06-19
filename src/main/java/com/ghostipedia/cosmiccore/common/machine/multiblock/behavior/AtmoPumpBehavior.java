@@ -19,15 +19,15 @@ public class AtmoPumpBehavior extends WorkableElectricMultiblockMachine {
     private TickableSubscription hurtSub;
     private int Damage = 1;
 
-    public AtmoPumpBehavior(BlockEntityCreationInfo holder, Object... args) {
-        super(holder, args);
+    public AtmoPumpBehavior(BlockEntityCreationInfo holder) {
+        super(holder);
     }
 
     private void updateBounds(int multiplier) {
         var flt = RelativeDirection.offsetPos(getBlockPos(), getFrontFacing(), getUpwardsFacing(), isFlipped(), 3, 14, -14);
         var brb = RelativeDirection.offsetPos(getBlockPos(), getFrontFacing(), getUpwardsFacing(), isFlipped(), -14, -14,
                 14);
-        killzone = new AABB(flt, brb);
+        killzone = AABB.encapsulatingFullBlocks(flt, brb);
     }
 
     @Override

@@ -16,7 +16,6 @@ import com.gregtechceu.gtceu.utils.FormattingUtil;
 import com.gregtechceu.gtceu.utils.GTUtil;
 
 import com.lowdragmc.lowdraglib.gui.widget.*;
-import com.lowdragmc.lowdraglib.side.fluid.FluidStack;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.HoverEvent;
@@ -24,7 +23,9 @@ import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.chat.Style;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.crafting.Ingredient;
+import net.neoforged.neoforge.common.crafting.SizedIngredient;
+import net.neoforged.neoforge.fluids.FluidStack;
+import net.neoforged.neoforge.fluids.crafting.SizedFluidIngredient;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -47,8 +48,6 @@ public class DreamersBasinMachine extends MultithreadedMachine implements IDispl
         super(holder);
     }
 
-    @Override
-    @NotNull
 
     // ===== Custom UI Implementation =====
 
@@ -247,12 +246,12 @@ public class DreamersBasinMachine extends MultithreadedMachine implements IDispl
                 .append(Component.literal(" ").withStyle(ChatFormatting.RESET));
 
         // Try to find first item output
-        // Note: Content stores Ingredient (usually SizedIngredient), not raw ItemStack
+        // Note: Content stores SizedIngredient, not raw ItemStack
         List<Content> itemOutputs = recipe.getOutputContents(ItemRecipeCapability.CAP);
         if (itemOutputs != null && !itemOutputs.isEmpty()) {
             for (Content content : itemOutputs) {
                 Object contentObj = content.getContent();
-                if (contentObj instanceof Ingredient ingredient) {
+                if (contentObj instanceof SizedIngredient ingredient) {
                     ItemStack[] items = ingredient.getItems();
                     if (items.length > 0 && !items[0].isEmpty()) {
                         ItemStack stack = items[0];
@@ -273,23 +272,27 @@ public class DreamersBasinMachine extends MultithreadedMachine implements IDispl
         }
 
         // Try fluid outputs if no items
+        // Note: Content stores SizedFluidIngredient, not raw FluidStack
         List<Content> fluidOutputs = recipe.getOutputContents(FluidRecipeCapability.CAP);
         if (fluidOutputs != null && !fluidOutputs.isEmpty()) {
             for (Content content : fluidOutputs) {
                 Object contentObj = content.getContent();
-                if (contentObj instanceof FluidStack fluid && !fluid.isEmpty()) {
-                    long amount = fluid.getAmount();
-                    float perSecond = amount * recipesPerSecond;
+                if (contentObj instanceof SizedFluidIngredient ingredient) {
+                    FluidStack[] fluids = ingredient.getFluids();
+                    if (fluids.length > 0 && !fluids[0].isEmpty()) {
+                        int amount = ingredient.amount();
+                        float perSecond = amount * recipesPerSecond;
 
-                    tooltip.append(fluid.getDisplayName().copy().withStyle(ChatFormatting.BLUE))
-                            .append(Component.literal(" " + FormattingUtil.formatNumbers(amount) + "mB")
-                                    .withStyle(ChatFormatting.GRAY));
+                        tooltip.append(fluids[0].getHoverName().copy().withStyle(ChatFormatting.BLUE))
+                                .append(Component.literal(" " + FormattingUtil.formatNumbers(amount) + "mB")
+                                        .withStyle(ChatFormatting.GRAY));
 
-                    if (perSecond >= 1f) {
-                        tooltip.append(Component.literal(String.format(" (%.0f mB/s)", perSecond))
-                                .withStyle(ChatFormatting.AQUA));
+                        if (perSecond >= 1f) {
+                            tooltip.append(Component.literal(String.format(" (%.0f mB/s)", perSecond))
+                                    .withStyle(ChatFormatting.AQUA));
+                        }
+                        return tooltip;
                     }
-                    return tooltip;
                 }
             }
         }

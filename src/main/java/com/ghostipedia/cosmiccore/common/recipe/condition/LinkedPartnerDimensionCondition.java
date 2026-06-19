@@ -1,5 +1,6 @@
 package com.ghostipedia.cosmiccore.common.recipe.condition;
 
+import com.ghostipedia.cosmiccore.CosmicCore;
 import com.ghostipedia.cosmiccore.api.machine.multiblock.LinkedWorkableElectricMultiblockMachine;
 
 import com.gregtechceu.gtceu.api.machine.trait.RecipeLogic;
@@ -12,7 +13,7 @@ import net.minecraft.core.GlobalPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 
-import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import org.jetbrains.annotations.NotNull;
 
@@ -29,8 +30,8 @@ public class LinkedPartnerDimensionCondition extends RecipeCondition<LinkedPartn
     /** The dimension the partner must be in */
     public ResourceLocation dimension;
 
-    public static final Codec<LinkedPartnerDimensionCondition> CODEC = RecordCodecBuilder
-            .create(instance -> RecipeCondition.isReverse(instance)
+    public static final MapCodec<LinkedPartnerDimensionCondition> CODEC = RecordCodecBuilder
+            .mapCodec(instance -> RecipeCondition.isReverse(instance)
                     .and(ResourceLocation.CODEC.fieldOf("dimension").forGetter(val -> val.dimension))
                     .apply(instance, LinkedPartnerDimensionCondition::new));
 
@@ -54,7 +55,8 @@ public class LinkedPartnerDimensionCondition extends RecipeCondition<LinkedPartn
     }
 
     public static void register() {
-        TYPE = GTRegistries.RECIPE_CONDITIONS.register("linked_partner_dimension",
+        TYPE = GTRegistries.register(GTRegistries.RECIPE_CONDITIONS,
+                CosmicCore.id("linked_partner_dimension"),
                 new RecipeConditionType<>(LinkedPartnerDimensionCondition::new, LinkedPartnerDimensionCondition.CODEC));
     }
 

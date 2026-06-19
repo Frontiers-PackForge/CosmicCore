@@ -1,7 +1,6 @@
 package com.ghostipedia.cosmiccore.common.machine.multiblock.part;
 
 import com.gregtechceu.gtceu.api.GTValues;
-import com.gregtechceu.gtceu.api.capability.IParallelHatch;
 import com.gregtechceu.gtceu.api.gui.widget.IntInputWidget;
 import com.gregtechceu.gtceu.api.blockentity.BlockEntityCreationInfo;
 import com.gregtechceu.gtceu.api.machine.feature.IFancyUIMachine;
@@ -18,19 +17,22 @@ import net.minecraft.util.Mth;
 import lombok.Getter;
 import org.jetbrains.annotations.NotNull;
 
-public class CosmicParallelHatchPartMachine extends TieredPartMachine implements IFancyUIMachine, IParallelHatch {
+public class CosmicParallelHatchPartMachine extends TieredPartMachine implements IFancyUIMachine {
 
     private static final int MIN_PARALLEL = 1;
 
     private final int maxParallel;
 
     @Persisted
-    @Getter
     private int currentParallel;
 
     public CosmicParallelHatchPartMachine(BlockEntityCreationInfo holder, int tier) {
         super(holder, tier);
         this.maxParallel = (int) Math.pow(4, tier - GTValues.EV);
+    }
+
+    public int getCurrentParallel() {
+        return currentParallel;
     }
 
     public void setCurrentParallel(int parallelAmount) {

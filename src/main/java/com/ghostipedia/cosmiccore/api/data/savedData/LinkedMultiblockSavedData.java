@@ -4,6 +4,7 @@ import com.ghostipedia.cosmiccore.CosmicCore;
 import com.ghostipedia.cosmiccore.api.capability.ILinkedMultiblock.LinkRole;
 
 import net.minecraft.core.GlobalPos;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.NbtOps;
@@ -36,6 +37,10 @@ public class LinkedMultiblockSavedData extends SavedData {
         load(tag);
     }
 
+    public static LinkedMultiblockSavedData load(CompoundTag tag, HolderLookup.Provider provider) {
+        return new LinkedMultiblockSavedData(tag);
+    }
+
     // ==================== Access ====================
 
     /**
@@ -45,8 +50,7 @@ public class LinkedMultiblockSavedData extends SavedData {
     public static LinkedMultiblockSavedData getOrCreate(MinecraftServer server) {
         ServerLevel overworld = server.overworld();
         return overworld.getDataStorage().computeIfAbsent(
-                LinkedMultiblockSavedData::new,
-                LinkedMultiblockSavedData::new,
+                new SavedData.Factory<>(LinkedMultiblockSavedData::new, LinkedMultiblockSavedData::load),
                 DATA_NAME);
     }
 
@@ -220,7 +224,7 @@ public class LinkedMultiblockSavedData extends SavedData {
     // ==================== Serialization ====================
 
     @Override
-    public CompoundTag save(CompoundTag root) {
+    public CompoundTag save(CompoundTag root, HolderLookup.Provider provider) {
         ListTag ownersList = new ListTag();
 
         for (Map.Entry<UUID, Map<GlobalPos, Set<LinkEntry>>> ownerEntry : links.entrySet()) {

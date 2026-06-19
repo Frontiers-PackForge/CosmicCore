@@ -26,7 +26,7 @@ import net.neoforged.neoforge.client.model.data.ModelData;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 import org.joml.Quaternionf;
 
 import java.util.List;
@@ -42,7 +42,7 @@ public class StellarIrisRender extends DynamicRender<IrisMultiblockMachine, Stel
     public static final StellarIrisRender INSTANCE = new StellarIrisRender();
     // Default star color - will be overridden by machine's customStarColor if set
     public static final String DEFAULT_STAR_COLOR = "#FFCC44"; // Golden yellow
-    public static final Codec<StellarIrisRender> CODEC = Codec.unit(StellarIrisRender.INSTANCE);
+    public static final MapCodec<StellarIrisRender> CODEC = MapCodec.unit(StellarIrisRender.INSTANCE);
 
     // Current hex color being used for rendering (set per-render from machine or default)
     private String hexColor = DEFAULT_STAR_COLOR;
@@ -206,7 +206,7 @@ public class StellarIrisRender extends DynamicRender<IrisMultiblockMachine, Stel
         PoseStack.Pose pose = poseStack.last();
         List<BakedQuad> quads = irisCoreModel.getQuads(null, null, random, ModelData.EMPTY, null);
         for (BakedQuad quad : quads) {
-            consumer.putBulkData(pose, quad, 0.0f, 0.0f, 0.0f, packedLight, packedOverlay);
+            consumer.putBulkData(pose, quad, 0.0f, 0.0f, 0.0f, 1f, packedLight, packedOverlay);
         }
     }
 
@@ -272,7 +272,7 @@ public class StellarIrisRender extends DynamicRender<IrisMultiblockMachine, Stel
 
         List<BakedQuad> quads = irisRingModel.getQuads(null, null, random, ModelData.EMPTY, null);
         for (BakedQuad quad : quads) {
-            consumer.putBulkData(poseStack.last(), quad, 1f, 1f, 1f, packedLight, packedOverlay);
+            consumer.putBulkData(poseStack.last(), quad, 1f, 1f, 1f, 1f, packedLight, packedOverlay);
         }
 
         poseStack.popPose();
@@ -297,7 +297,7 @@ public class StellarIrisRender extends DynamicRender<IrisMultiblockMachine, Stel
 
         List<BakedQuad> quads = irisRingModel.getQuads(null, null, random, ModelData.EMPTY, null);
         for (BakedQuad quad : quads) {
-            consumer.putBulkData(poseStack.last(), quad, 1f, 1f, 1f, packedLight, packedOverlay);
+            consumer.putBulkData(poseStack.last(), quad, 1f, 1f, 1f, 1f, packedLight, packedOverlay);
         }
 
         poseStack.popPose();
@@ -319,7 +319,7 @@ public class StellarIrisRender extends DynamicRender<IrisMultiblockMachine, Stel
 
         List<BakedQuad> quads = irisSmallRingModel.getQuads(null, null, random, ModelData.EMPTY, null);
         for (BakedQuad quad : quads) {
-            consumer.putBulkData(poseStack.last(), quad, 1f, 1f, 1f, packedLight, packedOverlay);
+            consumer.putBulkData(poseStack.last(), quad, 1f, 1f, 1f, 1f, packedLight, packedOverlay);
         }
 
         poseStack.popPose();

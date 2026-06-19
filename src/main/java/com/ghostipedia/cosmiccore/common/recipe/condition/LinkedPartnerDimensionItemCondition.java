@@ -1,5 +1,6 @@
 package com.ghostipedia.cosmiccore.common.recipe.condition;
 
+import com.ghostipedia.cosmiccore.CosmicCore;
 import com.ghostipedia.cosmiccore.api.machine.multiblock.LinkedWorkableElectricMultiblockMachine;
 import com.ghostipedia.cosmiccore.common.machine.multiblock.LinkedMultiblockHelper;
 
@@ -18,6 +19,7 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 
 import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import org.jetbrains.annotations.NotNull;
 
@@ -37,8 +39,8 @@ public class LinkedPartnerDimensionItemCondition extends RecipeCondition<LinkedP
     public ResourceLocation itemId;
     public int minCount;
 
-    public static final Codec<LinkedPartnerDimensionItemCondition> CODEC = RecordCodecBuilder
-            .create(instance -> RecipeCondition.isReverse(instance)
+    public static final MapCodec<LinkedPartnerDimensionItemCondition> CODEC = RecordCodecBuilder
+            .mapCodec(instance -> RecipeCondition.isReverse(instance)
                     .and(ResourceLocation.CODEC.fieldOf("dimension").forGetter(val -> val.dimension))
                     .and(ResourceLocation.CODEC.fieldOf("item").forGetter(val -> val.itemId))
                     .and(Codec.INT.optionalFieldOf("count", 1).forGetter(val -> val.minCount))
@@ -73,7 +75,8 @@ public class LinkedPartnerDimensionItemCondition extends RecipeCondition<LinkedP
     }
 
     public static void register() {
-        TYPE = GTRegistries.RECIPE_CONDITIONS.register("linked_partner_dimension_item",
+        TYPE = GTRegistries.register(GTRegistries.RECIPE_CONDITIONS,
+                CosmicCore.id("linked_partner_dimension_item"),
                 new RecipeConditionType<>(LinkedPartnerDimensionItemCondition::new,
                         LinkedPartnerDimensionItemCondition.CODEC));
     }

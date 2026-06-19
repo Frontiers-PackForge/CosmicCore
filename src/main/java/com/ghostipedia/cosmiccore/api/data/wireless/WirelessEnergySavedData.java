@@ -1,6 +1,7 @@
 package com.ghostipedia.cosmiccore.api.data.wireless;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
@@ -67,7 +68,9 @@ public class WirelessEnergySavedData extends SavedData {
 
     public static WirelessEnergySavedData getOrCreate(ServerLevel serverLevel) {
         return serverLevel.getDataStorage()
-                .computeIfAbsent(WirelessEnergySavedData::new, WirelessEnergySavedData::new, DATA_NAME);
+                .computeIfAbsent(
+                        new SavedData.Factory<>(WirelessEnergySavedData::new, WirelessEnergySavedData::load),
+                        DATA_NAME);
     }
 
     private WirelessEnergySavedData() {}
@@ -82,9 +85,13 @@ public class WirelessEnergySavedData extends SavedData {
         }
     }
 
+    private static WirelessEnergySavedData load(CompoundTag nbt, HolderLookup.Provider provider) {
+        return new WirelessEnergySavedData(nbt);
+    }
+
     @NotNull
     @Override
-    public CompoundTag save(@NotNull CompoundTag nbt) {
+    public CompoundTag save(@NotNull CompoundTag nbt, @NotNull HolderLookup.Provider provider) {
         var wirelessEnergyList = new ListTag();
         for (var entry : GlobalWirelessEnergy.entrySet()) {
             if (entry.getKey() == null) continue;

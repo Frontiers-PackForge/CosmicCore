@@ -1973,14 +1973,14 @@ public class VoidScreen extends Screen {
     }
 
     @Override
-    public boolean mouseScrolled(double mouseX, double mouseY, double delta) {
+    public boolean mouseScrolled(double mouseX, double mouseY, double scrollX, double scrollY) {
         // Scroll bargain list in VIEW_ACTIVE state
         if (state == VoidState.VIEW_ACTIVE && !viewActiveAllOptions.isEmpty()) {
             int maxScroll = Math.max(0, viewActiveAllOptions.size() - viewActiveMaxVisible);
-            if (delta > 0) {
+            if (scrollY > 0) {
                 // Scroll up
                 bargainListScrollOffset = Math.max(0, bargainListScrollOffset - 1);
-            } else if (delta < 0) {
+            } else if (scrollY < 0) {
                 // Scroll down
                 bargainListScrollOffset = Math.min(maxScroll, bargainListScrollOffset + 1);
             }
@@ -1988,7 +1988,7 @@ public class VoidScreen extends Screen {
             setupViewActiveBargains();
             return true;
         }
-        return super.mouseScrolled(mouseX, mouseY, delta);
+        return super.mouseScrolled(mouseX, mouseY, scrollX, scrollY);
     }
 
     @Override

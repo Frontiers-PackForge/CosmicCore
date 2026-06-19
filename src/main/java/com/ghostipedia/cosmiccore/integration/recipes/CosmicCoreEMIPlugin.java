@@ -29,7 +29,7 @@ public class CosmicCoreEMIPlugin implements EmiPlugin {
 
     @Override
     public void register(EmiRegistry registry) {
-        registry.setDefaultComparison(CosmicItems.TARGETING_CHIP.asStack(), Comparison.compareNbt());
+        registry.setDefaultComparison(CosmicItems.TARGETING_CHIP.asStack(), Comparison.compareComponents());
 
         registry.addCategory(ASTEROID_CATEGORY);
         registry.addWorkstation(ASTEROID_CATEGORY, EmiStack.of(LARVA.LARVA.getBlock()));

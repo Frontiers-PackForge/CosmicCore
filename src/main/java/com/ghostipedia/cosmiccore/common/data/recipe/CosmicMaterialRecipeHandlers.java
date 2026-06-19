@@ -5,12 +5,10 @@ import com.gregtechceu.gtceu.api.data.chemical.material.Material;
 import com.gregtechceu.gtceu.api.data.chemical.material.info.MaterialFlags;
 import com.gregtechceu.gtceu.api.data.chemical.material.properties.PropertyKey;
 
-import net.minecraft.data.recipes.FinishedRecipe;
+import net.minecraft.data.recipes.RecipeOutput;
 import net.minecraft.resources.ResourceLocation;
 
 import org.jetbrains.annotations.NotNull;
-
-import java.util.function.Consumer;
 
 import static com.ghostipedia.cosmiccore.api.data.CosmicTagPrefix.*;
 import static com.ghostipedia.cosmiccore.gtbridge.CosmicRecipeTypes.*;
@@ -18,14 +16,14 @@ import static com.gregtechceu.gtceu.api.data.tag.TagPrefix.*;
 
 public class CosmicMaterialRecipeHandlers {
 
-    public static void init(@NotNull Consumer<FinishedRecipe> provider, @NotNull Material material) {
+    public static void init(@NotNull RecipeOutput provider, @NotNull Material material) {
         processHeavyBeam(provider, material);
         processModularShelling(provider, material);
         processUltraDensePlate(provider, material);
         processWireSpool(provider, material);
     }
 
-    private static void processHeavyBeam(@NotNull Consumer<FinishedRecipe> provider, @NotNull Material material) {
+    private static void processHeavyBeam(@NotNull RecipeOutput provider, @NotNull Material material) {
         if (!material.shouldGenerateRecipesFor(rod) || !material.shouldGenerateRecipesFor(plate) ||
                 !material.hasProperty(PropertyKey.INGOT))
             return;
@@ -45,7 +43,7 @@ public class CosmicMaterialRecipeHandlers {
                 .save(provider);
     }
 
-    private static void processModularShelling(@NotNull Consumer<FinishedRecipe> provider, @NotNull Material material) {
+    private static void processModularShelling(@NotNull RecipeOutput provider, @NotNull Material material) {
         if (!material.hasFlag(MaterialFlags.GENERATE_PLATE) || !material.hasFlag(MaterialFlags.GENERATE_BOLT_SCREW) ||
                 !material.hasFlag(MaterialFlags.GENERATE_FRAME) || !material.hasProperty(PropertyKey.INGOT))
             return;
@@ -63,7 +61,7 @@ public class CosmicMaterialRecipeHandlers {
                 .save(provider);
     }
 
-    private static void processUltraDensePlate(@NotNull Consumer<FinishedRecipe> provider, @NotNull Material material) {
+    private static void processUltraDensePlate(@NotNull RecipeOutput provider, @NotNull Material material) {
         if (!material.hasFlag(MaterialFlags.GENERATE_PLATE) || !material.hasProperty(PropertyKey.INGOT)) return;
 
         ORBITAL_FORGE_EBF.recipeBuilder("heavy_forging_" + material.getName() + "_ultra_dense_plate")
@@ -77,7 +75,7 @@ public class CosmicMaterialRecipeHandlers {
                 .save(provider);
     }
 
-    private static void processWireSpool(@NotNull Consumer<FinishedRecipe> provider, @NotNull Material material) {
+    private static void processWireSpool(@NotNull RecipeOutput provider, @NotNull Material material) {
         if (!material.hasProperty(PropertyKey.WIRE) || !material.hasProperty(PropertyKey.INGOT))
             return;
 

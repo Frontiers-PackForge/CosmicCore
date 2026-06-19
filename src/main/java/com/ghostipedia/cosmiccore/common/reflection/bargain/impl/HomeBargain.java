@@ -15,8 +15,10 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
 
 import java.util.List;
@@ -158,8 +160,10 @@ public class HomeBargain extends Bargain {
             ResourceKey<Level> respawnDim = player.getRespawnDimension();
             ServerLevel respawnLevel = player.server.getLevel(respawnDim);
             if (respawnLevel != null) {
-                Optional<Vec3> bedSpawn = Player.findRespawnPositionAndUseSpawnBlock(
-                        respawnLevel, bedPos, player.getRespawnAngle(), true, false);
+                BlockState respawnState = respawnLevel.getBlockState(bedPos);
+                Optional<Vec3> bedSpawn = respawnState
+                        .getRespawnPosition(EntityType.PLAYER, respawnLevel, bedPos, player.getRespawnAngle())
+                        .map(ServerPlayer.RespawnPosAngle::position);
                 if (bedSpawn.isPresent()) {
                     return Optional.of(new HomeLocation(respawnDim, bedSpawn.get()));
                 }

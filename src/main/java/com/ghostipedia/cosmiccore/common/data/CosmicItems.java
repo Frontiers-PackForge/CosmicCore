@@ -2,7 +2,6 @@ package com.ghostipedia.cosmiccore.common.data;
 
 import com.ghostipedia.cosmiccore.CosmicCore;
 import com.ghostipedia.cosmiccore.api.item.LinkedTerminalBehavior;
-import com.ghostipedia.cosmiccore.api.item.armor.*;
 import com.ghostipedia.cosmiccore.api.registries.CosmicRegistration;
 import com.ghostipedia.cosmiccore.client.renderer.item.HaloItemRenderer;
 import com.ghostipedia.cosmiccore.client.renderer.item.RadianceItemRenderer;
@@ -11,7 +10,6 @@ import com.ghostipedia.cosmiccore.common.data.tag.item.CosmicItemTags;
 import com.ghostipedia.cosmiccore.common.item.AirBladderItem;
 import com.ghostipedia.cosmiccore.common.item.AsteroidItem;
 import com.ghostipedia.cosmiccore.common.item.AsteroidTargetingChipItem;
-import com.ghostipedia.cosmiccore.common.item.CosmicScytheItem;
 import com.ghostipedia.cosmiccore.common.item.OxygenTankItem;
 import com.ghostipedia.cosmiccore.common.item.SoulNetworkReaderItem;
 import com.ghostipedia.cosmiccore.common.item.armor.ChestSanguineWarptechSuite;
@@ -26,6 +24,7 @@ import com.ghostipedia.cosmiccore.common.item.behavior.VeinSurveyBehavior;
 import com.ghostipedia.cosmiccore.common.item.behavior.WirelessPDABehavior;
 import com.ghostipedia.cosmiccore.common.reflection.item.MirrorItem;
 import com.ghostipedia.cosmiccore.common.reflection.item.SoulMutilatorItem;
+import com.ghostipedia.cosmiccore.utils.ItemData;
 import com.ghostipedia.cosmiccore.utils.StringUtil;
 
 import com.gregtechceu.gtceu.GTCEu;
@@ -37,7 +36,7 @@ import com.gregtechceu.gtceu.api.item.component.ICustomDescriptionId;
 import com.gregtechceu.gtceu.api.item.component.IItemComponent;
 import com.gregtechceu.gtceu.api.item.component.ThermalFluidStats;
 import com.gregtechceu.gtceu.common.data.GTItems;
-import com.gregtechceu.gtceu.common.item.ItemFluidContainer;
+import com.gregtechceu.gtceu.common.item.behavior.ItemFluidContainer;
 import com.gregtechceu.gtceu.common.item.behavior.TooltipBehavior;
 import com.gregtechceu.gtceu.common.item.armor.GTArmorMaterials;
 import com.gregtechceu.gtceu.common.registry.GTRegistration;
@@ -59,10 +58,6 @@ import net.minecraft.world.level.Level;
 import net.neoforged.neoforge.fluids.FluidStack;
 import net.neoforged.neoforge.fluids.FluidUtil;
 
-import com.sammy.malum.common.item.spirit.SpiritShardItem;
-import com.sammy.malum.core.systems.spirit.MalumSpiritType;
-import com.sammy.malum.core.systems.spirit.SpiritVisualMotif;
-import com.sammy.malum.registry.common.SpiritTypeRegistry;
 import com.teamresourceful.resourcefullib.common.registry.RegistryEntry;
 import com.tterrag.registrate.providers.ProviderType;
 import com.tterrag.registrate.util.entry.ItemEntry;
@@ -76,8 +71,6 @@ import java.util.function.Function;
 import static com.ghostipedia.cosmiccore.CosmicUtils.attachRenderer;
 import static com.ghostipedia.cosmiccore.api.registries.CosmicRegistration.REGISTRATE;
 import static com.gregtechceu.gtceu.common.data.GTItems.attach;
-import static com.sammy.malum.registry.common.SpiritTypeRegistry.SPIRITS;
-import static com.sammy.malum.registry.common.item.ItemTiers.ItemTierEnum.SOUL_STAINED_STEEL;
 
 public class CosmicItems {
 
@@ -95,6 +88,10 @@ public class CosmicItems {
             .defaultModel()
             .register();
 
+    /* SHELVED (cosmiccore-42.14): Malum 1.8.2 reworked the spirit-type system
+       (MalumSpiritType.create / SpiritVisualMotif / SpiritTypeRegistry.register removed,
+       now DeferredSpiritTypes + SpiritColorProperties). Re-add the 4 cosmic spirit types
+       and their SpiritShardItems once the Malum spirit API is ported.
     public static final ItemEntry<SpiritShardItem> ETHERIC_SPIRIT_ITEM = REGISTRATE
             .item("etheric_spirit", (properties -> new SpiritShardItem(properties, CosmicItems.ETHERIC_SPIRIT)))
             .lang("Etheric Spirit")
@@ -150,6 +147,7 @@ public class CosmicItems {
             MALICE_SPIRIT_ITEM)
             .setItemColor(SpiritVisualMotif::getPrimaryColor)
             .build());
+    */
     public static final ItemEntry<ComponentItem> PROD_MOD_1 = REGISTRATE.item("prod_mod_1", ComponentItem::new)
             .lang("Productivity Module Mk.1")
             .properties(p -> p.stacksTo(1))
@@ -1125,6 +1123,9 @@ public class CosmicItems {
             .defaultModel()
             .register();
 
+    /* SHELVED (cosmiccore-42.14): CosmicScytheItem needs the Malum 1.8.2 scythe rework
+       (enchantment-based scythe system removed), NeoForge item-capability rework, and
+       GTCEu electric-item port. Re-add the three scythes once CosmicScytheItem is ported.
     public static final ItemEntry<CosmicScytheItem> NANO_SCYTHE = REGISTRATE
             .item("nano_scythe",
                     props -> new CosmicScytheItem(
@@ -1154,12 +1155,13 @@ public class CosmicItems {
             .lang("Sanguine Scythe")
             .defaultModel()
             .register();
+    */
 
     public static ItemEntry<ComponentItem> THE_ONE_RING = REGISTRATE
             .item("the_one_ring", p -> (ComponentItem) new ComponentItem(p) {
 
                 @Override
-                public boolean canBeHurtBy(DamageSource damageSource) {
+                public boolean canBeHurtBy(ItemStack stack, DamageSource damageSource) {
                     return damageSource.is(DamageTypes.LAVA);
                 }
 
@@ -1971,7 +1973,7 @@ public class CosmicItems {
             .properties(p -> p.stacksTo(1))
             .onRegister(attach(new InfiniteSprayCanBehavior(1)))
             .onRegister(modelPredicate(CosmicCore.id("color"),
-                    (itemStack) -> (float) itemStack.getOrCreateTag().getInt(InfiniteSprayCanBehavior.ColorTag)))
+                    (itemStack) -> (float) ItemData.readTag(itemStack).getInt(InfiniteSprayCanBehavior.ColorTag)))
             .register();
 
     public static ItemEntry<ComponentItem> NEUTRONITE_FLUID_CELL = GTRegistration.REGISTRATE
@@ -3017,11 +3019,6 @@ public class CosmicItems {
                 ItemProperties.register(item, predicate, (itemStack, c, l, i) -> property.apply(itemStack));
             }
         };
-    }
-
-    public static MalumSpiritType register(MalumSpiritType spiritType) {
-        SPIRITS.put(spiritType.identifier, spiritType);
-        return spiritType;
     }
 
     public static void init() {}

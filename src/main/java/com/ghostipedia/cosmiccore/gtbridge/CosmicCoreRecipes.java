@@ -11,11 +11,9 @@ import com.ghostipedia.cosmiccore.common.recipe.condition.LinkedPartnerDimension
 
 import com.gregtechceu.gtceu.api.GTValues;
 
-import net.minecraft.data.recipes.FinishedRecipe;
+import net.minecraft.data.recipes.RecipeOutput;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.material.Fluids;
-
-import java.util.function.Consumer;
 
 import static com.ghostipedia.cosmiccore.common.data.materials.CosmicMaterials.DilutedPrisma;
 import static com.ghostipedia.cosmiccore.common.data.materials.CosmicMaterials.Prisma;
@@ -26,7 +24,7 @@ import static com.gregtechceu.gtceu.common.data.GTRecipeTypes.DISTILLATION_RECIP
 
 public class CosmicCoreRecipes {
 
-    public static void init(Consumer<FinishedRecipe> provider) {
+    public static void init(RecipeOutput provider) {
         registerIndustrialPrimitiveBlastFurnaceRecipes(provider);
 
         DISTILLATION_RECIPES.recipeBuilder("diluted_prisma_to_prisma_and_water")
@@ -144,7 +142,7 @@ public class CosmicCoreRecipes {
         // .save(provider);
     }
 
-    private static void registerIndustrialPrimitiveBlastFurnaceRecipes(Consumer<FinishedRecipe> provider) {
+    private static void registerIndustrialPrimitiveBlastFurnaceRecipes(RecipeOutput provider) {
         INDUSTRIAL_PRIMITIVE_BLAST_FURNACE_RECIPES.recipeBuilder("steel_from_coal_gem").inputItems(ingot, Iron)
                 .inputItems(gem, Coal, 2).outputItems(ingot, Steel).outputItems(dustTiny, DarkAsh, 2)
                 .duration((int) (1800 * 0.75f)).inputFluids(Creosote.getFluid(250))

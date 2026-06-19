@@ -10,7 +10,7 @@ import com.lowdragmc.lowdraglib.gui.widget.WidgetGroup;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.util.Mth;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
@@ -64,19 +64,19 @@ public class OreExtractionDrillWidget extends WidgetGroup {
     }
 
     @Override
-    public void writeInitialData(FriendlyByteBuf buffer) {
+    public void writeInitialData(RegistryFriendlyByteBuf buffer) {
         super.writeInitialData(buffer);
         syncDrillData(buffer);
     }
 
     @Override
     @OnlyIn(Dist.CLIENT)
-    public void readInitialData(FriendlyByteBuf buffer) {
+    public void readInitialData(RegistryFriendlyByteBuf buffer) {
         super.readInitialData(buffer);
         readDrillData(buffer);
     }
 
-    private void syncDrillData(FriendlyByteBuf buffer) {
+    private void syncDrillData(RegistryFriendlyByteBuf buffer) {
         OreExtractionDrillMachine machine = machineSupplier.get();
         if (machine == null) {
             buffer.writeInt(0);
@@ -111,7 +111,7 @@ public class OreExtractionDrillWidget extends WidgetGroup {
         }
     }
 
-    private void readDrillData(FriendlyByteBuf buffer) {
+    private void readDrillData(RegistryFriendlyByteBuf buffer) {
         tier = buffer.readInt();
         phase = buffer.readInt();
         scanProgress = buffer.readFloat();
@@ -152,7 +152,7 @@ public class OreExtractionDrillWidget extends WidgetGroup {
 
     @Override
     @OnlyIn(Dist.CLIENT)
-    public void readUpdateInfo(int id, FriendlyByteBuf buffer) {
+    public void readUpdateInfo(int id, RegistryFriendlyByteBuf buffer) {
         if (id == 501) {
             readDrillData(buffer);
         } else {
@@ -366,7 +366,7 @@ public class OreExtractionDrillWidget extends WidgetGroup {
 
     @Override
     @OnlyIn(Dist.CLIENT)
-    public boolean mouseWheelMove(double mouseX, double mouseY, double wheelDelta) {
+    public boolean mouseWheelMove(double mouseX, double mouseY, double scrollX, double scrollY) {
         int x = getPosition().x;
         int y = getPosition().y;
         int w = getSize().width;
@@ -382,14 +382,14 @@ public class OreExtractionDrillWidget extends WidgetGroup {
             int totalOreTypes = getGroupedOres().size();
             int maxScroll = Math.max(0, totalOreTypes - MAX_VISIBLE_ORES);
 
-            if (wheelDelta > 0) {
+            if (scrollY > 0) {
                 oreScrollOffset = Math.max(0, oreScrollOffset - 1);
-            } else if (wheelDelta < 0) {
+            } else if (scrollY < 0) {
                 oreScrollOffset = Math.min(maxScroll, oreScrollOffset + 1);
             }
             return true;
         }
-        return super.mouseWheelMove(mouseX, mouseY, wheelDelta);
+        return super.mouseWheelMove(mouseX, mouseY, scrollX, scrollY);
     }
 
     private int getTierColor() {

@@ -44,8 +44,6 @@ public class MagneticFieldMachine extends MagnetWorkableElectricMultiblockMachin
         super(holder);
     }
 
-    @Override
-    @NotNull
 
     @Override
     public void onStructureFormed() {

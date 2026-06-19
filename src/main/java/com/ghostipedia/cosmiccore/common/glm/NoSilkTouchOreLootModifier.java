@@ -3,8 +3,13 @@ package com.ghostipedia.cosmiccore.common.glm;
 import com.gregtechceu.gtceu.api.data.chemical.ChemicalHelper;
 import com.gregtechceu.gtceu.api.data.chemical.material.properties.PropertyKey;
 
+import net.minecraft.core.Holder;
+import net.minecraft.core.HolderGetter;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.item.enchantment.Enchantment;
+import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.storage.loot.LootContext;
@@ -12,18 +17,21 @@ import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import net.neoforged.neoforge.common.Tags;
-import net.minecraftforge.common.loot.IGlobalLootModifier;
-import net.minecraftforge.common.loot.LootModifier;
+import net.neoforged.neoforge.common.loot.IGlobalLootModifier;
+import net.neoforged.neoforge.common.loot.LootModifier;
 
-import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import org.jetbrains.annotations.NotNull;
 
 public class NoSilkTouchOreLootModifier extends LootModifier {
 
-    public static final Codec<NoSilkTouchOreLootModifier> CODEC = RecordCodecBuilder.create(inst -> codecStart(inst)
-            .apply(inst, NoSilkTouchOreLootModifier::new));
+    public static final MapCodec<NoSilkTouchOreLootModifier> CODEC = RecordCodecBuilder
+            .mapCodec(inst -> inst
+                    .group(IGlobalLootModifier.LOOT_CONDITIONS_CODEC.fieldOf("conditions")
+                            .forGetter(lm -> lm.conditions))
+                    .apply(inst, NoSilkTouchOreLootModifier::new));
 
     /**
      * Re-entry guard. We re-run the block's loot table with a "fake" tool to get the
@@ -45,8 +53,11 @@ public class NoSilkTouchOreLootModifier extends LootModifier {
                                                           LootContext context) {
         if (REENTRY.get()) return generatedLoot;
 
+        HolderGetter<Enchantment> enchantments = context.getResolver().lookupOrThrow(Registries.ENCHANTMENT);
+        Holder<Enchantment> silkTouch = enchantments.getOrThrow(Enchantments.SILK_TOUCH);
+
         ItemStack tool = context.getParamOrNull(LootContextParams.TOOL);
-        if (tool == null || tool.getEnchantmentLevel(Enchantments.SILK_TOUCH) <= 0) {
+        if (tool == null || EnchantmentHelper.getItemEnchantmentLevel(silkTouch, tool) <= 0) {
             return generatedLoot;
         }
 
@@ -72,9 +83,10 @@ public class NoSilkTouchOreLootModifier extends LootModifier {
         // any tier, and gets the recipient ore's natural non-silk-touch drops. Fortune is the only
         // enchantment that affects ore drop counts, so we forward that and drop everything else.
         ItemStack fakeTool = new ItemStack(Items.NETHERITE_PICKAXE);
-        int fortune = tool.getEnchantmentLevel(Enchantments.BLOCK_FORTUNE);
+        Holder<Enchantment> fortuneHolder = enchantments.getOrThrow(Enchantments.FORTUNE);
+        int fortune = EnchantmentHelper.getItemEnchantmentLevel(fortuneHolder, tool);
         if (fortune > 0) {
-            fakeTool.enchant(Enchantments.BLOCK_FORTUNE, fortune);
+            fakeTool.enchant(fortuneHolder, fortune);
         }
 
         LootParams.Builder builder = new LootParams.Builder(context.getLevel())
@@ -103,7 +115,7 @@ public class NoSilkTouchOreLootModifier extends LootModifier {
     }
 
     @Override
-    public Codec<? extends IGlobalLootModifier> codec() {
+    public MapCodec<? extends IGlobalLootModifier> codec() {
         return CODEC;
     }
 }

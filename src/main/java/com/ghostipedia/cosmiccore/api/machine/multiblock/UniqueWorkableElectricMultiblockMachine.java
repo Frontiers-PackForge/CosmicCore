@@ -19,8 +19,8 @@ import java.util.UUID;
 public class UniqueWorkableElectricMultiblockMachine extends WorkableElectricMultiblockMachine {
 
 
-    public UniqueWorkableElectricMultiblockMachine(BlockEntityCreationInfo holder, Object... args) {
-        super(holder, args);
+    public UniqueWorkableElectricMultiblockMachine(BlockEntityCreationInfo holder) {
+        super(holder);
     }
 
     // Used to make sure you cannot have more than one of this multiblock per player / team

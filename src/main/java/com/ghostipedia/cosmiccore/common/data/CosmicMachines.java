@@ -13,7 +13,6 @@ import com.ghostipedia.cosmiccore.common.ae2gt.CosmicStockingBusPartMachine;
 import com.ghostipedia.cosmiccore.common.ae2gt.CosmicStockingHatchPartMachine;
 import com.ghostipedia.cosmiccore.common.block.debug.CreativeThermiaContainerMachine;
 import com.ghostipedia.cosmiccore.common.machine.WirelessChargerMachine;
-import com.ghostipedia.cosmiccore.common.machine.multiblock.electric.hpca.HPCAMachine;
 import com.ghostipedia.cosmiccore.common.machine.multiblock.multi.WirelessDataBankMachine;
 import com.ghostipedia.cosmiccore.common.machine.multiblock.part.*;
 import com.ghostipedia.cosmiccore.common.machine.part.WirelessDataSensor;
@@ -22,6 +21,7 @@ import com.ghostipedia.cosmiccore.gtbridge.CosmicRecipeTypes;
 import com.gregtechceu.gtceu.GTCEu;
 import com.gregtechceu.gtceu.api.GTCEuAPI;
 import com.gregtechceu.gtceu.api.GTValues;
+import com.gregtechceu.gtceu.api.blockentity.BlockEntityCreationInfo;
 import com.gregtechceu.gtceu.api.capability.recipe.IO;
 import com.gregtechceu.gtceu.api.capability.recipe.ItemRecipeCapability;
 import com.gregtechceu.gtceu.api.data.RotationState;
@@ -68,7 +68,6 @@ import static com.ghostipedia.cosmiccore.api.registries.CosmicRegistration.REGIS
 import static com.ghostipedia.cosmiccore.common.data.CosmicBlocks.*;
 import static com.ghostipedia.cosmiccore.common.data.CosmicMachinesUtils.*;
 import static com.ghostipedia.cosmiccore.common.data.recipe.CosmicRecipeModifiers.COSMIC_MODULES;
-import static com.ghostipedia.cosmiccore.common.machine.multiblock.electric.hpca.HPCAMachine.*;
 import static com.ghostipedia.cosmiccore.gtbridge.CosmicRecipeTypes.BIO_LAB;
 import static com.gregtechceu.gtceu.api.GTValues.*;
 import static com.gregtechceu.gtceu.api.capability.recipe.IO.OUT;
@@ -147,7 +146,7 @@ public class CosmicMachines {
                             .recipeType(GTRecipeTypes.WIREMILL_RECIPES)
                             .recipeModifier(SimpleSteamMachine::recipeModifier)
                             .addOutputLimit(ItemRecipeCapability.CAP, 1)
-                            .modelProperty(SimpleSteamMachine.VENT_DIRECTION_PROPERTY, RelativeDirection.BACK)
+                            .modelProperty(GTMachineModelProperties.VENT_DIRECTION, RelativeDirection.BACK)
                             .workableSteamHullModel(pressure, GTCEu.id("block/machines/wiremill"))
                             .register());
 
@@ -416,44 +415,6 @@ public class CosmicMachines {
             REINFORCED_NAQUADRIA_CASING, GEARBOX_NAQUADRIA, CASING_INTAKE_ULTIMATE,
             CosmicCore.id("block/casings/solid/reinforced_naquadria_casing"),
             GTCEu.id("block/multiblock/generator/extreme_combustion_engine"));
-
-    public static MachineDefinition HPCA_INDICATOR = REGISTRATE
-            .machine("hpca_indicator", HPCAIndicatorPartMachine::new)
-            .langValue("HPCA Indicator")
-            .appearanceBlock(COMPUTER_CASING)
-            .modelProperty(GTMachineModelProperties.IS_FORMED, false)
-            .model(createOverlayTieredHullMachineModel(CosmicCore.id("block/machine/part/hpca_indicator"))
-                    .andThen(b -> b.addDynamicRenderer(CosmicDynamicRenderHelpers::getHPCAIndicatorRender)))
-            .tier(ZPM)
-            .register();
-
-    public static final MachineDefinition HIGH_PERFORMANCE_COMPUTATION_ARRAY = REGISTRATE
-            .multiblock("high_performance_computation_array", HPCAMachine::new)
-            .langValue("High Performance Computation Array (HPCA)")
-            .rotationState(RotationState.NON_Y_AXIS)
-            .appearanceBlock(COMPUTER_CASING)
-            .recipeType(DUMMY_RECIPES)
-            // Builds from the front top left to the back bottom right. Each aisle iss a vertical slice. We draw each
-            // aisle left to right, top to bottom
-            .pattern(definition -> FactoryBlockPattern.start(RelativeDirection.LEFT, DOWN, RelativeDirection.BACK)
-                    .aisle("AA", "CC", "CC", "CC", "SA")
-                    .aisle("BA", "XV", "XV", "XV", "VA")
-                    .setRepeatable(MIN_COMPONENTS_SLICES, MAX_COMPONENTS_SLICES)
-                    .aisle("AA", "BC", "BC", "BC", "AA")
-                    .where('S', controller(blocks(definition.getBlock())))
-                    .where('A', blocks(ADVANCED_COMPUTER_CASING.get()))
-                    .where('B', blocks(HPCA_INDICATOR.get()))
-                    .where('V', blocks(COMPUTER_HEAT_VENT.get()))
-                    .where('X', abilities(PartAbility.HPCA_COMPONENT)
-                            .or(blocks(Blocks.AIR)))
-                    .where('C', blocks(COMPUTER_CASING.get()).setMinGlobalLimited(5)
-                            .or(abilities(PartAbility.INPUT_ENERGY).setMinGlobalLimited(1).setMaxGlobalLimited(2, 1))
-                            .or(abilities(PartAbility.IMPORT_FLUIDS).setMaxGlobalLimited(1))
-                            .or(abilities(PartAbility.COMPUTATION_DATA_TRANSMISSION).setExactLimit(1))
-                            .or(autoAbilities(true, false, false)))
-                    .build())
-            .sidedWorkableCasingModel(GTCEu.id("block/casings/hpca/computer_casing"), GTCEu.id("block/multiblock/hpca"))
-            .register();
 
     private static MachineDefinition[] registerSoulHatch(String name, String displayName, IO io,
                                                          int[] tiers, PartAbility... abilities) {
@@ -912,9 +873,7 @@ public class CosmicMachines {
         GTMultiMachines.EXTREME_COMBUSTION_ENGINE.setRenderWorldPreview(false);
         GTMultiMachines.ASSEMBLY_LINE.setRecipeModifier(new RecipeModifierList(COSMIC_MODULES, OC_NON_PERFECT));
         GTMultiMachines.ASSEMBLY_LINE.setAlwaysTryModifyRecipe(true);
-        GCYMMachines.MEGA_BLAST_FURNACE.setRecipeTypes(new GTRecipeType[] { DUMMY_RECIPES });
-        GCYMMachines.MEGA_BLAST_FURNACE.setRenderXEIPreview(false);
-        GCYMMachines.MEGA_BLAST_FURNACE.setRenderWorldPreview(false);
+        // TODO(cosmiccore-42.14): GCYMMachines.MEGA_BLAST_FURNACE removed in GTCEu 8.0
         GTMultiMachines.POWER_SUBSTATION.setRenderXEIPreview(false);
         GTMultiMachines.POWER_SUBSTATION.setRenderWorldPreview(false);
 

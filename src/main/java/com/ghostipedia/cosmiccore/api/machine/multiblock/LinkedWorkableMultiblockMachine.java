@@ -6,6 +6,7 @@ import com.ghostipedia.cosmiccore.api.data.savedData.LinkEntry;
 import com.ghostipedia.cosmiccore.api.data.savedData.LinkedMultiblockSavedData;
 import com.ghostipedia.cosmiccore.common.machine.multiblock.LinkedMultiblockHelper;
 import com.ghostipedia.cosmiccore.common.machine.multiblock.LinkedMultiblockHelper.RolePair;
+import com.ghostipedia.cosmiccore.utils.ItemData;
 
 import com.gregtechceu.gtceu.api.blockentity.BlockEntityCreationInfo;
 import com.gregtechceu.gtceu.api.machine.MetaMachine;
@@ -15,6 +16,7 @@ import com.gregtechceu.gtceu.common.machine.owner.FTBOwner;
 
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.GlobalPos;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtOps;
 import net.minecraft.network.chat.Component;
@@ -59,8 +61,8 @@ public abstract class LinkedWorkableMultiblockMachine extends WorkableMultiblock
      */
     protected Set<GlobalPos> knownPartners = new HashSet<>();
 
-    public LinkedWorkableMultiblockMachine(BlockEntityCreationInfo holder, Object... args) {
-        super(holder, args);
+    public LinkedWorkableMultiblockMachine(BlockEntityCreationInfo holder) {
+        super(holder);
     }
 
 
@@ -182,22 +184,17 @@ public abstract class LinkedWorkableMultiblockMachine extends WorkableMultiblock
             return InteractionResult.FAIL;
         }
 
-        // Write link data to datastick
         CompoundTag linkData = new CompoundTag();
         GlobalPos.CODEC.encodeStart(NbtOps.INSTANCE, myPos)
                 .result()
                 .ifPresent(encoded -> linkData.put(TAG_POS, encoded));
         linkData.putUUID(TAG_OWNER, owner);
 
-        // Store in namespaced tag to preserve other datastick data
-        CompoundTag rootTag = dataStick.getOrCreateTag();
-        rootTag.put(DATASTICK_TAG_KEY, linkData);
+        ItemData.mutateTag(dataStick, rootTag -> rootTag.put(DATASTICK_TAG_KEY, linkData));
 
-        // Update datastick name
         String machineName = getDefinition().getName();
-        dataStick.setHoverName(Component.translatable("cosmiccore.datastick.link_copied", machineName));
+        dataStick.set(DataComponents.CUSTOM_NAME, Component.translatable("cosmiccore.datastick.link_copied", machineName));
 
-        // Feedback
         player.sendSystemMessage(Component.translatable("cosmiccore.link.copied", machineName)
                 .withStyle(ChatFormatting.GREEN));
 
@@ -210,14 +207,13 @@ public abstract class LinkedWorkableMultiblockMachine extends WorkableMultiblock
             return InteractionResult.sidedSuccess(true);
         }
 
-        CompoundTag rootTag = dataStick.getTag();
-        if (rootTag == null || !rootTag.contains(DATASTICK_TAG_KEY)) {
-            return InteractionResult.PASS; // Not our data, let other handlers try
+        CompoundTag rootTag = ItemData.readTag(dataStick);
+        if (!rootTag.contains(DATASTICK_TAG_KEY)) {
+            return InteractionResult.PASS;
         }
 
         CompoundTag linkData = rootTag.getCompound(DATASTICK_TAG_KEY);
 
-        // Parse partner info from datastick
         GlobalPos partnerPos = GlobalPos.CODEC
                 .decode(NbtOps.INSTANCE, linkData.get(TAG_POS))
                 .result()

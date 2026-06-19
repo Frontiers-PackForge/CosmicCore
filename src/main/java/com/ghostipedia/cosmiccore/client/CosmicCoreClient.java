@@ -9,13 +9,14 @@ import com.ghostipedia.cosmiccore.client.renderer.machine.*;
 import com.gregtechceu.gtceu.client.renderer.machine.DynamicRenderManager;
 
 import net.minecraft.client.renderer.ShaderInstance;
+import net.minecraft.client.resources.model.ModelResourceLocation;
 import net.neoforged.api.distmarker.Dist;
-import net.minecraftforge.client.event.ModelEvent;
-import net.minecraftforge.client.event.RegisterGuiOverlaysEvent;
-import net.minecraftforge.client.event.RegisterKeyMappingsEvent;
-import net.minecraftforge.client.event.RegisterShadersEvent;
-import net.minecraftforge.client.event.RenderGuiOverlayEvent;
-import net.minecraftforge.client.gui.overlay.VanillaGuiOverlay;
+import net.neoforged.neoforge.client.event.ModelEvent;
+import net.neoforged.neoforge.client.event.RegisterGuiLayersEvent;
+import net.neoforged.neoforge.client.event.RegisterKeyMappingsEvent;
+import net.neoforged.neoforge.client.event.RegisterShadersEvent;
+import net.neoforged.neoforge.client.event.RenderGuiLayerEvent;
+import net.neoforged.neoforge.client.gui.VanillaGuiLayers;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
@@ -35,7 +36,6 @@ public class CosmicCoreClient {
     public static void init(IEventBus modBus) {
         modBus.register(CosmicCoreClient.class);
 
-        DynamicRenderManager.register(CosmicCore.id("hpca_indicator"), HPCAIndicatorRender.TYPE);
         DynamicRenderManager.register(CosmicCore.id("hellfire_foundry_parts"), HellFireFoundryPartRender.TYPE);
         DynamicRenderManager.register(CosmicCore.id("hemographic_transfuser"), HemophagicTransfuserRender.TYPE);
         DynamicRenderManager.register(CosmicCore.id("suffering_chamber"), SufferingChamberRenderer.TYPE);
@@ -93,8 +93,8 @@ public class CosmicCoreClient {
     }
 
     @SubscribeEvent
-    public static void onGUIRegisterUIOverlays(RegisterGuiOverlaysEvent event) {
-        event.registerAboveAll("cosmichud", new CosmicHudGuiOverlay());
+    public static void onGUIRegisterUIOverlays(RegisterGuiLayersEvent event) {
+        event.registerAboveAll(CosmicCore.id("cosmichud"), new CosmicHudGuiOverlay());
     }
 
     @SubscribeEvent
@@ -106,21 +106,21 @@ public class CosmicCoreClient {
 
     @SubscribeEvent
     public static void registerAdditionalModels(ModelEvent.RegisterAdditional event) {
-        event.register(StellarIrisRender.IRIS_MODEL_CORE);
-        event.register(StellarIrisRender.IRIS_MODEL_RING);
-        event.register(StellarIrisRender.IRIS_MODEL_RING_WHITE);
+        event.register(ModelResourceLocation.standalone(StellarIrisRender.IRIS_MODEL_CORE));
+        event.register(ModelResourceLocation.standalone(StellarIrisRender.IRIS_MODEL_RING));
+        event.register(ModelResourceLocation.standalone(StellarIrisRender.IRIS_MODEL_RING_WHITE));
 
-        event.register(ConceptIncineratorRender.IRIS_MODEL_CORE);
-        event.register(ConceptIncineratorRender.IRIS_MODEL_RING);
-        event.register(ConceptIncineratorRender.IRIS_MODEL_RING_WHITE);
-        event.register(ConceptIncineratorRender.STAR_CORE);
-        event.register(ConceptIncineratorRender.STAR_CORE_MIDDLE);
-        event.register(ConceptIncineratorRender.STAR_CORE_OUTER);
+        event.register(ModelResourceLocation.standalone(ConceptIncineratorRender.IRIS_MODEL_CORE));
+        event.register(ModelResourceLocation.standalone(ConceptIncineratorRender.IRIS_MODEL_RING));
+        event.register(ModelResourceLocation.standalone(ConceptIncineratorRender.IRIS_MODEL_RING_WHITE));
+        event.register(ModelResourceLocation.standalone(ConceptIncineratorRender.STAR_CORE));
+        event.register(ModelResourceLocation.standalone(ConceptIncineratorRender.STAR_CORE_MIDDLE));
+        event.register(ModelResourceLocation.standalone(ConceptIncineratorRender.STAR_CORE_OUTER));
 
-        event.register(StarBallastRender.STAR_MODEL_CORE);
-        event.register(StarBallastRender.STAR_MODEL_OUTER);
-        event.register(StarBallastRender.STAR_MODEL_INNER);
-        event.register(StarBallastRender.STAR_MODEL_BEAM);
+        event.register(ModelResourceLocation.standalone(StarBallastRender.STAR_MODEL_CORE));
+        event.register(ModelResourceLocation.standalone(StarBallastRender.STAR_MODEL_OUTER));
+        event.register(ModelResourceLocation.standalone(StarBallastRender.STAR_MODEL_INNER));
+        event.register(ModelResourceLocation.standalone(StarBallastRender.STAR_MODEL_BEAM));
     }
 
     /* SHELVED bee client registration — Forestry dropped on 1.21.1 (bead cosmiccore-42.13)
@@ -407,8 +407,8 @@ public class CosmicCoreClient {
     public static final class HideVanillaOverlays {
 
         @SubscribeEvent
-        public static void onOverlayPre(RenderGuiOverlayEvent.Pre event) {
-            if (event.getOverlay() == VanillaGuiOverlay.AIR_LEVEL.type()) {
+        public static void onOverlayPre(RenderGuiLayerEvent.Pre event) {
+            if (event.getName().equals(VanillaGuiLayers.AIR_LEVEL)) {
                 event.setCanceled(true);
             }
         }

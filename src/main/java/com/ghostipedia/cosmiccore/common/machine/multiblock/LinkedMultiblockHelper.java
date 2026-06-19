@@ -19,7 +19,6 @@ import net.minecraft.core.GlobalPos;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.ChunkPos;
-import net.minecraftforge.common.world.ForgeChunkManager;
 
 import org.jetbrains.annotations.Nullable;
 
@@ -100,26 +99,14 @@ public class LinkedMultiblockHelper {
 
         ChunkPos chunkPos = new ChunkPos(target.pos());
         BlockPos ownerPos = requester.pos();
-        boolean success = ForgeChunkManager.forceChunk(
-                level,
-                CosmicCore.MOD_ID,
-                ownerPos,
-                chunkPos.x,
-                chunkPos.z,
-                true,
-                true);
+        boolean success = level.setChunkForced(chunkPos.x, chunkPos.z, true);
 
-        if (success) {
-            activeTickets.computeIfAbsent(requester, k -> new HashMap<>())
-                    .put(target, ownerPos);
-            CosmicCore.LOGGER.debug("Force-loaded chunk {} in {} for machine at {} (owner: {})",
-                    chunkPos, target.dimension().location(), requester, ownerPos);
-        } else {
-            CosmicCore.LOGGER.warn("Failed to force-load chunk {} in {}",
-                    chunkPos, target.dimension().location());
-        }
+        activeTickets.computeIfAbsent(requester, k -> new HashMap<>())
+                .put(target, ownerPos);
+        CosmicCore.LOGGER.debug("Force-loaded chunk {} in {} for machine at {} (owner: {}, changed: {})",
+                chunkPos, target.dimension().location(), requester, ownerPos, success);
 
-        return success;
+        return true;
     }
 
     public static void releasePartnerChunk(MinecraftServer server, GlobalPos requester, GlobalPos target) {
@@ -133,14 +120,7 @@ public class LinkedMultiblockHelper {
         if (level == null) return;
 
         ChunkPos chunkPos = new ChunkPos(target.pos());
-        ForgeChunkManager.forceChunk(
-                level,
-                CosmicCore.MOD_ID,
-                ownerPos,
-                chunkPos.x,
-                chunkPos.z,
-                false,
-                true);
+        level.setChunkForced(chunkPos.x, chunkPos.z, false);
 
         CosmicCore.LOGGER.debug("Released chunk {} in {} for machine at {} (owner: {})",
                 chunkPos, target.dimension().location(), requester, ownerPos);
@@ -157,19 +137,11 @@ public class LinkedMultiblockHelper {
         int released = 0;
         for (Map.Entry<GlobalPos, BlockPos> entry : tickets.entrySet()) {
             GlobalPos target = entry.getKey();
-            BlockPos ownerPos = entry.getValue();
 
             ServerLevel level = server.getLevel(target.dimension());
             if (level != null) {
                 ChunkPos chunkPos = new ChunkPos(target.pos());
-                ForgeChunkManager.forceChunk(
-                        level,
-                        CosmicCore.MOD_ID,
-                        ownerPos,
-                        chunkPos.x,
-                        chunkPos.z,
-                        false,
-                        true);
+                level.setChunkForced(chunkPos.x, chunkPos.z, false);
                 released++;
             }
         }

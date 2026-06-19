@@ -18,8 +18,8 @@ public class WeakSteamParallelMultiBlockMachine extends SteamParallelMultiblockM
     // if in millibuckets, this is 0.5, Meaning 0.5mb of steam -> 1 EU
     private static final double CONVERSION_RATE = 0.5D;
 
-    public WeakSteamParallelMultiBlockMachine(BlockEntityCreationInfo holder, Object... args) {
-        super(holder, args);
+    public WeakSteamParallelMultiBlockMachine(BlockEntityCreationInfo holder) {
+        super(holder);
         setMaxParallels(4);
     }
 

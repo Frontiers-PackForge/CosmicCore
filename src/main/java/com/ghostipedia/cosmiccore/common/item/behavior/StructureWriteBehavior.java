@@ -1,6 +1,7 @@
 package com.ghostipedia.cosmiccore.common.item.behavior;
 
 import com.ghostipedia.cosmiccore.api.data.DebugBlockPattern;
+import com.ghostipedia.cosmiccore.utils.ItemData;
 
 import com.gregtechceu.gtceu.GTCEu;
 import com.gregtechceu.gtceu.api.gui.GuiTextures;
@@ -126,7 +127,6 @@ public class StructureWriteBehavior implements IItemUIFactory {
                 builder.append(".aisle(\"%s\")\n".formatted(Joiner.on("\", \"").join(strings)));
             }
 
-            // Add legend mapping characters to block resource locations
             builder.append("\n// Block Legend:\n");
             blockPattern.charToBlockMap.forEach((character, resourceLocation) -> {
                 if (character == ' ') {
@@ -170,18 +170,17 @@ public class StructureWriteBehavior implements IItemUIFactory {
     }
 
     public static Direction getDir(ItemStack stack) {
-        CompoundTag tag = stack.getOrCreateTagElement("structure_writer");
+        CompoundTag tag = ItemData.readElement(stack, "structure_writer");
         if (!tag.contains("dir")) return Direction.WEST;
         return Direction.byName(tag.getString("dir"));
     }
 
     public static void setDir(ItemStack stack, Direction dir) {
-        CompoundTag tag = stack.getOrCreateTagElement("structure_writer");
-        tag.putString("dir", dir.getName());
+        ItemData.mutateElement(stack, "structure_writer", tag -> tag.putString("dir", dir.getName()));
     }
 
     public static BlockPos[] getPos(ItemStack stack) {
-        CompoundTag tag = stack.getOrCreateTagElement("structure_writer");
+        CompoundTag tag = ItemData.readElement(stack, "structure_writer");
         if (!tag.contains("minX")) return null;
         return new BlockPos[] {
                 new BlockPos(tag.getInt("minX"), tag.getInt("minY"), tag.getInt("minZ")),
@@ -190,37 +189,39 @@ public class StructureWriteBehavior implements IItemUIFactory {
     }
 
     public static void addPos(ItemStack stack, BlockPos pos) {
-        CompoundTag tag = stack.getOrCreateTagElement("structure_writer");
-        if (!tag.contains("minX") || tag.getInt("minX") > pos.getX()) {
-            tag.putInt("minX", pos.getX());
-        }
-        if (!tag.contains("maxX") || tag.getInt("maxX") < pos.getX()) {
-            tag.putInt("maxX", pos.getX());
-        }
+        ItemData.mutateElement(stack, "structure_writer", tag -> {
+            if (!tag.contains("minX") || tag.getInt("minX") > pos.getX()) {
+                tag.putInt("minX", pos.getX());
+            }
+            if (!tag.contains("maxX") || tag.getInt("maxX") < pos.getX()) {
+                tag.putInt("maxX", pos.getX());
+            }
 
-        if (!tag.contains("minY") || tag.getInt("minY") > pos.getY()) {
-            tag.putInt("minY", pos.getY());
-        }
-        if (!tag.contains("maxY") || tag.getInt("maxY") < pos.getY()) {
-            tag.putInt("maxY", pos.getY());
-        }
+            if (!tag.contains("minY") || tag.getInt("minY") > pos.getY()) {
+                tag.putInt("minY", pos.getY());
+            }
+            if (!tag.contains("maxY") || tag.getInt("maxY") < pos.getY()) {
+                tag.putInt("maxY", pos.getY());
+            }
 
-        if (!tag.contains("minZ") || tag.getInt("minZ") > pos.getZ()) {
-            tag.putInt("minZ", pos.getZ());
-        }
-        if (!tag.contains("maxZ") || tag.getInt("maxZ") < pos.getZ()) {
-            tag.putInt("maxZ", pos.getZ());
-        }
+            if (!tag.contains("minZ") || tag.getInt("minZ") > pos.getZ()) {
+                tag.putInt("minZ", pos.getZ());
+            }
+            if (!tag.contains("maxZ") || tag.getInt("maxZ") < pos.getZ()) {
+                tag.putInt("maxZ", pos.getZ());
+            }
+        });
     }
 
     public static void removePos(ItemStack stack) {
-        CompoundTag tag = stack.getOrCreateTagElement("structure_writer");
-        tag.remove("minX");
-        tag.remove("maxX");
-        tag.remove("minY");
-        tag.remove("maxY");
-        tag.remove("minZ");
-        tag.remove("maxZ");
+        ItemData.mutateElement(stack, "structure_writer", tag -> {
+            tag.remove("minX");
+            tag.remove("maxX");
+            tag.remove("minY");
+            tag.remove("maxY");
+            tag.remove("minZ");
+            tag.remove("maxZ");
+        });
     }
 
     @Override
@@ -238,7 +239,7 @@ public class StructureWriteBehavior implements IItemUIFactory {
 
     @Override
     public InteractionResultHolder<ItemStack> use(
-                                                  Item item, Level level, Player player, InteractionHand usedHand) {
+                                                  ItemStack item, Level level, Player player, InteractionHand usedHand) {
         ItemStack stack = player.getItemInHand(usedHand);
         if (player.isShiftKeyDown()) {
             removePos(stack);

@@ -41,6 +41,7 @@ import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.neoforged.fml.event.lifecycle.FMLLoadCompleteEvent;
 import net.neoforged.neoforge.capabilities.RegisterCapabilitiesEvent;
+import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent;
 import net.neoforged.neoforge.registries.RegisterEvent;
 
 import appeng.api.features.GridLinkables;
@@ -110,7 +111,6 @@ public class CosmicCore {
         event.enqueueWork(() -> {
             MapIngredientTypeManager.registerMapIngredient(SoulIngredient.class, MapSoulIngredient::from);
             GridLinkables.register(CosmicItems.LINKED_TERMINAL, LinkedTerminalBehavior.handler);
-            CCoreNetwork.init();
             OxygenRules.registerAirRanges();
             DimensionMobScaling.registerScaling();
             ArgumentTypeInfos.registerByClass(SoulTypeArgument.class,
@@ -128,7 +128,8 @@ public class CosmicCore {
     }
 
     @SubscribeEvent
-    public void registerCapabilities(RegisterCapabilitiesEvent event) {
-        OxygenItemCap.onRegisterCaps(event);
+    public void registerPayloads(RegisterPayloadHandlersEvent event) {
+        CCoreNetwork.registerPayloads(event);
     }
+
 }

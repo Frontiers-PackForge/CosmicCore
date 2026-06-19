@@ -6,10 +6,6 @@ import com.gregtechceu.gtceu.client.renderer.machine.DynamicRender;
 
 public class CosmicDynamicRenderHelpers {
 
-    public static DynamicRender<?, ?> getHPCAIndicatorRender() {
-        return HPCAIndicatorRender.INSTANCE;
-    }
-
     public static DynamicRender<?, ?> getHemophagicTransfuserRender() {
         return HemophagicTransfuserRender.INSTANCE;
     }

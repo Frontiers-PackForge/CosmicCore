@@ -23,10 +23,8 @@ import com.lowdragmc.lowdraglib.utils.Position;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.ItemNameBlockItem;
 import net.minecraft.world.item.ItemStack;
-import net.neoforged.neoforge.common.IPlantable;
+import net.minecraft.world.level.block.BushBlock;
 
-import lombok.Getter;
-import lombok.Setter;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;
@@ -35,8 +33,6 @@ public class CropHolderPartMachines extends MultiblockPartMachine implements IFa
 
     @Persisted
     private final CropHolderHandler heldCrops;
-    @Getter
-    @Setter
     @Persisted
     @DescSynced
     private boolean isLocked;
@@ -44,6 +40,14 @@ public class CropHolderPartMachines extends MultiblockPartMachine implements IFa
     public CropHolderPartMachines(BlockEntityCreationInfo holder) {
         super(holder);
         heldCrops = new CropHolderHandler(this);
+    }
+
+    public boolean isLocked() {
+        return isLocked;
+    }
+
+    public void setLocked(boolean locked) {
+        this.isLocked = locked;
     }
 
     private class CropHolderHandler extends NotifiableItemStackHandler {
@@ -79,13 +83,13 @@ public class CropHolderPartMachines extends MultiblockPartMachine implements IFa
             }
             if (item instanceof ItemNameBlockItem plantBlock) {
                 var block = plantBlock.getBlock();
-                if (block instanceof IPlantable plantable) {
+                if (block instanceof BushBlock) {
                     return true;
                 }
             }
             if (item instanceof BlockItem plantBlock) {
                 var block = plantBlock.getBlock();
-                if (block instanceof IPlantable) {
+                if (block instanceof BushBlock) {
                     return true;
                 }
             }

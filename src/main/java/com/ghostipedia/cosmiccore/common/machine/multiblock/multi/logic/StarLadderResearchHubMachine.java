@@ -10,6 +10,7 @@ import com.ghostipedia.cosmiccore.common.machine.multiblock.multi.StarLadderRese
 
 import com.gregtechceu.gtceu.api.blockentity.BlockEntityCreationInfo;
 import com.gregtechceu.gtceu.api.pattern.BlockPattern;
+import com.gregtechceu.gtceu.utils.ExtendedUseOnContext;
 
 import com.lowdragmc.lowdraglib.gui.modular.ModularUI;
 import com.lowdragmc.lowdraglib.gui.widget.Widget;
@@ -32,7 +33,6 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.phys.BlockHitResult;
 import net.neoforged.api.distmarker.Dist;
@@ -53,22 +53,31 @@ public class StarLadderResearchHubMachine extends LinkedWorkableElectricMultiblo
     @Persisted
     @DescSynced
     @UpdateListener(methodName = "onRingTierSynced")
-    @Getter
     private int ringTier = 0;
 
     @Persisted
     @DescSynced
     @UpdateListener(methodName = "onRingPreviewSynced")
-    @Getter
     private boolean ringPreviewEnabled = false;
 
     @Persisted
     @DescSynced
-    @Getter
     private int partialRingIndex = 0;
 
-    public StarLadderResearchHubMachine(BlockEntityCreationInfo holder, Object... args) {
-        super(holder, args);
+    public StarLadderResearchHubMachine(BlockEntityCreationInfo holder) {
+        super(holder);
+    }
+
+    public int getRingTier() {
+        return ringTier;
+    }
+
+    public boolean isRingPreviewEnabled() {
+        return ringPreviewEnabled;
+    }
+
+    public int getPartialRingIndex() {
+        return partialRingIndex;
     }
 
     @OnlyIn(Dist.CLIENT)
@@ -103,7 +112,7 @@ public class StarLadderResearchHubMachine extends LinkedWorkableElectricMultiblo
         return isFormed() && ringTier < 3;
     }
 
-    public Block getNextRingBlock() {
+    public net.minecraft.world.level.block.Block getNextRingBlock() {
         if (!canUpgrade()) return null;
         return RingUpgradePreviewRenderer.getRingBlock(ringTier + 1);
     }
@@ -118,7 +127,7 @@ public class StarLadderResearchHubMachine extends LinkedWorkableElectricMultiblo
         return RingUpgradePreviewRenderer.calculateRingPositions(getBlockPos(), getFrontFacing(), ringTier + 1);
     }
 
-    public Map<BlockPos, Block> getNextRingPositionsWithBlocks() {
+    public Map<BlockPos, net.minecraft.world.level.block.Block> getNextRingPositionsWithBlocks() {
         if (!canUpgrade()) return Map.of();
         return RingUpgradePreviewRenderer.calculateRingPositionsWithBlocks(getBlockPos(), getFrontFacing(), ringTier + 1);
     }
@@ -126,15 +135,15 @@ public class StarLadderResearchHubMachine extends LinkedWorkableElectricMultiblo
     public int autoBuildNextRing(Player player) {
         if (!canUpgrade() || getLevel() == null) return 0;
 
-        Map<BlockPos, Block> positionsWithBlocks = getNextRingPositionsWithBlocks();
+        Map<BlockPos, net.minecraft.world.level.block.Block> positionsWithBlocks = getNextRingPositionsWithBlocks();
         if (positionsWithBlocks.isEmpty()) return 0;
 
         boolean isCreative = player.isCreative();
         int placed = 0;
 
-        for (Map.Entry<BlockPos, Block> entry : positionsWithBlocks.entrySet()) {
+        for (Map.Entry<BlockPos, net.minecraft.world.level.block.Block> entry : positionsWithBlocks.entrySet()) {
             BlockPos pos = entry.getKey();
-            Block targetBlock = entry.getValue();
+            net.minecraft.world.level.block.Block targetBlock = entry.getValue();
 
             if (!getLevel().isEmptyBlock(pos)) continue;
 
@@ -145,7 +154,7 @@ public class StarLadderResearchHubMachine extends LinkedWorkableElectricMultiblo
             }
 
             // Place the block
-            getLevel().setBlock(pos, targetBlock.defaultBlockState(), Block.UPDATE_ALL);
+            getLevel().setBlock(pos, targetBlock.defaultBlockState(), net.minecraft.world.level.block.Block.UPDATE_ALL);
 
             // Play place sound
             SoundType soundType = targetBlock.defaultBlockState().getSoundType();
@@ -158,7 +167,7 @@ public class StarLadderResearchHubMachine extends LinkedWorkableElectricMultiblo
         return placed;
     }
 
-    private ItemStack consumeBlockFromInventory(Player player, Block targetBlock) {
+    private ItemStack consumeBlockFromInventory(Player player, net.minecraft.world.level.block.Block targetBlock) {
         for (int i = 0; i < player.getInventory().getContainerSize(); i++) {
             ItemStack stack = player.getInventory().getItem(i);
             if (stack.isEmpty()) continue;
@@ -176,7 +185,7 @@ public class StarLadderResearchHubMachine extends LinkedWorkableElectricMultiblo
         return ItemStack.EMPTY;
     }
 
-    public int countBlocksInInventory(Player player, Block targetBlock) {
+    public int countBlocksInInventory(Player player, net.minecraft.world.level.block.Block targetBlock) {
         int count = 0;
         for (int i = 0; i < player.getInventory().getContainerSize(); i++) {
             ItemStack stack = player.getInventory().getItem(i);
@@ -194,7 +203,7 @@ public class StarLadderResearchHubMachine extends LinkedWorkableElectricMultiblo
     public int countEmptyRingPositions() {
         if (!canUpgrade() || getLevel() == null) return 0;
 
-        Map<BlockPos, Block> positions = getNextRingPositionsWithBlocks();
+        Map<BlockPos, net.minecraft.world.level.block.Block> positions = getNextRingPositionsWithBlocks();
         int empty = 0;
         for (BlockPos pos : positions.keySet()) {
             if (getLevel().isEmptyBlock(pos)) {
@@ -204,12 +213,12 @@ public class StarLadderResearchHubMachine extends LinkedWorkableElectricMultiblo
         return empty;
     }
 
-    public Map<Block, Integer> countEmptyRingPositionsByBlock() {
+    public Map<net.minecraft.world.level.block.Block, Integer> countEmptyRingPositionsByBlock() {
         if (!canUpgrade() || getLevel() == null) return Map.of();
 
-        Map<BlockPos, Block> positions = getNextRingPositionsWithBlocks();
-        Map<Block, Integer> counts = new java.util.HashMap<>();
-        for (Map.Entry<BlockPos, Block> entry : positions.entrySet()) {
+        Map<BlockPos, net.minecraft.world.level.block.Block> positions = getNextRingPositionsWithBlocks();
+        Map<net.minecraft.world.level.block.Block, Integer> counts = new java.util.HashMap<>();
+        for (Map.Entry<BlockPos, net.minecraft.world.level.block.Block> entry : positions.entrySet()) {
             if (getLevel().isEmptyBlock(entry.getKey())) {
                 counts.merge(entry.getValue(), 1, Integer::sum);
             }
@@ -217,7 +226,7 @@ public class StarLadderResearchHubMachine extends LinkedWorkableElectricMultiblo
         return counts;
     }
 
-    public Map<Block, Integer> getNextRingBlockCounts() {
+    public Map<net.minecraft.world.level.block.Block, Integer> getNextRingBlockCounts() {
         if (!canUpgrade()) return Map.of();
         return RingUpgradePreviewRenderer.getDeltaBlockCounts(ringTier);
     }
@@ -246,9 +255,9 @@ public class StarLadderResearchHubMachine extends LinkedWorkableElectricMultiblo
     }
 
     @Override
-    protected InteractionResult onScrewdriverClick(Player playerIn, InteractionHand hand,
-                                                   Direction gridSide, BlockHitResult hitResult) {
+    protected InteractionResult onScrewdriverClick(ExtendedUseOnContext context) {
         if (!isRemote()) {
+            Player playerIn = context.getPlayer();
             if (playerIn.isShiftKeyDown()) {
                 // Shift+Screwdriver = Auto-build
                 return handleAutoBuild(playerIn);
@@ -257,19 +266,18 @@ public class StarLadderResearchHubMachine extends LinkedWorkableElectricMultiblo
                 return handlePreviewToggle(playerIn);
             }
         }
-        return super.onScrewdriverClick(playerIn, hand, gridSide, hitResult);
+        return super.onScrewdriverClick(context);
     }
 
     @Override
-    protected InteractionResult onSoftMalletClick(Player playerIn, InteractionHand hand,
-                                                  Direction gridSide, BlockHitResult hitResult) {
+    protected InteractionResult onSoftMalletClick(ExtendedUseOnContext context) {
+        Player playerIn = context.getPlayer();
         if (!isRemote()) {
             if (playerIn.isShiftKeyDown()) {
-                // Shift+Soft Mallet = Debug auto-build T0 only (creative mode only)
                 return handleDebugBuildT0(playerIn);
             }
         }
-        return super.onSoftMalletClick(playerIn, hand, gridSide, hitResult);
+        return super.onSoftMalletClick(context);
     }
 
     private InteractionResult handlePreviewToggle(Player player) {
@@ -321,9 +329,9 @@ public class StarLadderResearchHubMachine extends LinkedWorkableElectricMultiblo
 
         // Check if player has any of the required blocks (skip for creative)
         if (!player.isCreative()) {
-            Map<Block, Integer> neededByBlock = countEmptyRingPositionsByBlock();
+            Map<net.minecraft.world.level.block.Block, Integer> neededByBlock = countEmptyRingPositionsByBlock();
             boolean hasAnyBlocks = false;
-            for (Block block : neededByBlock.keySet()) {
+            for (net.minecraft.world.level.block.Block block : neededByBlock.keySet()) {
                 if (countBlocksInInventory(player, block) > 0) {
                     hasAnyBlocks = true;
                     break;
@@ -382,7 +390,7 @@ public class StarLadderResearchHubMachine extends LinkedWorkableElectricMultiblo
 
         if (getLevel() == null) return InteractionResult.PASS;
 
-        Map<BlockPos, Block> t0Positions = RingUpgradePreviewRenderer.calculateRingPositionsWithBlocks(
+        Map<BlockPos, net.minecraft.world.level.block.Block> t0Positions = RingUpgradePreviewRenderer.calculateRingPositionsWithBlocks(
                 getBlockPos(), getFrontFacing(), 0);
 
         if (t0Positions.isEmpty()) {
@@ -394,16 +402,16 @@ public class StarLadderResearchHubMachine extends LinkedWorkableElectricMultiblo
 
         int placed = 0;
         int skipped = 0;
-        for (Map.Entry<BlockPos, Block> entry : t0Positions.entrySet()) {
+        for (Map.Entry<BlockPos, net.minecraft.world.level.block.Block> entry : t0Positions.entrySet()) {
             BlockPos pos = entry.getKey();
-            Block targetBlock = entry.getValue();
+            net.minecraft.world.level.block.Block targetBlock = entry.getValue();
 
             if (!getLevel().isEmptyBlock(pos)) {
                 skipped++;
                 continue;
             }
 
-            getLevel().setBlock(pos, targetBlock.defaultBlockState(), Block.UPDATE_ALL);
+            getLevel().setBlock(pos, targetBlock.defaultBlockState(), net.minecraft.world.level.block.Block.UPDATE_ALL);
 
             SoundType soundType = targetBlock.defaultBlockState().getSoundType();
             getLevel().playSound(null, pos, soundType.getPlaceSound(), SoundSource.BLOCKS,
@@ -505,11 +513,11 @@ public class StarLadderResearchHubMachine extends LinkedWorkableElectricMultiblo
         // Display upgrade info if not at max tier
         if (canUpgrade()) {
             // Show what's needed for next tier
-            Map<Block, Integer> neededByBlock = countEmptyRingPositionsByBlock();
+            Map<net.minecraft.world.level.block.Block, Integer> neededByBlock = countEmptyRingPositionsByBlock();
             if (!neededByBlock.isEmpty()) {
                 textList.add(Component.literal("Next Tier (T" + (ringTier + 1) + ") Needs:")
                         .withStyle(ChatFormatting.GRAY));
-                for (Map.Entry<Block, Integer> entry : neededByBlock.entrySet()) {
+                for (Map.Entry<net.minecraft.world.level.block.Block, Integer> entry : neededByBlock.entrySet()) {
                     textList.add(Component.literal("  " + entry.getValue() + "x ")
                             .withStyle(ChatFormatting.WHITE)
                             .append(entry.getKey().getName().copy().withStyle(ChatFormatting.YELLOW)));

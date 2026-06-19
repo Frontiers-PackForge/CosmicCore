@@ -55,7 +55,6 @@ public class MultiblockInit {
         SufferingChamber.init();
         TitanFusion.init();
         DawnForge.init();
-        MegaProductionAlveary.init();
         ManaEtchingFactory.init();
         ArcaneCrucible.init();
         CinderHearth.init();

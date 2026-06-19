@@ -39,8 +39,6 @@ public class HeatSensitiveMachine extends HeatWorkableElectricMultiblockMachine 
         super(holder);
     }
 
-    @Override
-    @NotNull
 
     @Override
     public void onStructureFormed() {

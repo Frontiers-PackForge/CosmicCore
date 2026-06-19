@@ -1,15 +1,21 @@
 package com.ghostipedia.cosmiccore.common.network.packet;
 
-import com.ghostipedia.cosmiccore.common.network.CCoreNetwork;
+import com.ghostipedia.cosmiccore.CosmicCore;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
-import net.neoforged.api.distmarker.Dist;
-import net.minecraftforge.fml.DistExecutor;
-import net.minecraftforge.network.NetworkEvent;
+import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
+import net.neoforged.neoforge.network.handling.IPayloadContext;
 
-public class OxygenWarnPacket implements CCoreNetwork.INetPacket {
+import org.jetbrains.annotations.NotNull;
+
+public class OxygenWarnPacket implements CustomPacketPayload {
+
+    public static final Type<OxygenWarnPacket> TYPE = new Type<>(CosmicCore.id("oxygen_warn"));
+    public static final StreamCodec<FriendlyByteBuf, OxygenWarnPacket> CODEC =
+            StreamCodec.ofMember(OxygenWarnPacket::encode, OxygenWarnPacket::new);
 
     private final String message;
     private final int seconds;
@@ -24,15 +30,17 @@ public class OxygenWarnPacket implements CCoreNetwork.INetPacket {
         this.seconds = buf.readVarInt();
     }
 
-    @Override
     public void encode(FriendlyByteBuf buffer) {
         buffer.writeUtf(message);
         buffer.writeVarInt(seconds);
     }
 
+    public void execute(IPayloadContext context) {
+        Minecraft.getInstance().gui.setOverlayMessage(Component.translatable(message, seconds), false);
+    }
+
     @Override
-    public void execute(NetworkEvent.Context context) {
-        DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> Minecraft.getInstance().execute(
-                () -> Minecraft.getInstance().gui.setOverlayMessage(Component.translatable(message, seconds), false)));
+    public @NotNull Type<OxygenWarnPacket> type() {
+        return TYPE;
     }
 }

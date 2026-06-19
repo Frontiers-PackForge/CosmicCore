@@ -12,6 +12,7 @@ import com.gregtechceu.gtceu.api.capability.recipe.IO;
 import com.gregtechceu.gtceu.api.capability.recipe.IRecipeHandler;
 import com.gregtechceu.gtceu.api.capability.recipe.RecipeCapability;
 import com.gregtechceu.gtceu.api.blockentity.BlockEntityCreationInfo;
+import com.gregtechceu.gtceu.api.machine.MetaMachine;
 import com.gregtechceu.gtceu.api.machine.feature.IFancyUIMachine;
 import com.gregtechceu.gtceu.api.machine.feature.IOverclockMachine;
 import com.gregtechceu.gtceu.api.machine.feature.multiblock.IDisplayUIMachine;
@@ -34,8 +35,6 @@ import net.minecraft.network.chat.Style;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.player.Player;
 
-import lombok.Getter;
-import lombok.Setter;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -46,13 +45,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
-@Getter
 public class StellarBaseModule extends WorkableMultiblockMachine
                                implements IStellarModuleReceiver, IDisplayUIMachine, IFancyUIMachine,
                                IOverclockMachine {
 
 
-    @Setter
+    @Nullable
     private IStellarIrisProvider stellarIris;
 
     @DescSynced
@@ -64,14 +62,10 @@ public class StellarBaseModule extends WorkableMultiblockMachine
     @DescSynced
     private boolean powerFailure = false;
 
-    @Getter
-    @Setter
     @Persisted
     @DescSynced
     private int configuredMaxParallel = 1;
 
-    @Getter
-    @Setter
     @Persisted
     @DescSynced
     private long configuredVoltagePerParallel = 32;
@@ -84,6 +78,41 @@ public class StellarBaseModule extends WorkableMultiblockMachine
                 Long.MAX_VALUE, Long.MAX_VALUE, Long.MAX_VALUE, 0, 0);
         this.virtualEnergyContainer.setSideInputCondition(side -> false);
         this.virtualEnergyContainer.setSideOutputCondition(side -> false);
+    }
+
+    @Override
+    @Nullable
+    public IStellarIrisProvider getStellarIris() {
+        return stellarIris;
+    }
+
+    @Override
+    public void setStellarIris(@Nullable IStellarIrisProvider provider) {
+        this.stellarIris = provider;
+    }
+
+    public long getEnergyConsumedPerTick() {
+        return energyConsumedPerTick;
+    }
+
+    public boolean isWirelessEnergyAvailable() {
+        return wirelessEnergyAvailable;
+    }
+
+    public int getConfiguredMaxParallel() {
+        return configuredMaxParallel;
+    }
+
+    public void setConfiguredMaxParallel(int configuredMaxParallel) {
+        this.configuredMaxParallel = configuredMaxParallel;
+    }
+
+    public long getConfiguredVoltagePerParallel() {
+        return configuredVoltagePerParallel;
+    }
+
+    public void setConfiguredVoltagePerParallel(long configuredVoltagePerParallel) {
+        this.configuredVoltagePerParallel = configuredVoltagePerParallel;
     }
 
 
@@ -216,14 +245,11 @@ public class StellarBaseModule extends WorkableMultiblockMachine
 
                     for (int y = -10; y <= 10; y++) {
                         BlockPos checkPos = modulePos.offset(x, y, z);
-                        var blockEntity = getLevel().getBlockEntity(checkPos);
+                        MetaMachine machine = MetaMachine.getMachine(getLevel(), checkPos);
 
-                        if (blockEntity instanceof BlockEntityCreationInfo machineBlockEntity) {
-                            var machine = machineBlockEntity;
-                            if (machine instanceof IrisMultiblockMachine iris && iris.isFormed()) {
-                                if (iris.registerModule(this)) {
-                                    return;
-                                }
+                        if (machine instanceof IrisMultiblockMachine iris && iris.isFormed()) {
+                            if (iris.registerModule(this)) {
+                                return;
                             }
                         }
                     }

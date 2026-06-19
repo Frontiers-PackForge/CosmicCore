@@ -28,7 +28,6 @@ dependencies {
     // AE2 stack (upstream, matching the pack)
     implementation(forge.ae2)
     implementation(forge.guideme)
-    implementation(forge.expandedae)
     implementation(forge.ae2wtlib)
     implementation(forge.clothconfig)
 
@@ -36,7 +35,12 @@ dependencies {
     compileOnly(variantOf(forge.create) { classifier("slim") })
     compileOnly(forge.ponder)
     compileOnly(forge.flywheel.api)
-    runtimeOnly(forge.create)
+    runtimeOnly(forge.create) {
+        // Create's published metadata leaks optional integrations as runtime deps. The pack uses Xaero's,
+        // not JourneyMap, and the bundled JourneyMap beta is incompatible with our compile-time journeymap-api
+        // (it expects journeymap.api.v2...PluginHelper, absent in 2.0.0-SNAPSHOT) -> NoClassDefFoundError on init.
+        exclude group: 'maven.modrinth', module: 'journeymap'
+    }
     runtimeOnly(forge.flywheel.impl)
 
     // Magic / content mods
@@ -51,7 +55,10 @@ dependencies {
     implementation(forge.geckolib)
 
     // Apotheosis (modular on 1.21.1)
-    implementation(forge.placebo)
+    // Placebo is provided transitively by the Apothic mods as dev.shadowsoffire:Placebo. Declaring it
+    // separately as maven.modrinth:placebo put two distinct coordinates of the same mod on the classpath,
+    // so Placebo loaded twice and double-registered (placebo:button_click, enchanting_stats). CC has no
+    // direct Placebo usage, so let Apothic supply the single canonical copy.
     implementation(forge.apothicattributes)
     implementation(forge.apothicenchanting)
     implementation(forge.apothicspawners)
@@ -84,4 +91,5 @@ dependencies {
     // New Thin Air                -> discontinued
     // Modern AE2 Additions, ModKit, WorldEdit, World Stripper -> dropped
     // botarium / yabn / byteCodecs / resourcefulConfig -> Ad Astra stack, dropped with AA
+    // Expanded AE 2.1.1           -> core mixin hard-refs Advanced AE (not in pack); CC has no code dep on it
 }

@@ -2,6 +2,7 @@ package com.ghostipedia.cosmiccore.api.item;
 
 import com.ghostipedia.cosmiccore.api.block.IBlockPattern;
 import com.ghostipedia.cosmiccore.common.data.CosmicItems;
+import com.ghostipedia.cosmiccore.utils.ItemData;
 
 import com.gregtechceu.gtceu.api.item.component.IAddInformation;
 import com.gregtechceu.gtceu.api.item.component.IInteractionItem;
@@ -61,7 +62,7 @@ public class LinkedTerminalBehavior implements IInteractionItem, IAddInformation
     }
 
     @Override
-    public void appendHoverText(ItemStack stack, @Nullable Level level, List<Component> lines, TooltipFlag isAdvanced) {
+    public void appendHoverText(ItemStack stack, Item.TooltipContext context, List<Component> lines, TooltipFlag isAdvanced) {
         var position = linkedPosition(stack);
         if (position == null) {
             lines.add(Tooltips.of(GuiText.Unlinked, Tooltips.RED));
@@ -74,14 +75,14 @@ public class LinkedTerminalBehavior implements IInteractionItem, IAddInformation
     }
 
     @Override
-    public InteractionResultHolder<ItemStack> use(Item item, Level level, Player player, InteractionHand usedHand) {
+    public InteractionResultHolder<ItemStack> use(ItemStack item, Level level, Player player, InteractionHand usedHand) {
         var stack = player.getItemInHand(usedHand);
         return InteractionResultHolder.pass(stack);
     }
 
     private GlobalPos linkedPosition(ItemStack item) {
-        var tag = item.getTag();
-        if (tag != null && tag.contains(TAG_ACCESS_POINT_POS, Tag.TAG_COMPOUND)) {
+        var tag = ItemData.readTag(item);
+        if (tag.contains(TAG_ACCESS_POINT_POS, Tag.TAG_COMPOUND)) {
             return GlobalPos.CODEC.decode(NbtOps.INSTANCE, tag.get(TAG_ACCESS_POINT_POS))
                     .resultOrPartial(Util.prefix("Linked position", Log::error))
                     .map(Pair::getFirst)
@@ -141,12 +142,12 @@ public class LinkedTerminalBehavior implements IInteractionItem, IAddInformation
         public void link(ItemStack itemStack, GlobalPos pos) {
             GlobalPos.CODEC.encodeStart(NbtOps.INSTANCE, pos)
                     .result()
-                    .ifPresent(tag -> itemStack.getOrCreateTag().put(TAG_ACCESS_POINT_POS, tag));
+                    .ifPresent(tag -> ItemData.mutateTag(itemStack, root -> root.put(TAG_ACCESS_POINT_POS, tag)));
         }
 
         @Override
         public void unlink(ItemStack itemStack) {
-            itemStack.removeTagKey(TAG_ACCESS_POINT_POS);
+            ItemData.mutateTag(itemStack, root -> root.remove(TAG_ACCESS_POINT_POS));
         }
     }
 }

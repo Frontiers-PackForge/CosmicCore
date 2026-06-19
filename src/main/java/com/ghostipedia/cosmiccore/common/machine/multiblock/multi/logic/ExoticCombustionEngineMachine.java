@@ -84,7 +84,7 @@ public class ExoticCombustionEngineMachine extends WorkableElectricMultiblockMac
                 .inputFluids(lube)
                 .addData(LUBRICATION_KEY, lubrication)
                 .addData(DURATION_KEY, duration)
-                .buildRawRecipe());
+                .build());
     }
 
     static void addBooster(FluidStack booster, int boost, int duration) {
@@ -92,7 +92,7 @@ public class ExoticCombustionEngineMachine extends WorkableElectricMultiblockMac
                 .inputFluids(booster)
                 .addData(BOOST_KEY, boost)
                 .addData(DURATION_KEY, duration)
-                .buildRawRecipe());
+                .build());
     }
 
     private int runningTimer = 0;

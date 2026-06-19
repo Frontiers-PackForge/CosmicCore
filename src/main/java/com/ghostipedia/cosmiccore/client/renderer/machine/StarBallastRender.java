@@ -21,7 +21,7 @@ import net.neoforged.neoforge.client.model.data.ModelData;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 import org.joml.Quaternionf;
 
 import java.util.List;
@@ -35,7 +35,7 @@ import javax.annotation.ParametersAreNonnullByDefault;
 public class StarBallastRender extends DynamicRender<IrisMultiblockMachine, StarBallastRender> {
 
     public static final StarBallastRender INSTANCE = new StarBallastRender();
-    public static final Codec<StarBallastRender> CODEC = Codec.unit(StarBallastRender.INSTANCE);
+    public static final MapCodec<StarBallastRender> CODEC = MapCodec.unit(StarBallastRender.INSTANCE);
     public static final DynamicRenderType<IrisMultiblockMachine, StarBallastRender> TYPE = new DynamicRenderType<>(
             StarBallastRender.CODEC);
 

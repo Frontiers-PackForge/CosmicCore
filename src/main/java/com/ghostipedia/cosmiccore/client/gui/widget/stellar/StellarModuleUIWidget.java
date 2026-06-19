@@ -18,7 +18,7 @@ import com.lowdragmc.lowdraglib.gui.widget.WidgetGroup;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
 
@@ -58,7 +58,7 @@ public class StellarModuleUIWidget extends FancyMachineUIWidget {
     }
 
     @Override
-    public void handleClientAction(int id, FriendlyByteBuf buffer) {
+    public void handleClientAction(int id, RegistryFriendlyByteBuf buffer) {
         if (id == 1) {
             int newParallel = buffer.readInt();
             long newVoltage = buffer.readLong();
@@ -69,7 +69,7 @@ public class StellarModuleUIWidget extends FancyMachineUIWidget {
                 module.setConfiguredVoltagePerParallel(newVoltage);
 
                 // Mark dirty so it saves
-                module.markDirty();
+                module.markAsChanged();
 
                 com.ghostipedia.cosmiccore.CosmicCore.LOGGER.info(
                         "[StellarModuleUI] SERVER received power settings: parallel={}, voltage={}",
@@ -104,7 +104,7 @@ public class StellarModuleUIWidget extends FancyMachineUIWidget {
     }
 
     @Override
-    public void writeInitialData(FriendlyByteBuf buffer) {
+    public void writeInitialData(RegistryFriendlyByteBuf buffer) {
         super.writeInitialData(buffer);
 
         StellarBaseModule module = moduleSupplier.get();
@@ -121,7 +121,7 @@ public class StellarModuleUIWidget extends FancyMachineUIWidget {
 
     @Override
     @OnlyIn(Dist.CLIENT)
-    public void readInitialData(FriendlyByteBuf buffer) {
+    public void readInitialData(RegistryFriendlyByteBuf buffer) {
         super.readInitialData(buffer);
         syncedMaxParallel = buffer.readInt();
         syncedVoltage = buffer.readLong();
@@ -130,7 +130,7 @@ public class StellarModuleUIWidget extends FancyMachineUIWidget {
 
     @Override
     @OnlyIn(Dist.CLIENT)
-    public void readUpdateInfo(int id, FriendlyByteBuf buffer) {
+    public void readUpdateInfo(int id, RegistryFriendlyByteBuf buffer) {
         if (id == 201) {
             syncedMaxParallel = buffer.readInt();
             syncedVoltage = buffer.readLong();

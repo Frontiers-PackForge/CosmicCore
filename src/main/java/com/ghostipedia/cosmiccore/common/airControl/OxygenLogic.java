@@ -287,7 +287,7 @@ public final class OxygenLogic {
 
         var curiosCap = CuriosApi.getCuriosInventory(player);
         if (curiosCap.isPresent()) {
-            var curiosHandler = curiosCap.resolve().get();
+            var curiosHandler = curiosCap.get();
             var backHandler = curiosHandler.getStacksHandler("back");
             if (backHandler.isPresent()) {
                 IDynamicStackHandler stacks = backHandler.get().getStacks();
@@ -307,11 +307,9 @@ public final class OxygenLogic {
     private static int drainFromStack(ItemStack stack, int requestTicks) {
         if (stack.isEmpty() || requestTicks <= 0) return requestTicks;
 
-        return stack.getCapability(OXYGEN_SUPPLY)
-                .map(provider -> {
-                    int got = Math.max(0, provider.drainOxygenTicks(stack, requestTicks));
-                    return Math.max(0, requestTicks - got);
-                })
-                .orElse(requestTicks);
+        IOxygenSupplyItem provider = stack.getCapability(OXYGEN_SUPPLY);
+        if (provider == null) return requestTicks;
+        int got = Math.max(0, provider.drainOxygenTicks(stack, requestTicks));
+        return Math.max(0, requestTicks - got);
     }
 }

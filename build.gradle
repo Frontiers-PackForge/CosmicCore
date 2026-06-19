@@ -19,8 +19,19 @@ java {
 
 // Force re-resolution of snapshot/changing modules (ldlib snapshots, etc.)
 configurations.all {
+    // cc-tweaked-1.21.1-forge is a Forge jar that leaks in transitively via KubeJS. It is not a NeoForge
+    // build and not part of the pack, and its Forge-style onServerStarted tab rebuild is what first exposed
+    // the creative-tab duplicate (now fixed properly in CosmicCreativeModeTabs#deduplicating). Dropping the
+    // stray Forge jar regardless; add a NeoForge ComputerCraft explicitly if it is ever actually wanted.
+    exclude group: 'cc.tweaked'
     resolutionStrategy {
         cacheChangingModulesFor 0, 'seconds'
+        // Create transitively pulls an old JEI (19.21.0.247); gtceu/kubejs require >= 19.25.x.
+        // Force the JEI runtime to the catalog-pinned version.
+        def jeiVersion = forge.versions.jei.get()
+        force "mezz.jei:jei-1.21.1-common-api:${jeiVersion}"
+        force "mezz.jei:jei-1.21.1-neoforge-api:${jeiVersion}"
+        force "mezz.jei:jei-1.21.1-neoforge:${jeiVersion}"
     }
 }
 

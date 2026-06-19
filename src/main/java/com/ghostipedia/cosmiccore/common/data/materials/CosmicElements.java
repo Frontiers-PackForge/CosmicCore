@@ -1,7 +1,11 @@
 package com.ghostipedia.cosmiccore.common.data.materials;
 
+import com.ghostipedia.cosmiccore.CosmicCore;
+
 import com.gregtechceu.gtceu.api.data.chemical.Element;
 import com.gregtechceu.gtceu.api.registry.GTRegistries;
+
+import java.util.Locale;
 
 public class CosmicElements {
 
@@ -12,7 +16,7 @@ public class CosmicElements {
     public static Element createAndRegister(long protons, long neutrons, long halfLifeSeconds, String decayTo,
                                             String name, String symbol, boolean isIsotope) {
         Element element = new Element(protons, neutrons, halfLifeSeconds, decayTo, name, symbol, isIsotope);
-        GTRegistries.ELEMENTS.register(name, element);
+        GTRegistries.register(GTRegistries.ELEMENTS, CosmicCore.id(name.toLowerCase(Locale.ROOT)), element);
         return element;
     }
 

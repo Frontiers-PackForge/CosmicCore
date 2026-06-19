@@ -19,7 +19,7 @@ public class CosmicCoreRemainingAirOverlayMixin {
      */
     @Redirect(method = "render",
               at = @At(value = "INVOKE",
-                       target = "Lnet/minecraftforge/fluids/FluidType;isAir()Z"),
+                       target = "Lnet/neoforged/neoforge/fluids/FluidType;isAir()Z"),
               remap = false)
     private boolean cosmicCore$redirectIsAir(FluidType fluidType) {
         LocalPlayer player = net.minecraft.client.Minecraft.getInstance().player;

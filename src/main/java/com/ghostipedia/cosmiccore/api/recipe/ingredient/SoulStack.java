@@ -27,6 +27,10 @@ public record SoulStack(SoulType type, int amount) {
         return new SoulStack(this.type, this.amount + amount);
     }
 
+    public SoulStack withAmount(int amount) {
+        return new SoulStack(this.type, amount);
+    }
+
     public SoulStack sum(SoulStack a, SoulStack b) {
         Preconditions.checkArgument(a.type == b.type, "SoulStack types don't match");
         return a.add(b.amount);

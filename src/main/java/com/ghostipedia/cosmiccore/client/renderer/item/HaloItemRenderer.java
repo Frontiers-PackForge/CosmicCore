@@ -83,8 +83,8 @@ public class HaloItemRenderer extends WrappedItemRenderer implements IRenderer {
         model = getVanillaModel(stack, null, null);
         if (transformType == ItemDisplayContext.GUI) {
             Tesselator tess = Tesselator.getInstance();
-            BufferBuilder buf = tess.getBuilder();
-            buf.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX);
+            BufferBuilder buf;
+            buf = tess.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX);
 
             poseStack.pushPose();
             RenderSystem.enableBlend();
@@ -115,11 +115,11 @@ public class HaloItemRenderer extends WrappedItemRenderer implements IRenderer {
                 float maxV = sprite.getV1();
 
                 Matrix4f pos = poseStack.last().pose();
-                buf.vertex(pos, max, max, 0).uv(maxU, minV).endVertex();
-                buf.vertex(pos, min, max, 0).uv(minU, minV).endVertex();
-                buf.vertex(pos, min, min, 0).uv(minU, maxV).endVertex();
-                buf.vertex(pos, max, min, 0).uv(maxU, maxV).endVertex();
-                tess.end();
+                buf.addVertex(pos, max, max, 0).setUv(maxU, minV);
+                buf.addVertex(pos, min, max, 0).setUv(minU, minV);
+                buf.addVertex(pos, min, min, 0).setUv(minU, maxV);
+                buf.addVertex(pos, max, min, 0).setUv(maxU, maxV);
+                BufferUploader.drawWithShader(buf.buildOrThrow());
 
                 RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
                 poseStack.popPose();

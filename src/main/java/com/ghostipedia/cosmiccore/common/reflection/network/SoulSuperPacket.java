@@ -1,7 +1,6 @@
 package com.ghostipedia.cosmiccore.common.reflection.network;
 
 import com.ghostipedia.cosmiccore.CosmicCore;
-import com.ghostipedia.cosmiccore.common.network.CCoreNetwork;
 import com.ghostipedia.cosmiccore.common.reflection.ReflectionCapability;
 import com.ghostipedia.cosmiccore.common.reflection.soul.SoulShape;
 import com.ghostipedia.cosmiccore.common.reflection.soul.SoulSuper;
@@ -9,33 +8,34 @@ import com.ghostipedia.cosmiccore.common.reflection.soul.SoulSuperRegistry;
 
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraftforge.network.NetworkEvent;
+import net.neoforged.neoforge.network.handling.IPayloadContext;
 
-public class SoulSuperPacket implements CCoreNetwork.INetPacket {
+import org.jetbrains.annotations.NotNull;
+
+public class SoulSuperPacket implements CustomPacketPayload {
+
+    public static final Type<SoulSuperPacket> TYPE = new Type<>(CosmicCore.id("soul_super"));
+    public static final StreamCodec<FriendlyByteBuf, SoulSuperPacket> CODEC =
+            StreamCodec.ofMember(SoulSuperPacket::encode, SoulSuperPacket::new);
 
     public SoulSuperPacket() {}
 
-    public SoulSuperPacket(FriendlyByteBuf buffer) {
-        // No data needed
-    }
+    public SoulSuperPacket(FriendlyByteBuf buffer) {}
 
-    @Override
-    public void encode(FriendlyByteBuf buffer) {
-        // No data needed
-    }
+    public void encode(FriendlyByteBuf buffer) {}
 
-    @Override
-    public void execute(NetworkEvent.Context context) {
-        ServerPlayer player = context.getSender();
-        if (player == null) return;
+    public void execute(IPayloadContext context) {
+        if (!(context.player() instanceof ServerPlayer player)) return;
 
         ReflectionCapability.get(player).ifPresent(reflection -> {
             SoulShape shape = reflection.getSoulShape();
 
             if (!shape.isShaped()) {
                 player.displayClientMessage(
-                        Component.literal("\u00A77\u00A7o*Your soul is unshaped. There is no power to call upon.*"),
+                        Component.literal("§7§o*Your soul is unshaped. There is no power to call upon.*"),
                         true);
                 return;
             }
@@ -50,7 +50,7 @@ public class SoulSuperPacket implements CCoreNetwork.INetPacket {
 
             if (reflection.isSuperActive(currentTime)) {
                 player.displayClientMessage(
-                        Component.literal("\u00A77\u00A7o*The power already courses through you.*"),
+                        Component.literal("§7§o*The power already courses through you.*"),
                         true);
                 return;
             }
@@ -59,14 +59,14 @@ public class SoulSuperPacket implements CCoreNetwork.INetPacket {
                 long remaining = reflection.getSuperCooldownRemaining(currentTime, soulSuper.getCooldownTicks());
                 int secondsRemaining = (int) (remaining / 20);
                 player.displayClientMessage(
-                        Component.literal("\u00A77\u00A7o*" + secondsRemaining + "s until power returns.*"),
+                        Component.literal("§7§o*" + secondsRemaining + "s until power returns.*"),
                         true);
                 return;
             }
 
             if (!soulSuper.canActivate(player)) {
                 player.displayClientMessage(
-                        Component.literal("\u00A77\u00A7o*The conditions are not right.*"),
+                        Component.literal("§7§o*The conditions are not right.*"),
                         true);
                 return;
             }
@@ -77,5 +77,10 @@ public class SoulSuperPacket implements CCoreNetwork.INetPacket {
                 reflection.setSuperActiveUntil(currentTime + soulSuper.getDurationTicks());
             }
         });
+    }
+
+    @Override
+    public @NotNull Type<SoulSuperPacket> type() {
+        return TYPE;
     }
 }

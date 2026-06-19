@@ -7,7 +7,6 @@ import com.gregtechceu.gtceu.api.capability.recipe.EURecipeCapability;
 import com.gregtechceu.gtceu.api.capability.recipe.IO;
 import com.gregtechceu.gtceu.api.blockentity.BlockEntityCreationInfo;
 import com.gregtechceu.gtceu.api.machine.TickableSubscription;
-import com.gregtechceu.gtceu.api.machine.feature.IExplosionMachine;
 import com.gregtechceu.gtceu.api.machine.feature.multiblock.IMultiPart;
 import com.gregtechceu.gtceu.api.machine.multiblock.WorkableElectricMultiblockMachine;
 import com.gregtechceu.gtceu.api.misc.EnergyContainerList;
@@ -29,7 +28,7 @@ import java.util.Map;
 
 import javax.annotation.Nullable;
 
-public class VoraxReactorMachine extends WorkableElectricMultiblockMachine implements IExplosionMachine {
+public class VoraxReactorMachine extends WorkableElectricMultiblockMachine {
 
     @DescSynced
     @Getter
@@ -58,8 +57,6 @@ public class VoraxReactorMachine extends WorkableElectricMultiblockMachine imple
         super(holder);
     }
 
-    @Override
-    @NotNull
 
     @Override
     public void onStructureFormed() {

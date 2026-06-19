@@ -25,12 +25,7 @@ import java.util.List;
 public class VoidFluidDrillMachine extends WorkableElectricMultiblockMachine {
 
     public VoidFluidDrillMachine(BlockEntityCreationInfo holder) {
-        super(holder);
-    }
-
-    @Override
-    protected RecipeLogic createRecipeLogic(Object... args) {
-        return new VoidFluidDrillLogic(this);
+        super(holder, m -> new VoidFluidDrillLogic((VoidFluidDrillMachine) m));
     }
 
     @NotNull

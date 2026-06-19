@@ -18,8 +18,6 @@ import net.minecraft.world.level.Level;
 
 import java.util.List;
 
-import javax.annotation.Nullable;
-
 /**
  * The Mirror - a handheld item that lets you face your Reflection.
  *
@@ -70,7 +68,8 @@ public class MirrorItem extends Item {
     }
 
     @Override
-    public void appendHoverText(ItemStack stack, @Nullable Level level, List<Component> tooltip, TooltipFlag flag) {
+    public void appendHoverText(ItemStack stack, Item.TooltipContext context, List<Component> tooltip,
+                               TooltipFlag flag) {
         tooltip.add(Component.literal("§7A polished surface that reflects more than light."));
         tooltip.add(Component.literal("§8§oRight-click to gaze into the void."));
     }

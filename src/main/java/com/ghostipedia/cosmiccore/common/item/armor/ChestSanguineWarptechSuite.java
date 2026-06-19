@@ -5,14 +5,16 @@ import com.ghostipedia.cosmiccore.api.capability.souls.SoulType;
 import com.ghostipedia.cosmiccore.api.data.souls.SoulNetwork;
 import com.ghostipedia.cosmiccore.api.data.souls.SoulNetworkSavedData;
 import com.ghostipedia.cosmiccore.api.recipe.ingredient.SoulStack;
+import com.ghostipedia.cosmiccore.utils.ItemData;
 
 import com.gregtechceu.gtceu.api.capability.GTCapabilityHelper;
+import com.gregtechceu.gtceu.common.item.armor.IJetpack;
 import com.gregtechceu.gtceu.common.item.armor.QuarkTechSuite;
 import com.gregtechceu.gtceu.api.capability.IElectricItem;
 import com.gregtechceu.gtceu.api.item.armor.ArmorUtils;
 import com.gregtechceu.gtceu.core.IFireImmuneEntity;
 import com.gregtechceu.gtceu.utils.GTUtil;
-import com.gregtechceu.gtceu.utils.input.KeyBind;
+import com.gregtechceu.gtceu.utils.input.SyncedKeyMappings;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
@@ -25,13 +27,13 @@ import net.minecraft.network.protocol.game.ClientboundPlayerAbilitiesPacket;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Abilities;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ArmorItem;
+import net.minecraft.world.item.ArmorMaterial;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
@@ -43,7 +45,7 @@ import it.unimi.dsi.fastutil.ints.IntList;
 
 import java.util.List;
 
-public class ChestSanguineWarptechSuite extends QuarkTechSuite {
+public class ChestSanguineWarptechSuite extends QuarkTechSuite implements IJetpack {
 
     public static final String SANGUINE_SHIELD_NBT_KEY = CosmicCore.MOD_ID + ":sanguine_shield";
     public static final int SANGUINE_SHIELD_DRAIN_PER_SECOND = 10;
@@ -75,7 +77,7 @@ public class ChestSanguineWarptechSuite extends QuarkTechSuite {
     @OnlyIn(Dist.CLIENT)
     protected void addSanguineHUD(ItemStack stack, ArmorUtils.ModularHUD hud) {
         if (stack == null) return;
-        CompoundTag tag = stack.getOrCreateTag();
+        CompoundTag tag = ItemData.readTag(stack);
         if (tag.contains("currentLP")) {
             long currentLP = tag.getLong("currentLP");
             hud.newString(Component.translatable("cosmiccore.armor.sanguinewarptech.hud.LP", currentLP));
@@ -102,8 +104,7 @@ public class ChestSanguineWarptechSuite extends QuarkTechSuite {
             return;
         }
 
-        CompoundTag data = item.getOrCreateTag();
-        // Assume no tags exist if we don't see the toggleTimer tag
+        CompoundTag data = ItemData.readTag(item);
         if (!data.contains("toggleTimer")) {
             data.putByte("toggleTimer", (byte) 0);
             data.putBoolean("canShare", false);
@@ -122,7 +123,7 @@ public class ChestSanguineWarptechSuite extends QuarkTechSuite {
         // Handle toggle keypresses
         String messageKey = null;
         if (toggleTimer == 0) {
-            if (KeyBind.ARMOR_CHARGING.isKeyDown(player)) {
+            if (SyncedKeyMappings.ARMOR_CHARGING.isKeyDown(player)) {
                 canShare = !canShare;
                 if (canShare && cont.getCharge() == 0) { // Only allow for charging to be enabled if charge is nonzero
                     messageKey = "metaarmor.qts.share.error";
@@ -131,7 +132,7 @@ public class ChestSanguineWarptechSuite extends QuarkTechSuite {
                     messageKey = "metaarmor.qts.share." + (canShare ? "enable" : "disable");
                 }
                 data.putBoolean("canShare", canShare);
-            } else if (KeyBind.JETPACK_ENABLE.isKeyDown(player)) {
+            } else if (SyncedKeyMappings.JETPACK_ENABLE.isKeyDown(player)) {
                 jetpackEnabled = !jetpackEnabled;
                 messageKey = "metaarmor.jetpack.flight." + (jetpackEnabled ? "enable" : "disable");
                 data.putBoolean("enabled", jetpackEnabled);
@@ -252,10 +253,12 @@ public class ChestSanguineWarptechSuite extends QuarkTechSuite {
         timer++;
         if (timer == Long.MAX_VALUE)
             timer = 0;
+
+        ItemData.writeTag(item, data);
     }
 
     @Override
-    public int damageArmor(LivingEntity entity, ItemStack itemStack, DamageSource source, int damage,
+    public int damageArmor(LivingEntity entity, ItemStack itemStack, int damage,
                            EquipmentSlot equipmentSlot) {
         IElectricItem item = GTCapabilityHelper.getElectricItem(itemStack);
         if (item != null) {
@@ -265,7 +268,29 @@ public class ChestSanguineWarptechSuite extends QuarkTechSuite {
     }
 
     @Override
-    public ResourceLocation getArmorTexture(ItemStack stack, Entity entity, EquipmentSlot slot, String type) {
+    public ResourceLocation getArmorTexture(ItemStack stack, Entity entity, EquipmentSlot slot,
+                                            ArmorMaterial.Layer layer) {
         return CosmicCore.id("textures/armor/sanguine_suit_1.png");
+    }
+
+    @Override
+    public boolean canUseEnergy(ItemStack stack, int amount) {
+        IElectricItem container = GTCapabilityHelper.getElectricItem(stack);
+        if (container == null) return false;
+        return container.canUse(amount);
+    }
+
+    @Override
+    public void drainEnergy(ItemStack stack, int amount) {
+        IElectricItem container = GTCapabilityHelper.getElectricItem(stack);
+        if (container == null) return;
+        container.discharge(amount, tier, true, false, false);
+    }
+
+    @Override
+    public boolean hasEnergy(ItemStack stack) {
+        IElectricItem container = GTCapabilityHelper.getElectricItem(stack);
+        if (container == null) return false;
+        return container.getCharge() > 0;
     }
 }

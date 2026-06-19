@@ -68,12 +68,14 @@ public class AlchemicalFissionReactor extends WorkableElectricMultiblockMachine 
     }
 
 
-    public AlchemicalFissionReactor(BlockEntityCreationInfo holder, Object... args) {
-        super(holder, args);
+    public AlchemicalFissionReactor(BlockEntityCreationInfo holder) {
+        super(holder);
     }
 
-    @Override
-    @NotNull
+    public static long getHeatCapacity() {
+        return heatCapacity;
+    }
+
 
     @Override
     public void onStructureFormed() {

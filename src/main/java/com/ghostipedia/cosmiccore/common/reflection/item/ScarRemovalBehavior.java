@@ -18,8 +18,6 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
 
-import org.jetbrains.annotations.Nullable;
-
 import java.util.List;
 import java.util.Set;
 
@@ -35,7 +33,7 @@ public class ScarRemovalBehavior implements IInteractionItem, IAddInformation {
     public ScarRemovalBehavior() {}
 
     @Override
-    public InteractionResultHolder<ItemStack> use(Item item, Level level, Player player, InteractionHand hand) {
+    public InteractionResultHolder<ItemStack> use(ItemStack item, Level level, Player player, InteractionHand hand) {
         ItemStack stack = player.getItemInHand(hand);
 
         if (level.isClientSide()) {
@@ -76,7 +74,8 @@ public class ScarRemovalBehavior implements IInteractionItem, IAddInformation {
     }
 
     @Override
-    public void appendHoverText(ItemStack stack, @Nullable Level level, List<Component> tooltip, TooltipFlag flag) {
+    public void appendHoverText(ItemStack stack, Item.TooltipContext context, List<Component> tooltip,
+                               TooltipFlag flag) {
         tooltip.add(Component.literal("Right-click to mend a defiance scar")
                 .withStyle(ChatFormatting.GRAY));
         tooltip.add(Component.empty());

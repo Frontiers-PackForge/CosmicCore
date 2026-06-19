@@ -1,21 +1,26 @@
 package com.ghostipedia.cosmiccore.common.network.packet;
 
+import com.ghostipedia.cosmiccore.CosmicCore;
 import com.ghostipedia.cosmiccore.common.item.armor.boots.ICosmicBoots;
-import com.ghostipedia.cosmiccore.common.network.CCoreNetwork;
 
 import com.gregtechceu.gtceu.api.item.armor.ArmorComponentItem;
 
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.network.NetworkEvent;
+import net.neoforged.neoforge.network.handling.IPayloadContext;
 
-/**
- * Packet sent from client to server when player presses boot control keybinds.
- */
-public class BootsControlPacket implements CCoreNetwork.INetPacket {
+import org.jetbrains.annotations.NotNull;
+
+public class BootsControlPacket implements CustomPacketPayload {
+
+    public static final Type<BootsControlPacket> TYPE = new Type<>(CosmicCore.id("boots_control"));
+    public static final StreamCodec<FriendlyByteBuf, BootsControlPacket> CODEC =
+            StreamCodec.ofMember(BootsControlPacket::encode, BootsControlPacket::new);
 
     public enum Action {
         SPEED_INCREASE,
@@ -36,15 +41,12 @@ public class BootsControlPacket implements CCoreNetwork.INetPacket {
         this.action = buf.readEnum(Action.class);
     }
 
-    @Override
     public void encode(FriendlyByteBuf buffer) {
         buffer.writeEnum(action);
     }
 
-    @Override
-    public void execute(NetworkEvent.Context context) {
-        ServerPlayer player = context.getSender();
-        if (player == null) return;
+    public void execute(IPayloadContext context) {
+        if (!(context.player() instanceof ServerPlayer player)) return;
 
         ItemStack boots = player.getItemBySlot(EquipmentSlot.FEET);
         if (!isCosmicBoots(boots)) return;
@@ -76,12 +78,12 @@ public class BootsControlPacket implements CCoreNetwork.INetPacket {
             case TOGGLE_STEP -> {
                 boolean enabled = ICosmicBoots.toggleStepAssist(boots);
                 messageKey = "cosmiccore.boots.message.step";
-                messageArg = enabled ? "\u00a7aON" : "\u00a7cOFF";
+                messageArg = enabled ? "§aON" : "§cOFF";
             }
             case TOGGLE_INERTIA -> {
                 boolean enabled = ICosmicBoots.toggleInertiaCancel(boots);
                 messageKey = "cosmiccore.boots.message.inertia";
-                messageArg = enabled ? "\u00a7aON" : "\u00a7cOFF";
+                messageArg = enabled ? "§aON" : "§cOFF";
             }
         }
 
@@ -90,12 +92,14 @@ public class BootsControlPacket implements CCoreNetwork.INetPacket {
         }
     }
 
-    /**
-     * Check if the item is a CosmicCore boots item.
-     */
     private static boolean isCosmicBoots(ItemStack stack) {
         if (stack.isEmpty()) return false;
         if (!(stack.getItem() instanceof ArmorComponentItem armorItem)) return false;
         return armorItem.getArmorLogic() instanceof ICosmicBoots;
+    }
+
+    @Override
+    public @NotNull Type<BootsControlPacket> type() {
+        return TYPE;
     }
 }

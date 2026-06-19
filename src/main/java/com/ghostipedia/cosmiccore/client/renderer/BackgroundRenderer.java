@@ -34,13 +34,12 @@ public class BackgroundRenderer {
         RenderSystem.defaultBlendFunc();
         RenderSystem.setShader(GameRenderer::getPositionColorShader);
 
-        BufferBuilder blackBuffer = Tesselator.getInstance().getBuilder();
-        blackBuffer.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_COLOR);
-        blackBuffer.vertex(matrix, 0, screenHeight, 0).color(0, 0, 0, blackAlpha).endVertex();
-        blackBuffer.vertex(matrix, screenWidth, screenHeight, 0).color(0, 0, 0, blackAlpha).endVertex();
-        blackBuffer.vertex(matrix, screenWidth, 0, 0).color(0, 0, 0, blackAlpha).endVertex();
-        blackBuffer.vertex(matrix, 0, 0, 0).color(0, 0, 0, blackAlpha).endVertex();
-        BufferUploader.drawWithShader(blackBuffer.end());
+        BufferBuilder blackBuffer = Tesselator.getInstance().begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_COLOR);
+        blackBuffer.addVertex(matrix, 0, screenHeight, 0).setColor(0, 0, 0, blackAlpha);
+        blackBuffer.addVertex(matrix, screenWidth, screenHeight, 0).setColor(0, 0, 0, blackAlpha);
+        blackBuffer.addVertex(matrix, screenWidth, 0, 0).setColor(0, 0, 0, blackAlpha);
+        blackBuffer.addVertex(matrix, 0, 0, 0).setColor(0, 0, 0, blackAlpha);
+        BufferUploader.drawWithShader(blackBuffer.buildOrThrow());
 
         ShaderInstance shader = type == BackgroundType.VOID ? CosmicCoreClient.getVoidBgShader() :
                 CosmicCoreClient.getGalaxyBgShader();
@@ -66,13 +65,12 @@ public class BackgroundRenderer {
 
         setUniformSafe(shader, "Intensity", fadeAlpha);
 
-        BufferBuilder buffer = Tesselator.getInstance().getBuilder();
-        buffer.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX);
-        buffer.vertex(matrix, 0, screenHeight, 0).uv(0, 1).endVertex();
-        buffer.vertex(matrix, screenWidth, screenHeight, 0).uv(1, 1).endVertex();
-        buffer.vertex(matrix, screenWidth, 0, 0).uv(1, 0).endVertex();
-        buffer.vertex(matrix, 0, 0, 0).uv(0, 0).endVertex();
-        BufferUploader.drawWithShader(buffer.end());
+        BufferBuilder buffer = Tesselator.getInstance().begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX);
+        buffer.addVertex(matrix, 0, screenHeight, 0).setUv(0, 1);
+        buffer.addVertex(matrix, screenWidth, screenHeight, 0).setUv(1, 1);
+        buffer.addVertex(matrix, screenWidth, 0, 0).setUv(1, 0);
+        buffer.addVertex(matrix, 0, 0, 0).setUv(0, 0);
+        BufferUploader.drawWithShader(buffer.buildOrThrow());
 
         RenderSystem.disableBlend();
         RenderSystem.setShader(GameRenderer::getPositionTexShader);
@@ -85,13 +83,12 @@ public class BackgroundRenderer {
 
         Matrix4f matrix = poseStack.last().pose();
 
-        BufferBuilder buffer = Tesselator.getInstance().getBuilder();
-        buffer.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_COLOR);
-        buffer.vertex(matrix, 0, screenHeight, 0).color(0, 0, 0, 255).endVertex();
-        buffer.vertex(matrix, screenWidth, screenHeight, 0).color(0, 0, 0, 255).endVertex();
-        buffer.vertex(matrix, screenWidth, 0, 0).color(0, 0, 0, 255).endVertex();
-        buffer.vertex(matrix, 0, 0, 0).color(0, 0, 0, 255).endVertex();
-        BufferUploader.drawWithShader(buffer.end());
+        BufferBuilder buffer = Tesselator.getInstance().begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_COLOR);
+        buffer.addVertex(matrix, 0, screenHeight, 0).setColor(0, 0, 0, 255);
+        buffer.addVertex(matrix, screenWidth, screenHeight, 0).setColor(0, 0, 0, 255);
+        buffer.addVertex(matrix, screenWidth, 0, 0).setColor(0, 0, 0, 255);
+        buffer.addVertex(matrix, 0, 0, 0).setColor(0, 0, 0, 255);
+        BufferUploader.drawWithShader(buffer.buildOrThrow());
 
         RenderSystem.disableBlend();
     }

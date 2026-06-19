@@ -19,7 +19,7 @@ public class DivingHelmetItemMixin {
      */
     @Redirect(method = "breatheUnderwater",
               at = @At(value = "INVOKE",
-                       target = "Lnet/minecraftforge/event/entity/living/LivingBreatheEvent;canBreathe()Z"))
+                       target = "Lnet/neoforged/neoforge/event/entity/living/LivingBreatheEvent;canBreathe()Z"))
     private static boolean cosmicCore$redirectCanBreathe(LivingBreatheEvent event) {
         LivingEntity entity = event.getEntity();
         // Return false (can't breathe) if air quality is bad, so helmet activates

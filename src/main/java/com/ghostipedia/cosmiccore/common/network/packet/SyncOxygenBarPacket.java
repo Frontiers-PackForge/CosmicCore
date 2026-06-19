@@ -1,19 +1,25 @@
 package com.ghostipedia.cosmiccore.common.network.packet;
 
+import com.ghostipedia.cosmiccore.CosmicCore;
 import com.ghostipedia.cosmiccore.client.CosmicHudGuiOverlay;
-import com.ghostipedia.cosmiccore.common.network.CCoreNetwork;
 
 import net.minecraft.network.FriendlyByteBuf;
-import net.neoforged.api.distmarker.Dist;
-import net.minecraftforge.fml.DistExecutor;
-import net.minecraftforge.network.NetworkEvent;
+import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
+import net.neoforged.neoforge.network.handling.IPayloadContext;
 
-public class SyncOxygenBarPacket implements CCoreNetwork.INetPacket {
+import org.jetbrains.annotations.NotNull;
+
+public class SyncOxygenBarPacket implements CustomPacketPayload {
+
+    public static final Type<SyncOxygenBarPacket> TYPE = new Type<>(CosmicCore.id("sync_oxygen_bar"));
+    public static final StreamCodec<FriendlyByteBuf, SyncOxygenBarPacket> CODEC =
+            StreamCodec.ofMember(SyncOxygenBarPacket::encode, SyncOxygenBarPacket::new);
 
     private final long left;
     private final long max;
     private final boolean show;
-    private final double ratePerSecond; // signed ticks/sec; negative = draining
+    private final double ratePerSecond;
 
     public SyncOxygenBarPacket(long left, long max, boolean show, double ratePerSecond) {
         this.left = left;
@@ -29,7 +35,6 @@ public class SyncOxygenBarPacket implements CCoreNetwork.INetPacket {
         this.ratePerSecond = buf.readDouble();
     }
 
-    @Override
     public void encode(FriendlyByteBuf buf) {
         buf.writeVarLong(left);
         buf.writeVarLong(max);
@@ -37,9 +42,12 @@ public class SyncOxygenBarPacket implements CCoreNetwork.INetPacket {
         buf.writeDouble(ratePerSecond);
     }
 
+    public void execute(IPayloadContext context) {
+        CosmicHudGuiOverlay.setOxygenBar(left, max, show, ratePerSecond);
+    }
+
     @Override
-    public void execute(NetworkEvent.Context ctx) {
-        DistExecutor.unsafeRunWhenOn(Dist.CLIENT,
-                () -> () -> CosmicHudGuiOverlay.setOxygenBar(left, max, show, ratePerSecond));
+    public @NotNull Type<SyncOxygenBarPacket> type() {
+        return TYPE;
     }
 }

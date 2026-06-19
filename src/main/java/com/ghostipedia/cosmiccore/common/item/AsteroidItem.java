@@ -2,14 +2,14 @@ package com.ghostipedia.cosmiccore.common.item;
 
 import com.gregtechceu.gtceu.api.item.ComponentItem;
 
+import com.ghostipedia.cosmiccore.utils.ItemData;
+
 import net.minecraft.ChatFormatting;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
-import net.minecraft.world.level.Level;
-
-import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
@@ -20,11 +20,11 @@ public class AsteroidItem extends ComponentItem {
     }
 
     @Override
-    public void appendHoverText(ItemStack stack, @Nullable Level level, List<Component> tooltipComponents,
+    public void appendHoverText(ItemStack stack, Item.TooltipContext context, List<Component> tooltipComponents,
                                 TooltipFlag isAdvanced) {
-        CompoundTag tag = stack.getTag();
+        CompoundTag tag = ItemData.readTag(stack);
 
-        if (tag == null || tag.isEmpty()) {
+        if (tag.isEmpty()) {
             tooltipComponents.add(Component.translatable("tooltip.cosmiccore.asteroid.tiny")
                     .withStyle(ChatFormatting.GRAY, ChatFormatting.ITALIC));
             return;
@@ -37,6 +37,6 @@ public class AsteroidItem extends ComponentItem {
                     .withStyle(ChatFormatting.AQUA));
         }
 
-        super.appendHoverText(stack, level, tooltipComponents, isAdvanced);
+        super.appendHoverText(stack, context, tooltipComponents, isAdvanced);
     }
 }

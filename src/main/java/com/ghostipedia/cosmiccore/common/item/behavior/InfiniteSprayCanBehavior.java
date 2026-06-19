@@ -9,14 +9,14 @@ import com.gregtechceu.gtceu.api.item.component.IAddInformation;
 import com.gregtechceu.gtceu.api.item.component.IInteractionItem;
 import com.gregtechceu.gtceu.common.data.GTSoundEntries;
 import com.gregtechceu.gtceu.config.ConfigHolder;
-import com.gregtechceu.gtceu.data.recipe.CustomTags;
 import com.gregtechceu.gtceu.utils.BreadthFirstBlockSearch;
+
+import com.ghostipedia.cosmiccore.utils.ItemData;
 
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.chat.Style;
@@ -43,14 +43,12 @@ import net.minecraft.world.level.block.entity.ShulkerBoxBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.Property;
 import net.neoforged.neoforge.common.Tags;
-import net.minecraftforge.common.util.TriPredicate;
+import net.neoforged.neoforge.common.util.TriPredicate;
 
 import appeng.api.util.AECableType;
 import appeng.api.util.AEColor;
 import appeng.blockentity.networking.CableBusBlockEntity;
 import com.google.common.collect.ImmutableMap;
-import lombok.Getter;
-import lombok.Setter;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -61,32 +59,43 @@ import java.util.function.BiPredicate;
 
 public class InfiniteSprayCanBehavior implements IInteractionItem, IAddInformation {
 
-    @Getter
-    @Setter
     public ExtendedDyeColor color;
 
-    @Getter
-    @Setter
     private Boolean isLocked = false;
 
     public boolean isSwinging = false;
 
     public static final String ColorTag = "color";
 
-    // guitextures
     public InfiniteSprayCanBehavior(int color) {
         ExtendedDyeColor[] colors = ExtendedDyeColor.values();
         this.color = color >= colors.length || color < 0 ? null : colors[color];
     }
 
+    public ExtendedDyeColor getColor() {
+        return color;
+    }
+
+    public void setColor(ExtendedDyeColor color) {
+        this.color = color;
+    }
+
+    public Boolean getIsLocked() {
+        return isLocked;
+    }
+
+    public void setIsLocked(Boolean isLocked) {
+        this.isLocked = isLocked;
+    }
+
     public void sendColorToTag(Player Player, ExtendedDyeColor color) {
         var stack = Player.getMainHandItem();
-        stack.getOrCreateTag().putInt(ColorTag, color.getColorId());
+        ItemData.mutateTag(stack, tag -> tag.putInt(ColorTag, color.getColorId()));
         PrintColorToActionBar(Player, color);
     }
 
     @Override
-    public InteractionResultHolder<ItemStack> use(Item item, Level level, Player player, InteractionHand usedHand) {
+    public InteractionResultHolder<ItemStack> use(ItemStack item, Level level, Player player, InteractionHand usedHand) {
         if (level.isClientSide && player.isShiftKeyDown()) {
             SprayCanClientHandler.openScreen(player, this);
             return InteractionResultHolder.success(player.getItemInHand(usedHand));
@@ -111,11 +120,10 @@ public class InfiniteSprayCanBehavior implements IInteractionItem, IAddInformati
     }
 
     @Override
-    public boolean onEntitySwing(ItemStack stack, LivingEntity entity) {
+    public boolean onEntitySwing(ItemStack stack, LivingEntity entity, InteractionHand hand) {
         if (!(entity instanceof Player player) || isSwinging) {
             return true;
         }
-        CompoundTag tag = stack.getOrCreateTag();
         if (!this.isLocked) {
             int totalColors = ExtendedDyeColor.values().length;
             int nextColor = player.isCrouching() ? (color.ordinal() - 1 + totalColors) % totalColors :
@@ -219,7 +227,7 @@ public class InfiniteSprayCanBehavior implements IInteractionItem, IAddInformati
     }
 
     @Override
-    public void appendHoverText(ItemStack stack, @Nullable Level world, List<Component> tooltip, TooltipFlag flag) {
+    public void appendHoverText(ItemStack stack, Item.TooltipContext world, List<Component> tooltip, TooltipFlag flag) {
         tooltip.add(Component.translatable("cosmiccore.item.spraycan.tooltip.lclick"));
         tooltip.add(Component.translatable("cosmiccore.item.spraycan.tooltip.lclick_sneak"));
         tooltip.add(Component.translatable("cosmiccore.item.spraycan.tooltip.rclick"));
@@ -298,12 +306,12 @@ public class InfiniteSprayCanBehavior implements IInteractionItem, IAddInformati
                 }
             }
         } else if (first instanceof ShulkerBoxBlockEntity shulkerBoxBE) {
-            var tag = shulkerBoxBE.saveWithFullMetadata();
             var level = first.getLevel();
             var pos = first.getBlockPos();
+            var tag = shulkerBoxBE.saveWithFullMetadata(level.registryAccess());
             recolorBlockNoState(SHULKER_BOX_MAP, color.getColor(), level, pos, Blocks.SHULKER_BOX);
             if (level.getBlockEntity(pos) instanceof ShulkerBoxBlockEntity newShulker) {
-                newShulker.load(tag);
+                newShulker.loadWithComponents(tag, level.registryAccess());
             }
         } else {
             return false;
@@ -352,7 +360,7 @@ public class InfiniteSprayCanBehavior implements IInteractionItem, IAddInformati
     }
 
     private boolean tryPaintSpecialBlock(Level world, BlockPos pos, @NotNull Block block) {
-        if (block.defaultBlockState().is(Tags.Blocks.GLASS)) {
+        if (block.defaultBlockState().is(Tags.Blocks.GLASS_BLOCKS)) {
             if (recolorBlockNoState(GLASS_MAP, this.color.getColor(), world, pos, Blocks.GLASS)) {
                 return true;
             }
@@ -377,12 +385,12 @@ public class InfiniteSprayCanBehavior implements IInteractionItem, IAddInformati
                 return true;
             }
         }
-        if (block.defaultBlockState().is(CustomTags.CONCRETE_BLOCK)) {
+        if (CONCRETE_MAP.containsValue(block)) {
             if (recolorBlockNoState(CONCRETE_MAP, this.color.getColor(), world, pos)) {
                 return true;
             }
         }
-        if (block.defaultBlockState().is(CustomTags.CONCRETE_POWDER_BLOCK)) {
+        if (CONCRETE_POWDER_MAP.containsValue(block)) {
             if (recolorBlockNoState(CONCRETE_POWDER_MAP, this.color.getColor(), world, pos)) {
                 return true;
             }
@@ -440,11 +448,11 @@ public class InfiniteSprayCanBehavior implements IInteractionItem, IAddInformati
             world.setBlock(pos, Blocks.WHITE_CARPET.defaultBlockState(), 3);
             return true;
         }
-        if (block.defaultBlockState().is(CustomTags.CONCRETE_BLOCK) && block != Blocks.WHITE_CONCRETE) {
+        if (CONCRETE_MAP.containsValue(block) && block != Blocks.WHITE_CONCRETE) {
             world.setBlock(pos, Blocks.WHITE_CONCRETE.defaultBlockState(), 3);
             return true;
         }
-        if (block.defaultBlockState().is(CustomTags.CONCRETE_POWDER_BLOCK) && block != Blocks.WHITE_CONCRETE_POWDER) {
+        if (CONCRETE_POWDER_MAP.containsValue(block) && block != Blocks.WHITE_CONCRETE_POWDER) {
             world.setBlock(pos, Blocks.WHITE_CONCRETE_POWDER.defaultBlockState(), 3);
             return true;
         }

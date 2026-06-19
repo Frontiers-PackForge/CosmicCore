@@ -102,43 +102,35 @@ public class CosmicMaterials {
         basicNutrientProductionFluid = new Material.Builder(CosmicCore.id("basic_production_nutrient"))
                 .liquid(new FluidBuilder().state(FluidState.LIQUID).customStill())
                 .formula("\uD80C\uDDA6")
-                .langValue("Basic Production Nutrient")
                 .buildAndRegister();
         advancedNutrientProductionFluid = new Material.Builder(CosmicCore.id("advanced_production_nutrient"))
                 .liquid(new FluidBuilder().state(FluidState.LIQUID).customStill())
                 .formula("\uD80C\uDDA6")
-                .langValue("Advanced Production Nutrient")
                 .buildAndRegister();
         superNutrientProductionFluid = new Material.Builder(CosmicCore.id("super_production_nutrient"))
                 .liquid(new FluidBuilder().state(FluidState.LIQUID).customStill())
                 .formula("\uD80C\uDDA6")
-                .langValue("Super Production Nutrient")
                 .buildAndRegister();
         perfectedNutrientProductionFluid = new Material.Builder(CosmicCore.id("perfect_production_nutrient"))
                 .liquid(new FluidBuilder().state(FluidState.LIQUID).customStill())
                 .formula("\uD80C\uDDA6")
-                .langValue("Perfect Production Nutrient")
                 .buildAndRegister();
 
         basicNutrientOverclockFluid = new Material.Builder(CosmicCore.id("basic_overclock_nutrient"))
                 .liquid(new FluidBuilder().state(FluidState.LIQUID).customStill())
                 .formula("\uD80C\uDDA6")
-                .langValue("Basic Overclocking Nutrient")
                 .buildAndRegister();
         advancedNutrientOverclockFluid = new Material.Builder(CosmicCore.id("advanced_overclock_nutrient"))
                 .liquid(new FluidBuilder().state(FluidState.LIQUID).customStill())
                 .formula("\uD80C\uDDA6")
-                .langValue("Advanced Overclocking Nutrient")
                 .buildAndRegister();
         superNutrientOverclockFluid = new Material.Builder(CosmicCore.id("super_overclock_nutrient"))
                 .liquid(new FluidBuilder().state(FluidState.LIQUID).customStill())
                 .formula("\uD80C\uDDA6")
-                .langValue("Super Overclocking Nutrient")
                 .buildAndRegister();
         perfectedNutrientOverclockFluid = new Material.Builder(CosmicCore.id("perfect_overclock_nutrient"))
                 .liquid(new FluidBuilder().state(FluidState.LIQUID).customStill())
                 .formula("\uD80C\uDDA6")
-                .langValue("Perfected Overclocking Nutrient")
                 .buildAndRegister();
 
         Prisma = new Material.Builder(CosmicCore.id("prisma"))
@@ -367,7 +359,6 @@ public class CosmicMaterials {
 
         Nevramite = new Material.Builder(CosmicCore.id("nevramite"))
                 .ingot()
-                .langValue("Nevramite")
                 .liquid(new FluidBuilder().temperature(9800))
                 .plasma(109000)
                 .formula("✫")

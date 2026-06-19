@@ -4,7 +4,6 @@ import com.ghostipedia.cosmiccore.api.machine.multiblock.StellarBaseModule;
 import com.ghostipedia.cosmiccore.common.machine.multiblock.multi.logic.PCBFoundryMachine;
 
 import com.gregtechceu.gtceu.api.machine.MetaMachine;
-import com.gregtechceu.gtceu.api.capability.IParallelHatch;
 
 import com.gregtechceu.gtceu.common.machine.multiblock.part.ParallelHatchPartMachine;
 import com.gregtechceu.gtceu.integration.jade.provider.ParallelProvider;
@@ -58,7 +57,7 @@ public abstract class ParallelProviderMixin {
 
     @Inject(method = "appendServerData",
             at = @At(value = "INVOKE",
-                     target = "Lcom/gregtechceu/gtceu/api/machine/feature/multiblock/MultiblockControllerMachine;getParallelHatch()Ljava/util/Optional;"),
+                     target = "Lcom/gregtechceu/gtceu/api/machine/multiblock/MultiblockControllerMachine;getParallelHatch()Ljava/util/Optional;"),
             locals = LocalCapture.CAPTURE_FAILSOFT,
             cancellable = true,
             require = 0)
@@ -84,7 +83,7 @@ public abstract class ParallelProviderMixin {
     @Unique
     private boolean cosmicCore$isPCBFoundryParallelHatch(BlockAccessor blockAccessor) {
         MetaMachine machine = cosmicCore$getMachine(blockAccessor);
-        if (machine instanceof IParallelHatch && machine instanceof ParallelHatchPartMachine hatch) {
+        if (machine instanceof ParallelHatchPartMachine hatch) {
             if (hatch.getControllers().size() == 1) {
                 return hatch.getControllers().first() instanceof PCBFoundryMachine;
             }

@@ -8,7 +8,7 @@ import com.lowdragmc.lowdraglib.gui.widget.Widget;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.resources.sounds.SimpleSoundInstance;
-import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.Mth;
 import net.neoforged.api.distmarker.Dist;
@@ -228,7 +228,7 @@ public class PrestigeAnimationOverlay extends Widget {
         shake = 20f * (1f - p);
 
         if (t == 1) {
-            playSound(SoundEvents.GENERIC_EXPLODE, 1.0f, 0.3f);
+            playSound(SoundEvents.GENERIC_EXPLODE.value(), 1.0f, 0.3f);
             playSound(SoundEvents.WARDEN_SONIC_BOOM, 1.0f, 0.5f);
             playSound(SoundEvents.END_PORTAL_SPAWN, 0.8f, 0.5f);
         }
@@ -261,7 +261,7 @@ public class PrestigeAnimationOverlay extends Widget {
         distortion = 0f;
         shake = 2f * (1f - p);
 
-        if (t == 1) playSound(SoundEvents.SOUL_ESCAPE, 0.8f, 0.5f);
+        if (t == 1) playSound(SoundEvents.SOUL_ESCAPE.value(), 0.8f, 0.5f);
     }
 
     private void tickTranscendence(int t) {
@@ -725,7 +725,7 @@ public class PrestigeAnimationOverlay extends Widget {
 
     @Override
     @OnlyIn(Dist.CLIENT)
-    public void readUpdateInfo(int id, FriendlyByteBuf buffer) {
+    public void readUpdateInfo(int id, RegistryFriendlyByteBuf buffer) {
         if (id == UPDATE_ID_ANIMATION_STATE) {
             boolean shouldStart = buffer.readBoolean();
             if (shouldStart && !active) {

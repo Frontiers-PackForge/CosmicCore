@@ -8,6 +8,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.item.ArmorItem;
+import net.minecraft.world.item.ArmorMaterial;
 import net.minecraft.world.item.ItemStack;
 
 public class SanguineWarptechSuite extends QuarkTechSuite {
@@ -17,7 +18,8 @@ public class SanguineWarptechSuite extends QuarkTechSuite {
     }
 
     @Override
-    public ResourceLocation getArmorTexture(ItemStack stack, Entity entity, EquipmentSlot slot, String type) {
+    public ResourceLocation getArmorTexture(ItemStack stack, Entity entity, EquipmentSlot slot,
+                                            ArmorMaterial.Layer layer) {
         return slot != EquipmentSlot.LEGS ?
                 CosmicCore.id("textures/armor/sanguine_suit_1.png") :
                 CosmicCore.id("textures/armor/sanguine_suit_2.png");

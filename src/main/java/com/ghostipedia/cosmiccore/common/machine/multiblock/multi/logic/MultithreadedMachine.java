@@ -29,7 +29,6 @@ import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import it.unimi.dsi.fastutil.ints.IntArrayList;
 import it.unimi.dsi.fastutil.ints.IntList;
 import it.unimi.dsi.fastutil.longs.Long2ObjectMaps;
-import lombok.Getter;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -58,7 +57,6 @@ public class MultithreadedMachine extends WorkableElectricMultiblockMachine impl
     /**
      * Map of thread color -> RecipeLogic for that thread
      */
-    @Getter
     private final Int2ObjectMap<MultithreadedRecipeLogic> threadLogics = new Int2ObjectLinkedOpenHashMap<>();
 
     /**
@@ -76,7 +74,6 @@ public class MultithreadedMachine extends WorkableElectricMultiblockMachine impl
      */
     @Persisted
     @DescSynced
-    @Getter
     private int maxThreads = 0;
 
     /**
@@ -84,13 +81,11 @@ public class MultithreadedMachine extends WorkableElectricMultiblockMachine impl
      */
     @Persisted
     @DescSynced
-    @Getter
     private int activeThreadCount = 0;
 
     /**
      * Total amperage available from energy hatch(es)
      */
-    @Getter
     private int totalAmperage = 0;
 
     @Nullable
@@ -102,23 +97,11 @@ public class MultithreadedMachine extends WorkableElectricMultiblockMachine impl
     private int tickRotation = 0;
 
     public MultithreadedMachine(BlockEntityCreationInfo holder) {
-        super(holder);
-    }
-
-    @Override
-    @NotNull
-
-    @Override
-    protected RecipeLogic createRecipeLogic(Object... args) {
-        // We don't use the default recipe logic - we manage multiple thread logics instead
-        // Return a dummy that does nothing, actual work is done by thread logics
-        return new RecipeLogic(this) {
+        super(holder, m -> new RecipeLogic(m) {
 
             @Override
-            public void serverTick() {
-                // Do nothing - threading is handled separately
-            }
-        };
+            public void serverTick() {}
+        });
     }
 
     @Override
@@ -410,6 +393,22 @@ public class MultithreadedMachine extends WorkableElectricMultiblockMachine impl
     private long getEnergyPerThread() {
         if (energyContainer == null || activeThreadCount == 0) return 0;
         return energyContainer.getInputVoltage() * totalAmperage / Math.max(1, getRunningThreadCount());
+    }
+
+    public Int2ObjectMap<MultithreadedRecipeLogic> getThreadLogics() {
+        return threadLogics;
+    }
+
+    public int getMaxThreads() {
+        return maxThreads;
+    }
+
+    public int getActiveThreadCount() {
+        return activeThreadCount;
+    }
+
+    public int getTotalAmperage() {
+        return totalAmperage;
     }
 
     /**

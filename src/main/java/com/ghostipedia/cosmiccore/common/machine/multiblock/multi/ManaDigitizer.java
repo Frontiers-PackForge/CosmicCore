@@ -14,7 +14,7 @@ import com.gregtechceu.gtceu.api.recipe.OverclockingLogic;
 import com.gregtechceu.gtceu.common.data.GTMaterials;
 import com.gregtechceu.gtceu.common.data.GTRecipeModifiers;
 
-import com.sammy.malum.registry.common.block.BlockRegistry;
+import com.sammy.malum.registry.common.block.MalumBlocks;
 
 import static com.ghostipedia.cosmiccore.api.registries.CosmicRegistration.REGISTRATE;
 import static com.ghostipedia.cosmiccore.common.data.CosmicBlocks.*;
@@ -55,7 +55,7 @@ public class ManaDigitizer {
                             .or(abilities(PartAbility.MAINTENANCE).setExactLimit(1)))
                     .where('B', blocks(CYCLOZINE_CHEMICALLY_REPELLING_CASING.get()))
                     .where('C', frames(GTMaterials.TungstenCarbide))
-                    .where('D', blocks(BlockRegistry.AQUEOUS_SPIRITED_GLASS.get()))
+                    .where('D', blocks(MalumBlocks.AQUEOUS_SPIRITED_GLASS.get()))
                     .build())
             // spotless:on
             .workableCasingModel(CosmicCore.id("block/casings/solid/vomahine_certified_chemically_resistant_casing"),
