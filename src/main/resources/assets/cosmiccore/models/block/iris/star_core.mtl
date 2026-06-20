@@ -1,0 +1,13 @@
+# Blender 4.0.2 MTL File: 'None'
+# www.blender.org
+
+newmtl Material
+map_Kd #texture0
+Ns 0.000000
+Ka 1.000000 1.000000 1.000000
+Kd 1.000000 1.000000 1.000000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 10.650000
+d 0.700000
+illum 3

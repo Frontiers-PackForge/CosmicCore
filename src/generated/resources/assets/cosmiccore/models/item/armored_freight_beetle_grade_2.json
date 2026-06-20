@@ -1,0 +1,6 @@
+{
+    "parent": "minecraft:item/generated",
+    "textures": {
+        "layer0": "cosmiccore:item/armored_freight_beetle_grade_2"
+    }
+}

@@ -1,0 +1,7 @@
+{
+  "parent": "gtceu:block/overlay/2_layer/front_emissive",
+  "textures": {
+    "overlay": "cosmiccore:block/overlay/drone_hatch_maint",
+    "overlay_emissive": "cosmiccore:block/overlay/drone_hatch_maint_emissive"
+  }
+}

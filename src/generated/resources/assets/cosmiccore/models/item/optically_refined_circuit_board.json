@@ -1,0 +1,6 @@
+{
+    "parent": "minecraft:item/generated",
+    "textures": {
+        "layer0": "cosmiccore:item/optically_refined_circuit_board"
+    }
+}

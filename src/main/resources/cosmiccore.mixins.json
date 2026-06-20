@@ -1,18 +1,51 @@
 {
   "required": true,
+  "refmap": "cosmiccore.refmap.json",
   "package": "com.ghostipedia.cosmiccore.mixin",
-  "compatibilityLevel": "JAVA_17",
+  "compatibilityLevel": "JAVA_21",
   "minVersion": "0.8",
-  "mixins": [
-    "AdAstraOverlayScreenMixin",
-    "AdAstraSpaceSuitItemMixin",
-    "DivingHelmetItemMixin",
-    "PlayerBreathingMixin",
-    "client.CosmicCoreRemainingAirOverlayMixin"
-  ],
+  "plugin": "com.ghostipedia.cosmiccore.mixin.CosmicCoreMixinPlugin",
   "client": [
+    "StarKillerMixin",
+    "quake.QuakeMovementMixin",
+    "accessor.MBPatternAccessor",
+    "client.MinecraftMixin",
+    "client.PatternPreviewWidgetMixin",
+    "client.SoundManagerMixin",
+    "emi.EmiFavoritesMixin",
+    "emi.EmiScreenManagerMixin",
+    "emi.RecipeScreenMixin",
+    "emi.ScreenSpaceMixin",
+    "emi.SidebarPanelMixin",
+    "jei.TagInfoRecipeCategoryMixin"
+  ],
+  "mixins": [
+    "BlockPatternMixin",
+    "BlocksMixin",
+    "ComponentItemMixin",
+    "DivingHelmetItemMixin",
+    "GTValuesMixin",
+    "PlayerBreathingMixin",
+    "TagPrefixItemMixin",
+    "frontiers.MinecraftRemoveOxygenMixin",
+    "accessor.GTMMEBufferAccessor",
+    "accessor.LivingEntityAccessor",
+    "accessor.CubicSplineMultipointAccessor",
+    "accessor.LootTableAccessor",
+    "client.CosmicCoreRemainingAirOverlayMixin",
+    "gtceu.ElectricContainerBlockProviderMixin",
+    "gtceu.GTOreDefinitionMixin",
+    "gtceu.MetaMachinePaintMixin",
+    "gtceu.ParallelProviderMixin",
+    "gtceu.RecipeLogicProviderMixin",
+    "gtceu.RecipeOutputProviderMixin",
+    "gtceu.WorkableBlockProviderMixin",
+    "lso.FrostbiteEffectMixin",
+    "lso.HeatstrokeEffectMixin",
+    "worldgen.CubicSplineMultipointMixin"
   ],
   "injectors": {
-    "defaultRequire": 1
+    "defaultRequire": 1,
+    "maxShiftBy": 5
   }
 }

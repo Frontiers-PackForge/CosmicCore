@@ -3,8 +3,7 @@ package com.ghostipedia.cosmiccore.common.data;
 import com.ghostipedia.cosmiccore.api.registries.CosmicRegistration;
 import com.ghostipedia.cosmiccore.common.data.lang.CosmicLangHandler;
 import com.ghostipedia.cosmiccore.common.data.tag.CosmicTagsHandler;
-import com.gregtechceu.gtceu.common.registry.GTRegistration;
-import com.gregtechceu.gtceu.data.tags.TagsHandler;
+
 import com.tterrag.registrate.providers.ProviderType;
 
 public class CosmicCoreDatagen {
@@ -16,5 +15,4 @@ public class CosmicCoreDatagen {
         CosmicRegistration.REGISTRATE.addDataGenerator(ProviderType.ENTITY_TAGS, CosmicTagsHandler::initEntity);
         CosmicRegistration.REGISTRATE.addDataGenerator(ProviderType.LANG, CosmicLangHandler::init);
     }
-
 }

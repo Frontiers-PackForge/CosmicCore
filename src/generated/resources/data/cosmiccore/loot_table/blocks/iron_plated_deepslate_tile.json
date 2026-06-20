@@ -1,0 +1,21 @@
+{
+    "type": "minecraft:block",
+    "pools": [
+        {
+            "bonus_rolls": 0.0,
+            "conditions": [
+                {
+                    "condition": "minecraft:survives_explosion"
+                }
+            ],
+            "entries": [
+                {
+                    "type": "minecraft:item",
+                    "name": "cosmiccore:iron_plated_deepslate_tile"
+                }
+            ],
+            "rolls": 1.0
+        }
+    ],
+    "random_sequence": "cosmiccore:blocks/iron_plated_deepslate_tile"
+}

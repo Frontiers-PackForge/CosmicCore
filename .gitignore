@@ -28,9 +28,15 @@ bin/
 
 *.DS_Store
 
-# fabric
+# runtime folders
 
 run/
+run-data/
+runs/
 
 # forge generated resources cache
 /src/generated/resources/.cache/
+# Agenic Support Tools - Debug Only
+/.claude/
+# Personal Notes I Keep in my Local
+/docs/

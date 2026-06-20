@@ -1,0 +1,110 @@
+repositories {
+    mavenLocal()
+    mavenCentral()
+
+    maven { // GTCEu
+        name = 'GTCEu Maven'
+        url = 'https://maven.gtceu.com'
+        content { includeGroup 'com.gregtechceu.gtceu' }
+    }
+    maven { // AE2 (upstream), GuideME, AE2WTLib (Mari023), JEI mirror
+        name = "ModMaven"
+        url = "https://modmaven.dev/"
+        content {
+            includeGroup 'org.appliedenergistics'
+            includeGroup 'de.mari_023'
+            includeGroup 'mezz.jei'
+        }
+    }
+    maven { // LDLib, Shimmer
+        name = "FirstDarkDev"
+        url = "https://maven.firstdark.dev/snapshots"
+    }
+    maven { // JEI, Patchouli
+        name = "BlameJared"
+        url = "https://maven.blamejared.com/"
+    }
+    exclusiveContent { // Create, Ponder, Flywheel
+        forRepository { maven { url = "https://maven.createmod.net" } }
+        filter {
+            includeGroup("net.createmod.ponder")
+            includeGroup("com.simibubi.create")
+            includeGroupAndSubgroups("dev.engine-room")
+        }
+    }
+    exclusiveContent { // Configuration
+        forRepository { maven { url = "https://repo.repsy.io/mvn/toma/public" } }
+        filter { includeGroup("dev.toma.configuration") }
+    }
+    exclusiveContent { // KubeJS and Rhino
+        forRepository { maven { url = "https://maven.latvian.dev/releases" } }
+        filter {
+            includeGroup("dev.latvian.mods")
+            includeGroup("dev.latvian.apps")
+        }
+    }
+    exclusiveContent { // FTB mods
+        forRepository { maven { url = "https://maven.ftb.dev/releases/" } }
+        filter { includeGroup("dev.ftb.mods") }
+    }
+    exclusiveContent { // EMI
+        forRepository { maven { url = "https://maven.terraformersmc.com/releases/" } }
+        filter { includeGroup("dev.emi") }
+    }
+    exclusiveContent { // architectury, cloth-config
+        forRepository { maven { url = "https://maven.shedaniel.me/" } }
+        filter {
+            includeGroupAndSubgroups("me.shedaniel")
+            includeGroup("dev.architectury")
+        }
+    }
+    exclusiveContent { // registrate
+        forRepository { maven { url = "https://mvn.devos.one/snapshots/" } }
+        filter { includeGroup("com.tterrag.registrate") }
+    }
+    exclusiveContent { // Curios
+        forRepository { maven { url = "https://maven.theillusivec4.top/" } }
+        filter { includeGroup('top.theillusivec4.curios') }
+    }
+    maven { // Apotheosis / Shadows of Fire
+        name = "Shadows of Fire"
+        url = "https://maven.shadowsoffire.dev/releases"
+    }
+    maven { // GeckoLib
+        name = 'GeckoLib'
+        url = 'https://dl.cloudsmith.io/public/geckolib3/geckolib/maven/'
+        content {
+            includeGroupByRegex("software\\.bernie.*")
+            includeGroup("com.eliotlash.mclib")
+        }
+    }
+    maven { // Occultism, Modonomicon
+        name = "Klikli"
+        url = "https://dl.cloudsmith.io/public/klikli-dev/mods/maven/"
+        content { includeGroup("com.klikli_dev") }
+    }
+    exclusiveContent { // JourneyMap API
+        forRepository { maven { url = "https://jm.gserv.me/repository/maven-public/" } }
+        filter { includeGroup("info.journeymap") }
+    }
+    exclusiveContent { // KubeJS transitive (animated-gif-lib-for-java)
+        forRepository { maven { url = "https://jitpack.io/" } }
+        filter { includeGroup("com.github.rtyley") }
+    }
+    exclusiveContent { // CC: Tweaked (KubeJS transitive)
+        forRepository { maven { url = "https://maven.squiddev.cc" } }
+        filter { includeGroup("cc.tweaked") }
+    }
+    exclusiveContent { // Team Resourceful (resourcefullib)
+        forRepository { maven { url = "https://maven.teamresourceful.com/repository/maven-public/" } }
+        filter { includeGroupAndSubgroups("com.teamresourceful") }
+    }
+    exclusiveContent { // Modrinth maven (content mods)
+        forRepository { maven { url = "https://api.modrinth.com/maven/" } }
+        filter { includeGroup("maven.modrinth") }
+    }
+    exclusiveContent { // Curseforge maven
+        forRepository { maven { url = "https://cursemaven.com/" } }
+        filter { includeGroup("curse.maven") }
+    }
+}

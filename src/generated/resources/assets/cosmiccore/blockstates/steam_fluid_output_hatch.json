@@ -1,0 +1,28 @@
+{
+    "variants": {
+        "facing=down": {
+            "model": "cosmiccore:block/machine/steam_fluid_output_hatch",
+            "x": 90
+        },
+        "facing=east": {
+            "model": "cosmiccore:block/machine/steam_fluid_output_hatch",
+            "y": 90
+        },
+        "facing=north": {
+            "model": "cosmiccore:block/machine/steam_fluid_output_hatch"
+        },
+        "facing=south": {
+            "model": "cosmiccore:block/machine/steam_fluid_output_hatch",
+            "y": 180
+        },
+        "facing=up": {
+            "gtceu:z": 180,
+            "model": "cosmiccore:block/machine/steam_fluid_output_hatch",
+            "x": 270
+        },
+        "facing=west": {
+            "model": "cosmiccore:block/machine/steam_fluid_output_hatch",
+            "y": 270
+        }
+    }
+}

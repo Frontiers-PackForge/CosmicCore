@@ -1,0 +1,11 @@
+{
+  "parent": "minecraft:block/cube",
+  "textures": {
+    "up": "gtceu:block/material_sets/neutronite/block_up",
+	"down": "gtceu:block/material_sets/neutronite/block_down",
+	"north": "gtceu:block/material_sets/neutronite/block_side",
+	"east": "gtceu:block/material_sets/neutronite/block_side",
+	"south": "gtceu:block/material_sets/neutronite/block_side",
+	"west": "gtceu:block/material_sets/neutronite/block_side"
+  }
+}

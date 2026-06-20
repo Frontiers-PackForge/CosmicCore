@@ -1,0 +1,21 @@
+base {
+    archivesName = "${mod_id}-${libs.versions.minecraft.get()}"
+}
+
+java {
+    withSourcesJar()
+}
+
+afterEvaluate {
+    tasks.withType(org.gradle.jvm.tasks.Jar).configureEach {
+        destinationDirectory = file('build/libs/')
+        manifest.attributes([
+                'Specification-Title'  : mod_name,
+                'Specification-Version': mod_version,
+                'Specification-Vendor' : mod_authors,
+                'Implementation-Title' : base.archivesName.get(),
+                'Implementation-Version': version,
+                'Implementation-Vendor': mod_authors,
+        ])
+    }
+}

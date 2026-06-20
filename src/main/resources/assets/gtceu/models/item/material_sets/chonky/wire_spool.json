@@ -1,0 +1,8 @@
+{
+    "parent": "gtceu:item/generated",
+    "textures": {
+        "layer0": "gtceu:item/material_sets/chonky/wire_spool",
+        "layer1": "gtceu:item/material_sets/chonky/wire_spool_secondary",
+        "layer2": "gtceu:item/material_sets/chonky/wire_spool_overlay"
+    }
+}

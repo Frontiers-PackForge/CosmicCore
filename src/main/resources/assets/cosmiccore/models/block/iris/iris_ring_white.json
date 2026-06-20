@@ -1,0 +1,9 @@
+{
+    "loader": "forge:obj",
+    "model": "cosmiccore:models/block/iris/the_ring_white.obj",
+    "textures": {
+      "texture0": "cosmiccore:block/iris/the_ring_white",
+      "particle":"cosmiccore:block/iris/the_ring_white"
+    },
+    "automatic_culling": false
+  }

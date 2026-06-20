@@ -1,0 +1,6 @@
+{
+    "parent": "minecraft:item/generated",
+    "textures": {
+        "layer0": "cosmiccore:item/spirit_engraved_enthel_circuit_board"
+    }
+}

@@ -1,0 +1,6 @@
+{
+  "parent": "gtceu:block/overlay/front_emissive",
+  "textures": {
+    "overlay_emissive": "cosmiccore:block/overlay/wireless_data_hatch"
+  }
+}

@@ -1,0 +1,35 @@
+package com.ghostipedia.cosmiccore.common.data.datagen;
+
+import com.ghostipedia.cosmiccore.CosmicCore;
+
+import com.gregtechceu.gtceu.api.registry.registrate.SoundEntryBuilder;
+
+import net.minecraft.data.DataGenerator;
+import net.minecraft.data.PackOutput;
+import net.neoforged.neoforge.common.data.ExistingFileHelper;
+import net.neoforged.neoforge.data.event.GatherDataEvent;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.EventBusSubscriber;
+
+@EventBusSubscriber(bus = EventBusSubscriber.Bus.MOD)
+public class CosmicDataGenerators {
+
+    @SubscribeEvent
+    public static void gatherData(GatherDataEvent event) {
+        DataGenerator generator = event.getGenerator();
+        PackOutput packOutput = generator.getPackOutput();
+        ExistingFileHelper existingFileHelper = event.getExistingFileHelper();
+        var registries = event.getLookupProvider();
+
+        boolean server = event.includeServer();
+
+        // TODO DATAGEN FOR Materials + stats + traits (server)
+        // generator.addProvider(server, new CosmicTinkersMaterials(packOutput));
+        // generator.addProvider(server, new CosmicMaterialStats(packOutput));
+        // generator.addProvider(server, new CosmicMaterialTraits(packOutput));
+
+        if (event.includeClient()) {
+            generator.addProvider(true, new SoundEntryBuilder.SoundEntryProvider(packOutput, CosmicCore.MOD_ID));
+        }
+    }
+}

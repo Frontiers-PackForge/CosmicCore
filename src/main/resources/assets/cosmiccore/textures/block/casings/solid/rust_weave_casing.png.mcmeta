@@ -1,0 +1,5 @@
+{
+    "ldlib": {
+        "connection": "cosmiccore:block/casings/solid/rust_weave_casing_ctm"
+    }
+}

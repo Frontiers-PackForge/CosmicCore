@@ -1,0 +1,5 @@
+{
+    "ldlib": {
+        "connection": "cosmiccore:block/casings/solid/pressure_containment_casing_ctm"
+    }
+}

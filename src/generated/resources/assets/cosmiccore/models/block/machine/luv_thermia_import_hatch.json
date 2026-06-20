@@ -1,0 +1,32 @@
+{
+    "parent": "minecraft:block/block",
+    "loader": "gtceu:machine",
+    "machine": "cosmiccore:luv_thermia_import_hatch",
+    "replaceable_textures": [
+        "bottom",
+        "top",
+        "side"
+    ],
+    "variants": {
+        "is_formed=false": {
+            "model": {
+                "parent": "cosmiccore:block/machine/part/thermia_input_hatch",
+                "textures": {
+                    "bottom": "gtceu:block/casings/voltage/luv/bottom",
+                    "side": "gtceu:block/casings/voltage/luv/side",
+                    "top": "gtceu:block/casings/voltage/luv/top"
+                }
+            }
+        },
+        "is_formed=true": {
+            "model": {
+                "parent": "cosmiccore:block/machine/part/thermia_input_hatch",
+                "textures": {
+                    "bottom": "gtceu:block/casings/voltage/luv/bottom",
+                    "side": "gtceu:block/casings/voltage/luv/side",
+                    "top": "gtceu:block/casings/voltage/luv/top"
+                }
+            }
+        }
+    }
+}

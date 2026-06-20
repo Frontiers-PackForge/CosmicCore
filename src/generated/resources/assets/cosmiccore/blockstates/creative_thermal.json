@@ -1,0 +1,7 @@
+{
+    "variants": {
+        "": {
+            "model": "cosmiccore:block/machine/creative_thermal"
+        }
+    }
+}

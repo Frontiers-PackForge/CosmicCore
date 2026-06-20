@@ -1,130 +1,136 @@
 package com.ghostipedia.cosmiccore.api.machine.trait;
 
-import com.ghostipedia.cosmiccore.api.capability.recipe.SoulRecipeCapability;
-import com.ghostipedia.cosmiccore.api.capability.ISoulContainer;
+import com.ghostipedia.cosmiccore.api.capability.recipe.CosmicRecipeCapabilities;
+import com.ghostipedia.cosmiccore.api.data.souls.SoulNetwork;
+import com.ghostipedia.cosmiccore.api.data.souls.SoulNetworkSavedData;
+import com.ghostipedia.cosmiccore.api.recipe.ingredient.SoulIngredient;
+import com.ghostipedia.cosmiccore.api.recipe.ingredient.SoulStack;
+
 import com.gregtechceu.gtceu.api.capability.recipe.IO;
 import com.gregtechceu.gtceu.api.capability.recipe.RecipeCapability;
-import com.gregtechceu.gtceu.api.machine.ConditionalSubscriptionHandler;
 import com.gregtechceu.gtceu.api.machine.MetaMachine;
+import com.gregtechceu.gtceu.api.machine.trait.MachineTraitType;
 import com.gregtechceu.gtceu.api.machine.trait.NotifiableRecipeHandlerTrait;
 import com.gregtechceu.gtceu.api.recipe.GTRecipe;
-import com.lowdragmc.lowdraglib.syncdata.annotation.DescSynced;
-import com.lowdragmc.lowdraglib.syncdata.annotation.Persisted;
-import com.lowdragmc.lowdraglib.syncdata.field.ManagedFieldHolder;
-import lombok.Getter;
-import org.jetbrains.annotations.Nullable;
-import wayoftime.bloodmagic.core.data.SoulNetwork;
-import wayoftime.bloodmagic.core.data.SoulTicket;
-import wayoftime.bloodmagic.util.helper.NetworkHelper;
-import com.gregtechceu.gtceu.api.GTValues;
+import com.gregtechceu.gtceu.common.machine.owner.FTBOwner;
 
-import java.util.Collections;
+import net.minecraft.server.level.ServerLevel;
+
+import lombok.Getter;
+import org.jetbrains.annotations.NotNull;
+
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-public class NotifiableSoulContainer extends NotifiableRecipeHandlerTrait<Integer> implements ISoulContainer {
-    public static final ManagedFieldHolder MANAGED_FIELD_HOLDER = new ManagedFieldHolder(NotifiableSoulContainer.class, NotifiableRecipeHandlerTrait.MANAGED_FIELD_HOLDER);
+public class NotifiableSoulContainer extends NotifiableRecipeHandlerTrait<SoulIngredient> {
+
+    public static final MachineTraitType<NotifiableSoulContainer> TYPE =
+            new MachineTraitType<>(NotifiableSoulContainer.class);
+
+    public final IO handlerIO;
 
     @Getter
-    private final IO handlerIO;
-    private final ConditionalSubscriptionHandler conditionalSubscriptionHandler;
+    private final int throughput;
 
     @Getter
-    @Persisted @DescSynced
-    private UUID owner;
+    private final int capacity;
 
-    @Getter
-    @DescSynced
-    private int currentEssence;
-
-    @Persisted
-    private int maxCapacity;
-
-    @Persisted
-    private int maxConsumption;
-
-    public NotifiableSoulContainer(MetaMachine machine, IO io, int maxCapacity, int maxConsumption) {
+    public NotifiableSoulContainer(MetaMachine machine, IO io, int throughput, int capacity) {
         super(machine);
         this.handlerIO = io;
-        this.currentEssence = -1;
-        this.maxCapacity = maxCapacity;
-        this.maxConsumption = maxConsumption;
-        conditionalSubscriptionHandler = new ConditionalSubscriptionHandler(machine, this::querySoulNetwork, () -> owner != null);
-    }
-
-    private void querySoulNetwork() {
-        if (this.machine.getOffsetTimer() % 20 != 0) return;
-
-        var network = this.getSoulNetwork();
-        if (network == null) return;
-
-        var essence = network.getCurrentEssence();
-        if (this.currentEssence == essence) return;
-
-        this.currentEssence = essence;
-        this.notifyListeners();
+        this.throughput = throughput;
+        this.capacity = capacity;
     }
 
     @Override
-    public List<Integer> handleRecipeInner(IO io, GTRecipe recipe, List<Integer> left, @Nullable String slotName, boolean simulate) {
-        ISoulContainer container = this;
-        if (container.getOwner() == null) return null;
+    public IO getHandlerIO() {
+        return handlerIO;
+    }
 
-        int lifeEssence = left.stream().reduce(0, Integer::sum);
-        if (io == IO.IN) {
-            var canOutput = Math.min(this.maxConsumption, container.getSoulNetwork().getCurrentEssence());
-            if (!simulate) lifeEssence = container.getSoulNetwork().syphon(SoulTicket.block(this.machine.getLevel(), this.machine.getPos(), Math.min(canOutput, lifeEssence)), false);
-            lifeEssence = lifeEssence - canOutput;
-        } else if (io == IO.OUT) {
-            var canInput = this.maxCapacity - container.getSoulNetwork().getCurrentEssence();
-            if (!simulate) lifeEssence = container.getSoulNetwork().add(SoulTicket.block(this.machine.getLevel(), this.machine.getPos(), Math.min(canInput, lifeEssence)), this.maxCapacity);
-            lifeEssence = lifeEssence - canInput;
+    public int getThroughput() {
+        return throughput;
+    }
+
+    public int getCapacity() {
+        return capacity;
+    }
+
+    @Override
+    public MachineTraitType<NotifiableSoulContainer> getTraitType() {
+        return TYPE;
+    }
+
+    private SoulNetwork getSoulNetwork() {
+        if (this.machine.getLevel() instanceof ServerLevel serverLevel) {
+            return SoulNetworkSavedData.getSoulNetwork(serverLevel, getOwner());
+        }
+        return new SoulNetwork();
+    }
+
+    private UUID getOwner() {
+        if (this.machine.getOwner() instanceof FTBOwner ftbOwner) {
+            var team = ftbOwner.getPlayerTeam(this.machine.getOwnerUUID());
+            if (team != null) return team.getTeamId();
+        }
+        return this.machine.getOwnerUUID();
+    }
+
+    @Override
+    public List<SoulIngredient> handleRecipeInner(IO io, GTRecipe recipe, List<SoulIngredient> left, boolean simulate) {
+        if (io != handlerIO) return left;
+        if (io != IO.IN && io != IO.OUT) return left.isEmpty() ? null : left;
+
+        var network = getSoulNetwork();
+        List<SoulIngredient> result = new ArrayList<>();
+
+        for (SoulIngredient ingredient : left) {
+            SoulStack requiredStack = ingredient.stack();
+            if (requiredStack.isEmpty()) continue;
+
+            if (io == IO.IN) {
+                SoulStack consumedStack = network.syphon(requiredStack, simulate);
+                if (consumedStack.amount() < requiredStack.amount()) {
+                    result.add(SoulIngredient
+                            .of(requiredStack.withAmount(requiredStack.amount() - consumedStack.amount())));
+                }
+            } else {
+                SoulStack canInput = network.add(requiredStack, throughput, capacity, simulate);
+                SoulStack reminder = requiredStack.withAmount(requiredStack.amount() - canInput.amount());
+                if (reminder.amount() > 0) result.add(SoulIngredient.of(reminder));
+            }
         }
 
-        return lifeEssence <= 0 ? null : Collections.singletonList(lifeEssence);
+        return result.isEmpty() ? null : result;
     }
 
     @Override
-    public List<Object> getContents() {
-        if (this.owner == null) return Collections.emptyList();
-        return List.of(this.getSoulNetwork().getCurrentEssence());
+    public @NotNull List<Object> getContents() {
+        return getSoulNetwork().getContents().stream()
+                .map(SoulIngredient::new)
+                .map(Object.class::cast)
+                .toList();
     }
 
-    @Override
-    public double getTotalContentAmount() {
-        if (this.owner == null)return 0;
-        return this.getSoulNetwork().getCurrentEssence();
-    }
-
-    @Override
-    public RecipeCapability<Integer> getCapability() {
-        return SoulRecipeCapability.CAP;
-    }
-
-    @Override
-    public ManagedFieldHolder getFieldHolder() {
-        return MANAGED_FIELD_HOLDER;
-    }
-
-    @Override
-    public SoulNetwork getSoulNetwork() {
-        return NetworkHelper.getSoulNetwork(this.owner);
+    /** Server-only access to the underlying network's stacks for UI display. */
+    public List<SoulStack> getStacks() {
+        return getSoulNetwork().getContents();
     }
 
     @Override
     public int getSize() {
-        return 1;
+        return getSoulNetwork().getContents().size();
     }
 
     @Override
-    public void setOwner(UUID owner) {
-        this.owner = owner;
-        conditionalSubscriptionHandler.updateSubscription();
+    public double getTotalContentAmount() {
+        return getSoulNetwork().getContents().stream()
+                .mapToInt(SoulStack::amount)
+                .sum();
     }
 
     @Override
-    public void onMachineLoad() {
-        super.onMachineLoad();
-        conditionalSubscriptionHandler.initialize(this.machine.getLevel());
+    public RecipeCapability<SoulIngredient> getCapability() {
+        return CosmicRecipeCapabilities.SOUL;
     }
 }

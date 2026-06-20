@@ -1,27 +1,18 @@
 package com.ghostipedia.cosmiccore;
 
-
 import com.ghostipedia.cosmiccore.api.capability.recipe.CosmicRecipeCapabilities;
-import com.ghostipedia.cosmiccore.api.data.CosmicCoreMaterialIconType;
-import com.ghostipedia.cosmiccore.api.data.CosmicCoreTagPrefix;
 import com.ghostipedia.cosmiccore.api.registries.CosmicRegistration;
-import com.ghostipedia.cosmiccore.common.data.materials.CosmicElements;
-import com.ghostipedia.cosmiccore.common.data.recipe.CosmicCoreOreRecipeHandler;
-import com.ghostipedia.cosmiccore.gtbridge.CosmicRecipeTypes;
-import com.ghostipedia.cosmiccore.gtbridge.CosmicCoreRecipes;
+import com.ghostipedia.cosmiccore.common.data.worldgen.CosmicWorldGenLayers;
+import com.ghostipedia.cosmiccore.common.data.worldgen.generator.CosmicVeinGenerators;
+
 import com.gregtechceu.gtceu.api.addon.GTAddon;
 import com.gregtechceu.gtceu.api.addon.IGTAddon;
 import com.gregtechceu.gtceu.api.addon.events.KJSRecipeKeyEvent;
 import com.gregtechceu.gtceu.api.registry.registrate.GTRegistrate;
-import com.mojang.datafixers.util.Pair;
-import net.minecraft.data.recipes.FinishedRecipe;
 
-import java.util.function.Consumer;
+import net.minecraft.data.recipes.RecipeOutput;
 
-import static com.ghostipedia.cosmiccore.integration.kjs.recipe.components.CosmicRecipeComponent.SOUL_IN;
-import static com.ghostipedia.cosmiccore.integration.kjs.recipe.components.CosmicRecipeComponent.SOUL_OUT;
-
-@GTAddon
+@GTAddon(CosmicCore.MOD_ID)
 public class CosmicCoreGTAddon implements IGTAddon {
 
     @Override
@@ -30,41 +21,37 @@ public class CosmicCoreGTAddon implements IGTAddon {
     }
 
     @Override
-    public void registerTagPrefixes() {
-        CosmicCoreMaterialIconType.init();
-        CosmicCoreTagPrefix.initTagPrefixes();
-    }
-
-    @Override
-    public void initializeAddon() {
+    public void gtInitComplete() {
         CosmicCore.LOGGER.info("CosmicCoreGTAddon has loaded!");
     }
 
     @Override
-    public void registerElements() {
-        IGTAddon.super.registerElements();
-        CosmicElements.init();
-    }
-
-    @Override
-    public String addonModId() {
-        return CosmicCore.MOD_ID;
-    }
-
-    @Override
-    public void addRecipes(Consumer<FinishedRecipe> provider) {
-        CosmicRecipeTypes.init();
-        CosmicCoreRecipes.init(provider);
-        CosmicCoreOreRecipeHandler.init(provider);
-    }
-
-    @Override
-    public void registerRecipeCapabilities() {
-        CosmicRecipeCapabilities.init();
+    public void addRecipes(RecipeOutput provider) {
+        // TODO(recipe-gen / bead 42.9): migrate CosmicCoreRecipes + CosmicCoreOreRecipeHandler +
+        // CosmicMaterialRecipeHandlers from Consumer<FinishedRecipe> to 1.21 RecipeOutput, then re-enable:
+        // CosmicCoreRecipes.init(provider);
+        // for (var material : GTCEuAPI.materialManager.getRegisteredMaterials()) {
+        //     CosmicCoreOreRecipeHandler.init(provider, material);
+        //     CosmicMaterialRecipeHandlers.init(provider, material);
+        // }
     }
 
     @Override
     public void registerRecipeKeys(KJSRecipeKeyEvent event) {
-        event.registerKey(CosmicRecipeCapabilities.SOUL, Pair.of(SOUL_IN, SOUL_OUT));
+        // TODO(cosmiccore-42.14): re-register the SOUL recipe key once the KubeJS integration
+        // (integration.kjs.recipe.components.CosmicRecipeComponent) is ported to the 1.21 KJS API.
+    }
+
+    @Override
+    public void registerWorldgenLayers() {
+        // Register the layer here (registration-time hook). The ore-vein reassignment that depends on the
+        // gtceu:ore_vein datapack registry runs later, in CosmicWorldGenLayers#onAddReloadListeners, once
+        // that registry is populated.
+        CosmicWorldGenLayers.init();
+    }
+
+    @Override
+    public void registerVeinGenerators() {
+        CosmicVeinGenerators.init();
     }
 }
