@@ -1,0 +1,7 @@
+{
+    "variants": {
+        "": {
+            "model": "cosmiccore:block/high_tolerance_rhenium_casing"
+        }
+    }
+}

@@ -1,31 +1,35 @@
 package com.ghostipedia.cosmiccore.common.machine.multiblock.electric;
 
 import com.ghostipedia.cosmiccore.api.machine.multiblock.MagnetWorkableElectricMultiblockMachine;
+
 import com.gregtechceu.gtceu.api.capability.IEnergyContainer;
 import com.gregtechceu.gtceu.api.capability.recipe.EURecipeCapability;
 import com.gregtechceu.gtceu.api.capability.recipe.IO;
-import com.gregtechceu.gtceu.api.machine.IMachineBlockEntity;
+import com.gregtechceu.gtceu.api.blockentity.BlockEntityCreationInfo;
 import com.gregtechceu.gtceu.api.machine.TickableSubscription;
 import com.gregtechceu.gtceu.api.machine.feature.ITieredMachine;
 import com.gregtechceu.gtceu.api.machine.feature.multiblock.IMultiPart;
 import com.gregtechceu.gtceu.api.misc.EnergyContainerList;
 import com.gregtechceu.gtceu.api.recipe.GTRecipe;
 import com.gregtechceu.gtceu.utils.FormattingUtil;
+
 import com.lowdragmc.lowdraglib.syncdata.annotation.Persisted;
-import com.lowdragmc.lowdraglib.syncdata.field.ManagedFieldHolder;
-import it.unimi.dsi.fastutil.longs.Long2ObjectMaps;
-import lombok.Getter;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.Style;
 
-import javax.annotation.Nullable;
+import it.unimi.dsi.fastutil.longs.Long2ObjectMaps;
+import lombok.Getter;
+import org.jetbrains.annotations.NotNull;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import javax.annotation.Nullable;
+
 public class MagneticFieldMachine extends MagnetWorkableElectricMultiblockMachine implements ITieredMachine {
-    protected static final ManagedFieldHolder MANAGED_FIELD_HOLDER = new ManagedFieldHolder(MagneticFieldMachine.class, MagnetWorkableElectricMultiblockMachine.MANAGED_FIELD_HOLDER);
+
     @Getter
     private int fieldChargeRate;
     @Getter
@@ -36,33 +40,35 @@ public class MagneticFieldMachine extends MagnetWorkableElectricMultiblockMachin
     @Nullable
     protected TickableSubscription preMagnetSubs;
 
-    public MagneticFieldMachine(IMachineBlockEntity holder) {
+    public MagneticFieldMachine(BlockEntityCreationInfo holder) {
         super(holder);
     }
-    @Override
-    public ManagedFieldHolder getFieldHolder() {
-        return MANAGED_FIELD_HOLDER;
-    }
+
+
     @Override
     public void onStructureFormed() {
         super.onStructureFormed();
 
-        List<IEnergyContainer> energyContainers = new ArrayList<>();
+        List<IEnergyContainer> inputEnergyContainers = new ArrayList<>();
         Map<Long, IO> ioMap = getMultiblockState().getMatchContext().getOrCreate("ioMap", Long2ObjectMaps::emptyMap);
         for (IMultiPart part : getParts()) {
-            IO io = ioMap.getOrDefault(part.self().getPos().asLong(), IO.IN);
+            IO io = ioMap.getOrDefault(part.self().getBlockPos().asLong(), IO.IN);
             if (io == IO.NONE || io == IO.OUT) continue;
-            for (var handler : part.getRecipeHandlers()) {
+            var handlers = part.getRecipeHandlers();
+            for (var handler : handlers) {
                 IO handlerIO = handler.getHandlerIO();
-                if (handlerIO == IO.IN){
-                    if (handler.getCapability() == EURecipeCapability.CAP && handler instanceof IEnergyContainer container) {
-                        energyContainers.add(container);
-                        traitSubscriptions.add(handler.addChangedListener(this::updateMagnetFieldSubscription));
-                    }
+                if (handlerIO == IO.IN) {
+                    var containers = handler.getCapability(EURecipeCapability.CAP).stream()
+                            .filter(IEnergyContainer.class::isInstance)
+                            .map(IEnergyContainer.class::cast)
+                            .toList();
+                    inputEnergyContainers.addAll(containers);
+                    traitSubscriptions.add(handler.subscribe(this::updateMagnetFieldSubscription));
+
                 }
             }
         }
-        this.inputEnergyContainers = new EnergyContainerList(energyContainers);
+        this.inputEnergyContainers = new EnergyContainerList(inputEnergyContainers);
         updateMagnetFieldSubscription();
     }
 
@@ -73,9 +79,7 @@ public class MagneticFieldMachine extends MagnetWorkableElectricMultiblockMachin
             preMagnetSubs.unsubscribe();
             preMagnetSubs = null;
         }
-
     }
-
 
     @Override
     public void onLoad() {
@@ -98,10 +102,10 @@ public class MagneticFieldMachine extends MagnetWorkableElectricMultiblockMachin
             return;
         }
         if (inputEnergyContainers.getEnergyStored() > getEnergyCost() && getMagnetStrength() > fieldStrength) {
-            if(fieldStrength < 0){
+            if (fieldStrength < 0) {
                 fieldStrength = 0;
             }
-            if(fieldStrength > getMagnetStrength()){
+            if (fieldStrength > getMagnetStrength()) {
                 fieldStrength = getMagnetStrength();
             }
             inputEnergyContainers.removeEnergy(getEnergyCost());
@@ -113,26 +117,27 @@ public class MagneticFieldMachine extends MagnetWorkableElectricMultiblockMachin
 
     @Override
     public boolean beforeWorking(@org.jetbrains.annotations.Nullable GTRecipe recipe) {
-       if(recipe.data.getInt("min_field") <= fieldStrength){
-           if(recipe.data.contains("decay_rate") && recipe.data.getInt("decay_rate") > 0){
-               if (!recipe.data.getBoolean("per_tick")){
-                   fieldStrength = fieldStrength - recipe.data.getInt("decay_rate");
-               } return true;
-           }
-       }
+        if (recipe.data.getInt("min_field") <= fieldStrength) {
+            if (recipe.data.contains("decay_rate") && recipe.data.getInt("decay_rate") > 0) {
+                if (!recipe.data.getBoolean("per_tick")) {
+                    fieldStrength = fieldStrength - recipe.data.getInt("decay_rate");
+                }
+                return true;
+            }
+        }
         return false;
     }
 
     @Override
     public boolean onWorking() {
         GTRecipe recipe = recipeLogic.getLastRecipe();
-        if(!recipe.data.getBoolean("per_tick")){
+        if (!recipe.data.getBoolean("per_tick")) {
             return super.onWorking();
         }
-        if(!recipe.data.contains("decay_rate") || recipe.data.getInt("decay_rate") <= 0){
+        if (!recipe.data.contains("decay_rate") || recipe.data.getInt("decay_rate") <= 0) {
             return false;
         }
-        if(fieldStrength < recipe.data.getInt("min_field")){
+        if (fieldStrength < recipe.data.getInt("min_field")) {
             return false;
         }
         fieldStrength = fieldStrength - recipe.data.getInt("decay_rate");
@@ -140,7 +145,7 @@ public class MagneticFieldMachine extends MagnetWorkableElectricMultiblockMachin
     }
 
     @Override
-    public boolean dampingWhenWaiting() {
+    public boolean regressWhenWaiting() {
         return false;
     }
 
@@ -150,12 +155,11 @@ public class MagneticFieldMachine extends MagnetWorkableElectricMultiblockMachin
         if (isFormed) {
             textList.add(Component.translatable("cosmiccore.multiblock.current_field_strength", fieldStrength));
             textList.add(Component.translatable("cosmiccore.multiblock.magnetic_field_strength",
-                    Component.translatable(FormattingUtil.formatNumbers(this.getMagnetType().getMagnetFieldCapacity())).setStyle(Style.EMPTY.withColor(ChatFormatting.GOLD))));
+                    Component.translatable(FormattingUtil.formatNumbers(this.getMagnetType().getMagnetFieldCapacity()))
+                            .setStyle(Style.EMPTY.withColor(ChatFormatting.GOLD))));
             textList.add(Component.translatable("cosmiccore.multiblock.magnetic_regen",
-                    Component.translatable(FormattingUtil.formatNumbers(this.getMagnetType().getMagnetRegenRate())).setStyle(Style.EMPTY.withColor(ChatFormatting.GOLD))));
+                    Component.translatable(FormattingUtil.formatNumbers(this.getMagnetType().getMagnetRegenRate()))
+                            .setStyle(Style.EMPTY.withColor(ChatFormatting.GOLD))));
         }
-
     }
-
-
 }

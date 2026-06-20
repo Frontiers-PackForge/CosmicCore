@@ -1,0 +1,6 @@
+{
+    "parent": "minecraft:item/generated",
+    "textures": {
+        "layer0": "cosmiccore:item/fiber_mesh_ingot_frame"
+    }
+}

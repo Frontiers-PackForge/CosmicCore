@@ -1,5 +1,7 @@
 package com.ghostipedia.cosmiccore.common.data.tag;
-import com.lowdragmc.lowdraglib.Platform;
+
+import com.ghostipedia.cosmiccore.CosmicCore;
+
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
@@ -8,16 +10,16 @@ import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.material.Fluid;
-import com.ghostipedia.cosmiccore.CosmicCore;
 
 public class TagUtil {
+
     public static <T> TagKey<T> optionalTag(ResourceKey<? extends Registry<T>> registry, ResourceLocation id) {
         return TagKey.create(registry, id);
     }
 
     public static <T> TagKey<T> createTag(ResourceKey<? extends Registry<T>> registry, String path, boolean vanilla) {
-        if (vanilla) return optionalTag(registry, new ResourceLocation("minecraft", path));
-        return optionalTag(registry, new ResourceLocation("forge", path));
+        if (vanilla) return optionalTag(registry, ResourceLocation.fromNamespaceAndPath("minecraft", path));
+        return optionalTag(registry, ResourceLocation.fromNamespaceAndPath("forge", path));
     }
 
     public static <T> TagKey<T> createModTag(ResourceKey<? extends Registry<T>> registry, String path) {
@@ -55,5 +57,4 @@ public class TagUtil {
     public static TagKey<Fluid> createModFluidTag(String path) {
         return createModTag(Registries.FLUID, path);
     }
-
 }

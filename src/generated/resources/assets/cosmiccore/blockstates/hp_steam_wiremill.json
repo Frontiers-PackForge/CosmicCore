@@ -1,0 +1,19 @@
+{
+    "variants": {
+        "facing=east": {
+            "model": "cosmiccore:block/machine/hp_steam_wiremill",
+            "y": 90
+        },
+        "facing=north": {
+            "model": "cosmiccore:block/machine/hp_steam_wiremill"
+        },
+        "facing=south": {
+            "model": "cosmiccore:block/machine/hp_steam_wiremill",
+            "y": 180
+        },
+        "facing=west": {
+            "model": "cosmiccore:block/machine/hp_steam_wiremill",
+            "y": 270
+        }
+    }
+}

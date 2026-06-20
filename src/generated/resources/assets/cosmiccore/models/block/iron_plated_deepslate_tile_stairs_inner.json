@@ -1,0 +1,8 @@
+{
+    "parent": "minecraft:block/inner_stairs",
+    "textures": {
+        "bottom": "cosmiccore:block/casings/cosmetic/iron_plated_deepslate_tile",
+        "side": "cosmiccore:block/casings/cosmetic/iron_plated_deepslate_tile",
+        "top": "cosmiccore:block/casings/cosmetic/iron_plated_deepslate_tile"
+    }
+}

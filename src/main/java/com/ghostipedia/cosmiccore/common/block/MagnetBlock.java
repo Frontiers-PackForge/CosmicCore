@@ -3,66 +3,78 @@ package com.ghostipedia.cosmiccore.common.block;
 import com.ghostipedia.cosmiccore.CosmicCore;
 import com.ghostipedia.cosmiccore.api.block.IMagnetType;
 import com.ghostipedia.cosmiccore.common.data.materials.CosmicMaterials;
-import com.gregtechceu.gtceu.GTCEu;
+
 import com.gregtechceu.gtceu.api.block.ActiveBlock;
 import com.gregtechceu.gtceu.api.data.chemical.material.Material;
-import com.gregtechceu.gtceu.client.renderer.block.TextureOverrideRenderer;
 import com.gregtechceu.gtceu.utils.GTUtil;
-import com.lowdragmc.lowdraglib.Platform;
-import lombok.Getter;
+
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.StringRepresentable;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.BlockGetter;
+
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.List;
-import java.util.Map;
+
+import javax.annotation.ParametersAreNonnullByDefault;
+
 @ParametersAreNonnullByDefault
 public class MagnetBlock extends ActiveBlock {
+
     public IMagnetType magnetBlock;
+
     public MagnetBlock(Properties properties, IMagnetType magnetType) {
-        super(properties, Platform.isClient() ? new TextureOverrideRenderer(new ResourceLocation("block/cube_all"),
-                        Map.of("all", magnetType.getTexture())) : null,
-                Platform.isClient() ? new TextureOverrideRenderer(GTCEu.id("block/cube_2_layer_all"),
-                        Map.of("bot_all", magnetType.getTexture(),
-                                "top_all", new ResourceLocation(magnetType.getTexture() + "_bloom"))) : null);
+        super(properties);
         this.magnetBlock = magnetType;
     }
+
     @Override
-    public void appendHoverText(ItemStack stack, @Nullable BlockGetter level, List<Component> tooltip, TooltipFlag flag) {
-        super.appendHoverText(stack, level, tooltip, flag);
+    public void appendHoverText(ItemStack stack, Item.TooltipContext context, List<Component> tooltip,
+                                TooltipFlag flag) {
+        super.appendHoverText(stack, context, tooltip, flag);
         if (GTUtil.isShiftDown()) {
             tooltip.add(Component.translatable("cosmiccore.wire_coil.magnet_stats"));
-            tooltip.add(Component.translatable("cosmiccore.wire_coil.magnet_capacity", magnetBlock.getMagnetFieldCapacity()));
+            tooltip.add(Component.translatable("cosmiccore.wire_coil.magnet_capacity",
+                    magnetBlock.getMagnetFieldCapacity()));
             tooltip.add(Component.translatable("cosmiccore.wire_coil.magnet_regen", magnetBlock.getMagnetRegenRate()));
-            tooltip.add(Component.translatable("cosmiccore.wire_coil.eu_multiplier",  magnetBlock.energyConsumption()));
+            tooltip.add(Component.translatable("cosmiccore.wire_coil.eu_multiplier", magnetBlock.energyConsumption()));
 
         } else {
             tooltip.add(Component.translatable("block.gtceu.wire_coil.tooltip_extended_info"));
         }
     }
-    public enum MagnetType implements StringRepresentable, IMagnetType{
-        HIGH_POWERED("high_powered",15000,10,3, CosmicMaterials.LivingIgniclad, CosmicCore.id("block/casings/solid/alternator_flux_coiling_copper")),
-        FUSION_GRADE("fusion_grade",100000,500,8192, CosmicMaterials.LivingIgniclad, CosmicCore.id("block/casings/solid/magnet_fusion_grade"));
 
-        @NotNull @Getter
+    public enum MagnetType implements StringRepresentable, IMagnetType {
+
+        HIGH_POWERED("high_powered", 15000, 10, 3, CosmicMaterials.LivingIgniclad,
+                CosmicCore.id("block/casings/solid/alternator_flux_coiling_copper")),
+        FUSION_GRADE("fusion_grade", 100000, 500, 8192, CosmicMaterials.LivingIgniclad,
+                CosmicCore.id("block/casings/solid/magnet_fusion_grade")),
+        STELLAR_NEUTRONIUM_GRADE("stellar_neutronium_grade", 250000, 2500, 32768, CosmicMaterials.LivingIgniclad,
+                CosmicCore.id("block/casings/solid/stellar_neutronium_grade_magnet"));
+        // NYI
+        // RAMPART_SUPERCONDUCTING_MAGNET("rampart_magnet", 25000000, 15000, 524288, CosmicMaterials.LivingIgniclad,
+        // CosmicCore.id("block/casings/solid/rampart_magnet")),
+        // GALVORN_SPATIALLY_RESISTANT_MAGNET("galvorn_spatially_resistant_magnet", 1000000000, 750000, 8388608,
+        // CosmicMaterials.LivingIgniclad,
+        // CosmicCore.id("block/casings/solid/galvorn_magnet"));
+
+        @NotNull
         private final String name;
-        @Getter
         private final int magnetStrength;
-        @Getter
         private final int regenRate;
-        @Getter
         private final int energyConsumed;
-        @Getter
         private final Material material;
-        @NotNull @Getter
+        @NotNull
         private final ResourceLocation texture;
-        MagnetType(String name, int magnetStrength, int regenRate, int energyConsumed, Material material, ResourceLocation texture) {
+
+        MagnetType(String name, int magnetStrength, int regenRate, int energyConsumed, Material material,
+                   ResourceLocation texture) {
             this.name = name;
             this.magnetStrength = magnetStrength;
             this.regenRate = regenRate;
@@ -70,6 +82,33 @@ public class MagnetBlock extends ActiveBlock {
             this.material = material;
             this.texture = texture;
         }
+
+        public String getName() {
+            return name;
+        }
+
+        public int getMagnetStrength() {
+            return magnetStrength;
+        }
+
+        public int getRegenRate() {
+            return regenRate;
+        }
+
+        public int getEnergyConsumed() {
+            return energyConsumed;
+        }
+
+        public Material getMaterial() {
+            return material;
+        }
+
+        @NotNull
+        @Override
+        public ResourceLocation getTexture() {
+            return texture;
+        }
+
         @NotNull
         @Override
         public String toString() {
@@ -81,7 +120,6 @@ public class MagnetBlock extends ActiveBlock {
         public String getSerializedName() {
             return name;
         }
-
 
         @Override
         public int getMagnetFieldCapacity() {
@@ -97,8 +135,5 @@ public class MagnetBlock extends ActiveBlock {
         public int energyConsumption() {
             return getEnergyConsumed();
         }
-
     }
-
-
 }

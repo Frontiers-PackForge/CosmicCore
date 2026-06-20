@@ -1,0 +1,6 @@
+{
+  "parent": "block/cube_all",
+  "textures": {
+    "all": "cosmiccore:block/variant/machine_casing_ludicrous_engine_intake_active"
+  }
+}

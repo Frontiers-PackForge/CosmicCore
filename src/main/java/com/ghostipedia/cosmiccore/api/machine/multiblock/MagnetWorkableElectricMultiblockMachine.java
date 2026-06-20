@@ -2,20 +2,20 @@ package com.ghostipedia.cosmiccore.api.machine.multiblock;
 
 import com.ghostipedia.cosmiccore.api.block.IMagnetType;
 import com.ghostipedia.cosmiccore.common.block.MagnetBlock;
-import com.gregtechceu.gtceu.api.block.ICoilType;
-import com.gregtechceu.gtceu.api.machine.IMachineBlockEntity;
-import com.gregtechceu.gtceu.api.machine.multiblock.WorkableElectricMultiblockMachine;
-import com.gregtechceu.gtceu.utils.GTUtil;
-import lombok.Getter;
 
-@Getter
+import com.gregtechceu.gtceu.api.blockentity.BlockEntityCreationInfo;
+import com.gregtechceu.gtceu.api.machine.multiblock.WorkableElectricMultiblockMachine;
+
 public class MagnetWorkableElectricMultiblockMachine extends WorkableElectricMultiblockMachine {
 
-    @Getter
     private IMagnetType magnetType = MagnetBlock.MagnetType.HIGH_POWERED;
 
-    public MagnetWorkableElectricMultiblockMachine(IMachineBlockEntity holder) {
+    public MagnetWorkableElectricMultiblockMachine(BlockEntityCreationInfo holder) {
         super(holder);
+    }
+
+    public IMagnetType getMagnetType() {
+        return magnetType;
     }
 
     @Override
@@ -30,10 +30,12 @@ public class MagnetWorkableElectricMultiblockMachine extends WorkableElectricMul
     public int getMagnetStrength() {
         return magnetType.getMagnetFieldCapacity();
     }
+
     public int getMagnetRegen() {
         return magnetType.getMagnetRegenRate();
     }
-    public int getEnergyCost(){
+
+    public int getEnergyCost() {
         return magnetType.energyConsumption();
     }
 }

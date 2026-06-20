@@ -1,0 +1,6 @@
+{
+    "parent": "cosmiccore:block/overlay/all_sides",
+    "textures": {
+        "overlay": "cosmiccore:block/overlay/alveary/accelerant"
+    }
+}
