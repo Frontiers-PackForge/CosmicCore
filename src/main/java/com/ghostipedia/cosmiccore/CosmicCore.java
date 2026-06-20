@@ -9,7 +9,6 @@ import com.ghostipedia.cosmiccore.api.recipe.ingredient.SoulIngredient;
 import com.ghostipedia.cosmiccore.api.recipe.lookup.MapSoulIngredient;
 import com.ghostipedia.cosmiccore.api.registries.CosmicRegistration;
 import com.ghostipedia.cosmiccore.client.CosmicCoreClient;
-import com.ghostipedia.cosmiccore.common.airControl.OxygenItemCap;
 import com.ghostipedia.cosmiccore.common.airControl.OxygenRules;
 import com.ghostipedia.cosmiccore.common.commands.argument.SoulTypeArgument;
 import com.ghostipedia.cosmiccore.common.data.*;
@@ -20,7 +19,6 @@ import com.ghostipedia.cosmiccore.common.machine.multiblock.multi.modular.Multib
 import com.ghostipedia.cosmiccore.common.mob.DimensionMobScaling;
 import com.ghostipedia.cosmiccore.common.network.CCoreNetwork;
 import com.ghostipedia.cosmiccore.common.recipe.condition.CosmicConditions;
-import com.ghostipedia.cosmiccore.common.reflection.ReflectionCapability;
 import com.ghostipedia.cosmiccore.common.reflection.bargain.CosmicBargains;
 import com.ghostipedia.cosmiccore.gtbridge.CosmicRecipeTypes;
 
@@ -40,7 +38,6 @@ import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.neoforged.fml.event.lifecycle.FMLLoadCompleteEvent;
-import net.neoforged.neoforge.capabilities.RegisterCapabilitiesEvent;
 import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent;
 import net.neoforged.neoforge.registries.RegisterEvent;
 
@@ -51,11 +48,15 @@ import org.slf4j.LoggerFactory;
 @Mod(CosmicCore.MOD_ID)
 public class CosmicCore {
 
+    // GTCEu 8.0 registers all content during a single RegisterEvent; guard so it only runs once.
+    // Content registration mirrors GTCEu's CommonProxy#onRegister ordering (elements -> materials -> tag prefixes
+    // -> recipe caps, conditions, and types -> blocks -> items -> machines -> sounds).
+    private static boolean didRunRegistration = false;
     public static final String MOD_ID = "cosmiccore", NAME = "CosmicCore";
     public static final Logger LOGGER = LoggerFactory.getLogger(NAME);
-
-    // GTCEu 8.0 registers all content during a single RegisterEvent; guard so it only runs once.
-    private static boolean didRunRegistration = false;
+    public static ResourceLocation id(String path) {
+        return ResourceLocation.fromNamespaceAndPath(MOD_ID, path);
+    }
 
     public CosmicCore(IEventBus modBus) {
         modBus.register(this);
@@ -69,12 +70,6 @@ public class CosmicCore {
         }
     }
 
-    public static ResourceLocation id(String path) {
-        return ResourceLocation.fromNamespaceAndPath(MOD_ID, path);
-    }
-
-    // Content registration — mirrors GTCEu's CommonProxy#onRegister ordering (elements -> materials -> tag prefixes
-    // -> recipe caps/conditions/types -> blocks -> items -> machines -> sounds).
     @SubscribeEvent
     public void onRegister(RegisterEvent event) {
         if (didRunRegistration) return;
