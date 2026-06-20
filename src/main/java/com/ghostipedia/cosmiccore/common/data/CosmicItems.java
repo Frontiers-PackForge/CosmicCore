@@ -3014,6 +3014,63 @@ public class CosmicItems {
             .defaultModel()
             .register();
 
+    public static final ItemEntry<ComponentItem> WEAK_BINDING_PUTTY = REGISTRATE
+            .item("weak_binding_putty", ComponentItem::new)
+            .lang("Weak Binding Putty")
+            .properties(p -> p.stacksTo(64))
+            .defaultModel()
+            .register();
+    public static final ItemEntry<ComponentItem> COMPACTIFIED_ROD = REGISTRATE
+            .item("compactified_rod", ComponentItem::new)
+            .lang("Compactified Rod")
+            .properties(p -> p.stacksTo(64))
+            .defaultModel()
+            .register();
+    public static final ItemEntry<ComponentItem> ODDLY_DENSE_MALLET_FACE = REGISTRATE
+            .item("oddly_dense_mallet_face", ComponentItem::new)
+            .lang("Oddly Dense Mallet Face")
+            .properties(p -> p.stacksTo(64))
+            .defaultModel()
+            .register();
+    public static final ItemEntry<ComponentItem> SOLID_CORE = REGISTRATE
+            .item("solid_core", ComponentItem::new)
+            .lang("Solid Core")
+            .properties(p -> p.stacksTo(64))
+            .defaultModel()
+            .register();
+    public static final ItemEntry<ComponentItem> HEAVY_BINDINGS = REGISTRATE
+            .item("heavy_bindings", ComponentItem::new)
+            .lang("Heavy Bindings")
+            .properties(p -> p.stacksTo(64))
+            .defaultModel()
+            .register();
+    public static final ItemEntry<ComponentItem> STURDY_PLATES = REGISTRATE
+            .item("sturdy_plates", ComponentItem::new)
+            .lang("Sturdy Plates")
+            .properties(p -> p.stacksTo(64))
+            .defaultModel()
+            .register();
+
+    public static final ItemEntry<ComponentItem> BRONZE_ASH_DUST = REGISTRATE
+            .item("bronze_ash_dust", ComponentItem::new)
+            .lang("Bronze Ash Dust")
+            .properties(p -> p.stacksTo(64))
+            .defaultModel()
+            .register();
+
+    public static final ItemEntry<ComponentItem> COGWORK_UNITS = REGISTRATE
+            .item("cogwork_units", ComponentItem::new)
+            .lang("Cogwork Units")
+            .properties(p -> p.stacksTo(64))
+            .defaultModel()
+            .register();
+    public static final ItemEntry<ComponentItem> STEAM_PISTON = REGISTRATE
+            .item("steam_piston", ComponentItem::new)
+            .lang("Steam Piston")
+            .properties(p -> p.stacksTo(64))
+            .defaultModel()
+            .register();
+
     public static <T extends Item> NonNullConsumer<T> modelPredicate(ResourceLocation predicate,
                                                                      Function<ItemStack, Float> property) {
         return item -> {
