@@ -24,7 +24,8 @@ import java.util.Set;
  * or generated blocks. Both the worldgen dispatcher (which places fields) and the survey scanner (which predicts them
  * ahead of generation) call into this class, so the two can never drift apart.
  *
- * <p>Cores are scattered by a deterministic Poisson-disk: a jittered cell grid where a candidate keeps its spot only
+ * <p>
+ * Cores are scattered by a deterministic Poisson-disk: a jittered cell grid where a candidate keeps its spot only
  * if no higher-priority neighbour sits within {@link #MIN_DISTANCE}. Each surviving core is assigned a
  * dimension-eligible, rarity-weighted bundle, then expanded into a field: a set of small ore-pocket fragments whose
  * arrangement traces one of four shapes. The shape lives in the arrangement; each pocket itself is a plain small blob
@@ -55,6 +56,7 @@ public final class OreFieldPlacement {
     public record FieldMember(BlockPos center) {}
 
     public record OreField(BlockPos core, Material bundle, long worldSeed, ResourceKey<Level> dimension) {
+
         public List<FieldMember> members() {
             return layoutField(this);
         }
@@ -91,7 +93,7 @@ public final class OreFieldPlacement {
 
     private static FieldProfile profile(ResourceKey<Level> dimension, Shape shape) {
         int fragments = (shape == Shape.STRINGER || shape == Shape.FRACTURE) ? 39 : 44;
-        return new FieldProfile(Set.of(dimension), 100, shape, fragments, 70);
+        return new FieldProfile(Set.of(dimension), 100, shape, fragments, 88);
     }
 
     private static void put(Material bundle, FieldProfile profile) {
@@ -236,22 +238,22 @@ public final class OreFieldPlacement {
     }
 
     private static void branchingLayout(List<int[]> pts, int n, float radius, RandomSource r) {
-        int core = Math.round(n * 0.3f);
+        int core = Math.round(n * 0.15f);
         for (int i = 0; i < core; i++) {
             double a = r.nextDouble() * TAU;
-            double d = r.nextDouble() * radius * 0.22;
+            double d = r.nextDouble() * radius * 0.15;
             add(pts, Math.cos(a) * d, Math.sin(a) * d);
         }
         int rem = n - core;
-        int branches = 4;
+        int branches = 5;
         int per = Math.max(1, Mth.ceil((float) rem / branches));
         for (int b = 0; b < branches; b++) {
-            double ang = (double) b / branches * TAU + (r.nextDouble() - 0.5) * 0.8;
+            double ang = (double) b / branches * TAU + (r.nextDouble() - 0.5) * 0.5;
             double x = 0, z = 0;
-            double len = radius * (0.85 + r.nextDouble() * 0.3);
+            double len = radius * (0.9 + r.nextDouble() * 0.25);
             double step = len / per;
             for (int s = 0; s < per; s++) {
-                ang += (r.nextDouble() - 0.5) * 0.5;
+                ang += (r.nextDouble() - 0.5) * 0.35;
                 x += Math.cos(ang) * step;
                 z += Math.sin(ang) * step;
                 add(pts, x + jit(r, radius), z + jit(r, radius));
@@ -260,19 +262,19 @@ public final class OreFieldPlacement {
     }
 
     private static void clusterLayout(List<int[]> pts, int n, float radius, RandomSource r) {
-        int k = clamp(Math.round(n / 4f), 3, 8);
+        int k = clamp(Math.round(n / 5f), 4, 9);
         double[][] nodes = new double[k][2];
         for (int i = 0; i < k; i++) {
             double a = r.nextDouble() * TAU;
-            double d = (0.25 + r.nextDouble() * 0.75) * radius * 0.82;
+            double d = (0.1 + r.nextDouble() * 0.55) * radius;
             nodes[i][0] = Math.cos(a) * d;
-            nodes[i][1] = Math.sin(a) * d * 0.92;
+            nodes[i][1] = Math.sin(a) * d * 0.9;
         }
         int per = Math.max(1, Mth.ceil((float) n / k));
         for (double[] node : nodes) {
             for (int j = 0; j < per; j++) {
                 double a = r.nextDouble() * TAU;
-                double d = r.nextDouble() * radius * 0.2;
+                double d = r.nextDouble() * radius * 0.32;
                 add(pts, node[0] + Math.cos(a) * d, node[1] + Math.sin(a) * d);
             }
         }

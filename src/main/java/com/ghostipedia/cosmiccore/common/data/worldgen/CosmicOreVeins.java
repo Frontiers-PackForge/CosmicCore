@@ -150,7 +150,7 @@ public class CosmicOreVeins {
         if (mono == null) return;
 
         dest.clusterSize(src.clusterSize());
-        dest.density(src.density());
+        dest.density(src.density() * 0.8f);
         dest.weight(0);
         dest.layer(src.layer());
         dest.dimensions(src.dimensionFilter());
