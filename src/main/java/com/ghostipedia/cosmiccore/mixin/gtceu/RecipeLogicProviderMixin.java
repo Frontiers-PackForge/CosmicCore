@@ -17,7 +17,8 @@ import snownee.jade.api.BlockAccessor;
 public class RecipeLogicProviderMixin {
 
     @Inject(method = "write", at = @At("HEAD"), cancellable = true)
-    private void cosmicCore$skipStellarModuleWrite(CompoundTag data, BlockAccessor blockAccessor, RecipeLogic capability,
+    private void cosmicCore$skipStellarModuleWrite(CompoundTag data, BlockAccessor blockAccessor,
+                                                   RecipeLogic capability,
                                                    CallbackInfo ci) {
         if (capability.getMachine() instanceof StellarBaseModule) {
             data.putBoolean("Working", capability.isWorking());

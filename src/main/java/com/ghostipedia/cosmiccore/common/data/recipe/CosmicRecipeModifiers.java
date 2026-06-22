@@ -45,6 +45,20 @@ public class CosmicRecipeModifiers {
      */
     public static final RecipeModifier STELLAR_MODULE_OVERCLOCK = CosmicRecipeModifiers::stellarModuleOverclock;
 
+    public static final RecipeModifier LOCKED_PARALLEL_8 = CosmicRecipeModifiers::lockedParallel8;
+
+    public static @NotNull ModifierFunction lockedParallel8(@NotNull MetaMachine machine, @NotNull GTRecipe recipe) {
+        if (!(machine instanceof MultiblockControllerMachine controller) || !controller.isFormed()) {
+            return ModifierFunction.IDENTITY;
+        }
+        int parallels = ParallelLogic.getParallelAmountWithoutEU(machine, recipe, 8);
+        if (parallels <= 1) return ModifierFunction.IDENTITY;
+        return ModifierFunction.builder()
+                .modifyAllContents(ContentModifier.multiplier(parallels))
+                .parallels(parallels)
+                .build();
+    }
+
     /**
      * Stellar module overclock logic.
      * Uses configuredVoltagePerParallel for OC tier and configuredMaxParallel for parallels.

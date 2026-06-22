@@ -2,10 +2,10 @@ package com.ghostipedia.cosmiccore.common.machine.multiblock.multi.logic;
 
 import com.ghostipedia.cosmiccore.common.machine.multiblock.part.SterilizationHatchPartMachine;
 
+import com.gregtechceu.gtceu.api.blockentity.BlockEntityCreationInfo;
 import com.gregtechceu.gtceu.api.capability.IEnergyContainer;
 import com.gregtechceu.gtceu.api.capability.recipe.EURecipeCapability;
 import com.gregtechceu.gtceu.api.capability.recipe.IO;
-import com.gregtechceu.gtceu.api.blockentity.BlockEntityCreationInfo;
 import com.gregtechceu.gtceu.api.machine.TickableSubscription;
 import com.gregtechceu.gtceu.api.machine.feature.multiblock.IMultiPart;
 import com.gregtechceu.gtceu.api.machine.multiblock.WorkableElectricMultiblockMachine;
@@ -15,12 +15,12 @@ import com.gregtechceu.gtceu.utils.FormattingUtil;
 
 import com.lowdragmc.lowdraglib.syncdata.annotation.DescSynced;
 import com.lowdragmc.lowdraglib.syncdata.annotation.Persisted;
+
 import net.minecraft.network.chat.Component;
 import net.neoforged.neoforge.fluids.FluidStack;
 
 import it.unimi.dsi.fastutil.longs.Long2ObjectMaps;
 import lombok.Getter;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -47,7 +47,6 @@ public class VoraxReactorMachine extends WorkableElectricMultiblockMachine {
 
     private SterilizationHatchPartMachine sterileHatch = null;
 
-
     @Nullable
     protected TickableSubscription contagionSubscription;
     @Nullable
@@ -56,7 +55,6 @@ public class VoraxReactorMachine extends WorkableElectricMultiblockMachine {
     public VoraxReactorMachine(BlockEntityCreationInfo holder) {
         super(holder);
     }
-
 
     @Override
     public void onStructureFormed() {

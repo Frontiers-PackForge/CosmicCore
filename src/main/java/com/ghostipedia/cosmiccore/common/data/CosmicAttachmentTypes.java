@@ -13,8 +13,8 @@ import net.neoforged.neoforge.registries.NeoForgeRegistries;
 
 public class CosmicAttachmentTypes {
 
-    public static final DeferredRegister<AttachmentType<?>> ATTACHMENT_TYPES =
-            DeferredRegister.create(NeoForgeRegistries.ATTACHMENT_TYPES, CosmicCore.MOD_ID);
+    public static final DeferredRegister<AttachmentType<?>> ATTACHMENT_TYPES = DeferredRegister
+            .create(NeoForgeRegistries.ATTACHMENT_TYPES, CosmicCore.MOD_ID);
 
     public static final DeferredHolder<AttachmentType<?>, AttachmentType<ReflectionData>> REFLECTION = ATTACHMENT_TYPES
             .register("reflection",

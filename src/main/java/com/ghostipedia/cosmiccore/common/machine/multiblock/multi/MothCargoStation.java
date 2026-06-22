@@ -27,9 +27,12 @@ import static com.gregtechceu.gtceu.common.data.GTBlocks.CASING_STEEL_SOLID;
 public class MothCargoStation {
 
     // Forestry beehive blocks used as moth homes
-    public static final ResourceLocation BEEHIVE_FOREST = ResourceLocation.fromNamespaceAndPath("forestry", "beehive_forest");
-    public static final ResourceLocation BEEHIVE_LUSH = ResourceLocation.fromNamespaceAndPath("forestry", "beehive_lush");
-    public static final ResourceLocation BEEHIVE_DESERT = ResourceLocation.fromNamespaceAndPath("forestry", "beehive_desert");
+    public static final ResourceLocation BEEHIVE_FOREST = ResourceLocation.fromNamespaceAndPath("forestry",
+            "beehive_forest");
+    public static final ResourceLocation BEEHIVE_LUSH = ResourceLocation.fromNamespaceAndPath("forestry",
+            "beehive_lush");
+    public static final ResourceLocation BEEHIVE_DESERT = ResourceLocation.fromNamespaceAndPath("forestry",
+            "beehive_desert");
     public static final ResourceLocation BEEHIVE_END = ResourceLocation.fromNamespaceAndPath("forestry", "beehive_end");
 
     /**

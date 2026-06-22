@@ -4,16 +4,17 @@ import com.ghostipedia.cosmiccore.api.machine.multiblock.DroneStationMachine;
 import com.ghostipedia.cosmiccore.api.misc.DroneStationConnection;
 
 import com.gregtechceu.gtceu.api.GTValues;
+import com.gregtechceu.gtceu.api.blockentity.BlockEntityCreationInfo;
 import com.gregtechceu.gtceu.api.gui.GuiTextures;
 import com.gregtechceu.gtceu.api.gui.fancy.IFancyTooltip;
 import com.gregtechceu.gtceu.api.gui.fancy.TooltipsPanel;
-import com.gregtechceu.gtceu.api.blockentity.BlockEntityCreationInfo;
 import com.gregtechceu.gtceu.api.machine.TickableSubscription;
 import com.gregtechceu.gtceu.api.machine.feature.multiblock.IMaintenanceMachine;
 import com.gregtechceu.gtceu.api.machine.multiblock.part.TieredPartMachine;
 
 import com.lowdragmc.lowdraglib.syncdata.annotation.DescSynced;
 import com.lowdragmc.lowdraglib.syncdata.annotation.Persisted;
+
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
@@ -27,7 +28,6 @@ import java.util.Set;
 
 public class DroneMaintenanceInterfacePartMachine extends TieredPartMachine
                                                   implements IMaintenanceMachine {
-
 
     @Persisted
     protected int timeActive;
@@ -53,7 +53,6 @@ public class DroneMaintenanceInterfacePartMachine extends TieredPartMachine
     //////////////////////////////////////
     // ****** Initialization ******//
     //////////////////////////////////////
-
 
     @Override
     public byte startProblems() {

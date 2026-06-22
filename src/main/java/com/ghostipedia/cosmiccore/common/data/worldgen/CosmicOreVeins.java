@@ -1,452 +1,203 @@
 package com.ghostipedia.cosmiccore.common.data.worldgen;
 
-import com.ghostipedia.cosmiccore.CosmicCore;
+import com.ghostipedia.cosmiccore.common.data.materials.CosmicBundleMaterials;
 import com.ghostipedia.cosmiccore.common.data.worldgen.generator.veins.*;
 
+import com.gregtechceu.gtceu.api.data.chemical.material.Material;
 import com.gregtechceu.gtceu.api.data.worldgen.GTOreDefinition;
 import com.gregtechceu.gtceu.api.data.worldgen.generator.VeinGenerator;
-import com.gregtechceu.gtceu.api.registry.GTRegistries;
-import com.gregtechceu.gtceu.common.data.GTMaterials;
 
-import net.minecraft.core.Holder;
-import net.minecraft.core.Registry;
-import net.minecraft.core.RegistryAccess;
 import net.minecraft.resources.ResourceLocation;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
-import java.util.function.Supplier;
 
-/**
- * Explicit ore vein generator definitions for CosmicCore.
- * Each vein can be individually tuned with full control over generator parameters.
- *
- * Generator Types:
- * - BRANCHING: Meandering river-like branches that snake and split recursively
- * - CLUSTER: Distinct ore pockets connected by thin channels
- * - FRACTURE: "Shattered Geode" - hollow shell with inward spikes and outward cracks
- * - SHELL: Concentric layers with core/inner/outer materials
- * - STRINGER: Large blobby core with many thin tendrils (octopus-like)
- */
 public class CosmicOreVeins {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(CosmicOreVeins.class);
+    private static final Map<String, Material> VEINS = new LinkedHashMap<>();
+    private static final Map<Material, Shape> SHAPES = new LinkedHashMap<>();
+    private static final Map<String, Material> NAME_TO_MONO = new LinkedHashMap<>();
+    private static final Map<String, String> PRIMARY_TO_BUNDLE = new LinkedHashMap<>();
+    private static final Map<String, Integer> COUNT = new LinkedHashMap<>();
+    private static final Map<String, GTOreDefinition> SNAPSHOTS = new LinkedHashMap<>();
 
-    private static final Map<String, Supplier<VeinGenerator>> VEIN_GENERATORS = new HashMap<>();
-
-    // Track which veins we've registered to know which GT veins to disable
-    private static final Set<String> REGISTERED_VEIN_IDS = new HashSet<>();
+    private enum Shape {
+        BRANCHING,
+        CLUSTER,
+        STRINGER,
+        FRACTURE
+    }
 
     public static void init() {
-        // ============================================
-        // OVERWORLD - STONE LAYER
-        // ============================================
+        VEINS.clear();
+        SHAPES.clear();
+        NAME_TO_MONO.clear();
+        PRIMARY_TO_BUNDLE.clear();
+        COUNT.clear();
 
-        // Coal - large scattered pockets
-        register("coal_vein", () -> {
-            var gen = new ClusterVeinGenerator(new ArrayList<>(), new ArrayList<>(),
-                    12, 0.07f, 0.03f, 0.85f, 0.02f);
-            gen.oreBlock(GTMaterials.Coal, 5);
-            return gen.build();
-        });
+        VEINS.put("iron", CosmicBundleMaterials.Ferosine);
+        VEINS.put("magnetite", CosmicBundleMaterials.Ferosine);
+        VEINS.put("copper", CosmicBundleMaterials.Cuprosiva);
+        VEINS.put("copper_tin", CosmicBundleMaterials.Cuprosiva);
+        VEINS.put("cassiterite", CosmicBundleMaterials.Cuprosiva);
+        VEINS.put("galena", CosmicBundleMaterials.Galenite);
+        VEINS.put("nickel", CosmicBundleMaterials.Landisite);
+        VEINS.put("lubricant", CosmicBundleMaterials.Landisite);
+        VEINS.put("redstone", CosmicBundleMaterials.Redstona);
+        VEINS.put("manganese", CosmicBundleMaterials.Redstona);
+        VEINS.put("lapis", CosmicBundleMaterials.Lazuric);
+        VEINS.put("sapphire", CosmicBundleMaterials.Lazuric);
+        VEINS.put("garnet", CosmicBundleMaterials.Lazuric);
+        VEINS.put("mica", CosmicBundleMaterials.Lazuric);
+        VEINS.put("coal", CosmicBundleMaterials.Carbonic);
+        VEINS.put("diamond", CosmicBundleMaterials.Carbonic);
+        VEINS.put("oilsands", CosmicBundleMaterials.Carbonic);
+        VEINS.put("salts", CosmicBundleMaterials.EarthenSalts);
+        VEINS.put("apatite", CosmicBundleMaterials.EarthenSalts);
+        VEINS.put("mineral_sand", CosmicBundleMaterials.EarthenSalts);
+        VEINS.put("garnet_tin", CosmicBundleMaterials.EarthenSalts);
+        VEINS.put("olivine", CosmicBundleMaterials.EarthenSalts);
 
-        // Iron - branching veins
-        register("iron_vein", () -> {
-            var gen = new BranchingVeinGenerator(new ArrayList<>(), new ArrayList<>(),
-                    5, 0.12f, 0.18f, 0.35f, 0.55f, 0.06f);
-            gen.oreBlock(GTMaterials.Goethite, 3);
-            gen.oreBlock(GTMaterials.YellowLimonite, 2);
-            gen.oreBlock(GTMaterials.Hematite, 2);
-            gen.oreBlock(GTMaterials.Malachite, 1);
-            return gen.build();
-        });
+        VEINS.put("sulfur", CosmicBundleMaterials.Pyroltic);
+        VEINS.put("banded_iron", CosmicBundleMaterials.Pyroltic);
+        VEINS.put("certus_quartz", CosmicBundleMaterials.Quartizine);
+        VEINS.put("nether_quartz", CosmicBundleMaterials.Quartizine);
+        VEINS.put("beryllium", CosmicBundleMaterials.Quartizine);
+        VEINS.put("molybdenum", CosmicBundleMaterials.Molybite);
+        VEINS.put("nether_manganese", CosmicBundleMaterials.Molybite);
+        VEINS.put("tetrahedrite", CosmicBundleMaterials.Fahlorium);
+        VEINS.put("topaz", CosmicBundleMaterials.Fahlorium);
+        VEINS.put("nether_redstone", CosmicBundleMaterials.Fahlorium);
+        VEINS.put("saltpeter", CosmicBundleMaterials.Fahlorium);
+        VEINS.put("monazite", CosmicBundleMaterials.MonaziteSalts);
 
-        // Magnetite - branching with gold
-        register("magnetite_vein_ow", () -> {
-            var gen = new BranchingVeinGenerator(new ArrayList<>(), new ArrayList<>(),
-                    4, 0.14f, 0.16f, 0.4f, 0.6f, 0.08f);
-            gen.oreBlock(GTMaterials.Magnetite, 3);
-            gen.oreBlock(GTMaterials.VanadiumMagnetite, 2);
-            gen.rareBlock(GTMaterials.Gold, 1);
-            return gen.build();
-        });
+        VEINS.put("sheldonite", CosmicBundleMaterials.Agarlite);
+        VEINS.put("pitchblende", CosmicBundleMaterials.CrudeRadionite);
+        VEINS.put("naquadah", CosmicBundleMaterials.CrudeRadionite);
+        VEINS.put("scheelite", CosmicBundleMaterials.CrudeRadionite);
+        VEINS.put("end_magnetite", CosmicBundleMaterials.Vanachrome);
+        VEINS.put("end_bauxite", CosmicBundleMaterials.Vanachrome);
 
-        // Copper/Tin - stringer (octopus-like tendrils)
-        register("copper_tin_vein", () -> {
-            var gen = new StringerVeinGenerator(new ArrayList<>(), new ArrayList<>(),
-                    18, 0.30f, 0.055f, 0.65f, 0.5f, 0.04f);
-            gen.oreBlock(GTMaterials.Chalcopyrite, 3);
-            gen.oreBlock(GTMaterials.Zeolite, 2);
-            gen.oreBlock(GTMaterials.Cassiterite, 2);
-            gen.rareBlock(GTMaterials.Realgar, 1);
-            return gen.build();
-        });
+        shape(CosmicBundleMaterials.Ferosine, Shape.BRANCHING);
+        shape(CosmicBundleMaterials.Cuprosiva, Shape.STRINGER);
+        shape(CosmicBundleMaterials.Galenite, Shape.BRANCHING);
+        shape(CosmicBundleMaterials.Landisite, Shape.BRANCHING);
+        shape(CosmicBundleMaterials.Redstona, Shape.FRACTURE);
+        shape(CosmicBundleMaterials.Lazuric, Shape.CLUSTER);
+        shape(CosmicBundleMaterials.Carbonic, Shape.CLUSTER);
+        shape(CosmicBundleMaterials.EarthenSalts, Shape.CLUSTER);
+        shape(CosmicBundleMaterials.Pyroltic, Shape.FRACTURE);
+        shape(CosmicBundleMaterials.Quartizine, Shape.CLUSTER);
+        shape(CosmicBundleMaterials.Molybite, Shape.STRINGER);
+        shape(CosmicBundleMaterials.Fahlorium, Shape.FRACTURE);
+        shape(CosmicBundleMaterials.MonaziteSalts, Shape.STRINGER);
+        shape(CosmicBundleMaterials.Agarlite, Shape.STRINGER);
+        shape(CosmicBundleMaterials.CrudeRadionite, Shape.FRACTURE);
+        shape(CosmicBundleMaterials.Vanachrome, Shape.BRANCHING);
 
-        // Cassiterite (Tin) - stringer
-        register("cassiterite_vein", () -> {
-            var gen = new StringerVeinGenerator(new ArrayList<>(), new ArrayList<>(),
-                    15, 0.28f, 0.06f, 0.6f, 0.55f, 0.03f);
-            gen.oreBlock(GTMaterials.Tin, 3);
-            gen.oreBlock(GTMaterials.Cassiterite, 2);
-            return gen.build();
-        });
-
-        // Galena (Lead/Silver) - branching
-        register("galena_vein", () -> {
-            var gen = new BranchingVeinGenerator(new ArrayList<>(), new ArrayList<>(),
-                    4, 0.13f, 0.15f, 0.45f, 0.5f, 0.1f);
-            gen.oreBlock(GTMaterials.Galena, 3);
-            gen.oreBlock(GTMaterials.Silver, 2);
-            gen.oreBlock(GTMaterials.Lead, 2);
-            return gen.build();
-        });
-
-        // Salt - cluster pockets
-        register("salts_vein", () -> {
-            var gen = new ClusterVeinGenerator(new ArrayList<>(), new ArrayList<>(),
-                    10, 0.065f, 0.025f, 0.9f, 0.05f);
-            gen.oreBlock(GTMaterials.RockSalt, 3);
-            gen.oreBlock(GTMaterials.Salt, 3);
-            gen.oreBlock(GTMaterials.Lepidolite, 2);
-            gen.rareBlock(GTMaterials.Spodumene, 1);
-            return gen.build();
-        });
-
-        // Apatite - cluster
-        register("apatite_vein", () -> {
-            var gen = new ClusterVeinGenerator(new ArrayList<>(), new ArrayList<>(),
-                    8, 0.06f, 0.025f, 0.85f, 0.06f);
-            gen.oreBlock(GTMaterials.Apatite, 3);
-            gen.oreBlock(GTMaterials.TricalciumPhosphate, 2);
-            gen.rareBlock(GTMaterials.Pyrochlore, 1);
-            return gen.build();
-        });
-
-        // Garnet - shell layers
-        register("garnet_vein", () -> {
-            var gen = new ShellVeinGenerator(new ArrayList<>(), new ArrayList<>(), new ArrayList<>(),
-                    0.25f, 0.55f, 0.3f, 0.25f);
-            gen.coreBlock(GTMaterials.GarnetRed, 3);
-            gen.innerBlock(GTMaterials.GarnetYellow, 3);
-            gen.outerBlock(GTMaterials.Amethyst, 2);
-            gen.outerBlock(GTMaterials.Opal, 1);
-            return gen.build();
-        });
-
-        // Garnet/Tin Sand - shell
-        register("garnet_tin_vein", () -> {
-            var gen = new ShellVeinGenerator(new ArrayList<>(), new ArrayList<>(), new ArrayList<>(),
-                    0.25f, 0.6f, 0.3f, 0.15f);
-            gen.coreBlock(GTMaterials.CassiteriteSand, 3);
-            gen.innerBlock(GTMaterials.GarnetSand, 3);
-            gen.outerBlock(GTMaterials.Asbestos, 2);
-            gen.outerBlock(GTMaterials.Diatomite, 1);
-            return gen.build();
-        });
-
-        // Lubricant materials - shell
-        register("lubricant_vein", () -> {
-            var gen = new ShellVeinGenerator(new ArrayList<>(), new ArrayList<>(), new ArrayList<>(),
-                    0.3f, 0.6f, 0.2f, 0.2f);
-            gen.coreBlock(GTMaterials.Soapstone, 3);
-            gen.innerBlock(GTMaterials.Talc, 3);
-            gen.outerBlock(GTMaterials.GlauconiteSand, 2);
-            gen.outerBlock(GTMaterials.Pentlandite, 1);
-            return gen.build();
-        });
-
-        // Mineral Sand - shell
-        register("mineral_sand_vein", () -> {
-            var gen = new ShellVeinGenerator(new ArrayList<>(), new ArrayList<>(), new ArrayList<>(),
-                    0.25f, 0.55f, 0.3f, 0.25f);
-            gen.coreBlock(GTMaterials.BasalticMineralSand, 3);
-            gen.innerBlock(GTMaterials.GraniticMineralSand, 3);
-            gen.outerBlock(GTMaterials.FullersEarth, 2);
-            gen.outerBlock(GTMaterials.Gypsum, 1);
-            return gen.build();
-        });
-
-        // Oilsands - cluster
-        register("oilsands_vein", () -> {
-            var gen = new ClusterVeinGenerator(new ArrayList<>(), new ArrayList<>(),
-                    6, 0.08f, 0.04f, 0.7f, 0.0f);
-            gen.oreBlock(GTMaterials.Oilsands, 5);
-            return gen.build();
-        });
-
-        // ============================================
-        // OVERWORLD - DEEPSLATE LAYER
-        // ============================================
-
-        // Copper - stringer
-        register("copper_vein", () -> {
-            var gen = new StringerVeinGenerator(new ArrayList<>(), new ArrayList<>(),
-                    16, 0.32f, 0.055f, 0.6f, 0.5f, 0.05f);
-            gen.oreBlock(GTMaterials.Chalcopyrite, 3);
-            gen.oreBlock(GTMaterials.Iron, 2);
-            gen.oreBlock(GTMaterials.Pyrite, 2);
-            gen.oreBlock(GTMaterials.Copper, 1);
-            return gen.build();
-        });
-
-        // Diamond - shell (valuable core)
-        register("diamond_vein", () -> {
-            var gen = new ShellVeinGenerator(new ArrayList<>(), new ArrayList<>(), new ArrayList<>(),
-                    0.2f, 0.5f, 0.2f, 0.1f);
-            gen.coreBlock(GTMaterials.Diamond, 2);
-            gen.innerBlock(GTMaterials.Graphite, 3);
-            gen.outerBlock(GTMaterials.Coal, 3);
-            return gen.build();
-        });
-
-        // Lapis - shell
-        register("lapis_vein", () -> {
-            var gen = new ShellVeinGenerator(new ArrayList<>(), new ArrayList<>(), new ArrayList<>(),
-                    0.25f, 0.55f, 0.25f, 0.15f);
-            gen.coreBlock(GTMaterials.Lazurite, 3);
-            gen.innerBlock(GTMaterials.Sodalite, 3);
-            gen.innerBlock(GTMaterials.Lapis, 2);
-            gen.outerBlock(GTMaterials.Calcite, 3);
-            return gen.build();
-        });
-
-        // Redstone - fracture (shattered geode)
-        register("redstone_vein_ow", () -> {
-            var gen = new FractureVeinGenerator(new ArrayList<>(), new ArrayList<>(),
-                    14.0f, 0.1f, 10, 7.0f);
-            gen.oreBlock(GTMaterials.Redstone, 4);
-            gen.oreBlock(GTMaterials.Chromite, 2);
-            gen.rareBlock(GTMaterials.Cinnabar, 1);
-            return gen.build();
-        });
-
-        // Sapphire - shell
-        register("sapphire_vein", () -> {
-            var gen = new ShellVeinGenerator(new ArrayList<>(), new ArrayList<>(), new ArrayList<>(),
-                    0.25f, 0.55f, 0.2f, 0.12f);
-            gen.coreBlock(GTMaterials.Almandine, 3);
-            gen.innerBlock(GTMaterials.Pyrope, 3);
-            gen.outerBlock(GTMaterials.Sapphire, 2);
-            gen.outerBlock(GTMaterials.GreenSapphire, 1);
-            return gen.build();
-        });
-
-        // Olivine - shell
-        register("olivine_vein", () -> {
-            var gen = new ShellVeinGenerator(new ArrayList<>(), new ArrayList<>(), new ArrayList<>(),
-                    0.3f, 0.6f, 0.25f, 0.18f);
-            gen.coreBlock(GTMaterials.Bentonite, 3);
-            gen.innerBlock(GTMaterials.Magnesite, 3);
-            gen.outerBlock(GTMaterials.Olivine, 2);
-            gen.outerBlock(GTMaterials.GlauconiteSand, 1);
-            return gen.build();
-        });
-
-        // Mica/Bauxite - cluster
-        register("mica_vein", () -> {
-            var gen = new ClusterVeinGenerator(new ArrayList<>(), new ArrayList<>(),
-                    9, 0.055f, 0.025f, 0.85f, 0.08f);
-            gen.oreBlock(GTMaterials.Kyanite, 3);
-            gen.oreBlock(GTMaterials.Mica, 2);
-            gen.oreBlock(GTMaterials.Bauxite, 2);
-            gen.rareBlock(GTMaterials.Pollucite, 1);
-            return gen.build();
-        });
-
-        // Manganese - branching
-        register("manganese_vein_ow", () -> {
-            var gen = new BranchingVeinGenerator(new ArrayList<>(), new ArrayList<>(),
-                    4, 0.12f, 0.14f, 0.4f, 0.5f, 0.08f);
-            gen.oreBlock(GTMaterials.Grossular, 3);
-            gen.oreBlock(GTMaterials.Spessartine, 2);
-            gen.oreBlock(GTMaterials.Pyrolusite, 2);
-            gen.rareBlock(GTMaterials.Tantalite, 1);
-            return gen.build();
-        });
-
-        // ============================================
-        // NETHER
-        // ============================================
-
-        // Sulfur - fracture
-        register("sulfur_vein", () -> {
-            var gen = new FractureVeinGenerator(new ArrayList<>(), new ArrayList<>(),
-                    12.0f, 0.08f, 9, 6.0f);
-            gen.oreBlock(GTMaterials.Sulfur, 3);
-            gen.oreBlock(GTMaterials.Pyrite, 2);
-            gen.oreBlock(GTMaterials.Sphalerite, 2);
-            return gen.build();
-        });
-
-        // Tetrahedrite - fracture
-        register("tetrahedrite_vein", () -> {
-            var gen = new FractureVeinGenerator(new ArrayList<>(), new ArrayList<>(),
-                    11.0f, 0.1f, 8, 5.5f);
-            gen.oreBlock(GTMaterials.Tetrahedrite, 3);
-            gen.oreBlock(GTMaterials.Copper, 2);
-            gen.rareBlock(GTMaterials.Stibnite, 1);
-            return gen.build();
-        });
-
-        // Redstone (Nether) - fracture
-        register("redstone_vein", () -> {
-            var gen = new FractureVeinGenerator(new ArrayList<>(), new ArrayList<>(),
-                    13.0f, 0.1f, 9, 6.5f);
-            gen.oreBlock(GTMaterials.Redstone, 4);
-            gen.oreBlock(GTMaterials.Chromite, 2);
-            gen.rareBlock(GTMaterials.Cinnabar, 1);
-            return gen.build();
-        });
-
-        // Banded Iron - branching
-        register("banded_iron_vein", () -> {
-            var gen = new BranchingVeinGenerator(new ArrayList<>(), new ArrayList<>(),
-                    5, 0.14f, 0.18f, 0.35f, 0.55f, 0.1f);
-            gen.oreBlock(GTMaterials.Goethite, 3);
-            gen.oreBlock(GTMaterials.YellowLimonite, 2);
-            gen.oreBlock(GTMaterials.Hematite, 2);
-            gen.rareBlock(GTMaterials.Gold, 1);
-            return gen.build();
-        });
-
-        // Beryllium - shell
-        register("beryllium_vein", () -> {
-            var gen = new ShellVeinGenerator(new ArrayList<>(), new ArrayList<>(), new ArrayList<>(),
-                    0.25f, 0.55f, 0.2f, 0.15f);
-            gen.coreBlock(GTMaterials.Beryllium, 3);
-            gen.innerBlock(GTMaterials.Emerald, 2);
-            gen.outerBlock(GTMaterials.Thorium, 2);
-            return gen.build();
-        });
-
-        // Certus Quartz - cluster (GTCEu uses "certus_quartz" not "certus_quartz_vein")
-        register("certus_quartz", () -> {
-            var gen = new ClusterVeinGenerator(new ArrayList<>(), new ArrayList<>(),
-                    8, 0.06f, 0.028f, 0.85f, 0.06f);
-            gen.oreBlock(GTMaterials.Quartzite, 3);
-            gen.oreBlock(GTMaterials.CertusQuartz, 2);
-            gen.oreBlock(GTMaterials.Barite, 1);
-            return gen.build();
-        });
-
-        // Manganese (Nether) - branching
-        register("manganese_vein", () -> {
-            var gen = new BranchingVeinGenerator(new ArrayList<>(), new ArrayList<>(),
-                    4, 0.12f, 0.15f, 0.4f, 0.5f, 0.1f);
-            gen.oreBlock(GTMaterials.Grossular, 3);
-            gen.oreBlock(GTMaterials.Pyrolusite, 2);
-            gen.rareBlock(GTMaterials.Tantalite, 1);
-            return gen.build();
-        });
-
-        // Molybdenum - stringer
-        register("molybdenum_vein", () -> {
-            var gen = new StringerVeinGenerator(new ArrayList<>(), new ArrayList<>(),
-                    14, 0.25f, 0.05f, 0.55f, 0.5f, 0.08f);
-            gen.oreBlock(GTMaterials.Wulfenite, 3);
-            gen.oreBlock(GTMaterials.Molybdenite, 2);
-            gen.oreBlock(GTMaterials.Molybdenum, 2);
-            gen.rareBlock(GTMaterials.Powellite, 1);
-            return gen.build();
-        });
-
-        // Monazite - stringer
-        register("monazite_vein", () -> {
-            var gen = new StringerVeinGenerator(new ArrayList<>(), new ArrayList<>(),
-                    12, 0.28f, 0.055f, 0.5f, 0.55f, 0.1f);
-            gen.oreBlock(GTMaterials.Bastnasite, 3);
-            gen.oreBlock(GTMaterials.Monazite, 2);
-            gen.rareBlock(GTMaterials.Neodymium, 1);
-            return gen.build();
-        });
-
-        // Nether Quartz - cluster
-        register("nether_quartz_vein", () -> {
-            var gen = new ClusterVeinGenerator(new ArrayList<>(), new ArrayList<>(),
-                    10, 0.065f, 0.03f, 0.8f, 0.03f);
-            gen.oreBlock(GTMaterials.NetherQuartz, 3);
-            gen.oreBlock(GTMaterials.Quartzite, 2);
-            return gen.build();
-        });
-
-        // Saltpeter - cluster
-        register("saltpeter_vein", () -> {
-            var gen = new ClusterVeinGenerator(new ArrayList<>(), new ArrayList<>(),
-                    9, 0.055f, 0.025f, 0.85f, 0.06f);
-            gen.oreBlock(GTMaterials.Saltpeter, 3);
-            gen.oreBlock(GTMaterials.Diatomite, 2);
-            gen.oreBlock(GTMaterials.Electrotine, 2);
-            gen.rareBlock(GTMaterials.Alunite, 1);
-            return gen.build();
-        });
-
-        // Topaz - shell
-        register("topaz_vein", () -> {
-            var gen = new ShellVeinGenerator(new ArrayList<>(), new ArrayList<>(), new ArrayList<>(),
-                    0.25f, 0.55f, 0.2f, 0.15f);
-            gen.coreBlock(GTMaterials.BlueTopaz, 2);
-            gen.coreBlock(GTMaterials.Topaz, 2);
-            gen.innerBlock(GTMaterials.Chalcocite, 3);
-            gen.outerBlock(GTMaterials.Bornite, 3);
-            return gen.build();
-        });
-    }
-
-    // ============================================
-    // REGISTRATION
-    // ============================================
-
-    private static void register(String veinId, Supplier<VeinGenerator> generatorSupplier) {
-        String lowerId = veinId.toLowerCase();
-        VEIN_GENERATORS.put(lowerId, generatorSupplier);
-        REGISTERED_VEIN_IDS.add(lowerId);
-    }
-
-    public static void applyOverrides(RegistryAccess registryAccess) {
-        int replaced = 0;
-        int skipped = 0;
-
-        Registry<GTOreDefinition> registry = registryAccess.registryOrThrow(GTRegistries.ORE_VEIN_REGISTRY);
-
-        for (Holder.Reference<GTOreDefinition> holder : registry.holders().toList()) {
-            ResourceLocation id = holder.key().location();
-            if (!id.getNamespace().equals("gtceu")) continue;
-
-            String path = id.getPath().toLowerCase();
-            Supplier<VeinGenerator> generatorSupplier = VEIN_GENERATORS.get(path);
-
-            if (generatorSupplier != null) {
-                VeinGenerator generator = generatorSupplier.get();
-                if (generator != null) {
-                    holder.value().veinGenerator(generator);
-                    replaced++;
-                    LOGGER.debug("Replaced vein generator for: {}", id);
-                }
-            } else {
-                // TODO(cosmiccore-42): GTCEu 8.0 turned ore veins into a frozen datapack registry;
-                // there is no supported runtime removal (IMappedRegistryAccess#gtceu$remove is @TestOnly
-                // and throws on frozen registries). Veins without a custom override can no longer be
-                // removed here -- this needs a datapack/server-load hook redesign to suppress them.
-                skipped++;
+        Set<String> seen = new HashSet<>();
+        for (Map.Entry<String, Material> entry : VEINS.entrySet()) {
+            Material mono = entry.getValue();
+            String name = mono.getName();
+            NAME_TO_MONO.putIfAbsent(name, mono);
+            COUNT.merge(name, 1, Integer::sum);
+            if (seen.add(name)) {
+                PRIMARY_TO_BUNDLE.put(entry.getKey(), name);
             }
         }
+    }
 
-        LOGGER.info("CosmicOreVeins: Replaced {} vein generators, {} GT veins left intact (removal unsupported)",
-                replaced, skipped);
+    private static void shape(Material mono, Shape shape) {
+        SHAPES.put(mono, shape);
+    }
+
+    public static void beginRebuild() {
+        init();
+        SNAPSHOTS.clear();
+    }
+
+    public static void capture(ResourceLocation id, GTOreDefinition vein) {
+        if (!id.getNamespace().equals("gtceu")) return;
+        String bundle = PRIMARY_TO_BUNDLE.get(id.getPath());
+        if (bundle == null) return;
+        SNAPSHOTS.put(bundle, new GTOreDefinition(vein));
+    }
+
+    public static List<String> capturedBundles() {
+        return List.copyOf(SNAPSHOTS.keySet());
+    }
+
+    public static void applyCaptured(GTOreDefinition dest, String bundle) {
+        GTOreDefinition src = SNAPSHOTS.get(bundle);
+        if (src == null) return;
+        copyInto(dest, src, bundle);
+    }
+
+    public static boolean shouldRemove(ResourceLocation id) {
+        return id.getNamespace().equals("gtceu") && VEINS.containsKey(id.getPath());
+    }
+
+    private static void copyInto(GTOreDefinition dest, GTOreDefinition src, String bundle) {
+        Material mono = NAME_TO_MONO.get(bundle);
+        if (mono == null) return;
+
+        dest.clusterSize(src.clusterSize());
+        dest.density(src.density());
+        dest.weight(src.weight() * COUNT.getOrDefault(bundle, 1));
+        dest.layer(src.layer());
+        dest.dimensions(src.dimensionFilter());
+        dest.heightRange(src.heightRange());
+        dest.discardChanceOnAirExposure(src.discardChanceOnAirExposure());
+        dest.biomes(src.biomes());
+        dest.biomeWeightModifier(src.biomeWeightModifier());
+        dest.veinGenerator(buildGenerator(SHAPES.getOrDefault(mono, Shape.BRANCHING), mono));
+
+        CosmicWorldGenLayers.reassign(dest);
+    }
+
+    private static VeinGenerator buildGenerator(Shape shape, Material mono) {
+        return switch (shape) {
+            case BRANCHING -> branching(mono);
+            case CLUSTER -> cluster(mono);
+            case STRINGER -> stringer(mono);
+            case FRACTURE -> fracture(mono);
+        };
+    }
+
+    private static VeinGenerator branching(Material mono) {
+        var gen = new BranchingVeinGenerator(new ArrayList<>(), new ArrayList<>(), 4, 0.15f, 0.15f, 0.4f, 0.6f, 0.08f);
+        gen.oreBlock(mono, 1);
+        return gen.build();
+    }
+
+    private static VeinGenerator cluster(Material mono) {
+        var gen = new ClusterVeinGenerator(new ArrayList<>(), new ArrayList<>(), 10, 0.06f, 0.025f, 0.90f, 0.06f);
+        gen.oreBlock(mono, 1);
+        return gen.build();
+    }
+
+    private static VeinGenerator stringer(Material mono) {
+        var gen = new StringerVeinGenerator(new ArrayList<>(), new ArrayList<>(), 20, 0.35f, 0.06f, 0.7f, 0.5f, 0.04f);
+        gen.oreBlock(mono, 1);
+        return gen.build();
+    }
+
+    private static VeinGenerator fracture(Material mono) {
+        var gen = new FractureVeinGenerator(new ArrayList<>(), new ArrayList<>(), 21.0f, 0.08f, 8, 10.5f);
+        gen.oreBlock(mono, 1);
+        return gen.build();
     }
 
     public static boolean hasOverride(String veinId) {
-        return VEIN_GENERATORS.containsKey(veinId.toLowerCase());
+        return VEINS.containsKey(veinId.toLowerCase(Locale.ROOT));
     }
 
     public static Set<String> getRegisteredVeinIds() {
-        return Set.copyOf(REGISTERED_VEIN_IDS);
+        return Set.copyOf(VEINS.keySet());
     }
 }

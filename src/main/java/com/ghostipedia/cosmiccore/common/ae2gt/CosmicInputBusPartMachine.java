@@ -1,8 +1,8 @@
 package com.ghostipedia.cosmiccore.common.ae2gt;
 
+import com.gregtechceu.gtceu.api.blockentity.BlockEntityCreationInfo;
 import com.gregtechceu.gtceu.api.capability.recipe.IO;
 import com.gregtechceu.gtceu.api.gui.fancy.FancyMachineUIWidget;
-import com.gregtechceu.gtceu.api.blockentity.BlockEntityCreationInfo;
 import com.gregtechceu.gtceu.api.machine.feature.IDataStickInteractable;
 import com.gregtechceu.gtceu.api.machine.trait.NotifiableItemStackHandler;
 import com.gregtechceu.gtceu.common.data.item.GTDataComponents;
@@ -34,7 +34,6 @@ import appeng.api.storage.MEStorage;
 
 public class CosmicInputBusPartMachine extends MEBusPartMachine implements IDataStickInteractable {
 
-
     protected final static int CONFIG_SIZE = 1;
 
     protected ExportOnlyAEItemList aeItemHandler;
@@ -58,7 +57,6 @@ public class CosmicInputBusPartMachine extends MEBusPartMachine implements IData
         this.aeItemHandler = new ExportOnlyAEItemList(this, CONFIG_SIZE);
         return this.aeItemHandler;
     }
-
 
     /////////////////////////////////
     // ********** Sync ME *********//

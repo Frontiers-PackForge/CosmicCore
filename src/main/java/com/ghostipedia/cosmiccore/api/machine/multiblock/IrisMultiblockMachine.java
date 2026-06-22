@@ -7,8 +7,8 @@ import com.ghostipedia.cosmiccore.client.gui.widget.stellar.StellarIrisWidget;
 import com.ghostipedia.cosmiccore.common.data.CosmicItems;
 import com.ghostipedia.cosmiccore.common.data.CosmicSounds;
 
-import com.gregtechceu.gtceu.api.capability.recipe.IO;
 import com.gregtechceu.gtceu.api.blockentity.BlockEntityCreationInfo;
+import com.gregtechceu.gtceu.api.capability.recipe.IO;
 import com.gregtechceu.gtceu.api.machine.MetaMachine;
 import com.gregtechceu.gtceu.api.machine.multiblock.WorkableElectricMultiblockMachine;
 import com.gregtechceu.gtceu.api.machine.trait.NotifiableItemStackHandler;
@@ -21,14 +21,13 @@ import com.lowdragmc.lowdraglib.gui.widget.Widget;
 import com.lowdragmc.lowdraglib.syncdata.annotation.DescSynced;
 import com.lowdragmc.lowdraglib.syncdata.annotation.Persisted;
 import com.lowdragmc.lowdraglib.syncdata.annotation.UpdateListener;
+
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
-
-import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -40,7 +39,6 @@ import static com.ghostipedia.cosmiccore.api.machine.multiblock.IrisMultiblockMa
 import static com.ghostipedia.cosmiccore.api.machine.multiblock.IrisMultiblockMachine.Stage.DEATH;
 
 public class IrisMultiblockMachine extends WorkableElectricMultiblockMachine implements IStellarIrisProvider {
-
 
     @Persisted
     private final NotifiableItemStackHandler inventory;
@@ -180,7 +178,6 @@ public class IrisMultiblockMachine extends WorkableElectricMultiblockMachine imp
         this.scheduleRenderUpdate();
         soundTick();
     }
-
 
     @Override
     public void onStructureFormed() {
@@ -657,7 +654,8 @@ public class IrisMultiblockMachine extends WorkableElectricMultiblockMachine imp
                         () -> this.shouldWorkingPlaySound() && !this.isRemoved() &&
                                 this.getLevel().isLoaded(this.getBlockPos()) &&
                                 MetaMachine.getMachine(this.getLevel(), this.getBlockPos()) == this,
-                        RelativeDirection.offsetPos(this.getBlockPos(), getFrontFacing(), getUpwardsFacing(), isFlipped, 0,
+                        RelativeDirection.offsetPos(this.getBlockPos(), getFrontFacing(), getUpwardsFacing(), isFlipped,
+                                0,
                                 0, -47),
                         true, 0, 1, 1);
             }

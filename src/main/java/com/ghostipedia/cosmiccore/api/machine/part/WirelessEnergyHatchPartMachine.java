@@ -3,16 +3,17 @@ package com.ghostipedia.cosmiccore.api.machine.part;
 import com.ghostipedia.cosmiccore.api.data.wireless.WirelessEnergySavedData;
 
 import com.gregtechceu.gtceu.api.GTValues;
-import com.gregtechceu.gtceu.api.capability.recipe.IO;
 import com.gregtechceu.gtceu.api.blockentity.BlockEntityCreationInfo;
+import com.gregtechceu.gtceu.api.capability.recipe.IO;
 import com.gregtechceu.gtceu.api.machine.TickableSubscription;
 import com.gregtechceu.gtceu.api.machine.multiblock.part.TieredIOPartMachine;
 import com.gregtechceu.gtceu.api.machine.trait.NotifiableEnergyContainer;
 import com.gregtechceu.gtceu.common.machine.owner.FTBOwner;
 import com.gregtechceu.gtceu.utils.FormattingUtil;
-
 import com.gregtechceu.gtceu.utils.ISubscription;
+
 import com.lowdragmc.lowdraglib.syncdata.annotation.Persisted;
+
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.TickTask;
@@ -36,7 +37,6 @@ import javax.annotation.ParametersAreNonnullByDefault;
 public class WirelessEnergyHatchPartMachine extends TieredIOPartMachine {
 
     protected static final long ticks_between_save_data_operations = 5L * 20L;
-
 
     @Persisted
     public final NotifiableEnergyContainer energyContainer;

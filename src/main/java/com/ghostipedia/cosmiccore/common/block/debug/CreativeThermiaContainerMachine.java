@@ -4,9 +4,9 @@ import com.ghostipedia.cosmiccore.api.capability.recipe.IHeatContainer;
 import com.ghostipedia.cosmiccore.api.machine.trait.NotifiableThermiaContainer;
 
 import com.gregtechceu.gtceu.api.GTValues;
+import com.gregtechceu.gtceu.api.blockentity.BlockEntityCreationInfo;
 import com.gregtechceu.gtceu.api.capability.recipe.IO;
 import com.gregtechceu.gtceu.api.gui.GuiTextures;
-import com.gregtechceu.gtceu.api.blockentity.BlockEntityCreationInfo;
 import com.gregtechceu.gtceu.api.machine.MetaMachine;
 import com.gregtechceu.gtceu.api.machine.feature.IUIMachine;
 
@@ -17,10 +17,9 @@ import com.lowdragmc.lowdraglib.gui.texture.TextTexture;
 import com.lowdragmc.lowdraglib.gui.widget.*;
 import com.lowdragmc.lowdraglib.syncdata.annotation.DescSynced;
 import com.lowdragmc.lowdraglib.syncdata.annotation.Persisted;
+
 import net.minecraft.core.Direction;
 import net.minecraft.world.entity.player.Player;
-
-import org.jetbrains.annotations.NotNull;
 
 import static com.ghostipedia.cosmiccore.common.machine.multiblock.part.ThermiaHatchPartMachine.getThermiaLimits;
 
@@ -34,7 +33,6 @@ public class CreativeThermiaContainerMachine extends MetaMachine implements IHea
     @Persisted
     private boolean source = true;
     private long lastAverageHeatIOPerTick = 0;
-
 
     @Persisted
     @DescSynced

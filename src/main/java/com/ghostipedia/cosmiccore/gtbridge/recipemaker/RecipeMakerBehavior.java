@@ -144,10 +144,10 @@ public class RecipeMakerBehavior implements IItemUIFactory {
         Arrays.fill(inChance, RecipeDraft.GUARANTEED);
         Arrays.fill(fOutChance, RecipeDraft.GUARANTEED);
         Arrays.fill(fInChance, RecipeDraft.GUARANTEED);
-        Supplier<int[]> chanceArr = () -> selFluid[0] ? (selOut[0] ? fOutChance : fInChance)
-                : (selOut[0] ? outChance : inChance);
-        Supplier<int[]> boostArr = () -> selFluid[0] ? (selOut[0] ? fOutBoost : fInBoost)
-                : (selOut[0] ? outBoost : inBoost);
+        Supplier<int[]> chanceArr = () -> selFluid[0] ? (selOut[0] ? fOutChance : fInChance) :
+                (selOut[0] ? outChance : inChance);
+        Supplier<int[]> boostArr = () -> selFluid[0] ? (selOut[0] ? fOutBoost : fInBoost) :
+                (selOut[0] ? outBoost : inBoost);
         String[] recipeId = { "" };
 
         editor.addWidget(new LabelWidget(0, 0, type.registryName.getPath()));
@@ -165,7 +165,8 @@ public class RecipeMakerBehavior implements IItemUIFactory {
 
         editor.addWidget(new LabelWidget(0, 126, "Amp"));
         editor.addWidget(new TextFieldWidget(26, 124, 30, 12,
-                () -> String.valueOf(amperage[0]), s -> amperage[0] = parseLong(s, 1)).setNumbersOnly(1L, Long.MAX_VALUE));
+                () -> String.valueOf(amperage[0]), s -> amperage[0] = parseLong(s, 1))
+                .setNumbersOnly(1L, Long.MAX_VALUE));
         editor.addWidget(new LabelWidget(64, 126, "Tick"));
         editor.addWidget(new TextFieldWidget(90, 124, 30, 12,
                 () -> String.valueOf(duration[0]), s -> duration[0] = (int) parseLong(s, 100))
@@ -326,6 +327,7 @@ public class RecipeMakerBehavior implements IItemUIFactory {
 
     @FunctionalInterface
     private interface SlotConfig {
+
         void open(int slot, boolean isOutput, boolean isFluid);
     }
 

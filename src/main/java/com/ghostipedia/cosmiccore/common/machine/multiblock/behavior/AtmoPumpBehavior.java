@@ -24,8 +24,10 @@ public class AtmoPumpBehavior extends WorkableElectricMultiblockMachine {
     }
 
     private void updateBounds(int multiplier) {
-        var flt = RelativeDirection.offsetPos(getBlockPos(), getFrontFacing(), getUpwardsFacing(), isFlipped(), 3, 14, -14);
-        var brb = RelativeDirection.offsetPos(getBlockPos(), getFrontFacing(), getUpwardsFacing(), isFlipped(), -14, -14,
+        var flt = RelativeDirection.offsetPos(getBlockPos(), getFrontFacing(), getUpwardsFacing(), isFlipped(), 3, 14,
+                -14);
+        var brb = RelativeDirection.offsetPos(getBlockPos(), getFrontFacing(), getUpwardsFacing(), isFlipped(), -14,
+                -14,
                 14);
         killzone = AABB.encapsulatingFullBlocks(flt, brb);
     }

@@ -3,8 +3,8 @@ package com.ghostipedia.cosmiccore.api.machine.multiblock;
 import com.ghostipedia.cosmiccore.api.block.IMultiblockProvider;
 import com.ghostipedia.cosmiccore.api.block.IMultiblockReciever;
 
-import com.gregtechceu.gtceu.api.capability.IEnergyContainer;
 import com.gregtechceu.gtceu.api.blockentity.BlockEntityCreationInfo;
+import com.gregtechceu.gtceu.api.capability.IEnergyContainer;
 import com.gregtechceu.gtceu.api.machine.multiblock.WorkableElectricMultiblockMachine;
 import com.gregtechceu.gtceu.api.machine.trait.NotifiableEnergyContainer;
 

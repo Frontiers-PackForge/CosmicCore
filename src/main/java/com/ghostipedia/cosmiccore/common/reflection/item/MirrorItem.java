@@ -69,7 +69,7 @@ public class MirrorItem extends Item {
 
     @Override
     public void appendHoverText(ItemStack stack, Item.TooltipContext context, List<Component> tooltip,
-                               TooltipFlag flag) {
+                                TooltipFlag flag) {
         tooltip.add(Component.literal("§7A polished surface that reflects more than light."));
         tooltip.add(Component.literal("§8§oRight-click to gaze into the void."));
     }

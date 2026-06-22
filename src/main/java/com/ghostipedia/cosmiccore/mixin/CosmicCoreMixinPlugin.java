@@ -15,6 +15,7 @@ public class CosmicCoreMixinPlugin implements IMixinConfigPlugin {
 
     private static final boolean EMI_LOADED;
     private static final boolean JEI_LOADED;
+    private static final boolean EMBERS_LOADED;
 
     static {
         // Check if EMI is present by looking for a resource file, not a class
@@ -23,6 +24,8 @@ public class CosmicCoreMixinPlugin implements IMixinConfigPlugin {
                 .getResource("dev/emi/emi/api/EmiApi.class") != null;
         JEI_LOADED = CosmicCoreMixinPlugin.class.getClassLoader()
                 .getResource("mezz/jei/library/plugins/jei/tags/TagInfoRecipeCategory.class") != null;
+        EMBERS_LOADED = CosmicCoreMixinPlugin.class.getClassLoader()
+                .getResource("com/rekindled/embers/worldgen/EmbersLateWorldgen.class") != null;
     }
 
     @Override
@@ -41,6 +44,10 @@ public class CosmicCoreMixinPlugin implements IMixinConfigPlugin {
         }
         // Skip JEI mixins if JEI is not loaded
         if (mixinClassName.contains(".jei.") && !JEI_LOADED) {
+            return false;
+        }
+        // Skip Embers mixins if Embers is not loaded
+        if (mixinClassName.contains(".embers.") && !EMBERS_LOADED) {
             return false;
         }
 

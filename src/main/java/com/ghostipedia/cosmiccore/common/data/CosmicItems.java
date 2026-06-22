@@ -22,9 +22,9 @@ import com.ghostipedia.cosmiccore.common.item.behavior.OxygenSupplyTankBehavior;
 import com.ghostipedia.cosmiccore.common.item.behavior.StructureWriteBehavior;
 import com.ghostipedia.cosmiccore.common.item.behavior.VeinSurveyBehavior;
 import com.ghostipedia.cosmiccore.common.item.behavior.WirelessPDABehavior;
-import com.ghostipedia.cosmiccore.gtbridge.recipemaker.RecipeMakerBehavior;
 import com.ghostipedia.cosmiccore.common.reflection.item.MirrorItem;
 import com.ghostipedia.cosmiccore.common.reflection.item.SoulMutilatorItem;
+import com.ghostipedia.cosmiccore.gtbridge.recipemaker.RecipeMakerBehavior;
 import com.ghostipedia.cosmiccore.utils.ItemData;
 import com.ghostipedia.cosmiccore.utils.StringUtil;
 
@@ -37,9 +37,9 @@ import com.gregtechceu.gtceu.api.item.component.ICustomDescriptionId;
 import com.gregtechceu.gtceu.api.item.component.IItemComponent;
 import com.gregtechceu.gtceu.api.item.component.ThermalFluidStats;
 import com.gregtechceu.gtceu.common.data.GTItems;
+import com.gregtechceu.gtceu.common.item.armor.GTArmorMaterials;
 import com.gregtechceu.gtceu.common.item.behavior.ItemFluidContainer;
 import com.gregtechceu.gtceu.common.item.behavior.TooltipBehavior;
-import com.gregtechceu.gtceu.common.item.armor.GTArmorMaterials;
 import com.gregtechceu.gtceu.common.registry.GTRegistration;
 import com.gregtechceu.gtceu.config.ConfigHolder;
 import com.gregtechceu.gtceu.data.recipe.CustomTags;
@@ -59,12 +59,10 @@ import net.minecraft.world.level.Level;
 import net.neoforged.neoforge.fluids.FluidStack;
 import net.neoforged.neoforge.fluids.FluidUtil;
 
-import com.teamresourceful.resourcefullib.common.registry.RegistryEntry;
 import com.tterrag.registrate.providers.ProviderType;
 import com.tterrag.registrate.util.entry.ItemEntry;
 import com.tterrag.registrate.util.nullness.NonNullBiConsumer;
 import com.tterrag.registrate.util.nullness.NonNullConsumer;
-import team.lodestar.lodestone.systems.easing.Easing;
 
 import java.awt.*;
 import java.util.function.Function;
@@ -75,7 +73,8 @@ import static com.gregtechceu.gtceu.common.data.GTItems.attach;
 
 public class CosmicItems {
 
-    // TODO(stellaris): SUN_GLOBE item used Ad Astra GLOBES registry + RenderedBlockItem — dropped with Ad Astra (bead cosmiccore-42.13)
+    // TODO(stellaris): SUN_GLOBE item used Ad Astra GLOBES registry + RenderedBlockItem — dropped with Ad Astra (bead
+    // cosmiccore-42.13)
     static {
         CosmicRegistration.REGISTRATE.creativeModeTab(() -> CosmicCreativeModeTabs.COSMIC_CORE);
     }
@@ -89,66 +88,67 @@ public class CosmicItems {
             .defaultModel()
             .register();
 
-    /* SHELVED (cosmiccore-42.14): Malum 1.8.2 reworked the spirit-type system
-       (MalumSpiritType.create / SpiritVisualMotif / SpiritTypeRegistry.register removed,
-       now DeferredSpiritTypes + SpiritColorProperties). Re-add the 4 cosmic spirit types
-       and their SpiritShardItems once the Malum spirit API is ported.
-    public static final ItemEntry<SpiritShardItem> ETHERIC_SPIRIT_ITEM = REGISTRATE
-            .item("etheric_spirit", (properties -> new SpiritShardItem(properties, CosmicItems.ETHERIC_SPIRIT)))
-            .lang("Etheric Spirit")
-            .properties(p -> p.stacksTo(64))
-            .tag()
-            .defaultModel()
-            .register();
-
-    public static MalumSpiritType ETHERIC_SPIRIT = SpiritTypeRegistry.register(MalumSpiritType.create("etheric",
-            new SpiritVisualMotif(new Color(120, 75, 255), new Color(55, 55, 55), 0.9f, Easing.BOUNCE_IN_OUT),
-            ETHERIC_SPIRIT_ITEM)
-            .setItemColor(SpiritVisualMotif::getPrimaryColor)
-            .build());
-
-    public static final ItemEntry<SpiritShardItem> WRATHFUL_SPIRIT_ITEM = REGISTRATE
-            .item("wrathful_spirit", (properties -> new SpiritShardItem(properties, CosmicItems.WRATHFUL_SPIRIT)))
-            .lang("Wrathful Spirit")
-            .properties(p -> p.stacksTo(64))
-            .tag()
-            .defaultModel()
-            .register();
-
-    public static MalumSpiritType WRATHFUL_SPIRIT = SpiritTypeRegistry.register(MalumSpiritType.create("wrathful",
-            new SpiritVisualMotif(2, new Color(120, 200, 80), new Color(200, 55, 0), 0.9f, Easing.SINE_IN_OUT),
-            WRATHFUL_SPIRIT_ITEM)
-            .setItemColor(SpiritVisualMotif::getPrimaryColor)
-            .build());
-
-    public static final ItemEntry<SpiritShardItem> PRIDEFUL_SPIRIT_ITEM = REGISTRATE
-            .item("prideful_spirit", (properties -> new SpiritShardItem(properties, CosmicItems.PRIDEFUL_SPIRIT)))
-            .lang("Prideful Spirit")
-            .properties(p -> p.stacksTo(64))
-            .tag()
-            .defaultModel()
-            .register();
-
-    public static MalumSpiritType PRIDEFUL_SPIRIT = SpiritTypeRegistry.register(MalumSpiritType.create("prideful",
-            new SpiritVisualMotif(4, new Color(120, 0, 100), new Color(200, 55, 0), 0.9f, Easing.SINE_IN_OUT),
-            PRIDEFUL_SPIRIT_ITEM)
-            .setItemColor(SpiritVisualMotif::getPrimaryColor)
-            .build());
-
-    public static final ItemEntry<SpiritShardItem> MALICE_SPIRIT_ITEM = REGISTRATE
-            .item("malice_spirit", (properties -> new SpiritShardItem(properties, CosmicItems.MALICE_SPIRIT)))
-            .lang("Malice Spirit")
-            .properties(p -> p.stacksTo(64))
-            .tag()
-            .defaultModel()
-            .register();
-
-    public static MalumSpiritType MALICE_SPIRIT = SpiritTypeRegistry.register(MalumSpiritType.create("malice",
-            new SpiritVisualMotif(4, new Color(210, 210, 210), new Color(200, 55, 0), 0.9f, Easing.SINE_IN_OUT),
-            MALICE_SPIRIT_ITEM)
-            .setItemColor(SpiritVisualMotif::getPrimaryColor)
-            .build());
-    */
+    /*
+     * SHELVED (cosmiccore-42.14): Malum 1.8.2 reworked the spirit-type system
+     * (MalumSpiritType.create / SpiritVisualMotif / SpiritTypeRegistry.register removed,
+     * now DeferredSpiritTypes + SpiritColorProperties). Re-add the 4 cosmic spirit types
+     * and their SpiritShardItems once the Malum spirit API is ported.
+     * public static final ItemEntry<SpiritShardItem> ETHERIC_SPIRIT_ITEM = REGISTRATE
+     * .item("etheric_spirit", (properties -> new SpiritShardItem(properties, CosmicItems.ETHERIC_SPIRIT)))
+     * .lang("Etheric Spirit")
+     * .properties(p -> p.stacksTo(64))
+     * .tag()
+     * .defaultModel()
+     * .register();
+     * 
+     * public static MalumSpiritType ETHERIC_SPIRIT = SpiritTypeRegistry.register(MalumSpiritType.create("etheric",
+     * new SpiritVisualMotif(new Color(120, 75, 255), new Color(55, 55, 55), 0.9f, Easing.BOUNCE_IN_OUT),
+     * ETHERIC_SPIRIT_ITEM)
+     * .setItemColor(SpiritVisualMotif::getPrimaryColor)
+     * .build());
+     * 
+     * public static final ItemEntry<SpiritShardItem> WRATHFUL_SPIRIT_ITEM = REGISTRATE
+     * .item("wrathful_spirit", (properties -> new SpiritShardItem(properties, CosmicItems.WRATHFUL_SPIRIT)))
+     * .lang("Wrathful Spirit")
+     * .properties(p -> p.stacksTo(64))
+     * .tag()
+     * .defaultModel()
+     * .register();
+     * 
+     * public static MalumSpiritType WRATHFUL_SPIRIT = SpiritTypeRegistry.register(MalumSpiritType.create("wrathful",
+     * new SpiritVisualMotif(2, new Color(120, 200, 80), new Color(200, 55, 0), 0.9f, Easing.SINE_IN_OUT),
+     * WRATHFUL_SPIRIT_ITEM)
+     * .setItemColor(SpiritVisualMotif::getPrimaryColor)
+     * .build());
+     * 
+     * public static final ItemEntry<SpiritShardItem> PRIDEFUL_SPIRIT_ITEM = REGISTRATE
+     * .item("prideful_spirit", (properties -> new SpiritShardItem(properties, CosmicItems.PRIDEFUL_SPIRIT)))
+     * .lang("Prideful Spirit")
+     * .properties(p -> p.stacksTo(64))
+     * .tag()
+     * .defaultModel()
+     * .register();
+     * 
+     * public static MalumSpiritType PRIDEFUL_SPIRIT = SpiritTypeRegistry.register(MalumSpiritType.create("prideful",
+     * new SpiritVisualMotif(4, new Color(120, 0, 100), new Color(200, 55, 0), 0.9f, Easing.SINE_IN_OUT),
+     * PRIDEFUL_SPIRIT_ITEM)
+     * .setItemColor(SpiritVisualMotif::getPrimaryColor)
+     * .build());
+     * 
+     * public static final ItemEntry<SpiritShardItem> MALICE_SPIRIT_ITEM = REGISTRATE
+     * .item("malice_spirit", (properties -> new SpiritShardItem(properties, CosmicItems.MALICE_SPIRIT)))
+     * .lang("Malice Spirit")
+     * .properties(p -> p.stacksTo(64))
+     * .tag()
+     * .defaultModel()
+     * .register();
+     * 
+     * public static MalumSpiritType MALICE_SPIRIT = SpiritTypeRegistry.register(MalumSpiritType.create("malice",
+     * new SpiritVisualMotif(4, new Color(210, 210, 210), new Color(200, 55, 0), 0.9f, Easing.SINE_IN_OUT),
+     * MALICE_SPIRIT_ITEM)
+     * .setItemColor(SpiritVisualMotif::getPrimaryColor)
+     * .build());
+     */
     public static final ItemEntry<ComponentItem> PROD_MOD_1 = REGISTRATE.item("prod_mod_1", ComponentItem::new)
             .lang("Productivity Module Mk.1")
             .properties(p -> p.stacksTo(1))
@@ -1125,39 +1125,40 @@ public class CosmicItems {
             .defaultModel()
             .register();
 
-    /* SHELVED (cosmiccore-42.14): CosmicScytheItem needs the Malum 1.8.2 scythe rework
-       (enchantment-based scythe system removed), NeoForge item-capability rework, and
-       GTCEu electric-item port. Re-add the three scythes once CosmicScytheItem is ported.
-    public static final ItemEntry<CosmicScytheItem> NANO_SCYTHE = REGISTRATE
-            .item("nano_scythe",
-                    props -> new CosmicScytheItem(
-                            SOUL_STAINED_STEEL,
-                            10.5f, 0.5f, props))
-            .properties(p -> p.stacksTo(1))
-            .lang("Nano Scythe")
-            .defaultModel()
-            .register();
-
-    public static final ItemEntry<CosmicScytheItem> QUANTUM_SCYTHE = REGISTRATE
-            .item("quantum_scythe",
-                    props -> new CosmicScytheItem(
-                            SOUL_STAINED_STEEL,
-                            25.5f, 0.5f, props))
-            .properties(p -> p.stacksTo(1))
-            .lang("Quark Scythe")
-            .defaultModel()
-            .register();
-
-    public static final ItemEntry<CosmicScytheItem> SANGUINE_SCYTHE = REGISTRATE
-            .item("sanguine_scythe",
-                    props -> new CosmicScytheItem(
-                            SOUL_STAINED_STEEL,
-                            100f, 0.5f, props))
-            .properties(p -> p.stacksTo(1))
-            .lang("Sanguine Scythe")
-            .defaultModel()
-            .register();
-    */
+    /*
+     * SHELVED (cosmiccore-42.14): CosmicScytheItem needs the Malum 1.8.2 scythe rework
+     * (enchantment-based scythe system removed), NeoForge item-capability rework, and
+     * GTCEu electric-item port. Re-add the three scythes once CosmicScytheItem is ported.
+     * public static final ItemEntry<CosmicScytheItem> NANO_SCYTHE = REGISTRATE
+     * .item("nano_scythe",
+     * props -> new CosmicScytheItem(
+     * SOUL_STAINED_STEEL,
+     * 10.5f, 0.5f, props))
+     * .properties(p -> p.stacksTo(1))
+     * .lang("Nano Scythe")
+     * .defaultModel()
+     * .register();
+     * 
+     * public static final ItemEntry<CosmicScytheItem> QUANTUM_SCYTHE = REGISTRATE
+     * .item("quantum_scythe",
+     * props -> new CosmicScytheItem(
+     * SOUL_STAINED_STEEL,
+     * 25.5f, 0.5f, props))
+     * .properties(p -> p.stacksTo(1))
+     * .lang("Quark Scythe")
+     * .defaultModel()
+     * .register();
+     * 
+     * public static final ItemEntry<CosmicScytheItem> SANGUINE_SCYTHE = REGISTRATE
+     * .item("sanguine_scythe",
+     * props -> new CosmicScytheItem(
+     * SOUL_STAINED_STEEL,
+     * 100f, 0.5f, props))
+     * .properties(p -> p.stacksTo(1))
+     * .lang("Sanguine Scythe")
+     * .defaultModel()
+     * .register();
+     */
 
     public static ItemEntry<ComponentItem> THE_ONE_RING = REGISTRATE
             .item("the_one_ring", p -> (ComponentItem) new ComponentItem(p) {
@@ -1612,57 +1613,59 @@ public class CosmicItems {
             .onRegister(attach(StructureWriteBehavior.INSTANCE))
             .register();
 
-    // Space Suite — TODO(stellaris): AA/Botarium oxygen space-suit chestplates shelved (see _shelved/api/item/armor, bead cosmiccore-42.13)
-    /* SHELVED (AA/Botarium space suits — armor logic moved to _shelved):
-    public static ItemEntry<SpaceArmorComponentItem> SPACE_NANO_CHESTPLATE = REGISTRATE
-            .item("space_nanomuscle_chestplate",
-                    (p) -> new SpaceArmorComponentItem(GTArmorMaterials.ARMOR, ArmorItem.Type.CHESTPLATE, 5000, p)
-                            .setArmorLogic(new NanoMuscleSpaceSuite(ArmorItem.Type.CHESTPLATE, 512,
-                                    6_400_000L * (long) Math.max(1,
-                                            Math.pow(4, ConfigHolder.INSTANCE.tools.voltageTierNanoSuit - 3)),
-                                    ConfigHolder.INSTANCE.tools.voltageTierNanoSuit)))
-            .tag(CosmicItemTags.NANOMUSCLE_SPACE_SUITE, ModItemTags.SPACE_SUITS, ModItemTags.FREEZE_RESISTANT_ARMOR,
-                    ModItemTags.HEAT_RESISTANT_ARMOR)
-            .lang("NanoMuscle™ Space Suite Chestplate")
-            .properties(p -> p.rarity(Rarity.RARE))
-            .register();
-    public static ItemEntry<SpaceArmorComponentItem> ADVANCED_SPACE_NANO_CHESTPLATE = REGISTRATE
-            .item("space_advanced_nanomuscle_chestplate",
-                    (p) -> new SpaceArmorComponentItem(GTArmorMaterials.ARMOR, ArmorItem.Type.CHESTPLATE, 10000, p)
-                            .setArmorLogic(new AdvancedNanoMuscleSpaceSuite(512,
-                                    12_800_000L * (long) Math.max(1,
-                                            Math.pow(4, ConfigHolder.INSTANCE.tools.voltageTierAdvNanoSuit - 3)),
-                                    ConfigHolder.INSTANCE.tools.voltageTierAdvNanoSuit)))
-            .tag(CosmicItemTags.NANOMUSCLE_SPACE_SUITE, ModItemTags.SPACE_SUITS, ModItemTags.FREEZE_RESISTANT_ARMOR,
-                    ModItemTags.HEAT_RESISTANT_ARMOR)
-            .lang("Advanced NanoMuscle™ Space Suite Chestplate")
-            .properties(p -> p.rarity(Rarity.EPIC))
-            .register();
-    public static ItemEntry<SpaceArmorComponentItem> SPACE_QUARK_CHESTPLATE = REGISTRATE
-            .item("space_quarktech_chestplate",
-                    (p) -> new SpaceArmorComponentItem(GTArmorMaterials.ARMOR, ArmorItem.Type.CHESTPLATE, 20000, p)
-                            .setArmorLogic(new QuarkTechSpaceSuite(ArmorItem.Type.CHESTPLATE, 8192,
-                                    100_000_000L * (long) Math.max(1,
-                                            Math.pow(4, ConfigHolder.INSTANCE.tools.voltageTierQuarkTech - 5)),
-                                    ConfigHolder.INSTANCE.tools.voltageTierQuarkTech)))
-            .tag(CosmicItemTags.QUARKTECH_SPACE_SUITE, ModItemTags.SPACE_SUITS, ModItemTags.FREEZE_RESISTANT_ARMOR,
-                    ModItemTags.HEAT_RESISTANT_ARMOR)
-            .lang("QuarkTech™ Space Suite Chestplate")
-            .properties(p -> p.rarity(Rarity.RARE))
-            .register();
-    public static ItemEntry<SpaceArmorComponentItem> ADVANCED_SPACE_QUARK_CHESTPLATE = REGISTRATE
-            .item("space_advanced_quarktech_chestplate",
-                    (p) -> new SpaceArmorComponentItem(GTArmorMaterials.ARMOR, ArmorItem.Type.CHESTPLATE, 50000, p)
-                            .setArmorLogic(new AdvancedQuarkTechSpaceSuite(8192,
-                                    1_000_000_000L * (long) Math.max(1,
-                                            Math.pow(4, ConfigHolder.INSTANCE.tools.voltageTierAdvQuarkTech - 6)),
-                                    ConfigHolder.INSTANCE.tools.voltageTierAdvQuarkTech)))
-            .tag(CosmicItemTags.QUARKTECH_SPACE_SUITE, ModItemTags.SPACE_SUITS, ModItemTags.FREEZE_RESISTANT_ARMOR,
-                    ModItemTags.HEAT_RESISTANT_ARMOR)
-            .lang("Advanced QuarkTech™ Space Suite Chestplate")
-            .properties(p -> p.rarity(Rarity.EPIC))
-            .register();
-    */
+    // Space Suite — TODO(stellaris): AA/Botarium oxygen space-suit chestplates shelved (see _shelved/api/item/armor,
+    // bead cosmiccore-42.13)
+    /*
+     * SHELVED (AA/Botarium space suits — armor logic moved to _shelved):
+     * public static ItemEntry<SpaceArmorComponentItem> SPACE_NANO_CHESTPLATE = REGISTRATE
+     * .item("space_nanomuscle_chestplate",
+     * (p) -> new SpaceArmorComponentItem(GTArmorMaterials.ARMOR, ArmorItem.Type.CHESTPLATE, 5000, p)
+     * .setArmorLogic(new NanoMuscleSpaceSuite(ArmorItem.Type.CHESTPLATE, 512,
+     * 6_400_000L * (long) Math.max(1,
+     * Math.pow(4, ConfigHolder.INSTANCE.tools.voltageTierNanoSuit - 3)),
+     * ConfigHolder.INSTANCE.tools.voltageTierNanoSuit)))
+     * .tag(CosmicItemTags.NANOMUSCLE_SPACE_SUITE, ModItemTags.SPACE_SUITS, ModItemTags.FREEZE_RESISTANT_ARMOR,
+     * ModItemTags.HEAT_RESISTANT_ARMOR)
+     * .lang("NanoMuscle™ Space Suite Chestplate")
+     * .properties(p -> p.rarity(Rarity.RARE))
+     * .register();
+     * public static ItemEntry<SpaceArmorComponentItem> ADVANCED_SPACE_NANO_CHESTPLATE = REGISTRATE
+     * .item("space_advanced_nanomuscle_chestplate",
+     * (p) -> new SpaceArmorComponentItem(GTArmorMaterials.ARMOR, ArmorItem.Type.CHESTPLATE, 10000, p)
+     * .setArmorLogic(new AdvancedNanoMuscleSpaceSuite(512,
+     * 12_800_000L * (long) Math.max(1,
+     * Math.pow(4, ConfigHolder.INSTANCE.tools.voltageTierAdvNanoSuit - 3)),
+     * ConfigHolder.INSTANCE.tools.voltageTierAdvNanoSuit)))
+     * .tag(CosmicItemTags.NANOMUSCLE_SPACE_SUITE, ModItemTags.SPACE_SUITS, ModItemTags.FREEZE_RESISTANT_ARMOR,
+     * ModItemTags.HEAT_RESISTANT_ARMOR)
+     * .lang("Advanced NanoMuscle™ Space Suite Chestplate")
+     * .properties(p -> p.rarity(Rarity.EPIC))
+     * .register();
+     * public static ItemEntry<SpaceArmorComponentItem> SPACE_QUARK_CHESTPLATE = REGISTRATE
+     * .item("space_quarktech_chestplate",
+     * (p) -> new SpaceArmorComponentItem(GTArmorMaterials.ARMOR, ArmorItem.Type.CHESTPLATE, 20000, p)
+     * .setArmorLogic(new QuarkTechSpaceSuite(ArmorItem.Type.CHESTPLATE, 8192,
+     * 100_000_000L * (long) Math.max(1,
+     * Math.pow(4, ConfigHolder.INSTANCE.tools.voltageTierQuarkTech - 5)),
+     * ConfigHolder.INSTANCE.tools.voltageTierQuarkTech)))
+     * .tag(CosmicItemTags.QUARKTECH_SPACE_SUITE, ModItemTags.SPACE_SUITS, ModItemTags.FREEZE_RESISTANT_ARMOR,
+     * ModItemTags.HEAT_RESISTANT_ARMOR)
+     * .lang("QuarkTech™ Space Suite Chestplate")
+     * .properties(p -> p.rarity(Rarity.RARE))
+     * .register();
+     * public static ItemEntry<SpaceArmorComponentItem> ADVANCED_SPACE_QUARK_CHESTPLATE = REGISTRATE
+     * .item("space_advanced_quarktech_chestplate",
+     * (p) -> new SpaceArmorComponentItem(GTArmorMaterials.ARMOR, ArmorItem.Type.CHESTPLATE, 50000, p)
+     * .setArmorLogic(new AdvancedQuarkTechSpaceSuite(8192,
+     * 1_000_000_000L * (long) Math.max(1,
+     * Math.pow(4, ConfigHolder.INSTANCE.tools.voltageTierAdvQuarkTech - 6)),
+     * ConfigHolder.INSTANCE.tools.voltageTierAdvQuarkTech)))
+     * .tag(CosmicItemTags.QUARKTECH_SPACE_SUITE, ModItemTags.SPACE_SUITS, ModItemTags.FREEZE_RESISTANT_ARMOR,
+     * ModItemTags.HEAT_RESISTANT_ARMOR)
+     * .lang("Advanced QuarkTech™ Space Suite Chestplate")
+     * .properties(p -> p.rarity(Rarity.EPIC))
+     * .register();
+     */
     // Oiled up white girl trying to understand what the FUCK an armor tag is, i'm doing to fucking shove a whole
     // pineapple up the ass of whatever mojang employee thought these were **OKAY TO CODE**
 
@@ -1685,7 +1688,8 @@ public class CosmicItems {
                                     10_000_000_000L * (long) Math.max(1,
                                             Math.pow(4, ConfigHolder.INSTANCE.tools.voltageTierAdvQuarkTech - 6)),
                                     ConfigHolder.INSTANCE.tools.voltageTierAdvQuarkTech)))
-            // TODO(stellaris): AA ModItemTags (SPACE_SUITS/FREEZE/HEAT) dropped with Ad Astra; oxygen-tank sub-feature removed (now plain armor)
+            // TODO(stellaris): AA ModItemTags (SPACE_SUITS/FREEZE/HEAT) dropped with Ad Astra; oxygen-tank sub-feature
+            // removed (now plain armor)
             .tag(CosmicItemTags.QUARKTECH_SPACE_SUITE)
             .lang("Sanguine WarpTech Gravplate")
             .properties(p -> p.rarity(Rarity.EPIC))
@@ -3043,6 +3047,170 @@ public class CosmicItems {
             .item("cogwork_units", ComponentItem::new)
             .lang("Cogwork Units")
             .properties(p -> p.stacksTo(64))
+            .defaultModel()
+            .register();
+
+    public static final ItemEntry<ComponentItem> VULCANIZED_BINDING_COMPOUND = REGISTRATE
+            .item("vulcanized_binding_compound", ComponentItem::new)
+            .lang("Vulcanized Binding Compound")
+            .properties(p -> p.stacksTo(64))
+            .defaultModel()
+            .register();
+    public static final ItemEntry<ComponentItem> RIVETED_STRAPS = REGISTRATE
+            .item("riveted_straps", ComponentItem::new)
+            .lang("Riveted Straps")
+            .properties(p -> p.stacksTo(64))
+            .defaultModel()
+            .register();
+    public static final ItemEntry<ComponentItem> CREOSOTE_GREASE = REGISTRATE
+            .item("creosote_grease", ComponentItem::new)
+            .lang("Creosote Grease")
+            .properties(p -> p.stacksTo(64))
+            .defaultModel()
+            .register();
+
+    public static final ItemEntry<ComponentItem> LV_COGWORK_MAGICAPACITOR = REGISTRATE
+            .item("lv_cogwork_magicapacitor", ComponentItem::new)
+            .lang("LV Cogwork Magicapacitor")
+            .properties(p -> p.stacksTo(64))
+            .defaultModel()
+            .register();
+    public static final ItemEntry<ComponentItem> LV_MODULAR_FRAMEWORKS = REGISTRATE
+            .item("lv_modular_frameworks", ComponentItem::new)
+            .lang("LV Modular Frameworks")
+            .properties(p -> p.stacksTo(64))
+            .defaultModel()
+            .register();
+    public static final ItemEntry<ComponentItem> LV_POWER_INTERFACE = REGISTRATE
+            .item("lv_power_interface", ComponentItem::new)
+            .lang("LV Power Interface")
+            .properties(p -> p.stacksTo(64))
+            .defaultModel()
+            .register();
+    public static final ItemEntry<ComponentItem> LV_CLADDING = REGISTRATE
+            .item("lv_cladding", ComponentItem::new)
+            .lang("LV Cladding")
+            .properties(p -> p.stacksTo(64))
+            .defaultModel()
+            .register();
+
+    public static final ItemEntry<ComponentItem> SHREDDED_MAGEBLOOM = REGISTRATE
+            .item("shredded_magebloom", ComponentItem::new)
+            .lang("Shredded Magebloom")
+            .properties(p -> p.stacksTo(64))
+            .tag()
+            .defaultModel()
+            .register();
+    public static final ItemEntry<ComponentItem> WASHED_MAGEBLOOM = REGISTRATE
+            .item("washed_magebloom", ComponentItem::new)
+            .lang("Washed Magebloom")
+            .properties(p -> p.stacksTo(64))
+            .tag()
+            .defaultModel()
+            .register();
+    public static final ItemEntry<ComponentItem> EMBRACED_LUMINITE_INGOT = REGISTRATE
+            .item("embraced_luminite_ingot", ComponentItem::new)
+            .lang("Embraced Luminite Ingot")
+            .properties(p -> p.stacksTo(64))
+            .tag()
+            .defaultModel()
+            .register();
+    public static final ItemEntry<ComponentItem> NEUTRONIUM_LATTICE = REGISTRATE
+            .item("neutronium_lattice", ComponentItem::new)
+            .lang("Neutronium Lattice")
+            .properties(p -> p.stacksTo(64))
+            .tag()
+            .defaultModel()
+            .register();
+    public static final ItemEntry<ComponentItem> HEAVY_NEUTRON_FILTER = REGISTRATE
+            .item("heavy_neutron_filter", ComponentItem::new)
+            .lang("Heavy Neutron Filter")
+            .properties(p -> p.stacksTo(64))
+            .tag()
+            .defaultModel()
+            .register();
+    public static final ItemEntry<ComponentItem> NEUTRONIUM_SEEDLING = REGISTRATE
+            .item("neutronium_seedling", ComponentItem::new)
+            .lang("Neutronium Seedling")
+            .properties(p -> p.stacksTo(64))
+            .tag()
+            .defaultModel()
+            .register();
+    public static final ItemEntry<ComponentItem> TERRAWEAVE_CLOTH = REGISTRATE
+            .item("terraweave_cloth", ComponentItem::new)
+            .lang("Terraweave Cloth")
+            .properties(p -> p.stacksTo(64))
+            .tag()
+            .defaultModel()
+            .register();
+    public static final ItemEntry<ComponentItem> CARBON_ETHERSTEEL_LATTICE = REGISTRATE
+            .item("carbon_ethersteel_lattice", ComponentItem::new)
+            .lang("Carbon Fiber Ethersteel Lattice")
+            .properties(p -> p.stacksTo(64))
+            .tag()
+            .defaultModel()
+            .register();
+    public static final ItemEntry<ComponentItem> RESPLENDENT_SYLVAN_NANOLATTICE = REGISTRATE
+            .item("resplendent_sylvan_nanolattice", ComponentItem::new)
+            .lang("Resplendent Sylvan Nanolattice")
+            .properties(p -> p.stacksTo(64))
+            .tag()
+            .defaultModel()
+            .register();
+    public static final ItemEntry<ComponentItem> SPOOLED_TERRAWEAVE = REGISTRATE
+            .item("spooled_terraweave", ComponentItem::new)
+            .lang("Spooled Terraweave")
+            .properties(p -> p.stacksTo(64))
+            .tag()
+            .defaultModel()
+            .register();
+    public static final ItemEntry<ComponentItem> TARANIUM_RESONANTION_CHARGE = REGISTRATE
+            .item("taranium_resonantion_charge", ComponentItem::new)
+            .lang("Taranium Resonantion Charge")
+            .properties(p -> p.stacksTo(64))
+            .tag()
+            .defaultModel()
+            .register();
+    public static final ItemEntry<ComponentItem> NAQUADRIA_RESONANTION_CHARGE = REGISTRATE
+            .item("naquadria_resonantion_charge", ComponentItem::new)
+            .lang("Naquadria Resonantion Charge")
+            .properties(p -> p.stacksTo(64))
+            .tag()
+            .defaultModel()
+            .register();
+    public static final ItemEntry<ComponentItem> CHROMATICALLY_DOPED_NETHER_STAR_BOULE = REGISTRATE
+            .item("chromatically_doped_nether_star_boule", ComponentItem::new)
+            .lang("Chromatically Doped Nether star Boule")
+            .properties(p -> p.stacksTo(64))
+            .tag()
+            .defaultModel()
+            .register();
+    public static final ItemEntry<ComponentItem> SEAL_SHARDS = REGISTRATE
+            .item("seal_shards", ComponentItem::new)
+            .lang("Shards of the Underworld")
+            .properties(p -> p.stacksTo(64))
+            .tag()
+            .defaultModel()
+            .register();
+    public static final ItemEntry<ComponentItem> PRISMATIC_LENS = REGISTRATE
+            .item("prismatic_lens", ComponentItem::new)
+            .lang("Prismatic Lens")
+            .properties(p -> p.stacksTo(64))
+            .tag()
+            .defaultModel()
+            .register();
+    public static final ItemEntry<ComponentItem> UNDERGARDEN_DIM = REGISTRATE
+            .item("undergarden_dim", ComponentItem::new)
+            .lang("Undergarden")
+            .properties(p -> p.stacksTo(64))
+            .tag()
+            .defaultModel()
+            .register();
+    public static final ItemEntry<ComponentItem> CINDER_FUEL_PELLETS = REGISTRATE
+            .item("cinder_fuel_pellets", ComponentItem::new)
+            .lang("Cinder Fuel Ember Pellets")
+            .properties(p -> p.stacksTo(64))
+            .tag()
             .defaultModel()
             .register();
 

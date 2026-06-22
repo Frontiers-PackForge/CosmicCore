@@ -46,7 +46,8 @@ public class ConfigurableFluidSlot extends PhantomFluidWidget {
                 onConfigure.run();
                 return true;
             }
-            if (Minecraft.getInstance().player.containerMenu.getCarried().isEmpty() && !getLastFluidInTank().isEmpty()) {
+            if (Minecraft.getInstance().player.containerMenu.getCarried().isEmpty() &&
+                    !getLastFluidInTank().isEmpty()) {
                 if (Screen.hasShiftDown()) {
                     writeClientAction(CYCLE, buffer -> {});
                     return true;

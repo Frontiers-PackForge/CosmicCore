@@ -39,8 +39,8 @@ public class ScarSelectionPackets {
     public static class OpenScarSelectionPacket implements CustomPacketPayload {
 
         public static final Type<OpenScarSelectionPacket> TYPE = new Type<>(CosmicCore.id("scar_open_selection"));
-        public static final StreamCodec<FriendlyByteBuf, OpenScarSelectionPacket> CODEC =
-                StreamCodec.ofMember(OpenScarSelectionPacket::encode, OpenScarSelectionPacket::new);
+        public static final StreamCodec<FriendlyByteBuf, OpenScarSelectionPacket> CODEC = StreamCodec
+                .ofMember(OpenScarSelectionPacket::encode, OpenScarSelectionPacket::new);
 
         private final Set<ResourceLocation> scars;
 
@@ -77,8 +77,8 @@ public class ScarSelectionPackets {
     public static class ScarRemovalPacket implements CustomPacketPayload {
 
         public static final Type<ScarRemovalPacket> TYPE = new Type<>(CosmicCore.id("scar_removal"));
-        public static final StreamCodec<FriendlyByteBuf, ScarRemovalPacket> CODEC =
-                StreamCodec.ofMember(ScarRemovalPacket::encode, ScarRemovalPacket::new);
+        public static final StreamCodec<FriendlyByteBuf, ScarRemovalPacket> CODEC = StreamCodec
+                .ofMember(ScarRemovalPacket::encode, ScarRemovalPacket::new);
 
         private final ResourceLocation scarId;
 

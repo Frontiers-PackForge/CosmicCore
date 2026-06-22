@@ -3,10 +3,10 @@ package com.ghostipedia.cosmiccore.common.machine.multiblock.part;
 import com.ghostipedia.cosmiccore.api.CosmicGuiTextures;
 import com.ghostipedia.cosmiccore.common.data.CosmicBotanyItemRegistration;
 
+import com.gregtechceu.gtceu.api.blockentity.BlockEntityCreationInfo;
 import com.gregtechceu.gtceu.api.capability.recipe.IO;
 import com.gregtechceu.gtceu.api.gui.GuiTextures;
 import com.gregtechceu.gtceu.api.gui.widget.BlockableSlotWidget;
-import com.gregtechceu.gtceu.api.blockentity.BlockEntityCreationInfo;
 import com.gregtechceu.gtceu.api.machine.MetaMachine;
 import com.gregtechceu.gtceu.api.machine.feature.IFancyUIMachine;
 import com.gregtechceu.gtceu.api.machine.multiblock.part.MultiblockPartMachine;
@@ -109,5 +109,4 @@ public class CropHolderPartMachines extends MultiblockPartMachine implements IFa
                         .setIsBlocked(this::isLocked)
                         .setBackground(GuiTextures.SLOT, CosmicGuiTextures.PLANT_OVERLAY));
     }
-
 }

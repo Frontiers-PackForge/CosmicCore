@@ -114,7 +114,8 @@ public class VeinSurveyBehavior implements IInteractionItem, IAddInformation {
     }
 
     @Override
-    public InteractionResultHolder<ItemStack> use(ItemStack item, Level level, Player player, InteractionHand usedHand) {
+    public InteractionResultHolder<ItemStack> use(ItemStack item, Level level, Player player,
+                                                  InteractionHand usedHand) {
         ItemStack stack = player.getItemInHand(usedHand);
 
         if (player.isShiftKeyDown()) {

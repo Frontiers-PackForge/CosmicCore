@@ -19,11 +19,9 @@ import java.util.Set;
  */
 public class LinkTestStationMachine extends LinkedWorkableElectricMultiblockMachine {
 
-
     public LinkTestStationMachine(BlockEntityCreationInfo holder) {
         super(holder);
     }
-
 
     // ==================== Link Configuration ====================
 

@@ -43,13 +43,14 @@ public class ConfigurableItemSlot extends PhantomSlotWidget {
     @Override
     public boolean mouseClicked(double mouseX, double mouseY, int button) {
         if (isMouseOverElement(mouseX, mouseY)) {
-            if (onConfigure != null && button == 2) { //MMB for configs - SHIFT+CLICK for other bullshit that isn't configs man.
+            if (onConfigure != null && button == 2) { // MMB for configs - SHIFT+CLICK for other bullshit that isn't
+                                                      // configs man.
                 writeClientAction(CONFIGURE, buffer -> {});
                 onConfigure.run();
                 return true;
             }
-            if (Minecraft.getInstance().player.containerMenu.getCarried().isEmpty()
-                    && !handler.getStackInSlot(index).isEmpty()) {
+            if (Minecraft.getInstance().player.containerMenu.getCarried().isEmpty() &&
+                    !handler.getStackInSlot(index).isEmpty()) {
                 if (Screen.hasShiftDown()) {
                     writeClientAction(CYCLE, buffer -> {});
                     return true;

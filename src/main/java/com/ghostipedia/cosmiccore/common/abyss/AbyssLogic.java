@@ -1,9 +1,7 @@
 package com.ghostipedia.cosmiccore.common.abyss;
 
-import java.util.Optional;
-import com.ghostipedia.cosmiccore.common.data.CosmicAttachmentTypes;
-
 import com.ghostipedia.cosmiccore.CosmicCore;
+import com.ghostipedia.cosmiccore.common.data.CosmicAttachmentTypes;
 import com.ghostipedia.cosmiccore.common.network.CCoreNetwork;
 import com.ghostipedia.cosmiccore.common.network.packet.AbyssTimeWarnPacket;
 import com.ghostipedia.cosmiccore.common.network.packet.SyncTimeBarPacket;
@@ -11,10 +9,12 @@ import com.ghostipedia.cosmiccore.common.network.packet.SyncTimeBarPacket;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
-import net.neoforged.neoforge.event.entity.player.PlayerEvent;
-import net.neoforged.neoforge.event.tick.PlayerTickEvent;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.neoforge.event.entity.player.PlayerEvent;
+import net.neoforged.neoforge.event.tick.PlayerTickEvent;
+
+import java.util.Optional;
 
 import static com.ghostipedia.cosmiccore.common.abyss.AbyssRules.WARNINGS;
 

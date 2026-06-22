@@ -425,8 +425,8 @@ public class CosmicLangHandler extends LangHandler {
                 "§cStar Requires \n§r%s \n§cto avoid §lcataclysmic failure!");
         provider.add("cosmiccore.multiblock.advanced.star_ladder_tier",
                 "§aVomahine StarLadderOld Tether Tier§f: §b%s \n §aMax Research Modules§f: §b%s");
-        provider.add("tagprefix.leached_ore", "Leached %s Ore");
-        provider.add("tagprefix.prisma_frothed_ore", "Prisma Frothed %s Ore");
+        // provider.add("tagprefix.leached_ore", "Leached %s Ore");
+        // provider.add("tagprefix.prisma_frothed_ore", "Prisma Frothed %s Ore");
         provider.add("tagprefix.ultradense_plate", "Ultradense %s Plate");
         provider.add("tagprefix.heavy_beam", "Heavy %s Beam");
         provider.add("tagprefix.modular_shelling", "%s Modular Shelling");
@@ -435,6 +435,11 @@ public class CosmicLangHandler extends LangHandler {
         provider.add("tagprefix.shape_memory_foil", "%s Shaping Memory Foil");
         provider.add("tagprefix.alve_foil_insulator", "%s Alve Insulator");
         provider.add("tagprefix.raw_ore_cubic", "Cubic %s Ore");
+        provider.add("tagprefix.ore_chunk", "%s Ore Chunk");
+        provider.add("tagprefix.powderized_ore", "Powderized %s Ore");
+        provider.add("tagprefix.crystallized_ore_chunk", "Crystallized %s Ore Chunk");
+        provider.add("tagprefix.atomically_purified_ore_chunk", "Atomically Purified %s Ore Chunk");
+        provider.add("tagprefix.flocculated_ore", "Flocculated %s Ore");
 
         provider.add("cosmiccore.multiblock.reboot_powergrid", "§aReboot All Connected Machines");
         provider.add("cosmiccore.multiblock.sleep_powergrid", "§cSuspend All Connected Machines");

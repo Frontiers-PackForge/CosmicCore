@@ -90,8 +90,8 @@ public class VoidUIPackets {
     public static class OpenVoidScreenPacket implements CustomPacketPayload {
 
         public static final Type<OpenVoidScreenPacket> TYPE = new Type<>(CosmicCore.id("void_open_screen"));
-        public static final StreamCodec<FriendlyByteBuf, OpenVoidScreenPacket> CODEC =
-                StreamCodec.ofMember(OpenVoidScreenPacket::encode, OpenVoidScreenPacket::new);
+        public static final StreamCodec<FriendlyByteBuf, OpenVoidScreenPacket> CODEC = StreamCodec
+                .ofMember(OpenVoidScreenPacket::encode, OpenVoidScreenPacket::new);
 
         private final ResourceLocation bargainId;
         private final int erosion;
@@ -166,8 +166,8 @@ public class VoidUIPackets {
     public static class BargainChoicePacket implements CustomPacketPayload {
 
         public static final Type<BargainChoicePacket> TYPE = new Type<>(CosmicCore.id("void_bargain_choice"));
-        public static final StreamCodec<FriendlyByteBuf, BargainChoicePacket> CODEC =
-                StreamCodec.ofMember(BargainChoicePacket::encode, BargainChoicePacket::new);
+        public static final StreamCodec<FriendlyByteBuf, BargainChoicePacket> CODEC = StreamCodec
+                .ofMember(BargainChoicePacket::encode, BargainChoicePacket::new);
 
         private final ResourceLocation bargainId;
         private final String answerId;
@@ -265,8 +265,8 @@ public class VoidUIPackets {
     public static class ThresholdEncounterPacket implements CustomPacketPayload {
 
         public static final Type<ThresholdEncounterPacket> TYPE = new Type<>(CosmicCore.id("void_threshold_encounter"));
-        public static final StreamCodec<FriendlyByteBuf, ThresholdEncounterPacket> CODEC =
-                StreamCodec.ofMember(ThresholdEncounterPacket::encode, ThresholdEncounterPacket::new);
+        public static final StreamCodec<FriendlyByteBuf, ThresholdEncounterPacket> CODEC = StreamCodec
+                .ofMember(ThresholdEncounterPacket::encode, ThresholdEncounterPacket::new);
 
         private final int thresholdIndex;
         private final int erosion;
@@ -313,8 +313,8 @@ public class VoidUIPackets {
     public static class OpenHubPacket implements CustomPacketPayload {
 
         public static final Type<OpenHubPacket> TYPE = new Type<>(CosmicCore.id("void_open_hub"));
-        public static final StreamCodec<FriendlyByteBuf, OpenHubPacket> CODEC =
-                StreamCodec.ofMember(OpenHubPacket::encode, OpenHubPacket::new);
+        public static final StreamCodec<FriendlyByteBuf, OpenHubPacket> CODEC = StreamCodec
+                .ofMember(OpenHubPacket::encode, OpenHubPacket::new);
 
         private final int erosion;
         private final Set<ResourceLocation> activeBargains;
@@ -396,8 +396,8 @@ public class VoidUIPackets {
     public static class DefianceChoicePacket implements CustomPacketPayload {
 
         public static final Type<DefianceChoicePacket> TYPE = new Type<>(CosmicCore.id("void_defiance_choice"));
-        public static final StreamCodec<FriendlyByteBuf, DefianceChoicePacket> CODEC =
-                StreamCodec.ofMember(DefianceChoicePacket::encode, DefianceChoicePacket::new);
+        public static final StreamCodec<FriendlyByteBuf, DefianceChoicePacket> CODEC = StreamCodec
+                .ofMember(DefianceChoicePacket::encode, DefianceChoicePacket::new);
 
         private final ResourceLocation bargainId;
 
@@ -441,8 +441,8 @@ public class VoidUIPackets {
     public static class SoulShapeChoicePacket implements CustomPacketPayload {
 
         public static final Type<SoulShapeChoicePacket> TYPE = new Type<>(CosmicCore.id("void_soul_shape_choice"));
-        public static final StreamCodec<FriendlyByteBuf, SoulShapeChoicePacket> CODEC =
-                StreamCodec.ofMember(SoulShapeChoicePacket::encode, SoulShapeChoicePacket::new);
+        public static final StreamCodec<FriendlyByteBuf, SoulShapeChoicePacket> CODEC = StreamCodec
+                .ofMember(SoulShapeChoicePacket::encode, SoulShapeChoicePacket::new);
 
         private final SoulShape shape;
 

@@ -34,8 +34,8 @@ public class StarLadderUplinkPackets {
     public static class UplinkActionPacket implements CustomPacketPayload {
 
         public static final Type<UplinkActionPacket> TYPE = new Type<>(CosmicCore.id("uplink_action"));
-        public static final StreamCodec<FriendlyByteBuf, UplinkActionPacket> CODEC =
-                StreamCodec.ofMember(UplinkActionPacket::encode, UplinkActionPacket::new);
+        public static final StreamCodec<FriendlyByteBuf, UplinkActionPacket> CODEC = StreamCodec
+                .ofMember(UplinkActionPacket::encode, UplinkActionPacket::new);
 
         private final BlockPos machinePos;
         private final UplinkAction action;
@@ -78,8 +78,8 @@ public class StarLadderUplinkPackets {
     public static class CloseScreenPacket implements CustomPacketPayload {
 
         public static final Type<CloseScreenPacket> TYPE = new Type<>(CosmicCore.id("uplink_close_screen"));
-        public static final StreamCodec<FriendlyByteBuf, CloseScreenPacket> CODEC =
-                StreamCodec.ofMember(CloseScreenPacket::encode, CloseScreenPacket::new);
+        public static final StreamCodec<FriendlyByteBuf, CloseScreenPacket> CODEC = StreamCodec
+                .ofMember(CloseScreenPacket::encode, CloseScreenPacket::new);
 
         public CloseScreenPacket() {}
 
@@ -100,8 +100,8 @@ public class StarLadderUplinkPackets {
     public static class UplinkSyncPacket implements CustomPacketPayload {
 
         public static final Type<UplinkSyncPacket> TYPE = new Type<>(CosmicCore.id("uplink_sync"));
-        public static final StreamCodec<RegistryFriendlyByteBuf, UplinkSyncPacket> CODEC =
-                StreamCodec.ofMember(UplinkSyncPacket::encode, UplinkSyncPacket::new);
+        public static final StreamCodec<RegistryFriendlyByteBuf, UplinkSyncPacket> CODEC = StreamCodec
+                .ofMember(UplinkSyncPacket::encode, UplinkSyncPacket::new);
 
         private final StarLadderUplinkState state;
         private final int progress;
@@ -179,8 +179,8 @@ public class StarLadderUplinkPackets {
     public static class ObserverWhisperPacket implements CustomPacketPayload {
 
         public static final Type<ObserverWhisperPacket> TYPE = new Type<>(CosmicCore.id("uplink_observer_whisper"));
-        public static final StreamCodec<FriendlyByteBuf, ObserverWhisperPacket> CODEC =
-                StreamCodec.ofMember(ObserverWhisperPacket::encode, ObserverWhisperPacket::new);
+        public static final StreamCodec<FriendlyByteBuf, ObserverWhisperPacket> CODEC = StreamCodec
+                .ofMember(ObserverWhisperPacket::encode, ObserverWhisperPacket::new);
 
         private static final Style REFLECTION_STYLE = Style.EMPTY.withItalic(true).withColor(0x9966CC);
         private static final Style OBSERVER_STYLE = Style.EMPTY.withColor(0x88CCFF).withBold(false);

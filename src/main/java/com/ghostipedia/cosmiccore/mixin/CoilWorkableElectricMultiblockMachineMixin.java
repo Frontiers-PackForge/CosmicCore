@@ -8,11 +8,11 @@ import com.gregtechceu.gtceu.api.blockentity.BlockEntityCreationInfo;
 import com.gregtechceu.gtceu.api.machine.TickableSubscription;
 import com.gregtechceu.gtceu.api.machine.multiblock.CoilWorkableElectricMultiblockMachine;
 import com.gregtechceu.gtceu.api.machine.multiblock.WorkableElectricMultiblockMachine;
-import com.gregtechceu.gtceu.api.machine.multiblock.WorkableMultiblockMachine;
 import com.gregtechceu.gtceu.api.recipe.GTRecipe;
 
 import com.lowdragmc.lowdraglib.syncdata.annotation.DescSynced;
 import com.lowdragmc.lowdraglib.syncdata.annotation.Persisted;
+
 import net.minecraft.server.level.ServerLevel;
 
 import com.mojang.blaze3d.MethodsReturnNonnullByDefault;
@@ -28,7 +28,6 @@ import javax.annotation.ParametersAreNonnullByDefault;
 @ParametersAreNonnullByDefault
 @Mixin(value = CoilWorkableElectricMultiblockMachine.class, remap = false)
 public abstract class CoilWorkableElectricMultiblockMachineMixin extends WorkableElectricMultiblockMachine {
-
 
     @Shadow
     private ICoilType coilType;
@@ -108,5 +107,4 @@ public abstract class CoilWorkableElectricMultiblockMachineMixin extends Workabl
          */
         return super.onWorking();
     }
-
 }

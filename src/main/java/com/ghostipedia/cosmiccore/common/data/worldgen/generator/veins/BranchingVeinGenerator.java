@@ -99,7 +99,7 @@ public class BranchingVeinGenerator extends VeinGenerator {
         Map<BlockPos, OreBlockPlacer> generatedBlocks = new Object2ObjectOpenHashMap<>();
 
         int size = entry.clusterSize().sample(random);
-        int baseRadius = Math.max(70, Mth.ceil(size * 0.9f));
+        int baseRadius = Math.round(1.75f * Math.max(12, Mth.ceil(size * 0.4f)));
         int actualBranchCount = branchCount + random.nextInt(3) - 1;
         long noiseSeed = random.nextLong();
         float nodeRadius = Math.max(6.0f, coreRadiusRatio * baseRadius);

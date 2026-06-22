@@ -20,5 +20,14 @@ public class CosmicMaterialSet {
     public static final MaterialIconSet CRYSTAL = new MaterialIconSet("crystal", DULL);
     public static final MaterialIconSet MAGIC = new MaterialIconSet("magic", DULL);
 
+    public static final MaterialIconSet MANA = new MaterialIconSet("mana", SHINY);
+    public static final MaterialIconSet FLUID_A = new MaterialIconSet("fluid_a", SHINY);
+    public static final MaterialIconSet FLUID_B = new MaterialIconSet("fluid_b", SHINY);
+    public static final MaterialIconSet FLUID_C = new MaterialIconSet("fluid_c", SHINY);
+    public static final MaterialIconSet UTHERIUM = new MaterialIconSet("utherium", DIAMOND);
+    public static final MaterialIconSet RUNE_STEEL = new MaterialIconSet("rune_steel", BRIGHT);
+    public static final MaterialIconSet PRISMA = new MaterialIconSet("prisma", DIAMOND);
+    public static final MaterialIconSet STARRY = new MaterialIconSet("starry", DULL);
+
     public static void init() {}
 }

@@ -22,7 +22,7 @@ public class SoulMutilatorItem extends Item {
 
     @Override
     public void appendHoverText(ItemStack stack, Item.TooltipContext context, List<Component> tooltip,
-                               TooltipFlag flag) {
+                                TooltipFlag flag) {
         tooltip.add(Component.translatable("item.cosmiccore.soul_mutilator.tooltip")
                 .withStyle(ChatFormatting.GRAY));
         tooltip.add(Component.translatable("item.cosmiccore.soul_mutilator.tooltip.warning")

@@ -13,8 +13,8 @@ import org.jetbrains.annotations.NotNull;
 public class SyncOxygenBarPacket implements CustomPacketPayload {
 
     public static final Type<SyncOxygenBarPacket> TYPE = new Type<>(CosmicCore.id("sync_oxygen_bar"));
-    public static final StreamCodec<FriendlyByteBuf, SyncOxygenBarPacket> CODEC =
-            StreamCodec.ofMember(SyncOxygenBarPacket::encode, SyncOxygenBarPacket::new);
+    public static final StreamCodec<FriendlyByteBuf, SyncOxygenBarPacket> CODEC = StreamCodec
+            .ofMember(SyncOxygenBarPacket::encode, SyncOxygenBarPacket::new);
 
     private final long left;
     private final long max;
