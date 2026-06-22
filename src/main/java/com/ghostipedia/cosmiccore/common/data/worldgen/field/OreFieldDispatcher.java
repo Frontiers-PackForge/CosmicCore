@@ -40,10 +40,8 @@ public final class OreFieldDispatcher {
     private OreFieldDispatcher() {}
 
     private static final Logger LOGGER = LoggerFactory.getLogger("CosmicOreFields");
-    private static final int SEARCH_RADIUS = 96;
+    private static final int SEARCH_RADIUS = 140;
     private static final long Y_SALT = 0x5DEECE66DL;
-
-    private static final java.util.Set<Long> DEBUG_LOGGED = java.util.concurrent.ConcurrentHashMap.newKeySet();
 
     public static List<GeneratedVeinMetadata> membersInChunk(WorldGenLevel level, ChunkGenerator generator,
                                                              ChunkPos chunkPos) {
@@ -74,19 +72,19 @@ public final class OreFieldDispatcher {
         List<GeneratedVeinMetadata> out = new ArrayList<>();
         for (OreFieldPlacement.OreField field : fields) {
             ResourceLocation id = CosmicCore.id(field.bundle().getName());
-            Optional<Holder.Reference<GTOreDefinition>> holder =
-                    registry.getHolder(ResourceKey.create(GTRegistries.ORE_VEIN_REGISTRY, id));
+            Optional<Holder.Reference<GTOreDefinition>> holder = registry
+                    .getHolder(ResourceKey.create(GTRegistries.ORE_VEIN_REGISTRY, id));
             if (holder.isEmpty()) continue;
             GTOreDefinition definition = holder.get().value();
 
             RandomSource coreRandom = new XoroshiroRandomSource(
-                    seed ^ Y_SALT ^ ((long) field.core().getX() * 341873128712L
-                            + (long) field.core().getZ() * 132897987541L));
+                    seed ^ Y_SALT ^
+                            ((long) field.core().getX() * 341873128712L + (long) field.core().getZ() * 132897987541L));
             BlockPos coreOrigin = definition.heightRange().getPositions(
                     new PlacementContext(level, generator, Optional.empty()),
                     coreRandom, new BlockPos(field.core().getX(), 0, field.core().getZ())).findFirst().orElse(null);
             if (coreOrigin == null) continue;
-            int coreY = coreOrigin.getY();
+            int coreY = coreOrigin.getY() + 5;
             int minY = level.getMinBuildHeight() + 1;
             int maxY = level.getMaxBuildHeight() - 1;
 
@@ -94,10 +92,6 @@ public final class OreFieldDispatcher {
                 BlockPos markerPos = new BlockPos(field.core().getX(), coreY, field.core().getZ());
                 ServerCache.instance.addVein(dimension, gridX, gridZ,
                         new GeneratedVeinMetadata(chunkPos, markerPos, holder.get()));
-                // TODO temporary field-gen diagnostic, remove once placement is confirmed in-world
-                if (DEBUG_LOGGED.add(field.core().asLong())) {
-                    LOGGER.info("Cosmic ore field placed: {} at {}", field.bundle().getName(), markerPos);
-                }
             }
 
             for (OreFieldPlacement.FieldMember member : field.members()) {
