@@ -1,16 +1,21 @@
 package com.ghostipedia.cosmiccore;
 
-import com.ghostipedia.cosmiccore.api.capability.recipe.CosmicRecipeCapabilities;
 import com.ghostipedia.cosmiccore.api.registries.CosmicRegistration;
+import com.ghostipedia.cosmiccore.common.data.materials.CosmicBundleMaterials;
+import com.ghostipedia.cosmiccore.common.data.recipe.CosmicCoreOreRecipeHandler;
 import com.ghostipedia.cosmiccore.common.data.worldgen.CosmicWorldGenLayers;
 import com.ghostipedia.cosmiccore.common.data.worldgen.generator.CosmicVeinGenerators;
 
 import com.gregtechceu.gtceu.api.addon.GTAddon;
 import com.gregtechceu.gtceu.api.addon.IGTAddon;
 import com.gregtechceu.gtceu.api.addon.events.KJSRecipeKeyEvent;
+import com.gregtechceu.gtceu.api.data.chemical.material.Material;
 import com.gregtechceu.gtceu.api.registry.registrate.GTRegistrate;
 
 import net.minecraft.data.recipes.RecipeOutput;
+
+import java.util.HashSet;
+import java.util.Set;
 
 @GTAddon(CosmicCore.MOD_ID)
 public class CosmicCoreGTAddon implements IGTAddon {
@@ -27,13 +32,14 @@ public class CosmicCoreGTAddon implements IGTAddon {
 
     @Override
     public void addRecipes(RecipeOutput provider) {
-        // TODO(recipe-gen / bead 42.9): migrate CosmicCoreRecipes + CosmicCoreOreRecipeHandler +
-        // CosmicMaterialRecipeHandlers from Consumer<FinishedRecipe> to 1.21 RecipeOutput, then re-enable:
-        // CosmicCoreRecipes.init(provider);
-        // for (var material : GTCEuAPI.materialManager.getRegisteredMaterials()) {
-        //     CosmicCoreOreRecipeHandler.init(provider, material);
-        //     CosmicMaterialRecipeHandlers.init(provider, material);
-        // }
+        Set<Material> chunkMetals = new HashSet<>();
+        for (Material bundleOre : CosmicBundleMaterials.bundleOres()) {
+            CosmicCoreOreRecipeHandler.bundleInit(provider, bundleOre);
+            chunkMetals.addAll(CosmicBundleMaterials.outputsOf(bundleOre));
+        }
+        for (Material metal : chunkMetals) {
+            CosmicCoreOreRecipeHandler.processChunkBasics(provider, metal);
+        }
     }
 
     @Override
@@ -44,9 +50,6 @@ public class CosmicCoreGTAddon implements IGTAddon {
 
     @Override
     public void registerWorldgenLayers() {
-        // Register the layer here (registration-time hook). The ore-vein reassignment that depends on the
-        // gtceu:ore_vein datapack registry runs later, in CosmicWorldGenLayers#onAddReloadListeners, once
-        // that registry is populated.
         CosmicWorldGenLayers.init();
     }
 

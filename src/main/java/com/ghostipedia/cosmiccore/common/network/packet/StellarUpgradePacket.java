@@ -20,8 +20,8 @@ import javax.annotation.Nullable;
 public class StellarUpgradePacket implements CustomPacketPayload {
 
     public static final Type<StellarUpgradePacket> TYPE = new Type<>(CosmicCore.id("stellar_upgrade"));
-    public static final StreamCodec<FriendlyByteBuf, StellarUpgradePacket> CODEC =
-            StreamCodec.ofMember(StellarUpgradePacket::encode, StellarUpgradePacket::new);
+    public static final StreamCodec<FriendlyByteBuf, StellarUpgradePacket> CODEC = StreamCodec
+            .ofMember(StellarUpgradePacket::encode, StellarUpgradePacket::new);
 
     private final BlockPos machinePos;
     @Nullable

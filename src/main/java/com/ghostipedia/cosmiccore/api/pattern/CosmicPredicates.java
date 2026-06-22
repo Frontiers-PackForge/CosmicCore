@@ -124,7 +124,8 @@ public class CosmicPredicates {
 
             var blockEntity = blockWorldState.getBlockEntity();
             if (blockEntity instanceof MetaMachine machine) {
-                if (machine instanceof MultiblockControllerMachine && machine instanceof IStellarModuleReceiver moduleReceiver) {
+                if (machine instanceof MultiblockControllerMachine &&
+                        machine instanceof IStellarModuleReceiver moduleReceiver) {
                     Set<IStellarModuleReceiver> modules = blockWorldState.getMatchContext()
                             .getOrCreate("stellarModules", HashSet::new);
                     modules.add(moduleReceiver);

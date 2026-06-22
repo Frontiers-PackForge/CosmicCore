@@ -11,6 +11,7 @@ import com.gregtechceu.gtceu.api.sync_system.annotations.SaveField;
 
 import com.lowdragmc.lowdraglib.gui.modular.ModularUI;
 import com.lowdragmc.lowdraglib.gui.widget.Widget;
+
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.GlobalPos;
 import net.minecraft.network.chat.Component;
@@ -19,7 +20,6 @@ import net.minecraft.world.entity.player.Player;
 import java.util.List;
 
 public class StarLadderMachine extends LinkedWorkableElectricMultiblockMachine {
-
 
     @SaveField
     private final StarLadderUplinkManager uplinkManager = new StarLadderUplinkManager(this);
@@ -31,7 +31,6 @@ public class StarLadderMachine extends LinkedWorkableElectricMultiblockMachine {
     public StarLadderUplinkManager getUplinkManager() {
         return uplinkManager;
     }
-
 
     @Override
     public LinkRole getLinkRole() {

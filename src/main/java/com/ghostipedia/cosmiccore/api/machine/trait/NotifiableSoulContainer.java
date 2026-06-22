@@ -25,8 +25,8 @@ import java.util.UUID;
 
 public class NotifiableSoulContainer extends NotifiableRecipeHandlerTrait<SoulIngredient> {
 
-    public static final MachineTraitType<NotifiableSoulContainer> TYPE =
-            new MachineTraitType<>(NotifiableSoulContainer.class);
+    public static final MachineTraitType<NotifiableSoulContainer> TYPE = new MachineTraitType<>(
+            NotifiableSoulContainer.class);
 
     public final IO handlerIO;
 

@@ -13,7 +13,8 @@ public class PlanetKeys {
 
     static {
         SUN = ResourceKey.create(Registries.DIMENSION, ResourceLocation.fromNamespaceAndPath("frontiers", "sun"));
-        JUPITER = ResourceKey.create(Registries.DIMENSION, ResourceLocation.fromNamespaceAndPath("frontiers", "jupiter"));
+        JUPITER = ResourceKey.create(Registries.DIMENSION,
+                ResourceLocation.fromNamespaceAndPath("frontiers", "jupiter"));
         SATURN = ResourceKey.create(Registries.DIMENSION, ResourceLocation.fromNamespaceAndPath("frontiers", "saturn"));
     }
 }

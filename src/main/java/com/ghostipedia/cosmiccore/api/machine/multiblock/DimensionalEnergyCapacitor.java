@@ -4,10 +4,10 @@ import com.ghostipedia.cosmiccore.CosmicCore;
 import com.ghostipedia.cosmiccore.api.data.savedData.UniqueMultiblockSavedData;
 import com.ghostipedia.cosmiccore.api.data.wireless.WirelessEnergySavedData;
 
+import com.gregtechceu.gtceu.api.blockentity.BlockEntityCreationInfo;
 import com.gregtechceu.gtceu.api.gui.GuiTextures;
 import com.gregtechceu.gtceu.api.gui.fancy.IFancyTooltip;
 import com.gregtechceu.gtceu.api.gui.fancy.TooltipsPanel;
-import com.gregtechceu.gtceu.api.blockentity.BlockEntityCreationInfo;
 import com.gregtechceu.gtceu.api.machine.multiblock.IBatteryData;
 import com.gregtechceu.gtceu.api.machine.trait.RecipeLogic;
 import com.gregtechceu.gtceu.common.machine.multiblock.electric.PowerSubstationMachine;
@@ -28,7 +28,6 @@ import java.util.List;
 import java.util.Map;
 
 public class DimensionalEnergyCapacitor extends DimensionalEnergyInterface {
-
 
     public static final int MAX_BATTERY_LAYER = 18;
     public static final int MIN_CASINGS = 14;
@@ -66,7 +65,8 @@ public class DimensionalEnergyCapacitor extends DimensionalEnergyInterface {
             var uniqueMultiblockMapping = UniqueMultiblockSavedData.getOrCreate(serverLevel);
 
             if (uniqueMultiblockMapping.hasData(owner, multiblockId, getDimension())) {
-                this.isDuplicate = !uniqueMultiblockMapping.isUnique(owner, multiblockId, getDimension(), getBlockPos());
+                this.isDuplicate = !uniqueMultiblockMapping.isUnique(owner, multiblockId, getDimension(),
+                        getBlockPos());
                 if (isDuplicate) {
                     recipeLogic.setStatus(RecipeLogic.Status.SUSPEND);
                     return;

@@ -1,17 +1,17 @@
 package com.ghostipedia.cosmiccore.common.item.behavior;
 
+import com.ghostipedia.cosmiccore.utils.ItemData;
+
 import com.gregtechceu.gtceu.GTCEu;
 import com.gregtechceu.gtceu.api.GTValues;
 import com.gregtechceu.gtceu.api.blockentity.IPaintable;
-import com.gregtechceu.gtceu.api.machine.MetaMachine;
 import com.gregtechceu.gtceu.api.blockentity.PipeBlockEntity;
 import com.gregtechceu.gtceu.api.item.component.IAddInformation;
 import com.gregtechceu.gtceu.api.item.component.IInteractionItem;
+import com.gregtechceu.gtceu.api.machine.MetaMachine;
 import com.gregtechceu.gtceu.common.data.GTSoundEntries;
 import com.gregtechceu.gtceu.config.ConfigHolder;
 import com.gregtechceu.gtceu.utils.BreadthFirstBlockSearch;
-
-import com.ghostipedia.cosmiccore.utils.ItemData;
 
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
@@ -50,7 +50,6 @@ import appeng.api.util.AEColor;
 import appeng.blockentity.networking.CableBusBlockEntity;
 import com.google.common.collect.ImmutableMap;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 import java.util.Map;
@@ -95,7 +94,8 @@ public class InfiniteSprayCanBehavior implements IInteractionItem, IAddInformati
     }
 
     @Override
-    public InteractionResultHolder<ItemStack> use(ItemStack item, Level level, Player player, InteractionHand usedHand) {
+    public InteractionResultHolder<ItemStack> use(ItemStack item, Level level, Player player,
+                                                  InteractionHand usedHand) {
         if (level.isClientSide && player.isShiftKeyDown()) {
             SprayCanClientHandler.openScreen(player, this);
             return InteractionResultHolder.success(player.getItemInHand(usedHand));
@@ -508,8 +508,8 @@ public class InfiniteSprayCanBehavior implements IInteractionItem, IAddInformati
     };
 
     private static final TriPredicate<MetaMachine, MetaMachine, Direction> gtMetaMachinePredicate = (parent,
-                                                                                                                           child,
-                                                                                                                           direction) -> {
+                                                                                                     child,
+                                                                                                     direction) -> {
         if (parent == null) return true;
         return paintablePredicate.test(parent, child) &&
                 parent.getDefinition().equals(child.getDefinition());

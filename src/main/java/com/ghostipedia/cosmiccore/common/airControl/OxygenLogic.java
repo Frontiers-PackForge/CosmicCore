@@ -1,10 +1,8 @@
 package com.ghostipedia.cosmiccore.common.airControl;
 
-import java.util.Optional;
-import com.ghostipedia.cosmiccore.common.data.CosmicAttachmentTypes;
-
 import com.ghostipedia.cosmiccore.CosmicCore;
 import com.ghostipedia.cosmiccore.common.airControl.RebreatherHelper.RebreatherType;
+import com.ghostipedia.cosmiccore.common.data.CosmicAttachmentTypes;
 import com.ghostipedia.cosmiccore.common.network.CCoreNetwork;
 import com.ghostipedia.cosmiccore.common.network.packet.OxygenWarnPacket;
 import com.ghostipedia.cosmiccore.common.network.packet.SyncOxygenBarPacket;
@@ -14,15 +12,16 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.effect.MobEffects;
-import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.item.ItemStack;
-import net.neoforged.neoforge.event.entity.player.PlayerEvent;
-import net.neoforged.neoforge.event.tick.PlayerTickEvent;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.neoforge.event.entity.player.PlayerEvent;
+import net.neoforged.neoforge.event.tick.PlayerTickEvent;
 
 import top.theillusivec4.curios.api.CuriosApi;
 import top.theillusivec4.curios.api.type.inventory.IDynamicStackHandler;
+
+import java.util.Optional;
 
 import static com.ghostipedia.cosmiccore.common.airControl.OxygenConfig.*;
 import static com.ghostipedia.cosmiccore.common.airControl.OxygenItemCap.OXYGEN_SUPPLY;
@@ -269,7 +268,8 @@ public final class OxygenLogic {
 
         int remaining = requestTicks;
 
-        // TODO(stellaris): re-add space-suit oxygen drain when the AA/Botarium fluid-suit system is reworked (bead cosmiccore-42.13)
+        // TODO(stellaris): re-add space-suit oxygen drain when the AA/Botarium fluid-suit system is reworked (bead
+        // cosmiccore-42.13)
         if (rebreather == RebreatherType.PRESSURIZED) {
             remaining = drainFromCuriosBackSlot(player, remaining);
         }

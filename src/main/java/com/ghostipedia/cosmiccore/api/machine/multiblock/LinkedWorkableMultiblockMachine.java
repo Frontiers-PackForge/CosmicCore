@@ -49,7 +49,6 @@ import java.util.function.Predicate;
 public abstract class LinkedWorkableMultiblockMachine extends WorkableMultiblockMachine
                                                       implements ILinkedMultiblock, IDisplayUIMachine {
 
-
     private static final String DATASTICK_TAG_KEY = "cosmiccore:link_data";
     private static final String TAG_POS = "Pos";
     private static final String TAG_OWNER = "Owner";
@@ -64,7 +63,6 @@ public abstract class LinkedWorkableMultiblockMachine extends WorkableMultiblock
     public LinkedWorkableMultiblockMachine(BlockEntityCreationInfo holder) {
         super(holder);
     }
-
 
     // ==================== ILinkedMultiblock Implementation ====================
 
@@ -193,7 +191,8 @@ public abstract class LinkedWorkableMultiblockMachine extends WorkableMultiblock
         ItemData.mutateTag(dataStick, rootTag -> rootTag.put(DATASTICK_TAG_KEY, linkData));
 
         String machineName = getDefinition().getName();
-        dataStick.set(DataComponents.CUSTOM_NAME, Component.translatable("cosmiccore.datastick.link_copied", machineName));
+        dataStick.set(DataComponents.CUSTOM_NAME,
+                Component.translatable("cosmiccore.datastick.link_copied", machineName));
 
         player.sendSystemMessage(Component.translatable("cosmiccore.link.copied", machineName)
                 .withStyle(ChatFormatting.GREEN));

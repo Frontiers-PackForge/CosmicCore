@@ -9,6 +9,7 @@ import com.gregtechceu.gtceu.api.transfer.item.NotifiableAccountedInvWrapper;
 import com.gregtechceu.gtceu.utils.GTTransferUtils;
 
 import com.lowdragmc.lowdraglib.syncdata.annotation.Persisted;
+
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.NonNullList;
 import net.minecraft.server.level.ServerLevel;
@@ -27,7 +28,6 @@ import org.jetbrains.annotations.Nullable;
 import java.util.*;
 
 public class OreExtractionDrillLogic extends RecipeLogic {
-
 
     public static final int TICKS_PER_ORE = 100;
     public static final int CHUNKS_PER_SIDE = 9;
@@ -92,7 +92,6 @@ public class OreExtractionDrillLogic extends RecipeLogic {
     public OreExtractionDrillMachine getMachine() {
         return (OreExtractionDrillMachine) super.getMachine();
     }
-
 
     @Override
     public void serverTick() {

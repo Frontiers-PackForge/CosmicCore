@@ -17,9 +17,9 @@ import com.lowdragmc.lowdraglib.gui.widget.Widget;
 import com.lowdragmc.lowdraglib.syncdata.annotation.DescSynced;
 import com.lowdragmc.lowdraglib.syncdata.annotation.Persisted;
 import com.lowdragmc.lowdraglib.syncdata.annotation.UpdateListener;
+
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Direction;
 import net.minecraft.core.GlobalPos;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
@@ -27,25 +27,20 @@ import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
-import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.SoundType;
-import net.minecraft.world.phys.BlockHitResult;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
-
-import lombok.Getter;
 
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
 public class StarLadderResearchHubMachine extends LinkedWorkableElectricMultiblockMachine {
-
 
     private static final ResourceKey<Level> REQUIRED_DIMENSION = ResourceKey.create(
             Registries.DIMENSION, ResourceLocation.fromNamespaceAndPath("ad_astra", "earth_orbit"));
@@ -129,7 +124,8 @@ public class StarLadderResearchHubMachine extends LinkedWorkableElectricMultiblo
 
     public Map<BlockPos, net.minecraft.world.level.block.Block> getNextRingPositionsWithBlocks() {
         if (!canUpgrade()) return Map.of();
-        return RingUpgradePreviewRenderer.calculateRingPositionsWithBlocks(getBlockPos(), getFrontFacing(), ringTier + 1);
+        return RingUpgradePreviewRenderer.calculateRingPositionsWithBlocks(getBlockPos(), getFrontFacing(),
+                ringTier + 1);
     }
 
     public int autoBuildNextRing(Player player) {
@@ -230,7 +226,6 @@ public class StarLadderResearchHubMachine extends LinkedWorkableElectricMultiblo
         if (!canUpgrade()) return Map.of();
         return RingUpgradePreviewRenderer.getDeltaBlockCounts(ringTier);
     }
-
 
     @Override
     public void onStructureFormed() {
@@ -390,8 +385,9 @@ public class StarLadderResearchHubMachine extends LinkedWorkableElectricMultiblo
 
         if (getLevel() == null) return InteractionResult.PASS;
 
-        Map<BlockPos, net.minecraft.world.level.block.Block> t0Positions = RingUpgradePreviewRenderer.calculateRingPositionsWithBlocks(
-                getBlockPos(), getFrontFacing(), 0);
+        Map<BlockPos, net.minecraft.world.level.block.Block> t0Positions = RingUpgradePreviewRenderer
+                .calculateRingPositionsWithBlocks(
+                        getBlockPos(), getFrontFacing(), 0);
 
         if (t0Positions.isEmpty()) {
             player.displayClientMessage(

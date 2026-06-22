@@ -3,9 +3,9 @@ package com.ghostipedia.cosmiccore.common.machine.multiblock.part;
 import com.ghostipedia.cosmiccore.common.wireless.WirelessDataStore;
 import com.ghostipedia.cosmiccore.utils.OwnershipUtils;
 
+import com.gregtechceu.gtceu.api.blockentity.BlockEntityCreationInfo;
 import com.gregtechceu.gtceu.api.capability.IDataAccessHatch;
 import com.gregtechceu.gtceu.api.gui.GuiTextures;
-import com.gregtechceu.gtceu.api.blockentity.BlockEntityCreationInfo;
 import com.gregtechceu.gtceu.api.machine.multiblock.MultiblockDisplayText;
 import com.gregtechceu.gtceu.api.machine.multiblock.part.MultiblockPartMachine;
 import com.gregtechceu.gtceu.api.recipe.GTRecipe;

@@ -8,8 +8,8 @@ import com.gregtechceu.gtceu.api.capability.recipe.IRecipeCapabilityHolder;
 import com.gregtechceu.gtceu.api.capability.recipe.IRecipeHandler;
 import com.gregtechceu.gtceu.api.capability.recipe.RecipeCapability;
 import com.gregtechceu.gtceu.api.machine.feature.IRecipeLogicMachine;
-import com.gregtechceu.gtceu.api.machine.trait.RecipeHandlerList;
 import com.gregtechceu.gtceu.api.machine.trait.MachineTraitType;
+import com.gregtechceu.gtceu.api.machine.trait.RecipeHandlerList;
 import com.gregtechceu.gtceu.api.machine.trait.RecipeLogic;
 import com.gregtechceu.gtceu.api.recipe.ActionResult;
 import com.gregtechceu.gtceu.api.recipe.GTRecipe;
@@ -18,6 +18,7 @@ import com.gregtechceu.gtceu.api.recipe.modifier.ModifierFunction;
 
 import com.lowdragmc.lowdraglib.syncdata.annotation.DescSynced;
 import com.lowdragmc.lowdraglib.syncdata.annotation.Persisted;
+
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -32,7 +33,6 @@ import java.util.Iterator;
  * that only includes this thread's color-coded inputs and shared outputs.
  */
 public class MultithreadedRecipeLogic extends RecipeLogic implements IRecipeCapabilityHolder {
-
 
     /**
      * Toggle to log per-thread recipe matching and tick-drain decisions. Flip on when investigating thread behavior.
@@ -118,7 +118,6 @@ public class MultithreadedRecipeLogic extends RecipeLogic implements IRecipeCapa
                                           Map<IO, Map<RecipeCapability<?>, List<IRecipeHandler<?>>>> threadCapabilitiesFlat) {
         this.threadCapabilitiesFlat = threadCapabilitiesFlat;
     }
-
 
     // === IRecipeCapabilityHolder implementation ===
     // These methods provide a filtered view of handlers for this thread only

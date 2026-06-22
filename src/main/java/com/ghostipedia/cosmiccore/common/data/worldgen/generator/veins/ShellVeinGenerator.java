@@ -89,7 +89,7 @@ public class ShellVeinGenerator extends VeinGenerator {
         Map<BlockPos, OreBlockPlacer> generatedBlocks = new Object2ObjectOpenHashMap<>();
 
         int size = entry.clusterSize().sample(random);
-        int radius = Math.max(32, Mth.ceil(size * 0.5f));
+        int radius = Math.round(1.75f * Math.max(10, Mth.ceil(size * 0.35f)));
 
         float innerRadius = radius * innerRadiusRatio;
         float outerRadius = radius * outerRadiusRatio;

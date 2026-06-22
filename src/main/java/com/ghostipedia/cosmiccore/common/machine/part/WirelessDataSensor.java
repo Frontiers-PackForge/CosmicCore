@@ -4,10 +4,10 @@ import com.ghostipedia.cosmiccore.api.data.wireless.WirelessEnergySavedData;
 import com.ghostipedia.cosmiccore.api.machine.multiblock.DimensionalEnergyCapacitor;
 
 import com.gregtechceu.gtceu.api.GTValues;
+import com.gregtechceu.gtceu.api.blockentity.BlockEntityCreationInfo;
 import com.gregtechceu.gtceu.api.gui.GuiTextures;
 import com.gregtechceu.gtceu.api.gui.widget.LongInputWidget;
 import com.gregtechceu.gtceu.api.gui.widget.ToggleButtonWidget;
-import com.gregtechceu.gtceu.api.blockentity.BlockEntityCreationInfo;
 import com.gregtechceu.gtceu.common.machine.owner.FTBOwner;
 import com.gregtechceu.gtceu.common.machine.owner.MachineOwner;
 
@@ -35,8 +35,6 @@ public class WirelessDataSensor extends SensorPartMachine {
     private static Level serverLevel;
     private static UUID playerUUID;
     private static UUID wirelessUUID;
-
-
 
     private static final int DEFAULT_MIN_PERCENT = 33;
     private static final int DEFAULT_MAX_PERCENT = 66;
@@ -110,7 +108,8 @@ public class WirelessDataSensor extends SensorPartMachine {
         if (wirelessUUID == null) {
             var owner = this.getOwner();
             if (owner == null) return 0;
-            var team = MachineOwner.getOwner(owner.getPlayerUUID()) instanceof FTBOwner ftbOwner ? ftbOwner.getTeam() : null;
+            var team = MachineOwner.getOwner(owner.getPlayerUUID()) instanceof FTBOwner ftbOwner ? ftbOwner.getTeam() :
+                    null;
             wirelessUUID = team != null ? team.getTeamId() : playerUUID;
         }
         if (side == getFrontFacing().getOpposite()) {

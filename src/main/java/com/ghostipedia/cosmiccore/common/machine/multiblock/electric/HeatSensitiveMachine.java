@@ -3,12 +3,11 @@ package com.ghostipedia.cosmiccore.common.machine.multiblock.electric;
 import com.ghostipedia.cosmiccore.api.capability.recipe.HeatRecipeCapability;
 import com.ghostipedia.cosmiccore.api.capability.recipe.IHeatContainer;
 import com.ghostipedia.cosmiccore.api.machine.multiblock.HeatWorkableElectricMultiblockMachine;
-import com.ghostipedia.cosmiccore.api.machine.multiblock.MagnetWorkableElectricMultiblockMachine;
 
+import com.gregtechceu.gtceu.api.blockentity.BlockEntityCreationInfo;
 import com.gregtechceu.gtceu.api.capability.IEnergyContainer;
 import com.gregtechceu.gtceu.api.capability.recipe.EURecipeCapability;
 import com.gregtechceu.gtceu.api.capability.recipe.IO;
-import com.gregtechceu.gtceu.api.blockentity.BlockEntityCreationInfo;
 import com.gregtechceu.gtceu.api.machine.TickableSubscription;
 import com.gregtechceu.gtceu.api.machine.feature.ITieredMachine;
 import com.gregtechceu.gtceu.api.machine.feature.multiblock.IMultiPart;
@@ -16,7 +15,6 @@ import com.gregtechceu.gtceu.api.misc.EnergyContainerList;
 
 import it.unimi.dsi.fastutil.longs.Long2ObjectMaps;
 import lombok.Getter;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -38,7 +36,6 @@ public class HeatSensitiveMachine extends HeatWorkableElectricMultiblockMachine 
     public HeatSensitiveMachine(BlockEntityCreationInfo holder) {
         super(holder);
     }
-
 
     @Override
     public void onStructureFormed() {

@@ -1,21 +1,18 @@
 package com.ghostipedia.cosmiccore.common.machine.multiblock.part;
 
 import com.gregtechceu.gtceu.api.GTValues;
-import com.gregtechceu.gtceu.api.gui.widget.IntInputWidget;
 import com.gregtechceu.gtceu.api.blockentity.BlockEntityCreationInfo;
+import com.gregtechceu.gtceu.api.gui.widget.IntInputWidget;
 import com.gregtechceu.gtceu.api.machine.feature.IFancyUIMachine;
 import com.gregtechceu.gtceu.api.machine.feature.IRecipeLogicMachine;
 import com.gregtechceu.gtceu.api.machine.multiblock.MultiblockControllerMachine;
-import com.gregtechceu.gtceu.api.machine.multiblock.part.MultiblockPartMachine;
 import com.gregtechceu.gtceu.api.machine.multiblock.part.TieredPartMachine;
 
 import com.lowdragmc.lowdraglib.gui.widget.Widget;
 import com.lowdragmc.lowdraglib.gui.widget.WidgetGroup;
 import com.lowdragmc.lowdraglib.syncdata.annotation.Persisted;
-import net.minecraft.util.Mth;
 
-import lombok.Getter;
-import org.jetbrains.annotations.NotNull;
+import net.minecraft.util.Mth;
 
 public class CosmicParallelHatchPartMachine extends TieredPartMachine implements IFancyUIMachine {
 
@@ -53,5 +50,4 @@ public class CosmicParallelHatchPartMachine extends TieredPartMachine implements
 
         return parallelAmountGroup;
     }
-
 }

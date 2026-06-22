@@ -7,11 +7,11 @@ import com.ghostipedia.cosmiccore.client.gui.widget.stellar.StellarModuleContent
 import com.ghostipedia.cosmiccore.client.gui.widget.stellar.StellarModuleUIWidget;
 
 import com.gregtechceu.gtceu.api.GTValues;
+import com.gregtechceu.gtceu.api.blockentity.BlockEntityCreationInfo;
 import com.gregtechceu.gtceu.api.capability.recipe.EURecipeCapability;
 import com.gregtechceu.gtceu.api.capability.recipe.IO;
 import com.gregtechceu.gtceu.api.capability.recipe.IRecipeHandler;
 import com.gregtechceu.gtceu.api.capability.recipe.RecipeCapability;
-import com.gregtechceu.gtceu.api.blockentity.BlockEntityCreationInfo;
 import com.gregtechceu.gtceu.api.machine.MetaMachine;
 import com.gregtechceu.gtceu.api.machine.feature.IFancyUIMachine;
 import com.gregtechceu.gtceu.api.machine.feature.IOverclockMachine;
@@ -28,6 +28,7 @@ import com.lowdragmc.lowdraglib.gui.modular.ModularUI;
 import com.lowdragmc.lowdraglib.gui.widget.Widget;
 import com.lowdragmc.lowdraglib.syncdata.annotation.DescSynced;
 import com.lowdragmc.lowdraglib.syncdata.annotation.Persisted;
+
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
@@ -35,7 +36,6 @@ import net.minecraft.network.chat.Style;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.player.Player;
 
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.math.BigInteger;
@@ -48,7 +48,6 @@ import java.util.UUID;
 public class StellarBaseModule extends WorkableMultiblockMachine
                                implements IStellarModuleReceiver, IDisplayUIMachine, IFancyUIMachine,
                                IOverclockMachine {
-
 
     @Nullable
     private IStellarIrisProvider stellarIris;
@@ -114,7 +113,6 @@ public class StellarBaseModule extends WorkableMultiblockMachine
     public void setConfiguredVoltagePerParallel(long configuredVoltagePerParallel) {
         this.configuredVoltagePerParallel = configuredVoltagePerParallel;
     }
-
 
     protected UUID getTeamUUID() {
         var owner = getOwner();

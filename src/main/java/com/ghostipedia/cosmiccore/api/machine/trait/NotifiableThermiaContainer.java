@@ -21,8 +21,8 @@ import java.util.function.Predicate;
 
 public class NotifiableThermiaContainer extends NotifiableRecipeHandlerTrait<Integer> implements IHeatContainer {
 
-    public static final MachineTraitType<NotifiableThermiaContainer> TYPE =
-            new MachineTraitType<>(NotifiableThermiaContainer.class);
+    public static final MachineTraitType<NotifiableThermiaContainer> TYPE = new MachineTraitType<>(
+            NotifiableThermiaContainer.class);
 
     private final IO handlerIO;
     @Getter

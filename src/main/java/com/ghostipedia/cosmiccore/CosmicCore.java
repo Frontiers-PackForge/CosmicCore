@@ -12,6 +12,7 @@ import com.ghostipedia.cosmiccore.client.CosmicCoreClient;
 import com.ghostipedia.cosmiccore.common.airControl.OxygenRules;
 import com.ghostipedia.cosmiccore.common.commands.argument.SoulTypeArgument;
 import com.ghostipedia.cosmiccore.common.data.*;
+import com.ghostipedia.cosmiccore.common.data.materials.CosmicBundleMaterials;
 import com.ghostipedia.cosmiccore.common.data.materials.CosmicElements;
 import com.ghostipedia.cosmiccore.common.data.materials.CosmicMaterialSet;
 import com.ghostipedia.cosmiccore.common.data.materials.CosmicMaterials;
@@ -54,6 +55,7 @@ public class CosmicCore {
     private static boolean didRunRegistration = false;
     public static final String MOD_ID = "cosmiccore", NAME = "CosmicCore";
     public static final Logger LOGGER = LoggerFactory.getLogger(NAME);
+
     public static ResourceLocation id(String path) {
         return ResourceLocation.fromNamespaceAndPath(MOD_ID, path);
     }
@@ -79,6 +81,7 @@ public class CosmicCore {
         CosmicCreativeModeTabs.init();
         CosmicElements.init();
         CosmicMaterials.register();
+        CosmicBundleMaterials.register();
         CosmicCoreMaterialIconType.init();
         CosmicTagPrefix.initTagPrefixes();
         CosmicMaterialSet.init();
@@ -126,5 +129,4 @@ public class CosmicCore {
     public void registerPayloads(RegisterPayloadHandlersEvent event) {
         CCoreNetwork.registerPayloads(event);
     }
-
 }

@@ -35,8 +35,8 @@ public class CosmicSounds {
         for (SoundEntry entry : GTRegistries.SOUNDS) {
             if (!entry.getId().getNamespace().equals(CosmicCore.MOD_ID)) continue;
             entry.prepare();
-            entry.register(soundEvent ->
-                    GTRegistries.register(BuiltInRegistries.SOUND_EVENT, soundEvent.getLocation(), soundEvent));
+            entry.register(soundEvent -> GTRegistries.register(BuiltInRegistries.SOUND_EVENT, soundEvent.getLocation(),
+                    soundEvent));
         }
     }
 }

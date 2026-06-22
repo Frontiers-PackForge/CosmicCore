@@ -51,7 +51,8 @@ public class LinkedTerminalBehavior implements IInteractionItem, IAddInformation
         var level = context.getLevel();
         var pos = context.getClickedPos();
         var stack = context.getItemInHand();
-        if (!(MetaMachine.getMachine(level, pos) instanceof MultiblockControllerMachine controller)) return InteractionResult.PASS;
+        if (!(MetaMachine.getMachine(level, pos) instanceof MultiblockControllerMachine controller))
+            return InteractionResult.PASS;
         if (controller.isFormed() || level.isClientSide) return InteractionResult.PASS;
         var grid = getLinkedGrid(stack, level, player);
         if (grid == null) return InteractionResult.PASS;
@@ -62,7 +63,8 @@ public class LinkedTerminalBehavior implements IInteractionItem, IAddInformation
     }
 
     @Override
-    public void appendHoverText(ItemStack stack, Item.TooltipContext context, List<Component> lines, TooltipFlag isAdvanced) {
+    public void appendHoverText(ItemStack stack, Item.TooltipContext context, List<Component> lines,
+                                TooltipFlag isAdvanced) {
         var position = linkedPosition(stack);
         if (position == null) {
             lines.add(Tooltips.of(GuiText.Unlinked, Tooltips.RED));
@@ -75,7 +77,8 @@ public class LinkedTerminalBehavior implements IInteractionItem, IAddInformation
     }
 
     @Override
-    public InteractionResultHolder<ItemStack> use(ItemStack item, Level level, Player player, InteractionHand usedHand) {
+    public InteractionResultHolder<ItemStack> use(ItemStack item, Level level, Player player,
+                                                  InteractionHand usedHand) {
         var stack = player.getItemInHand(usedHand);
         return InteractionResultHolder.pass(stack);
     }

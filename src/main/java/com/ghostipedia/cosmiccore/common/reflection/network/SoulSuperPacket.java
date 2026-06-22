@@ -18,8 +18,8 @@ import org.jetbrains.annotations.NotNull;
 public class SoulSuperPacket implements CustomPacketPayload {
 
     public static final Type<SoulSuperPacket> TYPE = new Type<>(CosmicCore.id("soul_super"));
-    public static final StreamCodec<FriendlyByteBuf, SoulSuperPacket> CODEC =
-            StreamCodec.ofMember(SoulSuperPacket::encode, SoulSuperPacket::new);
+    public static final StreamCodec<FriendlyByteBuf, SoulSuperPacket> CODEC = StreamCodec
+            .ofMember(SoulSuperPacket::encode, SoulSuperPacket::new);
 
     public SoulSuperPacket() {}
 

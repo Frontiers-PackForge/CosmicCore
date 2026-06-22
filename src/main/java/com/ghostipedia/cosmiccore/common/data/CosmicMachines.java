@@ -8,7 +8,6 @@ import com.ghostipedia.cosmiccore.api.machine.part.DroneMaintenanceInterfacePart
 import com.ghostipedia.cosmiccore.api.machine.part.SteamFluidHatchPartMachine;
 import com.ghostipedia.cosmiccore.api.machine.part.WirelessEnergyHatchPartMachine;
 import com.ghostipedia.cosmiccore.api.registries.CosmicRegistration;
-import com.ghostipedia.cosmiccore.client.renderer.machine.CosmicDynamicRenderHelpers;
 import com.ghostipedia.cosmiccore.common.ae2gt.CosmicStockingBusPartMachine;
 import com.ghostipedia.cosmiccore.common.ae2gt.CosmicStockingHatchPartMachine;
 import com.ghostipedia.cosmiccore.common.block.debug.CreativeThermiaContainerMachine;
@@ -56,7 +55,6 @@ import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.Blocks;
 
 import it.unimi.dsi.fastutil.Pair;
 
@@ -272,7 +270,8 @@ public class CosmicMachines {
                     .register(),
             GTValues.tiersBetween(HV, UIV));
 
-    // TODO(forestry): INDUSTRIAL_APIARY (IndustrialApiaryMachine + BEES recipes) shelved with Forestry (bead cosmiccore-42.13)
+    // TODO(forestry): INDUSTRIAL_APIARY (IndustrialApiaryMachine + BEES recipes) shelved with Forestry (bead
+    // cosmiccore-42.13)
 
     public static final MachineDefinition[] BIO_LAB_SINGLE = registerTieredMachines("biolab",
             (holder, tier) -> new SimpleTieredMachine(holder, tier, defaultTankSizeFunction), (tier, builder) -> builder
@@ -625,7 +624,8 @@ public class CosmicMachines {
             .machine("steam_fluid_input_hatch", holder -> new SteamFluidHatchPartMachine(holder, IO.IN, 4000, 1))
             .rotationState(RotationState.ALL)
             .abilities(PartAbility.IMPORT_FLUIDS)
-            .colorOverlaySteamHullModel(ResourceLocation.fromNamespaceAndPath(GTCEu.MOD_ID, "block/overlay/machine/overlay_pipe"),
+            .colorOverlaySteamHullModel(
+                    ResourceLocation.fromNamespaceAndPath(GTCEu.MOD_ID, "block/overlay/machine/overlay_pipe"),
                     ResourceLocation.fromNamespaceAndPath(GTCEu.MOD_ID, "block/overlay/machine/overlay_fluid_hatch"),
                     ResourceLocation.fromNamespaceAndPath(GTCEu.MOD_ID, "block/overlay/machine/overlay_fluid_hatch"))
             .tooltips(Component.translatable("gtceu.machine.steam_fluid_hatch_notice"))
@@ -636,7 +636,8 @@ public class CosmicMachines {
             .machine("steam_fluid_output_hatch", holder -> new SteamFluidHatchPartMachine(holder, IO.OUT, 4000, 1))
             .rotationState(RotationState.ALL)
             .abilities(PartAbility.EXPORT_FLUIDS)
-            .colorOverlaySteamHullModel(ResourceLocation.fromNamespaceAndPath(GTCEu.MOD_ID, "block/overlay/machine/overlay_pipe"),
+            .colorOverlaySteamHullModel(
+                    ResourceLocation.fromNamespaceAndPath(GTCEu.MOD_ID, "block/overlay/machine/overlay_pipe"),
                     ResourceLocation.fromNamespaceAndPath(GTCEu.MOD_ID, "block/overlay/machine/overlay_fluid_hatch"),
                     ResourceLocation.fromNamespaceAndPath(GTCEu.MOD_ID, "block/overlay/machine/overlay_fluid_hatch"))
             .modelProperty(GTMachineModelProperties.IS_FORMED, false)
@@ -859,7 +860,8 @@ public class CosmicMachines {
         };
     }
 
-    // TODO(forestry): Alveary modifier casings (14 ALVEARY_*_PART + registerAlvearyModifier / AlvearyModifierPartMachine) shelved with Forestry (bead cosmiccore-42.13)
+    // TODO(forestry): Alveary modifier casings (14 ALVEARY_*_PART + registerAlvearyModifier /
+    // AlvearyModifierPartMachine) shelved with Forestry (bead cosmiccore-42.13)
 
     public static void init() {
         GTMultiMachines.LARGE_COMBUSTION_ENGINE.setRecipeTypes(new GTRecipeType[] { DUMMY_RECIPES });

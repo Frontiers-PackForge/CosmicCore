@@ -11,7 +11,6 @@ import com.gregtechceu.gtceu.api.machine.multiblock.PartAbility;
 import com.gregtechceu.gtceu.api.pattern.FactoryBlockPattern;
 import com.gregtechceu.gtceu.api.pattern.Predicates;
 
-
 import static com.ghostipedia.cosmiccore.api.machine.part.CosmicPartAbility.EXPORT_EMBER;
 import static com.ghostipedia.cosmiccore.api.registries.CosmicRegistration.REGISTRATE;
 import static com.gregtechceu.gtceu.api.pattern.Predicates.*;
@@ -42,7 +41,8 @@ public class CinderHearth {
                             .or(abilities(PartAbility.IMPORT_FLUIDS).setPreviewCount(1))
                             .or(Predicates.abilities(PartAbility.INPUT_ENERGY).setExactLimit(1)))
                     .where('B',
-                            abilities(EXPORT_EMBER).setPreviewCount(8).or(blocks(CosmicBlocks.LIGHT_DAWNSTONE_CASING.get())))
+                            abilities(EXPORT_EMBER).setPreviewCount(8)
+                                    .or(blocks(CosmicBlocks.LIGHT_DAWNSTONE_CASING.get())))
                     .where('C', blocks(CosmicBlocks.LIGHT_DAWNSTONE_CASING.get()))
                     .where('D', blocks(CosmicBlocks.REINFORCED_DAWNSTONE_CASING.get()))
                     .where('F', blocks(CosmicBlocks.LIGHT_DAWNSTONE_CASING.get()))

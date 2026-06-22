@@ -1,12 +1,12 @@
 package com.ghostipedia.cosmiccore.common.ae2gt;
 
+import com.gregtechceu.gtceu.api.blockentity.BlockEntityCreationInfo;
 import com.gregtechceu.gtceu.api.gui.fancy.ConfiguratorPanel;
 import com.gregtechceu.gtceu.api.gui.fancy.TabsWidget;
-import com.gregtechceu.gtceu.api.blockentity.BlockEntityCreationInfo;
 import com.gregtechceu.gtceu.api.machine.MetaMachine;
 import com.gregtechceu.gtceu.api.machine.fancyconfigurator.AutoStockingFancyConfigurator;
-import com.gregtechceu.gtceu.api.machine.multiblock.MultiblockControllerMachine;
 import com.gregtechceu.gtceu.api.machine.feature.multiblock.IMultiPart;
+import com.gregtechceu.gtceu.api.machine.multiblock.MultiblockControllerMachine;
 import com.gregtechceu.gtceu.api.machine.trait.NotifiableFluidTank;
 import com.gregtechceu.gtceu.common.item.behavior.IntCircuitBehaviour;
 import com.gregtechceu.gtceu.config.ConfigHolder;
@@ -21,6 +21,7 @@ import com.gregtechceu.gtceu.utils.ExtendedUseOnContext;
 import com.lowdragmc.lowdraglib.syncdata.annotation.DescSynced;
 import com.lowdragmc.lowdraglib.syncdata.annotation.DropSaved;
 import com.lowdragmc.lowdraglib.syncdata.annotation.Persisted;
+
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
@@ -43,7 +44,6 @@ import java.util.PriorityQueue;
 import java.util.function.Predicate;
 
 public class CosmicStockingHatchPartMachine extends CosmicInputHatchPartMachine implements IMEStockingPart {
-
 
     private static final int CONFIG_SIZE = 1;
 
@@ -119,7 +119,6 @@ public class CosmicStockingHatchPartMachine extends CosmicInputHatchPartMachine 
         this.aeFluidHandler = new CosmicStockingHatchPartMachine.ExportOnlyAEStockingFluidList(this, CONFIG_SIZE);
         return this.aeFluidHandler;
     }
-
 
     /////////////////////////////////
     // ********** Sync ME *********//

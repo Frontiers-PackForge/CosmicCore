@@ -1,7 +1,7 @@
 package com.ghostipedia.cosmiccore.common.ae2gt;
 
-import com.gregtechceu.gtceu.api.capability.recipe.IO;
 import com.gregtechceu.gtceu.api.blockentity.BlockEntityCreationInfo;
+import com.gregtechceu.gtceu.api.capability.recipe.IO;
 import com.gregtechceu.gtceu.api.machine.feature.IDataStickInteractable;
 import com.gregtechceu.gtceu.api.machine.feature.IHasCircuitSlot;
 import com.gregtechceu.gtceu.api.machine.trait.NotifiableFluidTank;
@@ -39,7 +39,6 @@ import javax.annotation.ParametersAreNonnullByDefault;
 public class CosmicInputHatchPartMachine extends MEHatchPartMachine
                                          implements IDataStickInteractable, IHasCircuitSlot {
 
-
     protected ExportOnlyAEFluidList aeFluidHandler;
 
     public CosmicInputHatchPartMachine(BlockEntityCreationInfo holder) {
@@ -57,7 +56,6 @@ public class CosmicInputHatchPartMachine extends MEHatchPartMachine
         this.aeFluidHandler = new ExportOnlyAEFluidList(this, slots);
         return aeFluidHandler;
     }
-
 
     /////////////////////////////////
     // ********** Sync ME *********//

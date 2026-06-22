@@ -94,7 +94,7 @@ public class ClusterVeinGenerator extends VeinGenerator {
         Map<BlockPos, OreBlockPlacer> generatedBlocks = new Object2ObjectOpenHashMap<>();
 
         int size = entry.clusterSize().sample(random);
-        int radius = Math.max(80, Mth.ceil(size * 1.5f));
+        int radius = Math.round(1.75f * Math.max(14, Mth.ceil(size * 0.5f)));
         int actualNodeCount = nodeCount + random.nextInt(4) - 2;
         float baseNodeSize = Math.max(8.0f, Math.min(15.0f, radius * 0.12f));
         float channelThickness = Math.max(4.0f, Math.min(8.0f, radius * 0.06f));

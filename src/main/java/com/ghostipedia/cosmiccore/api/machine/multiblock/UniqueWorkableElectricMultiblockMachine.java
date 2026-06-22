@@ -8,6 +8,7 @@ import com.gregtechceu.gtceu.api.machine.trait.RecipeLogic;
 import com.gregtechceu.gtceu.common.machine.owner.FTBOwner;
 
 import com.lowdragmc.lowdraglib.syncdata.annotation.Persisted;
+
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.Style;
@@ -17,7 +18,6 @@ import java.util.List;
 import java.util.UUID;
 
 public class UniqueWorkableElectricMultiblockMachine extends WorkableElectricMultiblockMachine {
-
 
     public UniqueWorkableElectricMultiblockMachine(BlockEntityCreationInfo holder) {
         super(holder);
@@ -37,7 +37,8 @@ public class UniqueWorkableElectricMultiblockMachine extends WorkableElectricMul
             var uniqueMultiblockMapping = UniqueMultiblockSavedData.getOrCreate(serverLevel);
 
             if (uniqueMultiblockMapping.hasData(owner, multiblockId, getDimension())) {
-                this.isDuplicate = !uniqueMultiblockMapping.isUnique(owner, multiblockId, getDimension(), getBlockPos());
+                this.isDuplicate = !uniqueMultiblockMapping.isUnique(owner, multiblockId, getDimension(),
+                        getBlockPos());
                 if (isDuplicate) recipeLogic.setStatus(RecipeLogic.Status.SUSPEND);
             } else uniqueMultiblockMapping.addMultiblock(owner, getDefinition().getId().toString(), getDimension(),
                     getBlockPos());

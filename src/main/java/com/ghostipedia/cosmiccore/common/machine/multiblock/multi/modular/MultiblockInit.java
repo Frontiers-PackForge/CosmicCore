@@ -52,6 +52,11 @@ public class MultiblockInit {
         SteamAssembler.init();
         SteamCaster.init();
         SteamMixer.init();
+        Powderizer.init();
+        IndustrialOreSorter.init();
+        IndustrialFlotationPlant.init();
+        DissolutionVat.init();
+        SludgeDigestor.init();
         SufferingChamber.init();
         TitanFusion.init();
         DawnForge.init();

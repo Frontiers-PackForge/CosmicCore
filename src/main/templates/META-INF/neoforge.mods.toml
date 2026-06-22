@@ -33,3 +33,10 @@ config = "cosmiccore.mixins.json"
     versionRange = "[${gtceu_version},)"
     ordering = "AFTER"
     side = "BOTH"
+
+[[dependencies.${mod_id}]]
+    modId = "embers"
+    type = "optional"
+    versionRange = "[0,)"
+    ordering = "AFTER"
+    side = "BOTH"
