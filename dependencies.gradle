@@ -7,6 +7,7 @@ dependencies {
     compileOnly(forge.ldlib)
     compileOnly(forge.registrate)
     compileOnly(forge.configuration)
+    implementation("curse.maven:world-stripper-250603:5592921")
 
     // KubeJS (real, in-use scripts)
     implementation(forge.kubejs)
