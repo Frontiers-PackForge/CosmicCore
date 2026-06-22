@@ -37,6 +37,7 @@
     "gtceu.ElectricContainerBlockProviderMixin",
     "gtceu.GTKubeRecipeMixin",
     "gtceu.GTOreDefinitionMixin",
+    "gtceu.OreGeneratorMixin",
     "gtceu.MetaMachinePaintMixin",
     "gtceu.ParallelProviderMixin",
     "gtceu.RecipeLogicProviderMixin",

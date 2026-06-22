@@ -8,6 +8,7 @@ import com.gregtechceu.gtceu.api.data.worldgen.GTOreDefinition;
 import com.gregtechceu.gtceu.api.data.worldgen.generator.VeinGenerator;
 
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.valueproviders.ConstantInt;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -25,6 +26,8 @@ public class CosmicOreVeins {
     private static final Map<String, String> PRIMARY_TO_BUNDLE = new LinkedHashMap<>();
     private static final Map<String, Integer> COUNT = new LinkedHashMap<>();
     private static final Map<String, GTOreDefinition> SNAPSHOTS = new LinkedHashMap<>();
+
+    private static final int FIELD_POCKET_CLUSTER_SIZE = 10;
 
     private enum Shape {
         BRANCHING,
@@ -148,16 +151,17 @@ public class CosmicOreVeins {
 
         dest.clusterSize(src.clusterSize());
         dest.density(src.density());
-        dest.weight(src.weight() * COUNT.getOrDefault(bundle, 1));
+        dest.weight(0);
         dest.layer(src.layer());
         dest.dimensions(src.dimensionFilter());
         dest.heightRange(src.heightRange());
         dest.discardChanceOnAirExposure(src.discardChanceOnAirExposure());
         dest.biomes(src.biomes());
         dest.biomeWeightModifier(src.biomeWeightModifier());
-        dest.veinGenerator(buildGenerator(SHAPES.getOrDefault(mono, Shape.BRANCHING), mono));
+        dest.veinGenerator(pocket(mono));
 
         CosmicWorldGenLayers.reassign(dest);
+        dest.clusterSize(ConstantInt.of(FIELD_POCKET_CLUSTER_SIZE));
     }
 
     private static VeinGenerator buildGenerator(Shape shape, Material mono) {
@@ -189,6 +193,12 @@ public class CosmicOreVeins {
 
     private static VeinGenerator fracture(Material mono) {
         var gen = new FractureVeinGenerator(new ArrayList<>(), new ArrayList<>(), 21.0f, 0.08f, 8, 10.5f);
+        gen.oreBlock(mono, 1);
+        return gen.build();
+    }
+
+    private static VeinGenerator pocket(Material mono) {
+        var gen = new PocketVeinGenerator(new ArrayList<>(), 0.3f, 0.55f);
         gen.oreBlock(mono, 1);
         return gen.build();
     }
