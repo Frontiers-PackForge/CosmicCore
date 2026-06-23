@@ -54,7 +54,6 @@ public final class FieldBlobDraw {
     private static final Set<String> LOGGED = ConcurrentHashMap.newKeySet();
     private static BufferBuilder zoneBatch;
 
-
     public static float minimapZoneRadius(byte tier, int fieldRadius) {
         float blockR = zoneBlockRadius(tier, fieldRadius);
         try {

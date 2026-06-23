@@ -1,6 +1,7 @@
 package com.ghostipedia.cosmiccore.common.data;
 
 import com.ghostipedia.cosmiccore.CosmicCore;
+import com.ghostipedia.cosmiccore.api.capability.recipe.CosmicRecipeCapabilities;
 import com.ghostipedia.cosmiccore.api.machine.multiblock.DimensionalEnergyCapacitor;
 import com.ghostipedia.cosmiccore.api.machine.multiblock.DimensionalEnergyInterface;
 import com.ghostipedia.cosmiccore.api.machine.part.CosmicPartAbility;
@@ -96,7 +97,12 @@ public class CosmicMachines {
             "soul_output_hatch", "Soul Output Hatch",
             IO.OUT, HIGH_TIERS, EXPORT_SOUL);
 
-    // TODO(embers): EMBER_IMPORT_HATCH / EMBER_EXPORT_HATCH shelved with Embers (bead cosmiccore-42.14)
+    public static final MachineDefinition[] EMBER_IMPORT_HATCH = registerEmberHatch(
+            "ember_input_hatch", "Ember Input Hatch",
+            IO.IN, ELECTRIC_TIERS, IMPORT_EMBER);
+    public static final MachineDefinition[] EMBER_EXPORT_HATCH = registerEmberHatch(
+            "ember_output_hatch", "Ember Output Hatch",
+            IO.OUT, ELECTRIC_TIERS, EXPORT_EMBER);
 
     public static final MachineDefinition[] THERMIA_VENT = registerThermiaTieredHatch(
             "thermia_export_hatch", "Thermia Vent", "thermia_output_hatch",
@@ -433,7 +439,29 @@ public class CosmicMachines {
                 tiers);
     }
 
-    // TODO(embers): registerEmberHatch (EmberHatchPartMachine) shelved with Embers (bead cosmiccore-42.14)
+    private static MachineDefinition[] registerEmberHatch(String name, String displayName, IO io,
+                                                          int[] tiers, PartAbility... abilities) {
+        return registerTieredMachines(name,
+                (holder, tier) -> new EmberHatchPartMachine(holder, tier, io),
+                (tier, builder) -> builder
+                        .langValue(GTValues.VNF[tier] + ' ' + displayName)
+                        .abilities(abilities)
+                        .rotationState(RotationState.ALL)
+                        .modelProperty(GTMachineModelProperties.IS_FORMED, false)
+                        .overlayTieredHullModel("ember_hatch")
+                        .tooltipBuilder((item, tooltip) -> {
+                            if (io == IO.IN) {
+                                tooltip.add(Component.translatable("tooltip.cosmiccore.ember_hatch.capacity",
+                                        EmberHatchPartMachine.getMaxCapacity(tier)));
+                                tooltip.add(Component.translatable("tooltip.cosmiccore.ember_hatch.consumption",
+                                        EmberHatchPartMachine.getMaxConsumption(tier)));
+                            } else {
+                                tooltip.add(Component.translatable("tooltip.cosmiccore.ember_hatch.capacity",
+                                        EmberHatchPartMachine.getMaxCapacity(tier)));
+                            }
+                        }).register(),
+                tiers);
+    }
 
     private static MachineDefinition[] registerWirelessEnergyTieredHatch(String name, String displayName, String model,
                                                                          IO io, int[] tiers, int amperage,
@@ -864,6 +892,7 @@ public class CosmicMachines {
     // AlvearyModifierPartMachine) shelved with Forestry (bead cosmiccore-42.13)
 
     public static void init() {
+        GTRecipeTypes.MIXER_RECIPES.setMaxSize(IO.IN, CosmicRecipeCapabilities.EMBER, 1);
         GTMultiMachines.LARGE_COMBUSTION_ENGINE.setRecipeTypes(new GTRecipeType[] { DUMMY_RECIPES });
         GTMultiMachines.LARGE_COMBUSTION_ENGINE.setRenderXEIPreview(false);
         GTMultiMachines.LARGE_COMBUSTION_ENGINE.setRenderWorldPreview(false);

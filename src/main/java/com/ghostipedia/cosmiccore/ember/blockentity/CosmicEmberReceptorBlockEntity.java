@@ -25,7 +25,6 @@ public class CosmicEmberReceptorBlockEntity extends EmberReceiverBlockEntity imp
         return 250 * Math.pow(4, tier);
     }
 
-    // Unused
     @Override
     public double pull() {
         return 0;
@@ -48,7 +47,8 @@ public class CosmicEmberReceptorBlockEntity extends EmberReceiverBlockEntity imp
         Direction facing = state.getValue(BlockStateProperties.FACING);
         BlockEntity attachedTile = level.getBlockEntity(pos.relative(facing, -1));
         if (blockEntity.ticksExisted % 2 == 0 && attachedTile != null) {
-            IEmberCapability cap = attachedTile.getCapability(EmbersCapabilities.EMBER_CAPABILITY, facing).orElse(null);
+            IEmberCapability cap = level.getCapability(EmbersCapabilities.EMBER_BLOCK_CAPABILITY,
+                    pos.relative(facing, -1), facing);
             if (cap != null && cap.getEmber() < cap.getEmberCapacity() && blockEntity.capability.getEmber() > 0) {
                 double added = cap.addAmount(Math.min(blockEntity.transfer(), blockEntity.capability.getEmber()), true);
                 blockEntity.capability.removeAmount(added, true);

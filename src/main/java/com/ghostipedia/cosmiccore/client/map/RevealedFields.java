@@ -16,7 +16,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-
 public final class RevealedFields {
 
     public static final RevealedFields INSTANCE = new RevealedFields();

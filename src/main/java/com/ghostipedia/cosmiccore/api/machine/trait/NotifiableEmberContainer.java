@@ -1,18 +1,14 @@
 package com.ghostipedia.cosmiccore.api.machine.trait;
 
-import com.ghostipedia.cosmiccore.api.capability.recipe.EmberRecipeCapability;
+import com.ghostipedia.cosmiccore.api.capability.recipe.CosmicRecipeCapabilities;
 import com.ghostipedia.cosmiccore.common.machine.multiblock.part.EmberHatchPartMachine;
 
 import com.gregtechceu.gtceu.api.capability.recipe.IO;
 import com.gregtechceu.gtceu.api.capability.recipe.RecipeCapability;
 import com.gregtechceu.gtceu.api.machine.MetaMachine;
+import com.gregtechceu.gtceu.api.machine.trait.MachineTraitType;
 import com.gregtechceu.gtceu.api.machine.trait.NotifiableRecipeHandlerTrait;
 import com.gregtechceu.gtceu.api.recipe.GTRecipe;
-
-import com.lowdragmc.lowdraglib.syncdata.annotation.Persisted;
-import com.lowdragmc.lowdraglib.syncdata.field.ManagedFieldHolder;
-
-import net.minecraft.nbt.CompoundTag;
 
 import com.rekindled.embers.api.power.IEmberCapability;
 import com.rekindled.embers.power.DefaultEmberCapability;
@@ -24,65 +20,48 @@ import java.util.List;
 
 public class NotifiableEmberContainer extends NotifiableRecipeHandlerTrait<Double> {
 
-    public static final ManagedFieldHolder MANAGED_FIELD_HOLDER = new ManagedFieldHolder(NotifiableEmberContainer.class,
-            NotifiableRecipeHandlerTrait.MANAGED_FIELD_HOLDER);
+    public static final MachineTraitType<NotifiableEmberContainer> TYPE = new MachineTraitType<>(
+            NotifiableEmberContainer.class);
 
-    private EmberHatchPartMachine emberHatch;
-    public IEmberCapability capability = new DefaultEmberCapability() {
+    private final EmberHatchPartMachine emberHatch;
+    private final IO handlerIO;
+
+    @Getter
+    private final double maxCapacity;
+
+    @Getter
+    private final double maxConsumption;
+
+    public final IEmberCapability capability = new DefaultEmberCapability() {
 
         @Override
         public void onContentsChanged() {
             super.onContentsChanged();
             emberHatch.cachedEmber = getEmber();
-            notifyListeners();
             NotifiableEmberContainer.this.notifyListeners();
         }
-
-        /*
-         * @Override
-         * public double getEmber() {
-         * return getTotalContentAmount();
-         * }
-         * 
-         * @Override
-         * public double addAmount(double value, boolean doAdd) {
-         * return super.addAmount(value, doAdd);
-         * }
-         */
     };
-
-    @Override
-    public void saveCustomPersistedData(@NotNull CompoundTag tag, boolean forDrop) {
-        super.saveCustomPersistedData(tag, forDrop);
-        capability.writeToNBT(tag);
-    }
-
-    @Override
-    public void loadCustomPersistedData(@NotNull CompoundTag tag) {
-        super.loadCustomPersistedData(tag);
-        capability.deserializeNBT(tag);
-        if (capability.getEmberCapacity() == 0)
-            capability.setEmberCapacity(maxCapacity);
-    }
-
-    private final IO handlerIO;
-
-    @Persisted
-    @Getter
-    private double maxCapacity;
-
-    @Persisted
-    @Getter
-    private double maxConsumption;
 
     public NotifiableEmberContainer(MetaMachine machine, IO io, double maxCapacity, double maxConsumption) {
         super(machine);
         this.emberHatch = (EmberHatchPartMachine) machine;
-        this.capability.setEmberCapacity(maxCapacity);
-        this.capability.setEmber(0.0D);
         this.handlerIO = io;
         this.maxCapacity = maxCapacity;
         this.maxConsumption = maxConsumption;
+        this.capability.setEmberCapacity(maxCapacity);
+        this.capability.setEmber(0.0D);
+    }
+
+    @Override
+    public void onMachineLoad() {
+        super.onMachineLoad();
+        capability.setEmberCapacity(maxCapacity);
+        capability.setEmber(emberHatch.cachedEmber);
+    }
+
+    @Override
+    public MachineTraitType<NotifiableEmberContainer> getTraitType() {
+        return TYPE;
     }
 
     @Override
@@ -118,12 +97,7 @@ public class NotifiableEmberContainer extends NotifiableRecipeHandlerTrait<Doubl
 
     @Override
     public RecipeCapability<Double> getCapability() {
-        return EmberRecipeCapability.CAP;
-    }
-
-    @Override
-    public ManagedFieldHolder getFieldHolder() {
-        return MANAGED_FIELD_HOLDER;
+        return CosmicRecipeCapabilities.EMBER;
     }
 
     @Override

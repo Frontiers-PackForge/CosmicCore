@@ -55,6 +55,11 @@ dependencies {
     implementation(forge.smartbrainlib)
     implementation(forge.geckolib)
 
+    // Embers Re-Ignited (NeoForge 1.21.1 fork of Embers Rekindled, modId "embers"). Required: the ember
+    // hatch/emitter/receptor content extends its blocks + ember capability. CurseForge project 1579725,
+    // file 8295861 = "1.5.4 Beta 1", the exact build the pack ships.
+    implementation("curse.maven:embers-re-ignited-1579725:8295861")
+
     // Apotheosis (modular on 1.21.1)
     // Placebo is provided transitively by the Apothic mods as dev.shadowsoffire:Placebo. Declaring it
     // separately as maven.modrinth:placebo put two distinct coordinates of the same mod on the classpath,
@@ -98,7 +103,6 @@ dependencies {
 
     // ---- DROPPED for the 1.21.1 port (no NeoForge build / pack chose alternatives) ----
     // Forestry CE + Gendustry CE  -> no 1.21.1 (bee system shelved, see bead cosmiccore-42.2)
-    // Embers Rekindled            -> no 1.21.1 (ember system shelved)
     // Ad Astra                    -> no 1.21.1 (isolate+no-op now, Stellaris later, bead cosmiccore-42.13)
     // Embeddium + Oculus          -> pack uses Sodium + Iris
     // Travel Anchors + LibX       -> not in pack
