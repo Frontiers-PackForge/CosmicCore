@@ -36,6 +36,7 @@ public final class OreFieldPlacement {
     private OreFieldPlacement() {}
 
     public static final int MIN_DISTANCE = 350;
+    public static final int DEFAULT_FIELD_RADIUS = 88;
 
     private static final int CELL_SIZE = MIN_DISTANCE;
     private static final long ANCHOR_SALT = 0x9E37F1DCA7E5B900L;
@@ -93,7 +94,7 @@ public final class OreFieldPlacement {
 
     private static FieldProfile profile(ResourceKey<Level> dimension, Shape shape) {
         int fragments = (shape == Shape.STRINGER || shape == Shape.FRACTURE) ? 39 : 44;
-        return new FieldProfile(Set.of(dimension), 100, shape, fragments, 88);
+        return new FieldProfile(Set.of(dimension), 100, shape, fragments, DEFAULT_FIELD_RADIUS);
     }
 
     private static void put(Material bundle, FieldProfile profile) {
@@ -103,6 +104,11 @@ public final class OreFieldPlacement {
     public static FieldProfile profileFor(Material bundle) {
         init();
         return PROFILES.get(bundle);
+    }
+
+    public static Set<Material> bundles() {
+        init();
+        return PROFILES.keySet();
     }
 
     /**

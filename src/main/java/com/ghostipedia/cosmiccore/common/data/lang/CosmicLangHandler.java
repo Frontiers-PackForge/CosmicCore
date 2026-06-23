@@ -1,10 +1,23 @@
 package com.ghostipedia.cosmiccore.common.data.lang;
 
+import com.ghostipedia.cosmiccore.common.data.worldgen.field.OreFieldPlacement;
+
+import com.gregtechceu.gtceu.api.data.chemical.material.Material;
 import com.gregtechceu.gtceu.data.lang.LangHandler;
 
 import com.tterrag.registrate.providers.RegistrateLangProvider;
 
 public class CosmicLangHandler extends LangHandler {
+
+    private static String toTitle(String snakeCase) {
+        StringBuilder out = new StringBuilder();
+        for (String part : snakeCase.split("_")) {
+            if (part.isEmpty()) continue;
+            if (out.length() > 0) out.append(' ');
+            out.append(Character.toUpperCase(part.charAt(0))).append(part.substring(1));
+        }
+        return out.toString();
+    }
 
     public static void init(RegistrateLangProvider provider) {
         // Vein Survey Scanner
@@ -29,6 +42,15 @@ public class CosmicLangHandler extends LangHandler {
         provider.add("cosmiccore.survey.no_veins.filtered", "No veins found matching '%s'");
         provider.add("cosmiccore.survey.no_veins.directional", "No veins found in that direction");
         provider.add("cosmiccore.survey.click_tp", "Click to teleport");
+        provider.add("button.cosmiccore.toggle_depleted.name", "Toggle Depleted");
+        provider.add("cosmiccore.dowsing.found", "The rod twitches toward a nearby field");
+        provider.add("cosmiccore.dowsing.none", "The rod lies still");
+        provider.add("cosmiccore.dowsing.tooltip.radius", "Sensing range: %d blocks");
+        provider.add("cosmiccore.dowsing.tooltip.use", "§7Use: Reveal the nearest ore field");
+
+        for (Material bundle : OreFieldPlacement.bundles()) {
+            provider.add("ore_vein.cosmiccore." + bundle.getName(), toTitle(bundle.getName()) + " Ore Field");
+        }
         provider.add("cosmiccore.survey.command.scanning", "Surveying veins within %d blocks...");
         provider.add("cosmiccore.survey.command.results", "=== Vein Survey Results ===");
         provider.add("cosmiccore.survey.command.vein_types", "Vein types: ");
