@@ -5,8 +5,8 @@ import com.gregtechceu.gtceu.utils.FormattingUtil;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.level.block.entity.BlockEntity;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
 
 import com.llamalad7.mixinextras.sugar.Local;
 import com.rekindled.embers.block.EmberDialBlock;

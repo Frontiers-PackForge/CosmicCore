@@ -21,7 +21,8 @@
     "gtceu.GroupingMapRendererMixin",
     "gtceu.ButtonStateMixin",
     "xaerominimap.CCoreMinimapFBORendererMixin",
-    "xaeroworldmap.CCoreMapElementRenderHandlerBuilderMixin"
+    "xaeroworldmap.CCoreMapElementRenderHandlerBuilderMixin",
+    "embers.EmberDialBlockMixin"
   ],
   "mixins": [
     "BlockPatternMixin",

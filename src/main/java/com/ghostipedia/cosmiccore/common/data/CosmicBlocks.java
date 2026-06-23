@@ -8,9 +8,12 @@ import com.ghostipedia.cosmiccore.common.block.DivingBellEscapePad;
 import com.ghostipedia.cosmiccore.common.block.MagnetBlock;
 import com.ghostipedia.cosmiccore.common.block.MothHomeBlock;
 import com.ghostipedia.cosmiccore.common.blockentity.CosmicCoilBlockEntity;
+import com.ghostipedia.cosmiccore.ember.CosmicEmberEmitterBlock;
+import com.ghostipedia.cosmiccore.ember.CosmicEmberReceptorBlock;
 
 import com.gregtechceu.gtceu.GTCEu;
 import com.gregtechceu.gtceu.api.GTCEuAPI;
+import com.gregtechceu.gtceu.api.GTValues;
 import com.gregtechceu.gtceu.api.block.ActiveBlock;
 import com.gregtechceu.gtceu.api.block.ICoilType;
 import com.gregtechceu.gtceu.api.block.property.GTBlockStateProperties;
@@ -30,13 +33,17 @@ import net.minecraft.world.level.material.MapColor;
 import net.neoforged.neoforge.client.model.generators.ConfiguredModel;
 import net.neoforged.neoforge.client.model.generators.ModelFile;
 
+import com.rekindled.embers.RegistryManager;
 import com.tterrag.registrate.providers.DataGenContext;
 import com.tterrag.registrate.providers.RegistrateBlockstateProvider;
 import com.tterrag.registrate.util.entry.BlockEntry;
 import com.tterrag.registrate.util.nullness.NonNullBiConsumer;
 import com.tterrag.registrate.util.nullness.NonNullFunction;
 import com.tterrag.registrate.util.nullness.NonNullSupplier;
+import it.unimi.dsi.fastutil.ints.Int2ReferenceArrayMap;
 
+import java.util.Locale;
+import java.util.Map;
 import java.util.function.Supplier;
 
 import static com.ghostipedia.cosmiccore.api.registries.CosmicRegistration.REGISTRATE;
@@ -48,6 +55,49 @@ public class CosmicBlocks {
         REGISTRATE.creativeModeTab(() -> CosmicCreativeModeTabs.COSMIC_CORE);
 
     }
+
+    public static final Map<Integer, BlockEntry<CosmicEmberEmitterBlock>> EMBER_EMITTER_BLOCKS = registerEmberEmitters();
+    public static final Map<Integer, BlockEntry<CosmicEmberReceptorBlock>> EMBER_RECEPTOR_BLOCKS = registerEmberReceptors();
+
+    private static Map<Integer, BlockEntry<CosmicEmberEmitterBlock>> registerEmberEmitters() {
+        Map<Integer, BlockEntry<CosmicEmberEmitterBlock>> emitters = new Int2ReferenceArrayMap<>();
+        for (int i = 0; i < 15; i++) {
+            final int tier = i;
+            final String key = (i == 0 ? "steam" : GTValues.VN[i].toLowerCase(Locale.ROOT));
+            final String tierName = (i == 0 ? "Steam" : GTValues.VN[i]);
+            emitters.put(i, REGISTRATE.block(key + "_ember_emitter", props -> new CosmicEmberEmitterBlock(props, tier))
+                    .lang(tierName + " Ember Emitter")
+                    .initialProperties(RegistryManager.EMBER_EMITTER::get)
+                    .exBlockstate((ctx, prov) -> prov.directionalBlock(ctx.getEntry(),
+                            prov.models().getExistingFile(CosmicCore.id(key + "_ember_emitter"))))
+                    .tag(BlockTags.MINEABLE_WITH_PICKAXE)
+                    .item(BlockItem::new)
+                    .build()
+                    .register());
+        }
+        return emitters;
+    }
+
+    private static Map<Integer, BlockEntry<CosmicEmberReceptorBlock>> registerEmberReceptors() {
+        Map<Integer, BlockEntry<CosmicEmberReceptorBlock>> receptors = new Int2ReferenceArrayMap<>();
+        for (int i = 0; i < 15; i++) {
+            final int tier = i;
+            final String key = (i == 0 ? "steam" : GTValues.VN[i].toLowerCase(Locale.ROOT));
+            final String tierName = (i == 0 ? "Steam" : GTValues.VN[i]);
+            receptors.put(i,
+                    REGISTRATE.block(key + "_ember_receptor", props -> new CosmicEmberReceptorBlock(props, tier))
+                            .lang(tierName + " Ember Receptor")
+                            .initialProperties(RegistryManager.EMBER_RECEIVER::get)
+                            .exBlockstate((ctx, prov) -> prov.directionalBlock(ctx.getEntry(),
+                                    prov.models().getExistingFile(CosmicCore.id(key + "_ember_receptor"))))
+                            .tag(BlockTags.MINEABLE_WITH_PICKAXE)
+                            .item(BlockItem::new)
+                            .build()
+                            .register());
+        }
+        return receptors;
+    }
+
     // Coil Register
     // TODO(stellaris): SUN_GLOBE used Ad Astra GLOBES registry + GlobeBlock — dropped with Ad Astra (bead
     // cosmiccore-42.13)

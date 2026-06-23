@@ -21,7 +21,6 @@ import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import org.apache.commons.lang3.mutable.MutableInt;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Collection;
 import java.util.List;
 
 public class EmberRecipeCapability extends RecipeCapability<Double> {
@@ -49,12 +48,6 @@ public class EmberRecipeCapability extends RecipeCapability<Double> {
         return ingredients;
     }
 
-    @Override
-    public List<Object> compressIngredients(Collection<Object> ingredients) {
-        // TODO: Figure out what it needs to do
-        return super.compressIngredients(ingredients);
-    }
-
     private static double getInputContents(IRecipeCapabilityHolder holder) {
         var handlerLists = holder.getCapabilitiesForIO(IO.IN);
         if (handlerLists.isEmpty()) return 0d;
@@ -67,8 +60,6 @@ public class EmberRecipeCapability extends RecipeCapability<Double> {
             for (var handler : emberHandlers) {
                 var emberHandler = (NotifiableEmberContainer) handler;
                 for (var content : handler.getContents()) {
-                    // At most, an ember hatch can contribute the minimum of the max allowed consumption per tick, or
-                    // the current amount stored
                     total += Math.min((double) content, emberHandler.getMaxConsumption());
                 }
             }

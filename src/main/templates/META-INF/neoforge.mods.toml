@@ -36,7 +36,7 @@ config = "cosmiccore.mixins.json"
 
 [[dependencies.${mod_id}]]
     modId = "embers"
-    type = "optional"
+    type = "required"
     versionRange = "[0,)"
     ordering = "AFTER"
     side = "BOTH"

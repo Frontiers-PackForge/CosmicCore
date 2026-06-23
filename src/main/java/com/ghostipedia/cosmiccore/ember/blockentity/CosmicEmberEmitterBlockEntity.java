@@ -58,7 +58,8 @@ public class CosmicEmberEmitterBlockEntity extends EmberEmitterBlockEntity imple
         Direction facing = state.getValue(BlockStateProperties.FACING);
         BlockEntity attachedTile = level.getBlockEntity(pos.relative(facing, -1));
         if (blockEntity.ticksExisted % 5 == 0 && attachedTile != null) {
-            IEmberCapability cap = attachedTile.getCapability(EmbersCapabilities.EMBER_CAPABILITY, facing).orElse(null);
+            IEmberCapability cap = level.getCapability(EmbersCapabilities.EMBER_BLOCK_CAPABILITY,
+                    pos.relative(facing, -1), facing);
             if (cap != null) {
                 if (cap.getEmber() > 0 &&
                         blockEntity.capability.getEmber() < blockEntity.capability.getEmberCapacity()) {
