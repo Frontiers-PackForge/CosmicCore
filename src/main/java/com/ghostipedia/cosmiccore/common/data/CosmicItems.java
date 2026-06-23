@@ -16,6 +16,7 @@ import com.ghostipedia.cosmiccore.common.item.armor.ChestSanguineWarptechSuite;
 import com.ghostipedia.cosmiccore.common.item.armor.HelmetSanguineWarptechSuite;
 import com.ghostipedia.cosmiccore.common.item.armor.SanguineWarptechSuite;
 import com.ghostipedia.cosmiccore.common.item.armor.boots.CosmicBootsArmorLogic;
+import com.ghostipedia.cosmiccore.common.item.behavior.DowsingRodBehavior;
 import com.ghostipedia.cosmiccore.common.item.behavior.EffectApplicationBehavior;
 import com.ghostipedia.cosmiccore.common.item.behavior.InfiniteSprayCanBehavior;
 import com.ghostipedia.cosmiccore.common.item.behavior.OxygenSupplyTankBehavior;
@@ -2808,6 +2809,14 @@ public class CosmicItems {
                     ElectricStats.createElectricItem(1_600_000L, GTValues.HV),
                     new VeinSurveyBehavior(2000, GTValues.V[GTValues.HV] * 4, VeinSurveyBehavior.DetailLevel.PRECISE)))
             .defaultModel()
+            .register();
+
+    public static final ItemEntry<ComponentItem> DOWSING_ROD = REGISTRATE
+            .item("dowsing_rod", ComponentItem::new)
+            .lang("Dowsing Rod")
+            .properties(p -> p.stacksTo(1))
+            .onRegister(attach(new DowsingRodBehavior(2000, 100)))
+            .model((ctx, prov) -> prov.generated(ctx, ResourceLocation.withDefaultNamespace("item/blaze_rod")))
             .register();
 
     // Oneiric Signets — non-consumed gate items (Blood Orb replacement)

@@ -17,7 +17,11 @@
     "emi.RecipeScreenMixin",
     "emi.ScreenSpaceMixin",
     "emi.SidebarPanelMixin",
-    "jei.TagInfoRecipeCategoryMixin"
+    "jei.TagInfoRecipeCategoryMixin",
+    "gtceu.GroupingMapRendererMixin",
+    "gtceu.ButtonStateMixin",
+    "xaerominimap.CCoreMinimapFBORendererMixin",
+    "xaeroworldmap.CCoreMapElementRenderHandlerBuilderMixin"
   ],
   "mixins": [
     "BlockPatternMixin",

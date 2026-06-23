@@ -80,6 +80,19 @@ dependencies {
     // JourneyMap API — pack uses Xaero's; integration compiles against the API and no-ops at runtime.
     compileOnly(forge.journeymap.api)
 
+    // Xaero's Minimap / World Map — pack ships Xaero's. compileOnly to build our own field-blob overlay
+    // against their (internal) render classes; runtimeOnly so the dev client loads Xaero's to test it.
+    compileOnly(forge.xaeroslib)
+    compileOnly(forge.xaerosminimap)
+    compileOnly(forge.xaerosworldmap)
+    runtimeOnly(forge.xaeroslib)
+    runtimeOnly(forge.xaerosminimap)
+    runtimeOnly(forge.xaerosworldmap)
+
+    // Sodium + Iris — dev runtime only, so the client renders fast and we can sanity-check render compat.
+    runtimeOnly(forge.sodium)
+    runtimeOnly(forge.iris)
+
     // Dev tooling
     runtimeOnly(forge.effortless)
 

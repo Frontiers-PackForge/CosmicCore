@@ -44,6 +44,15 @@ jade = "15.10.5+neoforge"
 journeymapapi = "2.0.0-1.21.1-SNAPSHOT"
 effortless = "4.1"
 
+# Xaero's Minimap / World Map (coordinates verbatim from GregTech-Modern forge.versions.toml)
+xaerosLib = "1.1.0"
+xaerosWorldMap = "1.40.11"
+xaerosMinimap = "25.3.10"
+
+# Sodium + Iris (dev-only runtime; perf + render compat sanity-checking)
+sodium = "mc1.21.1-0.6.13-neoforge"
+iris = "1.8.12+1.21.1-neoforge"
+
 [libraries]
 gtceu               = { module = "com.gregtechceu.gtceu:gtceu-1.21.1", version.ref = "gtceu" }
 ldlib               = { module = "com.lowdragmc.ldlib:ldlib-neoforge-1.21.1", version.ref = "ldlib" }
@@ -87,6 +96,13 @@ lso                 = { module = "maven.modrinth:legendary-survival-overhaul", v
 jade                = { module = "maven.modrinth:jade", version.ref = "jade" }
 journeymap-api      = { module = "info.journeymap:journeymap-api-neoforge", version.ref = "journeymapapi" }
 effortless          = { module = "maven.modrinth:effortless-building", version.ref = "effortless" }
+
+xaeroslib           = { module = "xaero.lib:xaerolib-neoforge-1.21.1", version.ref = "xaerosLib" }
+xaerosworldmap      = { module = "xaero.map:xaeroworldmap-neoforge-1.21.1", version.ref = "xaerosWorldMap" }
+xaerosminimap       = { module = "xaero.minimap:xaerominimap-neoforge-1.21.1", version.ref = "xaerosMinimap" }
+
+sodium              = { module = "maven.modrinth:sodium", version.ref = "sodium" }
+iris                = { module = "maven.modrinth:iris", version.ref = "iris" }
 
 [bundles]
 jei = ["jei-common-api", "jei-neoforge-api", "jei-neoforge-impl"]
