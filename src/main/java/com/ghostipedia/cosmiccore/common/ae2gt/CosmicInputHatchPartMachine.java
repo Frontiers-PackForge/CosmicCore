@@ -25,7 +25,6 @@ import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.component.CustomData;
-
 import net.neoforged.neoforge.fluids.capability.IFluidHandler;
 
 import appeng.api.config.Actionable;
@@ -127,8 +126,8 @@ public class CosmicInputHatchPartMachine extends MEHatchPartMachine
 
         // Config slots
         // TODO(8.0.0): re-add ME config slots in a MUI2 buildUI override via
-        //   new com.gregtechceu.gtceu.integration.ae2.gui.AEConfigWidget(aeFluidHandler, CONFIG_SIZE, true)
-        //   (AEFluidConfigWidget was merged into AEConfigWidget; this LDLib WidgetGroup path is dead).
+        // new com.gregtechceu.gtceu.integration.ae2.gui.AEConfigWidget(aeFluidHandler, CONFIG_SIZE, true)
+        // (AEFluidConfigWidget was merged into AEConfigWidget; this LDLib WidgetGroup path is dead).
 
         return group;
     }

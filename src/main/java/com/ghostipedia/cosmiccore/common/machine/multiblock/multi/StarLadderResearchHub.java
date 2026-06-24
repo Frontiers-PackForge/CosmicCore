@@ -8,18 +8,12 @@ import com.ghostipedia.cosmiccore.gtbridge.CosmicRecipeTypes;
 import com.gregtechceu.gtceu.api.data.RotationState;
 import com.gregtechceu.gtceu.api.machine.MultiblockMachineDefinition;
 import com.gregtechceu.gtceu.api.machine.multiblock.PartAbility;
+import com.gregtechceu.gtceu.api.multiblock.PatternPredicate;
 import com.gregtechceu.gtceu.api.multiblock.pattern.BlockPattern;
 import com.gregtechceu.gtceu.api.multiblock.pattern.MultiblockPatternBuilder;
-import com.gregtechceu.gtceu.api.multiblock.PatternPredicate;
-import com.gregtechceu.gtceu.common.data.GTMachines;
 
 import net.minecraft.ChatFormatting;
-import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
-import net.minecraft.world.level.block.Blocks;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import static com.ghostipedia.cosmiccore.api.registries.CosmicRegistration.REGISTRATE;
 import static com.gregtechceu.gtceu.api.multiblock.Predicates.*;
@@ -71,9 +65,9 @@ public class StarLadderResearchHub {
                     .where('D', blocks(CosmicBlocks.SOUL_MUTED_CASING.get()))
                     .build())
             // TODO(8.0.0): JEI/XEI multiblock shape-preview (.shapeInfos + tier0-3ShapeInfo builders)
-            //  removed - api.pattern.MultiblockShapeInfo no longer exists in GTCEu 8.0.0.
-            //  These were preview-only (per-tier T0-T3 shapes); the live tier0-3Pattern()
-            //  structure definitions are unaffected. Reinstate when MUI2/XEI exposes a shape API.
+            // removed - api.pattern.MultiblockShapeInfo no longer exists in GTCEu 8.0.0.
+            // These were preview-only (per-tier T0-T3 shapes); the live tier0-3Pattern()
+            // structure definitions are unaffected. Reinstate when MUI2/XEI exposes a shape API.
             .model(
                     createWorkableCasingMachineModel(
                             CosmicCore.id("block/casings/solid/superheavy_steel_casing"),

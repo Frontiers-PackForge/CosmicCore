@@ -7,9 +7,9 @@ import com.ghostipedia.cosmiccore.api.data.wireless.WirelessEnergySavedData;
 import com.gregtechceu.gtceu.api.blockentity.BlockEntityCreationInfo;
 import com.gregtechceu.gtceu.api.machine.multiblock.IBatteryData;
 import com.gregtechceu.gtceu.api.machine.trait.RecipeLogic;
+import com.gregtechceu.gtceu.api.sync_system.annotations.SaveField;
 import com.gregtechceu.gtceu.common.block.BatteryBlock;
 import com.gregtechceu.gtceu.common.machine.owner.MachineOwner;
-import com.gregtechceu.gtceu.api.sync_system.annotations.SaveField;
 
 import com.lowdragmc.lowdraglib.utils.DummyWorld;
 

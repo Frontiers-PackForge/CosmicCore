@@ -427,9 +427,9 @@ public class StellarBaseModule extends WorkableMultiblockMachine
     }
 
     // TODO(8.0.0 UI): the LDLib IDisplayUIMachine/IFancyUIMachine machine-feature surface was removed in
-    //  GTCEu 8.0.0 (replaced by MUI2, which is deferred/unavailable on this target). The Stellar module UI
-    //  (createUIWidget/createUI via StellarModuleContentWidget/StellarModuleUIWidget) and the addDisplayText
-    //  status readout were dropped here. Re-implement on MUI2 once it lands. All non-UI logic is preserved.
+    // GTCEu 8.0.0 (replaced by MUI2, which is deferred/unavailable on this target). The Stellar module UI
+    // (createUIWidget/createUI via StellarModuleContentWidget/StellarModuleUIWidget) and the addDisplayText
+    // status readout were dropped here. Re-implement on MUI2 once it lands. All non-UI logic is preserved.
 
     public boolean isPowerFailure() {
         return powerFailure;

@@ -15,14 +15,12 @@ import com.gregtechceu.gtceu.api.machine.MultiblockMachineDefinition;
 import com.gregtechceu.gtceu.api.machine.multiblock.PartAbility;
 import com.gregtechceu.gtceu.api.machine.multiblock.WorkableElectricMultiblockMachine;
 import com.gregtechceu.gtceu.api.misc.EnergyContainerList;
-import com.gregtechceu.gtceu.api.multiblock.pattern.MultiblockPatternBuilder;
 import com.gregtechceu.gtceu.api.multiblock.Predicates;
+import com.gregtechceu.gtceu.api.multiblock.pattern.MultiblockPatternBuilder;
 import com.gregtechceu.gtceu.api.recipe.OverclockingLogic;
 import com.gregtechceu.gtceu.common.data.GTRecipeModifiers;
 import com.gregtechceu.gtceu.common.data.GTRecipeTypes;
 
-import com.lowdragmc.lowdraglib.gui.texture.GuiTextureGroup;
-import com.lowdragmc.lowdraglib.gui.texture.TextTexture;
 import com.lowdragmc.lowdraglib.gui.widget.*;
 
 import net.minecraft.network.chat.Component;
@@ -30,7 +28,6 @@ import net.minecraft.network.chat.Component;
 import lombok.Getter;
 
 import java.util.Collection;
-import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 
 import javax.annotation.Nullable;
@@ -146,7 +143,7 @@ public class StarLadderOld extends WorkableElectricMultiblockMachine implements 
             .register();
 
     // TODO(8.0.0 MUI2): the LDLib createUIWidget/addDisplayText surface (star-ladder tier readout + send-orbit
-    //  button) was removed in GTCEu 8.0.0. Rebuild on MUI2 when the StarLadder UI is ported. Logic preserved.
+    // button) was removed in GTCEu 8.0.0. Rebuild on MUI2 when the StarLadder UI is ported. Logic preserved.
 
     public static void init() {}
 }

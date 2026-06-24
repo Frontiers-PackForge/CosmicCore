@@ -1,10 +1,9 @@
 package com.ghostipedia.cosmiccore.mixin;
 
+import com.ghostipedia.cosmiccore.api.item.component.ICustomRenderer;
 import com.ghostipedia.cosmiccore.client.renderer.item.CosmicCoreItemRendererProvider;
 
 import com.gregtechceu.gtceu.api.item.ComponentItem;
-import com.ghostipedia.cosmiccore.api.item.component.ICustomRenderer;
-
 import com.gregtechceu.gtceu.api.item.component.IItemComponent;
 
 import net.minecraft.world.item.Item;

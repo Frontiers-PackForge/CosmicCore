@@ -106,9 +106,20 @@ dependencies {
     runtimeOnly(forge.xaerosminimap)
     runtimeOnly(forge.xaerosworldmap)
 
-    // Sodium + Iris — dev runtime only, so the client renders fast and we can sanity-check render compat.
-    runtimeOnly(forge.sodium)
-    runtimeOnly(forge.iris)
+    // Sodium 0.8.x + Iris — dev runtime only (render compat sanity). Sodium 0.8 is the caffeinemc multi-artifact
+    // set; see build.gradle for the sodiumShell config + stripSodiumShell task and why the shell is repackaged.
+    // compile against the -api/-mod, load the stripped shell as a LIBRARY + the -mod as the real "sodium" mod,
+    // plus Sinytra's Forgified Fabric API shims for the FRAPI paths 0.8 needs. Coords pinned from chloride.
+    compileOnly("net.caffeinemc:sodium-neoforge-api:${sodiumNeoVersion}")
+    compileOnly("net.caffeinemc:sodium-neoforge-mod:${sodiumNeoVersion}")
+    sodiumShell("net.caffeinemc:sodium-neoforge:${sodiumNeoVersion}")
+    runtimeOnly("net.caffeinemc:sodium-neoforge-mod:${sodiumNeoVersion}")
+    runtimeOnly(files(tasks.named('stripSodiumShell')))
+    runtimeOnly("org.sinytra.forgified-fabric-api:fabric-api-base:0.4.42+d1308ded19")
+    runtimeOnly("org.sinytra.forgified-fabric-api:fabric-renderer-api-v1:3.4.1+9125b6dc19")
+    runtimeOnly("org.sinytra.forgified-fabric-api:fabric-rendering-data-attachment-v1:0.3.48+73761d2e19")
+    runtimeOnly("org.sinytra.forgified-fabric-api:fabric-block-view-api-v2:1.0.10+9afaaf8c19")
+    runtimeOnly("curse.maven:irisshaders-455508:8242804")
 
     // Dev tooling
     runtimeOnly(forge.effortless)

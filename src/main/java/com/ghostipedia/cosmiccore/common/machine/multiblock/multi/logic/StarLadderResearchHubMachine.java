@@ -2,8 +2,6 @@ package com.ghostipedia.cosmiccore.common.machine.multiblock.multi.logic;
 
 import com.ghostipedia.cosmiccore.api.capability.ILinkedMultiblock;
 import com.ghostipedia.cosmiccore.api.machine.multiblock.LinkedWorkableElectricMultiblockMachine;
-import com.ghostipedia.cosmiccore.client.gui.widget.starladder.StarLadderFancyUIWidget;
-import com.ghostipedia.cosmiccore.client.gui.widget.starladder.StarLadderResearchHubWidget;
 import com.ghostipedia.cosmiccore.client.renderer.RingUpgradePreviewRenderer;
 import com.ghostipedia.cosmiccore.common.machine.multiblock.LinkedMultiblockHelper;
 import com.ghostipedia.cosmiccore.common.machine.multiblock.multi.StarLadderResearchHub;
@@ -12,8 +10,6 @@ import com.gregtechceu.gtceu.api.blockentity.BlockEntityCreationInfo;
 import com.gregtechceu.gtceu.api.multiblock.pattern.BlockPattern;
 import com.gregtechceu.gtceu.utils.ExtendedUseOnContext;
 
-import com.lowdragmc.lowdraglib.gui.modular.ModularUI;
-import com.lowdragmc.lowdraglib.gui.widget.Widget;
 import com.lowdragmc.lowdraglib.syncdata.annotation.DescSynced;
 import com.lowdragmc.lowdraglib.syncdata.annotation.Persisted;
 import com.lowdragmc.lowdraglib.syncdata.annotation.UpdateListener;
@@ -487,7 +483,7 @@ public class StarLadderResearchHubMachine extends LinkedWorkableElectricMultiblo
         return getPartnerMachine(partner);
     }
 
-        public void addDisplayText(List<Component> textList) {
+    public void addDisplayText(List<Component> textList) {
         if (!isFormed()) return;
 
         // Display tier (0-3)
@@ -537,5 +533,5 @@ public class StarLadderResearchHubMachine extends LinkedWorkableElectricMultiblo
     }
 
     // TODO(8.0.0 MUI2): createUIWidget/createUI (LDLib UI via StarLadderResearchHubWidget/StarLadderFancyUIWidget)
-    //  removed in GTCEu 8.0.0. Rebuild on MUI2 when the StarLadder UI is ported; ringTier/preview state preserved.
+    // removed in GTCEu 8.0.0. Rebuild on MUI2 when the StarLadder UI is ported; ringTier/preview state preserved.
 }

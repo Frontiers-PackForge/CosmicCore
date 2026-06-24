@@ -52,7 +52,7 @@ public class IPBFMachine extends WorkableMultiblockMachine {
     }
 
     // TODO(8.0.0 MUI2): custom steam/parallel/progress display text shelved; base default
-    //  getWidgetsForDisplay UI is used for now (original LDLib createUI/addDisplayText in git history).
+    // getWidgetsForDisplay UI is used for now (original LDLib createUI/addDisplayText in git history).
 
     @Override
     public void notifyStatusChanged(RecipeLogic.Status oldStatus, RecipeLogic.Status newStatus) {

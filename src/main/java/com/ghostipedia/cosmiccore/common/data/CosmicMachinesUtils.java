@@ -14,9 +14,9 @@ import com.gregtechceu.gtceu.api.data.tag.TagPrefix;
 import com.gregtechceu.gtceu.api.machine.*;
 import com.gregtechceu.gtceu.api.machine.multiblock.PartAbility;
 import com.gregtechceu.gtceu.api.machine.property.GTMachineModelProperties;
-import com.gregtechceu.gtceu.api.multiblock.pattern.MultiblockPatternBuilder;
 import com.gregtechceu.gtceu.api.multiblock.PatternPredicate;
 import com.gregtechceu.gtceu.api.multiblock.Predicates;
+import com.gregtechceu.gtceu.api.multiblock.pattern.MultiblockPatternBuilder;
 import com.gregtechceu.gtceu.api.multiblock.predicates.BasePredicate;
 import com.gregtechceu.gtceu.api.multiblock.util.BlockInfo;
 import com.gregtechceu.gtceu.api.recipe.GTRecipeType;
@@ -175,8 +175,8 @@ public class CosmicMachinesUtils {
                 (tier, builder) -> builder
                         .langValue("%s %s Generator %s".formatted(VLVH[tier], toEnglishName(name), VLVT[tier]))
                         // TODO(8.0.0): SimpleGeneratorMachine.EDITABLE_UI_CREATOR + MachineBuilder.editableUI were
-                        //  removed in the GTCEu UI rewrite (stock GTMachines comments out the same call). Recipe
-                        //  type/tier wiring below is unaffected; restore the editable XEI UI once MUI2 ports it.
+                        // removed in the GTCEu UI rewrite (stock GTMachines comments out the same call). Recipe
+                        // type/tier wiring below is unaffected; restore the editable XEI UI once MUI2 ports it.
                         // .editableUI(SimpleGeneratorMachine.EDITABLE_UI_CREATOR.apply(GTCEu.id(name), recipeType))
                         .rotationState(RotationState.ALL)
                         .recipeType(recipeType)

@@ -10,26 +10,21 @@ import com.gregtechceu.gtceu.api.capability.recipe.RecipeCapability;
 import com.gregtechceu.gtceu.api.machine.TickableSubscription;
 import com.gregtechceu.gtceu.api.machine.feature.multiblock.IMaintenanceMachine;
 import com.gregtechceu.gtceu.api.machine.feature.multiblock.IMultiPart;
-import com.gregtechceu.gtceu.api.machine.multiblock.MultiblockDisplayText;
 import com.gregtechceu.gtceu.api.machine.multiblock.WorkableElectricMultiblockMachine;
 import com.gregtechceu.gtceu.api.machine.trait.RecipeHandlerList;
 import com.gregtechceu.gtceu.api.machine.trait.RecipeLogic;
 import com.gregtechceu.gtceu.api.recipe.GTRecipe;
 import com.gregtechceu.gtceu.common.machine.multiblock.part.EnergyHatchPartMachine;
-import com.gregtechceu.gtceu.utils.FormattingUtil;
 
 import com.lowdragmc.lowdraglib.syncdata.annotation.DescSynced;
 import com.lowdragmc.lowdraglib.syncdata.annotation.Persisted;
 
-import net.minecraft.ChatFormatting;
-import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.DyeColor;
 
 import it.unimi.dsi.fastutil.ints.Int2ObjectLinkedOpenHashMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import it.unimi.dsi.fastutil.ints.IntArrayList;
 import it.unimi.dsi.fastutil.ints.IntList;
-import it.unimi.dsi.fastutil.longs.Long2ObjectMaps;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
@@ -448,8 +443,8 @@ public class MultithreadedMachine extends WorkableElectricMultiblockMachine impl
     }
 
     // TODO(8.0.0 MUI2): addDisplayText (LDLib multiblock status readout) was removed in GTCEu 8.0.0
-    //  (stock GTCEu machines like HPCAMachine comment out the same). Rebuild the thread-status display on
-    //  MUI2 when ported; the thread/amperage data is all preserved on this machine.
+    // (stock GTCEu machines like HPCAMachine comment out the same). Rebuild the thread-status display on
+    // MUI2 when ported; the thread/amperage data is all preserved on this machine.
 
     // === IMultithreadedMachine interface implementation ===
 

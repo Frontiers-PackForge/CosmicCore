@@ -26,7 +26,8 @@ import brachy.modularui.widgets.layout.Flow;
 import brachy.modularui.widgets.textfield.TextFieldWidget;
 import lombok.Getter;
 
-// Migrated to GTCEu 8.0.0: IParallelHatch -> ParallelHatchPartMachine model (IMuiMachine + MultiblockControllerMachine).
+// Migrated to GTCEu 8.0.0: IParallelHatch -> ParallelHatchPartMachine model (IMuiMachine +
+// MultiblockControllerMachine).
 // Parallel-config UI ported from stock ParallelHatchPartMachine#buildMainUI (replaces the removed IntInputWidget).
 public class CosmicParallelHatchPartMachine extends TieredPartMachine implements IMuiMachine {
 

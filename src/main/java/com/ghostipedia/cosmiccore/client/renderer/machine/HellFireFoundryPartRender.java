@@ -26,7 +26,6 @@ import net.neoforged.neoforge.client.model.data.ModelData;
 
 import com.klikli_dev.occultism.registry.OccultismBlocks;
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import lombok.Getter;

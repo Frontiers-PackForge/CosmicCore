@@ -19,12 +19,10 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.Style;
 
-import it.unimi.dsi.fastutil.longs.Long2ObjectMaps;
 import lombok.Getter;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 import javax.annotation.Nullable;
 
@@ -145,7 +143,7 @@ public class MagneticFieldMachine extends MagnetWorkableElectricMultiblockMachin
         return false;
     }
 
-        public void addDisplayText(List<Component> textList) {
+    public void addDisplayText(List<Component> textList) {
         if (isFormed) {
             textList.add(Component.translatable("cosmiccore.multiblock.current_field_strength", fieldStrength));
             textList.add(Component.translatable("cosmiccore.multiblock.magnetic_field_strength",
