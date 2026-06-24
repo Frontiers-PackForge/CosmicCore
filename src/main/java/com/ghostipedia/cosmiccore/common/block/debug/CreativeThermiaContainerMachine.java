@@ -11,13 +11,12 @@ import com.gregtechceu.gtceu.api.machine.feature.IMuiMachine;
 import com.gregtechceu.gtceu.api.sync_system.annotations.SaveField;
 import com.gregtechceu.gtceu.api.sync_system.annotations.SyncToClient;
 
+import net.minecraft.core.Direction;
+
 import brachy.modularui.factory.PosGuiData;
 import brachy.modularui.screen.ModularPanel;
 import brachy.modularui.screen.UISettings;
 import brachy.modularui.value.sync.PanelSyncManager;
-
-import net.minecraft.core.Direction;
-import net.minecraft.world.entity.player.Player;
 
 import static com.ghostipedia.cosmiccore.common.machine.multiblock.part.ThermiaHatchPartMachine.getThermiaLimits;
 
@@ -70,8 +69,8 @@ public class CreativeThermiaContainerMachine extends MetaMachine implements IHea
     @Override
     public ModularPanel buildUI(PosGuiData data, PanelSyncManager syncManager, UISettings settings) {
         // TODO(8.0.0): reimplement the creative heat controller UI (heat value field +
-        //  active/source toggles) in MUI2. Was LDLib ModularUI (createUI). Shelved for launch;
-        //  heat logic and fields (heat/active/source) are unaffected.
+        // active/source toggles) in MUI2. Was LDLib ModularUI (createUI). Shelved for launch;
+        // heat logic and fields (heat/active/source) are unaffected.
         return ModularPanel.defaultPanel(getDefinition().getId().getPath(), 176, 166);
     }
 }

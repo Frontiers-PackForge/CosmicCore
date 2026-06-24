@@ -123,8 +123,8 @@ public class CosmicInputBusPartMachine extends MEBusPartMachine implements IData
 
         // Config slots
         // TODO(8.0.0): re-add ME config slots in a MUI2 buildUI override via
-        //   new com.gregtechceu.gtceu.integration.ae2.gui.AEConfigWidget(aeItemHandler, CONFIG_SIZE, false)
-        //   (AEItemConfigWidget was merged into AEConfigWidget; this LDLib WidgetGroup path is dead).
+        // new com.gregtechceu.gtceu.integration.ae2.gui.AEConfigWidget(aeItemHandler, CONFIG_SIZE, false)
+        // (AEItemConfigWidget was merged into AEConfigWidget; this LDLib WidgetGroup path is dead).
 
         return group;
     }

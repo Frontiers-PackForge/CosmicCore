@@ -61,8 +61,7 @@ public class LinkTestStationMachine extends LinkedWorkableElectricMultiblockMach
 
     // ==================== Display ====================
 
-        public void addDisplayText(List<Component> textList) {
-
+    public void addDisplayText(List<Component> textList) {
         if (!isFormed()) return;
 
         // Show link status

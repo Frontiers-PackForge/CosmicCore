@@ -19,9 +19,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.server.TickTask;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.BlockHitResult;
 
 import lombok.Getter;
@@ -73,7 +71,7 @@ public class WirelessEnergyHatchPartMachine extends TieredIOPartMachine {
         return GTValues.V[tier] * amperage * ((long) (ticks_between_save_data_operations * 1.1));
     }
 
-        public boolean shouldOpenUI(Player player, InteractionHand hand, BlockHitResult hit) {
+    public boolean shouldOpenUI(Player player, InteractionHand hand, BlockHitResult hit) {
         return false;
     }
 
@@ -118,7 +116,6 @@ public class WirelessEnergyHatchPartMachine extends TieredIOPartMachine {
         }
         return getOwnerUUID();
     }
-
 
     @Override
     public void onMachineDestroyed() {

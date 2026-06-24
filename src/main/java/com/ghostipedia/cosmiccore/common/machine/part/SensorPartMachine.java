@@ -39,7 +39,7 @@ public class SensorPartMachine extends TieredPartMachine implements IMuiMachine 
         signalUpdateHandler.updateSubscription();
     }
 
-        public boolean shouldOpenUI(Player player, InteractionHand hand, BlockHitResult hit) {
+    public boolean shouldOpenUI(Player player, InteractionHand hand, BlockHitResult hit) {
         return true;
     }
 

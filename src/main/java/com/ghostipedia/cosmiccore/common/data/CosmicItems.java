@@ -558,8 +558,8 @@ public class CosmicItems {
 
     // Literally Random shit
     // TODO(recipe-maker): RecipeMakerBehavior + the gtbridge/recipemaker tool are shelved in _shelved/ pending
-    //  the MUI2 rebuild (the LDLib held-item UI can't be dispatched by GTCEu 8.0's MUI2-only ComponentItem).
-    //  DONK is the plain creative-tab icon until the tool is rebuilt on IItemUIHolder#buildUI.
+    // the MUI2 rebuild (the LDLib held-item UI can't be dispatched by GTCEu 8.0's MUI2-only ComponentItem).
+    // DONK is the plain creative-tab icon until the tool is rebuilt on IItemUIHolder#buildUI.
     public static final ItemEntry<ComponentItem> DONK = REGISTRATE.item("donk", ComponentItem::new)
             .lang("Donk")
             .properties(p -> p.stacksTo(16))

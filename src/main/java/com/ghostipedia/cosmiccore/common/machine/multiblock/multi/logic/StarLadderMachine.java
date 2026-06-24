@@ -2,22 +2,11 @@ package com.ghostipedia.cosmiccore.common.machine.multiblock.multi.logic;
 
 import com.ghostipedia.cosmiccore.api.capability.ILinkedMultiblock;
 import com.ghostipedia.cosmiccore.api.machine.multiblock.LinkedWorkableElectricMultiblockMachine;
-import com.ghostipedia.cosmiccore.client.gui.widget.starladder.StarLadderFancyUIWidget;
-import com.ghostipedia.cosmiccore.client.gui.widget.starladder.StarLadderWidget;
-import com.ghostipedia.cosmiccore.common.machine.multiblock.LinkedMultiblockHelper;
 
 import com.gregtechceu.gtceu.api.blockentity.BlockEntityCreationInfo;
 import com.gregtechceu.gtceu.api.sync_system.annotations.SaveField;
 
-import com.lowdragmc.lowdraglib.gui.modular.ModularUI;
-import com.lowdragmc.lowdraglib.gui.widget.Widget;
-
-import net.minecraft.ChatFormatting;
 import net.minecraft.core.GlobalPos;
-import net.minecraft.network.chat.Component;
-import net.minecraft.world.entity.player.Player;
-
-import java.util.List;
 
 public class StarLadderMachine extends LinkedWorkableElectricMultiblockMachine {
 
@@ -64,6 +53,6 @@ public class StarLadderMachine extends LinkedWorkableElectricMultiblockMachine {
     }
 
     // TODO(8.0.0 MUI2): addDisplayText + createUIWidget/createUI (LDLib UI: research-hub link status + uplink
-    //  progress via StarLadderWidget/StarLadderFancyUIWidget) were removed in GTCEu 8.0.0. Rebuild on MUI2 when
-    //  the StarLadder UI is ported; uplinkManager / getLinkedPartners supply the data.
+    // progress via StarLadderWidget/StarLadderFancyUIWidget) were removed in GTCEu 8.0.0. Rebuild on MUI2 when
+    // the StarLadder UI is ported; uplinkManager / getLinkedPartners supply the data.
 }

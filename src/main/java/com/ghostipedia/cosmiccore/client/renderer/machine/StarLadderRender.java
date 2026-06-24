@@ -13,9 +13,7 @@ import com.gregtechceu.gtceu.client.util.RenderBufferHelper;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.Util;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.LightTexture;
 import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.Sheets;
 import net.minecraft.client.renderer.texture.TextureAtlas;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.core.BlockPos;
@@ -379,12 +377,12 @@ public class StarLadderRender extends
 
         // draw cube quads
         // TODO(8.0.0): RenderBufferHelper.renderCube no longer takes a sprite (now solid-color only:
-        //  renderCube(buf, stack, pos, size, colorARGB)). Rebuild the textured blood cube via renderCubeFace
-        //  (per-face with bloodCubeSprite UVs) when revisiting visuals. Cube render shelved for now.
+        // renderCube(buf, stack, pos, size, colorARGB)). Rebuild the textured blood cube via renderCubeFace
+        // (per-face with bloodCubeSprite UVs) when revisiting visuals. Cube render shelved for now.
         // var consumer = bufferSource.getBuffer(Sheets.translucentCullBlockSheet());
         // RenderBufferHelper.renderCube(consumer, poseStack.last(), 0xffffffff,
-        //         LightTexture.FULL_BRIGHT, bloodCubeSprite,
-        //         -1, -1, -1, 1, 1, 1);
+        // LightTexture.FULL_BRIGHT, bloodCubeSprite,
+        // -1, -1, -1, 1, 1, 1);
 
         poseStack.popPose();
     }

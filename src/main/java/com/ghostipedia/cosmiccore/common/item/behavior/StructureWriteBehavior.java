@@ -16,7 +16,6 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
@@ -25,7 +24,6 @@ import brachy.modularui.factory.PlayerInventoryGuiData;
 import brachy.modularui.screen.ModularPanel;
 import brachy.modularui.screen.UISettings;
 import brachy.modularui.value.sync.PanelSyncManager;
-
 import com.google.common.base.Joiner;
 
 public class StructureWriteBehavior implements IItemUIHolder {
@@ -37,13 +35,13 @@ public class StructureWriteBehavior implements IItemUIHolder {
     }
 
     // TODO(8.0.0 MUI2): custom UI shelved; default UI used (orig in git).
-    //  The original createUI(HeldItemUIFactory.HeldItemHolder, Player) was a full LDLib ModularUI:
-    //   - a DISPLAY-backed panel showing the structural scale (1 + max-min on X/Y/Z) and the export
-    //     order (DebugBlockPattern.getDir(dir)[0..2] names);
-    //   - an "export_to_log" button -> exportLog(...);
-    //   - "rotate_along_x_axis" / "rotate_along_y_axis" buttons -> changeDirX(...) / changeDirY(...).
-    //  Rebuild those widgets in MUI2 here, wiring the export/rotate helpers below (which retain the
-    //  full export-to-log logic). For now we open a minimal default panel.
+    // The original createUI(HeldItemUIFactory.HeldItemHolder, Player) was a full LDLib ModularUI:
+    // - a DISPLAY-backed panel showing the structural scale (1 + max-min on X/Y/Z) and the export
+    // order (DebugBlockPattern.getDir(dir)[0..2] names);
+    // - an "export_to_log" button -> exportLog(...);
+    // - "rotate_along_x_axis" / "rotate_along_y_axis" buttons -> changeDirX(...) / changeDirY(...).
+    // Rebuild those widgets in MUI2 here, wiring the export/rotate helpers below (which retain the
+    // full export-to-log logic). For now we open a minimal default panel.
     @Override
     public ModularPanel<?> buildUI(PlayerInventoryGuiData<?> data, PanelSyncManager syncManager, UISettings settings) {
         return ModularPanel.defaultPanel("structure_writer", 176, 120);
@@ -185,7 +183,8 @@ public class StructureWriteBehavior implements IItemUIHolder {
     }
 
     @Override
-    public InteractionResultHolder<ItemStack> use(ItemStack item, Level level, Player player, InteractionHand usedHand) {
+    public InteractionResultHolder<ItemStack> use(ItemStack item, Level level, Player player,
+                                                  InteractionHand usedHand) {
         ItemStack stack = player.getItemInHand(usedHand);
         if (player.isShiftKeyDown()) {
             removePos(stack);

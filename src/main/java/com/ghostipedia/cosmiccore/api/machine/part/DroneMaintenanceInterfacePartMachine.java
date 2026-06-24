@@ -169,9 +169,9 @@ public class DroneMaintenanceInterfacePartMachine extends TieredPartMachine
     // TODO(8.0.0 MUI2): custom UI shelved; default UI used (orig in git).
     // attachTooltips(TooltipsPanel) used the removed api.gui.fancy IFancyTooltip/TooltipsPanel API.
     // It surfaced two GTECH-logo fancy tooltips driven by syncedConnectionPos:
-    //   - when connected (syncedConnectionPos != -1): green "drone_maintenance_interface.connection_location"
-    //     with BlockPos.of(syncedConnectionPos) X/Y/Z;
-    //   - when disconnected (== -1): red "drone_maintenance_interface.no_connection".
+    // - when connected (syncedConnectionPos != -1): green "drone_maintenance_interface.connection_location"
+    // with BlockPos.of(syncedConnectionPos) X/Y/Z;
+    // - when disconnected (== -1): red "drone_maintenance_interface.no_connection".
     // Reinstate via GTMultiblockTextUtil rows in the controller's getWidgetsForDisplay when porting to MUI2.
     // The syncedConnectionPos field + connection logic above remain fully functional.
 

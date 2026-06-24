@@ -101,5 +101,5 @@ public class SterilizationHatchPartMachine extends TieredIOPartMachine
     }
 
     // TODO(8.0.0 MUI2): the LDLib IUIMachine createUI (fluid tank readout) was removed in GTCEu 8.0.0.
-    //  Rebuild on IUIMachine/buildUI (MUI2) when the sterilization UI is ported; fluidTank supplies the data.
+    // Rebuild on IUIMachine/buildUI (MUI2) when the sterilization UI is ported; fluidTank supplies the data.
 }

@@ -9,22 +9,22 @@ import com.gregtechceu.gtceu.api.machine.feature.IMuiMachine;
 import com.gregtechceu.gtceu.api.machine.multiblock.part.TieredIOPartMachine;
 import com.gregtechceu.gtceu.api.machine.trait.NotifiableItemStackHandler;
 import com.gregtechceu.gtceu.api.machine.trait.RecipeHandlerList;
+import com.gregtechceu.gtceu.api.sync_system.annotations.SaveField;
+import com.gregtechceu.gtceu.common.mui.GTMuiWidgets;
+
+import net.minecraft.MethodsReturnNonnullByDefault;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+
 import brachy.modularui.factory.PosGuiData;
+import brachy.modularui.screen.ModularPanel;
+import brachy.modularui.screen.UISettings;
 import brachy.modularui.value.sync.PanelSyncManager;
 import brachy.modularui.value.sync.SyncHandlers;
 import brachy.modularui.widgets.SlotGroupWidget;
 import brachy.modularui.widgets.layout.Grid;
 import brachy.modularui.widgets.slot.ItemSlot;
 import brachy.modularui.widgets.slot.SlotGroup;
-import brachy.modularui.screen.ModularPanel;
-import brachy.modularui.screen.UISettings;
-import com.gregtechceu.gtceu.common.mui.GTMuiWidgets;
-import com.gregtechceu.gtceu.api.sync_system.annotations.SaveField;
-
-import net.minecraft.MethodsReturnNonnullByDefault;
-import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemStack;
-
 import lombok.Getter;
 
 import java.util.List;

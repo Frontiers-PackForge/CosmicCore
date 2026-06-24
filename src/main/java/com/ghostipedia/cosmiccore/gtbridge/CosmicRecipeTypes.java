@@ -1,8 +1,6 @@
 package com.ghostipedia.cosmiccore.gtbridge;
 
 import com.ghostipedia.cosmiccore.CosmicCore;
-
-import com.ghostipedia.cosmiccore.api.CosmicGuiTextures;
 import com.ghostipedia.cosmiccore.api.capability.recipe.EmberRecipeCapability;
 import com.ghostipedia.cosmiccore.api.capability.recipe.SoulRecipeCapability;
 import com.ghostipedia.cosmiccore.common.data.CosmicSounds;
@@ -22,7 +20,6 @@ import net.minecraft.client.resources.language.I18n;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.level.Level;
 
 import static com.ghostipedia.cosmiccore.common.data.CosmicSounds.*;
 import static com.gregtechceu.gtceu.common.data.GCYMRecipeTypes.ALLOY_BLAST_RECIPES;
@@ -31,9 +28,9 @@ import static com.gregtechceu.gtceu.common.data.GTRecipeTypes.*;
 public class CosmicRecipeTypes {
 
     // TODO(Ore Chaos): these 6 ore-processing recipe types were referenced by their controllers +
-    //  CosmicCoreOreRecipeHandler but never registered (WIP gap). IO sizes inferred from the recipe builders
-    //  (flotation: item+fluid in / item out; powderizer: item in/out; sorter: 1 in / SORTER_IO_CAP=6 out) and
-    //  sensible defaults for the no-recipe-yet ones (sludge/oneiric/dissolution). Tune IO/UI/sound as needed.
+    // CosmicCoreOreRecipeHandler but never registered (WIP gap). IO sizes inferred from the recipe builders
+    // (flotation: item+fluid in / item out; powderizer: item in/out; sorter: 1 in / SORTER_IO_CAP=6 out) and
+    // sensible defaults for the no-recipe-yet ones (sludge/oneiric/dissolution). Tune IO/UI/sound as needed.
     public static final GTRecipeType SLUDGE_DIGESTOR = register(CosmicCore.id("sludge_digestor"), MULTIBLOCK)
             .setMaxIOSize(3, 3, 2, 2)
             .UI(builder -> builder.setProgressBar(GTGuiTextures.PROGRESS_ARROW));
@@ -129,7 +126,7 @@ public class CosmicRecipeTypes {
             .setMaxIOSize(12, 3, 6, 0)
             .setSound(HEAVY_ASSEM)
             // TODO(8.0.0): custom CosmicGuiTextures.PROGRESS_BAR_HEAVY (LDLib ResourceTexture) has no
-            //  ProgressBarTextureSet equivalent; using PROGRESS_ASSEMBLER as closest cosmetic substitute
+            // ProgressBarTextureSet equivalent; using PROGRESS_ASSEMBLER as closest cosmetic substitute
             .UI(builder -> builder.setProgressBar(GTGuiTextures.PROGRESS_ASSEMBLER));
 
     public static final GTRecipeType PLASMITE_FORGE = GTRecipeTypes
@@ -137,7 +134,7 @@ public class CosmicRecipeTypes {
             .setMaxIOSize(3, 3, 3, 3)
             .setSound(HEAVY_ASSEM)
             // TODO(8.0.0): custom CosmicGuiTextures.PROGRESS_BAR_HEAVY (LDLib ResourceTexture) has no
-            //  ProgressBarTextureSet equivalent; using PROGRESS_ASSEMBLER as closest cosmetic substitute
+            // ProgressBarTextureSet equivalent; using PROGRESS_ASSEMBLER as closest cosmetic substitute
             .UI(builder -> builder.setProgressBar(GTGuiTextures.PROGRESS_ASSEMBLER));
 
     public static final GTRecipeType PRISMA_FOUNDRY = GTRecipeTypes
@@ -163,7 +160,8 @@ public class CosmicRecipeTypes {
             .setMaxIOSize(16, 1, 4, 2)
             .setSound(GAS_SUCC)
             .UI(builder -> builder.setProgressBar(GTGuiTextures.PROGRESS_ARROW));
-    public static final GTRecipeType GROVE_RECIPES = GTRecipeTypes.register(CosmicCore.id("drygmy_grove"), GTRecipeTypes.MULTIBLOCK)
+    public static final GTRecipeType GROVE_RECIPES = GTRecipeTypes
+            .register(CosmicCore.id("drygmy_grove"), GTRecipeTypes.MULTIBLOCK)
             .setMaxSize(IO.IN, SoulRecipeCapability.CAP, 1)
             .setMaxSize(IO.OUT, SoulRecipeCapability.CAP, 1)
             .setMaxIOSize(2, 9, 1, 3)
@@ -175,7 +173,8 @@ public class CosmicRecipeTypes {
             .UI(builder -> builder.setProgressBar(GTGuiTextures.PROGRESS_ARROW))
             .setMaxTooltips(1)
             .setSound(GTSoundEntries.FIRE);
-    public static final GTRecipeType LEACHING_PLANT = GTRecipeTypes.register(CosmicCore.id("leaching_plant"), GTRecipeTypes.MULTIBLOCK)
+    public static final GTRecipeType LEACHING_PLANT = GTRecipeTypes
+            .register(CosmicCore.id("leaching_plant"), GTRecipeTypes.MULTIBLOCK)
             .setMaxIOSize(3, 6, 3, 3)
             .UI(builder -> builder.setProgressBar(GTGuiTextures.PROGRESS_ARROW));
 
@@ -283,7 +282,8 @@ public class CosmicRecipeTypes {
             .setHasResearchSlot(true)
             .setMaxIOSize(3, 3, 3, 3)
             // TODO(8.0.0): PROGRESS_BAR_ARC_FURNACE had no ProgressBarTextureSet; closest substitute
-            // 8.0.0 removed GTRecipeType.addDataInfo(...) -> data infos registered in init() via getDataInfos().add(...)
+            // 8.0.0 removed GTRecipeType.addDataInfo(...) -> data infos registered in init() via
+            // getDataInfos().add(...)
             .UI(builder -> builder.setProgressBar(GTGuiTextures.PROGRESS_FUSION));
 
     public static final GTRecipeType ORBITAL_FORGE_ABS = GTRecipeTypes
@@ -292,15 +292,17 @@ public class CosmicRecipeTypes {
             .setHasResearchSlot(true)
             .setMaxIOSize(9, 3, 3, 3)
             // TODO(8.0.0): PROGRESS_BAR_COKE_OVEN had no ProgressBarTextureSet; closest substitute
-            // 8.0.0 removed GTRecipeType.addDataInfo(...) -> data infos registered in init() via getDataInfos().add(...)
+            // 8.0.0 removed GTRecipeType.addDataInfo(...) -> data infos registered in init() via
+            // getDataInfos().add(...)
             .UI(builder -> builder.setProgressBar(GTGuiTextures.PROGRESS_ARROW_MULTIPLE));
-    public static final GTRecipeType DAWN_FORGE = GTRecipeTypes.register(CosmicCore.id("dawn_forge"), GTRecipeTypes.MULTIBLOCK)
+    public static final GTRecipeType DAWN_FORGE = GTRecipeTypes
+            .register(CosmicCore.id("dawn_forge"), GTRecipeTypes.MULTIBLOCK)
             .setMaxIOSize(8, 1, 2, 0)
             .setMaxSize(IO.IN, EmberRecipeCapability.CAP, 1)
             .setSound(DAWN_FORGE_SFX)
             .setMaxTooltips(5)
             // TODO(8.0.0): custom CosmicGuiTextures.DAWN_FORGE (LDLib ResourceTexture) has no
-            //  ProgressBarTextureSet equivalent; using PROGRESS_ARROW_MULTIPLE as closest cosmetic substitute
+            // ProgressBarTextureSet equivalent; using PROGRESS_ARROW_MULTIPLE as closest cosmetic substitute
             .UI(builder -> builder.setProgressBar(GTGuiTextures.PROGRESS_ARROW_MULTIPLE));
 
     public static final GTRecipeType CINDER_HEARTH = GTRecipeTypes
@@ -311,7 +313,7 @@ public class CosmicRecipeTypes {
             .setSound(DAWN_FORGE_SFX)
             .setMaxTooltips(7)
             // TODO(8.0.0): GTGuiTextures.PROGRESS_BAR_BOILER_HEAT is a plain UITexture (not a
-            //  ProgressBarTextureSet) in 8.0.0; using PROGRESS_BOILER_FUEL_STEEL as closest cosmetic substitute
+            // ProgressBarTextureSet) in 8.0.0; using PROGRESS_BOILER_FUEL_STEEL as closest cosmetic substitute
             .UI(builder -> builder.setProgressBar(GTGuiTextures.PROGRESS_BOILER_FUEL_STEEL));
 
     public static final GTRecipeType ARCANE_CRUCIBLE = GTRecipeTypes
@@ -322,7 +324,7 @@ public class CosmicRecipeTypes {
             .setSound(DAWN_FORGE_SFX)
             .setMaxTooltips(7)
             // TODO(8.0.0): GTGuiTextures.PROGRESS_BAR_MASS_FAB is a plain UITexture (not a
-            //  ProgressBarTextureSet) in 8.0.0; using PROGRESS_ARROW_MULTIPLE as closest cosmetic substitute
+            // ProgressBarTextureSet) in 8.0.0; using PROGRESS_ARROW_MULTIPLE as closest cosmetic substitute
             .UI(builder -> builder.setProgressBar(GTGuiTextures.PROGRESS_ARROW_MULTIPLE));
 
     public static final GTRecipeType PYROTHERMIC_REFINERY = GTRecipeTypes
@@ -333,7 +335,7 @@ public class CosmicRecipeTypes {
             .setSound(GTSoundEntries.JET_ENGINE)
             .setMaxTooltips(3)
             // TODO(8.0.0): GTGuiTextures.PROGRESS_BAR_MASS_FAB is a plain UITexture (not a
-            //  ProgressBarTextureSet) in 8.0.0; using PROGRESS_ARROW_MULTIPLE as closest cosmetic substitute
+            // ProgressBarTextureSet) in 8.0.0; using PROGRESS_ARROW_MULTIPLE as closest cosmetic substitute
             .UI(builder -> builder.setProgressBar(GTGuiTextures.PROGRESS_ARROW_MULTIPLE));
 
     public static final GTRecipeType MANA_ETCHING_FACTORY = GTRecipeTypes
@@ -355,7 +357,8 @@ public class CosmicRecipeTypes {
             // .setSound(CosmicSounds.BLACK_HOLE_CRY)
             .UI(builder -> builder.setProgressBar(GTGuiTextures.PROGRESS_ARROW));
 
-    public static final GTRecipeType STELLAR_IRIS = GTRecipeTypes.register(CosmicCore.id("stellar_iris"), GTRecipeTypes.MULTIBLOCK)
+    public static final GTRecipeType STELLAR_IRIS = GTRecipeTypes
+            .register(CosmicCore.id("stellar_iris"), GTRecipeTypes.MULTIBLOCK)
             .setMaxIOSize(16, 16, 16, 16)
             // .setSound(CosmicSounds.BLACK_HOLE_CRY)
             .UI(builder -> builder.setProgressBar(GTGuiTextures.PROGRESS_ARROW));
@@ -371,7 +374,8 @@ public class CosmicRecipeTypes {
             .register(CosmicCore.id("chormatic_distillation_plant"), GTRecipeTypes.MULTIBLOCK)
             .setMaxIOSize(1, 1, 1, 16)
             .UI(builder -> builder.setProgressBar(GTGuiTextures.PROGRESS_ARROW));
-    public static final GTRecipeType CELESTIAL_BORE = GTRecipeTypes.register(CosmicCore.id("celestial_bore"), GTRecipeTypes.MULTIBLOCK)
+    public static final GTRecipeType CELESTIAL_BORE = GTRecipeTypes
+            .register(CosmicCore.id("celestial_bore"), GTRecipeTypes.MULTIBLOCK)
             .setMaxIOSize(1, 54, 3, 18)
             .setSound(CosmicSounds.LAMINATOR)
             .UI(builder -> builder.setProgressBar(GTGuiTextures.PROGRESS_ARROW));
@@ -453,7 +457,8 @@ public class CosmicRecipeTypes {
      * TODO: Neutron Forge Pressure/Heat Buildup Mechanic, feeding it astronomically large amounts of plasma allow it to
      * unlock 'COSMIC PARALLELS' - Which Allow MULTIPLE UNIQUE RECIPES to run at once.
      */
-    public static final GTRecipeType NEUTRON_FORGE = GTRecipeTypes.register(CosmicCore.id("neutron_forge"), GTRecipeTypes.MULTIBLOCK)
+    public static final GTRecipeType NEUTRON_FORGE = GTRecipeTypes
+            .register(CosmicCore.id("neutron_forge"), GTRecipeTypes.MULTIBLOCK)
             .setMaxIOSize(12, 12, 12, 12)
             .setHasResearchSlot(true)
             .setSound(GTSoundEntries.REPLICATOR) // TODO - Sounds
@@ -589,7 +594,8 @@ public class CosmicRecipeTypes {
                 // If It Doesn't have a Dimension, add the recipe and give it an dimension req of 'Sun Orbit'
                 orbitBuilderEBF
                         .addCondition(new DimensionCondition(
-                                ResourceKey.create(Registries.DIMENSION, ResourceLocation.parse("frontiers:sun_orbit"))))
+                                ResourceKey.create(Registries.DIMENSION,
+                                        ResourceLocation.parse("frontiers:sun_orbit"))))
                         .save(provider);
             }
         });
@@ -610,7 +616,8 @@ public class CosmicRecipeTypes {
                 // If It Doesn't have a Dimension, add the recipe and give it an dimension req of 'Sun Orbit'
                 orbitBuilderABS
                         .addCondition(new DimensionCondition(
-                                ResourceKey.create(Registries.DIMENSION, ResourceLocation.parse("frontiers:sun_orbit"))))
+                                ResourceKey.create(Registries.DIMENSION,
+                                        ResourceLocation.parse("frontiers:sun_orbit"))))
                         .save(provider);
             }
         });

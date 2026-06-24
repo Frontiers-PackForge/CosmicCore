@@ -5,15 +5,11 @@ import com.ghostipedia.cosmiccore.api.data.savedData.UniqueMultiblockSavedData;
 import com.gregtechceu.gtceu.api.blockentity.BlockEntityCreationInfo;
 import com.gregtechceu.gtceu.api.machine.multiblock.WorkableElectricMultiblockMachine;
 import com.gregtechceu.gtceu.api.machine.trait.RecipeLogic;
-import com.gregtechceu.gtceu.common.machine.owner.FTBOwner;
 import com.gregtechceu.gtceu.api.sync_system.annotations.SaveField;
+import com.gregtechceu.gtceu.common.machine.owner.FTBOwner;
 
-import net.minecraft.ChatFormatting;
-import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.Style;
 import net.minecraft.server.level.ServerLevel;
 
-import java.util.List;
 import java.util.UUID;
 
 public class UniqueWorkableElectricMultiblockMachine extends WorkableElectricMultiblockMachine {

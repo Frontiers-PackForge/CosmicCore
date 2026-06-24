@@ -21,7 +21,8 @@
     "xaerominimap.CCoreMinimapFBORendererMixin",
     "xaeroworldmap.CCoreMapElementRenderHandlerBuilderMixin",
     "embers.EmberDialBlockMixin",
-    "modularui.ModularUIConfigMixin"
+    "modularui.ModularUIConfigMixin",
+    "gtfix.ModelBakerImplCtmScraperFixMixin"
   ],
   "mixins": [
     "BlockPatternMixin",

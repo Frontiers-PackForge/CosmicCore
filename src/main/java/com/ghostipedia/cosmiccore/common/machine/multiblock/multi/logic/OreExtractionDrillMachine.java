@@ -1,8 +1,5 @@
 package com.ghostipedia.cosmiccore.common.machine.multiblock.multi.logic;
 
-import com.ghostipedia.cosmiccore.client.gui.widget.drill.OreExtractionDrillFancyUIWidget;
-import com.ghostipedia.cosmiccore.client.gui.widget.drill.OreExtractionDrillWidget;
-
 import com.gregtechceu.gtceu.api.GTValues;
 import com.gregtechceu.gtceu.api.blockentity.BlockEntityCreationInfo;
 import com.gregtechceu.gtceu.api.capability.IEnergyContainer;
@@ -10,23 +7,11 @@ import com.gregtechceu.gtceu.api.capability.recipe.EURecipeCapability;
 import com.gregtechceu.gtceu.api.capability.recipe.IO;
 import com.gregtechceu.gtceu.api.machine.multiblock.WorkableElectricMultiblockMachine;
 import com.gregtechceu.gtceu.api.misc.EnergyContainerList;
-import com.gregtechceu.gtceu.utils.FormattingUtil;
 
-import com.lowdragmc.lowdraglib.gui.modular.ModularUI;
-import com.lowdragmc.lowdraglib.gui.widget.Widget;
-
-import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.HoverEvent;
-import net.minecraft.network.chat.MutableComponent;
-import net.minecraft.network.chat.Style;
-import net.minecraft.world.entity.player.Player;
 
 import lombok.Getter;
 import org.jetbrains.annotations.NotNull;
-
-import java.util.List;
-import java.util.Map;
 
 public class OreExtractionDrillMachine extends WorkableElectricMultiblockMachine {
 
@@ -125,5 +110,5 @@ public class OreExtractionDrillMachine extends WorkableElectricMultiblockMachine
     }
 
     // TODO(8.0.0 MUI2): createUIWidget/createUI/addDisplayText (LDLib UI: drill-phase + ore-scan status via
-    //  OreExtractionDrillWidget) removed in GTCEu 8.0.0. Rebuild on MUI2; OreExtractionDrillLogic supplies the data.
+    // OreExtractionDrillWidget) removed in GTCEu 8.0.0. Rebuild on MUI2; OreExtractionDrillLogic supplies the data.
 }

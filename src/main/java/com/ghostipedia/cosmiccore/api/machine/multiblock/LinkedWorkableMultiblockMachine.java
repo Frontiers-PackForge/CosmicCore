@@ -1,13 +1,12 @@
 package com.ghostipedia.cosmiccore.api.machine.multiblock;
 
-import com.ghostipedia.cosmiccore.utils.ItemData;
-
 import com.ghostipedia.cosmiccore.CosmicCore;
 import com.ghostipedia.cosmiccore.api.capability.ILinkedMultiblock;
 import com.ghostipedia.cosmiccore.api.data.savedData.LinkEntry;
 import com.ghostipedia.cosmiccore.api.data.savedData.LinkedMultiblockSavedData;
 import com.ghostipedia.cosmiccore.common.machine.multiblock.LinkedMultiblockHelper;
 import com.ghostipedia.cosmiccore.common.machine.multiblock.LinkedMultiblockHelper.RolePair;
+import com.ghostipedia.cosmiccore.utils.ItemData;
 
 import com.gregtechceu.gtceu.api.blockentity.BlockEntityCreationInfo;
 import com.gregtechceu.gtceu.api.machine.MetaMachine;
@@ -192,7 +191,8 @@ public abstract class LinkedWorkableMultiblockMachine extends WorkableMultiblock
 
         // Update datastick name
         String machineName = getDefinition().getName();
-        dataStick.set(net.minecraft.core.component.DataComponents.CUSTOM_NAME, Component.translatable("cosmiccore.datastick.link_copied", machineName));
+        dataStick.set(net.minecraft.core.component.DataComponents.CUSTOM_NAME,
+                Component.translatable("cosmiccore.datastick.link_copied", machineName));
 
         // Feedback
         player.sendSystemMessage(Component.translatable("cosmiccore.link.copied", machineName)

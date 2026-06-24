@@ -1,10 +1,10 @@
 package com.ghostipedia.cosmiccore;
 
+import com.ghostipedia.cosmiccore.api.item.component.ICustomRenderer;
 import com.ghostipedia.cosmiccore.common.data.CosmicItems;
 
 import com.gregtechceu.gtceu.GTCEu;
 import com.gregtechceu.gtceu.api.item.ComponentItem;
-import com.ghostipedia.cosmiccore.api.item.component.ICustomRenderer;
 
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;

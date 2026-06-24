@@ -50,8 +50,8 @@ public class SoulHatchPartMachine extends TieredIOPartMachine {
     }
 
     // TODO(8.0.0 MUI2): the LDLib createUIWidget surface (owner + soul-network contents readout via
-    //  ComponentPanelWidget) was removed in GTCEu 8.0.0. Rebuild on IItemUIHolder/buildUI when the soul UI
-    //  is ported; soulContainer.getStacks() supplies the display data. Non-UI logic preserved.
+    // ComponentPanelWidget) was removed in GTCEu 8.0.0. Rebuild on IItemUIHolder/buildUI when the soul UI
+    // is ported; soulContainer.getStacks() supplies the display data. Non-UI logic preserved.
 
     public static int getMaxConsumption(int tier) {
         return switch (tier) {

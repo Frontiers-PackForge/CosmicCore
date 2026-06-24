@@ -1,13 +1,13 @@
 package com.ghostipedia.cosmiccore.mixin;
 
 import com.ghostipedia.cosmiccore.api.data.material.property.CCoreMaterialIconSet;
+import com.ghostipedia.cosmiccore.api.item.component.ICustomRenderer;
 import com.ghostipedia.cosmiccore.client.renderer.item.CosmicCoreItemRendererProvider;
 
 import com.gregtechceu.gtceu.GTCEu;
 import com.gregtechceu.gtceu.api.data.chemical.material.Material;
 import com.gregtechceu.gtceu.api.data.tag.TagPrefix;
 import com.gregtechceu.gtceu.api.item.TagPrefixItem;
-import com.ghostipedia.cosmiccore.api.item.component.ICustomRenderer;
 
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;

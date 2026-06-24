@@ -11,20 +11,16 @@ import com.gregtechceu.gtceu.api.machine.feature.multiblock.IMultiPart;
 import com.gregtechceu.gtceu.api.machine.multiblock.WorkableElectricMultiblockMachine;
 import com.gregtechceu.gtceu.api.misc.EnergyContainerList;
 import com.gregtechceu.gtceu.api.recipe.GTRecipe;
-import com.gregtechceu.gtceu.utils.FormattingUtil;
 
 import com.lowdragmc.lowdraglib.syncdata.annotation.DescSynced;
 import com.lowdragmc.lowdraglib.syncdata.annotation.Persisted;
 
-import net.minecraft.network.chat.Component;
 import net.neoforged.neoforge.fluids.FluidStack;
 
-import it.unimi.dsi.fastutil.longs.Long2ObjectMaps;
 import lombok.Getter;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 import javax.annotation.Nullable;
 
@@ -161,7 +157,7 @@ public class VoraxReactorMachine extends WorkableElectricMultiblockMachine {
     }
 
     // TODO(8.0.0 MUI2): addDisplayText (LDLib status readout: contagion strength/rate, cleaning status) was
-    //  removed in GTCEu 8.0.0. Rebuild on MUI2 when ported; contagionStrength/contagionDelta/sterileHatch preserved.
+    // removed in GTCEu 8.0.0. Rebuild on MUI2 when ported; contagionStrength/contagionDelta/sterileHatch preserved.
 
     public static float clamp(float v, float min, float max) {
         return Math.max(min, Math.min(v, max));

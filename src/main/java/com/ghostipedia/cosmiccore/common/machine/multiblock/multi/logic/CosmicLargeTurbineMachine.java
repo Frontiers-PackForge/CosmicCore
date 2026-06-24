@@ -171,7 +171,7 @@ public class CosmicLargeTurbineMachine extends WorkableElectricMultiblockMachine
     // ******* GUI ********//
     //////////////////////////////////////
 
-        public void addDisplayText(List<Component> textList) {
+    public void addDisplayText(List<Component> textList) {
         if (isFormed()) {
             var rotorHolder = getRotorHolder();
 

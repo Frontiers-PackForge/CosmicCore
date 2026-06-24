@@ -19,7 +19,6 @@ import com.ghostipedia.cosmiccore.common.machine.part.WirelessDataSensor;
 import com.ghostipedia.cosmiccore.gtbridge.CosmicRecipeTypes;
 
 import com.gregtechceu.gtceu.GTCEu;
-import com.gregtechceu.gtceu.api.GTCEuAPI;
 import com.gregtechceu.gtceu.api.GTValues;
 import com.gregtechceu.gtceu.api.blockentity.BlockEntityCreationInfo;
 import com.gregtechceu.gtceu.api.capability.recipe.IO;
@@ -30,8 +29,8 @@ import com.gregtechceu.gtceu.api.machine.multiblock.PartAbility;
 import com.gregtechceu.gtceu.api.machine.property.GTMachineModelProperties;
 import com.gregtechceu.gtceu.api.machine.steam.SimpleSteamMachine;
 import com.gregtechceu.gtceu.api.machine.trait.RecipeLogic;
-import com.gregtechceu.gtceu.api.multiblock.pattern.MultiblockPatternBuilder;
 import com.gregtechceu.gtceu.api.multiblock.Predicates;
+import com.gregtechceu.gtceu.api.multiblock.pattern.MultiblockPatternBuilder;
 import com.gregtechceu.gtceu.api.multiblock.util.RelativeDirection;
 import com.gregtechceu.gtceu.api.recipe.GTRecipeType;
 import com.gregtechceu.gtceu.api.recipe.modifier.RecipeModifierList;
@@ -48,10 +47,8 @@ import com.gregtechceu.gtceu.common.machine.multiblock.electric.PowerSubstationM
 import com.gregtechceu.gtceu.common.machine.multiblock.part.EnergyHatchPartMachine;
 import com.gregtechceu.gtceu.common.machine.multiblock.part.FluidHatchPartMachine;
 import com.gregtechceu.gtceu.common.machine.multiblock.primitive.PrimitiveWorkableMachine;
-import com.gregtechceu.gtceu.config.ConfigHolder;
 import com.gregtechceu.gtceu.utils.FormattingUtil;
 
-import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.Block;
@@ -572,8 +569,8 @@ public class CosmicMachines {
                     .where('B', Predicates.powerSubstationBatteries())
                     .build())
             // TODO(8.0.0): MultiblockShapeInfo + MultiblockMachineBuilder.shapeInfos() were removed in the
-            //  GTCEu pattern rewrite. Reimplement the JEI multiblock preview against the new api.multiblock
-            //  preview system once it's available. Shelved for launch (preview only, not core function).
+            // GTCEu pattern rewrite. Reimplement the JEI multiblock preview against the new api.multiblock
+            // preview system once it's available. Shelved for launch (preview only, not core function).
             .workableCasingModel(GTCEu.id("block/casings/solid/machine_casing_palladium_substation"),
                     GTCEu.id("block/multiblock/power_substation"))
             .register();
