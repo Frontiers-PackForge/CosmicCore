@@ -6,7 +6,7 @@ import com.gregtechceu.gtceu.api.blockentity.BlockEntityCreationInfo;
 
 import static com.ghostipedia.cosmiccore.common.data.CosmicBlocks.*;
 import static com.gregtechceu.gtceu.api.GTValues.*;
-import static com.gregtechceu.gtceu.api.pattern.Predicates.*;
+import static com.gregtechceu.gtceu.api.multiblock.Predicates.*;
 
 public class StarLadderDummy extends ModularizedWorkableElectricMultiblockMachine {
 

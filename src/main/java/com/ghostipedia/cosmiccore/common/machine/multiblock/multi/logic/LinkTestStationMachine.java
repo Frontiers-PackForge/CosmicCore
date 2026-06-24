@@ -61,9 +61,7 @@ public class LinkTestStationMachine extends LinkedWorkableElectricMultiblockMach
 
     // ==================== Display ====================
 
-    @Override
-    public void addDisplayText(List<Component> textList) {
-        super.addDisplayText(textList);
+        public void addDisplayText(List<Component> textList) {
 
         if (!isFormed()) return;
 

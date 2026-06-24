@@ -3,6 +3,7 @@
 # gtceu itself comes from the local flat jar in libs/ (gtceu-1.21.1-8.0.0.jar); version kept for mods.toml placeholder
 gtceu = "8.0.0"
 ldlib = "1.0.35.a"
+mui = "3.3.0-SNAPSHOT"
 registrate = "MC1.21-1.3.0+67"
 configuration = "3.1.1-neoforge"
 
@@ -15,7 +16,7 @@ kubejs = "2101.7.2-build.368"
 rhino = "2101.2.7-build.85"
 architectury = "13.0.8"
 clothconfig = "15.0.140"
-create = "6.0.8-168"   # compileOnly; pack runtime ships 6.0.10
+create = "6.0.10-281"   # aligned to pack runtime (6.0.10); Embers Re-Ignited requires >= 6.0.10
 ponder = "1.0.64"
 flywheel = "1.0.5"
 curios = "9.5.1+1.21.1"
@@ -56,6 +57,7 @@ iris = "1.8.12+1.21.1-neoforge"
 [libraries]
 gtceu               = { module = "com.gregtechceu.gtceu:gtceu-1.21.1", version.ref = "gtceu" }
 ldlib               = { module = "com.lowdragmc.ldlib:ldlib-neoforge-1.21.1", version.ref = "ldlib" }
+mui                 = { module = "brachy.modularui:modularui-mc1.21.1", version.ref = "mui" }
 registrate          = { module = "com.tterrag.registrate:Registrate", version.ref = "registrate" }
 configuration       = { module = "dev.toma.configuration:configuration-1.21.1", version.ref = "configuration" }
 

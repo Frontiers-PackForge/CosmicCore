@@ -18,21 +18,17 @@ public class HeatWorkableElectricMultiblockMachine extends WorkableElectricMulti
     @Getter
     private IHeatContainer heatContainer = null;
 
-    public HeatWorkableElectricMultiblockMachine(BlockEntityCreationInfo holder) {
-        super(holder);
+    public HeatWorkableElectricMultiblockMachine(BlockEntityCreationInfo info) {
+        super(info);
     }
 
     @Override
-    public void onStructureFormed() {
-        super.onStructureFormed();
-        Map<Long, IO> ioMap = getMultiblockState().getMatchContext().getOrCreate("ioMap", Long2ObjectMaps::emptyMap);
+    public void formStructure(@org.jetbrains.annotations.NotNull String substructureName) {
+        super.formStructure(substructureName);
         for (IMultiPart part : getParts()) {
-            IO io = ioMap.getOrDefault(part.self().getBlockPos().asLong(), IO.BOTH);
             if (part instanceof IHeatContainer container) {
                 this.heatContainer = container;
             }
         }
     }
-
-    ;
 }

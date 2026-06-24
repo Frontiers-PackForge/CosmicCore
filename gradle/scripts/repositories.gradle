@@ -5,7 +5,11 @@ repositories {
     maven { // GTCEu
         name = 'GTCEu Maven'
         url = 'https://maven.gtceu.com'
-        content { includeGroup 'com.gregtechceu.gtceu' }
+        content {
+            includeGroup 'com.gregtechceu.gtceu'
+            // ModularUI2: GTCEu re-hosts brachy.modularui on its own maven (only live remote serving 3.3.0-SNAPSHOT).
+            includeGroup 'brachy.modularui'
+        }
     }
     maven { // AE2 (upstream), GuideME, AE2WTLib (Mari023), JEI mirror
         name = "ModMaven"

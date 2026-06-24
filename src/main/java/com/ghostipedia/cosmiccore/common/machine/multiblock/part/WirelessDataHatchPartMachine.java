@@ -5,14 +5,21 @@ import com.ghostipedia.cosmiccore.utils.OwnershipUtils;
 
 import com.gregtechceu.gtceu.api.blockentity.BlockEntityCreationInfo;
 import com.gregtechceu.gtceu.api.capability.IDataAccessHatch;
-import com.gregtechceu.gtceu.api.gui.GuiTextures;
+import com.gregtechceu.gtceu.api.machine.feature.IMuiMachine;
 import com.gregtechceu.gtceu.api.machine.multiblock.MultiblockDisplayText;
 import com.gregtechceu.gtceu.api.machine.multiblock.part.MultiblockPartMachine;
+import com.gregtechceu.gtceu.api.multiblock.pattern.PatternState;
+import brachy.modularui.api.drawable.Text;
+import brachy.modularui.factory.PosGuiData;
+import brachy.modularui.value.sync.PanelSyncManager;
+import brachy.modularui.widgets.TextWidget;
+import brachy.modularui.widgets.layout.Flow;
 import com.gregtechceu.gtceu.api.recipe.GTRecipe;
+import brachy.modularui.screen.ModularPanel;
+import brachy.modularui.screen.UISettings;
+import com.gregtechceu.gtceu.common.mui.GTMuiWidgets;
 import com.gregtechceu.gtceu.common.machine.owner.FTBOwner;
 import com.gregtechceu.gtceu.common.recipe.condition.ResearchCondition;
-
-import com.lowdragmc.lowdraglib.gui.widget.*;
 
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.network.chat.Component;
@@ -27,10 +34,10 @@ import javax.annotation.ParametersAreNonnullByDefault;
 
 @MethodsReturnNonnullByDefault
 @ParametersAreNonnullByDefault
-public class WirelessDataHatchPartMachine extends MultiblockPartMachine implements IDataAccessHatch {
+public class WirelessDataHatchPartMachine extends MultiblockPartMachine implements IDataAccessHatch, IMuiMachine {
 
-    public WirelessDataHatchPartMachine(BlockEntityCreationInfo holder) {
-        super(holder);
+    public WirelessDataHatchPartMachine(BlockEntityCreationInfo info) {
+        super(info);
     }
 
     @Override
@@ -45,7 +52,9 @@ public class WirelessDataHatchPartMachine extends MultiblockPartMachine implemen
 
     @Override
     public boolean isRecipeAvailable(@NotNull GTRecipe recipe, @NotNull Collection<IDataAccessHatch> seen) {
-        var team = getOwner() instanceof FTBOwner ftbOwner ? ftbOwner.getPlayerTeam(getOwnerUUID()) : null;
+        var machineOwner = getOwner();
+        if (machineOwner == null) return false;
+        var team = ((FTBOwner) machineOwner).getPlayerTeam(getOwnerUUID());
         var owner = team != null ? team.getTeamId() : getOwnerUUID();
 
         seen.add(this);
@@ -55,24 +64,42 @@ public class WirelessDataHatchPartMachine extends MultiblockPartMachine implemen
     }
 
     private UUID getTeamUUID() {
-        var team = getOwner() instanceof FTBOwner ftbOwner ? ftbOwner.getPlayerTeam(getOwnerUUID()) : null;
+        var owner = getOwner();
+        if (owner == null) return getOwnerUUID();
+        var team = ((FTBOwner) owner).getPlayerTeam(getOwnerUUID());
         return team != null ? team.getTeamId() : getOwnerUUID();
     }
 
     @Override
-    public Widget createUIWidget() {
-        var group = new WidgetGroup(0, 0, 182 + 8, 117 + 8);
-        group.addWidget(new DraggableScrollableWidgetGroup(4, 4, 182, 117).setBackground(GuiTextures.DISPLAY)
-                .addWidget(new LabelWidget(4, 5, self().getBlockState().getBlock().getDescriptionId()))
-                .addWidget(new ComponentPanelWidget(4, 17, this::addDisplayText)
-                        .textSupplier(this.getLevel().isClientSide ? null : this::addDisplayText)
-                        .setMaxWidthLimit(200)));
-        group.setBackground(GuiTextures.BACKGROUND_INVERSE);
-        return group;
+    public ModularPanel buildUI(PosGuiData data, PanelSyncManager syncManager, UISettings settings) {
+        var panel = ModularPanel.defaultPanel(getDefinition().getId().getPath(), 190, 130);
+        panel.child(GTMuiWidgets.createTitleBar(this.getDefinition(), 190));
+
+        panel.child(Flow.column()
+                .coverChildren()
+                .padding(8)
+                .top(14)
+                .horizontalCenter() // brachy 3.3.0: alignX(float) removed; horizontalCenter() == leftRel(0.5f)
+                .childPadding(4)
+                .child(new TextWidget<>(Text.dynamic(() -> {
+                    var textList = new java.util.ArrayList<Component>();
+                    addDisplayText(textList);
+                    if (textList.isEmpty()) return Component.empty();
+                    var result = Component.literal("");
+                    for (int i = 0; i < textList.size(); i++) {
+                        if (i > 0) result.append(Component.literal("\n"));
+                        result.append(textList.get(i));
+                    }
+                    return result;
+                }))));
+
+        return panel;
     }
 
     public void addDisplayText(List<Component> textList) {
-        MultiblockDisplayText.builder(textList, isFormed())
+        PatternState state = new PatternState();
+        state.setFormed(isFormed());
+        MultiblockDisplayText.builder(textList, state)
                 .addCustom(list -> OwnershipUtils.addOwnerLine(list, getOwner(), true));
     }
 }

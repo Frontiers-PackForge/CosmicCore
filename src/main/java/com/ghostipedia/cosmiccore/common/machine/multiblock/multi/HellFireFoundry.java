@@ -9,8 +9,8 @@ import com.gregtechceu.gtceu.api.data.RotationState;
 import com.gregtechceu.gtceu.api.machine.MultiblockMachineDefinition;
 import com.gregtechceu.gtceu.api.machine.multiblock.PartAbility;
 import com.gregtechceu.gtceu.api.machine.multiblock.WorkableElectricMultiblockMachine;
-import com.gregtechceu.gtceu.api.pattern.FactoryBlockPattern;
-import com.gregtechceu.gtceu.api.pattern.Predicates;
+import com.gregtechceu.gtceu.api.multiblock.pattern.MultiblockPatternBuilder;
+import com.gregtechceu.gtceu.api.multiblock.Predicates;
 import com.gregtechceu.gtceu.api.recipe.OverclockingLogic;
 import com.gregtechceu.gtceu.common.data.GTRecipeModifiers;
 
@@ -19,7 +19,7 @@ import static com.ghostipedia.cosmiccore.api.registries.CosmicRegistration.REGIS
 import static com.ghostipedia.cosmiccore.common.data.CosmicBlocks.BLANK_RUNE;
 import static com.ghostipedia.cosmiccore.common.data.CosmicBlocks.HIGHLY_CONDUCTIVE_FISSION_CASING;
 import static com.ghostipedia.cosmiccore.common.data.datagen.CosmicMachineModels.createSeparateControllerCasingMachineModel;
-import static com.gregtechceu.gtceu.api.pattern.Predicates.*;
+import static com.gregtechceu.gtceu.api.multiblock.Predicates.*;
 import static com.gregtechceu.gtceu.common.data.GTRecipeModifiers.BATCH_MODE;
 import static com.gregtechceu.gtceu.common.data.GTRecipeModifiers.ELECTRIC_OVERCLOCK;
 import static com.klikli_dev.occultism.registry.OccultismBlocks.IESNIUM_BLOCK;
@@ -34,16 +34,16 @@ public class HellFireFoundry {
             .partAppearance((controller, part, side) -> HIGHLY_CONDUCTIVE_FISSION_CASING.getDefaultState())
             .recipeModifiers(GTRecipeModifiers.PARALLEL_HATCH,
                     ELECTRIC_OVERCLOCK.apply(OverclockingLogic.PERFECT_OVERCLOCK), BATCH_MODE)
-            .pattern(definition -> FactoryBlockPattern.start()
-                    .aisle("         ", "         ", " AAAAAAA ", "  AAAAA  ", "         ", "         ", "         ")
-                    .aisle(" AA   AA ", "         ", "ABBBBBBBA", " BBBBBBB ", " BB   BB ", " B     B ", " C     C ")
-                    .aisle(" A     A ", "  A   A  ", "ABBBBBBBA", "ABB   BBA", " B     B ", "         ", "         ")
-                    .aisle("         ", "         ", "ABBBBBBBA", "AB CCC BA", "         ", "         ", "         ")
-                    .aisle("         ", "         ", "ABBBBBBBA", "AB CXC BA", "         ", "         ", "         ")
-                    .aisle("         ", "         ", "ABBBBBBBA", "AB CCC BA", "         ", "         ", "         ")
-                    .aisle(" A     A ", "  A   A  ", "ABBBBBBBA", "ABB   BBA", " B     B ", "         ", "         ")
-                    .aisle(" AA   AA ", "         ", "ABBBBBBBA", " BBBBBBB ", " BB   BB ", " B     B ", " C     C ")
-                    .aisle("         ", "         ", " AAAAAAA ", "  AAQAA  ", "         ", "         ", "         ")
+            .pattern(definition -> MultiblockPatternBuilder.start()
+                    .slice("         ", "         ", " AAAAAAA ", "  AAAAA  ", "         ", "         ", "         ")
+                    .slice(" AA   AA ", "         ", "ABBBBBBBA", " BBBBBBB ", " BB   BB ", " B     B ", " C     C ")
+                    .slice(" A     A ", "  A   A  ", "ABBBBBBBA", "ABB   BBA", " B     B ", "         ", "         ")
+                    .slice("         ", "         ", "ABBBBBBBA", "AB CCC BA", "         ", "         ", "         ")
+                    .slice("         ", "         ", "ABBBBBBBA", "AB CXC BA", "         ", "         ", "         ")
+                    .slice("         ", "         ", "ABBBBBBBA", "AB CCC BA", "         ", "         ", "         ")
+                    .slice(" A     A ", "  A   A  ", "ABBBBBBBA", "ABB   BBA", " B     B ", "         ", "         ")
+                    .slice(" AA   AA ", "         ", "ABBBBBBBA", " BBBBBBB ", " BB   BB ", " B     B ", " C     C ")
+                    .slice("         ", "         ", " AAAAAAA ", "  AAQAA  ", "         ", "         ", "         ")
                     .where('Q', Predicates.controller(Predicates.blocks(definition.get())))
                     .where(' ', Predicates.any())
                     .where('A', blocks(BLANK_RUNE.get()))

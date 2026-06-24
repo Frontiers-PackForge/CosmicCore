@@ -6,7 +6,6 @@ import com.gregtechceu.gtceu.api.machine.feature.IDataStickInteractable;
 import com.gregtechceu.gtceu.api.machine.feature.IHasCircuitSlot;
 import com.gregtechceu.gtceu.api.machine.trait.NotifiableFluidTank;
 import com.gregtechceu.gtceu.common.data.item.GTDataComponents;
-import com.gregtechceu.gtceu.integration.ae2.gui.widget.AEFluidConfigWidget;
 import com.gregtechceu.gtceu.integration.ae2.machine.MEHatchPartMachine;
 import com.gregtechceu.gtceu.integration.ae2.slot.ExportOnlyAEFluidList;
 import com.gregtechceu.gtceu.integration.ae2.slot.ExportOnlyAEFluidSlot;
@@ -26,6 +25,7 @@ import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.component.CustomData;
+
 import net.neoforged.neoforge.fluids.capability.IFluidHandler;
 
 import appeng.api.config.Actionable;
@@ -41,14 +41,8 @@ public class CosmicInputHatchPartMachine extends MEHatchPartMachine
 
     protected ExportOnlyAEFluidList aeFluidHandler;
 
-    public CosmicInputHatchPartMachine(BlockEntityCreationInfo holder) {
-        super(holder, IO.IN);
-        super.circuitSlotEnabled = false;
-    }
-
-    @Override
-    public void onMachineDestroyed() {
-        flushInventory();
+    public CosmicInputHatchPartMachine(BlockEntityCreationInfo info) {
+        super(info, IO.IN);
     }
 
     @Override
@@ -57,6 +51,11 @@ public class CosmicInputHatchPartMachine extends MEHatchPartMachine
         return aeFluidHandler;
     }
 
+    @Override
+    public void onMachineDestroyed() {
+        super.onMachineDestroyed();
+        flushInventory();
+    }
     /////////////////////////////////
     // ********** Sync ME *********//
     /////////////////////////////////
@@ -118,8 +117,8 @@ public class CosmicInputHatchPartMachine extends MEHatchPartMachine
     // ********** GUI ***********//
     ///////////////////////////////
 
-    @Override
-    public Widget createUIWidget() {
+    // TODO: Convert to MUI2 buildUI(PosGuiData, PanelSyncManager, UISettings)
+    public Widget createUIWidgetOld() {
         WidgetGroup group = new WidgetGroup(new Position(0, 0));
         // ME Network status
         group.addWidget(new LabelWidget(3, 0, () -> this.isOnline ?
@@ -127,7 +126,9 @@ public class CosmicInputHatchPartMachine extends MEHatchPartMachine
                 "gtceu.gui.me_network.offline"));
 
         // Config slots
-        group.addWidget(new AEFluidConfigWidget(3, 10, this.aeFluidHandler));
+        // TODO(8.0.0): re-add ME config slots in a MUI2 buildUI override via
+        //   new com.gregtechceu.gtceu.integration.ae2.gui.AEConfigWidget(aeFluidHandler, CONFIG_SIZE, true)
+        //   (AEFluidConfigWidget was merged into AEConfigWidget; this LDLib WidgetGroup path is dead).
 
         return group;
     }
@@ -152,7 +153,7 @@ public class CosmicInputHatchPartMachine extends MEHatchPartMachine
     @Override
     public final InteractionResult onDataStickUse(Player player, ItemStack dataStick) {
         CustomData tag = dataStick.get(GTDataComponents.DATA_COPY_TAG);
-        if (tag == null || !tag.contains("MEInputHatch")) {
+        if (tag == null || !tag.copyTag().contains("MEInputHatch")) {
             return InteractionResult.PASS;
         }
 

@@ -1,5 +1,24 @@
 package com.ghostipedia.cosmiccore.client.gui.widget.starladder;
 
+import com.lowdragmc.lowdraglib.gui.widget.WidgetGroup;
+
+import java.util.function.IntSupplier;
+
+// DESIGN REFERENCE (GTCEu 8.0.0 MUI2 migration): the original implementation is preserved verbatim in the
+// block comment below for the eventual MUI2 rebuild. FancyMachineUIWidget / IFancyUIProvider / api.gui /
+// api.gui.widget were removed in the GTCEu 8.0.0 UI rewrite, so this is gutted to a no-op WidgetGroup stub.
+// See memory feedback_cosmiccore_keep_fancy_widgets: keep removed-API UI widgets as design reference, never delete.
+public class StarLadderFancyUIWidget extends WidgetGroup {
+
+    public StarLadderFancyUIWidget(Object mainPage, int width, int height, IntSupplier tierSupplier) {
+        super(0, 0, width, height);
+    }
+}
+
+
+/* ===== ORIGINAL DESIGN REFERENCE (pre-GTCEu-8.0.0) =====
+package com.ghostipedia.cosmiccore.client.gui.widget.starladder;
+
 import com.gregtechceu.gtceu.api.gui.fancy.FancyMachineUIWidget;
 import com.gregtechceu.gtceu.api.gui.fancy.IFancyUIProvider;
 
@@ -210,3 +229,5 @@ public class StarLadderFancyUIWidget extends FancyMachineUIWidget {
         graphics.drawString(font, title, centeredX, centeredY, titleColor, true);
     }
 }
+
+===== END ORIGINAL DESIGN REFERENCE ===== */

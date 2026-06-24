@@ -7,13 +7,13 @@ import com.gregtechceu.gtceu.GTCEu;
 import com.gregtechceu.gtceu.api.data.RotationState;
 import com.gregtechceu.gtceu.api.machine.MultiblockMachineDefinition;
 import com.gregtechceu.gtceu.api.machine.multiblock.PartAbility;
-import com.gregtechceu.gtceu.api.pattern.FactoryBlockPattern;
+import com.gregtechceu.gtceu.api.multiblock.pattern.MultiblockPatternBuilder;
 import com.gregtechceu.gtceu.common.data.GTBlocks;
 
 import net.minecraft.network.chat.Component;
 
 import static com.ghostipedia.cosmiccore.api.registries.CosmicRegistration.REGISTRATE;
-import static com.gregtechceu.gtceu.api.pattern.Predicates.*;
+import static com.gregtechceu.gtceu.api.multiblock.Predicates.*;
 import static com.gregtechceu.gtceu.common.data.models.GTMachineModels.createWorkableCasingMachineModel;
 
 /**
@@ -32,10 +32,10 @@ public class LinkTestStation {
             .rotationState(RotationState.NON_Y_AXIS)
             .recipeType(CosmicRecipeTypes.LINK_TEST_RECIPES)
             .appearanceBlock(GTBlocks.CASING_STEEL_SOLID)
-            .pattern(definition -> FactoryBlockPattern.start()
-                    .aisle("CCC", "CCC", "CCC")
-                    .aisle("CCC", "C C", "CCC")
-                    .aisle("CCC", "CQC", "CCC")
+            .pattern(definition -> MultiblockPatternBuilder.start()
+                    .slice("CCC", "CCC", "CCC")
+                    .slice("CCC", "C C", "CCC")
+                    .slice("CCC", "CQC", "CCC")
                     .where(' ', any())
                     .where('Q', controller(blocks(definition.getBlock())))
                     .where('C', blocks(GTBlocks.CASING_STEEL_SOLID.get())

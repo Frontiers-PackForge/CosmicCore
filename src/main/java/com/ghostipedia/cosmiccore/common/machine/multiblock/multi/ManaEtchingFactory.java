@@ -8,8 +8,8 @@ import com.gregtechceu.gtceu.api.data.RotationState;
 import com.gregtechceu.gtceu.api.machine.MultiblockMachineDefinition;
 import com.gregtechceu.gtceu.api.machine.multiblock.PartAbility;
 import com.gregtechceu.gtceu.api.machine.multiblock.WorkableElectricMultiblockMachine;
-import com.gregtechceu.gtceu.api.pattern.FactoryBlockPattern;
-import com.gregtechceu.gtceu.api.pattern.Predicates;
+import com.gregtechceu.gtceu.api.multiblock.pattern.MultiblockPatternBuilder;
+import com.gregtechceu.gtceu.api.multiblock.Predicates;
 import com.gregtechceu.gtceu.api.recipe.OverclockingLogic;
 import com.gregtechceu.gtceu.common.data.GTBlocks;
 import com.gregtechceu.gtceu.common.data.GTRecipeModifiers;
@@ -18,7 +18,7 @@ import static com.ghostipedia.cosmiccore.api.machine.part.CosmicPartAbility.IMPO
 import static com.ghostipedia.cosmiccore.api.registries.CosmicRegistration.REGISTRATE;
 import static com.ghostipedia.cosmiccore.common.data.CosmicBlocks.LIVING_ROCK_TILES;
 import static com.gregtechceu.gtceu.api.machine.multiblock.PartAbility.EXPORT_FLUIDS;
-import static com.gregtechceu.gtceu.api.pattern.Predicates.*;
+import static com.gregtechceu.gtceu.api.multiblock.Predicates.*;
 import static com.gregtechceu.gtceu.common.data.GTRecipeModifiers.ELECTRIC_OVERCLOCK;
 
 public class ManaEtchingFactory {
@@ -31,14 +31,14 @@ public class ManaEtchingFactory {
             .partAppearance((controller, part, side) -> LIVING_ROCK_TILES.getDefaultState())
             .recipeModifiers(GTRecipeModifiers.PARALLEL_HATCH,
                     ELECTRIC_OVERCLOCK.apply(OverclockingLogic.NON_PERFECT_OVERCLOCK), GTRecipeModifiers.BATCH_MODE)
-            .pattern(definition -> FactoryBlockPattern.start()
-                    .aisle(" AAAAA ", " CCCCC ", " CCCCC ", " DDDDD ")
-                    .aisle("AADDDAA", "D     D", "D     D", "DDDDDDD")
-                    .aisle("AADDDAA", "A     A", "A     A", "AADADAA")
-                    .aisle("AADDDAA", "D     D", "D     D", "DDDDDDD")
-                    .aisle(" AAQAA ", " CCCCC ", " CCCCC ", " DDDDD ")
+            .pattern(definition -> MultiblockPatternBuilder.start()
+                    .slice(" AAAAA ", " CCCCC ", " CCCCC ", " DDDDD ")
+                    .slice("AADDDAA", "D     D", "D     D", "DDDDDDD")
+                    .slice("AADDDAA", "A     A", "A     A", "AADADAA")
+                    .slice("AADDDAA", "D     D", "D     D", "DDDDDDD")
+                    .slice(" AAQAA ", " CCCCC ", " CCCCC ", " DDDDD ")
                     .where(' ', any())
-                    .where("Q", controller(blocks(definition.getBlock())))
+                    .where('Q', controller(blocks(definition.getBlock())))
                     .where('A', blocks(LIVING_ROCK_TILES.get())
                             .or(abilities(PartAbility.IMPORT_ITEMS).setPreviewCount(1))
                             .or(abilities(PartAbility.EXPORT_ITEMS).setPreviewCount(1))

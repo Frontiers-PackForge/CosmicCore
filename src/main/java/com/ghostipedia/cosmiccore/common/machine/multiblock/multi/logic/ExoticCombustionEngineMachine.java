@@ -6,12 +6,8 @@ import com.gregtechceu.gtceu.api.GTValues;
 import com.gregtechceu.gtceu.api.blockentity.BlockEntityCreationInfo;
 import com.gregtechceu.gtceu.api.capability.recipe.IO;
 import com.gregtechceu.gtceu.api.fluids.store.FluidStorageKeys;
-import com.gregtechceu.gtceu.api.gui.GuiTextures;
-import com.gregtechceu.gtceu.api.gui.fancy.IFancyTooltip;
-import com.gregtechceu.gtceu.api.gui.fancy.TooltipsPanel;
 import com.gregtechceu.gtceu.api.machine.MetaMachine;
 import com.gregtechceu.gtceu.api.machine.feature.ITieredMachine;
-import com.gregtechceu.gtceu.api.machine.multiblock.MultiblockDisplayText;
 import com.gregtechceu.gtceu.api.machine.multiblock.WorkableElectricMultiblockMachine;
 import com.gregtechceu.gtceu.api.recipe.GTRecipe;
 import com.gregtechceu.gtceu.api.recipe.RecipeHelper;
@@ -21,22 +17,15 @@ import com.gregtechceu.gtceu.api.recipe.modifier.ParallelLogic;
 import com.gregtechceu.gtceu.api.recipe.modifier.RecipeModifier;
 import com.gregtechceu.gtceu.common.data.GTMaterials;
 import com.gregtechceu.gtceu.data.recipe.builder.GTRecipeBuilder;
-import com.gregtechceu.gtceu.utils.FormattingUtil;
-import com.gregtechceu.gtceu.utils.GTMath;
-import com.gregtechceu.gtceu.utils.GTUtil;
+import com.gregtechceu.gtceu.api.sync_system.annotations.SyncToClient;
 
-import com.lowdragmc.lowdraglib.syncdata.annotation.DescSynced;
-
-import net.minecraft.ChatFormatting;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.Style;
 import net.neoforged.neoforge.fluids.FluidStack;
 
 import it.unimi.dsi.fastutil.objects.Object2IntMap;
 import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
 import lombok.Getter;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
 
@@ -52,10 +41,10 @@ public class ExoticCombustionEngineMachine extends WorkableElectricMultiblockMac
     private final int tier;
     // Probably a bad idea, most likely a better way to do this
     @Getter
-    @DescSynced
+    @SyncToClient
     private static final Object2IntMap<FluidStack> lubricantTiers = new Object2IntOpenHashMap<>();
     @Getter
-    @DescSynced
+    @SyncToClient
     private static final Object2IntMap<FluidStack> boostingTiers = new Object2IntOpenHashMap<>();
 
     static {
@@ -98,8 +87,8 @@ public class ExoticCombustionEngineMachine extends WorkableElectricMultiblockMac
     private int boostAmount = 0, boostDuration = 0;
     private int lubeDuration = 0;
 
-    public ExoticCombustionEngineMachine(BlockEntityCreationInfo holder, int tier) {
-        super(holder);
+    public ExoticCombustionEngineMachine(BlockEntityCreationInfo info, int tier) {
+        super(info);
         this.tier = tier;
     }
 
@@ -226,68 +215,12 @@ public class ExoticCombustionEngineMachine extends WorkableElectricMultiblockMac
         return false;
     }
 
-    @Override
-    public void addDisplayText(List<Component> textList) {
-        MultiblockDisplayText.Builder builder = MultiblockDisplayText.builder(textList, isFormed())
-                .setWorkingStatus(recipeLogic.isWorkingEnabled(), recipeLogic.isActive());
-        var voltageName = Component.literal(GTValues.VNF[GTUtil.getFloorTierByVoltage(getOverclockVoltage())]);
-        var amperageName = boostAmount != 0 ? boostAmount * 3 : boostAmount;
-        if (recipeLogic.isSuspend() && !recipeLogic.getFancyTooltip().isEmpty()) {
-            builder.addCustom(t -> t.add(recipeLogic.getFancyTooltip().get(0)));
-            return;
-        }
-        builder.addCustom(t -> t.add(Component.translatable("gtceu.multiblock.max_energy_per_tick_amps",
-                FormattingUtil.formatNumbers(getOverclockVoltage() * amperageName),
-                amperageName, voltageName).withStyle(ChatFormatting.GRAY)));
-        if (isActive() && isWorkingEnabled()) {
-            builder.addCurrentEnergyProductionLine(
-                    recipeLogic.getLastRecipe() != null ? recipeLogic.getLastRecipe().getOutputEUt().voltage() : 0);
-        }
-
-        builder.addFuelNeededLine(getRecipeFluidInputInfo(), recipeLogic.getDuration());
-
-        if (isFormed && currentBooster != null) {
-            builder.addCustom(tl -> tl.add(Component
-                    .translatable("cosmiccore.multiblock.booster_used",
-                            Component.translatable(currentBooster))
-                    .withStyle(ChatFormatting.AQUA)));
-        }
-
-        if (isFormed && currentLubricant != null) {
-            builder.addCustom(tl -> tl.add(Component
-                    .translatable("cosmiccore.multiblock.lubricant_used",
-                            Component.translatable(currentLubricant))
-                    .withStyle(ChatFormatting.YELLOW)));
-        }
-
-        builder.addWorkingStatusLine();
-    }
-
-    @Nullable
-    public String getRecipeFluidInputInfo() {
-        // Previous Recipe is always null on first world load, so try to acquire a new recipe
-        GTRecipe recipe = recipeLogic.getLastRecipe();
-        if (recipe == null) {
-            Iterator<GTRecipe> iterator = recipeLogic.searchRecipe();
-            // noinspection ConstantValue
-            recipe = iterator != null && iterator.hasNext() ? iterator.next() : null;
-            if (recipe == null) return null;
-        }
-        FluidStack requiredFluidInput = RecipeHelper.getInputFluids(recipe).get(0);
-
-        long ocAmount = getMaxVoltage() / recipe.getOutputEUt().voltage();
-        int neededAmount = GTMath.saturatedCast(ocAmount * requiredFluidInput.getAmount());
-        return ChatFormatting.RED + FormattingUtil.formatNumbers(neededAmount) + "mB";
-    }
-
-    @Override
-    public void attachTooltips(TooltipsPanel tooltipsPanel) {
-        super.attachTooltips(tooltipsPanel);
-        tooltipsPanel.attachTooltips(new IFancyTooltip.Basic(
-                () -> GuiTextures.INDICATOR_NO_STEAM.get(false),
-                () -> List.of(Component.translatable("gtceu.multiblock.large_combustion_engine.obstructed")
-                        .setStyle(Style.EMPTY.withColor(ChatFormatting.RED))),
-                this::isIntakesObstructed,
-                () -> null));
-    }
+    // TODO(8.0.0 MUI2): custom UI shelved; default UI used (orig in git)
+    // Removed in 8.0.0: the addDisplayText(List<Component>) hook (display now via
+    // getWidgetsForDisplay(PanelSyncManager)), the api.gui.fancy TooltipsPanel/IFancyTooltip API used by
+    // attachTooltips, and the api.gui.GuiTextures indicator. The shelved readout showed max energy/amps, current
+    // production, fuel-needed (via the now-removed getRecipeFluidInputInfo() helper), and the active
+    // booster/lubricant lines; attachTooltips showed an "intakes obstructed" warning indicator
+    // (isIntakesObstructed() is kept above since onWorking gameplay also depends on it). Combustion/lubricant/
+    // booster gameplay is unchanged.
 }

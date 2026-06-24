@@ -2,6 +2,7 @@ package com.ghostipedia.cosmiccore.common.machine.part;
 
 import com.gregtechceu.gtceu.api.blockentity.BlockEntityCreationInfo;
 import com.gregtechceu.gtceu.api.machine.ConditionalSubscriptionHandler;
+import com.gregtechceu.gtceu.api.machine.feature.IMuiMachine;
 import com.gregtechceu.gtceu.api.machine.multiblock.MultiblockControllerMachine;
 import com.gregtechceu.gtceu.api.machine.multiblock.part.TieredPartMachine;
 
@@ -12,7 +13,7 @@ import net.minecraft.world.phys.BlockHitResult;
 
 import org.jetbrains.annotations.NotNull;
 
-public class SensorPartMachine extends TieredPartMachine {
+public class SensorPartMachine extends TieredPartMachine implements IMuiMachine {
 
     private final ConditionalSubscriptionHandler signalUpdateHandler;
 
@@ -33,13 +34,12 @@ public class SensorPartMachine extends TieredPartMachine {
     }
 
     @Override
-    public void addedToController(@NotNull MultiblockControllerMachine controller) {
-        super.addedToController(controller);
+    public void addedToController(@NotNull MultiblockControllerMachine controller, String substructureName) {
+        super.addedToController(controller, substructureName);
         signalUpdateHandler.updateSubscription();
     }
 
-    @Override
-    public boolean shouldOpenUI(Player player, InteractionHand hand, BlockHitResult hit) {
+        public boolean shouldOpenUI(Player player, InteractionHand hand, BlockHitResult hit) {
         return true;
     }
 

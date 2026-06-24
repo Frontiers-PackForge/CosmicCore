@@ -3,11 +3,11 @@ package com.ghostipedia.cosmiccore.client.renderer.machine;
 import com.ghostipedia.cosmiccore.CosmicCore;
 
 import com.gregtechceu.gtceu.api.machine.multiblock.WorkableElectricMultiblockMachine;
-import com.gregtechceu.gtceu.api.pattern.util.RelativeDirection;
+import com.gregtechceu.gtceu.api.multiblock.util.RelativeDirection;
 import com.gregtechceu.gtceu.client.renderer.GTRenderTypes;
 import com.gregtechceu.gtceu.client.renderer.machine.DynamicRender;
 import com.gregtechceu.gtceu.client.renderer.machine.DynamicRenderType;
-import com.gregtechceu.gtceu.client.util.ModelUtils;
+import com.gregtechceu.gtceu.client.util.ModelEventHelper;
 import com.gregtechceu.gtceu.client.util.RenderBufferHelper;
 
 import net.minecraft.client.Minecraft;
@@ -28,6 +28,7 @@ import net.neoforged.neoforge.client.model.data.ModelData;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
+import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import org.joml.Quaternionf;
 
@@ -58,11 +59,11 @@ public class SpiritCrucibleRender extends DynamicRender<WorkableElectricMultiblo
     private static TextureAtlasSprite blankVoidSprite = null;
 
     private SpiritCrucibleRender() {
-        ModelUtils.registerBakeEventListener(true, event -> {
-            irisCoreModel = event.getModels().get(IRIS_MODEL_CORE);
-
+        ModelEventHelper.registerBakeEventListener(true, (rl, baked, rootModel, modelBakery) -> {
+            if (rl.equals(IRIS_MODEL_CORE)) irisCoreModel = baked;
+            return baked;
         });
-        ModelUtils.registerAtlasStitchedEventListener(true, TextureAtlas.LOCATION_BLOCKS, event -> {
+        ModelEventHelper.registerAtlasStitchedEventListener(true, TextureAtlas.LOCATION_BLOCKS, event -> {
             swirlSprite = event.getAtlas().getSprite(VOID_SWIRL);
             blankVoidSprite = event.getAtlas().getSprite(VOID_BLANK);
         });
@@ -80,9 +81,9 @@ public class SpiritCrucibleRender extends DynamicRender<WorkableElectricMultiblo
         Direction front = machine.getFrontFacing();
         Direction upwards = machine.getUpwardsFacing();
         boolean flipped = machine.isFlipped();
-        Direction up = RelativeDirection.UP.getRelative(front, upwards, flipped);
-        Direction back = RelativeDirection.BACK.getRelative(front, upwards, flipped);
-        Direction.Axis leftAxis = RelativeDirection.LEFT.getRelative(front, upwards, flipped).getAxis();
+        Direction up = RelativeDirection.UP.getRelativeFacing(front, upwards, flipped);
+        Direction back = RelativeDirection.BACK.getRelativeFacing(front, upwards, flipped);
+        Direction.Axis leftAxis = RelativeDirection.LEFT.getRelativeFacing(front, upwards, flipped).getAxis();
 
         // translate to the absolute center of the multiblock
         float x0ffset = 0, y0ffset = 0, z0ffset = 0;
@@ -158,7 +159,7 @@ public class SpiritCrucibleRender extends DynamicRender<WorkableElectricMultiblo
 
     @OnlyIn(Dist.CLIENT)
     private void renderRings(Direction.Axis upAxis, float totalTick, PoseStack poseStack, MultiBufferSource buffer) {
-        VertexConsumer consumer = buffer.getBuffer(GTRenderTypes.getLightRing());
+        VertexConsumer consumer = buffer.getBuffer(GTRenderTypes.lightRing());
         float xRot = totalTick / 15;
         float zRot = Mth.HALF_PI + totalTick / 30;
         float yRot = totalTick / 20;
@@ -174,7 +175,7 @@ public class SpiritCrucibleRender extends DynamicRender<WorkableElectricMultiblo
 
         poseStack.pushPose();
         poseStack.mulPose(new Quaternionf().rotateXYZ(sinX, cosY, sinZ));
-        consumer = buffer.getBuffer(GTRenderTypes.getLightRing());
+        consumer = buffer.getBuffer(GTRenderTypes.lightRing());
         RenderBufferHelper.renderRing(poseStack, consumer,
                 0, 0, 0,
                 2.75f, 0.1F, 10, 36,
@@ -184,7 +185,7 @@ public class SpiritCrucibleRender extends DynamicRender<WorkableElectricMultiblo
 
         poseStack.pushPose();
         poseStack.mulPose(new Quaternionf().rotateXYZ(cosX, sinY, sinZ));
-        consumer = buffer.getBuffer(GTRenderTypes.getLightRing());
+        consumer = buffer.getBuffer(GTRenderTypes.lightRing());
         RenderBufferHelper.renderRing(poseStack, consumer,
                 0, 0, 0,
                 2.5f, 0.2F, 10, 36,
@@ -193,7 +194,7 @@ public class SpiritCrucibleRender extends DynamicRender<WorkableElectricMultiblo
 
         poseStack.pushPose();
         poseStack.mulPose(new Quaternionf().rotateZ(cosZ));
-        consumer = buffer.getBuffer(GTRenderTypes.getLightRing());
+        consumer = buffer.getBuffer(GTRenderTypes.lightRing());
         RenderBufferHelper.renderRing(poseStack, consumer,
                 0, 0, 0,
                 2f, 0.2F, 10, 36,
@@ -215,7 +216,7 @@ public class SpiritCrucibleRender extends DynamicRender<WorkableElectricMultiblo
         poseStack.mulPose(rot);
         poseStack.translate(0, -6.3, 0);
         VertexConsumer consumer = bufferSource.getBuffer(Sheets.cutoutBlockSheet());
-        RenderBufferHelper.renderCube(
+        RenderBufferHelper.renderTexturedCube(
                 consumer,
                 poseStack.last(),
                 EnumSet.of(Direction.UP, Direction.DOWN),

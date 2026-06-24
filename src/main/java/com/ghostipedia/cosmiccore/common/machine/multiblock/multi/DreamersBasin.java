@@ -9,15 +9,15 @@ import com.gregtechceu.gtceu.GTCEu;
 import com.gregtechceu.gtceu.api.data.RotationState;
 import com.gregtechceu.gtceu.api.machine.MultiblockMachineDefinition;
 import com.gregtechceu.gtceu.api.machine.multiblock.PartAbility;
-import com.gregtechceu.gtceu.api.pattern.FactoryBlockPattern;
-import com.gregtechceu.gtceu.api.pattern.Predicates;
+import com.gregtechceu.gtceu.api.multiblock.pattern.MultiblockPatternBuilder;
+import com.gregtechceu.gtceu.api.multiblock.Predicates;
 
 import net.minecraft.network.chat.Component;
 
 import static com.ghostipedia.cosmiccore.api.machine.part.CosmicPartAbility.EXPORT_SOUL;
 import static com.ghostipedia.cosmiccore.api.registries.CosmicRegistration.REGISTRATE;
 import static com.ghostipedia.cosmiccore.common.data.CosmicBlocks.SUPERHEAVY_STEEL_CASING;
-import static com.gregtechceu.gtceu.api.pattern.Predicates.*;
+import static com.gregtechceu.gtceu.api.multiblock.Predicates.*;
 
 /**
  * The Dreamer's Basin - A multithreaded processing machine.
@@ -47,44 +47,44 @@ public class DreamersBasin {
                     Component.translatable("cosmiccore.machine.dreamers_basin.tooltip.1"),
                     Component.translatable("cosmiccore.machine.dreamers_basin.tooltip.2"),
                     Component.translatable("cosmiccore.machine.dreamers_basin.tooltip.3"))
-            .pattern(definition -> FactoryBlockPattern.start()
-                    .aisle("  AAA   AAA  ", "    A   A    ", "    A   A    ", "      B      ", "      B      ",
+            .pattern(definition -> MultiblockPatternBuilder.start()
+                    .slice("  AAA   AAA  ", "    A   A    ", "    A   A    ", "      B      ", "      B      ",
                             "     BBB     ", "   BBBBBBB   ", "    BBBBB    ", "     BBB     ", "             ",
                             "             ")
-                    .aisle(" ACCA   ACCA ", "             ", "    A B A    ", "    AB BA    ", "     B B     ",
+                    .slice(" ACCA   ACCA ", "             ", "    A B A    ", "    AB BA    ", "     B B     ",
                             "   BBBBBBB   ", "  BCCBBBCCB  ", "   CC   CC   ", "   CC   CC   ", "   C     C   ",
                             "             ")
-                    .aisle("ACCA     ACCA", "  C   B   C  ", "  C  B B  C  ", "    A B A    ", "    A B A    ",
+                    .slice("ACCA     ACCA", "  C   B   C  ", "  C  B B  C  ", "    A B A    ", "    A B A    ",
                             "  B A C A B  ", " BCBBCCCBBCB ", "  CC     CC  ", "  C       C  ", "  C       C  ",
                             "  C       C  ")
-                    .aisle("ACA   B   ACA", "     B B     ", "      B      ", "   C     C   ", "   C CCC C   ",
+                    .slice("ACA   B   ACA", "     B B     ", "      B      ", "   C     C   ", "   C CCC C   ",
                             " B CCC CCC B ", "BCBC     CBCB", " CC       CC ", " C         C ", " C         C ",
                             "             ")
-                    .aisle("AA    B    AA", "A    B B    A", "AA    B    AA", " AA       AA ", "  A       A  ",
+                    .slice("AA    B    AA", "A    B B    A", "AA    B    AA", " AA       AA ", "  A       A  ",
                             " BAC     CAB ", "BCB       BCB", "BC         CB", " C         C ", "             ",
                             "             ")
-                    .aisle("     BBB     ", "   BBBBBBB   ", "  B   C   B  ", " B         B ", " B C     C B ",
+                    .slice("     BBB     ", "   BBBBBBB   ", "  B   C   B  ", " B         B ", " B C     C B ",
                             "BB C     C BB", "BBC       CBB", "B           B", "B           B", "             ",
                             "             ")
-                    .aisle("   BBBBBBB   ", "  B  BBB  B  ", " B BBCCCBB B ", "B B       B B", "B BC     CB B",
+                    .slice("   BBBBBBB   ", "  B  BBB  B  ", " B BBCCCBB B ", "B B       B B", "B BC     CB B",
                             "BBC       CBB", "BBC       CBB", "B           B", "B           B", "             ",
                             "             ")
-                    .aisle("     BBB     ", "   BBBBBBB   ", "  B   C   B  ", " B         B ", " B C     C B ",
+                    .slice("     BBB     ", "   BBBBBBB   ", "  B   C   B  ", " B         B ", " B C     C B ",
                             "BB C     C BB", "BBC       CBB", "B           B", "B           B", "             ",
                             "             ")
-                    .aisle("AA    B    AA", "A    B B    A", "AA    B    AA", " AA       AA ", "  A       A  ",
+                    .slice("AA    B    AA", "A    B B    A", "AA    B    AA", " AA       AA ", "  A       A  ",
                             " BAC     CAB ", "BCB       BCB", "BC         CB", " C         C ", "             ",
                             "             ")
-                    .aisle("ACA   B   ACA", "     B B     ", "      B      ", "   C     C   ", "   C CCC C   ",
+                    .slice("ACA   B   ACA", "     B B     ", "      B      ", "   C     C   ", "   C CCC C   ",
                             " B CCC CCC B ", "BCBC     CBCB", " CC       CC ", " C         C ", " C         C ",
                             "             ")
-                    .aisle("ACCA     ACCA", "  C   B   C  ", "  C  B B  C  ", "    A B A    ", "    A B A    ",
+                    .slice("ACCA     ACCA", "  C   B   C  ", "  C  B B  C  ", "    A B A    ", "    A B A    ",
                             "  B A C A B  ", " BCBBCCCBBCB ", "  CC     CC  ", "  C       C  ", "  C       C  ",
                             "  C       C  ")
-                    .aisle(" ACCA   ACCA ", "             ", "    A B A    ", "    AB BA    ", "     B B     ",
+                    .slice(" ACCA   ACCA ", "             ", "    A B A    ", "    AB BA    ", "     B B     ",
                             "   BBBBBBB   ", "  BCCBBBCCB  ", "   CC   CC   ", "   CC   CC   ", "   C     C   ",
                             "             ")
-                    .aisle("  AAA   AAA  ", "    A   A    ", "    A   A    ", "      B      ", "      B      ",
+                    .slice("  AAA   AAA  ", "    A   A    ", "    A   A    ", "      B      ", "      B      ",
                             "     BBB     ", "   BBBBBBB   ", "    BBDBB    ", "     BBB     ", "             ",
                             "             ")
 

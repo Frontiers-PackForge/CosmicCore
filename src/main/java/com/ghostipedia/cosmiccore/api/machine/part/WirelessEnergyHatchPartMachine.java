@@ -55,12 +55,12 @@ public class WirelessEnergyHatchPartMachine extends TieredIOPartMachine {
     protected NotifiableEnergyContainer createEnergyContainer() {
         NotifiableEnergyContainer container;
         if (this.io == IO.OUT) {
-            container = NotifiableEnergyContainer.emitterContainer(this, getEnergyCapacity(tier, amperage),
+            container = NotifiableEnergyContainer.emitterContainer(getEnergyCapacity(tier, amperage),
                     GTValues.V[tier], amperage);
             container.setSideOutputCondition(s -> s == getFrontFacing() && isWorkingEnabled());
             container.setCapabilityValidator(s -> s == null || s == getFrontFacing());
         } else {
-            container = NotifiableEnergyContainer.receiverContainer(this, getEnergyCapacity(tier, amperage),
+            container = NotifiableEnergyContainer.receiverContainer(getEnergyCapacity(tier, amperage),
                     GTValues.V[tier], amperage);
             container.setSideInputCondition(s -> s == getFrontFacing() && isWorkingEnabled());
             container.setCapabilityValidator(s -> s == null || s == getFrontFacing());
@@ -73,8 +73,7 @@ public class WirelessEnergyHatchPartMachine extends TieredIOPartMachine {
         return GTValues.V[tier] * amperage * ((long) (ticks_between_save_data_operations * 1.1));
     }
 
-    @Override
-    public boolean shouldOpenUI(Player player, InteractionHand hand, BlockHitResult hit) {
+        public boolean shouldOpenUI(Player player, InteractionHand hand, BlockHitResult hit) {
         return false;
     }
 
@@ -84,6 +83,15 @@ public class WirelessEnergyHatchPartMachine extends TieredIOPartMachine {
         if (getLevel() instanceof ServerLevel serverLevel)
             serverLevel.getServer().tell(new TickTask(0, this::updateWirelessSubscription));
         energyListener = energyContainer.addChangedListener(this::updateWirelessSubscription);
+        // 8.0.0: onMachinePlaced was removed; the input-hatch wireless EU gap-fill moved here. Idempotent
+        // because energyContainer persists (fresh place fills from the global buffer; on reload the gap is ~0).
+        if (io == IO.IN && getLevel() instanceof ServerLevel sl) {
+            var data = WirelessEnergySavedData.getOrCreate(sl);
+            var owner = getTeamUUID();
+            long euToTransfer = energyContainer.getEnergyCapacity() - energyContainer.getEnergyStored();
+            long euTransferred = data.addEUToGlobalWirelessEnergy(owner, -euToTransfer);
+            energyContainer.changeEnergy(euToTransfer - euTransferred);
+        }
     }
 
     @Override
@@ -111,20 +119,6 @@ public class WirelessEnergyHatchPartMachine extends TieredIOPartMachine {
         return getOwnerUUID();
     }
 
-    @Override
-    public void onMachinePlaced(@org.jetbrains.annotations.Nullable LivingEntity player, ItemStack stack) {
-        super.onMachinePlaced(player, stack);
-        if (getLevel() instanceof ServerLevel serverLevel) {
-            if (io == IO.IN) {
-                var data = WirelessEnergySavedData.getOrCreate(serverLevel);
-                var owner = getTeamUUID();
-
-                long euToTransfer = energyContainer.getEnergyCapacity() - energyContainer.getEnergyStored();
-                long euTransferred = data.addEUToGlobalWirelessEnergy(owner, -euToTransfer);
-                energyContainer.changeEnergy(euToTransfer - euTransferred);
-            }
-        }
-    }
 
     @Override
     public void onMachineDestroyed() {

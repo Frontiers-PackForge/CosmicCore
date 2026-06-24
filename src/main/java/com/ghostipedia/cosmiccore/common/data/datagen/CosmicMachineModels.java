@@ -6,6 +6,7 @@ import com.gregtechceu.gtceu.client.model.machine.overlays.WorkableOverlays;
 
 import net.minecraft.resources.ResourceLocation;
 import net.neoforged.neoforge.client.model.generators.BlockModelBuilder;
+import net.neoforged.neoforge.client.model.generators.ConfiguredModel;
 
 import static com.gregtechceu.gtceu.common.data.models.GTMachineModels.*;
 
@@ -23,7 +24,7 @@ public class CosmicMachineModels {
                 BlockModelBuilder model = prov.models().nested()
                         .parent(prov.models().getExistingFile(CUBE_ALL_SIDED_OVERLAY_MODEL))
                         .texture("all", controllerTexture);
-                return addWorkableOverlays(overlays, status, model);
+                return ConfiguredModel.builder().modelFile(addWorkableOverlays(overlays, status, model)).build();
             });
             builder.addTextureOverride("all", baseCasingTexture);
         };

@@ -2,43 +2,25 @@ package com.ghostipedia.cosmiccore.api.machine.multiblock;
 
 import com.gregtechceu.gtceu.api.GTValues;
 import com.gregtechceu.gtceu.api.blockentity.BlockEntityCreationInfo;
-import com.gregtechceu.gtceu.api.capability.recipe.EURecipeCapability;
-import com.gregtechceu.gtceu.api.capability.recipe.IO;
-import com.gregtechceu.gtceu.api.gui.GuiTextures;
-import com.gregtechceu.gtceu.api.gui.UITemplate;
 import com.gregtechceu.gtceu.api.machine.MetaMachine;
 import com.gregtechceu.gtceu.api.machine.TickableSubscription;
-import com.gregtechceu.gtceu.api.machine.feature.multiblock.IDisplayUIMachine;
-import com.gregtechceu.gtceu.api.machine.feature.multiblock.IFluidRenderMulti;
 import com.gregtechceu.gtceu.api.machine.multiblock.WorkableMultiblockMachine;
-import com.gregtechceu.gtceu.api.machine.steam.SteamEnergyRecipeHandler;
 import com.gregtechceu.gtceu.api.machine.trait.RecipeLogic;
 import com.gregtechceu.gtceu.api.recipe.GTRecipe;
 import com.gregtechceu.gtceu.api.recipe.RecipeHelper;
 import com.gregtechceu.gtceu.api.recipe.content.ContentModifier;
 import com.gregtechceu.gtceu.api.recipe.modifier.ModifierFunction;
 import com.gregtechceu.gtceu.api.recipe.modifier.ParallelLogic;
+import com.gregtechceu.gtceu.common.machine.trait.multiblock.MultiblockFluidRendererTrait;
 import com.gregtechceu.gtceu.config.ConfigHolder;
 import com.gregtechceu.gtceu.utils.GTUtil;
 
-import com.lowdragmc.lowdraglib.gui.modular.ModularUI;
-import com.lowdragmc.lowdraglib.gui.texture.IGuiTexture;
-import com.lowdragmc.lowdraglib.gui.widget.ComponentPanelWidget;
-import com.lowdragmc.lowdraglib.gui.widget.DraggableScrollableWidgetGroup;
-import com.lowdragmc.lowdraglib.gui.widget.LabelWidget;
-import com.lowdragmc.lowdraglib.syncdata.annotation.DescSynced;
-import com.lowdragmc.lowdraglib.syncdata.annotation.RequireRerender;
-
-import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleTypes;
-import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.Style;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.RandomSource;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import net.neoforged.api.distmarker.Dist;
@@ -47,32 +29,19 @@ import net.neoforged.api.distmarker.OnlyIn;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Collections;
-import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
-public class IPBFMachine extends WorkableMultiblockMachine implements IDisplayUIMachine, IFluidRenderMulti {
+public class IPBFMachine extends WorkableMultiblockMachine {
 
     public static final int MAX_PARALLELS = 8;
 
     private TickableSubscription hurtSubscription;
+    // Renders the lava/fluid blocks inside the structure (migrated from the removed IFluidRenderMulti).
+    private final MultiblockFluidRendererTrait fluidRendererTrait;
 
-    @DescSynced
-    @RequireRerender
-    private @NotNull Set<BlockPos> fluidBlockOffsets = new HashSet<>();
-
-    public IPBFMachine(BlockEntityCreationInfo holder) {
-        super(holder);
-    }
-
-    @Override
-    public @NotNull Set<BlockPos> getFluidBlockOffsets() {
-        return fluidBlockOffsets;
-    }
-
-    @Override
-    public void setFluidBlockOffsets(@NotNull Set<BlockPos> fluidBlockOffsets) {
-        this.fluidBlockOffsets = fluidBlockOffsets;
+    public IPBFMachine(BlockEntityCreationInfo info) {
+        super(info);
+        this.fluidRendererTrait = attachTrait(new MultiblockFluidRendererTrait(this::saveOffsets));
     }
 
     @Override
@@ -82,71 +51,8 @@ public class IPBFMachine extends WorkableMultiblockMachine implements IDisplayUI
         hurtSubscription = null;
     }
 
-    @Override
-    public void onStructureFormed() {
-        super.onStructureFormed();
-        IFluidRenderMulti.super.onStructureFormed();
-    }
-
-    @Override
-    public void onStructureInvalid() {
-        super.onStructureInvalid();
-        IFluidRenderMulti.super.onStructureInvalid();
-    }
-
-    @Override
-    public void addDisplayText(List<Component> textList) {
-        IDisplayUIMachine.super.addDisplayText(textList);
-        if (isFormed()) {
-            var handlers = getCapabilitiesFlat(IO.IN, EURecipeCapability.CAP);
-            if (!handlers.isEmpty() && handlers.get(0) instanceof SteamEnergyRecipeHandler steamHandler) {
-                if (steamHandler.getCapacity() > 0) {
-                    long steamStored = steamHandler.getStored();
-                    textList.add(Component.translatable("gtceu.multiblock.steam.steam_stored", steamStored,
-                            steamHandler.getCapacity()));
-                }
-            }
-
-            if (!isWorkingEnabled()) {
-                textList.add(Component.translatable("gtceu.multiblock.work_paused"));
-
-            } else if (isActive()) {
-                textList.add(Component.translatable("gtceu.multiblock.running"));
-                double currentInSec = (float) recipeLogic.getProgress() / 20.0f;
-                double maxInSec = (float) recipeLogic.getDuration() / 20.0f;
-                int currentProgress = (int) (recipeLogic.getProgressPercent() * 100);
-                textList.add(Component.translatable("gtceu.multiblock.parallel", MAX_PARALLELS));
-                textList.add(
-                        Component.translatable(
-                                "gtceu.multiblock.progress",
-                                String.format("%.2f", (float) currentInSec),
-                                String.format("%.2f", (float) maxInSec),
-                                currentProgress));
-            } else {
-                textList.add(Component.translatable("gtceu.multiblock.idling"));
-            }
-
-            if (recipeLogic.isWaiting()) {
-                textList.add(Component.translatable("gtceu.multiblock.steam.low_steam")
-                        .setStyle(Style.EMPTY.withColor(ChatFormatting.RED)));
-            }
-        }
-    }
-
-    @Override
-    public ModularUI createUI(Player entityPlayer) {
-        var screen = new DraggableScrollableWidgetGroup(7, 4, 182, 121).setBackground(getScreenTexture());
-        screen.addWidget(new LabelWidget(4, 5, self().getBlockState().getBlock().getDescriptionId()));
-        screen.addWidget(new ComponentPanelWidget(4, 17, this::addDisplayText)
-                .setMaxWidthLimit(150)
-                .clickHandler(this::handleDisplayClick));
-        return new ModularUI(196, 216, this, entityPlayer)
-                .background(GuiTextures.BACKGROUND_STEAM.get(true))
-                .widget(screen)
-                .widget(UITemplate.bindPlayerInventory(entityPlayer.getInventory(),
-                        GuiTextures.SLOT_STEAM.get(true), 7, 134,
-                        true));
-    }
+    // TODO(8.0.0 MUI2): custom steam/parallel/progress display text shelved; base default
+    //  getWidgetsForDisplay UI is used for now (original LDLib createUI/addDisplayText in git history).
 
     @Override
     public void notifyStatusChanged(RecipeLogic.Status oldStatus, RecipeLogic.Status newStatus) {
@@ -189,11 +95,6 @@ public class IPBFMachine extends WorkableMultiblockMachine implements IDisplayUI
     }
 
     @Override
-    public IGuiTexture getScreenTexture() {
-        return GuiTextures.DISPLAY_STEAM.get(true);
-    }
-
-    @Override
     public void animateTick(RandomSource random) {
         if (this.isActive()) {
             final BlockPos pos = getBlockPos();
@@ -232,8 +133,8 @@ public class IPBFMachine extends WorkableMultiblockMachine implements IDisplayUI
         }
     }
 
-    @Override
-    public @NotNull Set<BlockPos> saveOffsets() {
+    @NotNull
+    public Set<BlockPos> saveOffsets() {
         return Collections.singleton(new BlockPos(getFrontFacing().getOpposite().getNormal()));
     }
 }

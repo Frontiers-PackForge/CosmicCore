@@ -10,19 +10,19 @@ import net.minecraft.nbt.CompoundTag;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import snownee.jade.api.BlockAccessor;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(value = RecipeLogicProvider.class, remap = false)
 public class RecipeLogicProviderMixin {
 
+    // GTCEu 8.0 Jade API: write(CompoundTag, BlockAccessor, RecipeLogic)->void became write(RecipeLogic)->CompoundTag.
+    // For a Stellar module return a tag carrying ONLY the working flag, suppressing the rest of the recipe info.
     @Inject(method = "write", at = @At("HEAD"), cancellable = true)
-    private void cosmicCore$skipStellarModuleWrite(CompoundTag data, BlockAccessor blockAccessor,
-                                                   RecipeLogic capability,
-                                                   CallbackInfo ci) {
+    private void cosmicCore$skipStellarModuleWrite(RecipeLogic capability, CallbackInfoReturnable<CompoundTag> cir) {
         if (capability.getMachine() instanceof StellarBaseModule) {
-            data.putBoolean("Working", capability.isWorking());
-            ci.cancel();
+            CompoundTag tag = new CompoundTag();
+            tag.putBoolean("Working", capability.isWorking());
+            cir.setReturnValue(tag);
         }
     }
 }

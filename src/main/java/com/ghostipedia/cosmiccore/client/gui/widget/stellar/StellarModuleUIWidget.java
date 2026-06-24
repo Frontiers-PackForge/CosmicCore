@@ -1,5 +1,26 @@
 package com.ghostipedia.cosmiccore.client.gui.widget.stellar;
 
+import com.ghostipedia.cosmiccore.api.machine.multiblock.StellarBaseModule;
+
+import com.lowdragmc.lowdraglib.gui.widget.WidgetGroup;
+
+import java.util.function.Supplier;
+
+// DESIGN REFERENCE (GTCEu 8.0.0 MUI2 migration): the original implementation is preserved verbatim in the
+// block comment below for the eventual MUI2 rebuild. FancyMachineUIWidget / IFancyUIProvider / api.gui /
+// api.gui.widget were removed in the GTCEu 8.0.0 UI rewrite, so this is gutted to a no-op WidgetGroup stub.
+// See memory feedback_cosmiccore_keep_fancy_widgets: keep removed-API UI widgets as design reference, never delete.
+public class StellarModuleUIWidget extends WidgetGroup {
+
+    public StellarModuleUIWidget(Object mainPage, int width, int height, Supplier<StellarBaseModule> moduleSupplier) {
+        super(0, 0, width, height);
+    }
+}
+
+
+/* ===== ORIGINAL DESIGN REFERENCE (pre-GTCEu-8.0.0) =====
+package com.ghostipedia.cosmiccore.client.gui.widget.stellar;
+
 import com.ghostipedia.cosmiccore.api.machine.feature.IStellarIrisProvider;
 import com.ghostipedia.cosmiccore.api.machine.multiblock.IrisMultiblockMachine.Stage;
 import com.ghostipedia.cosmiccore.api.machine.multiblock.StellarBaseModule;
@@ -499,3 +520,5 @@ public class StellarModuleUIWidget extends FancyMachineUIWidget {
         };
     }
 }
+
+===== END ORIGINAL DESIGN REFERENCE ===== */

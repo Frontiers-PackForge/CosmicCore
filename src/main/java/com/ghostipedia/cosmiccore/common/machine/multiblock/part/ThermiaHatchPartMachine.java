@@ -6,29 +6,31 @@ import com.ghostipedia.cosmiccore.api.machine.trait.NotifiableThermiaContainer;
 import com.gregtechceu.gtceu.api.GTValues;
 import com.gregtechceu.gtceu.api.blockentity.BlockEntityCreationInfo;
 import com.gregtechceu.gtceu.api.capability.recipe.IO;
-import com.gregtechceu.gtceu.api.gui.GuiTextures;
+import com.gregtechceu.gtceu.api.machine.feature.IMuiMachine;
 import com.gregtechceu.gtceu.api.machine.multiblock.part.TieredIOPartMachine;
+import brachy.modularui.api.drawable.Text;
+import brachy.modularui.factory.PosGuiData;
+import brachy.modularui.value.sync.PanelSyncManager;
+import brachy.modularui.widgets.TextWidget;
+import brachy.modularui.widgets.layout.Flow;
+import brachy.modularui.screen.ModularPanel;
+import brachy.modularui.screen.UISettings;
+import com.gregtechceu.gtceu.common.mui.GTMuiWidgets;
+import com.gregtechceu.gtceu.api.sync_system.annotations.SaveField;
+import com.gregtechceu.gtceu.api.sync_system.annotations.SyncToClient;
 import com.gregtechceu.gtceu.utils.FormattingUtil;
 
-import com.lowdragmc.lowdraglib.gui.widget.ImageWidget;
-import com.lowdragmc.lowdraglib.gui.widget.LabelWidget;
-import com.lowdragmc.lowdraglib.gui.widget.Widget;
-import com.lowdragmc.lowdraglib.gui.widget.WidgetGroup;
-import com.lowdragmc.lowdraglib.syncdata.annotation.DescSynced;
-import com.lowdragmc.lowdraglib.syncdata.annotation.Persisted;
-
-import net.minecraft.client.resources.language.I18n;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
 
-public class ThermiaHatchPartMachine extends TieredIOPartMachine implements IHeatContainer {
+public class ThermiaHatchPartMachine extends TieredIOPartMachine implements IHeatContainer, IMuiMachine {
 
-    @Persisted
-    @DescSynced
+    @SaveField
+    @SyncToClient
     private final NotifiableThermiaContainer thermiaContainer;
 
-    public ThermiaHatchPartMachine(BlockEntityCreationInfo holder, int tier, IO io) {
-        super(holder, tier, io);
+    public ThermiaHatchPartMachine(BlockEntityCreationInfo info, int tier, IO io) {
+        super(info, tier, io);
         long currentTemp = 0;
         this.thermiaContainer = createThermiaContainer();
     }
@@ -48,23 +50,28 @@ public class ThermiaHatchPartMachine extends TieredIOPartMachine implements IHea
     }
 
     @Override
-    public Widget createUIWidget() {
-        var group = new WidgetGroup(0, 0, 128, 63);
+    public ModularPanel buildUI(PosGuiData data, PanelSyncManager syncManager, UISettings settings) {
+        var panel = ModularPanel.defaultPanel(getDefinition().getId().getPath(), 176, 120);
+        panel.child(GTMuiWidgets.createTitleBar(this.getDefinition(), 176));
 
-        group.addWidget(new ImageWidget(4, 4, 120, 55, GuiTextures.DISPLAY));
-        group.addWidget(new LabelWidget(8, 8, Component
-                .translatable("gui.cosmiccore.thermia_hatch.label." + (this.io == IO.IN ? "import" : "export"))));
-        group.addWidget(new LabelWidget(8, 18, () -> I18n.get("gui.cosmiccore.thermia_hatch.hatch_limit")));
-        group.addWidget(new LabelWidget(8, 28,
-                () -> I18n.get(FormattingUtil.formatNumbers(thermiaContainer.getOverloadLimit()), "K"))
-                .setClientSideWidget());
-        group.addWidget(new LabelWidget(8, 38, () -> I18n.get("gui.cosmiccore.thermia_hatch.stored_temp"))
-                .setClientSideWidget());
-        group.addWidget(new LabelWidget(8, 48,
-                () -> I18n.get(FormattingUtil.formatNumbers(thermiaContainer.getCurrentTemp()), "K"))
-                .setClientSideWidget());
-        group.setBackground(GuiTextures.BACKGROUND_INVERSE);
-        return group;
+        panel.child(Flow.column()
+                .coverChildren()
+                .padding(8)
+                .top(14)
+                .horizontalCenter() // brachy 3.3.0: alignX(float) removed; horizontalCenter() == leftRel(0.5f)
+                .childPadding(4)
+                .child(new TextWidget<>(Text.lang(
+                        "gui.cosmiccore.thermia_hatch.label." + (this.io == IO.IN ? "import" : "export"))))
+                .child(new TextWidget<>(Text.lang("gui.cosmiccore.thermia_hatch.hatch_limit")))
+                .child(new TextWidget<>(Text.dynamic(
+                        () -> Component
+                                .literal(FormattingUtil.formatNumbers(thermiaContainer.getOverloadLimit()) + " K"))))
+                .child(new TextWidget<>(Text.lang("gui.cosmiccore.thermia_hatch.stored_temp")))
+                .child(new TextWidget<>(Text.dynamic(
+                        () -> Component
+                                .literal(FormattingUtil.formatNumbers(thermiaContainer.getCurrentTemp()) + " K")))));
+
+        return panel;
     }
 
     public static int getThermiaLimits(int tier) {

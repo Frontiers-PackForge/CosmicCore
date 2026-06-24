@@ -24,7 +24,7 @@ public class ABSModifications {
             // TODO(cosmiccore-42.9): GTCEu 8.0 stopped auto-adding an AlloyBlastProperty to alloys with
             // 2+ fluid-only components (here Virtue + Prisma), so add it explicitly to keep this material's
             // ABS recipe. When ABS recipe-gen is re-enabled, confirm a MOLTEN fluid is registered for it too.
-            property = new AlloyBlastProperty(material.getBlastTemperature());
+            property = new AlloyBlastProperty();
             material.setProperty(PropertyKey.ALLOY_BLAST, property);
         }
         property.setRecipeProducer(new CustomAlloyBlastRecipeProducer(-1, -1, 32));

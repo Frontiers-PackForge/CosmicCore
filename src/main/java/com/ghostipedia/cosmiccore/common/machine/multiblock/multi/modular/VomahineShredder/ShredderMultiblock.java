@@ -12,7 +12,7 @@ import java.util.function.BiFunction;
 import static com.ghostipedia.cosmiccore.api.registries.CosmicRegistration.REGISTRATE;
 import static com.ghostipedia.cosmiccore.common.data.CosmicBlocks.*;
 import static com.gregtechceu.gtceu.api.GTValues.*;
-import static com.gregtechceu.gtceu.api.pattern.Predicates.*;
+import static com.gregtechceu.gtceu.api.multiblock.Predicates.*;
 
 public class ShredderMultiblock {
 
@@ -22,16 +22,16 @@ public class ShredderMultiblock {
     // .recipeModifier(GTRecipeModifiers.ELECTRIC_OVERCLOCK.apply(OverclockingLogic.NON_PERFECT_OVERCLOCK_SUBTICK))
     // .appearanceBlock(CosmicBlocks.CYCLOZINE_CHEMICALLY_REPELLING_CASING)
     // .recipeType(GTRecipeTypes.DUMMY_RECIPES)
-    // .pattern(definition -> FactoryBlockPattern.start()
-    // .aisle("AAAAAAAAAAAAA", "ADDDDDDDDDDDA", "ADDDDDDDDDDDA", "AAAAAAADDDDDA", " AAAAAAA")
-    // .aisle("ACCCCCCCCCCCA", "ACCCCCCCCCCCB", "ACCCCCCCCCCCB", "ACCCCCCCCCCCB", " CCCCCCA")
-    // .aisle("ACCCCCCCCCCCA", "ACDDDDCEEEEC ", "ACDDDDCEEEEC ", "ACCCCCCEEEEC ", " C CA")
-    // .aisle("ACCCCCCCCCCCA", "ACCCCCCEEEEC ", "ACCCCCCEEEEC ", "ACCCCCCEEEEC ", " C CA")
-    // .aisle("AAAAAACCCCCCA", "AAAAAACEEEEC ", "AAAAAACEEEEC ", "ABBBBBCEEEEC ", " C CA")
-    // .aisle("AAAAAACCCCCCA", "AFFFFACCCCCCB", "AAAAAACCCCCCB", "A BCCCCCCB", " CCCCCCA")
-    // .aisle("AAAAAAAAAAAAA", "G AB BA", "A AB BA", "A AB BA", " AAAAAAA")
+    // .pattern(definition -> MultiblockPatternBuilder.start()
+    // .slice("AAAAAAAAAAAAA", "ADDDDDDDDDDDA", "ADDDDDDDDDDDA", "AAAAAAADDDDDA", " AAAAAAA")
+    // .slice("ACCCCCCCCCCCA", "ACCCCCCCCCCCB", "ACCCCCCCCCCCB", "ACCCCCCCCCCCB", " CCCCCCA")
+    // .slice("ACCCCCCCCCCCA", "ACDDDDCEEEEC ", "ACDDDDCEEEEC ", "ACCCCCCEEEEC ", " C CA")
+    // .slice("ACCCCCCCCCCCA", "ACCCCCCEEEEC ", "ACCCCCCEEEEC ", "ACCCCCCEEEEC ", " C CA")
+    // .slice("AAAAAACCCCCCA", "AAAAAACEEEEC ", "AAAAAACEEEEC ", "ABBBBBCEEEEC ", " C CA")
+    // .slice("AAAAAACCCCCCA", "AFFFFACCCCCCB", "AAAAAACCCCCCB", "A BCCCCCCB", " CCCCCCA")
+    // .slice("AAAAAAAAAAAAA", "G AB BA", "A AB BA", "A AB BA", " AAAAAAA")
     // .where(' ', any())
-    // .where("G", controller(blocks(definition.getBlock())))
+    // .where('G', controller(blocks(definition.getBlock())))
     // .where('A', blocks(CYCLOZINE_CHEMICALLY_REPELLING_CASING.get()))
     // .where('B', blocks(MULTIPURPOSE_INTERSTELLAR_GRADE_CASING.get()))
     // .where('C', blocks(MULTIPURPOSE_INTERSTELLAR_GRADE_CASING.get()))
@@ -67,23 +67,23 @@ public class ShredderMultiblock {
     // .appearanceBlock(() -> FusionReactorMachine.getCasingState(tier))
     // .pattern((definition) -> {
     // var casing = blocks(FusionReactorMachine.getCasingState(tier));
-    // return FactoryBlockPattern.start()
-    // .aisle("AAAAAAAAAAAAA", "ADDDDDDDDDDDA", "ADDDDDDDDDDDA", "AAAAAAADDDDDA",
+    // return MultiblockPatternBuilder.start()
+    // .slice("AAAAAAAAAAAAA", "ADDDDDDDDDDDA", "ADDDDDDDDDDDA", "AAAAAAADDDDDA",
     // " AAAAAAA")
-    // .aisle("ACCCCCCCCCCCA", "ACCCCCCCCCCCB", "ACCCCCCCCCCCB", "ACCCCCCCCCCCB",
+    // .slice("ACCCCCCCCCCCA", "ACCCCCCCCCCCB", "ACCCCCCCCCCCB", "ACCCCCCCCCCCB",
     // " CCCCCCA")
-    // .aisle("ACCCCCCCCCCCA", "ACDDDDCEEEEC ", "ACDDDDCEEEEC ", "ACCCCCCEEEEC ",
+    // .slice("ACCCCCCCCCCCA", "ACDDDDCEEEEC ", "ACDDDDCEEEEC ", "ACCCCCCEEEEC ",
     // " C CA")
-    // .aisle("ACCCCCCCCCCCA", "ACCCCCCEEEEC ", "ACCCCCCEEEEC ", "ACCCCCCEEEEC ",
+    // .slice("ACCCCCCCCCCCA", "ACCCCCCEEEEC ", "ACCCCCCEEEEC ", "ACCCCCCEEEEC ",
     // " C CA")
-    // .aisle("AAAAAACCCCCCA", "AAAAAACEEEEC ", "AAAAAACEEEEC ", "ABBBBBCEEEEC ",
+    // .slice("AAAAAACCCCCCA", "AAAAAACEEEEC ", "AAAAAACEEEEC ", "ABBBBBCEEEEC ",
     // " C CA")
-    // .aisle("AAAAAACCCCCCA", "AFFFFACCCCCCB", "AAAAAACCCCCCB", "A BCCCCCCB",
+    // .slice("AAAAAACCCCCCA", "AFFFFACCCCCCB", "AAAAAACCCCCCB", "A BCCCCCCB",
     // " CCCCCCA")
-    // .aisle("AAAAAAAAAAAAA", "G AB BA", "A AB BA", "A AB BA",
+    // .slice("AAAAAAAAAAAAA", "G AB BA", "A AB BA", "A AB BA",
     // " AAAAAAA")
     // .where(' ', any())
-    // .where("F", controller(blocks(definition.getBlock()))
+    // .where('F', controller(blocks(definition.getBlock()))
     // .or(blocks(CASING_ATOMIC.get()).setMaxGlobalLimited(4)))
     // .where('A', blocks(CYCLOZINE_CHEMICALLY_REPELLING_CASING.get()))
     // .where('B', blocks(MULTIPURPOSE_INTERSTELLAR_GRADE_CASING.get()))

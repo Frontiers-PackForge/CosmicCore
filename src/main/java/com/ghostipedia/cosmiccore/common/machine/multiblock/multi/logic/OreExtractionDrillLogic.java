@@ -84,8 +84,8 @@ public class OreExtractionDrillLogic extends RecipeLogic {
     @Nullable
     private NotifiableAccountedInvWrapper cachedItemHandler = null;
 
-    public OreExtractionDrillLogic(OreExtractionDrillMachine machine) {
-        super(machine);
+    public OreExtractionDrillLogic() {
+        super();
     }
 
     @Override

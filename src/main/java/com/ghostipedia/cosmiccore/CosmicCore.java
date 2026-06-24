@@ -82,6 +82,7 @@ public class CosmicCore {
         CosmicElements.init();
         CosmicMaterials.register();
         CosmicBundleMaterials.register();
+        CosmicMaterials.registerMaterialFluids();
         CosmicCoreMaterialIconType.init();
         CosmicTagPrefix.initTagPrefixes();
         CosmicMaterialSet.init();

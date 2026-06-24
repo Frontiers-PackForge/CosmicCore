@@ -8,8 +8,8 @@ import com.gregtechceu.gtceu.api.data.RotationState;
 import com.gregtechceu.gtceu.api.machine.MultiblockMachineDefinition;
 import com.gregtechceu.gtceu.api.machine.multiblock.PartAbility;
 import com.gregtechceu.gtceu.api.machine.multiblock.WorkableElectricMultiblockMachine;
-import com.gregtechceu.gtceu.api.pattern.FactoryBlockPattern;
-import com.gregtechceu.gtceu.api.pattern.Predicates;
+import com.gregtechceu.gtceu.api.multiblock.Predicates;
+import com.gregtechceu.gtceu.api.multiblock.pattern.MultiblockPatternBuilder;
 import com.gregtechceu.gtceu.api.recipe.OverclockingLogic;
 import com.gregtechceu.gtceu.common.data.GTMaterials;
 import com.gregtechceu.gtceu.common.data.GTRecipeModifiers;
@@ -18,8 +18,8 @@ import static com.ghostipedia.cosmiccore.api.registries.CosmicRegistration.REGIS
 import static com.ghostipedia.cosmiccore.common.data.CosmicBlocks.LIGHTWEIGHT_DARK_STEEL_CASING;
 import static com.ghostipedia.cosmiccore.common.data.CosmicBlocks.LIGHTWEIGHT_INDUSTRIAL_CASING;
 import static com.ghostipedia.cosmiccore.common.data.CosmicBlocks.LIGHTWEIGHT_MECHANICAL_PARTWORK;
-import static com.gregtechceu.gtceu.api.pattern.Predicates.*;
-import static com.gregtechceu.gtceu.api.pattern.util.RelativeDirection.*;
+import static com.gregtechceu.gtceu.api.multiblock.Predicates.*;
+import static com.gregtechceu.gtceu.api.multiblock.util.RelativeDirection.*;
 import static com.gregtechceu.gtceu.common.data.models.GTMachineModels.createWorkableCasingMachineModel;
 
 public class SludgeDigestor {
@@ -31,13 +31,13 @@ public class SludgeDigestor {
             .recipeType(CosmicRecipeTypes.SLUDGE_DIGESTOR)
             .recipeModifiers(CosmicRecipeModifiers.LOCKED_PARALLEL_8,
                     GTRecipeModifiers.ELECTRIC_OVERCLOCK.apply(OverclockingLogic.NON_PERFECT_OVERCLOCK_SUBTICK))
-            .pattern(definition -> FactoryBlockPattern.start(RIGHT, DOWN, FRONT)
-                    .aisle("AAAA", "A  A", "B  B", "B  B", "B  B", "A  A", "    ")
-                    .aisle("AAAA", " CC ", " CC ", " CC ", " CC ", "ACCA", "    ")
-                    .aisle("AAAA", " CC ", " EE ", " CC ", " EE ", "ACCA", " CC ")
-                    .aisle("AAAA", " CC ", " CC ", " EE ", " CC ", "ACCA", " CC ")
-                    .aisle("AAAA", " CC ", " DC ", " CC ", " CC ", "ACCA", "    ")
-                    .aisle("AAAA", "A  A", "B  B", "B  B", "B  B", "A  A", "    ")
+            .pattern(definition -> MultiblockPatternBuilder.start(RIGHT, DOWN, FRONT)
+                    .slice("AAAA", "A  A", "B  B", "B  B", "B  B", "A  A", "    ")
+                    .slice("AAAA", " CC ", " CC ", " CC ", " CC ", "ACCA", "    ")
+                    .slice("AAAA", " CC ", " EE ", " CC ", " EE ", "ACCA", " CC ")
+                    .slice("AAAA", " CC ", " CC ", " EE ", " CC ", "ACCA", " CC ")
+                    .slice("AAAA", " CC ", " DC ", " CC ", " CC ", "ACCA", "    ")
+                    .slice("AAAA", "A  A", "B  B", "B  B", "B  B", "A  A", "    ")
                     .where('D', Predicates.controller(blocks(definition.getBlock())))
                     .where(' ', Predicates.air())
                     .where('A', blocks(LIGHTWEIGHT_DARK_STEEL_CASING.get())

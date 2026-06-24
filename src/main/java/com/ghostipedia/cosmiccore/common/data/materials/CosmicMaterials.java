@@ -8,11 +8,13 @@ import com.gregtechceu.gtceu.api.GTValues;
 import com.gregtechceu.gtceu.api.data.chemical.material.Material;
 import com.gregtechceu.gtceu.api.data.chemical.material.info.MaterialIconSet;
 import com.gregtechceu.gtceu.api.data.chemical.material.properties.BlastProperty;
+import com.gregtechceu.gtceu.api.data.chemical.material.properties.FluidProperty;
 import com.gregtechceu.gtceu.api.data.chemical.material.properties.PropertyKey;
 import com.gregtechceu.gtceu.api.data.chemical.material.properties.ToolProperty;
 import com.gregtechceu.gtceu.api.fluids.FluidBuilder;
 import com.gregtechceu.gtceu.api.fluids.FluidState;
-import com.gregtechceu.gtceu.api.fluids.store.FluidStorageKeys;
+import com.gregtechceu.gtceu.api.registry.GTRegistries;
+import com.gregtechceu.gtceu.api.registry.registrate.GTRegistrate;
 
 import static com.ghostipedia.cosmiccore.common.data.materials.CosmicMaterialSet.MAGIC;
 import static com.gregtechceu.gtceu.api.data.chemical.material.info.MaterialFlags.*;
@@ -627,6 +629,31 @@ public class CosmicMaterials {
                 .dust()
                 .color(0x36E3C3).secondaryColor(0x111827).iconSet(MaterialIconSet.DIAMOND)
                 .buildAndRegister();
+
+        // TODO(cosmiccore): re-add a PLASMA fluid to Chlorine. In GTCEu 8.0 CC cannot do this via
+        // enqueueRegistration at all: GTCEu both creates materials (initMaterials) AND freezes every material's
+        // fluid storage (GTFluids.init -> registered=true) inside its OWN single RegisterEvent handler, which
+        // runs before CC's RegisterEvent and before PostMaterialEvent - so by ANY CC hook Chlorine's storage is
+        // already frozen ("Cannot enqueue a builder after registration"). Needs a different path (a standalone
+        // plasma fluid, or a GTCEu-side material-modification mechanism). Removed for now to let the client boot.
+    }
+
+    /**
+     * GTCEu's GTFluids.init() runs inside GTCEu's own RegisterEvent handler, which fires BEFORE CosmicCore's,
+     * so it never sees CC's materials - their .liquid()/.gas() builders stay enqueued and never get registered,
+     * leaving getFluid() == minecraft:empty. That makes GTCEu's decomposition recipe generator throw
+     * (SingleFluidIngredient must not be constructed with minecraft:empty) at world load. So we register CC's
+     * material fluids ourselves here, exactly as GTFluids.init does, scoped to cosmiccore materials. Call this
+     * AFTER all CC materials are registered.
+     */
+    public static void registerMaterialFluids() {
+        for (Material material : GTRegistries.MATERIALS) {
+            if (!CosmicCore.MOD_ID.equals(material.getModid())) continue;
+            FluidProperty fluidProperty = material.getProperty(PropertyKey.FLUID);
+            if (fluidProperty != null) {
+                fluidProperty.registerFluids(material, GTRegistrate.createIgnoringListenerErrors(CosmicCore.MOD_ID));
+            }
+        }
     }
 
     public static void modifyMaterials() {
@@ -656,7 +683,5 @@ public class CosmicMaterials {
         Neutronium.setMaterialIconSet(CCoreMaterialIconSet.VIBRANIUM_NEUTRONIUM);
         Neutronium.addFlags(NO_SMELTING, NO_ORE_SMELTING);
         Neutronium.setProperty(PropertyKey.BLAST, new BlastProperty(15000));
-        Chlorine.getProperty(PropertyKey.FLUID).getStorage().enqueueRegistration(FluidStorageKeys.PLASMA,
-                new FluidBuilder().state(FluidState.PLASMA));
     }
 }

@@ -12,16 +12,16 @@ import com.gregtechceu.gtceu.GTCEu;
 import com.gregtechceu.gtceu.api.data.RotationState;
 import com.gregtechceu.gtceu.api.machine.MultiblockMachineDefinition;
 import com.gregtechceu.gtceu.api.machine.multiblock.PartAbility;
-import com.gregtechceu.gtceu.api.pattern.FactoryBlockPattern;
-import com.gregtechceu.gtceu.api.pattern.Predicates;
+import com.gregtechceu.gtceu.api.multiblock.pattern.MultiblockPatternBuilder;
+import com.gregtechceu.gtceu.api.multiblock.Predicates;
 import com.gregtechceu.gtceu.api.recipe.OverclockingLogic;
 
 import net.minecraft.world.level.block.Blocks;
 
 import static com.ghostipedia.cosmiccore.api.registries.CosmicRegistration.REGISTRATE;
 import static com.ghostipedia.cosmiccore.common.data.CosmicBlocks.TRITANIUM_LINED_HEAVY_NEUTRONIUM_CASING;
-import static com.gregtechceu.gtceu.api.pattern.Predicates.*;
-import static com.gregtechceu.gtceu.api.pattern.Predicates.blocks;
+import static com.gregtechceu.gtceu.api.multiblock.Predicates.*;
+import static com.gregtechceu.gtceu.api.multiblock.Predicates.blocks;
 import static com.gregtechceu.gtceu.common.data.GCYMBlocks.CASING_ATOMIC;
 import static com.gregtechceu.gtceu.common.data.GTBlocks.*;
 import static com.gregtechceu.gtceu.common.data.GTRecipeModifiers.ELECTRIC_OVERCLOCK;
@@ -37,42 +37,42 @@ public class VoraxReactor {
             .appearanceBlock(CASING_ATOMIC)
             .partAppearance((controller, part, side) -> TRITANIUM_LINED_HEAVY_NEUTRONIUM_CASING.getDefaultState())
             .generator(true)
-            .pattern(definition -> FactoryBlockPattern.start()
-                    .aisle(" AAAAAAAAA ", "    A A    ", "  AAA AAA  ", "    AAA    ", "   BBABB   ", "    BBB    ",
+            .pattern(definition -> MultiblockPatternBuilder.start()
+                    .slice(" AAAAAAAAA ", "    A A    ", "  AAA AAA  ", "    AAA    ", "   BBABB   ", "    BBB    ",
                             "     B     ", "           ", "           ", "           ", "     B     ", "    BBB    ",
                             "   BBABB   ", "    AAA    ", "  AAA AAA  ", "    A A    ", " AAAAAAAAA ")
-                    .aisle("AA       AA", "  CCCACCC  ", " A  A A  A ", "   BAAAB   ", "  BB A BB  ", "           ",
+                    .slice("AA       AA", "  CCCACCC  ", " A  A A  A ", "   BAAAB   ", "  BB A BB  ", "           ",
                             "           ", "           ", "           ", "           ", "           ", "           ",
                             "  BB A BB  ", "   BAAAB   ", " A  A A  A ", "  CCCACCC  ", "AA       AA")
-                    .aisle("A         A", " CCAAAAACC ", "A D A A D A", "  DBAAABD  ", " BD  A  DB ", "  D     D  ",
+                    .slice("A         A", " CCAAAAACC ", "A D A A D A", "  DBAAABD  ", " BD  A  DB ", "  D     D  ",
                             "  D     D  ", "  D     D  ", "  D     D  ", "  D     D  ", "  D     D  ", "  D     D  ",
                             " BD  A  DB ", "  DBAAABD  ", "A D A A D A", " CCAAAAACC ", "A         A")
-                    .aisle("A         A", " CAAAAAAAC ", "A  AA AA  A", " BBBAAABBB ", "BB  AEA  BB", "    AEA    ",
+                    .slice("A         A", " CAAAAAAAC ", "A  AA AA  A", " BBBAAABBB ", "BB  AEA  BB", "    AEA    ",
                             "    AEA    ", "     E     ", "           ", "     E     ", "    AEA    ", "    AEA    ",
                             "BB  AEA  BB", " BBBAAABBB ", "A  AA AA  A", " CAAAAAAAC ", "A         A")
-                    .aisle("A         A", "ACAABBBAACA", "AAAAAAAAAAA", "AAAAAAAAAAA", "B  AFEFA  B", "B  AFEFA  B",
+                    .slice("A         A", "ACAABBBAACA", "AAAAAAAAAAA", "AAAAAAAAAAA", "B  AFEFA  B", "B  AFEFA  B",
                             "B  AFEFA  B", "B   EEE   B", "B         B", "B   EEE   B", "B  AFEFA  B", "B  AFEFA  B",
                             "B  AFEFA  B", "AAAAAAAAAAA", "AAAAAAAAAAA", "ACAABBBAACA", "A         A")
-                    .aisle("A         A", " AAABBBAAA ", "    AEA    ", "AAAAAEAAAAA", "AAAEEEEEAAA", "B  EEEEE  B",
+                    .slice("A         A", " AAABBBAAA ", "    AEA    ", "AAAAAEAAAAA", "AAAEEEEEAAA", "B  EEEEE  B",
                             "B  EEEEE  B", "B  EEEEE  B", "B         B", "B  EEEEE  B", "B  EEEEE  B", "B  EEEEE  B",
                             "AAAEEEEEAAA", "AAAAAEAAAAA", "    AEA    ", " AAABBBAAA ", "A         A")
-                    .aisle("A         A", "ACAABBBAACA", "AAAAAAAAAAA", "AAAAAAAAAAA", "B  AFEFA  B", "B  AFEFA  B",
+                    .slice("A         A", "ACAABBBAACA", "AAAAAAAAAAA", "AAAAAAAAAAA", "B  AFEFA  B", "B  AFEFA  B",
                             "B  AFEFA  B", "B   EEE   B", "B         B", "B   EEE   B", "B  AFEFA  B", "B  AFEFA  B",
                             "B  AFEFA  B", "AAAAAAAAAAA", "AAAAAAAAAAA", "ACAABBBAACA", "A         A")
-                    .aisle("A         A", " CAAAAAAAC ", "A  AA AA  A", " BBBAAABBB ", "BB  AEA  BB", "    AEA    ",
+                    .slice("A         A", " CAAAAAAAC ", "A  AA AA  A", " BBBAAABBB ", "BB  AEA  BB", "    AEA    ",
                             "    AEA    ", "     E     ", "           ", "     E     ", "    AEA    ", "    AEA    ",
                             "BB  AEA  BB", " BBBAAABBB ", "A  AA AA  A", " CAAAAAAAC ", "A         A")
-                    .aisle("A         A", " CCAAAAACC ", "A D A A D A", "  DBAAABD  ", " BD  A  DB ", "  D     D  ",
+                    .slice("A         A", " CCAAAAACC ", "A D A A D A", "  DBAAABD  ", " BD  A  DB ", "  D     D  ",
                             "  D     D  ", "  D     D  ", "  D     D  ", "  D     D  ", "  D     D  ", "  D     D  ",
                             " BD  A  DB ", "  DBAAABD  ", "A D A A D A", " CCAAAAACC ", "A         A")
-                    .aisle("AA       AA", "  CCCACCC  ", " A  A A  A ", "   BAAAB   ", "  BB A BB  ", "           ",
+                    .slice("AA       AA", "  CCCACCC  ", " A  A A  A ", "   BAAAB   ", "  BB A BB  ", "           ",
                             "           ", "           ", "           ", "           ", "           ", "           ",
                             "  BB A BB  ", "   BAAAB   ", " A  A A  A ", "  CCCACCC  ", "AA       AA")
-                    .aisle(" AAAAAAAAA ", "    A A    ", "  AAA AAA  ", "    AAA    ", "   BBQBB   ", "    BBB    ",
+                    .slice(" AAAAAAAAA ", "    A A    ", "  AAA AAA  ", "    AAA    ", "   BBQBB   ", "    BBB    ",
                             "     B     ", "           ", "           ", "           ", "     B     ", "    BBB    ",
                             "   BBABB   ", "    AAA    ", "  AAA AAA  ", "    A A    ", " AAAAAAAAA ")
                     .where(' ', any())
-                    .where("Q", controller(blocks(definition.getBlock())))
+                    .where('Q', controller(blocks(definition.getBlock())))
                     .where('C', blocks(CosmicBlocks.ULTRA_POWERED_CASING.get()))
                     .where('A', blocks(CASING_ATOMIC.get()))
                     .where('D', frames(CosmicMaterials.Trinavine))

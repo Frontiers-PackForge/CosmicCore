@@ -5,7 +5,7 @@ import com.ghostipedia.cosmiccore.api.machine.multiblock.IrisMultiblockMachine;
 
 import com.gregtechceu.gtceu.client.renderer.machine.DynamicRender;
 import com.gregtechceu.gtceu.client.renderer.machine.DynamicRenderType;
-import com.gregtechceu.gtceu.client.util.ModelUtils;
+import com.gregtechceu.gtceu.client.util.ModelEventHelper;
 
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.client.Minecraft;
@@ -21,6 +21,7 @@ import net.neoforged.neoforge.client.model.data.ModelData;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
+import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import org.joml.Quaternionf;
 
@@ -51,11 +52,12 @@ public class StarBallastRender extends DynamicRender<IrisMultiblockMachine, Star
     private static BakedModel starBeamModel = null;
 
     private StarBallastRender() {
-        ModelUtils.registerBakeEventListener(true, event -> {
-            starCoreModel = event.getModels().get(STAR_MODEL_CORE);
-            outerStarSphereModel = event.getModels().get(STAR_MODEL_OUTER);
-            innerStarSphereModel = event.getModels().get(STAR_MODEL_INNER);
-            starBeamModel = event.getModels().get(STAR_MODEL_BEAM);
+        ModelEventHelper.registerBakeEventListener(true, (rl, baked, rootModel, modelBakery) -> {
+            if (rl.equals(STAR_MODEL_CORE)) starCoreModel = baked;
+            else if (rl.equals(STAR_MODEL_OUTER)) outerStarSphereModel = baked;
+            else if (rl.equals(STAR_MODEL_INNER)) innerStarSphereModel = baked;
+            else if (rl.equals(STAR_MODEL_BEAM)) starBeamModel = baked;
+            return baked;
         });
     }
 

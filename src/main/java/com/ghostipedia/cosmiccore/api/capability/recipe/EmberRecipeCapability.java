@@ -12,15 +12,10 @@ import com.gregtechceu.gtceu.api.recipe.content.ContentModifier;
 import com.gregtechceu.gtceu.api.recipe.content.SerializerDouble;
 import com.gregtechceu.gtceu.api.recipe.lookup.ingredient.AbstractMapIngredient;
 
-import com.lowdragmc.lowdraglib.gui.widget.LabelWidget;
-import com.lowdragmc.lowdraglib.gui.widget.WidgetGroup;
-
-import net.minecraft.network.chat.Component;
-
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
-import org.apache.commons.lang3.mutable.MutableInt;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Collection;
 import java.util.List;
 
 public class EmberRecipeCapability extends RecipeCapability<Double> {
@@ -46,6 +41,11 @@ public class EmberRecipeCapability extends RecipeCapability<Double> {
         List<AbstractMapIngredient> ingredients = new ObjectArrayList<>(1);
         if (ingredient instanceof Double ember) ingredients.add(new MapEmberIngredient(ember));
         return ingredients;
+    }
+
+    @Override
+    public List<Object> compressIngredients(Collection<Object> ingredients) {
+        return super.compressIngredients(ingredients);
     }
 
     private static double getInputContents(IRecipeCapabilityHolder holder) {
@@ -80,9 +80,9 @@ public class EmberRecipeCapability extends RecipeCapability<Double> {
         var nonConsumable = 0d;
         var consumable = 0d;
         for (Content content : inputs) {
-            double required = (double) content.content;
+            double required = (double) content.content();
 
-            if (content.chance == 0) {
+            if (content.chance() == 0) {
                 nonConsumable += required;
             } else {
                 consumable += required;
@@ -101,16 +101,7 @@ public class EmberRecipeCapability extends RecipeCapability<Double> {
         return true;
     }
 
-    @Override
-    public void addXEIInfo(WidgetGroup group, int xOffset, GTRecipe recipe, List<Content> contents, boolean perTick,
-                           boolean isInput, MutableInt yOffset) {
-        double ember = contents.stream().map(Content::getContent).mapToDouble(EmberRecipeCapability.CAP::of).sum();
-        if (isInput) {
-            group.addWidget(new LabelWidget(3 - xOffset, yOffset.addAndGet(10),
-                    Component.translatable("cosmiccore.recipe.ember_in", ember)));
-        } else {
-            group.addWidget(new LabelWidget(3 - xOffset, yOffset.addAndGet(10),
-                    Component.translatable("cosmiccore.recipe.ember_out", ember)));
-        }
-    }
+    // TODO(8.0.0): re-add XEI display via the new XEI category API.
+    // RecipeCapability#addXEIInfo was removed in 8.0.0; the original LDLib LabelWidget rendering
+    // (ember_in / ember_out) lived here and needs reimplementing against the new XEI category hook.
 }

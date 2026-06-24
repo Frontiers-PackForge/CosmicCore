@@ -56,8 +56,8 @@ public class LinkedTerminalBehavior implements IInteractionItem, IAddInformation
         if (controller.isFormed() || level.isClientSide) return InteractionResult.PASS;
         var grid = getLinkedGrid(stack, level, player);
         if (grid == null) return InteractionResult.PASS;
-        ((IBlockPattern) controller.getPattern()).cosmiccore$autoBuild(player,
-                controller.getMultiblockState(), grid);
+        ((IBlockPattern) controller.getDefaultStructurePattern()).cosmiccore$autoBuild(player,
+                controller.getDefaultPatternState(), grid);
         player.getCooldowns().addCooldown(CosmicItems.LINKED_TERMINAL.asItem(), 100);
         return InteractionResult.sidedSuccess(false);
     }

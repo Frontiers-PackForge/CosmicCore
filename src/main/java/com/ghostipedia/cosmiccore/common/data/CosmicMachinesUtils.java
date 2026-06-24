@@ -14,9 +14,11 @@ import com.gregtechceu.gtceu.api.data.tag.TagPrefix;
 import com.gregtechceu.gtceu.api.machine.*;
 import com.gregtechceu.gtceu.api.machine.multiblock.PartAbility;
 import com.gregtechceu.gtceu.api.machine.property.GTMachineModelProperties;
-import com.gregtechceu.gtceu.api.pattern.FactoryBlockPattern;
-import com.gregtechceu.gtceu.api.pattern.TraceabilityPredicate;
-import com.gregtechceu.gtceu.api.pattern.predicates.SimplePredicate;
+import com.gregtechceu.gtceu.api.multiblock.pattern.MultiblockPatternBuilder;
+import com.gregtechceu.gtceu.api.multiblock.PatternPredicate;
+import com.gregtechceu.gtceu.api.multiblock.Predicates;
+import com.gregtechceu.gtceu.api.multiblock.predicates.BasePredicate;
+import com.gregtechceu.gtceu.api.multiblock.util.BlockInfo;
 import com.gregtechceu.gtceu.api.recipe.GTRecipeType;
 import com.gregtechceu.gtceu.api.registry.registrate.MachineBuilder;
 import com.gregtechceu.gtceu.common.data.GTMaterialItems;
@@ -25,8 +27,6 @@ import com.gregtechceu.gtceu.common.data.GTRecipeTypes;
 import com.gregtechceu.gtceu.common.machine.multiblock.part.FluidHatchPartMachine;
 import com.gregtechceu.gtceu.common.machine.multiblock.part.RotorHolderPartMachine;
 import com.gregtechceu.gtceu.utils.FormattingUtil;
-
-import com.lowdragmc.lowdraglib.utils.BlockInfo;
 
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -44,8 +44,8 @@ import java.util.stream.Stream;
 import static com.ghostipedia.cosmiccore.api.registries.CosmicRegistration.REGISTRATE;
 import static com.gregtechceu.gtceu.api.GTValues.*;
 import static com.gregtechceu.gtceu.api.GTValues.V;
-import static com.gregtechceu.gtceu.api.pattern.Predicates.*;
-import static com.gregtechceu.gtceu.api.pattern.Predicates.blocks;
+import static com.gregtechceu.gtceu.api.multiblock.Predicates.*;
+import static com.gregtechceu.gtceu.api.multiblock.Predicates.blocks;
 import static com.gregtechceu.gtceu.common.data.machines.GTMachineUtils.workableTiered;
 import static com.gregtechceu.gtceu.common.data.models.GTMachineModels.OVERLAY_FLUID_HATCH_HALF_PX_TEX;
 import static com.gregtechceu.gtceu.common.data.models.GTMachineModels.OVERLAY_FLUID_HATCH_TEX;
@@ -66,11 +66,11 @@ public class CosmicMachinesUtils {
                 .generator(true)
                 .recipeModifier(ExoticCombustionEngineMachine::recipeModifier, true)
                 .appearanceBlock(casing)
-                .pattern(definition -> FactoryBlockPattern.start()
-                        .aisle("XXX", "XDX", "XXX")
-                        .aisle("XCX", "CGC", "XCX")
-                        .aisle("XCX", "CGC", "XCX")
-                        .aisle("AAA", "AYA", "AAA")
+                .pattern(definition -> MultiblockPatternBuilder.start()
+                        .slice("XXX", "XDX", "XXX")
+                        .slice("XCX", "CGC", "XCX")
+                        .slice("XCX", "CGC", "XCX")
+                        .slice("AAA", "AYA", "AAA")
                         .where('X', blocks(casing.get()))
                         .where('G', blocks(gear.get()))
                         .where('C', blocks(casing.get()).setMinGlobalLimited(3)
@@ -117,24 +117,34 @@ public class CosmicMachinesUtils {
                 .generator(true)
                 .recipeModifier(CosmicLargeTurbineMachine::recipeModifier, true)
                 .appearanceBlock(casing)
-                .pattern(definition -> FactoryBlockPattern.start()
-                        .aisle("CCCC", "CHHC", "CCCC")
-                        .aisle("CHHC", "RGGR", "CHHC")
-                        .aisle("CCCC", "CSHC", "CCCC")
+                .pattern(definition -> MultiblockPatternBuilder.start()
+                        .slice("CCCC", "CHHC", "CCCC")
+                        .slice("CHHC", "RGGR", "CHHC")
+                        .slice("CCCC", "CSHC", "CCCC")
                         .where('S', controller(blocks(definition.getBlock())))
                         .where('G', blocks(gear.get()))
                         .where('C', blocks(casing.get()))
                         .where('R',
-                                new TraceabilityPredicate(
-                                        new SimplePredicate(
-                                                state -> MetaMachine.getMachine(state.getWorld(),
-                                                        state.getPos()) instanceof RotorHolderPartMachine rotorHolder &&
-                                                        state.getWorld()
-                                                                .getBlockState(state.getPos()
-                                                                        .relative(rotorHolder.self().getFrontFacing()))
-                                                                .isAir(),
-                                                () -> PartAbility.ROTOR_HOLDER.getAllBlocks().stream()
-                                                        .map(BlockInfo::fromBlock).toArray(BlockInfo[]::new)))
+                                // 8.0.0: SimplePredicate removed -> BasePredicate. The error-predicate now
+                                // returns null on match and Predicates.PLACEHOLDER on miss (see stock
+                                // GTMachineUtils#rotorHolder). Same gameplay: rotor holder facing open air.
+                                new PatternPredicate(
+                                        new BasePredicate(
+                                                worldState -> {
+                                                    if (MetaMachine.getMachine(worldState.getLevel(),
+                                                            worldState.getPos()
+                                                                    .immutable()) instanceof RotorHolderPartMachine rotorHolder &&
+                                                            worldState.getLevel()
+                                                                    .getBlockState(worldState.getPos().immutable()
+                                                                            .relative(rotorHolder.self()
+                                                                                    .getFrontFacing()))
+                                                                    .isAir()) {
+                                                        return null;
+                                                    }
+                                                    return Predicates.PLACEHOLDER;
+                                                },
+                                                PartAbility.ROTOR_HOLDER.getAllBlocks().stream()
+                                                        .map(BlockInfo::fromBlock).toList()))
                                         .addTooltips(Component.translatable("gtceu.multiblock.pattern.clear_amount_3"))
                                         .addTooltips(Component.translatable("gtceu.multiblock.pattern.error.limited.1",
                                                 VN[tier]))
@@ -164,7 +174,10 @@ public class CosmicMachinesUtils {
                         tankScalingFunction),
                 (tier, builder) -> builder
                         .langValue("%s %s Generator %s".formatted(VLVH[tier], toEnglishName(name), VLVT[tier]))
-                        .editableUI(SimpleGeneratorMachine.EDITABLE_UI_CREATOR.apply(GTCEu.id(name), recipeType))
+                        // TODO(8.0.0): SimpleGeneratorMachine.EDITABLE_UI_CREATOR + MachineBuilder.editableUI were
+                        //  removed in the GTCEu UI rewrite (stock GTMachines comments out the same call). Recipe
+                        //  type/tier wiring below is unaffected; restore the editable XEI UI once MUI2 ports it.
+                        // .editableUI(SimpleGeneratorMachine.EDITABLE_UI_CREATOR.apply(GTCEu.id(name), recipeType))
                         .rotationState(RotationState.ALL)
                         .recipeType(recipeType)
                         .recipeModifier(SimpleGeneratorMachine::recipeModifier, true)
@@ -192,7 +205,7 @@ public class CosmicMachinesUtils {
         for (int tier : tiers) {
             var register = REGISTRATE
                     .machine(GTValues.VN[tier].toLowerCase(Locale.ROOT) + "_" + name,
-                            holder -> factory.apply(holder, tier))
+                            info -> factory.apply(info, tier))
                     .tier(tier);
             definitions[tier] = builder.apply(tier, register);
         }
@@ -203,11 +216,11 @@ public class CosmicMachinesUtils {
                                                                                    BiFunction<BlockEntityCreationInfo, Boolean, MetaMachine> factory,
                                                                                    BiFunction<Boolean, MachineBuilder<MachineDefinition, ?>, MachineDefinition> builder) {
         MachineDefinition lowTier = builder.apply(false,
-                REGISTRATE.machine("lp_%s".formatted(name), holder -> factory.apply(holder, false))
+                REGISTRATE.machine("lp_%s".formatted(name), info -> factory.apply(info, false))
                         .langValue("I DO NOT EXIST")
                         .tier(0));
         MachineDefinition highTier = builder.apply(true,
-                REGISTRATE.machine("hp_%s".formatted(name), holder -> factory.apply(holder, true))
+                REGISTRATE.machine("hp_%s".formatted(name), info -> factory.apply(info, true))
                         .langValue("High Pressure " + FormattingUtil.toEnglishName(name))
                         .tier(1));
         return Pair.of(lowTier, highTier);

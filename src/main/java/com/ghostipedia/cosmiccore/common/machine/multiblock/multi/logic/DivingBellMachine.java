@@ -54,15 +54,15 @@ public class DivingBellMachine extends WorkableElectricMultiblockMachine {
     }
 
     @Override
-    public void onStructureFormed() {
-        super.onStructureFormed();
+    public void formStructure(@org.jetbrains.annotations.NotNull String substructureName) {
+        super.formStructure(substructureName);
         // Subscribe to server ticks when structure forms
         tickSubscription = subscribeServerTick(tickSubscription, this::checkForPlayers);
     }
 
     @Override
-    public void onStructureInvalid() {
-        super.onStructureInvalid();
+    public void invalidateStructure(String substructureName) {
+        super.invalidateStructure(substructureName);
         // Unsubscribe when structure breaks
         if (tickSubscription != null) {
             tickSubscription.unsubscribe();

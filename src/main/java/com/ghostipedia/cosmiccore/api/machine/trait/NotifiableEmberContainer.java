@@ -1,6 +1,6 @@
 package com.ghostipedia.cosmiccore.api.machine.trait;
 
-import com.ghostipedia.cosmiccore.api.capability.recipe.CosmicRecipeCapabilities;
+import com.ghostipedia.cosmiccore.api.capability.recipe.EmberRecipeCapability;
 import com.ghostipedia.cosmiccore.common.machine.multiblock.part.EmberHatchPartMachine;
 
 import com.gregtechceu.gtceu.api.capability.recipe.IO;
@@ -9,6 +9,7 @@ import com.gregtechceu.gtceu.api.machine.MetaMachine;
 import com.gregtechceu.gtceu.api.machine.trait.MachineTraitType;
 import com.gregtechceu.gtceu.api.machine.trait.NotifiableRecipeHandlerTrait;
 import com.gregtechceu.gtceu.api.recipe.GTRecipe;
+import com.gregtechceu.gtceu.api.sync_system.annotations.SaveField;
 
 import com.rekindled.embers.api.power.IEmberCapability;
 import com.rekindled.embers.power.DefaultEmberCapability;
@@ -23,45 +24,59 @@ public class NotifiableEmberContainer extends NotifiableRecipeHandlerTrait<Doubl
     public static final MachineTraitType<NotifiableEmberContainer> TYPE = new MachineTraitType<>(
             NotifiableEmberContainer.class);
 
-    private final EmberHatchPartMachine emberHatch;
-    private final IO handlerIO;
+    @Override
+    public MachineTraitType<?> getTraitType() {
+        return TYPE;
+    }
 
-    @Getter
-    private final double maxCapacity;
-
-    @Getter
-    private final double maxConsumption;
-
-    public final IEmberCapability capability = new DefaultEmberCapability() {
+    private EmberHatchPartMachine emberHatch;
+    public IEmberCapability capability = new DefaultEmberCapability() {
 
         @Override
         public void onContentsChanged() {
             super.onContentsChanged();
             emberHatch.cachedEmber = getEmber();
+            notifyListeners();
             NotifiableEmberContainer.this.notifyListeners();
         }
+
+        /*
+         * @Override
+         * public double getEmber() {
+         * return getTotalContentAmount();
+         * }
+         * 
+         * @Override
+         * public double addAmount(double value, boolean doAdd) {
+         * return super.addAmount(value, doAdd);
+         * }
+         */
     };
 
+    // Note: NBT serialization for capability now handled via @SaveField annotation
+    // and manual initialization in constructor
+
+    private final IO handlerIO;
+
+    @SaveField
+    @Getter
+    private double maxCapacity;
+
+    @SaveField
+    @Getter
+    private double maxConsumption;
+
     public NotifiableEmberContainer(MetaMachine machine, IO io, double maxCapacity, double maxConsumption) {
-        super(machine);
+        super();
         this.emberHatch = (EmberHatchPartMachine) machine;
+        this.capability.setEmberCapacity(maxCapacity);
+        this.capability.setEmber(0.0D);
         this.handlerIO = io;
         this.maxCapacity = maxCapacity;
         this.maxConsumption = maxConsumption;
-        this.capability.setEmberCapacity(maxCapacity);
-        this.capability.setEmber(0.0D);
-    }
-
-    @Override
-    public void onMachineLoad() {
-        super.onMachineLoad();
-        capability.setEmberCapacity(maxCapacity);
-        capability.setEmber(emberHatch.cachedEmber);
-    }
-
-    @Override
-    public MachineTraitType<NotifiableEmberContainer> getTraitType() {
-        return TYPE;
+        // 8.0.0: NotifiableRecipeHandlerTrait no longer takes the machine in its ctor; attach explicitly so
+        // getMachine()/capability registration are wired (mirrors EnergyHatchPartMachine#attachTrait).
+        machine.attachTrait(this);
     }
 
     @Override
@@ -97,7 +112,7 @@ public class NotifiableEmberContainer extends NotifiableRecipeHandlerTrait<Doubl
 
     @Override
     public RecipeCapability<Double> getCapability() {
-        return CosmicRecipeCapabilities.EMBER;
+        return EmberRecipeCapability.CAP;
     }
 
     @Override

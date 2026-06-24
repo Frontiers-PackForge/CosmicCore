@@ -7,24 +7,16 @@ import com.gregtechceu.gtceu.api.blockentity.BlockEntityCreationInfo;
 import com.gregtechceu.gtceu.api.capability.recipe.IO;
 import com.gregtechceu.gtceu.api.capability.recipe.IRecipeHandler;
 import com.gregtechceu.gtceu.api.capability.recipe.RecipeCapability;
-import com.gregtechceu.gtceu.api.gui.GuiTextures;
-import com.gregtechceu.gtceu.api.gui.UITemplate;
-import com.gregtechceu.gtceu.api.gui.widget.TankWidget;
 import com.gregtechceu.gtceu.api.machine.TickableSubscription;
-import com.gregtechceu.gtceu.api.machine.feature.IUIMachine;
 import com.gregtechceu.gtceu.api.machine.multiblock.part.TieredIOPartMachine;
 import com.gregtechceu.gtceu.api.machine.trait.NotifiableFluidTank;
 import com.gregtechceu.gtceu.api.recipe.GTRecipe;
 import com.gregtechceu.gtceu.utils.GTTransferUtils;
 
-import com.lowdragmc.lowdraglib.gui.modular.ModularUI;
-import com.lowdragmc.lowdraglib.gui.widget.LabelWidget;
-import com.lowdragmc.lowdraglib.gui.widget.WidgetGroup;
 import com.lowdragmc.lowdraglib.syncdata.ISubscription;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.world.entity.player.Player;
 import net.neoforged.neoforge.fluids.crafting.SizedFluidIngredient;
 
 import org.jetbrains.annotations.NotNull;
@@ -33,7 +25,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.List;
 
 public class SterilizationHatchPartMachine extends TieredIOPartMachine
-                                           implements IRecipeHandler, IUIMachine {
+                                           implements IRecipeHandler {
 
     @Nullable
     protected TickableSubscription autoIOSubs;
@@ -108,16 +100,6 @@ public class SterilizationHatchPartMachine extends TieredIOPartMachine
         }
     }
 
-    // GUI
-    @Override
-    public ModularUI createUI(Player entityPlayer) {
-        var group = new WidgetGroup(0, 0, 176, 164);
-        group.addWidget(new LabelWidget(5, 5, "gui.cosmiccore.sterilization_hatch"));
-        group.addWidget(new TankWidget(this.fluidTank, 79, 30, true, true)
-                .setBackground(GuiTextures.FLUID_SLOT));
-        return new ModularUI(176, 164, this, entityPlayer)
-                .background(GuiTextures.BACKGROUND)
-                .widget(group)
-                .widget(UITemplate.bindPlayerInventory(entityPlayer.getInventory(), GuiTextures.SLOT, 7, 84, true));
-    }
+    // TODO(8.0.0 MUI2): the LDLib IUIMachine createUI (fluid tank readout) was removed in GTCEu 8.0.0.
+    //  Rebuild on IUIMachine/buildUI (MUI2) when the sterilization UI is ported; fluidTank supplies the data.
 }

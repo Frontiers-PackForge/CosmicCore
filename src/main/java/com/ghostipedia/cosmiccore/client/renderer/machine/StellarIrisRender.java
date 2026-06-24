@@ -6,7 +6,7 @@ import com.ghostipedia.cosmiccore.api.machine.multiblock.IrisMultiblockMachine;
 import com.gregtechceu.gtceu.client.renderer.GTRenderTypes;
 import com.gregtechceu.gtceu.client.renderer.machine.DynamicRender;
 import com.gregtechceu.gtceu.client.renderer.machine.DynamicRenderType;
-import com.gregtechceu.gtceu.client.util.ModelUtils;
+import com.gregtechceu.gtceu.client.util.ModelEventHelper;
 import com.gregtechceu.gtceu.client.util.RenderBufferHelper;
 
 import net.minecraft.MethodsReturnNonnullByDefault;
@@ -26,6 +26,7 @@ import net.neoforged.neoforge.client.model.data.ModelData;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
+import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import org.joml.Quaternionf;
 
@@ -63,16 +64,22 @@ public class StellarIrisRender extends DynamicRender<IrisMultiblockMachine, Stel
     private static BakedModel outerStarSphereModel = null;
     private static BakedModel innerStarSphereModel = null;
 
-    private StellarIrisRender() {
-        ModelUtils.registerBakeEventListener(true, event -> {
-            irisCoreModel = event.getModels().get(IRIS_MODEL_CORE);
-            irisRingModel = event.getModels().get(IRIS_MODEL_RING);
-            irisSmallRingModel = event.getModels().get(IRIS_MODEL_RING_WHITE);
+    private StellarIrisRender() {}
 
-            starCoreModel = event.getModels().get(STAR_MODEL_CORE);
-            outerStarSphereModel = event.getModels().get(STAR_MODEL_OUTER);
-            innerStarSphereModel = event.getModels().get(STAR_MODEL_INNER);
-        });
+    /**
+     * Capture the baked standalone models. 8.0.0: additional models are NOT delivered to
+     * ModelEventHelper's ModifyBakingResult listener (that map holds ModelResourceLocation-keyed
+     * blockstate/item models, so {@code rl.equals(plainRL)} never matched and every field stayed
+     * null -> the BER NPE'd silently). They live in {@link net.minecraftforge.client.event.ModelEvent.BakingCompleted}
+     * #getModels(), keyed by plain ResourceLocation. CosmicCoreClient forwards that map here.
+     */
+    public static void onBakingCompleted(java.util.Map<ResourceLocation, BakedModel> models) {
+        irisCoreModel = models.get(IRIS_MODEL_CORE);
+        irisRingModel = models.get(IRIS_MODEL_RING);
+        irisSmallRingModel = models.get(IRIS_MODEL_RING_WHITE);
+        starCoreModel = models.get(STAR_MODEL_CORE);
+        outerStarSphereModel = models.get(STAR_MODEL_OUTER);
+        innerStarSphereModel = models.get(STAR_MODEL_INNER);
     }
 
     @Override
@@ -565,7 +572,7 @@ public class StellarIrisRender extends DynamicRender<IrisMultiblockMachine, Stel
 
     @OnlyIn(Dist.CLIENT)
     private void renderRings(Direction.Axis upAxis, float totalTick, PoseStack poseStack, MultiBufferSource buffer) {
-        VertexConsumer consumer = buffer.getBuffer(GTRenderTypes.getLightRing());
+        VertexConsumer consumer = buffer.getBuffer(GTRenderTypes.lightRing());
         float xRot = totalTick / 15;
         float zRot = Mth.HALF_PI + totalTick / 30;
         float yRot = totalTick / 20;
@@ -581,7 +588,7 @@ public class StellarIrisRender extends DynamicRender<IrisMultiblockMachine, Stel
 
         poseStack.pushPose();
         poseStack.mulPose(new Quaternionf().rotateXYZ(sinX, cosY, sinZ));
-        consumer = buffer.getBuffer(GTRenderTypes.getLightRing());
+        consumer = buffer.getBuffer(GTRenderTypes.lightRing());
         RenderBufferHelper.renderRing(poseStack, consumer,
                 0, 0, 0,
                 6.3f, 0.3F, 10, 36,
@@ -590,7 +597,7 @@ public class StellarIrisRender extends DynamicRender<IrisMultiblockMachine, Stel
 
         poseStack.pushPose();
         poseStack.mulPose(new Quaternionf().rotateXYZ(cosX, sinY, sinZ));
-        consumer = buffer.getBuffer(GTRenderTypes.getLightRing());
+        consumer = buffer.getBuffer(GTRenderTypes.lightRing());
         RenderBufferHelper.renderRing(poseStack, consumer,
                 0, 0, 0,
                 5.75f, 0.3F, 10, 36,
@@ -599,7 +606,7 @@ public class StellarIrisRender extends DynamicRender<IrisMultiblockMachine, Stel
 
         poseStack.pushPose();
         poseStack.mulPose(new Quaternionf().rotateXYZ(cosZ, -sinY, 0));
-        consumer = buffer.getBuffer(GTRenderTypes.getLightRing());
+        consumer = buffer.getBuffer(GTRenderTypes.lightRing());
         RenderBufferHelper.renderRing(poseStack, consumer,
                 0, 0, 0,
                 3.75f, 0.3F, 10, 36,
@@ -609,7 +616,7 @@ public class StellarIrisRender extends DynamicRender<IrisMultiblockMachine, Stel
 
     private void renderRingsSecondary(Direction.Axis upAxis, float totalTick, PoseStack poseStack,
                                       MultiBufferSource buffer) {
-        VertexConsumer consumer = buffer.getBuffer(GTRenderTypes.getLightRing());
+        VertexConsumer consumer = buffer.getBuffer(GTRenderTypes.lightRing());
         float xRot = totalTick / 17f;
         float zRot = Mth.HALF_PI + 0.35f + totalTick / 29f;
         float yRot = totalTick / 21f;
@@ -625,7 +632,7 @@ public class StellarIrisRender extends DynamicRender<IrisMultiblockMachine, Stel
 
         poseStack.pushPose();
         poseStack.mulPose(new Quaternionf().rotateXYZ(sinX, cosY, sinZ));
-        consumer = buffer.getBuffer(GTRenderTypes.getLightRing());
+        consumer = buffer.getBuffer(GTRenderTypes.lightRing());
         RenderBufferHelper.renderRing(poseStack, consumer,
                 0, 0, 0,
                 5.10f + 0.25f * Mth.sin(totalTick * 0.9f + 0.3f),
@@ -639,7 +646,7 @@ public class StellarIrisRender extends DynamicRender<IrisMultiblockMachine, Stel
 
         poseStack.pushPose();
         poseStack.mulPose(new Quaternionf().rotateXYZ(cosX, sinY, sinZ));
-        consumer = buffer.getBuffer(GTRenderTypes.getLightRing());
+        consumer = buffer.getBuffer(GTRenderTypes.lightRing());
         RenderBufferHelper.renderRing(poseStack, consumer,
                 0, 0, 0,
                 4.55f + 0.30f * Mth.sin(totalTick * 0.377f + 0.9f),
@@ -652,7 +659,7 @@ public class StellarIrisRender extends DynamicRender<IrisMultiblockMachine, Stel
 
         poseStack.pushPose();
         poseStack.mulPose(new Quaternionf().rotateZ(cosZ));
-        consumer = buffer.getBuffer(GTRenderTypes.getLightRing());
+        consumer = buffer.getBuffer(GTRenderTypes.lightRing());
         RenderBufferHelper.renderRing(poseStack, consumer,
                 0, 0, 0,
                 5.05f + 0.22f * Mth.sin(totalTick * 0.065f + 1.9f),

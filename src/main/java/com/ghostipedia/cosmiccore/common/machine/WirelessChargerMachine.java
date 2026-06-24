@@ -46,7 +46,7 @@ public class WirelessChargerMachine extends TieredEnergyMachine {
     public WirelessChargerMachine(BlockEntityCreationInfo holder, int tier) {
         super(holder, tier, m -> {
             long chargeAmount = GTValues.V[tier];
-            return new NotifiableEnergyContainer(m, chargeAmount * 64L, chargeAmount, 4, 0L, 0L) {
+            return new NotifiableEnergyContainer(chargeAmount * 64L, chargeAmount, 4, 0L, 0L) {
 
                 @Override
                 public long getInputAmperage() {

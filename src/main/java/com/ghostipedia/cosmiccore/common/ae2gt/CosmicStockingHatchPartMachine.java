@@ -1,12 +1,9 @@
 package com.ghostipedia.cosmiccore.common.ae2gt;
 
 import com.gregtechceu.gtceu.api.blockentity.BlockEntityCreationInfo;
-import com.gregtechceu.gtceu.api.gui.fancy.ConfiguratorPanel;
-import com.gregtechceu.gtceu.api.gui.fancy.TabsWidget;
 import com.gregtechceu.gtceu.api.machine.MetaMachine;
-import com.gregtechceu.gtceu.api.machine.fancyconfigurator.AutoStockingFancyConfigurator;
-import com.gregtechceu.gtceu.api.machine.feature.multiblock.IMultiPart;
 import com.gregtechceu.gtceu.api.machine.multiblock.MultiblockControllerMachine;
+import com.gregtechceu.gtceu.api.machine.feature.multiblock.IMultiPart;
 import com.gregtechceu.gtceu.api.machine.trait.NotifiableFluidTank;
 import com.gregtechceu.gtceu.common.item.behavior.IntCircuitBehaviour;
 import com.gregtechceu.gtceu.config.ConfigHolder;
@@ -16,16 +13,17 @@ import com.gregtechceu.gtceu.integration.ae2.slot.ExportOnlyAEFluidSlot;
 import com.gregtechceu.gtceu.integration.ae2.slot.ExportOnlyAESlot;
 import com.gregtechceu.gtceu.integration.ae2.slot.IConfigurableSlotList;
 import com.gregtechceu.gtceu.integration.ae2.utils.AEUtil;
+import com.gregtechceu.gtceu.api.sync_system.annotations.SaveField;
+import com.gregtechceu.gtceu.api.sync_system.annotations.SyncToClient;
 import com.gregtechceu.gtceu.utils.ExtendedUseOnContext;
 
-import com.lowdragmc.lowdraglib.syncdata.annotation.DescSynced;
 import com.lowdragmc.lowdraglib.syncdata.annotation.DropSaved;
-import com.lowdragmc.lowdraglib.syncdata.annotation.Persisted;
 
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.InteractionResult;
+
 import net.neoforged.neoforge.fluids.FluidStack;
 
 import appeng.api.config.Actionable;
@@ -35,8 +33,6 @@ import appeng.api.stacks.AEKey;
 import appeng.api.stacks.GenericStack;
 import appeng.api.storage.MEStorage;
 import it.unimi.dsi.fastutil.objects.Object2LongMap;
-import lombok.Getter;
-import lombok.Setter;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Comparator;
@@ -47,28 +43,22 @@ public class CosmicStockingHatchPartMachine extends CosmicInputHatchPartMachine 
 
     private static final int CONFIG_SIZE = 1;
 
-    @DescSynced
-    @Persisted
-    @Getter
+    @SyncToClient
+    @SaveField
     private boolean autoPull;
 
-    @Getter
-    @Setter
-    @Persisted
+    @SaveField
     @DropSaved
     private int minStackSize = 1;
 
-    @Getter
-    @Setter
-    @Persisted
+    @SaveField
     @DropSaved
     private int ticksPerCycle = 40;
 
-    @Setter
     private Predicate<GenericStack> autoPullTest;
 
-    public CosmicStockingHatchPartMachine(BlockEntityCreationInfo holder) {
-        super(holder);
+    public CosmicStockingHatchPartMachine(BlockEntityCreationInfo info) {
+        super(info);
         this.autoPullTest = $ -> false;
     }
 
@@ -103,9 +93,9 @@ public class CosmicStockingHatchPartMachine extends CosmicInputHatchPartMachine 
     }
 
     @Override
-    public void addedToController(MultiblockControllerMachine controller) {
-        super.addedToController(controller);
-        IMEStockingPart.super.addedToController(controller);
+    public void addedToController(MultiblockControllerMachine controller, String substructureName) {
+        super.addedToController(controller, substructureName);
+        IMEStockingPart.super.addedToController(controller, substructureName);
     }
 
     @Override
@@ -119,7 +109,6 @@ public class CosmicStockingHatchPartMachine extends CosmicInputHatchPartMachine 
         this.aeFluidHandler = new CosmicStockingHatchPartMachine.ExportOnlyAEStockingFluidList(this, CONFIG_SIZE);
         return this.aeFluidHandler;
     }
-
     /////////////////////////////////
     // ********** Sync ME *********//
     /////////////////////////////////
@@ -153,11 +142,6 @@ public class CosmicStockingHatchPartMachine extends CosmicInputHatchPartMachine 
             }
             slot.setStock(null);
         }
-    }
-
-    @Override
-    public void attachSideTabs(TabsWidget sideTabs) {
-        sideTabs.setMainTab(this); // removes the cover configurator, it's pointless and clashes with layout.
     }
 
     @Override
@@ -259,21 +243,6 @@ public class CosmicStockingHatchPartMachine extends CosmicInputHatchPartMachine 
 
         aeFluidHandler.clearInventory(index);
     }
-
-    ///////////////////////////////
-    // ********** GUI ***********//
-    ///////////////////////////////
-
-    @Override
-    public void attachConfigurators(ConfiguratorPanel configuratorPanel) {
-        IMEStockingPart.super.attachConfigurators(configuratorPanel);
-        // super.attachConfigurators(configuratorPanel);
-        configuratorPanel.attachConfigurators(new AutoStockingFancyConfigurator(this));
-    }
-
-    ////////////////////////////////
-    // ******* Interaction *******//
-    ////////////////////////////////
 
     @Override
     protected InteractionResult onScrewdriverClick(ExtendedUseOnContext context) {

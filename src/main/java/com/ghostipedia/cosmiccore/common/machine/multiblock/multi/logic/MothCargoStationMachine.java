@@ -151,8 +151,8 @@ public class MothCargoStationMachine extends LinkedWorkableMultiblockMachine {
     // ==================== Lifecycle ====================
 
     @Override
-    public void onStructureFormed() {
-        super.onStructureFormed();
+    public void formStructure(@org.jetbrains.annotations.NotNull String substructureName) {
+        super.formStructure(substructureName);
 
         // Scan for moth homes in structure
         scanForMothHomes();
@@ -161,8 +161,8 @@ public class MothCargoStationMachine extends LinkedWorkableMultiblockMachine {
     }
 
     @Override
-    public void onStructureInvalid() {
-        super.onStructureInvalid();
+    public void invalidateStructure(String substructureName) {
+        super.invalidateStructure(substructureName);
         unsubscribeFromShipping();
         // Reset moth home stats
         mothHomeTier = 0;
@@ -580,8 +580,7 @@ public class MothCargoStationMachine extends LinkedWorkableMultiblockMachine {
 
     // ==================== UI ====================
 
-    @Override
-    public void addDisplayText(List<Component> textList) {
+        public void addDisplayText(List<Component> textList) {
         if (!isFormed()) {
             textList.add(Component.literal("Structure not formed")
                     .setStyle(Style.EMPTY.withColor(ChatFormatting.RED)));
