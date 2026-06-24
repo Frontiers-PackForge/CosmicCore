@@ -38,14 +38,11 @@ public class HeatSensitiveMachine extends HeatWorkableElectricMultiblockMachine 
     }
 
     @Override
-    public void onStructureFormed() {
-        super.onStructureFormed();
+    public void formStructure(@org.jetbrains.annotations.NotNull String substructureName) {
+        super.formStructure(substructureName);
         List<IEnergyContainer> energyContainers = new ArrayList<>();
         List<IHeatContainer> heatContainers = new ArrayList<>();
-        Map<Long, IO> ioMap = getMultiblockState().getMatchContext().getOrCreate("ioMap", Long2ObjectMaps::emptyMap);
         for (IMultiPart part : getParts()) {
-            IO io = ioMap.getOrDefault(part.self().getBlockPos().asLong(), IO.IN);
-            if (io == IO.NONE || io == IO.OUT) continue;
             for (var handler : part.getRecipeHandlers()) {
                 IO handlerIO = handler.getHandlerIO();
                 if (handler.hasCapability(HeatRecipeCapability.CAP) &&

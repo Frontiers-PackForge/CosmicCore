@@ -1,0 +1,22 @@
+{
+    "parent": "minecraft:block/block",
+    "loader": "gtceu:machine",
+    "machine": "cosmiccore:mv_ember_output_hatch",
+    "replaceable_textures": [
+        "bottom",
+        "top",
+        "side"
+    ],
+    "variants": {
+        "": {
+            "model": {
+                "parent": "cosmiccore:block/machine/part/ember_hatch",
+                "textures": {
+                    "bottom": "gtceu:block/casings/voltage/mv/bottom",
+                    "side": "gtceu:block/casings/voltage/mv/side",
+                    "top": "gtceu:block/casings/voltage/mv/top"
+                }
+            }
+        }
+    }
+}

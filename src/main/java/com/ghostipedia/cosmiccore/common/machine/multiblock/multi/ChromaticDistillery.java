@@ -7,15 +7,15 @@ import com.gregtechceu.gtceu.api.data.RotationState;
 import com.gregtechceu.gtceu.api.machine.MultiblockMachineDefinition;
 import com.gregtechceu.gtceu.api.machine.multiblock.PartAbility;
 import com.gregtechceu.gtceu.api.machine.multiblock.WorkableElectricMultiblockMachine;
-import com.gregtechceu.gtceu.api.pattern.FactoryBlockPattern;
-import com.gregtechceu.gtceu.api.pattern.Predicates;
+import com.gregtechceu.gtceu.api.multiblock.pattern.MultiblockPatternBuilder;
+import com.gregtechceu.gtceu.api.multiblock.Predicates;
 import com.gregtechceu.gtceu.api.recipe.OverclockingLogic;
 import com.gregtechceu.gtceu.common.data.GTBlocks;
 import com.gregtechceu.gtceu.common.data.GTRecipeModifiers;
 
 import static com.ghostipedia.cosmiccore.api.registries.CosmicRegistration.REGISTRATE;
-import static com.gregtechceu.gtceu.api.pattern.Predicates.*;
-import static com.gregtechceu.gtceu.api.pattern.util.RelativeDirection.*;
+import static com.gregtechceu.gtceu.api.multiblock.Predicates.*;
+import static com.gregtechceu.gtceu.api.multiblock.util.RelativeDirection.*;
 import static com.gregtechceu.gtceu.common.data.GTBlocks.*;
 import static com.gregtechceu.gtceu.common.data.GTBlocks.CASING_STAINLESS_CLEAN;
 import static com.gregtechceu.gtceu.common.data.GTRecipeModifiers.ELECTRIC_OVERCLOCK;
@@ -29,12 +29,12 @@ public class ChromaticDistillery {
             .recipeModifiers(ELECTRIC_OVERCLOCK.apply(OverclockingLogic.NON_PERFECT_OVERCLOCK),
                     GTRecipeModifiers.PARALLEL_HATCH, GTRecipeModifiers.BATCH_MODE)
             .appearanceBlock(GTBlocks.CASING_STAINLESS_CLEAN)
-            .pattern(definition -> FactoryBlockPattern.start(RIGHT, BACK, UP)
-                    .aisle(" BCB ", "BBBBB", "BBBBB", "BBBBB", " BBB ")
-                    .aisle(" A A ", "AGPGA", "APGPA", "AGPGA", " A A ").setRepeatable(1, 15)
-                    .aisle(" AAA ", "AAAAA", "AAAAA", "AAAAA", " AAA ")
+            .pattern(definition -> MultiblockPatternBuilder.start(RIGHT, BACK, UP)
+                    .slice(" BCB ", "BBBBB", "BBBBB", "BBBBB", " BBB ")
+                    .sliceRepeatable(1, 15, " A A ", "AGPGA", "APGPA", "AGPGA", " A A ")
+                    .slice(" AAA ", "AAAAA", "AAAAA", "AAAAA", " AAA ")
                     .where(' ', any())
-                    .where("C", controller(blocks(definition.getBlock())))
+                    .where('C', controller(blocks(definition.getBlock())))
                     .where('G', blocks(CASING_TEMPERED_GLASS.get()))
                     .where('P', blocks(CASING_TITANIUM_PIPE.get()))
                     .where('B', blocks(CASING_STAINLESS_CLEAN.get())

@@ -10,16 +10,16 @@ import com.gregtechceu.gtceu.api.data.tag.TagPrefix;
 import com.gregtechceu.gtceu.api.machine.MultiblockMachineDefinition;
 import com.gregtechceu.gtceu.api.machine.multiblock.PartAbility;
 import com.gregtechceu.gtceu.api.machine.multiblock.WorkableElectricMultiblockMachine;
-import com.gregtechceu.gtceu.api.pattern.FactoryBlockPattern;
-import com.gregtechceu.gtceu.api.pattern.Predicates;
+import com.gregtechceu.gtceu.api.multiblock.pattern.MultiblockPatternBuilder;
+import com.gregtechceu.gtceu.api.multiblock.Predicates;
 import com.gregtechceu.gtceu.api.recipe.OverclockingLogic;
 import com.gregtechceu.gtceu.common.data.GTMaterials;
 import com.gregtechceu.gtceu.common.data.GTRecipeModifiers;
 
 import static com.ghostipedia.cosmiccore.api.registries.CosmicRegistration.REGISTRATE;
 import static com.ghostipedia.cosmiccore.common.data.CosmicBlocks.WEAR_RESISTANT_RURIDIT_CASING;
-import static com.gregtechceu.gtceu.api.pattern.Predicates.*;
-import static com.gregtechceu.gtceu.api.pattern.util.RelativeDirection.*;
+import static com.gregtechceu.gtceu.api.multiblock.Predicates.*;
+import static com.gregtechceu.gtceu.api.multiblock.util.RelativeDirection.*;
 import static com.gregtechceu.gtceu.common.data.GCYMBlocks.CASING_STRESS_PROOF;
 import static com.gregtechceu.gtceu.common.data.GTBlocks.*;
 import static com.gregtechceu.gtceu.common.data.GTRecipeModifiers.ELECTRIC_OVERCLOCK;
@@ -33,16 +33,16 @@ public class LargeSpoolingMachine {
             .recipeModifiers(GTRecipeModifiers.PARALLEL_HATCH,
                     ELECTRIC_OVERCLOCK.apply(OverclockingLogic.NON_PERFECT_OVERCLOCK), GTRecipeModifiers.BATCH_MODE)
             .appearanceBlock(WEAR_RESISTANT_RURIDIT_CASING)
-            .pattern(definition -> FactoryBlockPattern.start()
-                    .aisle("  AAAA", "     F", "  DDDF", "     F", "     F", "     F", "     F", "  AAAA", "      ")
-                    .aisle("  AAAA", "   C  ", "  DC  ", "   C  ", "   C  ", "   C  ", "   C  ", "  AAAA", "      ")
-                    .aisle("AAAAAA", "A   A ", "A E A ", "A   A ", "A   A ", "A   A ", "A   A ", "AAAAAA", " AAA  ")
-                    .aisle("AAAAA ", "B   B ", "B   B ", "B   B ", "B   B ", "B   B ", "B   B ", "A   A ", "AAAAA ")
-                    .aisle("AACAA ", "B D B ", "B D B ", "B D B ", "B D B ", "B D B ", "B D B ", "B D B ", "AACAA ")
-                    .aisle("AAAAA ", "B   B ", "B   B ", "B   B ", "B   B ", "B   B ", "B   B ", "A   A ", "AAAAA ")
-                    .aisle("AAQAA ", "ABBBA ", "ABBBA ", "ABBBA ", "ABBBA ", "ABBBA ", "ABBBA ", "AABAA ", " AAA  ")
+            .pattern(definition -> MultiblockPatternBuilder.start()
+                    .slice("  AAAA", "     F", "  DDDF", "     F", "     F", "     F", "     F", "  AAAA", "      ")
+                    .slice("  AAAA", "   C  ", "  DC  ", "   C  ", "   C  ", "   C  ", "   C  ", "  AAAA", "      ")
+                    .slice("AAAAAA", "A   A ", "A E A ", "A   A ", "A   A ", "A   A ", "A   A ", "AAAAAA", " AAA  ")
+                    .slice("AAAAA ", "B   B ", "B   B ", "B   B ", "B   B ", "B   B ", "B   B ", "A   A ", "AAAAA ")
+                    .slice("AACAA ", "B D B ", "B D B ", "B D B ", "B D B ", "B D B ", "B D B ", "B D B ", "AACAA ")
+                    .slice("AAAAA ", "B   B ", "B   B ", "B   B ", "B   B ", "B   B ", "B   B ", "A   A ", "AAAAA ")
+                    .slice("AAQAA ", "ABBBA ", "ABBBA ", "ABBBA ", "ABBBA ", "ABBBA ", "ABBBA ", "AABAA ", " AAA  ")
                     .where(' ', any())
-                    .where("Q", controller(blocks(definition.getBlock())))
+                    .where('Q', controller(blocks(definition.getBlock())))
                     .where('A', blocks(WEAR_RESISTANT_RURIDIT_CASING.get()).setMinGlobalLimited(85, 90)
                             .or(Predicates.abilities(PartAbility.IMPORT_ITEMS).setMinGlobalLimited(1))
                             .or(Predicates.abilities(PartAbility.IMPORT_FLUIDS).setMinGlobalLimited(1))

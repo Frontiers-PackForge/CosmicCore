@@ -9,7 +9,7 @@ import com.gregtechceu.gtceu.api.data.RotationState;
 import com.gregtechceu.gtceu.api.machine.MultiblockMachineDefinition;
 import com.gregtechceu.gtceu.api.machine.multiblock.PartAbility;
 import com.gregtechceu.gtceu.api.machine.multiblock.WorkableElectricMultiblockMachine;
-import com.gregtechceu.gtceu.api.pattern.FactoryBlockPattern;
+import com.gregtechceu.gtceu.api.multiblock.pattern.MultiblockPatternBuilder;
 import com.gregtechceu.gtceu.api.recipe.OverclockingLogic;
 import com.gregtechceu.gtceu.common.data.GTBlocks;
 import com.gregtechceu.gtceu.common.data.GTRecipeModifiers;
@@ -18,7 +18,7 @@ import com.sammy.malum.registry.common.block.MalumBlocks;
 
 import static com.ghostipedia.cosmiccore.api.registries.CosmicRegistration.REGISTRATE;
 import static com.ghostipedia.cosmiccore.common.data.CosmicBlocks.HIGH_TEMP_FISSION_CASING;
-import static com.gregtechceu.gtceu.api.pattern.Predicates.*;
+import static com.gregtechceu.gtceu.api.multiblock.Predicates.*;
 
 public class VileFissionReactor {
 
@@ -34,14 +34,14 @@ public class VileFissionReactor {
                     GTRecipeModifiers.ELECTRIC_OVERCLOCK.apply(OverclockingLogic.NON_PERFECT_OVERCLOCK_SUBTICK),
                     GTRecipeModifiers.BATCH_MODE)
             // spotless:off
-            .pattern(definition -> FactoryBlockPattern.start()
-                    .aisle("AAAAAAA", " AA AA ", " A   A ", "       ", "       ", "   A   ", "   A   ", "  ABA  ", "   A   ", "   A   ", "       ", "       ", " A   A ", " AA AA ", "AAAAAAA")
-                    .aisle("AAAAAAA", "AABBBAA", "AABCBAA", " ABCBA ", "  BCB  ", "  BBB  ", "  AAA  ", " AA AA ", "  AAA  ", "  BBB  ", "  BCB  ", " ABCBA ", "AABCBAA", "AABBBAA", "AAAAAAA")
-                    .aisle("AAAAAAA", "ABDDDBA", " BDDDB ", " BDDDB ", " BDDDB ", " BDDDB ", " AADAA ", "AAADAAA", " AADAA ", " BDDDB ", " BDDDB ", " BDDDB ", " BDDDB ", "ABDDDBA", "AAAAAAA")
-                    .aisle("AAAAAAA", " BD DB ", " CD DC ", " CD DC ", " CD DC ", "ABD DBA", "AAD DAA", "B D D B", "AAD DAA", "ABD DBA", " CD DC ", " CD DC ", " CD DC ", " BD DB ", "AAAAAAA")
-                    .aisle("AAAAAAA", "ABDDDBA", " BDDDB ", " BDDDB ", " BDDDB ", " BDDDB ", " AADAA ", "AAADAAA", " AADAA ", " BDDDB ", " BDDDB ", " BDDDB ", " BDDDB ", "ABDDDBA", "AAAAAAA")
-                    .aisle("AAAAAAA", "AABBBAA", "AABCBAA", " ABCBA ", "  BCB  ", "  BBB  ", "  AAA  ", " AA AA ", "  AAA  ", "  BBB  ", "  BCB  ", " ABCBA ", "AABCBAA", "AABBBAA", "AAAAAAA")
-                    .aisle("AAAQAAA", " AA AA ", " A   A ", "       ", "       ", "   A   ", "   A   ", "  ABA  ", "   A   ", "   A   ", "       ", "       ", " A   A ", " AA AA ", "AAAAAAA")
+            .pattern(definition -> MultiblockPatternBuilder.start()
+                    .slice("AAAAAAA", " AA AA ", " A   A ", "       ", "       ", "   A   ", "   A   ", "  ABA  ", "   A   ", "   A   ", "       ", "       ", " A   A ", " AA AA ", "AAAAAAA")
+                    .slice("AAAAAAA", "AABBBAA", "AABCBAA", " ABCBA ", "  BCB  ", "  BBB  ", "  AAA  ", " AA AA ", "  AAA  ", "  BBB  ", "  BCB  ", " ABCBA ", "AABCBAA", "AABBBAA", "AAAAAAA")
+                    .slice("AAAAAAA", "ABDDDBA", " BDDDB ", " BDDDB ", " BDDDB ", " BDDDB ", " AADAA ", "AAADAAA", " AADAA ", " BDDDB ", " BDDDB ", " BDDDB ", " BDDDB ", "ABDDDBA", "AAAAAAA")
+                    .slice("AAAAAAA", " BD DB ", " CD DC ", " CD DC ", " CD DC ", "ABD DBA", "AAD DAA", "B D D B", "AAD DAA", "ABD DBA", " CD DC ", " CD DC ", " CD DC ", " BD DB ", "AAAAAAA")
+                    .slice("AAAAAAA", "ABDDDBA", " BDDDB ", " BDDDB ", " BDDDB ", " BDDDB ", " AADAA ", "AAADAAA", " AADAA ", " BDDDB ", " BDDDB ", " BDDDB ", " BDDDB ", "ABDDDBA", "AAAAAAA")
+                    .slice("AAAAAAA", "AABBBAA", "AABCBAA", " ABCBA ", "  BCB  ", "  BBB  ", "  AAA  ", " AA AA ", "  AAA  ", "  BBB  ", "  BCB  ", " ABCBA ", "AABCBAA", "AABBBAA", "AAAAAAA")
+                    .slice("AAAQAAA", " AA AA ", " A   A ", "       ", "       ", "   A   ", "   A   ", "  ABA  ", "   A   ", "   A   ", "       ", "       ", " A   A ", " AA AA ", "AAAAAAA")
 
                     .where(' ', any())
                     .where('Q', controller(blocks(definition.getBlock())))

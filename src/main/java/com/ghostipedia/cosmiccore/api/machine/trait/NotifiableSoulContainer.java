@@ -37,10 +37,11 @@ public class NotifiableSoulContainer extends NotifiableRecipeHandlerTrait<SoulIn
     private final int capacity;
 
     public NotifiableSoulContainer(MetaMachine machine, IO io, int throughput, int capacity) {
-        super(machine);
+        super();
         this.handlerIO = io;
         this.throughput = throughput;
         this.capacity = capacity;
+        machine.attachTrait(this);
     }
 
     @Override
@@ -62,18 +63,18 @@ public class NotifiableSoulContainer extends NotifiableRecipeHandlerTrait<SoulIn
     }
 
     private SoulNetwork getSoulNetwork() {
-        if (this.machine.getLevel() instanceof ServerLevel serverLevel) {
+        if (getMachine().getLevel() instanceof ServerLevel serverLevel) {
             return SoulNetworkSavedData.getSoulNetwork(serverLevel, getOwner());
         }
         return new SoulNetwork();
     }
 
     private UUID getOwner() {
-        if (this.machine.getOwner() instanceof FTBOwner ftbOwner) {
-            var team = ftbOwner.getPlayerTeam(this.machine.getOwnerUUID());
+        if (getMachine().getOwner() instanceof FTBOwner ftbOwner) {
+            var team = ftbOwner.getPlayerTeam(getMachine().getOwnerUUID());
             if (team != null) return team.getTeamId();
         }
-        return this.machine.getOwnerUUID();
+        return getMachine().getOwnerUUID();
     }
 
     @Override

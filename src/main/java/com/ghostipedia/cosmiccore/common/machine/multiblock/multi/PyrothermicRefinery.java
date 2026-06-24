@@ -9,8 +9,8 @@ import com.ghostipedia.cosmiccore.gtbridge.CosmicRecipeTypes;
 import com.gregtechceu.gtceu.api.data.RotationState;
 import com.gregtechceu.gtceu.api.machine.MultiblockMachineDefinition;
 import com.gregtechceu.gtceu.api.machine.multiblock.PartAbility;
-import com.gregtechceu.gtceu.api.pattern.FactoryBlockPattern;
-import com.gregtechceu.gtceu.api.pattern.Predicates;
+import com.gregtechceu.gtceu.api.multiblock.Predicates;
+import com.gregtechceu.gtceu.api.multiblock.pattern.MultiblockPatternBuilder;
 import com.gregtechceu.gtceu.api.recipe.OverclockingLogic;
 
 import static com.ghostipedia.cosmiccore.api.machine.part.CosmicPartAbility.IMPORT_EMBER;
@@ -18,7 +18,7 @@ import static com.ghostipedia.cosmiccore.api.registries.CosmicRegistration.REGIS
 import static com.ghostipedia.cosmiccore.common.data.CosmicBlocks.LIGHT_DAWNSTONE_CASING;
 import static com.gregtechceu.gtceu.api.machine.multiblock.PartAbility.EXPORT_FLUIDS;
 import static com.gregtechceu.gtceu.api.machine.multiblock.PartAbility.IMPORT_FLUIDS;
-import static com.gregtechceu.gtceu.api.pattern.Predicates.*;
+import static com.gregtechceu.gtceu.api.multiblock.Predicates.*;
 import static com.gregtechceu.gtceu.common.data.GTRecipeModifiers.ELECTRIC_OVERCLOCK;
 
 public class PyrothermicRefinery {
@@ -31,22 +31,22 @@ public class PyrothermicRefinery {
             .partAppearance((controller, part, side) -> LIGHT_DAWNSTONE_CASING.getDefaultState())
             .recipeModifiers(CosmicRecipeModifiers::innateParallel4x,
                     ELECTRIC_OVERCLOCK.apply(OverclockingLogic.NON_PERFECT_OVERCLOCK))
-            .pattern(definition -> FactoryBlockPattern.start()
+            .pattern(definition -> MultiblockPatternBuilder.start()
                     // spotless:off
-                    .aisle("     AAAAA     ", "               ", "               ", "               ", "               ", "               ", "               ", "               ", "               ", "               ", "               ", "               ", "               ")
-                    .aisle("   AABBBBBAA   ", "               ", "               ", "               ", "               ", "               ", "               ", "               ", "               ", "               ", "               ", "               ", "               ")
-                    .aisle(" AABBBBBBBBBAA ", "      DDD      ", "      DDD      ", "               ", "               ", "               ", "               ", "               ", "               ", "               ", "               ", "               ", "               ")
-                    .aisle(" ABBBBBBBBBBBA ", "     D   D     ", "     D   D     ", "     DDDDD     ", "               ", "               ", "               ", "               ", "               ", "               ", "               ", "               ", "               ")
-                    .aisle("ABBBBBBBBBBBBBA", "   AD     DA   ", "   AD     DA   ", "   A DEEED A   ", "   AAA E AAA   ", "     A E A     ", "     A E A     ", "     A E A     ", "     A E A     ", "     A E A     ", "     A E A     ", "     A E A     ", "     AAAAA     ")
-                    .aisle("ABBBBBBBBBBBBBA", " C  D     D  C ", " C  D     D  C ", " C   DEEED   C ", " C    FEF    C ", " C    FEF    C ", " C    FEFCCCCC ", " C    FEF      ", " C    FEF      ", " C    FEF      ", " CCCCCFEF      ", "      FEF      ", "     A   A     ")
-                    .aisle("ABBBBBBBBBBBBBA", "   AD     DA   ", "   AD     DA   ", "   A DEEED A   ", "   AAA E AAA   ", "     A E A     ", "     A E A     ", "     A E A     ", "     A E A     ", "     A E A     ", "     A E A     ", "     A E A     ", "     AAAAA     ")
-                    .aisle(" ABBBBBBBBBBBA ", "     D   D     ", "     D   D     ", "     DDDDD     ", "               ", "               ", "               ", "               ", "               ", "               ", "               ", "               ", "               ")
-                    .aisle(" AABBBBBBBBBAA ", "      DQD      ", "      DDD      ", "               ", "               ", "               ", "               ", "               ", "               ", "               ", "               ", "               ", "               ")
-                    .aisle("   AABBBBBAA   ", "               ", "               ", "               ", "               ", "               ", "               ", "               ", "               ", "               ", "               ", "               ", "               ")
-                    .aisle("     AAAAA     ", "               ", "               ", "               ", "               ", "               ", "               ", "               ", "               ", "               ", "               ", "               ", "               ")
+                    .slice("     AAAAA     ", "               ", "               ", "               ", "               ", "               ", "               ", "               ", "               ", "               ", "               ", "               ", "               ")
+                    .slice("   AABBBBBAA   ", "               ", "               ", "               ", "               ", "               ", "               ", "               ", "               ", "               ", "               ", "               ", "               ")
+                    .slice(" AABBBBBBBBBAA ", "      DDD      ", "      DDD      ", "               ", "               ", "               ", "               ", "               ", "               ", "               ", "               ", "               ", "               ")
+                    .slice(" ABBBBBBBBBBBA ", "     D   D     ", "     D   D     ", "     DDDDD     ", "               ", "               ", "               ", "               ", "               ", "               ", "               ", "               ", "               ")
+                    .slice("ABBBBBBBBBBBBBA", "   AD     DA   ", "   AD     DA   ", "   A DEEED A   ", "   AAA E AAA   ", "     A E A     ", "     A E A     ", "     A E A     ", "     A E A     ", "     A E A     ", "     A E A     ", "     A E A     ", "     AAAAA     ")
+                    .slice("ABBBBBBBBBBBBBA", " C  D     D  C ", " C  D     D  C ", " C   DEEED   C ", " C    FEF    C ", " C    FEF    C ", " C    FEFCCCCC ", " C    FEF      ", " C    FEF      ", " C    FEF      ", " CCCCCFEF      ", "      FEF      ", "     A   A     ")
+                    .slice("ABBBBBBBBBBBBBA", "   AD     DA   ", "   AD     DA   ", "   A DEEED A   ", "   AAA E AAA   ", "     A E A     ", "     A E A     ", "     A E A     ", "     A E A     ", "     A E A     ", "     A E A     ", "     A E A     ", "     AAAAA     ")
+                    .slice(" ABBBBBBBBBBBA ", "     D   D     ", "     D   D     ", "     DDDDD     ", "               ", "               ", "               ", "               ", "               ", "               ", "               ", "               ", "               ")
+                    .slice(" AABBBBBBBBBAA ", "      DQD      ", "      DDD      ", "               ", "               ", "               ", "               ", "               ", "               ", "               ", "               ", "               ", "               ")
+                    .slice("   AABBBBBAA   ", "               ", "               ", "               ", "               ", "               ", "               ", "               ", "               ", "               ", "               ", "               ", "               ")
+                    .slice("     AAAAA     ", "               ", "               ", "               ", "               ", "               ", "               ", "               ", "               ", "               ", "               ", "               ", "               ")
                     // spotless:on
                     .where(' ', any())
-                    .where("Q", controller(blocks(definition.getBlock())))
+                    .where('Q', controller(blocks(definition.getBlock())))
                     .where('A', blocks(CosmicBlocks.REINFORCED_DAWNSTONE_CASING.get()))
                     .where('B', blocks(CosmicBlocks.LIGHT_DAWNSTONE_CASING.get()))
                     .where('C', blocks(CosmicBlocks.STEEL_PLATED_BRONZE.get()))

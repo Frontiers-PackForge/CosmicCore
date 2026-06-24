@@ -1,25 +1,18 @@
 package com.ghostipedia.cosmiccore.common.machine.multiblock.part;
 
 import com.ghostipedia.cosmiccore.api.machine.trait.NotifiableSoulContainer;
-import com.ghostipedia.cosmiccore.utils.OwnershipUtils;
 
 import com.gregtechceu.gtceu.api.GTValues;
 import com.gregtechceu.gtceu.api.blockentity.BlockEntityCreationInfo;
 import com.gregtechceu.gtceu.api.capability.recipe.IO;
-import com.gregtechceu.gtceu.api.gui.GuiTextures;
 import com.gregtechceu.gtceu.api.machine.multiblock.MultiblockControllerMachine;
 import com.gregtechceu.gtceu.api.machine.multiblock.part.TieredIOPartMachine;
 
-import com.lowdragmc.lowdraglib.gui.widget.*;
 import com.lowdragmc.lowdraglib.syncdata.annotation.DescSynced;
 import com.lowdragmc.lowdraglib.syncdata.annotation.Persisted;
 
-import net.minecraft.ChatFormatting;
 import net.minecraft.MethodsReturnNonnullByDefault;
-import net.minecraft.network.chat.Component;
 import net.minecraft.server.TickTask;
-
-import java.util.List;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 
@@ -37,8 +30,8 @@ public class SoulHatchPartMachine extends TieredIOPartMachine {
     }
 
     @Override
-    public void addedToController(MultiblockControllerMachine controller) {
-        super.addedToController(controller);
+    public void addedToController(MultiblockControllerMachine controller, String substructureName) {
+        super.addedToController(controller, substructureName);
         var level = controller.self().getLevel();
         if (level != null && level.getServer() != null) {
             level.getServer().tell(new TickTask(0, this::invalidateIfDuplicate));
@@ -50,43 +43,15 @@ public class SoulHatchPartMachine extends TieredIOPartMachine {
             for (var part : controller.getParts()) {
                 if (part == this) continue;
                 if (part instanceof SoulHatchPartMachine soulHatch && soulHatch.io == this.io) {
-                    controller.onStructureInvalid();
+                    controller.invalidateStructure();
                 }
             }
         }
     }
 
-    @Override
-    public Widget createUIWidget() {
-        var group = new WidgetGroup(0, 0, 176, 117);
-
-        var scrollable = new DraggableScrollableWidgetGroup(4, 4, 168, 109).setBackground(GuiTextures.DISPLAY);
-        scrollable.addWidget(new LabelWidget(4, 5,
-                "gui.cosmiccore.soul_hatch.label." + (this.io == IO.IN ? "import" : "export")));
-        scrollable.addWidget(new ComponentPanelWidget(4, 17, this::addDisplayText)
-                .textSupplier(getLevel() != null && !getLevel().isClientSide ? this::addDisplayText : null)
-                .setMaxWidthLimit(160));
-
-        group.addWidget(scrollable);
-        group.setBackground(GuiTextures.BACKGROUND_INVERSE);
-        return group;
-    }
-
-    private void addDisplayText(List<Component> textList) {
-        textList.add(Component.translatable("gui.cosmiccore.soul_hatch.owner",
-                OwnershipUtils.getName(getOwner())));
-
-        var stacks = this.soulContainer.getStacks();
-        textList.add(Component.empty());
-        if (stacks.isEmpty()) {
-            textList.add(Component.translatable("gui.cosmiccore.soul.empty_network").withStyle(ChatFormatting.GRAY));
-        } else {
-            textList.add(Component.translatable("gui.cosmiccore.soul.network_contents").withStyle(ChatFormatting.GOLD));
-            for (var stack : stacks) {
-                textList.add(Component.literal("  ").append(stack.type().toComponent(stack.amount())));
-            }
-        }
-    }
+    // TODO(8.0.0 MUI2): the LDLib createUIWidget surface (owner + soul-network contents readout via
+    //  ComponentPanelWidget) was removed in GTCEu 8.0.0. Rebuild on IItemUIHolder/buildUI when the soul UI
+    //  is ported; soulContainer.getStacks() supplies the display data. Non-UI logic preserved.
 
     public static int getMaxConsumption(int tier) {
         return switch (tier) {

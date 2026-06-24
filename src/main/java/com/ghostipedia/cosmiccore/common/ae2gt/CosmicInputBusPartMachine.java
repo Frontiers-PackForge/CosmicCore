@@ -2,18 +2,15 @@ package com.ghostipedia.cosmiccore.common.ae2gt;
 
 import com.gregtechceu.gtceu.api.blockentity.BlockEntityCreationInfo;
 import com.gregtechceu.gtceu.api.capability.recipe.IO;
-import com.gregtechceu.gtceu.api.gui.fancy.FancyMachineUIWidget;
 import com.gregtechceu.gtceu.api.machine.feature.IDataStickInteractable;
 import com.gregtechceu.gtceu.api.machine.trait.NotifiableItemStackHandler;
 import com.gregtechceu.gtceu.common.data.item.GTDataComponents;
 import com.gregtechceu.gtceu.common.item.behavior.IntCircuitBehaviour;
-import com.gregtechceu.gtceu.integration.ae2.gui.widget.AEItemConfigWidget;
 import com.gregtechceu.gtceu.integration.ae2.machine.MEBusPartMachine;
 import com.gregtechceu.gtceu.integration.ae2.slot.ExportOnlyAEItemList;
 import com.gregtechceu.gtceu.integration.ae2.slot.ExportOnlyAEItemSlot;
 import com.gregtechceu.gtceu.utils.GTMath;
 
-import com.lowdragmc.lowdraglib.gui.modular.ModularUI;
 import com.lowdragmc.lowdraglib.gui.widget.LabelWidget;
 import com.lowdragmc.lowdraglib.gui.widget.Widget;
 import com.lowdragmc.lowdraglib.gui.widget.WidgetGroup;
@@ -38,9 +35,14 @@ public class CosmicInputBusPartMachine extends MEBusPartMachine implements IData
 
     protected ExportOnlyAEItemList aeItemHandler;
 
-    public CosmicInputBusPartMachine(BlockEntityCreationInfo holder) {
-        super(holder, IO.IN);
-        super.circuitSlotEnabled = false;
+    public CosmicInputBusPartMachine(BlockEntityCreationInfo info) {
+        super(info, IO.IN);
+    }
+
+    @Override
+    protected NotifiableItemStackHandler createInventory() {
+        this.aeItemHandler = new ExportOnlyAEItemList(CONFIG_SIZE);
+        return this.aeItemHandler;
     }
 
     /////////////////////////////////
@@ -51,13 +53,6 @@ public class CosmicInputBusPartMachine extends MEBusPartMachine implements IData
     public void onMachineDestroyed() {
         flushInventory();
     }
-
-    @Override
-    protected NotifiableItemStackHandler createInventory() {
-        this.aeItemHandler = new ExportOnlyAEItemList(this, CONFIG_SIZE);
-        return this.aeItemHandler;
-    }
-
     /////////////////////////////////
     // ********** Sync ME *********//
     /////////////////////////////////
@@ -118,8 +113,8 @@ public class CosmicInputBusPartMachine extends MEBusPartMachine implements IData
     // ********** GUI ***********//
     ///////////////////////////////
 
-    @Override
-    public Widget createUIWidget() {
+    // TODO: Convert to MUI2 buildUI(PosGuiData, PanelSyncManager, UISettings)
+    public Widget createUIWidgetOld() {
         WidgetGroup group = new WidgetGroup(new Position(0, 0));
         // ME Network status
         group.addWidget(new LabelWidget(3, 0, () -> this.isOnline ?
@@ -127,14 +122,11 @@ public class CosmicInputBusPartMachine extends MEBusPartMachine implements IData
                 "gtceu.gui.me_network.offline"));
 
         // Config slots
-        group.addWidget(new AEItemConfigWidget(46, 30, this.aeItemHandler));
+        // TODO(8.0.0): re-add ME config slots in a MUI2 buildUI override via
+        //   new com.gregtechceu.gtceu.integration.ae2.gui.AEConfigWidget(aeItemHandler, CONFIG_SIZE, false)
+        //   (AEItemConfigWidget was merged into AEConfigWidget; this LDLib WidgetGroup path is dead).
 
         return group;
-    }
-
-    @Override
-    public ModularUI createUI(Player entityPlayer) {
-        return new ModularUI(176, 50, this, entityPlayer).widget(new FancyMachineUIWidget(this, 176, 50));
     }
     ////////////////////////////////
     // ******* Interaction *******//
@@ -156,7 +148,7 @@ public class CosmicInputBusPartMachine extends MEBusPartMachine implements IData
     @Override
     public final InteractionResult onDataStickUse(Player player, ItemStack dataStick) {
         CustomData tag = dataStick.get(GTDataComponents.DATA_COPY_TAG);
-        if (tag == null || !tag.contains("MEInputBus")) {
+        if (tag == null || !tag.copyTag().contains("MEInputBus")) {
             return InteractionResult.PASS;
         }
 

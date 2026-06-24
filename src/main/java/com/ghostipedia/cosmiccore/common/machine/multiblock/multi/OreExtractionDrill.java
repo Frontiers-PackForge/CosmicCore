@@ -8,8 +8,8 @@ import com.gregtechceu.gtceu.api.GTValues;
 import com.gregtechceu.gtceu.api.data.RotationState;
 import com.gregtechceu.gtceu.api.machine.MultiblockMachineDefinition;
 import com.gregtechceu.gtceu.api.machine.multiblock.PartAbility;
-import com.gregtechceu.gtceu.api.pattern.FactoryBlockPattern;
-import com.gregtechceu.gtceu.api.pattern.Predicates;
+import com.gregtechceu.gtceu.api.multiblock.pattern.MultiblockPatternBuilder;
+import com.gregtechceu.gtceu.api.multiblock.Predicates;
 import com.gregtechceu.gtceu.common.data.GTBlocks;
 import com.gregtechceu.gtceu.common.data.GTMaterials;
 import com.gregtechceu.gtceu.common.data.GTRecipeTypes;
@@ -21,7 +21,7 @@ import net.minecraft.world.level.block.Block;
 import com.tterrag.registrate.util.entry.BlockEntry;
 
 import static com.ghostipedia.cosmiccore.api.registries.CosmicRegistration.REGISTRATE;
-import static com.gregtechceu.gtceu.api.pattern.Predicates.*;
+import static com.gregtechceu.gtceu.api.multiblock.Predicates.*;
 
 public class OreExtractionDrill {
 
@@ -87,16 +87,16 @@ public class OreExtractionDrill {
                         default -> GTBlocks.CASING_STEEL_PIPE.get();
                     };
 
-                    return FactoryBlockPattern.start()
-                            .aisle("AA AA", " A A ", " BCB ", "     ", "     ", "     ", "     ", "     ", "     ",
+                    return MultiblockPatternBuilder.start()
+                            .slice("AA AA", " A A ", " BCB ", "     ", "     ", "     ", "     ", "     ", "     ",
                                     "     ")
-                            .aisle("A   A", "A D A", "BCCCB", " CCC ", "  B  ", "  B  ", "  B  ", "     ", "     ",
+                            .slice("A   A", "A D A", "BCCCB", " CCC ", "  B  ", "  B  ", "  B  ", "     ", "     ",
                                     "     ")
-                            .aisle("  D  ", " DDD ", "CCCCC", " CCC ", " BCB ", " BCB ", " BCB ", "  B  ", "  B  ",
+                            .slice("  D  ", " DDD ", "CCCCC", " CCC ", " BCB ", " BCB ", " BCB ", "  B  ", "  B  ",
                                     "  B  ")
-                            .aisle("A   A", "A D A", "BCCCB", " CCC ", "  B  ", "  B  ", "  B  ", "     ", "     ",
+                            .slice("A   A", "A D A", "BCCCB", " CCC ", "  B  ", "  B  ", "  B  ", "     ", "     ",
                                     "     ")
-                            .aisle("AA AA", " A A ", " BSB ", "     ", "     ", "     ", "     ", "     ", "     ",
+                            .slice("AA AA", " A A ", " BSB ", "     ", "     ", "     ", "     ", "     ", "     ",
                                     "     ")
                             .where('S', controller(blocks(definition.getBlock())))
                             .where('A', blocks(decorativeCasing))

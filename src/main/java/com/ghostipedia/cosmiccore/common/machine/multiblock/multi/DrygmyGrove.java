@@ -10,7 +10,7 @@ import com.gregtechceu.gtceu.api.data.tag.TagPrefix;
 import com.gregtechceu.gtceu.api.machine.MultiblockMachineDefinition;
 import com.gregtechceu.gtceu.api.machine.multiblock.PartAbility;
 import com.gregtechceu.gtceu.api.machine.multiblock.WorkableElectricMultiblockMachine;
-import com.gregtechceu.gtceu.api.pattern.FactoryBlockPattern;
+import com.gregtechceu.gtceu.api.multiblock.pattern.MultiblockPatternBuilder;
 import com.gregtechceu.gtceu.api.recipe.OverclockingLogic;
 import com.gregtechceu.gtceu.common.data.GTBlocks;
 import com.gregtechceu.gtceu.common.data.GTMaterials;
@@ -20,8 +20,8 @@ import net.minecraft.world.level.block.Blocks;
 
 import static com.ghostipedia.cosmiccore.api.machine.part.CosmicPartAbility.IMPORT_SOUL;
 import static com.ghostipedia.cosmiccore.api.registries.CosmicRegistration.REGISTRATE;
-import static com.gregtechceu.gtceu.api.pattern.Predicates.*;
-import static com.gregtechceu.gtceu.api.pattern.Predicates.abilities;
+import static com.gregtechceu.gtceu.api.multiblock.Predicates.*;
+import static com.gregtechceu.gtceu.api.multiblock.Predicates.abilities;
 import static com.gregtechceu.gtceu.common.data.GTBlocks.*;
 import static com.gregtechceu.gtceu.common.data.GTRecipeModifiers.ELECTRIC_OVERCLOCK;
 
@@ -34,16 +34,16 @@ public class DrygmyGrove {
             .recipeModifiers(CosmicRecipeModifiers::groveMulti,
                     ELECTRIC_OVERCLOCK.apply(OverclockingLogic.NON_PERFECT_OVERCLOCK), GTRecipeModifiers.BATCH_MODE)
             .appearanceBlock(GTBlocks.CASING_STAINLESS_CLEAN)
-            .pattern(definition -> FactoryBlockPattern.start()
-                    .aisle("##QQQ##", "##QQQ##", "#######", "#######", "#######", "##QQQ##", "##QQQ##")
-                    .aisle("#QQQQQ#", "#QMMMQ#", "#FLBBF#", "#F#B#F#", "#F###F#", "#QGGGQ#", "#QQQQQ#")
-                    .aisle("QQQQQQQ", "QMMMMMQ", "#B#####", "#B#####", "#######", "QGP#PGQ", "QQQQQQQ")
-                    .aisle("QQQQQQQ", "QMMMMMQ", "#B###B#", "#######", "#######", "QG###GQ", "QQQQQQQ")
-                    .aisle("QQQQQQQ", "QMMMMMQ", "####LB#", "#####B#", "#######", "QGP#PGQ", "QQQQQQQ")
-                    .aisle("#QQQQQ#", "#QMMMQ#", "#F#BBF#", "#F##BF#", "#F###F#", "#QGGGQ#", "#QQQQQ#")
-                    .aisle("##QQQ##", "##QCQ##", "#######", "#######", "#######", "##QQQ##", "##QQQ##")
+            .pattern(definition -> MultiblockPatternBuilder.start()
+                    .slice("##QQQ##", "##QQQ##", "#######", "#######", "#######", "##QQQ##", "##QQQ##")
+                    .slice("#QQQQQ#", "#QMMMQ#", "#FLBBF#", "#F#B#F#", "#F###F#", "#QGGGQ#", "#QQQQQ#")
+                    .slice("QQQQQQQ", "QMMMMMQ", "#B#####", "#B#####", "#######", "QGP#PGQ", "QQQQQQQ")
+                    .slice("QQQQQQQ", "QMMMMMQ", "#B###B#", "#######", "#######", "QG###GQ", "QQQQQQQ")
+                    .slice("QQQQQQQ", "QMMMMMQ", "####LB#", "#####B#", "#######", "QGP#PGQ", "QQQQQQQ")
+                    .slice("#QQQQQ#", "#QMMMQ#", "#F#BBF#", "#F##BF#", "#F###F#", "#QGGGQ#", "#QQQQQ#")
+                    .slice("##QQQ##", "##QCQ##", "#######", "#######", "#######", "##QQQ##", "##QQQ##")
                     .where('#', any())
-                    .where("C", controller(blocks(definition.getBlock())))
+                    .where('C', controller(blocks(definition.getBlock())))
                     .where('F', blocks(ChemicalHelper.getBlock(TagPrefix.frameGt, GTMaterials.StainlessSteel)))
                     .where('M', blocks(Blocks.MOSS_BLOCK))
                     .where('B', blocks(Blocks.AZALEA_LEAVES)

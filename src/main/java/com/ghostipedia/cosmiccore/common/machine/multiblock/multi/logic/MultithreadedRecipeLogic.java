@@ -79,8 +79,8 @@ public class MultithreadedRecipeLogic extends RecipeLogic implements IRecipeCapa
      */
     private Map<IO, Map<RecipeCapability<?>, List<IRecipeHandler<?>>>> threadCapabilitiesFlat = new EnumMap<>(IO.class);
 
-    public MultithreadedRecipeLogic(IRecipeLogicMachine machine, int threadIndex, int threadColor) {
-        super(machine);
+    public MultithreadedRecipeLogic(int threadIndex, int threadColor) {
+        super();
         this.threadIndex = threadIndex;
         this.threadColor = threadColor;
     }
@@ -156,7 +156,7 @@ public class MultithreadedRecipeLogic extends RecipeLogic implements IRecipeCapa
      * Check if this thread can process recipes.
      */
     public boolean canWork() {
-        return threadActive && machine.isRecipeLogicAvailable();
+        return threadActive && getRLMachine().isRecipeLogicAvailable();
     }
 
     @Override
@@ -183,7 +183,7 @@ public class MultithreadedRecipeLogic extends RecipeLogic implements IRecipeCapa
      */
     @Nullable
     private MultithreadedMachine getParentMachine() {
-        if (machine instanceof MultithreadedMachine mtm) {
+        if (getMachine() instanceof MultithreadedMachine mtm) {
             return mtm;
         }
         return null;
@@ -264,7 +264,7 @@ public class MultithreadedRecipeLogic extends RecipeLogic implements IRecipeCapa
      * Applies overclocking within the thread's energy budget.
      *
      * IMPORTANT: The 'match' parameter is the RAW recipe from the recipe type,
-     * NOT yet modified by the machine. We must NOT call machine.fullModifyRecipe()
+     * NOT yet modified by the getRLMachine(). We must NOT call getRLMachine().fullModifyRecipe()
      * as that would apply overclock based on full machine power.
      */
     @Override
@@ -284,7 +284,7 @@ public class MultithreadedRecipeLogic extends RecipeLogic implements IRecipeCapa
             return false;
         }
 
-        GTRecipe trimmed = RecipeHelper.trimRecipeOutputs(modified, machine.getOutputLimits());
+        GTRecipe trimmed = RecipeHelper.trimRecipeOutputs(modified, getRLMachine().getOutputLimits());
         if (trimmed == null) {
             if (DEBUG) CosmicCore.LOGGER.info("[basin t#{} c=0x{}] reject {}: trimRecipeOutputs returned null",
                     threadIndex, Integer.toHexString(threadColor), match.getId());
@@ -318,7 +318,7 @@ public class MultithreadedRecipeLogic extends RecipeLogic implements IRecipeCapa
 
     /**
      * Override searchRecipe to use THIS THREAD as the capability holder,
-     * not the machine. This is critical for proper recipe filtering.
+     * not the getRLMachine(). This is critical for proper recipe filtering.
      */
     @Override
     public @NotNull Iterator<GTRecipe> searchRecipe() {
@@ -330,7 +330,7 @@ public class MultithreadedRecipeLogic extends RecipeLogic implements IRecipeCapa
                     threadIndex, Integer.toHexString(threadColor),
                     inMap.keySet(), outMap.keySet(), maxEUtPerThread);
         }
-        return machine.getRecipeType().searchRecipe(this, r -> {
+        return getRLMachine().getRecipeType().searchRecipe(this, r -> {
             ActionResult res = matchRecipe(r);
             if (DEBUG && !res.isSuccess()) {
                 CosmicCore.LOGGER.info("[basin t#{} c=0x{}] match-fail {}: {}",
@@ -355,7 +355,7 @@ public class MultithreadedRecipeLogic extends RecipeLogic implements IRecipeCapa
             // Re-apply OUR thread overclock to the origin recipe
             GTRecipe modified = applyThreadOverclock(lastOriginRecipe);
             if (modified != null) {
-                GTRecipe trimmed = RecipeHelper.trimRecipeOutputs(modified, machine.getOutputLimits());
+                GTRecipe trimmed = RecipeHelper.trimRecipeOutputs(modified, getRLMachine().getOutputLimits());
                 if (trimmed != null && checkRecipe(trimmed).isSuccess()) {
                     setupRecipe(trimmed);
                     recipeDirty = false;
@@ -409,7 +409,7 @@ public class MultithreadedRecipeLogic extends RecipeLogic implements IRecipeCapa
      */
     @Override
     protected ActionResult handleTickRecipeIO(GTRecipe recipe, IO io) {
-        if (DEBUG && io == IO.IN && machine instanceof MultithreadedMachine mtm) {
+        if (DEBUG && io == IO.IN && getMachine() instanceof MultithreadedMachine mtm) {
             var ec = mtm.getEnergyContainer();
             long before = ec != null ? ec.getEnergyStored() : -1;
             long requested = sumEURequest(recipe);
@@ -429,7 +429,7 @@ public class MultithreadedRecipeLogic extends RecipeLogic implements IRecipeCapa
         if (euList == null) return 0;
         long total = 0;
         for (var content : euList) {
-            if (content.getContent() instanceof com.gregtechceu.gtceu.api.recipe.ingredient.EnergyStack es) {
+            if (content.content() instanceof com.gregtechceu.gtceu.api.recipe.ingredient.EnergyStack es) {
                 total += es.getTotalEU();
             }
         }
@@ -456,12 +456,12 @@ public class MultithreadedRecipeLogic extends RecipeLogic implements IRecipeCapa
 
     /**
      * Override onRecipeFinish to prevent the base class from applying machine-level overclock.
-     * The base implementation calls machine.fullModifyRecipe(lastOriginRecipe) which would
+     * The base implementation calls getRLMachine().fullModifyRecipe(lastOriginRecipe) which would
      * apply overclock based on full machine power, ignoring our thread budget.
      */
     @Override
     public void onRecipeFinish() {
-        machine.afterWorking();
+        getRLMachine().afterWorking();
         if (lastRecipe != null) {
             // Reset run attempt tracking
             // Note: runAttempt and runDelay are package-private in base class
@@ -470,7 +470,7 @@ public class MultithreadedRecipeLogic extends RecipeLogic implements IRecipeCapa
             consecutiveRecipes++;
             handleRecipeIO(lastRecipe, IO.OUT);
 
-            // CRITICAL: Do NOT call machine.fullModifyRecipe here!
+            // CRITICAL: Do NOT call getRLMachine().fullModifyRecipe here!
             // Instead, re-apply OUR thread-specific overclock to the origin recipe
             if (lastOriginRecipe != null) {
                 GTRecipe modified = applyThreadOverclock(lastOriginRecipe);
@@ -478,7 +478,7 @@ public class MultithreadedRecipeLogic extends RecipeLogic implements IRecipeCapa
                     markLastRecipeDirty();
                 } else {
                     // Trim outputs
-                    GTRecipe trimmed = RecipeHelper.trimRecipeOutputs(modified, machine.getOutputLimits());
+                    GTRecipe trimmed = RecipeHelper.trimRecipeOutputs(modified, getRLMachine().getOutputLimits());
                     if (trimmed == null) {
                         markLastRecipeDirty();
                     } else {

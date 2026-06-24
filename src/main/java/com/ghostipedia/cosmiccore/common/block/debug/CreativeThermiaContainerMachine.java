@@ -6,40 +6,37 @@ import com.ghostipedia.cosmiccore.api.machine.trait.NotifiableThermiaContainer;
 import com.gregtechceu.gtceu.api.GTValues;
 import com.gregtechceu.gtceu.api.blockentity.BlockEntityCreationInfo;
 import com.gregtechceu.gtceu.api.capability.recipe.IO;
-import com.gregtechceu.gtceu.api.gui.GuiTextures;
 import com.gregtechceu.gtceu.api.machine.MetaMachine;
-import com.gregtechceu.gtceu.api.machine.feature.IUIMachine;
+import com.gregtechceu.gtceu.api.machine.feature.IMuiMachine;
+import com.gregtechceu.gtceu.api.sync_system.annotations.SaveField;
+import com.gregtechceu.gtceu.api.sync_system.annotations.SyncToClient;
 
-import com.lowdragmc.lowdraglib.gui.modular.ModularUI;
-import com.lowdragmc.lowdraglib.gui.texture.GuiTextureGroup;
-import com.lowdragmc.lowdraglib.gui.texture.ResourceBorderTexture;
-import com.lowdragmc.lowdraglib.gui.texture.TextTexture;
-import com.lowdragmc.lowdraglib.gui.widget.*;
-import com.lowdragmc.lowdraglib.syncdata.annotation.DescSynced;
-import com.lowdragmc.lowdraglib.syncdata.annotation.Persisted;
+import brachy.modularui.factory.PosGuiData;
+import brachy.modularui.screen.ModularPanel;
+import brachy.modularui.screen.UISettings;
+import brachy.modularui.value.sync.PanelSyncManager;
 
 import net.minecraft.core.Direction;
 import net.minecraft.world.entity.player.Player;
 
 import static com.ghostipedia.cosmiccore.common.machine.multiblock.part.ThermiaHatchPartMachine.getThermiaLimits;
 
-public class CreativeThermiaContainerMachine extends MetaMachine implements IHeatContainer, IUIMachine {
+public class CreativeThermiaContainerMachine extends MetaMachine implements IHeatContainer, IMuiMachine {
 
     // FieldHolder
-    @Persisted
+    @SaveField
     private long heat = 0;
-    @Persisted
+    @SaveField
     private boolean active = false;
-    @Persisted
+    @SaveField
     private boolean source = true;
     private long lastAverageHeatIOPerTick = 0;
-
-    @Persisted
-    @DescSynced
+    @SaveField
+    @SyncToClient
     private final NotifiableThermiaContainer thermiaContainer;
 
-    public CreativeThermiaContainerMachine(BlockEntityCreationInfo holder) {
-        super(holder);
+    public CreativeThermiaContainerMachine(BlockEntityCreationInfo info) {
+        super(info);
         long currentTemp = 0;
         this.thermiaContainer = new NotifiableThermiaContainer(this, IO.BOTH, getThermiaLimits(GTValues.MAX),
                 currentTemp);
@@ -71,35 +68,10 @@ public class CreativeThermiaContainerMachine extends MetaMachine implements IHea
     }
 
     @Override
-    public ModularUI createUI(Player entityPlayer) {
-        return new ModularUI(176, 166, this, entityPlayer)
-                .background(GuiTextures.BACKGROUND)
-                .widget(new LabelWidget(7, 32, "gtceu.creative.energy.voltage"))
-                .widget(new TextFieldWidget(9, 47, 152, 16, () -> String.valueOf(heat),
-                        value -> {
-                            heat = Long.parseLong(value);
-                        }).setNumbersOnly(0L, Long.MAX_VALUE))
-                .widget(new LabelWidget(7, 110,
-                        () -> "Average Energy I/O per tick: " + this.lastAverageHeatIOPerTick))
-                .widget(new SwitchWidget(7, 139, 77, 20, (clickData, value) -> active = value)
-                        .setTexture(
-                                new GuiTextureGroup(ResourceBorderTexture.BUTTON_COMMON,
-                                        new TextTexture("gtceu.creative.activity.off")),
-                                new GuiTextureGroup(ResourceBorderTexture.BUTTON_COMMON,
-                                        new TextTexture("gtceu.creative.activity.on")))
-                        .setPressed(active))
-                .widget(new SwitchWidget(85, 139, 77, 20, (clickData, value) -> {
-                    source = value;
-                    if (source) {
-                        heat = 0;
-                    } else {
-                        heat = Long.MIN_VALUE;
-                    }
-                }).setTexture(
-                        new GuiTextureGroup(ResourceBorderTexture.BUTTON_COMMON,
-                                new TextTexture("gtceu.creative.energy.sink")),
-                        new GuiTextureGroup(ResourceBorderTexture.BUTTON_COMMON,
-                                new TextTexture("gtceu.creative.energy.source")))
-                        .setPressed(source));
+    public ModularPanel buildUI(PosGuiData data, PanelSyncManager syncManager, UISettings settings) {
+        // TODO(8.0.0): reimplement the creative heat controller UI (heat value field +
+        //  active/source toggles) in MUI2. Was LDLib ModularUI (createUI). Shelved for launch;
+        //  heat logic and fields (heat/active/source) are unaffected.
+        return ModularPanel.defaultPanel(getDefinition().getId().getPath(), 176, 166);
     }
 }

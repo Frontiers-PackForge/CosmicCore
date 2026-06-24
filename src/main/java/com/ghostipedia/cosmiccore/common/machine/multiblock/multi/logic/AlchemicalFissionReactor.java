@@ -9,10 +9,9 @@ import com.gregtechceu.gtceu.api.machine.feature.multiblock.IMultiPart;
 import com.gregtechceu.gtceu.api.machine.multiblock.WorkableElectricMultiblockMachine;
 import com.gregtechceu.gtceu.api.transfer.fluid.FluidHandlerList;
 import com.gregtechceu.gtceu.common.data.GTMaterials;
+import com.gregtechceu.gtceu.api.sync_system.annotations.SaveField;
+import com.gregtechceu.gtceu.api.sync_system.annotations.SyncToClient;
 import com.gregtechceu.gtceu.utils.FormattingUtil;
-
-import com.lowdragmc.lowdraglib.syncdata.annotation.DescSynced;
-import com.lowdragmc.lowdraglib.syncdata.annotation.Persisted;
 
 import net.minecraft.network.chat.Component;
 import net.neoforged.neoforge.fluids.FluidStack;
@@ -44,22 +43,22 @@ public class AlchemicalFissionReactor extends WorkableElectricMultiblockMachine 
     public static final int HIGH = 100;
 
     @Getter
-    @DescSynced
-    @Persisted
+    @SyncToClient
+    @SaveField
     public static long heat = 0;
 
     @Nullable
     protected FluidHandlerList inputFluidHandlers;
 
     @Getter
-    @DescSynced
-    @Persisted
+    @SyncToClient
+    @SaveField
     public static long heatCapacity = HEAT_CAPACITY;
 
     @Nullable
     protected TickableSubscription fissionLogicSubs;
 
-    @DescSynced
+    @SyncToClient
     private static final Object2IntMap<FluidStack> coolantTiers = new Object2IntOpenHashMap<>();
 
     static {
@@ -67,25 +66,17 @@ public class AlchemicalFissionReactor extends WorkableElectricMultiblockMachine 
         coolantTiers.put(GTMaterials.Helium.getFluid(FluidStorageKeys.LIQUID, 1), 64);
     }
 
-    public AlchemicalFissionReactor(BlockEntityCreationInfo holder) {
-        super(holder);
-    }
-
-    public static long getHeatCapacity() {
-        return heatCapacity;
+    public AlchemicalFissionReactor(BlockEntityCreationInfo info) {
+        super(info);
     }
 
     @Override
-    public void onStructureFormed() {
-        super.onStructureFormed();
+    public void formStructure(@org.jetbrains.annotations.NotNull String substructureName) {
+        super.formStructure(substructureName);
         // I don't even know if this works I copied my old code from like 2024 :)
 
         List<IFluidHandler> inputFluidContainers = new ArrayList<>();
-        Long2ObjectMap<IO> ioMap = getMultiblockState().getMatchContext().getOrCreate("ioMap",
-                Long2ObjectMaps::emptyMap);
         for (IMultiPart part : getParts()) {
-            IO io = ioMap.getOrDefault(part.self().getBlockPos().asLong(), IO.BOTH);
-            if (io == IO.NONE || io == IO.OUT) continue;
             var handlerLists = part.getRecipeHandlers();
             for (var handlerList : handlerLists) {
                 if ((handlerList.getHandlerIO() != IO.IN)) continue;
@@ -101,8 +92,8 @@ public class AlchemicalFissionReactor extends WorkableElectricMultiblockMachine 
     }
 
     @Override
-    public void onStructureInvalid() {
-        super.onStructureInvalid();
+    public void invalidateStructure(String name) {
+        super.invalidateStructure(name);
         updateFissionSubscription();
         heat = 0;
     }
@@ -155,14 +146,14 @@ public class AlchemicalFissionReactor extends WorkableElectricMultiblockMachine 
     // Todo, coolant drain stuff.
     private void processCoolant() {}
 
-    @Override
-    public void addDisplayText(List<Component> textList) {
-        super.addDisplayText(textList);
-        if (isFormed) {
-            textList.add(Component.translatable("cosmiccore.multiblock.heat_value",
-                    FormattingUtil.formatNumber2Places(heat)));
-            textList.add(Component.translatable("cosmiccore.multiblock.heat_capacity",
-                    FormattingUtil.formatNumber2Places(getHeatCapacity())));
-        }
-    }
+    // TODO(8.0.0 MUI2): custom display text shelved; base default getWidgetsForDisplay UI used for now.
+    // addDisplayText(List<Component>) was removed from WorkableElectricMultiblockMachine in 8.0.0.
+    // Original heat-value / heat-capacity display text (orig in git):
+    // super.addDisplayText(textList);
+    // if (isFormed) {
+    // textList.add(Component.translatable("cosmiccore.multiblock.heat_value",
+    // FormattingUtil.formatNumber2Places(heat)));
+    // textList.add(Component.translatable("cosmiccore.multiblock.heat_capacity",
+    // FormattingUtil.formatNumber2Places(getHeatCapacity())));
+    // }
 }

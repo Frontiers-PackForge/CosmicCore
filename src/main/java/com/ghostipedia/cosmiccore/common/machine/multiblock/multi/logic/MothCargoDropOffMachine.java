@@ -106,8 +106,7 @@ public class MothCargoDropOffMachine extends LinkedWorkableMultiblockMachine {
 
     // ==================== UI ====================
 
-    @Override
-    public void addDisplayText(List<Component> textList) {
+        public void addDisplayText(List<Component> textList) {
         if (!isFormed()) {
             textList.add(Component.literal("Structure not formed")
                     .setStyle(Style.EMPTY.withColor(ChatFormatting.RED)));

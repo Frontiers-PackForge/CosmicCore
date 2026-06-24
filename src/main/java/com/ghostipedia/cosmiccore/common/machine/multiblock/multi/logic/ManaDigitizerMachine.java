@@ -52,14 +52,11 @@ public class ManaDigitizerMachine extends WorkableElectricMultiblockMachine {
     }
 
     @Override
-    public void onStructureFormed() {
-        super.onStructureFormed();
+    public void formStructure(@org.jetbrains.annotations.NotNull String substructureName) {
+        super.formStructure(substructureName);
 
         List<IEnergyContainer> inputEnergyContainers = new ArrayList<>();
-        Map<Long, IO> ioMap = getMultiblockState().getMatchContext().getOrCreate("ioMap", Long2ObjectMaps::emptyMap);
         for (IMultiPart part : getParts()) {
-            IO io = ioMap.getOrDefault(part.self().getBlockPos().asLong(), IO.IN);
-            if (io == IO.NONE || io == IO.OUT) continue;
             var handlers = part.getRecipeHandlers();
             for (var handler : handlers) {
                 IO handlerIO = handler.getHandlerIO();
@@ -121,8 +118,8 @@ public class ManaDigitizerMachine extends WorkableElectricMultiblockMachine {
     }
 
     @Override
-    public void onStructureInvalid() {
-        super.onStructureInvalid();
+    public void invalidateStructure(String substructureName) {
+        super.invalidateStructure(substructureName);
         this.inputEnergyContainers = null;
         updateBotanySubscription();
     }

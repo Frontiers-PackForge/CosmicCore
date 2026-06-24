@@ -1,10 +1,22 @@
 dependencies {
     compileOnly(libs.jetbrains.annotations)
 
-    // GTCEu — core dependency. Bundles (jarJar) LDLib + Registrate + Configuration at runtime,
-    // so those are declared compileOnly here and provided by GTCEu in dev/prod.
+    // GTCEu — core dependency. Its jar jar-jars Registrate + Configuration + ModularUI2 at runtime, so those
+    // are compileOnly here. It does NOT bundle LDLib (8.0.0 moved its own UI/sync to MUI2), so LDLib must be
+    // supplied separately: compileOnly against the FULL LDLib API to build...
     implementation(files("libs/gtceu-1.21.1-8.0.0.jar"))
     compileOnly(forge.ldlib)
+    // ...but at RUNTIME we ship a PATCHED LDLib. GTCEu 8.0 dropped LDLib for MUI2, so the two were never meant
+    // to coexist: stock LDLib and MUI2 both add @Accessor mixins to the same vanilla GUI classes (Slot,
+    // AbstractContainerScreen/Menu, ServerPlayer) and collide fatally at mixin-apply. The ccpatch jar is the
+    // stock 1.0.35.a jar with ONLY those 4 conflicting accessors stripped from ldlib.mixins.json (all 851
+    // classes + LDLib's other mixins, incl. ItemRendererMixin that dispatches CC's item renderers, untouched).
+    // Regenerate with `python gradle/patch-ldlib.py` if LDLib is bumped. Long-term: cosmiccore-11
+    // (migrate CC off LDLib) removes the need for this entirely.
+    runtimeOnly(files("libs/ldlib-neoforge-1.21.1-1.0.35.a-ccpatch.jar"))
+    // ModularUI2 (brachy.modularui): GTCEu 8.0.0 exposes brachy types in its public machine API (IMuiMachine,
+    // buildMainUI/getMainTextPanel), so it is a mandatory compile dep. GTCEu jarJars it at runtime, hence compileOnly.
+    compileOnly(forge.mui)
     compileOnly(forge.registrate)
     compileOnly(forge.configuration)
     implementation("curse.maven:world-stripper-250603:5592921")

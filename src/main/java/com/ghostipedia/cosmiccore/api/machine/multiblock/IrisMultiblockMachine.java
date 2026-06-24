@@ -2,8 +2,6 @@ package com.ghostipedia.cosmiccore.api.machine.multiblock;
 
 import com.ghostipedia.cosmiccore.api.machine.feature.IStellarIrisProvider;
 import com.ghostipedia.cosmiccore.api.machine.feature.IStellarModuleReceiver;
-import com.ghostipedia.cosmiccore.client.gui.widget.stellar.StellarFancyUIWidget;
-import com.ghostipedia.cosmiccore.client.gui.widget.stellar.StellarIrisWidget;
 import com.ghostipedia.cosmiccore.common.data.CosmicItems;
 import com.ghostipedia.cosmiccore.common.data.CosmicSounds;
 
@@ -13,142 +11,121 @@ import com.gregtechceu.gtceu.api.machine.MetaMachine;
 import com.gregtechceu.gtceu.api.machine.multiblock.WorkableElectricMultiblockMachine;
 import com.gregtechceu.gtceu.api.machine.trait.NotifiableItemStackHandler;
 import com.gregtechceu.gtceu.api.machine.trait.RecipeLogic;
-import com.gregtechceu.gtceu.api.pattern.util.RelativeDirection;
+import com.gregtechceu.gtceu.api.multiblock.util.RelativeDirection;
 import com.gregtechceu.gtceu.api.sound.AutoReleasedSound;
-
-import com.lowdragmc.lowdraglib.gui.modular.ModularUI;
-import com.lowdragmc.lowdraglib.gui.widget.Widget;
-import com.lowdragmc.lowdraglib.syncdata.annotation.DescSynced;
-import com.lowdragmc.lowdraglib.syncdata.annotation.Persisted;
-import com.lowdragmc.lowdraglib.syncdata.annotation.UpdateListener;
+import com.gregtechceu.gtceu.api.sync_system.annotations.ClientFieldChangeListener;
+import com.gregtechceu.gtceu.api.sync_system.annotations.RerenderOnChanged;
+import com.gregtechceu.gtceu.api.sync_system.annotations.SaveField;
+import com.gregtechceu.gtceu.api.sync_system.annotations.SyncToClient;
 
 import net.minecraft.core.BlockPos;
-import net.minecraft.network.chat.Component;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
 
+import lombok.Getter;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.EnumSet;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
 import static com.ghostipedia.cosmiccore.api.machine.multiblock.IrisMultiblockMachine.Stage.BLACK_HOLE;
 import static com.ghostipedia.cosmiccore.api.machine.multiblock.IrisMultiblockMachine.Stage.DEATH;
 
+@Getter
 public class IrisMultiblockMachine extends WorkableElectricMultiblockMachine implements IStellarIrisProvider {
 
-    @Persisted
+    @Getter
+    @SaveField
     private final NotifiableItemStackHandler inventory;
 
+    @Getter
     protected boolean ignite;
+    @Getter
     protected boolean isFuelable;
     protected Object workingSound;
 
-    @Persisted
-    @DescSynced
-    @UpdateListener(methodName = "onStageSynced")
+    @SaveField
+    @SyncToClient
+    @RerenderOnChanged
     private Stage stage = Stage.EMPTY;
 
-    /**
-     * Called when the stage field is synced from server to client.
-     * Parameters must match the field type (Stage).
-     */
-    @OnlyIn(Dist.CLIENT)
+    // 8.0.0: LDLib @UpdateListener is dead under the new sync system. @RerenderOnChanged re-renders the
+    // block when `stage` syncs; @ClientFieldChangeListener fires this (client-side) for sound. The
+    // setter MUST markClientSyncFieldDirty or the field never syncs (it stayed "dormant" on the client).
     @SuppressWarnings("unused")
-    protected void onStageSynced(Stage newValue, Stage oldValue) {
-        com.ghostipedia.cosmiccore.CosmicCore.LOGGER.warn(
-                "[IrisMultiblockMachine] CLIENT onStageSynced: {} -> {}", oldValue, newValue);
+    @ClientFieldChangeListener(fieldName = "stage")
+    protected void onStageSynced() {
         this.scheduleRenderUpdate();
         soundTick();
     }
 
-    /**
-     * Custom setter with debug logging to track stage changes.
-     */
     public void setStage(Stage newStage) {
-        Stage oldStage = this.stage;
         this.stage = newStage;
-        // Debug: log all stage changes with stack trace for unusual transitions
-        if (oldStage != newStage) {
-            com.ghostipedia.cosmiccore.CosmicCore.LOGGER.warn(
-                    "[IrisMultiblockMachine] setStage: {} -> {}", oldStage, newStage);
-            // If transitioning TO DEATH from EMPTY, log stack trace to find the culprit
-            if (oldStage == Stage.EMPTY && newStage == Stage.DEATH) {
-                com.ghostipedia.cosmiccore.CosmicCore.LOGGER.warn(
-                        "[IrisMultiblockMachine] SUSPICIOUS: EMPTY->DEATH transition! Stack trace:",
-                        new Exception("Stack trace"));
-            }
+        if (!isRemote()) {
+            getSyncDataHolder().markClientSyncFieldDirty("stage");
         }
     }
 
-    @Override
-    public Stage getStage() {
-        return stage;
-    }
-
-    public NotifiableItemStackHandler getInventory() {
-        return inventory;
-    }
-
-    public boolean isIgnite() {
-        return ignite;
-    }
-
-    public boolean isFuelable() {
-        return isFuelable;
+    /**
+     * 8.0.0 sync: {@code @SyncToClient} fields are NOT auto-detected — the setter must mark the field
+     * dirty (server-side) for it to reach the client. Helper for all the synced state below.
+     */
+    private void markSynced(String field) {
+        if (!isRemote()) {
+            getSyncDataHolder().markClientSyncFieldDirty(field);
+        }
     }
 
     /**
      * Custom star color (RGB, no alpha). -1 means use default stage-based color.
      * Persisted and synced to client for rendering.
      */
-    @Persisted
-    @DescSynced
+    @SaveField
+    @SyncToClient
+    @RerenderOnChanged
     private int customStarColor = -1;
-
-    public int getCustomStarColor() {
-        return customStarColor;
-    }
 
     public void setCustomStarColor(int customStarColor) {
         this.customStarColor = customStarColor;
+        markSynced("customStarColor");
     }
 
-    @Persisted
-    @DescSynced
+    @SaveField
+    @SyncToClient
     private int lifetimePrestigePoints = 0;
 
-    @Persisted
-    @DescSynced
+    @SaveField
+    @SyncToClient
     private int spendablePoints = 0;
 
-    @Persisted
-    @DescSynced
+    @SaveField
+    @SyncToClient
     private int prestigeTier = 0;
 
-    @Persisted
-    @DescSynced
+    @SaveField
+    @SyncToClient
     private int ascensionLevel = 0;
 
-    @Persisted
-    @DescSynced
+    @SaveField
+    @SyncToClient
     private Set<StellarIrisUpgrade> unlockedUpgrades = EnumSet.noneOf(StellarIrisUpgrade.class);
 
-    @Persisted
-    @DescSynced
+    @SaveField
+    @SyncToClient
     private int[] repeatableUpgradeLevels = new int[StellarIrisUpgrade.values().length];
 
-    @Persisted
-    @DescSynced
+    @SaveField
+    @SyncToClient
     private int consecutivePrestiges = 0;
 
-    @DescSynced
+    @SyncToClient
     private boolean prestigeAnimationActive = false;
 
-    @DescSynced
+    @SyncToClient
     private int lastPrestigePointsEarned = 0;
 
     private List<IStellarModuleReceiver> connectedModules = new ArrayList<>();
@@ -164,12 +141,10 @@ public class IrisMultiblockMachine extends WorkableElectricMultiblockMachine imp
         DEATH_GRACEFUL;
     }
 
-    public IrisMultiblockMachine(BlockEntityCreationInfo holder) {
-        super(holder);
-        this.inventory = new NotifiableItemStackHandler(this, 1, IO.NONE, IO.BOTH);
-        // Debug: log initial stage
-        com.ghostipedia.cosmiccore.CosmicCore.LOGGER.warn(
-                "[IrisMultiblockMachine] Constructor: initial stage={}", stage);
+    public IrisMultiblockMachine(BlockEntityCreationInfo info) {
+        super(info);
+        // 8.0.0: NotifiableItemStackHandler ctor no longer takes the machine; attach it as a trait.
+        this.inventory = attachTrait(new NotifiableItemStackHandler(1, IO.NONE, IO.BOTH));
     }
 
     @OnlyIn(Dist.CLIENT)
@@ -180,17 +155,26 @@ public class IrisMultiblockMachine extends WorkableElectricMultiblockMachine imp
     }
 
     @Override
-    public void onStructureFormed() {
-        super.onStructureFormed();
+    public void formStructure(@org.jetbrains.annotations.NotNull String substructureName) {
+        super.formStructure(substructureName);
 
         // Clear old module connections
         if (connectedModules != null) {
             connectedModules.forEach(m -> m.setStellarIris(null));
         }
 
-        // Get modules found during structure check (from moduleSlotPredicate)
-        Set<IStellarModuleReceiver> modules = getMultiblockState().getMatchContext()
-                .getOrDefault("stellarModules", Collections.emptySet());
+        // Re-derive connected modules post-formation (match-context accumulator removed in 8.0.0):
+        // scan the formed pattern for IStellarModuleReceiver controllers occupying module slots.
+        Set<IStellarModuleReceiver> modules = new HashSet<>();
+        var level = getLevel();
+        if (level != null) {
+            for (var entry : getDefaultPatternState().getCache().long2ObjectEntrySet()) {
+                if (MetaMachine.getMachine(level,
+                        BlockPos.of(entry.getLongKey())) instanceof IStellarModuleReceiver module) {
+                    modules.add(module);
+                }
+            }
+        }
 
         this.connectedModules = new ArrayList<>(modules);
 
@@ -202,7 +186,7 @@ public class IrisMultiblockMachine extends WorkableElectricMultiblockMachine imp
 
     /**
      * Registers a module with this Iris. Called by modules when they form or detect a nearby Iris.
-     * 
+     *
      * @param module The module to register
      * @return true if registration was successful
      */
@@ -213,17 +197,8 @@ public class IrisMultiblockMachine extends WorkableElectricMultiblockMachine imp
             connectedModules.add(module);
             module.setStellarIris(this);
 
-            // Store position for tracking
             if (module instanceof MetaMachine metaMachine) {
                 moduleSlotPositions.add(metaMachine.getBlockPos().immutable());
-                // Debug logging
-                if (getLevel() != null && !getLevel().isClientSide) {
-                    com.ghostipedia.cosmiccore.CosmicCore.LOGGER.info(
-                            "[StellarIris] Module registered: {} at {}. Total modules: {}",
-                            metaMachine.getBlockState().getBlock().getDescriptionId(),
-                            metaMachine.getBlockPos(),
-                            connectedModules.size());
-                }
             }
             return true;
         }
@@ -232,7 +207,7 @@ public class IrisMultiblockMachine extends WorkableElectricMultiblockMachine imp
 
     /**
      * Unregisters a module from this Iris. Called when a module is broken or invalidated.
-     * 
+     *
      * @param module The module to unregister
      */
     public void unregisterModule(IStellarModuleReceiver module) {
@@ -256,13 +231,13 @@ public class IrisMultiblockMachine extends WorkableElectricMultiblockMachine imp
         if (!isFormed()) return;
 
         // Trigger structure recheck which will re-run the predicates
-        getMultiblockState().setError(null);
-        checkPatternWithLock();
+        getDefaultPatternState().setError(null);
+        checkAndFormStructure(); // 8.0.0: replaces removed checkPatternWithLock()
     }
 
     @Override
-    public void onStructureInvalid() {
-        super.onStructureInvalid();
+    public void invalidateStructure(String name) {
+        super.invalidateStructure(name);
 
         // Sever all module connections
         if (connectedModules != null) {
@@ -380,7 +355,7 @@ public class IrisMultiblockMachine extends WorkableElectricMultiblockMachine imp
 
     /**
      * Checks if the item in the star seed slot is a prestige item (Programmable Mote).
-     * 
+     *
      * @return true if a prestige item is in the slot
      */
     public boolean hasPrestigeItem() {
@@ -391,7 +366,7 @@ public class IrisMultiblockMachine extends WorkableElectricMultiblockMachine imp
     /**
      * Checks if the iris has an active star (not EMPTY or DEATH states).
      * Required for prestige to be triggered.
-     * 
+     *
      * @return true if there's an active star to consume
      */
     public boolean hasActiveStar() {
@@ -404,6 +379,7 @@ public class IrisMultiblockMachine extends WorkableElectricMultiblockMachine imp
      * The actual point award and stage reset happen when animation completes.
      */
     public void triggerPrestige() {
+        if (getLevel() == null || getLevel().isClientSide) return;
         if (!hasPrestigeItem() || !hasActiveStar()) {
             return;
         }
@@ -424,6 +400,9 @@ public class IrisMultiblockMachine extends WorkableElectricMultiblockMachine imp
         // Start the animation - UI will handle the visual sequence
         // Animation duration: 5s shrink + 3s fade = 8s total (160 ticks)
         prestigeAnimationActive = true;
+
+        markSynced("lastPrestigePointsEarned");
+        markSynced("prestigeAnimationActive");
 
         // Note: Stage reset and point award happen when completePrestige() is called
         // This is triggered by the UI after animation completes
@@ -459,6 +438,12 @@ public class IrisMultiblockMachine extends WorkableElectricMultiblockMachine imp
 
         // End animation state
         prestigeAnimationActive = false;
+
+        markSynced("lifetimePrestigePoints");
+        markSynced("spendablePoints");
+        markSynced("consecutivePrestiges");
+        markSynced("prestigeTier");
+        markSynced("prestigeAnimationActive");
 
         if (getLevel() != null && !getLevel().isClientSide) {
             com.ghostipedia.cosmiccore.CosmicCore.LOGGER.info(
@@ -565,6 +550,8 @@ public class IrisMultiblockMachine extends WorkableElectricMultiblockMachine imp
 
         spendablePoints -= upgrade.getCost();
         unlockedUpgrades.add(upgrade);
+        markSynced("spendablePoints");
+        markSynced("unlockedUpgrades");
         return true;
     }
 
@@ -582,6 +569,8 @@ public class IrisMultiblockMachine extends WorkableElectricMultiblockMachine imp
         if (ordinal >= 0 && ordinal < repeatableUpgradeLevels.length) {
             repeatableUpgradeLevels[ordinal] = currentLevel + 1;
         }
+        markSynced("spendablePoints");
+        markSynced("repeatableUpgradeLevels");
         return true;
     }
 
@@ -623,6 +612,7 @@ public class IrisMultiblockMachine extends WorkableElectricMultiblockMachine imp
      */
     public void setPrestigeAnimationActive(boolean active) {
         this.prestigeAnimationActive = active;
+        markSynced("prestigeAnimationActive");
     }
 
     @Override
@@ -666,22 +656,21 @@ public class IrisMultiblockMachine extends WorkableElectricMultiblockMachine imp
         }
     }
 
-    @Override
-    public Widget createUIWidget() {
-        return new StellarIrisWidget(() -> this);
-    }
-
-    @Override
-    public void addDisplayText(List<Component> textList) {
-        if (isFormed()) {
-            textList.add(Component.translatable(stage.toString()));
-            textList.add(Component.translatable("cosmiccore.multiblock.iris.star_stage_sustain"));
-        }
-    }
-
-    @Override
-    public ModularUI createUI(Player entityPlayer) {
-        return new ModularUI(176, 166, this, entityPlayer)
-                .widget(new StellarFancyUIWidget(this, 176, 166, this::getStage));
-    }
+    // TODO(8.0.0 MUI2): the donor (v8-dev-neocyte) drives this machine's UI via MUI2 (StellarIrisPanel /
+    // buildUI(PosGuiData, PanelSyncManager, UISettings)). MUI2 (brachy.modularui / client.gui.mui) is NOT
+    // available on the 1.21.1 NeoForge target yet (deferred), so the entire UI is dropped here. Re-add
+    // buildUI + the StellarIrisPanel once MUI2 lands. All non-UI logic (sync, prestige, modules, sound) is intact.
+    //
+    // The LDLib addDisplayText(List<Component>) override point was also removed in 8.0.0; multiblock status
+    // text is now provided via getWidgetsForDisplay(PanelSyncManager). DESIGN REF (pre-8.0.0) — KEEP,
+    // reimplement as IWidget rows if needed:
+    /*
+     * @Override
+     * public void addDisplayText(List<Component> textList) {
+     * if (isFormed()) {
+     * textList.add(Component.translatable(stage.toString()));
+     * textList.add(Component.translatable("cosmiccore.multiblock.iris.star_stage_sustain"));
+     * }
+     * }
+     */
 }

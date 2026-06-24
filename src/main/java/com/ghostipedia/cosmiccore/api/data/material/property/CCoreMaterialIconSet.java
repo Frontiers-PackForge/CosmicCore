@@ -6,7 +6,7 @@ import com.ghostipedia.cosmiccore.common.data.materials.CosmicMaterialSet;
 import com.ghostipedia.cosmiccore.utils.ColorUtil;
 
 import com.gregtechceu.gtceu.api.data.chemical.material.info.MaterialIconSet;
-import com.gregtechceu.gtceu.api.item.component.ICustomRenderer;
+import com.ghostipedia.cosmiccore.api.item.component.ICustomRenderer;
 
 import com.lowdragmc.lowdraglib.client.renderer.IRenderer;
 
@@ -39,8 +39,7 @@ public class CCoreMaterialIconSet extends MaterialIconSet implements IRenderer {
 
     public static final CCoreMaterialIconSet VIBRANIUM = new CCoreMaterialIconSet("vibranium",
             CosmicMaterialSet.NEUTRONITE, false,
-            HaloItemRenderer.create(4, 0xFF489BC3,
-                    ResourceLocation.fromNamespaceAndPath(CosmicCore.MOD_ID, "block/iris/rnd/halo"), true,
+            HaloItemRenderer.create(4, 0xFF489BC3, ResourceLocation.fromNamespaceAndPath(CosmicCore.MOD_ID, "block/iris/rnd/halo"), true,
                     false));
     public static final CCoreMaterialIconSet VIBRANIUM_NEUTRONIUM = new CCoreMaterialIconSet("vibranium_neutronium",
             CosmicMaterialSet.NEUTRONIUM_CCORE, false,
@@ -52,15 +51,13 @@ public class CCoreMaterialIconSet extends MaterialIconSet implements IRenderer {
     // CosmicMaterialSet.NEUTRONIUM_CCORE, false, LensRender::new);
 
     public static final CCoreMaterialIconSet PRISMATIC = new CCoreMaterialIconSet("prismatic", SHINY, false,
-            HaloItemRenderer.create(8, 0xFF1c1926,
-                    ResourceLocation.fromNamespaceAndPath(CosmicCore.MOD_ID, "block/iris/rnd/storm_halo"),
+            HaloItemRenderer.create(8, 0xFF1c1926, ResourceLocation.fromNamespaceAndPath(CosmicCore.MOD_ID, "block/iris/rnd/storm_halo"),
                     true,
                     false));
 
     public static final CCoreMaterialIconSet CHRONIC = new CCoreMaterialIconSet("chronic", CosmicMaterialSet.CHRONON,
             false,
-            HaloItemRenderer.create(8, 0xFF1c1926,
-                    ResourceLocation.fromNamespaceAndPath(CosmicCore.MOD_ID, "block/iris/rnd/time_halo"),
+            HaloItemRenderer.create(8, 0xFF1c1926, ResourceLocation.fromNamespaceAndPath(CosmicCore.MOD_ID, "block/iris/rnd/time_halo"),
                     true,
                     false));
 
@@ -73,8 +70,7 @@ public class CCoreMaterialIconSet extends MaterialIconSet implements IRenderer {
     public static final CCoreMaterialIconSet STARMETALICO = new CCoreMaterialIconSet("starmetal_special",
             CosmicMaterialSet.STARMETAL, false,
             HaloItemRenderer.create(2, 0xFFFFFFFF,
-                    ResourceLocation.fromNamespaceAndPath(CosmicCore.MOD_ID, "block/iris/rnd/tentacle_halo_glass"),
-                    true,
+                    ResourceLocation.fromNamespaceAndPath(CosmicCore.MOD_ID, "block/iris/rnd/tentacle_halo_glass"), true,
                     true));
 
     public static final CCoreMaterialIconSet SOL_STEEL = new CCoreMaterialIconSet("sol_steel", CosmicMaterialSet.SOL,

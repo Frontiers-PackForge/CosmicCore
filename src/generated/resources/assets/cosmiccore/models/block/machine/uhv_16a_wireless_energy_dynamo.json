@@ -8,17 +8,7 @@
         "side"
     ],
     "variants": {
-        "is_formed=false": {
-            "model": {
-                "parent": "cosmiccore:block/machine/part/wireless_energy_16a",
-                "textures": {
-                    "bottom": "gtceu:block/casings/voltage/uhv/bottom",
-                    "side": "gtceu:block/casings/voltage/uhv/side",
-                    "top": "gtceu:block/casings/voltage/uhv/top"
-                }
-            }
-        },
-        "is_formed=true": {
+        "": {
             "model": {
                 "parent": "cosmiccore:block/machine/part/wireless_energy_16a",
                 "textures": {

@@ -24,7 +24,7 @@ import java.util.List;
 public class VoidFluidDrillMachine extends WorkableElectricMultiblockMachine {
 
     public VoidFluidDrillMachine(BlockEntityCreationInfo holder) {
-        super(holder, m -> new VoidFluidDrillLogic((VoidFluidDrillMachine) m));
+        super(holder, new VoidFluidDrillLogic());
     }
 
     @NotNull
@@ -42,8 +42,7 @@ public class VoidFluidDrillMachine extends WorkableElectricMultiblockMachine {
         return Math.min(this.tier + 1, Math.max(this.tier, GTUtil.getFloorTierByVoltage(energyCont.getInputVoltage())));
     }
 
-    @Override
-    public void addDisplayText(List<Component> textList) {
+        public void addDisplayText(List<Component> textList) {
         if (isFormed()) {
             int energyContainer = getEnergyTier();
             long maxVoltage = GTValues.V[energyContainer];

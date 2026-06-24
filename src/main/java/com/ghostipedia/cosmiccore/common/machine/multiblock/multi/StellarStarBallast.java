@@ -10,8 +10,8 @@ import com.gregtechceu.gtceu.GTCEu;
 import com.gregtechceu.gtceu.api.data.RotationState;
 import com.gregtechceu.gtceu.api.machine.MultiblockMachineDefinition;
 import com.gregtechceu.gtceu.api.machine.multiblock.PartAbility;
-import com.gregtechceu.gtceu.api.pattern.FactoryBlockPattern;
-import com.gregtechceu.gtceu.api.pattern.Predicates;
+import com.gregtechceu.gtceu.api.multiblock.pattern.MultiblockPatternBuilder;
+import com.gregtechceu.gtceu.api.multiblock.Predicates;
 import com.gregtechceu.gtceu.api.recipe.OverclockingLogic;
 import com.gregtechceu.gtceu.common.data.GTRecipeModifiers;
 
@@ -19,8 +19,8 @@ import net.minecraft.network.chat.Component;
 
 import static com.ghostipedia.cosmiccore.api.registries.CosmicRegistration.REGISTRATE;
 import static com.ghostipedia.cosmiccore.common.data.CosmicBlocks.*;
-import static com.gregtechceu.gtceu.api.pattern.Predicates.*;
-import static com.gregtechceu.gtceu.api.pattern.Predicates.blocks;
+import static com.gregtechceu.gtceu.api.multiblock.Predicates.*;
+import static com.gregtechceu.gtceu.api.multiblock.Predicates.blocks;
 import static com.gregtechceu.gtceu.common.data.GCYMBlocks.CASING_ATOMIC;
 import static com.gregtechceu.gtceu.common.data.GCYMBlocks.CASING_HIGH_TEMPERATURE_SMELTING;
 import static com.gregtechceu.gtceu.common.data.models.GTMachineModels.createWorkableCasingMachineModel;
@@ -33,8 +33,8 @@ public class StellarStarBallast {
             .recipeType(CosmicRecipeTypes.VOMAHINE_CORE_DRILL)
             .recipeModifier(GTRecipeModifiers.ELECTRIC_OVERCLOCK.apply(OverclockingLogic.NON_PERFECT_OVERCLOCK_SUBTICK))
             .appearanceBlock(CosmicBlocks.CYCLOZINE_CHEMICALLY_REPELLING_CASING)
-            .pattern(definition -> FactoryBlockPattern.start()
-                    .aisle("                           AAAAA                           ",
+            .pattern(definition -> MultiblockPatternBuilder.start()
+                    .slice("                           AAAAA                           ",
                             "                        BBBBBBBBBBB                        ",
                             "                                                           ",
                             "                                                           ",
@@ -45,7 +45,7 @@ public class StellarStarBallast {
                             "                                                           ",
                             "                        BBBBBBBBBBB                        ",
                             "                           AAAAA                           ")
-                    .aisle("                          AAAAAAA                          ",
+                    .slice("                          AAAAAAA                          ",
                             "                    BBBBBBBBBBBBBBBBBBB                    ",
                             "                        CBBDDDDDBBC                        ",
                             "                         BB     BB                         ",
@@ -56,7 +56,7 @@ public class StellarStarBallast {
                             "                        CBBDDDDDBBC                        ",
                             "                    BBBBBBBBBBBBBBBBBBB                    ",
                             "                          AAAAAAA                          ")
-                    .aisle("                          AADDDAA                          ",
+                    .slice("                          AADDDAA                          ",
                             "                  BBBBBBBBBBBBBBBBBBBBBBB                  ",
                             "                     CCCAAAAAAAAAAACCC                     ",
                             "                        AAAAAAAAAAA                        ",
@@ -67,7 +67,7 @@ public class StellarStarBallast {
                             "                     CCCAAAAAAAAAAACCC                     ",
                             "                  BBBBBBBBBBBBBBBBBBBBBBB                  ",
                             "                          AADDDAA                          ")
-                    .aisle("                          AADFDAA                          ",
+                    .slice("                          AADFDAA                          ",
                             "                BBBBBBBBGGGGGGGGGGGBBBBBBBB                ",
                             "                  CCCAAAAAAAAAAAAAAAAACCC                  ",
                             "                     AAAAAAAAAAAAAAAAA                     ",
@@ -78,7 +78,7 @@ public class StellarStarBallast {
                             "                  CCCAAAAAAAAAAAAAAAAACCC                  ",
                             "                BBBBBBBBGGGGGGGGGGGBBBBBBBB                ",
                             "                          AADFDAA                          ")
-                    .aisle("                          AADDDAA                          ",
+                    .slice("                          AADDDAA                          ",
                             "              BBBBBBBGGGBBBBBBBBBBBGGGBBBBBBB              ",
                             "                CCAAAAAAAAAAAAAAAAAAAAAAACC                ",
                             "                  AAAAAAAAAAAAAAAAAAAAAAA                  ",
@@ -89,7 +89,7 @@ public class StellarStarBallast {
                             "                CCAAAAAAAAAAAAAAAAAAAAAAACC                ",
                             "              BBBBBBBGGGBBBBBBBBBBBGGGBBBBBBB              ",
                             "                          AADDDAA                          ")
-                    .aisle("                          AAAAAAA                          ",
+                    .slice("                          AAAAAAA                          ",
                             "            BBBBBBGGGBBBBBBBBBBBBBBBBBGGGBBBBBB            ",
                             "              CCAAAAAAAACBBDDDDDBBCAAAAAAAACC              ",
                             "                AAAAAAAA BB     BB AAAAAAAA                ",
@@ -100,7 +100,7 @@ public class StellarStarBallast {
                             "              CCAAAAAAAACBBDDDDDBBCAAAAAAAACC              ",
                             "            BBBBBBGGGBBBBBBBBBBBBBBBBBGGGBBBBBB            ",
                             "                          AAAAAAA                          ")
-                    .aisle("                           AAAAA                           ",
+                    .slice("                           AAAAA                           ",
                             "           BBBBBGGBBBBBBBBBBBBBBBBBBBBBBBGGBBBBB           ",
                             "             CAAAAAAACCC           CCCAAAAAAAC             ",
                             "              AAAAAAA                 AAAAAAA              ",
@@ -111,7 +111,7 @@ public class StellarStarBallast {
                             "             CAAAAAAACCC           CCCAAAAAAAC             ",
                             "           BBBBBGGBBBBBBBBBBBBBBBBBBBBBBBGGBBBBB           ",
                             "                           AAAAA                           ")
-                    .aisle("                                                           ",
+                    .slice("                                                           ",
                             "          BBBBGGBBBBBBBBB         BBBBBBBBBGGBBBB          ",
                             "            CAAAAACCC                 CCCAAAAAC            ",
                             "             AAAAA                       AAAAA             ",
@@ -122,7 +122,7 @@ public class StellarStarBallast {
                             "            CAAAAACCC                 CCCAAAAAC            ",
                             "          BBBBGGBBBBBBBBB         BBBBBBBBBGGBBBB          ",
                             "                                                           ")
-                    .aisle("                                                           ",
+                    .slice("                                                           ",
                             "         BBBBGBBBBBBB                 BBBBBBBGBBBB         ",
                             "           CAAAAAC                       CAAAAAC           ",
                             "            AAAAA                         AAAAA            ",
@@ -133,7 +133,7 @@ public class StellarStarBallast {
                             "           CAAAAAC                       CAAAAAC           ",
                             "         BBBBGBBBBBBB                 BBBBBBBGBBBB         ",
                             "                                                           ")
-                    .aisle("                                                           ",
+                    .slice("                                                           ",
                             "        BBBBGBBBBBB                     BBBBBBGBBBB        ",
                             "          CAAAACC                         CCAAAAC          ",
                             "           AAAA                             AAAA           ",
@@ -144,7 +144,7 @@ public class StellarStarBallast {
                             "          CAAAACC                         CCAAAAC          ",
                             "        BBBBGBBBBBB                     BBBBBBGBBBB        ",
                             "                                                           ")
-                    .aisle("                                                           ",
+                    .slice("                                                           ",
                             "       BBBBGBBBBB                         BBBBBGBBBB       ",
                             "         CAAAAC                             CAAAAC         ",
                             "          AAAA                               AAAA          ",
@@ -155,7 +155,7 @@ public class StellarStarBallast {
                             "         CAAAAC                             CAAAAC         ",
                             "       BBBBGBBBBB                         BBBBBGBBBB       ",
                             "                                                           ")
-                    .aisle("                                                           ",
+                    .slice("                                                           ",
                             "      BBBBGBBBBB                           BBBBBGBBBB      ",
                             "        CAAACC                               CCAAAC        ",
                             "         AAA                                   AAA         ",
@@ -166,7 +166,7 @@ public class StellarStarBallast {
                             "        CAAACC                               CCAAAC        ",
                             "      BBBBGBBBBB                           BBBBBGBBBB      ",
                             "                                                           ")
-                    .aisle("                                                           ",
+                    .slice("                                                           ",
                             "     BBBBGBBBB                               BBBBGBBBB     ",
                             "       CAAAC                                   CAAAC       ",
                             "        AAA                                     AAA        ",
@@ -177,7 +177,7 @@ public class StellarStarBallast {
                             "       CAAAC                                   CAAAC       ",
                             "     BBBBGBBBB                               BBBBGBBBB     ",
                             "                                                           ")
-                    .aisle("                                                           ",
+                    .slice("                                                           ",
                             "     BBBGBBBB                                 BBBBGBBB     ",
                             "      CAAAAC                                   CAAAAC      ",
                             "       AAAA                                     AAAA       ",
@@ -188,7 +188,7 @@ public class StellarStarBallast {
                             "      CAAAAC                                   CAAAAC      ",
                             "     BBBGBBBB                                 BBBBGBBB     ",
                             "                                                           ")
-                    .aisle("                                                           ",
+                    .slice("                                                           ",
                             "    BBBGBBBB                                   BBBBGBBB    ",
                             "     CAAAAC                                     CAAAAC     ",
                             "      AAAA                                       AAAA      ",
@@ -199,7 +199,7 @@ public class StellarStarBallast {
                             "     CAAAAC                                     CAAAAC     ",
                             "    BBBGBBBB                                   BBBBGBBB    ",
                             "                                                           ")
-                    .aisle("                                                           ",
+                    .slice("                                                           ",
                             "    BBBGBBBB                                   BBBBGBBB    ",
                             "     CAAAC                                       CAAAC     ",
                             "      AAA                                         AAA      ",
@@ -210,7 +210,7 @@ public class StellarStarBallast {
                             "     CAAAC                                       CAAAC     ",
                             "    BBBGBBBB                                   BBBBGBBB    ",
                             "                                                           ")
-                    .aisle("                                                           ",
+                    .slice("                                                           ",
                             "   BBBGBBBB                                     BBBBGBBB   ",
                             "    CAAAAC                                       CAAAAC    ",
                             "     AAAA                                         AAAA     ",
@@ -221,7 +221,7 @@ public class StellarStarBallast {
                             "    CAAAAC                                       CAAAAC    ",
                             "   BBBGBBBB                                     BBBBGBBB   ",
                             "                                                           ")
-                    .aisle("                                                           ",
+                    .slice("                                                           ",
                             "   BBBGBBB                                       BBBGBBB   ",
                             "    CAAAC                                         CAAAC    ",
                             "     AAA                                           AAA     ",
@@ -232,7 +232,7 @@ public class StellarStarBallast {
                             "    CAAAC                                         CAAAC    ",
                             "   BBBGBBB                                       BBBGBBB   ",
                             "                                                           ")
-                    .aisle("                                                           ",
+                    .slice("                                                           ",
                             "  BBBGBBBB                                       BBBBGBBB  ",
                             "   CAAAC                                           CAAAC   ",
                             "    AAA                                             AAA    ",
@@ -243,7 +243,7 @@ public class StellarStarBallast {
                             "   CAAAC                                           CAAAC   ",
                             "  BBBGBBBB                                       BBBBGBBB  ",
                             "                                                           ")
-                    .aisle("                                                           ",
+                    .slice("                                                           ",
                             "  BBBGBBB                                         BBBGBBB  ",
                             "   CAAAC                                           CAAAC   ",
                             "    AAA                                             AAA    ",
@@ -254,7 +254,7 @@ public class StellarStarBallast {
                             "   CAAAC                                           CAAAC   ",
                             "  BBBGBBB                                         BBBGBBB  ",
                             "                                                           ")
-                    .aisle("                                                           ",
+                    .slice("                                                           ",
                             " BBBBGBBB                                         BBBGBBBB ",
                             "   CAAAC                                           CAAAC   ",
                             "    AAA                                             AAA    ",
@@ -265,7 +265,7 @@ public class StellarStarBallast {
                             "   CAAAC                                           CAAAC   ",
                             " BBBBGBBB                                         BBBGBBBB ",
                             "                                                           ")
-                    .aisle("                                                           ",
+                    .slice("                                                           ",
                             " BBBGBBB                                           BBBGBBB ",
                             "  CAAAC                                             CAAAC  ",
                             "   AAA                                               AAA   ",
@@ -276,7 +276,7 @@ public class StellarStarBallast {
                             "  CAAAC                                             CAAAC  ",
                             " BBBGBBB                                           BBBGBBB ",
                             "                                                           ")
-                    .aisle("                                                           ",
+                    .slice("                                                           ",
                             " BBBGBBB                                           BBBGBBB ",
                             "  CAAAC                                             CAAAC  ",
                             "   AAA                                               AAA   ",
@@ -287,7 +287,7 @@ public class StellarStarBallast {
                             "  CAAAC                                             CAAAC  ",
                             " BBBGBBB                                           BBBGBBB ",
                             "                                                           ")
-                    .aisle("                                                           ",
+                    .slice("                                                           ",
                             " BBBGBBB                                           BBBGBBB ",
                             "  CAAAC                                             CAAAC  ",
                             "   AAA                                               AAA   ",
@@ -298,7 +298,7 @@ public class StellarStarBallast {
                             "  CAAAC                                             CAAAC  ",
                             " BBBGBBB                                           BBBGBBB ",
                             "                                                           ")
-                    .aisle("                                                           ",
+                    .slice("                                                           ",
                             "BBBGBBBB                                           BBBBGBBB",
                             " CAAAC                                               CAAAC ",
                             "  AAA                                                 AAA  ",
@@ -309,7 +309,7 @@ public class StellarStarBallast {
                             " CAAAC                                               CAAAC ",
                             "BBBGBBBB                                           BBBBGBBB",
                             "                                                           ")
-                    .aisle("                                                           ",
+                    .slice("                                                           ",
                             "BBBGBBB                                             BBBGBBB",
                             " BAAAB                                               BAAAB ",
                             " BAAAB                                               BAAAB ",
@@ -320,7 +320,7 @@ public class StellarStarBallast {
                             " BAAAB                                               BAAAB ",
                             "BBBGBBB                                             BBBGBBB",
                             "                                                           ")
-                    .aisle(" AAAAA                                               AAAAA ",
+                    .slice(" AAAAA                                               AAAAA ",
                             "BBBGBBB                                             BBBGBBB",
                             " BAAAB                                               BAAAB ",
                             " BAAAB                                               BAAAB ",
@@ -331,7 +331,7 @@ public class StellarStarBallast {
                             " BAAAB                                               BAAAB ",
                             "BBBGBBB                                             BBBGBBB",
                             " AAAAA                                               AAAAA ")
-                    .aisle("AAAAAAA                                             AAAAAAA",
+                    .slice("AAAAAAA                                             AAAAAAA",
                             "BBBGBBB                                             BBBGBBB",
                             " DAAAD                                               DAAAD ",
                             "  AAA                                                 AAA  ",
@@ -342,7 +342,7 @@ public class StellarStarBallast {
                             " DAAAD                                               DAAAD ",
                             "BBBGBBB                                             BBBGBBB",
                             "AAAAAAA                                             AAAAAAA")
-                    .aisle("AADDDAA                                             AADDDAA",
+                    .slice("AADDDAA                                             AADDDAA",
                             "BBBGBBB                                             BBBGBBB",
                             " DAAAD                                               DAAAD ",
                             "  AAA                                                 AAA  ",
@@ -353,7 +353,7 @@ public class StellarStarBallast {
                             " DAAAD                                               DAAAD ",
                             "BBBGBBB                                             BBBGBBB",
                             "AADDDAA                                             AADDDAA")
-                    .aisle("AADFDAA                                             AADFDAA",
+                    .slice("AADFDAA                                             AADFDAA",
                             "BBBGBBB                                             BBBGBBB",
                             " DAAAD                                               DAAAD ",
                             "  AAA                                                 AAA  ",
@@ -364,7 +364,7 @@ public class StellarStarBallast {
                             " DAAAD                                               DAAAD ",
                             "BBBGBBB                                             BBBGBBB",
                             "AADFDAA                                             AADFDAA")
-                    .aisle("AADDDAA                                             AADDDAA",
+                    .slice("AADDDAA                                             AADDDAA",
                             "BBBGBBB                                             BBBGBBB",
                             " DAAAD                                               DAAAD ",
                             "  AAA                                                 AAA  ",
@@ -375,7 +375,7 @@ public class StellarStarBallast {
                             " DAAAD                                               DAAAD ",
                             "BBBGBBB                                             BBBGBBB",
                             "AADDDAA                                             AADDDAA")
-                    .aisle("AAAAAAA                                             AAAAAAA",
+                    .slice("AAAAAAA                                             AAAAAAA",
                             "BBBGBBB                                             BBBGBBB",
                             " DAAAD                                               DAAAD ",
                             "  AAA                                                 AAA  ",
@@ -386,7 +386,7 @@ public class StellarStarBallast {
                             " DAAAD                                               DAAAD ",
                             "BBBGBBB                                             BBBGBBB",
                             "AAAAAAA                                             AAAAAAA")
-                    .aisle(" AAAAA                                               AAAAA ",
+                    .slice(" AAAAA                                               AAAAA ",
                             "BBBGBBB                                             BBBGBBB",
                             " BAAAB                                               BAAAB ",
                             " BAAAB                                               BAAAB ",
@@ -397,7 +397,7 @@ public class StellarStarBallast {
                             " BAAAB                                               BAAAB ",
                             "BBBGBBB                                             BBBGBBB",
                             " AAAAA                                               AAAAA ")
-                    .aisle("                                                           ",
+                    .slice("                                                           ",
                             "BBBGBBB                                             BBBGBBB",
                             " BAAAB                                               BAAAB ",
                             " BAAAB                                               BAAAB ",
@@ -408,7 +408,7 @@ public class StellarStarBallast {
                             " BAAAB                                               BAAAB ",
                             "BBBGBBB                                             BBBGBBB",
                             "                                                           ")
-                    .aisle("                                                           ",
+                    .slice("                                                           ",
                             "BBBGBBBB                                           BBBBGBBB",
                             " CAAAC                                               CAAAC ",
                             "  AAA                                                 AAA  ",
@@ -419,7 +419,7 @@ public class StellarStarBallast {
                             " CAAAC                                               CAAAC ",
                             "BBBGBBBB                                           BBBBGBBB",
                             "                                                           ")
-                    .aisle("                                                           ",
+                    .slice("                                                           ",
                             " BBBGBBB                                           BBBGBBB ",
                             "  CAAAC                                             CAAAC  ",
                             "   AAA                                               AAA   ",
@@ -430,7 +430,7 @@ public class StellarStarBallast {
                             "  CAAAC                                             CAAAC  ",
                             " BBBGBBB                                           BBBGBBB ",
                             "                                                           ")
-                    .aisle("                                                           ",
+                    .slice("                                                           ",
                             " BBBGBBB                                           BBBGBBB ",
                             "  CAAAC                                             CAAAC  ",
                             "   AAA                                               AAA   ",
@@ -441,7 +441,7 @@ public class StellarStarBallast {
                             "  CAAAC                                             CAAAC  ",
                             " BBBGBBB                                           BBBGBBB ",
                             "                                                           ")
-                    .aisle("                                                           ",
+                    .slice("                                                           ",
                             " BBBGBBB                                           BBBGBBB ",
                             "  CAAAC                                             CAAAC  ",
                             "   AAA                                               AAA   ",
@@ -452,7 +452,7 @@ public class StellarStarBallast {
                             "  CAAAC                                             CAAAC  ",
                             " BBBGBBB                                           BBBGBBB ",
                             "                                                           ")
-                    .aisle("                                                           ",
+                    .slice("                                                           ",
                             " BBBBGBBB                                         BBBGBBBB ",
                             "   CAAAC                                           CAAAC   ",
                             "    AAA                                             AAA    ",
@@ -463,7 +463,7 @@ public class StellarStarBallast {
                             "   CAAAC                                           CAAAC   ",
                             " BBBBGBBB                                         BBBGBBBB ",
                             "                                                           ")
-                    .aisle("                                                           ",
+                    .slice("                                                           ",
                             "  BBBGBBB                                         BBBGBBB  ",
                             "   CAAAC                                           CAAAC   ",
                             "    AAA                                             AAA    ",
@@ -474,7 +474,7 @@ public class StellarStarBallast {
                             "   CAAAC                                           CAAAC   ",
                             "  BBBGBBB                                         BBBGBBB  ",
                             "                                                           ")
-                    .aisle("                                                           ",
+                    .slice("                                                           ",
                             "  BBBGBBBB                                       BBBBGBBB  ",
                             "   CAAAC                                           CAAAC   ",
                             "    AAA                                             AAA    ",
@@ -485,7 +485,7 @@ public class StellarStarBallast {
                             "   CAAAC                                           CAAAC   ",
                             "  BBBGBBBB                                       BBBBGBBB  ",
                             "                                                           ")
-                    .aisle("                                                           ",
+                    .slice("                                                           ",
                             "   BBBGBBB                                       BBBGBBB   ",
                             "    CAAAC                                         CAAAC    ",
                             "     AAA                                           AAA     ",
@@ -496,7 +496,7 @@ public class StellarStarBallast {
                             "    CAAAC                                         CAAAC    ",
                             "   BBBGBBB                                       BBBGBBB   ",
                             "                                                           ")
-                    .aisle("                                                           ",
+                    .slice("                                                           ",
                             "   BBBGBBBB                                     BBBBGBBB   ",
                             "    CAAAAC                                       CAAAAC    ",
                             "     AAAA                                         AAAA     ",
@@ -507,7 +507,7 @@ public class StellarStarBallast {
                             "    CAAAAC                                       CAAAAC    ",
                             "   BBBGBBBB                                     BBBBGBBB   ",
                             "                                                           ")
-                    .aisle("                                                           ",
+                    .slice("                                                           ",
                             "    BBBGBBBB                                   BBBBGBBB    ",
                             "     CAAAC                                       CAAAC     ",
                             "      AAA                                         AAA      ",
@@ -518,7 +518,7 @@ public class StellarStarBallast {
                             "     CAAAC                                       CAAAC     ",
                             "    BBBGBBBB                                   BBBBGBBB    ",
                             "                                                           ")
-                    .aisle("                                                           ",
+                    .slice("                                                           ",
                             "    BBBGBBBB                                   BBBBGBBB    ",
                             "     CAAAAC                                     CAAAAC     ",
                             "      AAAA                                       AAAA      ",
@@ -529,7 +529,7 @@ public class StellarStarBallast {
                             "     CAAAAC                                     CAAAAC     ",
                             "    BBBGBBBB                                   BBBBGBBB    ",
                             "                                                           ")
-                    .aisle("                                                           ",
+                    .slice("                                                           ",
                             "     BBBGBBBB                                 BBBBGBBB     ",
                             "      CAAAAC                                   CAAAAC      ",
                             "       AAAA                                     AAAA       ",
@@ -540,7 +540,7 @@ public class StellarStarBallast {
                             "      CAAAAC                                   CAAAAC      ",
                             "     BBBGBBBB                                 BBBBGBBB     ",
                             "                                                           ")
-                    .aisle("                                                           ",
+                    .slice("                                                           ",
                             "     BBBBGBBBB                               BBBBGBBBB     ",
                             "       CAAAC                                   CAAAC       ",
                             "        AAA                                     AAA        ",
@@ -551,7 +551,7 @@ public class StellarStarBallast {
                             "       CAAAC                                   CAAAC       ",
                             "     BBBBGBBBB                               BBBBGBBBB     ",
                             "                                                           ")
-                    .aisle("                                                           ",
+                    .slice("                                                           ",
                             "      BBBBGBBBBB                           BBBBBGBBBB      ",
                             "        CAAACC                               CCAAAC        ",
                             "         AAA                                   AAA         ",
@@ -562,7 +562,7 @@ public class StellarStarBallast {
                             "        CAAACC                               CCAAAC        ",
                             "      BBBBGBBBBB                           BBBBBGBBBB      ",
                             "                                                           ")
-                    .aisle("                                                           ",
+                    .slice("                                                           ",
                             "       BBBBGBBBBB                         BBBBBGBBBB       ",
                             "         CAAAAC                             CAAAAC         ",
                             "          AAAA                               AAAA          ",
@@ -573,7 +573,7 @@ public class StellarStarBallast {
                             "         CAAAAC                             CAAAAC         ",
                             "       BBBBGBBBBB                         BBBBBGBBBB       ",
                             "                                                           ")
-                    .aisle("                                                           ",
+                    .slice("                                                           ",
                             "        BBBBGBBBBBB                     BBBBBBGBBBB        ",
                             "          CAAAACC                         CCAAAAC          ",
                             "           AAAA                             AAAA           ",
@@ -584,7 +584,7 @@ public class StellarStarBallast {
                             "          CAAAACC                         CCAAAAC          ",
                             "        BBBBGBBBBBB                     BBBBBBGBBBB        ",
                             "                                                           ")
-                    .aisle("                                                           ",
+                    .slice("                                                           ",
                             "         BBBBGBBBBBBB                 BBBBBBBGBBBB         ",
                             "           CAAAAAC                       CAAAAAC           ",
                             "            AAAAA                         AAAAA            ",
@@ -595,7 +595,7 @@ public class StellarStarBallast {
                             "           CAAAAAC                       CAAAAAC           ",
                             "         BBBBGBBBBBBB                 BBBBBBBGBBBB         ",
                             "                                                           ")
-                    .aisle("                                                           ",
+                    .slice("                                                           ",
                             "          BBBBGGBBBBBBBBB         BBBBBBBBBGGBBBB          ",
                             "            CAAAAACCC                 CCCAAAAAC            ",
                             "             AAAAA                       AAAAA             ",
@@ -606,7 +606,7 @@ public class StellarStarBallast {
                             "            CAAAAACCC                 CCCAAAAAC            ",
                             "          BBBBGGBBBBBBBBB         BBBBBBBBBGGBBBB          ",
                             "                                                           ")
-                    .aisle("                           AAAAA                           ",
+                    .slice("                           AAAAA                           ",
                             "           BBBBBGGBBBBBBBBBBBBBBBBBBBBBBBGGBBBBB           ",
                             "             CAAAAAAACCC           CCCAAAAAAAC             ",
                             "              AAAAAAA                 AAAAAAA              ",
@@ -617,7 +617,7 @@ public class StellarStarBallast {
                             "             CAAAAAAACCC           CCCAAAAAAAC             ",
                             "           BBBBBGGBBBBBBBBBBBBBBBBBBBBBBBGGBBBBB           ",
                             "                           AAAAA                           ")
-                    .aisle("                          AAAAAAA                          ",
+                    .slice("                          AAAAAAA                          ",
                             "            BBBBBBGGGBBBBBBBBBBBBBBBBBGGGBBBBBB            ",
                             "              CCAAAAAAAACBBDDDDDBBCAAAAAAAACC              ",
                             "                AAAAAAAA BB     BB AAAAAAAA                ",
@@ -628,7 +628,7 @@ public class StellarStarBallast {
                             "              CCAAAAAAAACBBDDDDDBBCAAAAAAAACC              ",
                             "            BBBBBBGGGBBBBBBBBBBBBBBBBBGGGBBBBBB            ",
                             "                          AAAAAAA                          ")
-                    .aisle("                          AADDDAA                          ",
+                    .slice("                          AADDDAA                          ",
                             "              BBBBBBBGGGBBBBBBBBBBBGGGBBBBBBB              ",
                             "                CCAAAAAAAAAAAAAAAAAAAAAAACC                ",
                             "                  AAAAAAAAAAAAAAAAAAAAAAA                  ",
@@ -639,7 +639,7 @@ public class StellarStarBallast {
                             "                CCAAAAAAAAAAAAAAAAAAAAAAACC                ",
                             "              BBBBBBBGGGBBBBBBBBBBBGGGBBBBBBB              ",
                             "                          AADDDAA                          ")
-                    .aisle("                          AADFDAA                          ",
+                    .slice("                          AADFDAA                          ",
                             "                BBBBBBBBGGGGGGGGGGGBBBBBBBB                ",
                             "                  CCCAAAAAAAAAAAAAAAAACCC                  ",
                             "                     AAAAAAAAAAAAAAAAA                     ",
@@ -650,7 +650,7 @@ public class StellarStarBallast {
                             "                  CCCAAAAAAAAAAAAAAAAACCC                  ",
                             "                BBBBBBBBGGGGGGGGGGGBBBBBBBB                ",
                             "                          AADFDAA                          ")
-                    .aisle("                          AADDDAA                          ",
+                    .slice("                          AADDDAA                          ",
                             "                  BBBBBBBBBBBBBBBBBBBBBBB                  ",
                             "                     CCCAAAAAAAAAAACCC                     ",
                             "                        AAAAAAAAAAA                        ",
@@ -661,7 +661,7 @@ public class StellarStarBallast {
                             "                     CCCAAAAAAAAAAACCC                     ",
                             "                  BBBBBBBBBBBBBBBBBBBBBBB                  ",
                             "                          AADDDAA                          ")
-                    .aisle("                          AAAAAAA                          ",
+                    .slice("                          AAAAAAA                          ",
                             "                    BBBBBBBBBBBBBBBBBBB                    ",
                             "                        CBBDDDDDBBC                        ",
                             "                         BB  B  BB                         ",
@@ -672,7 +672,7 @@ public class StellarStarBallast {
                             "                        CBBDDDDDBBC                        ",
                             "                    BBBBBBBBBBBBBBBBBBB                    ",
                             "                          AAAAAAA                          ")
-                    .aisle("                           AAAAA                           ",
+                    .slice("                           AAAAA                           ",
                             "                        BBBBBBBBBBB                        ",
                             "                                                           ",
                             "                                                           ",
@@ -684,7 +684,7 @@ public class StellarStarBallast {
                             "                        BBBBBBBBBBB                        ",
                             "                           AAAAA                           ")
                     .where(' ', any())
-                    .where("Q", controller(blocks(definition.getBlock())))
+                    .where('Q', controller(blocks(definition.getBlock())))
                     .where('A', blocks(CASING_HIGH_TEMPERATURE_SMELTING.get()))
                     .where('B', blocks(MULTIPURPOSE_INTERSTELLAR_GRADE_CASING.get()))
                     .where('C', blocks(MULTIPURPOSE_INTERSTELLAR_GRADE_CASING.get()))

@@ -1,0 +1,836 @@
+{
+    "variants": {
+        "back=false,facing=down,front=false,left=false,right=false,waterlogged=false": {
+            "model": "cosmiccore:block/mv_ember_emitter",
+            "x": 180
+        },
+        "back=false,facing=down,front=false,left=false,right=false,waterlogged=true": {
+            "model": "cosmiccore:block/mv_ember_emitter",
+            "x": 180
+        },
+        "back=false,facing=down,front=false,left=false,right=true,waterlogged=false": {
+            "model": "cosmiccore:block/mv_ember_emitter",
+            "x": 180
+        },
+        "back=false,facing=down,front=false,left=false,right=true,waterlogged=true": {
+            "model": "cosmiccore:block/mv_ember_emitter",
+            "x": 180
+        },
+        "back=false,facing=down,front=false,left=true,right=false,waterlogged=false": {
+            "model": "cosmiccore:block/mv_ember_emitter",
+            "x": 180
+        },
+        "back=false,facing=down,front=false,left=true,right=false,waterlogged=true": {
+            "model": "cosmiccore:block/mv_ember_emitter",
+            "x": 180
+        },
+        "back=false,facing=down,front=false,left=true,right=true,waterlogged=false": {
+            "model": "cosmiccore:block/mv_ember_emitter",
+            "x": 180
+        },
+        "back=false,facing=down,front=false,left=true,right=true,waterlogged=true": {
+            "model": "cosmiccore:block/mv_ember_emitter",
+            "x": 180
+        },
+        "back=false,facing=down,front=true,left=false,right=false,waterlogged=false": {
+            "model": "cosmiccore:block/mv_ember_emitter",
+            "x": 180
+        },
+        "back=false,facing=down,front=true,left=false,right=false,waterlogged=true": {
+            "model": "cosmiccore:block/mv_ember_emitter",
+            "x": 180
+        },
+        "back=false,facing=down,front=true,left=false,right=true,waterlogged=false": {
+            "model": "cosmiccore:block/mv_ember_emitter",
+            "x": 180
+        },
+        "back=false,facing=down,front=true,left=false,right=true,waterlogged=true": {
+            "model": "cosmiccore:block/mv_ember_emitter",
+            "x": 180
+        },
+        "back=false,facing=down,front=true,left=true,right=false,waterlogged=false": {
+            "model": "cosmiccore:block/mv_ember_emitter",
+            "x": 180
+        },
+        "back=false,facing=down,front=true,left=true,right=false,waterlogged=true": {
+            "model": "cosmiccore:block/mv_ember_emitter",
+            "x": 180
+        },
+        "back=false,facing=down,front=true,left=true,right=true,waterlogged=false": {
+            "model": "cosmiccore:block/mv_ember_emitter",
+            "x": 180
+        },
+        "back=false,facing=down,front=true,left=true,right=true,waterlogged=true": {
+            "model": "cosmiccore:block/mv_ember_emitter",
+            "x": 180
+        },
+        "back=false,facing=east,front=false,left=false,right=false,waterlogged=false": {
+            "model": "cosmiccore:block/mv_ember_emitter",
+            "x": 90,
+            "y": 90
+        },
+        "back=false,facing=east,front=false,left=false,right=false,waterlogged=true": {
+            "model": "cosmiccore:block/mv_ember_emitter",
+            "x": 90,
+            "y": 90
+        },
+        "back=false,facing=east,front=false,left=false,right=true,waterlogged=false": {
+            "model": "cosmiccore:block/mv_ember_emitter",
+            "x": 90,
+            "y": 90
+        },
+        "back=false,facing=east,front=false,left=false,right=true,waterlogged=true": {
+            "model": "cosmiccore:block/mv_ember_emitter",
+            "x": 90,
+            "y": 90
+        },
+        "back=false,facing=east,front=false,left=true,right=false,waterlogged=false": {
+            "model": "cosmiccore:block/mv_ember_emitter",
+            "x": 90,
+            "y": 90
+        },
+        "back=false,facing=east,front=false,left=true,right=false,waterlogged=true": {
+            "model": "cosmiccore:block/mv_ember_emitter",
+            "x": 90,
+            "y": 90
+        },
+        "back=false,facing=east,front=false,left=true,right=true,waterlogged=false": {
+            "model": "cosmiccore:block/mv_ember_emitter",
+            "x": 90,
+            "y": 90
+        },
+        "back=false,facing=east,front=false,left=true,right=true,waterlogged=true": {
+            "model": "cosmiccore:block/mv_ember_emitter",
+            "x": 90,
+            "y": 90
+        },
+        "back=false,facing=east,front=true,left=false,right=false,waterlogged=false": {
+            "model": "cosmiccore:block/mv_ember_emitter",
+            "x": 90,
+            "y": 90
+        },
+        "back=false,facing=east,front=true,left=false,right=false,waterlogged=true": {
+            "model": "cosmiccore:block/mv_ember_emitter",
+            "x": 90,
+            "y": 90
+        },
+        "back=false,facing=east,front=true,left=false,right=true,waterlogged=false": {
+            "model": "cosmiccore:block/mv_ember_emitter",
+            "x": 90,
+            "y": 90
+        },
+        "back=false,facing=east,front=true,left=false,right=true,waterlogged=true": {
+            "model": "cosmiccore:block/mv_ember_emitter",
+            "x": 90,
+            "y": 90
+        },
+        "back=false,facing=east,front=true,left=true,right=false,waterlogged=false": {
+            "model": "cosmiccore:block/mv_ember_emitter",
+            "x": 90,
+            "y": 90
+        },
+        "back=false,facing=east,front=true,left=true,right=false,waterlogged=true": {
+            "model": "cosmiccore:block/mv_ember_emitter",
+            "x": 90,
+            "y": 90
+        },
+        "back=false,facing=east,front=true,left=true,right=true,waterlogged=false": {
+            "model": "cosmiccore:block/mv_ember_emitter",
+            "x": 90,
+            "y": 90
+        },
+        "back=false,facing=east,front=true,left=true,right=true,waterlogged=true": {
+            "model": "cosmiccore:block/mv_ember_emitter",
+            "x": 90,
+            "y": 90
+        },
+        "back=false,facing=north,front=false,left=false,right=false,waterlogged=false": {
+            "model": "cosmiccore:block/mv_ember_emitter",
+            "x": 90
+        },
+        "back=false,facing=north,front=false,left=false,right=false,waterlogged=true": {
+            "model": "cosmiccore:block/mv_ember_emitter",
+            "x": 90
+        },
+        "back=false,facing=north,front=false,left=false,right=true,waterlogged=false": {
+            "model": "cosmiccore:block/mv_ember_emitter",
+            "x": 90
+        },
+        "back=false,facing=north,front=false,left=false,right=true,waterlogged=true": {
+            "model": "cosmiccore:block/mv_ember_emitter",
+            "x": 90
+        },
+        "back=false,facing=north,front=false,left=true,right=false,waterlogged=false": {
+            "model": "cosmiccore:block/mv_ember_emitter",
+            "x": 90
+        },
+        "back=false,facing=north,front=false,left=true,right=false,waterlogged=true": {
+            "model": "cosmiccore:block/mv_ember_emitter",
+            "x": 90
+        },
+        "back=false,facing=north,front=false,left=true,right=true,waterlogged=false": {
+            "model": "cosmiccore:block/mv_ember_emitter",
+            "x": 90
+        },
+        "back=false,facing=north,front=false,left=true,right=true,waterlogged=true": {
+            "model": "cosmiccore:block/mv_ember_emitter",
+            "x": 90
+        },
+        "back=false,facing=north,front=true,left=false,right=false,waterlogged=false": {
+            "model": "cosmiccore:block/mv_ember_emitter",
+            "x": 90
+        },
+        "back=false,facing=north,front=true,left=false,right=false,waterlogged=true": {
+            "model": "cosmiccore:block/mv_ember_emitter",
+            "x": 90
+        },
+        "back=false,facing=north,front=true,left=false,right=true,waterlogged=false": {
+            "model": "cosmiccore:block/mv_ember_emitter",
+            "x": 90
+        },
+        "back=false,facing=north,front=true,left=false,right=true,waterlogged=true": {
+            "model": "cosmiccore:block/mv_ember_emitter",
+            "x": 90
+        },
+        "back=false,facing=north,front=true,left=true,right=false,waterlogged=false": {
+            "model": "cosmiccore:block/mv_ember_emitter",
+            "x": 90
+        },
+        "back=false,facing=north,front=true,left=true,right=false,waterlogged=true": {
+            "model": "cosmiccore:block/mv_ember_emitter",
+            "x": 90
+        },
+        "back=false,facing=north,front=true,left=true,right=true,waterlogged=false": {
+            "model": "cosmiccore:block/mv_ember_emitter",
+            "x": 90
+        },
+        "back=false,facing=north,front=true,left=true,right=true,waterlogged=true": {
+            "model": "cosmiccore:block/mv_ember_emitter",
+            "x": 90
+        },
+        "back=false,facing=south,front=false,left=false,right=false,waterlogged=false": {
+            "model": "cosmiccore:block/mv_ember_emitter",
+            "x": 90,
+            "y": 180
+        },
+        "back=false,facing=south,front=false,left=false,right=false,waterlogged=true": {
+            "model": "cosmiccore:block/mv_ember_emitter",
+            "x": 90,
+            "y": 180
+        },
+        "back=false,facing=south,front=false,left=false,right=true,waterlogged=false": {
+            "model": "cosmiccore:block/mv_ember_emitter",
+            "x": 90,
+            "y": 180
+        },
+        "back=false,facing=south,front=false,left=false,right=true,waterlogged=true": {
+            "model": "cosmiccore:block/mv_ember_emitter",
+            "x": 90,
+            "y": 180
+        },
+        "back=false,facing=south,front=false,left=true,right=false,waterlogged=false": {
+            "model": "cosmiccore:block/mv_ember_emitter",
+            "x": 90,
+            "y": 180
+        },
+        "back=false,facing=south,front=false,left=true,right=false,waterlogged=true": {
+            "model": "cosmiccore:block/mv_ember_emitter",
+            "x": 90,
+            "y": 180
+        },
+        "back=false,facing=south,front=false,left=true,right=true,waterlogged=false": {
+            "model": "cosmiccore:block/mv_ember_emitter",
+            "x": 90,
+            "y": 180
+        },
+        "back=false,facing=south,front=false,left=true,right=true,waterlogged=true": {
+            "model": "cosmiccore:block/mv_ember_emitter",
+            "x": 90,
+            "y": 180
+        },
+        "back=false,facing=south,front=true,left=false,right=false,waterlogged=false": {
+            "model": "cosmiccore:block/mv_ember_emitter",
+            "x": 90,
+            "y": 180
+        },
+        "back=false,facing=south,front=true,left=false,right=false,waterlogged=true": {
+            "model": "cosmiccore:block/mv_ember_emitter",
+            "x": 90,
+            "y": 180
+        },
+        "back=false,facing=south,front=true,left=false,right=true,waterlogged=false": {
+            "model": "cosmiccore:block/mv_ember_emitter",
+            "x": 90,
+            "y": 180
+        },
+        "back=false,facing=south,front=true,left=false,right=true,waterlogged=true": {
+            "model": "cosmiccore:block/mv_ember_emitter",
+            "x": 90,
+            "y": 180
+        },
+        "back=false,facing=south,front=true,left=true,right=false,waterlogged=false": {
+            "model": "cosmiccore:block/mv_ember_emitter",
+            "x": 90,
+            "y": 180
+        },
+        "back=false,facing=south,front=true,left=true,right=false,waterlogged=true": {
+            "model": "cosmiccore:block/mv_ember_emitter",
+            "x": 90,
+            "y": 180
+        },
+        "back=false,facing=south,front=true,left=true,right=true,waterlogged=false": {
+            "model": "cosmiccore:block/mv_ember_emitter",
+            "x": 90,
+            "y": 180
+        },
+        "back=false,facing=south,front=true,left=true,right=true,waterlogged=true": {
+            "model": "cosmiccore:block/mv_ember_emitter",
+            "x": 90,
+            "y": 180
+        },
+        "back=false,facing=up,front=false,left=false,right=false,waterlogged=false": {
+            "model": "cosmiccore:block/mv_ember_emitter"
+        },
+        "back=false,facing=up,front=false,left=false,right=false,waterlogged=true": {
+            "model": "cosmiccore:block/mv_ember_emitter"
+        },
+        "back=false,facing=up,front=false,left=false,right=true,waterlogged=false": {
+            "model": "cosmiccore:block/mv_ember_emitter"
+        },
+        "back=false,facing=up,front=false,left=false,right=true,waterlogged=true": {
+            "model": "cosmiccore:block/mv_ember_emitter"
+        },
+        "back=false,facing=up,front=false,left=true,right=false,waterlogged=false": {
+            "model": "cosmiccore:block/mv_ember_emitter"
+        },
+        "back=false,facing=up,front=false,left=true,right=false,waterlogged=true": {
+            "model": "cosmiccore:block/mv_ember_emitter"
+        },
+        "back=false,facing=up,front=false,left=true,right=true,waterlogged=false": {
+            "model": "cosmiccore:block/mv_ember_emitter"
+        },
+        "back=false,facing=up,front=false,left=true,right=true,waterlogged=true": {
+            "model": "cosmiccore:block/mv_ember_emitter"
+        },
+        "back=false,facing=up,front=true,left=false,right=false,waterlogged=false": {
+            "model": "cosmiccore:block/mv_ember_emitter"
+        },
+        "back=false,facing=up,front=true,left=false,right=false,waterlogged=true": {
+            "model": "cosmiccore:block/mv_ember_emitter"
+        },
+        "back=false,facing=up,front=true,left=false,right=true,waterlogged=false": {
+            "model": "cosmiccore:block/mv_ember_emitter"
+        },
+        "back=false,facing=up,front=true,left=false,right=true,waterlogged=true": {
+            "model": "cosmiccore:block/mv_ember_emitter"
+        },
+        "back=false,facing=up,front=true,left=true,right=false,waterlogged=false": {
+            "model": "cosmiccore:block/mv_ember_emitter"
+        },
+        "back=false,facing=up,front=true,left=true,right=false,waterlogged=true": {
+            "model": "cosmiccore:block/mv_ember_emitter"
+        },
+        "back=false,facing=up,front=true,left=true,right=true,waterlogged=false": {
+            "model": "cosmiccore:block/mv_ember_emitter"
+        },
+        "back=false,facing=up,front=true,left=true,right=true,waterlogged=true": {
+            "model": "cosmiccore:block/mv_ember_emitter"
+        },
+        "back=false,facing=west,front=false,left=false,right=false,waterlogged=false": {
+            "model": "cosmiccore:block/mv_ember_emitter",
+            "x": 90,
+            "y": 270
+        },
+        "back=false,facing=west,front=false,left=false,right=false,waterlogged=true": {
+            "model": "cosmiccore:block/mv_ember_emitter",
+            "x": 90,
+            "y": 270
+        },
+        "back=false,facing=west,front=false,left=false,right=true,waterlogged=false": {
+            "model": "cosmiccore:block/mv_ember_emitter",
+            "x": 90,
+            "y": 270
+        },
+        "back=false,facing=west,front=false,left=false,right=true,waterlogged=true": {
+            "model": "cosmiccore:block/mv_ember_emitter",
+            "x": 90,
+            "y": 270
+        },
+        "back=false,facing=west,front=false,left=true,right=false,waterlogged=false": {
+            "model": "cosmiccore:block/mv_ember_emitter",
+            "x": 90,
+            "y": 270
+        },
+        "back=false,facing=west,front=false,left=true,right=false,waterlogged=true": {
+            "model": "cosmiccore:block/mv_ember_emitter",
+            "x": 90,
+            "y": 270
+        },
+        "back=false,facing=west,front=false,left=true,right=true,waterlogged=false": {
+            "model": "cosmiccore:block/mv_ember_emitter",
+            "x": 90,
+            "y": 270
+        },
+        "back=false,facing=west,front=false,left=true,right=true,waterlogged=true": {
+            "model": "cosmiccore:block/mv_ember_emitter",
+            "x": 90,
+            "y": 270
+        },
+        "back=false,facing=west,front=true,left=false,right=false,waterlogged=false": {
+            "model": "cosmiccore:block/mv_ember_emitter",
+            "x": 90,
+            "y": 270
+        },
+        "back=false,facing=west,front=true,left=false,right=false,waterlogged=true": {
+            "model": "cosmiccore:block/mv_ember_emitter",
+            "x": 90,
+            "y": 270
+        },
+        "back=false,facing=west,front=true,left=false,right=true,waterlogged=false": {
+            "model": "cosmiccore:block/mv_ember_emitter",
+            "x": 90,
+            "y": 270
+        },
+        "back=false,facing=west,front=true,left=false,right=true,waterlogged=true": {
+            "model": "cosmiccore:block/mv_ember_emitter",
+            "x": 90,
+            "y": 270
+        },
+        "back=false,facing=west,front=true,left=true,right=false,waterlogged=false": {
+            "model": "cosmiccore:block/mv_ember_emitter",
+            "x": 90,
+            "y": 270
+        },
+        "back=false,facing=west,front=true,left=true,right=false,waterlogged=true": {
+            "model": "cosmiccore:block/mv_ember_emitter",
+            "x": 90,
+            "y": 270
+        },
+        "back=false,facing=west,front=true,left=true,right=true,waterlogged=false": {
+            "model": "cosmiccore:block/mv_ember_emitter",
+            "x": 90,
+            "y": 270
+        },
+        "back=false,facing=west,front=true,left=true,right=true,waterlogged=true": {
+            "model": "cosmiccore:block/mv_ember_emitter",
+            "x": 90,
+            "y": 270
+        },
+        "back=true,facing=down,front=false,left=false,right=false,waterlogged=false": {
+            "model": "cosmiccore:block/mv_ember_emitter",
+            "x": 180
+        },
+        "back=true,facing=down,front=false,left=false,right=false,waterlogged=true": {
+            "model": "cosmiccore:block/mv_ember_emitter",
+            "x": 180
+        },
+        "back=true,facing=down,front=false,left=false,right=true,waterlogged=false": {
+            "model": "cosmiccore:block/mv_ember_emitter",
+            "x": 180
+        },
+        "back=true,facing=down,front=false,left=false,right=true,waterlogged=true": {
+            "model": "cosmiccore:block/mv_ember_emitter",
+            "x": 180
+        },
+        "back=true,facing=down,front=false,left=true,right=false,waterlogged=false": {
+            "model": "cosmiccore:block/mv_ember_emitter",
+            "x": 180
+        },
+        "back=true,facing=down,front=false,left=true,right=false,waterlogged=true": {
+            "model": "cosmiccore:block/mv_ember_emitter",
+            "x": 180
+        },
+        "back=true,facing=down,front=false,left=true,right=true,waterlogged=false": {
+            "model": "cosmiccore:block/mv_ember_emitter",
+            "x": 180
+        },
+        "back=true,facing=down,front=false,left=true,right=true,waterlogged=true": {
+            "model": "cosmiccore:block/mv_ember_emitter",
+            "x": 180
+        },
+        "back=true,facing=down,front=true,left=false,right=false,waterlogged=false": {
+            "model": "cosmiccore:block/mv_ember_emitter",
+            "x": 180
+        },
+        "back=true,facing=down,front=true,left=false,right=false,waterlogged=true": {
+            "model": "cosmiccore:block/mv_ember_emitter",
+            "x": 180
+        },
+        "back=true,facing=down,front=true,left=false,right=true,waterlogged=false": {
+            "model": "cosmiccore:block/mv_ember_emitter",
+            "x": 180
+        },
+        "back=true,facing=down,front=true,left=false,right=true,waterlogged=true": {
+            "model": "cosmiccore:block/mv_ember_emitter",
+            "x": 180
+        },
+        "back=true,facing=down,front=true,left=true,right=false,waterlogged=false": {
+            "model": "cosmiccore:block/mv_ember_emitter",
+            "x": 180
+        },
+        "back=true,facing=down,front=true,left=true,right=false,waterlogged=true": {
+            "model": "cosmiccore:block/mv_ember_emitter",
+            "x": 180
+        },
+        "back=true,facing=down,front=true,left=true,right=true,waterlogged=false": {
+            "model": "cosmiccore:block/mv_ember_emitter",
+            "x": 180
+        },
+        "back=true,facing=down,front=true,left=true,right=true,waterlogged=true": {
+            "model": "cosmiccore:block/mv_ember_emitter",
+            "x": 180
+        },
+        "back=true,facing=east,front=false,left=false,right=false,waterlogged=false": {
+            "model": "cosmiccore:block/mv_ember_emitter",
+            "x": 90,
+            "y": 90
+        },
+        "back=true,facing=east,front=false,left=false,right=false,waterlogged=true": {
+            "model": "cosmiccore:block/mv_ember_emitter",
+            "x": 90,
+            "y": 90
+        },
+        "back=true,facing=east,front=false,left=false,right=true,waterlogged=false": {
+            "model": "cosmiccore:block/mv_ember_emitter",
+            "x": 90,
+            "y": 90
+        },
+        "back=true,facing=east,front=false,left=false,right=true,waterlogged=true": {
+            "model": "cosmiccore:block/mv_ember_emitter",
+            "x": 90,
+            "y": 90
+        },
+        "back=true,facing=east,front=false,left=true,right=false,waterlogged=false": {
+            "model": "cosmiccore:block/mv_ember_emitter",
+            "x": 90,
+            "y": 90
+        },
+        "back=true,facing=east,front=false,left=true,right=false,waterlogged=true": {
+            "model": "cosmiccore:block/mv_ember_emitter",
+            "x": 90,
+            "y": 90
+        },
+        "back=true,facing=east,front=false,left=true,right=true,waterlogged=false": {
+            "model": "cosmiccore:block/mv_ember_emitter",
+            "x": 90,
+            "y": 90
+        },
+        "back=true,facing=east,front=false,left=true,right=true,waterlogged=true": {
+            "model": "cosmiccore:block/mv_ember_emitter",
+            "x": 90,
+            "y": 90
+        },
+        "back=true,facing=east,front=true,left=false,right=false,waterlogged=false": {
+            "model": "cosmiccore:block/mv_ember_emitter",
+            "x": 90,
+            "y": 90
+        },
+        "back=true,facing=east,front=true,left=false,right=false,waterlogged=true": {
+            "model": "cosmiccore:block/mv_ember_emitter",
+            "x": 90,
+            "y": 90
+        },
+        "back=true,facing=east,front=true,left=false,right=true,waterlogged=false": {
+            "model": "cosmiccore:block/mv_ember_emitter",
+            "x": 90,
+            "y": 90
+        },
+        "back=true,facing=east,front=true,left=false,right=true,waterlogged=true": {
+            "model": "cosmiccore:block/mv_ember_emitter",
+            "x": 90,
+            "y": 90
+        },
+        "back=true,facing=east,front=true,left=true,right=false,waterlogged=false": {
+            "model": "cosmiccore:block/mv_ember_emitter",
+            "x": 90,
+            "y": 90
+        },
+        "back=true,facing=east,front=true,left=true,right=false,waterlogged=true": {
+            "model": "cosmiccore:block/mv_ember_emitter",
+            "x": 90,
+            "y": 90
+        },
+        "back=true,facing=east,front=true,left=true,right=true,waterlogged=false": {
+            "model": "cosmiccore:block/mv_ember_emitter",
+            "x": 90,
+            "y": 90
+        },
+        "back=true,facing=east,front=true,left=true,right=true,waterlogged=true": {
+            "model": "cosmiccore:block/mv_ember_emitter",
+            "x": 90,
+            "y": 90
+        },
+        "back=true,facing=north,front=false,left=false,right=false,waterlogged=false": {
+            "model": "cosmiccore:block/mv_ember_emitter",
+            "x": 90
+        },
+        "back=true,facing=north,front=false,left=false,right=false,waterlogged=true": {
+            "model": "cosmiccore:block/mv_ember_emitter",
+            "x": 90
+        },
+        "back=true,facing=north,front=false,left=false,right=true,waterlogged=false": {
+            "model": "cosmiccore:block/mv_ember_emitter",
+            "x": 90
+        },
+        "back=true,facing=north,front=false,left=false,right=true,waterlogged=true": {
+            "model": "cosmiccore:block/mv_ember_emitter",
+            "x": 90
+        },
+        "back=true,facing=north,front=false,left=true,right=false,waterlogged=false": {
+            "model": "cosmiccore:block/mv_ember_emitter",
+            "x": 90
+        },
+        "back=true,facing=north,front=false,left=true,right=false,waterlogged=true": {
+            "model": "cosmiccore:block/mv_ember_emitter",
+            "x": 90
+        },
+        "back=true,facing=north,front=false,left=true,right=true,waterlogged=false": {
+            "model": "cosmiccore:block/mv_ember_emitter",
+            "x": 90
+        },
+        "back=true,facing=north,front=false,left=true,right=true,waterlogged=true": {
+            "model": "cosmiccore:block/mv_ember_emitter",
+            "x": 90
+        },
+        "back=true,facing=north,front=true,left=false,right=false,waterlogged=false": {
+            "model": "cosmiccore:block/mv_ember_emitter",
+            "x": 90
+        },
+        "back=true,facing=north,front=true,left=false,right=false,waterlogged=true": {
+            "model": "cosmiccore:block/mv_ember_emitter",
+            "x": 90
+        },
+        "back=true,facing=north,front=true,left=false,right=true,waterlogged=false": {
+            "model": "cosmiccore:block/mv_ember_emitter",
+            "x": 90
+        },
+        "back=true,facing=north,front=true,left=false,right=true,waterlogged=true": {
+            "model": "cosmiccore:block/mv_ember_emitter",
+            "x": 90
+        },
+        "back=true,facing=north,front=true,left=true,right=false,waterlogged=false": {
+            "model": "cosmiccore:block/mv_ember_emitter",
+            "x": 90
+        },
+        "back=true,facing=north,front=true,left=true,right=false,waterlogged=true": {
+            "model": "cosmiccore:block/mv_ember_emitter",
+            "x": 90
+        },
+        "back=true,facing=north,front=true,left=true,right=true,waterlogged=false": {
+            "model": "cosmiccore:block/mv_ember_emitter",
+            "x": 90
+        },
+        "back=true,facing=north,front=true,left=true,right=true,waterlogged=true": {
+            "model": "cosmiccore:block/mv_ember_emitter",
+            "x": 90
+        },
+        "back=true,facing=south,front=false,left=false,right=false,waterlogged=false": {
+            "model": "cosmiccore:block/mv_ember_emitter",
+            "x": 90,
+            "y": 180
+        },
+        "back=true,facing=south,front=false,left=false,right=false,waterlogged=true": {
+            "model": "cosmiccore:block/mv_ember_emitter",
+            "x": 90,
+            "y": 180
+        },
+        "back=true,facing=south,front=false,left=false,right=true,waterlogged=false": {
+            "model": "cosmiccore:block/mv_ember_emitter",
+            "x": 90,
+            "y": 180
+        },
+        "back=true,facing=south,front=false,left=false,right=true,waterlogged=true": {
+            "model": "cosmiccore:block/mv_ember_emitter",
+            "x": 90,
+            "y": 180
+        },
+        "back=true,facing=south,front=false,left=true,right=false,waterlogged=false": {
+            "model": "cosmiccore:block/mv_ember_emitter",
+            "x": 90,
+            "y": 180
+        },
+        "back=true,facing=south,front=false,left=true,right=false,waterlogged=true": {
+            "model": "cosmiccore:block/mv_ember_emitter",
+            "x": 90,
+            "y": 180
+        },
+        "back=true,facing=south,front=false,left=true,right=true,waterlogged=false": {
+            "model": "cosmiccore:block/mv_ember_emitter",
+            "x": 90,
+            "y": 180
+        },
+        "back=true,facing=south,front=false,left=true,right=true,waterlogged=true": {
+            "model": "cosmiccore:block/mv_ember_emitter",
+            "x": 90,
+            "y": 180
+        },
+        "back=true,facing=south,front=true,left=false,right=false,waterlogged=false": {
+            "model": "cosmiccore:block/mv_ember_emitter",
+            "x": 90,
+            "y": 180
+        },
+        "back=true,facing=south,front=true,left=false,right=false,waterlogged=true": {
+            "model": "cosmiccore:block/mv_ember_emitter",
+            "x": 90,
+            "y": 180
+        },
+        "back=true,facing=south,front=true,left=false,right=true,waterlogged=false": {
+            "model": "cosmiccore:block/mv_ember_emitter",
+            "x": 90,
+            "y": 180
+        },
+        "back=true,facing=south,front=true,left=false,right=true,waterlogged=true": {
+            "model": "cosmiccore:block/mv_ember_emitter",
+            "x": 90,
+            "y": 180
+        },
+        "back=true,facing=south,front=true,left=true,right=false,waterlogged=false": {
+            "model": "cosmiccore:block/mv_ember_emitter",
+            "x": 90,
+            "y": 180
+        },
+        "back=true,facing=south,front=true,left=true,right=false,waterlogged=true": {
+            "model": "cosmiccore:block/mv_ember_emitter",
+            "x": 90,
+            "y": 180
+        },
+        "back=true,facing=south,front=true,left=true,right=true,waterlogged=false": {
+            "model": "cosmiccore:block/mv_ember_emitter",
+            "x": 90,
+            "y": 180
+        },
+        "back=true,facing=south,front=true,left=true,right=true,waterlogged=true": {
+            "model": "cosmiccore:block/mv_ember_emitter",
+            "x": 90,
+            "y": 180
+        },
+        "back=true,facing=up,front=false,left=false,right=false,waterlogged=false": {
+            "model": "cosmiccore:block/mv_ember_emitter"
+        },
+        "back=true,facing=up,front=false,left=false,right=false,waterlogged=true": {
+            "model": "cosmiccore:block/mv_ember_emitter"
+        },
+        "back=true,facing=up,front=false,left=false,right=true,waterlogged=false": {
+            "model": "cosmiccore:block/mv_ember_emitter"
+        },
+        "back=true,facing=up,front=false,left=false,right=true,waterlogged=true": {
+            "model": "cosmiccore:block/mv_ember_emitter"
+        },
+        "back=true,facing=up,front=false,left=true,right=false,waterlogged=false": {
+            "model": "cosmiccore:block/mv_ember_emitter"
+        },
+        "back=true,facing=up,front=false,left=true,right=false,waterlogged=true": {
+            "model": "cosmiccore:block/mv_ember_emitter"
+        },
+        "back=true,facing=up,front=false,left=true,right=true,waterlogged=false": {
+            "model": "cosmiccore:block/mv_ember_emitter"
+        },
+        "back=true,facing=up,front=false,left=true,right=true,waterlogged=true": {
+            "model": "cosmiccore:block/mv_ember_emitter"
+        },
+        "back=true,facing=up,front=true,left=false,right=false,waterlogged=false": {
+            "model": "cosmiccore:block/mv_ember_emitter"
+        },
+        "back=true,facing=up,front=true,left=false,right=false,waterlogged=true": {
+            "model": "cosmiccore:block/mv_ember_emitter"
+        },
+        "back=true,facing=up,front=true,left=false,right=true,waterlogged=false": {
+            "model": "cosmiccore:block/mv_ember_emitter"
+        },
+        "back=true,facing=up,front=true,left=false,right=true,waterlogged=true": {
+            "model": "cosmiccore:block/mv_ember_emitter"
+        },
+        "back=true,facing=up,front=true,left=true,right=false,waterlogged=false": {
+            "model": "cosmiccore:block/mv_ember_emitter"
+        },
+        "back=true,facing=up,front=true,left=true,right=false,waterlogged=true": {
+            "model": "cosmiccore:block/mv_ember_emitter"
+        },
+        "back=true,facing=up,front=true,left=true,right=true,waterlogged=false": {
+            "model": "cosmiccore:block/mv_ember_emitter"
+        },
+        "back=true,facing=up,front=true,left=true,right=true,waterlogged=true": {
+            "model": "cosmiccore:block/mv_ember_emitter"
+        },
+        "back=true,facing=west,front=false,left=false,right=false,waterlogged=false": {
+            "model": "cosmiccore:block/mv_ember_emitter",
+            "x": 90,
+            "y": 270
+        },
+        "back=true,facing=west,front=false,left=false,right=false,waterlogged=true": {
+            "model": "cosmiccore:block/mv_ember_emitter",
+            "x": 90,
+            "y": 270
+        },
+        "back=true,facing=west,front=false,left=false,right=true,waterlogged=false": {
+            "model": "cosmiccore:block/mv_ember_emitter",
+            "x": 90,
+            "y": 270
+        },
+        "back=true,facing=west,front=false,left=false,right=true,waterlogged=true": {
+            "model": "cosmiccore:block/mv_ember_emitter",
+            "x": 90,
+            "y": 270
+        },
+        "back=true,facing=west,front=false,left=true,right=false,waterlogged=false": {
+            "model": "cosmiccore:block/mv_ember_emitter",
+            "x": 90,
+            "y": 270
+        },
+        "back=true,facing=west,front=false,left=true,right=false,waterlogged=true": {
+            "model": "cosmiccore:block/mv_ember_emitter",
+            "x": 90,
+            "y": 270
+        },
+        "back=true,facing=west,front=false,left=true,right=true,waterlogged=false": {
+            "model": "cosmiccore:block/mv_ember_emitter",
+            "x": 90,
+            "y": 270
+        },
+        "back=true,facing=west,front=false,left=true,right=true,waterlogged=true": {
+            "model": "cosmiccore:block/mv_ember_emitter",
+            "x": 90,
+            "y": 270
+        },
+        "back=true,facing=west,front=true,left=false,right=false,waterlogged=false": {
+            "model": "cosmiccore:block/mv_ember_emitter",
+            "x": 90,
+            "y": 270
+        },
+        "back=true,facing=west,front=true,left=false,right=false,waterlogged=true": {
+            "model": "cosmiccore:block/mv_ember_emitter",
+            "x": 90,
+            "y": 270
+        },
+        "back=true,facing=west,front=true,left=false,right=true,waterlogged=false": {
+            "model": "cosmiccore:block/mv_ember_emitter",
+            "x": 90,
+            "y": 270
+        },
+        "back=true,facing=west,front=true,left=false,right=true,waterlogged=true": {
+            "model": "cosmiccore:block/mv_ember_emitter",
+            "x": 90,
+            "y": 270
+        },
+        "back=true,facing=west,front=true,left=true,right=false,waterlogged=false": {
+            "model": "cosmiccore:block/mv_ember_emitter",
+            "x": 90,
+            "y": 270
+        },
+        "back=true,facing=west,front=true,left=true,right=false,waterlogged=true": {
+            "model": "cosmiccore:block/mv_ember_emitter",
+            "x": 90,
+            "y": 270
+        },
+        "back=true,facing=west,front=true,left=true,right=true,waterlogged=false": {
+            "model": "cosmiccore:block/mv_ember_emitter",
+            "x": 90,
+            "y": 270
+        },
+        "back=true,facing=west,front=true,left=true,right=true,waterlogged=true": {
+            "model": "cosmiccore:block/mv_ember_emitter",
+            "x": 90,
+            "y": 270
+        }
+    }
+}

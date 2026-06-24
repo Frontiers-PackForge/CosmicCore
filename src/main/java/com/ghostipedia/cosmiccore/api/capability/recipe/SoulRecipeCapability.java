@@ -9,16 +9,10 @@ import com.gregtechceu.gtceu.api.capability.recipe.IO;
 import com.gregtechceu.gtceu.api.capability.recipe.IRecipeCapabilityHolder;
 import com.gregtechceu.gtceu.api.capability.recipe.RecipeCapability;
 import com.gregtechceu.gtceu.api.recipe.GTRecipe;
-import com.gregtechceu.gtceu.api.recipe.content.Content;
 import com.gregtechceu.gtceu.api.recipe.content.ContentModifier;
 import com.gregtechceu.gtceu.api.recipe.content.IContentSerializer;
 
-import com.lowdragmc.lowdraglib.gui.widget.LabelWidget;
-import com.lowdragmc.lowdraglib.gui.widget.WidgetGroup;
-import com.lowdragmc.lowdraglib.utils.LocalizationUtils;
-
 import com.mojang.serialization.Codec;
-import org.apache.commons.lang3.mutable.MutableInt;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -109,7 +103,7 @@ public class SoulRecipeCapability extends RecipeCapability<SoulIngredient> {
         var totalInputs = getInputContents(holder);
 
         var parallelMap = inputs.stream()
-                .map(content -> (SoulIngredient) content.getContent())
+                .map(content -> (SoulIngredient) content.content())
                 .collect(Collectors.toMap(
                         ingredient -> ingredient.stack().type(),
                         ingredient -> {
@@ -127,22 +121,9 @@ public class SoulRecipeCapability extends RecipeCapability<SoulIngredient> {
         return Math.min(limit, maxParallel);
     }
 
-    @Override
-    public void addXEIInfo(WidgetGroup group, int xOffset, GTRecipe recipe, List<Content> contents, boolean perTick,
-                           boolean isInput, MutableInt yOffset) {
-        String type = contents.stream().map(Content::getContent).map(SoulRecipeCapability.CAP::of)
-                .map(SoulIngredient::stack).map(SoulStack::type).map(SoulType::getSerializedName).findFirst()
-                .orElse("");
-        long soul = contents.stream().map(Content::getContent).map(SoulRecipeCapability.CAP::of)
-                .map(SoulIngredient::stack).mapToLong(SoulStack::amount).sum();
-        if (isInput) {
-            group.addWidget(new LabelWidget(3 - xOffset, yOffset.addAndGet(10),
-                    LocalizationUtils.format("recipe.cosmiccore." + type + "_soul_in", soul)));
-        } else {
-            group.addWidget(new LabelWidget(3 - xOffset, yOffset.addAndGet(10),
-                    LocalizationUtils.format("recipe.cosmiccore." + type + "_soul_out", soul)));
-        }
-    }
+    // TODO(8.0.0): re-add XEI display via the new XEI category API.
+    // RecipeCapability#addXEIInfo was removed in 8.0.0; the original LDLib LabelWidget rendering
+    // (<type>_soul_in / <type>_soul_out) lived here and needs reimplementing against the new XEI category hook.
 
     private static class SerializerSoulIngredient implements IContentSerializer<SoulIngredient> {
 

@@ -8,8 +8,6 @@ import com.gregtechceu.gtceu.api.GTValues;
 import com.gregtechceu.gtceu.api.blockentity.BlockEntityCreationInfo;
 import com.gregtechceu.gtceu.api.capability.IControllable;
 import com.gregtechceu.gtceu.api.capability.recipe.IO;
-import com.gregtechceu.gtceu.api.gui.GuiTextures;
-import com.gregtechceu.gtceu.api.gui.fancy.FancyMachineUIWidget;
 import com.gregtechceu.gtceu.api.machine.TickableSubscription;
 import com.gregtechceu.gtceu.api.machine.multiblock.MultiblockControllerMachine;
 import com.gregtechceu.gtceu.api.machine.multiblock.WorkableElectricMultiblockMachine;
@@ -19,21 +17,11 @@ import com.gregtechceu.gtceu.api.recipe.RecipeHelper;
 import com.gregtechceu.gtceu.data.recipe.builder.GTRecipeBuilder;
 import com.gregtechceu.gtceu.utils.ExtendedUseOnContext;
 
-import com.lowdragmc.lowdraglib.gui.modular.ModularUI;
-import com.lowdragmc.lowdraglib.gui.texture.GuiTextureGroup;
-import com.lowdragmc.lowdraglib.gui.texture.TextTexture;
-import com.lowdragmc.lowdraglib.gui.widget.*;
-
-import net.minecraft.ChatFormatting;
-import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.Style;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.InteractionResult;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 
 import com.google.common.collect.HashMultimap;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -90,13 +78,13 @@ public class DroneStationMachine extends WorkableElectricMultiblockMachine {
         }
     }
 
-    public DroneStationMachine(BlockEntityCreationInfo holder) {
-        super(holder);
+    public DroneStationMachine(BlockEntityCreationInfo info) {
+        super(info);
     }
 
     @Override
-    public void onStructureFormed() {
-        super.onStructureFormed();
+    public void formStructure(@org.jetbrains.annotations.NotNull String substructureName) {
+        super.formStructure(substructureName);
         if (!isRemote()) {
             droneStations.put(this.getLevel().dimension().location(), this);
             tickSubscription = this.subscribeServerTick(this::updateDroneHatches);
@@ -104,9 +92,9 @@ public class DroneStationMachine extends WorkableElectricMultiblockMachine {
     }
 
     @Override
-    public void onStructureInvalid() {
+    public void invalidateStructure(String name) {
         setWorkingEnabled(false);
-        super.onStructureInvalid();
+        super.invalidateStructure(name);
         if (!isRemote()) {
             droneStations.remove(this.getLevel().dimension().location(), this);
             tickSubscription.unsubscribe();
@@ -211,23 +199,13 @@ public class DroneStationMachine extends WorkableElectricMultiblockMachine {
         super.setWorkingEnabled(isWorkingAllowed);
     }
 
-    @Override
-    public void addDisplayText(List<Component> textList) {
-        super.addDisplayText(textList);
-        if (!this.connections.isEmpty()) {
-            textList.add(Component
-                    .translatable("cosmiccore.multiblock.drone_station_machine.drone_amount", this.connections.size())
-                    .setStyle(Style.EMPTY.withColor(ChatFormatting.GREEN)));
-        } else {
-            textList.add(Component
-                    .translatable("cosmiccore.multiblock.drone_station_machine.no_drones")
-                    .setStyle(Style.EMPTY.withColor(ChatFormatting.RED)));
-
-        }
-    }
+    // TODO(8.0.0 MUI2): custom display text shelved; base default getWidgetsForDisplay UI used for now (original
+    // drone-count display text + reboot/sleep power-grid buttons in git history).
 
     // EXAMPLE CODE, REMOVE LATER MAYBE?
     // Or keep in, in which case, this should be a feature and remove this comment :eugeneThumbsUpCool:
+    // 8.0.0: MetaMachine.onScrewdriverClick now takes a single ExtendedUseOnContext instead of
+    // (Player, InteractionHand, Direction, BlockHitResult).
     @Override
     protected InteractionResult onScrewdriverClick(ExtendedUseOnContext context) {
         int i = 0;
@@ -318,40 +296,4 @@ public class DroneStationMachine extends WorkableElectricMultiblockMachine {
     }
 
     // TODO: Add functions for UI to disable/enable/read status/etc machines remotely
-
-    @Override
-    public @NotNull Widget createUIWidget() {
-        var group = new WidgetGroup(0, 0, 182 + 8, 117 + 8);
-        group.addWidget(new DraggableScrollableWidgetGroup(4, 4, 182, 117).setBackground(getScreenTexture())
-                .addWidget(new LabelWidget(4, 5, self().getBlockState().getBlock().getDescriptionId()))
-                .addWidget(new ComponentPanelWidget(4, 17, this::addDisplayText)
-                        .textSupplier(this.getLevel().isClientSide ? null : this::addDisplayText)
-                        .setMaxWidthLimit(150)
-                        .clickHandler(this::handleDisplayClick)));
-        group.setBackground(GuiTextures.BACKGROUND_INVERSE);
-        group.addWidget(new ButtonWidget(
-                6,
-                80,
-                178,
-                20,
-                new GuiTextureGroup(
-                        GuiTextures.BUTTON,
-                        new TextTexture("cosmiccore.multiblock.reboot_powergrid")),
-                clickData -> turnAllMachinesOn()));
-        group.addWidget(new ButtonWidget(
-                6,
-                100,
-                178,
-                20,
-                new GuiTextureGroup(
-                        GuiTextures.BUTTON,
-                        new TextTexture("cosmiccore.multiblock.sleep_powergrid")),
-                clickData -> turnAllMachinesOff()));
-        return group;
-    }
-
-    @Override
-    public ModularUI createUI(Player entityPlayer) {
-        return new ModularUI(198, 208, this, entityPlayer).widget(new FancyMachineUIWidget(this, 198, 208));
-    }
 }

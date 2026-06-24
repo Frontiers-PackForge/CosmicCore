@@ -12,7 +12,8 @@ import net.neoforged.neoforge.fluids.crafting.SizedFluidIngredient;
 public class NotifiableSterileTank extends NotifiableFluidTank {
 
     public NotifiableSterileTank(MetaMachine machine, int slots, int capacity, IO io, IO capabilityIO) {
-        super(machine, slots, capacity, io, capabilityIO);
+        super(slots, capacity, io, capabilityIO);
+        machine.attachTrait(this);
     }
 
     @Override

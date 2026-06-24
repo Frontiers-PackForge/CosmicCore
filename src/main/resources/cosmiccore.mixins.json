@@ -8,9 +8,7 @@
   "client": [
     "StarKillerMixin",
     "quake.QuakeMovementMixin",
-    "accessor.MBPatternAccessor",
     "client.MinecraftMixin",
-    "client.PatternPreviewWidgetMixin",
     "client.SoundManagerMixin",
     "emi.EmiFavoritesMixin",
     "emi.EmiScreenManagerMixin",
@@ -22,7 +20,8 @@
     "gtceu.ButtonStateMixin",
     "xaerominimap.CCoreMinimapFBORendererMixin",
     "xaeroworldmap.CCoreMapElementRenderHandlerBuilderMixin",
-    "embers.EmberDialBlockMixin"
+    "embers.EmberDialBlockMixin",
+    "modularui.ModularUIConfigMixin"
   ],
   "mixins": [
     "BlockPatternMixin",

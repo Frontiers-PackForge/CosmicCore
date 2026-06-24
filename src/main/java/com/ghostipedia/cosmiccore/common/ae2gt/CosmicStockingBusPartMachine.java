@@ -1,12 +1,8 @@
 package com.ghostipedia.cosmiccore.common.ae2gt;
 
 import com.gregtechceu.gtceu.api.blockentity.BlockEntityCreationInfo;
-import com.gregtechceu.gtceu.api.gui.fancy.ConfiguratorPanel;
-import com.gregtechceu.gtceu.api.gui.fancy.TabsWidget;
-import com.gregtechceu.gtceu.api.machine.MetaMachine;
-import com.gregtechceu.gtceu.api.machine.fancyconfigurator.AutoStockingFancyConfigurator;
-import com.gregtechceu.gtceu.api.machine.feature.multiblock.IMultiPart;
 import com.gregtechceu.gtceu.api.machine.multiblock.MultiblockControllerMachine;
+import com.gregtechceu.gtceu.api.machine.feature.multiblock.IMultiPart;
 import com.gregtechceu.gtceu.api.machine.trait.NotifiableItemStackHandler;
 import com.gregtechceu.gtceu.config.ConfigHolder;
 import com.gregtechceu.gtceu.integration.ae2.machine.feature.multiblock.IMEStockingPart;
@@ -14,11 +10,11 @@ import com.gregtechceu.gtceu.integration.ae2.slot.ExportOnlyAEItemList;
 import com.gregtechceu.gtceu.integration.ae2.slot.ExportOnlyAEItemSlot;
 import com.gregtechceu.gtceu.integration.ae2.slot.ExportOnlyAESlot;
 import com.gregtechceu.gtceu.integration.ae2.slot.IConfigurableSlotList;
+import com.gregtechceu.gtceu.api.sync_system.annotations.SaveField;
+import com.gregtechceu.gtceu.api.sync_system.annotations.SyncToClient;
 import com.gregtechceu.gtceu.utils.ExtendedUseOnContext;
 
-import com.lowdragmc.lowdraglib.syncdata.annotation.DescSynced;
 import com.lowdragmc.lowdraglib.syncdata.annotation.DropSaved;
-import com.lowdragmc.lowdraglib.syncdata.annotation.Persisted;
 
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
@@ -33,8 +29,6 @@ import appeng.api.stacks.AEKey;
 import appeng.api.stacks.GenericStack;
 import appeng.api.storage.MEStorage;
 import it.unimi.dsi.fastutil.objects.Object2LongMap;
-import lombok.Getter;
-import lombok.Setter;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Comparator;
@@ -43,27 +37,21 @@ import java.util.function.Predicate;
 
 public class CosmicStockingBusPartMachine extends CosmicInputBusPartMachine implements IMEStockingPart {
 
-    @DescSynced
-    @Persisted
-    @Getter
+    @SyncToClient
+    @SaveField
     private boolean autoPull;
 
-    @Getter
-    @Setter
-    @Persisted
+    @SaveField
     @DropSaved
     private int minStackSize = 1;
-    @Getter
-    @Setter
-    @Persisted
+    @SaveField
     @DropSaved
     private int ticksPerCycle = 40;
 
-    @Setter
     private Predicate<GenericStack> autoPullTest;
 
-    public CosmicStockingBusPartMachine(BlockEntityCreationInfo holder) {
-        super(holder);
+    public CosmicStockingBusPartMachine(BlockEntityCreationInfo info) {
+        super(info);
         this.autoPullTest = $ -> false;
     }
 
@@ -101,9 +89,9 @@ public class CosmicStockingBusPartMachine extends CosmicInputBusPartMachine impl
     /////////////////////////////////
 
     @Override
-    public void addedToController(MultiblockControllerMachine controller) {
-        super.addedToController(controller);
-        IMEStockingPart.super.addedToController(controller);
+    public void addedToController(MultiblockControllerMachine controller, String substructureName) {
+        super.addedToController(controller, substructureName);
+        IMEStockingPart.super.addedToController(controller, substructureName);
     }
 
     @Override
@@ -114,10 +102,9 @@ public class CosmicStockingBusPartMachine extends CosmicInputBusPartMachine impl
 
     @Override
     protected NotifiableItemStackHandler createInventory() {
-        this.aeItemHandler = new CosmicStockingBusPartMachine.ExportOnlyAEStockingItemList(this, CONFIG_SIZE);
+        this.aeItemHandler = new CosmicStockingBusPartMachine.ExportOnlyAEStockingItemList(CONFIG_SIZE);
         return this.aeItemHandler;
     }
-
     /////////////////////////////////
     // ********** Sync ME *********//
     /////////////////////////////////
@@ -153,11 +140,6 @@ public class CosmicStockingBusPartMachine extends CosmicInputBusPartMachine impl
             }
             slot.setStock(null);
         }
-    }
-
-    @Override
-    public void attachSideTabs(TabsWidget sideTabs) {
-        sideTabs.setMainTab(this); // removes the cover configurator, it's pointless and clashes with layout.
     }
 
     @Override
@@ -279,17 +261,6 @@ public class CosmicStockingBusPartMachine extends CosmicInputBusPartMachine impl
         aeItemHandler.clearInventory(index);
     }
 
-    ///////////////////////////////
-    // ********** GUI ***********//
-    ///////////////////////////////
-
-    @Override
-    public void attachConfigurators(ConfiguratorPanel configuratorPanel) {
-        IMEStockingPart.super.attachConfigurators(configuratorPanel);
-        // super.attachConfigurators(configuratorPanel);
-        configuratorPanel.attachConfigurators(new AutoStockingFancyConfigurator(this));
-    }
-
     @Override
     protected InteractionResult onScrewdriverClick(ExtendedUseOnContext context) {
         if (!isRemote()) {
@@ -336,8 +307,8 @@ public class CosmicStockingBusPartMachine extends CosmicInputBusPartMachine impl
 
     private class ExportOnlyAEStockingItemList extends ExportOnlyAEItemList {
 
-        public ExportOnlyAEStockingItemList(MetaMachine holder, int slots) {
-            super(holder, slots, CosmicStockingBusPartMachine.ExportOnlyAEStockingItemSlot::new);
+        public ExportOnlyAEStockingItemList(int slots) {
+            super(slots, CosmicStockingBusPartMachine.ExportOnlyAEStockingItemSlot::new);
         }
 
         @Override

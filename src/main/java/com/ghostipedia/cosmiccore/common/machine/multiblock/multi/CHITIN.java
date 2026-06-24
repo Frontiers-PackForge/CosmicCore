@@ -8,13 +8,13 @@ import com.gregtechceu.gtceu.api.data.RotationState;
 import com.gregtechceu.gtceu.api.machine.MultiblockMachineDefinition;
 import com.gregtechceu.gtceu.api.machine.multiblock.PartAbility;
 import com.gregtechceu.gtceu.api.machine.multiblock.WorkableElectricMultiblockMachine;
-import com.gregtechceu.gtceu.api.pattern.FactoryBlockPattern;
+import com.gregtechceu.gtceu.api.multiblock.pattern.MultiblockPatternBuilder;
 import com.gregtechceu.gtceu.api.recipe.OverclockingLogic;
 import com.gregtechceu.gtceu.common.data.GTBlocks;
 import com.gregtechceu.gtceu.common.data.GTRecipeModifiers;
 
 import static com.ghostipedia.cosmiccore.api.registries.CosmicRegistration.REGISTRATE;
-import static com.gregtechceu.gtceu.api.pattern.Predicates.*;
+import static com.gregtechceu.gtceu.api.multiblock.Predicates.*;
 import static com.gregtechceu.gtceu.common.data.GTBlocks.CASING_HSSE_STURDY;
 
 public class CHITIN {
@@ -31,14 +31,14 @@ public class CHITIN {
                     GTRecipeModifiers.ELECTRIC_OVERCLOCK.apply(OverclockingLogic.NON_PERFECT_OVERCLOCK_SUBTICK),
                     GTRecipeModifiers.BATCH_MODE)
             // spotless:off
-            .pattern(definition -> FactoryBlockPattern.start()
-                    .aisle(" AAAAA ", " ABBBA ", " AAAAA ", "  A A  ", "  A A  ", "  A A  ", "  A A  ", "  A A  ", "  A A  ", "       ")
-                    .aisle("ACCCCCA", "ACCCCCA", "ACCCCCA", " CCCCC ", " CCCCC ", " CCCCC ", " CCCCC ", " CCCCC ", " CCCCC ", " CCCCC ")
-                    .aisle("ACCCCCA", "BCCCCCB", "ACCCCCA", "ACCCCCA", "ACCCCCA", "ACCCCCA", "ACCCCCA", "ACCCCCA", "ACCCCCA", " CCCCC ")
-                    .aisle("ACCCCCA", "BCCCCCB", "ACCCCCA", " CCCCC ", " CCCCC ", " CCCCC ", " CCCCC ", " CCCCC ", " CCCCC ", " CCCCC ")
-                    .aisle("ACCCCCA", "BCCCCCB", "ACCCCCA", "ACCCCCA", "ACCCCCA", "ACCCCCA", "ACCCCCA", "ACCCCCA", "ACCCCCA", " CCCCC ")
-                    .aisle("ACCCCCA", "ACCCCCA", "ACCCCCA", " CCCCC ", " CCCCC ", " CCCCC ", " CCCCC ", " CCCCC ", " CCCCC ", " CCCCC ")
-                    .aisle(" AAAAA ", " ABQBA ", " AAAAA ", "  A A  ", "  A A  ", "  A A  ", "  A A  ", "  A A  ", "  A A  ", "       ")
+            .pattern(definition -> MultiblockPatternBuilder.start()
+                    .slice(" AAAAA ", " ABBBA ", " AAAAA ", "  A A  ", "  A A  ", "  A A  ", "  A A  ", "  A A  ", "  A A  ", "       ")
+                    .slice("ACCCCCA", "ACCCCCA", "ACCCCCA", " CCCCC ", " CCCCC ", " CCCCC ", " CCCCC ", " CCCCC ", " CCCCC ", " CCCCC ")
+                    .slice("ACCCCCA", "BCCCCCB", "ACCCCCA", "ACCCCCA", "ACCCCCA", "ACCCCCA", "ACCCCCA", "ACCCCCA", "ACCCCCA", " CCCCC ")
+                    .slice("ACCCCCA", "BCCCCCB", "ACCCCCA", " CCCCC ", " CCCCC ", " CCCCC ", " CCCCC ", " CCCCC ", " CCCCC ", " CCCCC ")
+                    .slice("ACCCCCA", "BCCCCCB", "ACCCCCA", "ACCCCCA", "ACCCCCA", "ACCCCCA", "ACCCCCA", "ACCCCCA", "ACCCCCA", " CCCCC ")
+                    .slice("ACCCCCA", "ACCCCCA", "ACCCCCA", " CCCCC ", " CCCCC ", " CCCCC ", " CCCCC ", " CCCCC ", " CCCCC ", " CCCCC ")
+                    .slice(" AAAAA ", " ABQBA ", " AAAAA ", "  A A  ", "  A A  ", "  A A  ", "  A A  ", "  A A  ", "  A A  ", "       ")
                     .where(' ', any())
                     .where('Q', controller(blocks(definition.getBlock())))
                     .where('A', blocks(CosmicBlocks.SOUL_STAINED_STEEL_ALU_CASING.get()))

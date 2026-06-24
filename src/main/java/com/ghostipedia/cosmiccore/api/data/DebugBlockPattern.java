@@ -1,6 +1,6 @@
 package com.ghostipedia.cosmiccore.api.data;
 
-import com.gregtechceu.gtceu.api.pattern.util.RelativeDirection;
+import com.gregtechceu.gtceu.api.multiblock.util.RelativeDirection;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;

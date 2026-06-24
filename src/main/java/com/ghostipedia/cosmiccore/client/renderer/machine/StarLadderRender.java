@@ -3,11 +3,11 @@ package com.ghostipedia.cosmiccore.client.renderer.machine;
 import com.ghostipedia.cosmiccore.CosmicCore;
 
 import com.gregtechceu.gtceu.api.machine.multiblock.WorkableElectricMultiblockMachine;
-import com.gregtechceu.gtceu.api.pattern.util.RelativeDirection;
+import com.gregtechceu.gtceu.api.multiblock.util.RelativeDirection;
 import com.gregtechceu.gtceu.client.renderer.GTRenderTypes;
 import com.gregtechceu.gtceu.client.renderer.machine.DynamicRender;
 import com.gregtechceu.gtceu.client.renderer.machine.DynamicRenderType;
-import com.gregtechceu.gtceu.client.util.ModelUtils;
+import com.gregtechceu.gtceu.client.util.ModelEventHelper;
 import com.gregtechceu.gtceu.client.util.RenderBufferHelper;
 
 import net.minecraft.MethodsReturnNonnullByDefault;
@@ -50,9 +50,9 @@ public class StarLadderRender extends
             StarLadderRender.CODEC);
 
     private static final BiFunction<Direction, Direction, AABB> renderBoundCache = Util.memoize((front, upwards) -> {
-        Direction up = RelativeDirection.UP.getRelative(front, upwards, false);
-        Direction back = RelativeDirection.BACK.getRelative(front, upwards, false);
-        Direction left = RelativeDirection.LEFT.getRelative(front, upwards, false);
+        Direction up = RelativeDirection.UP.getRelativeFacing(front, upwards, false);
+        Direction back = RelativeDirection.BACK.getRelativeFacing(front, upwards, false);
+        Direction left = RelativeDirection.LEFT.getRelativeFacing(front, upwards, false);
 
         // offset from the controller to the inner cube (scaled up by 1 in all directions)
         // values are from the multi pattern
@@ -72,7 +72,7 @@ public class StarLadderRender extends
     @SuppressWarnings("deprecation")
     private StarLadderRender() {
         if (!isEventListenerRegistered) {
-            ModelUtils.registerAtlasStitchedEventListener(true, TextureAtlas.LOCATION_BLOCKS, event -> {
+            ModelEventHelper.registerAtlasStitchedEventListener(true, TextureAtlas.LOCATION_BLOCKS, event -> {
                 bloodCubeSprite = event.getAtlas().getSprite(BLOOD_CUBE_TEXTURE);
             });
             isEventListenerRegistered = true;
@@ -113,8 +113,8 @@ public class StarLadderRender extends
         Direction front = machine.getFrontFacing();
         Direction upwards = machine.getUpwardsFacing();
         boolean flipped = machine.isFlipped();
-        Direction frontDir = RelativeDirection.FRONT.getRelative(front, upwards, flipped);
-        Direction.Axis leftAxis = RelativeDirection.LEFT.getRelative(front, upwards, flipped).getAxis();
+        Direction frontDir = RelativeDirection.FRONT.getRelativeFacing(front, upwards, flipped);
+        Direction.Axis leftAxis = RelativeDirection.LEFT.getRelativeFacing(front, upwards, flipped).getAxis();
 
         float x0ffset = 0, y0ffset = 0.5f, z0ffset = 0;
 
@@ -236,7 +236,7 @@ public class StarLadderRender extends
                 edges.add(key);
             }
         }
-        VertexConsumer vertexConsumer = buffer.getBuffer(GTRenderTypes.getLightRing());
+        VertexConsumer vertexConsumer = buffer.getBuffer(GTRenderTypes.lightRing());
         final Matrix4f mat = poseStack.last().pose();
 
         var cam = Minecraft.getInstance().gameRenderer.getMainCamera();
@@ -251,7 +251,7 @@ public class StarLadderRender extends
 
         final float EPS = 1e-6f;
         for (long key : edges) {
-            vertexConsumer = buffer.getBuffer(GTRenderTypes.getLightRing());
+            vertexConsumer = buffer.getBuffer(GTRenderTypes.lightRing());
             int i0 = (int) (key >>> 32);
             int i1 = (int) (key & 0xFFFFFFFFL);
 
@@ -333,7 +333,7 @@ public class StarLadderRender extends
                                          float radius, int slices, int stacks,
                                          float r, float g, float b, float a) {
         Matrix4f mat = poseStack.last().pose();
-        VertexConsumer vc = buffer.getBuffer(GTRenderTypes.getLightRing());
+        VertexConsumer vc = buffer.getBuffer(GTRenderTypes.lightRing());
 
         float dPhi = (float) (Mth.TWO_PI / Math.max(3, slices));
         float dTheta = (float) (Math.PI / Math.max(2, stacks));
@@ -378,10 +378,13 @@ public class StarLadderRender extends
         poseStack.mulPose(rot);
 
         // draw cube quads
-        var consumer = bufferSource.getBuffer(Sheets.translucentCullBlockSheet());
-        RenderBufferHelper.renderCube(consumer, poseStack.last(), 0xffffffff,
-                LightTexture.FULL_BRIGHT, bloodCubeSprite,
-                -1, -1, -1, 1, 1, 1);
+        // TODO(8.0.0): RenderBufferHelper.renderCube no longer takes a sprite (now solid-color only:
+        //  renderCube(buf, stack, pos, size, colorARGB)). Rebuild the textured blood cube via renderCubeFace
+        //  (per-face with bloodCubeSprite UVs) when revisiting visuals. Cube render shelved for now.
+        // var consumer = bufferSource.getBuffer(Sheets.translucentCullBlockSheet());
+        // RenderBufferHelper.renderCube(consumer, poseStack.last(), 0xffffffff,
+        //         LightTexture.FULL_BRIGHT, bloodCubeSprite,
+        //         -1, -1, -1, 1, 1, 1);
 
         poseStack.popPose();
     }
@@ -399,13 +402,13 @@ public class StarLadderRender extends
         float animTime = -totalTick * 0.10f;
 
         // Render central core column first (back to front for translucency)
-        VertexConsumer coreConsumer = buffer.getBuffer(GTRenderTypes.getLightRing());
+        VertexConsumer coreConsumer = buffer.getBuffer(GTRenderTypes.lightRing());
         renderCoreColumn(poseStack, coreConsumer, pillarHeight, coreRadius, totalTick, packedLight, packedOverlay);
 
         // Render counter-rotating helix layers for structural stability look
         // First layer - clockwise spiral
         for (int strand = 0; strand < numStrands; strand++) {
-            VertexConsumer strandConsumer = buffer.getBuffer(GTRenderTypes.getLightRing());
+            VertexConsumer strandConsumer = buffer.getBuffer(GTRenderTypes.lightRing());
             float strandAngleOffset = (strand / (float) numStrands) * Mth.TWO_PI;
             renderBraidedStrand(poseStack, strandConsumer, pillarHeight, helixRadius, strandRadius,
                     strandAngleOffset, animTime, windingSpeed, packedLight, packedOverlay, true);
@@ -413,7 +416,7 @@ public class StarLadderRender extends
 
         // Second layer - counter-clockwise spiral (creates woven/braided effect)
         for (int strand = 0; strand < numStrands; strand++) {
-            VertexConsumer strandConsumer = buffer.getBuffer(GTRenderTypes.getLightRing());
+            VertexConsumer strandConsumer = buffer.getBuffer(GTRenderTypes.lightRing());
             float strandAngleOffset = (strand / (float) numStrands) * Mth.TWO_PI + (Mth.PI / numStrands);
             renderBraidedStrand(poseStack, strandConsumer, pillarHeight, helixRadius * 0.95f, strandRadius * 0.8f,
                     strandAngleOffset, animTime, -windingSpeed, packedLight, packedOverlay, false);
@@ -502,7 +505,7 @@ public class StarLadderRender extends
 
     @OnlyIn(Dist.CLIENT)
     private void renderRings(Direction.Axis upAxis, float totalTick, PoseStack poseStack, MultiBufferSource buffer) {
-        VertexConsumer consumer = buffer.getBuffer(GTRenderTypes.getLightRing());
+        VertexConsumer consumer = buffer.getBuffer(GTRenderTypes.lightRing());
 
         float xRot = totalTick / 20;
         float zRot = Mth.HALF_PI + totalTick / 60;

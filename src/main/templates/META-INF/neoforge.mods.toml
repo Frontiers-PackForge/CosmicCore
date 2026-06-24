@@ -34,6 +34,17 @@ config = "cosmiccore.mixins.json"
     ordering = "AFTER"
     side = "BOTH"
 
+# GTCEu 8.0 dropped LDLib (it moved to ModularUI2), so it no longer brings LDLib transitively.
+# CosmicCore still uses LDLib directly (gui widgets, @Persisted/@DescSynced syncdata, BlockInfo, the
+# IRenderer/IItemRendererProvider item-render API), so CC must require LDLib itself. Load AFTER it.
+# (Min version pinned in forge.versions.toml = ${ldlib_version}; range left open so the pack can ship newer.)
+[[dependencies.${mod_id}]]
+    modId = "ldlib"
+    type = "required"
+    versionRange = "[0,)"
+    ordering = "AFTER"
+    side = "BOTH"
+
 [[dependencies.${mod_id}]]
     modId = "embers"
     type = "required"

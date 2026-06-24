@@ -11,13 +11,12 @@ import com.gregtechceu.gtceu.api.GTValues;
 import com.gregtechceu.gtceu.api.blockentity.BlockEntityCreationInfo;
 import com.gregtechceu.gtceu.api.capability.IEnergyContainer;
 import com.gregtechceu.gtceu.api.data.RotationState;
-import com.gregtechceu.gtceu.api.gui.GuiTextures;
 import com.gregtechceu.gtceu.api.machine.MultiblockMachineDefinition;
 import com.gregtechceu.gtceu.api.machine.multiblock.PartAbility;
 import com.gregtechceu.gtceu.api.machine.multiblock.WorkableElectricMultiblockMachine;
 import com.gregtechceu.gtceu.api.misc.EnergyContainerList;
-import com.gregtechceu.gtceu.api.pattern.FactoryBlockPattern;
-import com.gregtechceu.gtceu.api.pattern.Predicates;
+import com.gregtechceu.gtceu.api.multiblock.pattern.MultiblockPatternBuilder;
+import com.gregtechceu.gtceu.api.multiblock.Predicates;
 import com.gregtechceu.gtceu.api.recipe.OverclockingLogic;
 import com.gregtechceu.gtceu.common.data.GTRecipeModifiers;
 import com.gregtechceu.gtceu.common.data.GTRecipeTypes;
@@ -37,7 +36,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import javax.annotation.Nullable;
 
 import static com.ghostipedia.cosmiccore.api.registries.CosmicRegistration.REGISTRATE;
-import static com.gregtechceu.gtceu.api.pattern.Predicates.*;
+import static com.gregtechceu.gtceu.api.multiblock.Predicates.*;
 
 public class StarLadderOld extends WorkableElectricMultiblockMachine implements IMultiblockProvider {
 
@@ -77,13 +76,13 @@ public class StarLadderOld extends WorkableElectricMultiblockMachine implements 
     }
 
     @Override
-    public void onStructureFormed() {
-        super.onStructureFormed();
+    public void formStructure(@org.jetbrains.annotations.NotNull String substructureName) {
+        super.formStructure(substructureName);
     }
 
     @Override
-    public void onStructureInvalid() {
-        super.onStructureInvalid();
+    public void invalidateStructure(String substructureName) {
+        super.invalidateStructure(substructureName);
         this.starLadderReceivers.forEach(IMultiblockReciever::sendWorkingDisabled);
         this.starLadderReceivers.forEach(s -> s.setModularMultiBlock(null));
     }
@@ -122,11 +121,11 @@ public class StarLadderOld extends WorkableElectricMultiblockMachine implements 
             .recipeType(GTRecipeTypes.DUMMY_RECIPES)
             .recipeModifier(GTRecipeModifiers.ELECTRIC_OVERCLOCK.apply(OverclockingLogic.NON_PERFECT_OVERCLOCK_SUBTICK))
             .appearanceBlock(CosmicBlocks.CYCLOZINE_CHEMICALLY_REPELLING_CASING)
-            .pattern(definition -> FactoryBlockPattern.start()
-                    .aisle("A   A", "A   A", "A   A", "A   A")
-                    .aisle("AAAAA", "A B A", "Q   Q", "A   A")
+            .pattern(definition -> MultiblockPatternBuilder.start()
+                    .slice("A   A", "A   A", "A   A", "A   A")
+                    .slice("AAAAA", "A B A", "Q   Q", "A   A")
                     .where(' ', any())
-                    .where("B", controller(blocks(definition.getBlock())))
+                    .where('B', controller(blocks(definition.getBlock())))
                     .where('A', blocks(CosmicBlocks.CYCLOZINE_CHEMICALLY_REPELLING_CASING.get())
                             .or(Predicates.abilities(PartAbility.EXPORT_ITEMS).setMaxGlobalLimited(16))
                             .or(Predicates.abilities(PartAbility.EXPORT_FLUIDS).setMaxGlobalLimited(16))
@@ -135,7 +134,7 @@ public class StarLadderOld extends WorkableElectricMultiblockMachine implements 
                             .or(Predicates.abilities(PartAbility.OUTPUT_LASER).setMaxGlobalLimited(1))
                             .or(Predicates.abilities(PartAbility.IMPORT_FLUIDS).setMaxGlobalLimited(16))
                             .or(Predicates.abilities(PartAbility.IMPORT_ITEMS).setMaxGlobalLimited(16)))
-                    .where("Q", blocks(CosmicModularMachines.STAR_LADDER_TEST_MODULE[GTValues.ZPM].get()))
+                    .where('Q', blocks(CosmicModularMachines.STAR_LADDER_TEST_MODULE[GTValues.ZPM].get()))
                     // blocks(Arrays.stream(CosmicModularMachines.STAR_LADDER_TEST_MODULE).filter(Objects::nonNull).map(Supplier::get).toArray(IMachineBlock[]::new))
                     .build())
             .workableCasingModel(CosmicCore.id("block/casings/solid/vomahine_certified_chemically_resistant_casing"),
@@ -146,35 +145,8 @@ public class StarLadderOld extends WorkableElectricMultiblockMachine implements 
                     Component.translatable("cosmiccore.multiblock.iris.tooltip.3"))
             .register();
 
-    @Override
-    public Widget createUIWidget() {
-        var group = new WidgetGroup(0, 0, 182 + 8, 117 + 8);
-        group.addWidget(new DraggableScrollableWidgetGroup(4, 4, 182, 117).setBackground(getScreenTexture())
-                .addWidget(new LabelWidget(4, 5, self().getBlockState().getBlock().getDescriptionId()))
-                .addWidget(new ComponentPanelWidget(4, 17, this::addDisplayText)
-                        .textSupplier(this.getLevel().isClientSide ? null : this::addDisplayText)
-                        .setMaxWidthLimit(150)
-                        .clickHandler(this::handleDisplayClick)));
-        group.setBackground(GuiTextures.BACKGROUND_INVERSE);
-        group.addWidget(new ButtonWidget(
-                27,
-                100,
-                158,
-                20,
-                new GuiTextureGroup(
-                        GuiTextures.BUTTON,
-                        new TextTexture("cosmiccore.multiblock.send_orbit_data")),
-                clickData -> isfuelable(true)));
-        return group;
-    }
-
-    @Override
-    public void addDisplayText(List<Component> textList) {
-        if (isFormed()) {
-            textList.add(Component.translatable("cosmiccore.multiblock.advanced.star_ladder_tier", tetherTier,
-                    getMaxModules()));
-        }
-    }
+    // TODO(8.0.0 MUI2): the LDLib createUIWidget/addDisplayText surface (star-ladder tier readout + send-orbit
+    //  button) was removed in GTCEu 8.0.0. Rebuild on MUI2 when the StarLadder UI is ported. Logic preserved.
 
     public static void init() {}
 }

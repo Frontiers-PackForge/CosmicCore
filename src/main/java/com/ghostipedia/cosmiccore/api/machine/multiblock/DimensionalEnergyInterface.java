@@ -1,68 +1,45 @@
 package com.ghostipedia.cosmiccore.api.machine.multiblock;
 
 import com.ghostipedia.cosmiccore.api.data.wireless.WirelessEnergySavedData;
-import com.ghostipedia.cosmiccore.utils.CosmicFormattingUtil;
 
 import com.gregtechceu.gtceu.api.blockentity.BlockEntityCreationInfo;
 import com.gregtechceu.gtceu.api.capability.IEnergyContainer;
 import com.gregtechceu.gtceu.api.capability.recipe.EURecipeCapability;
 import com.gregtechceu.gtceu.api.capability.recipe.IO;
-import com.gregtechceu.gtceu.api.gui.GuiTextures;
-import com.gregtechceu.gtceu.api.gui.fancy.FancyMachineUIWidget;
 import com.gregtechceu.gtceu.api.machine.ConditionalSubscriptionHandler;
-import com.gregtechceu.gtceu.api.machine.feature.IFancyUIMachine;
-import com.gregtechceu.gtceu.api.machine.feature.multiblock.IDisplayUIMachine;
 import com.gregtechceu.gtceu.api.machine.feature.multiblock.IMaintenanceMachine;
 import com.gregtechceu.gtceu.api.machine.feature.multiblock.IMultiPart;
 import com.gregtechceu.gtceu.api.machine.multiblock.WorkableMultiblockMachine;
 import com.gregtechceu.gtceu.api.machine.trait.NotifiableEnergyContainer;
 import com.gregtechceu.gtceu.api.machine.trait.RecipeLogic;
 import com.gregtechceu.gtceu.api.misc.EnergyContainerList;
+import com.gregtechceu.gtceu.api.sync_system.annotations.SaveField;
 import com.gregtechceu.gtceu.common.machine.owner.FTBOwner;
 import com.gregtechceu.gtceu.common.machine.owner.MachineOwner;
 import com.gregtechceu.gtceu.config.ConfigHolder;
-import com.gregtechceu.gtceu.utils.FormattingUtil;
 
-import com.lowdragmc.lowdraglib.gui.modular.ModularUI;
-import com.lowdragmc.lowdraglib.gui.util.ClickData;
-import com.lowdragmc.lowdraglib.gui.widget.*;
-import com.lowdragmc.lowdraglib.syncdata.annotation.Persisted;
 import com.lowdragmc.lowdraglib.utils.DummyWorld;
 
-import net.minecraft.ChatFormatting;
-import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.HoverEvent;
-import net.minecraft.network.chat.MutableComponent;
-import net.minecraft.network.chat.Style;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.world.entity.player.Player;
 
-import it.unimi.dsi.fastutil.longs.Long2ObjectMaps;
+import org.jetbrains.annotations.NotNull;
 
-import java.math.BigInteger;
-import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.UUID;
 
-import static com.ghostipedia.cosmiccore.utils.CosmicFormattingUtil.combineWithConstantWidth;
-import static com.ghostipedia.cosmiccore.utils.CosmicFormattingUtil.formatWithConstantWidth;
-
-public class DimensionalEnergyInterface extends WorkableMultiblockMachine
-                                        implements IFancyUIMachine, IDisplayUIMachine {
+// TODO(8.0.0 MUI2): custom display text shelved; base default getWidgetsForDisplay UI used for now (original in git
+// history).
+public class DimensionalEnergyInterface extends WorkableMultiblockMachine {
 
     protected static final long ticks_between_save_data_operations = 5L * 20L; // Once per 5s
-    private static final int uiWidth = 182;
-
-    private static final BigInteger BIG_INTEGER_MAX_LONG = BigInteger.valueOf(Long.MAX_VALUE);
 
     protected IMaintenanceMachine maintenance;
     protected EnergyContainerList inputHatches;
     protected EnergyContainerList outputHatches;
     protected long passiveDrain;
 
-    @Persisted
+    @SaveField
     protected IEnergyContainer energyBuffer;
 
     // Stats tracked for UI display
@@ -74,15 +51,15 @@ public class DimensionalEnergyInterface extends WorkableMultiblockMachine
 
     protected ConditionalSubscriptionHandler tickSubscription;
 
-    public DimensionalEnergyInterface(BlockEntityCreationInfo holder) {
-        super(holder);
+    public DimensionalEnergyInterface(BlockEntityCreationInfo info) {
+        super(info);
         this.tickSubscription = new ConditionalSubscriptionHandler(this, this::transferEnergyTick, this::isActive);
         this.localDisplay = true;
     }
 
     @Override
-    public void onStructureFormed() {
-        super.onStructureFormed();
+    public void formStructure(@NotNull String substructureName) {
+        super.formStructure(substructureName);
         if (getLevel() instanceof DummyWorld) return;
 
         initializeAbilities();
@@ -95,14 +72,9 @@ public class DimensionalEnergyInterface extends WorkableMultiblockMachine
         List<IEnergyContainer> inputs = new ArrayList<>();
         List<IEnergyContainer> outputs = new ArrayList<>();
 
-        Map<Long, IO> ioMap = getMultiblockState().getMatchContext().getOrCreate("ioMap", Long2ObjectMaps::emptyMap);
         for (IMultiPart part : getParts()) {
-            IO io = ioMap.getOrDefault(part.self().getBlockPos().asLong(), IO.BOTH);
-            if (io == IO.NONE) continue;
-
             var handlerLists = part.getRecipeHandlers();
             for (var handlerList : handlerLists) {
-                if (!handlerList.isValid(io)) continue;
                 if (handlerList.getHandlerIO() == IO.IN) {
                     handlerList.getCapability(EURecipeCapability.CAP).stream()
                             .filter(IEnergyContainer.class::isInstance)
@@ -122,24 +94,20 @@ public class DimensionalEnergyInterface extends WorkableMultiblockMachine
     }
 
     protected UUID getTeamUUID() {
-        // CosmicCore.LOGGER.warn("getting team UUID");
         var owner = getOwner();
         var ownerUUID = getOwnerUUID();
         // Faultcheck the Owner and OwnerUUID
         if (owner == null) return MachineOwner.EMPTY;
         if (ownerUUID == null) return MachineOwner.EMPTY;
 
-        // CosmicCore.LOGGER.warn("Owner UUID: " + ownerUUID.toString());
         var team = owner instanceof FTBOwner ftbOwner ? ftbOwner.getPlayerTeam(ownerUUID) : null;
         if (team == null) return ownerUUID;
 
-        // CosmicCore.LOGGER.warn("Team UUID: " + team);
-        // CosmicCore.LOGGER.warn("Team UUID: " + team.getTeamId());
         return team.getTeamId();
     }
 
     @Override
-    public void onStructureInvalid() {
+    public void invalidateStructure(String name) {
         if (getLevel() instanceof ServerLevel serverLevel) { // Transfer buffer content to avoid losses
             var data = WirelessEnergySavedData.getOrCreate(serverLevel);
             var owner = getTeamUUID();
@@ -164,7 +132,7 @@ public class DimensionalEnergyInterface extends WorkableMultiblockMachine
         }
 
         tickSubscription.unsubscribe();
-        super.onStructureInvalid();
+        super.invalidateStructure(name);
     }
 
     public boolean isActive() {
@@ -179,8 +147,10 @@ public class DimensionalEnergyInterface extends WorkableMultiblockMachine
         bufferSize += (getPassiveDrainPerTick() * 8 * 2) * ticks_between_save_data_operations;
         if (bufferSize < 0L)
             throw new RuntimeException("DimensionalEnergyCapacitor: Calculated buffer size is too big.");
-        this.energyBuffer = new NotifiableEnergyContainer(this, bufferSize, Long.MAX_VALUE, Long.MAX_VALUE,
-                Long.MAX_VALUE, Long.MAX_VALUE);
+        // 8.0.0: NotifiableEnergyContainer ctor no longer takes the machine; attach as a trait
+        // (mirrors the old `new NotifiableEnergyContainer(this, ...)` which registered it on construction).
+        this.energyBuffer = attachTrait(new NotifiableEnergyContainer(bufferSize, Long.MAX_VALUE, Long.MAX_VALUE,
+                Long.MAX_VALUE, Long.MAX_VALUE));
     }
 
     public long getPassiveDrainPerTick() {
@@ -203,37 +173,6 @@ public class DimensionalEnergyInterface extends WorkableMultiblockMachine
             return (long) (getPassiveDrainPerTick() * multiplier * modifier);
         }
         return getPassiveDrainPerTick();
-    }
-
-    private static MutableComponent getTimeToFillDrainText(BigInteger timeToFillSeconds) {
-        if (timeToFillSeconds.compareTo(BIG_INTEGER_MAX_LONG) > 0) {
-            // too large to represent in a java Duration
-            timeToFillSeconds = BIG_INTEGER_MAX_LONG;
-        }
-
-        Duration duration = Duration.ofSeconds(timeToFillSeconds.longValue());
-        String key;
-        long fillTime;
-        if (duration.getSeconds() <= 180) {
-            fillTime = duration.getSeconds();
-            key = "gtceu.multiblock.power_substation.time_seconds";
-        } else if (duration.toMinutes() <= 180) {
-            fillTime = duration.toMinutes();
-            key = "gtceu.multiblock.power_substation.time_minutes";
-        } else if (duration.toHours() <= 72) {
-            fillTime = duration.toHours();
-            key = "gtceu.multiblock.power_substation.time_hours";
-        } else if (duration.toDays() <= 730) { // 2 years
-            fillTime = duration.toDays();
-            key = "gtceu.multiblock.power_substation.time_days";
-        } else if (duration.toDays() / 365 < 1_000_000) {
-            fillTime = duration.toDays() / 365;
-            key = "gtceu.multiblock.power_substation.time_years";
-        } else {
-            return Component.translatable("gtceu.multiblock.power_substation.time_forever");
-        }
-
-        return Component.translatable(key, FormattingUtil.formatNumbers(fillTime));
     }
 
     protected void transferEnergyTick() {
@@ -292,144 +231,4 @@ public class DimensionalEnergyInterface extends WorkableMultiblockMachine
         }
     }
 
-    @Override
-    public void addDisplayText(List<Component> textList) {
-        IDisplayUIMachine.super.addDisplayText(textList);
-        if (this.isFormed()) {
-            // Multiblock status
-            if (!isWorkingEnabled()) textList.add(Component.translatable("gtceu.multiblock.work_paused"));
-            else if (isActive()) textList.add(Component.translatable("gtceu.multiblock.running"));
-            else textList.add(Component.translatable("gtceu.multiblock.idling"));
-
-            if (recipeLogic.isWaiting()) {
-                textList.add(Component.translatable("gtceu.multiblock.waiting")
-                        .setStyle(Style.EMPTY.withColor(ChatFormatting.RED)));
-            }
-
-            var owner = getTeamUUID();
-            if (energyBuffer != null && owner != MachineOwner.EMPTY) {
-                if (getLevel() instanceof ServerLevel serverLevel) {
-                    var data = WirelessEnergySavedData.getOrCreate(serverLevel);
-
-                    var STYLE_GOLD = Style.EMPTY.withColor(ChatFormatting.GOLD);
-                    var STYLE_DARK_RED = Style.EMPTY.withColor(ChatFormatting.DARK_RED);
-                    var STYLE_GREEN = Style.EMPTY.withColor(ChatFormatting.GREEN);
-                    var STYLE_RED = Style.EMPTY.withColor(ChatFormatting.RED);
-
-                    // Tittle
-                    var buttonComponent = ComponentPanelWidget.withButton(Component.literal("[").append(localDisplay ?
-                            Component.translatable("cosmic.multiblock.capacitor.info.global") :
-                            Component.translatable("cosmic.multiblock.capacitor.info.local"))
-                            .append(Component.literal("]")), "local_display");
-
-                    var labelComponent = localDisplay ?
-                            Component.translatable("cosmic.multiblock.capacitor.info.tittle.local") :
-                            Component.translatable("cosmic.multiblock.capacitor.info.tittle.global");
-
-                    textList.add(localDisplay ? combineWithConstantWidth(labelComponent, buttonComponent, uiWidth - 4) :
-                            combineWithConstantWidth(buttonComponent, labelComponent, uiWidth - 4));
-
-                    BigInteger energyCapacity = data.getEnergyCapacity(owner);;
-                    BigInteger energyStored = data.getEnergyStored(owner);
-                    energyStored = energyStored.add(BigInteger.valueOf(energyBuffer.getEnergyStored()));
-                    BigInteger energyBuffered;
-                    long passiveDrain;
-                    long avgIn;
-                    long avgOut;
-
-                    if (localDisplay) {
-                        energyBuffered = BigInteger.valueOf(energyBuffer.getEnergyStored());
-                        avgIn = averageInLastSec;
-                        avgOut = averageOutLastSec;
-                        passiveDrain = getPassiveDrain();
-                    } else {
-                        energyBuffered = data.getEnergyBufferedExceptLocal(owner, getBlockPos());
-                        energyBuffered = energyBuffered.add(BigInteger.valueOf(energyBuffer.getEnergyStored()));
-                        avgIn = data.getEnergyInput(owner);
-                        avgOut = data.getEnergyOutput(owner);
-                        passiveDrain = data.getPassiveDrain(owner);
-                    }
-
-                    var storedComponent = Component
-                            .literal(CosmicFormattingUtil.formatNumberWithCharacterLimit(energyStored, 12));
-                    textList.add(formatWithConstantWidth("gtceu.multiblock.power_substation.stored",
-                            storedComponent.setStyle(STYLE_GOLD), uiWidth - 4));
-
-                    var capacityComponent = Component
-                            .literal(CosmicFormattingUtil.formatNumberWithCharacterLimit(energyCapacity, 12));
-                    textList.add(formatWithConstantWidth("gtceu.multiblock.power_substation.capacity",
-                            capacityComponent.setStyle(STYLE_GOLD), uiWidth - 4));
-
-                    var bufferedComponent = Component
-                            .literal(CosmicFormattingUtil.formatNumberWithCharacterLimit(energyBuffered, 12));
-                    textList.add(formatWithConstantWidth("cosmic.multiblock.capacitor.buffered",
-                            bufferedComponent.setStyle(STYLE_GOLD), uiWidth - 4));
-
-                    var passiveDrainComponent = Component.literal(
-                            CosmicFormattingUtil.formatNumberWithCharacterLimit(BigInteger.valueOf(passiveDrain), 9));
-                    textList.add(formatWithConstantWidth("gtceu.multiblock.power_substation.passive_drain",
-                            passiveDrainComponent.setStyle(STYLE_DARK_RED), uiWidth - 4));
-
-                    var avgInComponent = Component.literal(
-                            CosmicFormattingUtil.formatNumberWithCharacterLimit(BigInteger.valueOf(avgIn), 10));
-                    textList.add(formatWithConstantWidth("gtceu.multiblock.power_substation.average_in",
-                            avgInComponent.setStyle(STYLE_GREEN), uiWidth - 4)
-                            .withStyle(Style.EMPTY.withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT,
-                                    Component.translatable("gtceu.multiblock.power_substation.average_in_hover")))));
-
-                    var avgOutComponent = Component.literal(CosmicFormattingUtil
-                            .formatNumberWithCharacterLimit(BigInteger.valueOf(Math.abs(avgOut)), 10));
-                    textList.add(formatWithConstantWidth("gtceu.multiblock.power_substation.average_out",
-                            avgOutComponent.setStyle(STYLE_RED), uiWidth - 4)
-                            .withStyle(Style.EMPTY.withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT,
-                                    Component.translatable("gtceu.multiblock.power_substation.average_out_hover")))));
-
-                    if (!localDisplay) {
-                        var avgInput = data.getEnergyInput(owner);
-                        var avgOutput = data.getEnergyOutput(owner);
-                        if (avgInput > avgOutput) {
-                            BigInteger timeToFillSeconds = data.getEnergyCapacity(owner)
-                                    .subtract(data.getEnergyStored(owner))
-                                    .divide(BigInteger.valueOf((avgInput - avgOutput) * 20));
-                            textList.add(formatWithConstantWidth("gtceu.multiblock.power_substation.time_to_fill",
-                                    getTimeToFillDrainText(timeToFillSeconds).setStyle(STYLE_GREEN), uiWidth - 4));
-                        } else if (avgInput < avgOutput) {
-                            BigInteger timeToDrainSeconds = energyStored
-                                    .divide(BigInteger.valueOf((avgOutput - avgInput) * 20));
-                            textList.add(formatWithConstantWidth("gtceu.multiblock.power_substation.time_to_drain",
-                                    getTimeToFillDrainText(timeToDrainSeconds).setStyle(STYLE_RED), uiWidth - 4));
-                        }
-                    }
-                }
-            }
-        }
-
-        getDefinition().getAdditionalDisplay().accept(this, textList);
-    }
-
-    @Override
-    public void handleDisplayClick(String componentData, ClickData clickData) {
-        if (!clickData.isRemote) {
-            if (componentData.equals("local_display")) {
-                localDisplay = !localDisplay;
-            }
-        }
-    }
-
-    @Override
-    public Widget createUIWidget() {
-        var group = new WidgetGroup(0, 0, uiWidth + 8, 117 + 8);
-        group.addWidget(new DraggableScrollableWidgetGroup(4, 4, uiWidth, 117).setBackground(getScreenTexture())
-                .addWidget(new LabelWidget(4, 5, self().getBlockState().getBlock().getDescriptionId()))
-                .addWidget(new ComponentPanelWidget(4, 17, this::addDisplayText).setMaxWidthLimit(uiWidth - 4)
-                        .clickHandler(this::handleDisplayClick)));
-        group.setBackground(GuiTextures.BACKGROUND_INVERSE);
-        return group;
-    }
-
-    @Override
-    public ModularUI createUI(Player entityPlayer) {
-        return new ModularUI(uiWidth + 8, 208, this, entityPlayer)
-                .widget(new FancyMachineUIWidget(this, uiWidth + 8, 208));
-    }
 }
