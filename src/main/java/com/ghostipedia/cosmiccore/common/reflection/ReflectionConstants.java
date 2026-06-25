@@ -7,6 +7,8 @@ public final class ReflectionConstants {
 
     private ReflectionConstants() {}
 
+    public static final boolean ENABLED = false;
+
     // ---- Erosion Thresholds ----
     // These trigger mandatory reflection encounters
 

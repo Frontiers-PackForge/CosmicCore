@@ -12,6 +12,7 @@ import com.ghostipedia.cosmiccore.common.item.armor.boots.ICosmicBoots;
 import com.ghostipedia.cosmiccore.common.item.behavior.EffectApplicationBehavior;
 import com.ghostipedia.cosmiccore.common.reflection.ReflectionCommand;
 import com.ghostipedia.cosmiccore.common.reflection.ReflectionCommands;
+import com.ghostipedia.cosmiccore.common.reflection.ReflectionConstants;
 import com.ghostipedia.cosmiccore.mixin.accessor.LivingEntityAccessor;
 
 import com.gregtechceu.gtceu.api.capability.GTCapabilityHelper;
@@ -101,8 +102,10 @@ public class ForgeCommonEventListener {
     public static void registerCommand(RegisterCommandsEvent event) {
         WirelessEnergyCommand.register(event.getDispatcher(), event.getBuildContext());
         SoulCommand.register(event.getDispatcher(), event.getBuildContext());
-        ReflectionCommand.register(event.getDispatcher());
-        ReflectionCommands.register(event.getDispatcher());
+        if (ReflectionConstants.ENABLED) {
+            ReflectionCommand.register(event.getDispatcher());
+            ReflectionCommands.register(event.getDispatcher());
+        }
         VeinSurveyCommand.register(event.getDispatcher());
         ExportRegistryCommand.register(event.getDispatcher());
         StarLadderCommand.register(event.getDispatcher());
