@@ -553,6 +553,28 @@ public class CosmicLangHandler extends LangHandler {
         provider.add("cosmiccore.wireless_charger.enter_range",
                 "You have entered charging range [Range - %s blocks]");
         provider.add("cosmiccore.wireless_charger.left_range", "You have left charging range [Range - %s blocks]");
+
+        // Wireless Computation
+        provider.add("cosmiccore.machine.wireless_computation_hatch.tooltip.0",
+                "Wirelessly receives computation from the team's network");
+        provider.add("cosmiccore.machine.wireless_computation_hatch.tooltip.1",
+                "Drop-in replacement for wired computation hatches");
+        provider.add("cosmiccore.machine.wireless_computation_hatch.providers", "Network Providers: %d");
+        provider.add("cosmiccore.machine.wireless_computation_hatch.max_cwu", "Max CWU/t Available: %d");
+        provider.add("cosmiccore.multiblock.wireless_computation_transmitter.tooltip.0",
+                "Transmits computation wirelessly to the team's network");
+        provider.add("cosmiccore.multiblock.wireless_computation_transmitter.tooltip.1",
+                "Connect computation sources via Receiver Hatches");
+        provider.add("cosmiccore.multiblock.wireless_computation_transmitter.tooltip.2",
+                "Consumes LuV tier EU per receiver hatch");
+        provider.add("cosmiccore.multiblock.wireless_computation_transmitter.transmitting", "Transmitting Computation");
+        provider.add("cosmiccore.multiblock.wireless_computation_transmitter.local_hatches",
+                "Local Receiver Hatches: %d");
+        provider.add("cosmiccore.multiblock.wireless_computation_transmitter.network_providers",
+                "Network Providers: %d");
+        provider.add("cosmiccore.multiblock.wireless_computation_transmitter.max_cwu", "Max CWU/t: %d");
+        provider.add("cosmiccore.multiblock.wireless_computation_transmitter.cwu_usage", "CWU Usage: %d / %d CWU/t");
+
         provider.add("cosmiccore.circuit.lore.tier.max.0", "MAX Tier Circuit");
         provider.add("cosmiccore.circuit.lore.tier.max.1", "Not a processor- but an Obituary.");
         provider.add("cosmiccore.circuit.lore.tier.max.2", "Input: Existence.");

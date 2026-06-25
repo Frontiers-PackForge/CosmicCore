@@ -8,4 +8,6 @@ public abstract class GlobalWirelessVariableStorage {
 
     // Global wireless data stick map
     public static HashMap<UUID, WirelessDataStore> GlobalWirelessDataSticks = new HashMap<>(20, 0.9f);
+
+    public static HashMap<UUID, WirelessComputationStore> GlobalWirelessComputation = new HashMap<>(20, 0.9f);
 }
