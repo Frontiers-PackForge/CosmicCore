@@ -10,6 +10,7 @@ import com.gregtechceu.gtceu.api.machine.MultiblockMachineDefinition;
 import com.gregtechceu.gtceu.api.machine.multiblock.PartAbility;
 import com.gregtechceu.gtceu.api.multiblock.Predicates;
 import com.gregtechceu.gtceu.api.multiblock.pattern.MultiblockPatternBuilder;
+import com.gregtechceu.gtceu.api.multiblock.util.RelativeDirection;
 
 import static com.ghostipedia.cosmiccore.api.machine.part.CosmicPartAbility.EXPORT_EMBER;
 import static com.ghostipedia.cosmiccore.api.registries.CosmicRegistration.REGISTRATE;
@@ -23,7 +24,8 @@ public class CinderHearth {
             .recipeType(CosmicRecipeTypes.CINDER_HEARTH)
             .appearanceBlock(CosmicBlocks.LIGHT_DAWNSTONE_CASING)
             .partAppearance((controller, part, side) -> CosmicBlocks.LIGHT_DAWNSTONE_CASING.get().defaultBlockState())
-            .pattern(definition -> MultiblockPatternBuilder.start()
+            .pattern(definition -> MultiblockPatternBuilder
+                    .start(RelativeDirection.FRONT, RelativeDirection.UP, RelativeDirection.LEFT)
                     .slice("AAAAAAAAAA", "A   A    A", "A   A    A", "A   A    A", "AAAAAAAAAA", "          ",
                             "          ")
                     .slice("ADDDAAAAAA", " D DCCCCC ", " D DCCCCC ", " D DCCCCC ", "AD DA    A", " D D      ",

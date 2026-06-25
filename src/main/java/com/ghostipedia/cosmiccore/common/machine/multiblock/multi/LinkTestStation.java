@@ -8,6 +8,7 @@ import com.gregtechceu.gtceu.api.data.RotationState;
 import com.gregtechceu.gtceu.api.machine.MultiblockMachineDefinition;
 import com.gregtechceu.gtceu.api.machine.multiblock.PartAbility;
 import com.gregtechceu.gtceu.api.multiblock.pattern.MultiblockPatternBuilder;
+import com.gregtechceu.gtceu.api.multiblock.util.RelativeDirection;
 import com.gregtechceu.gtceu.common.data.GTBlocks;
 
 import net.minecraft.network.chat.Component;
@@ -32,7 +33,8 @@ public class LinkTestStation {
             .rotationState(RotationState.NON_Y_AXIS)
             .recipeType(CosmicRecipeTypes.LINK_TEST_RECIPES)
             .appearanceBlock(GTBlocks.CASING_STEEL_SOLID)
-            .pattern(definition -> MultiblockPatternBuilder.start()
+            .pattern(definition -> MultiblockPatternBuilder
+                    .start(RelativeDirection.FRONT, RelativeDirection.UP, RelativeDirection.LEFT)
                     .slice("CCC", "CCC", "CCC")
                     .slice("CCC", "C C", "CCC")
                     .slice("CCC", "CQC", "CCC")

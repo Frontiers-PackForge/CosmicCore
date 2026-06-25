@@ -12,6 +12,7 @@ import com.gregtechceu.gtceu.api.multiblock.PatternPredicate;
 import com.gregtechceu.gtceu.api.multiblock.pattern.MultiblockPatternBuilder;
 import com.gregtechceu.gtceu.api.multiblock.predicates.BasePredicate;
 import com.gregtechceu.gtceu.api.multiblock.util.BlockInfo;
+import com.gregtechceu.gtceu.api.multiblock.util.RelativeDirection;
 import com.gregtechceu.gtceu.api.recipe.OverclockingLogic;
 import com.gregtechceu.gtceu.common.data.GTRecipeModifiers;
 import com.gregtechceu.gtceu.common.machine.multiblock.part.RotorHolderPartMachine;
@@ -37,7 +38,7 @@ public class AtmoPump {
                     GTRecipeModifiers.ELECTRIC_OVERCLOCK.apply(OverclockingLogic.NON_PERFECT_OVERCLOCK_SUBTICK),
                     GTRecipeModifiers.BATCH_MODE)
             // spotless:off
-            .pattern(definition -> MultiblockPatternBuilder.start()
+            .pattern(definition -> MultiblockPatternBuilder.start(RelativeDirection.FRONT, RelativeDirection.UP, RelativeDirection.LEFT)
                     .slice("         AA AA         ", "                       ", "                       ", "                       ", "         AA AA         ", "                       ", "         AA AA         ", "                       ", "                       ", "                       ", "         AA AA         ")
                     .slice("         ABCBA         ", "          BDB          ", "          BDB          ", "          BDB          ", "         ABCBA         ", "          B B          ", "         ABCBA         ", "          BDB          ", "          BDB          ", "          BDB          ", "         ABCBA         ")
                     .slice("          CCC          ", "          D D          ", "          D D          ", "          D D          ", "          CCC          ", "                       ", "          CCC          ", "          D D          ", "          D D          ", "          D D          ", "          CCC          ")

@@ -11,6 +11,7 @@ import com.gregtechceu.gtceu.api.machine.MultiblockMachineDefinition;
 import com.gregtechceu.gtceu.api.machine.multiblock.PartAbility;
 import com.gregtechceu.gtceu.api.machine.multiblock.WorkableElectricMultiblockMachine;
 import com.gregtechceu.gtceu.api.multiblock.pattern.MultiblockPatternBuilder;
+import com.gregtechceu.gtceu.api.multiblock.util.RelativeDirection;
 import com.gregtechceu.gtceu.api.recipe.OverclockingLogic;
 import com.gregtechceu.gtceu.common.data.GTBlocks;
 import com.gregtechceu.gtceu.common.data.GTRecipeModifiers;
@@ -34,7 +35,7 @@ public class AtomicReconstructor {
                     GTRecipeModifiers.ELECTRIC_OVERCLOCK.apply(OverclockingLogic.NON_PERFECT_OVERCLOCK_SUBTICK),
                     GTRecipeModifiers.BATCH_MODE)
             // spotless:off
-            .pattern(definition -> MultiblockPatternBuilder.start()
+            .pattern(definition -> MultiblockPatternBuilder.start(RelativeDirection.FRONT, RelativeDirection.UP, RelativeDirection.LEFT)
                     .slice("      AAAAAAA      ", "      DAAAAAD      ", "      DA   AD      ", "      DA   AD      ", "      D     D      ", "      D     D      ", "      D     D      ", "      D     D      ", "      D     D      ", "      DA   AD      ", "      DA   AD      ", "      DAAAAAD      ", "      AAAAAAA      ", "                   ")
                     .slice("AAAAA ADAAADA  DDD ", "A   A ADDDDDA  GGG ", "A   A A     A  DDD ", "A   A A     A  GGG ", "A   A          DDD ", "A   A       A      ", "A   A       A      ", "A   A       A      ", "A   A              ", "A   A A     A      ", "AAAAA A     A      ", "      ADDDDDA      ", "      ADAAADA      ", "       AAAAA       ")
                     .slice("AAAAA AAAAAAA DDDDD", " BBB  ADDDDDA GFFFG", " BBB    C     DFFFD", " BBB    C     GFFFG", " BBB    C     DD DD", " BBBCCCCC   A  DAD ", " BBBCCCCC  DAAAAAD ", " BBBCCCCC   A      ", " BBB    C          ", " BBB    C          ", "AAAAA   C          ", "      ADDDDDA      ", "      AAAAAAA      ", "       AAAAA       ")

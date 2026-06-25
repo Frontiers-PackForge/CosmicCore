@@ -11,6 +11,7 @@ import com.gregtechceu.gtceu.api.machine.multiblock.PartAbility;
 import com.gregtechceu.gtceu.api.machine.multiblock.WorkableElectricMultiblockMachine;
 import com.gregtechceu.gtceu.api.multiblock.Predicates;
 import com.gregtechceu.gtceu.api.multiblock.pattern.MultiblockPatternBuilder;
+import com.gregtechceu.gtceu.api.multiblock.util.RelativeDirection;
 import com.gregtechceu.gtceu.api.recipe.OverclockingLogic;
 
 import static com.ghostipedia.cosmiccore.api.machine.part.CosmicPartAbility.IMPORT_EMBER;
@@ -30,7 +31,8 @@ public class IndustrialSteamTurbine {
             .partAppearance((controller, part, side) -> SOUL_STAINED_STEEL_ALU_CASING.getDefaultState())
             .recipeModifiers(CosmicRecipeModifiers::innateParallel4x,
                     ELECTRIC_OVERCLOCK.apply(OverclockingLogic.NON_PERFECT_OVERCLOCK))
-            .pattern(definition -> MultiblockPatternBuilder.start()
+            .pattern(definition -> MultiblockPatternBuilder
+                    .start(RelativeDirection.FRONT, RelativeDirection.UP, RelativeDirection.LEFT)
                     .slice(" AAA ", " ABA ", " BBB ", " BBB ", " ABA ", " AAA ")
                     .slice("AAAAA", "A   A", "B   B", "B   B", "A   A", "AAAAA")
                     .slice("AAAAA", "B   B", "B   B", "B   B", "B   B", "AAAAA")

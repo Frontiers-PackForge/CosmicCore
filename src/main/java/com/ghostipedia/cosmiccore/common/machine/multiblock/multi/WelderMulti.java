@@ -11,6 +11,7 @@ import com.gregtechceu.gtceu.api.machine.multiblock.PartAbility;
 import com.gregtechceu.gtceu.api.machine.multiblock.WorkableElectricMultiblockMachine;
 import com.gregtechceu.gtceu.api.multiblock.Predicates;
 import com.gregtechceu.gtceu.api.multiblock.pattern.MultiblockPatternBuilder;
+import com.gregtechceu.gtceu.api.multiblock.util.RelativeDirection;
 import com.gregtechceu.gtceu.api.recipe.OverclockingLogic;
 import com.gregtechceu.gtceu.common.data.GTBlocks;
 import com.gregtechceu.gtceu.common.data.GTRecipeModifiers;
@@ -36,7 +37,7 @@ public class WelderMulti {
             .recipeModifiers(GTRecipeModifiers.PARALLEL_HATCH,
                     GTRecipeModifiers.ELECTRIC_OVERCLOCK.apply(OverclockingLogic.PERFECT_OVERCLOCK_SUBTICK))
             // spotless:off
-            .pattern(definition -> MultiblockPatternBuilder.start()
+            .pattern(definition -> MultiblockPatternBuilder.start(RelativeDirection.FRONT, RelativeDirection.UP, RelativeDirection.LEFT)
                     .slice("AAAA       AAAA", "               ", "               ", "               ", "               ", "               ", "               ", "               ", "               ")
                     .slice("AAAAA     AAAAA", " BB         BB ", "  B         B  ", "  B         B  ", "  B         B  ", "  B         B  ", "  B         B  ", "  B         B  ", "  B         B  ")
                     .slice("AAAAAA   AAAAAA", " BBB       BBB ", " B           B ", " B           B ", " B           B ", " B           B ", " B           B ", " B           B ", " BBB       BBB ")

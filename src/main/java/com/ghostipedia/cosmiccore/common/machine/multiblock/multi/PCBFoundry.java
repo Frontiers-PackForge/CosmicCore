@@ -12,6 +12,7 @@ import com.gregtechceu.gtceu.api.data.tag.TagPrefix;
 import com.gregtechceu.gtceu.api.machine.MultiblockMachineDefinition;
 import com.gregtechceu.gtceu.api.machine.multiblock.PartAbility;
 import com.gregtechceu.gtceu.api.multiblock.pattern.MultiblockPatternBuilder;
+import com.gregtechceu.gtceu.api.multiblock.util.RelativeDirection;
 import com.gregtechceu.gtceu.api.recipe.OverclockingLogic;
 import com.gregtechceu.gtceu.common.data.*;
 
@@ -34,7 +35,7 @@ public class PCBFoundry {
                     GTRecipeModifiers.ELECTRIC_OVERCLOCK.apply(OverclockingLogic.NON_PERFECT_OVERCLOCK_SUBTICK),
                     GTRecipeModifiers.BATCH_MODE)
             // spotless:off
-            .pattern(definition -> MultiblockPatternBuilder.start()
+            .pattern(definition -> MultiblockPatternBuilder.start(RelativeDirection.FRONT, RelativeDirection.UP, RelativeDirection.LEFT)
                     .slice("AAAAAAAAA", "A A A A A", "A A A A A", "A A A A A", "         ", "         ", "         ")
                     .slice("ABBBBBBBA", "ACCCCCCCA", "ACCCCCCCA", "A A A A A", "         ", "         ", "         ")
                     .slice("ABBBBBBBA", "ACCCCCCCA", "ACCCCCCCA", "A A A A A", "         ", "         ", "         ")

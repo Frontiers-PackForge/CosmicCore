@@ -12,6 +12,7 @@ import com.gregtechceu.gtceu.api.machine.MultiblockMachineDefinition;
 import com.gregtechceu.gtceu.api.machine.multiblock.PartAbility;
 import com.gregtechceu.gtceu.api.machine.multiblock.WorkableElectricMultiblockMachine;
 import com.gregtechceu.gtceu.api.multiblock.pattern.MultiblockPatternBuilder;
+import com.gregtechceu.gtceu.api.multiblock.util.RelativeDirection;
 import com.gregtechceu.gtceu.api.recipe.OverclockingLogic;
 import com.gregtechceu.gtceu.common.data.GTRecipeModifiers;
 
@@ -36,7 +37,7 @@ public class PlasmiteDistillery {
                     GTRecipeModifiers.ELECTRIC_OVERCLOCK.apply(OverclockingLogic.NON_PERFECT_OVERCLOCK_SUBTICK),
                     GTRecipeModifiers.BATCH_MODE)
             // spotless:off
-            .pattern(definition -> MultiblockPatternBuilder.start()
+            .pattern(definition -> MultiblockPatternBuilder.start(RelativeDirection.FRONT, RelativeDirection.UP, RelativeDirection.LEFT)
                     .slice(" AAAEEEEEEEEEEE", " AAAEFFFFFFFFFE", " AAAEFFFFFFFFFE", " AAAEFFFFFFFFFE", " AAAEEEEEEEEEEE", " AAA           ", " AAA           ", " AAA           ", " AAA           ", " AAA           ", " AAA           ", "               ")
                     .slice("AAAAAEEEEEEEEEA", "AABAA         A", "AABAAGGGGGGGGGA", "AABAA         A", "AABAAEFFFFFFFFA", "AABAAHHHHHHHHHA", "AABAA          ", "AABAA          ", "AABAA          ", "AABAA          ", "AABAA          ", " AAA           ")
                     .slice("AAAAAEEEEEEEEEA", "ABCBAGGGGGGGGGA", "ABCBACCCCCCCCCA", "ABCBAGGGGGGGGGA", "ABCBAEFFFFFFFFA", "ABCBA         A", "ABCBA          ", "ABCBA          ", "ABCBA          ", "ABCBA          ", "ABCBA          ", " AAA           ")

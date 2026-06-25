@@ -13,6 +13,8 @@ import com.gregtechceu.gtceu.api.data.chemical.material.properties.PropertyKey;
 import com.gregtechceu.gtceu.api.data.chemical.material.properties.ToolProperty;
 import com.gregtechceu.gtceu.api.fluids.FluidBuilder;
 import com.gregtechceu.gtceu.api.fluids.FluidState;
+import com.gregtechceu.gtceu.api.fluids.store.FluidStorageKey;
+import com.gregtechceu.gtceu.api.fluids.store.FluidStorageKeys;
 import com.gregtechceu.gtceu.api.registry.GTRegistries;
 import com.gregtechceu.gtceu.api.registry.registrate.GTRegistrate;
 
@@ -683,5 +685,50 @@ public class CosmicMaterials {
         Neutronium.setMaterialIconSet(CCoreMaterialIconSet.VIBRANIUM_NEUTRONIUM);
         Neutronium.addFlags(NO_SMELTING, NO_ORE_SMELTING);
         Neutronium.setProperty(PropertyKey.BLAST, new BlastProperty(15000));
+
+        addPeriodicTableFluids();
+    }
+
+    /**
+     * Pack KubeJS (Periodic_table.js) used to enqueue these fluids onto stock GTCEu materials, but GTCEu 8.0 freezes
+     * every material's fluid storage during GTFluids#init - before any KubeJS material hook runs - so the enqueue threw
+     * "Cannot enqueue a builder after registration". PostMaterialEvent (this method's caller) is the pre-freeze window
+     * GTCEu itself uses for the same purpose (see AlloyBlastPropertyAddition), so the additions live here instead.
+     */
+    private static void addPeriodicTableFluids() {
+        for (Material material : new Material[] { Gold, Europium, Copper, Aluminium, Tritanium }) {
+            enqueueFluid(material, FluidStorageKeys.PLASMA, new FluidBuilder().state(FluidState.PLASMA));
+        }
+        for (Material material : new Material[] { Naquadah, NaquadahEnriched, Naquadria }) {
+            enqueueFluid(material, FluidStorageKeys.MOLTEN, new FluidBuilder().state(FluidState.LIQUID));
+        }
+        for (Material material : new Material[] { Agar, Scandium, Strontium, Caesium, Francium, Radium, Actinium,
+                Zirconium, Hafnium, Technetium, Rhenium, Bohrium, Rubidium, Rutherfordium, Dubnium, Seaborgium, Hassium,
+                Praseodymium, Protactinium, Promethium, Neptunium, Meitnerium, Roentgenium, Copernicium, Thallium,
+                Nihonium, Flerovium, Moscovium, Gadolinium, Curium, Terbium, Berkelium, Dysprosium, Californium,
+                Einsteinium, Fermium, Mendelevium, Nobelium, Lawrencium, Holmium, Erbium, Thulium, Ytterbium, Germanium,
+                Livermorium, Tennessine, Oganesson, Polonium, Astatine, Tellurium, Selenium, Salt }) {
+            enqueueFluid(material, FluidStorageKeys.LIQUID, new FluidBuilder());
+        }
+    }
+
+    private static void enqueueFluid(Material material, FluidStorageKey key, FluidBuilder builder) {
+        FluidProperty existing = material.getProperty(PropertyKey.FLUID);
+        if (existing != null) {
+            try {
+                existing.enqueueRegistration(key, builder);
+            } catch (RuntimeException alreadyRegisteredOrQueued) {
+                CosmicCore.LOGGER.debug("Skipping {} fluid for {} (already provided/frozen by GTCEu)", key, material);
+            }
+            return;
+        }
+        FluidProperty created = new FluidProperty();
+        try {
+            created.enqueueRegistration(key, builder);
+        } catch (RuntimeException cannotEnqueue) {
+            CosmicCore.LOGGER.debug("Skipping {} fluid for {} (could not enqueue)", key, material);
+            return;
+        }
+        material.setProperty(PropertyKey.FLUID, created);
     }
 }

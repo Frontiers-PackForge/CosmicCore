@@ -9,6 +9,7 @@ import com.gregtechceu.gtceu.api.machine.MultiblockMachineDefinition;
 import com.gregtechceu.gtceu.api.machine.multiblock.PartAbility;
 import com.gregtechceu.gtceu.api.multiblock.Predicates;
 import com.gregtechceu.gtceu.api.multiblock.pattern.MultiblockPatternBuilder;
+import com.gregtechceu.gtceu.api.multiblock.util.RelativeDirection;
 import com.gregtechceu.gtceu.client.renderer.machine.DynamicRenderHelper;
 import com.gregtechceu.gtceu.common.block.BoilerFireboxType;
 import com.gregtechceu.gtceu.utils.GTUtil;
@@ -29,7 +30,8 @@ public class IPBF {
             .recipeType(CosmicRecipeTypes.INDUSTRIAL_PRIMITIVE_BLAST_FURNACE_RECIPES)
             .recipeModifier(IPBFMachine::recipeModifier, true)
             .appearanceBlock(CASING_PRIMITIVE_BRICKS)
-            .pattern(definition -> MultiblockPatternBuilder.start()
+            .pattern(definition -> MultiblockPatternBuilder
+                    .start(RelativeDirection.FRONT, RelativeDirection.UP, RelativeDirection.LEFT)
                     .slice("QQQ", "XXX", "XXX", "XXX", "XXX")
                     .slice("QQQ", "X#X", "X#X", "X#X", "X#X")
                     .slice("QQQ", "XYX", "XXX", "XXX", "XXX")

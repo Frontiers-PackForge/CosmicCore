@@ -8,6 +8,7 @@ import com.gregtechceu.gtceu.api.machine.MultiblockMachineDefinition;
 import com.gregtechceu.gtceu.api.machine.multiblock.PartAbility;
 import com.gregtechceu.gtceu.api.multiblock.Predicates;
 import com.gregtechceu.gtceu.api.multiblock.pattern.MultiblockPatternBuilder;
+import com.gregtechceu.gtceu.api.multiblock.util.RelativeDirection;
 import com.gregtechceu.gtceu.api.recipe.OverclockingLogic;
 import com.gregtechceu.gtceu.common.data.GTMaterials;
 import com.gregtechceu.gtceu.common.data.GTRecipeModifiers;
@@ -30,7 +31,8 @@ public class DroneStation {
             .appearanceBlock(CASING_STAINLESS_CLEAN)
             .partAppearance((controller, part, side) -> CASING_STAINLESS_CLEAN.getDefaultState())
             .recipeModifiers(GTRecipeModifiers.ELECTRIC_OVERCLOCK.apply(OverclockingLogic.PERFECT_OVERCLOCK_SUBTICK))
-            .pattern(definition -> MultiblockPatternBuilder.start()
+            .pattern(definition -> MultiblockPatternBuilder
+                    .start(RelativeDirection.FRONT, RelativeDirection.UP, RelativeDirection.LEFT)
                     .slice(" AAAAA     ", "           ", "           ", "           ", "           ", "           ",
                             "           ", "           ", "           ", "           ", "           ")
                     .slice("AAAAAAA    ", "B     B    ", "B     B    ", "B  C  B    ", "B CCC B    ", "BCCCCCB    ",

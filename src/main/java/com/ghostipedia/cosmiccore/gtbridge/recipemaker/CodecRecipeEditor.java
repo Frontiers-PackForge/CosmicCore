@@ -2,7 +2,6 @@ package com.ghostipedia.cosmiccore.gtbridge.recipemaker;
 
 import com.ghostipedia.cosmiccore.gtbridge.recipemaker.RecipeCodecReader.JsonField;
 
-import com.gregtechceu.gtceu.api.gui.GuiTextures;
 import com.gregtechceu.gtceu.api.transfer.item.CustomItemStackHandler;
 
 import com.lowdragmc.lowdraglib.gui.texture.ColorRectTexture;
@@ -116,7 +115,7 @@ public final class CodecRecipeEditor {
             }
         }
         editor.addWidget(body);
-        editor.addWidget(new ExportButtonWidget(0, 192, 120, 16, GuiTextures.VANILLA_BUTTON,
+        editor.addWidget(new ExportButtonWidget(0, 192, 120, 16, RecipeMakerTextures.VANILLA_BUTTON,
                 () -> export(player, typeId, recipeId, sample, fields, itemState, fluidState, valueState)));
         editor.addWidget(new LabelWidget(34, 196, "Copy KubeJS"));
     }

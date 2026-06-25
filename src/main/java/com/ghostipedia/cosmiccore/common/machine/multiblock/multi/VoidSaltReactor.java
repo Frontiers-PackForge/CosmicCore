@@ -9,6 +9,7 @@ import com.gregtechceu.gtceu.api.machine.MultiblockMachineDefinition;
 import com.gregtechceu.gtceu.api.machine.multiblock.PartAbility;
 import com.gregtechceu.gtceu.api.machine.multiblock.WorkableElectricMultiblockMachine;
 import com.gregtechceu.gtceu.api.multiblock.pattern.MultiblockPatternBuilder;
+import com.gregtechceu.gtceu.api.multiblock.util.RelativeDirection;
 import com.gregtechceu.gtceu.api.recipe.OverclockingLogic;
 import com.gregtechceu.gtceu.common.data.GTBlocks;
 import com.gregtechceu.gtceu.common.data.GTRecipeModifiers;
@@ -33,7 +34,7 @@ public class VoidSaltReactor {
                     GTRecipeModifiers.ELECTRIC_OVERCLOCK.apply(OverclockingLogic.NON_PERFECT_OVERCLOCK_SUBTICK),
                     GTRecipeModifiers.BATCH_MODE)
             // spotless:off
-            .pattern(definition -> MultiblockPatternBuilder.start()
+            .pattern(definition -> MultiblockPatternBuilder.start(RelativeDirection.FRONT, RelativeDirection.UP, RelativeDirection.LEFT)
                     .slice("AA AA", "BA AB", "B   B", "B   B", "B   B", "BA AB", "AA AA")
                     .slice("AAAAA", "ACCCA", " CDC ", " CDC ", " CDC ", "ACCCA", "AAAAA")
                     .slice(" AAA ", " CCC ", " DED ", " DED ", " DED ", " CCC ", " AAA ")

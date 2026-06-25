@@ -11,6 +11,7 @@ import com.gregtechceu.gtceu.api.machine.MultiblockMachineDefinition;
 import com.gregtechceu.gtceu.api.machine.multiblock.PartAbility;
 import com.gregtechceu.gtceu.api.multiblock.Predicates;
 import com.gregtechceu.gtceu.api.multiblock.pattern.MultiblockPatternBuilder;
+import com.gregtechceu.gtceu.api.multiblock.util.RelativeDirection;
 
 import net.minecraft.network.chat.Component;
 
@@ -47,7 +48,8 @@ public class DreamersBasin {
                     Component.translatable("cosmiccore.machine.dreamers_basin.tooltip.1"),
                     Component.translatable("cosmiccore.machine.dreamers_basin.tooltip.2"),
                     Component.translatable("cosmiccore.machine.dreamers_basin.tooltip.3"))
-            .pattern(definition -> MultiblockPatternBuilder.start()
+            .pattern(definition -> MultiblockPatternBuilder
+                    .start(RelativeDirection.FRONT, RelativeDirection.UP, RelativeDirection.LEFT)
                     .slice("  AAA   AAA  ", "    A   A    ", "    A   A    ", "      B      ", "      B      ",
                             "     BBB     ", "   BBBBBBB   ", "    BBBBB    ", "     BBB     ", "             ",
                             "             ")

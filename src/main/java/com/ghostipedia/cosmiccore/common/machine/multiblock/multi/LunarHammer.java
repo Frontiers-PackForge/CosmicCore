@@ -11,6 +11,7 @@ import com.gregtechceu.gtceu.api.data.RotationState;
 import com.gregtechceu.gtceu.api.machine.MultiblockMachineDefinition;
 import com.gregtechceu.gtceu.api.machine.multiblock.PartAbility;
 import com.gregtechceu.gtceu.api.multiblock.pattern.MultiblockPatternBuilder;
+import com.gregtechceu.gtceu.api.multiblock.util.RelativeDirection;
 import com.gregtechceu.gtceu.api.recipe.OverclockingLogic;
 import com.gregtechceu.gtceu.common.data.GTBlocks;
 import com.gregtechceu.gtceu.common.data.GTMaterials;
@@ -36,7 +37,7 @@ public class LunarHammer {
                     GTRecipeModifiers.ELECTRIC_OVERCLOCK.apply(OverclockingLogic.PERFECT_OVERCLOCK),
                     GTRecipeModifiers.BATCH_MODE)
             // spotless:off
-            .pattern(definition -> MultiblockPatternBuilder.start()
+            .pattern(definition -> MultiblockPatternBuilder.start(RelativeDirection.FRONT, RelativeDirection.UP, RelativeDirection.LEFT)
                     .slice("    A     A    ", "    A  B  A    ", "      BBB      ", "      BBB      ", "       B       ", "               ", "               ", "               ", "               ", "               ", "               ", "               ", "               ", "               ", "               ", "               ", "               ", "               ", "               ", "               ", "               ", "               ", "               ", "               ", "       B       ", "      BBB      ", "      BBB      ", "    A  B  A    ", "    A     A    ")
                     .slice("   AA     AA   ", "   AA  C  AA   ", "   AA CDC AA   ", "    A CCC A    ", "       C       ", "               ", "               ", "     EEEEE     ", "               ", "               ", "               ", "               ", "               ", "               ", "               ", "               ", "               ", "               ", "               ", "               ", "               ", "     EEEEE     ", "               ", "               ", "       C       ", "    A CCC A    ", "   AA CDC AA   ", "   AAFFCFFAA   ", "   AA     AA   ")
                     .slice("  ACCCCCCCCCA  ", "  AF   C   FA  ", "  AFCCCDCCCFA  ", "  AF  CCC  FA  ", "  AFEEECEEEFA  ", "  AF       FA  ", "   F       F   ", "   FE G G EF   ", "   F       F   ", "   F       F   ", "   F       F   ", "   F       F   ", "   F       F   ", "   F       F   ", "   F       F   ", "   F       F   ", "   F       F   ", "   F       F   ", "   F       F   ", "   F       F   ", "   F       F   ", "   FE G G EF   ", "   F       F   ", "  AF       FA  ", "  AFEEECEEEFA  ", "  AF  CCC  FA  ", "  AFCCCDCCCFA  ", "  AF   C   FA  ", "  ACCCCCCCCCA  ")

@@ -10,6 +10,7 @@ import com.gregtechceu.gtceu.api.machine.MultiblockMachineDefinition;
 import com.gregtechceu.gtceu.api.machine.multiblock.PartAbility;
 import com.gregtechceu.gtceu.api.multiblock.Predicates;
 import com.gregtechceu.gtceu.api.multiblock.pattern.MultiblockPatternBuilder;
+import com.gregtechceu.gtceu.api.multiblock.util.RelativeDirection;
 import com.gregtechceu.gtceu.common.data.GTBlocks;
 import com.gregtechceu.gtceu.common.data.GTMaterials;
 import com.gregtechceu.gtceu.common.data.GTRecipeTypes;
@@ -87,7 +88,8 @@ public class OreExtractionDrill {
                         default -> GTBlocks.CASING_STEEL_PIPE.get();
                     };
 
-                    return MultiblockPatternBuilder.start()
+                    return MultiblockPatternBuilder
+                            .start(RelativeDirection.FRONT, RelativeDirection.UP, RelativeDirection.LEFT)
                             .slice("AA AA", " A A ", " BCB ", "     ", "     ", "     ", "     ", "     ", "     ",
                                     "     ")
                             .slice("A   A", "A D A", "BCCCB", " CCC ", "  B  ", "  B  ", "  B  ", "     ", "     ",

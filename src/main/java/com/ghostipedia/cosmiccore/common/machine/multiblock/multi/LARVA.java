@@ -9,6 +9,7 @@ import com.gregtechceu.gtceu.api.machine.MultiblockMachineDefinition;
 import com.gregtechceu.gtceu.api.machine.multiblock.PartAbility;
 import com.gregtechceu.gtceu.api.multiblock.Predicates;
 import com.gregtechceu.gtceu.api.multiblock.pattern.MultiblockPatternBuilder;
+import com.gregtechceu.gtceu.api.multiblock.util.RelativeDirection;
 import com.gregtechceu.gtceu.api.recipe.modifier.RecipeModifier;
 import com.gregtechceu.gtceu.common.data.*;
 
@@ -28,7 +29,8 @@ public class LARVA {
             .recipeModifier(RecipeModifier.NO_MODIFIER)
             .appearanceBlock(TRITANIUM_LINED_HEAVY_NEUTRONIUM_CASING)
             .partAppearance((controller, part, side) -> TRITANIUM_LINED_HEAVY_NEUTRONIUM_CASING.getDefaultState())
-            .pattern(definition -> MultiblockPatternBuilder.start()
+            .pattern(definition -> MultiblockPatternBuilder
+                    .start(RelativeDirection.FRONT, RelativeDirection.UP, RelativeDirection.LEFT)
                     // spotless: off
                     .slice("                                                                   ",
                             "                                                                   ",

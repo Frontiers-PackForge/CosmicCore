@@ -27,7 +27,8 @@ public abstract class GroupingMapRendererMixin {
         boolean isField = vein.definition().unwrapKey()
                 .map(key -> key.location().getNamespace().equals(CosmicCore.MOD_ID))
                 .orElse(false);
-        if (isField) {
+        boolean noMaterials = vein.definition().value().veinGenerator().getAllMaterials().isEmpty();
+        if (isField || noMaterials) {
             cir.setReturnValue(false);
         }
     }

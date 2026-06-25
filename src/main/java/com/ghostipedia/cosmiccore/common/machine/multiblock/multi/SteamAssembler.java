@@ -9,6 +9,7 @@ import com.gregtechceu.gtceu.api.machine.MultiblockMachineDefinition;
 import com.gregtechceu.gtceu.api.machine.multiblock.PartAbility;
 import com.gregtechceu.gtceu.api.multiblock.Predicates;
 import com.gregtechceu.gtceu.api.multiblock.pattern.MultiblockPatternBuilder;
+import com.gregtechceu.gtceu.api.multiblock.util.RelativeDirection;
 import com.gregtechceu.gtceu.client.renderer.machine.DynamicRenderHelper;
 import com.gregtechceu.gtceu.common.block.BoilerFireboxType;
 import com.gregtechceu.gtceu.common.data.GTRecipeTypes;
@@ -29,7 +30,8 @@ public class SteamAssembler {
             .recipeType(GTRecipeTypes.ASSEMBLER_RECIPES)
             .recipeModifier(WeakSteamParallelMultiBlockMachine::recipeModifier, true)
             .appearanceBlock(STEEL_PLATED_BRONZE)
-            .pattern(definition -> MultiblockPatternBuilder.start()
+            .pattern(definition -> MultiblockPatternBuilder
+                    .start(RelativeDirection.FRONT, RelativeDirection.UP, RelativeDirection.LEFT)
                     .slice("AAAAA", "BBBBB", "BBBBB")
                     .slice("AAAAA", "BDDDB", "BBBBB")
                     .slice("AAAAA", "BYBBB", "BBBBB")

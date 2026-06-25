@@ -7,6 +7,7 @@ import com.gregtechceu.gtceu.api.data.RotationState;
 import com.gregtechceu.gtceu.api.machine.MultiblockMachineDefinition;
 import com.gregtechceu.gtceu.api.machine.multiblock.PartAbility;
 import com.gregtechceu.gtceu.api.multiblock.pattern.MultiblockPatternBuilder;
+import com.gregtechceu.gtceu.api.multiblock.util.RelativeDirection;
 import com.gregtechceu.gtceu.common.data.GTRecipeTypes;
 
 import net.minecraft.network.chat.Component;
@@ -33,7 +34,7 @@ public class MothCargoDropOff {
             .recipeType(GTRecipeTypes.DUMMY_RECIPES)
             .appearanceBlock(CASING_STEEL_SOLID)
             // spotless:off
-            .pattern(definition -> MultiblockPatternBuilder.start()
+            .pattern(definition -> MultiblockPatternBuilder.start(RelativeDirection.FRONT, RelativeDirection.UP, RelativeDirection.LEFT)
                     // Compact 3x3x3 structure
                     .slice("CCC", "CCC", "C C")
                     .slice("CCC", "C C", "   ")

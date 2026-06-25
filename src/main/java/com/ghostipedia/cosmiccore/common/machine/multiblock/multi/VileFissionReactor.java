@@ -10,6 +10,7 @@ import com.gregtechceu.gtceu.api.machine.MultiblockMachineDefinition;
 import com.gregtechceu.gtceu.api.machine.multiblock.PartAbility;
 import com.gregtechceu.gtceu.api.machine.multiblock.WorkableElectricMultiblockMachine;
 import com.gregtechceu.gtceu.api.multiblock.pattern.MultiblockPatternBuilder;
+import com.gregtechceu.gtceu.api.multiblock.util.RelativeDirection;
 import com.gregtechceu.gtceu.api.recipe.OverclockingLogic;
 import com.gregtechceu.gtceu.common.data.GTBlocks;
 import com.gregtechceu.gtceu.common.data.GTRecipeModifiers;
@@ -34,7 +35,7 @@ public class VileFissionReactor {
                     GTRecipeModifiers.ELECTRIC_OVERCLOCK.apply(OverclockingLogic.NON_PERFECT_OVERCLOCK_SUBTICK),
                     GTRecipeModifiers.BATCH_MODE)
             // spotless:off
-            .pattern(definition -> MultiblockPatternBuilder.start()
+            .pattern(definition -> MultiblockPatternBuilder.start(RelativeDirection.FRONT, RelativeDirection.UP, RelativeDirection.LEFT)
                     .slice("AAAAAAA", " AA AA ", " A   A ", "       ", "       ", "   A   ", "   A   ", "  ABA  ", "   A   ", "   A   ", "       ", "       ", " A   A ", " AA AA ", "AAAAAAA")
                     .slice("AAAAAAA", "AABBBAA", "AABCBAA", " ABCBA ", "  BCB  ", "  BBB  ", "  AAA  ", " AA AA ", "  AAA  ", "  BBB  ", "  BCB  ", " ABCBA ", "AABCBAA", "AABBBAA", "AAAAAAA")
                     .slice("AAAAAAA", "ABDDDBA", " BDDDB ", " BDDDB ", " BDDDB ", " BDDDB ", " AADAA ", "AAADAAA", " AADAA ", " BDDDB ", " BDDDB ", " BDDDB ", " BDDDB ", "ABDDDBA", "AAAAAAA")

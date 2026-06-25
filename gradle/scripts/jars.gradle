@@ -19,3 +19,12 @@ afterEvaluate {
         ])
     }
 }
+
+// Jar-in-jar CC's PATCHED LDLib so the built mod is SELF-CONTAINED: the pack has no separate ldlib mod, and CC
+// requires one (and must NOT get the stock ldlib - it conflicts with MUI2; see dependencies.gradle / patch-ldlib.py).
+// Added only to the assembled jar (META-INF/jarjar), so the dev runClient - which loads the exploded source set +
+// runtimeOnly(ccpatch), not this jar - is unaffected. NeoForge extracts + loads the nested jar as the "ldlib" mod.
+tasks.named('jar', org.gradle.jvm.tasks.Jar).configure {
+    from("$rootDir/libs/ldlib-neoforge-1.21.1-1.0.35.a-ccpatch.jar") { into 'META-INF/jarjar' }
+    from("$rootDir/jarjar/metadata.json") { into 'META-INF/jarjar' }
+}

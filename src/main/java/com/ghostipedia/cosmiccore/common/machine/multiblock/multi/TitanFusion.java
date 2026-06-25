@@ -10,6 +10,7 @@ import com.gregtechceu.gtceu.api.data.RotationState;
 import com.gregtechceu.gtceu.api.machine.MultiblockMachineDefinition;
 import com.gregtechceu.gtceu.api.machine.multiblock.PartAbility;
 import com.gregtechceu.gtceu.api.multiblock.pattern.MultiblockPatternBuilder;
+import com.gregtechceu.gtceu.api.multiblock.util.RelativeDirection;
 import com.gregtechceu.gtceu.api.recipe.OverclockingLogic;
 import com.gregtechceu.gtceu.common.data.GTBlocks;
 import com.gregtechceu.gtceu.common.data.GTMaterials;
@@ -34,7 +35,7 @@ public class TitanFusion {
                     GTRecipeModifiers.ELECTRIC_OVERCLOCK.apply(OverclockingLogic.PERFECT_OVERCLOCK),
                     GTRecipeModifiers.BATCH_MODE)
             // spotless:off
-            .pattern(definition -> MultiblockPatternBuilder.start()
+            .pattern(definition -> MultiblockPatternBuilder.start(RelativeDirection.FRONT, RelativeDirection.UP, RelativeDirection.LEFT)
                     .slice("         AAAAA         ", "         AAAAA         ", "         AAAAA         ", "         AAAAA         ", "                       ", "                       ", "                       ", "                       ", "                       ", "                       ", "                       ", "                       ", "          AAA          ", "         AAAAA         ", "         AAAAA         ", "         AAAAA         ", "          AAA          ", "                       ", "                       ", "                       ", "                       ", "                       ", "                       ", "                       ", "                       ", "         AAAAA         ", "         AAAAA         ", "         AAAAA         ", "         AAAAA         ")
                     .slice("        BBBBBBB        ", "        BBBBBBB        ", "        BBBBBBB        ", "         AACAA         ", "           C           ", "           C           ", "           C           ", "           C           ", "           C           ", "           C           ", "           C           ", "           C           ", "           C           ", "       AA  C  AA       ", "      AAA  C  AAA      ", "       AA  C  AA       ", "           C           ", "           C           ", "           C           ", "           C           ", "           C           ", "           C           ", "           C           ", "           C           ", "           C           ", "         AACAA         ", "        BBBBBBB        ", "        BBBBBBB        ", "        BBBBBBB        ")
                     .slice("      BBBBBBBBBBB      ", "      BBBBBBBBBBB      ", "      BBBBBBBBBBB      ", "        CAAAAAC        ", "                       ", "                       ", "                       ", "                       ", "                       ", "                       ", "                       ", "                       ", "                       ", "                       ", "     A           A     ", "                       ", "                       ", "                       ", "                       ", "                       ", "                       ", "                       ", "                       ", "                       ", "                       ", "        CAAAAAC        ", "      BBBBBBBBBBB      ", "      BBBBBBBBBBB      ", "      BBBBBBBBBBB      ")

@@ -10,6 +10,7 @@ import com.gregtechceu.gtceu.api.machine.multiblock.PartAbility;
 import com.gregtechceu.gtceu.api.machine.multiblock.WorkableElectricMultiblockMachine;
 import com.gregtechceu.gtceu.api.multiblock.Predicates;
 import com.gregtechceu.gtceu.api.multiblock.pattern.MultiblockPatternBuilder;
+import com.gregtechceu.gtceu.api.multiblock.util.RelativeDirection;
 import com.gregtechceu.gtceu.api.recipe.OverclockingLogic;
 import com.gregtechceu.gtceu.common.data.GTBlocks;
 import com.gregtechceu.gtceu.common.data.GTRecipeModifiers;
@@ -31,7 +32,8 @@ public class ManaEtchingFactory {
             .partAppearance((controller, part, side) -> LIVING_ROCK_TILES.getDefaultState())
             .recipeModifiers(GTRecipeModifiers.PARALLEL_HATCH,
                     ELECTRIC_OVERCLOCK.apply(OverclockingLogic.NON_PERFECT_OVERCLOCK), GTRecipeModifiers.BATCH_MODE)
-            .pattern(definition -> MultiblockPatternBuilder.start()
+            .pattern(definition -> MultiblockPatternBuilder
+                    .start(RelativeDirection.FRONT, RelativeDirection.UP, RelativeDirection.LEFT)
                     .slice(" AAAAA ", " CCCCC ", " CCCCC ", " DDDDD ")
                     .slice("AADDDAA", "D     D", "D     D", "DDDDDDD")
                     .slice("AADDDAA", "A     A", "A     A", "AADADAA")

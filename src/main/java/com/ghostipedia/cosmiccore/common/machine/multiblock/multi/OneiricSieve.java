@@ -10,6 +10,7 @@ import com.gregtechceu.gtceu.api.machine.multiblock.PartAbility;
 import com.gregtechceu.gtceu.api.machine.multiblock.WorkableElectricMultiblockMachine;
 import com.gregtechceu.gtceu.api.multiblock.Predicates;
 import com.gregtechceu.gtceu.api.multiblock.pattern.MultiblockPatternBuilder;
+import com.gregtechceu.gtceu.api.multiblock.util.RelativeDirection;
 import com.gregtechceu.gtceu.api.recipe.OverclockingLogic;
 import com.gregtechceu.gtceu.common.data.GTBlocks;
 import com.gregtechceu.gtceu.common.data.GTRecipeModifiers;
@@ -32,7 +33,7 @@ public class OneiricSieve {
                     ELECTRIC_OVERCLOCK.apply(OverclockingLogic.NON_PERFECT_OVERCLOCK))
             .appearanceBlock(SUPERHEAVY_STEEL_CASING)
             // spotless:off
-            .pattern(definition -> MultiblockPatternBuilder.start()
+            .pattern(definition -> MultiblockPatternBuilder.start(RelativeDirection.FRONT, RelativeDirection.UP, RelativeDirection.LEFT)
                     .slice(" AABBBBBAA ", "           ", "           ", "           ", "           ", "           ")
                     .slice(" A BAAAB A ", "           ", "           ", "  BBCCCBB  ", "    CAC    ", " BBBBBBBBB ")
                     .slice("CACBAAABCAC", "CCC     CCC", "  C     C  ", "  CBDDDBC  ", "CCCCC CCCCC", "CB       BC")

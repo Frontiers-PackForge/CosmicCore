@@ -357,7 +357,8 @@ public class CosmicMachines {
             .rotationState(RotationState.NON_Y_AXIS)
             .recipeType(CosmicRecipeTypes.SOUL_TESTER_RECIPES)
             .appearanceBlock(GTBlocks.CASING_PRIMITIVE_BRICKS)
-            .pattern(definition -> MultiblockPatternBuilder.start()
+            .pattern(definition -> MultiblockPatternBuilder
+                    .start(RelativeDirection.FRONT, RelativeDirection.UP, RelativeDirection.LEFT)
                     .slice("S", "S", "C", "I", "I")
                     .where('C', controller(blocks(definition.getBlock())))
                     .where('S', abilities(CosmicPartAbility.IMPORT_SOUL).or(abilities(CosmicPartAbility.EXPORT_SOUL)))
@@ -373,7 +374,8 @@ public class CosmicMachines {
      * .rotationState(RotationState.NON_Y_AXIS)
      * .recipeType(CosmicRecipeTypes.EMBER_TESTER_RECIPES)
      * .appearanceBlock(GTBlocks.CASING_PRIMITIVE_BRICKS)
-     * .pattern(definition -> MultiblockPatternBuilder.start()
+     * .pattern(definition -> MultiblockPatternBuilder.start(RelativeDirection.FRONT, RelativeDirection.UP,
+     * RelativeDirection.LEFT)
      * .slice("S", "C", "I")
      * .where('C', controller(blocks(definition.getBlock())))
      * .where('S', abilities(IMPORT_EMBER).or(abilities(EXPORT_EMBER)))
@@ -548,7 +550,7 @@ public class CosmicMachines {
                     Component.translatable("gtceu.machine.dec.tooltip.1"),
                     Component.translatable("gtceu.machine.dec.tooltip.2"),
                     Component.translatable("gtceu.machine.dec.tooltip.3"))
-            .pattern(definition -> MultiblockPatternBuilder.start(LEFT, BACK, DOWN)
+            .pattern(definition -> MultiblockPatternBuilder.start(UP, BACK, RIGHT)
                     .slice("XXSXX", "XXXXX", "XXXXX", "XXXXX", "XXXXX")
                     .slice("XXXXX", "XCCCX", "XCCCX", "XCCCX", "XXXXX")
                     .sliceRepeatable(1, DimensionalEnergyCapacitor.MAX_BATTERY_LAYER, "GGGGG", "GBBBG", "GBBBG",
@@ -589,7 +591,8 @@ public class CosmicMachines {
                              .append(Component.translatable("gtceu.machine.active_transformer.tooltip.3")
                                      .withStyle(TooltipHelper.RAINBOW_HSL_SLOW))))
             .tooltips(Component.translatable("gtceu.machine.dec.tooltip.4"))
-            .pattern((definition) -> MultiblockPatternBuilder.start()
+            .pattern((definition) -> MultiblockPatternBuilder
+                    .start(RelativeDirection.FRONT, RelativeDirection.UP, RelativeDirection.LEFT)
                     .slice("XXX", "XXX", "XXX")
                     .slice("XXX", "XCX", "XXX")
                     .slice("XMX", "XSX", "XXX")
@@ -634,7 +637,8 @@ public class CosmicMachines {
             .rotationState(RotationState.NON_Y_AXIS)
             .appearanceBlock(HIGH_POWER_CASING)
             .recipeType(GTRecipeTypes.DUMMY_RECIPES)
-            .pattern(definition -> MultiblockPatternBuilder.start()
+            .pattern(definition -> MultiblockPatternBuilder
+                    .start(RelativeDirection.FRONT, RelativeDirection.UP, RelativeDirection.LEFT)
                     // spotless: off
                     .slice("   AAAAAAA   ", "     BBB     ", "     BBB     ", "             ", "             ",
                             "             ", "             ", "             ", "             ", "             ",
@@ -885,7 +889,8 @@ public class CosmicMachines {
             if (definition == null) continue;
             definition.setPattern("main", () -> {
                 var casing = blocks(FusionReactorMachine.getCasingState(definition.getTier()));
-                return MultiblockPatternBuilder.start()
+                return MultiblockPatternBuilder
+                        .start(RelativeDirection.FRONT, RelativeDirection.UP, RelativeDirection.LEFT)
                         .slice("###############", "######OGO######", "###############")
                         .slice("######ICI######", "####GGAAAGG####", "######ICI######")
                         .slice("####CC###CC####", "###EAAOGOAAE###", "####CC###CC####")
@@ -918,21 +923,23 @@ public class CosmicMachines {
                         .build();
             });
         }
-        GCYMMachines.LARGE_CENTRIFUGE.setPattern("main", () -> MultiblockPatternBuilder.start()
-                .slice("#XXX#", "XXXXX", "#XXX#")
-                .slice("XXXXX", "XAPAX", "XXXXX")
-                .slice("XXXXX", "XPAPX", "XXXXX")
-                .slice("XXXXX", "XAPAX", "XXXXX")
-                .slice("#XXX#", "XXSXX", "#XXX#")
-                .where('S', controller(blocks(GCYMMachines.LARGE_CENTRIFUGE.getBlock())))
-                .where('X', blocks(CASING_VIBRATION_SAFE.get()).setMinGlobalLimited(40)
-                        .or(Predicates.autoAbilities(CENTRIFUGE_RECIPES))
-                        .or(Predicates.autoAbilities(true, false, true))
-                        .or(abilities(STERILIZE_HATCH).setMaxGlobalLimited(1, 1)))
-                .where('P', Predicates.blocks(CASING_STEEL_PIPE.get()))
-                .where('A', Predicates.air())
-                .where('#', Predicates.any())
-                .build());
+        GCYMMachines.LARGE_CENTRIFUGE.setPattern("main",
+                () -> MultiblockPatternBuilder
+                        .start(RelativeDirection.FRONT, RelativeDirection.UP, RelativeDirection.LEFT)
+                        .slice("#XXX#", "XXXXX", "#XXX#")
+                        .slice("XXXXX", "XAPAX", "XXXXX")
+                        .slice("XXXXX", "XPAPX", "XXXXX")
+                        .slice("XXXXX", "XAPAX", "XXXXX")
+                        .slice("#XXX#", "XXSXX", "#XXX#")
+                        .where('S', controller(blocks(GCYMMachines.LARGE_CENTRIFUGE.getBlock())))
+                        .where('X', blocks(CASING_VIBRATION_SAFE.get()).setMinGlobalLimited(40)
+                                .or(Predicates.autoAbilities(CENTRIFUGE_RECIPES))
+                                .or(Predicates.autoAbilities(true, false, true))
+                                .or(abilities(STERILIZE_HATCH).setMaxGlobalLimited(1, 1)))
+                        .where('P', Predicates.blocks(CASING_STEEL_PIPE.get()))
+                        .where('A', Predicates.air())
+                        .where('#', Predicates.any())
+                        .build());
 
         GTMultiMachines.ASSEMBLY_LINE.setPattern("main", () -> MultiblockPatternBuilder.start(BACK, UP, RIGHT)
                 .slice("FIF", "RTR", "SAG", "#Y#")
