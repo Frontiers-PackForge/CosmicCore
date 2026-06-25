@@ -1,7 +1,7 @@
 {
-    "ldlib": {
-        "connection": "cosmiccore:block/casings/solid/magnet_fusion_grade_bloom_ctm",
-        "emissive": true
+    "gtceu": {
+        "connection_texture": "cosmiccore:block/casings/solid/magnet_fusion_grade_bloom_ctm",
+        "bloom": true
     },
     "shimmer": {
         "bloom": true

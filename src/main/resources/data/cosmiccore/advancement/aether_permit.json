@@ -1,0 +1,17 @@
+{
+  "criteria": {
+    "has_permit": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": ["cosmiccore:aether_permit"]
+          }
+        ]
+      }
+    }
+  },
+  "requirements": [
+    ["has_permit"]
+  ]
+}

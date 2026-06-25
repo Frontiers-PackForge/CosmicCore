@@ -18,6 +18,7 @@ import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.WorldGenLevel;
 import net.minecraft.world.level.chunk.ChunkGenerator;
+import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.level.levelgen.XoroshiroRandomSource;
 import net.minecraft.world.level.levelgen.placement.PlacementContext;
 
@@ -42,6 +43,7 @@ public final class OreFieldDispatcher {
     private static final Logger LOGGER = LoggerFactory.getLogger("CosmicOreFields");
     private static final int SEARCH_RADIUS = 140;
     private static final long Y_SALT = 0x5DEECE66DL;
+    private static final int SURFACE_CLEARANCE = 40;
 
     public static List<GeneratedVeinMetadata> membersInChunk(WorldGenLevel level, ChunkGenerator generator,
                                                              ChunkPos chunkPos) {
@@ -70,6 +72,8 @@ public final class OreFieldDispatcher {
         int gridZ = Math.floorDiv(chunkPos.z, gridSize);
 
         List<GeneratedVeinMetadata> out = new ArrayList<>();
+        PlacementContext placement = new PlacementContext(level, generator, Optional.empty());
+        boolean surfaceDimension = dimension != Level.NETHER && dimension != Level.END;
         for (OreFieldPlacement.OreField field : fields) {
             ResourceLocation id = CosmicCore.id(field.bundle().getName());
             Optional<Holder.Reference<GTOreDefinition>> holder = registry
@@ -80,13 +84,18 @@ public final class OreFieldDispatcher {
             RandomSource coreRandom = new XoroshiroRandomSource(
                     seed ^ Y_SALT ^
                             ((long) field.core().getX() * 341873128712L + (long) field.core().getZ() * 132897987541L));
-            BlockPos coreOrigin = definition.heightRange().getPositions(
-                    new PlacementContext(level, generator, Optional.empty()),
+            BlockPos coreOrigin = definition.heightRange().getPositions(placement,
                     coreRandom, new BlockPos(field.core().getX(), 0, field.core().getZ())).findFirst().orElse(null);
             if (coreOrigin == null) continue;
-            int coreY = coreOrigin.getY() + 5;
             int minY = level.getMinBuildHeight() + 1;
             int maxY = level.getMaxBuildHeight() - 1;
+            int coreY = coreOrigin.getY() + 5;
+            if (surfaceDimension) {
+                int surface = placement.getHeight(Heightmap.Types.OCEAN_FLOOR_WG, field.core().getX(),
+                        field.core().getZ());
+                coreY = Math.min(coreY, surface - SURFACE_CLEARANCE);
+            }
+            coreY = Math.max(minY, Math.min(maxY, coreY));
 
             if ((field.core().getX() >> 4) == chunkPos.x && (field.core().getZ() >> 4) == chunkPos.z) {
                 BlockPos markerPos = new BlockPos(field.core().getX(), coreY, field.core().getZ());

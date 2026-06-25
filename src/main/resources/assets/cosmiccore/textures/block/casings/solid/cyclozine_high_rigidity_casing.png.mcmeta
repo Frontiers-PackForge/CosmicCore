@@ -1,5 +1,5 @@
 {
-    "ldlib": {
-        "connection": "cosmiccore:block/casings/solid/cyclozine_high_rigidity_casing_ctm"
+    "gtceu": {
+        "connection_texture": "cosmiccore:block/casings/solid/cyclozine_high_rigidity_casing_ctm"
     }
 }

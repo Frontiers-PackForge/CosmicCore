@@ -1,22 +1,30 @@
 package com.ghostipedia.cosmiccore.common.data.recipe;
 
+import com.ghostipedia.cosmiccore.CosmicCore;
 import com.ghostipedia.cosmiccore.common.data.materials.CosmicBundleMaterials;
 
 import com.gregtechceu.gtceu.api.GTValues;
 import com.gregtechceu.gtceu.api.data.chemical.ChemicalHelper;
 import com.gregtechceu.gtceu.api.data.chemical.material.Material;
 import com.gregtechceu.gtceu.api.data.tag.TagPrefix;
+import com.gregtechceu.gtceu.common.data.GTMaterials;
+import com.gregtechceu.gtceu.data.recipe.VanillaRecipeHelper;
 
+import net.minecraft.core.cauldron.CauldronInteraction;
 import net.minecraft.data.recipes.RecipeOutput;
 import net.minecraft.world.item.ItemStack;
 
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 import static com.ghostipedia.cosmiccore.api.data.CosmicTagPrefix.*;
 import static com.ghostipedia.cosmiccore.gtbridge.CosmicRecipeTypes.*;
 import static com.gregtechceu.gtceu.api.data.tag.TagPrefix.crushed;
 import static com.gregtechceu.gtceu.api.data.tag.TagPrefix.crushedPurified;
 import static com.gregtechceu.gtceu.api.data.tag.TagPrefix.dust;
+import static com.gregtechceu.gtceu.api.data.tag.TagPrefix.gem;
+import static com.gregtechceu.gtceu.api.data.tag.TagPrefix.ingot;
 import static com.gregtechceu.gtceu.api.data.tag.TagPrefix.rawOre;
 import static com.gregtechceu.gtceu.common.data.GTMaterials.Water;
 import static com.gregtechceu.gtceu.common.data.GTRecipeTypes.FORGE_HAMMER_RECIPES;
@@ -39,6 +47,7 @@ public class CosmicCoreOreRecipeHandler {
         sortAt(provider, flocculatedOre, material, outputs, 4, 2, "sort_flocculated_");
         sortAt(provider, crystallizedOreChunk, material, outputs, 5, 2, "sort_crystallized_");
         sortAt(provider, atomicallyPurifiedOreChunk, material, outputs, SORTER_IO_CAP, 3, "sort_atom_purified_");
+        furnaceBootstrap(provider, material);
     }
 
     private static void entryStep(RecipeOutput provider, Material material) {
@@ -126,5 +135,49 @@ public class CosmicCoreOreRecipeHandler {
                 .outputItems(dustStack)
                 .duration(150).EUt(GTValues.VA[GTValues.LV])
                 .save(provider);
+    }
+
+    private record FurnaceOut(TagPrefix prefix, Material material, int count) {}
+
+    private static Map<Material, FurnaceOut> furnaceOutputs;
+
+    private static Map<Material, FurnaceOut> furnaceOutputs() {
+        if (furnaceOutputs == null) {
+            Map<Material, FurnaceOut> map = new LinkedHashMap<>();
+            map.put(CosmicBundleMaterials.Ferosine, new FurnaceOut(ingot, GTMaterials.Iron, 1));
+            map.put(CosmicBundleMaterials.Cuprosiva, new FurnaceOut(ingot, GTMaterials.Copper, 1));
+            map.put(CosmicBundleMaterials.Galenite, new FurnaceOut(ingot, GTMaterials.Lead, 1));
+            map.put(CosmicBundleMaterials.Landisite, new FurnaceOut(ingot, GTMaterials.Nickel, 1));
+            map.put(CosmicBundleMaterials.Redstona, new FurnaceOut(dust, GTMaterials.Redstone, 4));
+            map.put(CosmicBundleMaterials.Lazuric, new FurnaceOut(gem, GTMaterials.Lapis, 4));
+            map.put(CosmicBundleMaterials.Carbonic, new FurnaceOut(gem, GTMaterials.Coal, 4));
+            map.put(CosmicBundleMaterials.EarthenSalts, new FurnaceOut(gem, GTMaterials.Salt, 4));
+            map.put(CosmicBundleMaterials.Pyroltic, new FurnaceOut(dust, GTMaterials.Sulfur, 4));
+            map.put(CosmicBundleMaterials.Quartizine, new FurnaceOut(gem, GTMaterials.CertusQuartz, 4));
+            map.put(CosmicBundleMaterials.Molybite, new FurnaceOut(ingot, GTMaterials.Molybdenum, 1));
+            map.put(CosmicBundleMaterials.Fahlorium, new FurnaceOut(ingot, GTMaterials.Copper, 1));
+            map.put(CosmicBundleMaterials.MonaziteSalts, new FurnaceOut(dust, GTMaterials.Bastnasite, 4));
+            furnaceOutputs = map;
+        }
+        return furnaceOutputs;
+    }
+
+    private static void furnaceBootstrap(RecipeOutput provider, Material material) {
+        FurnaceOut out = furnaceOutputs().get(material);
+        if (out == null) return;
+        ItemStack raw = ChemicalHelper.get(rawOre, material);
+        ItemStack result = ChemicalHelper.get(out.prefix(), out.material(), out.count());
+        if (raw.isEmpty() || result.isEmpty()) return;
+        VanillaRecipeHelper.addSmeltingRecipe(provider, CosmicCore.id("furnace_" + material.getName()),
+                raw, result, 0.5f);
+    }
+
+    public static void disableBundleCauldronWash() {
+        for (Material material : CosmicBundleMaterials.bundleOres()) {
+            ItemStack crushedStack = ChemicalHelper.get(crushed, material);
+            if (!crushedStack.isEmpty()) {
+                CauldronInteraction.WATER.map().remove(crushedStack.getItem());
+            }
+        }
     }
 }

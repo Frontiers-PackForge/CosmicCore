@@ -1,15 +1,9 @@
 package com.ghostipedia.cosmiccore.gtbridge.recipemaker;
 
 import com.ghostipedia.cosmiccore.gtbridge.recipemaker.RecipeCodecReader.JsonField;
+import com.ghostipedia.cosmiccore.gtbridge.recipemaker.RecipeMakerBehavior.State;
 
 import com.gregtechceu.gtceu.api.transfer.item.CustomItemStackHandler;
-
-import com.lowdragmc.lowdraglib.gui.texture.ColorRectTexture;
-import com.lowdragmc.lowdraglib.gui.widget.DraggableScrollableWidgetGroup;
-import com.lowdragmc.lowdraglib.gui.widget.LabelWidget;
-import com.lowdragmc.lowdraglib.gui.widget.SelectorWidget;
-import com.lowdragmc.lowdraglib.gui.widget.TextFieldWidget;
-import com.lowdragmc.lowdraglib.gui.widget.WidgetGroup;
 
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
@@ -18,6 +12,16 @@ import net.minecraft.world.item.ItemStack;
 import net.neoforged.neoforge.fluids.FluidStack;
 import net.neoforged.neoforge.fluids.capability.templates.FluidTank;
 
+import brachy.modularui.api.IPanelHandler;
+import brachy.modularui.api.drawable.Text;
+import brachy.modularui.utils.Alignment;
+import brachy.modularui.value.sync.IntSyncValue;
+import brachy.modularui.value.sync.PanelSyncManager;
+import brachy.modularui.widgets.CycleButtonWidget;
+import brachy.modularui.widgets.ListWidget;
+import brachy.modularui.widgets.TextWidget;
+import brachy.modularui.widgets.layout.Flow;
+import brachy.modularui.widgets.textfield.TextFieldWidget;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonArray;
@@ -26,141 +30,173 @@ import com.google.gson.JsonObject;
 
 import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
 /**
- * Generic editor for any recipe type that has no hand-built or GregTech editor. It treats a sampled recipe (from
- * {@link RecipeCodecReader}) as a TEMPLATE: numeric/string fields are pre-filled and editable, item/fluid fields
- * get phantom slots (left empty = keep the template's value, filled = override). Export rebuilds the recipe JSON
- * from the template plus the user's overrides and emits {@code event.custom({...})}, which is valid KubeJS for any
- * type. Runs identically on both sides (codec data is available on each), so no syncing is needed.
+ * Generic editor for any recipe type with no hand-built or GregTech editor. A sampled recipe (from
+ * {@link RecipeCodecReader}) is the template: numeric/string fields pre-fill and edit, item/fluid fields map onto the
+ * shared slot pool by role. Both the layout and the export walk the same deterministic field-to-pool allocation, so
+ * the export reads exactly the slots the user filled. Emits a builder call when the type ships a KubeJS schema, else
+ * {@code event.custom({...})}. Export runs server-side where the schema storage is reachable.
  */
 public final class CodecRecipeEditor {
 
-    private static final int TANK_CAPACITY = 64_000;
     private static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
+    private static final int COLS = 6;
 
     private CodecRecipeEditor() {}
 
-    public static void build(WidgetGroup editor, Player player, String typeId) {
-        ResourceLocation rl = ResourceLocation.tryParse(typeId);
-        List<JsonField> fields = rl == null ? List.of() : RecipeCodecReader.fields(player, rl);
-        JsonObject sample = rl == null ? null : RecipeCodecReader.sample(player, rl);
+    private record Alloc(JsonField field, Kind kind, int role, int start, int count, int valIndex) {}
 
-        editor.addWidget(new LabelWidget(0, 0, shortName(typeId)));
-        if (fields.isEmpty() || sample == null) {
-            editor.addWidget(new LabelWidget(0, 14, "no sample recipe"));
-            editor.addWidget(new LabelWidget(0, 24, "(can't auto-build)"));
+    public static void build(PanelSyncManager sm, ListWidget editor, Player player, String typeId, State state,
+                             RecipeMakerControl control, IntSyncValue selSlot, IntSyncValue selSide,
+                             IntSyncValue selType, IPanelHandler slotPanel) {
+        ResourceLocation rl = ResourceLocation.tryParse(typeId);
+        JsonObject sample = rl == null ? null : RecipeCodecReader.sample(player, rl);
+        List<Alloc> allocs = rl == null ? List.of() : allocate(player, rl);
+
+        editor.child(new TextWidget<>(Text.str(shortName(typeId))).height(9));
+        if (allocs.isEmpty() || sample == null) {
+            editor.child(new TextWidget<>(Text.str("no sample recipe")).height(9));
             return;
         }
 
-        String[] recipeId = { "" };
-        editor.addWidget(new LabelWidget(0, 12, "id"));
-        editor.addWidget(new TextFieldWidget(16, 11, 106, 12, () -> recipeId[0], s -> recipeId[0] = s));
-
-        Map<String, CustomItemStackHandler> itemState = new LinkedHashMap<>();
-        Map<String, FluidTank[]> fluidState = new LinkedHashMap<>();
-        Map<String, String[]> valueState = new LinkedHashMap<>();
-
-        DraggableScrollableWidgetGroup body = new DraggableScrollableWidgetGroup(0, 26, 128, 162);
-        body.setBackground(new ColorRectTexture(0x40000000));
-        int y = 2;
-        for (JsonField field : fields) {
-            String label = field.output() ? field.name() + " (out)" : field.name();
-            Kind ui = uiKind(field);
-            switch (ui) {
+        for (Alloc a : allocs) {
+            String label = a.field().output() ? a.field().name() + " (out)" : a.field().name();
+            switch (a.kind()) {
                 case ITEM -> {
-                    int slots = field.kind() == RecipeCodecReader.Kind.LIST ? listSlots(field) : 1;
-                    CustomItemStackHandler handler = new CustomItemStackHandler(slots);
-                    itemState.put(field.name(), handler);
-                    body.addWidget(new LabelWidget(2, y, label));
-                    for (int i = 0; i < slots; i++) {
-                        body.addWidget(new ConfigurableItemSlot(handler, i, 2 + (i % 6) * 18, y + 10 + (i / 6) * 18));
-                    }
-                    y += 12 + ((slots + 5) / 6) * 18;
+                    editor.child(new TextWidget<>(Text.str(label)).height(9));
+                    CustomItemStackHandler handler = a.role() == 1 ? state.itemOut : state.itemIn;
+                    editor.child(itemSlots(sm, a.role() == 1 ? "io" : "ii", handler, a.start(), a.count(), a.role(),
+                            selSlot, selSide, selType, slotPanel));
                 }
                 case FLUID -> {
-                    int slots = field.kind() == RecipeCodecReader.Kind.LIST ? listSlots(field) : 1;
-                    FluidTank[] tanks = new FluidTank[slots];
-                    for (int i = 0; i < slots; i++) tanks[i] = new FluidTank(TANK_CAPACITY);
-                    fluidState.put(field.name(), tanks);
-                    body.addWidget(new LabelWidget(2, y, label));
-                    for (int i = 0; i < slots; i++) {
-                        body.addWidget(new ConfigurableFluidSlot(tanks[i], 2 + (i % 6) * 18, y + 10 + (i / 6) * 18));
-                    }
-                    y += 12 + ((slots + 5) / 6) * 18;
+                    editor.child(new TextWidget<>(Text.str(label)).height(9));
+                    FluidTank[] tanks = a.role() == 1 ? state.fluidOut : state.fluidIn;
+                    editor.child(fluidSlots(sm, a.role() == 1 ? "fo" : "fi", tanks, a.start(), a.count(), a.role(),
+                            selSlot, selSide, selType, slotPanel));
                 }
                 case BOOLEAN -> {
-                    String[] value = { sample.has(field.name()) ? sample.get(field.name()).getAsString() : "false" };
-                    valueState.put(field.name(), value);
-                    body.addWidget(new LabelWidget(2, y, label));
-                    body.addWidget(new SelectorWidget(52, y, 70, 12, List.of("false", "true"), 0)
-                            .setOnChanged(v -> value[0] = v).setSupplier(() -> value[0]));
-                    y += 16;
+                    int vi = a.valIndex();
+                    if (state.codecVals[vi].isEmpty()) {
+                        state.codecVals[vi] = sample.has(a.field().name()) ?
+                                sample.get(a.field().name()).getAsString() : "false";
+                    }
+                    editor.child(RecipeMakerBehavior.fieldRow(label, new CycleButtonWidget().stateCount(2)
+                            .stateOverlay(0, Text.str("false").alignment(Alignment.TopLeft).asTextIcon())
+                            .stateOverlay(1, Text.str("true").alignment(Alignment.TopLeft).asTextIcon())
+                            .value(RecipeMakerBehavior.intSync(sm, "cvb" + vi,
+                                    () -> "true".equals(state.codecVals[vi]) ? 1 : 0,
+                                    v -> state.codecVals[vi] = v == 1 ? "true" : "false"))
+                            .expanded().height(14)));
                 }
                 case FIELD -> {
-                    String[] value = { sample.has(field.name()) ? sample.get(field.name()).getAsString() : "" };
-                    valueState.put(field.name(), value);
-                    body.addWidget(new LabelWidget(2, y, label));
-                    body.addWidget(new TextFieldWidget(52, y, 70, 12, () -> value[0], s -> value[0] = s));
-                    y += 16;
+                    int vi = a.valIndex();
+                    if (state.codecVals[vi].isEmpty()) {
+                        state.codecVals[vi] = sample.has(a.field().name()) ?
+                                sample.get(a.field().name()).getAsString() : "";
+                    }
+                    editor.child(RecipeMakerBehavior.fieldRow(label, new TextFieldWidget()
+                            .value(RecipeMakerBehavior.strSync(sm, "cv" + vi, () -> state.codecVals[vi],
+                                    v -> state.codecVals[vi] = v))
+                            .expanded().height(12)));
                 }
-                default -> {
-                    body.addWidget(new LabelWidget(2, y, label + " (kept)"));
-                    y += 12;
-                }
+                default -> editor.child(new TextWidget<>(Text.str(label + " (kept)")).height(9));
             }
         }
-        editor.addWidget(body);
-        editor.addWidget(new ExportButtonWidget(0, 192, 120, 16, RecipeMakerTextures.VANILLA_BUTTON,
-                () -> export(player, typeId, recipeId, sample, fields, itemState, fluidState, valueState)));
-        editor.addWidget(new LabelWidget(34, 196, "Copy KubeJS"));
+
+        control.setExporter(() -> export(player, typeId, state));
+        editor.child(RecipeMakerBehavior.copyButton(control));
     }
 
-    private static String export(Player player, String typeId, String[] recipeId, JsonObject sample,
-                                 List<JsonField> fields, Map<String, CustomItemStackHandler> itemState,
-                                 Map<String, FluidTank[]> fluidState, Map<String, String[]> valueState) {
+    private static List<Alloc> allocate(Player player, ResourceLocation rl) {
+        List<JsonField> fields = RecipeCodecReader.fields(player, rl);
+        List<Alloc> allocs = new ArrayList<>();
+        int itemIn = 0;
+        int itemOut = 0;
+        int fluidIn = 0;
+        int fluidOut = 0;
+        int val = 0;
+        for (JsonField field : fields) {
+            Kind kind = uiKind(field);
+            int role = field.output() ? 1 : 0;
+            switch (kind) {
+                case ITEM -> {
+                    int count = field.kind() == RecipeCodecReader.Kind.LIST ? listSlots(field) : 1;
+                    int start = role == 1 ? itemOut : itemIn;
+                    if (start + count <= RecipeMakerBehavior.POOL_ITEM) {
+                        allocs.add(new Alloc(field, kind, role, start, count, -1));
+                        if (role == 1) itemOut += count;
+                        else itemIn += count;
+                    }
+                }
+                case FLUID -> {
+                    int count = field.kind() == RecipeCodecReader.Kind.LIST ? listSlots(field) : 1;
+                    int start = role == 1 ? fluidOut : fluidIn;
+                    if (start + count <= RecipeMakerBehavior.POOL_FLUID) {
+                        allocs.add(new Alloc(field, kind, role, start, count, -1));
+                        if (role == 1) fluidOut += count;
+                        else fluidIn += count;
+                    }
+                }
+                case FIELD, BOOLEAN -> {
+                    if (val < RecipeMakerBehavior.POOL_CODEC_VAL) {
+                        allocs.add(new Alloc(field, kind, role, -1, 0, val++));
+                    }
+                }
+                default -> allocs.add(new Alloc(field, Kind.KEEP, role, -1, 0, -1));
+            }
+        }
+        return allocs;
+    }
+
+    private static String export(Player player, String typeId, State state) {
+        ResourceLocation rl = ResourceLocation.tryParse(typeId);
+        JsonObject sample = rl == null ? null : RecipeCodecReader.sample(player, rl);
+        if (sample == null) return "// no sample recipe";
         JsonObject out = sample.deepCopy();
         out.addProperty("type", typeId);
-        for (JsonField field : fields) {
-            String name = field.name();
-            switch (uiKind(field)) {
+        for (Alloc a : allocate(player, rl)) {
+            String name = a.field().name();
+            switch (a.kind()) {
                 case ITEM -> {
-                    CustomItemStackHandler handler = itemState.get(name);
+                    CustomItemStackHandler handler = a.role() == 1 ? state.itemOut : state.itemIn;
                     JsonElement shape = elementShape(sample.get(name));
-                    if (field.kind() == RecipeCodecReader.Kind.LIST) {
+                    if (a.field().kind() == RecipeCodecReader.Kind.LIST) {
                         JsonArray array = new JsonArray();
-                        for (int i = 0; i < handler.getSlots(); i++) {
-                            ItemStack stack = handler.getStackInSlot(i);
-                            if (!stack.isEmpty()) array.add(itemToJson(shape, stack));
+                        for (int j = 0; j < a.count(); j++) {
+                            ItemStack stack = handler.getStackInSlot(a.start() + j);
+                            String tag = a.role() == 0 ? state.inTag[a.start() + j] : "";
+                            if (!stack.isEmpty()) array.add(itemElement(shape, stack, tag));
                         }
                         if (!array.isEmpty()) out.add(name, array);
                     } else {
-                        ItemStack stack = handler.getStackInSlot(0);
-                        if (!stack.isEmpty()) out.add(name, itemToJson(shape, stack));
+                        ItemStack stack = handler.getStackInSlot(a.start());
+                        String tag = a.role() == 0 ? state.inTag[a.start()] : "";
+                        if (!stack.isEmpty()) out.add(name, itemElement(shape, stack, tag));
                     }
                 }
                 case FLUID -> {
-                    FluidTank[] tanks = fluidState.get(name);
+                    FluidTank[] tanks = a.role() == 1 ? state.fluidOut : state.fluidIn;
                     JsonElement shape = elementShape(sample.get(name));
-                    if (field.kind() == RecipeCodecReader.Kind.LIST) {
+                    if (a.field().kind() == RecipeCodecReader.Kind.LIST) {
                         JsonArray array = new JsonArray();
-                        for (FluidTank tank : tanks) {
-                            if (!tank.getFluid().isEmpty()) array.add(fluidToJson(shape, tank.getFluid()));
+                        for (int j = 0; j < a.count(); j++) {
+                            FluidStack fluid = tanks[a.start() + j].getFluid();
+                            if (!fluid.isEmpty()) array.add(fluidToJson(shape, fluid));
                         }
                         if (!array.isEmpty()) out.add(name, array);
-                    } else if (!tanks[0].getFluid().isEmpty()) {
-                        out.add(name, fluidToJson(shape, tanks[0].getFluid()));
+                    } else {
+                        FluidStack fluid = tanks[a.start()].getFluid();
+                        if (!fluid.isEmpty()) out.add(name, fluidToJson(shape, fluid));
                     }
                 }
-                case BOOLEAN -> out.addProperty(name, "true".equals(valueState.get(name)[0]));
+                case BOOLEAN -> out.addProperty(name, "true".equals(state.codecVals[a.valIndex()]));
                 case FIELD -> {
-                    String text = valueState.get(name)[0].trim();
+                    String text = state.codecVals[a.valIndex()].trim();
                     if (text.isEmpty()) break;
-                    if (field.kind() == RecipeCodecReader.Kind.NUMBER) {
+                    if (a.field().kind() == RecipeCodecReader.Kind.NUMBER) {
                         if (text.contains(".")) out.addProperty(name, Double.parseDouble(text));
                         else out.addProperty(name, Long.parseLong(text));
                     } else {
@@ -172,17 +208,52 @@ public final class CodecRecipeEditor {
         }
         String builder = buildBuilder(player, typeId, out);
         String result = builder != null ? builder : "event.custom(" + GSON.toJson(out) + ")";
-        if (!recipeId[0].isBlank()) result += ".id('" + recipeId[0].trim() + "')";
+        if (!state.recipeId[0].isBlank()) result += ".id('" + state.recipeId[0].trim() + "')";
         return result;
     }
 
-    /**
-     * If the type has a KubeJS schema (i.e. a kubejs addon ships one - Create, EnderIO, Ars Nouveau, Occultism,
-     * GregTech, vanilla), emit the idiomatic builder call {@code event.recipes.<ns>.<path>(args...).key(value)...}
-     * by formatting the rebuilt JSON ({@code out}) against the schema's constructor + remaining keys. Returns null
-     * (caller falls back to {@code event.custom}) if there's no schema or any present value can't be formatted, so a
-     * recipe is never exported with silently dropped data.
-     */
+    private static Flow itemSlots(PanelSyncManager sm, String key, CustomItemStackHandler handler, int start,
+                                  int count, int role, IntSyncValue selSlot, IntSyncValue selSide,
+                                  IntSyncValue selType, IPanelHandler slotPanel) {
+        Flow column = Flow.column().coverChildren();
+        Flow row = null;
+        for (int j = 0; j < count; j++) {
+            if (j % COLS == 0) {
+                row = Flow.row().coverChildren();
+                column.child(row);
+            }
+            int slot = start + j;
+            row.child(new ConfigurableItemSlot(RecipeMakerBehavior.itemSync(sm, key, slot, handler), () -> {
+                selSlot.setIntValue(slot, true, true);
+                selSide.setIntValue(role, true, true);
+                selType.setIntValue(0, true, true);
+                slotPanel.openPanel();
+            }).size(18));
+        }
+        return column;
+    }
+
+    private static Flow fluidSlots(PanelSyncManager sm, String key, FluidTank[] tanks, int start, int count, int role,
+                                   IntSyncValue selSlot, IntSyncValue selSide, IntSyncValue selType,
+                                   IPanelHandler slotPanel) {
+        Flow column = Flow.column().coverChildren();
+        Flow row = null;
+        for (int j = 0; j < count; j++) {
+            if (j % COLS == 0) {
+                row = Flow.row().coverChildren();
+                column.child(row);
+            }
+            int slot = start + j;
+            row.child(new ConfigurableFluidSlot(RecipeMakerBehavior.fluidSync(sm, key, slot, tanks[slot]), () -> {
+                selSlot.setIntValue(slot, true, true);
+                selSide.setIntValue(role, true, true);
+                selType.setIntValue(1, true, true);
+                slotPanel.openPanel();
+            }).size(18));
+        }
+        return column;
+    }
+
     private static String buildBuilder(Player player, String typeId, JsonObject out) {
         List<RecipeSchemaReader.SchemaField> ctor = RecipeSchemaReader.constructorKeys(player, typeId);
         if (ctor.isEmpty()) return null;
@@ -285,7 +356,7 @@ public final class CodecRecipeEditor {
     }
 
     private static int listSlots(JsonField field) {
-        return Math.min(64, Math.max(4, field.listMax() + 4));
+        return Math.min(RecipeMakerBehavior.POOL_ITEM, Math.max(4, field.listMax() + 4));
     }
 
     private static JsonElement elementShape(JsonElement sampleValue) {
@@ -293,6 +364,15 @@ public final class CodecRecipeEditor {
             return sampleValue.getAsJsonArray().get(0);
         }
         return sampleValue;
+    }
+
+    private static JsonElement itemElement(JsonElement shape, ItemStack stack, String tag) {
+        if (tag != null && !tag.isEmpty()) {
+            JsonObject object = new JsonObject();
+            object.addProperty("tag", tag);
+            return object;
+        }
+        return itemToJson(shape, stack);
     }
 
     private static JsonElement itemToJson(JsonElement shape, ItemStack stack) {

@@ -1,6 +1,6 @@
 {
-    "ldlib": {
-        "emissive": true
+    "gtceu": {
+        "bloom": true
     },
     "shimmer": {
         "bloom": true

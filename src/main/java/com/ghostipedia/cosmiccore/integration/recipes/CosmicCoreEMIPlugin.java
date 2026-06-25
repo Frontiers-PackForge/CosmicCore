@@ -6,9 +6,14 @@ import com.ghostipedia.cosmiccore.common.machine.multiblock.multi.LARVA;
 import com.ghostipedia.cosmiccore.common.machine.multiblock.multi.logic.LarvaMachine;
 import com.ghostipedia.cosmiccore.integration.recipes.emi.AsteroidEmiRecipe;
 
+import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 
+import brachy.modularui.api.IMuiScreen;
+import brachy.modularui.integration.emi.handler.EmiScreenHandler;
+import brachy.modularui.screen.ContainerScreenWrapper;
+import brachy.modularui.screen.ScreenWrapper;
 import dev.emi.emi.api.EmiEntrypoint;
 import dev.emi.emi.api.EmiPlugin;
 import dev.emi.emi.api.EmiRegistry;
@@ -30,6 +35,9 @@ public class CosmicCoreEMIPlugin implements EmiPlugin {
     @Override
     public void register(EmiRegistry registry) {
         registry.setDefaultComparison(CosmicItems.TARGETING_CHIP.asStack(), Comparison.compareComponents());
+
+        registerModularUIScreen(registry, ScreenWrapper.class);
+        registerModularUIScreen(registry, ContainerScreenWrapper.class);
 
         registry.addCategory(ASTEROID_CATEGORY);
         registry.addWorkstation(ASTEROID_CATEGORY, EmiStack.of(LARVA.LARVA.getBlock()));
@@ -61,6 +69,13 @@ public class CosmicCoreEMIPlugin implements EmiPlugin {
         addAsteroidRecipe(registry, "wasteland_asteroid", CosmicItems.TUNGSTENSTEEL_NANOLATTICE_SPOOL.asStack(),
                 List.of(EmiStack.of(CosmicItems.WASTELAND_ASTEROID.asStack())),
                 CosmicItems.WASTELAND_ASTEROID.asStack());
+    }
+
+    private static <T extends Screen & IMuiScreen> void registerModularUIScreen(EmiRegistry registry, Class<T> cls) {
+        EmiScreenHandler<T> handler = EmiScreenHandler.of(cls);
+        registry.addDragDropHandler(cls, handler);
+        registry.addStackProvider(cls, handler);
+        registry.addExclusionArea(cls, handler);
     }
 
     private void addAsteroidRecipe(EmiRegistry registry, String keySuffix, ItemStack spool, List<EmiStack> outputs,

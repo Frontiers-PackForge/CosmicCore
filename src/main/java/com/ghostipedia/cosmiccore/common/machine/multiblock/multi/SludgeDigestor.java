@@ -31,7 +31,7 @@ public class SludgeDigestor {
             .recipeType(CosmicRecipeTypes.SLUDGE_DIGESTOR)
             .recipeModifiers(CosmicRecipeModifiers.LOCKED_PARALLEL_8,
                     GTRecipeModifiers.ELECTRIC_OVERCLOCK.apply(OverclockingLogic.NON_PERFECT_OVERCLOCK_SUBTICK))
-            .pattern(definition -> MultiblockPatternBuilder.start(RIGHT, DOWN, FRONT)
+            .pattern(definition -> MultiblockPatternBuilder.start(RIGHT, UP, FRONT)
                     .slice("AAAA", "A  A", "B  B", "B  B", "B  B", "A  A", "    ")
                     .slice("AAAA", " CC ", " CC ", " CC ", " CC ", "ACCA", "    ")
                     .slice("AAAA", " CC ", " EE ", " CC ", " EE ", "ACCA", " CC ")
