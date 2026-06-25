@@ -25,7 +25,7 @@ import com.ghostipedia.cosmiccore.common.item.behavior.VeinSurveyBehavior;
 import com.ghostipedia.cosmiccore.common.item.behavior.WirelessPDABehavior;
 import com.ghostipedia.cosmiccore.common.reflection.item.MirrorItem;
 import com.ghostipedia.cosmiccore.common.reflection.item.SoulMutilatorItem;
-import com.ghostipedia.cosmiccore.gtbridge.recipemaker.RecipeMakerItem;
+import com.ghostipedia.cosmiccore.gtbridge.recipemaker.RecipeMakerBehavior;
 import com.ghostipedia.cosmiccore.utils.ItemData;
 import com.ghostipedia.cosmiccore.utils.StringUtil;
 
@@ -86,6 +86,20 @@ public class CosmicItems {
             .lang("Soul Network Reader")
             .properties(p -> p.stacksTo(1))
             .tag()
+            .defaultModel()
+            .register();
+
+    public static final ItemEntry<Item> NETHER_PERMIT = REGISTRATE
+            .item("nether_permit", Item::new)
+            .lang("Nether Permit")
+            .properties(p -> p.stacksTo(1))
+            .defaultModel()
+            .register();
+
+    public static final ItemEntry<Item> AETHER_PERMIT = REGISTRATE
+            .item("aether_permit", Item::new)
+            .lang("Aether Permit")
+            .properties(p -> p.stacksTo(1))
             .defaultModel()
             .register();
 
@@ -558,9 +572,10 @@ public class CosmicItems {
             .register();
 
     // Literally Random shit
-    public static final ItemEntry<RecipeMakerItem> DONK = REGISTRATE.item("donk", RecipeMakerItem::new)
+    public static final ItemEntry<ComponentItem> DONK = REGISTRATE.item("donk", ComponentItem::new)
             .lang("Donk")
             .properties(p -> p.stacksTo(16))
+            .onRegister(attach(new RecipeMakerBehavior()))
             .tag()
             .defaultModel()
             .register();

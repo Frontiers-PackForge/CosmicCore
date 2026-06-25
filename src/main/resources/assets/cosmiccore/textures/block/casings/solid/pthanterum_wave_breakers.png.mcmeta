@@ -1,5 +1,5 @@
 {
-    "ldlib": {
-        "connection": "cosmiccore:block/casings/solid/pthanterum_wave_breakers_ctm"
+    "gtceu": {
+        "connection_texture": "cosmiccore:block/casings/solid/pthanterum_wave_breakers_ctm"
     }
 }

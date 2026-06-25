@@ -32,7 +32,7 @@ public class DissolutionVat {
             .recipeType(CosmicRecipeTypes.DISSOLUTION_VAT)
             .recipeModifiers(CosmicRecipeModifiers.LOCKED_PARALLEL_8,
                     GTRecipeModifiers.ELECTRIC_OVERCLOCK.apply(OverclockingLogic.NON_PERFECT_OVERCLOCK_SUBTICK))
-            .pattern(definition -> MultiblockPatternBuilder.start(RIGHT, DOWN, FRONT)
+            .pattern(definition -> MultiblockPatternBuilder.start(RIGHT, UP, FRONT)
                     .slice("CAAAAAC", "CAAAAAC", "CAAAAAC")
                     .slice("AAAAAAA", "ADDDDDA", "AEEEEEA")
                     .slice("CAAAAAC", "CAAAAAC", "CAAAAAC")

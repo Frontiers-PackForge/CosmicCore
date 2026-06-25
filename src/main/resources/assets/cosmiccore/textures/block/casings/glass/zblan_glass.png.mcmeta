@@ -1,5 +1,5 @@
 {
-    "ldlib": {
-        "connection": "cosmiccore:block/casings/glass/zblan_glass_ctm"
+    "gtceu": {
+        "connection_texture": "cosmiccore:block/casings/glass/zblan_glass_ctm"
     }
 }

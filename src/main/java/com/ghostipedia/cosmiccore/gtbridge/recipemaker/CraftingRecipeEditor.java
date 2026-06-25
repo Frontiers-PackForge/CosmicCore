@@ -1,14 +1,19 @@
 package com.ghostipedia.cosmiccore.gtbridge.recipemaker;
 
-import com.gregtechceu.gtceu.api.transfer.item.CustomItemStackHandler;
-
-import com.lowdragmc.lowdraglib.gui.widget.LabelWidget;
-import com.lowdragmc.lowdraglib.gui.widget.SelectorWidget;
-import com.lowdragmc.lowdraglib.gui.widget.TextFieldWidget;
-import com.lowdragmc.lowdraglib.gui.widget.WidgetGroup;
+import com.ghostipedia.cosmiccore.gtbridge.recipemaker.RecipeMakerBehavior.State;
 
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.world.item.ItemStack;
+
+import brachy.modularui.api.IPanelHandler;
+import brachy.modularui.api.drawable.Text;
+import brachy.modularui.utils.Alignment;
+import brachy.modularui.value.sync.IntSyncValue;
+import brachy.modularui.value.sync.PanelSyncManager;
+import brachy.modularui.widgets.CycleButtonWidget;
+import brachy.modularui.widgets.ListWidget;
+import brachy.modularui.widgets.TextWidget;
+import brachy.modularui.widgets.layout.Flow;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -17,67 +22,78 @@ import java.util.Map;
 import java.util.StringJoiner;
 
 /**
- * Hand-built editor for vanilla 3x3 crafting (shaped + shapeless) - the default view of the Recipe Forge. Shaped
- * recipes are trimmed to their bounding box and compiled to a pattern + key map; shapeless just lists the
- * ingredients. Exports KubeJS event.shaped / event.shapeless.
+ * Hand-built editor for vanilla 3x3 crafting (shaped + shapeless). Uses the first 9 slots of the shared input pool as
+ * the grid and output slot 0 as the result. Exports KubeJS event.shaped / event.shapeless.
  */
 public final class CraftingRecipeEditor {
 
     private CraftingRecipeEditor() {}
 
-    public static void build(WidgetGroup editor) {
-        CustomItemStackHandler grid = new CustomItemStackHandler(9);
-        CustomItemStackHandler output = new CustomItemStackHandler(1);
-        boolean[] shapeless = { false };
-        String[] recipeId = { "" };
-
-        editor.addWidget(new LabelWidget(0, 0, "Crafting"));
-        editor.addWidget(new LabelWidget(0, 11, "id"));
-        editor.addWidget(new TextFieldWidget(16, 10, 106, 12, () -> recipeId[0], s -> recipeId[0] = s));
-        for (int i = 0; i < 9; i++) {
-            editor.addWidget(new ConfigurableItemSlot(grid, i, (i % 3) * 18, 28 + (i / 3) * 18));
+    public static void build(PanelSyncManager sm, ListWidget editor, State state, RecipeMakerControl control,
+                             IntSyncValue selSlot, IntSyncValue selSide, IntSyncValue selType,
+                             IPanelHandler slotPanel) {
+        Flow grid = Flow.column().coverChildren();
+        for (int r = 0; r < 3; r++) {
+            Flow row = Flow.row().coverChildren();
+            for (int c = 0; c < 3; c++) {
+                int i = r * 3 + c;
+                row.child(new ConfigurableItemSlot(RecipeMakerBehavior.itemSync(sm, "ii", i, state.itemIn), () -> {
+                    selSlot.setIntValue(i, true, true);
+                    selSide.setIntValue(0, true, true);
+                    selType.setIntValue(0, true, true);
+                    slotPanel.openPanel();
+                }).size(18));
+            }
+            grid.child(row);
         }
-        editor.addWidget(new LabelWidget(60, 50, "->"));
-        editor.addWidget(new ConfigurableItemSlot(output, 0, 74, 46));
+        editor.child(Flow.row().coverChildrenHeight().widthRel(1f).childPadding(6)
+                .child(grid)
+                .child(new TextWidget<>(Text.str("->")))
+                .child(new ConfigurableItemSlot(RecipeMakerBehavior.itemSync(sm, "io", 0, state.itemOut), () -> {
+                    selSlot.setIntValue(0, true, true);
+                    selSide.setIntValue(1, true, true);
+                    selType.setIntValue(0, true, true);
+                    slotPanel.openPanel();
+                }).size(18)));
 
-        editor.addWidget(new LabelWidget(0, 94, "Mode"));
-        editor.addWidget(new SelectorWidget(34, 92, 84, 14, List.of("shaped", "shapeless"), 0)
-                .setOnChanged(name -> shapeless[0] = name.equals("shapeless"))
-                .setSupplier(() -> shapeless[0] ? "shapeless" : "shaped"));
+        editor.child(RecipeMakerBehavior.fieldRow("Mode", new CycleButtonWidget().stateCount(2)
+                .stateOverlay(0, Text.str("shaped").alignment(Alignment.TopLeft).asTextIcon())
+                .stateOverlay(1, Text.str("shapeless").alignment(Alignment.TopLeft).asTextIcon())
+                .value(RecipeMakerBehavior.intSync(sm, "cmode", () -> state.craftMode[0], v -> state.craftMode[0] = v))
+                .expanded().height(14)));
 
-        editor.addWidget(new ExportButtonWidget(0, 192, 120, 16, RecipeMakerTextures.VANILLA_BUTTON,
-                () -> export(grid, output, shapeless[0], recipeId[0])));
-        editor.addWidget(new LabelWidget(34, 196, "Copy KubeJS"));
+        control.setExporter(() -> export(state));
+        editor.child(RecipeMakerBehavior.copyButton(control));
     }
 
-    private static String export(CustomItemStackHandler grid, CustomItemStackHandler output, boolean shapeless,
-                                 String recipeId) {
-        ItemStack out = output.getStackInSlot(0);
+    private static String export(State state) {
+        ItemStack out = state.itemOut.getStackInSlot(0);
         if (out.isEmpty()) return "// set a crafting output";
         String result = itemString(out);
-        String recipe = shapeless ? shapeless(grid, result) : shaped(grid, result);
+        boolean shapeless = state.craftMode[0] == 1;
+        String recipe = shapeless ? shapeless(state) : shaped(state);
         if (recipe.startsWith("//")) return recipe;
-        if (!recipeId.isBlank()) recipe += ".id('" + recipeId.trim() + "')";
+        if (!state.recipeId[0].isBlank()) recipe += ".id('" + state.recipeId[0].trim() + "')";
         return recipe;
     }
 
-    private static String shapeless(CustomItemStackHandler grid, String result) {
+    private static String shapeless(State state) {
         StringJoiner inputs = new StringJoiner(", ");
         for (int i = 0; i < 9; i++) {
-            ItemStack stack = grid.getStackInSlot(i);
-            if (!stack.isEmpty()) inputs.add(itemString(stack));
+            ItemStack stack = state.itemIn.getStackInSlot(i);
+            if (!stack.isEmpty()) inputs.add("'" + craftIngredient(state, i) + "'");
         }
         if (inputs.length() == 0) return "// add ingredients";
-        return "event.shapeless(" + result + ", [" + inputs + "])";
+        return "event.shapeless(" + itemString(state.itemOut.getStackInSlot(0)) + ", [" + inputs + "])";
     }
 
-    private static String shaped(CustomItemStackHandler grid, String result) {
+    private static String shaped(State state) {
         int minRow = 3;
         int maxRow = -1;
         int minCol = 3;
         int maxCol = -1;
         for (int i = 0; i < 9; i++) {
-            if (grid.getStackInSlot(i).isEmpty()) continue;
+            if (state.itemIn.getStackInSlot(i).isEmpty()) continue;
             minRow = Math.min(minRow, i / 3);
             maxRow = Math.max(maxRow, i / 3);
             minCol = Math.min(minCol, i % 3);
@@ -91,16 +107,16 @@ public final class CraftingRecipeEditor {
         for (int r = minRow; r <= maxRow; r++) {
             StringBuilder row = new StringBuilder();
             for (int c = minCol; c <= maxCol; c++) {
-                ItemStack stack = grid.getStackInSlot(r * 3 + c);
+                ItemStack stack = state.itemIn.getStackInSlot(r * 3 + c);
                 if (stack.isEmpty()) {
                     row.append(' ');
                     continue;
                 }
-                String id = BuiltInRegistries.ITEM.getKey(stack.getItem()).toString();
-                Character ch = keyMap.get(id);
+                String ingredient = craftIngredient(state, r * 3 + c);
+                Character ch = keyMap.get(ingredient);
                 if (ch == null) {
                     ch = next++;
-                    keyMap.put(id, ch);
+                    keyMap.put(ingredient, ch);
                 }
                 row.append(ch.charValue());
             }
@@ -113,11 +129,17 @@ public final class CraftingRecipeEditor {
         for (Map.Entry<String, Character> entry : keyMap.entrySet()) {
             key.add(entry.getValue() + ": '" + entry.getKey() + "'");
         }
-        return "event.shaped(" + result + ", [" + pattern + "], {" + key + "})";
+        return "event.shaped(" + itemString(state.itemOut.getStackInSlot(0)) + ", [" + pattern + "], {" + key + "})";
     }
 
     private static String itemString(ItemStack stack) {
         var id = BuiltInRegistries.ITEM.getKey(stack.getItem());
         return stack.getCount() > 1 ? "'" + stack.getCount() + "x " + id + "'" : "'" + id + "'";
+    }
+
+    private static String craftIngredient(State state, int i) {
+        String tag = state.inTag[i];
+        if (tag != null && !tag.isEmpty()) return "#" + tag;
+        return BuiltInRegistries.ITEM.getKey(state.itemIn.getStackInSlot(i).getItem()).toString();
     }
 }

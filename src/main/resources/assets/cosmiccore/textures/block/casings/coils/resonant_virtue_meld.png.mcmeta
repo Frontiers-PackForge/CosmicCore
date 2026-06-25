@@ -1,9 +1,9 @@
 {
-    "ldlib": {
-        "connection": "cosmiccore:block/casings/coils/resonant_virtue_meld_ctm"
+    "gtceu": {
+        "connection_texture": "cosmiccore:block/casings/coils/resonant_virtue_meld_ctm"
     },
-    "animation":{
-      "interpolate": true,
-      "frametime":16
-   }
+    "animation": {
+        "interpolate": true,
+        "frametime": 16
+    }
 }

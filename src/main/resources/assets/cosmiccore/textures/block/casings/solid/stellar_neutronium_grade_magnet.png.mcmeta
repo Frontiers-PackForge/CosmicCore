@@ -1,5 +1,5 @@
 {
-    "ldlib": {
-        "connection": "cosmiccore:block/casings/solid/stellar_neutronium_grade_magnet_ctm"
+    "gtceu": {
+        "connection_texture": "cosmiccore:block/casings/solid/stellar_neutronium_grade_magnet_ctm"
     }
 }

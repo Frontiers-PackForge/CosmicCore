@@ -16,6 +16,7 @@ import com.ghostipedia.cosmiccore.common.data.materials.CosmicBundleMaterials;
 import com.ghostipedia.cosmiccore.common.data.materials.CosmicElements;
 import com.ghostipedia.cosmiccore.common.data.materials.CosmicMaterialSet;
 import com.ghostipedia.cosmiccore.common.data.materials.CosmicMaterials;
+import com.ghostipedia.cosmiccore.common.data.recipe.CosmicCoreOreRecipeHandler;
 import com.ghostipedia.cosmiccore.common.machine.multiblock.multi.modular.MultiblockInit;
 import com.ghostipedia.cosmiccore.common.mob.DimensionMobScaling;
 import com.ghostipedia.cosmiccore.common.network.CCoreNetwork;
@@ -114,6 +115,7 @@ public class CosmicCore {
             DimensionMobScaling.registerScaling();
             ArgumentTypeInfos.registerByClass(SoulTypeArgument.class,
                     SingletonArgumentInfo.contextFree(SoulTypeArgument::soulType));
+            CosmicCoreOreRecipeHandler.disableBundleCauldronWash();
         });
     }
 
