@@ -66,6 +66,7 @@
     "gtfix.GTRecipeSerializerNullSyncFixMixin",
     "gtfix.DecompositionRecipeHandlerEmptyFluidFixMixin",
     "gtfix.UIFactoryServerPlayerAccessorFixMixin",
+    "architectury.ArchitecturyNullCodecSkipFixMixin",
     "lso.FrostbiteEffectMixin",
     "lso.HeatstrokeEffectMixin",
     "worldgen.CubicSplineMultipointMixin"

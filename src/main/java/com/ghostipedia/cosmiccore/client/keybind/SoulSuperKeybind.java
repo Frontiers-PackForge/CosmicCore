@@ -2,6 +2,7 @@ package com.ghostipedia.cosmiccore.client.keybind;
 
 import com.ghostipedia.cosmiccore.CosmicCore;
 import com.ghostipedia.cosmiccore.common.network.CCoreNetwork;
+import com.ghostipedia.cosmiccore.common.reflection.ReflectionConstants;
 import com.ghostipedia.cosmiccore.common.reflection.network.SoulSuperPacket;
 
 import net.minecraft.client.KeyMapping;
@@ -36,6 +37,7 @@ public class SoulSuperKeybind {
 
     @SubscribeEvent
     public static void onClientTick(ClientTickEvent.Post event) {
+        if (!ReflectionConstants.ENABLED) return;
         Minecraft mc = Minecraft.getInstance();
         Player player = mc.player;
         if (player == null || mc.screen != null) {

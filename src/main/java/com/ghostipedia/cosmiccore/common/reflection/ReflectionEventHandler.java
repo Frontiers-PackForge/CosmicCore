@@ -51,6 +51,7 @@ public class ReflectionEventHandler {
 
     @SubscribeEvent(priority = EventPriority.LOWEST)
     public static void onPlayerDeath(LivingDeathEvent event) {
+        if (!ReflectionConstants.ENABLED) return;
         if (!(event.getEntity() instanceof ServerPlayer player)) return;
 
         BackBargain.recordDeath(player);
@@ -113,6 +114,7 @@ public class ReflectionEventHandler {
 
     @SubscribeEvent
     public static void onPlayerRespawn(PlayerEvent.PlayerRespawnEvent event) {
+        if (!ReflectionConstants.ENABLED) return;
         if (!(event.getEntity() instanceof ServerPlayer player)) return;
 
         ReflectionCapability.get(player).ifPresent(reflection -> {
@@ -152,6 +154,7 @@ public class ReflectionEventHandler {
 
     @SubscribeEvent
     public static void onPlayerTick(PlayerTickEvent.Post event) {
+        if (!ReflectionConstants.ENABLED) return;
         if (!(event.getEntity() instanceof ServerPlayer player)) return;
 
         for (Bargain bargain : BargainRegistry.getActive(player)) {
@@ -172,6 +175,7 @@ public class ReflectionEventHandler {
 
     @SubscribeEvent
     public static void onPlayerLogin(PlayerEvent.PlayerLoggedInEvent event) {
+        if (!ReflectionConstants.ENABLED) return;
         if (!(event.getEntity() instanceof ServerPlayer player)) return;
 
         ReflectionCapability.get(player).ifPresent(reflection -> {
@@ -218,6 +222,7 @@ public class ReflectionEventHandler {
 
     @SubscribeEvent
     public static void onLivingDamage(LivingIncomingDamageEvent event) {
+        if (!ReflectionConstants.ENABLED) return;
         if (!(event.getEntity() instanceof ServerPlayer player)) return;
 
         float damage = event.getAmount();
@@ -250,6 +255,7 @@ public class ReflectionEventHandler {
 
     @SubscribeEvent
     public static void onLivingHeal(LivingHealEvent event) {
+        if (!ReflectionConstants.ENABLED) return;
         if (!(event.getEntity() instanceof ServerPlayer player)) return;
 
         float healing = event.getAmount();

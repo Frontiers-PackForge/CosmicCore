@@ -1,6 +1,7 @@
 package com.ghostipedia.cosmiccore.common.reflection.bargain;
 
 import com.ghostipedia.cosmiccore.CosmicCore;
+import com.ghostipedia.cosmiccore.common.reflection.ReflectionConstants;
 import com.ghostipedia.cosmiccore.common.reflection.bargain.impl.ArmorBargain;
 import com.ghostipedia.cosmiccore.common.reflection.bargain.impl.BackBargain;
 import com.ghostipedia.cosmiccore.common.reflection.bargain.impl.DepthsBargain;
@@ -26,6 +27,7 @@ public final class CosmicBargains {
     private CosmicBargains() {}
 
     public static void init() {
+        if (!ReflectionConstants.ENABLED) return;
         CosmicCore.LOGGER.info("Registering Reflection bargains...");
 
         // EARLY TIER - Gateway bargains (0-100 erosion)

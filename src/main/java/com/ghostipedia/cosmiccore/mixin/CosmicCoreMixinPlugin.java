@@ -25,7 +25,8 @@ public class CosmicCoreMixinPlugin implements IMixinConfigPlugin {
                 ".jei.", "mezz/jei/library/plugins/jei/tags/TagInfoRecipeCategory.class",
                 ".embers.", "com/rekindled/embers/worldgen/EmbersLateWorldgen.class",
                 ".xaerominimap.", "xaero/common/minimap/render/MinimapFBORenderer.class",
-                ".xaeroworldmap.", "xaero/map/element/MapElementRenderHandler.class");
+                ".xaeroworldmap.", "xaero/map/element/MapElementRenderHandler.class",
+                ".architectury.", "dev/architectury/impl/NetworkAggregator.class");
         probes.forEach((token, resource) -> GATES.put(token, loader.getResource(resource) != null));
     }
 

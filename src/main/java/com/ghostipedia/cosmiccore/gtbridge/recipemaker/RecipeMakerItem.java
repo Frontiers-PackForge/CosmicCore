@@ -5,7 +5,7 @@ import com.gregtechceu.gtceu.api.item.ComponentItem;
 import com.lowdragmc.lowdraglib.gui.factory.HeldItemUIFactory;
 import com.lowdragmc.lowdraglib.gui.modular.ModularUI;
 
-import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.network.chat.Component;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.player.Player;
@@ -26,8 +26,10 @@ public class RecipeMakerItem extends ComponentItem implements HeldItemUIFactory.
 
     @Override
     public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
-        if (player instanceof ServerPlayer serverPlayer) {
-            HeldItemUIFactory.INSTANCE.openUI(serverPlayer, hand);
+        if (!level.isClientSide()) {
+            player.displayClientMessage(
+                    Component.literal("Recipe Forge is being rebuilt on ModularUI2 and is temporarily disabled."),
+                    true);
         }
         return InteractionResultHolder.success(player.getItemInHand(hand));
     }
