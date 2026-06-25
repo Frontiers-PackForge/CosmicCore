@@ -122,11 +122,11 @@ public final class AbyssLogic {
         player.hurt(player.damageSources().fellOutOfWorld(), Float.MAX_VALUE);
     }
 
-    private static void sendHUD(ServerPlayer player, long remain, long max) {
+    public static void sendHUD(ServerPlayer player, long remain, long max) {
         CCoreNetwork.sendToPlayer(player, new SyncTimeBarPacket(AbyssRules.DIM.location(), remain, max));
     }
 
-    private static void hideHUD(ServerPlayer player) {
+    public static void hideHUD(ServerPlayer player) {
         CCoreNetwork.sendToPlayer(player, new SyncTimeBarPacket(AbyssRules.DIM.location(), -1, 0));
     }
 }
