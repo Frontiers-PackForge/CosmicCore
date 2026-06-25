@@ -11,6 +11,7 @@ import com.gregtechceu.gtceu.api.machine.multiblock.PartAbility;
 import com.gregtechceu.gtceu.api.machine.multiblock.WorkableElectricMultiblockMachine;
 import com.gregtechceu.gtceu.api.multiblock.Predicates;
 import com.gregtechceu.gtceu.api.multiblock.pattern.MultiblockPatternBuilder;
+import com.gregtechceu.gtceu.api.multiblock.util.RelativeDirection;
 import com.gregtechceu.gtceu.common.data.GCYMBlocks;
 import com.gregtechceu.gtceu.common.data.GTMaterials;
 
@@ -29,7 +30,8 @@ public class WASP {
             .recipeModifier(CosmicRecipeModifiers::asteroidYieldModifier)
             .appearanceBlock(HIGHLY_FLEXIBLE_REINFORCED_TRINAVINE_CASING)
             .partAppearance((controller, part, side) -> HIGHLY_FLEXIBLE_REINFORCED_TRINAVINE_CASING.getDefaultState())
-            .pattern(definition -> MultiblockPatternBuilder.start()
+            .pattern(definition -> MultiblockPatternBuilder
+                    .start(RelativeDirection.FRONT, RelativeDirection.UP, RelativeDirection.LEFT)
                     // spotless: off
                     .slice("                       ", "                       ", "        B     B        ",
                             "          C C          ", "                       ", "                       ",

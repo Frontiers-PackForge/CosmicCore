@@ -25,6 +25,7 @@ import com.ghostipedia.cosmiccore.common.item.behavior.VeinSurveyBehavior;
 import com.ghostipedia.cosmiccore.common.item.behavior.WirelessPDABehavior;
 import com.ghostipedia.cosmiccore.common.reflection.item.MirrorItem;
 import com.ghostipedia.cosmiccore.common.reflection.item.SoulMutilatorItem;
+import com.ghostipedia.cosmiccore.gtbridge.recipemaker.RecipeMakerItem;
 import com.ghostipedia.cosmiccore.utils.ItemData;
 import com.ghostipedia.cosmiccore.utils.StringUtil;
 
@@ -557,10 +558,7 @@ public class CosmicItems {
             .register();
 
     // Literally Random shit
-    // TODO(recipe-maker): RecipeMakerBehavior + the gtbridge/recipemaker tool are shelved in _shelved/ pending
-    // the MUI2 rebuild (the LDLib held-item UI can't be dispatched by GTCEu 8.0's MUI2-only ComponentItem).
-    // DONK is the plain creative-tab icon until the tool is rebuilt on IItemUIHolder#buildUI.
-    public static final ItemEntry<ComponentItem> DONK = REGISTRATE.item("donk", ComponentItem::new)
+    public static final ItemEntry<RecipeMakerItem> DONK = REGISTRATE.item("donk", RecipeMakerItem::new)
             .lang("Donk")
             .properties(p -> p.stacksTo(16))
             .tag()

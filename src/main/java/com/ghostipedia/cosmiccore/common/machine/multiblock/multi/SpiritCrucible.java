@@ -11,6 +11,7 @@ import com.gregtechceu.gtceu.api.machine.multiblock.PartAbility;
 import com.gregtechceu.gtceu.api.machine.multiblock.WorkableElectricMultiblockMachine;
 import com.gregtechceu.gtceu.api.multiblock.Predicates;
 import com.gregtechceu.gtceu.api.multiblock.pattern.MultiblockPatternBuilder;
+import com.gregtechceu.gtceu.api.multiblock.util.RelativeDirection;
 import com.gregtechceu.gtceu.api.recipe.OverclockingLogic;
 
 import static com.ghostipedia.cosmiccore.api.registries.CosmicRegistration.REGISTRATE;
@@ -32,7 +33,7 @@ public class SpiritCrucible {
             .appearanceBlock(CASING_ATOMIC)
             .partAppearance((controller, part, side) -> CASING_ATOMIC.getDefaultState())
             // spotless:off
-            .pattern(definition -> MultiblockPatternBuilder.start()
+            .pattern(definition -> MultiblockPatternBuilder.start(RelativeDirection.FRONT, RelativeDirection.UP, RelativeDirection.LEFT)
                     .slice("AAB       BAA", "  B       B  ", "  B       B  ", "  B       B  ", "             ", "             ", "             ", "             ", "             ", "             ", "             ", "             ", "             ", "             ")
                     .slice("AA         AA", " A         A ", " AAB     BAA ", "   B     B   ", "   B     B   ", "   B     B   ", "             ", "             ", "             ", "   B     B   ", "   B     B   ", "   B     B   ", "   B     B   ", "   B     B   ")
                     .slice("B   CAAAC   B", "B   CAAAC   B", "BAA CAAAC AAB", "B A CAAAC A B", "  AAC   CAA  ", "  D C   C D  ", "  D C   C D  ", "  D C   C D  ", "  D C   C D  ", "  BBC   CBB  ", "    C   C    ", "             ", "             ", "             ")

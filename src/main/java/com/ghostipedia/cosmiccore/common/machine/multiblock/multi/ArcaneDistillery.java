@@ -10,6 +10,7 @@ import com.gregtechceu.gtceu.api.machine.multiblock.PartAbility;
 import com.gregtechceu.gtceu.api.machine.multiblock.WorkableElectricMultiblockMachine;
 import com.gregtechceu.gtceu.api.multiblock.Predicates;
 import com.gregtechceu.gtceu.api.multiblock.pattern.MultiblockPatternBuilder;
+import com.gregtechceu.gtceu.api.multiblock.util.RelativeDirection;
 import com.gregtechceu.gtceu.api.recipe.OverclockingLogic;
 import com.gregtechceu.gtceu.common.data.GTRecipeModifiers;
 
@@ -32,7 +33,7 @@ public class ArcaneDistillery {
             .recipeModifiers(GTRecipeModifiers.BATCH_MODE,
                     ELECTRIC_OVERCLOCK.apply(OverclockingLogic.PERFECT_OVERCLOCK_SUBTICK))
             // spotless:off
-            .pattern(definition -> MultiblockPatternBuilder.start()
+            .pattern(definition -> MultiblockPatternBuilder.start(RelativeDirection.FRONT, RelativeDirection.UP, RelativeDirection.LEFT)
                     .slice("  A  AAA  A  ", "     AAA     ", "     AAA     ", "             ", "             ", "             ", "             ", "             ", "             ", "             ", "     AAA     ", "     AAA     ", "  A  AAA  A  ")
                     .slice(" AAAAAAAAAAA ", "  ABB C BBA  ", "    B   B    ", "    B   B    ", "             ", "             ", "             ", "             ", "             ", "    B   B    ", "    B   B    ", "   BB C BBA  ", " AAAAAAAAAAA ")
                     .slice("AAAAAAAAAAAAA", " AB   C   BA ", "  B       B  ", "  D       D  ", "  D       D  ", "  D       D  ", "  D       D  ", "  D       D  ", "  D       D  ", "  D       D  ", "  B       B  ", "  B   C   BA ", "AAAAAAAAAAAAA")

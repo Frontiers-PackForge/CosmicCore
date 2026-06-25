@@ -19,6 +19,7 @@ import com.gregtechceu.gtceu.api.multiblock.Predicates;
 import com.gregtechceu.gtceu.api.multiblock.pattern.MultiblockPatternBuilder;
 import com.gregtechceu.gtceu.api.multiblock.predicates.BasePredicate;
 import com.gregtechceu.gtceu.api.multiblock.util.BlockInfo;
+import com.gregtechceu.gtceu.api.multiblock.util.RelativeDirection;
 import com.gregtechceu.gtceu.api.recipe.GTRecipeType;
 import com.gregtechceu.gtceu.api.registry.registrate.MachineBuilder;
 import com.gregtechceu.gtceu.common.data.GTMaterialItems;
@@ -66,7 +67,8 @@ public class CosmicMachinesUtils {
                 .generator(true)
                 .recipeModifier(ExoticCombustionEngineMachine::recipeModifier, true)
                 .appearanceBlock(casing)
-                .pattern(definition -> MultiblockPatternBuilder.start()
+                .pattern(definition -> MultiblockPatternBuilder
+                        .start(RelativeDirection.FRONT, RelativeDirection.UP, RelativeDirection.LEFT)
                         .slice("XXX", "XDX", "XXX")
                         .slice("XCX", "CGC", "XCX")
                         .slice("XCX", "CGC", "XCX")
@@ -117,7 +119,8 @@ public class CosmicMachinesUtils {
                 .generator(true)
                 .recipeModifier(CosmicLargeTurbineMachine::recipeModifier, true)
                 .appearanceBlock(casing)
-                .pattern(definition -> MultiblockPatternBuilder.start()
+                .pattern(definition -> MultiblockPatternBuilder
+                        .start(RelativeDirection.FRONT, RelativeDirection.UP, RelativeDirection.LEFT)
                         .slice("CCCC", "CHHC", "CCCC")
                         .slice("CHHC", "RGGR", "CHHC")
                         .slice("CCCC", "CSHC", "CCCC")

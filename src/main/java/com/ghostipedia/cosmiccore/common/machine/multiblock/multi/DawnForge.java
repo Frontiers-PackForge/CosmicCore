@@ -11,6 +11,7 @@ import com.gregtechceu.gtceu.api.machine.MultiblockMachineDefinition;
 import com.gregtechceu.gtceu.api.machine.multiblock.PartAbility;
 import com.gregtechceu.gtceu.api.multiblock.Predicates;
 import com.gregtechceu.gtceu.api.multiblock.pattern.MultiblockPatternBuilder;
+import com.gregtechceu.gtceu.api.multiblock.util.RelativeDirection;
 
 import static com.ghostipedia.cosmiccore.api.machine.part.CosmicPartAbility.IMPORT_EMBER;
 import static com.ghostipedia.cosmiccore.api.registries.CosmicRegistration.REGISTRATE;
@@ -27,7 +28,8 @@ public class DawnForge {
             .appearanceBlock(LIGHT_DAWNSTONE_CASING)
             .partAppearance((controller, part, side) -> LIGHT_DAWNSTONE_CASING.getDefaultState())
             .recipeModifier(WeakSteamParallelMultiBlockMachine.recipeModifierCanRunAtMost(GTValues.MV))
-            .pattern(definition -> MultiblockPatternBuilder.start()
+            .pattern(definition -> MultiblockPatternBuilder
+                    .start(RelativeDirection.FRONT, RelativeDirection.UP, RelativeDirection.LEFT)
                     .slice("ABBBA", "A   A", "AA AA", " BBB ", "     ")
                     .slice("BAAAB", "     ", "A   A", "BABAB", "  B  ")
                     .slice("BAAAB", "  D  ", "     ", "BBABB", " BBB ")

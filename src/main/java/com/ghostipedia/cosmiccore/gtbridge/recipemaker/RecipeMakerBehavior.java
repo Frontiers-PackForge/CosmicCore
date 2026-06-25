@@ -3,8 +3,6 @@ package com.ghostipedia.cosmiccore.gtbridge.recipemaker;
 import com.gregtechceu.gtceu.api.GTValues;
 import com.gregtechceu.gtceu.api.capability.recipe.FluidRecipeCapability;
 import com.gregtechceu.gtceu.api.capability.recipe.ItemRecipeCapability;
-import com.gregtechceu.gtceu.api.gui.GuiTextures;
-import com.gregtechceu.gtceu.api.item.component.IItemUIFactory;
 import com.gregtechceu.gtceu.api.machine.multiblock.CleanroomType;
 import com.gregtechceu.gtceu.api.recipe.GTRecipeType;
 import com.gregtechceu.gtceu.api.transfer.item.CustomItemStackHandler;
@@ -36,7 +34,7 @@ import java.util.Locale;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
-public class RecipeMakerBehavior implements IItemUIFactory {
+public class RecipeMakerBehavior {
 
     private static final String CRAFTING = "minecraft:crafting";
     private static final int WIDTH = 288;
@@ -46,7 +44,6 @@ public class RecipeMakerBehavior implements IItemUIFactory {
     private static final int TANK_CAPACITY = 64_000;
     private static final int COLS = 3;
 
-    @Override
     public ModularUI createUI(HeldItemUIFactory.HeldItemHolder holder, Player player) {
         ModularUI ui = new ModularUI(WIDTH, HEIGHT, holder, player);
         ui.widget(new LabelWidget(8, 6, "Recipe Forge"));
@@ -101,7 +98,7 @@ public class RecipeMakerBehavior implements IItemUIFactory {
         ui.widget(inventory);
 
         open.accept(CRAFTING);
-        ui.mainGroup.setBackground(GuiTextures.BACKGROUND);
+        ui.mainGroup.setBackground(RecipeMakerTextures.BACKGROUND);
         return ui;
     }
 
@@ -109,7 +106,7 @@ public class RecipeMakerBehavior implements IItemUIFactory {
                                  String needle, Consumer<String> open) {
         if (!needle.isEmpty() && !id.toLowerCase(Locale.ROOT).contains(needle)) return;
         int y = rowY[0];
-        list.addWidget(new ButtonWidget(1, y, 128, 14, GuiTextures.VANILLA_BUTTON, data -> open.accept(id)));
+        list.addWidget(new ButtonWidget(1, y, 128, 14, RecipeMakerTextures.VANILLA_BUTTON, data -> open.accept(id)));
         list.addWidget(new LabelWidget(4, y + 3, label));
         rowY[0] += 15;
     }
@@ -179,7 +176,7 @@ public class RecipeMakerBehavior implements IItemUIFactory {
                 .setSupplier(() -> GTValues.VN[tier[0]]));
 
         WidgetGroup capabilities = new WidgetGroup(0, 0, 128, 138);
-        capabilities.setBackground(GuiTextures.BACKGROUND);
+        capabilities.setBackground(RecipeMakerTextures.BACKGROUND);
         capabilities.setVisible(false);
         capabilities.setActive(false);
         capabilities.addWidget(new LabelWidget(4, 3, "Capabilities"));
@@ -189,7 +186,7 @@ public class RecipeMakerBehavior implements IItemUIFactory {
                 .setNumbersOnly(0L, Integer.MAX_VALUE));
 
         WidgetGroup conditions = new WidgetGroup(0, 0, 128, 138);
-        conditions.setBackground(GuiTextures.BACKGROUND);
+        conditions.setBackground(RecipeMakerTextures.BACKGROUND);
         conditions.setVisible(false);
         conditions.setActive(false);
         conditions.addWidget(new LabelWidget(4, 3, "Conditions"));
@@ -211,7 +208,7 @@ public class RecipeMakerBehavior implements IItemUIFactory {
                 () -> dimension[0], s -> dimension[0] = s.trim()));
 
         WidgetGroup slotConfig = new WidgetGroup(0, 0, 128, 138);
-        slotConfig.setBackground(GuiTextures.BACKGROUND);
+        slotConfig.setBackground(RecipeMakerTextures.BACKGROUND);
         slotConfig.setVisible(false);
         slotConfig.setActive(false);
         slotConfig.addWidget(new LabelWidget(4, 3, "Slot options"));
@@ -258,14 +255,17 @@ public class RecipeMakerBehavior implements IItemUIFactory {
             slotConfig.setActive(true);
         };
 
-        slotConfig.addWidget(new ButtonWidget(4, 118, 120, 14, GuiTextures.VANILLA_BUTTON, data -> closeAll.run()));
+        slotConfig.addWidget(
+                new ButtonWidget(4, 118, 120, 14, RecipeMakerTextures.VANILLA_BUTTON, data -> closeAll.run()));
         slotConfig.addWidget(new LabelWidget(54, 121, "Close"));
-        capabilities.addWidget(new ButtonWidget(4, 118, 120, 14, GuiTextures.VANILLA_BUTTON, data -> closeAll.run()));
+        capabilities.addWidget(
+                new ButtonWidget(4, 118, 120, 14, RecipeMakerTextures.VANILLA_BUTTON, data -> closeAll.run()));
         capabilities.addWidget(new LabelWidget(54, 121, "Close"));
-        conditions.addWidget(new ButtonWidget(4, 118, 120, 14, GuiTextures.VANILLA_BUTTON, data -> closeAll.run()));
+        conditions.addWidget(
+                new ButtonWidget(4, 118, 120, 14, RecipeMakerTextures.VANILLA_BUTTON, data -> closeAll.run()));
         conditions.addWidget(new LabelWidget(54, 121, "Close"));
 
-        editor.addWidget(new ButtonWidget(0, 158, 120, 14, GuiTextures.VANILLA_BUTTON, data -> {
+        editor.addWidget(new ButtonWidget(0, 158, 120, 14, RecipeMakerTextures.VANILLA_BUTTON, data -> {
             boolean open = !capOpen[0];
             closeAll.run();
             capOpen[0] = open;
@@ -274,7 +274,7 @@ public class RecipeMakerBehavior implements IItemUIFactory {
         }));
         editor.addWidget(new LabelWidget(34, 161, "Capabilities"));
 
-        editor.addWidget(new ButtonWidget(0, 176, 120, 14, GuiTextures.VANILLA_BUTTON, data -> {
+        editor.addWidget(new ButtonWidget(0, 176, 120, 14, RecipeMakerTextures.VANILLA_BUTTON, data -> {
             boolean open = !condOpen[0];
             closeAll.run();
             condOpen[0] = open;
@@ -283,7 +283,7 @@ public class RecipeMakerBehavior implements IItemUIFactory {
         }));
         editor.addWidget(new LabelWidget(38, 179, "Conditions"));
 
-        editor.addWidget(new ExportButtonWidget(0, 192, 120, 16, GuiTextures.VANILLA_BUTTON,
+        editor.addWidget(new ExportButtonWidget(0, 192, 120, 16, RecipeMakerTextures.VANILLA_BUTTON,
                 () -> buildScript(type, recipeId, itemIn, itemOut, fluidIn, fluidOut, tier, amperage, duration,
                         blastTemp, cwu, cleanroom, dimension, outChance, outBoost, inChance, inBoost, inNoConsume,
                         fOutChance, fOutBoost, fInChance, fInBoost)));
@@ -413,7 +413,7 @@ public class RecipeMakerBehavior implements IItemUIFactory {
     private static List<String> cleanroomNames() {
         List<String> names = new ArrayList<>();
         names.add("none");
-        CleanroomType.getAllTypes().stream().map(CleanroomType::name).sorted().forEach(names::add);
+        CleanroomType.getAllTypes().stream().map(CleanroomType::getName).sorted().forEach(names::add);
         return names;
     }
 

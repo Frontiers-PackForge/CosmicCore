@@ -1,6 +1,5 @@
 package com.ghostipedia.cosmiccore.gtbridge.recipemaker;
 
-import com.gregtechceu.gtceu.api.gui.GuiTextures;
 import com.gregtechceu.gtceu.api.transfer.item.CustomItemStackHandler;
 
 import com.lowdragmc.lowdraglib.gui.widget.LabelWidget;
@@ -46,7 +45,7 @@ public final class CraftingRecipeEditor {
                 .setOnChanged(name -> shapeless[0] = name.equals("shapeless"))
                 .setSupplier(() -> shapeless[0] ? "shapeless" : "shaped"));
 
-        editor.addWidget(new ExportButtonWidget(0, 192, 120, 16, GuiTextures.VANILLA_BUTTON,
+        editor.addWidget(new ExportButtonWidget(0, 192, 120, 16, RecipeMakerTextures.VANILLA_BUTTON,
                 () -> export(grid, output, shapeless[0], recipeId[0])));
         editor.addWidget(new LabelWidget(34, 196, "Copy KubeJS"));
     }

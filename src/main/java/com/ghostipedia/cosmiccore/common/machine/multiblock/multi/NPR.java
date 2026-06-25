@@ -13,6 +13,7 @@ import com.gregtechceu.gtceu.api.data.tag.TagPrefix;
 import com.gregtechceu.gtceu.api.machine.MultiblockMachineDefinition;
 import com.gregtechceu.gtceu.api.machine.multiblock.PartAbility;
 import com.gregtechceu.gtceu.api.multiblock.pattern.MultiblockPatternBuilder;
+import com.gregtechceu.gtceu.api.multiblock.util.RelativeDirection;
 import com.gregtechceu.gtceu.common.data.GTMaterials;
 
 import net.minecraft.network.chat.Component;
@@ -31,7 +32,8 @@ public class NPR {
             .recipeModifier(CosmicRecipeModifiers::vomahineReactorOC)
             .appearanceBlock(CosmicBlocks.NAQUADAH_PRESSURE_RESISTANT_CASING)
             .generator(true)
-            .pattern(definition -> MultiblockPatternBuilder.start()
+            .pattern(definition -> MultiblockPatternBuilder
+                    .start(RelativeDirection.FRONT, RelativeDirection.UP, RelativeDirection.LEFT)
                     .slice("##QQQ##", "##QQQ##", "###Q###", "#######", "#######", "#######", "#######", "#######",
                             "#######", "#######", "###Q###", "##QQQ##", "##QQQ##")
                     .slice("#QQQQQ#", "#QQSQQ#", "#FQQQF#", "#FQFQF#", "#F###F#", "#F###F#", "#F###F#", "#F###F#",

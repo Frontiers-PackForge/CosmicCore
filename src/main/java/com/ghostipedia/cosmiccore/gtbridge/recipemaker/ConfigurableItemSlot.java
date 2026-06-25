@@ -1,7 +1,5 @@
 package com.ghostipedia.cosmiccore.gtbridge.recipemaker;
 
-import com.gregtechceu.gtceu.api.gui.GuiTextures;
-
 import com.lowdragmc.lowdraglib.gui.widget.PhantomSlotWidget;
 
 import net.minecraft.client.Minecraft;
@@ -32,7 +30,7 @@ public class ConfigurableItemSlot extends PhantomSlotWidget {
         this.handler = handler;
         this.index = index;
         setClearSlotOnRightClick(false);
-        setBackgroundTexture(GuiTextures.SLOT);
+        setBackgroundTexture(RecipeMakerTextures.SLOT);
     }
 
     public ConfigurableItemSlot setOnConfigure(Runnable onConfigure) {

@@ -10,6 +10,7 @@ import com.gregtechceu.gtceu.api.machine.multiblock.PartAbility;
 import com.gregtechceu.gtceu.api.machine.multiblock.WorkableElectricMultiblockMachine;
 import com.gregtechceu.gtceu.api.multiblock.Predicates;
 import com.gregtechceu.gtceu.api.multiblock.pattern.MultiblockPatternBuilder;
+import com.gregtechceu.gtceu.api.multiblock.util.RelativeDirection;
 import com.gregtechceu.gtceu.api.recipe.OverclockingLogic;
 import com.gregtechceu.gtceu.common.data.GTBlocks;
 
@@ -33,7 +34,8 @@ public class EclipsedDawnForge {
             .partAppearance((controller, part, side) -> ETHERSTEEL_PLATED_ASH_TILES.getDefaultState())
             .recipeModifiers(CosmicRecipeModifiers::innateParallel4x,
                     ELECTRIC_OVERCLOCK.apply(OverclockingLogic.NON_PERFECT_OVERCLOCK), BATCH_MODE)
-            .pattern(definition -> MultiblockPatternBuilder.start()
+            .pattern(definition -> MultiblockPatternBuilder
+                    .start(RelativeDirection.FRONT, RelativeDirection.UP, RelativeDirection.LEFT)
                     // spotless:off
                     .slice("  AAAAA  ", "   AAA   ", "         ", "         ", "         ", "         ", "   AAA   ", "         ")
                     .slice(" AAAAAAA ", " AACCCAA ", " AA   AA ", " A     A ", "         ", "         ", " AAAAAAA ", "   AAA   ")

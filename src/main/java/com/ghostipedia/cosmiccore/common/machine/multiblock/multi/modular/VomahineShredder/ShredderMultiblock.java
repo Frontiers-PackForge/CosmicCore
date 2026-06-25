@@ -22,7 +22,8 @@ public class ShredderMultiblock {
     // .recipeModifier(GTRecipeModifiers.ELECTRIC_OVERCLOCK.apply(OverclockingLogic.NON_PERFECT_OVERCLOCK_SUBTICK))
     // .appearanceBlock(CosmicBlocks.CYCLOZINE_CHEMICALLY_REPELLING_CASING)
     // .recipeType(GTRecipeTypes.DUMMY_RECIPES)
-    // .pattern(definition -> MultiblockPatternBuilder.start()
+    // .pattern(definition -> MultiblockPatternBuilder.start(RelativeDirection.FRONT, RelativeDirection.UP,
+    // RelativeDirection.LEFT)
     // .slice("AAAAAAAAAAAAA", "ADDDDDDDDDDDA", "ADDDDDDDDDDDA", "AAAAAAADDDDDA", " AAAAAAA")
     // .slice("ACCCCCCCCCCCA", "ACCCCCCCCCCCB", "ACCCCCCCCCCCB", "ACCCCCCCCCCCB", " CCCCCCA")
     // .slice("ACCCCCCCCCCCA", "ACDDDDCEEEEC ", "ACDDDDCEEEEC ", "ACCCCCCEEEEC ", " C CA")
@@ -67,7 +68,7 @@ public class ShredderMultiblock {
     // .appearanceBlock(() -> FusionReactorMachine.getCasingState(tier))
     // .pattern((definition) -> {
     // var casing = blocks(FusionReactorMachine.getCasingState(tier));
-    // return MultiblockPatternBuilder.start()
+    // return MultiblockPatternBuilder.start(RelativeDirection.FRONT, RelativeDirection.UP, RelativeDirection.LEFT)
     // .slice("AAAAAAAAAAAAA", "ADDDDDDDDDDDA", "ADDDDDDDDDDDA", "AAAAAAADDDDDA",
     // " AAAAAAA")
     // .slice("ACCCCCCCCCCCA", "ACCCCCCCCCCCB", "ACCCCCCCCCCCB", "ACCCCCCCCCCCB",

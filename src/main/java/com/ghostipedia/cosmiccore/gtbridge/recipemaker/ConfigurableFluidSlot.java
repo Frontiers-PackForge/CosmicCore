@@ -1,7 +1,5 @@
 package com.ghostipedia.cosmiccore.gtbridge.recipemaker;
 
-import com.gregtechceu.gtceu.api.gui.GuiTextures;
-
 import com.lowdragmc.lowdraglib.gui.widget.PhantomFluidWidget;
 
 import net.minecraft.client.Minecraft;
@@ -30,7 +28,7 @@ public class ConfigurableFluidSlot extends PhantomFluidWidget {
     public ConfigurableFluidSlot(FluidTank tank, int x, int y) {
         super(tank, 0, x, y, 18, 18, tank::getFluid, tank::setFluid);
         this.tank = tank;
-        setBackground(GuiTextures.FLUID_SLOT);
+        setBackground(RecipeMakerTextures.FLUID_SLOT);
     }
 
     public ConfigurableFluidSlot setOnConfigure(Runnable onConfigure) {

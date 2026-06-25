@@ -11,6 +11,7 @@ import com.gregtechceu.gtceu.api.machine.MultiblockMachineDefinition;
 import com.gregtechceu.gtceu.api.machine.multiblock.CoilWorkableElectricMultiblockMachine;
 import com.gregtechceu.gtceu.api.machine.multiblock.PartAbility;
 import com.gregtechceu.gtceu.api.multiblock.pattern.MultiblockPatternBuilder;
+import com.gregtechceu.gtceu.api.multiblock.util.RelativeDirection;
 import com.gregtechceu.gtceu.common.data.GTRecipeModifiers;
 import com.gregtechceu.gtceu.utils.FormattingUtil;
 
@@ -37,7 +38,7 @@ public class OrbitalForge {
                     GTRecipeModifiers::ebfOverclock, BATCH_MODE)
             .appearanceBlock(CosmicBlocks.CYCLOZINE_CHEMICALLY_REPELLING_CASING)
             // spotless:off
-            .pattern(definition -> MultiblockPatternBuilder.start()
+            .pattern(definition -> MultiblockPatternBuilder.start(RelativeDirection.FRONT, RelativeDirection.UP, RelativeDirection.LEFT)
                     .slice("                                   ", "                                   ", "   AAAAA                   AAAAA   ", "   BBBBB                   BBBBB   ", "   AAAAA                   AAAAA   ", "                                   ", "                                   ")
                     .slice("                                   ", "                                   ", "  CA   AC      C   C      CA   AC  ", "  BB D BB      CDDDC      BB D BB  ", "  CA   AC      C   C      CA   AC  ", "                                   ", "                                   ")
                     .slice("                                   ", "               CAAAC               ", " CC     CC     DEEED     CC     CC ", " BB  D  BB     AEEEA     BB  D  BB ", " CC     CC     DEEED     CC     CC ", "               CAAAC               ", "                                   ")

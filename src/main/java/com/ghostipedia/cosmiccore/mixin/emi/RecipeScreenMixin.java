@@ -1,5 +1,6 @@
 package com.ghostipedia.cosmiccore.mixin.emi;
 
+import com.ghostipedia.cosmiccore.integration.emi.EmbedMouseForwarder;
 import com.ghostipedia.cosmiccore.integration.emi.RecipeScreenAccessor;
 
 import net.minecraft.client.gui.screens.Screen;
@@ -26,9 +27,12 @@ import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Redirect;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import java.util.List;
+import java.util.function.Predicate;
 
 @Mixin(value = RecipeScreen.class, remap = false)
 public abstract class RecipeScreenMixin extends Screen implements RecipeScreenAccessor {
@@ -192,5 +196,41 @@ public abstract class RecipeScreenMixin extends Screen implements RecipeScreenAc
         }
 
         return fallback;
+    }
+
+    @Unique
+    private boolean cosmiccore$forwardToEmbed(Predicate<EmbedMouseForwarder> action) {
+        if (currentPage == null) return false;
+        boolean handled = false;
+        for (WidgetGroup group : currentPage) {
+            for (Widget widget : group.widgets) {
+                if (widget instanceof EmbedMouseForwarder forwarder && action.test(forwarder)) {
+                    handled = true;
+                }
+            }
+        }
+        return handled;
+    }
+
+    @Inject(method = "mouseScrolled(DDDD)Z", at = @At("HEAD"), cancellable = true, remap = false)
+    private void cosmiccore$forwardEmbedScroll(double mouseX, double mouseY, double scrollX, double scrollY,
+                                               CallbackInfoReturnable<Boolean> cir) {
+        if (cosmiccore$forwardToEmbed(f -> f.cosmiccore$mouseScrolled(scrollX, scrollY))) {
+            cir.setReturnValue(true);
+        }
+    }
+
+    @Inject(method = "mouseDragged(DDIDD)Z", at = @At("HEAD"), cancellable = true, remap = false)
+    private void cosmiccore$forwardEmbedDrag(double mouseX, double mouseY, int button, double dragX, double dragY,
+                                             CallbackInfoReturnable<Boolean> cir) {
+        if (cosmiccore$forwardToEmbed(f -> f.cosmiccore$mouseDragged(button, dragX, dragY))) {
+            cir.setReturnValue(true);
+        }
+    }
+
+    @Inject(method = "mouseReleased(DDI)Z", at = @At("HEAD"), remap = false)
+    private void cosmiccore$forwardEmbedRelease(double mouseX, double mouseY, int button,
+                                                CallbackInfoReturnable<Boolean> cir) {
+        cosmiccore$forwardToEmbed(f -> f.cosmiccore$mouseReleased(button));
     }
 }

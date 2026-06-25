@@ -10,6 +10,7 @@ import com.gregtechceu.gtceu.api.data.RotationState;
 import com.gregtechceu.gtceu.api.machine.MultiblockMachineDefinition;
 import com.gregtechceu.gtceu.api.machine.multiblock.MultiblockControllerMachine;
 import com.gregtechceu.gtceu.api.multiblock.pattern.MultiblockPatternBuilder;
+import com.gregtechceu.gtceu.api.multiblock.util.RelativeDirection;
 import com.gregtechceu.gtceu.api.registry.registrate.MultiblockMachineBuilder;
 import com.gregtechceu.gtceu.common.data.GTRecipeTypes;
 import com.gregtechceu.gtceu.common.machine.multiblock.electric.FusionReactorMachine;
@@ -33,7 +34,8 @@ public class CosmicModularMachines {
                     .appearanceBlock(() -> FusionReactorMachine.getCasingState(tier))
                     .pattern((definition) -> {
                         var casing = blocks(FusionReactorMachine.getCasingState(tier));
-                        return MultiblockPatternBuilder.start()
+                        return MultiblockPatternBuilder
+                                .start(RelativeDirection.FRONT, RelativeDirection.UP, RelativeDirection.LEFT)
                                 .slice("A", "A", "A", "A")
                                 .slice("A", "A", "B", "A")
                                 .where('B', controller(blocks(definition.getBlock())))

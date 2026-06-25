@@ -12,6 +12,7 @@ import com.gregtechceu.gtceu.api.machine.multiblock.PartAbility;
 import com.gregtechceu.gtceu.api.machine.multiblock.WorkableElectricMultiblockMachine;
 import com.gregtechceu.gtceu.api.multiblock.Predicates;
 import com.gregtechceu.gtceu.api.multiblock.pattern.MultiblockPatternBuilder;
+import com.gregtechceu.gtceu.api.multiblock.util.RelativeDirection;
 import com.gregtechceu.gtceu.api.recipe.OverclockingLogic;
 import com.gregtechceu.gtceu.common.data.GTMaterials;
 import com.gregtechceu.gtceu.common.data.GTRecipeModifiers;
@@ -33,7 +34,8 @@ public class LargeSpoolingMachine {
             .recipeModifiers(GTRecipeModifiers.PARALLEL_HATCH,
                     ELECTRIC_OVERCLOCK.apply(OverclockingLogic.NON_PERFECT_OVERCLOCK), GTRecipeModifiers.BATCH_MODE)
             .appearanceBlock(WEAR_RESISTANT_RURIDIT_CASING)
-            .pattern(definition -> MultiblockPatternBuilder.start()
+            .pattern(definition -> MultiblockPatternBuilder
+                    .start(RelativeDirection.FRONT, RelativeDirection.UP, RelativeDirection.LEFT)
                     .slice("  AAAA", "     F", "  DDDF", "     F", "     F", "     F", "     F", "  AAAA", "      ")
                     .slice("  AAAA", "   C  ", "  DC  ", "   C  ", "   C  ", "   C  ", "   C  ", "  AAAA", "      ")
                     .slice("AAAAAA", "A   A ", "A E A ", "A   A ", "A   A ", "A   A ", "A   A ", "AAAAAA", " AAA  ")

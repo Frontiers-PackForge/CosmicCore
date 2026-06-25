@@ -14,6 +14,7 @@ import com.gregtechceu.gtceu.api.machine.MultiblockMachineDefinition;
 import com.gregtechceu.gtceu.api.machine.multiblock.PartAbility;
 import com.gregtechceu.gtceu.api.multiblock.Predicates;
 import com.gregtechceu.gtceu.api.multiblock.pattern.MultiblockPatternBuilder;
+import com.gregtechceu.gtceu.api.multiblock.util.RelativeDirection;
 import com.gregtechceu.gtceu.api.recipe.OverclockingLogic;
 
 import net.minecraft.world.level.block.Blocks;
@@ -37,7 +38,8 @@ public class VoraxReactor {
             .appearanceBlock(CASING_ATOMIC)
             .partAppearance((controller, part, side) -> TRITANIUM_LINED_HEAVY_NEUTRONIUM_CASING.getDefaultState())
             .generator(true)
-            .pattern(definition -> MultiblockPatternBuilder.start()
+            .pattern(definition -> MultiblockPatternBuilder
+                    .start(RelativeDirection.FRONT, RelativeDirection.UP, RelativeDirection.LEFT)
                     .slice(" AAAAAAAAA ", "    A A    ", "  AAA AAA  ", "    AAA    ", "   BBABB   ", "    BBB    ",
                             "     B     ", "           ", "           ", "           ", "     B     ", "    BBB    ",
                             "   BBABB   ", "    AAA    ", "  AAA AAA  ", "    A A    ", " AAAAAAAAA ")
