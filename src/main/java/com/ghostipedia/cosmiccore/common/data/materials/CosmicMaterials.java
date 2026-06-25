@@ -296,7 +296,7 @@ public class CosmicMaterials {
         Enderium = new Material.Builder(CosmicCore.id("enderium"))
                 .ingot()
                 .liquid(new FluidBuilder().temperature(1340))
-                .color(0x1f6b62).secondaryColor(0x16455f).iconSet(MaterialIconSet.SHINY)
+                .color(0x1f6b62).secondaryColor(0x16455f).iconSet(MaterialIconSet.CHUNKY)
                 .flags(GENERATE_BOLT_SCREW, GENERATE_ROUND, GENERATE_GEAR, GENERATE_SMALL_GEAR, GENERATE_RING,
                         GENERATE_FRAME, GENERATE_SPRING, GENERATE_SPRING_SMALL, GENERATE_FINE_WIRE, GENERATE_DENSE)
                 .blastTemp(4500, BlastProperty.GasTier.HIGH, GTValues.VA[GTValues.EV], 1200)
@@ -614,7 +614,7 @@ public class CosmicMaterials {
                 .flags(GENERATE_ROTOR, GENERATE_FRAME, GENERATE_BOLT_SCREW, GENERATE_ROUND, GENERATE_GEAR,
                         GENERATE_SMALL_GEAR, GENERATE_RING, GENERATE_FRAME, GENERATE_SPRING, GENERATE_SPRING_SMALL,
                         GENERATE_FINE_WIRE)
-                .color(0xE8F3FF).secondaryColor(0x1F2A36).iconSet(MaterialIconSet.METALLIC)
+                .color(0xE8F3FF).secondaryColor(0x1F2A36).iconSet(MaterialIconSet.MAGIC_TERRA)
                 .buildAndRegister();
         PaleOil = new Material.Builder(CosmicCore.id("pale_oil"))
                 .formula("✧⚙")
