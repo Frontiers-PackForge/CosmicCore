@@ -17,15 +17,16 @@ public final class EmiSizeWarmer {
     public static volatile boolean enabled = true;
 
     private static final Logger LOGGER = LoggerFactory.getLogger("CosmicCore/EmiSizeWarmer");
-    private static final long HOLD_BUDGET_NANOS = 30_000_000L;
+    private static final long HOLD_BUDGET_NANOS = 40_000_000L;
     private static final int HOLD_MAX_STEPS = 5000;
 
     private static final ArrayDeque<ModularUIEmiRecipe> QUEUE = new ArrayDeque<>();
-    private static volatile boolean bakeSeen = false;
-    private static volatile boolean warmComplete = false;
-    private static boolean loggedError = false;
-    private static int totalQueued = 0;
-    private static int warmedTotal = 0;
+    private static volatile boolean bakeSeen;
+    private static volatile boolean warmComplete;
+    private static boolean loggedError;
+    private static int totalQueued;
+    private static int warmedTotal;
+    private static long warmStartNanos;
 
     private EmiSizeWarmer() {}
 
@@ -34,10 +35,11 @@ public final class EmiSizeWarmer {
     }
 
     public static void tick() {
-        if (!enabled) return;
-
-        boolean baked = Minecraft.getInstance().level != null && EmiReloadManager.getStatus() == 2;
-        if (!baked) {
+        if (!enabled) {
+            if (bakeSeen) reset();
+            return;
+        }
+        if (Minecraft.getInstance().level == null || EmiReloadManager.getStatus() != 2) {
             if (bakeSeen) reset();
             return;
         }
@@ -45,14 +47,14 @@ public final class EmiSizeWarmer {
         if (!bakeSeen) {
             refill();
             bakeSeen = true;
+            warmStartNanos = System.nanoTime();
             totalQueued = QUEUE.size();
-            LOGGER.info("EMI size warmer: holding EMI and pre-sizing {} recipes", totalQueued);
+            LOGGER.info("EMI size warmer: holding EMI, pre-sizing {} recipes", totalQueued);
             if (QUEUE.isEmpty()) {
                 warmComplete = true;
                 return;
             }
         }
-
         if (warmComplete) return;
 
         long deadline = System.nanoTime() + HOLD_BUDGET_NANOS;
@@ -66,7 +68,7 @@ public final class EmiSizeWarmer {
             } catch (Throwable t) {
                 if (!loggedError) {
                     loggedError = true;
-                    LOGGER.debug("EMI size warmer: a recipe failed to pre-size; skipping it and continuing", t);
+                    LOGGER.debug("EMI size warmer: a recipe failed to pre-size; skipping it", t);
                 }
             }
         }
@@ -74,7 +76,9 @@ public final class EmiSizeWarmer {
         if (QUEUE.isEmpty()) {
             warmComplete = true;
             EmiReloadManager.reloadStep = Component.literal("");
-            LOGGER.info("EMI size warmer: done; pre-sized {} recipes, releasing EMI", warmedTotal);
+            double seconds = (System.nanoTime() - warmStartNanos) / 1_000_000_000.0D;
+            LOGGER.info("EMI size warmer: done; pre-sized {} recipes in {}s, releasing EMI", warmedTotal,
+                    String.format("%.2f", seconds));
         } else {
             EmiReloadManager.reloadWorry = Long.MAX_VALUE;
             EmiReloadManager.reloadStep = Component.literal(
@@ -88,8 +92,8 @@ public final class EmiSizeWarmer {
         warmComplete = false;
         warmedTotal = 0;
         for (EmiRecipe recipe : EmiApi.getRecipeManager().getRecipes()) {
-            if (recipe instanceof ModularUIEmiRecipe modularRecipe) {
-                QUEUE.add(modularRecipe);
+            if (recipe instanceof ModularUIEmiRecipe modular) {
+                QUEUE.add(modular);
             }
         }
     }
@@ -100,5 +104,6 @@ public final class EmiSizeWarmer {
         warmComplete = false;
         warmedTotal = 0;
         totalQueued = 0;
+        EmiReloadManager.reloadStep = Component.literal("");
     }
 }
