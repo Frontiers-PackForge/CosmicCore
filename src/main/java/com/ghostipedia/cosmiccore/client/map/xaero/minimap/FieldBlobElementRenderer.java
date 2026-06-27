@@ -1,0 +1,68 @@
+package com.ghostipedia.cosmiccore.client.map.xaero.minimap;
+
+import com.ghostipedia.cosmiccore.client.map.RevealedField;
+import com.ghostipedia.cosmiccore.client.map.RevealedFields;
+import com.ghostipedia.cosmiccore.client.map.xaero.FieldBlobDraw;
+import com.ghostipedia.cosmiccore.client.map.xaero.FieldBlobElement;
+
+import com.gregtechceu.gtceu.integration.map.GroupingMapRenderer;
+
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.renderer.MultiBufferSource;
+
+import xaero.common.graphics.renderer.multitexture.MultiTextureRenderTypeRendererProvider;
+import xaero.hud.minimap.element.render.MinimapElementRenderInfo;
+import xaero.hud.minimap.element.render.MinimapElementRenderLocation;
+import xaero.hud.minimap.element.render.MinimapElementRenderer;
+
+public class FieldBlobElementRenderer extends MinimapElementRenderer<FieldBlobElement, Object> {
+
+    private FieldBlobElementRenderer(FieldBlobElementReader reader, FieldBlobElementRenderProvider provider,
+                                     Object context) {
+        super(reader, provider, context);
+    }
+
+    @Override
+    public void preRender(MinimapElementRenderInfo renderInfo, MultiBufferSource.BufferSource renderTypeBuffers,
+                          MultiTextureRenderTypeRendererProvider multiTextureRenderTypeRenderers) {}
+
+    @Override
+    public boolean renderElement(FieldBlobElement element, boolean highlit, boolean outOfBounds,
+                                 double optionalDepth, float optionalScale, double partialX, double partialY,
+                                 MinimapElementRenderInfo renderInfo, GuiGraphics graphics,
+                                 MultiBufferSource.BufferSource renderTypeBuffers) {
+        RevealedField field = element.field();
+        Minecraft mc = Minecraft.getInstance();
+        boolean depleted = mc.level != null &&
+                RevealedFields.INSTANCE.isDepleted(mc.level.dimension(), field.x(), field.z());
+        FieldBlobDraw.minimapBlob(graphics, FieldBlobDraw.minimapZoneRadius(field.tier(), field.radius()),
+                field.colorRGB(), FieldBlobDraw.shapeSeed(field.x(), field.z()), depleted);
+        return true;
+    }
+
+    @Override
+    public void postRender(MinimapElementRenderInfo renderInfo, MultiBufferSource.BufferSource renderTypeBuffers,
+                           MultiTextureRenderTypeRendererProvider multiTextureRenderTypeRenderers) {}
+
+    @Override
+    public boolean shouldRender(MinimapElementRenderLocation location) {
+        return location == MinimapElementRenderLocation.IN_MINIMAP &&
+                GroupingMapRenderer.getInstance().doShowLayer(FieldBlobDraw.ORE_VEINS_LAYER);
+    }
+
+    public static final class Builder {
+
+        private Builder() {}
+
+        public FieldBlobElementRenderer build() {
+            FieldBlobDraw.ensureLayerDefaultOn();
+            return new FieldBlobElementRenderer(new FieldBlobElementReader(),
+                    new FieldBlobElementRenderProvider(), new Object());
+        }
+
+        public static Builder begin() {
+            return new Builder();
+        }
+    }
+}

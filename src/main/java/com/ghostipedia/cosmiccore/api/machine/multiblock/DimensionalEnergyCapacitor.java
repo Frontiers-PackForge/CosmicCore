@@ -4,31 +4,25 @@ import com.ghostipedia.cosmiccore.CosmicCore;
 import com.ghostipedia.cosmiccore.api.data.savedData.UniqueMultiblockSavedData;
 import com.ghostipedia.cosmiccore.api.data.wireless.WirelessEnergySavedData;
 
-import com.gregtechceu.gtceu.api.gui.GuiTextures;
-import com.gregtechceu.gtceu.api.gui.fancy.IFancyTooltip;
-import com.gregtechceu.gtceu.api.gui.fancy.TooltipsPanel;
 import com.gregtechceu.gtceu.api.blockentity.BlockEntityCreationInfo;
 import com.gregtechceu.gtceu.api.machine.multiblock.IBatteryData;
 import com.gregtechceu.gtceu.api.machine.trait.RecipeLogic;
-import com.gregtechceu.gtceu.common.machine.multiblock.electric.PowerSubstationMachine;
+import com.gregtechceu.gtceu.api.sync_system.annotations.SaveField;
+import com.gregtechceu.gtceu.common.block.BatteryBlock;
 import com.gregtechceu.gtceu.common.machine.owner.MachineOwner;
 
-import com.lowdragmc.lowdraglib.syncdata.annotation.Persisted;
 import com.lowdragmc.lowdraglib.utils.DummyWorld;
 
-import net.minecraft.ChatFormatting;
-import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.Style;
 import net.minecraft.server.level.ServerLevel;
 
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
 
+// TODO(8.0.0 MUI2): custom display text shelved; base default getWidgetsForDisplay UI used for now (original in git
+// history).
 public class DimensionalEnergyCapacitor extends DimensionalEnergyInterface {
-
 
     public static final int MAX_BATTERY_LAYER = 18;
     public static final int MIN_CASINGS = 14;
@@ -40,20 +34,20 @@ public class DimensionalEnergyCapacitor extends DimensionalEnergyInterface {
     public static final long PASSIVE_DRAIN_MAX_PER_STORAGE = 100_000L;
 
     // Used to make sure you cannot have more than one of this multiblock per player / team
-    @Persisted
+    @SaveField
     public boolean isDuplicate = false;
 
-    @Persisted
+    @SaveField
     private long[] capacities;
 
-    public DimensionalEnergyCapacitor(BlockEntityCreationInfo holder) {
-        super(holder);
+    public DimensionalEnergyCapacitor(BlockEntityCreationInfo info) {
+        super(info);
         this.localDisplay = false;
     }
 
     @Override
-    public void onStructureFormed() {
-        if (getLevel() instanceof DummyWorld) super.onStructureFormed();
+    public void formStructure(@org.jetbrains.annotations.NotNull String substructureName) {
+        if (getLevel() instanceof DummyWorld) super.formStructure(substructureName);
 
         if (getLevel() instanceof ServerLevel serverLevel) {
             var owner = getTeamUUID();
@@ -66,7 +60,8 @@ public class DimensionalEnergyCapacitor extends DimensionalEnergyInterface {
             var uniqueMultiblockMapping = UniqueMultiblockSavedData.getOrCreate(serverLevel);
 
             if (uniqueMultiblockMapping.hasData(owner, multiblockId, getDimension())) {
-                this.isDuplicate = !uniqueMultiblockMapping.isUnique(owner, multiblockId, getDimension(), getBlockPos());
+                this.isDuplicate = !uniqueMultiblockMapping.isUnique(owner, multiblockId, getDimension(),
+                        getBlockPos());
                 if (isDuplicate) {
                     recipeLogic.setStatus(RecipeLogic.Status.SUSPEND);
                     return;
@@ -75,23 +70,23 @@ public class DimensionalEnergyCapacitor extends DimensionalEnergyInterface {
                     getBlockPos());
 
             List<IBatteryData> batteries = new ArrayList<>();
-            for (Map.Entry<String, Object> battery : getMultiblockState().getMatchContext().entrySet()) {
-                if (battery.getKey().startsWith(PowerSubstationMachine.PMC_BATTERY_HEADER) &&
-                        battery.getValue() instanceof PowerSubstationMachine.BatteryMatchWrapper wrapper) {
-                    for (int i = 0; i < wrapper.getAmount(); i++) {
-                        batteries.add(wrapper.getPartType());
-                    }
+            // Re-derive batteries post-formation (match-context accumulator removed in 8.0.0);
+            // mirrors GTCEu PowerSubstationMachine.formStructure.
+            for (var entry : getDefaultPatternState().getCache().long2ObjectEntrySet()) {
+                if (entry.getValue().getBlockState().getBlock() instanceof BatteryBlock batteryBlock &&
+                        batteryBlock.getData().getCapacity() > 0) {
+                    batteries.add(batteryBlock.getData());
                 }
             }
 
             this.capacities = batteries.stream().mapToLong(IBatteryData::getCapacity).toArray();
 
             if (batteries.isEmpty()) {
-                onStructureInvalid();
+                invalidateStructure(substructureName);
                 return;
             }
 
-            super.onStructureFormed(); // This order is important do not move
+            super.formStructure(substructureName); // This order is important do not move
 
             var capacity = batteries.stream().mapToLong(IBatteryData::getCapacity)
                     .mapToObj(BigInteger::valueOf).reduce(BigInteger.ZERO, BigInteger::add);
@@ -102,8 +97,8 @@ public class DimensionalEnergyCapacitor extends DimensionalEnergyInterface {
     }
 
     @Override
-    public void onStructureInvalid() {
-        super.onStructureInvalid();
+    public void invalidateStructure(String name) {
+        super.invalidateStructure(name);
         if (getLevel() instanceof ServerLevel serverLevel) {
             var owner = getTeamUUID();
             if (owner != MachineOwner.EMPTY) {
@@ -131,16 +126,6 @@ public class DimensionalEnergyCapacitor extends DimensionalEnergyInterface {
     }
 
     @Override
-    public void addDisplayText(List<Component> textList) {
-        if (this.isDuplicate) {
-            textList.add(Component.translatable("cosmic.multiblock.capacitor.duplicate.multiblock.1")
-                    .setStyle(Style.EMPTY.withColor(ChatFormatting.DARK_RED)));
-            textList.add(Component.translatable("cosmic.multiblock.capacitor.duplicate.multiblock.2")
-                    .setStyle(Style.EMPTY.withColor(ChatFormatting.DARK_RED)));
-        } else super.addDisplayText(textList);
-    }
-
-    @Override
     public void setWorkingEnabled(boolean isWorkingAllowed) {
         super.setWorkingEnabled(isWorkingAllowed);
         if (getLevel() instanceof ServerLevel serverLevel) {
@@ -150,22 +135,6 @@ public class DimensionalEnergyCapacitor extends DimensionalEnergyInterface {
                 wirelessData.setActive(owner, isWorkingAllowed);
             }
         }
-    }
-
-    private boolean hasOwner() {
-        var owner = getTeamUUID();
-        return owner != MachineOwner.EMPTY;
-    }
-
-    @Override
-    public void attachTooltips(TooltipsPanel tooltipsPanel) {
-        super.attachTooltips(tooltipsPanel);
-        tooltipsPanel.attachTooltips(new IFancyTooltip.Basic(
-                () -> GuiTextures.INDICATOR_NO_ENERGY,
-                () -> List.of(Component.translatable("cosmic.multiblock.capacitor.owner.null")
-                        .setStyle(Style.EMPTY.withColor(ChatFormatting.RED))),
-                () -> (!this.hasOwner()),
-                () -> null));
     }
 
     private String getDimension() {

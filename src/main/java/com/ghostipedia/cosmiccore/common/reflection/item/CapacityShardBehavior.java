@@ -70,7 +70,7 @@ public class CapacityShardBehavior implements IInteractionItem, IAddInformation 
 
     @Override
     public void appendHoverText(ItemStack stack, Item.TooltipContext context, List<Component> tooltip,
-                               TooltipFlag flag) {
+                                TooltipFlag flag) {
         tooltip.add(Component.literal("Right-click to expand soul capacity")
                 .withStyle(ChatFormatting.GRAY));
         tooltip.add(Component.literal("Shift+Right-click to consume entire stack")

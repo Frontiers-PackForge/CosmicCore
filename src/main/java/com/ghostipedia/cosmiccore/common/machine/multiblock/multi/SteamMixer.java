@@ -9,12 +9,13 @@ import com.gregtechceu.gtceu.api.capability.recipe.ItemRecipeCapability;
 import com.gregtechceu.gtceu.api.data.RotationState;
 import com.gregtechceu.gtceu.api.machine.MultiblockMachineDefinition;
 import com.gregtechceu.gtceu.api.machine.multiblock.PartAbility;
-import com.gregtechceu.gtceu.api.pattern.FactoryBlockPattern;
-import com.gregtechceu.gtceu.api.pattern.Predicates;
+import com.gregtechceu.gtceu.api.multiblock.Predicates;
+import com.gregtechceu.gtceu.api.multiblock.pattern.MultiblockPatternBuilder;
+import com.gregtechceu.gtceu.api.multiblock.util.RelativeDirection;
 import com.gregtechceu.gtceu.common.data.GTRecipeTypes;
 
 import static com.ghostipedia.cosmiccore.api.registries.CosmicRegistration.REGISTRATE;
-import static com.gregtechceu.gtceu.api.pattern.Predicates.blocks;
+import static com.gregtechceu.gtceu.api.multiblock.Predicates.blocks;
 import static com.gregtechceu.gtceu.common.data.GTBlocks.*;
 import static com.gregtechceu.gtceu.common.data.models.GTMachineModels.createWorkableCasingMachineModel;
 
@@ -27,10 +28,11 @@ public class SteamMixer {
             .recipeType(GTRecipeTypes.MIXER_RECIPES)
             .recipeModifier(WeakSteamParallelMultiBlockMachine::recipeModifier, true)
             .addOutputLimit(ItemRecipeCapability.CAP, 1)
-            .pattern(definition -> FactoryBlockPattern.start()
-                    .aisle("AAA", "BCB", "BCB", " B ")
-                    .aisle("AAA", "CEC", "CEC", "BXB")
-                    .aisle("ADA", "BCB", "BCB", " B ")
+            .pattern(definition -> MultiblockPatternBuilder
+                    .start(RelativeDirection.FRONT, RelativeDirection.UP, RelativeDirection.LEFT)
+                    .slice("AAA", "BCB", "BCB", " B ")
+                    .slice("AAA", "CEC", "CEC", "BXB")
+                    .slice("ADA", "BCB", "BCB", " B ")
                     .where('D', Predicates.controller(blocks(definition.getBlock())))
                     .where('#', Predicates.air())
                     .where(' ', Predicates.any())

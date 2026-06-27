@@ -1,5 +1,8 @@
 package com.ghostipedia.cosmiccore.common.worldgen.survey;
 
+import com.ghostipedia.cosmiccore.CosmicCore;
+import com.ghostipedia.cosmiccore.common.data.worldgen.field.OreFieldPlacement;
+
 import com.gregtechceu.gtceu.api.data.worldgen.GTOreDefinition;
 import com.gregtechceu.gtceu.api.data.worldgen.IWorldGenLayer;
 import com.gregtechceu.gtceu.api.data.worldgen.WorldGeneratorUtils;
@@ -133,6 +136,31 @@ public class VeinSurveyUtil {
             }
         }
 
+        Set<Long> confirmedFieldCores = new HashSet<>();
+        for (VeinInfo info : results) {
+            if (info.isConfirmed()) {
+                confirmedFieldCores.add(coreKey(info.center().getX(), info.center().getZ()));
+            }
+        }
+        Registry<GTOreDefinition> veinRegistry = level.registryAccess().registryOrThrow(GTRegistries.ORE_VEIN_REGISTRY);
+        for (OreFieldPlacement.OreField field : OreFieldPlacement.fieldsNear(
+                level.getSeed(), level.dimension(), centerPos.getX(), centerPos.getZ(), radiusBlocks)) {
+            BlockPos fieldCenter = new BlockPos(field.core().getX(), 0, field.core().getZ());
+            if (distanceXZ(fieldCenter, centerPos) > radiusBlocks) continue;
+            if (confirmedFieldCores.contains(coreKey(fieldCenter.getX(), fieldCenter.getZ()))) continue;
+
+            ResourceLocation veinId = CosmicCore.id(field.bundle().getName());
+            var holder = veinRegistry.getHolder(ResourceKey.create(GTRegistries.ORE_VEIN_REGISTRY, veinId));
+            if (holder.isEmpty()) continue;
+            GTOreDefinition definition = holder.get().value();
+            if (targetLayer != null && !definition.layer().equals(targetLayer)) continue;
+
+            OreFieldPlacement.FieldProfile profile = OreFieldPlacement.profileFor(field.bundle());
+            int estimatedRadius = profile != null ? profile.fieldRadius() : 64;
+            results.add(new VeinInfo(fieldCenter, new ChunkPos(fieldCenter), definition, veinId,
+                    estimatedRadius, VeinConfidence.PREDICTED));
+        }
+
         results.sort((a, b) -> Integer.compare(
                 a.horizontalDistanceFrom(centerPos),
                 b.horizontalDistanceFrom(centerPos)));
@@ -144,6 +172,10 @@ public class VeinSurveyUtil {
         int dx = a.getX() - b.getX();
         int dz = a.getZ() - b.getZ();
         return (int) Math.sqrt(dx * dx + dz * dz);
+    }
+
+    private static long coreKey(int x, int z) {
+        return ((long) x << 32) ^ (z & 0xffffffffL);
     }
 
     /**

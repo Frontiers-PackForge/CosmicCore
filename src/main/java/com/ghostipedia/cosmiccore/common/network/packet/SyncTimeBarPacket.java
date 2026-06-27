@@ -14,8 +14,8 @@ import org.jetbrains.annotations.NotNull;
 public class SyncTimeBarPacket implements CustomPacketPayload {
 
     public static final Type<SyncTimeBarPacket> TYPE = new Type<>(CosmicCore.id("sync_time_bar"));
-    public static final StreamCodec<FriendlyByteBuf, SyncTimeBarPacket> CODEC =
-            StreamCodec.ofMember(SyncTimeBarPacket::encode, SyncTimeBarPacket::new);
+    public static final StreamCodec<FriendlyByteBuf, SyncTimeBarPacket> CODEC = StreamCodec
+            .ofMember(SyncTimeBarPacket::encode, SyncTimeBarPacket::new);
 
     private final ResourceLocation dimension;
     private final long ticksLeft;

@@ -6,13 +6,14 @@ import com.gregtechceu.gtceu.GTCEu;
 import com.gregtechceu.gtceu.api.data.RotationState;
 import com.gregtechceu.gtceu.api.machine.MultiblockMachineDefinition;
 import com.gregtechceu.gtceu.api.machine.multiblock.PartAbility;
-import com.gregtechceu.gtceu.api.pattern.FactoryBlockPattern;
+import com.gregtechceu.gtceu.api.multiblock.pattern.MultiblockPatternBuilder;
+import com.gregtechceu.gtceu.api.multiblock.util.RelativeDirection;
 import com.gregtechceu.gtceu.common.data.GTRecipeTypes;
 
 import net.minecraft.network.chat.Component;
 
 import static com.ghostipedia.cosmiccore.api.registries.CosmicRegistration.REGISTRATE;
-import static com.gregtechceu.gtceu.api.pattern.Predicates.*;
+import static com.gregtechceu.gtceu.api.multiblock.Predicates.*;
 import static com.gregtechceu.gtceu.common.data.GTBlocks.CASING_STEEL_SOLID;
 
 /**
@@ -33,11 +34,11 @@ public class MothCargoDropOff {
             .recipeType(GTRecipeTypes.DUMMY_RECIPES)
             .appearanceBlock(CASING_STEEL_SOLID)
             // spotless:off
-            .pattern(definition -> FactoryBlockPattern.start()
+            .pattern(definition -> MultiblockPatternBuilder.start(RelativeDirection.FRONT, RelativeDirection.UP, RelativeDirection.LEFT)
                     // Compact 3x3x3 structure
-                    .aisle("CCC", "CCC", "C C")
-                    .aisle("CCC", "C C", "   ")
-                    .aisle("CCC", "CQC", "C C")
+                    .slice("CCC", "CCC", "C C")
+                    .slice("CCC", "C C", "   ")
+                    .slice("CCC", "CQC", "C C")
                     .where(' ', any())
                     .where('Q', controller(blocks(definition.getBlock())))
                     .where('C', blocks(CASING_STEEL_SOLID.get())

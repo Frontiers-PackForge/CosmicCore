@@ -1,220 +1,183 @@
 package com.ghostipedia.cosmiccore.common.data.recipe;
 
-import com.ghostipedia.cosmiccore.common.data.CosmicItems;
+import com.ghostipedia.cosmiccore.CosmicCore;
+import com.ghostipedia.cosmiccore.common.data.materials.CosmicBundleMaterials;
 
 import com.gregtechceu.gtceu.api.GTValues;
 import com.gregtechceu.gtceu.api.data.chemical.ChemicalHelper;
 import com.gregtechceu.gtceu.api.data.chemical.material.Material;
-import com.gregtechceu.gtceu.api.data.chemical.material.properties.PropertyKey;
+import com.gregtechceu.gtceu.api.data.tag.TagPrefix;
 import com.gregtechceu.gtceu.common.data.GTMaterials;
+import com.gregtechceu.gtceu.data.recipe.VanillaRecipeHelper;
 
+import net.minecraft.core.cauldron.CauldronInteraction;
 import net.minecraft.data.recipes.RecipeOutput;
 import net.minecraft.world.item.ItemStack;
 
-import org.jetbrains.annotations.NotNull;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
 
 import static com.ghostipedia.cosmiccore.api.data.CosmicTagPrefix.*;
-import static com.ghostipedia.cosmiccore.common.data.materials.CosmicMaterials.DilutedPrisma;
-import static com.ghostipedia.cosmiccore.common.data.materials.CosmicMaterials.Prisma;
 import static com.ghostipedia.cosmiccore.gtbridge.CosmicRecipeTypes.*;
-import static com.gregtechceu.gtceu.api.data.tag.TagPrefix.*;
-import static com.gregtechceu.gtceu.common.data.GTMaterials.*;
-import static com.gregtechceu.gtceu.common.data.GTRecipeTypes.*;
+import static com.gregtechceu.gtceu.api.data.tag.TagPrefix.crushed;
+import static com.gregtechceu.gtceu.api.data.tag.TagPrefix.crushedPurified;
+import static com.gregtechceu.gtceu.api.data.tag.TagPrefix.dust;
+import static com.gregtechceu.gtceu.api.data.tag.TagPrefix.gem;
+import static com.gregtechceu.gtceu.api.data.tag.TagPrefix.ingot;
+import static com.gregtechceu.gtceu.api.data.tag.TagPrefix.rawOre;
+import static com.gregtechceu.gtceu.common.data.GTMaterials.Water;
+import static com.gregtechceu.gtceu.common.data.GTRecipeTypes.FORGE_HAMMER_RECIPES;
+import static com.gregtechceu.gtceu.common.data.GTRecipeTypes.MACERATOR_RECIPES;
 
 public class CosmicCoreOreRecipeHandler {
 
-    public static void init(RecipeOutput provider, @NotNull Material material) {
-        processCrushedLeachedBad(provider, material);
-        processCrushedLeachedGood(provider, material);
-        processRefinedFrothed(provider, material);
-        processLeachedRefined(provider, material);
-        processFrothedPure(provider, material);
-        processRawOretoFinalStates(provider, material);
-        processRawOretoFinalStatesAugmented(provider, material);
-        // todo old
-        // crushed.executeHandler(provider, PropertyKey.ORE, CosmicCoreOreRecipeHandler::processcrushedLeached);
-        // crushedRefined.executeHandler(provider, PropertyKey.ORE, CosmicCoreOreRecipeHandler::processRefinedFrothed);
-        // crushedLeached.executeHandler(provider, PropertyKey.ORE, CosmicCoreOreRecipeHandler::processLeachedRefined);
-        // prismaFrothed.executeHandler(provider, PropertyKey.ORE, CosmicCoreOreRecipeHandler::processFrothedPure);
+    private static final int SORT_EUT = 2;
+    private static final int REFINE_EUT = 8;
+    private static final int SORT_TIME_PER_TYPE = 300;
+    private static final int SORTER_IO_CAP = 6;
+
+    public static void bundleInit(RecipeOutput provider, Material material) {
+        List<Material> outputs = CosmicBundleMaterials.outputsOf(material);
+        if (outputs == null || outputs.isEmpty()) return;
+        entryStep(provider, material);
+        refineChain(provider, material);
+        sortAt(provider, crushedPurified, material, outputs, 2, 1, "sort_purified_");
+        sortAt(provider, powderizedOre, material, outputs, 3, 1, "sort_powder_");
+        sortAt(provider, flocculatedOre, material, outputs, 4, 2, "sort_flocculated_");
+        sortAt(provider, crystallizedOreChunk, material, outputs, 5, 2, "sort_crystallized_");
+        sortAt(provider, atomicallyPurifiedOreChunk, material, outputs, SORTER_IO_CAP, 3, "sort_atom_purified_");
+        furnaceBootstrap(provider, material);
     }
 
-    public static void processCrushedLeachedBad(RecipeOutput provider, Material material) {
-        if (!material.shouldGenerateRecipesFor(crushed) || !material.hasProperty(PropertyKey.ORE)) return;
-        var property = material.getProperty(PropertyKey.ORE);
-        ItemStack leachedStack = ChemicalHelper.get(crushedLeached, material);
-
-        Material byproduct = property.getOreByProduct(0);
-        Material byproduct2 = property.getOreByProduct(1);
-
-        var builder = LEACHING_PLANT.recipeBuilder("crushed_" + material.getName() + "_to_crushedleached")
-                .inputItems(crushedPurified, material)
-                .inputFluids(Water.getFluid(100))
-                .inputFluids(SulfuricAcid.getFluid(200))
-                .circuitMeta(1)
-                .outputItems(leachedStack)
-                .chancedOutput(leachedStack, 5500, 750);
-        if (byproduct != GTMaterials.NULL && !ChemicalHelper.get(dustPure, byproduct).isEmpty()) {
-            builder.chancedOutput(dustPure, byproduct, 1500, 1350);
-        }
-        if (byproduct2 != GTMaterials.NULL && !ChemicalHelper.get(dustPure, byproduct2).isEmpty()) {
-            builder.chancedOutput(dustPure, byproduct2, 2200, 1150);
-        }
-        builder.outputFluids(DilutedSulfuricAcid.getFluid(300));
-        builder.duration(60).EUt(GTValues.VA[GTValues.HV]).save(provider);
-    }
-
-    public static void processCrushedLeachedGood(RecipeOutput provider, Material material) {
-        if (!material.shouldGenerateRecipesFor(crushed) || !material.hasProperty(PropertyKey.ORE)) return;
-        var property = material.getProperty(PropertyKey.ORE);
-        ItemStack leachedStack = ChemicalHelper.get(crushedLeached, material);
-
-        Material byproduct = property.getOreByProduct(0);
-        Material byproduct2 = property.getOreByProduct(1);
-
-        var builder = LEACHING_PLANT.recipeBuilder("crushed_" + material.getName() + "_to_crushedleached_optimized")
-                .inputItems(crushedPurified, material)
-                .chancedInput(CosmicItems.ABRASIVE_ROSIN_MILLSTONES.asStack(), 2500, 0)
-                .inputFluids(Water.getFluid(100))
-                .inputFluids(SulfuricAcid.getFluid(200))
-                .circuitMeta(2)
-                .outputItems(leachedStack, 2);
-        if (byproduct != GTMaterials.NULL && !ChemicalHelper.get(dustPure, byproduct).isEmpty()) {
-            builder.chancedOutput(dustPure, byproduct, 1500, 1350);
-        }
-        if (byproduct2 != GTMaterials.NULL && !ChemicalHelper.get(dustPure, byproduct2).isEmpty()) {
-            builder.chancedOutput(dustPure, byproduct2, 2200, 1150);
-        }
-        builder.outputFluids(DilutedSulfuricAcid.getFluid(300));
-        builder.duration(60).EUt(GTValues.VA[GTValues.HV]).save(provider);
-    }
-
-    public static void processRefinedFrothed(RecipeOutput provider, Material material) {
-        if (!material.shouldGenerateRecipesFor(crushedRefined) || !material.hasProperty(PropertyKey.ORE)) return;
-        var property = material.getProperty(PropertyKey.ORE);
-        ItemStack frothedStack = ChemicalHelper.get(prismaFrothed, material);
-
-        Material byproduct = property.getOreByProduct(0);
-        Material byproduct2 = property.getOreByProduct(1);
-        Material byproduct3 = property.getOreByProduct(2);
-        Material byproduct4 = property.getOreByProduct(Integer.MAX_VALUE);
-
-        var builder = CHROMATIC_FLOTATION_PLANT.recipeBuilder("refined_" + material.getName() + "_to_frothed")
-                .inputItems(crushedRefined, material)
-                .inputFluids(Prisma.getFluid(1000))
-                .outputItems(frothedStack.copyWithCount(2));
-        if (byproduct != GTMaterials.NULL && !ChemicalHelper.get(dustImpure, byproduct).isEmpty()) {
-            builder.chancedOutput(dustImpure, byproduct, 3500, 1450);
-        }
-        if (byproduct2 != GTMaterials.NULL && !ChemicalHelper.get(dustImpure, byproduct2).isEmpty()) {
-            builder.chancedOutput(dustImpure, byproduct2, 1800, 1750);
-        }
-        if (byproduct3 != GTMaterials.NULL && !ChemicalHelper.get(dustPure, byproduct3).isEmpty()) {
-            builder.chancedOutput(dustImpure, byproduct3, 1500, 1950);
-        }
-        if (byproduct4 != GTMaterials.NULL && !ChemicalHelper.get(dustPure, byproduct4).isEmpty()) {
-            builder.chancedOutput(dustImpure, byproduct4, 1500, 1950);
-        }
-        builder.outputFluids(Prisma.getFluid(500));
-        builder.duration(40).EUt(GTValues.VA[GTValues.IV]).save(provider);
-    }
-
-    public static void processLeachedRefined(RecipeOutput provider, Material material) {
-        if (!material.shouldGenerateRecipesFor(crushedLeached) || !material.hasProperty(PropertyKey.ORE)) return;
-        ItemStack refinedStack = ChemicalHelper.get(crushedRefined, material);
-        var property = material.getProperty(PropertyKey.ORE);
-
-        Material byproduct = property.getOreByProduct(1);
-
-        var builder = THERMAL_CENTRIFUGE_RECIPES.recipeBuilder("leached_" + material.getName() + "_to_refined")
-                .inputItems(crushedLeached, material)
-                .outputItems(refinedStack);
-        if (byproduct != GTMaterials.NULL && !ChemicalHelper.get(dust, byproduct).isEmpty()) {
-            builder.chancedOutput(dust, byproduct, 2500, 1000);
-        }
-        builder.duration(40).EUt(GTValues.VA[GTValues.HV]).save(provider);
-    }
-
-    public static void processFrothedPure(RecipeOutput provider, Material material) {
-        if (!material.shouldGenerateRecipesFor(prismaFrothed) || !material.hasProperty(PropertyKey.ORE)) return;
-        ItemStack refinedStack = ChemicalHelper.get(prismaFrothed, material);
-        ItemStack pureStack = ChemicalHelper.get(dustPure, material);
-        var property = material.getProperty(PropertyKey.ORE);
-
-        Material byproduct = property.getOreByProduct(0);
-
-        var builder = CHEMICAL_BATH_RECIPES.recipeBuilder("frothed_" + material.getName() + "_to_purified")
-                .inputItems(prismaFrothed, material)
-                .inputFluids(Water.getFluid(1000))
-                .outputItems(pureStack);
-        if (byproduct != GTMaterials.NULL && !ChemicalHelper.get(dustPure, byproduct).isEmpty()) {
-            builder.chancedOutput(dustPure, byproduct, 1500, 1950);
-        }
-        builder.outputFluids(DilutedPrisma.getFluid(1250));
-        builder.duration(40).EUt(GTValues.VA[GTValues.IV]).save(provider);
-    }
-
-    // Prismatic Foundry
-
-    public static void processRawOretoFinalStates(RecipeOutput provider, Material material) {
-        if (!material.shouldGenerateRecipesFor(rawOre) || !material.hasProperty(PropertyKey.ORE)) return;
-        var property = material.getProperty(PropertyKey.ORE);
-        ItemStack frothedStack = ChemicalHelper.get(dust, material);
-
-        Material byproduct = property.getOreByProduct(0);
-        Material byproduct2 = property.getOreByProduct(1);
-        Material byproduct3 = property.getOreByProduct(2);
-        Material byproduct4 = property.getOreByProduct(Integer.MAX_VALUE);
-
-        var builder = PRISMA_FOUNDRY.recipeBuilder("raw_ore_prismf_" + material.getName() + "_to_dusts")
+    private static void entryStep(RecipeOutput provider, Material material) {
+        ItemStack crushedStack = ChemicalHelper.get(crushed, material);
+        if (crushedStack.isEmpty()) return;
+        FORGE_HAMMER_RECIPES.recipeBuilder("hammer_raw_" + material.getName() + "_to_crushed")
                 .inputItems(rawOre, material)
-                .inputFluids(GTMaterials.Blaze.getFluid(250))
-                .inputFluids(Water.getFluid(2750))
-                .circuitMeta(1)
-                .outputItems(frothedStack.copyWithCount(6));
-        if (byproduct != GTMaterials.NULL && !ChemicalHelper.get(dust, byproduct).isEmpty()) {
-            builder.chancedOutput(dust, byproduct, 3, 3500, 0);
-        }
-        if (byproduct2 != GTMaterials.NULL && !ChemicalHelper.get(dust, byproduct2).isEmpty()) {
-            builder.chancedOutput(dust, byproduct2, 3, 3500, 0);
-        }
-        if (byproduct3 != GTMaterials.NULL && !ChemicalHelper.get(dust, byproduct3).isEmpty()) {
-            builder.chancedOutput(dust, byproduct3, 3, 3500, 0);
-        }
-        if (byproduct4 != GTMaterials.NULL && !ChemicalHelper.get(dust, byproduct4).isEmpty()) {
-            builder.chancedOutput(dust, byproduct4, 3, 3500, 0);
-        }
-        builder.duration(40).EUt(GTValues.V[GTValues.HV]).save(provider);
+                .outputItems(crushedStack.copyWithCount(1))
+                .duration(10).EUt(16)
+                .save(provider);
+        MACERATOR_RECIPES.recipeBuilder("macerate_raw_" + material.getName() + "_to_crushed")
+                .inputItems(rawOre, material)
+                .outputItems(crushedStack.copyWithCount(2))
+                .duration(400).EUt(2)
+                .save(provider);
     }
 
-    public static void processRawOretoFinalStatesAugmented(RecipeOutput provider, Material material) {
-        if (!material.shouldGenerateRecipesFor(rawOre) || !material.hasProperty(PropertyKey.ORE)) return;
-        var property = material.getProperty(PropertyKey.ORE);
-        ItemStack frothedStack = ChemicalHelper.get(dust, material);
+    private static void refineChain(RecipeOutput provider, Material material) {
+        floatStep(provider, material, crushed, crushedPurified, "float_purify_", 400, 500);
+        millStep(provider, material, crushedPurified, powderizedOre, "mill_powder_", 600);
+        floatStep(provider, material, powderizedOre, flocculatedOre, "flocculate_", 1000, 1000);
+        floatStep(provider, material, flocculatedOre, crystallizedOreChunk, "crystallize_", 1600, 1000);
+        floatStep(provider, material, crystallizedOreChunk, atomicallyPurifiedOreChunk, "atomically_purify_", 2600,
+                1000);
+    }
 
-        Material byproduct = property.getOreByProduct(0);
-        Material byproduct2 = property.getOreByProduct(1);
-        Material byproduct3 = property.getOreByProduct(2);
-        Material byproduct4 = property.getOreByProduct(Integer.MAX_VALUE);
+    private static void floatStep(RecipeOutput provider, Material material, TagPrefix in, TagPrefix out,
+                                  String namePrefix, int duration, int water) {
+        ItemStack outStack = ChemicalHelper.get(out, material);
+        if (outStack.isEmpty()) return;
+        INDUSTRIAL_FLOTATION_PLANT.recipeBuilder(namePrefix + material.getName())
+                .inputItems(in, material)
+                .inputFluids(Water.getFluid(water))
+                .outputItems(outStack)
+                .duration(duration).EUt(REFINE_EUT)
+                .save(provider);
+    }
 
-        var builder = PRISMA_FOUNDRY.recipeBuilder("raw_ore_prismf_" + material.getName() + "_to_dusts_improved")
-                .inputItems(rawOre, material)
-                .chancedInput(CosmicItems.ABRASIVE_ROSIN_MILLSTONES.asStack(), 5500, 0)
-                .inputFluids(GTMaterials.Blaze.getFluid(25))
-                .inputFluids(Water.getFluid(2750))
-                .circuitMeta(2)
-                .outputItems(frothedStack.copyWithCount(9));
-        if (byproduct != GTMaterials.NULL && !ChemicalHelper.get(dust, byproduct).isEmpty()) {
-            builder.chancedOutput(dust, byproduct, 5, 5500, 0);
+    private static void millStep(RecipeOutput provider, Material material, TagPrefix in, TagPrefix out,
+                                 String namePrefix, int duration) {
+        ItemStack outStack = ChemicalHelper.get(out, material);
+        if (outStack.isEmpty()) return;
+        POWDERIZER.recipeBuilder(namePrefix + material.getName())
+                .inputItems(in, material)
+                .outputItems(outStack)
+                .duration(duration).EUt(REFINE_EUT)
+                .save(provider);
+    }
+
+    private static void sortAt(RecipeOutput provider, TagPrefix inputForm, Material material,
+                               List<Material> outputs, int typeCount, int yieldMult, String namePrefix) {
+        int n = Math.min(Math.min(typeCount, outputs.size()), SORTER_IO_CAP);
+        if (n <= 0) return;
+        var builder = INDUSTRIAL_ORE_SORTER.recipeBuilder(namePrefix + material.getName())
+                .inputItems(inputForm, material);
+        int emitted = 0;
+        for (int i = 0; i < n; i++) {
+            ItemStack chunk = chunkOf(outputs.get(i));
+            if (chunk.isEmpty()) continue;
+            builder.outputItems(chunk.copyWithCount(amountFor(i) * yieldMult));
+            emitted++;
         }
-        if (byproduct2 != GTMaterials.NULL && !ChemicalHelper.get(dust, byproduct2).isEmpty()) {
-            builder.chancedOutput(dust, byproduct2, 5, 5500, 0);
+        if (emitted == 0) return;
+        builder.duration(SORT_TIME_PER_TYPE * emitted).EUt(SORT_EUT).save(provider);
+    }
+
+    private static int amountFor(int index) {
+        return switch (index) {
+            case 0 -> 4;
+            case 1 -> 2;
+            default -> 1;
+        };
+    }
+
+    private static ItemStack chunkOf(Material mineral) {
+        return ChemicalHelper.get(oreChunk, mineral);
+    }
+
+    public static void processChunkBasics(RecipeOutput provider, Material mineral) {
+        if (ChemicalHelper.get(oreChunk, mineral).isEmpty()) return;
+        ItemStack dustStack = ChemicalHelper.get(dust, mineral);
+        if (dustStack.isEmpty()) return;
+        MACERATOR_RECIPES.recipeBuilder("macerate_chunk_" + mineral.getName())
+                .inputItems(oreChunk, mineral)
+                .outputItems(dustStack)
+                .duration(150).EUt(GTValues.VA[GTValues.LV])
+                .save(provider);
+    }
+
+    private record FurnaceOut(TagPrefix prefix, Material material, int count) {}
+
+    private static Map<Material, FurnaceOut> furnaceOutputs;
+
+    private static Map<Material, FurnaceOut> furnaceOutputs() {
+        if (furnaceOutputs == null) {
+            Map<Material, FurnaceOut> map = new LinkedHashMap<>();
+            map.put(CosmicBundleMaterials.Ferosine, new FurnaceOut(ingot, GTMaterials.Iron, 1));
+            map.put(CosmicBundleMaterials.Cuprosiva, new FurnaceOut(ingot, GTMaterials.Copper, 1));
+            map.put(CosmicBundleMaterials.Galenite, new FurnaceOut(ingot, GTMaterials.Lead, 1));
+            map.put(CosmicBundleMaterials.Landisite, new FurnaceOut(ingot, GTMaterials.Nickel, 1));
+            map.put(CosmicBundleMaterials.Redstona, new FurnaceOut(dust, GTMaterials.Redstone, 4));
+            map.put(CosmicBundleMaterials.Lazuric, new FurnaceOut(gem, GTMaterials.Lapis, 4));
+            map.put(CosmicBundleMaterials.Carbonic, new FurnaceOut(gem, GTMaterials.Coal, 4));
+            map.put(CosmicBundleMaterials.EarthenSalts, new FurnaceOut(gem, GTMaterials.Salt, 4));
+            map.put(CosmicBundleMaterials.Pyroltic, new FurnaceOut(dust, GTMaterials.Sulfur, 4));
+            map.put(CosmicBundleMaterials.Quartizine, new FurnaceOut(gem, GTMaterials.CertusQuartz, 4));
+            map.put(CosmicBundleMaterials.Molybite, new FurnaceOut(ingot, GTMaterials.Molybdenum, 1));
+            map.put(CosmicBundleMaterials.Fahlorium, new FurnaceOut(ingot, GTMaterials.Copper, 1));
+            map.put(CosmicBundleMaterials.MonaziteSalts, new FurnaceOut(dust, GTMaterials.Bastnasite, 4));
+            furnaceOutputs = map;
         }
-        if (byproduct3 != GTMaterials.NULL && !ChemicalHelper.get(dust, byproduct3).isEmpty()) {
-            builder.chancedOutput(dust, byproduct3, 5, 5500, 0);
+        return furnaceOutputs;
+    }
+
+    private static void furnaceBootstrap(RecipeOutput provider, Material material) {
+        FurnaceOut out = furnaceOutputs().get(material);
+        if (out == null) return;
+        ItemStack raw = ChemicalHelper.get(rawOre, material);
+        ItemStack result = ChemicalHelper.get(out.prefix(), out.material(), out.count());
+        if (raw.isEmpty() || result.isEmpty()) return;
+        VanillaRecipeHelper.addSmeltingRecipe(provider, CosmicCore.id("furnace_" + material.getName()),
+                raw, result, 0.5f);
+    }
+
+    public static void disableBundleCauldronWash() {
+        for (Material material : CosmicBundleMaterials.bundleOres()) {
+            ItemStack crushedStack = ChemicalHelper.get(crushed, material);
+            if (!crushedStack.isEmpty()) {
+                CauldronInteraction.WATER.map().remove(crushedStack.getItem());
+            }
         }
-        if (byproduct4 != GTMaterials.NULL && !ChemicalHelper.get(dust, byproduct4).isEmpty()) {
-            builder.chancedOutput(dust, byproduct4, 5, 5500, 0);
-        }
-        builder.duration(40).EUt(GTValues.V[GTValues.HV]).save(provider);
     }
 }

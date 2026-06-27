@@ -93,7 +93,7 @@ public class StringerVeinGenerator extends VeinGenerator {
         Map<BlockPos, OreBlockPlacer> generatedBlocks = new Object2ObjectOpenHashMap<>();
 
         int size = entry.clusterSize().sample(random);
-        int radius = Math.max(55, Mth.ceil(size * 0.7f));
+        int radius = Math.round(1.75f * Math.max(12, Mth.ceil(size * 0.4f)));
         float coreRadius = Math.max(5.0f, radius * coreRadiusRatio);
         float baseStringerThickness = Math.max(2.0f, radius * stringerThicknessRatio);
         int actualStringerCount = stringerCount + random.nextInt(6) - 3;

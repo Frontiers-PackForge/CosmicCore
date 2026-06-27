@@ -3,6 +3,7 @@ package com.ghostipedia.cosmiccore.common.network;
 import com.ghostipedia.cosmiccore.common.network.packet.AbyssTimeWarnPacket;
 import com.ghostipedia.cosmiccore.common.network.packet.BootsControlPacket;
 import com.ghostipedia.cosmiccore.common.network.packet.OxygenWarnPacket;
+import com.ghostipedia.cosmiccore.common.network.packet.RevealFieldsPacket;
 import com.ghostipedia.cosmiccore.common.network.packet.StarLadderUplinkPackets;
 import com.ghostipedia.cosmiccore.common.network.packet.StellarUpgradePacket;
 import com.ghostipedia.cosmiccore.common.network.packet.SyncOxygenBarPacket;
@@ -43,6 +44,7 @@ public class CCoreNetwork {
                 SyncQuakeMovementPacket::execute);
         registrar.playToClient(SyncPredictedVeinsPacket.TYPE, SyncPredictedVeinsPacket.CODEC,
                 SyncPredictedVeinsPacket::execute);
+        registrar.playToClient(RevealFieldsPacket.TYPE, RevealFieldsPacket.CODEC, RevealFieldsPacket::execute);
 
         registrar.playToServer(DashPacket.TYPE, DashPacket.CODEC, DashPacket::execute);
         registrar.playToServer(SoulSuperPacket.TYPE, SoulSuperPacket.CODEC, SoulSuperPacket::execute);

@@ -23,8 +23,8 @@ public class VoidFluidDrillLogic extends RecipeLogic {
     @Nullable
     private Fluid veinFluid;
 
-    public VoidFluidDrillLogic(VoidFluidDrillMachine machine) {
-        super(machine);
+    public VoidFluidDrillLogic() {
+        super();
     }
 
     @Nullable
@@ -54,7 +54,7 @@ public class VoidFluidDrillLogic extends RecipeLogic {
             }
             var match = getFluidDrillRecipe();
             if (match != null) {
-                if (RecipeHelper.matchContents(this.machine, match).isSuccess()) {
+                if (RecipeHelper.matchContents(getMachine(), match).isSuccess()) {
                     setupRecipe(match);
                 }
             }
@@ -108,14 +108,14 @@ public class VoidFluidDrillLogic extends RecipeLogic {
 
     @Override
     public void onRecipeFinish() {
-        machine.afterWorking();
+        getRLMachine().afterWorking();
         if (lastRecipe != null) {
-            RecipeHelper.handleRecipeIO(this.machine, lastRecipe, IO.OUT, this.chanceCaches);
+            RecipeHelper.handleRecipeIO(getMachine(), lastRecipe, IO.OUT, this.chanceCaches);
         }
         // try it again
         var match = getFluidDrillRecipe();
         if (match != null) {
-            if (RecipeHelper.matchContents(this.machine, match).isSuccess()) {
+            if (RecipeHelper.matchContents(getMachine(), match).isSuccess()) {
                 setupRecipe(match);
                 return;
             }

@@ -1,5 +1,5 @@
 {
-    "ldlib": {
-        "connection": "cosmiccore:block/variant/machine_casing_radioactive_filter_ctm"
+    "gtceu": {
+        "connection_texture": "cosmiccore:block/variant/machine_casing_radioactive_filter_ctm"
     }
 }

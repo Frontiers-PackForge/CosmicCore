@@ -91,9 +91,9 @@ public class StructureBoundingBox {
 
             var direction = getDir(player.getMainHandItem());
             var dirs = DebugBlockPattern.getDir(direction);
-            var cSign = dirs[0].global.getAxis();
-            var sSign = dirs[1].global.getAxis();
-            var aSign = dirs[2].global.getAxis();
+            var cSign = dirs[0].getDefaultFacing().getAxis();
+            var sSign = dirs[1].getDefaultFacing().getAxis();
+            var aSign = dirs[2].getDefaultFacing().getAxis();
             // I Dislike this
             PoseStack.Pose last = poseStack.last();
             Matrix4f mat4 = last.pose();
@@ -102,8 +102,7 @@ public class StructureBoundingBox {
                     .setNormal(last,
                             cSign == Direction.Axis.X ? 1 : 0,
                             cSign == Direction.Axis.Y ? 1 : 0,
-                            cSign == Direction.Axis.Z ? 1 : 0)
-                    ;
+                            cSign == Direction.Axis.Z ? 1 : 0);
             buffer.addVertex(mat4,
                     cSign == Direction.Axis.X ? poses[0].getX() + 1.5f : poses[0].getX(),
                     cSign == Direction.Axis.Y ? poses[0].getY() + 1.5f : poses[0].getY(),
@@ -112,15 +111,13 @@ public class StructureBoundingBox {
                     .setNormal(last,
                             cSign == Direction.Axis.X ? 1 : 0,
                             cSign == Direction.Axis.Y ? 1 : 0,
-                            cSign == Direction.Axis.Z ? 1 : 0)
-                    ;
+                            cSign == Direction.Axis.Z ? 1 : 0);
             // sSign
             buffer.addVertex(mat4, poses[0].getX(), poses[0].getY(), poses[0].getZ()).setColor(0f, 1f, 0f, 0.75f)
                     .setNormal(last,
                             sSign == Direction.Axis.X ? 1 : 0,
                             sSign == Direction.Axis.Y ? 1 : 0,
-                            sSign == Direction.Axis.Z ? 1 : 0)
-                    ;
+                            sSign == Direction.Axis.Z ? 1 : 0);
             buffer.addVertex(mat4,
                     sSign == Direction.Axis.X ? poses[0].getX() + 1.5f : poses[0].getX(),
                     sSign == Direction.Axis.Y ? poses[0].getY() + 1.5f : poses[0].getY(),
@@ -129,15 +126,13 @@ public class StructureBoundingBox {
                     .setNormal(last,
                             sSign == Direction.Axis.X ? 1 : 0,
                             sSign == Direction.Axis.Y ? 1 : 0,
-                            sSign == Direction.Axis.Z ? 1 : 0)
-                    ;
+                            sSign == Direction.Axis.Z ? 1 : 0);
             // aSign
             buffer.addVertex(mat4, poses[0].getX(), poses[0].getY(), poses[0].getZ()).setColor(0f, 0f, 1f, 0.75f)
                     .setNormal(last,
                             aSign == Direction.Axis.X ? 1 : 0,
                             aSign == Direction.Axis.Y ? 1 : 0,
-                            aSign == Direction.Axis.Z ? 1 : 0)
-                    ;
+                            aSign == Direction.Axis.Z ? 1 : 0);
             buffer.addVertex(mat4,
                     aSign == Direction.Axis.X ? poses[0].getX() + 1.5f : poses[0].getX(),
                     aSign == Direction.Axis.Y ? poses[0].getY() + 1.5f : poses[0].getY(),
@@ -146,8 +141,7 @@ public class StructureBoundingBox {
                     .setNormal(last,
                             aSign == Direction.Axis.X ? 1 : 0,
                             aSign == Direction.Axis.Y ? 1 : 0,
-                            aSign == Direction.Axis.Z ? 1 : 0)
-                    ;
+                            aSign == Direction.Axis.Z ? 1 : 0);
             BufferUploader.drawWithShader(buffer.buildOrThrow());
 
             RenderSystem.enableCull();

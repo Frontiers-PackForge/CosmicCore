@@ -1,7 +1,7 @@
 package com.ghostipedia.cosmiccore.client.renderer.machine;
 
 import com.gregtechceu.gtceu.api.machine.multiblock.WorkableElectricMultiblockMachine;
-import com.gregtechceu.gtceu.api.pattern.util.RelativeDirection;
+import com.gregtechceu.gtceu.api.multiblock.util.RelativeDirection;
 import com.gregtechceu.gtceu.api.recipe.GTRecipe;
 import com.gregtechceu.gtceu.client.renderer.machine.DynamicRender;
 import com.gregtechceu.gtceu.client.renderer.machine.DynamicRenderType;
@@ -126,9 +126,9 @@ public class BioVatRender extends DynamicRender<WorkableElectricMultiblockMachin
         Direction upwards = machine.getUpwardsFacing();
         boolean flipped = machine.isFlipped();
 
-        Vec3i up = RelativeDirection.UP.getRelative(front, upwards, flipped).getNormal();
-        Vec3i back = RelativeDirection.BACK.getRelative(front, upwards, flipped).getNormal();
-        Direction.Axis leftAxis = RelativeDirection.LEFT.getRelative(front, upwards, flipped).getAxis();
+        Vec3i up = RelativeDirection.UP.getRelativeFacing(front, upwards, flipped).getNormal();
+        Vec3i back = RelativeDirection.BACK.getRelativeFacing(front, upwards, flipped).getNormal();
+        Direction.Axis leftAxis = RelativeDirection.LEFT.getRelativeFacing(front, upwards, flipped).getAxis();
 
         float x0ffset = 0, y0ffset = 0, zOffset = 0;
 

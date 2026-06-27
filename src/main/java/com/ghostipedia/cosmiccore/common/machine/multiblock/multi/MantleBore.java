@@ -8,15 +8,15 @@ import com.ghostipedia.cosmiccore.common.machine.multiblock.multi.logic.LarvaMac
 import com.gregtechceu.gtceu.api.data.RotationState;
 import com.gregtechceu.gtceu.api.machine.MultiblockMachineDefinition;
 import com.gregtechceu.gtceu.api.machine.multiblock.PartAbility;
-import com.gregtechceu.gtceu.api.pattern.FactoryBlockPattern;
-import com.gregtechceu.gtceu.api.pattern.Predicates;
+import com.gregtechceu.gtceu.api.multiblock.Predicates;
+import com.gregtechceu.gtceu.api.multiblock.pattern.MultiblockPatternBuilder;
 import com.gregtechceu.gtceu.api.recipe.modifier.RecipeModifier;
 import com.gregtechceu.gtceu.common.data.GTBlocks;
 import com.gregtechceu.gtceu.common.data.GTRecipeTypes;
 
 import static com.ghostipedia.cosmiccore.api.registries.CosmicRegistration.REGISTRATE;
-import static com.gregtechceu.gtceu.api.pattern.Predicates.*;
-import static com.gregtechceu.gtceu.api.pattern.util.RelativeDirection.*;
+import static com.gregtechceu.gtceu.api.multiblock.Predicates.*;
+import static com.gregtechceu.gtceu.api.multiblock.util.RelativeDirection.*;
 import static com.gregtechceu.gtceu.common.data.GTBlocks.*;
 import static com.gregtechceu.gtceu.common.data.models.GTMachineModels.createWorkableCasingMachineModel;
 
@@ -28,12 +28,12 @@ public class MantleBore {
             .recipeType(GTRecipeTypes.ELECTROLYZER_RECIPES)
             .recipeModifier(RecipeModifier.NO_MODIFIER)
             .appearanceBlock(GTBlocks.STEEL_HULL)
-            .pattern(definition -> FactoryBlockPattern.start(RIGHT, BACK, UP)
-                    .aisle(" A   A ", "A     A", "       ", "   D   ", "       ", "A     A", " A   A ")
-                    .aisle(" A   A ", "A     A", "   D   ", "  DDD  ", "   D   ", "A     A", " A   A ")
-                    .aisle("  BBB  ", " ACCCA ", "BCBBBCB", "BCBEBCB", "BCBBBCB", " ACCCA ", "  BBB  ")
+            .pattern(definition -> MultiblockPatternBuilder.start(RIGHT, BACK, UP)
+                    .slice(" A   A ", "A     A", "       ", "   D   ", "       ", "A     A", " A   A ")
+                    .slice(" A   A ", "A     A", "   D   ", "  DDD  ", "   D   ", "A     A", " A   A ")
+                    .slice("  BBB  ", " ACCCA ", "BCBBBCB", "BCBEBCB", "BCBBBCB", " ACCCA ", "  BBB  ")
                     .where(' ', any())
-                    .where("E", controller(blocks(definition.getBlock())))
+                    .where('E', controller(blocks(definition.getBlock())))
                     .where('C', blocks(CosmicBlocks.CASING_HEAT_VENT.get()))
                     .where('A', blocks(STEEL_HULL.get()))
                     .where('D', blocks(STEEL_HULL.get()))

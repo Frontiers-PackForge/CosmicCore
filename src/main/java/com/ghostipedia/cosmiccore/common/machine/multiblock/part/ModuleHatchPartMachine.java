@@ -3,20 +3,29 @@ package com.ghostipedia.cosmiccore.common.machine.multiblock.part;
 import com.ghostipedia.cosmiccore.common.data.CosmicItems;
 
 import com.gregtechceu.gtceu.api.GTValues;
-import com.gregtechceu.gtceu.api.capability.recipe.IO;
-import com.gregtechceu.gtceu.api.gui.GuiTextures;
-import com.gregtechceu.gtceu.api.gui.widget.SlotWidget;
 import com.gregtechceu.gtceu.api.blockentity.BlockEntityCreationInfo;
+import com.gregtechceu.gtceu.api.capability.recipe.IO;
+import com.gregtechceu.gtceu.api.machine.feature.IMuiMachine;
 import com.gregtechceu.gtceu.api.machine.multiblock.part.TieredIOPartMachine;
 import com.gregtechceu.gtceu.api.machine.trait.NotifiableItemStackHandler;
 import com.gregtechceu.gtceu.api.machine.trait.RecipeHandlerList;
+import com.gregtechceu.gtceu.api.sync_system.annotations.SaveField;
+import com.gregtechceu.gtceu.common.mui.GTMuiWidgets;
 
-import com.lowdragmc.lowdraglib.gui.widget.Widget;
-import com.lowdragmc.lowdraglib.gui.widget.WidgetGroup;
-import com.lowdragmc.lowdraglib.jei.IngredientIO;
-import com.lowdragmc.lowdraglib.syncdata.annotation.Persisted;
 import net.minecraft.MethodsReturnNonnullByDefault;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+
+import brachy.modularui.factory.PosGuiData;
+import brachy.modularui.screen.ModularPanel;
+import brachy.modularui.screen.UISettings;
+import brachy.modularui.value.sync.PanelSyncManager;
+import brachy.modularui.value.sync.SyncHandlers;
+import brachy.modularui.widgets.SlotGroupWidget;
+import brachy.modularui.widgets.layout.Grid;
+import brachy.modularui.widgets.slot.ItemSlot;
+import brachy.modularui.widgets.slot.SlotGroup;
+import lombok.Getter;
 
 import java.util.List;
 
@@ -24,22 +33,19 @@ import javax.annotation.ParametersAreNonnullByDefault;
 
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
-public class ModuleHatchPartMachine extends TieredIOPartMachine {
+public class ModuleHatchPartMachine extends TieredIOPartMachine implements IMuiMachine {
 
-    @Persisted
+    @Getter
+    @SaveField
     private final NotifiableItemStackHandler inventory;
 
-    public ModuleHatchPartMachine(BlockEntityCreationInfo holder, int tier) {
-        super(holder, tier, IO.IN);
-        this.inventory = new NotifiableItemStackHandler(this, getSlots(tier), IO.IN);
+    public ModuleHatchPartMachine(BlockEntityCreationInfo info, int tier) {
+        super(info, tier, IO.IN);
+        this.inventory = attachTrait(new NotifiableItemStackHandler(getSlots(tier), IO.IN));
         this.inventory.setFilter(ModuleHatchPartMachine::isModule);
     }
 
-    public NotifiableItemStackHandler getInventory() {
-        return inventory;
-    }
-
-    private static List<net.minecraft.world.item.Item> MODULES = null;
+    private static List<Item> MODULES = null;
 
     private static boolean isModule(ItemStack stack) {
         if (MODULES == null) {
@@ -60,7 +66,6 @@ public class ModuleHatchPartMachine extends TieredIOPartMachine {
     }
 
     private int getSlots(int tier) {
-        // Always have 4 slots, change this to give different slots per tier
         switch (tier) {
             case GTValues.UV:
                 return 4;
@@ -76,7 +81,6 @@ public class ModuleHatchPartMachine extends TieredIOPartMachine {
     //////////////////////////////////////
     // ***** Initialization ******//
     //////////////////////////////////////
-
     @Override
     public void onMachineDestroyed() {
         super.onMachineDestroyed();
@@ -92,24 +96,36 @@ public class ModuleHatchPartMachine extends TieredIOPartMachine {
     //////////////////////////////////////
 
     @Override
-    public Widget createUIWidget() {
-        int rowSize = 4;
-        int colSize = this.getInventory().getSlots() / 4;
-        var group = new WidgetGroup(0, 0, 18 * rowSize + 16, 18 * colSize + 16);
-        var container = new WidgetGroup(4, 4, 18 * rowSize + 8, 18 * colSize + 8);
-        int index = 0;
-        for (int y = 0; y < colSize; y++) {
-            for (int x = 0; x < rowSize; x++) {
-                container.addWidget(
-                        new SlotWidget(getInventory().storage, index++, 4 + x * 18, 4 + y * 18, true, io.support(IO.IN))
-                                .setBackgroundTexture(GuiTextures.SLOT)
-                                .setIngredientIO(IngredientIO.INPUT));
-            }
-        }
+    public ModularPanel buildUI(PosGuiData data, PanelSyncManager syncManager, UISettings settings) {
+        int colSize = 4;
+        int totalSlots = getInventory().getSlots();
+        int rowSize = totalSlots / colSize;
 
-        container.setBackground(GuiTextures.BACKGROUND_INVERSE);
-        group.addWidget(container);
+        int width = Math.max(176, 18 * colSize + 14);
+        int height = Math.max(168, (18 * rowSize) + 78 + 19);
+        var panel = ModularPanel.defaultPanel(getDefinition().getId().getPath(), width, height);
+        panel.child(GTMuiWidgets.createTitleBar(this.getDefinition(), width));
 
-        return group;
+        SlotGroup group = new SlotGroup("module_inv", colSize, 0, true);
+        panel.child(new Grid()
+                .coverChildren()
+                .top(10)
+                .horizontalCenter() // brachy 3.3.0: alignX(float) removed; horizontalCenter() == leftRel(0.5f)
+                // brachy 3.3.0: Grid.mapTo(width,count,fn) removed -> gridOfSizeWidth(size,width,(x,y,i)->...)
+                .gridOfSizeWidth(totalSlots, colSize, (x, y, index) -> new ItemSlot()
+                        .slot(SyncHandlers.itemSlot(inventory, index)
+                                .slotGroup(group)
+                                .changeListener((newItem, amount, client, init) -> {
+                                    if (amount) {
+                                        inventory.onContentsChanged();
+                                    }
+                                })
+                                .accessibility(inventory.handlerIO.support(IO.IN), true))))
+
+                .child(SlotGroupWidget.playerInventory(true)
+                        .left(7)
+                        .bottom(7));
+
+        return panel;
     }
 }

@@ -5,31 +5,26 @@ import com.ghostipedia.cosmiccore.api.data.savedData.UniqueMultiblockSavedData;
 import com.gregtechceu.gtceu.api.blockentity.BlockEntityCreationInfo;
 import com.gregtechceu.gtceu.api.machine.multiblock.WorkableElectricMultiblockMachine;
 import com.gregtechceu.gtceu.api.machine.trait.RecipeLogic;
+import com.gregtechceu.gtceu.api.sync_system.annotations.SaveField;
 import com.gregtechceu.gtceu.common.machine.owner.FTBOwner;
 
-import com.lowdragmc.lowdraglib.syncdata.annotation.Persisted;
-import net.minecraft.ChatFormatting;
-import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.Style;
 import net.minecraft.server.level.ServerLevel;
 
-import java.util.List;
 import java.util.UUID;
 
 public class UniqueWorkableElectricMultiblockMachine extends WorkableElectricMultiblockMachine {
 
-
-    public UniqueWorkableElectricMultiblockMachine(BlockEntityCreationInfo holder) {
-        super(holder);
+    public UniqueWorkableElectricMultiblockMachine(BlockEntityCreationInfo info) {
+        super(info);
     }
 
     // Used to make sure you cannot have more than one of this multiblock per player / team
-    @Persisted
+    @SaveField
     public boolean isDuplicate = false;
 
     @Override
-    public void onStructureFormed() {
-        super.onStructureFormed();
+    public void formStructure(@org.jetbrains.annotations.NotNull String substructureName) {
+        super.formStructure(substructureName);
 
         if (getLevel() instanceof ServerLevel serverLevel) {
             var owner = getTeamUUID();
@@ -37,7 +32,8 @@ public class UniqueWorkableElectricMultiblockMachine extends WorkableElectricMul
             var uniqueMultiblockMapping = UniqueMultiblockSavedData.getOrCreate(serverLevel);
 
             if (uniqueMultiblockMapping.hasData(owner, multiblockId, getDimension())) {
-                this.isDuplicate = !uniqueMultiblockMapping.isUnique(owner, multiblockId, getDimension(), getBlockPos());
+                this.isDuplicate = !uniqueMultiblockMapping.isUnique(owner, multiblockId, getDimension(),
+                        getBlockPos());
                 if (isDuplicate) recipeLogic.setStatus(RecipeLogic.Status.SUSPEND);
             } else uniqueMultiblockMapping.addMultiblock(owner, getDefinition().getId().toString(), getDimension(),
                     getBlockPos());
@@ -46,13 +42,13 @@ public class UniqueWorkableElectricMultiblockMachine extends WorkableElectricMul
     }
 
     protected UUID getTeamUUID() {
-        var team = getOwner() instanceof FTBOwner ftbOwner ? ftbOwner.getPlayerTeam(getOwnerUUID()) : null;
+        var team = ((FTBOwner) getOwner()).getPlayerTeam(getOwnerUUID());
         return team != null ? team.getTeamId() : getOwnerUUID();
     }
 
     @Override
-    public void onStructureInvalid() {
-        super.onStructureInvalid();
+    public void invalidateStructure(String name) {
+        super.invalidateStructure(name);
         if (getLevel() instanceof ServerLevel serverLevel) {
             var owner = getTeamUUID();
             var uniqueMultiblockMapping = UniqueMultiblockSavedData.getOrCreate(serverLevel);
@@ -61,15 +57,15 @@ public class UniqueWorkableElectricMultiblockMachine extends WorkableElectricMul
         }
     }
 
-    @Override
-    public void addDisplayText(List<Component> textList) {
-        if (this.isDuplicate) {
-            textList.add(Component.translatable("cosmic.multiblock.capacitor.duplicate.multiblock.1")
-                    .setStyle(Style.EMPTY.withColor(ChatFormatting.DARK_RED)));
-            textList.add(Component.translatable("cosmic.multiblock.capacitor.duplicate.multiblock.2")
-                    .setStyle(Style.EMPTY.withColor(ChatFormatting.DARK_RED)));
-        } else super.addDisplayText(textList);
-    }
+    // TODO(8.0.0 MUI2): custom display text shelved; base default getWidgetsForDisplay UI used for now.
+    // addDisplayText(List<Component>) was removed from WorkableElectricMultiblockMachine in 8.0.0.
+    // Original "duplicate multiblock" warning text (orig in git):
+    // if (this.isDuplicate) {
+    // textList.add(Component.translatable("cosmic.multiblock.capacitor.duplicate.multiblock.1")
+    // .setStyle(Style.EMPTY.withColor(ChatFormatting.DARK_RED)));
+    // textList.add(Component.translatable("cosmic.multiblock.capacitor.duplicate.multiblock.2")
+    // .setStyle(Style.EMPTY.withColor(ChatFormatting.DARK_RED)));
+    // } else super.addDisplayText(textList);
 
     private String getDimension() {
         if (getLevel() instanceof ServerLevel serverLevel) {

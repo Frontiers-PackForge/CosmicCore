@@ -5,11 +5,12 @@ import com.ghostipedia.cosmiccore.common.machine.multiblock.multi.modular.module
 
 import com.gregtechceu.gtceu.GTCEu;
 import com.gregtechceu.gtceu.api.GTValues;
-import com.gregtechceu.gtceu.api.data.RotationState;
 import com.gregtechceu.gtceu.api.blockentity.BlockEntityCreationInfo;
+import com.gregtechceu.gtceu.api.data.RotationState;
 import com.gregtechceu.gtceu.api.machine.MultiblockMachineDefinition;
 import com.gregtechceu.gtceu.api.machine.multiblock.MultiblockControllerMachine;
-import com.gregtechceu.gtceu.api.pattern.FactoryBlockPattern;
+import com.gregtechceu.gtceu.api.multiblock.pattern.MultiblockPatternBuilder;
+import com.gregtechceu.gtceu.api.multiblock.util.RelativeDirection;
 import com.gregtechceu.gtceu.api.registry.registrate.MultiblockMachineBuilder;
 import com.gregtechceu.gtceu.common.data.GTRecipeTypes;
 import com.gregtechceu.gtceu.common.machine.multiblock.electric.FusionReactorMachine;
@@ -19,7 +20,7 @@ import java.util.function.BiFunction;
 
 import static com.ghostipedia.cosmiccore.api.registries.CosmicRegistration.REGISTRATE;
 import static com.gregtechceu.gtceu.api.GTValues.*;
-import static com.gregtechceu.gtceu.api.pattern.Predicates.*;
+import static com.gregtechceu.gtceu.api.multiblock.Predicates.*;
 import static com.gregtechceu.gtceu.utils.FormattingUtil.toRomanNumeral;
 
 public class CosmicModularMachines {
@@ -33,10 +34,11 @@ public class CosmicModularMachines {
                     .appearanceBlock(() -> FusionReactorMachine.getCasingState(tier))
                     .pattern((definition) -> {
                         var casing = blocks(FusionReactorMachine.getCasingState(tier));
-                        return FactoryBlockPattern.start()
-                                .aisle("A", "A", "A", "A")
-                                .aisle("A", "A", "B", "A")
-                                .where("B", controller(blocks(definition.getBlock())))
+                        return MultiblockPatternBuilder
+                                .start(RelativeDirection.FRONT, RelativeDirection.UP, RelativeDirection.LEFT)
+                                .slice("A", "A", "A", "A")
+                                .slice("A", "A", "B", "A")
+                                .where('B', controller(blocks(definition.getBlock())))
                                 .where('A', blocks(CosmicBlocks.CYCLOZINE_CHEMICALLY_REPELLING_CASING.get()))
                                 .build();
                     })

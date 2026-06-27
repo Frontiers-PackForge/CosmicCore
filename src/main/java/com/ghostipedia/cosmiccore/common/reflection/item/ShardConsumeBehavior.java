@@ -83,7 +83,7 @@ public class ShardConsumeBehavior implements IInteractionItem, IAddInformation {
 
     @Override
     public void appendHoverText(ItemStack stack, Item.TooltipContext context, List<Component> tooltip,
-                               TooltipFlag flag) {
+                                TooltipFlag flag) {
         tooltip.add(Component.literal("Right-click to absorb into your soul")
                 .withStyle(ChatFormatting.GRAY));
         tooltip.add(Component.literal("Shift+Right-click to absorb entire stack")

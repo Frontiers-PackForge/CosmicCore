@@ -8,18 +8,18 @@ import com.gregtechceu.gtceu.api.data.RotationState;
 import com.gregtechceu.gtceu.api.machine.MultiblockMachineDefinition;
 import com.gregtechceu.gtceu.api.machine.multiblock.PartAbility;
 import com.gregtechceu.gtceu.api.machine.multiblock.WorkableElectricMultiblockMachine;
-import com.gregtechceu.gtceu.api.pattern.FactoryBlockPattern;
-import com.gregtechceu.gtceu.api.pattern.Predicates;
+import com.gregtechceu.gtceu.api.multiblock.Predicates;
+import com.gregtechceu.gtceu.api.multiblock.pattern.MultiblockPatternBuilder;
+import com.gregtechceu.gtceu.api.multiblock.util.RelativeDirection;
 import com.gregtechceu.gtceu.api.recipe.OverclockingLogic;
 import com.gregtechceu.gtceu.common.data.GTBlocks;
-
 
 import static com.ghostipedia.cosmiccore.api.machine.part.CosmicPartAbility.IMPORT_EMBER;
 import static com.ghostipedia.cosmiccore.api.registries.CosmicRegistration.REGISTRATE;
 import static com.ghostipedia.cosmiccore.common.data.CosmicBlocks.ETHERSTEEL_PLATED_ASH_TILES;
 import static com.gregtechceu.gtceu.api.machine.multiblock.PartAbility.EXPORT_FLUIDS;
 import static com.gregtechceu.gtceu.api.machine.multiblock.PartAbility.IMPORT_FLUIDS;
-import static com.gregtechceu.gtceu.api.pattern.Predicates.*;
+import static com.gregtechceu.gtceu.api.multiblock.Predicates.*;
 import static com.gregtechceu.gtceu.common.data.GTRecipeModifiers.BATCH_MODE;
 import static com.gregtechceu.gtceu.common.data.GTRecipeModifiers.ELECTRIC_OVERCLOCK;
 
@@ -34,20 +34,21 @@ public class EclipsedDawnForge {
             .partAppearance((controller, part, side) -> ETHERSTEEL_PLATED_ASH_TILES.getDefaultState())
             .recipeModifiers(CosmicRecipeModifiers::innateParallel4x,
                     ELECTRIC_OVERCLOCK.apply(OverclockingLogic.NON_PERFECT_OVERCLOCK), BATCH_MODE)
-            .pattern(definition -> FactoryBlockPattern.start()
+            .pattern(definition -> MultiblockPatternBuilder
+                    .start(RelativeDirection.FRONT, RelativeDirection.UP, RelativeDirection.LEFT)
                     // spotless:off
-                    .aisle("  AAAAA  ", "   AAA   ", "         ", "         ", "         ", "         ", "   AAA   ", "         ")
-                    .aisle(" AAAAAAA ", " AACCCAA ", " AA   AA ", " A     A ", "         ", "         ", " AAAAAAA ", "   AAA   ")
-                    .aisle("AAAAAAAAA", " ACCCCCA ", " AD   DA ", "  D   D  ", "  D   D  ", "  D   D  ", " ADA ADA ", "  AAAAA  ")
-                    .aisle("AAAAAAAAA", "ACCCCCCCA", "   CCC   ", "         ", "         ", "         ", "AAA   AAA", " AAAEAAA ")
-                    .aisle("AAAAAAAAA", "ACCCCCCCA", "   CCC   ", "    F    ", "         ", "         ", "AA     AA", " AAEEEAA ")
-                    .aisle("AAAAAAAAA", "ACCCCCCCA", "   CCC   ", "         ", "         ", "         ", "AAA   AAA", " AAAEAAA ")
-                    .aisle("AAAAAAAAA", " ACCCCCA ", " AD   DA ", "  D   D  ", "  D   D  ", "  D   D  ", " ADA ADA ", "  AAAAA  ")
-                    .aisle(" AAAAAAA ", " AACCCAA ", " AA   AA ", " A     A ", "         ", "         ", " AAAAAAA ", "   AAA   ")
-                    .aisle("  AAAAA  ", "   AQA   ", "         ", "         ", "         ", "         ", "   AAA   ", "         ")
+                    .slice("  AAAAA  ", "   AAA   ", "         ", "         ", "         ", "         ", "   AAA   ", "         ")
+                    .slice(" AAAAAAA ", " AACCCAA ", " AA   AA ", " A     A ", "         ", "         ", " AAAAAAA ", "   AAA   ")
+                    .slice("AAAAAAAAA", " ACCCCCA ", " AD   DA ", "  D   D  ", "  D   D  ", "  D   D  ", " ADA ADA ", "  AAAAA  ")
+                    .slice("AAAAAAAAA", "ACCCCCCCA", "   CCC   ", "         ", "         ", "         ", "AAA   AAA", " AAAEAAA ")
+                    .slice("AAAAAAAAA", "ACCCCCCCA", "   CCC   ", "    F    ", "         ", "         ", "AA     AA", " AAEEEAA ")
+                    .slice("AAAAAAAAA", "ACCCCCCCA", "   CCC   ", "         ", "         ", "         ", "AAA   AAA", " AAAEAAA ")
+                    .slice("AAAAAAAAA", " ACCCCCA ", " AD   DA ", "  D   D  ", "  D   D  ", "  D   D  ", " ADA ADA ", "  AAAAA  ")
+                    .slice(" AAAAAAA ", " AACCCAA ", " AA   AA ", " A     A ", "         ", "         ", " AAAAAAA ", "   AAA   ")
+                    .slice("  AAAAA  ", "   AQA   ", "         ", "         ", "         ", "         ", "   AAA   ", "         ")
                     // spotless:on
                     .where(' ', any())
-                    .where("Q", controller(blocks(definition.getBlock())))
+                    .where('Q', controller(blocks(definition.getBlock())))
                     .where('A', blocks(ETHERSTEEL_PLATED_ASH_TILES.get())
                             .or(abilities(PartAbility.IMPORT_ITEMS).setPreviewCount(1))
                             .or(abilities(PartAbility.EXPORT_ITEMS).setPreviewCount(1))

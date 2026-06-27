@@ -4,9 +4,9 @@ import com.ghostipedia.cosmiccore.CosmicCore;
 
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.player.Player;
-import net.neoforged.neoforge.event.entity.living.MobEffectEvent;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.neoforge.event.entity.living.MobEffectEvent;
 
 import sfiomn.legendarysurvivaloverhaul.api.temperature.TemperatureUtil;
 

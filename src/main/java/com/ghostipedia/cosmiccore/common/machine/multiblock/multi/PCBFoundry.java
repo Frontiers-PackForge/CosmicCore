@@ -11,14 +11,15 @@ import com.gregtechceu.gtceu.api.data.chemical.ChemicalHelper;
 import com.gregtechceu.gtceu.api.data.tag.TagPrefix;
 import com.gregtechceu.gtceu.api.machine.MultiblockMachineDefinition;
 import com.gregtechceu.gtceu.api.machine.multiblock.PartAbility;
-import com.gregtechceu.gtceu.api.pattern.FactoryBlockPattern;
+import com.gregtechceu.gtceu.api.multiblock.pattern.MultiblockPatternBuilder;
+import com.gregtechceu.gtceu.api.multiblock.util.RelativeDirection;
 import com.gregtechceu.gtceu.api.recipe.OverclockingLogic;
 import com.gregtechceu.gtceu.common.data.*;
 
 import static com.ghostipedia.cosmiccore.api.registries.CosmicRegistration.REGISTRATE;
 import static com.ghostipedia.cosmiccore.common.data.CosmicBlocks.*;
-import static com.gregtechceu.gtceu.api.pattern.Predicates.*;
-import static com.gregtechceu.gtceu.api.pattern.Predicates.blocks;
+import static com.gregtechceu.gtceu.api.multiblock.Predicates.*;
+import static com.gregtechceu.gtceu.api.multiblock.Predicates.blocks;
 
 public class PCBFoundry {
 
@@ -34,27 +35,27 @@ public class PCBFoundry {
                     GTRecipeModifiers.ELECTRIC_OVERCLOCK.apply(OverclockingLogic.NON_PERFECT_OVERCLOCK_SUBTICK),
                     GTRecipeModifiers.BATCH_MODE)
             // spotless:off
-            .pattern(definition -> FactoryBlockPattern.start()
-                    .aisle("AAAAAAAAA", "A A A A A", "A A A A A", "A A A A A", "         ", "         ", "         ")
-                    .aisle("ABBBBBBBA", "ACCCCCCCA", "ACCCCCCCA", "A A A A A", "         ", "         ", "         ")
-                    .aisle("ABBBBBBBA", "ACCCCCCCA", "ACCCCCCCA", "A A A A A", "         ", "         ", "         ")
-                    .aisle("AAAAAAAAA", "AAAAAAAAA", "AAAAAAAAA", "AAAAAAAAA", "         ", "         ", "         ")
-                    .aisle("ADDDDDDDA", "ADEFFFEDA", "ADEFFFEDA", "ADEFFFEDA", "ADEEEEEDA", "ADDDDDDDA", "         ")
-                    .aisle("ADDDDDDDA", " E FFF E ", " E     E ", " E     E ", " E     E ", "AD     DA", "  BBBBB  ")
-                    .aisle("ADDDDDDDA", " E FFF E ", " E     E ", " E   G E ", " E   H E ", "ADHHHHHDA", "  BEEEB  ")
-                    .aisle("ADDDDDDDA", " E FFF E ", " E     E ", " E     E ", " E     E ", "AD     DA", "  BEEEB  ")
-                    .aisle("ADDDDDDDA", " E FFF E ", " E     E ", " E     E ", " E     E ", "AD     DA", "  BEEEB  ")
-                    .aisle("ADDDDDDDA", " E FFF E ", " E     E ", " E I   E ", " E H   E ", "ADHHHHHDA", "  BEEEB  ")
-                    .aisle("ADDDDDDDA", " E FFF E ", " E     E ", " E     E ", " E     E ", "AD     DA", "  BEEEB  ")
-                    .aisle("ADDDDDDDA", "AE FFF EA", "AE     EA", "AE     EA", "AE     EA", "AD     DA", "  BEEEB  ")
-                    .aisle("ADDDDDDDA", " D     D ", " D     D ", " D     D ", " D     D ", "ADDD DDDA", "  BBEBB  ")
-                    .aisle("ADDDDDDDA", "AEBBBBBEA", "AE     EA", "AE     EA", "AE     EA", "ABDDDDDBA", "  BBBBB  ")
-                    .aisle("ADDDDDDDA", " EBBBBBE ", " E BBB E ", " E BBB E ", " E BBB E ", "ABDBBBDBA", "   BBB   ")
-                    .aisle("ADDDDDDDA", " EBBBBBE ", " E BBB E ", " E BBB E ", " E BBB E ", "ABDBBBDBA", "   BBB   ")
-                    .aisle("ADDDDDDDA", " EBBBBBE ", " E BBB E ", " E BBB E ", " E BBB E ", "ABDBBBDBA", "   BBB   ")
-                    .aisle("ADDDDDDDA", " EBBBBBE ", " E     E ", "AAAAAAAAA", "AE     EA", "ABDDDDDBA", "         ")
-                    .aisle("ADDDDDDDA", " DEEAEED ", " DEEAEED ", "ADEEAEEDA", " DEEAEED ", "AAAAAAAAA", "         ")
-                    .aisle("AAAAAAAAA", "A  AAA  A", "A  AAA  A", "AAAAQAAAA", "   AAA   ", "   AAA   ", "         ")
+            .pattern(definition -> MultiblockPatternBuilder.start(RelativeDirection.FRONT, RelativeDirection.UP, RelativeDirection.LEFT)
+                    .slice("AAAAAAAAA", "A A A A A", "A A A A A", "A A A A A", "         ", "         ", "         ")
+                    .slice("ABBBBBBBA", "ACCCCCCCA", "ACCCCCCCA", "A A A A A", "         ", "         ", "         ")
+                    .slice("ABBBBBBBA", "ACCCCCCCA", "ACCCCCCCA", "A A A A A", "         ", "         ", "         ")
+                    .slice("AAAAAAAAA", "AAAAAAAAA", "AAAAAAAAA", "AAAAAAAAA", "         ", "         ", "         ")
+                    .slice("ADDDDDDDA", "ADEFFFEDA", "ADEFFFEDA", "ADEFFFEDA", "ADEEEEEDA", "ADDDDDDDA", "         ")
+                    .slice("ADDDDDDDA", " E FFF E ", " E     E ", " E     E ", " E     E ", "AD     DA", "  BBBBB  ")
+                    .slice("ADDDDDDDA", " E FFF E ", " E     E ", " E   G E ", " E   H E ", "ADHHHHHDA", "  BEEEB  ")
+                    .slice("ADDDDDDDA", " E FFF E ", " E     E ", " E     E ", " E     E ", "AD     DA", "  BEEEB  ")
+                    .slice("ADDDDDDDA", " E FFF E ", " E     E ", " E     E ", " E     E ", "AD     DA", "  BEEEB  ")
+                    .slice("ADDDDDDDA", " E FFF E ", " E     E ", " E I   E ", " E H   E ", "ADHHHHHDA", "  BEEEB  ")
+                    .slice("ADDDDDDDA", " E FFF E ", " E     E ", " E     E ", " E     E ", "AD     DA", "  BEEEB  ")
+                    .slice("ADDDDDDDA", "AE FFF EA", "AE     EA", "AE     EA", "AE     EA", "AD     DA", "  BEEEB  ")
+                    .slice("ADDDDDDDA", " D     D ", " D     D ", " D     D ", " D     D ", "ADDD DDDA", "  BBEBB  ")
+                    .slice("ADDDDDDDA", "AEBBBBBEA", "AE     EA", "AE     EA", "AE     EA", "ABDDDDDBA", "  BBBBB  ")
+                    .slice("ADDDDDDDA", " EBBBBBE ", " E BBB E ", " E BBB E ", " E BBB E ", "ABDBBBDBA", "   BBB   ")
+                    .slice("ADDDDDDDA", " EBBBBBE ", " E BBB E ", " E BBB E ", " E BBB E ", "ABDBBBDBA", "   BBB   ")
+                    .slice("ADDDDDDDA", " EBBBBBE ", " E BBB E ", " E BBB E ", " E BBB E ", "ABDBBBDBA", "   BBB   ")
+                    .slice("ADDDDDDDA", " EBBBBBE ", " E     E ", "AAAAAAAAA", "AE     EA", "ABDDDDDBA", "         ")
+                    .slice("ADDDDDDDA", " DEEAEED ", " DEEAEED ", "ADEEAEEDA", " DEEAEED ", "AAAAAAAAA", "         ")
+                    .slice("AAAAAAAAA", "A  AAA  A", "A  AAA  A", "AAAAQAAAA", "   AAA   ", "   AAA   ", "         ")
                     .where(' ', any())
                     .where('Q', controller(blocks(definition.getBlock())))
                     .where('A', blocks(BICHROMAL_NEVRAMITE_CASING.get())

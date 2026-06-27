@@ -1,12 +1,25 @@
 dependencies {
     compileOnly(libs.jetbrains.annotations)
 
-    // GTCEu — core dependency. Bundles (jarJar) LDLib + Registrate + Configuration at runtime,
-    // so those are declared compileOnly here and provided by GTCEu in dev/prod.
+    // GTCEu — core dependency. Its jar jar-jars Registrate + Configuration + ModularUI2 at runtime, so those
+    // are compileOnly here. It does NOT bundle LDLib (8.0.0 moved its own UI/sync to MUI2), so LDLib must be
+    // supplied separately: compileOnly against the FULL LDLib API to build...
     implementation(files("libs/gtceu-1.21.1-8.0.0.jar"))
     compileOnly(forge.ldlib)
+    // ...but at RUNTIME we ship a PATCHED LDLib. GTCEu 8.0 dropped LDLib for MUI2, so the two were never meant
+    // to coexist: stock LDLib and MUI2 both add @Accessor mixins to the same vanilla GUI classes (Slot,
+    // AbstractContainerScreen/Menu, ServerPlayer) and collide fatally at mixin-apply. The ccpatch jar is the
+    // stock 1.0.35.a jar with ONLY those 4 conflicting accessors stripped from ldlib.mixins.json (all 851
+    // classes + LDLib's other mixins, incl. ItemRendererMixin that dispatches CC's item renderers, untouched).
+    // Regenerate with `python gradle/patch-ldlib.py` if LDLib is bumped. Long-term: cosmiccore-11
+    // (migrate CC off LDLib) removes the need for this entirely.
+    runtimeOnly(files("libs/ldlib-neoforge-1.21.1-1.0.35.a-ccpatch.jar"))
+    // ModularUI2 (brachy.modularui): GTCEu 8.0.0 exposes brachy types in its public machine API (IMuiMachine,
+    // buildMainUI/getMainTextPanel), so it is a mandatory compile dep. GTCEu jarJars it at runtime, hence compileOnly.
+    compileOnly(forge.mui)
     compileOnly(forge.registrate)
     compileOnly(forge.configuration)
+    implementation("curse.maven:world-stripper-250603:5592921")
 
     // KubeJS (real, in-use scripts)
     implementation(forge.kubejs)
@@ -35,6 +48,17 @@ dependencies {
     compileOnly(variantOf(forge.create) { classifier("slim") })
     compileOnly(forge.ponder)
     compileOnly(forge.flywheel.api)
+
+    // Create Aeronautics compat (GTM bridge). compileOnly: the pack ships these, CC must not bundle them.
+    // Aero/Simulated/Sable have no usable maven (bundler/Fabric/JIJ-only), so the pack's jars are pinned in
+    // libs/, extracted from create-aeronautics-bundled-1.21.1-1.3.0 and sable-neoforge-1.21.1-2.0.3.
+    compileOnly(files("libs/aeronautics-neoforge-1.21.1-1.3.0.jar"))
+    compileOnly(files("libs/simulated-neoforge-1.21.1-1.3.0.jar"))
+    compileOnly(files("libs/offroad-neoforge-1.21.1-1.3.0.jar"))
+    compileOnly(files("libs/sable-neoforge-1.21.1-2.0.3.jar"))
+    compileOnly(files("libs/sable-rapier-1.21.1-2.0.3.jar"))
+    compileOnly(files("libs/sable-companion-common-1.21.1-1.6.0.jar"))
+    compileOnly(files("libs/veil-neoforge-1.21.1-4.1.4.jar"))
     runtimeOnly(forge.create) {
         // Create's published metadata leaks optional integrations as runtime deps. The pack uses Xaero's,
         // not JourneyMap, and the bundled JourneyMap beta is incompatible with our compile-time journeymap-api
@@ -53,6 +77,11 @@ dependencies {
     implementation(forge.modonomicon)
     implementation(forge.smartbrainlib)
     implementation(forge.geckolib)
+
+    // Embers Re-Ignited (NeoForge 1.21.1 fork of Embers Rekindled, modId "embers"). Required: the ember
+    // hatch/emitter/receptor content extends its blocks + ember capability. CurseForge project 1579725,
+    // file 8295861 = "1.5.4 Beta 1", the exact build the pack ships.
+    implementation("curse.maven:embers-re-ignited-1579725:8295861")
 
     // Apotheosis (modular on 1.21.1)
     // Placebo is provided transitively by the Apothic mods as dev.shadowsoffire:Placebo. Declaring it
@@ -79,12 +108,35 @@ dependencies {
     // JourneyMap API — pack uses Xaero's; integration compiles against the API and no-ops at runtime.
     compileOnly(forge.journeymap.api)
 
+    // Xaero's Minimap / World Map — pack ships Xaero's. compileOnly to build our own field-blob overlay
+    // against their (internal) render classes; runtimeOnly so the dev client loads Xaero's to test it.
+    compileOnly(forge.xaeroslib)
+    compileOnly(forge.xaerosminimap)
+    compileOnly(forge.xaerosworldmap)
+    runtimeOnly(forge.xaeroslib)
+    runtimeOnly(forge.xaerosminimap)
+    runtimeOnly(forge.xaerosworldmap)
+
+    // Sodium 0.8.x + Iris — dev runtime only (render compat sanity). Sodium 0.8 is the caffeinemc multi-artifact
+    // set; see build.gradle for the sodiumShell config + stripSodiumShell task and why the shell is repackaged.
+    // compile against the -api/-mod, load the stripped shell as a LIBRARY + the -mod as the real "sodium" mod,
+    // plus Sinytra's Forgified Fabric API shims for the FRAPI paths 0.8 needs. Coords pinned from chloride.
+    compileOnly("net.caffeinemc:sodium-neoforge-api:${sodiumNeoVersion}")
+    compileOnly("net.caffeinemc:sodium-neoforge-mod:${sodiumNeoVersion}")
+    sodiumShell("net.caffeinemc:sodium-neoforge:${sodiumNeoVersion}")
+    runtimeOnly("net.caffeinemc:sodium-neoforge-mod:${sodiumNeoVersion}")
+    runtimeOnly(files(tasks.named('stripSodiumShell')))
+    runtimeOnly("org.sinytra.forgified-fabric-api:fabric-api-base:0.4.42+d1308ded19")
+    runtimeOnly("org.sinytra.forgified-fabric-api:fabric-renderer-api-v1:3.4.1+9125b6dc19")
+    runtimeOnly("org.sinytra.forgified-fabric-api:fabric-rendering-data-attachment-v1:0.3.48+73761d2e19")
+    runtimeOnly("org.sinytra.forgified-fabric-api:fabric-block-view-api-v2:1.0.10+9afaaf8c19")
+    runtimeOnly("curse.maven:irisshaders-455508:8242804")
+
     // Dev tooling
     runtimeOnly(forge.effortless)
 
     // ---- DROPPED for the 1.21.1 port (no NeoForge build / pack chose alternatives) ----
     // Forestry CE + Gendustry CE  -> no 1.21.1 (bee system shelved, see bead cosmiccore-42.2)
-    // Embers Rekindled            -> no 1.21.1 (ember system shelved)
     // Ad Astra                    -> no 1.21.1 (isolate+no-op now, Stellaris later, bead cosmiccore-42.13)
     // Embeddium + Oculus          -> pack uses Sodium + Iris
     // Travel Anchors + LibX       -> not in pack

@@ -3,11 +3,11 @@ package com.ghostipedia.cosmiccore.client.renderer.machine;
 import com.ghostipedia.cosmiccore.CosmicCore;
 
 import com.gregtechceu.gtceu.api.machine.multiblock.WorkableElectricMultiblockMachine;
-import com.gregtechceu.gtceu.api.pattern.util.RelativeDirection;
+import com.gregtechceu.gtceu.api.multiblock.util.RelativeDirection;
 import com.gregtechceu.gtceu.client.renderer.GTRenderTypes;
 import com.gregtechceu.gtceu.client.renderer.machine.DynamicRender;
 import com.gregtechceu.gtceu.client.renderer.machine.DynamicRenderType;
-import com.gregtechceu.gtceu.client.util.ModelUtils;
+import com.gregtechceu.gtceu.client.util.ModelEventHelper;
 import com.gregtechceu.gtceu.client.util.RenderBufferHelper;
 
 import net.minecraft.MethodsReturnNonnullByDefault;
@@ -33,6 +33,7 @@ import org.jetbrains.annotations.NotNull;
 import org.joml.Matrix4f;
 import org.joml.Quaternionf;
 
+import java.util.EnumSet;
 import java.util.HashSet;
 import java.util.function.BiFunction;
 
@@ -49,9 +50,9 @@ public class RenderTesterHelper extends
             RenderTesterHelper.CODEC);
 
     private static final BiFunction<Direction, Direction, AABB> renderBoundCache = Util.memoize((front, upwards) -> {
-        Direction up = RelativeDirection.UP.getRelative(front, upwards, false);
-        Direction back = RelativeDirection.BACK.getRelative(front, upwards, false);
-        Direction left = RelativeDirection.LEFT.getRelative(front, upwards, false);
+        Direction up = RelativeDirection.UP.getRelativeFacing(front, upwards, false);
+        Direction back = RelativeDirection.BACK.getRelativeFacing(front, upwards, false);
+        Direction left = RelativeDirection.LEFT.getRelativeFacing(front, upwards, false);
 
         // offset from the controller to the inner cube (scaled up by 1 in all directions)
         // values are from the multi pattern
@@ -71,7 +72,7 @@ public class RenderTesterHelper extends
     @SuppressWarnings("deprecation")
     private RenderTesterHelper() {
         if (!isEventListenerRegistered) {
-            ModelUtils.registerAtlasStitchedEventListener(true, TextureAtlas.LOCATION_BLOCKS, event -> {
+            ModelEventHelper.registerAtlasStitchedEventListener(true, TextureAtlas.LOCATION_BLOCKS, event -> {
                 bloodCubeSprite = event.getAtlas().getSprite(BLOOD_CUBE_TEXTURE);
             });
             isEventListenerRegistered = true;
@@ -112,9 +113,9 @@ public class RenderTesterHelper extends
         Direction front = machine.getFrontFacing();
         Direction upwards = machine.getUpwardsFacing();
         boolean flipped = machine.isFlipped();
-        Direction up = RelativeDirection.UP.getRelative(front, upwards, flipped);
-        Direction back = RelativeDirection.BACK.getRelative(front, upwards, flipped);
-        Direction.Axis leftAxis = RelativeDirection.LEFT.getRelative(front, upwards, flipped).getAxis();
+        Direction up = RelativeDirection.UP.getRelativeFacing(front, upwards, flipped);
+        Direction back = RelativeDirection.BACK.getRelativeFacing(front, upwards, flipped);
+        Direction.Axis leftAxis = RelativeDirection.LEFT.getRelativeFacing(front, upwards, flipped).getAxis();
 
         float x0ffset = 0, y0ffset = 2.5f, z0ffset = 0;
 
@@ -146,7 +147,7 @@ public class RenderTesterHelper extends
         int segments = 4;
         float r = 0.85f, g = 0.9f, b = 1.0f, a = 1f;
 
-        VertexConsumer consumer = buffer.getBuffer(GTRenderTypes.getLightRing());
+        VertexConsumer consumer = buffer.getBuffer(GTRenderTypes.lightRing());
         Matrix4f mat = poseStack.last().pose();
 
         float dA = Mth.TWO_PI / sides;
@@ -166,7 +167,7 @@ public class RenderTesterHelper extends
                 1.0f,
                 0.12f,
                 0.4f, 0.9f, 1.0f, 0.85f);
-        consumer = buffer.getBuffer(GTRenderTypes.getLightRing());
+        consumer = buffer.getBuffer(GTRenderTypes.lightRing());
 
         Quaternionf frot = new Quaternionf()
                 .rotateXYZ(Mth.sin(totalTick / 30),
@@ -226,8 +227,8 @@ public class RenderTesterHelper extends
             }
         final float eps = edge2 * 1.0015f;
 
-        PoseStack.Pose pose = poseStack.last();
-        Matrix4f mat = pose.pose();
+        var mat = poseStack.last().pose();
+        var nrm = poseStack.last().normal();
         VertexConsumer vc = buffer.getBuffer(net.minecraft.client.renderer.RenderType.lines());
 
         for (int i = 0; i < 20; i++)
@@ -239,9 +240,9 @@ public class RenderTesterHelper extends
                     float nx = dx / len, ny = dy / len, nz = dz / len;
 
                     vc.addVertex(mat, V[i][0], V[i][1], V[i][2])
-                            .setColor(r, g, b, alpha).setNormal(pose, nx, ny, nz);
+                            .setColor(r, g, b, alpha).setNormal(nx, ny, nz);
                     vc.addVertex(mat, V[j][0], V[j][1], V[j][2])
-                            .setColor(r, g, b, alpha).setNormal(pose, nx, ny, nz);
+                            .setColor(r, g, b, alpha).setNormal(nx, ny, nz);
                 }
             }
     }
@@ -282,7 +283,7 @@ public class RenderTesterHelper extends
                 edges.add(key);
             }
         }
-        VertexConsumer vertexConsumer = buffer.getBuffer(GTRenderTypes.getLightRing());
+        VertexConsumer vertexConsumer = buffer.getBuffer(GTRenderTypes.lightRing());
         final Matrix4f mat = poseStack.last().pose();
 
         var cam = Minecraft.getInstance().gameRenderer.getMainCamera();
@@ -297,7 +298,7 @@ public class RenderTesterHelper extends
 
         final float EPS = 1e-6f;
         for (long key : edges) {
-            vertexConsumer = buffer.getBuffer(GTRenderTypes.getLightRing());
+            vertexConsumer = buffer.getBuffer(GTRenderTypes.lightRing());
             int i0 = (int) (key >>> 32);
             int i1 = (int) (key & 0xFFFFFFFFL);
 
@@ -379,7 +380,7 @@ public class RenderTesterHelper extends
                                          float radius, int slices, int stacks,
                                          float r, float g, float b, float a) {
         Matrix4f mat = poseStack.last().pose();
-        VertexConsumer vc = buffer.getBuffer(GTRenderTypes.getLightRing());
+        VertexConsumer vc = buffer.getBuffer(GTRenderTypes.lightRing());
 
         float dPhi = (float) (Mth.TWO_PI / Math.max(3, slices));
         float dTheta = (float) (Math.PI / Math.max(2, stacks));
@@ -425,7 +426,7 @@ public class RenderTesterHelper extends
 
         // draw cube quads
         var consumer = bufferSource.getBuffer(Sheets.translucentCullBlockSheet());
-        RenderBufferHelper.renderCube(consumer, poseStack.last(), 0xffffffff,
+        RenderBufferHelper.renderTexturedCube(consumer, poseStack.last(), EnumSet.allOf(Direction.class), 0xffffffff,
                 LightTexture.FULL_BRIGHT, bloodCubeSprite,
                 -1, -1, -1, 1, 1, 1);
 
@@ -434,7 +435,7 @@ public class RenderTesterHelper extends
 
     @OnlyIn(Dist.CLIENT)
     private void renderRings(Direction.Axis upAxis, float totalTick, PoseStack poseStack, MultiBufferSource buffer) {
-        VertexConsumer consumer = buffer.getBuffer(GTRenderTypes.getLightRing());
+        VertexConsumer consumer = buffer.getBuffer(GTRenderTypes.lightRing());
 
         float xRot = totalTick / 20;
         float zRot = Mth.HALF_PI + totalTick / 60;

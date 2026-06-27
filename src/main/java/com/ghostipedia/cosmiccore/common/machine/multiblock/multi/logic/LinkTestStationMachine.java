@@ -19,11 +19,9 @@ import java.util.Set;
  */
 public class LinkTestStationMachine extends LinkedWorkableElectricMultiblockMachine {
 
-
     public LinkTestStationMachine(BlockEntityCreationInfo holder) {
         super(holder);
     }
-
 
     // ==================== Link Configuration ====================
 
@@ -63,10 +61,7 @@ public class LinkTestStationMachine extends LinkedWorkableElectricMultiblockMach
 
     // ==================== Display ====================
 
-    @Override
     public void addDisplayText(List<Component> textList) {
-        super.addDisplayText(textList);
-
         if (!isFormed()) return;
 
         // Show link status

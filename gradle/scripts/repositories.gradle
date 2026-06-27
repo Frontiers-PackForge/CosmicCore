@@ -5,7 +5,11 @@ repositories {
     maven { // GTCEu
         name = 'GTCEu Maven'
         url = 'https://maven.gtceu.com'
-        content { includeGroup 'com.gregtechceu.gtceu' }
+        content {
+            includeGroup 'com.gregtechceu.gtceu'
+            // ModularUI2: GTCEu re-hosts brachy.modularui on its own maven (only live remote serving 3.3.0-SNAPSHOT).
+            includeGroup 'brachy.modularui'
+        }
     }
     maven { // AE2 (upstream), GuideME, AE2WTLib (Mari023), JEI mirror
         name = "ModMaven"
@@ -87,6 +91,10 @@ repositories {
         forRepository { maven { url = "https://jm.gserv.me/repository/maven-public/" } }
         filter { includeGroup("info.journeymap") }
     }
+    exclusiveContent { // Xaero's Minimap / World Map
+        forRepository { maven { url = "https://chocolateminecraft.com/maven/" } }
+        filter { includeGroupAndSubgroups("xaero") }
+    }
     exclusiveContent { // KubeJS transitive (animated-gif-lib-for-java)
         forRepository { maven { url = "https://jitpack.io/" } }
         filter { includeGroup("com.github.rtyley") }
@@ -106,5 +114,17 @@ repositories {
     exclusiveContent { // Curseforge maven
         forRepository { maven { url = "https://cursemaven.com/" } }
         filter { includeGroup("curse.maven") }
+    }
+    exclusiveContent { // Sodium 0.8.x (caffeinemc)
+        forRepository { maven { url = "https://maven.caffeinemc.net/releases" } }
+        filter { includeGroup("net.caffeinemc") }
+    }
+    exclusiveContent { // Sinytra - Forgified Fabric API shims for Sodium 0.8 FRAPI
+        forRepository { maven { url = "https://maven.sinytra.org/" } }
+        filter { includeGroupAndSubgroups("org.sinytra") }
+    }
+    exclusiveContent { // Fabric (transitives of the Forgified Fabric API shims)
+        forRepository { maven { url = "https://maven.fabricmc.net/" } }
+        filter { includeGroup("net.fabricmc") }
     }
 }

@@ -8,12 +8,13 @@ import com.gregtechceu.gtceu.api.capability.recipe.ItemRecipeCapability;
 import com.gregtechceu.gtceu.api.data.RotationState;
 import com.gregtechceu.gtceu.api.machine.MultiblockMachineDefinition;
 import com.gregtechceu.gtceu.api.machine.multiblock.PartAbility;
-import com.gregtechceu.gtceu.api.pattern.FactoryBlockPattern;
-import com.gregtechceu.gtceu.api.pattern.Predicates;
+import com.gregtechceu.gtceu.api.multiblock.Predicates;
+import com.gregtechceu.gtceu.api.multiblock.pattern.MultiblockPatternBuilder;
+import com.gregtechceu.gtceu.api.multiblock.util.RelativeDirection;
 import com.gregtechceu.gtceu.common.data.GTRecipeTypes;
 
 import static com.ghostipedia.cosmiccore.api.registries.CosmicRegistration.REGISTRATE;
-import static com.gregtechceu.gtceu.api.pattern.Predicates.*;
+import static com.gregtechceu.gtceu.api.multiblock.Predicates.*;
 import static com.gregtechceu.gtceu.common.data.GTBlocks.*;
 import static com.gregtechceu.gtceu.common.data.GTBlocks.CASING_BRONZE_PIPE;
 
@@ -26,10 +27,11 @@ public class SteamCaster {
             .recipeType(GTRecipeTypes.FLUID_SOLIDFICATION_RECIPES)
             .recipeModifier(WeakSteamParallelMultiBlockMachine::recipeModifier, true)
             .addOutputLimit(ItemRecipeCapability.CAP, 1)
-            .pattern(definition -> FactoryBlockPattern.start()
-                    .aisle("AAAA", "ABBA", "AAAA")
-                    .aisle("AAAA", "BCCB", "AAAA")
-                    .aisle("AAAA", "ADBA", "AAAA")
+            .pattern(definition -> MultiblockPatternBuilder
+                    .start(RelativeDirection.FRONT, RelativeDirection.UP, RelativeDirection.LEFT)
+                    .slice("AAAA", "ABBA", "AAAA")
+                    .slice("AAAA", "BCCB", "AAAA")
+                    .slice("AAAA", "ADBA", "AAAA")
                     .where('D', Predicates.controller(blocks(definition.getBlock())))
                     .where('#', Predicates.air())
                     .where(' ', Predicates.any())

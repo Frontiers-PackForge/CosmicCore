@@ -4,10 +4,10 @@ import com.ghostipedia.cosmiccore.CosmicCore;
 import com.ghostipedia.cosmiccore.common.machine.multiblock.multi.logic.VoraxReactorMachine;
 
 import com.gregtechceu.gtceu.api.machine.multiblock.WorkableElectricMultiblockMachine;
-import com.gregtechceu.gtceu.api.pattern.util.RelativeDirection;
+import com.gregtechceu.gtceu.api.multiblock.util.RelativeDirection;
 import com.gregtechceu.gtceu.client.renderer.machine.DynamicRender;
 import com.gregtechceu.gtceu.client.renderer.machine.DynamicRenderType;
-import com.gregtechceu.gtceu.client.util.ModelUtils;
+import com.gregtechceu.gtceu.client.util.ModelEventHelper;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
@@ -54,13 +54,14 @@ public class ConceptIncineratorRender extends
     private static BakedModel irisOuterStarModel = null;
 
     private ConceptIncineratorRender() {
-        ModelUtils.registerBakeEventListener(true, event -> {
-            irisCoreModel = event.getModels().get(IRIS_MODEL_CORE);
-            irisRingModel = event.getModels().get(IRIS_MODEL_RING);
-            irisSmallRingModel = event.getModels().get(IRIS_MODEL_RING_WHITE);
-            irisLowStarModel = event.getModels().get(STAR_CORE);
-            irisMidStarModel = event.getModels().get(STAR_CORE_MIDDLE);
-            irisOuterStarModel = event.getModels().get(STAR_CORE_OUTER);
+        ModelEventHelper.registerBakeEventListener(true, (rl, baked, rootModel, modelBakery) -> {
+            if (rl.equals(IRIS_MODEL_CORE)) irisCoreModel = baked;
+            else if (rl.equals(IRIS_MODEL_RING)) irisRingModel = baked;
+            else if (rl.equals(IRIS_MODEL_RING_WHITE)) irisSmallRingModel = baked;
+            else if (rl.equals(STAR_CORE)) irisLowStarModel = baked;
+            else if (rl.equals(STAR_CORE_MIDDLE)) irisMidStarModel = baked;
+            else if (rl.equals(STAR_CORE_OUTER)) irisOuterStarModel = baked;
+            return baked;
         });
     }
 
@@ -81,9 +82,9 @@ public class ConceptIncineratorRender extends
         Direction front = machine.getFrontFacing();
         Direction upwards = machine.getUpwardsFacing();
         boolean flipped = machine.isFlipped();
-        Direction up = RelativeDirection.UP.getRelative(front, upwards, flipped);
-        Direction back = RelativeDirection.BACK.getRelative(front, upwards, flipped);
-        Direction.Axis leftAxis = RelativeDirection.LEFT.getRelative(front, upwards, flipped).getAxis();
+        Direction up = RelativeDirection.UP.getRelativeFacing(front, upwards, flipped);
+        Direction back = RelativeDirection.BACK.getRelativeFacing(front, upwards, flipped);
+        Direction.Axis leftAxis = RelativeDirection.LEFT.getRelativeFacing(front, upwards, flipped).getAxis();
 
         // translate to the absolute center of the multiblock
         float x0ffset = 0, y0ffset = 0, z0ffset = 0;
@@ -218,7 +219,8 @@ public class ConceptIncineratorRender extends
         PoseStack.Pose pose = poseStack.last();
         List<BakedQuad> quads = irisCoreModel.getQuads(null, null, random, ModelData.EMPTY, null);
         for (BakedQuad quad : quads) {
-            consumer.putBulkData(pose, quad, 0.016F + (percent / 4), 0.094F, 0.125F, 1, packedLight, packedOverlay);
+            consumer.putBulkData(pose, quad, 0.016F + (percent / 4), 0.094F, 0.125F, 1, packedLight, packedOverlay,
+                    false);
         }
     }
 
@@ -237,7 +239,8 @@ public class ConceptIncineratorRender extends
         PoseStack.Pose pose = poseStack.last();
         List<BakedQuad> quads = irisCoreModel.getQuads(null, null, random, ModelData.EMPTY, null);
         for (BakedQuad quad : quads) {
-            consumer.putBulkData(pose, quad, 0.2f + percent, 0.2f, 0.7f + -percent, 1, packedLight, packedOverlay);
+            consumer.putBulkData(pose, quad, 0.2f + percent, 0.2f, 0.7f + -percent, 1, packedLight, packedOverlay,
+                    false);
         }
     }
 
@@ -246,7 +249,7 @@ public class ConceptIncineratorRender extends
         poseStack.scale(2.0f, 2.0f, 2.0f);
         List<BakedQuad> quads = irisRingModel.getQuads(null, null, random, ModelData.EMPTY, null);
         for (BakedQuad quad : quads) {
-            consumer.putBulkData(poseStack.last(), quad, 1f, 1f, 1f, 1f, packedLight, packedOverlay);
+            consumer.putBulkData(poseStack.last(), quad, 1f, 1f, 1f, 1f, 1, packedOverlay);
         }
 
         poseStack.popPose();

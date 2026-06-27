@@ -11,13 +11,14 @@ import com.gregtechceu.gtceu.api.data.tag.TagPrefix;
 import com.gregtechceu.gtceu.api.machine.MultiblockMachineDefinition;
 import com.gregtechceu.gtceu.api.machine.multiblock.PartAbility;
 import com.gregtechceu.gtceu.api.machine.multiblock.WorkableElectricMultiblockMachine;
-import com.gregtechceu.gtceu.api.pattern.FactoryBlockPattern;
+import com.gregtechceu.gtceu.api.multiblock.pattern.MultiblockPatternBuilder;
+import com.gregtechceu.gtceu.api.multiblock.util.RelativeDirection;
 import com.gregtechceu.gtceu.api.recipe.OverclockingLogic;
 import com.gregtechceu.gtceu.common.data.GTRecipeModifiers;
 
 import static com.ghostipedia.cosmiccore.api.registries.CosmicRegistration.REGISTRATE;
 import static com.ghostipedia.cosmiccore.common.data.CosmicBlocks.*;
-import static com.gregtechceu.gtceu.api.pattern.Predicates.*;
+import static com.gregtechceu.gtceu.api.multiblock.Predicates.*;
 import static com.gregtechceu.gtceu.common.data.GTBlocks.*;
 
 // NOTE DO NOT ADD BERS/RENDERS TO THIS YET
@@ -36,12 +37,12 @@ public class PlasmiteDistillery {
                     GTRecipeModifiers.ELECTRIC_OVERCLOCK.apply(OverclockingLogic.NON_PERFECT_OVERCLOCK_SUBTICK),
                     GTRecipeModifiers.BATCH_MODE)
             // spotless:off
-            .pattern(definition -> FactoryBlockPattern.start()
-                    .aisle(" AAAEEEEEEEEEEE", " AAAEFFFFFFFFFE", " AAAEFFFFFFFFFE", " AAAEFFFFFFFFFE", " AAAEEEEEEEEEEE", " AAA           ", " AAA           ", " AAA           ", " AAA           ", " AAA           ", " AAA           ", "               ")
-                    .aisle("AAAAAEEEEEEEEEA", "AABAA         A", "AABAAGGGGGGGGGA", "AABAA         A", "AABAAEFFFFFFFFA", "AABAAHHHHHHHHHA", "AABAA          ", "AABAA          ", "AABAA          ", "AABAA          ", "AABAA          ", " AAA           ")
-                    .aisle("AAAAAEEEEEEEEEA", "ABCBAGGGGGGGGGA", "ABCBACCCCCCCCCA", "ABCBAGGGGGGGGGA", "ABCBAEFFFFFFFFA", "ABCBA         A", "ABCBA          ", "ABCBA          ", "ABCBA          ", "ABCBA          ", "ABCBA          ", " AAA           ")
-                    .aisle("AAAAAEEEEEEEEEA", "AABAA         A", "AABAAGGGGGGGGGA", "AABAA         A", "AABAAEFFFFFFFFA", "AABAAHHHHHHHHHA", "AABAA          ", "AABAA          ", "AABAA          ", "AABAA          ", "AABAA          ", " AAA           ")
-                    .aisle(" AAAEEEEEEEEEEE", " AAAEFFFFFFFFFE", " AQAEFFFFFFFFFE", " AAAEFFFFFFFFFE", " AAAEEEEEEEEEEE", " AAA           ", " AAA           ", " AAA           ", " AAA           ", " AAA           ", " AAA           ", "               ")
+            .pattern(definition -> MultiblockPatternBuilder.start(RelativeDirection.FRONT, RelativeDirection.UP, RelativeDirection.LEFT)
+                    .slice(" AAAEEEEEEEEEEE", " AAAEFFFFFFFFFE", " AAAEFFFFFFFFFE", " AAAEFFFFFFFFFE", " AAAEEEEEEEEEEE", " AAA           ", " AAA           ", " AAA           ", " AAA           ", " AAA           ", " AAA           ", "               ")
+                    .slice("AAAAAEEEEEEEEEA", "AABAA         A", "AABAAGGGGGGGGGA", "AABAA         A", "AABAAEFFFFFFFFA", "AABAAHHHHHHHHHA", "AABAA          ", "AABAA          ", "AABAA          ", "AABAA          ", "AABAA          ", " AAA           ")
+                    .slice("AAAAAEEEEEEEEEA", "ABCBAGGGGGGGGGA", "ABCBACCCCCCCCCA", "ABCBAGGGGGGGGGA", "ABCBAEFFFFFFFFA", "ABCBA         A", "ABCBA          ", "ABCBA          ", "ABCBA          ", "ABCBA          ", "ABCBA          ", " AAA           ")
+                    .slice("AAAAAEEEEEEEEEA", "AABAA         A", "AABAAGGGGGGGGGA", "AABAA         A", "AABAAEFFFFFFFFA", "AABAAHHHHHHHHHA", "AABAA          ", "AABAA          ", "AABAA          ", "AABAA          ", "AABAA          ", " AAA           ")
+                    .slice(" AAAEEEEEEEEEEE", " AAAEFFFFFFFFFE", " AQAEFFFFFFFFFE", " AAAEFFFFFFFFFE", " AAAEEEEEEEEEEE", " AAA           ", " AAA           ", " AAA           ", " AAA           ", " AAA           ", " AAA           ", "               ")
                     .where(' ', any())
                     .where('Q', controller(blocks(definition.getBlock())))
                     .where('A', blocks(HIGHLY_FLEXIBLE_REINFORCED_TRINAVINE_CASING.get())

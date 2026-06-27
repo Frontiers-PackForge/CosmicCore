@@ -1,6 +1,8 @@
 package com.ghostipedia.cosmiccore.common.item.behavior;
 
+import com.ghostipedia.cosmiccore.common.data.worldgen.field.OreFieldPlacement;
 import com.ghostipedia.cosmiccore.common.network.CCoreNetwork;
+import com.ghostipedia.cosmiccore.common.network.packet.RevealFieldsPacket;
 import com.ghostipedia.cosmiccore.common.network.packet.SyncPredictedVeinsPacket;
 import com.ghostipedia.cosmiccore.common.worldgen.survey.VeinSurveyUtil;
 import com.ghostipedia.cosmiccore.common.worldgen.survey.VeinSurveyUtil.VeinInfo;
@@ -114,7 +116,8 @@ public class VeinSurveyBehavior implements IInteractionItem, IAddInformation {
     }
 
     @Override
-    public InteractionResultHolder<ItemStack> use(ItemStack item, Level level, Player player, InteractionHand usedHand) {
+    public InteractionResultHolder<ItemStack> use(ItemStack item, Level level, Player player,
+                                                  InteractionHand usedHand) {
         ItemStack stack = player.getItemInHand(usedHand);
 
         if (player.isShiftKeyDown()) {
@@ -185,6 +188,13 @@ public class VeinSurveyBehavior implements IInteractionItem, IAddInformation {
         }
 
         CCoreNetwork.sendToPlayer(player, new SyncPredictedVeinsPacket(allVeins, true));
+
+        List<OreFieldPlacement.OreField> revealFields = OreFieldPlacement.fieldsNear(
+                level.getSeed(), level.dimension(), center.getX(), center.getZ(), radius);
+        if (!revealFields.isEmpty()) {
+            CCoreNetwork.sendToPlayer(player,
+                    RevealFieldsPacket.of(level.dimension(), revealFields, (byte) detailLevel.level));
+        }
     }
 
     private boolean isInCone(BlockPos from, BlockPos to, double facingYaw, int coneAngle) {

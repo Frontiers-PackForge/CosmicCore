@@ -13,8 +13,8 @@ import org.jetbrains.annotations.NotNull;
 public class SyncQuakeMovementPacket implements CustomPacketPayload {
 
     public static final Type<SyncQuakeMovementPacket> TYPE = new Type<>(CosmicCore.id("sync_quake_movement"));
-    public static final StreamCodec<FriendlyByteBuf, SyncQuakeMovementPacket> CODEC =
-            StreamCodec.ofMember(SyncQuakeMovementPacket::encode, SyncQuakeMovementPacket::new);
+    public static final StreamCodec<FriendlyByteBuf, SyncQuakeMovementPacket> CODEC = StreamCodec
+            .ofMember(SyncQuakeMovementPacket::encode, SyncQuakeMovementPacket::new);
 
     private final boolean hasQuakeMovement;
 

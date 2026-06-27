@@ -2,8 +2,8 @@ package com.ghostipedia.cosmiccore.common.machine;
 
 import com.gregtechceu.gtceu.GTCEu;
 import com.gregtechceu.gtceu.api.GTValues;
-import com.gregtechceu.gtceu.api.capability.GTCapabilityHelper;
 import com.gregtechceu.gtceu.api.blockentity.BlockEntityCreationInfo;
+import com.gregtechceu.gtceu.api.capability.GTCapabilityHelper;
 import com.gregtechceu.gtceu.api.machine.TickableSubscription;
 import com.gregtechceu.gtceu.api.machine.TieredEnergyMachine;
 import com.gregtechceu.gtceu.api.machine.trait.NotifiableEnergyContainer;
@@ -46,7 +46,7 @@ public class WirelessChargerMachine extends TieredEnergyMachine {
     public WirelessChargerMachine(BlockEntityCreationInfo holder, int tier) {
         super(holder, tier, m -> {
             long chargeAmount = GTValues.V[tier];
-            return new NotifiableEnergyContainer(m, chargeAmount * 64L, chargeAmount, 4, 0L, 0L) {
+            return new NotifiableEnergyContainer(chargeAmount * 64L, chargeAmount, 4, 0L, 0L) {
 
                 @Override
                 public long getInputAmperage() {

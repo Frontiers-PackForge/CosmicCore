@@ -4,30 +4,35 @@ import com.ghostipedia.cosmiccore.api.data.wireless.WirelessEnergySavedData;
 import com.ghostipedia.cosmiccore.api.machine.multiblock.DimensionalEnergyCapacitor;
 
 import com.gregtechceu.gtceu.api.GTValues;
-import com.gregtechceu.gtceu.api.gui.GuiTextures;
-import com.gregtechceu.gtceu.api.gui.widget.LongInputWidget;
-import com.gregtechceu.gtceu.api.gui.widget.ToggleButtonWidget;
 import com.gregtechceu.gtceu.api.blockentity.BlockEntityCreationInfo;
+import com.gregtechceu.gtceu.api.sync_system.annotations.SaveField;
+import com.gregtechceu.gtceu.api.sync_system.annotations.SyncToClient;
 import com.gregtechceu.gtceu.common.machine.owner.FTBOwner;
 import com.gregtechceu.gtceu.common.machine.owner.MachineOwner;
-
-import com.lowdragmc.lowdraglib.gui.widget.LabelWidget;
-import com.lowdragmc.lowdraglib.gui.widget.TextBoxWidget;
-import com.lowdragmc.lowdraglib.gui.widget.Widget;
-import com.lowdragmc.lowdraglib.gui.widget.WidgetGroup;
-import com.lowdragmc.lowdraglib.syncdata.annotation.DescSynced;
-import com.lowdragmc.lowdraglib.syncdata.annotation.Persisted;
-import com.lowdragmc.lowdraglib.utils.LocalizationUtils;
+import com.gregtechceu.gtceu.common.mui.GTGuiTextures;
+import com.gregtechceu.gtceu.common.mui.GTMuiWidgets;
 
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.Level;
 
+import brachy.modularui.api.drawable.Text;
+import brachy.modularui.factory.PosGuiData;
+import brachy.modularui.screen.ModularPanel;
+import brachy.modularui.screen.UISettings;
+import brachy.modularui.value.BoolValue;
+import brachy.modularui.value.sync.LongSyncValue;
+import brachy.modularui.value.sync.PanelSyncManager;
+import brachy.modularui.widgets.TextWidget;
+import brachy.modularui.widgets.ToggleButton;
+import brachy.modularui.widgets.layout.Flow;
+import brachy.modularui.widgets.textfield.TextFieldWidget;
+import lombok.Getter;
+import lombok.Setter;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.math.BigInteger;
-import java.util.List;
 import java.util.UUID;
 
 public class WirelessDataSensor extends SensorPartMachine {
@@ -35,67 +40,32 @@ public class WirelessDataSensor extends SensorPartMachine {
     private static Level serverLevel;
     private static UUID playerUUID;
     private static UUID wirelessUUID;
-
-
-
     private static final int DEFAULT_MIN_PERCENT = 33;
     private static final int DEFAULT_MAX_PERCENT = 66;
 
-    @Persisted
+    @SaveField
+    @Getter
+    @Setter
     public long minValue, maxValue;
 
-    @Persisted
+    @SaveField
+    @Getter
     private boolean usePercent;
 
-    @Persisted
-    @DescSynced
+    @SaveField
+    @SyncToClient
+    @Getter
+    @Setter
     private boolean isInverted;
 
-    @Persisted
-    @DescSynced
+    @SaveField
+    @SyncToClient
+    @Getter
+    @Setter
     private int signal;
 
-    private LongInputWidget minValueInput;
-    private LongInputWidget maxValueInput;
-
-    public long getMinValue() {
-        return minValue;
-    }
-
-    public void setMinValue(long minValue) {
-        this.minValue = minValue;
-    }
-
-    public long getMaxValue() {
-        return maxValue;
-    }
-
-    public void setMaxValue(long maxValue) {
-        this.maxValue = maxValue;
-    }
-
-    public boolean isUsePercent() {
-        return usePercent;
-    }
-
-    public boolean isInverted() {
-        return isInverted;
-    }
-
-    public void setInverted(boolean inverted) {
-        this.isInverted = inverted;
-    }
-
-    public int getSignal() {
-        return signal;
-    }
-
-    public void setSignal(int signal) {
-        this.signal = signal;
-    }
-
-    public WirelessDataSensor(BlockEntityCreationInfo holder) {
-        super(holder, GTValues.EV);
+    public WirelessDataSensor(BlockEntityCreationInfo info) {
+        super(info, GTValues.EV);
         this.minValue = DEFAULT_MIN_PERCENT;
         this.maxValue = DEFAULT_MAX_PERCENT;
         this.usePercent = true;
@@ -110,7 +80,7 @@ public class WirelessDataSensor extends SensorPartMachine {
         if (wirelessUUID == null) {
             var owner = this.getOwner();
             if (owner == null) return 0;
-            var team = MachineOwner.getOwner(owner.getPlayerUUID()) instanceof FTBOwner ftbOwner ? ftbOwner.getTeam() : null;
+            var team = ((FTBOwner) MachineOwner.getOwner(owner.getPlayerUUID())).getTeam();
             wirelessUUID = team != null ? team.getTeamId() : playerUUID;
         }
         if (side == getFrontFacing().getOpposite()) {
@@ -139,8 +109,8 @@ public class WirelessDataSensor extends SensorPartMachine {
     }
 
     @Override
-    public void updateSignal() {
-        super.updateSignal();
+    protected void updateSignal() {
+        // No-op - signal is computed on demand in getOutputSignal
     }
 
     @Override
@@ -150,29 +120,36 @@ public class WirelessDataSensor extends SensorPartMachine {
     }
 
     @Override
-    public Widget createUIWidget() {
-        WidgetGroup group = new WidgetGroup(0, 0, 176, 105);
-        group.addWidget(new LabelWidget(10, 5, "cover.advanced_energy_detector.label"));
+    public ModularPanel buildUI(PosGuiData data, PanelSyncManager syncManager, UISettings settings) {
+        var panel = ModularPanel.defaultPanel(getDefinition().getId().getPath(), 176, 120);
+        panel.child(GTMuiWidgets.createTitleBar(this.getDefinition(), 176));
 
-        group.addWidget(new TextBoxWidget(10, 55, 25,
-                List.of(LocalizationUtils.format("cover.advanced_energy_detector.min"))));
+        panel.child(Flow.column()
+                .coverChildren()
+                .padding(8)
+                .top(14)
+                .left(8)
+                .childPadding(4)
+                .child(new TextWidget<>(Text.lang("cover.advanced_energy_detector.label")))
+                .child(new ToggleButton()
+                        .value(new BoolValue.Dynamic(this::isInverted, this::setInverted))
+                        .background(false, GTGuiTextures.BUTTON_REDSTONE_OFF)
+                        .background(true, GTGuiTextures.BUTTON_REDSTONE_ON)
+                        .tooltipAutoUpdate(true)
+                        .tooltipBuilder(t -> t.addLine(Text.lang("cover.advanced_energy_detector.invert"))))
+                .child(Flow.row().coverChildren().childPadding(4)
+                        .child(new TextWidget<>(Text.lang("cover.advanced_energy_detector.min")))
+                        .child(new TextFieldWidget()
+                                .setNumbersLong(() -> 0L, () -> 100L)
+                                .value(new LongSyncValue(this::getMinValue, this::setMinValue))
+                                .size(100, 18)))
+                .child(Flow.row().coverChildren().childPadding(4)
+                        .child(new TextWidget<>(Text.lang("cover.advanced_energy_detector.max")))
+                        .child(new TextFieldWidget()
+                                .setNumbersLong(() -> 0L, () -> 100L)
+                                .value(new LongSyncValue(this::getMaxValue, this::setMaxValue))
+                                .size(100, 18))));
 
-        group.addWidget(new TextBoxWidget(10, 80, 25,
-                List.of(LocalizationUtils.format("cover.advanced_energy_detector.max"))));
-
-        minValueInput = new LongInputWidget(40, 50, 176 - 40 - 10, 20, this::getMinValue, this::setMinValue);
-        maxValueInput = new LongInputWidget(40, 75, 176 - 40 - 10, 20, this::getMaxValue, this::setMaxValue);
-        minValueInput.setMin(0L).setMax(100L);
-        maxValueInput.setMin(0L).setMax(100L);
-        group.addWidget(minValueInput);
-        group.addWidget(maxValueInput);
-
-        // Invert Redstone Output Toggle:
-        group.addWidget(new ToggleButtonWidget(
-                9, 20, 20, 20,
-                GuiTextures.INVERT_REDSTONE_BUTTON, this::isInverted, this::setInverted)
-                .isMultiLang()
-                .setTooltipText("cover.advanced_energy_detector.invert"));
-        return group;
+        return panel;
     }
 }

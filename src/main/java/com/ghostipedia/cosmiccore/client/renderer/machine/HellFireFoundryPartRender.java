@@ -8,7 +8,7 @@ import com.gregtechceu.gtceu.api.machine.multiblock.WorkableElectricMultiblockMa
 import com.gregtechceu.gtceu.client.model.machine.IControllerModelRenderer;
 import com.gregtechceu.gtceu.client.renderer.machine.DynamicRender;
 import com.gregtechceu.gtceu.client.renderer.machine.DynamicRenderType;
-import com.gregtechceu.gtceu.client.util.ModelUtils;
+import com.gregtechceu.gtceu.client.util.ModelEventHelper;
 
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.client.renderer.MultiBufferSource;
@@ -28,6 +28,7 @@ import com.klikli_dev.occultism.registry.OccultismBlocks;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import lombok.Getter;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
@@ -48,20 +49,20 @@ public class HellFireFoundryPartRender extends
     // spotless:on
 
     private final BlockState iesniumBlock;
+    @Getter
     private final BlockState casing;
     private BakedModel iesniumBlockModel;
     private BakedModel casingModel;
 
-    public BlockState getCasing() {
-        return casing;
-    }
-
     public HellFireFoundryPartRender(BlockState casing) {
         this.iesniumBlock = OccultismBlocks.IESNIUM_BLOCK.get().defaultBlockState();
         this.casing = casing;
-        ModelUtils.registerBakeEventListener(true, event -> {
-            this.iesniumBlockModel = event.getModels().get(BlockModelShaper.stateToModelLocation(this.iesniumBlock));
-            this.casingModel = event.getModels().get(BlockModelShaper.stateToModelLocation(this.casing));
+        var iesniumModelLoc = BlockModelShaper.stateToModelLocation(this.iesniumBlock);
+        var casingModelLoc = BlockModelShaper.stateToModelLocation(this.casing);
+        ModelEventHelper.registerBakeEventListener(true, (rl, baked, rootModel, modelBakery) -> {
+            if (rl.equals(iesniumModelLoc)) this.iesniumBlockModel = baked;
+            else if (rl.equals(casingModelLoc)) this.casingModel = baked;
+            return baked;
         });
     }
 

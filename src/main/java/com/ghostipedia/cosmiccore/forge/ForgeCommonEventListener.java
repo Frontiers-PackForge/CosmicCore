@@ -12,6 +12,7 @@ import com.ghostipedia.cosmiccore.common.item.armor.boots.ICosmicBoots;
 import com.ghostipedia.cosmiccore.common.item.behavior.EffectApplicationBehavior;
 import com.ghostipedia.cosmiccore.common.reflection.ReflectionCommand;
 import com.ghostipedia.cosmiccore.common.reflection.ReflectionCommands;
+import com.ghostipedia.cosmiccore.common.reflection.ReflectionConstants;
 import com.ghostipedia.cosmiccore.mixin.accessor.LivingEntityAccessor;
 
 import com.gregtechceu.gtceu.api.capability.GTCapabilityHelper;
@@ -25,6 +26,9 @@ import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import net.neoforged.bus.api.EventPriority;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.RegisterCommandsEvent;
 import net.neoforged.neoforge.event.entity.living.LivingDeathEvent;
 import net.neoforged.neoforge.event.entity.living.LivingEquipmentChangeEvent;
@@ -32,9 +36,6 @@ import net.neoforged.neoforge.event.entity.living.LivingEvent;
 import net.neoforged.neoforge.event.entity.living.LivingFallEvent;
 import net.neoforged.neoforge.event.entity.living.LivingIncomingDamageEvent;
 import net.neoforged.neoforge.event.tick.PlayerTickEvent;
-import net.neoforged.bus.api.EventPriority;
-import net.neoforged.bus.api.SubscribeEvent;
-import net.neoforged.fml.common.EventBusSubscriber;
 
 import static com.ghostipedia.cosmiccore.common.item.armor.ChestSanguineWarptechSuite.SANGUINE_SHIELD_NBT_KEY;
 
@@ -101,8 +102,10 @@ public class ForgeCommonEventListener {
     public static void registerCommand(RegisterCommandsEvent event) {
         WirelessEnergyCommand.register(event.getDispatcher(), event.getBuildContext());
         SoulCommand.register(event.getDispatcher(), event.getBuildContext());
-        ReflectionCommand.register(event.getDispatcher());
-        ReflectionCommands.register(event.getDispatcher());
+        if (ReflectionConstants.ENABLED) {
+            ReflectionCommand.register(event.getDispatcher());
+            ReflectionCommands.register(event.getDispatcher());
+        }
         VeinSurveyCommand.register(event.getDispatcher());
         ExportRegistryCommand.register(event.getDispatcher());
         StarLadderCommand.register(event.getDispatcher());

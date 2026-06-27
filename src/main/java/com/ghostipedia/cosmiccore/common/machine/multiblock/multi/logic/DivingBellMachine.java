@@ -1,8 +1,6 @@
 package com.ghostipedia.cosmiccore.common.machine.multiblock.multi.logic;
 
-import java.util.Optional;
 import com.ghostipedia.cosmiccore.common.data.CosmicAttachmentTypes;
-
 import com.ghostipedia.cosmiccore.common.data.CosmicBlocks;
 import com.ghostipedia.cosmiccore.common.teleporter.LandingZoneHelper;
 import com.ghostipedia.cosmiccore.common.teleporter.SafeTeleporter;
@@ -13,6 +11,7 @@ import com.gregtechceu.gtceu.api.machine.TickableSubscription;
 import com.gregtechceu.gtceu.api.machine.multiblock.WorkableElectricMultiblockMachine;
 
 import com.lowdragmc.lowdraglib.syncdata.annotation.Persisted;
+
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
@@ -23,9 +22,8 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.phys.AABB;
 
-import org.jetbrains.annotations.NotNull;
-
 import java.util.List;
+import java.util.Optional;
 
 /**
  * Diving Bell Machine Controller
@@ -36,7 +34,6 @@ import java.util.List;
  * - Only teleports one player per activation
  */
 public class DivingBellMachine extends WorkableElectricMultiblockMachine {
-
 
     // Configuration values
     private static final int TELEPORT_COST_EU = 500000; // 500k EU per teleport
@@ -56,17 +53,16 @@ public class DivingBellMachine extends WorkableElectricMultiblockMachine {
         super(holder);
     }
 
-
     @Override
-    public void onStructureFormed() {
-        super.onStructureFormed();
+    public void formStructure(@org.jetbrains.annotations.NotNull String substructureName) {
+        super.formStructure(substructureName);
         // Subscribe to server ticks when structure forms
         tickSubscription = subscribeServerTick(tickSubscription, this::checkForPlayers);
     }
 
     @Override
-    public void onStructureInvalid() {
-        super.onStructureInvalid();
+    public void invalidateStructure(String substructureName) {
+        super.invalidateStructure(substructureName);
         // Unsubscribe when structure breaks
         if (tickSubscription != null) {
             tickSubscription.unsubscribe();

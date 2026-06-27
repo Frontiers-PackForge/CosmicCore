@@ -8,11 +8,15 @@ import com.gregtechceu.gtceu.api.GTValues;
 import com.gregtechceu.gtceu.api.data.chemical.material.Material;
 import com.gregtechceu.gtceu.api.data.chemical.material.info.MaterialIconSet;
 import com.gregtechceu.gtceu.api.data.chemical.material.properties.BlastProperty;
+import com.gregtechceu.gtceu.api.data.chemical.material.properties.FluidProperty;
 import com.gregtechceu.gtceu.api.data.chemical.material.properties.PropertyKey;
 import com.gregtechceu.gtceu.api.data.chemical.material.properties.ToolProperty;
 import com.gregtechceu.gtceu.api.fluids.FluidBuilder;
 import com.gregtechceu.gtceu.api.fluids.FluidState;
+import com.gregtechceu.gtceu.api.fluids.store.FluidStorageKey;
 import com.gregtechceu.gtceu.api.fluids.store.FluidStorageKeys;
+import com.gregtechceu.gtceu.api.registry.GTRegistries;
+import com.gregtechceu.gtceu.api.registry.registrate.GTRegistrate;
 
 import static com.ghostipedia.cosmiccore.common.data.materials.CosmicMaterialSet.MAGIC;
 import static com.gregtechceu.gtceu.api.data.chemical.material.info.MaterialFlags.*;
@@ -627,6 +631,31 @@ public class CosmicMaterials {
                 .dust()
                 .color(0x36E3C3).secondaryColor(0x111827).iconSet(MaterialIconSet.DIAMOND)
                 .buildAndRegister();
+
+        // TODO(cosmiccore): re-add a PLASMA fluid to Chlorine. In GTCEu 8.0 CC cannot do this via
+        // enqueueRegistration at all: GTCEu both creates materials (initMaterials) AND freezes every material's
+        // fluid storage (GTFluids.init -> registered=true) inside its OWN single RegisterEvent handler, which
+        // runs before CC's RegisterEvent and before PostMaterialEvent - so by ANY CC hook Chlorine's storage is
+        // already frozen ("Cannot enqueue a builder after registration"). Needs a different path (a standalone
+        // plasma fluid, or a GTCEu-side material-modification mechanism). Removed for now to let the client boot.
+    }
+
+    /**
+     * GTCEu's GTFluids.init() runs inside GTCEu's own RegisterEvent handler, which fires BEFORE CosmicCore's,
+     * so it never sees CC's materials - their .liquid()/.gas() builders stay enqueued and never get registered,
+     * leaving getFluid() == minecraft:empty. That makes GTCEu's decomposition recipe generator throw
+     * (SingleFluidIngredient must not be constructed with minecraft:empty) at world load. So we register CC's
+     * material fluids ourselves here, exactly as GTFluids.init does, scoped to cosmiccore materials. Call this
+     * AFTER all CC materials are registered.
+     */
+    public static void registerMaterialFluids() {
+        for (Material material : GTRegistries.MATERIALS) {
+            if (!CosmicCore.MOD_ID.equals(material.getModid())) continue;
+            FluidProperty fluidProperty = material.getProperty(PropertyKey.FLUID);
+            if (fluidProperty != null) {
+                fluidProperty.registerFluids(material, GTRegistrate.createIgnoringListenerErrors(CosmicCore.MOD_ID));
+            }
+        }
     }
 
     public static void modifyMaterials() {
@@ -656,7 +685,50 @@ public class CosmicMaterials {
         Neutronium.setMaterialIconSet(CCoreMaterialIconSet.VIBRANIUM_NEUTRONIUM);
         Neutronium.addFlags(NO_SMELTING, NO_ORE_SMELTING);
         Neutronium.setProperty(PropertyKey.BLAST, new BlastProperty(15000));
-        Chlorine.getProperty(PropertyKey.FLUID).getStorage().enqueueRegistration(FluidStorageKeys.PLASMA,
-                new FluidBuilder().state(FluidState.PLASMA));
+
+        addPeriodicTableFluids();
+    }
+
+    /**
+     * Pack KubeJS (Periodic_table.js) used to enqueue these fluids onto stock GTCEu materials, but GTCEu 8.0 freezes
+     * every material's fluid storage during GTFluids#init - before any KubeJS material hook runs - so the enqueue threw
+     * "Cannot enqueue a builder after registration". PostMaterialEvent (this method's caller) is the pre-freeze window
+     * GTCEu itself uses for the same purpose (see AlloyBlastPropertyAddition), so the additions live here instead.
+     */
+    private static void addPeriodicTableFluids() {
+        for (Material material : new Material[] { Gold, Europium, Copper, Aluminium, Tritanium }) {
+            enqueueFluid(material, FluidStorageKeys.PLASMA, new FluidBuilder().state(FluidState.PLASMA));
+        }
+        for (Material material : new Material[] { Naquadah, NaquadahEnriched, Naquadria }) {
+            enqueueFluid(material, FluidStorageKeys.MOLTEN, new FluidBuilder().state(FluidState.LIQUID));
+        }
+        for (Material material : new Material[] { Agar, Scandium, Strontium, Caesium, Francium, Radium, Actinium,
+                Zirconium, Hafnium, Technetium, Rhenium, Bohrium, Rubidium, Rutherfordium, Dubnium, Seaborgium, Hassium,
+                Praseodymium, Protactinium, Promethium, Neptunium, Meitnerium, Roentgenium, Copernicium, Thallium,
+                Nihonium, Flerovium, Moscovium, Gadolinium, Curium, Terbium, Berkelium, Dysprosium, Californium,
+                Einsteinium, Fermium, Mendelevium, Nobelium, Lawrencium, Holmium, Erbium, Thulium, Ytterbium, Germanium,
+                Livermorium, Tennessine, Oganesson, Polonium, Astatine, Tellurium, Selenium, Salt }) {
+            enqueueFluid(material, FluidStorageKeys.LIQUID, new FluidBuilder());
+        }
+    }
+
+    private static void enqueueFluid(Material material, FluidStorageKey key, FluidBuilder builder) {
+        FluidProperty existing = material.getProperty(PropertyKey.FLUID);
+        if (existing != null) {
+            try {
+                existing.enqueueRegistration(key, builder);
+            } catch (RuntimeException alreadyRegisteredOrQueued) {
+                CosmicCore.LOGGER.debug("Skipping {} fluid for {} (already provided/frozen by GTCEu)", key, material);
+            }
+            return;
+        }
+        FluidProperty created = new FluidProperty();
+        try {
+            created.enqueueRegistration(key, builder);
+        } catch (RuntimeException cannotEnqueue) {
+            CosmicCore.LOGGER.debug("Skipping {} fluid for {} (could not enqueue)", key, material);
+            return;
+        }
+        material.setProperty(PropertyKey.FLUID, created);
     }
 }
