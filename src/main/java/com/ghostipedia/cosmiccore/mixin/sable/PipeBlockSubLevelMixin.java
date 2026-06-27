@@ -1,5 +1,9 @@
 package com.ghostipedia.cosmiccore.mixin.sable;
 
+import com.ghostipedia.cosmiccore.CosmicCore;
+import com.ghostipedia.cosmiccore.integration.sable.SableAssemblyRotation;
+import com.ghostipedia.cosmiccore.integration.sable.SableAssemblyRotationHolder;
+
 import com.gregtechceu.gtceu.api.block.PipeBlock;
 import com.gregtechceu.gtceu.api.blockentity.PipeBlockEntity;
 import com.gregtechceu.gtceu.api.pipenet.LevelPipeNet;
@@ -29,6 +33,13 @@ public abstract class PipeBlockSubLevelMixin implements BlockSubLevelAssemblyLis
             tick(state, resultingLevel, newPos, resultingLevel.getRandom());
         }
         if (resultingLevel.getBlockEntity(newPos) instanceof PipeBlockEntity<?, ?> pipe) {
+            try {
+                SableAssemblyRotation.rotatePipe(pipe, SableAssemblyRotationHolder.current(),
+                        resultingLevel.registryAccess());
+            } catch (Throwable t) {
+                CosmicCore.LOGGER.error("Failed to rotate pipe connections/covers during Sable assembly at {}",
+                        newPos, t);
+            }
             pipe.getSyncDataHolder().resyncAllFields();
             pipe.scheduleRenderUpdate();
         }

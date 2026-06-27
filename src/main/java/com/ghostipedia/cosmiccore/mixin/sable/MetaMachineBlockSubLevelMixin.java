@@ -1,5 +1,9 @@
 package com.ghostipedia.cosmiccore.mixin.sable;
 
+import com.ghostipedia.cosmiccore.CosmicCore;
+import com.ghostipedia.cosmiccore.integration.sable.SableAssemblyRotation;
+import com.ghostipedia.cosmiccore.integration.sable.SableAssemblyRotationHolder;
+
 import com.gregtechceu.gtceu.api.block.MetaMachineBlock;
 import com.gregtechceu.gtceu.api.machine.MetaMachine;
 
@@ -17,6 +21,12 @@ public abstract class MetaMachineBlockSubLevelMixin implements BlockSubLevelAsse
     public void afterMove(ServerLevel originLevel, ServerLevel resultingLevel, BlockState state, BlockPos oldPos,
                           BlockPos newPos) {
         if (MetaMachine.getMachine(resultingLevel, newPos) instanceof MetaMachine machine) {
+            try {
+                SableAssemblyRotation.rotateMachine(machine.getCoverContainer(),
+                        SableAssemblyRotationHolder.current(), resultingLevel.registryAccess());
+            } catch (Throwable t) {
+                CosmicCore.LOGGER.error("Failed to rotate machine covers during Sable assembly at {}", newPos, t);
+            }
             machine.getSyncDataHolder().resyncAllFields();
             machine.scheduleRenderUpdate();
         }

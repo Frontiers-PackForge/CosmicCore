@@ -102,7 +102,7 @@ public class NotifiableEmberContainer extends NotifiableRecipeHandlerTrait<Doubl
             if (!simulate) ember = capability.addAmount(Math.min(canInput, ember), true);
             ember -= canInput;
         }
-        return ember <= 0 ? null : Collections.singletonList(ember);
+        return ember <= 0 ? Collections.emptyList() : Collections.singletonList(ember);
     }
 
     @Override
