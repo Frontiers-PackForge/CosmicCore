@@ -89,7 +89,10 @@
     "lso.HeatstrokeEffectMixin",
     "worldgen.CubicSplineMultipointMixin",
     "sable.PipeBlockSubLevelMixin",
+    "sable.PipeCoverContainerSlotAccessor",
+    "sable.MachineCoverContainerSlotAccessor",
     "sable.MachineUIFactorySubLevelRangeMixin",
+    "sable.CoverUIFactorySubLevelRangeMixin",
     "sable.MetaMachineBlockSubLevelMixin",
     "sable.SubLevelAssemblyHelperRotationCaptureMixin"
   ],
