@@ -48,7 +48,8 @@
     "gtfix.QuantumChestUpwardFacingCrashFixMixin",
     "gtfix.SchemaWidgetZoomMixin",
     "gtfix.SchemaWidgetPanMixin",
-    "gtfix.DummyChunkSourceThreadSafeMixin"
+    "gtfix.DummyChunkSourceThreadSafeMixin",
+    "sable.BlockHighlightSubLevelMixin"
   ],
   "mixins": [
     "BlockPatternMixin",
@@ -89,7 +90,8 @@
     "worldgen.CubicSplineMultipointMixin",
     "sable.PipeBlockSubLevelMixin",
     "sable.MachineUIFactorySubLevelRangeMixin",
-    "sable.MetaMachineBlockSubLevelMixin"
+    "sable.MetaMachineBlockSubLevelMixin",
+    "sable.SubLevelAssemblyHelperRotationCaptureMixin"
   ],
   "injectors": {
     "defaultRequire": 1,
