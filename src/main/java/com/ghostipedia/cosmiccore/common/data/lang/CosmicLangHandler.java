@@ -538,6 +538,9 @@ public class CosmicLangHandler extends LangHandler {
         // embers lang
         provider.add("cosmiccore.ember.capacity", "§cEmber Capacity:§6 %s");
         provider.add("cosmiccore.ember.transfer", "§cEmber Transfer Rate:§6 %s");
+        provider.add("cosmiccore.jade.ember", "Ember: %s/%s");
+        provider.add("cosmiccore.jade.ember.volatile", "Accepts Volatile Ember");
+        provider.add("cosmiccore.jade.ember.transfer", "Transfer: %s");
 
         multiLang(provider, "item.cosmiccore.the_one_ring.tooltip",
                 "§6§oOne Ring to rule them all, One Ring to find them, One Ring to bring them all and in the darkness bind them.§r",

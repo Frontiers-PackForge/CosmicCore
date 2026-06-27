@@ -6,6 +6,7 @@ import com.ghostipedia.cosmiccore.api.data.CosmicTagPrefix;
 import com.ghostipedia.cosmiccore.api.item.LinkedTerminalBehavior;
 import com.ghostipedia.cosmiccore.api.pattern.CosmicPredicates;
 import com.ghostipedia.cosmiccore.api.recipe.ingredient.SoulIngredient;
+import com.ghostipedia.cosmiccore.api.recipe.lookup.MapEmberIngredient;
 import com.ghostipedia.cosmiccore.api.recipe.lookup.MapSoulIngredient;
 import com.ghostipedia.cosmiccore.api.registries.CosmicRegistration;
 import com.ghostipedia.cosmiccore.client.CosmicCoreClient;
@@ -22,6 +23,7 @@ import com.ghostipedia.cosmiccore.common.mob.DimensionMobScaling;
 import com.ghostipedia.cosmiccore.common.network.CCoreNetwork;
 import com.ghostipedia.cosmiccore.common.recipe.condition.CosmicConditions;
 import com.ghostipedia.cosmiccore.common.reflection.bargain.CosmicBargains;
+import com.ghostipedia.cosmiccore.ember.CosmicEmberCapabilities;
 import com.ghostipedia.cosmiccore.gtbridge.CosmicRecipeTypes;
 
 import com.gregtechceu.gtceu.api.GTCEuAPI;
@@ -40,6 +42,7 @@ import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.neoforged.fml.event.lifecycle.FMLLoadCompleteEvent;
+import net.neoforged.neoforge.capabilities.RegisterCapabilitiesEvent;
 import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent;
 import net.neoforged.neoforge.registries.RegisterEvent;
 
@@ -110,6 +113,7 @@ public class CosmicCore {
     public void commonSetup(FMLCommonSetupEvent event) {
         event.enqueueWork(() -> {
             MapIngredientTypeManager.registerMapIngredient(SoulIngredient.class, MapSoulIngredient::from);
+            MapIngredientTypeManager.registerMapIngredient(Double.class, MapEmberIngredient::convertToMapIngredient);
             GridLinkables.register(CosmicItems.LINKED_TERMINAL, LinkedTerminalBehavior.handler);
             OxygenRules.registerAirRanges();
             DimensionMobScaling.registerScaling();
@@ -131,5 +135,10 @@ public class CosmicCore {
     @SubscribeEvent
     public void registerPayloads(RegisterPayloadHandlersEvent event) {
         CCoreNetwork.registerPayloads(event);
+    }
+
+    @SubscribeEvent
+    public void registerCapabilities(RegisterCapabilitiesEvent event) {
+        CosmicEmberCapabilities.register(event);
     }
 }

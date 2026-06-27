@@ -1,5 +1,5 @@
 {
-    "loader": "forge:obj",
+    "loader": "neoforge:obj",
     "model": "cosmiccore:models/block/iris/the_ring.obj",
     "textures": {
       "texture0": "cosmiccore:block/iris/the_ring",
