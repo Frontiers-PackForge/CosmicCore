@@ -1,0 +1,50 @@
+{
+    "parent": "minecraft:block/block",
+    "loader": "gtceu:machine",
+    "machine": "cosmiccore:industrial_ore_sorter",
+    "texture_overrides": {
+        "all": "cosmiccore:block/casings/solid/lightweight_dark_steel_casing"
+    },
+    "variants": {
+        "recipe_logic_status=idle": {
+            "model": {
+                "parent": "gtceu:block/machine/template/cube_all/sided",
+                "textures": {
+                    "all": "cosmiccore:block/casings/solid/lightweight_dark_steel_casing",
+                    "overlay_front": "cosmiccore:block/multiblock/wireless_data_transmitter/overlay_front",
+                    "overlay_front_emissive": "cosmiccore:block/multiblock/wireless_data_transmitter/overlay_front_emissive"
+                }
+            }
+        },
+        "recipe_logic_status=suspend": {
+            "model": {
+                "parent": "gtceu:block/machine/template/cube_all/sided",
+                "textures": {
+                    "all": "cosmiccore:block/casings/solid/lightweight_dark_steel_casing",
+                    "overlay_front": "cosmiccore:block/multiblock/wireless_data_transmitter/overlay_front_paused",
+                    "overlay_front_emissive": "cosmiccore:block/multiblock/wireless_data_transmitter/overlay_front_paused_emissive"
+                }
+            }
+        },
+        "recipe_logic_status=waiting": {
+            "model": {
+                "parent": "gtceu:block/machine/template/cube_all/sided",
+                "textures": {
+                    "all": "cosmiccore:block/casings/solid/lightweight_dark_steel_casing",
+                    "overlay_front": "cosmiccore:block/multiblock/wireless_data_transmitter/overlay_front_active",
+                    "overlay_front_emissive": "cosmiccore:block/multiblock/wireless_data_transmitter/overlay_front_active_emissive"
+                }
+            }
+        },
+        "recipe_logic_status=working": {
+            "model": {
+                "parent": "gtceu:block/machine/template/cube_all/sided",
+                "textures": {
+                    "all": "cosmiccore:block/casings/solid/lightweight_dark_steel_casing",
+                    "overlay_front": "cosmiccore:block/multiblock/wireless_data_transmitter/overlay_front_active",
+                    "overlay_front_emissive": "cosmiccore:block/multiblock/wireless_data_transmitter/overlay_front_active_emissive"
+                }
+            }
+        }
+    }
+}

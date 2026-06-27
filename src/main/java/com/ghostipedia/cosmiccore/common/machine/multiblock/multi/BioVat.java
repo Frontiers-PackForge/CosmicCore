@@ -10,12 +10,13 @@ import com.gregtechceu.gtceu.api.data.RotationState;
 import com.gregtechceu.gtceu.api.machine.MultiblockMachineDefinition;
 import com.gregtechceu.gtceu.api.machine.multiblock.PartAbility;
 import com.gregtechceu.gtceu.api.machine.multiblock.WorkableElectricMultiblockMachine;
-import com.gregtechceu.gtceu.api.pattern.FactoryBlockPattern;
-import com.gregtechceu.gtceu.api.pattern.Predicates;
+import com.gregtechceu.gtceu.api.multiblock.Predicates;
+import com.gregtechceu.gtceu.api.multiblock.pattern.MultiblockPatternBuilder;
+import com.gregtechceu.gtceu.api.multiblock.util.RelativeDirection;
 
 import static com.ghostipedia.cosmiccore.api.registries.CosmicRegistration.REGISTRATE;
 import static com.ghostipedia.cosmiccore.common.data.CosmicBlocks.*;
-import static com.gregtechceu.gtceu.api.pattern.Predicates.*;
+import static com.gregtechceu.gtceu.api.multiblock.Predicates.*;
 import static com.gregtechceu.gtceu.common.data.models.GTMachineModels.createWorkableCasingMachineModel;
 
 public class BioVat {
@@ -25,14 +26,15 @@ public class BioVat {
             .rotationState(RotationState.NON_Y_AXIS)
             .recipeType(CosmicRecipeTypes.BIOVAT)
             .appearanceBlock(REINFORCED_NAQUADRIA_CASING)
-            .pattern(definition -> FactoryBlockPattern.start()
-                    .aisle("AAAAA", "CCCCC", "CCCCC", "AAAAA")
-                    .aisle("AAAAA", "C   C", "C   C", "ADDDA")
-                    .aisle("AAAAA", "C   C", "C   C", "ADDDA")
-                    .aisle("AAAAA", "C   C", "C   C", "ADDDA")
-                    .aisle("AAQAA", "CCCCC", "CCCCC", "AAAAA")
+            .pattern(definition -> MultiblockPatternBuilder
+                    .start(RelativeDirection.FRONT, RelativeDirection.UP, RelativeDirection.LEFT)
+                    .slice("AAAAA", "CCCCC", "CCCCC", "AAAAA")
+                    .slice("AAAAA", "C   C", "C   C", "ADDDA")
+                    .slice("AAAAA", "C   C", "C   C", "ADDDA")
+                    .slice("AAAAA", "C   C", "C   C", "ADDDA")
+                    .slice("AAQAA", "CCCCC", "CCCCC", "AAAAA")
                     .where(' ', any())
-                    .where("Q", controller(blocks(definition.getBlock())))
+                    .where('Q', controller(blocks(definition.getBlock())))
                     .where('C', blocks(ZBLAN_REINFORCED_GLASS.get()))
                     .where('D', blocks(RADIOACTIVE_FILTER_CASING.get()))
                     .where('A', blocks(REINFORCED_NAQUADRIA_CASING.get())

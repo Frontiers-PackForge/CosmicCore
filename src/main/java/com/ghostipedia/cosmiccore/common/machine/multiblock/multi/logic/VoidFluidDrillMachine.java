@@ -1,12 +1,11 @@
 package com.ghostipedia.cosmiccore.common.machine.multiblock.multi.logic;
 
 import com.gregtechceu.gtceu.api.GTValues;
+import com.gregtechceu.gtceu.api.blockentity.BlockEntityCreationInfo;
 import com.gregtechceu.gtceu.api.capability.IEnergyContainer;
 import com.gregtechceu.gtceu.api.capability.recipe.EURecipeCapability;
 import com.gregtechceu.gtceu.api.capability.recipe.IO;
-import com.gregtechceu.gtceu.api.blockentity.BlockEntityCreationInfo;
 import com.gregtechceu.gtceu.api.machine.multiblock.WorkableElectricMultiblockMachine;
-import com.gregtechceu.gtceu.api.machine.trait.RecipeLogic;
 import com.gregtechceu.gtceu.api.misc.EnergyContainerList;
 import com.gregtechceu.gtceu.common.machine.trait.FluidDrillLogic;
 import com.gregtechceu.gtceu.utils.FormattingUtil;
@@ -25,7 +24,7 @@ import java.util.List;
 public class VoidFluidDrillMachine extends WorkableElectricMultiblockMachine {
 
     public VoidFluidDrillMachine(BlockEntityCreationInfo holder) {
-        super(holder, m -> new VoidFluidDrillLogic((VoidFluidDrillMachine) m));
+        super(holder, new VoidFluidDrillLogic());
     }
 
     @NotNull
@@ -43,7 +42,6 @@ public class VoidFluidDrillMachine extends WorkableElectricMultiblockMachine {
         return Math.min(this.tier + 1, Math.max(this.tier, GTUtil.getFloorTierByVoltage(energyCont.getInputVoltage())));
     }
 
-    @Override
     public void addDisplayText(List<Component> textList) {
         if (isFormed()) {
             int energyContainer = getEnergyTier();

@@ -38,7 +38,7 @@ public abstract class QuakeMovementMixin {
             return;
         }
 
-        if (!QuakeMovementHandler.getClientHasQuakeMovement()) {
+        if (!QuakeMovementHandler.isWearingGlobetrotters(player)) {
             cosmiccore$preTravelVelocity = null;
             return;
         }

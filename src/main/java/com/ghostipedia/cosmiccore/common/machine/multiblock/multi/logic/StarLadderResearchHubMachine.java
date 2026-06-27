@@ -2,24 +2,20 @@ package com.ghostipedia.cosmiccore.common.machine.multiblock.multi.logic;
 
 import com.ghostipedia.cosmiccore.api.capability.ILinkedMultiblock;
 import com.ghostipedia.cosmiccore.api.machine.multiblock.LinkedWorkableElectricMultiblockMachine;
-import com.ghostipedia.cosmiccore.client.gui.widget.starladder.StarLadderFancyUIWidget;
-import com.ghostipedia.cosmiccore.client.gui.widget.starladder.StarLadderResearchHubWidget;
 import com.ghostipedia.cosmiccore.client.renderer.RingUpgradePreviewRenderer;
 import com.ghostipedia.cosmiccore.common.machine.multiblock.LinkedMultiblockHelper;
 import com.ghostipedia.cosmiccore.common.machine.multiblock.multi.StarLadderResearchHub;
 
 import com.gregtechceu.gtceu.api.blockentity.BlockEntityCreationInfo;
-import com.gregtechceu.gtceu.api.pattern.BlockPattern;
+import com.gregtechceu.gtceu.api.multiblock.pattern.BlockPattern;
 import com.gregtechceu.gtceu.utils.ExtendedUseOnContext;
 
-import com.lowdragmc.lowdraglib.gui.modular.ModularUI;
-import com.lowdragmc.lowdraglib.gui.widget.Widget;
 import com.lowdragmc.lowdraglib.syncdata.annotation.DescSynced;
 import com.lowdragmc.lowdraglib.syncdata.annotation.Persisted;
 import com.lowdragmc.lowdraglib.syncdata.annotation.UpdateListener;
+
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Direction;
 import net.minecraft.core.GlobalPos;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
@@ -27,25 +23,20 @@ import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
-import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.SoundType;
-import net.minecraft.world.phys.BlockHitResult;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
-
-import lombok.Getter;
 
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
 public class StarLadderResearchHubMachine extends LinkedWorkableElectricMultiblockMachine {
-
 
     private static final ResourceKey<Level> REQUIRED_DIMENSION = ResourceKey.create(
             Registries.DIMENSION, ResourceLocation.fromNamespaceAndPath("ad_astra", "earth_orbit"));
@@ -129,7 +120,8 @@ public class StarLadderResearchHubMachine extends LinkedWorkableElectricMultiblo
 
     public Map<BlockPos, net.minecraft.world.level.block.Block> getNextRingPositionsWithBlocks() {
         if (!canUpgrade()) return Map.of();
-        return RingUpgradePreviewRenderer.calculateRingPositionsWithBlocks(getBlockPos(), getFrontFacing(), ringTier + 1);
+        return RingUpgradePreviewRenderer.calculateRingPositionsWithBlocks(getBlockPos(), getFrontFacing(),
+                ringTier + 1);
     }
 
     public int autoBuildNextRing(Player player) {
@@ -231,12 +223,12 @@ public class StarLadderResearchHubMachine extends LinkedWorkableElectricMultiblo
         return RingUpgradePreviewRenderer.getDeltaBlockCounts(ringTier);
     }
 
-
     @Override
-    public void onStructureFormed() {
-        super.onStructureFormed();
+    public void formStructure(@org.jetbrains.annotations.NotNull String substructureName) {
+        super.formStructure(substructureName);
 
-        // Use the tier from the pattern that matched during checkPattern()
+        // 8.0.0: re-derive the matched tier here (was done in the old checkPattern() override).
+        detectTier();
         this.ringTier = Math.max(0, lastMatchedTier);
         this.partialRingIndex = 0; // No partial rings with strict pattern matching
 
@@ -247,8 +239,8 @@ public class StarLadderResearchHubMachine extends LinkedWorkableElectricMultiblo
     }
 
     @Override
-    public void onStructureInvalid() {
-        super.onStructureInvalid();
+    public void invalidateStructure(String substructureName) {
+        super.invalidateStructure(substructureName);
         this.ringTier = 0;
         this.partialRingIndex = 0;
         this.ringPreviewEnabled = false;
@@ -358,13 +350,9 @@ public class StarLadderResearchHubMachine extends LinkedWorkableElectricMultiblo
             // Play a completion sound
             getLevel().playSound(null, getBlockPos(), SoundEvents.PLAYER_LEVELUP, SoundSource.BLOCKS, 0.5F, 1.0F);
 
-            // Force structure re-evaluation by invalidating first, then rechecking
-            // This ensures onStructureFormed() is called again with the new tier
-            onStructureInvalid();
-            getMultiblockState().setError(null);
-            if (checkPattern()) {
-                onStructureFormed();
-            }
+            // 8.0.0: re-evaluate structure via the all-in-one checkAndFormStructure (replaces the old
+            // invalidate -> setError(null) -> checkPattern -> onStructureFormed sequence).
+            checkAndFormStructure();
         } else {
             player.displayClientMessage(
                     Component.literal("Placed " + placed + " blocks. ").withStyle(ChatFormatting.YELLOW)
@@ -390,8 +378,9 @@ public class StarLadderResearchHubMachine extends LinkedWorkableElectricMultiblo
 
         if (getLevel() == null) return InteractionResult.PASS;
 
-        Map<BlockPos, net.minecraft.world.level.block.Block> t0Positions = RingUpgradePreviewRenderer.calculateRingPositionsWithBlocks(
-                getBlockPos(), getFrontFacing(), 0);
+        Map<BlockPos, net.minecraft.world.level.block.Block> t0Positions = RingUpgradePreviewRenderer
+                .calculateRingPositionsWithBlocks(
+                        getBlockPos(), getFrontFacing(), 0);
 
         if (t0Positions.isEmpty()) {
             player.displayClientMessage(
@@ -429,11 +418,9 @@ public class StarLadderResearchHubMachine extends LinkedWorkableElectricMultiblo
         getLevel().playSound(null, getBlockPos(), SoundEvents.PLAYER_LEVELUP, SoundSource.BLOCKS, 0.5F, 1.2F);
 
         // Force structure re-evaluation
-        onStructureInvalid();
-        getMultiblockState().setError(null);
-        if (checkPattern()) {
-            onStructureFormed();
-        }
+        // 8.0.0: re-evaluate structure via the all-in-one checkAndFormStructure (replaces the old
+        // invalidate -> setError(null) -> checkPattern -> onStructureFormed sequence).
+        checkAndFormStructure();
 
         return InteractionResult.SUCCESS;
     }
@@ -457,21 +444,16 @@ public class StarLadderResearchHubMachine extends LinkedWorkableElectricMultiblo
         return tierPatterns;
     }
 
-    @Override
-    public boolean checkPattern() {
-        // TODO: Re-enable dimension check after testing
-        // Check dimension requirement
-        // if (getLevel() != null && !getLevel().dimension().equals(REQUIRED_DIMENSION)) {
-        // return false;
-        // }
-
+    // 8.0.0: was an @Override of checkPattern() (removed); now a helper called from formStructure() to
+    // re-derive which tier pattern matched (the old getMatchContext tier-detect), setting lastMatchedTier.
+    private boolean detectTier() {
         // Try each tier pattern from T3 to T0 (highest first)
         // The highest tier that matches determines the structure's tier
-        var state = getMultiblockState();
+        var state = getDefaultPatternState();
 
         for (int tier = 3; tier >= 0; tier--) {
             BlockPattern pattern = getTierPatterns()[tier];
-            if (pattern.checkPatternAt(state, false)) {
+            if (pattern.checkPatternAt(getLevel(), state, getBlockPos(), getFrontFacing(), getUpwardsFacing(), false)) {
                 lastMatchedTier = tier;
                 return true;
             }
@@ -501,9 +483,7 @@ public class StarLadderResearchHubMachine extends LinkedWorkableElectricMultiblo
         return getPartnerMachine(partner);
     }
 
-    @Override
     public void addDisplayText(List<Component> textList) {
-        super.addDisplayText(textList);
         if (!isFormed()) return;
 
         // Display tier (0-3)
@@ -552,16 +532,6 @@ public class StarLadderResearchHubMachine extends LinkedWorkableElectricMultiblo
                 .withStyle(ChatFormatting.GRAY));
     }
 
-    @Override
-    public Widget createUIWidget() {
-        return new StarLadderResearchHubWidget(() -> this);
-    }
-
-    @Override
-    public ModularUI createUI(Player entityPlayer) {
-        return new ModularUI(StarLadderResearchHubWidget.WIDTH + 16, StarLadderResearchHubWidget.HEIGHT + 70, this,
-                entityPlayer)
-                .widget(new StarLadderFancyUIWidget(this, StarLadderResearchHubWidget.WIDTH + 16,
-                        StarLadderResearchHubWidget.HEIGHT + 70, this::getRingTier));
-    }
+    // TODO(8.0.0 MUI2): createUIWidget/createUI (LDLib UI via StarLadderResearchHubWidget/StarLadderFancyUIWidget)
+    // removed in GTCEu 8.0.0. Rebuild on MUI2 when the StarLadder UI is ported; ringTier/preview state preserved.
 }

@@ -4,19 +4,8 @@ import com.ghostipedia.cosmiccore.api.data.DebugBlockPattern;
 import com.ghostipedia.cosmiccore.utils.ItemData;
 
 import com.gregtechceu.gtceu.GTCEu;
-import com.gregtechceu.gtceu.api.gui.GuiTextures;
 import com.gregtechceu.gtceu.api.item.ComponentItem;
-import com.gregtechceu.gtceu.api.item.component.IItemUIFactory;
-
-import com.lowdragmc.lowdraglib.gui.factory.HeldItemUIFactory;
-import com.lowdragmc.lowdraglib.gui.modular.ModularUI;
-import com.lowdragmc.lowdraglib.gui.texture.GuiTextureGroup;
-import com.lowdragmc.lowdraglib.gui.texture.TextTexture;
-import com.lowdragmc.lowdraglib.gui.widget.ButtonWidget;
-import com.lowdragmc.lowdraglib.gui.widget.ImageWidget;
-import com.lowdragmc.lowdraglib.gui.widget.LabelWidget;
-import com.lowdragmc.lowdraglib.gui.widget.WidgetGroup;
-import com.lowdragmc.lowdraglib.utils.LocalizationUtils;
+import com.gregtechceu.gtceu.api.mui.IItemUIHolder;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -27,14 +16,17 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
 
+import brachy.modularui.factory.PlayerInventoryGuiData;
+import brachy.modularui.screen.ModularPanel;
+import brachy.modularui.screen.UISettings;
+import brachy.modularui.value.sync.PanelSyncManager;
 import com.google.common.base.Joiner;
 
-public class StructureWriteBehavior implements IItemUIFactory {
+public class StructureWriteBehavior implements IItemUIHolder {
 
     public static final StructureWriteBehavior INSTANCE = new StructureWriteBehavior();
 
@@ -42,76 +34,32 @@ public class StructureWriteBehavior implements IItemUIFactory {
         /**/
     }
 
+    // TODO(8.0.0 MUI2): custom UI shelved; default UI used (orig in git).
+    // The original createUI(HeldItemUIFactory.HeldItemHolder, Player) was a full LDLib ModularUI:
+    // - a DISPLAY-backed panel showing the structural scale (1 + max-min on X/Y/Z) and the export
+    // order (DebugBlockPattern.getDir(dir)[0..2] names);
+    // - an "export_to_log" button -> exportLog(...);
+    // - "rotate_along_x_axis" / "rotate_along_y_axis" buttons -> changeDirX(...) / changeDirY(...).
+    // Rebuild those widgets in MUI2 here, wiring the export/rotate helpers below (which retain the
+    // full export-to-log logic). For now we open a minimal default panel.
     @Override
-    public ModularUI createUI(HeldItemUIFactory.HeldItemHolder playerInventoryHolder, Player entityPlayer) {
-        var container = new WidgetGroup(8, 8, 160, 54);
-        container
-                .addWidget(new ImageWidget(4, 4, 152, 46, GuiTextures.DISPLAY))
-                .addWidget(new LabelWidget(7, 7, () -> {
-                    int x = 0;
-                    int y = 0;
-                    int z = 0;
-                    if (getPos(playerInventoryHolder.getHeld()) != null) {
-                        BlockPos[] blockPos = getPos(playerInventoryHolder.getHeld());
-                        if (blockPos != null) {
-                            x = 1 + blockPos[1].getX() - blockPos[0].getX();
-                            y = 1 + blockPos[1].getY() - blockPos[0].getY();
-                            z = 1 + blockPos[1].getZ() - blockPos[0].getZ();
-                        }
-                    }
-                    return LocalizationUtils.format(
-                            "item.cosmiccore.debug.structure_writer.structural_scale", x, y, z);
-                }).setTextColor(0xFAF9F6))
-                .addWidget(new LabelWidget(7, 20, () -> {
-                    var direction = getDir(playerInventoryHolder.getHeld());
-                    var dirs = DebugBlockPattern.getDir(direction);
-                    return LocalizationUtils.format(
-                            "item.cosmiccore.debug.structure_writer.export_order",
-                            dirs[0].name(),
-                            dirs[1].name(),
-                            dirs[2].name());
-                }).setTextColor(0xFAF9F6));
-        container.setBackground(GuiTextures.BACKGROUND_INVERSE);
-        return new ModularUI(176, 120, playerInventoryHolder, entityPlayer)
-                .background(GuiTextures.BACKGROUND)
-                .widget(container)
-                .widget(new ButtonWidget(
-                        9,
-                        68,
-                        158,
-                        20,
-                        new GuiTextureGroup(
-                                GuiTextures.BUTTON,
-                                new TextTexture("item.cosmiccore.debug.structure_writer.export_to_log")),
-                        clickData -> exportLog(playerInventoryHolder)))
-                .widget(new ButtonWidget(
-                        9,
-                        91,
-                        77,
-                        20,
-                        new GuiTextureGroup(
-                                GuiTextures.BUTTON,
-                                new TextTexture("item.cosmiccore.debug.structure_writer.rotate_along_x_axis")),
-                        clickData -> changeDirX(playerInventoryHolder)))
-                .widget(new ButtonWidget(
-                        90,
-                        91,
-                        77,
-                        20,
-                        new GuiTextureGroup(
-                                GuiTextures.BUTTON,
-                                new TextTexture("item.cosmiccore.debug.structure_writer.rotate_along_y_axis")),
-                        clickData -> changeDirY(playerInventoryHolder)));
+    public ModularPanel<?> buildUI(PlayerInventoryGuiData<?> data, PanelSyncManager syncManager, UISettings settings) {
+        return ModularPanel.defaultPanel("structure_writer", 176, 120);
     }
 
-    private void exportLog(HeldItemUIFactory.HeldItemHolder playerInventoryHolder) {
-        if (getPos(playerInventoryHolder.getHeld()) != null &&
-                playerInventoryHolder.getPlayer() instanceof ServerPlayer player) {
-            BlockPos[] blockPos = getPos(playerInventoryHolder.getHeld());
-            Direction direction = getDir(playerInventoryHolder.getHeld());
+    /**
+     * Export-to-log logic (PRESERVED from the pre-8.0.0 createUI button). Builds the multiblock
+     * .slice(...) lines + a character->block legend and dumps them to the log. Retyped to take the
+     * held stack + player directly now that LDLib's HeldItemUIFactory.HeldItemHolder is gone; a future
+     * MUI2 panel button should call this.
+     */
+    private void exportLog(ItemStack heldStack, Player heldPlayer) {
+        if (getPos(heldStack) != null && heldPlayer instanceof ServerPlayer player) {
+            BlockPos[] blockPos = getPos(heldStack);
+            Direction direction = getDir(heldStack);
             StringBuilder builder = new StringBuilder();
             DebugBlockPattern blockPattern = new DebugBlockPattern(
-                    playerInventoryHolder.getPlayer().level(),
+                    heldPlayer.level(),
                     blockPos[0].getX(),
                     blockPos[0].getY(),
                     blockPos[0].getZ(),
@@ -124,9 +72,10 @@ public class StructureWriteBehavior implements IItemUIFactory {
                     Component.translatable("item.cosmiccore.debug.structure_writer.output_successful"), false);
             for (int i = 0; i < blockPattern.pattern.length; i++) {
                 String[] strings = blockPattern.pattern[i];
-                builder.append(".aisle(\"%s\")\n".formatted(Joiner.on("\", \"").join(strings)));
+                builder.append(".slice(\"%s\")\n".formatted(Joiner.on("\", \"").join(strings)));
             }
 
+            // Add legend mapping characters to block resource locations
             builder.append("\n// Block Legend:\n");
             blockPattern.charToBlockMap.forEach((character, resourceLocation) -> {
                 if (character == ' ') {
@@ -140,20 +89,16 @@ public class StructureWriteBehavior implements IItemUIFactory {
         }
     }
 
-    private void changeDirX(HeldItemUIFactory.HeldItemHolder playerInventoryHolder) {
-        if (getPos(playerInventoryHolder.getHeld()) != null &&
-                playerInventoryHolder.getPlayer() instanceof ServerPlayer) {
-            ItemStack itemStack = playerInventoryHolder.getHeld();
+    private void changeDirX(ItemStack itemStack, Player heldPlayer) {
+        if (getPos(itemStack) != null && heldPlayer instanceof ServerPlayer) {
             Direction direction = getDir(itemStack);
             direction = direction.getClockWise(Direction.Axis.X);
             setDir(itemStack, direction);
         }
     }
 
-    private void changeDirY(HeldItemUIFactory.HeldItemHolder playerInventoryHolder) {
-        if (getPos(playerInventoryHolder.getHeld()) != null &&
-                playerInventoryHolder.getPlayer() instanceof ServerPlayer) {
-            ItemStack itemStack = playerInventoryHolder.getHeld();
+    private void changeDirY(ItemStack itemStack, Player heldPlayer) {
+        if (getPos(itemStack) != null && heldPlayer instanceof ServerPlayer) {
             Direction direction = getDir(itemStack);
             direction = direction.getClockWise(Direction.Axis.Y);
             setDir(itemStack, direction);
@@ -238,16 +183,14 @@ public class StructureWriteBehavior implements IItemUIFactory {
     }
 
     @Override
-    public InteractionResultHolder<ItemStack> use(
-                                                  ItemStack item, Level level, Player player, InteractionHand usedHand) {
+    public InteractionResultHolder<ItemStack> use(ItemStack item, Level level, Player player,
+                                                  InteractionHand usedHand) {
         ItemStack stack = player.getItemInHand(usedHand);
         if (player.isShiftKeyDown()) {
             removePos(stack);
-        } else {
-            if (player instanceof ServerPlayer serverPlayer) {
-                HeldItemUIFactory.INSTANCE.openUI(serverPlayer, usedHand);
-            }
+            return new InteractionResultHolder<>(InteractionResult.SUCCESS, stack);
         }
-        return new InteractionResultHolder<>(InteractionResult.SUCCESS, stack);
+        // Open the structure-writer UI via the MUI2 player-inventory factory (IItemUIHolder default).
+        return IItemUIHolder.super.use(item, level, player, usedHand);
     }
 }

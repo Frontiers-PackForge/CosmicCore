@@ -4,16 +4,11 @@ import com.ghostipedia.cosmiccore.CosmicCore;
 import com.ghostipedia.cosmiccore.client.renderer.CosmicCoreRenderTypes;
 import com.ghostipedia.cosmiccore.common.blockentity.CosmicCoilBlockEntity;
 
-import com.gregtechceu.gtceu.GTCEu;
-import com.gregtechceu.gtceu.api.GTValues;
 import com.gregtechceu.gtceu.api.block.property.GTBlockStateProperties;
 
-import net.minecraft.client.renderer.LightTexture;
 import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
-import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.Block;
@@ -46,7 +41,8 @@ public class NebulaeCoilRenderer implements BlockEntityRenderer<CosmicCoilBlockE
         PoseStack.Pose last = poseStack.last();
         Matrix4f pose = last.pose();
 
-        // TODO(cosmiccore-42.14): restore the Oculus/Iris shader-animated nebulae path once Iris is on the 1.21 classpath.
+        // TODO(cosmiccore-42.14): restore the Oculus/Iris shader-animated nebulae path once Iris is on the 1.21
+        // classpath.
         VertexConsumer consumer = buffer.getBuffer(CosmicCoreRenderTypes.nebulae());
 
         this.renderFace(blockEntity, pose, consumer,

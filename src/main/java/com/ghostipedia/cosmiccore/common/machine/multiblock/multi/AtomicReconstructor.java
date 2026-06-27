@@ -10,7 +10,8 @@ import com.gregtechceu.gtceu.api.data.RotationState;
 import com.gregtechceu.gtceu.api.machine.MultiblockMachineDefinition;
 import com.gregtechceu.gtceu.api.machine.multiblock.PartAbility;
 import com.gregtechceu.gtceu.api.machine.multiblock.WorkableElectricMultiblockMachine;
-import com.gregtechceu.gtceu.api.pattern.FactoryBlockPattern;
+import com.gregtechceu.gtceu.api.multiblock.pattern.MultiblockPatternBuilder;
+import com.gregtechceu.gtceu.api.multiblock.util.RelativeDirection;
 import com.gregtechceu.gtceu.api.recipe.OverclockingLogic;
 import com.gregtechceu.gtceu.common.data.GTBlocks;
 import com.gregtechceu.gtceu.common.data.GTRecipeModifiers;
@@ -18,7 +19,7 @@ import com.gregtechceu.gtceu.common.data.GTRecipeModifiers;
 import static com.ghostipedia.cosmiccore.api.registries.CosmicRegistration.REGISTRATE;
 import static com.ghostipedia.cosmiccore.common.data.CosmicBlocks.ETHERSTEEL_PLATED_ASH_TILES;
 import static com.ghostipedia.cosmiccore.common.data.datagen.CosmicMachineModels.createSeparateControllerCasingMachineModel;
-import static com.gregtechceu.gtceu.api.pattern.Predicates.*;
+import static com.gregtechceu.gtceu.api.multiblock.Predicates.*;
 
 public class AtomicReconstructor {
 
@@ -34,14 +35,14 @@ public class AtomicReconstructor {
                     GTRecipeModifiers.ELECTRIC_OVERCLOCK.apply(OverclockingLogic.NON_PERFECT_OVERCLOCK_SUBTICK),
                     GTRecipeModifiers.BATCH_MODE)
             // spotless:off
-            .pattern(definition -> FactoryBlockPattern.start()
-                    .aisle("      AAAAAAA      ", "      DAAAAAD      ", "      DA   AD      ", "      DA   AD      ", "      D     D      ", "      D     D      ", "      D     D      ", "      D     D      ", "      D     D      ", "      DA   AD      ", "      DA   AD      ", "      DAAAAAD      ", "      AAAAAAA      ", "                   ")
-                    .aisle("AAAAA ADAAADA  DDD ", "A   A ADDDDDA  GGG ", "A   A A     A  DDD ", "A   A A     A  GGG ", "A   A          DDD ", "A   A       A      ", "A   A       A      ", "A   A       A      ", "A   A              ", "A   A A     A      ", "AAAAA A     A      ", "      ADDDDDA      ", "      ADAAADA      ", "       AAAAA       ")
-                    .aisle("AAAAA AAAAAAA DDDDD", " BBB  ADDDDDA GFFFG", " BBB    C     DFFFD", " BBB    C     GFFFG", " BBB    C     DD DD", " BBBCCCCC   A  DAD ", " BBBCCCCC  DAAAAAD ", " BBBCCCCC   A      ", " BBB    C          ", " BBB    C          ", "AAAAA   C          ", "      ADDDDDA      ", "      AAAAAAA      ", "       AAAAA       ")
-                    .aisle("AAAAA AAAAAAA DDDDD", " B B  ADDDDDA GF FG", " B B    C     DF FD", " B B    C     GF FG", " B B    C     D   D", " B BCCCCC  DDDD  D ", " B BCCCCC FFFFF  D ", " B BCCCCC  DDDDDDD ", " B B    C          ", " B B    C          ", "AAAAA   C          ", "      ADDDDDA      ", "      AAAAAAA      ", "       AAAAA       ")
-                    .aisle("AAAAA AAAAAAA DDDDD", " BBB  ADDDDDA GFFFG", " BBB    C     DFFFD", " BBB    C     GFFFG", " BBB    C     DD DD", " BBBCCCCC   A  DAD ", " BBBCCCCC  DAAAAAD ", " BBBCCCCC   A      ", " BBB    C          ", " BBB    C          ", "AAAAA   C          ", "      ADDDDDA      ", "      AAAAAAA      ", "       AAAAA       ")
-                    .aisle("AAAAA ADAAADA  DDD ", "A   A ADDDDDA  GGG ", "A   A A     A  DDD ", "A   A A     A  GGG ", "A   A          DDD ", "A   A       A      ", "A   A       A      ", "A   A       A      ", "A   A              ", "A   A A     A      ", "AAAAA A     A      ", "      ADDDDDA      ", "      ADAAADA      ", "       AAAAA       ")
-                    .aisle("      AAAAAAA      ", "      DAAQAAD      ", "      DA   AD      ", "      DA   AD      ", "      D     D      ", "      D     D      ", "      D     D      ", "      D     D      ", "      D     D      ", "      DA   AD      ", "      DA   AD      ", "      DAAAAAD      ", "      AAAAAAA      ", "                   ")
+            .pattern(definition -> MultiblockPatternBuilder.start(RelativeDirection.FRONT, RelativeDirection.UP, RelativeDirection.LEFT)
+                    .slice("      AAAAAAA      ", "      DAAAAAD      ", "      DA   AD      ", "      DA   AD      ", "      D     D      ", "      D     D      ", "      D     D      ", "      D     D      ", "      D     D      ", "      DA   AD      ", "      DA   AD      ", "      DAAAAAD      ", "      AAAAAAA      ", "                   ")
+                    .slice("AAAAA ADAAADA  DDD ", "A   A ADDDDDA  GGG ", "A   A A     A  DDD ", "A   A A     A  GGG ", "A   A          DDD ", "A   A       A      ", "A   A       A      ", "A   A       A      ", "A   A              ", "A   A A     A      ", "AAAAA A     A      ", "      ADDDDDA      ", "      ADAAADA      ", "       AAAAA       ")
+                    .slice("AAAAA AAAAAAA DDDDD", " BBB  ADDDDDA GFFFG", " BBB    C     DFFFD", " BBB    C     GFFFG", " BBB    C     DD DD", " BBBCCCCC   A  DAD ", " BBBCCCCC  DAAAAAD ", " BBBCCCCC   A      ", " BBB    C          ", " BBB    C          ", "AAAAA   C          ", "      ADDDDDA      ", "      AAAAAAA      ", "       AAAAA       ")
+                    .slice("AAAAA AAAAAAA DDDDD", " B B  ADDDDDA GF FG", " B B    C     DF FD", " B B    C     GF FG", " B B    C     D   D", " B BCCCCC  DDDD  D ", " B BCCCCC FFFFF  D ", " B BCCCCC  DDDDDDD ", " B B    C          ", " B B    C          ", "AAAAA   C          ", "      ADDDDDA      ", "      AAAAAAA      ", "       AAAAA       ")
+                    .slice("AAAAA AAAAAAA DDDDD", " BBB  ADDDDDA GFFFG", " BBB    C     DFFFD", " BBB    C     GFFFG", " BBB    C     DD DD", " BBBCCCCC   A  DAD ", " BBBCCCCC  DAAAAAD ", " BBBCCCCC   A      ", " BBB    C          ", " BBB    C          ", "AAAAA   C          ", "      ADDDDDA      ", "      AAAAAAA      ", "       AAAAA       ")
+                    .slice("AAAAA ADAAADA  DDD ", "A   A ADDDDDA  GGG ", "A   A A     A  DDD ", "A   A A     A  GGG ", "A   A          DDD ", "A   A       A      ", "A   A       A      ", "A   A       A      ", "A   A              ", "A   A A     A      ", "AAAAA A     A      ", "      ADDDDDA      ", "      ADAAADA      ", "       AAAAA       ")
+                    .slice("      AAAAAAA      ", "      DAAQAAD      ", "      DA   AD      ", "      DA   AD      ", "      D     D      ", "      D     D      ", "      D     D      ", "      D     D      ", "      D     D      ", "      DA   AD      ", "      DA   AD      ", "      DAAAAAD      ", "      AAAAAAA      ", "                   ")
 
                     .where(' ', any())
                     .where('Q', controller(blocks(definition.getBlock())))

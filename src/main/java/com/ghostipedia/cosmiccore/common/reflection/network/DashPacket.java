@@ -15,8 +15,8 @@ import org.jetbrains.annotations.NotNull;
 public class DashPacket implements CustomPacketPayload {
 
     public static final Type<DashPacket> TYPE = new Type<>(CosmicCore.id("dash"));
-    public static final StreamCodec<FriendlyByteBuf, DashPacket> CODEC =
-            StreamCodec.ofMember(DashPacket::encode, DashPacket::new);
+    public static final StreamCodec<FriendlyByteBuf, DashPacket> CODEC = StreamCodec.ofMember(DashPacket::encode,
+            DashPacket::new);
 
     private final float xRot;
     private final float yRot;

@@ -7,7 +7,6 @@ import com.llamalad7.mixinextras.sugar.Local;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.ModifyArg;
-import org.spongepowered.asm.mixin.injection.ModifyVariable;
 import sfiomn.legendarysurvivaloverhaul.common.effects.FrostbiteEffect;
 
 @Mixin(value = FrostbiteEffect.class)
@@ -26,8 +25,7 @@ public abstract class FrostbiteEffectMixin extends MobEffect {
         return amount + amplifier;
     }
 
-    @ModifyVariable(method = "shouldApplyEffectTickThisTick", at = @At(value = "STORE"), ordinal = 2, name = "time")
-    private int cosmiccore$modifyDamageIncrement(int time) {
-        return 50;
-    }
+    // TODO(cosmiccore): the shouldApplyEffectTickThisTick tick-rate override (force 'time' = 50) was removed -
+    // @ModifyVariable at that STORE proved flaky to target reliably. Re-add with a verified injection point
+    // (slot index, or an @Inject HEAD that recomputes) once the client launches and it can be tested in-game.
 }

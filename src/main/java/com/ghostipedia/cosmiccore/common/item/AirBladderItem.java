@@ -1,10 +1,8 @@
 package com.ghostipedia.cosmiccore.common.item;
 
-import java.util.Optional;
-import com.ghostipedia.cosmiccore.common.data.CosmicAttachmentTypes;
-
 import com.ghostipedia.cosmiccore.common.airControl.OxygenConfig;
 import com.ghostipedia.cosmiccore.common.airControl.OxygenRules;
+import com.ghostipedia.cosmiccore.common.data.CosmicAttachmentTypes;
 import com.ghostipedia.cosmiccore.utils.ItemData;
 
 import net.minecraft.core.BlockPos;
@@ -19,6 +17,8 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
+
+import java.util.Optional;
 
 public class AirBladderItem extends Item {
 

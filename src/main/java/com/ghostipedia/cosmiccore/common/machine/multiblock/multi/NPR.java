@@ -12,14 +12,15 @@ import com.gregtechceu.gtceu.api.data.chemical.ChemicalHelper;
 import com.gregtechceu.gtceu.api.data.tag.TagPrefix;
 import com.gregtechceu.gtceu.api.machine.MultiblockMachineDefinition;
 import com.gregtechceu.gtceu.api.machine.multiblock.PartAbility;
-import com.gregtechceu.gtceu.api.pattern.FactoryBlockPattern;
+import com.gregtechceu.gtceu.api.multiblock.pattern.MultiblockPatternBuilder;
+import com.gregtechceu.gtceu.api.multiblock.util.RelativeDirection;
 import com.gregtechceu.gtceu.common.data.GTMaterials;
 
 import net.minecraft.network.chat.Component;
 
 import static com.ghostipedia.cosmiccore.api.pattern.CosmicPredicates.magnetCoils;
 import static com.ghostipedia.cosmiccore.api.registries.CosmicRegistration.REGISTRATE;
-import static com.gregtechceu.gtceu.api.pattern.Predicates.*;
+import static com.gregtechceu.gtceu.api.multiblock.Predicates.*;
 import static com.gregtechceu.gtceu.common.data.GTBlocks.FUSION_GLASS;
 
 public class NPR {
@@ -31,23 +32,24 @@ public class NPR {
             .recipeModifier(CosmicRecipeModifiers::vomahineReactorOC)
             .appearanceBlock(CosmicBlocks.NAQUADAH_PRESSURE_RESISTANT_CASING)
             .generator(true)
-            .pattern(definition -> FactoryBlockPattern.start()
-                    .aisle("##QQQ##", "##QQQ##", "###Q###", "#######", "#######", "#######", "#######", "#######",
+            .pattern(definition -> MultiblockPatternBuilder
+                    .start(RelativeDirection.FRONT, RelativeDirection.UP, RelativeDirection.LEFT)
+                    .slice("##QQQ##", "##QQQ##", "###Q###", "#######", "#######", "#######", "#######", "#######",
                             "#######", "#######", "###Q###", "##QQQ##", "##QQQ##")
-                    .aisle("#QQQQQ#", "#QQSQQ#", "#FQQQF#", "#FQFQF#", "#F###F#", "#F###F#", "#F###F#", "#F###F#",
+                    .slice("#QQQQQ#", "#QQSQQ#", "#FQQQF#", "#FQFQF#", "#F###F#", "#F###F#", "#F###F#", "#F###F#",
                             "#F###F#", "#FQFQF#", "#FQQQF#", "#QQSQQ#", "#QQQQQ#")
-                    .aisle("QQQQQQQ", "QQSSSQQ", "#QSSSQ#", "#QHGHQ#", "##HGH##", "##HGH##", "##HGH##", "##HGH##",
+                    .slice("QQQQQQQ", "QQSSSQQ", "#QSSSQ#", "#QHGHQ#", "##HGH##", "##HGH##", "##HGH##", "##HGH##",
                             "##HGH##", "#QHGHQ#", "#QSSSQ#", "QQSSSQQ", "QQQQQQQ")
-                    .aisle("QQQQQQQ", "QSSSSSQ", "QQSSSQQ", "#FGSGF#", "##GSG##", "##GSG##", "##GSG##", "##GSG##",
+                    .slice("QQQQQQQ", "QSSSSSQ", "QQSSSQQ", "#FGSGF#", "##GSG##", "##GSG##", "##GSG##", "##GSG##",
                             "##GSG##", "#FGSGF#", "QQSSSQQ", "QSSSSSQ", "QQQQQQQ")
-                    .aisle("QQQQQQQ", "QQSSSQQ", "#QSSSQ#", "#QHGHQ#", "##HGH##", "##HGH##", "##HGH##", "##HGH##",
+                    .slice("QQQQQQQ", "QQSSSQQ", "#QSSSQ#", "#QHGHQ#", "##HGH##", "##HGH##", "##HGH##", "##HGH##",
                             "##HGH##", "#QHGHQ#", "#QSSSQ#", "QQSSSQQ", "QQQQQQQ")
-                    .aisle("#QQQQQ#", "#QQSQQ#", "#FQQQF#", "#FQFQF#", "#F###F#", "#F###F#", "#F###F#", "#F###F#",
+                    .slice("#QQQQQ#", "#QQSQQ#", "#FQQQF#", "#FQFQF#", "#F###F#", "#F###F#", "#F###F#", "#F###F#",
                             "#F###F#", "#FQFQF#", "#FQQQF#", "#QQSQQ#", "#QQQQQ#")
-                    .aisle("##QQQ##", "##QCQ##", "###Q###", "#######", "#######", "#######", "#######", "#######",
+                    .slice("##QQQ##", "##QCQ##", "###Q###", "#######", "#######", "#######", "#######", "#######",
                             "#######", "#######", "###Q###", "##QQQ##", "##QQQ##")
                     .where('#', any())
-                    .where("C", controller(blocks(definition.getBlock())))
+                    .where('C', controller(blocks(definition.getBlock())))
                     .where('F', blocks(ChemicalHelper.getBlock(TagPrefix.frameGt, GTMaterials.NaquadahAlloy)))
                     .where('S', magnetCoils())
                     .where('H', blocks(CosmicBlocks.RESONANTLY_TUNED_VIRTUE_MELD_CASING.get()))

@@ -20,6 +20,7 @@ public class CosmicVeinGenerators {
     public static MapCodec<ClusterVeinGenerator> CLUSTER;
     public static MapCodec<StringerVeinGenerator> STRINGER;
     public static MapCodec<ShellVeinGenerator> SHELL;
+    public static MapCodec<PocketVeinGenerator> POCKET;
 
     public static void init() {
         FRACTURE = register("fracture", FractureVeinGenerator.CODEC, FractureVeinGenerator::new);
@@ -28,6 +29,7 @@ public class CosmicVeinGenerators {
         CLUSTER = register("cluster", ClusterVeinGenerator.CODEC, ClusterVeinGenerator::new);
         STRINGER = register("stringer", StringerVeinGenerator.CODEC, StringerVeinGenerator::new);
         SHELL = register("shell", ShellVeinGenerator.CODEC, ShellVeinGenerator::new);
+        POCKET = register("pocket", PocketVeinGenerator.CODEC, PocketVeinGenerator::new);
     }
 
     private static <T extends VeinGenerator> MapCodec<T> register(

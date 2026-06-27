@@ -19,8 +19,8 @@ import static com.gregtechceu.gtceu.api.data.tag.TagPrefix.Conditions.hasOreProp
 
 public class CosmicTagPrefix {
 
-    public static TagPrefix crushedLeached;
-    public static TagPrefix prismaFrothed;
+    // public static TagPrefix crushedLeached;
+    // public static TagPrefix prismaFrothed;
     public static TagPrefix ultraDense;
     public static TagPrefix heavyBeam;
     public static TagPrefix modularShelling;
@@ -29,6 +29,11 @@ public class CosmicTagPrefix {
     public static TagPrefix alveFoilInsulator;
     public static TagPrefix shapeMemoryFoil;
     public static TagPrefix rawOreCubic;
+    public static TagPrefix oreChunk;
+    public static TagPrefix powderizedOre;
+    public static TagPrefix crystallizedOreChunk;
+    public static TagPrefix atomicallyPurifiedOreChunk;
+    public static TagPrefix flocculatedOre;
     public static final TagKey<Block> STAR_LADDER_BLOCKS = TagUtil.createBlockTag("starladder_blocks");
     public static final TagKey<Item> STAR_LADDER_ITEMS = TagUtil.createItemTag("starladder_items");
 
@@ -51,19 +56,66 @@ public class CosmicTagPrefix {
                 .generateItem(true)
                 .generationCondition(hasOreProperty);
 
-        crushedLeached = new TagPrefix("leachedOre")
-                .idPattern("leached_%s_ore")
-                .defaultTagPath("leached_ores/%s")
-                .defaultTagPath("leached_ores")
-                .materialIconType(CosmicCoreMaterialIconType.crushedLeached)
+        /*
+         * crushedLeached = new TagPrefix("leachedOre")
+         * .idPattern("leached_%s_ore")
+         * .defaultTagPath("leached_ores/%s")
+         * .defaultTagPath("leached_ores")
+         * .materialIconType(CosmicCoreMaterialIconType.crushedLeached)
+         * .unificationEnabled(true)
+         * .generateItem(true)
+         * .generationCondition(hasOreProperty);
+         * prismaFrothed = new TagPrefix("prismaFrothedOre")
+         * .idPattern("prisma_frothed_%s_ore")
+         * .defaultTagPath("prisma_frothed_ores/%s")
+         * .defaultTagPath("prisma_frothed_ores")
+         * .materialIconType(CosmicCoreMaterialIconType.prismaFrothed)
+         * .unificationEnabled(true)
+         * .generateItem(true)
+         * .generationCondition(hasOreProperty);
+         */
+
+        oreChunk = new TagPrefix("oreChunk")
+                .idPattern("%s_ore_chunk")
+                .defaultTagPath("ore_chunks/%s")
+                .defaultTagPath("ore_chunks")
+                .materialIconType(CosmicCoreMaterialIconType.oreChunk)
                 .unificationEnabled(true)
                 .generateItem(true)
                 .generationCondition(hasOreProperty);
-        prismaFrothed = new TagPrefix("prismaFrothedOre")
-                .idPattern("prisma_frothed_%s_ore")
-                .defaultTagPath("prisma_frothed_ores/%s")
-                .defaultTagPath("prisma_frothed_ores")
-                .materialIconType(CosmicCoreMaterialIconType.prismaFrothed)
+
+        powderizedOre = new TagPrefix("powderizedOre")
+                .idPattern("powderized_%s_ore")
+                .defaultTagPath("powderized_ores/%s")
+                .defaultTagPath("powderized_ores")
+                .materialIconType(CosmicCoreMaterialIconType.powderizedOre)
+                .unificationEnabled(true)
+                .generateItem(true)
+                .generationCondition(hasOreProperty);
+
+        crystallizedOreChunk = new TagPrefix("crystallizedOreChunk")
+                .idPattern("crystallized_%s_ore_chunk")
+                .defaultTagPath("crystallized_ore_chunks/%s")
+                .defaultTagPath("crystallized_ore_chunks")
+                .materialIconType(CosmicCoreMaterialIconType.crystallizedOreChunk)
+                .unificationEnabled(true)
+                .generateItem(true)
+                .generationCondition(hasOreProperty);
+
+        atomicallyPurifiedOreChunk = new TagPrefix("atomicallyPurifiedOreChunk")
+                .idPattern("atomically_purified_%s_ore_chunk")
+                .defaultTagPath("atomically_purified_ore_chunks/%s")
+                .defaultTagPath("atomically_purified_ore_chunks")
+                .materialIconType(CosmicCoreMaterialIconType.atomicallyPurifiedOreChunk)
+                .unificationEnabled(true)
+                .generateItem(true)
+                .generationCondition(hasOreProperty);
+
+        flocculatedOre = new TagPrefix("flocculatedOre")
+                .idPattern("flocculated_%s_ore")
+                .defaultTagPath("flocculated_ores/%s")
+                .defaultTagPath("flocculated_ores")
+                .materialIconType(CosmicCoreMaterialIconType.flocculatedOre)
                 .unificationEnabled(true)
                 .generateItem(true)
                 .generationCondition(hasOreProperty);

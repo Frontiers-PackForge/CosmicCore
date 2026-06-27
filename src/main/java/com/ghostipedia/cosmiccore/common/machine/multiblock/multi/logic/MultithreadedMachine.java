@@ -2,34 +2,29 @@ package com.ghostipedia.cosmiccore.common.machine.multiblock.multi.logic;
 
 import com.ghostipedia.cosmiccore.api.machine.multiblock.IMultithreadedMachine;
 
+import com.gregtechceu.gtceu.api.blockentity.BlockEntityCreationInfo;
 import com.gregtechceu.gtceu.api.capability.recipe.EURecipeCapability;
 import com.gregtechceu.gtceu.api.capability.recipe.IO;
 import com.gregtechceu.gtceu.api.capability.recipe.IRecipeHandler;
 import com.gregtechceu.gtceu.api.capability.recipe.RecipeCapability;
-import com.gregtechceu.gtceu.api.blockentity.BlockEntityCreationInfo;
 import com.gregtechceu.gtceu.api.machine.TickableSubscription;
 import com.gregtechceu.gtceu.api.machine.feature.multiblock.IMaintenanceMachine;
 import com.gregtechceu.gtceu.api.machine.feature.multiblock.IMultiPart;
-import com.gregtechceu.gtceu.api.machine.multiblock.MultiblockDisplayText;
 import com.gregtechceu.gtceu.api.machine.multiblock.WorkableElectricMultiblockMachine;
 import com.gregtechceu.gtceu.api.machine.trait.RecipeHandlerList;
 import com.gregtechceu.gtceu.api.machine.trait.RecipeLogic;
 import com.gregtechceu.gtceu.api.recipe.GTRecipe;
 import com.gregtechceu.gtceu.common.machine.multiblock.part.EnergyHatchPartMachine;
-import com.gregtechceu.gtceu.utils.FormattingUtil;
 
 import com.lowdragmc.lowdraglib.syncdata.annotation.DescSynced;
 import com.lowdragmc.lowdraglib.syncdata.annotation.Persisted;
-import net.minecraft.ChatFormatting;
-import net.minecraft.network.chat.Component;
+
 import net.minecraft.world.item.DyeColor;
 
 import it.unimi.dsi.fastutil.ints.Int2ObjectLinkedOpenHashMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import it.unimi.dsi.fastutil.ints.IntArrayList;
 import it.unimi.dsi.fastutil.ints.IntList;
-import it.unimi.dsi.fastutil.longs.Long2ObjectMaps;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
@@ -47,7 +42,6 @@ import java.util.*;
  * - Energy is split evenly among active threads
  */
 public class MultithreadedMachine extends WorkableElectricMultiblockMachine implements IMultithreadedMachine {
-
 
     /**
      * Maximum possible threads (limited by largest energy hatch amperage)
@@ -97,7 +91,7 @@ public class MultithreadedMachine extends WorkableElectricMultiblockMachine impl
     private int tickRotation = 0;
 
     public MultithreadedMachine(BlockEntityCreationInfo holder) {
-        super(holder, m -> new RecipeLogic(m) {
+        super(holder, new RecipeLogic() {
 
             @Override
             public void serverTick() {}
@@ -105,8 +99,8 @@ public class MultithreadedMachine extends WorkableElectricMultiblockMachine impl
     }
 
     @Override
-    public void onStructureFormed() {
-        super.onStructureFormed();
+    public void formStructure(@org.jetbrains.annotations.NotNull String substructureName) {
+        super.formStructure(substructureName);
 
         // Clear previous state
         threadLogics.clear();
@@ -132,8 +126,8 @@ public class MultithreadedMachine extends WorkableElectricMultiblockMachine impl
     }
 
     @Override
-    public void onStructureInvalid() {
-        super.onStructureInvalid();
+    public void invalidateStructure(String substructureName) {
+        super.invalidateStructure(substructureName);
 
         // Deactivate all threads
         for (MultithreadedRecipeLogic logic : threadLogics.values()) {
@@ -157,15 +151,11 @@ public class MultithreadedMachine extends WorkableElectricMultiblockMachine impl
      * Detect the amperage of energy hatches to determine max thread count.
      */
     private void detectEnergyHatchAmperage() {
-        Map<Long, IO> ioMap = getMultiblockState().getMatchContext()
-                .getOrCreate("ioMap", Long2ObjectMaps::emptyMap);
-
+        // 8.0.0: getMatchContext()/the pattern ioMap was removed. Energy hatches are always inputs, so
+        // sum their amperage directly (the old ioMap defaulted to IO.IN for these).
         for (IMultiPart part : getParts()) {
             if (part instanceof EnergyHatchPartMachine energyHatch) {
-                IO io = ioMap.getOrDefault(part.self().getBlockPos().asLong(), IO.IN);
-                if (io == IO.IN || io == IO.BOTH) {
-                    totalAmperage += energyHatch.getAmperage();
-                }
+                totalAmperage += energyHatch.getAmperage();
             }
         }
 
@@ -232,7 +222,8 @@ public class MultithreadedMachine extends WorkableElectricMultiblockMachine impl
             if (threadLogics.size() >= maxThreads) break;
 
             int color = entry.getIntKey();
-            MultithreadedRecipeLogic logic = new MultithreadedRecipeLogic(this, threadLogics.size(), color);
+            MultithreadedRecipeLogic logic = new MultithreadedRecipeLogic(threadLogics.size(), color);
+            attachTrait(logic);
             logic.setMaxEUtPerThread(euPerThread);
             applyThreadHandlers(logic, entry.getValue());
             logic.activateThread();
@@ -342,7 +333,8 @@ public class MultithreadedMachine extends WorkableElectricMultiblockMachine impl
             MultithreadedRecipeLogic logic = threadLogics.get(color);
             if (logic == null) {
                 if (threadLogics.size() >= maxThreads) continue;
-                logic = new MultithreadedRecipeLogic(this, threadLogics.size(), color);
+                logic = new MultithreadedRecipeLogic(threadLogics.size(), color);
+                attachTrait(logic);
                 logic.activateThread();
                 threadLogics.put(color, logic);
             }
@@ -450,56 +442,9 @@ public class MultithreadedMachine extends WorkableElectricMultiblockMachine impl
         return "Color #" + Integer.toHexString(color);
     }
 
-    @Override
-    public void addDisplayText(List<Component> textList) {
-        // Basic multiblock status
-        var builder = MultiblockDisplayText.builder(textList, isFormed())
-                .setWorkingStatus(isWorkingEnabled(), getRunningThreadCount() > 0);
-
-        if (isFormed()) {
-            // Thread status header
-            builder.addCustom(tl -> {
-                tl.add(Component.translatable("cosmiccore.machine.multithreaded.thread_status")
-                        .withStyle(ChatFormatting.AQUA));
-                tl.add(Component.translatable("cosmiccore.machine.multithreaded.max_threads",
-                        FormattingUtil.formatNumbers(maxThreads))
-                        .withStyle(ChatFormatting.GRAY));
-                tl.add(Component.translatable("cosmiccore.machine.multithreaded.active_threads",
-                        FormattingUtil.formatNumbers(getRunningThreadCount()),
-                        FormattingUtil.formatNumbers(threadLogics.size()))
-                        .withStyle(ChatFormatting.GRAY));
-            });
-
-            // Per-thread status
-            builder.addCustom(tl -> {
-                for (MultithreadedRecipeLogic logic : threadLogics.values()) {
-                    String colorName = getColorName(logic.getThreadColor());
-                    ChatFormatting statusColor = logic.isWorking() ? ChatFormatting.GREEN : ChatFormatting.YELLOW;
-
-                    String status;
-                    if (logic.isWorking()) {
-                        int percent = (int) (logic.getProgressPercent() * 100);
-                        status = percent + "%";
-                    } else if (logic.isIdle()) {
-                        status = "Idle";
-                    } else if (logic.isWaiting()) {
-                        status = "Waiting";
-                    } else {
-                        status = "Suspended";
-                    }
-
-                    tl.add(Component.literal("  [" + colorName + "] " + status)
-                            .withStyle(statusColor));
-                }
-            });
-
-            // Energy info
-            builder.addEnergyUsageLine(energyContainer);
-            builder.addEnergyTierLine(tier);
-        }
-
-        getDefinition().getAdditionalDisplay().accept(this, textList);
-    }
+    // TODO(8.0.0 MUI2): addDisplayText (LDLib multiblock status readout) was removed in GTCEu 8.0.0
+    // (stock GTCEu machines like HPCAMachine comment out the same). Rebuild the thread-status display on
+    // MUI2 when ported; the thread/amperage data is all preserved on this machine.
 
     // === IMultithreadedMachine interface implementation ===
 

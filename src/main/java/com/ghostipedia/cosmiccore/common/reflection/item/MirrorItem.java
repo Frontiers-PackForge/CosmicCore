@@ -1,6 +1,7 @@
 package com.ghostipedia.cosmiccore.common.reflection.item;
 
 import com.ghostipedia.cosmiccore.common.reflection.ReflectionCapability;
+import com.ghostipedia.cosmiccore.common.reflection.ReflectionConstants;
 import com.ghostipedia.cosmiccore.common.reflection.ui.VoidUIPackets;
 
 import net.minecraft.network.chat.Component;
@@ -36,6 +37,7 @@ public class MirrorItem extends Item {
     @Override
     public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
         ItemStack stack = player.getItemInHand(hand);
+        if (!ReflectionConstants.ENABLED) return InteractionResultHolder.pass(stack);
 
         if (!level.isClientSide() && player instanceof ServerPlayer serverPlayer) {
             // Check if the reflection has awakened
@@ -69,7 +71,7 @@ public class MirrorItem extends Item {
 
     @Override
     public void appendHoverText(ItemStack stack, Item.TooltipContext context, List<Component> tooltip,
-                               TooltipFlag flag) {
+                                TooltipFlag flag) {
         tooltip.add(Component.literal("§7A polished surface that reflects more than light."));
         tooltip.add(Component.literal("§8§oRight-click to gaze into the void."));
     }

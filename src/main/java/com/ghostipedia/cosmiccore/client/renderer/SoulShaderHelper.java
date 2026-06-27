@@ -81,7 +81,8 @@ public final class SoulShaderHelper {
 
         Matrix4f matrix = poseStack.last().pose();
 
-        BufferBuilder buffer = Tesselator.getInstance().begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX);
+        BufferBuilder buffer = Tesselator.getInstance().begin(VertexFormat.Mode.QUADS,
+                DefaultVertexFormat.POSITION_TEX);
         buffer.addVertex(matrix, x1, y2, 0).setUv(u1, v2);
         buffer.addVertex(matrix, x2, y2, 0).setUv(u2, v2);
         buffer.addVertex(matrix, x2, y1, 0).setUv(u2, v1);

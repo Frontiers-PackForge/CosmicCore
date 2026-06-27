@@ -1,5 +1,5 @@
 {
-    "ldlib": {
-        "connection": "cosmiccore:block/casings/solid/gilded_pthanterum_casing_ctm"
+    "gtceu": {
+        "connection_texture": "cosmiccore:block/casings/solid/gilded_pthanterum_casing_ctm"
     }
 }

@@ -8,9 +8,8 @@ import com.gregtechceu.gtceu.api.machine.MetaMachine;
 import com.gregtechceu.gtceu.api.machine.trait.MachineTraitType;
 import com.gregtechceu.gtceu.api.machine.trait.NotifiableRecipeHandlerTrait;
 import com.gregtechceu.gtceu.api.recipe.GTRecipe;
-
-import com.lowdragmc.lowdraglib.syncdata.annotation.DescSynced;
-import com.lowdragmc.lowdraglib.syncdata.annotation.Persisted;
+import com.gregtechceu.gtceu.api.sync_system.annotations.SaveField;
+import com.gregtechceu.gtceu.api.sync_system.annotations.SyncToClient;
 
 import net.minecraft.core.Direction;
 
@@ -21,43 +20,33 @@ import java.util.function.Predicate;
 
 public class NotifiableThermiaContainer extends NotifiableRecipeHandlerTrait<Integer> implements IHeatContainer {
 
-    public static final MachineTraitType<NotifiableThermiaContainer> TYPE =
-            new MachineTraitType<>(NotifiableThermiaContainer.class);
+    public static final MachineTraitType<NotifiableThermiaContainer> TYPE = new MachineTraitType<>(
+            NotifiableThermiaContainer.class);
 
+    @Override
+    public MachineTraitType<?> getTraitType() {
+        return TYPE;
+    }
+
+    @Getter
     private final IO handlerIO;
     @Getter
     private final long overloadLimit;
-    @Persisted
-    @DescSynced
+    @SaveField
+    @SyncToClient
     @Getter
     private final long currentTemp;
     private Predicate<Direction> sideInputCondition;
     private Predicate<Direction> sideOutputCondition;
 
     public NotifiableThermiaContainer(MetaMachine machine, IO io, long overloadLimit, long currentTemp) {
-        super(machine);
+        super();
         this.handlerIO = io;
         this.overloadLimit = overloadLimit;
         this.currentTemp = currentTemp;
-    }
-
-    @Override
-    public IO getHandlerIO() {
-        return handlerIO;
-    }
-
-    @Override
-    public long getOverloadLimit() {
-        return overloadLimit;
-    }
-
-    public long getCurrentTemp() {
-        return currentTemp;
-    }
-
-    @Override
-    public MachineTraitType<NotifiableThermiaContainer> getTraitType() {
-        return TYPE;
+        // 8.0.0: NotifiableRecipeHandlerTrait no longer takes the machine in its ctor; attach explicitly so
+        // getMachine()/capability registration are wired (mirrors EnergyHatchPartMachine#attachTrait).
+        machine.attachTrait(this);
     }
 
     public void serverTick() {

@@ -19,8 +19,8 @@ import org.jetbrains.annotations.NotNull;
 public class BootsControlPacket implements CustomPacketPayload {
 
     public static final Type<BootsControlPacket> TYPE = new Type<>(CosmicCore.id("boots_control"));
-    public static final StreamCodec<FriendlyByteBuf, BootsControlPacket> CODEC =
-            StreamCodec.ofMember(BootsControlPacket::encode, BootsControlPacket::new);
+    public static final StreamCodec<FriendlyByteBuf, BootsControlPacket> CODEC = StreamCodec
+            .ofMember(BootsControlPacket::encode, BootsControlPacket::new);
 
     public enum Action {
         SPEED_INCREASE,

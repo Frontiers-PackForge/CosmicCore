@@ -8,9 +8,12 @@ import com.ghostipedia.cosmiccore.common.block.DivingBellEscapePad;
 import com.ghostipedia.cosmiccore.common.block.MagnetBlock;
 import com.ghostipedia.cosmiccore.common.block.MothHomeBlock;
 import com.ghostipedia.cosmiccore.common.blockentity.CosmicCoilBlockEntity;
+import com.ghostipedia.cosmiccore.ember.CosmicEmberEmitterBlock;
+import com.ghostipedia.cosmiccore.ember.CosmicEmberReceptorBlock;
 
 import com.gregtechceu.gtceu.GTCEu;
 import com.gregtechceu.gtceu.api.GTCEuAPI;
+import com.gregtechceu.gtceu.api.GTValues;
 import com.gregtechceu.gtceu.api.block.ActiveBlock;
 import com.gregtechceu.gtceu.api.block.ICoilType;
 import com.gregtechceu.gtceu.api.block.property.GTBlockStateProperties;
@@ -30,7 +33,7 @@ import net.minecraft.world.level.material.MapColor;
 import net.neoforged.neoforge.client.model.generators.ConfiguredModel;
 import net.neoforged.neoforge.client.model.generators.ModelFile;
 
-import com.teamresourceful.resourcefullib.common.registry.RegistryEntry;
+import com.rekindled.embers.RegistryManager;
 import com.tterrag.registrate.providers.DataGenContext;
 import com.tterrag.registrate.providers.RegistrateBlockstateProvider;
 import com.tterrag.registrate.util.entry.BlockEntry;
@@ -39,6 +42,7 @@ import com.tterrag.registrate.util.nullness.NonNullFunction;
 import com.tterrag.registrate.util.nullness.NonNullSupplier;
 import it.unimi.dsi.fastutil.ints.Int2ReferenceArrayMap;
 
+import java.util.Locale;
 import java.util.Map;
 import java.util.function.Supplier;
 
@@ -51,8 +55,52 @@ public class CosmicBlocks {
         REGISTRATE.creativeModeTab(() -> CosmicCreativeModeTabs.COSMIC_CORE);
 
     }
+
+    public static final Map<Integer, BlockEntry<CosmicEmberEmitterBlock>> EMBER_EMITTER_BLOCKS = registerEmberEmitters();
+    public static final Map<Integer, BlockEntry<CosmicEmberReceptorBlock>> EMBER_RECEPTOR_BLOCKS = registerEmberReceptors();
+
+    private static Map<Integer, BlockEntry<CosmicEmberEmitterBlock>> registerEmberEmitters() {
+        Map<Integer, BlockEntry<CosmicEmberEmitterBlock>> emitters = new Int2ReferenceArrayMap<>();
+        for (int i = 0; i < 15; i++) {
+            final int tier = i;
+            final String key = (i == 0 ? "steam" : GTValues.VN[i].toLowerCase(Locale.ROOT));
+            final String tierName = (i == 0 ? "Steam" : GTValues.VN[i]);
+            emitters.put(i, REGISTRATE.block(key + "_ember_emitter", props -> new CosmicEmberEmitterBlock(props, tier))
+                    .lang(tierName + " Ember Emitter")
+                    .initialProperties(RegistryManager.EMBER_EMITTER::get)
+                    .exBlockstate((ctx, prov) -> prov.directionalBlock(ctx.getEntry(),
+                            prov.models().getExistingFile(CosmicCore.id(key + "_ember_emitter"))))
+                    .tag(BlockTags.MINEABLE_WITH_PICKAXE)
+                    .item(BlockItem::new)
+                    .build()
+                    .register());
+        }
+        return emitters;
+    }
+
+    private static Map<Integer, BlockEntry<CosmicEmberReceptorBlock>> registerEmberReceptors() {
+        Map<Integer, BlockEntry<CosmicEmberReceptorBlock>> receptors = new Int2ReferenceArrayMap<>();
+        for (int i = 0; i < 15; i++) {
+            final int tier = i;
+            final String key = (i == 0 ? "steam" : GTValues.VN[i].toLowerCase(Locale.ROOT));
+            final String tierName = (i == 0 ? "Steam" : GTValues.VN[i]);
+            receptors.put(i,
+                    REGISTRATE.block(key + "_ember_receptor", props -> new CosmicEmberReceptorBlock(props, tier))
+                            .lang(tierName + " Ember Receptor")
+                            .initialProperties(RegistryManager.EMBER_RECEIVER::get)
+                            .exBlockstate((ctx, prov) -> prov.directionalBlock(ctx.getEntry(),
+                                    prov.models().getExistingFile(CosmicCore.id(key + "_ember_receptor"))))
+                            .tag(BlockTags.MINEABLE_WITH_PICKAXE)
+                            .item(BlockItem::new)
+                            .build()
+                            .register());
+        }
+        return receptors;
+    }
+
     // Coil Register
-    // TODO(stellaris): SUN_GLOBE used Ad Astra GLOBES registry + GlobeBlock — dropped with Ad Astra (bead cosmiccore-42.13)
+    // TODO(stellaris): SUN_GLOBE used Ad Astra GLOBES registry + GlobeBlock — dropped with Ad Astra (bead
+    // cosmiccore-42.13)
 
     public static final BlockEntry<CoilBlock> COIL_PRISMATIC_TUNGSTENSTEEL = createCoilBlock(
             CosmicCoilBlock.CoilType.PRISMATIC_TUNGSTENSTEEL);
@@ -112,6 +160,14 @@ public class CosmicBlocks {
             CosmicCore.id("block/casings/solid/steel_plated_bronze_casing"));
     public static final BlockEntry<Block> ALTERNATOR_FLUX_COILING = createCasingBlock("alternator_flux_coiling",
             CosmicCore.id("block/casings/solid/alternator_flux_coiling_copper"));
+    public static final BlockEntry<Block> LIGHTWEIGHT_INDUSTRIAL_CASING = createCasingBlock(
+            "lightweight_industrial_casing", CosmicCore.id("block/casings/solid/lightweight_industrial_casing"));
+    public static final BlockEntry<Block> LIGHTWEIGHT_MECHANICAL_PARTWORK = createCasingBlock(
+            "lightweight_mechanical_partwork", CosmicCore.id("block/casings/solid/lightweight_mechanical_partwork"));
+    public static final BlockEntry<Block> LIGHTWEIGHT_LOGISTIC_CASING = createCasingBlock(
+            "lightweight_logistic_casing", CosmicCore.id("block/casings/solid/lightweight_logistic_casing"));
+    public static final BlockEntry<Block> LIGHTWEIGHT_DARK_STEEL_CASING = createCasingBlock(
+            "lightweight_dark_steel_casing", CosmicCore.id("block/casings/solid/lightweight_dark_steel_casing"));
     public static final BlockEntry<Block> PLATED_AEROCLOUD = createCasingBlock("plated_aerocloud",
             CosmicCore.id("block/casings/solid/plated_aerocloud"));
     public static final BlockEntry<Block> SELF_HEALING_PTHANTERUM = createCasingBlock("self_healing_pthanterum_casing",
@@ -275,429 +331,432 @@ public class CosmicBlocks {
             "iron_plated_deepslate_tile",
             CosmicCore.id("block/casings/cosmetic/iron_plated_deepslate_tile"));
 
-    /* SHELVED ember blocks — Embers dropped on 1.21.1 (beads cosmiccore-42.13 / 42.14)
-    public static final Map<Integer, BlockEntry<CosmicEmberEmitterBlock>> EMBER_EMITTER_BLOCKS = new Int2ReferenceArrayMap<>();
-    public static final Map<Integer, BlockEntry<CosmicEmberReceptorBlock>> EMBER_RECEPTOR_BLOCKS = new Int2ReferenceArrayMap<>();
-
-    // RECIEVERS
-    public static final BlockEntry<CosmicEmberReceptorBlock> COSMIC_EMBER_RECEIVER_STEAM = REGISTRATE
-            .block("steam_ember_receptor", props -> new CosmicEmberReceptorBlock(props, 0))
-            .lang("Steam Ember Receptor")
-            .initialProperties(RegistryManager.EMBER_RECEIVER::get)
-            .exBlockstate((ctx, prov) -> {
-                prov.directionalBlock(ctx.getEntry(),
-                        prov.models().getExistingFile(CosmicCore.id("steam_ember_receptor")));
-            })
-            .tag(BlockTags.MINEABLE_WITH_PICKAXE)
-            .item(BlockItem::new)
-            .build()
-            .register();
-
-    public static final BlockEntry<CosmicEmberReceptorBlock> COSMIC_EMBER_RECEIVER_LV = REGISTRATE
-            .block("lv_ember_receptor", props -> new CosmicEmberReceptorBlock(props, 1))
-            .lang("LV Ember Receptor")
-            .initialProperties(RegistryManager.EMBER_RECEIVER::get)
-            .exBlockstate((ctx, prov) -> {
-                prov.directionalBlock(ctx.getEntry(),
-                        prov.models().getExistingFile(CosmicCore.id("lv_ember_receptor")));
-            })
-            .tag(BlockTags.MINEABLE_WITH_PICKAXE)
-            .item(BlockItem::new)
-            .build()
-            .register();
-
-    public static final BlockEntry<CosmicEmberReceptorBlock> COSMIC_EMBER_RECEIVER_MV = REGISTRATE
-            .block("mv_ember_receptor", props -> new CosmicEmberReceptorBlock(props, 2))
-            .lang("MV Ember Receptor")
-            .initialProperties(RegistryManager.EMBER_RECEIVER::get)
-            .exBlockstate((ctx, prov) -> {
-                prov.directionalBlock(ctx.getEntry(),
-                        prov.models().getExistingFile(CosmicCore.id("mv_ember_receptor")));
-            })
-            .tag(BlockTags.MINEABLE_WITH_PICKAXE)
-            .item(BlockItem::new)
-            .build()
-            .register();
-
-    public static final BlockEntry<CosmicEmberReceptorBlock> COSMIC_EMBER_RECEIVER_HV = REGISTRATE
-            .block("hv_ember_receptor", props -> new CosmicEmberReceptorBlock(props, 3))
-            .lang("HV Ember Receptor")
-            .initialProperties(RegistryManager.EMBER_RECEIVER::get)
-            .exBlockstate((ctx, prov) -> {
-                prov.directionalBlock(ctx.getEntry(),
-                        prov.models().getExistingFile(CosmicCore.id("hv_ember_receptor")));
-            })
-            .tag(BlockTags.MINEABLE_WITH_PICKAXE)
-            .item(BlockItem::new)
-            .build()
-            .register();
-
-    public static final BlockEntry<CosmicEmberReceptorBlock> COSMIC_EMBER_RECEIVER_EV = REGISTRATE
-            .block("ev_ember_receptor", props -> new CosmicEmberReceptorBlock(props, 4))
-            .lang("EV Ember Receptor")
-            .initialProperties(RegistryManager.EMBER_RECEIVER::get)
-            .exBlockstate((ctx, prov) -> {
-                prov.directionalBlock(ctx.getEntry(),
-                        prov.models().getExistingFile(CosmicCore.id("ev_ember_receptor")));
-            })
-            .tag(BlockTags.MINEABLE_WITH_PICKAXE)
-            .item(BlockItem::new)
-            .build()
-            .register();
-
-    public static final BlockEntry<CosmicEmberReceptorBlock> COSMIC_EMBER_RECEIVER_IV = REGISTRATE
-            .block("iv_ember_receptor", props -> new CosmicEmberReceptorBlock(props, 5))
-            .lang("IV Ember Receptor")
-            .initialProperties(RegistryManager.EMBER_RECEIVER::get)
-            .exBlockstate((ctx, prov) -> {
-                prov.directionalBlock(ctx.getEntry(),
-                        prov.models().getExistingFile(CosmicCore.id("iv_ember_receptor")));
-            })
-            .tag(BlockTags.MINEABLE_WITH_PICKAXE)
-            .item(BlockItem::new)
-            .build()
-            .register();
-
-    public static final BlockEntry<CosmicEmberReceptorBlock> COSMIC_EMBER_RECEIVER_LUV = REGISTRATE
-            .block("luv_ember_receptor", props -> new CosmicEmberReceptorBlock(props, 6))
-            .lang("LuV Ember Receptor")
-            .initialProperties(RegistryManager.EMBER_RECEIVER::get)
-            .exBlockstate((ctx, prov) -> {
-                prov.directionalBlock(ctx.getEntry(),
-                        prov.models().getExistingFile(CosmicCore.id("luv_ember_receptor")));
-            })
-            .tag(BlockTags.MINEABLE_WITH_PICKAXE)
-            .item(BlockItem::new)
-            .build()
-            .register();
-
-    public static final BlockEntry<CosmicEmberReceptorBlock> COSMIC_EMBER_RECEIVER_ZPM = REGISTRATE
-            .block("zpm_ember_receptor", props -> new CosmicEmberReceptorBlock(props, 7))
-            .lang("ZPM Ember Receptor")
-            .initialProperties(RegistryManager.EMBER_RECEIVER::get)
-            .exBlockstate((ctx, prov) -> {
-                prov.directionalBlock(ctx.getEntry(),
-                        prov.models().getExistingFile(CosmicCore.id("zpm_ember_receptor")));
-            })
-            .tag(BlockTags.MINEABLE_WITH_PICKAXE)
-            .item(BlockItem::new)
-            .build()
-            .register();
-
-    public static final BlockEntry<CosmicEmberReceptorBlock> COSMIC_EMBER_RECEIVER_UV = REGISTRATE
-            .block("uv_ember_receptor", props -> new CosmicEmberReceptorBlock(props, 8))
-            .lang("UV Ember Receptor")
-            .initialProperties(RegistryManager.EMBER_RECEIVER::get)
-            .exBlockstate((ctx, prov) -> {
-                prov.directionalBlock(ctx.getEntry(),
-                        prov.models().getExistingFile(CosmicCore.id("uv_ember_receptor")));
-            })
-            .tag(BlockTags.MINEABLE_WITH_PICKAXE)
-            .item(BlockItem::new)
-            .build()
-            .register();
-
-    public static final BlockEntry<CosmicEmberReceptorBlock> COSMIC_EMBER_RECEIVER_UHV = REGISTRATE
-            .block("uhv_ember_receptor", props -> new CosmicEmberReceptorBlock(props, 9))
-            .lang("UHV Ember Receptor")
-            .initialProperties(RegistryManager.EMBER_RECEIVER::get)
-            .exBlockstate((ctx, prov) -> {
-                prov.directionalBlock(ctx.getEntry(),
-                        prov.models().getExistingFile(CosmicCore.id("uhv_ember_receptor")));
-            })
-            .tag(BlockTags.MINEABLE_WITH_PICKAXE)
-            .item(BlockItem::new)
-            .build()
-            .register();
-
-    public static final BlockEntry<CosmicEmberReceptorBlock> COSMIC_EMBER_RECEIVER_UEV = REGISTRATE
-            .block("uev_ember_receptor", props -> new CosmicEmberReceptorBlock(props, 10))
-            .lang("UEV Ember Receptor")
-            .initialProperties(RegistryManager.EMBER_RECEIVER::get)
-            .exBlockstate((ctx, prov) -> {
-                prov.directionalBlock(ctx.getEntry(),
-                        prov.models().getExistingFile(CosmicCore.id("uev_ember_receptor")));
-            })
-            .tag(BlockTags.MINEABLE_WITH_PICKAXE)
-            .item(BlockItem::new)
-            .build()
-            .register();
-
-    public static final BlockEntry<CosmicEmberReceptorBlock> COSMIC_EMBER_RECEIVER_UIV = REGISTRATE
-            .block("uiv_ember_receptor", props -> new CosmicEmberReceptorBlock(props, 11))
-            .lang("UIV Ember Receptor")
-            .initialProperties(RegistryManager.EMBER_RECEIVER::get)
-            .exBlockstate((ctx, prov) -> {
-                prov.directionalBlock(ctx.getEntry(),
-                        prov.models().getExistingFile(CosmicCore.id("uiv_ember_receptor")));
-            })
-            .item(BlockItem::new)
-            .build()
-            .register();
-
-    public static final BlockEntry<CosmicEmberReceptorBlock> COSMIC_EMBER_RECEIVER_UXV = REGISTRATE
-            .block("uxv_ember_receptor", props -> new CosmicEmberReceptorBlock(props, 12))
-            .lang("UXV Ember Receptor")
-            .initialProperties(RegistryManager.EMBER_RECEIVER::get)
-            .exBlockstate((ctx, prov) -> {
-                prov.directionalBlock(ctx.getEntry(),
-                        prov.models().getExistingFile(CosmicCore.id("uxv_ember_receptor")));
-            })
-            .tag(BlockTags.MINEABLE_WITH_PICKAXE)
-            .item(BlockItem::new)
-            .build()
-            .register();
-
-    public static final BlockEntry<CosmicEmberReceptorBlock> COSMIC_EMBER_RECEIVER_OPV = REGISTRATE
-            .block("opv_ember_receptor", props -> new CosmicEmberReceptorBlock(props, 13))
-            .lang("OPV Ember Receptor")
-            .initialProperties(RegistryManager.EMBER_RECEIVER::get)
-            .exBlockstate((ctx, prov) -> {
-                prov.directionalBlock(ctx.getEntry(),
-                        prov.models().getExistingFile(CosmicCore.id("opv_ember_receptor")));
-            })
-            .tag(BlockTags.MINEABLE_WITH_PICKAXE)
-            .item(BlockItem::new)
-            .build()
-            .register();
-
-    public static final BlockEntry<CosmicEmberReceptorBlock> COSMIC_EMBER_RECEIVER_MAX = REGISTRATE
-            .block("max_ember_receptor", props -> new CosmicEmberReceptorBlock(props, 14))
-            .lang("MAX Ember Receptor")
-            .initialProperties(RegistryManager.EMBER_RECEIVER::get)
-            .exBlockstate((ctx, prov) -> {
-                prov.directionalBlock(ctx.getEntry(),
-                        prov.models().getExistingFile(CosmicCore.id("max_ember_receptor")));
-            })
-            .tag(BlockTags.MINEABLE_WITH_PICKAXE)
-            .item(BlockItem::new)
-            .build()
-            .register();
-
-    // EMITTERS
-    public static final BlockEntry<CosmicEmberEmitterBlock> COSMIC_EMBER_EMITTER_STEAM = REGISTRATE
-            .block("steam_ember_emitter", props -> new CosmicEmberEmitterBlock(props, 0))
-            .lang("Steam Ember Emitter")
-            .initialProperties(RegistryManager.EMBER_EMITTER::get)
-            .exBlockstate((ctx, prov) -> {
-                prov.directionalBlock(ctx.getEntry(),
-                        prov.models().getExistingFile(CosmicCore.id("steam_ember_emitter")));
-            })
-            .tag(BlockTags.MINEABLE_WITH_PICKAXE)
-            .item(BlockItem::new)
-            .build()
-            .register();
-
-    public static final BlockEntry<CosmicEmberEmitterBlock> COSMIC_EMBER_EMITTER_LV = REGISTRATE
-            .block("lv_ember_emitter", props -> new CosmicEmberEmitterBlock(props, 1))
-            .lang("LV Ember Emitter")
-            .initialProperties(RegistryManager.EMBER_EMITTER::get)
-            .exBlockstate((ctx, prov) -> {
-                prov.directionalBlock(ctx.getEntry(), prov.models().getExistingFile(CosmicCore.id("lv_ember_emitter")));
-            })
-            .tag(BlockTags.MINEABLE_WITH_PICKAXE)
-            .item(BlockItem::new)
-            .build()
-            .register();
-
-    public static final BlockEntry<CosmicEmberEmitterBlock> COSMIC_EMBER_EMITTER_MV = REGISTRATE
-            .block("mv_ember_emitter", props -> new CosmicEmberEmitterBlock(props, 2))
-            .lang("MV Ember Emitter")
-            .initialProperties(RegistryManager.EMBER_EMITTER::get)
-            .exBlockstate((ctx, prov) -> {
-                prov.directionalBlock(ctx.getEntry(), prov.models().getExistingFile(CosmicCore.id("mv_ember_emitter")));
-            })
-            .tag(BlockTags.MINEABLE_WITH_PICKAXE)
-            .item(BlockItem::new)
-            .build()
-            .register();
-
-    public static final BlockEntry<CosmicEmberEmitterBlock> COSMIC_EMBER_EMITTER_HV = REGISTRATE
-            .block("hv_ember_emitter", props -> new CosmicEmberEmitterBlock(props, 3))
-            .lang("HV Ember Emitter")
-            .initialProperties(RegistryManager.EMBER_EMITTER::get)
-            .exBlockstate((ctx, prov) -> {
-                prov.directionalBlock(ctx.getEntry(), prov.models().getExistingFile(CosmicCore.id("hv_ember_emitter")));
-            })
-            .tag(BlockTags.MINEABLE_WITH_PICKAXE)
-            .item(BlockItem::new)
-            .build()
-            .register();
-
-    public static final BlockEntry<CosmicEmberEmitterBlock> COSMIC_EMBER_EMITTER_EV = REGISTRATE
-            .block("ev_ember_emitter", props -> new CosmicEmberEmitterBlock(props, 4))
-            .lang("EV Ember Emitter")
-            .initialProperties(RegistryManager.EMBER_EMITTER::get)
-            .exBlockstate((ctx, prov) -> {
-                prov.directionalBlock(ctx.getEntry(), prov.models().getExistingFile(CosmicCore.id("ev_ember_emitter")));
-            })
-            .tag(BlockTags.MINEABLE_WITH_PICKAXE)
-            .item(BlockItem::new)
-            .build()
-            .register();
-
-    public static final BlockEntry<CosmicEmberEmitterBlock> COSMIC_EMBER_EMITTER_IV = REGISTRATE
-            .block("iv_ember_emitter", props -> new CosmicEmberEmitterBlock(props, 5))
-            .lang("IV Ember Emitter")
-            .initialProperties(RegistryManager.EMBER_EMITTER::get)
-            .exBlockstate((ctx, prov) -> {
-                prov.directionalBlock(ctx.getEntry(), prov.models().getExistingFile(CosmicCore.id("iv_ember_emitter")));
-            })
-            .tag(BlockTags.MINEABLE_WITH_PICKAXE)
-            .item(BlockItem::new)
-            .build()
-            .register();
-
-    public static final BlockEntry<CosmicEmberEmitterBlock> COSMIC_EMBER_EMITTER_LUV = REGISTRATE
-            .block("luv_ember_emitter", props -> new CosmicEmberEmitterBlock(props, 6))
-            .lang("LuV Ember Emitter")
-            .initialProperties(RegistryManager.EMBER_EMITTER::get)
-            .exBlockstate((ctx, prov) -> {
-                prov.directionalBlock(ctx.getEntry(),
-                        prov.models().getExistingFile(CosmicCore.id("luv_ember_emitter")));
-            })
-            .tag(BlockTags.MINEABLE_WITH_PICKAXE)
-            .item(BlockItem::new)
-            .build()
-            .register();
-
-    public static final BlockEntry<CosmicEmberEmitterBlock> COSMIC_EMBER_EMITTER_ZPM = REGISTRATE
-            .block("zpm_ember_emitter", props -> new CosmicEmberEmitterBlock(props, 7))
-            .lang("ZPM Ember Emitter")
-            .initialProperties(RegistryManager.EMBER_EMITTER::get)
-            .exBlockstate((ctx, prov) -> {
-                prov.directionalBlock(ctx.getEntry(),
-                        prov.models().getExistingFile(CosmicCore.id("zpm_ember_emitter")));
-            })
-            .tag(BlockTags.MINEABLE_WITH_PICKAXE)
-            .item(BlockItem::new)
-            .build()
-            .register();
-
-    public static final BlockEntry<CosmicEmberEmitterBlock> COSMIC_EMBER_EMITTER_UV = REGISTRATE
-            .block("uv_ember_emitter", props -> new CosmicEmberEmitterBlock(props, 8))
-            .lang("UV Ember Emitter")
-            .initialProperties(RegistryManager.EMBER_EMITTER::get)
-            .exBlockstate((ctx, prov) -> {
-                prov.directionalBlock(ctx.getEntry(), prov.models().getExistingFile(CosmicCore.id("uv_ember_emitter")));
-            })
-            .tag(BlockTags.MINEABLE_WITH_PICKAXE)
-            .item(BlockItem::new)
-            .build()
-            .register();
-
-    public static final BlockEntry<CosmicEmberEmitterBlock> COSMIC_EMBER_EMITTER_UHV = REGISTRATE
-            .block("uhv_ember_emitter", props -> new CosmicEmberEmitterBlock(props, 9))
-            .lang("UHV Ember Emitter")
-            .initialProperties(RegistryManager.EMBER_EMITTER::get)
-            .exBlockstate((ctx, prov) -> {
-                prov.directionalBlock(ctx.getEntry(),
-                        prov.models().getExistingFile(CosmicCore.id("uhv_ember_emitter")));
-            })
-            .tag(BlockTags.MINEABLE_WITH_PICKAXE)
-            .item(BlockItem::new)
-            .build()
-            .register();
-
-    public static final BlockEntry<CosmicEmberEmitterBlock> COSMIC_EMBER_EMITTER_UEV = REGISTRATE
-            .block("uev_ember_emitter", props -> new CosmicEmberEmitterBlock(props, 10))
-            .lang("UEV Ember Emitter")
-            .initialProperties(RegistryManager.EMBER_EMITTER::get)
-            .exBlockstate((ctx, prov) -> {
-                prov.directionalBlock(ctx.getEntry(),
-                        prov.models().getExistingFile(CosmicCore.id("uev_ember_emitter")));
-            })
-            .tag(BlockTags.MINEABLE_WITH_PICKAXE)
-            .item(BlockItem::new)
-            .build()
-            .register();
-
-    public static final BlockEntry<CosmicEmberEmitterBlock> COSMIC_EMBER_EMITTER_UIV = REGISTRATE
-            .block("uiv_ember_emitter", props -> new CosmicEmberEmitterBlock(props, 11))
-            .lang("UIV Ember Emitter")
-            .initialProperties(RegistryManager.EMBER_EMITTER::get)
-            .exBlockstate((ctx, prov) -> {
-                prov.directionalBlock(ctx.getEntry(),
-                        prov.models().getExistingFile(CosmicCore.id("uiv_ember_emitter")));
-            })
-            .tag(BlockTags.MINEABLE_WITH_PICKAXE)
-            .item(BlockItem::new)
-            .build()
-            .register();
-
-    public static final BlockEntry<CosmicEmberEmitterBlock> COSMIC_EMBER_EMITTER_UXV = REGISTRATE
-            .block("uxv_ember_emitter", props -> new CosmicEmberEmitterBlock(props, 12))
-            .lang("UXV Ember Emitter")
-            .initialProperties(RegistryManager.EMBER_EMITTER::get)
-            .exBlockstate((ctx, prov) -> {
-                prov.directionalBlock(ctx.getEntry(),
-                        prov.models().getExistingFile(CosmicCore.id("uxv_ember_emitter")));
-            })
-            .tag(BlockTags.MINEABLE_WITH_PICKAXE)
-            .item(BlockItem::new)
-            .build()
-            .register();
-
-    public static final BlockEntry<CosmicEmberEmitterBlock> COSMIC_EMBER_EMITTER_OPV = REGISTRATE
-            .block("opv_ember_emitter", props -> new CosmicEmberEmitterBlock(props, 13))
-            .lang("OPV Ember Emitter")
-            .initialProperties(RegistryManager.EMBER_EMITTER::get)
-            .exBlockstate((ctx, prov) -> {
-                prov.directionalBlock(ctx.getEntry(),
-                        prov.models().getExistingFile(CosmicCore.id("opv_ember_emitter")));
-            })
-            .tag(BlockTags.MINEABLE_WITH_PICKAXE)
-            .item(BlockItem::new)
-            .build()
-            .register();
-
-    public static final BlockEntry<CosmicEmberEmitterBlock> COSMIC_EMBER_EMITTER_MAX = REGISTRATE
-            .block("max_ember_emitter", props -> new CosmicEmberEmitterBlock(props, 14))
-            .lang("MAX Ember Emitter")
-            .initialProperties(RegistryManager.EMBER_EMITTER::get)
-            .exBlockstate((ctx, prov) -> {
-                prov.directionalBlock(ctx.getEntry(),
-                        prov.models().getExistingFile(CosmicCore.id("max_ember_emitter")));
-            })
-            .tag(BlockTags.MINEABLE_WITH_PICKAXE)
-            .item(BlockItem::new)
-            .build()
-            .register();
-
-    static {
-        EMBER_EMITTER_BLOCKS.put(0, COSMIC_EMBER_EMITTER_STEAM);
-        EMBER_EMITTER_BLOCKS.put(1, COSMIC_EMBER_EMITTER_LV);
-        EMBER_EMITTER_BLOCKS.put(2, COSMIC_EMBER_EMITTER_MV);
-        EMBER_EMITTER_BLOCKS.put(3, COSMIC_EMBER_EMITTER_HV);
-        EMBER_EMITTER_BLOCKS.put(4, COSMIC_EMBER_EMITTER_EV);
-        EMBER_EMITTER_BLOCKS.put(5, COSMIC_EMBER_EMITTER_IV);
-        EMBER_EMITTER_BLOCKS.put(6, COSMIC_EMBER_EMITTER_LUV);
-        EMBER_EMITTER_BLOCKS.put(7, COSMIC_EMBER_EMITTER_ZPM);
-        EMBER_EMITTER_BLOCKS.put(8, COSMIC_EMBER_EMITTER_UV);
-        EMBER_EMITTER_BLOCKS.put(9, COSMIC_EMBER_EMITTER_UHV);
-        EMBER_EMITTER_BLOCKS.put(10, COSMIC_EMBER_EMITTER_UEV);
-        EMBER_EMITTER_BLOCKS.put(11, COSMIC_EMBER_EMITTER_UIV);
-        EMBER_EMITTER_BLOCKS.put(12, COSMIC_EMBER_EMITTER_UXV);
-        EMBER_EMITTER_BLOCKS.put(13, COSMIC_EMBER_EMITTER_OPV);
-        EMBER_EMITTER_BLOCKS.put(14, COSMIC_EMBER_EMITTER_MAX);
-
-        EMBER_RECEPTOR_BLOCKS.put(0, COSMIC_EMBER_RECEIVER_STEAM);
-        EMBER_RECEPTOR_BLOCKS.put(1, COSMIC_EMBER_RECEIVER_LV);
-        EMBER_RECEPTOR_BLOCKS.put(2, COSMIC_EMBER_RECEIVER_MV);
-        EMBER_RECEPTOR_BLOCKS.put(3, COSMIC_EMBER_RECEIVER_HV);
-        EMBER_RECEPTOR_BLOCKS.put(4, COSMIC_EMBER_RECEIVER_EV);
-        EMBER_RECEPTOR_BLOCKS.put(5, COSMIC_EMBER_RECEIVER_IV);
-        EMBER_RECEPTOR_BLOCKS.put(6, COSMIC_EMBER_RECEIVER_LUV);
-        EMBER_RECEPTOR_BLOCKS.put(7, COSMIC_EMBER_RECEIVER_ZPM);
-        EMBER_RECEPTOR_BLOCKS.put(8, COSMIC_EMBER_RECEIVER_UV);
-        EMBER_RECEPTOR_BLOCKS.put(9, COSMIC_EMBER_RECEIVER_UHV);
-        EMBER_RECEPTOR_BLOCKS.put(10, COSMIC_EMBER_RECEIVER_UEV);
-        EMBER_RECEPTOR_BLOCKS.put(11, COSMIC_EMBER_RECEIVER_UIV);
-        EMBER_RECEPTOR_BLOCKS.put(12, COSMIC_EMBER_RECEIVER_UXV);
-        EMBER_RECEPTOR_BLOCKS.put(13, COSMIC_EMBER_RECEIVER_OPV);
-        EMBER_RECEPTOR_BLOCKS.put(14, COSMIC_EMBER_RECEIVER_MAX);
-    }
-    */
+    /*
+     * SHELVED ember blocks — Embers dropped on 1.21.1 (beads cosmiccore-42.13 / 42.14)
+     * public static final Map<Integer, BlockEntry<CosmicEmberEmitterBlock>> EMBER_EMITTER_BLOCKS = new
+     * Int2ReferenceArrayMap<>();
+     * public static final Map<Integer, BlockEntry<CosmicEmberReceptorBlock>> EMBER_RECEPTOR_BLOCKS = new
+     * Int2ReferenceArrayMap<>();
+     * 
+     * // RECIEVERS
+     * public static final BlockEntry<CosmicEmberReceptorBlock> COSMIC_EMBER_RECEIVER_STEAM = REGISTRATE
+     * .block("steam_ember_receptor", props -> new CosmicEmberReceptorBlock(props, 0))
+     * .lang("Steam Ember Receptor")
+     * .initialProperties(RegistryManager.EMBER_RECEIVER::get)
+     * .exBlockstate((ctx, prov) -> {
+     * prov.directionalBlock(ctx.getEntry(),
+     * prov.models().getExistingFile(CosmicCore.id("steam_ember_receptor")));
+     * })
+     * .tag(BlockTags.MINEABLE_WITH_PICKAXE)
+     * .item(BlockItem::new)
+     * .build()
+     * .register();
+     * 
+     * public static final BlockEntry<CosmicEmberReceptorBlock> COSMIC_EMBER_RECEIVER_LV = REGISTRATE
+     * .block("lv_ember_receptor", props -> new CosmicEmberReceptorBlock(props, 1))
+     * .lang("LV Ember Receptor")
+     * .initialProperties(RegistryManager.EMBER_RECEIVER::get)
+     * .exBlockstate((ctx, prov) -> {
+     * prov.directionalBlock(ctx.getEntry(),
+     * prov.models().getExistingFile(CosmicCore.id("lv_ember_receptor")));
+     * })
+     * .tag(BlockTags.MINEABLE_WITH_PICKAXE)
+     * .item(BlockItem::new)
+     * .build()
+     * .register();
+     * 
+     * public static final BlockEntry<CosmicEmberReceptorBlock> COSMIC_EMBER_RECEIVER_MV = REGISTRATE
+     * .block("mv_ember_receptor", props -> new CosmicEmberReceptorBlock(props, 2))
+     * .lang("MV Ember Receptor")
+     * .initialProperties(RegistryManager.EMBER_RECEIVER::get)
+     * .exBlockstate((ctx, prov) -> {
+     * prov.directionalBlock(ctx.getEntry(),
+     * prov.models().getExistingFile(CosmicCore.id("mv_ember_receptor")));
+     * })
+     * .tag(BlockTags.MINEABLE_WITH_PICKAXE)
+     * .item(BlockItem::new)
+     * .build()
+     * .register();
+     * 
+     * public static final BlockEntry<CosmicEmberReceptorBlock> COSMIC_EMBER_RECEIVER_HV = REGISTRATE
+     * .block("hv_ember_receptor", props -> new CosmicEmberReceptorBlock(props, 3))
+     * .lang("HV Ember Receptor")
+     * .initialProperties(RegistryManager.EMBER_RECEIVER::get)
+     * .exBlockstate((ctx, prov) -> {
+     * prov.directionalBlock(ctx.getEntry(),
+     * prov.models().getExistingFile(CosmicCore.id("hv_ember_receptor")));
+     * })
+     * .tag(BlockTags.MINEABLE_WITH_PICKAXE)
+     * .item(BlockItem::new)
+     * .build()
+     * .register();
+     * 
+     * public static final BlockEntry<CosmicEmberReceptorBlock> COSMIC_EMBER_RECEIVER_EV = REGISTRATE
+     * .block("ev_ember_receptor", props -> new CosmicEmberReceptorBlock(props, 4))
+     * .lang("EV Ember Receptor")
+     * .initialProperties(RegistryManager.EMBER_RECEIVER::get)
+     * .exBlockstate((ctx, prov) -> {
+     * prov.directionalBlock(ctx.getEntry(),
+     * prov.models().getExistingFile(CosmicCore.id("ev_ember_receptor")));
+     * })
+     * .tag(BlockTags.MINEABLE_WITH_PICKAXE)
+     * .item(BlockItem::new)
+     * .build()
+     * .register();
+     * 
+     * public static final BlockEntry<CosmicEmberReceptorBlock> COSMIC_EMBER_RECEIVER_IV = REGISTRATE
+     * .block("iv_ember_receptor", props -> new CosmicEmberReceptorBlock(props, 5))
+     * .lang("IV Ember Receptor")
+     * .initialProperties(RegistryManager.EMBER_RECEIVER::get)
+     * .exBlockstate((ctx, prov) -> {
+     * prov.directionalBlock(ctx.getEntry(),
+     * prov.models().getExistingFile(CosmicCore.id("iv_ember_receptor")));
+     * })
+     * .tag(BlockTags.MINEABLE_WITH_PICKAXE)
+     * .item(BlockItem::new)
+     * .build()
+     * .register();
+     * 
+     * public static final BlockEntry<CosmicEmberReceptorBlock> COSMIC_EMBER_RECEIVER_LUV = REGISTRATE
+     * .block("luv_ember_receptor", props -> new CosmicEmberReceptorBlock(props, 6))
+     * .lang("LuV Ember Receptor")
+     * .initialProperties(RegistryManager.EMBER_RECEIVER::get)
+     * .exBlockstate((ctx, prov) -> {
+     * prov.directionalBlock(ctx.getEntry(),
+     * prov.models().getExistingFile(CosmicCore.id("luv_ember_receptor")));
+     * })
+     * .tag(BlockTags.MINEABLE_WITH_PICKAXE)
+     * .item(BlockItem::new)
+     * .build()
+     * .register();
+     * 
+     * public static final BlockEntry<CosmicEmberReceptorBlock> COSMIC_EMBER_RECEIVER_ZPM = REGISTRATE
+     * .block("zpm_ember_receptor", props -> new CosmicEmberReceptorBlock(props, 7))
+     * .lang("ZPM Ember Receptor")
+     * .initialProperties(RegistryManager.EMBER_RECEIVER::get)
+     * .exBlockstate((ctx, prov) -> {
+     * prov.directionalBlock(ctx.getEntry(),
+     * prov.models().getExistingFile(CosmicCore.id("zpm_ember_receptor")));
+     * })
+     * .tag(BlockTags.MINEABLE_WITH_PICKAXE)
+     * .item(BlockItem::new)
+     * .build()
+     * .register();
+     * 
+     * public static final BlockEntry<CosmicEmberReceptorBlock> COSMIC_EMBER_RECEIVER_UV = REGISTRATE
+     * .block("uv_ember_receptor", props -> new CosmicEmberReceptorBlock(props, 8))
+     * .lang("UV Ember Receptor")
+     * .initialProperties(RegistryManager.EMBER_RECEIVER::get)
+     * .exBlockstate((ctx, prov) -> {
+     * prov.directionalBlock(ctx.getEntry(),
+     * prov.models().getExistingFile(CosmicCore.id("uv_ember_receptor")));
+     * })
+     * .tag(BlockTags.MINEABLE_WITH_PICKAXE)
+     * .item(BlockItem::new)
+     * .build()
+     * .register();
+     * 
+     * public static final BlockEntry<CosmicEmberReceptorBlock> COSMIC_EMBER_RECEIVER_UHV = REGISTRATE
+     * .block("uhv_ember_receptor", props -> new CosmicEmberReceptorBlock(props, 9))
+     * .lang("UHV Ember Receptor")
+     * .initialProperties(RegistryManager.EMBER_RECEIVER::get)
+     * .exBlockstate((ctx, prov) -> {
+     * prov.directionalBlock(ctx.getEntry(),
+     * prov.models().getExistingFile(CosmicCore.id("uhv_ember_receptor")));
+     * })
+     * .tag(BlockTags.MINEABLE_WITH_PICKAXE)
+     * .item(BlockItem::new)
+     * .build()
+     * .register();
+     * 
+     * public static final BlockEntry<CosmicEmberReceptorBlock> COSMIC_EMBER_RECEIVER_UEV = REGISTRATE
+     * .block("uev_ember_receptor", props -> new CosmicEmberReceptorBlock(props, 10))
+     * .lang("UEV Ember Receptor")
+     * .initialProperties(RegistryManager.EMBER_RECEIVER::get)
+     * .exBlockstate((ctx, prov) -> {
+     * prov.directionalBlock(ctx.getEntry(),
+     * prov.models().getExistingFile(CosmicCore.id("uev_ember_receptor")));
+     * })
+     * .tag(BlockTags.MINEABLE_WITH_PICKAXE)
+     * .item(BlockItem::new)
+     * .build()
+     * .register();
+     * 
+     * public static final BlockEntry<CosmicEmberReceptorBlock> COSMIC_EMBER_RECEIVER_UIV = REGISTRATE
+     * .block("uiv_ember_receptor", props -> new CosmicEmberReceptorBlock(props, 11))
+     * .lang("UIV Ember Receptor")
+     * .initialProperties(RegistryManager.EMBER_RECEIVER::get)
+     * .exBlockstate((ctx, prov) -> {
+     * prov.directionalBlock(ctx.getEntry(),
+     * prov.models().getExistingFile(CosmicCore.id("uiv_ember_receptor")));
+     * })
+     * .item(BlockItem::new)
+     * .build()
+     * .register();
+     * 
+     * public static final BlockEntry<CosmicEmberReceptorBlock> COSMIC_EMBER_RECEIVER_UXV = REGISTRATE
+     * .block("uxv_ember_receptor", props -> new CosmicEmberReceptorBlock(props, 12))
+     * .lang("UXV Ember Receptor")
+     * .initialProperties(RegistryManager.EMBER_RECEIVER::get)
+     * .exBlockstate((ctx, prov) -> {
+     * prov.directionalBlock(ctx.getEntry(),
+     * prov.models().getExistingFile(CosmicCore.id("uxv_ember_receptor")));
+     * })
+     * .tag(BlockTags.MINEABLE_WITH_PICKAXE)
+     * .item(BlockItem::new)
+     * .build()
+     * .register();
+     * 
+     * public static final BlockEntry<CosmicEmberReceptorBlock> COSMIC_EMBER_RECEIVER_OPV = REGISTRATE
+     * .block("opv_ember_receptor", props -> new CosmicEmberReceptorBlock(props, 13))
+     * .lang("OPV Ember Receptor")
+     * .initialProperties(RegistryManager.EMBER_RECEIVER::get)
+     * .exBlockstate((ctx, prov) -> {
+     * prov.directionalBlock(ctx.getEntry(),
+     * prov.models().getExistingFile(CosmicCore.id("opv_ember_receptor")));
+     * })
+     * .tag(BlockTags.MINEABLE_WITH_PICKAXE)
+     * .item(BlockItem::new)
+     * .build()
+     * .register();
+     * 
+     * public static final BlockEntry<CosmicEmberReceptorBlock> COSMIC_EMBER_RECEIVER_MAX = REGISTRATE
+     * .block("max_ember_receptor", props -> new CosmicEmberReceptorBlock(props, 14))
+     * .lang("MAX Ember Receptor")
+     * .initialProperties(RegistryManager.EMBER_RECEIVER::get)
+     * .exBlockstate((ctx, prov) -> {
+     * prov.directionalBlock(ctx.getEntry(),
+     * prov.models().getExistingFile(CosmicCore.id("max_ember_receptor")));
+     * })
+     * .tag(BlockTags.MINEABLE_WITH_PICKAXE)
+     * .item(BlockItem::new)
+     * .build()
+     * .register();
+     * 
+     * // EMITTERS
+     * public static final BlockEntry<CosmicEmberEmitterBlock> COSMIC_EMBER_EMITTER_STEAM = REGISTRATE
+     * .block("steam_ember_emitter", props -> new CosmicEmberEmitterBlock(props, 0))
+     * .lang("Steam Ember Emitter")
+     * .initialProperties(RegistryManager.EMBER_EMITTER::get)
+     * .exBlockstate((ctx, prov) -> {
+     * prov.directionalBlock(ctx.getEntry(),
+     * prov.models().getExistingFile(CosmicCore.id("steam_ember_emitter")));
+     * })
+     * .tag(BlockTags.MINEABLE_WITH_PICKAXE)
+     * .item(BlockItem::new)
+     * .build()
+     * .register();
+     * 
+     * public static final BlockEntry<CosmicEmberEmitterBlock> COSMIC_EMBER_EMITTER_LV = REGISTRATE
+     * .block("lv_ember_emitter", props -> new CosmicEmberEmitterBlock(props, 1))
+     * .lang("LV Ember Emitter")
+     * .initialProperties(RegistryManager.EMBER_EMITTER::get)
+     * .exBlockstate((ctx, prov) -> {
+     * prov.directionalBlock(ctx.getEntry(), prov.models().getExistingFile(CosmicCore.id("lv_ember_emitter")));
+     * })
+     * .tag(BlockTags.MINEABLE_WITH_PICKAXE)
+     * .item(BlockItem::new)
+     * .build()
+     * .register();
+     * 
+     * public static final BlockEntry<CosmicEmberEmitterBlock> COSMIC_EMBER_EMITTER_MV = REGISTRATE
+     * .block("mv_ember_emitter", props -> new CosmicEmberEmitterBlock(props, 2))
+     * .lang("MV Ember Emitter")
+     * .initialProperties(RegistryManager.EMBER_EMITTER::get)
+     * .exBlockstate((ctx, prov) -> {
+     * prov.directionalBlock(ctx.getEntry(), prov.models().getExistingFile(CosmicCore.id("mv_ember_emitter")));
+     * })
+     * .tag(BlockTags.MINEABLE_WITH_PICKAXE)
+     * .item(BlockItem::new)
+     * .build()
+     * .register();
+     * 
+     * public static final BlockEntry<CosmicEmberEmitterBlock> COSMIC_EMBER_EMITTER_HV = REGISTRATE
+     * .block("hv_ember_emitter", props -> new CosmicEmberEmitterBlock(props, 3))
+     * .lang("HV Ember Emitter")
+     * .initialProperties(RegistryManager.EMBER_EMITTER::get)
+     * .exBlockstate((ctx, prov) -> {
+     * prov.directionalBlock(ctx.getEntry(), prov.models().getExistingFile(CosmicCore.id("hv_ember_emitter")));
+     * })
+     * .tag(BlockTags.MINEABLE_WITH_PICKAXE)
+     * .item(BlockItem::new)
+     * .build()
+     * .register();
+     * 
+     * public static final BlockEntry<CosmicEmberEmitterBlock> COSMIC_EMBER_EMITTER_EV = REGISTRATE
+     * .block("ev_ember_emitter", props -> new CosmicEmberEmitterBlock(props, 4))
+     * .lang("EV Ember Emitter")
+     * .initialProperties(RegistryManager.EMBER_EMITTER::get)
+     * .exBlockstate((ctx, prov) -> {
+     * prov.directionalBlock(ctx.getEntry(), prov.models().getExistingFile(CosmicCore.id("ev_ember_emitter")));
+     * })
+     * .tag(BlockTags.MINEABLE_WITH_PICKAXE)
+     * .item(BlockItem::new)
+     * .build()
+     * .register();
+     * 
+     * public static final BlockEntry<CosmicEmberEmitterBlock> COSMIC_EMBER_EMITTER_IV = REGISTRATE
+     * .block("iv_ember_emitter", props -> new CosmicEmberEmitterBlock(props, 5))
+     * .lang("IV Ember Emitter")
+     * .initialProperties(RegistryManager.EMBER_EMITTER::get)
+     * .exBlockstate((ctx, prov) -> {
+     * prov.directionalBlock(ctx.getEntry(), prov.models().getExistingFile(CosmicCore.id("iv_ember_emitter")));
+     * })
+     * .tag(BlockTags.MINEABLE_WITH_PICKAXE)
+     * .item(BlockItem::new)
+     * .build()
+     * .register();
+     * 
+     * public static final BlockEntry<CosmicEmberEmitterBlock> COSMIC_EMBER_EMITTER_LUV = REGISTRATE
+     * .block("luv_ember_emitter", props -> new CosmicEmberEmitterBlock(props, 6))
+     * .lang("LuV Ember Emitter")
+     * .initialProperties(RegistryManager.EMBER_EMITTER::get)
+     * .exBlockstate((ctx, prov) -> {
+     * prov.directionalBlock(ctx.getEntry(),
+     * prov.models().getExistingFile(CosmicCore.id("luv_ember_emitter")));
+     * })
+     * .tag(BlockTags.MINEABLE_WITH_PICKAXE)
+     * .item(BlockItem::new)
+     * .build()
+     * .register();
+     * 
+     * public static final BlockEntry<CosmicEmberEmitterBlock> COSMIC_EMBER_EMITTER_ZPM = REGISTRATE
+     * .block("zpm_ember_emitter", props -> new CosmicEmberEmitterBlock(props, 7))
+     * .lang("ZPM Ember Emitter")
+     * .initialProperties(RegistryManager.EMBER_EMITTER::get)
+     * .exBlockstate((ctx, prov) -> {
+     * prov.directionalBlock(ctx.getEntry(),
+     * prov.models().getExistingFile(CosmicCore.id("zpm_ember_emitter")));
+     * })
+     * .tag(BlockTags.MINEABLE_WITH_PICKAXE)
+     * .item(BlockItem::new)
+     * .build()
+     * .register();
+     * 
+     * public static final BlockEntry<CosmicEmberEmitterBlock> COSMIC_EMBER_EMITTER_UV = REGISTRATE
+     * .block("uv_ember_emitter", props -> new CosmicEmberEmitterBlock(props, 8))
+     * .lang("UV Ember Emitter")
+     * .initialProperties(RegistryManager.EMBER_EMITTER::get)
+     * .exBlockstate((ctx, prov) -> {
+     * prov.directionalBlock(ctx.getEntry(), prov.models().getExistingFile(CosmicCore.id("uv_ember_emitter")));
+     * })
+     * .tag(BlockTags.MINEABLE_WITH_PICKAXE)
+     * .item(BlockItem::new)
+     * .build()
+     * .register();
+     * 
+     * public static final BlockEntry<CosmicEmberEmitterBlock> COSMIC_EMBER_EMITTER_UHV = REGISTRATE
+     * .block("uhv_ember_emitter", props -> new CosmicEmberEmitterBlock(props, 9))
+     * .lang("UHV Ember Emitter")
+     * .initialProperties(RegistryManager.EMBER_EMITTER::get)
+     * .exBlockstate((ctx, prov) -> {
+     * prov.directionalBlock(ctx.getEntry(),
+     * prov.models().getExistingFile(CosmicCore.id("uhv_ember_emitter")));
+     * })
+     * .tag(BlockTags.MINEABLE_WITH_PICKAXE)
+     * .item(BlockItem::new)
+     * .build()
+     * .register();
+     * 
+     * public static final BlockEntry<CosmicEmberEmitterBlock> COSMIC_EMBER_EMITTER_UEV = REGISTRATE
+     * .block("uev_ember_emitter", props -> new CosmicEmberEmitterBlock(props, 10))
+     * .lang("UEV Ember Emitter")
+     * .initialProperties(RegistryManager.EMBER_EMITTER::get)
+     * .exBlockstate((ctx, prov) -> {
+     * prov.directionalBlock(ctx.getEntry(),
+     * prov.models().getExistingFile(CosmicCore.id("uev_ember_emitter")));
+     * })
+     * .tag(BlockTags.MINEABLE_WITH_PICKAXE)
+     * .item(BlockItem::new)
+     * .build()
+     * .register();
+     * 
+     * public static final BlockEntry<CosmicEmberEmitterBlock> COSMIC_EMBER_EMITTER_UIV = REGISTRATE
+     * .block("uiv_ember_emitter", props -> new CosmicEmberEmitterBlock(props, 11))
+     * .lang("UIV Ember Emitter")
+     * .initialProperties(RegistryManager.EMBER_EMITTER::get)
+     * .exBlockstate((ctx, prov) -> {
+     * prov.directionalBlock(ctx.getEntry(),
+     * prov.models().getExistingFile(CosmicCore.id("uiv_ember_emitter")));
+     * })
+     * .tag(BlockTags.MINEABLE_WITH_PICKAXE)
+     * .item(BlockItem::new)
+     * .build()
+     * .register();
+     * 
+     * public static final BlockEntry<CosmicEmberEmitterBlock> COSMIC_EMBER_EMITTER_UXV = REGISTRATE
+     * .block("uxv_ember_emitter", props -> new CosmicEmberEmitterBlock(props, 12))
+     * .lang("UXV Ember Emitter")
+     * .initialProperties(RegistryManager.EMBER_EMITTER::get)
+     * .exBlockstate((ctx, prov) -> {
+     * prov.directionalBlock(ctx.getEntry(),
+     * prov.models().getExistingFile(CosmicCore.id("uxv_ember_emitter")));
+     * })
+     * .tag(BlockTags.MINEABLE_WITH_PICKAXE)
+     * .item(BlockItem::new)
+     * .build()
+     * .register();
+     * 
+     * public static final BlockEntry<CosmicEmberEmitterBlock> COSMIC_EMBER_EMITTER_OPV = REGISTRATE
+     * .block("opv_ember_emitter", props -> new CosmicEmberEmitterBlock(props, 13))
+     * .lang("OPV Ember Emitter")
+     * .initialProperties(RegistryManager.EMBER_EMITTER::get)
+     * .exBlockstate((ctx, prov) -> {
+     * prov.directionalBlock(ctx.getEntry(),
+     * prov.models().getExistingFile(CosmicCore.id("opv_ember_emitter")));
+     * })
+     * .tag(BlockTags.MINEABLE_WITH_PICKAXE)
+     * .item(BlockItem::new)
+     * .build()
+     * .register();
+     * 
+     * public static final BlockEntry<CosmicEmberEmitterBlock> COSMIC_EMBER_EMITTER_MAX = REGISTRATE
+     * .block("max_ember_emitter", props -> new CosmicEmberEmitterBlock(props, 14))
+     * .lang("MAX Ember Emitter")
+     * .initialProperties(RegistryManager.EMBER_EMITTER::get)
+     * .exBlockstate((ctx, prov) -> {
+     * prov.directionalBlock(ctx.getEntry(),
+     * prov.models().getExistingFile(CosmicCore.id("max_ember_emitter")));
+     * })
+     * .tag(BlockTags.MINEABLE_WITH_PICKAXE)
+     * .item(BlockItem::new)
+     * .build()
+     * .register();
+     * 
+     * static {
+     * EMBER_EMITTER_BLOCKS.put(0, COSMIC_EMBER_EMITTER_STEAM);
+     * EMBER_EMITTER_BLOCKS.put(1, COSMIC_EMBER_EMITTER_LV);
+     * EMBER_EMITTER_BLOCKS.put(2, COSMIC_EMBER_EMITTER_MV);
+     * EMBER_EMITTER_BLOCKS.put(3, COSMIC_EMBER_EMITTER_HV);
+     * EMBER_EMITTER_BLOCKS.put(4, COSMIC_EMBER_EMITTER_EV);
+     * EMBER_EMITTER_BLOCKS.put(5, COSMIC_EMBER_EMITTER_IV);
+     * EMBER_EMITTER_BLOCKS.put(6, COSMIC_EMBER_EMITTER_LUV);
+     * EMBER_EMITTER_BLOCKS.put(7, COSMIC_EMBER_EMITTER_ZPM);
+     * EMBER_EMITTER_BLOCKS.put(8, COSMIC_EMBER_EMITTER_UV);
+     * EMBER_EMITTER_BLOCKS.put(9, COSMIC_EMBER_EMITTER_UHV);
+     * EMBER_EMITTER_BLOCKS.put(10, COSMIC_EMBER_EMITTER_UEV);
+     * EMBER_EMITTER_BLOCKS.put(11, COSMIC_EMBER_EMITTER_UIV);
+     * EMBER_EMITTER_BLOCKS.put(12, COSMIC_EMBER_EMITTER_UXV);
+     * EMBER_EMITTER_BLOCKS.put(13, COSMIC_EMBER_EMITTER_OPV);
+     * EMBER_EMITTER_BLOCKS.put(14, COSMIC_EMBER_EMITTER_MAX);
+     * 
+     * EMBER_RECEPTOR_BLOCKS.put(0, COSMIC_EMBER_RECEIVER_STEAM);
+     * EMBER_RECEPTOR_BLOCKS.put(1, COSMIC_EMBER_RECEIVER_LV);
+     * EMBER_RECEPTOR_BLOCKS.put(2, COSMIC_EMBER_RECEIVER_MV);
+     * EMBER_RECEPTOR_BLOCKS.put(3, COSMIC_EMBER_RECEIVER_HV);
+     * EMBER_RECEPTOR_BLOCKS.put(4, COSMIC_EMBER_RECEIVER_EV);
+     * EMBER_RECEPTOR_BLOCKS.put(5, COSMIC_EMBER_RECEIVER_IV);
+     * EMBER_RECEPTOR_BLOCKS.put(6, COSMIC_EMBER_RECEIVER_LUV);
+     * EMBER_RECEPTOR_BLOCKS.put(7, COSMIC_EMBER_RECEIVER_ZPM);
+     * EMBER_RECEPTOR_BLOCKS.put(8, COSMIC_EMBER_RECEIVER_UV);
+     * EMBER_RECEPTOR_BLOCKS.put(9, COSMIC_EMBER_RECEIVER_UHV);
+     * EMBER_RECEPTOR_BLOCKS.put(10, COSMIC_EMBER_RECEIVER_UEV);
+     * EMBER_RECEPTOR_BLOCKS.put(11, COSMIC_EMBER_RECEIVER_UIV);
+     * EMBER_RECEPTOR_BLOCKS.put(12, COSMIC_EMBER_RECEIVER_UXV);
+     * EMBER_RECEPTOR_BLOCKS.put(13, COSMIC_EMBER_RECEIVER_OPV);
+     * EMBER_RECEPTOR_BLOCKS.put(14, COSMIC_EMBER_RECEIVER_MAX);
+     * }
+     */
 
     // GLASS BLOCKS
     public static final BlockEntry<Block> ZBLAN_REINFORCED_GLASS = createGlassCasingBlock(

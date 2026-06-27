@@ -18,6 +18,7 @@ import dev.latvian.mods.kubejs.recipe.component.SizedFluidIngredientComponent;
 import dev.latvian.mods.kubejs.recipe.component.SizedIngredientComponent;
 import dev.latvian.mods.kubejs.recipe.component.StringComponent;
 import dev.latvian.mods.kubejs.recipe.component.TimeComponent;
+import dev.latvian.mods.kubejs.recipe.schema.RecipeConstructor;
 import dev.latvian.mods.kubejs.recipe.schema.RecipeNamespace;
 import dev.latvian.mods.kubejs.recipe.schema.RecipeSchemaStorage;
 import dev.latvian.mods.kubejs.recipe.schema.RecipeSchemaType;
@@ -37,7 +38,15 @@ import java.util.Map;
  */
 public final class RecipeSchemaReader {
 
-    public enum Kind { ITEM, FLUID, NUMBER, BOOLEAN, STRING, OTHER }
+    public enum Kind {
+        ITEM,
+        FLUID,
+        NUMBER,
+        BOOLEAN,
+        STRING,
+        OTHER
+    }
+
     public record SchemaField(String name, ComponentRole role, Kind kind, boolean list, RecipeKey<?> key) {}
 
     private RecipeSchemaReader() {}
@@ -83,13 +92,41 @@ public final class RecipeSchemaReader {
         return fields;
     }
 
+    /**
+     * The positional arguments of a type's largest KubeJS constructor, in order - i.e. the builder signature for
+     * {@code event.recipes.<ns>.<path>(arg0, arg1, ...)}. Empty if the type has no KubeJS schema (then the caller
+     * should fall back to {@code event.custom}).
+     */
+    public static List<SchemaField> constructorKeys(Player player, String typeId) {
+        List<SchemaField> fields = new ArrayList<>();
+        RecipeSchemaStorage storage = storage(player);
+        if (storage == null) return fields;
+        int colon = typeId.indexOf(':');
+        if (colon < 0) return fields;
+        RecipeNamespace namespace = storage.namespaces.get(typeId.substring(0, colon));
+        if (namespace == null) return fields;
+        RecipeSchemaType type = namespace.get(typeId.substring(colon + 1));
+        if (type == null) return fields;
+        RecipeConstructor full = null;
+        for (RecipeConstructor c : type.schema.constructors().values()) {
+            if (full == null || c.keys.size() > full.keys.size()) full = c;
+        }
+        if (full == null) return fields;
+        for (RecipeKey<?> key : full.keys) {
+            boolean list = key.component instanceof ListRecipeComponent;
+            RecipeComponent<?> base = list ? ((ListRecipeComponent<?>) key.component).component() : key.component;
+            fields.add(new SchemaField(key.name, key.role, kindOf(base), list, key));
+        }
+        return fields;
+    }
+
     private static Kind kindOf(RecipeComponent<?> component) {
-        if (component instanceof ItemStackComponent || component instanceof IngredientComponent
-                || component instanceof SizedIngredientComponent) {
+        if (component instanceof ItemStackComponent || component instanceof IngredientComponent ||
+                component instanceof SizedIngredientComponent) {
             return Kind.ITEM;
         }
-        if (component instanceof FluidStackComponent || component instanceof FluidIngredientComponent
-                || component instanceof SizedFluidIngredientComponent) {
+        if (component instanceof FluidStackComponent || component instanceof FluidIngredientComponent ||
+                component instanceof SizedFluidIngredientComponent) {
             return Kind.FLUID;
         }
         if (component instanceof NumberComponent || component instanceof TimeComponent) return Kind.NUMBER;

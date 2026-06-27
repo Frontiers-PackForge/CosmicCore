@@ -1,5 +1,5 @@
 {
-    "ldlib": {
-        "connection": "cosmiccore:block/casings/solid/soul_stained_steel_aluminium_plated_casing_ctm"
+    "gtceu": {
+        "connection_texture": "cosmiccore:block/casings/solid/soul_stained_steel_aluminium_plated_casing_ctm"
     }
 }

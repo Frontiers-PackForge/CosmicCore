@@ -1,0 +1,28 @@
+{
+    "jars": [
+        {
+            "identifier": {
+                "group": "com.lowdragmc.ldlib",
+                "artifact": "ldlib-neoforge-1.21.1"
+            },
+            "version": {
+                "range": "[1.0.35.a,)",
+                "artifactVersion": "1.0.35.a"
+            },
+            "path": "META-INF/jarjar/ldlib-neoforge-1.21.1-1.0.35.a-ccpatch.jar",
+            "isObfuscated": false
+        },
+        {
+            "identifier": {
+                "group": "createbionics",
+                "artifact": "createbionics"
+            },
+            "version": {
+                "range": "[1.0.5b,)",
+                "artifactVersion": "1.0.5b"
+            },
+            "path": "META-INF/jarjar/createbionics-1.0.5b.jar",
+            "isObfuscated": false
+        }
+    ]
+}

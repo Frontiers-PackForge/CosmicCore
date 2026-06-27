@@ -24,6 +24,7 @@ public class RecipeDraft {
     public GTRecipeType recipeType;
 
     public final List<ItemStack> itemInputs = new ArrayList<>();
+    public final List<String> itemInputTags = new ArrayList<>();
     public final List<Boolean> itemInputNotConsumed = new ArrayList<>();
     public final List<Integer> itemInputChances = new ArrayList<>();
     public final List<Integer> itemInputBoosts = new ArrayList<>();
@@ -36,10 +37,15 @@ public class RecipeDraft {
     public final List<FluidStack> fluidOutputs = new ArrayList<>();
     public final List<Integer> fluidOutputChances = new ArrayList<>();
     public final List<Integer> fluidOutputBoosts = new ArrayList<>();
+    public final List<String> extraLines = new ArrayList<>();
 
     public int voltageTier = GTValues.LV;
     public long amperage = 1L;
     public int duration = 100;
+
+    public boolean rawEU = false;
+    public long rawVoltage = 32L;
+    public String voltageArray = "VA";
 
     public int blastTemp = 0;
     public int cwu = 0;

@@ -1,59 +1,46 @@
 package com.ghostipedia.cosmiccore.common.machine.multiblock.part;
 
-import com.ghostipedia.cosmiccore.api.CosmicGuiTextures;
 import com.ghostipedia.cosmiccore.common.data.CosmicBotanyItemRegistration;
 
-import com.gregtechceu.gtceu.api.capability.recipe.IO;
-import com.gregtechceu.gtceu.api.gui.GuiTextures;
-import com.gregtechceu.gtceu.api.gui.widget.BlockableSlotWidget;
 import com.gregtechceu.gtceu.api.blockentity.BlockEntityCreationInfo;
-import com.gregtechceu.gtceu.api.machine.MetaMachine;
-import com.gregtechceu.gtceu.api.machine.feature.IFancyUIMachine;
+import com.gregtechceu.gtceu.api.capability.recipe.IO;
 import com.gregtechceu.gtceu.api.machine.multiblock.part.MultiblockPartMachine;
 import com.gregtechceu.gtceu.api.machine.trait.NotifiableItemStackHandler;
+import com.gregtechceu.gtceu.api.sync_system.annotations.SaveField;
+import com.gregtechceu.gtceu.api.sync_system.annotations.SyncToClient;
 import com.gregtechceu.gtceu.api.transfer.item.CustomItemStackHandler;
-
-import com.lowdragmc.lowdraglib.gui.widget.ImageWidget;
-import com.lowdragmc.lowdraglib.gui.widget.Widget;
-import com.lowdragmc.lowdraglib.gui.widget.WidgetGroup;
-import com.lowdragmc.lowdraglib.syncdata.annotation.DescSynced;
-import com.lowdragmc.lowdraglib.syncdata.annotation.Persisted;
-import com.lowdragmc.lowdraglib.utils.Position;
 
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.ItemNameBlockItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.BushBlock;
 
+import lombok.Getter;
+import lombok.Setter;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;
 
-public class CropHolderPartMachines extends MultiblockPartMachine implements IFancyUIMachine {
+// TODO(8.0.0 MUI2): custom UI shelved; default UI used (orig in git)
+public class CropHolderPartMachines extends MultiblockPartMachine {
 
-    @Persisted
+    @SaveField
     private final CropHolderHandler heldCrops;
-    @Persisted
-    @DescSynced
+    @Getter
+    @Setter
+    @SaveField
+    @SyncToClient
     private boolean isLocked;
 
-    public CropHolderPartMachines(BlockEntityCreationInfo holder) {
-        super(holder);
-        heldCrops = new CropHolderHandler(this);
-    }
-
-    public boolean isLocked() {
-        return isLocked;
-    }
-
-    public void setLocked(boolean locked) {
-        this.isLocked = locked;
+    public CropHolderPartMachines(BlockEntityCreationInfo info) {
+        super(info);
+        heldCrops = attachTrait(new CropHolderHandler());
     }
 
     private class CropHolderHandler extends NotifiableItemStackHandler {
 
-        public CropHolderHandler(MetaMachine machine) {
-            super(machine, 1, IO.IN, IO.BOTH, size -> new CustomItemStackHandler(size) {
+        public CropHolderHandler() {
+            super(1, IO.IN, IO.BOTH, size -> new CustomItemStackHandler(size) {
 
                 @Override
                 public int getSlotLimit(int slot) {
@@ -100,14 +87,4 @@ public class CropHolderPartMachines extends MultiblockPartMachine implements IFa
             // TODO; Come back for manual Recipe map Injection
         }
     }
-
-    @Override
-    public Widget createUIWidget() {
-        return new WidgetGroup(new Position(0, 0))
-                .addWidget(new ImageWidget(0, 15, 84, 60, GuiTextures.PROGRESS_BAR_RESEARCH_STATION_BASE))
-                .addWidget(new BlockableSlotWidget(heldCrops, 0, 33, 36)
-                        .setIsBlocked(this::isLocked)
-                        .setBackground(GuiTextures.SLOT, CosmicGuiTextures.PLANT_OVERLAY));
-    }
-
 }

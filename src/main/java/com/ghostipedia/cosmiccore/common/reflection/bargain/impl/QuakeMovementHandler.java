@@ -20,9 +20,9 @@ import net.minecraft.world.level.block.RenderShape;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
-import net.neoforged.neoforge.event.tick.PlayerTickEvent;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.neoforge.event.tick.PlayerTickEvent;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -67,7 +67,14 @@ public class QuakeMovementHandler {
 
     @OnlyIn(Dist.CLIENT)
     public static boolean getClientHasQuakeMovement() {
-        return clientHasQuakeMovement;
+        Player player = Minecraft.getInstance().player;
+        return player != null && isWearingGlobetrotters(player);
+    }
+
+    public static boolean isWearingGlobetrotters(Player player) {
+        ItemStack boots = player.getItemBySlot(EquipmentSlot.FEET);
+        return !boots.isEmpty() && boots.getItem() instanceof ArmorComponentItem armorItem &&
+                armorItem.getArmorLogic() instanceof ICosmicBoots;
     }
 
     public static double getHardCapSpeed() {
@@ -82,8 +89,8 @@ public class QuakeMovementHandler {
     public static void onPlayerTick(PlayerTickEvent.Pre event) {
         Player player = event.getEntity();
         if (!player.level().isClientSide()) return;
-        if (!clientHasQuakeMovement) return;
         if (player != Minecraft.getInstance().player) return;
+        if (!isWearingGlobetrotters(player)) return;
 
         CelesteDashHandler.clientTick(player);
 

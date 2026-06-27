@@ -15,7 +15,6 @@ import com.gregtechceu.gtceu.common.machine.owner.FTBOwner;
 
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.GlobalPos;
-import net.minecraft.core.component.DataComponents;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtOps;
 import net.minecraft.network.chat.Component;
@@ -46,7 +45,6 @@ import java.util.function.Predicate;
 public abstract class LinkedWorkableElectricMultiblockMachine extends WorkableElectricMultiblockMachine
                                                               implements ILinkedMultiblock {
 
-
     private static final String DATASTICK_TAG_KEY = "cosmiccore:link_data";
     private static final String TAG_POS = "Pos";
     private static final String TAG_OWNER = "Owner";
@@ -58,11 +56,9 @@ public abstract class LinkedWorkableElectricMultiblockMachine extends WorkableEl
      */
     protected Set<GlobalPos> knownPartners = new HashSet<>();
 
-    public LinkedWorkableElectricMultiblockMachine(BlockEntityCreationInfo holder) {
-        super(holder);
+    public LinkedWorkableElectricMultiblockMachine(BlockEntityCreationInfo info) {
+        super(info);
     }
-
-
     // ==================== ILinkedMultiblock Implementation ====================
 
     @Override
@@ -76,7 +72,7 @@ public abstract class LinkedWorkableElectricMultiblockMachine extends WorkableEl
     @Override
     @Nullable
     public UUID getTeamUUID() {
-        var team = getOwner() instanceof FTBOwner ftbOwner ? ftbOwner.getPlayerTeam(getOwnerUUID()) : null;
+        var team = ((FTBOwner) getOwner()).getPlayerTeam(getOwnerUUID());
         return team != null ? team.getTeamId() : getOwnerUUID();
     }
 
@@ -123,15 +119,15 @@ public abstract class LinkedWorkableElectricMultiblockMachine extends WorkableEl
     // ==================== Lifecycle ====================
 
     @Override
-    public void onStructureFormed() {
-        super.onStructureFormed();
+    public void formStructure(@org.jetbrains.annotations.NotNull String substructureName) {
+        super.formStructure(substructureName);
         // Process any pending link notifications from when we were unloaded
         processLinkNotifications();
     }
 
     @Override
-    public void onStructureInvalid() {
-        super.onStructureInvalid();
+    public void invalidateStructure(String name) {
+        super.invalidateStructure(name);
         // Don't remove links when structure breaks - links persist to SavedData
         // They'll be cleaned up when the machine is actually destroyed
     }
@@ -188,11 +184,15 @@ public abstract class LinkedWorkableElectricMultiblockMachine extends WorkableEl
                 .ifPresent(encoded -> linkData.put(TAG_POS, encoded));
         linkData.putUUID(TAG_OWNER, owner);
 
+        // Store in namespaced tag to preserve other datastick data
         ItemData.mutateTag(dataStick, rootTag -> rootTag.put(DATASTICK_TAG_KEY, linkData));
 
+        // Update datastick name
         String machineName = getDefinition().getName();
-        dataStick.set(DataComponents.CUSTOM_NAME, Component.translatable("cosmiccore.datastick.link_copied", machineName));
+        dataStick.set(net.minecraft.core.component.DataComponents.CUSTOM_NAME,
+                Component.translatable("cosmiccore.datastick.link_copied", machineName));
 
+        // Feedback
         player.sendSystemMessage(Component.translatable("cosmiccore.link.copied", machineName)
                 .withStyle(ChatFormatting.GREEN));
 
@@ -206,8 +206,8 @@ public abstract class LinkedWorkableElectricMultiblockMachine extends WorkableEl
         }
 
         CompoundTag rootTag = ItemData.readTag(dataStick);
-        if (!rootTag.contains(DATASTICK_TAG_KEY)) {
-            return InteractionResult.PASS;
+        if (rootTag == null || !rootTag.contains(DATASTICK_TAG_KEY)) {
+            return InteractionResult.PASS; // Not our data, let other handlers try
         }
 
         CompoundTag linkData = rootTag.getCompound(DATASTICK_TAG_KEY);

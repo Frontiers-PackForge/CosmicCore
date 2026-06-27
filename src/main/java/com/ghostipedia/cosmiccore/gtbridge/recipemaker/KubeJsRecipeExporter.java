@@ -37,12 +37,13 @@ public final class KubeJsRecipeExporter {
             boolean noConsume = i < draft.itemInputNotConsumed.size() && draft.itemInputNotConsumed.get(i);
             int chance = i < draft.itemInputChances.size() ? draft.itemInputChances.get(i) : RecipeDraft.GUARANTEED;
             int boost = i < draft.itemInputBoosts.size() ? draft.itemInputBoosts.get(i) : 0;
+            String arg = tagOrItem(draft.itemInputTags, i, stack);
             if (noConsume) {
-                extraInputs.add(".notConsumable(" + itemString(stack) + ")");
+                extraInputs.add(".notConsumable(" + arg + ")");
             } else if (chance < RecipeDraft.GUARANTEED) {
-                extraInputs.add(".chancedInput(" + itemString(stack) + ", " + chance + ", " + boost + ")");
+                extraInputs.add(".chancedInput(" + arg + ", " + chance + ", " + boost + ")");
             } else {
-                consumed.add(itemString(stack));
+                consumed.add(arg);
             }
         }
         if (consumed.length() > 0) lines.add(".itemInputs(" + consumed + ")");
@@ -87,7 +88,14 @@ public final class KubeJsRecipeExporter {
             }
         }
 
-        lines.add(".EUt(GTValues.VA[GTValues." + GTValues.VN[draft.voltageTier] + "], " + draft.amperage + ")");
+        lines.addAll(draft.extraLines);
+
+        if (draft.rawEU) {
+            lines.add(".EUt(" + draft.rawVoltage + ", " + draft.amperage + ")");
+        } else {
+            lines.add(".EUt(GTValues." + draft.voltageArray + "[GTValues." + GTValues.VN[draft.voltageTier] + "], " +
+                    draft.amperage + ")");
+        }
         if (draft.blastTemp > 0) lines.add(".blastFurnaceTemp(" + draft.blastTemp + ")");
         if (draft.cwu > 0) lines.add(".CWUt(" + draft.cwu + ")");
         if (draft.cleanroom != null && !draft.cleanroom.isEmpty() && !draft.cleanroom.equals("none")) {
@@ -104,6 +112,12 @@ public final class KubeJsRecipeExporter {
     private static String itemString(ItemStack stack) {
         var id = BuiltInRegistries.ITEM.getKey(stack.getItem());
         return stack.getCount() > 1 ? "'" + stack.getCount() + "x " + id + "'" : "'" + id + "'";
+    }
+
+    private static String tagOrItem(List<String> tags, int i, ItemStack stack) {
+        String tag = i < tags.size() ? tags.get(i) : "";
+        if (tag == null || tag.isEmpty()) return itemString(stack);
+        return stack.getCount() > 1 ? "'" + stack.getCount() + "x #" + tag + "'" : "'#" + tag + "'";
     }
 
     private static String fluidArgs(FluidStack stack) {

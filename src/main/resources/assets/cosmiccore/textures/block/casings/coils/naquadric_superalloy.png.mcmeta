@@ -1,9 +1,9 @@
 {
-    "ldlib": {
-        "connection": "cosmiccore:block/casings/coils/naquadric_superalloy_ctm"
+    "gtceu": {
+        "connection_texture": "cosmiccore:block/casings/coils/naquadric_superalloy_ctm"
     },
-    "animation":{
-      "interpolate": true,
-      "frametime":16
-   }
+    "animation": {
+        "interpolate": true,
+        "frametime": 16
+    }
 }

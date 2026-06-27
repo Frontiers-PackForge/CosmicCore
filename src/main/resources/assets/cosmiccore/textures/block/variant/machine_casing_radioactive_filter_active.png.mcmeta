@@ -1,6 +1,6 @@
 {
-    "ldlib": {
-        "connection": "cosmiccore:block/variant/machine_casing_radioactive_filter_ctm_active"
+    "gtceu": {
+        "connection_texture": "cosmiccore:block/variant/machine_casing_radioactive_filter_ctm_active"
     },
     "shimmer": {
         "bloom": true

@@ -35,6 +35,6 @@ public class CosmicCoreJEIPlugin implements IModPlugin {
 
     @Override
     public void registerItemSubtypes(ISubtypeRegistration registration) {
-        if (GTCEu.Mods.isREILoaded() || GTCEu.Mods.isEMILoaded()) return;
+        if (GTCEu.Mods.isAnyRecipeViewerLoaded()) return;
     }
 }

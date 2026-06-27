@@ -11,11 +11,11 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.world.entity.player.Player;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.client.event.ClientTickEvent;
 import net.neoforged.neoforge.client.event.RegisterKeyMappingsEvent;
 import net.neoforged.neoforge.client.settings.KeyConflictContext;
-import net.neoforged.bus.api.SubscribeEvent;
-import net.neoforged.fml.common.EventBusSubscriber;
 
 import com.mojang.blaze3d.platform.InputConstants;
 import org.lwjgl.glfw.GLFW;
@@ -38,9 +38,10 @@ public class QuakeMovementKeybinds {
 
     public static boolean isDashKeyDown() {
         if (DASH == null) return false;
-        Minecraft mc = Minecraft.getInstance();
-        long window = mc.getWindow().getWindow();
-        return InputConstants.isKeyDown(window, DASH.getKey().getValue());
+        InputConstants.Key key = DASH.getKey();
+        if (key.getType() != InputConstants.Type.KEYSYM || key.getValue() < 0) return false;
+        long window = Minecraft.getInstance().getWindow().getWindow();
+        return InputConstants.isKeyDown(window, key.getValue());
     }
 
     @EventBusSubscriber(modid = CosmicCore.MOD_ID, bus = EventBusSubscriber.Bus.GAME, value = Dist.CLIENT)

@@ -6,8 +6,9 @@ import com.gregtechceu.gtceu.GTCEu;
 import com.gregtechceu.gtceu.api.data.RotationState;
 import com.gregtechceu.gtceu.api.machine.MultiblockMachineDefinition;
 import com.gregtechceu.gtceu.api.machine.multiblock.PartAbility;
-import com.gregtechceu.gtceu.api.pattern.FactoryBlockPattern;
-import com.gregtechceu.gtceu.api.pattern.Predicates;
+import com.gregtechceu.gtceu.api.multiblock.Predicates;
+import com.gregtechceu.gtceu.api.multiblock.pattern.MultiblockPatternBuilder;
+import com.gregtechceu.gtceu.api.multiblock.util.RelativeDirection;
 import com.gregtechceu.gtceu.api.recipe.OverclockingLogic;
 import com.gregtechceu.gtceu.common.data.GTMaterials;
 import com.gregtechceu.gtceu.common.data.GTRecipeModifiers;
@@ -16,7 +17,7 @@ import com.gregtechceu.gtceu.common.data.GTRecipeTypes;
 import net.minecraft.world.level.block.Blocks;
 
 import static com.ghostipedia.cosmiccore.api.registries.CosmicRegistration.REGISTRATE;
-import static com.gregtechceu.gtceu.api.pattern.Predicates.*;
+import static com.gregtechceu.gtceu.api.multiblock.Predicates.*;
 import static com.gregtechceu.gtceu.common.data.GTBlocks.*;
 
 public class DroneStation {
@@ -30,20 +31,21 @@ public class DroneStation {
             .appearanceBlock(CASING_STAINLESS_CLEAN)
             .partAppearance((controller, part, side) -> CASING_STAINLESS_CLEAN.getDefaultState())
             .recipeModifiers(GTRecipeModifiers.ELECTRIC_OVERCLOCK.apply(OverclockingLogic.PERFECT_OVERCLOCK_SUBTICK))
-            .pattern(definition -> FactoryBlockPattern.start()
-                    .aisle(" AAAAA     ", "           ", "           ", "           ", "           ", "           ",
+            .pattern(definition -> MultiblockPatternBuilder
+                    .start(RelativeDirection.FRONT, RelativeDirection.UP, RelativeDirection.LEFT)
+                    .slice(" AAAAA     ", "           ", "           ", "           ", "           ", "           ",
                             "           ", "           ", "           ", "           ", "           ")
-                    .aisle("AAAAAAA    ", "B     B    ", "B     B    ", "B  C  B    ", "B CCC B    ", "BCCCCCB    ",
+                    .slice("AAAAAAA    ", "B     B    ", "B     B    ", "B  C  B    ", "B CCC B    ", "BCCCCCB    ",
                             "BCCDCCB    ", "BCCCCCB    ", "B CCC B  F ", "B     B F  ", "           ")
-                    .aisle("AAAAAAAAAA ", "       FFF ", "  CCC  FFF ", "  CEC  FFF ", " CEEEC FFF ", " CEEEC FFF ",
+                    .slice("AAAAAAAAAA ", "       FFF ", "  CCC  FFF ", "  CEC  FFF ", " CEEEC FFF ", " CEEEC FFF ",
                             " CEEEC     ", " CEEEC   FF", " CEEEC  F  ", "  CCC  F   ", "       F   ")
-                    .aisle("AAAAAAAAAA ", "       F F ", "  CCC  F F ", " CEEEC F F ", " CEEEC F F ", " CEEEC FFF ",
+                    .slice("AAAAAAAAAA ", "       F F ", "  CCC  F F ", " CEEEC F F ", " CEEEC F F ", " CEEEC FFF ",
                             " DEEED  B  ", " CEEEC  BFF", " CEEEC  H  ", "  CCC  F H ", "       F   ")
-                    .aisle("AAAAAAAAAA ", "       FFF ", "  CCC  FQF ", "  CEC  FFF ", " CEEEC FFF ", " CEEEC FFF ",
+                    .slice("AAAAAAAAAA ", "       FFF ", "  CCC  FQF ", "  CEC  FFF ", " CEEEC FFF ", " CEEEC FFF ",
                             " CEEEC     ", " CEEEC   FF", " CEEEC  F  ", "  CCC  F   ", "       F   ")
-                    .aisle("AAAAAAA    ", "B     B    ", "B     B    ", "B  C  B    ", "B CCC B    ", "BCCCCCB    ",
+                    .slice("AAAAAAA    ", "B     B    ", "B     B    ", "B  C  B    ", "B CCC B    ", "BCCCCCB    ",
                             "BCCDCCB    ", "BCCCCCB    ", "B CCC B  F ", "B     B F  ", "           ")
-                    .aisle(" AAAAA     ", "           ", "           ", "           ", "           ", "           ",
+                    .slice(" AAAAA     ", "           ", "           ", "           ", "           ", "           ",
                             "           ", "           ", "           ", "           ", "           ")
 
                     .where('Q', controller(blocks(definition.getBlock())))

@@ -3,19 +3,15 @@ package com.ghostipedia.cosmiccore.api.machine.multiblock;
 import com.ghostipedia.cosmiccore.api.data.wireless.WirelessEnergySavedData;
 import com.ghostipedia.cosmiccore.api.machine.feature.IStellarIrisProvider;
 import com.ghostipedia.cosmiccore.api.machine.feature.IStellarModuleReceiver;
-import com.ghostipedia.cosmiccore.client.gui.widget.stellar.StellarModuleContentWidget;
-import com.ghostipedia.cosmiccore.client.gui.widget.stellar.StellarModuleUIWidget;
 
 import com.gregtechceu.gtceu.api.GTValues;
+import com.gregtechceu.gtceu.api.blockentity.BlockEntityCreationInfo;
 import com.gregtechceu.gtceu.api.capability.recipe.EURecipeCapability;
 import com.gregtechceu.gtceu.api.capability.recipe.IO;
 import com.gregtechceu.gtceu.api.capability.recipe.IRecipeHandler;
 import com.gregtechceu.gtceu.api.capability.recipe.RecipeCapability;
-import com.gregtechceu.gtceu.api.blockentity.BlockEntityCreationInfo;
 import com.gregtechceu.gtceu.api.machine.MetaMachine;
-import com.gregtechceu.gtceu.api.machine.feature.IFancyUIMachine;
 import com.gregtechceu.gtceu.api.machine.feature.IOverclockMachine;
-import com.gregtechceu.gtceu.api.machine.feature.multiblock.IDisplayUIMachine;
 import com.gregtechceu.gtceu.api.machine.multiblock.WorkableMultiblockMachine;
 import com.gregtechceu.gtceu.api.machine.trait.NotifiableEnergyContainer;
 import com.gregtechceu.gtceu.api.recipe.GTRecipe;
@@ -24,16 +20,11 @@ import com.gregtechceu.gtceu.common.machine.owner.FTBOwner;
 import com.gregtechceu.gtceu.common.machine.owner.MachineOwner;
 import com.gregtechceu.gtceu.utils.GTUtil;
 
-import com.lowdragmc.lowdraglib.gui.modular.ModularUI;
-import com.lowdragmc.lowdraglib.gui.widget.Widget;
 import com.lowdragmc.lowdraglib.syncdata.annotation.DescSynced;
 import com.lowdragmc.lowdraglib.syncdata.annotation.Persisted;
-import net.minecraft.ChatFormatting;
+
 import net.minecraft.core.BlockPos;
-import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.Style;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.world.entity.player.Player;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -46,9 +37,7 @@ import java.util.Map;
 import java.util.UUID;
 
 public class StellarBaseModule extends WorkableMultiblockMachine
-                               implements IStellarModuleReceiver, IDisplayUIMachine, IFancyUIMachine,
-                               IOverclockMachine {
-
+                               implements IStellarModuleReceiver, IOverclockMachine {
 
     @Nullable
     private IStellarIrisProvider stellarIris;
@@ -74,8 +63,8 @@ public class StellarBaseModule extends WorkableMultiblockMachine
 
     public StellarBaseModule(BlockEntityCreationInfo holder) {
         super(holder);
-        this.virtualEnergyContainer = new NotifiableEnergyContainer(this,
-                Long.MAX_VALUE, Long.MAX_VALUE, Long.MAX_VALUE, 0, 0);
+        this.virtualEnergyContainer = attachTrait(new NotifiableEnergyContainer(
+                Long.MAX_VALUE, Long.MAX_VALUE, Long.MAX_VALUE, 0, 0));
         this.virtualEnergyContainer.setSideInputCondition(side -> false);
         this.virtualEnergyContainer.setSideOutputCondition(side -> false);
     }
@@ -114,7 +103,6 @@ public class StellarBaseModule extends WorkableMultiblockMachine
     public void setConfiguredVoltagePerParallel(long configuredVoltagePerParallel) {
         this.configuredVoltagePerParallel = configuredVoltagePerParallel;
     }
-
 
     protected UUID getTeamUUID() {
         var owner = getOwner();
@@ -211,8 +199,8 @@ public class StellarBaseModule extends WorkableMultiblockMachine
     }
 
     @Override
-    public void onStructureFormed() {
-        super.onStructureFormed();
+    public void formStructure(@NotNull String substructureName) {
+        super.formStructure(substructureName);
         this.wirelessEnergyAvailable = checkWirelessEnergyAvailable();
         findAndRegisterWithIris();
         virtualEnergyContainer.setEnergyStored(Long.MAX_VALUE / 2);
@@ -259,8 +247,8 @@ public class StellarBaseModule extends WorkableMultiblockMachine
     }
 
     @Override
-    public void onStructureInvalid() {
-        super.onStructureInvalid();
+    public void invalidateStructure(String name) {
+        super.invalidateStructure(name);
 
         if (stellarIris instanceof IrisMultiblockMachine iris) {
             iris.unregisterModule(this);
@@ -438,61 +426,10 @@ public class StellarBaseModule extends WorkableMultiblockMachine
         return configuredVoltagePerParallel * getEffectiveParallelLimit();
     }
 
-    @Override
-    public Widget createUIWidget() {
-        return new StellarModuleContentWidget(() -> this);
-    }
-
-    @Override
-    public ModularUI createUI(Player entityPlayer) {
-        return new ModularUI(198, 208, this, entityPlayer)
-                .widget(new StellarModuleUIWidget(this, 198, 208, () -> this));
-    }
-
-    @Override
-    public void addDisplayText(List<Component> textList) {
-        IDisplayUIMachine.super.addDisplayText(textList);
-
-        if (isFormed()) {
-            if (powerFailure) {
-                textList.add(Component.translatable("cosmiccore.multiblock.stellar_module.power_failure")
-                        .setStyle(Style.EMPTY.withColor(ChatFormatting.RED).withBold(true)));
-            }
-
-            if (!wirelessEnergyAvailable) {
-                textList.add(Component.translatable("cosmiccore.multiblock.stellar_module.no_wireless")
-                        .setStyle(Style.EMPTY.withColor(ChatFormatting.RED)));
-            } else if (energyConsumedPerTick > 0) {
-                textList.add(Component.translatable("cosmiccore.multiblock.stellar_module.energy_usage",
-                        String.format("%,d", energyConsumedPerTick))
-                        .setStyle(Style.EMPTY.withColor(ChatFormatting.YELLOW)));
-            }
-
-            String tierName = GTValues.VNF[getOverclockTier()];
-            textList.add(Component.translatable("cosmiccore.multiblock.stellar_module.power_config",
-                    tierName, getEffectiveParallelLimit())
-                    .setStyle(Style.EMPTY.withColor(ChatFormatting.AQUA)));
-
-            IStellarIrisProvider iris = getStellarIris();
-            if (iris == null) {
-                textList.add(Component.translatable("cosmiccore.multiblock.stellar_module.not_connected"));
-            } else if (!iris.isFormed()) {
-                textList.add(Component.translatable("cosmiccore.multiblock.stellar_module.iris_not_formed"));
-            } else if (!iris.canProcess()) {
-                textList.add(Component.translatable("cosmiccore.multiblock.stellar_module.iris_not_ready"));
-                textList.add(Component.translatable("cosmiccore.multiblock.stellar_module.stage",
-                        iris.getStage().toString()));
-            } else {
-                textList.add(Component.translatable("cosmiccore.multiblock.stellar_module.connected"));
-                textList.add(Component.translatable("cosmiccore.multiblock.stellar_module.stage",
-                        iris.getStage().toString()));
-                textList.add(Component.translatable("cosmiccore.multiblock.stellar_module.speed_bonus",
-                        String.format("%.1fx", iris.getSpeedBonus())));
-                textList.add(Component.translatable("cosmiccore.multiblock.stellar_module.parallel",
-                        iris.getParallelLimit()));
-            }
-        }
-    }
+    // TODO(8.0.0 UI): the LDLib IDisplayUIMachine/IFancyUIMachine machine-feature surface was removed in
+    // GTCEu 8.0.0 (replaced by MUI2, which is deferred/unavailable on this target). The Stellar module UI
+    // (createUIWidget/createUI via StellarModuleContentWidget/StellarModuleUIWidget) and the addDisplayText
+    // status readout were dropped here. Re-implement on MUI2 once it lands. All non-UI logic is preserved.
 
     public boolean isPowerFailure() {
         return powerFailure;

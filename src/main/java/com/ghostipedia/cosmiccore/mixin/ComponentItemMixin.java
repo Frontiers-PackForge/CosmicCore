@@ -1,9 +1,9 @@
 package com.ghostipedia.cosmiccore.mixin;
 
+import com.ghostipedia.cosmiccore.api.item.component.ICustomRenderer;
 import com.ghostipedia.cosmiccore.client.renderer.item.CosmicCoreItemRendererProvider;
 
 import com.gregtechceu.gtceu.api.item.ComponentItem;
-import com.gregtechceu.gtceu.api.item.component.ICustomRenderer;
 import com.gregtechceu.gtceu.api.item.component.IItemComponent;
 
 import net.minecraft.world.item.Item;
@@ -33,4 +33,7 @@ public abstract class ComponentItemMixin extends Item implements CosmicCoreItemR
         }
         return null;
     }
+
+    // getRenderer(ItemStack) -> IRenderer lives as a default on CosmicCoreItemRendererProvider (shared by
+    // this and TagPrefixItemMixin); this mixin only supplies getRenderInfo.
 }

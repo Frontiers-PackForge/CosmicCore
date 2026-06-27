@@ -32,8 +32,19 @@ import java.util.Map;
  */
 public final class RecipeCodecReader {
 
-    public enum Kind { ITEM, FLUID, NUMBER, STRING, BOOLEAN, LIST, OBJECT, OTHER }
+    public enum Kind {
+        ITEM,
+        FLUID,
+        NUMBER,
+        STRING,
+        BOOLEAN,
+        LIST,
+        OBJECT,
+        OTHER
+    }
+
     public record JsonField(String name, Kind kind, Kind elementKind, boolean output, int listMax) {}
+
     private static final int MAX_SAMPLES = 64;
 
     private RecipeCodecReader() {}
@@ -42,7 +53,8 @@ public final class RecipeCodecReader {
     private static List<RecipeHolder<?>> recipesOf(Player player, ResourceLocation typeId) {
         RecipeType<?> type = BuiltInRegistries.RECIPE_TYPE.get(typeId);
         if (type == null) return List.of();
-        Collection<RecipeHolder<?>> all = (Collection) player.level().getRecipeManager().getAllRecipesFor((RecipeType) type);
+        Collection<RecipeHolder<?>> all = (Collection) player.level().getRecipeManager()
+                .getAllRecipesFor((RecipeType) type);
         List<RecipeHolder<?>> sorted = new ArrayList<>(all);
         sorted.sort(Comparator.comparing(holder -> holder.id().toString()));
         return sorted;

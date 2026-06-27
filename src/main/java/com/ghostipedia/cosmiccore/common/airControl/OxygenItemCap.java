@@ -8,6 +8,6 @@ public class OxygenItemCap {
 
     private OxygenItemCap() {}
 
-    public static final ItemCapability<IOxygenSupplyItem, Void> OXYGEN_SUPPLY =
-            ItemCapability.createVoid(CosmicCore.id("oxygen_supply"), IOxygenSupplyItem.class);
+    public static final ItemCapability<IOxygenSupplyItem, Void> OXYGEN_SUPPLY = ItemCapability
+            .createVoid(CosmicCore.id("oxygen_supply"), IOxygenSupplyItem.class);
 }

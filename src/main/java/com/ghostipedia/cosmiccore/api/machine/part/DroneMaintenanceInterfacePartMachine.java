@@ -4,9 +4,6 @@ import com.ghostipedia.cosmiccore.api.machine.multiblock.DroneStationMachine;
 import com.ghostipedia.cosmiccore.api.misc.DroneStationConnection;
 
 import com.gregtechceu.gtceu.api.GTValues;
-import com.gregtechceu.gtceu.api.gui.GuiTextures;
-import com.gregtechceu.gtceu.api.gui.fancy.IFancyTooltip;
-import com.gregtechceu.gtceu.api.gui.fancy.TooltipsPanel;
 import com.gregtechceu.gtceu.api.blockentity.BlockEntityCreationInfo;
 import com.gregtechceu.gtceu.api.machine.TickableSubscription;
 import com.gregtechceu.gtceu.api.machine.feature.multiblock.IMaintenanceMachine;
@@ -14,20 +11,15 @@ import com.gregtechceu.gtceu.api.machine.multiblock.part.TieredPartMachine;
 
 import com.lowdragmc.lowdraglib.syncdata.annotation.DescSynced;
 import com.lowdragmc.lowdraglib.syncdata.annotation.Persisted;
-import net.minecraft.ChatFormatting;
-import net.minecraft.core.BlockPos;
-import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.Style;
+
 import net.minecraft.resources.ResourceLocation;
 
 import org.jetbrains.annotations.Nullable;
 
-import java.util.List;
 import java.util.Set;
 
 public class DroneMaintenanceInterfacePartMachine extends TieredPartMachine
                                                   implements IMaintenanceMachine {
-
 
     @Persisted
     protected int timeActive;
@@ -53,7 +45,6 @@ public class DroneMaintenanceInterfacePartMachine extends TieredPartMachine
     //////////////////////////////////////
     // ****** Initialization ******//
     //////////////////////////////////////
-
 
     @Override
     public byte startProblems() {
@@ -145,7 +136,7 @@ public class DroneMaintenanceInterfacePartMachine extends TieredPartMachine
         // TODO[GTCEu 8.0 port]: cleanroom-supplying disabled. The 1.20.1 API used here
         // (ICleanroomProvider / ICleanroomReceiver / DummyCleanroom.createForTypes) was removed.
         // 8.0 replaces it with the trait pair CleanroomProviderTrait / CleanroomReceiverTrait
-        // (com.gregtechceu.gtceu.api.machine.trait). Reimplementing requires attaching a
+        // (com.gregtechceu.gtceu.common.machine.trait). Reimplementing requires attaching a
         // CleanroomProviderTrait to this part and pushing it into each controller's
         // CleanroomReceiverTrait via CleanroomReceiverTrait#setCleanroomProvider; there is no
         // DummyCleanroom factory anymore, so a real provider trait must be constructed.
@@ -175,26 +166,14 @@ public class DroneMaintenanceInterfacePartMachine extends TieredPartMachine
         }
     }
 
-    @Override
-    public void attachTooltips(TooltipsPanel tooltipsPanel) {
-        IMaintenanceMachine.super.attachTooltips(tooltipsPanel);
-        tooltipsPanel.attachTooltips(new IFancyTooltip.Basic(
-                () -> GuiTextures.GREGTECH_LOGO,
-                () -> List.of(Component
-                        .translatable("cosmiccore.multiblock.drone_maintenance_interface.connection_location",
-                                BlockPos.of(this.syncedConnectionPos).getX(),
-                                BlockPos.of(this.syncedConnectionPos).getY(),
-                                BlockPos.of(this.syncedConnectionPos).getZ())
-                        .setStyle(Style.EMPTY.withColor(ChatFormatting.GREEN))),
-                () -> this.syncedConnectionPos != -1,
-                () -> null));
-        tooltipsPanel.attachTooltips(new IFancyTooltip.Basic(
-                () -> GuiTextures.GREGTECH_LOGO,
-                () -> List.of(Component.translatable("cosmiccore.multiblock.drone_maintenance_interface.no_connection")
-                        .setStyle(Style.EMPTY.withColor(ChatFormatting.RED))),
-                (() -> this.syncedConnectionPos == -1),
-                () -> null));
-    }
+    // TODO(8.0.0 MUI2): custom UI shelved; default UI used (orig in git).
+    // attachTooltips(TooltipsPanel) used the removed api.gui.fancy IFancyTooltip/TooltipsPanel API.
+    // It surfaced two GTECH-logo fancy tooltips driven by syncedConnectionPos:
+    // - when connected (syncedConnectionPos != -1): green "drone_maintenance_interface.connection_location"
+    // with BlockPos.of(syncedConnectionPos) X/Y/Z;
+    // - when disconnected (== -1): red "drone_maintenance_interface.no_connection".
+    // Reinstate via GTMultiblockTextUtil rows in the controller's getWidgetsForDisplay when porting to MUI2.
+    // The syncedConnectionPos field + connection logic above remain fully functional.
 
     public void fixAllMaintenanceProblems() {
         for (int i = 0; i < 6; i++) setMaintenanceFixed(i);

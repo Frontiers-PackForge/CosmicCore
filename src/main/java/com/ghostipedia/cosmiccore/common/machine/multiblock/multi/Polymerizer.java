@@ -10,8 +10,9 @@ import com.gregtechceu.gtceu.api.data.tag.TagPrefix;
 import com.gregtechceu.gtceu.api.machine.MultiblockMachineDefinition;
 import com.gregtechceu.gtceu.api.machine.multiblock.PartAbility;
 import com.gregtechceu.gtceu.api.machine.multiblock.WorkableElectricMultiblockMachine;
-import com.gregtechceu.gtceu.api.pattern.FactoryBlockPattern;
-import com.gregtechceu.gtceu.api.pattern.Predicates;
+import com.gregtechceu.gtceu.api.multiblock.Predicates;
+import com.gregtechceu.gtceu.api.multiblock.pattern.MultiblockPatternBuilder;
+import com.gregtechceu.gtceu.api.multiblock.util.RelativeDirection;
 import com.gregtechceu.gtceu.api.recipe.OverclockingLogic;
 import com.gregtechceu.gtceu.common.data.GTMaterials;
 import com.gregtechceu.gtceu.common.data.GTRecipeModifiers;
@@ -19,7 +20,7 @@ import com.gregtechceu.gtceu.common.data.GTRecipeModifiers;
 import static com.ghostipedia.cosmiccore.api.registries.CosmicRegistration.REGISTRATE;
 import static com.ghostipedia.cosmiccore.common.data.CosmicBlocks.*;
 import static com.ghostipedia.cosmiccore.common.data.datagen.CosmicMachineModels.createSeparateControllerCasingMachineModel;
-import static com.gregtechceu.gtceu.api.pattern.Predicates.*;
+import static com.gregtechceu.gtceu.api.multiblock.Predicates.*;
 import static com.gregtechceu.gtceu.common.data.GTBlocks.FUSION_GLASS;
 import static com.gregtechceu.gtceu.common.data.GTRecipeModifiers.BATCH_MODE;
 import static com.gregtechceu.gtceu.common.data.GTRecipeModifiers.ELECTRIC_OVERCLOCK;
@@ -34,14 +35,15 @@ public class Polymerizer {
             .partAppearance((controller, part, side) -> CYCLOZINE_CHEMICALLY_REPELLING_CASING.getDefaultState())
             .recipeModifiers(GTRecipeModifiers.PARALLEL_HATCH,
                     ELECTRIC_OVERCLOCK.apply(OverclockingLogic.PERFECT_OVERCLOCK), BATCH_MODE)
-            .pattern(definition -> FactoryBlockPattern.start()
-                    .aisle("X       X", "X       X", "AABBABBAA", "AABBABBAA", "AABBABBAA", "         ", "         ")
-                    .aisle("         ", "AABBABBAA", "AD#####DA", "ADD###DDA", "AD#####DA", "AABBABBAA", "         ")
-                    .aisle("AABBABBAA", "AD#####DA", "EF#####FE", "EFD###DFE", "EF#####FE", "AD#####DA", "AABBABBAA")
-                    .aisle("AABBABBAA", "ADD###DDA", "EFD###DFE", "EDDFFFDDE", "EFD###DFE", "ADD###DDA", "AABBABBAA")
-                    .aisle("AABBABBAA", "AD#####DA", "EF#####FE", "EFD###DFE", "EF#####FE", "AD#####DA", "AABBABBAA")
-                    .aisle("         ", "AABBABBAA", "AD#####DA", "ADD###DDA", "AD#####DA", "AABBABBAA", "         ")
-                    .aisle("X       X", "X       X", "AABBABBAA", "AABBQBBAA", "AABBABBAA", "         ", "         ")
+            .pattern(definition -> MultiblockPatternBuilder
+                    .start(RelativeDirection.FRONT, RelativeDirection.UP, RelativeDirection.LEFT)
+                    .slice("X       X", "X       X", "AABBABBAA", "AABBABBAA", "AABBABBAA", "         ", "         ")
+                    .slice("         ", "AABBABBAA", "AD#####DA", "ADD###DDA", "AD#####DA", "AABBABBAA", "         ")
+                    .slice("AABBABBAA", "AD#####DA", "EF#####FE", "EFD###DFE", "EF#####FE", "AD#####DA", "AABBABBAA")
+                    .slice("AABBABBAA", "ADD###DDA", "EFD###DFE", "EDDFFFDDE", "EFD###DFE", "ADD###DDA", "AABBABBAA")
+                    .slice("AABBABBAA", "AD#####DA", "EF#####FE", "EFD###DFE", "EF#####FE", "AD#####DA", "AABBABBAA")
+                    .slice("         ", "AABBABBAA", "AD#####DA", "ADD###DDA", "AD#####DA", "AABBABBAA", "         ")
+                    .slice("X       X", "X       X", "AABBABBAA", "AABBQBBAA", "AABBABBAA", "         ", "         ")
                     .where('Q', Predicates.controller(Predicates.blocks(definition.get())))
                     .where(' ', Predicates.any())
                     .where('#', Predicates.air())

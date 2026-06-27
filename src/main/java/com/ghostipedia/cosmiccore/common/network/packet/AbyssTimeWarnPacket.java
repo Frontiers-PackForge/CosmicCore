@@ -14,8 +14,8 @@ import org.jetbrains.annotations.NotNull;
 public class AbyssTimeWarnPacket implements CustomPacketPayload {
 
     public static final Type<AbyssTimeWarnPacket> TYPE = new Type<>(CosmicCore.id("abyss_time_warn"));
-    public static final StreamCodec<FriendlyByteBuf, AbyssTimeWarnPacket> CODEC =
-            StreamCodec.ofMember(AbyssTimeWarnPacket::encode, AbyssTimeWarnPacket::new);
+    public static final StreamCodec<FriendlyByteBuf, AbyssTimeWarnPacket> CODEC = StreamCodec
+            .ofMember(AbyssTimeWarnPacket::encode, AbyssTimeWarnPacket::new);
 
     private final String message;
 

@@ -1,10 +1,23 @@
 package com.ghostipedia.cosmiccore.common.data.lang;
 
+import com.ghostipedia.cosmiccore.common.data.worldgen.field.OreFieldPlacement;
+
+import com.gregtechceu.gtceu.api.data.chemical.material.Material;
 import com.gregtechceu.gtceu.data.lang.LangHandler;
 
 import com.tterrag.registrate.providers.RegistrateLangProvider;
 
 public class CosmicLangHandler extends LangHandler {
+
+    private static String toTitle(String snakeCase) {
+        StringBuilder out = new StringBuilder();
+        for (String part : snakeCase.split("_")) {
+            if (part.isEmpty()) continue;
+            if (out.length() > 0) out.append(' ');
+            out.append(Character.toUpperCase(part.charAt(0))).append(part.substring(1));
+        }
+        return out.toString();
+    }
 
     public static void init(RegistrateLangProvider provider) {
         // Vein Survey Scanner
@@ -29,6 +42,15 @@ public class CosmicLangHandler extends LangHandler {
         provider.add("cosmiccore.survey.no_veins.filtered", "No veins found matching '%s'");
         provider.add("cosmiccore.survey.no_veins.directional", "No veins found in that direction");
         provider.add("cosmiccore.survey.click_tp", "Click to teleport");
+        provider.add("button.cosmiccore.toggle_depleted.name", "Toggle Depleted");
+        provider.add("cosmiccore.dowsing.found", "The rod twitches toward a nearby field");
+        provider.add("cosmiccore.dowsing.none", "The rod lies still");
+        provider.add("cosmiccore.dowsing.tooltip.radius", "Sensing range: %d blocks");
+        provider.add("cosmiccore.dowsing.tooltip.use", "§7Use: Reveal the nearest ore field");
+
+        for (Material bundle : OreFieldPlacement.bundles()) {
+            provider.add("ore_vein.cosmiccore." + bundle.getName(), toTitle(bundle.getName()) + " Ore Field");
+        }
         provider.add("cosmiccore.survey.command.scanning", "Surveying veins within %d blocks...");
         provider.add("cosmiccore.survey.command.results", "=== Vein Survey Results ===");
         provider.add("cosmiccore.survey.command.vein_types", "Vein types: ");
@@ -425,8 +447,8 @@ public class CosmicLangHandler extends LangHandler {
                 "§cStar Requires \n§r%s \n§cto avoid §lcataclysmic failure!");
         provider.add("cosmiccore.multiblock.advanced.star_ladder_tier",
                 "§aVomahine StarLadderOld Tether Tier§f: §b%s \n §aMax Research Modules§f: §b%s");
-        provider.add("tagprefix.leached_ore", "Leached %s Ore");
-        provider.add("tagprefix.prisma_frothed_ore", "Prisma Frothed %s Ore");
+        // provider.add("tagprefix.leached_ore", "Leached %s Ore");
+        // provider.add("tagprefix.prisma_frothed_ore", "Prisma Frothed %s Ore");
         provider.add("tagprefix.ultradense_plate", "Ultradense %s Plate");
         provider.add("tagprefix.heavy_beam", "Heavy %s Beam");
         provider.add("tagprefix.modular_shelling", "%s Modular Shelling");
@@ -435,6 +457,11 @@ public class CosmicLangHandler extends LangHandler {
         provider.add("tagprefix.shape_memory_foil", "%s Shaping Memory Foil");
         provider.add("tagprefix.alve_foil_insulator", "%s Alve Insulator");
         provider.add("tagprefix.raw_ore_cubic", "Cubic %s Ore");
+        provider.add("tagprefix.ore_chunk", "%s Ore Chunk");
+        provider.add("tagprefix.powderized_ore", "Powderized %s Ore");
+        provider.add("tagprefix.crystallized_ore_chunk", "Crystallized %s Ore Chunk");
+        provider.add("tagprefix.atomically_purified_ore_chunk", "Atomically Purified %s Ore Chunk");
+        provider.add("tagprefix.flocculated_ore", "Flocculated %s Ore");
 
         provider.add("cosmiccore.multiblock.reboot_powergrid", "§aReboot All Connected Machines");
         provider.add("cosmiccore.multiblock.sleep_powergrid", "§cSuspend All Connected Machines");
@@ -511,6 +538,9 @@ public class CosmicLangHandler extends LangHandler {
         // embers lang
         provider.add("cosmiccore.ember.capacity", "§cEmber Capacity:§6 %s");
         provider.add("cosmiccore.ember.transfer", "§cEmber Transfer Rate:§6 %s");
+        provider.add("cosmiccore.jade.ember", "Ember: %s/%s");
+        provider.add("cosmiccore.jade.ember.volatile", "Accepts Volatile Ember");
+        provider.add("cosmiccore.jade.ember.transfer", "Transfer: %s");
 
         multiLang(provider, "item.cosmiccore.the_one_ring.tooltip",
                 "§6§oOne Ring to rule them all, One Ring to find them, One Ring to bring them all and in the darkness bind them.§r",

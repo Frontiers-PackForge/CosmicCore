@@ -7,6 +7,7 @@ import com.ghostipedia.cosmiccore.common.data.CosmicItems;
 import com.ghostipedia.cosmiccore.common.data.CosmicMachines;
 import com.ghostipedia.cosmiccore.common.data.materials.CosmicElements;
 import com.ghostipedia.cosmiccore.common.data.materials.CosmicMaterials;
+import com.ghostipedia.cosmiccore.common.data.worldgen.CosmicOreVeins;
 import com.ghostipedia.cosmiccore.common.data.worldgen.CosmicWorldGenLayers;
 import com.ghostipedia.cosmiccore.common.data.worldgen.generator.veins.BranchingVeinGenerator;
 import com.ghostipedia.cosmiccore.common.data.worldgen.generator.veins.ClusterVeinGenerator;
@@ -51,6 +52,7 @@ public class CosmicCoreKubeJSPlugin implements KubeJSPlugin {
         bindings.add("ShellVeinGenerator", ShellVeinGenerator.class);
 
         bindings.add("CosmicWorldGenLayers", CosmicWorldGenLayers.class);
+        bindings.add("CosmicOreVeins", CosmicOreVeins.class);
         bindings.add("CosmicCore", CosmicCore.class);
     }
 }

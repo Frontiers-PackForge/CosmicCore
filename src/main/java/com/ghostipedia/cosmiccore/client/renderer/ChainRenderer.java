@@ -108,7 +108,8 @@ public class ChainRenderer {
             RenderSystem.setShaderColor(chain.color[0] / 255f, chain.color[1] / 255f,
                     chain.color[2] / 255f, alpha);
 
-            BufferBuilder buffer = Tesselator.getInstance().begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX);
+            BufferBuilder buffer = Tesselator.getInstance().begin(VertexFormat.Mode.QUADS,
+                    DefaultVertexFormat.POSITION_TEX);
             emitChainQuads(buffer, matrix, chain, partialTick);
             BufferUploader.drawWithShader(buffer.buildOrThrow());
         }

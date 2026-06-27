@@ -8,7 +8,8 @@ import com.gregtechceu.gtceu.api.data.RotationState;
 import com.gregtechceu.gtceu.api.machine.MultiblockMachineDefinition;
 import com.gregtechceu.gtceu.api.machine.multiblock.PartAbility;
 import com.gregtechceu.gtceu.api.machine.multiblock.WorkableElectricMultiblockMachine;
-import com.gregtechceu.gtceu.api.pattern.FactoryBlockPattern;
+import com.gregtechceu.gtceu.api.multiblock.pattern.MultiblockPatternBuilder;
+import com.gregtechceu.gtceu.api.multiblock.util.RelativeDirection;
 import com.gregtechceu.gtceu.api.recipe.OverclockingLogic;
 import com.gregtechceu.gtceu.common.data.GTBlocks;
 import com.gregtechceu.gtceu.common.data.GTRecipeModifiers;
@@ -17,7 +18,7 @@ import com.sammy.malum.registry.common.block.MalumBlocks;
 
 import static com.ghostipedia.cosmiccore.api.registries.CosmicRegistration.REGISTRATE;
 import static com.ghostipedia.cosmiccore.common.data.CosmicBlocks.HIGH_TEMP_FISSION_CASING;
-import static com.gregtechceu.gtceu.api.pattern.Predicates.*;
+import static com.gregtechceu.gtceu.api.multiblock.Predicates.*;
 
 public class VoidSaltReactor {
 
@@ -33,12 +34,12 @@ public class VoidSaltReactor {
                     GTRecipeModifiers.ELECTRIC_OVERCLOCK.apply(OverclockingLogic.NON_PERFECT_OVERCLOCK_SUBTICK),
                     GTRecipeModifiers.BATCH_MODE)
             // spotless:off
-            .pattern(definition -> FactoryBlockPattern.start()
-                    .aisle("AA AA", "BA AB", "B   B", "B   B", "B   B", "BA AB", "AA AA")
-                    .aisle("AAAAA", "ACCCA", " CDC ", " CDC ", " CDC ", "ACCCA", "AAAAA")
-                    .aisle(" AAA ", " CCC ", " DED ", " DED ", " DED ", " CCC ", " AAA ")
-                    .aisle("AAAAA", "ACQCA", " CDC ", " CDC ", " CDC ", "ACCCA", "AAAAA")
-                    .aisle("AA AA", "BA AB", "B   B", "B   B", "B   B", "BA AB", "AA AA")
+            .pattern(definition -> MultiblockPatternBuilder.start(RelativeDirection.FRONT, RelativeDirection.UP, RelativeDirection.LEFT)
+                    .slice("AA AA", "BA AB", "B   B", "B   B", "B   B", "BA AB", "AA AA")
+                    .slice("AAAAA", "ACCCA", " CDC ", " CDC ", " CDC ", "ACCCA", "AAAAA")
+                    .slice(" AAA ", " CCC ", " DED ", " DED ", " DED ", " CCC ", " AAA ")
+                    .slice("AAAAA", "ACQCA", " CDC ", " CDC ", " CDC ", "ACCCA", "AAAAA")
+                    .slice("AA AA", "BA AB", "B   B", "B   B", "B   B", "BA AB", "AA AA")
 
                     .where(' ', any())
                     .where('Q', controller(blocks(definition.getBlock())))

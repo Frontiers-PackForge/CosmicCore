@@ -3,10 +3,10 @@ package com.ghostipedia.cosmiccore.common.machine.multiblock.multi.logic;
 import com.ghostipedia.cosmiccore.api.capability.ILinkedMultiblock;
 import com.ghostipedia.cosmiccore.api.machine.multiblock.LinkedWorkableMultiblockMachine;
 
+import com.gregtechceu.gtceu.api.blockentity.BlockEntityCreationInfo;
 import com.gregtechceu.gtceu.api.capability.recipe.FluidRecipeCapability;
 import com.gregtechceu.gtceu.api.capability.recipe.IO;
 import com.gregtechceu.gtceu.api.capability.recipe.ItemRecipeCapability;
-import com.gregtechceu.gtceu.api.blockentity.BlockEntityCreationInfo;
 import com.gregtechceu.gtceu.api.machine.trait.NotifiableFluidTank;
 import com.gregtechceu.gtceu.api.machine.trait.NotifiableItemStackHandler;
 
@@ -30,13 +30,11 @@ import java.util.List;
  */
 public class MothCargoDropOffMachine extends LinkedWorkableMultiblockMachine {
 
-
     // ==================== Constructor ====================
 
     public MothCargoDropOffMachine(BlockEntityCreationInfo holder) {
         super(holder);
     }
-
 
     // ==================== Linking Overrides ====================
 
@@ -108,7 +106,6 @@ public class MothCargoDropOffMachine extends LinkedWorkableMultiblockMachine {
 
     // ==================== UI ====================
 
-    @Override
     public void addDisplayText(List<Component> textList) {
         if (!isFormed()) {
             textList.add(Component.literal("Structure not formed")

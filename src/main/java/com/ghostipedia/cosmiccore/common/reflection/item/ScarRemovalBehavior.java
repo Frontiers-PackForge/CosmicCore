@@ -75,7 +75,7 @@ public class ScarRemovalBehavior implements IInteractionItem, IAddInformation {
 
     @Override
     public void appendHoverText(ItemStack stack, Item.TooltipContext context, List<Component> tooltip,
-                               TooltipFlag flag) {
+                                TooltipFlag flag) {
         tooltip.add(Component.literal("Right-click to mend a defiance scar")
                 .withStyle(ChatFormatting.GRAY));
         tooltip.add(Component.empty());

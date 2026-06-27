@@ -42,6 +42,37 @@ sourceSets {
     }
 }
 
+// --- Sodium 0.8.x (dev-only render testing) --------------------------------------------------------------
+// Sodium 0.8 ships on caffeinemc maven as a 3-artifact set (-api / -mod / the production "shell"). The shell
+// claims modId "sodium", which on a dev classpath would shadow the real sodium-neoforge-mod and make the game
+// report "sodium is not installed". So we strip the shell down to a plain LIBRARY (drop its mod metadata) and
+// load sodium-neoforge-mod as the actual mod, plus Sinytra's Forgified Fabric API shims for the FRAPI paths 0.8
+// needs. Pattern from SrRapero720/chloride (1.21.1-neo), adapted from NeoGradle to ModDevGradle.
+// Defined here (before the dependency/repository applies) so dependencies.gradle can use the config + task.
+ext.sodiumNeoVersion = "0.8.12-beta.1+mc1.21.1"
+
+configurations {
+    sodiumShell { transitive = false }
+}
+
+tasks.register('stripSodiumShell', Jar) {
+    archiveBaseName = 'cc-sodium-neoforge-shell-lib'
+    archiveVersion = (sodiumNeoVersion as String).replace('+', '-')
+    destinationDirectory = layout.buildDirectory.dir('sodium-shell-lib')
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+    from { configurations.sodiumShell.collect { zipTree(it) } }
+    exclude 'META-INF/MANIFEST.MF'
+    exclude 'META-INF/neoforge.mods.toml'
+    exclude 'META-INF/jarjar/**'
+    exclude 'META-INF/services/net.neoforged.neoforgespi.locating.IModFileCandidateLocator'
+    manifest {
+        attributes(
+                'FMLModType': 'LIBRARY',
+                'Automatic-Module-Name': 'sodium_service'
+        )
+    }
+}
+
 apply from: "$rootDir/gradle/scripts/jars.gradle"
 apply from: "$rootDir/gradle/scripts/moddevgradle.gradle"
 apply from: "$rootDir/gradle/scripts/repositories.gradle"

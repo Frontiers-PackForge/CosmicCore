@@ -3,11 +3,11 @@ package com.ghostipedia.cosmiccore.client.renderer.machine;
 import com.ghostipedia.cosmiccore.CosmicCore;
 
 import com.gregtechceu.gtceu.api.machine.multiblock.WorkableElectricMultiblockMachine;
-import com.gregtechceu.gtceu.api.pattern.util.RelativeDirection;
+import com.gregtechceu.gtceu.api.multiblock.util.RelativeDirection;
 import com.gregtechceu.gtceu.client.renderer.GTRenderTypes;
 import com.gregtechceu.gtceu.client.renderer.machine.DynamicRender;
 import com.gregtechceu.gtceu.client.renderer.machine.DynamicRenderType;
-import com.gregtechceu.gtceu.client.util.ModelUtils;
+import com.gregtechceu.gtceu.client.util.ModelEventHelper;
 import com.gregtechceu.gtceu.client.util.RenderBufferHelper;
 
 import net.minecraft.MethodsReturnNonnullByDefault;
@@ -31,6 +31,7 @@ import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.serialization.MapCodec;
 import org.joml.Quaternionf;
 
+import java.util.EnumSet;
 import java.util.function.BiFunction;
 
 import javax.annotation.ParametersAreNonnullByDefault;
@@ -46,9 +47,9 @@ public class HemophagicTransfuserRender extends
             HemophagicTransfuserRender.CODEC);
 
     private static final BiFunction<Direction, Direction, AABB> renderBoundCache = Util.memoize((front, upwards) -> {
-        Direction up = RelativeDirection.UP.getRelative(front, upwards, false);
-        Direction back = RelativeDirection.BACK.getRelative(front, upwards, false);
-        Direction left = RelativeDirection.LEFT.getRelative(front, upwards, false);
+        Direction up = RelativeDirection.UP.getRelativeFacing(front, upwards, false);
+        Direction back = RelativeDirection.BACK.getRelativeFacing(front, upwards, false);
+        Direction left = RelativeDirection.LEFT.getRelativeFacing(front, upwards, false);
 
         // offset from the controller to the inner cube (scaled up by 1 in all directions)
         // values are from the multi pattern
@@ -68,7 +69,7 @@ public class HemophagicTransfuserRender extends
     @SuppressWarnings("deprecation")
     private HemophagicTransfuserRender() {
         if (!isEventListenerRegistered) {
-            ModelUtils.registerAtlasStitchedEventListener(true, TextureAtlas.LOCATION_BLOCKS, event -> {
+            ModelEventHelper.registerAtlasStitchedEventListener(true, TextureAtlas.LOCATION_BLOCKS, event -> {
                 bloodCubeSprite = event.getAtlas().getSprite(BLOOD_CUBE_TEXTURE);
             });
             isEventListenerRegistered = true;
@@ -113,9 +114,9 @@ public class HemophagicTransfuserRender extends
         Direction front = machine.getFrontFacing();
         Direction upwards = machine.getUpwardsFacing();
         boolean flipped = machine.isFlipped();
-        Direction up = RelativeDirection.UP.getRelative(front, upwards, flipped);
-        Direction back = RelativeDirection.BACK.getRelative(front, upwards, flipped);
-        Direction.Axis leftAxis = RelativeDirection.LEFT.getRelative(front, upwards, flipped).getAxis();
+        Direction up = RelativeDirection.UP.getRelativeFacing(front, upwards, flipped);
+        Direction back = RelativeDirection.BACK.getRelativeFacing(front, upwards, flipped);
+        Direction.Axis leftAxis = RelativeDirection.LEFT.getRelativeFacing(front, upwards, flipped).getAxis();
 
         // translate to the absolute center of the multiblock
         float x0ffset = 0, y0ffset = 0, z0ffset = 0;
@@ -159,7 +160,7 @@ public class HemophagicTransfuserRender extends
 
         // draw cube quads
         var consumer = bufferSource.getBuffer(Sheets.translucentCullBlockSheet());
-        RenderBufferHelper.renderCube(consumer, poseStack.last(), 0xffffffff,
+        RenderBufferHelper.renderTexturedCube(consumer, poseStack.last(), EnumSet.allOf(Direction.class), 0xffffffff,
                 LightTexture.FULL_BRIGHT, bloodCubeSprite,
                 -1, -1, -1, 1, 1, 1);
 
@@ -168,7 +169,7 @@ public class HemophagicTransfuserRender extends
 
     @OnlyIn(Dist.CLIENT)
     private void renderRings(Direction.Axis upAxis, float totalTick, PoseStack poseStack, MultiBufferSource buffer) {
-        VertexConsumer consumer = buffer.getBuffer(GTRenderTypes.getLightRing());
+        VertexConsumer consumer = buffer.getBuffer(GTRenderTypes.lightRing());
 
         float xRot = totalTick / 20;
         float zRot = Mth.HALF_PI + totalTick / 60;

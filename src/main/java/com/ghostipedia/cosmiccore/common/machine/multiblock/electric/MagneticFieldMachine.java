@@ -2,10 +2,10 @@ package com.ghostipedia.cosmiccore.common.machine.multiblock.electric;
 
 import com.ghostipedia.cosmiccore.api.machine.multiblock.MagnetWorkableElectricMultiblockMachine;
 
+import com.gregtechceu.gtceu.api.blockentity.BlockEntityCreationInfo;
 import com.gregtechceu.gtceu.api.capability.IEnergyContainer;
 import com.gregtechceu.gtceu.api.capability.recipe.EURecipeCapability;
 import com.gregtechceu.gtceu.api.capability.recipe.IO;
-import com.gregtechceu.gtceu.api.blockentity.BlockEntityCreationInfo;
 import com.gregtechceu.gtceu.api.machine.TickableSubscription;
 import com.gregtechceu.gtceu.api.machine.feature.ITieredMachine;
 import com.gregtechceu.gtceu.api.machine.feature.multiblock.IMultiPart;
@@ -14,17 +14,15 @@ import com.gregtechceu.gtceu.api.recipe.GTRecipe;
 import com.gregtechceu.gtceu.utils.FormattingUtil;
 
 import com.lowdragmc.lowdraglib.syncdata.annotation.Persisted;
+
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.Style;
 
-import it.unimi.dsi.fastutil.longs.Long2ObjectMaps;
 import lombok.Getter;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 import javax.annotation.Nullable;
 
@@ -44,16 +42,12 @@ public class MagneticFieldMachine extends MagnetWorkableElectricMultiblockMachin
         super(holder);
     }
 
-
     @Override
-    public void onStructureFormed() {
-        super.onStructureFormed();
+    public void formStructure(@org.jetbrains.annotations.NotNull String substructureName) {
+        super.formStructure(substructureName);
 
         List<IEnergyContainer> inputEnergyContainers = new ArrayList<>();
-        Map<Long, IO> ioMap = getMultiblockState().getMatchContext().getOrCreate("ioMap", Long2ObjectMaps::emptyMap);
         for (IMultiPart part : getParts()) {
-            IO io = ioMap.getOrDefault(part.self().getBlockPos().asLong(), IO.IN);
-            if (io == IO.NONE || io == IO.OUT) continue;
             var handlers = part.getRecipeHandlers();
             for (var handler : handlers) {
                 IO handlerIO = handler.getHandlerIO();
@@ -90,8 +84,8 @@ public class MagneticFieldMachine extends MagnetWorkableElectricMultiblockMachin
     }
 
     @Override
-    public void onStructureInvalid() {
-        super.onStructureInvalid();
+    public void invalidateStructure(String substructureName) {
+        super.invalidateStructure(substructureName);
         this.inputEnergyContainers = null;
         fieldStrength = 0;
         updateMagnetFieldSubscription();
@@ -149,9 +143,7 @@ public class MagneticFieldMachine extends MagnetWorkableElectricMultiblockMachin
         return false;
     }
 
-    @Override
     public void addDisplayText(List<Component> textList) {
-        super.addDisplayText(textList);
         if (isFormed) {
             textList.add(Component.translatable("cosmiccore.multiblock.current_field_strength", fieldStrength));
             textList.add(Component.translatable("cosmiccore.multiblock.magnetic_field_strength",

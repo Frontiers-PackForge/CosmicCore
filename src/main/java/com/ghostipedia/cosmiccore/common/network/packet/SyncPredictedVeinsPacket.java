@@ -21,8 +21,8 @@ import java.util.List;
 public class SyncPredictedVeinsPacket implements CustomPacketPayload {
 
     public static final Type<SyncPredictedVeinsPacket> TYPE = new Type<>(CosmicCore.id("sync_predicted_veins"));
-    public static final StreamCodec<FriendlyByteBuf, SyncPredictedVeinsPacket> CODEC =
-            StreamCodec.ofMember(SyncPredictedVeinsPacket::encode, SyncPredictedVeinsPacket::new);
+    public static final StreamCodec<FriendlyByteBuf, SyncPredictedVeinsPacket> CODEC = StreamCodec
+            .ofMember(SyncPredictedVeinsPacket::encode, SyncPredictedVeinsPacket::new);
 
     private final List<PredictedVeinData> veins;
     private final boolean clearExisting;

@@ -4,25 +4,41 @@ import org.objectweb.asm.tree.ClassNode;
 import org.spongepowered.asm.mixin.extensibility.IMixinConfigPlugin;
 import org.spongepowered.asm.mixin.extensibility.IMixinInfo;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 /**
- * Mixin plugin to conditionally load mixins based on mod presence.
- * Prevents EMI mixins from loading when EMI is not present.
+ * Applies integration mixins only when the optional mod they target is present. Presence is detected by probing for a
+ * marker resource (a class file) instead of loading the class, so no integration class is touched too early. Each
+ * entry maps a mixin-package token to its marker resource; adding a gated integration is one map entry.
  */
 public class CosmicCoreMixinPlugin implements IMixinConfigPlugin {
 
-    private static final boolean EMI_LOADED;
-    private static final boolean JEI_LOADED;
+    private static final Map<String, Boolean> GATES = new HashMap<>();
 
     static {
-        // Check if EMI is present by looking for a resource file, not a class
-        // This avoids loading any class too early which would break mixins
-        EMI_LOADED = CosmicCoreMixinPlugin.class.getClassLoader()
-                .getResource("dev/emi/emi/api/EmiApi.class") != null;
-        JEI_LOADED = CosmicCoreMixinPlugin.class.getClassLoader()
-                .getResource("mezz/jei/library/plugins/jei/tags/TagInfoRecipeCategory.class") != null;
+        ClassLoader loader = CosmicCoreMixinPlugin.class.getClassLoader();
+        Map<String, String> probes = Map.of(
+                ".emi.", "dev/emi/emi/api/EmiApi.class",
+                ".jei.", "mezz/jei/library/plugins/jei/tags/TagInfoRecipeCategory.class",
+                ".embers.", "com/rekindled/embers/worldgen/EmbersLateWorldgen.class",
+                ".xaerominimap.", "xaero/common/minimap/render/MinimapFBORenderer.class",
+                ".xaeroworldmap.", "xaero/map/element/MapElementRenderHandler.class",
+                ".architectury.", "dev/architectury/impl/NetworkAggregator.class",
+                ".sable.", "dev/ryanhcode/sable/api/block/BlockSubLevelAssemblyListener.class");
+        probes.forEach((token, resource) -> GATES.put(token, loader.getResource(resource) != null));
+    }
+
+    @Override
+    public boolean shouldApplyMixin(String targetClassName, String mixinClassName) {
+        for (Map.Entry<String, Boolean> gate : GATES.entrySet()) {
+            if (mixinClassName.contains(gate.getKey()) && !gate.getValue()) {
+                return false;
+            }
+        }
+        return true;
     }
 
     @Override
@@ -31,20 +47,6 @@ public class CosmicCoreMixinPlugin implements IMixinConfigPlugin {
     @Override
     public String getRefMapperConfig() {
         return null;
-    }
-
-    @Override
-    public boolean shouldApplyMixin(String targetClassName, String mixinClassName) {
-        // Skip EMI mixins if EMI is not loaded
-        if (mixinClassName.contains(".emi.") && !EMI_LOADED) {
-            return false;
-        }
-        // Skip JEI mixins if JEI is not loaded
-        if (mixinClassName.contains(".jei.") && !JEI_LOADED) {
-            return false;
-        }
-
-        return true;
     }
 
     @Override

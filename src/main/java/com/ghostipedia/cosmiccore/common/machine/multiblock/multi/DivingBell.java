@@ -7,12 +7,13 @@ import com.gregtechceu.gtceu.GTCEu;
 import com.gregtechceu.gtceu.api.data.RotationState;
 import com.gregtechceu.gtceu.api.machine.MultiblockMachineDefinition;
 import com.gregtechceu.gtceu.api.machine.multiblock.PartAbility;
-import com.gregtechceu.gtceu.api.pattern.FactoryBlockPattern;
+import com.gregtechceu.gtceu.api.multiblock.pattern.MultiblockPatternBuilder;
+import com.gregtechceu.gtceu.api.multiblock.util.RelativeDirection;
 import com.gregtechceu.gtceu.common.data.GTRecipeTypes;
 
 import static com.ghostipedia.cosmiccore.api.registries.CosmicRegistration.REGISTRATE;
 import static com.ghostipedia.cosmiccore.common.data.CosmicBlocks.*;
-import static com.gregtechceu.gtceu.api.pattern.Predicates.*;
+import static com.gregtechceu.gtceu.api.multiblock.Predicates.*;
 
 public class DivingBell {
 
@@ -23,13 +24,13 @@ public class DivingBell {
             .recipeType(GTRecipeTypes.DUMMY_RECIPES)
             .appearanceBlock(REINFORCED_NAQUADRIA_CASING)
             // spotless:off
-            .pattern(definition -> FactoryBlockPattern.start()
+            .pattern(definition -> MultiblockPatternBuilder.start(RelativeDirection.FRONT, RelativeDirection.UP, RelativeDirection.LEFT)
                     // Front row (all vertical layers bottom to top)
-                    .aisle("CCC", "GGG", "GGG", "CCC", "CCC")
+                    .slice("CCC", "GGG", "GGG", "CCC", "CCC")
                     // Middle row (all vertical layers bottom to top)
-                    .aisle("CQC", "G G", "G G", "C C", "C C")
+                    .slice("CQC", "G G", "G G", "C C", "C C")
                     // Back row (all vertical layers bottom to top)
-                    .aisle("CCC", "GGG", "GGG", "CCC", "CCC")
+                    .slice("CCC", "GGG", "GGG", "CCC", "CCC")
                     .where(' ', any())
                     .where('Q', controller(blocks(definition.getBlock())))
                     .where('G', blocks(ZBLAN_REINFORCED_GLASS.get()))

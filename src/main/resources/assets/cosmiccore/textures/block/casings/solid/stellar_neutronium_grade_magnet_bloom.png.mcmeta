@@ -1,7 +1,7 @@
 {
-    "ldlib": {
-        "connection": "cosmiccore:block/casings/solid/stellar_neutronium_grade_magnet_bloom_ctm",
-        "emissive": true
+    "gtceu": {
+        "connection_texture": "cosmiccore:block/casings/solid/stellar_neutronium_grade_magnet_bloom_ctm",
+        "bloom": true
     },
     "shimmer": {
         "bloom": true

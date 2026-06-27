@@ -7,7 +7,8 @@ import com.gregtechceu.gtceu.GTCEu;
 import com.gregtechceu.gtceu.api.data.RotationState;
 import com.gregtechceu.gtceu.api.machine.MultiblockMachineDefinition;
 import com.gregtechceu.gtceu.api.machine.multiblock.PartAbility;
-import com.gregtechceu.gtceu.api.pattern.FactoryBlockPattern;
+import com.gregtechceu.gtceu.api.multiblock.pattern.MultiblockPatternBuilder;
+import com.gregtechceu.gtceu.api.multiblock.util.RelativeDirection;
 import com.gregtechceu.gtceu.common.data.GTRecipeTypes;
 
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -17,7 +18,7 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 
 import static com.ghostipedia.cosmiccore.api.registries.CosmicRegistration.REGISTRATE;
-import static com.gregtechceu.gtceu.api.pattern.Predicates.*;
+import static com.gregtechceu.gtceu.api.multiblock.Predicates.*;
 import static com.gregtechceu.gtceu.common.data.GTBlocks.CASING_STEEL_SOLID;
 
 /**
@@ -27,9 +28,12 @@ import static com.gregtechceu.gtceu.common.data.GTBlocks.CASING_STEEL_SOLID;
 public class MothCargoStation {
 
     // Forestry beehive blocks used as moth homes
-    public static final ResourceLocation BEEHIVE_FOREST = ResourceLocation.fromNamespaceAndPath("forestry", "beehive_forest");
-    public static final ResourceLocation BEEHIVE_LUSH = ResourceLocation.fromNamespaceAndPath("forestry", "beehive_lush");
-    public static final ResourceLocation BEEHIVE_DESERT = ResourceLocation.fromNamespaceAndPath("forestry", "beehive_desert");
+    public static final ResourceLocation BEEHIVE_FOREST = ResourceLocation.fromNamespaceAndPath("forestry",
+            "beehive_forest");
+    public static final ResourceLocation BEEHIVE_LUSH = ResourceLocation.fromNamespaceAndPath("forestry",
+            "beehive_lush");
+    public static final ResourceLocation BEEHIVE_DESERT = ResourceLocation.fromNamespaceAndPath("forestry",
+            "beehive_desert");
     public static final ResourceLocation BEEHIVE_END = ResourceLocation.fromNamespaceAndPath("forestry", "beehive_end");
 
     /**
@@ -56,13 +60,13 @@ public class MothCargoStation {
             .recipeType(GTRecipeTypes.DUMMY_RECIPES)
             .appearanceBlock(CASING_STEEL_SOLID)
             // spotless:off
-            .pattern(definition -> FactoryBlockPattern.start()
+            .pattern(definition -> MultiblockPatternBuilder.start(RelativeDirection.FRONT, RelativeDirection.UP, RelativeDirection.LEFT)
                     // Tower structure: 3x3 footprint, 6 blocks tall
                     // Moth homes (beehives) in center column - up to 4 can be placed
                     // Open walls (air in center) so beehives are visible from all sides
-                    .aisle("CCC", "C C", "C C", "C C", "C C", "CCC")
-                    .aisle("CCC", " M ", " M ", " M ", " M ", "CCC")
-                    .aisle("CQC", "C C", "C C", "C C", "C C", "CCC")
+                    .slice("CCC", "C C", "C C", "C C", "C C", "CCC")
+                    .slice("CCC", " M ", " M ", " M ", " M ", "CCC")
+                    .slice("CQC", "C C", "C C", "C C", "C C", "CCC")
                     .where(' ', any())
                     .where('Q', controller(blocks(definition.getBlock())))
                     .where('C', blocks(CASING_STEEL_SOLID.get())

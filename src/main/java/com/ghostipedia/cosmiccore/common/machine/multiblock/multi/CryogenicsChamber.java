@@ -8,16 +8,17 @@ import com.gregtechceu.gtceu.api.data.RotationState;
 import com.gregtechceu.gtceu.api.machine.MultiblockMachineDefinition;
 import com.gregtechceu.gtceu.api.machine.multiblock.PartAbility;
 import com.gregtechceu.gtceu.api.machine.multiblock.WorkableElectricMultiblockMachine;
-import com.gregtechceu.gtceu.api.pattern.FactoryBlockPattern;
-import com.gregtechceu.gtceu.api.pattern.Predicates;
+import com.gregtechceu.gtceu.api.multiblock.Predicates;
+import com.gregtechceu.gtceu.api.multiblock.pattern.MultiblockPatternBuilder;
+import com.gregtechceu.gtceu.api.multiblock.util.RelativeDirection;
 import com.gregtechceu.gtceu.api.recipe.OverclockingLogic;
 import com.gregtechceu.gtceu.common.data.GTRecipeModifiers;
 
 import static com.ghostipedia.cosmiccore.api.registries.CosmicRegistration.REGISTRATE;
 import static com.ghostipedia.cosmiccore.common.data.CosmicBlocks.*;
 import static com.ghostipedia.cosmiccore.common.data.datagen.CosmicMachineModels.createSeparateControllerCasingMachineModel;
-import static com.gregtechceu.gtceu.api.pattern.Predicates.*;
-import static com.gregtechceu.gtceu.api.pattern.Predicates.blocks;
+import static com.gregtechceu.gtceu.api.multiblock.Predicates.*;
+import static com.gregtechceu.gtceu.api.multiblock.Predicates.blocks;
 
 public class CryogenicsChamber {
 
@@ -34,21 +35,21 @@ public class CryogenicsChamber {
                     GTRecipeModifiers.ELECTRIC_OVERCLOCK.apply(OverclockingLogic.NON_PERFECT_OVERCLOCK_SUBTICK),
                     GTRecipeModifiers.BATCH_MODE)
             // spotless:off
-            .pattern(definition -> FactoryBlockPattern.start()
+            .pattern(definition -> MultiblockPatternBuilder.start(RelativeDirection.FRONT, RelativeDirection.UP, RelativeDirection.LEFT)
 
-                    .aisle("   AAAAAAA   ", "             ", "             ", "             ", "             ", "             ", "             ", "             ")
-                    .aisle("  AAAAAAAAA  ", "    A A A    ", "    A A A    ", "    A A A    ", "    A A A    ", "             ", "             ", "             ")
-                    .aisle(" AABBBBBBBAA ", "  ABBBBBBBA  ", "  ABBBBBBBA  ", "  ABBBBBBBA  ", "  A A A A A  ", "             ", "             ", "             ")
-                    .aisle("AABBBBBBBBBAA", "  BBBBBBBBB  ", "  BBBBBBBBB  ", "    A A A    ", "             ", "             ", "             ", "             ")
-                    .aisle("AABBBBBBBBBAA", " ABBBBBBBBBA ", " ABBBBBBBBBA ", " AB A A A BA ", "  B       B  ", "  B       B  ", "  B       B  ", "             ")
-                    .aisle("AABBBBBBBBBAA", "  BBBBBBBBB  ", "  BBBBBBBBB  ", "  BAAAAAAAB  ", "  B  AAA  B  ", "  B  DDD  B  ", "  B  DDD  B  ", "  B  DDD  B  ")
-                    .aisle("AABBBBBBBBBAA", " ABBBBBBBBBA ", " ABBBBBBBBBA ", " ABAAAAAAABA ", " AB  AAA  BA ", " AB  DDD  BA ", "  BCCD DCCB  ", "  B  DDD  B  ")
-                    .aisle("AABBBBBBBBBAA", "  BBBBBBBBB  ", "  BBBBBBBBB  ", "  BAAAAAAAB  ", "  B  AAA  B  ", "  B  DDD  B  ", "  B  DQD  B  ", "  B  DDD  B  ")
-                    .aisle("AABBBBBBBBBAA", " ABBBBBBBBBA ", " ABBBBBBBBBA ", " AB A A A BA ", "  B       B  ", "  B       B  ", "  B       B  ", "             ")
-                    .aisle("AABBBBBBBBBAA", "  BBBBBBBBB  ", "  BBBBBBBBB  ", "    A A A    ", "             ", "             ", "             ", "             ")
-                    .aisle(" AABBBBBBBAA ", "  ABBBBBBBA  ", "  ABBBBBBBA  ", "  ABBBBBBBA  ", "  A A A A A  ", "             ", "             ", "             ")
-                    .aisle("  AAAAAAAAA  ", "    A A A    ", "    A A A    ", "    A A A    ", "    A A A    ", "             ", "             ", "             ")
-                    .aisle("   AAAAAAA   ", "             ", "             ", "             ", "             ", "             ", "             ", "             ")
+                    .slice("   AAAAAAA   ", "             ", "             ", "             ", "             ", "             ", "             ", "             ")
+                    .slice("  AAAAAAAAA  ", "    A A A    ", "    A A A    ", "    A A A    ", "    A A A    ", "             ", "             ", "             ")
+                    .slice(" AABBBBBBBAA ", "  ABBBBBBBA  ", "  ABBBBBBBA  ", "  ABBBBBBBA  ", "  A A A A A  ", "             ", "             ", "             ")
+                    .slice("AABBBBBBBBBAA", "  BBBBBBBBB  ", "  BBBBBBBBB  ", "    A A A    ", "             ", "             ", "             ", "             ")
+                    .slice("AABBBBBBBBBAA", " ABBBBBBBBBA ", " ABBBBBBBBBA ", " AB A A A BA ", "  B       B  ", "  B       B  ", "  B       B  ", "             ")
+                    .slice("AABBBBBBBBBAA", "  BBBBBBBBB  ", "  BBBBBBBBB  ", "  BAAAAAAAB  ", "  B  AAA  B  ", "  B  DDD  B  ", "  B  DDD  B  ", "  B  DDD  B  ")
+                    .slice("AABBBBBBBBBAA", " ABBBBBBBBBA ", " ABBBBBBBBBA ", " ABAAAAAAABA ", " AB  AAA  BA ", " AB  DDD  BA ", "  BCCD DCCB  ", "  B  DDD  B  ")
+                    .slice("AABBBBBBBBBAA", "  BBBBBBBBB  ", "  BBBBBBBBB  ", "  BAAAAAAAB  ", "  B  AAA  B  ", "  B  DDD  B  ", "  B  DQD  B  ", "  B  DDD  B  ")
+                    .slice("AABBBBBBBBBAA", " ABBBBBBBBBA ", " ABBBBBBBBBA ", " AB A A A BA ", "  B       B  ", "  B       B  ", "  B       B  ", "             ")
+                    .slice("AABBBBBBBBBAA", "  BBBBBBBBB  ", "  BBBBBBBBB  ", "    A A A    ", "             ", "             ", "             ", "             ")
+                    .slice(" AABBBBBBBAA ", "  ABBBBBBBA  ", "  ABBBBBBBA  ", "  ABBBBBBBA  ", "  A A A A A  ", "             ", "             ", "             ")
+                    .slice("  AAAAAAAAA  ", "    A A A    ", "    A A A    ", "    A A A    ", "    A A A    ", "             ", "             ", "             ")
+                    .slice("   AAAAAAA   ", "             ", "             ", "             ", "             ", "             ", "             ", "             ")
 
                     .where(' ', any())
                     .where('Q', controller(blocks(definition.getBlock())))

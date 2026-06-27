@@ -9,8 +9,9 @@ import com.gregtechceu.gtceu.api.data.RotationState;
 import com.gregtechceu.gtceu.api.machine.MultiblockMachineDefinition;
 import com.gregtechceu.gtceu.api.machine.multiblock.PartAbility;
 import com.gregtechceu.gtceu.api.machine.multiblock.WorkableElectricMultiblockMachine;
-import com.gregtechceu.gtceu.api.pattern.FactoryBlockPattern;
-import com.gregtechceu.gtceu.api.pattern.Predicates;
+import com.gregtechceu.gtceu.api.multiblock.Predicates;
+import com.gregtechceu.gtceu.api.multiblock.pattern.MultiblockPatternBuilder;
+import com.gregtechceu.gtceu.api.multiblock.util.RelativeDirection;
 import com.gregtechceu.gtceu.api.recipe.OverclockingLogic;
 import com.gregtechceu.gtceu.common.data.GTRecipeModifiers;
 
@@ -18,7 +19,7 @@ import static com.ghostipedia.cosmiccore.api.machine.part.CosmicPartAbility.IMPO
 import static com.ghostipedia.cosmiccore.api.registries.CosmicRegistration.REGISTRATE;
 import static com.ghostipedia.cosmiccore.common.data.CosmicBlocks.*;
 import static com.ghostipedia.cosmiccore.common.data.datagen.CosmicMachineModels.*;
-import static com.gregtechceu.gtceu.api.pattern.Predicates.*;
+import static com.gregtechceu.gtceu.api.multiblock.Predicates.*;
 import static com.gregtechceu.gtceu.common.data.GCYMBlocks.*;
 
 public class HemophagicTransfuser {
@@ -33,18 +34,18 @@ public class HemophagicTransfuser {
             .recipeModifiers(GTRecipeModifiers.PARALLEL_HATCH,
                     GTRecipeModifiers.ELECTRIC_OVERCLOCK.apply(OverclockingLogic.PERFECT_OVERCLOCK_SUBTICK))
             // spotless:off
-            .pattern(definition -> FactoryBlockPattern.start()
-                    .aisle("AAAA   AAAA", "A  AAAAA  A", "A         A", "AA       AA", " A       A ", " A       A ", " A       A ", "AA       AA", "A         A", "A  AAAAA  A", "AAAA   AAAA")
-                    .aisle("A  AAAAA  A", "   BCCCB   ", "  B     B  ", "A         A", "AC       CA", "AC       CA", "AC       CA", "A         A", "  B     B  ", "   BCCCB   ", "A  AAAAA  A")
-                    .aisle("A         A", "  B     B  ", " B       B ", "           ", "D         D", "D         D", "D         D", "           ", " B       B ", "  B     B  ", "A         A")
-                    .aisle("AA       AA", "AB       BA", "           ", "   EEEEE   ", "D  E   E  D", "D  E   E  D", "D  E   E  D", "   EEEEE   ", "           ", "AB       BA", "AA       AA")
-                    .aisle(" A       A ", "AC       CA", "F         F", "F  E   E  F", "D         D", "D         D", "D         D", "F  E   E  F", "F         F", "AC       CA", " A       A ")
-                    .aisle(" A       A ", "AC       CA", "           ", "   E   E   ", "D         D", "D         D", "D         D", "   E   E   ", "           ", "AC       CA", " A       A ")
-                    .aisle(" A       A ", "AC       CA", "F         F", "F  E   E  F", "D         D", "D         D", "D         D", "F  E   E  F", "F         F", "AC       CA", " A       A ")
-                    .aisle("AA       AA", "AB       BA", "           ", "   EEEEE   ", "D  E   E  D", "D  E   E  D", "D  E   E  D", "   EEEEE   ", "           ", "AB       BA", "AA       AA")
-                    .aisle("A         A", "  B     B  ", " B       B ", "           ", "D         D", "D         D", "D         D", "           ", " B       B ", "  B     B  ", "A         A")
-                    .aisle("A  AAAAA  A", "   BCCCB   ", "  B     B  ", "A         A", "AC       CA", "AC       CA", "AC       CA", "A         A", "  B     B  ", "   BCCCB   ", "A  AAAAA  A")
-                    .aisle("AAAA   AAAA", "A  AAQAA  A", "A         A", "AA       AA", " A       A ", " A       A ", " A       A ", "AA       AA", "A         A", "A  AAAAA  A", "AAAA   AAAA")
+            .pattern(definition -> MultiblockPatternBuilder.start(RelativeDirection.FRONT, RelativeDirection.UP, RelativeDirection.LEFT)
+                    .slice("AAAA   AAAA", "A  AAAAA  A", "A         A", "AA       AA", " A       A ", " A       A ", " A       A ", "AA       AA", "A         A", "A  AAAAA  A", "AAAA   AAAA")
+                    .slice("A  AAAAA  A", "   BCCCB   ", "  B     B  ", "A         A", "AC       CA", "AC       CA", "AC       CA", "A         A", "  B     B  ", "   BCCCB   ", "A  AAAAA  A")
+                    .slice("A         A", "  B     B  ", " B       B ", "           ", "D         D", "D         D", "D         D", "           ", " B       B ", "  B     B  ", "A         A")
+                    .slice("AA       AA", "AB       BA", "           ", "   EEEEE   ", "D  E   E  D", "D  E   E  D", "D  E   E  D", "   EEEEE   ", "           ", "AB       BA", "AA       AA")
+                    .slice(" A       A ", "AC       CA", "F         F", "F  E   E  F", "D         D", "D         D", "D         D", "F  E   E  F", "F         F", "AC       CA", " A       A ")
+                    .slice(" A       A ", "AC       CA", "           ", "   E   E   ", "D         D", "D         D", "D         D", "   E   E   ", "           ", "AC       CA", " A       A ")
+                    .slice(" A       A ", "AC       CA", "F         F", "F  E   E  F", "D         D", "D         D", "D         D", "F  E   E  F", "F         F", "AC       CA", " A       A ")
+                    .slice("AA       AA", "AB       BA", "           ", "   EEEEE   ", "D  E   E  D", "D  E   E  D", "D  E   E  D", "   EEEEE   ", "           ", "AB       BA", "AA       AA")
+                    .slice("A         A", "  B     B  ", " B       B ", "           ", "D         D", "D         D", "D         D", "           ", " B       B ", "  B     B  ", "A         A")
+                    .slice("A  AAAAA  A", "   BCCCB   ", "  B     B  ", "A         A", "AC       CA", "AC       CA", "AC       CA", "A         A", "  B     B  ", "   BCCCB   ", "A  AAAAA  A")
+                    .slice("AAAA   AAAA", "A  AAQAA  A", "A         A", "AA       AA", " A       A ", " A       A ", " A       A ", "AA       AA", "A         A", "A  AAAAA  A", "AAAA   AAAA")
                     .where(' ', any())
                     .where('Q', controller(blocks(definition.getBlock())))
                     .where('A', blocks(BLANK_RUNE.get()))

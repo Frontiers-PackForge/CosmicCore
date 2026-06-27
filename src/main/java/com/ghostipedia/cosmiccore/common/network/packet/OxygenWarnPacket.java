@@ -14,8 +14,8 @@ import org.jetbrains.annotations.NotNull;
 public class OxygenWarnPacket implements CustomPacketPayload {
 
     public static final Type<OxygenWarnPacket> TYPE = new Type<>(CosmicCore.id("oxygen_warn"));
-    public static final StreamCodec<FriendlyByteBuf, OxygenWarnPacket> CODEC =
-            StreamCodec.ofMember(OxygenWarnPacket::encode, OxygenWarnPacket::new);
+    public static final StreamCodec<FriendlyByteBuf, OxygenWarnPacket> CODEC = StreamCodec
+            .ofMember(OxygenWarnPacket::encode, OxygenWarnPacket::new);
 
     private final String message;
     private final int seconds;

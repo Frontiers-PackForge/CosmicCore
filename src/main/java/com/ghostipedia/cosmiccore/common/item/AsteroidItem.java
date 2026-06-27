@@ -1,8 +1,8 @@
 package com.ghostipedia.cosmiccore.common.item;
 
-import com.gregtechceu.gtceu.api.item.ComponentItem;
-
 import com.ghostipedia.cosmiccore.utils.ItemData;
+
+import com.gregtechceu.gtceu.api.item.ComponentItem;
 
 import net.minecraft.ChatFormatting;
 import net.minecraft.nbt.CompoundTag;

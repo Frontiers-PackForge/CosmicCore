@@ -3,18 +3,11 @@ package com.ghostipedia.cosmiccore.api.capability.recipe;
 import com.ghostipedia.cosmiccore.api.recipe.lookup.MapHeatIngredient;
 
 import com.gregtechceu.gtceu.api.capability.recipe.RecipeCapability;
-import com.gregtechceu.gtceu.api.recipe.GTRecipe;
-import com.gregtechceu.gtceu.api.recipe.content.Content;
 import com.gregtechceu.gtceu.api.recipe.content.ContentModifier;
 import com.gregtechceu.gtceu.api.recipe.content.SerializerLong;
 import com.gregtechceu.gtceu.api.recipe.lookup.ingredient.AbstractMapIngredient;
 
-import com.lowdragmc.lowdraglib.gui.widget.LabelWidget;
-import com.lowdragmc.lowdraglib.gui.widget.WidgetGroup;
-import com.lowdragmc.lowdraglib.utils.LocalizationUtils;
-
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
-import org.apache.commons.lang3.mutable.MutableInt;
 
 import java.util.List;
 
@@ -48,16 +41,7 @@ public class HeatRecipeCapability extends RecipeCapability<Long> {
         return true;
     }
 
-    @Override
-    public void addXEIInfo(WidgetGroup group, int xOffset, GTRecipe recipe, List<Content> contents, boolean perTick,
-                           boolean isInput, MutableInt yOffset) {
-        long thermia = contents.stream().map(Content::getContent).mapToLong(HeatRecipeCapability.CAP::of).sum();
-        if (isInput) {
-            group.addWidget(new LabelWidget(3 - xOffset, yOffset.addAndGet(10),
-                    LocalizationUtils.format("cosmiccore.recipe.thermiaIn", thermia)));
-        } else {
-            group.addWidget(new LabelWidget(3 - xOffset, yOffset.addAndGet(10),
-                    LocalizationUtils.format("cosmiccore.recipe.thermiaOut", thermia)));
-        }
-    }
+    // TODO(8.0.0): re-add XEI display via the new XEI category API.
+    // RecipeCapability#addXEIInfo was removed in 8.0.0; the original LDLib LabelWidget rendering
+    // (thermiaIn / thermiaOut) lived here and needs reimplementing against the new XEI category hook.
 }

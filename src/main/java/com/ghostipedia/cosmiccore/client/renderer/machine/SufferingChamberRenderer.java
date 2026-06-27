@@ -3,10 +3,10 @@ package com.ghostipedia.cosmiccore.client.renderer.machine;
 import com.ghostipedia.cosmiccore.CosmicCore;
 
 import com.gregtechceu.gtceu.api.machine.multiblock.WorkableElectricMultiblockMachine;
-import com.gregtechceu.gtceu.api.pattern.util.RelativeDirection;
+import com.gregtechceu.gtceu.api.multiblock.util.RelativeDirection;
 import com.gregtechceu.gtceu.client.renderer.machine.DynamicRender;
 import com.gregtechceu.gtceu.client.renderer.machine.DynamicRenderType;
-import com.gregtechceu.gtceu.client.util.ModelUtils;
+import com.gregtechceu.gtceu.client.util.ModelEventHelper;
 import com.gregtechceu.gtceu.client.util.RenderBufferHelper;
 
 import net.minecraft.MethodsReturnNonnullByDefault;
@@ -49,9 +49,9 @@ public class SufferingChamberRenderer extends
     private static TextureAtlasSprite pentagramSprite = null;
 
     private static final BiFunction<Direction, Direction, AABB> renderBoundCache = Util.memoize((front, upwards) -> {
-        Direction up = RelativeDirection.UP.getRelative(front, upwards, false);
-        Direction back = RelativeDirection.BACK.getRelative(front, upwards, false);
-        Direction left = RelativeDirection.LEFT.getRelative(front, upwards, false);
+        Direction up = RelativeDirection.UP.getRelativeFacing(front, upwards, false);
+        Direction back = RelativeDirection.BACK.getRelativeFacing(front, upwards, false);
+        Direction left = RelativeDirection.LEFT.getRelativeFacing(front, upwards, false);
 
         BlockPos.MutableBlockPos minPos = new BlockPos.MutableBlockPos()
                 .move(left, 4).move(up, 3).move(back, 1);
@@ -62,7 +62,7 @@ public class SufferingChamberRenderer extends
     });
 
     private SufferingChamberRenderer() {
-        ModelUtils.registerAtlasStitchedEventListener(true, TextureAtlas.LOCATION_BLOCKS, event -> {
+        ModelEventHelper.registerAtlasStitchedEventListener(true, TextureAtlas.LOCATION_BLOCKS, event -> {
             pentagramSprite = event.getAtlas().getSprite(PENTAGRAM);
         });
     }
@@ -105,9 +105,9 @@ public class SufferingChamberRenderer extends
         Direction upwards = machine.getUpwardsFacing();
         boolean flipped = machine.isFlipped();
 
-        Vec3i up = RelativeDirection.UP.getRelative(front, upwards, flipped).getNormal();
-        Vec3i back = RelativeDirection.BACK.getRelative(front, upwards, flipped).getNormal();
-        Direction.Axis leftAxis = RelativeDirection.LEFT.getRelative(front, upwards, flipped).getAxis();
+        Vec3i up = RelativeDirection.UP.getRelativeFacing(front, upwards, flipped).getNormal();
+        Vec3i back = RelativeDirection.BACK.getRelativeFacing(front, upwards, flipped).getNormal();
+        Direction.Axis leftAxis = RelativeDirection.LEFT.getRelativeFacing(front, upwards, flipped).getAxis();
 
         float x0ffset = 0, y0ffset = 0, zOffset = 0;
 
@@ -135,7 +135,7 @@ public class SufferingChamberRenderer extends
         poseStack.mulPose(rot);
 
         VertexConsumer consumer = bufferSource.getBuffer(Sheets.cutoutBlockSheet());
-        RenderBufferHelper.renderCube(
+        RenderBufferHelper.renderTexturedCube(
                 consumer,
                 poseStack.last(),
                 EnumSet.of(Direction.UP, Direction.DOWN),

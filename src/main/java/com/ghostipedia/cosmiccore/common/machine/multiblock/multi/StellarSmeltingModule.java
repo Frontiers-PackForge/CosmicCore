@@ -8,13 +8,13 @@ import com.gregtechceu.gtceu.GTCEu;
 import com.gregtechceu.gtceu.api.data.RotationState;
 import com.gregtechceu.gtceu.api.machine.MultiblockMachineDefinition;
 import com.gregtechceu.gtceu.api.machine.multiblock.PartAbility;
-import com.gregtechceu.gtceu.api.pattern.FactoryBlockPattern;
-import com.gregtechceu.gtceu.api.pattern.Predicates;
+import com.gregtechceu.gtceu.api.multiblock.Predicates;
+import com.gregtechceu.gtceu.api.multiblock.pattern.MultiblockPatternBuilder;
 
 import static com.ghostipedia.cosmiccore.api.registries.CosmicRegistration.REGISTRATE;
 import static com.ghostipedia.cosmiccore.common.data.CosmicBlocks.*;
-import static com.gregtechceu.gtceu.api.pattern.Predicates.*;
-import static com.gregtechceu.gtceu.api.pattern.util.RelativeDirection.*;
+import static com.gregtechceu.gtceu.api.multiblock.Predicates.*;
+import static com.gregtechceu.gtceu.api.multiblock.util.RelativeDirection.*;
 import static com.gregtechceu.gtceu.common.data.GCYMBlocks.*;
 
 public class StellarSmeltingModule {
@@ -27,16 +27,16 @@ public class StellarSmeltingModule {
             .appearanceBlock(CASING_HIGH_TEMPERATURE_SMELTING)
             .recipeModifiers(CosmicRecipeModifiers.STELLAR_MODULE_OVERCLOCK)
             // spotless:off
-            .pattern(definition -> FactoryBlockPattern.start(RIGHT, BACK, UP)
-                    .aisle("  AAAAA  ", " ACCCCCA ", "AFCFFFCFA", "AFCFFFCFA", "AFCFFFCFA", " ACCCCCA ", "  AAAAA  ")
-                    .aisle("  B   B  ", "DDDDDDDDD", "DDDDDDDDD", "GGGGGGGGG", "DDDDDDDDD", "DDDDDDDDD", "  B   B  ")
-                    .aisle("  B   B  ", "BCCCCCCCB", "GGGGGGGGG", "GGGGGGGGG", "GGGGGGGGG", "BCC   CCB", "  B   B  ")
-                    .aisle("  B   B  ", "BCC   CCB", "GGGBBBGGG", "GGGBBBGGG", "GGGBBBGGG", "BCC   CCB", "  B   B  ")
-                    .aisle(" BBBBBBB ", "BCC B CCB", "GGGBBBGGG", "GGGBBBGGG", "GGGBBBGGG", "BCC B CCB", " BBBBBBB ")
-                    .aisle("  B   B  ", "BCC   CCB", "GGGBBBGGG", "GGGBBBGGG", "GGGBBBGGG", "BCC   CCB", "  B   B  ")
-                    .aisle("  B   B  ", "BCCCCCCCB", "GGGGGGGGG", "GGGGGGGGG", "GGGGGGGGG", "BCC   CCB", "  B   B  ")
-                    .aisle("  B   B  ", "DDDDDDDDD", "DDDDDDDDD", "GGGGGGGGG", "DDDDDDDDD", "DDDDDDDDD", "  B   B  ")
-                    .aisle("  AAAAA  ", " AEEEEEA ", "AFEFFFEFA", "AFEFQFEFA", "AFEFFFEFA", " AEEEEEA ", "  AAAAA  ")
+            .pattern(definition -> MultiblockPatternBuilder.start(RIGHT, BACK, UP)
+                    .slice("  AAAAA  ", " ACCCCCA ", "AFCFFFCFA", "AFCFFFCFA", "AFCFFFCFA", " ACCCCCA ", "  AAAAA  ")
+                    .slice("  B   B  ", "DDDDDDDDD", "DDDDDDDDD", "GGGGGGGGG", "DDDDDDDDD", "DDDDDDDDD", "  B   B  ")
+                    .slice("  B   B  ", "BCCCCCCCB", "GGGGGGGGG", "GGGGGGGGG", "GGGGGGGGG", "BCC   CCB", "  B   B  ")
+                    .slice("  B   B  ", "BCC   CCB", "GGGBBBGGG", "GGGBBBGGG", "GGGBBBGGG", "BCC   CCB", "  B   B  ")
+                    .slice(" BBBBBBB ", "BCC B CCB", "GGGBBBGGG", "GGGBBBGGG", "GGGBBBGGG", "BCC B CCB", " BBBBBBB ")
+                    .slice("  B   B  ", "BCC   CCB", "GGGBBBGGG", "GGGBBBGGG", "GGGBBBGGG", "BCC   CCB", "  B   B  ")
+                    .slice("  B   B  ", "BCCCCCCCB", "GGGGGGGGG", "GGGGGGGGG", "GGGGGGGGG", "BCC   CCB", "  B   B  ")
+                    .slice("  B   B  ", "DDDDDDDDD", "DDDDDDDDD", "GGGGGGGGG", "DDDDDDDDD", "DDDDDDDDD", "  B   B  ")
+                    .slice("  AAAAA  ", " AEEEEEA ", "AFEFFFEFA", "AFEFQFEFA", "AFEFFFEFA", " AEEEEEA ", "  AAAAA  ")
 
                     .where(' ', any())
                     .where('Q', controller(blocks(definition.getBlock())))

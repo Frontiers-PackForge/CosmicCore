@@ -34,7 +34,8 @@ public class BackgroundRenderer {
         RenderSystem.defaultBlendFunc();
         RenderSystem.setShader(GameRenderer::getPositionColorShader);
 
-        BufferBuilder blackBuffer = Tesselator.getInstance().begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_COLOR);
+        BufferBuilder blackBuffer = Tesselator.getInstance().begin(VertexFormat.Mode.QUADS,
+                DefaultVertexFormat.POSITION_COLOR);
         blackBuffer.addVertex(matrix, 0, screenHeight, 0).setColor(0, 0, 0, blackAlpha);
         blackBuffer.addVertex(matrix, screenWidth, screenHeight, 0).setColor(0, 0, 0, blackAlpha);
         blackBuffer.addVertex(matrix, screenWidth, 0, 0).setColor(0, 0, 0, blackAlpha);
@@ -65,7 +66,8 @@ public class BackgroundRenderer {
 
         setUniformSafe(shader, "Intensity", fadeAlpha);
 
-        BufferBuilder buffer = Tesselator.getInstance().begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX);
+        BufferBuilder buffer = Tesselator.getInstance().begin(VertexFormat.Mode.QUADS,
+                DefaultVertexFormat.POSITION_TEX);
         buffer.addVertex(matrix, 0, screenHeight, 0).setUv(0, 1);
         buffer.addVertex(matrix, screenWidth, screenHeight, 0).setUv(1, 1);
         buffer.addVertex(matrix, screenWidth, 0, 0).setUv(1, 0);
@@ -83,7 +85,8 @@ public class BackgroundRenderer {
 
         Matrix4f matrix = poseStack.last().pose();
 
-        BufferBuilder buffer = Tesselator.getInstance().begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_COLOR);
+        BufferBuilder buffer = Tesselator.getInstance().begin(VertexFormat.Mode.QUADS,
+                DefaultVertexFormat.POSITION_COLOR);
         buffer.addVertex(matrix, 0, screenHeight, 0).setColor(0, 0, 0, 255);
         buffer.addVertex(matrix, screenWidth, screenHeight, 0).setColor(0, 0, 0, 255);
         buffer.addVertex(matrix, screenWidth, 0, 0).setColor(0, 0, 0, 255);

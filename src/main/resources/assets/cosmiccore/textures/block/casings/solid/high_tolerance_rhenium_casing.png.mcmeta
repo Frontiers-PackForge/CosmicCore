@@ -1,5 +1,5 @@
 {
-    "ldlib": {
-        "connection": "cosmiccore:block/casings/solid/high_tolerance_rhenium_casing_ctm"
+    "gtceu": {
+        "connection_texture": "cosmiccore:block/casings/solid/high_tolerance_rhenium_casing_ctm"
     }
 }

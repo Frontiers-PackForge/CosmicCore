@@ -1,8 +1,6 @@
 package com.ghostipedia.cosmiccore.common.block;
 
-import java.util.Optional;
 import com.ghostipedia.cosmiccore.common.data.CosmicAttachmentTypes;
-
 import com.ghostipedia.cosmiccore.common.teleporter.SafeTeleporter;
 
 import net.minecraft.core.BlockPos;
@@ -17,6 +15,8 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
+
+import java.util.Optional;
 
 // Escape Pad block that teleports players back to their origin dimension. Placed automatically by the Diving Bell.
 public class DivingBellEscapePad extends Block {

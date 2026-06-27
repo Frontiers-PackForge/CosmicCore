@@ -6,10 +6,10 @@ import com.ghostipedia.cosmiccore.api.machine.multiblock.LinkedWorkableMultibloc
 import com.ghostipedia.cosmiccore.common.machine.multiblock.LinkedMultiblockHelper;
 import com.ghostipedia.cosmiccore.common.machine.multiblock.multi.MothCargoStation;
 
+import com.gregtechceu.gtceu.api.blockentity.BlockEntityCreationInfo;
 import com.gregtechceu.gtceu.api.capability.recipe.FluidRecipeCapability;
 import com.gregtechceu.gtceu.api.capability.recipe.IO;
 import com.gregtechceu.gtceu.api.capability.recipe.ItemRecipeCapability;
-import com.gregtechceu.gtceu.api.blockentity.BlockEntityCreationInfo;
 import com.gregtechceu.gtceu.api.machine.MetaMachine;
 import com.gregtechceu.gtceu.api.machine.TickableSubscription;
 import com.gregtechceu.gtceu.api.machine.trait.NotifiableFluidTank;
@@ -18,6 +18,7 @@ import com.gregtechceu.gtceu.utils.ExtendedUseOnContext;
 
 import com.lowdragmc.lowdraglib.syncdata.annotation.DescSynced;
 import com.lowdragmc.lowdraglib.syncdata.annotation.Persisted;
+
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.GlobalPos;
@@ -53,7 +54,6 @@ import java.util.*;
  * </ul>
  */
 public class MothCargoStationMachine extends LinkedWorkableMultiblockMachine {
-
 
     // ==================== Constants ====================
 
@@ -120,7 +120,6 @@ public class MothCargoStationMachine extends LinkedWorkableMultiblockMachine {
         super(holder);
     }
 
-
     // ==================== Linking Overrides ====================
 
     @Override
@@ -152,8 +151,8 @@ public class MothCargoStationMachine extends LinkedWorkableMultiblockMachine {
     // ==================== Lifecycle ====================
 
     @Override
-    public void onStructureFormed() {
-        super.onStructureFormed();
+    public void formStructure(@org.jetbrains.annotations.NotNull String substructureName) {
+        super.formStructure(substructureName);
 
         // Scan for moth homes in structure
         scanForMothHomes();
@@ -162,8 +161,8 @@ public class MothCargoStationMachine extends LinkedWorkableMultiblockMachine {
     }
 
     @Override
-    public void onStructureInvalid() {
-        super.onStructureInvalid();
+    public void invalidateStructure(String substructureName) {
+        super.invalidateStructure(substructureName);
         unsubscribeFromShipping();
         // Reset moth home stats
         mothHomeTier = 0;
@@ -581,7 +580,6 @@ public class MothCargoStationMachine extends LinkedWorkableMultiblockMachine {
 
     // ==================== UI ====================
 
-    @Override
     public void addDisplayText(List<Component> textList) {
         if (!isFormed()) {
             textList.add(Component.literal("Structure not formed")
