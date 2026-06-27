@@ -13,6 +13,8 @@ import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import com.rekindled.embers.api.capabilities.EmbersCapabilities;
 import com.rekindled.embers.api.power.IEmberCapability;
 import com.rekindled.embers.blockentity.EmberReceiverBlockEntity;
+import com.rekindled.embers.compat.sublevel.SubLevelCompat;
+import com.rekindled.embers.util.CapabilityCompat;
 import lombok.Getter;
 
 public class CosmicEmberReceptorBlockEntity extends EmberReceiverBlockEntity implements ICosmicEmberStats {
@@ -45,15 +47,15 @@ public class CosmicEmberReceptorBlockEntity extends EmberReceiverBlockEntity imp
                                   CosmicEmberReceptorBlockEntity blockEntity) {
         blockEntity.ticksExisted++;
         Direction facing = state.getValue(BlockStateProperties.FACING);
-        BlockEntity attachedTile = level.getBlockEntity(pos.relative(facing, -1));
-        if (blockEntity.ticksExisted % 2 == 0 && attachedTile != null) {
-            IEmberCapability cap = level.getCapability(EmbersCapabilities.EMBER_BLOCK_CAPABILITY,
-                    pos.relative(facing, -1), facing);
-            if (cap != null && cap.getEmber() < cap.getEmberCapacity() && blockEntity.capability.getEmber() > 0) {
-                double added = cap.addAmount(Math.min(blockEntity.transfer(), blockEntity.capability.getEmber()), true);
+        BlockEntity attachedTile = SubLevelCompat.findAdjacent(blockEntity, facing.getOpposite());
+        if (attachedTile != null) {
+            IEmberCapability cap = CapabilityCompat
+                    .getCapability(attachedTile, EmbersCapabilities.EMBER_CAPABILITY, facing).orElse(null);
+            if (cap != null && cap.getEmber() < cap.getEmberCapacity() && blockEntity.capability.getEmber() > 0.0) {
+                double added = cap.addAmount(
+                        Math.min(blockEntity.transfer(), blockEntity.capability.getEmber()), true);
                 blockEntity.capability.removeAmount(added, true);
             }
-
         }
     }
 }

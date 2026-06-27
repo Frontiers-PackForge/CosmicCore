@@ -36,6 +36,11 @@ public class NotifiableEmberContainer extends NotifiableRecipeHandlerTrait<Doubl
         public void onContentsChanged() {
             super.onContentsChanged();
             emberHatch.cachedEmber = getEmber();
+            emberHatch.cachedEmberCapacity = NotifiableEmberContainer.this.maxCapacity;
+            if (!emberHatch.isRemote()) {
+                emberHatch.getSyncDataHolder().markClientSyncFieldDirty("cachedEmber");
+                emberHatch.getSyncDataHolder().markClientSyncFieldDirty("cachedEmberCapacity");
+            }
             notifyListeners();
             NotifiableEmberContainer.this.notifyListeners();
         }
