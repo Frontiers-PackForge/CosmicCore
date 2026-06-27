@@ -19,8 +19,10 @@ import com.rekindled.embers.api.capabilities.EmbersCapabilities;
 import com.rekindled.embers.api.power.IEmberCapability;
 import com.rekindled.embers.api.power.IEmberPacketReceiver;
 import com.rekindled.embers.blockentity.EmberEmitterBlockEntity;
+import com.rekindled.embers.compat.sublevel.SubLevelCompat;
 import com.rekindled.embers.datagen.EmbersSounds;
 import com.rekindled.embers.entity.EmberPacketEntity;
+import com.rekindled.embers.util.CapabilityCompat;
 import com.rekindled.embers.util.Misc;
 import lombok.Getter;
 
@@ -52,56 +54,83 @@ public class CosmicEmberEmitterBlockEntity extends EmberEmitterBlockEntity imple
         return new CosmicEmberEmitterBlockEntity(type, pPos, pBlockState, tier);
     }
 
+    @Override
+    public boolean canSendBurst() {
+        validateRangeLimitedLink();
+        if (level == null) {
+            return false;
+        }
+        if (level.hasNeighborSignal(worldPosition) && target != null && !level.isClientSide) {
+            return false;
+        }
+        BlockEntity targetTile = SubLevelCompat.findReachableLinkedTarget(
+                this, target, targetSubLevelId, targetPhysicalPosition);
+        if (targetTile == null) {
+            if (rangeLimitedEndpoint && SubLevelCompat.isCrossSubLevelLink(this, targetSubLevelId)) {
+                target = null;
+                targetSubLevelId = null;
+                targetTrackingPointId = null;
+                targetPhysicalPosition = null;
+                rangeLimitedEndpoint = false;
+                setChanged();
+            }
+            return false;
+        }
+        if (!SubLevelCompat.isInSubLevel(this) && !SubLevelCompat.isInSubLevel(targetTile)) {
+            if (!level.isLoaded(target)) {
+                return false;
+            }
+            if (trajectoryChunks == null) {
+                trajectoryChunks = new HashSet<>();
+                Misc.calculateTrajectoryChunks(trajectoryChunks, worldPosition, target,
+                        getEmittingDirection(level.getBlockState(worldPosition)
+                                .getValue(BlockStateProperties.FACING)));
+            }
+            if (level instanceof ServerLevel serverLevel) {
+                for (ChunkPos chunkPos : trajectoryChunks) {
+                    if (!serverLevel.isNaturalSpawningAllowed(chunkPos)) {
+                        return false;
+                    }
+                }
+            }
+        }
+        return true;
+    }
+
     public static void serverTick(Level level, BlockPos pos, BlockState state,
                                   CosmicEmberEmitterBlockEntity blockEntity) {
         blockEntity.ticksExisted++;
         Direction facing = state.getValue(BlockStateProperties.FACING);
-        BlockEntity attachedTile = level.getBlockEntity(pos.relative(facing, -1));
-        if (blockEntity.ticksExisted % 5 == 0 && attachedTile != null) {
-            IEmberCapability cap = level.getCapability(EmbersCapabilities.EMBER_BLOCK_CAPABILITY,
-                    pos.relative(facing, -1), facing);
-            if (cap != null) {
-                if (cap.getEmber() > 0 &&
-                        blockEntity.capability.getEmber() < blockEntity.capability.getEmberCapacity()) {
-                    double removed = cap.removeAmount(blockEntity.pull(), true);
-                    blockEntity.capability.addAmount(removed, true);
-                }
+        BlockEntity attachedTile = SubLevelCompat.findAdjacent(blockEntity, facing.getOpposite());
+        if (blockEntity.ticksExisted % 5L == 0L && attachedTile != null) {
+            IEmberCapability cap = CapabilityCompat
+                    .getCapability(attachedTile, EmbersCapabilities.EMBER_CAPABILITY, facing).orElse(null);
+            if (cap != null && cap.getEmber() > 0.0 &&
+                    blockEntity.capability.getEmber() < blockEntity.capability.getEmberCapacity()) {
+                double removed = cap.removeAmount(blockEntity.pull(), true);
+                blockEntity.capability.addAmount(removed, true);
             }
         }
-        if ((blockEntity.ticksExisted + blockEntity.offset) % 20 == 0 && blockEntity.canSendBurst() &&
-                blockEntity.capability.getEmber() > PULL_RATE) {
-            BlockEntity targetTile = level.getBlockEntity(blockEntity.target);
-            if (targetTile instanceof IEmberPacketReceiver) {
-                if (((IEmberPacketReceiver) targetTile).hasRoomFor(blockEntity.transfer())) {
-                    EmberPacketEntity packet = RegistryManager.EMBER_PACKET.get().create(blockEntity.level);
-                    Vec3 velocity = getBurstVelocity(facing);
-                    packet.initCustom(pos, blockEntity.target, velocity.x, velocity.y, velocity.z,
-                            Math.min(blockEntity.transfer(), blockEntity.capability.getEmber()));
-                    blockEntity.capability
-                            .removeAmount(Math.min(blockEntity.transfer(), blockEntity.capability.getEmber()), true);
-                    blockEntity.level.addFreshEntity(packet);
-                    level.playSound(null, pos, EmbersSounds.EMBER_EMIT.get(), SoundSource.BLOCKS, 1.0f, 1.0f);
-                }
+        if ((blockEntity.ticksExisted + (long) blockEntity.offset) % 20L == 0L && blockEntity.canSendBurst() &&
+                blockEntity.capability.getEmber() > blockEntity.pull()) {
+            BlockEntity targetTile = SubLevelCompat.findReachableLinkedTarget(
+                    blockEntity, blockEntity.target, blockEntity.targetSubLevelId,
+                    blockEntity.targetPhysicalPosition);
+            if (targetTile instanceof IEmberPacketReceiver receiver && receiver.hasRoomFor(blockEntity.transfer())) {
+                EmberPacketEntity packet = RegistryManager.EMBER_PACKET.get().create(blockEntity.level);
+                Vec3 velocity = SubLevelCompat.toPhysicalDirection(blockEntity, getBurstVelocity(facing));
+                Vec3 start = SubLevelCompat.toPhysicalPosition(blockEntity, Vec3.atCenterOf(pos));
+                Vec3 destination = SubLevelCompat.currentTrackedPhysicalPosition(
+                        blockEntity, blockEntity.target, blockEntity.targetSubLevelId,
+                        blockEntity.targetPhysicalPosition);
+                double sent = Math.min(blockEntity.transfer(), blockEntity.capability.getEmber());
+                packet.initCustom(start, destination, velocity.x, velocity.y, velocity.z, sent);
+                packet.pos = blockEntity.getBlockPos().immutable();
+                packet.setTrackedTarget(blockEntity.target, blockEntity.targetSubLevelId);
+                blockEntity.capability.removeAmount(sent, true);
+                blockEntity.level.addFreshEntity(packet);
+                level.playSound(null, pos, EmbersSounds.EMBER_EMIT.get(), SoundSource.BLOCKS, 1.0f, 1.0f);
             }
         }
-    }
-
-    @Override
-    public boolean canSendBurst() {
-        if (target != null && level.isLoaded(target) && !level.isClientSide) {
-            if (trajectoryChunks == null) {
-                trajectoryChunks = new HashSet<ChunkPos>();
-                Misc.calculateTrajectoryChunks(trajectoryChunks, worldPosition, target,
-                        getEmittingDirection(level.getBlockState(worldPosition).getValue(BlockStateProperties.FACING)));
-            }
-            if (level instanceof ServerLevel serverLevel) {
-                for (ChunkPos chunk : trajectoryChunks) {
-                    if (!serverLevel.isNaturalSpawningAllowed(chunk))
-                        return false;
-                }
-            }
-            return true;
-        }
-        return false;
     }
 }

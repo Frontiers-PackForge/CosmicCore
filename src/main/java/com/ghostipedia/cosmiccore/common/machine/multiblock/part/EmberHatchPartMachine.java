@@ -23,10 +23,13 @@ import brachy.modularui.widgets.layout.Flow;
 
 public class EmberHatchPartMachine extends TieredIOPartMachine implements IMuiMachine {
 
-    // Cache that updates when emberContainer.capability updates, synced for the UI
     @SyncToClient
     @SaveField
     public double cachedEmber = 0;
+
+    @SyncToClient
+    @SaveField
+    public double cachedEmberCapacity = 0;
 
     @SaveField
     public final NotifiableEmberContainer emberContainer;
@@ -34,6 +37,7 @@ public class EmberHatchPartMachine extends TieredIOPartMachine implements IMuiMa
     public EmberHatchPartMachine(BlockEntityCreationInfo info, int tier, IO io) {
         super(info, tier, io);
         this.emberContainer = new NotifiableEmberContainer(this, io, getMaxCapacity(tier), getMaxConsumption(tier));
+        this.cachedEmberCapacity = getMaxCapacity(tier);
     }
 
     @Override
@@ -45,12 +49,13 @@ public class EmberHatchPartMachine extends TieredIOPartMachine implements IMuiMa
                 .coverChildren()
                 .padding(8)
                 .top(14)
-                .horizontalCenter() // brachy 3.3.0: alignX(float) removed; horizontalCenter() == leftRel(0.5f)
+                .horizontalCenter()
                 .childPadding(4)
                 .child(new TextWidget<>(Text.lang(
                         "gui.cosmiccore.ember_hatch.label." + (this.io == IO.IN ? "import" : "export"))))
                 .child(new TextWidget<>(Text.dynamic(
-                        () -> Component.literal(FormattingUtil.formatNumbers(cachedEmber) + " Ember")))));
+                        () -> Component.literal(FormattingUtil.formatNumbers(cachedEmber) + " / " +
+                                FormattingUtil.formatNumbers(cachedEmberCapacity) + " Ember")))));
 
         return panel;
     }
