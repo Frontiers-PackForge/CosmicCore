@@ -44,9 +44,11 @@
     "gtfix.PatternPreviewMatrixCaptureMixin",
     "gtfix.CtmMeshBuilderAoFixMixin",
     "gtfix.FacadeCoverRendererAoFixMixin",
+    "gtfix.StaticFaceBakeryUvNormalizeMixin",
     "gtfix.QuantumChestUpwardFacingCrashFixMixin",
     "gtfix.SchemaWidgetZoomMixin",
-    "gtfix.SchemaWidgetPanMixin"
+    "gtfix.SchemaWidgetPanMixin",
+    "gtfix.DummyChunkSourceThreadSafeMixin"
   ],
   "mixins": [
     "BlockPatternMixin",
@@ -64,11 +66,12 @@
     "accessor.LootTableAccessor",
     "client.CosmicCoreRemainingAirOverlayMixin",
     "gtceu.ElectricContainerBlockProviderMixin",
-    "gtceu.CuprosivaHandSortMixin",
+    "gtceu.CrushedBundleHandSortMixin",
     "gtceu.GTKubeRecipeMixin",
     "gtceu.GTOreDefinitionMixin",
     "gtceu.OreGeneratorMixin",
     "gtceu.MetaMachinePaintMixin",
+    "gtceu.MetaMachineBlockNoMoveDropMixin",
     "gtceu.ParallelProviderMixin",
     "gtceu.RecipeLogicProviderMixin",
     "gtceu.RecipeManagerCategoryMixin",
@@ -78,10 +81,15 @@
     "gtfix.DecompositionRecipeHandlerEmptyFluidFixMixin",
     "gtfix.UIFactoryServerPlayerAccessorFixMixin",
     "gtfix.PipeFrameMaterialNullFixMixin",
+    "gtfix.CapabilityMapComponentMatchesFixMixin",
+    "gtfix.ContentJSMatchesFixMixin",
     "architectury.ArchitecturyNullCodecSkipFixMixin",
     "lso.FrostbiteEffectMixin",
     "lso.HeatstrokeEffectMixin",
-    "worldgen.CubicSplineMultipointMixin"
+    "worldgen.CubicSplineMultipointMixin",
+    "sable.PipeBlockSubLevelMixin",
+    "sable.MachineUIFactorySubLevelRangeMixin",
+    "sable.MetaMachineBlockSubLevelMixin"
   ],
   "injectors": {
     "defaultRequire": 1,
