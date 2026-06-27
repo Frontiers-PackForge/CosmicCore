@@ -58,9 +58,6 @@ public class NotifiableEmberContainer extends NotifiableRecipeHandlerTrait<Doubl
          */
     };
 
-    // Note: NBT serialization for capability now handled via @SaveField annotation
-    // and manual initialization in constructor
-
     private final IO handlerIO;
 
     @SaveField
@@ -82,6 +79,14 @@ public class NotifiableEmberContainer extends NotifiableRecipeHandlerTrait<Doubl
         // 8.0.0: NotifiableRecipeHandlerTrait no longer takes the machine in its ctor; attach explicitly so
         // getMachine()/capability registration are wired (mirrors EnergyHatchPartMachine#attachTrait).
         machine.attachTrait(this);
+    }
+
+    @Override
+    public void onMachineLoad() {
+        super.onMachineLoad();
+        if (!emberHatch.isRemote()) {
+            capability.setEmber(emberHatch.cachedEmber);
+        }
     }
 
     @Override
