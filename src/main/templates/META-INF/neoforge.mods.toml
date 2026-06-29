@@ -51,3 +51,10 @@ config = "cosmiccore.mixins.json"
     versionRange = "[0,)"
     ordering = "AFTER"
     side = "BOTH"
+
+[[dependencies.${mod_id}]]
+    modId = "undergarden"
+    type = "optional"
+    versionRange = "[0,)"
+    ordering = "AFTER"
+    side = "BOTH"

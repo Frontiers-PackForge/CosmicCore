@@ -49,7 +49,8 @@
     "gtfix.SchemaWidgetZoomMixin",
     "gtfix.SchemaWidgetPanMixin",
     "gtfix.DummyChunkSourceThreadSafeMixin",
-    "sable.BlockHighlightSubLevelMixin"
+    "sable.BlockHighlightSubLevelMixin",
+    "client.AbyssLightTextureMixin"
   ],
   "mixins": [
     "BlockPatternMixin",
@@ -84,6 +85,7 @@
     "gtfix.PipeFrameMaterialNullFixMixin",
     "gtfix.CapabilityMapComponentMatchesFixMixin",
     "gtfix.ContentJSMatchesFixMixin",
+    "gtfix.IGregtechBlockEntityRemovedChunkReentryFixMixin",
     "architectury.ArchitecturyNullCodecSkipFixMixin",
     "lso.FrostbiteEffectMixin",
     "lso.HeatstrokeEffectMixin",

@@ -18,6 +18,8 @@ import com.ghostipedia.cosmiccore.common.data.materials.CosmicElements;
 import com.ghostipedia.cosmiccore.common.data.materials.CosmicMaterialSet;
 import com.ghostipedia.cosmiccore.common.data.materials.CosmicMaterials;
 import com.ghostipedia.cosmiccore.common.data.recipe.CosmicCoreOreRecipeHandler;
+import com.ghostipedia.cosmiccore.common.data.temperature.CosmicTemperatureModifiers;
+import com.ghostipedia.cosmiccore.common.data.worldgen.generator.CosmicChunkGenerators;
 import com.ghostipedia.cosmiccore.common.machine.multiblock.multi.modular.MultiblockInit;
 import com.ghostipedia.cosmiccore.common.mob.DimensionMobScaling;
 import com.ghostipedia.cosmiccore.common.network.CCoreNetwork;
@@ -69,6 +71,8 @@ public class CosmicCore {
         CosmicRegistration.REGISTRATE.registerEventListeners(modBus);
         CosmicAttachmentTypes.ATTACHMENT_TYPES.register(modBus);
         CosmicLootModifiers.register(modBus);
+        CosmicTemperatureModifiers.register(modBus);
+        CosmicChunkGenerators.register(modBus);
         CosmicBargains.init();
 
         if (Platform.isClient()) {
