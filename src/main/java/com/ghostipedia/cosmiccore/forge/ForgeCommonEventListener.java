@@ -93,6 +93,7 @@ public class ForgeCommonEventListener {
         CompoundTag tag = player.getPersistentData();
         if (tag.contains(SANGUINE_SHIELD_NBT_KEY) && tag.getBoolean(SANGUINE_SHIELD_NBT_KEY)) {
             event.setCanceled(true);
+            player.setHealth(player.getMaxHealth());
             player.sendSystemMessage(
                     Component.translatable("cosmiccore.armor.sanguinewarptech.message.death_defiance"));
         }

@@ -7,6 +7,7 @@ import com.ghostipedia.cosmiccore.client.map.RevealedFields;
 import com.ghostipedia.cosmiccore.client.renderer.RingUpgradePreviewRenderer;
 import com.ghostipedia.cosmiccore.client.renderer.StructureBoundingBox;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.FogRenderer;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
@@ -16,6 +17,7 @@ import net.neoforged.neoforge.client.event.RenderLevelStageEvent;
 import net.neoforged.neoforge.client.event.ViewportEvent;
 import net.neoforged.neoforge.event.level.LevelEvent;
 
+import brachy.modularui.utils.RegistryAccessContainer;
 import com.mojang.blaze3d.shaders.FogShape;
 
 @SuppressWarnings("unused")
@@ -36,6 +38,14 @@ public class ForgeClientEventHandler {
         // Clear all previews when world unloads to prevent stale data
         if (event.getLevel().isClientSide()) {
             RingUpgradePreviewRenderer.clearAllPreviews();
+        }
+    }
+
+    @SubscribeEvent
+    public static void onLoggingIn(ClientPlayerNetworkEvent.LoggingIn event) {
+        var connection = Minecraft.getInstance().getConnection();
+        if (connection != null) {
+            RegistryAccessContainer.update(connection.registryAccess(), null);
         }
     }
 

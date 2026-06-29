@@ -19,6 +19,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.WorldGenLevel;
 import net.minecraft.world.level.chunk.ChunkGenerator;
 import net.minecraft.world.level.levelgen.Heightmap;
+import net.minecraft.world.level.levelgen.RandomState;
 import net.minecraft.world.level.levelgen.XoroshiroRandomSource;
 import net.minecraft.world.level.levelgen.placement.PlacementContext;
 
@@ -59,6 +60,7 @@ public final class OreFieldDispatcher {
                                                        ChunkPos chunkPos) {
         long seed = level.getSeed();
         ResourceKey<Level> dimension = level.getLevel().dimension();
+        RandomState randomState = level.getLevel().getChunkSource().randomState();
         int chunkCenterX = (chunkPos.x << 4) + 8;
         int chunkCenterZ = (chunkPos.z << 4) + 8;
 
@@ -91,8 +93,8 @@ public final class OreFieldDispatcher {
             int maxY = level.getMaxBuildHeight() - 1;
             int coreY = coreOrigin.getY() + 5;
             if (surfaceDimension) {
-                int surface = placement.getHeight(Heightmap.Types.OCEAN_FLOOR_WG, field.core().getX(),
-                        field.core().getZ());
+                int surface = generator.getBaseHeight(field.core().getX(), field.core().getZ(),
+                        Heightmap.Types.OCEAN_FLOOR_WG, level, randomState);
                 coreY = Math.min(coreY, surface - SURFACE_CLEARANCE);
             }
             coreY = Math.max(minY, Math.min(maxY, coreY));

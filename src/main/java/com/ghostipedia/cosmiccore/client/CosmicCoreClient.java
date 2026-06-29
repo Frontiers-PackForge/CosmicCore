@@ -1,6 +1,7 @@
 package com.ghostipedia.cosmiccore.client;
 
 import com.ghostipedia.cosmiccore.CosmicCore;
+import com.ghostipedia.cosmiccore.client.dev.AbyssDevView;
 import com.ghostipedia.cosmiccore.client.keybind.BootsKeybinds;
 import com.ghostipedia.cosmiccore.client.keybind.QuakeMovementKeybinds;
 import com.ghostipedia.cosmiccore.client.keybind.SoulSuperKeybind;
@@ -99,6 +100,7 @@ public class CosmicCoreClient {
         BootsKeybinds.registerKeyMappings(event);
         QuakeMovementKeybinds.registerKeyMappings(event);
         SoulSuperKeybind.registerKeyMappings(event);
+        AbyssDevView.registerKeyMappings(event);
     }
 
     @SubscribeEvent
