@@ -90,6 +90,8 @@
     "lso.FrostbiteEffectMixin",
     "lso.HeatstrokeEffectMixin",
     "worldgen.CubicSplineMultipointMixin",
+    "worldgen.AbyssDeepWaterMixin",
+    "worldgen.AbyssNoiseChunkTagMixin",
     "sable.PipeBlockSubLevelMixin",
     "sable.PipeCoverContainerSlotAccessor",
     "sable.MachineCoverContainerSlotAccessor",

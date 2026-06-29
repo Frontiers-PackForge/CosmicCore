@@ -1,11 +1,17 @@
 package com.ghostipedia.cosmiccore.common.data.worldgen.generator;
 
+import com.ghostipedia.cosmiccore.common.data.worldgen.abyss.AbyssDispatcher;
+
 import net.minecraft.core.Holder;
+import net.minecraft.server.level.WorldGenRegion;
+import net.minecraft.world.level.StructureManager;
 import net.minecraft.world.level.biome.BiomeSource;
+import net.minecraft.world.level.chunk.ChunkAccess;
 import net.minecraft.world.level.chunk.ChunkGenerator;
 import net.minecraft.world.level.levelgen.Aquifer;
 import net.minecraft.world.level.levelgen.NoiseBasedChunkGenerator;
 import net.minecraft.world.level.levelgen.NoiseGeneratorSettings;
+import net.minecraft.world.level.levelgen.RandomState;
 
 import com.google.common.base.Suppliers;
 import com.mojang.serialization.MapCodec;
@@ -27,9 +33,18 @@ public class CosmicFloodedNoiseChunkGenerator extends NoiseBasedChunkGenerator {
         this.globalFluidPicker = Suppliers.memoize(() -> floodedFluidPicker(settings.value()));
     }
 
+    // Undergarden does it's own fill behavior which just kills water flooding at y0 and we need big hole full o water.
+    // So uh, proceed to drown the entire undergarden!
     private static Aquifer.FluidPicker floodedFluidPicker(NoiseGeneratorSettings settings) {
         Aquifer.FluidStatus flooded = new Aquifer.FluidStatus(settings.seaLevel(), settings.defaultFluid());
         return (x, y, z) -> flooded;
+    }
+
+    @Override
+    public void buildSurface(WorldGenRegion level, StructureManager structureManager, RandomState random,
+                             ChunkAccess chunk) {
+        super.buildSurface(level, structureManager, random, chunk);
+        AbyssDispatcher.stampChunk(level.getSeed(), level.getLevel().dimension(), chunk);
     }
 
     @Override
