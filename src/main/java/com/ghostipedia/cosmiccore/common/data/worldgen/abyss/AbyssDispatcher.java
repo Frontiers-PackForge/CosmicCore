@@ -6,6 +6,8 @@ import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.chunk.ChunkAccess;
 
@@ -21,32 +23,58 @@ public final class AbyssDispatcher {
 
     private static final Logger LOGGER = LoggerFactory.getLogger("CosmicAbyss");
     private static final int COVER_DEPTH = 2;
-    private static final String[] LAYER_COLOR = { "white", "light_blue", "cyan", "blue", "purple" };
-    private static final String[] ZONE_COLOR = { "red", "yellow", "lime", "orange" };
+    private static final double MARBLE_SCALE = 0.16;
+    private static final double MARBLE_THRESHOLD = 0.60;
 
-    private static BlockState[] layerStone;
-    private static BlockState[] layerBlob;
-    private static BlockState[] zoneCover;
+    private static final String[] LAYER_STONE = {
+            "minecraft:deepslate",
+            "create:scorchia",
+            "malum:twisted_rock",
+            "minecraft:blackstone",
+            "eternal_starlight:springstone"
+    };
+    private static final String[] LAYER_ACCENT = {
+            "minecraft:smooth_basalt",
+            "create:scoria",
+            "malum:tainted_rock",
+            "biomesoplenty:smooth_black_sandstone",
+            "eternal_starlight:springstone"
+    };
+    private static final String[] LAYER_SKIN = {
+            "undergarden:shiverstone",
+            "undergarden:sediment",
+            "malum:blighted_earth",
+            "eternal_starlight:voidstone",
+            "eternal_starlight:springstone"
+    };
+
+    private static BlockState[] stoneByLayer;
+    private static BlockState[] accentByLayer;
+    private static BlockState[] skinByLayer;
 
     private static void initPalette() {
-        if (layerStone != null) return;
-        BlockState[] stone = new BlockState[LAYER_COLOR.length];
-        BlockState[] blob = new BlockState[LAYER_COLOR.length];
-        for (int i = 0; i < LAYER_COLOR.length; i++) {
-            stone[i] = block(LAYER_COLOR[i] + "_concrete");
-            blob[i] = block(LAYER_COLOR[i] + "_terracotta");
-        }
-        BlockState[] cover = new BlockState[ZONE_COLOR.length];
-        for (int i = 0; i < ZONE_COLOR.length; i++) {
-            cover[i] = block(ZONE_COLOR[i] + "_wool");
-        }
-        layerStone = stone;
-        layerBlob = blob;
-        zoneCover = cover;
+        if (stoneByLayer != null) return;
+        stoneByLayer = resolve(LAYER_STONE);
+        accentByLayer = resolve(LAYER_ACCENT);
+        skinByLayer = resolve(LAYER_SKIN);
     }
 
-    private static BlockState block(String path) {
-        return BuiltInRegistries.BLOCK.get(ResourceLocation.withDefaultNamespace(path)).defaultBlockState();
+    private static BlockState[] resolve(String[] ids) {
+        BlockState[] out = new BlockState[ids.length];
+        for (int i = 0; i < ids.length; i++) {
+            out[i] = block(ids[i]);
+        }
+        return out;
+    }
+
+    private static BlockState block(String id) {
+        ResourceLocation rl = ResourceLocation.tryParse(id);
+        if (rl != null) {
+            Block b = BuiltInRegistries.BLOCK.get(rl);
+            if (b != null && b != Blocks.AIR) return b.defaultBlockState();
+        }
+        LOGGER.warn("Abyss greybox: block '{}' not found, falling back to deepslate", id);
+        return Blocks.DEEPSLATE.defaultBlockState();
     }
 
     public static void stampChunk(long seed, ResourceKey<Level> dim, ChunkAccess chunk) {
@@ -79,6 +107,7 @@ public final class AbyssDispatcher {
 
         int floorY = chunk.getMinBuildHeight() + 1;
         int ceilY = chunk.getMaxBuildHeight() - 1;
+        int top = LAYER_STONE.length - 1;
 
         BlockPos.MutableBlockPos cursor = new BlockPos.MutableBlockPos();
         List<AbyssPlacement.Member> colLand = new ArrayList<>();
@@ -110,9 +139,6 @@ public final class AbyssDispatcher {
                 }
                 if (colLand.isEmpty() && colSparse.isEmpty()) continue;
 
-                int zone = AbyssRegions.zone(seed, wx, wz) % zoneCover.length;
-                BlockState cover = zoneCover[zone];
-
                 int y0 = Math.max(floorY, (int) Math.floor(yLo));
                 int y1 = Math.min(ceilY, (int) Math.ceil(yHi));
                 int coverLeft = 0;
@@ -132,15 +158,23 @@ public final class AbyssDispatcher {
                         prevLand = false;
                         continue;
                     }
-                    int layer = AbyssRegions.layer(y) % layerStone.length;
+                    int layer = AbyssRegions.layerBlended(seed, wx, y, wz);
+                    if (layer < 0) layer = 0;
+                    if (layer > top) layer = top;
                     if (landSolid) {
                         if (!prevLand) coverLeft = COVER_DEPTH;
-                        BlockState put = coverLeft > 0 ? cover : layerStone[layer];
-                        if (coverLeft > 0) coverLeft--;
+                        BlockState put;
+                        if (coverLeft > 0) {
+                            put = skinByLayer[layer];
+                            coverLeft--;
+                        } else {
+                            double n = AbyssShape.noise3(seed, wx * MARBLE_SCALE, y * MARBLE_SCALE, wz * MARBLE_SCALE);
+                            put = n > MARBLE_THRESHOLD ? accentByLayer[layer] : stoneByLayer[layer];
+                        }
                         chunk.setBlockState(cursor, put, false);
                         prevLand = true;
                     } else {
-                        chunk.setBlockState(cursor, layerBlob[layer], false);
+                        chunk.setBlockState(cursor, stoneByLayer[layer], false);
                         prevLand = false;
                     }
                 }

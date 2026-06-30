@@ -1,5 +1,6 @@
 package com.ghostipedia.cosmiccore.api.capability.recipe;
 
+import com.ghostipedia.cosmiccore.CosmicCore;
 import com.ghostipedia.cosmiccore.api.machine.trait.NotifiableEmberContainer;
 import com.ghostipedia.cosmiccore.api.recipe.lookup.MapEmberIngredient;
 
@@ -23,7 +24,7 @@ public class EmberRecipeCapability extends RecipeCapability<Double> {
     public static final EmberRecipeCapability CAP = new EmberRecipeCapability();
 
     protected EmberRecipeCapability() {
-        super("ember", 0xFFFF9900, true, 12, SerializerDouble.INSTANCE);
+        super(CosmicCore.id("ember"), 0xFFFF9900, true, 12, SerializerDouble.INSTANCE);
     }
 
     @Override

@@ -640,24 +640,6 @@ public class CosmicMaterials {
         // plasma fluid, or a GTCEu-side material-modification mechanism). Removed for now to let the client boot.
     }
 
-    /**
-     * GTCEu's GTFluids.init() runs inside GTCEu's own RegisterEvent handler, which fires BEFORE CosmicCore's,
-     * so it never sees CC's materials - their .liquid()/.gas() builders stay enqueued and never get registered,
-     * leaving getFluid() == minecraft:empty. That makes GTCEu's decomposition recipe generator throw
-     * (SingleFluidIngredient must not be constructed with minecraft:empty) at world load. So we register CC's
-     * material fluids ourselves here, exactly as GTFluids.init does, scoped to cosmiccore materials. Call this
-     * AFTER all CC materials are registered.
-     */
-    public static void registerMaterialFluids() {
-        for (Material material : GTRegistries.MATERIALS) {
-            if (!CosmicCore.MOD_ID.equals(material.getModid())) continue;
-            FluidProperty fluidProperty = material.getProperty(PropertyKey.FLUID);
-            if (fluidProperty != null) {
-                fluidProperty.registerFluids(material, GTRegistrate.createIgnoringListenerErrors(CosmicCore.MOD_ID));
-            }
-        }
-    }
-
     public static void modifyMaterials() {
         var rubyOreProp = Ruby.getProperty(PropertyKey.ORE);
         var ilmeniteOreProp = Ilmenite.getProperty(PropertyKey.ORE);

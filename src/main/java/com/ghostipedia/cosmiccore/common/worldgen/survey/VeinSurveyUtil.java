@@ -194,7 +194,7 @@ public class VeinSurveyUtil {
         BlockPos veinCenter = veinCenterOpt.get();
         Holder<Biome> biome = level.getBiome(veinCenter);
 
-        var applicableLayers = WorldGeneratorUtils.WORLD_GEN_LAYERS.values().stream()
+        var applicableLayers = GTRegistries.WORLD_GEN_LAYERS.stream()
                 .filter(l -> l.isApplicableForLevel(level.dimension()))
                 .toList();
 

@@ -11,9 +11,9 @@ import com.ghostipedia.cosmiccore.utils.ItemData;
 import com.gregtechceu.gtceu.api.capability.GTCapabilityHelper;
 import com.gregtechceu.gtceu.api.capability.IElectricItem;
 import com.gregtechceu.gtceu.api.data.worldgen.IWorldGenLayer;
-import com.gregtechceu.gtceu.api.data.worldgen.WorldGeneratorUtils;
 import com.gregtechceu.gtceu.api.item.component.IAddInformation;
 import com.gregtechceu.gtceu.api.item.component.IInteractionItem;
+import com.gregtechceu.gtceu.api.registry.GTRegistries;
 
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
@@ -157,7 +157,7 @@ public class VeinSurveyBehavior implements IInteractionItem, IAddInformation {
     private void performScan(ServerLevel level, ServerPlayer player, ItemStack stack, ScanMode mode) {
         BlockPos center = player.blockPosition();
 
-        IWorldGenLayer layer = WorldGeneratorUtils.WORLD_GEN_LAYERS.values().stream()
+        IWorldGenLayer layer = GTRegistries.WORLD_GEN_LAYERS.stream()
                 .filter(l -> l.isApplicableForLevel(level.dimension()))
                 .findFirst()
                 .orElse(null);

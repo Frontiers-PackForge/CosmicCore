@@ -1,5 +1,7 @@
 package com.ghostipedia.cosmiccore.api.capability.recipe;
 
+import com.ghostipedia.cosmiccore.CosmicCore;
+
 import com.gregtechceu.gtceu.api.capability.recipe.FluidRecipeCapability;
 import com.gregtechceu.gtceu.api.capability.recipe.RecipeCapability;
 import com.gregtechceu.gtceu.api.recipe.content.ContentModifier;
@@ -12,7 +14,7 @@ public class SterileRecipeCapability extends RecipeCapability<SizedFluidIngredie
     public final static SterileRecipeCapability CAP = new SterileRecipeCapability();
 
     protected SterileRecipeCapability() {
-        super("sterile", 0x5E2129FF, true, 10, SerializerFluidIngredient.INSTANCE);
+        super(CosmicCore.id("sterile"), 0x5E2129FF, true, 10, SerializerFluidIngredient.INSTANCE);
     }
 
     @Override
