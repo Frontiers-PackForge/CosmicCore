@@ -1,6 +1,8 @@
 package com.ghostipedia.cosmiccore.common.data.worldgen;
 
+import com.ghostipedia.cosmiccore.CosmicCore;
 import com.ghostipedia.cosmiccore.common.data.tag.block.CosmicBlockTags;
+import com.ghostipedia.cosmiccore.mixin.gtceu.SimpleWorldGenLayerLevelsAccessor;
 
 import com.gregtechceu.gtceu.api.data.worldgen.GTOreDefinition;
 import com.gregtechceu.gtceu.api.data.worldgen.IWorldGenLayer;
@@ -21,12 +23,12 @@ public class CosmicWorldGenLayers {
 
     public static void init() {
         OVERWORLD = new SimpleWorldGenLayer(
-                "overworld",
+                CosmicCore.id("overworld"),
                 () -> new TagMatchTest(CosmicBlockTags.OVERWORLD_ORE_REPLACEABLES),
                 Set.of(Level.OVERWORLD));
 
-        WorldGenLayers.STONE.setLevels(Set.of());
-        WorldGenLayers.DEEPSLATE.setLevels(Set.of());
+        ((SimpleWorldGenLayerLevelsAccessor) WorldGenLayers.STONE).cosmiccore$setLevels(Set.of());
+        ((SimpleWorldGenLayerLevelsAccessor) WorldGenLayers.DEEPSLATE).cosmiccore$setLevels(Set.of());
     }
 
     public static void reassign(GTOreDefinition vein) {

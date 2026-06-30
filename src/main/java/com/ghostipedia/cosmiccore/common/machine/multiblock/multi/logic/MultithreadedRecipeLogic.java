@@ -48,7 +48,7 @@ public class MultithreadedRecipeLogic extends RecipeLogic implements IRecipeCapa
     private static String describe(ActionResult r) {
         StringBuilder sb = new StringBuilder();
         sb.append(r.reason() == null ? "<no reason>" : r.reason().getString());
-        if (r.capability() != null) sb.append(" cap=").append(r.capability().name);
+        if (r.capability() != null) sb.append(" cap=").append(r.capability().id);
         if (r.io() != null) sb.append(" io=").append(r.io());
         return sb.toString();
     }

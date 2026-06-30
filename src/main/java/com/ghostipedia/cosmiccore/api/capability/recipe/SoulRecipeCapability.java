@@ -1,5 +1,6 @@
 package com.ghostipedia.cosmiccore.api.capability.recipe;
 
+import com.ghostipedia.cosmiccore.CosmicCore;
 import com.ghostipedia.cosmiccore.api.capability.souls.SoulType;
 import com.ghostipedia.cosmiccore.api.machine.trait.NotifiableSoulContainer;
 import com.ghostipedia.cosmiccore.api.recipe.ingredient.SoulIngredient;
@@ -22,7 +23,7 @@ public class SoulRecipeCapability extends RecipeCapability<SoulIngredient> {
     public final static SoulRecipeCapability CAP = new SoulRecipeCapability();
 
     protected SoulRecipeCapability() {
-        super("soul", 0x5E2129FF, true, 10, SerializerSoulIngredient.INSTANCE);
+        super(CosmicCore.id("soul"), 0x5E2129FF, true, 10, SerializerSoulIngredient.INSTANCE);
     }
 
     @Override

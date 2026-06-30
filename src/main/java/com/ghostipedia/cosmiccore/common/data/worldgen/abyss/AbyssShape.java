@@ -59,7 +59,7 @@ public final class AbyssShape {
         return (h >>> 11) * 0x1.0p-53;
     }
 
-    private static double noise3(long seed, double x, double y, double z) {
+    public static double noise3(long seed, double x, double y, double z) {
         int xi = (int) Math.floor(x), yi = (int) Math.floor(y), zi = (int) Math.floor(z);
         double xf = x - xi, yf = y - yi, zf = z - zi;
         double u = fade(xf), v = fade(yf), w = fade(zf);

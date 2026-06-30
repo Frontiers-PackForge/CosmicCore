@@ -4,7 +4,7 @@ import com.ghostipedia.cosmiccore.common.worldgen.survey.VeinSurveyUtil;
 import com.ghostipedia.cosmiccore.common.worldgen.survey.VeinSurveyUtil.VeinInfo;
 
 import com.gregtechceu.gtceu.api.data.worldgen.IWorldGenLayer;
-import com.gregtechceu.gtceu.api.data.worldgen.WorldGeneratorUtils;
+import com.gregtechceu.gtceu.api.registry.GTRegistries;
 
 import net.minecraft.ChatFormatting;
 import net.minecraft.commands.CommandSourceStack;
@@ -39,7 +39,7 @@ public class VeinSurveyCommand {
 
     private static final SuggestionProvider<CommandSourceStack> VEIN_SUGGESTIONS = (context, builder) -> {
         var level = context.getSource().getLevel();
-        var layers = WorldGeneratorUtils.WORLD_GEN_LAYERS.values().stream()
+        var layers = GTRegistries.WORLD_GEN_LAYERS.stream()
                 .filter(l -> l.isApplicableForLevel(level.dimension()))
                 .toList();
 
@@ -109,7 +109,7 @@ public class VeinSurveyCommand {
         ctx.getSource().sendSuccess(() -> Component.translatable("cosmiccore.survey.command.scanning", radius)
                 .withStyle(ChatFormatting.YELLOW), false);
 
-        IWorldGenLayer layer = WorldGeneratorUtils.WORLD_GEN_LAYERS.values().stream()
+        IWorldGenLayer layer = GTRegistries.WORLD_GEN_LAYERS.stream()
                 .filter(l -> l.isApplicableForLevel(level.dimension()))
                 .findFirst()
                 .orElse(null);
@@ -183,7 +183,7 @@ public class VeinSurveyCommand {
         ServerLevel level = ctx.getSource().getLevel();
         BlockPos center = player.blockPosition();
 
-        IWorldGenLayer layer = WorldGeneratorUtils.WORLD_GEN_LAYERS.values().stream()
+        IWorldGenLayer layer = GTRegistries.WORLD_GEN_LAYERS.stream()
                 .filter(l -> l.isApplicableForLevel(level.dimension()))
                 .findFirst()
                 .orElse(null);
@@ -241,7 +241,7 @@ public class VeinSurveyCommand {
     private static int listVeinTypes(CommandContext<CommandSourceStack> ctx) {
         ServerLevel level = ctx.getSource().getLevel();
 
-        IWorldGenLayer layer = WorldGeneratorUtils.WORLD_GEN_LAYERS.values().stream()
+        IWorldGenLayer layer = GTRegistries.WORLD_GEN_LAYERS.stream()
                 .filter(l -> l.isApplicableForLevel(level.dimension()))
                 .findFirst()
                 .orElse(null);
