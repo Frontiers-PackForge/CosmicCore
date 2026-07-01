@@ -2,6 +2,8 @@ package com.ghostipedia.cosmiccore.gtbridge.recipemaker;
 
 import com.ghostipedia.cosmiccore.gtbridge.recipemaker.RecipeMakerBehavior.State;
 
+import com.gregtechceu.gtceu.common.mui.GTGuiTextures;
+
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.world.item.ItemStack;
 
@@ -56,7 +58,7 @@ public final class CraftingRecipeEditor {
                     slotPanel.openPanel();
                 }).size(18)));
 
-        editor.child(RecipeMakerBehavior.fieldRow("Mode", new CycleButtonWidget().stateCount(2)
+        editor.child(RecipeMakerBehavior.fieldRow("Mode", new CycleButtonWidget().background(GTGuiTextures.BUTTON).stateCount(2)
                 .stateOverlay(0, Text.str("shaped").alignment(Alignment.TopLeft).asTextIcon())
                 .stateOverlay(1, Text.str("shapeless").alignment(Alignment.TopLeft).asTextIcon())
                 .value(RecipeMakerBehavior.intSync(sm, "cmode", () -> state.craftMode[0], v -> state.craftMode[0] = v))

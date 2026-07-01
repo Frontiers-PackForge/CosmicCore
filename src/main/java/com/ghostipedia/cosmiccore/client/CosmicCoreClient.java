@@ -6,6 +6,8 @@ import com.ghostipedia.cosmiccore.client.keybind.BootsKeybinds;
 import com.ghostipedia.cosmiccore.client.keybind.QuakeMovementKeybinds;
 import com.ghostipedia.cosmiccore.client.keybind.SoulSuperKeybind;
 import com.ghostipedia.cosmiccore.client.renderer.machine.*;
+import com.ghostipedia.cosmiccore.client.tooltip.FoodTooltipClientComponent;
+import com.ghostipedia.cosmiccore.client.tooltip.FoodTooltipComponent;
 
 import com.gregtechceu.gtceu.client.renderer.machine.DynamicRenderManager;
 
@@ -16,6 +18,7 @@ import net.neoforged.bus.api.IEventBus;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.client.event.ModelEvent;
+import net.neoforged.neoforge.client.event.RegisterClientTooltipComponentFactoriesEvent;
 import net.neoforged.neoforge.client.event.RegisterGuiLayersEvent;
 import net.neoforged.neoforge.client.event.RegisterKeyMappingsEvent;
 import net.neoforged.neoforge.client.event.RegisterShadersEvent;
@@ -93,6 +96,11 @@ public class CosmicCoreClient {
     @SubscribeEvent
     public static void onGUIRegisterUIOverlays(RegisterGuiLayersEvent event) {
         event.registerAboveAll(CosmicCore.id("cosmichud"), new CosmicHudGuiOverlay());
+    }
+
+    @SubscribeEvent
+    public static void registerTooltipFactories(RegisterClientTooltipComponentFactoriesEvent event) {
+        event.register(FoodTooltipComponent.class, FoodTooltipClientComponent::new);
     }
 
     @SubscribeEvent

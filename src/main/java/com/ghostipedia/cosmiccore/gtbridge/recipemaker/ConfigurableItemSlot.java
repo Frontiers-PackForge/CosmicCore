@@ -1,5 +1,7 @@
 package com.ghostipedia.cosmiccore.gtbridge.recipemaker;
 
+import com.gregtechceu.gtceu.common.mui.GTGuiTextures;
+
 import brachy.modularui.api.widget.Interactable;
 import brachy.modularui.value.sync.ItemSlotSyncHandler;
 import brachy.modularui.widgets.slot.PhantomItemSlot;
@@ -15,6 +17,7 @@ public class ConfigurableItemSlot extends PhantomItemSlot {
 
     public ConfigurableItemSlot(ItemSlotSyncHandler handler, Runnable onConfigure) {
         syncHandler(handler);
+        background(GTGuiTextures.SLOT);
         this.onConfigure = onConfigure;
     }
 

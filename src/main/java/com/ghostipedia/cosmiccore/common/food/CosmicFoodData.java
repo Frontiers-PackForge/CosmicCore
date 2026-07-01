@@ -1,17 +1,21 @@
 package com.ghostipedia.cosmiccore.common.food;
 
+import net.minecraft.core.Holder;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.neoforge.common.util.INBTSerializable;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class CosmicFoodData implements INBTSerializable<CompoundTag> {
 
@@ -25,6 +29,7 @@ public class CosmicFoodData implements INBTSerializable<CompoundTag> {
 
     public transient int lastDamageTick = -10000;
     private transient boolean dirty = false;
+    public transient Map<ResourceLocation, Holder<Attribute>> appliedAttrMods = new HashMap<>();
 
     public void eat(ItemStack stack) {
         dirty = true;
@@ -75,6 +80,13 @@ public class CosmicFoodData implements INBTSerializable<CompoundTag> {
         for (ActiveFood af : foods) sum += af.def.regenBonus();
         for (ActiveFood af : brews) sum += af.def.regenBonus();
         return sum;
+    }
+
+    public List<AttributeSpec> allActiveAttributes() {
+        List<AttributeSpec> out = new ArrayList<>();
+        for (ActiveFood af : foods) out.addAll(af.def.attributes());
+        for (ActiveFood af : brews) out.addAll(af.def.attributes());
+        return out;
     }
 
     public void clearActive() {

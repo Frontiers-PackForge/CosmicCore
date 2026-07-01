@@ -101,28 +101,41 @@ public class CosmicHudGuiOverlay implements LayeredDraw.Layer {
     }
 
     private void renderFoodSlots(GuiGraphics guiGraphics, int screenWidth, int screenHeight) {
+        if (foodBars.isEmpty() && brewBars.isEmpty()) return;
         long elapsed = 0;
         Minecraft mc = Minecraft.getInstance();
         if (mc.level != null && barsGameTime >= 0) {
             elapsed = Math.max(0, mc.level.getGameTime() - barsGameTime);
         }
-        int baseX = screenWidth / 2 + 12;
-        int baseY = screenHeight - 52;
-        renderBarRow(guiGraphics, foodBars, baseX, baseY, elapsed);
-        renderBarRow(guiGraphics, brewBars, baseX, baseY - 22, elapsed);
+        int centerX = screenWidth / 2;
+        int hotbarTop = screenHeight - 22;
+        renderEndcapColumn(guiGraphics, mc, foodBars, centerX - 107, hotbarTop, elapsed);
+        renderEndcapColumn(guiGraphics, mc, brewBars, centerX + 95, hotbarTop, elapsed);
     }
 
-    private static void renderBarRow(GuiGraphics guiGraphics, List<FoodBar> bars, int x, int y, long elapsed) {
+    private static void renderEndcapColumn(GuiGraphics guiGraphics, Minecraft mc, List<FoodBar> bars,
+                                           int cellX, int hotbarTop, long elapsed) {
+        int stride = 22;
         for (int i = 0; i < bars.size(); i++) {
             FoodBar bar = bars.get(i);
-            int ix = x + i * 20;
-            guiGraphics.renderItem(bar.icon(), ix, y);
+            int cellTop = hotbarTop - 3 - i * stride;
+
+            var pose = guiGraphics.pose();
+            pose.pushPose();
+            pose.translate(cellX, cellTop, 0);
+            pose.scale(0.75f, 0.75f, 1f);
+            guiGraphics.renderItem(bar.icon(), 0, 0);
+            pose.popPose();
+
             int remaining = (int) Math.max(0, bar.ticksLeft() - elapsed);
-            float frac = Math.min(1f, (float) remaining / Math.max(1, bar.base()));
-            int barW = (int) (16 * frac);
-            int color = remaining > bar.base() ? 0xFF55FF55 : 0xFFFFAA00;
-            guiGraphics.fill(ix, y + 17, ix + 16, y + 19, 0xFF333333);
-            guiGraphics.fill(ix, y + 17, ix + barW, y + 19, color);
+            int color = remaining > bar.base() ? 0xFF55FF55 : remaining <= 200 ? 0xFFFF5555 : 0xFFFFFFFF;
+            String label = formatSeconds(remaining / 20);
+            pose.pushPose();
+            pose.translate(cellX + 6, cellTop + 13, 0);
+            pose.scale(0.75f, 0.75f, 1f);
+            int w = mc.font.width(label);
+            guiGraphics.drawString(mc.font, label, -w / 2, 0, color, true);
+            pose.popPose();
         }
     }
 
@@ -176,7 +189,7 @@ public class CosmicHudGuiOverlay implements LayeredDraw.Layer {
 
         // Position to match vanilla hunger bar (right edge at screenWidth/2 + 91)
         int x = screenWidth / 2 + 10;
-        int y = screenHeight - 39 - renderedHeight;
+        int y = screenHeight - 29 - renderedHeight;
 
         // Use displayedOxygen for visual (has monotonic constraint to prevent jitter)
         long visualOxygen = displayedOxygen >= 0 ? displayedOxygen : oxygenTicksLeft;
