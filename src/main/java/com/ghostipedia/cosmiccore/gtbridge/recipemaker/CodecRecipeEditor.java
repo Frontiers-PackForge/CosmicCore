@@ -4,6 +4,7 @@ import com.ghostipedia.cosmiccore.gtbridge.recipemaker.RecipeCodecReader.JsonFie
 import com.ghostipedia.cosmiccore.gtbridge.recipemaker.RecipeMakerBehavior.State;
 
 import com.gregtechceu.gtceu.api.transfer.item.CustomItemStackHandler;
+import com.gregtechceu.gtceu.common.mui.GTGuiTextures;
 
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
@@ -83,7 +84,7 @@ public final class CodecRecipeEditor {
                         state.codecVals[vi] = sample.has(a.field().name()) ?
                                 sample.get(a.field().name()).getAsString() : "false";
                     }
-                    editor.child(RecipeMakerBehavior.fieldRow(label, new CycleButtonWidget().stateCount(2)
+                    editor.child(RecipeMakerBehavior.fieldRow(label, new CycleButtonWidget().background(GTGuiTextures.BUTTON).stateCount(2)
                             .stateOverlay(0, Text.str("false").alignment(Alignment.TopLeft).asTextIcon())
                             .stateOverlay(1, Text.str("true").alignment(Alignment.TopLeft).asTextIcon())
                             .value(RecipeMakerBehavior.intSync(sm, "cvb" + vi,

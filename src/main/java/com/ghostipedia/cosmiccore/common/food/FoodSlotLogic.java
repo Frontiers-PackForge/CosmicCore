@@ -5,8 +5,12 @@ import com.ghostipedia.cosmiccore.common.data.CosmicAttachmentTypes;
 import com.ghostipedia.cosmiccore.common.network.CCoreNetwork;
 import com.ghostipedia.cosmiccore.common.network.packet.SyncFoodDataPacket;
 
+import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.damagesource.DamageTypes;
+import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.food.FoodData;
 import net.minecraft.world.item.ItemStack;
@@ -16,6 +20,7 @@ import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.entity.living.LivingDeathEvent;
 import net.neoforged.neoforge.event.entity.living.LivingEntityUseItemEvent;
 import net.neoforged.neoforge.event.entity.living.LivingIncomingDamageEvent;
+import net.neoforged.neoforge.event.entity.living.MobEffectEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 import net.neoforged.neoforge.event.tick.PlayerTickEvent;
 
@@ -29,6 +34,9 @@ public final class FoodSlotLogic {
     public static final double BASE_REGEN = 0.25;
     public static final int REGEN_DELAY = 200;
     public static final int RECONCILE_INTERVAL = 40;
+
+    private static final ResourceKey<MobEffect> FD_NOURISHMENT = ResourceKey.create(
+            Registries.MOB_EFFECT, ResourceLocation.fromNamespaceAndPath("farmersdelight", "nourishment"));
 
     @SubscribeEvent
     public static void onFinishUsingItem(LivingEntityUseItemEvent.Finish event) {
@@ -63,6 +71,7 @@ public final class FoodSlotLogic {
         data.tick();
 
         CosmicFoodModifiers.applyMaxHealth(player, data.totalHeartBonus());
+        CosmicFoodModifiers.applyAttributeModifiers(player, data.allActiveAttributes(), data);
         applyEffects(player, data);
 
         int sinceHurt = player.tickCount - data.lastDamageTick;
@@ -85,6 +94,13 @@ public final class FoodSlotLogic {
             return;
         }
         player.getData(CosmicAttachmentTypes.FOOD_DATA).lastDamageTick = player.tickCount;
+    }
+
+    @SubscribeEvent
+    public static void onEffectApplicable(MobEffectEvent.Applicable event) {
+        if (event.getEffectInstance().getEffect().is(FD_NOURISHMENT)) {
+            event.setResult(MobEffectEvent.Applicable.Result.DO_NOT_APPLY);
+        }
     }
 
     @SubscribeEvent

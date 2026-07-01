@@ -51,6 +51,6 @@ public final class CosmicFoodRegistry {
         double regen = Mth.clamp(nutrition * 0.10, 0.25, 2.0);
         int duration = Mth.clamp((int) ((nutrition + saturation) * 600), MIN_DURATION, MAX_DURATION);
 
-        return new FoodDefinition(category, hearts, regen, duration, List.of());
+        return new FoodDefinition(category, hearts, regen, duration, List.of(), List.of(), List.of());
     }
 }

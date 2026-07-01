@@ -69,12 +69,14 @@ import java.util.function.Supplier;
 public class RecipeMakerBehavior implements IItemUIHolder {
 
     static final String CRAFTING = "minecraft:crafting";
-    private static final int WIDTH = 340;
+    static final String FOOD = "cosmiccore:food";
+    private static final int WIDTH = 380;
     private static final int HEIGHT = 300;
     static final int COLS = 3;
     static final int POOL_ITEM = 25;
     static final int POOL_FLUID = 12;
     static final int POOL_CODEC_VAL = 16;
+    static final int FOOD_ROWS = 4;
     private static final int TAG_SLOTS = 16;
     private static final int TANK_CAPACITY = 64_000;
 
@@ -115,6 +117,7 @@ public class RecipeMakerBehavior implements IItemUIHolder {
         final String[] codecVals = new String[POOL_CODEC_VAL];
         final String[] scalarIn = new String[SCALAR_CAPS.size()];
         final String[] scalarOut = new String[SCALAR_CAPS.size()];
+        final FoodState food = new FoodState();
 
         State() {
             Arrays.fill(outChance, RecipeDraft.GUARANTEED);
@@ -125,6 +128,35 @@ public class RecipeMakerBehavior implements IItemUIHolder {
             Arrays.fill(codecVals, "");
             Arrays.fill(scalarIn, "");
             Arrays.fill(scalarOut, "");
+        }
+    }
+
+    public static final class FoodState {
+
+        final int[] category = { 0 };
+        final int[] pickRow = { 0 };
+        final String[] health = { "0" };
+        final String[] regen = { "0" };
+        final String[] duration = { "20m" };
+        final String[] effectId = new String[FOOD_ROWS];
+        final String[] effectAmp = new String[FOOD_ROWS];
+        final String[] attrId = new String[FOOD_ROWS];
+        final String[] attrAmount = new String[FOOD_ROWS];
+        final int[] attrOp = new int[FOOD_ROWS];
+        final String[] behGlyph = new String[FOOD_ROWS];
+        final String[] behColor = new String[FOOD_ROWS];
+        final String[] behLabel = new String[FOOD_ROWS];
+        final String[] behValue = new String[FOOD_ROWS];
+
+        FoodState() {
+            Arrays.fill(effectId, "");
+            Arrays.fill(effectAmp, "0");
+            Arrays.fill(attrId, "");
+            Arrays.fill(attrAmount, "0");
+            Arrays.fill(behGlyph, "");
+            Arrays.fill(behColor, "#ffffff");
+            Arrays.fill(behLabel, "");
+            Arrays.fill(behValue, "");
         }
     }
 
@@ -141,7 +173,8 @@ public class RecipeMakerBehavior implements IItemUIHolder {
                     new ModularSlot(inv, index).accessibility(false, false) : new ModularSlot(inv, index));
         }
 
-        ModularPanel<?> panel = ModularPanel.defaultPanel("recipe_forge", WIDTH, HEIGHT);
+        ModularPanel<?> panel = ModularPanel.defaultPanel("recipe_forge", WIDTH, HEIGHT)
+                .background(GTGuiTextures.BACKGROUND);
 
         IntSyncValue selSlot = new IntSyncValue(() -> state.selSlot[0], v -> state.selSlot[0] = v);
         selSlot.allowC2S();
@@ -160,11 +193,15 @@ public class RecipeMakerBehavior implements IItemUIHolder {
                 (sm, sh) -> buildTagPanel(sm, state, panel, sh));
         IPanelHandler slotPanel = syncManager.syncedPanel("rm_slot", true,
                 (sm, sh) -> buildSlotPanel(sm, state, panel, tagPanel));
+        IPanelHandler foodEffectPanel = syncManager.syncedPanel("rm_feff", true,
+                (sm, sh) -> FoodEditor.buildEffectPicker(sm, state, panel, sh));
+        IPanelHandler foodAttrPanel = syncManager.syncedPanel("rm_fattr", true,
+                (sm, sh) -> FoodEditor.buildAttrPicker(sm, state, panel, sh));
 
         DynamicSyncHandler editorSync = new DynamicSyncHandler().widgetProvider((sm, buf) -> {
             String typeId = buf.readUtf();
-            return buildEditor(sm, typeId, state, control, player, capPanel, condPanel, slotPanel, selSlot, selSide,
-                    selType);
+            return buildEditor(sm, typeId, state, control, player, capPanel, condPanel, slotPanel, foodEffectPanel,
+                    foodAttrPanel, selSlot, selSide, selType);
         });
         syncManager.syncValue("editor", editorSync);
 
@@ -180,6 +217,7 @@ public class RecipeMakerBehavior implements IItemUIHolder {
         ListWidget list = new ListWidget<>();
         list.collapseDisabledChildren().expanded().widthRel(1f);
         addRow(list, "crafting (3x3)", CRAFTING, search, editorSync);
+        addRow(list, "food (cosmic)", FOOD, search, editorSync);
         for (ResourceLocation id : allRecipeTypeIds()) {
             if (id.toString().equals(CRAFTING)) continue;
             addRow(list, id.getPath(), id.toString(), search, editorSync);
@@ -195,30 +233,33 @@ public class RecipeMakerBehavior implements IItemUIHolder {
                         .child(new TextFieldWidget().value(search).widthRel(1f).height(12).autoUpdateOnChange(true))
                         .child(list))
                 .child(editorDyn));
-        panel.child(SlotGroupWidget.playerInventory(7, true));
+        panel.child(SlotGroupWidget.playerInventory(7, true, (index, slot) -> slot.background(GTGuiTextures.SLOT)));
         return panel;
     }
 
     private static void addRow(ListWidget list, String label, String id, StringValue search,
                                DynamicSyncHandler editorSync) {
         list.child(new ButtonWidget<>()
+                .background(GTGuiTextures.BUTTON)
                 .size(144, 14)
                 .onMousePressed((context, button) -> {
                     editorSync.notifyUpdate(buf -> buf.writeUtf(id));
                     return true;
                 })
                 .setEnabledIf(w -> matches(id, search.getStringValue()))
-                .child(new TextWidget<>(Text.str(label)).textAlign(Alignment.CenterLeft).sizeRel(1f)));
+                .child(new TextWidget<>(Text.str(label)).textAlign(Alignment.CenterLeft).sizeRel(1f)
+                        .padding(3, 0, 0, 0)));
     }
 
-    private static boolean matches(String id, String needle) {
+    static boolean matches(String id, String needle) {
         if (needle == null || needle.isEmpty()) return true;
         return id.toLowerCase(Locale.ROOT).contains(needle.toLowerCase(Locale.ROOT));
     }
 
     private static Widget<?> buildEditor(PanelSyncManager sm, String typeId, State state, RecipeMakerControl control,
                                          Player player, IPanelHandler capPanel, IPanelHandler condPanel,
-                                         IPanelHandler slotPanel, IntSyncValue selSlot, IntSyncValue selSide,
+                                         IPanelHandler slotPanel, IPanelHandler foodEffectPanel,
+                                         IPanelHandler foodAttrPanel, IntSyncValue selSlot, IntSyncValue selSide,
                                          IntSyncValue selType) {
         ListWidget content = new ListWidget<>();
         content.sizeRel(1f);
@@ -227,6 +268,8 @@ public class RecipeMakerBehavior implements IItemUIHolder {
 
         if (CRAFTING.equals(typeId)) {
             CraftingRecipeEditor.build(sm, content, state, control, selSlot, selSide, selType, slotPanel);
+        } else if (FOOD.equals(typeId)) {
+            FoodEditor.build(sm, content, state, control, foodEffectPanel, foodAttrPanel);
         } else {
             ResourceLocation rl = ResourceLocation.tryParse(typeId);
             if (rl != null && BuiltInRegistries.RECIPE_TYPE.get(rl) instanceof GTRecipeType type) {
@@ -267,7 +310,7 @@ public class RecipeMakerBehavior implements IItemUIHolder {
 
         content.child(fieldRow("Tick", new TextFieldWidget().setNumbers(1, Integer.MAX_VALUE)
                 .value(intSync(sm, "dur", () -> state.duration[0], v -> state.duration[0] = v)).expanded().height(12)));
-        content.child(fieldRow("EU", new CycleButtonWidget().stateCount(2)
+        content.child(fieldRow("EU", new CycleButtonWidget().background(GTGuiTextures.BUTTON).stateCount(2)
                 .stateOverlay(0, Text.str("tier").alignment(Alignment.TopLeft).asTextIcon())
                 .stateOverlay(1, Text.str("raw").alignment(Alignment.TopLeft).asTextIcon())
                 .value(intSync(sm, "eumode", () -> state.euMode[0], v -> state.euMode[0] = v))
@@ -279,7 +322,7 @@ public class RecipeMakerBehavior implements IItemUIHolder {
                 .child(new TextWidget<>(Text.dynamic(() -> Component.literal(GTValues.VN[state.tier[0]]))).expanded());
         tierRow.setEnabledIf(w -> state.euMode[0] == 0);
         content.child(tierRow);
-        Flow voltRow = fieldRow("Volt", new CycleButtonWidget().stateCount(4)
+        Flow voltRow = fieldRow("Volt", new CycleButtonWidget().background(GTGuiTextures.BUTTON).stateCount(4)
                 .stateOverlay(0, Text.str("VA").alignment(Alignment.TopLeft).asTextIcon())
                 .stateOverlay(1, Text.str("V").alignment(Alignment.TopLeft).asTextIcon())
                 .stateOverlay(2, Text.str("VH").alignment(Alignment.TopLeft).asTextIcon())
@@ -337,7 +380,7 @@ public class RecipeMakerBehavior implements IItemUIHolder {
                 .child(new TextFieldWidget().setNumbers(1, Integer.MAX_VALUE)
                         .value(intSync(sm, "psize", () -> slotSize(state), v -> setSlotSize(state, v)))
                         .expanded().height(12));
-        Flow useRow = fieldRow("Use", new CycleButtonWidget().stateCount(2)
+        Flow useRow = fieldRow("Use", new CycleButtonWidget().background(GTGuiTextures.BUTTON).stateCount(2)
                 .stateOverlay(0, Text.str("consumed").alignment(Alignment.TopLeft).asTextIcon())
                 .stateOverlay(1, Text.str("not consumed").alignment(Alignment.TopLeft).asTextIcon())
                 .value(intSync(sm, "pcon",
@@ -483,7 +526,7 @@ public class RecipeMakerBehavior implements IItemUIHolder {
                 .child(new TextWidget<>(Text.str(title)).height(10));
     }
 
-    private static ModularPanel<?> popout(String name, ModularPanel<?> parent, int width, int height, Widget<?> body) {
+    static ModularPanel<?> popout(String name, ModularPanel<?> parent, int width, int height, Widget<?> body) {
         return new Dialog<>(name)
                 .disablePanelsBelow(false).draggable(true).closeOnOutOfBoundsClick(true)
                 .size(width, height).relative(parent).left(158).top(22)
@@ -496,7 +539,7 @@ public class RecipeMakerBehavior implements IItemUIHolder {
                 .expanded().height(12);
     }
 
-    private static TextFieldWidget strField(PanelSyncManager sm, String key, Supplier<String> getter,
+    static TextFieldWidget strField(PanelSyncManager sm, String key, Supplier<String> getter,
                                             Consumer<String> setter) {
         return new TextFieldWidget().value(strSync(sm, key, getter, setter)).expanded().height(12);
     }
@@ -660,6 +703,7 @@ public class RecipeMakerBehavior implements IItemUIHolder {
 
     static ButtonWidget<?> labelButton(String text, Runnable action) {
         return new ButtonWidget<>()
+                .background(GTGuiTextures.BUTTON)
                 .widthRel(1f).height(16)
                 .onMousePressed((context, button) -> {
                     action.run();
