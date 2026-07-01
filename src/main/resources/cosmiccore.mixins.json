@@ -68,6 +68,7 @@
     "gtceu.ParallelProviderMixin",
     "gtceu.RecipeLogicProviderMixin",
     "gtceu.RecipeManagerCategoryMixin",
+    "gtceu.WoodRecipeCleanupMixin",
     "gtceu.RecipeOutputProviderMixin",
     "gtceu.WorkableBlockProviderMixin",
     "gtceu.SimpleWorldGenLayerLevelsAccessor",
@@ -78,13 +79,10 @@
     "worldgen.CubicSplineMultipointMixin",
     "worldgen.AbyssDeepWaterMixin",
     "worldgen.AbyssNoiseChunkTagMixin",
-    "sable.PipeBlockSubLevelMixin",
     "sable.PipeCoverContainerSlotAccessor",
     "sable.MachineCoverContainerSlotAccessor",
     "sable.MachineUIFactorySubLevelRangeMixin",
-    "sable.CoverUIFactorySubLevelRangeMixin",
-    "sable.MetaMachineBlockSubLevelMixin",
-    "sable.SubLevelAssemblyHelperRotationCaptureMixin"
+    "sable.CoverUIFactorySubLevelRangeMixin"
   ],
   "injectors": {
     "defaultRequire": 1,
