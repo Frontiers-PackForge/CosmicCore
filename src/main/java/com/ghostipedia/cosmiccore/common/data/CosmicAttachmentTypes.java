@@ -3,6 +3,7 @@ package com.ghostipedia.cosmiccore.common.data;
 import com.ghostipedia.cosmiccore.CosmicCore;
 import com.ghostipedia.cosmiccore.common.abyss.AbyssBudget;
 import com.ghostipedia.cosmiccore.common.airControl.OxygenBudget;
+import com.ghostipedia.cosmiccore.common.food.CosmicFoodData;
 import com.ghostipedia.cosmiccore.common.reflection.ReflectionData;
 import com.ghostipedia.cosmiccore.common.teleporter.TeleportOrigin;
 
@@ -31,4 +32,8 @@ public class CosmicAttachmentTypes {
     public static final DeferredHolder<AttachmentType<?>, AttachmentType<TeleportOrigin>> TELEPORT_ORIGIN = ATTACHMENT_TYPES
             .register("teleport_origin",
                     () -> AttachmentType.serializable(holder -> new TeleportOrigin()).copyOnDeath().build());
+
+    public static final DeferredHolder<AttachmentType<?>, AttachmentType<CosmicFoodData>> FOOD_DATA = ATTACHMENT_TYPES
+            .register("food_data",
+                    () -> AttachmentType.serializable(holder -> new CosmicFoodData()).copyOnDeath().build());
 }

@@ -1,6 +1,7 @@
 package com.ghostipedia.cosmiccore.client;
 
 import com.ghostipedia.cosmiccore.CosmicCore;
+import com.ghostipedia.cosmiccore.common.food.FoodBar;
 import com.ghostipedia.cosmiccore.common.item.behavior.WirelessPDABehavior;
 
 import com.gregtechceu.gtceu.api.item.ComponentItem;
@@ -18,6 +19,8 @@ import net.minecraft.world.item.ItemStack;
 import com.mojang.blaze3d.systems.RenderSystem;
 import lombok.NoArgsConstructor;
 import org.jetbrains.annotations.NotNull;
+
+import java.util.List;
 
 @NoArgsConstructor
 public class CosmicHudGuiOverlay implements LayeredDraw.Layer {
@@ -73,6 +76,17 @@ public class CosmicHudGuiOverlay implements LayeredDraw.Layer {
         }
     }
 
+    private static List<FoodBar> foodBars = List.of();
+    private static List<FoodBar> brewBars = List.of();
+    private static long barsGameTime = -1;
+
+    public static void setFoodData(List<FoodBar> foods, List<FoodBar> brews) {
+        foodBars = foods;
+        brewBars = brews;
+        Minecraft mc = Minecraft.getInstance();
+        barsGameTime = mc.level != null ? mc.level.getGameTime() : -1;
+    }
+
     @Override
     public void render(GuiGraphics guiGraphics, DeltaTracker deltaTracker) {
         Minecraft mc = Minecraft.getInstance();
@@ -82,6 +96,33 @@ public class CosmicHudGuiOverlay implements LayeredDraw.Layer {
             renderHUDWirelessPDA(WirelessPDABehavior.CosmicCuriosUtils.getPDACurio(mc.player), guiGraphics);
             renderTimeBudgetBar(guiGraphics, screenWidth, screenHeight);
             renderOxygenBar(guiGraphics, screenWidth, screenHeight);
+            renderFoodSlots(guiGraphics, screenWidth, screenHeight);
+        }
+    }
+
+    private void renderFoodSlots(GuiGraphics guiGraphics, int screenWidth, int screenHeight) {
+        long elapsed = 0;
+        Minecraft mc = Minecraft.getInstance();
+        if (mc.level != null && barsGameTime >= 0) {
+            elapsed = Math.max(0, mc.level.getGameTime() - barsGameTime);
+        }
+        int baseX = screenWidth / 2 + 12;
+        int baseY = screenHeight - 52;
+        renderBarRow(guiGraphics, foodBars, baseX, baseY, elapsed);
+        renderBarRow(guiGraphics, brewBars, baseX, baseY - 22, elapsed);
+    }
+
+    private static void renderBarRow(GuiGraphics guiGraphics, List<FoodBar> bars, int x, int y, long elapsed) {
+        for (int i = 0; i < bars.size(); i++) {
+            FoodBar bar = bars.get(i);
+            int ix = x + i * 20;
+            guiGraphics.renderItem(bar.icon(), ix, y);
+            int remaining = (int) Math.max(0, bar.ticksLeft() - elapsed);
+            float frac = Math.min(1f, (float) remaining / Math.max(1, bar.base()));
+            int barW = (int) (16 * frac);
+            int color = remaining > bar.base() ? 0xFF55FF55 : 0xFFFFAA00;
+            guiGraphics.fill(ix, y + 17, ix + 16, y + 19, 0xFF333333);
+            guiGraphics.fill(ix, y + 17, ix + barW, y + 19, color);
         }
     }
 
