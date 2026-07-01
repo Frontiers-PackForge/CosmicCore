@@ -15,8 +15,6 @@ import com.gregtechceu.gtceu.api.fluids.FluidBuilder;
 import com.gregtechceu.gtceu.api.fluids.FluidState;
 import com.gregtechceu.gtceu.api.fluids.store.FluidStorageKey;
 import com.gregtechceu.gtceu.api.fluids.store.FluidStorageKeys;
-import com.gregtechceu.gtceu.api.registry.GTRegistries;
-import com.gregtechceu.gtceu.api.registry.registrate.GTRegistrate;
 
 import static com.ghostipedia.cosmiccore.common.data.materials.CosmicMaterialSet.MAGIC;
 import static com.gregtechceu.gtceu.api.data.chemical.material.info.MaterialFlags.*;

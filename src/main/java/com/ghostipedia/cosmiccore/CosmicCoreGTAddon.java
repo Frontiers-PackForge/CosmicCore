@@ -4,6 +4,7 @@ import com.ghostipedia.cosmiccore.api.capability.recipe.CosmicRecipeCapabilities
 import com.ghostipedia.cosmiccore.api.registries.CosmicRegistration;
 import com.ghostipedia.cosmiccore.common.data.materials.CosmicBundleMaterials;
 import com.ghostipedia.cosmiccore.common.data.recipe.CosmicCoreOreRecipeHandler;
+import com.ghostipedia.cosmiccore.common.data.recipe.CosmicWoods;
 import com.ghostipedia.cosmiccore.common.data.worldgen.CosmicWorldGenLayers;
 import com.ghostipedia.cosmiccore.common.data.worldgen.generator.CosmicVeinGenerators;
 
@@ -12,6 +13,8 @@ import com.gregtechceu.gtceu.api.addon.IGTAddon;
 import com.gregtechceu.gtceu.api.addon.events.KJSRecipeKeyEvent;
 import com.gregtechceu.gtceu.api.data.chemical.material.Material;
 import com.gregtechceu.gtceu.api.registry.registrate.GTRegistrate;
+import com.gregtechceu.gtceu.data.recipe.WoodTypeEntry;
+import com.gregtechceu.gtceu.data.recipe.misc.WoodMachineRecipes;
 import com.gregtechceu.gtceu.integration.kjs.recipe.components.ContentJS;
 
 import net.minecraft.data.recipes.RecipeOutput;
@@ -44,6 +47,10 @@ public class CosmicCoreGTAddon implements IGTAddon {
         for (Material metal : chunkMetals) {
             CosmicCoreOreRecipeHandler.processChunkBasics(provider, metal);
         }
+        for (WoodTypeEntry wood : CosmicWoods.entries()) {
+            WoodMachineRecipes.registerWoodTypeRecipe(provider, wood);
+        }
+        CosmicWoods.registerLogToPlankRecipes(provider);
     }
 
     @Override
