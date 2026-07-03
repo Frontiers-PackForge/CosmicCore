@@ -29,6 +29,7 @@ public final class MirrorScene {
 
     private static final ResourceLocation TEX_BAND_A = CosmicCore.id("textures/gui/mirror/band_a.png");
     private static final ResourceLocation TEX_BAND_B = CosmicCore.id("textures/gui/mirror/band_b.png");
+    private static final ResourceLocation TEX_RING_SCAR = CosmicCore.id("textures/gui/mirror/ring_scar.png");
     private static final ResourceLocation TEX_CORE = CosmicCore.id("textures/gui/mirror/core.png");
     private static final ResourceLocation TEX_GLOW = CosmicCore.id("textures/gui/mirror/glow.png");
     private static final ResourceLocation TEX_THREAD = CosmicCore.id("textures/gui/mirror/thread.png");
@@ -51,9 +52,6 @@ public final class MirrorScene {
     private static final int ECHO_LIT = 0xFFF0D9A8;
     private static final int ECHO_HOT = 0xFFFFF3D6;
     private static final int ECHO_DIM = 0xFF8A9BC4;
-    private static final int SCORCH_DARK = 0xF0201216;
-    private static final int SCORCH_MID = 0xFF2C1C20;
-    private static final int EMBER = 0xFFFF8A5A;
     private static final int COIL_TINT = 0xFFBF8D50;
 
     private static final int STAR_COUNT = 110;
@@ -90,8 +88,7 @@ public final class MirrorScene {
     private static final float DISK_ALPHA = 0.85f;
     private static final float DISK_SPEED = 0.55f;
 
-    private static final float SCORCH_THETA = 0.9f;
-    private static final float SCORCH_ARC = 0.42f;
+    private static final int LUA_BAND = 0;
 
     private static final float STRAND_SWAY = 11f;
     private static final float STRAND_WIDTH = 4.0f;
@@ -170,10 +167,7 @@ public final class MirrorScene {
         pose.pushPose();
         parallax(pose, px, py, 2);
         for (int b = 0; b < BANDS.length; b++) {
-            drawBand(g, cx, cy, b, time);
-        }
-        if (state.scorch) {
-            drawScorch(g, cx, cy, time);
+            drawBand(g, cx, cy, b, time, state.scorch);
         }
         pose.popPose();
 
@@ -197,11 +191,11 @@ public final class MirrorScene {
                 drawCeremonyStrand(g, cx, cy, time, state);
                 pose.popPose();
             }
-            if (state.claimable || state.flashTicks > 0) {
-                sceneLayer(pose, cx, cy, scale, px, py, 4);
-                drawBeacon(g, cx, cy, time, state);
-                pose.popPose();
-            }
+        }
+        if (state.claimable || state.flashTicks > 0 || state.burstTicks > 0) {
+            sceneLayer(pose, cx, cy, scale, px, py, 4);
+            drawBeacon(g, cx, cy, time, state);
+            pose.popPose();
         }
 
         drawVignette(g, width, height);
@@ -267,10 +261,10 @@ public final class MirrorScene {
         flush(buf);
     }
 
-    private static void drawBand(GuiGraphics g, float cx, float cy, int band, float time) {
+    private static void drawBand(GuiGraphics g, float cx, float cy, int band, float time, boolean scarred) {
         float[] def = BANDS[band];
         float spinDeg = def[3] * time * Mth.RAD_TO_DEG;
-        ResourceLocation tex = def[4] == 0 ? TEX_BAND_A : TEX_BAND_B;
+        ResourceLocation tex = band == LUA_BAND && scarred ? TEX_RING_SCAR : def[4] == 0 ? TEX_BAND_A : TEX_BAND_B;
         PoseStack pose = g.pose();
         pose.pushPose();
         pose.translate(cx, cy, 0);
@@ -282,30 +276,6 @@ public final class MirrorScene {
         texQuad(buf, pose.last().pose(), 0, 0, half, 0xFFFFFFFF, 255);
         flush(buf);
         pose.popPose();
-    }
-
-    private static void drawScorch(GuiGraphics g, float cx, float cy, float time) {
-        List<float[]> pts = new ArrayList<>();
-        int steps = 10;
-        for (int i = 0; i <= steps; i++) {
-            float t = SCORCH_THETA - SCORCH_ARC / 2 + SCORCH_ARC * i / steps;
-            pts.add(bandPoint(cx, cy, 0, t, time));
-        }
-        BufferBuilder buf = beginTex(TEX_THREAD);
-        Matrix4f mat = g.pose().last().pose();
-        ribbon(buf, mat, pts, 11f, SCORCH_DARK, 255, false);
-        ribbon(buf, mat, pts, 6f, SCORCH_MID, 255, false);
-        flush(buf);
-
-        BufferBuilder glow = beginTex(TEX_GLOW);
-        for (int e = 0; e < 4; e++) {
-            float et = SCORCH_THETA + (e - 1.5f) * SCORCH_ARC / 3.2f;
-            float[] p = bandPoint(cx, cy, 0, et, time);
-            float flick = 0.4f + 0.6f * Mth.abs(Mth.sin(time * 2.3f + e * 1.7f));
-            texQuad(glow, mat, p[0], p[1], 7f + flick * 3f, EMBER, (int) (110 * flick));
-            texQuad(glow, mat, p[0], p[1], 2.6f, EMBER, (int) (220 * flick));
-        }
-        flush(glow);
     }
 
     private static void drawChords(GuiGraphics g, float cx, float cy, float time) {
@@ -424,10 +394,26 @@ public final class MirrorScene {
 
     private static void drawBeacon(GuiGraphics g, float cx, float cy, float time,
                                    MirrorScreen.DevState state) {
+        Matrix4f mat = g.pose().last().pose();
+
+        if (state.burstTicks > 0 && state.burstSlot >= 0) {
+            float f = 1f - state.burstTicks / 26f;
+            float bx = cx + ECHO_LAYOUT[state.burstSlot % ECHO_MAX][0];
+            float by = cy + ECHO_LAYOUT[state.burstSlot % ECHO_MAX][1];
+            BufferBuilder rings = beginColor();
+            ringStroke(rings, mat, bx, by, 6f + f * 52f, 1.2f + 3f * (1f - f), ECHO_HOT,
+                    (int) (235 * (1f - f)));
+            ringStroke(rings, mat, bx, by, 4f + f * 30f, 1.2f + 2f * (1f - f), STRAND_GOLD,
+                    (int) (200 * (1f - f)));
+            flush(rings);
+            BufferBuilder bglow = beginTex(TEX_GLOW);
+            texQuad(bglow, mat, bx, by, 18f * (1f - f * 0.5f), ECHO_HOT, (int) (200 * (1f - f)));
+            flush(bglow);
+        }
+
         int slot = Math.min(state.litEchoes, ECHO_MAX - 1);
         float ex = cx + ECHO_LAYOUT[slot][0];
         float ey = cy + ECHO_LAYOUT[slot][1];
-        Matrix4f mat = g.pose().last().pose();
 
         if (state.flashTicks > 0) {
             float f = 1f - state.flashTicks / 24f;
@@ -451,6 +437,17 @@ public final class MirrorScene {
         texQuad(glow, mat, ex, ey, (16f + 5f * pulse) * boost, ECHO_LIT, (int) (120 + 80 * pulse));
         texQuad(glow, mat, ex, ey, 6.5f * boost, ECHO_HOT, 255);
         flush(glow);
+
+        if (state.holding) {
+            float hold = Math.min(1f, state.holdTicks / (float) MirrorScreen.HOLD_TICKS);
+            BufferBuilder lock = beginColor();
+            ringStroke(lock, mat, ex, ey, 34f - 25f * hold, 2.2f, ECHO_HOT, (int) (130 + 110 * hold));
+            arcStroke(lock, mat, ex, ey, 13f, 3f, -Mth.HALF_PI, hold * Mth.TWO_PI, ECHO_HOT, 255);
+            flush(lock);
+            BufferBuilder hglow = beginTex(TEX_GLOW);
+            texQuad(hglow, mat, ex, ey, 10f + 15f * hold, ECHO_HOT, (int) (90 + 140 * hold));
+            flush(hglow);
+        }
     }
 
     private static void drawCoils(GuiGraphics g, float cx, float cy, float time, MirrorScreen.DevState state) {
@@ -590,6 +587,30 @@ public final class MirrorScene {
         for (int i = 0; i < n; i++) {
             float a0 = i * Mth.TWO_PI / n;
             float a1 = (i + 1) * Mth.TWO_PI / n;
+            float c0 = Mth.cos(a0), s0 = Mth.sin(a0);
+            float c1 = Mth.cos(a1), s1 = Mth.sin(a1);
+            buf.addVertex(mat, cx + c0 * ri, cy + s0 * ri, 0).setColor(rr, gg, bb, a);
+            buf.addVertex(mat, cx + c0 * ro, cy + s0 * ro, 0).setColor(rr, gg, bb, a);
+            buf.addVertex(mat, cx + c1 * ro, cy + s1 * ro, 0).setColor(rr, gg, bb, a);
+            buf.addVertex(mat, cx + c1 * ro, cy + s1 * ro, 0).setColor(rr, gg, bb, a);
+            buf.addVertex(mat, cx + c1 * ri, cy + s1 * ri, 0).setColor(rr, gg, bb, a);
+            buf.addVertex(mat, cx + c0 * ri, cy + s0 * ri, 0).setColor(rr, gg, bb, a);
+        }
+    }
+
+    private static void arcStroke(BufferBuilder buf, Matrix4f mat, float cx, float cy, float r, float w,
+                                  float start, float sweep, int tint, int alphaIn) {
+        if (sweep <= 0.001f) return;
+        int rr = (tint >> 16) & 0xFF, gg = (tint >> 8) & 0xFF, bb = tint & 0xFF;
+        int srcA = tint >>> 24;
+        int a = srcA == 0 ? alphaIn : Math.min(255, srcA * alphaIn / 255);
+        if (a <= 0) return;
+        int n = Math.max(2, (int) (48 * sweep / Mth.TWO_PI));
+        float ri = Math.max(0.2f, r - w / 2f);
+        float ro = r + w / 2f;
+        for (int i = 0; i < n; i++) {
+            float a0 = start + sweep * i / n;
+            float a1 = start + sweep * (i + 1) / n;
             float c0 = Mth.cos(a0), s0 = Mth.sin(a0);
             float c1 = Mth.cos(a1), s1 = Mth.sin(a1);
             buf.addVertex(mat, cx + c0 * ri, cy + s0 * ri, 0).setColor(rr, gg, bb, a);

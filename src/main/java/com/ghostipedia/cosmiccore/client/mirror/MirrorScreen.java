@@ -25,6 +25,7 @@ public class MirrorScreen extends Screen {
 
     public static final int CEREMONY_TICKS = 160;
     public static final int ECHO_CAP = 12;
+    public static final int HOLD_TICKS = 22;
 
     public static KeyMapping OPEN;
 
@@ -40,6 +41,10 @@ public class MirrorScreen extends Screen {
         public int hoverEcho = -1;
         public float veil;
         public int flashTicks;
+        public boolean holding;
+        public int holdTicks;
+        public int burstTicks;
+        public int burstSlot = -1;
 
         public DevState() {
             reset();
@@ -55,6 +60,10 @@ public class MirrorScreen extends Screen {
             ceremonyProgress = 0;
             veil = 0f;
             flashTicks = 0;
+            holding = false;
+            holdTicks = 0;
+            burstTicks = 0;
+            burstSlot = -1;
         }
     }
 
@@ -80,6 +89,20 @@ public class MirrorScreen extends Screen {
         if (state.flashTicks > 0) {
             state.flashTicks--;
         }
+        if (state.burstTicks > 0) {
+            state.burstTicks--;
+        }
+        if (state.holding) {
+            if (!state.claimable) {
+                state.holding = false;
+                state.holdTicks = 0;
+            } else {
+                state.holdTicks++;
+                if (state.holdTicks >= HOLD_TICKS) {
+                    performClaim();
+                }
+            }
+        }
     }
 
     @Override
@@ -95,7 +118,8 @@ public class MirrorScreen extends Screen {
         MirrorScene.render(guiGraphics, width, height, mouseX, mouseY, time, zoom, state);
         if (state.claimable) {
             int a = (int) (150 + 70 * Math.sin(time * 2.5f));
-            guiGraphics.drawCenteredString(font, "an echo waits. touch it to remember.",
+            String prompt = state.holding ? "lock it down." : "an echo waits. hold it to remember.";
+            guiGraphics.drawCenteredString(font, prompt,
                     width / 2, height - 40, (a << 24) | 0xF0D9A8);
         } else if (state.ceremonyActive) {
             guiGraphics.drawCenteredString(font, "sol is weaving...",
@@ -139,7 +163,7 @@ public class MirrorScreen extends Screen {
             }
             case GLFW.GLFW_KEY_W -> {
                 if (state.claimable) {
-                    claimEcho();
+                    performClaim();
                 }
                 if (!state.ceremonyActive && state.coils > 0 && state.litEchoes < ECHO_CAP) {
                     state.coils--;
@@ -153,7 +177,7 @@ public class MirrorScreen extends Screen {
                 return true;
             }
             case GLFW.GLFW_KEY_X -> {
-                claimEcho();
+                performClaim();
                 return true;
             }
             case GLFW.GLFW_KEY_R -> {
@@ -171,15 +195,27 @@ public class MirrorScreen extends Screen {
         if (button == 0) {
             int hit = echoAt(mouseX, mouseY);
             if (hit >= 0 && state.claimable && hit == Math.min(state.litEchoes, ECHO_CAP - 1)) {
-                claimEcho();
+                state.holding = true;
+                state.holdTicks = 0;
                 return true;
             }
         }
         return super.mouseClicked(mouseX, mouseY, button);
     }
 
-    private void claimEcho() {
+    @Override
+    public boolean mouseReleased(double mouseX, double mouseY, int button) {
+        if (button == 0 && state.holding) {
+            state.holding = false;
+            state.holdTicks = 0;
+            return true;
+        }
+        return super.mouseReleased(mouseX, mouseY, button);
+    }
+
+    private void performClaim() {
         if (!state.claimable) return;
+        int seat = Math.min(state.litEchoes, ECHO_CAP - 1);
         if (state.litEchoes < ECHO_CAP) {
             state.litEchoes++;
             state.dimEchoes = Math.max(0, state.dimEchoes - 1);
@@ -188,6 +224,10 @@ public class MirrorScreen extends Screen {
         state.ceremonyActive = false;
         state.ceremonyProgress = 0;
         state.flashTicks = 0;
+        state.holding = false;
+        state.holdTicks = 0;
+        state.burstTicks = 26;
+        state.burstSlot = seat;
     }
 
     private int echoAt(double mouseX, double mouseY) {

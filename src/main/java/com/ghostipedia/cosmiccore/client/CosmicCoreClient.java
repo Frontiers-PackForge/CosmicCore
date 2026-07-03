@@ -5,7 +5,6 @@ import com.ghostipedia.cosmiccore.client.dev.AbyssDevView;
 import com.ghostipedia.cosmiccore.client.dev.MurkbloomDevControls;
 import com.ghostipedia.cosmiccore.client.keybind.BootsKeybinds;
 import com.ghostipedia.cosmiccore.client.keybind.QuakeMovementKeybinds;
-import com.ghostipedia.cosmiccore.client.keybind.SoulSuperKeybind;
 import com.ghostipedia.cosmiccore.client.mirror.MirrorScreen;
 import com.ghostipedia.cosmiccore.client.murkbloom.MurkParticle;
 import com.ghostipedia.cosmiccore.client.murkbloom.MurkbloomOverlay;
@@ -22,6 +21,7 @@ import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.fml.loading.FMLEnvironment;
 import net.neoforged.neoforge.client.event.ModelEvent;
 import net.neoforged.neoforge.client.event.RegisterClientTooltipComponentFactoriesEvent;
 import net.neoforged.neoforge.client.event.RegisterGuiLayersEvent;
@@ -129,10 +129,11 @@ public class CosmicCoreClient {
     public static void registerKeyMappings(RegisterKeyMappingsEvent event) {
         BootsKeybinds.registerKeyMappings(event);
         QuakeMovementKeybinds.registerKeyMappings(event);
-        SoulSuperKeybind.registerKeyMappings(event);
-        AbyssDevView.registerKeyMappings(event);
-        MurkbloomDevControls.registerKeyMappings(event);
-        MirrorScreen.registerKeyMappings(event);
+        if (!FMLEnvironment.production) {
+            AbyssDevView.registerKeyMappings(event);
+            MurkbloomDevControls.registerKeyMappings(event);
+            MirrorScreen.registerKeyMappings(event);
+        }
     }
 
     @SubscribeEvent
