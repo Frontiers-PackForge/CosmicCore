@@ -70,6 +70,7 @@ public class CosmicCore {
         modBus.register(this);
         CosmicRegistration.REGISTRATE.registerEventListeners(modBus);
         CosmicAttachmentTypes.ATTACHMENT_TYPES.register(modBus);
+        CosmicParticleTypes.PARTICLE_TYPES.register(modBus);
         CosmicLootModifiers.register(modBus);
         CosmicTemperatureModifiers.register(modBus);
         CosmicChunkGenerators.register(modBus);

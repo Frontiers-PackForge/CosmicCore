@@ -53,7 +53,8 @@ public final class FoodEditor {
                 .child(new CycleButtonWidget().background(GTGuiTextures.BUTTON).stateCount(2)
                         .stateOverlay(0, Text.str("food").alignment(Alignment.TopLeft).asTextIcon())
                         .stateOverlay(1, Text.str("brew").alignment(Alignment.TopLeft).asTextIcon())
-                        .value(RecipeMakerBehavior.intSync(sm, "fcat", () -> food.category[0], v -> food.category[0] = v))
+                        .value(RecipeMakerBehavior.intSync(sm, "fcat", () -> food.category[0],
+                                v -> food.category[0] = v))
                         .expanded().height(14)));
 
         editor.child(RecipeMakerBehavior.fieldRow("Health",

@@ -23,7 +23,7 @@ public final class FoodTooltips {
     private static final String G_DURATION = "⌛";
     private static final String G_ATTR = "◆";
 
-    private static final String[] ROMAN = {"", "I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX", "X"};
+    private static final String[] ROMAN = { "", "I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX", "X" };
 
     public static FoodTooltipComponent build(FoodDefinition def) {
         List<FoodTooltipComponent.Line> lines = new ArrayList<>();

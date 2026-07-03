@@ -2,12 +2,16 @@ package com.ghostipedia.cosmiccore.client;
 
 import com.ghostipedia.cosmiccore.CosmicCore;
 import com.ghostipedia.cosmiccore.client.dev.AbyssDevView;
+import com.ghostipedia.cosmiccore.client.dev.MurkbloomDevControls;
 import com.ghostipedia.cosmiccore.client.keybind.BootsKeybinds;
 import com.ghostipedia.cosmiccore.client.keybind.QuakeMovementKeybinds;
 import com.ghostipedia.cosmiccore.client.keybind.SoulSuperKeybind;
+import com.ghostipedia.cosmiccore.client.murkbloom.MurkParticle;
+import com.ghostipedia.cosmiccore.client.murkbloom.MurkbloomOverlay;
 import com.ghostipedia.cosmiccore.client.renderer.machine.*;
 import com.ghostipedia.cosmiccore.client.tooltip.FoodTooltipClientComponent;
 import com.ghostipedia.cosmiccore.client.tooltip.FoodTooltipComponent;
+import com.ghostipedia.cosmiccore.common.data.CosmicParticleTypes;
 
 import com.gregtechceu.gtceu.client.renderer.machine.DynamicRenderManager;
 
@@ -21,6 +25,7 @@ import net.neoforged.neoforge.client.event.ModelEvent;
 import net.neoforged.neoforge.client.event.RegisterClientTooltipComponentFactoriesEvent;
 import net.neoforged.neoforge.client.event.RegisterGuiLayersEvent;
 import net.neoforged.neoforge.client.event.RegisterKeyMappingsEvent;
+import net.neoforged.neoforge.client.event.RegisterParticleProvidersEvent;
 import net.neoforged.neoforge.client.event.RegisterShadersEvent;
 import net.neoforged.neoforge.client.event.RenderGuiLayerEvent;
 import net.neoforged.neoforge.client.gui.VanillaGuiLayers;
@@ -96,6 +101,7 @@ public class CosmicCoreClient {
     @SubscribeEvent
     public static void onGUIRegisterUIOverlays(RegisterGuiLayersEvent event) {
         event.registerAboveAll(CosmicCore.id("cosmichud"), new CosmicHudGuiOverlay());
+        event.registerAboveAll(CosmicCore.id("murkbloom"), new MurkbloomOverlay());
     }
 
     @SubscribeEvent
@@ -104,11 +110,19 @@ public class CosmicCoreClient {
     }
 
     @SubscribeEvent
+    public static void registerParticleProviders(RegisterParticleProvidersEvent event) {
+        event.registerSpriteSet(CosmicParticleTypes.MURK.get(), MurkParticle.BodyProvider::new);
+        event.registerSpriteSet(CosmicParticleTypes.MURK_PALE.get(), MurkParticle.PaleProvider::new);
+        event.registerSpriteSet(CosmicParticleTypes.MURK_MOTE.get(), MurkParticle.MoteProvider::new);
+    }
+
+    @SubscribeEvent
     public static void registerKeyMappings(RegisterKeyMappingsEvent event) {
         BootsKeybinds.registerKeyMappings(event);
         QuakeMovementKeybinds.registerKeyMappings(event);
         SoulSuperKeybind.registerKeyMappings(event);
         AbyssDevView.registerKeyMappings(event);
+        MurkbloomDevControls.registerKeyMappings(event);
     }
 
     @SubscribeEvent

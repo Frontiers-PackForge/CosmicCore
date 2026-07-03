@@ -540,7 +540,7 @@ public class RecipeMakerBehavior implements IItemUIHolder {
     }
 
     static TextFieldWidget strField(PanelSyncManager sm, String key, Supplier<String> getter,
-                                            Consumer<String> setter) {
+                                    Consumer<String> setter) {
         return new TextFieldWidget().value(strSync(sm, key, getter, setter)).expanded().height(12);
     }
 

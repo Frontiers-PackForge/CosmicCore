@@ -12,6 +12,7 @@ public record FoodTooltipComponent(List<Line> lines) implements TooltipComponent
     public record Line(Icon icon, Component label, Component value) {}
 
     public sealed interface Icon {
+
         record Glyph(String ch, int color) implements Icon {}
 
         record Effect(Holder<MobEffect> effect) implements Icon {}

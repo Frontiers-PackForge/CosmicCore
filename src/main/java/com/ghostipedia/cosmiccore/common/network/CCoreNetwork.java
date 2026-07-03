@@ -2,6 +2,7 @@ package com.ghostipedia.cosmiccore.common.network;
 
 import com.ghostipedia.cosmiccore.common.network.packet.AbyssTimeWarnPacket;
 import com.ghostipedia.cosmiccore.common.network.packet.BootsControlPacket;
+import com.ghostipedia.cosmiccore.common.network.packet.MurkbloomSyncPacket;
 import com.ghostipedia.cosmiccore.common.network.packet.OxygenWarnPacket;
 import com.ghostipedia.cosmiccore.common.network.packet.RevealFieldsPacket;
 import com.ghostipedia.cosmiccore.common.network.packet.StarLadderUplinkPackets;
@@ -41,6 +42,7 @@ public class CCoreNetwork {
         registrar.playToClient(AbyssTimeWarnPacket.TYPE, AbyssTimeWarnPacket.CODEC, AbyssTimeWarnPacket::execute);
         registrar.playToClient(SyncOxygenBarPacket.TYPE, SyncOxygenBarPacket.CODEC, SyncOxygenBarPacket::execute);
         registrar.playToClient(SyncFoodDataPacket.TYPE, SyncFoodDataPacket.CODEC, SyncFoodDataPacket::execute);
+        registrar.playToClient(MurkbloomSyncPacket.TYPE, MurkbloomSyncPacket.CODEC, MurkbloomSyncPacket::execute);
         registrar.playToClient(OxygenWarnPacket.TYPE, OxygenWarnPacket.CODEC, OxygenWarnPacket::execute);
         registrar.playToClient(SyncQuakeMovementPacket.TYPE, SyncQuakeMovementPacket.CODEC,
                 SyncQuakeMovementPacket::execute);

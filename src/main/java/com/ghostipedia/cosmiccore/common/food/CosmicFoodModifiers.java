@@ -74,7 +74,8 @@ public final class CosmicFoodModifiers {
     }
 
     private static ResourceLocation attrModId(Holder<Attribute> attribute, AttributeModifier.Operation op) {
-        ResourceLocation loc = attribute.unwrapKey().map(ResourceKey::location).orElseGet(() -> CosmicCore.id("unknown"));
+        ResourceLocation loc = attribute.unwrapKey().map(ResourceKey::location)
+                .orElseGet(() -> CosmicCore.id("unknown"));
         return CosmicCore.id("food_attr." + loc.getNamespace() + "." + loc.getPath() + "." + op.ordinal());
     }
 }
