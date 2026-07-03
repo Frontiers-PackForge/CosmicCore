@@ -55,5 +55,6 @@ public class CosmicCoreKubeJSPlugin implements KubeJSPlugin {
         bindings.add("CosmicOreVeins", CosmicOreVeins.class);
         bindings.add("CosmicCore", CosmicCore.class);
         bindings.add("CosmicFood", CosmicFoodBinding.class);
+        bindings.add("Deeds", DeedsKubeBinding.class);
     }
 }
