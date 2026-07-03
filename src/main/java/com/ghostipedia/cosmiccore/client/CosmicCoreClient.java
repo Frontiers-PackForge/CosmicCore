@@ -6,6 +6,7 @@ import com.ghostipedia.cosmiccore.client.dev.MurkbloomDevControls;
 import com.ghostipedia.cosmiccore.client.keybind.BootsKeybinds;
 import com.ghostipedia.cosmiccore.client.keybind.QuakeMovementKeybinds;
 import com.ghostipedia.cosmiccore.client.keybind.SoulSuperKeybind;
+import com.ghostipedia.cosmiccore.client.mirror.MirrorScreen;
 import com.ghostipedia.cosmiccore.client.murkbloom.MurkParticle;
 import com.ghostipedia.cosmiccore.client.murkbloom.MurkbloomOverlay;
 import com.ghostipedia.cosmiccore.client.renderer.machine.*;
@@ -31,9 +32,11 @@ import net.neoforged.neoforge.client.event.RenderGuiLayerEvent;
 import net.neoforged.neoforge.client.gui.VanillaGuiLayers;
 
 import com.mojang.blaze3d.vertex.DefaultVertexFormat;
+import com.mojang.blaze3d.vertex.VertexFormat;
 import lombok.Getter;
 
 import java.io.IOException;
+import java.util.function.Consumer;
 
 public class CosmicCoreClient {
 
@@ -73,28 +76,34 @@ public class CosmicCoreClient {
     @Getter
     private static ShaderInstance soulThreadsShader;
 
+    @Getter
+    private static ShaderInstance mirrorDiskShader;
+
     @SubscribeEvent
     public static void shaderRegistry(RegisterShadersEvent event) {
+        registerShader(event, "rendertype_nebulae", DefaultVertexFormat.POSITION,
+                (shaderInstance) -> nebulaeShader = shaderInstance);
+        registerShader(event, "soul_aura", DefaultVertexFormat.POSITION_TEX,
+                (shaderInstance) -> soulAuraShader = shaderInstance);
+        registerShader(event, "void_bg", DefaultVertexFormat.POSITION_TEX,
+                (shaderInstance) -> voidBgShader = shaderInstance);
+        registerShader(event, "galaxy_bg", DefaultVertexFormat.POSITION_TEX,
+                (shaderInstance) -> galaxyBgShader = shaderInstance);
+        registerShader(event, "soul_core", DefaultVertexFormat.POSITION_TEX,
+                (shaderInstance) -> soulCoreShader = shaderInstance);
+        registerShader(event, "soul_threads", DefaultVertexFormat.POSITION_TEX,
+                (shaderInstance) -> soulThreadsShader = shaderInstance);
+        registerShader(event, "mirror_disk", DefaultVertexFormat.POSITION_TEX,
+                (shaderInstance) -> mirrorDiskShader = shaderInstance);
+    }
+
+    private static void registerShader(RegisterShadersEvent event, String name, VertexFormat format,
+                                       Consumer<ShaderInstance> setter) {
         try {
-            event.registerShader(new ShaderInstance(event.getResourceProvider(), CosmicCore.id("rendertype_nebulae"),
-                    DefaultVertexFormat.POSITION), (shaderInstance) -> nebulaeShader = shaderInstance);
-
-            event.registerShader(new ShaderInstance(event.getResourceProvider(), CosmicCore.id("soul_aura"),
-                    DefaultVertexFormat.POSITION_TEX), (shaderInstance) -> soulAuraShader = shaderInstance);
-
-            event.registerShader(new ShaderInstance(event.getResourceProvider(), CosmicCore.id("void_bg"),
-                    DefaultVertexFormat.POSITION_TEX), (shaderInstance) -> voidBgShader = shaderInstance);
-
-            event.registerShader(new ShaderInstance(event.getResourceProvider(), CosmicCore.id("galaxy_bg"),
-                    DefaultVertexFormat.POSITION_TEX), (shaderInstance) -> galaxyBgShader = shaderInstance);
-
-            event.registerShader(new ShaderInstance(event.getResourceProvider(), CosmicCore.id("soul_core"),
-                    DefaultVertexFormat.POSITION_TEX), (shaderInstance) -> soulCoreShader = shaderInstance);
-
-            event.registerShader(new ShaderInstance(event.getResourceProvider(), CosmicCore.id("soul_threads"),
-                    DefaultVertexFormat.POSITION_TEX), (shaderInstance) -> soulThreadsShader = shaderInstance);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
+            event.registerShader(new ShaderInstance(event.getResourceProvider(), CosmicCore.id(name), format),
+                    setter);
+        } catch (IOException | RuntimeException e) {
+            CosmicCore.LOGGER.error("Shader {} failed to load, its effect is disabled", name, e);
         }
     }
 
@@ -123,6 +132,7 @@ public class CosmicCoreClient {
         SoulSuperKeybind.registerKeyMappings(event);
         AbyssDevView.registerKeyMappings(event);
         MurkbloomDevControls.registerKeyMappings(event);
+        MirrorScreen.registerKeyMappings(event);
     }
 
     @SubscribeEvent
