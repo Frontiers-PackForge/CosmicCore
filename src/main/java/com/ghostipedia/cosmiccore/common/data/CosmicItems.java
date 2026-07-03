@@ -7,6 +7,7 @@ import com.ghostipedia.cosmiccore.client.renderer.item.HaloItemRenderer;
 import com.ghostipedia.cosmiccore.client.renderer.item.RadianceItemRenderer;
 import com.ghostipedia.cosmiccore.common.airControl.OxygenConfig;
 import com.ghostipedia.cosmiccore.common.data.tag.item.CosmicItemTags;
+import com.ghostipedia.cosmiccore.common.item.AbyssalSonarItem;
 import com.ghostipedia.cosmiccore.common.item.AirBladderItem;
 import com.ghostipedia.cosmiccore.common.item.AsteroidItem;
 import com.ghostipedia.cosmiccore.common.item.AsteroidTargetingChipItem;
@@ -84,6 +85,14 @@ public class CosmicItems {
     public static final ItemEntry<SoulNetworkReaderItem> SOUL_READER = REGISTRATE
             .item("soul_reader", SoulNetworkReaderItem::new)
             .lang("Soul Network Reader")
+            .properties(p -> p.stacksTo(1))
+            .tag()
+            .defaultModel()
+            .register();
+
+    public static final ItemEntry<AbyssalSonarItem> ABYSSAL_SONAR = REGISTRATE
+            .item("abyssal_sonar", AbyssalSonarItem::new)
+            .lang("Abyssal Sonar")
             .properties(p -> p.stacksTo(1))
             .tag()
             .defaultModel()

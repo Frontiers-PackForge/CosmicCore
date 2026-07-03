@@ -3,10 +3,6 @@ package com.ghostipedia.cosmiccore.client.tooltip;
 import com.ghostipedia.cosmiccore.CosmicCore;
 import com.ghostipedia.cosmiccore.common.food.CosmicFoodRegistry;
 
-import brachy.modularui.screen.event.RichTooltipEvent;
-
-import com.mojang.datafixers.util.Either;
-
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.screens.inventory.tooltip.ClientTooltipComponent;
 import net.minecraft.client.gui.screens.inventory.tooltip.ClientTooltipPositioner;
@@ -16,6 +12,8 @@ import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.client.event.RenderTooltipEvent;
 
+import brachy.modularui.screen.event.RichTooltipEvent;
+import com.mojang.datafixers.util.Either;
 import org.joml.Vector2ic;
 
 import java.util.List;
