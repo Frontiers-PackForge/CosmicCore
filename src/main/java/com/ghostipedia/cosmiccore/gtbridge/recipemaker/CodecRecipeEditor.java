@@ -10,6 +10,7 @@ import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.RecipeHolder;
 import net.neoforged.neoforge.fluids.FluidStack;
 import net.neoforged.neoforge.fluids.capability.templates.FluidTank;
 
@@ -21,6 +22,7 @@ import brachy.modularui.value.sync.PanelSyncManager;
 import brachy.modularui.widgets.CycleButtonWidget;
 import brachy.modularui.widgets.ListWidget;
 import brachy.modularui.widgets.TextWidget;
+import brachy.modularui.widgets.menu.DropdownWidget;
 import brachy.modularui.widgets.layout.Flow;
 import brachy.modularui.widgets.textfield.TextFieldWidget;
 import com.google.gson.Gson;
@@ -28,11 +30,14 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import com.klikli_dev.occultism.crafting.recipe.RitualRecipe;
+import com.klikli_dev.occultism.registry.OccultismRecipes;
 
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.TreeSet;
 
 /**
  * Generic editor for any recipe type with no hand-built or GregTech editor. A sampled recipe (from
@@ -45,6 +50,7 @@ public final class CodecRecipeEditor {
 
     private static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
     private static final int COLS = 6;
+    private static final String RITUAL_TYPE_ID = "occultism:ritual";
 
     private CodecRecipeEditor() {}
 
@@ -99,10 +105,19 @@ public final class CodecRecipeEditor {
                         state.codecVals[vi] = sample.has(a.field().name()) ?
                                 sample.get(a.field().name()).getAsString() : "";
                     }
-                    editor.child(RecipeMakerBehavior.fieldRow(label, new TextFieldWidget()
-                            .value(RecipeMakerBehavior.strSync(sm, "cv" + vi, () -> state.codecVals[vi],
-                                    v -> state.codecVals[vi] = v))
-                            .expanded().height(12)));
+                    if (RITUAL_TYPE_ID.equals(typeId) && isRitualIdField(a.field().name())) {
+                        DropdownWidget dropdown = new DropdownWidget("cvd" + vi, String.class);
+                        dropdown.value(RecipeMakerBehavior.strSync(sm, "cv" + vi, () -> state.codecVals[vi],
+                                v -> state.codecVals[vi] = v));
+                        dropdown.options(ritualFieldValues(player, a.field().name()));
+                        dropdown.expanded().height(14);
+                        editor.child(RecipeMakerBehavior.fieldRow(label, dropdown));
+                    } else {
+                        editor.child(RecipeMakerBehavior.fieldRow(label, new TextFieldWidget()
+                                .value(RecipeMakerBehavior.strSync(sm, "cv" + vi, () -> state.codecVals[vi],
+                                        v -> state.codecVals[vi] = v))
+                                .expanded().height(12)));
+                    }
                 }
                 default -> editor.child(new TextWidget<>(Text.str(label + " (kept)")).height(9));
             }
@@ -407,5 +422,22 @@ public final class CodecRecipeEditor {
     private static String shortName(String typeId) {
         int colon = typeId.indexOf(':');
         return colon < 0 ? typeId : typeId.substring(colon + 1);
+    }
+
+    private static boolean isRitualIdField(String name) {
+        return "ritual_type".equals(name) || "pentacle_id".equals(name);
+    }
+
+    private static List<String> ritualFieldValues(Player player, String field) {
+        Set<String> values = new TreeSet<>();
+        if (player != null && player.level() != null) {
+            for (RecipeHolder<RitualRecipe> holder :
+                    player.level().getRecipeManager().getAllRecipesFor(OccultismRecipes.RITUAL_TYPE.get())) {
+                RitualRecipe recipe = holder.value();
+                values.add("pentacle_id".equals(field) ? recipe.getPentacleId().toString()
+                        : recipe.getRitualType().toString());
+            }
+        }
+        return new ArrayList<>(values);
     }
 }

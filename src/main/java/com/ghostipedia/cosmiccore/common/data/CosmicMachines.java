@@ -431,13 +431,17 @@ public class CosmicMachines {
                                                           int[] tiers, PartAbility... abilities) {
         return registerTieredMachines(name,
                 (holder, tier) -> new EmberHatchPartMachine(holder, tier, io),
-                (tier, builder) -> builder
-                        .langValue((tier == GTValues.ULV ? "Steam" : GTValues.VNF[tier]) + ' ' + displayName)
-                        .abilities(abilities)
-                        .rotationState(RotationState.ALL)
-                        .modelProperty(GTMachineModelProperties.IS_FORMED, false)
-                        .overlayTieredHullModel("ember_hatch")
-                        .tooltipBuilder((item, tooltip) -> {
+                (tier, builder) -> {
+                    builder.langValue((tier == GTValues.ULV ? "Steam" : GTValues.VNF[tier]) + ' ' + displayName)
+                            .abilities(abilities)
+                            .rotationState(RotationState.ALL)
+                            .modelProperty(GTMachineModelProperties.IS_FORMED, false);
+                    if (tier == GTValues.ULV) {
+                        builder.overlaySteamHullModel("ember_hatch");
+                    } else {
+                        builder.overlayTieredHullModel("ember_hatch");
+                    }
+                    return builder.tooltipBuilder((item, tooltip) -> {
                             if (io == IO.IN) {
                                 tooltip.add(Component.translatable("tooltip.cosmiccore.ember_hatch.capacity",
                                         EmberHatchPartMachine.getMaxCapacity(tier)));
@@ -447,7 +451,8 @@ public class CosmicMachines {
                                 tooltip.add(Component.translatable("tooltip.cosmiccore.ember_hatch.capacity",
                                         EmberHatchPartMachine.getMaxCapacity(tier)));
                             }
-                        }).register(),
+                        }).register();
+                },
                 tiers);
     }
 
