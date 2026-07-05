@@ -16,10 +16,14 @@ public final class DeedsKubeBinding {
     private DeedsKubeBinding() {}
 
     public static Deed register(String id, String lever, int tier) {
+        return register(id, lever, tier, "tier" + tier);
+    }
+
+    public static Deed register(String id, String lever, int tier, String chapter) {
         ResourceLocation rid = ResourceLocation.parse(id);
         String nameKey = "deed." + rid.getNamespace() + "." + rid.getPath().replace('/', '.');
         return DeedRegistry.put(
-                new Deed(rid, nameKey, Deed.Lever.valueOf(lever.toUpperCase(Locale.ROOT)), tier));
+                new Deed(rid, nameKey, Deed.Lever.valueOf(lever.toUpperCase(Locale.ROOT)), tier, chapter));
     }
 
     public static DeedCondition woven(String id) {

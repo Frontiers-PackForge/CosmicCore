@@ -9,6 +9,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 
 import com.mojang.brigadier.CommandDispatcher;
+import com.mojang.brigadier.arguments.IntegerArgumentType;
 import com.mojang.brigadier.suggestion.SuggestionProvider;
 
 public final class DeedCommand {
@@ -28,13 +29,17 @@ public final class DeedCommand {
                                     ServerPlayer player = ctx.getSource().getPlayerOrException();
                                     ResourceLocation id = ResourceLocationArgument.getId(ctx, "id");
                                     if (DeedRegistry.get(id) == null) {
-                                        ctx.getSource().sendFailure(
-                                                Component.literal("Unknown deed " + id));
+                                        ctx.getSource().sendFailure(Component.translatableWithFallback(
+                                                "command.cosmiccore.deed.unknown", "Unknown deed %s", id.toString()));
                                         return 0;
                                     }
                                     boolean granted = DeedsAPI.grantCoil(player, id);
-                                    ctx.getSource().sendSuccess(() -> Component.literal(granted ?
-                                            "Coil granted for " + id : "Deed already pending or woven: " + id), true);
+                                    ctx.getSource().sendSuccess(() -> granted ?
+                                            Component.translatableWithFallback("command.cosmiccore.deed.granted",
+                                                    "Coil granted for %s", id.toString()) :
+                                            Component.translatableWithFallback("command.cosmiccore.deed.duplicate",
+                                                    "Deed already pending or woven: %s", id.toString()),
+                                            true);
                                     return granted ? 1 : 0;
                                 })))
                 .then(Commands.literal("weave")
@@ -45,8 +50,14 @@ public final class DeedCommand {
                                     ServerPlayer player = ctx.getSource().getPlayerOrException();
                                     ResourceLocation id = ResourceLocationArgument.getId(ctx, "id");
                                     DeedLedger.WovenEcho echo = DeedsAPI.weave(player, id, true);
-                                    ctx.getSource().sendSuccess(() -> Component.literal(echo != null ?
-                                            "Woven " + id + " as echo #" + echo.claimIndex() : "Already woven: " + id),
+                                    ctx.getSource().sendSuccess(() -> echo !=
+                                            null ? Component.translatableWithFallback("command.cosmiccore.deed.woven",
+                                                    "Woven %s as echo #%s", id.toString(),
+                                                    String.valueOf(echo.claimIndex())) :
+                                                    Component.translatableWithFallback(
+                                                            "command.cosmiccore.deed.already_woven",
+                                                            "Already woven: %s",
+                                                            id.toString()),
                                             true);
                                     return echo != null ? 1 : 0;
                                 })))
@@ -70,6 +81,57 @@ public final class DeedCommand {
                             }
                             return woven.size();
                         }))
+                .then(Commands.literal("fill")
+                        .requires(source -> source.hasPermission(2))
+                        .then(Commands.argument("count", IntegerArgumentType.integer(0, 84))
+                                .executes(ctx -> {
+                                    ServerPlayer player = ctx.getSource().getPlayerOrException();
+                                    int target = IntegerArgumentType.getInteger(ctx, "count");
+                                    String teamKey = DeedTeams.teamKey(player);
+                                    DeedLedger ledger = DeedLedger.get(player.getServer());
+                                    int have = 0;
+                                    for (DeedLedger.WovenEcho echo : ledger.wovenOf(teamKey)) {
+                                        if (!echo.deedId().equals(DeedRegistry.THE_ADDRESS.id())) have++;
+                                    }
+                                    int added = 0;
+                                    for (Deed deed : DeedRegistry.all()) {
+                                        if (have + added >= target) break;
+                                        if (!deed.id().getPath().startsWith("dev/")) continue;
+                                        if (ledger.isWoven(teamKey, deed.id())) continue;
+                                        ledger.weave(teamKey, deed.id(), player.getUUID(),
+                                                player.level().getGameTime(), null);
+                                        added++;
+                                    }
+                                    DeedsAPI.syncTeam(player.getServer(), teamKey);
+                                    int result = added;
+                                    int total = have + added;
+                                    ctx.getSource().sendSuccess(() -> Component.translatableWithFallback(
+                                            "command.cosmiccore.deed.filled", "Dev-filled %s deeds (now %s)",
+                                            String.valueOf(result), String.valueOf(total)), true);
+                                    return result;
+                                })))
+                .then(Commands.literal("coils")
+                        .requires(source -> source.hasPermission(2))
+                        .then(Commands.argument("count", IntegerArgumentType.integer(1, 84))
+                                .executes(ctx -> {
+                                    ServerPlayer player = ctx.getSource().getPlayerOrException();
+                                    int target = IntegerArgumentType.getInteger(ctx, "count");
+                                    String teamKey = DeedTeams.teamKey(player);
+                                    DeedLedger ledger = DeedLedger.get(player.getServer());
+                                    int added = 0;
+                                    for (Deed deed : DeedRegistry.all()) {
+                                        if (added >= target) break;
+                                        if (!deed.id().getPath().startsWith("dev/")) continue;
+                                        if (ledger.isWoven(teamKey, deed.id())) continue;
+                                        if (ledger.grantCoil(teamKey, deed.id())) added++;
+                                    }
+                                    DeedsAPI.syncTeam(player.getServer(), teamKey);
+                                    int result = added;
+                                    ctx.getSource().sendSuccess(() -> Component.translatableWithFallback(
+                                            "command.cosmiccore.deed.coiled", "Granted %s dev coils",
+                                            String.valueOf(result)), true);
+                                    return result;
+                                })))
                 .then(Commands.literal("reset")
                         .requires(source -> source.hasPermission(2))
                         .executes(ctx -> {
@@ -77,8 +139,8 @@ public final class DeedCommand {
                             String teamKey = DeedTeams.teamKey(player);
                             DeedLedger.get(player.getServer()).reset(teamKey);
                             DeedsAPI.syncTeam(player.getServer(), teamKey);
-                            ctx.getSource().sendSuccess(
-                                    () -> Component.literal("Deed ledger reset for team " + teamKey), true);
+                            ctx.getSource().sendSuccess(() -> Component.translatableWithFallback(
+                                    "command.cosmiccore.deed.reset", "Deed ledger reset for team %s", teamKey), true);
                             return 1;
                         })));
     }
