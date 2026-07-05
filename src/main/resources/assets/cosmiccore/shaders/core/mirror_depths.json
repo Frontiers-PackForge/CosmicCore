@@ -1,0 +1,18 @@
+{
+    "vertex": "cosmiccore:mirror_depths",
+    "fragment": "cosmiccore:mirror_depths",
+    "attributes": [
+        "Position",
+        "UV0"
+    ],
+    "samplers": [],
+    "uniforms": [
+        { "name": "ModelViewMat", "type": "matrix4x4", "count": 16, "values": [ 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0 ] },
+        { "name": "ProjMat", "type": "matrix4x4", "count": 16, "values": [ 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0 ] },
+        { "name": "DepthsTime", "type": "float", "count": 1, "values": [ 0.0 ] },
+        { "name": "Awaken", "type": "float", "count": 1, "values": [ 0.0 ] },
+        { "name": "Vortex", "type": "float", "count": 1, "values": [ 0.0 ] },
+        { "name": "PixelGrid", "type": "float", "count": 1, "values": [ 48.0 ] },
+        { "name": "Alpha", "type": "float", "count": 1, "values": [ 0.9 ] }
+    ]
+}
