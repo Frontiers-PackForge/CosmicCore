@@ -60,8 +60,9 @@ public class DeedCondition extends RecipeCondition<DeedCondition> {
     @Override
     public Component getTooltips() {
         Deed known = DeedRegistry.get(deed);
-        Component name = known != null ? Component.translatableWithFallback(known.nameKey(), prettify(deed)) :
-                Component.literal(prettify(deed));
+        String nameKey = known != null ? known.nameKey() :
+                "deed." + deed.getNamespace() + "." + deed.getPath().replace('/', '.');
+        Component name = Component.translatableWithFallback(nameKey, prettify(deed));
         if (isReverse) {
             return Component.translatableWithFallback("cosmiccore.recipe.condition.deed.not.tooltip",
                     "Sol must not have been told: %s", name);

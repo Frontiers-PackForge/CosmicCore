@@ -1,5 +1,6 @@
 package com.ghostipedia.cosmiccore.common.mirror.deed;
 
+import com.ghostipedia.cosmiccore.CosmicCore;
 import com.ghostipedia.cosmiccore.common.network.CCoreNetwork;
 import com.ghostipedia.cosmiccore.common.network.packet.DeedSyncPacket;
 
@@ -20,6 +21,7 @@ public final class DeedsAPI {
     public static boolean grantCoil(ServerPlayer player, ResourceLocation deedId) {
         MinecraftServer server = player.getServer();
         if (server == null) return false;
+        if (deedId.equals(DeedRegistry.THE_ADDRESS.id())) return false;
         String teamKey = DeedTeams.teamKey(player);
         boolean changed = DeedLedger.get(server).grantCoil(teamKey, deedId);
         if (changed) {
@@ -54,11 +56,15 @@ public final class DeedsAPI {
         }
         List<ResourceLocation> pending = new ArrayList<>(ledger.pendingOf(teamKey));
         DeedSyncPacket packet = new DeedSyncPacket(woven, pending);
+        int sent = 0;
         for (ServerPlayer online : server.getPlayerList().getPlayers()) {
             if (DeedTeams.teamKey(online).equals(teamKey)) {
                 CCoreNetwork.sendToPlayer(online, packet);
+                sent++;
             }
         }
+        CosmicCore.LOGGER.info("Deed sync team {}: {} woven {} pending -> {} players", teamKey,
+                woven.size(), pending.size(), sent);
     }
 
     public static void syncPlayer(ServerPlayer player) {

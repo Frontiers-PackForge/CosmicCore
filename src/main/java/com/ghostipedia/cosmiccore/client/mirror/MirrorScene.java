@@ -35,7 +35,9 @@ public final class MirrorScene {
     private static final ResourceLocation TEX_THREAD = CosmicCore.id("textures/gui/mirror/thread.png");
     private static final ResourceLocation TEX_LINE = CosmicCore.id("textures/gui/mirror/line.png");
     private static final ResourceLocation TEX_SOCKET = CosmicCore.id("textures/gui/mirror/socket.png");
+    private static final ResourceLocation TEX_HEART = CosmicCore.id("textures/gui/mirror/heart_socket.png");
     private static final ResourceLocation TEX_COIL = CosmicCore.id("textures/gui/mirror/coil.png");
+    private static final ResourceLocation TEX_SKEIN = CosmicCore.id("textures/gui/mirror/skein.png");
 
     private static final float DESIGN_W = 720f;
     private static final float DESIGN_H = 660f;
@@ -74,12 +76,27 @@ public final class MirrorScene {
 
     private static final int ECHO_MAX = 12;
     private static final float ECHO_RADIUS = 7.0f;
-    private static final float ECHO_SPIRAL_START = -1.2f;
-    private static final float ECHO_SPIRAL_STEP = 1.05f;
-    private static final float ECHO_SPIRAL_OUTER = 68f;
-    private static final float ECHO_SPIRAL_INNER = 19f;
-    private static final float ECHO_SQUASH = 0.72f;
+    private static final float ECHO_RING_R = 78f;
+    private static final float ECHO_RING_START = -Mth.HALF_PI;
     private static final float SOCKET_HALF = 6.5f;
+    private static final float HEART_SOCKET_HALF = 11f;
+
+    private static final float SKEIN_RING_R = 42f;
+    private static final float SKEIN_START_ANGLE = -1.57f;
+    private static final float SKEIN_STEP_ANGLE = 1.05f;
+    private static final float SKEIN_HALF = 9f;
+    private static final int SKEIN_MAX = MirrorScreen.SKEIN_CAP;
+    private static final float STRAND_DIVE_R = 34f;
+    private static final float SKEIN_STRAND_WIDTH = 3.0f;
+    private static final int SKEIN_STRAND_ALPHA = 130;
+    private static final int[] SKEIN_HUES = {
+            0xFFC98D50, 0xFF8FB8D0, 0xFFA88BC0, 0xFF9EC49A, 0xFFD0A0A0, 0xFFC6C29E };
+    private static final int THREAD_FAINT = 0x66E8C07A;
+
+    private static final float DEPTHS_R = 86f;
+    private static final float DEPTHS_PIXEL_GRID = 48f;
+    private static final float DEPTHS_ALPHA = 0.9f;
+    private static final float DEPTHS_TIME_WRAP = 2513.274f;
 
     private static final float DISK_HALF_X = 150f;
     private static final float DISK_HALF_Y = 118f;
@@ -92,8 +109,9 @@ public final class MirrorScene {
 
     private static final float STRAND_SWAY = 11f;
     private static final float STRAND_WIDTH = 4.0f;
-    private static final float STRAND_TIP_FRAC = 0.28f;
     private static final float GOLDEN_ANGLE = 2.399963f;
+    private static final float CEREMONY_BOND = 0.4f;
+    private static final float CEREMONY_RETRACT = 0.15f;
 
     private static final int VIGNETTE_ALPHA = 150;
     private static final float VIGNETTE_DEPTH = 0.22f;
@@ -130,10 +148,9 @@ public final class MirrorScene {
                     r.nextFloat() < CHORD_FOLLOW_CHANCE ? 1f : 0f));
         }
         for (int i = 0; i < ECHO_MAX; i++) {
-            double a = ECHO_SPIRAL_START + i * ECHO_SPIRAL_STEP;
-            double rad = ECHO_SPIRAL_OUTER - (ECHO_SPIRAL_OUTER - ECHO_SPIRAL_INNER) * i / (double) (ECHO_MAX - 1);
-            ECHO_LAYOUT[i][0] = (float) (Math.cos(a) * rad);
-            ECHO_LAYOUT[i][1] = (float) (Math.sin(a) * rad * ECHO_SQUASH);
+            double a = ECHO_RING_START + i * (Math.PI * 2 / ECHO_MAX);
+            ECHO_LAYOUT[i][0] = (float) (Math.cos(a) * ECHO_RING_R);
+            ECHO_LAYOUT[i][1] = (float) (Math.sin(a) * ECHO_RING_R);
         }
     }
 
@@ -192,9 +209,16 @@ public final class MirrorScene {
                 pose.popPose();
             }
         }
-        if (state.claimable || state.flashTicks > 0 || state.burstTicks > 0) {
+        boolean heartHero = (state.skeins >= SKEIN_MAX && Math.min(state.litEchoes, ECHO_MAX) >= ECHO_MAX &&
+                !state.heartClaimed) || state.heartBurstTicks > 0;
+        if (state.claimable || state.flashTicks > 0 || state.burstTicks > 0 || heartHero) {
             sceneLayer(pose, cx, cy, scale, px, py, 4);
-            drawBeacon(g, cx, cy, time, state);
+            if (state.claimable || state.flashTicks > 0 || state.burstTicks > 0) {
+                drawBeacon(g, cx, cy, time, state);
+            }
+            if (heartHero) {
+                drawHeartClaim(g, cx, cy, time, state);
+            }
             pose.popPose();
         }
 
@@ -212,6 +236,17 @@ public final class MirrorScene {
 
     public static float sceneScale(int width, int height) {
         return Math.min(width / DESIGN_W, height / DESIGN_H) * SCALE_BOOST;
+    }
+
+    public static float[] heartScreenPos(int width, int height, double mouseX, double mouseY, float zoom) {
+        float cx = width / 2f;
+        float cy = height / 2f;
+        float scale = sceneScale(width, height) * zoom;
+        float px = ((float) mouseX - cx) / cx;
+        float py = ((float) mouseY - cy) / cy;
+        float shift = PARALLAX[4] * PARALLAX_STRENGTH * scale;
+        return new float[] { cx - px * shift, cy - py * shift,
+                Math.max(10f, HEART_SOCKET_HALF * 2f * scale) };
     }
 
     public static float[] echoScreenPos(int index, int width, int height, double mouseX, double mouseY,
@@ -299,21 +334,6 @@ public final class MirrorScene {
         flush(knots);
     }
 
-    private static float[] strandTip(float cx, float cy, int index) {
-        float ex = ECHO_LAYOUT[index % ECHO_MAX][0];
-        float ey = ECHO_LAYOUT[index % ECHO_MAX][1];
-        float len = Mth.sqrt(ex * ex + ey * ey);
-        float rad = CORE_RADIUS * STRAND_TIP_FRAC;
-        if (len < 1.0e-3f) {
-            return new float[] { cx + rad, cy };
-        }
-        return new float[] { cx + ex / len * rad, cy + ey / len * rad * 0.94f };
-    }
-
-    private static List<float[]> strandPath(float cx, float cy, int index, float time, float progress) {
-        return strandPath(cx, cy, index, time, progress, strandTip(cx, cy, index));
-    }
-
     private static List<float[]> strandPath(float cx, float cy, int index, float time, float progress,
                                             float[] tip) {
         int band = index % 3;
@@ -344,10 +364,19 @@ public final class MirrorScene {
 
         List<List<float[]>> paths = new ArrayList<>(lit);
         for (int i = 0; i < lit; i++) {
-            paths.add(strandPath(cx, cy, i, time, 1f));
+            paths.add(strandPath(cx, cy, i, time, 1f, strandTip(cx, cy, i)));
         }
 
+        int done = Math.min(state.skeins, SKEIN_MAX);
         BufferBuilder buf = beginTex(TEX_THREAD);
+        for (int s = 0; s < done; s++) {
+            float[] target = skeinPos(cx, cy, s);
+            int alpha = Math.max(90, SKEIN_STRAND_ALPHA - (done - 1 - s) * 12);
+            for (int i = 0; i < ECHO_MAX; i++) {
+                List<float[]> pts = strandPath(cx, cy, s * ECHO_MAX + i, time, 1f, target);
+                ribbon(buf, mat, pts, SKEIN_STRAND_WIDTH, STRAND_GOLD, alpha, true);
+            }
+        }
         for (List<float[]> pts : paths) {
             ribbon(buf, mat, pts, STRAND_WIDTH + 1.4f, STRAND_DEEP, 190, true);
             ribbon(buf, mat, pts, STRAND_WIDTH, STRAND_GOLD, 255, true);
@@ -362,34 +391,88 @@ public final class MirrorScene {
         flush(glow);
     }
 
+    static float ceremonyEased(MirrorScreen.DevState state) {
+        float progress = Mth.clamp(state.ceremonyProgress / (float) MirrorScreen.CEREMONY_TICKS, 0f, 1f);
+        return progress * progress * (3f - 2f * progress);
+    }
+
+    private static float[] coilPos(float cx, float cy, int index) {
+        float a = 0.6f + index * 1.9f;
+        return new float[] { cx + Mth.cos(a) * 272f, cy + Mth.sin(a) * 228f };
+    }
+
     private static void drawCeremonyStrand(GuiGraphics g, float cx, float cy, float time,
                                            MirrorScreen.DevState state) {
         Matrix4f mat = g.pose().last().pose();
         int lit = Math.min(state.litEchoes, ECHO_MAX);
         int slot = Math.min(lit, ECHO_MAX - 1);
-        float progress = Mth.clamp(state.ceremonyProgress / (float) MirrorScreen.CEREMONY_TICKS, 0f, 1f);
-        float eased = progress * progress * (3f - 2f * progress);
         float[] seat = { cx + ECHO_LAYOUT[slot][0], cy + ECHO_LAYOUT[slot][1] };
-        List<float[]> cPts = strandPath(cx, cy, slot, time, Math.max(0.04f, eased), seat);
+        float[] spool = coilPos(cx, cy, Math.max(0, state.coils - 1));
+        int band = slot % 3;
+        float theta = slot * GOLDEN_ANGLE + band * 0.7f;
+        float[] anchor = bandPoint(cx, cy, band, theta, time);
+        float p = Math.max(0.02f, ceremonyEased(state));
+
+        float h1 = Math.min(1f, p / CEREMONY_BOND);
+        float t1 = Mth.clamp((p - CEREMONY_BOND) / CEREMONY_RETRACT, 0f, 1f);
+        float h2 = Mth.clamp((p - CEREMONY_BOND) / (1f - CEREMONY_BOND), 0f, 1f);
+        float sway = Mth.sin(time * 0.5f) * STRAND_SWAY;
 
         BufferBuilder buf = beginTex(TEX_THREAD);
-        ribbon(buf, mat, cPts, STRAND_WIDTH + 1.4f, STRAND_DEEP, 220, true);
-        ribbon(buf, mat, cPts, STRAND_WIDTH, STRAND_GOLD, 255, true);
+        List<float[]> pts1 = null;
+        if (h1 - t1 > 0.01f) {
+            pts1 = bezierPts(spool, anchor, sway * 0.4f, sway * 0.3f, t1, h1);
+            ribbon(buf, mat, pts1, STRAND_WIDTH + 1.4f, STRAND_DEEP, 220, true);
+            ribbon(buf, mat, pts1, STRAND_WIDTH, STRAND_GOLD, 255, true);
+        }
+        List<float[]> pts2 = null;
+        if (h2 > 0.01f) {
+            pts2 = bezierPts(anchor, seat, sway, sway, 0f, h2);
+            ribbon(buf, mat, pts2, STRAND_WIDTH + 1.4f, STRAND_DEEP, 220, true);
+            ribbon(buf, mat, pts2, STRAND_WIDTH, STRAND_GOLD, 255, true);
+        }
         flush(buf);
 
         BufferBuilder glow = beginTex(TEX_GLOW);
-        float[] anchor = cPts.get(0);
-        texQuad(glow, mat, anchor[0], anchor[1], 5.5f, STRAND_GOLD, 210);
-        int n = cPts.size();
-        for (int t = 1; t <= 3 && n - 1 - t >= 0; t++) {
-            float[] p = cPts.get(n - 1 - t);
-            texQuad(glow, mat, p[0], p[1], 6f - t * 1.3f, ECHO_LIT, 120 - t * 30);
+        if (t1 <= 0.01f && p < CEREMONY_BOND) {
+            texQuad(glow, mat, spool[0], spool[1], 5.5f, STRAND_GOLD, 210);
         }
-        float[] head = cPts.get(n - 1);
-        float pulse = 0.6f + 0.4f * Mth.sin(time * 6f);
-        texQuad(glow, mat, head[0], head[1], 13f, ECHO_LIT, (int) (150 * pulse));
-        texQuad(glow, mat, head[0], head[1], 5f, ECHO_HOT, 255);
+        if (p >= CEREMONY_BOND) {
+            float bondFlash = Mth.clamp(1f - (p - CEREMONY_BOND) / 0.1f, 0f, 1f);
+            texQuad(glow, mat, anchor[0], anchor[1], 4.6f + 6f * bondFlash, STRAND_GOLD,
+                    (int) (200 + 55 * bondFlash));
+        }
+        List<float[]> active = pts2 != null ? pts2 : pts1;
+        if (active != null) {
+            int n = active.size();
+            for (int t = 1; t <= 3 && n - 1 - t >= 0; t++) {
+                float[] pt = active.get(n - 1 - t);
+                texQuad(glow, mat, pt[0], pt[1], 6f - t * 1.3f, ECHO_LIT, 120 - t * 30);
+            }
+            float[] headPt = active.get(n - 1);
+            float pulse = 0.6f + 0.4f * Mth.sin(time * 6f);
+            texQuad(glow, mat, headPt[0], headPt[1], 13f, ECHO_LIT, (int) (150 * pulse));
+            texQuad(glow, mat, headPt[0], headPt[1], 5f, ECHO_HOT, 255);
+        }
         flush(glow);
+    }
+
+    private static List<float[]> bezierPts(float[] from, float[] to, float swayA, float swayB, float t0,
+                                           float t1) {
+        float c1x = Mth.lerp(0.35f, from[0], to[0]) + swayA;
+        float c1y = Mth.lerp(0.35f, from[1], to[1]) - swayA * 0.6f;
+        float c2x = Mth.lerp(0.75f, from[0], to[0]) - swayB * 0.5f;
+        float c2y = Mth.lerp(0.75f, from[1], to[1]) + swayB * 0.4f;
+        List<float[]> pts = new ArrayList<>();
+        int steps = 18;
+        for (int i = 0; i <= steps; i++) {
+            float t = Mth.lerp(i / (float) steps, t0, t1);
+            float u = 1f - t;
+            float x = u * u * u * from[0] + 3 * u * u * t * c1x + 3 * u * t * t * c2x + t * t * t * to[0];
+            float y = u * u * u * from[1] + 3 * u * u * t * c1y + 3 * u * t * t * c2y + t * t * t * to[1];
+            pts.add(new float[] { x, y });
+        }
+        return pts;
     }
 
     private static void drawBeacon(GuiGraphics g, float cx, float cy, float time,
@@ -450,18 +533,133 @@ public final class MirrorScene {
         }
     }
 
+    private static void drawHeartClaim(GuiGraphics g, float cx, float cy, float time,
+                                       MirrorScreen.DevState state) {
+        Matrix4f mat = g.pose().last().pose();
+
+        if (state.heartBurstTicks > 0) {
+            float span = state.heartClaimed ? 40f : 12f;
+            float f = 1f - state.heartBurstTicks / span;
+            float reach = state.heartClaimed ? 130f : 40f;
+            BufferBuilder burst = beginColor();
+            ringStroke(burst, mat, cx, cy, 10f + f * reach, 1.5f + 3f * (1f - f), ECHO_HOT,
+                    (int) (235 * (1f - f)));
+            if (state.heartClaimed) {
+                ringStroke(burst, mat, cx, cy, 6f + f * reach * 0.6f, 1.2f + 2f * (1f - f), STRAND_GOLD,
+                        (int) (200 * (1f - f)));
+            }
+            flush(burst);
+        }
+
+        boolean heartClaimable = state.skeins >= SKEIN_MAX && Math.min(state.litEchoes, ECHO_MAX) >= ECHO_MAX &&
+                !state.heartClaimed;
+        if (!heartClaimable) return;
+
+        float frac = (time * 0.6f) % 1f;
+        float frac2 = (time * 0.6f + 0.5f) % 1f;
+        BufferBuilder rings = beginColor();
+        ringStroke(rings, mat, cx, cy, 12f + frac * 40f, 1.6f, ECHO_LIT, (int) (180 * (1f - frac)));
+        ringStroke(rings, mat, cx, cy, 12f + frac2 * 40f, 1.6f, ECHO_LIT, (int) (180 * (1f - frac2)));
+        for (int s = 0; s < 3; s++) {
+            float start = -Mth.HALF_PI + s * (Mth.TWO_PI / 3f) + 0.12f;
+            float sweep = Mth.TWO_PI / 3f - 0.24f;
+            boolean done = s < state.heartStage;
+            arcStroke(rings, mat, cx, cy, 19f, done ? 3f : 1.6f, start, sweep,
+                    done ? ECHO_HOT : ECHO_DIM, done ? 255 : 140);
+        }
+        flush(rings);
+
+        float pulse = 0.5f + 0.5f * Mth.sin(time * 2.6f);
+        BufferBuilder glow = beginTex(TEX_GLOW);
+        texQuad(glow, mat, cx, cy, 22f + 7f * pulse, ECHO_LIT, (int) (110 + 80 * pulse));
+        texQuad(glow, mat, cx, cy, 9f, ECHO_HOT, 255);
+        flush(glow);
+
+        if (state.heartHolding) {
+            float hold = Math.min(1f, state.heartHoldTicks / (float) MirrorScreen.HOLD_TICKS);
+            BufferBuilder lock = beginColor();
+            ringStroke(lock, mat, cx, cy, 48f - 33f * hold, 2.6f, ECHO_HOT, (int) (130 + 110 * hold));
+            float start = -Mth.HALF_PI + state.heartStage * (Mth.TWO_PI / 3f) + 0.12f;
+            arcStroke(lock, mat, cx, cy, 19f, 3.4f, start, hold * (Mth.TWO_PI / 3f - 0.24f), ECHO_HOT,
+                    255);
+            flush(lock);
+            BufferBuilder hglow = beginTex(TEX_GLOW);
+            texQuad(hglow, mat, cx, cy, 16f + 20f * hold, ECHO_HOT, (int) (90 + 150 * hold));
+            flush(hglow);
+        }
+    }
+
     private static void drawCoils(GuiGraphics g, float cx, float cy, float time, MirrorScreen.DevState state) {
         if (state.coils <= 0) return;
         Matrix4f mat = g.pose().last().pose();
         BufferBuilder buf = beginTex(TEX_COIL);
         for (int i = 0; i < state.coils; i++) {
-            float a = 0.6f + i * 1.9f;
-            float bx = cx + Mth.cos(a) * 272f;
-            float by = cy + Mth.sin(a) * 228f;
+            float scale = 1f;
+            if (state.ceremonyActive && i == state.coils - 1) {
+                scale = 1f - Math.min(1f, ceremonyEased(state) / CEREMONY_BOND);
+                if (scale <= 0.05f) continue;
+            }
+            float[] p = coilPos(cx, cy, i);
             int breathe = (int) (215 + 30 * Mth.sin(time * 0.9f + i));
-            texQuad(buf, mat, bx, by, 22f, COIL_TINT, breathe);
+            texQuad(buf, mat, p[0], p[1], 22f * scale, COIL_TINT, breathe);
         }
         flush(buf);
+    }
+
+    private static float[] skeinPos(float cx, float cy, int index) {
+        float a = SKEIN_START_ANGLE + index * SKEIN_STEP_ANGLE;
+        return new float[] { cx + Mth.cos(a) * SKEIN_RING_R, cy + Mth.sin(a) * SKEIN_RING_R };
+    }
+
+    private static float[] strandTip(float cx, float cy, int index) {
+        double a = ECHO_RING_START + (index % ECHO_MAX) * (Math.PI * 2 / ECHO_MAX);
+        return new float[] { cx + (float) (Math.cos(a) * STRAND_DIVE_R),
+                cy + (float) (Math.sin(a) * STRAND_DIVE_R) };
+    }
+
+    private static void drawSkeins(GuiGraphics g, float cx, float cy, float time, MirrorScreen.DevState state) {
+        int done = Math.min(state.skeins, SKEIN_MAX);
+        if (done <= 0) return;
+        Matrix4f mat = g.pose().last().pose();
+
+        BufferBuilder thread = beginTex(TEX_LINE);
+        for (int i = 0; i < done - 1; i++) {
+            ribbon(thread, mat, List.of(skeinPos(cx, cy, i), skeinPos(cx, cy, i + 1)), 1.4f, THREAD_FAINT,
+                    255, false);
+        }
+        if (done >= SKEIN_MAX) {
+            ribbon(thread, mat, List.of(skeinPos(cx, cy, done - 1), skeinPos(cx, cy, 0)), 1.4f,
+                    THREAD_FAINT, 255, false);
+            float[] heart = { cx, cy };
+            for (int i = 0; i < done; i++) {
+                ribbon(thread, mat, List.of(skeinPos(cx, cy, i), heart), 1.4f, THREAD_FAINT, 255, false);
+            }
+        }
+        flush(thread);
+
+        BufferBuilder buf = beginTex(TEX_SKEIN);
+        for (int i = 0; i < done; i++) {
+            float[] p = skeinPos(cx, cy, i);
+            float breathe = 1f + 0.04f * Mth.sin(time * 0.7f + i * 1.3f);
+            texQuad(buf, mat, p[0], p[1], SKEIN_HALF * breathe, SKEIN_HUES[i % SKEIN_HUES.length], 245);
+        }
+        flush(buf);
+
+        BufferBuilder glow = beginTex(TEX_GLOW);
+        for (int i = 0; i < done; i++) {
+            float[] p = skeinPos(cx, cy, i);
+            texQuad(glow, mat, p[0], p[1], SKEIN_HALF * 1.6f, SKEIN_HUES[i % SKEIN_HUES.length], 70);
+        }
+        flush(glow);
+
+        if (state.skeinBurstTicks > 0) {
+            float[] p = skeinPos(cx, cy, done - 1);
+            float f = 1f - state.skeinBurstTicks / 20f;
+            BufferBuilder burst = beginColor();
+            ringStroke(burst, mat, p[0], p[1], 6f + f * 34f, 1.2f + 2f * (1f - f), STRAND_GOLD,
+                    (int) (220 * (1f - f)));
+            flush(burst);
+        }
     }
 
     private static void drawCore(GuiGraphics g, float cx, float cy, float time, MirrorScreen.DevState state) {
@@ -474,19 +672,48 @@ public final class MirrorScene {
         texQuad(core, mat, cx, cy, CORE_RADIUS / CORE_TEX_RING * breath, 0xFFFFFFFF, 255);
         flush(core);
 
+        drawDepths(g, cx, cy, time, state);
+        drawSkeins(g, cx, cy, time, state);
+
+        boolean heartActive = state.skeins >= SKEIN_MAX;
+        BufferBuilder heart = beginTex(TEX_GLOW);
+        if (state.heartClaimed) {
+            float pulse = 0.8f + 0.2f * Mth.sin(time * 0.9f);
+            texQuad(heart, mat, cx, cy, HEART_SOCKET_HALF * 3f, ECHO_LIT, (int) (130 * pulse));
+            texQuad(heart, mat, cx, cy, HEART_SOCKET_HALF * 1.3f, ECHO_HOT, 255);
+        } else if (heartActive) {
+            float pulse = 0.6f + 0.4f * Mth.sin(time * 1.1f);
+            texQuad(heart, mat, cx, cy, HEART_SOCKET_HALF * 2.2f, ECHO_LIT, (int) (90 * pulse));
+        }
+        flush(heart);
+        BufferBuilder heartSocket = beginTex(TEX_HEART);
+        texQuad(heartSocket, mat, cx, cy, HEART_SOCKET_HALF, 0xFFFFFFFF, heartActive ? 255 : 205);
+        flush(heartSocket);
+
         int lit = Math.min(state.litEchoes, ECHO_MAX);
         int total = Math.min(state.litEchoes + state.dimEchoes, ECHO_MAX);
         int pending = (state.ceremonyActive || state.claimable) ? 1 : 0;
         int slots = Math.min(Math.max(total, lit + pending), ECHO_MAX);
 
+        boolean finalEra = state.skeins >= SKEIN_MAX;
         BufferBuilder fil = beginTex(TEX_LINE);
-        for (int i = 1; i < lit; i++) {
-            float ax = cx + ECHO_LAYOUT[i - 1][0], ay = cy + ECHO_LAYOUT[i - 1][1];
-            float bx = cx + ECHO_LAYOUT[i][0], by = cy + ECHO_LAYOUT[i][1];
-            float mx = (ax + bx) / 2f + Mth.sin(i * 4.7f) * 2.2f;
-            float my = (ay + by) / 2f + Mth.cos(i * 3.1f) * 2.2f;
-            List<float[]> pts = List.of(new float[] { ax, ay }, new float[] { mx, my }, new float[] { bx, by });
-            ribbon(fil, mat, pts, 1.1f, FILAMENT_TINT, 255, false);
+        if (finalEra) {
+            float[] heartPos = { cx, cy };
+            for (int i = 0; i < lit; i++) {
+                List<float[]> pts = List.of(
+                        new float[] { cx + ECHO_LAYOUT[i][0], cy + ECHO_LAYOUT[i][1] }, heartPos);
+                ribbon(fil, mat, pts, 1.1f, FILAMENT_TINT, 255, false);
+            }
+        } else {
+            for (int i = 1; i < lit; i++) {
+                float ax = cx + ECHO_LAYOUT[i - 1][0], ay = cy + ECHO_LAYOUT[i - 1][1];
+                float bx = cx + ECHO_LAYOUT[i][0], by = cy + ECHO_LAYOUT[i][1];
+                float mx = (ax + bx) / 2f + Mth.sin(i * 4.7f) * 2.2f;
+                float my = (ay + by) / 2f + Mth.cos(i * 3.1f) * 2.2f;
+                List<float[]> pts = List.of(new float[] { ax, ay }, new float[] { mx, my },
+                        new float[] { bx, by });
+                ribbon(fil, mat, pts, 1.1f, FILAMENT_TINT, 255, false);
+            }
         }
         flush(fil);
 
@@ -556,6 +783,36 @@ public final class MirrorScene {
         buf.addVertex(mat, cx + DISK_HALF_X, cy + DISK_HALF_Y, 0).setUv(1, 1);
         buf.addVertex(mat, cx + DISK_HALF_X, cy - DISK_HALF_Y, 0).setUv(1, 0);
         buf.addVertex(mat, cx - DISK_HALF_X, cy - DISK_HALF_Y, 0).setUv(0, 0);
+        flush(buf);
+    }
+
+    private static void drawDepths(GuiGraphics g, float cx, float cy, float time,
+                                   MirrorScreen.DevState state) {
+        float awaken = state.awaken;
+        if (awaken < 0.02f) return;
+        ShaderInstance shader = CosmicCoreClient.getMirrorDepthsShader();
+        if (shader == null) return;
+        float heartProgress = state.heartClaimed ? 1f : (state.heartStage +
+                (state.heartHolding ? Math.min(1f, state.heartHoldTicks / (float) MirrorScreen.HOLD_TICKS) : 0f)) / 3f;
+        float vortex = Math.max(0.22f, heartProgress);
+        shader.safeGetUniform("DepthsTime").set(time % DEPTHS_TIME_WRAP);
+        shader.safeGetUniform("Awaken").set(awaken);
+        shader.safeGetUniform("Vortex").set(vortex);
+        shader.safeGetUniform("PixelGrid").set(DEPTHS_PIXEL_GRID);
+        shader.safeGetUniform("Alpha").set(DEPTHS_ALPHA);
+        RenderSystem.enableBlend();
+        RenderSystem.defaultBlendFunc();
+        RenderSystem.disableCull();
+        RenderSystem.setShader(() -> shader);
+        BufferBuilder buf = Tesselator.getInstance().begin(VertexFormat.Mode.TRIANGLES,
+                DefaultVertexFormat.POSITION_TEX);
+        Matrix4f mat = g.pose().last().pose();
+        buf.addVertex(mat, cx - DEPTHS_R, cy - DEPTHS_R, 0).setUv(0, 0);
+        buf.addVertex(mat, cx - DEPTHS_R, cy + DEPTHS_R, 0).setUv(0, 1);
+        buf.addVertex(mat, cx + DEPTHS_R, cy + DEPTHS_R, 0).setUv(1, 1);
+        buf.addVertex(mat, cx + DEPTHS_R, cy + DEPTHS_R, 0).setUv(1, 1);
+        buf.addVertex(mat, cx + DEPTHS_R, cy - DEPTHS_R, 0).setUv(1, 0);
+        buf.addVertex(mat, cx - DEPTHS_R, cy - DEPTHS_R, 0).setUv(0, 0);
         flush(buf);
     }
 
