@@ -86,6 +86,8 @@ public class CosmicMachines {
         CosmicRegistration.REGISTRATE.creativeModeTab(() -> CosmicCreativeModeTabs.COSMIC_CORE);
     }
 
+    private static final int[] EMBER_TIERS = tiersBetween(ULV, ELECTRIC_TIERS[ELECTRIC_TIERS.length - 1]);
+
     public final static MachineDefinition[] SOUL_IMPORT_HATCH = registerSoulHatch(
             "soul_input_hatch", "Soul Input Hatch",
             IO.IN, HIGH_TIERS, IMPORT_SOUL);
@@ -95,10 +97,10 @@ public class CosmicMachines {
 
     public static final MachineDefinition[] EMBER_IMPORT_HATCH = registerEmberHatch(
             "ember_input_hatch", "Ember Input Hatch",
-            IO.IN, ELECTRIC_TIERS, IMPORT_EMBER);
+            IO.IN, EMBER_TIERS, IMPORT_EMBER);
     public static final MachineDefinition[] EMBER_EXPORT_HATCH = registerEmberHatch(
             "ember_output_hatch", "Ember Output Hatch",
-            IO.OUT, ELECTRIC_TIERS, EXPORT_EMBER);
+            IO.OUT, EMBER_TIERS, EXPORT_EMBER);
 
     public static final MachineDefinition[] THERMIA_VENT = registerThermiaTieredHatch(
             "thermia_export_hatch", "Thermia Vent", "thermia_output_hatch",
@@ -430,7 +432,7 @@ public class CosmicMachines {
         return registerTieredMachines(name,
                 (holder, tier) -> new EmberHatchPartMachine(holder, tier, io),
                 (tier, builder) -> builder
-                        .langValue(GTValues.VNF[tier] + ' ' + displayName)
+                        .langValue((tier == GTValues.ULV ? "Steam" : GTValues.VNF[tier]) + ' ' + displayName)
                         .abilities(abilities)
                         .rotationState(RotationState.ALL)
                         .modelProperty(GTMachineModelProperties.IS_FORMED, false)

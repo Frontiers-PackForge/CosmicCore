@@ -43,10 +43,10 @@ public class CosmicLangHandler extends LangHandler {
         provider.add("cosmiccore.survey.no_veins.directional", "No veins found in that direction");
         provider.add("cosmiccore.survey.click_tp", "Click to teleport");
         provider.add("button.cosmiccore.toggle_depleted.name", "Toggle Depleted");
-        provider.add("cosmiccore.dowsing.found", "The rod twitches toward a nearby field");
+        provider.add("cosmiccore.dowsing.found", "The rod stirs, sensing %d ore fields nearby:");
         provider.add("cosmiccore.dowsing.none", "The rod lies still");
         provider.add("cosmiccore.dowsing.tooltip.radius", "Sensing range: %d blocks");
-        provider.add("cosmiccore.dowsing.tooltip.use", "§7Use: Reveal the nearest ore field");
+        provider.add("cosmiccore.dowsing.tooltip.use", "§7Use: Reveal nearby ore fields");
 
         for (Material bundle : OreFieldPlacement.bundles()) {
             provider.add("ore_vein.cosmiccore." + bundle.getName(), toTitle(bundle.getName()) + " Ore Field");

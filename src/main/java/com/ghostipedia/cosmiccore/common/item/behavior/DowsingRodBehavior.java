@@ -23,8 +23,8 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
 
+import java.util.Comparator;
 import java.util.List;
-import java.util.Optional;
 
 public class DowsingRodBehavior implements IInteractionItem, IAddInformation {
 
@@ -49,23 +49,40 @@ public class DowsingRodBehavior implements IInteractionItem, IAddInformation {
         if (!level.isClientSide && level instanceof ServerLevel serverLevel &&
                 player instanceof ServerPlayer serverPlayer) {
             BlockPos center = player.blockPosition();
-            Optional<OreField> nearest = OreFieldPlacement.nearestField(
-                    serverLevel.getSeed(), serverLevel.dimension(), null, center.getX(), center.getZ(), radius);
+            List<OreField> fields = OreFieldPlacement.fieldsNear(
+                    serverLevel.getSeed(), serverLevel.dimension(), center.getX(), center.getZ(), radius);
+            fields.sort(Comparator.comparingInt(field -> horizontalDistance(field.core(), center)));
 
-            if (nearest.isPresent()) {
-                CCoreNetwork.sendToPlayer(serverPlayer,
-                        RevealFieldsPacket.of(serverLevel.dimension(), List.of(nearest.get()), ROD_TIER));
-                player.sendSystemMessage(Component.translatable("cosmiccore.dowsing.found")
-                        .withStyle(ChatFormatting.GOLD));
-                level.playSound(null, center, SoundEvents.AMETHYST_BLOCK_CHIME, SoundSource.PLAYERS, 0.6f, 1.0f);
-            } else {
+            if (fields.isEmpty()) {
                 player.sendSystemMessage(Component.translatable("cosmiccore.dowsing.none")
                         .withStyle(ChatFormatting.GRAY));
+            } else {
+                CCoreNetwork.sendToPlayer(serverPlayer,
+                        RevealFieldsPacket.of(serverLevel.dimension(), fields, ROD_TIER));
+                player.sendSystemMessage(Component.translatable("cosmiccore.dowsing.found", fields.size())
+                        .withStyle(ChatFormatting.GOLD));
+                int index = 1;
+                for (OreField field : fields) {
+                    int distance = horizontalDistance(field.core(), center);
+                    player.sendSystemMessage(Component.literal("  " + index + ". ")
+                            .withStyle(ChatFormatting.GRAY)
+                            .append(field.bundle().getLocalizedName().copy().withStyle(ChatFormatting.AQUA))
+                            .append(Component.literal(" - ").withStyle(ChatFormatting.DARK_GRAY))
+                            .append(Component.literal(distance + "m").withStyle(ChatFormatting.WHITE)));
+                    index++;
+                }
+                level.playSound(null, center, SoundEvents.AMETHYST_BLOCK_CHIME, SoundSource.PLAYERS, 0.6f, 1.0f);
             }
             player.getCooldowns().addCooldown(stack.getItem(), cooldownTicks);
         }
 
         return InteractionResultHolder.success(stack);
+    }
+
+    private static int horizontalDistance(BlockPos from, BlockPos to) {
+        long dx = from.getX() - to.getX();
+        long dz = from.getZ() - to.getZ();
+        return (int) Math.sqrt(dx * dx + dz * dz);
     }
 
     @Override

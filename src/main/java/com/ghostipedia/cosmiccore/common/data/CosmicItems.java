@@ -2838,7 +2838,7 @@ public class CosmicItems {
             .item("dowsing_rod", ComponentItem::new)
             .lang("Dowsing Rod")
             .properties(p -> p.stacksTo(1))
-            .onRegister(attach(new DowsingRodBehavior(2000, 100)))
+            .onRegister(attach(new DowsingRodBehavior(250, 100)))
             .model((ctx, prov) -> prov.generated(ctx, ResourceLocation.withDefaultNamespace("item/blaze_rod")))
             .register();
 
