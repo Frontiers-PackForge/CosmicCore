@@ -2,11 +2,13 @@ package com.ghostipedia.cosmiccore.common.airControl;
 
 import com.ghostipedia.cosmiccore.common.data.CosmicItems;
 
+import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 
+import com.simibubi.create.content.equipment.armor.DivingHelmetItem;
 import top.theillusivec4.curios.api.CuriosApi;
 import top.theillusivec4.curios.api.type.capability.ICuriosItemHandler;
 import top.theillusivec4.curios.api.type.inventory.ICurioStacksHandler;
@@ -48,12 +50,20 @@ public final class RebreatherHelper {
             return RebreatherType.PRESSURIZED;
         }
 
+        if (hasCreateDivingHelmet(player)) {
+            return RebreatherType.PRESSURIZED;
+        }
+
         // Check for simple
         if (hasCurioItem(player, "head", CosmicItems.SIMPLE_REBREATHER.asItem())) {
             return RebreatherType.SIMPLE;
         }
 
         return RebreatherType.NONE;
+    }
+
+    public static boolean hasCreateDivingHelmet(Player player) {
+        return player != null && player.getItemBySlot(EquipmentSlot.HEAD).getItem() instanceof DivingHelmetItem;
     }
 
     /**

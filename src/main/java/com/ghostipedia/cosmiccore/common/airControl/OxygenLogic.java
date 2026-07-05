@@ -18,9 +18,12 @@ import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 import net.neoforged.neoforge.event.tick.PlayerTickEvent;
 
+import com.simibubi.create.content.equipment.armor.BacktankUtil;
+
 import top.theillusivec4.curios.api.CuriosApi;
 import top.theillusivec4.curios.api.type.inventory.IDynamicStackHandler;
 
+import java.util.List;
 import java.util.Optional;
 
 import static com.ghostipedia.cosmiccore.common.airControl.OxygenConfig.*;
@@ -272,9 +275,32 @@ public final class OxygenLogic {
         // cosmiccore-42.13)
         if (rebreather == RebreatherType.PRESSURIZED) {
             remaining = drainFromCuriosBackSlot(player, remaining);
+            remaining = drainFromBacktank(player, remaining);
         }
 
         return requestTicks - remaining;
+    }
+
+    private static int drainFromBacktank(ServerPlayer player, int requestTicks) {
+        if (requestTicks <= 0) return requestTicks;
+
+        List<ItemStack> tanks = BacktankUtil.getAllWithAir(player);
+        if (tanks.isEmpty()) return requestTicks;
+
+        if (RebreatherHelper.hasCreateDivingHelmet(player)) {
+            return 0;
+        }
+
+        int remaining = requestTicks;
+        for (ItemStack tank : tanks) {
+            if (remaining <= 0) break;
+            int take = Math.min(BacktankUtil.getAir(tank), remaining);
+            if (take > 0) {
+                BacktankUtil.consumeAir(player, tank, take);
+                remaining -= take;
+            }
+        }
+        return remaining;
     }
 
     /**

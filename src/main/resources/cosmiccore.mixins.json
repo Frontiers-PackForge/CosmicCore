@@ -41,7 +41,8 @@
     "gtfix.DummyChunkSourceThreadSafeMixin",
     "sable.BlockHighlightSubLevelMixin",
     "aero.ClientBalloonEffectIrisFixMixin",
-    "client.AbyssLightTextureMixin"
+    "client.AbyssLightTextureMixin",
+    "ftbchunks.FTBChunksMapKeybindMixin"
   ],
   "mixins": [
     "BlockPatternMixin",
