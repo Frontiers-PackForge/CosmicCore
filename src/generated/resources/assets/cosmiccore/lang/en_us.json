@@ -579,6 +579,7 @@
     "cosmiccore.datastick.link_copied": "Link: %s",
     "cosmiccore.dowsing.found": "The rod stirs, sensing %d ore fields nearby:",
     "cosmiccore.dowsing.none": "The rod lies still",
+    "cosmiccore.dowsing.team_share": "%s discovered %s new ore field(s):",
     "cosmiccore.dowsing.tooltip.radius": "Sensing range: %d blocks",
     "cosmiccore.dowsing.tooltip.use": "§7Use: Reveal nearby ore fields",
     "cosmiccore.ember.capacity": "§cEmber Capacity:§6 %s",

@@ -45,6 +45,7 @@ public class CosmicLangHandler extends LangHandler {
         provider.add("button.cosmiccore.toggle_depleted.name", "Toggle Depleted");
         provider.add("cosmiccore.dowsing.found", "The rod stirs, sensing %d ore fields nearby:");
         provider.add("cosmiccore.dowsing.none", "The rod lies still");
+        provider.add("cosmiccore.dowsing.team_share", "%s discovered %s new ore field(s):");
         provider.add("cosmiccore.dowsing.tooltip.radius", "Sensing range: %d blocks");
         provider.add("cosmiccore.dowsing.tooltip.use", "§7Use: Reveal nearby ore fields");
 

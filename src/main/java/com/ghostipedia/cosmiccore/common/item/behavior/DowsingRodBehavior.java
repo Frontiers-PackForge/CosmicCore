@@ -1,5 +1,7 @@
 package com.ghostipedia.cosmiccore.common.item.behavior;
 
+import com.ghostipedia.cosmiccore.client.map.RevealedField;
+import com.ghostipedia.cosmiccore.common.data.worldgen.field.FieldDiscoverySharing;
 import com.ghostipedia.cosmiccore.common.data.worldgen.field.OreFieldPlacement;
 import com.ghostipedia.cosmiccore.common.data.worldgen.field.OreFieldPlacement.OreField;
 import com.ghostipedia.cosmiccore.common.network.CCoreNetwork;
@@ -11,6 +13,7 @@ import com.gregtechceu.gtceu.api.item.component.IInteractionItem;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
@@ -57,8 +60,9 @@ public class DowsingRodBehavior implements IInteractionItem, IAddInformation {
                 player.sendSystemMessage(Component.translatable("cosmiccore.dowsing.none")
                         .withStyle(ChatFormatting.GRAY));
             } else {
-                CCoreNetwork.sendToPlayer(serverPlayer,
-                        RevealFieldsPacket.of(serverLevel.dimension(), fields, ROD_TIER));
+                ResourceKey<Level> dimension = serverLevel.dimension();
+                List<RevealedField> revealed = RevealFieldsPacket.toRevealedFields(fields, ROD_TIER);
+                CCoreNetwork.sendToPlayer(serverPlayer, new RevealFieldsPacket(dimension, revealed));
                 player.sendSystemMessage(Component.translatable("cosmiccore.dowsing.found", fields.size())
                         .withStyle(ChatFormatting.GOLD));
                 int index = 1;
@@ -72,6 +76,7 @@ public class DowsingRodBehavior implements IInteractionItem, IAddInformation {
                     index++;
                 }
                 level.playSound(null, center, SoundEvents.AMETHYST_BLOCK_CHIME, SoundSource.PLAYERS, 0.6f, 1.0f);
+                FieldDiscoverySharing.shareWithTeam(serverPlayer, dimension, revealed);
             }
             player.getCooldowns().addCooldown(stack.getItem(), cooldownTicks);
         }

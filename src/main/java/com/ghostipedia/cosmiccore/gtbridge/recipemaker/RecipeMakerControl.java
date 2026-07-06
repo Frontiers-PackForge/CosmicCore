@@ -1,6 +1,7 @@
 package com.ghostipedia.cosmiccore.gtbridge.recipemaker;
 
-import net.minecraft.client.Minecraft;
+import com.ghostipedia.cosmiccore.client.recipemaker.RecipeMakerClipboard;
+
 import net.minecraft.network.RegistryFriendlyByteBuf;
 
 import brachy.modularui.value.sync.SyncHandler;
@@ -38,7 +39,7 @@ public class RecipeMakerControl extends SyncHandler<RecipeMakerControl> {
     @Override
     public void readOnClient(int id, RegistryFriendlyByteBuf buf) {
         if (id == RESULT) {
-            Minecraft.getInstance().keyboardHandler.setClipboard(buf.readUtf());
+            RecipeMakerClipboard.copy(buf.readUtf());
         }
     }
 }

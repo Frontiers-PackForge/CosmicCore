@@ -46,7 +46,7 @@ public class RevealFieldsPacket implements CustomPacketPayload {
         }
     }
 
-    public static RevealFieldsPacket of(ResourceKey<Level> dimension, List<OreField> oreFields, byte tier) {
+    public static List<RevealedField> toRevealedFields(List<OreField> oreFields, byte tier) {
         List<RevealedField> fields = new ArrayList<>(oreFields.size());
         for (OreField field : oreFields) {
             Material bundle = field.bundle();
@@ -55,7 +55,11 @@ public class RevealFieldsPacket implements CustomPacketPayload {
             fields.add(new RevealedField(field.core().getX(), field.core().getZ(),
                     bundle.getMaterialARGB(), bundle.getName(), tier, radius));
         }
-        return new RevealFieldsPacket(dimension, fields);
+        return fields;
+    }
+
+    public static RevealFieldsPacket of(ResourceKey<Level> dimension, List<OreField> oreFields, byte tier) {
+        return new RevealFieldsPacket(dimension, toRevealedFields(oreFields, tier));
     }
 
     public void encode(FriendlyByteBuf buffer) {
