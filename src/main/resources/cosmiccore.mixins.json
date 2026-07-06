@@ -38,6 +38,7 @@
     "modularui.ModularUIScrollFixMixin",
     "gtfix.SchemaWidgetZoomMixin",
     "gtfix.SchemaWidgetPanMixin",
+    "gtfix.SchemaRendererEmiPickFixMixin",
     "gtfix.DummyChunkSourceThreadSafeMixin",
     "sable.BlockHighlightSubLevelMixin",
     "aero.ClientBalloonEffectIrisFixMixin",
