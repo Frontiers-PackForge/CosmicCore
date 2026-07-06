@@ -33,6 +33,7 @@ public final class FoodSlotLogic {
 
     public static final double BASE_REGEN = 0.25;
     public static final int REGEN_DELAY = 200;
+    public static final int REGEN_INTERVAL = 5;
     public static final int RECONCILE_INTERVAL = 40;
 
     private static final ResourceKey<MobEffect> FD_NOURISHMENT = ResourceKey.create(
@@ -75,10 +76,10 @@ public final class FoodSlotLogic {
         applyEffects(player, data);
 
         int sinceHurt = player.tickCount - data.lastDamageTick;
-        if (sinceHurt > REGEN_DELAY && player.tickCount % 5 == 0 && player.getHealth() > 0 &&
+        if (sinceHurt > REGEN_DELAY && player.tickCount % REGEN_INTERVAL == 0 && player.getHealth() > 0 &&
                 player.getHealth() < player.getMaxHealth()) {
-            float regen = (float) (BASE_REGEN + data.totalRegenBonus());
-            player.heal(regen / 20f);
+            float heartsPerSecond = (float) (BASE_REGEN + data.totalRegenBonus());
+            player.heal(heartsPerSecond * 2f * REGEN_INTERVAL / 20f);
         }
 
         if (data.consumeDirty() || (data.hasActive() && player.tickCount % RECONCILE_INTERVAL == 0)) {
