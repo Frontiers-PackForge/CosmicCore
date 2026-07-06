@@ -2,6 +2,7 @@ package com.ghostipedia.cosmiccore.common.data.recipe;
 
 import com.ghostipedia.cosmiccore.CosmicCore;
 import com.ghostipedia.cosmiccore.common.data.materials.CosmicBundleMaterials;
+import com.ghostipedia.cosmiccore.common.data.materials.CosmicMaterials;
 
 import com.gregtechceu.gtceu.api.GTValues;
 import com.gregtechceu.gtceu.api.data.chemical.ChemicalHelper;
@@ -23,10 +24,12 @@ import static com.ghostipedia.cosmiccore.gtbridge.CosmicRecipeTypes.*;
 import static com.gregtechceu.gtceu.api.data.tag.TagPrefix.crushed;
 import static com.gregtechceu.gtceu.api.data.tag.TagPrefix.crushedPurified;
 import static com.gregtechceu.gtceu.api.data.tag.TagPrefix.dust;
+import static com.gregtechceu.gtceu.api.data.tag.TagPrefix.foil;
 import static com.gregtechceu.gtceu.api.data.tag.TagPrefix.gem;
 import static com.gregtechceu.gtceu.api.data.tag.TagPrefix.ingot;
 import static com.gregtechceu.gtceu.api.data.tag.TagPrefix.rawOre;
 import static com.gregtechceu.gtceu.common.data.GTMaterials.Water;
+import static com.gregtechceu.gtceu.common.data.GTRecipeTypes.CHEMICAL_RECIPES;
 import static com.gregtechceu.gtceu.common.data.GTRecipeTypes.FORGE_HAMMER_RECIPES;
 import static com.gregtechceu.gtceu.common.data.GTRecipeTypes.MACERATOR_RECIPES;
 
@@ -68,7 +71,7 @@ public class CosmicCoreOreRecipeHandler {
     private static void refineChain(RecipeOutput provider, Material material) {
         floatStep(provider, material, crushed, crushedPurified, "float_purify_", 400, 500);
         millStep(provider, material, crushedPurified, powderizedOre, "mill_powder_", 600);
-        floatStep(provider, material, powderizedOre, flocculatedOre, "flocculate_", 1000, 1000);
+        flocculateStep(provider, material);
         floatStep(provider, material, flocculatedOre, crystallizedOreChunk, "crystallize_", 1600, 1000);
         floatStep(provider, material, crystallizedOreChunk, atomicallyPurifiedOreChunk, "atomically_purify_", 2600,
                 1000);
@@ -83,6 +86,27 @@ public class CosmicCoreOreRecipeHandler {
                 .inputFluids(Water.getFluid(water))
                 .outputItems(outStack)
                 .duration(duration).EUt(REFINE_EUT)
+                .save(provider);
+    }
+
+    private static void flocculateStep(RecipeOutput provider, Material material) {
+        ItemStack outStack = ChemicalHelper.get(flocculatedOre, material);
+        if (outStack.isEmpty()) return;
+        INDUSTRIAL_FLOTATION_PLANT.recipeBuilder("flocculate_" + material.getName())
+                .inputItems(powderizedOre, material)
+                .inputFluids(Water.getFluid(1000))
+                .inputFluids(CosmicMaterials.PolyethyleneOxide.getFluid(10))
+                .outputItems(outStack)
+                .duration(1000).EUt(REFINE_EUT)
+                .save(provider);
+    }
+
+    public static void registerFlocculant(RecipeOutput provider) {
+        CHEMICAL_RECIPES.recipeBuilder("polyethylene_oxide_flocculant")
+                .inputItems(foil, GTMaterials.Polyethylene)
+                .inputFluids(GTMaterials.Oxygen.getFluid(1000))
+                .outputFluids(CosmicMaterials.PolyethyleneOxide.getFluid(1000))
+                .duration(120).EUt(GTValues.VA[GTValues.LV])
                 .save(provider);
     }
 

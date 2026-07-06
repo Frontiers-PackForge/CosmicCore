@@ -103,11 +103,6 @@ dependencies {
     // refs (the worldgen is data JSON). Pinned to the pack's exact jar.
     runtimeOnly(files("libs/The_Undergarden-1.21.1-0.9.6.jar"))
 
-    // Eternal Starlight: CC's Drowned Hollow overrides undergarden:worldgen/noise_settings and uses
-    // eternal_starlight:springstone (the crag layer), so the dev run's registry load fails without it. Same
-    // runtimeOnly data-only reasoning; pinned to the pack's exact jar (ES only needs NeoForge+Minecraft).
-    runtimeOnly(files("libs/eternalstarlight-0.8.1+1.21.1+neoforge.jar"))
-
     // Apotheosis (modular on 1.21.1)
     // Placebo is provided transitively by the Apothic mods as dev.shadowsoffire:Placebo. Declaring it
     // separately as maven.modrinth:placebo put two distinct coordinates of the same mod on the classpath,

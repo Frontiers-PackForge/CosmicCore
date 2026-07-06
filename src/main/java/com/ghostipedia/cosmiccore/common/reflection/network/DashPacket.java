@@ -46,7 +46,7 @@ public class DashPacket implements CustomPacketPayload {
 
     public void execute(IPayloadContext context) {
         if (!(context.player() instanceof ServerPlayer player)) return;
-        if (!QuakeMovementHandler.hasQuakeMovement(player)) return;
+        if (!QuakeMovementHandler.canUseGlobestriderMovement(player)) return;
 
         CelesteDashHandler.executeDashServer(player, xRot, yRot, forwardInput, strafeInput);
     }

@@ -1271,6 +1271,15 @@ public class CosmicItems {
             })))
             .register();
 
+    public static ItemEntry<ComponentItem> PALMS_OF_THE_GLOBESTRIDER = REGISTRATE
+            .item("palms_of_the_globestrider", ComponentItem::new)
+            .lang("Palms of the Globestrider")
+            .properties(p -> p.stacksTo(1))
+            .onRegister(attach(new TooltipBehavior(list -> {
+                list.add(Component.translatable("item.cosmiccore.palms_of_the_globestrider.tooltip"));
+            })))
+            .register();
+
     public static final ItemEntry<ComponentItem> WAXED_LEATHER = REGISTRATE.item("waxed_leather", ComponentItem::new)
             .lang("Waxed Leather")
             .properties(p -> p.stacksTo(64))
@@ -2838,8 +2847,8 @@ public class CosmicItems {
             .item("dowsing_rod", ComponentItem::new)
             .lang("Dowsing Rod")
             .properties(p -> p.stacksTo(1))
-            .onRegister(attach(new DowsingRodBehavior(250, 100)))
-            .model((ctx, prov) -> prov.generated(ctx, ResourceLocation.withDefaultNamespace("item/blaze_rod")))
+            .onRegister(attach(new DowsingRodBehavior(500, 100)))
+            .defaultModel()
             .register();
 
     // Oneiric Signets — non-consumed gate items (Blood Orb replacement)

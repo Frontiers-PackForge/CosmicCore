@@ -236,6 +236,16 @@ public class CosmicMachines {
                     .register(),
             ELECTRIC_TIERS);
 
+    public static final MachineDefinition[] SPOOLING_MACHINE = registerTieredMachines("spooling_machine",
+            (holder, tier) -> new SimpleTieredMachine(holder, tier, defaultTankSizeFunction),
+            (tier, builder) -> builder.recipeType(CosmicRecipeTypes.SPOOLING_MACHINE)
+                    .tooltips(workableTiered(tier, GTValues.V[tier], GTValues.V[tier] * 64,
+                            CosmicRecipeTypes.SPOOLING_MACHINE,
+                            defaultTankSizeFunction.applyAsInt(tier), true))
+                    .workableTieredHullModel(GTCEu.id("block/machines/wiremill"))
+                    .register(),
+            ELECTRIC_TIERS);
+
     public static final MachineDefinition[] VAC_BUBBLER = registerTieredMachines("vacuum_bubbler",
             (holder, tier) -> new SimpleTieredMachine(holder, tier, defaultTankSizeFunction),
             (tier, builder) -> builder
@@ -442,16 +452,16 @@ public class CosmicMachines {
                         builder.overlayTieredHullModel("ember_hatch");
                     }
                     return builder.tooltipBuilder((item, tooltip) -> {
-                            if (io == IO.IN) {
-                                tooltip.add(Component.translatable("tooltip.cosmiccore.ember_hatch.capacity",
-                                        EmberHatchPartMachine.getMaxCapacity(tier)));
-                                tooltip.add(Component.translatable("tooltip.cosmiccore.ember_hatch.consumption",
-                                        EmberHatchPartMachine.getMaxConsumption(tier)));
-                            } else {
-                                tooltip.add(Component.translatable("tooltip.cosmiccore.ember_hatch.capacity",
-                                        EmberHatchPartMachine.getMaxCapacity(tier)));
-                            }
-                        }).register();
+                        if (io == IO.IN) {
+                            tooltip.add(Component.translatable("tooltip.cosmiccore.ember_hatch.capacity",
+                                    EmberHatchPartMachine.getMaxCapacity(tier)));
+                            tooltip.add(Component.translatable("tooltip.cosmiccore.ember_hatch.consumption",
+                                    EmberHatchPartMachine.getMaxConsumption(tier)));
+                        } else {
+                            tooltip.add(Component.translatable("tooltip.cosmiccore.ember_hatch.capacity",
+                                    EmberHatchPartMachine.getMaxCapacity(tier)));
+                        }
+                    }).register();
                 },
                 tiers);
     }

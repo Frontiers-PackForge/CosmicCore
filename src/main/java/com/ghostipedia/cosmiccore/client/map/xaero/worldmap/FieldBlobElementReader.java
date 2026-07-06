@@ -1,21 +1,13 @@
 package com.ghostipedia.cosmiccore.client.map.xaero.worldmap;
 
-import com.ghostipedia.cosmiccore.client.map.RevealedFieldStorage;
 import com.ghostipedia.cosmiccore.client.map.RevealedFields;
 import com.ghostipedia.cosmiccore.client.map.xaero.FieldBlobDraw;
 import com.ghostipedia.cosmiccore.client.map.xaero.FieldBlobElement;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.screens.Screen;
-import net.minecraft.resources.ResourceKey;
-import net.minecraft.world.level.Level;
 
 import xaero.lib.client.gui.widget.Tooltip;
 import xaero.map.element.MapElementReader;
-import xaero.map.gui.IRightClickableElement;
-import xaero.map.gui.dropdown.rightclick.RightClickOption;
-
-import java.util.ArrayList;
 
 public class FieldBlobElementReader extends MapElementReader<FieldBlobElement, Object, FieldBlobElementRenderer> {
 
@@ -32,6 +24,16 @@ public class FieldBlobElementReader extends MapElementReader<FieldBlobElement, O
     @Override
     public float getBoxScale(int location, FieldBlobElement element, Object context) {
         return 1.0f;
+    }
+
+    @Override
+    public boolean isHoveredOnMap(int location, FieldBlobElement element, double mouseX, double mouseZ, double scale,
+                                  double screenSizeBasedScale, double dimScale, Object context, float partialTicks) {
+        double dx = (mouseX - element.field().x() / dimScale) * scale;
+        double dz = (mouseZ - element.field().z() / dimScale) * scale;
+        float pixelRadius = FieldBlobDraw.zonePixelRadius(
+                FieldBlobDraw.zoneBlockRadius(element.field().tier(), element.field().radius()), scale);
+        return dx * dx + dz * dz <= (double) pixelRadius * pixelRadius;
     }
 
     @Override
@@ -90,25 +92,8 @@ public class FieldBlobElementReader extends MapElementReader<FieldBlobElement, O
     }
 
     @Override
-    public ArrayList<RightClickOption> getRightClickOptions(FieldBlobElement element, IRightClickableElement target) {
-        ArrayList<RightClickOption> options = new ArrayList<>();
-        options.add(new RightClickOption("button.cosmiccore.toggle_depleted.name", 0, target) {
-
-            @Override
-            public void onAction(Screen screen) {
-                Minecraft mc = Minecraft.getInstance();
-                if (mc.level == null) return;
-                ResourceKey<Level> dimension = mc.level.dimension();
-                RevealedFields.INSTANCE.toggleDepleted(dimension, element.field().x(), element.field().z());
-                RevealedFieldStorage.save();
-            }
-        });
-        return options;
-    }
-
-    @Override
     public boolean isRightClickValid(FieldBlobElement element) {
-        return true;
+        return false;
     }
 
     @Override

@@ -27,7 +27,6 @@ public final class FieldBlobDraw {
 
     public static final String ORE_VEINS_LAYER = "ore_veins";
     public static final int ZONE_MIN_PX = 20;
-    public static final int ZONE_MAX_PX = 360;
     public static final double ZONE_SCALE_MULT = 1.6;
 
     private static final int Z_MINIMAP = 0;
@@ -82,7 +81,7 @@ public final class FieldBlobDraw {
 
     public static float zonePixelRadius(float blockRadius, double mapScale) {
         double px = blockRadius * mapScale * ZONE_SCALE_MULT;
-        return (float) Math.max(ZONE_MIN_PX, Math.min(ZONE_MAX_PX, px));
+        return (float) Math.max(ZONE_MIN_PX, px);
     }
 
     public static long shapeSeed(int x, int z) {
@@ -110,12 +109,15 @@ public final class FieldBlobDraw {
         double p1 = phase(shapeSeed, 1);
         double p2 = phase(shapeSeed, 2);
         double p3 = phase(shapeSeed, 3);
+        Matrix4f pose = graphics.pose().last().pose();
+        double mapAngle = Math.atan2(pose.m01(), pose.m00());
         for (int i = 0; i < n; i++) {
             double a = (double) i / n * TAU;
             double w = ZONE_BASE_W + 0.13 * Math.sin(a * 2 + p1) + 0.07 * Math.sin(a * 3 + p2) +
                     0.05 * Math.sin(a * 5 + p3);
-            rx[i] = (float) (Math.cos(a) * radius * w);
-            rz[i] = (float) (Math.sin(a) * radius * w);
+            double drawA = a - mapAngle;
+            rx[i] = (float) (Math.cos(drawA) * radius * w);
+            rz[i] = (float) (Math.sin(drawA) * radius * w);
         }
         int rgb = depleted ? DEPLETED_RGB : (colorRGB & 0xFFFFFF);
         scanlineRing(graphics, rx, rz, 0xFF000000 | rgb);

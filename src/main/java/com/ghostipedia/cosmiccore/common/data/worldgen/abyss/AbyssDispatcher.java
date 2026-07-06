@@ -31,21 +31,21 @@ public final class AbyssDispatcher {
             "create:scorchia",
             "malum:twisted_rock",
             "minecraft:blackstone",
-            "eternal_starlight:springstone"
+            "minecraft:calcite"
     };
     private static final String[] LAYER_ACCENT = {
             "minecraft:smooth_basalt",
             "create:scoria",
             "malum:tainted_rock",
             "biomesoplenty:smooth_black_sandstone",
-            "eternal_starlight:springstone"
+            "minecraft:calcite"
     };
     private static final String[] LAYER_SKIN = {
             "undergarden:shiverstone",
             "undergarden:sediment",
             "malum:blighted_earth",
-            "eternal_starlight:voidstone",
-            "eternal_starlight:springstone"
+            "minecraft:basalt",
+            "minecraft:calcite"
     };
 
     private static BlockState[] stoneByLayer;

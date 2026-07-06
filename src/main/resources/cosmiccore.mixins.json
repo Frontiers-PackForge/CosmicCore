@@ -32,6 +32,7 @@
     "gtceu.ButtonStateMixin",
     "xaerominimap.CCoreMinimapFBORendererMixin",
     "xaeroworldmap.CCoreMapElementRenderHandlerBuilderMixin",
+    "xaeroworldmap.CCoreGuiMapDepleteMenuMixin",
     "embers.EmberDialBlockMixin",
     "modularui.ModularUIConfigMixin",
     "modularui.ModularUIConfigDevMixin",

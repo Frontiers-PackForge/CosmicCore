@@ -22,8 +22,8 @@ import brachy.modularui.value.sync.PanelSyncManager;
 import brachy.modularui.widgets.CycleButtonWidget;
 import brachy.modularui.widgets.ListWidget;
 import brachy.modularui.widgets.TextWidget;
-import brachy.modularui.widgets.menu.DropdownWidget;
 import brachy.modularui.widgets.layout.Flow;
+import brachy.modularui.widgets.menu.DropdownWidget;
 import brachy.modularui.widgets.textfield.TextFieldWidget;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -431,11 +431,11 @@ public final class CodecRecipeEditor {
     private static List<String> ritualFieldValues(Player player, String field) {
         Set<String> values = new TreeSet<>();
         if (player != null && player.level() != null) {
-            for (RecipeHolder<RitualRecipe> holder :
-                    player.level().getRecipeManager().getAllRecipesFor(OccultismRecipes.RITUAL_TYPE.get())) {
+            for (RecipeHolder<RitualRecipe> holder : player.level().getRecipeManager()
+                    .getAllRecipesFor(OccultismRecipes.RITUAL_TYPE.get())) {
                 RitualRecipe recipe = holder.value();
-                values.add("pentacle_id".equals(field) ? recipe.getPentacleId().toString()
-                        : recipe.getRitualType().toString());
+                values.add("pentacle_id".equals(field) ? recipe.getPentacleId().toString() :
+                        recipe.getRitualType().toString());
             }
         }
         return new ArrayList<>(values);

@@ -52,6 +52,7 @@ public class CosmicMaterials {
     public static Material Temmerite;
     public static Material Triphenylphosphine;
     public static Material Neutronite;
+    public static Material PolyethyleneOxide;
     public static Material Vitrius;
     public static Material SolSteel;
     public static Material StarMetal;
@@ -149,6 +150,12 @@ public class CosmicMaterials {
                 .liquid()
                 .color(0x4995b3).secondaryColor(0x4995b3)
                 .components(Prisma, 1, Water, 4)
+                .flags(DISABLE_DECOMPOSITION)
+                .buildAndRegister();
+        PolyethyleneOxide = new Material.Builder(CosmicCore.id("polyethylene_oxide"))
+                .liquid()
+                .color(0xdbe4e0).secondaryColor(0xb4c6bf)
+                .components(Carbon, 2, Hydrogen, 4, Oxygen, 1)
                 .flags(DISABLE_DECOMPOSITION)
                 .buildAndRegister();
         Moondrop = new Material.Builder(CosmicCore.id("moondrop"))
