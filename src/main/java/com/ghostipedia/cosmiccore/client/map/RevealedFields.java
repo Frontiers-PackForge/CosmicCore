@@ -1,5 +1,7 @@
 package com.ghostipedia.cosmiccore.client.map;
 
+import com.ghostipedia.cosmiccore.client.map.xaero.FieldBlobDraw;
+
 import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
@@ -39,6 +41,25 @@ public final class RevealedFields {
         return dim == null ? List.of() : new ArrayList<>(dim.values());
     }
 
+    public RevealedField fieldAt(ResourceKey<Level> dimension, int x, int z) {
+        Map<Long, RevealedField> dim = byDim.get(dimension);
+        if (dim == null) return null;
+        RevealedField best = null;
+        long bestSq = Long.MAX_VALUE;
+        for (RevealedField field : dim.values()) {
+            float radius = FieldBlobDraw.zoneBlockRadius(field.tier(), field.radius()) *
+                    (float) FieldBlobDraw.ZONE_SCALE_MULT;
+            long dx = x - field.x();
+            long dz = z - field.z();
+            long sq = dx * dx + dz * dz;
+            if (sq <= (long) (radius * radius) && sq < bestSq) {
+                best = field;
+                bestSq = sq;
+            }
+        }
+        return best;
+    }
+
     public boolean isDepleted(ResourceKey<Level> dimension, int x, int z) {
         Set<Long> set = depleted.get(dimension);
         return set != null && set.contains(key(x, z));
@@ -57,8 +78,11 @@ public final class RevealedFields {
         depleted.clear();
     }
 
+    public static final int FORMAT_VERSION = 2;
+
     public CompoundTag toNbt() {
         CompoundTag root = new CompoundTag();
+        root.putInt("version", FORMAT_VERSION);
         ListTag dims = new ListTag();
         for (Map.Entry<ResourceKey<Level>, Map<Long, RevealedField>> entry : byDim.entrySet()) {
             CompoundTag dimTag = new CompoundTag();
@@ -80,6 +104,7 @@ public final class RevealedFields {
 
     public void fromNbt(CompoundTag root) {
         clearAll();
+        if (root.getInt("version") < FORMAT_VERSION) return;
         ListTag dims = root.getList("dims", Tag.TAG_COMPOUND);
         for (int i = 0; i < dims.size(); i++) {
             CompoundTag dimTag = dims.getCompound(i);

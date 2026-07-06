@@ -552,6 +552,8 @@ public class CosmicLangHandler extends LangHandler {
                 "§7Reduces oxygen drain in §bThin Air§7 environments.");
         provider.add("item.cosmiccore.pressurized_rebreather.tooltip",
                 "§6Enables oxygen tank usage. Works in §cNo Air§6 environments.");
+        provider.add("item.cosmiccore.palms_of_the_globestrider.tooltip",
+                "§bAir-strafe, bunny-hop, and dash while worn.");
         provider.add("cosmiccore.universal.tooltip.lube_info.0",
                 "§aProviding Better Lubricants increases the total EU created");
         provider.add("cosmiccore.universal.tooltip.lube_info.1", "§eLubricant§f: §c1x §fEU total @ 1000mb/hr");

@@ -13,6 +13,7 @@ import net.minecraft.world.level.levelgen.XoroshiroRandomSource;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -26,10 +27,14 @@ import java.util.Set;
  *
  * <p>
  * Cores are scattered by a deterministic Poisson-disk: a jittered cell grid where a candidate keeps its spot only
- * if no higher-priority neighbour sits within {@link #MIN_DISTANCE}. Each surviving core is assigned a
- * dimension-eligible, rarity-weighted bundle, then expanded into a field: a set of small ore-pocket fragments whose
- * arrangement traces one of four shapes. The shape lives in the arrangement; each pocket itself is a plain small blob
- * (see {@code PocketVeinGenerator}).
+ * if no higher-priority neighbour sits within {@link #MIN_DISTANCE}. Each surviving core draws its bundle from a
+ * regional shuffle bag: cells group into {@link #REGION_CELLS}-square regions, each region deals a full
+ * weight-proportional bag of the dimension's bundles across its survivors, so every region contains every bundle
+ * type and the walk to any specific ore is bounded by roughly one region span. {@link FieldGenLedger} records
+ * override the deal for fields already baked into chunks (including pre-bag worlds, which keep their legacy-roll
+ * identity), so assignment changes can never contradict ore in the ground. The core then expands into a field: a
+ * set of small ore-pocket fragments whose arrangement traces one of four shapes. The shape lives in the
+ * arrangement; each pocket itself is a plain small blob (see {@code PocketVeinGenerator}).
  */
 public final class OreFieldPlacement {
 
@@ -39,9 +44,11 @@ public final class OreFieldPlacement {
     public static final int DEFAULT_FIELD_RADIUS = 88;
 
     private static final int CELL_SIZE = MIN_DISTANCE;
+    private static final int REGION_CELLS = 5;
     private static final long ANCHOR_SALT = 0x9E37F1DCA7E5B900L;
     private static final long TYPE_SALT = 0xC2B2AE3D27D4EB4FL;
     private static final long DISTRICT_SALT = 0x165667B19E3779F9L;
+    private static final long BAG_SALT = 0x7C6E9A2F51D8B34DL;
     private static final double TAU = Math.PI * 2.0;
 
     public enum Shape {
@@ -134,7 +141,9 @@ public final class OreFieldPlacement {
                 long dx = x - centerX;
                 long dz = z - centerZ;
                 if (dx * dx + dz * dz > radiusSqr) continue;
-                Material bundle = assignBundle(worldSeed, dimension, x, z);
+                if (FieldGenLedger.isUnresolvable(dimension, cx, cz)) continue;
+                Material bundle = FieldGenLedger.recorded(dimension, cx, cz);
+                if (bundle == null) bundle = assignBundleFresh(worldSeed, dimension, cx, cz);
                 if (bundle == null) continue;
                 out.add(new OreField(new BlockPos(x, 0, z), bundle, worldSeed, dimension));
             }
@@ -172,7 +181,7 @@ public final class OreFieldPlacement {
         return new long[] { x, z, priority };
     }
 
-    private static long[] survivingCore(long worldSeed, ResourceKey<Level> dimension, int cx, int cz) {
+    static long[] survivingCore(long worldSeed, ResourceKey<Level> dimension, int cx, int cz) {
         long[] self = candidate(worldSeed, dimension, cx, cz);
         long minSqr = (long) MIN_DISTANCE * MIN_DISTANCE;
         for (int nx = cx - 1; nx <= cx + 1; nx++) {
@@ -188,7 +197,7 @@ public final class OreFieldPlacement {
         return self;
     }
 
-    private static Material assignBundle(long worldSeed, ResourceKey<Level> dimension, int x, int z) {
+    static Material assignBundleLegacy(long worldSeed, ResourceKey<Level> dimension, int x, int z) {
         int total = 0;
         for (FieldProfile profile : PROFILES.values()) {
             if (profile.dimensions().contains(dimension) && profile.weight() > 0) {
@@ -209,6 +218,79 @@ public final class OreFieldPlacement {
             if (roll < acc) return entry.getKey();
         }
         return last;
+    }
+
+    static Material assignBundleFresh(long worldSeed, ResourceKey<Level> dimension, int cellX, int cellZ) {
+        init();
+        List<Material> bag = bagFor(dimension);
+        if (bag.isEmpty()) return null;
+
+        int regionX = Math.floorDiv(cellX, REGION_CELLS);
+        int regionZ = Math.floorDiv(cellZ, REGION_CELLS);
+        int rank = -1;
+        int survivors = 0;
+        for (int gz = 0; gz < REGION_CELLS; gz++) {
+            for (int gx = 0; gx < REGION_CELLS; gx++) {
+                int cx = regionX * REGION_CELLS + gx;
+                int cz = regionZ * REGION_CELLS + gz;
+                if (survivingCore(worldSeed, dimension, cx, cz) == null) continue;
+                if (cx == cellX && cz == cellZ) rank = survivors;
+                survivors++;
+            }
+        }
+        if (rank < 0) return null;
+
+        RandomSource random = new XoroshiroRandomSource(
+                mix(worldSeed, BAG_SALT ^ dimensionSalt(dimension), regionX, regionZ));
+        Material[] deal = bag.toArray(new Material[0]);
+        int passes = rank / deal.length;
+        for (int pass = 0; pass <= passes; pass++) {
+            for (int i = deal.length - 1; i > 0; i--) {
+                int j = random.nextInt(i + 1);
+                Material swap = deal[i];
+                deal[i] = deal[j];
+                deal[j] = swap;
+            }
+        }
+        return deal[rank % deal.length];
+    }
+
+    private static List<Material> bagFor(ResourceKey<Level> dimension) {
+        int gcd = 0;
+        for (FieldProfile profile : PROFILES.values()) {
+            if (profile.dimensions().contains(dimension) && profile.weight() > 0) {
+                gcd = gcd == 0 ? profile.weight() : gcd(gcd, profile.weight());
+            }
+        }
+        List<Material> bag = new ArrayList<>();
+        if (gcd <= 0) return bag;
+        for (Map.Entry<Material, FieldProfile> entry : PROFILES.entrySet()) {
+            FieldProfile profile = entry.getValue();
+            if (!profile.dimensions().contains(dimension) || profile.weight() <= 0) continue;
+            int copies = profile.weight() / gcd;
+            for (int i = 0; i < copies; i++) {
+                bag.add(entry.getKey());
+            }
+        }
+        return bag;
+    }
+
+    private static int gcd(int a, int b) {
+        while (b != 0) {
+            int t = a % b;
+            a = b;
+            b = t;
+        }
+        return a;
+    }
+
+    static Set<ResourceKey<Level>> fieldDimensions() {
+        init();
+        Set<ResourceKey<Level>> dimensions = new LinkedHashSet<>();
+        for (FieldProfile profile : PROFILES.values()) {
+            dimensions.addAll(profile.dimensions());
+        }
+        return dimensions;
     }
 
     private static List<FieldMember> layoutField(OreField field) {

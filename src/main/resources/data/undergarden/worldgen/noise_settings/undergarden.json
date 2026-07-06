@@ -398,7 +398,7 @@
         "then_run": {
           "type": "minecraft:block",
           "result_state": {
-            "Name": "eternal_starlight:springstone"
+            "Name": "minecraft:calcite"
           }
         }
       },

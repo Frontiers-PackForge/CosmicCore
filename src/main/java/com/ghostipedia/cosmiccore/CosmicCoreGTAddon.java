@@ -39,6 +39,7 @@ public class CosmicCoreGTAddon implements IGTAddon {
 
     @Override
     public void addRecipes(RecipeOutput provider) {
+        CosmicCoreOreRecipeHandler.registerFlocculant(provider);
         Set<Material> chunkMetals = new HashSet<>();
         for (Material bundleOre : CosmicBundleMaterials.bundleOres()) {
             CosmicCoreOreRecipeHandler.bundleInit(provider, bundleOre);

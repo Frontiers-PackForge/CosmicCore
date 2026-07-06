@@ -43,7 +43,7 @@ public class CosmicRecipeTypes {
             .UI(builder -> builder.setProgressBar(GTGuiTextures.PROGRESS_ARROW));
     public static final GTRecipeType INDUSTRIAL_FLOTATION_PLANT = register(
             CosmicCore.id("industrial_flotation_plant"), MULTIBLOCK)
-            .setMaxIOSize(2, 2, 1, 1)
+            .setMaxIOSize(2, 2, 2, 1)
             .UI(builder -> builder.setProgressBar(GTGuiTextures.PROGRESS_ARROW));
     public static final GTRecipeType ONEIRIC_SIEVE = register(CosmicCore.id("oneiric_sieve"), MULTIBLOCK)
             .setMaxIOSize(3, 3, 1, 1)

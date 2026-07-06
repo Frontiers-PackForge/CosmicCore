@@ -1,6 +1,7 @@
 package com.ghostipedia.cosmiccore.common.reflection.bargain.impl;
 
 import com.ghostipedia.cosmiccore.CosmicCore;
+import com.ghostipedia.cosmiccore.common.data.CosmicItems;
 import com.ghostipedia.cosmiccore.common.item.armor.boots.ICosmicBoots;
 import com.ghostipedia.cosmiccore.common.reflection.ReflectionCapability;
 
@@ -24,8 +25,14 @@ import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.tick.PlayerTickEvent;
 
+import top.theillusivec4.curios.api.CuriosApi;
+import top.theillusivec4.curios.api.type.capability.ICuriosItemHandler;
+import top.theillusivec4.curios.api.type.inventory.ICurioStacksHandler;
+import top.theillusivec4.curios.api.type.inventory.IDynamicStackHandler;
+
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 import java.util.UUID;
 
 @EventBusSubscriber(modid = CosmicCore.MOD_ID)
@@ -68,7 +75,25 @@ public class QuakeMovementHandler {
     @OnlyIn(Dist.CLIENT)
     public static boolean getClientHasQuakeMovement() {
         Player player = Minecraft.getInstance().player;
-        return player != null && isWearingGlobetrotters(player);
+        return player != null && canUseGlobestriderMovement(player);
+    }
+
+    public static boolean canUseGlobestriderMovement(Player player) {
+        return hasGlobestriderPalms(player) || isWearingGlobetrotters(player);
+    }
+
+    public static boolean hasGlobestriderPalms(Player player) {
+        Optional<ICuriosItemHandler> cap = CuriosApi.getCuriosInventory(player);
+        if (cap.isEmpty()) return false;
+        Optional<ICurioStacksHandler> handler = cap.get().getStacksHandler("hands");
+        if (handler.isEmpty()) return false;
+        IDynamicStackHandler stacks = handler.get().getStacks();
+        for (int i = 0; i < stacks.getSlots(); i++) {
+            if (stacks.getStackInSlot(i).is(CosmicItems.PALMS_OF_THE_GLOBESTRIDER.asItem())) {
+                return true;
+            }
+        }
+        return false;
     }
 
     public static boolean isWearingGlobetrotters(Player player) {
@@ -90,7 +115,7 @@ public class QuakeMovementHandler {
         Player player = event.getEntity();
         if (!player.level().isClientSide()) return;
         if (player != Minecraft.getInstance().player) return;
-        if (!isWearingGlobetrotters(player)) return;
+        if (!canUseGlobestriderMovement(player)) return;
 
         CelesteDashHandler.clientTick(player);
 

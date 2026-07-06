@@ -2,6 +2,7 @@ package com.ghostipedia.cosmiccore.common.data.materials;
 
 import com.ghostipedia.cosmiccore.CosmicCore;
 
+import com.gregtechceu.gtceu.GTCEu;
 import com.gregtechceu.gtceu.api.data.chemical.material.Material;
 import com.gregtechceu.gtceu.api.data.chemical.material.info.MaterialIconSet;
 
@@ -37,6 +38,7 @@ public class CosmicBundleMaterials {
     public static Material Agarlite;
     public static Material CrudeRadionite;
     public static Material Vanachrome;
+    public static Material Emberite;
 
     private static final Map<Material, List<Material>> OUTPUTS = new LinkedHashMap<>();
 
@@ -58,6 +60,12 @@ public class CosmicBundleMaterials {
         CrudeRadionite = bundle("crude_radionite", 0x3FA63F, 0x1F6B1F, MaterialIconSet.RADIOACTIVE);
         Vanachrome = bundle("vanachrome", 0x6FA0A0, 0x3F6F6F, MaterialIconSet.METALLIC);
 
+        Emberite = new Material.Builder(GTCEu.id("emberite"))
+                .gem()
+                .ore()
+                .color(0xff7300).iconSet(MaterialIconSet.CERTUS)
+                .buildAndRegister();
+
         out(Ferosine, Magnetite, Goethite, YellowLimonite, Hematite, VanadiumMagnetite, Gold);
         out(Cuprosiva, Chalcopyrite, Cassiterite, Malachite, Pyrite, Zeolite, Realgar);
         out(Galenite, Galena, Silver);
@@ -70,7 +78,7 @@ public class CosmicBundleMaterials {
         out(Quartizine, CertusQuartz, NetherQuartz, Quartzite, Barite, Beryllium, Emerald);
         out(Molybite, Molybdenite, Wulfenite, Powellite, Pyrolusite, Tantalite, Grossular);
         out(Fahlorium, Tetrahedrite, Stibnite, Topaz, Chalcocite, Bornite, Saltpeter);
-        out(MonaziteSalts, Bastnasite, Monazite);
+        out(MonaziteSalts, Bastnasite, Monazite, Emberite);
         out(Agarlite, Cooperite, Bornite);
         out(CrudeRadionite, Pitchblende, Uraninite, Naquadah, Scheelite, Tungstate);
         out(Vanachrome, Magnetite, VanadiumMagnetite, Chromite, Bauxite, Ilmenite, Gold);
