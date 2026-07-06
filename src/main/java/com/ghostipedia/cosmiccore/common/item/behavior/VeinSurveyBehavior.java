@@ -1,5 +1,7 @@
 package com.ghostipedia.cosmiccore.common.item.behavior;
 
+import com.ghostipedia.cosmiccore.client.map.RevealedField;
+import com.ghostipedia.cosmiccore.common.data.worldgen.field.FieldDiscoverySharing;
 import com.ghostipedia.cosmiccore.common.data.worldgen.field.OreFieldPlacement;
 import com.ghostipedia.cosmiccore.common.network.CCoreNetwork;
 import com.ghostipedia.cosmiccore.common.network.packet.RevealFieldsPacket;
@@ -192,8 +194,9 @@ public class VeinSurveyBehavior implements IInteractionItem, IAddInformation {
         List<OreFieldPlacement.OreField> revealFields = OreFieldPlacement.fieldsNear(
                 level.getSeed(), level.dimension(), center.getX(), center.getZ(), radius);
         if (!revealFields.isEmpty()) {
-            CCoreNetwork.sendToPlayer(player,
-                    RevealFieldsPacket.of(level.dimension(), revealFields, (byte) detailLevel.level));
+            List<RevealedField> revealed = RevealFieldsPacket.toRevealedFields(revealFields, (byte) detailLevel.level);
+            CCoreNetwork.sendToPlayer(player, new RevealFieldsPacket(level.dimension(), revealed));
+            FieldDiscoverySharing.shareWithTeam(player, level.dimension(), revealed);
         }
     }
 

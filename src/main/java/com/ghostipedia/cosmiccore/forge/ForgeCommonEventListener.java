@@ -2,15 +2,20 @@ package com.ghostipedia.cosmiccore.forge;
 
 import com.ghostipedia.cosmiccore.CosmicCore;
 import com.ghostipedia.cosmiccore.CosmicUtils;
+import com.ghostipedia.cosmiccore.client.map.RevealedField;
 import com.ghostipedia.cosmiccore.common.commands.ExportRegistryCommand;
 import com.ghostipedia.cosmiccore.common.commands.SoulCommand;
 import com.ghostipedia.cosmiccore.common.commands.StarLadderCommand;
 import com.ghostipedia.cosmiccore.common.commands.VeinSurveyCommand;
 import com.ghostipedia.cosmiccore.common.commands.WirelessEnergyCommand;
 import com.ghostipedia.cosmiccore.common.data.CosmicItems;
+import com.ghostipedia.cosmiccore.common.data.worldgen.field.FieldDiscoveryData;
 import com.ghostipedia.cosmiccore.common.item.armor.boots.ICosmicBoots;
 import com.ghostipedia.cosmiccore.common.item.behavior.EffectApplicationBehavior;
 import com.ghostipedia.cosmiccore.common.mirror.deed.DeedCommand;
+import com.ghostipedia.cosmiccore.common.mirror.deed.DeedTeams;
+import com.ghostipedia.cosmiccore.common.network.CCoreNetwork;
+import com.ghostipedia.cosmiccore.common.network.packet.RevealFieldsPacket;
 import com.ghostipedia.cosmiccore.common.reflection.ReflectionCommand;
 import com.ghostipedia.cosmiccore.common.reflection.ReflectionCommands;
 import com.ghostipedia.cosmiccore.common.reflection.ReflectionConstants;
@@ -19,14 +24,18 @@ import com.ghostipedia.cosmiccore.mixin.accessor.LivingEntityAccessor;
 import com.gregtechceu.gtceu.api.capability.GTCapabilityHelper;
 import com.gregtechceu.gtceu.api.item.armor.ArmorComponentItem;
 
+import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.protocol.game.ClientboundPlayerAbilitiesPacket;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
 import net.neoforged.bus.api.EventPriority;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
@@ -36,13 +45,30 @@ import net.neoforged.neoforge.event.entity.living.LivingEquipmentChangeEvent;
 import net.neoforged.neoforge.event.entity.living.LivingEvent;
 import net.neoforged.neoforge.event.entity.living.LivingFallEvent;
 import net.neoforged.neoforge.event.entity.living.LivingIncomingDamageEvent;
+import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 import net.neoforged.neoforge.event.tick.PlayerTickEvent;
+
+import java.util.List;
 
 import static com.ghostipedia.cosmiccore.common.item.armor.ChestSanguineWarptechSuite.SANGUINE_SHIELD_NBT_KEY;
 
 @SuppressWarnings("unused")
 @EventBusSubscriber(modid = CosmicCore.MOD_ID, bus = EventBusSubscriber.Bus.GAME)
 public class ForgeCommonEventListener {
+
+    @SubscribeEvent
+    public static void onPlayerLoggedIn(PlayerEvent.PlayerLoggedInEvent event) {
+        if (!(event.getEntity() instanceof ServerPlayer player)) return;
+        FieldDiscoveryData data = FieldDiscoveryData.get(player.getServer());
+        String teamKey = DeedTeams.teamKey(player);
+        for (String dimensionId : data.dimensionsFor(teamKey)) {
+            ResourceLocation dimensionLoc = ResourceLocation.parse(dimensionId);
+            List<RevealedField> fields = data.get(teamKey, dimensionLoc);
+            if (fields.isEmpty()) continue;
+            ResourceKey<Level> dimension = ResourceKey.create(Registries.DIMENSION, dimensionLoc);
+            CCoreNetwork.sendToPlayer(player, new RevealFieldsPacket(dimension, fields));
+        }
+    }
 
     @SubscribeEvent
     public static void onPlayerTick(final PlayerTickEvent.Post event) {
