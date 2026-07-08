@@ -2,8 +2,10 @@ package com.ghostipedia.cosmiccore.common.abyss;
 
 import com.ghostipedia.cosmiccore.CosmicCore;
 import com.ghostipedia.cosmiccore.common.data.CosmicAttachmentTypes;
+import com.ghostipedia.cosmiccore.common.data.worldgen.abyss.AbyssRegions;
 import com.ghostipedia.cosmiccore.common.network.CCoreNetwork;
 import com.ghostipedia.cosmiccore.common.network.packet.AbyssTimeWarnPacket;
+import com.ghostipedia.cosmiccore.common.network.packet.SyncAbyssAttunementPacket;
 import com.ghostipedia.cosmiccore.common.network.packet.SyncTimeBarPacket;
 
 import net.minecraft.network.chat.Component;
@@ -21,6 +23,8 @@ import static com.ghostipedia.cosmiccore.common.abyss.AbyssRules.WARNINGS;
 @EventBusSubscriber(modid = CosmicCore.MOD_ID)
 public final class AbyssLogic {
 
+    public static final int ATTUNEMENT_LAYER = 2;
+
     @SubscribeEvent
     public static void onPlayerTick(PlayerTickEvent.Post event) {
         if (event.getEntity().level().isClientSide) return;
@@ -35,6 +39,14 @@ public final class AbyssLogic {
             }
 
             boolean inAbyss = level.dimension().equals(AbyssRules.DIM);
+
+            if (inAbyss && !player.getData(CosmicAttachmentTypes.ABYSS_ATTUNED) &&
+                    AbyssRegions.layer(player.getBlockY()) >= ATTUNEMENT_LAYER) {
+                player.setData(CosmicAttachmentTypes.ABYSS_ATTUNED, true);
+                player.sendSystemMessage(Component.translatable("cosmiccore.abyss.seal_broken")
+                        .withStyle(style -> style.withColor(0xC9AEF5).withItalic(true)));
+                CCoreNetwork.sendToPlayer(player, new SyncAbyssAttunementPacket(true));
+            }
 
             if (inAbyss) {
                 if (cap.isDecaying(AbyssRules.DIM)) {
@@ -92,6 +104,9 @@ public final class AbyssLogic {
     public static void onPlayerLogin(PlayerEvent.PlayerLoggedInEvent event) {
         if (event.getEntity().level().isClientSide) return;
         ServerPlayer player = (ServerPlayer) event.getEntity();
+
+        CCoreNetwork.sendToPlayer(player,
+                new SyncAbyssAttunementPacket(player.getData(CosmicAttachmentTypes.ABYSS_ATTUNED)));
 
         Optional.of(player.getData(CosmicAttachmentTypes.ABYSS_BUDGET)).ifPresent(cap -> {
             if (cap.getRemainingTicks(AbyssRules.DIM) < 0) {

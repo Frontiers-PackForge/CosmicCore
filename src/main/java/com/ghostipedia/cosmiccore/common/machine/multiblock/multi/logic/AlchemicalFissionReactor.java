@@ -41,7 +41,7 @@ public class AlchemicalFissionReactor extends WorkableElectricMultiblockMachine 
     @Getter
     @SyncToClient
     @SaveField
-    public static long heat = 0;
+    public long heat = 0;
 
     @Nullable
     protected FluidHandlerList inputFluidHandlers;
@@ -49,12 +49,11 @@ public class AlchemicalFissionReactor extends WorkableElectricMultiblockMachine 
     @Getter
     @SyncToClient
     @SaveField
-    public static long heatCapacity = HEAT_CAPACITY;
+    public long heatCapacity = HEAT_CAPACITY;
 
     @Nullable
     protected TickableSubscription fissionLogicSubs;
 
-    @SyncToClient
     private static final Object2IntMap<FluidStack> coolantTiers = new Object2IntOpenHashMap<>();
 
     static {

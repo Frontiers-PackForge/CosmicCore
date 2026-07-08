@@ -1471,5 +1471,14 @@ public class CosmicLangHandler extends LangHandler {
         provider.add("cosmiccore.command.food.memory_fail", "Hold a real food to make a memory of it");
         provider.add("cosmiccore.command.food.dump_fail", "Food dump failed: %s");
         provider.add("cosmiccore.command.food.dump_done", "Dumped %s consumables (%s hand-defined) to %s and %s");
+        provider.add("cosmiccore.tooltip.food.warming", "Warming");
+        provider.add("cosmiccore.tooltip.food.cooling", "Cooling");
+        provider.add("cosmiccore.abyss.tome_sealed", "The magic of this tome has been sealed away");
+        provider.add("cosmiccore.abyss.seal_broken",
+                "You have found the source. The magic of your tomes stirs awake.");
+        provider.add("cosmiccore.tooltip.tome_sealed_1",
+                "A dark and virulent force has stripped the magic conductivity away from this tome,");
+        provider.add("cosmiccore.tooltip.tome_sealed_2",
+                "it is nothing but a mundane book until you discover the source");
     }
 }

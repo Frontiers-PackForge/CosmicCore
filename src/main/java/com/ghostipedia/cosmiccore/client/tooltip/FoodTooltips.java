@@ -1,6 +1,7 @@
 package com.ghostipedia.cosmiccore.client.tooltip;
 
 import com.ghostipedia.cosmiccore.CosmicCore;
+import com.ghostipedia.cosmiccore.common.compat.lso.LsoFoodCompat;
 import com.ghostipedia.cosmiccore.common.food.AttributeSpec;
 import com.ghostipedia.cosmiccore.common.food.BehaviorLine;
 import com.ghostipedia.cosmiccore.common.food.CosmicFoodRegistry;
@@ -21,7 +22,7 @@ public final class FoodTooltips {
 
     public static final ResourceLocation FRAME = CosmicCore.id("tooltip/food");
 
-    private static final String G_HEALTH = " ♥";
+    private static final String G_HEALTH = "❤";
     private static final String G_REGEN = "✚";
     private static final String G_DURATION = "⧖";
     private static final String G_ATTR = "◆";
@@ -33,7 +34,7 @@ public final class FoodTooltips {
                 new FoodTooltipComponent.Line(new FoodTooltipComponent.Icon.Glyph("☠", 0xFFCF6679),
                         Component.translatable("cosmiccore.tooltip.food.vile"),
                         value(Component.translatable("cosmiccore.tooltip.food.vile_desc"), 0xE58A93)),
-                new FoodTooltipComponent.Line(new FoodTooltipComponent.Icon.Glyph("⌛", 0xFFCF6679),
+                new FoodTooltipComponent.Line(new FoodTooltipComponent.Icon.Glyph("⧖", 0xFFCF6679),
                         Component.translatable("cosmiccore.tooltip.food.vile_hunger"), value("", 0xC8A8AC))));
     }
 
@@ -82,6 +83,17 @@ public final class FoodTooltips {
             lines.add(new FoodTooltipComponent.Line(
                     new FoodTooltipComponent.Icon.Glyph(behavior.glyph(), behavior.color()),
                     Component.literal(behavior.label()), value(behavior.value(), behavior.color() & 0xFFFFFF)));
+        }
+        LsoFoodCompat.ConsumableTemp temp = LsoFoodCompat.temperature(stack);
+        if (temp != null) {
+            boolean warming = temp.level() > 0;
+            String degrees = String.format("%+d°C (", (int) (temp.level() * LsoFoodCompat.DEGREES_PER_LEVEL)) +
+                    mmss(temp.durationTicks() / 20) + ")";
+            lines.add(new FoodTooltipComponent.Line(
+                    new FoodTooltipComponent.Icon.Glyph(warming ? "♨" : "❆", warming ? 0xFFFF9E64 : 0xFF7FD4FF),
+                    Component.translatable(
+                            warming ? "cosmiccore.tooltip.food.warming" : "cosmiccore.tooltip.food.cooling"),
+                    value(degrees, warming ? 0xFFB27F : 0xA8E4FF)));
         }
         lines.add(new FoodTooltipComponent.Line(new FoodTooltipComponent.Icon.Glyph(G_DURATION, 0xFFFFD166),
                 Component.translatable("cosmiccore.tooltip.food.duration"),

@@ -87,6 +87,7 @@ dependencies {
     implementation(forge.modonomicon)
     implementation(forge.smartbrainlib)
     implementation(forge.geckolib)
+    implementation(forge.arsnouveau)
 
     // Embers Re-Ignited (NeoForge 1.21.1 fork of Embers Rekindled, modId "embers"). Required: the ember
     // hatch/emitter/receptor content extends its blocks + ember capability. CurseForge project 1579725,
