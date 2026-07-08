@@ -21,7 +21,7 @@ public final class FoodTooltips {
 
     public static final ResourceLocation FRAME = CosmicCore.id("tooltip/food");
 
-    private static final String G_HEALTH =" ♥";
+    private static final String G_HEALTH = " ♥";
     private static final String G_REGEN = "✚";
     private static final String G_DURATION = "⧖";
     private static final String G_ATTR = "◆";

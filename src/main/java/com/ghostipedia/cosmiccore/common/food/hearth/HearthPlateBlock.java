@@ -1,6 +1,8 @@
 package com.ghostipedia.cosmiccore.common.food.hearth;
 
+import com.ghostipedia.cosmiccore.common.data.CosmicAttachmentTypes;
 import com.ghostipedia.cosmiccore.common.data.CosmicBlockEntities;
+import com.ghostipedia.cosmiccore.common.food.CosmicFoodData;
 import com.ghostipedia.cosmiccore.common.food.CosmicFoodRegistry;
 import com.ghostipedia.cosmiccore.common.food.HearthLogic;
 
@@ -103,7 +105,20 @@ public class HearthPlateBlock extends Block implements EntityBlock {
                 back = plate.main;
                 plate.main = ItemStack.EMPTY;
             }
-            if (back.isEmpty()) return InteractionResult.CONSUME;
+            if (back.isEmpty()) {
+                if (player instanceof ServerPlayer serverPlayer) {
+                    CosmicFoodData data = serverPlayer.getData(CosmicAttachmentTypes.FOOD_DATA);
+                    if (HearthLogic.canInscribe(data)) {
+                        boolean roomFor = data.signatures.size() < HearthLogic.MAX_SIGNATURES;
+                        serverPlayer.sendSystemMessage(HearthLogic.inscribeCurrentMeal(serverPlayer));
+                        if (roomFor) {
+                            level.playSound(null, pos, SoundEvents.AMETHYST_BLOCK_CHIME, SoundSource.BLOCKS,
+                                    0.9f, 0.8f);
+                        }
+                    }
+                }
+                return InteractionResult.CONSUME;
+            }
             if (!player.addItem(back)) player.drop(back, false);
             plate.sync();
             return InteractionResult.CONSUME;

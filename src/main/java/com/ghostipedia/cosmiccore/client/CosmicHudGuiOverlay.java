@@ -16,6 +16,7 @@ import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.LayeredDraw;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.HumanoidArm;
 import net.minecraft.world.item.ItemStack;
 
 import com.mojang.blaze3d.systems.RenderSystem;
@@ -98,8 +99,11 @@ public class CosmicHudGuiOverlay implements LayeredDraw.Layer {
         sickened = newSickened;
     }
 
+    private static ItemStack memoryIcon = ItemStack.EMPTY;
+
     public static void setMemory(@Nullable FoodMemory newMemory) {
         memory = newMemory;
+        memoryIcon = newMemory != null ? new ItemStack(newMemory.dish()) : ItemStack.EMPTY;
     }
 
     @Nullable
@@ -121,7 +125,7 @@ public class CosmicHudGuiOverlay implements LayeredDraw.Layer {
     }
 
     private void renderFoodSlots(GuiGraphics guiGraphics, int screenWidth, int screenHeight) {
-        if (foodBars.isEmpty() && brewBars.isEmpty()) return;
+        if (foodBars.isEmpty() && brewBars.isEmpty() && memory == null) return;
         long elapsed = 0;
         Minecraft mc = Minecraft.getInstance();
         if (mc.level != null && barsGameTime >= 0) {
@@ -132,8 +136,40 @@ public class CosmicHudGuiOverlay implements LayeredDraw.Layer {
         }
         int centerX = screenWidth / 2;
         int hotbarTop = screenHeight - 22;
-        renderEndcapColumn(guiGraphics, mc, foodBars, centerX - 107, hotbarTop, elapsed);
-        renderEndcapColumn(guiGraphics, mc, brewBars, centerX + 95, hotbarTop, elapsed);
+        int foodX = centerX - 107;
+        int brewX = centerX + 95;
+        if (mc.player != null && !mc.player.getOffhandItem().isEmpty()) {
+            if (mc.player.getMainArm() == HumanoidArm.RIGHT) {
+                foodX -= 29;
+            } else {
+                brewX += 29;
+            }
+        }
+        int foodBase = hotbarTop;
+        if (memory != null) {
+            renderMemoryCell(guiGraphics, mc, foodX, hotbarTop);
+            foodBase -= 22;
+        }
+        renderEndcapColumn(guiGraphics, mc, foodBars, foodX, foodBase, elapsed);
+        renderEndcapColumn(guiGraphics, mc, brewBars, brewX, hotbarTop, elapsed);
+    }
+
+    private static void renderMemoryCell(GuiGraphics guiGraphics, Minecraft mc, int cellX, int hotbarTop) {
+        int cellTop = hotbarTop - 3;
+        var pose = guiGraphics.pose();
+        pose.pushPose();
+        pose.translate(cellX, cellTop, 0);
+        pose.scale(0.75f, 0.75f, 1f);
+        guiGraphics.renderItem(memoryIcon, 0, 0);
+        pose.popPose();
+
+        pose.pushPose();
+        pose.translate(cellX + 6, cellTop + 13, 0);
+        pose.scale(0.75f, 0.75f, 1f);
+        String label = "⌂";
+        int w = mc.font.width(label);
+        guiGraphics.drawString(mc.font, label, -w / 2, 0, 0xFFE8C66A, true);
+        pose.popPose();
     }
 
     private static void renderEndcapColumn(GuiGraphics guiGraphics, Minecraft mc, List<FoodBar> bars,

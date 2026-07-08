@@ -98,6 +98,12 @@ public final class HearthLogic {
         return true;
     }
 
+    public static boolean canInscribe(CosmicFoodData data) {
+        return data.memory != null && !data.lastMealKey.isEmpty() &&
+                !data.hasSignature(data.lastMealKey) &&
+                data.mealDays.getOrDefault(data.lastMealKey, 0) >= SIGNATURE_DAYS;
+    }
+
     public static Component inscribeCurrentMeal(ServerPlayer player) {
         CosmicFoodData data = player.getData(CosmicAttachmentTypes.FOOD_DATA);
         FoodMemory memory = data.memory;
