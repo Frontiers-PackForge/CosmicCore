@@ -5,14 +5,13 @@ import com.ghostipedia.cosmiccore.common.data.CosmicAttachmentTypes;
 import com.ghostipedia.cosmiccore.common.network.CCoreNetwork;
 import com.ghostipedia.cosmiccore.common.network.packet.SyncFoodDataPacket;
 
-import net.minecraft.core.registries.Registries;
-import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.core.component.DataComponents;
+import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.damagesource.DamageTypes;
-import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.food.FoodData;
+import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.neoforged.bus.api.SubscribeEvent;
@@ -36,9 +35,6 @@ public final class FoodSlotLogic {
     public static final int REGEN_INTERVAL = 5;
     public static final int RECONCILE_INTERVAL = 40;
 
-    private static final ResourceKey<MobEffect> FD_NOURISHMENT = ResourceKey.create(
-            Registries.MOB_EFFECT, ResourceLocation.fromNamespaceAndPath("farmersdelight", "nourishment"));
-
     @SubscribeEvent
     public static void onFinishUsingItem(LivingEntityUseItemEvent.Finish event) {
         if (event.getEntity().level().isClientSide) return;
@@ -52,10 +48,33 @@ public final class FoodSlotLogic {
             syncNow(player, data);
             return;
         }
+        if (CosmicFoodRegistry.isVile(stack.getItem())) {
+            data.sickened = true;
+            player.sendSystemMessage(Component.translatable("cosmiccore.food.sickened")
+                    .withStyle(style -> style.withColor(0xCF6679).withItalic(true)));
+            syncNow(player, data);
+            return;
+        }
         if (!CosmicFoodRegistry.isConsumable(stack)) return;
 
         data.eat(stack);
+        stripVanillaFoodEffects(player, stack);
         syncNow(player, data);
+    }
+
+    private static void stripVanillaFoodEffects(ServerPlayer player, ItemStack stack) {
+        if (CosmicFoodRegistry.isDefined(stack.getItem())) return;
+        FoodProperties props = stack.get(DataComponents.FOOD);
+        if (props == null) return;
+        for (FoodProperties.PossibleEffect possible : props.effects()) {
+            if (!CosmicFoodRegistry.isAbsorbed(possible)) continue;
+            MobEffectInstance applied = possible.effect();
+            MobEffectInstance active = player.getEffect(applied.getEffect());
+            if (active == null || active.isInfiniteDuration()) continue;
+            if (active.getAmplifier() != applied.getAmplifier()) continue;
+            if (active.getDuration() > applied.getDuration()) continue;
+            player.removeEffect(applied.getEffect());
+        }
     }
 
     @SubscribeEvent
@@ -99,7 +118,7 @@ public final class FoodSlotLogic {
 
     @SubscribeEvent
     public static void onEffectApplicable(MobEffectEvent.Applicable event) {
-        if (event.getEffectInstance().getEffect().is(FD_NOURISHMENT)) {
+        if (CosmicFoodRegistry.isBlockedEffect(event.getEffectInstance().getEffect())) {
             event.setResult(MobEffectEvent.Applicable.Result.DO_NOT_APPLY);
         }
     }
@@ -107,7 +126,14 @@ public final class FoodSlotLogic {
     @SubscribeEvent
     public static void onDeath(LivingDeathEvent event) {
         if (event.getEntity() instanceof ServerPlayer player) {
-            player.getData(CosmicAttachmentTypes.FOOD_DATA).clearActive();
+            CosmicFoodData data = player.getData(CosmicAttachmentTypes.FOOD_DATA);
+            data.clearActive();
+            if (data.memory != null) {
+                player.sendSystemMessage(Component
+                        .translatable("cosmiccore.hearth.memory_fades", data.memory.dishName())
+                        .withStyle(style -> style.withColor(0x8F7FB8).withItalic(true)));
+                data.setMemory(null);
+            }
         }
     }
 

@@ -8,6 +8,7 @@ import com.ghostipedia.cosmiccore.common.block.DivingBellEscapePad;
 import com.ghostipedia.cosmiccore.common.block.MagnetBlock;
 import com.ghostipedia.cosmiccore.common.block.MothHomeBlock;
 import com.ghostipedia.cosmiccore.common.blockentity.CosmicCoilBlockEntity;
+import com.ghostipedia.cosmiccore.common.food.hearth.HearthPlateBlock;
 import com.ghostipedia.cosmiccore.ember.CosmicEmberEmitterBlock;
 import com.ghostipedia.cosmiccore.ember.CosmicEmberReceptorBlock;
 
@@ -133,6 +134,16 @@ public class CosmicBlocks {
                         .partialState().with(GTBlockStateProperties.ACTIVE, true).modelForState().modelFile(active)
                         .addModel();
             });
+
+    public static final BlockEntry<HearthPlateBlock> HEARTH_PLATE = REGISTRATE
+            .block("hearth_plate", HearthPlateBlock::new)
+            .initialProperties(() -> Blocks.STONE)
+            .properties(p -> p.strength(0.5f).noOcclusion())
+            .blockstate(NonNullBiConsumer.noop())
+            .item(BlockItem::new)
+            .model(NonNullBiConsumer.noop())
+            .build()
+            .register();
 
     // New Casings ; Several reference textures from GTOCore, make sure to give credits to them!
     public static final BlockEntry<Block> REFLECTIVE_STARMETAL_CASING = createCasingBlock("reflective_starmetal_casing",

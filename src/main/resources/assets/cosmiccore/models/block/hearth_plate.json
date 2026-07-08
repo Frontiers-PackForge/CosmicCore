@@ -1,0 +1,33 @@
+{
+  "parent": "minecraft:block/block",
+  "textures": {
+    "plate": "minecraft:block/quartz_block_top",
+    "particle": "minecraft:block/quartz_block_top"
+  },
+  "elements": [
+    {
+      "from": [2, 0, 2],
+      "to": [14, 1, 14],
+      "faces": {
+        "down": { "texture": "#plate" },
+        "up": { "texture": "#plate" },
+        "north": { "texture": "#plate" },
+        "south": { "texture": "#plate" },
+        "west": { "texture": "#plate" },
+        "east": { "texture": "#plate" }
+      }
+    },
+    {
+      "from": [1, 1, 1],
+      "to": [15, 2, 15],
+      "faces": {
+        "down": { "texture": "#plate" },
+        "up": { "texture": "#plate" },
+        "north": { "texture": "#plate" },
+        "south": { "texture": "#plate" },
+        "west": { "texture": "#plate" },
+        "east": { "texture": "#plate" }
+      }
+    }
+  ]
+}

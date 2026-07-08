@@ -48,7 +48,7 @@ public abstract class CrushedBundleHandSortMixin {
     private static void cosmiccore$giveNuggets(Player player, Material material, int nuggets) {
         while (nuggets > 0) {
             int give = Math.min(nuggets, 64);
-            ItemStack out = ChemicalHelper.get(TagPrefix.nugget, material, give);
+            ItemStack out = ChemicalHelper.get(TagPrefix.dustTiny, material, give);
             nuggets -= give;
             if (!player.getInventory().add(out)) {
                 player.drop(out, false);

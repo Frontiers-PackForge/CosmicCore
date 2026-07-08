@@ -1,7 +1,9 @@
 package com.ghostipedia.cosmiccore.client;
 
 import com.ghostipedia.cosmiccore.CosmicCore;
+import com.ghostipedia.cosmiccore.common.food.CosmicFoodData;
 import com.ghostipedia.cosmiccore.common.food.FoodBar;
+import com.ghostipedia.cosmiccore.common.food.FoodMemory;
 import com.ghostipedia.cosmiccore.common.item.behavior.WirelessPDABehavior;
 
 import com.gregtechceu.gtceu.api.item.ComponentItem;
@@ -19,6 +21,7 @@ import net.minecraft.world.item.ItemStack;
 import com.mojang.blaze3d.systems.RenderSystem;
 import lombok.NoArgsConstructor;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
@@ -79,12 +82,29 @@ public class CosmicHudGuiOverlay implements LayeredDraw.Layer {
     private static List<FoodBar> foodBars = List.of();
     private static List<FoodBar> brewBars = List.of();
     private static long barsGameTime = -1;
+    @Nullable
+    private static FoodMemory memory;
 
     public static void setFoodData(List<FoodBar> foods, List<FoodBar> brews) {
         foodBars = foods;
         brewBars = brews;
         Minecraft mc = Minecraft.getInstance();
         barsGameTime = mc.level != null ? mc.level.getGameTime() : -1;
+    }
+
+    private static boolean sickened;
+
+    public static void setSickened(boolean newSickened) {
+        sickened = newSickened;
+    }
+
+    public static void setMemory(@Nullable FoodMemory newMemory) {
+        memory = newMemory;
+    }
+
+    @Nullable
+    public static FoodMemory getMemory() {
+        return memory;
     }
 
     @Override
@@ -106,6 +126,9 @@ public class CosmicHudGuiOverlay implements LayeredDraw.Layer {
         Minecraft mc = Minecraft.getInstance();
         if (mc.level != null && barsGameTime >= 0) {
             elapsed = Math.max(0, mc.level.getGameTime() - barsGameTime);
+            if (sickened) {
+                elapsed *= CosmicFoodData.SICKNESS_DECAY;
+            }
         }
         int centerX = screenWidth / 2;
         int hotbarTop = screenHeight - 22;
@@ -240,7 +263,8 @@ public class CosmicHudGuiOverlay implements LayeredDraw.Layer {
 
     private static Component computeOxygenETA() {
         if (oxygenTicksLeft <= 0) {
-            return Component.literal("SUFFOCATING").withStyle(s -> s.withColor(COLOR_DRAIN));
+            return Component.translatable("cosmiccore.hud.oxygen.suffocating")
+                    .withStyle(s -> s.withColor(COLOR_DRAIN));
         }
         if (oxygenTicksLeft >= oxygenMaxTicks) {
             return Component.literal("--:--").withStyle(s -> s.withColor(COLOR_IDLE));

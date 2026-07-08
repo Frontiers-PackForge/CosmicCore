@@ -30,7 +30,8 @@ public class CosmicCoreMixinPlugin implements IMixinConfigPlugin {
                 ".aero.",
                 "dev/eriksonn/aeronautics/content/blocks/hot_air/balloon/effect/ClientBalloonEffectRenderer.class",
                 ".sable.", "dev/ryanhcode/sable/api/block/BlockSubLevelAssemblyListener.class",
-                ".ftbchunks.", "dev/ftb/mods/ftbchunks/client/FTBChunksClient.class");
+                ".ftbchunks.", "dev/ftb/mods/ftbchunks/client/FTBChunksClient.class",
+                ".occultism.", "com/klikli_dev/occultism/crafting/recipe/PasteRepairItemRecipe.class");
         probes.forEach((token, resource) -> GATES.put(token, loader.getResource(resource) != null));
     }
 

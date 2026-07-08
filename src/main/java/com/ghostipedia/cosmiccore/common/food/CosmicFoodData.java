@@ -12,10 +12,14 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.neoforge.common.util.INBTSerializable;
 
+import org.jetbrains.annotations.Nullable;
+
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.function.ToDoubleFunction;
 
 public class CosmicFoodData implements INBTSerializable<CompoundTag> {
 
@@ -26,6 +30,31 @@ public class CosmicFoodData implements INBTSerializable<CompoundTag> {
     public List<ActiveFood> brews = new ArrayList<>();
     public int maxFoods = DEFAULT_FOOD_SLOTS;
     public int maxBrews = DEFAULT_BREW_SLOTS;
+    @Nullable
+    public FoodMemory memory;
+    public List<CookbookPage> cookbook = new ArrayList<>();
+    public long lastPageDay = -1;
+    public List<SignatureMeal> signatures = new ArrayList<>();
+    public Map<String, Integer> mealDays = new HashMap<>();
+    public Map<String, Long> mealLastDay = new HashMap<>();
+    public String lastMealKey = "";
+    public boolean sickened = false;
+
+    public static final int SICKNESS_DECAY = 120;
+
+    public boolean hasPage(String key) {
+        for (var page : cookbook) {
+            if (page.key().equals(key)) return true;
+        }
+        return false;
+    }
+
+    public boolean hasSignature(String key) {
+        for (var signature : signatures) {
+            if (signature.key().equals(key)) return true;
+        }
+        return false;
+    }
 
     public transient int lastDamageTick = -10000;
     private transient boolean dirty = false;
@@ -59,27 +88,53 @@ public class CosmicFoodData implements INBTSerializable<CompoundTag> {
     }
 
     public void tick() {
-        tickList(foods);
-        tickList(brews);
+        int step = sickened ? SICKNESS_DECAY : 1;
+        tickList(foods, step);
+        tickList(brews, step);
+        if (sickened && !hasActive()) {
+            sickened = false;
+            dirty = true;
+        }
     }
 
-    private void tickList(List<ActiveFood> list) {
-        for (ActiveFood af : list) af.ticksLeft--;
+    private void tickList(List<ActiveFood> list, int step) {
+        for (ActiveFood af : list) af.ticksLeft -= step;
         if (list.removeIf(af -> af.ticksLeft <= 0)) dirty = true;
     }
 
+    public static final double[] CHANNEL_WEIGHTS = { 1.0, 0.5, 0.25 };
+
     public double totalHeartBonus() {
-        double sum = 0;
-        for (ActiveFood af : foods) sum += af.def.heartBonus();
-        for (ActiveFood af : brews) sum += af.def.heartBonus();
-        return sum;
+        double total = softCapTotal(FoodDefinition::heartBonus) + (memory != null ? memory.heartBonus() : 0);
+        for (var signature : signatures) total += signature.heartBonus();
+        return total;
     }
 
     public double totalRegenBonus() {
-        double sum = 0;
-        for (ActiveFood af : foods) sum += af.def.regenBonus();
-        for (ActiveFood af : brews) sum += af.def.regenBonus();
-        return sum;
+        double total = softCapTotal(FoodDefinition::regenBonus) + (memory != null ? memory.regenBonus() : 0);
+        for (var signature : signatures) total += signature.regenBonus();
+        return total;
+    }
+
+    public void setMemory(@Nullable FoodMemory newMemory) {
+        memory = newMemory;
+        dirty = true;
+    }
+
+    private double softCapTotal(ToDoubleFunction<FoodDefinition> extractor) {
+        int count = foods.size() + brews.size();
+        if (count == 0) return 0;
+        double[] values = new double[count];
+        int filled = 0;
+        for (ActiveFood af : foods) values[filled++] = extractor.applyAsDouble(af.def);
+        for (ActiveFood af : brews) values[filled++] = extractor.applyAsDouble(af.def);
+        Arrays.sort(values);
+        double total = 0;
+        for (int rank = 0; rank < count; rank++) {
+            double weight = CHANNEL_WEIGHTS[Math.min(rank, CHANNEL_WEIGHTS.length - 1)];
+            total += values[count - 1 - rank] * weight;
+        }
+        return total;
     }
 
     public List<AttributeSpec> allActiveAttributes() {
@@ -112,6 +167,22 @@ public class CosmicFoodData implements INBTSerializable<CompoundTag> {
         tag.putInt("maxBrews", maxBrews);
         tag.put("foods", saveList(foods));
         tag.put("brews", saveList(brews));
+        if (memory != null) tag.put("memory", memory.toTag());
+        ListTag pages = new ListTag();
+        for (var page : cookbook) pages.add(page.toTag());
+        tag.put("cookbook", pages);
+        tag.putLong("lastPageDay", lastPageDay);
+        ListTag sigs = new ListTag();
+        for (var signature : signatures) sigs.add(signature.toTag());
+        tag.put("signatures", sigs);
+        CompoundTag progress = new CompoundTag();
+        mealDays.forEach(progress::putInt);
+        tag.put("mealDays", progress);
+        CompoundTag lastDays = new CompoundTag();
+        mealLastDay.forEach(lastDays::putLong);
+        tag.put("mealLastDay", lastDays);
+        tag.putString("lastMealKey", lastMealKey);
+        tag.putBoolean("sickened", sickened);
         return tag;
     }
 
@@ -121,6 +192,25 @@ public class CosmicFoodData implements INBTSerializable<CompoundTag> {
         maxBrews = nbt.contains("maxBrews") ? nbt.getInt("maxBrews") : DEFAULT_BREW_SLOTS;
         foods = loadList(nbt.getList("foods", Tag.TAG_COMPOUND));
         brews = loadList(nbt.getList("brews", Tag.TAG_COMPOUND));
+        memory = nbt.contains("memory") ? FoodMemory.fromTag(nbt.getCompound("memory")) : null;
+        cookbook = new ArrayList<>();
+        for (Tag element : nbt.getList("cookbook", Tag.TAG_COMPOUND)) {
+            cookbook.add(CookbookPage.fromTag((CompoundTag) element));
+        }
+        lastPageDay = nbt.contains("lastPageDay") ? nbt.getLong("lastPageDay") : -1;
+        signatures = new ArrayList<>();
+        for (Tag element : nbt.getList("signatures", Tag.TAG_COMPOUND)) {
+            var signature = SignatureMeal.fromTag((CompoundTag) element);
+            if (signature != null) signatures.add(signature);
+        }
+        mealDays = new HashMap<>();
+        CompoundTag progress = nbt.getCompound("mealDays");
+        for (String key : progress.getAllKeys()) mealDays.put(key, progress.getInt(key));
+        mealLastDay = new HashMap<>();
+        CompoundTag lastDays = nbt.getCompound("mealLastDay");
+        for (String key : lastDays.getAllKeys()) mealLastDay.put(key, lastDays.getLong(key));
+        lastMealKey = nbt.getString("lastMealKey");
+        sickened = nbt.getBoolean("sickened");
     }
 
     private static ListTag saveList(List<ActiveFood> list) {
@@ -138,9 +228,9 @@ public class CosmicFoodData implements INBTSerializable<CompoundTag> {
         List<ActiveFood> out = new ArrayList<>();
         for (Tag element : list) {
             CompoundTag t = (CompoundTag) element;
-            ResourceLocation id = ResourceLocation.tryParse(t.getString("id"));
-            if (id == null || !BuiltInRegistries.ITEM.containsKey(id)) continue;
-            out.add(new ActiveFood(BuiltInRegistries.ITEM.get(id), t.getInt("ticks")));
+            Item item = FoodNbt.item(t.getString("id"));
+            if (item == null) continue;
+            out.add(new ActiveFood(item, t.getInt("ticks")));
         }
         return out;
     }
