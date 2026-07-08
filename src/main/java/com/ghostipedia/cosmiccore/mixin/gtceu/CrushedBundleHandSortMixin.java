@@ -7,7 +7,6 @@ import com.gregtechceu.gtceu.api.data.chemical.material.Material;
 import com.gregtechceu.gtceu.api.data.chemical.material.stack.MaterialStack;
 import com.gregtechceu.gtceu.api.data.tag.TagPrefix;
 import com.gregtechceu.gtceu.api.item.TagPrefixItem;
-import com.gregtechceu.gtceu.common.data.GTMaterials;
 
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
@@ -35,13 +34,7 @@ public abstract class CrushedBundleHandSortMixin {
         if (!(stack.getItem() instanceof TagPrefixItem item) || item.tagPrefix != TagPrefix.crushed) {
             return null;
         }
-        if (item.material == CosmicBundleMaterials.Cuprosiva) {
-            return new MaterialStack(GTMaterials.Tin, 3);
-        }
-        if (item.material == CosmicBundleMaterials.Ferosine) {
-            return new MaterialStack(GTMaterials.Gold, 2);
-        }
-        return null;
+        return CosmicBundleMaterials.handSortOutput(item.material);
     }
 
     @Unique

@@ -5,6 +5,9 @@ import com.ghostipedia.cosmiccore.CosmicCore;
 import com.gregtechceu.gtceu.GTCEu;
 import com.gregtechceu.gtceu.api.data.chemical.material.Material;
 import com.gregtechceu.gtceu.api.data.chemical.material.info.MaterialIconSet;
+import com.gregtechceu.gtceu.api.data.chemical.material.stack.MaterialStack;
+
+import org.jetbrains.annotations.Nullable;
 
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -41,6 +44,7 @@ public class CosmicBundleMaterials {
     public static Material Emberite;
 
     private static final Map<Material, List<Material>> OUTPUTS = new LinkedHashMap<>();
+    private static final Map<Material, MaterialStack> HAND_SORT = new LinkedHashMap<>();
 
     public static void register() {
         Ferosine = bundle("ferosine", 0x8B5A2B, 0x5E3A1C, MaterialIconSet.ROUGH);
@@ -82,6 +86,11 @@ public class CosmicBundleMaterials {
         out(Agarlite, Cooperite, Bornite);
         out(CrudeRadionite, Pitchblende, Uraninite, Naquadah, Scheelite, Tungstate);
         out(Vanachrome, Magnetite, VanadiumMagnetite, Chromite, Bauxite, Ilmenite, Gold);
+
+        sort(Cuprosiva, Tin, 3);
+        sort(Ferosine, Gold, 2);
+        sort(Galenite, Silver, 2);
+        sort(Pyroltic, Sphalerite, 3);
     }
 
     private static Material bundle(String id, int color, int secondaryColor, MaterialIconSet iconSet) {
@@ -96,6 +105,15 @@ public class CosmicBundleMaterials {
 
     private static void out(Material bundleOre, Material... minerals) {
         OUTPUTS.put(bundleOre, List.of(minerals));
+    }
+
+    private static void sort(Material bundleOre, Material output, int tinyDusts) {
+        HAND_SORT.put(bundleOre, new MaterialStack(output, tinyDusts));
+    }
+
+    @Nullable
+    public static MaterialStack handSortOutput(Material bundleOre) {
+        return HAND_SORT.get(bundleOre);
     }
 
     public static List<Material> outputsOf(Material bundleOre) {
