@@ -932,7 +932,6 @@ public class CosmicLangHandler extends LangHandler {
     }
 
     private static void initReflectionLang(RegistrateLangProvider provider) {
-
         // Stellar Iris Module System
         provider.add("cosmiccore.multiblock.stellar_module.not_connected", "§cNot Connected to Stellar Iris");
         provider.add("cosmiccore.multiblock.stellar_module.iris_not_formed", "§cStellar Iris Not Formed");
@@ -1472,6 +1471,5 @@ public class CosmicLangHandler extends LangHandler {
         provider.add("cosmiccore.command.food.memory_fail", "Hold a real food to make a memory of it");
         provider.add("cosmiccore.command.food.dump_fail", "Food dump failed: %s");
         provider.add("cosmiccore.command.food.dump_done", "Dumped %s consumables (%s hand-defined) to %s and %s");
-
     }
 }
