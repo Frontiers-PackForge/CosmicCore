@@ -3,11 +3,14 @@ package com.ghostipedia.cosmiccore.client.tooltip;
 import com.ghostipedia.cosmiccore.CosmicCore;
 import com.ghostipedia.cosmiccore.common.food.AttributeSpec;
 import com.ghostipedia.cosmiccore.common.food.BehaviorLine;
+import com.ghostipedia.cosmiccore.common.food.CosmicFoodRegistry;
 import com.ghostipedia.cosmiccore.common.food.FoodDefinition;
 
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.effect.MobEffectCategory;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
+import net.minecraft.world.item.ItemStack;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,28 +21,57 @@ public final class FoodTooltips {
 
     public static final ResourceLocation FRAME = CosmicCore.id("tooltip/food");
 
-    private static final String G_HEALTH = "♥";
+    private static final String G_HEALTH =" ♥";
     private static final String G_REGEN = "✚";
-    private static final String G_DURATION = "⌛";
+    private static final String G_DURATION = "⧖";
     private static final String G_ATTR = "◆";
 
     private static final String[] ROMAN = { "", "I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX", "X" };
 
-    public static FoodTooltipComponent build(FoodDefinition def) {
+    public static FoodTooltipComponent buildVile() {
+        return new FoodTooltipComponent(List.of(
+                new FoodTooltipComponent.Line(new FoodTooltipComponent.Icon.Glyph("☠", 0xFFCF6679),
+                        Component.translatable("cosmiccore.tooltip.food.vile"),
+                        value(Component.translatable("cosmiccore.tooltip.food.vile_desc"), 0xE58A93)),
+                new FoodTooltipComponent.Line(new FoodTooltipComponent.Icon.Glyph("⌛", 0xFFCF6679),
+                        Component.translatable("cosmiccore.tooltip.food.vile_hunger"), value("", 0xC8A8AC))));
+    }
+
+    public static FoodTooltipComponent build(ItemStack stack, FoodDefinition def) {
         List<FoodTooltipComponent.Line> lines = new ArrayList<>();
 
-        double hearts = def.heartBonus() / 2.0;
+        String family = CosmicFoodRegistry.archetypeNameFor(stack);
+        Component familyLabel = switch (family) {
+            case "defined" -> Component.translatable("cosmiccore.food.family.defined");
+            case "auto" -> Component.translatable("cosmiccore.food.family.auto");
+            default -> Component.translatableWithFallback("cosmiccore.food.family." + family,
+                    Character.toUpperCase(family.charAt(0)) + family.substring(1));
+        };
+        Component role = CosmicFoodRegistry.plateRole(stack, family).label();
+        lines.add(new FoodTooltipComponent.Line(new FoodTooltipComponent.Icon.Glyph("✦", 0xFFB9A5E3),
+                familyLabel, value(role, 0xCFC0EE)));
+
+        double hearts = FoodDefinition.heartsFromHealth(def.heartBonus());
         if (hearts != 0) {
             lines.add(new FoodTooltipComponent.Line(new FoodTooltipComponent.Icon.Glyph(G_HEALTH, 0xFFFF6B6B),
-                    Component.literal("Max health"), value(signed(hearts) + " " + G_HEALTH, 0xFF8F8F)));
+                    Component.translatable("cosmiccore.tooltip.food.max_health"),
+                    value(signed(hearts) + " " + G_HEALTH, 0xFF8F8F)));
         }
         if (def.regenBonus() != 0) {
             lines.add(new FoodTooltipComponent.Line(new FoodTooltipComponent.Icon.Glyph(G_REGEN, 0xFFFF9BCE),
-                    Component.literal("Health regen"), value(signed(def.regenBonus()) + "/s", 0xFFB3DA)));
+                    Component.translatable("cosmiccore.tooltip.food.regen"),
+                    value(signed(def.regenBonus()) + "/s", 0xFFB3DA)));
         }
         for (FoodDefinition.EffectSpec spec : def.effects()) {
             lines.add(new FoodTooltipComponent.Line(new FoodTooltipComponent.Icon.Effect(spec.effect()),
                     spec.effect().value().getDisplayName().copy(), value(roman(spec.amplifier() + 1), 0x8EE6B0)));
+        }
+        for (FoodDefinition.ConsumeEffectSpec spec : def.consumeEffects()) {
+            boolean harmful = spec.effect().value().getCategory() == MobEffectCategory.HARMFUL;
+            lines.add(new FoodTooltipComponent.Line(new FoodTooltipComponent.Icon.Effect(spec.effect()),
+                    spec.effect().value().getDisplayName().copy(),
+                    value(roman(spec.amplifier() + 1) + " (" + mmss(spec.durationTicks() / 20) + ")",
+                            harmful ? 0xFF8A80 : 0xC8C8C8)));
         }
         for (AttributeSpec spec : def.attributes()) {
             lines.add(new FoodTooltipComponent.Line(new FoodTooltipComponent.Icon.Glyph(G_ATTR, 0xFF7FB2FF),
@@ -52,13 +84,18 @@ public final class FoodTooltips {
                     Component.literal(behavior.label()), value(behavior.value(), behavior.color() & 0xFFFFFF)));
         }
         lines.add(new FoodTooltipComponent.Line(new FoodTooltipComponent.Icon.Glyph(G_DURATION, 0xFFFFD166),
-                Component.literal("Duration"), value(mmss(def.durationTicks() / 20), 0xFFDD8A)));
+                Component.translatable("cosmiccore.tooltip.food.duration"),
+                value(mmss(def.durationTicks() / 20), 0xFFDD8A)));
 
         return new FoodTooltipComponent(lines);
     }
 
     private static Component value(String text, int rgb) {
-        return Component.literal(text).withStyle(style -> style.withColor(rgb));
+        return value(Component.literal(text), rgb);
+    }
+
+    private static Component value(Component text, int rgb) {
+        return text.copy().withStyle(style -> style.withColor(rgb));
     }
 
     private static String signed(double v) {

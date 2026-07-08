@@ -30,7 +30,8 @@ public final class FoodTooltipEvents {
     public static void onGather(RenderTooltipEvent.GatherComponents event) {
         ItemStack stack = event.getItemStack();
         if (!CosmicFoodRegistry.isConsumable(stack)) return;
-        FoodTooltipComponent block = FoodTooltips.build(CosmicFoodRegistry.get(stack));
+        FoodTooltipComponent block = CosmicFoodRegistry.isVile(stack.getItem()) ? FoodTooltips.buildVile() :
+                FoodTooltips.build(stack, CosmicFoodRegistry.get(stack));
         event.getTooltipElements().add(Either.right(block));
     }
 

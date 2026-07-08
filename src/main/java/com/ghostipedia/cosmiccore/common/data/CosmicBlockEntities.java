@@ -1,5 +1,6 @@
 package com.ghostipedia.cosmiccore.common.data;
 
+import com.ghostipedia.cosmiccore.common.food.hearth.HearthPlateBlockEntity;
 import com.ghostipedia.cosmiccore.ember.blockentity.CosmicEmberEmitterBlockEntity;
 import com.ghostipedia.cosmiccore.ember.blockentity.CosmicEmberReceptorBlockEntity;
 
@@ -16,6 +17,12 @@ import static com.ghostipedia.cosmiccore.common.data.CosmicBlocks.EMBER_EMITTER_
 import static com.ghostipedia.cosmiccore.common.data.CosmicBlocks.EMBER_RECEPTOR_BLOCKS;
 
 public class CosmicBlockEntities {
+
+    public static final BlockEntityEntry<HearthPlateBlockEntity> HEARTH_PLATE_BE = REGISTRATE
+            .<HearthPlateBlockEntity>blockEntity("hearth_plate",
+                    (type, pos, state) -> new HearthPlateBlockEntity(type, pos, state))
+            .validBlock(CosmicBlocks.HEARTH_PLATE)
+            .register();
 
     public static final Map<Integer, BlockEntityEntry<CosmicEmberEmitterBlockEntity>> COSMIC_EMBER_EMITTER_BE = registerEmberEmitters();
     public static final Map<Integer, BlockEntityEntry<CosmicEmberReceptorBlockEntity>> COSMIC_EMBER_RECEIVER_BE = registerEmberReceptors();

@@ -39,7 +39,7 @@ public class CosmicFoodBuilder {
     }
 
     public CosmicFoodBuilder health(double hearts) {
-        this.heartBonus = hearts * 2.0;
+        this.heartBonus = FoodDefinition.healthFromHearts(hearts);
         return this;
     }
 
@@ -54,7 +54,7 @@ public class CosmicFoodBuilder {
     }
 
     public CosmicFoodBuilder effect(String id, int amplifier) {
-        effects.add(new FoodDefinition.EffectSpec(effectHolder(id), amplifier));
+        effects.add(effectSpec(id, amplifier));
         return this;
     }
 
@@ -63,8 +63,16 @@ public class CosmicFoodBuilder {
     }
 
     public CosmicFoodBuilder attribute(String id, double amount, String operation) {
-        attributes.add(new AttributeSpec(attributeHolder(id), amount, operation(operation)));
+        attributes.add(attributeSpec(id, amount, operation));
         return this;
+    }
+
+    public static FoodDefinition.EffectSpec effectSpec(String id, int amplifier) {
+        return new FoodDefinition.EffectSpec(effectHolder(id), amplifier);
+    }
+
+    public static AttributeSpec attributeSpec(String id, double amount, String operation) {
+        return new AttributeSpec(attributeHolder(id), amount, operation(operation));
     }
 
     public CosmicFoodBuilder behavior(String glyph, String color, String label, String value) {
@@ -74,7 +82,7 @@ public class CosmicFoodBuilder {
 
     public FoodDefinition build() {
         return new FoodDefinition(category, heartBonus, regenBonus, durationTicks, List.copyOf(effects),
-                List.copyOf(attributes), List.copyOf(behaviors));
+                List.copyOf(attributes), List.copyOf(behaviors), List.of());
     }
 
     private static Holder<MobEffect> effectHolder(String id) {
@@ -97,12 +105,12 @@ public class CosmicFoodBuilder {
         };
     }
 
-    private static int parseColor(String color) {
+    public static int parseColor(String color) {
         String hex = color.startsWith("#") ? color.substring(1) : color;
         return 0xFF000000 | Integer.parseInt(hex, 16);
     }
 
-    private static int parseDuration(Object duration) {
+    public static int parseDuration(Object duration) {
         if (duration instanceof Number number) return number.intValue();
         String s = duration.toString().trim().toLowerCase();
         if (s.isEmpty()) return 6000;

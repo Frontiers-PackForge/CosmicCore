@@ -2106,5 +2106,40 @@ public class CosmicLangHandler extends LangHandler {
                 "You are now %s. Something fundamental changed.");
         provider.add("reflection.cosmiccore.ui.soul_shape.complete.1",
                 "There's no returning to what you were.");
+        provider.add("cosmiccore.hud.oxygen.suffocating", "SUFFOCATING");
+        // Food system and the Hearth
+        provider.add("cosmiccore.food.sickened", "Your stomach turns. Your meals are slipping away.");
+        provider.add("cosmiccore.food.family.defined", "Special");
+        provider.add("cosmiccore.food.family.auto", "Food");
+        provider.add("cosmiccore.food.role.main", "Main Course");
+        provider.add("cosmiccore.food.role.side", "Side Dish");
+        provider.add("cosmiccore.food.role.drink", "Drink");
+        provider.add("cosmiccore.tooltip.food.vile", "Vile");
+        provider.add("cosmiccore.tooltip.food.vile_desc", "causes onset of hunger at a rapid rate");
+        provider.add("cosmiccore.tooltip.food.vile_hunger", "You feel the need to eat again");
+        provider.add("cosmiccore.tooltip.food.max_health", "Max health");
+        provider.add("cosmiccore.tooltip.food.regen", "Health regen");
+        provider.add("cosmiccore.tooltip.food.duration", "Duration");
+        provider.add("cosmiccore.hearth.memory_fades", "The memory of %s fades.");
+        provider.add("cosmiccore.hearth.memory_settles", "The memory of %s settles in.");
+        provider.add("cosmiccore.hearth.page_broadens", "You add a new page in your cookbook as your palate broadens.");
+        provider.add("cosmiccore.hearth.page", "You add a new page in your cookbook.");
+        provider.add("cosmiccore.hearth.taken_root",
+                "%s has became a unforgettable meal! Eat it at home once more and inscribe it with /cosmicfood inscribe.");
+        provider.add("cosmiccore.hearth.inscribe.no_memory", "You carry no meal memory to inscribe.");
+        provider.add("cosmiccore.hearth.inscribe.already", "%s is already part of you.");
+        provider.add("cosmiccore.hearth.inscribe.not_rooted", "This meal has not taken root in you yet.");
+        provider.add("cosmiccore.hearth.inscribe.full", "You already carry %s signature meals.");
+        provider.add("cosmiccore.hearth.inscribe.done", "%s is part of you now.");
+        provider.add("cosmiccore.hearth.plate.vile", "You wouldn't serve that.");
+        provider.add("cosmiccore.hearth.plate.drink_full", "A drink is already poured.");
+        provider.add("cosmiccore.hearth.plate.side_full", "The side is already plated.");
+        provider.add("cosmiccore.hearth.plate.main_full", "The main course is already served.");
+        provider.add("cosmiccore.hearth.plate.no_main", "A meal needs a main course.");
+        provider.add("cosmiccore.hearth.plate.not_home", "Too far from your bed to feel at home.");
+        provider.add("cosmiccore.command.players_only", "Players only");
+        provider.add("cosmiccore.command.food.memory_fail", "Hold a real food to make a memory of it");
+        provider.add("cosmiccore.command.food.dump_fail", "Food dump failed: %s");
+        provider.add("cosmiccore.command.food.dump_done", "Dumped %s consumables (%s hand-defined) to %s and %s");
     }
 }

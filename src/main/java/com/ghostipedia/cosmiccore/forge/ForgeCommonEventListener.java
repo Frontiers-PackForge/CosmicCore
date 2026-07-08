@@ -10,6 +10,7 @@ import com.ghostipedia.cosmiccore.common.commands.VeinSurveyCommand;
 import com.ghostipedia.cosmiccore.common.commands.WirelessEnergyCommand;
 import com.ghostipedia.cosmiccore.common.data.CosmicItems;
 import com.ghostipedia.cosmiccore.common.data.worldgen.field.FieldDiscoveryData;
+import com.ghostipedia.cosmiccore.common.food.CosmicFoodCommand;
 import com.ghostipedia.cosmiccore.common.item.armor.boots.ICosmicBoots;
 import com.ghostipedia.cosmiccore.common.item.behavior.EffectApplicationBehavior;
 import com.ghostipedia.cosmiccore.common.mirror.deed.DeedCommand;
@@ -137,6 +138,7 @@ public class ForgeCommonEventListener {
         VeinSurveyCommand.register(event.getDispatcher());
         ExportRegistryCommand.register(event.getDispatcher());
         StarLadderCommand.register(event.getDispatcher());
+        CosmicFoodCommand.register(event.getDispatcher());
         DeedCommand.register(event.getDispatcher());
     }
 
