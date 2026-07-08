@@ -12,6 +12,8 @@ import com.ghostipedia.cosmiccore.api.registries.CosmicRegistration;
 import com.ghostipedia.cosmiccore.client.CosmicCoreClient;
 import com.ghostipedia.cosmiccore.common.airControl.OxygenRules;
 import com.ghostipedia.cosmiccore.common.commands.argument.SoulTypeArgument;
+import com.ghostipedia.cosmiccore.common.compat.ars.ArsSealCompat;
+import com.ghostipedia.cosmiccore.common.compat.lso.LsoFoodCompat;
 import com.ghostipedia.cosmiccore.common.data.*;
 import com.ghostipedia.cosmiccore.common.data.materials.CosmicBundleMaterials;
 import com.ghostipedia.cosmiccore.common.data.materials.CosmicElements;
@@ -124,6 +126,12 @@ public class CosmicCore {
             ArgumentTypeInfos.registerByClass(SoulTypeArgument.class,
                     SingletonArgumentInfo.contextFree(SoulTypeArgument::soulType));
             CosmicCoreOreRecipeHandler.disableBundleCauldronWash();
+            if (LsoFoodCompat.isLoaded()) {
+                LsoFoodCompat.retuneEffects();
+            }
+            if (ArsSealCompat.isLoaded()) {
+                ArsSealCompat.register();
+            }
         });
     }
 

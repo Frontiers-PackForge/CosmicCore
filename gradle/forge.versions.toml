@@ -26,6 +26,7 @@ resourcefullib = "3.0.12"
 tmrv = "0.8.1+mc.21.1"
 
 ## content mods (versions verified resolvable for NeoForge 1.21.1) ##
+arsnouveau = "5.12.0"
 malum = "1.8.2"
 lodestone = "1.8.2"
 occultism = "1.221.0"
@@ -84,6 +85,7 @@ ftblibrary          = { module = "dev.ftb.mods:ftb-library-neoforge", version.re
 ftbteams            = { module = "dev.ftb.mods:ftb-teams-neoforge", version.ref = "ftbteams" }
 resourcefullib      = { module = "com.teamresourceful.resourcefullib:resourcefullib-neoforge-1.21", version.ref = "resourcefullib" }
 
+arsnouveau          = { module = "maven.modrinth:ars-nouveau", version.ref = "arsnouveau" }
 malum               = { module = "maven.modrinth:malum", version.ref = "malum" }
 lodestone           = { module = "maven.modrinth:lodestonelib", version.ref = "lodestone" }
 occultism           = { module = "com.klikli_dev:occultism-1.21.1-neoforge", version.ref = "occultism" }

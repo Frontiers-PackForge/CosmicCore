@@ -15,7 +15,6 @@ import com.gregtechceu.gtceu.api.recipe.content.ContentModifier;
 import com.gregtechceu.gtceu.api.recipe.modifier.ModifierFunction;
 import com.gregtechceu.gtceu.api.recipe.modifier.ParallelLogic;
 import com.gregtechceu.gtceu.api.recipe.modifier.RecipeModifier;
-import com.gregtechceu.gtceu.api.sync_system.annotations.SyncToClient;
 import com.gregtechceu.gtceu.common.data.GTMaterials;
 import com.gregtechceu.gtceu.data.recipe.builder.GTRecipeBuilder;
 
@@ -39,12 +38,9 @@ public class ExoticCombustionEngineMachine extends WorkableElectricMultiblockMac
     private String currentBooster;
     @Getter
     private final int tier;
-    // Probably a bad idea, most likely a better way to do this
     @Getter
-    @SyncToClient
     private static final Object2IntMap<FluidStack> lubricantTiers = new Object2IntOpenHashMap<>();
     @Getter
-    @SyncToClient
     private static final Object2IntMap<FluidStack> boostingTiers = new Object2IntOpenHashMap<>();
 
     static {

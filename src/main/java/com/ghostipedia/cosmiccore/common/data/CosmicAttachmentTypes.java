@@ -12,6 +12,8 @@ import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import net.neoforged.neoforge.registries.NeoForgeRegistries;
 
+import com.mojang.serialization.Codec;
+
 public class CosmicAttachmentTypes {
 
     public static final DeferredRegister<AttachmentType<?>> ATTACHMENT_TYPES = DeferredRegister
@@ -36,4 +38,8 @@ public class CosmicAttachmentTypes {
     public static final DeferredHolder<AttachmentType<?>, AttachmentType<CosmicFoodData>> FOOD_DATA = ATTACHMENT_TYPES
             .register("food_data",
                     () -> AttachmentType.serializable(holder -> new CosmicFoodData()).copyOnDeath().build());
+
+    public static final DeferredHolder<AttachmentType<?>, AttachmentType<Boolean>> ABYSS_ATTUNED = ATTACHMENT_TYPES
+            .register("abyss_attuned",
+                    () -> AttachmentType.builder(() -> false).serialize(Codec.BOOL).copyOnDeath().build());
 }

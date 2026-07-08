@@ -9,6 +9,7 @@ import com.ghostipedia.cosmiccore.common.network.packet.OxygenWarnPacket;
 import com.ghostipedia.cosmiccore.common.network.packet.RevealFieldsPacket;
 import com.ghostipedia.cosmiccore.common.network.packet.StarLadderUplinkPackets;
 import com.ghostipedia.cosmiccore.common.network.packet.StellarUpgradePacket;
+import com.ghostipedia.cosmiccore.common.network.packet.SyncAbyssAttunementPacket;
 import com.ghostipedia.cosmiccore.common.network.packet.SyncFoodDataPacket;
 import com.ghostipedia.cosmiccore.common.network.packet.SyncOxygenBarPacket;
 import com.ghostipedia.cosmiccore.common.network.packet.SyncPredictedVeinsPacket;
@@ -43,6 +44,8 @@ public class CCoreNetwork {
         registrar.playToClient(SyncTimeBarPacket.TYPE, SyncTimeBarPacket.CODEC, SyncTimeBarPacket::execute);
         registrar.playToClient(AbyssTimeWarnPacket.TYPE, AbyssTimeWarnPacket.CODEC, AbyssTimeWarnPacket::execute);
         registrar.playToClient(SyncOxygenBarPacket.TYPE, SyncOxygenBarPacket.CODEC, SyncOxygenBarPacket::execute);
+        registrar.playToClient(SyncAbyssAttunementPacket.TYPE, SyncAbyssAttunementPacket.CODEC,
+                SyncAbyssAttunementPacket::execute);
         registrar.playToClient(SyncFoodDataPacket.TYPE, SyncFoodDataPacket.CODEC, SyncFoodDataPacket::execute);
         registrar.playToClient(MurkbloomSyncPacket.TYPE, MurkbloomSyncPacket.CODEC, MurkbloomSyncPacket::execute);
         registrar.playToClient(OxygenWarnPacket.TYPE, OxygenWarnPacket.CODEC, OxygenWarnPacket::execute);
