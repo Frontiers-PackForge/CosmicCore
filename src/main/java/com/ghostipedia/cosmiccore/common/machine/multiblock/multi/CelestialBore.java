@@ -12,6 +12,7 @@ import com.gregtechceu.gtceu.api.multiblock.pattern.MultiblockPatternBuilder;
 import com.gregtechceu.gtceu.common.data.GTBlocks;
 import com.gregtechceu.gtceu.common.data.GTMaterials;
 
+import static com.ghostipedia.cosmiccore.api.pattern.CosmicPredicates.autoAbilitiesNoEnergyIn;
 import static com.ghostipedia.cosmiccore.api.registries.CosmicRegistration.REGISTRATE;
 import static com.ghostipedia.cosmiccore.common.data.CosmicBlocks.*;
 import static com.gregtechceu.gtceu.api.multiblock.Predicates.*;
@@ -92,7 +93,7 @@ public class CelestialBore {
                     .where('L', blocks(GTBlocks.FUSION_GLASS.get()))
                     .where('M', blocks(MAGNET_STELLAR_GRADE.get()))
                     .where('N', blocks(TRITANIUM_LINED_HEAVY_NEUTRONIUM_CASING.get())
-                            .or(autoAbilities(CosmicRecipeTypes.CELESTIAL_BORE))
+                            .or(autoAbilitiesNoEnergyIn(CosmicRecipeTypes.CELESTIAL_BORE))
                             .or(abilities(PartAbility.IMPORT_FLUIDS))
                             .or(abilities(PartAbility.EXPORT_ITEMS, PartAbility.IMPORT_ITEMS))
                             .or(abilities(PartAbility.INPUT_ENERGY).setExactLimit(1))

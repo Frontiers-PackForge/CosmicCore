@@ -17,6 +17,7 @@ import com.gregtechceu.gtceu.common.data.GTRecipeModifiers;
 
 import static com.ghostipedia.cosmiccore.api.machine.part.CosmicPartAbility.EXPORT_SOUL;
 import static com.ghostipedia.cosmiccore.api.machine.part.CosmicPartAbility.IMPORT_SOUL;
+import static com.ghostipedia.cosmiccore.api.pattern.CosmicPredicates.autoAbilitiesNoEnergyIn;
 import static com.ghostipedia.cosmiccore.api.registries.CosmicRegistration.REGISTRATE;
 import static com.ghostipedia.cosmiccore.common.data.CosmicBlocks.*;
 import static com.gregtechceu.gtceu.api.multiblock.Predicates.*;
@@ -46,7 +47,7 @@ public class OneiricSieve {
                     .where('A', blocks(SOUL_MUTED_CASING.get()))
                     .where('B', blocks(SOMARUST_CASING.get()))
                     .where('C', blocks(SUPERHEAVY_STEEL_CASING.get())
-                            .or(autoAbilities(CosmicRecipeTypes.ONEIRIC_SIEVE))
+                            .or(autoAbilitiesNoEnergyIn(CosmicRecipeTypes.ONEIRIC_SIEVE))
                             .or(autoAbilities(true, false, false))
                             .or(Predicates.abilities(PartAbility.INPUT_ENERGY).setMinGlobalLimited(1)
                                     .setMaxGlobalLimited(2))

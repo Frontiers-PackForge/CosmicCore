@@ -14,6 +14,7 @@ import com.gregtechceu.gtceu.api.recipe.OverclockingLogic;
 import com.gregtechceu.gtceu.common.data.GTMaterials;
 import com.gregtechceu.gtceu.common.data.GTRecipeModifiers;
 
+import static com.ghostipedia.cosmiccore.api.pattern.CosmicPredicates.autoAbilitiesNoEnergyIn;
 import static com.ghostipedia.cosmiccore.api.registries.CosmicRegistration.REGISTRATE;
 import static com.gregtechceu.gtceu.api.multiblock.Predicates.*;
 import static com.gregtechceu.gtceu.common.data.GTBlocks.CASING_INVAR_HEATPROOF;
@@ -40,8 +41,8 @@ public class Roaster {
                     .where('Q', controller(blocks(definition.getBlock())))
                     .where('A', frames(GTMaterials.BlackSteel))
                     .where('B', blocks(CASING_INVAR_HEATPROOF.get())
-                            .or(autoAbilities(CosmicRecipeTypes.LARGE_ROASTER))
-                            .or(abilities(PartAbility.INPUT_ENERGY).setMaxGlobalLimited(2,2))
+                            .or(autoAbilitiesNoEnergyIn(CosmicRecipeTypes.LARGE_ROASTER))
+                            .or(abilities(PartAbility.INPUT_ENERGY).setMinGlobalLimited(1).setMaxGlobalLimited(2,2))
                             .or(abilities(CosmicPartAbility.IMPORT_EMBER).setMaxGlobalLimited(1,1))
                             .or(abilities(PartAbility.MAINTENANCE).setExactLimit(1)))
                     .build())

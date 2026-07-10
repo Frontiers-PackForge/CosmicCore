@@ -15,6 +15,7 @@ import com.gregtechceu.gtceu.common.data.GTBlocks;
 import com.gregtechceu.gtceu.common.data.GTMaterials;
 import com.gregtechceu.gtceu.common.data.GTRecipeModifiers;
 
+import static com.ghostipedia.cosmiccore.api.pattern.CosmicPredicates.autoAbilitiesNoEnergyIn;
 import static com.ghostipedia.cosmiccore.api.registries.CosmicRegistration.REGISTRATE;
 import static com.ghostipedia.cosmiccore.common.data.CosmicBlocks.*;
 import static com.gregtechceu.gtceu.api.multiblock.Predicates.*;
@@ -102,7 +103,7 @@ public class ComponentAssemblyLine {
                     .where('H', frames(GTMaterials.Neutronium))
                     .where('I', blocks(TRITANIUM_LINED_HEAVY_NEUTRONIUM_CASING.get()))
                     .where('J', blocks(BICHROMAL_NEVRAMITE_CASING.get())
-                            .or(autoAbilities(CosmicRecipeTypes.MANA_DIGITIZER,CosmicRecipeTypes.MANA_FLUIDIZER))
+                            .or(autoAbilitiesNoEnergyIn(CosmicRecipeTypes.MANA_DIGITIZER,CosmicRecipeTypes.MANA_FLUIDIZER))
                             .or(abilities(PartAbility.INPUT_ENERGY).setExactLimit(1))
                             .or(abilities(PartAbility.PARALLEL_HATCH).setExactLimit(1))
                             .or(abilities(PartAbility.MAINTENANCE).setExactLimit(1)))

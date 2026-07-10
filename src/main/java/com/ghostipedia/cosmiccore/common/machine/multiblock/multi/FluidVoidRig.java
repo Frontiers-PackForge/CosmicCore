@@ -18,6 +18,7 @@ import com.gregtechceu.gtceu.common.data.GTRecipeModifiers;
 
 import net.minecraft.network.chat.Component;
 
+import static com.ghostipedia.cosmiccore.api.pattern.CosmicPredicates.autoAbilitiesNoEnergyIn;
 import static com.ghostipedia.cosmiccore.api.registries.CosmicRegistration.REGISTRATE;
 import static com.ghostipedia.cosmiccore.common.data.CosmicBlocks.*;
 import static com.gregtechceu.gtceu.api.multiblock.Predicates.*;
@@ -51,7 +52,7 @@ public class FluidVoidRig {
                     .where(' ', any())
                     .where('Q', controller(blocks(definition.getBlock())))
                     .where('A', blocks(GILDED_PTHANTERUM_CASING.get()).setMinGlobalLimited(105)
-                            .or(autoAbilities(CosmicRecipeTypes.VOID_MINER))
+                            .or(autoAbilitiesNoEnergyIn(CosmicRecipeTypes.VOID_MINER))
                             .or(abilities(PartAbility.IMPORT_FLUIDS,PartAbility.IMPORT_FLUIDS_4X,PartAbility.IMPORT_FLUIDS_9X))
                             .or(abilities(PartAbility.EXPORT_ITEMS))
                             .or(abilities(PartAbility.EXPORT_FLUIDS))

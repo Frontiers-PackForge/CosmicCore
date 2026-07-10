@@ -15,6 +15,7 @@ import com.gregtechceu.gtceu.common.data.GTRecipeModifiers;
 
 import net.minecraft.world.level.block.Blocks;
 
+import static com.ghostipedia.cosmiccore.api.pattern.CosmicPredicates.autoAbilitiesNoEnergyIn;
 import static com.ghostipedia.cosmiccore.api.registries.CosmicRegistration.REGISTRATE;
 import static com.ghostipedia.cosmiccore.common.data.CosmicBlocks.LIGHTWEIGHT_DARK_STEEL_CASING;
 import static com.ghostipedia.cosmiccore.common.data.CosmicBlocks.LIGHTWEIGHT_INDUSTRIAL_CASING;
@@ -32,15 +33,15 @@ public class DissolutionVat {
             .recipeType(CosmicRecipeTypes.DISSOLUTION_VAT)
             .recipeModifiers(CosmicRecipeModifiers.LOCKED_PARALLEL_8,
                     GTRecipeModifiers.ELECTRIC_OVERCLOCK.apply(OverclockingLogic.NON_PERFECT_OVERCLOCK_SUBTICK))
-            .pattern(definition -> MultiblockPatternBuilder.start(RIGHT, UP, FRONT)
+            .pattern(definition -> MultiblockPatternBuilder.start(LEFT, UP, BACK)
                     .slice("CAAAAAC", "CAAAAAC", "CAAAAAC")
                     .slice("AAAAAAA", "ADDDDDA", "AEEEEEA")
                     .slice("CAAAAAC", "CAAAAAC", "CAAAAAC")
                     .slice("  AAA  ", "  ABA  ", "       ")
                     .where('B', Predicates.controller(blocks(definition.getBlock())))
-                    .where(' ', Predicates.air())
+                    .where(' ', Predicates.any())
                     .where('A', blocks(LIGHTWEIGHT_DARK_STEEL_CASING.get())
-                            .or(autoAbilities(CosmicRecipeTypes.DISSOLUTION_VAT))
+                            .or(autoAbilitiesNoEnergyIn(CosmicRecipeTypes.DISSOLUTION_VAT))
                             .or(abilities(PartAbility.INPUT_ENERGY).setExactLimit(1))
                             .or(abilities(PartAbility.MAINTENANCE).setExactLimit(1)))
                     .where('C', blocks(LIGHTWEIGHT_INDUSTRIAL_CASING.get()))

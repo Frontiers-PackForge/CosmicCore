@@ -16,6 +16,7 @@ import com.gregtechceu.gtceu.common.data.GTRecipeModifiers;
 
 import com.sammy.malum.registry.common.block.MalumBlocks;
 
+import static com.ghostipedia.cosmiccore.api.pattern.CosmicPredicates.autoAbilitiesNoEnergyIn;
 import static com.ghostipedia.cosmiccore.api.registries.CosmicRegistration.REGISTRATE;
 import static com.ghostipedia.cosmiccore.common.data.CosmicBlocks.HIGH_TEMP_FISSION_CASING;
 import static com.gregtechceu.gtceu.api.multiblock.Predicates.*;
@@ -44,8 +45,8 @@ public class VoidSaltReactor {
                     .where(' ', any())
                     .where('Q', controller(blocks(definition.getBlock())))
                     .where('A', blocks(HIGH_TEMP_FISSION_CASING.get())
-                            .or(autoAbilities(CosmicRecipeTypes.VOID_SALT_FISSION))
-                            .or(abilities(PartAbility.INPUT_ENERGY).setMaxGlobalLimited(2,2))
+                            .or(autoAbilitiesNoEnergyIn(CosmicRecipeTypes.VOID_SALT_FISSION))
+                            .or(abilities(PartAbility.INPUT_ENERGY).setMinGlobalLimited(1).setMaxGlobalLimited(2,2))
                             .or(abilities(PartAbility.MAINTENANCE).setExactLimit(1)))
                     .where('B', blocks(MalumBlocks.BLOCK_OF_SOULSTONE.get()))
                     .where('C', blocks(CosmicBlocks.HIGHLY_CONDUCTIVE_FISSION_CASING.get()))

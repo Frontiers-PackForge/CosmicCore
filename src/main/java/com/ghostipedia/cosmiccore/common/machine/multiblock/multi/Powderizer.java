@@ -14,6 +14,7 @@ import com.gregtechceu.gtceu.api.recipe.OverclockingLogic;
 import com.gregtechceu.gtceu.common.data.GTMaterials;
 import com.gregtechceu.gtceu.common.data.GTRecipeModifiers;
 
+import static com.ghostipedia.cosmiccore.api.pattern.CosmicPredicates.autoAbilitiesNoEnergyIn;
 import static com.ghostipedia.cosmiccore.api.registries.CosmicRegistration.REGISTRATE;
 import static com.ghostipedia.cosmiccore.common.data.CosmicBlocks.LIGHTWEIGHT_DARK_STEEL_CASING;
 import static com.gregtechceu.gtceu.api.multiblock.Predicates.*;
@@ -30,16 +31,16 @@ public class Powderizer {
             .recipeType(CosmicRecipeTypes.POWDERIZER)
             .recipeModifiers(CosmicRecipeModifiers.LOCKED_PARALLEL_8,
                     GTRecipeModifiers.ELECTRIC_OVERCLOCK.apply(OverclockingLogic.NON_PERFECT_OVERCLOCK_SUBTICK))
-            .pattern(definition -> MultiblockPatternBuilder.start(BACK, UP, LEFT)
+            .pattern(definition -> MultiblockPatternBuilder.start(LEFT, UP, BACK)
                     .slice(" AAA ", " A A ", " B B ", " B B ", " A A ", " AAA ")
                     .slice("AAAAA", "A C A", "B   B", "B   B", "A C A", "AAAAA")
                     .slice("DAAAA", "  CC ", " CC  ", "  C  ", "  CC ", "AAAAA")
                     .slice("AAAAA", "A   A", "B   B", "B C B", "A   A", "AAAAA")
                     .slice(" AAA ", " A A ", " B B ", " B B ", " A A ", " AAA ")
                     .where('D', Predicates.controller(blocks(definition.getBlock())))
-                    .where(' ', Predicates.air())
+                    .where(' ', Predicates.any())
                     .where('A', blocks(LIGHTWEIGHT_DARK_STEEL_CASING.get())
-                            .or(autoAbilities(CosmicRecipeTypes.POWDERIZER))
+                            .or(autoAbilitiesNoEnergyIn(CosmicRecipeTypes.POWDERIZER))
                             .or(abilities(PartAbility.INPUT_ENERGY).setExactLimit(1))
                             .or(abilities(PartAbility.MAINTENANCE).setExactLimit(1)))
                     .where('B', frames(GTMaterials.Steel))

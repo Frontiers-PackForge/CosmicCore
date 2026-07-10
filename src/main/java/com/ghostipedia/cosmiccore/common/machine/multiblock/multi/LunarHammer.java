@@ -17,6 +17,7 @@ import com.gregtechceu.gtceu.common.data.GTBlocks;
 import com.gregtechceu.gtceu.common.data.GTMaterials;
 import com.gregtechceu.gtceu.common.data.GTRecipeModifiers;
 
+import static com.ghostipedia.cosmiccore.api.pattern.CosmicPredicates.autoAbilitiesNoEnergyIn;
 import static com.ghostipedia.cosmiccore.api.registries.CosmicRegistration.REGISTRATE;
 import static com.ghostipedia.cosmiccore.common.data.CosmicBlocks.*;
 import static com.gregtechceu.gtceu.api.multiblock.Predicates.*;
@@ -58,7 +59,7 @@ public class LunarHammer {
                     .where('A', blocks(OSCILLATING_GILDED_PTHANTERUM_CASING.get())) //Part IO go here
                     .where('B', blocks(CASING_HIGH_TEMPERATURE_SMELTING.get())
                             .or(autoAbilities())
-                            .or(autoAbilities(CosmicRecipeTypes.HEAVY_ASSEMBLER))
+                            .or(autoAbilitiesNoEnergyIn(CosmicRecipeTypes.HEAVY_ASSEMBLER))
                             .or(abilities(PartAbility.IMPORT_FLUIDS,PartAbility.IMPORT_FLUIDS_4X,PartAbility.IMPORT_FLUIDS_9X))
                             .or(abilities(PartAbility.INPUT_ENERGY,PartAbility.INPUT_LASER).setExactLimit(1))
                             .or(abilities(PartAbility.MAINTENANCE).setExactLimit(1)))
