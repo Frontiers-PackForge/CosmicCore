@@ -14,6 +14,7 @@ import com.gregtechceu.gtceu.api.recipe.OverclockingLogic;
 import com.gregtechceu.gtceu.common.data.GTMaterials;
 import com.gregtechceu.gtceu.common.data.GTRecipeModifiers;
 
+import static com.ghostipedia.cosmiccore.api.pattern.CosmicPredicates.autoAbilitiesNoEnergyIn;
 import static com.ghostipedia.cosmiccore.api.registries.CosmicRegistration.REGISTRATE;
 import static com.ghostipedia.cosmiccore.common.data.CosmicBlocks.LIGHTWEIGHT_DARK_STEEL_CASING;
 import static com.gregtechceu.gtceu.api.multiblock.Predicates.*;
@@ -31,16 +32,16 @@ public class IndustrialOreSorter {
             .recipeType(CosmicRecipeTypes.INDUSTRIAL_ORE_SORTER)
             .recipeModifiers(CosmicRecipeModifiers.LOCKED_PARALLEL_8,
                     GTRecipeModifiers.ELECTRIC_OVERCLOCK.apply(OverclockingLogic.NON_PERFECT_OVERCLOCK_SUBTICK))
-            .pattern(definition -> MultiblockPatternBuilder.start(BACK, UP, LEFT)
+            .pattern(definition -> MultiblockPatternBuilder.start(LEFT, UP, BACK)
                     .slice("AAA E ", "AAA E ", "    E ", "    E ")
                     .slice("ABAAA ", "D AAA ", "   AA ", "    E ")
                     .slice("AAAAAA", "AAABBA", "  A  A", "    C ")
                     .slice("  AAAA", "  ABBA", "  A  A", "      ")
                     .slice("   AA ", "   AA ", "   AA ", "      ")
                     .where('D', Predicates.controller(blocks(definition.getBlock())))
-                    .where(' ', Predicates.air())
+                    .where(' ', Predicates.any())
                     .where('A', blocks(LIGHTWEIGHT_DARK_STEEL_CASING.get())
-                            .or(autoAbilities(CosmicRecipeTypes.INDUSTRIAL_ORE_SORTER))
+                            .or(autoAbilitiesNoEnergyIn(CosmicRecipeTypes.INDUSTRIAL_ORE_SORTER))
                             .or(abilities(PartAbility.INPUT_ENERGY).setExactLimit(1))
                             .or(abilities(PartAbility.MAINTENANCE).setExactLimit(1)))
                     .where('B', blocks(CASING_STEEL_GEARBOX.get()))

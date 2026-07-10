@@ -16,6 +16,7 @@ import com.gregtechceu.gtceu.api.recipe.OverclockingLogic;
 import com.gregtechceu.gtceu.common.data.GTRecipeModifiers;
 
 import static com.ghostipedia.cosmiccore.api.machine.part.CosmicPartAbility.IMPORT_SOUL;
+import static com.ghostipedia.cosmiccore.api.pattern.CosmicPredicates.autoAbilitiesNoEnergyIn;
 import static com.ghostipedia.cosmiccore.api.registries.CosmicRegistration.REGISTRATE;
 import static com.ghostipedia.cosmiccore.common.data.CosmicBlocks.BLANK_RUNE;
 import static com.ghostipedia.cosmiccore.common.data.CosmicBlocks.HIGHLY_CONDUCTIVE_FISSION_CASING;
@@ -50,7 +51,7 @@ public class HellFireFoundry {
                     .where(' ', Predicates.any())
                     .where('A', blocks(BLANK_RUNE.get()))
                     .where('B', blocks(HIGHLY_CONDUCTIVE_FISSION_CASING.get()).setMinGlobalLimited(70)
-                            .or(autoAbilities(CosmicRecipeTypes.HELLFIRE_FOUNDRY))
+                            .or(autoAbilitiesNoEnergyIn(CosmicRecipeTypes.HELLFIRE_FOUNDRY))
                             .or(abilities(PartAbility.MAINTENANCE).setExactLimit(1))
                             .or(abilities(PartAbility.INPUT_ENERGY).setExactLimit(1)))
                     .where('X', abilities(IMPORT_SOUL).setMinGlobalLimited(1, 1).setMaxGlobalLimited(1))

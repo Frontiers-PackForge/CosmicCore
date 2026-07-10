@@ -19,6 +19,7 @@ import com.gregtechceu.gtceu.common.machine.multiblock.part.RotorHolderPartMachi
 
 import net.minecraft.network.chat.Component;
 
+import static com.ghostipedia.cosmiccore.api.pattern.CosmicPredicates.autoAbilitiesNoEnergyIn;
 import static com.ghostipedia.cosmiccore.api.registries.CosmicRegistration.REGISTRATE;
 import static com.ghostipedia.cosmiccore.common.data.CosmicBlocks.*;
 import static com.gregtechceu.gtceu.api.multiblock.Predicates.*;
@@ -70,7 +71,7 @@ public class AtmoPump {
                     .where('E', blocks(RESONANTLY_TUNED_VIRTUE_MELD_CASING.get()))
                     .where('A', blocks(COMPUTER_CASING.get()))
                     .where('G', blocks(TRITANIUM_LINED_HEAVY_NEUTRONIUM_CASING.get())
-                            .or(autoAbilities(CosmicRecipeTypes.ATMOSPHERE_SIPHON))
+                            .or(autoAbilitiesNoEnergyIn(CosmicRecipeTypes.ATMOSPHERE_SIPHON))
                             .or(abilities(PartAbility.IMPORT_FLUIDS,PartAbility.IMPORT_FLUIDS_4X,PartAbility.IMPORT_FLUIDS_9X))
                             .or(abilities(PartAbility.EXPORT_ITEMS))
                             .or(abilities(PartAbility.INPUT_ENERGY).setExactLimit(1))

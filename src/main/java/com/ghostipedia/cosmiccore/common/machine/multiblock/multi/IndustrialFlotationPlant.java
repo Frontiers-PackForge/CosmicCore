@@ -13,6 +13,7 @@ import com.gregtechceu.gtceu.api.multiblock.pattern.MultiblockPatternBuilder;
 import com.gregtechceu.gtceu.api.recipe.OverclockingLogic;
 import com.gregtechceu.gtceu.common.data.GTRecipeModifiers;
 
+import static com.ghostipedia.cosmiccore.api.pattern.CosmicPredicates.autoAbilitiesNoEnergyIn;
 import static com.ghostipedia.cosmiccore.api.registries.CosmicRegistration.REGISTRATE;
 import static com.ghostipedia.cosmiccore.common.data.CosmicBlocks.LIGHTWEIGHT_DARK_STEEL_CASING;
 import static com.gregtechceu.gtceu.api.multiblock.Predicates.*;
@@ -29,16 +30,16 @@ public class IndustrialFlotationPlant {
             .recipeType(CosmicRecipeTypes.INDUSTRIAL_FLOTATION_PLANT)
             .recipeModifiers(CosmicRecipeModifiers.LOCKED_PARALLEL_8,
                     GTRecipeModifiers.ELECTRIC_OVERCLOCK.apply(OverclockingLogic.NON_PERFECT_OVERCLOCK_SUBTICK))
-            .pattern(definition -> MultiblockPatternBuilder.start(BACK, UP, LEFT)
+            .pattern(definition -> MultiblockPatternBuilder.start(LEFT, UP, BACK)
                     .slice("AAAAA", "AAAAA", "  AAA")
                     .slice("AAAAA", "CBBBA", "  A A")
                     .slice("AAAAA", "AAAAA", "  AAA")
                     .slice("  AAA", "  ABA", "  A A")
                     .slice("  AAA", "  AAA", "  AAA")
                     .where('C', Predicates.controller(blocks(definition.getBlock())))
-                    .where(' ', Predicates.air())
+                    .where(' ', Predicates.any())
                     .where('A', blocks(LIGHTWEIGHT_DARK_STEEL_CASING.get())
-                            .or(autoAbilities(CosmicRecipeTypes.INDUSTRIAL_FLOTATION_PLANT))
+                            .or(autoAbilitiesNoEnergyIn(CosmicRecipeTypes.INDUSTRIAL_FLOTATION_PLANT))
                             .or(abilities(PartAbility.INPUT_ENERGY).setExactLimit(1))
                             .or(abilities(PartAbility.MAINTENANCE).setExactLimit(1)))
                     .where('B', blocks(CASING_STEEL_PIPE.get()))

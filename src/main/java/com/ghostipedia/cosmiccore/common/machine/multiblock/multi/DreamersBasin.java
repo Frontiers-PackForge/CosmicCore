@@ -16,6 +16,7 @@ import com.gregtechceu.gtceu.api.multiblock.util.RelativeDirection;
 import net.minecraft.network.chat.Component;
 
 import static com.ghostipedia.cosmiccore.api.machine.part.CosmicPartAbility.EXPORT_SOUL;
+import static com.ghostipedia.cosmiccore.api.pattern.CosmicPredicates.autoAbilitiesNoEnergyIn;
 import static com.ghostipedia.cosmiccore.api.registries.CosmicRegistration.REGISTRATE;
 import static com.ghostipedia.cosmiccore.common.data.CosmicBlocks.SUPERHEAVY_STEEL_CASING;
 import static com.gregtechceu.gtceu.api.multiblock.Predicates.*;
@@ -94,7 +95,7 @@ public class DreamersBasin {
                     .where(' ', any())
                     .where('A', blocks(CosmicBlocks.SOUL_MUTED_CASING.get()))
                     .where('B', blocks(SUPERHEAVY_STEEL_CASING.get()).setMinGlobalLimited(200)
-                            .or(autoAbilities(CosmicRecipeTypes.MULTITHREADED_PROCESSOR))
+                            .or(autoAbilitiesNoEnergyIn(CosmicRecipeTypes.MULTITHREADED_PROCESSOR))
                             .or(Predicates.abilities(PartAbility.INPUT_ENERGY).setMinGlobalLimited(1)
                                     .setMaxGlobalLimited(2))
                             .or(Predicates.abilities(PartAbility.MAINTENANCE).setExactLimit(1))

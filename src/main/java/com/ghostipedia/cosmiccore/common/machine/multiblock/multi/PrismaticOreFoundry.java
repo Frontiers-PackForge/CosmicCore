@@ -17,6 +17,7 @@ import com.gregtechceu.gtceu.common.data.GCYMBlocks;
 import com.gregtechceu.gtceu.common.data.GTMaterials;
 import com.gregtechceu.gtceu.common.data.GTRecipeModifiers;
 
+import static com.ghostipedia.cosmiccore.api.pattern.CosmicPredicates.autoAbilitiesNoEnergyIn;
 import static com.ghostipedia.cosmiccore.api.registries.CosmicRegistration.REGISTRATE;
 import static com.ghostipedia.cosmiccore.common.data.CosmicBlocks.*;
 import static com.gregtechceu.gtceu.api.multiblock.Predicates.*;
@@ -59,7 +60,7 @@ public class PrismaticOreFoundry {
                     .where('A', blocks(GCYMBlocks.CASING_REACTION_SAFE.get()))
                     .where('B', blocks(GCYMBlocks.CASING_WATERTIGHT.get()))   //.setMinGlobalLimited(28)
                     .where('C', blocks(SELF_HEALING_PTHANTERUM.get())
-                            .or(autoAbilities(CosmicRecipeTypes.PRISMA_FOUNDRY))
+                            .or(autoAbilitiesNoEnergyIn(CosmicRecipeTypes.PRISMA_FOUNDRY))
                             .or(abilities(PartAbility.IMPORT_FLUIDS,PartAbility.IMPORT_FLUIDS_4X,PartAbility.IMPORT_FLUIDS_9X))
                             .or(abilities(PartAbility.EXPORT_ITEMS,PartAbility.IMPORT_ITEMS))
                             .or(abilities(PartAbility.INPUT_ENERGY, PartAbility.INPUT_LASER).setExactLimit(1))

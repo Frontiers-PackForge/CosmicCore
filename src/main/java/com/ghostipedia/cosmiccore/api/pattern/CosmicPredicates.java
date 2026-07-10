@@ -11,6 +11,7 @@ import com.gregtechceu.gtceu.api.multiblock.PatternPredicate;
 import com.gregtechceu.gtceu.api.multiblock.Predicates;
 import com.gregtechceu.gtceu.api.multiblock.error.BlockMatchingError;
 import com.gregtechceu.gtceu.api.multiblock.util.BlockInfo;
+import com.gregtechceu.gtceu.api.recipe.GTRecipeType;
 
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
@@ -44,6 +45,14 @@ public class CosmicPredicates {
 
     // Predicates only check block PRESENCE. Type/tier consistency is re-derived post-formation by the
     // controller (see decision: match-context accumulator removed in GTCEu 8.0.0).
+
+    // autoAbilities(recipeType) silently contributes its own INPUT_ENERGY sub-predicate (min 1, max 2)
+    // whenever the recipe type consumes EU. Unioned with an explicit INPUT_ENERGY predicate, each placed
+    // hatch can only satisfy ONE of the two counters, so "setExactLimit(1)" multis refuse to form until
+    // a second hatch feeds the duplicate. Multis declaring their own energy predicate must use this.
+    public static PatternPredicate autoAbilitiesNoEnergyIn(GTRecipeType... recipeType) {
+        return Predicates.autoAbilities(recipeType, false, true, true, true, true, true);
+    }
 
     public static PatternPredicate magnetCoils() {
         return new PatternPredicate("Magnet Coils", worldState -> {

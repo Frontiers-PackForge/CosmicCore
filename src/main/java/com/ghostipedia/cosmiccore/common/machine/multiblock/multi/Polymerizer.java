@@ -17,6 +17,7 @@ import com.gregtechceu.gtceu.api.recipe.OverclockingLogic;
 import com.gregtechceu.gtceu.common.data.GTMaterials;
 import com.gregtechceu.gtceu.common.data.GTRecipeModifiers;
 
+import static com.ghostipedia.cosmiccore.api.pattern.CosmicPredicates.autoAbilitiesNoEnergyIn;
 import static com.ghostipedia.cosmiccore.api.registries.CosmicRegistration.REGISTRATE;
 import static com.ghostipedia.cosmiccore.common.data.CosmicBlocks.*;
 import static com.ghostipedia.cosmiccore.common.data.datagen.CosmicMachineModels.createSeparateControllerCasingMachineModel;
@@ -51,8 +52,9 @@ public class Polymerizer {
                     .where('B', blocks(FUSION_GLASS.get()))
                     .where('D', blocks(RESONANTLY_TUNED_VIRTUE_MELD_CASING.get()))
                     .where('E', blocks(CYCLOZINE_CHEMICALLY_REPELLING_CASING.get())
-                            .or(autoAbilities(CosmicRecipeTypes.POLYMERIZER))
-                            .or(abilities(PartAbility.INPUT_ENERGY, PartAbility.INPUT_LASER).setMaxGlobalLimited(2, 2)
+                            .or(autoAbilitiesNoEnergyIn(CosmicRecipeTypes.POLYMERIZER))
+                            .or(abilities(PartAbility.INPUT_ENERGY, PartAbility.INPUT_LASER).setMinGlobalLimited(1)
+                                    .setMaxGlobalLimited(2, 2)
                                     .setPreviewCount(1)))
                     .where('F', blocks(GEARBOX_PTHANTERUM.get()))
                     .where('X', blocks(ChemicalHelper.getBlock(TagPrefix.frameGt, GTMaterials.NaquadahAlloy)))

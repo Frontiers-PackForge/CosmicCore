@@ -16,6 +16,7 @@ import com.gregtechceu.gtceu.common.data.GTRecipeModifiers;
 
 import com.sammy.malum.registry.common.block.MalumBlocks;
 
+import static com.ghostipedia.cosmiccore.api.pattern.CosmicPredicates.autoAbilitiesNoEnergyIn;
 import static com.ghostipedia.cosmiccore.api.registries.CosmicRegistration.REGISTRATE;
 import static com.ghostipedia.cosmiccore.common.data.CosmicBlocks.CYCLOZINE_CHEMICALLY_REPELLING_CASING;
 import static com.ghostipedia.cosmiccore.common.data.CosmicBlocks.ULTRA_POWERED_CASING;
@@ -48,7 +49,7 @@ public class Laminator {
                     .where(' ', any())
                     .where('Q', controller(blocks(definition.getBlock())))
                     .where('A', blocks(ULTRA_POWERED_CASING.get())
-                            .or(autoAbilities(CosmicRecipeTypes.MANA_DIGITIZER,CosmicRecipeTypes.MANA_FLUIDIZER))
+                            .or(autoAbilitiesNoEnergyIn(CosmicRecipeTypes.MANA_DIGITIZER,CosmicRecipeTypes.MANA_FLUIDIZER))
                             .or(abilities(PartAbility.INPUT_ENERGY).setExactLimit(1))
                             .or(abilities(PartAbility.PARALLEL_HATCH).setExactLimit(1))
                             .or(abilities(PartAbility.MAINTENANCE).setExactLimit(1)))

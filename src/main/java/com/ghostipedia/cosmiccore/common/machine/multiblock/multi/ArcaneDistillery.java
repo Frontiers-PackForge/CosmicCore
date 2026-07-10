@@ -14,6 +14,7 @@ import com.gregtechceu.gtceu.api.multiblock.util.RelativeDirection;
 import com.gregtechceu.gtceu.api.recipe.OverclockingLogic;
 import com.gregtechceu.gtceu.common.data.GTRecipeModifiers;
 
+import static com.ghostipedia.cosmiccore.api.pattern.CosmicPredicates.autoAbilitiesNoEnergyIn;
 import static com.ghostipedia.cosmiccore.api.registries.CosmicRegistration.REGISTRATE;
 import static com.ghostipedia.cosmiccore.common.data.CosmicBlocks.*;
 import static com.ghostipedia.cosmiccore.common.data.CosmicBlocks.TRITANIUM_LINED_HEAVY_NEUTRONIUM_CASING;
@@ -50,9 +51,9 @@ public class ArcaneDistillery {
                     .where('Q', Predicates.controller(Predicates.blocks(definition.get())))
                     .where(' ', Predicates.any())
                     .where('A', blocks(OSCILLATING_GILDED_PTHANTERUM_CASING.get())
-                            .or(autoAbilities(CosmicRecipeTypes.ARCANE_DISTILLERY))
+                            .or(autoAbilitiesNoEnergyIn(CosmicRecipeTypes.ARCANE_DISTILLERY))
                             .or(autoAbilities(true,false,false))
-                            .or(abilities(PartAbility.INPUT_ENERGY, PartAbility.INPUT_LASER).setMaxGlobalLimited(2, 2)
+                            .or(abilities(PartAbility.INPUT_ENERGY, PartAbility.INPUT_LASER).setMinGlobalLimited(1).setMaxGlobalLimited(2, 2)
                                     .setPreviewCount(1)))
                     .where('B', blocks(GILDED_PTHANTERUM_CASING.get()))
                     .where('C', blocks(VIBRANT_RUBIDIUM_CASING.get()))

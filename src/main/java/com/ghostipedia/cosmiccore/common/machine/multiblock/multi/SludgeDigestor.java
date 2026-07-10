@@ -14,6 +14,7 @@ import com.gregtechceu.gtceu.api.recipe.OverclockingLogic;
 import com.gregtechceu.gtceu.common.data.GTMaterials;
 import com.gregtechceu.gtceu.common.data.GTRecipeModifiers;
 
+import static com.ghostipedia.cosmiccore.api.pattern.CosmicPredicates.autoAbilitiesNoEnergyIn;
 import static com.ghostipedia.cosmiccore.api.registries.CosmicRegistration.REGISTRATE;
 import static com.ghostipedia.cosmiccore.common.data.CosmicBlocks.LIGHTWEIGHT_DARK_STEEL_CASING;
 import static com.ghostipedia.cosmiccore.common.data.CosmicBlocks.LIGHTWEIGHT_INDUSTRIAL_CASING;
@@ -31,7 +32,7 @@ public class SludgeDigestor {
             .recipeType(CosmicRecipeTypes.SLUDGE_DIGESTOR)
             .recipeModifiers(CosmicRecipeModifiers.LOCKED_PARALLEL_8,
                     GTRecipeModifiers.ELECTRIC_OVERCLOCK.apply(OverclockingLogic.NON_PERFECT_OVERCLOCK_SUBTICK))
-            .pattern(definition -> MultiblockPatternBuilder.start(RIGHT, UP, FRONT)
+            .pattern(definition -> MultiblockPatternBuilder.start(LEFT, UP, BACK)
                     .slice("AAAA", "A  A", "B  B", "B  B", "B  B", "A  A", "    ")
                     .slice("AAAA", " CC ", " CC ", " CC ", " CC ", "ACCA", "    ")
                     .slice("AAAA", " CC ", " EE ", " CC ", " EE ", "ACCA", " CC ")
@@ -39,9 +40,9 @@ public class SludgeDigestor {
                     .slice("AAAA", " CC ", " DC ", " CC ", " CC ", "ACCA", "    ")
                     .slice("AAAA", "A  A", "B  B", "B  B", "B  B", "A  A", "    ")
                     .where('D', Predicates.controller(blocks(definition.getBlock())))
-                    .where(' ', Predicates.air())
+                    .where(' ', Predicates.any())
                     .where('A', blocks(LIGHTWEIGHT_DARK_STEEL_CASING.get())
-                            .or(autoAbilities(CosmicRecipeTypes.SLUDGE_DIGESTOR))
+                            .or(autoAbilitiesNoEnergyIn(CosmicRecipeTypes.SLUDGE_DIGESTOR))
                             .or(abilities(PartAbility.INPUT_ENERGY).setExactLimit(1))
                             .or(abilities(PartAbility.MAINTENANCE).setExactLimit(1)))
                     .where('B', frames(GTMaterials.StainlessSteel))

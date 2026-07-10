@@ -16,6 +16,7 @@ import com.gregtechceu.gtceu.common.data.GTBlocks;
 import com.gregtechceu.gtceu.common.data.GTMaterials;
 import com.gregtechceu.gtceu.common.data.GTRecipeModifiers;
 
+import static com.ghostipedia.cosmiccore.api.pattern.CosmicPredicates.autoAbilitiesNoEnergyIn;
 import static com.ghostipedia.cosmiccore.api.registries.CosmicRegistration.REGISTRATE;
 import static com.ghostipedia.cosmiccore.common.data.CosmicBlocks.*;
 import static com.gregtechceu.gtceu.api.multiblock.Predicates.*;
@@ -64,7 +65,7 @@ public class TitanFusion {
                     .where('Q', controller(blocks(definition.getBlock())))
                     .where('A', blocks(OSCILLATING_GILDED_PTHANTERUM_CASING.get())
                             .or(autoAbilities())
-                            .or(autoAbilities(CosmicRecipeTypes.TITAN_FUSION_RECIPES))
+                            .or(autoAbilitiesNoEnergyIn(CosmicRecipeTypes.TITAN_FUSION_RECIPES))
                             .or(abilities(PartAbility.IMPORT_FLUIDS,PartAbility.IMPORT_FLUIDS_4X,PartAbility.IMPORT_FLUIDS_9X))
                             .or(abilities(PartAbility.EXPORT_ITEMS,PartAbility.EXPORT_FLUIDS))
                             .or(abilities(PartAbility.INPUT_ENERGY,PartAbility.INPUT_LASER).setExactLimit(1))

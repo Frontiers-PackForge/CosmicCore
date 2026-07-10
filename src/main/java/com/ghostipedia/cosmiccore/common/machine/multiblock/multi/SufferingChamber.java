@@ -16,6 +16,7 @@ import com.gregtechceu.gtceu.api.recipe.OverclockingLogic;
 import com.gregtechceu.gtceu.common.data.GTRecipeModifiers;
 
 import static com.ghostipedia.cosmiccore.api.machine.part.CosmicPartAbility.EXPORT_SOUL;
+import static com.ghostipedia.cosmiccore.api.pattern.CosmicPredicates.autoAbilitiesNoEnergyIn;
 import static com.ghostipedia.cosmiccore.api.registries.CosmicRegistration.REGISTRATE;
 import static com.ghostipedia.cosmiccore.common.data.CosmicBlocks.*;
 import static com.ghostipedia.cosmiccore.common.data.datagen.CosmicMachineModels.createSeparateControllerCasingMachineModel;
@@ -49,7 +50,7 @@ public class SufferingChamber {
                     .where('Q', Predicates.controller(Predicates.blocks(definition.get())))
                     .where(' ', Predicates.any())
                     .where('A', blocks(CASING_STRESS_PROOF.get()).setMinGlobalLimited(185)
-                            .or(autoAbilities(CosmicRecipeTypes.SUFFERING_CHAMBER))
+                            .or(autoAbilitiesNoEnergyIn(CosmicRecipeTypes.SUFFERING_CHAMBER))
                             .or(abilities(PartAbility.INPUT_ENERGY).setExactLimit(1)))
                     .where('B', blocks(BLANK_RUNE.get()))
                     .where('D', blocks(RITUAL_STONE.get()))

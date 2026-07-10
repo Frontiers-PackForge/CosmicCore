@@ -16,6 +16,7 @@ import com.gregtechceu.gtceu.api.recipe.OverclockingLogic;
 import com.gregtechceu.gtceu.common.data.GTBlocks;
 import com.gregtechceu.gtceu.common.data.GTRecipeModifiers;
 
+import static com.ghostipedia.cosmiccore.api.pattern.CosmicPredicates.autoAbilitiesNoEnergyIn;
 import static com.ghostipedia.cosmiccore.api.registries.CosmicRegistration.REGISTRATE;
 import static com.ghostipedia.cosmiccore.common.data.CosmicBlocks.ETHERSTEEL_PLATED_ASH_TILES;
 import static com.ghostipedia.cosmiccore.common.data.datagen.CosmicMachineModels.createSeparateControllerCasingMachineModel;
@@ -48,8 +49,8 @@ public class AtomicReconstructor {
                     .where('Q', controller(blocks(definition.getBlock())))
                     .where('A', blocks(CosmicBlocks.SOUL_STAINED_STEEL_ALU_CASING.get()))
                     .where('B', blocks(ETHERSTEEL_PLATED_ASH_TILES.get())
-                            .or(autoAbilities(CosmicRecipeTypes.VOID_SALT_FISSION))
-                            .or(abilities(PartAbility.INPUT_ENERGY).setMaxGlobalLimited(2,2))
+                            .or(autoAbilitiesNoEnergyIn(CosmicRecipeTypes.VOID_SALT_FISSION))
+                            .or(abilities(PartAbility.INPUT_ENERGY).setMinGlobalLimited(1).setMaxGlobalLimited(2,2))
                             .or(abilities(PartAbility.MAINTENANCE).setExactLimit(1)))
                     .where('C', blocks(GTBlocks.CASING_STAINLESS_CLEAN.get()))
                     .where('D', blocks(ETHERSTEEL_PLATED_ASH_TILES.get()))
