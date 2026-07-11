@@ -1,8 +1,8 @@
 package com.ghostipedia.cosmiccore.client.murkbloom;
 
 import com.ghostipedia.cosmiccore.CosmicCore;
-import com.ghostipedia.cosmiccore.common.murkbloom.MurkbloomServerLogic;
 import com.ghostipedia.cosmiccore.common.data.worldgen.abyss.AbyssRegions;
+import com.ghostipedia.cosmiccore.common.murkbloom.MurkbloomServerLogic;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.LightTexture;
