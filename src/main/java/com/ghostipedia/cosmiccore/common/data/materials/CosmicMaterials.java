@@ -46,6 +46,15 @@ public class CosmicMaterials {
     public static Material EnragedStygianPlague;
     public static Material Cosmocite;
     public static Material TearsOfTheUniverse;
+    public static Material Utherium;
+    public static Material Rogdorium;
+    public static Material Arcanite;
+    public static Material Gloomarcine;
+    public static Material Veilspar;
+    public static Material Soulshade;
+    public static Material Duskmote;
+    public static Material Hadalite;
+    public static Material Abyssbloom;
     public static Material Ichor;
     public static Material Ichorium;
     public static Material Chronon;
@@ -586,6 +595,43 @@ public class CosmicMaterials {
         TearsOfTheUniverse = new Material.Builder(CosmicCore.id("universe_tears"))
                 .liquid(new FluidBuilder().temperature(1))
                 .color(0xdb5e5e).secondaryColor(0x5e0f3d).iconSet(MaterialIconSet.SHINY)
+                .buildAndRegister();
+
+        Utherium = new Material.Builder(CosmicCore.id("utherium"))
+                .gem()
+                .color(0xC24B55).secondaryColor(0x7A2430).iconSet(MaterialIconSet.RUBY)
+                .buildAndRegister();
+        Rogdorium = new Material.Builder(CosmicCore.id("rogdorium"))
+                .dust()
+                .color(0x86BF54).secondaryColor(0x4E7A2E).iconSet(MaterialIconSet.ROUGH)
+                .buildAndRegister();
+        Arcanite = new Material.Builder(CosmicCore.id("arcanite"))
+                .gem()
+                .color(0x8C6AE8).secondaryColor(0x5A3FA8).iconSet(MaterialIconSet.CERTUS)
+                .buildAndRegister();
+        Gloomarcine = new Material.Builder(CosmicCore.id("gloomarcine"))
+                .dust()
+                .color(0x4F6D8C).secondaryColor(0x2E4258).iconSet(MaterialIconSet.DULL)
+                .buildAndRegister();
+        Veilspar = new Material.Builder(CosmicCore.id("veilspar"))
+                .gem()
+                .color(0xC9D8E8).secondaryColor(0x8FA6BC).iconSet(MaterialIconSet.QUARTZ)
+                .buildAndRegister();
+        Soulshade = new Material.Builder(CosmicCore.id("soulshade"))
+                .dust()
+                .color(0x6E5A8C).secondaryColor(0x453466).iconSet(MaterialIconSet.DULL)
+                .buildAndRegister();
+        Duskmote = new Material.Builder(CosmicCore.id("duskmote"))
+                .dust()
+                .color(0x8C7A5A).secondaryColor(0x5E4E38).iconSet(MaterialIconSet.SAND)
+                .buildAndRegister();
+        Hadalite = new Material.Builder(CosmicCore.id("hadalite"))
+                .gem()
+                .color(0x5A3F7A).secondaryColor(0x241640).iconSet(MaterialIconSet.SHINY)
+                .buildAndRegister();
+        Abyssbloom = new Material.Builder(CosmicCore.id("abyssbloom"))
+                .dust()
+                .color(0x3F4E7A).secondaryColor(0x141E38).iconSet(MaterialIconSet.ROUGH)
                 .buildAndRegister();
         // TODO - A dangerous bioweapon unleashed on many orbital bodies in space, entirely designed to sterilize life
         // from anything it touches.

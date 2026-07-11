@@ -1437,6 +1437,9 @@ public class CosmicLangHandler extends LangHandler {
                 "There's no returning to what you were.");
         provider.add("cosmiccore.hud.oxygen.suffocating", "SUFFOCATING");
         provider.add("cosmiccore.tooltip.hand_sort", "Can be hand sorted for: %s");
+        provider.add("cosmiccore.tooltip.oxygen_tank.fill", "Oxygen: %s / %s mB");
+        provider.add("cosmiccore.tooltip.oxygen_tank.runtime", "Breathing time: %s");
+        provider.add("cosmiccore.tooltip.oxygen_tank.rebreather", "Requires Pressurized Rebreather or Diving Helmet");
         // Food system and the Hearth
         provider.add("cosmiccore.food.sickened", "Your stomach turns. Your meals are slipping away.");
         provider.add("cosmiccore.food.family.defined", "Special");
@@ -1475,10 +1478,26 @@ public class CosmicLangHandler extends LangHandler {
         provider.add("cosmiccore.tooltip.food.cooling", "Cooling");
         provider.add("cosmiccore.abyss.tome_sealed", "The magic of this tome has been sealed away");
         provider.add("cosmiccore.abyss.seal_broken",
-                "You have found the source. The magic of your tomes stirs awake.");
+                "You have found the source of arcane interference, your spell book hums with energy again. ");
         provider.add("cosmiccore.tooltip.tome_sealed_1",
                 "A dark and virulent force has stripped the magic conductivity away from this tome,");
         provider.add("cosmiccore.tooltip.tome_sealed_2",
-                "it is nothing but a mundane book until you discover the source");
+                "it is nothing but a mundane book until you discover the source.");
+        provider.add("cosmiccore.abyss.crush_ascend", "CRUSH DEPTH! ASCEND IMMEDIATELY!");
+        provider.add("cosmiccore.abyss.no_teleport", "The deep does not permit passage");
+        provider.add("cosmiccore.abyss.no_mount", "Nothing will carry you down here");
+        provider.add("cosmiccore.abyss.descent", "As you descend, the water becomes darker and more violent");
+        provider.add("cosmiccore.abyss.swarm_title", "The Murkbloom Swarms");
+        provider.add("cosmiccore.abyss.swarm_subtitle", "Stop disturbing the water and hide!");
+        provider.add("effect.cosmiccore.stealth", "Stealth");
+        provider.add("cosmiccore.tooltip.stealth_coated", "Stealth Coating %s");
+        provider.add("cosmiccore.tooltip.stealth_coating.use_1", "Sew onto armor or tools at a Sewing Table.");
+        provider.add("cosmiccore.tooltip.stealth_coating.use_2",
+                "Greatly Reduces Sound Creation in the Abyss, reduced effect on armors.");
+        provider.add("cosmiccore.abyss.speed_kill",
+                "Your wake screamed through the dark and the Murkbloom echos back in force.");
+        provider.add("cosmiccore.abyss.stalked", "Something vast turns its attention toward you.");
+        provider.add("death.attack.cosmiccore.murkbloom", "%1$s was consumed by the Murkbloom");
+        provider.add("death.attack.cosmiccore.too_loud", "%1$s was too loud in the abyss");
     }
 }

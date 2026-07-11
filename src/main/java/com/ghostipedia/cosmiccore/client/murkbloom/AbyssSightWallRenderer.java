@@ -1,6 +1,7 @@
 package com.ghostipedia.cosmiccore.client.murkbloom;
 
 import com.ghostipedia.cosmiccore.CosmicCore;
+import com.ghostipedia.cosmiccore.common.murkbloom.MurkbloomServerLogic;
 import com.ghostipedia.cosmiccore.common.data.worldgen.abyss.AbyssRegions;
 
 import net.minecraft.client.Minecraft;
@@ -48,7 +49,7 @@ public final class AbyssSightWallRenderer {
 
         MultiBufferSource.BufferSource buffers = mc.renderBuffers().bufferSource();
 
-        if (mc.level.dimension().equals(AbyssClientFog.HOLLOW_DIM)) {
+        if (mc.level.dimension().equals(MurkbloomServerLogic.HOLLOW_DIM)) {
             VertexConsumer vc = buffers.getBuffer(WALL_TYPE);
             drawWall(vc, matrix, cam.x, cam.y, cam.z, LID_Y, colorForEdge(cam.y, LID_Y));
             for (int edge : AbyssRegions.LAYER_EDGES) {

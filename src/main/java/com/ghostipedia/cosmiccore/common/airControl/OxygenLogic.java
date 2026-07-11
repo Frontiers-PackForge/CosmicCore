@@ -3,6 +3,7 @@ package com.ghostipedia.cosmiccore.common.airControl;
 import com.ghostipedia.cosmiccore.CosmicCore;
 import com.ghostipedia.cosmiccore.common.airControl.RebreatherHelper.RebreatherType;
 import com.ghostipedia.cosmiccore.common.data.CosmicAttachmentTypes;
+import com.ghostipedia.cosmiccore.common.item.behavior.OxygenSupplyTankBehavior;
 import com.ghostipedia.cosmiccore.common.network.CCoreNetwork;
 import com.ghostipedia.cosmiccore.common.network.packet.OxygenWarnPacket;
 import com.ghostipedia.cosmiccore.common.network.packet.SyncOxygenBarPacket;
@@ -12,6 +13,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.effect.MobEffects;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
@@ -22,8 +24,12 @@ import com.simibubi.create.content.equipment.armor.BacktankUtil;
 import top.theillusivec4.curios.api.CuriosApi;
 import top.theillusivec4.curios.api.type.inventory.IDynamicStackHandler;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
+import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
 
 import static com.ghostipedia.cosmiccore.common.airControl.OxygenConfig.*;
 import static com.ghostipedia.cosmiccore.common.airControl.OxygenItemCap.OXYGEN_SUPPLY;
@@ -39,8 +45,8 @@ public final class OxygenLogic {
         return CONSUME_BYPASS.get();
     }
 
-    private static final java.util.Map<java.util.UUID, Long> lastSyncOxygenValue = new java.util.concurrent.ConcurrentHashMap<>();
-    private static final java.util.Map<java.util.UUID, Long> lastSyncGameTime = new java.util.concurrent.ConcurrentHashMap<>();
+    private static final Map<UUID, Long> lastSyncOxygenValue = new ConcurrentHashMap<>();
+    private static final Map<UUID, Long> lastSyncGameTime = new ConcurrentHashMap<>();
 
     @SubscribeEvent
     public static void onPlayerTick(PlayerTickEvent.Post event) {
@@ -54,7 +60,7 @@ public final class OxygenLogic {
             if ((player.serverLevel().getGameTime() % HUD_SYNC_INTERVAL) == 0) {
                 long playerMaxOxygen = getMaxOxygenTicks(player);
                 CCoreNetwork.sendToPlayer(player,
-                        new SyncOxygenBarPacket(playerMaxOxygen, playerMaxOxygen, false, 0.0));
+                        new SyncOxygenBarPacket(playerMaxOxygen, playerMaxOxygen, false, 0.0, 0));
             }
             return;
         }
@@ -100,9 +106,12 @@ public final class OxygenLogic {
             long current = cap.getOxygenTicks(level.dimension());
             cap.setConsuming(level.dimension(), rates.oxygenDrainPerTick > 0);
 
+            RebreatherType rebreather = RebreatherType.NONE;
+            double effectiveDrainPerTick = 0.0;
+
             if (rates.oxygenDrainPerTick > 0) {
                 // Check for rebreather equipment and apply drain modifiers
-                RebreatherType rebreather = RebreatherHelper.getEquippedRebreather(player);
+                rebreather = RebreatherHelper.getEquippedRebreather(player);
                 double drainMult = 1.0;
 
                 // Apply rebreather effects based on air quality
@@ -125,6 +134,7 @@ public final class OxygenLogic {
                 // This ensures rebreathers actually reduce effective drain (e.g., 0.5x means drain every other tick)
                 double baseDrain = rates.oxygenDrainPerTick;
                 double fractionalDrain = baseDrain * drainMult;
+                effectiveDrainPerTick = fractionalDrain;
 
                 // Use the regen buffer to accumulate fractional drain (stored as negative when draining)
                 double buffer = cap.getRegenBuffer(level.dimension());
@@ -186,7 +196,7 @@ public final class OxygenLogic {
                 boolean show = (quality != OxygenRules.AirQuality.SAFE) || remaining < playerMaxOxygen;
 
                 // Calculate rate based on actual change over the sync interval
-                java.util.UUID playerId = player.getUUID();
+                UUID playerId = player.getUUID();
                 double ratePerSecond = 0.0;
                 long currentGameTime = level.getGameTime();
                 Long prevOxygen = lastSyncOxygenValue.get(playerId);
@@ -204,8 +214,13 @@ public final class OxygenLogic {
                 lastSyncOxygenValue.put(playerId, remaining);
                 lastSyncGameTime.put(playerId, currentGameTime);
 
+                long tankSeconds = 0;
+                if (effectiveDrainPerTick > 0 && rebreather == RebreatherType.PRESSURIZED) {
+                    tankSeconds = computeTankSeconds(player, effectiveDrainPerTick);
+                }
+
                 CCoreNetwork.sendToPlayer(player,
-                        new SyncOxygenBarPacket(remaining, playerMaxOxygen, show, ratePerSecond));
+                        new SyncOxygenBarPacket(remaining, playerMaxOxygen, show, ratePerSecond, tankSeconds));
             }
         });
     }
@@ -218,7 +233,7 @@ public final class OxygenLogic {
         ServerLevel level = player.serverLevel();
 
         // Reset rate tracking for fresh rate calculation
-        java.util.UUID playerId = player.getUUID();
+        UUID playerId = player.getUUID();
         lastSyncOxygenValue.remove(playerId);
         lastSyncGameTime.remove(playerId);
 
@@ -230,14 +245,14 @@ public final class OxygenLogic {
             }
             long remaining = cap.getOxygenTicks(level.dimension());
             boolean show = remaining < playerMaxOxygen;
-            CCoreNetwork.sendToPlayer(player, new SyncOxygenBarPacket(remaining, playerMaxOxygen, show, 0.0));
+            CCoreNetwork.sendToPlayer(player, new SyncOxygenBarPacket(remaining, playerMaxOxygen, show, 0.0, 0));
         });
     }
 
     @SubscribeEvent
     public static void onLogout(PlayerEvent.PlayerLoggedOutEvent event) {
         // Clean up tracking maps to prevent memory leaks
-        java.util.UUID playerId = event.getEntity().getUUID();
+        UUID playerId = event.getEntity().getUUID();
         lastSyncOxygenValue.remove(playerId);
         lastSyncGameTime.remove(playerId);
     }
@@ -254,7 +269,8 @@ public final class OxygenLogic {
             cap.setOxygenTicks(level.dimension(), playerMaxOxygen);
             cap.setRegenBuffer(level.dimension(), 0.0);
             cap.setConsuming(level.dimension(), false);
-            CCoreNetwork.sendToPlayer(player, new SyncOxygenBarPacket(playerMaxOxygen, playerMaxOxygen, false, 0.0));
+            CCoreNetwork.sendToPlayer(player,
+                    new SyncOxygenBarPacket(playerMaxOxygen, playerMaxOxygen, false, 0.0, 0));
         });
     }
 
@@ -309,21 +325,49 @@ public final class OxygenLogic {
         if (requestTicks <= 0) return 0;
 
         int remaining = requestTicks;
+        for (ItemStack stack : backSlotStacks(player)) {
+            if (remaining <= 0) break;
+            remaining = drainFromStack(stack, remaining);
+        }
+        return remaining;
+    }
 
+    public static List<ItemStack> backSlotStacks(Player player) {
         var curiosCap = CuriosApi.getCuriosInventory(player);
-        if (curiosCap.isPresent()) {
-            var curiosHandler = curiosCap.get();
-            var backHandler = curiosHandler.getStacksHandler("back");
-            if (backHandler.isPresent()) {
-                IDynamicStackHandler stacks = backHandler.get().getStacks();
-                for (int i = 0; i < stacks.getSlots() && remaining > 0; i++) {
-                    ItemStack stack = stacks.getStackInSlot(i);
-                    remaining = drainFromStack(stack, remaining);
-                }
+        if (curiosCap.isEmpty()) return List.of();
+        var backHandler = curiosCap.get().getStacksHandler("back");
+        if (backHandler.isEmpty()) return List.of();
+
+        IDynamicStackHandler stacks = backHandler.get().getStacks();
+        List<ItemStack> out = new ArrayList<>();
+        for (int i = 0; i < stacks.getSlots(); i++) {
+            ItemStack stack = stacks.getStackInSlot(i);
+            if (!stack.isEmpty()) out.add(stack);
+        }
+        return out;
+    }
+
+    public static long curioTankTicksRemaining(Player player) {
+        long total = 0;
+        for (ItemStack stack : backSlotStacks(player)) {
+            if (stack.getCapability(OXYGEN_SUPPLY) != null) {
+                total += OxygenSupplyTankBehavior.remainingTicks(stack);
             }
         }
+        return total;
+    }
 
-        return remaining;
+    private static long computeTankSeconds(ServerPlayer player, double drainPerTick) {
+        double perSecond = drainPerTick * 20.0;
+        double seconds = curioTankTicksRemaining(player) / perSecond;
+        int createAir = 0;
+        for (ItemStack tank : BacktankUtil.getAllWithAir(player)) {
+            createAir += BacktankUtil.getAir(tank);
+        }
+        if (createAir > 0) {
+            seconds += RebreatherHelper.hasCreateDivingHelmet(player) ? createAir : createAir / perSecond;
+        }
+        return (long) seconds;
     }
 
     /**

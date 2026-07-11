@@ -14,6 +14,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import static com.ghostipedia.cosmiccore.common.data.materials.CosmicMaterials.Utherium;
 import static com.gregtechceu.gtceu.api.data.chemical.material.info.MaterialFlags.DISABLE_MATERIAL_RECIPES;
 import static com.gregtechceu.gtceu.api.data.tag.TagPrefix.crushedRefined;
 import static com.gregtechceu.gtceu.api.data.tag.TagPrefix.dust;
@@ -42,6 +43,8 @@ public class CosmicBundleMaterials {
     public static Material CrudeRadionite;
     public static Material Vanachrome;
     public static Material Emberite;
+    public static Material Utherite;
+    public static Material Shimmerbloom;
 
     private static final Map<Material, List<Material>> OUTPUTS = new LinkedHashMap<>();
     private static final Map<Material, MaterialStack> HAND_SORT = new LinkedHashMap<>();
@@ -63,6 +66,8 @@ public class CosmicBundleMaterials {
         Agarlite = bundle("agarlite", 0xCFE0E8, 0x9FB4BE, MaterialIconSet.SHINY);
         CrudeRadionite = bundle("crude_radionite", 0x3FA63F, 0x1F6B1F, MaterialIconSet.RADIOACTIVE);
         Vanachrome = bundle("vanachrome", 0x6FA0A0, 0x3F6F6F, MaterialIconSet.METALLIC);
+        Utherite = bundle("utherite", 0xB0525E, 0x5E2830, MaterialIconSet.ROUGH);
+        Shimmerbloom = bundle("shimmerbloom", 0x9FB8E8, 0x54689E, MaterialIconSet.SHINY);
 
         Emberite = new Material.Builder(GTCEu.id("emberite"))
                 .gem()
@@ -86,6 +91,9 @@ public class CosmicBundleMaterials {
         out(Agarlite, Cooperite, Bornite);
         out(CrudeRadionite, Pitchblende, Uraninite, Naquadah, Scheelite, Tungstate);
         out(Vanachrome, Magnetite, VanadiumMagnetite, Chromite, Bauxite, Ilmenite, Gold);
+        out(Utherite, Utherium, CosmicMaterials.Rogdorium, CosmicMaterials.Arcanite);
+        out(Shimmerbloom, CosmicMaterials.Gloomarcine, CosmicMaterials.Veilspar, CosmicMaterials.Soulshade,
+                CosmicMaterials.Duskmote, CosmicMaterials.Hadalite, CosmicMaterials.Abyssbloom);
 
         sort(Cuprosiva, Tin, 3);
         sort(Ferosine, Gold, 2);

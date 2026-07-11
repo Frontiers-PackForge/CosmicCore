@@ -92,9 +92,14 @@ public final class OreFieldPlacement {
         put(CosmicBundleMaterials.Fahlorium, profile(Level.NETHER, Shape.FRACTURE));
         put(CosmicBundleMaterials.MonaziteSalts, profile(Level.NETHER, Shape.STRINGER));
 
-        put(CosmicBundleMaterials.Agarlite, profile(Level.END, Shape.STRINGER));
         put(CosmicBundleMaterials.CrudeRadionite, profile(Level.END, Shape.FRACTURE));
-        put(CosmicBundleMaterials.Vanachrome, profile(Level.END, Shape.BRANCHING));
+
+        // TODO(cosmiccore-101): Hollow bundle fields shelved; the vertical Hollow places ore via
+        // AbyssDispatcher splatter during island stamping. Restore if fields learn island-aware Y.
+        // put(CosmicBundleMaterials.Utherite, profile(MurkbloomServerLogic.HOLLOW_DIM, Shape.BRANCHING));
+        // put(CosmicBundleMaterials.Vanachrome, profile(MurkbloomServerLogic.HOLLOW_DIM, Shape.BRANCHING));
+        // put(CosmicBundleMaterials.Shimmerbloom, profile(MurkbloomServerLogic.HOLLOW_DIM, Shape.CLUSTER));
+        // put(CosmicBundleMaterials.Agarlite, profile(MurkbloomServerLogic.HOLLOW_DIM, Shape.STRINGER));
 
         initialized = true;
     }

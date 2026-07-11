@@ -1,11 +1,10 @@
 package com.ghostipedia.cosmiccore.common.item;
 
-import com.ghostipedia.cosmiccore.utils.ItemData;
+import com.ghostipedia.cosmiccore.common.item.behavior.OxygenSupplyTankBehavior;
 
 import com.gregtechceu.gtceu.api.item.ComponentItem;
 
 import net.minecraft.ChatFormatting;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -50,48 +49,13 @@ public class OxygenTankItem extends ComponentItem {
 
         int amt = h.getFluidInTank(0).getAmount();
         int cap = h.getTankCapacity(0);
-        tooltip.add(line("Oxygen", amt + " / " + cap + " mB", ChatFormatting.AQUA));
-
-        CompoundTag tag = ItemData.readElement(stack, "CosmicCoreO2");
-        int ticksPerMb = tag.getInt("TicksPerMb");
-        int transferPerTick = tag.getInt("TransferPerTick");
-
-        if (ticksPerMb <= 0 || transferPerTick < 0) {
-            stack.getCapability(Capabilities.FluidHandler.ITEM);
-            tag = ItemData.readElement(stack, "CosmicCoreO2");
-            ticksPerMb = Math.max(1, tag.getInt("TicksPerMb"));
-            transferPerTick = Math.max(0, tag.getInt("TransferPerTick"));
-        }
-
-        int ticksPerSec = transferPerTick * 20;
-
-        double mbPerTickAtMax = Math.min(1.0, transferPerTick / (double) ticksPerMb);
-        double mbPerSecAtMax = mbPerTickAtMax * 20.0;
-
-        tooltip.add(line("Max Output", transferPerTick + " O\u2082/t (" + ticksPerSec + "/s)", ChatFormatting.GRAY));
-        tooltip.add(line("Conversion", ticksPerMb + " O\u2082-ticks per mB", ChatFormatting.GRAY));
-        tooltip.add(line("Use @ Max", fmt(mbPerTickAtMax) + " mB/t (" + fmt(mbPerSecAtMax) + " mB/s)",
-                ChatFormatting.DARK_GRAY));
-
-        if (cap > 0 && transferPerTick > 0) {
-            long totalOTicks = (long) amt * (long) ticksPerMb;
-            long runGTicks = (long) Math.floor(totalOTicks / (double) transferPerTick);
-            tooltip.add(line("Est. Runtime @ Max", formatDurationSeconds(runGTicks / 20.0), ChatFormatting.DARK_GREEN));
-        }
-
-        tooltip.add(Component.empty());
-        tooltip.add(Component.literal("Requires Pressurized Rebreather").withStyle(ChatFormatting.RED));
-    }
-
-    private static Component line(String label, String value, ChatFormatting color) {
-        return Component.literal(label + ": ").withStyle(ChatFormatting.WHITE)
-                .append(Component.literal(value).withStyle(color));
-    }
-
-    private static String fmt(double d) {
-        if (d >= 10) return String.format("%.0f", d);
-        if (d >= 1) return String.format("%.2f", d);
-        return String.format("%.3f", d);
+        tooltip.add(Component.translatable("cosmiccore.tooltip.oxygen_tank.fill", amt, cap)
+                .withStyle(ChatFormatting.AQUA));
+        tooltip.add(Component.translatable("cosmiccore.tooltip.oxygen_tank.runtime",
+                formatDurationSeconds(OxygenSupplyTankBehavior.remainingTicks(stack) / 20.0))
+                .withStyle(ChatFormatting.GRAY));
+        tooltip.add(Component.translatable("cosmiccore.tooltip.oxygen_tank.rebreather")
+                .withStyle(ChatFormatting.RED));
     }
 
     private static String formatDurationSeconds(double seconds) {

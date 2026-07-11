@@ -9,6 +9,7 @@ import com.gregtechceu.gtceu.api.item.component.IItemComponent;
 import com.gregtechceu.gtceu.common.data.GTMaterials;
 import com.gregtechceu.gtceu.common.data.item.GTDataComponents;
 
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.neoforge.capabilities.Capabilities;
@@ -23,50 +24,48 @@ public class OxygenSupplyTankBehavior implements IItemComponent, IComponentCapab
 
     private static final String TAG_ROOT = "CosmicCoreO2";
     private static final String TAG_BUF = "TickBuffer";
-    private static final String TAG_CAP = "CapacityMb";
-    private static final String TAG_TPT = "TransferPerTick";
     private static final String TAG_TPM = "TicksPerMb";
 
     @Getter
     private final int capacityMb;
     @Getter
-    private final int transferPerTick;
-    @Getter
     private final int ticksPerMb;
 
-    public OxygenSupplyTankBehavior(int capacityMb, int transferPerTick, int ticksPerMb) {
+    public OxygenSupplyTankBehavior(int capacityMb, int ticksPerMb) {
         this.capacityMb = capacityMb;
-        this.transferPerTick = Math.max(0, transferPerTick);
         this.ticksPerMb = Math.max(1, ticksPerMb);
     }
 
-    /**
-     * Drains oxygen ticks from the tank's internal buffer, refilling from fluid as needed.
-     */
     public int drainTicks(ItemStack stack, int requestTicks) {
         if (requestTicks <= 0) return 0;
-
-        int outLimit = Math.min(requestTicks, transferPerTick);
 
         IFluidHandlerItem fluidHandler = getFluidHandler(stack);
         if (fluidHandler == null) return 0;
 
         int buffer = getTickBuffer(stack);
-
-        if (buffer < outLimit) {
+        if (buffer < requestTicks) {
+            int neededMb = (requestTicks - buffer + ticksPerMb - 1) / ticksPerMb;
             FluidStack drained = fluidHandler.drain(
-                    new FluidStack(GTMaterials.Oxygen.getFluid(), 1),
+                    new FluidStack(GTMaterials.Oxygen.getFluid(), neededMb),
                     IFluidHandlerItem.FluidAction.EXECUTE);
             if (!drained.isEmpty()) {
                 buffer += drained.getAmount() * ticksPerMb;
             }
         }
 
-        int provided = Math.min(outLimit, buffer);
+        int provided = Math.min(requestTicks, buffer);
         if (provided > 0) {
             setTickBuffer(stack, buffer - provided);
         }
         return provided;
+    }
+
+    public static long remainingTicks(ItemStack stack) {
+        IFluidHandlerItem fluidHandler = stack.getCapability(Capabilities.FluidHandler.ITEM);
+        if (fluidHandler == null) return 0;
+        CompoundTag tag = ItemData.readElement(stack, TAG_ROOT);
+        int ticksPerMb = Math.max(1, tag.getInt(TAG_TPM));
+        return (long) fluidHandler.getFluidInTank(0).getAmount() * ticksPerMb + tag.getInt(TAG_BUF);
     }
 
     private IFluidHandlerItem getFluidHandler(ItemStack stack) {
@@ -82,11 +81,7 @@ public class OxygenSupplyTankBehavior implements IItemComponent, IComponentCapab
     }
 
     private void ensureConfigWritten(ItemStack stack) {
-        ItemData.mutateElement(stack, TAG_ROOT, tag -> {
-            tag.putInt(TAG_CAP, capacityMb);
-            tag.putInt(TAG_TPT, transferPerTick);
-            tag.putInt(TAG_TPM, ticksPerMb);
-        });
+        ItemData.mutateElement(stack, TAG_ROOT, tag -> tag.putInt(TAG_TPM, ticksPerMb));
     }
 
     @Override

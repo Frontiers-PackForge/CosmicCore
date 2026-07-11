@@ -13,6 +13,7 @@ import com.ghostipedia.cosmiccore.common.item.AsteroidItem;
 import com.ghostipedia.cosmiccore.common.item.AsteroidTargetingChipItem;
 import com.ghostipedia.cosmiccore.common.item.OxygenTankItem;
 import com.ghostipedia.cosmiccore.common.item.SoulNetworkReaderItem;
+import com.ghostipedia.cosmiccore.common.item.StealthCoatingItem;
 import com.ghostipedia.cosmiccore.common.item.armor.ChestSanguineWarptechSuite;
 import com.ghostipedia.cosmiccore.common.item.armor.HelmetSanguineWarptechSuite;
 import com.ghostipedia.cosmiccore.common.item.armor.SanguineWarptechSuite;
@@ -56,11 +57,15 @@ import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.*;
 import net.minecraft.world.level.Level;
 import net.neoforged.neoforge.fluids.FluidStack;
 import net.neoforged.neoforge.fluids.FluidUtil;
 
+import com.simibubi.create.Create;
+import com.simibubi.create.content.equipment.armor.DivingBootsItem;
+import com.simibubi.create.content.equipment.armor.DivingHelmetItem;
 import com.tterrag.registrate.providers.ProviderType;
 import com.tterrag.registrate.util.entry.ItemEntry;
 import com.tterrag.registrate.util.nullness.NonNullBiConsumer;
@@ -110,6 +115,73 @@ public class CosmicItems {
             .lang("Aether Permit")
             .properties(p -> p.stacksTo(1))
             .defaultModel()
+            .register();
+
+    public static final ItemEntry<DivingHelmetItem> SHADEBLOOM_DIVING_HELMET = REGISTRATE
+            .item("shadebloom_diving_helmet",
+                    p -> new DivingHelmetItem(ArmorMaterials.NETHERITE,
+                            p.durability(ArmorItem.Type.HELMET.getDurability(37)),
+                            Create.asResource("netherite_diving")))
+            .lang("Shadebloom Diving Helmet")
+            .model(NonNullBiConsumer.noop())
+            .register();
+
+    public static final ItemEntry<ArmorItem> SHADEBLOOM_CHESTPLATE = REGISTRATE
+            .item("shadebloom_chestplate",
+                    p -> new ArmorItem(ArmorMaterials.NETHERITE, ArmorItem.Type.CHESTPLATE,
+                            p.durability(ArmorItem.Type.CHESTPLATE.getDurability(37))))
+            .lang("Shadebloom Chestplate")
+            .model(NonNullBiConsumer.noop())
+            .register();
+
+    public static final ItemEntry<ArmorItem> SHADEBLOOM_LEGGINGS = REGISTRATE
+            .item("shadebloom_leggings",
+                    p -> new ArmorItem(ArmorMaterials.NETHERITE, ArmorItem.Type.LEGGINGS,
+                            p.durability(ArmorItem.Type.LEGGINGS.getDurability(37))))
+            .lang("Shadebloom Leggings")
+            .model(NonNullBiConsumer.noop())
+            .register();
+
+    public static final ItemEntry<ArmorItem> SHADEBLOOM_BOOTS = REGISTRATE
+            .item("shadebloom_boots",
+                    p -> new ArmorItem(ArmorMaterials.NETHERITE, ArmorItem.Type.BOOTS,
+                            p.durability(ArmorItem.Type.BOOTS.getDurability(37))))
+            .lang("Shadebloom Boots")
+            .model(NonNullBiConsumer.noop())
+            .register();
+
+    public static final ItemEntry<DivingBootsItem> SHADEBLOOM_DIVING_BOOTS = REGISTRATE
+            .item("shadebloom_diving_boots",
+                    p -> new DivingBootsItem(ArmorMaterials.NETHERITE,
+                            p.durability(ArmorItem.Type.BOOTS.getDurability(37)),
+                            Create.asResource("netherite_diving")))
+            .lang("Shadebloom Diving Boots")
+            .model(NonNullBiConsumer.noop())
+            .register();
+
+    public static final ItemEntry<Item> ABYSS_BERRY = REGISTRATE
+            .item("abyss_berry", Item::new)
+            .lang("Abyss Berry")
+            .properties(p -> p.food(new FoodProperties.Builder().nutrition(2).saturationModifier(0.3f).build()))
+            .model(NonNullBiConsumer.noop())
+            .register();
+
+    public static final ItemEntry<StealthCoatingItem> STEALTH_COATING_1 = REGISTRATE
+            .item("stealth_coating_1", p -> new StealthCoatingItem(p.stacksTo(16), 1))
+            .lang("Stealth Coating I")
+            .model(NonNullBiConsumer.noop())
+            .register();
+
+    public static final ItemEntry<StealthCoatingItem> STEALTH_COATING_2 = REGISTRATE
+            .item("stealth_coating_2", p -> new StealthCoatingItem(p.stacksTo(16), 2))
+            .lang("Stealth Coating II")
+            .model(NonNullBiConsumer.noop())
+            .register();
+
+    public static final ItemEntry<StealthCoatingItem> STEALTH_COATING_3 = REGISTRATE
+            .item("stealth_coating_3", p -> new StealthCoatingItem(p.stacksTo(16), 3))
+            .lang("Stealth Coating III")
+            .model(NonNullBiConsumer.noop())
             .register();
 
     /*
@@ -2670,7 +2742,7 @@ public class CosmicItems {
             .item("bronze_supply_tank", OxygenTankItem::new)
             .lang("Bronze Supply Tank")
             .properties(p -> p.stacksTo(1))
-            .onRegister(attach(new OxygenSupplyTankBehavior(1000, 5, 10)))
+            .onRegister(attach(new OxygenSupplyTankBehavior(1000, 10)))
             .defaultModel()
             .register();
 
@@ -2678,7 +2750,7 @@ public class CosmicItems {
             .item("steel_supply_tank", OxygenTankItem::new)
             .lang("Steel Supply Tank")
             .properties(p -> p.stacksTo(1))
-            .onRegister(attach(new OxygenSupplyTankBehavior(2500, 5, 15)))
+            .onRegister(attach(new OxygenSupplyTankBehavior(2500, 15)))
             .defaultModel()
             .register();
 

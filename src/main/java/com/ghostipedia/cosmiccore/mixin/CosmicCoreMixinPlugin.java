@@ -20,18 +20,19 @@ public class CosmicCoreMixinPlugin implements IMixinConfigPlugin {
 
     static {
         ClassLoader loader = CosmicCoreMixinPlugin.class.getClassLoader();
-        Map<String, String> probes = Map.of(
-                ".emi.", "dev/emi/emi/api/EmiApi.class",
-                ".jei.", "mezz/jei/library/plugins/jei/tags/TagInfoRecipeCategory.class",
-                ".embers.", "com/rekindled/embers/worldgen/EmbersLateWorldgen.class",
-                ".xaerominimap.", "xaero/common/minimap/render/MinimapFBORenderer.class",
-                ".xaeroworldmap.", "xaero/map/element/MapElementRenderHandler.class",
-                ".architectury.", "dev/architectury/impl/NetworkAggregator.class",
-                ".aero.",
-                "dev/eriksonn/aeronautics/content/blocks/hot_air/balloon/effect/ClientBalloonEffectRenderer.class",
-                ".sable.", "dev/ryanhcode/sable/api/block/BlockSubLevelAssemblyListener.class",
-                ".ftbchunks.", "dev/ftb/mods/ftbchunks/client/FTBChunksClient.class",
-                ".occultism.", "com/klikli_dev/occultism/crafting/recipe/PasteRepairItemRecipe.class");
+        Map<String, String> probes = Map.ofEntries(
+                Map.entry(".emi.", "dev/emi/emi/api/EmiApi.class"),
+                Map.entry(".jei.", "mezz/jei/library/plugins/jei/tags/TagInfoRecipeCategory.class"),
+                Map.entry(".embers.", "com/rekindled/embers/worldgen/EmbersLateWorldgen.class"),
+                Map.entry(".xaerominimap.", "xaero/common/minimap/render/MinimapFBORenderer.class"),
+                Map.entry(".xaeroworldmap.", "xaero/map/element/MapElementRenderHandler.class"),
+                Map.entry(".architectury.", "dev/architectury/impl/NetworkAggregator.class"),
+                Map.entry(".aero.",
+                        "dev/eriksonn/aeronautics/content/blocks/hot_air/balloon/effect/ClientBalloonEffectRenderer.class"),
+                Map.entry(".sable.", "dev/ryanhcode/sable/api/block/BlockSubLevelAssemblyListener.class"),
+                Map.entry(".ftbchunks.", "dev/ftb/mods/ftbchunks/client/FTBChunksClient.class"),
+                Map.entry(".occultism.", "com/klikli_dev/occultism/crafting/recipe/PasteRepairItemRecipe.class"),
+                Map.entry(".undergarden.", "quek/undergarden/event/UthericInfectionEvents.class"));
         probes.forEach((token, resource) -> GATES.put(token, loader.getResource(resource) != null));
     }
 

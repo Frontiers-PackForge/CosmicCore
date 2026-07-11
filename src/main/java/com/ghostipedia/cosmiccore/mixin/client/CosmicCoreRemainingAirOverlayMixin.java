@@ -1,32 +1,19 @@
 package com.ghostipedia.cosmiccore.mixin.client;
 
-import com.ghostipedia.cosmiccore.common.breath.OxygenHelper;
-
-import net.minecraft.client.player.LocalPlayer;
-import net.neoforged.neoforge.fluids.FluidType;
+import net.minecraft.client.DeltaTracker;
+import net.minecraft.client.gui.GuiGraphics;
 
 import com.simibubi.create.content.equipment.armor.RemainingAirOverlay;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Redirect;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(value = RemainingAirOverlay.class, remap = false)
 public class CosmicCoreRemainingAirOverlayMixin {
 
-    /**
-     * Make the air overlay show when air quality is bad, even if not in fluid.
-     * Redirects the fluidType.isAir() check to return false when bad air activates helmet.
-     */
-    @Redirect(method = "render",
-              at = @At(value = "INVOKE",
-                       target = "Lnet/neoforged/neoforge/fluids/FluidType;isAir()Z"),
-              remap = false)
-    private boolean cosmicCore$redirectIsAir(FluidType fluidType) {
-        LocalPlayer player = net.minecraft.client.Minecraft.getInstance().player;
-        // If air quality is bad, pretend we're NOT in air so overlay shows
-        if (player != null && OxygenHelper.airQualityActivatesHelmet(player)) {
-            return false;
-        }
-        return fluidType.isAir();
+    @Inject(method = "render", at = @At("HEAD"), cancellable = true, remap = false)
+    private void cosmicCore$hideCreateAirOverlay(GuiGraphics graphics, DeltaTracker deltaTracker, CallbackInfo ci) {
+        ci.cancel();
     }
 }

@@ -1,10 +1,13 @@
 package com.ghostipedia.cosmiccore.client;
 
 import com.ghostipedia.cosmiccore.CosmicCore;
+import com.ghostipedia.cosmiccore.client.murkbloom.MurkbloomClientState;
 import com.ghostipedia.cosmiccore.common.food.CosmicFoodData;
 import com.ghostipedia.cosmiccore.common.food.FoodBar;
 import com.ghostipedia.cosmiccore.common.food.FoodMemory;
 import com.ghostipedia.cosmiccore.common.item.behavior.WirelessPDABehavior;
+import com.ghostipedia.cosmiccore.common.murkbloom.MurkbloomServerLogic;
+import com.ghostipedia.cosmiccore.common.murkbloom.PressureRules;
 
 import com.gregtechceu.gtceu.api.item.ComponentItem;
 import com.gregtechceu.gtceu.api.item.component.IItemComponent;
@@ -43,6 +46,7 @@ public class CosmicHudGuiOverlay implements LayeredDraw.Layer {
     private static long oxygenMaxTicks = 0;
     private static boolean oxygenShow = true;
     private static double lastRateTicksPerSecond = Double.NaN;
+    private static long tankSecondsLeft = 0;
 
     // Track displayed value to prevent visual jitter (bar only moves in direction of rate)
     private static long displayedOxygen = -1;
@@ -57,11 +61,12 @@ public class CosmicHudGuiOverlay implements LayeredDraw.Layer {
         timeMaxTicks = max;
     }
 
-    public static void setOxygenBar(long left, long max, boolean show, double ratePerSecond) {
+    public static void setOxygenBar(long left, long max, boolean show, double ratePerSecond, long tankSeconds) {
         oxygenTicksLeft = left;
         oxygenMaxTicks = max;
         oxygenShow = show;
         lastRateTicksPerSecond = ratePerSecond;
+        tankSecondsLeft = tankSeconds;
 
         // Update displayed value with monotonic constraint based on rate direction
         // This prevents visual jitter from server-side fluctuations
@@ -121,6 +126,54 @@ public class CosmicHudGuiOverlay implements LayeredDraw.Layer {
             renderTimeBudgetBar(guiGraphics, screenWidth, screenHeight);
             renderOxygenBar(guiGraphics, screenWidth, screenHeight);
             renderFoodSlots(guiGraphics, screenWidth, screenHeight);
+            renderDepthMeter(guiGraphics, screenWidth, screenHeight);
+            renderMurkMeter(guiGraphics, screenWidth, screenHeight);
+        }
+    }
+
+    private static void renderMurkMeter(GuiGraphics guiGraphics, int screenWidth, int screenHeight) {
+        Minecraft mc = Minecraft.getInstance();
+        var player = mc.player;
+        if (player == null || mc.level == null ||
+                !MurkbloomServerLogic.inHollow(player.level(), player.getY())) {
+            return;
+        }
+
+        int stir = MurkbloomClientState.stir();
+        int color = switch (stir) {
+            case 0 -> 0x66707A88;
+            case 1 -> 0xFFDCE6EA;
+            case 2 -> 0xFFE8C66A;
+            case 3 -> 0xFFFF9E64;
+            default -> 0xFFFF4545;
+        };
+        if (stir >= 4 && (mc.level.getGameTime() / 5) % 2 == 0) {
+            color = 0xFFFFFFFF;
+        }
+        StringBuilder icon = new StringBuilder("◁");
+        for (int i = 0; i < stir; i++) {
+            icon.append(')');
+        }
+        String text = icon.toString();
+        int x = screenWidth / 2 - mc.font.width(text) / 2;
+        int y = screenHeight - 86;
+        guiGraphics.drawString(mc.font, text, x, y, color, true);
+    }
+
+    private static void renderDepthMeter(GuiGraphics guiGraphics, int screenWidth, int screenHeight) {
+        Minecraft mc = Minecraft.getInstance();
+        var player = mc.player;
+        if (player == null || !MurkbloomServerLogic.inHollow(player.level(), player.getY())) return;
+
+        int depth = -player.getBlockY();
+        boolean crushing = PressureRules.crushing(player);
+        String text = depth + "m";
+        int x = screenWidth - mc.font.width(text) - 10;
+        int y = screenHeight / 2 - 4;
+        guiGraphics.drawString(mc.font, text, x, y, crushing ? 0xFFFF4545 : 0xFFD7E4EA, true);
+        if (crushing) {
+            String mark = "▼";
+            guiGraphics.drawString(mc.font, mark, x - mc.font.width(mark) - 3, y, 0xFFFF4545, true);
         }
     }
 
@@ -145,13 +198,13 @@ public class CosmicHudGuiOverlay implements LayeredDraw.Layer {
                 brewX += 29;
             }
         }
-        int foodBase = hotbarTop;
+        int foodStart = 0;
         if (memory != null) {
             renderMemoryCell(guiGraphics, mc, foodX, hotbarTop);
-            foodBase -= 22;
+            foodStart = 1;
         }
-        renderEndcapColumn(guiGraphics, mc, foodBars, foodX, foodBase, elapsed);
-        renderEndcapColumn(guiGraphics, mc, brewBars, brewX, hotbarTop, elapsed);
+        renderEndcapGrid(guiGraphics, mc, foodBars, foodX, hotbarTop, elapsed, -1, foodStart);
+        renderEndcapGrid(guiGraphics, mc, brewBars, brewX, hotbarTop, elapsed, 1, 0);
     }
 
     private static void renderMemoryCell(GuiGraphics guiGraphics, Minecraft mc, int cellX, int hotbarTop) {
@@ -172,12 +225,14 @@ public class CosmicHudGuiOverlay implements LayeredDraw.Layer {
         pose.popPose();
     }
 
-    private static void renderEndcapColumn(GuiGraphics guiGraphics, Minecraft mc, List<FoodBar> bars,
-                                           int cellX, int hotbarTop, long elapsed) {
+    private static void renderEndcapGrid(GuiGraphics guiGraphics, Minecraft mc, List<FoodBar> bars,
+                                         int baseX, int hotbarTop, long elapsed, int direction, int startSlot) {
         int stride = 22;
         for (int i = 0; i < bars.size(); i++) {
             FoodBar bar = bars.get(i);
-            int cellTop = hotbarTop - 3 - i * stride;
+            int slot = startSlot + i;
+            int cellX = baseX + direction * (slot / 2) * stride;
+            int cellTop = hotbarTop - 3 - (slot % 2) * stride;
 
             var pose = guiGraphics.pose();
             pose.pushPose();
@@ -281,6 +336,10 @@ public class CosmicHudGuiOverlay implements LayeredDraw.Layer {
         // ETA text - render outside the scaled context for crisp text
         var font = Minecraft.getInstance().font;
         var comp = computeOxygenETA();
+        if (oxygenTicksLeft >= oxygenMaxTicks && tankSecondsLeft > 0) {
+            comp = Component.literal(formatSeconds(tankSecondsLeft))
+                    .withStyle(s -> s.withColor(0xFFFFFF));
+        }
         int tx = x + renderedWidth / 2 - font.width(comp) / 2;
         int ty = y + (renderedHeight - 8) / 2 + 1;  // +1 to nudge down for better centering
         // Disable shadow for draining (black text), enable for others

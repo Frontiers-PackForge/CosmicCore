@@ -159,6 +159,11 @@ public final class FoodSlotLogic {
     private static void applyEffects(ServerPlayer player, CosmicFoodData data) {
         applyEffectsFrom(player, data.foods);
         applyEffectsFrom(player, data.brews);
+        if (data.memory != null) {
+            for (FoodDefinition.EffectSpec spec : data.memory.effects()) {
+                player.addEffect(new MobEffectInstance(spec.effect(), 40, spec.amplifier(), true, false, false));
+            }
+        }
     }
 
     private static void applyEffectsFrom(ServerPlayer player, List<ActiveFood> list) {

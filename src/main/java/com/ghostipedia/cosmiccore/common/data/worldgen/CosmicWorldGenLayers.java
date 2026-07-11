@@ -2,6 +2,7 @@ package com.ghostipedia.cosmiccore.common.data.worldgen;
 
 import com.ghostipedia.cosmiccore.CosmicCore;
 import com.ghostipedia.cosmiccore.common.data.tag.block.CosmicBlockTags;
+import com.ghostipedia.cosmiccore.common.murkbloom.MurkbloomServerLogic;
 import com.ghostipedia.cosmiccore.mixin.gtceu.SimpleWorldGenLayerLevelsAccessor;
 
 import com.gregtechceu.gtceu.api.data.worldgen.GTOreDefinition;
@@ -20,18 +21,35 @@ import java.util.Set;
 public class CosmicWorldGenLayers {
 
     public static SimpleWorldGenLayer OVERWORLD;
+    public static SimpleWorldGenLayer HOLLOW;
+
+    private static boolean initialized;
 
     public static void init() {
+        if (initialized) return;
+        initialized = true;
+
         OVERWORLD = new SimpleWorldGenLayer(
                 CosmicCore.id("overworld"),
                 () -> new TagMatchTest(CosmicBlockTags.OVERWORLD_ORE_REPLACEABLES),
                 Set.of(Level.OVERWORLD));
 
+        HOLLOW = new SimpleWorldGenLayer(
+                CosmicCore.id("hollow"),
+                () -> new TagMatchTest(CosmicBlockTags.HOLLOW_ORE_REPLACEABLES),
+                Set.of(MurkbloomServerLogic.HOLLOW_DIM));
+
         ((SimpleWorldGenLayerLevelsAccessor) WorldGenLayers.STONE).cosmiccore$setLevels(Set.of());
         ((SimpleWorldGenLayerLevelsAccessor) WorldGenLayers.DEEPSLATE).cosmiccore$setLevels(Set.of());
     }
 
+    public static SimpleWorldGenLayer hollow() {
+        init();
+        return HOLLOW;
+    }
+
     public static void reassign(GTOreDefinition vein) {
+        init();
         if (OVERWORLD == null) return;
         IWorldGenLayer currentLayer = vein.layer();
         if (currentLayer == WorldGenLayers.STONE || currentLayer == WorldGenLayers.DEEPSLATE) {
