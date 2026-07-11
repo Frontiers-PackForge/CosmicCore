@@ -2,6 +2,7 @@ package com.ghostipedia.cosmiccore.common.data.worldgen;
 
 import com.ghostipedia.cosmiccore.common.data.materials.CosmicBundleMaterials;
 import com.ghostipedia.cosmiccore.common.data.worldgen.generator.veins.*;
+import com.ghostipedia.cosmiccore.common.murkbloom.MurkbloomServerLogic;
 
 import com.gregtechceu.gtceu.api.data.chemical.material.Material;
 import com.gregtechceu.gtceu.api.data.worldgen.GTOreDefinition;
@@ -13,6 +14,7 @@ import net.minecraft.util.valueproviders.ConstantInt;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -26,8 +28,10 @@ public class CosmicOreVeins {
     private static final Map<String, String> PRIMARY_TO_BUNDLE = new LinkedHashMap<>();
     private static final Map<String, Integer> COUNT = new LinkedHashMap<>();
     private static final Map<String, GTOreDefinition> SNAPSHOTS = new LinkedHashMap<>();
+    private static final Map<String, int[]> HOLLOW_BANDS = new LinkedHashMap<>();
 
     private static final int FIELD_POCKET_CLUSTER_SIZE = 10;
+    private static final float HOLLOW_DENSITY = 0.5f;
 
     private enum Shape {
         BRANCHING,
@@ -42,6 +46,7 @@ public class CosmicOreVeins {
         NAME_TO_MONO.clear();
         PRIMARY_TO_BUNDLE.clear();
         COUNT.clear();
+        HOLLOW_BANDS.clear();
 
         VEINS.put("iron", CosmicBundleMaterials.Ferosine);
         VEINS.put("magnetite", CosmicBundleMaterials.Ferosine);
@@ -99,9 +104,12 @@ public class CosmicOreVeins {
         shape(CosmicBundleMaterials.Molybite, Shape.STRINGER);
         shape(CosmicBundleMaterials.Fahlorium, Shape.FRACTURE);
         shape(CosmicBundleMaterials.MonaziteSalts, Shape.STRINGER);
-        shape(CosmicBundleMaterials.Agarlite, Shape.STRINGER);
         shape(CosmicBundleMaterials.CrudeRadionite, Shape.FRACTURE);
-        shape(CosmicBundleMaterials.Vanachrome, Shape.BRANCHING);
+
+        hollow(CosmicBundleMaterials.Utherite, Shape.BRANCHING, -390, -210);
+        hollow(CosmicBundleMaterials.Vanachrome, Shape.BRANCHING, -590, -410);
+        hollow(CosmicBundleMaterials.Shimmerbloom, Shape.CLUSTER, -590, -410);
+        hollow(CosmicBundleMaterials.Agarlite, Shape.STRINGER, -790, -610);
 
         Set<String> seen = new HashSet<>();
         for (Map.Entry<String, Material> entry : VEINS.entrySet()) {
@@ -119,6 +127,12 @@ public class CosmicOreVeins {
         SHAPES.put(mono, shape);
     }
 
+    private static void hollow(Material mono, Shape shape, int minY, int maxY) {
+        SHAPES.put(mono, shape);
+        NAME_TO_MONO.putIfAbsent(mono.getName(), mono);
+        HOLLOW_BANDS.put(mono.getName(), new int[] { minY, maxY });
+    }
+
     public static void beginRebuild() {
         init();
         SNAPSHOTS.clear();
@@ -132,13 +146,34 @@ public class CosmicOreVeins {
     }
 
     public static List<String> capturedBundles() {
-        return List.copyOf(SNAPSHOTS.keySet());
+        Set<String> all = new LinkedHashSet<>(SNAPSHOTS.keySet());
+        all.addAll(HOLLOW_BANDS.keySet());
+        return List.copyOf(all);
     }
 
     public static void applyCaptured(GTOreDefinition dest, String bundle) {
+        if (HOLLOW_BANDS.containsKey(bundle)) {
+            applyHollow(dest, bundle);
+            return;
+        }
         GTOreDefinition src = SNAPSHOTS.get(bundle);
         if (src == null) return;
         copyInto(dest, src, bundle);
+    }
+
+    private static void applyHollow(GTOreDefinition dest, String bundle) {
+        Material mono = NAME_TO_MONO.get(bundle);
+        int[] band = HOLLOW_BANDS.get(bundle);
+        if (mono == null || band == null) return;
+
+        dest.clusterSize(ConstantInt.of(FIELD_POCKET_CLUSTER_SIZE));
+        dest.density(HOLLOW_DENSITY);
+        dest.weight(0);
+        dest.layer(CosmicWorldGenLayers.hollow());
+        dest.dimensions(Set.of(MurkbloomServerLogic.HOLLOW_DIM));
+        dest.heightRangeUniform(band[0], band[1]);
+        dest.discardChanceOnAirExposure(0f);
+        dest.veinGenerator(pocket(mono));
     }
 
     public static boolean shouldRemove(ResourceLocation id) {

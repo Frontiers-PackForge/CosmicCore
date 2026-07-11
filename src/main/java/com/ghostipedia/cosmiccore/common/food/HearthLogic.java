@@ -5,14 +5,18 @@ import com.ghostipedia.cosmiccore.common.network.CCoreNetwork;
 import com.ghostipedia.cosmiccore.common.network.packet.SyncFoodDataPacket;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Holder;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.item.ItemStack;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 public final class HearthLogic {
 
@@ -51,26 +55,33 @@ public final class HearthLogic {
         FoodDefinition def = CosmicFoodRegistry.get(main);
         double hearts = def.heartBonus() * MEMORY_POWER_SHARE;
         double regen = def.regenBonus() * MEMORY_POWER_SHARE;
+        Map<Holder<MobEffect>, Integer> effectMerge = new LinkedHashMap<>();
+        collectEffects(def, effectMerge);
         StringBuilder name = new StringBuilder(main.getHoverName().getString());
         if (!side.isEmpty() && CosmicFoodRegistry.isConsumable(side)) {
             FoodDefinition sideDef = CosmicFoodRegistry.get(side);
             hearts += sideDef.heartBonus() * COMPLEMENT_SHARE;
             regen += sideDef.regenBonus() * COMPLEMENT_SHARE;
+            collectEffects(sideDef, effectMerge);
             name.append(" with ").append(side.getHoverName().getString());
         }
         if (!drink.isEmpty() && CosmicFoodRegistry.isConsumable(drink)) {
             FoodDefinition drinkDef = CosmicFoodRegistry.get(drink);
             hearts += drinkDef.heartBonus() * COMPLEMENT_SHARE;
             regen += drinkDef.regenBonus() * COMPLEMENT_SHARE;
+            collectEffects(drinkDef, effectMerge);
             name.append(name.indexOf(" with ") >= 0 ? " and " : " with ").append(drink.getHoverName().getString());
         }
+
+        List<FoodDefinition.EffectSpec> memoryEffects = new ArrayList<>();
+        effectMerge.forEach((effect, amp) -> memoryEffects.add(new FoodDefinition.EffectSpec(effect, amp)));
 
         long day = player.serverLevel().getDayTime() / 24000L;
         CosmicFoodData data = player.getData(CosmicAttachmentTypes.FOOD_DATA);
 
         double palate = palateMultiplier(data);
         FoodMemory memory = new FoodMemory(name.toString(), main.getItem(), hearts * palate, regen * palate,
-                quality, sharedWith, day);
+                quality, sharedWith, day, List.copyOf(memoryEffects));
         data.setMemory(memory);
 
         String pageKey = pageKey(main, side, drink);
@@ -127,6 +138,12 @@ public final class HearthLogic {
         CCoreNetwork.sendToPlayer(player, new SyncFoodDataPacket(data));
         data.consumeDirty();
         return msg("cosmiccore.hearth.inscribe.done", 0xC9AEF5, signature.dishName());
+    }
+
+    private static void collectEffects(FoodDefinition def, Map<Holder<MobEffect>, Integer> into) {
+        for (FoodDefinition.EffectSpec spec : def.effects()) {
+            into.merge(spec.effect(), spec.amplifier(), Math::max);
+        }
     }
 
     private static Component msg(String key, int color, Object... args) {

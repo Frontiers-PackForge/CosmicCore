@@ -1,11 +1,19 @@
 package com.ghostipedia.cosmiccore.common.murkbloom;
 
 import com.ghostipedia.cosmiccore.CosmicCore;
+import com.ghostipedia.cosmiccore.common.data.CosmicAttachmentTypes;
+import com.ghostipedia.cosmiccore.common.data.CosmicDamageTypes;
+import com.ghostipedia.cosmiccore.common.data.worldgen.abyss.AbyssRegions;
 import com.ghostipedia.cosmiccore.common.network.CCoreNetwork;
 import com.ghostipedia.cosmiccore.common.network.packet.MurkbloomSyncPacket;
+import com.ghostipedia.cosmiccore.common.network.packet.SyncAbyssAttunementPacket;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.Registries;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.protocol.game.ClientboundSetSubtitleTextPacket;
+import net.minecraft.network.protocol.game.ClientboundSetTitleTextPacket;
+import net.minecraft.network.protocol.game.ClientboundSetTitlesAnimationPacket;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
@@ -13,6 +21,7 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.level.Level;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.neoforge.event.entity.living.LivingDeathEvent;
 import net.neoforged.neoforge.event.entity.living.LivingEntityUseItemEvent;
 import net.neoforged.neoforge.event.entity.living.LivingIncomingDamageEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerEvent;
@@ -31,6 +40,7 @@ public final class MurkbloomServerLogic {
     public static final ResourceKey<Level> HOLLOW_DIM = ResourceKey.create(Registries.DIMENSION,
             ResourceLocation.fromNamespaceAndPath("undergarden", "undergarden"));
     public static final int ENTRY_Y = -60;
+    public static final int ATTUNEMENT_LAYER = 2;
 
     private static final double[] RISE_THRESHOLDS = { 25, 50, 70, 90 };
     private static final double FALL_HYSTERESIS = 8;
@@ -75,7 +85,15 @@ public final class MurkbloomServerLogic {
         boolean exposed = false;
         int exposedTicks = 0;
         byte impulseKind = 0;
+        int dissolveTicks = 0;
+        boolean dissolveWarned = false;
+        boolean stalkWarned = false;
+        int lastLayer = 0;
     }
+
+    public static final int DISSOLVE_GRACE_TICKS = 200;
+    public static final int DISSOLVE_INTERVAL = 10;
+    public static final float DISSOLVE_DAMAGE = 10.0f;
 
     public static final byte KIND_BREAK = 1;
     public static final byte KIND_PLACE = 2;
@@ -84,15 +102,29 @@ public final class MurkbloomServerLogic {
     public static final byte KIND_SONAR = 5;
 
     public static boolean inHollow(ServerPlayer player) {
-        return player.level().dimension().equals(HOLLOW_DIM) && player.getY() < ENTRY_Y;
+        return inHollow(player.level(), player.getY());
+    }
+
+    public static boolean inHollow(Level level, double y) {
+        return level.dimension().equals(HOLLOW_DIM) && y <= ENTRY_Y;
     }
 
     public static boolean hunting(ServerPlayer player) {
         return inHollow(player) && player.isInWater();
     }
 
+    public static final double STEALTH_FLOOR = 0.5;
+
+    public static double noiseGainScale(ServerPlayer player) {
+        int layer = AbyssRegions.layer(player.getBlockY());
+        double aggro = Math.pow(5, Math.max(0, layer - 1));
+        double scaled = aggro * StealthCoating.armorMultiplier(player) * StealthCoating.effectMultiplier(player);
+        return Math.max(scaled, STEALTH_FLOOR);
+    }
+
     public static void impulse(ServerPlayer player, double amount, boolean capped, byte kind) {
         if (!inHollow(player)) return;
+        amount *= noiseGainScale(player);
         Hunt hunt = HUNTS.computeIfAbsent(player.getUUID(), u -> new Hunt());
         double next = hunt.noise + amount;
         if (capped) next = Math.max(hunt.noise, Math.min(next, SONAR_CAP));
@@ -135,6 +167,21 @@ public final class MurkbloomServerLogic {
             hunt = HUNTS.computeIfAbsent(player.getUUID(), u -> new Hunt());
         }
 
+        if (!player.getData(CosmicAttachmentTypes.ABYSS_ATTUNED) &&
+                AbyssRegions.layer(player.getBlockY()) >= ATTUNEMENT_LAYER) {
+            player.setData(CosmicAttachmentTypes.ABYSS_ATTUNED, true);
+            player.displayClientMessage(Component.translatable("cosmiccore.abyss.seal_broken")
+                    .withStyle(style -> style.withColor(0xC9AEF5).withItalic(true)), true);
+            CCoreNetwork.sendToPlayer(player, new SyncAbyssAttunementPacket(true));
+        }
+
+        int layer = AbyssRegions.layer(player.getBlockY());
+        if (layer > hunt.lastLayer && layer >= 2) {
+            player.displayClientMessage(Component.translatable("cosmiccore.abyss.descent")
+                    .withStyle(style -> style.withColor(0x6E93A6).withItalic(true)), true);
+        }
+        hunt.lastLayer = layer;
+
         if (player.tickCount % 20 == 0) {
             hunt.exposed = isExposed(player);
         }
@@ -159,7 +206,8 @@ public final class MurkbloomServerLogic {
             } else {
                 movement = TICK_STILL_RESTLESS;
             }
-            hunt.noise += exposure + movement;
+            double gain = exposure + movement;
+            hunt.noise += gain > 0 ? gain * noiseGainScale(player) : gain;
         } else {
             hunt.exposedTicks = Math.max(0, hunt.exposedTicks - 6);
             hunt.noise -= DECAY_DRY;
@@ -167,6 +215,37 @@ public final class MurkbloomServerLogic {
         hunt.noise = Mth.clamp(hunt.noise, 0, 100);
 
         stepStir(hunt, player);
+
+        if (hunt.stir >= 3 && !hunt.stalkWarned) {
+            hunt.stalkWarned = true;
+            player.displayClientMessage(Component.translatable("cosmiccore.abyss.stalked")
+                    .withStyle(style -> style.withColor(0xFF9E64).withItalic(true)), true);
+        } else if (hunt.stir <= 1) {
+            hunt.stalkWarned = false;
+        }
+
+        if (hunting(player) && hunt.stir >= 4) {
+            hunt.dissolveTicks++;
+            if (!hunt.dissolveWarned) {
+                hunt.dissolveWarned = true;
+                player.connection.send(new ClientboundSetTitlesAnimationPacket(10, 70, 20));
+                player.connection.send(new ClientboundSetSubtitleTextPacket(
+                        Component.translatable("cosmiccore.abyss.swarm_subtitle")
+                                .withStyle(style -> style.withColor(0xDCE6EA))));
+                player.connection.send(new ClientboundSetTitleTextPacket(
+                        Component.translatable("cosmiccore.abyss.swarm_title")
+                                .withStyle(style -> style.withColor(0xCF6679))));
+            }
+            if (hunt.dissolveTicks > DISSOLVE_GRACE_TICKS && hunt.dissolveTicks % DISSOLVE_INTERVAL == 0) {
+                player.hurt(CosmicDamageTypes.source(player.level(), CosmicDamageTypes.MURKBLOOM), DISSOLVE_DAMAGE);
+            }
+        } else {
+            hunt.dissolveTicks = 0;
+            if (hunt.stir < 3) {
+                hunt.dissolveWarned = false;
+            }
+        }
+
         sync(player, hunt, false);
     }
 
@@ -228,7 +307,8 @@ public final class MurkbloomServerLogic {
     @SubscribeEvent
     public static void onBlockBreak(BlockEvent.BreakEvent event) {
         if (event.getPlayer() instanceof ServerPlayer player) {
-            impulse(player, NOISE_BREAK, false, KIND_BREAK);
+            double muted = NOISE_BREAK * StealthCoating.toolMultiplier(player.getMainHandItem());
+            impulse(player, muted, false, KIND_BREAK);
         }
     }
 
@@ -257,7 +337,30 @@ public final class MurkbloomServerLogic {
     }
 
     @SubscribeEvent
+    public static void onLogin(PlayerEvent.PlayerLoggedInEvent event) {
+        if (event.getEntity() instanceof ServerPlayer player) {
+            CCoreNetwork.sendToPlayer(player,
+                    new SyncAbyssAttunementPacket(player.getData(CosmicAttachmentTypes.ABYSS_ATTUNED)));
+        }
+    }
+
+    @SubscribeEvent
     public static void onLogout(PlayerEvent.PlayerLoggedOutEvent event) {
         HUNTS.remove(event.getEntity().getUUID());
+    }
+
+    @SubscribeEvent
+    public static void onDeath(LivingDeathEvent event) {
+        if (event.getEntity() instanceof ServerPlayer player) {
+            HUNTS.remove(player.getUUID());
+        }
+    }
+
+    @SubscribeEvent
+    public static void onRespawn(PlayerEvent.PlayerRespawnEvent event) {
+        if (event.getEntity() instanceof ServerPlayer player) {
+            HUNTS.remove(player.getUUID());
+            CCoreNetwork.sendToPlayer(player, new MurkbloomSyncPacket(0, 0f, player.getYRot(), 0f, (byte) 0));
+        }
     }
 }

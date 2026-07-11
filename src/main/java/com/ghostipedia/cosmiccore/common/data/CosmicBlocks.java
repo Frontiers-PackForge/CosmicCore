@@ -4,9 +4,11 @@ import com.ghostipedia.cosmiccore.CosmicCore;
 import com.ghostipedia.cosmiccore.api.CosmicCoreAPI;
 import com.ghostipedia.cosmiccore.api.block.IMagnetType;
 import com.ghostipedia.cosmiccore.client.renderer.block.NebulaeCoilRenderer;
+import com.ghostipedia.cosmiccore.common.block.BerryVineBlock;
 import com.ghostipedia.cosmiccore.common.block.DivingBellEscapePad;
 import com.ghostipedia.cosmiccore.common.block.MagnetBlock;
 import com.ghostipedia.cosmiccore.common.block.MothHomeBlock;
+import com.ghostipedia.cosmiccore.common.block.MurkFloraBlock;
 import com.ghostipedia.cosmiccore.common.blockentity.CosmicCoilBlockEntity;
 import com.ghostipedia.cosmiccore.common.food.hearth.HearthPlateBlock;
 import com.ghostipedia.cosmiccore.ember.CosmicEmberEmitterBlock;
@@ -144,6 +146,46 @@ public class CosmicBlocks {
             .model(NonNullBiConsumer.noop())
             .build()
             .register();
+
+    public static final BlockEntry<MurkFloraBlock> MURK_KELP = flora("murk_kelp", "Murky Kelp", 6);
+    public static final BlockEntry<MurkFloraBlock> MURK_SEAGRASS = flora("murk_seagrass", "Murky Seagrass", 0);
+    public static final BlockEntry<MurkFloraBlock> GLOOM_FAN = flora("gloom_fan", "Gloom Fan", 0);
+    public static final BlockEntry<MurkFloraBlock> SHIMMER_TUFT = flora("shimmer_tuft", "Shimmer Tuft", 7);
+    public static final BlockEntry<MurkFloraBlock> DITCHBULB = flora("ditchbulb", "Lantern Bulb", 10);
+    public static final BlockEntry<MurkFloraBlock> BLOOD_FAN = flora("blood_fan", "Blood Fan", 0);
+    public static final BlockEntry<MurkFloraBlock> PALE_POLYP = flora("pale_polyp", "Pale Polyp", 0);
+    public static final BlockEntry<MurkFloraBlock> ABYSS_VINE = flora("abyss_vine", "Abyss Vine", 0);
+    public static final BlockEntry<MurkFloraBlock> ABYSS_VINE_TIP = flora("abyss_vine_tip", "Abyss Vine", 0);
+    public static final BlockEntry<MurkFloraBlock> CLINGING_BLIGHT = flora("clinging_blight", "Clinging Blight", 0);
+    public static final BlockEntry<MurkFloraBlock> BLIGHTROOT = flora("blightroot", "Blightroot", 7);
+    public static final BlockEntry<MurkFloraBlock> BLIGHTED_GROWTH = flora("blighted_growth", "Blighted Growth", 0);
+    public static final BlockEntry<MurkFloraBlock> STRANGE_CRYSTAL = flora("strange_crystal", "Strange Crystal", 8);
+    public static final BlockEntry<MurkFloraBlock> LARGE_STRANGE_CRYSTAL = flora("large_strange_crystal",
+            "Large Strange Crystal", 11);
+
+    public static final BlockEntry<BerryVineBlock> DROOP_STRAND = REGISTRATE
+            .block("droop_strand", BerryVineBlock::new)
+            .initialProperties(() -> Blocks.SEAGRASS)
+            .properties(p -> p.noCollission().instabreak().noOcclusion().lightLevel(state -> 5))
+            .lang("Berried Abyss Vine")
+            .blockstate(NonNullBiConsumer.noop())
+            .item(BlockItem::new)
+            .model(NonNullBiConsumer.noop())
+            .build()
+            .register();
+
+    private static BlockEntry<MurkFloraBlock> flora(String name, String lang, int light) {
+        return REGISTRATE
+                .block(name, MurkFloraBlock::new)
+                .initialProperties(() -> Blocks.SEAGRASS)
+                .properties(p -> p.noCollission().instabreak().noOcclusion().lightLevel(state -> light))
+                .lang(lang)
+                .blockstate(NonNullBiConsumer.noop())
+                .item(BlockItem::new)
+                .model(NonNullBiConsumer.noop())
+                .build()
+                .register();
+    }
 
     // New Casings ; Several reference textures from GTOCore, make sure to give credits to them!
     public static final BlockEntry<Block> REFLECTIVE_STARMETAL_CASING = createCasingBlock("reflective_starmetal_casing",

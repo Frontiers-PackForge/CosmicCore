@@ -52,6 +52,7 @@ dependencies {
     // Create Aeronautics compat (GTM bridge). compileOnly: the pack ships these, CC must not bundle them.
     // Aero/Simulated/Sable have no usable maven (bundler/Fabric/JIJ-only), so the pack's jars are pinned in
     // libs/, extracted from create-aeronautics-bundled-1.21.1-1.3.0 and sable-neoforge-1.21.1-2.0.3.
+    compileOnly(files("libs/The_Undergarden-1.21.1-0.9.6.jar"))
     compileOnly(files("libs/aeronautics-neoforge-1.21.1-1.3.0.jar"))
     compileOnly(files("libs/simulated-neoforge-1.21.1-1.3.0.jar"))
     compileOnly(files("libs/offroad-neoforge-1.21.1-1.3.0.jar"))
@@ -59,6 +60,7 @@ dependencies {
     compileOnly(files("libs/sable-rapier-1.21.1-2.0.3.jar"))
     compileOnly(files("libs/sable-companion-common-1.21.1-1.6.0.jar"))
     compileOnly(files("libs/veil-neoforge-1.21.1-4.1.4.jar"))
+    compileOnly(files("libs/hooked-neoforge-2.0.2.jar"))
 
     // Cosmonautics hard-requires aeronautics + sable at RUNTIME, so the dev run must now load the whole
     // Aero/Sable stack it previously only compiled against. Same pinned jars; runtimeOnly does not bundle.

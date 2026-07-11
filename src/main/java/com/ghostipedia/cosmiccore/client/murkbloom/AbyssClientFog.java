@@ -2,17 +2,12 @@ package com.ghostipedia.cosmiccore.client.murkbloom;
 
 import com.ghostipedia.cosmiccore.CosmicCore;
 import com.ghostipedia.cosmiccore.client.dev.AbyssDevView;
+import com.ghostipedia.cosmiccore.common.airControl.RebreatherHelper;
 import com.ghostipedia.cosmiccore.common.data.worldgen.abyss.AbyssRegions;
+import com.ghostipedia.cosmiccore.common.murkbloom.MurkbloomServerLogic;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.core.registries.Registries;
-import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
-import net.minecraft.world.entity.EquipmentSlot;
-import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.Level;
 import net.minecraft.world.level.material.FogType;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.EventPriority;
@@ -27,10 +22,6 @@ public final class AbyssClientFog {
 
     private AbyssClientFog() {}
 
-    public static final ResourceKey<Level> HOLLOW_DIM = ResourceKey.create(Registries.DIMENSION,
-            ResourceLocation.fromNamespaceAndPath("undergarden", "undergarden"));
-    public static final int ENTRY_Y = -60;
-
     private static final float[][] LAYER_FOG = {
             { 0x14 / 255f, 0x28 / 255f, 0x26 / 255f },
             { 0x0B / 255f, 0x0F / 255f, 0x16 / 255f },
@@ -39,19 +30,15 @@ public final class AbyssClientFog {
             { 0x10 / 255f, 0x04 / 255f, 0x07 / 255f },
     };
 
-    private static final float FOG_NEAR = 12f;
-    private static final float FOG_FAR = 112f;
+    private static final float FOG_NEAR = 40f;
+    private static final float FOG_FAR = 160f;
     private static final float HELMET_FAR_BONUS = 1.25f;
-    private static final float STIR_FAR_PULL = 0.45f;
+    private static final float STIR_FAR_PULL = 0.30f;
     private static final int EDGE_BLEND = 24;
-
-    private static final String COPPER_DIVING_HELMET = "create:copper_diving_helmet";
-    private static final String NETHERITE_DIVING_HELMET = "create:netherite_diving_helmet";
 
     public static boolean inHollowWater(Minecraft mc) {
         if (mc.level == null || mc.player == null) return false;
-        if (!mc.level.dimension().equals(HOLLOW_DIM)) return false;
-        if (mc.gameRenderer.getMainCamera().getPosition().y > ENTRY_Y) return false;
+        if (!MurkbloomServerLogic.inHollow(mc.level, mc.gameRenderer.getMainCamera().getPosition().y)) return false;
         return mc.gameRenderer.getMainCamera().getFluidInCamera() == FogType.WATER;
     }
 
@@ -77,16 +64,14 @@ public final class AbyssClientFog {
         return new float[] { r, g, b };
     }
 
-    private static final float VANILLA_FAR_BASELINE = 26f;
-    private static final float VANILLA_NEAR_BASELINE = 1f;
-    private static final int GATE_START_ABOVE = 20;
-    private static final int GATE_FULL_BELOW = 4;
+    private static final int WATER_TOP_Y = 32;
+    private static final float GATE_SPAN = 15f;
 
     public static float entryGate(Minecraft mc) {
-        if (mc.level == null || !mc.level.dimension().equals(HOLLOW_DIM)) return 0f;
+        if (mc.level == null || !mc.level.dimension().equals(MurkbloomServerLogic.HOLLOW_DIM)) return 0f;
         if (mc.gameRenderer.getMainCamera().getFluidInCamera() != FogType.WATER) return 0f;
         double camY = mc.gameRenderer.getMainCamera().getPosition().y;
-        float t = (float) ((ENTRY_Y + GATE_START_ABOVE - camY) / (GATE_START_ABOVE + GATE_FULL_BELOW));
+        float t = (float) ((WATER_TOP_Y - camY) / GATE_SPAN);
         t = Mth.clamp(t, 0f, 1f);
         return t * t * (3f - 2f * t);
     }
@@ -99,14 +84,14 @@ public final class AbyssClientFog {
         if (gate <= 0f) return;
 
         float far = FOG_FAR;
-        if (wearsDivingHelmet(mc.player)) far *= HELMET_FAR_BONUS;
+        if (RebreatherHelper.hasCreateDivingHelmet(mc.player)) far *= HELMET_FAR_BONUS;
         float stir = MurkbloomClientState.intensity();
         far *= 1f - STIR_FAR_PULL * stir;
         far *= 1f + 0.06f * stir * (float) Math.sin(MurkbloomClientState.ticks() * 0.017);
-        float near = FOG_NEAR * (1f - 0.5f * stir);
+        float near = FOG_NEAR * (1f - 0.35f * stir);
 
-        event.setNearPlaneDistance(Mth.lerp(gate, VANILLA_NEAR_BASELINE, near));
-        event.setFarPlaneDistance(Mth.lerp(gate, VANILLA_FAR_BASELINE, far));
+        event.setNearPlaneDistance(Mth.lerp(gate, (float) event.getNearPlaneDistance(), near));
+        event.setFarPlaneDistance(Mth.lerp(gate, (float) event.getFarPlaneDistance(), far));
         event.setFogShape(FogShape.CYLINDER);
         event.setCanceled(true);
     }
@@ -124,12 +109,5 @@ public final class AbyssClientFog {
         event.setRed(Mth.lerp(gate, (float) event.getRed(), color[0] * murk));
         event.setGreen(Mth.lerp(gate, (float) event.getGreen(), color[1] * murk));
         event.setBlue(Mth.lerp(gate, (float) event.getBlue(), color[2] * murk));
-    }
-
-    private static boolean wearsDivingHelmet(LivingEntity entity) {
-        ItemStack head = entity.getItemBySlot(EquipmentSlot.HEAD);
-        if (head.isEmpty()) return false;
-        String id = head.getItem().builtInRegistryHolder().key().location().toString();
-        return COPPER_DIVING_HELMET.equals(id) || NETHERITE_DIVING_HELMET.equals(id);
     }
 }

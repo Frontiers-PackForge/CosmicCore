@@ -9,4 +9,7 @@ public class CosmicBlockTags {
 
     public static final TagKey<Block> OVERWORLD_ORE_REPLACEABLES = TagUtil
             .createModBlockTag("overworld_ore_replaceables");
+
+    public static final TagKey<Block> HOLLOW_ORE_REPLACEABLES = TagUtil
+            .createModBlockTag("hollow_ore_replaceables");
 }

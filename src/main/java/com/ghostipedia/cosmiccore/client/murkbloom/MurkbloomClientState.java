@@ -22,6 +22,7 @@ public final class MurkbloomClientState {
 
     private static int stirLevel = DORMANT;
     private static float intensity = 0f;
+    private static float steadyIntensity = 0f;
     private static float bloomDensity = 0f;
     private static float lastLoudYaw = 0f;
     private static float flinchPulse = 0f;
@@ -57,6 +58,10 @@ public final class MurkbloomClientState {
 
     public static float intensity() {
         return intensity;
+    }
+
+    public static float steadyIntensity() {
+        return steadyIntensity;
     }
 
     public static float bloomDensity() {
@@ -102,6 +107,7 @@ public final class MurkbloomClientState {
     public static void onClientTick(ClientTickEvent.Post event) {
         clientTicks++;
         float target = serverDriven ? bloomDensity : stirLevel / 4f;
+        steadyIntensity = Mth.lerp(0.04f, steadyIntensity, Mth.clamp(target, 0f, 1f));
         float wobble = (float) Math.sin(clientTicks * 0.011) * 0.03f;
 
         if (stirLevel == RISING && clientTicks >= nextLullRoll) {

@@ -1,14 +1,24 @@
 package com.ghostipedia.cosmiccore.common.food;
 
+import net.minecraft.core.Holder;
 import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.ListTag;
+import net.minecraft.nbt.Tag;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.item.Item;
 
 import org.jetbrains.annotations.Nullable;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public record FoodMemory(String dishName, Item dish, double heartBonus, double regenBonus, int quality,
-                         int sharedWith, long day) {
+                         int sharedWith, long day, List<FoodDefinition.EffectSpec> effects) {
 
     public CompoundTag toTag() {
         CompoundTag tag = new CompoundTag();
@@ -19,6 +29,14 @@ public record FoodMemory(String dishName, Item dish, double heartBonus, double r
         tag.putInt("quality", quality);
         tag.putInt("shared", sharedWith);
         tag.putLong("day", day);
+        ListTag effectList = new ListTag();
+        for (FoodDefinition.EffectSpec spec : effects) {
+            CompoundTag effectTag = new CompoundTag();
+            effectTag.putString("id", spec.effect().unwrapKey().map(k -> k.location().toString()).orElse(""));
+            effectTag.putInt("amp", spec.amplifier());
+            effectList.add(effectTag);
+        }
+        tag.put("effects", effectList);
         return tag;
     }
 
@@ -27,8 +45,17 @@ public record FoodMemory(String dishName, Item dish, double heartBonus, double r
         if (!tag.contains("dish")) return null;
         Item dish = FoodNbt.item(tag.getString("dish"));
         if (dish == null) return null;
+        List<FoodDefinition.EffectSpec> effects = new ArrayList<>();
+        for (Tag element : tag.getList("effects", Tag.TAG_COMPOUND)) {
+            CompoundTag effectTag = (CompoundTag) element;
+            ResourceLocation id = ResourceLocation.tryParse(effectTag.getString("id"));
+            if (id == null) continue;
+            BuiltInRegistries.MOB_EFFECT.getHolder(ResourceKey.create(Registries.MOB_EFFECT, id))
+                    .ifPresent(holder -> effects.add(
+                            new FoodDefinition.EffectSpec(holder, effectTag.getInt("amp"))));
+        }
         return new FoodMemory(tag.getString("name"), dish, tag.getDouble("hearts"), tag.getDouble("regen"),
-                tag.getInt("quality"), tag.getInt("shared"), tag.getLong("day"));
+                tag.getInt("quality"), tag.getInt("shared"), tag.getLong("day"), List.copyOf(effects));
     }
 
     public void write(FriendlyByteBuf buf) {
@@ -39,10 +66,31 @@ public record FoodMemory(String dishName, Item dish, double heartBonus, double r
         buf.writeVarInt(quality);
         buf.writeVarInt(sharedWith);
         buf.writeVarLong(day);
+        buf.writeVarInt(effects.size());
+        for (FoodDefinition.EffectSpec spec : effects) {
+            buf.writeVarInt(BuiltInRegistries.MOB_EFFECT.getId(spec.effect().value()));
+            buf.writeVarInt(spec.amplifier());
+        }
     }
 
     public static FoodMemory read(FriendlyByteBuf buf) {
-        return new FoodMemory(buf.readUtf(), BuiltInRegistries.ITEM.byId(buf.readVarInt()), buf.readDouble(),
-                buf.readDouble(), buf.readVarInt(), buf.readVarInt(), buf.readVarLong());
+        String name = buf.readUtf();
+        Item dish = BuiltInRegistries.ITEM.byId(buf.readVarInt());
+        double hearts = buf.readDouble();
+        double regen = buf.readDouble();
+        int quality = buf.readVarInt();
+        int shared = buf.readVarInt();
+        long day = buf.readVarLong();
+        int count = buf.readVarInt();
+        List<FoodDefinition.EffectSpec> effects = new ArrayList<>(count);
+        for (int i = 0; i < count; i++) {
+            MobEffect effect = BuiltInRegistries.MOB_EFFECT.byId(buf.readVarInt());
+            int amp = buf.readVarInt();
+            if (effect != null) {
+                Holder<MobEffect> holder = BuiltInRegistries.MOB_EFFECT.wrapAsHolder(effect);
+                effects.add(new FoodDefinition.EffectSpec(holder, amp));
+            }
+        }
+        return new FoodMemory(name, dish, hearts, regen, quality, shared, day, List.copyOf(effects));
     }
 }

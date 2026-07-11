@@ -21,6 +21,7 @@ import com.ghostipedia.cosmiccore.common.data.materials.CosmicMaterialSet;
 import com.ghostipedia.cosmiccore.common.data.materials.CosmicMaterials;
 import com.ghostipedia.cosmiccore.common.data.recipe.CosmicCoreOreRecipeHandler;
 import com.ghostipedia.cosmiccore.common.data.temperature.CosmicTemperatureModifiers;
+import com.ghostipedia.cosmiccore.common.data.worldgen.CosmicWorldGenLayers;
 import com.ghostipedia.cosmiccore.common.data.worldgen.generator.CosmicChunkGenerators;
 import com.ghostipedia.cosmiccore.common.machine.multiblock.multi.modular.MultiblockInit;
 import com.ghostipedia.cosmiccore.common.mob.DimensionMobScaling;
@@ -72,6 +73,7 @@ public class CosmicCore {
         modBus.register(this);
         CosmicRegistration.REGISTRATE.registerEventListeners(modBus);
         CosmicAttachmentTypes.ATTACHMENT_TYPES.register(modBus);
+        CosmicEffects.EFFECTS.register(modBus);
         CosmicParticleTypes.PARTICLE_TYPES.register(modBus);
         CosmicLootModifiers.register(modBus);
         CosmicTemperatureModifiers.register(modBus);
@@ -107,6 +109,7 @@ public class CosmicCore {
         MultiblockInit.init();
         CosmicMachines.init();
         CosmicSounds.init();
+        CosmicWorldGenLayers.init();
         CosmicCoreDatagen.init();
     }
 

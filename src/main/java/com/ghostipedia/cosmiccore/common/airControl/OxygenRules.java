@@ -1,5 +1,7 @@
 package com.ghostipedia.cosmiccore.common.airControl;
 
+import com.ghostipedia.cosmiccore.common.murkbloom.MurkbloomServerLogic;
+
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
@@ -150,6 +152,10 @@ public final class OxygenRules {
 
         // Venus - toxic atmosphere
         addRanges(VENUS, new AirRanges(Integer.MIN_VALUE, Integer.MAX_VALUE, AirQuality.TOXIC, 2, 0.0, 3.0f));
+
+        addRanges(MurkbloomServerLogic.HOLLOW_DIM,
+                new AirRanges(Integer.MIN_VALUE, MurkbloomServerLogic.ENTRY_Y, AirQuality.ABYSS),
+                new AirRanges(MurkbloomServerLogic.ENTRY_Y + 1, Integer.MAX_VALUE, AirQuality.SAFE));
 
         // Glacio - thin but breathable at surface (ice world with some atmosphere)
         addRanges(GLACIO,

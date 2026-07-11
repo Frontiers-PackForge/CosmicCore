@@ -1,0 +1,6 @@
+{
+    "parent": "minecraft:item/generated",
+    "textures": {
+        "layer0": "cosmiccore:block/abyss/strange_crystal"
+    }
+}

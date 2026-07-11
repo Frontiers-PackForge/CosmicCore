@@ -16,6 +16,7 @@ import com.gregtechceu.gtceu.api.multiblock.util.RelativeDirection;
 import com.gregtechceu.gtceu.api.recipe.OverclockingLogic;
 import com.gregtechceu.gtceu.common.data.*;
 
+import static com.ghostipedia.cosmiccore.api.pattern.CosmicPredicates.autoAbilitiesNoEnergyIn;
 import static com.ghostipedia.cosmiccore.api.registries.CosmicRegistration.REGISTRATE;
 import static com.ghostipedia.cosmiccore.common.data.CosmicBlocks.*;
 import static com.gregtechceu.gtceu.api.multiblock.Predicates.*;
@@ -60,7 +61,7 @@ public class PCBFoundry {
                     .where('Q', controller(blocks(definition.getBlock())))
                     .where('A', blocks(BICHROMAL_NEVRAMITE_CASING.get())
                             .or(autoAbilities())
-                            .or(autoAbilities(CosmicRecipeTypes.HEAVY_ASSEMBLER))
+                            .or(autoAbilitiesNoEnergyIn(CosmicRecipeTypes.HEAVY_ASSEMBLER))
                             .or(abilities(PartAbility.IMPORT_FLUIDS,PartAbility.IMPORT_FLUIDS_4X,PartAbility.IMPORT_FLUIDS_9X))
                             .or(abilities(PartAbility.INPUT_ENERGY).setExactLimit(1))
                             .or(abilities(PartAbility.PARALLEL_HATCH, CosmicPartAbility.COSMIC_PARALLEL_HATCH).setExactLimit(1))
