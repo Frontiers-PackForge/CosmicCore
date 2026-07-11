@@ -1,3 +1,6 @@
 {
-    "parent": "create:item/netherite_diving_boots"
+    "parent": "minecraft:item/generated",
+    "textures": {
+        "layer0": "cosmiccore:item/shadebloom_diving_boots"
+    }
 }

@@ -63,7 +63,6 @@ import net.minecraft.world.level.Level;
 import net.neoforged.neoforge.fluids.FluidStack;
 import net.neoforged.neoforge.fluids.FluidUtil;
 
-import com.simibubi.create.Create;
 import com.simibubi.create.content.equipment.armor.DivingBootsItem;
 import com.simibubi.create.content.equipment.armor.DivingHelmetItem;
 import com.tterrag.registrate.providers.ProviderType;
@@ -119,16 +118,16 @@ public class CosmicItems {
 
     public static final ItemEntry<DivingHelmetItem> SHADEBLOOM_DIVING_HELMET = REGISTRATE
             .item("shadebloom_diving_helmet",
-                    p -> new DivingHelmetItem(ArmorMaterials.NETHERITE,
+                    p -> new DivingHelmetItem(CosmicArmorMaterials.SHADEBLOOM,
                             p.durability(ArmorItem.Type.HELMET.getDurability(37)),
-                            Create.asResource("netherite_diving")))
+                            CosmicCore.id("shadebloom")))
             .lang("Shadebloom Diving Helmet")
             .model(NonNullBiConsumer.noop())
             .register();
 
     public static final ItemEntry<ArmorItem> SHADEBLOOM_CHESTPLATE = REGISTRATE
             .item("shadebloom_chestplate",
-                    p -> new ArmorItem(ArmorMaterials.NETHERITE, ArmorItem.Type.CHESTPLATE,
+                    p -> new ArmorItem(CosmicArmorMaterials.SHADEBLOOM, ArmorItem.Type.CHESTPLATE,
                             p.durability(ArmorItem.Type.CHESTPLATE.getDurability(37))))
             .lang("Shadebloom Chestplate")
             .model(NonNullBiConsumer.noop())
@@ -136,7 +135,7 @@ public class CosmicItems {
 
     public static final ItemEntry<ArmorItem> SHADEBLOOM_LEGGINGS = REGISTRATE
             .item("shadebloom_leggings",
-                    p -> new ArmorItem(ArmorMaterials.NETHERITE, ArmorItem.Type.LEGGINGS,
+                    p -> new ArmorItem(CosmicArmorMaterials.SHADEBLOOM, ArmorItem.Type.LEGGINGS,
                             p.durability(ArmorItem.Type.LEGGINGS.getDurability(37))))
             .lang("Shadebloom Leggings")
             .model(NonNullBiConsumer.noop())
@@ -144,7 +143,7 @@ public class CosmicItems {
 
     public static final ItemEntry<ArmorItem> SHADEBLOOM_BOOTS = REGISTRATE
             .item("shadebloom_boots",
-                    p -> new ArmorItem(ArmorMaterials.NETHERITE, ArmorItem.Type.BOOTS,
+                    p -> new ArmorItem(CosmicArmorMaterials.SHADEBLOOM, ArmorItem.Type.BOOTS,
                             p.durability(ArmorItem.Type.BOOTS.getDurability(37))))
             .lang("Shadebloom Boots")
             .model(NonNullBiConsumer.noop())
@@ -152,9 +151,9 @@ public class CosmicItems {
 
     public static final ItemEntry<DivingBootsItem> SHADEBLOOM_DIVING_BOOTS = REGISTRATE
             .item("shadebloom_diving_boots",
-                    p -> new DivingBootsItem(ArmorMaterials.NETHERITE,
+                    p -> new DivingBootsItem(CosmicArmorMaterials.SHADEBLOOM,
                             p.durability(ArmorItem.Type.BOOTS.getDurability(37)),
-                            Create.asResource("netherite_diving")))
+                            CosmicCore.id("shadebloom")))
             .lang("Shadebloom Diving Boots")
             .model(NonNullBiConsumer.noop())
             .register();
