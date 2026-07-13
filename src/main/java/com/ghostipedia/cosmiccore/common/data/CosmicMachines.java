@@ -47,6 +47,8 @@ import com.gregtechceu.gtceu.common.machine.multiblock.electric.PowerSubstationM
 import com.gregtechceu.gtceu.common.machine.multiblock.part.EnergyHatchPartMachine;
 import com.gregtechceu.gtceu.common.machine.multiblock.part.FluidHatchPartMachine;
 import com.gregtechceu.gtceu.common.machine.multiblock.primitive.PrimitiveWorkableMachine;
+import com.gregtechceu.gtceu.common.mui.GTGuiTheme;
+import com.gregtechceu.gtceu.common.mui.GTSingleblockMachinePanels;
 import com.gregtechceu.gtceu.utils.FormattingUtil;
 
 import net.minecraft.network.chat.Component;
@@ -137,6 +139,8 @@ public class CosmicMachines {
                     "steam_bender", SimpleSteamMachine::new, (pressure, builder) -> builder
                             .rotationState(RotationState.NON_Y_AXIS)
                             .recipeType(GTRecipeTypes.BENDER_RECIPES)
+                            .ui(GTSingleblockMachinePanels.GENERAL_MACHINE)
+                            .themeId(i -> i > 0 ? GTGuiTheme.STEEL.getId() : GTGuiTheme.BRONZE.getId())
                             .recipeModifier(SimpleSteamMachine::recipeModifier)
                             .addOutputLimit(ItemRecipeCapability.CAP, 1)
                             .workableSteamHullModel(pressure, GTCEu.id("block/machines/bender"))
@@ -146,6 +150,8 @@ public class CosmicMachines {
                     "steam_wiremill", SimpleSteamMachine::new, (pressure, builder) -> builder
                             .rotationState(RotationState.NON_Y_AXIS)
                             .recipeType(GTRecipeTypes.WIREMILL_RECIPES)
+                            .ui(GTSingleblockMachinePanels.GENERAL_MACHINE)
+                            .themeId(i -> i > 0 ? GTGuiTheme.STEEL.getId() : GTGuiTheme.BRONZE.getId())
                             .recipeModifier(SimpleSteamMachine::recipeModifier)
                             .addOutputLimit(ItemRecipeCapability.CAP, 1)
                             .modelProperty(GTMachineModelProperties.VENT_DIRECTION, RelativeDirection.BACK)
@@ -189,6 +195,7 @@ public class CosmicMachines {
             (holder, tier) -> new SimpleTieredMachine(holder, tier, defaultTankSizeFunction),
             (tier, builder) -> builder
                     .recipeType(CosmicRecipeTypes.CALX_REACTOR)
+                    .ui(GTSingleblockMachinePanels.GENERAL_MACHINE)
                     .tooltipBuilder((stack, list) -> {
                         list.add(Component.translatable("cosmiccore.calx_reactor.desc"));
                     })
@@ -202,6 +209,7 @@ public class CosmicMachines {
     public static final MachineDefinition[] MANA_LEACHING_TUB = registerTieredMachines("mana_leaching_tub",
             (holder, tier) -> new SimpleTieredMachine(holder, tier, defaultTankSizeFunction),
             (tier, builder) -> builder.recipeType(CosmicRecipeTypes.MANA_LEACHING_TUB)
+                    .ui(GTSingleblockMachinePanels.GENERAL_MACHINE)
                     .tooltipBuilder((stack, list) -> {
                         list.add(Component.translatable("cosmiccore.mana_leaching_tub.desc"));
                     })
@@ -215,6 +223,7 @@ public class CosmicMachines {
     public static final MachineDefinition[] ROASTER = registerTieredMachines("roaster",
             (holder, tier) -> new SimpleTieredMachine(holder, tier, defaultTankSizeFunction),
             (tier, builder) -> builder.recipeType(CosmicRecipeTypes.ROASTER)
+                    .ui(GTSingleblockMachinePanels.GENERAL_MACHINE)
                     .tooltipBuilder((stack, list) -> {
                         list.add(Component.translatable("cosmiccore.roaster.desc"));
                     })
@@ -227,6 +236,7 @@ public class CosmicMachines {
     public static final MachineDefinition[] THERMOMAG = registerTieredMachines("thermomagnitizer",
             (holder, tier) -> new SimpleTieredMachine(holder, tier, defaultTankSizeFunction),
             (tier, builder) -> builder.recipeType(CosmicRecipeTypes.THERMOMAG)
+                    .ui(GTSingleblockMachinePanels.GENERAL_MACHINE)
                     .tooltipBuilder((stack, list) -> {
                         list.add(Component.translatable("cosmiccore.thermomagnitizer.desc"));
                     })
@@ -239,6 +249,7 @@ public class CosmicMachines {
     public static final MachineDefinition[] SPOOLING_MACHINE = registerTieredMachines("spooling_machine",
             (holder, tier) -> new SimpleTieredMachine(holder, tier, defaultTankSizeFunction),
             (tier, builder) -> builder.recipeType(CosmicRecipeTypes.SPOOLING_MACHINE)
+                    .ui(GTSingleblockMachinePanels.GENERAL_MACHINE)
                     .tooltips(workableTiered(tier, GTValues.V[tier], GTValues.V[tier] * 64,
                             CosmicRecipeTypes.SPOOLING_MACHINE,
                             defaultTankSizeFunction.applyAsInt(tier), true))
@@ -250,6 +261,7 @@ public class CosmicMachines {
             (holder, tier) -> new SimpleTieredMachine(holder, tier, defaultTankSizeFunction),
             (tier, builder) -> builder
                     .recipeType(CosmicRecipeTypes.VAC_BUBBLER)
+                    .ui(GTSingleblockMachinePanels.GENERAL_MACHINE)
                     .tooltipBuilder((stack, list) -> {
                         list.add(Component.translatable("cosmiccore.vacuum_bubbler.desc"));
                     })
@@ -283,6 +295,7 @@ public class CosmicMachines {
                     .rotationState(RotationState.NON_Y_AXIS)
                     .recipeType(BIO_LAB)
                     .recipeModifier(OC_NON_PERFECT)
+                    .ui(GTSingleblockMachinePanels.GENERAL_MACHINE)
                     .workableTieredHullModel(GTCEu.id("block/machines/brewery"))
                     .tooltips(workableTiered(tier, GTValues.V[tier], GTValues.V[tier] * 64,
                             BIO_LAB, defaultTankSizeFunction.applyAsInt(tier), true))

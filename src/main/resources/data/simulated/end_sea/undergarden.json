@@ -1,0 +1,7 @@
+{
+  "dimension": "undergarden:undergarden",
+  "priority": 2,
+  "start_y": 20,
+  "depth_gradient": 5.0,
+  "drag": 10.0
+}

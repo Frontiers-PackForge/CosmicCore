@@ -23,6 +23,7 @@ import com.ghostipedia.cosmiccore.common.data.recipe.CosmicCoreOreRecipeHandler;
 import com.ghostipedia.cosmiccore.common.data.temperature.CosmicTemperatureModifiers;
 import com.ghostipedia.cosmiccore.common.data.worldgen.CosmicWorldGenLayers;
 import com.ghostipedia.cosmiccore.common.data.worldgen.generator.CosmicChunkGenerators;
+import com.ghostipedia.cosmiccore.common.item.armor.boots.TravelerBootsMigration;
 import com.ghostipedia.cosmiccore.common.machine.multiblock.multi.modular.MultiblockInit;
 import com.ghostipedia.cosmiccore.common.mob.DimensionMobScaling;
 import com.ghostipedia.cosmiccore.common.network.CCoreNetwork;
@@ -122,6 +123,7 @@ public class CosmicCore {
     public void commonSetup(FMLCommonSetupEvent event) {
         event.enqueueWork(() -> {
             MapIngredientTypeManager.registerMapIngredient(SoulIngredient.class, MapSoulIngredient::from);
+            TravelerBootsMigration.registerAliases();
             MapIngredientTypeManager.registerMapIngredient(Double.class, MapEmberIngredient::convertToMapIngredient);
             GridLinkables.register(CosmicItems.LINKED_TERMINAL, LinkedTerminalBehavior.handler);
             OxygenRules.registerAirRanges();

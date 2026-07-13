@@ -34,6 +34,7 @@ public class CosmicFoodData implements INBTSerializable<CompoundTag> {
     public FoodMemory memory;
     public List<CookbookPage> cookbook = new ArrayList<>();
     public long lastPageDay = -1;
+    public long lastPageTick = -1;
     public List<SignatureMeal> signatures = new ArrayList<>();
     public Map<String, Integer> mealDays = new HashMap<>();
     public Map<String, Long> mealLastDay = new HashMap<>();
@@ -172,6 +173,7 @@ public class CosmicFoodData implements INBTSerializable<CompoundTag> {
         for (var page : cookbook) pages.add(page.toTag());
         tag.put("cookbook", pages);
         tag.putLong("lastPageDay", lastPageDay);
+        tag.putLong("lastPageTick", lastPageTick);
         ListTag sigs = new ListTag();
         for (var signature : signatures) sigs.add(signature.toTag());
         tag.put("signatures", sigs);
@@ -198,6 +200,7 @@ public class CosmicFoodData implements INBTSerializable<CompoundTag> {
             cookbook.add(CookbookPage.fromTag((CompoundTag) element));
         }
         lastPageDay = nbt.contains("lastPageDay") ? nbt.getLong("lastPageDay") : -1;
+        lastPageTick = nbt.contains("lastPageTick") ? nbt.getLong("lastPageTick") : -1;
         signatures = new ArrayList<>();
         for (Tag element : nbt.getList("signatures", Tag.TAG_COMPOUND)) {
             var signature = SignatureMeal.fromTag((CompoundTag) element);

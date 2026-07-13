@@ -1,5 +1,7 @@
 package com.ghostipedia.cosmiccore.common.machine.multiblock.multi.logic;
 
+import com.ghostipedia.cosmiccore.common.murkbloom.AbyssMachineRestrictions;
+
 import com.gregtechceu.gtceu.api.GTValues;
 import com.gregtechceu.gtceu.api.blockentity.BlockEntityCreationInfo;
 import com.gregtechceu.gtceu.api.capability.IEnergyContainer;
@@ -58,6 +60,7 @@ public class OreExtractionDrillMachine extends WorkableElectricMultiblockMachine
     }
 
     public boolean drainEnergy(boolean simulate) {
+        if (AbyssMachineRestrictions.inUndergarden(getLevel())) return false;
         var energyHandlers = this.getCapabilitiesFlat(IO.IN, EURecipeCapability.CAP);
         if (energyHandlers == null) return false;
 

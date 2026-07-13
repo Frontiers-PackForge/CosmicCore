@@ -22,6 +22,7 @@ import static com.gregtechceu.gtceu.api.machine.multiblock.PartAbility.IMPORT_FL
 import static com.gregtechceu.gtceu.api.multiblock.Predicates.*;
 import static com.gregtechceu.gtceu.common.data.GTRecipeModifiers.BATCH_MODE;
 import static com.gregtechceu.gtceu.common.data.GTRecipeModifiers.ELECTRIC_OVERCLOCK;
+import static com.rekindled.embers.RegistryManager.DAWNSTONE_ANVIL;
 
 public class EclipsedDawnForge {
 
@@ -59,7 +60,7 @@ public class EclipsedDawnForge {
                     .where('C', blocks(ETHERSTEEL_PLATED_ASH_TILES.get()))
                     .where('D', blocks(GTBlocks.CASING_PTFE_INERT.get()))
                     .where('E', blocks(GTBlocks.CASING_LAMINATED_GLASS.get()))
-                    .where('F', blocks(net.minecraft.world.level.block.Blocks.ANVIL))
+                    .where('F', blocks(DAWNSTONE_ANVIL.get()))
 
                     .build())
             .workableCasingModel(CosmicCore.id("block/casings/solid/ethersteel_plated_ash_tiles"),

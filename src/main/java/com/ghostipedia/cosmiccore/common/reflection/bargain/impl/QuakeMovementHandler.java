@@ -2,10 +2,7 @@ package com.ghostipedia.cosmiccore.common.reflection.bargain.impl;
 
 import com.ghostipedia.cosmiccore.CosmicCore;
 import com.ghostipedia.cosmiccore.common.data.CosmicItems;
-import com.ghostipedia.cosmiccore.common.item.armor.boots.ICosmicBoots;
 import com.ghostipedia.cosmiccore.common.reflection.ReflectionCapability;
-
-import com.gregtechceu.gtceu.api.item.armor.ArmorComponentItem;
 
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
@@ -14,9 +11,7 @@ import net.minecraft.core.particles.BlockParticleOption;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.chat.Component;
 import net.minecraft.util.Mth;
-import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.RenderShape;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.api.distmarker.Dist;
@@ -79,7 +74,7 @@ public class QuakeMovementHandler {
     }
 
     public static boolean canUseGlobestriderMovement(Player player) {
-        return hasGlobestriderPalms(player) || isWearingGlobetrotters(player);
+        return hasGlobestriderPalms(player);
     }
 
     public static boolean hasGlobestriderPalms(Player player) {
@@ -94,12 +89,6 @@ public class QuakeMovementHandler {
             }
         }
         return false;
-    }
-
-    public static boolean isWearingGlobetrotters(Player player) {
-        ItemStack boots = player.getItemBySlot(EquipmentSlot.FEET);
-        return !boots.isEmpty() && boots.getItem() instanceof ArmorComponentItem armorItem &&
-                armorItem.getArmorLogic() instanceof ICosmicBoots;
     }
 
     public static double getHardCapSpeed() {
@@ -127,16 +116,16 @@ public class QuakeMovementHandler {
             return;
 
         UUID uuid = player.getUUID();
-        boolean onGround = player.onGround();
+        boolean onGround = QuakeGrounding.isMovementGrounded(player);
         boolean wasGrounded = wasOnGround.getOrDefault(uuid, true);
 
         Vec3 motion = player.getDeltaMovement();
         double horizontalSpeed = getHorizontalSpeed(motion);
+        int airborneTicks = airTime.getOrDefault(uuid, 0);
 
         if (!onGround) {
-            airTime.merge(uuid, 1, Integer::sum);
-        } else {
-            airTime.put(uuid, 0);
+            airborneTicks++;
+            airTime.put(uuid, airborneTicks);
         }
 
         boolean justJumped = !onGround && wasGrounded && motion.y > 0;
@@ -157,8 +146,7 @@ public class QuakeMovementHandler {
 
         // Bhop on landing (requires minimum airtime to filter stair/step spam)
         if (onGround && !wasGrounded && horizontalSpeed > MIN_BHOP_SPEED) {
-            int air = airTime.getOrDefault(uuid, 0);
-            if (air >= MIN_BHOP_AIRTIME) {
+            if (airborneTicks >= MIN_BHOP_AIRTIME) {
                 double oldSpeed = horizontalSpeed;
                 motion = applyBunnyHop(player, motion, horizontalSpeed);
                 player.setDeltaMovement(motion);
@@ -170,6 +158,9 @@ public class QuakeMovementHandler {
                     if (DEBUG_MODE) lastBhopTick = player.tickCount;
                 }
             }
+        }
+        if (onGround) {
+            airTime.put(uuid, 0);
         }
 
         // Air strafe
@@ -220,9 +211,8 @@ public class QuakeMovementHandler {
             targetSpeed = boostedSpeed;
         }
 
-        double maxSpeed = Math.min(getEffectiveMaxSpeed(player), HARD_CAP_SPEED);
-        targetSpeed = Math.min(targetSpeed, maxSpeed);
-        targetSpeed = Math.max(targetSpeed, Math.min(currentSpeed, maxSpeed));
+        targetSpeed = Math.min(targetSpeed, HARD_CAP_SPEED);
+        targetSpeed = Math.max(targetSpeed, Math.min(currentSpeed, HARD_CAP_SPEED));
 
         if (Math.abs(targetSpeed - currentSpeed) > 0.001 && currentSpeed > 0) {
             double scale = targetSpeed / currentSpeed;
@@ -304,19 +294,6 @@ public class QuakeMovementHandler {
 
     private static double getHorizontalSpeed(Vec3 motion) {
         return Math.sqrt(motion.x * motion.x + motion.z * motion.z);
-    }
-
-    private static double getEffectiveMaxSpeed(Player player) {
-        ItemStack boots = player.getItemBySlot(EquipmentSlot.FEET);
-        if (!boots.isEmpty() && boots.getItem() instanceof ArmorComponentItem armorItem) {
-            if (armorItem.getArmorLogic() instanceof ICosmicBoots cosmicBoots) {
-                double bootSpeed = cosmicBoots.getEffectiveMaxSpeed(boots);
-                if (bootSpeed > 0) {
-                    return Math.min(bootSpeed, HARD_CAP_SPEED);
-                }
-            }
-        }
-        return HARD_CAP_SPEED;
     }
 
     @OnlyIn(Dist.CLIENT)

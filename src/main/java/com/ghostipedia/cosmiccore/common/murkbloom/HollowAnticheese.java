@@ -6,14 +6,17 @@ import com.ghostipedia.cosmiccore.common.data.CosmicDamageTypes;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.vehicle.AbstractMinecart;
 import net.minecraft.world.entity.vehicle.Boat;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Blocks;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
@@ -24,7 +27,16 @@ import net.neoforged.neoforge.event.entity.EntityTravelToDimensionEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerInteractEvent;
 import net.neoforged.neoforge.event.level.BlockEvent;
+import net.neoforged.neoforge.event.tick.EntityTickEvent;
 import net.neoforged.neoforge.event.tick.PlayerTickEvent;
+
+import com.simibubi.create.api.behaviour.movement.MovementBehaviour;
+import com.simibubi.create.api.contraption.ContraptionMovementSetting;
+import com.simibubi.create.content.contraptions.Contraption;
+import com.simibubi.create.content.contraptions.OrientedContraptionEntity;
+import com.simibubi.create.content.contraptions.actors.psi.PortableStorageInterfaceMovement;
+import com.simibubi.create.content.contraptions.data.ContraptionPickupLimiting;
+import com.simibubi.create.content.contraptions.mounted.MinecartContraptionItem;
 
 import java.util.ArrayDeque;
 import java.util.HashMap;
@@ -167,6 +179,15 @@ public final class HollowAnticheese {
     }
 
     @SubscribeEvent
+    public static void onEntityTick(EntityTickEvent.Pre event) {
+        if (!(event.getEntity() instanceof AbstractMinecart cart)) return;
+        if (cart.level().isClientSide || !MurkbloomServerLogic.inHollow(cart.level(), cart.getY())) return;
+        if (!collapseCartContraption(cart)) {
+            returnVehicleToShelf(cart);
+        }
+    }
+
+    @SubscribeEvent
     public static void onMount(EntityMountEvent event) {
         if (!event.isMounting()) return;
         if (!(event.getEntityMounting() instanceof ServerPlayer player)) return;
@@ -191,5 +212,41 @@ public final class HollowAnticheese {
         vehicle.setDeltaMovement(0, 0, 0);
         vehicle.resetFallDistance();
         vehicle.setPos(vehicle.getX(), MurkbloomServerLogic.ENTRY_Y + 1.0, vehicle.getZ());
+    }
+
+    private static boolean collapseCartContraption(AbstractMinecart cart) {
+        if (!(cart.level() instanceof ServerLevel level)) return false;
+        OrientedContraptionEntity entity = cart.getPassengers().stream()
+                .filter(OrientedContraptionEntity.class::isInstance)
+                .map(OrientedContraptionEntity.class::cast)
+                .findFirst()
+                .orElse(null);
+        if (entity == null) return false;
+
+        Contraption contraption = entity.getContraption();
+        if (ContraptionMovementSetting.isNoPickup(contraption.getBlocks().values())) return false;
+        ItemStack stack = MinecartContraptionItem.create(cart.getMinecartType(), entity);
+        if (stack.isEmpty() ||
+                ContraptionPickupLimiting.isTooLargeForPickup(stack.saveOptional(level.registryAccess()))) {
+            return false;
+        }
+
+        if (cart.hasCustomName()) {
+            stack.set(DataComponents.CUSTOM_NAME, cart.getCustomName());
+        }
+        contraption.stop(level);
+        for (var actor : contraption.getActors()) {
+            MovementBehaviour behaviour = MovementBehaviour.REGISTRY.get(actor.left.state());
+            if (behaviour instanceof PortableStorageInterfaceMovement interfaceMovement) {
+                interfaceMovement.reset(actor.right);
+            }
+        }
+
+        ItemEntity item = new ItemEntity(level, cart.getX(), MurkbloomServerLogic.ENTRY_Y + 1.0, cart.getZ(), stack);
+        item.setDefaultPickUpDelay();
+        entity.discard();
+        cart.discard();
+        level.addFreshEntity(item);
+        return true;
     }
 }

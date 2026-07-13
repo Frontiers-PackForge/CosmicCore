@@ -17,7 +17,7 @@ import com.ghostipedia.cosmiccore.common.item.StealthCoatingItem;
 import com.ghostipedia.cosmiccore.common.item.armor.ChestSanguineWarptechSuite;
 import com.ghostipedia.cosmiccore.common.item.armor.HelmetSanguineWarptechSuite;
 import com.ghostipedia.cosmiccore.common.item.armor.SanguineWarptechSuite;
-import com.ghostipedia.cosmiccore.common.item.armor.boots.CosmicBootsArmorLogic;
+import com.ghostipedia.cosmiccore.common.item.armor.boots.TravelerBootsItem;
 import com.ghostipedia.cosmiccore.common.item.behavior.DowsingRodBehavior;
 import com.ghostipedia.cosmiccore.common.item.behavior.EffectApplicationBehavior;
 import com.ghostipedia.cosmiccore.common.item.behavior.InfiniteSprayCanBehavior;
@@ -141,12 +141,12 @@ public class CosmicItems {
             .model(NonNullBiConsumer.noop())
             .register();
 
-    public static final ItemEntry<ArmorItem> SHADEBLOOM_BOOTS = REGISTRATE
-            .item("shadebloom_boots",
-                    p -> new ArmorItem(CosmicArmorMaterials.SHADEBLOOM, ArmorItem.Type.BOOTS,
-                            p.durability(ArmorItem.Type.BOOTS.getDurability(37))))
-            .lang("Shadebloom Boots")
-            .model(NonNullBiConsumer.noop())
+    public static final ItemEntry<TravelerBootsItem> SHADEBLOOM_BOOTS = REGISTRATE
+            .item("shadebloom_travelers_boots",
+                    p -> new TravelerBootsItem(CosmicArmorMaterials.SHADEBLOOM,
+                            p.durability(ArmorItem.Type.BOOTS.getDurability(45)).fireResistant()))
+            .lang("Shadebloom Traveler's Boots")
+            .tag(CustomTags.PPE_ARMOR)
             .register();
 
     public static final ItemEntry<DivingBootsItem> SHADEBLOOM_DIVING_BOOTS = REGISTRATE
@@ -2769,92 +2769,38 @@ public class CosmicItems {
         return item -> item.attachComponents(components);
     }
 
-    // -------------------------------------------------------------------------
-    // Cosmic Boots - Additive movement bonuses that stack with Quake movement
-    // Tiers: Hydraulic (LV), Nano (HV), Quark (IV), Sanguine (ZPM)
-    // All boots have +1 step height via attribute modifier
-    // -------------------------------------------------------------------------
-
-    // Hydraulic Boots (LV) - Entry level mobility boots
-    // Feels like a nice upgrade from vanilla - snappy and responsive
-    public static ItemEntry<ArmorComponentItem> HYDRAULIC_BOOTS = REGISTRATE
-            .item("hydraulic_boots",
-                    (p) -> new ArmorComponentItem(GTArmorMaterials.ARMOR, ArmorItem.Type.BOOTS, p)
-                            .setArmorLogic(new CosmicBootsArmorLogic(
-                                    128, // energyPerUse
-                                    400_000L, // capacity (LV tier)
-                                    1, // tier (LV)
-                                    0.8, // maxSpeed cap (b/t)
-                                    2.0, // groundAcceleration bonus
-                                    0.5, // groundDeceleration
-                                    0.8, // airControl bonus
-                                    3.0, // jumpPower - ~4 blocks high
-                                    true, // fallNegation
-                                    "textures/armor/hydraulic_boots.png")))
-            .lang("Hydraulic Globetrotters Boots")
+    public static ItemEntry<TravelerBootsItem> STEEL_TRAVELERS_BOOTS = REGISTRATE
+            .item("steel_travelers_boots",
+                    p -> new TravelerBootsItem(CosmicArmorMaterials.STEEL_TRAVELER,
+                            p.durability(ArmorItem.Type.BOOTS.getDurability(33))))
+            .lang("Steel Traveler's Boots")
             .properties(p -> p.rarity(Rarity.UNCOMMON))
             .tag(CustomTags.PPE_ARMOR)
             .register();
 
-    // Nano Boots (HV) - Mid-tier, noticeably quick
-    // Clear upgrade from Hydraulic - you feel the difference immediately
-    public static ItemEntry<ArmorComponentItem> NANO_BOOTS = REGISTRATE
-            .item("nano_boots",
-                    (p) -> new ArmorComponentItem(GTArmorMaterials.ARMOR, ArmorItem.Type.BOOTS, p)
-                            .setArmorLogic(new CosmicBootsArmorLogic(
-                                    512, // energyPerUse
-                                    6_400_000L, // capacity (HV tier)
-                                    3, // tier (HV)
-                                    1.5, // maxSpeed cap (b/t)
-                                    4.0, // groundAcceleration bonus
-                                    0.6, // groundDeceleration
-                                    1.0, // airControl bonus
-                                    4.0, // jumpPower - ~5 blocks high
-                                    true, // fallNegation
-                                    "textures/armor/nano_boots.png")))
-            .lang("NanoMuscle\u2122 Globetrotters Boots")
+    public static ItemEntry<TravelerBootsItem> NETHERITE_TRAVELERS_BOOTS = REGISTRATE
+            .item("netherite_travelers_boots",
+                    p -> new TravelerBootsItem(CosmicArmorMaterials.NETHERITE_TRAVELER,
+                            p.durability(ArmorItem.Type.BOOTS.getDurability(37)).fireResistant()))
+            .lang("Netherite Traveler's Boots")
             .properties(p -> p.rarity(Rarity.RARE))
             .tag(CustomTags.PPE_ARMOR)
             .register();
 
-    // Quark Boots (IV) - High-tier, fast as hell
-    // Like riding a motorcycle - exhilarating speed with control
-    public static ItemEntry<ArmorComponentItem> QUARK_BOOTS = REGISTRATE
-            .item("quark_boots",
-                    (p) -> new ArmorComponentItem(GTArmorMaterials.ARMOR, ArmorItem.Type.BOOTS, p)
-                            .setArmorLogic(new CosmicBootsArmorLogic(
-                                    2048, // energyPerUse
-                                    25_600_000L, // capacity (IV tier)
-                                    5, // tier (IV)
-                                    1.25, // maxSpeed cap (b/t)
-                                    3.5, // groundAcceleration bonus
-                                    0.75, // groundDeceleration
-                                    1.2, // airControl bonus
-                                    3.5, // jumpPower - ~4.5 blocks high
-                                    true, // fallNegation
-                                    "textures/armor/quark_boots.png")))
-            .lang("QuarkTech\u2122 Globetrotters Boots")
+    public static ItemEntry<TravelerBootsItem> NANO_BOOTS = REGISTRATE
+            .item("nano_travelers_boots",
+                    p -> new TravelerBootsItem(CosmicArmorMaterials.NANO_TRAVELER,
+                            p.durability(ArmorItem.Type.BOOTS.getDurability(55)).fireResistant()))
+            .lang("Nano Traveler's Boots")
             .properties(p -> p.rarity(Rarity.EPIC))
             .tag(CustomTags.PPE_ARMOR)
             .register();
 
-    // Sanguine Boots (ZPM) - Ultimate tier, very fast
-    // Shot out of a cannon - high speed with great control
-    public static ItemEntry<ArmorComponentItem> SANGUINE_BOOTS = REGISTRATE
-            .item("sanguine_boots",
-                    (p) -> new ArmorComponentItem(GTArmorMaterials.ARMOR, ArmorItem.Type.BOOTS, p)
-                            .setArmorLogic(new CosmicBootsArmorLogic(
-                                    8192, // energyPerUse
-                                    409_600_000L, // capacity (ZPM tier)
-                                    7, // tier (ZPM)
-                                    2.25, // maxSpeed cap (b/t)
-                                    6.0, // groundAcceleration bonus
-                                    0.9, // groundDeceleration - can stop on a dime
-                                    1.5, // airControl bonus - full air control
-                                    6.5, // jumpPower - ~8 blocks high
-                                    true, // fallNegation
-                                    "textures/armor/sanguine_boots.png")))
-            .lang("Sanguine Globetrotters Boots")
+    public static ItemEntry<TravelerBootsItem> QUARK_BOOTS = REGISTRATE
+            .item("quark_travelers_boots",
+                    p -> new TravelerBootsItem(CosmicArmorMaterials.QUARK_TRAVELER,
+                            p.durability(ArmorItem.Type.BOOTS.getDurability(75)).fireResistant()))
+            .lang("Quark Traveler's Boots")
             .properties(p -> p.rarity(Rarity.EPIC))
             .tag(CustomTags.PPE_ARMOR)
             .register();

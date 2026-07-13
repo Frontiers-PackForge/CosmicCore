@@ -1,11 +1,12 @@
 {
     "values": [
+        "cosmiccore:shadebloom_travelers_boots",
         "cosmiccore:sanguine_warptech_helmet",
         "cosmiccore:sanguine_warptech_leggings",
         "cosmiccore:sanguine_warptech_boots",
-        "cosmiccore:hydraulic_boots",
-        "cosmiccore:nano_boots",
-        "cosmiccore:quark_boots",
-        "cosmiccore:sanguine_boots"
+        "cosmiccore:steel_travelers_boots",
+        "cosmiccore:netherite_travelers_boots",
+        "cosmiccore:nano_travelers_boots",
+        "cosmiccore:quark_travelers_boots"
     ]
 }
