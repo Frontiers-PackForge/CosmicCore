@@ -141,6 +141,7 @@ public class CosmicBlocks {
             .block("hearth_plate", HearthPlateBlock::new)
             .initialProperties(() -> Blocks.STONE)
             .properties(p -> p.strength(0.5f).noOcclusion())
+            .tag(BlockTags.MINEABLE_WITH_PICKAXE)
             .blockstate(NonNullBiConsumer.noop())
             .item(BlockItem::new)
             .model(NonNullBiConsumer.noop())

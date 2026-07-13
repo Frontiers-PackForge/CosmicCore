@@ -18,6 +18,7 @@ import static com.ghostipedia.cosmiccore.api.registries.CosmicRegistration.REGIS
 import static com.ghostipedia.cosmiccore.common.data.CosmicBlocks.LIGHT_DAWNSTONE_CASING;
 import static com.gregtechceu.gtceu.api.machine.multiblock.PartAbility.EXPORT_FLUIDS;
 import static com.gregtechceu.gtceu.api.multiblock.Predicates.*;
+import static com.rekindled.embers.RegistryManager.DAWNSTONE_ANVIL;
 
 public class DawnForge {
 
@@ -47,7 +48,7 @@ public class DawnForge {
                             .or(abilities(EXPORT_FLUIDS).setPreviewCount(1))
                             .or(abilities(IMPORT_EMBER).setPreviewCount(1))
                             .or(Predicates.abilities(PartAbility.STEAM).setExactLimit(1)))
-                    .where('D', blocks(net.minecraft.world.level.block.Blocks.ANVIL))
+                    .where('D', blocks(DAWNSTONE_ANVIL.get()))
                     //
                     .build())
             .workableCasingModel(CosmicCore.id("block/casings/solid/light_dawnstone_casing"),

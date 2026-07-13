@@ -29,6 +29,8 @@ public class CosmicCoreMixinPlugin implements IMixinConfigPlugin {
                 Map.entry(".architectury.", "dev/architectury/impl/NetworkAggregator.class"),
                 Map.entry(".aero.",
                         "dev/eriksonn/aeronautics/content/blocks/hot_air/balloon/effect/ClientBalloonEffectRenderer.class"),
+                Map.entry(".simulated.",
+                        "dev/simulated_team/simulated/content/blocks/physics_assembler/PhysicsAssemblerBlockEntity.class"),
                 Map.entry(".sable.", "dev/ryanhcode/sable/api/block/BlockSubLevelAssemblyListener.class"),
                 Map.entry(".ftbchunks.", "dev/ftb/mods/ftbchunks/client/FTBChunksClient.class"),
                 Map.entry(".occultism.", "com/klikli_dev/occultism/crafting/recipe/PasteRepairItemRecipe.class"),

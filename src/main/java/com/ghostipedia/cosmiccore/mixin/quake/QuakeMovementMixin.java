@@ -1,5 +1,6 @@
 package com.ghostipedia.cosmiccore.mixin.quake;
 
+import com.ghostipedia.cosmiccore.common.reflection.bargain.impl.QuakeGrounding;
 import com.ghostipedia.cosmiccore.common.reflection.bargain.impl.QuakeMovementHandler;
 
 import net.minecraft.world.entity.LivingEntity;
@@ -70,7 +71,7 @@ public abstract class QuakeMovementMixin {
         float strafeInput = player.xxa;
         boolean hasMovementInput = Math.abs(forwardInput) > 0.01 || Math.abs(strafeInput) > 0.01;
         boolean hasStrafeInput = Math.abs(strafeInput) > 0.01;
-        boolean onGroundNow = player.onGround();
+        boolean onGroundNow = QuakeGrounding.isMovementGrounded(player);
 
         // Air strafe detection
         if (!onGroundNow && hasStrafeInput) {

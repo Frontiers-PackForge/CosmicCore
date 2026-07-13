@@ -1,5 +1,6 @@
 package com.ghostipedia.cosmiccore.common.food;
 
+import com.ghostipedia.cosmiccore.common.compat.qualityfood.QualityFoodCompat;
 import com.ghostipedia.cosmiccore.common.data.CosmicAttachmentTypes;
 import com.ghostipedia.cosmiccore.common.network.CCoreNetwork;
 import com.ghostipedia.cosmiccore.common.network.packet.SyncFoodDataPacket;
@@ -30,6 +31,7 @@ public final class HearthLogic {
     public static final int SIGNATURE_DAYS = 7;
     public static final int MAX_SIGNATURES = 3;
     public static final double SIGNATURE_SHARE = 0.25;
+    public static final long COOKBOOK_PAGE_COOLDOWN = 24000L;
 
     public static double palateMultiplier(CosmicFoodData data) {
         return 1.0 + Math.min(data.cookbook.size(), PALATE_PAGE_CAP) * PALATE_PER_PAGE;
@@ -52,23 +54,26 @@ public final class HearthLogic {
         if (!CosmicFoodRegistry.isConsumable(main)) return false;
         if (CosmicFoodRegistry.isVile(main.getItem())) return false;
 
+        int mainQuality = Math.max(quality, QualityFoodCompat.level(main));
         FoodDefinition def = CosmicFoodRegistry.get(main);
-        double hearts = def.heartBonus() * MEMORY_POWER_SHARE;
-        double regen = def.regenBonus() * MEMORY_POWER_SHARE;
+        double hearts = def.heartBonus() * MEMORY_POWER_SHARE * qualityMultiplier(mainQuality);
+        double regen = def.regenBonus() * MEMORY_POWER_SHARE * qualityMultiplier(mainQuality);
         Map<Holder<MobEffect>, Integer> effectMerge = new LinkedHashMap<>();
         collectEffects(def, effectMerge);
         StringBuilder name = new StringBuilder(main.getHoverName().getString());
         if (!side.isEmpty() && CosmicFoodRegistry.isConsumable(side)) {
             FoodDefinition sideDef = CosmicFoodRegistry.get(side);
-            hearts += sideDef.heartBonus() * COMPLEMENT_SHARE;
-            regen += sideDef.regenBonus() * COMPLEMENT_SHARE;
+            double sideQuality = qualityMultiplier(QualityFoodCompat.level(side));
+            hearts += sideDef.heartBonus() * COMPLEMENT_SHARE * sideQuality;
+            regen += sideDef.regenBonus() * COMPLEMENT_SHARE * sideQuality;
             collectEffects(sideDef, effectMerge);
             name.append(" with ").append(side.getHoverName().getString());
         }
         if (!drink.isEmpty() && CosmicFoodRegistry.isConsumable(drink)) {
             FoodDefinition drinkDef = CosmicFoodRegistry.get(drink);
-            hearts += drinkDef.heartBonus() * COMPLEMENT_SHARE;
-            regen += drinkDef.regenBonus() * COMPLEMENT_SHARE;
+            double drinkQuality = qualityMultiplier(QualityFoodCompat.level(drink));
+            hearts += drinkDef.heartBonus() * COMPLEMENT_SHARE * drinkQuality;
+            regen += drinkDef.regenBonus() * COMPLEMENT_SHARE * drinkQuality;
             collectEffects(drinkDef, effectMerge);
             name.append(name.indexOf(" with ") >= 0 ? " and " : " with ").append(drink.getHoverName().getString());
         }
@@ -81,13 +86,16 @@ public final class HearthLogic {
 
         double palate = palateMultiplier(data);
         FoodMemory memory = new FoodMemory(name.toString(), main.getItem(), hearts * palate, regen * palate,
-                quality, sharedWith, day, List.copyOf(memoryEffects));
+                mainQuality, sharedWith, day, List.copyOf(memoryEffects));
         data.setMemory(memory);
 
         String pageKey = pageKey(main, side, drink);
-        if (day > data.lastPageDay && !data.hasPage(pageKey)) {
+        long gameTime = player.serverLevel().getGameTime();
+        boolean pageCooldownReady = data.lastPageTick < 0 || gameTime - data.lastPageTick >= COOKBOOK_PAGE_COOLDOWN;
+        if (pageCooldownReady && !data.hasPage(pageKey)) {
             data.cookbook.add(new CookbookPage(pageKey, name.toString(), day));
             data.lastPageDay = day;
+            data.lastPageTick = gameTime;
             String pageLangKey = data.cookbook.size() <= PALATE_PAGE_CAP ?
                     "cosmiccore.hearth.page_broadens" : "cosmiccore.hearth.page";
             player.sendSystemMessage(msg(pageLangKey, 0xB9A5E3));
@@ -107,6 +115,15 @@ public final class HearthLogic {
         data.consumeDirty();
         player.sendSystemMessage(msg("cosmiccore.hearth.memory_settles", 0xE8C66A, memory.dishName()));
         return true;
+    }
+
+    public static double qualityMultiplier(int quality) {
+        return switch (quality) {
+            case 1 -> 1.25;
+            case 2 -> 1.5;
+            case 3 -> 1.75;
+            default -> 1.0;
+        };
     }
 
     public static boolean canInscribe(CosmicFoodData data) {

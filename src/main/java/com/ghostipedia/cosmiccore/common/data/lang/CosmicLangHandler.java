@@ -1322,38 +1322,12 @@ public class CosmicLangHandler extends LangHandler {
         provider.add("cosmiccore.stellar.upgrade.void_attunement.desc",
                 "+2% bonus from void effects per level (max 10 levels)");
 
-        // Cosmic Boots
-        provider.add("key.categories.cosmiccore.boots", "Cosmic Boots");
-        provider.add("key.cosmiccore.boots.speed_increase", "Boots: Increase Speed");
-        provider.add("key.cosmiccore.boots.speed_decrease", "Boots: Decrease Speed");
-        provider.add("key.cosmiccore.boots.jump_increase", "Boots: Increase Jump");
-        provider.add("key.cosmiccore.boots.jump_decrease", "Boots: Decrease Jump");
-        provider.add("key.cosmiccore.boots.toggle_step", "Boots: Toggle Step Assist");
-        provider.add("key.cosmiccore.boots.toggle_inertia", "Boots: Toggle Inertia Dampening");
-
         // Quake Movement (Reflection Bargain)
         provider.add("key.categories.cosmiccore.movement", "Quake Movement");
         provider.add("key.cosmiccore.movement.dash", "Dash");
 
-        // Boot tooltips
-        provider.add("cosmiccore.boots.speed_modifier", "Speed Modifier: %s");
-        provider.add("cosmiccore.boots.jump_modifier", "Jump Modifier: %s");
-        provider.add("cosmiccore.boots.step_assist", "Step Assist: %s");
-        provider.add("cosmiccore.boots.inertia_cancel", "Inertia Dampening: %s");
-
-        // Boot HUD
-        provider.add("cosmiccore.boots.hud.speed", "Speed: %s %s");
-        provider.add("cosmiccore.boots.hud.speed_simple", "Speed: %s");
-        provider.add("cosmiccore.boots.hud.jump", "Jump: %s");
-
-        // Boot action messages
-        provider.add("cosmiccore.boots.message.speed", "Speed Modifier: %s");
-        provider.add("cosmiccore.boots.message.jump", "Jump Modifier: %s");
-        provider.add("cosmiccore.boots.message.step", "Step Assist: %s");
-        provider.add("cosmiccore.boots.message.inertia", "Inertia Dampening: %s");
-
-        // Max speed tooltip
-        provider.add("cosmiccore.boots.max_speed", "Max Speed: %s");
+        provider.add("item.cosmiccore.travelers_boots.tooltip",
+                "Negates fall damage and steps up full blocks while standing.");
 
         // Soul Shapes
         provider.add("cosmiccore.soul_shape.unshaped.name", "Unshaped");
@@ -1455,8 +1429,9 @@ public class CosmicLangHandler extends LangHandler {
         provider.add("cosmiccore.tooltip.food.duration", "Duration");
         provider.add("cosmiccore.hearth.memory_fades", "The memory of %s fades.");
         provider.add("cosmiccore.hearth.memory_settles", "The memory of %s settles in.");
-        provider.add("cosmiccore.hearth.page_broadens", "You add a new page in your cookbook as your palate broadens.");
-        provider.add("cosmiccore.hearth.page", "You add a new page in your cookbook.");
+        provider.add("cosmiccore.hearth.page_broadens",
+                "A memory of this meal is saved to your cookbook, broadening your palate.");
+        provider.add("cosmiccore.hearth.page", "A memory of this meal is saved to your cookbook.");
         provider.add("cosmiccore.hearth.taken_root",
                 "%s has become an unforgettable meal! Right Click your empty plate to seal it in.");
         provider.add("cosmiccore.hearth.inscribe.no_memory", "You carry no meal memory to inscribe.");
@@ -1486,6 +1461,7 @@ public class CosmicLangHandler extends LangHandler {
         provider.add("cosmiccore.abyss.crush_ascend", "CRUSH DEPTH! ASCEND IMMEDIATELY!");
         provider.add("cosmiccore.abyss.no_teleport", "The deep does not permit passage");
         provider.add("cosmiccore.abyss.no_mount", "Nothing will carry you down here");
+        provider.add("cosmiccore.abyss.machine_forbidden", "This machine cannot operate in the deep");
         provider.add("cosmiccore.abyss.descent", "As you descend, the water becomes darker and more violent");
         provider.add("cosmiccore.abyss.swarm_title", "The Murkbloom Swarms");
         provider.add("cosmiccore.abyss.swarm_subtitle", "Stop disturbing the water and hide!");

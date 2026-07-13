@@ -3,7 +3,6 @@ package com.ghostipedia.cosmiccore.client;
 import com.ghostipedia.cosmiccore.CosmicCore;
 import com.ghostipedia.cosmiccore.client.dev.AbyssDevView;
 import com.ghostipedia.cosmiccore.client.dev.MurkbloomDevControls;
-import com.ghostipedia.cosmiccore.client.keybind.BootsKeybinds;
 import com.ghostipedia.cosmiccore.client.keybind.QuakeMovementKeybinds;
 import com.ghostipedia.cosmiccore.client.mirror.MirrorScreen;
 import com.ghostipedia.cosmiccore.client.murkbloom.MurkParticle;
@@ -139,7 +138,6 @@ public class CosmicCoreClient {
 
     @SubscribeEvent
     public static void registerKeyMappings(RegisterKeyMappingsEvent event) {
-        BootsKeybinds.registerKeyMappings(event);
         QuakeMovementKeybinds.registerKeyMappings(event);
         if (!FMLEnvironment.production) {
             AbyssDevView.registerKeyMappings(event);

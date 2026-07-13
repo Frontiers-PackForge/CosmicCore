@@ -121,6 +121,6 @@ public final class KubeJsRecipeExporter {
     }
 
     private static String fluidArgs(FluidStack stack) {
-        return "'" + BuiltInRegistries.FLUID.getKey(stack.getFluid()) + " " + stack.getAmount() + "'";
+        return "'" + stack.getAmount() + "x " + BuiltInRegistries.FLUID.getKey(stack.getFluid()) + "'";
     }
 }

@@ -1,7 +1,6 @@
 package com.ghostipedia.cosmiccore.common.network;
 
 import com.ghostipedia.cosmiccore.common.network.packet.AbyssTimeWarnPacket;
-import com.ghostipedia.cosmiccore.common.network.packet.BootsControlPacket;
 import com.ghostipedia.cosmiccore.common.network.packet.DeedSyncPacket;
 import com.ghostipedia.cosmiccore.common.network.packet.MirrorWeavePacket;
 import com.ghostipedia.cosmiccore.common.network.packet.MurkbloomSyncPacket;
@@ -59,7 +58,6 @@ public class CCoreNetwork {
         registrar.playToServer(DashPacket.TYPE, DashPacket.CODEC, DashPacket::execute);
         registrar.playToServer(SoulSuperPacket.TYPE, SoulSuperPacket.CODEC, SoulSuperPacket::execute);
         registrar.playToServer(StellarUpgradePacket.TYPE, StellarUpgradePacket.CODEC, StellarUpgradePacket::execute);
-        registrar.playToServer(BootsControlPacket.TYPE, BootsControlPacket.CODEC, BootsControlPacket::execute);
         registrar.playToServer(MirrorWeavePacket.TYPE, MirrorWeavePacket.CODEC, MirrorWeavePacket::execute);
 
         registrar.playToClient(VoidUIPackets.OpenVoidScreenPacket.TYPE, VoidUIPackets.OpenVoidScreenPacket.CODEC,

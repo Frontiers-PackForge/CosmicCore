@@ -1,13 +1,11 @@
 package com.ghostipedia.cosmiccore.mixin.gtceu;
 
-import com.gregtechceu.gtceu.api.recipe.GTRecipeType;
+import com.ghostipedia.cosmiccore.common.recipe.GTRecipeCategoryLifecycle;
 
-import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.util.profiling.ProfilerFiller;
 import net.minecraft.world.item.crafting.RecipeManager;
-import net.minecraft.world.item.crafting.RecipeType;
 
 import com.google.gson.JsonElement;
 import org.spongepowered.asm.mixin.Mixin;
@@ -33,10 +31,6 @@ public abstract class RecipeManagerCategoryMixin {
             at = @At("HEAD"))
     private void cosmiccore$clearGtCategoryMaps(Map<ResourceLocation, JsonElement> map, ResourceManager resourceManager,
                                                 ProfilerFiller profiler, CallbackInfo ci) {
-        for (RecipeType<?> type : BuiltInRegistries.RECIPE_TYPE) {
-            if (type instanceof GTRecipeType gtRecipeType) {
-                gtRecipeType.getCategoryMap().clear();
-            }
-        }
+        GTRecipeCategoryLifecycle.clear();
     }
 }

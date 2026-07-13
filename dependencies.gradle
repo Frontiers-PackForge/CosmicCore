@@ -33,6 +33,7 @@ dependencies {
 
     // WAILA-likes
     implementation(forge.jade)
+    compileOnly("maven.modrinth:Ahdn1OE0:Q2Ua4hew")
 
     // Curios
     compileOnly(variantOf(forge.curios) { classifier("api") })
