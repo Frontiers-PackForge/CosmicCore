@@ -293,7 +293,8 @@ public class CosmicLangHandler extends LangHandler {
                 "§7§oTurn up the heat!",
                 "§fConsumes creosote with recipes to improve efficiency.",
                 "§aRecipes are §f25% §aFaster.",
-                "§aParallel Amount§f: §b8x§r");
+                "§aRuns Recipes in Batches of §f: §b8x§r",
+                "§aBlock Recipes are More Efficient! §f: §b8x§r");
 
         provider.add("block.gtceu.high_pressure_assembler", "High Pressure Assembler");
         multiLang(provider, "cosmiccore.multiblock.hpsassem.tooltip",
@@ -550,7 +551,7 @@ public class CosmicLangHandler extends LangHandler {
         // generic machine tooltips
         provider.add("item.cosmiccore.space_radio.tooltip", "§6Lets you hear sounds in space!");
         provider.add("item.cosmiccore.simple_rebreather.tooltip",
-                "§7Reduces oxygen drain in §bThin Air§7 environments.");
+                "§7Prevents oxygen loss in §bThin Air§7 environments.");
         provider.add("item.cosmiccore.pressurized_rebreather.tooltip",
                 "§6Enables oxygen tank usage. Works in §cNo Air§6 environments.");
         provider.add("item.cosmiccore.palms_of_the_globestrider.tooltip",
@@ -1412,7 +1413,7 @@ public class CosmicLangHandler extends LangHandler {
         provider.add("cosmiccore.hud.oxygen.suffocating", "SUFFOCATING");
         provider.add("cosmiccore.tooltip.hand_sort", "Can be hand sorted for: %s");
         provider.add("cosmiccore.tooltip.oxygen_tank.fill", "Oxygen: %s / %s mB");
-        provider.add("cosmiccore.tooltip.oxygen_tank.runtime", "Breathing time: %s");
+        provider.add("cosmiccore.tooltip.oxygen_tank.runtime", "No-Air breathing time: %s");
         provider.add("cosmiccore.tooltip.oxygen_tank.rebreather", "Requires Pressurized Rebreather or Diving Helmet");
         // Food system and the Hearth
         provider.add("cosmiccore.food.sickened", "Your stomach turns. Your meals are slipping away.");

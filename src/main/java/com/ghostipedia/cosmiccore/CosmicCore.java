@@ -11,6 +11,8 @@ import com.ghostipedia.cosmiccore.api.recipe.lookup.MapSoulIngredient;
 import com.ghostipedia.cosmiccore.api.registries.CosmicRegistration;
 import com.ghostipedia.cosmiccore.client.CosmicCoreClient;
 import com.ghostipedia.cosmiccore.common.airControl.OxygenRules;
+import com.ghostipedia.cosmiccore.common.block.crop.CosmicCropFeatures;
+import com.ghostipedia.cosmiccore.common.block.crop.CosmicCrops;
 import com.ghostipedia.cosmiccore.common.commands.argument.SoulTypeArgument;
 import com.ghostipedia.cosmiccore.common.compat.ars.ArsSealCompat;
 import com.ghostipedia.cosmiccore.common.compat.lso.LsoFoodCompat;
@@ -79,6 +81,7 @@ public class CosmicCore {
         CosmicLootModifiers.register(modBus);
         CosmicTemperatureModifiers.register(modBus);
         CosmicChunkGenerators.register(modBus);
+        CosmicCropFeatures.register(modBus);
         CosmicBargains.init();
 
         if (Platform.isClient()) {
@@ -106,6 +109,7 @@ public class CosmicCore {
         CosmicBlockEntities.init();
         CosmicItems.init();
         CosmicBotanyItemRegistration.init();
+        CosmicCrops.init();
         CosmicPredicates.init();
         MultiblockInit.init();
         CosmicMachines.init();

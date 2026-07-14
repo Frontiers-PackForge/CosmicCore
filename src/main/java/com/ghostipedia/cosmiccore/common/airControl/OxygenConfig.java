@@ -37,6 +37,12 @@ public final class OxygenConfig {
     /** Extra ticks tanks can top-up per game tick when protecting player */
     public static final int TANK_TOPUP_TICKS_PER_TICK = 2;
 
+    /** Canonical oxygen consumption in NO_AIR environments, in oxygen ticks per game tick. */
+    public static final double NO_AIR_DRAIN_PER_TICK = 1.0;
+
+    /** THIN air consumes oxygen at half the canonical NO_AIR rate. */
+    public static final double THIN_AIR_DRAIN_PER_TICK = NO_AIR_DRAIN_PER_TICK * 0.5;
+
     /** How many oxygen ticks per mB consumed from space suits (higher = suits last longer) */
     public static final int SPACE_SUIT_TICKS_PER_MB = 5;
 
@@ -53,16 +59,6 @@ public final class OxygenConfig {
 
     /** Interval between suffocation damage ticks */
     public static final int SUFFOCATION_DAMAGE_INTERVAL = 20;
-
-    // -------------------------------------------------------------------------
-    // Rebreather Behavior
-    // -------------------------------------------------------------------------
-
-    /** Drain reduction multiplier for simple rebreather in THIN air (0.5 = half drain) */
-    public static final double SIMPLE_REBREATHER_DRAIN_MULT = 0.5;
-
-    /** Drain reduction multiplier for pressurized rebreather (0.25 = quarter drain) */
-    public static final double PRESSURIZED_REBREATHER_DRAIN_MULT = 0.25;
 
     // -------------------------------------------------------------------------
     // Air Bladder

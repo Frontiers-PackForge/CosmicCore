@@ -1021,14 +1021,6 @@ public class CosmicItems {
             .tag()
             .defaultModel()
             .register();
-    public static final ItemEntry<ComponentItem> INERT_FUNGAL_SPORES = REGISTRATE
-            .item("inert_fungal_spores", ComponentItem::new)
-            .lang("Inert Fungal Spores")
-            .properties(p -> p.stacksTo(64))
-            .tag()
-            .defaultModel()
-            .register();
-
     public static final ItemEntry<ComponentItem> HEME_RING = REGISTRATE
             .item("heme_ring", ComponentItem::new)
             .lang("Heme Ring")
@@ -3069,13 +3061,6 @@ public class CosmicItems {
             .properties(p -> p.stacksTo(64))
             .defaultModel()
             .register();
-    public static final ItemEntry<ComponentItem> TAU_FRUIT = REGISTRATE
-            .item("tau_fruit", ComponentItem::new)
-            .lang("Tau Fruit")
-            .properties(p -> p.stacksTo(64))
-            .defaultModel()
-            .register();
-
     public static final ItemEntry<ComponentItem> WEAK_BINDING_PUTTY = REGISTRATE
             .item("weak_binding_putty", ComponentItem::new)
             .lang("Weak Binding Putty")

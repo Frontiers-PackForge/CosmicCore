@@ -1,6 +1,10 @@
 package com.ghostipedia.cosmiccore.mixin;
 
+import org.objectweb.asm.Opcodes;
+import org.objectweb.asm.tree.AbstractInsnNode;
 import org.objectweb.asm.tree.ClassNode;
+import org.objectweb.asm.tree.MethodInsnNode;
+import org.objectweb.asm.tree.MethodNode;
 import org.spongepowered.asm.mixin.extensibility.IMixinConfigPlugin;
 import org.spongepowered.asm.mixin.extensibility.IMixinInfo;
 
@@ -16,6 +20,10 @@ import java.util.Set;
  */
 public class CosmicCoreMixinPlugin implements IMixinConfigPlugin {
 
+    private static final String DRIPPY_SCALE_MIXIN = ".drippy.DrippyLoadingOverlayScaleFixMixin";
+    private static final String FANCY_MENU_UI_BASE = "de/keksuccino/fancymenu/util/rendering/ui/UIBase";
+    private static final String POSE_STACK = "com/mojang/blaze3d/vertex/PoseStack";
+    private static final String DRIPPY_SCALE_COMPAT = "com/ghostipedia/cosmiccore/client/compat/drippy/DrippyRenderScaleCompat";
     private static final Map<String, Boolean> GATES = new HashMap<>();
 
     static {
@@ -34,6 +42,8 @@ public class CosmicCoreMixinPlugin implements IMixinConfigPlugin {
                 Map.entry(".sable.", "dev/ryanhcode/sable/api/block/BlockSubLevelAssemblyListener.class"),
                 Map.entry(".ftbchunks.", "dev/ftb/mods/ftbchunks/client/FTBChunksClient.class"),
                 Map.entry(".occultism.", "com/klikli_dev/occultism/crafting/recipe/PasteRepairItemRecipe.class"),
+                Map.entry(".drippy.",
+                        "de/keksuccino/drippyloadingscreen/mixin/mixins/common/client/MixinLoadingOverlay.class"),
                 Map.entry(".undergarden.", "quek/undergarden/event/UthericInfectionEvents.class"));
         probes.forEach((token, resource) -> GATES.put(token, loader.getResource(resource) != null));
     }
@@ -68,5 +78,38 @@ public class CosmicCoreMixinPlugin implements IMixinConfigPlugin {
     public void preApply(String targetClassName, ClassNode targetClass, String mixinClassName, IMixinInfo mixinInfo) {}
 
     @Override
-    public void postApply(String targetClassName, ClassNode targetClass, String mixinClassName, IMixinInfo mixinInfo) {}
+    public void postApply(String targetClassName, ClassNode targetClass, String mixinClassName, IMixinInfo mixinInfo) {
+        if (!mixinClassName.endsWith(DRIPPY_SCALE_MIXIN)) {
+            return;
+        }
+
+        for (MethodNode method : targetClass.methods) {
+            boolean drippyRenderMethod = false;
+            for (AbstractInsnNode instruction : method.instructions) {
+                if (instruction instanceof MethodInsnNode call && call.owner.equals(FANCY_MENU_UI_BASE) &&
+                        call.name.equals("calculateFixedRenderScale") && call.desc.equals("(F)F")) {
+                    drippyRenderMethod = true;
+                    break;
+                }
+            }
+            if (!drippyRenderMethod) {
+                continue;
+            }
+            for (AbstractInsnNode instruction : method.instructions) {
+                if (instruction instanceof MethodInsnNode call && call.owner.equals(POSE_STACK) &&
+                        call.name.equals("scale") && call.desc.equals("(FFF)V")) {
+                    method.instructions.set(
+                            call,
+                            new MethodInsnNode(
+                                    Opcodes.INVOKESTATIC,
+                                    DRIPPY_SCALE_COMPAT,
+                                    "applyUntrackedScale",
+                                    "(Lcom/mojang/blaze3d/vertex/PoseStack;FFF)V",
+                                    false));
+                    return;
+                }
+            }
+        }
+        throw new IllegalStateException("Drippy loading-overlay scale call was not found");
+    }
 }

@@ -29,7 +29,7 @@ public final class RebreatherHelper {
     public enum RebreatherType {
         /** No rebreather equipped */
         NONE,
-        /** Simple rebreather - slows oxygen drain in THIN air only */
+        /** Simple rebreather - prevents oxygen loss in THIN air only */
         SIMPLE,
         /** Pressurized rebreather - works in NO_AIR, allows tank usage */
         PRESSURIZED

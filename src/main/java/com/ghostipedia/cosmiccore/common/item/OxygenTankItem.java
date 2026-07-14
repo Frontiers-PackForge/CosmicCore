@@ -16,6 +16,8 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
+import static com.ghostipedia.cosmiccore.common.airControl.OxygenConfig.NO_AIR_DRAIN_PER_TICK;
+
 public class OxygenTankItem extends ComponentItem {
 
     public OxygenTankItem(Properties props) {
@@ -52,7 +54,8 @@ public class OxygenTankItem extends ComponentItem {
         tooltip.add(Component.translatable("cosmiccore.tooltip.oxygen_tank.fill", amt, cap)
                 .withStyle(ChatFormatting.AQUA));
         tooltip.add(Component.translatable("cosmiccore.tooltip.oxygen_tank.runtime",
-                formatDurationSeconds(OxygenSupplyTankBehavior.remainingTicks(stack) / 20.0))
+                formatDurationSeconds(OxygenSupplyTankBehavior.remainingTicks(stack) /
+                        (NO_AIR_DRAIN_PER_TICK * 20.0)))
                 .withStyle(ChatFormatting.GRAY));
         tooltip.add(Component.translatable("cosmiccore.tooltip.oxygen_tank.rebreather")
                 .withStyle(ChatFormatting.RED));

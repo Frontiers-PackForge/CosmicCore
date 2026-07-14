@@ -96,52 +96,37 @@ public final class OxygenLogic {
             BlockPos eyePos = BlockPos.containing(player.getX(), player.getEyeY(), player.getZ());
             boolean eyesInFluid = !level.getFluidState(eyePos).isEmpty();
             if (eyesInFluid && !player.hasEffect(MobEffects.WATER_BREATHING)) {
-                OxygenRules.Rates thinAir = OxygenRules.QUALITY_RATES.get(OxygenRules.AirQuality.THIN).copy();
-                rates.oxygenDrainPerTick = Math.max(rates.oxygenDrainPerTick, thinAir.oxygenDrainPerTick);
+                OxygenRules.Rates noAir = OxygenRules.QUALITY_RATES.get(OxygenRules.AirQuality.NO_AIR).copy();
+                rates.oxygenDrainPerTick = Math.max(rates.oxygenDrainPerTick, noAir.oxygenDrainPerTick);
                 rates.oxygenRecoveryPerTick = 0.0; // No passive regen while submerged
-                rates.suffocationDamage = Math.max(rates.suffocationDamage, 2.0f);
-                quality = OxygenRules.AirQuality.THIN;
+                rates.suffocationDamage = Math.max(rates.suffocationDamage, noAir.suffocationDamage);
+                quality = OxygenRules.AirQuality.NO_AIR;
             }
 
             long current = cap.getOxygenTicks(level.dimension());
-            cap.setConsuming(level.dimension(), rates.oxygenDrainPerTick > 0);
 
             RebreatherType rebreather = RebreatherType.NONE;
             double effectiveDrainPerTick = 0.0;
 
             if (rates.oxygenDrainPerTick > 0) {
-                // Check for rebreather equipment and apply drain modifiers
                 rebreather = RebreatherHelper.getEquippedRebreather(player);
-                double drainMult = 1.0;
+                boolean protectedFromThinAir = quality == OxygenRules.AirQuality.THIN &&
+                        rebreather != RebreatherType.NONE;
+                effectiveDrainPerTick = protectedFromThinAir ? 0.0 : rates.oxygenDrainPerTick;
+            }
+            cap.setConsuming(level.dimension(), effectiveDrainPerTick > 0);
+            if (rates.oxygenDrainPerTick > 0 && effectiveDrainPerTick == 0) {
+                cap.setRegenBuffer(level.dimension(), 0.0);
+            }
 
-                // Apply rebreather effects based on air quality
-                if (quality == OxygenRules.AirQuality.THIN) {
-                    // Both rebreathers work in THIN air
-                    if (rebreather == RebreatherType.PRESSURIZED) {
-                        drainMult = PRESSURIZED_REBREATHER_DRAIN_MULT;
-                    } else if (rebreather == RebreatherType.SIMPLE) {
-                        drainMult = SIMPLE_REBREATHER_DRAIN_MULT;
-                    }
-                } else if (quality == OxygenRules.AirQuality.NO_AIR) {
-                    // Only pressurized rebreather works in NO_AIR
-                    if (rebreather == RebreatherType.PRESSURIZED) {
-                        drainMult = PRESSURIZED_REBREATHER_DRAIN_MULT;
-                    }
-                }
-                // TOXIC and ABYSS are not affected by rebreathers
-
-                // Apply multiplier to drain rate using fractional accumulation
-                // This ensures rebreathers actually reduce effective drain (e.g., 0.5x means drain every other tick)
-                double baseDrain = rates.oxygenDrainPerTick;
-                double fractionalDrain = baseDrain * drainMult;
-                effectiveDrainPerTick = fractionalDrain;
+            if (effectiveDrainPerTick > 0) {
 
                 // Use the regen buffer to accumulate fractional drain (stored as negative when draining)
                 double buffer = cap.getRegenBuffer(level.dimension());
                 // If buffer was positive (from regen), reset it since we're now draining
                 if (buffer > 0) buffer = 0;
                 // Buffer is stored as negative during drain, so negate to get positive accumulator
-                double drainAccum = -buffer + fractionalDrain;
+                double drainAccum = -buffer + effectiveDrainPerTick;
                 int drain = (int) drainAccum; // Integer part is actual drain this tick
                 double remainder = drainAccum - drain; // Fractional part carries over
                 cap.setRegenBuffer(level.dimension(), -remainder); // Store negative to indicate drain mode
@@ -193,7 +178,7 @@ public final class OxygenLogic {
             // HUD sync - calculate rate based on change since last sync
             if ((level.getGameTime() % HUD_SYNC_INTERVAL) == 0) {
                 long remaining = cap.getOxygenTicks(level.dimension());
-                boolean show = (quality != OxygenRules.AirQuality.SAFE) || remaining < playerMaxOxygen;
+                boolean show = effectiveDrainPerTick > 0 || remaining < playerMaxOxygen;
 
                 // Calculate rate based on actual change over the sync interval
                 UUID playerId = player.getUUID();
@@ -216,7 +201,7 @@ public final class OxygenLogic {
 
                 long tankSeconds = 0;
                 if (effectiveDrainPerTick > 0 && rebreather == RebreatherType.PRESSURIZED) {
-                    tankSeconds = computeTankSeconds(player, effectiveDrainPerTick);
+                    tankSeconds = computeTankSeconds(player);
                 }
 
                 CCoreNetwork.sendToPlayer(player,
@@ -357,8 +342,8 @@ public final class OxygenLogic {
         return total;
     }
 
-    private static long computeTankSeconds(ServerPlayer player, double drainPerTick) {
-        double perSecond = drainPerTick * 20.0;
+    private static long computeTankSeconds(ServerPlayer player) {
+        double perSecond = NO_AIR_DRAIN_PER_TICK * 20.0;
         double seconds = curioTankTicksRemaining(player) / perSecond;
         int createAir = 0;
         for (ItemStack tank : BacktankUtil.getAllWithAir(player)) {
