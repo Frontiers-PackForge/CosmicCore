@@ -47,8 +47,7 @@ public final class CosmicCrops {
             .properties(p -> p.mapColor(MapColor.PLANT).instabreak().noOcclusion().pushReaction(PushReaction.DESTROY))
             .lang("Soul Gourd Bloom")
             .blockstate(NonNullBiConsumer.noop())
-            .loot((tables, block) -> tables.dropOther(block,
-                    CosmicBotanyItemRegistration.SOUL_GOURD.get()))
+            .loot((tables, block) -> tables.dropOther(block, soulGourd()))
             .register();
     public static final BlockEntry<SoulGourdAttachedStemBlock> SOUL_GOURD_ATTACHED_STEM = REGISTRATE
             .block("soul_gourd_attached_stem", SoulGourdAttachedStemBlock::new)
@@ -114,6 +113,12 @@ public final class CosmicCrops {
             .lang("Rainbow Cane")
             .model(NonNullBiConsumer.noop())
             .register();
+    public static final ItemEntry<ItemNameBlockItem> SOUL_GOURD = REGISTRATE
+            .item("soul_gourd", p -> new ItemNameBlockItem(SOUL_GOURD_BLOOM.get(), p))
+            .lang("Soul Gourd")
+            .properties(p -> p.stacksTo(16))
+            .model(NonNullBiConsumer.noop())
+            .register();
     public static final ItemEntry<ItemNameBlockItem> SOUL_GOURD_SEEDS = REGISTRATE
             .item("soul_gourd_seeds", p -> new ItemNameBlockItem(SOUL_GOURD_CROP.get(), p))
             .lang("Soul Gourd Seeds")
@@ -144,6 +149,10 @@ public final class CosmicCrops {
 
     private static ItemNameBlockItem soulGourdSeeds() {
         return SOUL_GOURD_SEEDS.get();
+    }
+
+    private static ItemNameBlockItem soulGourd() {
+        return SOUL_GOURD.get();
     }
 
     private static ItemNameBlockItem sporebeans() {
