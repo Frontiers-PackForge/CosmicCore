@@ -42,10 +42,14 @@
     "gtfix.DummyChunkSourceThreadSafeMixin",
     "gtfix.GTJadeHarvestToolFixMixin",
     "gtfix.ClientRecipeCategorySyncFixMixin",
+    "gtfix.SchemaRendererEmiPickFixMixin",
+    "gtfix.emi.GTEMIProgrammedCircuitComparisonFixMixin",
     "sable.BlockHighlightSubLevelMixin",
     "aero.ClientBalloonEffectIrisFixMixin",
     "client.AbyssLightTextureMixin",
-    "ftbchunks.FTBChunksMapKeybindMixin"
+    "ftbchunks.FTBChunksMapKeybindMixin",
+    "occultism.ModonomiconPreviewOffsetFixMixin",
+    "drippy.DrippyLoadingOverlayScaleFixMixin"
   ],
   "mixins": [
     "BlockPatternMixin",
@@ -88,6 +92,7 @@
     "gtfix.TieredMachineOutputSlotClampMixin",
     "gtfix.MachineInputSlotExtractFixMixin",
     "gtfix.ModularQuickMoveDupeFixMixin",
+    "gtfix.IntCircuitStackPreservationMixin",
     "gtfix.DrumMachineFixMixin",
     "gtfix.CrateTapeReloadFixMixin",
     "gtfix.SteamSolidBoilerFuelSlotFixMixin",
