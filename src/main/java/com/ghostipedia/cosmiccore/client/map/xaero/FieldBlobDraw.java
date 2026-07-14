@@ -102,22 +102,22 @@ public final class FieldBlobDraw {
         addZoneAt(matrix, radius, colorRGB, shapeSeed, depleted, Z_WORLDMAP);
     }
 
-    public static void minimapBlob(GuiGraphics graphics, float radius, int colorRGB, long shapeSeed, boolean depleted) {
+    public static void minimapBlob(GuiGraphics graphics, float radius, int colorRGB, long shapeSeed, boolean depleted,
+                                   double transformPs, double transformPc) {
         int n = ZONE_SEGMENTS;
         float[] rx = new float[n];
         float[] rz = new float[n];
         double p1 = phase(shapeSeed, 1);
         double p2 = phase(shapeSeed, 2);
         double p3 = phase(shapeSeed, 3);
-        Matrix4f pose = graphics.pose().last().pose();
-        double mapAngle = Math.atan2(pose.m01(), pose.m00());
         for (int i = 0; i < n; i++) {
             double a = (double) i / n * TAU;
             double w = ZONE_BASE_W + 0.13 * Math.sin(a * 2 + p1) + 0.07 * Math.sin(a * 3 + p2) +
                     0.05 * Math.sin(a * 5 + p3);
-            double drawA = a - mapAngle;
-            rx[i] = (float) (Math.cos(drawA) * radius * w);
-            rz[i] = (float) (Math.sin(drawA) * radius * w);
+            double localX = Math.cos(a) * radius * w;
+            double localZ = Math.sin(a) * radius * w;
+            rx[i] = (float) (transformPs * localX - transformPc * localZ);
+            rz[i] = (float) (transformPc * localX + transformPs * localZ);
         }
         int rgb = depleted ? DEPLETED_RGB : (colorRGB & 0xFFFFFF);
         scanlineRing(graphics, rx, rz, 0xFF000000 | rgb);

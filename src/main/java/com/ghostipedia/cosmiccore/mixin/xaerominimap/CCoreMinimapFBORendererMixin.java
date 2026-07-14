@@ -32,7 +32,8 @@ public abstract class CCoreMinimapFBORendererMixin extends MinimapRenderer {
     @Inject(method = "loadFrameBuffer",
             at = @At(value = "INVOKE", target = "Lxaero/common/mods/SupportMods;worldmap()Z"))
     private void cosmiccore$injectFieldBlobs(MinimapProcessor minimapProcessor, CallbackInfo ci) {
-        FieldBlobElementRenderer renderer = FieldBlobElementRenderer.Builder.begin().build();
+        FieldBlobElementRenderer renderer = FieldBlobElementRenderer.Builder.begin()
+                .build(this.minimapElementMapRendererHandler);
         minimapElementMapRendererHandler.add(renderer);
         this.minimap.getOverMapRendererHandler().add(renderer);
     }

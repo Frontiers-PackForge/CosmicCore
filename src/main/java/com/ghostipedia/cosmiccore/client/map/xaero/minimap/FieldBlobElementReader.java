@@ -6,46 +6,51 @@ import com.ghostipedia.cosmiccore.client.map.xaero.FieldBlobElement;
 import net.minecraft.client.Minecraft;
 
 import xaero.hud.minimap.element.render.MinimapElementReader;
+import xaero.hud.minimap.element.render.map.MinimapElementMapRendererHandler;
 
-public class FieldBlobElementReader extends MinimapElementReader<FieldBlobElement, Object> {
+public class FieldBlobElementReader extends MinimapElementReader<FieldBlobElement, MinimapElementMapRendererHandler> {
 
     @Override
-    public boolean isHidden(FieldBlobElement element, Object context) {
+    public boolean isHidden(FieldBlobElement element, MinimapElementMapRendererHandler context) {
         return false;
     }
 
     @Override
-    public double getRenderX(FieldBlobElement element, Object context, float partialTicks) {
+    public double getRenderX(FieldBlobElement element, MinimapElementMapRendererHandler context, float partialTicks) {
         return element.field().x();
     }
 
     @Override
-    public double getRenderY(FieldBlobElement element, Object context, float partialTicks) {
+    public double getRenderY(FieldBlobElement element, MinimapElementMapRendererHandler context, float partialTicks) {
         return 0;
     }
 
     @Override
-    public double getRenderZ(FieldBlobElement element, Object context, float partialTicks) {
+    public double getRenderZ(FieldBlobElement element, MinimapElementMapRendererHandler context, float partialTicks) {
         return element.field().z();
     }
 
     @Override
-    public int getInteractionBoxLeft(FieldBlobElement element, Object context, float partialTicks) {
+    public int getInteractionBoxLeft(FieldBlobElement element, MinimapElementMapRendererHandler context,
+                                     float partialTicks) {
         return -this.getInteractionBoxRight(element, context, partialTicks);
     }
 
     @Override
-    public int getInteractionBoxRight(FieldBlobElement element, Object context, float partialTicks) {
+    public int getInteractionBoxRight(FieldBlobElement element, MinimapElementMapRendererHandler context,
+                                      float partialTicks) {
         return extent(element);
     }
 
     @Override
-    public int getInteractionBoxTop(FieldBlobElement element, Object context, float partialTicks) {
+    public int getInteractionBoxTop(FieldBlobElement element, MinimapElementMapRendererHandler context,
+                                    float partialTicks) {
         return -extent(element);
     }
 
     @Override
-    public int getInteractionBoxBottom(FieldBlobElement element, Object context, float partialTicks) {
+    public int getInteractionBoxBottom(FieldBlobElement element, MinimapElementMapRendererHandler context,
+                                       float partialTicks) {
         return extent(element);
     }
 
@@ -84,22 +89,26 @@ public class FieldBlobElementReader extends MinimapElementReader<FieldBlobElemen
     }
 
     @Override
-    public int getRenderBoxLeft(FieldBlobElement element, Object context, float partialTicks) {
+    public int getRenderBoxLeft(FieldBlobElement element, MinimapElementMapRendererHandler context,
+                                float partialTicks) {
         return this.getInteractionBoxLeft(element, context, partialTicks);
     }
 
     @Override
-    public int getRenderBoxRight(FieldBlobElement element, Object context, float partialTicks) {
+    public int getRenderBoxRight(FieldBlobElement element, MinimapElementMapRendererHandler context,
+                                 float partialTicks) {
         return this.getInteractionBoxRight(element, context, partialTicks);
     }
 
     @Override
-    public int getRenderBoxTop(FieldBlobElement element, Object context, float partialTicks) {
+    public int getRenderBoxTop(FieldBlobElement element, MinimapElementMapRendererHandler context,
+                               float partialTicks) {
         return this.getInteractionBoxTop(element, context, partialTicks);
     }
 
     @Override
-    public int getRenderBoxBottom(FieldBlobElement element, Object context, float partialTicks) {
+    public int getRenderBoxBottom(FieldBlobElement element, MinimapElementMapRendererHandler context,
+                                  float partialTicks) {
         return this.getInteractionBoxBottom(element, context, partialTicks);
     }
 }

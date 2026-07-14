@@ -30,6 +30,7 @@
     "gtceu.OreVeinElementRendererMixin",
     "gtceu.ButtonStateMixin",
     "xaerominimap.CCoreMinimapFBORendererMixin",
+    "xaerominimap.MinimapElementMapRendererHandlerAccessor",
     "xaeroworldmap.CCoreMapElementRenderHandlerBuilderMixin",
     "xaeroworldmap.CCoreGuiMapDepleteMenuMixin",
     "embers.EmberDialBlockMixin",
