@@ -1,0 +1,6 @@
+{
+  "variants": {
+    "berries=false": { "model": "cosmiccore:block/crops/rockvine/body" },
+    "berries=true": { "model": "cosmiccore:block/crops/rockvine/body_berries" }
+  }
+}

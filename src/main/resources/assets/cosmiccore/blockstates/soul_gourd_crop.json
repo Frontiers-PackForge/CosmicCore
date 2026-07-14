@@ -1,0 +1,12 @@
+{
+  "variants": {
+    "age=0": { "model": "cosmiccore:block/crops/soul_gourd/crop_stage_0" },
+    "age=1": { "model": "cosmiccore:block/crops/soul_gourd/crop_stage_1" },
+    "age=2": { "model": "cosmiccore:block/crops/soul_gourd/crop_stage_2" },
+    "age=3": { "model": "cosmiccore:block/crops/soul_gourd/crop_stage_3" },
+    "age=4": { "model": "cosmiccore:block/crops/soul_gourd/crop_stage_4" },
+    "age=5": { "model": "cosmiccore:block/crops/soul_gourd/crop_stage_5" },
+    "age=6": { "model": "cosmiccore:block/crops/soul_gourd/crop_stage_6" },
+    "age=7": { "model": "cosmiccore:block/crops/soul_gourd/crop_stage_7" }
+  }
+}

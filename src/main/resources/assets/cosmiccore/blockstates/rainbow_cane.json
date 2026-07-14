@@ -1,0 +1,5 @@
+{
+  "multipart": [
+    { "apply": { "model": "cosmiccore:block/crops/rainbow_cane/rainbow_cane" } }
+  ]
+}

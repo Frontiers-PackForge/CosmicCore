@@ -640,7 +640,7 @@ public class CosmicMachines {
     public static final MachineDefinition STEAM_IMPORT_HATCH = REGISTRATE
             .machine("steam_fluid_input_hatch", holder -> new SteamFluidHatchPartMachine(holder, IO.IN, 4000, 1))
             .rotationState(RotationState.ALL)
-            .abilities(PartAbility.IMPORT_FLUIDS)
+            .abilities(PartAbility.IMPORT_FLUIDS, STEAM_IMPORT_FLUIDS)
             .colorOverlaySteamHullModel(
                     ResourceLocation.fromNamespaceAndPath(GTCEu.MOD_ID, "block/overlay/machine/overlay_pipe"),
                     ResourceLocation.fromNamespaceAndPath(GTCEu.MOD_ID, "block/overlay/machine/overlay_fluid_hatch"),

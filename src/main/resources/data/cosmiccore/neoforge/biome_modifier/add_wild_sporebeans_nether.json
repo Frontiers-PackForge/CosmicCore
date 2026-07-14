@@ -1,0 +1,6 @@
+{
+  "type": "neoforge:add_features",
+  "biomes": "#cosmiccore:has_wild_sporebeans_nether",
+  "features": "cosmiccore:wild_sporebeans_nether",
+  "step": "vegetal_decoration"
+}

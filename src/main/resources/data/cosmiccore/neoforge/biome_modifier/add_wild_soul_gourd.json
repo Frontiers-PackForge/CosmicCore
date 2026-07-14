@@ -1,0 +1,6 @@
+{
+  "type": "neoforge:add_features",
+  "biomes": "#cosmiccore:has_wild_soul_gourd",
+  "features": "cosmiccore:wild_soul_gourd",
+  "step": "vegetal_decoration"
+}

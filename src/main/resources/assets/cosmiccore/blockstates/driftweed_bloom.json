@@ -1,0 +1,8 @@
+{
+  "variants": {
+    "age=0": { "model": "cosmiccore:block/crops/driftweed/bloom_stage_0" },
+    "age=1": { "model": "cosmiccore:block/crops/driftweed/bloom_stage_1" },
+    "age=2": { "model": "cosmiccore:block/crops/driftweed/bloom_stage_2" },
+    "age=3": { "model": "cosmiccore:block/crops/driftweed/bloom_stage_3" }
+  }
+}

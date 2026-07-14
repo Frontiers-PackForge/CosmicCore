@@ -18,6 +18,7 @@ public class CosmicPartAbility {
 
     public static final PartAbility IMPORT_EMBER = new PartAbility("import_ember");
     public static final PartAbility EXPORT_EMBER = new PartAbility("export_ember");
+    public static final PartAbility STEAM_IMPORT_FLUIDS = new PartAbility("steam_import_fluids");
     public static final PartAbility BEE_HOLDER = new PartAbility("bee_holder");
     public static final PartAbility ME_ASSEMBLY_PARTS = new PartAbility("me_assembly_parts");
     public static final PartAbility ME_ASSEMBLY_PARTS_FLUID = new PartAbility("me_assembly_parts_fluid");

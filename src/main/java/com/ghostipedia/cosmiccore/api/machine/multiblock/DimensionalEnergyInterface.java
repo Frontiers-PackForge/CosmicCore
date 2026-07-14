@@ -9,7 +9,6 @@ import com.gregtechceu.gtceu.api.capability.recipe.IO;
 import com.gregtechceu.gtceu.api.machine.ConditionalSubscriptionHandler;
 import com.gregtechceu.gtceu.api.machine.feature.multiblock.IMaintenanceMachine;
 import com.gregtechceu.gtceu.api.machine.feature.multiblock.IMultiPart;
-import com.gregtechceu.gtceu.api.machine.multiblock.WorkableMultiblockMachine;
 import com.gregtechceu.gtceu.api.machine.trait.NotifiableEnergyContainer;
 import com.gregtechceu.gtceu.api.machine.trait.RecipeLogic;
 import com.gregtechceu.gtceu.api.misc.EnergyContainerList;
@@ -28,9 +27,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-// TODO(8.0.0 MUI2): custom display text shelved; base default getWidgetsForDisplay UI used for now (original in git
-// history).
-public class DimensionalEnergyInterface extends WorkableMultiblockMachine {
+public class DimensionalEnergyInterface extends MuiWorkableMultiblockMachine {
 
     protected static final long ticks_between_save_data_operations = 5L * 20L; // Once per 5s
 
