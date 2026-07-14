@@ -29,6 +29,8 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
+import static com.ghostipedia.cosmiccore.common.airControl.OxygenConfig.NO_AIR_DRAIN_PER_TICK;
+
 @NoArgsConstructor
 public class CosmicHudGuiOverlay implements LayeredDraw.Layer {
 
@@ -371,8 +373,9 @@ public class CosmicHudGuiOverlay implements LayeredDraw.Layer {
         }
 
         if (r < 0) {
-            // Draining
-            long etaSec = (long) Math.ceil(oxygenTicksLeft / (-r));
+            // Draining. Keep the estimate stable and conservative by using the canonical NO_AIR rate;
+            // THIN air can only make the reserve last longer.
+            long etaSec = (long) Math.ceil(oxygenTicksLeft / (NO_AIR_DRAIN_PER_TICK * 20.0));
             return Component.literal("<- " + formatSeconds(etaSec) + "  >").withStyle(s -> s.withColor(COLOR_DRAIN));
         } else {
             // Regenerating

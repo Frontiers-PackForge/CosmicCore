@@ -1,7 +1,5 @@
 package com.ghostipedia.cosmiccore.common.airControl;
 
-import com.ghostipedia.cosmiccore.common.murkbloom.MurkbloomServerLogic;
-
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
@@ -17,14 +15,12 @@ public final class OxygenRules {
     public enum AirQuality {
         SAFE,
         THIN,
-        TOXIC,
-        ABYSS,
         NO_AIR
     }
 
     public static final class Rates {
 
-        public int oxygenDrainPerTick;
+        public double oxygenDrainPerTick;
         public double oxygenRecoveryPerTick;
         public float suffocationDamage;
 
@@ -37,7 +33,7 @@ public final class OxygenRules {
         }
     }
 
-    private static Rates rates(int drain, double regen, float dmg) {
+    private static Rates rates(double drain, double regen, float dmg) {
         Rates result = new Rates();
         result.oxygenDrainPerTick = drain;
         result.oxygenRecoveryPerTick = regen;
@@ -46,11 +42,9 @@ public final class OxygenRules {
     }
 
     public static final Map<AirQuality, Rates> QUALITY_RATES = Map.of(
-            AirQuality.SAFE, rates(0, 2.0, 5f),
-            AirQuality.THIN, rates(1, 0.0, 5f),
-            AirQuality.TOXIC, rates(1, 0.5, 5f),
-            AirQuality.ABYSS, rates(8, 0.0, 1000f),
-            AirQuality.NO_AIR, rates(2, 0.0, 5f));
+            AirQuality.SAFE, rates(0.0, 2.0, 5f),
+            AirQuality.THIN, rates(OxygenConfig.THIN_AIR_DRAIN_PER_TICK, 0.0, 5f),
+            AirQuality.NO_AIR, rates(OxygenConfig.NO_AIR_DRAIN_PER_TICK, 0.0, 5f));
 
     // Air Ranges
 
@@ -60,7 +54,7 @@ public final class OxygenRules {
         public final int maxY;
         public final AirQuality quality;
 
-        public final Integer drainPerTickOverride;
+        public final Double drainPerTickOverride;
         public final Double regenOverride;
         public final Float damageOverride;
 
@@ -69,7 +63,7 @@ public final class OxygenRules {
         }
 
         public AirRanges(int minY, int maxY, AirQuality quality,
-                         Integer drainPerTickOverride,
+                         Double drainPerTickOverride,
                          Double regenOverride,
                          Float damageOverride) {
             this.minY = minY;
@@ -131,7 +125,7 @@ public final class OxygenRules {
         // --- Overworld ---
         addRanges(Level.OVERWORLD,
                 // y ≤ 0 : THIN air underground
-                new AirRanges(Integer.MIN_VALUE, 0, AirQuality.THIN, 1, 0.0, 2.0f),
+                new AirRanges(Integer.MIN_VALUE, 0, AirQuality.THIN, null, 0.0, 2.0f),
                 // 1 to 199 : SAFE (faster regen)
                 new AirRanges(1, 199, AirQuality.SAFE, null, 3.0, null),
                 // 200+ : THIN at high altitude
@@ -150,16 +144,12 @@ public final class OxygenRules {
             addRanges(airless, new AirRanges(Integer.MIN_VALUE, Integer.MAX_VALUE, AirQuality.NO_AIR));
         }
 
-        // Venus - toxic atmosphere
-        addRanges(VENUS, new AirRanges(Integer.MIN_VALUE, Integer.MAX_VALUE, AirQuality.TOXIC, 2, 0.0, 3.0f));
-
-        addRanges(MurkbloomServerLogic.HOLLOW_DIM,
-                new AirRanges(Integer.MIN_VALUE, MurkbloomServerLogic.ENTRY_Y, AirQuality.ABYSS),
-                new AirRanges(MurkbloomServerLogic.ENTRY_Y + 1, Integer.MAX_VALUE, AirQuality.SAFE));
+        // Venus currently uses the same sealed-air rules as other airless surfaces.
+        addRanges(VENUS, new AirRanges(Integer.MIN_VALUE, Integer.MAX_VALUE, AirQuality.NO_AIR));
 
         // Glacio - thin but breathable at surface (ice world with some atmosphere)
         addRanges(GLACIO,
-                new AirRanges(Integer.MIN_VALUE, 0, AirQuality.THIN, 1, 0.0, 2.0f),
+                new AirRanges(Integer.MIN_VALUE, 0, AirQuality.THIN, null, 0.0, 2.0f),
                 new AirRanges(1, 127, AirQuality.SAFE, null, 1.5, null),
                 new AirRanges(128, Integer.MAX_VALUE, AirQuality.THIN));
     }
