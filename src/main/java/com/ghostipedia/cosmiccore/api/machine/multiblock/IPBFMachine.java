@@ -4,7 +4,6 @@ import com.gregtechceu.gtceu.api.GTValues;
 import com.gregtechceu.gtceu.api.blockentity.BlockEntityCreationInfo;
 import com.gregtechceu.gtceu.api.machine.MetaMachine;
 import com.gregtechceu.gtceu.api.machine.TickableSubscription;
-import com.gregtechceu.gtceu.api.machine.multiblock.WorkableMultiblockMachine;
 import com.gregtechceu.gtceu.api.machine.trait.RecipeLogic;
 import com.gregtechceu.gtceu.api.recipe.GTRecipe;
 import com.gregtechceu.gtceu.api.recipe.RecipeHelper;
@@ -31,7 +30,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Collections;
 import java.util.Set;
 
-public class IPBFMachine extends WorkableMultiblockMachine {
+public class IPBFMachine extends MuiWorkableMultiblockMachine {
 
     public static final int MAX_PARALLELS = 8;
 
@@ -50,9 +49,6 @@ public class IPBFMachine extends WorkableMultiblockMachine {
         unsubscribe(hurtSubscription);
         hurtSubscription = null;
     }
-
-    // TODO(8.0.0 MUI2): custom steam/parallel/progress display text shelved; base default
-    // getWidgetsForDisplay UI is used for now (original LDLib createUI/addDisplayText in git history).
 
     @Override
     public void notifyStatusChanged(RecipeLogic.Status oldStatus, RecipeLogic.Status newStatus) {
