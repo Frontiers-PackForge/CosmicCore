@@ -5,6 +5,7 @@ import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
@@ -19,6 +20,8 @@ import net.minecraft.world.level.block.state.properties.DirectionProperty;
 import net.minecraft.world.level.block.state.properties.IntegerProperty;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
+
+import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -86,7 +89,7 @@ final class SoulGourdCropBlock extends Block implements BonemealableBlock {
         for (Direction direction : Direction.Plane.HORIZONTAL) {
             BlockPos target = pos.relative(direction);
             if (level.isEmptyBlock(target) &&
-                    level.getBlockState(target.below()).is(CropBlockTags.SOUL_GOURD_PLANTABLE_ON)) {
+                    level.getBlockState(target.below()).isFaceSturdy(level, target.below(), Direction.UP)) {
                 candidates.add(direction);
             }
         }
@@ -204,12 +207,13 @@ final class SoulGourdBloomBlock extends Block {
     }
 
     @Override
+    public @Nullable BlockState getStateForPlacement(BlockPlaceContext context) {
+        return defaultBlockState().setValue(FACING, context.getHorizontalDirection().getOpposite());
+    }
+
+    @Override
     protected boolean canSurvive(BlockState state, LevelReader level, BlockPos pos) {
-        if (!level.getBlockState(pos.below()).is(CropBlockTags.SOUL_GOURD_PLANTABLE_ON)) return false;
-        Direction direction = state.getValue(FACING);
-        BlockState stem = level.getBlockState(pos.relative(direction));
-        return stem.is(CosmicCrops.SOUL_GOURD_ATTACHED_STEM.get()) &&
-                stem.getValue(SoulGourdAttachedStemBlock.FACING) == direction.getOpposite();
+        return level.getBlockState(pos.below()).isFaceSturdy(level, pos.below(), Direction.UP);
     }
 
     @Override
@@ -223,6 +227,11 @@ final class SoulGourdBloomBlock extends Block {
     @Override
     protected VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {
         return SHAPE;
+    }
+
+    @Override
+    public ItemStack getCloneItemStack(LevelReader level, BlockPos pos, BlockState state) {
+        return new ItemStack(CosmicCrops.SOUL_GOURD.get());
     }
 
     @Override
