@@ -1,0 +1,8 @@
+{
+  "variants": {
+    "facing=north": { "model": "cosmiccore:block/crops/soul_gourd/attached_stem" },
+    "facing=east": { "model": "cosmiccore:block/crops/soul_gourd/attached_stem", "y": 90 },
+    "facing=south": { "model": "cosmiccore:block/crops/soul_gourd/attached_stem", "y": 180 },
+    "facing=west": { "model": "cosmiccore:block/crops/soul_gourd/attached_stem", "y": 270 }
+  }
+}

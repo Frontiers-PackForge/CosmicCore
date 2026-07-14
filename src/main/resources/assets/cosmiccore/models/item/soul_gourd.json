@@ -1,0 +1,49 @@
+{
+  "textures": {
+    "side": "cosmiccore:block/crops/soul_gourd/gourd_side",
+    "top": "cosmiccore:block/crops/soul_gourd/gourd_top",
+    "bottom": "cosmiccore:block/crops/soul_gourd/gourd_bottom",
+    "particle": "cosmiccore:block/crops/soul_gourd/gourd_side"
+  },
+  "elements": [
+    {
+      "from": [3, 0, 3],
+      "to": [13, 8, 13],
+      "faces": {
+        "north": { "uv": [3, 4, 13, 12], "texture": "#side" },
+        "east": { "uv": [3, 4, 13, 12], "texture": "#side" },
+        "south": { "uv": [3, 4, 13, 12], "texture": "#side" },
+        "west": { "uv": [3, 4, 13, 12], "texture": "#side" },
+        "up": { "uv": [3, 3, 13, 13], "texture": "#top" },
+        "down": { "uv": [3, 2, 13, 12], "texture": "#bottom" }
+      }
+    }
+  ],
+  "display": {
+    "thirdperson_righthand": {
+      "translation": [0, 3, 1],
+      "scale": [0.55, 0.55, 0.55]
+    },
+    "thirdperson_lefthand": {
+      "translation": [0, 3, 1],
+      "scale": [0.55, 0.55, 0.55]
+    },
+    "firstperson_righthand": {
+      "rotation": [0, -90, 25],
+      "translation": [1.13, 3.2, 1.13],
+      "scale": [0.68, 0.68, 0.68]
+    },
+    "firstperson_lefthand": {
+      "rotation": [0, -90, 25],
+      "translation": [1.13, 3.2, 1.13],
+      "scale": [0.68, 0.68, 0.68]
+    },
+    "head": {
+      "rotation": [0, -180, 0],
+      "translation": [0, 13, 0.25]
+    },
+    "fixed": {
+      "translation": [0, 4, 0]
+    }
+  }
+}

@@ -1,0 +1,40 @@
+{
+  "type": "minecraft:random_patch",
+  "config": {
+    "feature": {
+      "feature": {
+        "type": "minecraft:simple_block",
+        "config": {
+          "to_place": {
+            "type": "minecraft:simple_state_provider",
+            "state": {
+              "Name": "cosmiccore:driftweed_root",
+              "Properties": { "age": "3", "waterlogged": "true" }
+            }
+          }
+        }
+      },
+      "placement": [
+        {
+          "type": "minecraft:block_predicate_filter",
+          "predicate": {
+            "type": "minecraft:all_of",
+            "predicates": [
+              { "type": "minecraft:matching_blocks", "blocks": "minecraft:water" },
+              {
+                "type": "minecraft:would_survive",
+                "state": {
+                  "Name": "cosmiccore:driftweed_root",
+                  "Properties": { "age": "3", "waterlogged": "true" }
+                }
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "tries": 10,
+    "xz_spread": 5,
+    "y_spread": 1
+  }
+}

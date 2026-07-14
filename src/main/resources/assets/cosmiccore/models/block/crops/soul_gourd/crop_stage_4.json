@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:block/stem_growth4",
+  "render_type": "minecraft:cutout",
+  "textures": {
+    "stem": "cosmiccore:block/crops/soul_gourd/stem"
+  }
+}

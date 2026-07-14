@@ -1,0 +1,37 @@
+{
+  "replace": false,
+  "values": [
+    {
+      "id": "metalbarrels:copper_barrel",
+      "required": false
+    },
+    {
+      "id": "metalbarrels:crystal_barrel",
+      "required": false
+    },
+    {
+      "id": "metalbarrels:diamond_barrel",
+      "required": false
+    },
+    {
+      "id": "metalbarrels:gold_barrel",
+      "required": false
+    },
+    {
+      "id": "metalbarrels:iron_barrel",
+      "required": false
+    },
+    {
+      "id": "metalbarrels:netherite_barrel",
+      "required": false
+    },
+    {
+      "id": "metalbarrels:obsidian_barrel",
+      "required": false
+    },
+    {
+      "id": "metalbarrels:silver_barrel",
+      "required": false
+    }
+  ]
+}

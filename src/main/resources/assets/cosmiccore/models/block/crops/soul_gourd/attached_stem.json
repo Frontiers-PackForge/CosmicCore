@@ -1,0 +1,25 @@
+{
+  "render_type": "minecraft:cutout",
+  "textures": {
+    "attached_stem": "cosmiccore:block/crops/soul_gourd/attached_stem",
+    "particle": "cosmiccore:block/crops/soul_gourd/attached_stem"
+  },
+  "elements": [
+    {
+      "from": [8, 8, 0],
+      "to": [8, 13, 9],
+      "faces": {
+        "east": { "uv": [0, 0, 9, 5], "texture": "#attached_stem", "tintindex": 0 },
+        "west": { "uv": [0, 6, 9, 11], "texture": "#attached_stem", "tintindex": 0 }
+      }
+    },
+    {
+      "from": [8, 0, 0],
+      "to": [8, 8, 9],
+      "faces": {
+        "east": { "uv": [7, 10, 16, 16], "texture": "#attached_stem", "tintindex": 0 },
+        "west": { "uv": [0, 10, 9, 16], "texture": "#attached_stem", "tintindex": 0 }
+      }
+    }
+  ]
+}

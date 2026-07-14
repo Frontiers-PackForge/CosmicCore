@@ -1,0 +1,72 @@
+{
+    "credit":  "Made with Blockbench",
+    "textures":  {
+                     "0":  "cosmiccore:block/crops/sporebeans/spore_bean_one",
+                     "particle":  "cosmiccore:block/crops/sporebeans/spore_bean_one"
+                 },
+    "elements":  [
+                     {
+                         "name":  "Stage 0",
+                         "from":  [
+                                      4,
+                                      4,
+                                      14
+                                  ],
+                         "to":  [
+                                    13,
+                                    6,
+                                    16
+                                ],
+                         "faces":  {
+                                       "north":  {
+                                                     "uv":  [
+                                                                0,
+                                                                10,
+                                                                9,
+                                                                12
+                                                            ],
+                                                     "texture":  "#0"
+                                                 },
+                                       "east":  {
+                                                    "uv":  [
+                                                               2,
+                                                               8,
+                                                               4,
+                                                               10
+                                                           ],
+                                                    "texture":  "#0"
+                                                },
+                                       "west":  {
+                                                    "uv":  [
+                                                               0,
+                                                               8,
+                                                               2,
+                                                               10
+                                                           ],
+                                                    "texture":  "#0"
+                                                },
+                                       "up":  {
+                                                  "uv":  [
+                                                             0,
+                                                             12,
+                                                             9,
+                                                             14
+                                                         ],
+                                                  "texture":  "#0"
+                                              },
+                                       "down":  {
+                                                    "uv":  [
+                                                               0,
+                                                               14,
+                                                               9,
+                                                               16
+                                                           ],
+                                                    "texture":  "#0"
+                                                }
+                                   }
+                     }
+                 ],
+    "parent":  "minecraft:block/block",
+    "ambientocclusion":  false,
+    "render_type":  "minecraft:cutout"
+}
