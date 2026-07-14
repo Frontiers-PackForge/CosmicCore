@@ -4,6 +4,7 @@ import com.ghostipedia.cosmiccore.client.map.RevealedField;
 import com.ghostipedia.cosmiccore.client.map.RevealedFields;
 import com.ghostipedia.cosmiccore.client.map.xaero.FieldBlobDraw;
 import com.ghostipedia.cosmiccore.client.map.xaero.FieldBlobElement;
+import com.ghostipedia.cosmiccore.mixin.xaerominimap.MinimapElementMapRendererHandlerAccessor;
 
 import com.gregtechceu.gtceu.integration.map.GroupingMapRenderer;
 
@@ -15,11 +16,14 @@ import xaero.common.graphics.renderer.multitexture.MultiTextureRenderTypeRendere
 import xaero.hud.minimap.element.render.MinimapElementRenderInfo;
 import xaero.hud.minimap.element.render.MinimapElementRenderLocation;
 import xaero.hud.minimap.element.render.MinimapElementRenderer;
+import xaero.hud.minimap.element.render.map.MinimapElementMapRendererHandler;
 
-public class FieldBlobElementRenderer extends MinimapElementRenderer<FieldBlobElement, Object> {
+public class FieldBlobElementRenderer
+                                      extends
+                                      MinimapElementRenderer<FieldBlobElement, MinimapElementMapRendererHandler> {
 
     private FieldBlobElementRenderer(FieldBlobElementReader reader, FieldBlobElementRenderProvider provider,
-                                     Object context) {
+                                     MinimapElementMapRendererHandler context) {
         super(reader, provider, context);
     }
 
@@ -36,8 +40,10 @@ public class FieldBlobElementRenderer extends MinimapElementRenderer<FieldBlobEl
         Minecraft mc = Minecraft.getInstance();
         boolean depleted = mc.level != null &&
                 RevealedFields.INSTANCE.isDepleted(mc.level.dimension(), field.x(), field.z());
+        MinimapElementMapRendererHandlerAccessor transform = (MinimapElementMapRendererHandlerAccessor) (Object) this.context;
         FieldBlobDraw.minimapBlob(graphics, FieldBlobDraw.minimapZoneRadius(field.tier(), field.radius()),
-                field.colorRGB(), FieldBlobDraw.shapeSeed(field.x(), field.z()), depleted);
+                field.colorRGB(), FieldBlobDraw.shapeSeed(field.x(), field.z()), depleted,
+                transform.cosmiccore$getTransformPs(), transform.cosmiccore$getTransformPc());
         return true;
     }
 
@@ -55,10 +61,10 @@ public class FieldBlobElementRenderer extends MinimapElementRenderer<FieldBlobEl
 
         private Builder() {}
 
-        public FieldBlobElementRenderer build() {
+        public FieldBlobElementRenderer build(MinimapElementMapRendererHandler handler) {
             FieldBlobDraw.ensureLayerDefaultOn();
             return new FieldBlobElementRenderer(new FieldBlobElementReader(),
-                    new FieldBlobElementRenderProvider(), new Object());
+                    new FieldBlobElementRenderProvider(), handler);
         }
 
         public static Builder begin() {

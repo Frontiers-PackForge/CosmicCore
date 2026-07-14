@@ -11,13 +11,16 @@ import net.minecraft.client.player.LocalPlayer;
 import xaero.hud.minimap.BuiltInHudModules;
 import xaero.hud.minimap.element.render.MinimapElementRenderLocation;
 import xaero.hud.minimap.element.render.MinimapElementRenderProvider;
+import xaero.hud.minimap.element.render.map.MinimapElementMapRendererHandler;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 
-public class FieldBlobElementRenderProvider extends MinimapElementRenderProvider<FieldBlobElement, Object> {
+public class FieldBlobElementRenderProvider
+                                            extends
+                                            MinimapElementRenderProvider<FieldBlobElement, MinimapElementMapRendererHandler> {
 
     private static final int VIEW_MARGIN_BLOCKS = 140;
     private static final int VIEW_FALLBACK_BLOCKS = 256;
@@ -27,7 +30,7 @@ public class FieldBlobElementRenderProvider extends MinimapElementRenderProvider
     public FieldBlobElementRenderProvider() {}
 
     @Override
-    public void begin(MinimapElementRenderLocation location, Object context) {
+    public void begin(MinimapElementRenderLocation location, MinimapElementMapRendererHandler context) {
         RevealedFieldStorage.ensureLoaded();
         Minecraft mc = Minecraft.getInstance();
         LocalPlayer player = mc.player;
@@ -56,17 +59,17 @@ public class FieldBlobElementRenderProvider extends MinimapElementRenderProvider
     }
 
     @Override
-    public boolean hasNext(MinimapElementRenderLocation location, Object context) {
+    public boolean hasNext(MinimapElementRenderLocation location, MinimapElementMapRendererHandler context) {
         return this.iterator != null && this.iterator.hasNext();
     }
 
     @Override
-    public FieldBlobElement getNext(MinimapElementRenderLocation location, Object context) {
+    public FieldBlobElement getNext(MinimapElementRenderLocation location, MinimapElementMapRendererHandler context) {
         return this.iterator.next();
     }
 
     @Override
-    public void end(MinimapElementRenderLocation location, Object context) {}
+    public void end(MinimapElementRenderLocation location, MinimapElementMapRendererHandler context) {}
 
     private static long viewRadiusSqr() {
         try {
