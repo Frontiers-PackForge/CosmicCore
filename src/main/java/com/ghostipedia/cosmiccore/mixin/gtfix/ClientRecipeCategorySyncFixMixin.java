@@ -1,6 +1,6 @@
 package com.ghostipedia.cosmiccore.mixin.gtfix;
 
-import com.ghostipedia.cosmiccore.common.recipe.GTRecipeCategoryLifecycle;
+import com.ghostipedia.cosmiccore.common.recipe.GTRecipeReloadLifecycle;
 
 import net.minecraft.client.multiplayer.ClientPacketListener;
 import net.minecraft.network.protocol.game.ClientboundUpdateRecipesPacket;
@@ -23,6 +23,6 @@ public abstract class ClientRecipeCategorySyncFixMixin {
                      target = "Lnet/neoforged/neoforge/client/ClientHooks;onRecipesUpdated(Lnet/minecraft/world/item/crafting/RecipeManager;)V",
                      shift = At.Shift.BEFORE))
     private void cosmiccore$rebuildGtRecipeCategories(ClientboundUpdateRecipesPacket packet, CallbackInfo ci) {
-        GTRecipeCategoryLifecycle.rebuild(getRecipeManager().getRecipes());
+        GTRecipeReloadLifecycle.rebuildCategories(getRecipeManager().getRecipes());
     }
 }
