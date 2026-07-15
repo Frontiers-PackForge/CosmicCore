@@ -2,7 +2,7 @@ package com.ghostipedia.cosmiccore.mixin.gtceu;
 
 import com.ghostipedia.cosmiccore.api.machine.multiblock.StellarBaseModule;
 
-import com.gregtechceu.gtceu.api.machine.trait.RecipeLogic;
+import com.gregtechceu.gtceu.api.machine.trait.recipe.RecipeLogic;
 import com.gregtechceu.gtceu.integration.jade.provider.RecipeLogicProvider;
 
 import net.minecraft.nbt.CompoundTag;

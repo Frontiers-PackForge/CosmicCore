@@ -3,9 +3,8 @@ package com.ghostipedia.cosmiccore.common.ae2gt;
 import com.gregtechceu.gtceu.api.blockentity.BlockEntityCreationInfo;
 import com.gregtechceu.gtceu.api.capability.recipe.IO;
 import com.gregtechceu.gtceu.api.machine.feature.IDataStickInteractable;
-import com.gregtechceu.gtceu.api.machine.trait.NotifiableItemStackHandler;
+import com.gregtechceu.gtceu.api.machine.trait.notifiable.NotifiableItemStackHandler;
 import com.gregtechceu.gtceu.common.data.item.GTDataComponents;
-import com.gregtechceu.gtceu.common.item.behavior.IntCircuitBehaviour;
 import com.gregtechceu.gtceu.integration.ae2.machine.MEBusPartMachine;
 import com.gregtechceu.gtceu.integration.ae2.slot.ExportOnlyAEItemList;
 import com.gregtechceu.gtceu.integration.ae2.slot.ExportOnlyAEItemSlot;
@@ -36,13 +35,12 @@ public class CosmicInputBusPartMachine extends MEBusPartMachine implements IData
     protected ExportOnlyAEItemList aeItemHandler;
 
     public CosmicInputBusPartMachine(BlockEntityCreationInfo info) {
-        super(info, IO.IN);
+        this(info, new ExportOnlyAEItemList(CONFIG_SIZE));
     }
 
-    @Override
-    protected NotifiableItemStackHandler createInventory() {
-        this.aeItemHandler = new ExportOnlyAEItemList(CONFIG_SIZE);
-        return this.aeItemHandler;
+    protected CosmicInputBusPartMachine(BlockEntityCreationInfo info, NotifiableItemStackHandler inventory) {
+        super(info, IO.IN, inventory);
+        this.aeItemHandler = (ExportOnlyAEItemList) getInventory();
     }
 
     /////////////////////////////////
@@ -177,8 +175,7 @@ public class CosmicInputBusPartMachine extends MEBusPartMachine implements IData
             CompoundTag stackTag = GenericStack.writeTag(provider, config);
             configStacks.put(Integer.toString(i), stackTag);
         }
-        tag.putByte("GhostCircuit",
-                (byte) IntCircuitBehaviour.getCircuitConfiguration(circuitInventory.getStackInSlot(0)));
+        tag.putByte("GhostCircuit", (byte) circuitSlot.getCurrentCircuit());
         tag.putBoolean("DistinctBuses", isDistinct());
         return tag;
     }
@@ -197,7 +194,7 @@ public class CosmicInputBusPartMachine extends MEBusPartMachine implements IData
             }
         }
         if (tag.contains("GhostCircuit")) {
-            circuitInventory.setStackInSlot(0, IntCircuitBehaviour.stack(tag.getByte("GhostCircuit")));
+            circuitSlot.setCurrentCircuit(tag.getByte("GhostCircuit"));
         }
         if (tag.contains("DistinctBuses")) {
             setDistinct(tag.getBoolean("DistinctBuses"));

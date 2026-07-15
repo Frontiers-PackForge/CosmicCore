@@ -8,8 +8,8 @@ import com.gregtechceu.gtceu.api.capability.IEnergyContainer;
 import com.gregtechceu.gtceu.api.capability.recipe.*;
 import com.gregtechceu.gtceu.api.fluids.store.FluidStorageKeys;
 import com.gregtechceu.gtceu.api.machine.TickableSubscription;
-import com.gregtechceu.gtceu.api.machine.feature.multiblock.IMultiPart;
 import com.gregtechceu.gtceu.api.machine.multiblock.WorkableElectricMultiblockMachine;
+import com.gregtechceu.gtceu.api.machine.multiblock.part.MultiblockPartMachine;
 import com.gregtechceu.gtceu.api.misc.EnergyContainerList;
 import com.gregtechceu.gtceu.common.data.GTMaterials;
 
@@ -54,7 +54,7 @@ public class ManaDigitizerMachine extends WorkableElectricMultiblockMachine {
         super.formStructure(substructureName);
 
         List<IEnergyContainer> inputEnergyContainers = new ArrayList<>();
-        for (IMultiPart part : getParts()) {
+        for (MultiblockPartMachine part : getParts()) {
             var handlers = part.getRecipeHandlers();
             for (var handler : handlers) {
                 IO handlerIO = handler.getHandlerIO();

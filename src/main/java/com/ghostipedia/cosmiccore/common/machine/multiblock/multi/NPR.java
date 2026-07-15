@@ -29,6 +29,7 @@ public class NPR {
             .multiblock("naquahine_pressure_reactor", MagneticFieldMachine::new)
             .rotationState(RotationState.NON_Y_AXIS)
             .recipeType(CosmicRecipeTypes.NAQUAHINE_REACTOR)
+            .regressWhenWaiting(false)
             .recipeModifier(CosmicRecipeModifiers::vomahineReactorOC)
             .appearanceBlock(CosmicBlocks.NAQUADAH_PRESSURE_RESISTANT_CASING)
             .generator(true)

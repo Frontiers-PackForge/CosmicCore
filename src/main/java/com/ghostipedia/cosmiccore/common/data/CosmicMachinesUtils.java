@@ -65,6 +65,7 @@ public class CosmicMachinesUtils {
         return REGISTRATE.multiblock(name, holder -> new ExoticCombustionEngineMachine(holder, tier))
                 .rotationState(RotationState.ALL)
                 .recipeType(GTRecipeTypes.COMBUSTION_GENERATOR_FUELS)
+                .regressWhenWaiting(false)
                 .generator(true)
                 .recipeModifier(ExoticCombustionEngineMachine::recipeModifier, true)
                 .appearanceBlock(casing)
@@ -117,6 +118,7 @@ public class CosmicMachinesUtils {
         return REGISTRATE.multiblock(name, holder -> new CosmicLargeTurbineMachine(holder, tier))
                 .rotationState(RotationState.ALL)
                 .recipeType(recipeType)
+                .regressWhenWaiting(false)
                 .generator(true)
                 .recipeModifier(CosmicLargeTurbineMachine::recipeModifier, true)
                 .appearanceBlock(casing)
@@ -197,14 +199,14 @@ public class CosmicMachinesUtils {
 
     public static MachineDefinition[] registerTieredSingleBlockMachines(String name,
                                                                         BiFunction<BlockEntityCreationInfo, Integer, MetaMachine> factory,
-                                                                        BiFunction<Integer, MachineBuilder<MachineDefinition, ?>, MachineDefinition> builder,
+                                                                        BiFunction<Integer, MachineBuilder<MachineDefinition, MetaMachine, ?>, MachineDefinition> builder,
                                                                         int... tiers) {
         return registerTieredMachines(name, factory, builder, tiers);
     }
 
     public static MachineDefinition[] registerTieredMachines(String name,
                                                              BiFunction<BlockEntityCreationInfo, Integer, MetaMachine> factory,
-                                                             BiFunction<Integer, MachineBuilder<MachineDefinition, ?>, MachineDefinition> builder,
+                                                             BiFunction<Integer, MachineBuilder<MachineDefinition, MetaMachine, ?>, MachineDefinition> builder,
                                                              int... tiers) {
         MachineDefinition[] definitions = new MachineDefinition[GTValues.TIER_COUNT];
         for (int tier : tiers) {
@@ -219,7 +221,7 @@ public class CosmicMachinesUtils {
 
     public static Pair<MachineDefinition, MachineDefinition> registerSteamMachines(String name,
                                                                                    BiFunction<BlockEntityCreationInfo, Boolean, MetaMachine> factory,
-                                                                                   BiFunction<Boolean, MachineBuilder<MachineDefinition, ?>, MachineDefinition> builder) {
+                                                                                   BiFunction<Boolean, MachineBuilder<MachineDefinition, MetaMachine, ?>, MachineDefinition> builder) {
         MachineDefinition lowTier = builder.apply(false,
                 REGISTRATE.machine("lp_%s".formatted(name), info -> factory.apply(info, false))
                         .langValue("I DO NOT EXIST")

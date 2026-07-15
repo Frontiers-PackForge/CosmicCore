@@ -12,7 +12,7 @@ public abstract class SteamSolidBoilerFuelSlotFixMixin {
 
     @ModifyArg(method = "<init>",
                at = @At(value = "INVOKE",
-                        target = "Lcom/gregtechceu/gtceu/api/machine/trait/NotifiableItemStackHandler;<init>(ILcom/gregtechceu/gtceu/api/capability/recipe/IO;Lcom/gregtechceu/gtceu/api/capability/recipe/IO;)V"),
+                        target = "Lcom/gregtechceu/gtceu/api/machine/trait/notifiable/NotifiableItemStackHandler;<init>(ILcom/gregtechceu/gtceu/api/capability/recipe/IO;Lcom/gregtechceu/gtceu/api/capability/recipe/IO;)V"),
                index = 2,
                remap = false)
     private IO cosmiccore$fuelSlotGuiExtractable(IO capabilityIO) {

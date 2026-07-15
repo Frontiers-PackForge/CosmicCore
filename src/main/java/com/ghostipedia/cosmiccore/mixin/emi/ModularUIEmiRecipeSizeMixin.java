@@ -38,7 +38,7 @@ public abstract class ModularUIEmiRecipeSizeMixin {
         Object self = this;
         if (self instanceof MultiblockInfoEmiWrapper) {
             w = 320;
-            h = 260;
+            h = 240;
         } else if (self instanceof GTEmiOreProcessingWrapper) {
             w = 180;
             h = 170;

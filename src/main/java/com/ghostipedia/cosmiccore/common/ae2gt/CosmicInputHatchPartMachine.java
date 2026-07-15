@@ -3,8 +3,7 @@ package com.ghostipedia.cosmiccore.common.ae2gt;
 import com.gregtechceu.gtceu.api.blockentity.BlockEntityCreationInfo;
 import com.gregtechceu.gtceu.api.capability.recipe.IO;
 import com.gregtechceu.gtceu.api.machine.feature.IDataStickInteractable;
-import com.gregtechceu.gtceu.api.machine.feature.IHasCircuitSlot;
-import com.gregtechceu.gtceu.api.machine.trait.NotifiableFluidTank;
+import com.gregtechceu.gtceu.api.machine.trait.notifiable.NotifiableFluidTank;
 import com.gregtechceu.gtceu.common.data.item.GTDataComponents;
 import com.gregtechceu.gtceu.integration.ae2.machine.MEHatchPartMachine;
 import com.gregtechceu.gtceu.integration.ae2.slot.ExportOnlyAEFluidList;
@@ -35,8 +34,7 @@ import javax.annotation.ParametersAreNonnullByDefault;
 
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
-public class CosmicInputHatchPartMachine extends MEHatchPartMachine
-                                         implements IDataStickInteractable, IHasCircuitSlot {
+public class CosmicInputHatchPartMachine extends MEHatchPartMachine implements IDataStickInteractable {
 
     protected ExportOnlyAEFluidList aeFluidHandler;
 
@@ -181,6 +179,7 @@ public class CosmicInputHatchPartMachine extends MEHatchPartMachine
             CompoundTag stackTag = GenericStack.writeTag(provider, config);
             configStacks.put(Integer.toString(i), stackTag);
         }
+        tag.putByte("GhostCircuit", (byte) circuitSlot.getCurrentCircuit());
         return tag;
     }
 
@@ -196,6 +195,9 @@ public class CosmicInputHatchPartMachine extends MEHatchPartMachine
                     this.aeFluidHandler.getInventory()[i].setConfig(null);
                 }
             }
+        }
+        if (tag.contains("GhostCircuit")) {
+            circuitSlot.setCurrentCircuit(tag.getByte("GhostCircuit"));
         }
     }
 }

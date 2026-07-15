@@ -10,7 +10,7 @@ import com.gregtechceu.gtceu.api.capability.recipe.EURecipeCapability;
 import com.gregtechceu.gtceu.api.capability.recipe.IO;
 import com.gregtechceu.gtceu.api.machine.TickableSubscription;
 import com.gregtechceu.gtceu.api.machine.feature.ITieredMachine;
-import com.gregtechceu.gtceu.api.machine.feature.multiblock.IMultiPart;
+import com.gregtechceu.gtceu.api.machine.multiblock.part.MultiblockPartMachine;
 import com.gregtechceu.gtceu.api.misc.EnergyContainerList;
 
 import lombok.Getter;
@@ -40,7 +40,7 @@ public class HeatSensitiveMachine extends HeatWorkableElectricMultiblockMachine 
         super.formStructure(substructureName);
         List<IEnergyContainer> energyContainers = new ArrayList<>();
         List<IHeatContainer> heatContainers = new ArrayList<>();
-        for (IMultiPart part : getParts()) {
+        for (MultiblockPartMachine part : getParts()) {
             for (var handler : part.getRecipeHandlers()) {
                 IO handlerIO = handler.getHandlerIO();
                 if (handler.hasCapability(HeatRecipeCapability.CAP) &&

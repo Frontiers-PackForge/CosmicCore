@@ -5,31 +5,21 @@ import com.ghostipedia.cosmiccore.api.misc.DroneStationConnection;
 
 import com.gregtechceu.gtceu.api.GTValues;
 import com.gregtechceu.gtceu.api.blockentity.BlockEntityCreationInfo;
-import com.gregtechceu.gtceu.api.machine.TickableSubscription;
-import com.gregtechceu.gtceu.api.machine.feature.multiblock.IMaintenanceMachine;
-import com.gregtechceu.gtceu.api.machine.multiblock.part.TieredPartMachine;
+import com.gregtechceu.gtceu.common.data.GTItems;
+import com.gregtechceu.gtceu.common.machine.multiblock.part.MaintenanceHatchPartMachine;
+import com.gregtechceu.gtceu.utils.ExtendedUseOnContext;
 
 import com.lowdragmc.lowdraglib.syncdata.annotation.DescSynced;
-import com.lowdragmc.lowdraglib.syncdata.annotation.Persisted;
 
 import net.minecraft.resources.ResourceLocation;
-
-import org.jetbrains.annotations.Nullable;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.phys.BlockHitResult;
 
 import java.util.Set;
 
-public class DroneMaintenanceInterfacePartMachine extends TieredPartMachine
-                                                  implements IMaintenanceMachine {
-
-    @Persisted
-    protected int timeActive;
-    @Persisted
-    @DescSynced
-    protected byte maintenanceProblems = startProblems();
-    @Persisted
-    private float durationMultiplier = 1f;
-    @Nullable
-    protected TickableSubscription maintenanceSubs;
+public class DroneMaintenanceInterfacePartMachine extends MaintenanceHatchPartMachine {
 
     private DroneStationConnection connection;
 
@@ -39,7 +29,20 @@ public class DroneMaintenanceInterfacePartMachine extends TieredPartMachine
     private long syncedConnectionPos;
 
     public DroneMaintenanceInterfacePartMachine(BlockEntityCreationInfo holder) {
-        super(holder, GTValues.HV);
+        super(holder, GTValues.HV, false);
+    }
+
+    @Override
+    public boolean shouldOpenUI(Player player, InteractionHand hand, BlockHitResult hit) {
+        return false;
+    }
+
+    @Override
+    public InteractionResult onUseWithItem(ExtendedUseOnContext context) {
+        if (context.getItemInHand().is(GTItems.DUCT_TAPE.get())) {
+            return InteractionResult.PASS;
+        }
+        return super.onUseWithItem(context);
     }
 
     //////////////////////////////////////
@@ -54,38 +57,12 @@ public class DroneMaintenanceInterfacePartMachine extends TieredPartMachine
     //////////////////////////////////////
     // ********* Logic **********//
     //////////////////////////////////////
-    @Override
-    public int getTimeActive() {
-        return timeActive;
-    }
-
-    @Override
-    public void setTimeActive(int timeActive) {
-        this.timeActive = timeActive;
-    }
-
-    @Override
-    public byte getMaintenanceProblems() {
-        return maintenanceProblems;
-    }
-
-    @Override
-    public float getDurationMultiplier() {
-        return durationMultiplier;
-    }
-
     public DroneStationConnection getConnection() {
         return connection;
     }
 
     @Override
-    public void setMaintenanceProblems(byte problems) {
-        this.maintenanceProblems = problems;
-    }
-
-    @Override
-    public void onLoad() {
-        super.onLoad();
+    protected void updateMaintenanceSubscription() {
         if (!isRemote()) {
             maintenanceSubs = subscribeServerTick(maintenanceSubs, this::update);
         }
@@ -97,6 +74,7 @@ public class DroneMaintenanceInterfacePartMachine extends TieredPartMachine
             maintenanceSubs.unsubscribe();
             maintenanceSubs = null;
         }
+        super.onUnload();
     }
 
     @Override
@@ -105,6 +83,7 @@ public class DroneMaintenanceInterfacePartMachine extends TieredPartMachine
         if (hasConnection()) connection.machine = null;
     }
 
+    @Override
     public void update() {
         if (isRemote()) return;
         // Fix maintenance problems every second
@@ -174,15 +153,6 @@ public class DroneMaintenanceInterfacePartMachine extends TieredPartMachine
     // - when disconnected (== -1): red "drone_maintenance_interface.no_connection".
     // Reinstate via GTMultiblockTextUtil rows in the controller's getWidgetsForDisplay when porting to MUI2.
     // The syncedConnectionPos field + connection logic above remain fully functional.
-
-    public void fixAllMaintenanceProblems() {
-        for (int i = 0; i < 6; i++) setMaintenanceFixed(i);
-    }
-
-    @Override
-    public boolean isFullAuto() {
-        return false;
-    }
 
     @Override
     public void setTaped(boolean ignored) {}

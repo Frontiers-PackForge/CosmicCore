@@ -4,8 +4,8 @@ import com.gregtechceu.gtceu.api.blockentity.BlockEntityCreationInfo;
 import com.gregtechceu.gtceu.api.capability.recipe.RecipeCapability;
 import com.gregtechceu.gtceu.api.machine.MetaMachine;
 import com.gregtechceu.gtceu.api.machine.feature.ITieredMachine;
-import com.gregtechceu.gtceu.api.machine.feature.multiblock.IMultiPart;
 import com.gregtechceu.gtceu.api.machine.multiblock.WorkableElectricMultiblockMachine;
+import com.gregtechceu.gtceu.api.machine.multiblock.part.MultiblockPartMachine;
 import com.gregtechceu.gtceu.api.recipe.GTRecipe;
 import com.gregtechceu.gtceu.api.recipe.content.ContentModifier;
 import com.gregtechceu.gtceu.api.recipe.ingredient.EnergyStack;
@@ -43,7 +43,7 @@ public class CosmicLargeTurbineMachine extends WorkableElectricMultiblockMachine
 
     @Nullable
     private RotorHolderPartMachine getRotorHolder() {
-        for (IMultiPart part : getParts()) {
+        for (MultiblockPartMachine part : getParts()) {
             if (part instanceof RotorHolderPartMachine rotorHolder) {
                 return rotorHolder;
             }
@@ -155,11 +155,6 @@ public class CosmicLargeTurbineMachine extends WorkableElectricMultiblockMachine
                 .parallels(actualParallel)
                 .durationMultiplier(holderEfficiency)
                 .build();
-    }
-
-    @Override
-    public boolean regressWhenWaiting() {
-        return false;
     }
 
     @Override

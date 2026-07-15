@@ -6,7 +6,7 @@ import com.gregtechceu.gtceu.api.blockentity.BlockEntityCreationInfo;
 import com.gregtechceu.gtceu.api.capability.GTCapabilityHelper;
 import com.gregtechceu.gtceu.api.machine.TickableSubscription;
 import com.gregtechceu.gtceu.api.machine.TieredEnergyMachine;
-import com.gregtechceu.gtceu.api.machine.trait.NotifiableEnergyContainer;
+import com.gregtechceu.gtceu.api.machine.trait.notifiable.NotifiableEnergyContainer;
 import com.gregtechceu.gtceu.common.machine.owner.ArgonautsOwner;
 import com.gregtechceu.gtceu.common.machine.owner.FTBOwner;
 import com.gregtechceu.gtceu.common.machine.owner.PlayerOwner;
@@ -44,24 +44,31 @@ public class WirelessChargerMachine extends TieredEnergyMachine {
     List<Player> oldPlayerList = new ArrayList<>();
 
     public WirelessChargerMachine(BlockEntityCreationInfo holder, int tier) {
-        super(holder, tier, m -> {
-            long chargeAmount = GTValues.V[tier];
-            return new NotifiableEnergyContainer(chargeAmount * 64L, chargeAmount, 4, 0L, 0L) {
-
-                @Override
-                public long getInputAmperage() {
-                    if (((WirelessChargerMachine) m).mode == ChargeMode.SUPER_CHARGED) {
-                        return 4;
-                    }
-                    return 1;
-                }
-            };
-        });
+        super(holder, tier, new WirelessChargerEnergyContainer(tier));
+        ((WirelessChargerEnergyContainer) energyContainer).bind(this);
         this.tier = tier;
         mode = ChargeMode.SUPER_CHARGED;
         longRange = 1024L * (tier - GTValues.MV);
         shortRange = 512L * (tier - GTValues.MV);
         chargeAmount = GTValues.V[tier];
+    }
+
+    private static final class WirelessChargerEnergyContainer extends NotifiableEnergyContainer {
+
+        private WirelessChargerMachine machine;
+
+        private WirelessChargerEnergyContainer(int tier) {
+            super(GTValues.V[tier] * 64L, GTValues.V[tier], 4, 0L, 0L);
+        }
+
+        private void bind(WirelessChargerMachine machine) {
+            this.machine = machine;
+        }
+
+        @Override
+        public long getInputAmperage() {
+            return machine != null && machine.mode == ChargeMode.SUPER_CHARGED ? 4 : 1;
+        }
     }
 
     @Override

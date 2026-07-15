@@ -8,7 +8,7 @@ import com.gregtechceu.gtceu.api.capability.recipe.EURecipeCapability;
 import com.gregtechceu.gtceu.api.capability.recipe.IO;
 import com.gregtechceu.gtceu.api.machine.TickableSubscription;
 import com.gregtechceu.gtceu.api.machine.feature.ITieredMachine;
-import com.gregtechceu.gtceu.api.machine.feature.multiblock.IMultiPart;
+import com.gregtechceu.gtceu.api.machine.multiblock.part.MultiblockPartMachine;
 import com.gregtechceu.gtceu.api.misc.EnergyContainerList;
 import com.gregtechceu.gtceu.api.recipe.GTRecipe;
 import com.gregtechceu.gtceu.utils.FormattingUtil;
@@ -47,7 +47,7 @@ public class MagneticFieldMachine extends MagnetWorkableElectricMultiblockMachin
         super.formStructure(substructureName);
 
         List<IEnergyContainer> inputEnergyContainers = new ArrayList<>();
-        for (IMultiPart part : getParts()) {
+        for (MultiblockPartMachine part : getParts()) {
             var handlers = part.getRecipeHandlers();
             for (var handler : handlers) {
                 IO handlerIO = handler.getHandlerIO();
@@ -136,11 +136,6 @@ public class MagneticFieldMachine extends MagnetWorkableElectricMultiblockMachin
         }
         fieldStrength = fieldStrength - recipe.data.getInt("decay_rate");
         return super.onWorking();
-    }
-
-    @Override
-    public boolean regressWhenWaiting() {
-        return false;
     }
 
     public void addDisplayText(List<Component> textList) {

@@ -3,8 +3,8 @@ package com.ghostipedia.cosmiccore.mixin.gtceu;
 import com.ghostipedia.cosmiccore.common.machine.multiblock.multi.logic.MultithreadedMachine;
 
 import com.gregtechceu.gtceu.api.machine.MetaMachine;
-import com.gregtechceu.gtceu.api.machine.feature.multiblock.IMultiPart;
-import com.gregtechceu.gtceu.api.machine.trait.RecipeHandlerList;
+import com.gregtechceu.gtceu.api.machine.multiblock.part.MultiblockPartMachine;
+import com.gregtechceu.gtceu.api.machine.trait.recipe.RecipeHandlerList;
 
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -16,7 +16,7 @@ public abstract class MetaMachinePaintMixin {
 
     @Inject(method = "setPaintingColor", at = @At("TAIL"))
     private void cosmiccore$onPaintChange(int paintingColor, CallbackInfo ci) {
-        if (!(((Object) this) instanceof IMultiPart part)) return;
+        if (!(((Object) this) instanceof MultiblockPartMachine part)) return;
 
         // Each part lazy-caches its RecipeHandlerList with the painting color at first access and
         // never updates after. Sync the cached color so anything reading it (GTM handler-group

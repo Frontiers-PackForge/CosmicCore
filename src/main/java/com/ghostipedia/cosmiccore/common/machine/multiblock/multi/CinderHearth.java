@@ -22,6 +22,7 @@ public class CinderHearth {
             .multiblock("cinder_hearth", RegressionPersistentWorkableElectricMachine::new)
             .rotationState(RotationState.NON_Y_AXIS)
             .recipeType(CosmicRecipeTypes.CINDER_HEARTH)
+            .regressWhenWaiting(false)
             .appearanceBlock(CosmicBlocks.LIGHT_DAWNSTONE_CASING)
             .partAppearance((controller, part, side) -> CosmicBlocks.LIGHT_DAWNSTONE_CASING.get().defaultBlockState())
             .pattern(definition -> MultiblockPatternBuilder

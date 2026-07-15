@@ -2,9 +2,9 @@ package com.ghostipedia.cosmiccore.client.renderer.machine;
 
 import com.ghostipedia.cosmiccore.common.machine.multiblock.part.SoulHatchPartMachine;
 
-import com.gregtechceu.gtceu.api.machine.feature.multiblock.IMultiPart;
 import com.gregtechceu.gtceu.api.machine.multiblock.MultiblockControllerMachine;
 import com.gregtechceu.gtceu.api.machine.multiblock.WorkableElectricMultiblockMachine;
+import com.gregtechceu.gtceu.api.machine.multiblock.part.MultiblockPartMachine;
 import com.gregtechceu.gtceu.client.model.machine.IControllerModelRenderer;
 import com.gregtechceu.gtceu.client.renderer.machine.DynamicRender;
 import com.gregtechceu.gtceu.client.renderer.machine.DynamicRenderType;
@@ -73,9 +73,9 @@ public class HellFireFoundryPartRender extends
 
     @Override
     public void renderPartModel(List<BakedQuad> quads, MultiblockControllerMachine controller,
-                                IMultiPart part, Direction frontFacing, @Nullable Direction side,
+                                MultiblockPartMachine part, Direction frontFacing, @Nullable Direction side,
                                 RandomSource rand, ModelData modelData, @Nullable RenderType renderType) {
-        BlockPos partPos = part.self().getBlockPos();
+        BlockPos partPos = part.getBlockPos();
         MultiblockControllerMachine machine = controller;
         BakedModel model = part instanceof SoulHatchPartMachine ? iesniumBlockModel : casingModel;
         emitQuads(quads, model, machine.getLevel(), partPos, casing, side, rand, modelData, renderType);

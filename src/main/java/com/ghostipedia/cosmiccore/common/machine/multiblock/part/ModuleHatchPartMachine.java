@@ -7,8 +7,8 @@ import com.gregtechceu.gtceu.api.blockentity.BlockEntityCreationInfo;
 import com.gregtechceu.gtceu.api.capability.recipe.IO;
 import com.gregtechceu.gtceu.api.machine.feature.IMuiMachine;
 import com.gregtechceu.gtceu.api.machine.multiblock.part.TieredIOPartMachine;
-import com.gregtechceu.gtceu.api.machine.trait.NotifiableItemStackHandler;
-import com.gregtechceu.gtceu.api.machine.trait.RecipeHandlerList;
+import com.gregtechceu.gtceu.api.machine.trait.notifiable.NotifiableItemStackHandler;
+import com.gregtechceu.gtceu.api.machine.trait.recipe.RecipeHandlerList;
 import com.gregtechceu.gtceu.api.sync_system.annotations.SaveField;
 import com.gregtechceu.gtceu.common.mui.GTMuiWidgets;
 
@@ -115,8 +115,8 @@ public class ModuleHatchPartMachine extends TieredIOPartMachine implements IMuiM
                 .gridOfSizeWidth(totalSlots, colSize, (x, y, index) -> new ItemSlot()
                         .slot(SyncHandlers.itemSlot(inventory, index)
                                 .slotGroup(group)
-                                .changeListener((newItem, amount, client, init) -> {
-                                    if (amount) {
+                                .changeListener((newItem, amountChanged, client, init) -> {
+                                    if (amountChanged) {
                                         inventory.onContentsChanged();
                                     }
                                 })

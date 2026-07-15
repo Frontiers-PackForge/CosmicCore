@@ -7,8 +7,8 @@ import com.gregtechceu.gtceu.api.capability.IEnergyContainer;
 import com.gregtechceu.gtceu.api.capability.recipe.EURecipeCapability;
 import com.gregtechceu.gtceu.api.capability.recipe.IO;
 import com.gregtechceu.gtceu.api.machine.TickableSubscription;
-import com.gregtechceu.gtceu.api.machine.feature.multiblock.IMultiPart;
 import com.gregtechceu.gtceu.api.machine.multiblock.WorkableElectricMultiblockMachine;
+import com.gregtechceu.gtceu.api.machine.multiblock.part.MultiblockPartMachine;
 import com.gregtechceu.gtceu.api.misc.EnergyContainerList;
 import com.gregtechceu.gtceu.api.recipe.GTRecipe;
 
@@ -58,7 +58,7 @@ public class VoraxReactorMachine extends WorkableElectricMultiblockMachine {
 
         List<IEnergyContainer> outputEnergyContainers = new ArrayList<>();
         // 8.0.0: getMatchContext()/ioMap removed; the handler.getHandlerIO() check below already filters IO.
-        for (IMultiPart part : getParts()) {
+        for (MultiblockPartMachine part : getParts()) {
             if (part instanceof SterilizationHatchPartMachine) {
                 sterileHatch = (SterilizationHatchPartMachine) part;
             }
@@ -149,11 +149,6 @@ public class VoraxReactorMachine extends WorkableElectricMultiblockMachine {
     public boolean onWorking() {
         updateContagion();
         return super.onWorking();
-    }
-
-    @Override
-    public boolean regressWhenWaiting() {
-        return false;
     }
 
     // TODO(8.0.0 MUI2): addDisplayText (LDLib status readout: contagion strength/rate, cleaning status) was

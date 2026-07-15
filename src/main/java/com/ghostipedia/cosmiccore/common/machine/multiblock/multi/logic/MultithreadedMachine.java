@@ -8,13 +8,13 @@ import com.gregtechceu.gtceu.api.capability.recipe.IO;
 import com.gregtechceu.gtceu.api.capability.recipe.IRecipeHandler;
 import com.gregtechceu.gtceu.api.capability.recipe.RecipeCapability;
 import com.gregtechceu.gtceu.api.machine.TickableSubscription;
-import com.gregtechceu.gtceu.api.machine.feature.multiblock.IMaintenanceMachine;
-import com.gregtechceu.gtceu.api.machine.feature.multiblock.IMultiPart;
 import com.gregtechceu.gtceu.api.machine.multiblock.WorkableElectricMultiblockMachine;
-import com.gregtechceu.gtceu.api.machine.trait.RecipeHandlerList;
-import com.gregtechceu.gtceu.api.machine.trait.RecipeLogic;
+import com.gregtechceu.gtceu.api.machine.multiblock.part.MultiblockPartMachine;
+import com.gregtechceu.gtceu.api.machine.trait.recipe.RecipeHandlerList;
+import com.gregtechceu.gtceu.api.machine.trait.recipe.RecipeLogic;
 import com.gregtechceu.gtceu.api.recipe.GTRecipe;
 import com.gregtechceu.gtceu.common.machine.multiblock.part.EnergyHatchPartMachine;
+import com.gregtechceu.gtceu.common.machine.multiblock.part.MaintenanceHatchPartMachine;
 
 import com.lowdragmc.lowdraglib.syncdata.annotation.DescSynced;
 import com.lowdragmc.lowdraglib.syncdata.annotation.Persisted;
@@ -153,7 +153,7 @@ public class MultithreadedMachine extends WorkableElectricMultiblockMachine impl
     private void detectEnergyHatchAmperage() {
         // 8.0.0: getMatchContext()/the pattern ioMap was removed. Energy hatches are always inputs, so
         // sum their amperage directly (the old ioMap defaulted to IO.IN for these).
-        for (IMultiPart part : getParts()) {
+        for (MultiblockPartMachine part : getParts()) {
             if (part instanceof EnergyHatchPartMachine energyHatch) {
                 totalAmperage += energyHatch.getAmperage();
             }
@@ -169,9 +169,9 @@ public class MultithreadedMachine extends WorkableElectricMultiblockMachine impl
      * access and never updates after a repaint.
      */
     private void partitionHandlersByColor() {
-        for (IMultiPart part : getParts()) {
-            if (part instanceof IMaintenanceMachine) continue;
-            int color = part.self().getPaintingColor();
+        for (MultiblockPartMachine part : getParts()) {
+            if (part instanceof MaintenanceHatchPartMachine) continue;
+            int color = part.getPaintingColor();
             for (RecipeHandlerList handlerList : part.getRecipeHandlers()) {
                 if (handlerList.getHandlerIO() != IO.IN && handlerList.getHandlerIO() != IO.BOTH) continue;
                 if (!hasRecipeCapability(handlerList)) continue;
@@ -184,8 +184,8 @@ public class MultithreadedMachine extends WorkableElectricMultiblockMachine impl
      * Collect output handlers that will be shared by all threads.
      */
     private void collectOutputHandlers() {
-        for (IMultiPart part : getParts()) {
-            if (part instanceof IMaintenanceMachine) continue;
+        for (MultiblockPartMachine part : getParts()) {
+            if (part instanceof MaintenanceHatchPartMachine) continue;
             for (RecipeHandlerList handlerList : part.getRecipeHandlers()) {
                 if (handlerList.getHandlerIO() != IO.OUT && handlerList.getHandlerIO() != IO.BOTH) continue;
                 if (!hasRecipeCapability(handlerList)) continue;
@@ -304,9 +304,9 @@ public class MultithreadedMachine extends WorkableElectricMultiblockMachine impl
         if (getLevel() == null || getLevel().isClientSide) return;
 
         Int2ObjectMap<List<RecipeHandlerList>> newPartition = new Int2ObjectLinkedOpenHashMap<>();
-        for (IMultiPart part : getParts()) {
-            if (part instanceof IMaintenanceMachine) continue;
-            int color = part.self().getPaintingColor();
+        for (MultiblockPartMachine part : getParts()) {
+            if (part instanceof MaintenanceHatchPartMachine) continue;
+            int color = part.getPaintingColor();
             for (RecipeHandlerList handlerList : part.getRecipeHandlers()) {
                 if (handlerList.getHandlerIO() != IO.IN && handlerList.getHandlerIO() != IO.BOTH) continue;
                 if (!hasRecipeCapability(handlerList)) continue;

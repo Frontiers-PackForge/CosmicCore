@@ -16,7 +16,7 @@ dependencies {
     runtimeOnly(files("libs/ldlib-neoforge-1.21.1-1.0.35.a-ccpatch.jar"))
     // ModularUI2 (brachy.modularui): GTCEu 8.0.0 exposes brachy types in its public machine API (IMuiMachine,
     // buildMainUI/getMainTextPanel), so it is a mandatory compile dep. GTCEu jarJars it at runtime, hence compileOnly.
-    compileOnly(forge.mui)
+    compileOnly(files("libs/modularui-mc1.21.1-3.3.1.jar"))
     compileOnly(forge.registrate)
     compileOnly(forge.configuration)
     implementation("curse.maven:world-stripper-250603:5592921")

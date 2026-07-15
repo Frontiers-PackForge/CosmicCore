@@ -7,12 +7,12 @@ import com.gregtechceu.gtceu.api.capability.IEnergyContainer;
 import com.gregtechceu.gtceu.api.capability.recipe.EURecipeCapability;
 import com.gregtechceu.gtceu.api.capability.recipe.IO;
 import com.gregtechceu.gtceu.api.machine.ConditionalSubscriptionHandler;
-import com.gregtechceu.gtceu.api.machine.feature.multiblock.IMaintenanceMachine;
-import com.gregtechceu.gtceu.api.machine.feature.multiblock.IMultiPart;
-import com.gregtechceu.gtceu.api.machine.trait.NotifiableEnergyContainer;
-import com.gregtechceu.gtceu.api.machine.trait.RecipeLogic;
+import com.gregtechceu.gtceu.api.machine.multiblock.part.MultiblockPartMachine;
+import com.gregtechceu.gtceu.api.machine.trait.notifiable.NotifiableEnergyContainer;
+import com.gregtechceu.gtceu.api.machine.trait.recipe.RecipeLogic;
 import com.gregtechceu.gtceu.api.misc.EnergyContainerList;
 import com.gregtechceu.gtceu.api.sync_system.annotations.SaveField;
+import com.gregtechceu.gtceu.common.machine.multiblock.part.MaintenanceHatchPartMachine;
 import com.gregtechceu.gtceu.common.machine.owner.FTBOwner;
 import com.gregtechceu.gtceu.common.machine.owner.MachineOwner;
 import com.gregtechceu.gtceu.config.ConfigHolder;
@@ -31,7 +31,7 @@ public class DimensionalEnergyInterface extends MuiWorkableMultiblockMachine {
 
     protected static final long ticks_between_save_data_operations = 5L * 20L; // Once per 5s
 
-    protected IMaintenanceMachine maintenance;
+    protected MaintenanceHatchPartMachine maintenance;
     protected EnergyContainerList inputHatches;
     protected EnergyContainerList outputHatches;
     protected long passiveDrain;
@@ -69,7 +69,7 @@ public class DimensionalEnergyInterface extends MuiWorkableMultiblockMachine {
         List<IEnergyContainer> inputs = new ArrayList<>();
         List<IEnergyContainer> outputs = new ArrayList<>();
 
-        for (IMultiPart part : getParts()) {
+        for (MultiblockPartMachine part : getParts()) {
             var handlerLists = part.getRecipeHandlers();
             for (var handlerList : handlerLists) {
                 if (handlerList.getHandlerIO() == IO.IN) {
@@ -157,8 +157,8 @@ public class DimensionalEnergyInterface extends MuiWorkableMultiblockMachine {
     public long getPassiveDrain() {
         if (ConfigHolder.INSTANCE.machines.enableMaintenance) {
             if (maintenance == null) {
-                for (IMultiPart part : getParts()) {
-                    if (part instanceof IMaintenanceMachine maintenanceMachine) {
+                for (MultiblockPartMachine part : getParts()) {
+                    if (part instanceof MaintenanceHatchPartMachine maintenanceMachine) {
                         this.maintenance = maintenanceMachine;
                         break;
                     }

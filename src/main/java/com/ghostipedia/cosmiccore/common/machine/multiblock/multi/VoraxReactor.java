@@ -34,6 +34,7 @@ public class VoraxReactor {
             .multiblock("vorax_reactor", VoraxReactorMachine::new)
             .rotationState(RotationState.NON_Y_AXIS)
             .recipeType(CosmicRecipeTypes.VORAX)
+            .regressWhenWaiting(false)
             .recipeModifier(ELECTRIC_OVERCLOCK.apply(OverclockingLogic.NON_PERFECT_OVERCLOCK))
             .appearanceBlock(CASING_ATOMIC)
             .partAppearance((controller, part, side) -> TRITANIUM_LINED_HEAVY_NEUTRONIUM_CASING.getDefaultState())
