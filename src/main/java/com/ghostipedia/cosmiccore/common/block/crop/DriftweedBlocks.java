@@ -34,7 +34,7 @@ final class DriftweedRootBlock extends Block implements SimpleWaterloggedBlock, 
 
     static final IntegerProperty AGE = BlockStateProperties.AGE_3;
     static final BooleanProperty WATERLOGGED = BlockStateProperties.WATERLOGGED;
-    private static final int MAX_STALKS = 3;
+    private static final int MAX_STALKS = 16;
     private static final VoxelShape SHAPE = Block.box(3, 0, 3, 13, 10, 13);
 
     DriftweedRootBlock(Properties properties) {
@@ -65,22 +65,26 @@ final class DriftweedRootBlock extends Block implements SimpleWaterloggedBlock, 
         if (age < 3) {
             level.setBlock(pos, state.setValue(AGE, age + 1), 2);
         } else {
-            growToSurface(level, pos);
+            placeColumnToSurface(level, pos, 3);
         }
     }
 
-    private void growToSurface(ServerLevel level, BlockPos pos) {
+    static boolean placeColumnToSurface(LevelAccessor level, BlockPos pos, int flags) {
         List<BlockPos> stalkPositions = new ArrayList<>();
         BlockPos cursor = pos.above();
         while (level.getBlockState(cursor).is(Blocks.WATER) && stalkPositions.size() < MAX_STALKS) {
             stalkPositions.add(cursor);
             cursor = cursor.above();
         }
-        if (level.getBlockState(cursor).is(Blocks.WATER) || !level.isEmptyBlock(cursor)) return;
+        if (level.getBlockState(cursor).is(Blocks.WATER) || !level.isEmptyBlock(cursor)) return false;
+        BlockState rootState = CosmicCrops.DRIFTWEED_ROOT.getDefaultState().setValue(AGE, 3);
+        if (!rootState.canSurvive(level, pos)) return false;
+        level.setBlock(pos, rootState, flags);
         for (BlockPos stalkPos : stalkPositions) {
-            level.setBlock(stalkPos, CosmicCrops.DRIFTWEED_STALK.getDefaultState(), 3);
+            level.setBlock(stalkPos, CosmicCrops.DRIFTWEED_STALK.getDefaultState(), flags);
         }
-        level.setBlock(cursor, CosmicCrops.DRIFTWEED_BLOOM.getDefaultState(), 3);
+        level.setBlock(cursor, CosmicCrops.DRIFTWEED_BLOOM.getDefaultState(), flags);
+        return true;
     }
 
     @Override
@@ -102,7 +106,7 @@ final class DriftweedRootBlock extends Block implements SimpleWaterloggedBlock, 
 
     @Override
     protected void tick(BlockState state, ServerLevel level, BlockPos pos, RandomSource random) {
-        if (state.getValue(AGE) == 3) growToSurface(level, pos);
+        if (state.getValue(AGE) == 3) placeColumnToSurface(level, pos, 3);
     }
 
     @Override

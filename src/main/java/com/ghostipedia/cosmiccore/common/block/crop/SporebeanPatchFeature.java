@@ -11,6 +11,10 @@ import net.minecraft.world.level.levelgen.feature.configurations.NoneFeatureConf
 
 final class SporebeanPatchFeature extends Feature<NoneFeatureConfiguration> {
 
+    private static final int PLACEMENT_ATTEMPTS = 48;
+    private static final int SEARCH_ABOVE_ORIGIN = 8;
+    private static final int SEARCH_DEPTH = 32;
+
     SporebeanPatchFeature() {
         super(NoneFeatureConfiguration.CODEC);
     }
@@ -21,13 +25,13 @@ final class SporebeanPatchFeature extends Feature<NoneFeatureConfiguration> {
         RandomSource random = context.random();
         BlockPos origin = context.origin();
         boolean placed = false;
-        for (int attempt = 0; attempt < 24; attempt++) {
+        for (int attempt = 0; attempt < PLACEMENT_ATTEMPTS; attempt++) {
             int x = origin.getX() + random.nextInt(15) - 7;
             int z = origin.getZ() + random.nextInt(15) - 7;
-            int startY = origin.getY() - 3;
-            for (int offsetY = 0; offsetY < 15; offsetY++) {
+            int startY = origin.getY() + SEARCH_ABOVE_ORIGIN;
+            for (int offsetY = 0; offsetY <= SEARCH_DEPTH; offsetY++) {
                 boolean placedThisAttempt = false;
-                BlockPos supportPos = new BlockPos(x, startY + offsetY, z);
+                BlockPos supportPos = new BlockPos(x, startY - offsetY, z);
                 if (!level.getBlockState(supportPos).is(CropBlockTags.SPOREBEAN_SUPPORTS)) continue;
                 Direction direction = Direction.Plane.HORIZONTAL.getRandomDirection(random);
                 for (int side = 0; side < 4; side++) {
