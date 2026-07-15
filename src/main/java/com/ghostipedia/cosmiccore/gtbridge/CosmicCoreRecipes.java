@@ -160,11 +160,11 @@ public class CosmicCoreRecipes {
                 .inputFluids(Creosote.getFluid(250))
                 .duration(1800).save(provider);
         INDUSTRIAL_PRIMITIVE_BLAST_FURNACE_RECIPES.recipeBuilder("steel_from_coke_gem").inputItems(ingot, Iron)
-                .inputItems(gem, Coke).outputItems(ingot, Steel).chancedOutput(dust, Ash, "1/9", 0)
+                .inputItems(gem, Coke).outputItems(ingot, Steel).chancedOutput(dust, Ash, "1/9")
                 .duration((int) (1500 * 0.75f)).inputFluids(Creosote.getFluid(250))
                 .save(provider);
         INDUSTRIAL_PRIMITIVE_BLAST_FURNACE_RECIPES.recipeBuilder("steel_from_coke_dust").inputItems(ingot, Iron)
-                .inputItems(dust, Coke).outputItems(ingot, Steel).chancedOutput(dust, Ash, "1/9", 0)
+                .inputItems(dust, Coke).outputItems(ingot, Steel).chancedOutput(dust, Ash, "1/9")
                 .duration((int) (1500 * 0.75f)).inputFluids(Creosote.getFluid(250))
                 .save(provider);
 
@@ -203,12 +203,12 @@ public class CosmicCoreRecipes {
                 .save(provider);
         INDUSTRIAL_PRIMITIVE_BLAST_FURNACE_RECIPES.recipeBuilder("steel_from_coke_gem_wrought")
                 .inputItems(ingot, WroughtIron)
-                .inputItems(gem, Coke).outputItems(ingot, Steel).chancedOutput(dust, Ash, "1/9", 0)
+                .inputItems(gem, Coke).outputItems(ingot, Steel).chancedOutput(dust, Ash, "1/9")
                 .duration((int) (600 * 0.75f)).inputFluids(Creosote.getFluid(250))
                 .save(provider);
         INDUSTRIAL_PRIMITIVE_BLAST_FURNACE_RECIPES.recipeBuilder("steel_from_coke_dust_wrought")
                 .inputItems(ingot, WroughtIron)
-                .inputItems(dust, Coke).outputItems(ingot, Steel).chancedOutput(dust, Ash, "1/9", 0)
+                .inputItems(dust, Coke).outputItems(ingot, Steel).chancedOutput(dust, Ash, "1/9")
                 .duration((int) (600 * 0.75f)).inputFluids(Creosote.getFluid(250))
                 .save(provider);
 

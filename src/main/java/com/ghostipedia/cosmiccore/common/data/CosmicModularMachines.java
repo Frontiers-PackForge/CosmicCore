@@ -52,7 +52,7 @@ public class CosmicModularMachines {
     public static MultiblockMachineDefinition[] registerTieredModules(
                                                                       String name,
                                                                       BiFunction<BlockEntityCreationInfo, Integer, MultiblockControllerMachine> factory,
-                                                                      BiFunction<Integer, MultiblockMachineBuilder<?, ?>, MultiblockMachineDefinition> builder,
+                                                                      BiFunction<Integer, MultiblockMachineBuilder<?, ?, ?>, MultiblockMachineDefinition> builder,
                                                                       int... tiers) {
         MultiblockMachineDefinition[] definitions = new MultiblockMachineDefinition[GTValues.TIER_COUNT];
         for (int tier : tiers) {

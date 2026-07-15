@@ -10,12 +10,12 @@ import com.gregtechceu.gtceu.api.capability.IEnergyContainer;
 import com.gregtechceu.gtceu.api.capability.recipe.EURecipeCapability;
 import com.gregtechceu.gtceu.api.capability.recipe.IO;
 import com.gregtechceu.gtceu.api.machine.ConditionalSubscriptionHandler;
-import com.gregtechceu.gtceu.api.machine.feature.multiblock.IMaintenanceMachine;
-import com.gregtechceu.gtceu.api.machine.feature.multiblock.IMultiPart;
 import com.gregtechceu.gtceu.api.machine.multiblock.PartAbility;
 import com.gregtechceu.gtceu.api.machine.multiblock.WorkableElectricMultiblockMachine;
-import com.gregtechceu.gtceu.api.machine.trait.RecipeLogic;
+import com.gregtechceu.gtceu.api.machine.multiblock.part.MultiblockPartMachine;
+import com.gregtechceu.gtceu.api.machine.trait.recipe.RecipeLogic;
 import com.gregtechceu.gtceu.api.misc.EnergyContainerList;
+import com.gregtechceu.gtceu.common.machine.multiblock.part.MaintenanceHatchPartMachine;
 import com.gregtechceu.gtceu.common.machine.owner.FTBOwner;
 import com.gregtechceu.gtceu.config.ConfigHolder;
 
@@ -32,7 +32,7 @@ public class WirelessDataBankMachine extends WorkableElectricMultiblockMachine
 
     public static final int EUT_PER_HATCH_CHAINED = GTValues.VA[GTValues.LuV];
 
-    private IMaintenanceMachine maintenance;
+    private MaintenanceHatchPartMachine maintenance;
     private IEnergyContainer energyContainer;
 
     private final ConditionalSubscriptionHandler tickSubscription;
@@ -69,8 +69,8 @@ public class WirelessDataBankMachine extends WorkableElectricMultiblockMachine
         if (getLevel() instanceof DummyWorld) return;
 
         List<IEnergyContainer> energyContainers = new ArrayList<>();
-        for (IMultiPart part : getParts()) {
-            if (part instanceof IMaintenanceMachine maintenanceMachine)
+        for (MultiblockPartMachine part : getParts()) {
+            if (part instanceof MaintenanceHatchPartMachine maintenanceMachine)
                 this.maintenance = maintenanceMachine;
             for (var handler : part.getRecipeHandlers()) {
                 var handlerIO = handler.getHandlerIO();
@@ -122,7 +122,7 @@ public class WirelessDataBankMachine extends WorkableElectricMultiblockMachine
         List<IDataAccessHatch> hatches = new ArrayList<>();
 
         for (var part : getParts()) {
-            Block block = part.self().getBlockState().getBlock();
+            Block block = part.getBlockState().getBlock();
             if (part instanceof IDataAccessHatch hatch && PartAbility.OPTICAL_DATA_RECEPTION.isApplicable(block)) {
                 hatches.add(hatch);
             }

@@ -3,7 +3,7 @@ package com.ghostipedia.cosmiccore.mixin.gtceu;
 import com.ghostipedia.cosmiccore.api.machine.multiblock.StellarBaseModule;
 
 import com.gregtechceu.gtceu.api.capability.IEnergyInfoProvider;
-import com.gregtechceu.gtceu.api.machine.trait.NotifiableEnergyContainer;
+import com.gregtechceu.gtceu.api.machine.trait.notifiable.NotifiableEnergyContainer;
 import com.gregtechceu.gtceu.integration.jade.provider.ElectricContainerBlockProvider;
 
 import net.minecraft.nbt.CompoundTag;

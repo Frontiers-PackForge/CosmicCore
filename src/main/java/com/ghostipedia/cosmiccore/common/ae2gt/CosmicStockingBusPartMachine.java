@@ -1,9 +1,8 @@
 package com.ghostipedia.cosmiccore.common.ae2gt;
 
 import com.gregtechceu.gtceu.api.blockentity.BlockEntityCreationInfo;
-import com.gregtechceu.gtceu.api.machine.feature.multiblock.IMultiPart;
 import com.gregtechceu.gtceu.api.machine.multiblock.MultiblockControllerMachine;
-import com.gregtechceu.gtceu.api.machine.trait.NotifiableItemStackHandler;
+import com.gregtechceu.gtceu.api.machine.multiblock.part.MultiblockPartMachine;
 import com.gregtechceu.gtceu.api.sync_system.annotations.SaveField;
 import com.gregtechceu.gtceu.api.sync_system.annotations.SyncToClient;
 import com.gregtechceu.gtceu.config.ConfigHolder;
@@ -32,6 +31,7 @@ import it.unimi.dsi.fastutil.objects.Object2LongMap;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Comparator;
+import java.util.Objects;
 import java.util.PriorityQueue;
 import java.util.function.Predicate;
 
@@ -51,8 +51,10 @@ public class CosmicStockingBusPartMachine extends CosmicInputBusPartMachine impl
     private Predicate<GenericStack> autoPullTest;
 
     public CosmicStockingBusPartMachine(BlockEntityCreationInfo info) {
-        super(info);
+        super(info, new ExportOnlyAEStockingItemList(CONFIG_SIZE));
         this.autoPullTest = $ -> false;
+        this.aeItemHandler = (ExportOnlyAEItemList) getInventory();
+        ((ExportOnlyAEStockingItemList) getInventory()).setStockingBusPartMachine(this);
     }
 
     @Override
@@ -100,11 +102,6 @@ public class CosmicStockingBusPartMachine extends CosmicInputBusPartMachine impl
         super.removedFromController(controller);
     }
 
-    @Override
-    protected NotifiableItemStackHandler createInventory() {
-        this.aeItemHandler = new CosmicStockingBusPartMachine.ExportOnlyAEStockingItemList(CONFIG_SIZE);
-        return this.aeItemHandler;
-    }
     /////////////////////////////////
     // ********** Sync ME *********//
     /////////////////////////////////
@@ -171,7 +168,7 @@ public class CosmicStockingBusPartMachine extends CosmicInputBusPartMachine impl
         // Otherwise, we need to test for if the item is configured
         // in any stocking bus in the multi (besides ourselves).
         for (MultiblockControllerMachine controller : getControllers()) {
-            for (IMultiPart part : controller.getParts()) {
+            for (MultiblockPartMachine part : controller.getParts()) {
                 if (part instanceof CosmicStockingBusPartMachine bus) {
                     // We don't need to check for ourselves, as this case is handled elsewhere.
                     if (bus == this || bus.isDistinct()) continue;
@@ -305,15 +302,24 @@ public class CosmicStockingBusPartMachine extends CosmicInputBusPartMachine impl
         super.readConfigFromTag(provider, tag);
     }
 
-    private class ExportOnlyAEStockingItemList extends ExportOnlyAEItemList {
+    private static class ExportOnlyAEStockingItemList extends ExportOnlyAEItemList {
+
+        private CosmicStockingBusPartMachine stockingBusPartMachine;
 
         public ExportOnlyAEStockingItemList(int slots) {
-            super(slots, CosmicStockingBusPartMachine.ExportOnlyAEStockingItemSlot::new);
+            super(slots, ExportOnlyAEStockingItemSlot::new);
+        }
+
+        public void setStockingBusPartMachine(CosmicStockingBusPartMachine stockingBusPartMachine) {
+            this.stockingBusPartMachine = stockingBusPartMachine;
+            for (var slot : inventory) {
+                ((ExportOnlyAEStockingItemSlot) slot).setStockingBusPartMachine(stockingBusPartMachine);
+            }
         }
 
         @Override
         public boolean isAutoPull() {
-            return autoPull;
+            return Objects.requireNonNull(stockingBusPartMachine).isAutoPull();
         }
 
         @Override
@@ -326,13 +332,15 @@ public class CosmicStockingBusPartMachine extends CosmicInputBusPartMachine impl
             boolean inThisBus = super.hasStackInConfig(stack, false);
             if (inThisBus) return true;
             if (checkExternal) {
-                return testConfiguredInOtherPart(stack);
+                return Objects.requireNonNull(stockingBusPartMachine).testConfiguredInOtherPart(stack);
             }
             return false;
         }
     }
 
-    private class ExportOnlyAEStockingItemSlot extends ExportOnlyAEItemSlot {
+    private static class ExportOnlyAEStockingItemSlot extends ExportOnlyAEItemSlot {
+
+        private CosmicStockingBusPartMachine stockingBusPartMachine;
 
         public ExportOnlyAEStockingItemSlot() {
             super();
@@ -342,18 +350,23 @@ public class CosmicStockingBusPartMachine extends CosmicInputBusPartMachine impl
             super(config, stock);
         }
 
+        public void setStockingBusPartMachine(CosmicStockingBusPartMachine stockingBusPartMachine) {
+            this.stockingBusPartMachine = stockingBusPartMachine;
+        }
+
         @Override
         public ItemStack extractItem(int slot, int amount, boolean simulate) {
-            if (slot == 0 && this.stock != null) {
+            if (slot == 0 && this.stock != null && stockingBusPartMachine != null) {
                 if (this.config != null) {
                     // Extract the items from the real net to either validate (simulate)
                     // or extract (modulate) when this is called
-                    if (!isOnline()) return ItemStack.EMPTY;
-                    MEStorage aeNetwork = getMainNode().getGrid().getStorageService().getInventory();
+                    if (!stockingBusPartMachine.isOnline()) return ItemStack.EMPTY;
+                    MEStorage aeNetwork = stockingBusPartMachine.getMainNode().getGrid().getStorageService()
+                            .getInventory();
 
                     Actionable action = simulate ? Actionable.SIMULATE : Actionable.MODULATE;
                     var key = config.what();
-                    long extracted = aeNetwork.extract(key, amount, action, actionSource);
+                    long extracted = aeNetwork.extract(key, amount, action, stockingBusPartMachine.actionSource);
 
                     if (extracted > 0) {
                         ItemStack resultStack = key instanceof AEItemKey itemKey ?
@@ -377,7 +390,7 @@ public class CosmicStockingBusPartMachine extends CosmicInputBusPartMachine impl
 
         @Override
         public CosmicStockingBusPartMachine.ExportOnlyAEStockingItemSlot copy() {
-            return new CosmicStockingBusPartMachine.ExportOnlyAEStockingItemSlot(
+            return new ExportOnlyAEStockingItemSlot(
                     this.config == null ? null : copy(this.config),
                     this.stock == null ? null : copy(this.stock));
         }

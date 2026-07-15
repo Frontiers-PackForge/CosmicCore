@@ -6,14 +6,12 @@ import com.gregtechceu.gtceu.api.capability.recipe.IO;
 import com.gregtechceu.gtceu.api.capability.recipe.RecipeCapability;
 import com.gregtechceu.gtceu.api.machine.MetaMachine;
 import com.gregtechceu.gtceu.api.machine.trait.MachineTraitType;
-import com.gregtechceu.gtceu.api.machine.trait.NotifiableRecipeHandlerTrait;
+import com.gregtechceu.gtceu.api.machine.trait.notifiable.NotifiableRecipeHandlerTrait;
 import com.gregtechceu.gtceu.api.recipe.GTRecipe;
 import com.gregtechceu.gtceu.api.sync_system.annotations.SaveField;
 import com.gregtechceu.gtceu.api.sync_system.annotations.SyncToClient;
 
 import net.minecraft.core.Direction;
-
-import lombok.Getter;
 
 import java.util.List;
 import java.util.function.Predicate;
@@ -28,13 +26,10 @@ public class NotifiableThermiaContainer extends NotifiableRecipeHandlerTrait<Int
         return TYPE;
     }
 
-    @Getter
     private final IO handlerIO;
-    @Getter
     private final long overloadLimit;
     @SaveField
     @SyncToClient
-    @Getter
     private final long currentTemp;
     private Predicate<Direction> sideInputCondition;
     private Predicate<Direction> sideOutputCondition;
@@ -47,6 +42,19 @@ public class NotifiableThermiaContainer extends NotifiableRecipeHandlerTrait<Int
         // 8.0.0: NotifiableRecipeHandlerTrait no longer takes the machine in its ctor; attach explicitly so
         // getMachine()/capability registration are wired (mirrors EnergyHatchPartMachine#attachTrait).
         machine.attachTrait(this);
+    }
+
+    @Override
+    public IO getHandlerIO() {
+        return handlerIO;
+    }
+
+    public long getOverloadLimit() {
+        return overloadLimit;
+    }
+
+    public long getCurrentTemp() {
+        return currentTemp;
     }
 
     public void serverTick() {

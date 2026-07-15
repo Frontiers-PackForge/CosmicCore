@@ -28,6 +28,7 @@ public class PyrothermicRefinery {
             .multiblock("pyrothermic_refinery", RegressionPersistentWorkableElectricMachine::new)
             .rotationState(RotationState.NON_Y_AXIS)
             .recipeType(CosmicRecipeTypes.PYROTHERMIC_REFINERY)
+            .regressWhenWaiting(false)
             .appearanceBlock(LIGHT_DAWNSTONE_CASING)
             .partAppearance((controller, part, side) -> LIGHT_DAWNSTONE_CASING.getDefaultState())
             .recipeModifiers(CosmicRecipeModifiers::innateParallel4x,

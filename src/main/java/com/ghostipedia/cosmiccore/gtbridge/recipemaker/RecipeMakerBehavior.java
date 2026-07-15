@@ -170,7 +170,8 @@ public class RecipeMakerBehavior implements IItemUIHolder {
 
         if (data.getInventoryType() == InventoryTypes.PLAYER) {
             syncManager.bindPlayerInventory(player, (inv, index) -> index == data.getSlotIndex() ?
-                    new ModularSlot(inv, index).accessibility(false, false) : new ModularSlot(inv, index));
+                    ModularSlot.playerSlot(inv, index, player).accessibility(false, false) :
+                    ModularSlot.playerSlot(inv, index, player));
         }
 
         ModularPanel<?> panel = ModularPanel.defaultPanel("recipe_forge", WIDTH, HEIGHT)

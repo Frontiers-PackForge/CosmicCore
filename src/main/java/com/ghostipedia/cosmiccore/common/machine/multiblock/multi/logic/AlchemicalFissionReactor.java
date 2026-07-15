@@ -5,8 +5,8 @@ import com.gregtechceu.gtceu.api.capability.recipe.FluidRecipeCapability;
 import com.gregtechceu.gtceu.api.capability.recipe.IO;
 import com.gregtechceu.gtceu.api.fluids.store.FluidStorageKeys;
 import com.gregtechceu.gtceu.api.machine.TickableSubscription;
-import com.gregtechceu.gtceu.api.machine.feature.multiblock.IMultiPart;
 import com.gregtechceu.gtceu.api.machine.multiblock.WorkableElectricMultiblockMachine;
+import com.gregtechceu.gtceu.api.machine.multiblock.part.MultiblockPartMachine;
 import com.gregtechceu.gtceu.api.sync_system.annotations.SaveField;
 import com.gregtechceu.gtceu.api.sync_system.annotations.SyncToClient;
 import com.gregtechceu.gtceu.api.transfer.fluid.FluidHandlerList;
@@ -71,7 +71,7 @@ public class AlchemicalFissionReactor extends WorkableElectricMultiblockMachine 
         // I don't even know if this works I copied my old code from like 2024 :)
 
         List<IFluidHandler> inputFluidContainers = new ArrayList<>();
-        for (IMultiPart part : getParts()) {
+        for (MultiblockPartMachine part : getParts()) {
             var handlerLists = part.getRecipeHandlers();
             for (var handlerList : handlerLists) {
                 if ((handlerList.getHandlerIO() != IO.IN)) continue;

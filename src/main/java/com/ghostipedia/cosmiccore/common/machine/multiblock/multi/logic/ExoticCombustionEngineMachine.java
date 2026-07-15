@@ -206,11 +206,6 @@ public class ExoticCombustionEngineMachine extends WorkableElectricMultiblockMac
         return value;
     }
 
-    @Override
-    public boolean regressWhenWaiting() {
-        return false;
-    }
-
     // TODO(8.0.0 MUI2): custom UI shelved; default UI used (orig in git)
     // Removed in 8.0.0: the addDisplayText(List<Component>) hook (display now via
     // getWidgetsForDisplay(PanelSyncManager)), the api.gui.fancy TooltipsPanel/IFancyTooltip API used by

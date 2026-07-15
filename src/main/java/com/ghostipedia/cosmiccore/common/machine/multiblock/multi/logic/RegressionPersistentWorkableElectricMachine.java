@@ -9,11 +9,6 @@ public class RegressionPersistentWorkableElectricMachine extends WorkableElectri
         super(holder);
     }
 
-    @Override
-    public boolean regressWhenWaiting() {
-        return false;
-    }
-
     // TODO: Machine Fails and recipe voids if per-Tick is not satisfied.
     @Override
     public boolean onWorking() {

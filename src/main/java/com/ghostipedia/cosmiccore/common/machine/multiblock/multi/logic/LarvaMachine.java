@@ -13,9 +13,9 @@ import com.gregtechceu.gtceu.api.capability.recipe.IO;
 import com.gregtechceu.gtceu.api.capability.recipe.ItemRecipeCapability;
 import com.gregtechceu.gtceu.api.data.tag.TagPrefix;
 import com.gregtechceu.gtceu.api.machine.multiblock.WorkableElectricMultiblockMachine;
-import com.gregtechceu.gtceu.api.machine.trait.NotifiableFluidTank;
-import com.gregtechceu.gtceu.api.machine.trait.NotifiableItemStackHandler;
-import com.gregtechceu.gtceu.api.machine.trait.RecipeLogic;
+import com.gregtechceu.gtceu.api.machine.trait.notifiable.NotifiableFluidTank;
+import com.gregtechceu.gtceu.api.machine.trait.notifiable.NotifiableItemStackHandler;
+import com.gregtechceu.gtceu.api.machine.trait.recipe.RecipeLogic;
 import com.gregtechceu.gtceu.api.recipe.GTRecipe;
 import com.gregtechceu.gtceu.common.data.GTMaterials;
 import com.gregtechceu.gtceu.common.machine.multiblock.part.ItemBusPartMachine;
@@ -40,7 +40,6 @@ import java.util.List;
 import java.util.Map;
 
 import static com.gregtechceu.gtceu.common.data.GTRecipeTypes.SCANNER_RECIPES;
-import static com.gregtechceu.gtceu.common.item.behavior.IntCircuitBehaviour.getCircuitConfiguration;
 
 public class LarvaMachine extends WorkableElectricMultiblockMachine {
 
@@ -315,9 +314,8 @@ public class LarvaMachine extends WorkableElectricMultiblockMachine {
 
                 // TODO: For now circuit is a dumb parallel with 0 being 1x, 1 being 2x etc
 
-                var circuit = itemBus.getCircuitInventory();
-                var circuitStack = circuit.getStackInSlot(0);
-                var multiplier = getCircuitConfiguration(circuitStack) + 1;
+                var circuitConfiguration = itemBus.getCircuitSlot().getCurrentCircuit();
+                var multiplier = circuitConfiguration + 1;
 
                 var recipeInputs = inputs.get(tier);
                 var itemInput = recipeInputs.getFirst().copy();
@@ -326,7 +324,7 @@ public class LarvaMachine extends WorkableElectricMultiblockMachine {
                 itemInput.setCount(recipeInputs.getFirst().getCount() * multiplier);
                 fluidInput.setAmount(recipeInputs.getSecond().getAmount() * multiplier);
                 // Should do it? This'll set the NBT of the asteroid appropriately
-                var sizedAsteroid = setAsteroidSize(itemOutput, getCircuitConfiguration(circuitStack));
+                var sizedAsteroid = setAsteroidSize(itemOutput, circuitConfiguration);
 
                 if (canConsumeItem(availableItems, itemInput) &&
                         canConsumeFluid(availableFluids, fluidInput)) {

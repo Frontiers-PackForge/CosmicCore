@@ -11,7 +11,7 @@ import com.gregtechceu.gtceu.api.capability.recipe.IO;
 import com.gregtechceu.gtceu.api.machine.TickableSubscription;
 import com.gregtechceu.gtceu.api.machine.multiblock.MultiblockControllerMachine;
 import com.gregtechceu.gtceu.api.machine.multiblock.WorkableElectricMultiblockMachine;
-import com.gregtechceu.gtceu.api.machine.trait.RecipeLogic;
+import com.gregtechceu.gtceu.api.machine.trait.recipe.RecipeLogic;
 import com.gregtechceu.gtceu.api.recipe.GTRecipe;
 import com.gregtechceu.gtceu.api.recipe.RecipeHelper;
 import com.gregtechceu.gtceu.data.recipe.builder.GTRecipeBuilder;
@@ -72,7 +72,7 @@ public class DroneStationMachine extends WorkableElectricMultiblockMachine {
 
             droneTierRecipes.add(GTRecipeBuilder.ofRaw()
                     .notConsumable(tier.item) // we need this so it doesn't match empty stuff
-                    .chancedInput(tier.item, (int) (tier.consumptionChance * 10000), 0)
+                    .chancedInput(tier.item, (int) (tier.consumptionChance * 10000))
                     .addData(TIER_KEY, tier.ordinal())
                     .build());
         }
