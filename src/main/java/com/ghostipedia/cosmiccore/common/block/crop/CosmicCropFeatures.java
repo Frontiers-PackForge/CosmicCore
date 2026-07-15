@@ -16,6 +16,8 @@ public final class CosmicCropFeatures {
 
     public static final DeferredHolder<Feature<?>, Feature<NoneFeatureConfiguration>> SPOREBEAN_PATCH = FEATURES
             .register("sporebeans_patch", SporebeanPatchFeature::new);
+    public static final DeferredHolder<Feature<?>, Feature<NoneFeatureConfiguration>> DRIFTWEED_PATCH = FEATURES
+            .register("driftweed_patch", DriftweedPatchFeature::new);
 
     private CosmicCropFeatures() {}
 
