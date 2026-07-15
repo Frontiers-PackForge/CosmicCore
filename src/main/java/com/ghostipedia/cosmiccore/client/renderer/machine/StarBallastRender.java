@@ -5,7 +5,6 @@ import com.ghostipedia.cosmiccore.api.machine.multiblock.IrisMultiblockMachine;
 
 import com.gregtechceu.gtceu.client.renderer.machine.DynamicRender;
 import com.gregtechceu.gtceu.client.renderer.machine.DynamicRenderType;
-import com.gregtechceu.gtceu.client.util.ModelEventHelper;
 
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.client.Minecraft;
@@ -13,6 +12,7 @@ import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.Sheets;
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.resources.model.BakedModel;
+import net.minecraft.client.resources.model.ModelResourceLocation;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
@@ -25,6 +25,7 @@ import com.mojang.serialization.MapCodec;
 import org.joml.Quaternionf;
 
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 
@@ -50,14 +51,13 @@ public class StarBallastRender extends DynamicRender<IrisMultiblockMachine, Star
     private static BakedModel innerStarSphereModel = null;
     private static BakedModel starBeamModel = null;
 
-    private StarBallastRender() {
-        ModelEventHelper.registerBakeEventListener(true, (rl, baked, rootModel, modelBakery) -> {
-            if (rl.equals(STAR_MODEL_CORE)) starCoreModel = baked;
-            else if (rl.equals(STAR_MODEL_OUTER)) outerStarSphereModel = baked;
-            else if (rl.equals(STAR_MODEL_INNER)) innerStarSphereModel = baked;
-            else if (rl.equals(STAR_MODEL_BEAM)) starBeamModel = baked;
-            return baked;
-        });
+    private StarBallastRender() {}
+
+    public static void onBakingCompleted(Map<ModelResourceLocation, BakedModel> models) {
+        starCoreModel = models.get(ModelResourceLocation.standalone(STAR_MODEL_CORE));
+        outerStarSphereModel = models.get(ModelResourceLocation.standalone(STAR_MODEL_OUTER));
+        innerStarSphereModel = models.get(ModelResourceLocation.standalone(STAR_MODEL_INNER));
+        starBeamModel = models.get(ModelResourceLocation.standalone(STAR_MODEL_BEAM));
     }
 
     @Override
@@ -83,7 +83,10 @@ public class StarBallastRender extends DynamicRender<IrisMultiblockMachine, Star
     @Override
     public void render(IrisMultiblockMachine machine, float partialTick, PoseStack poseStack,
                        MultiBufferSource buffer, int packedLight, int packedOverlay) {
-        if (!machine.isFormed()) return;
+        if (!machine.isFormed() || starCoreModel == null || outerStarSphereModel == null ||
+                innerStarSphereModel == null || starBeamModel == null) {
+            return;
+        }
 
         float totalTick = (Minecraft.getInstance().level.getGameTime() + partialTick);
         VertexConsumer consumer = buffer.getBuffer(Sheets.translucentCullBlockSheet());

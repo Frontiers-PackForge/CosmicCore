@@ -70,11 +70,13 @@ public class DroneStationMachine extends WorkableElectricMultiblockMachine {
     static {
         for (DroneTier tier : DroneTier.values()) {
 
-            droneTierRecipes.add(GTRecipeBuilder.ofRaw()
+            var recipe = GTRecipeBuilder.ofRaw()
                     .notConsumable(tier.item) // we need this so it doesn't match empty stuff
-                    .chancedInput(tier.item, (int) (tier.consumptionChance * 10000))
-                    .addData(TIER_KEY, tier.ordinal())
-                    .build());
+                    .addData(TIER_KEY, tier.ordinal());
+            if (tier.consumptionChance > 0) {
+                recipe.chancedInput(tier.item, (int) (tier.consumptionChance * 10000));
+            }
+            droneTierRecipes.add(recipe.build());
         }
     }
 

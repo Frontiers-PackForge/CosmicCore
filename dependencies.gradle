@@ -1,5 +1,6 @@
 dependencies {
     compileOnly(libs.jetbrains.annotations)
+    compileOnly annotationProcessor("com.github.bawnorton.mixinsquared:mixinsquared-common:0.3.7-beta.1")
 
     // GTCEu — core dependency. Its jar jar-jars Registrate + Configuration + ModularUI2 at runtime, so those
     // are compileOnly here. It does NOT bundle LDLib (8.0.0 moved its own UI/sync to MUI2), so LDLib must be

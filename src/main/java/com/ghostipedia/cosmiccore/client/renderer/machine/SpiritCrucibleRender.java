@@ -18,6 +18,7 @@ import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.renderer.texture.TextureAtlas;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.resources.model.BakedModel;
+import net.minecraft.client.resources.model.ModelResourceLocation;
 import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
@@ -33,6 +34,7 @@ import org.joml.Quaternionf;
 
 import java.util.EnumSet;
 import java.util.List;
+import java.util.Map;
 
 import static com.ghostipedia.cosmiccore.client.renderer.machine.StarBallastRender.random;
 
@@ -58,20 +60,20 @@ public class SpiritCrucibleRender extends DynamicRender<WorkableElectricMultiblo
     private static TextureAtlasSprite blankVoidSprite = null;
 
     private SpiritCrucibleRender() {
-        ModelEventHelper.registerBakeEventListener(true, (rl, baked, rootModel, modelBakery) -> {
-            if (rl.equals(IRIS_MODEL_CORE)) irisCoreModel = baked;
-            return baked;
-        });
-        ModelEventHelper.registerAtlasStitchedEventListener(true, TextureAtlas.LOCATION_BLOCKS, event -> {
+        ModelEventHelper.registerAtlasStitchedEventListener(false, TextureAtlas.LOCATION_BLOCKS, event -> {
             swirlSprite = event.getAtlas().getSprite(VOID_SWIRL);
             blankVoidSprite = event.getAtlas().getSprite(VOID_BLANK);
         });
     }
 
+    public static void onBakingCompleted(Map<ModelResourceLocation, BakedModel> models) {
+        irisCoreModel = models.get(ModelResourceLocation.standalone(IRIS_MODEL_CORE));
+    }
+
     @Override
     public void render(WorkableElectricMultiblockMachine machine, float partialTick, PoseStack poseStack,
                        MultiBufferSource buffer, int packedLight, int packedOverlay) {
-        if (!machine.isFormed()) {
+        if (!machine.isFormed() || irisCoreModel == null || swirlSprite == null) {
             return;
         }
         float totalTick = (Minecraft.getInstance().player.tickCount + partialTick);

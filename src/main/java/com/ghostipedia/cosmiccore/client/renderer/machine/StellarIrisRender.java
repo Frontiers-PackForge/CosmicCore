@@ -6,7 +6,6 @@ import com.ghostipedia.cosmiccore.api.machine.multiblock.IrisMultiblockMachine;
 import com.gregtechceu.gtceu.client.renderer.GTRenderTypes;
 import com.gregtechceu.gtceu.client.renderer.machine.DynamicRender;
 import com.gregtechceu.gtceu.client.renderer.machine.DynamicRenderType;
-import com.gregtechceu.gtceu.client.util.ModelEventHelper;
 import com.gregtechceu.gtceu.client.util.RenderBufferHelper;
 
 import net.minecraft.MethodsReturnNonnullByDefault;
@@ -15,6 +14,7 @@ import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.Sheets;
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.resources.model.BakedModel;
+import net.minecraft.client.resources.model.ModelResourceLocation;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
@@ -30,6 +30,7 @@ import com.mojang.serialization.MapCodec;
 import org.joml.Quaternionf;
 
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 
@@ -65,20 +66,13 @@ public class StellarIrisRender extends DynamicRender<IrisMultiblockMachine, Stel
 
     private StellarIrisRender() {}
 
-    /**
-     * Capture the baked standalone models. 8.0.0: additional models are NOT delivered to
-     * ModelEventHelper's ModifyBakingResult listener (that map holds ModelResourceLocation-keyed
-     * blockstate/item models, so {@code rl.equals(plainRL)} never matched and every field stayed
-     * null -> the BER NPE'd silently). They live in {@link net.minecraftforge.client.event.ModelEvent.BakingCompleted}
-     * #getModels(), keyed by plain ResourceLocation. CosmicCoreClient forwards that map here.
-     */
-    public static void onBakingCompleted(java.util.Map<ResourceLocation, BakedModel> models) {
-        irisCoreModel = models.get(IRIS_MODEL_CORE);
-        irisRingModel = models.get(IRIS_MODEL_RING);
-        irisSmallRingModel = models.get(IRIS_MODEL_RING_WHITE);
-        starCoreModel = models.get(STAR_MODEL_CORE);
-        outerStarSphereModel = models.get(STAR_MODEL_OUTER);
-        innerStarSphereModel = models.get(STAR_MODEL_INNER);
+    public static void onBakingCompleted(Map<ModelResourceLocation, BakedModel> models) {
+        irisCoreModel = models.get(ModelResourceLocation.standalone(IRIS_MODEL_CORE));
+        irisRingModel = models.get(ModelResourceLocation.standalone(IRIS_MODEL_RING));
+        irisSmallRingModel = models.get(ModelResourceLocation.standalone(IRIS_MODEL_RING_WHITE));
+        starCoreModel = models.get(ModelResourceLocation.standalone(STAR_MODEL_CORE));
+        outerStarSphereModel = models.get(ModelResourceLocation.standalone(STAR_MODEL_OUTER));
+        innerStarSphereModel = models.get(ModelResourceLocation.standalone(STAR_MODEL_INNER));
     }
 
     @Override
@@ -103,6 +97,11 @@ public class StellarIrisRender extends DynamicRender<IrisMultiblockMachine, Stel
     @Override
     public void render(IrisMultiblockMachine machine, float partialTick, PoseStack poseStack, MultiBufferSource buffer,
                        int packedLight, int packedOverlay) {
+        if (irisCoreModel == null || irisRingModel == null || irisSmallRingModel == null || starCoreModel == null ||
+                outerStarSphereModel == null || innerStarSphereModel == null) {
+            return;
+        }
+
         // if (!machine.isFormed()) return;
 
         // Set the star color from the machine's custom color (or default)

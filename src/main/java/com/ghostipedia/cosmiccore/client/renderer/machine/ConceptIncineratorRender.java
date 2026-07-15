@@ -7,13 +7,13 @@ import com.gregtechceu.gtceu.api.machine.multiblock.WorkableElectricMultiblockMa
 import com.gregtechceu.gtceu.api.multiblock.util.RelativeDirection;
 import com.gregtechceu.gtceu.client.renderer.machine.DynamicRender;
 import com.gregtechceu.gtceu.client.renderer.machine.DynamicRenderType;
-import com.gregtechceu.gtceu.client.util.ModelEventHelper;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.Sheets;
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.resources.model.BakedModel;
+import net.minecraft.client.resources.model.ModelResourceLocation;
 import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
@@ -28,6 +28,7 @@ import com.mojang.serialization.MapCodec;
 import org.joml.Quaternionf;
 
 import java.util.List;
+import java.util.Map;
 
 import static com.ghostipedia.cosmiccore.client.renderer.machine.StarBallastRender.random;
 
@@ -53,16 +54,15 @@ public class ConceptIncineratorRender extends
     private static BakedModel irisMidStarModel = null;
     private static BakedModel irisOuterStarModel = null;
 
-    private ConceptIncineratorRender() {
-        ModelEventHelper.registerBakeEventListener(true, (rl, baked, rootModel, modelBakery) -> {
-            if (rl.equals(IRIS_MODEL_CORE)) irisCoreModel = baked;
-            else if (rl.equals(IRIS_MODEL_RING)) irisRingModel = baked;
-            else if (rl.equals(IRIS_MODEL_RING_WHITE)) irisSmallRingModel = baked;
-            else if (rl.equals(STAR_CORE)) irisLowStarModel = baked;
-            else if (rl.equals(STAR_CORE_MIDDLE)) irisMidStarModel = baked;
-            else if (rl.equals(STAR_CORE_OUTER)) irisOuterStarModel = baked;
-            return baked;
-        });
+    private ConceptIncineratorRender() {}
+
+    public static void onBakingCompleted(Map<ModelResourceLocation, BakedModel> models) {
+        irisCoreModel = models.get(ModelResourceLocation.standalone(IRIS_MODEL_CORE));
+        irisRingModel = models.get(ModelResourceLocation.standalone(IRIS_MODEL_RING));
+        irisSmallRingModel = models.get(ModelResourceLocation.standalone(IRIS_MODEL_RING_WHITE));
+        irisLowStarModel = models.get(ModelResourceLocation.standalone(STAR_CORE));
+        irisMidStarModel = models.get(ModelResourceLocation.standalone(STAR_CORE_MIDDLE));
+        irisOuterStarModel = models.get(ModelResourceLocation.standalone(STAR_CORE_OUTER));
     }
 
     @Override
@@ -74,7 +74,10 @@ public class ConceptIncineratorRender extends
     public void render(WorkableElectricMultiblockMachine machine, float partialTick, PoseStack poseStack,
                        MultiBufferSource buffer,
                        int packedLight, int packedOverlay) {
-        if (!machine.isFormed()) return;
+        if (!machine.isFormed() || irisCoreModel == null || irisRingModel == null || irisSmallRingModel == null ||
+                irisLowStarModel == null || irisMidStarModel == null || irisOuterStarModel == null) {
+            return;
+        }
 
         float totalTick = (Minecraft.getInstance().player.tickCount + partialTick);
 
