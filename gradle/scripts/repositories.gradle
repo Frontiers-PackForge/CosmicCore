@@ -2,6 +2,11 @@ repositories {
     mavenLocal()
     mavenCentral()
 
+    exclusiveContent { // MixinSquared (cross-mixin compatibility patches)
+        forRepository { maven { url = "https://maven.bawnorton.com/releases" } }
+        filter { includeGroup("com.github.bawnorton.mixinsquared") }
+    }
+
     maven { // GTCEu
         name = 'GTCEu Maven'
         url = 'https://maven.gtceu.com'

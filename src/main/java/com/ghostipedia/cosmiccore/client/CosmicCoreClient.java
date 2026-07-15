@@ -151,6 +151,9 @@ public class CosmicCoreClient {
         event.register(ModelResourceLocation.standalone(StellarIrisRender.IRIS_MODEL_CORE));
         event.register(ModelResourceLocation.standalone(StellarIrisRender.IRIS_MODEL_RING));
         event.register(ModelResourceLocation.standalone(StellarIrisRender.IRIS_MODEL_RING_WHITE));
+        event.register(ModelResourceLocation.standalone(StellarIrisRender.STAR_MODEL_CORE));
+        event.register(ModelResourceLocation.standalone(StellarIrisRender.STAR_MODEL_OUTER));
+        event.register(ModelResourceLocation.standalone(StellarIrisRender.STAR_MODEL_INNER));
 
         event.register(ModelResourceLocation.standalone(ConceptIncineratorRender.IRIS_MODEL_CORE));
         event.register(ModelResourceLocation.standalone(ConceptIncineratorRender.IRIS_MODEL_RING));
@@ -163,6 +166,14 @@ public class CosmicCoreClient {
         event.register(ModelResourceLocation.standalone(StarBallastRender.STAR_MODEL_OUTER));
         event.register(ModelResourceLocation.standalone(StarBallastRender.STAR_MODEL_INNER));
         event.register(ModelResourceLocation.standalone(StarBallastRender.STAR_MODEL_BEAM));
+    }
+
+    @SubscribeEvent
+    public static void onBakingCompleted(ModelEvent.BakingCompleted event) {
+        StellarIrisRender.onBakingCompleted(event.getModels());
+        ConceptIncineratorRender.onBakingCompleted(event.getModels());
+        StarBallastRender.onBakingCompleted(event.getModels());
+        SpiritCrucibleRender.onBakingCompleted(event.getModels());
     }
 
     /*

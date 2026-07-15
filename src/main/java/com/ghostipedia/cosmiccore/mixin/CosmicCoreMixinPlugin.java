@@ -24,6 +24,8 @@ public class CosmicCoreMixinPlugin implements IMixinConfigPlugin {
     private static final String FANCY_MENU_UI_BASE = "de/keksuccino/fancymenu/util/rendering/ui/UIBase";
     private static final String POSE_STACK = "com/mojang/blaze3d/vertex/PoseStack";
     private static final String DRIPPY_SCALE_COMPAT = "com/ghostipedia/cosmiccore/client/compat/drippy/DrippyRenderScaleCompat";
+    private static final String AERONAUTICS_MARKER = "dev/eriksonn/aeronautics/content/blocks/hot_air/balloon/effect/ClientBalloonEffectRenderer.class";
+    private static final String MIXIN_SQUARED_TARGET_HANDLER = "com/bawnorton/mixinsquared/TargetHandler.class";
     private static final Map<String, Boolean> GATES = new HashMap<>();
 
     static {
@@ -35,8 +37,7 @@ public class CosmicCoreMixinPlugin implements IMixinConfigPlugin {
                 Map.entry(".xaerominimap.", "xaero/common/minimap/render/MinimapFBORenderer.class"),
                 Map.entry(".xaeroworldmap.", "xaero/map/element/MapElementRenderHandler.class"),
                 Map.entry(".architectury.", "dev/architectury/impl/NetworkAggregator.class"),
-                Map.entry(".aero.",
-                        "dev/eriksonn/aeronautics/content/blocks/hot_air/balloon/effect/ClientBalloonEffectRenderer.class"),
+                Map.entry(".aero.", AERONAUTICS_MARKER),
                 Map.entry(".simulated.",
                         "dev/simulated_team/simulated/content/blocks/physics_assembler/PhysicsAssemblerBlockEntity.class"),
                 Map.entry(".sable.", "dev/ryanhcode/sable/api/block/BlockSubLevelAssemblyListener.class"),
@@ -47,6 +48,10 @@ public class CosmicCoreMixinPlugin implements IMixinConfigPlugin {
                         "de/keksuccino/drippyloadingscreen/mixin/mixins/common/client/MixinLoadingOverlay.class"),
                 Map.entry(".undergarden.", "quek/undergarden/event/UthericInfectionEvents.class"));
         probes.forEach((token, resource) -> GATES.put(token, loader.getResource(resource) != null));
+        GATES.put(
+                ".aeroschema.",
+                loader.getResource(AERONAUTICS_MARKER) != null &&
+                        loader.getResource(MIXIN_SQUARED_TARGET_HANDLER) != null);
     }
 
     @Override
