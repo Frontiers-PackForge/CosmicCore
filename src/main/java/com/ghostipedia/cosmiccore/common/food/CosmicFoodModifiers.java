@@ -27,9 +27,9 @@ public final class CosmicFoodModifiers {
     public static final ResourceLocation BASE_HEALTH_ID = CosmicCore.id("food_base_health");
     public static final ResourceLocation FOOD_HEALTH_ID = CosmicCore.id("food_health_bonus");
 
-    public static void applyMaxHealth(Player player, double foodBonus) {
+    public static boolean applyMaxHealth(Player player, double foodBonus) {
         AttributeInstance attr = player.getAttribute(Attributes.MAX_HEALTH);
-        if (attr == null) return;
+        if (attr == null) return false;
 
         if (attr.getModifier(BASE_HEALTH_ID) == null) {
             attr.addTransientModifier(
@@ -41,6 +41,9 @@ public final class CosmicFoodModifiers {
             attr.addOrUpdateTransientModifier(
                     new AttributeModifier(FOOD_HEALTH_ID, foodBonus, AttributeModifier.Operation.ADD_VALUE));
         }
+        if (player.getHealth() <= player.getMaxHealth()) return false;
+        player.setHealth(player.getMaxHealth());
+        return true;
     }
 
     public static void applyAttributeModifiers(Player player, List<AttributeSpec> specs, CosmicFoodData data) {

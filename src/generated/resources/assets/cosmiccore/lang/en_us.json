@@ -1255,6 +1255,7 @@
     "cosmiccore.tooltip.food.cooling": "Cooling",
     "cosmiccore.tooltip.food.duration": "Duration",
     "cosmiccore.tooltip.food.max_health": "Max health",
+    "cosmiccore.tooltip.food.quality": "Quality bonus",
     "cosmiccore.tooltip.food.regen": "Health regen",
     "cosmiccore.tooltip.food.vile": "Vile",
     "cosmiccore.tooltip.food.vile_desc": "causes onset of hunger at a rapid rate",

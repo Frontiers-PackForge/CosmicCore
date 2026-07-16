@@ -15,4 +15,17 @@ public final class QualityFoodCompat {
         if (stack.isEmpty() || !ModList.get().isLoaded(MOD_ID)) return 0;
         return Math.clamp(QualityUtils.getQuality(stack).level(), 0, 3);
     }
+
+    public static double multiplier(int quality) {
+        return switch (quality) {
+            case 1 -> 1.25;
+            case 2 -> 1.5;
+            case 3 -> 1.75;
+            default -> 1.0;
+        };
+    }
+
+    public static int scaleDuration(int ticks, int quality) {
+        return (int) Math.round(ticks * multiplier(quality));
+    }
 }

@@ -2,6 +2,7 @@ package com.ghostipedia.cosmiccore.client.tooltip;
 
 import com.ghostipedia.cosmiccore.CosmicCore;
 import com.ghostipedia.cosmiccore.common.compat.lso.LsoFoodCompat;
+import com.ghostipedia.cosmiccore.common.compat.qualityfood.QualityFoodCompat;
 import com.ghostipedia.cosmiccore.common.food.AttributeSpec;
 import com.ghostipedia.cosmiccore.common.food.BehaviorLine;
 import com.ghostipedia.cosmiccore.common.food.CosmicFoodRegistry;
@@ -26,6 +27,7 @@ public final class FoodTooltips {
     private static final String G_REGEN = "✚";
     private static final String G_DURATION = "⧖";
     private static final String G_ATTR = "◆";
+    private static final String G_QUALITY = "✦";
 
     private static final String[] ROMAN = { "", "I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX", "X" };
 
@@ -52,16 +54,26 @@ public final class FoodTooltips {
         lines.add(new FoodTooltipComponent.Line(new FoodTooltipComponent.Icon.Glyph("✦", 0xFFB9A5E3),
                 familyLabel, value(role, 0xCFC0EE)));
 
-        double hearts = FoodDefinition.heartsFromHealth(def.heartBonus());
+        int quality = QualityFoodCompat.level(stack);
+        double qualityMultiplier = QualityFoodCompat.multiplier(quality);
+        if (quality > 0) {
+            int color = qualityColor(quality);
+            double bonus = (qualityMultiplier - 1.0) * 100.0;
+            lines.add(new FoodTooltipComponent.Line(new FoodTooltipComponent.Icon.Glyph(G_QUALITY, color),
+                    Component.translatable("cosmiccore.tooltip.food.quality"), value(signed(bonus) + "%", color)));
+        }
+
+        double hearts = FoodDefinition.heartsFromHealth(def.heartBonus() * qualityMultiplier);
         if (hearts != 0) {
             lines.add(new FoodTooltipComponent.Line(new FoodTooltipComponent.Icon.Glyph(G_HEALTH, 0xFFFF6B6B),
                     Component.translatable("cosmiccore.tooltip.food.max_health"),
                     value(signed(hearts) + " " + G_HEALTH, 0xFF8F8F)));
         }
-        if (def.regenBonus() != 0) {
+        double regen = def.regenBonus() * qualityMultiplier;
+        if (regen != 0) {
             lines.add(new FoodTooltipComponent.Line(new FoodTooltipComponent.Icon.Glyph(G_REGEN, 0xFFFF9BCE),
                     Component.translatable("cosmiccore.tooltip.food.regen"),
-                    value(signed(def.regenBonus()) + "/s", 0xFFB3DA)));
+                    value(signed(regen) + "/s", 0xFFB3DA)));
         }
         for (FoodDefinition.EffectSpec spec : def.effects()) {
             lines.add(new FoodTooltipComponent.Line(new FoodTooltipComponent.Icon.Effect(spec.effect()),
@@ -69,9 +81,12 @@ public final class FoodTooltips {
         }
         for (FoodDefinition.ConsumeEffectSpec spec : def.consumeEffects()) {
             boolean harmful = spec.effect().value().getCategory() == MobEffectCategory.HARMFUL;
+            boolean beneficial = spec.effect().value().getCategory() == MobEffectCategory.BENEFICIAL;
+            int effectTicks = beneficial ? QualityFoodCompat.scaleDuration(spec.durationTicks(), quality) :
+                    spec.durationTicks();
             lines.add(new FoodTooltipComponent.Line(new FoodTooltipComponent.Icon.Effect(spec.effect()),
                     spec.effect().value().getDisplayName().copy(),
-                    value(roman(spec.amplifier() + 1) + " (" + mmss(spec.durationTicks() / 20) + ")",
+                    value(roman(spec.amplifier() + 1) + " (" + mmss(effectTicks / 20) + ")",
                             harmful ? 0xFF8A80 : 0xC8C8C8)));
         }
         for (AttributeSpec spec : def.attributes()) {
@@ -97,7 +112,7 @@ public final class FoodTooltips {
         }
         lines.add(new FoodTooltipComponent.Line(new FoodTooltipComponent.Icon.Glyph(G_DURATION, 0xFFFFD166),
                 Component.translatable("cosmiccore.tooltip.food.duration"),
-                value(mmss(def.durationTicks() / 20), 0xFFDD8A)));
+                value(mmss(QualityFoodCompat.scaleDuration(def.durationTicks(), quality) / 20), 0xFFDD8A)));
 
         return new FoodTooltipComponent(lines);
     }
@@ -125,5 +140,14 @@ public final class FoodTooltips {
 
     private static String roman(int n) {
         return n >= 0 && n < ROMAN.length ? ROMAN[n] : String.valueOf(n);
+    }
+
+    private static int qualityColor(int quality) {
+        return switch (quality) {
+            case 1 -> 0xFFC0C0C0;
+            case 2 -> 0xFFFFD85A;
+            case 3 -> 0xFF55FFFF;
+            default -> 0xFFFFFFFF;
+        };
     }
 }

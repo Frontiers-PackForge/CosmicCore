@@ -1,5 +1,7 @@
 package com.ghostipedia.cosmiccore.common.food;
 
+import com.ghostipedia.cosmiccore.common.compat.qualityfood.QualityFoodCompat;
+
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -67,25 +69,27 @@ public class CosmicFoodData implements INBTSerializable<CompoundTag> {
         List<ActiveFood> list = def.category() == FoodCategory.BREW ? brews : foods;
         int max = def.category() == FoodCategory.BREW ? maxBrews : maxFoods;
         Item item = stack.getItem();
-        int base = def.durationTicks();
+        int quality = QualityFoodCompat.level(stack);
 
         for (ActiveFood af : list) {
             if (af.item == item) {
-                af.ticksLeft = Math.min(af.ticksLeft + base, base * 2);
+                af.addServing(quality);
                 return;
             }
         }
 
+        ActiveFood active = new ActiveFood(item);
+        active.addServing(quality);
         if (list.size() < max) {
-            list.add(new ActiveFood(item, base));
+            list.add(active);
             return;
         }
 
         int weakest = 0;
         for (int i = 1; i < list.size(); i++) {
-            if (list.get(i).ticksLeft < list.get(weakest).ticksLeft) weakest = i;
+            if (list.get(i).ticksLeft() < list.get(weakest).ticksLeft()) weakest = i;
         }
-        list.set(weakest, new ActiveFood(item, base));
+        list.set(weakest, active);
     }
 
     public void tick() {
@@ -99,8 +103,10 @@ public class CosmicFoodData implements INBTSerializable<CompoundTag> {
     }
 
     private void tickList(List<ActiveFood> list, int step) {
-        for (ActiveFood af : list) af.ticksLeft -= step;
-        if (list.removeIf(af -> af.ticksLeft <= 0)) dirty = true;
+        for (ActiveFood af : list) {
+            if (af.tick(step)) dirty = true;
+        }
+        if (list.removeIf(ActiveFood::isExpired)) dirty = true;
     }
 
     public static final double[] CHANNEL_WEIGHTS = { 1.0, 0.5, 0.25 };
@@ -127,8 +133,12 @@ public class CosmicFoodData implements INBTSerializable<CompoundTag> {
         if (count == 0) return 0;
         double[] values = new double[count];
         int filled = 0;
-        for (ActiveFood af : foods) values[filled++] = extractor.applyAsDouble(af.def);
-        for (ActiveFood af : brews) values[filled++] = extractor.applyAsDouble(af.def);
+        for (ActiveFood af : foods) {
+            values[filled++] = extractor.applyAsDouble(af.def) * QualityFoodCompat.multiplier(af.quality());
+        }
+        for (ActiveFood af : brews) {
+            values[filled++] = extractor.applyAsDouble(af.def) * QualityFoodCompat.multiplier(af.quality());
+        }
         Arrays.sort(values);
         double total = 0;
         for (int rank = 0; rank < count; rank++) {
@@ -221,7 +231,16 @@ public class CosmicFoodData implements INBTSerializable<CompoundTag> {
         for (ActiveFood af : list) {
             CompoundTag t = new CompoundTag();
             t.putString("id", BuiltInRegistries.ITEM.getKey(af.item).toString());
-            t.putInt("ticks", af.ticksLeft);
+            ListTag reserves = new ListTag();
+            double[] qualityReserves = af.qualityReserves();
+            for (int quality = 0; quality < qualityReserves.length; quality++) {
+                if (qualityReserves[quality] <= 0.0) continue;
+                CompoundTag reserve = new CompoundTag();
+                reserve.putInt("quality", quality);
+                reserve.putDouble("servings", qualityReserves[quality]);
+                reserves.add(reserve);
+            }
+            t.put("qualityReserves", reserves);
             out.add(t);
         }
         return out;
@@ -233,7 +252,21 @@ public class CosmicFoodData implements INBTSerializable<CompoundTag> {
             CompoundTag t = (CompoundTag) element;
             Item item = FoodNbt.item(t.getString("id"));
             if (item == null) continue;
-            out.add(new ActiveFood(item, t.getInt("ticks")));
+            ActiveFood active;
+            if (t.contains("qualityReserves", Tag.TAG_LIST)) {
+                double[] reserves = new double[4];
+                for (Tag reserveTag : t.getList("qualityReserves", Tag.TAG_COMPOUND)) {
+                    CompoundTag reserve = (CompoundTag) reserveTag;
+                    int quality = Math.clamp(reserve.getInt("quality"), 0, 3);
+                    reserves[quality] += reserve.getDouble("servings");
+                }
+                active = new ActiveFood(item);
+                active.restoreQualityReserves(reserves);
+            } else {
+                int quality = t.contains("quality") ? t.getInt("quality") : 0;
+                active = new ActiveFood(item, t.getInt("ticks"), quality);
+            }
+            if (!active.isExpired()) out.add(active);
         }
         return out;
     }

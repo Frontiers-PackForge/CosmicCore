@@ -37,6 +37,12 @@ public class CosmicHudGuiOverlay implements LayeredDraw.Layer {
     // Oxygen bar textures
     private static final ResourceLocation OXY_BG = CosmicCore.id("textures/gui/oxygen_bg.png");
     private static final ResourceLocation OXY_FILL = CosmicCore.id("textures/gui/oxygen_fill.png");
+    private static final ResourceLocation QUALITY_IRON = ResourceLocation.fromNamespaceAndPath("quality_food",
+            "quality_icon/iron");
+    private static final ResourceLocation QUALITY_GOLD = ResourceLocation.fromNamespaceAndPath("quality_food",
+            "quality_icon/gold");
+    private static final ResourceLocation QUALITY_DIAMOND = ResourceLocation.fromNamespaceAndPath("quality_food",
+            "quality_icon/diamond");
     private static final int TEX_W = 64, TEX_H = 12;
 
     // Time bar state
@@ -243,6 +249,15 @@ public class CosmicHudGuiOverlay implements LayeredDraw.Layer {
             guiGraphics.renderItem(bar.icon(), 0, 0);
             pose.popPose();
 
+            ResourceLocation qualityIcon = qualityIcon(bar.quality());
+            if (qualityIcon != null) {
+                pose.pushPose();
+                pose.translate(cellX, cellTop, 200);
+                pose.scale(0.75f, 0.75f, 1f);
+                guiGraphics.blitSprite(qualityIcon, 0, 0, 16, 16);
+                pose.popPose();
+            }
+
             int remaining = (int) Math.max(0, bar.ticksLeft() - elapsed);
             int color = remaining > bar.base() ? 0xFF55FF55 : remaining <= 200 ? 0xFFFF5555 : 0xFFFFFFFF;
             String label = formatSeconds(remaining / 20);
@@ -253,6 +268,16 @@ public class CosmicHudGuiOverlay implements LayeredDraw.Layer {
             guiGraphics.drawString(mc.font, label, -w / 2, 0, color, true);
             pose.popPose();
         }
+    }
+
+    @Nullable
+    private static ResourceLocation qualityIcon(int quality) {
+        return switch (quality) {
+            case 1 -> QUALITY_IRON;
+            case 2 -> QUALITY_GOLD;
+            case 3 -> QUALITY_DIAMOND;
+            default -> null;
+        };
     }
 
     private static void renderHUDWirelessPDA(@NotNull ItemStack stack, GuiGraphics guiGraphics) {
