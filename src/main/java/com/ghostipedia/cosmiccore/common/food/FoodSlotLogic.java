@@ -1,6 +1,7 @@
 package com.ghostipedia.cosmiccore.common.food;
 
 import com.ghostipedia.cosmiccore.CosmicCore;
+import com.ghostipedia.cosmiccore.common.compat.qualityfood.QualityFoodCompat;
 import com.ghostipedia.cosmiccore.common.data.CosmicAttachmentTypes;
 import com.ghostipedia.cosmiccore.common.network.CCoreNetwork;
 import com.ghostipedia.cosmiccore.common.network.packet.SyncFoodDataPacket;
@@ -9,6 +10,7 @@ import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.damagesource.DamageTypes;
+import net.minecraft.world.effect.MobEffectCategory;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.food.FoodData;
 import net.minecraft.world.food.FoodProperties;
@@ -59,6 +61,7 @@ public final class FoodSlotLogic {
 
         data.eat(stack);
         stripVanillaFoodEffects(player, stack);
+        extendPositiveConsumeEffects(player, stack);
         syncNow(player, data);
     }
 
@@ -74,6 +77,23 @@ public final class FoodSlotLogic {
             if (active.getAmplifier() != applied.getAmplifier()) continue;
             if (active.getDuration() > applied.getDuration()) continue;
             player.removeEffect(applied.getEffect());
+        }
+    }
+
+    private static void extendPositiveConsumeEffects(ServerPlayer player, ItemStack stack) {
+        int quality = QualityFoodCompat.level(stack);
+        if (quality == 0) return;
+        FoodDefinition def = CosmicFoodRegistry.get(stack);
+        for (FoodDefinition.ConsumeEffectSpec spec : def.consumeEffects()) {
+            if (spec.effect().value().getCategory() != MobEffectCategory.BENEFICIAL) continue;
+            MobEffectInstance active = player.getEffect(spec.effect());
+            if (active == null || active.isInfiniteDuration()) continue;
+            if (active.getAmplifier() != spec.amplifier()) continue;
+            if (active.getDuration() < spec.durationTicks() - 2 || active.getDuration() > spec.durationTicks())
+                continue;
+            int duration = QualityFoodCompat.scaleDuration(spec.durationTicks(), quality);
+            player.addEffect(new MobEffectInstance(active.getEffect(), duration, active.getAmplifier(),
+                    active.isAmbient(), active.isVisible(), active.showIcon()));
         }
     }
 

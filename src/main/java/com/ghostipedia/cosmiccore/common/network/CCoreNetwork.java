@@ -27,7 +27,7 @@ import net.neoforged.neoforge.network.registration.PayloadRegistrar;
 
 public class CCoreNetwork {
 
-    private static final String PROTOCOL_VERSION = "1.0.0";
+    private static final String PROTOCOL_VERSION = "1.2.0";
 
     public static void sendToServer(CustomPacketPayload packet) {
         PacketDistributor.sendToServer(packet);

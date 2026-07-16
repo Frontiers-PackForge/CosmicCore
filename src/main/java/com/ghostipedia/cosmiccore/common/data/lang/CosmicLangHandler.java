@@ -1427,6 +1427,7 @@ public class CosmicLangHandler extends LangHandler {
         provider.add("cosmiccore.tooltip.food.vile_hunger", "You feel the need to eat again");
         provider.add("cosmiccore.tooltip.food.max_health", "Max health");
         provider.add("cosmiccore.tooltip.food.regen", "Health regen");
+        provider.add("cosmiccore.tooltip.food.quality", "Quality bonus");
         provider.add("cosmiccore.tooltip.food.duration", "Duration");
         provider.add("cosmiccore.hearth.memory_fades", "The memory of %s fades.");
         provider.add("cosmiccore.hearth.memory_settles", "The memory of %s settles in.");

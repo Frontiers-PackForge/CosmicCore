@@ -56,14 +56,14 @@ public final class HearthLogic {
 
         int mainQuality = Math.max(quality, QualityFoodCompat.level(main));
         FoodDefinition def = CosmicFoodRegistry.get(main);
-        double hearts = def.heartBonus() * MEMORY_POWER_SHARE * qualityMultiplier(mainQuality);
-        double regen = def.regenBonus() * MEMORY_POWER_SHARE * qualityMultiplier(mainQuality);
+        double hearts = def.heartBonus() * MEMORY_POWER_SHARE * QualityFoodCompat.multiplier(mainQuality);
+        double regen = def.regenBonus() * MEMORY_POWER_SHARE * QualityFoodCompat.multiplier(mainQuality);
         Map<Holder<MobEffect>, Integer> effectMerge = new LinkedHashMap<>();
         collectEffects(def, effectMerge);
         StringBuilder name = new StringBuilder(main.getHoverName().getString());
         if (!side.isEmpty() && CosmicFoodRegistry.isConsumable(side)) {
             FoodDefinition sideDef = CosmicFoodRegistry.get(side);
-            double sideQuality = qualityMultiplier(QualityFoodCompat.level(side));
+            double sideQuality = QualityFoodCompat.multiplier(QualityFoodCompat.level(side));
             hearts += sideDef.heartBonus() * COMPLEMENT_SHARE * sideQuality;
             regen += sideDef.regenBonus() * COMPLEMENT_SHARE * sideQuality;
             collectEffects(sideDef, effectMerge);
@@ -71,7 +71,7 @@ public final class HearthLogic {
         }
         if (!drink.isEmpty() && CosmicFoodRegistry.isConsumable(drink)) {
             FoodDefinition drinkDef = CosmicFoodRegistry.get(drink);
-            double drinkQuality = qualityMultiplier(QualityFoodCompat.level(drink));
+            double drinkQuality = QualityFoodCompat.multiplier(QualityFoodCompat.level(drink));
             hearts += drinkDef.heartBonus() * COMPLEMENT_SHARE * drinkQuality;
             regen += drinkDef.regenBonus() * COMPLEMENT_SHARE * drinkQuality;
             collectEffects(drinkDef, effectMerge);
@@ -115,15 +115,6 @@ public final class HearthLogic {
         data.consumeDirty();
         player.sendSystemMessage(msg("cosmiccore.hearth.memory_settles", 0xE8C66A, memory.dishName()));
         return true;
-    }
-
-    public static double qualityMultiplier(int quality) {
-        return switch (quality) {
-            case 1 -> 1.25;
-            case 2 -> 1.5;
-            case 3 -> 1.75;
-            default -> 1.0;
-        };
     }
 
     public static boolean canInscribe(CosmicFoodData data) {

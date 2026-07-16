@@ -2,6 +2,7 @@ package com.ghostipedia.cosmiccore.common.network.packet;
 
 import com.ghostipedia.cosmiccore.CosmicCore;
 import com.ghostipedia.cosmiccore.client.CosmicHudGuiOverlay;
+import com.ghostipedia.cosmiccore.client.FoodHealthClient;
 import com.ghostipedia.cosmiccore.common.food.ActiveFood;
 import com.ghostipedia.cosmiccore.common.food.CosmicFoodData;
 import com.ghostipedia.cosmiccore.common.food.FoodBar;
@@ -32,12 +33,14 @@ public class SyncFoodDataPacket implements CustomPacketPayload {
     @Nullable
     private final FoodMemory memory;
     private final boolean sickened;
+    private final double foodHealthBonus;
 
     public SyncFoodDataPacket(CosmicFoodData data) {
         this.foods = toBars(data.foods);
         this.brews = toBars(data.brews);
         this.memory = data.memory;
         this.sickened = data.sickened;
+        this.foodHealthBonus = data.totalHeartBonus();
     }
 
     public SyncFoodDataPacket(FriendlyByteBuf buf) {
@@ -45,6 +48,7 @@ public class SyncFoodDataPacket implements CustomPacketPayload {
         this.brews = readBars(buf);
         this.memory = buf.readBoolean() ? FoodMemory.read(buf) : null;
         this.sickened = buf.readBoolean();
+        this.foodHealthBonus = buf.readDouble();
     }
 
     public void encode(FriendlyByteBuf buf) {
@@ -53,18 +57,20 @@ public class SyncFoodDataPacket implements CustomPacketPayload {
         buf.writeBoolean(memory != null);
         if (memory != null) memory.write(buf);
         buf.writeBoolean(sickened);
+        buf.writeDouble(foodHealthBonus);
     }
 
     public void execute(IPayloadContext context) {
         CosmicHudGuiOverlay.setFoodData(foods, brews);
         CosmicHudGuiOverlay.setMemory(memory);
         CosmicHudGuiOverlay.setSickened(sickened);
+        FoodHealthClient.sync(foodHealthBonus);
     }
 
     private static List<FoodBar> toBars(List<ActiveFood> list) {
         List<FoodBar> out = new ArrayList<>();
         for (ActiveFood af : list) {
-            out.add(new FoodBar(new ItemStack(af.item), af.ticksLeft, af.def.durationTicks()));
+            out.add(new FoodBar(new ItemStack(af.item), af.ticksLeft(), af.baseDuration(), af.quality()));
         }
         return out;
     }
@@ -75,6 +81,7 @@ public class SyncFoodDataPacket implements CustomPacketPayload {
             buf.writeVarInt(BuiltInRegistries.ITEM.getId(bar.icon().getItem()));
             buf.writeVarInt(bar.ticksLeft());
             buf.writeVarInt(bar.base());
+            buf.writeVarInt(bar.quality());
         }
     }
 
@@ -83,7 +90,7 @@ public class SyncFoodDataPacket implements CustomPacketPayload {
         List<FoodBar> out = new ArrayList<>();
         for (int i = 0; i < count; i++) {
             Item item = BuiltInRegistries.ITEM.byId(buf.readVarInt());
-            out.add(new FoodBar(new ItemStack(item), buf.readVarInt(), buf.readVarInt()));
+            out.add(new FoodBar(new ItemStack(item), buf.readVarInt(), buf.readVarInt(), buf.readVarInt()));
         }
         return out;
     }
