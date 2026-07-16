@@ -74,9 +74,6 @@ dependencies {
     runtimeOnly(files("libs/sable-companion-common-1.21.1-1.6.0.jar"))
     runtimeOnly(files("libs/veil-neoforge-1.21.1-4.1.4.jar"))
     runtimeOnly(forge.create) {
-        // Create's published metadata leaks optional integrations as runtime deps. The pack uses Xaero's,
-        // not JourneyMap, and the bundled JourneyMap beta is incompatible with our compile-time journeymap-api
-        // (it expects journeymap.api.v2...PluginHelper, absent in 2.0.0-SNAPSHOT) -> NoClassDefFoundError on init.
         exclude group: 'maven.modrinth', module: 'journeymap'
     }
     runtimeOnly(forge.flywheel.impl)
@@ -129,9 +126,6 @@ dependencies {
 
     // Resourceful Lib
     implementation(forge.resourcefullib)
-
-    // JourneyMap API — pack uses Xaero's; integration compiles against the API and no-ops at runtime.
-    compileOnly(forge.journeymap.api)
 
     // Xaero's Minimap / World Map — pack ships Xaero's. compileOnly to build our own field-blob overlay
     // against their (internal) render classes; runtimeOnly so the dev client loads Xaero's to test it.

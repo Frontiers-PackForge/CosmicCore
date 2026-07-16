@@ -5,6 +5,7 @@ import com.ghostipedia.cosmiccore.common.data.CosmicItems;
 import com.ghostipedia.cosmiccore.common.machine.multiblock.multi.LARVA;
 import com.ghostipedia.cosmiccore.common.machine.multiblock.multi.logic.LarvaMachine;
 import com.ghostipedia.cosmiccore.integration.recipes.emi.AsteroidEmiRecipe;
+import com.ghostipedia.cosmiccore.integration.recipes.emi.CraftingStationRecipeHandler;
 
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.resources.ResourceLocation;
@@ -38,6 +39,7 @@ public class CosmicCoreEMIPlugin implements EmiPlugin {
 
         registerModularUIScreen(registry, ScreenWrapper.class);
         registerModularUIScreen(registry, ContainerScreenWrapper.class);
+        CraftingStationRecipeHandler.register(registry);
 
         registry.addCategory(ASTEROID_CATEGORY);
         registry.addWorkstation(ASTEROID_CATEGORY, EmiStack.of(LARVA.LARVA.getBlock()));
