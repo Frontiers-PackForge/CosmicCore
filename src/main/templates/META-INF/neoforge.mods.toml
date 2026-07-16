@@ -13,6 +13,9 @@ description = '''${mod_description}'''
 [[mixins]]
 config = "cosmiccore.mixins.json"
 
+[[mixins]]
+config = "cosmiccore.modularui_server.mixins.json"
+
 [[dependencies.${mod_id}]]
     modId = "neoforge"
     type = "required"
@@ -58,3 +61,11 @@ config = "cosmiccore.mixins.json"
     versionRange = "[0,)"
     ordering = "AFTER"
     side = "BOTH"
+
+[[dependencies.${mod_id}]]
+    modId = "journeymap"
+    type = "incompatible"
+    reason = "Custom ore field integration is only supported with Xaero's Minimap and Xaero's World Map."
+    versionRange = "*"
+    ordering = "NONE"
+    side = "CLIENT"
