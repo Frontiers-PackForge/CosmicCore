@@ -112,11 +112,17 @@ public class CosmicHudGuiOverlay implements LayeredDraw.Layer {
         sickened = newSickened;
     }
 
-    private static ItemStack memoryIcon = ItemStack.EMPTY;
+    private static ItemStack memoryMainIcon = ItemStack.EMPTY;
+    private static ItemStack memorySideIcon = ItemStack.EMPTY;
+    private static ItemStack memoryDrinkIcon = ItemStack.EMPTY;
 
     public static void setMemory(@Nullable FoodMemory newMemory) {
         memory = newMemory;
-        memoryIcon = newMemory != null ? new ItemStack(newMemory.dish()) : ItemStack.EMPTY;
+        memoryMainIcon = newMemory != null ? new ItemStack(newMemory.dish()) : ItemStack.EMPTY;
+        memorySideIcon = newMemory != null && newMemory.side() != null ?
+                new ItemStack(newMemory.side()) : ItemStack.EMPTY;
+        memoryDrinkIcon = newMemory != null && newMemory.drink() != null ?
+                new ItemStack(newMemory.drink()) : ItemStack.EMPTY;
     }
 
     @Nullable
@@ -217,19 +223,32 @@ public class CosmicHudGuiOverlay implements LayeredDraw.Layer {
 
     private static void renderMemoryCell(GuiGraphics guiGraphics, Minecraft mc, int cellX, int hotbarTop) {
         int cellTop = hotbarTop - 3;
+        renderMemoryItem(guiGraphics, memorySideIcon, cellX - 4, cellTop + 2, 0.5f, 0);
+        renderMemoryItem(guiGraphics, memoryDrinkIcon, cellX + 8, cellTop + 2, 0.5f, 0);
+        renderMemoryItem(guiGraphics, memoryMainIcon, cellX, cellTop, 0.75f, 100);
+
+        renderQualityIcon(guiGraphics, cellX - 3, cellTop + 12, memory.sideQuality(), 0.3125f);
+        renderQualityIcon(guiGraphics, cellX + 4, cellTop + 12, memory.quality(), 0.3125f);
+        renderQualityIcon(guiGraphics, cellX + 10, cellTop + 12, memory.drinkQuality(), 0.3125f);
+
         var pose = guiGraphics.pose();
         pose.pushPose();
-        pose.translate(cellX, cellTop, 0);
-        pose.scale(0.75f, 0.75f, 1f);
-        guiGraphics.renderItem(memoryIcon, 0, 0);
-        pose.popPose();
-
-        pose.pushPose();
-        pose.translate(cellX + 6, cellTop + 13, 0);
-        pose.scale(0.75f, 0.75f, 1f);
+        pose.translate(cellX + 6, cellTop + 17, 0);
+        pose.scale(0.625f, 0.625f, 1f);
         String label = "⌂";
         int w = mc.font.width(label);
         guiGraphics.drawString(mc.font, label, -w / 2, 0, 0xFFE8C66A, true);
+        pose.popPose();
+    }
+
+    private static void renderMemoryItem(GuiGraphics guiGraphics, ItemStack stack, int x, int y, float scale, int z) {
+        if (stack.isEmpty()) return;
+
+        var pose = guiGraphics.pose();
+        pose.pushPose();
+        pose.translate(x, y, z);
+        pose.scale(scale, scale, 1f);
+        guiGraphics.renderItem(stack, 0, 0);
         pose.popPose();
     }
 
@@ -249,14 +268,7 @@ public class CosmicHudGuiOverlay implements LayeredDraw.Layer {
             guiGraphics.renderItem(bar.icon(), 0, 0);
             pose.popPose();
 
-            ResourceLocation qualityIcon = qualityIcon(bar.quality());
-            if (qualityIcon != null) {
-                pose.pushPose();
-                pose.translate(cellX, cellTop, 200);
-                pose.scale(0.75f, 0.75f, 1f);
-                guiGraphics.blitSprite(qualityIcon, 0, 0, 16, 16);
-                pose.popPose();
-            }
+            renderQualityIcon(guiGraphics, cellX, cellTop, bar.quality());
 
             int remaining = (int) Math.max(0, bar.ticksLeft() - elapsed);
             int color = remaining > bar.base() ? 0xFF55FF55 : remaining <= 200 ? 0xFFFF5555 : 0xFFFFFFFF;
@@ -268,6 +280,22 @@ public class CosmicHudGuiOverlay implements LayeredDraw.Layer {
             guiGraphics.drawString(mc.font, label, -w / 2, 0, color, true);
             pose.popPose();
         }
+    }
+
+    private static void renderQualityIcon(GuiGraphics guiGraphics, int cellX, int cellTop, int quality) {
+        renderQualityIcon(guiGraphics, cellX, cellTop, quality, 0.75f);
+    }
+
+    private static void renderQualityIcon(GuiGraphics guiGraphics, int cellX, int cellTop, int quality, float scale) {
+        ResourceLocation qualityIcon = qualityIcon(quality);
+        if (qualityIcon == null) return;
+
+        var pose = guiGraphics.pose();
+        pose.pushPose();
+        pose.translate(cellX, cellTop, 200);
+        pose.scale(scale, scale, 1f);
+        guiGraphics.blitSprite(qualityIcon, 0, 0, 16, 16);
+        pose.popPose();
     }
 
     @Nullable

@@ -55,7 +55,8 @@ public class SyncPredictedVeinsPacket implements CustomPacketPayload {
     public void execute(IPayloadContext context) {
         var mc = Minecraft.getInstance();
         if (mc.level == null) return;
-        // TODO(cosmiccore-42.14): route predicted-vein markers into the Xaero ore-field overlay. Journeymap Integration is unlikely something I will want to support.
+        // TODO(cosmiccore-42.14): route predicted-vein markers into the Xaero ore-field overlay. Journeymap Integration
+        // is unlikely something I will want to support.
     }
 
     @Override

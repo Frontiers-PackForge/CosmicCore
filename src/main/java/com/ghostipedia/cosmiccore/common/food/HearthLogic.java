@@ -11,6 +11,7 @@ import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.effect.MobEffect;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 
 import java.util.ArrayList;
@@ -61,19 +62,27 @@ public final class HearthLogic {
         Map<Holder<MobEffect>, Integer> effectMerge = new LinkedHashMap<>();
         collectEffects(def, effectMerge);
         StringBuilder name = new StringBuilder(main.getHoverName().getString());
+        Item sideItem = null;
+        int sideQuality = 0;
         if (!side.isEmpty() && CosmicFoodRegistry.isConsumable(side)) {
             FoodDefinition sideDef = CosmicFoodRegistry.get(side);
-            double sideQuality = QualityFoodCompat.multiplier(QualityFoodCompat.level(side));
-            hearts += sideDef.heartBonus() * COMPLEMENT_SHARE * sideQuality;
-            regen += sideDef.regenBonus() * COMPLEMENT_SHARE * sideQuality;
+            sideItem = side.getItem();
+            sideQuality = QualityFoodCompat.level(side);
+            double sideMultiplier = QualityFoodCompat.multiplier(sideQuality);
+            hearts += sideDef.heartBonus() * COMPLEMENT_SHARE * sideMultiplier;
+            regen += sideDef.regenBonus() * COMPLEMENT_SHARE * sideMultiplier;
             collectEffects(sideDef, effectMerge);
             name.append(" with ").append(side.getHoverName().getString());
         }
+        Item drinkItem = null;
+        int drinkQuality = 0;
         if (!drink.isEmpty() && CosmicFoodRegistry.isConsumable(drink)) {
             FoodDefinition drinkDef = CosmicFoodRegistry.get(drink);
-            double drinkQuality = QualityFoodCompat.multiplier(QualityFoodCompat.level(drink));
-            hearts += drinkDef.heartBonus() * COMPLEMENT_SHARE * drinkQuality;
-            regen += drinkDef.regenBonus() * COMPLEMENT_SHARE * drinkQuality;
+            drinkItem = drink.getItem();
+            drinkQuality = QualityFoodCompat.level(drink);
+            double drinkMultiplier = QualityFoodCompat.multiplier(drinkQuality);
+            hearts += drinkDef.heartBonus() * COMPLEMENT_SHARE * drinkMultiplier;
+            regen += drinkDef.regenBonus() * COMPLEMENT_SHARE * drinkMultiplier;
             collectEffects(drinkDef, effectMerge);
             name.append(name.indexOf(" with ") >= 0 ? " and " : " with ").append(drink.getHoverName().getString());
         }
@@ -85,8 +94,9 @@ public final class HearthLogic {
         CosmicFoodData data = player.getData(CosmicAttachmentTypes.FOOD_DATA);
 
         double palate = palateMultiplier(data);
-        FoodMemory memory = new FoodMemory(name.toString(), main.getItem(), hearts * palate, regen * palate,
-                mainQuality, sharedWith, day, List.copyOf(memoryEffects));
+        FoodMemory memory = new FoodMemory(name.toString(), main.getItem(), sideItem, drinkItem,
+                hearts * palate, regen * palate, mainQuality, sideQuality, drinkQuality, sharedWith, day,
+                memoryEffects);
         data.setMemory(memory);
 
         String pageKey = pageKey(main, side, drink);
