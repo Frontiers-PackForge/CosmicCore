@@ -1,0 +1,22 @@
+{
+  "textures": {
+    "side": "cosmiccore:block/crops/soul_gourd/gourd_side",
+    "top": "cosmiccore:block/crops/soul_gourd/gourd_top",
+    "bottom": "cosmiccore:block/crops/soul_gourd/gourd_bottom",
+    "particle": "cosmiccore:block/crops/soul_gourd/gourd_side"
+  },
+  "elements": [
+    {
+      "from": [3, 0, 3],
+      "to": [13, 8, 13],
+      "faces": {
+        "north": { "uv": [3, 4, 13, 12], "texture": "#side" },
+        "east": { "uv": [3, 4, 13, 12], "texture": "#side" },
+        "south": { "uv": [3, 4, 13, 12], "texture": "#side" },
+        "west": { "uv": [3, 4, 13, 12], "texture": "#side" },
+        "up": { "uv": [3, 3, 13, 13], "texture": "#top" },
+        "down": { "uv": [3, 2, 13, 12], "texture": "#bottom" }
+      }
+    }
+  ]
+}

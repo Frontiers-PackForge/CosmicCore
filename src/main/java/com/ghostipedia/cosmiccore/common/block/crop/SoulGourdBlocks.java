@@ -16,6 +16,7 @@ import net.minecraft.world.level.block.BonemealableBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.level.block.state.properties.DirectionProperty;
 import net.minecraft.world.level.block.state.properties.IntegerProperty;
 import net.minecraft.world.phys.shapes.CollisionContext;
@@ -97,7 +98,8 @@ final class SoulGourdCropBlock extends Block implements BonemealableBlock {
         Direction direction = candidates.get(random.nextInt(candidates.size()));
         BlockPos target = pos.relative(direction);
         level.setBlock(target, CosmicCrops.SOUL_GOURD_BLOOM.getDefaultState()
-                .setValue(SoulGourdBloomBlock.FACING, direction.getOpposite()), 3);
+                .setValue(SoulGourdBloomBlock.FACING, direction.getOpposite())
+                .setValue(SoulGourdBloomBlock.ATTACHED, true), 3);
         level.setBlock(pos, CosmicCrops.SOUL_GOURD_ATTACHED_STEM.getDefaultState()
                 .setValue(SoulGourdAttachedStemBlock.FACING, direction), 3);
     }
@@ -160,6 +162,7 @@ final class SoulGourdAttachedStemBlock extends Block {
         Direction direction = state.getValue(FACING);
         BlockState fruit = level.getBlockState(pos.relative(direction));
         return fruit.is(CosmicCrops.SOUL_GOURD_BLOOM.get()) &&
+                fruit.getValue(SoulGourdBloomBlock.ATTACHED) &&
                 fruit.getValue(SoulGourdBloomBlock.FACING) == direction.getOpposite();
     }
 
@@ -199,11 +202,12 @@ final class SoulGourdAttachedStemBlock extends Block {
 final class SoulGourdBloomBlock extends Block {
 
     static final DirectionProperty FACING = BlockStateProperties.HORIZONTAL_FACING;
+    static final BooleanProperty ATTACHED = BlockStateProperties.ATTACHED;
     private static final VoxelShape SHAPE = Block.box(2, 0, 2, 14, 12, 14);
 
     SoulGourdBloomBlock(Properties properties) {
         super(properties);
-        registerDefaultState(stateDefinition.any().setValue(FACING, Direction.NORTH));
+        registerDefaultState(stateDefinition.any().setValue(FACING, Direction.NORTH).setValue(ATTACHED, false));
     }
 
     @Override
@@ -219,6 +223,11 @@ final class SoulGourdBloomBlock extends Block {
     @Override
     protected BlockState updateShape(BlockState state, Direction direction, BlockState neighborState,
                                      LevelAccessor level, BlockPos pos, BlockPos neighborPos) {
+        if (state.getValue(ATTACHED) && direction == state.getValue(FACING) &&
+                (!neighborState.is(CosmicCrops.SOUL_GOURD_ATTACHED_STEM.get()) ||
+                        neighborState.getValue(SoulGourdAttachedStemBlock.FACING) != direction.getOpposite())) {
+            state = state.setValue(ATTACHED, false);
+        }
         return canSurvive(state, level, pos) ?
                 super.updateShape(state, direction, neighborState, level, pos, neighborPos) :
                 Blocks.AIR.defaultBlockState();
@@ -236,6 +245,6 @@ final class SoulGourdBloomBlock extends Block {
 
     @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
-        builder.add(FACING);
+        builder.add(FACING, ATTACHED);
     }
 }

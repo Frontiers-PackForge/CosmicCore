@@ -51,7 +51,7 @@ final class DriftweedRootBlock extends Block implements SimpleWaterloggedBlock, 
 
     @Override
     protected boolean isRandomlyTicking(BlockState state) {
-        return true;
+        return state.getValue(AGE) < 3;
     }
 
     @Override
@@ -62,7 +62,7 @@ final class DriftweedRootBlock extends Block implements SimpleWaterloggedBlock, 
 
     private void advance(ServerLevel level, BlockPos pos, BlockState state) {
         int age = state.getValue(AGE);
-        if (age < 3) {
+        if (age < 2) {
             level.setBlock(pos, state.setValue(AGE, age + 1), 2);
         } else {
             placeColumnToSurface(level, pos, 3);
@@ -100,13 +100,7 @@ final class DriftweedRootBlock extends Block implements SimpleWaterloggedBlock, 
             level.scheduleTick(pos, Fluids.WATER, Fluids.WATER.getTickDelay(level));
         }
         if (!canSurvive(state, level, pos)) return Blocks.WATER.defaultBlockState();
-        if (direction == Direction.UP && neighborState.isAir()) level.scheduleTick(pos, this, 2);
         return super.updateShape(state, direction, neighborState, level, pos, neighborPos);
-    }
-
-    @Override
-    protected void tick(BlockState state, ServerLevel level, BlockPos pos, RandomSource random) {
-        if (state.getValue(AGE) == 3) placeColumnToSurface(level, pos, 3);
     }
 
     @Override
@@ -165,15 +159,7 @@ final class DriftweedStalkBlock extends Block implements SimpleWaterloggedBlock 
             level.scheduleTick(pos, Fluids.WATER, Fluids.WATER.getTickDelay(level));
         }
         if (!canSurvive(state, level, pos)) return Blocks.WATER.defaultBlockState();
-        if (direction == Direction.UP && neighborState.isAir()) level.scheduleTick(pos, this, 2);
         return super.updateShape(state, direction, neighborState, level, pos, neighborPos);
-    }
-
-    @Override
-    protected void tick(BlockState state, ServerLevel level, BlockPos pos, RandomSource random) {
-        if (level.isEmptyBlock(pos.above())) {
-            level.setBlock(pos.above(), CosmicCrops.DRIFTWEED_BLOOM.getDefaultState(), 3);
-        }
     }
 
     @Override

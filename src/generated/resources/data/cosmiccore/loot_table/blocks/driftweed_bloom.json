@@ -1,17 +1,35 @@
 {
     "type": "minecraft:block",
+    "functions": [
+        {
+            "function": "minecraft:explosion_decay"
+        }
+    ],
     "pools": [
         {
             "bonus_rolls": 0.0,
-            "conditions": [
-                {
-                    "condition": "minecraft:survives_explosion"
-                }
-            ],
             "entries": [
                 {
-                    "type": "minecraft:item",
-                    "name": "cosmiccore:driftweed"
+                    "type": "minecraft:alternatives",
+                    "children": [
+                        {
+                            "type": "minecraft:item",
+                            "conditions": [
+                                {
+                                    "block": "cosmiccore:driftweed_bloom",
+                                    "condition": "minecraft:block_state_property",
+                                    "properties": {
+                                        "age": "3"
+                                    }
+                                }
+                            ],
+                            "name": "cosmiccore:driftweed"
+                        },
+                        {
+                            "type": "minecraft:item",
+                            "name": "cosmiccore:driftweed_rhizome"
+                        }
+                    ]
                 }
             ],
             "rolls": 1.0
