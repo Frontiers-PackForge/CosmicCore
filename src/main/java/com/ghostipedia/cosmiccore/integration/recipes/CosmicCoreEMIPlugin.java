@@ -2,13 +2,16 @@ package com.ghostipedia.cosmiccore.integration.recipes;
 
 import com.ghostipedia.cosmiccore.CosmicCore;
 import com.ghostipedia.cosmiccore.common.data.CosmicItems;
+import com.ghostipedia.cosmiccore.common.food.CosmicFoodRegistry;
 import com.ghostipedia.cosmiccore.common.machine.multiblock.multi.LARVA;
 import com.ghostipedia.cosmiccore.common.machine.multiblock.multi.logic.LarvaMachine;
 import com.ghostipedia.cosmiccore.integration.recipes.emi.AsteroidEmiRecipe;
 import com.ghostipedia.cosmiccore.integration.recipes.emi.CraftingStationRecipeHandler;
 
 import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 
 import brachy.modularui.api.IMuiScreen;
@@ -40,6 +43,7 @@ public class CosmicCoreEMIPlugin implements EmiPlugin {
         registerModularUIScreen(registry, ScreenWrapper.class);
         registerModularUIScreen(registry, ContainerScreenWrapper.class);
         CraftingStationRecipeHandler.register(registry);
+        registerFoodRoleAliases(registry);
 
         registry.addCategory(ASTEROID_CATEGORY);
         registry.addWorkstation(ASTEROID_CATEGORY, EmiStack.of(LARVA.LARVA.getBlock()));
@@ -71,6 +75,14 @@ public class CosmicCoreEMIPlugin implements EmiPlugin {
         addAsteroidRecipe(registry, "wasteland_asteroid", CosmicItems.TUNGSTENSTEEL_NANOLATTICE_SPOOL.asStack(),
                 List.of(EmiStack.of(CosmicItems.WASTELAND_ASTEROID.asStack())),
                 CosmicItems.WASTELAND_ASTEROID.asStack());
+    }
+
+    private static void registerFoodRoleAliases(EmiRegistry registry) {
+        for (Item item : BuiltInRegistries.ITEM) {
+            ItemStack stack = item.getDefaultInstance();
+            if (!CosmicFoodRegistry.isConsumable(stack)) continue;
+            registry.addAlias(EmiStack.of(stack), CosmicFoodRegistry.plateRole(stack).label());
+        }
     }
 
     private static <T extends Screen & IMuiScreen> void registerModularUIScreen(EmiRegistry registry, Class<T> cls) {

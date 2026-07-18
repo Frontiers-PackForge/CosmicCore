@@ -3,13 +3,17 @@ package com.ghostipedia.cosmiccore.common.block.crop;
 import com.ghostipedia.cosmiccore.common.data.CosmicBotanyItemRegistration;
 import com.ghostipedia.cosmiccore.common.data.CosmicCreativeModeTabs;
 
+import net.minecraft.advancements.critereon.StatePropertiesPredicate;
 import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.ItemNameBlockItem;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.material.MapColor;
 import net.minecraft.world.level.material.PushReaction;
+import net.minecraft.world.level.storage.loot.LootPool;
 import net.minecraft.world.level.storage.loot.LootTable;
+import net.minecraft.world.level.storage.loot.entries.LootItem;
+import net.minecraft.world.level.storage.loot.predicates.LootItemBlockStatePropertyCondition;
 
 import com.tterrag.registrate.util.entry.BlockEntry;
 import com.tterrag.registrate.util.entry.ItemEntry;
@@ -105,7 +109,16 @@ public final class CosmicCrops {
             .properties(p -> p.randomTicks().noCollission().instabreak().noOcclusion())
             .lang("Blooming Driftweed")
             .blockstate(NonNullBiConsumer.noop())
-            .loot((tables, block) -> tables.dropOther(block, CosmicBotanyItemRegistration.DRIFTWEED.get()))
+            .loot((tables, block) -> {
+                var mature = LootItemBlockStatePropertyCondition.hasBlockStateProperties(block)
+                        .setProperties(StatePropertiesPredicate.Builder.properties()
+                                .hasProperty(DriftweedBloomBlock.AGE, 3));
+                tables.add(block, tables.applyExplosionDecay(block, LootTable.lootTable()
+                        .withPool(LootPool.lootPool()
+                                .add(LootItem.lootTableItem(CosmicBotanyItemRegistration.DRIFTWEED.get())
+                                        .when(mature)
+                                        .otherwise(LootItem.lootTableItem(CosmicCrops.DRIFTWEED_RHIZOME.get()))))));
+            })
             .register();
 
     public static final ItemEntry<ItemNameBlockItem> RAINBOW_CANE_ITEM = REGISTRATE

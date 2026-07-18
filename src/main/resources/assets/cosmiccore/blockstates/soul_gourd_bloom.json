@@ -1,8 +1,12 @@
 {
   "variants": {
-    "facing=north": { "model": "cosmiccore:block/crops/soul_gourd/bloom" },
-    "facing=east": { "model": "cosmiccore:block/crops/soul_gourd/bloom", "y": 90 },
-    "facing=south": { "model": "cosmiccore:block/crops/soul_gourd/bloom", "y": 180 },
-    "facing=west": { "model": "cosmiccore:block/crops/soul_gourd/bloom", "y": 270 }
+    "attached=false,facing=north": { "model": "cosmiccore:block/crops/soul_gourd/bloom_stemless" },
+    "attached=false,facing=east": { "model": "cosmiccore:block/crops/soul_gourd/bloom_stemless" },
+    "attached=false,facing=south": { "model": "cosmiccore:block/crops/soul_gourd/bloom_stemless" },
+    "attached=false,facing=west": { "model": "cosmiccore:block/crops/soul_gourd/bloom_stemless" },
+    "attached=true,facing=north": { "model": "cosmiccore:block/crops/soul_gourd/bloom" },
+    "attached=true,facing=east": { "model": "cosmiccore:block/crops/soul_gourd/bloom", "y": 90 },
+    "attached=true,facing=south": { "model": "cosmiccore:block/crops/soul_gourd/bloom", "y": 180 },
+    "attached=true,facing=west": { "model": "cosmiccore:block/crops/soul_gourd/bloom", "y": 270 }
   }
 }

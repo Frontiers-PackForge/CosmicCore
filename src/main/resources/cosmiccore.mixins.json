@@ -9,6 +9,7 @@
     "StarKillerMixin",
     "quake.QuakeMovementMixin",
     "client.MinecraftMixin",
+    "client.ChatComponentPositionMixin",
     "client.GuiAccessor",
     "client.SoundManagerMixin",
     "emi.EmiFavoritesMixin",
