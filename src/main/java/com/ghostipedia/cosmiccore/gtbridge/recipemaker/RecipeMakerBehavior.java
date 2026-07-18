@@ -205,6 +205,11 @@ public class RecipeMakerBehavior implements IItemUIHolder {
                     foodAttrPanel, selSlot, selSide, selType);
         });
         syncManager.syncValue("editor", editorSync);
+        control.setEditorSelector(typeId -> {
+            if (isValidTypeId(typeId)) {
+                editorSync.notifyUpdate(buf -> buf.writeUtf(typeId));
+            }
+        });
 
         boolean[] inited = { false };
         syncManager.onServerTick(() -> {
@@ -217,11 +222,11 @@ public class RecipeMakerBehavior implements IItemUIHolder {
         StringValue search = new StringValue("");
         ListWidget list = new ListWidget<>();
         list.collapseDisabledChildren().expanded().widthRel(1f);
-        addRow(list, "crafting (3x3)", CRAFTING, search, editorSync);
-        addRow(list, "food (cosmic)", FOOD, search, editorSync);
+        addRow(list, "crafting (3x3)", CRAFTING, search, control);
+        addRow(list, "food (cosmic)", FOOD, search, control);
         for (ResourceLocation id : allRecipeTypeIds()) {
             if (id.toString().equals(CRAFTING)) continue;
-            addRow(list, id.getPath(), id.toString(), search, editorSync);
+            addRow(list, id.getPath(), id.toString(), search, control);
         }
 
         DynamicWidget editorDyn = new DynamicWidget<>();
@@ -239,17 +244,23 @@ public class RecipeMakerBehavior implements IItemUIHolder {
     }
 
     private static void addRow(ListWidget list, String label, String id, StringValue search,
-                               DynamicSyncHandler editorSync) {
+                               RecipeMakerControl control) {
         list.child(new ButtonWidget<>()
                 .background(GTGuiTextures.BUTTON)
                 .size(144, 14)
                 .onMousePressed((context, button) -> {
-                    editorSync.notifyUpdate(buf -> buf.writeUtf(id));
+                    control.requestEditor(id);
                     return true;
                 })
                 .setEnabledIf(w -> matches(id, search.getStringValue()))
                 .child(new TextWidget<>(Text.str(label)).textAlign(Alignment.CenterLeft).sizeRel(1f)
                         .padding(3, 0, 0, 0)));
+    }
+
+    private static boolean isValidTypeId(String typeId) {
+        if (CRAFTING.equals(typeId) || FOOD.equals(typeId)) return true;
+        ResourceLocation id = ResourceLocation.tryParse(typeId);
+        return id != null && BuiltInRegistries.RECIPE_TYPE.containsKey(id);
     }
 
     static boolean matches(String id, String needle) {

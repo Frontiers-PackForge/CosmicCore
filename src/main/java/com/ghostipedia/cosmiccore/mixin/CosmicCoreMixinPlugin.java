@@ -29,6 +29,8 @@ public class CosmicCoreMixinPlugin implements IMixinConfigPlugin {
     private static final String MIXIN_SQUARED_TARGET_HANDLER = "com/bawnorton/mixinsquared/TargetHandler.class";
     private static final String MODULAR_UI_MIXIN_PACKAGE = "brachy.modularui.core.mixins";
     private static final String MODULAR_UI_SLOT_ACCESSOR = "client.SlotAccessor";
+    private static final String QUALITY_FOOD_MARKER = "de/cadentem/quality_food/util/QualityUtils.class";
+    private static final String ULTIMINE_CROP_MARKER = "dev/ftb/mods/ftbultimine/crops/VanillaCropLikeHandler.class";
     private static final Map<String, Boolean> GATES = new HashMap<>();
 
     private String mixinPackage;
@@ -57,6 +59,10 @@ public class CosmicCoreMixinPlugin implements IMixinConfigPlugin {
                 ".aeroschema.",
                 loader.getResource(AERONAUTICS_MARKER) != null &&
                         loader.getResource(MIXIN_SQUARED_TARGET_HANDLER) != null);
+        GATES.put(
+                ".qualityfoodultimine.",
+                loader.getResource(QUALITY_FOOD_MARKER) != null &&
+                        loader.getResource(ULTIMINE_CROP_MARKER) != null);
     }
 
     @Override
