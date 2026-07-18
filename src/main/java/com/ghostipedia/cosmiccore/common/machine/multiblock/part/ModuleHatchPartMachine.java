@@ -115,8 +115,9 @@ public class ModuleHatchPartMachine extends TieredIOPartMachine implements IMuiM
                 .gridOfSizeWidth(totalSlots, colSize, (x, y, index) -> new ItemSlot()
                         .slot(SyncHandlers.itemSlot(inventory, index)
                                 .slotGroup(group)
-                                .changeListener((newItem, amountChanged, client, init) -> {
-                                    if (amountChanged) {
+                                .changeListener((oldItem, newItem, client, init) -> {
+                                    if (ItemStack.isSameItemSameComponents(oldItem, newItem) &&
+                                            oldItem.getCount() != newItem.getCount()) {
                                         inventory.onContentsChanged();
                                     }
                                 })
