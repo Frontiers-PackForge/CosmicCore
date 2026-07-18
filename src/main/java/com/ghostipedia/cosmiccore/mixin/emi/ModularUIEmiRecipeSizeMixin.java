@@ -27,7 +27,7 @@ public abstract class ModularUIEmiRecipeSizeMixin {
     @Shadow
     private int displayHeight;
 
-    @Inject(method = "requireSize", at = @At("HEAD"), cancellable = true, remap = false)
+    @Inject(method = "calculateSize", at = @At("HEAD"), cancellable = true, remap = false)
     private void cosmiccore$estimateSize(CallbackInfo ci) {
         if (this.sizeCalculated) {
             ci.cancel();

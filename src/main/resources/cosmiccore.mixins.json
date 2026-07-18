@@ -113,6 +113,8 @@
     "gtfix.GTMuiTitleBarBackgroundFixMixin",
     "gtfix.DrumMachineFixMixin",
     "gtfix.SteamSolidBoilerFuelSlotFixMixin",
+    "gtfix.ItemMagnetFilterSlotChangeFixMixin",
+    "gtfix.SimpleItemFilterSlotChangeFixMixin",
     "architectury.ArchitecturyNullCodecSkipFixMixin",
     "qualityfoodultimine.VanillaCropLikeHandlerQualityFixMixin",
     "lso.FrostbiteEffectMixin",

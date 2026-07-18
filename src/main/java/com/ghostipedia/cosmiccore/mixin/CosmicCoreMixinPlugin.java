@@ -5,7 +5,6 @@ import org.objectweb.asm.tree.AbstractInsnNode;
 import org.objectweb.asm.tree.ClassNode;
 import org.objectweb.asm.tree.MethodInsnNode;
 import org.objectweb.asm.tree.MethodNode;
-import org.spongepowered.asm.mixin.MixinEnvironment;
 import org.spongepowered.asm.mixin.extensibility.IMixinConfigPlugin;
 import org.spongepowered.asm.mixin.extensibility.IMixinInfo;
 
@@ -27,13 +26,9 @@ public class CosmicCoreMixinPlugin implements IMixinConfigPlugin {
     private static final String DRIPPY_SCALE_COMPAT = "com/ghostipedia/cosmiccore/client/compat/drippy/DrippyRenderScaleCompat";
     private static final String AERONAUTICS_MARKER = "dev/eriksonn/aeronautics/content/blocks/hot_air/balloon/effect/ClientBalloonEffectRenderer.class";
     private static final String MIXIN_SQUARED_TARGET_HANDLER = "com/bawnorton/mixinsquared/TargetHandler.class";
-    private static final String MODULAR_UI_MIXIN_PACKAGE = "brachy.modularui.core.mixins";
-    private static final String MODULAR_UI_SLOT_ACCESSOR = "client.SlotAccessor";
     private static final String QUALITY_FOOD_MARKER = "de/cadentem/quality_food/util/QualityUtils.class";
     private static final String ULTIMINE_CROP_MARKER = "dev/ftb/mods/ftbultimine/crops/VanillaCropLikeHandler.class";
     private static final Map<String, Boolean> GATES = new HashMap<>();
-
-    private String mixinPackage;
 
     static {
         ClassLoader loader = CosmicCoreMixinPlugin.class.getClassLoader();
@@ -76,9 +71,7 @@ public class CosmicCoreMixinPlugin implements IMixinConfigPlugin {
     }
 
     @Override
-    public void onLoad(String mixinPackage) {
-        this.mixinPackage = mixinPackage;
-    }
+    public void onLoad(String mixinPackage) {}
 
     @Override
     public String getRefMapperConfig() {
@@ -90,10 +83,6 @@ public class CosmicCoreMixinPlugin implements IMixinConfigPlugin {
 
     @Override
     public List<String> getMixins() {
-        if (mixinPackage != null && mixinPackage.startsWith(MODULAR_UI_MIXIN_PACKAGE) &&
-                MixinEnvironment.getCurrentEnvironment().getSide() == MixinEnvironment.Side.SERVER) {
-            return List.of(MODULAR_UI_SLOT_ACCESSOR);
-        }
         return null;
     }
 
