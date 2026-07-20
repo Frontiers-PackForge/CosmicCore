@@ -277,6 +277,7 @@ public class OreExtractionDrillLogic extends RecipeLogic {
             var caps = getMachine().getCapabilitiesFlat(IO.OUT, ItemRecipeCapability.CAP);
             if (caps != null && !caps.isEmpty()) {
                 cachedItemHandler = new NotifiableAccountedInvWrapper(caps.stream()
+                        .filter(IItemHandlerModifiable.class::isInstance)
                         .map(IItemHandlerModifiable.class::cast)
                         .toArray(IItemHandlerModifiable[]::new));
             }
