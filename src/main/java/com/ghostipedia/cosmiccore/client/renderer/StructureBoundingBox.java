@@ -90,10 +90,10 @@ public class StructureBoundingBox {
             RenderSystem.lineWidth(12);
 
             var direction = getDir(player.getMainHandItem());
-            var directions = DebugBlockPattern.directionsFor(direction);
-            Direction sliceDirection = directions.slice().getDefaultFacing();
-            Direction stringDirection = directions.string().getDefaultFacing();
-            Direction characterDirection = directions.character().getDefaultFacing();
+            var directions = DebugBlockPattern.worldDirectionsFor(direction);
+            Direction sliceDirection = directions.slice();
+            Direction stringDirection = directions.string();
+            Direction characterDirection = directions.character();
             double originX = axisOrigin(poses, Direction.Axis.X, sliceDirection, stringDirection, characterDirection);
             double originY = axisOrigin(poses, Direction.Axis.Y, sliceDirection, stringDirection, characterDirection);
             double originZ = axisOrigin(poses, Direction.Axis.Z, sliceDirection, stringDirection, characterDirection);

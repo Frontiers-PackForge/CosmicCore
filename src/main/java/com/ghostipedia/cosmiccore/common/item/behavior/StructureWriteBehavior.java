@@ -2,6 +2,7 @@ package com.ghostipedia.cosmiccore.common.item.behavior;
 
 import com.ghostipedia.cosmiccore.api.data.DebugBlockPattern;
 import com.ghostipedia.cosmiccore.api.data.DebugBlockPattern.PatternDirections;
+import com.ghostipedia.cosmiccore.api.data.DebugBlockPattern.WorldDirections;
 import com.ghostipedia.cosmiccore.utils.ItemData;
 
 import com.gregtechceu.gtceu.GTCEu;
@@ -174,23 +175,29 @@ public class StructureWriteBehavior implements IItemUIHolder {
 
     private static Component directionComponent(String role, String facingName) {
         Direction facing = Direction.byName(facingName);
-        PatternDirections directions = DebugBlockPattern.directionsFor(facing == null ? Direction.WEST : facing);
-        RelativeDirection direction = switch (role) {
-            case "slice" -> directions.slice();
-            case "string" -> directions.string();
-            default -> directions.character();
+        Direction resolvedFacing = facing == null ? Direction.WEST : facing;
+        PatternDirections patternDirections = DebugBlockPattern.directionsFor(resolvedFacing);
+        WorldDirections worldDirections = DebugBlockPattern.worldDirectionsFor(resolvedFacing);
+        RelativeDirection relativeDirection = switch (role) {
+            case "slice" -> patternDirections.slice();
+            case "string" -> patternDirections.string();
+            default -> patternDirections.character();
+        };
+        Direction worldDirection = switch (role) {
+            case "slice" -> worldDirections.slice();
+            case "string" -> worldDirections.string();
+            default -> worldDirections.character();
         };
         return Component.translatable(
                 "item.cosmiccore.debug.structure_writer.direction." + role,
                 Component.translatable(
-                        "item.cosmiccore.debug.structure_writer.relative." + direction.getSerializedName()),
-                axisName(direction));
+                        "item.cosmiccore.debug.structure_writer.relative." + relativeDirection.getSerializedName()),
+                axisName(worldDirection));
     }
 
-    private static String axisName(RelativeDirection direction) {
-        Direction absolute = direction.getDefaultFacing();
-        String sign = absolute.getAxisDirection() == Direction.AxisDirection.POSITIVE ? "+" : "-";
-        return sign + absolute.getAxis().getName().toUpperCase();
+    private static String axisName(Direction direction) {
+        String sign = direction.getAxisDirection() == Direction.AxisDirection.POSITIVE ? "+" : "-";
+        return sign + direction.getAxis().getName().toUpperCase();
     }
 
     private static void handleAction(PlayerInventoryGuiData<?> data, int action) {
@@ -226,6 +233,7 @@ public class StructureWriteBehavior implements IItemUIHolder {
         if (positions == null) return "";
 
         PatternDirections directions = DebugBlockPattern.directionsFor(getDir(stack));
+        WorldDirections worldDirections = DebugBlockPattern.worldDirectionsFor(getDir(stack));
         DebugBlockPattern blockPattern = new DebugBlockPattern(
                 player.level(),
                 positions[0].getX(),
@@ -234,7 +242,7 @@ public class StructureWriteBehavior implements IItemUIHolder {
                 positions[1].getX(),
                 positions[1].getY(),
                 positions[1].getZ());
-        blockPattern.orient(directions);
+        blockPattern.orient(worldDirections);
 
         StringBuilder builder = new StringBuilder()
                 .append("MultiblockPatternBuilder.start(\n")
