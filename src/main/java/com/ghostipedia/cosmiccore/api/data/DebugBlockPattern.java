@@ -18,7 +18,7 @@ import java.util.Set;
 
 public class DebugBlockPattern {
 
-    public RelativeDirection[] structureDir;
+    private PatternDirections directions;
     public String[][] pattern;
     public int[][] aisleRepetitions;
     public Map<Character, Set<String>> symbolMap;
@@ -27,9 +27,10 @@ public class DebugBlockPattern {
     public DebugBlockPattern() {
         symbolMap = new HashMap<>();
         charToBlockMap = new LinkedHashMap<>();
-        structureDir = new RelativeDirection[] {
-                RelativeDirection.LEFT, RelativeDirection.UP, RelativeDirection.FRONT
-        };
+        directions = new PatternDirections(
+                RelativeDirection.FRONT,
+                RelativeDirection.UP,
+                RelativeDirection.LEFT);
     }
 
     public DebugBlockPattern(
@@ -67,114 +68,52 @@ public class DebugBlockPattern {
                 pattern[x - minX][y - minY] = builder.toString();
             }
         }
-        var dirs = getDir(Direction.NORTH);
-        changeDir(dirs[0], dirs[1], dirs[2]);
+        orient(directionsFor(Direction.NORTH));
     }
 
-    public static RelativeDirection[] getDir(Direction facing) {
-        if (facing == Direction.WEST) {
-            return new RelativeDirection[] {
-                    RelativeDirection.LEFT, RelativeDirection.UP, RelativeDirection.BACK
-            };
-        } else if (facing == Direction.EAST) {
-            return new RelativeDirection[] {
-                    RelativeDirection.RIGHT, RelativeDirection.UP, RelativeDirection.FRONT
-            };
-        } else if (facing == Direction.NORTH) {
-            return new RelativeDirection[] {
-                    RelativeDirection.BACK, RelativeDirection.UP, RelativeDirection.RIGHT
-            };
-        } else if (facing == Direction.SOUTH) {
-            return new RelativeDirection[] {
-                    RelativeDirection.FRONT, RelativeDirection.UP, RelativeDirection.LEFT
-            };
-        } else if (facing == Direction.DOWN) {
-            return new RelativeDirection[] {
-                    RelativeDirection.RIGHT, RelativeDirection.BACK, RelativeDirection.UP
-            };
-        } else {
-            return new RelativeDirection[] {
-                    RelativeDirection.LEFT, RelativeDirection.FRONT, RelativeDirection.UP
-            };
-        }
+    public static PatternDirections directionsFor(Direction facing) {
+        return switch (facing) {
+            case WEST -> new PatternDirections(
+                    RelativeDirection.BACK,
+                    RelativeDirection.UP,
+                    RelativeDirection.LEFT);
+            case EAST -> new PatternDirections(
+                    RelativeDirection.FRONT,
+                    RelativeDirection.UP,
+                    RelativeDirection.RIGHT);
+            case NORTH -> new PatternDirections(
+                    RelativeDirection.RIGHT,
+                    RelativeDirection.UP,
+                    RelativeDirection.BACK);
+            case SOUTH -> new PatternDirections(
+                    RelativeDirection.LEFT,
+                    RelativeDirection.UP,
+                    RelativeDirection.FRONT);
+            case DOWN -> new PatternDirections(
+                    RelativeDirection.UP,
+                    RelativeDirection.BACK,
+                    RelativeDirection.RIGHT);
+            case UP -> new PatternDirections(
+                    RelativeDirection.UP,
+                    RelativeDirection.FRONT,
+                    RelativeDirection.LEFT);
+        };
     }
 
-    public void changeDir(
-                          RelativeDirection charDir, RelativeDirection stringDir, RelativeDirection aisleDir) {
-        if (charDir.isSameAxis(stringDir) || stringDir.isSameAxis(aisleDir) || aisleDir.isSameAxis(charDir)) return;
-        char[][][] newPattern = new char[structureDir[0].isSameAxis(aisleDir) ? pattern[0][0].length() :
-                structureDir[1].isSameAxis(aisleDir) ? pattern[0].length : pattern.length][structureDir[0]
-                        .isSameAxis(stringDir) ?
-                                pattern[0][0].length() :
-                                structureDir[1].isSameAxis(stringDir) ? pattern[0].length :
-                                        pattern.length][structureDir[0].isSameAxis(charDir) ? pattern[0][0].length() :
-                                                structureDir[1].isSameAxis(charDir) ? pattern[0].length :
-                                                        pattern.length];
+    public void orient(PatternDirections target) {
+        RelativeDirection.validateFacingsArray(new RelativeDirection[] {
+                target.slice(), target.string(), target.character()
+        });
+        char[][][] newPattern = new char[dimensionFor(target.slice())][dimensionFor(target.string())][dimensionFor(
+                target.character())];
         for (int i = 0; i < pattern.length; i++) {
             for (int j = 0; j < pattern[0].length; j++) {
                 for (int k = 0; k < pattern[0][0].length(); k++) {
                     char c = pattern[i][j].charAt(k);
-                    int x = 0, y = 0, z = 0;
-                    if (structureDir[2].isSameAxis(aisleDir)) {
-                        if (structureDir[2] == aisleDir) {
-                            x = i;
-                        } else {
-                            x = pattern.length - i - 1;
-                        }
-                    } else if (structureDir[2].isSameAxis(stringDir)) {
-                        if (structureDir[2] == stringDir) {
-                            y = i;
-                        } else {
-                            y = pattern.length - i - 1;
-                        }
-                    } else if (structureDir[2].isSameAxis(charDir)) {
-                        if (structureDir[2] == charDir) {
-                            z = i;
-                        } else {
-                            z = pattern.length - i - 1;
-                        }
-                    }
-
-                    if (structureDir[1].isSameAxis(aisleDir)) {
-                        if (structureDir[1] == aisleDir) {
-                            x = j;
-                        } else {
-                            x = pattern[0].length - j - 1;
-                        }
-                    } else if (structureDir[1].isSameAxis(stringDir)) {
-                        if (structureDir[1] == stringDir) {
-                            y = j;
-                        } else {
-                            y = pattern[0].length - j - 1;
-                        }
-                    } else if (structureDir[1].isSameAxis(charDir)) {
-                        if (structureDir[1] == charDir) {
-                            z = j;
-                        } else {
-                            z = pattern[0].length - j - 1;
-                        }
-                    }
-
-                    if (structureDir[0].isSameAxis(aisleDir)) {
-                        if (structureDir[0] == aisleDir) {
-                            x = k;
-                        } else {
-                            x = pattern[0][0].length() - k - 1;
-                        }
-                    } else if (structureDir[0].isSameAxis(stringDir)) {
-                        if (structureDir[0] == stringDir) {
-                            y = k;
-                        } else {
-                            y = pattern[0][0].length() - k - 1;
-                        }
-                    } else if (structureDir[0].isSameAxis(charDir)) {
-                        if (structureDir[0] == charDir) {
-                            z = k;
-                        } else {
-                            z = pattern[0][0].length() - k - 1;
-                        }
-                    }
-                    newPattern[x][y][z] = c;
+                    int slice = coordinateFor(target.slice(), i, j, k);
+                    int string = coordinateFor(target.string(), i, j, k);
+                    int character = coordinateFor(target.character(), i, j, k);
+                    newPattern[slice][string][character] = c;
                 }
             }
         }
@@ -196,12 +135,28 @@ public class DebugBlockPattern {
             aisleRepetition[1] = 1;
         }
 
-        structureDir = new RelativeDirection[] { charDir, stringDir, aisleDir };
+        directions = target;
+    }
+
+    private int dimensionFor(RelativeDirection target) {
+        if (directions.slice().isSameAxis(target)) return pattern.length;
+        if (directions.string().isSameAxis(target)) return pattern[0].length;
+        return pattern[0][0].length();
+    }
+
+    private int coordinateFor(RelativeDirection target, int slice, int string, int character) {
+        if (directions.slice().isSameAxis(target)) {
+            return directions.slice() == target ? slice : pattern.length - slice - 1;
+        }
+        if (directions.string().isSameAxis(target)) {
+            return directions.string() == target ? string : pattern[0].length - string - 1;
+        }
+        return directions.character() == target ? character : pattern[0][0].length() - character - 1;
     }
 
     public DebugBlockPattern copy() {
         DebugBlockPattern newPattern = new DebugBlockPattern();
-        System.arraycopy(this.structureDir, 0, newPattern.structureDir, 0, this.structureDir.length);
+        newPattern.directions = directions;
 
         newPattern.pattern = new String[pattern.length][pattern[0].length];
         for (int i = 0; i < pattern.length; i++) {
@@ -219,4 +174,9 @@ public class DebugBlockPattern {
 
         return newPattern;
     }
+
+    public record PatternDirections(
+                                    RelativeDirection slice,
+                                    RelativeDirection string,
+                                    RelativeDirection character) {}
 }
