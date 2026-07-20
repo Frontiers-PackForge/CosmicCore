@@ -1,19 +1,28 @@
 package com.ghostipedia.cosmiccore.common.machine.multiblock.multi.logic;
 
+import com.ghostipedia.cosmiccore.common.data.materials.CosmicMaterials;
+
+import com.gregtechceu.gtceu.api.capability.recipe.FluidRecipeCapability;
 import com.gregtechceu.gtceu.api.capability.recipe.IO;
 import com.gregtechceu.gtceu.api.capability.recipe.ItemRecipeCapability;
 import com.gregtechceu.gtceu.api.data.chemical.ChemicalHelper;
 import com.gregtechceu.gtceu.api.data.chemical.material.Material;
 import com.gregtechceu.gtceu.api.machine.trait.recipe.RecipeLogic;
+import com.gregtechceu.gtceu.api.sync_system.annotations.SaveField;
+import com.gregtechceu.gtceu.api.transfer.fluid.FluidHandlerList;
 import com.gregtechceu.gtceu.api.transfer.item.NotifiableAccountedInvWrapper;
 import com.gregtechceu.gtceu.utils.GTTransferUtils;
 
-import com.lowdragmc.lowdraglib.syncdata.annotation.Persisted;
-
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.NonNullList;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.util.Mth;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
@@ -21,6 +30,8 @@ import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.neoforge.common.Tags;
+import net.neoforged.neoforge.fluids.FluidStack;
+import net.neoforged.neoforge.fluids.capability.IFluidHandler;
 import net.neoforged.neoforge.items.IItemHandlerModifiable;
 
 import org.jetbrains.annotations.Nullable;
@@ -30,9 +41,12 @@ import java.util.*;
 public class OreExtractionDrillLogic extends RecipeLogic {
 
     public static final int TICKS_PER_ORE = 100;
-    public static final int CHUNKS_PER_SIDE = 9;
+    public static final int DRILLING_FLUID_PER_BLOCK = 100;
+    public static final int DRILLING_FLUID_CYCLE_TICKS = 50;
+    public static final int ADVANCED_DRILLING_FLUID_CYCLE_TICKS = 20;
+    public static final int EXTREME_DRILLING_FLUID_CYCLE_TICKS = 10;
+    public static final int LEGACY_CHUNKS_PER_SIDE = 9;
     public static final int BLOCKS_PER_CHUNK = 16;
-    public static final int AREA_SIZE = CHUNKS_PER_SIDE * BLOCKS_PER_CHUNK;
     public static final int SCAN_BLOCKS_PER_TICK = 16384;
 
     public enum DrillPhase {
@@ -42,40 +56,56 @@ public class OreExtractionDrillLogic extends RecipeLogic {
         COMPLETE
     }
 
-    @Persisted
+    @SaveField
     private DrillPhase phase = DrillPhase.IDLE;
 
-    @Persisted
+    @SaveField
     private List<BlockPos> pendingOres = new ArrayList<>();
 
-    @Persisted
+    @SaveField
     private int currentOreIndex = 0;
 
-    @Persisted
+    @SaveField
     private int miningProgress = 0;
 
-    @Persisted
+    @SaveField
+    private int currentCycleTicks = TICKS_PER_ORE;
+
     private int centerChunkX = Integer.MIN_VALUE;
-    @Persisted
     private int centerChunkZ = Integer.MIN_VALUE;
 
-    @Persisted
+    @SaveField
     private int scanX = 0;
-    @Persisted
+    @SaveField
     private int scanY = 0;
-    @Persisted
+    @SaveField
     private int scanZ = 0;
-    @Persisted
+    @SaveField
     private boolean scanningRight = true;
+
+    @SaveField
+    private int scanChunksPerSide = 0;
 
     private Set<ChunkPos> ourLoadedChunks = new HashSet<>();
     private Set<ChunkPos> structureChunks = new HashSet<>();
 
-    private Map<String, Integer> oreTypeCounts = new LinkedHashMap<>();
+    @SaveField
+    private List<String> ledgerKeys = new ArrayList<>();
+    @SaveField
+    private List<String> ledgerTranslationKeys = new ArrayList<>();
+    @SaveField
+    private List<String> ledgerItemIds = new ArrayList<>();
+    @SaveField
+    private List<Integer> ledgerCounts = new ArrayList<>();
 
-    @Persisted
+    private List<OreLedgerEntry> publishedLedger = List.of();
+    private boolean ledgerSnapshotInitialized = false;
+    private boolean ledgerDirty = false;
+    private int ledgerPublishTicks = 0;
+
+    @SaveField
     private long totalBlocksToScan = 0;
-    @Persisted
+    @SaveField
     private long blocksScanned = 0;
 
     private int minX, maxX, minZ, maxZ, minY, startY;
@@ -83,6 +113,9 @@ public class OreExtractionDrillLogic extends RecipeLogic {
 
     @Nullable
     private NotifiableAccountedInvWrapper cachedItemHandler = null;
+
+    @Nullable
+    private FluidHandlerList cachedFluidHandler = null;
 
     public OreExtractionDrillLogic() {
         super();
@@ -102,6 +135,9 @@ public class OreExtractionDrillLogic extends RecipeLogic {
         if (!boundsInitialized) {
             initializeBounds();
         }
+        if (!ledgerSnapshotInitialized) {
+            publishLedger();
+        }
 
         switch (phase) {
             case IDLE -> startScanning();
@@ -113,12 +149,18 @@ public class OreExtractionDrillLogic extends RecipeLogic {
 
     private void initializeBounds() {
         BlockPos machinePos = getMachine().getBlockPos();
-        int halfArea = AREA_SIZE / 2;
+        if (scanChunksPerSide <= 0) {
+            scanChunksPerSide = phase == DrillPhase.IDLE ?
+                    getMachine().getChunkDiameter() :
+                    LEGACY_CHUNKS_PER_SIDE;
+        }
+        int areaSize = scanChunksPerSide * BLOCKS_PER_CHUNK;
+        int halfArea = areaSize / 2;
 
         minX = machinePos.getX() - halfArea;
-        maxX = machinePos.getX() + halfArea - 1;
+        maxX = minX + areaSize - 1;
         minZ = machinePos.getZ() - halfArea;
-        maxZ = machinePos.getZ() + halfArea - 1;
+        maxZ = minZ + areaSize - 1;
         minY = getMachine().getLevel().getMinBuildHeight();
         startY = machinePos.getY();
 
@@ -132,10 +174,20 @@ public class OreExtractionDrillLogic extends RecipeLogic {
     }
 
     private void startScanning() {
+        int configuredChunksPerSide = getMachine().getChunkDiameter();
+        if (scanChunksPerSide != configuredChunksPerSide) {
+            scanChunksPerSide = configuredChunksPerSide;
+            boundsInitialized = false;
+        }
+        if (!boundsInitialized) {
+            initializeBounds();
+        }
+
         pendingOres.clear();
-        oreTypeCounts.clear();
+        clearLedger();
         currentOreIndex = 0;
         miningProgress = 0;
+        currentCycleTicks = TICKS_PER_ORE;
         blocksScanned = 0;
 
         scanX = minX;
@@ -161,13 +213,13 @@ public class OreExtractionDrillLogic extends RecipeLogic {
 
             if (isOre(state)) {
                 pendingOres.add(pos);
-                String oreName = getOreMaterialName(state);
-                oreTypeCounts.merge(oreName, 1, Integer::sum);
+                recordOre(state);
             }
 
             blocksScanned++;
             advanceScanPosition();
         }
+        publishLedgerIfDue();
     }
 
     private void advanceScanPosition() {
@@ -200,6 +252,7 @@ public class OreExtractionDrillLogic extends RecipeLogic {
     }
 
     private void finishScanning() {
+        publishLedger();
         if (pendingOres.isEmpty()) {
             phase = DrillPhase.COMPLETE;
             setStatus(Status.IDLE);
@@ -224,12 +277,15 @@ public class OreExtractionDrillLogic extends RecipeLogic {
             setStatus(Status.WAITING);
             return;
         }
+        if (miningProgress == 0) {
+            currentCycleTicks = selectCycleTicks();
+        }
         getMachine().drainEnergy(true);
         setStatus(Status.WORKING);
 
         miningProgress++;
 
-        if (miningProgress >= TICKS_PER_ORE) {
+        if (miningProgress >= currentCycleTicks) {
             miningProgress = 0;
             processCurrentOre(serverLevel);
             currentOreIndex++;
@@ -257,11 +313,7 @@ public class OreExtractionDrillLogic extends RecipeLogic {
         drops.addAll(state.getDrops(builder));
         outputDrops(drops);
 
-        float removalChance = getMachine().getRemovalChance();
-        if (serverLevel.getRandom().nextFloat() < removalChance) {
-            serverLevel.setBlock(orePos, Blocks.STONE.defaultBlockState(), 3);
-            pendingOres.set(currentOreIndex, null);
-        }
+        serverLevel.setBlock(orePos, Blocks.STONE.defaultBlockState(), 3);
     }
 
     private void outputDrops(NonNullList<ItemStack> drops) {
@@ -287,6 +339,52 @@ public class OreExtractionDrillLogic extends RecipeLogic {
 
     public void invalidateCache() {
         cachedItemHandler = null;
+        cachedFluidHandler = null;
+    }
+
+    private int selectCycleTicks() {
+        int tierIndex = getMachine().getTierIndex();
+        if (tierIndex >= 2 && consumeAccelerationFluid(CosmicMaterials.ExtremeDrillingFluid)) {
+            return EXTREME_DRILLING_FLUID_CYCLE_TICKS;
+        }
+        if (tierIndex >= 1 && consumeAccelerationFluid(CosmicMaterials.AdvancedDrillingFluid)) {
+            return ADVANCED_DRILLING_FLUID_CYCLE_TICKS;
+        }
+        if (consumeAccelerationFluid(com.gregtechceu.gtceu.common.data.GTMaterials.DrillingFluid)) {
+            return DRILLING_FLUID_CYCLE_TICKS;
+        }
+        return TICKS_PER_ORE;
+    }
+
+    private boolean consumeAccelerationFluid(Material material) {
+        var handler = getCachedFluidHandler();
+        if (handler == null) return false;
+
+        FluidStack requested = material.getFluid(DRILLING_FLUID_PER_BLOCK);
+        FluidStack simulated = GTTransferUtils.drainFluidAccountNotifiableList(
+                handler, requested, IFluidHandler.FluidAction.SIMULATE);
+        if (simulated.getAmount() != DRILLING_FLUID_PER_BLOCK) return false;
+
+        FluidStack drained = GTTransferUtils.drainFluidAccountNotifiableList(
+                handler, requested, IFluidHandler.FluidAction.EXECUTE);
+        return drained.getAmount() == DRILLING_FLUID_PER_BLOCK;
+    }
+
+    @Nullable
+    private FluidHandlerList getCachedFluidHandler() {
+        if (cachedFluidHandler == null) {
+            var caps = getMachine().getCapabilitiesFlat(IO.IN, FluidRecipeCapability.CAP);
+            if (caps != null && !caps.isEmpty()) {
+                List<IFluidHandler> handlers = caps.stream()
+                        .filter(IFluidHandler.class::isInstance)
+                        .map(IFluidHandler.class::cast)
+                        .toList();
+                if (!handlers.isEmpty()) {
+                    cachedFluidHandler = new FluidHandlerList(handlers);
+                }
+            }
+        }
+        return cachedFluidHandler;
     }
 
     private void updateChunkWindow(BlockPos targetPos) {
@@ -349,6 +447,9 @@ public class OreExtractionDrillLogic extends RecipeLogic {
                 }
             }
         }
+        if (phase == DrillPhase.MINING && currentOreIndex < pendingOres.size()) {
+            updateChunkWindow(pendingOres.get(currentOreIndex));
+        }
     }
 
     private void releaseAllMiningChunks() {
@@ -382,10 +483,12 @@ public class OreExtractionDrillLogic extends RecipeLogic {
         releaseAllMiningChunks();
         phase = DrillPhase.IDLE;
         pendingOres.clear();
-        oreTypeCounts.clear();
+        clearLedger();
         currentOreIndex = 0;
         miningProgress = 0;
+        currentCycleTicks = TICKS_PER_ORE;
         blocksScanned = 0;
+        scanChunksPerSide = 0;
         boundsInitialized = false;
     }
 
@@ -393,61 +496,80 @@ public class OreExtractionDrillLogic extends RecipeLogic {
         return state.is(Tags.Blocks.ORES);
     }
 
-    private String getOreMaterialName(BlockState state) {
+    private OreIdentity getOreIdentity(BlockState state) {
+        Item item = state.getBlock().asItem();
+        ResourceLocation blockId = BuiltInRegistries.BLOCK.getKey(state.getBlock());
+        ResourceLocation itemId = item == Items.AIR ?
+                BuiltInRegistries.ITEM.getKey(Items.BARRIER) :
+                BuiltInRegistries.ITEM.getKey(item);
+
         try {
-            ItemStack blockItem = new ItemStack(state.getBlock());
+            ItemStack blockItem = new ItemStack(item);
             if (!blockItem.isEmpty()) {
                 var materialStack = ChemicalHelper.getMaterialStack(blockItem);
                 if (materialStack != null && materialStack.material() != null) {
                     Material mat = materialStack.material();
-                    String localizedName = mat.getLocalizedName().getString();
-                    if (!localizedName.contains("material.gtceu.") && !localizedName.contains("null")) {
-                        return localizedName + " Ore";
-                    }
+                    ResourceLocation materialId = mat.getResourceLocation();
+                    return new OreIdentity("material:" + materialId, mat.getUnlocalizedName(), itemId);
                 }
             }
         } catch (Exception ignored) {}
 
-        return parseOreNameFromDescriptionId(state.getBlock().getDescriptionId());
+        return new OreIdentity("block:" + blockId, state.getBlock().getDescriptionId(), itemId);
     }
 
-    private static final String[] STONE_TYPES = {
-            "stone", "deepslate", "granite", "diorite", "andesite", "tuff",
-            "sand", "red_sand", "gravel", "basalt", "netherrack", "endstone",
-            "blackstone", "marble", "sandstone", "red_sandstone", "smooth_basalt"
-    };
-
-    private String parseOreNameFromDescriptionId(String descId) {
-        String key = descId.toLowerCase();
-        String[] parts = key.split("\\.");
-        if (parts.length < 2) return descId;
-
-        String orePart = parts[parts.length - 1].replace("_ore", "");
-
-        for (String stone : STONE_TYPES) {
-            String prefix = stone + "_";
-            if (orePart.startsWith(prefix)) {
-                orePart = orePart.substring(prefix.length());
-                break;
-            }
+    private void recordOre(BlockState state) {
+        OreIdentity identity = getOreIdentity(state);
+        int index = ledgerKeys.indexOf(identity.key());
+        if (index >= 0) {
+            ledgerCounts.set(index, ledgerCounts.get(index) + 1);
+        } else {
+            ledgerKeys.add(identity.key());
+            ledgerTranslationKeys.add(identity.translationKey());
+            ledgerItemIds.add(identity.itemId().toString());
+            ledgerCounts.add(1);
         }
-
-        return formatMaterialName(orePart) + " Ore";
+        ledgerDirty = true;
     }
 
-    private String formatMaterialName(String raw) {
-        String[] words = raw.split("_");
-        StringBuilder result = new StringBuilder();
-        for (String word : words) {
-            if (!word.isEmpty()) {
-                if (result.length() > 0) result.append(" ");
-                result.append(Character.toUpperCase(word.charAt(0)));
-                if (word.length() > 1) {
-                    result.append(word.substring(1));
-                }
-            }
+    private void clearLedger() {
+        ledgerKeys.clear();
+        ledgerTranslationKeys.clear();
+        ledgerItemIds.clear();
+        ledgerCounts.clear();
+        publishedLedger = List.of();
+        ledgerSnapshotInitialized = true;
+        ledgerDirty = false;
+        ledgerPublishTicks = 0;
+    }
+
+    private void publishLedgerIfDue() {
+        if (!ledgerDirty) return;
+        ledgerPublishTicks++;
+        if (ledgerPublishTicks >= 20) {
+            publishLedger();
         }
-        return result.toString();
+    }
+
+    private void publishLedger() {
+        int size = Math.min(Math.min(ledgerKeys.size(), ledgerTranslationKeys.size()),
+                Math.min(ledgerItemIds.size(), ledgerCounts.size()));
+        List<OreLedgerEntry> entries = new ArrayList<>(size);
+        ResourceLocation fallbackItem = BuiltInRegistries.ITEM.getKey(Items.BARRIER);
+        for (int i = 0; i < size; i++) {
+            ResourceLocation itemId = ResourceLocation.tryParse(ledgerItemIds.get(i));
+            entries.add(new OreLedgerEntry(
+                    ledgerTranslationKeys.get(i),
+                    itemId == null ? fallbackItem : itemId,
+                    ledgerCounts.get(i)));
+        }
+        entries.sort(Comparator.comparingInt(OreLedgerEntry::count)
+                .reversed()
+                .thenComparing(OreLedgerEntry::translationKey));
+        publishedLedger = List.copyOf(entries);
+        ledgerSnapshotInitialized = true;
+        ledgerDirty = false;
+        ledgerPublishTicks = 0;
     }
 
     public DrillPhase getPhase() {
@@ -455,11 +577,41 @@ public class OreExtractionDrillLogic extends RecipeLogic {
     }
 
     public Map<String, Integer> getOreTypeCounts() {
-        return oreTypeCounts;
+        Map<String, Integer> counts = new LinkedHashMap<>();
+        for (OreLedgerEntry entry : getOreLedgerEntries()) {
+            counts.put(Component.translatable(entry.translationKey()).getString(), entry.count());
+        }
+        return counts;
+    }
+
+    public List<OreLedgerEntry> getOreLedgerEntries() {
+        if (!ledgerSnapshotInitialized) {
+            publishLedger();
+        }
+        return publishedLedger;
     }
 
     public int getPendingOreCount() {
         return pendingOres.size();
+    }
+
+    public int getExcavatedOreCount() {
+        return Math.min(currentOreIndex, pendingOres.size());
+    }
+
+    public int getRemainingOreCount() {
+        return Math.max(0, pendingOres.size() - currentOreIndex);
+    }
+
+    public int getSurveyChunksPerSide() {
+        return scanChunksPerSide > 0 ? scanChunksPerSide : getMachine().getChunkDiameter();
+    }
+
+    public long getEstimatedSecondsRemaining() {
+        if (phase == DrillPhase.COMPLETE) return 0;
+        if (phase != DrillPhase.MINING) return -1;
+        long ticks = (long) getRemainingOreCount() * getCurrentCycleTicks() - miningProgress;
+        return Math.max(0, (ticks + 19) / 20);
     }
 
     public int getCurrentOreIndex() {
@@ -470,8 +622,12 @@ public class OreExtractionDrillLogic extends RecipeLogic {
         return miningProgress;
     }
 
+    public int getCurrentCycleTicks() {
+        return Math.max(1, currentCycleTicks);
+    }
+
     public float getMiningProgressPercent() {
-        return (float) miningProgress / TICKS_PER_ORE;
+        return (float) miningProgress / getCurrentCycleTicks();
     }
 
     public int getMiningProgressSeconds() {
@@ -479,13 +635,27 @@ public class OreExtractionDrillLogic extends RecipeLogic {
     }
 
     public int getTotalMiningSeconds() {
-        return TICKS_PER_ORE / 20;
+        return getCurrentCycleTicks() / 20;
     }
 
     public float getScanProgressPercent() {
         if (totalBlocksToScan <= 0) return 0f;
         return (float) blocksScanned / totalBlocksToScan * 100f;
     }
+
+    public double getOperationProgress() {
+        return switch (phase) {
+            case IDLE -> 0.0;
+            case SCANNING -> Mth.clamp(getScanProgressPercent() / 100.0, 0.0, 1.0);
+            case MINING -> pendingOres.isEmpty() ? 0.0 :
+                    Mth.clamp((double) currentOreIndex / pendingOres.size(), 0.0, 1.0);
+            case COMPLETE -> 1.0;
+        };
+    }
+
+    public record OreLedgerEntry(String translationKey, ResourceLocation itemId, int count) {}
+
+    private record OreIdentity(String key, String translationKey, ResourceLocation itemId) {}
 
     @Override
     public void findAndHandleRecipe() {}

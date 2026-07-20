@@ -10,7 +10,7 @@
     "variants": {
         "recipe_logic_status=idle": {
             "model": {
-                "parent": "gtceu:block/casings/voltage/ulv",
+                "parent": "gtceu:block/casings/voltage/lv",
                 "textures": {
                     "overlay_front": "gtceu:block/machines/object_holder/overlay_front"
                 }
@@ -18,7 +18,7 @@
         },
         "recipe_logic_status=suspend": {
             "model": {
-                "parent": "gtceu:block/casings/voltage/ulv",
+                "parent": "gtceu:block/casings/voltage/lv",
                 "textures": {
                     "overlay_front": "gtceu:block/machines/object_holder/overlay_front"
                 }
@@ -26,7 +26,7 @@
         },
         "recipe_logic_status=waiting": {
             "model": {
-                "parent": "gtceu:block/casings/voltage/ulv",
+                "parent": "gtceu:block/casings/voltage/lv",
                 "textures": {
                     "overlay_front": "gtceu:block/machines/object_holder/overlay_front_active",
                     "overlay_front_emissive": "gtceu:block/machines/object_holder/overlay_front_active_emissive"
@@ -35,7 +35,7 @@
         },
         "recipe_logic_status=working": {
             "model": {
-                "parent": "gtceu:block/casings/voltage/ulv",
+                "parent": "gtceu:block/casings/voltage/lv",
                 "textures": {
                     "overlay_front": "gtceu:block/machines/object_holder/overlay_front_active",
                     "overlay_front_emissive": "gtceu:block/machines/object_holder/overlay_front_active_emissive"

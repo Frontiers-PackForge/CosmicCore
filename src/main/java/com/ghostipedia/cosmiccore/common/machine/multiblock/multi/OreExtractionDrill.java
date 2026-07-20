@@ -45,15 +45,7 @@ public class OreExtractionDrill {
 
     private static MultiblockMachineDefinition registerDrill(String id, int tier, BlockEntry<Block> casing,
                                                              ResourceLocation casingTexture) {
-        float removalChance = switch (tier) {
-            case GTValues.LV -> 0.50f;
-            case GTValues.HV -> 0.25f;
-            case GTValues.IV -> 0.125f;
-            case GTValues.ZPM -> 0.0625f;
-            default -> 0.50f;
-        };
-        int yieldMultiplier = Math.round(1.0f / removalChance);
-
+        int chunkDiameter = OreExtractionDrillMachine.getChunkDiameterForTier(tier);
         return REGISTRATE
                 .multiblock(id, holder -> new OreExtractionDrillMachine(holder, tier))
                 .langValue(GTValues.VNF[tier] + " Ore Extraction Drill")
@@ -62,11 +54,10 @@ public class OreExtractionDrill {
                 .noRecipeModifier()
                 .appearanceBlock(casing)
                 .tooltips(
-                        Component.translatable("cosmiccore.machine.ore_extraction_drill.tooltip.0"),
-                        Component.translatable("cosmiccore.machine.ore_extraction_drill.tooltip.1",
-                                String.format("%.1f%%", removalChance * 100)),
-                        Component.translatable("cosmiccore.machine.ore_extraction_drill.tooltip.2",
-                                yieldMultiplier),
+                        Component.translatable("cosmiccore.machine.ore_extraction_drill.tooltip.0",
+                                chunkDiameter, chunkDiameter),
+                        Component.translatable("cosmiccore.machine.ore_extraction_drill.tooltip.1"),
+                        Component.translatable("cosmiccore.machine.ore_extraction_drill.tooltip.2"),
                         Component.translatable("cosmiccore.machine.ore_extraction_drill.tooltip.3"))
                 .pattern(definition -> {
                     // Tier-specific materials - deferred to pattern build time
@@ -106,6 +97,7 @@ public class OreExtractionDrill {
                             .where('C', blocks(casing.get())
                                     .or(Predicates.abilities(PartAbility.INPUT_ENERGY).setExactLimit(1))
                                     .or(Predicates.abilities(PartAbility.EXPORT_ITEMS).setMinGlobalLimited(1))
+                                    .or(Predicates.abilities(PartAbility.IMPORT_FLUIDS).setMaxGlobalLimited(1))
                                     .or(Predicates.abilities(PartAbility.MAINTENANCE).setExactLimit(1)))
                             .where('D', blocks(pipeCasing))
                             .where(' ', Predicates.any())

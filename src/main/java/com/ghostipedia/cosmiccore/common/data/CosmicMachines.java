@@ -548,6 +548,7 @@ public class CosmicMachines {
             .model(createSingleOverlayTieredHullMachineModel(GTModels.BLANK_TEXTURE,
                     GTCEu.id("block/overlay/machine/overlay_energy_emitter")))
             .tooltipBuilder(CREATIVE_TOOLTIPS)
+            .tier(GTValues.MAX)
             .register();
 
     private static MachineDefinition[] registerTieredMachines(String name,

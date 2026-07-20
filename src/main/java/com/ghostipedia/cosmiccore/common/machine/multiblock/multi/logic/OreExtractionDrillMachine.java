@@ -1,5 +1,6 @@
 package com.ghostipedia.cosmiccore.common.machine.multiblock.multi.logic;
 
+import com.ghostipedia.cosmiccore.common.machine.multiblock.multi.ui.OreExtractionDrillUI;
 import com.ghostipedia.cosmiccore.common.murkbloom.AbyssMachineRestrictions;
 
 import com.gregtechceu.gtceu.api.GTValues;
@@ -12,6 +13,10 @@ import com.gregtechceu.gtceu.api.misc.EnergyContainerList;
 
 import net.minecraft.network.chat.Component;
 
+import brachy.modularui.factory.PosGuiData;
+import brachy.modularui.screen.ModularPanel;
+import brachy.modularui.screen.UISettings;
+import brachy.modularui.value.sync.PanelSyncManager;
 import lombok.Getter;
 import org.jetbrains.annotations.NotNull;
 
@@ -31,20 +36,6 @@ public class OreExtractionDrillMachine extends WorkableElectricMultiblockMachine
         return (OreExtractionDrillLogic) super.getRecipeLogic();
     }
 
-    public float getRemovalChance() {
-        return switch (tier) {
-            case GTValues.LV -> 0.50f;
-            case GTValues.HV -> 0.25f;
-            case GTValues.IV -> 0.125f;
-            case GTValues.ZPM -> 0.0625f;
-            default -> 0.50f;
-        };
-    }
-
-    public int getEffectiveYieldMultiplier() {
-        return Math.round(1.0f / getRemovalChance());
-    }
-
     public int getTierIndex() {
         return switch (tier) {
             case GTValues.LV -> 0;
@@ -52,6 +43,19 @@ public class OreExtractionDrillMachine extends WorkableElectricMultiblockMachine
             case GTValues.IV -> 2;
             case GTValues.ZPM -> 3;
             default -> 0;
+        };
+    }
+
+    public int getChunkDiameter() {
+        return getChunkDiameterForTier(tier);
+    }
+
+    public static int getChunkDiameterForTier(int tier) {
+        return switch (tier) {
+            case GTValues.HV -> 11;
+            case GTValues.IV -> 13;
+            case GTValues.ZPM -> 15;
+            default -> 9;
         };
     }
 
@@ -102,6 +106,11 @@ public class OreExtractionDrillMachine extends WorkableElectricMultiblockMachine
     }
 
     @Override
+    public ModularPanel<?> buildUI(PosGuiData data, PanelSyncManager syncManager, UISettings settings) {
+        return OreExtractionDrillUI.build(this, data, syncManager, settings);
+    }
+
+    @Override
     protected net.minecraft.world.InteractionResult onScrewdriverClick(
                                                                        com.gregtechceu.gtceu.utils.ExtendedUseOnContext context) {
         if (!isRemote()) {
@@ -111,7 +120,4 @@ public class OreExtractionDrillMachine extends WorkableElectricMultiblockMachine
         }
         return net.minecraft.world.InteractionResult.sidedSuccess(isRemote());
     }
-
-    // TODO(8.0.0 MUI2): createUIWidget/createUI/addDisplayText (LDLib UI: drill-phase + ore-scan status via
-    // OreExtractionDrillWidget) removed in GTCEu 8.0.0. Rebuild on MUI2; OreExtractionDrillLogic supplies the data.
 }
