@@ -90,58 +90,18 @@ public class StructureBoundingBox {
             RenderSystem.lineWidth(12);
 
             var direction = getDir(player.getMainHandItem());
-            var dirs = DebugBlockPattern.getDir(direction);
-            var cSign = dirs[0].getDefaultFacing().getAxis();
-            var sSign = dirs[1].getDefaultFacing().getAxis();
-            var aSign = dirs[2].getDefaultFacing().getAxis();
-            // I Dislike this
+            var directions = DebugBlockPattern.directionsFor(direction);
+            Direction sliceDirection = directions.slice().getDefaultFacing();
+            Direction stringDirection = directions.string().getDefaultFacing();
+            Direction characterDirection = directions.character().getDefaultFacing();
+            double originX = axisOrigin(poses, Direction.Axis.X, sliceDirection, stringDirection, characterDirection);
+            double originY = axisOrigin(poses, Direction.Axis.Y, sliceDirection, stringDirection, characterDirection);
+            double originZ = axisOrigin(poses, Direction.Axis.Z, sliceDirection, stringDirection, characterDirection);
             PoseStack.Pose last = poseStack.last();
             Matrix4f mat4 = last.pose();
-            // cSign
-            buffer.addVertex(mat4, poses[0].getX(), poses[0].getY(), poses[0].getZ()).setColor(1f, 0f, 0f, 0.75f)
-                    .setNormal(last,
-                            cSign == Direction.Axis.X ? 1 : 0,
-                            cSign == Direction.Axis.Y ? 1 : 0,
-                            cSign == Direction.Axis.Z ? 1 : 0);
-            buffer.addVertex(mat4,
-                    cSign == Direction.Axis.X ? poses[0].getX() + 1.5f : poses[0].getX(),
-                    cSign == Direction.Axis.Y ? poses[0].getY() + 1.5f : poses[0].getY(),
-                    cSign == Direction.Axis.Z ? poses[0].getZ() + 1.5f : poses[0].getZ())
-                    .setColor(1f, 0f, 0f, 0.75f)
-                    .setNormal(last,
-                            cSign == Direction.Axis.X ? 1 : 0,
-                            cSign == Direction.Axis.Y ? 1 : 0,
-                            cSign == Direction.Axis.Z ? 1 : 0);
-            // sSign
-            buffer.addVertex(mat4, poses[0].getX(), poses[0].getY(), poses[0].getZ()).setColor(0f, 1f, 0f, 0.75f)
-                    .setNormal(last,
-                            sSign == Direction.Axis.X ? 1 : 0,
-                            sSign == Direction.Axis.Y ? 1 : 0,
-                            sSign == Direction.Axis.Z ? 1 : 0);
-            buffer.addVertex(mat4,
-                    sSign == Direction.Axis.X ? poses[0].getX() + 1.5f : poses[0].getX(),
-                    sSign == Direction.Axis.Y ? poses[0].getY() + 1.5f : poses[0].getY(),
-                    sSign == Direction.Axis.Z ? poses[0].getZ() + 1.5f : poses[0].getZ())
-                    .setColor(0f, 1f, 0f, 0.75f)
-                    .setNormal(last,
-                            sSign == Direction.Axis.X ? 1 : 0,
-                            sSign == Direction.Axis.Y ? 1 : 0,
-                            sSign == Direction.Axis.Z ? 1 : 0);
-            // aSign
-            buffer.addVertex(mat4, poses[0].getX(), poses[0].getY(), poses[0].getZ()).setColor(0f, 0f, 1f, 0.75f)
-                    .setNormal(last,
-                            aSign == Direction.Axis.X ? 1 : 0,
-                            aSign == Direction.Axis.Y ? 1 : 0,
-                            aSign == Direction.Axis.Z ? 1 : 0);
-            buffer.addVertex(mat4,
-                    aSign == Direction.Axis.X ? poses[0].getX() + 1.5f : poses[0].getX(),
-                    aSign == Direction.Axis.Y ? poses[0].getY() + 1.5f : poses[0].getY(),
-                    aSign == Direction.Axis.Z ? poses[0].getZ() + 1.5f : poses[0].getZ())
-                    .setColor(0f, 0f, 1f, 0.75f)
-                    .setNormal(last,
-                            aSign == Direction.Axis.X ? 1 : 0,
-                            aSign == Direction.Axis.Y ? 1 : 0,
-                            aSign == Direction.Axis.Z ? 1 : 0);
+            addAxis(buffer, last, mat4, originX, originY, originZ, sliceDirection, 1f, 0.2f, 0.2f);
+            addAxis(buffer, last, mat4, originX, originY, originZ, stringDirection, 0.2f, 1f, 0.2f);
+            addAxis(buffer, last, mat4, originX, originY, originZ, characterDirection, 0.2f, 0.4f, 1f);
             BufferUploader.drawWithShader(buffer.buildOrThrow());
 
             RenderSystem.enableCull();
@@ -149,5 +109,52 @@ public class StructureBoundingBox {
             RenderSystem.enableDepthTest();
             poseStack.popPose();
         }
+    }
+
+    private static double axisOrigin(
+                                     BlockPos[] positions,
+                                     Direction.Axis axis,
+                                     Direction first,
+                                     Direction second,
+                                     Direction third) {
+        Direction direction = first.getAxis() == axis ? first : second.getAxis() == axis ? second : third;
+        if (direction.getAxisDirection() == Direction.AxisDirection.POSITIVE) {
+            return switch (axis) {
+                case X -> positions[0].getX();
+                case Y -> positions[0].getY();
+                case Z -> positions[0].getZ();
+            };
+        }
+        return switch (axis) {
+            case X -> positions[1].getX() + 1;
+            case Y -> positions[1].getY() + 1;
+            case Z -> positions[1].getZ() + 1;
+        };
+    }
+
+    private static void addAxis(
+                                BufferBuilder buffer,
+                                PoseStack.Pose pose,
+                                Matrix4f matrix,
+                                double x,
+                                double y,
+                                double z,
+                                Direction direction,
+                                float red,
+                                float green,
+                                float blue) {
+        int stepX = direction.getStepX();
+        int stepY = direction.getStepY();
+        int stepZ = direction.getStepZ();
+        buffer.addVertex(matrix, (float) x, (float) y, (float) z)
+                .setColor(red, green, blue, 0.85f)
+                .setNormal(pose, stepX, stepY, stepZ);
+        buffer.addVertex(
+                matrix,
+                (float) x + stepX * 1.5f,
+                (float) y + stepY * 1.5f,
+                (float) z + stepZ * 1.5f)
+                .setColor(red, green, blue, 0.85f)
+                .setNormal(pose, stepX, stepY, stepZ);
     }
 }
