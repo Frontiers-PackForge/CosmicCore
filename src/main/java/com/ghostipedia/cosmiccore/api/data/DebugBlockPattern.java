@@ -18,7 +18,9 @@ import java.util.Set;
 
 public class DebugBlockPattern {
 
-    private PatternDirections directions;
+    private static final String SYMBOLS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!#$%&*+-./:;<=>?@[]^_";
+
+    private WorldDirections directions;
     public String[][] pattern;
     public int[][] aisleRepetitions;
     public Map<Character, Set<String>> symbolMap;
@@ -27,10 +29,10 @@ public class DebugBlockPattern {
     public DebugBlockPattern() {
         symbolMap = new HashMap<>();
         charToBlockMap = new LinkedHashMap<>();
-        directions = new PatternDirections(
-                RelativeDirection.FRONT,
-                RelativeDirection.UP,
-                RelativeDirection.LEFT);
+        directions = new WorldDirections(
+                Direction.EAST,
+                Direction.UP,
+                Direction.SOUTH);
     }
 
     public DebugBlockPattern(
@@ -47,8 +49,6 @@ public class DebugBlockPattern {
         map.put(Blocks.AIR.defaultBlockState(), ' ');
         charToBlockMap.put(' ', BuiltInRegistries.BLOCK.getKey(Blocks.AIR));
 
-        char c = 'A'; // auto
-
         for (int x = minX; x <= maxX; x++) {
             for (int y = minY; y <= maxY; y++) {
                 StringBuilder builder = new StringBuilder();
@@ -56,19 +56,18 @@ public class DebugBlockPattern {
                     BlockPos pos = new BlockPos(x, y, z);
                     BlockState state = world.getBlockState(pos);
                     if (!map.containsKey(state)) {
+                        char c = symbolAt(charToBlockMap.size() - 1);
                         map.put(state, c);
                         String name = String.valueOf(c);
                         symbolMap.computeIfAbsent(c, key -> new HashSet<>()).add(name); // any
                         ResourceLocation blockKey = BuiltInRegistries.BLOCK.getKey(state.getBlock());
                         charToBlockMap.put(c, blockKey);
-                        c++;
                     }
                     builder.append(map.get(state));
                 }
                 pattern[x - minX][y - minY] = builder.toString();
             }
         }
-        orient(directionsFor(Direction.NORTH));
     }
 
     public static PatternDirections directionsFor(Direction facing) {
@@ -100,10 +99,16 @@ public class DebugBlockPattern {
         };
     }
 
-    public void orient(PatternDirections target) {
-        RelativeDirection.validateFacingsArray(new RelativeDirection[] {
-                target.slice(), target.string(), target.character()
-        });
+    public static WorldDirections worldDirectionsFor(Direction facing) {
+        PatternDirections patternDirections = directionsFor(facing);
+        return new WorldDirections(
+                patternDirections.slice().getDefaultFacing().getOpposite(),
+                patternDirections.string().getDefaultFacing(),
+                patternDirections.character().getDefaultFacing());
+    }
+
+    public void orient(WorldDirections target) {
+        validateDirections(target);
         char[][][] newPattern = new char[dimensionFor(target.slice())][dimensionFor(target.string())][dimensionFor(
                 target.character())];
         for (int i = 0; i < pattern.length; i++) {
@@ -138,20 +143,39 @@ public class DebugBlockPattern {
         directions = target;
     }
 
-    private int dimensionFor(RelativeDirection target) {
-        if (directions.slice().isSameAxis(target)) return pattern.length;
-        if (directions.string().isSameAxis(target)) return pattern[0].length;
+    private int dimensionFor(Direction target) {
+        if (isSameAxis(directions.slice(), target)) return pattern.length;
+        if (isSameAxis(directions.string(), target)) return pattern[0].length;
         return pattern[0][0].length();
     }
 
-    private int coordinateFor(RelativeDirection target, int slice, int string, int character) {
-        if (directions.slice().isSameAxis(target)) {
+    private int coordinateFor(Direction target, int slice, int string, int character) {
+        if (isSameAxis(directions.slice(), target)) {
             return directions.slice() == target ? slice : pattern.length - slice - 1;
         }
-        if (directions.string().isSameAxis(target)) {
+        if (isSameAxis(directions.string(), target)) {
             return directions.string() == target ? string : pattern[0].length - string - 1;
         }
         return directions.character() == target ? character : pattern[0][0].length() - character - 1;
+    }
+
+    private static void validateDirections(WorldDirections directions) {
+        if (isSameAxis(directions.slice(), directions.string()) ||
+                isSameAxis(directions.string(), directions.character()) ||
+                isSameAxis(directions.character(), directions.slice())) {
+            throw new IllegalArgumentException("The three pattern directions must use distinct axes");
+        }
+    }
+
+    private static boolean isSameAxis(Direction first, Direction second) {
+        return first.getAxis() == second.getAxis();
+    }
+
+    private static char symbolAt(int index) {
+        if (index >= SYMBOLS.length()) {
+            throw new IllegalStateException("Structure contains too many distinct block states");
+        }
+        return SYMBOLS.charAt(index);
     }
 
     public DebugBlockPattern copy() {
@@ -179,4 +203,9 @@ public class DebugBlockPattern {
                                     RelativeDirection slice,
                                     RelativeDirection string,
                                     RelativeDirection character) {}
+
+    public record WorldDirections(
+                                  Direction slice,
+                                  Direction string,
+                                  Direction character) {}
 }
