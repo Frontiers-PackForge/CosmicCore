@@ -108,7 +108,19 @@ public class CosmicMaterials {
     public static Material superNutrientOverclockFluid;
     public static Material perfectedNutrientOverclockFluid;
 
+    public static Material AdvancedDrillingFluid;
+    public static Material ExtremeDrillingFluid;
+
     public static void register() {
+        AdvancedDrillingFluid = new Material.Builder(CosmicCore.id("advanced_drilling_fluid"))
+                .liquid()
+                .color(0x4CB7C5)
+                .buildAndRegister();
+        ExtremeDrillingFluid = new Material.Builder(CosmicCore.id("extreme_drilling_fluid"))
+                .liquid()
+                .color(0x9A4DFF)
+                .buildAndRegister();
+
         // Nutrient Fluids (Production)
 
         basicNutrientProductionFluid = new Material.Builder(CosmicCore.id("basic_production_nutrient"))

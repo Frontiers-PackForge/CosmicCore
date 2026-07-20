@@ -843,15 +843,44 @@ public class CosmicLangHandler extends LangHandler {
 
         // Ore Extraction Drill
         provider.add("cosmiccore.machine.ore_extraction_drill.tooltip.0",
-                "§bExtracts ores from a 9x9 chunk area below the drill while only requiring the drill to be chunk loaded");
+                "§bExtracts ores from a %sx%s chunk area below the drill while only requiring the drill to be chunk loaded");
         provider.add("cosmiccore.machine.ore_extraction_drill.tooltip.1",
-                "§fRemoval Chance: §e%s §f(chance to deplete ore per extraction)");
+                "§fMines each discovered ore block once, then replaces it with stone");
         provider.add("cosmiccore.machine.ore_extraction_drill.tooltip.2",
-                "§fEffective Yield: §a%sx §f(average extractions per ore)");
+                "§fOptional drilling fluids reduce cycle time; stronger fluids require higher-tier drills");
         provider.add("cosmiccore.machine.ore_extraction_drill.tooltip.3",
                 "§7Use screwdriver to restart scan after completion, will run until no ore is present");
         provider.add("cosmiccore.machine.ore_extraction_drill.restarted",
                 "Drill scan restarted");
+        provider.add("cosmiccore.machine.ore_extraction_drill.ui.operations", "Operations");
+        provider.add("cosmiccore.machine.ore_extraction_drill.ui.ledger", "Scanned Ores");
+        provider.add("cosmiccore.machine.ore_extraction_drill.ui.status.unformed", "Structure Unformed");
+        provider.add("cosmiccore.machine.ore_extraction_drill.ui.status.paused", "Operations Paused");
+        provider.add("cosmiccore.machine.ore_extraction_drill.ui.status.awaiting_power", "Awaiting Power");
+        provider.add("cosmiccore.machine.ore_extraction_drill.ui.status.idle", "Idle");
+        provider.add("cosmiccore.machine.ore_extraction_drill.ui.status.scanning", "Surveying Ore Field");
+        provider.add("cosmiccore.machine.ore_extraction_drill.ui.status.mining", "Excavating");
+        provider.add("cosmiccore.machine.ore_extraction_drill.ui.status.complete", "Field Exhausted");
+        provider.add("cosmiccore.machine.ore_extraction_drill.ui.scan_progress", "Surveyed: %s%%");
+        provider.add("cosmiccore.machine.ore_extraction_drill.ui.mining_progress", "Excavated: %s / %s");
+        provider.add("cosmiccore.machine.ore_extraction_drill.ui.area", "Survey: %sx%s chunks");
+        provider.add("cosmiccore.machine.ore_extraction_drill.ui.power", "Power Draw: %s EU/t");
+        provider.add("cosmiccore.machine.ore_extraction_drill.ui.cycle", "Cycle Time: %ss / block");
+        provider.add("cosmiccore.machine.ore_extraction_drill.ui.remaining", "Remaining: %s");
+        provider.add("cosmiccore.machine.ore_extraction_drill.ui.eta", "ETA: %s");
+        provider.add("cosmiccore.machine.ore_extraction_drill.ui.eta.calculating", "Calculating...");
+        provider.add("cosmiccore.machine.ore_extraction_drill.ui.eta.complete", "Complete");
+        provider.add("cosmiccore.machine.ore_extraction_drill.ui.duration.days", "%sd %sh");
+        provider.add("cosmiccore.machine.ore_extraction_drill.ui.duration.hours", "%sh %sm");
+        provider.add("cosmiccore.machine.ore_extraction_drill.ui.duration.minutes", "%sm %ss");
+        provider.add("cosmiccore.machine.ore_extraction_drill.ui.duration.seconds", "%ss");
+        provider.add("cosmiccore.machine.ore_extraction_drill.ui.ledger.empty", "No ores recorded");
+        provider.add("cosmiccore.tooltip.create_drill.field_fluid",
+                "Mounted field mining requires %s mB of drilling fluid per ore");
+        provider.add("cosmiccore.tooltip.create_drill.field_yield",
+                "%s%% Yield on Resource Field Ores");
+        provider.add("cosmiccore.tooltip.create_drill.field_scaling",
+                "Drilling fluid cost compounds above %s mounted mining heads");
 
         // Stellar Iris Widget UI
         provider.add("cosmiccore.stellar.prestige.title", "STELLAR CONVERGENCE");

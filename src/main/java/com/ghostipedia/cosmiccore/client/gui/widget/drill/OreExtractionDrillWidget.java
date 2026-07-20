@@ -42,8 +42,6 @@ public class OreExtractionDrillWidget extends WidgetGroup {
     private int totalOres = 0;
     private int miningProgressSec = 0;
     private int totalMiningSec = 10;
-    private float removalChance = 0.5f;
-    private int yieldMultiplier = 2;
     private Map<String, Integer> oreTypes = new LinkedHashMap<>();
 
     private float animPhase = 0f;
@@ -86,8 +84,6 @@ public class OreExtractionDrillWidget extends WidgetGroup {
             buffer.writeInt(0);
             buffer.writeInt(0);
             buffer.writeInt(10);
-            buffer.writeFloat(0.5f);
-            buffer.writeInt(2);
             buffer.writeInt(0);
             return;
         }
@@ -100,8 +96,6 @@ public class OreExtractionDrillWidget extends WidgetGroup {
         buffer.writeInt(logic.getPendingOreCount());
         buffer.writeInt(logic.getMiningProgressSeconds());
         buffer.writeInt(logic.getTotalMiningSeconds());
-        buffer.writeFloat(machine.getRemovalChance());
-        buffer.writeInt(machine.getEffectiveYieldMultiplier());
 
         Map<String, Integer> oreCounts = logic.getOreTypeCounts();
         buffer.writeInt(oreCounts.size());
@@ -119,8 +113,6 @@ public class OreExtractionDrillWidget extends WidgetGroup {
         totalOres = buffer.readInt();
         miningProgressSec = buffer.readInt();
         totalMiningSec = buffer.readInt();
-        removalChance = buffer.readFloat();
-        yieldMultiplier = buffer.readInt();
 
         oreTypes.clear();
         int count = buffer.readInt();
@@ -276,10 +268,6 @@ public class OreExtractionDrillWidget extends WidgetGroup {
 
         int statY = panelY + 15;
         int statGap = 11;
-
-        String chanceText = String.format("%.1f%% Depletion", removalChance * 100f);
-        graphics.drawString(font, chanceText, panelX + 6, statY, 0xFFFFCC44, false);
-        statY += statGap;
 
         long euPerTick = GTValues.V[tierIndexToGTTier(tier)];
         String euText = euPerTick + " EU/t";
