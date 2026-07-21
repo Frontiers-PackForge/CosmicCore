@@ -73,6 +73,7 @@ public class MultiblockInit {
         AtomicReconstructor.init();
         DivingBell.init();
         LinkTestStation.init();
+        BloomwyrmSystem.init();
         StarLadder.init();
         StarLadderResearchHub.init();
         // KryosynCrackingChamber.init();

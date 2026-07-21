@@ -26,6 +26,7 @@ import com.ghostipedia.cosmiccore.common.data.temperature.CosmicTemperatureModif
 import com.ghostipedia.cosmiccore.common.data.worldgen.CosmicWorldGenLayers;
 import com.ghostipedia.cosmiccore.common.data.worldgen.generator.CosmicChunkGenerators;
 import com.ghostipedia.cosmiccore.common.item.armor.boots.TravelerBootsMigration;
+import com.ghostipedia.cosmiccore.common.machine.multiblock.multi.logic.bloomwyrm.BloomwyrmChunkLoading;
 import com.ghostipedia.cosmiccore.common.machine.multiblock.multi.modular.MultiblockInit;
 import com.ghostipedia.cosmiccore.common.mob.DimensionMobScaling;
 import com.ghostipedia.cosmiccore.common.network.CCoreNetwork;
@@ -51,6 +52,7 @@ import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.neoforged.fml.event.lifecycle.FMLLoadCompleteEvent;
 import net.neoforged.neoforge.capabilities.RegisterCapabilitiesEvent;
+import net.neoforged.neoforge.common.world.chunk.RegisterTicketControllersEvent;
 import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent;
 import net.neoforged.neoforge.registries.RegisterEvent;
 
@@ -87,6 +89,11 @@ public class CosmicCore {
         if (Platform.isClient()) {
             CosmicCoreClient.init(modBus);
         }
+    }
+
+    @SubscribeEvent
+    public void registerTicketControllers(RegisterTicketControllersEvent event) {
+        BloomwyrmChunkLoading.register(event);
     }
 
     @SubscribeEvent

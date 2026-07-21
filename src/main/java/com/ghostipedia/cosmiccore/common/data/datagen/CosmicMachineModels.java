@@ -19,7 +19,9 @@ public class CosmicMachineModels {
             WorkableOverlays overlays = WorkableOverlays.get(overlayDir, prov.getExistingFileHelper());
 
             builder.forAllStates(state -> {
-                RecipeLogic.Status status = state.getValue(RecipeLogic.STATUS_PROPERTY);
+                RecipeLogic.Status status = state.hasProperty(RecipeLogic.STATUS_PROPERTY) ?
+                        state.getValue(RecipeLogic.STATUS_PROPERTY) :
+                        RecipeLogic.Status.IDLE;
 
                 BlockModelBuilder model = prov.models().nested()
                         .parent(prov.models().getExistingFile(CUBE_ALL_SIDED_OVERLAY_MODEL))

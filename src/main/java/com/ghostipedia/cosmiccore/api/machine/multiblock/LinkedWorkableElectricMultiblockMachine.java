@@ -11,6 +11,7 @@ import com.ghostipedia.cosmiccore.utils.ItemData;
 import com.gregtechceu.gtceu.api.blockentity.BlockEntityCreationInfo;
 import com.gregtechceu.gtceu.api.machine.MetaMachine;
 import com.gregtechceu.gtceu.api.machine.multiblock.WorkableElectricMultiblockMachine;
+import com.gregtechceu.gtceu.api.machine.trait.recipe.RecipeLogic;
 import com.gregtechceu.gtceu.common.machine.owner.FTBOwner;
 
 import net.minecraft.ChatFormatting;
@@ -59,7 +60,10 @@ public abstract class LinkedWorkableElectricMultiblockMachine extends WorkableEl
     public LinkedWorkableElectricMultiblockMachine(BlockEntityCreationInfo info) {
         super(info);
     }
-    // ==================== ILinkedMultiblock Implementation ====================
+
+    protected LinkedWorkableElectricMultiblockMachine(BlockEntityCreationInfo info, RecipeLogic recipeLogic) {
+        super(info, recipeLogic);
+    }
 
     @Override
     public GlobalPos getGlobalPos() {
@@ -98,38 +102,25 @@ public abstract class LinkedWorkableElectricMultiblockMachine extends WorkableEl
 
         Set<GlobalPos> currentPartners = getLinkedPartners();
 
-        // Find new partners (in SavedData but not in our cache)
         for (GlobalPos partner : currentPartners) {
             if (!knownPartners.contains(partner)) {
                 onLinkEstablished(partner);
             }
         }
 
-        // Find removed partners (in our cache but not in SavedData)
         Set<GlobalPos> removed = new HashSet<>(knownPartners);
         removed.removeAll(currentPartners);
         for (GlobalPos partner : removed) {
             onLinkBroken(partner);
         }
 
-        // Update cache
         knownPartners = new HashSet<>(currentPartners);
     }
-
-    // ==================== Lifecycle ====================
 
     @Override
     public void formStructure(@org.jetbrains.annotations.NotNull String substructureName) {
         super.formStructure(substructureName);
-        // Process any pending link notifications from when we were unloaded
         processLinkNotifications();
-    }
-
-    @Override
-    public void invalidateStructure(String name) {
-        super.invalidateStructure(name);
-        // Don't remove links when structure breaks - links persist to SavedData
-        // They'll be cleaned up when the machine is actually destroyed
     }
 
     @Override
@@ -141,14 +132,11 @@ public abstract class LinkedWorkableElectricMultiblockMachine extends WorkableEl
             GlobalPos myPos = getGlobalPos();
 
             if (owner != null && myPos != null) {
-                // Release any force-loaded chunks
                 LinkedMultiblockHelper.releaseAllTickets(serverLevel.getServer(), myPos);
 
-                // Remove all links from SavedData
                 LinkedMultiblockSavedData savedData = LinkedMultiblockSavedData.getOrCreate(serverLevel);
                 savedData.removeAllLinks(owner, myPos);
 
-                // Notify partners (if loaded)
                 for (GlobalPos partner : knownPartners) {
                     ILinkedMultiblock partnerMachine = LinkedMultiblockHelper.getLinkedMachine(
                             serverLevel.getServer(), partner);
@@ -159,8 +147,6 @@ public abstract class LinkedWorkableElectricMultiblockMachine extends WorkableEl
             }
         }
     }
-
-    // ==================== Datastick Handling ====================
 
     @Override
     public InteractionResult onDataStickShiftUse(Player player, ItemStack dataStick) {
@@ -177,22 +163,18 @@ public abstract class LinkedWorkableElectricMultiblockMachine extends WorkableEl
             return InteractionResult.FAIL;
         }
 
-        // Write link data to datastick
         CompoundTag linkData = new CompoundTag();
         GlobalPos.CODEC.encodeStart(NbtOps.INSTANCE, myPos)
                 .result()
                 .ifPresent(encoded -> linkData.put(TAG_POS, encoded));
         linkData.putUUID(TAG_OWNER, owner);
 
-        // Store in namespaced tag to preserve other datastick data
         ItemData.mutateTag(dataStick, rootTag -> rootTag.put(DATASTICK_TAG_KEY, linkData));
 
-        // Update datastick name
         String machineName = getDefinition().getName();
         dataStick.set(net.minecraft.core.component.DataComponents.CUSTOM_NAME,
                 Component.translatable("cosmiccore.datastick.link_copied", machineName));
 
-        // Feedback
         player.sendSystemMessage(Component.translatable("cosmiccore.link.copied", machineName)
                 .withStyle(ChatFormatting.GREEN));
 
@@ -207,12 +189,11 @@ public abstract class LinkedWorkableElectricMultiblockMachine extends WorkableEl
 
         CompoundTag rootTag = ItemData.readTag(dataStick);
         if (rootTag == null || !rootTag.contains(DATASTICK_TAG_KEY)) {
-            return InteractionResult.PASS; // Not our data, let other handlers try
+            return InteractionResult.PASS;
         }
 
         CompoundTag linkData = rootTag.getCompound(DATASTICK_TAG_KEY);
 
-        // Parse partner info from datastick
         GlobalPos partnerPos = GlobalPos.CODEC
                 .decode(NbtOps.INSTANCE, linkData.get(TAG_POS))
                 .result()
@@ -227,14 +208,9 @@ public abstract class LinkedWorkableElectricMultiblockMachine extends WorkableEl
 
         UUID partnerOwner = linkData.getUUID(TAG_OWNER);
 
-        // Attempt to establish link
         return tryLink(player, partnerPos, partnerOwner);
     }
 
-    /**
-     * Attempt to establish a link with the partner machine.
-     * Handles all validation, negotiation, and persistence.
-     */
     protected InteractionResult tryLink(Player player, GlobalPos partnerPos, UUID partnerOwner) {
         if (!(getLevel() instanceof ServerLevel serverLevel)) {
             return InteractionResult.FAIL;
@@ -244,9 +220,6 @@ public abstract class LinkedWorkableElectricMultiblockMachine extends WorkableEl
         GlobalPos myPos = getGlobalPos();
         UUID myOwner = getTeamUUID();
 
-        // === Validation ===
-
-        // Self-link check
         if (myPos.equals(partnerPos)) {
             player.sendSystemMessage(Component.translatable("cosmiccore.link.cannot_self_link")
                     .withStyle(ChatFormatting.RED));
@@ -257,7 +230,6 @@ public abstract class LinkedWorkableElectricMultiblockMachine extends WorkableEl
         // The datastick may be stale (team changed since it was written).
         // Ownership is verified at runtime after loading the partner machine.
 
-        // Partner limit check (this machine)
         Set<GlobalPos> currentPartners = getLinkedPartners();
         if (currentPartners.size() >= getMaxPartners() && !currentPartners.contains(partnerPos)) {
             player.sendSystemMessage(Component.translatable("cosmiccore.link.limit_reached_self")
@@ -265,18 +237,14 @@ public abstract class LinkedWorkableElectricMultiblockMachine extends WorkableEl
             return InteractionResult.FAIL;
         }
 
-        // Already linked check
         if (currentPartners.contains(partnerPos)) {
             player.sendSystemMessage(Component.translatable("cosmiccore.link.already_linked")
                     .withStyle(ChatFormatting.YELLOW));
             return InteractionResult.FAIL;
         }
 
-        // === Load and verify partner ===
-        // SECURITY: Always load partner to verify ownership and compatibility
         boolean needsUnload = false;
         if (!LinkedMultiblockHelper.isPartnerOnline(server, partnerPos)) {
-            // Try to force-load partner temporarily
             if (!LinkedMultiblockHelper.forceLoadPartnerChunk(server, myPos, partnerPos)) {
                 player.sendSystemMessage(Component.translatable("cosmiccore.link.partner_not_loaded")
                         .withStyle(ChatFormatting.RED));
@@ -299,7 +267,6 @@ public abstract class LinkedWorkableElectricMultiblockMachine extends WorkableEl
                 return InteractionResult.FAIL;
             }
 
-            // Verify ownership matches at runtime
             UUID actualPartnerOwner = partnerMachine.getTeamUUID();
             if (!Objects.equals(myOwner, actualPartnerOwner)) {
                 player.sendSystemMessage(Component.translatable("cosmiccore.link.different_owner")
@@ -307,7 +274,6 @@ public abstract class LinkedWorkableElectricMultiblockMachine extends WorkableEl
                 return InteractionResult.FAIL;
             }
 
-            // === Partner capacity check ===
             Set<GlobalPos> partnerLinks = partnerMachine.getLinkedPartners();
             if (partnerLinks.size() >= partnerMachine.getMaxPartners() && !partnerLinks.contains(myPos)) {
                 player.sendSystemMessage(Component.translatable("cosmiccore.link.limit_reached_partner")
@@ -315,7 +281,6 @@ public abstract class LinkedWorkableElectricMultiblockMachine extends WorkableEl
                 return InteractionResult.FAIL;
             }
 
-            // === Role Negotiation ===
             RolePair roles = LinkedMultiblockHelper.negotiateRoles(getLinkRole(), partnerMachine.getLinkRole());
             if (roles == null) {
                 player.sendSystemMessage(Component.translatable("cosmiccore.link.incompatible_roles",
@@ -324,7 +289,6 @@ public abstract class LinkedWorkableElectricMultiblockMachine extends WorkableEl
                 return InteractionResult.FAIL;
             }
 
-            // === Type compatibility check ===
             if (!canLinkTo(partnerPos, partnerMachine)) {
                 player.sendSystemMessage(Component.translatable("cosmiccore.link.incompatible_self")
                         .withStyle(ChatFormatting.RED));
@@ -337,17 +301,14 @@ public abstract class LinkedWorkableElectricMultiblockMachine extends WorkableEl
                 return InteractionResult.FAIL;
             }
 
-            // === Persist link ===
             LinkedMultiblockSavedData savedData = LinkedMultiblockSavedData.getOrCreate(serverLevel);
             savedData.link(myOwner, myPos, partnerPos, roles.aRole(), roles.bRole());
 
-            // === Notify both machines ===
             onLinkEstablished(partnerPos);
             knownPartners.add(partnerPos);
 
             partnerMachine.onLinkEstablished(myPos);
 
-            // Success feedback
             String myName = getDefinition().getName();
             String partnerName = rawPartner.getDefinition().getName();
             player.sendSystemMessage(Component.translatable("cosmiccore.link.established", myName, partnerName)
@@ -356,42 +317,32 @@ public abstract class LinkedWorkableElectricMultiblockMachine extends WorkableEl
             return InteractionResult.SUCCESS;
 
         } finally {
-            // Release temporary chunk load
             if (needsUnload) {
                 LinkedMultiblockHelper.releasePartnerChunk(server, myPos, partnerPos);
             }
         }
     }
 
-    // ==================== Default Implementations ====================
-
     @Override
     public boolean canLinkTo(GlobalPos partner, ILinkedMultiblock partnerMachine) {
-        // Default: allow linking to any ILinkedMultiblock
-        // Subclasses should override for type-specific restrictions
         return true;
     }
 
     @Override
     public LinkRole getLinkRole() {
-        // Default: bidirectional peer
         return LinkRole.PEER;
     }
 
     @Override
     public void onLinkEstablished(GlobalPos partner) {
-        // Default: just log
         CosmicCore.LOGGER.debug("Link established: {} -> {}", getGlobalPos(), partner);
     }
 
     @Override
     public void onLinkBroken(GlobalPos partner) {
-        // Default: just log and update cache
         CosmicCore.LOGGER.debug("Link broken: {} -> {}", getGlobalPos(), partner);
         knownPartners.remove(partner);
     }
-
-    // ==================== Utility Methods ====================
 
     /**
      * Get a linked partner's machine instance.
@@ -405,9 +356,6 @@ public abstract class LinkedWorkableElectricMultiblockMachine extends WorkableEl
         return LinkedMultiblockHelper.getLinkedMachine(serverLevel.getServer(), partner);
     }
 
-    /**
-     * Check if this machine can query the given partner (based on effective role).
-     */
     protected boolean canQueryPartner(GlobalPos partner) {
         if (!(getLevel() instanceof ServerLevel serverLevel)) {
             return false;
@@ -417,9 +365,6 @@ public abstract class LinkedWorkableElectricMultiblockMachine extends WorkableEl
         return LinkedMultiblockHelper.canQuery(serverLevel.getServer(), owner, getGlobalPos(), partner);
     }
 
-    /**
-     * Get the effective role for this machine in relation to a specific partner.
-     */
     @Nullable
     protected LinkRole getEffectiveRole(GlobalPos partner) {
         if (!(getLevel() instanceof ServerLevel serverLevel)) {
@@ -433,16 +378,6 @@ public abstract class LinkedWorkableElectricMultiblockMachine extends WorkableEl
         return link != null ? link.effectiveRole() : null;
     }
 
-    // ==================== Partner Resource Queries ====================
-
-    /**
-     * Check if a partner has a specific item in its input handlers.
-     * Handles chunk loading automatically.
-     *
-     * @param partner       The partner to query
-     * @param itemPredicate Predicate to test items (e.g., stack -> stack.is(Items.DIAMOND))
-     * @return true if partner has matching item, false otherwise or if unavailable
-     */
     protected boolean partnerHasItem(GlobalPos partner, Predicate<ItemStack> itemPredicate) {
         if (!(getLevel() instanceof ServerLevel serverLevel)) {
             return false;
@@ -454,14 +389,6 @@ public abstract class LinkedWorkableElectricMultiblockMachine extends WorkableEl
                 serverLevel.getServer(), owner, getGlobalPos(), partner, itemPredicate);
     }
 
-    /**
-     * Check if a partner has a specific fluid in its input handlers.
-     * Handles chunk loading automatically.
-     *
-     * @param partner        The partner to query
-     * @param fluidPredicate Predicate to test fluids (e.g., stack -> stack.getFluid().is(Fluids.LAVA))
-     * @return true if partner has matching fluid, false otherwise or if unavailable
-     */
     protected boolean partnerHasFluid(GlobalPos partner, Predicate<FluidStack> fluidPredicate) {
         if (!(getLevel() instanceof ServerLevel serverLevel)) {
             return false;
@@ -473,13 +400,6 @@ public abstract class LinkedWorkableElectricMultiblockMachine extends WorkableEl
                 serverLevel.getServer(), owner, getGlobalPos(), partner, fluidPredicate);
     }
 
-    /**
-     * Get total energy stored in a partner's energy containers.
-     * Handles chunk loading automatically.
-     *
-     * @param partner The partner to query
-     * @return Energy stored in EU, or 0 if unavailable
-     */
     protected long getPartnerEnergyStored(GlobalPos partner) {
         if (!(getLevel() instanceof ServerLevel serverLevel)) {
             return 0L;
@@ -491,13 +411,6 @@ public abstract class LinkedWorkableElectricMultiblockMachine extends WorkableEl
                 serverLevel.getServer(), owner, getGlobalPos(), partner);
     }
 
-    /**
-     * Check if a partner's multiblock is formed.
-     * Handles chunk loading automatically.
-     *
-     * @param partner The partner to query
-     * @return true if partner is formed, false otherwise or if unavailable
-     */
     protected boolean isPartnerFormed(GlobalPos partner) {
         if (!(getLevel() instanceof ServerLevel serverLevel)) {
             return false;
@@ -509,13 +422,6 @@ public abstract class LinkedWorkableElectricMultiblockMachine extends WorkableEl
                 serverLevel.getServer(), owner, getGlobalPos(), partner);
     }
 
-    /**
-     * Check if a partner is currently running a recipe.
-     * Handles chunk loading automatically.
-     *
-     * @param partner The partner to query
-     * @return true if partner is working, false otherwise or if unavailable
-     */
     protected boolean isPartnerWorking(GlobalPos partner) {
         if (!(getLevel() instanceof ServerLevel serverLevel)) {
             return false;
@@ -527,14 +433,6 @@ public abstract class LinkedWorkableElectricMultiblockMachine extends WorkableEl
                 serverLevel.getServer(), owner, getGlobalPos(), partner);
     }
 
-    /**
-     * Execute a custom query on a partner machine.
-     * Handles chunk loading and permission checks automatically.
-     *
-     * @param partner The partner to query
-     * @param query   The query function
-     * @return Query result, or null if unavailable
-     */
     @Nullable
     protected <T> T queryPartner(GlobalPos partner, LinkedMultiblockHelper.PartnerQuery<T> query) {
         if (!(getLevel() instanceof ServerLevel serverLevel)) {
@@ -547,13 +445,6 @@ public abstract class LinkedWorkableElectricMultiblockMachine extends WorkableEl
                 serverLevel.getServer(), owner, getGlobalPos(), partner, query);
     }
 
-    /**
-     * Check if ANY linked partner has a specific item.
-     * Useful for recipe conditions that require "a linked partner has X".
-     *
-     * @param itemPredicate Predicate to test items
-     * @return true if any partner has the item
-     */
     protected boolean anyPartnerHasItem(Predicate<ItemStack> itemPredicate) {
         for (GlobalPos partner : getLinkedPartners()) {
             if (partnerHasItem(partner, itemPredicate)) {
@@ -563,12 +454,6 @@ public abstract class LinkedWorkableElectricMultiblockMachine extends WorkableEl
         return false;
     }
 
-    /**
-     * Check if ANY linked partner has a specific fluid.
-     *
-     * @param fluidPredicate Predicate to test fluids
-     * @return true if any partner has the fluid
-     */
     protected boolean anyPartnerHasFluid(Predicate<FluidStack> fluidPredicate) {
         for (GlobalPos partner : getLinkedPartners()) {
             if (partnerHasFluid(partner, fluidPredicate)) {
@@ -578,11 +463,6 @@ public abstract class LinkedWorkableElectricMultiblockMachine extends WorkableEl
         return false;
     }
 
-    /**
-     * Check if ANY linked partner is formed and working.
-     *
-     * @return true if any partner is actively working
-     */
     public boolean anyPartnerWorking() {
         for (GlobalPos partner : getLinkedPartners()) {
             if (isPartnerWorking(partner)) {
@@ -592,11 +472,6 @@ public abstract class LinkedWorkableElectricMultiblockMachine extends WorkableEl
         return false;
     }
 
-    /**
-     * Count how many linked partners are currently formed.
-     *
-     * @return Number of formed partners
-     */
     public int countFormedPartners() {
         int count = 0;
         for (GlobalPos partner : getLinkedPartners()) {

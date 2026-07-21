@@ -468,12 +468,26 @@ public class CosmicLangHandler extends LangHandler {
         provider.add("cosmiccore.multiblock.reboot_powergrid", "§aReboot All Connected Machines");
         provider.add("cosmiccore.multiblock.sleep_powergrid", "§cSuspend All Connected Machines");
 
-        provider.add("item.cosmiccore.debug.structure_writer.structural_scale", "Structure size: X:%s Y:%s Z:%s");
-        provider.add("item.cosmiccore.debug.structure_writer.export_order",
-                "Pattern Export Order:\n §cC:%s§l§d/§aS:%s§l§d/§bA:%s");
-        provider.add("item.cosmiccore.debug.structure_writer.export_to_log", "Print Aisles to Log");
+        provider.add("item.cosmiccore.debug.structure_writer.selection", "Selection: %s to %s");
+        provider.add("item.cosmiccore.debug.structure_writer.structural_scale", "Size: %s | Blocks: %s");
+        provider.add("item.cosmiccore.debug.structure_writer.v8_order",
+                "Pattern Order: slice, string, character");
+        provider.add("item.cosmiccore.debug.structure_writer.direction.slice", "Slice: %s (%s)");
+        provider.add("item.cosmiccore.debug.structure_writer.direction.string", "String: %s (%s)");
+        provider.add("item.cosmiccore.debug.structure_writer.direction.character", "Character: %s (%s)");
+        provider.add("item.cosmiccore.debug.structure_writer.relative.up", "UP");
+        provider.add("item.cosmiccore.debug.structure_writer.relative.down", "DOWN");
+        provider.add("item.cosmiccore.debug.structure_writer.relative.left", "LEFT");
+        provider.add("item.cosmiccore.debug.structure_writer.relative.right", "RIGHT");
+        provider.add("item.cosmiccore.debug.structure_writer.relative.front", "FRONT");
+        provider.add("item.cosmiccore.debug.structure_writer.relative.back", "BACK");
+        provider.add("item.cosmiccore.debug.structure_writer.usage",
+                "Use on blocks to expand the selection. Sneak-use to clear.");
+        provider.add("item.cosmiccore.debug.structure_writer.copy_pattern", "Copy Pattern");
+        provider.add("item.cosmiccore.debug.structure_writer.export_to_log", "Print Pattern to Log");
         provider.add("item.cosmiccore.debug.structure_writer.rotate_along_x_axis", "Rotate X Axis");
         provider.add("item.cosmiccore.debug.structure_writer.rotate_along_y_axis", "Rotate Y Axis");
+        provider.add("item.cosmiccore.debug.structure_writer.clear", "Clear Selection");
         provider.add("item.cosmiccore.debug.structure_writer.output_successful",
                 "Output Successful! Check your log file!");
 
@@ -1506,5 +1520,83 @@ public class CosmicLangHandler extends LangHandler {
         provider.add("cosmiccore.abyss.stalked", "Something vast turns its attention toward you.");
         provider.add("death.attack.cosmiccore.murkbloom", "%1$s was consumed by the Murkbloom");
         provider.add("death.attack.cosmiccore.too_loud", "%1$s was too loud in the abyss");
+        provider.add("cosmiccore.machine.bloomwyrm_heart.tooltip.0",
+                "Orchestrates linked Bloomwyrm cultivation units.");
+        provider.add("cosmiccore.machine.bloomwyrm_heart.tooltip.1",
+                "Supplies shared §eEU§f, §aBiopower§f, §3Bloomwyrm Charge§f, and determines the active §6season§f.");
+        provider.add("cosmiccore.machine.bloomwyrm_heart.tooltip.2",
+                "Link other units with a §6data stick§f within §b64§f blocks.");
+        provider.add("cosmiccore.machine.abyssal_culture_vat.tooltip.0",
+                "Cultivates abyssal samples into §aBiopower§f and §3Bloomwyrm Charge§f.");
+        provider.add("cosmiccore.machine.abyssal_culture_vat.tooltip.1",
+                "§aBiopower§f yield depends on the §6active culture recipe and season§f.");
+        provider.add("cosmiccore.machine.sculk_biochamber.tooltip.0",
+                "Consumes Prepared Cultures and Resources based on the Bloomwyrm Season.");
+        provider.add("cosmiccore.machine.sculk_biochamber.tooltip.1",
+                "Consumes shared §3Bloomwyrm Charge§f and §aBiopower§f to mutate items and §aAlgae§f.");
+        provider.add("cosmiccore.machine.biomana_digestor.tooltip.0",
+                "Digests §cMurkwyrm Biomass§f into raw §aBiomana Slurry§f.");
+        provider.add("cosmiccore.machine.biomana_digestor.tooltip.1",
+                "Consumes shared §3Bloomwyrm Charge§f and §aBiopower§f to convert §2Biomass§f into §bMana§f.");
+        provider.add("cosmiccore.machine.manawomb_leeching_pond.tooltip.0",
+                "Utilizes §aAlgal Beds§f suspended in §bmana§f for industrial scale chemistry");
+        provider.add("cosmiccore.machine.manawomb_leeching_pond.tooltip.1",
+                "Runs one process per §6season§f.");
+        provider.add("cosmiccore.machine.bloomwyrm_unit.tooltip.parallel",
+                "Set the desired §nparallel count§f from the controller interface.");
+        provider.add("cosmiccore.bloomwyrm.season.germination", "Germination");
+        provider.add("cosmiccore.bloomwyrm.season.proliferation", "Proliferation");
+        provider.add("cosmiccore.bloomwyrm.season.bloom", "Bloom");
+        provider.add("cosmiccore.bloomwyrm.season.senescence", "Senescence");
+        provider.add("cosmiccore.bloomwyrm.essence.generic", "Seasonal Essence");
+        provider.add("cosmiccore.bloomwyrm.essence.germination", "Seed Essence");
+        provider.add("cosmiccore.bloomwyrm.essence.proliferation", "Growth Essence");
+        provider.add("cosmiccore.bloomwyrm.essence.bloom", "Bloom Essence");
+        provider.add("cosmiccore.bloomwyrm.essence.senescence", "Dormant Essence");
+        provider.add("cosmiccore.bloomwyrm.constraint.none", "Allocation ready");
+        provider.add("cosmiccore.bloomwyrm.constraint.no_heart", "No Bloomwyrm Heart linked");
+        provider.add("cosmiccore.bloomwyrm.constraint.no_recipe", "No eligible local recipe");
+        provider.add("cosmiccore.bloomwyrm.constraint.local_io", "Limited by local inputs or outputs");
+        provider.add("cosmiccore.bloomwyrm.constraint.energy", "Limited by Heart EU capacity");
+        provider.add("cosmiccore.bloomwyrm.constraint.biopower", "Limited by Biopower");
+        provider.add("cosmiccore.bloomwyrm.constraint.charge", "Limited by Bloomwyrm Charge");
+        provider.add("cosmiccore.bloomwyrm.constraint.seasonal_charge", "Limited by Seasonal Essence");
+        provider.add("cosmiccore.bloomwyrm.constraint.heart_capacity", "Limited by Bloomwyrm Charge capacity");
+        provider.add("cosmiccore.bloomwyrm.constraint.structure", "Allocation cancelled: structure unformed");
+        provider.add("cosmiccore.bloomwyrm.waiting_for_heart_power", "Waiting for Bloomwyrm Heart power");
+        provider.add("cosmiccore.bloomwyrm.unit.linked", "Bloomwyrm Heart linked");
+        provider.add("cosmiccore.bloomwyrm.unit.unlinked", "Bloomwyrm Heart not linked");
+        provider.add("cosmiccore.bloomwyrm.unit.parallel_requested", "Desired: %s  Mode target: %s");
+        provider.add("cosmiccore.bloomwyrm.unit.parallel_limits", "Eligible: %s  Heart offer: %s  Active: %s");
+        provider.add("cosmiccore.bloomwyrm.unit.parallel_control", "Next season parallels");
+        provider.add("cosmiccore.bloomwyrm.unit.parallel_control_max", "Max 16");
+        provider.add("cosmiccore.bloomwyrm.unit.reserve_control", "Season reserve mode");
+        provider.add("cosmiccore.bloomwyrm.unit.reserve_mode", "Reserve mode: %s");
+        provider.add("cosmiccore.bloomwyrm.unit.seasonal_charge", "%s: %s used / %s provided");
+        provider.add("cosmiccore.bloomwyrm.unit.allocation", "Allocation: %s EU/t, %s Bloomwyrm Charge");
+        provider.add("cosmiccore.bloomwyrm.unit.biopower", "Biopower: %s used / %s provided");
+        provider.add("cosmiccore.bloomwyrm.heart.season", "Season: %s (%s / %s s)");
+        provider.add("cosmiccore.bloomwyrm.heart.charge", "Bloomwyrm Charge: %s / %s");
+        provider.add("cosmiccore.bloomwyrm.heart.seasonal_charge", "%s: %s / %s");
+        provider.add("cosmiccore.bloomwyrm.heart.biopower", "Biopower: %s used / %s capacity");
+        provider.add("cosmiccore.bloomwyrm.heart.energy", "Campus draw: %s EU/t");
+        provider.add("cosmiccore.bloomwyrm.heart.units", "Active units: %s / %s linked");
+        provider.add("cosmiccore.bloomwyrm.heart.limited", "Resource-limited units: %s");
+        provider.add("cosmiccore.bloomwyrm.recipe.biopower_input", "Biopower use: %s");
+        provider.add("cosmiccore.bloomwyrm.recipe.biopower_output", "Biopower capacity: +%s");
+        provider.add("cosmiccore.bloomwyrm.recipe.charge_input", "Bloomwyrm Charge use: %s");
+        provider.add("cosmiccore.bloomwyrm.recipe.charge_output", "Bloomwyrm Charge yield: +%s");
+        provider.add("cosmiccore.bloomwyrm.recipe.seasonal_charge_input", "%s use: %s");
+        provider.add("cosmiccore.bloomwyrm.recipe.seasonal_charge_output", "%s yield: +%s");
+        provider.add("cosmiccore.bloomwyrm.recipe.max_parallel", "Max parallel: %s");
+        provider.add("cosmiccore.bloomwyrm.recipe.favored_season", "Favored: %s");
+        provider.add("cosmiccore.bloomwyrm.reserve_mode.conserve", "Conserve");
+        provider.add("cosmiccore.bloomwyrm.reserve_mode.stabilize", "Stabilize");
+        provider.add("cosmiccore.bloomwyrm.reserve_mode.overdrive", "Overdrive");
+        provider.add("cosmiccore.bloomwyrm.season.none", "Inactive");
+        provider.add("recipe_type.cosmiccore.abyssal_culture_vat", "Abyssal Culture Vat");
+        provider.add("recipe_type.cosmiccore.sculk_biochamber", "Sculk Biochamber");
+        provider.add("recipe_type.cosmiccore.biomana_digestor", "Biomana Digestor");
+        provider.add("recipe_type.cosmiccore.manawomb_leeching_pond", "Manawomb Leaching Pond");
     }
 }

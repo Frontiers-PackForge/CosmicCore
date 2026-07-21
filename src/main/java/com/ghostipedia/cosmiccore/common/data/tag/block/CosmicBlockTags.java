@@ -12,4 +12,7 @@ public class CosmicBlockTags {
 
     public static final TagKey<Block> HOLLOW_ORE_REPLACEABLES = TagUtil
             .createModBlockTag("hollow_ore_replaceables");
+
+    public static final TagKey<Block> INDUSTRIAL_IRON_BARS = TagUtil
+            .createModBlockTag("industrial_iron_bars");
 }
