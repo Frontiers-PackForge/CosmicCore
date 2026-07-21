@@ -39,7 +39,8 @@ public class FieldBlobElementRenderProvider
             return;
         }
 
-        Collection<RevealedField> all = RevealedFields.INSTANCE.forDim(mc.level.dimension());
+        var dimension = mc.level.dimension();
+        Collection<RevealedField> all = RevealedFields.INSTANCE.forDim(dimension);
         if (all.isEmpty()) {
             this.iterator = null;
             return;
@@ -52,7 +53,7 @@ public class FieldBlobElementRenderProvider
         List<FieldBlobElement> elements = new ArrayList<>();
         for (RevealedField field : all) {
             if (distSqr(field, px, pz) <= viewSqr) {
-                elements.add(new FieldBlobElement(field));
+                elements.add(new FieldBlobElement(dimension, field));
             }
         }
         this.iterator = elements.isEmpty() ? null : elements.iterator();

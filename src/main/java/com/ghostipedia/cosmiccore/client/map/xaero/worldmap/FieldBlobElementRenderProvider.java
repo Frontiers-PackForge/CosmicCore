@@ -10,6 +10,8 @@ import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.level.Level;
 
 import xaero.map.element.MapElementRenderProvider;
+import xaero.map.gui.GuiMap;
+import xaero.map.world.MapWorld;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -30,7 +32,11 @@ public class FieldBlobElementRenderProvider extends MapElementRenderProvider<Fie
             this.iterator = null;
             return;
         }
-        ResourceKey<Level> dimension = mc.level.dimension();
+        ResourceKey<Level> dimension = viewedDimension(mc);
+        if (dimension == null) {
+            this.iterator = null;
+            return;
+        }
         Collection<RevealedField> fields = RevealedFields.INSTANCE.forDim(dimension);
         if (fields.isEmpty()) {
             this.iterator = null;
@@ -38,7 +44,7 @@ public class FieldBlobElementRenderProvider extends MapElementRenderProvider<Fie
         }
         List<FieldBlobElement> elements = new ArrayList<>(fields.size());
         for (RevealedField field : fields) {
-            elements.add(new FieldBlobElement(field));
+            elements.add(new FieldBlobElement(dimension, field));
         }
         this.iterator = elements.iterator();
     }
@@ -55,4 +61,13 @@ public class FieldBlobElementRenderProvider extends MapElementRenderProvider<Fie
 
     @Override
     public void end(int location, Object context) {}
+
+    private static ResourceKey<Level> viewedDimension(Minecraft mc) {
+        if (mc.screen instanceof GuiMap map) {
+            if (map.getMapProcessor() == null) return null;
+            MapWorld mapWorld = map.getMapProcessor().getMapWorld();
+            return mapWorld == null ? null : mapWorld.getCurrentDimensionId();
+        }
+        return mc.level.dimension();
+    }
 }

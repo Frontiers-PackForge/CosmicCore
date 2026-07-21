@@ -85,8 +85,7 @@ public class FieldBlobElementRenderer
         RevealedField field = element.field();
         float pixelRadius = FieldBlobDraw.zonePixelRadius(FieldBlobDraw.zoneBlockRadius(field.tier(), field.radius()),
                 scale);
-        boolean depleted = mc.level != null &&
-                RevealedFields.INSTANCE.isDepleted(mc.level.dimension(), field.x(), field.z());
+        boolean depleted = RevealedFields.INSTANCE.isDepleted(element.dimension(), field.x(), field.z());
         FieldBlobDraw.addZone(graphics.pose().last().pose(), pixelRadius, field.colorRGB(),
                 FieldBlobDraw.shapeSeed(field.x(), field.z()), depleted);
         return true;
