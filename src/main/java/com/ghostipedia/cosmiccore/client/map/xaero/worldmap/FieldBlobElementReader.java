@@ -128,9 +128,8 @@ public class FieldBlobElementReader extends MapElementReader<FieldBlobElement, O
 
     @Override
     public Tooltip getTooltip(FieldBlobElement element, Object context, boolean overMenu) {
-        Minecraft mc = Minecraft.getInstance();
-        boolean depleted = mc.level != null &&
-                RevealedFields.INSTANCE.isDepleted(mc.level.dimension(), element.field().x(), element.field().z());
+        boolean depleted = RevealedFields.INSTANCE.isDepleted(element.dimension(), element.field().x(),
+                element.field().z());
         return new Tooltip(element.field().displayName() + (depleted ? " (depleted)" : ""));
     }
 }

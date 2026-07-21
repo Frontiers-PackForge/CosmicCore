@@ -8,7 +8,6 @@ import com.ghostipedia.cosmiccore.mixin.xaerominimap.MinimapElementMapRendererHa
 
 import com.gregtechceu.gtceu.integration.map.GroupingMapRenderer;
 
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.renderer.MultiBufferSource;
 
@@ -37,9 +36,7 @@ public class FieldBlobElementRenderer
                                  MinimapElementRenderInfo renderInfo, GuiGraphics graphics,
                                  MultiBufferSource.BufferSource renderTypeBuffers) {
         RevealedField field = element.field();
-        Minecraft mc = Minecraft.getInstance();
-        boolean depleted = mc.level != null &&
-                RevealedFields.INSTANCE.isDepleted(mc.level.dimension(), field.x(), field.z());
+        boolean depleted = RevealedFields.INSTANCE.isDepleted(element.dimension(), field.x(), field.z());
         MinimapElementMapRendererHandlerAccessor transform = (MinimapElementMapRendererHandlerAccessor) (Object) this.context;
         FieldBlobDraw.minimapBlob(graphics, FieldBlobDraw.minimapZoneRadius(field.tier(), field.radius()),
                 field.colorRGB(), FieldBlobDraw.shapeSeed(field.x(), field.z()), depleted,
