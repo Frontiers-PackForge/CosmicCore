@@ -115,6 +115,7 @@
     "gtfix.GTDynamicDataReloadResetMixin",
     "gtfix.GTToolEnchantmentTagsMixin",
     "gtfix.GTRecipeReloadResetMixin",
+    "gtfix.GTKubeRecipeDataWriteFixMixin",
     "gtfix.RecipeUILayoutEmberMixin",
     "gtfix.MachineInputSlotExtractFixMixin",
     "gtfix.IntCircuitStackPreservationMixin",

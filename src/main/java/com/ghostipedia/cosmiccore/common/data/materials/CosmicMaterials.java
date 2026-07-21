@@ -110,8 +110,13 @@ public class CosmicMaterials {
 
     public static Material AdvancedDrillingFluid;
     public static Material ExtremeDrillingFluid;
+    public static Material BiomanaSlurry;
 
     public static void register() {
+        BiomanaSlurry = new Material.Builder(CosmicCore.id("biomana_slurry"))
+                .liquid(new FluidBuilder().state(FluidState.LIQUID).temperature(295))
+                .color(0x176F6A)
+                .buildAndRegister();
         AdvancedDrillingFluid = new Material.Builder(CosmicCore.id("advanced_drilling_fluid"))
                 .liquid()
                 .color(0x4CB7C5)

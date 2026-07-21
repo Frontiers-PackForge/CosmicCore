@@ -20,5 +20,8 @@ public class CosmicBlockTagsLoader {
         overworldTag.addOptional(ResourceLocation.fromNamespaceAndPath("create", "asurine"));
         overworldTag.addOptional(ResourceLocation.fromNamespaceAndPath("create", "ochrum"));
         overworldTag.addOptional(ResourceLocation.fromNamespaceAndPath("create", "veridium"));
+
+        provider.addTag(CosmicBlockTags.INDUSTRIAL_IRON_BARS)
+                .addOptional(ResourceLocation.fromNamespaceAndPath("createdeco", "industrial_iron_bars"));
     }
 }

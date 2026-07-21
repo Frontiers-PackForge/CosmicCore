@@ -4,6 +4,7 @@ import com.ghostipedia.cosmiccore.CosmicCore;
 import com.ghostipedia.cosmiccore.api.capability.recipe.EmberRecipeCapability;
 import com.ghostipedia.cosmiccore.api.capability.recipe.SoulRecipeCapability;
 import com.ghostipedia.cosmiccore.common.data.CosmicSounds;
+import com.ghostipedia.cosmiccore.common.machine.multiblock.multi.logic.bloomwyrm.BloomwyrmRecipeKeys;
 
 import com.gregtechceu.gtceu.api.block.ICoilType;
 import com.gregtechceu.gtceu.api.capability.recipe.IO;
@@ -510,6 +511,38 @@ public class CosmicRecipeTypes {
             .setSound(GTSoundEntries.ASSEMBLER)
             .UI(builder -> builder.setProgressBar(GTGuiTextures.PROGRESS_ARROW));
 
+    public static final GTRecipeType ABYSSAL_CULTURE_VAT = GTRecipeTypes
+            .register(CosmicCore.id("abyssal_culture_vat"), MULTIBLOCK)
+            .setMaxIOSize(1, 1, 3, 3)
+            .setSound(GTSoundEntries.CHEMICAL)
+            .UI(builder -> builder.setProgressBar(GTGuiTextures.PROGRESS_ARROW_MULTIPLE)
+                    .addRecipeUIModifier(BloomwyrmRecipeUI.COMMON)
+                    .addRecipeUIModifier(BloomwyrmRecipeUI.FAVORED_SEASON));
+
+    public static final GTRecipeType SCULK_BIOCHAMBER = GTRecipeTypes
+            .register(CosmicCore.id("sculk_biochamber"), MULTIBLOCK)
+            .setMaxIOSize(6, 6, 5, 5)
+            .setSound(GTSoundEntries.CHEMICAL)
+            .UI(builder -> builder.setProgressBar(GTGuiTextures.PROGRESS_ARROW_MULTIPLE)
+                    .addRecipeUIModifier(BloomwyrmRecipeUI.COMMON)
+                    .addRecipeUIModifier(BloomwyrmRecipeUI.FAVORED_SEASON));
+
+    public static final GTRecipeType BIOMANA_DIGESTOR = GTRecipeTypes
+            .register(CosmicCore.id("biomana_digestor"), MULTIBLOCK)
+            .setMaxIOSize(4, 4, 4, 4)
+            .setSound(GTSoundEntries.CHEMICAL)
+            .UI(builder -> builder.setProgressBar(GTGuiTextures.PROGRESS_ARROW_MULTIPLE)
+                    .addRecipeUIModifier(BloomwyrmRecipeUI.COMMON)
+                    .addRecipeUIModifier(BloomwyrmRecipeUI.FAVORED_SEASON));
+
+    public static final GTRecipeType MANAWOMB_LEECHING_POND = GTRecipeTypes
+            .register(CosmicCore.id("manawomb_leeching_pond"), MULTIBLOCK)
+            .setMaxIOSize(4, 6, 4, 4)
+            .setSound(GTSoundEntries.CHEMICAL)
+            .UI(builder -> builder.setProgressBar(GTGuiTextures.PROGRESS_ARROW_MULTIPLE)
+                    .addRecipeUIModifier(BloomwyrmRecipeUI.COMMON)
+                    .addRecipeUIModifier(BloomwyrmRecipeUI.FAVORED_SEASON));
+
     public static void init() {
         for (GTRecipeType type : new GTRecipeType[] {
                 SLUDGE_DIGESTOR, POWDERIZER, INDUSTRIAL_ORE_SORTER, INDUSTRIAL_FLOTATION_PLANT, ONEIRIC_SIEVE,
@@ -525,7 +558,8 @@ public class CosmicRecipeTypes {
                 STELLAR_SMELTING, CHROMATIC_DISTILLATION_PLANT, CELESTIAL_BORE, NAQUAHINE_REACTOR,
                 INDUSTRIAL_CHEMVAT, BIOVAT, WASP_RECIPES, BEES, VOMAHINE_CORE_DRILL, REGOLITH_SIFTER,
                 LIFE_FORCE_MANIPULATOR, NEUTRON_FORGE, MULTITHREADED_PROCESSOR, MECHANICAL_RITUAL,
-                LINK_TEST_RECIPES }) {
+                LINK_TEST_RECIPES, ABYSSAL_CULTURE_VAT, SCULK_BIOCHAMBER, BIOMANA_DIGESTOR,
+                MANAWOMB_LEECHING_POND }) {
             type.setEUIO(IO.IN);
         }
         MINI_NAQUAHINE_REACTOR.setEUIO(IO.OUT);
@@ -570,6 +604,62 @@ public class CosmicRecipeTypes {
         });
         WASP_RECIPES.getDataInfos()
                 .add(data -> LocalizationUtils.format("cosmiccore.recipe.asteroid_weight_greater_1"));
+        for (GTRecipeType type : new GTRecipeType[] {
+                ABYSSAL_CULTURE_VAT, SCULK_BIOCHAMBER, BIOMANA_DIGESTOR, MANAWOMB_LEECHING_POND }) {
+            type.getDataInfos().add(data -> data.contains(BloomwyrmRecipeKeys.BIOPOWER_INPUT) ?
+                    LocalizationUtils.format(
+                            "cosmiccore.bloomwyrm.recipe.biopower_input",
+                            data.getInt(BloomwyrmRecipeKeys.BIOPOWER_INPUT)) :
+                    "");
+            type.getDataInfos().add(data -> data.contains(BloomwyrmRecipeKeys.BIOPOWER_OUTPUT) ?
+                    LocalizationUtils.format(
+                            "cosmiccore.bloomwyrm.recipe.biopower_output",
+                            data.getInt(BloomwyrmRecipeKeys.BIOPOWER_OUTPUT)) :
+                    "");
+            type.getDataInfos().add(data -> data.contains(BloomwyrmRecipeKeys.CHARGE_INPUT) ?
+                    LocalizationUtils.format(
+                            "cosmiccore.bloomwyrm.recipe.charge_input",
+                            data.getLong(BloomwyrmRecipeKeys.CHARGE_INPUT)) :
+                    "");
+            type.getDataInfos().add(data -> data.contains(BloomwyrmRecipeKeys.CHARGE_OUTPUT) ?
+                    LocalizationUtils.format(
+                            "cosmiccore.bloomwyrm.recipe.charge_output",
+                            data.getLong(BloomwyrmRecipeKeys.CHARGE_OUTPUT)) :
+                    "");
+            type.getDataInfos().add(data -> {
+                if (!data.contains(BloomwyrmRecipeKeys.SEASONAL_CHARGE_INPUT)) return "";
+                var season = BloomwyrmRecipeKeys.favoredSeason(data);
+                return LocalizationUtils.format(
+                        "cosmiccore.bloomwyrm.recipe.seasonal_charge_input",
+                        LocalizationUtils.format(season == null ?
+                                "cosmiccore.bloomwyrm.essence.generic" : season.essenceTranslationKey()),
+                        data.getLong(BloomwyrmRecipeKeys.SEASONAL_CHARGE_INPUT));
+            });
+            type.getDataInfos().add(data -> {
+                if (!data.contains(BloomwyrmRecipeKeys.SEASONAL_CHARGE_OUTPUT)) return "";
+                var season = BloomwyrmRecipeKeys.favoredSeason(data);
+                return LocalizationUtils.format(
+                        "cosmiccore.bloomwyrm.recipe.seasonal_charge_output",
+                        LocalizationUtils.format(season == null ?
+                                "cosmiccore.bloomwyrm.essence.generic" : season.essenceTranslationKey()),
+                        data.getLong(BloomwyrmRecipeKeys.SEASONAL_CHARGE_OUTPUT));
+            });
+            type.getDataInfos().add(data -> data.contains(BloomwyrmRecipeKeys.MAX_PARALLEL) ?
+                    LocalizationUtils.format(
+                            "cosmiccore.bloomwyrm.recipe.max_parallel",
+                            data.getInt(BloomwyrmRecipeKeys.MAX_PARALLEL)) :
+                    "");
+        }
+        for (GTRecipeType type : new GTRecipeType[] {
+                ABYSSAL_CULTURE_VAT, SCULK_BIOCHAMBER, BIOMANA_DIGESTOR, MANAWOMB_LEECHING_POND }) {
+            type.getDataInfos().add(data -> {
+                var season = BloomwyrmRecipeKeys.favoredSeason(data);
+                return season == null ? "" :
+                        LocalizationUtils.format(
+                                "cosmiccore.bloomwyrm.recipe.favored_season",
+                                LocalizationUtils.format(season.translationKey()));
+            });
+        }
 
         LASER_ENGRAVER_RECIPES.setMaxIOSize(2, 2, 1, 1);
         // Oh my God

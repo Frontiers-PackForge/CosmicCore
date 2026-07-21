@@ -1,6 +1,8 @@
 package com.ghostipedia.cosmiccore.gtbridge.recipemaker;
 
 import com.ghostipedia.cosmiccore.api.capability.recipe.CosmicRecipeCapabilities;
+import com.ghostipedia.cosmiccore.common.machine.multiblock.multi.logic.bloomwyrm.BloomwyrmSeason;
+import com.ghostipedia.cosmiccore.gtbridge.CosmicRecipeTypes;
 
 import com.gregtechceu.gtceu.api.GTValues;
 import com.gregtechceu.gtceu.api.capability.recipe.FluidRecipeCapability;
@@ -117,6 +119,14 @@ public class RecipeMakerBehavior implements IItemUIHolder {
         final String[] codecVals = new String[POOL_CODEC_VAL];
         final String[] scalarIn = new String[SCALAR_CAPS.size()];
         final String[] scalarOut = new String[SCALAR_CAPS.size()];
+        final String[] bloomwyrmBiopowerInput = { "" };
+        final String[] bloomwyrmBiopowerOutput = { "" };
+        final String[] bloomwyrmChargeInput = { "" };
+        final String[] bloomwyrmChargeOutput = { "" };
+        final String[] bloomwyrmSeasonalChargeInput = { "" };
+        final String[] bloomwyrmSeasonalChargeOutput = { "" };
+        final String[] bloomwyrmMaxParallel = { "" };
+        final int[] bloomwyrmFavoredSeason = { 0 };
         final FoodState food = new FoodState();
 
         State() {
@@ -354,6 +364,56 @@ public class RecipeMakerBehavior implements IItemUIHolder {
 
         content.child(labelButton("Capabilities", capPanel::openPanel));
         content.child(labelButton("Conditions", condPanel::openPanel));
+        if (isBloomwyrmType(type)) {
+            content.child(new TextWidget<>(Text.str("Bloomwyrm")).height(9));
+            content.child(fieldRow("Biopower use", 86,
+                    strField(sm, "wyrm_bio_in", () -> state.bloomwyrmBiopowerInput[0],
+                            v -> state.bloomwyrmBiopowerInput[0] = v)));
+            if (isBloomwyrmProducer(type)) {
+                content.child(fieldRow("Biopower yield", 86,
+                        strField(sm, "wyrm_bio_out", () -> state.bloomwyrmBiopowerOutput[0],
+                                v -> state.bloomwyrmBiopowerOutput[0] = v)));
+            }
+            content.child(fieldRow("Bloomwyrm in", 86,
+                    strField(sm, "wyrm_in", () -> state.bloomwyrmChargeInput[0],
+                            v -> state.bloomwyrmChargeInput[0] = v)));
+            if (isBloomwyrmProducer(type)) {
+                content.child(fieldRow("Bloomwyrm out", 86,
+                        strField(sm, "wyrm_out", () -> state.bloomwyrmChargeOutput[0],
+                                v -> state.bloomwyrmChargeOutput[0] = v)));
+                content.child(fieldRow("Essence yield", 86,
+                        strField(sm, "wyrm_season_out", () -> state.bloomwyrmSeasonalChargeOutput[0],
+                                v -> state.bloomwyrmSeasonalChargeOutput[0] = v)));
+            } else {
+                content.child(fieldRow("Essence use", 86,
+                        strField(sm, "wyrm_season_in", () -> state.bloomwyrmSeasonalChargeInput[0],
+                                v -> state.bloomwyrmSeasonalChargeInput[0] = v)));
+            }
+            if (supportsBloomwyrmParallel(type)) {
+                content.child(fieldRow("Max parallel", 86,
+                        strField(sm, "wyrm_parallel", () -> state.bloomwyrmMaxParallel[0],
+                                v -> state.bloomwyrmMaxParallel[0] = v)));
+            }
+            content.child(fieldRow("Season", 86,
+                    new CycleButtonWidget().background(GTGuiTextures.BUTTON)
+                            .stateCount(BloomwyrmSeason.values().length + 1)
+                            .stateOverlay(0, Text.str("none").alignment(Alignment.TopLeft).asTextIcon())
+                            .stateOverlay(1,
+                                    Text.lang(BloomwyrmSeason.GERMINATION.translationKey())
+                                            .alignment(Alignment.TopLeft).asTextIcon())
+                            .stateOverlay(2,
+                                    Text.lang(BloomwyrmSeason.PROLIFERATION.translationKey())
+                                            .alignment(Alignment.TopLeft).asTextIcon())
+                            .stateOverlay(3,
+                                    Text.lang(BloomwyrmSeason.BLOOM.translationKey())
+                                            .alignment(Alignment.TopLeft).asTextIcon())
+                            .stateOverlay(4,
+                                    Text.lang(BloomwyrmSeason.SENESCENCE.translationKey())
+                                            .alignment(Alignment.TopLeft).asTextIcon())
+                            .value(intSync(sm, "wyrm_season", () -> state.bloomwyrmFavoredSeason[0],
+                                    v -> state.bloomwyrmFavoredSeason[0] = v))
+                            .expanded().height(14)));
+        }
 
         control.setExporter(() -> buildGtScript(type, state));
         content.child(copyButton(control));
@@ -614,7 +674,62 @@ public class RecipeMakerBehavior implements IItemUIHolder {
                 draft.extraLines.add(".output('" + id + "', " + state.scalarOut[k].trim() + ")");
             }
         }
+        if (isBloomwyrmType(type)) {
+            addBloomwyrmData(draft, "biopowerInput", state.bloomwyrmBiopowerInput[0]);
+            if (isBloomwyrmProducer(type)) {
+                addBloomwyrmData(draft, "biopowerOutput", state.bloomwyrmBiopowerOutput[0]);
+            }
+            addBloomwyrmData(draft, "bloomwyrmChargeInput", state.bloomwyrmChargeInput[0]);
+            if (isBloomwyrmProducer(type) &&
+                    state.bloomwyrmFavoredSeason[0] > 0 &&
+                    !state.bloomwyrmChargeOutput[0].isBlank() &&
+                    state.bloomwyrmSeasonalChargeOutput[0].isBlank()) {
+                draft.extraLines.add(".bloomwyrmChargeOutput(" +
+                        state.bloomwyrmChargeOutput[0].trim() + ", " +
+                        state.bloomwyrmFavoredSeason[0] + ")");
+            } else if (isBloomwyrmProducer(type)) {
+                addBloomwyrmData(draft, "bloomwyrmChargeOutput", state.bloomwyrmChargeOutput[0]);
+            }
+            if (isBloomwyrmProducer(type) &&
+                    state.bloomwyrmFavoredSeason[0] > 0 &&
+                    !state.bloomwyrmSeasonalChargeOutput[0].isBlank()) {
+                draft.extraLines.add(".seasonalEssenceOutput(" +
+                        state.bloomwyrmSeasonalChargeOutput[0].trim() + ", " +
+                        state.bloomwyrmFavoredSeason[0] + ")");
+            }
+            if (!isBloomwyrmProducer(type) &&
+                    state.bloomwyrmFavoredSeason[0] > 0 &&
+                    !state.bloomwyrmSeasonalChargeInput[0].isBlank()) {
+                draft.extraLines.add(".seasonalEssenceInput(" +
+                        state.bloomwyrmSeasonalChargeInput[0].trim() + ", " +
+                        state.bloomwyrmFavoredSeason[0] + ")");
+            }
+            if (supportsBloomwyrmParallel(type)) {
+                addBloomwyrmData(draft, "maxCampusParallel", state.bloomwyrmMaxParallel[0]);
+            }
+        }
         return KubeJsRecipeExporter.export(draft, state.recipeId[0]);
+    }
+
+    private static boolean isBloomwyrmType(GTRecipeType type) {
+        return type == CosmicRecipeTypes.ABYSSAL_CULTURE_VAT ||
+                type == CosmicRecipeTypes.SCULK_BIOCHAMBER ||
+                type == CosmicRecipeTypes.BIOMANA_DIGESTOR ||
+                type == CosmicRecipeTypes.MANAWOMB_LEECHING_POND;
+    }
+
+    private static boolean isBloomwyrmProducer(GTRecipeType type) {
+        return type == CosmicRecipeTypes.ABYSSAL_CULTURE_VAT;
+    }
+
+    private static boolean supportsBloomwyrmParallel(GTRecipeType type) {
+        return type == CosmicRecipeTypes.SCULK_BIOCHAMBER || type == CosmicRecipeTypes.BIOMANA_DIGESTOR;
+    }
+
+    private static void addBloomwyrmData(RecipeDraft draft, String method, String value) {
+        if (value != null && !value.isBlank()) {
+            draft.extraLines.add("." + method + "(" + value.trim() + ")");
+        }
     }
 
     private static Flow itemGrid(PanelSyncManager sm, String key, CustomItemStackHandler handler, int count,
@@ -704,8 +819,12 @@ public class RecipeMakerBehavior implements IItemUIHolder {
     }
 
     static Flow fieldRow(String label, Widget<?> widget) {
+        return fieldRow(label, 40, widget);
+    }
+
+    private static Flow fieldRow(String label, int labelWidth, Widget<?> widget) {
         return Flow.row().coverChildrenHeight().widthRel(1f).childPadding(2)
-                .child(new TextWidget<>(Text.str(label)).width(40))
+                .child(new TextWidget<>(Text.str(label)).width(labelWidth))
                 .child(widget);
     }
 
