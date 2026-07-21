@@ -65,6 +65,9 @@
     "ftbchunks.FTBChunksClientConfigAccessor",
     "ftbchunks.FTBChunksDisabledMinimapHudMixin",
     "ftbchunks.FTBChunksMapKeybindMixin",
+    "ftbquests.QuestPanelDependencyLineMixin",
+    "ftbquests.QuestButtonDependencyLineMenuMixin",
+    "ftbquests.QuestButtonAccessor",
     "occultism.ModonomiconPreviewOffsetFixMixin",
     "drippy.DrippyLoadingOverlayScaleFixMixin"
   ],
@@ -130,6 +133,7 @@
     "gtfix.ToolAoEHandFixMixin",
     "architectury.ArchitecturyNullCodecSkipFixMixin",
     "qualityfoodultimine.VanillaCropLikeHandlerQualityFixMixin",
+    "ftbquests.QuestDependencyLineDataMixin",
     "lso.FrostbiteEffectMixin",
     "lso.HeatstrokeEffectMixin",
     "lso.SewingTableStealthMixin",

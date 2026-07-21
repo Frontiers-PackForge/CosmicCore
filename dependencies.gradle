@@ -123,6 +123,8 @@ dependencies {
     // Teams
     implementation(forge.ftblibrary)
     implementation(forge.ftbteams)
+    compileOnly(forge.ftbquests)
+    runtimeOnly(forge.ftbquests)
 
     // Resourceful Lib
     implementation(forge.resourcefullib)
