@@ -1598,5 +1598,21 @@ public class CosmicLangHandler extends LangHandler {
         provider.add("recipe_type.cosmiccore.sculk_biochamber", "Sculk Biochamber");
         provider.add("recipe_type.cosmiccore.biomana_digestor", "Biomana Digestor");
         provider.add("recipe_type.cosmiccore.manawomb_leeching_pond", "Manawomb Leaching Pond");
+        provider.add("cosmiccore.ftbquests.dependency_lines", "Dependency Lines");
+        provider.add("cosmiccore.ftbquests.dependency_lines.none", "No quest dependencies");
+        provider.add("cosmiccore.ftbquests.dependency_lines.dependencies", "Dependencies");
+        provider.add("cosmiccore.ftbquests.dependency_lines.dependants", "Dependants");
+        provider.add("cosmiccore.ftbquests.dependency_lines.task_count", "%s task dependencies");
+        provider.add("cosmiccore.ftbquests.dependency_lines.task_hint",
+                "Task dependencies do not draw lines. Use quest dependencies and hide individual lines here instead.");
+        provider.add("cosmiccore.ftbquests.dependency_lines.entry", "%s / %s");
+        provider.add("cosmiccore.ftbquests.dependency_lines.hide", "Hide line");
+        provider.add("cosmiccore.ftbquests.dependency_lines.show", "Show line");
+        provider.add("cosmiccore.ftbquests.dependency_lines.jump", "Jump to dependency");
+        provider.add("cosmiccore.ftbquests.dependency_lines.style", "Line style");
+        provider.add("cosmiccore.ftbquests.dependency_lines.style.default", "Chapter default");
+        provider.add("cosmiccore.ftbquests.dependency_lines.style.solid", "Solid");
+        provider.add("cosmiccore.ftbquests.dependency_lines.style.dashed", "Dashed");
+        provider.add("cosmiccore.ftbquests.dependency_lines.style.dotted", "Dotted");
     }
 }

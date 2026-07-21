@@ -44,6 +44,7 @@ public class CosmicCoreMixinPlugin implements IMixinConfigPlugin {
                         "dev/simulated_team/simulated/content/blocks/physics_assembler/PhysicsAssemblerBlockEntity.class"),
                 Map.entry(".sable.", "dev/ryanhcode/sable/api/block/BlockSubLevelAssemblyListener.class"),
                 Map.entry(".ftbchunks.", "dev/ftb/mods/ftbchunks/client/FTBChunksClient.class"),
+                Map.entry(".ftbquests.", "dev/ftb/mods/ftbquests/quest/Quest.class"),
                 Map.entry(".occultism.", "com/klikli_dev/occultism/crafting/recipe/PasteRepairItemRecipe.class"),
                 Map.entry(".terrablender.", "terrablender/worldgen/surface/NamespacedSurfaceRuleSource.class"),
                 Map.entry(".drippy.",

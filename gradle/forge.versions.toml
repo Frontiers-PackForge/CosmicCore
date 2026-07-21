@@ -21,6 +21,7 @@ flywheel = "1.0.5"
 curios = "9.5.1+1.21.1"
 ftblibrary = "2101.1.32"
 ftbteams = "2101.1.10"
+ftbquests = "2101.1.27"
 resourcefullib = "3.0.12"
 tmrv = "0.8.1+mc.21.1"
 
@@ -81,6 +82,7 @@ flywheel-impl       = { module = "dev.engine-room.flywheel:flywheel-neoforge-1.2
 curios              = { module = "top.theillusivec4.curios:curios-neoforge", version.ref = "curios" }
 ftblibrary          = { module = "dev.ftb.mods:ftb-library-neoforge", version.ref = "ftblibrary" }
 ftbteams            = { module = "dev.ftb.mods:ftb-teams-neoforge", version.ref = "ftbteams" }
+ftbquests           = { module = "dev.ftb.mods:ftb-quests-neoforge", version.ref = "ftbquests" }
 resourcefullib      = { module = "com.teamresourceful.resourcefullib:resourcefullib-neoforge-1.21", version.ref = "resourcefullib" }
 
 arsnouveau          = { module = "maven.modrinth:ars-nouveau", version.ref = "arsnouveau" }
