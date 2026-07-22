@@ -1,12 +1,15 @@
 package com.ghostipedia.cosmiccore.client.compat.ftbquests;
 
 import com.ghostipedia.cosmiccore.common.compat.ftbquests.DependencyLineSettings;
-import com.ghostipedia.cosmiccore.common.compat.ftbquests.DependencyLineStyle;
 import com.ghostipedia.cosmiccore.common.compat.ftbquests.QuestDependencyLineExtension;
 
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
 
+import dev.ftb.mods.ftblibrary.config.ImageResourceConfig;
+import dev.ftb.mods.ftblibrary.config.ui.resource.SelectImageResourceScreen;
+import dev.ftb.mods.ftblibrary.icon.Icon;
 import dev.ftb.mods.ftblibrary.icon.Icons;
 import dev.ftb.mods.ftblibrary.ui.ContextMenuItem;
 import dev.ftb.mods.ftbquests.client.gui.quests.QuestScreen;
@@ -102,8 +105,8 @@ public final class DependencyLineMenus {
                         "cosmiccore.ftbquests.dependency_lines.show"),
                 settings.visible() ? Icons.VISIBILITY_HIDE : Icons.VISIBILITY_SHOW,
                 button -> update(screen, dependent, dependency.id,
-                        new DependencyLineSettings(!settings.visible(), settings.style()))));
-        entries.add(buildStyleMenu(screen, dependent, dependency.id, settings));
+                        new DependencyLineSettings(!settings.visible(), settings.asset()))));
+        entries.add(buildAssetMenu(screen, dependent, dependency.id, settings));
         entries.add(ContextMenuItem.SEPARATOR);
         entries.add(new ContextMenuItem(
                 Component.translatable("cosmiccore.ftbquests.dependency_lines.jump"),
@@ -120,20 +123,67 @@ public final class DependencyLineMenus {
         return ContextMenuItem.subMenu(title, destination.getIcon(), entries);
     }
 
-    private static ContextMenuItem buildStyleMenu(QuestScreen screen, Quest dependent, long dependencyId,
+    private static ContextMenuItem buildAssetMenu(QuestScreen screen, Quest dependent, long dependencyId,
                                                   DependencyLineSettings settings) {
-        List<ContextMenuItem> styles = new ArrayList<>();
-        for (DependencyLineStyle style : DependencyLineStyle.values()) {
-            styles.add(new ContextMenuItem(
-                    Component.translatable("cosmiccore.ftbquests.dependency_lines.style." + style.name().toLowerCase()),
-                    settings.style() == style ? Icons.ACCEPT : Icons.ACCEPT_GRAY,
-                    button -> update(screen, dependent, dependencyId,
-                            new DependencyLineSettings(settings.visible(), style))));
-        }
+        List<ContextMenuItem> assets = new ArrayList<>();
+        assets.add(new ContextMenuItem(
+                Component.translatable("cosmiccore.ftbquests.dependency_lines.asset.default"),
+                settings.asset().isEmpty() ? Icons.ACCEPT : Icons.ACCEPT_GRAY,
+                button -> update(screen, dependent, dependencyId,
+                        new DependencyLineSettings(settings.visible(), ""))));
+        assets.add(buildPreset(
+                screen,
+                dependent,
+                dependencyId,
+                settings,
+                "cosmiccore.ftbquests.dependency_lines.asset.main_questline",
+                DependencyLineSettings.MAIN_QUESTLINE_ASSET));
+        assets.add(buildPreset(
+                screen,
+                dependent,
+                dependencyId,
+                settings,
+                "cosmiccore.ftbquests.dependency_lines.asset.offroad",
+                DependencyLineSettings.OFFROAD_ASSET));
+        assets.add(ContextMenuItem.SEPARATOR);
+        Component current = settings.asset().isEmpty() ?
+                Component.translatable("cosmiccore.ftbquests.dependency_lines.asset.default") :
+                Component.literal(settings.asset());
+        assets.add(new TooltipContextMenuItem(
+                Component.translatable("cosmiccore.ftbquests.dependency_lines.asset.choose"),
+                settings.assetLocation().<Icon>map(Icon::getIcon).orElse(Icons.ART),
+                button -> openAssetPicker(screen, dependent, dependencyId, settings),
+                Component.translatable("cosmiccore.ftbquests.dependency_lines.asset.current", current)
+                        .withStyle(ChatFormatting.GRAY),
+                Component.translatable("cosmiccore.ftbquests.dependency_lines.asset.hint")
+                        .withStyle(ChatFormatting.DARK_GRAY)));
         return ContextMenuItem.subMenu(
-                Component.translatable("cosmiccore.ftbquests.dependency_lines.style"),
-                Icons.ART,
-                styles);
+                Component.translatable("cosmiccore.ftbquests.dependency_lines.asset"),
+                settings.assetLocation().<Icon>map(Icon::getIcon).orElse(Icons.ART),
+                assets);
+    }
+
+    private static ContextMenuItem buildPreset(QuestScreen screen, Quest dependent, long dependencyId,
+                                               DependencyLineSettings settings, String name, String asset) {
+        return new ContextMenuItem(
+                Component.translatable(name),
+                settings.asset().equals(asset) ? Icons.ACCEPT : Icon.getIcon(asset),
+                button -> update(screen, dependent, dependencyId,
+                        new DependencyLineSettings(settings.visible(), asset)));
+    }
+
+    private static void openAssetPicker(QuestScreen screen, Quest dependent, long dependencyId,
+                                        DependencyLineSettings settings) {
+        ImageResourceConfig config = new ImageResourceConfig();
+        config.setValue(settings.assetLocation().orElse(ImageResourceConfig.NONE));
+        new SelectImageResourceScreen(config, accepted -> {
+            if (accepted) {
+                ResourceLocation selected = config.getValue();
+                String asset = ImageResourceConfig.NONE.equals(selected) ? "" : selected.toString();
+                update(screen, dependent, dependencyId, new DependencyLineSettings(settings.visible(), asset));
+            }
+            screen.openGui();
+        }).openGui();
     }
 
     private static void update(QuestScreen screen, Quest dependent, long dependencyId,

@@ -1609,10 +1609,12 @@ public class CosmicLangHandler extends LangHandler {
         provider.add("cosmiccore.ftbquests.dependency_lines.hide", "Hide line");
         provider.add("cosmiccore.ftbquests.dependency_lines.show", "Show line");
         provider.add("cosmiccore.ftbquests.dependency_lines.jump", "Jump to dependency");
-        provider.add("cosmiccore.ftbquests.dependency_lines.style", "Line style");
-        provider.add("cosmiccore.ftbquests.dependency_lines.style.default", "Chapter default");
-        provider.add("cosmiccore.ftbquests.dependency_lines.style.solid", "Solid");
-        provider.add("cosmiccore.ftbquests.dependency_lines.style.dashed", "Dashed");
-        provider.add("cosmiccore.ftbquests.dependency_lines.style.dotted", "Dotted");
+        provider.add("cosmiccore.ftbquests.dependency_lines.asset", "Line Asset");
+        provider.add("cosmiccore.ftbquests.dependency_lines.asset.default", "Chapter Default");
+        provider.add("cosmiccore.ftbquests.dependency_lines.asset.main_questline", "Main Questline");
+        provider.add("cosmiccore.ftbquests.dependency_lines.asset.offroad", "Offroad");
+        provider.add("cosmiccore.ftbquests.dependency_lines.asset.choose", "Choose Asset...");
+        provider.add("cosmiccore.ftbquests.dependency_lines.asset.current", "Current: %s");
+        provider.add("cosmiccore.ftbquests.dependency_lines.asset.hint", "Line assets should tile horizontally");
     }
 }
