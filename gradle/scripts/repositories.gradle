@@ -54,10 +54,6 @@ repositories {
         forRepository { maven { url = "https://maven.ftb.dev/releases/" } }
         filter { includeGroup("dev.ftb.mods") }
     }
-    exclusiveContent { // EMI
-        forRepository { maven { url = "https://maven.terraformersmc.com/releases/" } }
-        filter { includeGroup("dev.emi") }
-    }
     exclusiveContent { // architectury, cloth-config
         forRepository { maven { url = "https://maven.shedaniel.me/" } }
         filter {

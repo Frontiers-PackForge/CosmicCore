@@ -7,7 +7,7 @@ registrate = "MC1.21-1.3.0+67"
 configuration = "3.1.1-neoforge"
 
 jei = "19.25.1.328"
-emi = "1.1.24+1.21.1"
+emi = "1.1.24+1.21.1+neoforge"
 ae2 = "19.2.17"
 guideme = "21.1.16"
 ae2wtlib = "19.5.0"
@@ -64,7 +64,7 @@ configuration       = { module = "dev.toma.configuration:configuration-1.21.1", 
 jei-common-api      = { module = "mezz.jei:jei-1.21.1-common-api", version.ref = "jei" }
 jei-neoforge-api    = { module = "mezz.jei:jei-1.21.1-neoforge-api", version.ref = "jei" }
 jei-neoforge-impl   = { module = "mezz.jei:jei-1.21.1-neoforge", version.ref = "jei" }
-emi                 = { module = "dev.emi:emi-neoforge", version.ref = "emi" }
+emi                 = { module = "maven.modrinth:emi", version.ref = "emi" }
 tmrv                = { module = "maven.modrinth:toomanyrecipeviewers", version.ref = "tmrv" }
 
 ae2                 = { module = "org.appliedenergistics:appliedenergistics2", version.ref = "ae2" }
