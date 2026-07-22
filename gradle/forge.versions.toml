@@ -45,6 +45,12 @@ lso = "1.21.1-2.4.2"
 jade = "15.10.5+neoforge"
 journeymapapi = "2.0.0-1.21.1-SNAPSHOT"
 effortless = "4.1"
+aeronautics = "1.3.0"
+sable = "2.0.3"
+sableCompanion = "1.6.0"
+undergardenCurseFile = "7862546"
+hookedCurseFile = "7131932"
+veilCurseFile = "8236124"
 
 # Xaero's Minimap / World Map (coordinates verbatim from GregTech-Modern forge.versions.toml)
 xaerosLib = "1.1.0"
@@ -100,6 +106,15 @@ lso                 = { module = "maven.modrinth:legendary-survival-overhaul", v
 jade                = { module = "maven.modrinth:jade", version.ref = "jade" }
 journeymap-api      = { module = "info.journeymap:journeymap-api-neoforge", version.ref = "journeymapapi" }
 effortless          = { module = "maven.modrinth:effortless-building", version.ref = "effortless" }
+aeronautics         = { module = "dev.eriksonn.aeronautics:aeronautics-neoforge-1.21.1", version.ref = "aeronautics" }
+simulated           = { module = "dev.simulated_team.simulated:simulated-neoforge-1.21.1", version.ref = "aeronautics" }
+offroad             = { module = "dev.ryanhcode.offroad:offroad-neoforge-1.21.1", version.ref = "aeronautics" }
+sable               = { module = "dev.ryanhcode.sable:sable-neoforge-1.21.1", version.ref = "sable" }
+sable-companion     = { module = "dev.ryanhcode.sable-companion:sable-companion-common-1.21.1", version.ref = "sableCompanion" }
+sable-rapier        = { module = "dev.ryanhcode.sable:sable-sable_rapier-1.21.1", version.ref = "sable" }
+undergarden         = { module = "curse.maven:the-undergarden-379849", version.ref = "undergardenCurseFile" }
+hooked              = { module = "curse.maven:hooked-297209", version.ref = "hookedCurseFile" }
+veil                = { module = "curse.maven:veil-lib-1517006", version.ref = "veilCurseFile" }
 
 xaeroslib           = { module = "xaero.lib:xaerolib-neoforge-1.21.1", version.ref = "xaerosLib" }
 xaerosworldmap      = { module = "xaero.map:xaeroworldmap-neoforge-1.21.1", version.ref = "xaerosWorldMap" }
