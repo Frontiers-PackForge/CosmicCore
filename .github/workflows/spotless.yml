@@ -3,7 +3,7 @@ name: Java Formatting
 
 on:
   push:
-    branches: ['main-1.20.1-forge']
+    branches: ['1.21.1-Neoforged']
     paths: ['src/main/java/**']
   pull_request:
     paths: ['**']
@@ -17,6 +17,7 @@ jobs:
     name: Formatting
     runs-on: ubuntu-latest
     permissions:
+      contents: read
       pull-requests: read
     steps:
       - name: Checkout Repository
@@ -28,11 +29,9 @@ jobs:
           filters: |
             code:
               - 'src/main/java/**'
-      - run: git fetch origin main-1.20.1-forge
-        if: steps.filter.outputs.code == 'true'
       - name: Setup Build
         if: steps.filter.outputs.code == 'true'
         uses: ./.github/actions/build_setup
       - name: Run Spotless Formatting Check with Gradle
         if: steps.filter.outputs.code == 'true'
-        run: ./gradlew spotlessCheck --warning-mode all --build-cache   
+        run: ./gradlew -Dorg.gradle.java.home="$JAVA_HOME" spotlessCheck --warning-mode all --build-cache --no-daemon
