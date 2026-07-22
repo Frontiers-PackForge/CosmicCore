@@ -1,7 +1,6 @@
 package com.ghostipedia.cosmiccore.mixin.ftbquests;
 
 import com.ghostipedia.cosmiccore.common.compat.ftbquests.DependencyLineSettings;
-import com.ghostipedia.cosmiccore.common.compat.ftbquests.DependencyLineStyle;
 import com.ghostipedia.cosmiccore.common.compat.ftbquests.QuestDependencyLineExtension;
 
 import net.minecraft.core.HolderLookup;
@@ -49,7 +48,7 @@ public class QuestDependencyLineDataMixin implements QuestDependencyLineExtensio
             CompoundTag entry = new CompoundTag();
             entry.putLong("dependency", dependencyId);
             entry.putBoolean("visible", settings.visible());
-            entry.putString("style", settings.style().name().toLowerCase());
+            if (!settings.asset().isEmpty()) entry.putString("asset", settings.asset());
             list.add(entry);
         });
         tag.put("cosmiccore_dependency_lines", list);
@@ -65,7 +64,7 @@ public class QuestDependencyLineDataMixin implements QuestDependencyLineExtensio
             long dependencyId = entry.getLong("dependency");
             DependencyLineSettings settings = new DependencyLineSettings(
                     !entry.contains("visible") || entry.getBoolean("visible"),
-                    DependencyLineStyle.byName(entry.getString("style")));
+                    entry.getString("asset"));
             cosmiccore$setDependencyLineSettings(dependencyId, settings);
         }
     }
@@ -77,7 +76,7 @@ public class QuestDependencyLineDataMixin implements QuestDependencyLineExtensio
         cosmiccore$dependencyLineSettings.forEach((dependencyId, settings) -> {
             buffer.writeLong(dependencyId);
             buffer.writeBoolean(settings.visible());
-            buffer.writeEnum(settings.style());
+            buffer.writeUtf(settings.asset(), 256);
         });
     }
 
@@ -88,7 +87,7 @@ public class QuestDependencyLineDataMixin implements QuestDependencyLineExtensio
         for (int i = 0; i < count; i++) {
             cosmiccore$setDependencyLineSettings(
                     buffer.readLong(),
-                    new DependencyLineSettings(buffer.readBoolean(), buffer.readEnum(DependencyLineStyle.class)));
+                    new DependencyLineSettings(buffer.readBoolean(), buffer.readUtf(256)));
         }
     }
 
