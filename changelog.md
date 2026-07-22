@@ -1,6 +1,6 @@
-# Cosmic Core 0.8.9
+# Cosmic Core 0.15.0
 # DO NOT MANUALLY UPDATE COSMIC CORE FOR FRONTIERS **I WILL NOT WORK**
 
-Bees, oh so many bees
-module hatch updates
-uhhhh, yeah.
+- Migrated to 1.21.1
+- Updated GTM
+- Fixed the whole mod from not loading

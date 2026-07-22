@@ -3,7 +3,7 @@ _What does this PR do, and why? A clear, concise description. Linking an issue c
 
 
 ## AI Usage
-_Disclosure is required when AI tools were used. See the [AI Policy](https://github.com/Frontiers-PackForge/CosmicCore/blob/main-1.20.1-forge/AI_POLICY.md). There is no penalty for using AI, only for hiding it. You are responsible for understanding and reviewing all AI-assisted code before opening this PR._
+_Disclosure is required when AI tools were used. See the [AI Policy](https://github.com/Frontiers-PackForge/CosmicCore/blob/1.21.1-Neoforged/AI_POLICY.md). There is no penalty for using AI, only for hiding it. You are responsible for understanding and reviewing all AI-assisted code before opening this PR._
 
 - [ ] No AI tools were used for this pull request.
 - [ ] AI tools were used for this pull request.
