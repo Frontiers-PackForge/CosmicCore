@@ -54,6 +54,16 @@ repositories {
         forRepository { maven { url = "https://maven.ftb.dev/releases/" } }
         filter { includeGroup("dev.ftb.mods") }
     }
+    exclusiveContent {
+        forRepository { maven { url = "https://maven.ryanhcode.dev/releases" } }
+        filter {
+            includeGroup("dev.eriksonn.aeronautics")
+            includeGroup("dev.simulated_team.simulated")
+            includeGroup("dev.ryanhcode.offroad")
+            includeGroup("dev.ryanhcode.sable")
+            includeGroup("dev.ryanhcode.sable-companion")
+        }
+    }
     exclusiveContent { // architectury, cloth-config
         forRepository { maven { url = "https://maven.shedaniel.me/" } }
         filter {
