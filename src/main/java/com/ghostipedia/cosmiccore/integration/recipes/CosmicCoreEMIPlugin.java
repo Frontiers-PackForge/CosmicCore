@@ -2,10 +2,15 @@ package com.ghostipedia.cosmiccore.integration.recipes;
 
 import com.ghostipedia.cosmiccore.CosmicCore;
 import com.ghostipedia.cosmiccore.common.data.CosmicItems;
+import com.ghostipedia.cosmiccore.common.data.materials.CosmicBundleMaterials;
 import com.ghostipedia.cosmiccore.common.food.CosmicFoodRegistry;
+import com.ghostipedia.cosmiccore.common.machine.multiblock.multi.IndustrialFlotationPlant;
+import com.ghostipedia.cosmiccore.common.machine.multiblock.multi.IndustrialOreSorter;
 import com.ghostipedia.cosmiccore.common.machine.multiblock.multi.LARVA;
+import com.ghostipedia.cosmiccore.common.machine.multiblock.multi.Powderizer;
 import com.ghostipedia.cosmiccore.common.machine.multiblock.multi.logic.LarvaMachine;
 import com.ghostipedia.cosmiccore.integration.recipes.emi.AsteroidEmiRecipe;
+import com.ghostipedia.cosmiccore.integration.recipes.emi.CompositeOreSortingEmiRecipe;
 import com.ghostipedia.cosmiccore.integration.recipes.emi.CraftingStationRecipeHandler;
 
 import net.minecraft.client.gui.screens.Screen;
@@ -44,6 +49,17 @@ public class CosmicCoreEMIPlugin implements EmiPlugin {
         registerModularUIScreen(registry, ContainerScreenWrapper.class);
         CraftingStationRecipeHandler.register(registry);
         registerFoodRoleAliases(registry);
+
+        registry.addCategory(CompositeOreSortingEmiRecipe.CATEGORY);
+        registry.addWorkstation(CompositeOreSortingEmiRecipe.CATEGORY,
+                EmiStack.of(IndustrialOreSorter.INDUSTRIAL_ORE_SORTER.asStack()));
+        registry.addWorkstation(CompositeOreSortingEmiRecipe.CATEGORY,
+                EmiStack.of(Powderizer.POWDERIZER.asStack()));
+        registry.addWorkstation(CompositeOreSortingEmiRecipe.CATEGORY,
+                EmiStack.of(IndustrialFlotationPlant.INDUSTRIAL_FLOTATION_PLANT.asStack()));
+        for (var bundle : CosmicBundleMaterials.bundleOres()) {
+            registry.addRecipe(new CompositeOreSortingEmiRecipe(bundle));
+        }
 
         registry.addCategory(ASTEROID_CATEGORY);
         registry.addWorkstation(ASTEROID_CATEGORY, EmiStack.of(LARVA.LARVA.getBlock()));

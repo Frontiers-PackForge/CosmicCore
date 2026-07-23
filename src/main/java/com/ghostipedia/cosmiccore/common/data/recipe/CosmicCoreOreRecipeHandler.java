@@ -35,21 +35,16 @@ import static com.gregtechceu.gtceu.common.data.GTRecipeTypes.MACERATOR_RECIPES;
 
 public class CosmicCoreOreRecipeHandler {
 
-    private static final int SORT_EUT = 2;
     private static final int REFINE_EUT = 8;
-    private static final int SORT_TIME_PER_TYPE = 300;
-    private static final int SORTER_IO_CAP = 6;
 
     public static void bundleInit(RecipeOutput provider, Material material) {
         List<Material> outputs = CosmicBundleMaterials.outputsOf(material);
         if (outputs == null || outputs.isEmpty()) return;
         entryStep(provider, material);
         refineChain(provider, material);
-        sortAt(provider, crushedPurified, material, outputs, 2, 1, "sort_purified_");
-        sortAt(provider, powderizedOre, material, outputs, 3, 1, "sort_powder_");
-        sortAt(provider, flocculatedOre, material, outputs, 4, 2, "sort_flocculated_");
-        sortAt(provider, crystallizedOreChunk, material, outputs, 5, 2, "sort_crystallized_");
-        sortAt(provider, atomicallyPurifiedOreChunk, material, outputs, SORTER_IO_CAP, 3, "sort_atom_purified_");
+        for (CompositeOreSortingPlan.SortStage stage : CompositeOreSortingPlan.stages()) {
+            sortAt(provider, stage, material, outputs);
+        }
         furnaceBootstrap(provider, material);
     }
 
@@ -121,29 +116,22 @@ public class CosmicCoreOreRecipeHandler {
                 .save(provider);
     }
 
-    private static void sortAt(RecipeOutput provider, TagPrefix inputForm, Material material,
-                               List<Material> outputs, int typeCount, int yieldMult, String namePrefix) {
-        int n = Math.min(Math.min(typeCount, outputs.size()), SORTER_IO_CAP);
+    private static void sortAt(RecipeOutput provider, CompositeOreSortingPlan.SortStage stage, Material material,
+                               List<Material> outputs) {
+        int n = Math.min(Math.min(stage.typeCount(), outputs.size()), CompositeOreSortingPlan.SORTER_IO_CAP);
         if (n <= 0) return;
-        var builder = INDUSTRIAL_ORE_SORTER.recipeBuilder(namePrefix + material.getName())
-                .inputItems(inputForm, material);
+        var builder = INDUSTRIAL_ORE_SORTER.recipeBuilder(stage.recipeNamePrefix() + material.getName())
+                .inputItems(stage.inputForm(), material);
         int emitted = 0;
         for (int i = 0; i < n; i++) {
             ItemStack chunk = chunkOf(outputs.get(i));
             if (chunk.isEmpty()) continue;
-            builder.outputItems(chunk.copyWithCount(amountFor(i) * yieldMult));
+            builder.outputItems(chunk.copyWithCount(stage.outputAmount(i)));
             emitted++;
         }
         if (emitted == 0) return;
-        builder.duration(SORT_TIME_PER_TYPE * emitted).EUt(SORT_EUT).save(provider);
-    }
-
-    private static int amountFor(int index) {
-        return switch (index) {
-            case 0 -> 4;
-            case 1 -> 2;
-            default -> 1;
-        };
+        builder.duration(CompositeOreSortingPlan.SORT_TIME_PER_TYPE * emitted)
+                .EUt(CompositeOreSortingPlan.SORT_EUT).save(provider);
     }
 
     private static ItemStack chunkOf(Material mineral) {

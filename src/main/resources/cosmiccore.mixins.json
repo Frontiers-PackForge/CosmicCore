@@ -128,6 +128,7 @@
     "gtfix.GTMuiTitleBarBackgroundFixMixin",
     "gtfix.DrumMachineFixMixin",
     "gtfix.SteamSolidBoilerFuelSlotFixMixin",
+    "gtfix.FilterHandlerContentChangeFixMixin",
     "gtfix.ItemMagnetFilterSlotChangeFixMixin",
     "gtfix.SimpleItemFilterSlotChangeFixMixin",
     "gtfix.ToolAoEHandFixMixin",

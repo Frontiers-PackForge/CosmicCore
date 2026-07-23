@@ -1455,6 +1455,27 @@ public class CosmicLangHandler extends LangHandler {
                 "There's no returning to what you were.");
         provider.add("cosmiccore.hud.oxygen.suffocating", "SUFFOCATING");
         provider.add("cosmiccore.tooltip.hand_sort", "Can be hand sorted for: %s");
+        provider.add("cosmiccore.emi.composite_ore_sorting", "Ore Sorting Diagram");
+        provider.add("cosmiccore.emi.composite_ore_sorting.tier", "Tier");
+        provider.add("cosmiccore.emi.composite_ore_sorting.first_recovered", "First Yield");
+        provider.add("cosmiccore.emi.composite_ore_sorting.no_new_mineral", "No New Ore");
+        provider.add("cosmiccore.emi.composite_ore_sorting.tier_number", "Tier %s");
+        provider.add("cosmiccore.emi.composite_ore_sorting.process_order", "Order: %s");
+        provider.add("cosmiccore.emi.composite_ore_sorting.process_order.1", "Crush -> Wash -> Sort");
+        provider.add("cosmiccore.emi.composite_ore_sorting.process_order.2", "Crush -> Wash -> Powderize -> Sort");
+        provider.add("cosmiccore.emi.composite_ore_sorting.process_order.3",
+                "Crush -> Wash -> Powderize -> Flocculate -> Sort");
+        provider.add("cosmiccore.emi.composite_ore_sorting.process_order.4",
+                "Crush -> Wash -> Powderize -> Flocculate -> Crystallize -> Sort");
+        provider.add("cosmiccore.emi.composite_ore_sorting.process_order.5",
+                "Crush -> Wash -> Powderize -> Flocculate -> Crystallize -> Atomic Purification -> Sort");
+        provider.add("cosmiccore.emi.composite_ore_sorting.refinement_ratio",
+                "Previous tier stage -> This tier stage: 1:1");
+        provider.add("cosmiccore.emi.composite_ore_sorting.sorter_yield", "Sorter yields at this tier:");
+        provider.add("cosmiccore.emi.composite_ore_sorting.sorter_output", "%sx %s");
+        provider.add("cosmiccore.emi.composite_ore_sorting.entry", "Raw Ore -> Crushed Ore");
+        provider.add("cosmiccore.emi.composite_ore_sorting.entry.hammer", "Forge Hammer: 1:1");
+        provider.add("cosmiccore.emi.composite_ore_sorting.entry.macerator", "Macerator: 1:2");
         provider.add("cosmiccore.tooltip.oxygen_tank.fill", "Oxygen: %s / %s mB");
         provider.add("cosmiccore.tooltip.oxygen_tank.runtime", "No-Air breathing time: %s");
         provider.add("cosmiccore.tooltip.oxygen_tank.rebreather", "Requires Pressurized Rebreather or Diving Helmet");
