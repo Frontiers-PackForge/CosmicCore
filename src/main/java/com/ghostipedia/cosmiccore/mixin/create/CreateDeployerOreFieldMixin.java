@@ -36,12 +36,13 @@ public abstract class CreateDeployerOreFieldMixin {
                      shift = At.Shift.AFTER),
             cancellable = true)
     private void cosmiccore$gateInitialFieldMining(MovementContext context, BlockPos pos, CallbackInfo ci) {
+        if (context.world.isClientSide) return;
         DeployerFakePlayer player = getPlayer(context);
-        ((MovingDeployerContext) player).cosmiccore$setMovementContext(context);
+        if (!(player instanceof MovingDeployerContext bridge)) return;
+        bridge.cosmiccore$setMovementContext(context);
         if (!cosmiccore$isFieldMiningAttempt(context, pos, player)) return;
         if (cosmiccore$canActivate(context, pos, player, true)) return;
 
-        MovingDeployerContext bridge = (MovingDeployerContext) player;
         Pair<BlockPos, Float> progress = bridge.cosmiccore$getBlockBreakingProgress();
         if (progress == null || !progress.getLeft().equals(pos)) {
             bridge.cosmiccore$setBlockBreakingProgress(Pair.of(pos, 0f));
@@ -52,8 +53,9 @@ public abstract class CreateDeployerOreFieldMixin {
 
     @Inject(method = "tick", at = @At("HEAD"), cancellable = true)
     private void cosmiccore$gateContinuedFieldMining(MovementContext context, CallbackInfo ci) {
+        if (context.world.isClientSide) return;
         DeployerFakePlayer player = getPlayer(context);
-        MovingDeployerContext bridge = (MovingDeployerContext) player;
+        if (!(player instanceof MovingDeployerContext bridge)) return;
         bridge.cosmiccore$setMovementContext(context);
 
         Pair<BlockPos, Float> progress = bridge.cosmiccore$getBlockBreakingProgress();

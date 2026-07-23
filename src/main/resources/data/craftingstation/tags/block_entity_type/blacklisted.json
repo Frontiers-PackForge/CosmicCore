@@ -1,6 +1,23 @@
 {
   "replace": false,
   "values": [
-    "create:item_vault"
+    "create:item_vault",
+    "create_connected:item_silo",
+    "createdeco:shipping_container_white",
+    "createdeco:shipping_container_orange",
+    "createdeco:shipping_container_magenta",
+    "createdeco:shipping_container_light_blue",
+    "createdeco:shipping_container_yellow",
+    "createdeco:shipping_container_lime",
+    "createdeco:shipping_container_pink",
+    "createdeco:shipping_container_gray",
+    "createdeco:shipping_container_light_gray",
+    "createdeco:shipping_container_cyan",
+    "createdeco:shipping_container_purple",
+    "createdeco:shipping_container_blue",
+    "createdeco:shipping_container_brown",
+    "createdeco:shipping_container_green",
+    "createdeco:shipping_container_red",
+    "createdeco:shipping_container_black"
   ]
 }
