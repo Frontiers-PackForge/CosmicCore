@@ -128,6 +128,7 @@ public final class CosmicWoods {
         WoodTypeEntry.Builder builder = new WoodTypeEntry.Builder(ns, woodName)
                 .material(GTMaterials.Wood)
                 .generateLogToPlankRecipe(false)
+                .addSlabRecipe()
                 .addStairsRecipe()
                 .logTag(TagKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath(ns, logStem + "_logs")))
                 .planks(planks, null)

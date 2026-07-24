@@ -1,10 +1,10 @@
 package com.ghostipedia.cosmiccore.integration.emi;
 
-import net.minecraft.client.Minecraft;
+import com.ghostipedia.cosmiccore.client.gui.CompactAmountRenderer;
+
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.world.level.material.Fluid;
 
-import dev.emi.emi.EmiPort;
 import dev.emi.emi.EmiRenderHelper;
 import dev.emi.emi.api.recipe.EmiRecipe;
 import dev.emi.emi.api.stack.EmiIngredient;
@@ -13,7 +13,6 @@ import dev.emi.emi.runtime.EmiFavorite;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
-import java.util.Locale;
 
 public final class CosmicRecipeFavorite extends EmiFavorite {
 
@@ -64,43 +63,21 @@ public final class CosmicRecipeFavorite extends EmiFavorite {
         context.fill(x - 1, y - 1, 1, 18, 0xB0FFD700);
         context.fill(x + 16, y - 1, 1, 18, 0xB0FFD700);
         getStack().render(raw, x, y, delta, flags & ~EmiIngredient.RENDER_AMOUNT);
-        renderCompactAmount(context, x, y, outputAmount);
+        renderCompactAmount(raw, x, y, outputAmount);
         if ((flags & EmiIngredient.RENDER_INGREDIENT) != 0 && getRecipe() != null) {
             EmiRenderHelper.renderRecipeFavorite(getStack(), context, x, y);
         }
     }
 
-    private void renderCompactAmount(EmiDrawContext context, int x, int y, long amount) {
+    private void renderCompactAmount(GuiGraphics graphics, int x, int y, long amount) {
         if (amount <= 1) return;
-        String text = formatCompact(amount);
-        var component = EmiPort.literal(text);
-        Minecraft client = Minecraft.getInstance();
-        int textWidth = client.font.width(component);
-        context.push();
-        context.matrices().translate(0, 0, 200);
-        context.matrices().translate(x + 16, y + 16, 0);
-        context.matrices().scale(0.5f, 0.5f, 1);
-        context.drawTextWithShadow(component, -textWidth, -client.font.lineHeight, 0xFFFFFF);
-        context.pop();
-    }
-
-    private String formatCompact(long amount) {
         boolean fluid = !getStack().getEmiStacks().isEmpty() &&
                 getStack().getEmiStacks().get(0).getKey() instanceof Fluid;
         if (fluid) {
-            if (amount < 1000) return amount + "mB";
-            double buckets = amount / 1000.0;
-            if (buckets >= 1_000_000_000) {
-                return String.format(Locale.ROOT, "%.1fBB", buckets / 1_000_000_000);
-            }
-            if (buckets >= 1_000_000) return String.format(Locale.ROOT, "%.1fMB", buckets / 1_000_000);
-            if (buckets >= 1000) return String.format(Locale.ROOT, "%.1fKB", buckets / 1000);
-            return String.format(Locale.ROOT, "%.1fB", buckets);
+            CompactAmountRenderer.drawFluidAmount(graphics, x, y, 16, 16, amount);
+        } else {
+            CompactAmountRenderer.drawItemAmount(graphics, x, y, 16, 16, amount);
         }
-        if (amount >= 1_000_000_000) return String.format(Locale.ROOT, "%.1fB", amount / 1_000_000_000.0);
-        if (amount >= 1_000_000) return String.format(Locale.ROOT, "%.1fM", amount / 1_000_000.0);
-        if (amount >= 1000) return String.format(Locale.ROOT, "%.1fK", amount / 1000.0);
-        return String.valueOf(amount);
     }
 
     @Override
