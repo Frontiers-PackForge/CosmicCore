@@ -1011,11 +1011,35 @@ public class CosmicLangHandler extends LangHandler {
         provider.add("cosmiccore.gui.stellar.show_star", "Show Star View");
         provider.add("cosmiccore.gui.stellar.show_modules", "Show Module Control");
 
-        // EMI Bookmark Keybinds
-        provider.add("key.categories.cosmiccore.emi", "CosmicCore - EMI");
-        provider.add("key.cosmiccore.emi.next_bookmark_group", "Next Bookmark Group");
-        provider.add("key.cosmiccore.emi.prev_bookmark_group", "Previous Bookmark Group");
-        provider.add("key.cosmiccore.emi.create_bookmark_group", "Create Bookmark Group");
+        provider.add("cosmiccore.emi.bookmarks.header", "Group %s/%s");
+        provider.add("cosmiccore.emi.bookmarks.ingredient_unavailable", "Bookmark ingredient unavailable");
+        provider.add("cosmiccore.emi.bookmarks.fluid_amount", "Exact amount: %s");
+        provider.add("cosmiccore.emi.bookmarks.action.previous_group", "Previous Group");
+        provider.add("cosmiccore.emi.bookmarks.action.next_group", "Next Group");
+        provider.add("cosmiccore.emi.bookmarks.action.previous_page", "Previous Page");
+        provider.add("cosmiccore.emi.bookmarks.action.next_page", "Next Page");
+        provider.add("cosmiccore.emi.bookmarks.action.create_regular", "Click the + to create a new favorite group");
+        provider.add(
+                "cosmiccore.emi.bookmarks.action.create_recipe",
+                "Shift + Click the + to create a new recipe favorite group");
+        provider.add("cosmiccore.emi.bookmarks.action.delete", "Click the - to delete this empty group forever");
+        provider.add(
+                "cosmiccore.emi.bookmarks.action.force_delete",
+                "SHIFT+CTRL+ALT+CLICK to force delete this bookmark group.");
+        provider.add("cosmiccore.emi.bookmarks.help.title", "Advanced Controls");
+        provider.add("cosmiccore.emi.bookmarks.help.exact", "Ctrl + %s: Pin an exact stack amount");
+        provider.add("cosmiccore.emi.bookmarks.help.recipe", "Ctrl + Shift + %s: Pin a recipe row");
+        provider.add(
+                "cosmiccore.emi.bookmarks.help.adjust",
+                "Ctrl + Scroll: Adjust by 1 item, 1 mB, or 1 recipe batch");
+        provider.add(
+                "cosmiccore.emi.bookmarks.help.adjust_fluid",
+                "Ctrl + Alt + Scroll: Adjust fluids by 10 mB");
+        provider.add(
+                "cosmiccore.emi.bookmarks.help.adjust_fast",
+                "Ctrl + Shift + Scroll: Adjust by 64 items, 1 B, or 10 recipe batches");
+        provider.add("cosmiccore.emi.bookmarks.help.dismiss", "To hide the !, click the star once.");
+        provider.add("cosmiccore.emi.bookmarks.help.restore", "To show the ! again, click the star once.");
 
         // =========================================================================
         // STELLAR IRIS UPGRADE TREE
