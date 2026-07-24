@@ -997,6 +997,7 @@ public class CosmicLangHandler extends LangHandler {
         provider.add("config.jade.plugin_cosmiccore.drone_station", "[CosmicCore] Drone Station Info");
         provider.add("config.jade.plugin_cosmiccore.drone_maintenance_interface",
                 "[CosmicCore] Drone Maintenance Interface");
+        provider.add("gtceu.jade.changes_eu_tick", "%s EU/t");
 
         // JADE Stellar Module Provider
         provider.add("cosmiccore.jade.stellar_module.not_connected", "Iris: Not Connected");
@@ -1661,5 +1662,14 @@ public class CosmicLangHandler extends LangHandler {
         provider.add("cosmiccore.ftbquests.dependency_lines.asset.choose", "Choose Asset...");
         provider.add("cosmiccore.ftbquests.dependency_lines.asset.current", "Current: %s");
         provider.add("cosmiccore.ftbquests.dependency_lines.asset.hint", "Line assets should tile horizontally");
+        provider.add("cosmiccore.ftbquests.dependency_lines.paint", "Dependency Line Painter");
+        provider.add("cosmiccore.ftbquests.dependency_lines.paint.none",
+                "No dependency lines between selected quests");
+        provider.add("cosmiccore.ftbquests.dependency_lines.paint.summary",
+                "%s lines between %s selected quests (%s styles)");
+        provider.add("cosmiccore.ftbquests.dependency_lines.paint.scope",
+                "Only existing direct lines with both endpoints selected are changed");
+        provider.add("cosmiccore.ftbquests.dependency_lines.paint.show", "Show Lines");
+        provider.add("cosmiccore.ftbquests.dependency_lines.paint.hide", "Hide Lines");
     }
 }
