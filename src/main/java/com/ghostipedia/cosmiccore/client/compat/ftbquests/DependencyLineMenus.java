@@ -11,6 +11,8 @@ import dev.ftb.mods.ftblibrary.config.ImageResourceConfig;
 import dev.ftb.mods.ftblibrary.config.ui.resource.SelectImageResourceScreen;
 import dev.ftb.mods.ftblibrary.icon.Icon;
 import dev.ftb.mods.ftblibrary.icon.Icons;
+import dev.ftb.mods.ftblibrary.ui.Button;
+import dev.ftb.mods.ftblibrary.ui.ContextMenu;
 import dev.ftb.mods.ftblibrary.ui.ContextMenuItem;
 import dev.ftb.mods.ftbquests.client.gui.quests.QuestScreen;
 import dev.ftb.mods.ftbquests.client.gui.quests.TooltipContextMenuItem;
@@ -18,8 +20,12 @@ import dev.ftb.mods.ftbquests.net.EditObjectMessage;
 import dev.ftb.mods.ftbquests.quest.Quest;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Comparator;
+import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Set;
+import java.util.function.UnaryOperator;
 
 public final class DependencyLineMenus {
 
@@ -29,6 +35,18 @@ public final class DependencyLineMenus {
                                                Quest dependent) {
         List<ContextMenuItem> menu = new ArrayList<>(original);
         menu.add(ContextMenuItem.SEPARATOR);
+        menu.add(buildRoot(screen, dependent));
+        return menu;
+    }
+
+    public static List<ContextMenuItem> appendSelected(List<ContextMenuItem> original, QuestScreen screen,
+                                                       Quest dependent) {
+        Collection<Quest> selected = screen.getSelectedQuests();
+        if (selected.size() < 2) return append(original, screen, dependent);
+
+        List<ContextMenuItem> menu = new ArrayList<>(original);
+        menu.add(ContextMenuItem.SEPARATOR);
+        menu.add(buildSelectionRoot(screen, selected));
         menu.add(buildRoot(screen, dependent));
         return menu;
     }
@@ -89,10 +107,148 @@ public final class DependencyLineMenus {
                     Component.translatable("cosmiccore.ftbquests.dependency_lines.task_hint")
                             .withStyle(ChatFormatting.GRAY)));
         }
-        return ContextMenuItem.subMenu(
+        return boundedSubMenu(
                 Component.translatable("cosmiccore.ftbquests.dependency_lines"),
                 Icons.ART,
                 entries);
+    }
+
+    private static ContextMenuItem buildSelectionRoot(QuestScreen screen, Collection<Quest> selected) {
+        List<SelectedDependencyEdge> edges = collectSelectedEdges(selected);
+        List<ContextMenuItem> entries = new ArrayList<>();
+        if (edges.isEmpty()) {
+            entries.add(new TooltipContextMenuItem(
+                    Component.translatable("cosmiccore.ftbquests.dependency_lines.paint.none")
+                            .withStyle(ChatFormatting.GRAY),
+                    Icons.INFO_GRAY,
+                    null,
+                    Component.translatable("cosmiccore.ftbquests.dependency_lines.paint.scope")
+                            .withStyle(ChatFormatting.DARK_GRAY)));
+        } else {
+            long styleCount = edges.stream()
+                    .map(SelectedDependencyEdge::settings)
+                    .map(DependencyLineSettings::asset)
+                    .distinct()
+                    .count();
+            entries.add(new TooltipContextMenuItem(
+                    Component.translatable(
+                            "cosmiccore.ftbquests.dependency_lines.paint.summary",
+                            edges.size(),
+                            selected.size(),
+                            styleCount)
+                            .withStyle(ChatFormatting.GRAY),
+                    Icons.INFO_GRAY,
+                    null,
+                    Component.translatable("cosmiccore.ftbquests.dependency_lines.paint.scope")
+                            .withStyle(ChatFormatting.DARK_GRAY)));
+            entries.add(ContextMenuItem.SEPARATOR);
+            entries.add(buildSelectionPreset(
+                    screen,
+                    edges,
+                    "cosmiccore.ftbquests.dependency_lines.asset.main_questline",
+                    DependencyLineSettings.MAIN_QUESTLINE_ASSET));
+            entries.add(buildSelectionPreset(
+                    screen,
+                    edges,
+                    "cosmiccore.ftbquests.dependency_lines.asset.offroad",
+                    DependencyLineSettings.OFFROAD_ASSET));
+            entries.add(new ContextMenuItem(
+                    Component.translatable("cosmiccore.ftbquests.dependency_lines.asset.choose"),
+                    Icons.ART,
+                    button -> openSelectionAssetPicker(screen, edges)));
+            entries.add(new ContextMenuItem(
+                    Component.translatable("cosmiccore.ftbquests.dependency_lines.asset.default"),
+                    edges.stream().allMatch(edge -> edge.settings().asset().isEmpty()) ?
+                            Icons.ACCEPT : Icons.ART,
+                    button -> updateSelectionAsset(screen, edges, "")));
+            entries.add(ContextMenuItem.SEPARATOR);
+            entries.add(new ContextMenuItem(
+                    Component.translatable("cosmiccore.ftbquests.dependency_lines.paint.show"),
+                    Icons.VISIBILITY_SHOW,
+                    button -> updateSelection(
+                            screen,
+                            edges,
+                            settings -> new DependencyLineSettings(true, settings.asset()))));
+            entries.add(new ContextMenuItem(
+                    Component.translatable("cosmiccore.ftbquests.dependency_lines.paint.hide"),
+                    Icons.VISIBILITY_HIDE,
+                    button -> updateSelection(
+                            screen,
+                            edges,
+                            settings -> new DependencyLineSettings(false, settings.asset()))));
+        }
+        return boundedSubMenu(
+                Component.translatable("cosmiccore.ftbquests.dependency_lines.paint"),
+                Icons.ART,
+                entries);
+    }
+
+    private static List<SelectedDependencyEdge> collectSelectedEdges(Collection<Quest> selected) {
+        Set<Long> selectedIds = selected.stream().map(quest -> quest.id).collect(java.util.stream.Collectors.toSet());
+        return selected.stream()
+                .sorted(Comparator.comparingLong(quest -> quest.id))
+                .flatMap(dependent -> dependent.streamDependencies()
+                        .filter(Quest.class::isInstance)
+                        .map(Quest.class::cast)
+                        .filter(dependency -> selectedIds.contains(dependency.id))
+                        .map(dependency -> new SelectedDependencyEdge(
+                                dependent,
+                                dependency.id,
+                                extension(dependent).cosmiccore$getDependencyLineSettings(dependency.id))))
+                .distinct()
+                .toList();
+    }
+
+    private static ContextMenuItem buildSelectionPreset(QuestScreen screen, List<SelectedDependencyEdge> edges,
+                                                        String name, String asset) {
+        return new ContextMenuItem(
+                Component.translatable(name),
+                edges.stream().allMatch(edge -> edge.settings().asset().equals(asset)) ?
+                        Icons.ACCEPT : Icon.getIcon(asset),
+                button -> updateSelectionAsset(screen, edges, asset));
+    }
+
+    private static void openSelectionAssetPicker(QuestScreen screen, List<SelectedDependencyEdge> edges) {
+        ImageResourceConfig config = new ImageResourceConfig();
+        List<String> assets = edges.stream()
+                .map(SelectedDependencyEdge::settings)
+                .map(DependencyLineSettings::asset)
+                .distinct()
+                .toList();
+        ResourceLocation current = assets.size() == 1 && !assets.getFirst().isEmpty() ?
+                ResourceLocation.tryParse(assets.getFirst()) : ImageResourceConfig.NONE;
+        config.setValue(current == null ? ImageResourceConfig.NONE : current);
+        new SelectImageResourceScreen(config, accepted -> {
+            if (accepted) {
+                ResourceLocation selected = config.getValue();
+                String asset = ImageResourceConfig.NONE.equals(selected) ? "" : selected.toString();
+                updateSelectionAsset(screen, edges, asset);
+            }
+            screen.openGui();
+        }).openGui();
+    }
+
+    private static void updateSelectionAsset(QuestScreen screen, List<SelectedDependencyEdge> edges, String asset) {
+        updateSelection(
+                screen,
+                edges,
+                settings -> new DependencyLineSettings(settings.visible(), asset));
+    }
+
+    private static void updateSelection(QuestScreen screen, List<SelectedDependencyEdge> edges,
+                                        UnaryOperator<DependencyLineSettings> operation) {
+        Set<Quest> changed = new LinkedHashSet<>();
+        for (SelectedDependencyEdge edge : edges) {
+            DependencyLineSettings current = extension(edge.dependent())
+                    .cosmiccore$getDependencyLineSettings(edge.dependencyId());
+            DependencyLineSettings updated = operation.apply(current);
+            if (!current.equals(updated)) {
+                extension(edge.dependent()).cosmiccore$setDependencyLineSettings(edge.dependencyId(), updated);
+                changed.add(edge.dependent());
+            }
+        }
+        changed.forEach(EditObjectMessage::sendToServer);
+        if (!changed.isEmpty()) screen.questPanel.refreshWidgets();
     }
 
     private static ContextMenuItem buildDependency(QuestScreen screen, Quest dependent, Quest dependency,
@@ -120,7 +276,7 @@ public final class DependencyLineMenus {
                 "cosmiccore.ftbquests.dependency_lines.entry",
                 destination.getQuestChapter().getTitle(),
                 destination.getTitle());
-        return ContextMenuItem.subMenu(title, destination.getIcon(), entries);
+        return boundedSubMenu(title, destination.getIcon(), entries);
     }
 
     private static ContextMenuItem buildAssetMenu(QuestScreen screen, Quest dependent, long dependencyId,
@@ -157,7 +313,7 @@ public final class DependencyLineMenus {
                         .withStyle(ChatFormatting.GRAY),
                 Component.translatable("cosmiccore.ftbquests.dependency_lines.asset.hint")
                         .withStyle(ChatFormatting.DARK_GRAY)));
-        return ContextMenuItem.subMenu(
+        return boundedSubMenu(
                 Component.translatable("cosmiccore.ftbquests.dependency_lines.asset"),
                 settings.assetLocation().<Icon>map(Icon::getIcon).orElse(Icons.ART),
                 assets);
@@ -193,7 +349,29 @@ public final class DependencyLineMenus {
         screen.questPanel.refreshWidgets();
     }
 
+    private static ContextMenuItem boundedSubMenu(Component title, Icon icon, List<ContextMenuItem> entries) {
+        return new ContextMenuItem(title, icon, button -> openBoundedSubMenu(button, entries)).setCloseMenu(false);
+    }
+
+    private static void openBoundedSubMenu(Button button, List<ContextMenuItem> entries) {
+        ContextMenu menu = new ContextMenu(button.getParent(), entries);
+        button.getGui().openContextMenu(menu);
+
+        int margin = 2;
+        int screenWidth = button.getWindow().getGuiScaledWidth();
+        int screenHeight = button.getWindow().getGuiScaledHeight();
+        int right = button.getX() + button.width;
+        int left = button.getX() - menu.width;
+        int absoluteX = right + menu.width <= screenWidth - margin ? right : left;
+        int absoluteY = button.getY();
+        absoluteX = Math.max(margin, Math.min(absoluteX, Math.max(margin, screenWidth - menu.width - margin)));
+        absoluteY = Math.max(margin, Math.min(absoluteY, Math.max(margin, screenHeight - menu.height - margin)));
+        menu.setPos(absoluteX - button.getParent().getX(), absoluteY - button.getParent().getY());
+    }
+
     private static QuestDependencyLineExtension extension(Quest quest) {
         return (QuestDependencyLineExtension) (Object) quest;
     }
+
+    private record SelectedDependencyEdge(Quest dependent, long dependencyId, DependencyLineSettings settings) {}
 }

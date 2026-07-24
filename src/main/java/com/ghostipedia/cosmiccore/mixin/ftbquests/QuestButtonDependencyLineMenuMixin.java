@@ -45,6 +45,6 @@ public class QuestButtonDependencyLineMenuMixin {
                index = 0)
     private List<ContextMenuItem> cosmiccore$addDependencyLinesToSelectedQuestMenu(List<ContextMenuItem> items) {
         if (!questScreen.getSelectedQuests().contains(quest)) return items;
-        return DependencyLineMenus.append(items, questScreen, quest);
+        return DependencyLineMenus.appendSelected(items, questScreen, quest);
     }
 }
