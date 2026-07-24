@@ -49,6 +49,7 @@ public class QuestDependencyLineDataMixin implements QuestDependencyLineExtensio
             entry.putLong("dependency", dependencyId);
             entry.putBoolean("visible", settings.visible());
             if (!settings.asset().isEmpty()) entry.putString("asset", settings.asset());
+            if (settings.targetLinkId() != 0L) entry.putLong("target_link", settings.targetLinkId());
             list.add(entry);
         });
         tag.put("cosmiccore_dependency_lines", list);
@@ -64,7 +65,8 @@ public class QuestDependencyLineDataMixin implements QuestDependencyLineExtensio
             long dependencyId = entry.getLong("dependency");
             DependencyLineSettings settings = new DependencyLineSettings(
                     !entry.contains("visible") || entry.getBoolean("visible"),
-                    entry.getString("asset"));
+                    entry.getString("asset"),
+                    entry.getLong("target_link"));
             cosmiccore$setDependencyLineSettings(dependencyId, settings);
         }
     }
@@ -77,6 +79,7 @@ public class QuestDependencyLineDataMixin implements QuestDependencyLineExtensio
             buffer.writeLong(dependencyId);
             buffer.writeBoolean(settings.visible());
             buffer.writeUtf(settings.asset(), 256);
+            buffer.writeLong(settings.targetLinkId());
         });
     }
 
@@ -87,7 +90,7 @@ public class QuestDependencyLineDataMixin implements QuestDependencyLineExtensio
         for (int i = 0; i < count; i++) {
             cosmiccore$setDependencyLineSettings(
                     buffer.readLong(),
-                    new DependencyLineSettings(buffer.readBoolean(), buffer.readUtf(256)));
+                    new DependencyLineSettings(buffer.readBoolean(), buffer.readUtf(256), buffer.readLong()));
         }
     }
 

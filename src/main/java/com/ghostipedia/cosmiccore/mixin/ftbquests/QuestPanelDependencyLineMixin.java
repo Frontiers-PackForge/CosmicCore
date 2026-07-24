@@ -55,10 +55,12 @@ public class QuestPanelDependencyLineMixin {
             return;
         }
         cosmiccore$resolveDependencyLine(settings).bindTexture();
-        float renderedHalfWidth = settings.asset().equals(DependencyLineSettings.MAIN_QUESTLINE_ASSET) ?
-                halfWidth * 1.5F : halfWidth;
-        original.call(source, target, poseStack, renderedHalfWidth, red, green, blue, startAlpha, endAlpha,
-                textureOffset, tesselator);
+        boolean mainQuestline = settings.asset().equals(DependencyLineSettings.MAIN_QUESTLINE_ASSET);
+        float renderedHalfWidth = mainQuestline ? halfWidth * 1.5F : halfWidth;
+        int renderedStartAlpha = mainQuestline ? cosmiccore$boostMainQuestlineAlpha(startAlpha) : startAlpha;
+        int renderedEndAlpha = mainQuestline ? cosmiccore$boostMainQuestlineAlpha(endAlpha) : endAlpha;
+        original.call(source, target, poseStack, renderedHalfWidth, red, green, blue, renderedStartAlpha,
+                renderedEndAlpha, textureOffset, tesselator);
     }
 
     @WrapOperation(
@@ -93,5 +95,10 @@ public class QuestPanelDependencyLineMixin {
                         .<Icon>map(ThemeProperties.DEPENDENCY_LINE_TEXTURE::get)
                         .orElse(cosmiccore$defaultDependencyLine));
         return icon instanceof ImageIcon image ? image : cosmiccore$defaultDependencyLine;
+    }
+
+    @Unique
+    private static int cosmiccore$boostMainQuestlineAlpha(int alpha) {
+        return Math.min(255, alpha * 3 / 2);
     }
 }

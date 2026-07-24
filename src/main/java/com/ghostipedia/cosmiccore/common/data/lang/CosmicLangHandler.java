@@ -1671,5 +1671,14 @@ public class CosmicLangHandler extends LangHandler {
                 "Only existing direct lines with both endpoints selected are changed");
         provider.add("cosmiccore.ftbquests.dependency_lines.paint.show", "Show Lines");
         provider.add("cosmiccore.ftbquests.dependency_lines.paint.hide", "Hide Lines");
+        provider.add("cosmiccore.ftbquests.quest_alias", "Quest Alias");
+        provider.add("cosmiccore.ftbquests.quest_alias.hint", "Another view of the same quest and its progress");
+        provider.add("cosmiccore.ftbquests.quest_alias.dependant_lines", "Alias Dependant Lines");
+        provider.add("cosmiccore.ftbquests.quest_alias.dependant_lines.none",
+                "This quest has no dependant quest lines");
+        provider.add("cosmiccore.ftbquests.quest_alias.dependant_lines.assigned",
+                "This line ends at this alias. Click to return it to the canonical quest.");
+        provider.add("cosmiccore.ftbquests.quest_alias.dependant_lines.unassigned",
+                "Click to move this line to this alias.");
     }
 }
