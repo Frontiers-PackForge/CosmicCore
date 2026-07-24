@@ -158,11 +158,13 @@ public abstract class RecipeScreenMixin extends Screen implements RecipeScreenAc
         if (currentPage == null) return EmiStack.EMPTY;
 
         for (WidgetGroup group : currentPage) {
+            int localX = mouseX - group.x;
+            int localY = mouseY - group.y;
             for (Widget widget : group.widgets) {
                 if (widget instanceof SlotWidget slot) {
                     Bounds bounds = slot.getBounds();
-                    if (mouseX >= bounds.x() && mouseX < bounds.x() + bounds.width() &&
-                            mouseY >= bounds.y() && mouseY < bounds.y() + bounds.height()) {
+                    if (localX >= bounds.x() && localX < bounds.x() + bounds.width() &&
+                            localY >= bounds.y() && localY < bounds.y() + bounds.height()) {
                         return slot.getStack();
                     }
                 }
@@ -176,21 +178,13 @@ public abstract class RecipeScreenMixin extends Screen implements RecipeScreenAc
     public EmiRecipe getHoveredRecipe(int mouseX, int mouseY) {
         if (currentPage == null) return null;
 
-        EmiRecipe fallback = null;
-
         for (WidgetGroup group : currentPage) {
             if (group.recipe == null) continue;
-
-            if (fallback == null) {
-                fallback = group.recipe;
-            }
-
             if (mouseX >= group.x && mouseX < group.x + group.width &&
                     mouseY >= group.y && mouseY < group.y + group.height) {
                 return group.recipe;
             }
         }
-
-        return fallback;
+        return null;
     }
 }

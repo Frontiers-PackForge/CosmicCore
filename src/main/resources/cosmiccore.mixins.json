@@ -13,6 +13,7 @@
     "client.GuiAccessor",
     "client.SoundManagerMixin",
     "emi.EmiFavoritesMixin",
+    "emi.EmiPersistentDataMixin",
     "emi.EmiScreenManagerMixin",
     "emi.RecipeScreenMixin",
     "emi.ScreenSpaceMixin",

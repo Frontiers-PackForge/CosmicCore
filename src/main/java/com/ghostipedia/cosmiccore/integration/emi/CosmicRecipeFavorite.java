@@ -5,29 +5,42 @@ import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.world.level.material.Fluid;
 
 import dev.emi.emi.EmiPort;
+import dev.emi.emi.EmiRenderHelper;
+import dev.emi.emi.api.recipe.EmiRecipe;
 import dev.emi.emi.api.stack.EmiIngredient;
 import dev.emi.emi.runtime.EmiDrawContext;
 import dev.emi.emi.runtime.EmiFavorite;
+import org.jetbrains.annotations.Nullable;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
-/**
- * A recipe favorite that displays output (yellow highlight) followed by inputs inline.
- * Format: [OUTPUT amount] [INPUT1 amount] [INPUT2 amount] ...
- * Wraps to next row when out of horizontal space.
- */
-public class CosmicRecipeFavorite extends EmiFavorite {
+public final class CosmicRecipeFavorite extends EmiFavorite {
 
     public record InputEntry(EmiIngredient stack, long amount) {}
 
+    private final String bookmarkId;
+    private final @Nullable String recipeId;
     private final List<InputEntry> inputs;
     private final long outputAmount;
 
-    public CosmicRecipeFavorite(EmiIngredient output, long outputAmount, List<InputEntry> inputs) {
-        super(output, null);
+    public CosmicRecipeFavorite(String bookmarkId, @Nullable String recipeId, EmiIngredient output, long outputAmount,
+                                List<InputEntry> inputs, @Nullable EmiRecipe recipe) {
+        super(output, recipe);
+        this.bookmarkId = bookmarkId;
+        this.recipeId = recipeId;
         this.outputAmount = Math.max(1, outputAmount);
-        this.inputs = new ArrayList<>(inputs);
+        this.inputs = inputs.stream()
+                .map(input -> new InputEntry(input.stack().copy(), Math.max(1, input.amount())))
+                .toList();
+    }
+
+    public String getBookmarkId() {
+        return bookmarkId;
+    }
+
+    public @Nullable String getRecipeId() {
+        return recipeId;
     }
 
     public List<InputEntry> getInputs() {
@@ -43,121 +56,63 @@ public class CosmicRecipeFavorite extends EmiFavorite {
         return outputAmount;
     }
 
-    public int getTotalSlots() {
-        return 1 + inputs.size();
-    }
-
     @Override
     public void render(GuiGraphics raw, int x, int y, float delta, int flags) {
         EmiDrawContext context = EmiDrawContext.wrap(raw);
-
-        // Render output with yellow tint
-        renderStackWithAmount(context, getStack(), x, y, delta, flags, outputAmount, true);
-    }
-
-    /**
-     * Render the full recipe entry across multiple slots.
-     * Called by our custom sidebar renderer.
-     */
-    public void renderFull(EmiDrawContext context, int startX, int startY, int gridWidth, float delta, int flags) {
-        int slotSize = 18;
-        int currentX = startX;
-        int currentY = startY;
-        int slotsOnRow = 0;
-
-        // Render output with yellow highlight
-        renderStackWithAmount(context, getStack(), currentX, currentY, delta, flags, outputAmount, true);
-        currentX += slotSize;
-        slotsOnRow++;
-
-        // Render inputs
-        for (InputEntry input : inputs) {
-            if (slotsOnRow >= gridWidth) {
-                currentX = startX;
-                currentY += slotSize;
-                slotsOnRow = 0;
-            }
-
-            renderStackWithAmount(context, input.stack, currentX, currentY, delta, flags, input.amount, false);
-            currentX += slotSize;
-            slotsOnRow++;
+        context.fill(x - 1, y - 1, 18, 1, 0xB0FFD700);
+        context.fill(x - 1, y + 16, 18, 1, 0xB0FFD700);
+        context.fill(x - 1, y - 1, 1, 18, 0xB0FFD700);
+        context.fill(x + 16, y - 1, 1, 18, 0xB0FFD700);
+        getStack().render(raw, x, y, delta, flags & ~EmiIngredient.RENDER_AMOUNT);
+        renderCompactAmount(context, x, y, outputAmount);
+        if ((flags & EmiIngredient.RENDER_INGREDIENT) != 0 && getRecipe() != null) {
+            EmiRenderHelper.renderRecipeFavorite(getStack(), context, x, y);
         }
     }
 
-    /**
-     * Calculate how many rows this recipe takes given grid width.
-     */
-    public int getRowCount(int gridWidth) {
-        if (gridWidth <= 0) return 1;
-        int totalSlots = getTotalSlots();
-        return (totalSlots + gridWidth - 1) / gridWidth;
-    }
-
-    private void renderStackWithAmount(EmiDrawContext context, EmiIngredient stack, int x, int y,
-                                       float delta, int flags, long amount, boolean highlight) {
-        // Yellow highlight for output
-        if (highlight) {
-            context.fill(x, y, 18, 18, 0x44FFFF00);
-        }
-
-        // Render the stack without default amount
-        stack.render(context.raw(), x, y, delta, flags & ~EmiIngredient.RENDER_AMOUNT);
-
-        // Render compact amount
-        renderCompactAmount(context, x, y, amount, isFluid(stack));
-    }
-
-    private void renderCompactAmount(EmiDrawContext context, int x, int y, long amount, boolean fluid) {
-        String text = fluid ? formatFluidAmount(amount) : formatItemAmount(amount);
+    private void renderCompactAmount(EmiDrawContext context, int x, int y, long amount) {
+        if (amount <= 1) return;
+        String text = formatCompact(amount);
         var component = EmiPort.literal(text);
         Minecraft client = Minecraft.getInstance();
         int textWidth = client.font.width(component);
-
         context.push();
         context.matrices().translate(0, 0, 200);
-
-        float scale = 0.5f;
         context.matrices().translate(x + 16, y + 16, 0);
-        context.matrices().scale(scale, scale, 1);
-
+        context.matrices().scale(0.5f, 0.5f, 1);
         context.drawTextWithShadow(component, -textWidth, -client.font.lineHeight, 0xFFFFFF);
         context.pop();
     }
 
-    private boolean isFluid(EmiIngredient stack) {
-        if (stack.getEmiStacks().isEmpty()) return false;
-        return stack.getEmiStacks().get(0).getKey() instanceof Fluid;
-    }
-
-    private String formatFluidAmount(long mB) {
-        if (mB < 1000) return mB + "mB";
-        double buckets = mB / 1000.0;
-        if (buckets >= 1_000_000_000) return String.format("%.1fBB", buckets / 1_000_000_000);
-        if (buckets >= 1_000_000) return String.format("%.1fMB", buckets / 1_000_000);
-        if (buckets >= 1000) return String.format("%.1fKB", buckets / 1000);
-        return String.format("%.1fB", buckets);
-    }
-
-    private String formatItemAmount(long count) {
-        if (count >= 1_000_000_000) return String.format("%.1fB", count / 1_000_000_000.0);
-        if (count >= 1_000_000) return String.format("%.1fM", count / 1_000_000.0);
-        if (count >= 1000) return String.format("%.1fK", count / 1000.0);
-        return String.valueOf(count);
+    private String formatCompact(long amount) {
+        boolean fluid = !getStack().getEmiStacks().isEmpty() &&
+                getStack().getEmiStacks().get(0).getKey() instanceof Fluid;
+        if (fluid) {
+            if (amount < 1000) return amount + "mB";
+            double buckets = amount / 1000.0;
+            if (buckets >= 1_000_000_000) {
+                return String.format(Locale.ROOT, "%.1fBB", buckets / 1_000_000_000);
+            }
+            if (buckets >= 1_000_000) return String.format(Locale.ROOT, "%.1fMB", buckets / 1_000_000);
+            if (buckets >= 1000) return String.format(Locale.ROOT, "%.1fKB", buckets / 1000);
+            return String.format(Locale.ROOT, "%.1fB", buckets);
+        }
+        if (amount >= 1_000_000_000) return String.format(Locale.ROOT, "%.1fB", amount / 1_000_000_000.0);
+        if (amount >= 1_000_000) return String.format(Locale.ROOT, "%.1fM", amount / 1_000_000.0);
+        if (amount >= 1000) return String.format(Locale.ROOT, "%.1fK", amount / 1000.0);
+        return String.valueOf(amount);
     }
 
     @Override
     public EmiIngredient copy() {
-        return new CosmicRecipeFavorite(getStack(), outputAmount, inputs);
+        return new CosmicRecipeFavorite(bookmarkId, recipeId, getStack().copy(), outputAmount, inputs, getRecipe());
     }
 
     @Override
     public boolean strictEquals(EmiIngredient other) {
-        if (other instanceof CosmicRecipeFavorite otherRecipe) {
-            return getStack().equals(otherRecipe.getStack());
+        if (other instanceof CosmicRecipeFavorite recipeFavorite) {
+            return bookmarkId.equals(recipeFavorite.bookmarkId);
         }
-        if (other != null && !other.isEmpty()) {
-            return getStack().equals(other);
-        }
-        return false;
+        return super.strictEquals(other);
     }
 }
