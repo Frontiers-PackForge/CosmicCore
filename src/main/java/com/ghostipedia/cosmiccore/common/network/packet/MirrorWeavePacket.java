@@ -55,7 +55,7 @@ public class MirrorWeavePacket implements CustomPacketPayload {
                 CosmicCore.LOGGER.warn("Rejected deed weave {} from {}", deedId, player.getScoreboardName());
                 return;
             }
-            DeedsAPI.weave(player, deedId, bindPosition);
+            DeedsAPI.weave(player, deedId, bindPosition, deedId.equals(DeedRegistry.NETHER_PERMIT.id()));
         });
     }
 

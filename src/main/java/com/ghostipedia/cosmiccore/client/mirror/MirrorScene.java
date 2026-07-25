@@ -392,7 +392,7 @@ public final class MirrorScene {
     }
 
     static float ceremonyEased(MirrorScreen.DevState state) {
-        float progress = Mth.clamp(state.ceremonyProgress / (float) MirrorScreen.CEREMONY_TICKS, 0f, 1f);
+        float progress = DeedCinematic.weaveProgress(state.ceremonyProgress);
         return progress * progress * (3f - 2f * progress);
     }
 
@@ -521,7 +521,7 @@ public final class MirrorScene {
         flush(glow);
 
         if (state.ceremonyActive) {
-            float hold = Math.min(1f, state.ceremonyProgress / (float) MirrorScreen.CEREMONY_TICKS);
+            float hold = DeedCinematic.weaveProgress(state.ceremonyProgress);
             BufferBuilder lock = beginColor();
             ringStroke(lock, mat, ex, ey, 34f - 25f * hold, 2.2f, ECHO_HOT, (int) (130 + 110 * hold));
             arcStroke(lock, mat, ex, ey, 13f, 3f, -Mth.HALF_PI, hold * Mth.TWO_PI, ECHO_HOT, 255);

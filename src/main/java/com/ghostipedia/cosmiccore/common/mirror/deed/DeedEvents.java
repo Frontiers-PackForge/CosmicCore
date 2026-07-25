@@ -8,6 +8,7 @@ import net.neoforged.fml.ModList;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.entity.player.AdvancementEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerEvent;
+import net.neoforged.neoforge.event.tick.PlayerTickEvent;
 
 @EventBusSubscriber(modid = CosmicCore.MOD_ID)
 public final class DeedEvents {
@@ -29,18 +30,18 @@ public final class DeedEvents {
     public static void onAdvancementEarned(AdvancementEvent.AdvancementEarnEvent event) {
         if (event.getEntity() instanceof ServerPlayer player &&
                 event.getAdvancement().id().equals(CosmicCore.id("nether_permit"))) {
-            DeedsAPI.forcePatientZero(player);
+            DeedsAPI.reconcilePatientZero(player);
         }
     }
 
+    @SubscribeEvent
+    public static void onPlayerTick(PlayerTickEvent.Post event) {
+        if (!(event.getEntity() instanceof ServerPlayer player) || player.level().getGameTime() % 20 != 0) return;
+        DeedsAPI.reconcilePatientZero(player);
+    }
+
     static void reconcileAndSync(ServerPlayer player) {
-        var server = player.getServer();
-        if (server == null) return;
-        var advancement = server.getAdvancements().get(CosmicCore.id("nether_permit"));
-        if (advancement != null && player.getAdvancements().getOrStartProgress(advancement).isDone()) {
-            DeedsAPI.forcePatientZero(player);
-        }
-        DeedsAPI.syncPlayer(player);
+        if (!DeedsAPI.reconcilePatientZero(player)) DeedsAPI.syncPlayer(player);
     }
 
     static void reconcileAfterTeamChange(ServerPlayer player) {

@@ -11,7 +11,6 @@ import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.Screen;
-import net.minecraft.client.resources.language.I18n;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
@@ -34,10 +33,13 @@ import java.util.List;
 @EventBusSubscriber(modid = CosmicCore.MOD_ID, value = Dist.CLIENT)
 public class MirrorScreen extends Screen {
 
-    public static final int CEREMONY_TICKS = 160;
+    public static final int CEREMONY_TICKS = DeedCinematic.TOTAL_TICKS;
     public static final int ECHO_CAP = 12;
     public static final int HOLD_TICKS = 22;
     public static final int SKEIN_CAP = 6;
+    private static final int CINEMATIC_TEXT_MARGIN = 24;
+    private static final int CINEMATIC_TEXT_MAX_WIDTH = 320;
+    private static final float CINEMATIC_TEXT_WIDTH_RATIO = 0.34f;
 
     public static KeyMapping OPEN;
 
@@ -99,34 +101,13 @@ public class MirrorScreen extends Screen {
     private static final Component BINDING_PROMPT = Component.translatable("mirror.cosmiccore.prompt.binding");
     private static final Component HOLD_PROMPT = Component.translatable("mirror.cosmiccore.prompt.hold");
 
-    private static final class CinematicLine {
-
-        private final String text;
-        private final float x;
-        private final float y;
-        private final float angle;
-        private final int startTick;
-        private String visibleText = "";
-
-        private CinematicLine(String text, float x, float y, float angle, int startTick) {
-            this.text = text;
-            this.x = x;
-            this.y = y;
-            this.angle = angle;
-            this.startTick = startTick;
-        }
-
-        private void update(int ceremonyProgress) {
-            int elapsed = ceremonyProgress - startTick;
-            int codePoints = text.codePointCount(0, text.length());
-            int visible = Math.min(codePoints, Math.max(0, elapsed));
-            visibleText = visible == 0 ? "" : text.substring(0, text.offsetByCodePoints(0, visible));
-        }
-    }
-
     private final DevState state = new DevState();
     private boolean playback;
-    private final List<CinematicLine> cinematicLines = new ArrayList<>();
+    private boolean automaticWeave;
+    @Nullable
+    private DeedCinematic cinematic;
+    private DeedCinematic.Phase cinematicPhase = DeedCinematic.Phase.PRELUDE;
+    private int visibleCinematicCodePoints;
     @Nullable
     private ResourceLocation activeDeed;
     private boolean weaveSent;
@@ -140,26 +121,36 @@ public class MirrorScreen extends Screen {
     private int lastLit;
     private boolean lastHeart;
 
-    private MirrorScreen(@Nullable ClientDeedCache.ClientPresentation presentation) {
+    private MirrorScreen(@Nullable ClientDeedCache.ClientPresentation presentation,
+                         @Nullable ResourceLocation automaticDeed) {
         super(Component.translatable("screen.cosmiccore.deeds"));
         playback = presentation != null;
+        MirrorSounds.open();
         if (presentation != null) {
             startPresentation(presentation.deedId());
+        } else if (automaticDeed != null) {
+            beginAutomaticWeave(automaticDeed);
         }
-        MirrorSounds.open();
     }
 
     public static void open() {
         Minecraft minecraft = Minecraft.getInstance();
         if (minecraft.player == null) return;
         List<ClientDeedCache.ClientPresentation> presentations = ClientDeedCache.presentations();
-        minecraft.setScreen(new MirrorScreen(presentations.isEmpty() ? null : presentations.getFirst()));
+        minecraft.setScreen(new MirrorScreen(presentations.isEmpty() ? null : presentations.getFirst(), null));
+    }
+
+    public static void openPatientZero() {
+        Minecraft minecraft = Minecraft.getInstance();
+        if (minecraft.player != null) {
+            minecraft.setScreen(new MirrorScreen(null, DeedRegistry.NETHER_PERMIT.id()));
+        }
     }
 
     public static void openPresentation(ClientDeedCache.ClientPresentation presentation) {
         Minecraft minecraft = Minecraft.getInstance();
         if (minecraft.player != null && minecraft.screen == null) {
-            minecraft.setScreen(new MirrorScreen(presentation));
+            minecraft.setScreen(new MirrorScreen(presentation, null));
         }
     }
 
@@ -206,7 +197,7 @@ public class MirrorScreen extends Screen {
     @Override
     public void tick() {
         deriveFromLedger();
-        if (state.ceremonyActive && (playback || state.holding) && !weaveSent) {
+        if (state.ceremonyActive && (playback || automaticWeave || state.holding) && !weaveSent) {
             advanceCeremony();
         }
         if (weaveSent && activeDeed != null && ClientDeedCache.woven().contains(activeDeed)) {
@@ -222,11 +213,18 @@ public class MirrorScreen extends Screen {
     private void advanceCeremony() {
         state.ceremonyProgress++;
         state.holdTicks = state.ceremonyProgress;
-        for (CinematicLine line : cinematicLines) {
-            line.update(state.ceremonyProgress);
+        DeedCinematic.Phase nextPhase = DeedCinematic.phaseAt(state.ceremonyProgress);
+        if (nextPhase != cinematicPhase) {
+            cinematicPhase = nextPhase;
+            MirrorSounds.weavePhase(nextPhase);
         }
+        int nextVisibleCodePoints = cinematic == null ? 0 : cinematic.visibleCodePoints(state.ceremonyProgress);
+        if (nextVisibleCodePoints > visibleCinematicCodePoints && state.ceremonyProgress % 3 == 0) {
+            MirrorSounds.memoryGlyph(cinematicPhase);
+        }
+        visibleCinematicCodePoints = nextVisibleCodePoints;
         if (state.ceremonyProgress % 12 == 0 && state.ceremonyProgress < CEREMONY_TICKS) {
-            MirrorSounds.holdTick(state.ceremonyProgress / (float) CEREMONY_TICKS);
+            MirrorSounds.holdTick(DeedCinematic.weaveProgress(state.ceremonyProgress));
         }
         if (state.ceremonyProgress < CEREMONY_TICKS) return;
         state.ceremonyProgress = CEREMONY_TICKS;
@@ -294,23 +292,95 @@ public class MirrorScreen extends Screen {
                     alpha << 24 | 0xFFF3D6);
         } else if (state.ceremonyActive) {
             int alpha = (int) (150 + 70 * Math.sin(time * 2.5f));
-            Component prompt = playback ? BINDING_PROMPT : HOLD_PROMPT;
+            Component prompt = playback || automaticWeave ? BINDING_PROMPT : HOLD_PROMPT;
             guiGraphics.drawCenteredString(font, prompt, width / 2, height - 40,
                     alpha << 24 | 0xF0D9A8);
         }
     }
 
     private void renderCinematicText(GuiGraphics guiGraphics) {
-        if (!state.ceremonyActive || cinematicLines.isEmpty()) return;
-        for (CinematicLine line : cinematicLines) {
-            if (line.visibleText.isEmpty()) continue;
+        if (!state.ceremonyActive || cinematic == null) return;
+        for (DeedCinematic.Fragment fragment : cinematic.fragments()) {
+            int visibleCodePoints = fragment.visibleCodePoints(state.ceremonyProgress);
+            int alpha = fragment.alpha(state.ceremonyProgress);
+            if (visibleCodePoints == 0 || alpha == 0) continue;
+            List<String> lines = wrapCinematicText(fragment.text(), cinematicTextWidth(fragment));
             var pose = guiGraphics.pose();
             pose.pushPose();
-            pose.translate(width * line.x, height * line.y, 300);
-            pose.mulPose(Axis.ZP.rotationDegrees(line.angle));
-            guiGraphics.drawCenteredString(font, line.visibleText, 0, 0, 0xFFE8DFD0);
+            pose.translate(width * fragment.x(), height * fragment.y(), 300);
+            pose.mulPose(Axis.ZP.rotationDegrees(fragment.angle()));
+            int top = -Math.max(0, lines.size() - 1) * 5;
+            int remaining = visibleCodePoints;
+            for (int i = 0; i < lines.size(); i++) {
+                String line = lines.get(i);
+                int lineCodePoints = line.codePointCount(0, line.length());
+                int visibleLineCodePoints = Math.min(remaining, lineCodePoints);
+                String visibleLine = visibleLineCodePoints == 0 ? "" :
+                        line.substring(0, line.offsetByCodePoints(0, visibleLineCodePoints));
+                guiGraphics.drawCenteredString(font, visibleLine, 0, top + i * 10,
+                        alpha << 24 | 0xE8DFD0);
+                remaining = Math.max(0, remaining - lineCodePoints - (i + 1 < lines.size() ? 1 : 0));
+            }
             pose.popPose();
         }
+    }
+
+    private int cinematicTextWidth(DeedCinematic.Fragment fragment) {
+        int centerX = Math.round(width * fragment.x());
+        int edgeLimited = (Math.min(centerX, width - centerX) - CINEMATIC_TEXT_MARGIN) * 2;
+        int preferred = Math.min(CINEMATIC_TEXT_MAX_WIDTH, Math.round(width * CINEMATIC_TEXT_WIDTH_RATIO));
+        return Math.max(80, Math.min(preferred, Math.max(80, edgeLimited)));
+    }
+
+    private List<String> wrapCinematicText(String text, int maxWidth) {
+        List<String> lines = new ArrayList<>();
+        for (String paragraph : text.split("\\n", -1)) {
+            if (paragraph.isEmpty()) {
+                lines.add("");
+                continue;
+            }
+            StringBuilder line = new StringBuilder();
+            for (String word : paragraph.split(" +")) {
+                if (word.isEmpty()) continue;
+                String candidate = line.isEmpty() ? word : line + " " + word;
+                if (font.width(candidate) <= maxWidth) {
+                    line.setLength(0);
+                    line.append(candidate);
+                    continue;
+                }
+                if (!line.isEmpty()) {
+                    lines.add(line.toString());
+                    line.setLength(0);
+                }
+                wrapLongWord(lines, line, word, maxWidth);
+            }
+            if (!line.isEmpty()) lines.add(line.toString());
+        }
+        return lines;
+    }
+
+    private void wrapLongWord(List<String> lines, StringBuilder line, String word, int maxWidth) {
+        int offset = 0;
+        while (offset < word.length()) {
+            int end = fittingPrefixEnd(word, offset, maxWidth);
+            String piece = word.substring(offset, end);
+            if (end < word.length()) {
+                lines.add(piece);
+            } else {
+                line.append(piece);
+            }
+            offset = end;
+        }
+    }
+
+    private int fittingPrefixEnd(String text, int start, int maxWidth) {
+        int end = start;
+        while (end < text.length()) {
+            int next = text.offsetByCodePoints(end, 1);
+            if (end > start && font.width(text.substring(start, next)) > maxWidth) break;
+            end = next;
+        }
+        return end;
     }
 
     @Override
@@ -327,7 +397,9 @@ public class MirrorScreen extends Screen {
 
     @Override
     public boolean mouseClicked(double mouseX, double mouseY, int button) {
-        if (button != 0 || playback || weaveSent) return super.mouseClicked(mouseX, mouseY, button);
+        if (button != 0 || playback || automaticWeave || weaveSent) {
+            return super.mouseClicked(mouseX, mouseY, button);
+        }
         if (heartClaimable() && heartAt(mouseX, mouseY)) {
             state.heartHolding = true;
             state.heartHoldTicks = 0;
@@ -358,15 +430,29 @@ public class MirrorScreen extends Screen {
     }
 
     private void beginHeldWeave(ResourceLocation deedId, int slot, int coil) {
+        beginWeave(deedId, slot, coil);
+        state.holding = true;
+    }
+
+    private void beginAutomaticWeave(ResourceLocation deedId) {
+        deriveFromLedger();
+        List<ResourceLocation> pending = pendingDeeds();
+        int pendingIndex = Math.max(0, pending.indexOf(deedId));
+        beginWeave(deedId, state.litEchoes + pendingIndex, pendingIndex);
+        automaticWeave = true;
+    }
+
+    private void beginWeave(ResourceLocation deedId, int slot, int coil) {
         activeDeed = deedId;
         state.ceremonySlot = slot;
         state.ceremonyCoil = coil;
         state.ceremonyActive = true;
         state.ceremonyProgress = 0;
-        state.holding = true;
         state.holdTicks = 0;
         state.flashTicks = 0;
-        prepareCinematicLines(deedId);
+        cinematic = DeedCinematic.load(deedId);
+        cinematicPhase = DeedCinematic.Phase.PRELUDE;
+        visibleCinematicCodePoints = 0;
         MirrorSounds.weaveStart();
     }
 
@@ -377,21 +463,15 @@ public class MirrorScreen extends Screen {
         state.holding = false;
         state.holdTicks = 0;
         state.flashTicks = 0;
-        cinematicLines.clear();
+        cinematic = null;
     }
 
     private void startPresentation(ResourceLocation deedId) {
-        activeDeed = deedId;
         int wovenBody = 0;
         for (ResourceLocation id : ClientDeedCache.woven()) {
             if (!id.equals(DeedRegistry.THE_ADDRESS.id()) && !id.equals(deedId)) wovenBody++;
         }
-        state.ceremonySlot = wovenBody % ECHO_CAP;
-        state.ceremonyCoil = 0;
-        state.ceremonyActive = true;
-        state.ceremonyProgress = 0;
-        prepareCinematicLines(deedId);
-        MirrorSounds.weaveStart();
+        beginWeave(deedId, wovenBody % ECHO_CAP, 0);
     }
 
     private void finishPresentation() {
@@ -405,7 +485,7 @@ public class MirrorScreen extends Screen {
         state.burstSlot = state.ceremonySlot;
         activeDeed = null;
         playback = false;
-        cinematicLines.clear();
+        cinematic = null;
         MirrorSounds.claim();
     }
 
@@ -422,25 +502,8 @@ public class MirrorScreen extends Screen {
         state.holdTicks = 0;
         activeDeed = null;
         weaveSent = false;
-        cinematicLines.clear();
-    }
-
-    private void prepareCinematicLines(ResourceLocation deedId) {
-        cinematicLines.clear();
-        List<String> telling = new ArrayList<>();
-        for (int i = 0; i < 8; i++) {
-            String key = "deed." + deedId.getNamespace() + "." + deedId.getPath() + ".telling." + i;
-            if (!I18n.exists(key)) break;
-            telling.add(Component.translatable(key).getString());
-        }
-        int seed = deedId.hashCode();
-        int spacing = telling.isEmpty() ? 0 : 80 / telling.size();
-        for (int i = 0; i < telling.size(); i++) {
-            float x = 0.18f + Math.floorMod(seed + i * 41, 620) / 1000f;
-            float y = 0.16f + Math.floorMod(seed * 3 + i * 173, 570) / 1000f;
-            float angle = -18f + Math.floorMod(seed * 7 + i * 67, 361) / 10f;
-            cinematicLines.add(new CinematicLine(telling.get(i), x, y, angle, 10 + i * spacing));
-        }
+        automaticWeave = false;
+        cinematic = null;
     }
 
     private boolean heartClaimable() {
@@ -500,6 +563,11 @@ public class MirrorScreen extends Screen {
         if (OPEN == null || !OPEN.matches(event.getKey(), event.getScanCode())) return;
         Minecraft minecraft = Minecraft.getInstance();
         if (minecraft.screen != null || minecraft.player == null || !ClientDeedCache.canOpen()) return;
-        open();
+        if (ClientDeedCache.pending().contains(DeedRegistry.NETHER_PERMIT.id()) &&
+                !ClientDeedCache.woven().contains(DeedRegistry.NETHER_PERMIT.id())) {
+            openPatientZero();
+        } else {
+            open();
+        }
     }
 }

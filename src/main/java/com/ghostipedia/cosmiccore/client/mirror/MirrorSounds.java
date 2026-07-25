@@ -33,6 +33,20 @@ public final class MirrorSounds {
         ui(SoundEvents.AMETHYST_BLOCK_RESONATE, 1.0f, 0.7f);
     }
 
+    public static void weavePhase(DeedCinematic.Phase phase) {
+        switch (phase) {
+            case PRELUDE -> ui(SoundEvents.SCULK_CLICKING, 0.6f, 0.25f);
+            case COIL -> ui(SoundEvents.WOOL_PLACE, 0.75f, 0.55f);
+            case RING -> ui(SoundEvents.AMETHYST_BLOCK_RESONATE, 0.8f, 0.65f);
+            case KNOT -> ui(SoundEvents.RESPAWN_ANCHOR_CHARGE, 1.15f, 0.55f);
+        }
+    }
+
+    public static void memoryGlyph(DeedCinematic.Phase phase) {
+        float pitch = 0.68f + phase.ordinal() * 0.11f;
+        ui(SoundEvents.SCULK_CLICKING, pitch, 0.12f);
+    }
+
     public static void holdTick(float progress) {
         ui(SoundEvents.AMETHYST_BLOCK_STEP, 0.8f + progress * 0.8f, 0.4f);
     }
