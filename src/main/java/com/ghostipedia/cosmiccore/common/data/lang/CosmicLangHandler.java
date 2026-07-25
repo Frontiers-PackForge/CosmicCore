@@ -1690,11 +1690,27 @@ public class CosmicLangHandler extends LangHandler {
         provider.add("cosmiccore.deeds.banner.second",
                 "Fate feels as if it's buckling around you, asking for a new story.");
         provider.add("cosmiccore.deeds.banner.prompt", "It will not let go, pull it back to you");
+        provider.add("cosmiccore.deeds.banner.force_control", "[Press %s to forcefully weave]");
+        provider.add("cosmiccore.deeds.banner.control", "[Press %s to enter the Inner Vault]");
         provider.add("mirror.cosmiccore.prompt.hold", "Hold to weave");
         provider.add("mirror.cosmiccore.prompt.binding", "Binding...");
         provider.add("mirror.cosmiccore.prompt.heart_hold", "Hold on tightly...");
         provider.add("mirror.cosmiccore.prompt.heart",
                 "Mother Moon, here I stand, on the same stage as you once again.");
         provider.add("deed.cosmiccore.nether_permit", "Nether Permit");
+        provider.add("deed.cosmiccore.nether_permit.telling.prelude.0",
+                "Cold iron against a borrowed palm....");
+        provider.add("deed.cosmiccore.nether_permit.telling.coil.0",
+                "Someone painted this world.\nTheir name is far gone.");
+        provider.add("deed.cosmiccore.nether_permit.telling.coil.1",
+                "The quiet life kept what they could not carry amongst the stars.");
+        provider.add("deed.cosmiccore.nether_permit.telling.ring.0",
+                "The thread recoils to where no one was meant to return.");
+        provider.add("deed.cosmiccore.nether_permit.telling.ring.1",
+                "Warmth passes onto you like a welcomed dream, an embrace from someone no longer here.");
+        provider.add("deed.cosmiccore.nether_permit.telling.knot.0",
+                "It remembers the ground, it remembers the earth holding them.");
+        provider.add("deed.cosmiccore.nether_permit.telling.knot.1",
+                "Chains of silver open a maw into an infinite ocean of stars, as i cast my will inside.");
     }
 }

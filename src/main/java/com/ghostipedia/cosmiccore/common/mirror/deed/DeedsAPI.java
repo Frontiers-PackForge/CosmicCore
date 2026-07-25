@@ -1,6 +1,7 @@
 package com.ghostipedia.cosmiccore.common.mirror.deed;
 
 import com.ghostipedia.cosmiccore.CosmicCore;
+import com.ghostipedia.cosmiccore.common.data.CosmicItems;
 import com.ghostipedia.cosmiccore.common.network.CCoreNetwork;
 import com.ghostipedia.cosmiccore.common.network.packet.DeedPresentationPacket;
 import com.ghostipedia.cosmiccore.common.network.packet.DeedSyncPacket;
@@ -63,16 +64,22 @@ public final class DeedsAPI {
         return echo;
     }
 
-    @Nullable
-    public static DeedLedger.WovenEcho forcePatientZero(ServerPlayer player) {
+    public static boolean reconcilePatientZero(ServerPlayer player) {
         MinecraftServer server = player.getServer();
-        if (server == null) return null;
+        if (server == null) return false;
         String teamKey = DeedTeams.teamKey(player);
         DeedLedger ledger = DeedLedger.get(server);
         ResourceLocation deedId = DeedRegistry.NETHER_PERMIT.id();
-        if (ledger.isWoven(teamKey, deedId)) return null;
-        ledger.grantCoil(teamKey, deedId);
-        return weave(player, deedId, true, true);
+        if (ledger.isWoven(teamKey, deedId) || !hasPatientZeroTrigger(player)) return false;
+        return grantCoil(player, deedId);
+    }
+
+    public static boolean hasPatientZeroTrigger(ServerPlayer player) {
+        if (player.getInventory().contains(stack -> stack.is(CosmicItems.NETHER_PERMIT.get()))) return true;
+        MinecraftServer server = player.getServer();
+        if (server == null) return false;
+        var advancement = server.getAdvancements().get(CosmicCore.id("nether_permit"));
+        return advancement != null && player.getAdvancements().getOrStartProgress(advancement).isDone();
     }
 
     public static boolean isWoven(MinecraftServer server, String teamKey, ResourceLocation deedId) {
@@ -121,6 +128,9 @@ public final class DeedsAPI {
         Collection<UUID> members = DeedTeams.teamMemberIds(player);
         ledger.reset(teamKey);
         ledger.clearPresentations(members);
+        if (hasPatientZeroTrigger(player)) {
+            ledger.grantCoil(teamKey, DeedRegistry.NETHER_PERMIT.id());
+        }
         syncTeam(server, teamKey);
     }
 }

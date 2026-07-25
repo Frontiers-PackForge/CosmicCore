@@ -1,6 +1,8 @@
 package com.ghostipedia.cosmiccore.integration.recipes;
 
 import com.ghostipedia.cosmiccore.CosmicCore;
+import com.ghostipedia.cosmiccore.client.mirror.ClientDeedCache;
+import com.ghostipedia.cosmiccore.client.mirror.DeedInventoryButton;
 import com.ghostipedia.cosmiccore.common.data.CosmicItems;
 import com.ghostipedia.cosmiccore.common.data.materials.CosmicBundleMaterials;
 import com.ghostipedia.cosmiccore.common.food.CosmicFoodRegistry;
@@ -14,6 +16,7 @@ import com.ghostipedia.cosmiccore.integration.recipes.emi.CompositeOreSortingEmi
 import com.ghostipedia.cosmiccore.integration.recipes.emi.CraftingStationRecipeHandler;
 
 import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.client.gui.screens.inventory.InventoryScreen;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
@@ -30,6 +33,7 @@ import dev.emi.emi.api.recipe.EmiRecipeCategory;
 import dev.emi.emi.api.stack.Comparison;
 import dev.emi.emi.api.stack.EmiIngredient;
 import dev.emi.emi.api.stack.EmiStack;
+import dev.emi.emi.api.widget.Bounds;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -47,6 +51,15 @@ public class CosmicCoreEMIPlugin implements EmiPlugin {
 
         registerModularUIScreen(registry, ScreenWrapper.class);
         registerModularUIScreen(registry, ContainerScreenWrapper.class);
+        registry.addExclusionArea(InventoryScreen.class, (screen, consumer) -> {
+            if (!ClientDeedCache.entryUnlocked() || !DeedInventoryButton.visibleOnScreen(screen)) return;
+            int top = screen.getGuiTop() + screen.getYSize() - DeedInventoryButton.TEXTURE_BUFFER;
+            consumer.accept(new Bounds(
+                    screen.getGuiLeft(),
+                    top,
+                    screen.getXSize(),
+                    DeedInventoryButton.visualBottom(screen) - top));
+        });
         CraftingStationRecipeHandler.register(registry);
         registerFoodRoleAliases(registry);
 
