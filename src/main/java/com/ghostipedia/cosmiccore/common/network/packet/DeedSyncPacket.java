@@ -2,6 +2,7 @@ package com.ghostipedia.cosmiccore.common.network.packet;
 
 import com.ghostipedia.cosmiccore.CosmicCore;
 import com.ghostipedia.cosmiccore.client.mirror.ClientDeedCache;
+import com.ghostipedia.cosmiccore.common.mirror.deed.DeedLedger;
 
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
@@ -23,10 +24,13 @@ public class DeedSyncPacket implements CustomPacketPayload {
 
     private final List<ResourceLocation> woven;
     private final List<ResourceLocation> pending;
+    private final List<DeedLedger.Presentation> presentations;
 
-    public DeedSyncPacket(List<ResourceLocation> woven, List<ResourceLocation> pending) {
+    public DeedSyncPacket(List<ResourceLocation> woven, List<ResourceLocation> pending,
+                          List<DeedLedger.Presentation> presentations) {
         this.woven = woven;
         this.pending = pending;
+        this.presentations = presentations;
     }
 
     public DeedSyncPacket(FriendlyByteBuf buf) {
@@ -40,6 +44,11 @@ public class DeedSyncPacket implements CustomPacketPayload {
         for (int i = 0; i < pendingCount; i++) {
             this.pending.add(buf.readResourceLocation());
         }
+        int presentationCount = buf.readVarInt();
+        this.presentations = new ArrayList<>(presentationCount);
+        for (int i = 0; i < presentationCount; i++) {
+            this.presentations.add(new DeedLedger.Presentation(buf.readResourceLocation(), buf.readBoolean()));
+        }
     }
 
     public void encode(FriendlyByteBuf buf) {
@@ -51,10 +60,15 @@ public class DeedSyncPacket implements CustomPacketPayload {
         for (ResourceLocation id : pending) {
             buf.writeResourceLocation(id);
         }
+        buf.writeVarInt(presentations.size());
+        for (DeedLedger.Presentation presentation : presentations) {
+            buf.writeResourceLocation(presentation.deedId());
+            buf.writeBoolean(presentation.forced());
+        }
     }
 
     public void execute(IPayloadContext context) {
-        ClientDeedCache.applySync(woven, pending);
+        context.enqueueWork(() -> ClientDeedCache.applySync(woven, pending, presentations));
     }
 
     @Override

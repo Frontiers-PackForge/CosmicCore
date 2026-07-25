@@ -2,6 +2,7 @@ package com.ghostipedia.cosmiccore.common.mirror.deed;
 
 import com.ghostipedia.cosmiccore.CosmicCore;
 import com.ghostipedia.cosmiccore.common.network.CCoreNetwork;
+import com.ghostipedia.cosmiccore.common.network.packet.DeedPresentationPacket;
 import com.ghostipedia.cosmiccore.common.network.packet.DeedSyncPacket;
 
 import net.minecraft.core.GlobalPos;
@@ -12,7 +13,9 @@ import net.minecraft.server.level.ServerPlayer;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
+import java.util.UUID;
 
 public final class DeedsAPI {
 
@@ -32,16 +35,44 @@ public final class DeedsAPI {
 
     @Nullable
     public static DeedLedger.WovenEcho weave(ServerPlayer player, ResourceLocation deedId, boolean bindPosition) {
+        return weave(player, deedId, bindPosition, false);
+    }
+
+    @Nullable
+    public static DeedLedger.WovenEcho weave(ServerPlayer player, ResourceLocation deedId, boolean bindPosition,
+                                             boolean forcedPresentation) {
         MinecraftServer server = player.getServer();
         if (server == null) return null;
         String teamKey = DeedTeams.teamKey(player);
         GlobalPos pos = bindPosition ? GlobalPos.of(player.level().dimension(), player.blockPosition()) : null;
-        DeedLedger.WovenEcho echo = DeedLedger.get(server).weave(teamKey, deedId, player.getUUID(),
+        DeedLedger ledger = DeedLedger.get(server);
+        DeedLedger.WovenEcho echo = ledger.weave(teamKey, deedId, player.getUUID(),
                 player.level().getGameTime(), pos);
         if (echo != null) {
+            Collection<UUID> members = DeedTeams.teamMemberIds(player);
+            for (UUID memberId : members) {
+                ledger.enqueuePresentation(memberId, deedId, forcedPresentation);
+            }
             syncTeam(server, teamKey);
+            for (ServerPlayer online : server.getPlayerList().getPlayers()) {
+                if (members.contains(online.getUUID())) {
+                    CCoreNetwork.sendToPlayer(online, new DeedPresentationPacket(deedId, true));
+                }
+            }
         }
         return echo;
+    }
+
+    @Nullable
+    public static DeedLedger.WovenEcho forcePatientZero(ServerPlayer player) {
+        MinecraftServer server = player.getServer();
+        if (server == null) return null;
+        String teamKey = DeedTeams.teamKey(player);
+        DeedLedger ledger = DeedLedger.get(server);
+        ResourceLocation deedId = DeedRegistry.NETHER_PERMIT.id();
+        if (ledger.isWoven(teamKey, deedId)) return null;
+        ledger.grantCoil(teamKey, deedId);
+        return weave(player, deedId, true, true);
     }
 
     public static boolean isWoven(MinecraftServer server, String teamKey, ResourceLocation deedId) {
@@ -49,22 +80,16 @@ public final class DeedsAPI {
     }
 
     public static void syncTeam(MinecraftServer server, String teamKey) {
-        DeedLedger ledger = DeedLedger.get(server);
-        List<ResourceLocation> woven = new ArrayList<>();
-        for (DeedLedger.WovenEcho echo : ledger.wovenOf(teamKey)) {
-            woven.add(echo.deedId());
-        }
-        List<ResourceLocation> pending = new ArrayList<>(ledger.pendingOf(teamKey));
-        DeedSyncPacket packet = new DeedSyncPacket(woven, pending);
         int sent = 0;
         for (ServerPlayer online : server.getPlayerList().getPlayers()) {
             if (DeedTeams.teamKey(online).equals(teamKey)) {
-                CCoreNetwork.sendToPlayer(online, packet);
+                syncPlayer(online);
                 sent++;
             }
         }
+        DeedLedger ledger = DeedLedger.get(server);
         CosmicCore.LOGGER.info("Deed sync team {}: {} woven {} pending -> {} players", teamKey,
-                woven.size(), pending.size(), sent);
+                ledger.wovenOf(teamKey).size(), ledger.pendingOf(teamKey).size(), sent);
     }
 
     public static void syncPlayer(ServerPlayer player) {
@@ -76,7 +101,26 @@ public final class DeedsAPI {
         for (DeedLedger.WovenEcho echo : ledger.wovenOf(teamKey)) {
             woven.add(echo.deedId());
         }
-        CCoreNetwork.sendToPlayer(player,
-                new DeedSyncPacket(woven, new ArrayList<>(ledger.pendingOf(teamKey))));
+        CCoreNetwork.sendToPlayer(player, new DeedSyncPacket(woven,
+                new ArrayList<>(ledger.pendingOf(teamKey)), ledger.presentationsOf(player.getUUID())));
+    }
+
+    public static void acknowledgePresentation(ServerPlayer player, ResourceLocation deedId) {
+        MinecraftServer server = player.getServer();
+        if (server == null) return;
+        if (DeedLedger.get(server).acknowledgePresentation(player.getUUID(), deedId)) {
+            syncPlayer(player);
+        }
+    }
+
+    public static void resetTeam(ServerPlayer player) {
+        MinecraftServer server = player.getServer();
+        if (server == null) return;
+        String teamKey = DeedTeams.teamKey(player);
+        DeedLedger ledger = DeedLedger.get(server);
+        Collection<UUID> members = DeedTeams.teamMemberIds(player);
+        ledger.reset(teamKey);
+        ledger.clearPresentations(members);
+        syncTeam(server, teamKey);
     }
 }

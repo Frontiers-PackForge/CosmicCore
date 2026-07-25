@@ -137,8 +137,7 @@ public final class DeedCommand {
                         .executes(ctx -> {
                             ServerPlayer player = ctx.getSource().getPlayerOrException();
                             String teamKey = DeedTeams.teamKey(player);
-                            DeedLedger.get(player.getServer()).reset(teamKey);
-                            DeedsAPI.syncTeam(player.getServer(), teamKey);
+                            DeedsAPI.resetTeam(player);
                             ctx.getSource().sendSuccess(() -> Component.translatableWithFallback(
                                     "command.cosmiccore.deed.reset", "Deed ledger reset for team %s", teamKey), true);
                             return 1;

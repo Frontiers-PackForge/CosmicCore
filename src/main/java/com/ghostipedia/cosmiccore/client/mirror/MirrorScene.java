@@ -211,9 +211,9 @@ public final class MirrorScene {
         }
         boolean heartHero = (state.skeins >= SKEIN_MAX && Math.min(state.litEchoes, ECHO_MAX) >= ECHO_MAX &&
                 !state.heartClaimed) || state.heartBurstTicks > 0;
-        if (state.claimable || state.flashTicks > 0 || state.burstTicks > 0 || heartHero) {
+        if (state.ceremonyActive || state.claimable || state.flashTicks > 0 || state.burstTicks > 0 || heartHero) {
             sceneLayer(pose, cx, cy, scale, px, py, 4);
-            if (state.claimable || state.flashTicks > 0 || state.burstTicks > 0) {
+            if (state.ceremonyActive || state.claimable || state.flashTicks > 0 || state.burstTicks > 0) {
                 drawBeacon(g, cx, cy, time, state);
             }
             if (heartHero) {
@@ -404,10 +404,9 @@ public final class MirrorScene {
     private static void drawCeremonyStrand(GuiGraphics g, float cx, float cy, float time,
                                            MirrorScreen.DevState state) {
         Matrix4f mat = g.pose().last().pose();
-        int lit = Math.min(state.litEchoes, ECHO_MAX);
-        int slot = Math.min(lit, ECHO_MAX - 1);
+        int slot = Math.floorMod(state.ceremonySlot, ECHO_MAX);
         float[] seat = { cx + ECHO_LAYOUT[slot][0], cy + ECHO_LAYOUT[slot][1] };
-        float[] spool = coilPos(cx, cy, Math.max(0, state.coils - 1));
+        float[] spool = coilPos(cx, cy, Math.max(0, state.ceremonyCoil));
         int band = slot % 3;
         float theta = slot * GOLDEN_ANGLE + band * 0.7f;
         float[] anchor = bandPoint(cx, cy, band, theta, time);
@@ -494,7 +493,7 @@ public final class MirrorScene {
             flush(bglow);
         }
 
-        int slot = Math.min(state.litEchoes, ECHO_MAX - 1);
+        int slot = Math.floorMod(state.ceremonySlot, ECHO_MAX);
         float ex = cx + ECHO_LAYOUT[slot][0];
         float ey = cy + ECHO_LAYOUT[slot][1];
 
@@ -505,7 +504,7 @@ public final class MirrorScene {
                     (int) (220 * (1f - f)));
             flush(burst);
         }
-        if (!state.claimable) return;
+        if (!state.claimable && !state.ceremonyActive) return;
 
         float frac = (time * 0.8f) % 1f;
         float frac2 = (time * 0.8f + 0.5f) % 1f;
@@ -521,8 +520,8 @@ public final class MirrorScene {
         texQuad(glow, mat, ex, ey, 6.5f * boost, ECHO_HOT, 255);
         flush(glow);
 
-        if (state.holding) {
-            float hold = Math.min(1f, state.holdTicks / (float) MirrorScreen.HOLD_TICKS);
+        if (state.ceremonyActive) {
+            float hold = Math.min(1f, state.ceremonyProgress / (float) MirrorScreen.CEREMONY_TICKS);
             BufferBuilder lock = beginColor();
             ringStroke(lock, mat, ex, ey, 34f - 25f * hold, 2.2f, ECHO_HOT, (int) (130 + 110 * hold));
             arcStroke(lock, mat, ex, ey, 13f, 3f, -Mth.HALF_PI, hold * Mth.TWO_PI, ECHO_HOT, 255);
