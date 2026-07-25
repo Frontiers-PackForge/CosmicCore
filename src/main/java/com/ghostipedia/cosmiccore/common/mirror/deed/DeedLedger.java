@@ -32,6 +32,8 @@ public class DeedLedger extends SavedData {
     public record WovenEcho(ResourceLocation deedId, UUID weaver, int claimIndex, long gameTime,
                             @Nullable GlobalPos position) {}
 
+    public record Presentation(ResourceLocation deedId, boolean forced) {}
+
     public static final class TeamDeeds {
 
         final LinkedHashMap<ResourceLocation, WovenEcho> woven = new LinkedHashMap<>();
@@ -39,6 +41,7 @@ public class DeedLedger extends SavedData {
     }
 
     private final Map<String, TeamDeeds> teams = new HashMap<>();
+    private final Map<UUID, LinkedHashMap<ResourceLocation, Presentation>> presentations = new HashMap<>();
 
     public static DeedLedger get(MinecraftServer server) {
         return server.overworld().getDataStorage().computeIfAbsent(
@@ -73,6 +76,21 @@ public class DeedLedger extends SavedData {
             }
             ledger.teams.put(teamTag.getString("key"), deeds);
         }
+        ListTag presentationsTag = tag.getList("presentations", Tag.TAG_COMPOUND);
+        for (int i = 0; i < presentationsTag.size(); i++) {
+            CompoundTag playerTag = presentationsTag.getCompound(i);
+            UUID playerId = playerTag.getUUID("player");
+            LinkedHashMap<ResourceLocation, Presentation> playerPresentations = new LinkedHashMap<>();
+            ListTag entriesTag = playerTag.getList("entries", Tag.TAG_COMPOUND);
+            for (int j = 0; j < entriesTag.size(); j++) {
+                CompoundTag entryTag = entriesTag.getCompound(j);
+                ResourceLocation id = ResourceLocation.parse(entryTag.getString("id"));
+                playerPresentations.put(id, new Presentation(id, entryTag.getBoolean("forced")));
+            }
+            if (!playerPresentations.isEmpty()) {
+                ledger.presentations.put(playerId, playerPresentations);
+            }
+        }
         return ledger;
     }
 
@@ -104,6 +122,21 @@ public class DeedLedger extends SavedData {
             teamsTag.add(teamTag);
         }
         tag.put("teams", teamsTag);
+        ListTag presentationsTag = new ListTag();
+        for (Map.Entry<UUID, LinkedHashMap<ResourceLocation, Presentation>> entry : presentations.entrySet()) {
+            CompoundTag playerTag = new CompoundTag();
+            playerTag.putUUID("player", entry.getKey());
+            ListTag entriesTag = new ListTag();
+            for (Presentation presentation : entry.getValue().values()) {
+                CompoundTag entryTag = new CompoundTag();
+                entryTag.putString("id", presentation.deedId().toString());
+                entryTag.putBoolean("forced", presentation.forced());
+                entriesTag.add(entryTag);
+            }
+            playerTag.put("entries", entriesTag);
+            presentationsTag.add(playerTag);
+        }
+        tag.put("presentations", presentationsTag);
         return tag;
     }
 
@@ -144,6 +177,43 @@ public class DeedLedger extends SavedData {
     public Set<ResourceLocation> pendingOf(String teamKey) {
         TeamDeeds deeds = teams.get(teamKey);
         return deeds == null ? Set.of() : new LinkedHashSet<>(deeds.pending);
+    }
+
+    public void enqueuePresentation(UUID playerId, ResourceLocation deedId, boolean forced) {
+        LinkedHashMap<ResourceLocation, Presentation> playerPresentations = presentations.computeIfAbsent(
+                playerId, ignored -> new LinkedHashMap<>());
+        Presentation current = playerPresentations.get(deedId);
+        if (current == null || forced && !current.forced()) {
+            playerPresentations.put(deedId, new Presentation(deedId, forced));
+            setDirty();
+        }
+    }
+
+    public boolean acknowledgePresentation(UUID playerId, ResourceLocation deedId) {
+        LinkedHashMap<ResourceLocation, Presentation> playerPresentations = presentations.get(playerId);
+        if (playerPresentations == null || playerPresentations.remove(deedId) == null) return false;
+        if (playerPresentations.isEmpty()) {
+            presentations.remove(playerId);
+        }
+        setDirty();
+        return true;
+    }
+
+    public List<Presentation> presentationsOf(UUID playerId) {
+        LinkedHashMap<ResourceLocation, Presentation> playerPresentations = presentations.get(playerId);
+        return playerPresentations == null ? List.of() : new ArrayList<>(playerPresentations.values());
+    }
+
+    public void clearPresentations(Iterable<UUID> playerIds) {
+        boolean changed = false;
+        for (UUID playerId : playerIds) {
+            changed |= presentations.remove(playerId) != null;
+        }
+        if (changed) setDirty();
+    }
+
+    public void clearPresentations(UUID playerId) {
+        if (presentations.remove(playerId) != null) setDirty();
     }
 
     public void reset(String teamKey) {

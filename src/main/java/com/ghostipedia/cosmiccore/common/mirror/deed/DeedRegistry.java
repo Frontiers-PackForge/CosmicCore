@@ -24,6 +24,8 @@ public final class DeedRegistry {
             "deed.cosmiccore.first_machine", Deed.Lever.KEY, 1, "foundation"));
     public static final Deed FIRST_DESCENT = register(new Deed(CosmicCore.id("first_descent"),
             "deed.cosmiccore.first_descent", Deed.Lever.MARK, 3, "descent"));
+    public static final Deed NETHER_PERMIT = register(new Deed(CosmicCore.id("nether_permit"),
+            "deed.cosmiccore.nether_permit", Deed.Lever.KEY, 0, "foundation"));
     public static final Deed THE_ADDRESS = register(new Deed(CosmicCore.id("the_address"),
             "deed.cosmiccore.the_address", Deed.Lever.KEY, 7, "address"));
 

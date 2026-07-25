@@ -3,6 +3,7 @@ package com.ghostipedia.cosmiccore.client.mirror;
 import com.ghostipedia.cosmiccore.CosmicCore;
 import com.ghostipedia.cosmiccore.common.mirror.deed.DeedRegistry;
 import com.ghostipedia.cosmiccore.common.network.CCoreNetwork;
+import com.ghostipedia.cosmiccore.common.network.packet.DeedPresentationAckPacket;
 import com.ghostipedia.cosmiccore.common.network.packet.MirrorWeavePacket;
 
 import net.minecraft.Util;
@@ -10,7 +11,9 @@ import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.client.resources.language.I18n;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
@@ -20,10 +23,15 @@ import net.neoforged.neoforge.client.event.RegisterKeyMappingsEvent;
 import net.neoforged.neoforge.client.settings.KeyConflictContext;
 
 import com.mojang.blaze3d.platform.InputConstants;
+import com.mojang.math.Axis;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.lwjgl.glfw.GLFW;
 
-@EventBusSubscriber(modid = CosmicCore.MOD_ID, bus = EventBusSubscriber.Bus.GAME, value = Dist.CLIENT)
+import java.util.ArrayList;
+import java.util.List;
+
+@EventBusSubscriber(modid = CosmicCore.MOD_ID, value = Dist.CLIENT)
 public class MirrorScreen extends Screen {
 
     public static final int CEREMONY_TICKS = 160;
@@ -42,6 +50,8 @@ public class MirrorScreen extends Screen {
         public int coils;
         public boolean ceremonyActive;
         public int ceremonyProgress;
+        public int ceremonySlot;
+        public int ceremonyCoil;
         public int hoverEcho = -1;
         public float veil;
         public int flashTicks;
@@ -57,8 +67,6 @@ public class MirrorScreen extends Screen {
         public int heartHoldTicks;
         public boolean heartClaimed;
         public int heartBurstTicks;
-        public int devSkeins;
-        public int devDim;
 
         public DevState() {
             reset();
@@ -69,6 +77,8 @@ public class MirrorScreen extends Screen {
             claimable = false;
             ceremonyActive = false;
             ceremonyProgress = 0;
+            ceremonySlot = 0;
+            ceremonyCoil = 0;
             veil = 0f;
             flashTicks = 0;
             holding = false;
@@ -81,13 +91,46 @@ public class MirrorScreen extends Screen {
             heartHolding = false;
             heartHoldTicks = 0;
             heartBurstTicks = 0;
-            devSkeins = 0;
-            devDim = 0;
+        }
+    }
+
+    private static final Component HEART_PROMPT = Component.translatable("mirror.cosmiccore.prompt.heart");
+    private static final Component HEART_HOLD_PROMPT = Component.translatable("mirror.cosmiccore.prompt.heart_hold");
+    private static final Component BINDING_PROMPT = Component.translatable("mirror.cosmiccore.prompt.binding");
+    private static final Component HOLD_PROMPT = Component.translatable("mirror.cosmiccore.prompt.hold");
+
+    private static final class CinematicLine {
+
+        private final String text;
+        private final float x;
+        private final float y;
+        private final float angle;
+        private final int startTick;
+        private String visibleText = "";
+
+        private CinematicLine(String text, float x, float y, float angle, int startTick) {
+            this.text = text;
+            this.x = x;
+            this.y = y;
+            this.angle = angle;
+            this.startTick = startTick;
+        }
+
+        private void update(int ceremonyProgress) {
+            int elapsed = ceremonyProgress - startTick;
+            int codePoints = text.codePointCount(0, text.length());
+            int visible = Math.min(codePoints, Math.max(0, elapsed));
+            visibleText = visible == 0 ? "" : text.substring(0, text.offsetByCodePoints(0, visible));
         }
     }
 
     private final DevState state = new DevState();
-    private float time = 0f;
+    private boolean playback;
+    private final List<CinematicLine> cinematicLines = new ArrayList<>();
+    @Nullable
+    private ResourceLocation activeDeed;
+    private boolean weaveSent;
+    private float time;
     private float zoom = 1f;
     private float targetZoom = 1f;
     private long lastMillis = -1L;
@@ -97,30 +140,56 @@ public class MirrorScreen extends Screen {
     private int lastLit;
     private boolean lastHeart;
 
+    private MirrorScreen(@Nullable ClientDeedCache.ClientPresentation presentation) {
+        super(Component.translatable("screen.cosmiccore.deeds"));
+        playback = presentation != null;
+        if (presentation != null) {
+            startPresentation(presentation.deedId());
+        }
+        MirrorSounds.open();
+    }
+
+    public static void open() {
+        Minecraft minecraft = Minecraft.getInstance();
+        if (minecraft.player == null) return;
+        List<ClientDeedCache.ClientPresentation> presentations = ClientDeedCache.presentations();
+        minecraft.setScreen(new MirrorScreen(presentations.isEmpty() ? null : presentations.getFirst()));
+    }
+
+    public static void openPresentation(ClientDeedCache.ClientPresentation presentation) {
+        Minecraft minecraft = Minecraft.getInstance();
+        if (minecraft.player != null && minecraft.screen == null) {
+            minecraft.setScreen(new MirrorScreen(presentation));
+        }
+    }
+
     private void deriveFromLedger() {
         var woven = ClientDeedCache.woven();
         boolean heartWoven = woven.contains(DeedRegistry.THE_ADDRESS.id());
         int wovenBody = woven.size() - (heartWoven ? 1 : 0);
-        int dSkeins = Math.min(SKEIN_CAP, wovenBody / ECHO_CAP);
-        int dLit = Math.min(ECHO_CAP, wovenBody - dSkeins * ECHO_CAP);
-        int pending = 0;
-        for (var id : ClientDeedCache.pending()) {
-            if (!id.equals(DeedRegistry.THE_ADDRESS.id())) pending++;
+        if (playback && activeDeed != null && !activeDeed.equals(DeedRegistry.THE_ADDRESS.id()) &&
+                woven.contains(activeDeed)) {
+            wovenBody--;
         }
+        wovenBody = Math.max(0, wovenBody);
+        int derivedSkeins = Math.min(SKEIN_CAP, wovenBody / ECHO_CAP);
+        int derivedLit = Math.min(ECHO_CAP, wovenBody - derivedSkeins * ECHO_CAP);
+        int pending = pendingDeedCount();
+        int presented = playback && activeDeed != null && !activeDeed.equals(DeedRegistry.THE_ADDRESS.id()) ? 1 : 0;
 
-        state.skeins = Math.min(SKEIN_CAP, dSkeins + state.devSkeins);
-        state.litEchoes = dLit;
-        state.dimEchoes = Math.min(ECHO_CAP - dLit, pending + state.devDim);
-        state.coils = pending;
-        state.heartClaimed = heartWoven;
+        state.skeins = derivedSkeins;
+        state.litEchoes = derivedLit;
+        state.dimEchoes = Math.min(ECHO_CAP - derivedLit, pending + presented);
+        state.coils = Math.max(pending, state.ceremonyActive ? 1 : 0);
+        state.heartClaimed = heartWoven && !(playback && DeedRegistry.THE_ADDRESS.id().equals(activeDeed));
 
         if (lastWovenBody >= 0) {
-            if (dSkeins > lastSkeins) {
+            if (derivedSkeins > lastSkeins) {
                 state.skeinBurstTicks = 20;
                 MirrorSounds.compress();
-            } else if (dLit > lastLit) {
+            } else if (derivedLit > lastLit) {
                 state.burstTicks = 26;
-                state.burstSlot = dLit - 1;
+                state.burstSlot = derivedLit - 1;
                 MirrorSounds.claim();
             }
             if (heartWoven && !lastHeart) {
@@ -129,121 +198,119 @@ public class MirrorScreen extends Screen {
             }
         }
         lastWovenBody = wovenBody;
-        lastSkeins = dSkeins;
-        lastLit = dLit;
+        lastSkeins = derivedSkeins;
+        lastLit = derivedLit;
         lastHeart = heartWoven;
-    }
-
-    public MirrorScreen() {
-        super(Component.translatableWithFallback("screen.cosmiccore.mirror", "Sol's Mirror"));
-        MirrorSounds.open();
     }
 
     @Override
     public void tick() {
-        if (state.ceremonyActive && state.ceremonyProgress < CEREMONY_TICKS) {
-            state.ceremonyProgress++;
-            if (state.ceremonyProgress >= CEREMONY_TICKS) {
-                state.claimable = true;
-                state.flashTicks = 24;
-                MirrorSounds.weaveComplete();
-            }
+        deriveFromLedger();
+        if (state.ceremonyActive && (playback || state.holding) && !weaveSent) {
+            advanceCeremony();
         }
-        if (state.flashTicks > 0) {
-            state.flashTicks--;
+        if (weaveSent && activeDeed != null && ClientDeedCache.woven().contains(activeDeed)) {
+            finishInteractiveWeave();
         }
-        if (state.burstTicks > 0) {
-            state.burstTicks--;
+        if (state.flashTicks > 0) state.flashTicks--;
+        if (state.burstTicks > 0) state.burstTicks--;
+        if (state.skeinBurstTicks > 0) state.skeinBurstTicks--;
+        if (state.heartBurstTicks > 0) state.heartBurstTicks--;
+        tickHeart();
+    }
+
+    private void advanceCeremony() {
+        state.ceremonyProgress++;
+        state.holdTicks = state.ceremonyProgress;
+        for (CinematicLine line : cinematicLines) {
+            line.update(state.ceremonyProgress);
         }
-        if (state.skeinBurstTicks > 0) {
-            state.skeinBurstTicks--;
+        if (state.ceremonyProgress % 12 == 0 && state.ceremonyProgress < CEREMONY_TICKS) {
+            MirrorSounds.holdTick(state.ceremonyProgress / (float) CEREMONY_TICKS);
         }
-        if (state.heartBurstTicks > 0) {
-            state.heartBurstTicks--;
+        if (state.ceremonyProgress < CEREMONY_TICKS) return;
+        state.ceremonyProgress = CEREMONY_TICKS;
+        state.flashTicks = 24;
+        MirrorSounds.weaveComplete();
+        if (playback) {
+            finishPresentation();
+        } else if (activeDeed != null) {
+            weaveSent = true;
+            state.holding = false;
+            CCoreNetwork.sendToServer(new MirrorWeavePacket(activeDeed, true));
         }
-        if (state.heartHolding) {
-            if (!heartClaimable()) {
-                state.heartHolding = false;
-                state.heartHoldTicks = 0;
-            } else {
-                state.heartHoldTicks++;
-                if (state.heartHoldTicks % 3 == 0 && state.heartHoldTicks < HOLD_TICKS) {
-                    MirrorSounds.holdTick(state.heartHoldTicks / (float) HOLD_TICKS);
-                }
-                if (state.heartHoldTicks >= HOLD_TICKS) {
-                    state.heartStage++;
-                    state.heartHolding = false;
-                    state.heartHoldTicks = 0;
-                    if (state.heartStage >= 3) {
-                        CCoreNetwork.sendToServer(new MirrorWeavePacket(true));
-                    } else {
-                        state.heartBurstTicks = 12;
-                        MirrorSounds.heartStage(state.heartStage);
-                    }
-                }
-            }
+    }
+
+    private void tickHeart() {
+        if (!state.heartHolding) return;
+        if (!heartClaimable()) {
+            state.heartHolding = false;
+            state.heartHoldTicks = 0;
+            return;
         }
-        if (state.holding) {
-            if (!state.claimable) {
-                state.holding = false;
-                state.holdTicks = 0;
-            } else {
-                state.holdTicks++;
-                if (state.holdTicks % 3 == 0 && state.holdTicks < HOLD_TICKS) {
-                    MirrorSounds.holdTick(state.holdTicks / (float) HOLD_TICKS);
-                }
-                if (state.holdTicks >= HOLD_TICKS) {
-                    performClaim();
-                }
-            }
+        state.heartHoldTicks++;
+        if (state.heartHoldTicks % 3 == 0 && state.heartHoldTicks < HOLD_TICKS) {
+            MirrorSounds.holdTick(state.heartHoldTicks / (float) HOLD_TICKS);
+        }
+        if (state.heartHoldTicks < HOLD_TICKS) return;
+        state.heartStage++;
+        state.heartHolding = false;
+        state.heartHoldTicks = 0;
+        if (state.heartStage >= 3) {
+            CCoreNetwork.sendToServer(new MirrorWeavePacket(DeedRegistry.THE_ADDRESS.id(), true));
+        } else {
+            state.heartBurstTicks = 12;
+            MirrorSounds.heartStage(state.heartStage);
         }
     }
 
     @Override
     public void render(@NotNull GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick) {
         long now = Util.getMillis();
-        float dtTicks = lastMillis < 0 ? 0f : Mth.clamp((now - lastMillis) / 50f, 0f, 2f);
+        float deltaTicks = lastMillis < 0 ? 0f : Mth.clamp((now - lastMillis) / 50f, 0f, 2f);
         lastMillis = now;
-        time += dtTicks / 20f;
+        time += deltaTicks / 20f;
         deriveFromLedger();
-        zoom += (targetZoom - zoom) * (1f - (float) Math.pow(0.55f, dtTicks));
-        float veilTarget = (state.ceremonyActive || state.claimable || heartClaimable()) ? 1f : 0f;
-        state.veil += (veilTarget - state.veil) * (1f - (float) Math.pow(0.78f, dtTicks));
+        zoom += (targetZoom - zoom) * (1f - (float) Math.pow(0.55f, deltaTicks));
+        float veilTarget = state.ceremonyActive || heartClaimable() ? 1f : 0f;
+        state.veil += (veilTarget - state.veil) * (1f - (float) Math.pow(0.78f, deltaTicks));
         float awakenTarget = state.skeins >= SKEIN_CAP ? 1f : 0f;
-        state.awaken += (awakenTarget - state.awaken) * (1f - (float) Math.pow(0.99f, dtTicks));
+        state.awaken += (awakenTarget - state.awaken) * (1f - (float) Math.pow(0.99f, deltaTicks));
         state.hoverEcho = echoAt(mouseX, mouseY);
         if (state.hoverEcho != lastHover && state.hoverEcho >= 0) {
             MirrorSounds.hover(state.hoverEcho);
         }
         lastHover = state.hoverEcho;
         MirrorScene.render(guiGraphics, width, height, mouseX, mouseY, time, zoom, state);
+        renderPrompt(guiGraphics);
+        renderCinematicText(guiGraphics);
+    }
+
+    private void renderPrompt(GuiGraphics guiGraphics) {
         if (heartClaimable()) {
-            int a = (int) (150 + 70 * Math.sin(time * 2.5f));
-            Component prompt = state.heartHolding ?
-                    Component.translatableWithFallback("mirror.cosmiccore.prompt.heart_hold", "Hold on tightly...") :
-                    Component.translatableWithFallback("mirror.cosmiccore.prompt.heart",
-                            "Mother Moon, here I stand, on the same stage as you once again.");
-            guiGraphics.drawCenteredString(font, prompt, width / 2, height - 40, (a << 24) | 0xFFF3D6);
-        } else if (state.claimable) {
-            int a = (int) (150 + 70 * Math.sin(time * 2.5f));
-            Component prompt = state.holding ?
-                    Component.translatableWithFallback("mirror.cosmiccore.prompt.lock", "Bring them back to me.") :
-                    Component.translatableWithFallback("mirror.cosmiccore.prompt.waiting",
-                            "An echo from the past sings, hold on and remember.");
-            guiGraphics.drawCenteredString(font, prompt,
-                    width / 2, height - 40, (a << 24) | 0xF0D9A8);
+            int alpha = (int) (150 + 70 * Math.sin(time * 2.5f));
+            Component prompt = state.heartHolding ? HEART_HOLD_PROMPT : HEART_PROMPT;
+            guiGraphics.drawCenteredString(font, prompt, width / 2, height - 40,
+                    alpha << 24 | 0xFFF3D6);
         } else if (state.ceremonyActive) {
-            guiGraphics.drawCenteredString(font,
-                    Component.translatableWithFallback("mirror.cosmiccore.prompt.weaving", "Sol starts to weave..."),
-                    width / 2, height - 40, 0x90E8C07A);
+            int alpha = (int) (150 + 70 * Math.sin(time * 2.5f));
+            Component prompt = playback ? BINDING_PROMPT : HOLD_PROMPT;
+            guiGraphics.drawCenteredString(font, prompt, width / 2, height - 40,
+                    alpha << 24 | 0xF0D9A8);
         }
-        guiGraphics.drawString(font,
-                "[E] weave-now  [W] weave  [X] claim  [S] scar  [D] dim+  [K] skein+  [R] reset-fx  [scroll] zoom  (/deed grant feeds coils)",
-                8, height - 12, 0x40FFFFFF, false);
-        guiGraphics.drawString(font,
-                "cache: " + ClientDeedCache.woven().size() + " woven / " + ClientDeedCache.pending().size() +
-                        " pending | lit " + state.litEchoes + " skeins " + state.skeins + " coils " + state.coils,
-                8, height - 24, 0x40FFFFFF, false);
+    }
+
+    private void renderCinematicText(GuiGraphics guiGraphics) {
+        if (!state.ceremonyActive || cinematicLines.isEmpty()) return;
+        for (CinematicLine line : cinematicLines) {
+            if (line.visibleText.isEmpty()) continue;
+            var pose = guiGraphics.pose();
+            pose.pushPose();
+            pose.translate(width * line.x, height * line.y, 300);
+            pose.mulPose(Axis.ZP.rotationDegrees(line.angle));
+            guiGraphics.drawCenteredString(font, line.visibleText, 0, 0, 0xFFE8DFD0);
+            pose.popPose();
+        }
     }
 
     @Override
@@ -259,80 +326,121 @@ public class MirrorScreen extends Screen {
     public void renderBackground(@NotNull GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick) {}
 
     @Override
-    public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
-        switch (keyCode) {
-            case GLFW.GLFW_KEY_E -> {
-                if (!state.ceremonyActive && !state.claimable && state.coils > 0) {
-                    CCoreNetwork.sendToServer(new MirrorWeavePacket(false));
-                }
-                return true;
-            }
-            case GLFW.GLFW_KEY_D -> {
-                state.devDim = (state.devDim + 1) % (ECHO_CAP + 1);
-                return true;
-            }
-            case GLFW.GLFW_KEY_S -> {
-                state.scorch = !state.scorch;
-                return true;
-            }
-            case GLFW.GLFW_KEY_W -> {
-                if (state.claimable) {
-                    performClaim();
-                    return true;
-                }
-                if (!state.ceremonyActive && state.coils > 0 && state.litEchoes < ECHO_CAP) {
-                    state.ceremonyActive = true;
-                    state.ceremonyProgress = 0;
-                    MirrorSounds.weaveStart();
-                }
-                return true;
-            }
-            case GLFW.GLFW_KEY_K -> {
-                state.devSkeins = (state.devSkeins + 1) % (SKEIN_CAP + 1);
-                return true;
-            }
-            case GLFW.GLFW_KEY_X -> {
-                performClaim();
-                return true;
-            }
-            case GLFW.GLFW_KEY_R -> {
-                state.reset();
-                return true;
-            }
-            default -> {
-                return super.keyPressed(keyCode, scanCode, modifiers);
-            }
-        }
-    }
-
-    @Override
     public boolean mouseClicked(double mouseX, double mouseY, int button) {
-        if (button == 0) {
-            if (heartClaimable() && heartAt(mouseX, mouseY)) {
-                state.heartHolding = true;
-                state.heartHoldTicks = 0;
-                return true;
-            }
-            int hit = echoAt(mouseX, mouseY);
-            if (hit >= 0 && state.claimable && hit == Math.min(state.litEchoes, ECHO_CAP - 1)) {
-                state.holding = true;
-                state.holdTicks = 0;
-                return true;
-            }
+        if (button != 0 || playback || weaveSent) return super.mouseClicked(mouseX, mouseY, button);
+        if (heartClaimable() && heartAt(mouseX, mouseY)) {
+            state.heartHolding = true;
+            state.heartHoldTicks = 0;
+            return true;
         }
-        return super.mouseClicked(mouseX, mouseY, button);
+        int hit = echoAt(mouseX, mouseY);
+        int pendingIndex = hit - state.litEchoes;
+        List<ResourceLocation> pending = pendingDeeds();
+        if (pendingIndex < 0 || pendingIndex >= pending.size()) {
+            return super.mouseClicked(mouseX, mouseY, button);
+        }
+        beginHeldWeave(pending.get(pendingIndex), hit, pendingIndex);
+        return true;
     }
 
     @Override
     public boolean mouseReleased(double mouseX, double mouseY, int button) {
-        if (button == 0 && (state.holding || state.heartHolding)) {
-            state.holding = false;
-            state.holdTicks = 0;
+        if (button == 0 && state.heartHolding) {
             state.heartHolding = false;
             state.heartHoldTicks = 0;
             return true;
         }
+        if (button == 0 && state.holding && !weaveSent) {
+            cancelHeldWeave();
+            return true;
+        }
         return super.mouseReleased(mouseX, mouseY, button);
+    }
+
+    private void beginHeldWeave(ResourceLocation deedId, int slot, int coil) {
+        activeDeed = deedId;
+        state.ceremonySlot = slot;
+        state.ceremonyCoil = coil;
+        state.ceremonyActive = true;
+        state.ceremonyProgress = 0;
+        state.holding = true;
+        state.holdTicks = 0;
+        state.flashTicks = 0;
+        prepareCinematicLines(deedId);
+        MirrorSounds.weaveStart();
+    }
+
+    private void cancelHeldWeave() {
+        activeDeed = null;
+        state.ceremonyActive = false;
+        state.ceremonyProgress = 0;
+        state.holding = false;
+        state.holdTicks = 0;
+        state.flashTicks = 0;
+        cinematicLines.clear();
+    }
+
+    private void startPresentation(ResourceLocation deedId) {
+        activeDeed = deedId;
+        int wovenBody = 0;
+        for (ResourceLocation id : ClientDeedCache.woven()) {
+            if (!id.equals(DeedRegistry.THE_ADDRESS.id()) && !id.equals(deedId)) wovenBody++;
+        }
+        state.ceremonySlot = wovenBody % ECHO_CAP;
+        state.ceremonyCoil = 0;
+        state.ceremonyActive = true;
+        state.ceremonyProgress = 0;
+        prepareCinematicLines(deedId);
+        MirrorSounds.weaveStart();
+    }
+
+    private void finishPresentation() {
+        if (activeDeed == null) return;
+        ResourceLocation deedId = activeDeed;
+        CCoreNetwork.sendToServer(new DeedPresentationAckPacket(deedId));
+        ClientDeedCache.acknowledge(deedId);
+        state.ceremonyActive = false;
+        state.ceremonyProgress = 0;
+        state.burstTicks = 26;
+        state.burstSlot = state.ceremonySlot;
+        activeDeed = null;
+        playback = false;
+        cinematicLines.clear();
+        MirrorSounds.claim();
+    }
+
+    private void finishInteractiveWeave() {
+        if (activeDeed == null) return;
+        ResourceLocation deedId = activeDeed;
+        CCoreNetwork.sendToServer(new DeedPresentationAckPacket(deedId));
+        ClientDeedCache.acknowledge(deedId);
+        state.ceremonyActive = false;
+        state.ceremonyProgress = 0;
+        state.burstTicks = 26;
+        state.burstSlot = state.ceremonySlot;
+        state.holding = false;
+        state.holdTicks = 0;
+        activeDeed = null;
+        weaveSent = false;
+        cinematicLines.clear();
+    }
+
+    private void prepareCinematicLines(ResourceLocation deedId) {
+        cinematicLines.clear();
+        List<String> telling = new ArrayList<>();
+        for (int i = 0; i < 8; i++) {
+            String key = "deed." + deedId.getNamespace() + "." + deedId.getPath() + ".telling." + i;
+            if (!I18n.exists(key)) break;
+            telling.add(Component.translatable(key).getString());
+        }
+        int seed = deedId.hashCode();
+        int spacing = telling.isEmpty() ? 0 : 80 / telling.size();
+        for (int i = 0; i < telling.size(); i++) {
+            float x = 0.18f + Math.floorMod(seed + i * 41, 620) / 1000f;
+            float y = 0.16f + Math.floorMod(seed * 3 + i * 173, 570) / 1000f;
+            float angle = -18f + Math.floorMod(seed * 7 + i * 67, 361) / 10f;
+            cinematicLines.add(new CinematicLine(telling.get(i), x, y, angle, 10 + i * spacing));
+        }
     }
 
     private boolean heartClaimable() {
@@ -340,35 +448,35 @@ public class MirrorScreen extends Screen {
     }
 
     private boolean heartAt(double mouseX, double mouseY) {
-        float[] p = MirrorScene.heartScreenPos(width, height, mouseX, mouseY, zoom);
-        double dx = mouseX - p[0];
-        double dy = mouseY - p[1];
-        return dx * dx + dy * dy <= p[2] * p[2];
-    }
-
-    private void performClaim() {
-        if (!state.claimable) return;
-        state.claimable = false;
-        state.ceremonyActive = false;
-        state.ceremonyProgress = 0;
-        state.flashTicks = 0;
-        state.holding = false;
-        state.holdTicks = 0;
-        CCoreNetwork.sendToServer(new MirrorWeavePacket(false));
+        float[] position = MirrorScene.heartScreenPos(width, height, mouseX, mouseY, zoom);
+        double dx = mouseX - position[0];
+        double dy = mouseY - position[1];
+        return dx * dx + dy * dy <= position[2] * position[2];
     }
 
     private int echoAt(double mouseX, double mouseY) {
-        int total = Math.min(Math.max(state.litEchoes + state.dimEchoes,
-                state.litEchoes + (state.claimable ? 1 : 0)), ECHO_CAP);
+        int total = Math.min(state.litEchoes + state.dimEchoes, ECHO_CAP);
         for (int i = 0; i < total; i++) {
-            float[] p = MirrorScene.echoScreenPos(i, width, height, mouseX, mouseY, zoom);
-            double dx = mouseX - p[0];
-            double dy = mouseY - p[1];
-            if (dx * dx + dy * dy <= p[2] * p[2]) {
-                return i;
-            }
+            float[] position = MirrorScene.echoScreenPos(i, width, height, mouseX, mouseY, zoom);
+            double dx = mouseX - position[0];
+            double dy = mouseY - position[1];
+            if (dx * dx + dy * dy <= position[2] * position[2]) return i;
         }
         return -1;
+    }
+
+    private static List<ResourceLocation> pendingDeeds() {
+        return ClientDeedCache.pending().stream()
+                .filter(id -> !id.equals(DeedRegistry.THE_ADDRESS.id()))
+                .toList();
+    }
+
+    private static int pendingDeedCount() {
+        int count = 0;
+        for (ResourceLocation id : ClientDeedCache.pending()) {
+            if (!id.equals(DeedRegistry.THE_ADDRESS.id())) count++;
+        }
+        return count;
     }
 
     @Override
@@ -378,11 +486,11 @@ public class MirrorScreen extends Screen {
 
     public static void registerKeyMappings(RegisterKeyMappingsEvent event) {
         OPEN = new KeyMapping(
-                "key.cosmiccore.mirror_dev",
+                "key.cosmiccore.deeds.open",
                 KeyConflictContext.IN_GAME,
                 InputConstants.Type.KEYSYM,
-                GLFW.GLFW_KEY_UNKNOWN,
-                "key.categories.cosmiccore");
+                GLFW.GLFW_KEY_V,
+                "key.categories.cosmiccore.deeds");
         event.register(OPEN);
     }
 
@@ -390,8 +498,8 @@ public class MirrorScreen extends Screen {
     public static void onKeyInput(InputEvent.Key event) {
         if (event.getAction() != GLFW.GLFW_PRESS) return;
         if (OPEN == null || !OPEN.matches(event.getKey(), event.getScanCode())) return;
-        Minecraft mc = Minecraft.getInstance();
-        if (mc.screen != null || mc.player == null) return;
-        mc.setScreen(new MirrorScreen());
+        Minecraft minecraft = Minecraft.getInstance();
+        if (minecraft.screen != null || minecraft.player == null || !ClientDeedCache.canOpen()) return;
+        open();
     }
 }

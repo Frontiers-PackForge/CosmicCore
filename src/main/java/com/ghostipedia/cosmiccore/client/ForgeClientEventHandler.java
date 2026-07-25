@@ -4,6 +4,7 @@ import com.ghostipedia.cosmiccore.CosmicCore;
 import com.ghostipedia.cosmiccore.CosmicUtils;
 import com.ghostipedia.cosmiccore.client.map.RevealedFieldStorage;
 import com.ghostipedia.cosmiccore.client.map.RevealedFields;
+import com.ghostipedia.cosmiccore.client.mirror.ClientDeedCache;
 import com.ghostipedia.cosmiccore.client.renderer.RingUpgradePreviewRenderer;
 import com.ghostipedia.cosmiccore.client.renderer.StructureBoundingBox;
 
@@ -51,6 +52,7 @@ public class ForgeClientEventHandler {
 
     @SubscribeEvent
     public static void onLoggingOut(ClientPlayerNetworkEvent.LoggingOut event) {
+        ClientDeedCache.clear();
         RevealedFields.INSTANCE.clearAll();
         RevealedFieldStorage.reset();
     }

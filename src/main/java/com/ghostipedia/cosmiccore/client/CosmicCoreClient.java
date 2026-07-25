@@ -4,6 +4,7 @@ import com.ghostipedia.cosmiccore.CosmicCore;
 import com.ghostipedia.cosmiccore.client.dev.AbyssDevView;
 import com.ghostipedia.cosmiccore.client.dev.MurkbloomDevControls;
 import com.ghostipedia.cosmiccore.client.keybind.QuakeMovementKeybinds;
+import com.ghostipedia.cosmiccore.client.mirror.DeedHudOverlay;
 import com.ghostipedia.cosmiccore.client.mirror.MirrorScreen;
 import com.ghostipedia.cosmiccore.client.murkbloom.MurkParticle;
 import com.ghostipedia.cosmiccore.client.murkbloom.MurkbloomOverlay;
@@ -117,6 +118,7 @@ public class CosmicCoreClient {
     public static void onGUIRegisterUIOverlays(RegisterGuiLayersEvent event) {
         event.registerAboveAll(CosmicCore.id("cosmichud"), new CosmicHudGuiOverlay());
         event.registerAboveAll(CosmicCore.id("murkbloom"), new MurkbloomOverlay());
+        event.registerAboveAll(CosmicCore.id("deed_thread"), new DeedHudOverlay());
     }
 
     @SubscribeEvent
@@ -139,10 +141,10 @@ public class CosmicCoreClient {
     @SubscribeEvent
     public static void registerKeyMappings(RegisterKeyMappingsEvent event) {
         QuakeMovementKeybinds.registerKeyMappings(event);
+        MirrorScreen.registerKeyMappings(event);
         if (!FMLEnvironment.production) {
             AbyssDevView.registerKeyMappings(event);
             MurkbloomDevControls.registerKeyMappings(event);
-            MirrorScreen.registerKeyMappings(event);
         }
     }
 

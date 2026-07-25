@@ -1680,5 +1680,21 @@ public class CosmicLangHandler extends LangHandler {
                 "This line ends at this alias. Click to return it to the canonical quest.");
         provider.add("cosmiccore.ftbquests.quest_alias.dependant_lines.unassigned",
                 "Click to move this line to this alias.");
+        provider.add("screen.cosmiccore.deeds", "The Inner Vault");
+        provider.add("key.cosmiccore.deeds.open", "Open Deeds");
+        provider.add("key.categories.cosmiccore.deeds", "CosmicCore: Deeds");
+        provider.add("button.cosmiccore.deeds", "Deeds");
+        provider.add("button.cosmiccore.deeds.tooltip", "Enter the Inner Vault");
+        provider.add("cosmiccore.deeds.banner.first",
+                "Something in the darkness of your being clatters, lost but felt.");
+        provider.add("cosmiccore.deeds.banner.second",
+                "Fate feels as if it's buckling around you, asking for a new story.");
+        provider.add("cosmiccore.deeds.banner.prompt", "It will not let go, pull it back to you");
+        provider.add("mirror.cosmiccore.prompt.hold", "Hold to weave");
+        provider.add("mirror.cosmiccore.prompt.binding", "Binding...");
+        provider.add("mirror.cosmiccore.prompt.heart_hold", "Hold on tightly...");
+        provider.add("mirror.cosmiccore.prompt.heart",
+                "Mother Moon, here I stand, on the same stage as you once again.");
+        provider.add("deed.cosmiccore.nether_permit", "Nether Permit");
     }
 }
