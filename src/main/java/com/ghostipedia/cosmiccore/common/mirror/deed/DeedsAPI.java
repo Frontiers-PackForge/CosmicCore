@@ -1,6 +1,7 @@
 package com.ghostipedia.cosmiccore.common.mirror.deed;
 
 import com.ghostipedia.cosmiccore.CosmicCore;
+import com.ghostipedia.cosmiccore.common.compat.ftbquests.DeedQuestCompatBridge;
 import com.ghostipedia.cosmiccore.common.data.CosmicItems;
 import com.ghostipedia.cosmiccore.common.network.CCoreNetwork;
 import com.ghostipedia.cosmiccore.common.network.packet.DeedPresentationPacket;
@@ -31,6 +32,17 @@ public final class DeedsAPI {
         if (changed) {
             syncTeam(server, teamKey);
         }
+        return changed;
+    }
+
+    public static boolean revoke(ServerPlayer player, ResourceLocation deedId) {
+        MinecraftServer server = player.getServer();
+        if (server == null) return false;
+        String teamKey = DeedTeams.teamKey(player);
+        DeedLedger ledger = DeedLedger.get(server);
+        boolean changed = ledger.revoke(teamKey, deedId);
+        ledger.clearPresentation(DeedTeams.teamMemberIds(player), deedId);
+        if (changed) syncTeam(server, teamKey);
         return changed;
     }
 
@@ -87,6 +99,7 @@ public final class DeedsAPI {
     }
 
     public static void syncTeam(MinecraftServer server, String teamKey) {
+        DeedQuestCompatBridge.syncTeam(server, teamKey);
         int sent = 0;
         for (ServerPlayer online : server.getPlayerList().getPlayers()) {
             if (DeedTeams.teamKey(online).equals(teamKey)) {

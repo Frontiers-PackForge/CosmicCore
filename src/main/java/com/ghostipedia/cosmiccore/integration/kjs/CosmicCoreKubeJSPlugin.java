@@ -15,8 +15,10 @@ import com.ghostipedia.cosmiccore.common.data.worldgen.generator.veins.FractureV
 import com.ghostipedia.cosmiccore.common.data.worldgen.generator.veins.LensVeinGenerator;
 import com.ghostipedia.cosmiccore.common.data.worldgen.generator.veins.ShellVeinGenerator;
 import com.ghostipedia.cosmiccore.common.data.worldgen.generator.veins.StringerVeinGenerator;
+import com.ghostipedia.cosmiccore.common.mirror.deed.DeedRegistry;
 import com.ghostipedia.cosmiccore.gtbridge.CosmicRecipeTypes;
 
+import dev.latvian.mods.kubejs.client.LangKubeEvent;
 import dev.latvian.mods.kubejs.plugin.ClassFilter;
 import dev.latvian.mods.kubejs.plugin.KubeJSPlugin;
 import dev.latvian.mods.kubejs.script.BindingRegistry;
@@ -56,5 +58,15 @@ public class CosmicCoreKubeJSPlugin implements KubeJSPlugin {
         bindings.add("CosmicCore", CosmicCore.class);
         bindings.add("CosmicFood", CosmicFoodBinding.class);
         bindings.add("Deeds", DeedsKubeBinding.class);
+    }
+
+    @Override
+    public void generateLang(LangKubeEvent event) {
+        if (!event.lang().equals("en_us")) return;
+        for (var deed : DeedRegistry.all()) {
+            for (var entry : deed.enUs().entrySet()) {
+                event.add(deed.id().getNamespace(), entry.getKey(), entry.getValue());
+            }
+        }
     }
 }

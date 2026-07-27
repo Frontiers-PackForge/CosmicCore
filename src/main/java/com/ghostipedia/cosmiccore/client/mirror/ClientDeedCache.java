@@ -1,5 +1,6 @@
 package com.ghostipedia.cosmiccore.client.mirror;
 
+import com.ghostipedia.cosmiccore.client.compat.ftbquests.DeedQuestReturn;
 import com.ghostipedia.cosmiccore.common.mirror.deed.DeedLedger;
 import com.ghostipedia.cosmiccore.common.mirror.deed.DeedRegistry;
 
@@ -75,5 +76,6 @@ public final class ClientDeedCache {
         woven = List.of();
         pending = List.of();
         presentations.clear();
+        DeedQuestReturn.clear();
     }
 }

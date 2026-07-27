@@ -1697,6 +1697,24 @@ public class CosmicLangHandler extends LangHandler {
         provider.add("mirror.cosmiccore.prompt.heart_hold", "Hold on tightly...");
         provider.add("mirror.cosmiccore.prompt.heart",
                 "Mother Moon, here I stand, on the same stage as you once again.");
+        provider.add("command.cosmiccore.deed.revoked", "Revoked %s");
+        provider.add("command.cosmiccore.deed.not_held", "Deed is neither pending nor woven: %s");
+        provider.add("config.cosmiccore.dev_visor", "Dev Visor");
+        provider.add("config.cosmiccore.dev_visor.tooltip", "§cWARNING! WARNING! WARNING!§r\n" +
+                "This config enables editing aspects of the pack not normally allowed by default. This can cause " +
+                "potentially damaging effects to your progression, save, team, or otherwise anything in the pack.\n" +
+                "Using this means you have CLEARLY READ THIS, and ACCEPT FAULT for enabling it.\n" +
+                "If you are requesting support with this config on, there is a high chance developers will not be " +
+                "happy.");
+        provider.add("cosmiccore.ftbquests.deed.task", "Deed Seal");
+        provider.add("cosmiccore.ftbquests.deed.sealed_title", "SEALED");
+        provider.add("cosmiccore.ftbquests.deed.sealed_hint", "Something waits beyond this seal.");
+        provider.add("cosmiccore.ftbquests.deed.visible_hint",
+                "A star from within watches quietly, waiting for you.");
+        provider.add("cosmiccore.ftbquests.deed.primed_visible",
+                "The task at hand is complete, fate is waiting patiently.");
+        provider.add("cosmiccore.ftbquests.deed.primed_sealed",
+                "A great Star beckons from within, fate is waiting eagerly.");
         provider.add("deed.cosmiccore.nether_permit", "Nether Permit");
         provider.add("deed.cosmiccore.nether_permit.telling.prelude.0",
                 "Cold iron against a borrowed palm....");
@@ -1712,5 +1730,33 @@ public class CosmicLangHandler extends LangHandler {
                 "It remembers the ground, it remembers the earth holding them.");
         provider.add("deed.cosmiccore.nether_permit.telling.knot.1",
                 "Chains of silver open a maw into an infinite ocean of stars, as i cast my will inside.");
+        provider.add("deed.cosmiccore.current_flow", "Current Flow");
+        provider.add("deed.cosmiccore.current_flow.subtitle", "The mana of physics");
+        provider.add("deed.cosmiccore.current_flow.sealed_hint", "This star beckons to you, reach it.");
+        provider.add("deed.cosmiccore.current_flow.telling.prelude.0",
+                "The cold iron now feels familiar, in hands unborrowed, as will traces it forward.");
+        provider.add("deed.cosmiccore.current_flow.telling.prelude.1",
+                "A painter left a brush, lonely for a home. It will paint again.");
+        provider.add("deed.cosmiccore.current_flow.telling.coil.0",
+                "A metallic construct whirls and breathes life into a grove of steel and runes.");
+        provider.add("deed.cosmiccore.current_flow.telling.coil.1",
+                "Sparking, fleeting, and eager to touch the earth.");
+        provider.add("deed.cosmiccore.current_flow.telling.coil.2",
+                "It feels as if the tempest of the sky has graced the world a second time.");
+        provider.add("deed.cosmiccore.current_flow.telling.ring.0",
+                "\"The one who holds infinity, does such simple magicks entertain you so?\"");
+        provider.add("deed.cosmiccore.current_flow.telling.ring.1",
+                "\"The flow of power is simple and honest. Do not be tempted by greed; respect it.\"");
+        provider.add("deed.cosmiccore.current_flow.telling.knot.0",
+                "The poise of energy, the elegance of raw force, is something to cherish.");
+        provider.add("deed.cosmiccore.current_flow.telling.knot.1",
+                "In this field of stars, even the power of the skies looks so lonely and distant.");
+        provider.add("deed.cosmiccore.current_flow.telling.knot.2",
+                "A door opens inward where the current hums, and I cast my will inside once again.");
+        provider.add("deed.cosmiccore.current_flow.post",
+                "The steam age ends quietly, in the end. Not with a last whistle but with a hum you can feel " +
+                        "through your boots: small lightnings walking their fenced circles, patient, waiting to be " +
+                        "spent. You pulled this thread home yourself, and nothing tore. Somewhere in the dark below " +
+                        "your ribs, something that has never once been spoken to is beginning to suspect it was.");
     }
 }

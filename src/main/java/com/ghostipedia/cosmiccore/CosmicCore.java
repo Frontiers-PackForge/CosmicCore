@@ -15,7 +15,9 @@ import com.ghostipedia.cosmiccore.common.block.crop.CosmicCropFeatures;
 import com.ghostipedia.cosmiccore.common.block.crop.CosmicCrops;
 import com.ghostipedia.cosmiccore.common.commands.argument.SoulTypeArgument;
 import com.ghostipedia.cosmiccore.common.compat.ars.ArsSealCompat;
+import com.ghostipedia.cosmiccore.common.compat.ftbquests.DeedQuestCompatBridge;
 import com.ghostipedia.cosmiccore.common.compat.lso.LsoFoodCompat;
+import com.ghostipedia.cosmiccore.common.config.CosmicCoreConfig;
 import com.ghostipedia.cosmiccore.common.data.*;
 import com.ghostipedia.cosmiccore.common.data.materials.CosmicBundleMaterials;
 import com.ghostipedia.cosmiccore.common.data.materials.CosmicElements;
@@ -48,7 +50,9 @@ import net.minecraft.commands.synchronization.SingletonArgumentInfo;
 import net.minecraft.resources.ResourceLocation;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.ModContainer;
 import net.neoforged.fml.common.Mod;
+import net.neoforged.fml.config.ModConfig;
 import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.neoforged.fml.event.lifecycle.FMLLoadCompleteEvent;
 import net.neoforged.neoforge.capabilities.RegisterCapabilitiesEvent;
@@ -74,8 +78,9 @@ public class CosmicCore {
         return ResourceLocation.fromNamespaceAndPath(MOD_ID, path);
     }
 
-    public CosmicCore(IEventBus modBus) {
+    public CosmicCore(IEventBus modBus, ModContainer modContainer) {
         modBus.register(this);
+        modContainer.registerConfig(ModConfig.Type.CLIENT, CosmicCoreConfig.CLIENT_SPEC);
         CosmicRegistration.REGISTRATE.registerEventListeners(modBus);
         CosmicAttachmentTypes.ATTACHMENT_TYPES.register(modBus);
         CosmicEffects.EFFECTS.register(modBus);
@@ -142,6 +147,7 @@ public class CosmicCore {
             ArgumentTypeInfos.registerByClass(SoulTypeArgument.class,
                     SingletonArgumentInfo.contextFree(SoulTypeArgument::soulType));
             CosmicCoreOreRecipeHandler.disableBundleCauldronWash();
+            DeedQuestCompatBridge.register();
             if (LsoFoodCompat.isLoaded()) {
                 LsoFoodCompat.retuneEffects();
             }

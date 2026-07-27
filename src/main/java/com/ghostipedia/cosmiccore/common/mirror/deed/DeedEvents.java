@@ -1,6 +1,7 @@
 package com.ghostipedia.cosmiccore.common.mirror.deed;
 
 import com.ghostipedia.cosmiccore.CosmicCore;
+import com.ghostipedia.cosmiccore.common.compat.ftbquests.DeedQuestCompatBridge;
 
 import net.minecraft.server.level.ServerPlayer;
 import net.neoforged.bus.api.SubscribeEvent;
@@ -41,7 +42,11 @@ public final class DeedEvents {
     }
 
     static void reconcileAndSync(ServerPlayer player) {
-        if (!DeedsAPI.reconcilePatientZero(player)) DeedsAPI.syncPlayer(player);
+        if (!DeedsAPI.reconcilePatientZero(player)) {
+            DeedsAPI.syncPlayer(player);
+            var server = player.getServer();
+            if (server != null) DeedQuestCompatBridge.syncTeam(server, DeedTeams.teamKey(player));
+        }
     }
 
     static void reconcileAfterTeamChange(ServerPlayer player) {
