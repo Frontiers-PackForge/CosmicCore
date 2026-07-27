@@ -84,6 +84,9 @@ public class CosmicCoreClient {
     @Getter
     private static ShaderInstance mirrorDepthsShader;
 
+    @Getter
+    private static ShaderInstance deedInterferenceShader;
+
     @SubscribeEvent
     public static void shaderRegistry(RegisterShadersEvent event) {
         registerShader(event, "rendertype_nebulae", DefaultVertexFormat.POSITION,
@@ -102,6 +105,8 @@ public class CosmicCoreClient {
                 (shaderInstance) -> mirrorDiskShader = shaderInstance);
         registerShader(event, "mirror_depths", DefaultVertexFormat.POSITION_TEX,
                 (shaderInstance) -> mirrorDepthsShader = shaderInstance);
+        registerShader(event, "deed_interference", DefaultVertexFormat.POSITION_TEX,
+                (shaderInstance) -> deedInterferenceShader = shaderInstance);
     }
 
     private static void registerShader(RegisterShadersEvent event, String name, VertexFormat format,

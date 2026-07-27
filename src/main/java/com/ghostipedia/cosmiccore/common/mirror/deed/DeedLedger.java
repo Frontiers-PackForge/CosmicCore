@@ -158,7 +158,8 @@ public class DeedLedger extends SavedData {
         TeamDeeds deeds = team(teamKey);
         if (deeds.woven.containsKey(deedId)) return null;
         deeds.pending.remove(deedId);
-        WovenEcho echo = new WovenEcho(deedId, weaver, deeds.woven.size(), gameTime, position);
+        int claimIndex = deeds.woven.values().stream().mapToInt(WovenEcho::claimIndex).max().orElse(-1) + 1;
+        WovenEcho echo = new WovenEcho(deedId, weaver, claimIndex, gameTime, position);
         deeds.woven.put(deedId, echo);
         setDirty();
         return echo;
@@ -179,6 +180,17 @@ public class DeedLedger extends SavedData {
         return deeds == null ? Set.of() : new LinkedHashSet<>(deeds.pending);
     }
 
+    public boolean revoke(String teamKey, ResourceLocation deedId) {
+        TeamDeeds deeds = teams.get(teamKey);
+        if (deeds == null) return false;
+        boolean changed = deeds.pending.remove(deedId);
+        changed |= deeds.woven.remove(deedId) != null;
+        if (!changed) return false;
+        if (deeds.pending.isEmpty() && deeds.woven.isEmpty()) teams.remove(teamKey);
+        setDirty();
+        return true;
+    }
+
     public void enqueuePresentation(UUID playerId, ResourceLocation deedId, boolean forced) {
         LinkedHashMap<ResourceLocation, Presentation> playerPresentations = presentations.computeIfAbsent(
                 playerId, ignored -> new LinkedHashMap<>());
@@ -197,6 +209,17 @@ public class DeedLedger extends SavedData {
         }
         setDirty();
         return true;
+    }
+
+    public void clearPresentation(Iterable<UUID> playerIds, ResourceLocation deedId) {
+        boolean changed = false;
+        for (UUID playerId : playerIds) {
+            LinkedHashMap<ResourceLocation, Presentation> playerPresentations = presentations.get(playerId);
+            if (playerPresentations == null || playerPresentations.remove(deedId) == null) continue;
+            changed = true;
+            if (playerPresentations.isEmpty()) presentations.remove(playerId);
+        }
+        if (changed) setDirty();
     }
 
     public List<Presentation> presentationsOf(UUID playerId) {

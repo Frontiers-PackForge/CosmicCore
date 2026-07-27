@@ -1,6 +1,7 @@
 package com.ghostipedia.cosmiccore.client.mirror;
 
 import com.ghostipedia.cosmiccore.CosmicCore;
+import com.ghostipedia.cosmiccore.client.compat.ftbquests.DeedQuestReturn;
 import com.ghostipedia.cosmiccore.common.mirror.deed.DeedRegistry;
 import com.ghostipedia.cosmiccore.common.network.CCoreNetwork;
 import com.ghostipedia.cosmiccore.common.network.packet.DeedPresentationAckPacket;
@@ -16,6 +17,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.ModList;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.client.event.InputEvent;
 import net.neoforged.neoforge.client.event.RegisterKeyMappingsEvent;
@@ -33,13 +35,14 @@ import java.util.List;
 @EventBusSubscriber(modid = CosmicCore.MOD_ID, value = Dist.CLIENT)
 public class MirrorScreen extends Screen {
 
-    public static final int CEREMONY_TICKS = DeedCinematic.TOTAL_TICKS;
     public static final int ECHO_CAP = 12;
     public static final int HOLD_TICKS = 22;
     public static final int SKEIN_CAP = 6;
     private static final int CINEMATIC_TEXT_MARGIN = 24;
     private static final int CINEMATIC_TEXT_MAX_WIDTH = 320;
     private static final float CINEMATIC_TEXT_WIDTH_RATIO = 0.34f;
+    private static final int WEAVE_SYNC_TIMEOUT_TICKS = 200;
+    private static final int QUEST_REVEAL_TICKS = 30;
 
     public static KeyMapping OPEN;
 
@@ -52,6 +55,7 @@ public class MirrorScreen extends Screen {
         public int coils;
         public boolean ceremonyActive;
         public int ceremonyProgress;
+        public float ceremonyWeaveProgress;
         public int ceremonySlot;
         public int ceremonyCoil;
         public int hoverEcho = -1;
@@ -79,6 +83,7 @@ public class MirrorScreen extends Screen {
             claimable = false;
             ceremonyActive = false;
             ceremonyProgress = 0;
+            ceremonyWeaveProgress = 0f;
             ceremonySlot = 0;
             ceremonyCoil = 0;
             veil = 0f;
@@ -110,7 +115,12 @@ public class MirrorScreen extends Screen {
     private int visibleCinematicCodePoints;
     @Nullable
     private ResourceLocation activeDeed;
+    @Nullable
+    private Long returnQuestId;
     private boolean weaveSent;
+    private int weaveWaitTicks;
+    private int questRevealTicks;
+    private boolean returningToQuest;
     private float time;
     private float zoom = 1f;
     private float targetZoom = 1f;
@@ -122,9 +132,10 @@ public class MirrorScreen extends Screen {
     private boolean lastHeart;
 
     private MirrorScreen(@Nullable ClientDeedCache.ClientPresentation presentation,
-                         @Nullable ResourceLocation automaticDeed) {
+                         @Nullable ResourceLocation automaticDeed, @Nullable Long returnQuestId) {
         super(Component.translatable("screen.cosmiccore.deeds"));
         playback = presentation != null;
+        this.returnQuestId = returnQuestId;
         MirrorSounds.open();
         if (presentation != null) {
             startPresentation(presentation.deedId());
@@ -136,21 +147,45 @@ public class MirrorScreen extends Screen {
     public static void open() {
         Minecraft minecraft = Minecraft.getInstance();
         if (minecraft.player == null) return;
+        if (ClientDeedCache.pending().contains(DeedRegistry.NETHER_PERMIT.id()) &&
+                !ClientDeedCache.woven().contains(DeedRegistry.NETHER_PERMIT.id())) {
+            minecraft.setScreen(new MirrorScreen(null, DeedRegistry.NETHER_PERMIT.id(), null));
+            return;
+        }
         List<ClientDeedCache.ClientPresentation> presentations = ClientDeedCache.presentations();
-        minecraft.setScreen(new MirrorScreen(presentations.isEmpty() ? null : presentations.getFirst(), null));
+        if (!presentations.isEmpty()) {
+            minecraft.setScreen(new MirrorScreen(presentations.getFirst(), null, null));
+            return;
+        }
+        for (ResourceLocation pending : pendingDeeds()) {
+            if (!DeedCinematic.isAutomatic(pending)) continue;
+            Long returnQuestId = DeedQuestReturn.questId(pending);
+            if (returnQuestId == null) returnQuestId = DeedCinematic.returnQuestId(pending);
+            minecraft.setScreen(new MirrorScreen(null, pending, returnQuestId));
+            return;
+        }
+        minecraft.setScreen(new MirrorScreen(null, null, null));
     }
 
     public static void openPatientZero() {
         Minecraft minecraft = Minecraft.getInstance();
         if (minecraft.player != null) {
-            minecraft.setScreen(new MirrorScreen(null, DeedRegistry.NETHER_PERMIT.id()));
+            minecraft.setScreen(new MirrorScreen(null, DeedRegistry.NETHER_PERMIT.id(), null));
+        }
+    }
+
+    public static void openAutomatic(ResourceLocation deedId, long returnQuestId) {
+        Minecraft minecraft = Minecraft.getInstance();
+        if (minecraft.player != null) {
+            DeedQuestReturn.remember(deedId, returnQuestId);
+            minecraft.setScreen(new MirrorScreen(null, deedId, returnQuestId));
         }
     }
 
     public static void openPresentation(ClientDeedCache.ClientPresentation presentation) {
         Minecraft minecraft = Minecraft.getInstance();
         if (minecraft.player != null && minecraft.screen == null) {
-            minecraft.setScreen(new MirrorScreen(presentation, null));
+            minecraft.setScreen(new MirrorScreen(presentation, null, null));
         }
     }
 
@@ -197,11 +232,22 @@ public class MirrorScreen extends Screen {
     @Override
     public void tick() {
         deriveFromLedger();
+        if (questRevealTicks > 0) {
+            questRevealTicks--;
+            if (questRevealTicks == 0) {
+                returnToQuest();
+                return;
+            }
+        }
         if (state.ceremonyActive && (playback || automaticWeave || state.holding) && !weaveSent) {
             advanceCeremony();
         }
-        if (weaveSent && activeDeed != null && ClientDeedCache.woven().contains(activeDeed)) {
-            finishInteractiveWeave();
+        if (weaveSent && activeDeed != null) {
+            if (ClientDeedCache.woven().contains(activeDeed)) {
+                finishInteractiveWeave();
+            } else if (++weaveWaitTicks >= WEAVE_SYNC_TIMEOUT_TICKS) {
+                abortTimedOutWeave();
+            }
         }
         if (state.flashTicks > 0) state.flashTicks--;
         if (state.burstTicks > 0) state.burstTicks--;
@@ -211,29 +257,37 @@ public class MirrorScreen extends Screen {
     }
 
     private void advanceCeremony() {
+        if (cinematic == null) {
+            cancelWeave();
+            return;
+        }
         state.ceremonyProgress++;
         state.holdTicks = state.ceremonyProgress;
-        DeedCinematic.Phase nextPhase = DeedCinematic.phaseAt(state.ceremonyProgress);
+        state.ceremonyWeaveProgress = cinematic.weaveProgress(state.ceremonyProgress);
+        DeedCinematic.Phase nextPhase = cinematic.phaseAt(state.ceremonyProgress);
         if (nextPhase != cinematicPhase) {
             cinematicPhase = nextPhase;
             MirrorSounds.weavePhase(nextPhase);
         }
-        int nextVisibleCodePoints = cinematic == null ? 0 : cinematic.visibleCodePoints(state.ceremonyProgress);
+        int nextVisibleCodePoints = cinematic.visibleCodePoints(state.ceremonyProgress);
         if (nextVisibleCodePoints > visibleCinematicCodePoints && state.ceremonyProgress % 3 == 0) {
             MirrorSounds.memoryGlyph(cinematicPhase);
         }
         visibleCinematicCodePoints = nextVisibleCodePoints;
-        if (state.ceremonyProgress % 12 == 0 && state.ceremonyProgress < CEREMONY_TICKS) {
-            MirrorSounds.holdTick(DeedCinematic.weaveProgress(state.ceremonyProgress));
+        int ceremonyTicks = cinematic.totalTicks();
+        if (state.ceremonyProgress % 12 == 0 && state.ceremonyProgress < ceremonyTicks) {
+            MirrorSounds.holdTick(state.ceremonyWeaveProgress);
         }
-        if (state.ceremonyProgress < CEREMONY_TICKS) return;
-        state.ceremonyProgress = CEREMONY_TICKS;
+        if (state.ceremonyProgress < ceremonyTicks) return;
+        state.ceremonyProgress = ceremonyTicks;
+        state.ceremonyWeaveProgress = 1f;
         state.flashTicks = 24;
         MirrorSounds.weaveComplete();
         if (playback) {
             finishPresentation();
         } else if (activeDeed != null) {
             weaveSent = true;
+            weaveWaitTicks = 0;
             state.holding = false;
             CCoreNetwork.sendToServer(new MirrorWeavePacket(activeDeed, true));
         }
@@ -282,6 +336,7 @@ public class MirrorScreen extends Screen {
         MirrorScene.render(guiGraphics, width, height, mouseX, mouseY, time, zoom, state);
         renderPrompt(guiGraphics);
         renderCinematicText(guiGraphics);
+        renderQuestRevealTail(guiGraphics);
     }
 
     private void renderPrompt(GuiGraphics guiGraphics) {
@@ -317,12 +372,24 @@ public class MirrorScreen extends Screen {
                 int visibleLineCodePoints = Math.min(remaining, lineCodePoints);
                 String visibleLine = visibleLineCodePoints == 0 ? "" :
                         line.substring(0, line.offsetByCodePoints(0, visibleLineCodePoints));
-                guiGraphics.drawCenteredString(font, visibleLine, 0, top + i * 10,
-                        alpha << 24 | 0xE8DFD0);
+                Component renderedLine = Component.literal(visibleLine);
+                if (fragment.voice().italic()) {
+                    renderedLine = renderedLine.copy().withStyle(style -> style.withItalic(true));
+                }
+                guiGraphics.drawCenteredString(font, renderedLine, 0, top + i * 10,
+                        alpha << 24 | fragment.voice().color());
                 remaining = Math.max(0, remaining - lineCodePoints - (i + 1 < lines.size() ? 1 : 0));
             }
             pose.popPose();
         }
+    }
+
+    private void renderQuestRevealTail(GuiGraphics guiGraphics) {
+        if (questRevealTicks <= 0) return;
+        float progress = 1f - questRevealTicks / (float) QUEST_REVEAL_TICKS;
+        float eased = progress * progress * (3f - 2f * progress);
+        int alpha = Mth.clamp(Math.round(255f * eased), 0, 255);
+        guiGraphics.fill(0, 0, width, height, alpha << 24);
     }
 
     private int cinematicTextWidth(DeedCinematic.Fragment fragment) {
@@ -385,6 +452,7 @@ public class MirrorScreen extends Screen {
 
     @Override
     public boolean mouseScrolled(double mouseX, double mouseY, double scrollX, double scrollY) {
+        if (questRevealTicks > 0) return true;
         if (scrollY != 0) {
             targetZoom = Mth.clamp(targetZoom * (scrollY > 0 ? 1.15f : 1f / 1.15f), 1f, 2.6f);
             return true;
@@ -397,7 +465,7 @@ public class MirrorScreen extends Screen {
 
     @Override
     public boolean mouseClicked(double mouseX, double mouseY, int button) {
-        if (button != 0 || playback || automaticWeave || weaveSent) {
+        if (button != 0 || playback || automaticWeave || weaveSent || questRevealTicks > 0) {
             return super.mouseClicked(mouseX, mouseY, button);
         }
         if (heartClaimable() && heartAt(mouseX, mouseY)) {
@@ -411,7 +479,14 @@ public class MirrorScreen extends Screen {
         if (pendingIndex < 0 || pendingIndex >= pending.size()) {
             return super.mouseClicked(mouseX, mouseY, button);
         }
-        beginHeldWeave(pending.get(pendingIndex), hit, pendingIndex);
+        ResourceLocation deedId = pending.get(pendingIndex);
+        if (DeedCinematic.isAutomatic(deedId)) {
+            returnQuestId = DeedQuestReturn.questId(deedId);
+            if (returnQuestId == null) returnQuestId = DeedCinematic.returnQuestId(deedId);
+            beginAutomaticWeave(deedId);
+        } else {
+            beginHeldWeave(deedId, hit, pendingIndex);
+        }
         return true;
     }
 
@@ -448,8 +523,11 @@ public class MirrorScreen extends Screen {
         state.ceremonyCoil = coil;
         state.ceremonyActive = true;
         state.ceremonyProgress = 0;
+        state.ceremonyWeaveProgress = 0f;
         state.holdTicks = 0;
         state.flashTicks = 0;
+        weaveWaitTicks = 0;
+        questRevealTicks = 0;
         cinematic = DeedCinematic.load(deedId);
         cinematicPhase = DeedCinematic.Phase.PRELUDE;
         visibleCinematicCodePoints = 0;
@@ -457,12 +535,20 @@ public class MirrorScreen extends Screen {
     }
 
     private void cancelHeldWeave() {
+        cancelWeave();
+    }
+
+    private void cancelWeave() {
         activeDeed = null;
         state.ceremonyActive = false;
         state.ceremonyProgress = 0;
+        state.ceremonyWeaveProgress = 0f;
         state.holding = false;
         state.holdTicks = 0;
         state.flashTicks = 0;
+        weaveSent = false;
+        weaveWaitTicks = 0;
+        automaticWeave = false;
         cinematic = null;
     }
 
@@ -481,6 +567,7 @@ public class MirrorScreen extends Screen {
         ClientDeedCache.acknowledge(deedId);
         state.ceremonyActive = false;
         state.ceremonyProgress = 0;
+        state.ceremonyWeaveProgress = 0f;
         state.burstTicks = 26;
         state.burstSlot = state.ceremonySlot;
         activeDeed = null;
@@ -496,14 +583,37 @@ public class MirrorScreen extends Screen {
         ClientDeedCache.acknowledge(deedId);
         state.ceremonyActive = false;
         state.ceremonyProgress = 0;
+        state.ceremonyWeaveProgress = 1f;
         state.burstTicks = 26;
         state.burstSlot = state.ceremonySlot;
         state.holding = false;
         state.holdTicks = 0;
         activeDeed = null;
         weaveSent = false;
+        weaveWaitTicks = 0;
         automaticWeave = false;
         cinematic = null;
+        DeedQuestReturn.forget(deedId);
+        if (returnQuestId != null) {
+            questRevealTicks = QUEST_REVEAL_TICKS;
+        }
+    }
+
+    private void abortTimedOutWeave() {
+        cancelWeave();
+        returnToQuest();
+    }
+
+    private void returnToQuest() {
+        Long questId = returnQuestId;
+        returnQuestId = null;
+        if (questId == null) return;
+        returningToQuest = true;
+        if (ModList.get().isLoaded("ftbquests")) {
+            DeedQuestReturn.open(questId);
+        } else {
+            Minecraft.getInstance().setScreen(null);
+        }
     }
 
     private boolean heartClaimable() {
@@ -540,6 +650,34 @@ public class MirrorScreen extends Screen {
             if (!id.equals(DeedRegistry.THE_ADDRESS.id())) count++;
         }
         return count;
+    }
+
+    @Override
+    public boolean shouldCloseOnEsc() {
+        return !weaveSent && questRevealTicks <= 0;
+    }
+
+    @Override
+    public void onClose() {
+        cancelWeave();
+        if (returnQuestId != null) {
+            returnToQuest();
+        } else {
+            super.onClose();
+        }
+    }
+
+    @Override
+    public void removed() {
+        state.heartHolding = false;
+        state.heartHoldTicks = 0;
+        if (!returningToQuest) {
+            state.ceremonyActive = false;
+            state.ceremonyProgress = 0;
+            state.ceremonyWeaveProgress = 0f;
+            cinematic = null;
+        }
+        super.removed();
     }
 
     @Override

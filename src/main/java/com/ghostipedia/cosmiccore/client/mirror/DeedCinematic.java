@@ -1,70 +1,156 @@
 package com.ghostipedia.cosmiccore.client.mirror;
 
+import com.ghostipedia.cosmiccore.CosmicCore;
+
 import net.minecraft.client.resources.language.I18n;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 
 import java.util.ArrayList;
+import java.util.EnumMap;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public final class DeedCinematic {
 
-    private static final int TEMPO_SCALE = 2;
-    public static final int PRELUDE_TICKS = 55 * TEMPO_SCALE;
-    public static final int PHASE_TICKS = 90 * TEMPO_SCALE;
-    public static final int TOTAL_TICKS = PRELUDE_TICKS + PHASE_TICKS * 3;
-    private static final int TYPEWRITER_TICKS_PER_CODE_POINT = 1;
-    private static final int FADE_TICKS = 18 * TEMPO_SCALE;
-    private static final int MAX_FRAGMENTS_PER_PHASE = 3;
-    private static final int MAX_LEGACY_FRAGMENTS = 8;
+    private static final Profile DEFAULT_PROFILE = Profile.builder().build();
+    private static final Map<ResourceLocation, Profile> PROFILES = new HashMap<>();
+
+    static {
+        registerProfile(CosmicCore.id("current_flow"),
+                Profile.builder()
+                        .phaseVoice(Phase.RING, Voice.OVERSEER_ONE)
+                        .automatic(true)
+                        .returnQuest(0x1FECA1C0E8B233D5L)
+                        .build());
+    }
 
     public enum Phase {
 
-        PRELUDE("prelude", 0, PRELUDE_TICKS),
-        COIL("coil", PRELUDE_TICKS, PRELUDE_TICKS + PHASE_TICKS),
-        RING("ring", PRELUDE_TICKS + PHASE_TICKS, PRELUDE_TICKS + PHASE_TICKS * 2),
-        KNOT("knot", PRELUDE_TICKS + PHASE_TICKS * 2, TOTAL_TICKS);
+        PRELUDE("prelude"),
+        COIL("coil"),
+        RING("ring"),
+        KNOT("knot");
 
         private final String key;
-        private final int startTick;
-        private final int endTick;
 
-        Phase(String key, int startTick, int endTick) {
+        Phase(String key) {
             this.key = key;
-            this.startTick = startTick;
-            this.endTick = endTick;
         }
 
         String key() {
             return key;
         }
+    }
 
-        int startTick() {
-            return startTick;
+    public record Voice(int color, boolean italic) {
+
+        public static final Voice SOL = new Voice(0xE8DFD0, false);
+        public static final Voice OVERSEER_ONE = new Voice(0x88CCFF, false);
+    }
+
+    public static final class Profile {
+
+        private final Timing timing;
+        private final Map<Phase, Voice> phaseVoices;
+        private final Map<BeatKey, Voice> beatVoices;
+        private final boolean automatic;
+        private final Long returnQuestId;
+
+        private Profile(Timing timing, Map<Phase, Voice> phaseVoices, Map<BeatKey, Voice> beatVoices,
+                        boolean automatic, Long returnQuestId) {
+            this.timing = timing;
+            this.phaseVoices = Map.copyOf(phaseVoices);
+            this.beatVoices = Map.copyOf(beatVoices);
+            this.automatic = automatic;
+            this.returnQuestId = returnQuestId;
         }
 
-        int endTick() {
-            return endTick;
+        public static Builder builder() {
+            return new Builder();
+        }
+
+        Voice voice(Phase phase, int index) {
+            return beatVoices.getOrDefault(new BeatKey(phase, index), phaseVoices.getOrDefault(phase, Voice.SOL));
+        }
+
+        public static final class Builder {
+
+            private Timing timing = Timing.DEFAULT;
+            private final Map<Phase, Voice> phaseVoices = new EnumMap<>(Phase.class);
+            private final Map<BeatKey, Voice> beatVoices = new HashMap<>();
+            private boolean automatic = true;
+            private Long returnQuestId;
+
+            public Builder timing(Timing timing) {
+                this.timing = timing;
+                return this;
+            }
+
+            public Builder phaseVoice(Phase phase, Voice voice) {
+                phaseVoices.put(phase, voice);
+                return this;
+            }
+
+            public Builder beatVoice(Phase phase, int index, Voice voice) {
+                beatVoices.put(new BeatKey(phase, index), voice);
+                return this;
+            }
+
+            public Builder automatic(boolean automatic) {
+                this.automatic = automatic;
+                return this;
+            }
+
+            public Builder returnQuest(long returnQuestId) {
+                this.returnQuestId = returnQuestId;
+                return this;
+            }
+
+            public Profile build() {
+                return new Profile(timing, phaseVoices, beatVoices, automatic, returnQuestId);
+            }
+        }
+    }
+
+    public record Timing(int ticksPerCodePoint, int beatGapTicks, int phaseLeadTicks, int phaseHoldTicks,
+                         int fadeTicks, int minimumPreludeTicks, int minimumPhaseTicks) {
+
+        public static final Timing DEFAULT = new Timing(1, 8, 12, 28, 28, 90, 120);
+
+        public Timing {
+            if (ticksPerCodePoint < 1 || beatGapTicks < 0 || phaseLeadTicks < 0 || phaseHoldTicks < 0 ||
+                    fadeTicks < 1 || minimumPreludeTicks < 1 || minimumPhaseTicks < 1) {
+                throw new IllegalArgumentException("Invalid deed cinematic timing");
+            }
         }
     }
 
     public static final class Fragment {
 
         private final String text;
+        private final Voice voice;
         private final float x;
         private final float y;
         private final float angle;
         private final int startTick;
         private final int endTick;
+        private final int ticksPerCodePoint;
+        private final int fadeTicks;
 
-        private Fragment(String text, float x, float y, float angle, int startTick, int endTick) {
+        private Fragment(String text, Voice voice, float x, float y, float angle, int startTick, int endTick,
+                         int ticksPerCodePoint, int fadeTicks) {
             this.text = text;
+            this.voice = voice;
             this.x = x;
             this.y = y;
             this.angle = angle;
             this.startTick = startTick;
             this.endTick = endTick;
+            this.ticksPerCodePoint = ticksPerCodePoint;
+            this.fadeTicks = fadeTicks;
         }
 
         public float x() {
@@ -83,43 +169,72 @@ public final class DeedCinematic {
             return text;
         }
 
+        public Voice voice() {
+            return voice;
+        }
+
         public int alpha(int progress) {
             if (progress < startTick || progress >= endTick) return 0;
-            int fadeStart = endTick - FADE_TICKS;
+            int fadeStart = endTick - fadeTicks;
             if (progress <= fadeStart) return 255;
-            return Mth.clamp(Math.round(255f * (endTick - progress) / FADE_TICKS), 0, 255);
+            return Mth.clamp(Math.round(255f * (endTick - progress) / fadeTicks), 0, 255);
         }
 
         public int visibleCodePoints(int progress) {
             int elapsed = Math.max(0, progress - startTick);
             int codePoints = text.codePointCount(0, text.length());
-            return Math.min(codePoints, elapsed / TYPEWRITER_TICKS_PER_CODE_POINT);
+            return Math.min(codePoints, elapsed / ticksPerCodePoint);
         }
     }
 
-    private final List<Fragment> fragments;
+    private record BeatKey(Phase phase, int index) {}
 
-    private DeedCinematic(List<Fragment> fragments) {
+    private record LoadedBeat(String text, Voice voice, int index) {}
+
+    private record ScheduledBeat(LoadedBeat beat, int startTick, float[] placement) {}
+
+    private record PhaseRange(int startTick, int endTick) {}
+
+    private final List<Fragment> fragments;
+    private final Map<Phase, PhaseRange> phaseRanges;
+    private final int totalTicks;
+    private final int weaveStartTick;
+
+    private DeedCinematic(List<Fragment> fragments, Map<Phase, PhaseRange> phaseRanges, int totalTicks) {
         this.fragments = List.copyOf(fragments);
+        this.phaseRanges = Map.copyOf(phaseRanges);
+        this.totalTicks = totalTicks;
+        weaveStartTick = phaseRanges.get(Phase.PRELUDE).endTick();
+    }
+
+    public static void registerProfile(ResourceLocation deedId, Profile profile) {
+        PROFILES.put(deedId, profile);
+    }
+
+    public static boolean isAutomatic(ResourceLocation deedId) {
+        return PROFILES.getOrDefault(deedId, DEFAULT_PROFILE).automatic;
+    }
+
+    public static Long returnQuestId(ResourceLocation deedId) {
+        return PROFILES.getOrDefault(deedId, DEFAULT_PROFILE).returnQuestId;
     }
 
     public static DeedCinematic load(ResourceLocation deedId) {
-        List<Fragment> fragments = new ArrayList<>();
+        Profile profile = PROFILES.getOrDefault(deedId, DEFAULT_PROFILE);
         String root = "deed." + deedId.getNamespace() + "." + deedId.getPath() + ".telling.";
-        boolean staged = false;
-        for (Phase phase : Phase.values()) {
-            List<String> texts = readPhase(root, phase);
-            staged |= !texts.isEmpty();
-            addPhaseFragments(fragments, deedId, phase, texts);
+        Map<Phase, List<LoadedBeat>> beats = readStagedBeats(root, profile);
+        if (beats.values().stream().allMatch(List::isEmpty)) {
+            beats = readLegacyBeats(root, profile);
         }
-        if (!staged) {
-            addLegacyFragments(fragments, deedId, root);
-        }
-        return new DeedCinematic(fragments);
+        return schedule(deedId, profile, beats);
     }
 
     public List<Fragment> fragments() {
         return fragments;
+    }
+
+    public int totalTicks() {
+        return totalTicks;
     }
 
     public int visibleCodePoints(int progress) {
@@ -130,53 +245,86 @@ public final class DeedCinematic {
         return visible;
     }
 
-    public static Phase phaseAt(int progress) {
-        if (progress < PRELUDE_TICKS) return Phase.PRELUDE;
-        if (progress < PRELUDE_TICKS + PHASE_TICKS) return Phase.COIL;
-        if (progress < PRELUDE_TICKS + PHASE_TICKS * 2) return Phase.RING;
+    public Phase phaseAt(int progress) {
+        for (Phase phase : Phase.values()) {
+            if (progress < phaseRanges.get(phase).endTick()) return phase;
+        }
         return Phase.KNOT;
     }
 
-    public static float weaveProgress(int progress) {
-        return Mth.clamp((progress - PRELUDE_TICKS) / (float) (TOTAL_TICKS - PRELUDE_TICKS), 0f, 1f);
+    public float weaveProgress(int progress) {
+        return Mth.clamp((progress - weaveStartTick) / (float) Math.max(1, totalTicks - weaveStartTick), 0f, 1f);
     }
 
-    private static List<String> readPhase(String root, Phase phase) {
-        List<String> texts = new ArrayList<>();
-        for (int i = 0; i < MAX_FRAGMENTS_PER_PHASE; i++) {
-            String key = root + phase.key() + "." + i;
-            if (!I18n.exists(key)) break;
-            texts.add(Component.translatable(key).getString());
+    private static Map<Phase, List<LoadedBeat>> readStagedBeats(String root, Profile profile) {
+        Map<Phase, List<LoadedBeat>> beats = emptyBeats();
+        for (Phase phase : Phase.values()) {
+            List<LoadedBeat> phaseBeats = beats.get(phase);
+            for (int i = 0;; i++) {
+                String key = root + phase.key() + "." + i;
+                if (!I18n.exists(key)) break;
+                phaseBeats.add(new LoadedBeat(Component.translatable(key).getString(), profile.voice(phase, i), i));
+            }
         }
-        return texts;
+        return beats;
     }
 
-    private static void addPhaseFragments(List<Fragment> fragments, ResourceLocation deedId, Phase phase,
-                                          List<String> texts) {
-        for (int i = 0; i < texts.size(); i++) {
-            int start = phase.startTick() + 4 * TEMPO_SCALE + i * 15 * TEMPO_SCALE;
-            int end = phase.endTick();
-            float[] placement = placement(deedId, phase.ordinal(), i);
-            fragments.add(new Fragment(texts.get(i), placement[0], placement[1], placement[2], start, end));
-        }
-    }
-
-    private static void addLegacyFragments(List<Fragment> fragments, ResourceLocation deedId, String root) {
+    private static Map<Phase, List<LoadedBeat>> readLegacyBeats(String root, Profile profile) {
         List<String> texts = new ArrayList<>();
-        for (int i = 0; i < MAX_LEGACY_FRAGMENTS; i++) {
+        for (int i = 0;; i++) {
             String key = root + i;
             if (!I18n.exists(key)) break;
             texts.add(Component.translatable(key).getString());
         }
-        if (texts.isEmpty()) return;
-        int spacing = Math.max(18 * TEMPO_SCALE, (TOTAL_TICKS - 35 * TEMPO_SCALE) / texts.size());
+        Map<Phase, List<LoadedBeat>> beats = emptyBeats();
         for (int i = 0; i < texts.size(); i++) {
-            int start = 10 * TEMPO_SCALE + i * spacing;
-            int end = Math.min(TOTAL_TICKS, start + Math.max(45 * TEMPO_SCALE, spacing + FADE_TICKS));
-            Phase phase = phaseAt(start);
-            float[] placement = placement(deedId, phase.ordinal(), i);
-            fragments.add(new Fragment(texts.get(i), placement[0], placement[1], placement[2], start, end));
+            Phase phase = Phase.values()[Math.min(Phase.values().length - 1,
+                    i * Phase.values().length / texts.size())];
+            int phaseIndex = beats.get(phase).size();
+            beats.get(phase).add(new LoadedBeat(texts.get(i), profile.voice(phase, phaseIndex), phaseIndex));
         }
+        return beats;
+    }
+
+    private static Map<Phase, List<LoadedBeat>> emptyBeats() {
+        Map<Phase, List<LoadedBeat>> beats = new EnumMap<>(Phase.class);
+        for (Phase phase : Phase.values()) {
+            beats.put(phase, new ArrayList<>());
+        }
+        return beats;
+    }
+
+    private static DeedCinematic schedule(ResourceLocation deedId, Profile profile,
+                                          Map<Phase, List<LoadedBeat>> beats) {
+        List<Fragment> fragments = new ArrayList<>();
+        Map<Phase, PhaseRange> ranges = new EnumMap<>(Phase.class);
+        int phaseStart = 0;
+        for (Phase phase : Phase.values()) {
+            List<ScheduledBeat> scheduled = new ArrayList<>();
+            int cursor = phaseStart + profile.timing.phaseLeadTicks();
+            for (LoadedBeat beat : beats.get(phase)) {
+                float[] placement = placement(deedId, phase.ordinal(), beat.index());
+                scheduled.add(new ScheduledBeat(beat, cursor, placement));
+                int codePoints = beat.text().codePointCount(0, beat.text().length());
+                cursor += Math.max(1, codePoints * profile.timing.ticksPerCodePoint()) +
+                        profile.timing.beatGapTicks();
+            }
+            int minimumTicks = phase == Phase.PRELUDE ? profile.timing.minimumPreludeTicks() :
+                    profile.timing.minimumPhaseTicks();
+            int contentEnd = scheduled.isEmpty() ? phaseStart :
+                    cursor - profile.timing.beatGapTicks() + profile.timing.phaseHoldTicks() +
+                            profile.timing.fadeTicks();
+            int phaseEnd = Math.max(phaseStart + minimumTicks, contentEnd);
+            ranges.put(phase, new PhaseRange(phaseStart, phaseEnd));
+            for (ScheduledBeat scheduledBeat : scheduled) {
+                float[] placement = scheduledBeat.placement();
+                fragments.add(new Fragment(scheduledBeat.beat().text(), scheduledBeat.beat().voice(), placement[0],
+                        placement[1], placement[2], scheduledBeat.startTick(), phaseEnd,
+                        profile.timing.ticksPerCodePoint(), profile.timing.fadeTicks()));
+            }
+            phaseStart = phaseEnd;
+        }
+        return new DeedCinematic(fragments, ranges, phaseStart);
     }
 
     private static float[] placement(ResourceLocation deedId, int phase, int index) {

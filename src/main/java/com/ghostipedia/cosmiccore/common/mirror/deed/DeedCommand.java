@@ -42,6 +42,27 @@ public final class DeedCommand {
                                             true);
                                     return granted ? 1 : 0;
                                 })))
+                .then(Commands.literal("revoke")
+                        .requires(source -> source.hasPermission(2))
+                        .then(Commands.argument("id", ResourceLocationArgument.id())
+                                .suggests(DEED_IDS)
+                                .executes(ctx -> {
+                                    ServerPlayer player = ctx.getSource().getPlayerOrException();
+                                    ResourceLocation id = ResourceLocationArgument.getId(ctx, "id");
+                                    if (DeedRegistry.get(id) == null) {
+                                        ctx.getSource().sendFailure(Component.translatableWithFallback(
+                                                "command.cosmiccore.deed.unknown", "Unknown deed %s", id.toString()));
+                                        return 0;
+                                    }
+                                    boolean revoked = DeedsAPI.revoke(player, id);
+                                    ctx.getSource().sendSuccess(() -> revoked ?
+                                            Component.translatableWithFallback("command.cosmiccore.deed.revoked",
+                                                    "Revoked %s", id.toString()) :
+                                            Component.translatableWithFallback("command.cosmiccore.deed.not_held",
+                                                    "Deed is neither pending nor woven: %s", id.toString()),
+                                            true);
+                                    return revoked ? 1 : 0;
+                                })))
                 .then(Commands.literal("weave")
                         .requires(source -> source.hasPermission(2))
                         .then(Commands.argument("id", ResourceLocationArgument.id())

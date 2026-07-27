@@ -1,5 +1,6 @@
 package com.ghostipedia.cosmiccore.common.network;
 
+import com.ghostipedia.cosmiccore.common.compat.ftbquests.DeedQuestCompatBridge;
 import com.ghostipedia.cosmiccore.common.network.packet.AbyssTimeWarnPacket;
 import com.ghostipedia.cosmiccore.common.network.packet.DeedPresentationAckPacket;
 import com.ghostipedia.cosmiccore.common.network.packet.DeedPresentationPacket;
@@ -29,7 +30,7 @@ import net.neoforged.neoforge.network.registration.PayloadRegistrar;
 
 public class CCoreNetwork {
 
-    private static final String PROTOCOL_VERSION = "1.4.0";
+    private static final String PROTOCOL_VERSION = "1.7.0";
 
     public static void sendToServer(CustomPacketPayload packet) {
         PacketDistributor.sendToServer(packet);
@@ -58,6 +59,7 @@ public class CCoreNetwork {
         registrar.playToClient(DeedSyncPacket.TYPE, DeedSyncPacket.CODEC, DeedSyncPacket::execute);
         registrar.playToClient(DeedPresentationPacket.TYPE, DeedPresentationPacket.CODEC,
                 DeedPresentationPacket::execute);
+        DeedQuestCompatBridge.registerPayloads(registrar);
 
         registrar.playToServer(DashPacket.TYPE, DashPacket.CODEC, DashPacket::execute);
         registrar.playToServer(SoulSuperPacket.TYPE, SoulSuperPacket.CODEC, SoulSuperPacket::execute);

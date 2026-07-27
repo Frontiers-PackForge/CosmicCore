@@ -1,6 +1,7 @@
 package com.ghostipedia.cosmiccore.common.network.packet;
 
 import com.ghostipedia.cosmiccore.CosmicCore;
+import com.ghostipedia.cosmiccore.common.compat.ftbquests.DeedQuestCompatBridge;
 import com.ghostipedia.cosmiccore.common.mirror.deed.DeedLedger;
 import com.ghostipedia.cosmiccore.common.mirror.deed.DeedRegistry;
 import com.ghostipedia.cosmiccore.common.mirror.deed.DeedsAPI;
@@ -53,6 +54,11 @@ public class MirrorWeavePacket implements CustomPacketPayload {
                     ledger.pendingOf(teamKey).contains(deedId);
             if (!allowed) {
                 CosmicCore.LOGGER.warn("Rejected deed weave {} from {}", deedId, player.getScoreboardName());
+                return;
+            }
+            if (!address && !DeedQuestCompatBridge.canCommitWeave(player, deedId)) {
+                CosmicCore.LOGGER.warn("Rejected ineligible deed weave {} from {}", deedId,
+                        player.getScoreboardName());
                 return;
             }
             DeedsAPI.weave(player, deedId, bindPosition, deedId.equals(DeedRegistry.NETHER_PERMIT.id()));
