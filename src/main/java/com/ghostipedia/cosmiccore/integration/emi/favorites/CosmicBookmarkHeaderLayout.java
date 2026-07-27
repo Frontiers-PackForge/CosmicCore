@@ -30,8 +30,10 @@ public record CosmicBookmarkHeaderLayout(
 
     public static @Nullable CosmicBookmarkHeaderLayout create(SidebarPanel panel) {
         if (!panel.header || panel.space == null) return null;
+        EmiScreenBase screen = EmiScreenBase.getCurrent();
+        if (screen.isEmpty()) return null;
         Bounds header = new Bounds(panel.space.tx, panel.space.ty - HEADER_HEIGHT, panel.space.tw * 18, HEADER_HEIGHT);
-        Bounds usable = widestGap(header, EmiExclusionAreas.getExclusion(EmiScreenBase.getCurrent()));
+        Bounds usable = widestGap(header, EmiExclusionAreas.getExclusion(screen));
         if (usable.width() < CYCLE_SIZE * 2 + MIN_ARROW_SIZE * 4) return null;
 
         Bounds cycle = new Bounds(usable.x(), usable.y() + 1, CYCLE_SIZE, CYCLE_SIZE);
