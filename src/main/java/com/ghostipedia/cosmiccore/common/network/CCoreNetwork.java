@@ -6,6 +6,7 @@ import com.ghostipedia.cosmiccore.common.network.packet.DeedPresentationAckPacke
 import com.ghostipedia.cosmiccore.common.network.packet.DeedPresentationPacket;
 import com.ghostipedia.cosmiccore.common.network.packet.DeedSyncPacket;
 import com.ghostipedia.cosmiccore.common.network.packet.MirrorWeavePacket;
+import com.ghostipedia.cosmiccore.common.network.packet.MurkbloomDevImmunityPacket;
 import com.ghostipedia.cosmiccore.common.network.packet.MurkbloomSyncPacket;
 import com.ghostipedia.cosmiccore.common.network.packet.OxygenWarnPacket;
 import com.ghostipedia.cosmiccore.common.network.packet.RevealFieldsPacket;
@@ -30,7 +31,7 @@ import net.neoforged.neoforge.network.registration.PayloadRegistrar;
 
 public class CCoreNetwork {
 
-    private static final String PROTOCOL_VERSION = "1.7.0";
+    private static final String PROTOCOL_VERSION = "1.8.0";
 
     public static void sendToServer(CustomPacketPayload packet) {
         PacketDistributor.sendToServer(packet);
@@ -67,6 +68,8 @@ public class CCoreNetwork {
         registrar.playToServer(MirrorWeavePacket.TYPE, MirrorWeavePacket.CODEC, MirrorWeavePacket::execute);
         registrar.playToServer(DeedPresentationAckPacket.TYPE, DeedPresentationAckPacket.CODEC,
                 DeedPresentationAckPacket::execute);
+        registrar.playToServer(MurkbloomDevImmunityPacket.TYPE, MurkbloomDevImmunityPacket.CODEC,
+                MurkbloomDevImmunityPacket::execute);
 
         registrar.playToClient(VoidUIPackets.OpenVoidScreenPacket.TYPE, VoidUIPackets.OpenVoidScreenPacket.CODEC,
                 VoidUIPackets.OpenVoidScreenPacket::execute);

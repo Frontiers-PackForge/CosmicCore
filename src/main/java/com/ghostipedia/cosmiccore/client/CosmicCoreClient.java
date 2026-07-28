@@ -11,6 +11,7 @@ import com.ghostipedia.cosmiccore.client.murkbloom.MurkbloomOverlay;
 import com.ghostipedia.cosmiccore.client.renderer.machine.*;
 import com.ghostipedia.cosmiccore.client.tooltip.FoodTooltipClientComponent;
 import com.ghostipedia.cosmiccore.client.tooltip.FoodTooltipComponent;
+import com.ghostipedia.cosmiccore.common.config.CosmicCoreConfig;
 import com.ghostipedia.cosmiccore.common.data.CosmicBlockEntities;
 import com.ghostipedia.cosmiccore.common.data.CosmicParticleTypes;
 
@@ -147,7 +148,7 @@ public class CosmicCoreClient {
     public static void registerKeyMappings(RegisterKeyMappingsEvent event) {
         QuakeMovementKeybinds.registerKeyMappings(event);
         MirrorScreen.registerKeyMappings(event);
-        if (!FMLEnvironment.production) {
+        if (!FMLEnvironment.production || CosmicCoreConfig.devVisor()) {
             AbyssDevView.registerKeyMappings(event);
             MurkbloomDevControls.registerKeyMappings(event);
         }

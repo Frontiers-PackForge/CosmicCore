@@ -22,6 +22,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.BitSet;
 import java.util.List;
 
 public final class AbyssDispatcher {
@@ -172,9 +174,9 @@ public final class AbyssDispatcher {
                 TagPrefix.oreMarble
         };
         Material[][] layerMats = {
-                {},
                 { CosmicBundleMaterials.Utherite },
-                { CosmicBundleMaterials.Vanachrome, CosmicBundleMaterials.Shimmerbloom },
+                { CosmicBundleMaterials.Vanachrome },
+                { CosmicBundleMaterials.Shimmerbloom },
                 { CosmicBundleMaterials.Agarlite },
                 {}
         };
@@ -257,6 +259,13 @@ public final class AbyssDispatcher {
         BlockPos.MutableBlockPos cursor = new BlockPos.MutableBlockPos();
         List<AbyssPlacement.Member> colLand = new ArrayList<>();
         List<AbyssPlacement.Member> colSparse = new ArrayList<>();
+        int[] landLow = new int[land.size()];
+        int[] landHigh = new int[land.size()];
+        int[] sparseLow = new int[sparse.size()];
+        int[] sparseHigh = new int[sparse.size()];
+        int[] boundaries = new int[(land.size() + sparse.size()) * 2];
+        BitSet activeLand = new BitSet(land.size());
+        BitSet activeSparse = new BitSet(sparse.size());
 
         for (int lx = 0; lx < 16; lx++) {
             int wx = minX + lx;
@@ -264,74 +273,117 @@ public final class AbyssDispatcher {
                 int wz = minZ + lz;
                 colLand.clear();
                 colSparse.clear();
-                double yLo = Double.POSITIVE_INFINITY;
-                double yHi = Double.NEGATIVE_INFINITY;
+                int boundaryCount = 0;
+                double rawYLo = Double.POSITIVE_INFINITY;
                 for (AbyssPlacement.Member m : land) {
                     double r = m.reach();
                     if (wx < m.x() - r || wx > m.x() + r || wz < m.z() - r || wz > m.z() + r) continue;
-                    colLand.add(m);
                     double pad = m.yReach() + AbyssShape.ROUGHNESS * m.size();
-                    yLo = Math.min(yLo, m.y() - pad);
-                    yHi = Math.max(yHi, m.y() + pad);
+                    int low = Math.max(floorY, (int) Math.ceil(m.y() - pad));
+                    int high = Math.min(ceilY, (int) Math.floor(m.y() + pad));
+                    if (low > high) continue;
+                    int index = colLand.size();
+                    colLand.add(m);
+                    landLow[index] = low;
+                    landHigh[index] = high;
+                    boundaries[boundaryCount++] = low;
+                    boundaries[boundaryCount++] = high + 1;
+                    rawYLo = Math.min(rawYLo, m.y() - pad);
                 }
                 for (AbyssPlacement.Member m : sparse) {
                     double r = m.reach();
                     if (wx < m.x() - r || wx > m.x() + r || wz < m.z() - r || wz > m.z() + r) continue;
-                    colSparse.add(m);
                     double pad = m.yReach() + AbyssShape.ROUGHNESS * m.size();
-                    yLo = Math.min(yLo, m.y() - pad);
-                    yHi = Math.max(yHi, m.y() + pad);
+                    int low = Math.max(floorY, (int) Math.ceil(m.y() - pad));
+                    int high = Math.min(ceilY, (int) Math.floor(m.y() + pad));
+                    if (low > high) continue;
+                    int index = colSparse.size();
+                    colSparse.add(m);
+                    sparseLow[index] = low;
+                    sparseHigh[index] = high;
+                    boundaries[boundaryCount++] = low;
+                    boundaries[boundaryCount++] = high + 1;
+                    rawYLo = Math.min(rawYLo, m.y() - pad);
                 }
                 if (colLand.isEmpty() && colSparse.isEmpty()) continue;
 
-                int y0 = Math.max(floorY, (int) Math.floor(yLo));
-                int y1 = Math.min(ceilY, (int) Math.ceil(yHi));
+                Arrays.sort(boundaries, 0, boundaryCount);
+                int uniqueCount = 0;
+                for (int i = 0; i < boundaryCount; i++) {
+                    if (uniqueCount == 0 || boundaries[i] != boundaries[uniqueCount - 1]) {
+                        boundaries[uniqueCount++] = boundaries[i];
+                    }
+                }
+                int originalY0 = Math.max(floorY, (int) Math.floor(rawYLo));
                 int coverLeft = 0;
                 boolean prevLand = false;
 
-                for (int y = y1; y >= y0; y--) {
-                    boolean landSolid = !colLand.isEmpty() && AbyssShape.density(seed, wx, y, wz, colLand) < 0.0;
-                    boolean blobSolid = !landSolid && !colSparse.isEmpty() &&
-                            AbyssShape.density(seed, wx, y, wz, colSparse) < 0.0;
-                    if (!landSolid && !blobSolid) {
-                        if (prevLand) {
-                            tryBellyFlora(chunk, seed, wx, y, wz, floorY);
-                        }
+                for (int segment = uniqueCount - 2; segment >= 0; segment--) {
+                    int segmentLow = boundaries[segment];
+                    int segmentHigh = boundaries[segment + 1] - 1;
+                    activeLand.clear();
+                    activeSparse.clear();
+                    for (int i = 0; i < colLand.size(); i++) {
+                        if (landLow[i] <= segmentLow && landHigh[i] >= segmentHigh) activeLand.set(i);
+                    }
+                    for (int i = 0; i < colSparse.size(); i++) {
+                        if (sparseLow[i] <= segmentLow && sparseHigh[i] >= segmentHigh) activeSparse.set(i);
+                    }
+                    boolean hasActiveLand = !activeLand.isEmpty();
+                    boolean hasActiveSparse = !activeSparse.isEmpty();
+                    if (!hasActiveLand && !hasActiveSparse) {
+                        if (prevLand) tryBellyFlora(chunk, seed, wx, segmentHigh, wz, floorY);
                         prevLand = false;
                         continue;
                     }
-                    cursor.set(wx, y, wz);
-                    BlockState existing = chunk.getBlockState(cursor);
-                    if (!existing.isAir() && existing.getFluidState().isEmpty()) {
-                        prevLand = false;
-                        continue;
-                    }
-                    int layer = AbyssRegions.layerBlended(seed, wx, y, wz);
-                    if (layer < 0) layer = 0;
-                    if (layer > top) layer = top;
-                    if (landSolid) {
-                        if (!prevLand) {
-                            coverLeft = COVER_DEPTH;
-                            trySurfaceFlora(chunk, seed, wx, y + 1, wz, layer, ceilY);
+
+                    for (int y = segmentHigh; y >= segmentLow; y--) {
+                        double displacement = AbyssShape.roughnessDisplacement(seed, wx, y, wz);
+                        boolean landSolid = hasActiveLand &&
+                                AbyssShape.densityActive(wx, y, wz, colLand, activeLand, displacement) < 0.0;
+                        boolean blobSolid = !landSolid && hasActiveSparse &&
+                                AbyssShape.densityActive(wx, y, wz, colSparse, activeSparse, displacement) < 0.0;
+                        if (!landSolid && !blobSolid) {
+                            if (prevLand) tryBellyFlora(chunk, seed, wx, y, wz, floorY);
+                            prevLand = false;
+                            continue;
                         }
-                        BlockState put;
-                        if (coverLeft > 0) {
-                            put = skinByLayer[layer];
-                            coverLeft--;
-                        } else {
-                            put = rollOre(seed, wx, y, wz, layer);
-                            if (put == null) {
-                                double n = AbyssShape.noise3(seed, wx * MARBLE_SCALE, y * MARBLE_SCALE,
-                                        wz * MARBLE_SCALE);
-                                put = n > MARBLE_THRESHOLD ? accentByLayer[layer] : stoneByLayer[layer];
+                        cursor.set(wx, y, wz);
+                        BlockState existing = chunk.getBlockState(cursor);
+                        if (!existing.isAir() && existing.getFluidState().isEmpty()) {
+                            prevLand = false;
+                            continue;
+                        }
+                        int layer = AbyssRegions.layerBlended(seed, wx, y, wz);
+                        if (layer < 0) layer = 0;
+                        if (layer > top) layer = top;
+                        if (landSolid) {
+                            if (!prevLand) {
+                                coverLeft = COVER_DEPTH;
+                                trySurfaceFlora(chunk, seed, wx, y + 1, wz, layer, ceilY);
                             }
+                            BlockState put;
+                            if (coverLeft > 0) {
+                                put = skinByLayer[layer];
+                                coverLeft--;
+                            } else {
+                                put = rollOre(seed, wx, y, wz, layer);
+                                if (put == null) {
+                                    double n = AbyssShape.noise3(seed, wx * MARBLE_SCALE, y * MARBLE_SCALE,
+                                            wz * MARBLE_SCALE);
+                                    put = n > MARBLE_THRESHOLD ? accentByLayer[layer] : stoneByLayer[layer];
+                                }
+                            }
+                            chunk.setBlockState(cursor, put, false);
+                            prevLand = true;
+                        } else {
+                            chunk.setBlockState(cursor, stoneByLayer[layer], false);
+                            prevLand = false;
                         }
-                        chunk.setBlockState(cursor, put, false);
-                        prevLand = true;
-                    } else {
-                        chunk.setBlockState(cursor, stoneByLayer[layer], false);
-                        prevLand = false;
                     }
+                }
+                if (prevLand && boundaries[0] > originalY0) {
+                    tryBellyFlora(chunk, seed, wx, boundaries[0] - 1, wz, floorY);
                 }
             }
         }

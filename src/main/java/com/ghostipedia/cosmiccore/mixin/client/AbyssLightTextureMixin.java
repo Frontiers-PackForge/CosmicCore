@@ -18,7 +18,7 @@ public class AbyssLightTextureMixin {
                        target = "Lnet/minecraft/client/OptionInstance;get()Ljava/lang/Object;"))
     private Object cosmiccore$forceBright(OptionInstance<?> instance) {
         Object value = instance.get();
-        if (!AbyssDevView.stripFog) {
+        if (!AbyssDevView.active()) {
             return value;
         }
         Minecraft mc = Minecraft.getInstance();

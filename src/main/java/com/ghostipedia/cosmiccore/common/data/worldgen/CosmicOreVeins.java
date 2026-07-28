@@ -106,8 +106,8 @@ public class CosmicOreVeins {
         shape(CosmicBundleMaterials.MonaziteSalts, Shape.STRINGER);
         shape(CosmicBundleMaterials.CrudeRadionite, Shape.FRACTURE);
 
-        hollow(CosmicBundleMaterials.Utherite, Shape.BRANCHING, -390, -210);
-        hollow(CosmicBundleMaterials.Vanachrome, Shape.BRANCHING, -590, -410);
+        hollow(CosmicBundleMaterials.Utherite, Shape.BRANCHING, -190, -70);
+        hollow(CosmicBundleMaterials.Vanachrome, Shape.BRANCHING, -390, -210);
         hollow(CosmicBundleMaterials.Shimmerbloom, Shape.CLUSTER, -590, -410);
         hollow(CosmicBundleMaterials.Agarlite, Shape.STRINGER, -790, -610);
 

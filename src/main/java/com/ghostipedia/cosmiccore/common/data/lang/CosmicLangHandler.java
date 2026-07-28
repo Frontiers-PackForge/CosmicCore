@@ -1706,6 +1706,17 @@ public class CosmicLangHandler extends LangHandler {
                 "Using this means you have CLEARLY READ THIS, and ACCEPT FAULT for enabling it.\n" +
                 "If you are requesting support with this config on, there is a high chance developers will not be " +
                 "happy.");
+        provider.add("key.categories.cosmiccore", "CosmicCore: Development");
+        provider.add("key.cosmiccore.abyss_dev_view", "Toggle Abyss Survey Vision");
+        provider.add("key.cosmiccore.murkbloom_dev_stir", "Cycle Murkbloom Preview");
+        provider.add("key.cosmiccore.murkbloom_dev_immunity", "Toggle Murkbloom Immunity");
+        provider.add("cosmiccore.dev.abyss_view.enabled", "Abyss survey vision enabled");
+        provider.add("cosmiccore.dev.abyss_view.disabled", "Abyss survey vision disabled");
+        provider.add("cosmiccore.dev.murkbloom.flinch", "Murkbloom preview: flinch");
+        provider.add("cosmiccore.dev.murkbloom.stir", "Murkbloom preview: %s (%s)");
+        provider.add("cosmiccore.dev.murkbloom.immunity.enabled", "Murkbloom immunity enabled");
+        provider.add("cosmiccore.dev.murkbloom.immunity.disabled", "Murkbloom immunity disabled");
+        provider.add("cosmiccore.dev.murkbloom.immunity.denied", "Murkbloom immunity requires operator access");
         provider.add("cosmiccore.ftbquests.deed.task", "Deed Seal");
         provider.add("cosmiccore.ftbquests.deed.sealed_title", "SEALED");
         provider.add("cosmiccore.ftbquests.deed.sealed_hint", "Something waits beyond this seal.");
