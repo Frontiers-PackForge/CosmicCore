@@ -1,6 +1,7 @@
 package com.ghostipedia.cosmiccore.client.dev;
 
 import com.ghostipedia.cosmiccore.CosmicCore;
+import com.ghostipedia.cosmiccore.common.config.CosmicCoreConfig;
 
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
@@ -10,6 +11,7 @@ import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.fml.loading.FMLEnvironment;
 import net.neoforged.neoforge.client.event.InputEvent;
 import net.neoforged.neoforge.client.event.RegisterKeyMappingsEvent;
 import net.neoforged.neoforge.client.event.ViewportEvent;
@@ -28,6 +30,14 @@ public final class AbyssDevView {
     public static KeyMapping TOGGLE;
     public static boolean stripFog = false;
 
+    public static boolean allowed() {
+        return !FMLEnvironment.production || CosmicCoreConfig.devVisor();
+    }
+
+    public static boolean active() {
+        return allowed() && stripFog;
+    }
+
     public static void registerKeyMappings(RegisterKeyMappingsEvent event) {
         TOGGLE = new KeyMapping(
                 "key.cosmiccore.abyss_dev_view",
@@ -40,20 +50,21 @@ public final class AbyssDevView {
 
     @SubscribeEvent
     public static void onKeyInput(InputEvent.Key event) {
+        if (!allowed()) return;
         if (event.getAction() != GLFW.GLFW_PRESS) return;
         if (TOGGLE == null || !TOGGLE.matches(event.getKey(), event.getScanCode())) return;
         Minecraft mc = Minecraft.getInstance();
         if (mc.screen != null) return;
         stripFog = !stripFog;
         if (mc.player != null) {
-            mc.player.displayClientMessage(
-                    Component.literal("Abyss dev view (fog strip): " + (stripFog ? "ON" : "OFF")), true);
+            mc.player.displayClientMessage(Component.translatable(stripFog ?
+                    "cosmiccore.dev.abyss_view.enabled" : "cosmiccore.dev.abyss_view.disabled"), true);
         }
     }
 
     @SubscribeEvent
     public static void onRenderFog(ViewportEvent.RenderFog event) {
-        if (!stripFog || event.getType() != FogType.WATER) return;
+        if (!active() || event.getType() != FogType.WATER) return;
         event.setNearPlaneDistance(-8.0f);
         event.setFarPlaneDistance(2048.0f);
         event.setCanceled(true);
@@ -61,7 +72,7 @@ public final class AbyssDevView {
 
     @SubscribeEvent
     public static void onFogColor(ViewportEvent.ComputeFogColor event) {
-        if (!stripFog) return;
+        if (!active()) return;
         Minecraft mc = Minecraft.getInstance();
         if (mc.player == null || !mc.player.isUnderWater()) return;
         event.setRed(0.5f);

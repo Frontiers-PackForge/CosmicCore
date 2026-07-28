@@ -8,6 +8,8 @@ import com.ghostipedia.cosmiccore.common.network.CCoreNetwork;
 import com.ghostipedia.cosmiccore.common.network.packet.MurkbloomSyncPacket;
 import com.ghostipedia.cosmiccore.common.network.packet.SyncAbyssAttunementPacket;
 
+import com.gregtechceu.gtceu.api.item.tool.ToolHelper;
+
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
@@ -29,7 +31,9 @@ import net.neoforged.neoforge.event.level.BlockEvent;
 import net.neoforged.neoforge.event.tick.PlayerTickEvent;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 import java.util.UUID;
 
 @EventBusSubscriber(modid = CosmicCore.MOD_ID)
@@ -72,6 +76,7 @@ public final class MurkbloomServerLogic {
     private static final int[] SHELTER_HORIZONTAL = { 3, 6, 9 };
 
     private static final Map<UUID, Hunt> HUNTS = new HashMap<>();
+    private static final Set<UUID> DEV_IMMUNE = new HashSet<>();
 
     private static final class Hunt {
 
@@ -113,6 +118,19 @@ public final class MurkbloomServerLogic {
         return inHollow(player) && player.isInWater();
     }
 
+    public static boolean toggleDevImmunity(ServerPlayer player) {
+        UUID id = player.getUUID();
+        if (DEV_IMMUNE.remove(id)) return false;
+        DEV_IMMUNE.add(id);
+        HUNTS.remove(id);
+        sync(player, new Hunt(), true);
+        return true;
+    }
+
+    public static boolean devImmune(ServerPlayer player) {
+        return DEV_IMMUNE.contains(player.getUUID());
+    }
+
     public static final double STEALTH_FLOOR = 0.5;
 
     public static double noiseGainScale(ServerPlayer player) {
@@ -123,6 +141,7 @@ public final class MurkbloomServerLogic {
     }
 
     public static void impulse(ServerPlayer player, double amount, boolean capped, byte kind) {
+        if (devImmune(player)) return;
         if (!inHollow(player)) return;
         amount *= noiseGainScale(player);
         Hunt hunt = HUNTS.computeIfAbsent(player.getUUID(), u -> new Hunt());
@@ -135,6 +154,7 @@ public final class MurkbloomServerLogic {
     }
 
     public static void sonarPing(ServerPlayer player) {
+        if (devImmune(player)) return;
         if (!inHollow(player)) return;
         Hunt hunt = HUNTS.computeIfAbsent(player.getUUID(), u -> new Hunt());
         double target = hunt.stir < 4 ? RISE_THRESHOLDS[hunt.stir] + 2 : hunt.noise;
@@ -147,6 +167,7 @@ public final class MurkbloomServerLogic {
     @SubscribeEvent
     public static void onPlayerTick(PlayerTickEvent.Post event) {
         if (!(event.getEntity() instanceof ServerPlayer player)) return;
+        if (devImmune(player)) return;
         Hunt hunt = HUNTS.get(player.getUUID());
 
         if (!inHollow(player)) {
@@ -307,6 +328,10 @@ public final class MurkbloomServerLogic {
     @SubscribeEvent
     public static void onBlockBreak(BlockEvent.BreakEvent event) {
         if (event.getPlayer() instanceof ServerPlayer player) {
+            if (ToolHelper.IS_AOE_BREAKING_BLOCKS.get() &&
+                    !ToolHelper.getAoEDefinition(player.getMainHandItem()).isZero()) {
+                return;
+            }
             double muted = NOISE_BREAK * StealthCoating.toolMultiplier(player.getMainHandItem());
             impulse(player, muted, false, KIND_BREAK);
         }
@@ -347,6 +372,7 @@ public final class MurkbloomServerLogic {
     @SubscribeEvent
     public static void onLogout(PlayerEvent.PlayerLoggedOutEvent event) {
         HUNTS.remove(event.getEntity().getUUID());
+        DEV_IMMUNE.remove(event.getEntity().getUUID());
     }
 
     @SubscribeEvent

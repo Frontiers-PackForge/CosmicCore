@@ -11,7 +11,7 @@
     "loader": "gtceu:machine",
     "machine": "cosmiccore:bloomwyrm_heart",
     "texture_overrides": {
-        "all": "cosmiccore:block/casings/solid/lightweight_dark_steel_casing"
+        "all": "cosmiccore:block/casings/solid/somarust_casing"
     },
     "variants": {
         "is_formed=false": {

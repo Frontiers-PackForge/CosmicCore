@@ -78,7 +78,7 @@ public final class AbyssClientFog {
 
     @SubscribeEvent(priority = EventPriority.LOWEST, receiveCanceled = true)
     public static void onRenderFog(ViewportEvent.RenderFog event) {
-        if (AbyssDevView.stripFog) return;
+        if (AbyssDevView.active()) return;
         Minecraft mc = Minecraft.getInstance();
         float gate = entryGate(mc);
         if (gate <= 0f) return;
@@ -98,7 +98,7 @@ public final class AbyssClientFog {
 
     @SubscribeEvent(priority = EventPriority.LOWEST)
     public static void onFogColor(ViewportEvent.ComputeFogColor event) {
-        if (AbyssDevView.stripFog) return;
+        if (AbyssDevView.active()) return;
         Minecraft mc = Minecraft.getInstance();
         float gate = entryGate(mc);
         if (gate <= 0f) return;

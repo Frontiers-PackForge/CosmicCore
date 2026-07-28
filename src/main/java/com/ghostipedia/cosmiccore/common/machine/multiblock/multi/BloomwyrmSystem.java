@@ -24,12 +24,11 @@ import com.gregtechceu.gtceu.utils.TagUtil;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.level.block.Blocks;
 
+import com.sammy.malum.registry.common.block.MalumBlocks;
+
 import static com.ghostipedia.cosmiccore.api.pattern.CosmicPredicates.autoAbilitiesNoEnergyIn;
 import static com.ghostipedia.cosmiccore.api.registries.CosmicRegistration.REGISTRATE;
-import static com.ghostipedia.cosmiccore.common.data.CosmicBlocks.LIGHTWEIGHT_DARK_STEEL_CASING;
-import static com.ghostipedia.cosmiccore.common.data.CosmicBlocks.MURK_KELP;
-import static com.ghostipedia.cosmiccore.common.data.CosmicBlocks.RESONANTLY_TUNED_VIRTUE_MELD_CASING;
-import static com.ghostipedia.cosmiccore.common.data.CosmicBlocks.SOMARUST_CASING;
+import static com.ghostipedia.cosmiccore.common.data.CosmicBlocks.*;
 import static com.ghostipedia.cosmiccore.common.data.datagen.CosmicMachineModels.createSeparateControllerCasingMachineModel;
 import static com.gregtechceu.gtceu.api.multiblock.Predicates.abilities;
 import static com.gregtechceu.gtceu.api.multiblock.Predicates.any;
@@ -51,7 +50,7 @@ public final class BloomwyrmSystem {
             .rotationState(RotationState.NON_Y_AXIS)
             .recipeType(GTRecipeTypes.DUMMY_RECIPES)
             .appearanceBlock(SOMARUST_CASING)
-            .partAppearance((controller, part, side) -> LIGHTWEIGHT_DARK_STEEL_CASING.getDefaultState())
+            .partAppearance((controller, part, side) -> SOMARUST_CASING.getDefaultState())
             .pattern(definition -> MultiblockPatternBuilder
                     .start(RelativeDirection.BACK, RelativeDirection.UP, RelativeDirection.LEFT)
                     .slice("    AAA    ", "    A A    ", "           ", "           ", "           ", "           ",
@@ -77,18 +76,18 @@ public final class BloomwyrmSystem {
                     .slice("    AAA    ", "    A A    ", "           ", "           ", "           ", "           ",
                             "           ")
                     .where(' ', any())
-                    .where('A', blocks(LIGHTWEIGHT_DARK_STEEL_CASING.get())
+                    .where('A', blocks(SOMARUST_CASING.get())
                             .or(abilities(PartAbility.INPUT_ENERGY).setExactLimit(1))
                             .or(abilities(PartAbility.MAINTENANCE).setExactLimit(1)))
-                    .where('B', blocks(Blocks.SCULK))
-                    .where('C', blocks(Blocks.SCULK_CATALYST))
-                    .where('D', blocks(RESONANTLY_TUNED_VIRTUE_MELD_CASING.get()))
+                    .where('B', blocks(MalumBlocks.BLIGHTED_EARTH.get()))
+                    .where('C', blocks(MalumBlocks.BLIGHTED_EARTH.get()))
+                    .where('D', blocks(RUST_STAINED_CASING.get()))
                     .where('E', blocks(SOMARUST_CASING.get()))
                     .where('F', controller(blocks(definition.getBlock())))
                     .build())
             .model(createSeparateControllerCasingMachineModel(
                     CosmicCore.id("block/casings/solid/somarust_casing"),
-                    CosmicCore.id("block/casings/solid/lightweight_dark_steel_casing"),
+                    CosmicCore.id("block/casings/solid/somarust_casing"),
                     CosmicCore.id("block/multiblock/dawnforge"))
                     .andThen(model -> model
                             .addDynamicRenderer(CosmicDynamicRenderHelpers::createBloomwyrmHeartPartRender)))
@@ -103,8 +102,8 @@ public final class BloomwyrmSystem {
             .rotationState(RotationState.NON_Y_AXIS)
             .recipeType(CosmicRecipeTypes.ABYSSAL_CULTURE_VAT)
             .recipeModifier(BloomwyrmUnitMachine::recipeModifier)
-            .appearanceBlock(LIGHTWEIGHT_DARK_STEEL_CASING)
-            .partAppearance((controller, part, side) -> LIGHTWEIGHT_DARK_STEEL_CASING.getDefaultState())
+            .appearanceBlock(SOMARUST_CASING)
+            .partAppearance((controller, part, side) -> SOMARUST_CASING.getDefaultState())
             .pattern(definition -> MultiblockPatternBuilder
                     .start(RelativeDirection.BACK, RelativeDirection.UP, RelativeDirection.LEFT)
                     .slice(" AAA ", " ADA ", "  A  ", "     ", "     ", "  A  ", " AAA ", " AAA ")
@@ -113,7 +112,7 @@ public final class BloomwyrmSystem {
                     .slice("AAAAA", "ACCCA", " CCC ", " CCC ", " CCC ", " CCC ", "ACCCA", "AAAAA")
                     .slice("BAAAB", "BAAAB", "BAAAB", "BAAAB", "BAAAB", "BAAAB", "BAAAB", "BAAAB")
                     .where(' ', any())
-                    .where('A', blocks(LIGHTWEIGHT_DARK_STEEL_CASING.get())
+                    .where('A', blocks(SOMARUST_CASING.get())
                             .or(autoAbilitiesNoEnergyIn(CosmicRecipeTypes.ABYSSAL_CULTURE_VAT))
                             .or(autoAbilities(true, false, false)))
                     .where('B', blockTag(TagUtil.createBlockTag("frames/dark_steel")))
@@ -122,7 +121,7 @@ public final class BloomwyrmSystem {
                     .where('E', states(MURK_KELP.getDefaultState().setValue(MurkFloraBlock.WATERLOGGED, true)))
                     .build())
             .workableCasingModel(
-                    CosmicCore.id("block/casings/solid/lightweight_dark_steel_casing"),
+                    CosmicCore.id("block/casings/solid/somarust_casing"),
                     CosmicCore.id("block/multiblock/mixing_vessel"))
             .register();
 
@@ -136,8 +135,8 @@ public final class BloomwyrmSystem {
             .rotationState(RotationState.NON_Y_AXIS)
             .recipeType(CosmicRecipeTypes.SCULK_BIOCHAMBER)
             .recipeModifier(BloomwyrmUnitMachine::recipeModifier)
-            .appearanceBlock(LIGHTWEIGHT_DARK_STEEL_CASING)
-            .partAppearance((controller, part, side) -> LIGHTWEIGHT_DARK_STEEL_CASING.getDefaultState())
+            .appearanceBlock(SOMARUST_CASING)
+            .partAppearance((controller, part, side) -> SOMARUST_CASING.getDefaultState())
             .pattern(definition -> MultiblockPatternBuilder
                     .start(RelativeDirection.BACK, RelativeDirection.UP, RelativeDirection.LEFT)
                     .slice("AAEAA", "ABBBA", "ABBBA", "ABBBA", "ABBBA", "ABBBA", "AAAAA")
@@ -146,7 +145,7 @@ public final class BloomwyrmSystem {
                     .slice("AAAAA", "BCDCB", "BCDCB", "BCDCB", "BCDCB", "BCDCB", "AAAAA")
                     .slice("AAAAA", "ABBBA", "ABBBA", "ABBBA", "ABBBA", "ABBBA", "AAAAA")
                     .where(' ', any())
-                    .where('A', blocks(LIGHTWEIGHT_DARK_STEEL_CASING.get())
+                    .where('A', blocks(SOMARUST_CASING.get())
                             .or(autoAbilitiesNoEnergyIn(CosmicRecipeTypes.SCULK_BIOCHAMBER))
                             .or(autoAbilities(true, false, false)))
                     .where('B', blocks(Blocks.CYAN_STAINED_GLASS))
@@ -156,7 +155,7 @@ public final class BloomwyrmSystem {
                     .where('F', blocks(GTBlocks.COIL_CUPRONICKEL.get()))
                     .build())
             .workableCasingModel(
-                    CosmicCore.id("block/casings/solid/lightweight_dark_steel_casing"),
+                    CosmicCore.id("block/casings/solid/somarust_casing"),
                     CosmicCore.id("block/multiblock/vomahine_chemplant"))
             .register();
 
@@ -170,8 +169,8 @@ public final class BloomwyrmSystem {
             .rotationState(RotationState.NON_Y_AXIS)
             .recipeType(CosmicRecipeTypes.BIOMANA_DIGESTOR)
             .recipeModifier(BloomwyrmUnitMachine::recipeModifier)
-            .appearanceBlock(LIGHTWEIGHT_DARK_STEEL_CASING)
-            .partAppearance((controller, part, side) -> LIGHTWEIGHT_DARK_STEEL_CASING.getDefaultState())
+            .appearanceBlock(SOMARUST_CASING)
+            .partAppearance((controller, part, side) -> SOMARUST_CASING.getDefaultState())
             .pattern(definition -> MultiblockPatternBuilder
                     .start(RelativeDirection.LEFT, RelativeDirection.UP, RelativeDirection.FRONT)
                     .slice("       ", "       ", " AAAAA ", " AAAAA ", " CCCCC ", " JMMMF ")
@@ -182,7 +181,7 @@ public final class BloomwyrmSystem {
                     .slice(" G   G ", " GAAAG ", "AAALAAA", "AAH IAA", "CC   CC", "KF   JD")
                     .slice("       ", "       ", " AAAAA ", " AAAAA ", " CCCCC ", " KMMMD ")
                     .where(' ', any())
-                    .where('A', blocks(LIGHTWEIGHT_DARK_STEEL_CASING.get())
+                    .where('A', blocks(SOMARUST_CASING.get())
                             .or(autoAbilitiesNoEnergyIn(CosmicRecipeTypes.BIOMANA_DIGESTOR))
                             .or(autoAbilities(true, false, false)))
                     .where('B', controller(blocks(definition.getBlock())))
@@ -199,7 +198,7 @@ public final class BloomwyrmSystem {
                     .where('M', blockTag(CosmicBlockTags.INDUSTRIAL_IRON_BARS))
                     .build())
             .workableCasingModel(
-                    CosmicCore.id("block/casings/solid/lightweight_dark_steel_casing"),
+                    CosmicCore.id("block/casings/solid/somarust_casing"),
                     CosmicCore.id("block/multiblock/solidifier"))
             .register();
 
@@ -212,8 +211,8 @@ public final class BloomwyrmSystem {
             .rotationState(RotationState.NON_Y_AXIS)
             .recipeType(CosmicRecipeTypes.MANAWOMB_LEECHING_POND)
             .recipeModifier(BloomwyrmUnitMachine::recipeModifier)
-            .appearanceBlock(LIGHTWEIGHT_DARK_STEEL_CASING)
-            .partAppearance((controller, part, side) -> LIGHTWEIGHT_DARK_STEEL_CASING.getDefaultState())
+            .appearanceBlock(SOMARUST_CASING)
+            .partAppearance((controller, part, side) -> SOMARUST_CASING.getDefaultState())
             .pattern(definition -> MultiblockPatternBuilder
                     .start(RelativeDirection.LEFT, RelativeDirection.UP, RelativeDirection.FRONT)
                     .slice("AA     AA", "AA     AA", " BBBBBBB ", "AA     AA", "AA     AA")
@@ -224,7 +223,7 @@ public final class BloomwyrmSystem {
                     .slice("AA     AA", "ADDDDDDDA", "BDDDDDDDB", "ADDDDDDDA", "AA     AA")
                     .slice("AA     AA", "AA     AA", " BBBBBBB ", "AA     AA", "AA     AA")
                     .where(' ', any())
-                    .where('A', blocks(LIGHTWEIGHT_DARK_STEEL_CASING.get())
+                    .where('A', blocks(SOMARUST_CASING.get())
                             .or(autoAbilitiesNoEnergyIn(CosmicRecipeTypes.MANAWOMB_LEECHING_POND))
                             .or(autoAbilities(true, false, false)))
                     .where('B', blockTag(TagUtil.createBlockTag("frames/stainless_steel")))
@@ -232,7 +231,7 @@ public final class BloomwyrmSystem {
                     .where('D', blocks(GTBlocks.CASING_TITANIUM_STABLE.get()))
                     .build())
             .workableCasingModel(
-                    CosmicCore.id("block/casings/solid/lightweight_dark_steel_casing"),
+                    CosmicCore.id("block/casings/solid/somarust_casing"),
                     CosmicCore.id("block/multiblock/wireless_data_transmitter"))
             .register();
 

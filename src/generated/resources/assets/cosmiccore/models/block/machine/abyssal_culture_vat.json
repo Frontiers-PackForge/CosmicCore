@@ -3,14 +3,14 @@
     "loader": "gtceu:machine",
     "machine": "cosmiccore:abyssal_culture_vat",
     "texture_overrides": {
-        "all": "cosmiccore:block/casings/solid/lightweight_dark_steel_casing"
+        "all": "cosmiccore:block/casings/solid/somarust_casing"
     },
     "variants": {
         "recipe_logic_status=idle": {
             "model": {
                 "parent": "gtceu:block/machine/template/cube_all/sided",
                 "textures": {
-                    "all": "cosmiccore:block/casings/solid/lightweight_dark_steel_casing",
+                    "all": "cosmiccore:block/casings/solid/somarust_casing",
                     "overlay_front": "cosmiccore:block/multiblock/mixing_vessel/overlay_front",
                     "overlay_front_emissive": "cosmiccore:block/multiblock/mixing_vessel/overlay_front_emissive"
                 }
@@ -20,7 +20,7 @@
             "model": {
                 "parent": "gtceu:block/machine/template/cube_all/sided",
                 "textures": {
-                    "all": "cosmiccore:block/casings/solid/lightweight_dark_steel_casing",
+                    "all": "cosmiccore:block/casings/solid/somarust_casing",
                     "overlay_front": "cosmiccore:block/multiblock/mixing_vessel/overlay_front",
                     "overlay_front_emissive": "cosmiccore:block/multiblock/mixing_vessel/overlay_front_emissive"
                 }
@@ -30,7 +30,7 @@
             "model": {
                 "parent": "gtceu:block/machine/template/cube_all/sided",
                 "textures": {
-                    "all": "cosmiccore:block/casings/solid/lightweight_dark_steel_casing",
+                    "all": "cosmiccore:block/casings/solid/somarust_casing",
                     "overlay_front": "cosmiccore:block/multiblock/mixing_vessel/overlay_front_active",
                     "overlay_front_emissive": "cosmiccore:block/multiblock/mixing_vessel/overlay_front_active_emissive"
                 }
@@ -40,7 +40,7 @@
             "model": {
                 "parent": "gtceu:block/machine/template/cube_all/sided",
                 "textures": {
-                    "all": "cosmiccore:block/casings/solid/lightweight_dark_steel_casing",
+                    "all": "cosmiccore:block/casings/solid/somarust_casing",
                     "overlay_front": "cosmiccore:block/multiblock/mixing_vessel/overlay_front_active",
                     "overlay_front_emissive": "cosmiccore:block/multiblock/mixing_vessel/overlay_front_active_emissive"
                 }

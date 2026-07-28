@@ -9,6 +9,7 @@ import com.ghostipedia.cosmiccore.common.block.DivingBellEscapePad;
 import com.ghostipedia.cosmiccore.common.block.MagnetBlock;
 import com.ghostipedia.cosmiccore.common.block.MothHomeBlock;
 import com.ghostipedia.cosmiccore.common.block.MurkFloraBlock;
+import com.ghostipedia.cosmiccore.common.block.MurkKelpBlock;
 import com.ghostipedia.cosmiccore.common.blockentity.CosmicCoilBlockEntity;
 import com.ghostipedia.cosmiccore.common.food.hearth.HearthPlateBlock;
 import com.ghostipedia.cosmiccore.ember.CosmicEmberEmitterBlock;
@@ -148,7 +149,8 @@ public class CosmicBlocks {
             .build()
             .register();
 
-    public static final BlockEntry<MurkFloraBlock> MURK_KELP = flora("murk_kelp", "Murky Kelp", 6);
+    public static final BlockEntry<MurkKelpBlock> MURK_KELP = flora("murk_kelp", "Murky Kelp", 6,
+            MurkKelpBlock::new);
     public static final BlockEntry<MurkFloraBlock> MURK_SEAGRASS = flora("murk_seagrass", "Murky Seagrass", 0);
     public static final BlockEntry<MurkFloraBlock> GLOOM_FAN = flora("gloom_fan", "Gloom Fan", 0);
     public static final BlockEntry<MurkFloraBlock> SHIMMER_TUFT = flora("shimmer_tuft", "Shimmer Tuft", 7);
@@ -176,8 +178,13 @@ public class CosmicBlocks {
             .register();
 
     private static BlockEntry<MurkFloraBlock> flora(String name, String lang, int light) {
+        return flora(name, lang, light, MurkFloraBlock::new);
+    }
+
+    private static <T extends MurkFloraBlock> BlockEntry<T> flora(String name, String lang, int light,
+                                                                  NonNullFunction<BlockBehaviour.Properties, T> factory) {
         return REGISTRATE
-                .block(name, MurkFloraBlock::new)
+                .block(name, factory)
                 .initialProperties(() -> Blocks.SEAGRASS)
                 .properties(p -> p.noCollission().instabreak().noOcclusion().lightLevel(state -> light))
                 .lang(lang)

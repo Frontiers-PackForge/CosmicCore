@@ -1,5 +1,6 @@
 package com.ghostipedia.cosmiccore.common.data.worldgen.abyss;
 
+import java.util.BitSet;
 import java.util.List;
 
 public final class AbyssShape {
@@ -12,6 +13,7 @@ public final class AbyssShape {
 
     public static double density(long seed, double x, double y, double z, List<AbyssPlacement.Member> members) {
         double d = Double.POSITIVE_INFINITY;
+        double displacement = Double.NaN;
         for (int i = 0; i < members.size(); i++) {
             AbyssPlacement.Member m = members.get(i);
             double r = m.reach();
@@ -23,12 +25,31 @@ public final class AbyssShape {
             double ny = (y - m.y()) / (m.size() * m.squash());
             double nz = (z - m.z()) / m.size();
             double base = Math.sqrt(nx * nx + ny * ny + nz * nz) - 1.0;
-            double disp = ROUGHNESS *
-                    (noise3(seed, x * ROUGHNESS_SCALE, y * ROUGHNESS_SCALE, z * ROUGHNESS_SCALE) * 2.0 - 1.0);
-            double sd = (base - disp) * m.size();
+            if (Double.isNaN(displacement)) displacement = roughnessDisplacement(seed, x, y, z);
+            double sd = (base - displacement) * m.size();
             d = smin(d, sd, BLEED);
         }
         return d;
+    }
+
+    static double densityActive(double x, double y, double z, List<AbyssPlacement.Member> members, BitSet active,
+                                double displacement) {
+        double d = Double.POSITIVE_INFINITY;
+        for (int i = active.nextSetBit(0); i >= 0; i = active.nextSetBit(i + 1)) {
+            AbyssPlacement.Member m = members.get(i);
+            double nx = (x - m.x()) / m.size();
+            double ny = (y - m.y()) / (m.size() * m.squash());
+            double nz = (z - m.z()) / m.size();
+            double base = Math.sqrt(nx * nx + ny * ny + nz * nz) - 1.0;
+            double sd = (base - displacement) * m.size();
+            d = smin(d, sd, BLEED);
+        }
+        return d;
+    }
+
+    static double roughnessDisplacement(long seed, double x, double y, double z) {
+        return ROUGHNESS *
+                (noise3(seed, x * ROUGHNESS_SCALE, y * ROUGHNESS_SCALE, z * ROUGHNESS_SCALE) * 2.0 - 1.0);
     }
 
     public static double smin(double a, double b, double k) {
