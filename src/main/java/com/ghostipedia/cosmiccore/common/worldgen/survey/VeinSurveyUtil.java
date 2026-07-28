@@ -142,7 +142,7 @@ public class VeinSurveyUtil {
                 confirmedFieldCores.add(coreKey(info.center().getX(), info.center().getZ()));
             }
         }
-        Registry<GTOreDefinition> veinRegistry = level.registryAccess().registryOrThrow(GTRegistries.ORE_VEIN_REGISTRY);
+        Registry<GTOreDefinition> veinRegistry = level.registryAccess().registryOrThrow(GTRegistries.Keys.ORE_VEIN);
         for (OreFieldPlacement.OreField field : OreFieldPlacement.fieldsNear(
                 level.getSeed(), level.dimension(), centerPos.getX(), centerPos.getZ(), radiusBlocks)) {
             BlockPos fieldCenter = new BlockPos(field.core().getX(), 0, field.core().getZ());
@@ -150,7 +150,7 @@ public class VeinSurveyUtil {
             if (confirmedFieldCores.contains(coreKey(fieldCenter.getX(), fieldCenter.getZ()))) continue;
 
             ResourceLocation veinId = CosmicCore.id(field.bundle().getName());
-            var holder = veinRegistry.getHolder(ResourceKey.create(GTRegistries.ORE_VEIN_REGISTRY, veinId));
+            var holder = veinRegistry.getHolder(ResourceKey.create(GTRegistries.Keys.ORE_VEIN, veinId));
             if (holder.isEmpty()) continue;
             GTOreDefinition definition = holder.get().value();
             if (targetLayer != null && !definition.layer().equals(targetLayer)) continue;
@@ -194,7 +194,7 @@ public class VeinSurveyUtil {
         BlockPos veinCenter = veinCenterOpt.get();
         Holder<Biome> biome = level.getBiome(veinCenter);
 
-        var applicableLayers = GTRegistries.WORLD_GEN_LAYERS.stream()
+        var applicableLayers = level.registryAccess().registryOrThrow(GTRegistries.Keys.WORLD_GEN_LAYER).stream()
                 .filter(l -> l.isApplicableForLevel(level.dimension()))
                 .toList();
 
@@ -242,7 +242,7 @@ public class VeinSurveyUtil {
     public static List<String> getAvailableVeinTypes(ServerLevel level, IWorldGenLayer layer) {
         List<String> types = new ArrayList<>();
         Registry<GTOreDefinition> registry = level.registryAccess()
-                .registryOrThrow(GTRegistries.ORE_VEIN_REGISTRY);
+                .registryOrThrow(GTRegistries.Keys.ORE_VEIN);
         for (Holder.Reference<GTOreDefinition> holder : registry.holders().toList()) {
             GTOreDefinition vein = holder.value();
             if ((layer == null || vein.layer() == layer) && vein.weight() > 0) {

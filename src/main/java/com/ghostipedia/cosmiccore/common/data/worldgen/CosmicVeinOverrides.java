@@ -7,6 +7,7 @@ import com.gregtechceu.gtceu.api.data.worldgen.GTOreDefinition;
 import com.gregtechceu.gtceu.api.data.worldgen.generator.VeinGenerator;
 import com.gregtechceu.gtceu.api.registry.GTRegistries;
 
+import net.minecraft.core.RegistryAccess;
 import net.minecraft.resources.ResourceLocation;
 
 import java.util.*;
@@ -127,8 +128,8 @@ public class CosmicVeinOverrides {
         VEIN_SHAPE_OVERRIDES.put("uranium_vein", VeinShape.FRACTURE);
     }
 
-    public static void applyVeinOverrides() {
-        var registry = GTRegistries.builtinRegistry().registryOrThrow(GTRegistries.ORE_VEIN_REGISTRY);
+    public static void applyVeinOverrides(RegistryAccess registryAccess) {
+        var registry = registryAccess.registryOrThrow(GTRegistries.Keys.ORE_VEIN);
         for (var holder : registry.holders().toList()) {
             GTOreDefinition vein = holder.value();
             ResourceLocation id = holder.key().location();

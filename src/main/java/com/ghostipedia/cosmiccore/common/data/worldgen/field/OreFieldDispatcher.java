@@ -68,7 +68,7 @@ public final class OreFieldDispatcher {
                 seed, dimension, chunkCenterX, chunkCenterZ, SEARCH_RADIUS);
         if (fields.isEmpty()) return List.of();
 
-        Registry<GTOreDefinition> registry = level.registryAccess().registryOrThrow(GTRegistries.ORE_VEIN_REGISTRY);
+        Registry<GTOreDefinition> registry = level.registryAccess().registryOrThrow(GTRegistries.Keys.ORE_VEIN);
         int gridSize = ConfigHolder.INSTANCE.worldgen.oreVeins.oreVeinGridSize;
         int gridX = Math.floorDiv(chunkPos.x, gridSize);
         int gridZ = Math.floorDiv(chunkPos.z, gridSize);
@@ -79,7 +79,7 @@ public final class OreFieldDispatcher {
         for (OreFieldPlacement.OreField field : fields) {
             ResourceLocation id = CosmicCore.id(field.bundle().getName());
             Optional<Holder.Reference<GTOreDefinition>> holder = registry
-                    .getHolder(ResourceKey.create(GTRegistries.ORE_VEIN_REGISTRY, id));
+                    .getHolder(ResourceKey.create(GTRegistries.Keys.ORE_VEIN, id));
             if (holder.isEmpty()) continue;
             GTOreDefinition definition = holder.get().value();
 
