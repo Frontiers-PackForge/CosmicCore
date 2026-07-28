@@ -1,4 +1,4 @@
-# Cosmic Core 0.15.0
+# Cosmic Core 0.15.3
 # DO NOT MANUALLY UPDATE COSMIC CORE FOR FRONTIERS **I WILL NOT WORK**
 
 - Migrated to 1.21.1

@@ -39,7 +39,7 @@ public class VeinSurveyCommand {
 
     private static final SuggestionProvider<CommandSourceStack> VEIN_SUGGESTIONS = (context, builder) -> {
         var level = context.getSource().getLevel();
-        var layers = GTRegistries.WORLD_GEN_LAYERS.stream()
+        var layers = level.registryAccess().registryOrThrow(GTRegistries.Keys.WORLD_GEN_LAYER).stream()
                 .filter(l -> l.isApplicableForLevel(level.dimension()))
                 .toList();
 
@@ -109,7 +109,7 @@ public class VeinSurveyCommand {
         ctx.getSource().sendSuccess(() -> Component.translatable("cosmiccore.survey.command.scanning", radius)
                 .withStyle(ChatFormatting.YELLOW), false);
 
-        IWorldGenLayer layer = GTRegistries.WORLD_GEN_LAYERS.stream()
+        IWorldGenLayer layer = level.registryAccess().registryOrThrow(GTRegistries.Keys.WORLD_GEN_LAYER).stream()
                 .filter(l -> l.isApplicableForLevel(level.dimension()))
                 .findFirst()
                 .orElse(null);
@@ -183,7 +183,7 @@ public class VeinSurveyCommand {
         ServerLevel level = ctx.getSource().getLevel();
         BlockPos center = player.blockPosition();
 
-        IWorldGenLayer layer = GTRegistries.WORLD_GEN_LAYERS.stream()
+        IWorldGenLayer layer = level.registryAccess().registryOrThrow(GTRegistries.Keys.WORLD_GEN_LAYER).stream()
                 .filter(l -> l.isApplicableForLevel(level.dimension()))
                 .findFirst()
                 .orElse(null);
@@ -241,7 +241,7 @@ public class VeinSurveyCommand {
     private static int listVeinTypes(CommandContext<CommandSourceStack> ctx) {
         ServerLevel level = ctx.getSource().getLevel();
 
-        IWorldGenLayer layer = GTRegistries.WORLD_GEN_LAYERS.stream()
+        IWorldGenLayer layer = level.registryAccess().registryOrThrow(GTRegistries.Keys.WORLD_GEN_LAYER).stream()
                 .filter(l -> l.isApplicableForLevel(level.dimension()))
                 .findFirst()
                 .orElse(null);

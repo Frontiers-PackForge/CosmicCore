@@ -159,7 +159,7 @@ public class VeinSurveyBehavior implements IInteractionItem, IAddInformation {
     private void performScan(ServerLevel level, ServerPlayer player, ItemStack stack, ScanMode mode) {
         BlockPos center = player.blockPosition();
 
-        IWorldGenLayer layer = GTRegistries.WORLD_GEN_LAYERS.stream()
+        IWorldGenLayer layer = level.registryAccess().registryOrThrow(GTRegistries.Keys.WORLD_GEN_LAYER).stream()
                 .filter(l -> l.isApplicableForLevel(level.dimension()))
                 .findFirst()
                 .orElse(null);
