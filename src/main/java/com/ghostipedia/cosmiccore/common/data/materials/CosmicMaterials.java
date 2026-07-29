@@ -111,11 +111,26 @@ public class CosmicMaterials {
     public static Material AdvancedDrillingFluid;
     public static Material ExtremeDrillingFluid;
     public static Material BiomanaSlurry;
+    public static Material BloomingSludge;
+    public static Material BloomRichAlgaeSolution;
+    public static Material PhytoGrease;
 
     public static void register() {
         BiomanaSlurry = new Material.Builder(CosmicCore.id("biomana_slurry"))
                 .liquid(new FluidBuilder().state(FluidState.LIQUID).temperature(295))
                 .color(0x176F6A)
+                .buildAndRegister();
+        BloomingSludge = new Material.Builder(CosmicCore.id("blooming_sludge"))
+                .liquid()
+                .color(0x3F5A2D).secondaryColor(0x1C2D16)
+                .buildAndRegister();
+        BloomRichAlgaeSolution = new Material.Builder(CosmicCore.id("bloom_rich_algae_solution"))
+                .liquid()
+                .color(0x65A83F).secondaryColor(0xB4D66C)
+                .buildAndRegister();
+        PhytoGrease = new Material.Builder(CosmicCore.id("phyto_grease"))
+                .liquid()
+                .color(0xA0A943).secondaryColor(0x596427)
                 .buildAndRegister();
         AdvancedDrillingFluid = new Material.Builder(CosmicCore.id("advanced_drilling_fluid"))
                 .liquid()
@@ -222,8 +237,8 @@ public class CosmicMaterials {
                 .color(0xffb545).secondaryColor(0xe13923).iconSet(MaterialIconSet.METALLIC)
                 .flags(GENERATE_BOLT_SCREW, GENERATE_ROUND, GENERATE_GEAR, GENERATE_SMALL_GEAR, GENERATE_RING,
                         GENERATE_FRAME, GENERATE_SPRING, GENERATE_SPRING_SMALL, GENERATE_FINE_WIRE, GENERATE_DENSE)
-                .components(Gold, 1, RedSteel, 1, Glowstone, 4)
-                .blastTemp(2700, BlastProperty.GasTier.HIGH, GTValues.VA[GTValues.HV], 1200)
+                .components(Gold, 1, Redstone, 2, Glowstone, 2)
+                .blastTemp(1700, BlastProperty.GasTier.LOW, GTValues.VA[GTValues.HV], 1200)
                 .buildAndRegister();
 
         VibrantAlloy = new Material.Builder(CosmicCore.id("vibrant_alloy"))

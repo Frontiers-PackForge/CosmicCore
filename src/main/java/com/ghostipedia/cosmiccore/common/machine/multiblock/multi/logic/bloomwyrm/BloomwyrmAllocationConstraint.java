@@ -10,8 +10,7 @@ public enum BloomwyrmAllocationConstraint {
     BIOPOWER,
     CHARGE,
     HEART_CAPACITY,
-    STRUCTURE,
-    SEASONAL_CHARGE;
+    STRUCTURE;
 
     public String translationKey() {
         return "cosmiccore.bloomwyrm.constraint." + name().toLowerCase();
