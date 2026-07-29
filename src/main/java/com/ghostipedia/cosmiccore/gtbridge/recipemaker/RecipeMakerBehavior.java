@@ -1,7 +1,6 @@
 package com.ghostipedia.cosmiccore.gtbridge.recipemaker;
 
 import com.ghostipedia.cosmiccore.api.capability.recipe.CosmicRecipeCapabilities;
-import com.ghostipedia.cosmiccore.common.machine.multiblock.multi.logic.bloomwyrm.BloomwyrmSeason;
 import com.ghostipedia.cosmiccore.gtbridge.CosmicRecipeTypes;
 
 import com.gregtechceu.gtceu.api.GTValues;
@@ -123,10 +122,7 @@ public class RecipeMakerBehavior implements IItemUIHolder {
         final String[] bloomwyrmBiopowerOutput = { "" };
         final String[] bloomwyrmChargeInput = { "" };
         final String[] bloomwyrmChargeOutput = { "" };
-        final String[] bloomwyrmSeasonalChargeInput = { "" };
-        final String[] bloomwyrmSeasonalChargeOutput = { "" };
         final String[] bloomwyrmMaxParallel = { "" };
-        final int[] bloomwyrmFavoredSeason = { 0 };
         final FoodState food = new FoodState();
 
         State() {
@@ -381,38 +377,12 @@ public class RecipeMakerBehavior implements IItemUIHolder {
                 content.child(fieldRow("Bloomwyrm out", 86,
                         strField(sm, "wyrm_out", () -> state.bloomwyrmChargeOutput[0],
                                 v -> state.bloomwyrmChargeOutput[0] = v)));
-                content.child(fieldRow("Essence yield", 86,
-                        strField(sm, "wyrm_season_out", () -> state.bloomwyrmSeasonalChargeOutput[0],
-                                v -> state.bloomwyrmSeasonalChargeOutput[0] = v)));
-            } else {
-                content.child(fieldRow("Essence use", 86,
-                        strField(sm, "wyrm_season_in", () -> state.bloomwyrmSeasonalChargeInput[0],
-                                v -> state.bloomwyrmSeasonalChargeInput[0] = v)));
             }
             if (supportsBloomwyrmParallel(type)) {
                 content.child(fieldRow("Max parallel", 86,
                         strField(sm, "wyrm_parallel", () -> state.bloomwyrmMaxParallel[0],
                                 v -> state.bloomwyrmMaxParallel[0] = v)));
             }
-            content.child(fieldRow("Season", 86,
-                    new CycleButtonWidget().background(GTGuiTextures.BUTTON)
-                            .stateCount(BloomwyrmSeason.values().length + 1)
-                            .stateOverlay(0, Text.str("none").alignment(Alignment.TopLeft).asTextIcon())
-                            .stateOverlay(1,
-                                    Text.lang(BloomwyrmSeason.GERMINATION.translationKey())
-                                            .alignment(Alignment.TopLeft).asTextIcon())
-                            .stateOverlay(2,
-                                    Text.lang(BloomwyrmSeason.PROLIFERATION.translationKey())
-                                            .alignment(Alignment.TopLeft).asTextIcon())
-                            .stateOverlay(3,
-                                    Text.lang(BloomwyrmSeason.BLOOM.translationKey())
-                                            .alignment(Alignment.TopLeft).asTextIcon())
-                            .stateOverlay(4,
-                                    Text.lang(BloomwyrmSeason.SENESCENCE.translationKey())
-                                            .alignment(Alignment.TopLeft).asTextIcon())
-                            .value(intSync(sm, "wyrm_season", () -> state.bloomwyrmFavoredSeason[0],
-                                    v -> state.bloomwyrmFavoredSeason[0] = v))
-                            .expanded().height(14)));
         }
 
         control.setExporter(() -> buildGtScript(type, state));
@@ -680,29 +650,8 @@ public class RecipeMakerBehavior implements IItemUIHolder {
                 addBloomwyrmData(draft, "biopowerOutput", state.bloomwyrmBiopowerOutput[0]);
             }
             addBloomwyrmData(draft, "bloomwyrmChargeInput", state.bloomwyrmChargeInput[0]);
-            if (isBloomwyrmProducer(type) &&
-                    state.bloomwyrmFavoredSeason[0] > 0 &&
-                    !state.bloomwyrmChargeOutput[0].isBlank() &&
-                    state.bloomwyrmSeasonalChargeOutput[0].isBlank()) {
-                draft.extraLines.add(".bloomwyrmChargeOutput(" +
-                        state.bloomwyrmChargeOutput[0].trim() + ", " +
-                        state.bloomwyrmFavoredSeason[0] + ")");
-            } else if (isBloomwyrmProducer(type)) {
+            if (isBloomwyrmProducer(type)) {
                 addBloomwyrmData(draft, "bloomwyrmChargeOutput", state.bloomwyrmChargeOutput[0]);
-            }
-            if (isBloomwyrmProducer(type) &&
-                    state.bloomwyrmFavoredSeason[0] > 0 &&
-                    !state.bloomwyrmSeasonalChargeOutput[0].isBlank()) {
-                draft.extraLines.add(".seasonalEssenceOutput(" +
-                        state.bloomwyrmSeasonalChargeOutput[0].trim() + ", " +
-                        state.bloomwyrmFavoredSeason[0] + ")");
-            }
-            if (!isBloomwyrmProducer(type) &&
-                    state.bloomwyrmFavoredSeason[0] > 0 &&
-                    !state.bloomwyrmSeasonalChargeInput[0].isBlank()) {
-                draft.extraLines.add(".seasonalEssenceInput(" +
-                        state.bloomwyrmSeasonalChargeInput[0].trim() + ", " +
-                        state.bloomwyrmFavoredSeason[0] + ")");
             }
             if (supportsBloomwyrmParallel(type)) {
                 addBloomwyrmData(draft, "maxCampusParallel", state.bloomwyrmMaxParallel[0]);

@@ -113,7 +113,7 @@ public class ModuleHatchPartMachine extends TieredIOPartMachine implements IMuiM
                 .horizontalCenter() // brachy 3.3.0: alignX(float) removed; horizontalCenter() == leftRel(0.5f)
                 // brachy 3.3.0: Grid.mapTo(width,count,fn) removed -> gridOfSizeWidth(size,width,(x,y,i)->...)
                 .gridOfSizeWidth(totalSlots, colSize, (x, y, index) -> new ItemSlot()
-                        .slot(SyncHandlers.itemSlot(inventory, index)
+                        .slot(SyncHandlers.itemSlot(inventory.storage, index)
                                 .slotGroup(group)
                                 .changeListener((oldItem, newItem, client, init) -> {
                                     if (ItemStack.isSameItemSameComponents(oldItem, newItem) &&

@@ -1,11 +1,13 @@
 package com.ghostipedia.cosmiccore.common.data.recipe;
 
+import com.ghostipedia.cosmiccore.api.machine.multiblock.ITieredMultiblockMachine;
 import com.ghostipedia.cosmiccore.api.machine.multiblock.StellarBaseModule;
 import com.ghostipedia.cosmiccore.common.data.CosmicItems;
 import com.ghostipedia.cosmiccore.common.machine.multiblock.electric.MagneticFieldMachine;
 import com.ghostipedia.cosmiccore.common.machine.multiblock.multi.logic.LarvaMachine;
 import com.ghostipedia.cosmiccore.common.machine.multiblock.multi.logic.TitanFusionReactorMachine;
 import com.ghostipedia.cosmiccore.common.machine.multiblock.part.ModuleHatchPartMachine;
+import com.ghostipedia.cosmiccore.common.machine.multiblock.tier.ElectricBlastFurnaceTierState;
 
 import com.gregtechceu.gtceu.api.capability.recipe.IO;
 import com.gregtechceu.gtceu.api.capability.recipe.ItemRecipeCapability;
@@ -36,6 +38,7 @@ import java.util.Map;
 public class CosmicRecipeModifiers {
 
     public static final RecipeModifier COSMIC_MODULES = CosmicRecipeModifiers::moduleParallel;
+    public static final RecipeModifier EBF_TIER_STREAK = CosmicRecipeModifiers::ebfTierStreak;
 
     /**
      * Recipe modifier for Stellar Modules.
@@ -46,6 +49,21 @@ public class CosmicRecipeModifiers {
     public static final RecipeModifier STELLAR_MODULE_OVERCLOCK = CosmicRecipeModifiers::stellarModuleOverclock;
 
     public static final RecipeModifier LOCKED_PARALLEL_8 = CosmicRecipeModifiers::lockedParallel8;
+
+    public static @NotNull ModifierFunction ebfTierStreak(@NotNull MetaMachine machine,
+                                                          @NotNull GTRecipe recipe) {
+        if (!(machine instanceof ITieredMultiblockMachine tiered) || tiered.getStructureTier() < 1 ||
+                !tiered.matchesStructureTierStreak(recipe)) {
+            return ModifierFunction.IDENTITY;
+        }
+        int completedRuns = Math.min(ElectricBlastFurnaceTierState.MAX_MATCHING_RUNS,
+                tiered.getStructureTierStreak());
+        if (completedRuns == 0 || recipe.duration <= 1) return ModifierFunction.IDENTITY;
+        return ModifierFunction.builder()
+                .durationMultiplier(1.0 -
+                        ElectricBlastFurnaceTierState.durationReductionPercent(completedRuns) / 100.0)
+                .build();
+    }
 
     public static @NotNull ModifierFunction lockedParallel8(@NotNull MetaMachine machine, @NotNull GTRecipe recipe) {
         if (!(machine instanceof MultiblockControllerMachine controller) || !controller.isFormed()) {

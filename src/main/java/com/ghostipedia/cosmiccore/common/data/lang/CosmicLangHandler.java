@@ -65,6 +65,11 @@ public class CosmicLangHandler extends LangHandler {
         replace(provider, "item.gtceu.tool.luv_meld_tool", "%s Meld Multitool");
         provider.add("item.cosmiccore.portable_gravity_core.tooltip", "§aNormalizes Gravity to Match Earth.");
 
+        replace(provider, "material.cosmiccore.blooming_sludge", "Blooming Sludge");
+        replace(provider, "material.cosmiccore.bloom_rich_algae_solution", "Bloom Rich Algae Solution");
+        replace(provider, "material.cosmiccore.phyto_grease", "Phyto-Grease");
+        replace(provider, "material.cosmiccore.energetic_alloy", "Energized Aluminium");
+
         // machine tooltips/names/etc
         provider.add("gtceu.naquahine_reactor", "§bNaquahine Reactor");
 
@@ -407,6 +412,11 @@ public class CosmicLangHandler extends LangHandler {
         provider.add("cosmiccore.recipe.fieldDecay", "§fField Decay: %sT/t");
         provider.add("cosmiccore.recipe.fieldSlam", "§fField Consumed: %sT");
         provider.add("cosmiccore.recipe.condition.titan.tooltip", "Requires Titan Reactor Tier: %s");
+        provider.add("cosmiccore.multiblock.structure_tier", "Structure Tier: T%s");
+        provider.add("cosmiccore.multiblock.ebf.streak", "Recipe Duration Reduction: %s%%");
+        provider.add("cosmiccore.multiblock.ebf.streak.progress", "Consecutive Matching Recipes: %s / %s");
+        provider.add("cosmiccore.multiblock.ebf.streak.rule",
+                "Tier 2: Gains 5% recipe speed for each consecutive recipe up to 50%, reducing total power used and duration.");
 
         // Linked Partner Condition
         provider.add("cosmiccore.recipe.condition.linked_partner.tooltip", "Requires %s linked partner(s)");
@@ -1569,15 +1579,15 @@ public class CosmicLangHandler extends LangHandler {
         provider.add("cosmiccore.machine.bloomwyrm_heart.tooltip.0",
                 "Orchestrates linked Bloomwyrm cultivation units.");
         provider.add("cosmiccore.machine.bloomwyrm_heart.tooltip.1",
-                "Supplies shared §eEU§f, §aBiopower§f, §3Bloomwyrm Charge§f, and determines the active §6season§f.");
+                "Supplies shared §eEU§f, §aBiopower§f, and §3Bloomwyrm Charge§f.");
         provider.add("cosmiccore.machine.bloomwyrm_heart.tooltip.2",
                 "Link other units with a §6data stick§f within §b64§f blocks.");
         provider.add("cosmiccore.machine.abyssal_culture_vat.tooltip.0",
                 "Cultivates abyssal samples into §aBiopower§f and §3Bloomwyrm Charge§f.");
         provider.add("cosmiccore.machine.abyssal_culture_vat.tooltip.1",
-                "§aBiopower§f yield depends on the §6active culture recipe and season§f.");
+                "§aBiopower§f yield depends on the §6active culture recipe§f.");
         provider.add("cosmiccore.machine.sculk_biochamber.tooltip.0",
-                "Consumes Prepared Cultures and Resources based on the Bloomwyrm Season.");
+                "Consumes prepared cultures and Biopower and Bloomwyrm charge through the Bloomwyrm campus.");
         provider.add("cosmiccore.machine.sculk_biochamber.tooltip.1",
                 "Consumes shared §3Bloomwyrm Charge§f and §aBiopower§f to mutate items and §aAlgae§f.");
         provider.add("cosmiccore.machine.biomana_digestor.tooltip.0",
@@ -1587,18 +1597,9 @@ public class CosmicLangHandler extends LangHandler {
         provider.add("cosmiccore.machine.manawomb_leeching_pond.tooltip.0",
                 "Utilizes §aAlgal Beds§f suspended in §bmana§f for industrial scale chemistry");
         provider.add("cosmiccore.machine.manawomb_leeching_pond.tooltip.1",
-                "Runs one process per §6season§f.");
+                "Runs one process at a time.");
         provider.add("cosmiccore.machine.bloomwyrm_unit.tooltip.parallel",
                 "Set the desired §nparallel count§f from the controller interface.");
-        provider.add("cosmiccore.bloomwyrm.season.germination", "Germination");
-        provider.add("cosmiccore.bloomwyrm.season.proliferation", "Proliferation");
-        provider.add("cosmiccore.bloomwyrm.season.bloom", "Bloom");
-        provider.add("cosmiccore.bloomwyrm.season.senescence", "Senescence");
-        provider.add("cosmiccore.bloomwyrm.essence.generic", "Seasonal Essence");
-        provider.add("cosmiccore.bloomwyrm.essence.germination", "Seed Essence");
-        provider.add("cosmiccore.bloomwyrm.essence.proliferation", "Growth Essence");
-        provider.add("cosmiccore.bloomwyrm.essence.bloom", "Bloom Essence");
-        provider.add("cosmiccore.bloomwyrm.essence.senescence", "Dormant Essence");
         provider.add("cosmiccore.bloomwyrm.constraint.none", "Allocation ready");
         provider.add("cosmiccore.bloomwyrm.constraint.no_heart", "No Bloomwyrm Heart linked");
         provider.add("cosmiccore.bloomwyrm.constraint.no_recipe", "No eligible local recipe");
@@ -1606,24 +1607,18 @@ public class CosmicLangHandler extends LangHandler {
         provider.add("cosmiccore.bloomwyrm.constraint.energy", "Limited by Heart EU capacity");
         provider.add("cosmiccore.bloomwyrm.constraint.biopower", "Limited by Biopower");
         provider.add("cosmiccore.bloomwyrm.constraint.charge", "Limited by Bloomwyrm Charge");
-        provider.add("cosmiccore.bloomwyrm.constraint.seasonal_charge", "Limited by Seasonal Essence");
         provider.add("cosmiccore.bloomwyrm.constraint.heart_capacity", "Limited by Bloomwyrm Charge capacity");
         provider.add("cosmiccore.bloomwyrm.constraint.structure", "Allocation cancelled: structure unformed");
         provider.add("cosmiccore.bloomwyrm.waiting_for_heart_power", "Waiting for Bloomwyrm Heart power");
         provider.add("cosmiccore.bloomwyrm.unit.linked", "Bloomwyrm Heart linked");
         provider.add("cosmiccore.bloomwyrm.unit.unlinked", "Bloomwyrm Heart not linked");
-        provider.add("cosmiccore.bloomwyrm.unit.parallel_requested", "Desired: %s  Mode target: %s");
+        provider.add("cosmiccore.bloomwyrm.unit.parallel_requested", "Desired: %s  Eligible request: %s");
         provider.add("cosmiccore.bloomwyrm.unit.parallel_limits", "Eligible: %s  Heart offer: %s  Active: %s");
-        provider.add("cosmiccore.bloomwyrm.unit.parallel_control", "Next season parallels");
+        provider.add("cosmiccore.bloomwyrm.unit.parallel_control", "Requested parallels");
         provider.add("cosmiccore.bloomwyrm.unit.parallel_control_max", "Max 16");
-        provider.add("cosmiccore.bloomwyrm.unit.reserve_control", "Season reserve mode");
-        provider.add("cosmiccore.bloomwyrm.unit.reserve_mode", "Reserve mode: %s");
-        provider.add("cosmiccore.bloomwyrm.unit.seasonal_charge", "%s: %s used / %s provided");
         provider.add("cosmiccore.bloomwyrm.unit.allocation", "Allocation: %s EU/t, %s Bloomwyrm Charge");
         provider.add("cosmiccore.bloomwyrm.unit.biopower", "Biopower: %s used / %s provided");
-        provider.add("cosmiccore.bloomwyrm.heart.season", "Season: %s (%s / %s s)");
         provider.add("cosmiccore.bloomwyrm.heart.charge", "Bloomwyrm Charge: %s / %s");
-        provider.add("cosmiccore.bloomwyrm.heart.seasonal_charge", "%s: %s / %s");
         provider.add("cosmiccore.bloomwyrm.heart.biopower", "Biopower: %s used / %s capacity");
         provider.add("cosmiccore.bloomwyrm.heart.energy", "Campus draw: %s EU/t");
         provider.add("cosmiccore.bloomwyrm.heart.units", "Active units: %s / %s linked");
@@ -1632,14 +1627,7 @@ public class CosmicLangHandler extends LangHandler {
         provider.add("cosmiccore.bloomwyrm.recipe.biopower_output", "Biopower capacity: +%s");
         provider.add("cosmiccore.bloomwyrm.recipe.charge_input", "Bloomwyrm Charge use: %s");
         provider.add("cosmiccore.bloomwyrm.recipe.charge_output", "Bloomwyrm Charge yield: +%s");
-        provider.add("cosmiccore.bloomwyrm.recipe.seasonal_charge_input", "%s use: %s");
-        provider.add("cosmiccore.bloomwyrm.recipe.seasonal_charge_output", "%s yield: +%s");
         provider.add("cosmiccore.bloomwyrm.recipe.max_parallel", "Max parallel: %s");
-        provider.add("cosmiccore.bloomwyrm.recipe.favored_season", "Favored: %s");
-        provider.add("cosmiccore.bloomwyrm.reserve_mode.conserve", "Conserve");
-        provider.add("cosmiccore.bloomwyrm.reserve_mode.stabilize", "Stabilize");
-        provider.add("cosmiccore.bloomwyrm.reserve_mode.overdrive", "Overdrive");
-        provider.add("cosmiccore.bloomwyrm.season.none", "Inactive");
         provider.add("recipe_type.cosmiccore.abyssal_culture_vat", "Abyssal Culture Vat");
         provider.add("recipe_type.cosmiccore.sculk_biochamber", "Sculk Biochamber");
         provider.add("recipe_type.cosmiccore.biomana_digestor", "Biomana Digestor");

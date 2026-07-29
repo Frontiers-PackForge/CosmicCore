@@ -15,6 +15,7 @@ import com.ghostipedia.cosmiccore.common.block.debug.CreativeThermiaContainerMac
 import com.ghostipedia.cosmiccore.common.machine.WirelessChargerMachine;
 import com.ghostipedia.cosmiccore.common.machine.multiblock.multi.WirelessDataBankMachine;
 import com.ghostipedia.cosmiccore.common.machine.multiblock.part.*;
+import com.ghostipedia.cosmiccore.common.machine.multiblock.tier.TieredMultiblockPatterns;
 import com.ghostipedia.cosmiccore.common.machine.part.WirelessDataSensor;
 import com.ghostipedia.cosmiccore.gtbridge.CosmicRecipeTypes;
 
@@ -24,6 +25,8 @@ import com.gregtechceu.gtceu.api.blockentity.BlockEntityCreationInfo;
 import com.gregtechceu.gtceu.api.capability.recipe.IO;
 import com.gregtechceu.gtceu.api.capability.recipe.ItemRecipeCapability;
 import com.gregtechceu.gtceu.api.data.RotationState;
+import com.gregtechceu.gtceu.api.data.chemical.ChemicalHelper;
+import com.gregtechceu.gtceu.api.data.tag.TagPrefix;
 import com.gregtechceu.gtceu.api.machine.*;
 import com.gregtechceu.gtceu.api.machine.multiblock.PartAbility;
 import com.gregtechceu.gtceu.api.machine.property.GTMachineModelProperties;
@@ -65,6 +68,7 @@ import static com.ghostipedia.cosmiccore.api.registries.CosmicRegistration.REGIS
 import static com.ghostipedia.cosmiccore.common.data.CosmicBlocks.*;
 import static com.ghostipedia.cosmiccore.common.data.CosmicMachinesUtils.*;
 import static com.ghostipedia.cosmiccore.common.data.recipe.CosmicRecipeModifiers.COSMIC_MODULES;
+import static com.ghostipedia.cosmiccore.common.data.recipe.CosmicRecipeModifiers.EBF_TIER_STREAK;
 import static com.ghostipedia.cosmiccore.gtbridge.CosmicRecipeTypes.BIO_LAB;
 import static com.gregtechceu.gtceu.api.GTValues.*;
 import static com.gregtechceu.gtceu.api.capability.recipe.IO.OUT;
@@ -883,6 +887,26 @@ public class CosmicMachines {
 
     public static void init() {
         GTRecipeTypes.MIXER_RECIPES.setMaxSize(IO.IN, CosmicRecipeCapabilities.EMBER, 1);
+        TieredMultiblockPatterns.register(GTMultiMachines.ELECTRIC_BLAST_FURNACE,
+                () -> MultiblockPatternBuilder.start(FRONT, UP, LEFT)
+                        .slice("XXXXX", "FRRRF", "F   F", "F   F", "F   F", "FRRRF", "XXXXX")
+                        .slice("XRRRX", "RRRRR", " CCC ", " CCC ", " CCC ", "RRRRR", "XXXXX")
+                        .slice("XRRRX", "RRRRR", " C C ", " C C ", " C C ", "RRRRR", "XXMXX")
+                        .slice("XRRRX", "RRRRR", " CCC ", " CCC ", " CCC ", "RRRRR", "XXXXX")
+                        .slice("XXSXX", "FRRRF", "F   F", "F   F", "F   F", "FRRRF", "XXXXX")
+                        .where('S', controller(blocks(GTMultiMachines.ELECTRIC_BLAST_FURNACE.getBlock())))
+                        .where('X', blocks(CASING_INVAR_HEATPROOF.get()).setMinGlobalLimited(32)
+                                .or(autoAbilities(GTMultiMachines.ELECTRIC_BLAST_FURNACE.getRecipeTypes()))
+                                .or(autoAbilities(true, false, false)))
+                        .where('M', abilities(PartAbility.MUFFLER))
+                        .where('F', blocks(ChemicalHelper.getBlock(TagPrefix.frameGt, GTMaterials.StainlessSteel)))
+                        .where('R', blocks(SOMARUST_CASING.get()))
+                        .where('C', blocks(COIL_CUPRONICKEL.get()))
+                        .where(' ', any())
+                        .build());
+        GTMultiMachines.ELECTRIC_BLAST_FURNACE.setRecipeModifier(new RecipeModifierList(
+                GTMultiMachines.ELECTRIC_BLAST_FURNACE.getRecipeModifier(), EBF_TIER_STREAK));
+        GTMultiMachines.ELECTRIC_BLAST_FURNACE.setAlwaysTryModifyRecipe(true);
         GTMultiMachines.LARGE_COMBUSTION_ENGINE.setRecipeTypes(new GTRecipeType[] { DUMMY_RECIPES });
         GTMultiMachines.LARGE_COMBUSTION_ENGINE.setRenderXEIPreview(false);
         GTMultiMachines.LARGE_COMBUSTION_ENGINE.setRenderWorldPreview(false);
