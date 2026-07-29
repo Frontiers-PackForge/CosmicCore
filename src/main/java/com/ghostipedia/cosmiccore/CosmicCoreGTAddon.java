@@ -21,9 +21,6 @@ import net.minecraft.data.recipes.RecipeOutput;
 
 import dev.latvian.mods.kubejs.recipe.component.NumberComponent;
 
-import java.util.HashSet;
-import java.util.Set;
-
 @GTAddon(CosmicCore.MOD_ID)
 public class CosmicCoreGTAddon implements IGTAddon {
 
@@ -40,12 +37,10 @@ public class CosmicCoreGTAddon implements IGTAddon {
     @Override
     public void addRecipes(RecipeOutput provider) {
         CosmicCoreOreRecipeHandler.registerFlocculant(provider);
-        Set<Material> chunkMetals = new HashSet<>();
         for (Material bundleOre : CosmicBundleMaterials.bundleOres()) {
             CosmicCoreOreRecipeHandler.bundleInit(provider, bundleOre);
-            chunkMetals.addAll(CosmicBundleMaterials.outputsOf(bundleOre));
         }
-        for (Material metal : chunkMetals) {
+        for (Material metal : CosmicBundleMaterials.outputMaterials()) {
             CosmicCoreOreRecipeHandler.processChunkBasics(provider, metal);
         }
         for (WoodTypeEntry wood : CosmicWoods.entries()) {

@@ -1,0 +1,6 @@
+{
+  "type": "neoforge:add_features",
+  "biomes": "#undergarden:is_depths_biome",
+  "features": "cosmiccore:bloomscrap_blob",
+  "step": "underground_ores"
+}

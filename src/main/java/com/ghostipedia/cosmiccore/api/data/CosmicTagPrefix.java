@@ -1,5 +1,6 @@
 package com.ghostipedia.cosmiccore.api.data;
 
+import com.ghostipedia.cosmiccore.common.data.materials.CosmicBundleMaterials;
 import com.ghostipedia.cosmiccore.common.data.tag.TagUtil;
 
 import com.gregtechceu.gtceu.api.data.chemical.material.Material;
@@ -15,7 +16,6 @@ import java.util.function.Predicate;
 
 import static com.gregtechceu.gtceu.api.data.chemical.material.info.MaterialFlags.GENERATE_ROD;
 import static com.gregtechceu.gtceu.api.data.tag.TagPrefix.Conditions.hasIngotProperty;
-import static com.gregtechceu.gtceu.api.data.tag.TagPrefix.Conditions.hasOreProperty;
 
 public class CosmicTagPrefix {
 
@@ -53,8 +53,7 @@ public class CosmicTagPrefix {
                 .defaultTagPath("cubic_ores")
                 .materialIconType(CosmicCoreMaterialIconType.rawOreCubic)
                 .unificationEnabled(true)
-                .generateItem(true)
-                .generationCondition(hasOreProperty);
+                .generateItem(false);
 
         /*
          * crushedLeached = new TagPrefix("leachedOre")
@@ -82,7 +81,7 @@ public class CosmicTagPrefix {
                 .materialIconType(CosmicCoreMaterialIconType.oreChunk)
                 .unificationEnabled(true)
                 .generateItem(true)
-                .generationCondition(hasOreProperty);
+                .generationCondition(CosmicBundleMaterials::isBundleOutput);
 
         powderizedOre = new TagPrefix("powderizedOre")
                 .idPattern("powderized_%s_ore")
@@ -91,7 +90,7 @@ public class CosmicTagPrefix {
                 .materialIconType(CosmicCoreMaterialIconType.powderizedOre)
                 .unificationEnabled(true)
                 .generateItem(true)
-                .generationCondition(hasOreProperty);
+                .generationCondition(CosmicBundleMaterials::isBundleOre);
 
         crystallizedOreChunk = new TagPrefix("crystallizedOreChunk")
                 .idPattern("crystallized_%s_ore_chunk")
@@ -100,7 +99,7 @@ public class CosmicTagPrefix {
                 .materialIconType(CosmicCoreMaterialIconType.crystallizedOreChunk)
                 .unificationEnabled(true)
                 .generateItem(true)
-                .generationCondition(hasOreProperty);
+                .generationCondition(CosmicBundleMaterials::isBundleOre);
 
         atomicallyPurifiedOreChunk = new TagPrefix("atomicallyPurifiedOreChunk")
                 .idPattern("atomically_purified_%s_ore_chunk")
@@ -109,7 +108,7 @@ public class CosmicTagPrefix {
                 .materialIconType(CosmicCoreMaterialIconType.atomicallyPurifiedOreChunk)
                 .unificationEnabled(true)
                 .generateItem(true)
-                .generationCondition(hasOreProperty);
+                .generationCondition(CosmicBundleMaterials::isBundleOre);
 
         flocculatedOre = new TagPrefix("flocculatedOre")
                 .idPattern("flocculated_%s_ore")
@@ -118,7 +117,7 @@ public class CosmicTagPrefix {
                 .materialIconType(CosmicCoreMaterialIconType.flocculatedOre)
                 .unificationEnabled(true)
                 .generateItem(true)
-                .generationCondition(hasOreProperty);
+                .generationCondition(CosmicBundleMaterials::isBundleOre);
 
         ultraDense = new TagPrefix("ultradensePlate")
                 .idPattern("ultradense_%s_plate")

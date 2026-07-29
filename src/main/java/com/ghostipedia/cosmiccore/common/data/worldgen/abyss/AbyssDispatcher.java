@@ -176,7 +176,7 @@ public final class AbyssDispatcher {
         Material[][] layerMats = {
                 { CosmicBundleMaterials.Utherite },
                 { CosmicBundleMaterials.Vanachrome },
-                { CosmicBundleMaterials.Shimmerbloom },
+                { CosmicBundleMaterials.Phycolite },
                 { CosmicBundleMaterials.Agarlite },
                 {}
         };

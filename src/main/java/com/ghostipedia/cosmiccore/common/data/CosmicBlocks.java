@@ -34,6 +34,11 @@ import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.NoteBlockInstrument;
 import net.minecraft.world.level.material.MapColor;
+import net.minecraft.world.level.storage.loot.LootPool;
+import net.minecraft.world.level.storage.loot.LootTable;
+import net.minecraft.world.level.storage.loot.entries.LootItem;
+import net.minecraft.world.level.storage.loot.functions.SetItemCountFunction;
+import net.minecraft.world.level.storage.loot.providers.number.UniformGenerator;
 import net.neoforged.neoforge.client.model.generators.ConfiguredModel;
 import net.neoforged.neoforge.client.model.generators.ModelFile;
 
@@ -146,6 +151,25 @@ public class CosmicBlocks {
             .blockstate(NonNullBiConsumer.noop())
             .item(BlockItem::new)
             .model(NonNullBiConsumer.noop())
+            .build()
+            .register();
+
+    public static final BlockEntry<Block> BLOOMSCRAP_BLOCK = REGISTRATE
+            .block("bloomscrap_block", Block::new)
+            .lang("Bloomscrap Block")
+            .initialProperties(() -> Blocks.DEEPSLATE)
+            .properties(p -> p.isValidSpawn((state, level, pos, entity) -> false)
+                    .requiresCorrectToolForDrops()
+                    .strength(5.0F, 6.0F)
+                    .sound(SoundType.DEEPSLATE_TILES))
+            .addLayer(() -> RenderType::solid)
+            .exBlockstate(GTModels.cubeAllModel(CosmicCore.id("block/bloomscrap_block")))
+            .tag(BlockTags.MINEABLE_WITH_PICKAXE)
+            .loot((tables, block) -> tables.add(block, LootTable.lootTable()
+                    .withPool(LootPool.lootPool()
+                            .add(LootItem.lootTableItem(CosmicItems.BLOOMSCRAP.get())
+                                    .apply(SetItemCountFunction.setCount(UniformGenerator.between(2.0F, 4.0F)))))))
+            .item(BlockItem::new)
             .build()
             .register();
 
