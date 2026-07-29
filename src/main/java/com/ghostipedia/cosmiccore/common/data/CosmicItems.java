@@ -165,6 +165,13 @@ public class CosmicItems {
             .model(NonNullBiConsumer.noop())
             .register();
 
+    public static final ItemEntry<Item> BLOOMSCRAP = REGISTRATE
+            .item("bloomscrap", Item::new)
+            .lang("Bloomscrap")
+            .properties(p -> p.stacksTo(64))
+            .defaultModel()
+            .register();
+
     public static final ItemEntry<StealthCoatingItem> STEALTH_COATING_1 = REGISTRATE
             .item("stealth_coating_1", p -> new StealthCoatingItem(p.stacksTo(16), 1))
             .lang("Stealth Coating I")

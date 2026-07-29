@@ -1,6 +1,7 @@
 package com.ghostipedia.cosmiccore.common.machine.multiblock.multi.logic;
 
 import com.ghostipedia.cosmiccore.CosmicCore;
+import com.ghostipedia.cosmiccore.api.data.CosmicTagPrefix;
 import com.ghostipedia.cosmiccore.common.data.CosmicItems;
 import com.ghostipedia.cosmiccore.common.data.materials.CosmicMaterials;
 import com.ghostipedia.cosmiccore.gtbridge.CosmicRecipeTypes;
@@ -100,14 +101,14 @@ public class LarvaMachine extends WorkableElectricMultiblockMachine {
                 .save(provider);
 
         SCANNER_RECIPES.recipeBuilder(CosmicCore.id("rare_metal_asteroid"))
-                .inputItems(TagPrefix.rawOre, GTMaterials.Cooperite)
+                .inputItems(CosmicTagPrefix.oreChunk, GTMaterials.Cooperite)
                 .inputItems(CosmicItems.TARGETING_CHIP.asStack())
                 .outputItems(getAstroidDataChip("rare_metal_asteroid", 1))
                 .duration(40)
                 .EUt(GTValues.VA[GTValues.HV])
                 .save(provider);
         SCANNER_RECIPES.recipeBuilder(CosmicCore.id("auric_asteroid"))
-                .inputItems(TagPrefix.rawOre, GTMaterials.Gold)
+                .inputItems(CosmicTagPrefix.oreChunk, GTMaterials.Gold)
                 .inputItems(CosmicItems.TARGETING_CHIP.asStack())
                 .outputItems(getAstroidDataChip("auric_asteroid", 1))
                 .duration(40)
@@ -121,21 +122,21 @@ public class LarvaMachine extends WorkableElectricMultiblockMachine {
                 .EUt(GTValues.VA[GTValues.HV])
                 .save(provider);
         SCANNER_RECIPES.recipeBuilder(CosmicCore.id("lith_asteroid"))
-                .inputItems(TagPrefix.rawOre, GTMaterials.CertusQuartz)
+                .inputItems(CosmicTagPrefix.oreChunk, GTMaterials.CertusQuartz)
                 .inputItems(CosmicItems.TARGETING_CHIP.asStack())
                 .outputItems(getAstroidDataChip("lith_asteroid", 1))
                 .duration(40)
                 .EUt(GTValues.VA[GTValues.HV])
                 .save(provider);
         SCANNER_RECIPES.recipeBuilder(CosmicCore.id("mafic_asteroid"))
-                .inputItems(TagPrefix.rawOre, GTMaterials.Tungstate)
+                .inputItems(CosmicTagPrefix.oreChunk, GTMaterials.Tungstate)
                 .inputItems(CosmicItems.TARGETING_CHIP.asStack())
                 .outputItems(getAstroidDataChip("mafic_asteroid", 1))
                 .duration(40)
                 .EUt(GTValues.VA[GTValues.HV])
                 .save(provider);
         SCANNER_RECIPES.recipeBuilder(CosmicCore.id("mossy_asteroid"))
-                .inputItems(TagPrefix.rawOre, GTMaterials.Emerald)
+                .inputItems(CosmicTagPrefix.oreChunk, GTMaterials.Emerald)
                 .inputItems(CosmicItems.TARGETING_CHIP.asStack())
                 .outputItems(getAstroidDataChip("mossy_asteroid", 1))
                 .duration(40)

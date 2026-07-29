@@ -9,7 +9,9 @@ import com.gregtechceu.gtceu.api.data.chemical.material.stack.MaterialStack;
 
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Collections;
 import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -44,9 +46,10 @@ public class CosmicBundleMaterials {
     public static Material Vanachrome;
     public static Material Emberite;
     public static Material Utherite;
-    public static Material Shimmerbloom;
+    public static Material Phycolite;
 
     private static final Map<Material, List<Material>> OUTPUTS = new LinkedHashMap<>();
+    private static final Set<Material> OUTPUT_MATERIALS = new LinkedHashSet<>();
     private static final Map<Material, MaterialStack> HAND_SORT = new LinkedHashMap<>();
 
     public static void register() {
@@ -67,7 +70,7 @@ public class CosmicBundleMaterials {
         CrudeRadionite = bundle("crude_radionite", 0x3FA63F, 0x1F6B1F, MaterialIconSet.RADIOACTIVE);
         Vanachrome = bundle("vanachrome", 0x6FA0A0, 0x3F6F6F, MaterialIconSet.METALLIC);
         Utherite = bundle("utherite", 0xB0525E, 0x5E2830, MaterialIconSet.ROUGH);
-        Shimmerbloom = bundle("shimmerbloom", 0x9FB8E8, 0x54689E, MaterialIconSet.SHINY);
+        Phycolite = bundle("phycolite", 0x9FB8E8, 0x54689E, MaterialIconSet.SHINY);
 
         Emberite = new Material.Builder(GTCEu.id("emberite"))
                 .gem()
@@ -91,9 +94,9 @@ public class CosmicBundleMaterials {
         out(Agarlite, Cooperite, Bornite);
         out(CrudeRadionite, Pitchblende, Uraninite, Naquadah, Scheelite, Tungstate);
         out(Vanachrome, Magnetite, VanadiumMagnetite, Chromite, Bauxite, Ilmenite, Gold);
-        out(Utherite, Utherium, CosmicMaterials.Rogdorium, CosmicMaterials.Arcanite);
-        out(Shimmerbloom, CosmicMaterials.Gloomarcine, CosmicMaterials.Veilspar, CosmicMaterials.Soulshade,
-                CosmicMaterials.Duskmote, CosmicMaterials.Hadalite, CosmicMaterials.Abyssbloom);
+        out(Utherite, Utherium, CosmicMaterials.Aphotite, CosmicMaterials.Arcanite);
+        out(Phycolite, CosmicMaterials.Gloomarcine, CosmicMaterials.Veilspar, CosmicMaterials.Bathyst,
+                CosmicMaterials.Nyctophyte, CosmicMaterials.Hadalite, CosmicMaterials.Abyssbloom);
 
         sort(Cuprosiva, Tin, 3);
         sort(Ferosine, Gold, 2);
@@ -113,6 +116,7 @@ public class CosmicBundleMaterials {
 
     private static void out(Material bundleOre, Material... minerals) {
         OUTPUTS.put(bundleOre, List.of(minerals));
+        Collections.addAll(OUTPUT_MATERIALS, minerals);
     }
 
     private static void sort(Material bundleOre, Material output, int tinyDusts) {
@@ -129,6 +133,18 @@ public class CosmicBundleMaterials {
     }
 
     public static Set<Material> bundleOres() {
-        return OUTPUTS.keySet();
+        return Collections.unmodifiableSet(OUTPUTS.keySet());
+    }
+
+    public static Set<Material> outputMaterials() {
+        return Collections.unmodifiableSet(OUTPUT_MATERIALS);
+    }
+
+    public static boolean isBundleOre(Material material) {
+        return OUTPUTS.containsKey(material);
+    }
+
+    public static boolean isBundleOutput(Material material) {
+        return OUTPUT_MATERIALS.contains(material);
     }
 }

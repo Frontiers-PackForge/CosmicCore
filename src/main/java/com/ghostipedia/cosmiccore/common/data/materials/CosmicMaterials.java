@@ -47,12 +47,12 @@ public class CosmicMaterials {
     public static Material Cosmocite;
     public static Material TearsOfTheUniverse;
     public static Material Utherium;
-    public static Material Rogdorium;
+    public static Material Aphotite;
     public static Material Arcanite;
     public static Material Gloomarcine;
     public static Material Veilspar;
-    public static Material Soulshade;
-    public static Material Duskmote;
+    public static Material Bathyst;
+    public static Material Nyctophyte;
     public static Material Hadalite;
     public static Material Abyssbloom;
     public static Material Ichor;
@@ -618,7 +618,7 @@ public class CosmicMaterials {
                 .gem()
                 .color(0xC24B55).secondaryColor(0x7A2430).iconSet(MaterialIconSet.RUBY)
                 .buildAndRegister();
-        Rogdorium = new Material.Builder(CosmicCore.id("rogdorium"))
+        Aphotite = new Material.Builder(CosmicCore.id("aphotite"))
                 .dust()
                 .color(0x86BF54).secondaryColor(0x4E7A2E).iconSet(MaterialIconSet.ROUGH)
                 .buildAndRegister();
@@ -634,11 +634,11 @@ public class CosmicMaterials {
                 .gem()
                 .color(0xC9D8E8).secondaryColor(0x8FA6BC).iconSet(MaterialIconSet.QUARTZ)
                 .buildAndRegister();
-        Soulshade = new Material.Builder(CosmicCore.id("soulshade"))
+        Bathyst = new Material.Builder(CosmicCore.id("bathyst"))
                 .dust()
                 .color(0x6E5A8C).secondaryColor(0x453466).iconSet(MaterialIconSet.DULL)
                 .buildAndRegister();
-        Duskmote = new Material.Builder(CosmicCore.id("duskmote"))
+        Nyctophyte = new Material.Builder(CosmicCore.id("nyctophyte"))
                 .dust()
                 .color(0x8C7A5A).secondaryColor(0x5E4E38).iconSet(MaterialIconSet.SAND)
                 .buildAndRegister();

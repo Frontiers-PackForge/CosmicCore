@@ -5,6 +5,7 @@ import com.ghostipedia.cosmiccore.client.mirror.ClientDeedCache;
 import com.ghostipedia.cosmiccore.client.mirror.DeedInventoryButton;
 import com.ghostipedia.cosmiccore.common.data.CosmicItems;
 import com.ghostipedia.cosmiccore.common.data.materials.CosmicBundleMaterials;
+import com.ghostipedia.cosmiccore.common.data.materials.CosmicOreFormPolicy;
 import com.ghostipedia.cosmiccore.common.food.CosmicFoodRegistry;
 import com.ghostipedia.cosmiccore.common.machine.multiblock.multi.IndustrialFlotationPlant;
 import com.ghostipedia.cosmiccore.common.machine.multiblock.multi.IndustrialOreSorter;
@@ -27,6 +28,7 @@ import brachy.modularui.integration.emi.handler.EmiScreenHandler;
 import brachy.modularui.screen.ContainerScreenWrapper;
 import brachy.modularui.screen.ScreenWrapper;
 import dev.emi.emi.api.EmiEntrypoint;
+import dev.emi.emi.api.EmiInitRegistry;
 import dev.emi.emi.api.EmiPlugin;
 import dev.emi.emi.api.EmiRegistry;
 import dev.emi.emi.api.recipe.EmiRecipeCategory;
@@ -37,6 +39,8 @@ import dev.emi.emi.api.widget.Bounds;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 @EmiEntrypoint
 public class CosmicCoreEMIPlugin implements EmiPlugin {
@@ -44,6 +48,16 @@ public class CosmicCoreEMIPlugin implements EmiPlugin {
     public static final ResourceLocation ASTEROID_CATEGORY_ID = CosmicCore.id("asteroid_mining");
     public static final EmiRecipeCategory ASTEROID_CATEGORY = new EmiRecipeCategory(ASTEROID_CATEGORY_ID,
             EmiStack.of(CosmicItems.TARGETING_CHIP));
+
+    @Override
+    public void initialize(EmiInitRegistry registry) {
+        Map<Item, Boolean> hiddenOreFormCache = new ConcurrentHashMap<>();
+        registry.disableStacks(stack -> {
+            Item item = stack.getKeyOfType(Item.class);
+            return item != null && hiddenOreFormCache.computeIfAbsent(item,
+                    CosmicOreFormPolicy::isUnusedGeneratedOreForm);
+        });
+    }
 
     @Override
     public void register(EmiRegistry registry) {
