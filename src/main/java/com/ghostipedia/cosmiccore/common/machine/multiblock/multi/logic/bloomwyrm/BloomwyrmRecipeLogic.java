@@ -13,7 +13,7 @@ import java.util.Optional;
 
 public class BloomwyrmRecipeLogic extends RecipeLogic {
 
-    public Optional<BloomwyrmWorkRequest> createRequest(BloomwyrmSeason season) {
+    public Optional<BloomwyrmWorkRequest> createRequest() {
         BloomwyrmUnitMachine unit = getUnit();
         int desiredParallel = unit.getDesiredParallel();
         int maximumCandidate = unit.supportsParallelControl() ? BloomwyrmUnitMachine.MAX_DESIRED_PARALLEL : 1;
@@ -35,15 +35,12 @@ public class BloomwyrmRecipeLogic extends RecipeLogic {
                 continue;
             }
             unit.recordParallelEligibility(eligibleParallel);
-            int baseParallel = Math.min(desiredParallel, eligibleParallel);
-            int requestedParallel = unit.getRequestedParallelForMode(recipe, baseParallel, eligibleParallel, season);
-            unit.recordModeRequest(requestedParallel);
+            int requestedParallel = Math.min(desiredParallel, eligibleParallel);
+            unit.recordParallelRequest(requestedParallel);
             return Optional.of(unit.createWorkRequest(
                     recipe,
                     requestedParallel,
-                    baseParallel,
-                    eligibleParallel,
-                    season));
+                    eligibleParallel));
         }
         return Optional.empty();
     }

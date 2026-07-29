@@ -1,7 +1,6 @@
 package com.ghostipedia.cosmiccore.common.machine.multiblock.multi.logic.bloomwyrm;
 
 import com.gregtechceu.gtceu.api.machine.multiblock.WorkableElectricMultiblockMachine;
-import com.gregtechceu.gtceu.common.mui.GTGuiTextures;
 
 import brachy.modularui.api.drawable.Text;
 import brachy.modularui.drawable.GuiTextures;
@@ -11,7 +10,6 @@ import brachy.modularui.value.sync.IntSyncValue;
 import brachy.modularui.value.sync.PanelSyncManager;
 import brachy.modularui.widget.ParentWidget;
 import brachy.modularui.widget.Widget;
-import brachy.modularui.widgets.CycleButtonWidget;
 import brachy.modularui.widgets.ListWidget;
 import brachy.modularui.widgets.layout.Flow;
 import brachy.modularui.widgets.textfield.TextFieldWidget;
@@ -25,9 +23,7 @@ public final class BloomwyrmDisplayUI {
 
     public static Widget<?> create(WorkableElectricMultiblockMachine machine, PanelSyncManager syncManager) {
         boolean hasParallelControl = machine instanceof BloomwyrmUnitMachine unit && unit.supportsParallelControl();
-        boolean hasReserveControl = machine instanceof BloomwyrmUnitMachine unit &&
-                unit.supportsSeasonalReserveMode();
-        int controlHeight = hasParallelControl ? 44 : hasReserveControl ? 24 : 0;
+        int controlHeight = hasParallelControl ? 24 : 0;
         int listHeight = HEIGHT - 6 - controlHeight;
         var panel = new ParentWidget<>();
         var list = new ListWidget<>()
@@ -47,7 +43,7 @@ public final class BloomwyrmDisplayUI {
                     .width(WIDTH - 10)
                     .height(20)
                     .left(5)
-                    .bottom(hasReserveControl ? 24 : 4)
+                    .bottom(4)
                     .child(Text.lang("cosmiccore.bloomwyrm.unit.parallel_control")
                             .asWidget()
                             .color(0xFFFFFF)
@@ -66,36 +62,6 @@ public final class BloomwyrmDisplayUI {
                             .color(0xFFFFFF)
                             .marginLeft(6)
                             .verticalCenter()));
-        }
-        if (hasReserveControl && machine instanceof BloomwyrmUnitMachine unit) {
-            IntSyncValue reserveMode = new IntSyncValue(() -> unit.getReserveMode().ordinal(), unit::setReserveMode);
-            syncManager.syncValue("bloomwyrm_unit_reserve_mode_control", reserveMode);
-            var modeButton = new CycleButtonWidget()
-                    .background(GTGuiTextures.BUTTON)
-                    .stateCount(unit.supportsReserveOverdrive() ? 3 : 2)
-                    .stateOverlay(0, Text.lang(BloomwyrmReserveMode.CONSERVE.translationKey())
-                            .alignment(Alignment.CENTER).asTextIcon())
-                    .stateOverlay(1, Text.lang(BloomwyrmReserveMode.STABILIZE.translationKey())
-                            .alignment(Alignment.CENTER).asTextIcon())
-                    .value(reserveMode)
-                    .width(92)
-                    .height(16)
-                    .verticalCenter();
-            if (unit.supportsReserveOverdrive()) {
-                modeButton.stateOverlay(2, Text.lang(BloomwyrmReserveMode.OVERDRIVE.translationKey())
-                        .alignment(Alignment.CENTER).asTextIcon());
-            }
-            panel.child(Flow.row()
-                    .width(WIDTH - 10)
-                    .height(20)
-                    .left(5)
-                    .bottom(4)
-                    .child(Text.lang("cosmiccore.bloomwyrm.unit.reserve_control")
-                            .asWidget()
-                            .color(0xFFFFFF)
-                            .width(150)
-                            .verticalCenter())
-                    .child(modeButton));
         }
         return panel;
     }
