@@ -74,7 +74,7 @@ public class CosmicMaterials {
 
     public static Material AuricForcinium;
     public static Material SuperheavyBedrockAlloy;
-    public static Material Chlorophyte;
+    public static Material Nostium;
     public static Material DraconicTarragon;
     public static Material Kuvite;
     public static Material BlinkwardAlloy;
@@ -272,10 +272,10 @@ public class CosmicMaterials {
                 .blastTemp(4500, BlastProperty.GasTier.HIGH, GTValues.VA[GTValues.EV], 1200)
                 .buildAndRegister();
 
-        Chlorophyte = new Material.Builder(CosmicCore.id("chlorophyte"))
+        Nostium = new Material.Builder(CosmicCore.id("nostium"))
                 .ingot()
                 .liquid(new FluidBuilder().temperature(1340).customStill())
-                .iconSet(CosmicMaterialSet.CHLOROPHYTE)
+                .iconSet(CosmicMaterialSet.NOSTIUM)
                 .flags(GENERATE_BOLT_SCREW, GENERATE_ROUND, GENERATE_GEAR, GENERATE_SMALL_GEAR, GENERATE_RING,
                         GENERATE_FRAME, GENERATE_SPRING, GENERATE_SPRING_SMALL, GENERATE_FINE_WIRE, GENERATE_DENSE)
                 .blastTemp(4500, BlastProperty.GasTier.HIGH, GTValues.VA[GTValues.EV], 1200)

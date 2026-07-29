@@ -26,11 +26,17 @@ public final class DeedQuestCompatBridge {
         return !isLoaded() || Loaded.canCommitWeave(player, deedId);
     }
 
+    public static boolean hasPatientZeroQuestProgress(ServerPlayer player) {
+        return isLoaded() && Loaded.hasPatientZeroQuestProgress(player);
+    }
+
     private static boolean isLoaded() {
         return ModList.get().isLoaded("ftbquests");
     }
 
     private static final class Loaded {
+
+        private static final long NETHER_PERMIT_QUEST_ID = 0x16EE5D3DB14F4331L;
 
         private static void register() {
             DeedQuestCompat.register();
@@ -66,6 +72,14 @@ public final class DeedQuestCompatBridge {
                 if (deedTask.requirementsComplete(teamData)) return true;
             }
             return !found;
+        }
+
+        private static boolean hasPatientZeroQuestProgress(ServerPlayer player) {
+            var file = dev.ftb.mods.ftbquests.quest.ServerQuestFile.INSTANCE;
+            if (file == null || file.server != player.getServer()) return false;
+            var teamData = file.getTeamData(player).orElse(null);
+            var quest = file.getQuest(NETHER_PERMIT_QUEST_ID);
+            return teamData != null && quest != null && teamData.isCompleted(quest);
         }
     }
 }

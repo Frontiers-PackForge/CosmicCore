@@ -1587,7 +1587,7 @@ public class CosmicLangHandler extends LangHandler {
         provider.add("cosmiccore.machine.abyssal_culture_vat.tooltip.1",
                 "§aBiopower§f yield depends on the §6active culture recipe§f.");
         provider.add("cosmiccore.machine.sculk_biochamber.tooltip.0",
-                "Consumes prepared cultures and Biopower and Bloomwyrm charge through the Bloomwyrm campus.");
+                "Consumes prepared cultures, Biopower, and Bloomwyrm Charge through the Bloomwyrm campus.");
         provider.add("cosmiccore.machine.sculk_biochamber.tooltip.1",
                 "Consumes shared §3Bloomwyrm Charge§f and §aBiopower§f to mutate items and §aAlgae§f.");
         provider.add("cosmiccore.machine.biomana_digestor.tooltip.0",

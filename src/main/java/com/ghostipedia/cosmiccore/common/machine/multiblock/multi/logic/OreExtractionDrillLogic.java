@@ -273,6 +273,11 @@ public class OreExtractionDrillLogic extends RecipeLogic {
             return;
         }
 
+        if (miningProgress >= currentCycleTicks) {
+            finishCurrentOre(serverLevel);
+            return;
+        }
+
         if (!getMachine().drainEnergy(false)) {
             setStatus(Status.WAITING);
             return;
@@ -286,23 +291,31 @@ public class OreExtractionDrillLogic extends RecipeLogic {
         miningProgress++;
 
         if (miningProgress >= currentCycleTicks) {
-            miningProgress = 0;
-            processCurrentOre(serverLevel);
-            currentOreIndex++;
-            if (currentOreIndex < pendingOres.size()) {
-                updateChunkWindow(pendingOres.get(currentOreIndex));
-            }
+            finishCurrentOre(serverLevel);
         }
     }
 
-    private void processCurrentOre(ServerLevel serverLevel) {
-        if (currentOreIndex >= pendingOres.size()) return;
+    private void finishCurrentOre(ServerLevel serverLevel) {
+        if (!processCurrentOre(serverLevel)) {
+            setStatus(Status.WAITING);
+            return;
+        }
+
+        miningProgress = 0;
+        currentOreIndex++;
+        if (currentOreIndex < pendingOres.size()) {
+            updateChunkWindow(pendingOres.get(currentOreIndex));
+        }
+    }
+
+    private boolean processCurrentOre(ServerLevel serverLevel) {
+        if (currentOreIndex >= pendingOres.size()) return true;
 
         BlockPos orePos = pendingOres.get(currentOreIndex);
         BlockState state = serverLevel.getBlockState(orePos);
 
         if (!isOre(state)) {
-            return;
+            return true;
         }
 
         NonNullList<ItemStack> drops = NonNullList.create();
@@ -311,16 +324,21 @@ public class OreExtractionDrillLogic extends RecipeLogic {
                 .withParameter(LootContextParams.ORIGIN, Vec3.atLowerCornerOf(orePos))
                 .withParameter(LootContextParams.TOOL, ItemStack.EMPTY);
         drops.addAll(state.getDrops(builder));
-        outputDrops(drops);
+        if (!outputDrops(drops)) {
+            return false;
+        }
 
         serverLevel.setBlock(orePos, Blocks.STONE.defaultBlockState(), 3);
+        return true;
     }
 
-    private void outputDrops(NonNullList<ItemStack> drops) {
+    private boolean outputDrops(NonNullList<ItemStack> drops) {
         var handler = getCachedItemHandler();
-        if (handler == null) return;
+        if (handler == null || !GTTransferUtils.addItemsToItemHandler(handler, true, drops)) {
+            return false;
+        }
 
-        GTTransferUtils.addItemsToItemHandler(handler, false, drops);
+        return GTTransferUtils.addItemsToItemHandler(handler, false, drops);
     }
 
     @Nullable
