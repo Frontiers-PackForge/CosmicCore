@@ -1,7 +1,6 @@
 package com.ghostipedia.cosmiccore.mixin.gtceu;
 
 import com.ghostipedia.cosmiccore.common.machine.multiblock.multi.logic.bloomwyrm.BloomwyrmRecipeKeys;
-import com.ghostipedia.cosmiccore.common.machine.multiblock.multi.logic.bloomwyrm.BloomwyrmSeason;
 import com.ghostipedia.cosmiccore.common.recipe.condition.DeedCondition;
 
 import com.gregtechceu.gtceu.integration.kjs.recipe.GTRecipeSchema;
@@ -69,51 +68,6 @@ public abstract class GTKubeRecipeMixin {
         return bloomwyrmChargeOutput(amount);
     }
 
-    public GTRecipeSchema.GTKubeRecipe bloomwyrmChargeOutput(long amount, int favoredSeason) {
-        if (amount < 0) {
-            throw new KubeRuntimeException("Bloomwyrm Charge output must be non-negative");
-        }
-        BloomwyrmSeason[] seasons = BloomwyrmSeason.values();
-        if (favoredSeason < 1 || favoredSeason > seasons.length) {
-            throw new KubeRuntimeException("Bloomwyrm favored season must be between 1 and " + seasons.length);
-        }
-        GTRecipeSchema.GTKubeRecipe self = (GTRecipeSchema.GTKubeRecipe) (Object) this;
-        cosmiccore$putLongData(self, BloomwyrmRecipeKeys.CHARGE_OUTPUT, amount);
-        return cosmiccore$putIntData(self, BloomwyrmRecipeKeys.FAVORED_SEASON, favoredSeason);
-    }
-
-    public GTRecipeSchema.GTKubeRecipe murkbloomChargeOutput(long amount, int favoredSeason) {
-        return bloomwyrmChargeOutput(amount, favoredSeason);
-    }
-
-    public GTRecipeSchema.GTKubeRecipe seasonalEssenceInput(long amount, int favoredSeason) {
-        if (amount < 0) {
-            throw new KubeRuntimeException("Seasonal Essence input must be non-negative");
-        }
-        cosmiccore$validateSeason(favoredSeason);
-        GTRecipeSchema.GTKubeRecipe self = (GTRecipeSchema.GTKubeRecipe) (Object) this;
-        cosmiccore$putLongData(self, BloomwyrmRecipeKeys.SEASONAL_CHARGE_INPUT, amount);
-        return cosmiccore$putIntData(self, BloomwyrmRecipeKeys.FAVORED_SEASON, favoredSeason);
-    }
-
-    public GTRecipeSchema.GTKubeRecipe seasonalBiochargeInput(long amount, int favoredSeason) {
-        return seasonalEssenceInput(amount, favoredSeason);
-    }
-
-    public GTRecipeSchema.GTKubeRecipe seasonalEssenceOutput(long amount, int favoredSeason) {
-        if (amount < 0) {
-            throw new KubeRuntimeException("Seasonal Essence output must be non-negative");
-        }
-        cosmiccore$validateSeason(favoredSeason);
-        GTRecipeSchema.GTKubeRecipe self = (GTRecipeSchema.GTKubeRecipe) (Object) this;
-        cosmiccore$putLongData(self, BloomwyrmRecipeKeys.SEASONAL_CHARGE_OUTPUT, amount);
-        return cosmiccore$putIntData(self, BloomwyrmRecipeKeys.FAVORED_SEASON, favoredSeason);
-    }
-
-    public GTRecipeSchema.GTKubeRecipe seasonalBiochargeOutput(long amount, int favoredSeason) {
-        return seasonalEssenceOutput(amount, favoredSeason);
-    }
-
     public GTRecipeSchema.GTKubeRecipe maxCampusParallel(int amount) {
         if (amount < 1) {
             throw new KubeRuntimeException("Bloomwyrm campus parallel limit must be positive");
@@ -146,14 +100,6 @@ public abstract class GTKubeRecipeMixin {
         data.putLong(key, value);
         recipe.setValue(GTRecipeSchema.DATA, data);
         return recipe;
-    }
-
-    @Unique
-    private static void cosmiccore$validateSeason(int season) {
-        if (season < 1 || season > BloomwyrmSeason.values().length) {
-            throw new KubeRuntimeException(
-                    "Bloomwyrm favored season must be between 1 and " + BloomwyrmSeason.values().length);
-        }
     }
 
     @Inject(method = "getOrCreateId", at = @At("RETURN"), cancellable = true)

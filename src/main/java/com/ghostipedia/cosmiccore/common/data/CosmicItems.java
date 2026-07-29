@@ -963,6 +963,56 @@ public class CosmicItems {
             .defaultModel()
             .register();
 
+    public static final ItemEntry<ComponentItem> BLUE_PROTO_ALGAE = REGISTRATE
+            .item("blue_proto_algae", ComponentItem::new)
+            .lang("Blue Proto-Algae")
+            .properties(p -> p.stacksTo(4))
+            .tag()
+            .defaultModel()
+            .register();
+    public static final ItemEntry<ComponentItem> GREEN_PROTO_ALGAE = REGISTRATE
+            .item("green_proto_algae", ComponentItem::new)
+            .lang("Green Proto-Algae")
+            .properties(p -> p.stacksTo(4))
+            .tag()
+            .defaultModel()
+            .register();
+    public static final ItemEntry<ComponentItem> RED_PROTO_ALGAE = REGISTRATE
+            .item("red_proto_algae", ComponentItem::new)
+            .lang("Red Proto-Algae")
+            .properties(p -> p.stacksTo(4))
+            .tag()
+            .defaultModel()
+            .register();
+    public static final ItemEntry<ComponentItem> GREEN_ALGAE = REGISTRATE
+            .item("green_algae", ComponentItem::new)
+            .lang("Green Algae")
+            .properties(p -> p.stacksTo(64))
+            .tag()
+            .defaultModel()
+            .register();
+    public static final ItemEntry<ComponentItem> RED_ALGAE = REGISTRATE
+            .item("red_algae", ComponentItem::new)
+            .lang("Red Algae")
+            .properties(p -> p.stacksTo(64))
+            .tag()
+            .defaultModel()
+            .register();
+    public static final ItemEntry<ComponentItem> BLUE_ALGAE = REGISTRATE
+            .item("blue_algae", ComponentItem::new)
+            .lang("Blue Algae")
+            .properties(p -> p.stacksTo(64))
+            .tag()
+            .defaultModel()
+            .register();
+    public static final ItemEntry<ComponentItem> BLOOMWYRM_ALGAE = REGISTRATE
+            .item("bloomwyrm_algae", ComponentItem::new)
+            .lang("Bloomwyrm Algae")
+            .properties(p -> p.stacksTo(64))
+            .tag()
+            .defaultModel()
+            .register();
+
     public static final ItemEntry<ComponentItem> CONTAMINATED_PETRI_DISH = REGISTRATE
             .item("contaminated_petri_dish", ComponentItem::new)
             .lang("Contaminated Petri Dish")
@@ -3140,6 +3190,24 @@ public class CosmicItems {
     public static final ItemEntry<ComponentItem> LV_CLADDING = REGISTRATE
             .item("lv_cladding", ComponentItem::new)
             .lang("LV Cladding")
+            .properties(p -> p.stacksTo(64))
+            .defaultModel()
+            .register();
+    public static final ItemEntry<ComponentItem> MV_COGWORK_MAGICAPACITOR = REGISTRATE
+            .item("mv_cogwork_magicapacitor", ComponentItem::new)
+            .lang("MV Cogwork Magicapacitor")
+            .properties(p -> p.stacksTo(64))
+            .defaultModel()
+            .register();
+    public static final ItemEntry<ComponentItem> MV_MODULAR_FRAMEWORKS = REGISTRATE
+            .item("mv_modular_frameworks", ComponentItem::new)
+            .lang("MV Modular Frameworks")
+            .properties(p -> p.stacksTo(64))
+            .defaultModel()
+            .register();
+    public static final ItemEntry<ComponentItem> MV_CLADDING = REGISTRATE
+            .item("mv_cladding", ComponentItem::new)
+            .lang("MV Cladding")
             .properties(p -> p.stacksTo(64))
             .defaultModel()
             .register();

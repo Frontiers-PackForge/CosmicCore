@@ -2,6 +2,7 @@ package com.ghostipedia.cosmiccore.common.network;
 
 import com.ghostipedia.cosmiccore.common.compat.ftbquests.DeedQuestCompatBridge;
 import com.ghostipedia.cosmiccore.common.network.packet.AbyssTimeWarnPacket;
+import com.ghostipedia.cosmiccore.common.network.packet.BuildTieredMultiblockPacket;
 import com.ghostipedia.cosmiccore.common.network.packet.DeedPresentationAckPacket;
 import com.ghostipedia.cosmiccore.common.network.packet.DeedPresentationPacket;
 import com.ghostipedia.cosmiccore.common.network.packet.DeedSyncPacket;
@@ -10,6 +11,7 @@ import com.ghostipedia.cosmiccore.common.network.packet.MurkbloomDevImmunityPack
 import com.ghostipedia.cosmiccore.common.network.packet.MurkbloomSyncPacket;
 import com.ghostipedia.cosmiccore.common.network.packet.OxygenWarnPacket;
 import com.ghostipedia.cosmiccore.common.network.packet.RevealFieldsPacket;
+import com.ghostipedia.cosmiccore.common.network.packet.SetMultiblockStructureTierPacket;
 import com.ghostipedia.cosmiccore.common.network.packet.StarLadderUplinkPackets;
 import com.ghostipedia.cosmiccore.common.network.packet.StellarUpgradePacket;
 import com.ghostipedia.cosmiccore.common.network.packet.SyncAbyssAttunementPacket;
@@ -31,7 +33,7 @@ import net.neoforged.neoforge.network.registration.PayloadRegistrar;
 
 public class CCoreNetwork {
 
-    private static final String PROTOCOL_VERSION = "1.8.0";
+    private static final String PROTOCOL_VERSION = "1.9.0";
 
     public static void sendToServer(CustomPacketPayload packet) {
         PacketDistributor.sendToServer(packet);
@@ -70,6 +72,10 @@ public class CCoreNetwork {
                 DeedPresentationAckPacket::execute);
         registrar.playToServer(MurkbloomDevImmunityPacket.TYPE, MurkbloomDevImmunityPacket.CODEC,
                 MurkbloomDevImmunityPacket::execute);
+        registrar.playToServer(BuildTieredMultiblockPacket.TYPE, BuildTieredMultiblockPacket.CODEC,
+                BuildTieredMultiblockPacket::execute);
+        registrar.playToServer(SetMultiblockStructureTierPacket.TYPE, SetMultiblockStructureTierPacket.CODEC,
+                SetMultiblockStructureTierPacket::execute);
 
         registrar.playToClient(VoidUIPackets.OpenVoidScreenPacket.TYPE, VoidUIPackets.OpenVoidScreenPacket.CODEC,
                 VoidUIPackets.OpenVoidScreenPacket::execute);

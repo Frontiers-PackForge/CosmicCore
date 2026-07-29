@@ -516,32 +516,28 @@ public class CosmicRecipeTypes {
             .setMaxIOSize(1, 1, 3, 3)
             .setSound(GTSoundEntries.CHEMICAL)
             .UI(builder -> builder.setProgressBar(GTGuiTextures.PROGRESS_ARROW_MULTIPLE)
-                    .addRecipeUIModifier(BloomwyrmRecipeUI.COMMON)
-                    .addRecipeUIModifier(BloomwyrmRecipeUI.FAVORED_SEASON));
+                    .addRecipeUIModifier(BloomwyrmRecipeUI.COMMON));
 
     public static final GTRecipeType SCULK_BIOCHAMBER = GTRecipeTypes
             .register(CosmicCore.id("sculk_biochamber"), MULTIBLOCK)
             .setMaxIOSize(6, 6, 5, 5)
             .setSound(GTSoundEntries.CHEMICAL)
             .UI(builder -> builder.setProgressBar(GTGuiTextures.PROGRESS_ARROW_MULTIPLE)
-                    .addRecipeUIModifier(BloomwyrmRecipeUI.COMMON)
-                    .addRecipeUIModifier(BloomwyrmRecipeUI.FAVORED_SEASON));
+                    .addRecipeUIModifier(BloomwyrmRecipeUI.COMMON));
 
     public static final GTRecipeType BIOMANA_DIGESTOR = GTRecipeTypes
             .register(CosmicCore.id("biomana_digestor"), MULTIBLOCK)
             .setMaxIOSize(4, 4, 4, 4)
             .setSound(GTSoundEntries.CHEMICAL)
             .UI(builder -> builder.setProgressBar(GTGuiTextures.PROGRESS_ARROW_MULTIPLE)
-                    .addRecipeUIModifier(BloomwyrmRecipeUI.COMMON)
-                    .addRecipeUIModifier(BloomwyrmRecipeUI.FAVORED_SEASON));
+                    .addRecipeUIModifier(BloomwyrmRecipeUI.COMMON));
 
     public static final GTRecipeType MANAWOMB_LEECHING_POND = GTRecipeTypes
             .register(CosmicCore.id("manawomb_leeching_pond"), MULTIBLOCK)
             .setMaxIOSize(4, 6, 4, 4)
             .setSound(GTSoundEntries.CHEMICAL)
             .UI(builder -> builder.setProgressBar(GTGuiTextures.PROGRESS_ARROW_MULTIPLE)
-                    .addRecipeUIModifier(BloomwyrmRecipeUI.COMMON)
-                    .addRecipeUIModifier(BloomwyrmRecipeUI.FAVORED_SEASON));
+                    .addRecipeUIModifier(BloomwyrmRecipeUI.COMMON));
 
     public static void init() {
         for (GTRecipeType type : new GTRecipeType[] {
@@ -626,39 +622,11 @@ public class CosmicRecipeTypes {
                             "cosmiccore.bloomwyrm.recipe.charge_output",
                             data.getLong(BloomwyrmRecipeKeys.CHARGE_OUTPUT)) :
                     "");
-            type.getDataInfos().add(data -> {
-                if (!data.contains(BloomwyrmRecipeKeys.SEASONAL_CHARGE_INPUT)) return "";
-                var season = BloomwyrmRecipeKeys.favoredSeason(data);
-                return LocalizationUtils.format(
-                        "cosmiccore.bloomwyrm.recipe.seasonal_charge_input",
-                        LocalizationUtils.format(season == null ?
-                                "cosmiccore.bloomwyrm.essence.generic" : season.essenceTranslationKey()),
-                        data.getLong(BloomwyrmRecipeKeys.SEASONAL_CHARGE_INPUT));
-            });
-            type.getDataInfos().add(data -> {
-                if (!data.contains(BloomwyrmRecipeKeys.SEASONAL_CHARGE_OUTPUT)) return "";
-                var season = BloomwyrmRecipeKeys.favoredSeason(data);
-                return LocalizationUtils.format(
-                        "cosmiccore.bloomwyrm.recipe.seasonal_charge_output",
-                        LocalizationUtils.format(season == null ?
-                                "cosmiccore.bloomwyrm.essence.generic" : season.essenceTranslationKey()),
-                        data.getLong(BloomwyrmRecipeKeys.SEASONAL_CHARGE_OUTPUT));
-            });
             type.getDataInfos().add(data -> data.contains(BloomwyrmRecipeKeys.MAX_PARALLEL) ?
                     LocalizationUtils.format(
                             "cosmiccore.bloomwyrm.recipe.max_parallel",
                             data.getInt(BloomwyrmRecipeKeys.MAX_PARALLEL)) :
                     "");
-        }
-        for (GTRecipeType type : new GTRecipeType[] {
-                ABYSSAL_CULTURE_VAT, SCULK_BIOCHAMBER, BIOMANA_DIGESTOR, MANAWOMB_LEECHING_POND }) {
-            type.getDataInfos().add(data -> {
-                var season = BloomwyrmRecipeKeys.favoredSeason(data);
-                return season == null ? "" :
-                        LocalizationUtils.format(
-                                "cosmiccore.bloomwyrm.recipe.favored_season",
-                                LocalizationUtils.format(season.translationKey()));
-            });
         }
 
         LASER_ENGRAVER_RECIPES.setMaxIOSize(2, 2, 1, 1);

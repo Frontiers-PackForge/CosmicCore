@@ -1,5 +1,6 @@
 package com.ghostipedia.cosmiccore.integration.emi;
 
+import com.ghostipedia.cosmiccore.api.machine.multiblock.ITieredMultiblockPreview;
 import com.ghostipedia.cosmiccore.mixin.gtfix.emi.accessor.MultiblockSchemaInfoAccessor;
 
 import com.gregtechceu.gtceu.api.machine.MultiblockMachineDefinition;
@@ -45,6 +46,9 @@ public final class MultiblockPreviewSchemaCache {
 
     public static boolean apply(MultiblockMachineDefinition definition, MultiblockSchemaInfo schemaInfo,
                                 Direction frontFacing, Direction upFacing, boolean isFlipped) {
+        if (schemaInfo instanceof ITieredMultiblockPreview preview && preview.cosmiccore$getPreviewTier() != 0) {
+            return false;
+        }
         if (schemaInfo.getMapSchema() != null || schemaInfo.getStructureHelper() != null ||
                 !schemaInfo.getBlockCounts().isEmpty() || !schemaInfo.getStructureBlocks().isEmpty() ||
                 !schemaInfo.getUserGlobalBlockPreferences().isEmpty() ||
