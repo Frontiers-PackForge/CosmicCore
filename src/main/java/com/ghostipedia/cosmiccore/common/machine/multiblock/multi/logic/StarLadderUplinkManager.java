@@ -708,7 +708,7 @@ public class StarLadderUplinkManager implements INBTSerializable<CompoundTag> {
             material(TagPrefix.ingot, CosmicMaterials.MelodicAlloy, 32, 128),
             material(TagPrefix.ingot, GTMaterials.Stellite100, 16, 64),
             material(TagPrefix.ingot, GTMaterials.HSSG, 50, 200),
-            material(TagPrefix.ingot, CosmicMaterials.Chlorophyte, 32, 128),
+            material(TagPrefix.ingot, CosmicMaterials.Nostium, 32, 128),
             material(TagPrefix.ingot, CosmicMaterials.Halizine, 50, 200));
 
     // Phase 3: IV-tier complex components

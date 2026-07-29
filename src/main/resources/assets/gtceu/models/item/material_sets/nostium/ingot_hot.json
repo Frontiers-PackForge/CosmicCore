@@ -1,0 +1,6 @@
+{
+  "parent": "gtceu:item/material_sets/nostium/ingot",
+  "textures": {
+    "layer0": "gtceu:item/material_sets/nostium/ingot_hot"
+  }
+}

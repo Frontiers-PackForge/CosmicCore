@@ -133,7 +133,6 @@
     "gtfix.GTToolEnchantmentTagsMixin",
     "gtfix.GTRecipeReloadResetMixin",
     "gtfix.GTKubeRecipeDataWriteFixMixin",
-    "gtfix.GTKubeRecipeContentReplacementFixMixin",
     "gtfix.RecipeUILayoutEmberMixin",
     "gtfix.IntCircuitGhostSlotFixMixin",
     "gtfix.ItemBusUiStorageFixMixin",

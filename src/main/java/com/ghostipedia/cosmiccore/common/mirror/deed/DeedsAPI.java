@@ -11,6 +11,7 @@ import net.minecraft.core.GlobalPos;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.level.Level;
 
 import org.jetbrains.annotations.Nullable;
 
@@ -20,6 +21,12 @@ import java.util.List;
 import java.util.UUID;
 
 public final class DeedsAPI {
+
+    private static final ResourceLocation NETHER_PERMIT_ADVANCEMENT = CosmicCore.id("nether_permit");
+    private static final ResourceLocation ENTER_NETHER_ADVANCEMENT = ResourceLocation
+            .fromNamespaceAndPath("minecraft", "story/enter_the_nether");
+    private static final ResourceLocation NETHER_ROOT_ADVANCEMENT = ResourceLocation
+            .fromNamespaceAndPath("minecraft", "nether/root");
 
     private DeedsAPI() {}
 
@@ -90,7 +97,17 @@ public final class DeedsAPI {
         if (player.getInventory().contains(stack -> stack.is(CosmicItems.NETHER_PERMIT.get()))) return true;
         MinecraftServer server = player.getServer();
         if (server == null) return false;
-        var advancement = server.getAdvancements().get(CosmicCore.id("nether_permit"));
+        return player.level().dimension().equals(Level.NETHER) ||
+                hasAdvancement(player, NETHER_PERMIT_ADVANCEMENT) ||
+                hasAdvancement(player, ENTER_NETHER_ADVANCEMENT) ||
+                hasAdvancement(player, NETHER_ROOT_ADVANCEMENT) ||
+                DeedQuestCompatBridge.hasPatientZeroQuestProgress(player);
+    }
+
+    private static boolean hasAdvancement(ServerPlayer player, ResourceLocation advancementId) {
+        MinecraftServer server = player.getServer();
+        if (server == null) return false;
+        var advancement = server.getAdvancements().get(advancementId);
         return advancement != null && player.getAdvancements().getOrStartProgress(advancement).isDone();
     }
 

@@ -16,7 +16,7 @@ public class CosmicMaterialSet {
     public static final MaterialIconSet NEVRAMITE = new MaterialIconSet("nevramite", DULL);
     public static final MaterialIconSet VOIDSPARK = new MaterialIconSet("voidspark", DULL);
     public static final MaterialIconSet SOL = new MaterialIconSet("sol", DULL);
-    public static final MaterialIconSet CHLOROPHYTE = new MaterialIconSet("chlorophyte", SHINY);
+    public static final MaterialIconSet NOSTIUM = new MaterialIconSet("nostium", SHINY);
     public static final MaterialIconSet CRYSTAL = new MaterialIconSet("crystal", DULL);
     public static final MaterialIconSet MAGIC = new MaterialIconSet("magic", DULL);
 
