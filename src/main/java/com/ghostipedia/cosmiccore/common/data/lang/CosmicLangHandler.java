@@ -1582,6 +1582,8 @@ public class CosmicLangHandler extends LangHandler {
                 "Supplies shared §eEU§f, §aBiopower§f, and §3Bloomwyrm Charge§f.");
         provider.add("cosmiccore.machine.bloomwyrm_heart.tooltip.2",
                 "Link other units with a §6data stick§f within §b64§f blocks.");
+        provider.add("cosmiccore.machine.bloomwyrm_power_root.tooltip",
+                "Only usable by the Bloomwyrm Heart.");
         provider.add("cosmiccore.machine.abyssal_culture_vat.tooltip.0",
                 "Cultivates abyssal samples into §aBiopower§f and §3Bloomwyrm Charge§f.");
         provider.add("cosmiccore.machine.abyssal_culture_vat.tooltip.1",
@@ -1621,6 +1623,7 @@ public class CosmicLangHandler extends LangHandler {
         provider.add("cosmiccore.bloomwyrm.heart.charge", "Bloomwyrm Charge: %s / %s");
         provider.add("cosmiccore.bloomwyrm.heart.biopower", "Biopower: %s used / %s capacity");
         provider.add("cosmiccore.bloomwyrm.heart.energy", "Campus draw: %s EU/t");
+        provider.add("cosmiccore.bloomwyrm.heart.supply", "Power supply: %s EU/t at %s V");
         provider.add("cosmiccore.bloomwyrm.heart.units", "Active units: %s / %s linked");
         provider.add("cosmiccore.bloomwyrm.heart.limited", "Resource-limited units: %s");
         provider.add("cosmiccore.bloomwyrm.recipe.biopower_input", "Biopower use: %s");

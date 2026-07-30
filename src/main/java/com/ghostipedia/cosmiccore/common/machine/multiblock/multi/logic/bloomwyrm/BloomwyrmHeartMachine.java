@@ -231,6 +231,7 @@ public class BloomwyrmHeartMachine extends LinkedWorkableElectricMultiblockMachi
                 request -> request.request().biopowerOutputPerParallel() <= 0));
 
         long remainingEU = getCampusEnergyBudget();
+        long inputVoltage = getCampusInputVoltage();
         int remainingBiopower = BOOTSTRAP_BIOPOWER;
         int producedBiopower = 0;
         long remainingCharge = storedCharge;
@@ -241,6 +242,9 @@ public class BloomwyrmHeartMachine extends LinkedWorkableElectricMultiblockMachi
         for (UnitRequest candidate : requests) {
             BloomwyrmWorkRequest request = candidate.request();
             int heartOffer = request.eligibleParallel();
+            if (request.requiredVoltage() > inputVoltage) {
+                heartOffer = 0;
+            }
             heartOffer = limit(heartOffer, remainingEU, request.eutPerParallel());
             heartOffer = limit(heartOffer, remainingBiopower, request.biopowerInputPerParallel());
             heartOffer = limit(heartOffer, remainingCharge, request.chargeInputPerParallel());
@@ -250,6 +254,7 @@ public class BloomwyrmHeartMachine extends LinkedWorkableElectricMultiblockMachi
             BloomwyrmAllocationConstraint constraint = findConstraint(
                     request,
                     heartOffer,
+                    inputVoltage,
                     remainingEU,
                     remainingBiopower,
                     remainingCharge,
@@ -414,10 +419,15 @@ public class BloomwyrmHeartMachine extends LinkedWorkableElectricMultiblockMachi
                 .toList());
     }
 
-    private long getCampusEnergyBudget() {
+    public long getCampusEnergyBudget() {
         EnergyContainerList energy = getCampusEnergyContainer();
         if (energy == null) return 0;
         return multiply(energy.getInputVoltage(), energy.getInputAmperage());
+    }
+
+    public long getCampusInputVoltage() {
+        EnergyContainerList energy = getCampusEnergyContainer();
+        return energy == null ? 0 : energy.getHighestInputVoltage();
     }
 
     private static int limit(int current, long available, long cost) {
@@ -429,12 +439,16 @@ public class BloomwyrmHeartMachine extends LinkedWorkableElectricMultiblockMachi
     private static BloomwyrmAllocationConstraint findConstraint(
                                                                 BloomwyrmWorkRequest request,
                                                                 int allocated,
+                                                                long inputVoltage,
                                                                 long energy,
                                                                 int biopower,
                                                                 long charge,
                                                                 long chargeCapacity) {
         if (allocated >= request.requestedParallel()) {
             return BloomwyrmAllocationConstraint.NONE;
+        }
+        if (request.requiredVoltage() > inputVoltage) {
+            return BloomwyrmAllocationConstraint.ENERGY;
         }
         if (request.eutPerParallel() > 0 && energy / request.eutPerParallel() <= allocated) {
             return BloomwyrmAllocationConstraint.ENERGY;
@@ -464,6 +478,8 @@ public class BloomwyrmHeartMachine extends LinkedWorkableElectricMultiblockMachi
         IntSyncValue biopower = new IntSyncValue(this::getBiopowerCapacity);
         IntSyncValue usedBiopower = new IntSyncValue(this::getAllocatedBiopower);
         LongSyncValue eut = new LongSyncValue(this::getAllocatedEUt);
+        LongSyncValue energyBudget = new LongSyncValue(this::getCampusEnergyBudget);
+        LongSyncValue inputVoltage = new LongSyncValue(this::getCampusInputVoltage);
         IntSyncValue linked = new IntSyncValue(this::getLoadedUnitCount);
         IntSyncValue active = new IntSyncValue(this::getActiveUnitCount);
         IntSyncValue limited = new IntSyncValue(this::getLastLimitedUnits);
@@ -472,6 +488,8 @@ public class BloomwyrmHeartMachine extends LinkedWorkableElectricMultiblockMachi
         syncManager.syncValue("bloomwyrm_heart_biopower", biopower);
         syncManager.syncValue("bloomwyrm_heart_used_biopower", usedBiopower);
         syncManager.syncValue("bloomwyrm_heart_eut", eut);
+        syncManager.syncValue("bloomwyrm_heart_energy_budget", energyBudget);
+        syncManager.syncValue("bloomwyrm_heart_input_voltage", inputVoltage);
         syncManager.syncValue("bloomwyrm_heart_linked", linked);
         syncManager.syncValue("bloomwyrm_heart_active", active);
         syncManager.syncValue("bloomwyrm_heart_limited", limited);
@@ -492,6 +510,12 @@ public class BloomwyrmHeartMachine extends LinkedWorkableElectricMultiblockMachi
                 coloredValue(
                         FormattingUtil.formatNumbers(eut.getLongValue()),
                         powered.getBoolValue() ? ChatFormatting.GREEN : ChatFormatting.RED))
+                .withStyle(ChatFormatting.WHITE))
+                .asWidget());
+        widgets.add(Text.dynamic(() -> Component.translatable(
+                "cosmiccore.bloomwyrm.heart.supply",
+                coloredValue(FormattingUtil.formatNumbers(energyBudget.getLongValue()), ChatFormatting.YELLOW),
+                coloredValue(FormattingUtil.formatNumbers(inputVoltage.getLongValue()), ChatFormatting.AQUA))
                 .withStyle(ChatFormatting.WHITE))
                 .asWidget());
         widgets.add(Text.dynamic(() -> Component.translatable(

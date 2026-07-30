@@ -134,6 +134,27 @@ public class CosmicMachines {
             "16a_wireless_energy_dynamo", "16A Wireless Energy Dynamo", "wireless_energy_16a",
             IO.OUT, HIGH_TIERS, 16, PartAbility.OUTPUT_ENERGY);
 
+    public static final MachineDefinition[] BLOOMWYRM_POWER_ROOT = registerTieredMachines(
+            "bloomwyrm_power_root",
+            (holder, tier) -> new EnergyHatchPartMachine(holder, tier, IO.IN, 4),
+            (tier, builder) -> builder
+                    .langValue(VNF[tier] + " Bloomwyrm Power Root")
+                    .rotationState(RotationState.ALL)
+                    .abilities(CosmicPartAbility.BLOOMWYRM_POWER_INPUT)
+                    .modelProperty(IS_FORMED, false)
+                    .tooltips(
+                            Component.translatable("gtceu.universal.tooltip.voltage_in",
+                                    FormattingUtil.formatNumbers(V[tier]), VNF[tier]),
+                            Component.translatable("gtceu.universal.tooltip.amperage_in", 4),
+                            Component.translatable("gtceu.universal.tooltip.energy_storage_capacity",
+                                    FormattingUtil.formatNumbers(
+                                            EnergyHatchPartMachine.getHatchEnergyCapacity(tier, 4))),
+                            Component.translatable("gtceu.machine.energy_hatch.input_hi_amp.tooltip"),
+                            Component.translatable("cosmiccore.machine.bloomwyrm_power_root.tooltip"))
+                    .overlayTieredHullModel(GTCEu.id("block/machine/part/energy_input_hatch_4a"))
+                    .register(),
+            LV, MV, HV);
+
     public static final MachineDefinition[] NAQUAHINE_MINI_REACTOR = CosmicMachinesUtils.registerSimpleGenerator(
             "naquahine_mini_reactor",
             CosmicRecipeTypes.MINI_NAQUAHINE_REACTOR, genericGeneratorTankSizeFunction, 0.0f, GTValues.IV, GTValues.LuV,

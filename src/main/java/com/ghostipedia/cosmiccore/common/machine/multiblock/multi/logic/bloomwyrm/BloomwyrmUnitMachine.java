@@ -173,7 +173,9 @@ public abstract class BloomwyrmUnitMachine extends LinkedWorkableElectricMultibl
                                                   GTRecipe recipe,
                                                   int requestedParallel,
                                                   int eligibleParallel) {
-        long eut = Math.max(0L, recipe.getInputEUt().getTotalEU());
+        var inputEnergy = recipe.getInputEUt();
+        long requiredVoltage = Math.max(0L, inputEnergy.voltage());
+        long eut = Math.max(0L, inputEnergy.getTotalEU());
         int biopowerInput = Math.max(0, recipe.data.getInt(BloomwyrmRecipeKeys.BIOPOWER_INPUT));
         int biopowerOutput = Math.max(0, recipe.data.getInt(BloomwyrmRecipeKeys.BIOPOWER_OUTPUT));
         long chargeInput = Math.max(0L, recipe.data.getLong(BloomwyrmRecipeKeys.CHARGE_INPUT));
@@ -182,6 +184,7 @@ public abstract class BloomwyrmUnitMachine extends LinkedWorkableElectricMultibl
                 recipe,
                 requestedParallel,
                 eligibleParallel,
+                requiredVoltage,
                 eut,
                 biopowerInput,
                 biopowerOutput,
