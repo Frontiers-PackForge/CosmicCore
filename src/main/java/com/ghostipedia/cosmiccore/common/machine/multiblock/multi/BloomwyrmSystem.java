@@ -3,6 +3,7 @@ package com.ghostipedia.cosmiccore.common.machine.multiblock.multi;
 import com.ghostipedia.cosmiccore.CosmicCore;
 import com.ghostipedia.cosmiccore.client.renderer.machine.CosmicDynamicRenderHelpers;
 import com.ghostipedia.cosmiccore.common.block.MurkFloraBlock;
+import com.ghostipedia.cosmiccore.common.data.CosmicMachines;
 import com.ghostipedia.cosmiccore.common.data.tag.block.CosmicBlockTags;
 import com.ghostipedia.cosmiccore.common.machine.multiblock.multi.logic.bloomwyrm.AbyssalCultureVatMachine;
 import com.ghostipedia.cosmiccore.common.machine.multiblock.multi.logic.bloomwyrm.BiomanaDigestorMachine;
@@ -12,12 +13,15 @@ import com.ghostipedia.cosmiccore.common.machine.multiblock.multi.logic.bloomwyr
 import com.ghostipedia.cosmiccore.common.machine.multiblock.multi.logic.bloomwyrm.SculkBiochamberMachine;
 import com.ghostipedia.cosmiccore.gtbridge.CosmicRecipeTypes;
 
+import com.gregtechceu.gtceu.api.GTValues;
 import com.gregtechceu.gtceu.api.data.RotationState;
+import com.gregtechceu.gtceu.api.machine.MachineDefinition;
 import com.gregtechceu.gtceu.api.machine.MultiblockMachineDefinition;
 import com.gregtechceu.gtceu.api.machine.multiblock.PartAbility;
 import com.gregtechceu.gtceu.api.multiblock.pattern.MultiblockPatternBuilder;
 import com.gregtechceu.gtceu.api.multiblock.util.RelativeDirection;
 import com.gregtechceu.gtceu.common.data.GTBlocks;
+import com.gregtechceu.gtceu.common.data.GTMachines;
 import com.gregtechceu.gtceu.common.data.GTRecipeTypes;
 import com.gregtechceu.gtceu.utils.TagUtil;
 
@@ -25,6 +29,10 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.world.level.block.Blocks;
 
 import com.sammy.malum.registry.common.block.MalumBlocks;
+
+import java.util.Arrays;
+import java.util.Objects;
+import java.util.stream.Stream;
 
 import static com.ghostipedia.cosmiccore.api.pattern.CosmicPredicates.autoAbilitiesNoEnergyIn;
 import static com.ghostipedia.cosmiccore.api.registries.CosmicRegistration.REGISTRATE;
@@ -36,6 +44,7 @@ import static com.gregtechceu.gtceu.api.multiblock.Predicates.autoAbilities;
 import static com.gregtechceu.gtceu.api.multiblock.Predicates.blockTag;
 import static com.gregtechceu.gtceu.api.multiblock.Predicates.blocks;
 import static com.gregtechceu.gtceu.api.multiblock.Predicates.controller;
+import static com.gregtechceu.gtceu.api.multiblock.Predicates.machines;
 import static com.gregtechceu.gtceu.api.multiblock.Predicates.states;
 
 public final class BloomwyrmSystem {
@@ -77,7 +86,7 @@ public final class BloomwyrmSystem {
                             "           ")
                     .where(' ', any())
                     .where('A', blocks(SOMARUST_CASING.get())
-                            .or(abilities(PartAbility.INPUT_ENERGY).setExactLimit(1))
+                            .or(machines(bloomwyrmEnergyInputs()).setExactLimit(1))
                             .or(abilities(PartAbility.MAINTENANCE).setExactLimit(1)))
                     .where('B', blocks(MalumBlocks.BLIGHTED_EARTH.get()))
                     .where('C', blocks(MalumBlocks.BLIGHTED_EARTH.get()))
@@ -92,6 +101,20 @@ public final class BloomwyrmSystem {
                     .andThen(model -> model
                             .addDynamicRenderer(CosmicDynamicRenderHelpers::createBloomwyrmHeartPartRender)))
             .register();
+
+    private static MachineDefinition[] bloomwyrmEnergyInputs() {
+        return Stream.of(
+                CosmicMachines.BLOOMWYRM_POWER_ROOT,
+                new MachineDefinition[] {
+                        GTMachines.ENERGY_INPUT_HATCH[GTValues.LV],
+                        GTMachines.ENERGY_INPUT_HATCH[GTValues.MV],
+                        GTMachines.ENERGY_INPUT_HATCH[GTValues.HV] },
+                GTMachines.ENERGY_INPUT_HATCH_4A,
+                GTMachines.ENERGY_INPUT_HATCH_16A)
+                .flatMap(Arrays::stream)
+                .filter(Objects::nonNull)
+                .toArray(MachineDefinition[]::new);
+    }
 
     public static final MultiblockMachineDefinition ABYSSAL_CULTURE_VAT = REGISTRATE
             .multiblock("abyssal_culture_vat", AbyssalCultureVatMachine::new)

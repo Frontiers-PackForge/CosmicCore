@@ -6,6 +6,7 @@ public record BloomwyrmWorkRequest(
                                    GTRecipe recipe,
                                    int requestedParallel,
                                    int eligibleParallel,
+                                   long requiredVoltage,
                                    long eutPerParallel,
                                    int biopowerInputPerParallel,
                                    int biopowerOutputPerParallel,

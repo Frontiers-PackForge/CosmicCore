@@ -4,12 +4,14 @@ import com.gregtechceu.gtceu.GTCEu;
 import com.gregtechceu.gtceu.api.GTValues;
 import com.gregtechceu.gtceu.api.blockentity.BlockEntityCreationInfo;
 import com.gregtechceu.gtceu.api.capability.GTCapabilityHelper;
+import com.gregtechceu.gtceu.api.capability.compat.FeCompat;
 import com.gregtechceu.gtceu.api.machine.TickableSubscription;
 import com.gregtechceu.gtceu.api.machine.TieredEnergyMachine;
 import com.gregtechceu.gtceu.api.machine.trait.notifiable.NotifiableEnergyContainer;
 import com.gregtechceu.gtceu.common.machine.owner.ArgonautsOwner;
 import com.gregtechceu.gtceu.common.machine.owner.FTBOwner;
 import com.gregtechceu.gtceu.common.machine.owner.PlayerOwner;
+import com.gregtechceu.gtceu.config.ConfigHolder;
 import com.gregtechceu.gtceu.utils.ExtendedUseOnContext;
 import com.gregtechceu.gtceu.utils.FormattingUtil;
 
@@ -18,7 +20,9 @@ import net.minecraft.core.Vec3i;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.AABB;
+import net.neoforged.neoforge.energy.IEnergyStorage;
 import net.neoforged.neoforge.items.IItemHandler;
 import net.neoforged.neoforge.items.wrapper.EmptyItemHandler;
 import net.neoforged.neoforge.server.ServerLifecycleHooks;
@@ -127,25 +131,13 @@ public class WirelessChargerMachine extends TieredEnergyMachine {
                                 .<IItemHandler>map(ICuriosItemHandler::getEquippedCurios)
                                 .orElse(EmptyItemHandler.INSTANCE);
                         for (int i = 0; i < curios.getSlots(); i++) {
-                            var itemInSlot = curios.getStackInSlot(i);
-                            var slotElectricItem = GTCapabilityHelper.getElectricItem(itemInSlot);
-                            if (slotElectricItem != null && energyContainer.getEnergyStored() > maxChargeValue &&
-                                    slotElectricItem.chargeable()) {
-                                long chargedAmount = slotElectricItem.charge(maxChargeValue, tier, true, false);
-                                energyContainer.changeEnergy(-chargedAmount);
-                            }
+                            chargeItem(curios.getStackInSlot(i), maxChargeValue);
                         }
                     }
 
                     var playerInv = player.getInventory();
                     for (int i = 0; i < playerInv.getContainerSize(); i++) {
-                        var itemInSlot = playerInv.getItem(i);
-                        var slotElectricItem = GTCapabilityHelper.getElectricItem(itemInSlot);
-                        if (slotElectricItem != null && energyContainer.getEnergyStored() > maxChargeValue &&
-                                slotElectricItem.chargeable()) {
-                            long chargedAmount = slotElectricItem.charge(maxChargeValue, tier, true, false);
-                            energyContainer.changeEnergy(-chargedAmount);
-                        }
+                        chargeItem(playerInv.getItem(i), maxChargeValue);
                     }
                 }
             }
@@ -164,6 +156,27 @@ public class WirelessChargerMachine extends TieredEnergyMachine {
 
             if (oldPlayerList != players) oldPlayerList = players;
         }
+    }
+
+    private void chargeItem(ItemStack stack, long maxChargeValue) {
+        long availableEnergy = Math.min(maxChargeValue, energyContainer.getEnergyStored());
+        if (stack.isEmpty() || availableEnergy <= 0) return;
+
+        var electricItem = GTCapabilityHelper.getElectricItem(stack);
+        if (electricItem != null) {
+            if (electricItem.chargeable()) {
+                long chargedAmount = electricItem.charge(availableEnergy, tier, true, false);
+                energyContainer.changeEnergy(-chargedAmount);
+            }
+            return;
+        }
+
+        if (!ConfigHolder.INSTANCE.compat.energy.nativeEUToFE) return;
+        IEnergyStorage forgeEnergyItem = GTCapabilityHelper.getForgeEnergyItem(stack);
+        if (forgeEnergyItem == null || !forgeEnergyItem.canReceive()) return;
+
+        long chargedAmount = FeCompat.insertEu(forgeEnergyItem, availableEnergy, false);
+        energyContainer.changeEnergy(-chargedAmount);
     }
 
     private boolean isPlayerInRange(Player player) {
