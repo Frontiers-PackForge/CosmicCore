@@ -62,6 +62,11 @@ public class CosmicRecipeTypes {
             .setSound(CosmicSounds.LAMINATOR)
             .setMaxIOSize(3, 2, 2, 0)
             .UI(builder -> builder.setProgressBar(GTGuiTextures.PROGRESS_ARROW));
+    public static final GTRecipeType CHEMICAL_DEHYDRATOR = GTRecipeTypes
+            .register(CosmicCore.id("chemical_dehydrator"), ELECTRIC)
+            .setSound(GTSoundEntries.CHEMICAL)
+            .setMaxIOSize(2, 9, 2, 2)
+            .UI(builder -> builder.setProgressBar(GTGuiTextures.PROGRESS_ARROW));
     public static final GTRecipeType DAWNFORGE_ECLIPSED = GTRecipeTypes
             .register(CosmicCore.id("eclipsed_dawnforge"), ELECTRIC)
             .setSound(CosmicSounds.LAMINATOR)
@@ -542,7 +547,8 @@ public class CosmicRecipeTypes {
     public static void init() {
         for (GTRecipeType type : new GTRecipeType[] {
                 SLUDGE_DIGESTOR, POWDERIZER, INDUSTRIAL_ORE_SORTER, INDUSTRIAL_FLOTATION_PLANT, ONEIRIC_SIEVE,
-                DISSOLUTION_VAT, COSMIC_DUMMY_SPAM_YEETER, LAMINATOR, DAWNFORGE_ECLIPSED, VORAX, MANA_FLUIDIZER,
+                DISSOLUTION_VAT, COSMIC_DUMMY_SPAM_YEETER, LAMINATOR, CHEMICAL_DEHYDRATOR, DAWNFORGE_ECLIPSED,
+                VORAX, MANA_FLUIDIZER,
                 PCB_FABRICATOR, TITAN_FUSION_RECIPES, LUNAR_HAMMER, CRYOGENICS_CHAMBER, SOUL_TESTER_RECIPES,
                 VOID_MINER, HEAVY_ASSEMBLER, PLASMITE_FORGE, PRISMA_FOUNDRY, ATMOSPHERE_SIPHON, MANA_DIGITIZER,
                 COMPONENT_ASSEMBLY_LINE, GROVE_RECIPES, LEACHING_PLANT, HELLFIRE_FOUNDRY, SUFFERING_CHAMBER,

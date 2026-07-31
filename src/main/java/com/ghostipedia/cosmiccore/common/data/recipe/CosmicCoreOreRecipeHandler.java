@@ -36,6 +36,10 @@ import static com.gregtechceu.gtceu.common.data.GTRecipeTypes.MACERATOR_RECIPES;
 public class CosmicCoreOreRecipeHandler {
 
     private static final int REFINE_EUT = 8;
+    private static final int CHUNK_MACERATOR_EUT = 2;
+    private static final int CHUNK_MACERATOR_DURATION = 600;
+    private static final int CHUNK_POWDERIZER_EUT = 8;
+    private static final int CHUNK_POWDERIZER_DURATION = 300;
 
     public static void bundleInit(RecipeOutput provider, Material material) {
         List<Material> outputs = CosmicBundleMaterials.outputsOf(material);
@@ -121,7 +125,7 @@ public class CosmicCoreOreRecipeHandler {
         int n = Math.min(Math.min(stage.typeCount(), outputs.size()), CompositeOreSortingPlan.SORTER_IO_CAP);
         if (n <= 0) return;
         var builder = INDUSTRIAL_ORE_SORTER.recipeBuilder(stage.recipeNamePrefix() + material.getName())
-                .inputItems(stage.inputForm(), material);
+                .inputItems(stage.inputForm(), material, CompositeOreSortingPlan.SORT_INPUT_AMOUNT);
         int emitted = 0;
         for (int i = 0; i < n; i++) {
             ItemStack chunk = chunkOf(outputs.get(i));
@@ -145,7 +149,12 @@ public class CosmicCoreOreRecipeHandler {
         MACERATOR_RECIPES.recipeBuilder("macerate_chunk_" + mineral.getName())
                 .inputItems(oreChunk, mineral)
                 .outputItems(dustStack)
-                .duration(150).EUt(GTValues.VA[GTValues.LV])
+                .duration(CHUNK_MACERATOR_DURATION).EUt(CHUNK_MACERATOR_EUT)
+                .save(provider);
+        POWDERIZER.recipeBuilder("powderize_chunk_" + mineral.getName())
+                .inputItems(oreChunk, mineral)
+                .outputItems(dustStack)
+                .duration(CHUNK_POWDERIZER_DURATION).EUt(CHUNK_POWDERIZER_EUT)
                 .save(provider);
     }
 

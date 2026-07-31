@@ -86,11 +86,11 @@ public class CosmicBundleMaterials {
         out(Lazuric, Lazurite, Sapphire, GarnetRed, Bauxite, Kyanite, Pollucite);
         out(Carbonic, Coal, Graphite, Diamond, Oilsands);
         out(EarthenSalts, RockSalt, Apatite, Lepidolite, Spodumene, Pyrochlore, Olivine);
-        out(Pyroltic, Sulfur, Gold, Pyrite, Sphalerite, Goethite, Hematite);
+        out(Pyroltic, Sulfur, Gold, Sphalerite, Emberite, Pyrite, Hematite);
         out(Quartizine, CertusQuartz, NetherQuartz, Quartzite, Barite, Beryllium, Emerald);
         out(Molybite, Molybdenite, Wulfenite, Powellite, Pyrolusite, Tantalite, Grossular);
         out(Fahlorium, Tetrahedrite, Stibnite, Topaz, Chalcocite, Bornite, Saltpeter);
-        out(MonaziteSalts, Bastnasite, Monazite, Emberite);
+        out(MonaziteSalts, Bastnasite, Monazite);
         out(Agarlite, Cooperite, Bornite);
         out(CrudeRadionite, Pitchblende, Uraninite, Naquadah, Scheelite, Tungstate);
         out(Vanachrome, Magnetite, VanadiumMagnetite, Chromite, Bauxite, Ilmenite, Gold);

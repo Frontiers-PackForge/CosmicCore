@@ -35,6 +35,18 @@
             },
             "path": "META-INF/jarjar/gtceu-1.21.1-8.0.0.jar",
             "isObfuscated": false
+        },
+        {
+            "identifier": {
+                "group": "com.github.bawnorton.mixinsquared",
+                "artifact": "mixinsquared-neoforge"
+            },
+            "version": {
+                "range": "[0.3.7-beta.1,)",
+                "artifactVersion": "0.3.7-beta.1"
+            },
+            "path": "META-INF/jarjar/mixinsquared-neoforge-0.3.7-beta.1.jar",
+            "isObfuscated": false
         }
     ]
 }

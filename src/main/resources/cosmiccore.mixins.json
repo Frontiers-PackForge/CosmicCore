@@ -133,6 +133,7 @@
     "gtfix.GTToolEnchantmentTagsMixin",
     "gtfix.GTRecipeReloadResetMixin",
     "gtfix.GTKubeRecipeDataWriteFixMixin",
+    "gtfix.DistilleryOutputFluidFixMixin",
     "gtfix.RecipeUILayoutEmberMixin",
     "gtfix.IntCircuitGhostSlotFixMixin",
     "gtfix.ItemBusUiStorageFixMixin",
