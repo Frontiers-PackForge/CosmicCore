@@ -87,7 +87,7 @@ public class CosmicMaterials {
     public static Material Rosmotosin;
 
     public static Material VibrantAlloy;
-    public static Material EnergeticAlloy;
+    public static Material EnergeticAluminium;
     public static Material MelodicAlloy;
     public static Material StarstruckHalite;
 
@@ -231,7 +231,7 @@ public class CosmicMaterials {
                 .blastTemp(3600, BlastProperty.GasTier.HIGH, GTValues.VA[GTValues.EV], 1200)
                 .buildAndRegister();
 
-        EnergeticAlloy = new Material.Builder(CosmicCore.id("energetic_alloy"))
+        EnergeticAluminium = new Material.Builder(CosmicCore.id("energetic_aluminium"))
                 .ingot()
                 .liquid(new FluidBuilder().temperature(933))
                 .color(0xffb545).secondaryColor(0xe13923).iconSet(MaterialIconSet.METALLIC)

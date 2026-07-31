@@ -1,0 +1,19 @@
+{
+    "variants": {
+        "facing=east": {
+            "model": "cosmiccore:block/machine/uev_chemical_dehydrator",
+            "y": 90
+        },
+        "facing=north": {
+            "model": "cosmiccore:block/machine/uev_chemical_dehydrator"
+        },
+        "facing=south": {
+            "model": "cosmiccore:block/machine/uev_chemical_dehydrator",
+            "y": 180
+        },
+        "facing=west": {
+            "model": "cosmiccore:block/machine/uev_chemical_dehydrator",
+            "y": 270
+        }
+    }
+}

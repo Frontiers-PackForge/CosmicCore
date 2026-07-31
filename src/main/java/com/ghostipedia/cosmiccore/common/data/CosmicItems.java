@@ -3211,6 +3211,24 @@ public class CosmicItems {
             .properties(p -> p.stacksTo(64))
             .defaultModel()
             .register();
+    public static final ItemEntry<ComponentItem> HV_COGWORK_MAGICAPACITOR = REGISTRATE
+            .item("hv_cogwork_magicapacitor", ComponentItem::new)
+            .lang("HV Cogwork Magicapacitor")
+            .properties(p -> p.stacksTo(64))
+            .defaultModel()
+            .register();
+    public static final ItemEntry<ComponentItem> HV_MODULAR_FRAMEWORKS = REGISTRATE
+            .item("hv_modular_frameworks", ComponentItem::new)
+            .lang("HV Modular Frameworks")
+            .properties(p -> p.stacksTo(64))
+            .defaultModel()
+            .register();
+    public static final ItemEntry<ComponentItem> HV_CLADDING = REGISTRATE
+            .item("hv_cladding", ComponentItem::new)
+            .lang("HV Cladding")
+            .properties(p -> p.stacksTo(64))
+            .defaultModel()
+            .register();
 
     public static final ItemEntry<ComponentItem> SHREDDED_MAGEBLOOM = REGISTRATE
             .item("shredded_magebloom", ComponentItem::new)

@@ -25,7 +25,6 @@ public class CosmicCoreMixinPlugin implements IMixinConfigPlugin {
     private static final String POSE_STACK = "com/mojang/blaze3d/vertex/PoseStack";
     private static final String DRIPPY_SCALE_COMPAT = "com/ghostipedia/cosmiccore/client/compat/drippy/DrippyRenderScaleCompat";
     private static final String AERONAUTICS_MARKER = "dev/eriksonn/aeronautics/content/blocks/hot_air/balloon/effect/ClientBalloonEffectRenderer.class";
-    private static final String MIXIN_SQUARED_TARGET_HANDLER = "com/bawnorton/mixinsquared/TargetHandler.class";
     private static final String QUALITY_FOOD_MARKER = "de/cadentem/quality_food/util/QualityUtils.class";
     private static final String ULTIMINE_CROP_MARKER = "dev/ftb/mods/ftbultimine/crops/VanillaCropLikeHandler.class";
     private static final Map<String, Boolean> GATES = new HashMap<>();
@@ -51,10 +50,7 @@ public class CosmicCoreMixinPlugin implements IMixinConfigPlugin {
                         "de/keksuccino/drippyloadingscreen/mixin/mixins/common/client/MixinLoadingOverlay.class"),
                 Map.entry(".undergarden.", "quek/undergarden/event/UthericInfectionEvents.class"));
         probes.forEach((token, resource) -> GATES.put(token, loader.getResource(resource) != null));
-        GATES.put(
-                ".aeroschema.",
-                loader.getResource(AERONAUTICS_MARKER) != null &&
-                        loader.getResource(MIXIN_SQUARED_TARGET_HANDLER) != null);
+        GATES.put(".aeroschema.", loader.getResource(AERONAUTICS_MARKER) != null);
         GATES.put(
                 ".qualityfoodultimine.",
                 loader.getResource(QUALITY_FOOD_MARKER) != null &&
@@ -69,6 +65,10 @@ public class CosmicCoreMixinPlugin implements IMixinConfigPlugin {
             }
         }
         return true;
+    }
+
+    public static boolean isAeronauticsSchemaBypassAvailable() {
+        return GATES.getOrDefault(".aeroschema.", false);
     }
 
     @Override

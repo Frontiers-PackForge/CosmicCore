@@ -116,7 +116,8 @@ public final class CompositeOreSortingEmiRecipe implements EmiRecipe {
         for (int stageIndex = 0; stageIndex < stages.size(); stageIndex++) {
             CompositeOreSortingPlan.SortStage stage = stages.get(stageIndex);
             int y = FIRST_ROW_Y + stageIndex * ROW_HEIGHT;
-            ItemStack stageInput = ChemicalHelper.get(stage.inputForm(), bundle);
+            ItemStack stageInput = ChemicalHelper.get(stage.inputForm(), bundle,
+                    CompositeOreSortingPlan.SORT_INPUT_AMOUNT);
             SlotWidget stageSlot = widgets.addSlot(EmiStack.of(stageInput), 4, y).drawBack(true).recipeContext(this);
             appendStageTooltip(stageSlot, stage, stageIndex);
             addInfoMarker(widgets, 4, y);

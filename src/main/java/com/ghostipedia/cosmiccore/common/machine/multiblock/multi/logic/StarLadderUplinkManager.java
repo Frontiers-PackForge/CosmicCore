@@ -662,10 +662,10 @@ public class StarLadderUplinkManager implements INBTSerializable<CompoundTag> {
     // Phase 1: HV-tier complex components
     private static final List<DemandEntry> PHASE_1_COMPLEX = List.of(
             material(TagPrefix.gear, GTMaterials.StainlessSteel, 32, 512),
-            material(TagPrefix.spring, CosmicMaterials.EnergeticAlloy, 32, 512),
+            material(TagPrefix.spring, CosmicMaterials.EnergeticAluminium, 32, 512),
             material(TagPrefix.plate, CosmicMaterials.PrismaticTungstensteel, 64, 512),
             material(TagPrefix.frameGt, GTMaterials.StainlessSteel, 32, 512),
-            material(TagPrefix.wireFine, CosmicMaterials.EnergeticAlloy, 128, 512),
+            material(TagPrefix.wireFine, CosmicMaterials.EnergeticAluminium, 128, 512),
             item(CosmicItems.ADVANCED_RAM_WAFER::asStack, 64, 256),
             item(CosmicItems.ENTHEL_CPU::asStack, 16, 64),
             item(CosmicItems.ENTHELIC_PCB::asStack, 16, 64),

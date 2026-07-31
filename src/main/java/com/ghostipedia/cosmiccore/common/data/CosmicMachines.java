@@ -282,6 +282,33 @@ public class CosmicMachines {
                     .register(),
             ELECTRIC_TIERS);
 
+    public static final MachineDefinition[] LAMINATOR = registerTieredMachines("laminator",
+            (holder, tier) -> new SimpleTieredMachine(holder, tier, defaultTankSizeFunction),
+            (tier, builder) -> builder
+                    .langValue("%s Laminator %s".formatted(VLVH[tier], VLVT[tier]))
+                    .recipeType(CosmicRecipeTypes.LAMINATOR)
+                    .ui(GTSingleblockMachinePanels.GENERAL_MACHINE)
+                    .tooltips(workableTiered(tier, GTValues.V[tier], GTValues.V[tier] * 64,
+                            CosmicRecipeTypes.LAMINATOR, defaultTankSizeFunction.applyAsInt(tier), true))
+                    .workableTieredHullModel(GTCEu.id("block/machines/forming_press"))
+                    .register(),
+            tiersBetween(LV, UIV));
+
+    public static final MachineDefinition[] CHEMICAL_DEHYDRATOR = registerTieredMachines("chemical_dehydrator",
+            (holder, tier) -> new SimpleTieredMachine(holder, tier, defaultTankSizeFunction),
+            (tier, builder) -> builder
+                    .langValue("%s Chemical Dehydrator %s".formatted(VLVH[tier], VLVT[tier]))
+                    .recipeType(CosmicRecipeTypes.CHEMICAL_DEHYDRATOR)
+                    .ui(GTSingleblockMachinePanels.GENERAL_MACHINE)
+                    .tooltipBuilder((stack, list) -> list.add(
+                            Component.translatable("cosmiccore.machine.chemical_dehydrator.tooltip")))
+                    .tooltips(workableTiered(tier, GTValues.V[tier], GTValues.V[tier] * 64,
+                            CosmicRecipeTypes.CHEMICAL_DEHYDRATOR,
+                            defaultTankSizeFunction.applyAsInt(tier), true))
+                    .workableTieredHullModel(GTCEu.id("block/machines/thermal_centrifuge"))
+                    .register(),
+            tiersBetween(LV, UIV));
+
     public static final MachineDefinition[] VAC_BUBBLER = registerTieredMachines("vacuum_bubbler",
             (holder, tier) -> new SimpleTieredMachine(holder, tier, defaultTankSizeFunction),
             (tier, builder) -> builder

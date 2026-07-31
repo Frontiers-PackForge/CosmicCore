@@ -68,7 +68,7 @@ public class CosmicLangHandler extends LangHandler {
         replace(provider, "material.cosmiccore.blooming_sludge", "Blooming Sludge");
         replace(provider, "material.cosmiccore.bloom_rich_algae_solution", "Bloom Rich Algae Solution");
         replace(provider, "material.cosmiccore.phyto_grease", "Phyto-Grease");
-        replace(provider, "material.cosmiccore.energetic_alloy", "Energized Aluminium");
+        replace(provider, "material.cosmiccore.energetic_aluminium", "Energized Aluminium");
 
         // machine tooltips/names/etc
         provider.add("gtceu.naquahine_reactor", "§bNaquahine Reactor");
@@ -1635,6 +1635,10 @@ public class CosmicLangHandler extends LangHandler {
         provider.add("recipe_type.cosmiccore.sculk_biochamber", "Sculk Biochamber");
         provider.add("recipe_type.cosmiccore.biomana_digestor", "Biomana Digestor");
         provider.add("recipe_type.cosmiccore.manawomb_leeching_pond", "Manawomb Leaching Pond");
+        provider.add("recipe_type.cosmiccore.laminator", "Laminator");
+        provider.add("recipe_type.cosmiccore.chemical_dehydrator", "Chemical Dehydrator");
+        provider.add("cosmiccore.machine.chemical_dehydrator.tooltip",
+                "Removes water from chemical intermediates instead of returning it as a fluid output.");
         provider.add("cosmiccore.ftbquests.dependency_lines", "Dependency Lines");
         provider.add("cosmiccore.ftbquests.dependency_lines.none", "No quest dependencies");
         provider.add("cosmiccore.ftbquests.dependency_lines.dependencies", "Dependencies");

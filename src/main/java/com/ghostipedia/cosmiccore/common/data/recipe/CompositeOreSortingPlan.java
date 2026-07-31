@@ -13,6 +13,7 @@ import static com.gregtechceu.gtceu.api.data.tag.TagPrefix.crushedPurified;
 public final class CompositeOreSortingPlan {
 
     public static final int SORT_EUT = 2;
+    public static final int SORT_INPUT_AMOUNT = 4;
     public static final int SORT_TIME_PER_TYPE = 300;
     public static final int SORTER_IO_CAP = 6;
 
