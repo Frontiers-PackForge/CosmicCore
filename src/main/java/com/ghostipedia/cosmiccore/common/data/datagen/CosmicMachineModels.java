@@ -12,6 +12,16 @@ import static com.gregtechceu.gtceu.common.data.models.GTMachineModels.*;
 
 public class CosmicMachineModels {
 
+    public static MachineBuilder.ModelInitializer createSingleTextureMachineModel(ResourceLocation baseTexture) {
+        return (ctx, prov, builder) -> {
+            BlockModelBuilder model = prov.models().nested()
+                    .parent(prov.models().getExistingFile(
+                            ResourceLocation.withDefaultNamespace("block/cube_all")))
+                    .texture("all", baseTexture);
+            builder.partialState().setModel(model);
+        };
+    }
+
     public static MachineBuilder.ModelInitializer createSeparateControllerCasingMachineModel(ResourceLocation controllerTexture,
                                                                                              ResourceLocation baseCasingTexture,
                                                                                              ResourceLocation overlayDir) {

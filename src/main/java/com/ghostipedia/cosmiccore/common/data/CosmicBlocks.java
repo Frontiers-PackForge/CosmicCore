@@ -5,6 +5,7 @@ import com.ghostipedia.cosmiccore.api.CosmicCoreAPI;
 import com.ghostipedia.cosmiccore.api.block.IMagnetType;
 import com.ghostipedia.cosmiccore.client.renderer.block.NebulaeCoilRenderer;
 import com.ghostipedia.cosmiccore.common.block.BerryVineBlock;
+import com.ghostipedia.cosmiccore.common.block.ComputationBayCasingBlock;
 import com.ghostipedia.cosmiccore.common.block.DivingBellEscapePad;
 import com.ghostipedia.cosmiccore.common.block.MagnetBlock;
 import com.ghostipedia.cosmiccore.common.block.MothHomeBlock;
@@ -339,6 +340,18 @@ public class CosmicBlocks {
             CosmicCore.id("block/casings/solid/vomahine_certified_interstellar_grade_casing"));
     public static final BlockEntry<Block> ULTRA_POWERED_CASING = createCasingBlock(
             "ultra_powered_casing", CosmicCore.id("block/casings/solid/vomahine_ultra_powered_casing"));
+    public static final BlockEntry<ComputationBayCasingBlock> ME_COMPUTATION_BAY_CASING = REGISTRATE
+            .block("me_computation_bay_casing", ComputationBayCasingBlock::new)
+            .lang("ME Computation Bay Casing")
+            .initialProperties(() -> Blocks.IRON_BLOCK)
+            .properties(p -> p.isValidSpawn((state, level, pos, ent) -> false))
+            .addLayer(() -> RenderType::cutoutMipped)
+            .exBlockstate(GTModels.cubeAllModel(
+                    CosmicCore.id("block/casings/solid/compute_module_base")))
+            .tag(CustomTags.MINEABLE_WITH_CONFIG_VALID_PICKAXE_WRENCH)
+            .item(BlockItem::new)
+            .build()
+            .register();
     public static final BlockEntry<Block> HIGHLY_CONDUCTIVE_FISSION_CASING = createCasingBlock(
             "highly_conductive_fission_casing", CosmicCore.id("block/casings/solid/highly_conductive_fission_casing"));
     public static final BlockEntry<Block> GEARBOX_PTHANTERUM = createCasingBlock(

@@ -59,6 +59,7 @@ public class CosmicCoreClient {
         DynamicRenderManager.register(CosmicCore.id("biovat_render"), BioVatRender.TYPE);
         DynamicRenderManager.register(CosmicCore.id("tester_render"), RenderTesterHelper.TYPE);
         DynamicRenderManager.register(CosmicCore.id("star_ladder_render"), StarLadderRender.TYPE);
+        DynamicRenderManager.register(CosmicCore.id("me_computation_array_render"), MEComputationArrayRender.TYPE);
     }
 
     @Getter

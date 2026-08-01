@@ -320,6 +320,27 @@ public class CosmicLangHandler extends LangHandler {
                 "§7Can use any capacitor and be expanded vertically up to 18 times§r",
                 "§7Accepts §6Laser Hatches§r");
 
+        multiLang(provider, "cosmiccore.machine.me_computation_array.tooltip",
+                "§aStorage Size§r : §b%s§r component bays.",
+                "Each core uses §e%s§r §bEU/t§r for §e%s§r §aCWU/t§r; each relay routes up to §e%s§r §bEU/t§r into ME power.",
+                "Requires one MV or higher Energy Input Hatch and one ME Computation Uplink",
+                "Power relays are prioritized before computation cores when EU is low.",
+                "Fill unused component bays with ME Computation Bay Casings.");
+        provider.add("cosmiccore.block.me_computation_bay_casing.tooltip.0",
+                "Fills unused spots inside of Computation Arrays");
+        provider.add("cosmiccore.block.me_computation_bay_casing.tooltip.1",
+                "Allows the structure to form at the cost of providing no functionality.");
+        provider.add("cosmiccore.machine.me_computation_core.tooltip.0",
+                "Consumes §e%s§r §bEU/t§r to provide §e%s§r §aCWU/t§r through a formed Computation Array.");
+        provider.add("cosmiccore.machine.me_power_relay.tooltip.0",
+                "Will inject §e%s§r §bEU/t§r as ME power through a formed Computation Array.");
+        provider.add("cosmiccore.machine.me_computation_uplink.tooltip.0",
+                "Acts as an output for Computation Arrays");
+        provider.add("cosmiccore.machine.me_computation_uplink.tooltip.1",
+                "Outputs up to §e%s§r §aCWU/t§r");
+        provider.add("cosmiccore.machine.me_computation_uplink.tooltip.2",
+                "Passes all §bEU/t§r from Power relays into the AE2 Network");
+
         provider.add("emi.category.cosmiccore.asteroid_mining", "Asteroid Mining Operations");
 
         // recipe stuff
@@ -567,6 +588,21 @@ public class CosmicLangHandler extends LangHandler {
         provider.add("cosmiccore.jade.ember", "Ember: %s/%s");
         provider.add("cosmiccore.jade.ember.volatile", "Accepts Volatile Ember");
         provider.add("cosmiccore.jade.ember.transfer", "Transfer: %s");
+        provider.add("config.jade.plugin_cosmiccore.me_computation_array_details",
+                "[CosmicCore] ME Computation Array Details");
+        provider.add("cosmiccore.jade.me_computation_array.components", "Components: %s Cores / %s Relays");
+        provider.add("cosmiccore.jade.me_computation_array.compute", "Compute/tick: %s / %s CWU/t");
+        provider.add("cosmiccore.jade.me_computation_array.energy", "EU Demand: %s EU/t");
+        provider.add("cosmiccore.jade.me_computation_array.relay", "Provided Network Power: %s / %s EU/t");
+        provider.add("cosmiccore.jade.me_computation_array.buffer", "Stored Power: %s / %s EU (%s)");
+        provider.add("cosmiccore.jade.me_computation_array.uplink.online", "Uplink Online");
+        provider.add("cosmiccore.jade.me_computation_array.uplink.offline", "Uplink Offline");
+        provider.add("cosmiccore.machine.me_computation_array.display.components", "Components: %s Cores / %s Relays");
+        provider.add("cosmiccore.machine.me_computation_array.display.cwu", "Compute/tick: %s / %s CWU/t");
+        provider.add("cosmiccore.machine.me_computation_array.display.energy", "EU Demand: %s EU/t");
+        provider.add("cosmiccore.machine.me_computation_array.display.relay",
+                "Provided Network Power: %s / %s EU/t");
+        provider.add("cosmiccore.machine.me_computation_array.display.stored_power", "Stored Power: %s / %s EU");
 
         multiLang(provider, "item.cosmiccore.the_one_ring.tooltip",
                 "§6§oOne Ring to rule them all, One Ring to find them, One Ring to bring them all and in the darkness bind them.§r",

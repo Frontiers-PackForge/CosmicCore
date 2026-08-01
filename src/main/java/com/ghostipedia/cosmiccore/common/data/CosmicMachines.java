@@ -14,6 +14,7 @@ import com.ghostipedia.cosmiccore.common.ae2gt.CosmicStockingHatchPartMachine;
 import com.ghostipedia.cosmiccore.common.block.debug.CreativeThermiaContainerMachine;
 import com.ghostipedia.cosmiccore.common.machine.WirelessChargerMachine;
 import com.ghostipedia.cosmiccore.common.machine.multiblock.multi.WirelessDataBankMachine;
+import com.ghostipedia.cosmiccore.common.machine.multiblock.multi.logic.MEComputationArrayTuning;
 import com.ghostipedia.cosmiccore.common.machine.multiblock.part.*;
 import com.ghostipedia.cosmiccore.common.machine.multiblock.tier.TieredMultiblockPatterns;
 import com.ghostipedia.cosmiccore.common.machine.part.WirelessDataSensor;
@@ -67,6 +68,7 @@ import static com.ghostipedia.cosmiccore.api.machine.part.CosmicPartAbility.*;
 import static com.ghostipedia.cosmiccore.api.registries.CosmicRegistration.REGISTRATE;
 import static com.ghostipedia.cosmiccore.common.data.CosmicBlocks.*;
 import static com.ghostipedia.cosmiccore.common.data.CosmicMachinesUtils.*;
+import static com.ghostipedia.cosmiccore.common.data.datagen.CosmicMachineModels.createSingleTextureMachineModel;
 import static com.ghostipedia.cosmiccore.common.data.recipe.CosmicRecipeModifiers.COSMIC_MODULES;
 import static com.ghostipedia.cosmiccore.common.data.recipe.CosmicRecipeModifiers.EBF_TIER_STREAK;
 import static com.ghostipedia.cosmiccore.gtbridge.CosmicRecipeTypes.BIO_LAB;
@@ -371,6 +373,61 @@ public class CosmicMachines {
                     Component.translatable("cosmiccore.machine.me.stocking_item.tooltip.5"),
                     Component.translatable("cosmiccore.machine.me.stocking_item.tooltip.6"),
                     Component.translatable("gtceu.part_sharing.enabled"))
+            .register();
+
+    public static final MachineDefinition ME_COMPUTATION_CORE = REGISTRATE
+            .machine("me_computation_core",
+                    info -> new MEComputationComponentPartMachine(
+                            info, MEComputationComponentPartMachine.Role.COMPUTATION_CORE))
+            .langValue("ME Computation Core")
+            .tier(HV)
+            .rotationState(RotationState.ALL)
+            .abilities(CosmicPartAbility.ME_COMPUTATION_CORE)
+            .appearanceBlock(ULTRA_POWERED_CASING)
+            .model(createSingleTextureMachineModel(
+                    CosmicCore.id("block/casings/solid/compute_module_base")))
+            .tooltips(
+                    Component.translatable(
+                            "cosmiccore.machine.me_computation_core.tooltip.0",
+                            MEComputationArrayTuning.CORE_EU_PER_TICK,
+                            MEComputationArrayTuning.CORE_CWU_PER_TICK),
+                    Component.translatable("gtceu.part_sharing.disabled"))
+            .register();
+
+    public static final MachineDefinition ME_POWER_RELAY = REGISTRATE
+            .machine("me_power_relay",
+                    info -> new MEComputationComponentPartMachine(
+                            info, MEComputationComponentPartMachine.Role.POWER_RELAY))
+            .langValue("ME Power Relay")
+            .tier(HV)
+            .rotationState(RotationState.ALL)
+            .abilities(CosmicPartAbility.ME_POWER_RELAY)
+            .appearanceBlock(ULTRA_POWERED_CASING)
+            .model(createSingleTextureMachineModel(
+                    CosmicCore.id("block/casings/solid/compute_module_base")))
+            .tooltips(
+                    Component.translatable(
+                            "cosmiccore.machine.me_power_relay.tooltip.0",
+                            MEComputationArrayTuning.RELAY_EU_PER_TICK),
+                    Component.translatable("gtceu.part_sharing.disabled"))
+            .register();
+
+    public static final MachineDefinition ME_COMPUTATION_UPLINK = REGISTRATE
+            .machine("me_computation_uplink", MEComputationUplinkPartMachine::new)
+            .langValue("ME Computation Uplink")
+            .tier(HV)
+            .rotationState(RotationState.ALL)
+            .abilities(CosmicPartAbility.ME_COMPUTATION_UPLINK)
+            .modelProperty(IS_FORMED, false)
+            .overlayTieredHullModel(GTCEu.id("block/machine/part/computation_data_hatch"))
+            .tooltips(
+                    Component.translatable("cosmiccore.machine.me_computation_uplink.tooltip.0"),
+                    Component.translatable(
+                            "cosmiccore.machine.me_computation_uplink.tooltip.1",
+                            MEComputationArrayTuning.COMPONENT_POSITIONS *
+                                    MEComputationArrayTuning.CORE_CWU_PER_TICK),
+                    Component.translatable("cosmiccore.machine.me_computation_uplink.tooltip.2"),
+                    Component.translatable("gtceu.part_sharing.disabled"))
             .register();
 
     public final static MachineDefinition COSMIC_STOCKING_ME_PART_HATCH = REGISTRATE

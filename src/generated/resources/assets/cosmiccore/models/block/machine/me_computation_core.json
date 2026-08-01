@@ -1,0 +1,15 @@
+{
+    "parent": "minecraft:block/block",
+    "loader": "gtceu:machine",
+    "machine": "cosmiccore:me_computation_core",
+    "variants": {
+        "": {
+            "model": {
+                "parent": "minecraft:block/cube_all",
+                "textures": {
+                    "all": "cosmiccore:block/casings/solid/compute_module_base"
+                }
+            }
+        }
+    }
+}
