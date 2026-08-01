@@ -1620,12 +1620,16 @@ public class CosmicLangHandler extends LangHandler {
         provider.add("cosmiccore.bloomwyrm.unit.parallel_control_max", "Max 16");
         provider.add("cosmiccore.bloomwyrm.unit.allocation", "Allocation: %s EU/t, %s Bloomwyrm Charge");
         provider.add("cosmiccore.bloomwyrm.unit.biopower", "Biopower: %s used / %s provided");
+        provider.add("cosmiccore.bloomwyrm.unit.waiting_for_cycle", "Waiting for next Heart cycle: %s");
+        provider.add("cosmiccore.bloomwyrm.unit.cycle_blocked", "Waiting for active campus work to finish");
         provider.add("cosmiccore.bloomwyrm.heart.charge", "Bloomwyrm Charge: %s / %s");
         provider.add("cosmiccore.bloomwyrm.heart.biopower", "Biopower: %s used / %s capacity");
         provider.add("cosmiccore.bloomwyrm.heart.energy", "Campus draw: %s EU/t");
         provider.add("cosmiccore.bloomwyrm.heart.supply", "Power supply: %s EU/t at %s V");
         provider.add("cosmiccore.bloomwyrm.heart.units", "Active units: %s / %s linked");
         provider.add("cosmiccore.bloomwyrm.heart.limited", "Resource-limited units: %s");
+        provider.add("cosmiccore.bloomwyrm.heart.cycle", "Next allocation cycle: %s");
+        provider.add("cosmiccore.bloomwyrm.heart.cycle_blocked", "Next cycle ready; waiting for active campus work");
         provider.add("cosmiccore.bloomwyrm.recipe.biopower_input", "Biopower use: %s");
         provider.add("cosmiccore.bloomwyrm.recipe.biopower_output", "Biopower capacity: +%s");
         provider.add("cosmiccore.bloomwyrm.recipe.charge_input", "Bloomwyrm Charge use: %s");

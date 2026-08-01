@@ -295,6 +295,15 @@ public abstract class BloomwyrmUnitMachine extends LinkedWorkableElectricMultibl
         IntSyncValue biopowerOutput = new IntSyncValue(this::getAllocatedBiopowerOutput);
         LongSyncValue charge = new LongSyncValue(this::getAllocatedChargeInput);
         IntSyncValue constraint = new IntSyncValue(() -> getAllocationConstraint().ordinal());
+        IntSyncValue cycleSeconds = new IntSyncValue(() -> {
+            BloomwyrmHeartMachine heart = getHeart();
+            return heart == null ? 0 : heart.getCycleSecondsRemaining();
+        });
+        BooleanSyncValue cycleBlocked = new BooleanSyncValue(() -> {
+            BloomwyrmHeartMachine heart = getHeart();
+            return heart != null && heart.isCycleBlockedByActiveBatch();
+        });
+        BooleanSyncValue waitingForCycle = new BooleanSyncValue(this::isAvailableForAllocation);
         syncManager.syncValue("bloomwyrm_unit_linked", linked);
         syncManager.syncValue("bloomwyrm_unit_desired", desired);
         syncManager.syncValue("bloomwyrm_unit_requested", requested);
@@ -306,6 +315,9 @@ public abstract class BloomwyrmUnitMachine extends LinkedWorkableElectricMultibl
         syncManager.syncValue("bloomwyrm_unit_biopower_output", biopowerOutput);
         syncManager.syncValue("bloomwyrm_unit_charge", charge);
         syncManager.syncValue("bloomwyrm_unit_constraint", constraint);
+        syncManager.syncValue("bloomwyrm_unit_cycle_seconds", cycleSeconds);
+        syncManager.syncValue("bloomwyrm_unit_cycle_blocked", cycleBlocked);
+        syncManager.syncValue("bloomwyrm_unit_waiting_for_cycle", waitingForCycle);
         widgets.add(GTMultiblockTextUtil.addUnformedWarning(this, syncManager));
         widgets.add(Text.dynamic(() -> Component.translatable(
                 linked.getBoolValue() ?
@@ -343,6 +355,17 @@ public abstract class BloomwyrmUnitMachine extends LinkedWorkableElectricMultibl
                 .withStyle(constraint.getIntValue() == BloomwyrmAllocationConstraint.NONE.ordinal() ?
                         ChatFormatting.GREEN : ChatFormatting.GOLD))
                 .asWidget());
+        widgets.add(Text.dynamic(() -> cycleBlocked.getBoolValue() ?
+                Component.translatable("cosmiccore.bloomwyrm.unit.cycle_blocked")
+                        .withStyle(ChatFormatting.GOLD) :
+                Component.translatable(
+                        "cosmiccore.bloomwyrm.unit.waiting_for_cycle",
+                        coloredValue(
+                                BloomwyrmHeartMachine.formatCycleSeconds(cycleSeconds.getIntValue()),
+                                ChatFormatting.AQUA))
+                        .withStyle(ChatFormatting.WHITE))
+                .asWidget()
+                .setEnabledIf(widget -> linked.getBoolValue() && waitingForCycle.getBoolValue()));
         widgets.add(GTMultiblockTextUtil.addProgressLine(this, syncManager));
         widgets.add(GTMultiblockTextUtil.addWorkingStatusLine(this, syncManager));
         return widgets;

@@ -39,11 +39,14 @@ public class BloomwyrmHeartMachine extends LinkedWorkableElectricMultiblockMachi
     public static final int MAX_PARTNERS = 32;
     public static final int MAX_LINK_DISTANCE = 64;
     public static final double MAX_LINK_DISTANCE_SQUARED = MAX_LINK_DISTANCE * MAX_LINK_DISTANCE;
+    public static final int CYCLE_DURATION_TICKS = 1_200;
     public static final int BOOTSTRAP_BIOPOWER = 16;
     public static final long CHARGE_CAPACITY = 1_000_000L;
 
     @SaveField
     private long storedCharge;
+    @SaveField
+    private int cycleTicksRemaining = CYCLE_DURATION_TICKS;
     @SaveField
     private boolean allocationBatchActive;
     @SaveField
@@ -142,6 +145,18 @@ public class BloomwyrmHeartMachine extends LinkedWorkableElectricMultiblockMachi
         return lastLimitedUnits;
     }
 
+    public int getCycleTicksRemaining() {
+        return Math.max(0, cycleTicksRemaining);
+    }
+
+    public int getCycleSecondsRemaining() {
+        return (getCycleTicksRemaining() + 19) / 20;
+    }
+
+    public boolean isCycleBlockedByActiveBatch() {
+        return allocationBatchActive && getCycleTicksRemaining() == 0;
+    }
+
     public long acceptCharge(long amount) {
         if (amount <= 0) return 0;
         long accepted = Math.min(amount, CHARGE_CAPACITY - storedCharge);
@@ -189,6 +204,9 @@ public class BloomwyrmHeartMachine extends LinkedWorkableElectricMultiblockMachi
         if (!isFormed()) {
             return;
         }
+        if (cycleTicksRemaining > 0) {
+            cycleTicksRemaining--;
+        }
         int activeUnits = getActiveUnitCount();
         if (allocationBatchActive && allocationBatchParticipants.length == 0 && activeUnits > 0) {
             allocationBatchParticipants = getLoadedUnits().stream()
@@ -206,8 +224,9 @@ public class BloomwyrmHeartMachine extends LinkedWorkableElectricMultiblockMachi
             if (activeUnits > 0) {
                 allocationBatchActive = true;
                 allocatedBiopowerCapacity = getCurrentBiopowerOutput();
-            } else {
+            } else if (cycleTicksRemaining == 0) {
                 allocateBatch();
+                cycleTicksRemaining = CYCLE_DURATION_TICKS;
             }
         }
     }
@@ -483,7 +502,9 @@ public class BloomwyrmHeartMachine extends LinkedWorkableElectricMultiblockMachi
         IntSyncValue linked = new IntSyncValue(this::getLoadedUnitCount);
         IntSyncValue active = new IntSyncValue(this::getActiveUnitCount);
         IntSyncValue limited = new IntSyncValue(this::getLastLimitedUnits);
+        IntSyncValue cycleSeconds = new IntSyncValue(this::getCycleSecondsRemaining);
         BooleanSyncValue powered = new BooleanSyncValue(this::ensureCampusPowerForCurrentTick);
+        BooleanSyncValue cycleBlocked = new BooleanSyncValue(this::isCycleBlockedByActiveBatch);
         syncManager.syncValue("bloomwyrm_heart_charge", charge);
         syncManager.syncValue("bloomwyrm_heart_biopower", biopower);
         syncManager.syncValue("bloomwyrm_heart_used_biopower", usedBiopower);
@@ -493,7 +514,9 @@ public class BloomwyrmHeartMachine extends LinkedWorkableElectricMultiblockMachi
         syncManager.syncValue("bloomwyrm_heart_linked", linked);
         syncManager.syncValue("bloomwyrm_heart_active", active);
         syncManager.syncValue("bloomwyrm_heart_limited", limited);
+        syncManager.syncValue("bloomwyrm_heart_cycle_seconds", cycleSeconds);
         syncManager.syncValue("bloomwyrm_heart_powered", powered);
+        syncManager.syncValue("bloomwyrm_heart_cycle_blocked", cycleBlocked);
         widgets.add(GTMultiblockTextUtil.addUnformedWarning(this, syncManager));
         widgets.add(Text.dynamic(() -> Component.translatable(
                 "cosmiccore.bloomwyrm.heart.charge",
@@ -530,6 +553,14 @@ public class BloomwyrmHeartMachine extends LinkedWorkableElectricMultiblockMachi
                         limited.getIntValue() > 0 ? ChatFormatting.RED : ChatFormatting.GREEN))
                 .withStyle(ChatFormatting.WHITE))
                 .asWidget());
+        widgets.add(Text.dynamic(() -> cycleBlocked.getBoolValue() ?
+                Component.translatable("cosmiccore.bloomwyrm.heart.cycle_blocked")
+                        .withStyle(ChatFormatting.GOLD) :
+                Component.translatable(
+                        "cosmiccore.bloomwyrm.heart.cycle",
+                        coloredValue(formatCycleSeconds(cycleSeconds.getIntValue()), ChatFormatting.AQUA))
+                        .withStyle(ChatFormatting.WHITE))
+                .asWidget());
         return widgets;
     }
 
@@ -540,6 +571,11 @@ public class BloomwyrmHeartMachine extends LinkedWorkableElectricMultiblockMachi
 
     private static Component coloredValue(Object value, ChatFormatting color) {
         return Component.literal(String.valueOf(value)).withStyle(color);
+    }
+
+    public static String formatCycleSeconds(int totalSeconds) {
+        int boundedSeconds = Math.max(0, totalSeconds);
+        return boundedSeconds / 60 + ":" + String.format("%02d", boundedSeconds % 60);
     }
 
     private static long multiply(long value, long multiplier) {
