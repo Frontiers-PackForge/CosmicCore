@@ -28,6 +28,8 @@
     "emi.OreVeinIOCacheMixin",
     "emi.BedrockOreIOCacheMixin",
     "emi.BedrockFluidIOCacheMixin",
+    "emi.EmiCircuitTagPreferenceMixin",
+    "ae2.PatternEncodingOmniaPreferenceMixin",
     "create.StockKeeperRequestScreenMixin",
     "jei.TagInfoRecipeCategoryMixin",
     "jei.StockKeeperTransferPlayerToolMixin",
