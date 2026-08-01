@@ -57,4 +57,8 @@ public class CosmicDynamicRenderHelpers {
     public static DynamicRender<?, ?> getStarLadderRender() {
         return StarLadderRender.INSTANCE;
     }
+
+    public static DynamicRender<?, ?> getMEComputationArrayRender() {
+        return MEComputationArrayRender.INSTANCE;
+    }
 }

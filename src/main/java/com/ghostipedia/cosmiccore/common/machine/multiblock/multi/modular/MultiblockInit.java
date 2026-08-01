@@ -32,6 +32,7 @@ public class MultiblockInit {
         OneiricSieve.init();
         // CosmicModularMachines.init();
         ManaDigitizer.init();
+        MEComputationArray.init();
         ArcaneDistillery.init();
         BioVat.init();
         CelestialBore.init();

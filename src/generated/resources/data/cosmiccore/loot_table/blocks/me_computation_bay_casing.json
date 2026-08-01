@@ -1,0 +1,21 @@
+{
+    "type": "minecraft:block",
+    "pools": [
+        {
+            "bonus_rolls": 0.0,
+            "conditions": [
+                {
+                    "condition": "minecraft:survives_explosion"
+                }
+            ],
+            "entries": [
+                {
+                    "type": "minecraft:item",
+                    "name": "cosmiccore:me_computation_bay_casing"
+                }
+            ],
+            "rolls": 1.0
+        }
+    ],
+    "random_sequence": "cosmiccore:blocks/me_computation_bay_casing"
+}

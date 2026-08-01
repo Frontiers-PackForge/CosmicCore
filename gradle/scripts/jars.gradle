@@ -6,6 +6,22 @@ java {
     withSourcesJar()
 }
 
+def nebulaeArtifactFile = file("$rootDir/../NebulaeAE2/build/libs/nebulaeae2-0.1.0.jar")
+project.ext.nebulaeArtifactFile = nebulaeArtifactFile
+
+def verifyNebulaeArtifact = tasks.register('verifyNebulaeArtifact') {
+    doLast {
+        if (!nebulaeArtifactFile.isFile()) {
+            throw new GradleException(
+                    "Missing NebulaeAE2 artifact at ${nebulaeArtifactFile}. Build NebulaeAE2 before CosmicCore.")
+        }
+    }
+}
+
+tasks.named('compileJava').configure {
+    dependsOn verifyNebulaeArtifact
+}
+
 afterEvaluate {
     tasks.withType(org.gradle.jvm.tasks.Jar).configureEach {
         destinationDirectory = file('build/libs/')
@@ -25,9 +41,11 @@ afterEvaluate {
 // Added only to the assembled jar (META-INF/jarjar), so the dev runClient - which loads the exploded source set +
 // runtimeOnly(ccpatch), not this jar - is unaffected. NeoForge extracts + loads the nested jar as the "ldlib" mod.
 tasks.named('jar', org.gradle.jvm.tasks.Jar).configure {
+    dependsOn verifyNebulaeArtifact
     from("$rootDir/libs/ldlib-neoforge-1.21.1-1.0.35.a-ccpatch.jar") { into 'META-INF/jarjar' }
     from("$rootDir/libs/createbionics-1.0.5b.jar") { into 'META-INF/jarjar' }
     from("$rootDir/libs/gtceu-1.21.1-8.0.0.jar") { into 'META-INF/jarjar' }
+    from(nebulaeArtifactFile) { into 'META-INF/jarjar' }
     from(configurations.mixinSquaredRuntime) { into 'META-INF/jarjar' }
     from("$rootDir/jarjar/metadata.json") { into 'META-INF/jarjar' }
 }

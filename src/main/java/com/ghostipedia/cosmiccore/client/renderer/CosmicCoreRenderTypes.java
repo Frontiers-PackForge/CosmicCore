@@ -30,6 +30,15 @@ public class CosmicCoreRenderTypes extends RenderType {
                     .setWriteMaskState(COLOR_WRITE)
                     .createCompositeState(false));
 
+    private static final RenderType COMPUTATION_ARRAY_LED = RenderType.create("cosmiccore:computation_array_led",
+            DefaultVertexFormat.POSITION_COLOR, VertexFormat.Mode.QUADS, 2048, false, false,
+            RenderType.CompositeState.builder()
+                    .setShaderState(POSITION_COLOR_SHADER)
+                    .setCullState(NO_CULL)
+                    .setDepthTestState(LEQUAL_DEPTH_TEST)
+                    .setWriteMaskState(COLOR_DEPTH_WRITE)
+                    .createCompositeState(false));
+
     private CosmicCoreRenderTypes(String name, VertexFormat format, VertexFormat.Mode mode, int bufferSize,
                                   boolean affectsCrumbling, boolean sortOnUpload, Runnable setupState,
                                   Runnable clearState) {
@@ -42,5 +51,9 @@ public class CosmicCoreRenderTypes extends RenderType {
 
     public static RenderType soulAura() {
         return SOUL_AURA;
+    }
+
+    public static RenderType computationArrayLed() {
+        return COMPUTATION_ARRAY_LED;
     }
 }

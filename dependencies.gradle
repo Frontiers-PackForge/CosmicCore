@@ -46,6 +46,7 @@ dependencies {
     implementation(forge.guideme)
     implementation(forge.ae2wtlib)
     implementation(forge.clothconfig)
+    implementation(files(project.nebulaeArtifactFile))
 
     // Create
     compileOnly(variantOf(forge.create) { classifier("slim") })

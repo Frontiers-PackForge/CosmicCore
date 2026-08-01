@@ -60,6 +60,13 @@ config = "cosmiccore.mixins.json"
     side = "BOTH"
 
 [[dependencies.${mod_id}]]
+    modId = "nebulaeae2"
+    type = "required"
+    versionRange = "[0.1.0,)"
+    ordering = "AFTER"
+    side = "BOTH"
+
+[[dependencies.${mod_id}]]
     modId = "journeymap"
     type = "incompatible"
     reason = "Custom ore field integration is only supported with Xaero's Minimap and Xaero's World Map."

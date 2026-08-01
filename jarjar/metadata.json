@@ -47,6 +47,18 @@
             },
             "path": "META-INF/jarjar/mixinsquared-neoforge-0.3.7-beta.1.jar",
             "isObfuscated": false
+        },
+        {
+            "identifier": {
+                "group": "com.ghostipedia.nebulaeae2",
+                "artifact": "nebulaeae2"
+            },
+            "version": {
+                "range": "[0.1.0]",
+                "artifactVersion": "0.1.0"
+            },
+            "path": "META-INF/jarjar/nebulaeae2-0.1.0.jar",
+            "isObfuscated": false
         }
     ]
 }
