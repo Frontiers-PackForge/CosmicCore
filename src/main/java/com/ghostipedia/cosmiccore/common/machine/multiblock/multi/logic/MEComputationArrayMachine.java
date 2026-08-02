@@ -10,7 +10,6 @@ import com.gregtechceu.gtceu.api.machine.multiblock.part.MultiblockPartMachine;
 import com.gregtechceu.gtceu.api.machine.trait.recipe.RecipeLogic;
 import com.gregtechceu.gtceu.api.multiblock.util.RelativeDirection;
 import com.gregtechceu.gtceu.api.sync_system.annotations.SyncToClient;
-import com.gregtechceu.gtceu.client.bloom.BloomRenderTicket;
 import com.gregtechceu.gtceu.common.mui.GTMultiblockTextUtil;
 import com.gregtechceu.gtceu.utils.FormattingUtil;
 
@@ -55,7 +54,6 @@ public final class MEComputationArrayMachine extends WorkableElectricMultiblockM
     private long activeGridLeaseTick = Long.MIN_VALUE;
     @Nullable
     private UUID activeGridLeaseId;
-    private BloomRenderTicket registeredBloomTicket = BloomRenderTicket.INVALID;
 
     public MEComputationArrayMachine(BlockEntityCreationInfo info) {
         super(info, new ComputationArrayRecipeLogic());
@@ -116,10 +114,6 @@ public final class MEComputationArrayMachine extends WorkableElectricMultiblockM
     public void onUnload() {
         setCommittedCwut(0);
         setCurrentConsumption(0, 0);
-        if (registeredBloomTicket.isValid()) {
-            registeredBloomTicket.invalidate();
-            registeredBloomTicket = BloomRenderTicket.INVALID;
-        }
         if (tickSubscription != null) {
             tickSubscription.unsubscribe();
             tickSubscription = null;
@@ -167,14 +161,6 @@ public final class MEComputationArrayMachine extends WorkableElectricMultiblockM
 
     public int getRelayCount() {
         return powerRelays.size();
-    }
-
-    public BloomRenderTicket getRegisteredBloomTicket() {
-        return registeredBloomTicket;
-    }
-
-    public void setRegisteredBloomTicket(BloomRenderTicket registeredBloomTicket) {
-        this.registeredBloomTicket = registeredBloomTicket;
     }
 
     public double getStoredPowerEu() {

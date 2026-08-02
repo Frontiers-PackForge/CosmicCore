@@ -322,8 +322,8 @@ public class CosmicLangHandler extends LangHandler {
 
         multiLang(provider, "cosmiccore.machine.me_computation_array.tooltip",
                 "§aStorage Size§r : §b%s§r component bays.",
-                "Accepts only §7%s§r components. Each core scales from one-eighth standby to §e%s§r §bEU/t§r for §e%s§r §aCWU/t§r; each relay routes up to §e%s§r §bEU/t§r.",
-                "Requires one MV or higher Energy Input Hatch and one ME Computation Uplink",
+                "Accepts §7%s-%s§r components. Each bay uses its installed component tier's listed EU and output values.",
+                "Requires one or two MV or higher Energy Input Hatches and one ME Computation Uplink",
                 "Power relays are prioritized before computation cores when EU is low.",
                 "Fill unused component bays with ME Computation Bay Casings.");
         provider.add("cosmiccore.block.me_computation_bay_casing.tooltip.0",
@@ -342,6 +342,10 @@ public class CosmicLangHandler extends LangHandler {
                 "Publishes all funded §aCWU/t§r from its formed Computation Array");
         provider.add("cosmiccore.machine.me_computation_uplink.tooltip.2",
                 "Passes all §bEU/t§r from Power relays into the AE2 Network");
+        provider.add("cosmiccore.machine.me_computation_uplink.tooltip.3",
+                "Source reservation: §e0§r §aCWU/t§r; it cannot consume its own output.");
+        provider.add("cosmiccore.machine.me_computation_uplink.tooltip.4",
+                "Topology: +§e%s§r §aCWU/t§r per §e%s§r physical grid links, rounded up.");
 
         provider.add("emi.category.cosmiccore.asteroid_mining", "Asteroid Mining Operations");
 

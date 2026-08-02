@@ -31,6 +31,10 @@ import com.mojang.blaze3d.vertex.VertexFormat;
 import com.mojang.serialization.MapCodec;
 import org.joml.Matrix4f;
 
+import java.lang.ref.WeakReference;
+import java.util.Map;
+import java.util.WeakHashMap;
+
 public final class MEComputationArrayRender extends
                                             DynamicRender<MEComputationArrayMachine, MEComputationArrayRender> {
 
@@ -65,6 +69,7 @@ public final class MEComputationArrayRender extends
             RenderSystem.enableCull();
         }
     };
+    private final Map<MEComputationArrayMachine, BloomRenderTicket> bloomTickets = new WeakHashMap<>();
 
     private MEComputationArrayRender() {}
 
@@ -76,9 +81,8 @@ public final class MEComputationArrayRender extends
     @Override
     public boolean shouldRender(MEComputationArrayMachine machine, Vec3 cameraPos) {
         boolean active = machine.isFormed() && hasActiveComponents(machine);
-        if (!active && machine.getRegisteredBloomTicket().isValid()) {
-            machine.getRegisteredBloomTicket().invalidate();
-            machine.setRegisteredBloomTicket(BloomRenderTicket.INVALID);
+        if (!active) {
+            invalidateBloomTicket(machine);
         }
         return active && super.shouldRender(machine, cameraPos);
     }
@@ -102,11 +106,32 @@ public final class MEComputationArrayRender extends
     }
 
     private void ensureBloomTicket(MEComputationArrayMachine machine) {
-        if (machine.getRegisteredBloomTicket().isValid() || !BloomShaderManager.isBloomActive()) {
+        BloomRenderTicket ticket = bloomTickets.get(machine);
+        if ((ticket != null && ticket.isValid()) || !BloomShaderManager.isBloomActive()) {
             return;
         }
-        machine.setRegisteredBloomTicket(BloomHandler.registerBloomRender(
-                BLOOM_SETUP, new ComputationArrayBloomEffect(machine), machine));
+        WeakReference<MEComputationArrayMachine> machineReference = new WeakReference<>(machine);
+        ticket = BloomHandler.registerBloomRender(
+                BLOOM_SETUP,
+                new ComputationArrayBloomEffect(machineReference),
+                ignored -> {
+                    MEComputationArrayMachine referencedMachine = machineReference.get();
+                    return referencedMachine != null && !referencedMachine.isRemoved();
+                },
+                () -> {
+                    MEComputationArrayMachine referencedMachine = machineReference.get();
+                    return referencedMachine == null ? null : referencedMachine.getLevel();
+                });
+        if (ticket.isValid()) {
+            bloomTickets.put(machine, ticket);
+        }
+    }
+
+    private void invalidateBloomTicket(MEComputationArrayMachine machine) {
+        BloomRenderTicket ticket = bloomTickets.remove(machine);
+        if (ticket != null && ticket.isValid()) {
+            ticket.invalidate();
+        }
     }
 
     private void renderComponents(MEComputationArrayMachine machine, PoseStack poseStack, VertexConsumer consumer,
@@ -193,14 +218,18 @@ public final class MEComputationArrayRender extends
 
     private final class ComputationArrayBloomEffect implements IBloomEffect {
 
-        private final MEComputationArrayMachine machine;
+        private final WeakReference<MEComputationArrayMachine> machineReference;
 
-        private ComputationArrayBloomEffect(MEComputationArrayMachine machine) {
-            this.machine = machine;
+        private ComputationArrayBloomEffect(WeakReference<MEComputationArrayMachine> machineReference) {
+            this.machineReference = machineReference;
         }
 
         @Override
         public void renderBloomEffect(PoseStack poseStack, BufferBuilder buffer, EffectRenderContext context) {
+            MEComputationArrayMachine machine = machineReference.get();
+            if (machine == null) {
+                return;
+            }
             BlockPos pos = machine.getBlockPos();
             poseStack.pushPose();
             poseStack.translate(pos.getX(), pos.getY(), pos.getZ());
@@ -210,7 +239,8 @@ public final class MEComputationArrayRender extends
 
         @Override
         public boolean shouldRenderBloomEffect(EffectRenderContext context) {
-            return MEComputationArrayRender.this.shouldRender(machine, context.camPos()) &&
+            MEComputationArrayMachine machine = machineReference.get();
+            return machine != null && MEComputationArrayRender.this.shouldRender(machine, context.camPos()) &&
                     context.frustum().isVisible(MEComputationArrayRender.this.getRenderBoundingBox(machine));
         }
     }
