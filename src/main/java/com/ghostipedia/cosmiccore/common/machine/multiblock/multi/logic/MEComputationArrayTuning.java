@@ -9,10 +9,10 @@ public final class MEComputationArrayTuning {
 
     public static final int MINIMUM_ENERGY_HATCH_TIER = GTValues.MV;
     public static final int COMPONENT_POSITIONS = 5;
-    public static final long CORE_EU_PER_TICK = 24;
-    public static final long CORE_CWU_PER_TICK = 128;
-    public static final long RELAY_EU_PER_TICK = 24;
     public static final int UPLINK_BUFFER_TICKS = 20;
+    public static final long CORE_EU_RATIO_NUMERATOR = 3;
+    public static final long CORE_EU_RATIO_DENOMINATOR = 16;
+    public static final MEComputationComponentTier LOW_POWER_COMPONENT_TIER = MEComputationComponentTier.LV;
 
     private MEComputationArrayTuning() {}
 
@@ -30,8 +30,7 @@ public final class MEComputationArrayTuning {
         return (long) Math.floor(aeToEu(ae));
     }
 
-    public static double uplinkBufferCapacityAe() {
-        long relayEuPerTick = RELAY_EU_PER_TICK * COMPONENT_POSITIONS;
+    public static double uplinkBufferCapacityAe(long relayEuPerTick) {
         return euToAe(relayEuPerTick * UPLINK_BUFFER_TICKS);
     }
 }

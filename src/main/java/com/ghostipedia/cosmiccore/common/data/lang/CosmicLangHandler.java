@@ -322,7 +322,7 @@ public class CosmicLangHandler extends LangHandler {
 
         multiLang(provider, "cosmiccore.machine.me_computation_array.tooltip",
                 "§aStorage Size§r : §b%s§r component bays.",
-                "Each core uses §e%s§r §bEU/t§r for §e%s§r §aCWU/t§r; each relay routes up to §e%s§r §bEU/t§r into ME power.",
+                "Accepts only §7%s§r components. Each core scales from one-eighth standby to §e%s§r §bEU/t§r for §e%s§r §aCWU/t§r; each relay routes up to §e%s§r §bEU/t§r.",
                 "Requires one MV or higher Energy Input Hatch and one ME Computation Uplink",
                 "Power relays are prioritized before computation cores when EU is low.",
                 "Fill unused component bays with ME Computation Bay Casings.");
@@ -331,13 +331,15 @@ public class CosmicLangHandler extends LangHandler {
         provider.add("cosmiccore.block.me_computation_bay_casing.tooltip.1",
                 "Allows the structure to form at the cost of providing no functionality.");
         provider.add("cosmiccore.machine.me_computation_core.tooltip.0",
-                "Consumes §e%s§r §bEU/t§r to provide §e%s§r §aCWU/t§r through a formed Computation Array.");
+                "Consumes up to §e%s§r §bEU/t§r to provide up to §e%s§r §aCWU/t§r through a formed Computation Array.");
+        provider.add("cosmiccore.machine.me_computation_core.tooltip.1",
+                "Standby consumes §e%s§r §bEU/t§r and is credited toward funded CWU demand.");
         provider.add("cosmiccore.machine.me_power_relay.tooltip.0",
                 "Will inject §e%s§r §bEU/t§r as ME power through a formed Computation Array.");
         provider.add("cosmiccore.machine.me_computation_uplink.tooltip.0",
                 "Acts as an output for Computation Arrays");
         provider.add("cosmiccore.machine.me_computation_uplink.tooltip.1",
-                "Outputs up to §e%s§r §aCWU/t§r");
+                "Publishes all funded §aCWU/t§r from its formed Computation Array");
         provider.add("cosmiccore.machine.me_computation_uplink.tooltip.2",
                 "Passes all §bEU/t§r from Power relays into the AE2 Network");
 
