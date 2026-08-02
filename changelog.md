@@ -1,4 +1,4 @@
-# Cosmic Core 0.16.1
+# Cosmic Core 0.16.2
 # DO NOT MANUALLY UPDATE COSMIC CORE FOR FRONTIERS **IT WILL NOT WORK**
 
 ## New
@@ -11,6 +11,10 @@
 
 ## Improvements
 
+- Low-Power Computation Arrays now accept one or two ordinary MV-or-higher GT energy input hatch variants.
+- The LV-accessible Implosion Compressor now converts four regular gems into one flawless gem for every compatible nonflammable gem material.
+- ME Computation Uplinks now state their zero-CWU source reservation and the grid's physical-link CWU formula in their CosmicCore-owned tooltip.
+- The Low-Power Computation Array now accepts LV, MV, and HV computation cores and power relays in its five component bays.
 - Unused Low-Power Computation Array positions can now be filled with passive ME Computation Bay Casings, allowing partially populated arrays to form without adding EU draw.
 - Active computation cores and power relays now illuminate the centered two-by-two-pixel plates on all four horizontal faces in cyan and amber. With GTM Bloom Support
 - Computation cores, power relays, and passive bays now use the dedicated, non-connecting Compute Module Base texture without directional hatch overlays.
@@ -23,6 +27,9 @@
 
 ## Fixes
 
+- Low-Power Computation Array controllers no longer load GTM bloom renderer classes on dedicated servers when placed.
+- Nostium's automatically generated material-working recipes now remain within MV processing voltage.
+- Consolidated Utherium into one CosmicCore-owned material family while preserving its generated forms and flawless-gem processing.
 - ME Computation Uplinks no longer reserve CWU from the same pool they provide.
 - The Low-Power Computation Array now extends behind its controller so the controller face points outward.
 - Wireless chargers now charge NeoForge Energy items, including EnderIO tools, while preserving native GregTech electric-item handling.

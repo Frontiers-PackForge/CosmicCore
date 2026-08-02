@@ -19,6 +19,7 @@ import com.ghostipedia.cosmiccore.common.machine.multiblock.part.*;
 import com.ghostipedia.cosmiccore.common.machine.multiblock.tier.TieredMultiblockPatterns;
 import com.ghostipedia.cosmiccore.common.machine.part.WirelessDataSensor;
 import com.ghostipedia.cosmiccore.gtbridge.CosmicRecipeTypes;
+import com.ghostipedia.nebulaeae2.compute.ComputeTuning;
 
 import com.gregtechceu.gtceu.GTCEu;
 import com.gregtechceu.gtceu.api.GTValues;
@@ -395,6 +396,11 @@ public class CosmicMachines {
                     Component.translatable("cosmiccore.machine.me_computation_uplink.tooltip.0"),
                     Component.translatable("cosmiccore.machine.me_computation_uplink.tooltip.1"),
                     Component.translatable("cosmiccore.machine.me_computation_uplink.tooltip.2"),
+                    Component.translatable("cosmiccore.machine.me_computation_uplink.tooltip.3"),
+                    Component.translatable(
+                            "cosmiccore.machine.me_computation_uplink.tooltip.4",
+                            ComputeTuning.PHYSICAL_LINK_GROUP_RESERVATION,
+                            ComputeTuning.PHYSICAL_LINKS_PER_GROUP),
                     Component.translatable("gtceu.part_sharing.disabled"))
             .register();
 

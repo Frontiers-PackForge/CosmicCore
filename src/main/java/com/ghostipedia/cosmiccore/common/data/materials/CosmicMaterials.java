@@ -278,7 +278,7 @@ public class CosmicMaterials {
                 .iconSet(CosmicMaterialSet.NOSTIUM)
                 .flags(GENERATE_BOLT_SCREW, GENERATE_ROUND, GENERATE_GEAR, GENERATE_SMALL_GEAR, GENERATE_RING,
                         GENERATE_FRAME, GENERATE_SPRING, GENERATE_SPRING_SMALL, GENERATE_FINE_WIRE, GENERATE_DENSE)
-                .blastTemp(4500, BlastProperty.GasTier.HIGH, GTValues.VA[GTValues.EV], 1200)
+                .blastTemp(1700, BlastProperty.GasTier.LOW, GTValues.VA[GTValues.LV], 1200)
                 .buildAndRegister();
 
         DraconicTarragon = new Material.Builder(CosmicCore.id("draconic_tarragon"))
@@ -631,7 +631,10 @@ public class CosmicMaterials {
 
         Utherium = new Material.Builder(CosmicCore.id("utherium"))
                 .gem()
-                .color(0xC24B55).secondaryColor(0x7A2430).iconSet(MaterialIconSet.RUBY)
+                .ore()
+                .color(0xC3434C).secondaryColor(0x7A2430).iconSet(CosmicMaterialSet.UTHERIUM)
+                .flags(GENERATE_PLATE, GENERATE_BOLT_SCREW, GENERATE_ROD, GENERATE_SPRING,
+                        GENERATE_SPRING_SMALL, GENERATE_FOIL, NO_SMELTING, NO_ORE_SMELTING)
                 .buildAndRegister();
         Aphotite = new Material.Builder(CosmicCore.id("aphotite"))
                 .dust()

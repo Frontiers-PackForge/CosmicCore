@@ -9,16 +9,19 @@ import com.ghostipedia.cosmiccore.common.machine.multiblock.multi.logic.MEComput
 import com.gregtechceu.gtceu.GTCEu;
 import com.gregtechceu.gtceu.api.GTValues;
 import com.gregtechceu.gtceu.api.data.RotationState;
+import com.gregtechceu.gtceu.api.machine.MachineDefinition;
 import com.gregtechceu.gtceu.api.machine.MultiblockMachineDefinition;
-import com.gregtechceu.gtceu.api.machine.multiblock.PartAbility;
 import com.gregtechceu.gtceu.api.machine.property.GTMachineModelProperties;
 import com.gregtechceu.gtceu.api.machine.trait.recipe.RecipeLogic;
 import com.gregtechceu.gtceu.api.multiblock.pattern.MultiblockPatternBuilder;
 import com.gregtechceu.gtceu.api.multiblock.util.RelativeDirection;
+import com.gregtechceu.gtceu.common.data.GTMachines;
 import com.gregtechceu.gtceu.common.data.GTMaterials;
 import com.gregtechceu.gtceu.common.data.GTRecipeTypes;
 
 import net.minecraft.network.chat.Component;
+
+import java.util.Arrays;
 
 import static com.ghostipedia.cosmiccore.api.registries.CosmicRegistration.REGISTRATE;
 import static com.ghostipedia.cosmiccore.common.data.CosmicBlocks.LIGHTWEIGHT_DARK_STEEL_CASING;
@@ -29,6 +32,7 @@ import static com.gregtechceu.gtceu.api.multiblock.Predicates.any;
 import static com.gregtechceu.gtceu.api.multiblock.Predicates.blocks;
 import static com.gregtechceu.gtceu.api.multiblock.Predicates.controller;
 import static com.gregtechceu.gtceu.api.multiblock.Predicates.frames;
+import static com.gregtechceu.gtceu.api.multiblock.Predicates.machines;
 import static com.gregtechceu.gtceu.common.data.models.GTMachineModels.createWorkableCasingMachineModel;
 
 public final class MEComputationArray {
@@ -48,31 +52,30 @@ public final class MEComputationArray {
                     .slice("AACAA", "AA AA", "A   A", "     ", "A   A", "AA AA", "AAAAA")
                     .where(' ', any())
                     .where('A', blocks(LIGHTWEIGHT_DARK_STEEL_CASING.get())
-                            .or(ability(
-                                    PartAbility.INPUT_ENERGY,
-                                    GTValues.tiersBetween(
-                                            MEComputationArrayTuning.MINIMUM_ENERGY_HATCH_TIER,
-                                            GTValues.MAX))
-                                    .setExactLimit(1))
+                            .or(machines(standardEnergyInputHatches())
+                                    .setMinGlobalLimited(1)
+                                    .setMaxGlobalLimited(2))
                             .or(abilities(CosmicPartAbility.ME_COMPUTATION_UPLINK).setExactLimit(1)))
                     .where('B', frames(GTMaterials.Steel))
                     .where('C', controller(blocks(definition.getBlock())))
                     .where('D', blocks(ME_COMPUTATION_BAY_CASING.get())
                             .or(ability(
                                     CosmicPartAbility.ME_COMPUTATION_CORE,
-                                    MEComputationArrayTuning.LOW_POWER_COMPONENT_TIER.gtTier()))
+                                    GTValues.tiersBetween(
+                                            MEComputationArrayTuning.LOW_POWER_MINIMUM_COMPONENT_TIER.gtTier(),
+                                            MEComputationArrayTuning.LOW_POWER_MAXIMUM_COMPONENT_TIER.gtTier())))
                             .or(ability(
                                     CosmicPartAbility.ME_POWER_RELAY,
-                                    MEComputationArrayTuning.LOW_POWER_COMPONENT_TIER.gtTier())))
+                                    GTValues.tiersBetween(
+                                            MEComputationArrayTuning.LOW_POWER_MINIMUM_COMPONENT_TIER.gtTier(),
+                                            MEComputationArrayTuning.LOW_POWER_MAXIMUM_COMPONENT_TIER.gtTier()))))
                     .build())
             .tooltips(
                     Component.translatable("cosmiccore.machine.me_computation_array.tooltip.0",
                             MEComputationArrayTuning.COMPONENT_POSITIONS),
                     Component.translatable("cosmiccore.machine.me_computation_array.tooltip.1",
-                            GTValues.VN[MEComputationArrayTuning.LOW_POWER_COMPONENT_TIER.gtTier()],
-                            MEComputationArrayTuning.LOW_POWER_COMPONENT_TIER.coreEuPerTick(),
-                            MEComputationArrayTuning.LOW_POWER_COMPONENT_TIER.coreCwutPerTick(),
-                            MEComputationArrayTuning.LOW_POWER_COMPONENT_TIER.relayEuPerTick()),
+                            GTValues.VN[MEComputationArrayTuning.LOW_POWER_MINIMUM_COMPONENT_TIER.gtTier()],
+                            GTValues.VN[MEComputationArrayTuning.LOW_POWER_MAXIMUM_COMPONENT_TIER.gtTier()]),
                     Component.translatable("cosmiccore.machine.me_computation_array.tooltip.2"),
                     Component.translatable("cosmiccore.machine.me_computation_array.tooltip.3"),
                     Component.translatable("cosmiccore.machine.me_computation_array.tooltip.4"))
@@ -86,6 +89,12 @@ public final class MEComputationArray {
             .register();
 
     private MEComputationArray() {}
+
+    private static MachineDefinition[] standardEnergyInputHatches() {
+        return Arrays.stream(GTValues.tiersBetween(MEComputationArrayTuning.MINIMUM_ENERGY_HATCH_TIER, GTValues.MAX))
+                .mapToObj(tier -> GTMachines.ENERGY_INPUT_HATCH[tier])
+                .toArray(MachineDefinition[]::new);
+    }
 
     public static void init() {}
 }

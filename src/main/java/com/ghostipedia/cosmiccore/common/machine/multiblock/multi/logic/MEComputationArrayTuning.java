@@ -12,7 +12,8 @@ public final class MEComputationArrayTuning {
     public static final int UPLINK_BUFFER_TICKS = 20;
     public static final long CORE_EU_RATIO_NUMERATOR = 3;
     public static final long CORE_EU_RATIO_DENOMINATOR = 16;
-    public static final MEComputationComponentTier LOW_POWER_COMPONENT_TIER = MEComputationComponentTier.LV;
+    public static final MEComputationComponentTier LOW_POWER_MINIMUM_COMPONENT_TIER = MEComputationComponentTier.LV;
+    public static final MEComputationComponentTier LOW_POWER_MAXIMUM_COMPONENT_TIER = MEComputationComponentTier.HV;
 
     private MEComputationArrayTuning() {}
 
