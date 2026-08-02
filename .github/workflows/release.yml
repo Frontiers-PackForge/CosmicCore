@@ -75,6 +75,7 @@ jobs:
           jar tf "$ARTIFACT" | grep -Fqx 'META-INF/jarjar/metadata.json'
           jar tf "$ARTIFACT" | grep -Fqx 'META-INF/jarjar/gtceu-1.21.1-8.0.0.jar'
           jar tf "$ARTIFACT" | grep -Fqx 'META-INF/jarjar/ldlib-neoforge-1.21.1-1.0.35.a-ccpatch.jar'
+          jar tf "$ARTIFACT" | grep -Fqx 'META-INF/jarjar/nebulaeae2-0.1.0.jar'
 
       - name: Publish NeoForge Release to CurseForge and GitHub
         id: neoforge_release
