@@ -132,6 +132,10 @@ repositories {
         forRepository { maven { url = "https://maven.sinytra.org/" } }
         filter { includeGroupAndSubgroups("org.sinytra") }
     }
+    exclusiveContent { // Aether's Accessories development runtime
+        forRepository { maven { url = "https://maven.wispforest.io/releases" } }
+        filter { includeGroupAndSubgroups("io.wispforest") }
+    }
     exclusiveContent { // Fabric (transitives of the Forgified Fabric API shims)
         forRepository { maven { url = "https://maven.fabricmc.net/" } }
         filter { includeGroup("net.fabricmc") }

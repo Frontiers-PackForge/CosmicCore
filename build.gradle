@@ -53,6 +53,7 @@ ext.sodiumNeoVersion = "0.8.12-beta.1+mc1.21.1"
 
 configurations {
     sodiumShell { transitive = false }
+    accessoriesDevSource { transitive = false }
     mixinSquaredRuntime {
         canBeConsumed = false
         canBeResolved = true
@@ -81,6 +82,20 @@ tasks.register('stripSodiumShell', Jar) {
 
 apply from: "$rootDir/gradle/scripts/jars.gradle"
 apply from: "$rootDir/gradle/scripts/moddevgradle.gradle"
+
+tasks.register('patchAccessoriesForDev', Zip) {
+    archiveBaseName = 'cc-accessories-neoforge-dev'
+    archiveVersion = '1.1.0-beta.48-1.21.1'
+    archiveExtension = 'jar'
+    destinationDirectory = layout.projectDirectory.dir('.codex/scratch/accessories-dev-runtime')
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+    from({ configurations.accessoriesDevSource.collect { zipTree(it) } }) {
+        filesMatching('accessories-common.mixins.json') {
+            filter { String line -> line.contains('"client.model.EntityRenderersMixin"') ? null : line }
+        }
+    }
+}
+
 apply from: "$rootDir/gradle/scripts/repositories.gradle"
 apply from: "$rootDir/dependencies.gradle"
 apply from: "$rootDir/gradle/scripts/resources.gradle"

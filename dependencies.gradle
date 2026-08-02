@@ -83,6 +83,10 @@ dependencies {
     implementation(forge.smartbrainlib)
     implementation(forge.geckolib)
     implementation(forge.arsnouveau)
+    runtimeOnly("curse.maven:aether-255308:7043502")
+    accessoriesDevSource("io.wispforest:accessories-neoforge:1.1.0-beta.48+1.21.1")
+    runtimeOnly(files(tasks.named('patchAccessoriesForDev')))
+    runtimeOnly("curse.maven:owo-lib-532610:6785734")
 
     // Embers Re-Ignited (NeoForge 1.21.1 fork of Embers Rekindled, modId "embers"). Required: the ember
     // hatch/emitter/receptor content extends its blocks + ember capability. CurseForge project 1579725,

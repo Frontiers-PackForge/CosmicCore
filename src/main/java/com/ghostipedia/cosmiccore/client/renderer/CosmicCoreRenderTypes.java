@@ -15,6 +15,8 @@ public class CosmicCoreRenderTypes extends RenderType {
     protected static final ShaderStateShard NEBULAE_SHADER = new ShaderStateShard(CosmicCoreClient::getNebulaeShader);
     protected static final ShaderStateShard SOUL_AURA_SHADER = new ShaderStateShard(
             CosmicCoreClient::getSoulAuraShader);
+    protected static final ShaderStateShard AETHER_STORM_CURRENT_SHADER = new ShaderStateShard(
+            CosmicCoreClient::getAetherStormCurrentShader);
 
     private static final RenderType NEBULAE = RenderType.create("nebulae",
             DefaultVertexFormat.POSITION, VertexFormat.Mode.QUADS, 256, false, false,
@@ -39,6 +41,16 @@ public class CosmicCoreRenderTypes extends RenderType {
                     .setWriteMaskState(COLOR_DEPTH_WRITE)
                     .createCompositeState(false));
 
+    private static final RenderType AETHER_STORM_CURRENT = RenderType.create("cosmiccore:aether_storm_current",
+            DefaultVertexFormat.POSITION_TEX_COLOR, VertexFormat.Mode.QUADS, 786432, false, false,
+            RenderType.CompositeState.builder()
+                    .setShaderState(AETHER_STORM_CURRENT_SHADER)
+                    .setTransparencyState(TRANSLUCENT_TRANSPARENCY)
+                    .setCullState(NO_CULL)
+                    .setDepthTestState(LEQUAL_DEPTH_TEST)
+                    .setWriteMaskState(COLOR_WRITE)
+                    .createCompositeState(false));
+
     private CosmicCoreRenderTypes(String name, VertexFormat format, VertexFormat.Mode mode, int bufferSize,
                                   boolean affectsCrumbling, boolean sortOnUpload, Runnable setupState,
                                   Runnable clearState) {
@@ -55,5 +67,9 @@ public class CosmicCoreRenderTypes extends RenderType {
 
     public static RenderType computationArrayLed() {
         return COMPUTATION_ARRAY_LED;
+    }
+
+    public static RenderType aetherStormCurrent() {
+        return AETHER_STORM_CURRENT;
     }
 }
