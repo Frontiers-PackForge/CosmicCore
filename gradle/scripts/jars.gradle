@@ -6,14 +6,14 @@ java {
     withSourcesJar()
 }
 
-def nebulaeArtifactFile = file("$rootDir/../NebulaeAE2/build/libs/nebulaeae2-0.1.0.jar")
+def nebulaeArtifactFile = file("$rootDir/libs/nebulaeae2-0.1.0.jar")
 project.ext.nebulaeArtifactFile = nebulaeArtifactFile
 
 def verifyNebulaeArtifact = tasks.register('verifyNebulaeArtifact') {
     doLast {
         if (!nebulaeArtifactFile.isFile()) {
             throw new GradleException(
-                    "Missing NebulaeAE2 artifact at ${nebulaeArtifactFile}. Build NebulaeAE2 before CosmicCore.")
+                    "Missing vendored NebulaeAE2 artifact at ${nebulaeArtifactFile}.")
         }
     }
 }
