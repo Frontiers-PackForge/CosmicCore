@@ -89,6 +89,12 @@ public class CosmicCoreClient {
     @Getter
     private static ShaderInstance deedInterferenceShader;
 
+    @Getter
+    private static ShaderInstance aetherAtmosphereShader;
+
+    @Getter
+    private static ShaderInstance aetherStormCurrentShader;
+
     @SubscribeEvent
     public static void shaderRegistry(RegisterShadersEvent event) {
         registerShader(event, "rendertype_nebulae", DefaultVertexFormat.POSITION,
@@ -109,6 +115,12 @@ public class CosmicCoreClient {
                 (shaderInstance) -> mirrorDepthsShader = shaderInstance);
         registerShader(event, "deed_interference", DefaultVertexFormat.POSITION_TEX,
                 (shaderInstance) -> deedInterferenceShader = shaderInstance);
+        aetherAtmosphereShader = null;
+        registerShader(event, "aether_atmosphere", DefaultVertexFormat.POSITION,
+                (shaderInstance) -> aetherAtmosphereShader = shaderInstance);
+        aetherStormCurrentShader = null;
+        registerShader(event, "aether_storm_current", DefaultVertexFormat.POSITION_TEX_COLOR,
+                (shaderInstance) -> aetherStormCurrentShader = shaderInstance);
     }
 
     private static void registerShader(RegisterShadersEvent event, String name, VertexFormat format,

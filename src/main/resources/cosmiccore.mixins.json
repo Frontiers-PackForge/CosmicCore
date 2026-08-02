@@ -68,6 +68,8 @@
     "gtfix.emi.GTEMIProgrammedCircuitComparisonFixMixin",
     "sable.BlockHighlightSubLevelMixin",
     "aero.ClientBalloonEffectIrisFixMixin",
+    "aether.AetherAtmosphereMixin",
+    "malum.ParallelWorldRendererInitialSizeFixMixin",
     "client.AbyssLightTextureMixin",
     "ftbchunks.FTBChunksClientConfigAccessor",
     "ftbchunks.FTBChunksDisabledMinimapHudMixin",
