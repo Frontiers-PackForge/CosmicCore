@@ -58,17 +58,21 @@ public final class MEComputationArray {
                     .where('B', frames(GTMaterials.Steel))
                     .where('C', controller(blocks(definition.getBlock())))
                     .where('D', blocks(ME_COMPUTATION_BAY_CASING.get())
-                            .or(abilities(
+                            .or(ability(
                                     CosmicPartAbility.ME_COMPUTATION_CORE,
-                                    CosmicPartAbility.ME_POWER_RELAY)))
+                                    MEComputationArrayTuning.LOW_POWER_COMPONENT_TIER.gtTier()))
+                            .or(ability(
+                                    CosmicPartAbility.ME_POWER_RELAY,
+                                    MEComputationArrayTuning.LOW_POWER_COMPONENT_TIER.gtTier())))
                     .build())
             .tooltips(
                     Component.translatable("cosmiccore.machine.me_computation_array.tooltip.0",
                             MEComputationArrayTuning.COMPONENT_POSITIONS),
                     Component.translatable("cosmiccore.machine.me_computation_array.tooltip.1",
-                            MEComputationArrayTuning.CORE_EU_PER_TICK,
-                            MEComputationArrayTuning.CORE_CWU_PER_TICK,
-                            MEComputationArrayTuning.RELAY_EU_PER_TICK),
+                            GTValues.VN[MEComputationArrayTuning.LOW_POWER_COMPONENT_TIER.gtTier()],
+                            MEComputationArrayTuning.LOW_POWER_COMPONENT_TIER.coreEuPerTick(),
+                            MEComputationArrayTuning.LOW_POWER_COMPONENT_TIER.coreCwutPerTick(),
+                            MEComputationArrayTuning.LOW_POWER_COMPONENT_TIER.relayEuPerTick()),
                     Component.translatable("cosmiccore.machine.me_computation_array.tooltip.2"),
                     Component.translatable("cosmiccore.machine.me_computation_array.tooltip.3"),
                     Component.translatable("cosmiccore.machine.me_computation_array.tooltip.4"))

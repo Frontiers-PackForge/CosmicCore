@@ -1,7 +1,6 @@
 package com.ghostipedia.cosmiccore.integration.jade;
 
 import com.ghostipedia.cosmiccore.common.machine.multiblock.multi.logic.MEComputationArrayMachine;
-import com.ghostipedia.cosmiccore.common.machine.multiblock.multi.logic.MEComputationArrayTuning;
 
 import com.gregtechceu.gtceu.api.machine.MetaMachine;
 import com.gregtechceu.gtceu.utils.FormattingUtil;
@@ -27,6 +26,7 @@ public enum MEComputationArrayProvider implements IBlockComponentProvider, IServ
     private static final String MAXIMUM_CWUT = "MaximumCwut";
     private static final String EU_DEMAND = "EuDemand";
     private static final String RELAY_EUT = "RelayEut";
+    private static final String MAXIMUM_RELAY_EUT = "MaximumRelayEut";
     private static final String CORES = "Cores";
     private static final String RELAYS = "Relays";
     private static final String STORED_POWER_EU = "StoredPowerEu";
@@ -50,10 +50,11 @@ public enum MEComputationArrayProvider implements IBlockComponentProvider, IServ
             return;
         }
         CompoundTag telemetry = new CompoundTag();
-        telemetry.putLong(CURRENT_CWUT, machine.getAvailableCwut());
+        telemetry.putLong(CURRENT_CWUT, machine.getCommittedCwut());
         telemetry.putLong(MAXIMUM_CWUT, machine.getMaximumCwut());
         telemetry.putLong(EU_DEMAND, machine.getEuDemandPerTick());
         telemetry.putLong(RELAY_EUT, machine.getCurrentRelayEuPerTick());
+        telemetry.putLong(MAXIMUM_RELAY_EUT, machine.getMaximumRelayEuPerTick());
         telemetry.putInt(CORES, machine.getCoreCount());
         telemetry.putInt(RELAYS, machine.getRelayCount());
         telemetry.putDouble(STORED_POWER_EU, machine.getStoredPowerEu());
@@ -83,9 +84,7 @@ public enum MEComputationArrayProvider implements IBlockComponentProvider, IServ
         tooltip.add(Component.translatable(
                 "cosmiccore.jade.me_computation_array.relay",
                 value(FormattingUtil.formatNumbers(telemetry.getLong(RELAY_EUT)), ChatFormatting.YELLOW),
-                value(FormattingUtil.formatNumbers(
-                        (long) telemetry.getInt(RELAYS) * MEComputationArrayTuning.RELAY_EU_PER_TICK),
-                        ChatFormatting.GOLD)));
+                value(FormattingUtil.formatNumbers(telemetry.getLong(MAXIMUM_RELAY_EUT)), ChatFormatting.GOLD)));
         Component uplinkStatus = Component.translatable(
                 telemetry.getBoolean(UPLINK_ONLINE) ?
                         "cosmiccore.jade.me_computation_array.uplink.online" :

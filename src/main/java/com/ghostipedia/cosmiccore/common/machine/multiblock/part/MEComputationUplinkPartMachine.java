@@ -88,9 +88,15 @@ public final class MEComputationUplinkPartMachine extends MultiblockPartMachine
     }
 
     @Override
-    public long availableCwut() {
+    public long installedCwut() {
         MEComputationArrayMachine controller = getComputationController();
-        return controller == null ? 0 : controller.getAvailableCwut();
+        return controller == null ? 0 : controller.getInstalledCwut();
+    }
+
+    @Override
+    public long commitCwut(UUID gridLeaseId, long serverTick, long targetTotalCwut) {
+        MEComputationArrayMachine controller = getComputationController();
+        return controller == null ? 0 : controller.commitCwut(gridLeaseId, serverTick, targetTotalCwut);
     }
 
     public double getRelayPowerDemandAe() {
@@ -121,6 +127,16 @@ public final class MEComputationUplinkPartMachine extends MultiblockPartMachine
         return accepted;
     }
 
+    public void clampRelayPowerToCapacity() {
+        double maximumPower = getAEMaxPower();
+        if (aeBuffer <= maximumPower) {
+            return;
+        }
+        aeBuffer = maximumPower;
+        setChanged();
+        getSyncDataHolder().markClientSyncFieldDirty("aeBuffer");
+    }
+
     @Override
     public double injectAEPower(double amount, Actionable mode) {
         return amount;
@@ -128,7 +144,9 @@ public final class MEComputationUplinkPartMachine extends MultiblockPartMachine
 
     @Override
     public double getAEMaxPower() {
-        return MEComputationArrayTuning.uplinkBufferCapacityAe();
+        MEComputationArrayMachine controller = getComputationController();
+        return controller == null ? 0 :
+                MEComputationArrayTuning.uplinkBufferCapacityAe(controller.getMaximumRelayEuPerTick());
     }
 
     @Override

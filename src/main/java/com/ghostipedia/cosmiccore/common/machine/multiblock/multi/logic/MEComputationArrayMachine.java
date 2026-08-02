@@ -28,8 +28,10 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
+import java.util.UUID;
 import java.util.function.Supplier;
 
 public final class MEComputationArrayMachine extends WorkableElectricMultiblockMachine {
@@ -43,9 +45,16 @@ public final class MEComputationArrayMachine extends WorkableElectricMultiblockM
     @Nullable
     private TickableSubscription tickSubscription;
     @SyncToClient
-    private long availableCwut;
+    private long committedCwut;
     private long currentEuPerTick;
     private long currentRelayEuPerTick;
+    private boolean[] onlineCores = new boolean[0];
+    private long standbyCoreEuThisTick;
+    private long paidCoreEuThisTick;
+    private long powerCycleTick = Long.MIN_VALUE;
+    private long activeGridLeaseTick = Long.MIN_VALUE;
+    @Nullable
+    private UUID activeGridLeaseId;
     private BloomRenderTicket registeredBloomTicket = BloomRenderTicket.INVALID;
 
     public MEComputationArrayMachine(BlockEntityCreationInfo info) {
@@ -73,15 +82,25 @@ public final class MEComputationArrayMachine extends WorkableElectricMultiblockM
                 RelativeDirection.UP.getMultiSorter(getFrontFacing(), getUpwardsFacing(), isFlipped()));
         computationCores.sort(componentOrder);
         powerRelays.sort(componentOrder);
+        onlineCores = new boolean[computationCores.size()];
+        if (uplink != null) {
+            uplink.clampRelayPowerToCapacity();
+        }
         scheduleForNextServerTick(this::updateTickSubscription);
     }
 
     @Override
     public void invalidateStructure(String name) {
-        setAvailableCwut(0);
+        setCommittedCwut(0);
         setCurrentConsumption(0, 0);
         computationCores.clear();
         powerRelays.clear();
+        onlineCores = new boolean[0];
+        standbyCoreEuThisTick = 0;
+        paidCoreEuThisTick = 0;
+        powerCycleTick = Long.MIN_VALUE;
+        activeGridLeaseTick = Long.MIN_VALUE;
+        activeGridLeaseId = null;
         uplink = null;
         super.invalidateStructure(name);
         updateTickSubscription();
@@ -95,7 +114,7 @@ public final class MEComputationArrayMachine extends WorkableElectricMultiblockM
 
     @Override
     public void onUnload() {
-        setAvailableCwut(0);
+        setCommittedCwut(0);
         setCurrentConsumption(0, 0);
         if (registeredBloomTicket.isValid()) {
             registeredBloomTicket.invalidate();
@@ -108,24 +127,38 @@ public final class MEComputationArrayMachine extends WorkableElectricMultiblockM
         super.onUnload();
     }
 
-    public long getAvailableCwut() {
-        return availableCwut;
+    public long getCommittedCwut() {
+        return committedCwut;
     }
 
     public long getMaximumCwut() {
-        return (long) computationCores.size() * MEComputationArrayTuning.CORE_CWU_PER_TICK;
+        return computationCores.stream().mapToLong(MEComputationComponentPartMachine::cwutPerTick).sum();
+    }
+
+    public long getInstalledCwut() {
+        return isFormed() && isWorkingEnabled() && energyContainer != null && uplink != null ? getMaximumCwut() : 0;
+    }
+
+    public long getOnlineCwut() {
+        long onlineCwut = 0;
+        for (int index = 0; index < computationCores.size(); index++) {
+            if (onlineCores[index]) {
+                onlineCwut += computationCores.get(index).cwutPerTick();
+            }
+        }
+        return onlineCwut;
     }
 
     public long getEuDemandPerTick() {
-        if (!isFormed() || !isWorkingEnabled()) {
-            return 0;
-        }
-        return (long) computationCores.size() * MEComputationArrayTuning.CORE_EU_PER_TICK +
-                getRelayDemandEuPerTick();
+        return isFormed() && isWorkingEnabled() ? currentEuPerTick : 0;
     }
 
     public long getCurrentRelayEuPerTick() {
         return currentRelayEuPerTick;
+    }
+
+    public long getMaximumRelayEuPerTick() {
+        return powerRelays.stream().mapToLong(MEComputationComponentPartMachine::euPerTick).sum();
     }
 
     public int getCoreCount() {
@@ -149,20 +182,71 @@ public final class MEComputationArrayMachine extends WorkableElectricMultiblockM
     }
 
     public double getMaximumStoredPowerEu() {
-        return MEComputationArrayTuning.aeToEu(MEComputationArrayTuning.uplinkBufferCapacityAe());
+        return (double) getMaximumRelayEuPerTick() * MEComputationArrayTuning.UPLINK_BUFFER_TICKS;
     }
 
     public boolean isUplinkOnline() {
         return uplink != null && uplink.isGridOnline();
     }
 
+    public long commitCwut(UUID gridLeaseId, long serverTick, long targetTotalCwut) {
+        if (!isFormed() || !isWorkingEnabled() || energyContainer == null || uplink == null) {
+            return 0;
+        }
+        if (serverTick != getCurrentServerTick()) {
+            return 0;
+        }
+        ensurePowerCycle(serverTick);
+        if (activeGridLeaseTick == serverTick && !gridLeaseId.equals(activeGridLeaseId)) {
+            return 0;
+        }
+        if (activeGridLeaseTick != serverTick && targetTotalCwut > 0) {
+            activeGridLeaseTick = serverTick;
+            activeGridLeaseId = gridLeaseId;
+        } else if (activeGridLeaseTick != serverTick) {
+            return 0;
+        }
+        long requestedCwut = Math.min(Math.max(0, targetTotalCwut), getMaximumCwut());
+        long targetCwut = Math.min(requestedCwut, getOnlineCwut());
+        if (targetCwut <= committedCwut) {
+            if (requestedCwut > committedCwut) {
+                getRecipeLogic().setStatus(RecipeLogic.Status.WAITING);
+            }
+            return committedCwut;
+        }
+        long targetCoreEu = Math.max(
+                standbyCoreEuThisTick,
+                ceilMultiplyDivide(
+                        targetCwut,
+                        MEComputationArrayTuning.CORE_EU_RATIO_NUMERATOR,
+                        MEComputationArrayTuning.CORE_EU_RATIO_DENOMINATOR));
+        long euToConsume = Math.min(
+                Math.max(0, targetCoreEu - paidCoreEuThisTick),
+                energyContainer.getEnergyStored());
+        long additionalEu = euToConsume <= 0 ? 0 : energyContainer.removeEnergy(euToConsume);
+        paidCoreEuThisTick += additionalEu;
+        long fundedCwut = Math.min(
+                targetCwut,
+                paidCoreEuThisTick * MEComputationArrayTuning.CORE_EU_RATIO_DENOMINATOR /
+                        MEComputationArrayTuning.CORE_EU_RATIO_NUMERATOR);
+        setCommittedCwut(Math.max(committedCwut, fundedCwut));
+        setCurrentConsumption(currentEuPerTick + additionalEu, currentRelayEuPerTick);
+        if (committedCwut < requestedCwut) {
+            getRecipeLogic().setStatus(RecipeLogic.Status.WAITING);
+        } else if (additionalEu > 0) {
+            getRecipeLogic().setStatus(RecipeLogic.Status.WORKING);
+        }
+        return committedCwut;
+    }
+
     @Override
     public List<IWidget> getWidgetsForDisplay(PanelSyncManager syncManager) {
         List<IWidget> widgets = new ArrayList<>();
-        LongSyncValue currentCwut = new LongSyncValue(this::getAvailableCwut);
+        LongSyncValue currentCwut = new LongSyncValue(this::getCommittedCwut);
         LongSyncValue maximumCwut = new LongSyncValue(this::getMaximumCwut);
         LongSyncValue euDemand = new LongSyncValue(this::getEuDemandPerTick);
         LongSyncValue relayEut = new LongSyncValue(this::getCurrentRelayEuPerTick);
+        LongSyncValue maximumRelayEut = new LongSyncValue(this::getMaximumRelayEuPerTick);
         IntSyncValue cores = new IntSyncValue(this::getCoreCount);
         IntSyncValue relays = new IntSyncValue(this::getRelayCount);
         DoubleSyncValue storedPowerEu = new DoubleSyncValue(this::getStoredPowerEu);
@@ -171,6 +255,7 @@ public final class MEComputationArrayMachine extends WorkableElectricMultiblockM
         syncManager.syncValue("me_computation_maximum_cwut", maximumCwut);
         syncManager.syncValue("me_computation_eu_demand", euDemand);
         syncManager.syncValue("me_computation_relay_eut", relayEut);
+        syncManager.syncValue("me_computation_maximum_relay_eut", maximumRelayEut);
         syncManager.syncValue("me_computation_cores", cores);
         syncManager.syncValue("me_computation_relays", relays);
         syncManager.syncValue("me_computation_stored_power_eu", storedPowerEu);
@@ -191,10 +276,7 @@ public final class MEComputationArrayMachine extends WorkableElectricMultiblockM
         widgets.add(telemetryLine(() -> Component.translatable(
                 "cosmiccore.machine.me_computation_array.display.relay",
                 coloredValue(FormattingUtil.formatNumbers(relayEut.getLongValue()), ChatFormatting.YELLOW),
-                coloredValue(
-                        FormattingUtil.formatNumbers(
-                                (long) relays.getIntValue() * MEComputationArrayTuning.RELAY_EU_PER_TICK),
-                        ChatFormatting.GOLD))));
+                coloredValue(FormattingUtil.formatNumbers(maximumRelayEut.getLongValue()), ChatFormatting.GOLD))));
         widgets.add(telemetryLine(() -> Component.translatable(
                 "cosmiccore.machine.me_computation_array.display.stored_power",
                 coloredValue(FormattingUtil.formatNumber2Places(storedPowerEu.getDoubleValue()), ChatFormatting.AQUA),
@@ -213,21 +295,33 @@ public final class MEComputationArrayMachine extends WorkableElectricMultiblockM
     }
 
     private void tickComputationArray() {
+        long serverTick = getCurrentServerTick();
+        if (serverTick != Long.MIN_VALUE) {
+            ensurePowerCycle(serverTick);
+        }
+    }
+
+    private long getCurrentServerTick() {
+        return getLevel() == null || getLevel().getServer() == null ?
+                Long.MIN_VALUE : getLevel().getServer().getTickCount();
+    }
+
+    private void ensurePowerCycle(long serverTick) {
+        if (powerCycleTick == serverTick) {
+            return;
+        }
+        resetPowerCycle(serverTick);
         if (!isWorkingEnabled()) {
-            setAvailableCwut(0);
-            setCurrentConsumption(0, 0);
             getRecipeLogic().setStatus(RecipeLogic.Status.IDLE);
             return;
         }
         if (energyContainer == null || uplink == null) {
-            setAvailableCwut(0);
-            setCurrentConsumption(0, 0);
             getRecipeLogic().setStatus(RecipeLogic.Status.IDLE);
             return;
         }
         long relayConsumption = fillUplinkBuffer();
-        long coreConsumption = powerComputationCores();
-        long consumed = relayConsumption + coreConsumption;
+        long standbyConsumption = powerCoreStandby();
+        long consumed = relayConsumption + standbyConsumption;
         setCurrentConsumption(consumed, relayConsumption);
         if (consumed > 0) {
             getRecipeLogic().setStatus(RecipeLogic.Status.WORKING);
@@ -238,18 +332,38 @@ public final class MEComputationArrayMachine extends WorkableElectricMultiblockM
         }
     }
 
-    private long powerComputationCores() {
-        long affordableCores = Math.min(computationCores.size(),
-                energyContainer.getEnergyStored() / MEComputationArrayTuning.CORE_EU_PER_TICK);
-        long euToConsume = affordableCores * MEComputationArrayTuning.CORE_EU_PER_TICK;
-        if (euToConsume <= 0) {
-            setAvailableCwut(0);
-            return 0;
+    private void resetPowerCycle(long serverTick) {
+        setCommittedCwut(0);
+        setCurrentConsumption(0, 0);
+        Arrays.fill(onlineCores, false);
+        standbyCoreEuThisTick = 0;
+        paidCoreEuThisTick = 0;
+        powerCycleTick = serverTick;
+        activeGridLeaseTick = Long.MIN_VALUE;
+        activeGridLeaseId = null;
+        setActiveComponents(computationCores, false);
+        setActiveComponents(powerRelays, false);
+    }
+
+    private long powerCoreStandby() {
+        long consumedEu = 0;
+        for (int index = 0; index < computationCores.size(); index++) {
+            MEComputationComponentPartMachine core = computationCores.get(index);
+            long standbyEu = core.standbyEuPerTick();
+            if (energyContainer.getEnergyStored() < standbyEu) {
+                continue;
+            }
+            long consumed = energyContainer.removeEnergy(standbyEu);
+            if (consumed != standbyEu) {
+                continue;
+            }
+            onlineCores[index] = true;
+            core.setActive(true);
+            consumedEu += consumed;
         }
-        long consumed = energyContainer.removeEnergy(euToConsume);
-        long poweredCores = consumed / MEComputationArrayTuning.CORE_EU_PER_TICK;
-        setAvailableCwut(poweredCores * MEComputationArrayTuning.CORE_CWU_PER_TICK);
-        return consumed;
+        standbyCoreEuThisTick = consumedEu;
+        paidCoreEuThisTick = consumedEu;
+        return consumedEu;
     }
 
     private long fillUplinkBuffer() {
@@ -259,6 +373,7 @@ public final class MEComputationArrayMachine extends WorkableElectricMultiblockM
         }
         long consumed = energyContainer.removeEnergy(euToConsume);
         uplink.acceptRelayPower(MEComputationArrayTuning.euToAe(consumed));
+        setRelayActivity(consumed);
         return consumed;
     }
 
@@ -267,37 +382,46 @@ public final class MEComputationArrayMachine extends WorkableElectricMultiblockM
             return 0;
         }
         long euForDemand = MEComputationArrayTuning.aeToEuFloor(uplink.getRelayPowerDemandAe());
-        long relayLimit = (long) powerRelays.size() * MEComputationArrayTuning.RELAY_EU_PER_TICK;
-        return Math.min(euForDemand, relayLimit);
+        return Math.min(euForDemand, getMaximumRelayEuPerTick());
     }
 
     private boolean hasUnmetDemand() {
-        return !computationCores.isEmpty() || !powerRelays.isEmpty() && uplink.getRelayPowerDemandAe() > 0;
+        return getOnlineCwut() < getMaximumCwut() ||
+                !powerRelays.isEmpty() && uplink.getRelayPowerDemandAe() > 0;
     }
 
     private void setCurrentConsumption(long currentEuPerTick, long currentRelayEuPerTick) {
         this.currentEuPerTick = currentEuPerTick;
         this.currentRelayEuPerTick = currentRelayEuPerTick;
-        int activeCores = (int) ((currentEuPerTick - currentRelayEuPerTick) /
-                MEComputationArrayTuning.CORE_EU_PER_TICK);
-        int activeRelays = (int) Math.ceilDiv(currentRelayEuPerTick,
-                MEComputationArrayTuning.RELAY_EU_PER_TICK);
-        setActiveComponents(computationCores, activeCores);
-        setActiveComponents(powerRelays, activeRelays);
     }
 
-    private static void setActiveComponents(List<MEComputationComponentPartMachine> components, int activeCount) {
-        for (int index = 0; index < components.size(); index++) {
-            components.get(index).setActive(index < activeCount);
+    private void setRelayActivity(long relayEu) {
+        long remainingEu = relayEu;
+        for (MEComputationComponentPartMachine relay : powerRelays) {
+            relay.setActive(remainingEu > 0);
+            remainingEu = Math.max(0, remainingEu - relay.euPerTick());
         }
     }
 
-    private void setAvailableCwut(long availableCwut) {
-        if (this.availableCwut == availableCwut) {
+    private static long ceilMultiplyDivide(long value, long multiplier, long divisor) {
+        if (value <= 0 || multiplier <= 0) {
+            return 0;
+        }
+        return Math.ceilDiv(Math.multiplyExact(value, multiplier), divisor);
+    }
+
+    private static void setActiveComponents(List<MEComputationComponentPartMachine> components, boolean active) {
+        for (MEComputationComponentPartMachine component : components) {
+            component.setActive(active);
+        }
+    }
+
+    private void setCommittedCwut(long committedCwut) {
+        if (this.committedCwut == committedCwut) {
             return;
         }
-        this.availableCwut = availableCwut;
-        getSyncDataHolder().markClientSyncFieldDirty("availableCwut");
+        this.committedCwut = committedCwut;
+        getSyncDataHolder().markClientSyncFieldDirty("committedCwut");
     }
 
     private static Component coloredValue(Object value, ChatFormatting color) {
