@@ -1,0 +1,13 @@
+{
+    "variants": {
+        "type=bottom": {
+            "model": "cosmiccore:block/aetheric_saprolite_slab"
+        },
+        "type=double": {
+            "model": "cosmiccore:block/aetheric_saprolite"
+        },
+        "type=top": {
+            "model": "cosmiccore:block/aetheric_saprolite_slab_top"
+        }
+    }
+}
