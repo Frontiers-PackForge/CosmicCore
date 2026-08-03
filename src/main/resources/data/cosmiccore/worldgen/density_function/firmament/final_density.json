@@ -1,0 +1,63 @@
+﻿{
+  "type": "minecraft:squeeze",
+  "argument": {
+    "type": "minecraft:interpolated",
+    "argument": {
+      "type": "minecraft:blend_density",
+      "argument": {
+        "type": "minecraft:add",
+        "argument1": -0.25,
+        "argument2": {
+          "type": "minecraft:mul",
+          "argument1": {
+            "type": "minecraft:max",
+            "argument1": "cosmiccore:firmament/lower_gate",
+            "argument2": "cosmiccore:firmament/upper_gate"
+          },
+          "argument2": {
+            "type": "minecraft:add",
+            "argument1": 0.07,
+            "argument2": {
+              "type": "minecraft:add",
+              "argument1": {
+                "type": "minecraft:old_blended_noise",
+                "smear_scale_multiplier": 8.0,
+                "xz_factor": 80.0,
+                "xz_scale": 0.25,
+                "y_factor": 160.0,
+                "y_scale": 0.25
+              },
+              "argument2": {
+                "type": "minecraft:add",
+                "argument1": {
+                  "type": "minecraft:mul",
+                  "argument1": 0.16,
+                  "argument2": {
+                    "type": "minecraft:range_choice",
+                    "input": "minecraft:y",
+                    "min_inclusive": 0.0,
+                    "max_exclusive": 120.0,
+                    "when_in_range": "cosmiccore:firmament/lower_mass",
+                    "when_out_of_range": "cosmiccore:firmament/upper_mass"
+                  }
+                },
+                "argument2": {
+                  "type": "minecraft:mul",
+                  "argument1": 0.12,
+                  "argument2": {
+                    "type": "minecraft:range_choice",
+                    "input": "minecraft:y",
+                    "min_inclusive": 0.0,
+                    "max_exclusive": 120.0,
+                    "when_in_range": "cosmiccore:firmament/lower_lobe_field",
+                    "when_out_of_range": "cosmiccore:firmament/upper_lobe_field"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

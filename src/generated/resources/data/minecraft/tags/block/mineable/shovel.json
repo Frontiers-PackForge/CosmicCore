@@ -1,5 +1,7 @@
 {
     "values": [
+        "cosmiccore:astral_regolith",
+        "cosmiccore:stardust_turf",
         "cosmiccore:steel_rose_lantern"
     ]
 }

@@ -6,7 +6,7 @@ import com.ghostipedia.cosmiccore.client.map.RevealedFieldStorage;
 import com.ghostipedia.cosmiccore.client.map.RevealedFields;
 import com.ghostipedia.cosmiccore.common.data.worldgen.field.OreFieldPlacement;
 import com.ghostipedia.cosmiccore.common.data.worldgen.field.OreFieldPlacement.FieldProfile;
-import com.ghostipedia.cosmiccore.common.data.worldgen.field.OreFieldPlacement.OreField;
+import com.ghostipedia.cosmiccore.common.data.worldgen.field.OreFieldTerrainResolver.ResolvedOreField;
 
 import com.gregtechceu.gtceu.api.data.chemical.material.Material;
 
@@ -46,19 +46,19 @@ public class RevealFieldsPacket implements CustomPacketPayload {
         }
     }
 
-    public static List<RevealedField> toRevealedFields(List<OreField> oreFields, byte tier) {
+    public static List<RevealedField> toRevealedFields(List<ResolvedOreField> oreFields, byte tier) {
         List<RevealedField> fields = new ArrayList<>(oreFields.size());
-        for (OreField field : oreFields) {
-            Material bundle = field.bundle();
+        for (ResolvedOreField resolved : oreFields) {
+            Material bundle = resolved.field().bundle();
             FieldProfile profile = OreFieldPlacement.profileFor(bundle);
             int radius = profile != null ? profile.fieldRadius() : OreFieldPlacement.DEFAULT_FIELD_RADIUS;
-            fields.add(new RevealedField(field.core().getX(), field.core().getZ(),
+            fields.add(new RevealedField(resolved.representative().getX(), resolved.representative().getZ(),
                     bundle.getMaterialARGB(), bundle.getName(), tier, radius));
         }
         return fields;
     }
 
-    public static RevealFieldsPacket of(ResourceKey<Level> dimension, List<OreField> oreFields, byte tier) {
+    public static RevealFieldsPacket of(ResourceKey<Level> dimension, List<ResolvedOreField> oreFields, byte tier) {
         return new RevealFieldsPacket(dimension, toRevealedFields(oreFields, tier));
     }
 

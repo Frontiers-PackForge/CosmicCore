@@ -1,8 +1,0 @@
-{
-    "parent": "minecraft:block/slab",
-    "textures": {
-        "bottom": "cosmiccore:block/aether/aetheric_saprolite",
-        "side": "cosmiccore:block/aether/aetheric_saprolite",
-        "top": "cosmiccore:block/aether/aetheric_saprolite"
-    }
-}

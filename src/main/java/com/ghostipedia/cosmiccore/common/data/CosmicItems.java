@@ -79,7 +79,7 @@ import static com.gregtechceu.gtceu.common.data.GTItems.attach;
 
 public class CosmicItems {
 
-    // TODO(stellaris): SUN_GLOBE item used Ad Astra GLOBES registry + RenderedBlockItem — dropped with Ad Astra (bead
+    // TODO(stellaris): SUN_GLOBE item used Ad Astra GLOBES registry + RenderedBlockItem â€” dropped with Ad Astra (bead
     // cosmiccore-42.13)
     static {
         CosmicRegistration.REGISTRATE.creativeModeTab(() -> CosmicCreativeModeTabs.COSMIC_CORE);
@@ -109,9 +109,9 @@ public class CosmicItems {
             .defaultModel()
             .register();
 
-    public static final ItemEntry<Item> AETHER_PERMIT = REGISTRATE
-            .item("aether_permit", Item::new)
-            .lang("Aether Permit")
+    public static final ItemEntry<Item> FIRMAMENT_PERMIT = REGISTRATE
+            .item("firmament_permit", Item::new)
+            .lang("Firmament Permit")
             .properties(p -> p.stacksTo(1))
             .defaultModel()
             .register();
@@ -1219,7 +1219,7 @@ public class CosmicItems {
             .register();
     public static final ItemEntry<ComponentItem> PROGRAMMABLE_MOTE = REGISTRATE
             .item("programmable_mote", ComponentItem::new)
-            .lang("§5Programmable Mote")
+            .lang("Â§5Programmable Mote")
             .properties(p -> p.stacksTo(64))
             .defaultModel()
             .register();
@@ -1739,7 +1739,7 @@ public class CosmicItems {
 
     public static final ItemEntry<ComponentItem> ABERRANT_ESSENCE = REGISTRATE
             .item("aberrant_essence", ComponentItem::new)
-            .lang("§6Aberrant Essence")
+            .lang("Â§6Aberrant Essence")
             .properties(p -> p.stacksTo(64))
             .onRegister(attach(new TooltipBehavior(lines -> {
                 lines.add(Component.literal(StringUtil
@@ -1766,10 +1766,10 @@ public class CosmicItems {
             .onRegister(attach(StructureWriteBehavior.INSTANCE))
             .register();
 
-    // Space Suite — TODO(stellaris): AA/Botarium oxygen space-suit chestplates shelved (see _shelved/api/item/armor,
+    // Space Suite â€” TODO(stellaris): AA/Botarium oxygen space-suit chestplates shelved (see _shelved/api/item/armor,
     // bead cosmiccore-42.13)
     /*
-     * SHELVED (AA/Botarium space suits — armor logic moved to _shelved):
+     * SHELVED (AA/Botarium space suits â€” armor logic moved to _shelved):
      * public static ItemEntry<SpaceArmorComponentItem> SPACE_NANO_CHESTPLATE = REGISTRATE
      * .item("space_nanomuscle_chestplate",
      * (p) -> new SpaceArmorComponentItem(GTArmorMaterials.ARMOR, ArmorItem.Type.CHESTPLATE, 5000, p)
@@ -1779,7 +1779,7 @@ public class CosmicItems {
      * ConfigHolder.INSTANCE.tools.voltageTierNanoSuit)))
      * .tag(CosmicItemTags.NANOMUSCLE_SPACE_SUITE, ModItemTags.SPACE_SUITS, ModItemTags.FREEZE_RESISTANT_ARMOR,
      * ModItemTags.HEAT_RESISTANT_ARMOR)
-     * .lang("NanoMuscle™ Space Suite Chestplate")
+     * .lang("NanoMuscleâ„¢ Space Suite Chestplate")
      * .properties(p -> p.rarity(Rarity.RARE))
      * .register();
      * public static ItemEntry<SpaceArmorComponentItem> ADVANCED_SPACE_NANO_CHESTPLATE = REGISTRATE
@@ -1791,7 +1791,7 @@ public class CosmicItems {
      * ConfigHolder.INSTANCE.tools.voltageTierAdvNanoSuit)))
      * .tag(CosmicItemTags.NANOMUSCLE_SPACE_SUITE, ModItemTags.SPACE_SUITS, ModItemTags.FREEZE_RESISTANT_ARMOR,
      * ModItemTags.HEAT_RESISTANT_ARMOR)
-     * .lang("Advanced NanoMuscle™ Space Suite Chestplate")
+     * .lang("Advanced NanoMuscleâ„¢ Space Suite Chestplate")
      * .properties(p -> p.rarity(Rarity.EPIC))
      * .register();
      * public static ItemEntry<SpaceArmorComponentItem> SPACE_QUARK_CHESTPLATE = REGISTRATE
@@ -1803,7 +1803,7 @@ public class CosmicItems {
      * ConfigHolder.INSTANCE.tools.voltageTierQuarkTech)))
      * .tag(CosmicItemTags.QUARKTECH_SPACE_SUITE, ModItemTags.SPACE_SUITS, ModItemTags.FREEZE_RESISTANT_ARMOR,
      * ModItemTags.HEAT_RESISTANT_ARMOR)
-     * .lang("QuarkTech™ Space Suite Chestplate")
+     * .lang("QuarkTechâ„¢ Space Suite Chestplate")
      * .properties(p -> p.rarity(Rarity.RARE))
      * .register();
      * public static ItemEntry<SpaceArmorComponentItem> ADVANCED_SPACE_QUARK_CHESTPLATE = REGISTRATE
@@ -1815,7 +1815,7 @@ public class CosmicItems {
      * ConfigHolder.INSTANCE.tools.voltageTierAdvQuarkTech)))
      * .tag(CosmicItemTags.QUARKTECH_SPACE_SUITE, ModItemTags.SPACE_SUITS, ModItemTags.FREEZE_RESISTANT_ARMOR,
      * ModItemTags.HEAT_RESISTANT_ARMOR)
-     * .lang("Advanced QuarkTech™ Space Suite Chestplate")
+     * .lang("Advanced QuarkTechâ„¢ Space Suite Chestplate")
      * .properties(p -> p.rarity(Rarity.EPIC))
      * .register();
      */
@@ -2116,7 +2116,7 @@ public class CosmicItems {
     // Gravity Normalizer Item Variation
     public static final ItemEntry<ComponentItem> PORTABLE_GRAVITY_CORE = REGISTRATE
             .item("portable_gravity_core", ComponentItem::new)
-            .lang("§6Portable Gravity Core")
+            .lang("Â§6Portable Gravity Core")
             .tag()
             .properties(p -> p.stacksTo(64))
             .onRegister(attach(new TooltipBehavior(tooltips -> {
@@ -2127,7 +2127,7 @@ public class CosmicItems {
     // infinite spraycan
     public static final ItemEntry<ComponentItem> INFINITE_SPRAY_CAN = REGISTRATE
             .item("infinite_spray_can", ComponentItem::new)
-            .lang("§5 Infinite_spray_can")
+            .lang("Â§5 Infinite_spray_can")
             .setData(ProviderType.ITEM_MODEL, NonNullBiConsumer.noop())
             .properties(p -> p.stacksTo(1))
             .onRegister(attach(new InfiniteSprayCanBehavior(1)))
@@ -2917,7 +2917,7 @@ public class CosmicItems {
             .defaultModel()
             .register();
 
-    // Oneiric Signets — non-consumed gate items (Blood Orb replacement)
+    // Oneiric Signets â€” non-consumed gate items (Blood Orb replacement)
     public static final ItemEntry<ComponentItem> ONEIRIC_SIGNET_T1 = REGISTRATE
             .item("oneiric_signet_t1", ComponentItem::new)
             .lang("Oneiric Signet Mk.I")
@@ -2949,7 +2949,7 @@ public class CosmicItems {
             .defaultModel()
             .register();
 
-    // Soul Motes — tiered crafting ingredients (Slate replacement)
+    // Soul Motes â€” tiered crafting ingredients (Slate replacement)
     public static final ItemEntry<ComponentItem> FAINT_MOTE = REGISTRATE
             .item("faint_mote", ComponentItem::new)
             .lang("Faint Mote")
@@ -3011,7 +3011,7 @@ public class CosmicItems {
             .defaultModel()
             .register();
 
-    // Wrapped Soul Motes — intermediate crafting step between mote tiers
+    // Wrapped Soul Motes â€” intermediate crafting step between mote tiers
     public static final ItemEntry<ComponentItem> WRAPPED_FAINT_MOTE = REGISTRATE
             .item("wrapped_faint_mote", ComponentItem::new)
             .lang("Wrapped Faint Mote")
@@ -3073,7 +3073,7 @@ public class CosmicItems {
             .defaultModel()
             .register();
 
-    // Soul Reagents — BM reagent replacements
+    // Soul Reagents â€” BM reagent replacements
     public static final ItemEntry<ComponentItem> SOMNOLENT_DEW = REGISTRATE
             .item("somnolent_dew", ComponentItem::new)
             .lang("Somnolent Dew")
@@ -3111,7 +3111,7 @@ public class CosmicItems {
             .defaultModel()
             .register();
 
-    // Tau items — BM tau replacements
+    // Tau items â€” BM tau replacements
     public static final ItemEntry<ComponentItem> TAU_OIL = REGISTRATE
             .item("tau_oil", ComponentItem::new)
             .lang("Tau Oil")

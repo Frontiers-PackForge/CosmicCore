@@ -30,6 +30,8 @@
         "cosmiccore:uxv_ember_receptor",
         "cosmiccore:opv_ember_receptor",
         "cosmiccore:max_ember_receptor",
+        "cosmiccore:firmament_saprolite",
+        "cosmiccore:firmament_saprolite_slab",
         "cosmiccore:hearth_plate",
         "cosmiccore:bloomscrap_block",
         "cosmiccore:ethersteel_plated_ash_tiles",

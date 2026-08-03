@@ -1,0 +1,33 @@
+﻿{
+  "type": "minecraft:clamp",
+  "input": {
+    "type": "minecraft:add",
+    "argument1": -2.1,
+    "argument2": {
+      "type": "minecraft:mul",
+      "argument1": 3.0,
+      "argument2": {
+        "type": "minecraft:add",
+        "argument1": {
+          "type": "minecraft:abs",
+          "argument": "cosmiccore:firmament/upper_spire_field"
+        },
+        "argument2": {
+          "type": "minecraft:add",
+          "argument1": {
+            "type": "minecraft:mul",
+            "argument1": 0.25,
+            "argument2": "cosmiccore:firmament/upper_mass"
+          },
+          "argument2": {
+            "type": "minecraft:mul",
+            "argument1": 0.15,
+            "argument2": "cosmiccore:firmament/upper_lobe_field"
+          }
+        }
+      }
+    }
+  },
+  "min": 0.0,
+  "max": 1.0
+}

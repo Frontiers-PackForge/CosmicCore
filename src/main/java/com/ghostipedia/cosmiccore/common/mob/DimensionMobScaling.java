@@ -60,12 +60,7 @@ public final class DimensionMobScaling {
     public static final ResourceKey<Level> NETHER = Level.NETHER;
     public static final ResourceKey<Level> END = Level.END;
 
-    // Aether
-    private static ResourceKey<Level> aetherDim(String name) {
-        return ResourceKey.create(Registries.DIMENSION, ResourceLocation.fromNamespaceAndPath("aether", name));
-    }
-
-    public static final ResourceKey<Level> AETHER = aetherDim("the_aether");
+    public static final ResourceKey<Level> FIRMAMENT = frontiersDim("firmament");
 
     // Undergarden
     private static ResourceKey<Level> undergardenDim(String name) {
@@ -106,8 +101,8 @@ public final class DimensionMobScaling {
         // Tier 1: Nether - 2x HP, 1.5x damage
         register(NETHER, ScalingConfig.basic(2.0, 1.5));
 
-        // Tier 2: Aether - 3x HP, 2x damage
-        register(AETHER, ScalingConfig.basic(3.0, 2.0));
+        // Tier 2: Firmament - 3x HP, 2x damage
+        register(FIRMAMENT, ScalingConfig.basic(3.0, 2.0));
 
         // Tier 3: Undergarden - 4x HP, 2.5x damage
         register(UNDERGARDEN, ScalingConfig.basic(4.0, 2.5));
@@ -123,7 +118,7 @@ public final class DimensionMobScaling {
         // Tier 5: The Deep Below - 6x HP, 4x damage
         register(DEEP_BELOW, ScalingConfig.basic(6.0, 4.0));
 
-        // The End - 2.5x HP, 2x damage (between Nether and Aether)
+        // The End - 2.5x HP, 2x damage (between Nether and Firmament)
         register(END, ScalingConfig.basic(2.5, 2.0));
     }
 

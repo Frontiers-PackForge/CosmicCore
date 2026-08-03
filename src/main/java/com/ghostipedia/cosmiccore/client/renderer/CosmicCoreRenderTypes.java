@@ -15,8 +15,10 @@ public class CosmicCoreRenderTypes extends RenderType {
     protected static final ShaderStateShard NEBULAE_SHADER = new ShaderStateShard(CosmicCoreClient::getNebulaeShader);
     protected static final ShaderStateShard SOUL_AURA_SHADER = new ShaderStateShard(
             CosmicCoreClient::getSoulAuraShader);
-    protected static final ShaderStateShard AETHER_STORM_CURRENT_SHADER = new ShaderStateShard(
-            CosmicCoreClient::getAetherStormCurrentShader);
+    protected static final ShaderStateShard FIRMAMENT_STORM_CURRENT_SHADER = new ShaderStateShard(
+            CosmicCoreClient::getFirmamentStormCurrentShader);
+    protected static final ShaderStateShard FIRMAMENT_WIND_CURRENT_SHADER = new ShaderStateShard(
+            CosmicCoreClient::getFirmamentWindCurrentShader);
 
     private static final RenderType NEBULAE = RenderType.create("nebulae",
             DefaultVertexFormat.POSITION, VertexFormat.Mode.QUADS, 256, false, false,
@@ -41,10 +43,20 @@ public class CosmicCoreRenderTypes extends RenderType {
                     .setWriteMaskState(COLOR_DEPTH_WRITE)
                     .createCompositeState(false));
 
-    private static final RenderType AETHER_STORM_CURRENT = RenderType.create("cosmiccore:aether_storm_current",
+    private static final RenderType FIRMAMENT_STORM_CURRENT = RenderType.create("cosmiccore:firmament_storm_current",
             DefaultVertexFormat.POSITION_TEX_COLOR, VertexFormat.Mode.QUADS, 786432, false, false,
             RenderType.CompositeState.builder()
-                    .setShaderState(AETHER_STORM_CURRENT_SHADER)
+                    .setShaderState(FIRMAMENT_STORM_CURRENT_SHADER)
+                    .setTransparencyState(TRANSLUCENT_TRANSPARENCY)
+                    .setCullState(NO_CULL)
+                    .setDepthTestState(LEQUAL_DEPTH_TEST)
+                    .setWriteMaskState(COLOR_WRITE)
+                    .createCompositeState(false));
+
+    private static final RenderType FIRMAMENT_WIND_CURRENT = RenderType.create("cosmiccore:firmament_wind_current",
+            DefaultVertexFormat.POSITION_TEX_COLOR, VertexFormat.Mode.QUADS, 262144, false, true,
+            RenderType.CompositeState.builder()
+                    .setShaderState(FIRMAMENT_WIND_CURRENT_SHADER)
                     .setTransparencyState(TRANSLUCENT_TRANSPARENCY)
                     .setCullState(NO_CULL)
                     .setDepthTestState(LEQUAL_DEPTH_TEST)
@@ -69,7 +81,11 @@ public class CosmicCoreRenderTypes extends RenderType {
         return COMPUTATION_ARRAY_LED;
     }
 
-    public static RenderType aetherStormCurrent() {
-        return AETHER_STORM_CURRENT;
+    public static RenderType firmamentStormCurrent() {
+        return FIRMAMENT_STORM_CURRENT;
+    }
+
+    public static RenderType firmamentWindCurrent() {
+        return FIRMAMENT_WIND_CURRENT;
     }
 }

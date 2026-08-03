@@ -1,0 +1,6 @@
+﻿{
+  "type": "neoforge:add_features",
+  "biomes": "#frontiers:is_firmament",
+  "features": "cosmiccore:firmament_middle_band_bridge",
+  "step": "local_modifications"
+}

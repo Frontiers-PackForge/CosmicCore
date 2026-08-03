@@ -3,6 +3,7 @@ package com.ghostipedia.cosmiccore.client;
 import com.ghostipedia.cosmiccore.CosmicCore;
 import com.ghostipedia.cosmiccore.client.dev.AbyssDevView;
 import com.ghostipedia.cosmiccore.client.dev.MurkbloomDevControls;
+import com.ghostipedia.cosmiccore.client.firmament.FirmamentSpecialEffects;
 import com.ghostipedia.cosmiccore.client.keybind.QuakeMovementKeybinds;
 import com.ghostipedia.cosmiccore.client.mirror.DeedHudOverlay;
 import com.ghostipedia.cosmiccore.client.mirror.MirrorScreen;
@@ -14,6 +15,7 @@ import com.ghostipedia.cosmiccore.client.tooltip.FoodTooltipComponent;
 import com.ghostipedia.cosmiccore.common.config.CosmicCoreConfig;
 import com.ghostipedia.cosmiccore.common.data.CosmicBlockEntities;
 import com.ghostipedia.cosmiccore.common.data.CosmicParticleTypes;
+import com.ghostipedia.cosmiccore.common.dimension.FirmamentDimension;
 
 import com.gregtechceu.gtceu.client.renderer.machine.DynamicRenderManager;
 
@@ -27,6 +29,7 @@ import net.neoforged.fml.loading.FMLEnvironment;
 import net.neoforged.neoforge.client.event.EntityRenderersEvent;
 import net.neoforged.neoforge.client.event.ModelEvent;
 import net.neoforged.neoforge.client.event.RegisterClientTooltipComponentFactoriesEvent;
+import net.neoforged.neoforge.client.event.RegisterDimensionSpecialEffectsEvent;
 import net.neoforged.neoforge.client.event.RegisterGuiLayersEvent;
 import net.neoforged.neoforge.client.event.RegisterKeyMappingsEvent;
 import net.neoforged.neoforge.client.event.RegisterParticleProvidersEvent;
@@ -90,10 +93,13 @@ public class CosmicCoreClient {
     private static ShaderInstance deedInterferenceShader;
 
     @Getter
-    private static ShaderInstance aetherAtmosphereShader;
+    private static ShaderInstance firmamentAtmosphereShader;
 
     @Getter
-    private static ShaderInstance aetherStormCurrentShader;
+    private static ShaderInstance firmamentStormCurrentShader;
+
+    @Getter
+    private static ShaderInstance firmamentWindCurrentShader;
 
     @SubscribeEvent
     public static void shaderRegistry(RegisterShadersEvent event) {
@@ -115,12 +121,20 @@ public class CosmicCoreClient {
                 (shaderInstance) -> mirrorDepthsShader = shaderInstance);
         registerShader(event, "deed_interference", DefaultVertexFormat.POSITION_TEX,
                 (shaderInstance) -> deedInterferenceShader = shaderInstance);
-        aetherAtmosphereShader = null;
-        registerShader(event, "aether_atmosphere", DefaultVertexFormat.POSITION,
-                (shaderInstance) -> aetherAtmosphereShader = shaderInstance);
-        aetherStormCurrentShader = null;
-        registerShader(event, "aether_storm_current", DefaultVertexFormat.POSITION_TEX_COLOR,
-                (shaderInstance) -> aetherStormCurrentShader = shaderInstance);
+        firmamentAtmosphereShader = null;
+        registerShader(event, "firmament_atmosphere", DefaultVertexFormat.POSITION,
+                (shaderInstance) -> firmamentAtmosphereShader = shaderInstance);
+        firmamentStormCurrentShader = null;
+        registerShader(event, "firmament_storm_current", DefaultVertexFormat.POSITION_TEX_COLOR,
+                (shaderInstance) -> firmamentStormCurrentShader = shaderInstance);
+        firmamentWindCurrentShader = null;
+        registerShader(event, "firmament_wind_current", DefaultVertexFormat.POSITION_TEX_COLOR,
+                (shaderInstance) -> firmamentWindCurrentShader = shaderInstance);
+    }
+
+    @SubscribeEvent
+    public static void registerDimensionSpecialEffects(RegisterDimensionSpecialEffectsEvent event) {
+        event.register(FirmamentDimension.ID, new FirmamentSpecialEffects());
     }
 
     private static void registerShader(RegisterShadersEvent event, String name, VertexFormat format,
@@ -198,7 +212,7 @@ public class CosmicCoreClient {
     }
 
     /*
-     * SHELVED bee client registration — Forestry dropped on 1.21.1 (bead cosmiccore-42.13)
+     * SHELVED bee client registration â€” Forestry dropped on 1.21.1 (bead cosmiccore-42.13)
      * public static class CosmicBeesClientRegistration implements Consumer<IClientRegistration> {
      * 
      * @Override
