@@ -1,0 +1,206 @@
+package com.ghostipedia.cosmiccore.client.firmament;
+
+import com.ghostipedia.cosmiccore.CosmicCore;
+import com.ghostipedia.cosmiccore.client.CosmicCoreClient;
+import com.ghostipedia.cosmiccore.client.renderer.CosmicCoreRenderTypes;
+import com.ghostipedia.cosmiccore.common.data.worldgen.firmament.FirmamentMiddleBandLayout;
+import com.ghostipedia.cosmiccore.common.dimension.FirmamentDimension;
+
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.ShaderInstance;
+import net.minecraft.util.Mth;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.neoforge.client.event.RenderLevelStageEvent;
+
+import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.VertexConsumer;
+import org.joml.Matrix4f;
+
+@EventBusSubscriber(modid = CosmicCore.MOD_ID, value = Dist.CLIENT)
+public final class FirmamentWindCurrentRenderer {
+
+    private static final int CURRENT_CELL = 24;
+    private static final int CURRENT_RANGE = 192;
+    private static final int CURRENT_SEGMENTS = 10;
+    private static final int UPDRAFT_CELL = 192;
+    private static final int UPDRAFT_RANGE = 320;
+    private static final int UPDRAFT_SEGMENTS = 18;
+    private static final float MID_BAND_Y = 120.0f;
+    private static final long CURRENT_DECORATION_SALT = 0x3C6EF372FE94F82BL;
+    private static final long UPDRAFT_DECORATION_SALT = 0xA54FF53A5F1D36F1L;
+
+    private FirmamentWindCurrentRenderer() {}
+
+    @SubscribeEvent
+    public static void onRenderLevel(RenderLevelStageEvent event) {
+        if (event.getStage() != RenderLevelStageEvent.Stage.AFTER_PARTICLES) return;
+        Minecraft minecraft = Minecraft.getInstance();
+        if (minecraft.level == null || !minecraft.level.dimension().equals(FirmamentDimension.KEY)) return;
+        ShaderInstance shader = CosmicCoreClient.getFirmamentWindCurrentShader();
+        if (shader == null) return;
+
+        var camera = event.getCamera().getPosition();
+        PoseStack poseStack = event.getPoseStack();
+        poseStack.pushPose();
+        try {
+            poseStack.translate(-camera.x, -camera.y, -camera.z);
+            Matrix4f matrix = poseStack.last().pose();
+            MultiBufferSource.BufferSource buffers = minecraft.renderBuffers().bufferSource();
+            VertexConsumer consumer = buffers.getBuffer(CosmicCoreRenderTypes.firmamentWindCurrent());
+            drawHorizontalCurrents(consumer, matrix, camera.x, camera.z);
+            drawUpdrafts(consumer, matrix, camera.x, camera.z);
+
+            float partialTick = event.getPartialTick().getGameTimeDeltaPartialTick(false);
+            var timeUniform = shader.getUniform("CurrentTime");
+            if (timeUniform != null) {
+                timeUniform.set((float) ((minecraft.level.getGameTime() + partialTick) / 20.0));
+            }
+            var cameraUniform = shader.getUniform("CameraPos");
+            if (cameraUniform != null) {
+                cameraUniform.set((float) camera.x, (float) camera.y, (float) camera.z);
+            }
+            buffers.endBatch(CosmicCoreRenderTypes.firmamentWindCurrent());
+        } finally {
+            poseStack.popPose();
+        }
+    }
+
+    private static void drawHorizontalCurrents(VertexConsumer consumer, Matrix4f matrix,
+                                               double cameraX, double cameraZ) {
+        int minCellX = Mth.floor((cameraX - CURRENT_RANGE) / CURRENT_CELL);
+        int maxCellX = Mth.floor((cameraX + CURRENT_RANGE) / CURRENT_CELL);
+        int minCellZ = Mth.floor((cameraZ - CURRENT_RANGE) / CURRENT_CELL);
+        int maxCellZ = Mth.floor((cameraZ + CURRENT_RANGE) / CURRENT_CELL);
+        for (int cellZ = minCellZ; cellZ <= maxCellZ; cellZ++) {
+            for (int cellX = minCellX; cellX <= maxCellX; cellX++) {
+                double centerX = (cellX + 0.5) * CURRENT_CELL;
+                double centerZ = (cellZ + 0.5) * CURRENT_CELL;
+                FirmamentMiddleBandLayout.WindCorridor current = FirmamentMiddleBandLayout.sampleWind(centerX, centerZ);
+                if (current.strength() < 0.28) continue;
+
+                long localSeed = FirmamentMiddleBandLayout.mix(CURRENT_DECORATION_SALT, cellX, cellZ);
+                float phase = unit(localSeed, 0);
+                float length = 56.0f + unit(localSeed, 9) * 28.0f;
+                float width = 2.4f + (float) current.strength() * 3.8f;
+                float centerY = MID_BAND_Y + (unit(localSeed, 21) - 0.5f) * 18.0f;
+                drawCurrentCross(
+                        consumer, matrix,
+                        (float) centerX, centerY, (float) centerZ,
+                        (float) current.directionX(), (float) current.directionZ(),
+                        length, width, (float) current.strength(), phase);
+            }
+        }
+    }
+
+    private static void drawCurrentCross(VertexConsumer consumer, Matrix4f matrix, float centerX, float centerY,
+                                         float centerZ, float directionX, float directionZ, float length, float width,
+                                         float strength, float phase) {
+        float normalX = -directionZ;
+        float normalZ = directionX;
+        for (int segment = 0; segment < CURRENT_SEGMENTS; segment++) {
+            float progress0 = segment / (float) CURRENT_SEGMENTS;
+            float progress1 = (segment + 1) / (float) CURRENT_SEGMENTS;
+            float along0 = (progress0 - 0.5f) * length;
+            float along1 = (progress1 - 0.5f) * length;
+            float sway0 = Mth.sin(progress0 * Mth.TWO_PI + phase * Mth.TWO_PI) * 1.7f;
+            float sway1 = Mth.sin(progress1 * Mth.TWO_PI + phase * Mth.TWO_PI) * 1.7f;
+            float rise0 = Mth.sin(progress0 * Mth.TWO_PI * 1.5f + phase * 5.1f) * 1.4f;
+            float rise1 = Mth.sin(progress1 * Mth.TWO_PI * 1.5f + phase * 5.1f) * 1.4f;
+            float x0 = centerX + directionX * along0 + normalX * sway0;
+            float z0 = centerZ + directionZ * along0 + normalZ * sway0;
+            float x1 = centerX + directionX * along1 + normalX * sway1;
+            float z1 = centerZ + directionZ * along1 + normalZ * sway1;
+            float y0 = centerY + rise0;
+            float y1 = centerY + rise1;
+            float u0 = phase * 31.0f + progress0 * length;
+            float u1 = phase * 31.0f + progress1 * length;
+            addRibbonQuad(consumer, matrix, x0, y0, z0, x1, y1, z1,
+                    normalX * width, 0.0f, normalZ * width, u0, u1, strength, phase, false);
+            addRibbonQuad(consumer, matrix, x0, y0, z0, x1, y1, z1,
+                    0.0f, width * 0.72f, 0.0f, u0, u1, strength * 0.82f, phase + 0.37f, false);
+        }
+    }
+
+    private static void drawUpdrafts(VertexConsumer consumer, Matrix4f matrix,
+                                     double cameraX, double cameraZ) {
+        int minCellX = Mth.floor((cameraX - UPDRAFT_RANGE) / UPDRAFT_CELL);
+        int maxCellX = Mth.floor((cameraX + UPDRAFT_RANGE) / UPDRAFT_CELL);
+        int minCellZ = Mth.floor((cameraZ - UPDRAFT_RANGE) / UPDRAFT_CELL);
+        int maxCellZ = Mth.floor((cameraZ + UPDRAFT_RANGE) / UPDRAFT_CELL);
+        for (int cellZ = minCellZ; cellZ <= maxCellZ; cellZ++) {
+            for (int cellX = minCellX; cellX <= maxCellX; cellX++) {
+                long localSeed = FirmamentMiddleBandLayout.mix(UPDRAFT_DECORATION_SALT, cellX, cellZ);
+                if (unit(localSeed, 0) < 0.74f) continue;
+                float centerX = (cellX + 0.18f + unit(localSeed, 11) * 0.64f) * UPDRAFT_CELL;
+                float centerZ = (cellZ + 0.18f + unit(localSeed, 23) * 0.64f) * UPDRAFT_CELL;
+                FirmamentMiddleBandLayout.WindCorridor current = FirmamentMiddleBandLayout.sampleWind(centerX, centerZ);
+                if (current.strength() < 0.38) continue;
+                drawUpdraft(consumer, matrix, centerX, centerZ,
+                        78.0f + unit(localSeed, 35) * 12.0f,
+                        158.0f + unit(localSeed, 47) * 18.0f,
+                        3.5f + (float) current.strength() * 3.0f,
+                        (float) current.strength(), unit(localSeed, 7));
+            }
+        }
+    }
+
+    private static void drawUpdraft(VertexConsumer consumer, Matrix4f matrix, float centerX, float centerZ,
+                                    float minY, float maxY, float radius, float strength, float phase) {
+        for (int segment = 0; segment < UPDRAFT_SEGMENTS; segment++) {
+            float progress0 = segment / (float) UPDRAFT_SEGMENTS;
+            float progress1 = (segment + 1) / (float) UPDRAFT_SEGMENTS;
+            float angle0 = progress0 * Mth.TWO_PI * 1.35f + phase * Mth.TWO_PI;
+            float angle1 = progress1 * Mth.TWO_PI * 1.35f + phase * Mth.TWO_PI;
+            float radial0 = radius * (0.72f + 0.28f * Mth.sin(progress0 * Mth.PI));
+            float radial1 = radius * (0.72f + 0.28f * Mth.sin(progress1 * Mth.PI));
+            float x0 = centerX + Mth.cos(angle0) * radial0;
+            float z0 = centerZ + Mth.sin(angle0) * radial0;
+            float x1 = centerX + Mth.cos(angle1) * radial1;
+            float z1 = centerZ + Mth.sin(angle1) * radial1;
+            float y0 = Mth.lerp(progress0, minY, maxY);
+            float y1 = Mth.lerp(progress1, minY, maxY);
+            float normalX = Mth.cos((angle0 + angle1) * 0.5f);
+            float normalZ = Mth.sin((angle0 + angle1) * 0.5f);
+            float width = 2.2f + 1.4f * Mth.sin(progress0 * Mth.PI);
+            float u0 = phase * 43.0f + progress0 * (maxY - minY);
+            float u1 = phase * 43.0f + progress1 * (maxY - minY);
+            addRibbonQuad(consumer, matrix, x0, y0, z0, x1, y1, z1,
+                    normalX * width, 0.0f, normalZ * width, u0, u1, strength, phase, true);
+            addRibbonQuad(consumer, matrix, x0, y0, z0, x1, y1, z1,
+                    -normalZ * width, 0.0f, normalX * width, u0, u1,
+                    strength * 0.78f, phase + 0.43f, true);
+        }
+    }
+
+    private static void addRibbonQuad(VertexConsumer consumer, Matrix4f matrix,
+                                      float x0, float y0, float z0, float x1, float y1, float z1,
+                                      float offsetX, float offsetY, float offsetZ, float u0, float u1,
+                                      float strength, float phase, boolean updraft) {
+        int red = Math.round(Mth.clamp(strength, 0.0f, 1.0f) * 255.0f);
+        int green = Math.round((phase - Mth.floor(phase)) * 255.0f);
+        int blue = updraft ? 255 : 0;
+        int alpha = updraft ? 142 : 116;
+        addVertex(consumer, matrix, x0 - offsetX, y0 - offsetY, z0 - offsetZ,
+                u0, 0.0f, red, green, blue, alpha);
+        addVertex(consumer, matrix, x0 + offsetX, y0 + offsetY, z0 + offsetZ,
+                u0, 1.0f, red, green, blue, alpha);
+        addVertex(consumer, matrix, x1 + offsetX, y1 + offsetY, z1 + offsetZ,
+                u1, 1.0f, red, green, blue, alpha);
+        addVertex(consumer, matrix, x1 - offsetX, y1 - offsetY, z1 - offsetZ,
+                u1, 0.0f, red, green, blue, alpha);
+    }
+
+    private static void addVertex(VertexConsumer consumer, Matrix4f matrix, float x, float y, float z,
+                                  float u, float v, int red, int green, int blue, int alpha) {
+        consumer.addVertex(matrix, x, y, z)
+                .setUv(u, v)
+                .setColor(red, green, blue, alpha);
+    }
+
+    private static float unit(long value, int rotation) {
+        return (float) ((Long.rotateRight(value, rotation) >>> 40) & 0xFFFFFFL) / 0xFFFFFF;
+    }
+}

@@ -378,10 +378,17 @@ public final class FieldGenLedger {
     }
 
     private static void warnOnFingerprintDrift() {
-        if (!dirty) return;
         for (ResourceKey<Level> dimension : OreFieldPlacement.fieldDimensions()) {
             String stored = LOADED_FINGERPRINTS.get(dimension.location());
-            if (stored != null && !stored.equals(bagFingerprint(dimension))) {
+            if (stored == null) continue;
+            String current = bagFingerprint(dimension);
+            String terrain = OreFieldTerrainResolver.algorithmFingerprint(dimension);
+            if (!terrain.isEmpty() && !stored.startsWith("@" + terrain)) {
+                CosmicCore.LOGGER.warn("[FieldGen] terrain-resolution parameters for {} changed. Existing " +
+                        "Firmament field markers and newly resolved anchors may disagree until affected land is " +
+                        "regenerated.", dimension.location());
+            }
+            if (dirty && !stored.equals(current)) {
                 CosmicCore.LOGGER.warn("[FieldGen] bundle parameters for {} changed since the last clean " +
                         "shutdown and unrecorded generated land was found. Fields baked in the interrupted " +
                         "session may be recorded with the new parameters.", dimension.location());
@@ -391,6 +398,10 @@ public final class FieldGenLedger {
 
     private static String bagFingerprint(ResourceKey<Level> dimension) {
         StringJoiner joiner = new StringJoiner(",");
+        String terrainFingerprint = OreFieldTerrainResolver.algorithmFingerprint(dimension);
+        if (!terrainFingerprint.isEmpty()) {
+            joiner.add("@" + terrainFingerprint);
+        }
         for (Material bundle : OreFieldPlacement.bundles()) {
             OreFieldPlacement.FieldProfile profile = OreFieldPlacement.profileFor(bundle);
             if (profile == null || !profile.dimensions().contains(dimension) || profile.weight() <= 0) continue;

@@ -26,6 +26,7 @@ import com.ghostipedia.cosmiccore.common.data.materials.CosmicMaterials;
 import com.ghostipedia.cosmiccore.common.data.recipe.CosmicCoreOreRecipeHandler;
 import com.ghostipedia.cosmiccore.common.data.temperature.CosmicTemperatureModifiers;
 import com.ghostipedia.cosmiccore.common.data.worldgen.CosmicWorldGenLayers;
+import com.ghostipedia.cosmiccore.common.data.worldgen.firmament.CosmicFirmamentFeatures;
 import com.ghostipedia.cosmiccore.common.data.worldgen.generator.CosmicChunkGenerators;
 import com.ghostipedia.cosmiccore.common.item.armor.boots.TravelerBootsMigration;
 import com.ghostipedia.cosmiccore.common.machine.multiblock.multi.logic.bloomwyrm.BloomwyrmChunkLoading;
@@ -89,6 +90,7 @@ public class CosmicCore {
         CosmicTemperatureModifiers.register(modBus);
         CosmicChunkGenerators.register(modBus);
         CosmicCropFeatures.register(modBus);
+        CosmicFirmamentFeatures.register(modBus);
         CosmicBargains.init();
 
         if (Platform.isClient()) {

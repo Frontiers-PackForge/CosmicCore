@@ -1,6 +1,6 @@
 {
     "parent": "minecraft:block/cube_all",
     "textures": {
-        "all": "cosmiccore:block/aether/astral_regolith"
+        "all": "cosmiccore:block/firmament/astral_regolith"
     }
 }

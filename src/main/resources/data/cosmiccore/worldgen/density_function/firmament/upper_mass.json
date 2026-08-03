@@ -1,0 +1,9 @@
+﻿{
+  "type": "minecraft:cache_2d",
+  "argument": {
+    "type": "minecraft:noise",
+    "noise": "cosmiccore:firmament_archipelago_upper",
+    "xz_scale": 0.72,
+    "y_scale": 0.0
+  }
+}

@@ -1,0 +1,16 @@
+﻿{
+  "vertex": "cosmiccore:firmament_wind_current",
+  "fragment": "cosmiccore:firmament_wind_current",
+  "attributes": [
+    "Position",
+    "UV0",
+    "Color"
+  ],
+  "samplers": [],
+  "uniforms": [
+    { "name": "ModelViewMat", "type": "matrix4x4", "count": 16, "values": [ 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0 ] },
+    { "name": "ProjMat", "type": "matrix4x4", "count": 16, "values": [ 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0 ] },
+    { "name": "CurrentTime", "type": "float", "count": 1, "values": [ 0.0 ] },
+    { "name": "CameraPos", "type": "float", "count": 3, "values": [ 0.0, 120.0, 0.0 ] }
+  ]
+}

@@ -1,6 +1,7 @@
 package com.ghostipedia.cosmiccore.common.data.worldgen.field;
 
 import com.ghostipedia.cosmiccore.CosmicCore;
+import com.ghostipedia.cosmiccore.common.data.worldgen.field.OreFieldTerrainResolver.ResolvedOreField;
 
 import com.gregtechceu.gtceu.api.data.worldgen.GTOreDefinition;
 import com.gregtechceu.gtceu.api.data.worldgen.ores.GeneratedVeinMetadata;
@@ -64,8 +65,12 @@ public final class OreFieldDispatcher {
         int chunkCenterX = (chunkPos.x << 4) + 8;
         int chunkCenterZ = (chunkPos.z << 4) + 8;
 
-        List<OreFieldPlacement.OreField> fields = OreFieldPlacement.fieldsNear(
+        List<OreFieldPlacement.OreField> rawFields = OreFieldPlacement.fieldsNear(
                 seed, dimension, chunkCenterX, chunkCenterZ, SEARCH_RADIUS);
+        if (rawFields.isEmpty()) return List.of();
+
+        List<ResolvedOreField> fields = OreFieldTerrainResolver.resolveAll(
+                level.getLevel(), generator, randomState, rawFields);
         if (fields.isEmpty()) return List.of();
 
         Registry<GTOreDefinition> registry = level.registryAccess().registryOrThrow(GTRegistries.Keys.ORE_VEIN);
@@ -76,12 +81,27 @@ public final class OreFieldDispatcher {
         List<GeneratedVeinMetadata> out = new ArrayList<>();
         PlacementContext placement = new PlacementContext(level, generator, Optional.empty());
         boolean surfaceDimension = dimension != Level.NETHER && dimension != Level.END;
-        for (OreFieldPlacement.OreField field : fields) {
+        for (ResolvedOreField resolved : fields) {
+            OreFieldPlacement.OreField field = resolved.field();
             ResourceLocation id = CosmicCore.id(field.bundle().getName());
             Optional<Holder.Reference<GTOreDefinition>> holder = registry
                     .getHolder(ResourceKey.create(GTRegistries.Keys.ORE_VEIN, id));
             if (holder.isEmpty()) continue;
             GTOreDefinition definition = holder.get().value();
+
+            if (resolved.terrainAware()) {
+                BlockPos representative = resolved.representative();
+                if ((representative.getX() >> 4) == chunkPos.x &&
+                        (representative.getZ() >> 4) == chunkPos.z) {
+                    ServerCache.instance.addVein(dimension, gridX, gridZ,
+                            new GeneratedVeinMetadata(chunkPos, representative, holder.get()));
+                }
+                for (BlockPos anchor : resolved.memberAnchors()) {
+                    if ((anchor.getX() >> 4) != chunkPos.x || (anchor.getZ() >> 4) != chunkPos.z) continue;
+                    out.add(new GeneratedVeinMetadata(chunkPos, anchor, holder.get()));
+                }
+                continue;
+            }
 
             RandomSource coreRandom = new XoroshiroRandomSource(
                     seed ^ Y_SALT ^

@@ -2,6 +2,8 @@ package com.ghostipedia.cosmiccore.common.worldgen.survey;
 
 import com.ghostipedia.cosmiccore.CosmicCore;
 import com.ghostipedia.cosmiccore.common.data.worldgen.field.OreFieldPlacement;
+import com.ghostipedia.cosmiccore.common.data.worldgen.field.OreFieldTerrainResolver;
+import com.ghostipedia.cosmiccore.common.data.worldgen.field.OreFieldTerrainResolver.ResolvedOreField;
 
 import com.gregtechceu.gtceu.api.data.worldgen.GTOreDefinition;
 import com.gregtechceu.gtceu.api.data.worldgen.IWorldGenLayer;
@@ -143,9 +145,10 @@ public class VeinSurveyUtil {
             }
         }
         Registry<GTOreDefinition> veinRegistry = level.registryAccess().registryOrThrow(GTRegistries.Keys.ORE_VEIN);
-        for (OreFieldPlacement.OreField field : OreFieldPlacement.fieldsNear(
-                level.getSeed(), level.dimension(), centerPos.getX(), centerPos.getZ(), radiusBlocks)) {
-            BlockPos fieldCenter = new BlockPos(field.core().getX(), 0, field.core().getZ());
+        for (ResolvedOreField resolved : OreFieldTerrainResolver.resolveNear(
+                level, centerPos.getX(), centerPos.getZ(), radiusBlocks)) {
+            OreFieldPlacement.OreField field = resolved.field();
+            BlockPos fieldCenter = resolved.representative();
             if (distanceXZ(fieldCenter, centerPos) > radiusBlocks) continue;
             if (confirmedFieldCores.contains(coreKey(fieldCenter.getX(), fieldCenter.getZ()))) continue;
 

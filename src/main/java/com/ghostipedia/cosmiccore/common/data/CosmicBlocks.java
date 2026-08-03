@@ -12,6 +12,7 @@ import com.ghostipedia.cosmiccore.common.block.MothHomeBlock;
 import com.ghostipedia.cosmiccore.common.block.MurkFloraBlock;
 import com.ghostipedia.cosmiccore.common.block.MurkKelpBlock;
 import com.ghostipedia.cosmiccore.common.blockentity.CosmicCoilBlockEntity;
+import com.ghostipedia.cosmiccore.common.dimension.FirmamentPortalBlock;
 import com.ghostipedia.cosmiccore.common.food.hearth.HearthPlateBlock;
 import com.ghostipedia.cosmiccore.ember.CosmicEmberEmitterBlock;
 import com.ghostipedia.cosmiccore.ember.CosmicEmberReceptorBlock;
@@ -69,6 +70,38 @@ public class CosmicBlocks {
     public static final Map<Integer, BlockEntry<CosmicEmberEmitterBlock>> EMBER_EMITTER_BLOCKS = registerEmberEmitters();
     public static final Map<Integer, BlockEntry<CosmicEmberReceptorBlock>> EMBER_RECEPTOR_BLOCKS = registerEmberReceptors();
 
+    public static final BlockEntry<Block> FIRMAMENT_SAPROLITE = firmamentTerrainBlock(
+            "firmament_saprolite", "Firmament Saprolite", Blocks.STONE, "firmament_saprolite",
+            MapColor.WOOL, SoundType.STONE, 0.5F, true, BlockTags.MINEABLE_WITH_PICKAXE);
+    public static final BlockEntry<SlabBlock> FIRMAMENT_SAPROLITE_SLAB = firmamentTerrainSlab(
+            "firmament_saprolite_slab", "Firmament Saprolite Slab", "firmament_saprolite", FIRMAMENT_SAPROLITE);
+    public static final BlockEntry<Block> ASTRAL_REGOLITH = firmamentTerrainBlock(
+            "astral_regolith", "Astral Regolith", Blocks.DIRT, "astral_regolith",
+            MapColor.TERRACOTTA_CYAN, SoundType.GRAVEL, 0.2F, false,
+            BlockTags.DIRT, BlockTags.MINEABLE_WITH_SHOVEL);
+    public static final BlockEntry<Block> STARDUST_TURF = REGISTRATE.block("stardust_turf", Block::new)
+            .lang("Stardust Turf")
+            .initialProperties(() -> Blocks.GRASS_BLOCK)
+            .properties(properties -> properties.mapColor(MapColor.WARPED_WART_BLOCK)
+                    .strength(0.2F)
+                    .sound(SoundType.GRASS))
+            .blockstate((context, provider) -> provider.simpleBlock(
+                    context.get(), provider.models().cubeBottomTop(
+                            context.getName(), firmamentTexture("stardust_turf_side"),
+                            firmamentTexture("astral_regolith"), firmamentTexture("stardust_turf_top"))))
+            .loot((tables, block) -> tables.dropSelf(block))
+            .tag(BlockTags.DIRT, BlockTags.MINEABLE_WITH_SHOVEL)
+            .item(BlockItem::new)
+            .build()
+            .register();
+    public static final BlockEntry<FirmamentPortalBlock> FIRMAMENT_PORTAL = REGISTRATE
+            .block("firmament_portal", FirmamentPortalBlock::new)
+            .lang("Firmament Portal")
+            .initialProperties(() -> Blocks.NETHER_PORTAL)
+            .addLayer(() -> RenderType::translucent)
+            .blockstate(NonNullBiConsumer.noop())
+            .register();
+
     private static Map<Integer, BlockEntry<CosmicEmberEmitterBlock>> registerEmberEmitters() {
         Map<Integer, BlockEntry<CosmicEmberEmitterBlock>> emitters = new Int2ReferenceArrayMap<>();
         for (int i = 0; i < 15; i++) {
@@ -86,6 +119,53 @@ public class CosmicBlocks {
                     .register());
         }
         return emitters;
+    }
+
+    @SafeVarargs
+    private static BlockEntry<Block> firmamentTerrainBlock(String name, String lang, Block source, String texture,
+                                                           MapColor mapColor, SoundType sound, float strength,
+                                                           boolean requiresCorrectTool,
+                                                           net.minecraft.tags.TagKey<Block>... tags) {
+        return REGISTRATE.block(name, Block::new)
+                .lang(lang)
+                .initialProperties(() -> source)
+                .properties(properties -> {
+                    BlockBehaviour.Properties configured = properties.mapColor(mapColor).strength(strength)
+                            .sound(sound);
+                    return requiresCorrectTool ? configured.requiresCorrectToolForDrops() : configured;
+                })
+                .blockstate((context, provider) -> provider.simpleBlock(
+                        context.get(), provider.models().cubeAll(context.getName(), firmamentTexture(texture))))
+                .loot((tables, block) -> tables.dropSelf(block))
+                .tag(tags)
+                .item(BlockItem::new)
+                .build()
+                .register();
+    }
+
+    private static BlockEntry<SlabBlock> firmamentTerrainSlab(String name, String lang, String texture,
+                                                              BlockEntry<? extends Block> fullBlock) {
+        return REGISTRATE.block(name, SlabBlock::new)
+                .lang(lang)
+                .initialProperties(fullBlock)
+                .properties(BlockBehaviour.Properties::requiresCorrectToolForDrops)
+                .blockstate((context, provider) -> {
+                    ResourceLocation blockTexture = firmamentTexture(texture);
+                    var bottom = provider.models().slab(context.getName(), blockTexture, blockTexture, blockTexture);
+                    var top = provider.models().slabTop(context.getName() + "_top", blockTexture, blockTexture,
+                            blockTexture);
+                    var full = provider.models().getExistingFile(CosmicCore.id("block/" + fullBlock.getId().getPath()));
+                    provider.slabBlock(context.get(), bottom, top, full);
+                })
+                .loot((tables, block) -> tables.add(block, tables.createSlabItemTable(block)))
+                .tag(BlockTags.MINEABLE_WITH_PICKAXE)
+                .item(BlockItem::new)
+                .build()
+                .register();
+    }
+
+    private static ResourceLocation firmamentTexture(String name) {
+        return CosmicCore.id("block/firmament/" + name);
     }
 
     private static Map<Integer, BlockEntry<CosmicEmberReceptorBlock>> registerEmberReceptors() {
@@ -109,7 +189,7 @@ public class CosmicBlocks {
     }
 
     // Coil Register
-    // TODO(stellaris): SUN_GLOBE used Ad Astra GLOBES registry + GlobeBlock — dropped with Ad Astra (bead
+    // TODO(stellaris): SUN_GLOBE used Ad Astra GLOBES registry + GlobeBlock â€” dropped with Ad Astra (bead
     // cosmiccore-42.13)
 
     public static final BlockEntry<CoilBlock> COIL_PRISMATIC_TUNGSTENSTEEL = createCoilBlock(
@@ -430,7 +510,7 @@ public class CosmicBlocks {
             CosmicCore.id("block/casings/cosmetic/iron_plated_deepslate_tile"));
 
     /*
-     * SHELVED ember blocks — Embers dropped on 1.21.1 (beads cosmiccore-42.13 / 42.14)
+     * SHELVED ember blocks â€” Embers dropped on 1.21.1 (beads cosmiccore-42.13 / 42.14)
      * public static final Map<Integer, BlockEntry<CosmicEmberEmitterBlock>> EMBER_EMITTER_BLOCKS = new
      * Int2ReferenceArrayMap<>();
      * public static final Map<Integer, BlockEntry<CosmicEmberReceptorBlock>> EMBER_RECEPTOR_BLOCKS = new

@@ -2,8 +2,8 @@ package com.ghostipedia.cosmiccore.common.item.behavior;
 
 import com.ghostipedia.cosmiccore.client.map.RevealedField;
 import com.ghostipedia.cosmiccore.common.data.worldgen.field.FieldDiscoverySharing;
-import com.ghostipedia.cosmiccore.common.data.worldgen.field.OreFieldPlacement;
-import com.ghostipedia.cosmiccore.common.data.worldgen.field.OreFieldPlacement.OreField;
+import com.ghostipedia.cosmiccore.common.data.worldgen.field.OreFieldTerrainResolver;
+import com.ghostipedia.cosmiccore.common.data.worldgen.field.OreFieldTerrainResolver.ResolvedOreField;
 import com.ghostipedia.cosmiccore.common.network.CCoreNetwork;
 import com.ghostipedia.cosmiccore.common.network.packet.RevealFieldsPacket;
 
@@ -52,9 +52,11 @@ public class DowsingRodBehavior implements IInteractionItem, IAddInformation {
         if (!level.isClientSide && level instanceof ServerLevel serverLevel &&
                 player instanceof ServerPlayer serverPlayer) {
             BlockPos center = player.blockPosition();
-            List<OreField> fields = OreFieldPlacement.fieldsNear(
-                    serverLevel.getSeed(), serverLevel.dimension(), center.getX(), center.getZ(), radius);
-            fields.sort(Comparator.comparingInt(field -> horizontalDistance(field.core(), center)));
+            List<ResolvedOreField> fields = OreFieldTerrainResolver.resolveNear(
+                    serverLevel, center.getX(), center.getZ(), radius);
+            fields = fields.stream()
+                    .sorted(Comparator.comparingInt(field -> horizontalDistance(field.representative(), center)))
+                    .toList();
 
             if (fields.isEmpty()) {
                 player.sendSystemMessage(Component.translatable("cosmiccore.dowsing.none")
@@ -66,11 +68,11 @@ public class DowsingRodBehavior implements IInteractionItem, IAddInformation {
                 player.sendSystemMessage(Component.translatable("cosmiccore.dowsing.found", fields.size())
                         .withStyle(ChatFormatting.GOLD));
                 int index = 1;
-                for (OreField field : fields) {
-                    int distance = horizontalDistance(field.core(), center);
+                for (ResolvedOreField field : fields) {
+                    int distance = horizontalDistance(field.representative(), center);
                     player.sendSystemMessage(Component.literal("  " + index + ". ")
                             .withStyle(ChatFormatting.GRAY)
-                            .append(field.bundle().getLocalizedName().copy().withStyle(ChatFormatting.AQUA))
+                            .append(field.field().bundle().getLocalizedName().copy().withStyle(ChatFormatting.AQUA))
                             .append(Component.literal(" - ").withStyle(ChatFormatting.DARK_GRAY))
                             .append(Component.literal(distance + "m").withStyle(ChatFormatting.WHITE)));
                     index++;
