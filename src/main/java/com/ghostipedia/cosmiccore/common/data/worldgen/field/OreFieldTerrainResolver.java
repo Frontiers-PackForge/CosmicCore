@@ -29,7 +29,7 @@ import java.util.concurrent.ConcurrentHashMap;
 @EventBusSubscriber(modid = CosmicCore.MOD_ID)
 public final class OreFieldTerrainResolver {
 
-    public static final String ALGORITHM_FINGERPRINT = "firmament-terrain-v1:h1:b0-119+b120-239:d12:n8:r25";
+    public static final String ALGORITHM_FINGERPRINT = "firmament-terrain-v2:h320:b0-119+b192-319:d12:n8:r25";
 
     private static final int MIN_SOLID_DEPTH = 12;
     private static final int MIN_VALID_MEMBERS = 8;
@@ -43,7 +43,7 @@ public final class OreFieldTerrainResolver {
 
         NONE(0, 0),
         LOWER(0, 120),
-        UPPER(120, 240);
+        UPPER(192, 320);
 
         private final int minY;
         private final int maxYExclusive;

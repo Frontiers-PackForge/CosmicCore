@@ -1,5 +1,7 @@
 package com.ghostipedia.cosmiccore.common.reflection.bargain.impl;
 
+import com.ghostipedia.cosmiccore.api.gravity.GravityApi;
+
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -72,6 +74,7 @@ public class CelesteDashHandler {
 
     @OnlyIn(Dist.CLIENT)
     public static boolean tryDash(Player player) {
+        if (!GravityApi.isNormal(player)) return false;
         DashState state = getState(player);
 
         if (canDash(player, state)) {
@@ -92,6 +95,10 @@ public class CelesteDashHandler {
 
     @OnlyIn(Dist.CLIENT)
     public static void clientTick(Player player) {
+        if (!GravityApi.isNormal(player)) {
+            suspend(player);
+            return;
+        }
         DashState state = getState(player);
 
         boolean justJumped = !player.onGround() && state.wasGrounded && player.getDeltaMovement().y > 0.1;
@@ -164,6 +171,7 @@ public class CelesteDashHandler {
 
     public static void executeDashServer(ServerPlayer player, float xRot, float yRot, float forwardInput,
                                          float strafeInput) {
+        if (!GravityApi.isNormal(player)) return;
         if (player.isInWater() || player.isInLava()) return;
         if (player.getAbilities().flying || player.isFallFlying()) return;
 
@@ -184,6 +192,7 @@ public class CelesteDashHandler {
     }
 
     private static boolean canDash(Player player, DashState state) {
+        if (!GravityApi.isNormal(player)) return false;
         if (state.isDashing) return false;
         if (state.dashCharges <= 0) return false;
         if (state.dashCooldown > 0) return false;
@@ -358,6 +367,10 @@ public class CelesteDashHandler {
 
     public static void removePlayer(UUID uuid) {
         playerStates.remove(uuid);
+    }
+
+    public static void suspend(Player player) {
+        playerStates.remove(player.getUUID());
     }
 
     public static boolean isDashing(Player player) {

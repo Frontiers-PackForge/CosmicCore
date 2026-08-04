@@ -25,11 +25,15 @@ public final class FirmamentWindCurrentRenderer {
     private static final int CURRENT_CELL = 24;
     private static final int CURRENT_RANGE = 192;
     private static final int CURRENT_SEGMENTS = 10;
+    private static final int STORM_CELL = 40;
+    private static final int STORM_RANGE = 240;
+    private static final int STORM_SEGMENTS = 8;
+    private static final int STORM_LAYER_SPACING = 18;
     private static final int UPDRAFT_CELL = 192;
     private static final int UPDRAFT_RANGE = 320;
     private static final int UPDRAFT_SEGMENTS = 18;
-    private static final float MID_BAND_Y = 120.0f;
     private static final long CURRENT_DECORATION_SALT = 0x3C6EF372FE94F82BL;
+    private static final long STORM_DECORATION_SALT = 0x510E527FADE682D1L;
     private static final long UPDRAFT_DECORATION_SALT = 0xA54FF53A5F1D36F1L;
 
     private FirmamentWindCurrentRenderer() {}
@@ -50,6 +54,7 @@ public final class FirmamentWindCurrentRenderer {
             Matrix4f matrix = poseStack.last().pose();
             MultiBufferSource.BufferSource buffers = minecraft.renderBuffers().bufferSource();
             VertexConsumer consumer = buffers.getBuffer(CosmicCoreRenderTypes.firmamentWindCurrent());
+            drawStormBody(consumer, matrix, camera.x, camera.z);
             drawHorizontalCurrents(consumer, matrix, camera.x, camera.z);
             drawUpdrafts(consumer, matrix, camera.x, camera.z);
 
@@ -85,7 +90,8 @@ public final class FirmamentWindCurrentRenderer {
                 float phase = unit(localSeed, 0);
                 float length = 56.0f + unit(localSeed, 9) * 28.0f;
                 float width = 2.4f + (float) current.strength() * 3.8f;
-                float centerY = MID_BAND_Y + (unit(localSeed, 21) - 0.5f) * 18.0f;
+                float centerY = (float) FirmamentMiddleBandLayout.MIDDLE_BAND_CENTER_Y +
+                        (unit(localSeed, 21) - 0.5f) * 54.0f;
                 drawCurrentCross(
                         consumer, matrix,
                         (float) centerX, centerY, (float) centerZ,
@@ -124,6 +130,77 @@ public final class FirmamentWindCurrentRenderer {
         }
     }
 
+    private static void drawStormBody(VertexConsumer consumer, Matrix4f matrix,
+                                      double cameraX, double cameraZ) {
+        int minCellX = Mth.floor((cameraX - STORM_RANGE) / STORM_CELL);
+        int maxCellX = Mth.floor((cameraX + STORM_RANGE) / STORM_CELL);
+        int minCellZ = Mth.floor((cameraZ - STORM_RANGE) / STORM_CELL);
+        int maxCellZ = Mth.floor((cameraZ + STORM_RANGE) / STORM_CELL);
+        int minLayer = Mth.ceil((float) FirmamentMiddleBandLayout.WIND_MIN_Y / STORM_LAYER_SPACING);
+        int maxLayer = Mth.floor((float) FirmamentMiddleBandLayout.WIND_MAX_Y / STORM_LAYER_SPACING);
+        for (int layer = minLayer; layer <= maxLayer; layer++) {
+            for (int cellZ = minCellZ; cellZ <= maxCellZ; cellZ++) {
+                for (int cellX = minCellX; cellX <= maxCellX; cellX++) {
+                    long salt = STORM_DECORATION_SALT ^ ((long) layer * 0x9E3779B97F4A7C15L);
+                    long localSeed = FirmamentMiddleBandLayout.mix(salt, cellX, cellZ);
+                    if (unit(localSeed, 3) < 0.18f) continue;
+                    float centerX = (cellX + 0.12f + unit(localSeed, 11) * 0.76f) * STORM_CELL;
+                    float centerZ = (cellZ + 0.12f + unit(localSeed, 23) * 0.76f) * STORM_CELL;
+                    float centerY = layer * STORM_LAYER_SPACING + (unit(localSeed, 35) - 0.5f) * 11.0f;
+                    float envelope = (float) FirmamentMiddleBandLayout.stormEnvelope(centerY);
+                    if (envelope <= 0.04f) continue;
+
+                    FirmamentMiddleBandLayout.WindCorridor current = FirmamentMiddleBandLayout.sampleWind(centerX,
+                            centerZ);
+                    float angleOffset = (unit(localSeed, 47) - 0.5f) * 0.58f;
+                    float cosine = Mth.cos(angleOffset);
+                    float sine = Mth.sin(angleOffset);
+                    float directionX = (float) current.directionX() * cosine -
+                            (float) current.directionZ() * sine;
+                    float directionZ = (float) current.directionX() * sine +
+                            (float) current.directionZ() * cosine;
+                    float strength = envelope * (0.54f + unit(localSeed, 7) * 0.20f +
+                            (float) current.strength() * 0.26f);
+                    drawStormRibbon(consumer, matrix, centerX, centerY, centerZ,
+                            directionX, directionZ,
+                            76.0f + unit(localSeed, 17) * 72.0f,
+                            5.5f + unit(localSeed, 29) * 6.5f,
+                            strength, unit(localSeed, 41));
+                }
+            }
+        }
+    }
+
+    private static void drawStormRibbon(VertexConsumer consumer, Matrix4f matrix,
+                                        float centerX, float centerY, float centerZ,
+                                        float directionX, float directionZ, float length, float width,
+                                        float strength, float phase) {
+        float normalX = -directionZ;
+        float normalZ = directionX;
+        for (int segment = 0; segment < STORM_SEGMENTS; segment++) {
+            float progress0 = segment / (float) STORM_SEGMENTS;
+            float progress1 = (segment + 1) / (float) STORM_SEGMENTS;
+            float along0 = (progress0 - 0.5f) * length;
+            float along1 = (progress1 - 0.5f) * length;
+            float sway0 = Mth.sin(progress0 * Mth.TWO_PI * 1.35f + phase * 8.7f) * width * 0.72f;
+            float sway1 = Mth.sin(progress1 * Mth.TWO_PI * 1.35f + phase * 8.7f) * width * 0.72f;
+            float rise0 = Mth.sin(progress0 * Mth.TWO_PI * 1.7f + phase * 11.3f) * width * 0.88f;
+            float rise1 = Mth.sin(progress1 * Mth.TWO_PI * 1.7f + phase * 11.3f) * width * 0.88f;
+            float x0 = centerX + directionX * along0 + normalX * sway0;
+            float z0 = centerZ + directionZ * along0 + normalZ * sway0;
+            float x1 = centerX + directionX * along1 + normalX * sway1;
+            float z1 = centerZ + directionZ * along1 + normalZ * sway1;
+            float y0 = centerY + rise0;
+            float y1 = centerY + rise1;
+            float u0 = phase * 59.0f + progress0 * length;
+            float u1 = phase * 59.0f + progress1 * length;
+            addRibbonQuad(consumer, matrix, x0, y0, z0, x1, y1, z1,
+                    normalX * width, 0.0f, normalZ * width, u0, u1, strength, phase, 0.5f);
+            addRibbonQuad(consumer, matrix, x0, y0, z0, x1, y1, z1,
+                    0.0f, width * 0.82f, 0.0f, u0, u1, strength * 0.88f, phase + 0.31f, 0.5f);
+        }
+    }
+
     private static void drawUpdrafts(VertexConsumer consumer, Matrix4f matrix,
                                      double cameraX, double cameraZ) {
         int minCellX = Mth.floor((cameraX - UPDRAFT_RANGE) / UPDRAFT_CELL);
@@ -139,8 +216,8 @@ public final class FirmamentWindCurrentRenderer {
                 FirmamentMiddleBandLayout.WindCorridor current = FirmamentMiddleBandLayout.sampleWind(centerX, centerZ);
                 if (current.strength() < 0.38) continue;
                 drawUpdraft(consumer, matrix, centerX, centerZ,
-                        78.0f + unit(localSeed, 35) * 12.0f,
-                        158.0f + unit(localSeed, 47) * 18.0f,
+                        108.0f + unit(localSeed, 35) * 18.0f,
+                        222.0f + unit(localSeed, 47) * 10.0f,
                         3.5f + (float) current.strength() * 3.0f,
                         (float) current.strength(), unit(localSeed, 7));
             }
@@ -179,10 +256,18 @@ public final class FirmamentWindCurrentRenderer {
                                       float x0, float y0, float z0, float x1, float y1, float z1,
                                       float offsetX, float offsetY, float offsetZ, float u0, float u1,
                                       float strength, float phase, boolean updraft) {
+        addRibbonQuad(consumer, matrix, x0, y0, z0, x1, y1, z1, offsetX, offsetY, offsetZ,
+                u0, u1, strength, phase, updraft ? 1.0f : 0.0f);
+    }
+
+    private static void addRibbonQuad(VertexConsumer consumer, Matrix4f matrix,
+                                      float x0, float y0, float z0, float x1, float y1, float z1,
+                                      float offsetX, float offsetY, float offsetZ, float u0, float u1,
+                                      float strength, float phase, float mode) {
         int red = Math.round(Mth.clamp(strength, 0.0f, 1.0f) * 255.0f);
         int green = Math.round((phase - Mth.floor(phase)) * 255.0f);
-        int blue = updraft ? 255 : 0;
-        int alpha = updraft ? 142 : 116;
+        int blue = Math.round(Mth.clamp(mode, 0.0f, 1.0f) * 255.0f);
+        int alpha = mode > 0.25f && mode < 0.75f ? 188 : mode >= 0.75f ? 148 : 124;
         addVertex(consumer, matrix, x0 - offsetX, y0 - offsetY, z0 - offsetZ,
                 u0, 0.0f, red, green, blue, alpha);
         addVertex(consumer, matrix, x0 + offsetX, y0 + offsetY, z0 + offsetZ,

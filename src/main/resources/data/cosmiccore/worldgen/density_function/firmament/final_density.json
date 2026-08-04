@@ -36,7 +36,7 @@
                     "type": "minecraft:range_choice",
                     "input": "minecraft:y",
                     "min_inclusive": 0.0,
-                    "max_exclusive": 120.0,
+                    "max_exclusive": 160.0,
                     "when_in_range": "cosmiccore:firmament/lower_mass",
                     "when_out_of_range": "cosmiccore:firmament/upper_mass"
                   }
@@ -48,7 +48,7 @@
                     "type": "minecraft:range_choice",
                     "input": "minecraft:y",
                     "min_inclusive": 0.0,
-                    "max_exclusive": 120.0,
+                    "max_exclusive": 160.0,
                     "when_in_range": "cosmiccore:firmament/lower_lobe_field",
                     "when_out_of_range": "cosmiccore:firmament/upper_lobe_field"
                   }

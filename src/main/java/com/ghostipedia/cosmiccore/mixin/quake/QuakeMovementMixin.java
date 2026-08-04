@@ -1,5 +1,6 @@
 package com.ghostipedia.cosmiccore.mixin.quake;
 
+import com.ghostipedia.cosmiccore.api.gravity.GravityApi;
 import com.ghostipedia.cosmiccore.common.reflection.bargain.impl.QuakeGrounding;
 import com.ghostipedia.cosmiccore.common.reflection.bargain.impl.QuakeMovementHandler;
 
@@ -35,6 +36,11 @@ public abstract class QuakeMovementMixin {
         }
 
         if (!player.level().isClientSide()) {
+            cosmiccore$preTravelVelocity = null;
+            return;
+        }
+
+        if (!GravityApi.isNormal(player)) {
             cosmiccore$preTravelVelocity = null;
             return;
         }

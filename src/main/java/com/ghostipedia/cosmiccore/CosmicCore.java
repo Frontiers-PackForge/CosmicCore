@@ -28,6 +28,7 @@ import com.ghostipedia.cosmiccore.common.data.temperature.CosmicTemperatureModif
 import com.ghostipedia.cosmiccore.common.data.worldgen.CosmicWorldGenLayers;
 import com.ghostipedia.cosmiccore.common.data.worldgen.firmament.CosmicFirmamentFeatures;
 import com.ghostipedia.cosmiccore.common.data.worldgen.generator.CosmicChunkGenerators;
+import com.ghostipedia.cosmiccore.common.firmament.FirmamentSpaceGravityCompat;
 import com.ghostipedia.cosmiccore.common.item.armor.boots.TravelerBootsMigration;
 import com.ghostipedia.cosmiccore.common.machine.multiblock.multi.logic.bloomwyrm.BloomwyrmChunkLoading;
 import com.ghostipedia.cosmiccore.common.machine.multiblock.multi.modular.MultiblockInit;
@@ -150,6 +151,7 @@ public class CosmicCore {
                     SingletonArgumentInfo.contextFree(SoulTypeArgument::soulType));
             CosmicCoreOreRecipeHandler.disableBundleCauldronWash();
             DeedQuestCompatBridge.register();
+            FirmamentSpaceGravityCompat.registerPushSurfaceProvider();
             if (LsoFoodCompat.isLoaded()) {
                 LsoFoodCompat.retuneEffects();
             }
