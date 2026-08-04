@@ -1,0 +1,10 @@
+{
+  "stages": [
+    {
+      "type": "veil:blit",
+      "shader": "cosmiccore:firmament_sunset",
+      "in": "minecraft:main"
+    }
+  ],
+  "renderStage": "after_block_entities"
+}

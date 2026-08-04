@@ -73,6 +73,7 @@
     "aero.ClientBalloonEffectIrisFixMixin",
     "malum.ParallelWorldRendererInitialSizeFixMixin",
     "client.AbyssLightTextureMixin",
+    "client.FirmamentClientLevelLightingMixin",
     "ftbchunks.FTBChunksClientConfigAccessor",
     "ftbchunks.FTBChunksDisabledMinimapHudMixin",
     "ftbchunks.FTBChunksMapKeybindMixin",

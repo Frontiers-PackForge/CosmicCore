@@ -69,6 +69,7 @@ dependencies {
     runtimeOnly(forge.sable) { transitive = false }
     runtimeOnly(forge.sable.companion) { transitive = false }
     runtimeOnly(forge.sable.rapier)
+    compileOnly(forge.veil) { transitive = false }
     runtimeOnly(forge.veil) { transitive = false }
     runtimeOnly(forge.create) {
         exclude group: 'maven.modrinth', module: 'journeymap'

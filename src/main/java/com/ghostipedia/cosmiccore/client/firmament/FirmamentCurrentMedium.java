@@ -23,6 +23,7 @@ public final class FirmamentCurrentMedium {
     private static final float BELOW_EDGE = 28.0f;
     private static final float FOG_DISTANCE_BLEND = 0.55f;
     private static final float FOG_COLOR_BLEND = 0.35f;
+    private static final float BASE_FOG_NEAR_FRACTION = 0.18f;
     private static final float FOG_FAR = 96.0f;
     private static final float FOG_NEAR = 4.0f;
     private static final float FOG_RED = 0.025f;
@@ -33,15 +34,16 @@ public final class FirmamentCurrentMedium {
 
     @SubscribeEvent(priority = EventPriority.LOWEST, receiveCanceled = true)
     public static void onRenderFog(ViewportEvent.RenderFog event) {
-        float medium = mediumFactor(event);
-        if (medium <= 0.0f) return;
+        if (!firmamentAir(event)) return;
 
-        float blend = medium * FOG_DISTANCE_BLEND;
+        float medium = mediumFactor(event);
         float currentNear = (float) event.getNearPlaneDistance();
         float currentFar = (float) event.getFarPlaneDistance();
-        event.setNearPlaneDistance(Mth.lerp(blend, currentNear, Math.min(currentNear, FOG_NEAR)));
+        float baseNear = Math.min(currentNear, currentFar * BASE_FOG_NEAR_FRACTION);
+        float blend = medium * FOG_DISTANCE_BLEND;
+        event.setNearPlaneDistance(Mth.lerp(blend, baseNear, Math.min(baseNear, FOG_NEAR)));
         event.setFarPlaneDistance(Mth.lerp(blend, currentFar, Math.min(currentFar, FOG_FAR)));
-        event.setFogShape(FogShape.CYLINDER);
+        if (medium > 0.0f) event.setFogShape(FogShape.CYLINDER);
         event.setCanceled(true);
     }
 
@@ -57,15 +59,19 @@ public final class FirmamentCurrentMedium {
     }
 
     private static float mediumFactor(ViewportEvent event) {
-        Minecraft minecraft = Minecraft.getInstance();
-        if (minecraft.level == null || !minecraft.level.dimension().equals(FirmamentDimension.KEY)) return 0.0f;
-        if (event.getCamera().getFluidInCamera() != FogType.NONE) return 0.0f;
+        if (!firmamentAir(event)) return 0.0f;
 
         double signedHeight = event.getCamera().getPosition().y - FirmamentSightWallRenderer.SEA_Y;
         if (signedHeight >= 0.0) {
             return descendingSmoothstep((float) signedHeight, ABOVE_FULL, ABOVE_EDGE);
         }
         return descendingSmoothstep((float) -signedHeight, BELOW_FULL, BELOW_EDGE);
+    }
+
+    private static boolean firmamentAir(ViewportEvent event) {
+        Minecraft minecraft = Minecraft.getInstance();
+        return minecraft.level != null && minecraft.level.dimension().equals(FirmamentDimension.KEY) &&
+                event.getCamera().getFluidInCamera() == FogType.NONE;
     }
 
     private static float descendingSmoothstep(float value, float full, float edge) {

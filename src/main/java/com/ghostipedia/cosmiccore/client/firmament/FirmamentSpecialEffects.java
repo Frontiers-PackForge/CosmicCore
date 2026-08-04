@@ -7,6 +7,7 @@ import net.minecraft.world.phys.Vec3;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import org.joml.Matrix4f;
+import org.joml.Vector3f;
 
 public final class FirmamentSpecialEffects extends DimensionSpecialEffects {
 
@@ -22,6 +23,12 @@ public final class FirmamentSpecialEffects extends DimensionSpecialEffects {
     @Override
     public boolean isFoggyAt(int x, int y) {
         return false;
+    }
+
+    @Override
+    public void adjustLightmapColors(ClientLevel level, float partialTicks, float skyDarken, float blockLightRedFlicker,
+                                     float skyLight, int blockLightLevel, int skyLightLevel, Vector3f colors) {
+        FirmamentTwilightLighting.adjustLightmap(colors, skyLight, blockLightLevel, skyLightLevel);
     }
 
     @Override
