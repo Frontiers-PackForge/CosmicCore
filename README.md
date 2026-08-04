@@ -44,7 +44,7 @@ These devs may take the time to observe how poor of a programmer I am and laugh 
 ## Code
 All Code is issued under LGPL-3.0 unless explicitly stated within the file header
 ## Assets
-### All Files with the extension `.mtl` and `.obj` are All Rights reserved.
+### All Files with the extension `.mtl`, `.obj`,`.fsh`, and `.vsh` are All Rights reserved.
 ### All assets in `resources/assets/cosmiccore/textures` are licensed under All Rights Reserved by default
 Exclusions to this rule are as follows  
  - All files contained in the subfolder(s) `item` are licensed as MIT
@@ -53,12 +53,19 @@ Exclusions to this rule are as follows
 ```
 Human readable format:
 You may use code freely under LGPL-3.0, and most assets are licensed under MIT.
-You are NOT allowed to use my .mtl or .obj files or associated assets linked to them for any reason.
+You are NOT allowed to use my .mtl, .obj, .fsh, or .vsh files or associated assets linked to them for any reason.
+Other Assets from Different Mods are used and in good faith have I tried to make sure I follow their respective licenses , please reach out to me if something needs to be removed, thanks!
 ```
 
 Using code/assets from this project requires attribution in both cases and requires particular licensing, please keep that in mind.
 
-Credits;
-Thanks to [Gregtech Modern](https://github.com/GregTechCEu/GregTech-Modern) for plenty of useful code references and invaluable knowledge in learning Java.
-Thanks to ULSTICK's [GregTech: Refreshed](https://modrinth.com/resourcepack/gregtech-refreshed) for helping me learn how to make Jappa-style pixel art.
-Thanks to TFC Water Flasks for the Air Bladder Texture (Re-used the water bladder texture)
+## Code Credits
+[Gregtech Modern](https://github.com/GregTechCEu/GregTech-Modern) for plenty of useful code references and invaluable knowledge in learning Java.
+[Lodestone](https://github.com/LodestarMC/Lodestone) - For the amazing rendering tools it offers
+## Assets Credits
+[GTCEu:Modern](https://www.curseforge.com/minecraft/mc-mods/gregtechceu-modern) - General material assets
+[Regions Unexplored](https://www.curseforge.com/minecraft/mc-mods/regions-unexplored) - Reused assets for plants, crystals, other biomatter stuff, thanks!
+[Create](https://www.curseforge.com/minecraft/mc-mods/create) Note : This strictly uses assets that fall under MIT prior to their "All Rights Reserved" Change in Sept 2025. No New ARR assets have been used. Was used to inspire some various textures in similar stiles
+[Embers Re-Ignited](https://www.curseforge.com/minecraft/mc-mods/embers-re-ignited) Used for Custom Ember Emitter/Receptor Model bases
+[Traveler's Boots](https://www.curseforge.com/minecraft/mc-mods/travelers-boots) Boot Textures
+
