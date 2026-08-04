@@ -63,9 +63,13 @@ Using code/assets from this project requires attribution in both cases and requi
 [Gregtech Modern](https://github.com/GregTechCEu/GregTech-Modern) for plenty of useful code references and invaluable knowledge in learning Java.
 [Lodestone](https://github.com/LodestarMC/Lodestone) - For the amazing rendering tools it offers
 ## Assets Credits
-[GTCEu:Modern](https://www.curseforge.com/minecraft/mc-mods/gregtechceu-modern) - General material assets
-[Regions Unexplored](https://www.curseforge.com/minecraft/mc-mods/regions-unexplored) - Reused assets for plants, crystals, other biomatter stuff, thanks!
-[Create](https://www.curseforge.com/minecraft/mc-mods/create) Note : This strictly uses assets that fall under MIT prior to their "All Rights Reserved" Change in Sept 2025. No New ARR assets have been used. Was used to inspire some various textures in similar stiles
-[Embers Re-Ignited](https://www.curseforge.com/minecraft/mc-mods/embers-re-ignited) Used for Custom Ember Emitter/Receptor Model bases
-[Traveler's Boots](https://www.curseforge.com/minecraft/mc-mods/travelers-boots) Boot Textures
+- [GTCEu:Modern](https://www.curseforge.com/minecraft/mc-mods/gregtechceu-modern) - General material assets
+
+- [Regions Unexplored](https://www.curseforge.com/minecraft/mc-mods/regions-unexplored) - Reused assets for plants, crystals, other biomatter stuff, thanks!
+
+- [Create](https://www.curseforge.com/minecraft/mc-mods/create) Note : This strictly uses assets that fall under MIT prior to their "All Rights Reserved" Change in Sept 2025. No New ARR assets have been used. Was used to inspire some various textures in similar stiles
+
+- [Embers Re-Ignited](https://www.curseforge.com/minecraft/mc-mods/embers-re-ignited) Used for Custom Ember Emitter/Receptor Model bases
+
+- [Traveler's Boots](https://www.curseforge.com/minecraft/mc-mods/travelers-boots) Boot Textures
 
