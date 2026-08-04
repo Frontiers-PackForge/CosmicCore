@@ -4,6 +4,7 @@ import com.ghostipedia.cosmiccore.CosmicCore;
 import com.ghostipedia.cosmiccore.client.dev.AbyssDevView;
 import com.ghostipedia.cosmiccore.client.dev.MurkbloomDevControls;
 import com.ghostipedia.cosmiccore.client.firmament.FirmamentSpecialEffects;
+import com.ghostipedia.cosmiccore.client.firmament.FirmamentSunsetPostProcessor;
 import com.ghostipedia.cosmiccore.client.keybind.QuakeMovementKeybinds;
 import com.ghostipedia.cosmiccore.client.mirror.DeedHudOverlay;
 import com.ghostipedia.cosmiccore.client.mirror.MirrorScreen;
@@ -24,6 +25,7 @@ import net.minecraft.client.resources.model.ModelResourceLocation;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.ModList;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.fml.loading.FMLEnvironment;
 import net.neoforged.neoforge.client.event.EntityRenderersEvent;
@@ -50,6 +52,9 @@ public class CosmicCoreClient {
 
     public static void init(IEventBus modBus) {
         modBus.register(CosmicCoreClient.class);
+        if (ModList.get().isLoaded("veil")) {
+            FirmamentSunsetPostProcessor.register();
+        }
 
         DynamicRenderManager.register(CosmicCore.id("hellfire_foundry_parts"), HellFireFoundryPartRender.TYPE);
         DynamicRenderManager.register(CosmicCore.id("hemographic_transfuser"), HemophagicTransfuserRender.TYPE);

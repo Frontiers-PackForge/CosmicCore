@@ -67,6 +67,13 @@ config = "cosmiccore.mixins.json"
     side = "BOTH"
 
 [[dependencies.${mod_id}]]
+    modId = "veil"
+    type = "optional"
+    versionRange = "[4.1.4,)"
+    ordering = "AFTER"
+    side = "CLIENT"
+
+[[dependencies.${mod_id}]]
     modId = "nebulaeae2"
     type = "required"
     versionRange = "[0.1.0,)"

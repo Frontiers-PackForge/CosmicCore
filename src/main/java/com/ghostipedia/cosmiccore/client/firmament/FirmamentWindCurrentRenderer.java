@@ -25,13 +25,14 @@ public final class FirmamentWindCurrentRenderer {
     private static final int CURRENT_CELL = 24;
     private static final int CURRENT_RANGE = 192;
     private static final int CURRENT_SEGMENTS = 10;
-    private static final int STORM_CELL = 40;
-    private static final int STORM_RANGE = 240;
-    private static final int STORM_SEGMENTS = 8;
-    private static final int STORM_LAYER_SPACING = 18;
+    private static final int STORM_CELL = 48;
+    private static final int STORM_RANGE = 260;
+    private static final int STORM_SEGMENTS = 10;
+    private static final int STORM_LAYER_SPACING = 20;
     private static final int UPDRAFT_CELL = 192;
     private static final int UPDRAFT_RANGE = 320;
     private static final int UPDRAFT_SEGMENTS = 18;
+    private static final long CURRENT_TIME_WRAP_TICKS = 1_280L;
     private static final long CURRENT_DECORATION_SALT = 0x3C6EF372FE94F82BL;
     private static final long STORM_DECORATION_SALT = 0x510E527FADE682D1L;
     private static final long UPDRAFT_DECORATION_SALT = 0xA54FF53A5F1D36F1L;
@@ -61,7 +62,7 @@ public final class FirmamentWindCurrentRenderer {
             float partialTick = event.getPartialTick().getGameTimeDeltaPartialTick(false);
             var timeUniform = shader.getUniform("CurrentTime");
             if (timeUniform != null) {
-                timeUniform.set((float) ((minecraft.level.getGameTime() + partialTick) / 20.0));
+                timeUniform.set(currentTime(minecraft.level.getGameTime(), partialTick));
             }
             var cameraUniform = shader.getUniform("CameraPos");
             if (cameraUniform != null) {
@@ -143,7 +144,8 @@ public final class FirmamentWindCurrentRenderer {
                 for (int cellX = minCellX; cellX <= maxCellX; cellX++) {
                     long salt = STORM_DECORATION_SALT ^ ((long) layer * 0x9E3779B97F4A7C15L);
                     long localSeed = FirmamentMiddleBandLayout.mix(salt, cellX, cellZ);
-                    if (unit(localSeed, 3) < 0.18f) continue;
+                    float prominence = stormProminence(unit(localSeed, 3));
+                    if (prominence == 0.0f) continue;
                     float centerX = (cellX + 0.12f + unit(localSeed, 11) * 0.76f) * STORM_CELL;
                     float centerZ = (cellZ + 0.12f + unit(localSeed, 23) * 0.76f) * STORM_CELL;
                     float centerY = layer * STORM_LAYER_SPACING + (unit(localSeed, 35) - 0.5f) * 11.0f;
@@ -152,20 +154,37 @@ public final class FirmamentWindCurrentRenderer {
 
                     FirmamentMiddleBandLayout.WindCorridor current = FirmamentMiddleBandLayout.sampleWind(centerX,
                             centerZ);
-                    float angleOffset = (unit(localSeed, 47) - 0.5f) * 0.58f;
+                    float angleOffset = (unit(localSeed, 47) - 0.5f) * 0.24f;
                     float cosine = Mth.cos(angleOffset);
                     float sine = Mth.sin(angleOffset);
                     float directionX = (float) current.directionX() * cosine -
                             (float) current.directionZ() * sine;
                     float directionZ = (float) current.directionX() * sine +
                             (float) current.directionZ() * cosine;
-                    float strength = envelope * (0.54f + unit(localSeed, 7) * 0.20f +
-                            (float) current.strength() * 0.26f);
+                    float strength = envelope * (0.52f + unit(localSeed, 7) * 0.18f +
+                            (float) current.strength() * 0.28f) * Mth.lerp(prominence, 0.62f, 1.0f);
+                    float length = (128.0f + unit(localSeed, 17) * 112.0f) *
+                            Mth.lerp(prominence, 0.78f, 1.14f);
+                    float width = (4.0f + unit(localSeed, 29) * 4.5f) *
+                            Mth.lerp(prominence, 0.58f, 1.04f);
+                    float phase = unit(localSeed, 41);
                     drawStormRibbon(consumer, matrix, centerX, centerY, centerZ,
-                            directionX, directionZ,
-                            76.0f + unit(localSeed, 17) * 72.0f,
-                            5.5f + unit(localSeed, 29) * 6.5f,
-                            strength, unit(localSeed, 41));
+                            directionX, directionZ, length, width, strength, phase, prominence);
+                    if (prominence >= 0.88f) {
+                        float normalX = -directionZ;
+                        float normalZ = directionX;
+                        float spread = width * 1.45f;
+                        drawStormRibbon(consumer, matrix,
+                                centerX + normalX * spread, centerY + width * 0.32f,
+                                centerZ + normalZ * spread,
+                                directionX, directionZ, length * 0.84f, width * 0.30f,
+                                strength * 0.70f, phase + 0.19f, prominence * 0.68f);
+                        drawStormRibbon(consumer, matrix,
+                                centerX - normalX * spread, centerY - width * 0.26f,
+                                centerZ - normalZ * spread,
+                                directionX, directionZ, length * 0.76f, width * 0.24f,
+                                strength * 0.62f, phase + 0.57f, prominence * 0.60f);
+                    }
                 }
             }
         }
@@ -174,18 +193,19 @@ public final class FirmamentWindCurrentRenderer {
     private static void drawStormRibbon(VertexConsumer consumer, Matrix4f matrix,
                                         float centerX, float centerY, float centerZ,
                                         float directionX, float directionZ, float length, float width,
-                                        float strength, float phase) {
+                                        float strength, float phase, float prominence) {
         float normalX = -directionZ;
         float normalZ = directionX;
+        float opacity = 0.10f + prominence * 0.50f;
         for (int segment = 0; segment < STORM_SEGMENTS; segment++) {
             float progress0 = segment / (float) STORM_SEGMENTS;
             float progress1 = (segment + 1) / (float) STORM_SEGMENTS;
             float along0 = (progress0 - 0.5f) * length;
             float along1 = (progress1 - 0.5f) * length;
-            float sway0 = Mth.sin(progress0 * Mth.TWO_PI * 1.35f + phase * 8.7f) * width * 0.72f;
-            float sway1 = Mth.sin(progress1 * Mth.TWO_PI * 1.35f + phase * 8.7f) * width * 0.72f;
-            float rise0 = Mth.sin(progress0 * Mth.TWO_PI * 1.7f + phase * 11.3f) * width * 0.88f;
-            float rise1 = Mth.sin(progress1 * Mth.TWO_PI * 1.7f + phase * 11.3f) * width * 0.88f;
+            float sway0 = Mth.sin(progress0 * Mth.TWO_PI * 1.15f + phase * 8.7f) * width * 0.38f;
+            float sway1 = Mth.sin(progress1 * Mth.TWO_PI * 1.15f + phase * 8.7f) * width * 0.38f;
+            float rise0 = Mth.sin(progress0 * Mth.TWO_PI * 1.42f + phase * 11.3f) * width * 0.52f;
+            float rise1 = Mth.sin(progress1 * Mth.TWO_PI * 1.42f + phase * 11.3f) * width * 0.52f;
             float x0 = centerX + directionX * along0 + normalX * sway0;
             float z0 = centerZ + directionZ * along0 + normalZ * sway0;
             float x1 = centerX + directionX * along1 + normalX * sway1;
@@ -194,10 +214,16 @@ public final class FirmamentWindCurrentRenderer {
             float y1 = centerY + rise1;
             float u0 = phase * 59.0f + progress0 * length;
             float u1 = phase * 59.0f + progress1 * length;
-            addRibbonQuad(consumer, matrix, x0, y0, z0, x1, y1, z1,
-                    normalX * width, 0.0f, normalZ * width, u0, u1, strength, phase, 0.5f);
-            addRibbonQuad(consumer, matrix, x0, y0, z0, x1, y1, z1,
-                    0.0f, width * 0.82f, 0.0f, u0, u1, strength * 0.88f, phase + 0.31f, 0.5f);
+            float taper0 = stormTaper(progress0);
+            float taper1 = stormTaper(progress1);
+            addVariableRibbonQuad(consumer, matrix, x0, y0, z0, x1, y1, z1,
+                    normalX * width * taper0, 0.0f, normalZ * width * taper0,
+                    normalX * width * taper1, 0.0f, normalZ * width * taper1,
+                    u0, u1, strength, phase, 0.5f, opacity);
+            addVariableRibbonQuad(consumer, matrix, x0, y0, z0, x1, y1, z1,
+                    0.0f, width * 0.68f * taper0, 0.0f,
+                    0.0f, width * 0.68f * taper1, 0.0f,
+                    u0, u1, strength * 0.82f, phase + 0.31f, 0.5f, opacity * 0.82f);
         }
     }
 
@@ -264,17 +290,30 @@ public final class FirmamentWindCurrentRenderer {
                                       float x0, float y0, float z0, float x1, float y1, float z1,
                                       float offsetX, float offsetY, float offsetZ, float u0, float u1,
                                       float strength, float phase, float mode) {
+        float opacity = mode > 0.25f && mode < 0.75f ? 144.0f / 255.0f :
+                mode >= 0.75f ? 148.0f / 255.0f : 124.0f / 255.0f;
+        addVariableRibbonQuad(consumer, matrix, x0, y0, z0, x1, y1, z1,
+                offsetX, offsetY, offsetZ, offsetX, offsetY, offsetZ,
+                u0, u1, strength, phase, mode, opacity);
+    }
+
+    private static void addVariableRibbonQuad(VertexConsumer consumer, Matrix4f matrix,
+                                              float x0, float y0, float z0, float x1, float y1, float z1,
+                                              float offset0X, float offset0Y, float offset0Z,
+                                              float offset1X, float offset1Y, float offset1Z,
+                                              float u0, float u1, float strength, float phase, float mode,
+                                              float opacity) {
         int red = Math.round(Mth.clamp(strength, 0.0f, 1.0f) * 255.0f);
         int green = Math.round((phase - Mth.floor(phase)) * 255.0f);
         int blue = Math.round(Mth.clamp(mode, 0.0f, 1.0f) * 255.0f);
-        int alpha = mode > 0.25f && mode < 0.75f ? 188 : mode >= 0.75f ? 148 : 124;
-        addVertex(consumer, matrix, x0 - offsetX, y0 - offsetY, z0 - offsetZ,
+        int alpha = Math.round(Mth.clamp(opacity, 0.0f, 1.0f) * 255.0f);
+        addVertex(consumer, matrix, x0 - offset0X, y0 - offset0Y, z0 - offset0Z,
                 u0, 0.0f, red, green, blue, alpha);
-        addVertex(consumer, matrix, x0 + offsetX, y0 + offsetY, z0 + offsetZ,
+        addVertex(consumer, matrix, x0 + offset0X, y0 + offset0Y, z0 + offset0Z,
                 u0, 1.0f, red, green, blue, alpha);
-        addVertex(consumer, matrix, x1 + offsetX, y1 + offsetY, z1 + offsetZ,
+        addVertex(consumer, matrix, x1 + offset1X, y1 + offset1Y, z1 + offset1Z,
                 u1, 1.0f, red, green, blue, alpha);
-        addVertex(consumer, matrix, x1 - offsetX, y1 - offsetY, z1 - offsetZ,
+        addVertex(consumer, matrix, x1 - offset1X, y1 - offset1Y, z1 - offset1Z,
                 u1, 0.0f, red, green, blue, alpha);
     }
 
@@ -287,5 +326,20 @@ public final class FirmamentWindCurrentRenderer {
 
     private static float unit(long value, int rotation) {
         return (float) ((Long.rotateRight(value, rotation) >>> 40) & 0xFFFFFFL) / 0xFFFFFF;
+    }
+
+    static float stormProminence(float sample) {
+        if (sample < 0.34f) return 0.0f;
+        if (sample < 0.78f) return Mth.lerp((sample - 0.34f) / 0.44f, 0.18f, 0.34f);
+        if (sample < 0.96f) return Mth.lerp((sample - 0.78f) / 0.18f, 0.52f, 0.72f);
+        return Mth.lerp((sample - 0.96f) / 0.04f, 0.88f, 1.0f);
+    }
+
+    private static float stormTaper(float progress) {
+        return 0.08f + 0.92f * (float) Math.pow(Math.max(Mth.sin(progress * Mth.PI), 0.0f), 0.65);
+    }
+
+    static float currentTime(long gameTime, float partialTick) {
+        return (Math.floorMod(gameTime, CURRENT_TIME_WRAP_TICKS) + partialTick) / 20.0f;
     }
 }

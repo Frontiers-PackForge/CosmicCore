@@ -84,7 +84,7 @@ public final class FirmamentAtmosphereRenderer {
         PoseStack poseStack = new PoseStack();
         poseStack.mulPose(modelViewMatrix);
         Matrix4f matrix = poseStack.last().pose();
-        float solarAzimuth = ((level.getDayTime() + partialTick) % 72000L) / 72000.0f * TAU;
+        float solarAzimuth = FirmamentTwilightLighting.SOLAR_AZIMUTH;
 
         RenderSystem.depthMask(false);
         RenderSystem.disableCull();
@@ -451,7 +451,7 @@ public final class FirmamentAtmosphereRenderer {
 
     private static void renderSolarHalo(Matrix4f matrix, float solarAzimuth) {
         float directionX = (float) Math.cos(solarAzimuth);
-        float directionY = -0.035f;
+        float directionY = FirmamentTwilightLighting.SOLAR_ELEVATION;
         float directionZ = (float) Math.sin(solarAzimuth);
         float length = (float) Math.sqrt(directionX * directionX + directionY * directionY + directionZ * directionZ);
         directionX /= length;

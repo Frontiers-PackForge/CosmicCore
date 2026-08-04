@@ -9,6 +9,7 @@ import com.ghostipedia.cosmiccore.common.firmament.FirmamentTraversalState;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
+import net.minecraft.util.Mth;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.EventPriority;
 import net.neoforged.bus.api.SubscribeEvent;
@@ -62,7 +63,7 @@ public final class FirmamentTraversalClientPrediction {
         FirmamentTraversalState state = player.getData(CosmicAttachmentTypes.FIRMAMENT_TRAVERSAL_STATE);
         boolean runtimeEnabled = player.isNoGravity();
         boolean ownedRuntime = runtimeEnabled && state.managedFreeDrift() && GravityApi.isFreeDrift(player);
-        float currentManagedRoll = event.getRoll() - baseRoll;
+        float currentManagedRoll = shortestExitRoll(event.getRoll(), baseRoll);
         double now = player.tickCount + event.getPartialTick();
 
         if (ownedRuntime) {
@@ -106,5 +107,9 @@ public final class FirmamentTraversalClientPrediction {
         exitRoll = 0.0f;
         exitRollStart = Double.NaN;
         managedRoll = false;
+    }
+
+    static float shortestExitRoll(float presentedRoll, float baseRoll) {
+        return Mth.wrapDegrees(presentedRoll - baseRoll);
     }
 }
