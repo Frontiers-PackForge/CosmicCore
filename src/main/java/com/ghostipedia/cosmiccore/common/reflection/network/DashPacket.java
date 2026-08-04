@@ -1,6 +1,7 @@
 package com.ghostipedia.cosmiccore.common.reflection.network;
 
 import com.ghostipedia.cosmiccore.CosmicCore;
+import com.ghostipedia.cosmiccore.api.gravity.GravityApi;
 import com.ghostipedia.cosmiccore.common.reflection.bargain.impl.CelesteDashHandler;
 import com.ghostipedia.cosmiccore.common.reflection.bargain.impl.QuakeMovementHandler;
 
@@ -46,6 +47,7 @@ public class DashPacket implements CustomPacketPayload {
 
     public void execute(IPayloadContext context) {
         if (!(context.player() instanceof ServerPlayer player)) return;
+        if (!GravityApi.isNormal(player)) return;
         if (!QuakeMovementHandler.canUseGlobestriderMovement(player)) return;
 
         CelesteDashHandler.executeDashServer(player, xRot, yRot, forwardInput, strafeInput);

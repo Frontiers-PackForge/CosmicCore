@@ -43,6 +43,7 @@ public class CosmicCoreMixinPlugin implements IMixinConfigPlugin {
                 Map.entry(".malum.", "com/sammy/malum/client/renderer/renderpass/ParallelWorldRenderer.class"),
                 Map.entry(".simulated.",
                         "dev/simulated_team/simulated/content/blocks/physics_assembler/PhysicsAssemblerBlockEntity.class"),
+                Map.entry(".spacegravity.", "com/spacegravity/spacegravity/SpaceGravityState.class"),
                 Map.entry(".sable.", "dev/ryanhcode/sable/api/block/BlockSubLevelAssemblyListener.class"),
                 Map.entry(".ftbchunks.", "dev/ftb/mods/ftbchunks/client/FTBChunksClient.class"),
                 Map.entry(".ftbquests.", "dev/ftb/mods/ftbquests/quest/Quest.class"),

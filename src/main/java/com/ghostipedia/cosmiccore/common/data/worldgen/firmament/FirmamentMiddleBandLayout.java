@@ -11,10 +11,11 @@ public final class FirmamentMiddleBandLayout {
     private static final double WIND_SCALE = 1.0 / 448.0;
     private static final double WIND_WARP_SCALE = 1.0 / 224.0;
     private static final double WIND_BAND_SCALE = 1.0 / 92.0;
-    private static final double WIND_MIN_Y = 96.0;
-    private static final double WIND_FULL_MIN_Y = 112.0;
-    private static final double WIND_FULL_MAX_Y = 136.0;
-    private static final double WIND_MAX_Y = 152.0;
+    public static final double WIND_MIN_Y = 104.0;
+    public static final double WIND_FULL_MIN_Y = 120.0;
+    public static final double WIND_FULL_MAX_Y = 216.0;
+    public static final double WIND_MAX_Y = 232.0;
+    public static final double MIDDLE_BAND_CENTER_Y = 168.0;
 
     private FirmamentMiddleBandLayout() {}
 
@@ -45,10 +46,14 @@ public final class FirmamentMiddleBandLayout {
 
     public static WindCorridor sampleWind(double blockX, double blockY, double blockZ) {
         WindCorridor horizontal = sampleWind(blockX, blockZ);
+        return new WindCorridor(horizontal.strength() * stormEnvelope(blockY),
+                horizontal.directionX(), horizontal.directionZ());
+    }
+
+    public static double stormEnvelope(double blockY) {
         double lowerEnvelope = Mth.clamp((blockY - WIND_MIN_Y) / (WIND_FULL_MIN_Y - WIND_MIN_Y), 0.0, 1.0);
         double upperEnvelope = Mth.clamp((WIND_MAX_Y - blockY) / (WIND_MAX_Y - WIND_FULL_MAX_Y), 0.0, 1.0);
-        return new WindCorridor(horizontal.strength() * Math.min(lowerEnvelope, upperEnvelope),
-                horizontal.directionX(), horizontal.directionZ());
+        return Math.min(lowerEnvelope, upperEnvelope);
     }
 
     public static long mix(long seed, int x, int z) {

@@ -2,6 +2,7 @@ package com.ghostipedia.cosmiccore.forge;
 
 import com.ghostipedia.cosmiccore.CosmicCore;
 import com.ghostipedia.cosmiccore.CosmicUtils;
+import com.ghostipedia.cosmiccore.api.gravity.GravityApi;
 import com.ghostipedia.cosmiccore.client.map.RevealedField;
 import com.ghostipedia.cosmiccore.common.commands.ExportRegistryCommand;
 import com.ghostipedia.cosmiccore.common.commands.SoulCommand;
@@ -11,6 +12,7 @@ import com.ghostipedia.cosmiccore.common.commands.WirelessEnergyCommand;
 import com.ghostipedia.cosmiccore.common.data.CosmicItems;
 import com.ghostipedia.cosmiccore.common.data.worldgen.field.FieldDiscoveryData;
 import com.ghostipedia.cosmiccore.common.food.CosmicFoodCommand;
+import com.ghostipedia.cosmiccore.common.gravity.GravityDebugCommand;
 import com.ghostipedia.cosmiccore.common.item.armor.boots.TravelerBootsLogic;
 import com.ghostipedia.cosmiccore.common.item.behavior.EffectApplicationBehavior;
 import com.ghostipedia.cosmiccore.common.mirror.deed.DeedCommand;
@@ -64,6 +66,13 @@ public class ForgeCommonEventListener {
             if (fields.isEmpty()) continue;
             ResourceKey<Level> dimension = ResourceKey.create(Registries.DIMENSION, dimensionLoc);
             CCoreNetwork.sendToPlayer(player, new RevealFieldsPacket(dimension, fields));
+        }
+    }
+
+    @SubscribeEvent
+    public static void onPlayerChangedDimension(PlayerEvent.PlayerChangedDimensionEvent event) {
+        if (event.getEntity() instanceof ServerPlayer player) {
+            GravityApi.reset(player);
         }
     }
 
@@ -145,6 +154,7 @@ public class ForgeCommonEventListener {
         StarLadderCommand.register(event.getDispatcher());
         CosmicFoodCommand.register(event.getDispatcher());
         DeedCommand.register(event.getDispatcher());
+        GravityDebugCommand.register(event.getDispatcher());
     }
 
     @SubscribeEvent(priority = EventPriority.HIGH)

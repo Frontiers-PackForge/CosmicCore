@@ -1,5 +1,7 @@
 package com.ghostipedia.cosmiccore.common.dimension;
 
+import com.ghostipedia.cosmiccore.common.data.CosmicBlocks;
+
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
@@ -97,6 +99,11 @@ public final class FirmamentPortalBlock extends Block implements Portal {
     }
 
     private static BlockPos findSurface(ServerLevel level, int x, int z) {
+        if (level.dimension().equals(FirmamentDimension.KEY)) {
+            BlockPos lowerSurface = findFirmamentLowerSurface(level, x, z);
+            if (lowerSurface != null) return lowerSurface;
+            return new BlockPos(x, 64, z);
+        }
         int surface = level.getHeight(Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, x, z);
         if (surface > level.getMinBuildHeight() + 2) return new BlockPos(x, surface, z);
         for (int radius = 8; radius <= 64; radius += 8) {
@@ -110,7 +117,36 @@ public final class FirmamentPortalBlock extends Block implements Portal {
                 }
             }
         }
-        int fallbackY = level.dimension().equals(FirmamentDimension.KEY) ? 144 : level.getSharedSpawnPos().getY();
-        return new BlockPos(x, fallbackY, z);
+        return new BlockPos(x, level.getSharedSpawnPos().getY(), z);
+    }
+
+    @Nullable
+    private static BlockPos findFirmamentLowerSurface(ServerLevel level, int x, int z) {
+        for (int radius = 0; radius <= 64; radius += 8) {
+            for (int offsetX = -radius; offsetX <= radius; offsetX += 8) {
+                for (int offsetZ = -radius; offsetZ <= radius; offsetZ += 8) {
+                    if (radius > 0 && Math.abs(offsetX) != radius && Math.abs(offsetZ) != radius) continue;
+                    int sampleX = x + offsetX;
+                    int sampleZ = z + offsetZ;
+                    BlockPos.MutableBlockPos cursor = new BlockPos.MutableBlockPos(sampleX, 112, sampleZ);
+                    for (int y = 112; y >= 16; y--) {
+                        cursor.setY(y);
+                        if (!isFirmamentTerrain(level.getBlockState(cursor))) continue;
+                        if (!level.getBlockState(cursor.above()).isAir() ||
+                                !level.getBlockState(cursor.above(2)).isAir() ||
+                                !level.getBlockState(cursor.above(3)).isAir())
+                            continue;
+                        return cursor.above().immutable();
+                    }
+                }
+            }
+        }
+        return null;
+    }
+
+    private static boolean isFirmamentTerrain(BlockState state) {
+        return state.is(CosmicBlocks.FIRMAMENT_SAPROLITE.get()) ||
+                state.is(CosmicBlocks.FIRMAMENT_SAPROLITE_SLAB.get()) ||
+                state.is(CosmicBlocks.ASTRAL_REGOLITH.get()) || state.is(CosmicBlocks.STARDUST_TURF.get());
     }
 }

@@ -1,6 +1,7 @@
 package com.ghostipedia.cosmiccore.common.reflection.bargain.impl;
 
 import com.ghostipedia.cosmiccore.CosmicCore;
+import com.ghostipedia.cosmiccore.api.gravity.GravityApi;
 import com.ghostipedia.cosmiccore.common.data.CosmicItems;
 import com.ghostipedia.cosmiccore.common.reflection.ReflectionCapability;
 
@@ -104,6 +105,10 @@ public class QuakeMovementHandler {
         Player player = event.getEntity();
         if (!player.level().isClientSide()) return;
         if (player != Minecraft.getInstance().player) return;
+        if (!GravityApi.isNormal(player)) {
+            CelesteDashHandler.suspend(player);
+            return;
+        }
         if (!canUseGlobestriderMovement(player)) return;
 
         CelesteDashHandler.clientTick(player);

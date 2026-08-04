@@ -4,15 +4,15 @@
     "type": "minecraft:mul",
     "argument1": {
       "type": "minecraft:y_clamped_gradient",
-      "from_y": 128,
-      "to_y": 152,
+      "from_y": 208,
+      "to_y": 232,
       "from_value": 0.0,
       "to_value": 1.0
     },
     "argument2": {
       "type": "minecraft:y_clamped_gradient",
-      "from_y": 200,
-      "to_y": 224,
+      "from_y": 288,
+      "to_y": 312,
       "from_value": 1.0,
       "to_value": 0.0
     }
@@ -24,15 +24,15 @@
       "type": "minecraft:mul",
       "argument1": {
         "type": "minecraft:y_clamped_gradient",
-        "from_y": 120,
-        "to_y": 152,
+        "from_y": 192,
+        "to_y": 232,
         "from_value": 0.0,
         "to_value": 1.0
       },
       "argument2": {
         "type": "minecraft:y_clamped_gradient",
-        "from_y": 200,
-        "to_y": 240,
+        "from_y": 288,
+        "to_y": 320,
         "from_value": 1.0,
         "to_value": 0.0
       }

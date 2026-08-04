@@ -1,4 +1,7 @@
 dependencies {
+    testImplementation("org.junit.jupiter:junit-jupiter:5.10.2")
+    testRuntimeOnly("org.junit.platform:junit-platform-launcher:1.10.2")
+
     compileOnly(libs.jetbrains.annotations)
     compileOnly annotationProcessor("com.github.bawnorton.mixinsquared:mixinsquared-common:0.3.7-beta.1")
     mixinSquaredRuntime("com.github.bawnorton.mixinsquared:mixinsquared-neoforge:0.3.7-beta.1")
@@ -94,6 +97,9 @@ dependencies {
     implementation("curse.maven:create-cosmonautics-1595491:8358740")
 
     runtimeOnly(forge.undergarden) { transitive = false }
+
+    compileOnly("maven.modrinth:XMlHoHNU:dcHZSOWO")
+    runtimeOnly("maven.modrinth:XMlHoHNU:dcHZSOWO")
 
     // Apotheosis (modular on 1.21.1)
     // Placebo is provided transitively by the Apothic mods as dev.shadowsoffire:Placebo. Declaring it

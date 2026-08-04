@@ -16,9 +16,9 @@ final class FirmamentMiddleBandFeature extends Feature<NoneFeatureConfiguration>
 
     private static final int LOWER_MIN_Y = 32;
     private static final int LOWER_MAX_Y = 112;
-    private static final int UPPER_MIN_Y = 128;
-    private static final int UPPER_MAX_Y = 232;
-    private static final int ANCHOR_ATTEMPTS = 18;
+    private static final int UPPER_MIN_Y = 208;
+    private static final int UPPER_MAX_Y = 312;
+    private static final int ANCHOR_ATTEMPTS = 24;
 
     FirmamentMiddleBandFeature() {
         super(NoneFeatureConfiguration.CODEC);
@@ -39,15 +39,15 @@ final class FirmamentMiddleBandFeature extends Feature<NoneFeatureConfiguration>
         for (int attempt = 0; attempt < ANCHOR_ATTEMPTS; attempt++) {
             int lowerX = chunkMinX + 5 + random.nextInt(6);
             int lowerZ = chunkMinZ + 5 + random.nextInt(6);
-            int upperX = lowerX + random.nextInt(7) - 3;
-            int upperZ = lowerZ + random.nextInt(7) - 3;
+            int upperX = lowerX + random.nextInt(13) - 6;
+            int upperZ = lowerZ + random.nextInt(13) - 6;
             double middleX = (lowerX + upperX) * 0.5;
             double middleZ = (lowerZ + upperZ) * 0.5;
             if (FirmamentMiddleBandLayout.sampleWind(middleX, middleZ).strength() > 0.32) continue;
 
             BlockPos lower = findLowerAnchor(level, lowerX, lowerZ);
             BlockPos upper = findUpperAnchor(level, upperX, upperZ);
-            if (lower == null || upper == null || upper.getY() - lower.getY() < 16) continue;
+            if (lower == null || upper == null || upper.getY() - lower.getY() < 72) continue;
             return placeBridge(level, seed, random, lower, upper);
         }
         return false;
@@ -81,7 +81,7 @@ final class FirmamentMiddleBandFeature extends Feature<NoneFeatureConfiguration>
         double deltaX = upper.getX() - lower.getX();
         double deltaZ = upper.getZ() - lower.getZ();
         double length = Math.sqrt(deltaX * deltaX + deltaZ * deltaZ);
-        double bow = 1.25 + random.nextDouble() * 1.75;
+        double bow = 2.5 + random.nextDouble() * 5.5;
         double bowSign = random.nextBoolean() ? 1.0 : -1.0;
         double perpendicularX;
         double perpendicularZ;
@@ -94,6 +94,8 @@ final class FirmamentMiddleBandFeature extends Feature<NoneFeatureConfiguration>
             perpendicularZ = deltaX / length * bow * bowSign;
         }
         double radiusPhase = random.nextDouble() * Math.PI * 2.0;
+        double endpointRadius = 3.5 + random.nextDouble() * 2.0;
+        double waistRadius = 1.65 + random.nextDouble() * 1.25;
         BlockState stone = CosmicBlocks.FIRMAMENT_SAPROLITE.getDefaultState();
         BlockPos.MutableBlockPos cursor = new BlockPos.MutableBlockPos();
         boolean placed = false;
@@ -103,7 +105,8 @@ final class FirmamentMiddleBandFeature extends Feature<NoneFeatureConfiguration>
             double arc = Math.sin(progress * Math.PI);
             double centerX = Mth.lerp(progress, lower.getX(), upper.getX()) + perpendicularX * arc;
             double centerZ = Mth.lerp(progress, lower.getZ(), upper.getZ()) + perpendicularZ * arc;
-            double radius = 3.1 - 1.25 * arc + 0.35 * Math.sin(progress * Math.PI * 4.0 + radiusPhase);
+            double radius = Mth.lerp(arc, endpointRadius, waistRadius) +
+                    0.45 * Math.sin(progress * Math.PI * 5.0 + radiusPhase);
             int range = Mth.ceil(radius + 0.5);
             int y = lower.getY() + step;
             for (int offsetX = -range; offsetX <= range; offsetX++) {
