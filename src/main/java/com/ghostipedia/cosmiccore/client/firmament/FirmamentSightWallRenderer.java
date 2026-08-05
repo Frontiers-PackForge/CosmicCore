@@ -4,6 +4,7 @@ import com.ghostipedia.cosmiccore.CosmicCore;
 import com.ghostipedia.cosmiccore.client.CosmicCoreClient;
 import com.ghostipedia.cosmiccore.client.renderer.CosmicCoreRenderTypes;
 import com.ghostipedia.cosmiccore.common.dimension.FirmamentDimension;
+import com.ghostipedia.cosmiccore.common.firmament.FirmamentEnvironment;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.LightTexture;
@@ -29,7 +30,7 @@ public final class FirmamentSightWallRenderer {
             .withDefaultNamespace("textures/misc/white.png");
     private static final RenderType STORM_WALL_TYPE = CosmicCoreRenderTypes.firmamentStormCurrent();
     private static final RenderType FALLBACK_WALL_TYPE = RenderType.entityTranslucentEmissive(WHITE_TEXTURE);
-    static final int SEA_Y = 24;
+    static final int SEA_Y = FirmamentEnvironment.AMMONIA_SEA_Y;
     private static final float HALF_EXTENT = 384.0f;
     private static final float GRID_STEP = 16.0f;
     private static final int GRID_CELLS = 50;

@@ -11,6 +11,10 @@ public final class FirmamentTraversalForces {
 
     private static final double MAX_STORM_DELTA = 0.04;
     private static final double MAX_STORM_ACCELERATED_SPEED = 1.25;
+    private static final double VOID_FLOAT_DEPTH = 0.55;
+    private static final double VOID_SURFACE_SPRING = 0.055;
+    private static final double VOID_DEEP_SPRING = 0.12;
+    private static final double VOID_MAX_RISE_SPEED = 0.46;
 
     private FirmamentTraversalForces() {}
 
@@ -26,13 +30,50 @@ public final class FirmamentTraversalForces {
         return true;
     }
 
+    public static boolean applyVoidBoundary(Player player) {
+        return applyVoidBoundary(player, voidSurfaceY(player));
+    }
+
+    public static boolean applyVoidBoundary(Player player, double surfaceY) {
+        if (player.isSpectator() || player.getY() > surfaceY ||
+                player.getY() <= FirmamentEnvironment.PLAYER_ESCAPE_Y)
+            return false;
+        double depth = Math.clamp(
+                (surfaceY - player.getY()) /
+                        (FirmamentEnvironment.AMMONIA_SEA_Y - FirmamentEnvironment.VOID_FIELD_FULL_Y),
+                0.0,
+                1.0);
+        double eased = depth * depth * (3.0 - 2.0 * depth);
+        Vec3 inherited = player.getDeltaMovement();
+        double spring = VOID_SURFACE_SPRING + (VOID_DEEP_SPRING - VOID_SURFACE_SPRING) * eased;
+        double damping = 2.0 * Math.sqrt(spring);
+        double targetY = surfaceY - VOID_FLOAT_DEPTH;
+        double gravityCompensation = effectiveGravity(player, inherited);
+        double acceleration = spring * (targetY - player.getY()) - damping * inherited.y + gravityCompensation;
+        double verticalVelocity = Math.min(VOID_MAX_RISE_SPEED, inherited.y + acceleration);
+        if (Math.abs(verticalVelocity - inherited.y) < 1.0E-6) return false;
+        player.setDeltaMovement(inherited.x, verticalVelocity, inherited.z);
+        player.fallDistance = 0.0f;
+        return true;
+    }
+
+    public static double voidSurfaceY(Player player) {
+        double time = player.level().getGameTime() * 0.045;
+        double primary = Math.sin(player.getX() * 0.052 + player.getZ() * 0.021 + time) * 0.16;
+        double secondary = Math.sin(player.getX() * -0.029 + player.getZ() * 0.067 - time * 0.73) * 0.09;
+        return FirmamentEnvironment.AMMONIA_SEA_Y + primary + secondary;
+    }
+
     private static Vec3 residualGravity(Player player, double weight, Vec3 inherited) {
-        if (player.hasEffect(MobEffects.LEVITATION)) return Vec3.ZERO;
-        double gravity = player.getAttributeValue(Attributes.GRAVITY);
-        if (inherited.y <= 0.0 && player.hasEffect(MobEffects.SLOW_FALLING)) {
-            gravity = Math.min(gravity, 0.01);
-        }
+        double gravity = effectiveGravity(player, inherited);
         return new Vec3(0.0, -gravity * (1.0 - weight), 0.0);
+    }
+
+    private static double effectiveGravity(Player player, Vec3 inherited) {
+        if (player.hasEffect(MobEffects.LEVITATION)) return 0.0;
+        double gravity = player.getAttributeValue(Attributes.GRAVITY);
+        if (inherited.y <= 0.0 && player.hasEffect(MobEffects.SLOW_FALLING)) return Math.min(gravity, 0.01);
+        return gravity;
     }
 
     private static Vec3 limitedStormDelta(Player player, double weight, long phaseTick, Vec3 inherited) {

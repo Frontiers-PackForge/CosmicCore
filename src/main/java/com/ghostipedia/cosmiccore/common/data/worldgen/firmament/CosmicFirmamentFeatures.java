@@ -16,6 +16,8 @@ public final class CosmicFirmamentFeatures {
 
     public static final DeferredHolder<Feature<?>, Feature<NoneFeatureConfiguration>> MIDDLE_BAND_BRIDGE = FEATURES
             .register("firmament_middle_band_bridge", FirmamentMiddleBandFeature::new);
+    public static final DeferredHolder<Feature<?>, Feature<NoneFeatureConfiguration>> ECOLOGY = FEATURES
+            .register("firmament_ecology", FirmamentEcologyFeature::new);
 
     private CosmicFirmamentFeatures() {}
 

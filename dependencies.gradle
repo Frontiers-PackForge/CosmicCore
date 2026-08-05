@@ -101,6 +101,7 @@ dependencies {
 
     compileOnly("maven.modrinth:XMlHoHNU:dcHZSOWO")
     runtimeOnly("maven.modrinth:XMlHoHNU:dcHZSOWO")
+    spaceGravityRuntime("maven.modrinth:XMlHoHNU:dcHZSOWO")
 
     // Apotheosis (modular on 1.21.1)
     // Placebo is provided transitively by the Apothic mods as dev.shadowsoffire:Placebo. Declaring it

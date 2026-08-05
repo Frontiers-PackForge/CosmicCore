@@ -15,4 +15,7 @@ public class CosmicBlockTags {
 
     public static final TagKey<Block> INDUSTRIAL_IRON_BARS = TagUtil
             .createModBlockTag("industrial_iron_bars");
+
+    public static final TagKey<Block> FIRMAMENT_RESOURCE_BLOCKS = TagUtil
+            .createModBlockTag("firmament_resource_blocks");
 }

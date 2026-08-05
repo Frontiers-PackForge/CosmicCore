@@ -50,6 +50,18 @@
         },
         {
             "identifier": {
+                "group": "spacegravity",
+                "artifact": "space_gravity"
+            },
+            "version": {
+                "range": "[1.0.3]",
+                "artifactVersion": "1.0.3"
+            },
+            "path": "META-INF/jarjar/space_gravity-1.0.3.jar",
+            "isObfuscated": false
+        },
+        {
+            "identifier": {
                 "group": "com.ghostipedia.nebulaeae2",
                 "artifact": "nebulaeae2"
             },

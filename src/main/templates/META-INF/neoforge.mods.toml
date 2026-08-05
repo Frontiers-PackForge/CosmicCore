@@ -61,7 +61,7 @@ config = "cosmiccore.mixins.json"
 
 [[dependencies.${mod_id}]]
     modId = "space_gravity"
-    type = "optional"
+    type = "required"
     versionRange = "[1.0.3,)"
     ordering = "AFTER"
     side = "BOTH"
