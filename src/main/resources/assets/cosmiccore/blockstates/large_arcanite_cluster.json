@@ -1,0 +1,16 @@
+{
+    "multipart": [
+        {
+            "when": { "legacy": "true" },
+            "apply": { "model": "cosmiccore:block/large_arcanite_cluster_legacy" }
+        },
+        {
+            "when": { "legacy": "false", "half": "lower" },
+            "apply": { "model": "cosmiccore:block/large_arcanite_cluster_lower" }
+        },
+        {
+            "when": { "legacy": "false", "half": "upper" },
+            "apply": { "model": "cosmiccore:block/large_arcanite_cluster_upper" }
+        }
+    ]
+}

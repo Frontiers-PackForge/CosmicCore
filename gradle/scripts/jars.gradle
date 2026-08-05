@@ -46,6 +46,10 @@ tasks.named('jar', org.gradle.jvm.tasks.Jar).configure {
     from("$rootDir/libs/createbionics-1.0.5b.jar") { into 'META-INF/jarjar' }
     from("$rootDir/libs/gtceu-1.21.1-8.0.0.jar") { into 'META-INF/jarjar' }
     from(nebulaeArtifactFile) { into 'META-INF/jarjar' }
+    from(configurations.spaceGravityRuntime) {
+        into 'META-INF/jarjar'
+        rename { 'space_gravity-1.0.3.jar' }
+    }
     from(configurations.mixinSquaredRuntime) { into 'META-INF/jarjar' }
     from("$rootDir/jarjar/metadata.json") { into 'META-INF/jarjar' }
 }

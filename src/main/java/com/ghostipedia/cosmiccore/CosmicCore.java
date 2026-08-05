@@ -106,6 +106,7 @@ public class CosmicCore {
 
     @SubscribeEvent
     public void onRegister(RegisterEvent event) {
+        CosmicRegistryAliases.register(event);
         if (didRunRegistration) return;
         didRunRegistration = true;
 

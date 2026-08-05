@@ -9,8 +9,12 @@ import com.ghostipedia.cosmiccore.common.data.worldgen.firmament.FirmamentMiddle
 import com.ghostipedia.cosmiccore.common.dimension.FirmamentDimension;
 
 import net.minecraft.core.Direction;
+import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.player.Player;
 import net.neoforged.bus.api.EventPriority;
@@ -38,6 +42,7 @@ public final class FirmamentTraversalLogic {
             0.0,
             0L);
     private static final Map<ServerPlayer, AnomalyState> ANOMALY_STATES = new WeakHashMap<>();
+    private static final Map<ServerPlayer, SeaState> SEA_STATES = new WeakHashMap<>();
 
     private FirmamentTraversalLogic() {}
 
@@ -49,6 +54,12 @@ public final class FirmamentTraversalLogic {
         if (!inFirmament) {
             releaseOutsideFirmament(serverPlayer, false);
             return;
+        }
+        if (rescueBelowFirmament(serverPlayer)) return;
+        double seaSurfaceY = FirmamentTraversalForces.voidSurfaceY(serverPlayer);
+        updateSeaEntry(serverPlayer, seaSurfaceY);
+        if (FirmamentTraversalForces.applyVoidBoundary(serverPlayer, seaSurfaceY)) {
+            player.hasImpulse = true;
         }
         boolean canTraverse = !player.isSpectator() && !player.getAbilities().flying &&
                 !player.isPassenger() && !player.isDeadOrDying();
@@ -173,6 +184,7 @@ public final class FirmamentTraversalLogic {
         boolean managedFrame = isManagedFrame(GravityApi.getFrame(player));
         if (managedFrame) GravityApi.reset(player);
         ANOMALY_STATES.remove(player);
+        SEA_STATES.remove(player);
         publishInactive(player);
     }
 
@@ -182,6 +194,51 @@ public final class FirmamentTraversalLogic {
         if (managedFrame) GravityApi.reset(player);
         ANOMALY_STATES.remove(player);
         publishInactive(player);
+    }
+
+    private static boolean rescueBelowFirmament(ServerPlayer player) {
+        if (player.isSpectator() || player.getY() > FirmamentEnvironment.PLAYER_ESCAPE_Y) return false;
+        double x = player.getX();
+        double z = player.getZ();
+        double motionX = player.getDeltaMovement().x;
+        double motionZ = player.getDeltaMovement().z;
+        releaseNow(player);
+        player.stopRiding();
+        player.setDeltaMovement(motionX, 0.0, motionZ);
+        player.fallDistance = 0.0f;
+        ServerLevel overworld = player.server.overworld();
+        SEA_STATES.remove(player);
+        player.teleportTo(overworld, x, FirmamentEnvironment.OVERWORLD_ESCAPE_Y, z,
+                player.getYRot(), player.getXRot());
+        return true;
+    }
+
+    private static void updateSeaEntry(ServerPlayer player, double surfaceY) {
+        SeaState state = SEA_STATES.computeIfAbsent(player, ignored -> new SeaState());
+        boolean submerged = player.getY() <= surfaceY;
+        double impactSpeed = Math.max(0.0, -player.getDeltaMovement().y);
+        if (submerged && !state.submerged && impactSpeed >= 0.12) {
+            emitSeaEntry(player, surfaceY, impactSpeed);
+            state.submerged = true;
+            return;
+        }
+        if (submerged) {
+            state.submerged = true;
+        } else if (player.getY() >= surfaceY + 0.6) {
+            state.submerged = false;
+        }
+    }
+
+    private static void emitSeaEntry(ServerPlayer player, double surfaceY, double impactSpeed) {
+        ServerLevel level = player.serverLevel();
+        int particleCount = 6 + Mth.floor(Math.min(16.0, impactSpeed * 5.0));
+        level.sendParticles(ParticleTypes.SPLASH, player.getX(), surfaceY + 0.08, player.getZ(), particleCount,
+                0.38, 0.08, 0.38, 0.12 + Math.min(0.16, impactSpeed * 0.035));
+        float volume = (float) Math.clamp(0.45 + impactSpeed * 0.16, 0.45, 1.0);
+        float pitch = 0.82f + player.getRandom().nextFloat() * 0.16f;
+        level.playSound(null, player.getX(), surfaceY, player.getZ(),
+                impactSpeed >= 0.72 ? SoundEvents.PLAYER_SPLASH_HIGH_SPEED : SoundEvents.PLAYER_SPLASH,
+                SoundSource.PLAYERS, volume, pitch);
     }
 
     private static boolean isManagedFrame(GravityFrame frame) {
@@ -218,6 +275,7 @@ public final class FirmamentTraversalLogic {
         player.getPersistentData().remove(MANAGED_GRAVITY);
         GravityApi.reset(player);
         ANOMALY_STATES.remove(player);
+        SEA_STATES.remove(player);
         publishInactive(player);
     }
 
@@ -256,5 +314,10 @@ public final class FirmamentTraversalLogic {
         private void clearExitTicks() {
             exitTicks = 0;
         }
+    }
+
+    private static final class SeaState {
+
+        private boolean submerged;
     }
 }

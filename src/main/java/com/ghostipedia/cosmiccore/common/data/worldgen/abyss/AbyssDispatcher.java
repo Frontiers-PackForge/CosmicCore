@@ -1,5 +1,6 @@
 package com.ghostipedia.cosmiccore.common.data.worldgen.abyss;
 
+import com.ghostipedia.cosmiccore.common.block.LargeArcaniteClusterBlock;
 import com.ghostipedia.cosmiccore.common.data.CosmicBlocks;
 import com.ghostipedia.cosmiccore.common.data.materials.CosmicBundleMaterials;
 
@@ -91,24 +92,25 @@ public final class AbyssDispatcher {
         BlockState seagrass = CosmicBlocks.MURK_SEAGRASS.getDefaultState();
         BlockState gloomFan = CosmicBlocks.GLOOM_FAN.getDefaultState();
         BlockState shimmer = CosmicBlocks.SHIMMER_TUFT.getDefaultState();
-        BlockState ditchbulb = CosmicBlocks.DITCHBULB.getDefaultState();
+        BlockState lanternBulb = CosmicBlocks.LANTERN_BULB.getDefaultState();
         BlockState bloodFan = CosmicBlocks.BLOOD_FAN.getDefaultState();
         BlockState polyp = CosmicBlocks.PALE_POLYP.getDefaultState();
-        BlockState clinging = CosmicBlocks.CLINGING_BLIGHT.getDefaultState();
-        BlockState blightroot = CosmicBlocks.BLIGHTROOT.getDefaultState();
-        BlockState blightedGrowth = CosmicBlocks.BLIGHTED_GROWTH.getDefaultState();
-        BlockState strangeCrystal = CosmicBlocks.STRANGE_CRYSTAL.getDefaultState();
-        BlockState largeCrystal = CosmicBlocks.LARGE_STRANGE_CRYSTAL.getDefaultState();
+        BlockState anchoredBloomrot = CosmicBlocks.ANCHORED_BLOOMROT.getDefaultState();
+        BlockState bloomrotTendrils = CosmicBlocks.BLOOMROT_TENDRILS.getDefaultState();
+        BlockState bloomrotGrowth = CosmicBlocks.BLOOMROT_GROWTH.getDefaultState();
+        BlockState arcaniteCluster = CosmicBlocks.ARCANITE_CLUSTER.getDefaultState();
+        BlockState largeArcaniteCluster = CosmicBlocks.LARGE_ARCANITE_CLUSTER.getDefaultState();
 
         kelpState = kelp;
         vineBodyState = CosmicBlocks.ABYSS_VINE.getDefaultState();
         vineTipState = CosmicBlocks.ABYSS_VINE_TIP.getDefaultState();
-        vineBerryState = CosmicBlocks.DROOP_STRAND.getDefaultState();
+        vineBerryState = CosmicBlocks.RIPE_ABYSS_VINE.getDefaultState();
         surfaceFloraByLayer = new BlockState[][] {
                 { kelp, seagrass },
-                { seagrass, seagrass, kelp, kelp, gloomFan, shimmer, clinging },
-                { bloodFan, seagrass, ditchbulb, clinging, blightroot, blightedGrowth, strangeCrystal },
-                { polyp, polyp, strangeCrystal, largeCrystal },
+                { seagrass, seagrass, kelp, kelp, gloomFan, shimmer, anchoredBloomrot },
+                { bloodFan, seagrass, lanternBulb, anchoredBloomrot, bloomrotTendrils, bloomrotGrowth,
+                        arcaniteCluster },
+                { polyp, polyp, arcaniteCluster, largeArcaniteCluster },
                 {}
         };
         bellyVineLayers = new boolean[] { false, true, true, false, false };
@@ -136,6 +138,14 @@ public final class AbyssDispatcher {
 
         int pick = (int) (rand01(seed, wx, y, wz, SPECIES_SALT) * table.length);
         BlockState flora = table[Math.min(pick, table.length - 1)];
+        if (flora.is(CosmicBlocks.LARGE_ARCANITE_CLUSTER.get())) {
+            pos.set(wx, y + 1, wz);
+            if (y + 1 <= ceilY && chunk.getBlockState(pos).is(Blocks.WATER)) {
+                pos.set(wx, y, wz);
+                LargeArcaniteClusterBlock.placeAt(chunk, pos, flora);
+            }
+            return;
+        }
         int height = flora == kelpState ? 1 + (int) (rand01(seed, wx, y, wz, STACK_SALT) * 3) : 1;
         for (int dy = 0; dy < height; dy++) {
             pos.set(wx, y + dy, wz);

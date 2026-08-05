@@ -58,6 +58,11 @@ ext.sodiumNeoVersion = "0.8.12-beta.1+mc1.21.1"
 
 configurations {
     sodiumShell { transitive = false }
+    spaceGravityRuntime {
+        canBeConsumed = false
+        canBeResolved = true
+        transitive = false
+    }
     mixinSquaredRuntime {
         canBeConsumed = false
         canBeResolved = true

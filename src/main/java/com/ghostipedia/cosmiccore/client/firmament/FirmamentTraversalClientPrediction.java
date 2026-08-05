@@ -32,8 +32,11 @@ public final class FirmamentTraversalClientPrediction {
     @SubscribeEvent(priority = EventPriority.LOWEST)
     public static void onPlayerTickPre(PlayerTickEvent.Pre event) {
         if (!(event.getEntity() instanceof LocalPlayer player)) return;
-        if (!player.level().dimension().equals(FirmamentDimension.KEY) || player.isSpectator() ||
-                player.getAbilities().flying || player.isPassenger()) {
+        if (!player.level().dimension().equals(FirmamentDimension.KEY)) return;
+        if (FirmamentTraversalForces.applyVoidBoundary(player)) {
+            player.hasImpulse = true;
+        }
+        if (player.isSpectator() || player.getAbilities().flying || player.isPassenger()) {
             return;
         }
         FirmamentTraversalState state = player.getData(CosmicAttachmentTypes.FIRMAMENT_TRAVERSAL_STATE);

@@ -7,11 +7,13 @@ import com.ghostipedia.cosmiccore.client.renderer.block.NebulaeCoilRenderer;
 import com.ghostipedia.cosmiccore.common.block.BerryVineBlock;
 import com.ghostipedia.cosmiccore.common.block.ComputationBayCasingBlock;
 import com.ghostipedia.cosmiccore.common.block.DivingBellEscapePad;
+import com.ghostipedia.cosmiccore.common.block.LargeArcaniteClusterBlock;
 import com.ghostipedia.cosmiccore.common.block.MagnetBlock;
 import com.ghostipedia.cosmiccore.common.block.MothHomeBlock;
 import com.ghostipedia.cosmiccore.common.block.MurkFloraBlock;
 import com.ghostipedia.cosmiccore.common.block.MurkKelpBlock;
 import com.ghostipedia.cosmiccore.common.blockentity.CosmicCoilBlockEntity;
+import com.ghostipedia.cosmiccore.common.data.tag.block.CosmicBlockTags;
 import com.ghostipedia.cosmiccore.common.dimension.FirmamentPortalBlock;
 import com.ghostipedia.cosmiccore.common.food.hearth.HearthPlateBlock;
 import com.ghostipedia.cosmiccore.ember.CosmicEmberEmitterBlock;
@@ -94,6 +96,33 @@ public class CosmicBlocks {
             .item(BlockItem::new)
             .build()
             .register();
+    public static final BlockEntry<Block> SUNSCALDED_SAPROLITE = firmamentResourceBlock(
+            "sunscalded_saprolite", "Sunscalded Saprolite", Blocks.DEEPSLATE, "sunscalded_saprolite",
+            MapColor.TERRACOTTA_ORANGE, SoundType.STONE, 1.2F, 0);
+    public static final BlockEntry<Block> HELIOSTATIC_GLASS = firmamentResourceBlock(
+            "heliostatic_glass", "Heliostatic Glass", Blocks.AMETHYST_BLOCK, "heliostatic_glass",
+            MapColor.GOLD, SoundType.AMETHYST, 1.8F, 4);
+    public static final BlockEntry<Block> STORMGLASS = firmamentResourceBlock(
+            "stormglass", "Stormglass", Blocks.AMETHYST_BLOCK, "stormglass",
+            MapColor.COLOR_CYAN, SoundType.AMETHYST, 2.0F, 5);
+    public static final BlockEntry<Block> TEMPEST_FULGURITE = firmamentResourceBlock(
+            "tempest_fulgurite", "Tempest Fulgurite", Blocks.CALCITE, "tempest_fulgurite",
+            MapColor.COLOR_LIGHT_BLUE, SoundType.CALCITE, 1.6F, 6);
+    public static final BlockEntry<Block> AMMONIA_RIME = firmamentResourceBlock(
+            "ammonia_rime", "Ammonia Rime", Blocks.CALCITE, "ammonia_rime",
+            MapColor.COLOR_LIGHT_GREEN, SoundType.CALCITE, 0.8F, 2);
+    public static final BlockEntry<Block> GRAVITIC_FAULTSTONE = firmamentResourceBlock(
+            "gravitic_faultstone", "Gravitic Faultstone", Blocks.DEEPSLATE, "gravitic_faultstone",
+            MapColor.COLOR_PURPLE, SoundType.DEEPSLATE, 2.4F, 4);
+    public static final BlockEntry<Block> UMBRAL_CRUST = firmamentResourceBlock(
+            "umbral_crust", "Umbral Crust", Blocks.TUFF, "umbral_crust",
+            MapColor.TERRACOTTA_PURPLE, SoundType.TUFF, 1.4F, 1);
+    public static final BlockEntry<Block> RESONANT_SPIRESTONE = firmamentResourceBlock(
+            "resonant_spirestone", "Resonant Spirestone", Blocks.DEEPSLATE, "resonant_spirestone",
+            MapColor.TERRACOTTA_CYAN, SoundType.DEEPSLATE, 2.2F, 3);
+    public static final BlockEntry<Block> PRIMORDIAL_REMNANT = firmamentResourceBlock(
+            "primordial_remnant", "Primordial Remnant", Blocks.AMETHYST_BLOCK, "primordial_remnant",
+            MapColor.QUARTZ, SoundType.AMETHYST, 3.0F, 8);
     public static final BlockEntry<FirmamentPortalBlock> FIRMAMENT_PORTAL = REGISTRATE
             .block("firmament_portal", FirmamentPortalBlock::new)
             .lang("Firmament Portal")
@@ -166,6 +195,26 @@ public class CosmicBlocks {
 
     private static ResourceLocation firmamentTexture(String name) {
         return CosmicCore.id("block/firmament/" + name);
+    }
+
+    private static BlockEntry<Block> firmamentResourceBlock(String name, String lang, Block source, String texture,
+                                                            MapColor mapColor, SoundType sound, float strength,
+                                                            int lightLevel) {
+        return REGISTRATE.block(name, Block::new)
+                .lang(lang)
+                .initialProperties(() -> source)
+                .properties(properties -> properties.mapColor(mapColor)
+                        .strength(strength)
+                        .sound(sound)
+                        .lightLevel(state -> lightLevel)
+                        .requiresCorrectToolForDrops())
+                .blockstate((context, provider) -> provider.simpleBlock(
+                        context.get(), provider.models().cubeAll(context.getName(), firmamentTexture(texture))))
+                .loot((tables, block) -> tables.dropSelf(block))
+                .tag(BlockTags.MINEABLE_WITH_PICKAXE, CosmicBlockTags.FIRMAMENT_RESOURCE_BLOCKS)
+                .item(BlockItem::new)
+                .build()
+                .register();
     }
 
     private static Map<Integer, BlockEntry<CosmicEmberReceptorBlock>> registerEmberReceptors() {
@@ -259,23 +308,25 @@ public class CosmicBlocks {
     public static final BlockEntry<MurkFloraBlock> MURK_SEAGRASS = flora("murk_seagrass", "Murky Seagrass", 0);
     public static final BlockEntry<MurkFloraBlock> GLOOM_FAN = flora("gloom_fan", "Gloom Fan", 0);
     public static final BlockEntry<MurkFloraBlock> SHIMMER_TUFT = flora("shimmer_tuft", "Shimmer Tuft", 7);
-    public static final BlockEntry<MurkFloraBlock> DITCHBULB = flora("ditchbulb", "Lantern Bulb", 10);
+    public static final BlockEntry<MurkFloraBlock> LANTERN_BULB = flora("lantern_bulb", "Lantern Bulb", 10);
     public static final BlockEntry<MurkFloraBlock> BLOOD_FAN = flora("blood_fan", "Blood Fan", 0);
     public static final BlockEntry<MurkFloraBlock> PALE_POLYP = flora("pale_polyp", "Pale Polyp", 0);
     public static final BlockEntry<MurkFloraBlock> ABYSS_VINE = flora("abyss_vine", "Abyss Vine", 0);
     public static final BlockEntry<MurkFloraBlock> ABYSS_VINE_TIP = flora("abyss_vine_tip", "Abyss Vine", 0);
-    public static final BlockEntry<MurkFloraBlock> CLINGING_BLIGHT = flora("clinging_blight", "Clinging Blight", 0);
-    public static final BlockEntry<MurkFloraBlock> BLIGHTROOT = flora("blightroot", "Blightroot", 7);
-    public static final BlockEntry<MurkFloraBlock> BLIGHTED_GROWTH = flora("blighted_growth", "Blighted Growth", 0);
-    public static final BlockEntry<MurkFloraBlock> STRANGE_CRYSTAL = flora("strange_crystal", "Strange Crystal", 8);
-    public static final BlockEntry<MurkFloraBlock> LARGE_STRANGE_CRYSTAL = flora("large_strange_crystal",
-            "Large Strange Crystal", 11);
+    public static final BlockEntry<MurkFloraBlock> ANCHORED_BLOOMROT = flora("anchored_bloomrot",
+            "Anchored Bloomrot", 0);
+    public static final BlockEntry<MurkFloraBlock> BLOOMROT_TENDRILS = flora("bloomrot_tendrils",
+            "Bloomrot Tendrils", 7);
+    public static final BlockEntry<MurkFloraBlock> BLOOMROT_GROWTH = flora("bloomrot_growth", "Bloomrot Growth", 0);
+    public static final BlockEntry<MurkFloraBlock> ARCANITE_CLUSTER = flora("arcanite_cluster", "Arcanite Cluster", 8);
+    public static final BlockEntry<LargeArcaniteClusterBlock> LARGE_ARCANITE_CLUSTER = flora(
+            "large_arcanite_cluster", "Large Arcanite Cluster", 11, LargeArcaniteClusterBlock::new);
 
-    public static final BlockEntry<BerryVineBlock> DROOP_STRAND = REGISTRATE
-            .block("droop_strand", BerryVineBlock::new)
+    public static final BlockEntry<BerryVineBlock> RIPE_ABYSS_VINE = REGISTRATE
+            .block("ripe_abyss_vine", BerryVineBlock::new)
             .initialProperties(() -> Blocks.SEAGRASS)
             .properties(p -> p.noCollission().instabreak().noOcclusion().lightLevel(state -> 5))
-            .lang("Berried Abyss Vine")
+            .lang("Ripe Abyss Vine")
             .blockstate(NonNullBiConsumer.noop())
             .item(BlockItem::new)
             .model(NonNullBiConsumer.noop())
