@@ -9,6 +9,7 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.ModifyVariable;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import java.util.ArrayList;
@@ -26,6 +27,14 @@ public abstract class NamespacedSurfaceRuleSourceFlattenMixin {
     @Shadow
     @Final
     private Map<String, SurfaceRules.RuleSource> sources;
+
+    @ModifyVariable(method = "<init>", at = @At("HEAD"), argsOnly = true, ordinal = 0)
+    private static SurfaceRules.RuleSource cosmiccore$flattenSerializedBase(SurfaceRules.RuleSource base) {
+        while (base instanceof NamespacedSurfaceRuleSourceAccessor namespaced) {
+            base = namespaced.cosmiccore$getBase();
+        }
+        return base;
+    }
 
     @Inject(
             method = "apply(Lnet/minecraft/world/level/levelgen/SurfaceRules$Context;)Lnet/minecraft/world/level/levelgen/SurfaceRules$SurfaceRule;",

@@ -4,7 +4,6 @@ import com.ghostipedia.cosmiccore.CosmicCore;
 import com.ghostipedia.cosmiccore.client.renderer.machine.CosmicDynamicRenderHelpers;
 import com.ghostipedia.cosmiccore.common.block.MurkFloraBlock;
 import com.ghostipedia.cosmiccore.common.data.CosmicMachines;
-import com.ghostipedia.cosmiccore.common.data.tag.block.CosmicBlockTags;
 import com.ghostipedia.cosmiccore.common.machine.multiblock.multi.logic.bloomwyrm.AbyssalCultureVatMachine;
 import com.ghostipedia.cosmiccore.common.machine.multiblock.multi.logic.bloomwyrm.BiomanaDigestorMachine;
 import com.ghostipedia.cosmiccore.common.machine.multiblock.multi.logic.bloomwyrm.BloomwyrmHeartMachine;
@@ -192,33 +191,37 @@ public final class BloomwyrmSystem {
             .rotationState(RotationState.NON_Y_AXIS)
             .recipeType(CosmicRecipeTypes.BIOMANA_DIGESTOR)
             .recipeModifier(BloomwyrmUnitMachine::recipeModifier)
-            .appearanceBlock(SOMARUST_CASING)
-            .partAppearance((controller, part, side) -> SOMARUST_CASING.getDefaultState())
+            .appearanceBlock(LIGHTWEIGHT_DARK_STEEL_CASING)
+            .partAppearance((controller, part, side) -> LIGHTWEIGHT_DARK_STEEL_CASING.getDefaultState())
             .pattern(definition -> MultiblockPatternBuilder
-                    .start(RelativeDirection.LEFT, RelativeDirection.UP, RelativeDirection.FRONT)
-                    .slice("       ", "       ", " AAAAA ", " AAAAA ", " CCCCC ", " JMMMF ")
-                    .slice(" G   G ", " GAAAG ", "AAALAAA", "AAH LAA", "CC   CC", "JD   KF")
-                    .slice("       ", " AAAAA ", "AALHLAA", "AH   IA", "C     C", "E     E")
-                    .slice("       ", " AAAAA ", "AHHHLHA", "A     B", "C     C", "E     E")
-                    .slice("       ", " AAAAA ", "AALHHAA", "AL   HA", "C     C", "E     E")
-                    .slice(" G   G ", " GAAAG ", "AAALAAA", "AAH IAA", "CC   CC", "KF   JD")
-                    .slice("       ", "       ", " AAAAA ", " AAAAA ", " CCCCC ", " KMMMD ")
+                    .start(RelativeDirection.FRONT, RelativeDirection.UP, RelativeDirection.LEFT)
+                    .slice(" AA   AA ", " A     A ", " A     A ", "         ", "         ", "         ",
+                            "         ", "         ")
+                    .slice("ABBBBBBBA", "ABB   BBA", "AA     AA", " A     A ", "         ", "         ",
+                            "         ", "         ")
+                    .slice("ABCCCCCBA", " B     B ", "         ", "   CCC   ", "   CDC   ", "   CDC   ",
+                            "   CDC   ", "   CCC   ")
+                    .slice(" BCCCCCB ", "   C C   ", "   E E   ", "  CCCCC  ", "  C   C  ", "  C   C  ",
+                            "  C   C  ", "  CCCCC  ")
+                    .slice(" BCCCCCB ", "         ", "         ", "  CCCCC  ", "  D   D  ", "  D   D  ",
+                            "  D   D  ", "  CCCCC  ")
+                    .slice(" BCCCCCB ", "   C C   ", "   E E   ", "  CCCCC  ", "  C   C  ", "  C   C  ",
+                            "  C   C  ", "  CCCCC  ")
+                    .slice("ABCCCCCBA", " B     B ", "         ", "   CCC   ", "   CDC   ", "   CDC   ",
+                            "   CDC   ", "   CCC   ")
+                    .slice("ABBBFBBBA", "ABB   BBA", "AA     AA", " A     A ", "         ", "         ",
+                            "         ", "         ")
+                    .slice(" AA   AA ", " A     A ", " A     A ", "         ", "         ", "         ",
+                            "         ", "         ")
                     .where(' ', any())
-                    .where('A', blocks(SOMARUST_CASING.get())
+                    .where('A', blocks(LIGHTWEIGHT_INDUSTRIAL_CASING.get()))
+                    .where('B', blocks(LIGHTWEIGHT_DARK_STEEL_CASING.get())
                             .or(autoAbilitiesNoEnergyIn(CosmicRecipeTypes.BIOMANA_DIGESTOR))
                             .or(autoAbilities(true, false, false)))
-                    .where('B', controller(blocks(definition.getBlock())))
-                    .where('C', blocks(GTBlocks.CASING_PTFE_INERT.get()))
-                    .where('D', blockTag(CosmicBlockTags.INDUSTRIAL_IRON_BARS))
-                    .where('E', blockTag(CosmicBlockTags.INDUSTRIAL_IRON_BARS))
-                    .where('F', blockTag(CosmicBlockTags.INDUSTRIAL_IRON_BARS))
-                    .where('G', blockTag(TagUtil.createBlockTag("frames/stainless_steel")))
-                    .where('H', blocks(Blocks.SCULK))
-                    .where('I', blocks(Blocks.SCULK_CATALYST))
-                    .where('J', blockTag(CosmicBlockTags.INDUSTRIAL_IRON_BARS))
-                    .where('K', blockTag(CosmicBlockTags.INDUSTRIAL_IRON_BARS))
-                    .where('L', blocks(Blocks.MOSS_BLOCK))
-                    .where('M', blockTag(CosmicBlockTags.INDUSTRIAL_IRON_BARS))
+                    .where('C', blocks(SOMARUST_CASING.get()))
+                    .where('D', blocks(GTBlocks.CASING_TEMPERED_GLASS.get()))
+                    .where('E', blockTag(TagUtil.createBlockTag("frames/stainless_steel")))
+                    .where('F', controller(blocks(definition.getBlock())))
                     .build())
             .workableCasingModel(
                     CosmicCore.id("block/casings/solid/somarust_casing"),

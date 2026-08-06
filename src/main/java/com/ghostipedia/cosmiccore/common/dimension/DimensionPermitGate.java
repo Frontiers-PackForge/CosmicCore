@@ -24,19 +24,29 @@ public class DimensionPermitGate {
         if (!(event.getEntity() instanceof ServerPlayer player)) return;
 
         if (event.getDimension().equals(Level.NETHER)) {
-            gate(event, player, NETHER_PERMIT_ADVANCEMENT, "You need a Nether Permit to enter the Nether.");
+            gate(event, player, NETHER_PERMIT_ADVANCEMENT, "cosmiccore.dimension.nether_permit_required");
         } else if (event.getDimension().equals(FirmamentDimension.KEY)) {
-            gate(event, player, FIRMAMENT_PERMIT_ADVANCEMENT, "You need a Firmament Permit to enter the Firmament.");
+            if (!canEnterFirmament(player, true)) event.setCanceled(true);
         }
     }
 
     private static void gate(EntityTravelToDimensionEvent event, ServerPlayer player,
-                             ResourceLocation advancementId, String message) {
+                             ResourceLocation advancementId, String messageKey) {
         var advancement = player.server.getAdvancements().get(advancementId);
         if (advancement == null) return;
         if (!player.getAdvancements().getOrStartProgress(advancement).isDone()) {
             event.setCanceled(true);
-            player.displayClientMessage(Component.literal(message), true);
+            player.displayClientMessage(Component.translatable(messageKey), true);
         }
+    }
+
+    public static boolean canEnterFirmament(ServerPlayer player, boolean notify) {
+        var advancement = player.server.getAdvancements().get(FIRMAMENT_PERMIT_ADVANCEMENT);
+        boolean permitted = advancement == null || player.getAdvancements().getOrStartProgress(advancement).isDone();
+        if (!permitted && notify) {
+            player.displayClientMessage(
+                    Component.translatable("cosmiccore.dimension.firmament_permit_required"), true);
+        }
+        return permitted;
     }
 }

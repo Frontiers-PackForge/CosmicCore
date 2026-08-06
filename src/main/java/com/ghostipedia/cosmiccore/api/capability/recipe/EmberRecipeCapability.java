@@ -24,7 +24,7 @@ public class EmberRecipeCapability extends RecipeCapability<Double> {
     public static final EmberRecipeCapability CAP = new EmberRecipeCapability();
 
     protected EmberRecipeCapability() {
-        super(CosmicCore.id("ember"), 0xFFFF9900, true, 12, SerializerDouble.INSTANCE);
+        super(CosmicCore.id("ember"), 0xFF555555, true, 12, SerializerDouble.INSTANCE);
     }
 
     @Override

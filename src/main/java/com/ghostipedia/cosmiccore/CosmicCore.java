@@ -17,6 +17,7 @@ import com.ghostipedia.cosmiccore.common.commands.argument.SoulTypeArgument;
 import com.ghostipedia.cosmiccore.common.compat.ars.ArsSealCompat;
 import com.ghostipedia.cosmiccore.common.compat.ftbquests.DeedQuestCompatBridge;
 import com.ghostipedia.cosmiccore.common.compat.lso.LsoFoodCompat;
+import com.ghostipedia.cosmiccore.common.compat.occultism.CosmicRituals;
 import com.ghostipedia.cosmiccore.common.config.CosmicCoreConfig;
 import com.ghostipedia.cosmiccore.common.data.*;
 import com.ghostipedia.cosmiccore.common.data.materials.CosmicBundleMaterials;
@@ -92,6 +93,7 @@ public class CosmicCore {
         CosmicChunkGenerators.register(modBus);
         CosmicCropFeatures.register(modBus);
         CosmicFirmamentFeatures.register(modBus);
+        CosmicRituals.register(modBus);
         CosmicBargains.init();
 
         if (Platform.isClient()) {

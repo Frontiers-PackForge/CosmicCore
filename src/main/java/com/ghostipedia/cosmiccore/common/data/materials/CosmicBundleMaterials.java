@@ -62,6 +62,7 @@ public class CosmicBundleMaterials {
         Carbonic = bundle("carbonic", 0x2C2C30, 0x121214, MaterialIconSet.DULL);
         EarthenSalts = bundle("earthen_salts", 0xD9CBA8, 0xA89B78, MaterialIconSet.SAND);
         Pyroltic = bundle("pyroltic", 0xC9B037, 0x8A7615, MaterialIconSet.ROUGH);
+        dustPure.removeIgnored(Pyroltic);
         Quartizine = bundle("quartizine", 0x9FD8C8, 0x5FA090, MaterialIconSet.QUARTZ);
         Molybite = bundle("molybite", 0x4A5A6A, 0x2A3540, MaterialIconSet.METALLIC);
         Fahlorium = bundle("fahlorium", 0x7A5C3E, 0x4E3A26, MaterialIconSet.DULL);

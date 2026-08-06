@@ -107,6 +107,27 @@ public class DebugBlockPattern {
                 patternDirections.character().getDefaultFacing());
     }
 
+    public static ExportOrientation exportOrientationFor(Direction facing) {
+        PatternDirections patternDirections = directionsFor(facing);
+        WorldDirections worldDirections = worldDirectionsFor(facing);
+        for (Direction front : Direction.values()) {
+            for (Direction up : Direction.values()) {
+                if (front.getAxis() == up.getAxis()) continue;
+                for (int flipState = 0; flipState < 2; flipState++) {
+                    boolean flipped = flipState == 1;
+                    if (patternDirections.slice().getRelativeFacing(front, up, flipped) == worldDirections.slice() &&
+                            patternDirections.string().getRelativeFacing(front, up, flipped) ==
+                                    worldDirections.string() &&
+                            patternDirections.character().getRelativeFacing(front, up, flipped) ==
+                                    worldDirections.character()) {
+                        return new ExportOrientation(front, up, flipped);
+                    }
+                }
+            }
+        }
+        throw new IllegalStateException("Unable to resolve the structure writer export orientation");
+    }
+
     public void orient(WorldDirections target) {
         validateDirections(target);
         char[][][] newPattern = new char[dimensionFor(target.slice())][dimensionFor(target.string())][dimensionFor(
@@ -208,4 +229,9 @@ public class DebugBlockPattern {
                                   Direction slice,
                                   Direction string,
                                   Direction character) {}
+
+    public record ExportOrientation(
+                                    Direction front,
+                                    Direction up,
+                                    boolean flipped) {}
 }
