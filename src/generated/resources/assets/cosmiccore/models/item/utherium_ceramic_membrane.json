@@ -1,6 +1,6 @@
 {
     "parent": "minecraft:item/generated",
     "textures": {
-        "layer0": "cosmiccore:item/heavy_neutron_filter"
+        "layer0": "cosmiccore:item/utherium_ceramic_membrane"
     }
 }

@@ -1,6 +1,6 @@
 {
     "parent": "minecraft:item/generated",
     "textures": {
-        "layer0": "cosmiccore:item/sturdy_plates"
+        "layer0": "cosmiccore:item/utherium_ceramic_liner"
     }
 }
