@@ -102,6 +102,12 @@ public class StructureBoundingBox {
             addAxis(buffer, last, mat4, originX, originY, originZ, sliceDirection, 1f, 0.2f, 0.2f);
             addAxis(buffer, last, mat4, originX, originY, originZ, stringDirection, 0.2f, 1f, 0.2f);
             addAxis(buffer, last, mat4, originX, originY, originZ, characterDirection, 0.2f, 0.4f, 1f);
+            addFrontArrow(
+                    buffer,
+                    last,
+                    mat4,
+                    poses,
+                    DebugBlockPattern.exportOrientationFor(direction).front());
             BufferUploader.drawWithShader(buffer.buildOrThrow());
 
             RenderSystem.enableCull();
@@ -156,5 +162,90 @@ public class StructureBoundingBox {
                 (float) z + stepZ * 1.5f)
                 .setColor(red, green, blue, 0.85f)
                 .setNormal(pose, stepX, stepY, stepZ);
+    }
+
+    private static void addFrontArrow(
+                                      BufferBuilder buffer,
+                                      PoseStack.Pose pose,
+                                      Matrix4f matrix,
+                                      BlockPos[] positions,
+                                      Direction direction) {
+        double minX = positions[0].getX();
+        double minY = positions[0].getY();
+        double minZ = positions[0].getZ();
+        double maxX = positions[1].getX() + 1;
+        double maxY = positions[1].getY() + 1;
+        double maxZ = positions[1].getZ() + 1;
+        double centerX = (minX + maxX) * 0.5;
+        double centerY = (minY + maxY) * 0.5;
+        double centerZ = (minZ + maxZ) * 0.5;
+        double faceX = direction.getStepX() > 0 ? maxX : direction.getStepX() < 0 ? minX : centerX;
+        double faceY = direction.getStepY() > 0 ? maxY : direction.getStepY() < 0 ? minY : centerY;
+        double faceZ = direction.getStepZ() > 0 ? maxZ : direction.getStepZ() < 0 ? minZ : centerZ;
+        double tipX = faceX + direction.getStepX() * 2.25;
+        double tipY = faceY + direction.getStepY() * 2.25;
+        double tipZ = faceZ + direction.getStepZ() * 2.25;
+        double neckX = tipX - direction.getStepX() * 0.65;
+        double neckY = tipY - direction.getStepY() * 0.65;
+        double neckZ = tipZ - direction.getStepZ() * 0.65;
+        double[] firstPerpendicular = direction.getAxis() == Direction.Axis.Y ?
+                new double[] { 1, 0, 0 } : new double[] { 0, 1, 0 };
+        double[] secondPerpendicular = direction.getAxis() == Direction.Axis.Z ?
+                new double[] { 1, 0, 0 } : new double[] { 0, 0, 1 };
+
+        addLine(buffer, pose, matrix, faceX, faceY, faceZ, tipX, tipY, tipZ, direction);
+        addArrowHeadLine(buffer, pose, matrix, tipX, tipY, tipZ, neckX, neckY, neckZ,
+                firstPerpendicular, 0.42, direction);
+        addArrowHeadLine(buffer, pose, matrix, tipX, tipY, tipZ, neckX, neckY, neckZ,
+                firstPerpendicular, -0.42, direction);
+        addArrowHeadLine(buffer, pose, matrix, tipX, tipY, tipZ, neckX, neckY, neckZ,
+                secondPerpendicular, 0.42, direction);
+        addArrowHeadLine(buffer, pose, matrix, tipX, tipY, tipZ, neckX, neckY, neckZ,
+                secondPerpendicular, -0.42, direction);
+    }
+
+    private static void addArrowHeadLine(
+                                         BufferBuilder buffer,
+                                         PoseStack.Pose pose,
+                                         Matrix4f matrix,
+                                         double tipX,
+                                         double tipY,
+                                         double tipZ,
+                                         double neckX,
+                                         double neckY,
+                                         double neckZ,
+                                         double[] perpendicular,
+                                         double scale,
+                                         Direction direction) {
+        addLine(
+                buffer,
+                pose,
+                matrix,
+                tipX,
+                tipY,
+                tipZ,
+                neckX + perpendicular[0] * scale,
+                neckY + perpendicular[1] * scale,
+                neckZ + perpendicular[2] * scale,
+                direction);
+    }
+
+    private static void addLine(
+                                BufferBuilder buffer,
+                                PoseStack.Pose pose,
+                                Matrix4f matrix,
+                                double startX,
+                                double startY,
+                                double startZ,
+                                double endX,
+                                double endY,
+                                double endZ,
+                                Direction direction) {
+        buffer.addVertex(matrix, (float) startX, (float) startY, (float) startZ)
+                .setColor(1f, 1f, 1f, 1f)
+                .setNormal(pose, direction.getStepX(), direction.getStepY(), direction.getStepZ());
+        buffer.addVertex(matrix, (float) endX, (float) endY, (float) endZ)
+                .setColor(1f, 1f, 1f, 1f)
+                .setNormal(pose, direction.getStepX(), direction.getStepY(), direction.getStepZ());
     }
 }

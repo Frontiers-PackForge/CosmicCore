@@ -121,7 +121,7 @@ public final class FirmamentPortalBlock extends Block implements Portal {
     }
 
     @Nullable
-    private static BlockPos findFirmamentLowerSurface(ServerLevel level, int x, int z) {
+    static BlockPos findFirmamentLowerSurface(ServerLevel level, int x, int z) {
         for (int radius = 0; radius <= 64; radius += 8) {
             for (int offsetX = -radius; offsetX <= radius; offsetX += 8) {
                 for (int offsetZ = -radius; offsetZ <= radius; offsetZ += 8) {

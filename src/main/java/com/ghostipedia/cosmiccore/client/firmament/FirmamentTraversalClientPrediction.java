@@ -33,6 +33,10 @@ public final class FirmamentTraversalClientPrediction {
     public static void onPlayerTickPre(PlayerTickEvent.Pre event) {
         if (!(event.getEntity() instanceof LocalPlayer player)) return;
         if (!player.level().dimension().equals(FirmamentDimension.KEY)) return;
+        if (FirmamentTideHudOverlay.isReturning()) {
+            if (FirmamentTraversalForces.applyTideReturnDescent(player)) player.hasImpulse = true;
+            return;
+        }
         if (FirmamentTraversalForces.applyVoidBoundary(player)) {
             player.hasImpulse = true;
         }

@@ -5,6 +5,7 @@ import com.ghostipedia.cosmiccore.client.dev.AbyssDevView;
 import com.ghostipedia.cosmiccore.client.dev.MurkbloomDevControls;
 import com.ghostipedia.cosmiccore.client.firmament.FirmamentSpecialEffects;
 import com.ghostipedia.cosmiccore.client.firmament.FirmamentSunsetPostProcessor;
+import com.ghostipedia.cosmiccore.client.firmament.FirmamentTideHudOverlay;
 import com.ghostipedia.cosmiccore.client.keybind.QuakeMovementKeybinds;
 import com.ghostipedia.cosmiccore.client.mirror.DeedHudOverlay;
 import com.ghostipedia.cosmiccore.client.mirror.MirrorScreen;
@@ -157,6 +158,7 @@ public class CosmicCoreClient {
         event.registerAboveAll(CosmicCore.id("cosmichud"), new CosmicHudGuiOverlay());
         event.registerAboveAll(CosmicCore.id("murkbloom"), new MurkbloomOverlay());
         event.registerAboveAll(CosmicCore.id("deed_thread"), new DeedHudOverlay());
+        event.registerAboveAll(CosmicCore.id("firmament_tide"), new FirmamentTideHudOverlay());
     }
 
     @SubscribeEvent

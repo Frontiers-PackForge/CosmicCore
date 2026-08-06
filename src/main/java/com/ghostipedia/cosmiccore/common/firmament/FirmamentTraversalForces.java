@@ -15,6 +15,7 @@ public final class FirmamentTraversalForces {
     private static final double VOID_SURFACE_SPRING = 0.055;
     private static final double VOID_DEEP_SPRING = 0.12;
     private static final double VOID_MAX_RISE_SPEED = 0.46;
+    private static final double TIDE_RETURN_DESCENT_SPEED = -0.16;
 
     private FirmamentTraversalForces() {}
 
@@ -53,6 +54,16 @@ public final class FirmamentTraversalForces {
         double verticalVelocity = Math.min(VOID_MAX_RISE_SPEED, inherited.y + acceleration);
         if (Math.abs(verticalVelocity - inherited.y) < 1.0E-6) return false;
         player.setDeltaMovement(inherited.x, verticalVelocity, inherited.z);
+        player.fallDistance = 0.0f;
+        return true;
+    }
+
+    public static boolean applyTideReturnDescent(Player player) {
+        Vec3 inherited = player.getDeltaMovement();
+        double descent = Math.max(TIDE_RETURN_DESCENT_SPEED, Math.min(-0.05, inherited.y));
+        Vec3 result = new Vec3(0.0, descent, 0.0);
+        if (result.equals(inherited)) return false;
+        player.setDeltaMovement(result);
         player.fallDistance = 0.0f;
         return true;
     }

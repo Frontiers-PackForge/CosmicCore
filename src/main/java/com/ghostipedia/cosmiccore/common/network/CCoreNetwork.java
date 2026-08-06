@@ -6,6 +6,7 @@ import com.ghostipedia.cosmiccore.common.network.packet.BuildTieredMultiblockPac
 import com.ghostipedia.cosmiccore.common.network.packet.DeedPresentationAckPacket;
 import com.ghostipedia.cosmiccore.common.network.packet.DeedPresentationPacket;
 import com.ghostipedia.cosmiccore.common.network.packet.DeedSyncPacket;
+import com.ghostipedia.cosmiccore.common.network.packet.FirmamentTideHudPacket;
 import com.ghostipedia.cosmiccore.common.network.packet.MirrorWeavePacket;
 import com.ghostipedia.cosmiccore.common.network.packet.MurkbloomDevImmunityPacket;
 import com.ghostipedia.cosmiccore.common.network.packet.MurkbloomSyncPacket;
@@ -33,7 +34,7 @@ import net.neoforged.neoforge.network.registration.PayloadRegistrar;
 
 public class CCoreNetwork {
 
-    private static final String PROTOCOL_VERSION = "1.9.0";
+    private static final String PROTOCOL_VERSION = "1.12.0";
 
     public static void sendToServer(CustomPacketPayload packet) {
         PacketDistributor.sendToServer(packet);
@@ -62,6 +63,8 @@ public class CCoreNetwork {
         registrar.playToClient(DeedSyncPacket.TYPE, DeedSyncPacket.CODEC, DeedSyncPacket::execute);
         registrar.playToClient(DeedPresentationPacket.TYPE, DeedPresentationPacket.CODEC,
                 DeedPresentationPacket::execute);
+        registrar.playToClient(FirmamentTideHudPacket.TYPE, FirmamentTideHudPacket.CODEC,
+                FirmamentTideHudPacket::execute);
         DeedQuestCompatBridge.registerPayloads(registrar);
 
         registrar.playToServer(DashPacket.TYPE, DashPacket.CODEC, DashPacket::execute);

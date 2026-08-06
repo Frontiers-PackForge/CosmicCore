@@ -7,6 +7,8 @@ import com.ghostipedia.cosmiccore.api.gravity.GravityMode;
 import com.ghostipedia.cosmiccore.common.data.CosmicAttachmentTypes;
 import com.ghostipedia.cosmiccore.common.data.worldgen.firmament.FirmamentMiddleBandLayout;
 import com.ghostipedia.cosmiccore.common.dimension.FirmamentDimension;
+import com.ghostipedia.cosmiccore.common.network.CCoreNetwork;
+import com.ghostipedia.cosmiccore.common.network.packet.FirmamentTideHudPacket;
 
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleTypes;
@@ -32,6 +34,9 @@ public final class FirmamentTraversalLogic {
     private static final String MANAGED_GRAVITY = "cosmiccoreFirmamentManagedGravity";
     private static final double EXIT_THRESHOLD = 0.02;
     private static final int EXIT_CONFIRMATION_TICKS = 3;
+    private static final int TIDE_RETURN_HOLD_TICKS = 40;
+    private static final int TIDE_RETURN_MAX_TRANSITION_TICKS = 20;
+    private static final double TIDE_RETURN_TRANSITION_Y = 12.4;
     private static final GravityFrame FREE_DRIFT_FRAME = new GravityFrame(
             GravityMode.FREE_DRIFT,
             Direction.DOWN,
@@ -57,8 +62,9 @@ public final class FirmamentTraversalLogic {
         }
         if (rescueBelowFirmament(serverPlayer)) return;
         double seaSurfaceY = FirmamentTraversalForces.voidSurfaceY(serverPlayer);
-        updateSeaEntry(serverPlayer, seaSurfaceY);
-        if (FirmamentTraversalForces.applyVoidBoundary(serverPlayer, seaSurfaceY)) {
+        SeaState seaState = updateSeaEntry(serverPlayer, seaSurfaceY);
+        if (updateTideReturn(serverPlayer, seaSurfaceY, seaState)) return;
+        if (!seaState.returning && FirmamentTraversalForces.applyVoidBoundary(serverPlayer, seaSurfaceY)) {
             player.hasImpulse = true;
         }
         boolean canTraverse = !player.isSpectator() && !player.getAbilities().flying &&
@@ -158,9 +164,11 @@ public final class FirmamentTraversalLogic {
 
     @SubscribeEvent
     public static void onPlayerRespawn(PlayerEvent.PlayerRespawnEvent event) {
-        if (event.getEntity() instanceof ServerPlayer player &&
-                !player.level().dimension().equals(FirmamentDimension.KEY)) {
-            releaseOutsideFirmament(player, true);
+        if (event.getEntity() instanceof ServerPlayer player) {
+            clearSeaState(player);
+            if (!player.level().dimension().equals(FirmamentDimension.KEY)) {
+                releaseOutsideFirmament(player, true);
+            }
         }
     }
 
@@ -184,7 +192,7 @@ public final class FirmamentTraversalLogic {
         boolean managedFrame = isManagedFrame(GravityApi.getFrame(player));
         if (managedFrame) GravityApi.reset(player);
         ANOMALY_STATES.remove(player);
-        SEA_STATES.remove(player);
+        clearSeaState(player);
         publishInactive(player);
     }
 
@@ -198,35 +206,108 @@ public final class FirmamentTraversalLogic {
 
     private static boolean rescueBelowFirmament(ServerPlayer player) {
         if (player.isSpectator() || player.getY() > FirmamentEnvironment.PLAYER_ESCAPE_Y) return false;
-        double x = player.getX();
-        double z = player.getZ();
-        double motionX = player.getDeltaMovement().x;
-        double motionZ = player.getDeltaMovement().z;
-        releaseNow(player);
-        player.stopRiding();
-        player.setDeltaMovement(motionX, 0.0, motionZ);
-        player.fallDistance = 0.0f;
-        ServerLevel overworld = player.server.overworld();
-        SEA_STATES.remove(player);
-        player.teleportTo(overworld, x, FirmamentEnvironment.OVERWORLD_ESCAPE_Y, z,
-                player.getYRot(), player.getXRot());
+        returnToEarth(player, true, false);
         return true;
     }
 
-    private static void updateSeaEntry(ServerPlayer player, double surfaceY) {
+    private static SeaState updateSeaEntry(ServerPlayer player, double surfaceY) {
         SeaState state = SEA_STATES.computeIfAbsent(player, ignored -> new SeaState());
         boolean submerged = player.getY() <= surfaceY;
         double impactSpeed = Math.max(0.0, -player.getDeltaMovement().y);
         if (submerged && !state.submerged && impactSpeed >= 0.12) {
             emitSeaEntry(player, surfaceY, impactSpeed);
             state.submerged = true;
-            return;
+            return state;
         }
         if (submerged) {
             state.submerged = true;
         } else if (player.getY() >= surfaceY + 0.6) {
             state.submerged = false;
         }
+        return state;
+    }
+
+    private static boolean updateTideReturn(ServerPlayer player, double surfaceY, SeaState state) {
+        if (state.returning) {
+            state.returningTicks++;
+            if (player.getY() <= TIDE_RETURN_TRANSITION_Y ||
+                    state.returningTicks >= TIDE_RETURN_MAX_TRANSITION_TICKS) {
+                returnToEarth(player, false, true);
+                return true;
+            }
+            if (FirmamentTraversalForces.applyTideReturnDescent(player)) player.hasImpulse = true;
+            syncTideHud(player, state, FirmamentTideHudPacket.RETURNING);
+            return true;
+        }
+
+        boolean eligible = !player.isSpectator() && !player.getAbilities().flying && !player.isPassenger() &&
+                !player.isDeadOrDying() && player.getY() <= surfaceY + 0.35 &&
+                player.getY() > TIDE_RETURN_TRANSITION_Y;
+        if (!eligible) {
+            state.returnTicks = 0;
+            syncTideHud(player, state, FirmamentTideHudPacket.HIDDEN);
+            return false;
+        }
+
+        if (player.isShiftKeyDown() || player.isCrouching()) {
+            state.returnTicks = Math.min(TIDE_RETURN_HOLD_TICKS, state.returnTicks + 1);
+        } else {
+            state.returnTicks = Math.max(0, state.returnTicks - 2);
+        }
+        syncTideHud(player, state, FirmamentTideHudPacket.PROMPT);
+        if (state.returnTicks < TIDE_RETURN_HOLD_TICKS) return false;
+
+        state.returning = true;
+        state.returningTicks = 0;
+        releaseNow(player);
+        FirmamentTraversalForces.applyTideReturnDescent(player);
+        player.hasImpulse = true;
+        syncTideHud(player, state, FirmamentTideHudPacket.RETURNING);
+        return true;
+    }
+
+    private static void syncTideHud(ServerPlayer player, SeaState state, byte mode) {
+        float progress = mode == FirmamentTideHudPacket.HIDDEN ?
+                0.0f : (float) state.returnTicks / TIDE_RETURN_HOLD_TICKS;
+        long gameTime = player.level().getGameTime();
+        if (state.hudMode == mode && Math.abs(state.hudProgress - progress) < 0.024f &&
+                gameTime - state.lastHudSync < 10L) {
+            return;
+        }
+        state.hudMode = mode;
+        state.hudProgress = progress;
+        state.lastHudSync = gameTime;
+        CCoreNetwork.sendToPlayer(player, new FirmamentTideHudPacket(mode, progress));
+    }
+
+    private static void clearSeaState(ServerPlayer player) {
+        SeaState state = SEA_STATES.remove(player);
+        if (state != null && state.hudMode != FirmamentTideHudPacket.HIDDEN) {
+            CCoreNetwork.sendToPlayer(player,
+                    new FirmamentTideHudPacket(FirmamentTideHudPacket.HIDDEN, 0.0f));
+        }
+    }
+
+    private static void returnToEarth(
+                                      ServerPlayer player, boolean preserveHorizontalMotion, boolean cinematic) {
+        double x = player.getX();
+        double z = player.getZ();
+        double motionX = preserveHorizontalMotion ? player.getDeltaMovement().x : 0.0;
+        double motionZ = preserveHorizontalMotion ? player.getDeltaMovement().z : 0.0;
+        releaseNow(player);
+        player.stopRiding();
+        player.setDeltaMovement(motionX, 0.0, motionZ);
+        player.fallDistance = 0.0f;
+        ServerLevel overworld = player.server.overworld();
+        if (cinematic) {
+            SEA_STATES.remove(player);
+            CCoreNetwork.sendToPlayer(player,
+                    new FirmamentTideHudPacket(FirmamentTideHudPacket.ARRIVED, 1.0f));
+        } else {
+            clearSeaState(player);
+        }
+        player.teleportTo(overworld, x, FirmamentEnvironment.OVERWORLD_ESCAPE_Y, z,
+                player.getYRot(), player.getXRot());
     }
 
     private static void emitSeaEntry(ServerPlayer player, double surfaceY, double impactSpeed) {
@@ -275,7 +356,7 @@ public final class FirmamentTraversalLogic {
         player.getPersistentData().remove(MANAGED_GRAVITY);
         GravityApi.reset(player);
         ANOMALY_STATES.remove(player);
-        SEA_STATES.remove(player);
+        clearSeaState(player);
         publishInactive(player);
     }
 
@@ -319,5 +400,11 @@ public final class FirmamentTraversalLogic {
     private static final class SeaState {
 
         private boolean submerged;
+        private int returnTicks;
+        private boolean returning;
+        private int returningTicks;
+        private byte hudMode;
+        private float hudProgress;
+        private long lastHudSync;
     }
 }

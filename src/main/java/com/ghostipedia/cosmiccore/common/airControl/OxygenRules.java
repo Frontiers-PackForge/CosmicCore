@@ -1,5 +1,7 @@
 package com.ghostipedia.cosmiccore.common.airControl;
 
+import com.ghostipedia.cosmiccore.common.dimension.FirmamentDimension;
+
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
@@ -122,6 +124,9 @@ public final class OxygenRules {
 
     // Default range registration
     public static void registerAirRanges() {
+        addRanges(FirmamentDimension.KEY,
+                new AirRanges(Integer.MIN_VALUE, Integer.MAX_VALUE, AirQuality.NO_AIR));
+
         // --- Overworld ---
         addRanges(Level.OVERWORLD,
                 // y ≤ 0 : THIN air underground

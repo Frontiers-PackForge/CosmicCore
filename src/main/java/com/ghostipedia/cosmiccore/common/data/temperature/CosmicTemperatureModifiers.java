@@ -19,6 +19,9 @@ public final class CosmicTemperatureModifiers {
     public static final DeferredHolder<ModifierBase, GregtechMachineHeatModifier> GREGTECH_MACHINE_HEAT = MODIFIERS
             .register("gtceu_machine_heat", GregtechMachineHeatModifier::new);
 
+    public static final DeferredHolder<ModifierBase, FirmamentTemperatureModifier> FIRMAMENT = MODIFIERS
+            .register("firmament", FirmamentTemperatureModifier::new);
+
     public static void register(IEventBus modBus) {
         MODIFIERS.register(modBus);
     }
