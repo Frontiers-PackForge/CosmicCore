@@ -1,6 +1,6 @@
 {
     "parent": "minecraft:item/generated",
     "textures": {
-        "layer0": "cosmiccore:item/gelatin_scaffold"
+        "layer0": "cosmiccore:item/stripped_nyctophyte_media"
     }
 }

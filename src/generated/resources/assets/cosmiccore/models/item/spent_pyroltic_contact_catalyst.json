@@ -1,6 +1,6 @@
 {
     "parent": "minecraft:item/generated",
     "textures": {
-        "layer0": "cosmiccore:item/contaminated_petri_dish"
+        "layer0": "cosmiccore:item/spent_pyroltic_contact_catalyst"
     }
 }

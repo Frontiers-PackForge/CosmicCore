@@ -632,25 +632,35 @@ public class CosmicMaterials {
         Utherium = new Material.Builder(CosmicCore.id("utherium"))
                 .gem()
                 .ore()
+                .formula("ThSiO4")
                 .color(0xC3434C).secondaryColor(0x7A2430).iconSet(CosmicMaterialSet.UTHERIUM)
                 .flags(GENERATE_PLATE, GENERATE_BOLT_SCREW, GENERATE_ROD, GENERATE_SPRING,
-                        GENERATE_SPRING_SMALL, GENERATE_FOIL, NO_SMELTING, NO_ORE_SMELTING)
+                        GENERATE_SPRING_SMALL, GENERATE_FOIL, NO_SMELTING, NO_ORE_SMELTING,
+                        DISABLE_DECOMPOSITION)
                 .buildAndRegister();
         Aphotite = new Material.Builder(CosmicCore.id("aphotite"))
                 .dust()
+                .formula("K3Na(SO4)2")
                 .color(0x86BF54).secondaryColor(0x4E7A2E).iconSet(MaterialIconSet.ROUGH)
+                .flags(DISABLE_DECOMPOSITION)
                 .buildAndRegister();
         Arcanite = new Material.Builder(CosmicCore.id("arcanite"))
                 .gem()
+                .formula("K2NaYAl2Si4O12F4")
                 .color(0x8C6AE8).secondaryColor(0x5A3FA8).iconSet(MaterialIconSet.CERTUS)
+                .flags(DISABLE_DECOMPOSITION)
                 .buildAndRegister();
         Gloomarcine = new Material.Builder(CosmicCore.id("gloomarcine"))
                 .dust()
+                .formula("Mg4Si6O15(OH)2(H2O)6")
                 .color(0x4F6D8C).secondaryColor(0x2E4258).iconSet(MaterialIconSet.DULL)
+                .flags(DISABLE_DECOMPOSITION)
                 .buildAndRegister();
         Veilspar = new Material.Builder(CosmicCore.id("veilspar"))
                 .gem()
+                .formula("KAlSi3O8")
                 .color(0xC9D8E8).secondaryColor(0x8FA6BC).iconSet(MaterialIconSet.QUARTZ)
+                .flags(DISABLE_DECOMPOSITION)
                 .buildAndRegister();
         Bathyst = new Material.Builder(CosmicCore.id("bathyst"))
                 .dust()
@@ -660,15 +670,21 @@ public class CosmicMaterials {
                 .buildAndRegister();
         Nyctophyte = new Material.Builder(CosmicCore.id("nyctophyte"))
                 .dust()
+                .formula("Ca(C8H10NO6S)2")
                 .color(0x8C7A5A).secondaryColor(0x5E4E38).iconSet(MaterialIconSet.SAND)
+                .flags(DISABLE_DECOMPOSITION)
                 .buildAndRegister();
         Hadalite = new Material.Builder(CosmicCore.id("hadalite"))
                 .gem()
+                .formula("Tl2S3(MgFeSi2O4)4(H2O)")
                 .color(0x5A3F7A).secondaryColor(0x241640).iconSet(MaterialIconSet.SHINY)
+                .flags(DISABLE_DECOMPOSITION)
                 .buildAndRegister();
         Abyssbloom = new Material.Builder(CosmicCore.id("abyssbloom"))
                 .dust()
+                .formula("Fe3(PO4)2(H2O)8")
                 .color(0x3F4E7A).secondaryColor(0x141E38).iconSet(MaterialIconSet.ROUGH)
+                .flags(DISABLE_DECOMPOSITION)
                 .buildAndRegister();
         // TODO - A dangerous bioweapon unleashed on many orbital bodies in space, entirely designed to sterilize life
         // from anything it touches.

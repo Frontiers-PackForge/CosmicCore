@@ -1,6 +1,6 @@
 {
     "parent": "minecraft:item/generated",
     "textures": {
-        "layer0": "cosmiccore:item/crystal_chiplet_base"
+        "layer0": "cosmiccore:item/electret_blank"
     }
 }
