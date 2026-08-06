@@ -180,7 +180,7 @@ public class CosmicItems {
             .properties(p -> p.stacksTo(64))
             .defaultModel()
             .register();
-    //If you're working on the recent texture requests, this is where you need to go to change things :)
+    // If you're working on the recent texture requests, this is where you need to go to change things :)
     public static final ItemEntry<ComponentItem> UTHERIUM_CERAMIC_LINER = registerChainItem(
             "utherium_ceramic_liner", "Utherium Ceramic Liner", CosmicCore.id("item/sturdy_plates"));
 
