@@ -654,7 +654,9 @@ public class CosmicMaterials {
                 .buildAndRegister();
         Bathyst = new Material.Builder(CosmicCore.id("bathyst"))
                 .dust()
+                .formula("BaTiO3")
                 .color(0x6E5A8C).secondaryColor(0x453466).iconSet(MaterialIconSet.DULL)
+                .flags(DISABLE_DECOMPOSITION)
                 .buildAndRegister();
         Nyctophyte = new Material.Builder(CosmicCore.id("nyctophyte"))
                 .dust()
