@@ -84,6 +84,15 @@ public class CosmicItems {
     static {
         CosmicRegistration.REGISTRATE.creativeModeTab(() -> CosmicCreativeModeTabs.COSMIC_CORE);
     }
+
+    private static ItemEntry<ComponentItem> registerChainItem(String id, String name, ResourceLocation texture) {
+        return REGISTRATE.item(id, ComponentItem::new)
+                .lang(name)
+                .properties(properties -> properties.stacksTo(64))
+                .model((context, provider) -> provider.generated(context, texture))
+                .register();
+    }
+
     // Modules
 
     public static final ItemEntry<SoulNetworkReaderItem> SOUL_READER = REGISTRATE
@@ -171,6 +180,39 @@ public class CosmicItems {
             .properties(p -> p.stacksTo(64))
             .defaultModel()
             .register();
+    //If you're working on the recent texture requests, this is where you need to go to change things :)
+    public static final ItemEntry<ComponentItem> UTHERIUM_CERAMIC_LINER = registerChainItem(
+            "utherium_ceramic_liner", "Utherium Ceramic Liner", CosmicCore.id("item/sturdy_plates"));
+
+    public static final ItemEntry<ComponentItem> UTHERIUM_CERAMIC_MEMBRANE = registerChainItem(
+            "utherium_ceramic_membrane", "Utherium Ceramic Membrane", CosmicCore.id("item/heavy_neutron_filter"));
+
+    public static final ItemEntry<ComponentItem> ELECTRET_BLANK = registerChainItem(
+            "electret_blank", "Electret Blank", CosmicCore.id("item/crystal_chiplet_base"));
+
+    public static final ItemEntry<ComponentItem> POLARIZED_BATHYST_ELECTRET = registerChainItem(
+            "polarized_bathyst_electret", "Polarized Bathyst Electret", CosmicCore.id("item/prismatic_lens"));
+
+    public static final ItemEntry<ComponentItem> NYCTOPHYTE_EXCHANGE_MEDIA = registerChainItem(
+            "nyctophyte_exchange_media", "Nyctophyte Exchange Media", CosmicCore.id("item/prepared_petri_dish"));
+
+    public static final ItemEntry<ComponentItem> LOADED_NYCTOPHYTE_EXCHANGE_MEDIA = registerChainItem(
+            "loaded_nyctophyte_exchange_media", "Loaded Nyctophyte Exchange Media",
+            CosmicCore.id("item/contaminated_petri_dish"));
+
+    public static final ItemEntry<ComponentItem> EXHAUSTED_NYCTOPHYTE_EXCHANGE_MEDIA = registerChainItem(
+            "exhausted_nyctophyte_exchange_media", "Exhausted Nyctophyte Exchange Media",
+            CosmicCore.id("item/gelatin_scaffold"));
+
+    public static final ItemEntry<ComponentItem> CANNON_POWDER = registerChainItem(
+            "cannon_powder", "Cannon Powder", ResourceLocation.withDefaultNamespace("item/gunpowder"));
+
+    public static final ItemEntry<ComponentItem> PYROLTIC_CONTACT_CATALYST = registerChainItem(
+            "pyroltic_contact_catalyst", "Pyroltic Contact Catalyst", CosmicCore.id("item/heavy_neutron_filter"));
+
+    public static final ItemEntry<ComponentItem> SPENT_PYROLTIC_CONTACT_CATALYST = registerChainItem(
+            "spent_pyroltic_contact_catalyst", "Spent Pyroltic Contact Catalyst",
+            CosmicCore.id("item/contaminated_petri_dish"));
 
     public static final ItemEntry<StealthCoatingItem> STEALTH_COATING_1 = REGISTRATE
             .item("stealth_coating_1", p -> new StealthCoatingItem(p.stacksTo(16), 1))

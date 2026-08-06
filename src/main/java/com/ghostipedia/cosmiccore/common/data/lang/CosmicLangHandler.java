@@ -9,6 +9,25 @@ import com.tterrag.registrate.providers.RegistrateLangProvider;
 
 public class CosmicLangHandler extends LangHandler {
 
+    private static final String[] COSMIC_RECIPE_TYPE_IDS = {
+            "sludge_digestor", "powderizer", "industrial_ore_sorter", "industrial_flotation_plant",
+            "oneiric_sieve", "dissolution_vat", "fuckassbeeball", "laminator", "chemical_dehydrator",
+            "eclipsed_dawnforge", "vorax", "mana_fluidizer", "pcb_fab", "titan_fusion", "lunar_hammer",
+            "cryo_chamber", "soul_tester", "void_miner", "heavy_assembler", "plasmite_forge",
+            "prisma_foundry", "atmo_siphon", "mana_digitizer", "component_assembly_line", "drygmy_grove",
+            "leaching_plant", "hellfire_foundry", "suffering_chamber", "arcane_distillery", "arcane_folding",
+            "polymerizer", "hemophagic_transfuser", "chromatic_flotation_plant", "spirit_crucible",
+            "soul_foundry", "calx_reactor", "roaster", "mana_leaching_tub", "thermomagnitizer",
+            "vacuum_bubbler", "large_roaster", "vile_fission", "void_salt_fission", "reconstructor",
+            "spooling_machine", "orbital_forge", "orbital_forge_abs", "dawn_forge", "cinder_hearth",
+            "arcane_crucible", "pyrothermic_refinery", "mana_etching", "bio_lab", "star_ladder_research",
+            "stellar_iris", "ignition_complex", "chormatic_distillation_plant", "celestial_bore",
+            "naquahine_reactor", "mini_naquahine_reactor", "industrial_chemvat", "biovat", "wasp", "bees",
+            "core_drill", "regolith_sifter", "life_force_manipulator", "neutron_forge", "dream_basin",
+            "mechanical_ritual", "link_test", "abyssal_culture_vat", "sculk_biochamber",
+            "biomana_digestor", "manawomb_leeching_pond", "industrial_primitive_blast_furnace"
+    };
+
     private static String toTitle(String snakeCase) {
         StringBuilder out = new StringBuilder();
         for (String part : snakeCase.split("_")) {
@@ -1677,12 +1696,21 @@ public class CosmicLangHandler extends LangHandler {
         provider.add("cosmiccore.bloomwyrm.recipe.charge_input", "Bloomwyrm Charge use: %s");
         provider.add("cosmiccore.bloomwyrm.recipe.charge_output", "Bloomwyrm Charge yield: +%s");
         provider.add("cosmiccore.bloomwyrm.recipe.max_parallel", "Max parallel: %s");
-        provider.add("recipe_type.cosmiccore.abyssal_culture_vat", "Abyssal Culture Vat");
-        provider.add("recipe_type.cosmiccore.sculk_biochamber", "Sculk Biochamber");
-        provider.add("recipe_type.cosmiccore.biomana_digestor", "Biomana Digestor");
-        provider.add("recipe_type.cosmiccore.manawomb_leeching_pond", "Manawomb Leaching Pond");
-        provider.add("recipe_type.cosmiccore.laminator", "Laminator");
-        provider.add("recipe_type.cosmiccore.chemical_dehydrator", "Chemical Dehydrator");
+        for (String id : COSMIC_RECIPE_TYPE_IDS) {
+            String name = switch (id) {
+                case "fuckassbeeball" -> "Internal Recipe Type";
+                case "atmo_siphon" -> "Atmosphere Siphon";
+                case "pcb_fab" -> "PCB Fabricator";
+                case "cryo_chamber" -> "Cryogenics Chamber";
+                case "reconstructor" -> "Radbolt Reconstructor";
+                case "mana_etching" -> "Mana Etching Factory";
+                case "chormatic_distillation_plant" -> "Chromatic Distillation Plant";
+                case "industrial_chemvat" -> "Industrial Chemical Vat";
+                case "link_test" -> "Link Test Station";
+                default -> toTitle(id);
+            };
+            provider.add("recipe_type.cosmiccore." + id, name);
+        }
         provider.add("cosmiccore.machine.chemical_dehydrator.tooltip",
                 "Removes water from chemical intermediates instead of returning it as a fluid output.");
         provider.add("cosmiccore.ftbquests.dependency_lines", "Dependency Lines");
@@ -1758,6 +1786,19 @@ public class CosmicLangHandler extends LangHandler {
         provider.add("cosmiccore.dev.murkbloom.immunity.enabled", "Murkbloom immunity enabled");
         provider.add("cosmiccore.dev.murkbloom.immunity.disabled", "Murkbloom immunity disabled");
         provider.add("cosmiccore.dev.murkbloom.immunity.denied", "Murkbloom immunity requires operator access");
+        provider.add("cosmiccore.firmament.tide.title", "SET WITH THE SUN");
+        provider.add("cosmiccore.firmament.tide.prompt", "Hold sneak to return to earth");
+        provider.add("cosmiccore.dimension.nether_permit_required", "You need a Nether Permit to enter the Nether.");
+        provider.add("cosmiccore.dimension.firmament_permit_required",
+                "You need a Firmament Permit to enter the Firmament.");
+        provider.add("cosmiccore.firmament.ritual.overworld_only",
+                "The Firmament can only be reached from Earth.");
+        provider.add("ritual.cosmiccore.firmament_ascent.started", "The heavens begin to draw near.");
+        provider.add("ritual.cosmiccore.firmament_ascent.finished", "The sky releases its hold.");
+        provider.add("ritual.cosmiccore.firmament_ascent.interrupted", "The path above slams shut.");
+        provider.add("item.cosmiccore.ritual_dummy.firmament_ascent", "Ascension to the Firmament");
+        provider.add("item.cosmiccore.ritual_dummy.firmament_ascent.tooltip",
+                "Rise beyond the air and enter the Firmament.");
         provider.add("cosmiccore.ftbquests.deed.task", "Deed Seal");
         provider.add("cosmiccore.ftbquests.deed.sealed_title", "SEALED");
         provider.add("cosmiccore.ftbquests.deed.sealed_hint", "Something waits beyond this seal.");
