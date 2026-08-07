@@ -6,7 +6,6 @@ import com.ghostipedia.cosmiccore.common.machine.multiblock.part.EmberHatchPartM
 import com.gregtechceu.gtceu.api.capability.recipe.IO;
 import com.gregtechceu.gtceu.api.capability.recipe.RecipeCapability;
 import com.gregtechceu.gtceu.api.machine.MetaMachine;
-import com.gregtechceu.gtceu.api.machine.trait.MachineTraitType;
 import com.gregtechceu.gtceu.api.machine.trait.notifiable.NotifiableRecipeHandlerTrait;
 import com.gregtechceu.gtceu.api.recipe.GTRecipe;
 import com.gregtechceu.gtceu.api.sync_system.annotations.SaveField;
@@ -20,14 +19,6 @@ import java.util.Collections;
 import java.util.List;
 
 public class NotifiableEmberContainer extends NotifiableRecipeHandlerTrait<Double> {
-
-    public static final MachineTraitType<NotifiableEmberContainer> TYPE = new MachineTraitType<>(
-            NotifiableEmberContainer.class);
-
-    @Override
-    public MachineTraitType<?> getTraitType() {
-        return TYPE;
-    }
 
     private EmberHatchPartMachine emberHatch;
     public IEmberCapability capability = new DefaultEmberCapability() {

@@ -18,7 +18,7 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.*;
 import org.joml.Matrix4f;
 
-import static com.ghostipedia.cosmiccore.common.item.behavior.StructureWriteBehavior.getDir;
+import static com.ghostipedia.cosmiccore.common.item.behavior.StructureWriteBehavior.getOrientation;
 
 public class StructureBoundingBox {
 
@@ -89,8 +89,8 @@ public class StructureBoundingBox {
             RenderSystem.setShader(GameRenderer::getRendertypeLinesShader);
             RenderSystem.lineWidth(12);
 
-            var direction = getDir(player.getMainHandItem());
-            var directions = DebugBlockPattern.worldDirectionsFor(direction);
+            var orientation = getOrientation(player.getMainHandItem());
+            var directions = orientation.world();
             Direction sliceDirection = directions.slice();
             Direction stringDirection = directions.string();
             Direction characterDirection = directions.character();
@@ -107,7 +107,7 @@ public class StructureBoundingBox {
                     last,
                     mat4,
                     poses,
-                    DebugBlockPattern.exportOrientationFor(direction).front());
+                    DebugBlockPattern.exportOrientationFor(orientation).front());
             BufferUploader.drawWithShader(buffer.buildOrThrow());
 
             RenderSystem.enableCull();

@@ -3,7 +3,6 @@ package com.ghostipedia.cosmiccore.api.machine.multiblock;
 import com.gregtechceu.gtceu.api.blockentity.BlockEntityCreationInfo;
 import com.gregtechceu.gtceu.api.machine.feature.IMuiMachine;
 import com.gregtechceu.gtceu.api.machine.multiblock.WorkableMultiblockMachine;
-import com.gregtechceu.gtceu.common.mui.GTMultiblockTextUtil;
 
 import brachy.modularui.drawable.GuiTextures;
 import brachy.modularui.drawable.Icon;
@@ -30,7 +29,6 @@ public class MuiWorkableMultiblockMachine extends WorkableMultiblockMachine impl
                 .crossAxisAlignment(Alignment.CrossAxis.START)
                 .collapseDisabledChildren()
                 .posRel(Alignment.CenterLeft);
-        listWidget.child(GTMultiblockTextUtil.addUnformedWarning(this, syncManager));
         listWidget.children(getWidgetsForDisplay(syncManager));
         mainWidget.size(172, 136).background(GuiTextures.DISPLAY).child(listWidget.left(3).top(3));
     }

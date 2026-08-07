@@ -6,16 +6,16 @@ import com.ghostipedia.cosmiccore.utils.OwnershipUtils;
 import com.gregtechceu.gtceu.api.blockentity.BlockEntityCreationInfo;
 import com.gregtechceu.gtceu.api.capability.IDataAccessHatch;
 import com.gregtechceu.gtceu.api.machine.feature.IMuiMachine;
-import com.gregtechceu.gtceu.api.machine.multiblock.MultiblockDisplayText;
 import com.gregtechceu.gtceu.api.machine.multiblock.part.MultiblockPartMachine;
-import com.gregtechceu.gtceu.api.multiblock.pattern.PatternState;
 import com.gregtechceu.gtceu.api.recipe.GTRecipe;
 import com.gregtechceu.gtceu.common.machine.owner.FTBOwner;
 import com.gregtechceu.gtceu.common.mui.GTMuiWidgets;
 import com.gregtechceu.gtceu.common.recipe.condition.ResearchCondition;
 
+import net.minecraft.ChatFormatting;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.HoverEvent;
 
 import brachy.modularui.api.drawable.Text;
 import brachy.modularui.factory.PosGuiData;
@@ -97,9 +97,13 @@ public class WirelessDataHatchPartMachine extends MultiblockPartMachine implemen
     }
 
     public void addDisplayText(List<Component> textList) {
-        PatternState state = new PatternState();
-        state.setFormed(isFormed());
-        MultiblockDisplayText.builder(textList, state)
-                .addCustom(list -> OwnershipUtils.addOwnerLine(list, getOwner(), true));
+        if (!isFormed()) {
+            Component hover = Component.translatable("gtceu.multiblock.invalid_structure.tooltip")
+                    .withStyle(ChatFormatting.GRAY);
+            textList.add(Component.translatable("gtceu.multiblock.invalid_structure")
+                    .withStyle(ChatFormatting.RED)
+                    .withStyle(style -> style.withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, hover))));
+        }
+        OwnershipUtils.addOwnerLine(textList, getOwner(), true);
     }
 }

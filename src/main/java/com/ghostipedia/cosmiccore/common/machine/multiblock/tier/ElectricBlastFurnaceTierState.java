@@ -1,7 +1,6 @@
 package com.ghostipedia.cosmiccore.common.machine.multiblock.tier;
 
 import com.gregtechceu.gtceu.api.machine.trait.MachineTrait;
-import com.gregtechceu.gtceu.api.machine.trait.MachineTraitType;
 import com.gregtechceu.gtceu.api.sync_system.annotations.SaveField;
 import com.gregtechceu.gtceu.api.sync_system.annotations.SyncToClient;
 
@@ -9,9 +8,6 @@ public final class ElectricBlastFurnaceTierState extends MachineTrait {
 
     public static final int MAX_MATCHING_RUNS = 10;
     public static final int DURATION_REDUCTION_PERCENT_PER_RUN = 5;
-    public static final MachineTraitType<ElectricBlastFurnaceTierState> TYPE = new MachineTraitType<>(
-            ElectricBlastFurnaceTierState.class, false);
-
     @SaveField(nbtKey = "structure_tier")
     @SyncToClient
     private int structureTier;
@@ -20,11 +16,6 @@ public final class ElectricBlastFurnaceTierState extends MachineTrait {
     @SaveField(nbtKey = "streak_runs")
     @SyncToClient
     private int completedMatchingRuns;
-
-    @Override
-    public MachineTraitType<ElectricBlastFurnaceTierState> getTraitType() {
-        return TYPE;
-    }
 
     public int getStructureTier() {
         return structureTier;
