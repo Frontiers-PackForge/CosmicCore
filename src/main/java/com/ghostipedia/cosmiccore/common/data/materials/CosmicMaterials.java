@@ -668,10 +668,16 @@ public class CosmicMaterials {
                 .color(0x6E5A8C).secondaryColor(0x453466).iconSet(MaterialIconSet.DULL)
                 .flags(DISABLE_DECOMPOSITION)
                 .buildAndRegister();
+        Material nyctophytate = new Material.Builder(CosmicCore.id("nyctophytate"))
+                .formula("C8H10NO6S")
+                .color(0x8C7A5A).secondaryColor(0x5E4E38)
+                .flags(DISABLE_DECOMPOSITION)
+                .buildAndRegister();
         Nyctophyte = new Material.Builder(CosmicCore.id("nyctophyte"))
                 .dust()
                 .formula("Ca(C8H10NO6S)2")
                 .color(0x8C7A5A).secondaryColor(0x5E4E38).iconSet(MaterialIconSet.SAND)
+                .components(Calcium, 1, nyctophytate, 2)
                 .flags(DISABLE_DECOMPOSITION)
                 .buildAndRegister();
         Hadalite = new Material.Builder(CosmicCore.id("hadalite"))
