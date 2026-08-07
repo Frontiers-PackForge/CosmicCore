@@ -292,6 +292,7 @@ public class MultithreadedRecipeLogic extends RecipeLogic implements IRecipeCapa
 
         ActionResult result = checkRecipe(trimmed);
         if (!result.isSuccess()) {
+            recordFailureReason(match, result.reason(), result.score());
             if (DEBUG) CosmicCore.LOGGER.info("[basin t#{} c=0x{}] reject {}: checkRecipe -> {}",
                     threadIndex, Integer.toHexString(threadColor), match.getId(),
                     describe(result));
@@ -329,15 +330,7 @@ public class MultithreadedRecipeLogic extends RecipeLogic implements IRecipeCapa
                     threadIndex, Integer.toHexString(threadColor),
                     inMap.keySet(), outMap.keySet(), maxEUtPerThread);
         }
-        return getRLMachine().getRecipeType().searchRecipe(this, r -> {
-            ActionResult res = matchRecipe(r);
-            if (DEBUG && !res.isSuccess()) {
-                CosmicCore.LOGGER.info("[basin t#{} c=0x{}] match-fail {}: {}",
-                        threadIndex, Integer.toHexString(threadColor), r.getId(),
-                        describe(res));
-            }
-            return res.isSuccess();
-        });
+        return getRLMachine().getRecipeType().searchRecipe(this, recipe -> true);
     }
 
     /**
@@ -348,6 +341,7 @@ public class MultithreadedRecipeLogic extends RecipeLogic implements IRecipeCapa
     @Override
     public void findAndHandleRecipe() {
         lastFailedMatches = null;
+        clearFailureReason();
 
         // If we have a cached origin recipe, try to re-apply our thread-specific overclock
         if (!recipeDirty && lastOriginRecipe != null) {
@@ -355,10 +349,14 @@ public class MultithreadedRecipeLogic extends RecipeLogic implements IRecipeCapa
             GTRecipe modified = applyThreadOverclock(lastOriginRecipe);
             if (modified != null) {
                 GTRecipe trimmed = RecipeHelper.trimRecipeOutputs(modified, getRLMachine().getOutputLimits());
-                if (trimmed != null && checkRecipe(trimmed).isSuccess()) {
-                    setupRecipe(trimmed);
-                    recipeDirty = false;
-                    return;
+                if (trimmed != null) {
+                    ActionResult result = checkRecipe(trimmed);
+                    if (result.isSuccess()) {
+                        setupRecipe(trimmed);
+                        recipeDirty = false;
+                        return;
+                    }
+                    recordFailureReason(trimmed, result.reason(), Double.POSITIVE_INFINITY);
                 }
             }
         }
@@ -367,6 +365,7 @@ public class MultithreadedRecipeLogic extends RecipeLogic implements IRecipeCapa
         lastRecipe = null;
         lastOriginRecipe = null;
         handleSearchingRecipes(searchRecipe());
+        syncDataHolder.markClientSyncFieldDirty("lastRecipe");
         recipeDirty = false;
     }
 

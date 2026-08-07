@@ -7,7 +7,9 @@ import com.ghostipedia.cosmiccore.common.data.CosmicSounds;
 import com.ghostipedia.cosmiccore.common.machine.multiblock.multi.logic.bloomwyrm.BloomwyrmRecipeKeys;
 
 import com.gregtechceu.gtceu.api.block.ICoilType;
+import com.gregtechceu.gtceu.api.capability.recipe.FluidRecipeCapability;
 import com.gregtechceu.gtceu.api.capability.recipe.IO;
+import com.gregtechceu.gtceu.api.capability.recipe.ItemRecipeCapability;
 import com.gregtechceu.gtceu.api.recipe.GTRecipeType;
 import com.gregtechceu.gtceu.common.data.GTRecipeTypes;
 import com.gregtechceu.gtceu.common.data.GTSoundEntries;
@@ -265,7 +267,15 @@ public class CosmicRecipeTypes {
             .register(CosmicCore.id("large_roaster"), ELECTRIC)
             .setMaxSize(IO.IN, EmberRecipeCapability.CAP, 1)
             .setMaxIOSize(4, 4, 4, 4)
-            .UI(builder -> builder.setProgressBar(GTGuiTextures.PROGRESS_ARROW));
+            .UI(builder -> builder.setProgressBar(GTGuiTextures.PROGRESS_ARROW)
+                    .setRecipeViewerLayoutGridBuilder(ItemRecipeCapability.CAP, IO.IN,
+                            layout -> new String[] { "ss", "ss" })
+                    .setRecipeViewerLayoutGridBuilder(ItemRecipeCapability.CAP, IO.OUT,
+                            layout -> new String[] { "ss", "ss" })
+                    .setRecipeViewerLayoutGridBuilder(FluidRecipeCapability.CAP, IO.IN,
+                            layout -> new String[] { "ss", "ss" })
+                    .setRecipeViewerLayoutGridBuilder(FluidRecipeCapability.CAP, IO.OUT,
+                            layout -> new String[] { "ss", "ss" }));
     public static final GTRecipeType VILE_FISSION = GTRecipeTypes
             .register(CosmicCore.id("vile_fission"), ELECTRIC)
             .setMaxSize(IO.IN, EmberRecipeCapability.CAP, 1)

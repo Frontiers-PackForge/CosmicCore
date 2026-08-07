@@ -55,6 +55,7 @@ import com.gregtechceu.gtceu.common.machine.multiblock.primitive.PrimitiveWorkab
 import com.gregtechceu.gtceu.common.mui.GTGuiTheme;
 import com.gregtechceu.gtceu.common.mui.GTSingleblockMachinePanels;
 import com.gregtechceu.gtceu.utils.FormattingUtil;
+import com.gregtechceu.gtceu.utils.memoization.GTMemoizer;
 
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -171,6 +172,7 @@ public class CosmicMachines {
                             .themeId(i -> i > 0 ? GTGuiTheme.STEEL.getId() : GTGuiTheme.BRONZE.getId())
                             .recipeModifier(SimpleSteamMachine::recipeModifier)
                             .addOutputLimit(ItemRecipeCapability.CAP, 1)
+                            .modelProperty(GTMachineModelProperties.VENT_DIRECTION, RelativeDirection.BACK)
                             .workableSteamHullModel(pressure, GTCEu.id("block/machines/bender"))
                             .register());
     public static final Pair<MachineDefinition, MachineDefinition> STEAM_WIREMILL = CosmicMachinesUtils
@@ -1050,7 +1052,8 @@ public class CosmicMachines {
         GTMultiMachines.EXTREME_COMBUSTION_ENGINE.setRecipeTypes(new GTRecipeType[] { DUMMY_RECIPES });
         GTMultiMachines.EXTREME_COMBUSTION_ENGINE.setRenderXEIPreview(false);
         GTMultiMachines.EXTREME_COMBUSTION_ENGINE.setRenderWorldPreview(false);
-        GTMultiMachines.ASSEMBLY_LINE.setRecipeModifier(new RecipeModifierList(COSMIC_MODULES, OC_NON_PERFECT));
+        GTMultiMachines.ASSEMBLY_LINE.setRecipeModifier(new RecipeModifierList(
+                DEFAULT_ENVIRONMENT_REQUIREMENT, COSMIC_MODULES, OC_NON_PERFECT));
         GTMultiMachines.ASSEMBLY_LINE.setAlwaysTryModifyRecipe(true);
         // TODO(cosmiccore-42.14): GCYMMachines.MEGA_BLAST_FURNACE removed in GTCEu 8.0
         GTMultiMachines.POWER_SUBSTATION.setRenderXEIPreview(false);
@@ -1076,7 +1079,7 @@ public class CosmicMachines {
 
         for (MultiblockMachineDefinition definition : FUSION_REACTOR) {
             if (definition == null) continue;
-            definition.setPattern("main", () -> {
+            definition.setPattern("main", GTMemoizer.memoize(() -> {
                 var casing = blocks(FusionReactorMachine.getCasingState(definition.getTier()));
                 return MultiblockPatternBuilder
                         .start(RelativeDirection.FRONT, RelativeDirection.UP, RelativeDirection.LEFT)
@@ -1110,10 +1113,10 @@ public class CosmicMachines {
                                 .or(abilities(PartAbility.IMPORT_ITEMS)))
                         .where('#', any())
                         .build();
-            });
+            }));
         }
         GCYMMachines.LARGE_CENTRIFUGE.setPattern("main",
-                () -> MultiblockPatternBuilder
+                GTMemoizer.memoize(() -> MultiblockPatternBuilder
                         .start(RelativeDirection.FRONT, RelativeDirection.UP, RelativeDirection.LEFT)
                         .slice("#XXX#", "XXXXX", "#XXX#")
                         .slice("XXXXX", "XAPAX", "XXXXX")
@@ -1128,33 +1131,34 @@ public class CosmicMachines {
                         .where('P', Predicates.blocks(CASING_STEEL_PIPE.get()))
                         .where('A', Predicates.air())
                         .where('#', Predicates.any())
-                        .build());
+                        .build()));
 
-        GTMultiMachines.ASSEMBLY_LINE.setPattern("main", () -> MultiblockPatternBuilder.start(BACK, UP, RIGHT)
-                .slice("FIF", "RTR", "SAG", "#Y#")
-                .sliceRepeatable(3, 15, "FIF", "RTR", "DAG", "#Y#")
-                .slice("FOF", "RTR", "DAG", "#Y#")
-                .where('S', Predicates.controller(blocks(GTMultiMachines.ASSEMBLY_LINE.getBlock())))
-                .where('F', blocks(CASING_STEEL_SOLID.get())
-                        .or(Predicates.abilities(PartAbility.IMPORT_FLUIDS_1X, ME_ASSEMBLY_PARTS_FLUID)
-                                .setMaxGlobalLimited(4)))
-                .where('O',
-                        Predicates.abilities(PartAbility.EXPORT_ITEMS)
-                                .addTooltips(Component.translatable("gtceu.multiblock.pattern.location_end")))
-                .where('Y',
-                        blocks(CASING_STEEL_SOLID.get()).or(Predicates.abilities(PartAbility.INPUT_ENERGY)
-                                .setMinGlobalLimited(1).setMaxGlobalLimited(2)))
-                .where('I', blocks(ITEM_IMPORT_BUS[0].getBlock()).or(Predicates.abilities(ME_ASSEMBLY_PARTS)))
-                .where('G', blocks(CASING_GRATE.get()))
-                .where('A', blocks(CASING_ASSEMBLY_CONTROL.get()))
-                .where('R', blocks(CASING_LAMINATED_GLASS.get()))
-                .where('T', blocks(CASING_ASSEMBLY_LINE.get()))
-                .where('D',
-                        Predicates.abilities(PartAbility.DATA_ACCESS, PartAbility.OPTICAL_DATA_RECEPTION)
-                                .setExactLimit(1)
-                                .or(Predicates.abilities(MODULE_HATCH).setMaxGlobalLimited(1, 1))
-                                .or(blocks(CASING_GRATE.get())))
-                .where('#', Predicates.any())
-                .build());
+        GTMultiMachines.ASSEMBLY_LINE.setPattern("main",
+                GTMemoizer.memoize(() -> MultiblockPatternBuilder.start(BACK, UP, RIGHT)
+                        .slice("FIF", "RTR", "SAG", "#Y#")
+                        .sliceRepeatable(3, 15, "FIF", "RTR", "DAG", "#Y#")
+                        .slice("FOF", "RTR", "DAG", "#Y#")
+                        .where('S', Predicates.controller(blocks(GTMultiMachines.ASSEMBLY_LINE.getBlock())))
+                        .where('F', blocks(CASING_STEEL_SOLID.get())
+                                .or(Predicates.abilities(PartAbility.IMPORT_FLUIDS_1X, ME_ASSEMBLY_PARTS_FLUID)
+                                        .setMaxGlobalLimited(4)))
+                        .where('O',
+                                Predicates.abilities(PartAbility.EXPORT_ITEMS)
+                                        .addTooltips(Component.translatable("gtceu.multiblock.pattern.location_end")))
+                        .where('Y',
+                                blocks(CASING_STEEL_SOLID.get()).or(Predicates.abilities(PartAbility.INPUT_ENERGY)
+                                        .setMinGlobalLimited(1).setMaxGlobalLimited(2)))
+                        .where('I', blocks(ITEM_IMPORT_BUS[0].getBlock()).or(Predicates.abilities(ME_ASSEMBLY_PARTS)))
+                        .where('G', blocks(CASING_GRATE.get()))
+                        .where('A', blocks(CASING_ASSEMBLY_CONTROL.get()))
+                        .where('R', blocks(CASING_LAMINATED_GLASS.get()))
+                        .where('T', blocks(CASING_ASSEMBLY_LINE.get()))
+                        .where('D',
+                                Predicates.abilities(PartAbility.DATA_ACCESS, PartAbility.OPTICAL_DATA_RECEPTION)
+                                        .setExactLimit(1)
+                                        .or(Predicates.abilities(MODULE_HATCH).setMaxGlobalLimited(1, 1))
+                                        .or(blocks(CASING_GRATE.get())))
+                        .where('#', Predicates.any())
+                        .build()));
     }
 }

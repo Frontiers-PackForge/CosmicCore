@@ -1,5 +1,6 @@
 package com.ghostipedia.cosmiccore.common.machine.multiblock.multi;
 
+import com.ghostipedia.cosmiccore.CosmicCore;
 import com.ghostipedia.cosmiccore.api.machine.part.CosmicPartAbility;
 import com.ghostipedia.cosmiccore.gtbridge.CosmicRecipeTypes;
 
@@ -48,7 +49,7 @@ public class Roaster {
                     .build())
             // spotless:on
             .workableCasingModel(GTCEu.id("block/casings/solid/machine_casing_heatproof"),
-                    GTCEu.id("block/overlay/machine/roaster"))
+                    CosmicCore.id("block/overlay/machine/roaster"))
             .register();
 
     public static void init() {}

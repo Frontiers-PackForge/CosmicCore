@@ -10,7 +10,8 @@
             "model": {
                 "parent": "gtceu:block/machine/template/cube_all/sided",
                 "textures": {
-                    "all": "gtceu:block/casings/solid/machine_casing_heatproof"
+                    "all": "gtceu:block/casings/solid/machine_casing_heatproof",
+                    "overlay_front": "cosmiccore:block/overlay/machine/roaster/overlay_front"
                 }
             }
         },
@@ -18,7 +19,8 @@
             "model": {
                 "parent": "gtceu:block/machine/template/cube_all/sided",
                 "textures": {
-                    "all": "gtceu:block/casings/solid/machine_casing_heatproof"
+                    "all": "gtceu:block/casings/solid/machine_casing_heatproof",
+                    "overlay_front": "cosmiccore:block/overlay/machine/roaster/overlay_front"
                 }
             }
         },
@@ -26,7 +28,8 @@
             "model": {
                 "parent": "gtceu:block/machine/template/cube_all/sided",
                 "textures": {
-                    "all": "gtceu:block/casings/solid/machine_casing_heatproof"
+                    "all": "gtceu:block/casings/solid/machine_casing_heatproof",
+                    "overlay_front": "cosmiccore:block/overlay/machine/roaster/overlay_front"
                 }
             }
         },
@@ -34,7 +37,8 @@
             "model": {
                 "parent": "gtceu:block/machine/template/cube_all/sided",
                 "textures": {
-                    "all": "gtceu:block/casings/solid/machine_casing_heatproof"
+                    "all": "gtceu:block/casings/solid/machine_casing_heatproof",
+                    "overlay_front": "cosmiccore:block/overlay/machine/roaster/overlay_front"
                 }
             }
         }

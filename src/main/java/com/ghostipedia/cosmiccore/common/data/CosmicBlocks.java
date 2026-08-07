@@ -385,6 +385,9 @@ public class CosmicBlocks {
             "lightweight_logistic_casing", CosmicCore.id("block/casings/solid/lightweight_logistic_casing"));
     public static final BlockEntry<Block> LIGHTWEIGHT_DARK_STEEL_CASING = createCasingBlock(
             "lightweight_dark_steel_casing", CosmicCore.id("block/casings/solid/lightweight_dark_steel_casing"));
+    public static final BlockEntry<Block> LIGHTWEIGHT_STAINLESS_STEEL_CASING = createCasingBlock(
+            "lightweight_stainless_steel_casing",
+            CosmicCore.id("block/casings/solid/lightweight_stainless_steel_casing"));
     public static final BlockEntry<Block> PLATED_AEROCLOUD = createCasingBlock("plated_aerocloud",
             CosmicCore.id("block/casings/solid/plated_aerocloud"));
     public static final BlockEntry<Block> SELF_HEALING_PTHANTERUM = createCasingBlock("self_healing_pthanterum_casing",
