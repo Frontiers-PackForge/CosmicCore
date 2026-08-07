@@ -312,6 +312,20 @@ public class CosmicMachines {
                     .register(),
             tiersBetween(LV, UIV));
 
+    public static final MachineDefinition[] CRYSTALLIZER = registerTieredMachines("crystallizer",
+            (holder, tier) -> new SimpleTieredMachine(holder, tier, defaultTankSizeFunction),
+            (tier, builder) -> builder
+                    .langValue("%s Crystallizer %s".formatted(VLVH[tier], VLVT[tier]))
+                    .recipeType(CosmicRecipeTypes.CRYSTALLIZER)
+                    .recipeModifier(OC_NON_PERFECT)
+                    .ui(GTSingleblockMachinePanels.GENERAL_MACHINE)
+                    .tooltips(workableTiered(tier, GTValues.V[tier], GTValues.V[tier] * 64,
+                            CosmicRecipeTypes.CRYSTALLIZER,
+                            defaultTankSizeFunction.applyAsInt(tier), true))
+                    .workableTieredHullModel(GTCEu.id("block/machines/autoclave"))
+                    .register(),
+            tiersBetween(MV, UIV));
+
     public static final MachineDefinition[] VAC_BUBBLER = registerTieredMachines("vacuum_bubbler",
             (holder, tier) -> new SimpleTieredMachine(holder, tier, defaultTankSizeFunction),
             (tier, builder) -> builder
