@@ -125,6 +125,15 @@ public class CosmicItems {
             .defaultModel()
             .register();
 
+    public static final ItemEntry<ComponentItem> FIRMAMENT_ASCENT_RITUAL = REGISTRATE
+            .item("firmament_ascent_ritual", ComponentItem::new)
+            .lang("Ascension to the Firmament")
+            .properties(p -> p.stacksTo(1).rarity(Rarity.UNCOMMON))
+            .onRegister(attach(new TooltipBehavior(lines -> lines.add(
+                    Component.translatable("item.cosmiccore.firmament_ascent_ritual.tooltip")))))
+            .model(NonNullBiConsumer.noop())
+            .register();
+
     public static final ItemEntry<DivingHelmetItem> SHADEBLOOM_DIVING_HELMET = REGISTRATE
             .item("shadebloom_diving_helmet",
                     p -> new DivingHelmetItem(CosmicArmorMaterials.SHADEBLOOM,
