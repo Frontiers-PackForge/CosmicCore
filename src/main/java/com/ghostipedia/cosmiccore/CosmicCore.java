@@ -21,6 +21,7 @@ import com.ghostipedia.cosmiccore.common.compat.occultism.CosmicRituals;
 import com.ghostipedia.cosmiccore.common.config.CosmicCoreConfig;
 import com.ghostipedia.cosmiccore.common.data.*;
 import com.ghostipedia.cosmiccore.common.data.materials.CosmicBundleMaterials;
+import com.ghostipedia.cosmiccore.common.data.materials.CosmicCrystallizationMaterials;
 import com.ghostipedia.cosmiccore.common.data.materials.CosmicElements;
 import com.ghostipedia.cosmiccore.common.data.materials.CosmicMaterialSet;
 import com.ghostipedia.cosmiccore.common.data.materials.CosmicMaterials;
@@ -117,6 +118,7 @@ public class CosmicCore {
         CosmicElements.init();
         CosmicMaterials.register();
         CosmicBundleMaterials.register();
+        CosmicCrystallizationMaterials.register();
         CosmicCoreMaterialIconType.init();
         CosmicTagPrefix.initTagPrefixes();
         CosmicMaterialSet.init();

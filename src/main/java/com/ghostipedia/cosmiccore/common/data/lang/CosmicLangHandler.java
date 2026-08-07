@@ -12,7 +12,7 @@ public class CosmicLangHandler extends LangHandler {
     private static final String[] COSMIC_RECIPE_TYPE_IDS = {
             "sludge_digestor", "powderizer", "industrial_ore_sorter", "industrial_flotation_plant",
             "oneiric_sieve", "dissolution_vat", "fuckassbeeball", "laminator", "chemical_dehydrator",
-            "eclipsed_dawnforge", "vorax", "mana_fluidizer", "pcb_fab", "titan_fusion", "lunar_hammer",
+            "crystallizer", "eclipsed_dawnforge", "vorax", "mana_fluidizer", "pcb_fab", "titan_fusion", "lunar_hammer",
             "cryo_chamber", "soul_tester", "void_miner", "heavy_assembler", "plasmite_forge",
             "prisma_foundry", "atmo_siphon", "mana_digitizer", "component_assembly_line", "drygmy_grove",
             "leaching_plant", "hellfire_foundry", "suffering_chamber", "arcane_distillery", "arcane_folding",
@@ -520,6 +520,7 @@ public class CosmicLangHandler extends LangHandler {
         provider.add("tagprefix.crystallized_ore_chunk", "Crystallized %s Ore Chunk");
         provider.add("tagprefix.atomically_purified_ore_chunk", "Atomically Purified %s Ore Chunk");
         provider.add("tagprefix.flocculated_ore", "Flocculated %s Ore");
+        provider.add("tagprefix.buzzsaw_blade", "%s Buzzsaw Blade");
 
         provider.add("cosmiccore.multiblock.reboot_powergrid", "§aReboot All Connected Machines");
         provider.add("cosmiccore.multiblock.sleep_powergrid", "§cSuspend All Connected Machines");
@@ -1796,8 +1797,7 @@ public class CosmicLangHandler extends LangHandler {
         provider.add("ritual.cosmiccore.firmament_ascent.started", "The heavens begin to draw near.");
         provider.add("ritual.cosmiccore.firmament_ascent.finished", "The sky releases its hold.");
         provider.add("ritual.cosmiccore.firmament_ascent.interrupted", "The path above slams shut.");
-        provider.add("item.cosmiccore.ritual_dummy.firmament_ascent", "Ascension to the Firmament");
-        provider.add("item.cosmiccore.ritual_dummy.firmament_ascent.tooltip",
+        provider.add("item.cosmiccore.firmament_ascent_ritual.tooltip",
                 "Rise beyond the air and enter the Firmament.");
         provider.add("cosmiccore.ftbquests.deed.task", "Deed Seal");
         provider.add("cosmiccore.ftbquests.deed.sealed_title", "SEALED");

@@ -39,6 +39,7 @@ public class CosmicCoreGTAddon implements IGTAddon {
     public void addRecipes(RecipeOutput provider) {
         CosmicGemQualityRecipeHandler.register(provider);
         CosmicCoreOreRecipeHandler.registerFlocculant(provider);
+        CosmicCoreOreRecipeHandler.registerCrystallization(provider);
         for (Material bundleOre : CosmicBundleMaterials.bundleOres()) {
             CosmicCoreOreRecipeHandler.bundleInit(provider, bundleOre);
         }

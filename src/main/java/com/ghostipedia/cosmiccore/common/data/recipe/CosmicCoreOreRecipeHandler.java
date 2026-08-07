@@ -1,7 +1,9 @@
 package com.ghostipedia.cosmiccore.common.data.recipe;
 
 import com.ghostipedia.cosmiccore.CosmicCore;
+import com.ghostipedia.cosmiccore.common.data.CosmicItems;
 import com.ghostipedia.cosmiccore.common.data.materials.CosmicBundleMaterials;
+import com.ghostipedia.cosmiccore.common.data.materials.CosmicCrystallizationMaterials;
 import com.ghostipedia.cosmiccore.common.data.materials.CosmicMaterials;
 
 import com.gregtechceu.gtceu.api.GTValues;
@@ -14,6 +16,8 @@ import com.gregtechceu.gtceu.data.recipe.VanillaRecipeHelper;
 import net.minecraft.core.cauldron.CauldronInteraction;
 import net.minecraft.data.recipes.RecipeOutput;
 import net.minecraft.world.item.ItemStack;
+
+import com.rekindled.embers.RegistryManager;
 
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -32,6 +36,7 @@ import static com.gregtechceu.gtceu.common.data.GTMaterials.Water;
 import static com.gregtechceu.gtceu.common.data.GTRecipeTypes.CHEMICAL_RECIPES;
 import static com.gregtechceu.gtceu.common.data.GTRecipeTypes.FORGE_HAMMER_RECIPES;
 import static com.gregtechceu.gtceu.common.data.GTRecipeTypes.MACERATOR_RECIPES;
+import static com.gregtechceu.gtceu.common.data.GTRecipeTypes.MIXER_RECIPES;
 
 public class CosmicCoreOreRecipeHandler {
 
@@ -71,7 +76,7 @@ public class CosmicCoreOreRecipeHandler {
         floatStep(provider, material, crushed, crushedPurified, "float_purify_", 400, 500);
         millStep(provider, material, crushedPurified, powderizedOre, "mill_powder_", 600);
         flocculateStep(provider, material);
-        floatStep(provider, material, flocculatedOre, crystallizedOreChunk, "crystallize_", 1600, 1000);
+        crystallizationStep(provider, material);
         floatStep(provider, material, crystallizedOreChunk, atomicallyPurifiedOreChunk, "atomically_purify_", 2600,
                 1000);
     }
@@ -107,6 +112,81 @@ public class CosmicCoreOreRecipeHandler {
                 .outputFluids(CosmicMaterials.PolyethyleneOxide.getFluid(1000))
                 .duration(120).EUt(GTValues.VA[GTValues.LV])
                 .save(provider);
+    }
+
+    public static void registerCrystallization(RecipeOutput provider) {
+        CHEMICAL_RECIPES.recipeBuilder("cannonseed_crystallization_medium")
+                .inputItems(CosmicItems.CANNON_POWDER.asStack(4))
+                .inputFluids(GTMaterials.PhosphoricAcid.getFluid(250))
+                .inputFluids(GTMaterials.Glycerol.getFluid(750))
+                .outputFluids(CosmicCrystallizationMaterials.CannonseedCrystallizationMedium.getFluid(1000))
+                .duration(400).EUt(GTValues.VA[GTValues.MV])
+                .save(provider);
+
+        for (var entry : CosmicCrystallizationMaterials.gemGrowthSlurries().entrySet()) {
+            registerGemCrystallization(provider, entry.getKey(), entry.getValue());
+        }
+    }
+
+    private static void crystallizationStep(RecipeOutput provider, Material material) {
+        Material slurry = CosmicCrystallizationMaterials.oreSlurry(material);
+        if (slurry == null) return;
+
+        ItemStack flocculated = ChemicalHelper.get(flocculatedOre, material);
+        ItemStack crystallized = ChemicalHelper.get(crystallizedOreChunk, material);
+        if (flocculated.isEmpty() || crystallized.isEmpty()) return;
+
+        SLUDGE_DIGESTOR.recipeBuilder("load_" + material.getName() + "_crystallization_slurry")
+                .inputItems(flocculated)
+                .inputItems(CosmicItems.FUNCTIONALIZED_NYCTOPHYTE_MEDIA.asStack())
+                .inputFluids(CosmicCrystallizationMaterials.CannonseedCrystallizationMedium.getFluid(50))
+                .outputItems(CosmicItems.STRIPPED_NYCTOPHYTE_MEDIA.asStack())
+                .outputFluids(slurry.getFluid(50))
+                .duration(160).EUt(16)
+                .save(provider);
+
+        DISSOLUTION_VAT.recipeBuilder("crystallize_" + material.getName() + "_ore_chunk")
+                .inputFluids(slurry.getFluid(50))
+                .outputItems(crystallized)
+                .outputFluids(CosmicCrystallizationMaterials.CannonseedCrystallizationMedium.getFluid(25))
+                .duration(600).EUt(16)
+                .save(provider);
+    }
+
+    private static void registerGemCrystallization(RecipeOutput provider, Material material, Material slurry) {
+        ItemStack dustStack = gemDust(material);
+        ItemStack gemStack = gemStack(material);
+        if (dustStack.isEmpty() || gemStack.isEmpty()) return;
+
+        MIXER_RECIPES.recipeBuilder("load_" + material.getName() + "_gem_growth_slurry")
+                .inputItems(dustStack)
+                .inputItems(CosmicItems.FUNCTIONALIZED_NYCTOPHYTE_MEDIA.asStack())
+                .inputFluids(CosmicCrystallizationMaterials.CannonseedCrystallizationMedium.getFluid(200))
+                .outputItems(CosmicItems.STRIPPED_NYCTOPHYTE_MEDIA.asStack())
+                .outputFluids(slurry.getFluid(1000))
+                .duration(160).EUt(GTValues.VA[GTValues.MV])
+                .save(provider);
+
+        CRYSTALLIZER.recipeBuilder("grow_" + material.getName() + "_gem")
+                .inputFluids(slurry.getFluid(250))
+                .outputItems(gemStack)
+                .outputFluids(CosmicCrystallizationMaterials.CannonseedCrystallizationMedium.getFluid(25))
+                .duration(200).EUt(64)
+                .save(provider);
+    }
+
+    private static ItemStack gemDust(Material material) {
+        if (material == CosmicBundleMaterials.Emberite) {
+            return new ItemStack(RegistryManager.EMBER_GRIT.get(), 4);
+        }
+        return ChemicalHelper.get(dust, material, 4);
+    }
+
+    private static ItemStack gemStack(Material material) {
+        if (material == CosmicBundleMaterials.Emberite) {
+            return new ItemStack(RegistryManager.EMBER_CRYSTAL.get());
+        }
+        return ChemicalHelper.get(gem, material);
     }
 
     private static void millStep(RecipeOutput provider, Material material, TagPrefix in, TagPrefix out,
