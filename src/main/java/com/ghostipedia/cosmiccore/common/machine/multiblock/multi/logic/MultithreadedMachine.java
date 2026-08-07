@@ -13,11 +13,10 @@ import com.gregtechceu.gtceu.api.machine.multiblock.part.MultiblockPartMachine;
 import com.gregtechceu.gtceu.api.machine.trait.recipe.RecipeHandlerList;
 import com.gregtechceu.gtceu.api.machine.trait.recipe.RecipeLogic;
 import com.gregtechceu.gtceu.api.recipe.GTRecipe;
+import com.gregtechceu.gtceu.api.sync_system.annotations.SaveField;
+import com.gregtechceu.gtceu.api.sync_system.annotations.SyncToClient;
 import com.gregtechceu.gtceu.common.machine.multiblock.part.EnergyHatchPartMachine;
 import com.gregtechceu.gtceu.common.machine.multiblock.part.MaintenanceHatchPartMachine;
-
-import com.lowdragmc.lowdraglib.syncdata.annotation.DescSynced;
-import com.lowdragmc.lowdraglib.syncdata.annotation.Persisted;
 
 import net.minecraft.world.item.DyeColor;
 
@@ -53,6 +52,8 @@ public class MultithreadedMachine extends WorkableElectricMultiblockMachine impl
      */
     private final Int2ObjectMap<MultithreadedRecipeLogic> threadLogics = new Int2ObjectLinkedOpenHashMap<>();
 
+    private final List<MultithreadedRecipeLogic> threadLogicPool = new ArrayList<>(MAX_THREADS);
+
     /**
      * Map of thread color -> input handler list for that thread
      */
@@ -66,15 +67,15 @@ public class MultithreadedMachine extends WorkableElectricMultiblockMachine impl
     /**
      * Maximum number of threads allowed by the energy hatch
      */
-    @Persisted
-    @DescSynced
+    @SaveField
+    @SyncToClient
     private int maxThreads = 0;
 
     /**
      * Currently active thread count
      */
-    @Persisted
-    @DescSynced
+    @SaveField
+    @SyncToClient
     private int activeThreadCount = 0;
 
     /**
@@ -96,6 +97,11 @@ public class MultithreadedMachine extends WorkableElectricMultiblockMachine impl
             @Override
             public void serverTick() {}
         });
+        for (int index = 0; index < MAX_THREADS; index++) {
+            MultithreadedRecipeLogic logic = new MultithreadedRecipeLogic(index, -1);
+            attachPersistentTrait("cosmiccore_thread_" + index, logic);
+            threadLogicPool.add(logic);
+        }
     }
 
     @Override
@@ -222,15 +228,37 @@ public class MultithreadedMachine extends WorkableElectricMultiblockMachine impl
             if (threadLogics.size() >= maxThreads) break;
 
             int color = entry.getIntKey();
-            MultithreadedRecipeLogic logic = new MultithreadedRecipeLogic(threadLogics.size(), color);
-            attachTrait(logic);
+            MultithreadedRecipeLogic logic = acquireThreadLogic(color);
+            if (logic == null) break;
+            logic.bindThreadColor(color);
             logic.setMaxEUtPerThread(euPerThread);
             applyThreadHandlers(logic, entry.getValue());
             logic.activateThread();
             threadLogics.put(color, logic);
         }
 
+        for (MultithreadedRecipeLogic logic : threadLogicPool) {
+            if (logic.isThreadActive() && !threadLogics.containsValue(logic)) {
+                logic.deactivateThread();
+            }
+        }
+
         activeThreadCount = threadLogics.size();
+    }
+
+    @Nullable
+    private MultithreadedRecipeLogic acquireThreadLogic(int color) {
+        for (MultithreadedRecipeLogic logic : threadLogicPool) {
+            if (logic.getThreadColor() == color && !threadLogics.containsValue(logic)) {
+                return logic;
+            }
+        }
+        for (MultithreadedRecipeLogic logic : threadLogicPool) {
+            if (!logic.isThreadActive() && !threadLogics.containsValue(logic)) {
+                return logic;
+            }
+        }
+        return null;
     }
 
     /**
@@ -333,8 +361,9 @@ public class MultithreadedMachine extends WorkableElectricMultiblockMachine impl
             MultithreadedRecipeLogic logic = threadLogics.get(color);
             if (logic == null) {
                 if (threadLogics.size() >= maxThreads) continue;
-                logic = new MultithreadedRecipeLogic(threadLogics.size(), color);
-                attachTrait(logic);
+                logic = acquireThreadLogic(color);
+                if (logic == null) continue;
+                logic.bindThreadColor(color);
                 logic.activateThread();
                 threadLogics.put(color, logic);
             }

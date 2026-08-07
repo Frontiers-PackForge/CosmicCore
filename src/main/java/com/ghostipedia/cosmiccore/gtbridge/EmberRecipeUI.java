@@ -33,7 +33,7 @@ public final class EmberRecipeUI {
         long amount = EmberRecipeCapability.CAP.of(content.content()).longValue();
         String name = io == IO.IN ? "ember_in" : "ember_out";
         var text = Text.lang(io == IO.IN ? "cosmiccore.recipe.ember_in" : "cosmiccore.recipe.ember_out",
-                FormattingUtil.formatNumbers(amount)).withStyle(ChatFormatting.GOLD);
+                FormattingUtil.formatNumbers(amount)).withStyle(ChatFormatting.DARK_GRAY);
         var existing = WidgetTree.findFirstWithNameNullable(flow, name);
         if (existing != null) ((TextWidget<?>) existing).value(text);
         else flow.child(text.asWidget().name(name));

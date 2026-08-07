@@ -9,7 +9,6 @@ import com.ghostipedia.cosmiccore.api.recipe.ingredient.SoulStack;
 import com.gregtechceu.gtceu.api.capability.recipe.IO;
 import com.gregtechceu.gtceu.api.capability.recipe.RecipeCapability;
 import com.gregtechceu.gtceu.api.machine.MetaMachine;
-import com.gregtechceu.gtceu.api.machine.trait.MachineTraitType;
 import com.gregtechceu.gtceu.api.machine.trait.notifiable.NotifiableRecipeHandlerTrait;
 import com.gregtechceu.gtceu.api.recipe.GTRecipe;
 import com.gregtechceu.gtceu.common.machine.owner.FTBOwner;
@@ -24,9 +23,6 @@ import java.util.List;
 import java.util.UUID;
 
 public class NotifiableSoulContainer extends NotifiableRecipeHandlerTrait<SoulIngredient> {
-
-    public static final MachineTraitType<NotifiableSoulContainer> TYPE = new MachineTraitType<>(
-            NotifiableSoulContainer.class);
 
     public final IO handlerIO;
 
@@ -55,11 +51,6 @@ public class NotifiableSoulContainer extends NotifiableRecipeHandlerTrait<SoulIn
 
     public int getCapacity() {
         return capacity;
-    }
-
-    @Override
-    public MachineTraitType<NotifiableSoulContainer> getTraitType() {
-        return TYPE;
     }
 
     private SoulNetwork getSoulNetwork() {

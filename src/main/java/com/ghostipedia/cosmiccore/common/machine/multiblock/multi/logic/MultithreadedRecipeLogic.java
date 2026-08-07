@@ -7,16 +7,14 @@ import com.gregtechceu.gtceu.api.capability.recipe.IO;
 import com.gregtechceu.gtceu.api.capability.recipe.IRecipeCapabilityHolder;
 import com.gregtechceu.gtceu.api.capability.recipe.IRecipeHandler;
 import com.gregtechceu.gtceu.api.capability.recipe.RecipeCapability;
-import com.gregtechceu.gtceu.api.machine.trait.MachineTraitType;
 import com.gregtechceu.gtceu.api.machine.trait.recipe.RecipeHandlerList;
 import com.gregtechceu.gtceu.api.machine.trait.recipe.RecipeLogic;
 import com.gregtechceu.gtceu.api.recipe.ActionResult;
 import com.gregtechceu.gtceu.api.recipe.GTRecipe;
 import com.gregtechceu.gtceu.api.recipe.RecipeHelper;
 import com.gregtechceu.gtceu.api.recipe.modifier.ModifierFunction;
-
-import com.lowdragmc.lowdraglib.syncdata.annotation.DescSynced;
-import com.lowdragmc.lowdraglib.syncdata.annotation.Persisted;
+import com.gregtechceu.gtceu.api.sync_system.annotations.SaveField;
+import com.gregtechceu.gtceu.api.sync_system.annotations.SyncToClient;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -38,13 +36,6 @@ public class MultithreadedRecipeLogic extends RecipeLogic implements IRecipeCapa
      */
     public static boolean DEBUG = false;
 
-    /**
-     * A multithreaded machine attaches one of these per thread, so unlike the base {@link RecipeLogic#TYPE} this
-     * trait type must permit multiple instances on a single machine. GTCEu 8.0's MachineTraitHolder otherwise
-     * rejects the second attach, which aborts EMI's multiblock-preview build and with it all GT recipe display.
-     */
-    public static final MachineTraitType<RecipeLogic> TYPE = new MachineTraitType<>(RecipeLogic.class, true);
-
     private static String describe(ActionResult r) {
         StringBuilder sb = new StringBuilder();
         sb.append(r.reason() == null ? "<no reason>" : r.reason().getString());
@@ -55,10 +46,12 @@ public class MultithreadedRecipeLogic extends RecipeLogic implements IRecipeCapa
 
     private final int threadIndex;
 
-    private final int threadColor;
+    @SaveField
+    @SyncToClient
+    private int threadColor;
 
-    @Persisted
-    @DescSynced
+    @SaveField
+    @SyncToClient
     private boolean threadActive = false;
 
     /**
@@ -84,17 +77,28 @@ public class MultithreadedRecipeLogic extends RecipeLogic implements IRecipeCapa
         this.threadColor = threadColor;
     }
 
-    @Override
-    public MachineTraitType<RecipeLogic> getTraitType() {
-        return TYPE;
-    }
-
     public int getThreadIndex() {
         return threadIndex;
     }
 
     public int getThreadColor() {
         return threadColor;
+    }
+
+    public void bindThreadColor(int threadColor) {
+        if (this.threadColor == threadColor) return;
+        deactivateThread();
+        setStatus(Status.IDLE);
+        progress = 0;
+        duration = 0;
+        consecutiveRecipes = 0;
+        isActive = false;
+        lastRecipe = null;
+        lastOriginRecipe = null;
+        lastFailedMatches = null;
+        recipeDirty = true;
+        clearFailureReason();
+        this.threadColor = threadColor;
     }
 
     public boolean isThreadActive() {

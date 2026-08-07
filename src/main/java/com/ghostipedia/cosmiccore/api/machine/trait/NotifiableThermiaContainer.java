@@ -5,7 +5,6 @@ import com.ghostipedia.cosmiccore.api.capability.recipe.IHeatContainer;
 import com.gregtechceu.gtceu.api.capability.recipe.IO;
 import com.gregtechceu.gtceu.api.capability.recipe.RecipeCapability;
 import com.gregtechceu.gtceu.api.machine.MetaMachine;
-import com.gregtechceu.gtceu.api.machine.trait.MachineTraitType;
 import com.gregtechceu.gtceu.api.machine.trait.notifiable.NotifiableRecipeHandlerTrait;
 import com.gregtechceu.gtceu.api.recipe.GTRecipe;
 import com.gregtechceu.gtceu.api.sync_system.annotations.SaveField;
@@ -17,14 +16,6 @@ import java.util.List;
 import java.util.function.Predicate;
 
 public class NotifiableThermiaContainer extends NotifiableRecipeHandlerTrait<Integer> implements IHeatContainer {
-
-    public static final MachineTraitType<NotifiableThermiaContainer> TYPE = new MachineTraitType<>(
-            NotifiableThermiaContainer.class);
-
-    @Override
-    public MachineTraitType<?> getTraitType() {
-        return TYPE;
-    }
 
     private final IO handlerIO;
     private final long overloadLimit;

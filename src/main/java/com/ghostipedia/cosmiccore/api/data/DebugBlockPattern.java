@@ -107,9 +107,17 @@ public class DebugBlockPattern {
                 patternDirections.character().getDefaultFacing());
     }
 
+    public static StructureOrientation orientationFor(Direction facing) {
+        return new StructureOrientation(directionsFor(facing), worldDirectionsFor(facing));
+    }
+
     public static ExportOrientation exportOrientationFor(Direction facing) {
-        PatternDirections patternDirections = directionsFor(facing);
-        WorldDirections worldDirections = worldDirectionsFor(facing);
+        return exportOrientationFor(orientationFor(facing));
+    }
+
+    public static ExportOrientation exportOrientationFor(StructureOrientation orientation) {
+        PatternDirections patternDirections = orientation.pattern();
+        WorldDirections worldDirections = orientation.world();
         for (Direction front : Direction.values()) {
             for (Direction up : Direction.values()) {
                 if (front.getAxis() == up.getAxis()) continue;
@@ -229,6 +237,20 @@ public class DebugBlockPattern {
                                   Direction slice,
                                   Direction string,
                                   Direction character) {}
+
+    public record StructureOrientation(
+                                       PatternDirections pattern,
+                                       WorldDirections world) {
+
+        public StructureOrientation rotate(Direction.Axis axis) {
+            return new StructureOrientation(
+                    pattern,
+                    new WorldDirections(
+                            world.slice().getClockWise(axis),
+                            world.string().getClockWise(axis),
+                            world.character().getClockWise(axis)));
+        }
+    }
 
     public record ExportOrientation(
                                     Direction front,

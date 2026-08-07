@@ -2,6 +2,7 @@ package com.ghostipedia.cosmiccore.common.item.behavior;
 
 import com.ghostipedia.cosmiccore.api.data.DebugBlockPattern;
 import com.ghostipedia.cosmiccore.api.data.DebugBlockPattern.PatternDirections;
+import com.ghostipedia.cosmiccore.api.data.DebugBlockPattern.StructureOrientation;
 import com.ghostipedia.cosmiccore.api.data.DebugBlockPattern.WorldDirections;
 import com.ghostipedia.cosmiccore.utils.ItemData;
 
@@ -36,6 +37,8 @@ import brachy.modularui.widgets.ButtonWidget;
 import brachy.modularui.widgets.TextWidget;
 import brachy.modularui.widgets.layout.Flow;
 
+import java.util.Locale;
+
 public class StructureWriteBehavior implements IItemUIHolder {
 
     public static final StructureWriteBehavior INSTANCE = new StructureWriteBehavior();
@@ -60,12 +63,13 @@ public class StructureWriteBehavior implements IItemUIHolder {
         StringSyncValue maximum = new StringSyncValue(() -> formatPosition(data.getUsedItemStack(), 1));
         StringSyncValue dimensions = new StringSyncValue(() -> formatDimensions(data.getUsedItemStack()));
         StringSyncValue volume = new StringSyncValue(() -> formatVolume(data.getUsedItemStack()));
-        StringSyncValue facing = new StringSyncValue(() -> getDir(data.getUsedItemStack()).getName());
+        StringSyncValue orientation = new StringSyncValue(
+                () -> encodeOrientation(getOrientation(data.getUsedItemStack())));
         syncManager.syncValue("structure_writer_minimum", minimum);
         syncManager.syncValue("structure_writer_maximum", maximum);
         syncManager.syncValue("structure_writer_dimensions", dimensions);
         syncManager.syncValue("structure_writer_volume", volume);
-        syncManager.syncValue("structure_writer_facing", facing);
+        syncManager.syncValue("structure_writer_orientation", orientation);
 
         ModularPanel<?> panel = ModularPanel.defaultPanel("structure_writer", PANEL_WIDTH, PANEL_HEIGHT)
                 .background(GTGuiTextures.BACKGROUND);
@@ -96,19 +100,19 @@ public class StructureWriteBehavior implements IItemUIHolder {
                         .widthRel(1))
                 .child(new TextWidget<>(() -> directionComponent(
                         "slice",
-                        facing.getStringValue()))
+                        orientation.getStringValue()))
                         .color(SLICE_COLOR)
                         .height(10)
                         .widthRel(1))
                 .child(new TextWidget<>(() -> directionComponent(
                         "string",
-                        facing.getStringValue()))
+                        orientation.getStringValue()))
                         .color(STRING_COLOR)
                         .height(10)
                         .widthRel(1))
                 .child(new TextWidget<>(() -> directionComponent(
                         "character",
-                        facing.getStringValue()))
+                        orientation.getStringValue()))
                         .color(CHARACTER_COLOR)
                         .height(10)
                         .widthRel(1))
@@ -173,11 +177,10 @@ public class StructureWriteBehavior implements IItemUIHolder {
                         .sizeRel(1));
     }
 
-    private static Component directionComponent(String role, String facingName) {
-        Direction facing = Direction.byName(facingName);
-        Direction resolvedFacing = facing == null ? Direction.WEST : facing;
-        PatternDirections patternDirections = DebugBlockPattern.directionsFor(resolvedFacing);
-        WorldDirections worldDirections = DebugBlockPattern.worldDirectionsFor(resolvedFacing);
+    private static Component directionComponent(String role, String encodedOrientation) {
+        StructureOrientation orientation = decodeOrientation(encodedOrientation);
+        PatternDirections patternDirections = orientation.pattern();
+        WorldDirections worldDirections = orientation.world();
         RelativeDirection relativeDirection = switch (role) {
             case "slice" -> patternDirections.slice();
             case "string" -> patternDirections.string();
@@ -205,12 +208,12 @@ public class StructureWriteBehavior implements IItemUIHolder {
         ItemStack stack = data.getUsedItemStack();
         switch (action) {
             case StructureWriterControl.PRINT -> printExport(stack, player);
-            case StructureWriterControl.ROTATE_X -> setDir(
+            case StructureWriterControl.ROTATE_X -> setOrientation(
                     stack,
-                    getDir(stack).getClockWise(Direction.Axis.X));
-            case StructureWriterControl.ROTATE_Y -> setDir(
+                    getOrientation(stack).rotate(Direction.Axis.X));
+            case StructureWriterControl.ROTATE_Y -> setOrientation(
                     stack,
-                    getDir(stack).getClockWise(Direction.Axis.Y));
+                    getOrientation(stack).rotate(Direction.Axis.Y));
             case StructureWriterControl.CLEAR -> removePos(stack);
             default -> {
                 return;
@@ -232,8 +235,9 @@ public class StructureWriteBehavior implements IItemUIHolder {
         BlockPos[] positions = getPos(stack);
         if (positions == null) return "";
 
-        PatternDirections directions = DebugBlockPattern.directionsFor(getDir(stack));
-        WorldDirections worldDirections = DebugBlockPattern.worldDirectionsFor(getDir(stack));
+        StructureOrientation orientation = getOrientation(stack);
+        PatternDirections directions = orientation.pattern();
+        WorldDirections worldDirections = orientation.world();
         DebugBlockPattern blockPattern = new DebugBlockPattern(
                 player.level(),
                 positions[0].getX(),
@@ -320,6 +324,80 @@ public class StructureWriteBehavior implements IItemUIHolder {
 
     public static void setDir(ItemStack stack, Direction dir) {
         ItemData.mutateElement(stack, "structure_writer", tag -> tag.putString("dir", dir.getName()));
+    }
+
+    public static StructureOrientation getOrientation(ItemStack stack) {
+        CompoundTag tag = ItemData.readElement(stack, "structure_writer");
+        if (!tag.contains("patternSlice") ||
+                !tag.contains("patternString") ||
+                !tag.contains("patternCharacter") ||
+                !tag.contains("worldSlice") ||
+                !tag.contains("worldString") ||
+                !tag.contains("worldCharacter")) {
+            return DebugBlockPattern.orientationFor(getDir(stack));
+        }
+        try {
+            StructureOrientation orientation = new StructureOrientation(
+                    new PatternDirections(
+                            RelativeDirection.valueOf(tag.getString("patternSlice").toUpperCase(Locale.ROOT)),
+                            RelativeDirection.valueOf(tag.getString("patternString").toUpperCase(Locale.ROOT)),
+                            RelativeDirection.valueOf(tag.getString("patternCharacter").toUpperCase(Locale.ROOT))),
+                    new WorldDirections(
+                            requireDirection(tag.getString("worldSlice")),
+                            requireDirection(tag.getString("worldString")),
+                            requireDirection(tag.getString("worldCharacter"))));
+            DebugBlockPattern.exportOrientationFor(orientation);
+            return orientation;
+        } catch (IllegalArgumentException | IllegalStateException ignored) {
+            return DebugBlockPattern.orientationFor(getDir(stack));
+        }
+    }
+
+    public static void setOrientation(ItemStack stack, StructureOrientation orientation) {
+        DebugBlockPattern.exportOrientationFor(orientation);
+        ItemData.mutateElement(stack, "structure_writer", tag -> {
+            tag.putString("patternSlice", orientation.pattern().slice().getSerializedName());
+            tag.putString("patternString", orientation.pattern().string().getSerializedName());
+            tag.putString("patternCharacter", orientation.pattern().character().getSerializedName());
+            tag.putString("worldSlice", orientation.world().slice().getName());
+            tag.putString("worldString", orientation.world().string().getName());
+            tag.putString("worldCharacter", orientation.world().character().getName());
+        });
+    }
+
+    private static String encodeOrientation(StructureOrientation orientation) {
+        return orientation.pattern().slice().name() + "," +
+                orientation.pattern().string().name() + "," +
+                orientation.pattern().character().name() + ";" +
+                orientation.world().slice().getName() + "," +
+                orientation.world().string().getName() + "," +
+                orientation.world().character().getName();
+    }
+
+    private static StructureOrientation decodeOrientation(String encoded) {
+        try {
+            String[] values = encoded.split("[,;]", -1);
+            if (values.length != 6) return DebugBlockPattern.orientationFor(Direction.WEST);
+            StructureOrientation orientation = new StructureOrientation(
+                    new PatternDirections(
+                            RelativeDirection.valueOf(values[0]),
+                            RelativeDirection.valueOf(values[1]),
+                            RelativeDirection.valueOf(values[2])),
+                    new WorldDirections(
+                            requireDirection(values[3]),
+                            requireDirection(values[4]),
+                            requireDirection(values[5])));
+            DebugBlockPattern.exportOrientationFor(orientation);
+            return orientation;
+        } catch (IllegalArgumentException | IllegalStateException ignored) {
+            return DebugBlockPattern.orientationFor(Direction.WEST);
+        }
+    }
+
+    private static Direction requireDirection(String name) {
+        Direction direction = Direction.byName(name);
+        if (direction == null) throw new IllegalArgumentException("Unknown direction: " + name);
+        return direction;
     }
 
     public static BlockPos[] getPos(ItemStack stack) {

@@ -1,4 +1,4 @@
-# Cosmic Core 0.17.0
+# Cosmic Core 0.17.1
 # DO NOT MANUALLY UPDATE COSMIC CORE FOR FRONTIERS **IT WILL NOT WORK**
 
 ## New
@@ -22,6 +22,11 @@
 
 ## Fixes
 
+- Fixed the Debug Structure Writer collapsing rotations to six facings instead of preserving all twenty-four cube orientations.
+- Fixed older saved GregTech recipes failing to load when their serialized data predates parallel-tracking fields.
+- Removed stale pack recipes that duplicated CosmicCore's systematic flawless-gem implosion family.
+- Fixed Dreamer's Basin attaching recipe-thread traits after machine load and losing their progress across saves.
+- Fixed duplicate invalid-structure text in CosmicCore's generic MUI multiblock panel.
 - Fixed Firmament storm animation stepping, visual noise, sunset distance banding, and the near-camera lighting dead zone.
 - Fixed LP and HP Steam Benders generating without their directional steam-vent overlay.
 - Fixed Hard Hammer drop conversion using the wrong loop recipe, sharing mutable output stacks, and ignoring configured drop chance.
