@@ -1,0 +1,14 @@
+{
+  "depleted_yield": 0,
+  "depletion_amount": 1,
+  "depletion_chance": 100,
+  "dimension_filter": [
+    "minecraft:overworld"
+  ],
+  "fluid": "gtceu:multi_phase_oil",
+  "weight": 0,
+  "yield": {
+    "max": 0,
+    "min": 0
+  }
+}

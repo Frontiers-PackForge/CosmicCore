@@ -1,0 +1,24 @@
+{
+  "depleted_yield": 150,
+  "depletion_amount": 1,
+  "depletion_chance": 100,
+  "dimension_filter": [
+    "minecraft:overworld"
+  ],
+  "fluid": "gtceu:multi_phase_oil",
+  "weight": 80,
+  "weight_modifier": [
+    {
+      "added_weight": 10,
+      "biomes": "#minecraft:is_ocean"
+    },
+    {
+      "added_weight": 20,
+      "biomes": "#c:is_sandy"
+    }
+  ],
+  "yield": {
+    "max": 1000,
+    "min": 750
+  }
+}

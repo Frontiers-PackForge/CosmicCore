@@ -1,0 +1,14 @@
+{
+  "depleted_yield": 150,
+  "depletion_amount": 1,
+  "depletion_chance": 100,
+  "dimension_filter": [
+    "minecraft:the_nether"
+  ],
+  "fluid": "cosmiccore:volatile_multi_phase_oil",
+  "weight": 35,
+  "yield": {
+    "max": 1000,
+    "min": 750
+  }
+}
