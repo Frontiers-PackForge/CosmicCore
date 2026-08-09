@@ -1,5 +1,6 @@
 package com.ghostipedia.cosmiccore.mixin.gttweak;
 
+import com.ghostipedia.cosmiccore.api.machine.multiblock.IConfiguredMultiblockMachine;
 import com.ghostipedia.cosmiccore.api.machine.multiblock.ITieredMultiblockMachine;
 import com.ghostipedia.cosmiccore.api.machine.multiblock.ITieredMultiblockPreview;
 import com.ghostipedia.cosmiccore.common.machine.multiblock.tier.TieredMultiblockPatterns;
@@ -80,7 +81,9 @@ public class TieredTerminalBehaviorMixin {
         if (!(MetaMachine.getMachine(context.getLevel(),
                 context.getClickedPos()) instanceof MultiblockControllerMachine controller) ||
                 !(controller instanceof ITieredMultiblockMachine tiered) ||
-                !TieredMultiblockPatterns.isTiered(controller.getDefinition()) || controller.isFormed()) {
+                !TieredMultiblockPatterns.isTiered(controller.getDefinition()) ||
+                controller.isFormed() && (!(controller instanceof IConfiguredMultiblockMachine configured) ||
+                        configured.isConfigurationSelectionLocked())) {
             return;
         }
         if (!context.getLevel().isClientSide() && !MachineOwner.canOpenOwnerMachine(player, controller)) {

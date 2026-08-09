@@ -30,8 +30,14 @@ public final class TieredMultiblockUi {
                 .size(size)
                 .tooltipAutoUpdate(true)
                 .tooltipBuilder(tooltip -> {
-                    tooltip.addLine(
-                            Component.translatable("cosmiccore.multiblock.structure_tier", value.getIntValue() + 1));
+                    if (TieredMultiblockPatterns.hasConfigurationLabels(definition)) {
+                        tooltip.addLine(Component.translatable("cosmiccore.multiblock.construction_blueprint",
+                                Component.translatable(TieredMultiblockPatterns.label(definition,
+                                        value.getIntValue()).nameKey())));
+                    } else {
+                        tooltip.addLine(Component.translatable("cosmiccore.multiblock.structure_tier",
+                                value.getIntValue() + 1));
+                    }
                     if (definition == GTMultiMachines.ELECTRIC_BLAST_FURNACE && value.getIntValue() > 0) {
                         tooltip.addLine(Component.translatable("cosmiccore.multiblock.ebf.streak",
                                 ElectricBlastFurnaceTierState.durationReductionPercent(streakSupplier.getAsInt())));
@@ -39,7 +45,10 @@ public final class TieredMultiblockUi {
                     }
                 });
         for (int tier = 0; tier < TieredMultiblockPatterns.tierCount(definition); tier++) {
-            button.stateOverlay(tier, Text.str("T" + (tier + 1)).alignment(Alignment.TopLeft).asTextIcon());
+            String label = TieredMultiblockPatterns.hasConfigurationLabels(definition) ?
+                    Component.translatable(TieredMultiblockPatterns.label(definition, tier).shortKey()).getString() :
+                    "T" + (tier + 1);
+            button.stateOverlay(tier, Text.str(label).alignment(Alignment.TopLeft).asTextIcon());
         }
         return button;
     }
