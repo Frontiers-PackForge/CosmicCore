@@ -57,6 +57,11 @@ public class MultiblockInit {
         IndustrialOreSorter.init();
         IndustrialFlotationPlant.init();
         DissolutionVat.init();
+        PhaseSeparator.init();
+        Desalter.init();
+        SteamCrackingFurnace.init();
+        FractionalCondenser.init();
+        ConversionComplex.init();
         SludgeDigestor.init();
         SufferingChamber.init();
         TitanFusion.init();

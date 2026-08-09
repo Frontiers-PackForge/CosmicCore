@@ -1,5 +1,6 @@
 package com.ghostipedia.cosmiccore.mixin.gttweak;
 
+import com.ghostipedia.cosmiccore.api.machine.multiblock.IConfiguredMultiblockMachine;
 import com.ghostipedia.cosmiccore.api.machine.multiblock.ITieredMultiblockPreview;
 import com.ghostipedia.cosmiccore.common.machine.multiblock.tier.TieredMultiblockPatterns;
 import com.ghostipedia.cosmiccore.common.machine.multiblock.tier.TieredMultiblockUi;
@@ -34,6 +35,7 @@ import org.spongepowered.asm.mixin.injection.ModifyArg;
 import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
@@ -72,6 +74,22 @@ public abstract class TieredMultiblockPreviewWidgetMixin {
                method = "<init>",
                at = @At(value = "INVOKE",
                         target = "Lbrachy/modularui/widgets/ListWidget;children(Ljava/lang/Iterable;Ljava/util/function/Function;)Lbrachy/modularui/widgets/ListWidget;"),
+               index = 0,
+               require = 1)
+    private Iterable<Map.Entry<String, IBlockPattern>> cosmiccore$filterConfigurationPatterns(
+                                                                                              Iterable<Map.Entry<String, IBlockPattern>> patterns) {
+        if (!TieredMultiblockPatterns.hasConfigurationLabels(multiblockDefinition)) return patterns;
+        List<Map.Entry<String, IBlockPattern>> filtered = new ArrayList<>(1);
+        for (Map.Entry<String, IBlockPattern> entry : patterns) {
+            if ("main".equals(entry.getKey())) filtered.add(entry);
+        }
+        return filtered;
+    }
+
+    @ModifyArg(
+               method = "<init>",
+               at = @At(value = "INVOKE",
+                        target = "Lbrachy/modularui/widgets/ListWidget;children(Ljava/lang/Iterable;Ljava/util/function/Function;)Lbrachy/modularui/widgets/ListWidget;"),
                index = 1,
                require = 1)
     private Function<Map.Entry<String, IBlockPattern>, IWidget> cosmiccore$makeTierControlsDynamic(
@@ -95,9 +113,13 @@ public abstract class TieredMultiblockPreviewWidgetMixin {
         if (widget instanceof Flow patternColumn) {
             List<IWidget> children = patternColumn.getChildren();
             if (!children.isEmpty() && children.getLast() instanceof Flow predicatesRow) {
-                predicatesRow.addChild(TieredMultiblockUi.createTierButton(multiblockDefinition,
+                var button = TieredMultiblockUi.createTierButton(multiblockDefinition,
                         new IntValue.Dynamic(preview::cosmiccore$getPreviewTier, this::cosmiccore$setPreviewTier),
-                        () -> 0, 20), 0);
+                        () -> 0, 20);
+                if (TieredMultiblockPatterns.hasConfigurationLabels(multiblockDefinition)) {
+                    button.setEnabledIf(ignored -> !cosmiccore$isControllerLocked());
+                }
+                predicatesRow.addChild(button, 0);
             }
         }
         return widget;
@@ -108,7 +130,7 @@ public abstract class TieredMultiblockPreviewWidgetMixin {
         ITieredMultiblockPreview preview = (ITieredMultiblockPreview) multiblockSchemaInfo;
         int selectedTier = TieredMultiblockPatterns.clampTier(multiblockDefinition, tier);
         if (selectedTier == preview.cosmiccore$getPreviewTier()) return;
-        if (cosmiccore$isControllerActive()) return;
+        if (cosmiccore$isControllerLocked()) return;
         cosmiccore$pendingPreviewTier = selectedTier;
         if (!cosmiccore$tierUpdateListenerRegistered) {
             IWidget widget = (IWidget) (Object) this;
@@ -123,7 +145,7 @@ public abstract class TieredMultiblockPreviewWidgetMixin {
         if (selectedTier < 0) return;
         cosmiccore$pendingPreviewTier = -1;
         ITieredMultiblockPreview preview = (ITieredMultiblockPreview) multiblockSchemaInfo;
-        if (selectedTier == preview.cosmiccore$getPreviewTier() || cosmiccore$isControllerActive()) return;
+        if (selectedTier == preview.cosmiccore$getPreviewTier() || cosmiccore$isControllerLocked()) return;
         preview.cosmiccore$setPreviewTier(selectedTier);
         cosmiccore$selectionSuppressed = true;
         selectedBlockHandler.notifyUpdate();
@@ -141,11 +163,13 @@ public abstract class TieredMultiblockPreviewWidgetMixin {
     }
 
     @Unique
-    private boolean cosmiccore$isControllerActive() {
-        return controllerPos != null && Minecraft.getInstance().level != null &&
-                MetaMachine.getMachine(Minecraft.getInstance().level,
-                        controllerPos) instanceof IRecipeLogicMachine recipeMachine &&
-                recipeMachine.getRecipeLogic().isActive();
+    private boolean cosmiccore$isControllerLocked() {
+        if (controllerPos == null || Minecraft.getInstance().level == null) return false;
+        MetaMachine machine = MetaMachine.getMachine(Minecraft.getInstance().level, controllerPos);
+        if (machine instanceof IConfiguredMultiblockMachine configured) {
+            return configured.isConfigurationSelectionLocked();
+        }
+        return machine instanceof IRecipeLogicMachine recipeMachine && recipeMachine.getRecipeLogic().isActive();
     }
 
     @Redirect(

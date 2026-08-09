@@ -1,8 +1,10 @@
 package com.ghostipedia.cosmiccore.mixin.gttweak;
 
+import com.ghostipedia.cosmiccore.api.machine.multiblock.IConfiguredMultiblockMachine;
 import com.ghostipedia.cosmiccore.api.machine.multiblock.ITieredMultiblockPreview;
 import com.ghostipedia.cosmiccore.common.machine.multiblock.tier.TieredMultiblockPatterns;
 
+import com.gregtechceu.gtceu.api.machine.MetaMachine;
 import com.gregtechceu.gtceu.api.machine.MultiblockMachineDefinition;
 import com.gregtechceu.gtceu.api.mui.MultiblockSchemaInfo;
 import com.gregtechceu.gtceu.api.multiblock.pattern.IBlockPattern;
@@ -20,7 +22,9 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Redirect;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import java.util.function.Supplier;
 
@@ -70,5 +74,17 @@ public abstract class TieredMultiblockSchemaInfoMixin implements ITieredMultiblo
             return TieredMultiblockPatterns.pattern(definition, cosmiccore$previewTier);
         }
         return original.get();
+    }
+
+    @Inject(method = "refreshSchema", at = @At("RETURN"))
+    private void cosmiccore$applyPreviewConfiguration(MultiblockMachineDefinition definition,
+                                                      Direction frontFacing, Direction upFacing, boolean isFlipped,
+                                                      @Nullable Runnable onSchemaRefresh, CallbackInfo ci) {
+        var schema = ((MultiblockSchemaInfo) (Object) this).getMapSchema();
+        if (schema == null) return;
+        MetaMachine machine = MetaMachine.getMachine(schema.getLevel(), schema.getControllerPos());
+        if (machine instanceof IConfiguredMultiblockMachine configured) {
+            configured.setPreviewStructureTier(cosmiccore$previewTier);
+        }
     }
 }

@@ -8,6 +8,7 @@ import com.gregtechceu.gtceu.api.capability.recipe.ItemRecipeCapability;
 import com.gregtechceu.gtceu.api.capability.recipe.RecipeCapability;
 import com.gregtechceu.gtceu.api.recipe.GTRecipe;
 import com.gregtechceu.gtceu.api.recipe.GTRecipeType;
+import com.gregtechceu.gtceu.api.recipe.RecipeHelper;
 import com.gregtechceu.gtceu.api.recipe.gui.CapabilityContentBuilder;
 import com.gregtechceu.gtceu.api.recipe.gui.GTRecipeTypeUILayout;
 import com.gregtechceu.gtceu.api.recipe.gui.GTRecipeTypeUILayout.CapabilityUIInfo;
@@ -20,23 +21,26 @@ import java.lang.invoke.MethodHandles;
 import java.lang.invoke.VarHandle;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
-//This is such a hack, whatever
+
 public final class GTEmiRecipeBounds {
 
     private static final int SLOT_SIZE = 18;
-    private static final int MIN_WIDTH = 160;
-    private static final int BASE_TEXT_HEIGHT = 64;
+    private static final int MIN_WIDTH = 150;
     private static final int ROOT_OVERHEAD = 14;
+    private static final int TEXT_LINE_HEIGHT = 9;
+    private static final int TEXT_COMPONENT_PADDING = 1;
+    private static final int COMPUTATION_LINE_PADDING = 2;
+    private static final int OVERCLOCK_BUTTON_HEIGHT = 12;
     private static final String DEFAULT_PROGRESS_SUPPLIER_PREFIX = GTRecipeTypeUILayout.Builder.class.getName() +
             "$$Lambda";
     private static final VarHandle RECIPE_HANDLE = findRecipeHandle();
     private static final VarHandle GRID_BUILDERS_HANDLE = findGridBuildersHandle();
-    private static final Map<GTRecipeType, LayoutMetrics> LAYOUT_METRICS = new ConcurrentHashMap<>();
+    private static final Map<GTRecipeType, Boolean> DEFAULT_LAYOUTS = new ConcurrentHashMap<>();
 
     private GTEmiRecipeBounds() {}
 
     public static void clearCache() {
-        LAYOUT_METRICS.clear();
+        DEFAULT_LAYOUTS.clear();
     }
 
     public static Bounds tryEstimate(GTEmiRecipe emiRecipe) {
@@ -56,11 +60,10 @@ public final class GTEmiRecipeBounds {
         GTRecipeTypeUILayout layout = recipeType.getUiLayout();
         if (layout == null || !recipe.conditions.isEmpty() || !layout.getRecipeUIModifiers().isEmpty() ||
                 layout.getCustomUIBuilder() != null || !hasDefaultProgressSupplier(layout) ||
-                !hasOnlyDefaultCapabilities(recipeType))
+                !DEFAULT_LAYOUTS.computeIfAbsent(recipeType, GTEmiRecipeBounds::hasOnlyDefaultCapabilities))
             return null;
 
-        LayoutMetrics metrics = LAYOUT_METRICS.computeIfAbsent(
-                recipeType, ignored -> measureLayout(recipeType, layout));
+        LayoutMetrics metrics = measureLayout(recipe, layout);
         return bounds(metrics.width(), metrics.height());
     }
 
@@ -105,20 +108,16 @@ public final class GTEmiRecipeBounds {
         return !((Map<?, ?>) GRID_BUILDERS_HANDLE.get(info)).isEmpty();
     }
 
-    private static LayoutMetrics measureLayout(GTRecipeType recipeType, GTRecipeTypeUILayout layout) {
-        GridMetrics inputs = measureColumn(recipeType, IO.IN);
-        GridMetrics outputs = measureColumn(recipeType, IO.OUT);
+    private static LayoutMetrics measureLayout(GTRecipe recipe, GTRecipeTypeUILayout layout) {
+        int inputHeight = measureColumnHeight(recipe.getType(), IO.IN);
+        int outputHeight = measureColumnHeight(recipe.getType(), IO.OUT);
         int progressSize = Math.max(SLOT_SIZE, layout.getProgressBar().progressSize());
-        int childPadding = progressSize / 2 + 2;
-        int contentWidth = inputs.width() + outputs.width() + progressSize + childPadding * 2;
-        int width = Math.max(MIN_WIDTH, contentWidth + 10);
-        int contentHeight = Math.max(progressSize, Math.max(inputs.height(), outputs.height()));
-        int height = ROOT_OVERHEAD + contentHeight + BASE_TEXT_HEIGHT;
-        return new LayoutMetrics(width, height);
+        int contentHeight = Math.max(progressSize, Math.max(inputHeight, outputHeight));
+        int height = Math.max(60, ROOT_OVERHEAD + contentHeight + measureTextHeight(recipe));
+        return new LayoutMetrics(MIN_WIDTH, height);
     }
 
-    private static GridMetrics measureColumn(GTRecipeType recipeType, IO io) {
-        int width = 0;
+    private static int measureColumnHeight(GTRecipeType recipeType, IO io) {
         int height = 0;
         for (RecipeCapability<?> capability : new RecipeCapability<?>[] {
                 ItemRecipeCapability.CAP, FluidRecipeCapability.CAP
@@ -127,10 +126,55 @@ public final class GTEmiRecipeBounds {
             if (capacity == 0) continue;
             int columns = Math.min(3, capacity);
             int rows = Math.ceilDiv(capacity, columns);
-            width = Math.max(width, columns * SLOT_SIZE);
             height += rows * SLOT_SIZE;
         }
-        return new GridMetrics(width, height);
+        return height;
+    }
+
+    private static int measureTextHeight(GTRecipe recipe) {
+        int height = 0;
+        int components = 0;
+        if (!recipe.data.getBoolean("hide_duration")) {
+            height += TEXT_LINE_HEIGHT;
+            components++;
+        }
+
+        int computationLines = recipe.getTickInputContents(CWURecipeCapability.CAP).isEmpty() ? 0 : 1;
+        if (computationLines > 0 && recipe.data.getBoolean("duration_is_total_cwu")) {
+            computationLines++;
+        }
+        if (computationLines > 0) {
+            for (IO io : IO.values()) {
+                if (contentCount(recipe, CWURecipeCapability.CAP, io) == 0) continue;
+                height += computationLines * TEXT_LINE_HEIGHT +
+                        (computationLines - 1) * COMPUTATION_LINE_PADDING;
+                components++;
+            }
+        }
+
+        if (RecipeHelper.getRealEUt(recipe).voltage() > 0) {
+            for (IO io : IO.values()) {
+                if (contentCount(recipe, EURecipeCapability.CAP, io) == 0) continue;
+                height += TEXT_LINE_HEIGHT * 2 + TEXT_COMPONENT_PADDING + 1;
+                components++;
+            }
+        }
+
+        if (!recipe.getInputEUt().isEmpty()) {
+            height += OVERCLOCK_BUTTON_HEIGHT;
+            components++;
+        }
+        return height + Math.max(0, components - 1) * TEXT_COMPONENT_PADDING;
+    }
+
+    private static int contentCount(GTRecipe recipe, RecipeCapability<?> capability, IO io) {
+        if (io == IO.IN) {
+            return recipe.getInputContents(capability).size() + recipe.getTickInputContents(capability).size();
+        }
+        if (io == IO.OUT) {
+            return recipe.getOutputContents(capability).size() + recipe.getTickOutputContents(capability).size();
+        }
+        return 0;
     }
 
     private static GTRecipe getRecipe(GTEmiRecipe emiRecipe) {
@@ -158,8 +202,6 @@ public final class GTEmiRecipeBounds {
     private static Bounds bounds(int width, int height) {
         return new Bounds(0, 0, width, height);
     }
-
-    private record GridMetrics(int width, int height) {}
 
     private record LayoutMetrics(int width, int height) {}
 }

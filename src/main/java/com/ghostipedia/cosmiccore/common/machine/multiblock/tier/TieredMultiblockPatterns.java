@@ -14,6 +14,7 @@ import java.util.function.Supplier;
 public final class TieredMultiblockPatterns {
 
     private static final Map<MultiblockMachineDefinition, List<Supplier<IBlockPattern>>> PATTERNS = new IdentityHashMap<>();
+    private static final Map<MultiblockMachineDefinition, List<PatternLabel>> LABELS = new IdentityHashMap<>();
 
     private TieredMultiblockPatterns() {}
 
@@ -29,6 +30,16 @@ public final class TieredMultiblockPatterns {
             tiers.add(Suppliers.memoize(extraTier::get));
         }
         PATTERNS.put(definition, List.copyOf(tiers));
+    }
+
+    @SafeVarargs
+    public static void registerConfigurations(MultiblockMachineDefinition definition, List<PatternLabel> labels,
+                                              Supplier<IBlockPattern>... extraConfigurations) {
+        register(definition, extraConfigurations);
+        if (labels.size() != tierCount(definition)) {
+            throw new IllegalArgumentException("Configuration labels do not match patterns: " + definition.getId());
+        }
+        LABELS.put(definition, List.copyOf(labels));
     }
 
     public static boolean isTiered(MultiblockMachineDefinition definition) {
@@ -51,4 +62,18 @@ public final class TieredMultiblockPatterns {
         }
         return tiers.get(clampTier(definition, tier)).get();
     }
+
+    public static boolean hasConfigurationLabels(MultiblockMachineDefinition definition) {
+        return LABELS.containsKey(definition);
+    }
+
+    public static PatternLabel label(MultiblockMachineDefinition definition, int tier) {
+        List<PatternLabel> labels = LABELS.get(definition);
+        if (labels == null) {
+            throw new IllegalArgumentException("Multiblock has no configuration labels: " + definition.getId());
+        }
+        return labels.get(clampTier(definition, tier));
+    }
+
+    public record PatternLabel(String nameKey, String shortKey) {}
 }

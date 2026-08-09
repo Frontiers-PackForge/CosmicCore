@@ -1,6 +1,7 @@
 package com.ghostipedia.cosmiccore.common.network.packet;
 
 import com.ghostipedia.cosmiccore.CosmicCore;
+import com.ghostipedia.cosmiccore.api.machine.multiblock.IConfiguredMultiblockMachine;
 import com.ghostipedia.cosmiccore.api.machine.multiblock.ITieredMultiblockMachine;
 import com.ghostipedia.cosmiccore.common.machine.multiblock.tier.TieredMultiblockPatterns;
 import com.ghostipedia.cosmiccore.common.machine.multiblock.tier.TieredMultiblockTerminal;
@@ -84,7 +85,9 @@ public record BuildTieredMultiblockPacket(BlockPos machinePos, int tier,
             }
             if (!(MetaMachine.getMachine(player.level(),
                     machinePos) instanceof MultiblockControllerMachine controller) ||
-                    !(controller instanceof ITieredMultiblockMachine tiered) || controller.isFormed() ||
+                    !(controller instanceof ITieredMultiblockMachine tiered) ||
+                    controller.isFormed() && (!(controller instanceof IConfiguredMultiblockMachine configured) ||
+                            configured.isConfigurationSelectionLocked()) ||
                     controller instanceof IRecipeLogicMachine recipeMachine &&
                             recipeMachine.getRecipeLogic().isActive() ||
                     !TieredMultiblockPatterns.isTiered(controller.getDefinition()) ||

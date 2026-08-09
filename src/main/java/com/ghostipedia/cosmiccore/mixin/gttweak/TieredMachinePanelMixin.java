@@ -1,5 +1,6 @@
 package com.ghostipedia.cosmiccore.mixin.gttweak;
 
+import com.ghostipedia.cosmiccore.api.machine.multiblock.IConfiguredMultiblockMachine;
 import com.ghostipedia.cosmiccore.api.machine.multiblock.ITieredMultiblockMachine;
 import com.ghostipedia.cosmiccore.common.machine.multiblock.tier.TieredMultiblockPatterns;
 import com.ghostipedia.cosmiccore.common.machine.multiblock.tier.TieredMultiblockUi;
@@ -8,10 +9,12 @@ import com.gregtechceu.gtceu.api.machine.MetaMachine;
 import com.gregtechceu.gtceu.api.machine.MultiblockMachineDefinition;
 import com.gregtechceu.gtceu.api.machine.mui.MachineUIPanel;
 import com.gregtechceu.gtceu.api.machine.mui.MachineUIPanelBuilder;
+import com.gregtechceu.gtceu.api.recipe.GTRecipeType;
 
 import brachy.modularui.screen.UISettings;
 import brachy.modularui.value.sync.IntSyncValue;
 import brachy.modularui.value.sync.PanelSyncManager;
+import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -26,6 +29,18 @@ public class TieredMachinePanelMixin {
     @Final
     private MetaMachine machine;
 
+    @ModifyExpressionValue(
+                           method = "build",
+                           at = @At(value = "INVOKE",
+                                    target = "Lcom/gregtechceu/gtceu/api/machine/MachineDefinition;getRecipeTypes()[Lcom/gregtechceu/gtceu/api/recipe/GTRecipeType;"),
+                           require = 1)
+    private GTRecipeType[] cosmiccore$hideConfiguredRecipeTypeButton(GTRecipeType[] original) {
+        if (machine instanceof IConfiguredMultiblockMachine && original.length > 0) {
+            return new GTRecipeType[] { original[0] };
+        }
+        return original;
+    }
+
     @Inject(method = "build", at = @At("RETURN"))
     private void cosmiccore$addStructureTierButton(PanelSyncManager syncManager, UISettings settings,
                                                    CallbackInfoReturnable<MachineUIPanel> cir) {
@@ -35,8 +50,12 @@ public class TieredMachinePanelMixin {
             return;
         }
         IntSyncValue value = new IntSyncValue(tiered::getStructureTier, tiered::setStructureTier).allowC2S();
-        cir.getReturnValue().getRightConfiguratorPanel().child(TieredMultiblockUi.createTierButton(
+        var button = TieredMultiblockUi.createTierButton(
                 definition, value,
-                tiered::getStructureTierStreak, 18));
+                tiered::getStructureTierStreak, 18);
+        if (machine instanceof IConfiguredMultiblockMachine configured) {
+            button.setEnabledIf(widget -> !configured.isConfigurationSelectionLocked());
+        }
+        cir.getReturnValue().getRightConfiguratorPanel().child(button);
     }
 }
