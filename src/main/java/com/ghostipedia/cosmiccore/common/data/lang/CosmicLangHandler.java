@@ -3,7 +3,10 @@ package com.ghostipedia.cosmiccore.common.data.lang;
 import com.ghostipedia.cosmiccore.common.data.worldgen.field.OreFieldPlacement;
 
 import com.gregtechceu.gtceu.api.data.chemical.material.Material;
+import com.gregtechceu.gtceu.api.recipe.GTRecipeType;
 import com.gregtechceu.gtceu.data.lang.LangHandler;
+
+import net.minecraft.core.registries.BuiltInRegistries;
 
 import com.tterrag.registrate.providers.RegistrateLangProvider;
 
@@ -11,7 +14,10 @@ public class CosmicLangHandler extends LangHandler {
 
     private static final String[] COSMIC_RECIPE_TYPE_IDS = {
             "sludge_digestor", "powderizer", "industrial_ore_sorter", "industrial_flotation_plant",
-            "oneiric_sieve", "dissolution_vat", "fuckassbeeball", "laminator", "chemical_dehydrator",
+            "oneiric_sieve", "dissolution_vat", "phase_separator", "simple_desalter", "desalter",
+            "steam_cracking_furnace", "fractional_condenser", "fluid_catalytic_cracking", "hydrotreating",
+            "hydrocracking", "catalytic_reforming", "delayed_coking", "fuckassbeeball", "laminator",
+            "chemical_dehydrator",
             "crystallizer", "eclipsed_dawnforge", "vorax", "mana_fluidizer", "pcb_fab", "titan_fusion", "lunar_hammer",
             "cryo_chamber", "soul_tester", "void_miner", "heavy_assembler", "plasmite_forge",
             "prisma_foundry", "atmo_siphon", "mana_digitizer", "component_assembly_line", "drygmy_grove",
@@ -88,6 +94,62 @@ public class CosmicLangHandler extends LangHandler {
         replace(provider, "material.cosmiccore.bloom_rich_algae_solution", "Bloom Rich Algae Solution");
         replace(provider, "material.cosmiccore.phyto_grease", "Phyto-Grease");
         replace(provider, "material.cosmiccore.energetic_aluminium", "Energized Aluminium");
+        replace(provider, "material.gtceu.multi_phase_oil", "Multi-Phase Oil");
+        replace(provider, "block.gtceu.multi_phase_oil", "Multi-Phase Oil");
+        replace(provider, "material.gtceu.sour_refinery_gas", "Sour Refinery Gas");
+        replace(provider, "material.gtceu.sour_naphtha", "Sour Naphtha");
+        replace(provider, "material.gtceu.sour_middle_fraction_distillates", "Sour Middle Fraction Distillates");
+        replace(provider, "material.gtceu.sour_gas_oils", "Sour Gas Oils");
+        replace(provider, "material.gtceu.light_naphtha", "Light Naphtha");
+        replace(provider, "material.gtceu.middle_fraction_distillates", "Middle Fraction Distillates");
+        replace(provider, "material.gtceu.gas_oils", "Gas Oils");
+        replace(provider, "material.gtceu.raw_coking_gas", "Raw Coking Gas");
+        replace(provider, "material.gtceu.mixed_xylenes", "Mixed Xylenes");
+        replace(provider, "material.cosmiccore.volatile_multi_phase_oil", "Volatile Multi-Phase Oil");
+        replace(provider, "material.cosmiccore.salt_laden_light_oil", "Salt-Laden Light Oil");
+        replace(provider, "material.cosmiccore.salt_laden_oil", "Salt-Laden Oil");
+        replace(provider, "material.cosmiccore.salt_laden_heavy_oil", "Salt-Laden Heavy Oil");
+        replace(provider, "material.cosmiccore.wet_natural_gases", "Wet Natural Gases");
+        replace(provider, "material.cosmiccore.oil_rich_wastewater", "Oil-Rich Wastewater");
+        replace(provider, "material.cosmiccore.oily_sludge", "Oily Sludge");
+        replace(provider, "material.cosmiccore.sour_brine", "Sour Brine");
+        replace(provider, "material.cosmiccore.sour_process_water", "Sour Process Water");
+        replace(provider, "material.cosmiccore.atmospheric_residue", "Atmospheric Residue");
+        replace(provider, "material.cosmiccore.lean_amine_solution", "Lean Amine Solution");
+        replace(provider, "material.cosmiccore.rich_amine_solution", "Rich Amine Solution");
+        replace(provider, "material.cosmiccore.acidic_gases", "Acidic Gases");
+        replace(provider, "material.cosmiccore.tail_gas", "Tail Gas");
+        replace(provider, "material.cosmiccore.hot_light_effluents", "Hot Light Effluents");
+        replace(provider, "material.cosmiccore.hot_naphtha_effluents", "Hot Naphtha Effluents");
+        replace(provider, "material.cosmiccore.hot_gas_oil_effluents", "Hot Gas-Oil Effluents");
+        replace(provider, "material.cosmiccore.heavy_pyrolysis_oils", "Heavy Pyrolysis Oils");
+        replace(provider, "material.cosmiccore.olefin_gases", "Olefin Gases");
+        replace(provider, "material.cosmiccore.cracked_naphtha", "Cracked Naphtha");
+        replace(provider, "material.cosmiccore.aromatic_oil", "Aromatic Oil");
+        replace(provider, "material.cosmiccore.heavy_naphtha", "Heavy Naphtha");
+        replace(provider, "material.cosmiccore.cracked_gasoline", "Cracked Gasoline");
+        replace(provider, "material.cosmiccore.light_cycle_oil", "Light Cycle Oil");
+        replace(provider, "material.cosmiccore.slurry_oils", "Slurry Oils");
+        replace(provider, "material.cosmiccore.high_octane_reformate", "High-Octane Reformate");
+        replace(provider, "material.cosmiccore.vacuum_gas_oils", "Vacuum Gas Oils");
+        replace(provider, "block.cosmiccore.rust_resistant_structural_casing", "Rust-Resistant Structural Casing");
+        replace(provider, "block.cosmiccore.refractory_structural_casing", "Refractory Structural Casing");
+        replace(provider, "block.cosmiccore.refractory_containment_casing", "Refractory Containment Casing");
+        replace(provider, "block.cosmiccore.vibrant_pipe_framework", "Vibrant Pipe Framework");
+        replace(provider, "block.cosmiccore.heat_exchanger_casing", "Heat Exchanger Casing");
+        replace(provider, "block.cosmiccore.condensation_mesh", "Condensation Mesh");
+        replace(provider, "material.gtceu.light_oil", "Light Oil");
+        replace(provider, "material.gtceu.heavy_oil", "Heavy Oil");
+        replace(provider, "block.gtceu.light_oil", "Light Oil");
+        replace(provider, "block.gtceu.heavy_oil", "Heavy Oil");
+        provider.add("recipe_category.gtceu.arc_furnace_recycling", "Arc Scrapping");
+        provider.add("recipe_category.gtceu.macerator_recycling", "Part Grinding");
+        provider.add("recipe_category.gtceu.extractor_recycling", "Scrap Remelting");
+        provider.add("recipe_category.gtceu.ore_crushing", "Ore Grinding");
+        provider.add("recipe_category.gtceu.ore_forging", "Ore Crushing");
+        provider.add("recipe_category.gtceu.ore_bathing", "Ore Treating");
+        provider.add("recipe_category.gtceu.chem_dyes", "Chemical Dyeing");
+        provider.add("recipe_category.gtceu.ingot_molding", "Metal Molding");
 
         // machine tooltips/names/etc
         provider.add("gtceu.naquahine_reactor", "§bNaquahine Reactor");
@@ -141,6 +203,46 @@ public class CosmicLangHandler extends LangHandler {
                 "§fReduces total time of any recipe ran by 75% afterwards.",
                 "§6Accepts Laser hatches.",
                 "§6Accepts Cosmic Parallel Hatches.");
+
+        multiLang(provider, "cosmiccore.multiblock.desalter.tooltip",
+                "§7Power and Maintenance: §fRefractory Structural Casings",
+                "§7Fluid Inputs and Outputs: §fLightweight Stainless Steel Casings");
+        multiLang(provider, "cosmiccore.multiblock.steam_cracking_furnace.tooltip",
+                "§7Power and Maintenance: §fRefractory Structural Casings",
+                "§7Item and Fluid Inputs: §fSteel-Plated Bronze Casings",
+                "§7Fluid Output: §fRefractory Containment Casings");
+        multiLang(provider, "cosmiccore.multiblock.fractional_condenser.tooltip",
+                "§7Power and Maintenance: §fRefractory Structural Casings",
+                "§7Fluid Inputs: §fLarge Tower of Lightweight Stainless Steel Casings",
+                "§7Fluid and Item Outputs: §fSmall Toweer of Lightweight Stainless Steel Casings");
+        multiLang(provider, "cosmiccore.multiblock.phase_separator.tooltip",
+                "§7Fluid Input: §fBottom most layer of Lightweight Stainless Casing",
+                "§7Power and Maintenance: §fRefractory Structural Casings",
+                "§7Fluid Outputs: §fONLY Light Stainless Casing that are Surrounding by Refractory Casings");
+        provider.add("gtceu.multiblock.distillation_tower.description",
+                "The Distillation Tower uses multiple layers to refine output products. Each middle section and the top cap accepts at most one Fluid Output Hatch. Fluid input, power, maintenance, and the Item Output Bus belong on the base, while the top cap requires one Muffler Hatch.");
+        multiLang(provider, "cosmiccore.multiblock.conversion_complex.tooltip",
+                "§bA modular refinery with various extensions.",
+                "§bChoose a blueprint while unformed; the completed structure detects it automatically");
+        provider.add("cosmiccore.multiblock.conversion_complex.tooltip.shift_header",
+                "§6Mode requirements: §fStandard I/O Hatches go on the structures core.");
+        provider.add("cosmiccore.multiblock.conversion_complex.tooltip.core",
+                "§8Core: §7Construction chassis only. Does nothing on its own.");
+        provider.add("cosmiccore.multiblock.conversion_complex.tooltip.fcc",
+                "§5FCC: §fConsume Catalysts to produce more complicated materials.");
+        provider.add("cosmiccore.multiblock.conversion_complex.tooltip.hydrotreating",
+                "§9Hydrotreating: §7Consumes Hydrogen and Catalysts to clean impurities from refinery products.");
+        provider.add("cosmiccore.multiblock.conversion_complex.tooltip.hydrocracking",
+                "§3Hydrocracking: §fUses highly pressurized hydrogen and catalysts to split apart heavily refinery products.");
+        provider.add("cosmiccore.multiblock.conversion_complex.tooltip.reforming",
+                "§6Catalytic Reforming: §7eRearranges heavy products into reformates and aromatic compounds and excess hydrogen");
+        provider.add("cosmiccore.multiblock.conversion_complex.tooltip.coking",
+                "§cDelayed Coking: §fCracks nearly solid refinery products into pure coke and other heavy oils.");
+        provider.add("cosmiccore.fluid_catalytic_cracking", "Fluid Catalytic Cracking");
+        provider.add("cosmiccore.hydrotreating", "Hydrotreating");
+        provider.add("cosmiccore.hydrocracking", "Hydrocracking");
+        provider.add("cosmiccore.catalytic_reforming", "Catalytic Reforming");
+        provider.add("cosmiccore.delayed_coking", "Delayed Coking");
 
         multiLang(provider, "cosmiccore.multiblock.star_ladder.tooltip",
                 "§cThe peaks of creation reach out into the stars",
@@ -459,6 +561,24 @@ public class CosmicLangHandler extends LangHandler {
         provider.add("cosmiccore.recipe.fieldSlam", "§fField Consumed: %sT");
         provider.add("cosmiccore.recipe.condition.titan.tooltip", "Requires Titan Reactor Tier: %s");
         provider.add("cosmiccore.multiblock.structure_tier", "Structure Tier: T%s");
+        provider.add("cosmiccore.multiblock.construction_blueprint", "Construction Blueprint: %s");
+        provider.add("cosmiccore.multiblock.detected_configuration", "Detected Configuration: %s");
+        provider.add("cosmiccore.multiblock.configuration.core", "Base");
+        provider.add("cosmiccore.multiblock.configuration.core.short", "B");
+        provider.add("cosmiccore.multiblock.configuration.fcc", "Fluid Catalytic Cracker");
+        provider.add("cosmiccore.multiblock.configuration.fcc.short", "FC");
+        provider.add("cosmiccore.multiblock.configuration.hydrotreater", "Hydrotreater");
+        provider.add("cosmiccore.multiblock.configuration.hydrotreater.short", "HT");
+        provider.add("cosmiccore.multiblock.configuration.hydrocracker", "Hydrocracker");
+        provider.add("cosmiccore.multiblock.configuration.hydrocracker.short", "HC");
+        provider.add("cosmiccore.multiblock.configuration.reformer", "Catalytic Reformer");
+        provider.add("cosmiccore.multiblock.configuration.reformer.short", "CR");
+        provider.add("cosmiccore.multiblock.configuration.coker", "Delayed Coker");
+        provider.add("cosmiccore.multiblock.configuration.coker.short", "DC");
+        provider.add("cosmiccore.multiblock.configuration.physically_locked",
+                "Configuration is determined by the installed processing module");
+        provider.add("cosmiccore.multiblock.configuration.core_only",
+                "Attach a processing module to run recipes");
         provider.add("cosmiccore.multiblock.ebf.streak", "Recipe Duration Reduction: %s%%");
         provider.add("cosmiccore.multiblock.ebf.streak.progress", "Consecutive Matching Recipes: %s / %s");
         provider.add("cosmiccore.multiblock.ebf.streak.rule",
@@ -1697,6 +1817,12 @@ public class CosmicLangHandler extends LangHandler {
         provider.add("cosmiccore.bloomwyrm.recipe.charge_input", "Bloomwyrm Charge use: %s");
         provider.add("cosmiccore.bloomwyrm.recipe.charge_output", "Bloomwyrm Charge yield: +%s");
         provider.add("cosmiccore.bloomwyrm.recipe.max_parallel", "Max parallel: %s");
+        for (var recipeType : BuiltInRegistries.RECIPE_TYPE) {
+            if (recipeType instanceof GTRecipeType gtRecipeType &&
+                    gtRecipeType.registryName.getNamespace().equals("gtceu")) {
+                provider.add(gtRecipeType.getTranslationKey(), toTitle(gtRecipeType.registryName.getPath()));
+            }
+        }
         for (String id : COSMIC_RECIPE_TYPE_IDS) {
             String name = switch (id) {
                 case "fuckassbeeball" -> "Internal Recipe Type";
