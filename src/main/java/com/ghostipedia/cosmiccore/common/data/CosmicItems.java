@@ -227,6 +227,30 @@ public class CosmicItems {
             "spent_pyroltic_contact_catalyst", "Spent Pyroltic Contact Catalyst",
             CosmicCore.id("item/spent_pyroltic_contact_catalyst"));
 
+    public static final ItemEntry<ComponentItem> PURPLE_ZEOLITE_CATALYST = registerChainItem(
+            "purple_zeolite_catalyst", "Purple Zeolite Catalyst",
+            CosmicCore.id("item/purple_zeolite_catalyst"));
+
+    public static final ItemEntry<ComponentItem> COKED_PURPLE_ZEOLITE_CATALYST = registerChainItem(
+            "coked_purple_zeolite_catalyst", "Coked Purple Zeolite Catalyst",
+            CosmicCore.id("item/coked_purple_zeolite_catalyst"));
+
+    public static final ItemEntry<ComponentItem> BLUE_HYDRO_CATALYST = registerChainItem(
+            "blue_hydro_catalyst", "Blue Hydro Catalyst",
+            CosmicCore.id("item/blue_hydro_catalyst"));
+
+    public static final ItemEntry<ComponentItem> YELLOW_HYDRO_CATALYST = registerChainItem(
+            "yellow_hydro_catalyst", "Yellow Hydro Catalyst",
+            CosmicCore.id("item/yellow_hydro_catalyst"));
+
+    public static final ItemEntry<ComponentItem> ORANGE_RECOVERY_CATALYST = registerChainItem(
+            "orange_recovery_catalyst", "Orange Recovery Catalyst",
+            CosmicCore.id("item/orange_recovery_catalyst"));
+
+    public static final ItemEntry<ComponentItem> DEPLETED_ORANGE_RECOVERY_CATALYST = registerChainItem(
+            "depleted_orange_recovery_catalyst", "Depleted Orange Recovery Catalyst",
+            CosmicCore.id("item/depleted_orange_recovery_catalyst"));
+
     public static final ItemEntry<StealthCoatingItem> STEALTH_COATING_1 = REGISTRATE
             .item("stealth_coating_1", p -> new StealthCoatingItem(p.stacksTo(16), 1))
             .lang("Stealth Coating I")
