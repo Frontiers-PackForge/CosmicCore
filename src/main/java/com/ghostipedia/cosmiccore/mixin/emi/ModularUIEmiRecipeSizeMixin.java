@@ -1,11 +1,14 @@
 package com.ghostipedia.cosmiccore.mixin.emi;
 
+import com.ghostipedia.cosmiccore.integration.emi.GTEmiRecipeBounds;
+
 import com.gregtechceu.gtceu.integration.recipeviewer.emi.GTOreProcessingEmiCategory.GTEmiOreProcessingWrapper;
 import com.gregtechceu.gtceu.integration.recipeviewer.emi.MultiblockInfoEmiCategory.MultiblockInfoEmiWrapper;
 import com.gregtechceu.gtceu.integration.recipeviewer.emi.ProgrammedCircuitEmiCategory.GTProgrammedCircuitWrapper;
 import com.gregtechceu.gtceu.integration.recipeviewer.emi.orevein.GTBedrockFluidEmiCategory.GTBedrockFluid;
 import com.gregtechceu.gtceu.integration.recipeviewer.emi.orevein.GTBedrockOreEmiCategory.GTBedrockOre;
 import com.gregtechceu.gtceu.integration.recipeviewer.emi.orevein.GTOreVeinEmiCategory.GTEmiOreVein;
+import com.gregtechceu.gtceu.integration.recipeviewer.emi.recipe.GTEmiRecipe;
 
 import brachy.modularui.integration.emi.recipe.ModularUIEmiRecipe;
 import dev.emi.emi.api.widget.Bounds;
@@ -54,6 +57,13 @@ public abstract class ModularUIEmiRecipeSizeMixin {
         } else if (self instanceof GTProgrammedCircuitWrapper) {
             w = 154;
             h = 84;
+        } else if (self instanceof GTEmiRecipe recipe) {
+            Bounds estimated = GTEmiRecipeBounds.tryEstimate(recipe);
+            if (estimated == null) {
+                return;
+            }
+            w = estimated.width();
+            h = estimated.height();
         } else {
             return;
         }
