@@ -34,6 +34,7 @@ import com.gregtechceu.gtceu.api.machine.multiblock.PartAbility;
 import com.gregtechceu.gtceu.api.machine.property.GTMachineModelProperties;
 import com.gregtechceu.gtceu.api.machine.steam.SimpleSteamMachine;
 import com.gregtechceu.gtceu.api.machine.trait.recipe.RecipeLogic;
+import com.gregtechceu.gtceu.api.multiblock.PatternPredicate;
 import com.gregtechceu.gtceu.api.multiblock.Predicates;
 import com.gregtechceu.gtceu.api.multiblock.pattern.MultiblockPatternBuilder;
 import com.gregtechceu.gtceu.api.multiblock.util.RelativeDirection;
@@ -44,6 +45,7 @@ import com.gregtechceu.gtceu.client.util.TooltipHelper;
 import com.gregtechceu.gtceu.common.data.*;
 import com.gregtechceu.gtceu.common.data.GTMachines;
 import com.gregtechceu.gtceu.common.data.machines.GCYMMachines;
+import com.gregtechceu.gtceu.common.data.machines.GTAEMachines;
 import com.gregtechceu.gtceu.common.data.machines.GTMultiMachines;
 import com.gregtechceu.gtceu.common.data.models.GTModels;
 import com.gregtechceu.gtceu.common.machine.multiblock.electric.ActiveTransformerMachine;
@@ -327,6 +329,20 @@ public class CosmicMachines {
                     .workableTieredHullModel(GTCEu.id("block/machines/autoclave"))
                     .register(),
             tiersBetween(MV, UIV));
+
+    public static final MachineDefinition[] DESALTER = registerTieredMachines("desalter",
+            (holder, tier) -> new SimpleTieredMachine(holder, tier, defaultTankSizeFunction),
+            (tier, builder) -> builder
+                    .langValue("%s Desalter %s".formatted(VLVH[tier], VLVT[tier]))
+                    .recipeType(CosmicRecipeTypes.SIMPLE_DESALTER)
+                    .recipeModifier(OC_NON_PERFECT)
+                    .ui(GTSingleblockMachinePanels.GENERAL_MACHINE)
+                    .tooltips(workableTiered(tier, GTValues.V[tier], GTValues.V[tier] * 64,
+                            CosmicRecipeTypes.SIMPLE_DESALTER,
+                            defaultTankSizeFunction.applyAsInt(tier), true))
+                    .workableTieredHullModel(GTCEu.id("block/machines/chemical_bath"))
+                    .register(),
+            tiersBetween(LV, MV));
 
     public static final MachineDefinition[] VAC_BUBBLER = registerTieredMachines("vacuum_bubbler",
             (holder, tier) -> new SimpleTieredMachine(holder, tier, defaultTankSizeFunction),
@@ -1132,6 +1148,33 @@ public class CosmicMachines {
                         .where('A', Predicates.air())
                         .where('#', Predicates.any())
                         .build()));
+
+        GTMultiMachines.DISTILLATION_TOWER
+                .setAppearance(LIGHTWEIGHT_STAINLESS_STEEL_CASING::getDefaultState);
+        GTMultiMachines.DISTILLATION_TOWER.setPattern("main", GTMemoizer.memoize(() -> {
+            PatternPredicate exportPredicate = abilities(PartAbility.EXPORT_FLUIDS_1X);
+            if (GTCEu.Mods.isAE2Loaded()) {
+                exportPredicate = exportPredicate.or(blocks(GTAEMachines.FLUID_EXPORT_HATCH_ME.get()));
+            }
+            exportPredicate.setMaxLayerLimited(1);
+            PatternPredicate maintenance = autoAbilities(true, false, false).setMaxGlobalLimited(1);
+            return MultiblockPatternBuilder.start(UP, FRONT, LEFT)
+                    .slice(" AAA ", "AAAAA", "AAAAA", "AAAAA", " ABA ")
+                    .sliceRepeatable(1, 12, " CCC ", "C   C", "C   C", "C   C", " CCC ")
+                    .slice(" DDD ", "DDDDD", "DDEDD", "DDDDD", " DDD ")
+                    .where('A', blocks(LIGHTWEIGHT_STAINLESS_STEEL_CASING.get())
+                            .or(abilities(PartAbility.EXPORT_ITEMS).setMaxGlobalLimited(1))
+                            .or(abilities(PartAbility.INPUT_ENERGY).setMinGlobalLimited(1)
+                                    .setMaxGlobalLimited(2))
+                            .or(abilities(PartAbility.IMPORT_FLUIDS).setExactLimit(1))
+                            .or(maintenance))
+                    .where('B', controller(blocks(GTMultiMachines.DISTILLATION_TOWER.getBlock())))
+                    .where('C', blocks(LIGHTWEIGHT_STAINLESS_STEEL_CASING.get()).or(exportPredicate))
+                    .where('D', blocks(LIGHTWEIGHT_STAINLESS_STEEL_CASING.get()).or(exportPredicate))
+                    .where('E', abilities(PartAbility.MUFFLER).setExactLimit(1))
+                    .where(' ', air())
+                    .build();
+        }));
 
         GTMultiMachines.ASSEMBLY_LINE.setPattern("main",
                 GTMemoizer.memoize(() -> MultiblockPatternBuilder.start(BACK, UP, RIGHT)

@@ -1,0 +1,288 @@
+{
+    "parent": "minecraft:block/block",
+    "loader": "gtceu:machine",
+    "machine": "cosmiccore:conversion_complex",
+    "texture_overrides": {
+        "all": "cosmiccore:block/casings/solid/lightweight_stainless_steel_casing"
+    },
+    "variants": {
+        "configuration=0,recipe_logic_status=idle": {
+            "model": {
+                "parent": "gtceu:block/machine/template/cube_all/sided",
+                "textures": {
+                    "all": "cosmiccore:block/casings/solid/lightweight_stainless_steel_casing",
+                    "overlay_front": "gtceu:block/multiblock/multiblock_workable/overlay_front",
+                    "overlay_front_emissive": "gtceu:block/multiblock/multiblock_workable/overlay_front_emissive"
+                }
+            }
+        },
+        "configuration=0,recipe_logic_status=suspend": {
+            "model": {
+                "parent": "gtceu:block/machine/template/cube_all/sided",
+                "textures": {
+                    "all": "cosmiccore:block/casings/solid/lightweight_stainless_steel_casing",
+                    "overlay_front": "gtceu:block/multiblock/multiblock_workable/overlay_front_paused",
+                    "overlay_front_emissive": "gtceu:block/multiblock/multiblock_workable/overlay_front_paused_emissive"
+                }
+            }
+        },
+        "configuration=0,recipe_logic_status=waiting": {
+            "model": {
+                "parent": "gtceu:block/machine/template/cube_all/sided",
+                "textures": {
+                    "all": "cosmiccore:block/casings/solid/lightweight_stainless_steel_casing",
+                    "overlay_front": "gtceu:block/multiblock/multiblock_workable/overlay_front_active",
+                    "overlay_front_emissive": "gtceu:block/multiblock/multiblock_workable/overlay_front_active_emissive"
+                }
+            }
+        },
+        "configuration=0,recipe_logic_status=working": {
+            "model": {
+                "parent": "gtceu:block/machine/template/cube_all/sided",
+                "textures": {
+                    "all": "cosmiccore:block/casings/solid/lightweight_stainless_steel_casing",
+                    "overlay_front": "gtceu:block/multiblock/multiblock_workable/overlay_front_active",
+                    "overlay_front_emissive": "gtceu:block/multiblock/multiblock_workable/overlay_front_active_emissive"
+                }
+            }
+        },
+        "configuration=1,recipe_logic_status=idle": {
+            "model": {
+                "parent": "gtceu:block/machine/template/cube_all/sided",
+                "textures": {
+                    "all": "cosmiccore:block/casings/solid/lightweight_stainless_steel_casing",
+                    "overlay_back": "gtceu:block/machines/centrifuge/overlay_back",
+                    "overlay_front": "gtceu:block/machines/centrifuge/overlay_front",
+                    "overlay_side": "gtceu:block/machines/centrifuge/overlay_side",
+                    "overlay_top": "gtceu:block/machines/centrifuge/overlay_top"
+                }
+            }
+        },
+        "configuration=1,recipe_logic_status=suspend": {
+            "model": {
+                "parent": "gtceu:block/machine/template/cube_all/sided",
+                "textures": {
+                    "all": "cosmiccore:block/casings/solid/lightweight_stainless_steel_casing",
+                    "overlay_back": "gtceu:block/machines/centrifuge/overlay_back",
+                    "overlay_front": "gtceu:block/machines/centrifuge/overlay_front",
+                    "overlay_side": "gtceu:block/machines/centrifuge/overlay_side",
+                    "overlay_top": "gtceu:block/machines/centrifuge/overlay_top"
+                }
+            }
+        },
+        "configuration=1,recipe_logic_status=waiting": {
+            "model": {
+                "parent": "gtceu:block/machine/template/cube_all/sided",
+                "textures": {
+                    "all": "cosmiccore:block/casings/solid/lightweight_stainless_steel_casing",
+                    "overlay_back": "gtceu:block/machines/centrifuge/overlay_back_active",
+                    "overlay_front": "gtceu:block/machines/centrifuge/overlay_front_active",
+                    "overlay_side": "gtceu:block/machines/centrifuge/overlay_side_active",
+                    "overlay_top": "gtceu:block/machines/centrifuge/overlay_top_active"
+                }
+            }
+        },
+        "configuration=1,recipe_logic_status=working": {
+            "model": {
+                "parent": "gtceu:block/machine/template/cube_all/sided",
+                "textures": {
+                    "all": "cosmiccore:block/casings/solid/lightweight_stainless_steel_casing",
+                    "overlay_back": "gtceu:block/machines/centrifuge/overlay_back_active",
+                    "overlay_front": "gtceu:block/machines/centrifuge/overlay_front_active",
+                    "overlay_side": "gtceu:block/machines/centrifuge/overlay_side_active",
+                    "overlay_top": "gtceu:block/machines/centrifuge/overlay_top_active"
+                }
+            }
+        },
+        "configuration=2,recipe_logic_status=idle": {
+            "model": {
+                "parent": "gtceu:block/machine/template/cube_all/sided",
+                "textures": {
+                    "all": "cosmiccore:block/casings/solid/lightweight_stainless_steel_casing",
+                    "overlay_front": "gtceu:block/machines/chemical_reactor/overlay_front",
+                    "overlay_front_emissive": "gtceu:block/machines/chemical_reactor/overlay_front_emissive"
+                }
+            }
+        },
+        "configuration=2,recipe_logic_status=suspend": {
+            "model": {
+                "parent": "gtceu:block/machine/template/cube_all/sided",
+                "textures": {
+                    "all": "cosmiccore:block/casings/solid/lightweight_stainless_steel_casing",
+                    "overlay_front": "gtceu:block/machines/chemical_reactor/overlay_front",
+                    "overlay_front_emissive": "gtceu:block/machines/chemical_reactor/overlay_front_emissive"
+                }
+            }
+        },
+        "configuration=2,recipe_logic_status=waiting": {
+            "model": {
+                "parent": "gtceu:block/machine/template/cube_all/sided",
+                "textures": {
+                    "all": "cosmiccore:block/casings/solid/lightweight_stainless_steel_casing",
+                    "overlay_front": "gtceu:block/machines/chemical_reactor/overlay_front_active",
+                    "overlay_front_emissive": "gtceu:block/machines/chemical_reactor/overlay_front_active_emissive"
+                }
+            }
+        },
+        "configuration=2,recipe_logic_status=working": {
+            "model": {
+                "parent": "gtceu:block/machine/template/cube_all/sided",
+                "textures": {
+                    "all": "cosmiccore:block/casings/solid/lightweight_stainless_steel_casing",
+                    "overlay_front": "gtceu:block/machines/chemical_reactor/overlay_front_active",
+                    "overlay_front_emissive": "gtceu:block/machines/chemical_reactor/overlay_front_active_emissive"
+                }
+            }
+        },
+        "configuration=3,recipe_logic_status=idle": {
+            "model": {
+                "parent": "gtceu:block/machine/template/cube_all/sided",
+                "textures": {
+                    "all": "cosmiccore:block/casings/solid/lightweight_stainless_steel_casing",
+                    "overlay_front": "gtceu:block/machines/compressor/overlay_front",
+                    "overlay_front_emissive": "gtceu:block/machines/compressor/overlay_front_emissive",
+                    "overlay_side": "gtceu:block/machines/compressor/overlay_side",
+                    "overlay_side_emissive": "gtceu:block/machines/compressor/overlay_side_emissive",
+                    "overlay_top": "gtceu:block/machines/compressor/overlay_top",
+                    "overlay_top_emissive": "gtceu:block/machines/compressor/overlay_top_emissive"
+                }
+            }
+        },
+        "configuration=3,recipe_logic_status=suspend": {
+            "model": {
+                "parent": "gtceu:block/machine/template/cube_all/sided",
+                "textures": {
+                    "all": "cosmiccore:block/casings/solid/lightweight_stainless_steel_casing",
+                    "overlay_front": "gtceu:block/machines/compressor/overlay_front",
+                    "overlay_front_emissive": "gtceu:block/machines/compressor/overlay_front_emissive",
+                    "overlay_side": "gtceu:block/machines/compressor/overlay_side",
+                    "overlay_side_emissive": "gtceu:block/machines/compressor/overlay_side_emissive",
+                    "overlay_top": "gtceu:block/machines/compressor/overlay_top",
+                    "overlay_top_emissive": "gtceu:block/machines/compressor/overlay_top_emissive"
+                }
+            }
+        },
+        "configuration=3,recipe_logic_status=waiting": {
+            "model": {
+                "parent": "gtceu:block/machine/template/cube_all/sided",
+                "textures": {
+                    "all": "cosmiccore:block/casings/solid/lightweight_stainless_steel_casing",
+                    "overlay_front": "gtceu:block/machines/compressor/overlay_front_active",
+                    "overlay_front_emissive": "gtceu:block/machines/compressor/overlay_front_active_emissive",
+                    "overlay_side": "gtceu:block/machines/compressor/overlay_side_active",
+                    "overlay_side_emissive": "gtceu:block/machines/compressor/overlay_side_active_emissive",
+                    "overlay_top": "gtceu:block/machines/compressor/overlay_top_active",
+                    "overlay_top_emissive": "gtceu:block/machines/compressor/overlay_top_active_emissive"
+                }
+            }
+        },
+        "configuration=3,recipe_logic_status=working": {
+            "model": {
+                "parent": "gtceu:block/machine/template/cube_all/sided",
+                "textures": {
+                    "all": "cosmiccore:block/casings/solid/lightweight_stainless_steel_casing",
+                    "overlay_front": "gtceu:block/machines/compressor/overlay_front_active",
+                    "overlay_front_emissive": "gtceu:block/machines/compressor/overlay_front_active_emissive",
+                    "overlay_side": "gtceu:block/machines/compressor/overlay_side_active",
+                    "overlay_side_emissive": "gtceu:block/machines/compressor/overlay_side_active_emissive",
+                    "overlay_top": "gtceu:block/machines/compressor/overlay_top_active",
+                    "overlay_top_emissive": "gtceu:block/machines/compressor/overlay_top_active_emissive"
+                }
+            }
+        },
+        "configuration=4,recipe_logic_status=idle": {
+            "model": {
+                "parent": "gtceu:block/machine/template/cube_all/sided",
+                "textures": {
+                    "all": "cosmiccore:block/casings/solid/lightweight_stainless_steel_casing",
+                    "overlay_front": "gtceu:block/machines/distillery/overlay_front",
+                    "overlay_front_emissive": "gtceu:block/machines/distillery/overlay_front_emissive",
+                    "overlay_side": "gtceu:block/machines/distillery/overlay_side",
+                    "overlay_side_emissive": "gtceu:block/machines/distillery/overlay_side_emissive",
+                    "overlay_top": "gtceu:block/machines/distillery/overlay_top"
+                }
+            }
+        },
+        "configuration=4,recipe_logic_status=suspend": {
+            "model": {
+                "parent": "gtceu:block/machine/template/cube_all/sided",
+                "textures": {
+                    "all": "cosmiccore:block/casings/solid/lightweight_stainless_steel_casing",
+                    "overlay_front": "gtceu:block/machines/distillery/overlay_front_paused",
+                    "overlay_front_emissive": "gtceu:block/machines/distillery/overlay_front_paused_emissive",
+                    "overlay_side": "gtceu:block/machines/distillery/overlay_side",
+                    "overlay_side_emissive": "gtceu:block/machines/distillery/overlay_side_emissive",
+                    "overlay_top": "gtceu:block/machines/distillery/overlay_top"
+                }
+            }
+        },
+        "configuration=4,recipe_logic_status=waiting": {
+            "model": {
+                "parent": "gtceu:block/machine/template/cube_all/sided",
+                "textures": {
+                    "all": "cosmiccore:block/casings/solid/lightweight_stainless_steel_casing",
+                    "overlay_front": "gtceu:block/machines/distillery/overlay_front_active",
+                    "overlay_front_emissive": "gtceu:block/machines/distillery/overlay_front_active_emissive",
+                    "overlay_side": "gtceu:block/machines/distillery/overlay_side_active",
+                    "overlay_side_emissive": "gtceu:block/machines/distillery/overlay_side_active_emissive",
+                    "overlay_top": "gtceu:block/machines/distillery/overlay_top_active",
+                    "overlay_top_emissive": "gtceu:block/machines/distillery/overlay_top_active_emissive"
+                }
+            }
+        },
+        "configuration=4,recipe_logic_status=working": {
+            "model": {
+                "parent": "gtceu:block/machine/template/cube_all/sided",
+                "textures": {
+                    "all": "cosmiccore:block/casings/solid/lightweight_stainless_steel_casing",
+                    "overlay_front": "gtceu:block/machines/distillery/overlay_front_active",
+                    "overlay_front_emissive": "gtceu:block/machines/distillery/overlay_front_active_emissive",
+                    "overlay_side": "gtceu:block/machines/distillery/overlay_side_active",
+                    "overlay_side_emissive": "gtceu:block/machines/distillery/overlay_side_active_emissive",
+                    "overlay_top": "gtceu:block/machines/distillery/overlay_top_active",
+                    "overlay_top_emissive": "gtceu:block/machines/distillery/overlay_top_active_emissive"
+                }
+            }
+        },
+        "configuration=5,recipe_logic_status=idle": {
+            "model": {
+                "parent": "gtceu:block/machine/template/cube_all/sided",
+                "textures": {
+                    "all": "cosmiccore:block/casings/solid/lightweight_stainless_steel_casing",
+                    "overlay_front": "cosmiccore:block/multiblock/conversion_complex/delayed_coking/overlay_front",
+                    "overlay_front_emissive": "cosmiccore:block/multiblock/conversion_complex/delayed_coking/overlay_front_emissive"
+                }
+            }
+        },
+        "configuration=5,recipe_logic_status=suspend": {
+            "model": {
+                "parent": "gtceu:block/machine/template/cube_all/sided",
+                "textures": {
+                    "all": "cosmiccore:block/casings/solid/lightweight_stainless_steel_casing",
+                    "overlay_front": "cosmiccore:block/multiblock/conversion_complex/delayed_coking/overlay_front",
+                    "overlay_front_emissive": "cosmiccore:block/multiblock/conversion_complex/delayed_coking/overlay_front_emissive"
+                }
+            }
+        },
+        "configuration=5,recipe_logic_status=waiting": {
+            "model": {
+                "parent": "gtceu:block/machine/template/cube_all/sided",
+                "textures": {
+                    "all": "cosmiccore:block/casings/solid/lightweight_stainless_steel_casing",
+                    "overlay_front": "cosmiccore:block/multiblock/conversion_complex/delayed_coking/overlay_front_active",
+                    "overlay_front_emissive": "cosmiccore:block/multiblock/conversion_complex/delayed_coking/overlay_front_active_emissive"
+                }
+            }
+        },
+        "configuration=5,recipe_logic_status=working": {
+            "model": {
+                "parent": "gtceu:block/machine/template/cube_all/sided",
+                "textures": {
+                    "all": "cosmiccore:block/casings/solid/lightweight_stainless_steel_casing",
+                    "overlay_front": "cosmiccore:block/multiblock/conversion_complex/delayed_coking/overlay_front_active",
+                    "overlay_front_emissive": "cosmiccore:block/multiblock/conversion_complex/delayed_coking/overlay_front_active_emissive"
+                }
+            }
+        }
+    }
+}
