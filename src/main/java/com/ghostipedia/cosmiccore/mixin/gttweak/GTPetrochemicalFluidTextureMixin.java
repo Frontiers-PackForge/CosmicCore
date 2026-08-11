@@ -18,6 +18,6 @@ public abstract class GTPetrochemicalFluidTextureMixin {
               at = @At(value = "INVOKE",
                        target = "Lnet/minecraft/resources/ResourceLocation;fromNamespaceAndPath(Ljava/lang/String;Ljava/lang/String;)Lnet/minecraft/resources/ResourceLocation;"))
     private ResourceLocation cosmicCore$reuseLegacyPetrochemicalTexture(String namespace, String path) {
-        return ResourceLocation.fromNamespaceAndPath(namespace, GTPetrochemicalRegistryKeys.legacyTexturePath(path));
+        return GTPetrochemicalRegistryKeys.legacyTextureLocation(namespace, path);
     }
 }

@@ -19,6 +19,6 @@ public abstract class GTPetrochemicalMaterialIdMixin {
               at = @At(value = "INVOKE",
                        target = "Lcom/gregtechceu/gtceu/GTCEu;id(Ljava/lang/String;)Lnet/minecraft/resources/ResourceLocation;"))
     private static ResourceLocation cosmicCore$rekeyPetrochemicalMaterial(String path) {
-        return GTPetrochemicalRegistryKeys.canonicalGtId(path);
+        return GTPetrochemicalRegistryKeys.canonicalId(path);
     }
 }

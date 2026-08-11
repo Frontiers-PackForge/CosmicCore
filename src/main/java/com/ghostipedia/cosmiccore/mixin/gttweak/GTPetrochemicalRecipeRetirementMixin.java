@@ -1,5 +1,7 @@
 package com.ghostipedia.cosmiccore.mixin.gttweak;
 
+import com.ghostipedia.cosmiccore.common.data.GTPetrochemicalRegistryKeys;
+
 import com.gregtechceu.gtceu.GTCEu;
 import com.gregtechceu.gtceu.api.recipe.content.Content;
 import com.gregtechceu.gtceu.common.data.GTRecipeCapabilities;
@@ -29,17 +31,33 @@ public abstract class GTPetrochemicalRecipeRetirementMixin {
     @Unique
     private static final Set<ResourceLocation> RETIRED_OUTPUT_FLUIDS = Set.of(GTCEu.id("creosote"));
     @Unique
-    private static final Set<ResourceLocation> RETIRED_RECIPE_IDS = Set.of(
-            GTCEu.id("oilsands_ore_separation"),
-            GTCEu.id("oilsands_dust_separation"),
-            GTCEu.id("distill_creosote"),
-            GTCEu.id("ethylene_from_ethanol"));
+    private static final Set<ResourceLocation> RETIRED_RECIPE_IDS = cosmiccore$retiredRecipeIds();
+    @Unique
+    private static final Set<ResourceLocation> SOURCE_AUTHORITY_RETIRED_RECIPE_IDS = Set.of(
+            GTCEu.id("centrifuge/brown_mushroom_separation"),
+            GTCEu.id("centrifuge/endstone_separation"),
+            GTCEu.id("centrifuge/nether_wart_separation"),
+            GTCEu.id("centrifuge/red_mushroom_separation"),
+            GTCEu.id("centrifuge/rubber_log_separation"),
+            GTCEu.id("chemical_reactor/benzene_from_biphenyl"),
+            GTCEu.id("chemical_reactor/methane_from_elements"),
+            GTCEu.id("distillation_tower/distill_fermented_biomass"),
+            GTCEu.id("electrolyzer/acetone_electrolysis"),
+            GTCEu.id("electrolyzer/butane_electrolysis"),
+            GTCEu.id("electrolyzer/butene_electrolysis"),
+            GTCEu.id("extractor/monazite_extraction"),
+            GTCEu.id("large_chemical_reactor/methane_shortcut"),
+            GTCEu.id("large_chemical_reactor/phthalic_acid_from_naphthalene"),
+            GTCEu.id("large_chemical_reactor/phthalic_acid_from_naphthalene_9"));
 
     @Inject(method = "save", at = @At("HEAD"), cancellable = true, require = 1, remap = false)
     private void cosmiccore$retirePetrochemicalRecipe(RecipeOutput output, CallbackInfo ci) {
         GTRecipeBuilder builder = (GTRecipeBuilder) (Object) this;
         if (!GTCEu.MOD_ID.equals(builder.id.getNamespace())) return;
-        if (RETIRED_RECIPE_IDS.contains(builder.id) ||
+        ResourceLocation savedId = builder.recipeType == null ? builder.id :
+                builder.id.withPrefix(builder.recipeType.registryName.getPath() + "/");
+        if (SOURCE_AUTHORITY_RETIRED_RECIPE_IDS.contains(savedId) ||
+                RETIRED_RECIPE_IDS.contains(builder.id) ||
                 cosmiccore$containsFluid(builder.input, RETIRED_FLUIDS) ||
                 cosmiccore$containsFluid(builder.tickInput, RETIRED_FLUIDS) ||
                 cosmiccore$containsFluid(builder.output, RETIRED_FLUIDS) ||
@@ -87,7 +105,7 @@ public abstract class GTPetrochemicalRecipeRetirementMixin {
                 "wood_tar",
                 "raw_coking_gas",
                 "coal_tar")) {
-            retired.add(GTCEu.id(path));
+            retired.add(GTPetrochemicalRegistryKeys.canonicalId(path));
         }
         for (String feed : List.of("ethane", "ethylene", "propene", "propane", "butane", "butene", "butadiene")) {
             retired.add(GTCEu.id("hydro_cracked_" + feed));
@@ -98,6 +116,40 @@ public abstract class GTPetrochemicalRecipeRetirementMixin {
             retired.add(GTCEu.id("severely_hydro_cracked_" + cut));
             retired.add(GTCEu.id("lightly_steam_cracked_" + cut));
             retired.add(GTCEu.id("severely_steam_cracked_" + cut));
+        }
+        return Set.copyOf(retired);
+    }
+
+    @Unique
+    private static Set<ResourceLocation> cosmiccore$retiredRecipeIds() {
+        Set<ResourceLocation> retired = new HashSet<>();
+        for (String path : List.of(
+                "oilsands_ore_separation",
+                "oilsands_dust_separation",
+                "ethylene_from_ethanol",
+                "distill_oil",
+                "distill_light_oil",
+                "distill_heavy_oil",
+                "distill_raw_oil",
+                "distill_refinery_gas",
+                "distill_creosote",
+                "distill_charcoal_byproducts",
+                "distill_wood_tar",
+                "distill_wood_vinegar",
+                "distill_wood_gas",
+                "distill_coal_gas",
+                "distill_coal_tar")) {
+            retired.add(GTCEu.id(path));
+        }
+        for (String feed : List.of("ethane", "ethylene", "propene", "propane", "butane", "butene", "butadiene")) {
+            retired.add(GTCEu.id("distill_hydro_cracked_" + feed));
+            retired.add(GTCEu.id("distill_steam_cracked_" + feed));
+        }
+        for (String cut : List.of("heavy_fuel", "light_fuel", "naphtha", "gas")) {
+            retired.add(GTCEu.id("distill_lightly_hydro_cracked_" + cut));
+            retired.add(GTCEu.id("distill_severely_hydro_cracked_" + cut));
+            retired.add(GTCEu.id("distill_lightly_steam_cracked_" + cut));
+            retired.add(GTCEu.id("distill_severely_steam_cracked_" + cut));
         }
         return Set.copyOf(retired);
     }

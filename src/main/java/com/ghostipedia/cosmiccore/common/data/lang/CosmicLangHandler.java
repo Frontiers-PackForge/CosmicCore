@@ -16,7 +16,8 @@ public class CosmicLangHandler extends LangHandler {
             "sludge_digestor", "powderizer", "industrial_ore_sorter", "industrial_flotation_plant",
             "oneiric_sieve", "dissolution_vat", "phase_separator", "simple_desalter", "desalter",
             "steam_cracking_furnace", "fractional_condenser", "fluid_catalytic_cracking", "hydrotreating",
-            "hydrocracking", "catalytic_reforming", "delayed_coking", "fuckassbeeball", "laminator",
+            "hydrocracking", "catalytic_reforming", "delayed_coking", "vacuum_distillation", "fuckassbeeball",
+            "laminator",
             "chemical_dehydrator",
             "crystallizer", "eclipsed_dawnforge", "vorax", "mana_fluidizer", "pcb_fab", "titan_fusion", "lunar_hammer",
             "cryo_chamber", "soul_tester", "void_miner", "heavy_assembler", "plasmite_forge",
@@ -126,12 +127,29 @@ public class CosmicLangHandler extends LangHandler {
         replace(provider, "material.cosmiccore.olefin_gases", "Olefin Gases");
         replace(provider, "material.cosmiccore.cracked_naphtha", "Cracked Naphtha");
         replace(provider, "material.cosmiccore.aromatic_oil", "Aromatic Oil");
+        replace(provider, "material.cosmiccore.condensed_refinery_gas", "Condensed Refinery Gas");
         replace(provider, "material.cosmiccore.heavy_naphtha", "Heavy Naphtha");
         replace(provider, "material.cosmiccore.cracked_gasoline", "Cracked Gasoline");
         replace(provider, "material.cosmiccore.light_cycle_oil", "Light Cycle Oil");
         replace(provider, "material.cosmiccore.slurry_oils", "Slurry Oils");
         replace(provider, "material.cosmiccore.high_octane_reformate", "High-Octane Reformate");
         replace(provider, "material.cosmiccore.vacuum_gas_oils", "Vacuum Gas Oils");
+        replace(provider, "material.cosmiccore.waxy_distillates", "Waxy Distillates");
+        replace(provider, "material.cosmiccore.vacuum_residuals", "Vacuum Residuals");
+        replace(provider, "material.cosmiccore.bitumen", "Bitumen");
+        replace(provider, "material.cosmiccore.petroleum_coke", "Petroleum Coke");
+        replace(provider, "material.cosmiccore.calcined_petroleum_coke", "Calcined Petroleum Coke");
+        replace(provider, "material.cosmiccore.syngas", "Syngas");
+        replace(provider, "material.cosmiccore.hot_pyrolysis_vapors", "Hot Pyrolysis Vapors");
+        replace(provider, "material.cosmiccore.crude_benzene", "Crude Benzene");
+        replace(provider, "material.cosmiccore.wood_spirit", "Wood Spirit");
+        replace(provider, "material.cosmiccore.acidic_wood_liquor", "Acidic Wood Liquor");
+        replace(provider, "material.cosmiccore.light_tar_oils", "Light Tar Oils");
+        replace(provider, "material.cosmiccore.phenolic_oils", "Phenolic Oils");
+        replace(provider, "material.cosmiccore.tar_pitch", "Tar Pitch");
+        replace(provider, "material.cosmiccore.hot_coking_vapors", "Hot Coking Vapors");
+        replace(provider, "material.cosmiccore.ammonia_rich_liquor", "Ammonia-Rich Liquor");
+        replace(provider, "material.cosmiccore.naphthalene_oils", "Naphthalene Oils");
         replace(provider, "block.cosmiccore.rust_resistant_structural_casing", "Rust-Resistant Structural Casing");
         replace(provider, "block.cosmiccore.refractory_structural_casing", "Refractory Structural Casing");
         replace(provider, "block.cosmiccore.refractory_containment_casing", "Refractory Containment Casing");
@@ -575,6 +593,15 @@ public class CosmicLangHandler extends LangHandler {
         provider.add("cosmiccore.multiblock.configuration.reformer.short", "CR");
         provider.add("cosmiccore.multiblock.configuration.coker", "Delayed Coker");
         provider.add("cosmiccore.multiblock.configuration.coker.short", "DC");
+        provider.add("cosmiccore.multiblock.configuration.atmospheric", "Atmospheric Distillation");
+        provider.add("cosmiccore.multiblock.configuration.atmospheric.short", "AT");
+        provider.add("cosmiccore.multiblock.configuration.vacuum", "Vacuum Distillation");
+        provider.add("cosmiccore.multiblock.configuration.vacuum.short", "VA");
+        provider.add("cosmiccore.multiblock.distillation_tower.mode", "Operating Mode: %s");
+        provider.add("cosmiccore.multiblock.distillation_tower.vacuum_ready",
+                "Vacuum service online: fan module and tower height verified");
+        provider.add("cosmiccore.multiblock.distillation_tower.vacuum_required",
+                "Requires the attached frostproof fan module and at least four repeated tower layers");
         provider.add("cosmiccore.multiblock.configuration.physically_locked",
                 "Configuration is determined by the installed processing module");
         provider.add("cosmiccore.multiblock.configuration.core_only",

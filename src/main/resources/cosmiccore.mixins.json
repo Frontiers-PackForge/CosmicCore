@@ -160,6 +160,7 @@
     "gttweak.GTPetrochemicalFluidTextureMixin",
     "gttweak.GTPetrochemicalRecipeRetirementMixin",
     "gttweak.ElectricBlastFurnaceTierMixin",
+    "gttweak.VacuumDistillationTowerModeMixin",
     "gttweak.TieredMultiblockControllerMixin",
     "gttweak.TieredMachinePanelMixin",
     "gttweak.TieredRecipeCompletionMixin",

@@ -63,6 +63,8 @@ public class CosmicMaterials {
     public static Material Neutronite;
     public static Material PolyethyleneOxide;
     public static Material MultiPhaseOil;
+    public static Material HotPyrolysisVapors;
+    public static Material CrudeBenzene;
     public static Material VolatileMultiPhaseOil;
     public static Material SaltLadenLightOil;
     public static Material SaltLadenOil;
@@ -84,12 +86,27 @@ public class CosmicMaterials {
     public static Material OlefinGases;
     public static Material CrackedNaphtha;
     public static Material AromaticOil;
+    public static Material CondensedRefineryGas;
     public static Material HeavyNaphtha;
     public static Material CrackedGasoline;
     public static Material LightCycleOil;
     public static Material SlurryOils;
     public static Material HighOctaneReformate;
     public static Material VacuumGasOils;
+    public static Material WaxyDistillates;
+    public static Material VacuumResiduals;
+    public static Material Bitumen;
+    public static Material PetroleumCoke;
+    public static Material CalcinedPetroleumCoke;
+    public static Material Syngas;
+    public static Material WoodSpirit;
+    public static Material AcidicWoodLiquor;
+    public static Material LightTarOils;
+    public static Material PhenolicOils;
+    public static Material TarPitch;
+    public static Material HotCokingVapors;
+    public static Material AmmoniaRichLiquor;
+    public static Material NaphthaleneOils;
     public static Material Vitrius;
     public static Material SolSteel;
     public static Material StarMetal;
@@ -228,6 +245,12 @@ public class CosmicMaterials {
                 .flags(DISABLE_DECOMPOSITION)
                 .buildAndRegister();
         MultiPhaseOil = RawOil;
+        HotPyrolysisVapors = CharcoalByproducts;
+        CrudeBenzene = new Material.Builder(CosmicCore.id("crude_benzene"))
+                .liquid()
+                .color(0x665132).secondaryColor(0xA98A52)
+                .flags(DISABLE_DECOMPOSITION)
+                .buildAndRegister();
         VolatileMultiPhaseOil = new Material.Builder(CosmicCore.id("volatile_multi_phase_oil"))
                 .liquid()
                 .color(0x5A3D22).secondaryColor(0xB9874C)
@@ -333,6 +356,11 @@ public class CosmicMaterials {
                 .color(0x4A283C).secondaryColor(0x805069)
                 .flags(DISABLE_DECOMPOSITION)
                 .buildAndRegister();
+        CondensedRefineryGas = new Material.Builder(CosmicCore.id("condensed_refinery_gas"))
+                .liquid()
+                .color(0x8CA0AC).secondaryColor(0xC4D3DA)
+                .flags(DISABLE_DECOMPOSITION)
+                .buildAndRegister();
         HeavyNaphtha = new Material.Builder(CosmicCore.id("heavy_naphtha"))
                 .liquid()
                 .color(0xB88742).secondaryColor(0xDBB66F)
@@ -361,6 +389,76 @@ public class CosmicMaterials {
         VacuumGasOils = new Material.Builder(CosmicCore.id("vacuum_gas_oils"))
                 .liquid()
                 .color(0x42332B).secondaryColor(0x705547)
+                .flags(DISABLE_DECOMPOSITION)
+                .buildAndRegister();
+        WaxyDistillates = new Material.Builder(CosmicCore.id("waxy_distillates"))
+                .liquid()
+                .color(0xB39A64).secondaryColor(0xD8C18A)
+                .flags(DISABLE_DECOMPOSITION)
+                .buildAndRegister();
+        VacuumResiduals = new Material.Builder(CosmicCore.id("vacuum_residuals"))
+                .liquid()
+                .color(0x211C1B).secondaryColor(0x51433D)
+                .flags(DISABLE_DECOMPOSITION)
+                .buildAndRegister();
+        Bitumen = new Material.Builder(CosmicCore.id("bitumen"))
+                .liquid()
+                .color(0x181311).secondaryColor(0x40332D)
+                .flags(DISABLE_DECOMPOSITION)
+                .buildAndRegister();
+        PetroleumCoke = new Material.Builder(CosmicCore.id("petroleum_coke"))
+                .dust()
+                .color(0x24201D).secondaryColor(0x514A44)
+                .flags(DISABLE_DECOMPOSITION)
+                .buildAndRegister();
+        CalcinedPetroleumCoke = new Material.Builder(CosmicCore.id("calcined_petroleum_coke"))
+                .dust()
+                .color(0x171717).secondaryColor(0x393939)
+                .flags(DISABLE_DECOMPOSITION)
+                .buildAndRegister();
+        Syngas = new Material.Builder(CosmicCore.id("syngas"))
+                .gas()
+                .color(0xA7BAC2).secondaryColor(0xD7E5E9)
+                .flags(DISABLE_DECOMPOSITION)
+                .buildAndRegister();
+        WoodSpirit = new Material.Builder(CosmicCore.id("wood_spirit"))
+                .liquid()
+                .color(0xB58C55).secondaryColor(0xDEC18A)
+                .flags(DISABLE_DECOMPOSITION)
+                .buildAndRegister();
+        AcidicWoodLiquor = new Material.Builder(CosmicCore.id("acidic_wood_liquor"))
+                .liquid()
+                .color(0x8B684A).secondaryColor(0xB99971)
+                .flags(DISABLE_DECOMPOSITION)
+                .buildAndRegister();
+        LightTarOils = new Material.Builder(CosmicCore.id("light_tar_oils"))
+                .liquid()
+                .color(0x5D4130).secondaryColor(0x967052)
+                .flags(DISABLE_DECOMPOSITION)
+                .buildAndRegister();
+        PhenolicOils = new Material.Builder(CosmicCore.id("phenolic_oils"))
+                .liquid()
+                .color(0x493237).secondaryColor(0x795561)
+                .flags(DISABLE_DECOMPOSITION)
+                .buildAndRegister();
+        TarPitch = new Material.Builder(CosmicCore.id("tar_pitch"))
+                .liquid()
+                .color(0x21191A).secondaryColor(0x49383A)
+                .flags(DISABLE_DECOMPOSITION)
+                .buildAndRegister();
+        HotCokingVapors = new Material.Builder(CosmicCore.id("hot_coking_vapors"))
+                .gas()
+                .color(0x2D2925).secondaryColor(0x6B5A48)
+                .flags(DISABLE_DECOMPOSITION)
+                .buildAndRegister();
+        AmmoniaRichLiquor = new Material.Builder(CosmicCore.id("ammonia_rich_liquor"))
+                .liquid()
+                .color(0x735F3B).secondaryColor(0xB5A06C)
+                .flags(DISABLE_DECOMPOSITION)
+                .buildAndRegister();
+        NaphthaleneOils = new Material.Builder(CosmicCore.id("naphthalene_oils"))
+                .liquid()
+                .color(0x332C40).secondaryColor(0x655B78)
                 .flags(DISABLE_DECOMPOSITION)
                 .buildAndRegister();
         Moondrop = new Material.Builder(CosmicCore.id("moondrop"))
