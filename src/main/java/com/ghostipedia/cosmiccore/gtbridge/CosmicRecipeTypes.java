@@ -56,7 +56,7 @@ public class CosmicRecipeTypes {
             .UI(builder -> builder.setProgressBar(GTGuiTextures.PROGRESS_ARROW));
     public static final GTRecipeType PHASE_SEPARATOR = register(CosmicCore.id("phase_separator"), MULTIBLOCK)
             .setSound(GTSoundEntries.CENTRIFUGE)
-            .setMaxIOSize(1, 0, 1, 6)
+            .setMaxIOSize(1, 0, 2, 6)
             .UI(builder -> builder.setProgressBar(GTGuiTextures.PROGRESS_ARROW_MULTIPLE));
     public static final GTRecipeType SIMPLE_DESALTER = register(CosmicCore.id("simple_desalter"), ELECTRIC)
             .setSound(GTSoundEntries.CHEMICAL)
@@ -97,6 +97,11 @@ public class CosmicRecipeTypes {
     public static final GTRecipeType DELAYED_COKING = register(CosmicCore.id("delayed_coking"), MULTIBLOCK)
             .setSound(GTSoundEntries.FIRE)
             .setMaxIOSize(2, 2, 3, 6)
+            .UI(builder -> builder.setProgressBar(GTGuiTextures.PROGRESS_ARROW_MULTIPLE));
+    public static final GTRecipeType VACUUM_DISTILLATION = register(
+            CosmicCore.id("vacuum_distillation"), MULTIBLOCK)
+            .setSound(GTSoundEntries.COOLING)
+            .setMaxIOSize(0, 1, 1, 12)
             .UI(builder -> builder.setProgressBar(GTGuiTextures.PROGRESS_ARROW_MULTIPLE));
 
     public static final GTRecipeType COSMIC_DUMMY_SPAM_YEETER = GTRecipeTypes
@@ -608,8 +613,8 @@ public class CosmicRecipeTypes {
                 SLUDGE_DIGESTOR, POWDERIZER, INDUSTRIAL_ORE_SORTER, INDUSTRIAL_FLOTATION_PLANT, ONEIRIC_SIEVE,
                 DISSOLUTION_VAT, PHASE_SEPARATOR, SIMPLE_DESALTER, DESALTER, STEAM_CRACKING_FURNACE,
                 FRACTIONAL_CONDENSER, FLUID_CATALYTIC_CRACKING, HYDROTREATING, HYDROCRACKING,
-                CATALYTIC_REFORMING, DELAYED_COKING, COSMIC_DUMMY_SPAM_YEETER, LAMINATOR, CHEMICAL_DEHYDRATOR,
-                CRYSTALLIZER,
+                CATALYTIC_REFORMING, DELAYED_COKING, VACUUM_DISTILLATION, COSMIC_DUMMY_SPAM_YEETER, LAMINATOR,
+                CHEMICAL_DEHYDRATOR, CRYSTALLIZER,
                 DAWNFORGE_ECLIPSED,
                 VORAX, MANA_FLUIDIZER,
                 PCB_FABRICATOR, TITAN_FUSION_RECIPES, LUNAR_HAMMER, CRYOGENICS_CHAMBER, SOUL_TESTER_RECIPES,

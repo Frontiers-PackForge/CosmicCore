@@ -80,38 +80,39 @@ public final class CosmicRegistryAliases {
 
     private static void registerPetrochemicalAliases(RegisterEvent event, Registry<?> registry) {
         if (event.getRegistryKey().equals(GTRegistries.Keys.MATERIAL)) {
-            GTPetrochemicalRegistryKeys.REKEYS.forEach((from, to) -> addAlias(registry, gt(from), gt(to)));
+            GTPetrochemicalRegistryKeys.REKEYS.forEach((from, to) -> addAlias(registry, gt(from), to));
             addAlias(registry, CosmicCore.id("multi_phase_oil"), gt("multi_phase_oil"));
         }
         if (event.getRegistryKey().equals(Registries.FLUID)) {
             GTPetrochemicalRegistryKeys.REKEYS.forEach((from, to) -> {
-                addAlias(registry, gt(from), gt(to));
-                addAlias(registry, gt("flowing_" + from), gt("flowing_" + to));
+                addAlias(registry, gt(from), to);
+                addAlias(registry, gt("flowing_" + from), withPath(to, "flowing_" + to.getPath()));
             });
             addAlias(registry, CosmicCore.id("multi_phase_oil"), gt("multi_phase_oil"));
             addAlias(registry, CosmicCore.id("flowing_multi_phase_oil"), gt("flowing_multi_phase_oil"));
         }
         if (event.getRegistryKey().equals(Registries.ITEM)) {
             GTPetrochemicalRegistryKeys.REKEYS
-                    .forEach((from, to) -> addAlias(registry, gt(from + "_bucket"), gt(to + "_bucket")));
+                    .forEach((from, to) -> addAlias(registry, gt(from + "_bucket"),
+                            withPath(to, to.getPath() + "_bucket")));
             addAlias(registry, CosmicCore.id("multi_phase_oil_bucket"), gt("multi_phase_oil_bucket"));
         }
         if (event.getRegistryKey().equals(Registries.BLOCK)) {
             addAlias(registry, gt("raw_oil"), gt("multi_phase_oil"));
         }
         if (event.getRegistryKey().equals(NeoForgeRegistries.Keys.FLUID_TYPES)) {
-            GTPetrochemicalRegistryKeys.REKEYS.forEach((from, to) -> addAlias(registry, gt(from), gt(to)));
+            GTPetrochemicalRegistryKeys.REKEYS.forEach((from, to) -> addAlias(registry, gt(from), to));
             addAlias(registry, CosmicCore.id("multi_phase_oil"), gt("multi_phase_oil"));
         }
     }
 
     public static void validatePetrochemicalAliases() {
         GTPetrochemicalRegistryKeys.REKEYS.forEach((from, to) -> {
-            validateAlias(GTRegistries.MATERIALS, gt(from), gt(to));
-            validateAlias(BuiltInRegistries.FLUID, gt(from), gt(to));
-            validateAlias(BuiltInRegistries.FLUID, gt("flowing_" + from), gt("flowing_" + to));
-            validateAlias(BuiltInRegistries.ITEM, gt(from + "_bucket"), gt(to + "_bucket"));
-            validateAlias(NeoForgeRegistries.FLUID_TYPES, gt(from), gt(to));
+            validateAlias(GTRegistries.MATERIALS, gt(from), to);
+            validateAlias(BuiltInRegistries.FLUID, gt(from), to);
+            validateAlias(BuiltInRegistries.FLUID, gt("flowing_" + from), withPath(to, "flowing_" + to.getPath()));
+            validateAlias(BuiltInRegistries.ITEM, gt(from + "_bucket"), withPath(to, to.getPath() + "_bucket"));
+            validateAlias(NeoForgeRegistries.FLUID_TYPES, gt(from), to);
         });
         validateAlias(GTRegistries.MATERIALS, CosmicCore.id("multi_phase_oil"), gt("multi_phase_oil"));
         validateAlias(BuiltInRegistries.FLUID, CosmicCore.id("multi_phase_oil"), gt("multi_phase_oil"));
@@ -142,6 +143,10 @@ public final class CosmicRegistryAliases {
 
     private static ResourceLocation gt(String path) {
         return ResourceLocation.fromNamespaceAndPath("gtceu", path);
+    }
+
+    private static ResourceLocation withPath(ResourceLocation id, String path) {
+        return ResourceLocation.fromNamespaceAndPath(id.getNamespace(), path);
     }
 
     private static void addAlias(Registry<?> registry, ResourceLocation from, ResourceLocation to) {

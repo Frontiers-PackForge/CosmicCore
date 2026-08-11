@@ -13,6 +13,7 @@ import com.ghostipedia.cosmiccore.common.ae2gt.CosmicStockingBusPartMachine;
 import com.ghostipedia.cosmiccore.common.ae2gt.CosmicStockingHatchPartMachine;
 import com.ghostipedia.cosmiccore.common.block.debug.CreativeThermiaContainerMachine;
 import com.ghostipedia.cosmiccore.common.machine.WirelessChargerMachine;
+import com.ghostipedia.cosmiccore.common.machine.multiblock.multi.VacuumDistillationTower;
 import com.ghostipedia.cosmiccore.common.machine.multiblock.multi.WirelessDataBankMachine;
 import com.ghostipedia.cosmiccore.common.machine.multiblock.multi.logic.MEComputationComponentTier;
 import com.ghostipedia.cosmiccore.common.machine.multiblock.part.*;
@@ -1160,9 +1161,10 @@ public class CosmicMachines {
             PatternPredicate maintenance = autoAbilities(true, false, false).setMaxGlobalLimited(1);
             return MultiblockPatternBuilder.start(UP, FRONT, LEFT)
                     .slice(" AAA ", "AAAAA", "AAAAA", "AAAAA", " ABA ")
-                    .sliceRepeatable(1, 12, " CCC ", "C   C", "C   C", "C   C", " CCC ")
+                    .sliceRepeatable(1, 12, " CCC ", "C###C", "C###C", "C###C", " CCC ")
                     .slice(" DDD ", "DDDDD", "DDEDD", "DDDDD", " DDD ")
                     .where('A', blocks(LIGHTWEIGHT_STAINLESS_STEEL_CASING.get())
+                            .or(abilities(PartAbility.IMPORT_ITEMS).setMaxGlobalLimited(1))
                             .or(abilities(PartAbility.EXPORT_ITEMS).setMaxGlobalLimited(1))
                             .or(abilities(PartAbility.INPUT_ENERGY).setMinGlobalLimited(1)
                                     .setMaxGlobalLimited(2))
@@ -1172,9 +1174,11 @@ public class CosmicMachines {
                     .where('C', blocks(LIGHTWEIGHT_STAINLESS_STEEL_CASING.get()).or(exportPredicate))
                     .where('D', blocks(LIGHTWEIGHT_STAINLESS_STEEL_CASING.get()).or(exportPredicate))
                     .where('E', abilities(PartAbility.MUFFLER).setExactLimit(1))
-                    .where(' ', air())
+                    .where('#', air())
+                    .where(' ', any())
                     .build();
         }));
+        VacuumDistillationTower.init();
 
         GTMultiMachines.ASSEMBLY_LINE.setPattern("main",
                 GTMemoizer.memoize(() -> MultiblockPatternBuilder.start(BACK, UP, RIGHT)
