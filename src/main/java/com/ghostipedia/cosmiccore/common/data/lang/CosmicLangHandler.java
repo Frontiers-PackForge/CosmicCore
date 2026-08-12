@@ -90,6 +90,14 @@ public class CosmicLangHandler extends LangHandler {
         // items
         replace(provider, "item.gtceu.tool.luv_meld_tool", "%s Meld Multitool");
         provider.add("item.cosmiccore.portable_gravity_core.tooltip", "§aNormalizes Gravity to Match Earth.");
+        provider.add("item.cosmiccore.steam_conveyor.tooltip", "Moves items between adjacent inventories.");
+        provider.add("item.cosmiccore.steam_pump.tooltip", "Moves fluids between adjacent tanks.");
+        provider.add("item.cosmiccore.steam_robot_arm.tooltip",
+                "Moves exact quantities of items between adjacent inventories.");
+        provider.add("item.cosmiccore.steam_fluid_regulator.tooltip",
+                "Moves exact quantities of fluids between adjacent tanks.");
+        provider.add("cosmiccore.universal.tooltip.item_transfer_rate", "Transfer Rate: %s items/s");
+        provider.add("cosmiccore.universal.tooltip.fluid_transfer_rate", "Transfer Rate: %s mB/t");
 
         replace(provider, "material.cosmiccore.blooming_sludge", "Blooming Sludge");
         replace(provider, "material.cosmiccore.bloom_rich_algae_solution", "Bloom Rich Algae Solution");
