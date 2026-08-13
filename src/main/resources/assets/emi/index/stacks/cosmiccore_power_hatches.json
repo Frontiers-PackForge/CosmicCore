@@ -1,0 +1,98 @@
+{
+  "removed": [
+    "item:cosmiccore:ulv_energy_output_hatch_4a",
+    "item:cosmiccore:ulv_energy_output_hatch_16a",
+    "item:cosmiccore:lv_energy_input_hatch_4a",
+    "item:cosmiccore:mv_energy_input_hatch_4a",
+    "item:cosmiccore:hv_energy_input_hatch_4a",
+    "item:cosmiccore:lv_energy_output_hatch_4a",
+    "item:cosmiccore:mv_energy_output_hatch_4a",
+    "item:cosmiccore:hv_energy_output_hatch_4a",
+    "item:cosmiccore:lv_energy_input_hatch_16a",
+    "item:cosmiccore:mv_energy_input_hatch_16a",
+    "item:cosmiccore:hv_energy_input_hatch_16a",
+    "item:cosmiccore:lv_energy_output_hatch_16a",
+    "item:cosmiccore:mv_energy_output_hatch_16a",
+    "item:cosmiccore:hv_energy_output_hatch_16a",
+    "item:cosmiccore:lv_energy_input_hatch_64a",
+    "item:cosmiccore:mv_energy_input_hatch_64a",
+    "item:cosmiccore:hv_energy_input_hatch_64a",
+    "item:cosmiccore:lv_energy_output_hatch_64a",
+    "item:cosmiccore:mv_energy_output_hatch_64a",
+    "item:cosmiccore:hv_energy_output_hatch_64a"
+  ],
+  "added": [
+    {
+      "stack": "item:cosmiccore:lv_energy_input_hatch_4a",
+      "after": "item:gtceu:max_energy_output_hatch"
+    },
+    {
+      "stack": "item:cosmiccore:mv_energy_input_hatch_4a",
+      "after": "item:cosmiccore:lv_energy_input_hatch_4a"
+    },
+    {
+      "stack": "item:cosmiccore:hv_energy_input_hatch_4a",
+      "after": "item:cosmiccore:mv_energy_input_hatch_4a"
+    },
+    {
+      "stack": "item:cosmiccore:lv_energy_output_hatch_4a",
+      "after": "item:gtceu:max_energy_input_hatch_4a"
+    },
+    {
+      "stack": "item:cosmiccore:mv_energy_output_hatch_4a",
+      "after": "item:cosmiccore:lv_energy_output_hatch_4a"
+    },
+    {
+      "stack": "item:cosmiccore:hv_energy_output_hatch_4a",
+      "after": "item:cosmiccore:mv_energy_output_hatch_4a"
+    },
+    {
+      "stack": "item:cosmiccore:lv_energy_input_hatch_16a",
+      "after": "item:gtceu:max_energy_output_hatch_4a"
+    },
+    {
+      "stack": "item:cosmiccore:mv_energy_input_hatch_16a",
+      "after": "item:cosmiccore:lv_energy_input_hatch_16a"
+    },
+    {
+      "stack": "item:cosmiccore:hv_energy_input_hatch_16a",
+      "after": "item:cosmiccore:mv_energy_input_hatch_16a"
+    },
+    {
+      "stack": "item:cosmiccore:lv_energy_output_hatch_16a",
+      "after": "item:gtceu:max_energy_input_hatch_16a"
+    },
+    {
+      "stack": "item:cosmiccore:mv_energy_output_hatch_16a",
+      "after": "item:cosmiccore:lv_energy_output_hatch_16a"
+    },
+    {
+      "stack": "item:cosmiccore:hv_energy_output_hatch_16a",
+      "after": "item:cosmiccore:mv_energy_output_hatch_16a"
+    },
+    {
+      "stack": "item:cosmiccore:lv_energy_input_hatch_64a",
+      "after": "item:gtceu:max_energy_output_hatch_16a"
+    },
+    {
+      "stack": "item:cosmiccore:mv_energy_input_hatch_64a",
+      "after": "item:cosmiccore:lv_energy_input_hatch_64a"
+    },
+    {
+      "stack": "item:cosmiccore:hv_energy_input_hatch_64a",
+      "after": "item:cosmiccore:mv_energy_input_hatch_64a"
+    },
+    {
+      "stack": "item:cosmiccore:lv_energy_output_hatch_64a",
+      "after": "item:gtceu:max_substation_input_hatch_64a"
+    },
+    {
+      "stack": "item:cosmiccore:mv_energy_output_hatch_64a",
+      "after": "item:cosmiccore:lv_energy_output_hatch_64a"
+    },
+    {
+      "stack": "item:cosmiccore:hv_energy_output_hatch_64a",
+      "after": "item:cosmiccore:mv_energy_output_hatch_64a"
+    }
+  ]
+}
