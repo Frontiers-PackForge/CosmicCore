@@ -778,6 +778,23 @@ public class CosmicLangHandler extends LangHandler {
         provider.add("cosmiccore.jade.me_computation_array.buffer", "Stored Power: %s / %s EU (%s)");
         provider.add("cosmiccore.jade.me_computation_array.uplink.online", "Uplink Online");
         provider.add("cosmiccore.jade.me_computation_array.uplink.offline", "Uplink Offline");
+        provider.add("config.jade.plugin_cosmiccore.power_grid_telemetry", "[CosmicCore] Power Grid Telemetry");
+        provider.add("cosmiccore.jade.power.input_rating", "§fFace INPUT: %s V / %s A");
+        provider.add("cosmiccore.jade.power.output_rating", "Face OUTPUT: %s V / %s A");
+        provider.add("cosmiccore.jade.power.face_disconnected", "Face EU: Not connected");
+        provider.add("cosmiccore.jade.power.input_flow", "Block INPUT (1 s avg): %s A / %s EU/t");
+        provider.add("cosmiccore.jade.power.output_flow", "Block OUTPUT (1 s avg): %s A / %s EU/t");
+        provider.add("cosmiccore.jade.power.cable_rating", "§fCable Rating§r: %s V (%s) @ %s A");
+        provider.add("cosmiccore.jade.power.cable_voltage", "§fLive Voltage§r: %s V (%s)");
+        provider.add("cosmiccore.jade.power.cable_voltage_idle", "§fLive Voltage§r: §fIdle");
+        provider.add("cosmiccore.jade.power.cable_load", "§fLoad§r: %s §aA §7/ %s §aEU/t §7(§r%s§b%%§7)");
+        provider.add("cosmiccore.jade.power.cable_temperature", "§fTemperature: %s §bK");
+        provider.add("cosmiccore.jade.power.cable_overload", "§4Overload§c: %s%% §4to failure");
+        provider.add("cosmiccore.jade.power.cable_cause", "§cCause: %s");
+        provider.add("cosmiccore.jade.power.cable_cause.overamperage", "§6Overamperage");
+        provider.add("cosmiccore.jade.power.cable_cause.overvoltage", "§6Overvoltage");
+        provider.add("cosmiccore.jade.power.cable_cause.both", "§6Overamperage and overvoltage");
+        provider.add("cosmiccore.jade.power.cable_cause.residual", "§6Residual heat");
         provider.add("cosmiccore.machine.me_computation_array.display.components", "Components: %s Cores / %s Relays");
         provider.add("cosmiccore.machine.me_computation_array.display.cwu", "Compute/tick: %s / %s CWU/t");
         provider.add("cosmiccore.machine.me_computation_array.display.energy", "EU Demand: %s EU/t");
@@ -1224,7 +1241,7 @@ public class CosmicLangHandler extends LangHandler {
         provider.add("config.jade.plugin_cosmiccore.drone_station", "[CosmicCore] Drone Station Info");
         provider.add("config.jade.plugin_cosmiccore.drone_maintenance_interface",
                 "[CosmicCore] Drone Maintenance Interface");
-        provider.add("gtceu.jade.changes_eu_tick", "%s EU/t");
+        provider.add("gtceu.jade.changes_eu_tick", "Net Storage: %s EU/t");
 
         // JADE Stellar Module Provider
         provider.add("cosmiccore.jade.stellar_module.not_connected", "Iris: Not Connected");
