@@ -155,6 +155,8 @@
     "gtfix.RecipeUILayoutEmberMixin",
     "gtfix.IntCircuitGhostSlotFixMixin",
     "gtfix.DiodeModeProviderAmperageFixMixin",
+    "gtfix.BatteryBufferUnconditionalOvervoltageFixMixin",
+    "gtfix.NotifiableEnergyContainerOvervoltageFixMixin",
     "gtfix.MinerPostProcessingRecipeSelectionFixMixin",
     "gtfix.GTMultiblockOutputTooltipServerFixMixin",
     "gtfix.WorkableMultiblockRecipeTypeCacheFixMixin",

@@ -779,11 +779,11 @@ public class CosmicLangHandler extends LangHandler {
         provider.add("cosmiccore.jade.me_computation_array.uplink.online", "Uplink Online");
         provider.add("cosmiccore.jade.me_computation_array.uplink.offline", "Uplink Offline");
         provider.add("config.jade.plugin_cosmiccore.power_grid_telemetry", "[CosmicCore] Power Grid Telemetry");
-        provider.add("cosmiccore.jade.power.input_rating", "§fFace INPUT: %s V / %s A");
-        provider.add("cosmiccore.jade.power.output_rating", "Face OUTPUT: %s V / %s A");
-        provider.add("cosmiccore.jade.power.face_disconnected", "Face EU: Not connected");
-        provider.add("cosmiccore.jade.power.input_flow", "Block INPUT (1 s avg): %s A / %s EU/t");
-        provider.add("cosmiccore.jade.power.output_flow", "Block OUTPUT (1 s avg): %s A / %s EU/t");
+        provider.add("cosmiccore.jade.power.input_rating", "§fFace INPUT§7: %s V @ %s A");
+        provider.add("cosmiccore.jade.power.output_rating", "§fFace OUTPUT§7: %s V @ %s A");
+        provider.add("cosmiccore.jade.power.face_disconnected", "§fFace EU§7: Not connected");
+        provider.add("cosmiccore.jade.power.input_flow", "§fBlock INPUT§7: %s A @ %s EU/t");
+        provider.add("cosmiccore.jade.power.output_flow", "§fBlock OUTPUT§7: %s A @ %s EU/t");
         provider.add("cosmiccore.jade.power.cable_rating", "§fCable Rating§r: %s V (%s) @ %s A");
         provider.add("cosmiccore.jade.power.cable_voltage", "§fLive Voltage§r: %s V (%s)");
         provider.add("cosmiccore.jade.power.cable_voltage_idle", "§fLive Voltage§r: §fIdle");
