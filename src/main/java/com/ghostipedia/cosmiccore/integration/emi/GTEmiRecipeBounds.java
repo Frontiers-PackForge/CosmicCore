@@ -1,5 +1,7 @@
 package com.ghostipedia.cosmiccore.integration.emi;
 
+import com.ghostipedia.cosmiccore.common.power.steam.SteamRecipeViewerModifier;
+
 import com.gregtechceu.gtceu.api.capability.recipe.CWURecipeCapability;
 import com.gregtechceu.gtceu.api.capability.recipe.EURecipeCapability;
 import com.gregtechceu.gtceu.api.capability.recipe.FluidRecipeCapability;
@@ -15,10 +17,14 @@ import com.gregtechceu.gtceu.api.recipe.gui.GTRecipeTypeUILayout.CapabilityUIInf
 import com.gregtechceu.gtceu.api.recipe.gui.RecipeViewerCapabilityLayoutBuilder;
 import com.gregtechceu.gtceu.integration.recipeviewer.emi.recipe.GTEmiRecipe;
 
+import net.minecraft.client.Minecraft;
+import net.minecraft.network.chat.Component;
+
 import dev.emi.emi.api.widget.Bounds;
 
 import java.lang.invoke.MethodHandles;
 import java.lang.invoke.VarHandle;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -26,6 +32,7 @@ public final class GTEmiRecipeBounds {
 
     private static final int SLOT_SIZE = 18;
     private static final int MIN_WIDTH = 150;
+    private static final int ROOT_HORIZONTAL_PADDING = 6;
     private static final int ROOT_OVERHEAD = 14;
     private static final int TEXT_LINE_HEIGHT = 9;
     private static final int TEXT_COMPONENT_PADDING = 1;
@@ -58,13 +65,19 @@ public final class GTEmiRecipeBounds {
     private static Bounds tryEstimate(GTRecipe recipe) {
         GTRecipeType recipeType = recipe.getType();
         GTRecipeTypeUILayout layout = recipeType.getUiLayout();
-        if (layout == null || !recipe.conditions.isEmpty() || !layout.getRecipeUIModifiers().isEmpty() ||
+        if (layout == null || !recipe.conditions.isEmpty() || !hasSupportedRecipeUIModifiers(layout) ||
                 layout.getCustomUIBuilder() != null || !hasDefaultProgressSupplier(layout) ||
                 !DEFAULT_LAYOUTS.computeIfAbsent(recipeType, GTEmiRecipeBounds::hasOnlyDefaultCapabilities))
             return null;
 
         LayoutMetrics metrics = measureLayout(recipe, layout);
         return bounds(metrics.width(), metrics.height());
+    }
+
+    private static boolean hasSupportedRecipeUIModifiers(GTRecipeTypeUILayout layout) {
+        var modifiers = layout.getRecipeUIModifiers();
+        return modifiers.isEmpty() || modifiers.size() == 1 &&
+                modifiers.getFirst() == SteamRecipeViewerModifier.INSTANCE;
     }
 
     private static boolean hasDefaultProgressSupplier(GTRecipeTypeUILayout layout) {
@@ -113,8 +126,19 @@ public final class GTEmiRecipeBounds {
         int outputHeight = measureColumnHeight(recipe.getType(), IO.OUT);
         int progressSize = Math.max(SLOT_SIZE, layout.getProgressBar().progressSize());
         int contentHeight = Math.max(progressSize, Math.max(inputHeight, outputHeight));
-        int height = Math.max(60, ROOT_OVERHEAD + contentHeight + measureTextHeight(recipe));
-        return new LayoutMetrics(MIN_WIDTH, height);
+        var steamSummary = layout.getRecipeUIModifiers().isEmpty() ? List.<Component>of() :
+                SteamRecipeViewerModifier.summaryLines(recipe);
+        int height = Math.max(60, ROOT_OVERHEAD + contentHeight + measureTextHeight(recipe, steamSummary.size()));
+        int width = Math.max(MIN_WIDTH, measureSteamSummaryWidth(steamSummary));
+        return new LayoutMetrics(width, height);
+    }
+
+    private static int measureSteamSummaryWidth(List<Component> steamSummary) {
+        int width = 0;
+        for (Component line : steamSummary) {
+            width = Math.max(width, Minecraft.getInstance().font.width(line));
+        }
+        return width + ROOT_HORIZONTAL_PADDING;
     }
 
     private static int measureColumnHeight(GTRecipeType recipeType, IO io) {
@@ -131,7 +155,7 @@ public final class GTEmiRecipeBounds {
         return height;
     }
 
-    private static int measureTextHeight(GTRecipe recipe) {
+    private static int measureTextHeight(GTRecipe recipe, int steamSummaryLines) {
         int height = 0;
         int components = 0;
         if (!recipe.data.getBoolean("hide_duration")) {
@@ -163,6 +187,11 @@ public final class GTEmiRecipeBounds {
         if (!recipe.getInputEUt().isEmpty()) {
             height += OVERCLOCK_BUTTON_HEIGHT;
             components++;
+        }
+
+        if (steamSummaryLines > 0) {
+            height += TEXT_LINE_HEIGHT * steamSummaryLines;
+            components += steamSummaryLines;
         }
         return height + Math.max(0, components - 1) * TEXT_COMPONENT_PADDING;
     }

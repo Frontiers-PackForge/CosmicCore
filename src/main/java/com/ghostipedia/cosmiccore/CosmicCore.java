@@ -36,6 +36,7 @@ import com.ghostipedia.cosmiccore.common.machine.multiblock.multi.logic.bloomwyr
 import com.ghostipedia.cosmiccore.common.machine.multiblock.multi.modular.MultiblockInit;
 import com.ghostipedia.cosmiccore.common.mob.DimensionMobScaling;
 import com.ghostipedia.cosmiccore.common.network.CCoreNetwork;
+import com.ghostipedia.cosmiccore.common.power.steam.SteamRecipeViewerRegistration;
 import com.ghostipedia.cosmiccore.common.recipe.condition.CosmicConditions;
 import com.ghostipedia.cosmiccore.common.reflection.bargain.CosmicBargains;
 import com.ghostipedia.cosmiccore.ember.CosmicEmberCapabilities;
@@ -125,6 +126,9 @@ public class CosmicCore {
         CosmicRecipeCapabilities.init();
         CosmicConditions.register();
         CosmicRecipeTypes.init();
+        if (Platform.isClient()) {
+            SteamRecipeViewerRegistration.init();
+        }
         CosmicBlocks.init();
         CosmicBlockEntities.init();
         CosmicCovers.init();

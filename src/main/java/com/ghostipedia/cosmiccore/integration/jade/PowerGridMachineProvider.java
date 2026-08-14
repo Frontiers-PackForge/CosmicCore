@@ -1,9 +1,11 @@
 package com.ghostipedia.cosmiccore.integration.jade;
 
+import com.gregtechceu.gtceu.api.GTValues;
 import com.gregtechceu.gtceu.api.block.MetaMachineBlock;
 import com.gregtechceu.gtceu.api.capability.GTCapabilityHelper;
 import com.gregtechceu.gtceu.api.capability.IEnergyContainer;
 import com.gregtechceu.gtceu.api.machine.MetaMachine;
+import com.gregtechceu.gtceu.common.machine.electric.BatteryBufferMachine;
 import com.gregtechceu.gtceu.common.machine.electric.TransformerMachine;
 import com.gregtechceu.gtceu.common.machine.multiblock.part.DiodePartMachine;
 import com.gregtechceu.gtceu.utils.FormattingUtil;
@@ -15,6 +17,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.Mth;
 
 import snownee.jade.api.BlockAccessor;
 import snownee.jade.api.IBlockComponentProvider;
@@ -36,6 +39,7 @@ public enum PowerGridMachineProvider implements IBlockComponentProvider, IServer
     private static final String FACE_INPUT = "FaceInput";
     private static final String FACE_OUTPUT = "FaceOutput";
     private static final String NATIVE_FACE_RATINGS = "NativeFaceRatings";
+    private static final String COMPACT_FACE_RATINGS = "CompactFaceRatings";
 
     @Override
     public ResourceLocation getUid() {
@@ -81,6 +85,7 @@ public enum PowerGridMachineProvider implements IBlockComponentProvider, IServer
         telemetry.putBoolean(FACE_OUTPUT, faceContainer != null && faceContainer.outputsEnergy(side));
         telemetry.putBoolean(NATIVE_FACE_RATINGS,
                 machine instanceof DiodePartMachine || machine instanceof TransformerMachine);
+        telemetry.putBoolean(COMPACT_FACE_RATINGS, machine instanceof BatteryBufferMachine);
         data.put(DATA, telemetry);
     }
 
@@ -99,13 +104,18 @@ public enum PowerGridMachineProvider implements IBlockComponentProvider, IServer
         long outputPerSecond = telemetry.getLong(OUTPUT_PER_SECOND);
         boolean shift = GTUtil.isShiftDown();
         boolean nativeFaceRatings = telemetry.getBoolean(NATIVE_FACE_RATINGS);
+        boolean compactFaceRatings = telemetry.getBoolean(COMPACT_FACE_RATINGS);
 
         if (!nativeFaceRatings) {
             if (telemetry.getBoolean(FACE_INPUT)) {
-                tooltip.add(rating("cosmiccore.jade.power.input_rating", inputVoltage, inputAmperage));
+                tooltip.add(
+                        compactFaceRatings ? compactRating("gtceu.top.transform_input", inputVoltage, inputAmperage) :
+                                rating("cosmiccore.jade.power.input_rating", inputVoltage, inputAmperage));
             }
             if (telemetry.getBoolean(FACE_OUTPUT)) {
-                tooltip.add(rating("cosmiccore.jade.power.output_rating", outputVoltage, outputAmperage));
+                tooltip.add(compactFaceRatings ?
+                        compactRating("gtceu.top.transform_output", outputVoltage, outputAmperage) :
+                        rating("cosmiccore.jade.power.output_rating", outputVoltage, outputAmperage));
             }
             if (shift && !telemetry.getBoolean(FACE_INPUT) && !telemetry.getBoolean(FACE_OUTPUT)) {
                 tooltip.add(Component.translatable("cosmiccore.jade.power.face_disconnected")
@@ -130,6 +140,11 @@ public enum PowerGridMachineProvider implements IBlockComponentProvider, IServer
                 key,
                 value(FormattingUtil.formatNumbers(voltage), ChatFormatting.GREEN),
                 value(FormattingUtil.formatNumbers(amperage), ChatFormatting.YELLOW));
+    }
+
+    private static Component compactRating(String key, long voltage, long amperage) {
+        int tier = Mth.clamp(GTUtil.getTierByVoltage(voltage), 0, GTValues.VNF.length - 1);
+        return Component.translatable(key, GTValues.VNF[tier] + "\u00A7r (" + amperage + "A)");
     }
 
     private static Component flow(String key, long euPerSecond, long voltage) {

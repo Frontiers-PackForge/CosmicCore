@@ -3,6 +3,7 @@ package com.ghostipedia.cosmiccore.common.data.materials;
 import com.ghostipedia.cosmiccore.CosmicCore;
 import com.ghostipedia.cosmiccore.api.data.material.property.CCoreMaterialIconSet;
 import com.ghostipedia.cosmiccore.api.item.MeldingOmniTool;
+import com.ghostipedia.cosmiccore.common.power.ConductorAmpacityRules;
 
 import com.gregtechceu.gtceu.api.GTValues;
 import com.gregtechceu.gtceu.api.data.chemical.material.Material;
@@ -1013,6 +1014,7 @@ public class CosmicMaterials {
     }
 
     public static void modifyMaterials() {
+        ConductorAmpacityRules.applyMaterialBaseAmperages();
         var rubyOreProp = Ruby.getProperty(PropertyKey.ORE);
         var ilmeniteOreProp = Ilmenite.getProperty(PropertyKey.ORE);
         var aluminiumOreProp = Aluminium.getProperty(PropertyKey.ORE);
