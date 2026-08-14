@@ -14,18 +14,6 @@
         },
         {
             "identifier": {
-                "group": "createbionics",
-                "artifact": "createbionics"
-            },
-            "version": {
-                "range": "[1.0.5b,)",
-                "artifactVersion": "1.0.5b"
-            },
-            "path": "META-INF/jarjar/createbionics-1.0.5b.jar",
-            "isObfuscated": false
-        },
-        {
-            "identifier": {
                 "group": "com.gregtechceu.gtceu",
                 "artifact": "gtceu-1.21.1"
             },
