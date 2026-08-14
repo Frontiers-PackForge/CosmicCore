@@ -375,6 +375,30 @@ public class CosmicBlocks {
             CosmicCore.id("block/casings/solid/steel_plated_bronze_casing"));
     public static final BlockEntry<Block> ALTERNATOR_FLUX_COILING = createCasingBlock("alternator_flux_coiling",
             CosmicCore.id("block/casings/solid/alternator_flux_coiling_copper"));
+    public static final BlockEntry<Block> STEAM_GAS_TURBINE_INTEGRAL_COMPONENTS = createCasingBlock(
+            "steam_gas_turbine_integral_components", "Steam/Gas Turbine Integral Components",
+            CosmicCore.id("block/casings/solid/steam_gas_turbine_integral_components"));
+    public static final BlockEntry<Block> COMBUSTION_INTEGRAL_COMPONENTS = createCasingBlock(
+            "combustion_integral_components", "Combustion Integral Components",
+            CosmicCore.id("block/casings/solid/combustion_integral_components"));
+    public static final BlockEntry<Block> INDUSTRIAL_PARTWORK = createCasingBlock(
+            "industrial_partwork", "Industrial Partwork",
+            CosmicCore.id("block/casings/solid/industrial_partwork"));
+    public static final BlockEntry<Block> INDUSTRIAL_CONVERTER_SHELL = createCasingBlock(
+            "industrial_converter_shell", "Industrial Converter Shell",
+            CosmicCore.id("block/casings/solid/industrial_converter_shell"));
+    public static final BlockEntry<Block> LOW_VOLTAGE_SOLENOID_HOUSING = createCasingBlock(
+            "low_voltage_solenoid_housing", "Low Voltage Solenoid Housing",
+            CosmicCore.id("block/casings/solid/low_voltage_solenoid_housing"));
+    public static final BlockEntry<Block> MEDIUM_VOLTAGE_SOLENOID_HOUSING = createCasingBlock(
+            "medium_voltage_solenoid_housing", "Medium Voltage Solenoid Housing",
+            CosmicCore.id("block/casings/solid/medium_voltage_solenoid_housing"));
+    public static final BlockEntry<Block> HIGH_VOLTAGE_SOLENOID_HOUSING = createCasingBlock(
+            "high_voltage_solenoid_housing", "High Voltage Solenoid Housing",
+            CosmicCore.id("block/casings/solid/high_voltage_solenoid_housing"));
+    public static final BlockEntry<Block> EXTREME_VOLTAGE_SOLENOID_HOUSING = createCasingBlock(
+            "extreme_voltage_solenoid_housing", "Extreme Voltage Solenoid Housing",
+            CosmicCore.id("block/casings/solid/extreme_voltage_solenoid_housing"));
     public static final BlockEntry<Block> LIGHTWEIGHT_INDUSTRIAL_CASING = createCasingBlock(
             "lightweight_industrial_casing", CosmicCore.id("block/casings/solid/lightweight_industrial_casing"));
     public static final BlockEntry<Block> LIGHTWEIGHT_MECHANICAL_PARTWORK = createCasingBlock(
@@ -1081,6 +1105,19 @@ public class CosmicBlocks {
     public static BlockEntry<Block> createCasingBlock(String name, ResourceLocation texture) {
         return createCasingBlock(name, Block::new, texture, () -> Blocks.IRON_BLOCK,
                 () -> RenderType::cutoutMipped);
+    }
+
+    public static BlockEntry<Block> createCasingBlock(String name, String lang, ResourceLocation texture) {
+        return REGISTRATE.block(name, Block::new)
+                .initialProperties(() -> Blocks.IRON_BLOCK)
+                .properties(p -> p.isValidSpawn((state, level, pos, ent) -> false))
+                .addLayer(() -> RenderType::cutoutMipped)
+                .lang(lang)
+                .exBlockstate(GTModels.cubeAllModel(texture))
+                .tag(CustomTags.MINEABLE_WITH_CONFIG_VALID_PICKAXE_WRENCH)
+                .item(BlockItem::new)
+                .build()
+                .register();
     }
 
     public static BlockEntry<Block> createCasingBlock(String name,
