@@ -1,0 +1,21 @@
+{
+    "type": "minecraft:block",
+    "pools": [
+        {
+            "bonus_rolls": 0.0,
+            "conditions": [
+                {
+                    "condition": "minecraft:survives_explosion"
+                }
+            ],
+            "entries": [
+                {
+                    "type": "minecraft:item",
+                    "name": "cosmiccore:extreme_voltage_solenoid_housing"
+                }
+            ],
+            "rolls": 1.0
+        }
+    ],
+    "random_sequence": "cosmiccore:blocks/extreme_voltage_solenoid_housing"
+}
