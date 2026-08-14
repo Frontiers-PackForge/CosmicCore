@@ -43,7 +43,6 @@ afterEvaluate {
 tasks.named('jar', org.gradle.jvm.tasks.Jar).configure {
     dependsOn verifyNebulaeArtifact
     from("$rootDir/libs/ldlib-neoforge-1.21.1-1.0.35.a-ccpatch.jar") { into 'META-INF/jarjar' }
-    from("$rootDir/libs/createbionics-1.0.5b.jar") { into 'META-INF/jarjar' }
     from("$rootDir/libs/gtceu-1.21.1-8.0.0.jar") { into 'META-INF/jarjar' }
     from(nebulaeArtifactFile) { into 'META-INF/jarjar' }
     from(configurations.spaceGravityRuntime) {
