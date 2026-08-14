@@ -7,7 +7,6 @@ import com.ghostipedia.cosmiccore.common.item.behavior.OxygenSupplyTankBehavior;
 import com.ghostipedia.cosmiccore.common.network.CCoreNetwork;
 import com.ghostipedia.cosmiccore.common.network.packet.OxygenWarnPacket;
 import com.ghostipedia.cosmiccore.common.network.packet.SyncOxygenBarPacket;
-import com.ghostipedia.cosmiccore.common.reflection.bargain.impl.DepthsBargain;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
@@ -68,7 +67,6 @@ public final class OxygenLogic {
         ServerLevel level = player.serverLevel();
 
         Optional.of(player.getData(CosmicAttachmentTypes.OXYGEN_BUDGET)).ifPresent(cap -> {
-            // Get player-specific max capacity (may be modified by bargains)
             long playerMaxOxygen = getMaxOxygenTicks(player);
 
             // Initialize if needed
@@ -151,12 +149,7 @@ public final class OxygenLogic {
                 }
                 if (next <= 0 && rates.suffocationDamage > 0f &&
                         (level.getGameTime() % SUFFOCATION_DAMAGE_INTERVAL) == 0) {
-                    // Check for Depths bargain - instant death instead of gradual damage
-                    if (DepthsBargain.shouldInstantKillOnSuffocation(player)) {
-                        DepthsBargain.executeInstantSuffocation(player);
-                    } else {
-                        player.hurt(player.damageSources().drown(), rates.suffocationDamage);
-                    }
+                    player.hurt(player.damageSources().drown(), rates.suffocationDamage);
                 }
 
             } else if (rates.oxygenRecoveryPerTick > 0 && current < playerMaxOxygen) {

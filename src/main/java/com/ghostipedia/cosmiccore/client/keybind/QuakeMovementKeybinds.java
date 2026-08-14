@@ -1,10 +1,10 @@
 package com.ghostipedia.cosmiccore.client.keybind;
 
 import com.ghostipedia.cosmiccore.CosmicCore;
+import com.ghostipedia.cosmiccore.common.movement.CelesteDashHandler;
+import com.ghostipedia.cosmiccore.common.movement.QuakeMovementHandler;
 import com.ghostipedia.cosmiccore.common.network.CCoreNetwork;
-import com.ghostipedia.cosmiccore.common.reflection.bargain.impl.CelesteDashHandler;
-import com.ghostipedia.cosmiccore.common.reflection.bargain.impl.QuakeMovementHandler;
-import com.ghostipedia.cosmiccore.common.reflection.network.DashPacket;
+import com.ghostipedia.cosmiccore.common.network.packet.DashPacket;
 
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
@@ -58,7 +58,7 @@ public class QuakeMovementKeybinds {
                 return;
             }
 
-            if (!QuakeMovementHandler.getClientHasQuakeMovement()) {
+            if (!QuakeMovementHandler.canUseGlobestriderMovement(player)) {
                 wasKeyDown = false;
                 return;
             }

@@ -38,7 +38,6 @@ import com.ghostipedia.cosmiccore.common.mob.DimensionMobScaling;
 import com.ghostipedia.cosmiccore.common.network.CCoreNetwork;
 import com.ghostipedia.cosmiccore.common.power.steam.SteamRecipeViewerRegistration;
 import com.ghostipedia.cosmiccore.common.recipe.condition.CosmicConditions;
-import com.ghostipedia.cosmiccore.common.reflection.bargain.CosmicBargains;
 import com.ghostipedia.cosmiccore.ember.CosmicEmberCapabilities;
 import com.ghostipedia.cosmiccore.gtbridge.CosmicRecipeTypes;
 
@@ -95,7 +94,6 @@ public class CosmicCore {
         CosmicCropFeatures.register(modBus);
         CosmicFirmamentFeatures.register(modBus);
         CosmicRituals.register(modBus);
-        CosmicBargains.init();
 
         if (FMLEnvironment.dist.isClient()) {
             CosmicCoreClient.init(modBus);

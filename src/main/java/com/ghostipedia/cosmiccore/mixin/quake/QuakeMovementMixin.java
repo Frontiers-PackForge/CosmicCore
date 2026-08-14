@@ -1,8 +1,8 @@
 package com.ghostipedia.cosmiccore.mixin.quake;
 
 import com.ghostipedia.cosmiccore.api.gravity.GravityApi;
-import com.ghostipedia.cosmiccore.common.reflection.bargain.impl.QuakeGrounding;
-import com.ghostipedia.cosmiccore.common.reflection.bargain.impl.QuakeMovementHandler;
+import com.ghostipedia.cosmiccore.common.movement.QuakeGrounding;
+import com.ghostipedia.cosmiccore.common.movement.QuakeMovementHandler;
 
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;

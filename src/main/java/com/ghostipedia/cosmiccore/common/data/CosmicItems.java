@@ -25,8 +25,6 @@ import com.ghostipedia.cosmiccore.common.item.behavior.OxygenSupplyTankBehavior;
 import com.ghostipedia.cosmiccore.common.item.behavior.StructureWriteBehavior;
 import com.ghostipedia.cosmiccore.common.item.behavior.VeinSurveyBehavior;
 import com.ghostipedia.cosmiccore.common.item.behavior.WirelessPDABehavior;
-import com.ghostipedia.cosmiccore.common.reflection.item.MirrorItem;
-import com.ghostipedia.cosmiccore.common.reflection.item.SoulMutilatorItem;
 import com.ghostipedia.cosmiccore.gtbridge.recipemaker.RecipeMakerBehavior;
 import com.ghostipedia.cosmiccore.utils.ItemData;
 import com.ghostipedia.cosmiccore.utils.StringUtil;
@@ -1304,43 +1302,6 @@ public class CosmicItems {
             .item("programmable_mote", ComponentItem::new)
             .lang("Â§5Programmable Mote")
             .properties(p -> p.stacksTo(64))
-            .defaultModel()
-            .register();
-    public static final ItemEntry<ComponentItem> PERPETUITY_SHARD = REGISTRATE
-            .item("shard_of_perpetuity", ComponentItem::new)
-            .lang("Shard of Perpetuity")
-            .properties(p -> p.stacksTo(64))
-            .onRegister(attach(
-                    new TooltipBehavior(tooltips -> {
-                        tooltips.add(Component.translatable("cosmiccore.lore.shard_small.0"));
-                        tooltips.add(Component.translatable("cosmiccore.lore.shard_small.1"));
-                    }),
-                    new com.ghostipedia.cosmiccore.common.reflection.item.ShardConsumeBehavior(1)))
-            .defaultModel()
-            .register();
-    public static final ItemEntry<ComponentItem> PERPETUITY_SHARD_LARGE = REGISTRATE
-            .item("large_shard_of_perpetuity", ComponentItem::new)
-            .lang("Large Shard of Perpetuity")
-            .properties(p -> p.stacksTo(64))
-            .onRegister(attach(
-                    new TooltipBehavior(tooltips -> {
-                        tooltips.add(Component.translatable("cosmiccore.lore.shard_large.0"));
-                        tooltips.add(Component.translatable("cosmiccore.lore.shard_large.1"));
-                    }),
-                    new com.ghostipedia.cosmiccore.common.reflection.item.CapacityShardBehavior(10)))
-            .defaultModel()
-            .register();
-    public static final ItemEntry<ComponentItem> PERPETUITY_SHARD_MASSIVE = REGISTRATE
-            .item("cluster_of_perpetuity", ComponentItem::new)
-            .lang("Cluster of Perpetuity")
-            .properties(p -> p.stacksTo(16))
-            .onRegister(attach(
-                    new TooltipBehavior(tooltips -> {
-                        tooltips.add(Component.translatable("cosmiccore.lore.shard_huge.0"));
-                        tooltips.add(Component.translatable("cosmiccore.lore.shard_huge.1"));
-                        tooltips.add(Component.translatable("cosmiccore.lore.shard_huge.2"));
-                    }),
-                    new com.ghostipedia.cosmiccore.common.reflection.item.ScarRemovalBehavior()))
             .defaultModel()
             .register();
     public static final ItemEntry<ComponentItem> WIRELESS_PDA = REGISTRATE
@@ -2935,24 +2896,6 @@ public class CosmicItems {
             .lang("Quark Traveler's Boots")
             .properties(p -> p.rarity(Rarity.EPIC))
             .tag(CustomTags.PPE_ARMOR)
-            .register();
-
-    // -------------------------------------------------------------------------
-    // Reflection System
-    // -------------------------------------------------------------------------
-
-    public static final ItemEntry<MirrorItem> REFLECTION_MIRROR = REGISTRATE
-            .item("reflection_mirror", MirrorItem::new)
-            .lang("Mirror of Erosion")
-            .properties(p -> p.stacksTo(1))
-            .defaultModel()
-            .register();
-
-    public static final ItemEntry<SoulMutilatorItem> SOUL_MUTILATOR = REGISTRATE
-            .item("soul_mutilator", SoulMutilatorItem::new)
-            .lang("Soul Mutilator")
-            .properties(p -> p.stacksTo(1))
-            .defaultModel()
             .register();
 
     // -------------------------------------------------------------------------

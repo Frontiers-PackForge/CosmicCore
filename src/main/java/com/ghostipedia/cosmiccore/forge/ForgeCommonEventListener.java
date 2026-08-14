@@ -19,9 +19,6 @@ import com.ghostipedia.cosmiccore.common.mirror.deed.DeedCommand;
 import com.ghostipedia.cosmiccore.common.mirror.deed.DeedTeams;
 import com.ghostipedia.cosmiccore.common.network.CCoreNetwork;
 import com.ghostipedia.cosmiccore.common.network.packet.RevealFieldsPacket;
-import com.ghostipedia.cosmiccore.common.reflection.ReflectionCommand;
-import com.ghostipedia.cosmiccore.common.reflection.ReflectionCommands;
-import com.ghostipedia.cosmiccore.common.reflection.ReflectionConstants;
 import com.ghostipedia.cosmiccore.mixin.accessor.LivingEntityAccessor;
 
 import net.minecraft.core.registries.Registries;
@@ -145,10 +142,6 @@ public class ForgeCommonEventListener {
     public static void registerCommand(RegisterCommandsEvent event) {
         WirelessEnergyCommand.register(event.getDispatcher(), event.getBuildContext());
         SoulCommand.register(event.getDispatcher(), event.getBuildContext());
-        if (ReflectionConstants.ENABLED) {
-            ReflectionCommand.register(event.getDispatcher());
-            ReflectionCommands.register(event.getDispatcher());
-        }
         VeinSurveyCommand.register(event.getDispatcher());
         ExportRegistryCommand.register(event.getDispatcher());
         StarLadderCommand.register(event.getDispatcher());

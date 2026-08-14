@@ -1,9 +1,8 @@
-package com.ghostipedia.cosmiccore.common.reflection.bargain.impl;
+package com.ghostipedia.cosmiccore.common.movement;
 
 import com.ghostipedia.cosmiccore.CosmicCore;
 import com.ghostipedia.cosmiccore.api.gravity.GravityApi;
 import com.ghostipedia.cosmiccore.common.data.CosmicItems;
-import com.ghostipedia.cosmiccore.common.reflection.ReflectionCapability;
 
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
@@ -38,8 +37,6 @@ public class QuakeMovementHandler {
     private static final Map<UUID, Integer> airTime = new HashMap<>();
     private static final Map<UUID, Boolean> wasJumping = new HashMap<>();
 
-    private static boolean clientHasQuakeMovement = false;
-
     // Movement constants
     private static final double GROUND_ACCELERATE = 15.0;
     private static final double AIR_ACCELERATE = 200.0;
@@ -62,17 +59,6 @@ public class QuakeMovementHandler {
     private static int lastStrafeTick = 0;
     private static int lastTrimpTick = 0;
     private static double sessionMaxSpeed = 0;
-
-    @OnlyIn(Dist.CLIENT)
-    public static void setClientHasQuakeMovement(boolean has) {
-        clientHasQuakeMovement = has;
-    }
-
-    @OnlyIn(Dist.CLIENT)
-    public static boolean getClientHasQuakeMovement() {
-        Player player = Minecraft.getInstance().player;
-        return player != null && canUseGlobestriderMovement(player);
-    }
 
     public static boolean canUseGlobestriderMovement(Player player) {
         return hasGlobestriderPalms(player);
@@ -194,12 +180,6 @@ public class QuakeMovementHandler {
         }
 
         wasOnGround.put(uuid, onGround);
-    }
-
-    public static boolean hasQuakeMovement(Player player) {
-        return ReflectionCapability.get(player)
-                .map(reflection -> reflection.hasBargain(QuakeMovementBargain.INSTANCE.getId()))
-                .orElse(false);
     }
 
     private static Vec3 applyBunnyHop(Player player, Vec3 motion, double currentSpeed) {
