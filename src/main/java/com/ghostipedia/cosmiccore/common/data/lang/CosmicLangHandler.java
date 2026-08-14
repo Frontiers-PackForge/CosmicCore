@@ -98,6 +98,8 @@ public class CosmicLangHandler extends LangHandler {
                 "Moves exact quantities of fluids between adjacent tanks.");
         provider.add("cosmiccore.universal.tooltip.item_transfer_rate", "Transfer Rate: %s items/s");
         provider.add("cosmiccore.universal.tooltip.fluid_transfer_rate", "Transfer Rate: %s mB/t");
+        provider.add("tagprefix.wire_gt_twelve", "12x %s Wire");
+        provider.add("tagprefix.cable_gt_twelve", "12x %s Cable");
 
         replace(provider, "material.cosmiccore.blooming_sludge", "Blooming Sludge");
         replace(provider, "material.cosmiccore.bloom_rich_algae_solution", "Bloom Rich Algae Solution");
@@ -1869,6 +1871,8 @@ public class CosmicLangHandler extends LangHandler {
         provider.add("cosmiccore.bloomwyrm.recipe.charge_input", "Bloomwyrm Charge use: %s");
         provider.add("cosmiccore.bloomwyrm.recipe.charge_output", "Bloomwyrm Charge yield: +%s");
         provider.add("cosmiccore.bloomwyrm.recipe.max_parallel", "Max parallel: %s");
+        provider.add("cosmiccore.steam.recipe.time", "Steam Time: LP %s s | HP %s s");
+        provider.add("cosmiccore.steam.recipe.flow", "Steam Flow: LP %s mB/t | HP %s mB/t");
         for (var recipeType : BuiltInRegistries.RECIPE_TYPE) {
             if (recipeType instanceof GTRecipeType gtRecipeType &&
                     gtRecipeType.registryName.getNamespace().equals("gtceu")) {
