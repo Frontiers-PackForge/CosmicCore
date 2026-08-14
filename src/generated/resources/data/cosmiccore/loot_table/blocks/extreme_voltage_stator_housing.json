@@ -11,11 +11,11 @@
             "entries": [
                 {
                     "type": "minecraft:item",
-                    "name": "cosmiccore:low_voltage_solenoid_housing"
+                    "name": "cosmiccore:extreme_voltage_stator_housing"
                 }
             ],
             "rolls": 1.0
         }
     ],
-    "random_sequence": "cosmiccore:blocks/low_voltage_solenoid_housing"
+    "random_sequence": "cosmiccore:blocks/extreme_voltage_stator_housing"
 }
