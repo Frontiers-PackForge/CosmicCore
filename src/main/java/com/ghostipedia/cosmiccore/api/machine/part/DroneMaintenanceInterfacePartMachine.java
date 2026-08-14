@@ -9,8 +9,6 @@ import com.gregtechceu.gtceu.common.data.GTItems;
 import com.gregtechceu.gtceu.common.machine.multiblock.part.MaintenanceHatchPartMachine;
 import com.gregtechceu.gtceu.utils.ExtendedUseOnContext;
 
-import com.lowdragmc.lowdraglib.syncdata.annotation.DescSynced;
-
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -25,7 +23,6 @@ public class DroneMaintenanceInterfacePartMachine extends MaintenanceHatchPartMa
 
     // Can't sync a DroneStationConnection so magic value it is
     // -1 = no connection, otherwise it's the Long packed BPos
-    @DescSynced
     private long syncedConnectionPos;
 
     public DroneMaintenanceInterfacePartMachine(BlockEntityCreationInfo holder) {

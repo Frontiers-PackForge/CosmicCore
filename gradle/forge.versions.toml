@@ -2,7 +2,6 @@
 # --- shared GTCEu ecosystem (coordinates verbatim from GregTech-Modern 1.21 forge.versions.toml) ---
 # gtceu itself comes from the local flat jar in libs/ (gtceu-1.21.1-8.0.0.jar); version kept for mods.toml placeholder
 gtceu = "8.0.0"
-ldlib = "1.0.35.a"
 registrate = "MC1.21-1.3.0+67"
 configuration = "3.1.1-neoforge"
 
@@ -63,7 +62,6 @@ iris = "1.8.12+1.21.1-neoforge"
 
 [libraries]
 gtceu               = { module = "com.gregtechceu.gtceu:gtceu-1.21.1", version.ref = "gtceu" }
-ldlib               = { module = "com.lowdragmc.ldlib:ldlib-neoforge-1.21.1", version.ref = "ldlib" }
 registrate          = { module = "com.tterrag.registrate:Registrate", version.ref = "registrate" }
 configuration       = { module = "dev.toma.configuration:configuration-1.21.1", version.ref = "configuration" }
 

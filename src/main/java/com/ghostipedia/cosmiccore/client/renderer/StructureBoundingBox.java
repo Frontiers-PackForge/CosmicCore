@@ -3,8 +3,6 @@ package com.ghostipedia.cosmiccore.client.renderer;
 import com.ghostipedia.cosmiccore.api.data.DebugBlockPattern;
 import com.ghostipedia.cosmiccore.common.item.behavior.StructureWriteBehavior;
 
-import com.lowdragmc.lowdraglib.client.utils.RenderBufferUtils;
-
 import net.minecraft.client.Camera;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GameRenderer;
@@ -48,7 +46,7 @@ public class StructureBoundingBox {
             buffer = tesselator.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_COLOR);
             RenderSystem.setShader(GameRenderer::getPositionColorShader);
 
-            RenderBufferUtils.renderCubeFace(
+            renderCubeFace(
                     poseStack,
                     buffer,
                     poses[0].getX(),
@@ -69,7 +67,7 @@ public class StructureBoundingBox {
             RenderSystem.setShader(GameRenderer::getRendertypeLinesShader);
             RenderSystem.lineWidth(3);
 
-            RenderBufferUtils.drawCubeFrame(
+            drawCubeFrame(
                     poseStack,
                     buffer,
                     poses[0].getX(),
@@ -115,6 +113,125 @@ public class StructureBoundingBox {
             RenderSystem.enableDepthTest();
             poseStack.popPose();
         }
+    }
+
+    private static void renderCubeFace(
+                                       PoseStack poseStack,
+                                       BufferBuilder buffer,
+                                       float minX,
+                                       float minY,
+                                       float minZ,
+                                       float maxX,
+                                       float maxY,
+                                       float maxZ,
+                                       float red,
+                                       float green,
+                                       float blue,
+                                       float alpha,
+                                       boolean shade) {
+        Matrix4f matrix = poseStack.last().pose();
+        float sideRed = shade ? red * 0.6f : red;
+        float sideGreen = shade ? green * 0.6f : green;
+        float sideBlue = shade ? blue * 0.6f : blue;
+        addFaceVertex(buffer, matrix, minX, minY, minZ, sideRed, sideGreen, sideBlue, alpha);
+        addFaceVertex(buffer, matrix, minX, minY, maxZ, sideRed, sideGreen, sideBlue, alpha);
+        addFaceVertex(buffer, matrix, minX, maxY, maxZ, sideRed, sideGreen, sideBlue, alpha);
+        addFaceVertex(buffer, matrix, minX, maxY, minZ, sideRed, sideGreen, sideBlue, alpha);
+        addFaceVertex(buffer, matrix, maxX, minY, minZ, sideRed, sideGreen, sideBlue, alpha);
+        addFaceVertex(buffer, matrix, maxX, maxY, minZ, sideRed, sideGreen, sideBlue, alpha);
+        addFaceVertex(buffer, matrix, maxX, maxY, maxZ, sideRed, sideGreen, sideBlue, alpha);
+        addFaceVertex(buffer, matrix, maxX, minY, maxZ, sideRed, sideGreen, sideBlue, alpha);
+
+        float downRed = shade ? red * 0.5f : red;
+        float downGreen = shade ? green * 0.5f : green;
+        float downBlue = shade ? blue * 0.5f : blue;
+        addFaceVertex(buffer, matrix, minX, minY, minZ, downRed, downGreen, downBlue, alpha);
+        addFaceVertex(buffer, matrix, maxX, minY, minZ, downRed, downGreen, downBlue, alpha);
+        addFaceVertex(buffer, matrix, maxX, minY, maxZ, downRed, downGreen, downBlue, alpha);
+        addFaceVertex(buffer, matrix, minX, minY, maxZ, downRed, downGreen, downBlue, alpha);
+        addFaceVertex(buffer, matrix, minX, maxY, minZ, red, green, blue, alpha);
+        addFaceVertex(buffer, matrix, minX, maxY, maxZ, red, green, blue, alpha);
+        addFaceVertex(buffer, matrix, maxX, maxY, maxZ, red, green, blue, alpha);
+        addFaceVertex(buffer, matrix, maxX, maxY, minZ, red, green, blue, alpha);
+
+        float frontRed = shade ? red * 0.8f : red;
+        float frontGreen = shade ? green * 0.8f : green;
+        float frontBlue = shade ? blue * 0.8f : blue;
+        addFaceVertex(buffer, matrix, minX, minY, minZ, frontRed, frontGreen, frontBlue, alpha);
+        addFaceVertex(buffer, matrix, minX, maxY, minZ, frontRed, frontGreen, frontBlue, alpha);
+        addFaceVertex(buffer, matrix, maxX, maxY, minZ, frontRed, frontGreen, frontBlue, alpha);
+        addFaceVertex(buffer, matrix, maxX, minY, minZ, frontRed, frontGreen, frontBlue, alpha);
+        addFaceVertex(buffer, matrix, minX, minY, maxZ, frontRed, frontGreen, frontBlue, alpha);
+        addFaceVertex(buffer, matrix, maxX, minY, maxZ, frontRed, frontGreen, frontBlue, alpha);
+        addFaceVertex(buffer, matrix, maxX, maxY, maxZ, frontRed, frontGreen, frontBlue, alpha);
+        addFaceVertex(buffer, matrix, minX, maxY, maxZ, frontRed, frontGreen, frontBlue, alpha);
+    }
+
+    private static void addFaceVertex(
+                                      BufferBuilder buffer,
+                                      Matrix4f matrix,
+                                      float x,
+                                      float y,
+                                      float z,
+                                      float red,
+                                      float green,
+                                      float blue,
+                                      float alpha) {
+        buffer.addVertex(matrix, x, y, z).setColor(red, green, blue, alpha);
+    }
+
+    private static void drawCubeFrame(
+                                      PoseStack poseStack,
+                                      BufferBuilder buffer,
+                                      float minX,
+                                      float minY,
+                                      float minZ,
+                                      float maxX,
+                                      float maxY,
+                                      float maxZ,
+                                      float red,
+                                      float green,
+                                      float blue,
+                                      float alpha) {
+        PoseStack.Pose pose = poseStack.last();
+        Matrix4f matrix = pose.pose();
+        addFrameLine(buffer, pose, matrix, minX, minY, minZ, maxX, minY, minZ, red, green, blue, alpha, 1, 0, 0);
+        addFrameLine(buffer, pose, matrix, minX, maxY, minZ, maxX, maxY, minZ, red, green, blue, alpha, 1, 0, 0);
+        addFrameLine(buffer, pose, matrix, minX, minY, maxZ, maxX, minY, maxZ, red, green, blue, alpha, 1, 0, 0);
+        addFrameLine(buffer, pose, matrix, minX, maxY, maxZ, maxX, maxY, maxZ, red, green, blue, alpha, 1, 0, 0);
+        addFrameLine(buffer, pose, matrix, minX, minY, minZ, minX, maxY, minZ, red, green, blue, alpha, 0, 1, 0);
+        addFrameLine(buffer, pose, matrix, maxX, minY, minZ, maxX, maxY, minZ, red, green, blue, alpha, 0, 1, 0);
+        addFrameLine(buffer, pose, matrix, minX, minY, maxZ, minX, maxY, maxZ, red, green, blue, alpha, 0, 1, 0);
+        addFrameLine(buffer, pose, matrix, maxX, minY, maxZ, maxX, maxY, maxZ, red, green, blue, alpha, 0, 1, 0);
+        addFrameLine(buffer, pose, matrix, minX, minY, minZ, minX, minY, maxZ, red, green, blue, alpha, 0, 0, 1);
+        addFrameLine(buffer, pose, matrix, maxX, minY, minZ, maxX, minY, maxZ, red, green, blue, alpha, 0, 0, 1);
+        addFrameLine(buffer, pose, matrix, minX, maxY, minZ, minX, maxY, maxZ, red, green, blue, alpha, 0, 0, 1);
+        addFrameLine(buffer, pose, matrix, maxX, maxY, minZ, maxX, maxY, maxZ, red, green, blue, alpha, 0, 0, 1);
+    }
+
+    private static void addFrameLine(
+                                     BufferBuilder buffer,
+                                     PoseStack.Pose pose,
+                                     Matrix4f matrix,
+                                     float startX,
+                                     float startY,
+                                     float startZ,
+                                     float endX,
+                                     float endY,
+                                     float endZ,
+                                     float red,
+                                     float green,
+                                     float blue,
+                                     float alpha,
+                                     float normalX,
+                                     float normalY,
+                                     float normalZ) {
+        buffer.addVertex(matrix, startX, startY, startZ)
+                .setColor(red, green, blue, alpha)
+                .setNormal(pose, normalX, normalY, normalZ);
+        buffer.addVertex(matrix, endX, endY, endZ)
+                .setColor(red, green, blue, alpha)
+                .setNormal(pose, normalX, normalY, normalZ);
     }
 
     private static double axisOrigin(

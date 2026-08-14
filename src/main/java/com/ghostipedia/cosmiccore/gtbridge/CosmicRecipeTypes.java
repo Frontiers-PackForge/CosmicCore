@@ -17,10 +17,8 @@ import com.gregtechceu.gtceu.common.mui.GTGuiTextures;
 import com.gregtechceu.gtceu.common.recipe.condition.DimensionCondition;
 import com.gregtechceu.gtceu.utils.ResearchManager;
 
-import com.lowdragmc.lowdraglib.utils.LocalizationUtils;
-
-import net.minecraft.client.resources.language.I18n;
 import net.minecraft.core.registries.Registries;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 
@@ -30,10 +28,6 @@ import static com.gregtechceu.gtceu.common.data.GTRecipeTypes.*;
 
 public class CosmicRecipeTypes {
 
-    // TODO(Ore Chaos): these 6 ore-processing recipe types were referenced by their controllers +
-    // CosmicCoreOreRecipeHandler but never registered (WIP gap). IO sizes inferred from the recipe builders
-    // (flotation: item+fluid in / item out; powderizer: item in/out; sorter: 1 in / SORTER_IO_CAP=6 out) and
-    // sensible defaults for the no-recipe-yet ones (sludge/oneiric/dissolution). Tune IO/UI/sound as needed.
     public static final GTRecipeType SLUDGE_DIGESTOR = register(CosmicCore.id("sludge_digestor"), MULTIBLOCK)
             .setMaxIOSize(3, 3, 2, 2)
             .UI(builder -> builder.setProgressBar(GTGuiTextures.PROGRESS_ARROW));
@@ -637,69 +631,71 @@ public class CosmicRecipeTypes {
         // 8.0.0: GTRecipeType.addDataInfo(...) was removed; register XEI data-info lines on the dataInfos list.
         ORBITAL_FORGE_EBF.getDataInfos().add(data -> {
             int temp = data.getInt("ebf_temp");
-            return LocalizationUtils.format("gtceu.recipe.temperature", temp);
+            return Component.translatable("gtceu.recipe.temperature", temp).getString();
         });
         ORBITAL_FORGE_EBF.getDataInfos().add(data -> {
             int temp = data.getInt("ebf_temp");
             ICoilType requiredCoil = ICoilType.getMinRequiredType(temp);
             if (requiredCoil != null && !requiredCoil.getMaterial().isNull()) {
-                return LocalizationUtils.format("gtceu.recipe.coil.tier",
-                        I18n.get(requiredCoil.getMaterial().getUnlocalizedName()));
+                return Component.translatable("gtceu.recipe.coil.tier",
+                        Component.translatable(requiredCoil.getMaterial().getUnlocalizedName()).getString())
+                        .getString();
             }
             return "";
         });
         ORBITAL_FORGE_ABS.getDataInfos().add(data -> {
             int temp = data.getInt("ebf_temp");
-            return LocalizationUtils.format("gtceu.recipe.temperature", temp);
+            return Component.translatable("gtceu.recipe.temperature", temp).getString();
         });
         ORBITAL_FORGE_ABS.getDataInfos().add(data -> {
             int temp = data.getInt("ebf_temp");
             ICoilType requiredCoil = ICoilType.getMinRequiredType(temp);
             if (requiredCoil != null && !requiredCoil.getMaterial().isNull()) {
-                return LocalizationUtils.format("gtceu.recipe.coil.tier",
-                        I18n.get(requiredCoil.getMaterial().getUnlocalizedName()));
+                return Component.translatable("gtceu.recipe.coil.tier",
+                        Component.translatable(requiredCoil.getMaterial().getUnlocalizedName()).getString())
+                        .getString();
             }
             return "";
         });
         NAQUAHINE_REACTOR.getDataInfos().add(data -> {
             int minStrength = data.getInt("min_field");
-            return LocalizationUtils.format("cosmiccore.recipe.minField", minStrength);
+            return Component.translatable("cosmiccore.recipe.minField", minStrength).getString();
         });
         NAQUAHINE_REACTOR.getDataInfos().add(data -> {
             int decayRate = data.getInt("decay_rate");
             if (!data.getBoolean("per_tick")) {
-                return LocalizationUtils.format("cosmiccore.recipe.fieldSlam", decayRate);
+                return Component.translatable("cosmiccore.recipe.fieldSlam", decayRate).getString();
             }
-            return LocalizationUtils.format("cosmiccore.recipe.fieldDecay", decayRate);
+            return Component.translatable("cosmiccore.recipe.fieldDecay", decayRate).getString();
         });
         WASP_RECIPES.getDataInfos()
-                .add(data -> LocalizationUtils.format("cosmiccore.recipe.asteroid_weight_greater_1"));
+                .add(data -> Component.translatable("cosmiccore.recipe.asteroid_weight_greater_1").getString());
         for (GTRecipeType type : new GTRecipeType[] {
                 ABYSSAL_CULTURE_VAT, SCULK_BIOCHAMBER, BIOMANA_DIGESTOR, MANAWOMB_LEECHING_POND }) {
             type.getDataInfos().add(data -> data.contains(BloomwyrmRecipeKeys.BIOPOWER_INPUT) ?
-                    LocalizationUtils.format(
+                    Component.translatable(
                             "cosmiccore.bloomwyrm.recipe.biopower_input",
-                            data.getInt(BloomwyrmRecipeKeys.BIOPOWER_INPUT)) :
+                            data.getInt(BloomwyrmRecipeKeys.BIOPOWER_INPUT)).getString() :
                     "");
             type.getDataInfos().add(data -> data.contains(BloomwyrmRecipeKeys.BIOPOWER_OUTPUT) ?
-                    LocalizationUtils.format(
+                    Component.translatable(
                             "cosmiccore.bloomwyrm.recipe.biopower_output",
-                            data.getInt(BloomwyrmRecipeKeys.BIOPOWER_OUTPUT)) :
+                            data.getInt(BloomwyrmRecipeKeys.BIOPOWER_OUTPUT)).getString() :
                     "");
             type.getDataInfos().add(data -> data.contains(BloomwyrmRecipeKeys.CHARGE_INPUT) ?
-                    LocalizationUtils.format(
+                    Component.translatable(
                             "cosmiccore.bloomwyrm.recipe.charge_input",
-                            data.getLong(BloomwyrmRecipeKeys.CHARGE_INPUT)) :
+                            data.getLong(BloomwyrmRecipeKeys.CHARGE_INPUT)).getString() :
                     "");
             type.getDataInfos().add(data -> data.contains(BloomwyrmRecipeKeys.CHARGE_OUTPUT) ?
-                    LocalizationUtils.format(
+                    Component.translatable(
                             "cosmiccore.bloomwyrm.recipe.charge_output",
-                            data.getLong(BloomwyrmRecipeKeys.CHARGE_OUTPUT)) :
+                            data.getLong(BloomwyrmRecipeKeys.CHARGE_OUTPUT)).getString() :
                     "");
             type.getDataInfos().add(data -> data.contains(BloomwyrmRecipeKeys.MAX_PARALLEL) ?
-                    LocalizationUtils.format(
+                    Component.translatable(
                             "cosmiccore.bloomwyrm.recipe.max_parallel",
-                            data.getInt(BloomwyrmRecipeKeys.MAX_PARALLEL)) :
+                            data.getInt(BloomwyrmRecipeKeys.MAX_PARALLEL)).getString() :
                     "");
         }
 

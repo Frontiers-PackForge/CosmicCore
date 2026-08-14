@@ -848,9 +848,9 @@ public class CosmicLangHandler extends LangHandler {
                 "You have entered charging range [Range - %s blocks]");
         provider.add("cosmiccore.wireless_charger.left_range", "You have left charging range [Range - %s blocks]");
         provider.add("cosmiccore.circuit.lore.tier.max.0", "MAX Tier Circuit");
-        provider.add("cosmiccore.circuit.lore.tier.max.1", "Not a processor- but an Obituary.");
-        provider.add("cosmiccore.circuit.lore.tier.max.2", "Input: Existence.");
-        provider.add("cosmiccore.circuit.lore.tier.max.3", "Output: A single conclusion.");
+        provider.add("cosmiccore.circuit.lore.tier.max.1", "The Final Data Processor of the Titan of ???");
+        provider.add("cosmiccore.circuit.lore.tier.max.2", "In entered every world");
+        provider.add("cosmiccore.circuit.lore.tier.max.3", "as did nothing leave");
 
         provider.add("cosmiccore.lore.broken_virtue.0", "Perpetuity Shudders Softly");
         provider.add("cosmiccore.lore.broken_virtue.1", "Something has gone very wrong.");

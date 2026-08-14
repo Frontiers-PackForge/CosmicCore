@@ -4,7 +4,6 @@ import com.ghostipedia.cosmiccore.api.data.material.property.CCoreMaterialIconSe
 import com.ghostipedia.cosmiccore.api.item.component.ICustomRenderer;
 import com.ghostipedia.cosmiccore.client.renderer.item.CosmicCoreItemRendererProvider;
 
-import com.gregtechceu.gtceu.GTCEu;
 import com.gregtechceu.gtceu.api.data.chemical.material.Material;
 import com.gregtechceu.gtceu.api.data.tag.TagPrefix;
 import com.gregtechceu.gtceu.api.item.TagPrefixItem;
@@ -12,10 +11,10 @@ import com.gregtechceu.gtceu.api.item.TagPrefixItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 
-import org.checkerframework.common.aliasing.qual.Unique;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
@@ -26,6 +25,7 @@ public class TagPrefixItemMixin extends Item implements CosmicCoreItemRendererPr
     @Shadow
     @Final
     public TagPrefix tagPrefix;
+    @Shadow
     @Final
     public Material material;
 
@@ -40,11 +40,8 @@ public class TagPrefixItemMixin extends Item implements CosmicCoreItemRendererPr
             at = @At(value = "RETURN"),
             remap = false)
     private void TagPrefixItem(Item.Properties properties, TagPrefix tagPrefix, Material material, CallbackInfo ci) {
-        if (GTCEu.isClientSide()) {
-            if (material.getMaterialIconSet() instanceof CCoreMaterialIconSet iconSet) {
-                cosmicCore$customRenderer = iconSet.getCustomRender();
-            }
-
+        if (material.getMaterialIconSet() instanceof CCoreMaterialIconSet iconSet) {
+            cosmicCore$customRenderer = iconSet.getCustomRender();
         }
     }
 
@@ -52,7 +49,4 @@ public class TagPrefixItemMixin extends Item implements CosmicCoreItemRendererPr
     public ICustomRenderer getRenderInfo(ItemStack itemStack) {
         return cosmicCore$customRenderer;
     }
-
-    // getRenderer(ItemStack) -> IRenderer is the shared CosmicCoreItemRendererProvider default (delegates to
-    // getRenderInfo).
 }

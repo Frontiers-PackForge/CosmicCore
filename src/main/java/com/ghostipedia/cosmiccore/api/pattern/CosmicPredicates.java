@@ -3,7 +3,6 @@ package com.ghostipedia.cosmiccore.api.pattern;
 import com.ghostipedia.cosmiccore.api.CosmicCoreAPI;
 import com.ghostipedia.cosmiccore.api.machine.feature.IStellarModuleReceiver;
 import com.ghostipedia.cosmiccore.common.data.CosmicBlocks;
-import com.ghostipedia.cosmiccore.common.machine.multiblock.multi.MothCargoStation;
 
 import com.gregtechceu.gtceu.api.machine.MetaMachine;
 import com.gregtechceu.gtceu.api.machine.multiblock.MultiblockControllerMachine;
@@ -13,11 +12,8 @@ import com.gregtechceu.gtceu.api.multiblock.error.BlockMatchingError;
 import com.gregtechceu.gtceu.api.multiblock.util.BlockInfo;
 import com.gregtechceu.gtceu.api.recipe.GTRecipeType;
 
-import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 
 import java.util.Comparator;
@@ -86,28 +82,6 @@ public class CosmicPredicates {
                 .map(s -> new BlockInfo(s.get().defaultBlockState()))
                 .toList())
                 .addTooltips(Component.translatable("gtceu.multiblock.pattern.error.filters"));
-    }
-
-    public static PatternPredicate mothHomes() {
-        return new PatternPredicate("Moth Homes", worldState -> {
-            var blockState = worldState.getBlockState();
-            // Steel casing (always allowed as placeholder) or a valid Forestry beehive
-            if (blockState.is(CASING_STEEL_SOLID.get()) || MothCargoStation.isMothHome(blockState)) {
-                return null;
-            }
-            return Predicates.PLACEHOLDER;
-        }, List.of(
-                new BlockInfo(getBlockOrFallback(MothCargoStation.BEEHIVE_FOREST)),
-                new BlockInfo(getBlockOrFallback(MothCargoStation.BEEHIVE_LUSH)),
-                new BlockInfo(getBlockOrFallback(MothCargoStation.BEEHIVE_DESERT)),
-                new BlockInfo(getBlockOrFallback(MothCargoStation.BEEHIVE_END)),
-                new BlockInfo(CASING_STEEL_SOLID.get().defaultBlockState())))
-                .addTooltips(Component.literal("Forestry Beehive or Steel Casing"));
-    }
-
-    private static BlockState getBlockOrFallback(ResourceLocation loc) {
-        Block block = BuiltInRegistries.BLOCK.get(loc);
-        return (block != Blocks.AIR ? block : Blocks.BEEHIVE).defaultBlockState();
     }
 
     public static PatternPredicate stellarModuleSlot() {

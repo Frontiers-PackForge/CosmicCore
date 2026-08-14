@@ -22,8 +22,6 @@ import com.gregtechceu.gtceu.api.recipe.OverclockingLogic;
 import com.gregtechceu.gtceu.common.data.GTRecipeModifiers;
 import com.gregtechceu.gtceu.common.data.GTRecipeTypes;
 
-import com.lowdragmc.lowdraglib.gui.widget.*;
-
 import net.minecraft.network.chat.Component;
 
 import lombok.Getter;

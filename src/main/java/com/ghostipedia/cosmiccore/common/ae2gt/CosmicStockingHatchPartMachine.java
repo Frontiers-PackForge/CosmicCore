@@ -16,8 +16,6 @@ import com.gregtechceu.gtceu.integration.ae2.slot.IConfigurableSlotList;
 import com.gregtechceu.gtceu.integration.ae2.utils.AEUtil;
 import com.gregtechceu.gtceu.utils.ExtendedUseOnContext;
 
-import com.lowdragmc.lowdraglib.syncdata.annotation.DropSaved;
-
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
@@ -46,11 +44,9 @@ public class CosmicStockingHatchPartMachine extends CosmicInputHatchPartMachine 
     private boolean autoPull;
 
     @SaveField
-    @DropSaved
     private int minStackSize = 1;
 
     @SaveField
-    @DropSaved
     private int ticksPerCycle = 40;
 
     private Predicate<GenericStack> autoPullTest;
@@ -77,7 +73,9 @@ public class CosmicStockingHatchPartMachine extends CosmicInputHatchPartMachine 
 
     @Override
     public void setMinStackSize(int minStackSize) {
+        if (this.minStackSize == minStackSize) return;
         this.minStackSize = minStackSize;
+        markAsChanged();
     }
 
     @Override
@@ -87,7 +85,9 @@ public class CosmicStockingHatchPartMachine extends CosmicInputHatchPartMachine 
 
     @Override
     public void setTicksPerCycle(int ticksPerCycle) {
+        if (this.ticksPerCycle == ticksPerCycle) return;
         this.ticksPerCycle = ticksPerCycle;
+        markAsChanged();
     }
 
     @Override
@@ -114,7 +114,8 @@ public class CosmicStockingHatchPartMachine extends CosmicInputHatchPartMachine 
     @Override
     public void autoIO() {
         super.autoIO();
-        if (ticksPerCycle == 0) ticksPerCycle = ConfigHolder.INSTANCE.compat.ae2.updateIntervals; // Emergency Check to
+        if (ticksPerCycle == 0) setTicksPerCycle(ConfigHolder.INSTANCE.compat.ae2.updateIntervals); // Emergency Check
+                                                                                                    // to
         // Avoid Crash loops.
         if (getOffsetTimer() % ticksPerCycle == 0) {
             if (autoPull) {
@@ -172,7 +173,9 @@ public class CosmicStockingHatchPartMachine extends CosmicInputHatchPartMachine 
 
     @Override
     public void setAutoPull(boolean autoPull) {
+        boolean changed = this.autoPull != autoPull;
         this.autoPull = autoPull;
+        if (changed) getSyncDataHolder().markClientSyncFieldDirty("autoPull");
         if (!isRemote()) {
             if (!this.autoPull) {
                 this.aeFluidHandler.clearInventory(0);

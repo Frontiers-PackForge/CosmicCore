@@ -2,9 +2,9 @@ package com.ghostipedia.cosmiccore.common.data;
 
 import com.ghostipedia.cosmiccore.CosmicCore;
 import com.ghostipedia.cosmiccore.api.item.LinkedTerminalBehavior;
+import com.ghostipedia.cosmiccore.api.item.component.HaloItemRenderData;
+import com.ghostipedia.cosmiccore.api.item.component.RadianceItemRenderData;
 import com.ghostipedia.cosmiccore.api.registries.CosmicRegistration;
-import com.ghostipedia.cosmiccore.client.renderer.item.HaloItemRenderer;
-import com.ghostipedia.cosmiccore.client.renderer.item.RadianceItemRenderer;
 import com.ghostipedia.cosmiccore.common.airControl.OxygenConfig;
 import com.ghostipedia.cosmiccore.common.data.tag.item.CosmicItemTags;
 import com.ghostipedia.cosmiccore.common.item.AbyssalSonarItem;
@@ -46,8 +46,6 @@ import com.gregtechceu.gtceu.common.item.behavior.TooltipBehavior;
 import com.gregtechceu.gtceu.common.registry.GTRegistration;
 import com.gregtechceu.gtceu.config.ConfigHolder;
 import com.gregtechceu.gtceu.data.recipe.CustomTags;
-
-import com.lowdragmc.lowdraglib.utils.LocalizationUtils;
 
 import net.minecraft.client.renderer.item.ItemProperties;
 import net.minecraft.network.chat.Component;
@@ -1768,7 +1766,7 @@ public class CosmicItems {
             .item("eschaton_processor", ComponentItem::new)
             .lang("Eschaton Processor")
             .properties(p -> p.stacksTo(64))
-            .onRegister(attachRenderer(() -> HaloItemRenderer.create(6, 0xFFFFFFFF,
+            .onRegister(attachRenderer(new HaloItemRenderData(6, 0xFFFFFFFF,
                     ResourceLocation.fromNamespaceAndPath(CosmicCore.MOD_ID, "block/iris/rnd/tentacle_halo"), true,
                     false)))
             .defaultModel()
@@ -1777,7 +1775,7 @@ public class CosmicItems {
             .item("eschaton_processor_assembly", ComponentItem::new)
             .lang("Eschaton Processor Assembly")
             .properties(p -> p.stacksTo(64))
-            .onRegister(attachRenderer(() -> HaloItemRenderer.create(6, 0xFFFFFFFF,
+            .onRegister(attachRenderer(new HaloItemRenderData(6, 0xFFFFFFFF,
                     ResourceLocation.fromNamespaceAndPath(CosmicCore.MOD_ID, "block/iris/rnd/tentacle_halo"), true,
                     false)))
             .defaultModel()
@@ -1786,7 +1784,7 @@ public class CosmicItems {
             .item("eschaton_processor_supercomputer", ComponentItem::new)
             .lang("Eschaton Processor Supercomputer")
             .properties(p -> p.stacksTo(64))
-            .onRegister(attachRenderer(() -> HaloItemRenderer.create(6, 0xFFFFFFFF,
+            .onRegister(attachRenderer(new HaloItemRenderData(6, 0xFFFFFFFF,
                     ResourceLocation.fromNamespaceAndPath(CosmicCore.MOD_ID, "block/iris/rnd/tentacle_halo"), true,
                     false)))
             .defaultModel()
@@ -1795,12 +1793,12 @@ public class CosmicItems {
             .item("eschaton_processor_mainframe", ComponentItem::new)
             .lang("Eschaton Processor Mainframe")
             .properties(p -> p.stacksTo(64))
-            .onRegister(attachRenderer(() -> HaloItemRenderer.create(6, 0xFFFFFFFF,
+            .onRegister(attachRenderer(new HaloItemRenderData(6, 0xFFFFFFFF,
                     ResourceLocation.fromNamespaceAndPath(CosmicCore.MOD_ID, "block/iris/rnd/tentacle_halo"), true,
                     false)))
             .onRegister(attach(new TooltipBehavior(lines -> {
                 lines.add(Component.literal(StringUtil
-                        .rainbowDancing(LocalizationUtils.format("cosmiccore.circuit.lore.tier.max.0"))));
+                        .rainbowDancing(Component.translatable("cosmiccore.circuit.lore.tier.max.0").getString())));
                 lines.add(Component.translatable("cosmiccore.circuit.lore.tier.max.1"));
                 lines.add(Component.translatable("cosmiccore.circuit.lore.tier.max.2"));
                 lines.add(Component.translatable("cosmiccore.circuit.lore.tier.max.3"));
@@ -1817,7 +1815,7 @@ public class CosmicItems {
             .properties(p -> p.stacksTo(64))
             .onRegister(attach(new TooltipBehavior(lines -> {
                 lines.add(Component.literal(StringUtil
-                        .goldFlicker(LocalizationUtils.format("cosmiccore.lore.broken_virtue.0"))));
+                        .goldFlicker(Component.translatable("cosmiccore.lore.broken_virtue.0").getString())));
             })))
             .defaultModel()
             .register();
@@ -1828,7 +1826,7 @@ public class CosmicItems {
             .properties(p -> p.stacksTo(64))
             .onRegister(attach(new TooltipBehavior(lines -> {
                 lines.add(Component.literal(StringUtil
-                        .midnightOscillation(LocalizationUtils.format("cosmiccore.lore.broken_virtue.1"))));
+                        .midnightOscillation(Component.translatable("cosmiccore.lore.broken_virtue.1").getString())));
             })))
             .defaultModel()
             .register();
@@ -2652,7 +2650,7 @@ public class CosmicItems {
             .properties(p -> p.stacksTo(1))
             .tag()
             .defaultModel()
-            .onRegister(attachRenderer(() -> RadianceItemRenderer.INSTANCE))
+            .onRegister(attachRenderer(RadianceItemRenderData.INSTANCE))
             .register();
     public static final ItemEntry<AsteroidItem> FERRIC_ASTEROID = REGISTRATE
             .item("ferric_asteroid", AsteroidItem::new)
@@ -2660,7 +2658,7 @@ public class CosmicItems {
             .properties(p -> p.stacksTo(1))
             .tag()
             .defaultModel()
-            .onRegister(attachRenderer(() -> RadianceItemRenderer.INSTANCE))
+            .onRegister(attachRenderer(RadianceItemRenderData.INSTANCE))
             .register();
 
     public static final ItemEntry<AsteroidItem> RARE_METAL_ASTEROID = REGISTRATE
@@ -2669,7 +2667,7 @@ public class CosmicItems {
             .properties(p -> p.stacksTo(1))
             .tag()
             .defaultModel()
-            .onRegister(attachRenderer(() -> RadianceItemRenderer.INSTANCE))
+            .onRegister(attachRenderer(RadianceItemRenderData.INSTANCE))
             .register();
 
     public static final ItemEntry<AsteroidItem> AURIC_ASTEROID = REGISTRATE
@@ -2678,7 +2676,7 @@ public class CosmicItems {
             .properties(p -> p.stacksTo(1))
             .tag()
             .defaultModel()
-            .onRegister(attachRenderer(() -> RadianceItemRenderer.INSTANCE))
+            .onRegister(attachRenderer(RadianceItemRenderData.INSTANCE))
             .register();
 
     public static final ItemEntry<AsteroidItem> BRIMSTONE_ASTEROID = REGISTRATE
@@ -2687,7 +2685,7 @@ public class CosmicItems {
             .properties(p -> p.stacksTo(1))
             .tag()
             .defaultModel()
-            .onRegister(attachRenderer(() -> RadianceItemRenderer.INSTANCE))
+            .onRegister(attachRenderer(RadianceItemRenderData.INSTANCE))
             .register();
 
     public static final ItemEntry<AsteroidItem> LITH_ASTEROID = REGISTRATE
@@ -2696,7 +2694,7 @@ public class CosmicItems {
             .properties(p -> p.stacksTo(1))
             .tag()
             .defaultModel()
-            .onRegister(attachRenderer(() -> RadianceItemRenderer.INSTANCE))
+            .onRegister(attachRenderer(RadianceItemRenderData.INSTANCE))
             .register();
 
     public static final ItemEntry<AsteroidItem> MAFIC_ASTEROID = REGISTRATE
@@ -2705,7 +2703,7 @@ public class CosmicItems {
             .properties(p -> p.stacksTo(1))
             .tag()
             .defaultModel()
-            .onRegister(attachRenderer(() -> RadianceItemRenderer.INSTANCE))
+            .onRegister(attachRenderer(RadianceItemRenderData.INSTANCE))
             .register();
 
     public static final ItemEntry<AsteroidItem> MOSSY_ASTEROID = REGISTRATE
@@ -2714,7 +2712,7 @@ public class CosmicItems {
             .properties(p -> p.stacksTo(1))
             .tag()
             .defaultModel()
-            .onRegister(attachRenderer(() -> RadianceItemRenderer.INSTANCE))
+            .onRegister(attachRenderer(RadianceItemRenderData.INSTANCE))
             .register();
 
     public static final ItemEntry<AsteroidItem> OCCULT_ASTEROID = REGISTRATE
@@ -2723,7 +2721,7 @@ public class CosmicItems {
             .properties(p -> p.stacksTo(1))
             .tag()
             .defaultModel()
-            .onRegister(attachRenderer(() -> RadianceItemRenderer.INSTANCE))
+            .onRegister(attachRenderer(RadianceItemRenderData.INSTANCE))
             .register();
 
     public static final ItemEntry<AsteroidItem> OXIDE_ASTEROID = REGISTRATE
@@ -2732,7 +2730,7 @@ public class CosmicItems {
             .properties(p -> p.stacksTo(1))
             .tag()
             .defaultModel()
-            .onRegister(attachRenderer(() -> RadianceItemRenderer.INSTANCE))
+            .onRegister(attachRenderer(RadianceItemRenderData.INSTANCE))
             .register();
 
     public static final ItemEntry<AsteroidItem> SANGUINE_ASTEROID = REGISTRATE
@@ -2741,7 +2739,7 @@ public class CosmicItems {
             .properties(p -> p.stacksTo(1))
             .tag()
             .defaultModel()
-            .onRegister(attachRenderer(() -> RadianceItemRenderer.INSTANCE))
+            .onRegister(attachRenderer(RadianceItemRenderData.INSTANCE))
             .register();
 
     public static final ItemEntry<AsteroidItem> WASTELAND_ASTEROID = REGISTRATE
@@ -2750,7 +2748,7 @@ public class CosmicItems {
             .properties(p -> p.stacksTo(1))
             .tag()
             .defaultModel()
-            .onRegister(attachRenderer(() -> RadianceItemRenderer.INSTANCE))
+            .onRegister(attachRenderer(RadianceItemRenderData.INSTANCE))
             .register();
 
     public static final ItemEntry<ComponentItem> TUNGSTENSTEEL_NANOLATTICE_SPOOL = REGISTRATE

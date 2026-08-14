@@ -11,9 +11,8 @@ import com.gregtechceu.gtceu.api.machine.multiblock.WorkableElectricMultiblockMa
 import com.gregtechceu.gtceu.api.machine.multiblock.part.MultiblockPartMachine;
 import com.gregtechceu.gtceu.api.misc.EnergyContainerList;
 import com.gregtechceu.gtceu.api.recipe.GTRecipe;
-
-import com.lowdragmc.lowdraglib.syncdata.annotation.DescSynced;
-import com.lowdragmc.lowdraglib.syncdata.annotation.Persisted;
+import com.gregtechceu.gtceu.api.sync_system.annotations.SaveField;
+import com.gregtechceu.gtceu.api.sync_system.annotations.SyncToClient;
 
 import net.neoforged.neoforge.fluids.FluidStack;
 
@@ -26,19 +25,19 @@ import javax.annotation.Nullable;
 
 public class VoraxReactorMachine extends WorkableElectricMultiblockMachine {
 
-    @DescSynced
+    @SyncToClient
     @Getter
-    @Persisted
+    @SaveField
     private float contagionDelta = 30;
 
-    @DescSynced
+    @SyncToClient
     @Getter
-    @Persisted
+    @SaveField
     private float contagionStrength = 0;
 
-    @DescSynced
+    @SyncToClient
     @Getter
-    @Persisted
+    @SaveField
     private boolean isCleaning = true;
 
     private SterilizationHatchPartMachine sterileHatch = null;
@@ -92,7 +91,7 @@ public class VoraxReactorMachine extends WorkableElectricMultiblockMachine {
     public void invalidateStructure(String substructureName) {
         super.invalidateStructure(substructureName);
         this.outputEnergyContainers = null;
-        contagionStrength = 0;
+        setContagionStrength(0);
         updateContagionSubs();
     }
 
@@ -108,14 +107,14 @@ public class VoraxReactorMachine extends WorkableElectricMultiblockMachine {
     public void updateContagion() {
         if (recipeLogic.isWorking()) {
             if (!isCleaning && contagionStrength >= 100000) {
-                contagionStrength = 100000;
+                setContagionStrength(100000);
                 // recipeLogic.setStatus(RecipeLogic.Status.SUSPEND);
                 // doExplosion(12f + getTier());
             } else {
 
-                contagionDelta += 0.05F;
-                contagionStrength += contagionDelta;
-                isCleaning = false;
+                setContagionDelta(contagionDelta + 0.05F);
+                setContagionStrength(contagionStrength + contagionDelta);
+                setCleaning(false);
             }
         }
         if (recipeLogic.isIdle() || recipeLogic.isSuspend() || recipeLogic.isWaiting() || !this.isWorkingEnabled()) {
@@ -123,24 +122,24 @@ public class VoraxReactorMachine extends WorkableElectricMultiblockMachine {
                 if (sterileHatch != null) {
                     FluidStack sterileThingy = sterileHatch.fluidTank.getFluidInTank(0);
                     if (!sterileThingy.isEmpty() && sterileThingy.getAmount() >= 15) {
-                        contagionDelta -= 0.5F;
+                        setContagionDelta(contagionDelta - 0.5F);
                         sterileThingy.shrink(15);
-                        contagionStrength += contagionDelta;
-                        isCleaning = true;
+                        setContagionStrength(contagionStrength + contagionDelta);
+                        setCleaning(true);
                     } else {
-                        isCleaning = false;
+                        setCleaning(false);
                     }
                 }
             }
         }
-        contagionDelta = clamp(contagionDelta, -150, 50);
-        contagionStrength = clamp(contagionStrength, 0, 100000);
+        setContagionDelta(clamp(contagionDelta, -150, 50));
+        setContagionStrength(clamp(contagionStrength, 0, 100000));
     }
 
     @Override
     public boolean beforeWorking(@org.jetbrains.annotations.Nullable GTRecipe recipe) {
         if (contagionDelta <= 0) {
-            contagionDelta = 0;
+            setContagionDelta(0);
         }
         return super.beforeWorking(recipe);
     }
@@ -156,5 +155,23 @@ public class VoraxReactorMachine extends WorkableElectricMultiblockMachine {
 
     public static float clamp(float v, float min, float max) {
         return Math.max(min, Math.min(v, max));
+    }
+
+    private void setContagionDelta(float contagionDelta) {
+        if (Float.compare(this.contagionDelta, contagionDelta) == 0) return;
+        this.contagionDelta = contagionDelta;
+        getSyncDataHolder().markClientSyncFieldDirty("contagionDelta");
+    }
+
+    private void setContagionStrength(float contagionStrength) {
+        if (Float.compare(this.contagionStrength, contagionStrength) == 0) return;
+        this.contagionStrength = contagionStrength;
+        getSyncDataHolder().markClientSyncFieldDirty("contagionStrength");
+    }
+
+    private void setCleaning(boolean cleaning) {
+        if (this.isCleaning == cleaning) return;
+        this.isCleaning = cleaning;
+        getSyncDataHolder().markClientSyncFieldDirty("isCleaning");
     }
 }

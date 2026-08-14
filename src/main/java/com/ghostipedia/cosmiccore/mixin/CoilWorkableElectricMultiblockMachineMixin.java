@@ -9,9 +9,8 @@ import com.gregtechceu.gtceu.api.machine.TickableSubscription;
 import com.gregtechceu.gtceu.api.machine.multiblock.CoilWorkableElectricMultiblockMachine;
 import com.gregtechceu.gtceu.api.machine.multiblock.WorkableElectricMultiblockMachine;
 import com.gregtechceu.gtceu.api.recipe.GTRecipe;
-
-import com.lowdragmc.lowdraglib.syncdata.annotation.DescSynced;
-import com.lowdragmc.lowdraglib.syncdata.annotation.Persisted;
+import com.gregtechceu.gtceu.api.sync_system.annotations.SaveField;
+import com.gregtechceu.gtceu.api.sync_system.annotations.SyncToClient;
 
 import net.minecraft.server.level.ServerLevel;
 
@@ -40,8 +39,8 @@ public abstract class CoilWorkableElectricMultiblockMachineMixin extends Workabl
 
     // Temperature, in Kelvin (because GT uses kelvin instead of celsius.)
     @Unique
-    @Persisted(key = "currentTemp")
-    @DescSynced
+    @SaveField(nbtKey = "currentTemp")
+    @SyncToClient
     private float frontiers$currentTemp = 273;
     @Unique
     private TickableSubscription frontiers$temperatureTick = null;
@@ -55,8 +54,10 @@ public abstract class CoilWorkableElectricMultiblockMachineMixin extends Workabl
     }
 
     public void setTemperature(float temp) {
-        frontiers$currentTemp = temp + 273;
-        this.markAsChanged();
+        float currentTemp = temp + 273;
+        if (Float.compare(frontiers$currentTemp, currentTemp) == 0) return;
+        frontiers$currentTemp = currentTemp;
+        getSyncDataHolder().markClientSyncFieldDirty("frontiers$currentTemp");
     }
 
     @Override
