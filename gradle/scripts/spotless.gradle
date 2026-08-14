@@ -13,6 +13,9 @@ spotless {
     }
     java {
         target 'src/main/java/**/*.java', 'src/test/java/**/*.java'
+        targetExclude 'src/main/java/com/ghostipedia/cosmiccore/client/gui/widget/drill/**',
+                'src/main/java/com/ghostipedia/cosmiccore/client/gui/widget/starladder/**',
+                'src/main/java/com/ghostipedia/cosmiccore/client/gui/widget/stellar/**'
 
         def orderFile = file("$rootDir/spotless/spotless.importorder")
         def formatFile = file("$rootDir/spotless/spotless.eclipseformat.xml")

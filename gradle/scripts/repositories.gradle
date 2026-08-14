@@ -23,10 +23,6 @@ repositories {
             includeGroup 'mezz.jei'
         }
     }
-    maven { // LDLib, Shimmer
-        name = "FirstDarkDev"
-        url = "https://maven.firstdark.dev/snapshots"
-    }
     maven { // JEI, Patchouli
         name = "BlameJared"
         url = "https://maven.blamejared.com/"

@@ -19,8 +19,6 @@ import com.gregtechceu.gtceu.common.machine.multiblock.part.MaintenanceHatchPart
 import com.gregtechceu.gtceu.common.machine.owner.FTBOwner;
 import com.gregtechceu.gtceu.config.ConfigHolder;
 
-import com.lowdragmc.lowdraglib.utils.DummyWorld;
-
 import net.minecraft.world.level.block.Block;
 
 import java.util.*;
@@ -66,7 +64,7 @@ public class WirelessDataBankMachine extends WorkableElectricMultiblockMachine
     @Override
     public void formStructure(@org.jetbrains.annotations.NotNull String substructureName) {
         super.formStructure(substructureName);
-        if (getLevel() instanceof DummyWorld) return;
+        if (getLevel() == null || getLevel().isClientSide) return;
 
         List<IEnergyContainer> energyContainers = new ArrayList<>();
         for (MultiblockPartMachine part : getParts()) {

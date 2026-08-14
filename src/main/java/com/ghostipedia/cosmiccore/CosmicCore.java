@@ -48,8 +48,6 @@ import com.gregtechceu.gtceu.api.recipe.lookup.ingredient.MapIngredientTypeManag
 import com.gregtechceu.gtceu.common.block.CoilBlock;
 import com.gregtechceu.gtceu.config.ConfigHolder;
 
-import com.lowdragmc.lowdraglib.Platform;
-
 import net.minecraft.commands.synchronization.ArgumentTypeInfos;
 import net.minecraft.commands.synchronization.SingletonArgumentInfo;
 import net.minecraft.resources.ResourceLocation;
@@ -60,6 +58,7 @@ import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.config.ModConfig;
 import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.neoforged.fml.event.lifecycle.FMLLoadCompleteEvent;
+import net.neoforged.fml.loading.FMLEnvironment;
 import net.neoforged.neoforge.capabilities.RegisterCapabilitiesEvent;
 import net.neoforged.neoforge.common.world.chunk.RegisterTicketControllersEvent;
 import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent;
@@ -98,7 +97,7 @@ public class CosmicCore {
         CosmicRituals.register(modBus);
         CosmicBargains.init();
 
-        if (Platform.isClient()) {
+        if (FMLEnvironment.dist.isClient()) {
             CosmicCoreClient.init(modBus);
         }
     }
@@ -126,7 +125,7 @@ public class CosmicCore {
         CosmicRecipeCapabilities.init();
         CosmicConditions.register();
         CosmicRecipeTypes.init();
-        if (Platform.isClient()) {
+        if (FMLEnvironment.dist.isClient()) {
             SteamRecipeViewerRegistration.init();
         }
         CosmicBlocks.init();

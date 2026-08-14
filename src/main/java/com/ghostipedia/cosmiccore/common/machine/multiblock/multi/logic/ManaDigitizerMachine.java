@@ -13,8 +13,6 @@ import com.gregtechceu.gtceu.api.machine.multiblock.part.MultiblockPartMachine;
 import com.gregtechceu.gtceu.api.misc.EnergyContainerList;
 import com.gregtechceu.gtceu.common.data.GTMaterials;
 
-import com.lowdragmc.lowdraglib.syncdata.annotation.DescSynced;
-
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.neoforged.neoforge.fluids.FluidStack;
@@ -31,9 +29,7 @@ public class ManaDigitizerMachine extends WorkableElectricMultiblockMachine {
 
     @Nullable
     protected EnergyContainerList inputEnergyContainers;
-    @DescSynced
     private static final Object2IntMap<net.minecraft.world.item.Item> validIngredients = new Object2IntOpenHashMap<>();
-    @DescSynced
     private static final Object2IntMap<FluidStack> validIngredientsFluids = new Object2IntOpenHashMap<>();
 
     @Nullable

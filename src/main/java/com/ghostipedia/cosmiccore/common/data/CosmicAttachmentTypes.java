@@ -8,7 +8,6 @@ import com.ghostipedia.cosmiccore.common.firmament.FirmamentTraversalState;
 import com.ghostipedia.cosmiccore.common.food.CosmicFoodData;
 import com.ghostipedia.cosmiccore.common.gravity.GravityRuntimeState;
 import com.ghostipedia.cosmiccore.common.reflection.ReflectionData;
-import com.ghostipedia.cosmiccore.common.teleporter.TeleportOrigin;
 
 import net.neoforged.neoforge.attachment.AttachmentType;
 import net.neoforged.neoforge.registries.DeferredHolder;
@@ -33,10 +32,6 @@ public class CosmicAttachmentTypes {
     public static final DeferredHolder<AttachmentType<?>, AttachmentType<AbyssBudget>> ABYSS_BUDGET = ATTACHMENT_TYPES
             .register("abyss_budget",
                     () -> AttachmentType.serializable(holder -> new AbyssBudget()).copyOnDeath().build());
-
-    public static final DeferredHolder<AttachmentType<?>, AttachmentType<TeleportOrigin>> TELEPORT_ORIGIN = ATTACHMENT_TYPES
-            .register("teleport_origin",
-                    () -> AttachmentType.serializable(holder -> new TeleportOrigin()).copyOnDeath().build());
 
     public static final DeferredHolder<AttachmentType<?>, AttachmentType<CosmicFoodData>> FOOD_DATA = ATTACHMENT_TYPES
             .register("food_data",

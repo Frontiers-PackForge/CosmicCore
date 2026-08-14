@@ -1,6 +1,0 @@
-{
-    "parent": "minecraft:block/cube_all",
-    "textures": {
-        "all": "cosmiccore:block/casings/moth/moth_home_t2"
-    }
-}

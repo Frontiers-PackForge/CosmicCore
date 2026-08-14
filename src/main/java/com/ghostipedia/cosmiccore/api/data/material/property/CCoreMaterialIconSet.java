@@ -1,14 +1,12 @@
 package com.ghostipedia.cosmiccore.api.data.material.property;
 
 import com.ghostipedia.cosmiccore.CosmicCore;
+import com.ghostipedia.cosmiccore.api.item.component.HaloItemRenderData;
 import com.ghostipedia.cosmiccore.api.item.component.ICustomRenderer;
-import com.ghostipedia.cosmiccore.client.renderer.item.HaloItemRenderer;
 import com.ghostipedia.cosmiccore.common.data.materials.CosmicMaterialSet;
 import com.ghostipedia.cosmiccore.utils.ColorUtil;
 
 import com.gregtechceu.gtceu.api.data.chemical.material.info.MaterialIconSet;
-
-import com.lowdragmc.lowdraglib.client.renderer.IRenderer;
 
 import net.minecraft.resources.ResourceLocation;
 
@@ -17,13 +15,9 @@ import lombok.Getter;
 import java.util.function.Supplier;
 
 @Getter
-public class CCoreMaterialIconSet extends MaterialIconSet implements IRenderer {
+public class CCoreMaterialIconSet extends MaterialIconSet {
 
     private final ICustomRenderer customRender;
-
-    public CCoreMaterialIconSet(String name, MaterialIconSet parentIconset, boolean root, IRenderer renderer) {
-        this(name, parentIconset, root, renderer == null ? null : () -> renderer);
-    }
 
     public CCoreMaterialIconSet(String name, MaterialIconSet parentIconset, boolean root, ICustomRenderer renderer) {
         super(name, parentIconset, root);
@@ -39,47 +33,44 @@ public class CCoreMaterialIconSet extends MaterialIconSet implements IRenderer {
 
     public static final CCoreMaterialIconSet VIBRANIUM = new CCoreMaterialIconSet("vibranium",
             CosmicMaterialSet.NEUTRONITE, false,
-            HaloItemRenderer.create(4, 0xFF489BC3,
+            new HaloItemRenderData(4, 0xFF489BC3,
                     ResourceLocation.fromNamespaceAndPath(CosmicCore.MOD_ID, "block/iris/rnd/halo"), true,
                     false));
     public static final CCoreMaterialIconSet VIBRANIUM_NEUTRONIUM = new CCoreMaterialIconSet("vibranium_neutronium",
             CosmicMaterialSet.NEUTRONIUM_CCORE, false,
-            HaloItemRenderer.create(3, 0xFFFFFFFF, ResourceLocation.fromNamespaceAndPath(CosmicCore.MOD_ID,
+            new HaloItemRenderData(3, 0xFFFFFFFF, ResourceLocation.fromNamespaceAndPath(CosmicCore.MOD_ID,
                     "block/iris/rnd/compression_halo_neutronium_faded"), true,
                     false));
 
-    // public static final CCoreMaterialIconSet VIBRANIUM_NEUTRONIUM = new CCoreMaterialIconSet("vibranium_neutronium",
-    // CosmicMaterialSet.NEUTRONIUM_CCORE, false, LensRender::new);
-
     public static final CCoreMaterialIconSet PRISMATIC = new CCoreMaterialIconSet("prismatic", SHINY, false,
-            HaloItemRenderer.create(8, 0xFF1c1926,
+            new HaloItemRenderData(8, 0xFF1c1926,
                     ResourceLocation.fromNamespaceAndPath(CosmicCore.MOD_ID, "block/iris/rnd/storm_halo"),
                     true,
                     false));
 
     public static final CCoreMaterialIconSet CHRONIC = new CCoreMaterialIconSet("chronic", CosmicMaterialSet.CHRONON,
             false,
-            HaloItemRenderer.create(8, 0xFF1c1926,
+            new HaloItemRenderData(8, 0xFF1c1926,
                     ResourceLocation.fromNamespaceAndPath(CosmicCore.MOD_ID, "block/iris/rnd/time_halo"),
                     true,
                     false));
 
     public static final CCoreMaterialIconSet VOIDSPARKICO = new CCoreMaterialIconSet("voidspark_special",
             CosmicMaterialSet.VOIDSPARK, false,
-            HaloItemRenderer.create(4, 0xFFFFFFFF,
+            new HaloItemRenderData(4, 0xFFFFFFFF,
                     ResourceLocation.fromNamespaceAndPath(CosmicCore.MOD_ID, "block/iris/rnd/tentacle_halo"), true,
                     false));
 
     public static final CCoreMaterialIconSet STARMETALICO = new CCoreMaterialIconSet("starmetal_special",
             CosmicMaterialSet.STARMETAL, false,
-            HaloItemRenderer.create(2, 0xFFFFFFFF,
+            new HaloItemRenderData(2, 0xFFFFFFFF,
                     ResourceLocation.fromNamespaceAndPath(CosmicCore.MOD_ID, "block/iris/rnd/tentacle_halo_glass"),
                     true,
                     true));
 
     public static final CCoreMaterialIconSet SOL_STEEL = new CCoreMaterialIconSet("sol_steel", CosmicMaterialSet.SOL,
             false,
-            HaloItemRenderer.create(4, 0xFFFFFFFF,
+            new HaloItemRenderData(4, 0xFFFFFFFF,
                     ResourceLocation.fromNamespaceAndPath(CosmicCore.MOD_ID, "block/iris/rnd/compression_halo_sol"),
                     true,
                     false));

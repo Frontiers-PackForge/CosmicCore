@@ -1,18 +1,16 @@
 package com.ghostipedia.cosmiccore.common.item;
 
-import com.lowdragmc.lowdraglib.client.renderer.IBlockRendererProvider;
-import com.lowdragmc.lowdraglib.client.renderer.IItemRendererProvider;
-import com.lowdragmc.lowdraglib.client.renderer.IRenderer;
+import com.ghostipedia.cosmiccore.api.item.component.IBlockCustomRendererProvider;
+import com.ghostipedia.cosmiccore.api.item.component.ICustomRenderer;
+import com.ghostipedia.cosmiccore.api.item.component.ICustomRendererProvider;
 
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Block;
-import net.neoforged.api.distmarker.Dist;
-import net.neoforged.api.distmarker.OnlyIn;
 
 import org.jetbrains.annotations.Nullable;
 
-public class RenderBlockItem extends BlockItem implements IItemRendererProvider {
+public class RenderBlockItem extends BlockItem implements ICustomRendererProvider {
 
     public RenderBlockItem(Block block, Properties properties) {
         super(block, properties);
@@ -20,10 +18,9 @@ public class RenderBlockItem extends BlockItem implements IItemRendererProvider 
 
     @Nullable
     @Override
-    @OnlyIn(Dist.CLIENT)
-    public IRenderer getRenderer(ItemStack stack) {
-        if (getBlock() instanceof IBlockRendererProvider provider) {
-            return provider.getRenderer(getBlock().defaultBlockState());
+    public ICustomRenderer getRenderInfo(ItemStack stack) {
+        if (getBlock() instanceof IBlockCustomRendererProvider provider) {
+            return provider.getRenderInfo(getBlock().defaultBlockState());
         }
         return null;
     }

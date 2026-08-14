@@ -10,11 +10,6 @@ import com.gregtechceu.gtceu.integration.ae2.slot.ExportOnlyAEFluidList;
 import com.gregtechceu.gtceu.integration.ae2.slot.ExportOnlyAEFluidSlot;
 import com.gregtechceu.gtceu.utils.GTMath;
 
-import com.lowdragmc.lowdraglib.gui.widget.LabelWidget;
-import com.lowdragmc.lowdraglib.gui.widget.Widget;
-import com.lowdragmc.lowdraglib.gui.widget.WidgetGroup;
-import com.lowdragmc.lowdraglib.utils.Position;
-
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.component.DataComponents;
@@ -110,25 +105,8 @@ public class CosmicInputHatchPartMachine extends MEHatchPartMachine implements I
         }
     }
 
-    ///////////////////////////////
-    // ********** GUI ***********//
-    ///////////////////////////////
-
-    // TODO: Convert to MUI2 buildUI(PosGuiData, PanelSyncManager, UISettings)
-    public Widget createUIWidgetOld() {
-        WidgetGroup group = new WidgetGroup(new Position(0, 0));
-        // ME Network status
-        group.addWidget(new LabelWidget(3, 0, () -> this.isOnline ?
-                "gtceu.gui.me_network.online" :
-                "gtceu.gui.me_network.offline"));
-
-        // Config slots
-        // TODO(8.0.0): re-add ME config slots in a MUI2 buildUI override via
-        // new com.gregtechceu.gtceu.integration.ae2.gui.AEConfigWidget(aeFluidHandler, CONFIG_SIZE, true)
-        // (AEFluidConfigWidget was merged into AEConfigWidget; this LDLib WidgetGroup path is dead).
-
-        return group;
-    }
+    // TODO(cosmiccore-11): Rebuild the online status and one-slot fluid configuration in MUI2 with
+    // AEConfigWidget(aeFluidHandler, CONFIG_SIZE, true).
 
     ////////////////////////////////
     // ******* Interaction *******//

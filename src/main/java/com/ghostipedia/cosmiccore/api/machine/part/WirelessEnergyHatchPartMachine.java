@@ -8,11 +8,10 @@ import com.gregtechceu.gtceu.api.capability.recipe.IO;
 import com.gregtechceu.gtceu.api.machine.TickableSubscription;
 import com.gregtechceu.gtceu.api.machine.multiblock.part.TieredIOPartMachine;
 import com.gregtechceu.gtceu.api.machine.trait.notifiable.NotifiableEnergyContainer;
+import com.gregtechceu.gtceu.api.sync_system.annotations.SaveField;
 import com.gregtechceu.gtceu.common.machine.owner.FTBOwner;
 import com.gregtechceu.gtceu.utils.FormattingUtil;
 import com.gregtechceu.gtceu.utils.ISubscription;
-
-import com.lowdragmc.lowdraglib.syncdata.annotation.Persisted;
 
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.network.chat.Component;
@@ -36,7 +35,7 @@ public class WirelessEnergyHatchPartMachine extends TieredIOPartMachine {
 
     protected static final long ticks_between_save_data_operations = 5L * 20L;
 
-    @Persisted
+    @SaveField
     public final NotifiableEnergyContainer energyContainer;
     protected TickableSubscription wirelessSub;
     @Nullable
@@ -47,7 +46,7 @@ public class WirelessEnergyHatchPartMachine extends TieredIOPartMachine {
     public WirelessEnergyHatchPartMachine(BlockEntityCreationInfo holder, int tier, IO io, int amperage) {
         super(holder, tier, io);
         this.amperage = amperage;
-        this.energyContainer = createEnergyContainer();
+        this.energyContainer = attachTrait(createEnergyContainer());
     }
 
     protected NotifiableEnergyContainer createEnergyContainer() {

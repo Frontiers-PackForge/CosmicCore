@@ -1,7 +1,8 @@
 package com.ghostipedia.cosmiccore.common.item.behavior;
 
-import com.lowdragmc.lowdraglib.gui.texture.ResourceTexture;
+import com.ghostipedia.cosmiccore.CosmicCore;
 
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.DyeColor;
 
 import lombok.Getter;
@@ -32,11 +33,11 @@ public enum ExtendedDyeColor {
 
     private final DyeColor dyeColor;
     @Getter
-    public final ResourceTexture texture;
+    public final ResourceLocation texture;
 
-    ExtendedDyeColor(DyeColor dyeColor, String resloc) {
+    ExtendedDyeColor(DyeColor dyeColor, String textureFile) {
         this.dyeColor = dyeColor;
-        this.texture = new ResourceTexture("cosmiccore:textures/item/" + resloc);
+        this.texture = CosmicCore.id("textures/item/" + textureFile);
     }
 
     public static ExtendedDyeColor getColorFromDyeId(int dyeID) {

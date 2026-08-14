@@ -33,7 +33,4 @@ public abstract class ComponentItemMixin extends Item implements CosmicCoreItemR
         }
         return null;
     }
-
-    // getRenderer(ItemStack) -> IRenderer lives as a default on CosmicCoreItemRendererProvider (shared by
-    // this and TagPrefixItemMixin); this mixin only supplies getRenderInfo.
 }

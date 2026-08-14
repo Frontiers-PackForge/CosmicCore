@@ -16,12 +16,11 @@ import com.gregtechceu.gtceu.api.machine.multiblock.WorkableMultiblockMachine;
 import com.gregtechceu.gtceu.api.machine.trait.notifiable.NotifiableEnergyContainer;
 import com.gregtechceu.gtceu.api.recipe.GTRecipe;
 import com.gregtechceu.gtceu.api.recipe.RecipeHelper;
+import com.gregtechceu.gtceu.api.sync_system.annotations.SaveField;
+import com.gregtechceu.gtceu.api.sync_system.annotations.SyncToClient;
 import com.gregtechceu.gtceu.common.machine.owner.FTBOwner;
 import com.gregtechceu.gtceu.common.machine.owner.MachineOwner;
 import com.gregtechceu.gtceu.utils.GTUtil;
-
-import com.lowdragmc.lowdraglib.syncdata.annotation.DescSynced;
-import com.lowdragmc.lowdraglib.syncdata.annotation.Persisted;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
@@ -42,21 +41,21 @@ public class StellarBaseModule extends WorkableMultiblockMachine
     @Nullable
     private IStellarIrisProvider stellarIris;
 
-    @DescSynced
+    @SyncToClient
     private long energyConsumedPerTick = 0;
 
-    @DescSynced
+    @SyncToClient
     private boolean wirelessEnergyAvailable = false;
 
-    @DescSynced
+    @SyncToClient
     private boolean powerFailure = false;
 
-    @Persisted
-    @DescSynced
+    @SaveField
+    @SyncToClient
     private int configuredMaxParallel = 1;
 
-    @Persisted
-    @DescSynced
+    @SaveField
+    @SyncToClient
     private long configuredVoltagePerParallel = 32;
 
     private NotifiableEnergyContainer virtualEnergyContainer;
@@ -93,7 +92,9 @@ public class StellarBaseModule extends WorkableMultiblockMachine
     }
 
     public void setConfiguredMaxParallel(int configuredMaxParallel) {
+        if (this.configuredMaxParallel == configuredMaxParallel) return;
         this.configuredMaxParallel = configuredMaxParallel;
+        getSyncDataHolder().markClientSyncFieldDirty("configuredMaxParallel");
     }
 
     public long getConfiguredVoltagePerParallel() {
@@ -101,7 +102,27 @@ public class StellarBaseModule extends WorkableMultiblockMachine
     }
 
     public void setConfiguredVoltagePerParallel(long configuredVoltagePerParallel) {
+        if (this.configuredVoltagePerParallel == configuredVoltagePerParallel) return;
         this.configuredVoltagePerParallel = configuredVoltagePerParallel;
+        getSyncDataHolder().markClientSyncFieldDirty("configuredVoltagePerParallel");
+    }
+
+    private void setEnergyConsumedPerTick(long energyConsumedPerTick) {
+        if (this.energyConsumedPerTick == energyConsumedPerTick) return;
+        this.energyConsumedPerTick = energyConsumedPerTick;
+        getSyncDataHolder().markClientSyncFieldDirty("energyConsumedPerTick");
+    }
+
+    private void setWirelessEnergyAvailable(boolean wirelessEnergyAvailable) {
+        if (this.wirelessEnergyAvailable == wirelessEnergyAvailable) return;
+        this.wirelessEnergyAvailable = wirelessEnergyAvailable;
+        getSyncDataHolder().markClientSyncFieldDirty("wirelessEnergyAvailable");
+    }
+
+    private void setPowerFailure(boolean powerFailure) {
+        if (this.powerFailure == powerFailure) return;
+        this.powerFailure = powerFailure;
+        getSyncDataHolder().markClientSyncFieldDirty("powerFailure");
     }
 
     protected UUID getTeamUUID() {
@@ -184,7 +205,7 @@ public class StellarBaseModule extends WorkableMultiblockMachine
             findAndRegisterWithIris();
         }
         virtualEnergyContainer.setEnergyStored(Long.MAX_VALUE / 2);
-        this.wirelessEnergyAvailable = checkWirelessEnergyAvailable();
+        setWirelessEnergyAvailable(checkWirelessEnergyAvailable());
 
         if (isFormed() && getLevel() instanceof ServerLevel serverLevel) {
             serverLevel.getServer().tell(new net.minecraft.server.TickTask(
@@ -201,7 +222,7 @@ public class StellarBaseModule extends WorkableMultiblockMachine
     @Override
     public void formStructure(@NotNull String substructureName) {
         super.formStructure(substructureName);
-        this.wirelessEnergyAvailable = checkWirelessEnergyAvailable();
+        setWirelessEnergyAvailable(checkWirelessEnergyAvailable());
         findAndRegisterWithIris();
         virtualEnergyContainer.setEnergyStored(Long.MAX_VALUE / 2);
     }
@@ -255,8 +276,8 @@ public class StellarBaseModule extends WorkableMultiblockMachine
         }
 
         this.stellarIris = null;
-        this.wirelessEnergyAvailable = false;
-        this.energyConsumedPerTick = 0;
+        setWirelessEnergyAvailable(false);
+        setEnergyConsumedPerTick(0);
         clearEnergyOutput();
     }
 
@@ -280,7 +301,7 @@ public class StellarBaseModule extends WorkableMultiblockMachine
             return false;
         }
 
-        this.wirelessEnergyAvailable = checkWirelessEnergyAvailable();
+        setWirelessEnergyAvailable(checkWirelessEnergyAvailable());
         return wirelessEnergyAvailable;
     }
 
@@ -292,12 +313,12 @@ public class StellarBaseModule extends WorkableMultiblockMachine
         euPerTick = applyEnergyDiscount(euPerTick);
 
         if (!drainWirelessEnergy(euPerTick)) {
-            this.powerFailure = true;
+            setPowerFailure(true);
             return false;
         }
 
-        this.powerFailure = false;
-        this.energyConsumedPerTick = euPerTick;
+        setPowerFailure(false);
+        setEnergyConsumedPerTick(euPerTick);
         return super.beforeWorking(recipe);
     }
 
@@ -313,15 +334,15 @@ public class StellarBaseModule extends WorkableMultiblockMachine
         if (lastRecipe != null) {
             long euPerTick = RecipeHelper.getRealEUt(lastRecipe).getTotalEU();
             euPerTick = applyEnergyDiscount(euPerTick);
-            this.energyConsumedPerTick = euPerTick;
+            setEnergyConsumedPerTick(euPerTick);
 
             if (!drainWirelessEnergy(euPerTick)) {
-                this.powerFailure = true;
+                setPowerFailure(true);
                 return false;
             }
         }
 
-        this.powerFailure = false;
+        setPowerFailure(false);
         return true;
     }
 
@@ -337,8 +358,8 @@ public class StellarBaseModule extends WorkableMultiblockMachine
     @Override
     public void afterWorking() {
         super.afterWorking();
-        this.energyConsumedPerTick = 0;
-        this.powerFailure = false;
+        setEnergyConsumedPerTick(0);
+        setPowerFailure(false);
         clearEnergyOutput();
     }
 
@@ -404,7 +425,7 @@ public class StellarBaseModule extends WorkableMultiblockMachine
     @Override
     public void setOverclockTier(int tier) {
         tier = Math.max(getMinOverclockTier(), Math.min(tier, getMaxOverclockTier()));
-        this.configuredVoltagePerParallel = GTValues.V[tier];
+        setConfiguredVoltagePerParallel(GTValues.V[tier]);
     }
 
     @Override

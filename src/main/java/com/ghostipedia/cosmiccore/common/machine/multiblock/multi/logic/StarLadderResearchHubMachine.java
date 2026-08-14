@@ -8,11 +8,10 @@ import com.ghostipedia.cosmiccore.common.machine.multiblock.multi.StarLadderRese
 
 import com.gregtechceu.gtceu.api.blockentity.BlockEntityCreationInfo;
 import com.gregtechceu.gtceu.api.multiblock.pattern.BlockPattern;
+import com.gregtechceu.gtceu.api.sync_system.annotations.ClientFieldChangeListener;
+import com.gregtechceu.gtceu.api.sync_system.annotations.SaveField;
+import com.gregtechceu.gtceu.api.sync_system.annotations.SyncToClient;
 import com.gregtechceu.gtceu.utils.ExtendedUseOnContext;
-
-import com.lowdragmc.lowdraglib.syncdata.annotation.DescSynced;
-import com.lowdragmc.lowdraglib.syncdata.annotation.Persisted;
-import com.lowdragmc.lowdraglib.syncdata.annotation.UpdateListener;
 
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
@@ -41,18 +40,16 @@ public class StarLadderResearchHubMachine extends LinkedWorkableElectricMultiblo
     private static final ResourceKey<Level> REQUIRED_DIMENSION = ResourceKey.create(
             Registries.DIMENSION, ResourceLocation.fromNamespaceAndPath("ad_astra", "earth_orbit"));
 
-    @Persisted
-    @DescSynced
-    @UpdateListener(methodName = "onRingTierSynced")
+    @SaveField
+    @SyncToClient
     private int ringTier = 0;
 
-    @Persisted
-    @DescSynced
-    @UpdateListener(methodName = "onRingPreviewSynced")
+    @SaveField
+    @SyncToClient
     private boolean ringPreviewEnabled = false;
 
-    @Persisted
-    @DescSynced
+    @SaveField
+    @SyncToClient
     private int partialRingIndex = 0;
 
     public StarLadderResearchHubMachine(BlockEntityCreationInfo holder) {
@@ -73,8 +70,9 @@ public class StarLadderResearchHubMachine extends LinkedWorkableElectricMultiblo
 
     @OnlyIn(Dist.CLIENT)
     @SuppressWarnings("unused")
-    protected void onRingPreviewSynced(boolean newValue, boolean oldValue) {
-        if (newValue) {
+    @ClientFieldChangeListener(fieldName = "ringPreviewEnabled")
+    protected void onRingPreviewSynced() {
+        if (ringPreviewEnabled) {
             RingUpgradePreviewRenderer.enablePreview(getBlockPos(), getFrontFacing(), ringTier);
         } else {
             RingUpgradePreviewRenderer.disablePreview(getBlockPos());
@@ -83,19 +81,38 @@ public class StarLadderResearchHubMachine extends LinkedWorkableElectricMultiblo
 
     @OnlyIn(Dist.CLIENT)
     @SuppressWarnings("unused")
-    protected void onRingTierSynced(int newValue, int oldValue) {
+    @ClientFieldChangeListener(fieldName = "ringTier")
+    protected void onRingTierSynced() {
         if (ringPreviewEnabled) {
-            RingUpgradePreviewRenderer.updatePreview(getBlockPos(), getFrontFacing(), newValue);
+            RingUpgradePreviewRenderer.updatePreview(getBlockPos(), getFrontFacing(), ringTier);
         }
+    }
+
+    private void setRingTier(int ringTier) {
+        if (this.ringTier == ringTier) return;
+        this.ringTier = ringTier;
+        getSyncDataHolder().markClientSyncFieldDirty("ringTier");
+    }
+
+    private void setRingPreviewEnabled(boolean ringPreviewEnabled) {
+        if (this.ringPreviewEnabled == ringPreviewEnabled) return;
+        this.ringPreviewEnabled = ringPreviewEnabled;
+        getSyncDataHolder().markClientSyncFieldDirty("ringPreviewEnabled");
+    }
+
+    private void setPartialRingIndex(int partialRingIndex) {
+        if (this.partialRingIndex == partialRingIndex) return;
+        this.partialRingIndex = partialRingIndex;
+        getSyncDataHolder().markClientSyncFieldDirty("partialRingIndex");
     }
 
     public void toggleRingPreview() {
         // ringTier is 0-3, max tier is 3
         if (!isFormed() || ringTier >= 3) {
-            ringPreviewEnabled = false;
+            setRingPreviewEnabled(false);
             return;
         }
-        ringPreviewEnabled = !ringPreviewEnabled;
+        setRingPreviewEnabled(!ringPreviewEnabled);
     }
 
     public boolean canUpgrade() {
@@ -229,21 +246,21 @@ public class StarLadderResearchHubMachine extends LinkedWorkableElectricMultiblo
 
         // 8.0.0: re-derive the matched tier here (was done in the old checkPattern() override).
         detectTier();
-        this.ringTier = Math.max(0, lastMatchedTier);
-        this.partialRingIndex = 0; // No partial rings with strict pattern matching
+        setRingTier(Math.max(0, lastMatchedTier));
+        setPartialRingIndex(0); // No partial rings with strict pattern matching
 
         // Disable preview if max tier reached (T3 is max)
         if (ringPreviewEnabled && ringTier >= 3) {
-            ringPreviewEnabled = false;
+            setRingPreviewEnabled(false);
         }
     }
 
     @Override
     public void invalidateStructure(String substructureName) {
         super.invalidateStructure(substructureName);
-        this.ringTier = 0;
-        this.partialRingIndex = 0;
-        this.ringPreviewEnabled = false;
+        setRingTier(0);
+        setPartialRingIndex(0);
+        setRingPreviewEnabled(false);
     }
 
     @Override

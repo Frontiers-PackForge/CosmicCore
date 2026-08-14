@@ -1,17 +1,11 @@
 package com.ghostipedia.cosmiccore.client.renderer.item;
 
+import com.ghostipedia.cosmiccore.api.item.component.ICustomRenderer;
+
 import com.gregtechceu.gtceu.api.GTValues;
 
-import com.lowdragmc.lowdraglib.client.renderer.IItemRendererProvider;
-import com.lowdragmc.lowdraglib.client.renderer.IRenderer;
-
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.multiplayer.ClientLevel;
-import net.minecraft.client.renderer.ItemModelShaper;
 import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.entity.ItemRenderer;
 import net.minecraft.client.resources.model.BakedModel;
-import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.api.distmarker.Dist;
@@ -19,14 +13,15 @@ import net.neoforged.api.distmarker.OnlyIn;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 
-public class LensRender implements IRenderer {
+public class LensRender extends WrappedItemRenderer {
 
     public static final LensRender INSTANCE = new LensRender();
 
     @Override
     @OnlyIn(Dist.CLIENT)
-    public void renderItem(ItemStack stack, ItemDisplayContext transformType, boolean leftHand, PoseStack poseStack,
-                           MultiBufferSource buffer, int combinedLight, int combinedOverlay, BakedModel model) {
+    public void renderItem(ICustomRenderer renderData, ItemStack stack, ItemDisplayContext transformType,
+                           boolean leftHand, PoseStack poseStack, MultiBufferSource buffer, int combinedLight,
+                           int combinedOverlay, BakedModel model) {
         poseStack.pushPose();
         if (transformType == ItemDisplayContext.GUI) {
             float scalefactor = GTValues.RNG.nextFloat() * 0.2F + 0.95F;
@@ -35,29 +30,6 @@ public class LensRender implements IRenderer {
 
         vanillaRender(stack, transformType, leftHand, poseStack, buffer, combinedLight, combinedOverlay, model);
         poseStack.popPose();
-    }
-
-    public static void vanillaRender(ItemStack stack, ItemDisplayContext transformType, boolean leftHand,
-                                     PoseStack poseStack, MultiBufferSource buffer, int combinedLight,
-                                     int combinedOverlay, BakedModel model) {
-        IItemRendererProvider.disabled.set(true);
-        Minecraft.getInstance().getItemRenderer().render(stack, transformType, leftHand, poseStack, buffer,
-                combinedLight, combinedOverlay, getVanillaModel(stack, null, null));
-        IItemRendererProvider.disabled.set(false);
-    }
-
-    public static ItemRenderer getItemRenderer() {
-        return Minecraft.getInstance().getItemRenderer();
-    }
-
-    public static BakedModel getVanillaModel(ItemStack stack, ClientLevel level, LivingEntity entity) {
-        ItemModelShaper shaper = getItemRenderer().getItemModelShaper();
-        BakedModel model = shaper.getItemModel(stack.getItem());
-        if (model != null) {
-            BakedModel bakedmodel = model.getOverrides().resolve(model, stack, level, entity, 0);
-            if (bakedmodel != null) return bakedmodel;
-        }
-        return shaper.getModelManager().getMissingModel();
     }
 }
 // TODO ; I hate math, also make this a helper class rather than dumping all the same functions into here every time!

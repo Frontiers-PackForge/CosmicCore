@@ -6,8 +6,6 @@ import com.gregtechceu.gtceu.api.machine.trait.recipe.RecipeLogic;
 import com.gregtechceu.gtceu.api.sync_system.annotations.SaveField;
 import com.gregtechceu.gtceu.api.sync_system.annotations.SyncToClient;
 
-import com.lowdragmc.lowdraglib.syncdata.annotation.DropSaved;
-
 import lombok.Getter;
 
 import java.util.List;
@@ -16,19 +14,16 @@ public class TitanFusionReactorMachine extends WorkableElectricMultiblockMachine
 
     @SaveField
     @SyncToClient
-    @DropSaved
     @Getter
     private long EUSpent = 0L;
 
     @SaveField
     @SyncToClient
-    @DropSaved
     @Getter
     private int reactorTier = 3;  // To 10, 7 Upgrades
 
     @SaveField
     @SyncToClient
-    @DropSaved
     private boolean canUpgrade = false;
 
     public TitanFusionReactorMachine(BlockEntityCreationInfo info) {
@@ -47,8 +42,8 @@ public class TitanFusionReactorMachine extends WorkableElectricMultiblockMachine
             cost = costNow;
             return;
         }
-        EUSpent -= costNow;
-        reactorTier++;
+        setEUSpent(EUSpent - costNow);
+        setReactorTier(reactorTier + 1);
 
         cost = upgradeCost(reactorTier);
     }
@@ -69,7 +64,19 @@ public class TitanFusionReactorMachine extends WorkableElectricMultiblockMachine
     }
 
     public void increaseEUConsumed(long EUSpent) {
-        this.EUSpent += EUSpent;
+        setEUSpent(this.EUSpent + EUSpent);
+    }
+
+    private void setEUSpent(long EUSpent) {
+        if (this.EUSpent == EUSpent) return;
+        this.EUSpent = EUSpent;
+        getSyncDataHolder().markClientSyncFieldDirty("EUSpent");
+    }
+
+    private void setReactorTier(int reactorTier) {
+        if (this.reactorTier == reactorTier) return;
+        this.reactorTier = reactorTier;
+        getSyncDataHolder().markClientSyncFieldDirty("reactorTier");
     }
 
     // TODO(8.0.0 MUI2): custom UI shelved; default UI used (orig in git)

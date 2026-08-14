@@ -13,8 +13,6 @@ import com.gregtechceu.gtceu.api.machine.trait.notifiable.NotifiableFluidTank;
 import com.gregtechceu.gtceu.api.recipe.GTRecipe;
 import com.gregtechceu.gtceu.utils.GTTransferUtils;
 
-import com.lowdragmc.lowdraglib.syncdata.ISubscription;
-
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.neoforged.neoforge.fluids.crafting.SizedFluidIngredient;
@@ -29,8 +27,6 @@ public class SterilizationHatchPartMachine extends TieredIOPartMachine
 
     @Nullable
     protected TickableSubscription autoIOSubs;
-    @Nullable
-    protected ISubscription tankSubs;
     public final NotifiableFluidTank fluidTank;
 
     public SterilizationHatchPartMachine(BlockEntityCreationInfo holder, int tier, IO io, int tankSize) {

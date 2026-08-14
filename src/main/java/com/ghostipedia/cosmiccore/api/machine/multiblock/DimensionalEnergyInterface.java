@@ -17,8 +17,6 @@ import com.gregtechceu.gtceu.common.machine.owner.FTBOwner;
 import com.gregtechceu.gtceu.common.machine.owner.MachineOwner;
 import com.gregtechceu.gtceu.config.ConfigHolder;
 
-import com.lowdragmc.lowdraglib.utils.DummyWorld;
-
 import net.minecraft.server.level.ServerLevel;
 
 import org.jetbrains.annotations.NotNull;
@@ -57,7 +55,7 @@ public class DimensionalEnergyInterface extends MuiWorkableMultiblockMachine {
     @Override
     public void formStructure(@NotNull String substructureName) {
         super.formStructure(substructureName);
-        if (getLevel() instanceof DummyWorld) return;
+        if (getLevel() == null || getLevel().isClientSide) return;
 
         initializeAbilities();
         setEnergyBuffer();

@@ -11,9 +11,8 @@ import com.gregtechceu.gtceu.api.machine.feature.ITieredMachine;
 import com.gregtechceu.gtceu.api.machine.multiblock.part.MultiblockPartMachine;
 import com.gregtechceu.gtceu.api.misc.EnergyContainerList;
 import com.gregtechceu.gtceu.api.recipe.GTRecipe;
+import com.gregtechceu.gtceu.api.sync_system.annotations.SaveField;
 import com.gregtechceu.gtceu.utils.FormattingUtil;
-
-import com.lowdragmc.lowdraglib.syncdata.annotation.Persisted;
 
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
@@ -31,7 +30,7 @@ public class MagneticFieldMachine extends MagnetWorkableElectricMultiblockMachin
     @Getter
     private int fieldChargeRate;
     @Getter
-    @Persisted
+    @SaveField
     private int fieldStrength = 0;
     @Nullable
     protected EnergyContainerList inputEnergyContainers;
@@ -87,7 +86,7 @@ public class MagneticFieldMachine extends MagnetWorkableElectricMultiblockMachin
     public void invalidateStructure(String substructureName) {
         super.invalidateStructure(substructureName);
         this.inputEnergyContainers = null;
-        fieldStrength = 0;
+        setFieldStrength(0);
         updateMagnetFieldSubscription();
     }
 
@@ -97,14 +96,14 @@ public class MagneticFieldMachine extends MagnetWorkableElectricMultiblockMachin
         }
         if (inputEnergyContainers.getEnergyStored() > getEnergyCost() && getMagnetStrength() > fieldStrength) {
             if (fieldStrength < 0) {
-                fieldStrength = 0;
+                setFieldStrength(0);
             }
             if (fieldStrength > getMagnetStrength()) {
-                fieldStrength = getMagnetStrength();
+                setFieldStrength(getMagnetStrength());
             }
             inputEnergyContainers.removeEnergy(getEnergyCost());
-            fieldStrength += getMagnetRegen();
-            fieldStrength = Math.min(fieldStrength, getMagnetStrength());
+            setFieldStrength(fieldStrength + getMagnetRegen());
+            setFieldStrength(Math.min(fieldStrength, getMagnetStrength()));
 
         }
     }
@@ -114,7 +113,7 @@ public class MagneticFieldMachine extends MagnetWorkableElectricMultiblockMachin
         if (recipe.data.getInt("min_field") <= fieldStrength) {
             if (recipe.data.contains("decay_rate") && recipe.data.getInt("decay_rate") > 0) {
                 if (!recipe.data.getBoolean("per_tick")) {
-                    fieldStrength = fieldStrength - recipe.data.getInt("decay_rate");
+                    setFieldStrength(fieldStrength - recipe.data.getInt("decay_rate"));
                 }
                 return true;
             }
@@ -134,8 +133,14 @@ public class MagneticFieldMachine extends MagnetWorkableElectricMultiblockMachin
         if (fieldStrength < recipe.data.getInt("min_field")) {
             return false;
         }
-        fieldStrength = fieldStrength - recipe.data.getInt("decay_rate");
+        setFieldStrength(fieldStrength - recipe.data.getInt("decay_rate"));
         return super.onWorking();
+    }
+
+    private void setFieldStrength(int fieldStrength) {
+        if (this.fieldStrength == fieldStrength) return;
+        this.fieldStrength = fieldStrength;
+        markAsChanged();
     }
 
     public void addDisplayText(List<Component> textList) {

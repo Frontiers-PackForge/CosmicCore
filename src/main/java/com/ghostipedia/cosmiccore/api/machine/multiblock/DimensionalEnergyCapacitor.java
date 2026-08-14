@@ -11,8 +11,6 @@ import com.gregtechceu.gtceu.api.sync_system.annotations.SaveField;
 import com.gregtechceu.gtceu.common.block.BatteryBlock;
 import com.gregtechceu.gtceu.common.machine.owner.MachineOwner;
 
-import com.lowdragmc.lowdraglib.utils.DummyWorld;
-
 import net.minecraft.server.level.ServerLevel;
 
 import java.math.BigInteger;
@@ -47,53 +45,53 @@ public class DimensionalEnergyCapacitor extends DimensionalEnergyInterface {
 
     @Override
     public void formStructure(@org.jetbrains.annotations.NotNull String substructureName) {
-        if (getLevel() instanceof DummyWorld) super.formStructure(substructureName);
-
-        if (getLevel() instanceof ServerLevel serverLevel) {
-            var owner = getTeamUUID();
-            if (owner == MachineOwner.EMPTY) {
-                CosmicCore.LOGGER.warn("DimensionalEnergyCapcitor tried to form with null team.");
-                return;
-            }
-            var multiblockId = getDefinition().getId().toString();
-            var wirelessData = WirelessEnergySavedData.getOrCreate(serverLevel);
-            var uniqueMultiblockMapping = UniqueMultiblockSavedData.getOrCreate(serverLevel);
-
-            if (uniqueMultiblockMapping.hasData(owner, multiblockId, getDimension())) {
-                this.isDuplicate = !uniqueMultiblockMapping.isUnique(owner, multiblockId, getDimension(),
-                        getBlockPos());
-                if (isDuplicate) {
-                    recipeLogic.setStatus(RecipeLogic.Status.SUSPEND);
-                    return;
-                }
-            } else uniqueMultiblockMapping.addMultiblock(owner, getDefinition().getId().toString(), getDimension(),
-                    getBlockPos());
-
-            List<IBatteryData> batteries = new ArrayList<>();
-            // Re-derive batteries post-formation (match-context accumulator removed in 8.0.0);
-            // mirrors GTCEu PowerSubstationMachine.formStructure.
-            for (var entry : getDefaultPatternState().getCache().long2ObjectEntrySet()) {
-                if (entry.getValue().getBlockState().getBlock() instanceof BatteryBlock batteryBlock &&
-                        batteryBlock.getData().getCapacity() > 0) {
-                    batteries.add(batteryBlock.getData());
-                }
-            }
-
-            this.capacities = batteries.stream().mapToLong(IBatteryData::getCapacity).toArray();
-
-            if (batteries.isEmpty()) {
-                invalidateStructure(substructureName);
-                return;
-            }
-
-            super.formStructure(substructureName); // This order is important do not move
-
-            var capacity = batteries.stream().mapToLong(IBatteryData::getCapacity)
-                    .mapToObj(BigInteger::valueOf).reduce(BigInteger.ZERO, BigInteger::add);
-
-            wirelessData.setCapacity(owner, capacity);
-            wirelessData.setActive(owner, true);
+        if (!(getLevel() instanceof ServerLevel serverLevel)) {
+            super.formStructure(substructureName);
+            return;
         }
+        var owner = getTeamUUID();
+        if (owner == MachineOwner.EMPTY) {
+            CosmicCore.LOGGER.warn("DimensionalEnergyCapcitor tried to form with null team.");
+            return;
+        }
+        var multiblockId = getDefinition().getId().toString();
+        var wirelessData = WirelessEnergySavedData.getOrCreate(serverLevel);
+        var uniqueMultiblockMapping = UniqueMultiblockSavedData.getOrCreate(serverLevel);
+
+        if (uniqueMultiblockMapping.hasData(owner, multiblockId, getDimension())) {
+            this.isDuplicate = !uniqueMultiblockMapping.isUnique(owner, multiblockId, getDimension(),
+                    getBlockPos());
+            if (isDuplicate) {
+                recipeLogic.setStatus(RecipeLogic.Status.SUSPEND);
+                return;
+            }
+        } else uniqueMultiblockMapping.addMultiblock(owner, getDefinition().getId().toString(), getDimension(),
+                getBlockPos());
+
+        List<IBatteryData> batteries = new ArrayList<>();
+        // Re-derive batteries post-formation (match-context accumulator removed in 8.0.0);
+        // mirrors GTCEu PowerSubstationMachine.formStructure.
+        for (var entry : getDefaultPatternState().getCache().long2ObjectEntrySet()) {
+            if (entry.getValue().getBlockState().getBlock() instanceof BatteryBlock batteryBlock &&
+                    batteryBlock.getData().getCapacity() > 0) {
+                batteries.add(batteryBlock.getData());
+            }
+        }
+
+        this.capacities = batteries.stream().mapToLong(IBatteryData::getCapacity).toArray();
+
+        if (batteries.isEmpty()) {
+            invalidateStructure(substructureName);
+            return;
+        }
+
+        super.formStructure(substructureName); // This order is important do not move
+
+        var capacity = batteries.stream().mapToLong(IBatteryData::getCapacity)
+                .mapToObj(BigInteger::valueOf).reduce(BigInteger.ZERO, BigInteger::add);
+
+        wirelessData.setCapacity(owner, capacity);
+        wirelessData.setActive(owner, true);
     }
 
     @Override
