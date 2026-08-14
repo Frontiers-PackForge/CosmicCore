@@ -1,7 +1,5 @@
 package com.ghostipedia.cosmiccore.common.airControl;
 
-import com.ghostipedia.cosmiccore.common.reflection.bargain.impl.DepthsBargain;
-
 import net.minecraft.world.entity.player.Player;
 
 /**
@@ -18,13 +16,8 @@ public final class OxygenConfig {
     /** Base maximum oxygen capacity in ticks (90 seconds) */
     public static final long MAX_OXYGEN_TICKS = 20L * 90;
 
-    /**
-     * Get the effective max oxygen capacity for a player.
-     * This accounts for bargains that modify capacity (e.g., Depths bargain).
-     */
     public static long getMaxOxygenTicks(Player player) {
-        float multiplier = DepthsBargain.getCapacityMultiplier(player);
-        return (long) (MAX_OXYGEN_TICKS * multiplier);
+        return MAX_OXYGEN_TICKS;
     }
 
     /** Seconds remaining at which to show warnings */

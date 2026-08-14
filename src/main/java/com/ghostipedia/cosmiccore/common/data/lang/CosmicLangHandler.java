@@ -707,13 +707,6 @@ public class CosmicLangHandler extends LangHandler {
 
         // item tooltips
         // TODO reorganize, use multiLang where applicable
-        provider.add("cosmiccore.lore.shard_small.0", "§6A shard from a past eternity");
-        provider.add("cosmiccore.lore.shard_small.1", "§6it subtly echos to rewrite fate.");
-        provider.add("cosmiccore.lore.shard_large.0", "§aA large fragment from a past eternity");
-        provider.add("cosmiccore.lore.shard_large.1", "§ait echos to rewrite fate.");
-        provider.add("cosmiccore.lore.shard_huge.0", "§3An abnormally massive cluster from past eternity.");
-        provider.add("cosmiccore.lore.shard_huge.1", "§3it screams and wails at you to undo history.");
-        provider.add("cosmiccore.lore.shard_huge.2", "§cYour mind shatters trying to understand this.");
 
         provider.add("cosmiccore.omnia_circuit.lv", "§6Works as any LV Circuit.");
         provider.add("cosmiccore.omnia_circuit.mv", "§6Works as any MV Circuit.");
@@ -1216,12 +1209,12 @@ public class CosmicLangHandler extends LangHandler {
         provider.add("cosmiccore.stellar.slot.star_seed", "Star Seed");
 
         // =========================================================================
-        // REFLECTION SYSTEM
+        // EXTENDED SUBSYSTEM LANGUAGE
         // =========================================================================
-        initReflectionLang(provider);
+        initExtendedSubsystemLang(provider);
     }
 
-    private static void initReflectionLang(RegistrateLangProvider provider) {
+    private static void initExtendedSubsystemLang(RegistrateLangProvider provider) {
         // Stellar Iris Module System
         provider.add("cosmiccore.multiblock.stellar_module.not_connected", "§cNot Connected to Stellar Iris");
         provider.add("cosmiccore.multiblock.stellar_module.iris_not_formed", "§cStellar Iris Not Formed");
@@ -1637,93 +1630,13 @@ public class CosmicLangHandler extends LangHandler {
         provider.add("cosmiccore.stellar.upgrade.void_attunement.desc",
                 "+2% bonus from void effects per level (max 10 levels)");
 
-        // Quake Movement (Reflection Bargain)
+        // Globestrider Movement
         provider.add("key.categories.cosmiccore.movement", "Quake Movement");
         provider.add("key.cosmiccore.movement.dash", "Dash");
 
         provider.add("item.cosmiccore.travelers_boots.tooltip",
                 "Negates fall damage and steps up full blocks while standing.");
 
-        // Soul Shapes
-        provider.add("cosmiccore.soul_shape.unshaped.name", "Unshaped");
-        provider.add("cosmiccore.soul_shape.unshaped.tagline", "Your soul remains formless, undefined.");
-        provider.add("cosmiccore.soul_shape.unshaped.description",
-                "You have not yet chosen a shape. Your potential is limitless, but so is your lack of direction.");
-
-        provider.add("cosmiccore.soul_shape.revenant.name", "The Revenant");
-        provider.add("cosmiccore.soul_shape.revenant.tagline", "I was the first to die. I'll be the last to fall.");
-        provider.add("cosmiccore.soul_shape.revenant.description",
-                "You've died so many times that death itself is just a phase. Death-related bargains are empowered.");
-        provider.add("cosmiccore.soul_shape.revenant.super.name", "Defy");
-        provider.add("cosmiccore.soul_shape.revenant.super.description",
-                "When you would die, you don't. Enter a fury state with massive lifesteal. Heal to full or die for real.");
-
-        provider.add("cosmiccore.soul_shape.hollow.name", "The Hollow");
-        provider.add("cosmiccore.soul_shape.hollow.tagline", "I am empty. Consume All.");
-        provider.add("cosmiccore.soul_shape.hollow.description",
-                "You gain nothing passively. You take. Everything you have, you took from something else.");
-        provider.add("cosmiccore.soul_shape.hollow.super.name", "Devour");
-        provider.add("cosmiccore.soul_shape.hollow.super.description",
-                "Consume an entity whole. Gain Nourishment and leech a stat from what you ate.");
-
-        provider.add("cosmiccore.soul_shape.engine.name", "The Engine");
-        provider.add("cosmiccore.soul_shape.engine.tagline", "The factory must grow. And I must too.");
-        provider.add("cosmiccore.soul_shape.engine.description",
-                "You are the cog work. Efficiency. Throughput. Optimization. Speed-related bargains are empowered.");
-        provider.add("cosmiccore.soul_shape.engine.super.name", "Overclock");
-        provider.add("cosmiccore.soul_shape.engine.super.description",
-                "Overclock for a breif moment. Attack, move, mine, and build at massively boosted speeds.");
-
-        provider.add("cosmiccore.soul_shape.globedancer.name", "The Globedancer");
-        provider.add("cosmiccore.soul_shape.globedancer.tagline", "I am never where you strike.");
-        provider.add("cosmiccore.soul_shape.globedancer.description",
-                "Movement is identity. You are not hit because you are not there. Mobility bargains are empowered, defense is cursed.");
-        provider.add("cosmiccore.soul_shape.globedancer.super.name", "Slipstream");
-        provider.add("cosmiccore.soul_shape.globedancer.super.description",
-                "Become untouchable. No fall damage, no collision. Pure fluid motion.");
-
-        provider.add("cosmiccore.soul_shape.bulwark.name", "The Bulwark");
-        provider.add("cosmiccore.soul_shape.bulwark.tagline", "I endure what would break you.");
-        provider.add("cosmiccore.soul_shape.bulwark.description",
-                "You don't dodge. You don't retreat. You take it. Defensive bargains are empowered, mobility is cursed.");
-        provider.add("cosmiccore.soul_shape.bulwark.super.name", "Last Stand");
-        provider.add("cosmiccore.soul_shape.bulwark.super.description",
-                "Plant yourself. Emit a damaging aura, take massively reduced damage, reflect damage to attackers.");
-
-        provider.add("cosmiccore.soul_shape.bloodthirst.name", "The Bloodthirst");
-        provider.add("cosmiccore.soul_shape.bloodthirst.tagline", "I end things before they begin.");
-        provider.add("cosmiccore.soul_shape.bloodthirst.description",
-                "Kill or be killed. Damage bargains are empowered, defense is cursed.");
-        provider.add("cosmiccore.soul_shape.bloodthirst.super.name", "Rip and Tear");
-        provider.add("cosmiccore.soul_shape.bloodthirst.super.description",
-                "Enter a frenzy. Kill a mob, dash to the next, execute low-health enemies. RIP. AND. TEAR.");
-
-        // Soul Mutilator Item
-        provider.add("item.cosmiccore.soul_mutilator.tooltip", "A twisted instrument that can reshape your very soul.");
-        provider.add("item.cosmiccore.soul_mutilator.tooltip.warning", "This choice is permanent. Choose wisely.");
-        provider.add("cosmiccore.soul_mutilator.not_awakened", "Your soul has not yet awakened. Die a few more times.");
-        provider.add("cosmiccore.soul_mutilator.already_shaped", "Your soul is already shaped as %s.");
-        provider.add("cosmiccore.soul_mutilator.select_shape", "Select a Soul Shape:");
-        provider.add("cosmiccore.soul_mutilator.shape_selected", "Your soul has been mutilated into %s.");
-
-        // Soul Shape UI (Mirror of Erosion integration)
-        provider.add("reflection.cosmiccore.ui.hub.mutilate_soul", "[Reshape Your Core]");
-        provider.add("reflection.cosmiccore.ui.soul_shape.select_header", "Choose Your Shape");
-        provider.add("reflection.cosmiccore.ui.soul_shape.warning_permanent",
-                "This choice is permanent and cannot be undone.");
-        provider.add("reflection.cosmiccore.ui.soul_shape.intro.0",
-                "The blade rests against your core. This will redefine what you are.");
-        provider.add("reflection.cosmiccore.ui.soul_shape.intro.1",
-                "Once cut, the shape is permanent. Your core can only be shaped once.");
-        provider.add("reflection.cosmiccore.ui.soul_shape.intro.2",
-                "Think through this carefully. There's no going back.");
-        provider.add("reflection.cosmiccore.ui.soul_shape.transforming.0", "You cut.");
-        provider.add("reflection.cosmiccore.ui.soul_shape.transforming.1",
-                "Your entire being feels on fire as you shift into %s...");
-        provider.add("reflection.cosmiccore.ui.soul_shape.complete.0",
-                "You are now %s. Something fundamental changed.");
-        provider.add("reflection.cosmiccore.ui.soul_shape.complete.1",
-                "There's no returning to what you were.");
         provider.add("cosmiccore.hud.oxygen.suffocating", "SUFFOCATING");
         provider.add("cosmiccore.tooltip.hand_sort", "Can be hand sorted for: %s");
         provider.add("cosmiccore.emi.composite_ore_sorting", "Ore Sorting Diagram");

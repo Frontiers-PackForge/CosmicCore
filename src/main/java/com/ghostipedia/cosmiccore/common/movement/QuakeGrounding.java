@@ -1,4 +1,4 @@
-package com.ghostipedia.cosmiccore.common.reflection.bargain.impl;
+package com.ghostipedia.cosmiccore.common.movement;
 
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.phys.AABB;

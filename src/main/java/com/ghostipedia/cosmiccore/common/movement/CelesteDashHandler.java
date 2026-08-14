@@ -1,4 +1,4 @@
-package com.ghostipedia.cosmiccore.common.reflection.bargain.impl;
+package com.ghostipedia.cosmiccore.common.movement;
 
 import com.ghostipedia.cosmiccore.api.gravity.GravityApi;
 

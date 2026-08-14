@@ -225,7 +225,7 @@ public class StellarConvergenceScreen extends Screen {
     @Override
     public void render(GuiGraphics graphics, int mouseX, int mouseY, float partialTick) {
         // Cosmic background
-        BackgroundRenderer.render(graphics.pose(), BackgroundRenderer.BackgroundType.GALAXY, fadeAlpha, width, height);
+        BackgroundRenderer.render(graphics.pose(), fadeAlpha, width, height);
 
         if (fadeAlpha < 0.1f) return;
 

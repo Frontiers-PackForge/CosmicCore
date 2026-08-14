@@ -1,9 +1,9 @@
-package com.ghostipedia.cosmiccore.common.reflection.network;
+package com.ghostipedia.cosmiccore.common.network.packet;
 
 import com.ghostipedia.cosmiccore.CosmicCore;
 import com.ghostipedia.cosmiccore.api.gravity.GravityApi;
-import com.ghostipedia.cosmiccore.common.reflection.bargain.impl.CelesteDashHandler;
-import com.ghostipedia.cosmiccore.common.reflection.bargain.impl.QuakeMovementHandler;
+import com.ghostipedia.cosmiccore.common.movement.CelesteDashHandler;
+import com.ghostipedia.cosmiccore.common.movement.QuakeMovementHandler;
 
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;

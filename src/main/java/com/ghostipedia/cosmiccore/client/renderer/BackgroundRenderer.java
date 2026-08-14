@@ -19,13 +19,7 @@ import org.joml.Matrix4f;
 @OnlyIn(Dist.CLIENT)
 public class BackgroundRenderer {
 
-    public enum BackgroundType {
-        VOID,   // Mystical ethereal void
-        GALAXY  // Deep space galaxy with nebulae
-    }
-
-    public static void render(PoseStack poseStack, BackgroundType type, float fadeAlpha,
-                              int screenWidth, int screenHeight) {
+    public static void render(PoseStack poseStack, float fadeAlpha, int screenWidth, int screenHeight) {
         Matrix4f matrix = poseStack.last().pose();
 
         // Black overlay first so world fades to black during transitions
@@ -42,8 +36,7 @@ public class BackgroundRenderer {
         blackBuffer.addVertex(matrix, 0, 0, 0).setColor(0, 0, 0, blackAlpha);
         BufferUploader.drawWithShader(blackBuffer.buildOrThrow());
 
-        ShaderInstance shader = type == BackgroundType.VOID ? CosmicCoreClient.getVoidBgShader() :
-                CosmicCoreClient.getGalaxyBgShader();
+        ShaderInstance shader = CosmicCoreClient.getGalaxyBgShader();
 
         if (shader == null) {
             RenderSystem.disableBlend();
