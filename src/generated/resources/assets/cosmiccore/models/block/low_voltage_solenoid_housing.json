@@ -1,6 +1,0 @@
-{
-    "parent": "minecraft:block/cube_all",
-    "textures": {
-        "all": "cosmiccore:block/casings/solid/low_voltage_solenoid_housing"
-    }
-}
