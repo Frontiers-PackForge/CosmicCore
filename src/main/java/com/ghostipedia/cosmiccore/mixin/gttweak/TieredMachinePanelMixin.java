@@ -32,7 +32,8 @@ public class TieredMachinePanelMixin {
     @ModifyExpressionValue(
                            method = "build",
                            at = @At(value = "INVOKE",
-                                    target = "Lcom/gregtechceu/gtceu/api/machine/MachineDefinition;getRecipeTypes()[Lcom/gregtechceu/gtceu/api/recipe/GTRecipeType;"),
+                                    target = "Lcom/gregtechceu/gtceu/api/machine/MachineDefinition;getRecipeTypes()[Lcom/gregtechceu/gtceu/api/recipe/GTRecipeType;",
+                                    remap = false),
                            require = 1)
     private GTRecipeType[] cosmiccore$hideConfiguredRecipeTypeButton(GTRecipeType[] original) {
         if (machine instanceof IConfiguredMultiblockMachine && original.length > 0) {

@@ -62,6 +62,7 @@ public class MultiblockInit {
         SteamCrackingFurnace.init();
         FractionalCondenser.init();
         ConversionComplex.init();
+        ModularPowerStation.init();
         SludgeDigestor.init();
         SufferingChamber.init();
         TitanFusion.init();

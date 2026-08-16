@@ -2,6 +2,7 @@ package com.ghostipedia.cosmiccore.mixin.emi;
 
 import com.ghostipedia.cosmiccore.integration.emi.RecipeScreenAccessor;
 
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -17,6 +18,7 @@ import dev.emi.emi.api.widget.Widget;
 import dev.emi.emi.config.EmiConfig;
 import dev.emi.emi.config.SidebarSide;
 import dev.emi.emi.runtime.EmiDrawContext;
+import dev.emi.emi.runtime.EmiReloadManager;
 import dev.emi.emi.screen.RecipeScreen;
 import dev.emi.emi.screen.RecipeTab;
 import dev.emi.emi.screen.WidgetGroup;
@@ -26,7 +28,9 @@ import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Redirect;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import java.util.List;
 
@@ -44,6 +48,16 @@ public abstract class RecipeScreenMixin extends Screen implements RecipeScreenAc
 
     protected RecipeScreenMixin(Component title) {
         super(title);
+    }
+
+    @Inject(
+            method = "render(Lnet/minecraft/client/gui/GuiGraphics;IIF)V",
+            at = @At("HEAD"),
+            cancellable = true,
+            require = 1)
+    private void cosmicCore$skipRenderingAfterRuntimeClear(GuiGraphics guiGraphics, int mouseX, int mouseY,
+                                                           float delta, CallbackInfo ci) {
+        if (!EmiReloadManager.isLoaded()) ci.cancel();
     }
 
     @Shadow(remap = false)
