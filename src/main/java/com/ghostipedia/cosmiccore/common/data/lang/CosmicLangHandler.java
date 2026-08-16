@@ -1221,6 +1221,13 @@ public class CosmicLangHandler extends LangHandler {
     }
 
     private static void initExtendedSubsystemLang(RegistrateLangProvider provider) {
+        provider.add("cosmiccore.tooltip.steam_boiler.maximum_steam_output", "§6Maximum Output§f: %s mB/t Steam");
+        provider.add("cosmiccore.tooltip.steam_boiler.maximum_pressurized_output",
+                "§6Maximum Output§f: %s mB/t Pressurized Steam");
+        provider.add("cosmiccore.tooltip.steam_boiler.steam_equivalent", "§eSteam Equivalent§f: %s mB/t Steam");
+        provider.add("cosmiccore.tooltip.steam_boiler.temperature_scaling", "§7Output scales with boiler temperature");
+        provider.add("cosmiccore.tooltip.large_boiler.output_scaling", "Output scales with temperature and throttle");
+
         // Stellar Iris Module System
         provider.add("cosmiccore.multiblock.stellar_module.not_connected", "§cNot Connected to Stellar Iris");
         provider.add("cosmiccore.multiblock.stellar_module.iris_not_formed", "§cStellar Iris Not Formed");

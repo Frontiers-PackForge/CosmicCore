@@ -1,6 +1,6 @@
 package com.ghostipedia.cosmiccore.mixin.gttweak.power.steam;
 
-import com.ghostipedia.cosmiccore.common.power.steam.HighPressureSteamRules;
+import com.ghostipedia.cosmiccore.common.power.steam.HPBoilerRates;
 
 import com.gregtechceu.gtceu.api.capability.recipe.IO;
 import com.gregtechceu.gtceu.api.machine.MetaMachine;
@@ -29,22 +29,22 @@ public abstract class HighPressureSteamTerminalConversionMixin {
     private void cosmiccore$expandHighPressureSteam(FluidStack resource, FluidAction action,
                                                     CallbackInfoReturnable<Integer> cir) {
         NotifiableFluidTank tank = (NotifiableFluidTank) (Object) this;
-        if (tank.handlerIO != IO.IN || !HighPressureSteamRules.isHighPressureSteam(resource)) return;
+        if (tank.handlerIO != IO.IN || !HPBoilerRates.isHighPressureSteam(resource)) return;
 
         MetaMachine machine = tank.getMachine();
         if (!(machine instanceof SteamMachine) && !(machine instanceof SteamHatchPartMachine)) return;
 
         int offered = Math.min(resource.getAmount(),
-                Integer.MAX_VALUE / HighPressureSteamRules.STEAM_COMPRESSION_RATIO);
+                Integer.MAX_VALUE / HPBoilerRates.COMPACT_RATE);
         if (offered <= 0) {
             cir.setReturnValue(0);
             return;
         }
 
-        int simulatedSteam = tank.fillInternal(HighPressureSteamRules.expandedSteam(offered), FluidAction.SIMULATE);
-        int accepted = simulatedSteam / HighPressureSteamRules.STEAM_COMPRESSION_RATIO;
+        int simulatedSteam = tank.fillInternal(HPBoilerRates.expandedSteam(offered), FluidAction.SIMULATE);
+        int accepted = simulatedSteam / HPBoilerRates.COMPACT_RATE;
         if (accepted > 0 && action.execute()) {
-            tank.fillInternal(HighPressureSteamRules.expandedSteam(accepted), FluidAction.EXECUTE);
+            tank.fillInternal(HPBoilerRates.expandedSteam(accepted), FluidAction.EXECUTE);
         }
         cir.setReturnValue(accepted);
     }

@@ -1,6 +1,6 @@
 package com.ghostipedia.cosmiccore.mixin.gttweak.power.steam;
 
-import com.ghostipedia.cosmiccore.common.power.steam.HighPressureSteamRules;
+import com.ghostipedia.cosmiccore.common.power.steam.HPBoilerRates;
 
 import com.gregtechceu.gtceu.api.data.chemical.material.Material;
 import com.gregtechceu.gtceu.common.machine.multiblock.steam.LargeBoilerMachine;
@@ -29,7 +29,7 @@ public abstract class LargeBoilerHighPressureOutputMixin {
               expect = 2,
               allow = 2)
     private void cosmiccore$compressGeneratedSteam(LargeBoilerMachine machine, int amount) {
-        steamGenerated = amount / HighPressureSteamRules.STEAM_COMPRESSION_RATIO;
+        steamGenerated = amount / HPBoilerRates.COMPACT_RATE;
     }
 
     @Redirect(
@@ -41,6 +41,6 @@ public abstract class LargeBoilerHighPressureOutputMixin {
               expect = 1,
               allow = 1)
     private FluidStack cosmiccore$emitHighPressureSteam(Material material, int amount) {
-        return HighPressureSteamRules.highPressureSteam(amount);
+        return HPBoilerRates.highPressureSteam(amount);
     }
 }

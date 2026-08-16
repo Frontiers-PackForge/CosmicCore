@@ -19,6 +19,7 @@ import com.ghostipedia.cosmiccore.common.machine.multiblock.multi.logic.MEComput
 import com.ghostipedia.cosmiccore.common.machine.multiblock.part.*;
 import com.ghostipedia.cosmiccore.common.machine.multiblock.tier.TieredMultiblockPatterns;
 import com.ghostipedia.cosmiccore.common.machine.part.WirelessDataSensor;
+import com.ghostipedia.cosmiccore.common.power.steam.SteamBoilerTooltips;
 import com.ghostipedia.cosmiccore.gtbridge.CosmicRecipeTypes;
 import com.ghostipedia.nebulaeae2.compute.ComputeTuning;
 
@@ -1050,6 +1051,7 @@ public class CosmicMachines {
     // AlvearyModifierPartMachine) shelved with Forestry (bead cosmiccore-42.13)
 
     public static void init() {
+        SteamBoilerTooltips.init();
         GTRecipeTypes.MIXER_RECIPES.setMaxSize(IO.IN, CosmicRecipeCapabilities.EMBER, 1);
         TieredMultiblockPatterns.register(GTMultiMachines.ELECTRIC_BLAST_FURNACE,
                 () -> MultiblockPatternBuilder.start(FRONT, UP, LEFT)
