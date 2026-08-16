@@ -184,6 +184,7 @@
     "gttweak.power.CableBlockEntityTelemetryMixin",
     "gttweak.power.CableBlockProviderTelemetryMixin",
     "gttweak.power.EnergyNetHandlerTelemetryMixin",
+    "gttweak.power.GTRecipeVoltageStripper",
     "gttweak.power.GTMaterialsTwelvefoldConductorMixin",
     "gttweak.power.InsulationConstructorInvoker",
     "gttweak.power.InsulatedCableAmpacityMixin",

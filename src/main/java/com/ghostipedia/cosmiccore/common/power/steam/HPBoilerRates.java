@@ -6,11 +6,11 @@ import com.gregtechceu.gtceu.common.data.GTMaterials;
 
 import net.neoforged.neoforge.fluids.FluidStack;
 
-public final class HighPressureSteamRules {
+public final class HPBoilerRates {
 
-    public static final int STEAM_COMPRESSION_RATIO = 8;
+    public static final int COMPACT_RATE = 8;
 
-    private HighPressureSteamRules() {}
+    private HPBoilerRates() {}
 
     public static boolean isHighPressureSteam(FluidStack stack) {
         return !stack.isEmpty() && stack.getFluid() == CosmicMaterials.HighPressureSteam.getFluid();
@@ -21,6 +21,6 @@ public final class HighPressureSteamRules {
     }
 
     public static FluidStack expandedSteam(int highPressureSteamAmount) {
-        return GTMaterials.Steam.getFluid(Math.multiplyExact(highPressureSteamAmount, STEAM_COMPRESSION_RATIO));
+        return GTMaterials.Steam.getFluid(Math.multiplyExact(highPressureSteamAmount, COMPACT_RATE));
     }
 }

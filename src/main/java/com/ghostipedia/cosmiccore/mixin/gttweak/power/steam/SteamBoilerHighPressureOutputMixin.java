@@ -1,6 +1,7 @@
 package com.ghostipedia.cosmiccore.mixin.gttweak.power.steam;
 
-import com.ghostipedia.cosmiccore.common.power.steam.HighPressureSteamRules;
+import com.ghostipedia.cosmiccore.common.power.steam.HPBoilerRates;
+import com.ghostipedia.cosmiccore.common.power.steam.SteamBoilerRates;
 
 import com.gregtechceu.gtceu.api.blockentity.BlockEntityCreationInfo;
 import com.gregtechceu.gtceu.api.data.chemical.material.Material;
@@ -31,7 +32,7 @@ public abstract class SteamBoilerHighPressureOutputMixin {
                                                            CallbackInfo ci) {
         SteamBoilerMachine machine = (SteamBoilerMachine) (Object) this;
         if (isHighPressure) {
-            machine.steamTank.setFilter(HighPressureSteamRules::isHighPressureSteam);
+            machine.steamTank.setFilter(HPBoilerRates::isHighPressureSteam);
         }
     }
 
@@ -42,19 +43,22 @@ public abstract class SteamBoilerHighPressureOutputMixin {
             require = 2,
             expect = 2,
             allow = 2)
-    private void cosmiccore$scaleHighPressureSteamOutput(CallbackInfoReturnable<Long> cir) {
+    private void cosmiccore$applySteamOutputCurve(CallbackInfoReturnable<Long> cir) {
         SteamBoilerMachine machine = (SteamBoilerMachine) (Object) this;
-        if (!machine.isHighPressure() || cir.getReturnValue() == 0) return;
+        if (cir.getReturnValue() == 0) return;
 
-        int maximumCycleOutput;
-        if (machine instanceof SteamSolarBoiler || machine instanceof SteamSolidBoilerMachine) {
-            maximumCycleOutput = 20;
+        SteamBoilerRates.BoilerType type;
+        if (machine instanceof SteamSolarBoiler) {
+            type = SteamBoilerRates.BoilerType.SOLAR;
+        } else if (machine instanceof SteamSolidBoilerMachine) {
+            type = SteamBoilerRates.BoilerType.SOLID;
         } else if (machine instanceof SteamLiquidBoilerMachine) {
-            maximumCycleOutput = 40;
+            type = SteamBoilerRates.BoilerType.LIQUID;
         } else {
             return;
         }
-        cir.setReturnValue((long) maximumCycleOutput * machine.getCurrentTemperature() / machine.getMaxTemperature());
+        cir.setReturnValue(SteamBoilerRates.outputForCycle(type, machine.isHighPressure(),
+                machine.getCurrentTemperature(), machine.getMaxTemperature()));
     }
 
     @Redirect(
@@ -67,6 +71,6 @@ public abstract class SteamBoilerHighPressureOutputMixin {
               allow = 1)
     private FluidStack cosmiccore$emitHighPressureSteam(Material material, int amount) {
         SteamBoilerMachine machine = (SteamBoilerMachine) (Object) this;
-        return machine.isHighPressure() ? HighPressureSteamRules.highPressureSteam(amount) : material.getFluid(amount);
+        return machine.isHighPressure() ? HPBoilerRates.highPressureSteam(amount) : material.getFluid(amount);
     }
 }
