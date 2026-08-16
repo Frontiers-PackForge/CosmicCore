@@ -19,11 +19,13 @@ public class CosmicCoreJadePlugin implements IWailaPlugin {
     public static final ResourceLocation EMBER_DETAILS = CosmicCore.id("ember_details");
     public static final ResourceLocation ME_COMPUTATION_ARRAY_DETAILS = CosmicCore.id("me_computation_array_details");
     public static final ResourceLocation POWER_GRID_TELEMETRY = CosmicCore.id("power_grid_telemetry");
+    public static final ResourceLocation MODULAR_POWER_STATION_MODE = CosmicCore.id("modular_power_station_mode");
 
     @Override
     public void register(IWailaCommonRegistration registration) {
         registration.registerBlockDataProvider(CosmicEmberProvider.INSTANCE, Block.class);
         registration.registerBlockDataProvider(MEComputationArrayProvider.INSTANCE, Block.class);
+        registration.registerBlockDataProvider(ModularPowerStationModeProvider.INSTANCE, Block.class);
         registration.registerBlockDataProvider(PowerGridMachineProvider.INSTANCE, MetaMachine.class);
     }
 
@@ -31,6 +33,7 @@ public class CosmicCoreJadePlugin implements IWailaPlugin {
     public void registerClient(IWailaClientRegistration registration) {
         registration.registerBlockComponent(CosmicEmberProvider.INSTANCE, Block.class);
         registration.registerBlockComponent(MEComputationArrayProvider.INSTANCE, Block.class);
+        registration.registerBlockComponent(ModularPowerStationModeProvider.INSTANCE, Block.class);
         registration.registerBlockComponent(PowerGridMachineProvider.INSTANCE, MetaMachineBlock.class);
     }
 }

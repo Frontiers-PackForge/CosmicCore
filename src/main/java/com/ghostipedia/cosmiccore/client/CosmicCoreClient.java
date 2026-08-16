@@ -11,6 +11,7 @@ import com.ghostipedia.cosmiccore.client.mirror.DeedHudOverlay;
 import com.ghostipedia.cosmiccore.client.mirror.MirrorScreen;
 import com.ghostipedia.cosmiccore.client.murkbloom.MurkParticle;
 import com.ghostipedia.cosmiccore.client.murkbloom.MurkbloomOverlay;
+import com.ghostipedia.cosmiccore.client.ponder.CosmicPonderBootstrap;
 import com.ghostipedia.cosmiccore.client.renderer.machine.*;
 import com.ghostipedia.cosmiccore.client.tooltip.FoodTooltipClientComponent;
 import com.ghostipedia.cosmiccore.client.tooltip.FoodTooltipComponent;
@@ -55,6 +56,9 @@ public class CosmicCoreClient {
         modBus.register(CosmicCoreClient.class);
         if (ModList.get().isLoaded("veil")) {
             FirmamentSunsetPostProcessor.register();
+        }
+        if (ModList.get().isLoaded("create")) {
+            CosmicPonderBootstrap.init();
         }
 
         DynamicRenderManager.register(CosmicCore.id("hellfire_foundry_parts"), HellFireFoundryPartRender.TYPE);

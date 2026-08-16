@@ -32,7 +32,8 @@ public class CosmicLangHandler extends LangHandler {
             "naquahine_reactor", "mini_naquahine_reactor", "industrial_chemvat", "biovat", "wasp", "bees",
             "core_drill", "regolith_sifter", "life_force_manipulator", "neutron_forge", "dream_basin",
             "mechanical_ritual", "link_test", "abyssal_culture_vat", "sculk_biochamber",
-            "biomana_digestor", "manawomb_leeching_pond", "industrial_primitive_blast_furnace"
+            "biomana_digestor", "manawomb_leeching_pond", "industrial_primitive_blast_furnace",
+            "turbine_power_station", "combustion_power_station"
     };
 
     private static String toTitle(String snakeCase) {
@@ -774,6 +775,11 @@ public class CosmicLangHandler extends LangHandler {
         provider.add("cosmiccore.jade.me_computation_array.uplink.online", "Uplink Online");
         provider.add("cosmiccore.jade.me_computation_array.uplink.offline", "Uplink Offline");
         provider.add("config.jade.plugin_cosmiccore.power_grid_telemetry", "[CosmicCore] Power Grid Telemetry");
+        provider.add("config.jade.plugin_cosmiccore.modular_power_station_mode",
+                "[CosmicCore] Modular Power Station Mode");
+        provider.add("cosmiccore.jade.modular_power_station.mode", "Mode: %s");
+        provider.add("cosmiccore.jade.modular_power_station.mode.turbine", "Turbine Power Station");
+        provider.add("cosmiccore.jade.modular_power_station.mode.combustion", "Combustion Power Station");
         provider.add("cosmiccore.jade.power.input_rating", "§fFace INPUT§7: %s V @ %s A");
         provider.add("cosmiccore.jade.power.output_rating", "§fFace OUTPUT§7: %s V @ %s A");
         provider.add("cosmiccore.jade.power.face_disconnected", "§fFace EU§7: Not connected");
@@ -1784,8 +1790,51 @@ public class CosmicLangHandler extends LangHandler {
         provider.add("cosmiccore.bloomwyrm.recipe.charge_input", "Bloomwyrm Charge use: %s");
         provider.add("cosmiccore.bloomwyrm.recipe.charge_output", "Bloomwyrm Charge yield: +%s");
         provider.add("cosmiccore.bloomwyrm.recipe.max_parallel", "Max parallel: %s");
-        provider.add("cosmiccore.steam.recipe.time", "Steam Time: LP %s s | HP %s s");
-        provider.add("cosmiccore.steam.recipe.flow", "Steam Flow: LP %s mB/t | HP %s mB/t");
+        provider.add("cosmiccore.steam.recipe.high_pressure", "%s mB/t @ %s s (High Pressure Steam Machines)");
+        provider.add("cosmiccore.steam.recipe.low_pressure", "%s mB/t @ %s s (Low Pressure Steam Machines)");
+        provider.add("cosmiccore.multiblock.preview.group_repeats", "Repeated Module Groups: %s");
+        provider.add("cosmiccore.multiblock.modular_power_station.tooltip.0",
+                "Attach §eDrive Modules§f (1-4) and a Stator Module to create a suitable power plant.");
+        provider.add("cosmiccore.multiblock.modular_power_station.tooltip.1",
+                "§7Each stage boosts max power generation by 4 Amps.");
+        provider.add("cosmiccore.multiblock.modular_power_station.tooltip.2",
+                "§fTurbine assemblies accept Steam and Gas Turbine fuels through one hardware-selected mode.");
+        provider.add("cosmiccore.multiblock.modular_power_station.tooltip.3",
+                "§7Dynamo Tier is limited by stator tier.");
+        provider.add("cosmiccore.multiblock.modular_power_station.drive", "Drive: %s");
+        provider.add("cosmiccore.multiblock.modular_power_station.stages", "Drive Stages: %s / 4");
+        provider.add("cosmiccore.multiblock.modular_power_station.stator", "Stator: %s (%s V)");
+        provider.add("cosmiccore.multiblock.modular_power_station.throttle", "Output Limit: %s%% (%s EU/t, %s A)");
+        provider.add("cosmiccore.multiblock.modular_power_station.fuel.idle", "Fuel Rate: Waiting for an active fuel");
+        provider.add("cosmiccore.multiblock.modular_power_station.fuel.none", "Fuel Rate: No fluid fuel input");
+        provider.add("cosmiccore.multiblock.modular_power_station.fuel.rate",
+                "%s: %s mB/min | %s mB/h");
+        provider.add("cosmiccore.multiblock.modular_power_station.drive.none", "Undetected");
+        provider.add("cosmiccore.multiblock.modular_power_station.drive.turbine", "Steam/Gas Turbine");
+        provider.add("cosmiccore.multiblock.modular_power_station.drive.combustion", "Combustion Engine");
+        provider.add("cosmiccore.multiblock.modular_power_station.status.ready", "Assembly Ready!");
+        provider.add("cosmiccore.multiblock.modular_power_station.status.no_stages", "No drive stages detected!");
+        provider.add("cosmiccore.multiblock.modular_power_station.status.invalid_stage",
+                "A drive stage has invalid or mixed components!");
+        provider.add("cosmiccore.multiblock.modular_power_station.status.mixed_stages",
+                "All drive stages must use the same drive-core type!");
+        provider.add("cosmiccore.multiblock.modular_power_station.status.missing_stator",
+                "No supported stator housing was detected!");
+        provider.add("cosmiccore.multiblock.modular_power_station.status.mixed_stators",
+                "Every stator housing must use the same voltage tier!");
+        provider.add("cosmiccore.multiblock.modular_power_station.status.output_mismatch",
+                "The output hatch voltage tier must match the stator!");
+        provider.add("cosmiccore.ponder.modular_power_station.header", "The Modular Power Station");
+        provider.add("cosmiccore.ponder.shared.modular_power_station.text_1",
+                "The controller and general power hardware form the station core");
+        provider.add("cosmiccore.ponder.shared.modular_power_station.text_2",
+                "Each drive module adds one integral slice with a shared Part-work wall");
+        provider.add("cosmiccore.ponder.shared.modular_power_station.text_3",
+                "Up to four of these slices may be added, each adding an additional 4A of maximum power output.");
+        provider.add("cosmiccore.ponder.shared.modular_power_station.text_4",
+                "Modular Power Stations Must have all generator slices share the same integral parts, no mixing turbine and combustion modules!");
+        provider.add("cosmiccore.ponder.shared.modular_power_station.text_5",
+                "The ending houses a large stator to produce power, the dynamo output is limited by stator coil tier.");
         for (var recipeType : BuiltInRegistries.RECIPE_TYPE) {
             if (recipeType instanceof GTRecipeType gtRecipeType &&
                     gtRecipeType.registryName.getNamespace().equals("gtceu")) {

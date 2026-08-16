@@ -6,6 +6,7 @@ import com.ghostipedia.cosmiccore.api.capability.recipe.SoulRecipeCapability;
 import com.ghostipedia.cosmiccore.common.data.CosmicSounds;
 import com.ghostipedia.cosmiccore.common.machine.multiblock.multi.logic.bloomwyrm.BloomwyrmRecipeKeys;
 
+import com.gregtechceu.gtceu.GTCEu;
 import com.gregtechceu.gtceu.api.block.ICoilType;
 import com.gregtechceu.gtceu.api.capability.recipe.FluidRecipeCapability;
 import com.gregtechceu.gtceu.api.capability.recipe.IO;
@@ -454,6 +455,20 @@ public class CosmicRecipeTypes {
             .setMaxIOSize(1, 0, 1, 0)
             .setSound(GTSoundEntries.ARC)
             .UI(builder -> builder.setProgressBar(GTGuiTextures.PROGRESS_GAS_COLLECTOR));
+    public static final GTRecipeType TURBINE_POWER_STATION = GTRecipeTypes
+            .register(CosmicCore.id("turbine_power_station"), GTRecipeTypes.GENERATOR)
+            .setMaxIOSize(0, 0, 1, 1)
+            .setEUIO(IO.OUT)
+            .setSound(GAS_SUCC)
+            .UI(builder -> builder.setFluidSlotOverlay(IO.IN, 0, GTGuiTextures.CENTRIFUGE_OVERLAY)
+                    .setProgressBar(GTGuiTextures.PROGRESS_GAS_COLLECTOR));
+    public static final GTRecipeType COMBUSTION_POWER_STATION = GTRecipeTypes
+            .register(CosmicCore.id("combustion_power_station"), GTRecipeTypes.GENERATOR)
+            .setMaxIOSize(0, 0, 1, 1)
+            .setEUIO(IO.OUT)
+            .setSound(GAS_SUCC)
+            .UI(builder -> builder.setFluidSlotOverlay(IO.IN, 0, GTGuiTextures.FURNACE_OVERLAY_2)
+                    .setProgressBar(GTGuiTextures.PROGRESS_ARROW_MULTIPLE));
     public static final GTRecipeType INDUSTRIAL_CHEMVAT = GTRecipeTypes
             .register(CosmicCore.id("industrial_chemvat"), GTRecipeTypes.MULTIBLOCK)
             .setMaxIOSize(6, 6, 6, 6)
@@ -700,6 +715,7 @@ public class CosmicRecipeTypes {
         }
 
         LASER_ENGRAVER_RECIPES.setMaxIOSize(2, 2, 1, 1);
+        PACKER_RECIPES.setMaxIOSize(3, 2, 0, 0);
         // Oh my God
         MIXER_RECIPES.setMaxTooltips(4);
         BREWING_RECIPES.setMaxTooltips(4);
@@ -716,6 +732,20 @@ public class CosmicRecipeTypes {
         });
         LARGE_CHEMICAL_RECIPES.onRecipeBuild((builder, provider) -> {
             INDUSTRIAL_CHEMVAT.copyFrom(builder)
+                    .save(provider);
+        });
+        STEAM_TURBINE_FUELS.onRecipeBuild((builder, provider) -> {
+            if (!builder.id.equals(GTCEu.id("steam"))) {
+                TURBINE_POWER_STATION.copyFrom(builder)
+                        .save(provider);
+            }
+        });
+        GAS_TURBINE_FUELS.onRecipeBuild((builder, provider) -> {
+            TURBINE_POWER_STATION.copyFrom(builder)
+                    .save(provider);
+        });
+        COMBUSTION_GENERATOR_FUELS.onRecipeBuild((builder, provider) -> {
+            COMBUSTION_POWER_STATION.copyFrom(builder)
                     .save(provider);
         });
 

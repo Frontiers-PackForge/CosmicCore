@@ -387,18 +387,18 @@ public class CosmicBlocks {
     public static final BlockEntry<Block> INDUSTRIAL_CONVERTER_SHELL = createCasingBlock(
             "industrial_converter_shell", "Industrial Converter Shell",
             CosmicCore.id("block/casings/solid/industrial_converter_shell"));
-    public static final BlockEntry<Block> LOW_VOLTAGE_SOLENOID_HOUSING = createCasingBlock(
-            "low_voltage_solenoid_housing", "Low Voltage Solenoid Housing",
-            CosmicCore.id("block/casings/solid/low_voltage_solenoid_housing"));
-    public static final BlockEntry<Block> MEDIUM_VOLTAGE_SOLENOID_HOUSING = createCasingBlock(
-            "medium_voltage_solenoid_housing", "Medium Voltage Solenoid Housing",
-            CosmicCore.id("block/casings/solid/medium_voltage_solenoid_housing"));
-    public static final BlockEntry<Block> HIGH_VOLTAGE_SOLENOID_HOUSING = createCasingBlock(
-            "high_voltage_solenoid_housing", "High Voltage Solenoid Housing",
-            CosmicCore.id("block/casings/solid/high_voltage_solenoid_housing"));
-    public static final BlockEntry<Block> EXTREME_VOLTAGE_SOLENOID_HOUSING = createCasingBlock(
-            "extreme_voltage_solenoid_housing", "Extreme Voltage Solenoid Housing",
-            CosmicCore.id("block/casings/solid/extreme_voltage_solenoid_housing"));
+    public static final BlockEntry<Block> LOW_VOLTAGE_STATOR_HOUSING = createCasingBlock(
+            "low_voltage_stator_housing", "Low Voltage Stator Housing",
+            CosmicCore.id("block/casings/solid/low_voltage_stator_housing"));
+    public static final BlockEntry<Block> MEDIUM_VOLTAGE_STATOR_HOUSING = createCasingBlock(
+            "medium_voltage_stator_housing", "Medium Voltage Stator Housing",
+            CosmicCore.id("block/casings/solid/medium_voltage_stator_housing"));
+    public static final BlockEntry<Block> HIGH_VOLTAGE_STATOR_HOUSING = createCasingBlock(
+            "high_voltage_stator_housing", "High Voltage Stator Housing",
+            CosmicCore.id("block/casings/solid/high_voltage_stator_housing"));
+    public static final BlockEntry<Block> EXTREME_VOLTAGE_STATOR_HOUSING = createCasingBlock(
+            "extreme_voltage_stator_housing", "Extreme Voltage Stator Housing",
+            CosmicCore.id("block/casings/solid/extreme_voltage_stator_housing"));
     public static final BlockEntry<Block> LIGHTWEIGHT_INDUSTRIAL_CASING = createCasingBlock(
             "lightweight_industrial_casing", CosmicCore.id("block/casings/solid/lightweight_industrial_casing"));
     public static final BlockEntry<Block> LIGHTWEIGHT_MECHANICAL_PARTWORK = createCasingBlock(

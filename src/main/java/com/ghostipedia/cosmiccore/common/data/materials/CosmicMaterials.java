@@ -156,12 +156,19 @@ public class CosmicMaterials {
 
     public static Material AdvancedDrillingFluid;
     public static Material ExtremeDrillingFluid;
+    public static Material HighPressureSteam;
     public static Material BiomanaSlurry;
     public static Material BloomingSludge;
     public static Material BloomRichAlgaeSolution;
     public static Material PhytoGrease;
 
     public static void register() {
+        HighPressureSteam = new Material.Builder(CosmicCore.id("high_pressure_steam"))
+                .gas(new FluidBuilder().state(FluidState.GAS).temperature(473))
+                .color(0xC6E7FF)
+                .flags(DISABLE_DECOMPOSITION)
+                .components(Hydrogen, 2, Oxygen, 1)
+                .buildAndRegister();
         BiomanaSlurry = new Material.Builder(CosmicCore.id("biomana_slurry"))
                 .liquid(new FluidBuilder().state(FluidState.LIQUID).temperature(295))
                 .color(0x176F6A)
