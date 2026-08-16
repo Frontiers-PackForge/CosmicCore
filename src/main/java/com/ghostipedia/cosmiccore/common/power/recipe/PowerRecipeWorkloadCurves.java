@@ -14,7 +14,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 public final class PowerRecipeWorkloadCurves {
-    //Policy Rate File that determines amperage bands based on voltage, it's not exactly the best option but a million static fields basically would have been the same anyway...
+
+    // Policy Rate File that determines amperage bands based on voltage, it's not exactly the best option but a million
+    // static fields basically would have been the same anyway...
     private static final String POLICY_RESOURCE = "/data/cosmiccore/power_recipe_tweaks.json";
     private static final int POLICY_SCHEMA = 1;
     private static final Map<String, Curve> CURVES = load();

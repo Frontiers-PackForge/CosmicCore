@@ -13,9 +13,11 @@ import net.minecraft.nbt.Tag;
 import java.util.List;
 
 public final class PowerRecipeVoltageConverter {
+
     // The goal of this class is to handle extracting the original EU/t and throwing it to the wolves
     // The voltage is captured, then converted into target EU/t and Amp values.
-    // This does, however have the unintended side-effect of raising the general cost of everything that was <LV Amps before.
+    // This does, however have the unintended side-effect of raising the general cost of everything that was <LV Amps
+    // before.
     // This is used in tandem with GTRecipeVoltageStripper to kill off any trace EUt information that isn't relevant.
     public static final String POLICY_VERSION_KEY = "cosmiccore:power_workload_version";
     public static final String ORIGINAL_EUT_KEY = "cosmiccore:power_workload_original_eut";
