@@ -65,7 +65,7 @@ public final class CraftingRecipeEditor {
                 .value(RecipeMakerBehavior.intSync(sm, "cmode", () -> state.craftMode[0], v -> state.craftMode[0] = v))
                 .expanded().height(14)));
 
-        control.setExporter(() -> export(state));
+        control.setExporter(() -> RecipeExportResult.copied(export(state)));
         editor.child(RecipeMakerBehavior.copyButton(control));
     }
 

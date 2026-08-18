@@ -3,6 +3,7 @@ package com.ghostipedia.cosmiccore.gtbridge.recipemaker;
 import com.ghostipedia.cosmiccore.gtbridge.recipemaker.RecipeCodecReader.JsonField;
 import com.ghostipedia.cosmiccore.gtbridge.recipemaker.RecipeMakerBehavior.State;
 
+import com.gregtechceu.gtceu.api.recipe.GTRecipeType;
 import com.gregtechceu.gtceu.api.transfer.item.CustomItemStackHandler;
 import com.gregtechceu.gtceu.common.mui.GTGuiTextures;
 
@@ -168,10 +169,10 @@ public final class CodecRecipeEditor {
         return allocs;
     }
 
-    private static String export(Player player, String typeId, State state) {
+    private static RecipeExportResult export(Player player, String typeId, State state) {
         ResourceLocation rl = ResourceLocation.tryParse(typeId);
         JsonObject sample = rl == null ? null : RecipeCodecReader.sample(player, rl);
-        if (sample == null) return "// no sample recipe";
+        if (sample == null) return RecipeExportResult.copied("// no sample recipe");
         JsonObject out = sample.deepCopy();
         out.addProperty("type", typeId);
         for (Alloc a : allocate(player, rl)) {
@@ -223,10 +224,22 @@ public final class CodecRecipeEditor {
                 default -> {}
             }
         }
-        String builder = buildBuilder(player, typeId, out);
+        ResourceLocation recipeTypeId = ResourceLocation.tryParse(typeId);
+        boolean gtRecipe = recipeTypeId != null &&
+                BuiltInRegistries.RECIPE_TYPE.get(recipeTypeId) instanceof GTRecipeType;
+        KubeJsRecipeId.Resolution resolution = gtRecipe ? KubeJsRecipeId.resolveCodec(player, typeId,
+                state.recipeId[0], recipeIds(state.itemOut, state.fluidOut),
+                recipeIds(state.itemIn, state.fluidIn)) : null;
+        if (resolution != null && resolution.outcome() == KubeJsRecipeId.Outcome.FAILED) {
+            return RecipeExportResult.resolved("", resolution);
+        }
+        String recipeId = resolution == null ? state.recipeId[0] : resolution.constructorId();
+        String builder = buildBuilder(player, typeId, out, gtRecipe ? recipeId : null);
         String result = builder != null ? builder : "event.custom(" + GSON.toJson(out) + ")";
-        if (!state.recipeId[0].isBlank()) result += ".id('" + state.recipeId[0].trim() + "')";
-        return result;
+        if ((builder == null || !gtRecipe) && recipeId != null && !recipeId.isBlank()) {
+            result += ".id('" + recipeId.trim() + "')";
+        }
+        return resolution == null ? RecipeExportResult.copied(result) : RecipeExportResult.resolved(result, resolution);
     }
 
     private static Flow itemSlots(PanelSyncManager sm, String key, CustomItemStackHandler handler, int start,
@@ -271,7 +284,7 @@ public final class CodecRecipeEditor {
         return column;
     }
 
-    private static String buildBuilder(Player player, String typeId, JsonObject out) {
+    private static String buildBuilder(Player player, String typeId, JsonObject out, String recipeId) {
         List<RecipeSchemaReader.SchemaField> ctor = RecipeSchemaReader.constructorKeys(player, typeId);
         if (ctor.isEmpty()) return null;
         int colon = typeId.indexOf(':');
@@ -288,6 +301,9 @@ public final class CodecRecipeEditor {
             if (arg == null) return null;
             args.add(arg);
         }
+        if (recipeId != null) {
+            args.addFirst("'" + recipeId + "'");
+        }
         StringBuilder sb = new StringBuilder("event.recipes.");
         sb.append(ns).append(".").append(path).append("(").append(String.join(", ", args)).append(")");
         for (RecipeSchemaReader.SchemaField key : RecipeSchemaReader.fields(player, typeId)) {
@@ -299,6 +315,23 @@ public final class CodecRecipeEditor {
             sb.append(".").append(key.name()).append("(").append(arg).append(")");
         }
         return sb.toString();
+    }
+
+    private static List<ResourceLocation> recipeIds(CustomItemStackHandler handler, FluidTank[] tanks) {
+        List<ResourceLocation> ids = new ArrayList<>();
+        for (int slot = 0; slot < handler.getSlots(); slot++) {
+            ItemStack stack = handler.getStackInSlot(slot);
+            if (!stack.isEmpty()) {
+                ids.add(BuiltInRegistries.ITEM.getKey(stack.getItem()));
+            }
+        }
+        for (FluidTank tank : tanks) {
+            FluidStack stack = tank.getFluid();
+            if (!stack.isEmpty()) {
+                ids.add(BuiltInRegistries.FLUID.getKey(stack.getFluid()));
+            }
+        }
+        return ids;
     }
 
     private static String kubeArg(JsonElement value, RecipeSchemaReader.SchemaField key) {
