@@ -104,6 +104,7 @@
     "drippy.DrippyLoadingOverlayScaleFixMixin"
   ],
   "mixins": [
+    "CrashReportCosmicFrontiersNoticeMixin",
     "BlockPatternMixin",
     "BlocksMixin",
     "DivingHelmetItemMixin",
@@ -153,6 +154,7 @@
     "terrablender.NamespacedSurfaceRuleSourceFlattenMixin",
     "gtfix.GTDynamicDataReloadResetMixin",
     "gtfix.GTToolEnchantmentTagsMixin",
+    "gtfix.GTToolAoEBreakEffectScopeFixMixin",
     "gtfix.GTRecipeReloadResetMixin",
     "gtfix.GTKubeRecipeDataWriteFixMixin",
     "gtfix.DistilleryOutputFluidFixMixin",
@@ -184,7 +186,7 @@
     "gttweak.power.CableBlockEntityTelemetryMixin",
     "gttweak.power.CableBlockProviderTelemetryMixin",
     "gttweak.power.EnergyNetHandlerTelemetryMixin",
-    "gttweak.power.GTRecipeVoltageStripper",
+    "gttweak.power.GTRecipesPowerWorkloadMixin",
     "gttweak.power.GTMaterialsTwelvefoldConductorMixin",
     "gttweak.power.InsulationConstructorInvoker",
     "gttweak.power.InsulatedCableAmpacityMixin",

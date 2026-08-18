@@ -3,6 +3,7 @@ package com.ghostipedia.cosmiccore.gtbridge.recipemaker;
 import com.gregtechceu.gtceu.api.GTValues;
 
 import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.neoforge.fluids.FluidStack;
 
@@ -21,11 +22,15 @@ public final class KubeJsRecipeExporter {
 
     private KubeJsRecipeExporter() {}
 
-    public static String export(RecipeDraft draft, String recipeId) {
-        if (draft.recipeType == null) return "// no recipe type selected";
+    public static RecipeExportResult export(Player player, RecipeDraft draft, String recipeId) {
+        if (draft.recipeType == null) return RecipeExportResult.copied("// no recipe type selected");
 
         var typeId = draft.recipeType.registryName;
-        String idArg = recipeId == null || recipeId.isBlank() ? "" : "'" + recipeId.trim() + "'";
+        KubeJsRecipeId.Resolution resolution = KubeJsRecipeId.resolveDraft(player, draft, recipeId);
+        if (resolution.outcome() == KubeJsRecipeId.Outcome.FAILED) {
+            return RecipeExportResult.resolved("", resolution);
+        }
+        String idArg = "'" + resolution.constructorId() + "'";
         List<String> lines = new ArrayList<>();
         lines.add("event.recipes." + typeId.getNamespace() + "." + typeId.getPath() + "(" + idArg + ")");
 
@@ -106,7 +111,7 @@ public final class KubeJsRecipeExporter {
         }
         lines.add(".duration(" + draft.duration + ")");
 
-        return String.join("\n", lines);
+        return RecipeExportResult.resolved(String.join("\n", lines), resolution);
     }
 
     private static String itemString(ItemStack stack) {
