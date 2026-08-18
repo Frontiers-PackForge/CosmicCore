@@ -105,7 +105,7 @@ public final class FoodEditor {
                     .child(field(sm, "fbv" + r, () -> food.behValue[r], v -> food.behValue[r] = v).expanded()));
         }
 
-        control.setExporter(() -> FoodExporter.export(state));
+        control.setExporter(() -> RecipeExportResult.copied(FoodExporter.export(state)));
         editor.child(RecipeMakerBehavior.copyButton(control));
     }
 

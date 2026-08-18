@@ -1,5 +1,7 @@
 package com.ghostipedia.cosmiccore.mixin;
 
+import com.ghostipedia.cosmiccore.mixin.support.CosmicMixinTaintTracker;
+
 import org.objectweb.asm.Opcodes;
 import org.objectweb.asm.tree.AbstractInsnNode;
 import org.objectweb.asm.tree.ClassNode;
@@ -75,7 +77,9 @@ public class CosmicCoreMixinPlugin implements IMixinConfigPlugin {
     }
 
     @Override
-    public void onLoad(String mixinPackage) {}
+    public void onLoad(String mixinPackage) {
+        CosmicMixinTaintTracker.printLogNotice();
+    }
 
     @Override
     public String getRefMapperConfig() {
@@ -95,6 +99,7 @@ public class CosmicCoreMixinPlugin implements IMixinConfigPlugin {
 
     @Override
     public void postApply(String targetClassName, ClassNode targetClass, String mixinClassName, IMixinInfo mixinInfo) {
+        CosmicMixinTaintTracker.record(targetClassName, targetClass, mixinClassName);
         if (!mixinClassName.endsWith(DRIPPY_SCALE_MIXIN)) {
             return;
         }

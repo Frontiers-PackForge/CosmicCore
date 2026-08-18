@@ -13,11 +13,17 @@ import com.gregtechceu.gtceu.api.registry.GTRegistries;
 import com.gregtechceu.gtceu.api.transfer.item.CustomItemStackHandler;
 import com.gregtechceu.gtceu.common.mui.GTGuiTextures;
 
+import net.minecraft.ChatFormatting;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.context.UseOnContext;
+import net.minecraft.world.level.Level;
 import net.neoforged.neoforge.fluids.FluidStack;
 import net.neoforged.neoforge.fluids.capability.templates.FluidTank;
 
@@ -85,6 +91,32 @@ public class RecipeMakerBehavior implements IItemUIHolder {
 
     private static final List<ScalarCap> SCALAR_CAPS = List.of(
             new ScalarCap(CosmicRecipeCapabilities.EMBER, "Ember"));
+
+    @Override
+    public InteractionResultHolder<ItemStack> use(ItemStack item, Level level, Player player,
+                                                  InteractionHand usedHand) {
+        if (!player.hasPermissions(4)) {
+            if (!level.isClientSide) {
+                player.sendSystemMessage(Component.translatable("cosmiccore.recipe_maker.access_denied")
+                        .withStyle(ChatFormatting.RED));
+            }
+            return InteractionResultHolder.fail(item);
+        }
+        return IItemUIHolder.super.use(item, level, player, usedHand);
+    }
+
+    @Override
+    public InteractionResult useOn(UseOnContext context) {
+        Player player = context.getPlayer();
+        if (player == null || !player.hasPermissions(4)) {
+            if (player != null && !context.getLevel().isClientSide) {
+                player.sendSystemMessage(Component.translatable("cosmiccore.recipe_maker.access_denied")
+                        .withStyle(ChatFormatting.RED));
+            }
+            return InteractionResult.FAIL;
+        }
+        return IItemUIHolder.super.useOn(context);
+    }
 
     /** All backing stores for one open session; shared across the editor families, created once per open. */
     public static final class State {
@@ -292,7 +324,7 @@ public class RecipeMakerBehavior implements IItemUIHolder {
             ResourceLocation rl = ResourceLocation.tryParse(typeId);
             if (rl != null && BuiltInRegistries.RECIPE_TYPE.get(rl) instanceof GTRecipeType type) {
                 buildGtEditor(sm, content, type, state, control, capPanel, condPanel, slotPanel, selSlot, selSide,
-                        selType);
+                        selType, player);
             } else {
                 CodecRecipeEditor.build(sm, content, player, typeId, state, control, selSlot, selSide, selType,
                         slotPanel);
@@ -304,7 +336,7 @@ public class RecipeMakerBehavior implements IItemUIHolder {
     private static void buildGtEditor(PanelSyncManager sm, ListWidget content, GTRecipeType type, State state,
                                       RecipeMakerControl control, IPanelHandler capPanel, IPanelHandler condPanel,
                                       IPanelHandler slotPanel, IntSyncValue selSlot, IntSyncValue selSide,
-                                      IntSyncValue selType) {
+                                      IntSyncValue selType, Player player) {
         int maxItemIn = Math.min(type.getMaxInputs(ItemRecipeCapability.CAP), POOL_ITEM);
         int maxItemOut = Math.min(type.getMaxOutputs(ItemRecipeCapability.CAP), POOL_ITEM);
         int maxFluidIn = Math.min(type.getMaxInputs(FluidRecipeCapability.CAP), POOL_FLUID);
@@ -385,7 +417,7 @@ public class RecipeMakerBehavior implements IItemUIHolder {
             }
         }
 
-        control.setExporter(() -> buildGtScript(type, state));
+        control.setExporter(() -> buildGtScript(type, state, player));
         content.child(copyButton(control));
     }
 
@@ -586,7 +618,7 @@ public class RecipeMakerBehavior implements IItemUIHolder {
         return new TextFieldWidget().value(strSync(sm, key, getter, setter)).expanded().height(12);
     }
 
-    private static String buildGtScript(GTRecipeType type, State state) {
+    private static RecipeExportResult buildGtScript(GTRecipeType type, State state, Player player) {
         int maxItemIn = Math.min(type.getMaxInputs(ItemRecipeCapability.CAP), POOL_ITEM);
         int maxItemOut = Math.min(type.getMaxOutputs(ItemRecipeCapability.CAP), POOL_ITEM);
         int maxFluidIn = Math.min(type.getMaxInputs(FluidRecipeCapability.CAP), POOL_FLUID);
@@ -657,7 +689,7 @@ public class RecipeMakerBehavior implements IItemUIHolder {
                 addBloomwyrmData(draft, "maxCampusParallel", state.bloomwyrmMaxParallel[0]);
             }
         }
-        return KubeJsRecipeExporter.export(draft, state.recipeId[0]);
+        return KubeJsRecipeExporter.export(player, draft, state.recipeId[0]);
     }
 
     private static boolean isBloomwyrmType(GTRecipeType type) {
