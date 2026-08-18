@@ -2,7 +2,10 @@ package com.ghostipedia.cosmiccore.gtbridge.recipemaker;
 
 import com.ghostipedia.cosmiccore.client.recipemaker.RecipeMakerClipboard;
 
+import net.minecraft.ChatFormatting;
 import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.chat.Component;
+import net.minecraft.world.entity.player.Player;
 
 import brachy.modularui.value.sync.SyncHandler;
 
@@ -20,10 +23,10 @@ public class RecipeMakerControl extends SyncHandler<RecipeMakerControl> {
     private static final int RESULT = 2;
     private static final int SELECT_EDITOR = 3;
 
-    private Supplier<String> exporter = () -> "";
+    private Supplier<RecipeExportResult> exporter = () -> RecipeExportResult.copied("");
     private Consumer<String> editorSelector = typeId -> {};
 
-    public void setExporter(Supplier<String> exporter) {
+    public void setExporter(Supplier<RecipeExportResult> exporter) {
         this.exporter = exporter;
     }
 
@@ -41,9 +44,16 @@ public class RecipeMakerControl extends SyncHandler<RecipeMakerControl> {
 
     @Override
     public void readOnServer(int id, RegistryFriendlyByteBuf buf) {
+        Player player = getSyncManager().getPlayer();
+        if (!player.hasPermissions(4)) {
+            player.sendSystemMessage(Component.translatable("cosmiccore.recipe_maker.access_denied")
+                    .withStyle(ChatFormatting.RED));
+            return;
+        }
         if (id == EXPORT) {
-            String result = exporter.get();
-            syncToClient(RESULT, buffer -> buffer.writeUtf(result));
+            RecipeExportResult result = exporter.get();
+            if (result.message() != null) player.sendSystemMessage(result.message());
+            if (result.copy()) syncToClient(RESULT, buffer -> buffer.writeUtf(result.script()));
         } else if (id == SELECT_EDITOR) {
             editorSelector.accept(buf.readUtf(256));
         }

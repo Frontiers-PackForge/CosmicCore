@@ -526,6 +526,13 @@ public class CosmicLangHandler extends LangHandler {
         provider.add("cosmiccore.recipe.sterile_out", "ERROR?");
         provider.add("cosmiccore.recipe.ember_in", "Ember Input: %s");
         provider.add("cosmiccore.recipe.ember_out", "Ember Output: %s");
+        provider.add("cosmiccore.recipe_maker.access_denied", "Donk requires operator permission level 4.");
+        provider.add("cosmiccore.recipe_maker.id.amended",
+                "Recipe copied as %s. The default ID was occupied, so route variant %s was appended.");
+        provider.add("cosmiccore.recipe_maker.id.explicit_occupied",
+                "Recipe copied with existing ID %s. Loading it will replace or redefine that recipe.");
+        provider.add("cosmiccore.recipe_maker.id.amend_failed",
+                "Automatic recipe ID amendment failed for %s. Enter a route variant manually.");
         provider.add("cosmiccore.wire_coil.magnet_capacity", "  §fMax Field Strength: §f%s Tesla");
         provider.add("cosmiccore.wire_coil.magnet_regen", "  §5Field Regen Rate: %s Tesla/t");
         provider.add("cosmiccore.wire_coil.eu_multiplier", "  §aMagnet EU Cost: §c%s EU/t");
