@@ -783,7 +783,7 @@ public class CosmicMaterials {
                 .ingot()
                 .formula("⦽")
                 .blastTemp(8900)
-                .liquid(new FluidBuilder().temperature(7500))
+                .liquid(new FluidBuilder().temperature(7500).customStill())
                 .cableProperties(GTValues.V[6], 12, 4)
                 .fluidPipeProperties(65000, 3500, true, true, true, true)
                 .iconSet(CCoreMaterialIconSet.VIBRANIUM)// .color(0x489BC3).secondaryColor(0x51ADCA)

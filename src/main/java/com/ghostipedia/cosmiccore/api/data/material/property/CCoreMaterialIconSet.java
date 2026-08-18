@@ -33,8 +33,8 @@ public class CCoreMaterialIconSet extends MaterialIconSet {
 
     public static final CCoreMaterialIconSet VIBRANIUM = new CCoreMaterialIconSet("vibranium",
             CosmicMaterialSet.NEUTRONITE, false,
-            new HaloItemRenderData(4, 0xFF489BC3,
-                    ResourceLocation.fromNamespaceAndPath(CosmicCore.MOD_ID, "block/iris/rnd/halo"), true,
+            new HaloItemRenderData(4, 0xFFFFFFFF,
+                    ResourceLocation.fromNamespaceAndPath(CosmicCore.MOD_ID, "block/iris/rnd/shifting_halo_cyan"), true,
                     false));
     public static final CCoreMaterialIconSet VIBRANIUM_NEUTRONIUM = new CCoreMaterialIconSet("vibranium_neutronium",
             CosmicMaterialSet.NEUTRONIUM_CCORE, false,
