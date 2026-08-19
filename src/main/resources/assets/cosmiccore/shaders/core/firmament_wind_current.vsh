@@ -16,7 +16,7 @@ uniform mat4 ProjMat;
 uniform vec3 CameraPos;
 
 void main() {
-    currentUv = UV0;
+    currentUv = vec2(UV0.x, UV0.y >= 4095.0 ? UV0.y - 4096.0 : UV0.y);
     worldPosition = Position + CameraPos;
     currentStrength = Color.r;
     currentPhase = Color.g;

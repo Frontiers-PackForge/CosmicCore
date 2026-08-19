@@ -2,11 +2,16 @@ package com.ghostipedia.cosmiccore.client.firmament;
 
 import com.ghostipedia.cosmiccore.CosmicCore;
 import com.ghostipedia.cosmiccore.client.CosmicCoreClient;
+import com.ghostipedia.cosmiccore.client.compat.IrisCompat;
+import com.ghostipedia.cosmiccore.client.renderer.CosmicCoreRenderTypes;
 
 import net.minecraft.client.Camera;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.renderer.FogRenderer;
 import net.minecraft.client.renderer.GameRenderer;
+import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.ShaderInstance;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.effect.MobEffects;
@@ -23,6 +28,7 @@ import com.mojang.blaze3d.vertex.BufferUploader;
 import com.mojang.blaze3d.vertex.DefaultVertexFormat;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.Tesselator;
+import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.blaze3d.vertex.VertexFormat;
 import org.joml.Matrix4f;
 
@@ -56,6 +62,7 @@ public final class FirmamentAtmosphereRenderer {
     private static final ResourceLocation EARTH_TEXTURE = CosmicCore.id("textures/environment/earth.png");
     private static final ResourceLocation SUN_TEXTURE = ResourceLocation
             .withDefaultNamespace("textures/environment/sun.png");
+    private static final int OCEAN_HORIZON_MARKER = 3;
     private static final SeaHorizonLayer HORIZON_SURFACE = new SeaHorizonLayer(0.0f, 0.42f);
     private static final SeaHorizonLayer HORIZON_MIDDLE = new SeaHorizonLayer(0.5f, 0.23f);
     private static final SeaHorizonLayer HORIZON_DEEP = new SeaHorizonLayer(1.0f, 0.16f);
@@ -545,43 +552,49 @@ public final class FirmamentAtmosphereRenderer {
     private static void renderFirmamentSeaHorizon(ClientLevel level, float partialTick, Matrix4f matrix,
                                                   Camera camera) {
         ShaderInstance shader = CosmicCoreClient.getFirmamentStormCurrentShader();
-        if (shader == null) return;
+        boolean shadersActive = IrisCompat.shadersActive();
+        if (!shadersActive && shader == null) return;
 
         Vec3 cameraPosition = camera.getPosition();
         float passFade = FirmamentSightWallRenderer.seaVisibility(cameraPosition.y);
         if (passFade <= 0.01f) return;
 
-        RenderSystem.setShader(() -> shader);
-        var stormTimeUniform = shader.getUniform("StormTime");
-        if (stormTimeUniform != null) {
-            stormTimeUniform.set(FirmamentSightWallRenderer.stormTime(level.getGameTime(), partialTick));
-        }
-        var cameraUniform = shader.getUniform("CameraXZ");
-        if (cameraUniform != null) {
-            cameraUniform.set((float) cameraPosition.x, (float) cameraPosition.z);
-        }
-        var cameraYUniform = shader.getUniform("CameraY");
-        if (cameraYUniform != null) {
-            cameraYUniform.set((float) cameraPosition.y);
-        }
-        var edgeRadiusUniform = shader.getUniform("EdgeRadius");
-        if (edgeRadiusUniform != null) {
-            edgeRadiusUniform.set(SEA_HORIZON_JOIN_RADIUS);
-        }
-        var horizonPassUniform = shader.getUniform("HorizonPass");
-        if (horizonPassUniform != null) {
-            horizonPassUniform.set(1.0f);
+        if (!shadersActive) {
+            var stormTimeUniform = shader.getUniform("StormTime");
+            if (stormTimeUniform != null) {
+                stormTimeUniform.set(FirmamentSightWallRenderer.stormTime(level.getGameTime(), partialTick));
+            }
+            var cameraUniform = shader.getUniform("CameraXZ");
+            if (cameraUniform != null) {
+                cameraUniform.set((float) cameraPosition.x, (float) cameraPosition.z);
+            }
+            var cameraYUniform = shader.getUniform("CameraY");
+            if (cameraYUniform != null) {
+                cameraYUniform.set((float) cameraPosition.y);
+            }
+            var edgeRadiusUniform = shader.getUniform("EdgeRadius");
+            if (edgeRadiusUniform != null) {
+                edgeRadiusUniform.set(SEA_HORIZON_JOIN_RADIUS);
+            }
+            var horizonPassUniform = shader.getUniform("HorizonPass");
+            if (horizonPassUniform != null) {
+                horizonPassUniform.set(1.0f);
+            }
         }
 
-        BufferBuilder buffer = Tesselator.getInstance()
-                .begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX_COLOR);
+        MultiBufferSource.BufferSource buffers = Minecraft.getInstance().renderBuffers().bufferSource();
+        RenderType renderType = CosmicCoreRenderTypes.firmamentStormCurrent();
+        VertexConsumer consumer = buffers.getBuffer(renderType);
         SeaHorizonLayer[] layers = horizonLayers(cameraPosition.y);
         for (SeaHorizonLayer layer : layers) {
-            addSeaHorizonLayer(buffer, matrix, cameraPosition, passFade, layer);
+            addSeaHorizonLayer(consumer, matrix, cameraPosition, passFade, layer, shadersActive);
         }
-        BufferUploader.drawWithShader(buffer.buildOrThrow());
-        if (horizonPassUniform != null) {
-            horizonPassUniform.set(0.0f);
+        buffers.endBatch(renderType);
+        if (!shadersActive) {
+            var horizonPassUniform = shader.getUniform("HorizonPass");
+            if (horizonPassUniform != null) {
+                horizonPassUniform.set(0.0f);
+            }
         }
     }
 
@@ -594,8 +607,8 @@ public final class FirmamentAtmosphereRenderer {
         };
     }
 
-    private static void addSeaHorizonLayer(BufferBuilder buffer, Matrix4f matrix, Vec3 cameraPosition,
-                                           float passFade, SeaHorizonLayer layer) {
+    private static void addSeaHorizonLayer(VertexConsumer consumer, Matrix4f matrix, Vec3 cameraPosition,
+                                           float passFade, SeaHorizonLayer layer, boolean shaderPackCarrier) {
         int depth = Math.round(layer.depth() * 255.0f);
         int alpha = Math.round(layer.alpha() * passFade * 255.0f);
         for (int ring = 0; ring < SEA_HORIZON_RINGS; ring++) {
@@ -604,20 +617,21 @@ public final class FirmamentAtmosphereRenderer {
             for (int segment = 0; segment < SEA_HORIZON_SEGMENTS; segment++) {
                 float angleA = (float) segment / SEA_HORIZON_SEGMENTS * TAU;
                 float angleB = (float) (segment + 1) / SEA_HORIZON_SEGMENTS * TAU;
-                addSeaHorizonVertex(buffer, matrix, cameraPosition, layer.depth(), depth, alpha,
-                        innerProgress, angleA);
-                addSeaHorizonVertex(buffer, matrix, cameraPosition, layer.depth(), depth, alpha,
-                        outerProgress, angleA);
-                addSeaHorizonVertex(buffer, matrix, cameraPosition, layer.depth(), depth, alpha,
-                        outerProgress, angleB);
-                addSeaHorizonVertex(buffer, matrix, cameraPosition, layer.depth(), depth, alpha,
-                        innerProgress, angleB);
+                addSeaHorizonVertex(consumer, matrix, cameraPosition, layer.depth(), depth, alpha,
+                        innerProgress, angleA, shaderPackCarrier);
+                addSeaHorizonVertex(consumer, matrix, cameraPosition, layer.depth(), depth, alpha,
+                        outerProgress, angleA, shaderPackCarrier);
+                addSeaHorizonVertex(consumer, matrix, cameraPosition, layer.depth(), depth, alpha,
+                        outerProgress, angleB, shaderPackCarrier);
+                addSeaHorizonVertex(consumer, matrix, cameraPosition, layer.depth(), depth, alpha,
+                        innerProgress, angleB, shaderPackCarrier);
             }
         }
     }
 
-    private static void addSeaHorizonVertex(BufferBuilder buffer, Matrix4f matrix, Vec3 cameraPosition,
-                                            float layerDepth, int depth, int alpha, float progress, float angle) {
+    private static void addSeaHorizonVertex(VertexConsumer consumer, Matrix4f matrix, Vec3 cameraPosition,
+                                            float layerDepth, int depth, int alpha, float progress, float angle,
+                                            boolean shaderPackCarrier) {
         float easedProgress = progress * progress * progress;
         float worldRadius = mix(SEA_HORIZON_JOIN_RADIUS, SEA_HORIZON_FAR_RADIUS, easedProgress);
         float directionX = (float) Math.cos(angle);
@@ -634,9 +648,10 @@ public final class FirmamentAtmosphereRenderer {
         float z = directionZ * worldRadius * projectionScale;
         float worldX = (float) cameraPosition.x + directionX * worldRadius;
         float worldZ = (float) cameraPosition.z + directionZ * worldRadius;
-        buffer.addVertex(matrix, x, y, z)
-                .setUv(worldX, worldZ)
-                .setColor(depth, Math.round(progress * 255.0f), 255, alpha);
+        consumer.addVertex(matrix, x, y, z)
+                .setUv(worldX + (shaderPackCarrier ? FirmamentSightWallRenderer.SHADERPACK_OCEAN_UV_OFFSET : 0.0f),
+                        worldZ)
+                .setColor(depth, Math.round(progress * 255.0f), OCEAN_HORIZON_MARKER, alpha);
     }
 
     private static void renderFirmamentSea(Matrix4f matrix) {
