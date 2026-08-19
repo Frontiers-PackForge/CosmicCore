@@ -853,6 +853,15 @@ public class CosmicLangHandler extends LangHandler {
         provider.add("cosmiccore.wireless_charger.enter_range",
                 "You have entered charging range [Range - %s blocks]");
         provider.add("cosmiccore.wireless_charger.left_range", "You have left charging range [Range - %s blocks]");
+        provider.add("cosmiccore.flight_diffuser.range", "Grants creative flight within %s blocks while powered.");
+        provider.add("cosmiccore.flight_diffuser.power", "Consumes %s EU/t (8 A @ %s) continuously while enabled.");
+        provider.add("cosmiccore.flight_diffuser.landing",
+                "Leaving range will make you immune until you land safely if this was your only source of flight.");
+        provider.add("cosmiccore.create.chain_conveyor.vertical_direction", "Vertical chain direction: %s");
+        provider.add("cosmiccore.direction.north", "North");
+        provider.add("cosmiccore.direction.east", "East");
+        provider.add("cosmiccore.direction.south", "South");
+        provider.add("cosmiccore.direction.west", "West");
         provider.add("cosmiccore.circuit.lore.tier.max.0", "MAX Tier Circuit");
         provider.add("cosmiccore.circuit.lore.tier.max.1", "The Final Data Processor of the Titan of ???");
         provider.add("cosmiccore.circuit.lore.tier.max.2", "In entered every world");

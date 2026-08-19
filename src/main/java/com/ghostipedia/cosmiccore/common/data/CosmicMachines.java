@@ -12,6 +12,7 @@ import com.ghostipedia.cosmiccore.api.registries.CosmicRegistration;
 import com.ghostipedia.cosmiccore.common.ae2gt.CosmicStockingBusPartMachine;
 import com.ghostipedia.cosmiccore.common.ae2gt.CosmicStockingHatchPartMachine;
 import com.ghostipedia.cosmiccore.common.block.debug.CreativeThermiaContainerMachine;
+import com.ghostipedia.cosmiccore.common.machine.FlightDiffuserMachine;
 import com.ghostipedia.cosmiccore.common.machine.WirelessChargerMachine;
 import com.ghostipedia.cosmiccore.common.machine.multiblock.multi.VacuumDistillationTower;
 import com.ghostipedia.cosmiccore.common.machine.multiblock.multi.WirelessDataBankMachine;
@@ -373,6 +374,24 @@ public class CosmicMachines {
                     .workableTieredHullModel(CosmicCore.id("block/overlay/machine/wireless_charger"))
                     .register(),
             GTValues.tiersBetween(HV, UIV));
+
+    public static final MachineDefinition[] FLIGHT_DIFFUSER = registerTieredMachines("flight_diffuser",
+            FlightDiffuserMachine::new,
+            (tier, builder) -> builder
+                    .langValue("%s Flight Diffuser".formatted(VN[tier]))
+                    .tooltipBuilder((stack, list) -> {
+                        int range = FlightDiffuserMachine.RANGE +
+                                FlightDiffuserMachine.RANGEBOOST * (tier - GTValues.LV);
+                        list.add(Component.translatable("cosmiccore.flight_diffuser.range",
+                                FormattingUtil.formatNumbers(range)));
+                        list.add(Component.translatable("cosmiccore.flight_diffuser.power",
+                                FormattingUtil.formatNumbers(GTValues.V[tier] * FlightDiffuserMachine.AMPERAGE),
+                                VN[tier]));
+                        list.add(Component.translatable("cosmiccore.flight_diffuser.landing"));
+                    })
+                    .workableTieredHullModel(CosmicCore.id("block/overlay/machine/wireless_charger"))
+                    .register(),
+            GTValues.tiersBetween(LV, UIV));
 
     // TODO(forestry): INDUSTRIAL_APIARY (IndustrialApiaryMachine + BEES recipes) shelved with Forestry (bead
     // cosmiccore-42.13)
