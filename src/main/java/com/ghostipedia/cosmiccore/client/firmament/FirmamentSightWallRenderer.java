@@ -2,6 +2,7 @@ package com.ghostipedia.cosmiccore.client.firmament;
 
 import com.ghostipedia.cosmiccore.CosmicCore;
 import com.ghostipedia.cosmiccore.client.CosmicCoreClient;
+import com.ghostipedia.cosmiccore.client.compat.IrisCompat;
 import com.ghostipedia.cosmiccore.client.renderer.CosmicCoreRenderTypes;
 import com.ghostipedia.cosmiccore.common.dimension.FirmamentDimension;
 import com.ghostipedia.cosmiccore.common.firmament.FirmamentEnvironment;
@@ -28,8 +29,9 @@ public final class FirmamentSightWallRenderer {
 
     private static final ResourceLocation WHITE_TEXTURE = ResourceLocation
             .withDefaultNamespace("textures/misc/white.png");
-    private static final RenderType STORM_WALL_TYPE = CosmicCoreRenderTypes.firmamentStormCurrent();
     private static final RenderType FALLBACK_WALL_TYPE = RenderType.entityTranslucentEmissive(WHITE_TEXTURE);
+    private static final int OCEAN_CURRENT_MARKER = 2;
+    static final float SHADERPACK_OCEAN_UV_OFFSET = 67_108_864.0f;
     static final int SEA_Y = FirmamentEnvironment.AMMONIA_SEA_Y;
     private static final float HALF_EXTENT = 384.0f;
     private static final float GRID_STEP = 16.0f;
@@ -65,7 +67,7 @@ public final class FirmamentSightWallRenderer {
         Matrix4f matrix = poseStack.last().pose();
 
         ShaderInstance shader = CosmicCoreClient.getFirmamentStormCurrentShader();
-        if (shader != null) {
+        if (IrisCompat.shadersActive() || shader != null) {
             float partialTick = event.getPartialTick().getGameTimeDeltaPartialTick(false);
             float stormTime = stormTime(minecraft.level.getGameTime(), partialTick);
             renderStormWall(minecraft, matrix, camera.x, camera.y, camera.z, passFade, stormTime, shader);
@@ -79,30 +81,33 @@ public final class FirmamentSightWallRenderer {
                                         double cameraZ,
                                         float passFade, float stormTime, ShaderInstance shader) {
         MultiBufferSource.BufferSource buffers = minecraft.renderBuffers().bufferSource();
-        VertexConsumer consumer = buffers.getBuffer(STORM_WALL_TYPE);
-        drawStormVolume(consumer, matrix, cameraX, cameraY, cameraZ, passFade);
+        RenderType renderType = CosmicCoreRenderTypes.firmamentStormCurrent();
+        VertexConsumer consumer = buffers.getBuffer(renderType);
+        drawStormVolume(consumer, matrix, cameraX, cameraY, cameraZ, passFade, IrisCompat.shadersActive());
 
-        var stormTimeUniform = shader.getUniform("StormTime");
-        if (stormTimeUniform != null) {
-            stormTimeUniform.set(stormTime);
+        if (shader != null) {
+            var stormTimeUniform = shader.getUniform("StormTime");
+            if (stormTimeUniform != null) {
+                stormTimeUniform.set(stormTime);
+            }
+            var cameraUniform = shader.getUniform("CameraXZ");
+            if (cameraUniform != null) {
+                cameraUniform.set((float) cameraX, (float) cameraZ);
+            }
+            var cameraYUniform = shader.getUniform("CameraY");
+            if (cameraYUniform != null) {
+                cameraYUniform.set((float) cameraY);
+            }
+            var edgeRadiusUniform = shader.getUniform("EdgeRadius");
+            if (edgeRadiusUniform != null) {
+                edgeRadiusUniform.set(HALF_EXTENT);
+            }
+            var horizonPassUniform = shader.getUniform("HorizonPass");
+            if (horizonPassUniform != null) {
+                horizonPassUniform.set(0.0f);
+            }
         }
-        var cameraUniform = shader.getUniform("CameraXZ");
-        if (cameraUniform != null) {
-            cameraUniform.set((float) cameraX, (float) cameraZ);
-        }
-        var cameraYUniform = shader.getUniform("CameraY");
-        if (cameraYUniform != null) {
-            cameraYUniform.set((float) cameraY);
-        }
-        var edgeRadiusUniform = shader.getUniform("EdgeRadius");
-        if (edgeRadiusUniform != null) {
-            edgeRadiusUniform.set(HALF_EXTENT);
-        }
-        var horizonPassUniform = shader.getUniform("HorizonPass");
-        if (horizonPassUniform != null) {
-            horizonPassUniform.set(0.0f);
-        }
-        buffers.endBatch(STORM_WALL_TYPE);
+        buffers.endBatch(renderType);
     }
 
     static float seaVisibility(double cameraY) {
@@ -130,7 +135,7 @@ public final class FirmamentSightWallRenderer {
     }
 
     private static void drawStormVolume(VertexConsumer consumer, Matrix4f matrix, double cameraX, double cameraY,
-                                        double cameraZ, float passFade) {
+                                        double cameraZ, float passFade, boolean shaderPackCarrier) {
         StormLayer[] layers = switch (layerOrder(cameraY)) {
             case 0 -> HIGH_LAYER_ORDER;
             case 1 -> UPPER_MIDDLE_LAYER_ORDER;
@@ -138,12 +143,12 @@ public final class FirmamentSightWallRenderer {
             default -> LOW_LAYER_ORDER;
         };
         for (StormLayer layer : layers) {
-            drawStormLayer(consumer, matrix, cameraX, cameraZ, passFade, layer);
+            drawStormLayer(consumer, matrix, cameraX, cameraZ, passFade, layer, shaderPackCarrier);
         }
     }
 
     private static void drawStormLayer(VertexConsumer consumer, Matrix4f matrix, double cameraX, double cameraZ,
-                                       float passFade, StormLayer layer) {
+                                       float passFade, StormLayer layer, boolean shaderPackCarrier) {
         float centerX = (float) (Math.floor(cameraX / GRID_STEP + 0.5) * GRID_STEP);
         float centerZ = (float) (Math.floor(cameraZ / GRID_STEP + 0.5) * GRID_STEP);
         float startX = centerX - GRID_HALF_EXTENT;
@@ -156,19 +161,19 @@ public final class FirmamentSightWallRenderer {
             for (int xCell = 0; xCell < GRID_CELLS; xCell++) {
                 float x0 = startX + xCell * GRID_STEP;
                 float x1 = x0 + GRID_STEP;
-                addStormVertex(consumer, matrix, x0, z0, layerValue, alpha);
-                addStormVertex(consumer, matrix, x0, z1, layerValue, alpha);
-                addStormVertex(consumer, matrix, x1, z1, layerValue, alpha);
-                addStormVertex(consumer, matrix, x1, z0, layerValue, alpha);
+                addStormVertex(consumer, matrix, x0, z0, layerValue, alpha, shaderPackCarrier);
+                addStormVertex(consumer, matrix, x0, z1, layerValue, alpha, shaderPackCarrier);
+                addStormVertex(consumer, matrix, x1, z1, layerValue, alpha, shaderPackCarrier);
+                addStormVertex(consumer, matrix, x1, z0, layerValue, alpha, shaderPackCarrier);
             }
         }
     }
 
     private static void addStormVertex(VertexConsumer consumer, Matrix4f matrix, float x, float z,
-                                       int layerValue, int alpha) {
+                                       int layerValue, int alpha, boolean shaderPackCarrier) {
         consumer.addVertex(matrix, x, SEA_Y, z)
-                .setUv(x, z)
-                .setColor(layerValue, 255, 255, alpha);
+                .setUv(x + (shaderPackCarrier ? SHADERPACK_OCEAN_UV_OFFSET : 0.0f), z)
+                .setColor(layerValue, 255, OCEAN_CURRENT_MARKER, alpha);
     }
 
     private static void renderFallbackWall(Minecraft minecraft, Matrix4f matrix, double cameraX, double cameraZ,

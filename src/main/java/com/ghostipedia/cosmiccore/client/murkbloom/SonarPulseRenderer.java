@@ -19,7 +19,6 @@ import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.client.event.ClientTickEvent;
 
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import it.unimi.dsi.fastutil.longs.Long2IntOpenHashMap;
 import it.unimi.dsi.fastutil.longs.LongOpenHashSet;
 import it.unimi.dsi.fastutil.longs.LongSet;
 import org.joml.Matrix4f;
@@ -34,19 +33,16 @@ public final class SonarPulseRenderer {
 
     private static final float PULSE_SPEED = 2.8f;
     private static final float PULSE_RANGE = 96f;
-    private static final int SCAN_START_ABOVE = 12;
     private static final int SCAN_DOWN = 120;
     private static final int SCAN_UP = 40;
     private static final int FACE_LIFETIME = 140;
-    private static final int MAX_FACES = 20000;
-    private static final int MAX_CLIFF_FILL = 24;
+    private static final int MAX_FACES = 48000;
     private static final float FACE_INSET = 0.014f;
     private static final int NEAR_R = 0xFF, NEAR_G = 0x5A, NEAR_B = 0x4A;
     private static final int FAR_R = 0x59, FAR_G = 0xE8, FAR_B = 0xFF;
 
     private static final Deque<FaceHit> FACES = new ArrayDeque<>();
     private static final LongSet SEEN = new LongOpenHashSet();
-    private static final Long2IntOpenHashMap HEIGHTS = new Long2IntOpenHashMap();
     private static Vec3 pulseOrigin = null;
     private static float ringRadius = 0f;
 
@@ -55,8 +51,8 @@ public final class SonarPulseRenderer {
     public static void firePulse(Vec3 origin) {
         pulseOrigin = origin;
         ringRadius = 1.5f;
+        FACES.clear();
         SEEN.clear();
-        HEIGHTS.clear();
         Minecraft mc = Minecraft.getInstance();
         if (mc.level != null) {
             var resonate = BuiltInRegistries.SOUND_EVENT
@@ -90,7 +86,7 @@ public final class SonarPulseRenderer {
             for (int dz = -bound; dz <= bound; dz++) {
                 double dist = Math.sqrt(dx * dx + dz * dz);
                 if (dist < r0 || dist >= r1) continue;
-                scanColumn(mc.level, ox + dx, oz + dz, oy, ox, oz, now);
+                scanColumn(mc.level, ox + dx, oz + dz, oy, now);
             }
         }
 
@@ -100,59 +96,24 @@ public final class SonarPulseRenderer {
         }
     }
 
-    private static void scanColumn(Level level, int x, int z, int oy, int ox, int oz, long now) {
+    private static void scanColumn(Level level, int x, int z, int oy, long now) {
         BlockPos.MutableBlockPos pos = new BlockPos.MutableBlockPos();
-        boolean prevOpen = true;
-        for (int y = oy + SCAN_START_ABOVE; y >= oy - SCAN_DOWN; y--) {
+        BlockPos.MutableBlockPos neighbor = new BlockPos.MutableBlockPos();
+        for (int y = oy + SCAN_UP; y >= oy - SCAN_DOWN; y--) {
             pos.set(x, y, z);
-            boolean solid = isSolid(level, pos);
-            if (solid && prevOpen) {
-                BlockPos surface = pos.immutable();
-                addFace(surface, Direction.UP, now);
-                for (Direction d : Direction.Plane.HORIZONTAL) {
-                    if (!isSolid(level, surface.relative(d))) {
-                        addFace(surface, d, now);
-                    }
+            if (!isSolid(level, pos)) continue;
+            BlockPos surface = null;
+            for (Direction direction : Direction.values()) {
+                neighbor.set(
+                        x + direction.getStepX(),
+                        y + direction.getStepY(),
+                        z + direction.getStepZ());
+                if (!isSolid(level, neighbor)) {
+                    if (surface == null) surface = pos.immutable();
+                    addFace(surface, direction, now);
                 }
-                HEIGHTS.put(columnKey(x, z), y);
-                fillCliff(level, x, z, y, ox, oz, now);
-                break;
-            }
-            prevOpen = !solid;
-        }
-
-        prevOpen = true;
-        for (int y = oy + SCAN_START_ABOVE + 1; y <= oy + SCAN_UP; y++) {
-            pos.set(x, y, z);
-            boolean solid = isSolid(level, pos);
-            if (solid && prevOpen) {
-                addFace(pos.immutable(), Direction.DOWN, now);
-                break;
-            }
-            prevOpen = !solid;
-        }
-    }
-
-    private static void fillCliff(Level level, int x, int z, int surfaceY, int ox, int oz, long now) {
-        BlockPos.MutableBlockPos pos = new BlockPos.MutableBlockPos();
-        for (Direction side : Direction.Plane.HORIZONTAL) {
-            int nx = x + side.getStepX();
-            int nz = z + side.getStepZ();
-            long nKey = columnKey(nx, nz);
-            if (!HEIGHTS.containsKey(nKey)) continue;
-            int neighborY = HEIGHTS.get(nKey);
-            if (surfaceY - neighborY <= 1) continue;
-            int from = Math.max(neighborY + 1, surfaceY - MAX_CLIFF_FILL);
-            for (int y = from; y < surfaceY; y++) {
-                pos.set(x, y, z);
-                if (!isSolid(level, pos)) continue;
-                addFace(pos.immutable(), side, now);
             }
         }
-    }
-
-    private static long columnKey(int x, int z) {
-        return ((long) x << 32) | (z & 0xFFFFFFFFL);
     }
 
     private static void addFace(BlockPos pos, Direction face, long now) {

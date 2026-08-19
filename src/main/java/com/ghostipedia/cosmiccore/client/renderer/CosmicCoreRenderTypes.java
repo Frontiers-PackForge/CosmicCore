@@ -1,7 +1,9 @@
 package com.ghostipedia.cosmiccore.client.renderer;
 
 import com.ghostipedia.cosmiccore.client.CosmicCoreClient;
+import com.ghostipedia.cosmiccore.client.compat.IrisCompat;
 
+import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.client.renderer.RenderType;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
@@ -17,7 +19,8 @@ public class CosmicCoreRenderTypes extends RenderType {
             CosmicCoreClient::getFirmamentStormCurrentShader);
     protected static final ShaderStateShard FIRMAMENT_WIND_CURRENT_SHADER = new ShaderStateShard(
             CosmicCoreClient::getFirmamentWindCurrentShader);
-
+    protected static final ShaderStateShard POSITION_TEX_COLOR_CARRIER_SHADER = new ShaderStateShard(
+            GameRenderer::getPositionTexColorShader);
     private static final RenderType NEBULAE = RenderType.create("nebulae",
             DefaultVertexFormat.POSITION, VertexFormat.Mode.QUADS, 256, false, false,
             RenderType.CompositeState.builder()
@@ -43,10 +46,32 @@ public class CosmicCoreRenderTypes extends RenderType {
                     .setWriteMaskState(COLOR_WRITE)
                     .createCompositeState(false));
 
+    private static final RenderType FIRMAMENT_STORM_CURRENT_IRIS = RenderType.create(
+            "cosmiccore:firmament_storm_current_iris",
+            DefaultVertexFormat.POSITION_TEX_COLOR, VertexFormat.Mode.QUADS, 786432, false, false,
+            RenderType.CompositeState.builder()
+                    .setShaderState(POSITION_TEX_COLOR_CARRIER_SHADER)
+                    .setTransparencyState(TRANSLUCENT_TRANSPARENCY)
+                    .setCullState(NO_CULL)
+                    .setDepthTestState(LEQUAL_DEPTH_TEST)
+                    .setWriteMaskState(COLOR_WRITE)
+                    .createCompositeState(false));
+
     private static final RenderType FIRMAMENT_WIND_CURRENT = RenderType.create("cosmiccore:firmament_wind_current",
             DefaultVertexFormat.POSITION_TEX_COLOR, VertexFormat.Mode.QUADS, 262144, false, true,
             RenderType.CompositeState.builder()
                     .setShaderState(FIRMAMENT_WIND_CURRENT_SHADER)
+                    .setTransparencyState(TRANSLUCENT_TRANSPARENCY)
+                    .setCullState(NO_CULL)
+                    .setDepthTestState(LEQUAL_DEPTH_TEST)
+                    .setWriteMaskState(COLOR_WRITE)
+                    .createCompositeState(false));
+
+    private static final RenderType FIRMAMENT_WIND_CURRENT_IRIS = RenderType.create(
+            "cosmiccore:firmament_wind_current_iris",
+            DefaultVertexFormat.POSITION_TEX_COLOR, VertexFormat.Mode.QUADS, 262144, false, true,
+            RenderType.CompositeState.builder()
+                    .setShaderState(POSITION_TEX_COLOR_CARRIER_SHADER)
                     .setTransparencyState(TRANSLUCENT_TRANSPARENCY)
                     .setCullState(NO_CULL)
                     .setDepthTestState(LEQUAL_DEPTH_TEST)
@@ -68,10 +93,10 @@ public class CosmicCoreRenderTypes extends RenderType {
     }
 
     public static RenderType firmamentStormCurrent() {
-        return FIRMAMENT_STORM_CURRENT;
+        return IrisCompat.shadersActive() ? FIRMAMENT_STORM_CURRENT_IRIS : FIRMAMENT_STORM_CURRENT;
     }
 
     public static RenderType firmamentWindCurrent() {
-        return FIRMAMENT_WIND_CURRENT;
+        return IrisCompat.shadersActive() ? FIRMAMENT_WIND_CURRENT_IRIS : FIRMAMENT_WIND_CURRENT;
     }
 }

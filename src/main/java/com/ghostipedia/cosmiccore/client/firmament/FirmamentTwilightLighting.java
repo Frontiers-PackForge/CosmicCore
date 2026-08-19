@@ -8,7 +8,7 @@ import org.joml.Vector3f;
 public final class FirmamentTwilightLighting {
 
     public static final float SOLAR_AZIMUTH = 0.0f;
-    public static final float SOLAR_ELEVATION = 0.035f;
+    public static final float SOLAR_ELEVATION = 0.0f;
 
     private static final float SUN_NORMALIZATION = Mth.sqrt(1.0f + SOLAR_ELEVATION * SOLAR_ELEVATION);
     private static final float SUN_X = 1.0f / SUN_NORMALIZATION;

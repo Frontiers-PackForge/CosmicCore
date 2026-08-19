@@ -2,12 +2,14 @@ package com.ghostipedia.cosmiccore.client.firmament;
 
 import com.ghostipedia.cosmiccore.CosmicCore;
 import com.ghostipedia.cosmiccore.client.CosmicCoreClient;
+import com.ghostipedia.cosmiccore.client.compat.IrisCompat;
 import com.ghostipedia.cosmiccore.client.renderer.CosmicCoreRenderTypes;
 import com.ghostipedia.cosmiccore.common.data.worldgen.firmament.FirmamentMiddleBandLayout;
 import com.ghostipedia.cosmiccore.common.dimension.FirmamentDimension;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.ShaderInstance;
 import net.minecraft.util.Mth;
 import net.neoforged.api.distmarker.Dist;
@@ -36,6 +38,7 @@ public final class FirmamentWindCurrentRenderer {
     private static final long CURRENT_DECORATION_SALT = 0x3C6EF372FE94F82BL;
     private static final long STORM_DECORATION_SALT = 0x510E527FADE682D1L;
     private static final long UPDRAFT_DECORATION_SALT = 0xA54FF53A5F1D36F1L;
+    private static final float SHADERPACK_WIND_UV_OFFSET = 4096.0f;
 
     private FirmamentWindCurrentRenderer() {}
 
@@ -45,7 +48,7 @@ public final class FirmamentWindCurrentRenderer {
         Minecraft minecraft = Minecraft.getInstance();
         if (minecraft.level == null || !minecraft.level.dimension().equals(FirmamentDimension.KEY)) return;
         ShaderInstance shader = CosmicCoreClient.getFirmamentWindCurrentShader();
-        if (shader == null) return;
+        if (!IrisCompat.shadersActive() && shader == null) return;
 
         var camera = event.getCamera().getPosition();
         PoseStack poseStack = event.getPoseStack();
@@ -54,21 +57,24 @@ public final class FirmamentWindCurrentRenderer {
             poseStack.translate(-camera.x, -camera.y, -camera.z);
             Matrix4f matrix = poseStack.last().pose();
             MultiBufferSource.BufferSource buffers = minecraft.renderBuffers().bufferSource();
-            VertexConsumer consumer = buffers.getBuffer(CosmicCoreRenderTypes.firmamentWindCurrent());
+            RenderType renderType = CosmicCoreRenderTypes.firmamentWindCurrent();
+            VertexConsumer consumer = buffers.getBuffer(renderType);
             drawStormBody(consumer, matrix, camera.x, camera.z);
             drawHorizontalCurrents(consumer, matrix, camera.x, camera.z);
             drawUpdrafts(consumer, matrix, camera.x, camera.z);
 
-            float partialTick = event.getPartialTick().getGameTimeDeltaPartialTick(false);
-            var timeUniform = shader.getUniform("CurrentTime");
-            if (timeUniform != null) {
-                timeUniform.set(currentTime(minecraft.level.getGameTime(), partialTick));
+            if (shader != null) {
+                float partialTick = event.getPartialTick().getGameTimeDeltaPartialTick(false);
+                var timeUniform = shader.getUniform("CurrentTime");
+                if (timeUniform != null) {
+                    timeUniform.set(currentTime(minecraft.level.getGameTime(), partialTick));
+                }
+                var cameraUniform = shader.getUniform("CameraPos");
+                if (cameraUniform != null) {
+                    cameraUniform.set((float) camera.x, (float) camera.y, (float) camera.z);
+                }
             }
-            var cameraUniform = shader.getUniform("CameraPos");
-            if (cameraUniform != null) {
-                cameraUniform.set((float) camera.x, (float) camera.y, (float) camera.z);
-            }
-            buffers.endBatch(CosmicCoreRenderTypes.firmamentWindCurrent());
+            buffers.endBatch(renderType);
         } finally {
             poseStack.popPose();
         }
@@ -320,7 +326,7 @@ public final class FirmamentWindCurrentRenderer {
     private static void addVertex(VertexConsumer consumer, Matrix4f matrix, float x, float y, float z,
                                   float u, float v, int red, int green, int blue, int alpha) {
         consumer.addVertex(matrix, x, y, z)
-                .setUv(u, v)
+                .setUv(u, v + SHADERPACK_WIND_UV_OFFSET)
                 .setColor(red, green, blue, alpha);
     }
 

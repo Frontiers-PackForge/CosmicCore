@@ -11,6 +11,7 @@ import com.ghostipedia.cosmiccore.common.commands.VeinSurveyCommand;
 import com.ghostipedia.cosmiccore.common.commands.WirelessEnergyCommand;
 import com.ghostipedia.cosmiccore.common.data.CosmicItems;
 import com.ghostipedia.cosmiccore.common.data.worldgen.field.FieldDiscoveryData;
+import com.ghostipedia.cosmiccore.common.flight.FlightDiffuserBehavior;
 import com.ghostipedia.cosmiccore.common.food.CosmicFoodCommand;
 import com.ghostipedia.cosmiccore.common.gravity.GravityDebugCommand;
 import com.ghostipedia.cosmiccore.common.item.armor.boots.TravelerBootsLogic;
@@ -54,6 +55,7 @@ public class ForgeCommonEventListener {
     @SubscribeEvent
     public static void onPlayerLoggedIn(PlayerEvent.PlayerLoggedInEvent event) {
         if (!(event.getEntity() instanceof ServerPlayer player)) return;
+        FlightDiffuserBehavior.clear(player);
         TravelerBootsLogic.clearStepAssist(player);
         FieldDiscoveryData data = FieldDiscoveryData.get(player.getServer());
         String teamKey = DeedTeams.teamKey(player);
@@ -69,7 +71,22 @@ public class ForgeCommonEventListener {
     @SubscribeEvent
     public static void onPlayerChangedDimension(PlayerEvent.PlayerChangedDimensionEvent event) {
         if (event.getEntity() instanceof ServerPlayer player) {
+            FlightDiffuserBehavior.clear(player);
             GravityApi.reset(player);
+        }
+    }
+
+    @SubscribeEvent
+    public static void onPlayerLoggedOut(PlayerEvent.PlayerLoggedOutEvent event) {
+        if (event.getEntity() instanceof ServerPlayer player) {
+            FlightDiffuserBehavior.clear(player);
+        }
+    }
+
+    @SubscribeEvent
+    public static void onPlayerClone(PlayerEvent.Clone event) {
+        if (event.getEntity() instanceof ServerPlayer player) {
+            FlightDiffuserBehavior.clear(player);
         }
     }
 
@@ -91,6 +108,9 @@ public class ForgeCommonEventListener {
             }
             ((LivingEntityAccessor) player).callRemoveEffectParticles();
         }
+        if (player instanceof ServerPlayer serverPlayer) {
+            FlightDiffuserBehavior.tick(serverPlayer);
+        }
     }
 
     @SubscribeEvent
@@ -106,11 +126,13 @@ public class ForgeCommonEventListener {
         boolean tookOff = e.getFrom().is(CosmicItems.SANGUINE_WARPTECH_CHESTPLATE.get()) && !putOn;
 
         if (tookOff && !p.isCreative() && !p.isSpectator()) {
-            p.getAbilities().mayfly = false;
-            p.getAbilities().flying = false;
-            p.fallDistance = 0;
-            p.connection.send(
-                    new ClientboundPlayerAbilitiesPacket(p.getAbilities()));
+            if (!FlightDiffuserBehavior.claimActiveFlight(p)) {
+                p.getAbilities().mayfly = false;
+                p.getAbilities().flying = false;
+                p.fallDistance = 0;
+                p.connection.send(
+                        new ClientboundPlayerAbilitiesPacket(p.getAbilities()));
+            }
             p.getPersistentData().putBoolean(SANGUINE_SHIELD_NBT_KEY, false);
         }
     }
@@ -153,6 +175,12 @@ public class ForgeCommonEventListener {
     @SubscribeEvent(priority = EventPriority.HIGH)
     public static void onLivingFall(LivingFallEvent event) {
         if (!(event.getEntity() instanceof Player player)) return;
+        if (player instanceof ServerPlayer serverPlayer &&
+                FlightDiffuserBehavior.consumeLandingProtection(serverPlayer)) {
+            event.setCanceled(true);
+            player.fallDistance = 0;
+            return;
+        }
         if (!TravelerBootsLogic.isWearing(player)) return;
         event.setCanceled(true);
         player.fallDistance = 0;
