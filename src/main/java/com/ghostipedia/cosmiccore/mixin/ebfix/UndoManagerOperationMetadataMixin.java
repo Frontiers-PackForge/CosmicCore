@@ -50,7 +50,11 @@ public abstract class UndoManagerOperationMetadataMixin {
         if (source == null || source.isEmpty()) return;
         UndoManager.UndoEntry entry = source.getFirst();
         EffortlessBuildingUndoEntryExtension extension = (EffortlessBuildingUndoEntryExtension) (Object) entry;
-        EffortlessBuildingOperationMetadata metadata = extension.cosmiccore$getOperationMetadata(); // Screams about NPE warning, should be fine, I think it's just Mixin being dumb!
+        EffortlessBuildingOperationMetadata metadata = extension.cosmiccore$getOperationMetadata(); // Screams about NPE
+                                                                                                    // warning, should
+                                                                                                    // be fine, I think
+                                                                                                    // it's just Mixin
+                                                                                                    // being dumb!
         if (metadata == null) return;
 
         source.pop();

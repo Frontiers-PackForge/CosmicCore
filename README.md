@@ -61,7 +61,11 @@ Using code/assets from this project requires attribution in both cases and requi
 
 ## Code Credits
 [Gregtech Modern](https://github.com/GregTechCEu/GregTech-Modern) for plenty of useful code references and invaluable knowledge in learning Java.
-[Lodestone](https://github.com/LodestarMC/Lodestone) - For the amazing rendering tools it offers
+[Lodestone](https://github.com/LodestarMC/Lodestone) - For the amazing rendering tools it offers, we use it occasionally for visual effects
+[Effortless Building](https://github.com/Requios/effortless-building-multi) - Used for backporting 26.2 Upstream changes to 1.21.1 EB as it seems no backport efforts are currently being made, as well as used for GT pipe integration.
+[Embers Re-Ignited](https://www.curseforge.com/minecraft/mc-mods/embers-re-ignited) - Used to reference ember network routing and implement our own routing capable blocks/hatches
+[Applied Energistics 2](https://github.com/AppliedEnergistics/Applied-Energistics-2) - Used to make general compatibility patches for AE, and overall requires sometimes modifying core AE2 classes. Granted most of this work has been offloaded outside of Core to a separate helper mod.
+
 ## Assets Credits
 - [GTCEu:Modern](https://www.curseforge.com/minecraft/mc-mods/gregtechceu-modern) - General material assets
 
