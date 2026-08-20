@@ -104,6 +104,13 @@
     "ftbquests.QuestPanelAccessor",
     "ftbquests.QuestScreenAccessor",
     "occultism.ModonomiconPreviewOffsetFixMixin",
+    "ebfix.BlockPreviewRendererIsolationMixin",
+    "ebfix.BuildPipelineClientBreakingMixin",
+    "ebfix.BuildModesDisableSequenceMixin",
+    "ebfix.ItemUsageTrackerAE2Mixin",
+    "ebfix.ModifierRendererPreviewDepthMixin",
+    "ebfix.RadialMenuSingleplayerConfigMixin",
+    "ebfix.RenderHandlerItemCountAlphaMixin",
     "drippy.DrippyLoadingOverlayScaleFixMixin"
   ],
   "mixins": [
@@ -217,7 +224,11 @@
     "worldgen.AbyssDeepWaterMixin",
     "worldgen.AbyssNoiseChunkTagMixin",
     "worldgen.SurfaceRulesSequenceFlattenMixin",
-    "worldgen.SurfaceRulesSequenceRuleSourceFlattenMixin"
+    "worldgen.SurfaceRulesSequenceRuleSourceFlattenMixin",
+    "ebfix.PacketHandlerPlacementMixin",
+    "ebfix.UndoEntryOperationMetadataMixin",
+    "ebfix.UndoManagerOperationMetadataMixin",
+    "ebfix.UndoManagerStacksAccessor"
   ],
   "injectors": {
     "defaultRequire": 1,

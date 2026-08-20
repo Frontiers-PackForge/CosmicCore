@@ -7,6 +7,7 @@ import com.ghostipedia.cosmiccore.client.map.RevealedFields;
 import com.ghostipedia.cosmiccore.client.mirror.ClientDeedCache;
 import com.ghostipedia.cosmiccore.client.renderer.RingUpgradePreviewRenderer;
 import com.ghostipedia.cosmiccore.client.renderer.StructureBoundingBox;
+import com.ghostipedia.cosmiccore.common.compat.effortlessbuilding.EffortlessBuildingAE2Bridge;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.FogRenderer;
@@ -39,11 +40,13 @@ public class ForgeClientEventHandler {
         // Clear all previews when world unloads to prevent stale data
         if (event.getLevel().isClientSide()) {
             RingUpgradePreviewRenderer.clearAllPreviews();
+            EffortlessBuildingAE2Bridge.clearClientCache();
         }
     }
 
     @SubscribeEvent
     public static void onLoggingIn(ClientPlayerNetworkEvent.LoggingIn event) {
+        EffortlessBuildingAE2Bridge.clearClientCache();
         var connection = Minecraft.getInstance().getConnection();
         if (connection != null) {
             RegistryAccessContainer.update(connection.registryAccess(), null);
@@ -52,6 +55,7 @@ public class ForgeClientEventHandler {
 
     @SubscribeEvent
     public static void onLoggingOut(ClientPlayerNetworkEvent.LoggingOut event) {
+        EffortlessBuildingAE2Bridge.clearClientCache();
         ClientDeedCache.clear();
         RevealedFields.INSTANCE.clearAll();
         RevealedFieldStorage.reset();

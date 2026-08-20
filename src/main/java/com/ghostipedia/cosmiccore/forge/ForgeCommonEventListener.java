@@ -19,6 +19,7 @@ import com.ghostipedia.cosmiccore.common.item.behavior.EffectApplicationBehavior
 import com.ghostipedia.cosmiccore.common.mirror.deed.DeedCommand;
 import com.ghostipedia.cosmiccore.common.mirror.deed.DeedTeams;
 import com.ghostipedia.cosmiccore.common.network.CCoreNetwork;
+import com.ghostipedia.cosmiccore.common.network.packet.EffortlessBuildingAE2CountQueryPacket;
 import com.ghostipedia.cosmiccore.common.network.packet.RevealFieldsPacket;
 import com.ghostipedia.cosmiccore.mixin.accessor.LivingEntityAccessor;
 
@@ -80,6 +81,7 @@ public class ForgeCommonEventListener {
     public static void onPlayerLoggedOut(PlayerEvent.PlayerLoggedOutEvent event) {
         if (event.getEntity() instanceof ServerPlayer player) {
             FlightDiffuserBehavior.clear(player);
+            EffortlessBuildingAE2CountQueryPacket.clearPlayer(player.getUUID());
         }
     }
 

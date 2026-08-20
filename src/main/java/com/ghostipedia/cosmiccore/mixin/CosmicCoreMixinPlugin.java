@@ -10,7 +10,12 @@ import org.objectweb.asm.tree.MethodNode;
 import org.spongepowered.asm.mixin.extensibility.IMixinConfigPlugin;
 import org.spongepowered.asm.mixin.extensibility.IMixinInfo;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.HashMap;
+import java.util.HexFormat;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -29,6 +34,19 @@ public class CosmicCoreMixinPlugin implements IMixinConfigPlugin {
     private static final String AERONAUTICS_MARKER = "dev/eriksonn/aeronautics/content/blocks/hot_air/balloon/effect/ClientBalloonEffectRenderer.class";
     private static final String QUALITY_FOOD_MARKER = "de/cadentem/quality_food/util/QualityUtils.class";
     private static final String ULTIMINE_CROP_MARKER = "dev/ftb/mods/ftbultimine/crops/VanillaCropLikeHandler.class";
+    private static final List<String> EFFORTLESS_BUILDING_BASELINE_CLASSES = List.of(
+            "neoforge/nl/requios/effortlessbuilding/buildpipeline/BuildPipelineClient.class",
+            "neoforge/nl/requios/effortlessbuilding/render/BlockPreviewRenderer.class",
+            "neoforge/nl/requios/effortlessbuilding/buildmode/BuildModes.class",
+            "neoforge/nl/requios/effortlessbuilding/utilities/ItemUsageTracker.class",
+            "neoforge/nl/requios/effortlessbuilding/render/ModifierRenderer.class",
+            "neoforge/nl/requios/effortlessbuilding/network/PacketHandler.class",
+            "neoforge/nl/requios/effortlessbuilding/screen/RadialMenu.class",
+            "neoforge/nl/requios/effortlessbuilding/render/RenderHandler.class",
+            "neoforge/nl/requios/effortlessbuilding/utilities/UndoManager.class",
+            "neoforge/nl/requios/effortlessbuilding/utilities/UndoManager$UndoEntry.class",
+            "neoforge/nl/requios/effortlessbuilding/utilities/UndoManager$BlockChange.class");
+    private static final String EFFORTLESS_BUILDING_BASELINE_SHA256 = "8249009DB3A70B150BFD876A389529C796B7FA58E9B0C933A3024312D30B4F5F";
     private static final Map<String, Boolean> GATES = new HashMap<>();
 
     static {
@@ -60,6 +78,7 @@ public class CosmicCoreMixinPlugin implements IMixinConfigPlugin {
                 ".qualityfoodultimine.",
                 loader.getResource(QUALITY_FOOD_MARKER) != null &&
                         loader.getResource(ULTIMINE_CROP_MARKER) != null);
+        GATES.put(".ebfix.", matchesEffortlessBuildingBaseline(loader));
     }
 
     @Override
@@ -74,6 +93,22 @@ public class CosmicCoreMixinPlugin implements IMixinConfigPlugin {
 
     public static boolean isAeronauticsSchemaBypassAvailable() {
         return GATES.getOrDefault(".aeroschema.", false);
+    }
+
+    private static boolean matchesEffortlessBuildingBaseline(ClassLoader loader) {
+        try {
+            MessageDigest digest = MessageDigest.getInstance("SHA-256");
+            for (String resource : EFFORTLESS_BUILDING_BASELINE_CLASSES) {
+                try (InputStream input = loader.getResourceAsStream(resource)) {
+                    if (input == null) return false;
+                    digest.update(input.readAllBytes());
+                }
+            }
+            String hash = HexFormat.of().withUpperCase().formatHex(digest.digest());
+            return EFFORTLESS_BUILDING_BASELINE_SHA256.equals(hash);
+        } catch (IOException | NoSuchAlgorithmException ignored) {
+            return false;
+        }
     }
 
     @Override

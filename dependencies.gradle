@@ -142,6 +142,7 @@ dependencies {
     runtimeOnly("curse.maven:irisshaders-455508:8242804")
 
     // Dev tooling
+    compileOnly(forge.effortless)
     runtimeOnly(forge.effortless)
 
     // ---- DROPPED for the 1.21.1 port (no NeoForge build / pack chose alternatives) ----
