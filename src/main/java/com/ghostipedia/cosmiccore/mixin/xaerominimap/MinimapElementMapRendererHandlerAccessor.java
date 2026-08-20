@@ -12,4 +12,7 @@ public interface MinimapElementMapRendererHandlerAccessor {
 
     @Accessor("pc")
     double cosmiccore$getTransformPc();
+
+    @Accessor("zoom")
+    double cosmiccore$getZoom();
 }
