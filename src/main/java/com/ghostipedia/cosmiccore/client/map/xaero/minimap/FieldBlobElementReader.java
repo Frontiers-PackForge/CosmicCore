@@ -2,6 +2,7 @@ package com.ghostipedia.cosmiccore.client.map.xaero.minimap;
 
 import com.ghostipedia.cosmiccore.client.map.xaero.FieldBlobDraw;
 import com.ghostipedia.cosmiccore.client.map.xaero.FieldBlobElement;
+import com.ghostipedia.cosmiccore.mixin.xaerominimap.MinimapElementMapRendererHandlerAccessor;
 
 import net.minecraft.client.Minecraft;
 
@@ -39,23 +40,25 @@ public class FieldBlobElementReader extends MinimapElementReader<FieldBlobElemen
     @Override
     public int getInteractionBoxRight(FieldBlobElement element, MinimapElementMapRendererHandler context,
                                       float partialTicks) {
-        return extent(element);
+        return extent(element, context);
     }
 
     @Override
     public int getInteractionBoxTop(FieldBlobElement element, MinimapElementMapRendererHandler context,
                                     float partialTicks) {
-        return -extent(element);
+        return -extent(element, context);
     }
 
     @Override
     public int getInteractionBoxBottom(FieldBlobElement element, MinimapElementMapRendererHandler context,
                                        float partialTicks) {
-        return extent(element);
+        return extent(element, context);
     }
 
-    private static int extent(FieldBlobElement element) {
-        return Math.round(FieldBlobDraw.minimapZoneRadius(element.field().tier(), element.field().radius()));
+    private static int extent(FieldBlobElement element, MinimapElementMapRendererHandler context) {
+        double scale = ((MinimapElementMapRendererHandlerAccessor) (Object) context).cosmiccore$getZoom();
+        return Math.round(FieldBlobDraw.zonePixelRadius(
+                FieldBlobDraw.zoneBlockRadius(element.field().tier(), element.field().radius()), scale));
     }
 
     @Override
