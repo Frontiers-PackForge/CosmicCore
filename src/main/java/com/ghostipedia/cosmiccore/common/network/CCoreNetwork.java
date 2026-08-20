@@ -7,6 +7,8 @@ import com.ghostipedia.cosmiccore.common.network.packet.DashPacket;
 import com.ghostipedia.cosmiccore.common.network.packet.DeedPresentationAckPacket;
 import com.ghostipedia.cosmiccore.common.network.packet.DeedPresentationPacket;
 import com.ghostipedia.cosmiccore.common.network.packet.DeedSyncPacket;
+import com.ghostipedia.cosmiccore.common.network.packet.EffortlessBuildingAE2CountQueryPacket;
+import com.ghostipedia.cosmiccore.common.network.packet.EffortlessBuildingAE2CountSyncPacket;
 import com.ghostipedia.cosmiccore.common.network.packet.FirmamentTideHudPacket;
 import com.ghostipedia.cosmiccore.common.network.packet.MirrorWeavePacket;
 import com.ghostipedia.cosmiccore.common.network.packet.MurkbloomDevImmunityPacket;
@@ -30,7 +32,7 @@ import net.neoforged.neoforge.network.registration.PayloadRegistrar;
 
 public class CCoreNetwork {
 
-    private static final String PROTOCOL_VERSION = "1.13.0";
+    private static final String PROTOCOL_VERSION = "1.14.0";
 
     public static void sendToServer(CustomPacketPayload packet) {
         PacketDistributor.sendToServer(packet);
@@ -59,6 +61,8 @@ public class CCoreNetwork {
                 DeedPresentationPacket::execute);
         registrar.playToClient(FirmamentTideHudPacket.TYPE, FirmamentTideHudPacket.CODEC,
                 FirmamentTideHudPacket::execute);
+        registrar.playToClient(EffortlessBuildingAE2CountSyncPacket.TYPE, EffortlessBuildingAE2CountSyncPacket.CODEC,
+                EffortlessBuildingAE2CountSyncPacket::execute);
         DeedQuestCompatBridge.registerPayloads(registrar);
 
         registrar.playToServer(DashPacket.TYPE, DashPacket.CODEC, DashPacket::execute);
@@ -72,6 +76,8 @@ public class CCoreNetwork {
                 BuildTieredMultiblockPacket::execute);
         registrar.playToServer(SetMultiblockStructureTierPacket.TYPE, SetMultiblockStructureTierPacket.CODEC,
                 SetMultiblockStructureTierPacket::execute);
+        registrar.playToServer(EffortlessBuildingAE2CountQueryPacket.TYPE, EffortlessBuildingAE2CountQueryPacket.CODEC,
+                EffortlessBuildingAE2CountQueryPacket::execute);
 
         registrar.playToServer(StarLadderUplinkPackets.UplinkActionPacket.TYPE,
                 StarLadderUplinkPackets.UplinkActionPacket.CODEC,
