@@ -15,7 +15,6 @@ import com.mojang.blaze3d.vertex.MeshData;
 import com.mojang.blaze3d.vertex.Tesselator;
 import com.mojang.blaze3d.vertex.VertexFormat;
 import org.joml.Matrix4f;
-import xaero.hud.minimap.BuiltInHudModules;
 
 import java.util.Arrays;
 import java.util.Set;
@@ -31,7 +30,6 @@ public final class FieldBlobDraw {
 
     private static final int Z_MINIMAP = 0;
     private static final int Z_WORLDMAP = 200;
-    private static final int MINIMAP_ZONE_MIN_PX = 10;
     private static final float MINIMAP_RING_INNER = 0.85f;
     private static final double TAU = Math.PI * 2.0;
     private static final int ZONE_SEGMENTS = 30;
@@ -52,22 +50,6 @@ public final class FieldBlobDraw {
 
     private static final Set<String> LOGGED = ConcurrentHashMap.newKeySet();
     private static BufferBuilder zoneBatch;
-
-    public static float minimapZoneRadius(byte tier, int fieldRadius) {
-        float blockR = zoneBlockRadius(tier, fieldRadius);
-        try {
-            var processor = BuiltInHudModules.MINIMAP.getCurrentSession().getProcessor();
-            float max = processor.getMinimapSize() * 0.45f;
-            float px = (float) Math.max(MINIMAP_ZONE_MIN_PX, Math.min(max, blockR * processor.getMinimapZoom()));
-            if (LOGGED.add("minimapZoom")) {
-                CosmicCore.LOGGER.info("[FieldMap] minimap zoom={} size={} blockR={} -> px={}",
-                        processor.getMinimapZoom(), processor.getMinimapSize(), blockR, px);
-            }
-            return px;
-        } catch (Exception e) {
-            return Math.min(28f, blockR);
-        }
-    }
 
     public static float zoneBlockRadius(byte tier, int fieldRadius) {
         float factor = switch (tier) {

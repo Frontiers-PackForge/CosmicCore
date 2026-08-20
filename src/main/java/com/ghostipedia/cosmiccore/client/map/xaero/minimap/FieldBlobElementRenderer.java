@@ -38,7 +38,9 @@ public class FieldBlobElementRenderer
         RevealedField field = element.field();
         boolean depleted = RevealedFields.INSTANCE.isDepleted(element.dimension(), field.x(), field.z());
         MinimapElementMapRendererHandlerAccessor transform = (MinimapElementMapRendererHandlerAccessor) (Object) this.context;
-        FieldBlobDraw.minimapBlob(graphics, FieldBlobDraw.minimapZoneRadius(field.tier(), field.radius()),
+        float pixelRadius = FieldBlobDraw.zonePixelRadius(FieldBlobDraw.zoneBlockRadius(field.tier(), field.radius()),
+                transform.cosmiccore$getZoom());
+        FieldBlobDraw.minimapBlob(graphics, pixelRadius,
                 field.colorRGB(), FieldBlobDraw.shapeSeed(field.x(), field.z()), depleted,
                 transform.cosmiccore$getTransformPs(), transform.cosmiccore$getTransformPc());
         return true;
