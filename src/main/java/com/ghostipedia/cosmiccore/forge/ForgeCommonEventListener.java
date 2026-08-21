@@ -9,6 +9,7 @@ import com.ghostipedia.cosmiccore.common.commands.SoulCommand;
 import com.ghostipedia.cosmiccore.common.commands.StarLadderCommand;
 import com.ghostipedia.cosmiccore.common.commands.VeinSurveyCommand;
 import com.ghostipedia.cosmiccore.common.commands.WirelessEnergyCommand;
+import com.ghostipedia.cosmiccore.common.compat.effortlessbuilding.EffortlessBuildingGTPipeRenderSync;
 import com.ghostipedia.cosmiccore.common.data.CosmicItems;
 import com.ghostipedia.cosmiccore.common.data.worldgen.field.FieldDiscoveryData;
 import com.ghostipedia.cosmiccore.common.flight.FlightDiffuserBehavior;
@@ -44,6 +45,7 @@ import net.neoforged.neoforge.event.entity.living.LivingFallEvent;
 import net.neoforged.neoforge.event.entity.living.LivingIncomingDamageEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 import net.neoforged.neoforge.event.tick.PlayerTickEvent;
+import net.neoforged.neoforge.event.tick.ServerTickEvent;
 
 import java.util.List;
 
@@ -113,6 +115,11 @@ public class ForgeCommonEventListener {
         if (player instanceof ServerPlayer serverPlayer) {
             FlightDiffuserBehavior.tick(serverPlayer);
         }
+    }
+
+    @SubscribeEvent
+    public static void onServerTickPost(ServerTickEvent.Post event) {
+        EffortlessBuildingGTPipeRenderSync.flush(event.getServer());
     }
 
     @SubscribeEvent

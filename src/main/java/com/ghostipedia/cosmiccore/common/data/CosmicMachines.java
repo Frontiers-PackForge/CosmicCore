@@ -379,6 +379,8 @@ public class CosmicMachines {
             FlightDiffuserMachine::new,
             (tier, builder) -> builder
                     .langValue("%s Flight Diffuser".formatted(VN[tier]))
+                    .modelProperty(GTMachineModelProperties.IS_ACTIVE, false)
+                    .modelProperty(GTMachineModelProperties.IS_WORKING_ENABLED, true)
                     .tooltipBuilder((stack, list) -> {
                         int range = FlightDiffuserMachine.RANGE +
                                 FlightDiffuserMachine.RANGEBOOST * (tier - GTValues.LV);

@@ -58,7 +58,7 @@ public final class EffortlessBuildingGTPipeCompat {
                 }
             }
         }
-        synchronize(touched);
+        scheduleSynchronization(level, touched);
 
         Map<BlockPos, EffortlessBuildingGTPipeChange> changes = new LinkedHashMap<>();
         for (BlockPos pos : positions) {
@@ -81,7 +81,7 @@ public final class EffortlessBuildingGTPipeCompat {
             EffortlessBuildingGTPipeAnchor anchor = operation.anchor();
             restoreAnchor(level, anchor, anchor.connectedBefore(), anchor.blockedBefore(), touched);
         }
-        synchronize(touched);
+        scheduleSynchronization(level, touched);
     }
 
     public static void afterRedo(
@@ -96,7 +96,7 @@ public final class EffortlessBuildingGTPipeCompat {
             EffortlessBuildingGTPipeAnchor anchor = operation.anchor();
             restoreAnchor(level, anchor, anchor.connectedAfter(), anchor.blockedAfter(), touched);
         }
-        synchronize(touched);
+        scheduleSynchronization(level, touched);
     }
 
     @Nullable
@@ -231,10 +231,7 @@ public final class EffortlessBuildingGTPipeCompat {
         return ((PipeBlock) pipe.getPipeBlock()).canConnect((IPipeNode) pipe, direction);
     }
 
-    private static void synchronize(Set<IPipeNode<?, ?>> pipes) {
-        for (IPipeNode<?, ?> pipe : pipes) {
-            pipe.getSyncDataHolder().resyncAllFields();
-            pipe.scheduleRenderUpdate();
-        }
+    private static void scheduleSynchronization(ServerLevel level, Set<IPipeNode<?, ?>> pipes) {
+        EffortlessBuildingGTPipeRenderSync.schedule(level, pipes);
     }
 }
