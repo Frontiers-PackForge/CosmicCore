@@ -3,7 +3,7 @@
     "loader": "gtceu:machine",
     "machine": "cosmiccore:luv_flight_diffuser",
     "variants": {
-        "recipe_logic_status=idle": {
+        "active=false,recipe_logic_status=idle,working_enabled=false": {
             "model": {
                 "parent": "gtceu:block/casings/voltage/luv",
                 "textures": {
@@ -12,7 +12,7 @@
                 }
             }
         },
-        "recipe_logic_status=suspend": {
+        "active=false,recipe_logic_status=idle,working_enabled=true": {
             "model": {
                 "parent": "gtceu:block/casings/voltage/luv",
                 "textures": {
@@ -21,7 +21,7 @@
                 }
             }
         },
-        "recipe_logic_status=waiting": {
+        "active=false,recipe_logic_status=suspend,working_enabled=false": {
             "model": {
                 "parent": "gtceu:block/casings/voltage/luv",
                 "textures": {
@@ -30,7 +30,115 @@
                 }
             }
         },
-        "recipe_logic_status=working": {
+        "active=false,recipe_logic_status=suspend,working_enabled=true": {
+            "model": {
+                "parent": "gtceu:block/casings/voltage/luv",
+                "textures": {
+                    "overlay_front": "cosmiccore:block/overlay/machine/wireless_charger/overlay_front",
+                    "overlay_front_emissive": "cosmiccore:block/overlay/machine/wireless_charger/overlay_front_emissive"
+                }
+            }
+        },
+        "active=false,recipe_logic_status=waiting,working_enabled=false": {
+            "model": {
+                "parent": "gtceu:block/casings/voltage/luv",
+                "textures": {
+                    "overlay_front": "cosmiccore:block/overlay/machine/wireless_charger/overlay_front",
+                    "overlay_front_emissive": "cosmiccore:block/overlay/machine/wireless_charger/overlay_front_emissive"
+                }
+            }
+        },
+        "active=false,recipe_logic_status=waiting,working_enabled=true": {
+            "model": {
+                "parent": "gtceu:block/casings/voltage/luv",
+                "textures": {
+                    "overlay_front": "cosmiccore:block/overlay/machine/wireless_charger/overlay_front",
+                    "overlay_front_emissive": "cosmiccore:block/overlay/machine/wireless_charger/overlay_front_emissive"
+                }
+            }
+        },
+        "active=false,recipe_logic_status=working,working_enabled=false": {
+            "model": {
+                "parent": "gtceu:block/casings/voltage/luv",
+                "textures": {
+                    "overlay_front": "cosmiccore:block/overlay/machine/wireless_charger/overlay_front",
+                    "overlay_front_emissive": "cosmiccore:block/overlay/machine/wireless_charger/overlay_front_emissive"
+                }
+            }
+        },
+        "active=false,recipe_logic_status=working,working_enabled=true": {
+            "model": {
+                "parent": "gtceu:block/casings/voltage/luv",
+                "textures": {
+                    "overlay_front": "cosmiccore:block/overlay/machine/wireless_charger/overlay_front",
+                    "overlay_front_emissive": "cosmiccore:block/overlay/machine/wireless_charger/overlay_front_emissive"
+                }
+            }
+        },
+        "active=true,recipe_logic_status=idle,working_enabled=false": {
+            "model": {
+                "parent": "gtceu:block/casings/voltage/luv",
+                "textures": {
+                    "overlay_front": "cosmiccore:block/overlay/machine/wireless_charger/overlay_front",
+                    "overlay_front_emissive": "cosmiccore:block/overlay/machine/wireless_charger/overlay_front_emissive"
+                }
+            }
+        },
+        "active=true,recipe_logic_status=idle,working_enabled=true": {
+            "model": {
+                "parent": "gtceu:block/casings/voltage/luv",
+                "textures": {
+                    "overlay_front": "cosmiccore:block/overlay/machine/wireless_charger/overlay_front",
+                    "overlay_front_emissive": "cosmiccore:block/overlay/machine/wireless_charger/overlay_front_emissive"
+                }
+            }
+        },
+        "active=true,recipe_logic_status=suspend,working_enabled=false": {
+            "model": {
+                "parent": "gtceu:block/casings/voltage/luv",
+                "textures": {
+                    "overlay_front": "cosmiccore:block/overlay/machine/wireless_charger/overlay_front",
+                    "overlay_front_emissive": "cosmiccore:block/overlay/machine/wireless_charger/overlay_front_emissive"
+                }
+            }
+        },
+        "active=true,recipe_logic_status=suspend,working_enabled=true": {
+            "model": {
+                "parent": "gtceu:block/casings/voltage/luv",
+                "textures": {
+                    "overlay_front": "cosmiccore:block/overlay/machine/wireless_charger/overlay_front",
+                    "overlay_front_emissive": "cosmiccore:block/overlay/machine/wireless_charger/overlay_front_emissive"
+                }
+            }
+        },
+        "active=true,recipe_logic_status=waiting,working_enabled=false": {
+            "model": {
+                "parent": "gtceu:block/casings/voltage/luv",
+                "textures": {
+                    "overlay_front": "cosmiccore:block/overlay/machine/wireless_charger/overlay_front",
+                    "overlay_front_emissive": "cosmiccore:block/overlay/machine/wireless_charger/overlay_front_emissive"
+                }
+            }
+        },
+        "active=true,recipe_logic_status=waiting,working_enabled=true": {
+            "model": {
+                "parent": "gtceu:block/casings/voltage/luv",
+                "textures": {
+                    "overlay_front": "cosmiccore:block/overlay/machine/wireless_charger/overlay_front",
+                    "overlay_front_emissive": "cosmiccore:block/overlay/machine/wireless_charger/overlay_front_emissive"
+                }
+            }
+        },
+        "active=true,recipe_logic_status=working,working_enabled=false": {
+            "model": {
+                "parent": "gtceu:block/casings/voltage/luv",
+                "textures": {
+                    "overlay_front": "cosmiccore:block/overlay/machine/wireless_charger/overlay_front",
+                    "overlay_front_emissive": "cosmiccore:block/overlay/machine/wireless_charger/overlay_front_emissive"
+                }
+            }
+        },
+        "active=true,recipe_logic_status=working,working_enabled=true": {
             "model": {
                 "parent": "gtceu:block/casings/voltage/luv",
                 "textures": {
