@@ -25,8 +25,6 @@ import snownee.jade.api.ui.BoxStyle;
 import snownee.jade.api.ui.IElementHelper;
 import snownee.jade.api.ui.ProgressStyle;
 
-import java.util.Locale;
-
 public enum CosmicEmberProvider implements IBlockComponentProvider, IServerDataProvider<BlockAccessor> {
 
     INSTANCE;
@@ -93,7 +91,10 @@ public enum CosmicEmberProvider implements IBlockComponentProvider, IServerDataP
         double capacity = ember.getDouble(CAPACITY);
         float fill = capacity > 0 ? (float) Math.max(0.0D, Math.min(1.0D, amount / capacity)) : 0.0F;
 
-        Component label = Component.translatable("cosmiccore.jade.ember", format(amount), format(capacity))
+        Component label = Component.translatable(
+                "cosmiccore.jade.ember",
+                CosmicJadeFormatting.fixedTwoDecimals(amount),
+                CosmicJadeFormatting.fixedTwoDecimals(capacity))
                 .withStyle(ChatFormatting.WHITE);
 
         IElementHelper helper = IElementHelper.get();
@@ -108,7 +109,9 @@ public enum CosmicEmberProvider implements IBlockComponentProvider, IServerDataP
             tooltip.add(Component.translatable("cosmiccore.jade.ember.volatile").withStyle(ChatFormatting.WHITE));
         }
         if (ember.contains(TRANSFER, Tag.TAG_DOUBLE)) {
-            tooltip.add(Component.translatable("cosmiccore.jade.ember.transfer", format(ember.getDouble(TRANSFER)))
+            tooltip.add(Component.translatable(
+                    "cosmiccore.jade.ember.transfer",
+                    CosmicJadeFormatting.fixedTwoDecimals(ember.getDouble(TRANSFER)))
                     .withStyle(ChatFormatting.GRAY));
         }
     }
@@ -126,22 +129,5 @@ public enum CosmicEmberProvider implements IBlockComponentProvider, IServerDataP
         BlockState state = accessor.getBlockState();
         return level.getCapability(EmbersCapabilities.EMBER_BLOCK_CAPABILITY, pos, state,
                 accessor.getBlockEntity(), accessor.getSide());
-    }
-
-    private static String format(double value) {
-        if (!Double.isFinite(value)) {
-            return "0";
-        }
-        if (value == Math.rint(value)) {
-            return Long.toString(Math.round(value));
-        }
-        String out = String.format(Locale.ROOT, "%.2f", value);
-        while (out.endsWith("0")) {
-            out = out.substring(0, out.length() - 1);
-        }
-        if (out.endsWith(".")) {
-            out = out.substring(0, out.length() - 1);
-        }
-        return out;
     }
 }

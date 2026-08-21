@@ -152,8 +152,8 @@ public enum PowerGridMachineProvider implements IBlockComponentProvider, IServer
         double amperage = voltage <= 0 ? 0 : euPerTick / voltage;
         return Component.translatable(
                 key,
-                value(FormattingUtil.formatNumber2Places(amperage), ChatFormatting.YELLOW),
-                value(FormattingUtil.formatNumber2Places(euPerTick), ChatFormatting.RED));
+                value(CosmicJadeFormatting.fixedTwoDecimals(amperage), ChatFormatting.YELLOW),
+                value(CosmicJadeFormatting.fixedTwoDecimals(euPerTick), ChatFormatting.RED));
     }
 
     private static Component value(String value, ChatFormatting color) {

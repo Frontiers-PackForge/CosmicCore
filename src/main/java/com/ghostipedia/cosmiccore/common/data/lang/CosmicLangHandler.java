@@ -597,6 +597,13 @@ public class CosmicLangHandler extends LangHandler {
         provider.add("cosmiccore.recipe.fieldSlam", "§fField Consumed: %sT");
         provider.add("cosmiccore.recipe.condition.titan.tooltip", "Requires Titan Reactor Tier: %s");
         provider.add("cosmiccore.multiblock.structure_tier", "Structure Tier: T%s");
+        provider.add("cosmiccore.multiblock.tier_boost.applied_by", "§fTier Boost Applied By: §e%s");
+        provider.add("cosmiccore.multiblock.tier_boost.source.single", "%sA §r%s §fEnergy Hatch");
+        provider.add("cosmiccore.multiblock.tier_boost.source.multiple", "%s× §r%s §fEnergy Hatches");
+        provider.add("cosmiccore.multiblock.tier_boost.hover",
+                "§fThis multiblock can boost its recipe tier by one level when supplied with at least 4 A of power. §7Any additional power is used to accelerate recipes rather than increase its recipe tier further.");
+        provider.add("cosmiccore.multiblock.maximum_throughput", "Maximum Throughput:");
+        provider.add("cosmiccore.multiblock.maximum_throughput.value", "%s EU/t");
         provider.add("cosmiccore.multiblock.construction_blueprint", "Construction Blueprint: %s");
         provider.add("cosmiccore.multiblock.detected_configuration", "Detected Configuration: %s");
         provider.add("cosmiccore.multiblock.configuration.core", "Base");

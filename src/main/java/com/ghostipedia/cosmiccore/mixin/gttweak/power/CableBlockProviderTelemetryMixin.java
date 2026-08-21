@@ -1,6 +1,7 @@
 package com.ghostipedia.cosmiccore.mixin.gttweak.power;
 
 import com.ghostipedia.cosmiccore.common.power.telemetry.CablePowerTelemetry;
+import com.ghostipedia.cosmiccore.integration.jade.CosmicJadeFormatting;
 
 import com.gregtechceu.gtceu.api.GTValues;
 import com.gregtechceu.gtceu.common.block.CableBlock;
@@ -103,9 +104,9 @@ public abstract class CableBlockProviderTelemetryMixin {
             double load = maxAmperage <= 0 ? 0 : currentAmperage * 100.0 / maxAmperage;
             tooltip.add(Component.translatable(
                     "cosmiccore.jade.power.cable_load",
-                    value(FormattingUtil.formatNumber2Places(currentAmperage), ChatFormatting.YELLOW),
-                    value(FormattingUtil.formatNumber2Places(averageEuPerTick), ChatFormatting.YELLOW),
-                    value(FormattingUtil.formatNumber2Places(load), ChatFormatting.GREEN)));
+                    value(CosmicJadeFormatting.fixedTwoDecimals(currentAmperage), ChatFormatting.YELLOW),
+                    value(CosmicJadeFormatting.fixedTwoDecimals(averageEuPerTick), ChatFormatting.YELLOW),
+                    value(CosmicJadeFormatting.fixedTwoDecimals(load), ChatFormatting.GREEN)));
         }
         if (shift || temperature > CableBlockEntity.getDefaultTemp()) {
             tooltip.add(Component.translatable(
