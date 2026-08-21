@@ -92,8 +92,9 @@ public enum MEComputationArrayProvider implements IBlockComponentProvider, IServ
                 .withStyle(telemetry.getBoolean(UPLINK_ONLINE) ? ChatFormatting.GREEN : ChatFormatting.RED);
         tooltip.add(Component.translatable(
                 "cosmiccore.jade.me_computation_array.buffer",
-                value(FormattingUtil.formatNumber2Places(telemetry.getDouble(STORED_POWER_EU)), ChatFormatting.AQUA),
-                value(FormattingUtil.formatNumber2Places(telemetry.getDouble(MAXIMUM_STORED_POWER_EU)),
+                value(CosmicJadeFormatting.fixedTwoDecimals(telemetry.getDouble(STORED_POWER_EU)),
+                        ChatFormatting.AQUA),
+                value(CosmicJadeFormatting.fixedTwoDecimals(telemetry.getDouble(MAXIMUM_STORED_POWER_EU)),
                         ChatFormatting.DARK_AQUA),
                 uplinkStatus));
     }

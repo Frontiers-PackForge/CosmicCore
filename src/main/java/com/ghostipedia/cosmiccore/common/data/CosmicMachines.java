@@ -480,17 +480,19 @@ public class CosmicMachines {
     }
 
     public static final MachineDefinition[] ENERGY_INPUT_HATCH_4A = registerEnergyHatches(
-            "energy_input_hatch_4a", IO.IN, 4, GTValues.tiersBetween(LV, HV));
+            "energy_input_hatch_4a", IO.IN, 4, PartAbility.INPUT_ENERGY, GTValues.tiersBetween(LV, HV));
     public static final MachineDefinition[] ENERGY_OUTPUT_HATCH_4A = registerEnergyHatches(
-            "energy_output_hatch_4a", IO.OUT, 4, GTValues.tiersBetween(ULV, HV));
+            "energy_output_hatch_4a", IO.OUT, 4, PartAbility.OUTPUT_ENERGY, GTValues.tiersBetween(ULV, HV));
     public static final MachineDefinition[] ENERGY_INPUT_HATCH_16A = registerEnergyHatches(
-            "energy_input_hatch_16a", IO.IN, 16, GTValues.tiersBetween(LV, HV));
+            "energy_input_hatch_16a", IO.IN, 16, PartAbility.INPUT_ENERGY, GTValues.tiersBetween(LV, HV));
     public static final MachineDefinition[] ENERGY_OUTPUT_HATCH_16A = registerEnergyHatches(
-            "energy_output_hatch_16a", IO.OUT, 16, GTValues.tiersBetween(ULV, HV));
+            "energy_output_hatch_16a", IO.OUT, 16, PartAbility.OUTPUT_ENERGY, GTValues.tiersBetween(ULV, HV));
     public static final MachineDefinition[] ENERGY_INPUT_HATCH_64A = registerEnergyHatches(
-            "energy_input_hatch_64a", IO.IN, 64, GTValues.tiersBetween(LV, HV));
+            "energy_input_hatch_64a", IO.IN, 64, PartAbility.SUBSTATION_INPUT_ENERGY,
+            GTValues.tiersBetween(LV, HV));
     public static final MachineDefinition[] ENERGY_OUTPUT_HATCH_64A = registerEnergyHatches(
-            "energy_output_hatch_64a", IO.OUT, 64, GTValues.tiersBetween(LV, HV));
+            "energy_output_hatch_64a", IO.OUT, 64, PartAbility.SUBSTATION_OUTPUT_ENERGY,
+            GTValues.tiersBetween(LV, HV));
 
     static {
         REGISTRATE.creativeModeTab(CosmicCreativeModeTabs.COSMIC_CORE);
@@ -599,11 +601,17 @@ public class CosmicMachines {
                 tiers);
     }
 
-    private static MachineDefinition[] registerEnergyHatches(String name, IO io, int amperage, int... tiers) {
+    private static MachineDefinition[] registerEnergyHatches(String name, IO io, int amperage, PartAbility ability,
+                                                             int... tiers) {
         String direction = io == IO.IN ? "input" : "output";
         String tooltipDirection = io == IO.IN ? "in" : "out";
-        String hatchName = io == IO.IN ? "Energy Hatch" : "Dynamo Hatch";
-        PartAbility ability = io == IO.IN ? PartAbility.INPUT_ENERGY : PartAbility.OUTPUT_ENERGY;
+        boolean substation = ability == PartAbility.SUBSTATION_INPUT_ENERGY ||
+                ability == PartAbility.SUBSTATION_OUTPUT_ENERGY;
+        String hatchName = (substation ? "Substation " : "") +
+                (io == IO.IN ? "Energy Hatch" : "Dynamo Hatch");
+        String tooltipKey = substation ?
+                "gtceu.machine.substation_hatch." + direction + ".tooltip" :
+                "gtceu.machine.energy_hatch." + direction + "_hi_amp.tooltip";
         long capacityMultiplier = io == IO.IN ? 16L : 64L;
         return registerTieredMachines(name,
                 (holder, tier) -> new EnergyHatchPartMachine(holder, tier, io, amperage),
@@ -619,7 +627,7 @@ public class CosmicMachines {
                                         amperage),
                                 Component.translatable("gtceu.universal.tooltip.energy_storage_capacity",
                                         FormattingUtil.formatNumbers(V[tier] * capacityMultiplier * amperage)),
-                                Component.translatable("gtceu.machine.energy_hatch." + direction + "_hi_amp.tooltip"))
+                                Component.translatable(tooltipKey))
                         .overlayTieredHullModel(GTCEu.id(
                                 "block/machine/part/energy_" + direction + "_hatch_" + amperage + "a"))
                         .register(),

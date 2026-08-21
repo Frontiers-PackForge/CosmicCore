@@ -207,6 +207,8 @@
     "gttweak.power.InsulationTwelvefoldMixin",
     "gttweak.power.LosslessCableTooltipMixin",
     "gttweak.power.LosslessEnergyNetTransferMixin",
+    "gttweak.power.MultiblockRecipeTierBoostMixin",
+    "gttweak.power.MultiblockRecipeTierBoostUiMixin",
     "gttweak.power.WireCombiningHandlerTwelvefoldMixin",
     "gttweak.power.WireRecipeHandlerTwelvefoldMixin",
     "gttweak.power.steam.HighPressureSteamTerminalConversionMixin",

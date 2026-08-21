@@ -40,11 +40,11 @@ import static com.gregtechceu.gtceu.common.data.GTRecipeTypes.MIXER_RECIPES;
 
 public class CosmicCoreOreRecipeHandler {
 
-    private static final int REFINE_EUT = 8;
+    private static final long ORE_PROCESSING_VOLTAGE = GTValues.V[GTValues.LV];
+    private static final int ORE_PROCESSING_AMPS = 1;
     private static final int CHUNK_MACERATOR_EUT = 2;
     private static final int CHUNK_MACERATOR_DURATION = 600;
-    private static final int CHUNK_POWDERIZER_EUT = 8;
-    private static final int CHUNK_POWDERIZER_DURATION = 300;
+    private static final int POWDERIZER_DURATION = 300;
 
     public static void bundleInit(RecipeOutput provider, Material material) {
         List<Material> outputs = CosmicBundleMaterials.outputsOf(material);
@@ -70,6 +70,11 @@ public class CosmicCoreOreRecipeHandler {
                 .outputItems(crushedStack.copyWithCount(2))
                 .duration(400).EUt(2)
                 .save(provider);
+        POWDERIZER.recipeBuilder("powderize_raw_" + material.getName() + "_to_crushed")
+                .inputItems(rawOre, material)
+                .outputItems(crushedStack.copyWithCount(2))
+                .duration(POWDERIZER_DURATION).EUt(ORE_PROCESSING_VOLTAGE, ORE_PROCESSING_AMPS)
+                .save(provider);
     }
 
     private static void refineChain(RecipeOutput provider, Material material) {
@@ -89,7 +94,7 @@ public class CosmicCoreOreRecipeHandler {
                 .inputItems(in, material)
                 .inputFluids(Water.getFluid(water))
                 .outputItems(outStack)
-                .duration(duration).EUt(REFINE_EUT)
+                .duration(duration).EUt(ORE_PROCESSING_VOLTAGE, ORE_PROCESSING_AMPS)
                 .save(provider);
     }
 
@@ -101,7 +106,7 @@ public class CosmicCoreOreRecipeHandler {
                 .inputFluids(Water.getFluid(1000))
                 .inputFluids(CosmicMaterials.PolyethyleneOxide.getFluid(10))
                 .outputItems(outStack)
-                .duration(1000).EUt(REFINE_EUT)
+                .duration(1000).EUt(ORE_PROCESSING_VOLTAGE, ORE_PROCESSING_AMPS)
                 .save(provider);
     }
 
@@ -142,14 +147,14 @@ public class CosmicCoreOreRecipeHandler {
                 .inputFluids(CosmicCrystallizationMaterials.CannonseedCrystallizationMedium.getFluid(50))
                 .outputItems(CosmicItems.STRIPPED_NYCTOPHYTE_MEDIA.asStack())
                 .outputFluids(slurry.getFluid(50))
-                .duration(160).EUt(16)
+                .duration(160).EUt(ORE_PROCESSING_VOLTAGE, ORE_PROCESSING_AMPS)
                 .save(provider);
 
         DISSOLUTION_VAT.recipeBuilder("crystallize_" + material.getName() + "_ore_chunk")
                 .inputFluids(slurry.getFluid(50))
                 .outputItems(crystallized)
                 .outputFluids(CosmicCrystallizationMaterials.CannonseedCrystallizationMedium.getFluid(25))
-                .duration(600).EUt(16)
+                .duration(600).EUt(ORE_PROCESSING_VOLTAGE, ORE_PROCESSING_AMPS)
                 .save(provider);
     }
 
@@ -196,7 +201,7 @@ public class CosmicCoreOreRecipeHandler {
         POWDERIZER.recipeBuilder(namePrefix + material.getName())
                 .inputItems(in, material)
                 .outputItems(outStack)
-                .duration(duration).EUt(REFINE_EUT)
+                .duration(duration).EUt(ORE_PROCESSING_VOLTAGE, ORE_PROCESSING_AMPS)
                 .save(provider);
     }
 
@@ -215,7 +220,7 @@ public class CosmicCoreOreRecipeHandler {
         }
         if (emitted == 0) return;
         builder.duration(CompositeOreSortingPlan.SORT_TIME_PER_TYPE * emitted)
-                .EUt(CompositeOreSortingPlan.SORT_EUT).save(provider);
+                .EUt(CompositeOreSortingPlan.SORT_VOLTAGE, CompositeOreSortingPlan.SORT_AMPS).save(provider);
     }
 
     private static ItemStack chunkOf(Material mineral) {
@@ -234,7 +239,7 @@ public class CosmicCoreOreRecipeHandler {
         POWDERIZER.recipeBuilder("powderize_chunk_" + mineral.getName())
                 .inputItems(oreChunk, mineral)
                 .outputItems(dustStack)
-                .duration(CHUNK_POWDERIZER_DURATION).EUt(CHUNK_POWDERIZER_EUT)
+                .duration(POWDERIZER_DURATION).EUt(ORE_PROCESSING_VOLTAGE, ORE_PROCESSING_AMPS)
                 .save(provider);
     }
 
