@@ -1,0 +1,8 @@
+{
+    "parent": "minecraft:block/cube_bottom_top",
+    "textures": {
+        "bottom": "cosmiccore:block/capacitor/empty_tier_0_capacitor_top",
+        "side": "cosmiccore:block/capacitor/empty_tier_0_capacitor_side",
+        "top": "cosmiccore:block/capacitor/empty_tier_0_capacitor_top"
+    }
+}

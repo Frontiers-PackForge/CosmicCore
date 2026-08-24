@@ -12,7 +12,6 @@ import com.ghostipedia.cosmiccore.common.machine.multiblock.multi.logic.bloomwyr
 import com.ghostipedia.cosmiccore.common.machine.multiblock.multi.logic.bloomwyrm.SculkBiochamberMachine;
 import com.ghostipedia.cosmiccore.gtbridge.CosmicRecipeTypes;
 
-import com.gregtechceu.gtceu.api.GTValues;
 import com.gregtechceu.gtceu.api.data.RotationState;
 import com.gregtechceu.gtceu.api.machine.MachineDefinition;
 import com.gregtechceu.gtceu.api.machine.MultiblockMachineDefinition;
@@ -103,11 +102,8 @@ public final class BloomwyrmSystem {
 
     private static MachineDefinition[] bloomwyrmEnergyInputs() {
         return Stream.of(
-                CosmicMachines.BLOOMWYRM_POWER_ROOT,
-                new MachineDefinition[] {
-                        GTMachines.ENERGY_INPUT_HATCH[GTValues.LV],
-                        GTMachines.ENERGY_INPUT_HATCH[GTValues.MV],
-                        GTMachines.ENERGY_INPUT_HATCH[GTValues.HV] },
+                CosmicMachines.ENERGY_INPUT_HATCH_4A,
+                CosmicMachines.ENERGY_INPUT_HATCH_16A,
                 GTMachines.ENERGY_INPUT_HATCH_4A,
                 GTMachines.ENERGY_INPUT_HATCH_16A)
                 .flatMap(Arrays::stream)

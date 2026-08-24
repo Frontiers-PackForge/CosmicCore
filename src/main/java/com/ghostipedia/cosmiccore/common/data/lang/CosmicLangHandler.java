@@ -99,6 +99,9 @@ public class CosmicLangHandler extends LangHandler {
                 "Moves exact quantities of fluids between adjacent tanks.");
         provider.add("cosmiccore.universal.tooltip.item_transfer_rate", "Transfer Rate: %s items/s");
         provider.add("cosmiccore.universal.tooltip.fluid_transfer_rate", "Transfer Rate: %s mB/t");
+        provider.add("cosmiccore.gui.factory_gauge.promise_limit", "Promise Limit");
+        provider.add("cosmiccore.gui.factory_gauge.promise_limit.none", "Promise Limit: Unlimited");
+        provider.add("cosmiccore.gui.factory_gauge.place_fluid", "Place a fluid to monitor");
         provider.add("tagprefix.wire_gt_twelve", "12x %s Wire");
         provider.add("tagprefix.cable_gt_twelve", "12x %s Cable");
 
@@ -466,9 +469,14 @@ public class CosmicLangHandler extends LangHandler {
                 "§7Can Insert and Extract from your wireless networked linked to your §aPower Substation§r");
 
         multiLang(provider, "cosmiccore.machine.capacitor_array.tooltip",
-                "§7Local Dense Power Storage§r",
-                "§7Can use any capacitor and be expanded vertically up to 18 times§r",
-                "§7Accepts §6Laser Hatches§r");
+                "§7Local power storage for §aEarly power grids§7.",
+                "§7Stacks §f1-5§7 battery layers with §f9§7 capacitor batteries per layer.§r",
+                "§7Does not accept laser hatches, but accepts up to §a64A §7Energy/Dynamo hatches.§r");
+        provider.add("cosmiccore.multiblock.power_capacitor.local_buffer", "Local Buffer");
+        provider.add("cosmiccore.multiblock.pattern.power_capacitor_batteries",
+                "Use Empty Tier 0 or LV-HV Capacitor Batteries");
+        provider.add("cosmiccore.block.power_capacitor.tooltip_empty",
+                "Fills an unused battery position in a Power Capacitor");
 
         multiLang(provider, "cosmiccore.machine.me_computation_array.tooltip",
                 "§aStorage Size§r : §b%s§r component bays.",
@@ -1767,8 +1775,6 @@ public class CosmicLangHandler extends LangHandler {
                 "Supplies shared §eEU§f, §aBiopower§f, and §3Bloomwyrm Charge§f.");
         provider.add("cosmiccore.machine.bloomwyrm_heart.tooltip.2",
                 "Link other units with a §6data stick§f within §b64§f blocks.");
-        provider.add("cosmiccore.machine.bloomwyrm_power_root.tooltip",
-                "Only usable by the Bloomwyrm Heart.");
         provider.add("cosmiccore.machine.abyssal_culture_vat.tooltip.0",
                 "Cultivates abyssal samples into §aBiopower§f and §3Bloomwyrm Charge§f.");
         provider.add("cosmiccore.machine.abyssal_culture_vat.tooltip.1",

@@ -68,6 +68,15 @@ public class CosmicPredicates {
                 .addTooltips(Component.translatable("gtceu.multiblock.pattern.error.coils"));
     }
 
+    public static PatternPredicate powerCapacitorBatteries() {
+        return Predicates.blocks("PowerCapacitorBatteries",
+                CosmicBlocks.LV_CAPACITOR_BATTERY.get(),
+                CosmicBlocks.MV_CAPACITOR_BATTERY.get(),
+                CosmicBlocks.HV_CAPACITOR_BATTERY.get(),
+                CosmicBlocks.EMPTY_TIER_0_CAPACITOR.get())
+                .addTooltips(Component.translatable("cosmiccore.multiblock.pattern.power_capacitor_batteries"));
+    }
+
     public static PatternPredicate starLadderModules() {
         return new PatternPredicate("Star Ladder Modules", worldState -> {
             var blockState = worldState.getBlockState();

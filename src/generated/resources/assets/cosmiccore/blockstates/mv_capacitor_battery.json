@@ -1,0 +1,7 @@
+{
+    "variants": {
+        "": {
+            "model": "cosmiccore:block/mv_capacitor_battery"
+        }
+    }
+}
