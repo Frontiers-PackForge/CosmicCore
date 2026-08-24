@@ -3,14 +3,14 @@
     "loader": "gtceu:machine",
     "machine": "cosmiccore:capacitor_array",
     "texture_overrides": {
-        "all": "gtceu:block/casings/solid/machine_casing_palladium_substation"
+        "all": "cosmiccore:block/casings/solid/somarust_casing"
     },
     "variants": {
         "recipe_logic_status=idle": {
             "model": {
                 "parent": "gtceu:block/machine/template/cube_all/sided",
                 "textures": {
-                    "all": "gtceu:block/casings/solid/machine_casing_palladium_substation",
+                    "all": "cosmiccore:block/casings/solid/somarust_casing",
                     "overlay_front": "gtceu:block/multiblock/power_substation/overlay_front"
                 }
             }
@@ -19,7 +19,7 @@
             "model": {
                 "parent": "gtceu:block/machine/template/cube_all/sided",
                 "textures": {
-                    "all": "gtceu:block/casings/solid/machine_casing_palladium_substation",
+                    "all": "cosmiccore:block/casings/solid/somarust_casing",
                     "overlay_front": "gtceu:block/multiblock/power_substation/overlay_front"
                 }
             }
@@ -28,7 +28,7 @@
             "model": {
                 "parent": "gtceu:block/machine/template/cube_all/sided",
                 "textures": {
-                    "all": "gtceu:block/casings/solid/machine_casing_palladium_substation",
+                    "all": "cosmiccore:block/casings/solid/somarust_casing",
                     "overlay_front": "gtceu:block/multiblock/power_substation/overlay_front_active",
                     "overlay_front_emissive": "gtceu:block/multiblock/power_substation/overlay_front_active_emissive"
                 }
@@ -38,7 +38,7 @@
             "model": {
                 "parent": "gtceu:block/machine/template/cube_all/sided",
                 "textures": {
-                    "all": "gtceu:block/casings/solid/machine_casing_palladium_substation",
+                    "all": "cosmiccore:block/casings/solid/somarust_casing",
                     "overlay_front": "gtceu:block/multiblock/power_substation/overlay_front_active",
                     "overlay_front_emissive": "gtceu:block/multiblock/power_substation/overlay_front_active_emissive"
                 }

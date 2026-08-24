@@ -37,7 +37,8 @@ public final class BloomwyrmDisplayUI {
         list.children(machine.getWidgetsForDisplay(syncManager));
         panel.child(list.left(3).top(3));
         if (hasParallelControl && machine instanceof BloomwyrmUnitMachine unit) {
-            IntSyncValue desiredParallel = new IntSyncValue(unit::getDesiredParallel, unit::setDesiredParallel);
+            IntSyncValue desiredParallel = new IntSyncValue(unit::getDesiredParallel, unit::setDesiredParallel)
+                    .allowC2S();
             syncManager.syncValue("bloomwyrm_unit_parallel_control", desiredParallel);
             panel.child(Flow.row()
                     .width(WIDTH - 10)

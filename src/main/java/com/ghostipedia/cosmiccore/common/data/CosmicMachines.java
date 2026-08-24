@@ -8,12 +8,14 @@ import com.ghostipedia.cosmiccore.api.machine.part.CosmicPartAbility;
 import com.ghostipedia.cosmiccore.api.machine.part.DroneMaintenanceInterfacePartMachine;
 import com.ghostipedia.cosmiccore.api.machine.part.SteamFluidHatchPartMachine;
 import com.ghostipedia.cosmiccore.api.machine.part.WirelessEnergyHatchPartMachine;
+import com.ghostipedia.cosmiccore.api.pattern.CosmicPredicates;
 import com.ghostipedia.cosmiccore.api.registries.CosmicRegistration;
 import com.ghostipedia.cosmiccore.common.ae2gt.CosmicStockingBusPartMachine;
 import com.ghostipedia.cosmiccore.common.ae2gt.CosmicStockingHatchPartMachine;
 import com.ghostipedia.cosmiccore.common.block.debug.CreativeThermiaContainerMachine;
 import com.ghostipedia.cosmiccore.common.machine.FlightDiffuserMachine;
 import com.ghostipedia.cosmiccore.common.machine.WirelessChargerMachine;
+import com.ghostipedia.cosmiccore.common.machine.multiblock.multi.PowerCapacitorMachine;
 import com.ghostipedia.cosmiccore.common.machine.multiblock.multi.VacuumDistillationTower;
 import com.ghostipedia.cosmiccore.common.machine.multiblock.multi.WirelessDataBankMachine;
 import com.ghostipedia.cosmiccore.common.machine.multiblock.multi.logic.MEComputationComponentTier;
@@ -65,6 +67,7 @@ import com.gregtechceu.gtceu.utils.memoization.GTMemoizer;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
 
 import it.unimi.dsi.fastutil.Pair;
 
@@ -141,27 +144,6 @@ public class CosmicMachines {
     public static final MachineDefinition[] WIRELESS_ENERGY_OUTPUT_DYNAMO_16A = registerWirelessEnergyTieredHatch(
             "16a_wireless_energy_dynamo", "16A Wireless Energy Dynamo", "wireless_energy_16a",
             IO.OUT, HIGH_TIERS, 16, PartAbility.OUTPUT_ENERGY);
-
-    public static final MachineDefinition[] BLOOMWYRM_POWER_ROOT = registerTieredMachines(
-            "bloomwyrm_power_root",
-            (holder, tier) -> new EnergyHatchPartMachine(holder, tier, IO.IN, 4),
-            (tier, builder) -> builder
-                    .langValue(VNF[tier] + " Bloomwyrm Power Root")
-                    .rotationState(RotationState.ALL)
-                    .abilities(CosmicPartAbility.BLOOMWYRM_POWER_INPUT)
-                    .modelProperty(IS_FORMED, false)
-                    .tooltips(
-                            Component.translatable("gtceu.universal.tooltip.voltage_in",
-                                    FormattingUtil.formatNumbers(V[tier]), VNF[tier]),
-                            Component.translatable("gtceu.universal.tooltip.amperage_in", 4),
-                            Component.translatable("gtceu.universal.tooltip.energy_storage_capacity",
-                                    FormattingUtil.formatNumbers(
-                                            EnergyHatchPartMachine.getHatchEnergyCapacity(tier, 4))),
-                            Component.translatable("gtceu.machine.energy_hatch.input_hi_amp.tooltip"),
-                            Component.translatable("cosmiccore.machine.bloomwyrm_power_root.tooltip"))
-                    .overlayTieredHullModel(GTCEu.id("block/machine/part/energy_input_hatch_4a"))
-                    .register(),
-            LV, MV, HV);
 
     public static final MachineDefinition[] NAQUAHINE_MINI_REACTOR = CosmicMachinesUtils.registerSimpleGenerator(
             "naquahine_mini_reactor",
@@ -962,27 +944,35 @@ public class CosmicMachines {
                     CosmicCore.id("block/multiblock/wireless_data_transmitter"))
             .register();
     public static final MultiblockMachineDefinition LOCAL_POWER_CAPACITOR = REGISTRATE
-            .multiblock("capacitor_array", PowerSubstationMachine::new)
-            .langValue("Capacitor Array")
+            .multiblock("capacitor_array", PowerCapacitorMachine::new)
+            .langValue("Power Capacitor")
             .rotationState(RotationState.NON_Y_AXIS)
-            .appearanceBlock(CASING_PALLADIUM_SUBSTATION)
+            .appearanceBlock(SOMARUST_CASING)
             .recipeType(GTRecipeTypes.DUMMY_RECIPES)
             .tooltips(Component.translatable("cosmiccore.machine.capacitor_array.tooltip.0"),
-                    Component.translatable("cosmiccore.machine.capacitor_array.tooltip.1"))
-            .pattern(definition -> MultiblockPatternBuilder.start(RIGHT, BACK, UP)
-                    .slice("ACA", "AAA", "AAA")
-                    .sliceRepeatable(1, 11, "ABA", "BDB", "ABA")
-                    .slice("AAA", "AAA", "AAA")
-                    .where('C', controller(blocks(definition.getBlock())))
-                    .where('A', blocks(CASING_PALLADIUM_SUBSTATION.get())
-                            .or(abilities(PartAbility.INPUT_ENERGY, PartAbility.OUTPUT_ENERGY,
-                                    PartAbility.SUBSTATION_INPUT_ENERGY,
-                                    PartAbility.SUBSTATION_OUTPUT_ENERGY)
-                                    .or(abilities(PartAbility.MAINTENANCE).setExactLimit(1))))
-                    .where('D', Predicates.powerSubstationBatteries())
-                    .where('B', blocks(CASING_LAMINATED_GLASS.get()))
+                    Component.translatable("cosmiccore.machine.capacitor_array.tooltip.1"),
+                    Component.translatable("cosmiccore.machine.capacitor_array.tooltip.2"))
+            .pattern(definition -> MultiblockPatternBuilder.start(
+                    RelativeDirection.BACK,
+                    RelativeDirection.UP,
+                    RelativeDirection.LEFT)
+                    .slice(" BBB ", "BBBBB", "BBBBB", "BBBBB", " BBB ")
+                    .sliceRepeatable(1, 5, " BBB ", "BCCCB", "BCCCB", "BCCCB", " BBB ")
+                    .slice(" AAA ", "AAAAA", "AAAAA", "AAAAA", " AAA ")
+                    .slice(" AAA ", "AAAAA", "AAAAA", "AAAAA", " ADA ")
+                    .where(' ', air())
+                    .where('D', controller(blocks(definition.getBlock())))
+                    .where('A', blocks(SOMARUST_CASING.get())
+                            .or(abilities(PartAbility.INPUT_ENERGY, PartAbility.SUBSTATION_INPUT_ENERGY)
+                                    .setMinGlobalLimited(1)
+                                    .setMaxGlobalLimited(20).setPreviewCount(1))
+                            .or(abilities(PartAbility.OUTPUT_ENERGY, PartAbility.SUBSTATION_OUTPUT_ENERGY)
+                                    .setMinGlobalLimited(1)
+                                    .setMaxGlobalLimited(20).setPreviewCount(1)))
+                    .where('B', blocks(Blocks.TINTED_GLASS))
+                    .where('C', CosmicPredicates.powerCapacitorBatteries())
                     .build())
-            .workableCasingModel(GTCEu.id("block/casings/solid/machine_casing_palladium_substation"),
+            .workableCasingModel(CosmicCore.id("block/casings/solid/somarust_casing"),
                     GTCEu.id("block/multiblock/power_substation"))
             .register();
 

@@ -1,0 +1,8 @@
+{
+    "parent": "minecraft:block/cube_bottom_top",
+    "textures": {
+        "bottom": "cosmiccore:block/capacitor/hv_capacitor_battery_top",
+        "side": "cosmiccore:block/capacitor/hv_capacitor_battery_side",
+        "top": "cosmiccore:block/capacitor/hv_capacitor_battery_top"
+    }
+}

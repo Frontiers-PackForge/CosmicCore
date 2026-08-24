@@ -10,6 +10,8 @@ import com.ghostipedia.cosmiccore.common.block.LargeArcaniteClusterBlock;
 import com.ghostipedia.cosmiccore.common.block.MagnetBlock;
 import com.ghostipedia.cosmiccore.common.block.MurkFloraBlock;
 import com.ghostipedia.cosmiccore.common.block.MurkKelpBlock;
+import com.ghostipedia.cosmiccore.common.block.PowerCapacitorBatteryBlock;
+import com.ghostipedia.cosmiccore.common.block.PowerCapacitorBatteryData;
 import com.ghostipedia.cosmiccore.common.blockentity.CosmicCoilBlockEntity;
 import com.ghostipedia.cosmiccore.common.data.tag.block.CosmicBlockTags;
 import com.ghostipedia.cosmiccore.common.dimension.FirmamentPortalBlock;
@@ -537,6 +539,15 @@ public class CosmicBlocks {
     public static final BlockEntry<Block> SOMARUST_CASING = createCasingBlock(
             "somarust_casing",
             CosmicCore.id("block/casings/solid/somarust_casing"));
+
+    public static final BlockEntry<PowerCapacitorBatteryBlock> EMPTY_TIER_0_CAPACITOR = createPowerCapacitorBattery(
+            PowerCapacitorBatteryData.EMPTY_TIER_0, "Empty Tier 0 Capacitor");
+    public static final BlockEntry<PowerCapacitorBatteryBlock> LV_CAPACITOR_BATTERY = createPowerCapacitorBattery(
+            PowerCapacitorBatteryData.LV_CAPACITOR, "LV Capacitor Battery");
+    public static final BlockEntry<PowerCapacitorBatteryBlock> MV_CAPACITOR_BATTERY = createPowerCapacitorBattery(
+            PowerCapacitorBatteryData.MV_CAPACITOR, "MV Capacitor Battery");
+    public static final BlockEntry<PowerCapacitorBatteryBlock> HV_CAPACITOR_BATTERY = createPowerCapacitorBattery(
+            PowerCapacitorBatteryData.HV_CAPACITOR, "HV Capacitor Battery");
 
     public static final BlockEntry<Block> SOUL_MUTED_CASING = createCasingBlock(
             "soul_muted_casing",
@@ -1160,6 +1171,28 @@ public class CosmicBlocks {
                 .register();
         GTCEuAPI.HEATING_COILS.put(coilType, coilBlock);
         return coilBlock;
+    }
+
+    private static BlockEntry<PowerCapacitorBatteryBlock> createPowerCapacitorBattery(
+                                                                                      PowerCapacitorBatteryData data,
+                                                                                      String lang) {
+        return REGISTRATE
+                .block(data.getBatteryName(), properties -> new PowerCapacitorBatteryBlock(properties, data))
+                .lang(lang)
+                .initialProperties(() -> Blocks.IRON_BLOCK)
+                .properties(properties -> properties.isValidSpawn((state, level, pos, entityType) -> false))
+                .blockstate((context, provider) -> {
+                    ResourceLocation side = CosmicCore.id(
+                            "block/capacitor/" + data.getBatteryName() + "_side");
+                    ResourceLocation top = CosmicCore.id(
+                            "block/capacitor/" + data.getBatteryName() + "_top");
+                    provider.simpleBlock(context.get(), provider.models().cubeBottomTop(
+                            context.getName(), side, top, top));
+                })
+                .tag(CustomTags.MINEABLE_WITH_CONFIG_VALID_PICKAXE_WRENCH)
+                .item(BlockItem::new)
+                .build()
+                .register();
     }
 
     private static BlockEntry<CoilBlock> createCoilBlockWithEntity(ICoilType coilType,
