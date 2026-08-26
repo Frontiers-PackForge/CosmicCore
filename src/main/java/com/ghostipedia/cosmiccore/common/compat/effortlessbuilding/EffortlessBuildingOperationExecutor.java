@@ -3,6 +3,7 @@ package com.ghostipedia.cosmiccore.common.compat.effortlessbuilding;
 import com.ghostipedia.cosmiccore.CosmicCore;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.item.ItemEntity;
@@ -28,7 +29,7 @@ public final class EffortlessBuildingOperationExecutor {
             EffortlessBuildingBlockChange change = entry.getValue();
             boolean dropsConsumed = false;
             try {
-                if (!change.after().matches(level, pos)) continue;
+                if (!matchesAfter(level, pos, change)) continue;
                 if (!player.isCreative()) {
                     if (!canConsumeAll(player, change.displacedDrops())) continue;
                     consumeAll(player, change.displacedDrops());
@@ -67,7 +68,7 @@ public final class EffortlessBuildingOperationExecutor {
                     consumed = consumeExact(player, change.placedItem());
                     if (!consumed) continue;
                 }
-                if (!change.after().restore(level, pos)) {
+                if (!restoreAfter(player, level, pos, change)) {
                     restoreQuietly(level, pos, change.before());
                     if (consumed) giveOrDrop(player, change.placedItem());
                     continue;
@@ -160,6 +161,25 @@ public final class EffortlessBuildingOperationExecutor {
         } catch (RuntimeException exception) {
             CosmicCore.LOGGER.error("Effortless Building operation rollback failed at {}", pos, exception);
         }
+    }
+
+    private static boolean matchesAfter(
+                                        ServerLevel level, BlockPos pos,
+                                        EffortlessBuildingBlockChange change) {
+        if (EffortlessBuildingAE2CableCompat.isCableItem(change.placedItem())) {
+            return EffortlessBuildingAE2CableCompat.matchesUnmodifiedCable(level, pos, change.placedItem());
+        }
+        return change.after().matches(level, pos);
+    }
+
+    private static boolean restoreAfter(
+                                        ServerPlayer player, ServerLevel level, BlockPos pos,
+                                        EffortlessBuildingBlockChange change) {
+        if (EffortlessBuildingAE2CableCompat.isCableItem(change.placedItem())) {
+            return EffortlessBuildingAE2CableCompat.place(
+                    player, level, pos, Direction.UP, change.placedItem());
+        }
+        return change.after().restore(level, pos);
     }
 
     public record Result(int changed, Set<BlockPos> positions) {

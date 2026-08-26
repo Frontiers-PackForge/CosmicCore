@@ -73,6 +73,12 @@ public class CosmicCoreMixinPlugin implements IMixinConfigPlugin {
                         "de/keksuccino/drippyloadingscreen/mixin/mixins/common/client/MixinLoadingOverlay.class"),
                 Map.entry(".undergarden.", "quek/undergarden/event/UthericInfectionEvents.class"));
         probes.forEach((token, resource) -> GATES.put(token, loader.getResource(resource) != null));
+        GATES.put(
+                ".deployer.",
+                loader.getResource("net/liukrast/deployer/lib/logistics/board/AbstractPanelBehaviour.class") != null);
+        GATES.put(
+                ".repackaged.",
+                loader.getResource("net/liukrast/repackaged/content/fluid/FluidPanelBehaviour.class") != null);
         GATES.put(".aeroschema.", loader.getResource(AERONAUTICS_MARKER) != null);
         GATES.put(
                 ".qualityfoodultimine.",

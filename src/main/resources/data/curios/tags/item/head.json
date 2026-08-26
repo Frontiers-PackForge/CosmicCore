@@ -2,6 +2,7 @@
   "values": [
     "cosmiccore:space_radio",
     "cosmiccore:simple_rebreather",
-    "cosmiccore:pressurized_rebreather"
+    "cosmiccore:pressurized_rebreather",
+    "cosmiccore:wireless_pda"
   ]
 }

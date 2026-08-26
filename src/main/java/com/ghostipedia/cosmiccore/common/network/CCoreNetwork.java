@@ -9,6 +9,8 @@ import com.ghostipedia.cosmiccore.common.network.packet.DeedPresentationPacket;
 import com.ghostipedia.cosmiccore.common.network.packet.DeedSyncPacket;
 import com.ghostipedia.cosmiccore.common.network.packet.EffortlessBuildingAE2CountQueryPacket;
 import com.ghostipedia.cosmiccore.common.network.packet.EffortlessBuildingAE2CountSyncPacket;
+import com.ghostipedia.cosmiccore.common.network.packet.FactoryGaugeFluidSelectionPacket;
+import com.ghostipedia.cosmiccore.common.network.packet.FactoryGaugePromiseLimitPacket;
 import com.ghostipedia.cosmiccore.common.network.packet.FirmamentTideHudPacket;
 import com.ghostipedia.cosmiccore.common.network.packet.MirrorWeavePacket;
 import com.ghostipedia.cosmiccore.common.network.packet.MurkbloomDevImmunityPacket;
@@ -23,6 +25,7 @@ import com.ghostipedia.cosmiccore.common.network.packet.SyncFoodDataPacket;
 import com.ghostipedia.cosmiccore.common.network.packet.SyncOxygenBarPacket;
 import com.ghostipedia.cosmiccore.common.network.packet.SyncPredictedVeinsPacket;
 import com.ghostipedia.cosmiccore.common.network.packet.SyncTimeBarPacket;
+import com.ghostipedia.cosmiccore.common.network.packet.SyncWirelessPDAHudPacket;
 
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.server.level.ServerPlayer;
@@ -32,7 +35,7 @@ import net.neoforged.neoforge.network.registration.PayloadRegistrar;
 
 public class CCoreNetwork {
 
-    private static final String PROTOCOL_VERSION = "1.14.0";
+    private static final String PROTOCOL_VERSION = "1.16.0";
 
     public static void sendToServer(CustomPacketPayload packet) {
         PacketDistributor.sendToServer(packet);
@@ -63,6 +66,8 @@ public class CCoreNetwork {
                 FirmamentTideHudPacket::execute);
         registrar.playToClient(EffortlessBuildingAE2CountSyncPacket.TYPE, EffortlessBuildingAE2CountSyncPacket.CODEC,
                 EffortlessBuildingAE2CountSyncPacket::execute);
+        registrar.playToClient(SyncWirelessPDAHudPacket.TYPE, SyncWirelessPDAHudPacket.CODEC,
+                SyncWirelessPDAHudPacket::execute);
         DeedQuestCompatBridge.registerPayloads(registrar);
 
         registrar.playToServer(DashPacket.TYPE, DashPacket.CODEC, DashPacket::execute);
@@ -78,6 +83,10 @@ public class CCoreNetwork {
                 SetMultiblockStructureTierPacket::execute);
         registrar.playToServer(EffortlessBuildingAE2CountQueryPacket.TYPE, EffortlessBuildingAE2CountQueryPacket.CODEC,
                 EffortlessBuildingAE2CountQueryPacket::execute);
+        registrar.playToServer(FactoryGaugePromiseLimitPacket.TYPE, FactoryGaugePromiseLimitPacket.CODEC,
+                FactoryGaugePromiseLimitPacket::execute);
+        registrar.playToServer(FactoryGaugeFluidSelectionPacket.TYPE, FactoryGaugeFluidSelectionPacket.CODEC,
+                FactoryGaugeFluidSelectionPacket::execute);
 
         registrar.playToServer(StarLadderUplinkPackets.UplinkActionPacket.TYPE,
                 StarLadderUplinkPackets.UplinkActionPacket.CODEC,

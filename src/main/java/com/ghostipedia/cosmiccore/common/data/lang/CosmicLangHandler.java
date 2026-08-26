@@ -929,6 +929,15 @@ public class CosmicLangHandler extends LangHandler {
         provider.add("cosmic.gui.wireless.energy.location.format", "%s : x=%d y=%d z=%d");
         provider.add("cosmic.gui.wireless.energy.no.capacitor", "No Formed Capacitor");
         provider.add("cosmic.gui.wireless.energy.capacitor", "  §bCapacitor Location:§b ");
+        provider.add("cosmiccore.wireless_pda.bound", "PDA linked to Power Capacitor at %s");
+        provider.add("cosmiccore.wireless_pda.unbound", "PDA will now scan your global energy pocket");
+        provider.add("cosmiccore.wireless_pda.tooltip.bind", "Sneak-use on a Power Capacitor to monitor it");
+        provider.add("cosmiccore.wireless_pda.tooltip.linked", "Linked: %s [%s]");
+        provider.add("cosmiccore.wireless_pda.tooltip.clear", "Sneak-use in the air to clear the link");
+        provider.add("cosmiccore.wireless_pda.tooltip.wireless", "Monitoring dimensional team power pocket");
+        provider.add("cosmiccore.wireless_pda.hud.local", "Power Capacitor");
+        provider.add("cosmiccore.wireless_pda.hud.dimensional", "Dimensional Power Storage");
+        provider.add("cosmiccore.wireless_pda.hud.unavailable", "Storage unavailable");
 
         replace(provider, "item.cosmiccore.infinite_spray_can", "§lPrismatic Spray Can");
 

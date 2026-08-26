@@ -13,6 +13,7 @@ import com.ghostipedia.cosmiccore.api.registries.CosmicRegistration;
 import com.ghostipedia.cosmiccore.common.ae2gt.CosmicStockingBusPartMachine;
 import com.ghostipedia.cosmiccore.common.ae2gt.CosmicStockingHatchPartMachine;
 import com.ghostipedia.cosmiccore.common.block.debug.CreativeThermiaContainerMachine;
+import com.ghostipedia.cosmiccore.common.data.materials.CosmicMaterials;
 import com.ghostipedia.cosmiccore.common.machine.FlightDiffuserMachine;
 import com.ghostipedia.cosmiccore.common.machine.WirelessChargerMachine;
 import com.ghostipedia.cosmiccore.common.machine.multiblock.multi.PowerCapacitorMachine;
@@ -953,22 +954,22 @@ public class CosmicMachines {
                     Component.translatable("cosmiccore.machine.capacitor_array.tooltip.1"),
                     Component.translatable("cosmiccore.machine.capacitor_array.tooltip.2"))
             .pattern(definition -> MultiblockPatternBuilder.start(
-                    RelativeDirection.BACK,
                     RelativeDirection.UP,
+                    RelativeDirection.BACK,
                     RelativeDirection.LEFT)
-                    .slice(" BBB ", "BBBBB", "BBBBB", "BBBBB", " BBB ")
-                    .sliceRepeatable(1, 5, " BBB ", "BCCCB", "BCCCB", "BCCCB", " BBB ")
+                    .slice(" ADA ", "AAAAA", "AAAAA", "AAAAA", " AAA ")
                     .slice(" AAA ", "AAAAA", "AAAAA", "AAAAA", " AAA ")
-                    .slice(" AAA ", "AAAAA", "AAAAA", "AAAAA", " ADA ")
+                    .sliceRepeatable(1, 5, " BBB ", "BCCCB", "BCCCB", "BCCCB", " BBB ")
+                    .slice(" BBB ", "BBBBB", "BBBBB", "BBBBB", " BBB ")
                     .where(' ', air())
                     .where('D', controller(blocks(definition.getBlock())))
                     .where('A', blocks(SOMARUST_CASING.get())
-                            .or(abilities(PartAbility.INPUT_ENERGY, PartAbility.SUBSTATION_INPUT_ENERGY)
-                                    .setMinGlobalLimited(1)
-                                    .setMaxGlobalLimited(20).setPreviewCount(1))
-                            .or(abilities(PartAbility.OUTPUT_ENERGY, PartAbility.SUBSTATION_OUTPUT_ENERGY)
-                                    .setMinGlobalLimited(1)
-                                    .setMaxGlobalLimited(20).setPreviewCount(1)))
+                            .or(abilities(PartAbility.INPUT_ENERGY).setMaxGlobalLimited(20).setPreviewCount(1))
+                            .or(abilities(PartAbility.OUTPUT_ENERGY).setMaxGlobalLimited(20).setPreviewCount(1))
+                            .or(abilities(PartAbility.SUBSTATION_OUTPUT_ENERGY).setMaxGlobalLimited(20)
+                                    .setPreviewCount(1))
+                            .or(abilities(PartAbility.SUBSTATION_INPUT_ENERGY).setMaxGlobalLimited(20)
+                                    .setPreviewCount(1)))
                     .where('B', blocks(Blocks.TINTED_GLASS))
                     .where('C', CosmicPredicates.powerCapacitorBatteries())
                     .build())
@@ -1084,7 +1085,7 @@ public class CosmicMachines {
                                 .or(autoAbilities(GTMultiMachines.ELECTRIC_BLAST_FURNACE.getRecipeTypes()))
                                 .or(autoAbilities(true, false, false)))
                         .where('M', abilities(PartAbility.MUFFLER))
-                        .where('F', blocks(ChemicalHelper.getBlock(TagPrefix.frameGt, GTMaterials.StainlessSteel)))
+                        .where('F', blocks(ChemicalHelper.getBlock(TagPrefix.frameGt, CosmicMaterials.Nostium)))
                         .where('R', blocks(SOMARUST_CASING.get()))
                         .where('C', blocks(COIL_CUPRONICKEL.get()))
                         .where(' ', any())
