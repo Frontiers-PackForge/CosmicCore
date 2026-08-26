@@ -22,13 +22,15 @@ public record RecipeExportResult(String script, @Nullable Component message, boo
     public static RecipeExportResult resolved(String script, KubeJsRecipeId.Resolution resolution) {
         return switch (resolution.outcome()) {
             case AUTO_VARIANT -> copied(script,
-                    Component.translatable("cosmiccore.recipe_maker.id.amended", resolution.loadedId(),
+                    Component.translatable("cosmiccore.recipe_maker.id.amended", resolution.loadedId().toString(),
                             resolution.variant()).withStyle(ChatFormatting.GREEN));
             case EXPLICIT_OCCUPIED -> copied(script,
-                    Component.translatable("cosmiccore.recipe_maker.id.explicit_occupied", resolution.loadedId())
+                    Component
+                            .translatable("cosmiccore.recipe_maker.id.explicit_occupied",
+                                    resolution.loadedId().toString())
                             .withStyle(ChatFormatting.YELLOW));
             case FAILED -> failed(Component.translatable("cosmiccore.recipe_maker.id.amend_failed",
-                    resolution.loadedId()).withStyle(ChatFormatting.RED));
+                    resolution.loadedId().toString()).withStyle(ChatFormatting.RED));
             default -> copied(script);
         };
     }
