@@ -28,7 +28,9 @@ public class FieldBlobElementRenderer
 
     @Override
     public void preRender(MinimapElementRenderInfo renderInfo, MultiBufferSource.BufferSource renderTypeBuffers,
-                          MultiTextureRenderTypeRendererProvider multiTextureRenderTypeRenderers) {}
+                          MultiTextureRenderTypeRendererProvider multiTextureRenderTypeRenderers) {
+        FieldBlobDraw.beginMinimapBatch();
+    }
 
     @Override
     public boolean renderElement(FieldBlobElement element, boolean highlit, boolean outOfBounds,
@@ -40,7 +42,7 @@ public class FieldBlobElementRenderer
         MinimapElementMapRendererHandlerAccessor transform = (MinimapElementMapRendererHandlerAccessor) (Object) this.context;
         float pixelRadius = FieldBlobDraw.zonePixelRadius(FieldBlobDraw.zoneBlockRadius(field.tier(), field.radius()),
                 transform.cosmiccore$getZoom());
-        FieldBlobDraw.minimapBlob(graphics, pixelRadius,
+        FieldBlobDraw.addMinimapBlob(graphics.pose().last().pose(), pixelRadius,
                 field.colorRGB(), FieldBlobDraw.shapeSeed(field.x(), field.z()), depleted,
                 transform.cosmiccore$getTransformPs(), transform.cosmiccore$getTransformPc());
         return true;
@@ -48,7 +50,9 @@ public class FieldBlobElementRenderer
 
     @Override
     public void postRender(MinimapElementRenderInfo renderInfo, MultiBufferSource.BufferSource renderTypeBuffers,
-                           MultiTextureRenderTypeRendererProvider multiTextureRenderTypeRenderers) {}
+                           MultiTextureRenderTypeRendererProvider multiTextureRenderTypeRenderers) {
+        FieldBlobDraw.endMinimapBatch();
+    }
 
     @Override
     public boolean shouldRender(MinimapElementRenderLocation location) {

@@ -4,7 +4,6 @@ import com.ghostipedia.cosmiccore.CosmicCore;
 
 import com.gregtechceu.gtceu.integration.map.ButtonState;
 
-import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.renderer.GameRenderer;
 
 import com.mojang.blaze3d.systems.RenderSystem;
@@ -17,6 +16,8 @@ import com.mojang.blaze3d.vertex.VertexFormat;
 import org.joml.Matrix4f;
 
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -49,7 +50,9 @@ public final class FieldBlobDraw {
     private static final float HATCH_ALPHA = 0.75f;
 
     private static final Set<String> LOGGED = ConcurrentHashMap.newKeySet();
+    private static final Map<Long, BlobShape> SHAPES = new HashMap<>();
     private static BufferBuilder zoneBatch;
+    private static BufferBuilder minimapBatch;
 
     public static float zoneBlockRadius(byte tier, int fieldRadius) {
         float factor = switch (tier) {
@@ -84,68 +87,44 @@ public final class FieldBlobDraw {
         addZoneAt(matrix, radius, colorRGB, shapeSeed, depleted, Z_WORLDMAP);
     }
 
-    public static void minimapBlob(GuiGraphics graphics, float radius, int colorRGB, long shapeSeed, boolean depleted,
-                                   double transformPs, double transformPc) {
-        int n = ZONE_SEGMENTS;
-        float[] rx = new float[n];
-        float[] rz = new float[n];
-        double p1 = phase(shapeSeed, 1);
-        double p2 = phase(shapeSeed, 2);
-        double p3 = phase(shapeSeed, 3);
-        for (int i = 0; i < n; i++) {
-            double a = (double) i / n * TAU;
-            double w = ZONE_BASE_W + 0.13 * Math.sin(a * 2 + p1) + 0.07 * Math.sin(a * 3 + p2) +
-                    0.05 * Math.sin(a * 5 + p3);
-            double localX = Math.cos(a) * radius * w;
-            double localZ = Math.sin(a) * radius * w;
-            rx[i] = (float) (transformPs * localX - transformPc * localZ);
-            rz[i] = (float) (transformPc * localX + transformPs * localZ);
-        }
-        int rgb = depleted ? DEPLETED_RGB : (colorRGB & 0xFFFFFF);
-        scanlineRing(graphics, rx, rz, 0xFF000000 | rgb);
+    public static void beginMinimapBatch() {
+        RenderSystem.setShader(GameRenderer::getPositionColorShader);
+        RenderSystem.setShaderColor(1, 1, 1, 1);
+        minimapBatch = Tesselator.getInstance().begin(VertexFormat.Mode.TRIANGLES,
+                DefaultVertexFormat.POSITION_COLOR);
     }
 
-    private static void scanlineRing(GuiGraphics graphics, float[] rx, float[] rz, int argb) {
-        int n = rx.length;
-        float maxR = 0;
-        for (int i = 0; i < n; i++) {
-            float d = (float) Math.hypot(rx[i], rz[i]);
-            if (d > maxR) maxR = d;
+    public static void addMinimapBlob(Matrix4f matrix, float radius, int colorRGB, long shapeSeed, boolean depleted,
+                                      double transformPs, double transformPc) {
+        BufferBuilder buf = minimapBatch;
+        if (buf == null) return;
+
+        BlobShape shape = shape(shapeSeed);
+        int rgb = depleted ? DEPLETED_RGB : colorRGB;
+        float r = ((rgb >> 16) & 0xFF) / 255f;
+        float g = ((rgb >> 8) & 0xFF) / 255f;
+        float b = (rgb & 0xFF) / 255f;
+        for (int i = 0; i < ZONE_SEGMENTS; i++) {
+            int j = (i + 1) % ZONE_SEGMENTS;
+            float x1 = rotatedX(shape.x()[i], shape.z()[i], radius, transformPs, transformPc);
+            float z1 = rotatedZ(shape.x()[i], shape.z()[i], radius, transformPs, transformPc);
+            float x2 = rotatedX(shape.x()[j], shape.z()[j], radius, transformPs, transformPc);
+            float z2 = rotatedZ(shape.x()[j], shape.z()[j], radius, transformPs, transformPc);
+            tri(buf, matrix, x1, z1, x1 * MINIMAP_RING_INNER, z1 * MINIMAP_RING_INNER,
+                    x2, z2, Z_MINIMAP, r, g, b, 1f);
+            tri(buf, matrix, x1 * MINIMAP_RING_INNER, z1 * MINIMAP_RING_INNER,
+                    x2 * MINIMAP_RING_INNER, z2 * MINIMAP_RING_INNER,
+                    x2, z2, Z_MINIMAP, r, g, b, 1f);
         }
-        int bound = (int) Math.ceil(maxR);
-        for (int y = -bound; y <= bound; y++) {
-            float oMin = Float.MAX_VALUE;
-            float oMax = -Float.MAX_VALUE;
-            float iMin = Float.MAX_VALUE;
-            float iMax = -Float.MAX_VALUE;
-            for (int i = 0; i < n; i++) {
-                int j = (i + 1) % n;
-                float oz1 = rz[i];
-                float oz2 = rz[j];
-                if ((oz1 <= y && oz2 > y) || (oz2 <= y && oz1 > y)) {
-                    float t = (y - oz1) / (oz2 - oz1);
-                    float x = rx[i] + t * (rx[j] - rx[i]);
-                    oMin = Math.min(oMin, x);
-                    oMax = Math.max(oMax, x);
-                }
-                float iz1 = rz[i] * MINIMAP_RING_INNER;
-                float iz2 = rz[j] * MINIMAP_RING_INNER;
-                if ((iz1 <= y && iz2 > y) || (iz2 <= y && iz1 > y)) {
-                    float t = (y - iz1) / (iz2 - iz1);
-                    float ix1 = rx[i] * MINIMAP_RING_INNER;
-                    float ix2 = rx[j] * MINIMAP_RING_INNER;
-                    float x = ix1 + t * (ix2 - ix1);
-                    iMin = Math.min(iMin, x);
-                    iMax = Math.max(iMax, x);
-                }
-            }
-            if (oMax < oMin) continue;
-            if (iMax >= iMin) {
-                graphics.fill(Math.round(oMin), y, Math.round(iMin), y + 1, Z_MINIMAP, argb);
-                graphics.fill(Math.round(iMax), y, Math.round(oMax), y + 1, Z_MINIMAP, argb);
-            } else {
-                graphics.fill(Math.round(oMin), y, Math.round(oMax), y + 1, Z_MINIMAP, argb);
-            }
+    }
+
+    public static void endMinimapBatch() {
+        BufferBuilder buf = minimapBatch;
+        minimapBatch = null;
+        if (buf == null) return;
+        MeshData mesh = buf.build();
+        if (mesh != null) {
+            BufferUploader.drawWithShader(mesh);
         }
     }
 
@@ -154,19 +133,7 @@ public final class FieldBlobDraw {
         BufferBuilder buf = zoneBatch;
         if (buf == null) return;
 
-        int n = ZONE_SEGMENTS;
-        float[] rx = new float[n];
-        float[] rz = new float[n];
-        double p1 = phase(shapeSeed, 1);
-        double p2 = phase(shapeSeed, 2);
-        double p3 = phase(shapeSeed, 3);
-        for (int i = 0; i < n; i++) {
-            double a = (double) i / n * TAU;
-            double w = ZONE_BASE_W + 0.13 * Math.sin(a * 2 + p1) + 0.07 * Math.sin(a * 3 + p2) +
-                    0.05 * Math.sin(a * 5 + p3);
-            rx[i] = (float) (Math.cos(a) * radius * w);
-            rz[i] = (float) (Math.sin(a) * radius * w);
-        }
+        BlobShape shape = shape(shapeSeed);
 
         int rgb = depleted ? DEPLETED_RGB : colorRGB;
         float r = ((rgb >> 16) & 0xFF) / 255f;
@@ -175,19 +142,24 @@ public final class FieldBlobDraw {
         float fillAlpha = depleted ? ZONE_FILL_ALPHA_DEPLETED : ZONE_FILL_ALPHA;
         float edgeAlpha = depleted ? ZONE_EDGE_ALPHA_DEPLETED : ZONE_EDGE_ALPHA;
 
-        for (int i = 0; i < n; i++) {
-            int j = (i + 1) % n;
-            tri(buf, matrix, 0, 0, rx[i], rz[i], rx[j], rz[j], drawZ, r, g, b, fillAlpha);
+        for (int i = 0; i < ZONE_SEGMENTS; i++) {
+            int j = (i + 1) % ZONE_SEGMENTS;
+            tri(buf, matrix, 0, 0, shape.x()[i] * radius, shape.z()[i] * radius,
+                    shape.x()[j] * radius, shape.z()[j] * radius, drawZ, r, g, b, fillAlpha);
         }
         if (depleted) {
-            addHatch(buf, matrix, rx, rz, drawZ);
+            addHatch(buf, matrix, shape, radius, drawZ);
         }
-        for (int i = 0; i < n; i++) {
-            int j = (i + 1) % n;
-            tri(buf, matrix, rx[i], rz[i], rx[i] * ZONE_INNER_RING, rz[i] * ZONE_INNER_RING, rx[j], rz[j], drawZ,
+        for (int i = 0; i < ZONE_SEGMENTS; i++) {
+            int j = (i + 1) % ZONE_SEGMENTS;
+            float x1 = shape.x()[i] * radius;
+            float z1 = shape.z()[i] * radius;
+            float x2 = shape.x()[j] * radius;
+            float z2 = shape.z()[j] * radius;
+            tri(buf, matrix, x1, z1, x1 * ZONE_INNER_RING, z1 * ZONE_INNER_RING, x2, z2, drawZ,
                     r, g, b, edgeAlpha);
-            tri(buf, matrix, rx[i] * ZONE_INNER_RING, rz[i] * ZONE_INNER_RING, rx[j] * ZONE_INNER_RING,
-                    rz[j] * ZONE_INNER_RING, rx[j], rz[j], drawZ, r, g, b, edgeAlpha);
+            tri(buf, matrix, x1 * ZONE_INNER_RING, z1 * ZONE_INNER_RING, x2 * ZONE_INNER_RING,
+                    z2 * ZONE_INNER_RING, x2, z2, drawZ, r, g, b, edgeAlpha);
         }
     }
 
@@ -206,10 +178,13 @@ public final class FieldBlobDraw {
     }
 
     /** Diagonal hatching, clipped to the zone polygon so it never spills past the outline. */
-    private static void addHatch(BufferBuilder buf, Matrix4f matrix, float[] rx, float[] rz, int drawZ) {
-        int n = rx.length;
+    private static void addHatch(BufferBuilder buf, Matrix4f matrix, BlobShape shape, float radius, int drawZ) {
+        float[] rx = new float[ZONE_SEGMENTS];
+        float[] rz = new float[ZONE_SEGMENTS];
         float maxR = 0;
-        for (int i = 0; i < n; i++) {
+        for (int i = 0; i < ZONE_SEGMENTS; i++) {
+            rx[i] = shape.x()[i] * radius;
+            rz[i] = shape.z()[i] * radius;
             float d = (float) Math.hypot(rx[i], rz[i]);
             if (d > maxR) maxR = d;
         }
@@ -217,13 +192,13 @@ public final class FieldBlobDraw {
         if (step < 1) return;
         float ox = -SIN45 * HATCH_THICKNESS;
         float oz = SIN45 * HATCH_THICKNESS;
-        float[] ts = new float[n];
+        float[] ts = new float[ZONE_SEGMENTS];
         for (float c = -maxR; c <= maxR; c += step) {
             float px = -SIN45 * c;
             float pz = SIN45 * c;
             int count = 0;
-            for (int i = 0; i < n; i++) {
-                int j = (i + 1) % n;
+            for (int i = 0; i < ZONE_SEGMENTS; i++) {
+                int j = (i + 1) % ZONE_SEGMENTS;
                 float t = hatchClip(px, pz, rx[i], rz[i], rx[j], rz[j]);
                 if (!Float.isNaN(t)) ts[count++] = t;
             }
@@ -271,9 +246,43 @@ public final class FieldBlobDraw {
         }
     }
 
+    public static void clearShapeCache() {
+        SHAPES.clear();
+    }
+
+    private static BlobShape shape(long seed) {
+        return SHAPES.computeIfAbsent(seed, FieldBlobDraw::createShape);
+    }
+
+    private static BlobShape createShape(long seed) {
+        float[] x = new float[ZONE_SEGMENTS];
+        float[] z = new float[ZONE_SEGMENTS];
+        double p1 = phase(seed, 1);
+        double p2 = phase(seed, 2);
+        double p3 = phase(seed, 3);
+        for (int i = 0; i < ZONE_SEGMENTS; i++) {
+            double a = (double) i / ZONE_SEGMENTS * TAU;
+            double w = ZONE_BASE_W + 0.13 * Math.sin(a * 2 + p1) + 0.07 * Math.sin(a * 3 + p2) +
+                    0.05 * Math.sin(a * 5 + p3);
+            x[i] = (float) (Math.cos(a) * w);
+            z[i] = (float) (Math.sin(a) * w);
+        }
+        return new BlobShape(x, z);
+    }
+
+    private static float rotatedX(float x, float z, float radius, double transformPs, double transformPc) {
+        return (float) (radius * (transformPs * x - transformPc * z));
+    }
+
+    private static float rotatedZ(float x, float z, float radius, double transformPs, double transformPc) {
+        return (float) (radius * (transformPc * x + transformPs * z));
+    }
+
     private static double phase(long seed, int salt) {
         long h = (seed + salt * 0x9E3779B97F4A7C15L) * 0xC2B2AE3D27D4EB4FL;
         h ^= (h >>> 32);
         return (h & 0xFFFFFFL) / (double) 0x1000000 * TAU;
     }
+
+    private record BlobShape(float[] x, float[] z) {}
 }
