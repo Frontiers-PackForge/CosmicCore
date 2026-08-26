@@ -17,6 +17,7 @@ import com.ghostipedia.cosmiccore.common.food.CosmicFoodCommand;
 import com.ghostipedia.cosmiccore.common.gravity.GravityDebugCommand;
 import com.ghostipedia.cosmiccore.common.item.armor.boots.TravelerBootsLogic;
 import com.ghostipedia.cosmiccore.common.item.behavior.EffectApplicationBehavior;
+import com.ghostipedia.cosmiccore.common.item.behavior.WirelessPDABehavior;
 import com.ghostipedia.cosmiccore.common.mirror.deed.DeedCommand;
 import com.ghostipedia.cosmiccore.common.mirror.deed.DeedTeams;
 import com.ghostipedia.cosmiccore.common.network.CCoreNetwork;
@@ -114,6 +115,7 @@ public class ForgeCommonEventListener {
         }
         if (player instanceof ServerPlayer serverPlayer) {
             FlightDiffuserBehavior.tick(serverPlayer);
+            WirelessPDABehavior.syncHud(serverPlayer);
         }
     }
 

@@ -15,6 +15,7 @@ import com.ghostipedia.cosmiccore.common.machine.multiblock.multi.logic.LarvaMac
 import com.ghostipedia.cosmiccore.integration.recipes.emi.AsteroidEmiRecipe;
 import com.ghostipedia.cosmiccore.integration.recipes.emi.CompositeOreSortingEmiRecipe;
 import com.ghostipedia.cosmiccore.integration.recipes.emi.CraftingStationRecipeHandler;
+import com.ghostipedia.cosmiccore.integration.recipes.emi.FactoryGaugeEmiCompat;
 
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.gui.screens.inventory.InventoryScreen;
@@ -75,6 +76,7 @@ public class CosmicCoreEMIPlugin implements EmiPlugin {
                     DeedInventoryButton.visualBottom(screen) - top));
         });
         CraftingStationRecipeHandler.register(registry);
+        FactoryGaugeEmiCompat.register(registry);
         registerFoodRoleAliases(registry);
 
         registry.addCategory(CompositeOreSortingEmiRecipe.CATEGORY);

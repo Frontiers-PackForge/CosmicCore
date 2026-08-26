@@ -145,6 +145,9 @@ dependencies {
     compileOnly(forge.effortless)
     runtimeOnly(forge.effortless)
 
+    compileOnly("net.liukrast:deployer-1.21.1:0.1.2")
+    compileOnly("net.liukrast:repackaged-1.21.1:0.0.7")
+
     // ---- DROPPED for the 1.21.1 port (no NeoForge build / pack chose alternatives) ----
     // Forestry CE + Gendustry CE  -> no 1.21.1 (bee system shelved, see bead cosmiccore-42.2)
     // Ad Astra                    -> no 1.21.1 (isolate+no-op now, Stellaris later, bead cosmiccore-42.13)

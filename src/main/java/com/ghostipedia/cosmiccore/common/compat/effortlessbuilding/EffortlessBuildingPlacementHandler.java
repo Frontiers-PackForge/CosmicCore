@@ -47,7 +47,9 @@ public final class EffortlessBuildingPlacementHandler {
 
         blockSet.sortByDistance();
         ItemStack held = player.getMainHandItem();
-        if (!(held.getItem() instanceof BlockItem blockItem)) return;
+        BlockItem blockItem = held.getItem() instanceof BlockItem item ? item : null;
+        boolean ae2Cable = EffortlessBuildingAE2CableCompat.isCableItem(held);
+        if (blockItem == null && !ae2Cable) return;
         ItemStack placementItem = held.copyWithCount(1);
         ItemStack offHand = player.getOffhandItem();
         boolean creative = player.isCreative();
@@ -70,14 +72,25 @@ public final class EffortlessBuildingPlacementHandler {
                 reservation = creative ? Reservation.CREATIVE : reserve(player, placementItem, networkEligible);
                 if (reservation == null) break;
 
-                BlockState state = getPlacementState(level, player, pos, placementItem, blockItem, mapEntry.getValue(),
-                        packet, yFraction);
-                if (!level.setBlock(pos, state, 3)) {
-                    refund(player, placementItem, reservation);
-                    continue;
+                if (blockItem != null) {
+                    BlockState state = getPlacementState(
+                            level, player, pos, placementItem, blockItem, mapEntry.getValue(), packet, yFraction);
+                    if (!level.setBlock(pos, state, 3)) {
+                        refund(player, placementItem, reservation);
+                        continue;
+                    }
+                    blockChanged = true;
+                    transferBlockItemData(level, player, pos, placementItem, blockItem);
+                } else {
+                    blockChanged = true;
+                    if (!EffortlessBuildingAE2CableCompat.place(
+                            player, level, pos, packet.hitFace(), placementItem)) {
+                        restoreAfterFailure(level, pos, before);
+                        blockChanged = false;
+                        refund(player, placementItem, reservation);
+                        continue;
+                    }
                 }
-                blockChanged = true;
-                transferBlockItemData(level, player, pos, placementItem, blockItem);
                 EffortlessBuildingBlockSnapshot after = EffortlessBuildingBlockSnapshot.capture(level, pos);
                 BlockPos immutablePos = pos.immutable();
                 undoChanges.put(immutablePos, new UndoManager.BlockChange(before.state(), after.state()));

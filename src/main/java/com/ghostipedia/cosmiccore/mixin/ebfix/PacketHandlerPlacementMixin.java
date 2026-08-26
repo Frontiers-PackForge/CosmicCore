@@ -1,5 +1,6 @@
 package com.ghostipedia.cosmiccore.mixin.ebfix;
 
+import com.ghostipedia.cosmiccore.common.compat.effortlessbuilding.EffortlessBuildingAE2CableCompat;
 import com.ghostipedia.cosmiccore.common.compat.effortlessbuilding.EffortlessBuildingPlacementHandler;
 
 import net.minecraft.server.level.ServerPlayer;
@@ -19,7 +20,9 @@ public abstract class PacketHandlerPlacementMixin {
     private static void cosmiccore$placeDataSafeBlocks(
                                                        PlaceBuildModePacket packet, ServerPlayer player,
                                                        CallbackInfo ci) {
-        if (!(player.getMainHandItem().getItem() instanceof BlockItem)) return;
+        if (!(player.getMainHandItem().getItem() instanceof BlockItem) &&
+                !EffortlessBuildingAE2CableCompat.isCableItem(player.getMainHandItem()))
+            return;
         EffortlessBuildingPlacementHandler.placeBlocks(packet, player);
         ci.cancel();
     }

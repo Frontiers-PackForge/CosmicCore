@@ -76,6 +76,7 @@ public final class RevealedFields {
     public void clearAll() {
         byDim.clear();
         depleted.clear();
+        FieldBlobDraw.clearShapeCache();
     }
 
     public static final int FORMAT_VERSION = 2;
