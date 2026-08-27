@@ -14,10 +14,7 @@ import com.gregtechceu.gtceu.api.data.tag.TagPrefix;
 import com.gregtechceu.gtceu.api.machine.*;
 import com.gregtechceu.gtceu.api.machine.multiblock.PartAbility;
 import com.gregtechceu.gtceu.api.machine.property.GTMachineModelProperties;
-import com.gregtechceu.gtceu.api.multiblock.PatternPredicate;
-import com.gregtechceu.gtceu.api.multiblock.Predicates;
 import com.gregtechceu.gtceu.api.multiblock.pattern.MultiblockPatternBuilder;
-import com.gregtechceu.gtceu.api.multiblock.predicates.BasePredicate;
 import com.gregtechceu.gtceu.api.multiblock.util.BlockInfo;
 import com.gregtechceu.gtceu.api.multiblock.util.RelativeDirection;
 import com.gregtechceu.gtceu.api.recipe.GTRecipeType;
@@ -131,26 +128,15 @@ public class CosmicMachinesUtils {
                         .where('G', blocks(gear.get()))
                         .where('C', blocks(casing.get()))
                         .where('R',
-                                // 8.0.0: SimplePredicate removed -> BasePredicate. The error-predicate now
-                                // returns null on match and Predicates.PLACEHOLDER on miss (see stock
-                                // GTMachineUtils#rotorHolder). Same gameplay: rotor holder facing open air.
-                                new PatternPredicate(
-                                        new BasePredicate(
-                                                worldState -> {
-                                                    if (MetaMachine.getMachine(worldState.getLevel(),
-                                                            worldState.getPos()
-                                                                    .immutable()) instanceof RotorHolderPartMachine rotorHolder &&
-                                                            worldState.getLevel()
-                                                                    .getBlockState(worldState.getPos().immutable()
-                                                                            .relative(rotorHolder.self()
-                                                                                    .getFrontFacing()))
-                                                                    .isAir()) {
-                                                        return null;
-                                                    }
-                                                    return Predicates.PLACEHOLDER;
-                                                },
-                                                PartAbility.ROTOR_HOLDER.getAllBlocks().stream()
-                                                        .map(BlockInfo::fromBlock).toList()))
+                                builder("Rotor Holder")
+                                        .predicate(ctx -> MetaMachine.getMachine(ctx.level(),
+                                                ctx.pos()) instanceof RotorHolderPartMachine rotorHolder &&
+                                                ctx.level().getBlockState(
+                                                        ctx.pos().relative(rotorHolder.self().getFrontFacing()))
+                                                        .isAir())
+                                        .candidates(PartAbility.ROTOR_HOLDER.getAllBlocks().stream()
+                                                .map(BlockInfo::fromBlock))
+                                        .toMultiPredicate()
                                         .addTooltips(Component.translatable("gtceu.multiblock.pattern.clear_amount_3"))
                                         .addTooltips(Component.translatable("gtceu.multiblock.pattern.error.limited.1",
                                                 VN[tier]))

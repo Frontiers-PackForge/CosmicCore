@@ -10,7 +10,7 @@ import com.gregtechceu.gtceu.api.capability.recipe.IRecipeHandler;
 import com.gregtechceu.gtceu.api.machine.multiblock.MultiblockControllerMachine;
 import com.gregtechceu.gtceu.api.machine.multiblock.PartAbility;
 import com.gregtechceu.gtceu.api.machine.multiblock.WorkableElectricMultiblockMachine;
-import com.gregtechceu.gtceu.api.multiblock.PatternPredicate;
+import com.gregtechceu.gtceu.api.multiblock.MultiPredicate;
 import com.gregtechceu.gtceu.api.multiblock.pattern.BlockPattern;
 import com.gregtechceu.gtceu.api.multiblock.predicates.BasePredicate;
 import com.gregtechceu.gtceu.utils.GTUtil;
@@ -63,16 +63,16 @@ public final class MultiblockRecipeTierBoost {
 
     private static boolean allowsMultipleEnergyInputs(BlockPattern pattern) {
         Set<BasePredicate> energyPredicates = Collections.newSetFromMap(new IdentityHashMap<>());
-        for (PatternPredicate predicate : pattern.getPredicates().values()) {
-            for (BasePredicate basePredicate : predicate.subPredicates) {
+        for (MultiPredicate predicate : pattern.getPredicates().values()) {
+            for (BasePredicate basePredicate : predicate.expand()) {
                 if (acceptsEnergyHatches(basePredicate)) energyPredicates.add(basePredicate);
             }
         }
 
         int maximumInputs = 0;
         for (BasePredicate predicate : energyPredicates) {
-            if (predicate.maxCount < 0) return true;
-            maximumInputs += predicate.maxCount;
+            if (predicate.getMaxCount() < 0) return true;
+            maximumInputs += predicate.getMaxCount();
             if (maximumInputs > 1) return true;
         }
         return false;

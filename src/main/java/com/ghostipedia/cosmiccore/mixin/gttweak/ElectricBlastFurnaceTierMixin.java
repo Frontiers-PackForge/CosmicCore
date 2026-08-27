@@ -34,7 +34,7 @@ public abstract class ElectricBlastFurnaceTierMixin extends WorkableElectricMult
         super(info);
     }
 
-    @Inject(method = "<init>", at = @At("TAIL"))
+    @Inject(method = "<init>(Lcom/gregtechceu/gtceu/api/blockentity/BlockEntityCreationInfo;)V", at = @At("TAIL"))
     private void cosmiccore$attachTierState(BlockEntityCreationInfo info, CallbackInfo ci) {
         if (getDefinition() == GTMultiMachines.ELECTRIC_BLAST_FURNACE) {
             attachPersistentTrait("cosmiccore_ebf_tier", new ElectricBlastFurnaceTierState());

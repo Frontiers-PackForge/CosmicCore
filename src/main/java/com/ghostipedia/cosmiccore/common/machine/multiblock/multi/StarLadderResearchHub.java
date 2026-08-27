@@ -8,7 +8,7 @@ import com.ghostipedia.cosmiccore.gtbridge.CosmicRecipeTypes;
 import com.gregtechceu.gtceu.api.data.RotationState;
 import com.gregtechceu.gtceu.api.machine.MultiblockMachineDefinition;
 import com.gregtechceu.gtceu.api.machine.multiblock.PartAbility;
-import com.gregtechceu.gtceu.api.multiblock.PatternPredicate;
+import com.gregtechceu.gtceu.api.multiblock.MultiPredicate;
 import com.gregtechceu.gtceu.api.multiblock.pattern.BlockPattern;
 import com.gregtechceu.gtceu.api.multiblock.pattern.MultiblockPatternBuilder;
 import com.gregtechceu.gtceu.api.multiblock.util.RelativeDirection;
@@ -77,11 +77,11 @@ public class StarLadderResearchHub {
 
     public static void init() {}
 
-    private static PatternPredicate controllerSlot() {
+    private static MultiPredicate controllerSlot() {
         return blocks(STAR_LADDER_RESEARCH_HUB.getBlock());
     }
 
-    private static PatternPredicate hatchSlot() {
+    private static MultiPredicate hatchSlot() {
         return blocks(CosmicBlocks.SUPERHEAVY_STEEL_CASING.get())
                 .or(abilities(PartAbility.INPUT_ENERGY).setMinGlobalLimited(1).setMaxGlobalLimited(2))
                 .or(abilities(PartAbility.MAINTENANCE).setExactLimit(1))

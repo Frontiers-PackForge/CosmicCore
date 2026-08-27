@@ -6,7 +6,7 @@ import com.ghostipedia.cosmiccore.gtbridge.CosmicRecipeTypes;
 import com.gregtechceu.gtceu.GTCEu;
 import com.gregtechceu.gtceu.api.machine.MultiblockMachineDefinition;
 import com.gregtechceu.gtceu.api.machine.multiblock.PartAbility;
-import com.gregtechceu.gtceu.api.multiblock.PatternPredicate;
+import com.gregtechceu.gtceu.api.multiblock.MultiPredicate;
 import com.gregtechceu.gtceu.api.multiblock.pattern.IBlockPattern;
 import com.gregtechceu.gtceu.api.multiblock.pattern.MultiblockPatternBuilder;
 import com.gregtechceu.gtceu.api.recipe.GTRecipeType;
@@ -53,12 +53,12 @@ public final class VacuumDistillationTower {
     }
 
     private static IBlockPattern vacuumPattern(MultiblockMachineDefinition definition) {
-        PatternPredicate exportPredicate = abilities(PartAbility.EXPORT_FLUIDS_1X);
+        MultiPredicate exportPredicate = abilities(PartAbility.EXPORT_FLUIDS_1X);
         if (GTCEu.Mods.isAE2Loaded()) {
             exportPredicate = exportPredicate.or(blocks(GTAEMachines.FLUID_EXPORT_HATCH_ME.get()));
         }
-        exportPredicate.setMaxLayerLimited(1);
-        PatternPredicate maintenance = autoAbilities(true, false, false).setMaxGlobalLimited(1);
+        exportPredicate = exportPredicate.setMaxLayerLimited(1);
+        MultiPredicate maintenance = autoAbilities(true, false, false).setMaxGlobalLimited(1);
         return MultiblockPatternBuilder.start(UP, FRONT, LEFT)
                 .slice("FFFFAAA ", "FFFBAAAA", "FFFBAAAA", "FFFBAAAA", "FFFFASA ")
                 .sliceRepeatable(3, 3, "FVF OOO ", "F  B###O", "F  B###O", "F FB###O", "FVF OOO ")

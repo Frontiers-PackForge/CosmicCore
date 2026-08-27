@@ -55,7 +55,7 @@ public final class PatternMappedPartAppearance
         char symbol = pattern.getSlices()[sliceIndex].charAt(stringIndex, charIndex);
         var predicate = pattern.getPredicates().get(symbol);
         if (predicate == null) return fallback.get();
-        for (var subPredicate : predicate.subPredicates) {
+        for (var subPredicate : predicate.expand()) {
             for (BlockInfo candidate : subPredicate.getCandidates()) {
                 BlockState state = candidate.getBlockState();
                 if (!(state.getBlock() instanceof MetaMachineBlock) && !state.is(Blocks.AIR)) return state;

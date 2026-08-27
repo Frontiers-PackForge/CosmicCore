@@ -4,12 +4,10 @@ import com.ghostipedia.cosmiccore.api.machine.multiblock.GroupedSlicePreviewSupp
 
 import com.gregtechceu.gtceu.api.machine.MultiblockMachineDefinition;
 import com.gregtechceu.gtceu.api.mui.MultiblockSchemaInfo;
-import com.gregtechceu.gtceu.api.multiblock.PatternPredicate;
+import com.gregtechceu.gtceu.api.multiblock.MultiPredicate;
 import com.gregtechceu.gtceu.api.multiblock.pattern.BlockPattern;
 import com.gregtechceu.gtceu.api.multiblock.pattern.IBlockPattern;
 import com.gregtechceu.gtceu.api.multiblock.predicates.BasePredicate;
-import com.gregtechceu.gtceu.api.multiblock.predicates.PredicateBlocks;
-import com.gregtechceu.gtceu.api.multiblock.predicates.PredicateStates;
 import com.gregtechceu.gtceu.api.multiblock.util.BlockInfo;
 import com.gregtechceu.gtceu.common.mui.GTGuiTextures;
 import com.gregtechceu.gtceu.integration.recipeviewer.widgets.MultiblockPreviewWidget;
@@ -149,7 +147,7 @@ public abstract class MultiblockPreviewWidgetFixMixin {
                             target = "Lbrachy/modularui/drawable/text/ModularComponent;asIcon()Lbrachy/modularui/drawable/Icon;"),
                    require = 1)
     private Icon cosmiccore$showPredicateCandidates(ModularComponent text, Operation<Icon> original,
-                                                    @Local(ordinal = 0) PatternPredicate predicate) {
+                                                    @Local(ordinal = 0) MultiPredicate predicate) {
         List<ItemStack> candidates = cosmiccore$displayCandidates(predicate);
         if (candidates.isEmpty()) return original.call(text);
         return new ItemDrawable(candidates.toArray(ItemStack[]::new)).cycleTime(900).asIcon();
@@ -166,7 +164,7 @@ public abstract class MultiblockPreviewWidgetFixMixin {
     }
 
     @Inject(method = "createInnerPredicateMenu", at = @At("RETURN"), require = 1)
-    private void cosmiccore$centerNestedPredicateMenu(PatternPredicate predicate, BasePredicate basePredicate,
+    private void cosmiccore$centerNestedPredicateMenu(MultiPredicate predicate, BasePredicate basePredicate,
                                                       List<BlockInfo> candidates,
                                                       CallbackInfoReturnable<ContextMenuButton<?>> cir) {
         if (candidates.isEmpty()) return;
@@ -176,7 +174,7 @@ public abstract class MultiblockPreviewWidgetFixMixin {
     }
 
     @Inject(method = "lambda$createPredicateMenus$27", at = @At("RETURN"), require = 1)
-    private void cosmiccore$centerPredicateMenuEntry(PatternPredicate predicate, BasePredicate basePredicate,
+    private void cosmiccore$centerPredicateMenuEntry(MultiPredicate predicate, BasePredicate basePredicate,
                                                      CallbackInfoReturnable<IWidget> cir) {
         if (!(cir.getReturnValue() instanceof ToggleButton toggle) || basePredicate.getCandidates().isEmpty()) return;
         toggle.size(20);
@@ -184,7 +182,7 @@ public abstract class MultiblockPreviewWidgetFixMixin {
     }
 
     @Inject(method = "lambda$createInnerPredicateMenu$33", at = @At("RETURN"), require = 1)
-    private void cosmiccore$centerNestedPredicateMenuEntry(PatternPredicate predicate, BasePredicate basePredicate,
+    private void cosmiccore$centerNestedPredicateMenuEntry(MultiPredicate predicate, BasePredicate basePredicate,
                                                            BlockInfo candidate,
                                                            CallbackInfoReturnable<IWidget> cir) {
         if (!(cir.getReturnValue() instanceof ToggleButton toggle)) return;
@@ -198,14 +196,12 @@ public abstract class MultiblockPreviewWidgetFixMixin {
     }
 
     @Unique
-    private static List<ItemStack> cosmiccore$displayCandidates(PatternPredicate predicate) {
+    private static List<ItemStack> cosmiccore$displayCandidates(MultiPredicate predicate) {
         List<ItemStack> result = new ArrayList<>();
-        for (BasePredicate basePredicate : predicate.subPredicates) {
+        for (BasePredicate basePredicate : predicate.expand()) {
             List<BlockInfo> candidates = basePredicate.getCandidates();
             if (candidates.isEmpty()) continue;
-            int limit = basePredicate instanceof PredicateBlocks || basePredicate instanceof PredicateStates ?
-                    candidates.size() : 1;
-            for (int index = 0; index < limit; index++) {
+            for (int index = 0; index < candidates.size(); index++) {
                 ItemStack stack = candidates.get(index).getItemStackForm();
                 if (stack.isEmpty() || cosmiccore$contains(result, stack)) continue;
                 result.add(stack.copyWithCount(1));

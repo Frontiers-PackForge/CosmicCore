@@ -72,8 +72,8 @@ public final class SableAssemblyRotation {
             if (moved == null) {
                 return;
             }
-            CompoundTag data = old.getSyncDataHolder().serializeNBT(lookup, false, false);
-            moved.getSyncDataHolder().deserializeNBT(lookup, data, false);
+            CompoundTag data = old.getSyncDataHolder().serializeNBT(lookup);
+            moved.getSyncDataHolder().deserializeNBT(lookup, data);
             rebuilt[oldSide.ordinal()] = moved;
             newSides[oldSide.ordinal()] = newSide;
         }

@@ -103,7 +103,7 @@ public final class ModularPowerStationPatterns {
         return -1;
     }
 
-    private static com.gregtechceu.gtceu.api.multiblock.PatternPredicate coreCasing() {
+    private static com.gregtechceu.gtceu.api.multiblock.MultiPredicate coreCasing() {
         return blocks(CosmicBlocks.LIGHTWEIGHT_DARK_STEEL_CASING.get())
                 .or(abilities(PartAbility.IMPORT_FLUIDS).setMinGlobalLimited(1).setMaxGlobalLimited(4)
                         .setPreviewCount(1))

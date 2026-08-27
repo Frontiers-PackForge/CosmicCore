@@ -20,14 +20,8 @@ public final class GTRecipeReloadLifecycle {
         }
     }
 
-    public static void resetForReload() {
+    public static void clearPowerlessJetpackFuels() {
         PowerlessJetpack.FUELS.clear();
-        for (RecipeType<?> type : BuiltInRegistries.RECIPE_TYPE) {
-            if (type instanceof GTRecipeType gtRecipeType) {
-                gtRecipeType.db().clear();
-                gtRecipeType.getCategoryMap().clear();
-            }
-        }
     }
 
     public static void rebuildCategories(Iterable<RecipeHolder<?>> recipes) {

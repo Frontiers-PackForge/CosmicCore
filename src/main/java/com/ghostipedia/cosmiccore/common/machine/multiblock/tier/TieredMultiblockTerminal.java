@@ -4,7 +4,7 @@ import com.ghostipedia.cosmiccore.api.machine.multiblock.ITieredMultiblockMachin
 
 import com.gregtechceu.gtceu.api.block.MetaMachineBlock;
 import com.gregtechceu.gtceu.api.machine.multiblock.MultiblockControllerMachine;
-import com.gregtechceu.gtceu.api.multiblock.PatternPredicate;
+import com.gregtechceu.gtceu.api.multiblock.MultiPredicate;
 import com.gregtechceu.gtceu.api.multiblock.pattern.BlockPattern;
 import com.gregtechceu.gtceu.api.multiblock.pattern.ExpandablePattern;
 import com.gregtechceu.gtceu.api.multiblock.pattern.IBlockPattern;
@@ -68,10 +68,10 @@ public final class TieredMultiblockTerminal {
         Long2ObjectOpenHashMap<BlockInfo> preferences = new Long2ObjectOpenHashMap<>();
         if (pattern instanceof BlockPattern) {
             for (var entry : requestedPreferences.entrySet()) {
-                PatternPredicate predicate = helper.getPredicateFromPos(pattern, entry.getKey(),
+                MultiPredicate predicate = helper.getPredicateFromPos(pattern, entry.getKey(),
                         controller.getFrontFacing(), controller.getUpwardsFacing(), controller.isFlipped());
-                List<BlockInfo> candidates = predicate.subPredicates.stream()
-                        .flatMap(basePredicate -> basePredicate.candidates.stream())
+                List<BlockInfo> candidates = predicate.expand().stream()
+                        .flatMap(basePredicate -> basePredicate.getCandidates().stream())
                         .distinct()
                         .toList();
                 BlockInfo requested = BlockInfo.fromBlockState(entry.getValue());
@@ -125,13 +125,13 @@ public final class TieredMultiblockTerminal {
     private static boolean satisfiesGlobalMinimums(BlockPattern pattern,
                                                    Long2ObjectOpenHashMap<BlockInfo> preferences) {
         Set<BasePredicate> checked = java.util.Collections.newSetFromMap(new IdentityHashMap<>());
-        for (PatternPredicate predicate : pattern.getPredicates().values()) {
-            for (BasePredicate basePredicate : predicate.subPredicates) {
-                if (!checked.add(basePredicate) || basePredicate.minCount <= 0) continue;
+        for (MultiPredicate predicate : pattern.getPredicates().values()) {
+            for (BasePredicate basePredicate : predicate.expand()) {
+                if (!checked.add(basePredicate) || basePredicate.getMinCount() <= 0) continue;
                 long count = preferences.values().stream()
-                        .filter(basePredicate.candidates::contains)
+                        .filter(basePredicate.getCandidates()::contains)
                         .count();
-                if (count < basePredicate.minCount) return false;
+                if (count < basePredicate.getMinCount()) return false;
             }
         }
         return true;
