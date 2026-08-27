@@ -35,6 +35,10 @@ repositories {
             includeGroupAndSubgroups("dev.engine-room")
         }
     }
+    exclusiveContent {
+        forRepository { maven { url = "https://maven.liukrast.net" } }
+        filter { includeGroup("net.liukrast") }
+    }
     exclusiveContent { // Configuration
         forRepository { maven { url = "https://repo.repsy.io/mvn/toma/public" } }
         filter { includeGroup("dev.toma.configuration") }
