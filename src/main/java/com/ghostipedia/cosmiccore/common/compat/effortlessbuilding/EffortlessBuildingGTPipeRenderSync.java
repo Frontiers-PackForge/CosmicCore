@@ -24,7 +24,7 @@ public final class EffortlessBuildingGTPipeRenderSync {
     public static void schedule(ServerLevel level, Set<IPipeNode<?, ?>> pipes) {
         Set<BlockPos> positions = PENDING.computeIfAbsent(level.getServer(), ignored -> new LinkedHashMap<>())
                 .computeIfAbsent(level.dimension(), ignored -> new LinkedHashSet<>());
-        for (IPipeNode<?, ?> pipe : pipes) positions.add(pipe.getBlockPos().immutable());
+        for (IPipeNode<?, ?> pipe : pipes) positions.add(pipe.self().getBlockPos().immutable());
     }
 
     public static void flush(MinecraftServer server) {

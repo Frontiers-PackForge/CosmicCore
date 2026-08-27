@@ -8,9 +8,7 @@ import com.gregtechceu.gtceu.api.data.RotationState;
 import com.gregtechceu.gtceu.api.machine.MetaMachine;
 import com.gregtechceu.gtceu.api.machine.MultiblockMachineDefinition;
 import com.gregtechceu.gtceu.api.machine.multiblock.PartAbility;
-import com.gregtechceu.gtceu.api.multiblock.PatternPredicate;
 import com.gregtechceu.gtceu.api.multiblock.pattern.MultiblockPatternBuilder;
-import com.gregtechceu.gtceu.api.multiblock.predicates.BasePredicate;
 import com.gregtechceu.gtceu.api.multiblock.util.BlockInfo;
 import com.gregtechceu.gtceu.api.multiblock.util.RelativeDirection;
 import com.gregtechceu.gtceu.api.recipe.OverclockingLogic;
@@ -77,19 +75,14 @@ public class AtmoPump {
                             .or(abilities(PartAbility.INPUT_ENERGY).setExactLimit(1))
                             .or(abilities(PartAbility.MAINTENANCE).setExactLimit(1)))
                     .where('Z',
-                            // 8.0.0 migration: SimplePredicate removed -> BasePredicate; mirrors stock
-                            // GTMachineUtils#rotorHolder. IRotorHolderMachine -> RotorHolderPartMachine.
-                            new PatternPredicate(
-                                    new BasePredicate(
-                                            worldState -> MetaMachine.getMachine(worldState.getLevel(),
-                                                    worldState.getPos().immutable()) instanceof
-                                                    RotorHolderPartMachine rotorHolder &&
-                                                    worldState.getLevel()
-                                                            .getBlockState(worldState.getPos().immutable()
-                                                                    .relative(rotorHolder.self().getFrontFacing()))
-                                                            .isAir() ? null : PLACEHOLDER,
-                                            PartAbility.ROTOR_HOLDER.getAllBlocks().stream()
-                                                    .map(BlockInfo::fromBlock).toList()))
+                            builder("Rotor Holder")
+                                    .predicate(ctx -> MetaMachine.getMachine(ctx.level(), ctx.pos()) instanceof
+                                            RotorHolderPartMachine rotorHolder &&
+                                            ctx.level().getBlockState(
+                                                    ctx.pos().relative(rotorHolder.self().getFrontFacing())).isAir())
+                                    .candidates(PartAbility.ROTOR_HOLDER.getAllBlocks().stream()
+                                            .map(BlockInfo::fromBlock))
+                                    .toMultiPredicate()
                                     .addTooltips(Component.translatable("gtceu.multiblock.pattern.clear_amount_3"))
                                     .setExactLimit(4))
                     .build())

@@ -40,7 +40,7 @@ import com.gregtechceu.gtceu.api.machine.multiblock.PartAbility;
 import com.gregtechceu.gtceu.api.machine.property.GTMachineModelProperties;
 import com.gregtechceu.gtceu.api.machine.steam.SimpleSteamMachine;
 import com.gregtechceu.gtceu.api.machine.trait.recipe.RecipeLogic;
-import com.gregtechceu.gtceu.api.multiblock.PatternPredicate;
+import com.gregtechceu.gtceu.api.multiblock.MultiPredicate;
 import com.gregtechceu.gtceu.api.multiblock.Predicates;
 import com.gregtechceu.gtceu.api.multiblock.pattern.MultiblockPatternBuilder;
 import com.gregtechceu.gtceu.api.multiblock.util.RelativeDirection;
@@ -1186,12 +1186,12 @@ public class CosmicMachines {
         GTMultiMachines.DISTILLATION_TOWER
                 .setAppearance(LIGHTWEIGHT_STAINLESS_STEEL_CASING::getDefaultState);
         GTMultiMachines.DISTILLATION_TOWER.setPattern("main", GTMemoizer.memoize(() -> {
-            PatternPredicate exportPredicate = abilities(PartAbility.EXPORT_FLUIDS_1X);
+            MultiPredicate exportPredicate = abilities(PartAbility.EXPORT_FLUIDS_1X);
             if (GTCEu.Mods.isAE2Loaded()) {
                 exportPredicate = exportPredicate.or(blocks(GTAEMachines.FLUID_EXPORT_HATCH_ME.get()));
             }
-            exportPredicate.setMaxLayerLimited(1);
-            PatternPredicate maintenance = autoAbilities(true, false, false).setMaxGlobalLimited(1);
+            exportPredicate = exportPredicate.setMaxLayerLimited(1);
+            MultiPredicate maintenance = autoAbilities(true, false, false).setMaxGlobalLimited(1);
             return MultiblockPatternBuilder.start(UP, FRONT, LEFT)
                     .slice(" AAA ", "AAAAA", "AAAAA", "AAAAA", " ABA ")
                     .sliceRepeatable(1, 12, " CCC ", "C###C", "C###C", "C###C", " CCC ")

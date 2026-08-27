@@ -16,14 +16,15 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import java.util.Map;
 
 @Mixin(RecipeManager.class)
-public abstract class GTRecipeReloadResetMixin {
+public abstract class PowerlessJetpackFuelReloadResetMixin {
 
     @Inject(method = {
             "apply(Ljava/util/Map;Lnet/minecraft/server/packs/resources/ResourceManager;Lnet/minecraft/util/profiling/ProfilerFiller;)V",
             "m_5787_(Ljava/util/Map;Lnet/minecraft/server/packs/resources/ResourceManager;Lnet/minecraft/util/profiling/ProfilerFiller;)V"
     }, at = @At("HEAD"), require = 0)
-    private void cosmiccore$resetGtRecipeState(Map<ResourceLocation, JsonElement> map, ResourceManager resourceManager,
-                                               ProfilerFiller profiler, CallbackInfo ci) {
-        GTRecipeReloadLifecycle.resetForReload();
+    private void cosmiccore$resetPowerlessJetpackFuels(Map<ResourceLocation, JsonElement> map,
+                                                       ResourceManager resourceManager,
+                                                       ProfilerFiller profiler, CallbackInfo ci) {
+        GTRecipeReloadLifecycle.clearPowerlessJetpackFuels();
     }
 }

@@ -40,8 +40,9 @@ public class IPBF {
                     .slice("QQQ", "XYX", "XXX", "XXX", "XXX")
                     .where('X', blocks(CASING_PRIMITIVE_BRICKS.get()))
                     .where('#', Predicates.air()
-                            .or(Predicates.custom(bws -> GTUtil.isBlockSnow(bws.getBlockState()) ?
-                                    null : Predicates.PLACEHOLDER, null)))
+                            .or(Predicates.builder("Snow")
+                                    .predicate(ctx -> GTUtil.isBlockSnow(ctx.state()))
+                                    .toMultiPredicate()))
                     .where('Y', Predicates.controller(blocks(definition.getBlock())))
                     .where('Q', blocks(FIREBOX_STEEL.get()).setMinGlobalLimited(6)
                             .or(Predicates.abilities(PartAbility.STEAM_IMPORT_ITEMS).setPreviewCount(1)
