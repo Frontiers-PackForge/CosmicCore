@@ -40,7 +40,7 @@ public final class ConductorAmpacityRules {
             Map.entry("gtceu:elementium", 3),
             Map.entry("gtceu:enriched_naquadah_trinium_europium_duranide", 16),
             Map.entry("gtceu:europium", 2),
-            Map.entry("gtceu:galvanized_ethersteel", 6),
+            Map.entry("cosmiccore:galvanized_ethersteel", 6),
             Map.entry("gtceu:gold", 1),
             Map.entry("gtceu:graphene", 4),
             Map.entry("gtceu:hssg", 4),
