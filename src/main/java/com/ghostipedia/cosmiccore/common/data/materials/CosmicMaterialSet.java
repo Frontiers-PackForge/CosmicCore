@@ -1,5 +1,7 @@
 package com.ghostipedia.cosmiccore.common.data.materials;
 
+import com.ghostipedia.cosmiccore.CosmicCore;
+
 import com.gregtechceu.gtceu.api.data.chemical.material.info.MaterialIconSet;
 
 import static com.gregtechceu.gtceu.api.data.chemical.material.info.MaterialIconSet.*;
@@ -17,6 +19,8 @@ public class CosmicMaterialSet {
     public static final MaterialIconSet VOIDSPARK = new MaterialIconSet("voidspark", DULL);
     public static final MaterialIconSet SOL = new MaterialIconSet("sol", DULL);
     public static final MaterialIconSet NOSTIUM = new MaterialIconSet("nostium", SHINY);
+    public static final MaterialIconSet GALVANIZED_ETHERSTEEL = new MaterialIconSet(
+            CosmicCore.id("galvanized_ethersteel"), SHINY);
     public static final MaterialIconSet CRYSTAL = new MaterialIconSet("crystal", DULL);
     public static final MaterialIconSet MAGIC = new MaterialIconSet("magic", DULL);
 

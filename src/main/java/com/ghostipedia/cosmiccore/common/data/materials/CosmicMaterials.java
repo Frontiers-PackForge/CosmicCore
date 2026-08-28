@@ -121,6 +121,7 @@ public class CosmicMaterials {
     public static Material AuricForcinium;
     public static Material SuperheavyBedrockAlloy;
     public static Material Nostium;
+    public static Material GalvanizedEthersteel;
     public static Material DraconicTarragon;
     public static Material Kuvite;
     public static Material BlinkwardAlloy;
@@ -549,6 +550,18 @@ public class CosmicMaterials {
                 .flags(GENERATE_BOLT_SCREW, GENERATE_ROUND, GENERATE_GEAR, GENERATE_SMALL_GEAR, GENERATE_RING,
                         GENERATE_FRAME, GENERATE_SPRING, GENERATE_SPRING_SMALL, GENERATE_FINE_WIRE, GENERATE_DENSE)
                 .blastTemp(1700, BlastProperty.GasTier.LOW, GTValues.VA[GTValues.LV], 1200)
+                .buildAndRegister();
+
+        GalvanizedEthersteel = new Material.Builder(CosmicCore.id("galvanized_ethersteel"))
+                .ingot()
+                .liquid()
+                .element(CosmicElements.EtherSteel)
+                .color(0xEB4258).secondaryColor(0x8F0E5C)
+                .iconSet(CosmicMaterialSet.GALVANIZED_ETHERSTEEL)
+                .cableProperties(GTValues.V[GTValues.HV], 4, 4, false)
+                .flags(GENERATE_PLATE, GENERATE_BOLT_SCREW, GENERATE_ROD, GENERATE_SPRING, GENERATE_SPRING_SMALL,
+                        GENERATE_FOIL, GENERATE_FINE_WIRE, NO_SMELTING, GENERATE_FRAME, GENERATE_GEAR,
+                        GENERATE_SMALL_GEAR)
                 .buildAndRegister();
 
         DraconicTarragon = new Material.Builder(CosmicCore.id("draconic_tarragon"))
