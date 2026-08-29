@@ -70,7 +70,7 @@ public class ConversionComplexMachine extends WorkableElectricMultiblockMachine
         applyConfiguration(selectedConfiguration);
         getSyncDataHolder().markClientSyncFieldDirty("configuration");
         state.getCache().clear();
-        state.setError(null);
+        state.clearErrors();
         state.setShouldUpdate(true);
         state.setState(PatternState.CheckState.UNINITIALIZED);
         recipeLogic.updateTickSubscription();

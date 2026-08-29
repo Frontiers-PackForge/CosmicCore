@@ -61,6 +61,8 @@ public class CosmicCoreMixinPlugin implements IMixinConfigPlugin {
                 Map.entry(".architectury.", "dev/architectury/impl/NetworkAggregator.class"),
                 Map.entry(".aero.", AERONAUTICS_MARKER),
                 Map.entry(".malum.", "com/sammy/malum/client/renderer/renderpass/ParallelWorldRenderer.class"),
+                Map.entry(".sodium.",
+                        "net/caffeinemc/mods/sodium/client/render/chunk/terrain/material/DefaultMaterials.class"),
                 Map.entry(".simulated.",
                         "dev/simulated_team/simulated/content/blocks/physics_assembler/PhysicsAssemblerBlockEntity.class"),
                 Map.entry(".spacegravity.", "com/spacegravity/spacegravity/SpaceGravityState.class"),

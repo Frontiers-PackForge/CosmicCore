@@ -231,7 +231,7 @@ public class IrisMultiblockMachine extends WorkableElectricMultiblockMachine imp
         if (!isFormed()) return;
 
         // Trigger structure recheck which will re-run the predicates
-        getDefaultPatternState().setError(null);
+        getDefaultPatternState().clearErrors();
         checkAndFormStructure(); // 8.0.0: replaces removed checkPatternWithLock()
     }
 
