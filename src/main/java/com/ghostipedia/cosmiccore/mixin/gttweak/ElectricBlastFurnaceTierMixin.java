@@ -81,7 +81,7 @@ public abstract class ElectricBlastFurnaceTierMixin extends WorkableElectricMult
         }
         tierState.setStructureTier(selectedTier);
         state.getCache().clear();
-        state.setError(null);
+        state.clearErrors();
         state.setShouldUpdate(true);
         state.setState(PatternState.CheckState.UNINITIALIZED);
         checkAndFormStructure();

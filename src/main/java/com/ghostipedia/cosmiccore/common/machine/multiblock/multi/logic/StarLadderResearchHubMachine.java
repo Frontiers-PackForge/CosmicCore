@@ -368,7 +368,7 @@ public class StarLadderResearchHubMachine extends LinkedWorkableElectricMultiblo
             getLevel().playSound(null, getBlockPos(), SoundEvents.PLAYER_LEVELUP, SoundSource.BLOCKS, 0.5F, 1.0F);
 
             // 8.0.0: re-evaluate structure via the all-in-one checkAndFormStructure (replaces the old
-            // invalidate -> setError(null) -> checkPattern -> onStructureFormed sequence).
+            // invalidate -> clearErrors() -> checkPattern -> onStructureFormed sequence).
             checkAndFormStructure();
         } else {
             player.displayClientMessage(
@@ -436,7 +436,7 @@ public class StarLadderResearchHubMachine extends LinkedWorkableElectricMultiblo
 
         // Force structure re-evaluation
         // 8.0.0: re-evaluate structure via the all-in-one checkAndFormStructure (replaces the old
-        // invalidate -> setError(null) -> checkPattern -> onStructureFormed sequence).
+        // invalidate -> clearErrors() -> checkPattern -> onStructureFormed sequence).
         checkAndFormStructure();
 
         return InteractionResult.SUCCESS;
@@ -474,7 +474,7 @@ public class StarLadderResearchHubMachine extends LinkedWorkableElectricMultiblo
                 lastMatchedTier = tier;
                 return true;
             }
-            state.setError(null);
+            state.clearErrors();
         }
 
         lastMatchedTier = -1;

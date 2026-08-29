@@ -51,7 +51,7 @@ public abstract class VacuumDistillationTowerModeMixin extends WorkableElectricM
         }
         setActiveRecipeType(selectedMode);
         state.getCache().clear();
-        state.setError(null);
+        state.clearErrors();
         state.setShouldUpdate(true);
         state.setState(PatternState.CheckState.UNINITIALIZED);
         recipeLogic.updateTickSubscription();
