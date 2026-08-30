@@ -1,0 +1,17 @@
+{
+  "entity": "undergarden:forgotten",
+  "cultivation_tier": "ev",
+  "experience_min": 5,
+  "experience_max": 5,
+  "vitae": "standard",
+  "spiritus": "standard",
+  "item_outputs": [
+    {
+      "item": "malum:wicked_spirit",
+      "min_count": 1,
+      "max_count": 1,
+      "chance": 1
+    }
+  ],
+  "source_fingerprint": "a89dfec44f856ce46d7eaea331d4ebb270cd482c802c42f2c01be6ec27159d23"
+}

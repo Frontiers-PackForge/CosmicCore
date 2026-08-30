@@ -1,0 +1,41 @@
+{
+  "entity": "neovitae:daemonium_pestis",
+  "cultivation_tier": "ev",
+  "experience_min": 8,
+  "experience_max": 8,
+  "vitae": "standard",
+  "spiritus": "standard",
+  "item_outputs": [
+    {
+      "item": "minecraft:spider_eye",
+      "min_count": 1,
+      "max_count": 1,
+      "chance": 0.29986572265625
+    },
+    {
+      "item": "minecraft:string",
+      "min_count": 1,
+      "max_count": 2,
+      "chance": 0.166259765625
+    },
+    {
+      "item": "neovitae:tainted_flesh",
+      "min_count": 1,
+      "max_count": 1,
+      "chance": 0.5
+    },
+    {
+      "item": "neovitae:venomgland_sac",
+      "min_count": 1,
+      "max_count": 2,
+      "chance": 1
+    },
+    {
+      "item": "malum:wicked_spirit",
+      "min_count": 1,
+      "max_count": 1,
+      "chance": 1
+    }
+  ],
+  "source_fingerprint": "70a0b095ef56e59ca4f9ce4233e1b9c2f1b38a48a0e4c9565e3693a36a5b0fad"
+}

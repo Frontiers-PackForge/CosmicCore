@@ -1,0 +1,17 @@
+{
+  "entity": "ars_elemental:flashjack_entity",
+  "cultivation_tier": "mv",
+  "experience_min": 0,
+  "experience_max": 0,
+  "vitae": "standard",
+  "spiritus": "low",
+  "item_outputs": [
+    {
+      "item": "malum:sacred_spirit",
+      "min_count": 1,
+      "max_count": 1,
+      "chance": 1
+    }
+  ],
+  "source_fingerprint": "1b83c7259f7993086a825bdee568bd9e1252dd97781d04017e788947c1ac12a3"
+}

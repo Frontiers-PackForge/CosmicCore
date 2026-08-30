@@ -1,0 +1,35 @@
+{
+  "entity": "undergarden:gloomper",
+  "cultivation_tier": "mv",
+  "experience_min": 1,
+  "experience_max": 3,
+  "vitae": "standard",
+  "spiritus": "low",
+  "item_outputs": [
+    {
+      "item": "minecraft:leather",
+      "min_count": 1,
+      "max_count": 2,
+      "chance": 0.66668701171875
+    },
+    {
+      "item": "undergarden:raw_gloomper_leg",
+      "min_count": 1,
+      "max_count": 2,
+      "chance": 1
+    },
+    {
+      "item": "malum:earthen_spirit",
+      "min_count": 1,
+      "max_count": 1,
+      "chance": 1
+    },
+    {
+      "item": "malum:sacred_spirit",
+      "min_count": 1,
+      "max_count": 1,
+      "chance": 1
+    }
+  ],
+  "source_fingerprint": "9148d85c4b5ce20a1691bcb72b0d53af7491603da9b88a0eace1e0c5eb06d0c7"
+}

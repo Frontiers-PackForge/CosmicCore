@@ -1,0 +1,47 @@
+{
+  "entity": "occultism:possessed_endermite",
+  "cultivation_tier": "luv",
+  "experience_min": 3,
+  "experience_max": 3,
+  "vitae": "standard",
+  "spiritus": "standard",
+  "item_outputs": [
+    {
+      "item": "minecraft:end_stone",
+      "min_count": 1,
+      "max_count": 2,
+      "chance": 0.9901123046875
+    },
+    {
+      "item": "minecraft:end_stone_bricks",
+      "min_count": 1,
+      "max_count": 2,
+      "chance": 0.0098876953125
+    },
+    {
+      "item": "minecraft:ender_eye",
+      "min_count": 1,
+      "max_count": 1,
+      "chance": 0.04986572265625
+    },
+    {
+      "item": "minecraft:fermented_spider_eye",
+      "min_count": 1,
+      "max_count": 1,
+      "chance": 0.10040283203125
+    },
+    {
+      "item": "minecraft:spider_eye",
+      "min_count": 1,
+      "max_count": 1,
+      "chance": 0.09967041015625
+    },
+    {
+      "item": "malum:wicked_spirit",
+      "min_count": 1,
+      "max_count": 1,
+      "chance": 1
+    }
+  ],
+  "source_fingerprint": "ea788340e7b993efb1afdb026b1af0292f074f58aa3073c0ebd416e4bc10c259"
+}

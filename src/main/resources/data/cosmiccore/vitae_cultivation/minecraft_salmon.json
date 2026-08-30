@@ -1,0 +1,29 @@
+{
+  "entity": "minecraft:salmon",
+  "cultivation_tier": "mv",
+  "experience_min": 1,
+  "experience_max": 3,
+  "vitae": "standard",
+  "spiritus": "low",
+  "item_outputs": [
+    {
+      "item": "minecraft:bone_meal",
+      "min_count": 1,
+      "max_count": 1,
+      "chance": 0.068115234375
+    },
+    {
+      "item": "minecraft:salmon",
+      "min_count": 1,
+      "max_count": 1,
+      "chance": 1
+    },
+    {
+      "item": "malum:aqueous_spirit",
+      "min_count": 1,
+      "max_count": 1,
+      "chance": 1
+    }
+  ],
+  "source_fingerprint": "05982c25bf17635df57734bf9daa1a9b045507c95bcf3ee5e2ad398ea0cba279"
+}

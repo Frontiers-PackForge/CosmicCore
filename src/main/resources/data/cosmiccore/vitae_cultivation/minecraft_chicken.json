@@ -1,0 +1,35 @@
+{
+  "entity": "minecraft:chicken",
+  "cultivation_tier": "mv",
+  "experience_min": 1,
+  "experience_max": 3,
+  "vitae": "standard",
+  "spiritus": "low",
+  "item_outputs": [
+    {
+      "item": "minecraft:chicken",
+      "min_count": 1,
+      "max_count": 1,
+      "chance": 1
+    },
+    {
+      "item": "minecraft:feather",
+      "min_count": 1,
+      "max_count": 2,
+      "chance": 0.66668701171875
+    },
+    {
+      "item": "malum:sacred_spirit",
+      "min_count": 1,
+      "max_count": 1,
+      "chance": 1
+    },
+    {
+      "item": "malum:aerial_spirit",
+      "min_count": 1,
+      "max_count": 1,
+      "chance": 1
+    }
+  ],
+  "source_fingerprint": "6311fde6007a083124af8a88cb3a1e477a9170737253ec79d0282df1756962ed"
+}

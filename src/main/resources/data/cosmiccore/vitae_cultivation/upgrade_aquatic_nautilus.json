@@ -1,0 +1,23 @@
+{
+  "entity": "upgrade_aquatic:nautilus",
+  "cultivation_tier": "mv",
+  "experience_min": 1,
+  "experience_max": 3,
+  "vitae": "standard",
+  "spiritus": "low",
+  "item_outputs": [
+    {
+      "item": "minecraft:nautilus_shell",
+      "min_count": 1,
+      "max_count": 1,
+      "chance": 0.556884765625
+    },
+    {
+      "item": "malum:aqueous_spirit",
+      "min_count": 1,
+      "max_count": 1,
+      "chance": 1
+    }
+  ],
+  "source_fingerprint": "99d12df9036e910f43790f1dbe586387576aea457fc1658bbe204e8b83db5c88"
+}

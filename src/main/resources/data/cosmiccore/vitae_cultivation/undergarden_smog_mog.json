@@ -1,0 +1,29 @@
+{
+  "entity": "undergarden:smog_mog",
+  "cultivation_tier": "mv",
+  "experience_min": 1,
+  "experience_max": 3,
+  "vitae": "standard",
+  "spiritus": "low",
+  "item_outputs": [
+    {
+      "item": "undergarden:blue_mogmoss",
+      "min_count": 1,
+      "max_count": 1,
+      "chance": 0.5
+    },
+    {
+      "item": "undergarden:depthrock_pebble",
+      "min_count": 3,
+      "max_count": 6,
+      "chance": 1
+    },
+    {
+      "item": "malum:sacred_spirit",
+      "min_count": 1,
+      "max_count": 1,
+      "chance": 1
+    }
+  ],
+  "source_fingerprint": "9edd99c93c3adca6d9c940e4ff26125896bc45f1bc3de1e6ea0be6fcca8bcc69"
+}

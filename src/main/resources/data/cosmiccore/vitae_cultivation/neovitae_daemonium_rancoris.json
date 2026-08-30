@@ -1,0 +1,41 @@
+{
+  "entity": "neovitae:daemonium_rancoris",
+  "cultivation_tier": "ev",
+  "experience_min": 10,
+  "experience_max": 10,
+  "vitae": "standard",
+  "spiritus": "standard",
+  "item_outputs": [
+    {
+      "item": "minecraft:arrow",
+      "min_count": 1,
+      "max_count": 3,
+      "chance": 0.24993896484375
+    },
+    {
+      "item": "minecraft:bone",
+      "min_count": 1,
+      "max_count": 2,
+      "chance": 0.131591796875
+    },
+    {
+      "item": "neovitae:ectoplasmic_residue",
+      "min_count": 1,
+      "max_count": 2,
+      "chance": 1
+    },
+    {
+      "item": "neovitae:tainted_flesh",
+      "min_count": 1,
+      "max_count": 1,
+      "chance": 0.5
+    },
+    {
+      "item": "malum:wicked_spirit",
+      "min_count": 1,
+      "max_count": 1,
+      "chance": 1
+    }
+  ],
+  "source_fingerprint": "298d4ea0088f0e45325693f171b913c266bfebfd6880d9a822fdd464bc27913b"
+}

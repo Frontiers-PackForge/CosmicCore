@@ -1,0 +1,35 @@
+{
+  "entity": "undergarden:muncher",
+  "cultivation_tier": "mv",
+  "experience_min": 5,
+  "experience_max": 5,
+  "vitae": "standard",
+  "spiritus": "standard",
+  "item_outputs": [
+    {
+      "item": "undergarden:cloggrum_nugget",
+      "min_count": 1,
+      "max_count": 9,
+      "chance": 0.659423828125
+    },
+    {
+      "item": "undergarden:froststeel_nugget",
+      "min_count": 1,
+      "max_count": 3,
+      "chance": 0.50030517578125
+    },
+    {
+      "item": "malum:earthen_spirit",
+      "min_count": 1,
+      "max_count": 1,
+      "chance": 1
+    },
+    {
+      "item": "malum:wicked_spirit",
+      "min_count": 1,
+      "max_count": 1,
+      "chance": 1
+    }
+  ],
+  "source_fingerprint": "a0b8ab4e628b37b11a17695bc21c5b16a4bfbe0c9fbbd311ce1dfc308a5589b3"
+}

@@ -1,0 +1,29 @@
+{
+  "entity": "neovitae:daemonium_animaris",
+  "cultivation_tier": "ev",
+  "experience_min": 15,
+  "experience_max": 15,
+  "vitae": "standard",
+  "spiritus": "standard",
+  "item_outputs": [
+    {
+      "item": "neovitae:animus_mote",
+      "min_count": 1,
+      "max_count": 2,
+      "chance": 1
+    },
+    {
+      "item": "minecraft:phantom_membrane",
+      "min_count": 1,
+      "max_count": 1,
+      "chance": 0.14996337890625
+    },
+    {
+      "item": "malum:wicked_spirit",
+      "min_count": 1,
+      "max_count": 1,
+      "chance": 1
+    }
+  ],
+  "source_fingerprint": "f7cca84e394ba8c02018913c209bbccb35c73d8bb0e9044de11a9f4c69a43847"
+}

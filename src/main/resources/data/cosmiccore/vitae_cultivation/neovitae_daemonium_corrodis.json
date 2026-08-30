@@ -1,0 +1,47 @@
+{
+  "entity": "neovitae:daemonium_corrodis",
+  "cultivation_tier": "ev",
+  "experience_min": 25,
+  "experience_max": 25,
+  "vitae": "standard",
+  "spiritus": "standard",
+  "item_outputs": [
+    {
+      "item": "neovitae:blight_marrow",
+      "min_count": 1,
+      "max_count": 2,
+      "chance": 1
+    },
+    {
+      "item": "minecraft:bone",
+      "min_count": 1,
+      "max_count": 3,
+      "chance": 0.24932861328125
+    },
+    {
+      "item": "neovitae:raw_demonite",
+      "min_count": 1,
+      "max_count": 1,
+      "chance": 0.3023681640625
+    },
+    {
+      "item": "neovitae:tainted_flesh",
+      "min_count": 1,
+      "max_count": 2,
+      "chance": 0.40008544921875
+    },
+    {
+      "item": "minecraft:wither_skeleton_skull",
+      "min_count": 1,
+      "max_count": 1,
+      "chance": 0.04998779296875
+    },
+    {
+      "item": "malum:eldritch_spirit",
+      "min_count": 4,
+      "max_count": 4,
+      "chance": 1
+    }
+  ],
+  "source_fingerprint": "96eb0e317687a2002cbfe89a9e60e6184a6ce3295f2f81ba0b5dd52933ec27b9"
+}

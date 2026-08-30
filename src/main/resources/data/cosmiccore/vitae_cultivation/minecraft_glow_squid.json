@@ -1,0 +1,35 @@
+{
+  "entity": "minecraft:glow_squid",
+  "cultivation_tier": "mv",
+  "experience_min": 1,
+  "experience_max": 3,
+  "vitae": "standard",
+  "spiritus": "low",
+  "item_outputs": [
+    {
+      "item": "minecraft:glow_ink_sac",
+      "min_count": 1,
+      "max_count": 3,
+      "chance": 1
+    },
+    {
+      "item": "malum:aqueous_spirit",
+      "min_count": 2,
+      "max_count": 2,
+      "chance": 1
+    },
+    {
+      "item": "malum:sacred_spirit",
+      "min_count": 1,
+      "max_count": 1,
+      "chance": 1
+    },
+    {
+      "item": "malum:arcane_spirit",
+      "min_count": 1,
+      "max_count": 1,
+      "chance": 1
+    }
+  ],
+  "source_fingerprint": "3927cfbe88aa0dc40b3ae4796619466e1d9126ff97b287fbd31a39d13f61c6a6"
+}

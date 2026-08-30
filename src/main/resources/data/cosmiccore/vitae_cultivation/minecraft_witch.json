@@ -1,0 +1,65 @@
+{
+  "entity": "minecraft:witch",
+  "cultivation_tier": "ev",
+  "experience_min": 5,
+  "experience_max": 5,
+  "vitae": "standard",
+  "spiritus": "standard",
+  "item_outputs": [
+    {
+      "item": "minecraft:glass_bottle",
+      "min_count": 1,
+      "max_count": 6,
+      "chance": 0.1778564453125
+    },
+    {
+      "item": "minecraft:glowstone_dust",
+      "min_count": 1,
+      "max_count": 6,
+      "chance": 0.1807861328125
+    },
+    {
+      "item": "minecraft:gunpowder",
+      "min_count": 1,
+      "max_count": 6,
+      "chance": 0.17919921875
+    },
+    {
+      "item": "minecraft:redstone",
+      "min_count": 4,
+      "max_count": 8,
+      "chance": 1
+    },
+    {
+      "item": "minecraft:spider_eye",
+      "min_count": 1,
+      "max_count": 6,
+      "chance": 0.17852783203125
+    },
+    {
+      "item": "minecraft:stick",
+      "min_count": 1,
+      "max_count": 6,
+      "chance": 0.3321533203125
+    },
+    {
+      "item": "minecraft:sugar",
+      "min_count": 1,
+      "max_count": 6,
+      "chance": 0.17974853515625
+    },
+    {
+      "item": "malum:wicked_spirit",
+      "min_count": 2,
+      "max_count": 2,
+      "chance": 1
+    },
+    {
+      "item": "malum:arcane_spirit",
+      "min_count": 2,
+      "max_count": 2,
+      "chance": 1
+    }
+  ],
+  "source_fingerprint": "fa6700ed0aa990cdb227760742ed38bb038449507c122d1d47cd3a2d60f019cc"
+}

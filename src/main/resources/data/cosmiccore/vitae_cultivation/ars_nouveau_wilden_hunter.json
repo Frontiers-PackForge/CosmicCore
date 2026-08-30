@@ -1,0 +1,35 @@
+{
+  "entity": "ars_nouveau:wilden_hunter",
+  "cultivation_tier": "mv",
+  "experience_min": 5,
+  "experience_max": 5,
+  "vitae": "standard",
+  "spiritus": "standard",
+  "item_outputs": [
+    {
+      "item": "ars_nouveau:wilden_horn",
+      "min_count": 1,
+      "max_count": 1,
+      "chance": 1
+    },
+    {
+      "item": "malum:wicked_spirit",
+      "min_count": 1,
+      "max_count": 1,
+      "chance": 1
+    },
+    {
+      "item": "malum:arcane_spirit",
+      "min_count": 1,
+      "max_count": 1,
+      "chance": 1
+    },
+    {
+      "item": "malum:earthen_spirit",
+      "min_count": 1,
+      "max_count": 1,
+      "chance": 1
+    }
+  ],
+  "source_fingerprint": "cf2430d0730ea7c4f1699fc3de031f2b527584e3e194c83fb7c56896afb7c988"
+}

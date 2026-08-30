@@ -1,0 +1,29 @@
+{
+  "entity": "minecraft:vindicator",
+  "cultivation_tier": "mv",
+  "experience_min": 5,
+  "experience_max": 5,
+  "vitae": "standard",
+  "spiritus": "standard",
+  "item_outputs": [
+    {
+      "item": "minecraft:emerald",
+      "min_count": 1,
+      "max_count": 1,
+      "chance": 0.443115234375
+    },
+    {
+      "item": "farmersdelight:onion",
+      "min_count": 1,
+      "max_count": 1,
+      "chance": 0.0201416015625
+    },
+    {
+      "item": "malum:wicked_spirit",
+      "min_count": 4,
+      "max_count": 4,
+      "chance": 1
+    }
+  ],
+  "source_fingerprint": "c6c21a1def4760a4c5447b5e73dc8c958a2f4697bec96f45e8ba86f115b71b72"
+}

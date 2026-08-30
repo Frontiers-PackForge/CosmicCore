@@ -1,0 +1,29 @@
+{
+  "entity": "occultism:possessed_ghast",
+  "cultivation_tier": "ev",
+  "experience_min": 5,
+  "experience_max": 5,
+  "vitae": "standard",
+  "spiritus": "standard",
+  "item_outputs": [
+    {
+      "item": "minecraft:ghast_tear",
+      "min_count": 1,
+      "max_count": 3,
+      "chance": 1
+    },
+    {
+      "item": "minecraft:gunpowder",
+      "min_count": 1,
+      "max_count": 4,
+      "chance": 1
+    },
+    {
+      "item": "malum:wicked_spirit",
+      "min_count": 1,
+      "max_count": 1,
+      "chance": 1
+    }
+  ],
+  "source_fingerprint": "39b068deced138f4c9d3aeb8f9d11bfceb5b8db6ed0bfb84128586fd5f13cb56"
+}

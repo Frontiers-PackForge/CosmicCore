@@ -1,0 +1,35 @@
+{
+  "entity": "upgrade_aquatic:great_thrasher",
+  "cultivation_tier": "mv",
+  "experience_min": 55,
+  "experience_max": 55,
+  "vitae": "standard",
+  "spiritus": "standard",
+  "item_outputs": [
+    {
+      "item": "upgrade_aquatic:disc_fragment_atlantis",
+      "min_count": 1,
+      "max_count": 3,
+      "chance": 0.3299560546875
+    },
+    {
+      "item": "upgrade_aquatic:thrasher_tooth",
+      "min_count": 1,
+      "max_count": 3,
+      "chance": 1
+    },
+    {
+      "item": "malum:wicked_spirit",
+      "min_count": 3,
+      "max_count": 3,
+      "chance": 1
+    },
+    {
+      "item": "malum:aqueous_spirit",
+      "min_count": 3,
+      "max_count": 3,
+      "chance": 1
+    }
+  ],
+  "source_fingerprint": "04a1afee3af69e84f0f6adf2f61cb27a21c9371d4edda5cd700f3be9a06e83b8"
+}

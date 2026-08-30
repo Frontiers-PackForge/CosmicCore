@@ -1,0 +1,29 @@
+{
+  "entity": "minecraft:blaze",
+  "cultivation_tier": "mv",
+  "experience_min": 10,
+  "experience_max": 10,
+  "vitae": "standard",
+  "spiritus": "standard",
+  "item_outputs": [
+    {
+      "item": "minecraft:blaze_rod",
+      "min_count": 1,
+      "max_count": 1,
+      "chance": 0.443115234375
+    },
+    {
+      "item": "malum:infernal_spirit",
+      "min_count": 3,
+      "max_count": 3,
+      "chance": 1
+    },
+    {
+      "item": "malum:arcane_spirit",
+      "min_count": 1,
+      "max_count": 1,
+      "chance": 1
+    }
+  ],
+  "source_fingerprint": "ea0916710f31d7927f56317cbc865c985e130fd87da97c3fcd1c193e20aa21d4"
+}

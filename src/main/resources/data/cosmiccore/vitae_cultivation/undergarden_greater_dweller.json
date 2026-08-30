@@ -1,0 +1,29 @@
+{
+  "entity": "undergarden:greater_dweller",
+  "cultivation_tier": "ev",
+  "experience_min": 1,
+  "experience_max": 3,
+  "vitae": "standard",
+  "spiritus": "low",
+  "item_outputs": [
+    {
+      "item": "minecraft:leather",
+      "min_count": 1,
+      "max_count": 4,
+      "chance": 0.79962158203125
+    },
+    {
+      "item": "undergarden:raw_dweller_meat",
+      "min_count": 4,
+      "max_count": 8,
+      "chance": 1
+    },
+    {
+      "item": "malum:eldritch_spirit",
+      "min_count": 4,
+      "max_count": 4,
+      "chance": 1
+    }
+  ],
+  "source_fingerprint": "55492a777496e6b9714a563556bb40426715a14758db726ab5a3f198d260880d"
+}

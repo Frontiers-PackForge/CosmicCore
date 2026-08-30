@@ -1,0 +1,35 @@
+{
+  "entity": "minecraft:mooshroom",
+  "cultivation_tier": "mv",
+  "experience_min": 1,
+  "experience_max": 3,
+  "vitae": "standard",
+  "spiritus": "low",
+  "item_outputs": [
+    {
+      "item": "minecraft:beef",
+      "min_count": 1,
+      "max_count": 3,
+      "chance": 1
+    },
+    {
+      "item": "minecraft:leather",
+      "min_count": 1,
+      "max_count": 2,
+      "chance": 0.66668701171875
+    },
+    {
+      "item": "malum:arcane_spirit",
+      "min_count": 1,
+      "max_count": 1,
+      "chance": 1
+    },
+    {
+      "item": "malum:earthen_spirit",
+      "min_count": 1,
+      "max_count": 1,
+      "chance": 1
+    }
+  ],
+  "source_fingerprint": "2b16aa1dac665731d9a31e06bcc2aea0a3abd2938a465b2c1d337ac3b07552b4"
+}

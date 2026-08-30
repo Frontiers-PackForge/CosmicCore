@@ -1,0 +1,203 @@
+{
+  "entity": "occultism:possessed_blaze",
+  "cultivation_tier": "luv",
+  "experience_min": 10,
+  "experience_max": 10,
+  "vitae": "standard",
+  "spiritus": "standard",
+  "item_outputs": [
+    {
+      "item": "minecraft:ancient_debris",
+      "min_count": 1,
+      "max_count": 1,
+      "chance": 0.01055908203125
+    },
+    {
+      "item": "minecraft:basalt",
+      "min_count": 1,
+      "max_count": 1,
+      "chance": 0.1500244140625
+    },
+    {
+      "item": "minecraft:blackstone",
+      "min_count": 1,
+      "max_count": 1,
+      "chance": 0.1500244140625
+    },
+    {
+      "item": "minecraft:blaze_powder",
+      "min_count": 1,
+      "max_count": 13,
+      "chance": 0.928466796875
+    },
+    {
+      "item": "minecraft:blaze_rod",
+      "min_count": 2,
+      "max_count": 6,
+      "chance": 1
+    },
+    {
+      "item": "minecraft:bone_block",
+      "min_count": 1,
+      "max_count": 1,
+      "chance": 0.04998779296875
+    },
+    {
+      "item": "minecraft:brown_mushroom",
+      "min_count": 1,
+      "max_count": 1,
+      "chance": 0.1011962890625
+    },
+    {
+      "item": "minecraft:crimson_fungus",
+      "min_count": 1,
+      "max_count": 1,
+      "chance": 0.15216064453125
+    },
+    {
+      "item": "minecraft:crimson_nylium",
+      "min_count": 1,
+      "max_count": 1,
+      "chance": 0.08984375
+    },
+    {
+      "item": "minecraft:crimson_roots",
+      "min_count": 1,
+      "max_count": 1,
+      "chance": 0.04840087890625
+    },
+    {
+      "item": "minecraft:crying_obsidian",
+      "min_count": 1,
+      "max_count": 1,
+      "chance": 0.0394287109375
+    },
+    {
+      "item": "minecraft:gilded_blackstone",
+      "min_count": 1,
+      "max_count": 1,
+      "chance": 0.00994873046875
+    },
+    {
+      "item": "minecraft:glowstone",
+      "min_count": 1,
+      "max_count": 1,
+      "chance": 0.08935546875
+    },
+    {
+      "item": "minecraft:glowstone_dust",
+      "min_count": 1,
+      "max_count": 6,
+      "chance": 0.24993896484375
+    },
+    {
+      "item": "minecraft:gravel",
+      "min_count": 1,
+      "max_count": 1,
+      "chance": 0.0899658203125
+    },
+    {
+      "item": "minecraft:magma_block",
+      "min_count": 1,
+      "max_count": 1,
+      "chance": 0.14886474609375
+    },
+    {
+      "item": "minecraft:nether_quartz_ore",
+      "min_count": 1,
+      "max_count": 1,
+      "chance": 0.250244140625
+    },
+    {
+      "item": "minecraft:nether_wart",
+      "min_count": 1,
+      "max_count": 1,
+      "chance": 0.2977294921875
+    },
+    {
+      "item": "minecraft:nether_wart_block",
+      "min_count": 1,
+      "max_count": 1,
+      "chance": 0.0101318359375
+    },
+    {
+      "item": "minecraft:netherrack",
+      "min_count": 1,
+      "max_count": 1,
+      "chance": 0.44989013671875
+    },
+    {
+      "item": "minecraft:obsidian",
+      "min_count": 1,
+      "max_count": 1,
+      "chance": 0.20098876953125
+    },
+    {
+      "item": "minecraft:red_mushroom",
+      "min_count": 1,
+      "max_count": 1,
+      "chance": 0.10107421875
+    },
+    {
+      "item": "minecraft:shroomlight",
+      "min_count": 1,
+      "max_count": 1,
+      "chance": 0.00994873046875
+    },
+    {
+      "item": "minecraft:soul_sand",
+      "min_count": 1,
+      "max_count": 1,
+      "chance": 0.1500244140625
+    },
+    {
+      "item": "minecraft:soul_soil",
+      "min_count": 1,
+      "max_count": 1,
+      "chance": 0.14996337890625
+    },
+    {
+      "item": "minecraft:twisting_vines",
+      "min_count": 1,
+      "max_count": 1,
+      "chance": 0.05316162109375
+    },
+    {
+      "item": "minecraft:warped_fungus",
+      "min_count": 1,
+      "max_count": 1,
+      "chance": 0.1468505859375
+    },
+    {
+      "item": "minecraft:warped_nylium",
+      "min_count": 1,
+      "max_count": 1,
+      "chance": 0.08984375
+    },
+    {
+      "item": "minecraft:warped_roots",
+      "min_count": 1,
+      "max_count": 1,
+      "chance": 0.05242919921875
+    },
+    {
+      "item": "minecraft:warped_wart_block",
+      "min_count": 1,
+      "max_count": 1,
+      "chance": 0.0098876953125
+    },
+    {
+      "item": "minecraft:weeping_vines",
+      "min_count": 1,
+      "max_count": 1,
+      "chance": 0.0469970703125
+    },
+    {
+      "item": "malum:eldritch_spirit",
+      "min_count": 4,
+      "max_count": 4,
+      "chance": 1
+    }
+  ],
+  "source_fingerprint": "f559313517d8ccfd44b9e39a33774d24cc3d2a1e6e6df56fca3ad99abab49744"
+}

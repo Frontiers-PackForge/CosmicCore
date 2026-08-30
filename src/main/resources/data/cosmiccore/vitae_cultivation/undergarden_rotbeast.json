@@ -1,0 +1,29 @@
+{
+  "entity": "undergarden:rotbeast",
+  "cultivation_tier": "mv",
+  "experience_min": 5,
+  "experience_max": 5,
+  "vitae": "standard",
+  "spiritus": "standard",
+  "item_outputs": [
+    {
+      "item": "undergarden:utheric_shard",
+      "min_count": 2,
+      "max_count": 8,
+      "chance": 1
+    },
+    {
+      "item": "malum:arcane_spirit",
+      "min_count": 1,
+      "max_count": 1,
+      "chance": 1
+    },
+    {
+      "item": "malum:wicked_spirit",
+      "min_count": 1,
+      "max_count": 1,
+      "chance": 1
+    }
+  ],
+  "source_fingerprint": "40222ca31c97f393d5091469b19c2144be23b9ce176149d6e17b2cd2400b7913"
+}

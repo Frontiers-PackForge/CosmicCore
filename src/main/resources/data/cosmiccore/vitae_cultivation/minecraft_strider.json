@@ -1,0 +1,41 @@
+{
+  "entity": "minecraft:strider",
+  "cultivation_tier": "mv",
+  "experience_min": 1,
+  "experience_max": 3,
+  "vitae": "standard",
+  "spiritus": "low",
+  "item_outputs": [
+    {
+      "item": "mynethersdelight:strider_slice",
+      "min_count": 2,
+      "max_count": 4,
+      "chance": 1
+    },
+    {
+      "item": "minecraft:string",
+      "min_count": 2,
+      "max_count": 5,
+      "chance": 1
+    },
+    {
+      "item": "malum:arcane_spirit",
+      "min_count": 1,
+      "max_count": 1,
+      "chance": 1
+    },
+    {
+      "item": "malum:infernal_spirit",
+      "min_count": 2,
+      "max_count": 2,
+      "chance": 1
+    },
+    {
+      "item": "malum:sacred_spirit",
+      "min_count": 1,
+      "max_count": 1,
+      "chance": 1
+    }
+  ],
+  "source_fingerprint": "ca6362763ef4f74fff92c34a4cf8535c9ada7678162511fe0a942cce72df62ed"
+}

@@ -1,0 +1,53 @@
+{
+  "entity": "minecraft:husk",
+  "cultivation_tier": "mv",
+  "experience_min": 5,
+  "experience_max": 5,
+  "vitae": "low",
+  "spiritus": "standard",
+  "item_outputs": [
+    {
+      "item": "minecraft:carrot",
+      "min_count": 1,
+      "max_count": 1,
+      "chance": 0.008544921875
+    },
+    {
+      "item": "minecraft:iron_ingot",
+      "min_count": 1,
+      "max_count": 1,
+      "chance": 0.00830078125
+    },
+    {
+      "item": "farmersdelight:onion",
+      "min_count": 1,
+      "max_count": 1,
+      "chance": 0.02008056640625
+    },
+    {
+      "item": "minecraft:potato",
+      "min_count": 1,
+      "max_count": 1,
+      "chance": 0.00823974609375
+    },
+    {
+      "item": "minecraft:rotten_flesh",
+      "min_count": 1,
+      "max_count": 2,
+      "chance": 0.66668701171875
+    },
+    {
+      "item": "malum:wicked_spirit",
+      "min_count": 1,
+      "max_count": 1,
+      "chance": 1
+    },
+    {
+      "item": "malum:infernal_spirit",
+      "min_count": 1,
+      "max_count": 1,
+      "chance": 1
+    }
+  ],
+  "source_fingerprint": "102f36c061d2a8b51cc37dfe32e1b970c2ecced1e30c16d898994312aed0d166"
+}

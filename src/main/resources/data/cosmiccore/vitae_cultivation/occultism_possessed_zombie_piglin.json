@@ -1,0 +1,41 @@
+{
+  "entity": "occultism:possessed_zombie_piglin",
+  "cultivation_tier": "ev",
+  "experience_min": 5,
+  "experience_max": 5,
+  "vitae": "low",
+  "spiritus": "standard",
+  "item_outputs": [
+    {
+      "item": "occultism:demonic_meat",
+      "min_count": 1,
+      "max_count": 4,
+      "chance": 1
+    },
+    {
+      "item": "minecraft:porkchop",
+      "min_count": 1,
+      "max_count": 4,
+      "chance": 0.16448974609375
+    },
+    {
+      "item": "minecraft:rotten_flesh",
+      "min_count": 1,
+      "max_count": 4,
+      "chance": 0.166259765625
+    },
+    {
+      "item": "occultism:tallow",
+      "min_count": 1,
+      "max_count": 2,
+      "chance": 0.7999267578125
+    },
+    {
+      "item": "malum:eldritch_spirit",
+      "min_count": 4,
+      "max_count": 4,
+      "chance": 1
+    }
+  ],
+  "source_fingerprint": "3d73624d8b1bc8e27c25c3ebd009f693399fcd5aceae3c8ab0803c40281c10d0"
+}

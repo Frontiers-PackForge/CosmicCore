@@ -1,0 +1,41 @@
+{
+  "entity": "occultism:possessed_witch",
+  "cultivation_tier": "ev",
+  "experience_min": 5,
+  "experience_max": 5,
+  "vitae": "standard",
+  "spiritus": "standard",
+  "item_outputs": [
+    {
+      "item": "minecraft:experience_bottle",
+      "min_count": 1,
+      "max_count": 1,
+      "chance": 0.53338623046875
+    },
+    {
+      "item": "minecraft:honey_bottle",
+      "min_count": 1,
+      "max_count": 1,
+      "chance": 0.2666015625
+    },
+    {
+      "item": "minecraft:ominous_bottle",
+      "min_count": 1,
+      "max_count": 1,
+      "chance": 0.13330078125
+    },
+    {
+      "item": "minecraft:potion",
+      "min_count": 1,
+      "max_count": 1,
+      "chance": 0.06671142578125
+    },
+    {
+      "item": "malum:wicked_spirit",
+      "min_count": 1,
+      "max_count": 1,
+      "chance": 1
+    }
+  ],
+  "source_fingerprint": "1b1d294eaab938076cd727cb32d4e2c26015548591d03ae614e342313facf7ff"
+}

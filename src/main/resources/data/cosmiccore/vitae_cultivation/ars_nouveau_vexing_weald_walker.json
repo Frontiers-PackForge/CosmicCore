@@ -1,0 +1,17 @@
+{
+  "entity": "ars_nouveau:vexing_weald_walker",
+  "cultivation_tier": "mv",
+  "experience_min": 0,
+  "experience_max": 0,
+  "vitae": "standard",
+  "spiritus": "low",
+  "item_outputs": [
+    {
+      "item": "malum:eldritch_spirit",
+      "min_count": 4,
+      "max_count": 4,
+      "chance": 1
+    }
+  ],
+  "source_fingerprint": "b7ebb06b9ca0859fcf81d1691fd2a959fbe876ee08f88261aae8c618e8592a3b"
+}

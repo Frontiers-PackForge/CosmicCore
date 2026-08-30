@@ -1,0 +1,47 @@
+{
+  "entity": "minecraft:wither_skeleton",
+  "cultivation_tier": "mv",
+  "experience_min": 5,
+  "experience_max": 5,
+  "vitae": "low",
+  "spiritus": "standard",
+  "item_outputs": [
+    {
+      "item": "minecraft:bone",
+      "min_count": 1,
+      "max_count": 2,
+      "chance": 0.6661376953125
+    },
+    {
+      "item": "minecraft:coal",
+      "min_count": 1,
+      "max_count": 1,
+      "chance": 0.333251953125
+    },
+    {
+      "item": "minecraft:wither_skeleton_skull",
+      "min_count": 1,
+      "max_count": 1,
+      "chance": 0.0250244140625
+    },
+    {
+      "item": "malum:wicked_spirit",
+      "min_count": 1,
+      "max_count": 1,
+      "chance": 1
+    },
+    {
+      "item": "malum:arcane_spirit",
+      "min_count": 1,
+      "max_count": 1,
+      "chance": 1
+    },
+    {
+      "item": "malum:infernal_spirit",
+      "min_count": 1,
+      "max_count": 1,
+      "chance": 1
+    }
+  ],
+  "source_fingerprint": "d844f50cf9e573564c06d6c2d3bf9f7276edb26d2fbc1d5a564c95debf70358c"
+}

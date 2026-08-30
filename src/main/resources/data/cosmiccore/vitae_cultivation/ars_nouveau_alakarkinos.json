@@ -1,0 +1,17 @@
+{
+  "entity": "ars_nouveau:alakarkinos",
+  "cultivation_tier": "mv",
+  "experience_min": 0,
+  "experience_max": 0,
+  "vitae": "standard",
+  "spiritus": "low",
+  "item_outputs": [
+    {
+      "item": "malum:sacred_spirit",
+      "min_count": 1,
+      "max_count": 1,
+      "chance": 1
+    }
+  ],
+  "source_fingerprint": "5ae354fa7661bc81bd39ced081a4649559026c2140bbbb06bf9a4e5ee0045575"
+}

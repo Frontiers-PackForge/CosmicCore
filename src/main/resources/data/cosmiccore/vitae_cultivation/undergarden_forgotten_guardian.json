@@ -1,0 +1,29 @@
+{
+  "entity": "undergarden:forgotten_guardian",
+  "cultivation_tier": "luv",
+  "experience_min": 30,
+  "experience_max": 30,
+  "vitae": "standard",
+  "spiritus": "standard",
+  "item_outputs": [
+    {
+      "item": "undergarden:forgotten_nugget",
+      "min_count": 4,
+      "max_count": 16,
+      "chance": 1
+    },
+    {
+      "item": "malum:earthen_spirit",
+      "min_count": 3,
+      "max_count": 3,
+      "chance": 1
+    },
+    {
+      "item": "malum:eldritch_spirit",
+      "min_count": 5,
+      "max_count": 5,
+      "chance": 1
+    }
+  ],
+  "source_fingerprint": "d8f543f5a415a1a9c5884b49af0a6b29ffa2def0d730f0cb825d770d78dd0e37"
+}

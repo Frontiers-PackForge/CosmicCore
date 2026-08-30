@@ -1,0 +1,29 @@
+{
+  "entity": "undergarden:sploogie",
+  "cultivation_tier": "mv",
+  "experience_min": 5,
+  "experience_max": 5,
+  "vitae": "standard",
+  "spiritus": "standard",
+  "item_outputs": [
+    {
+      "item": "undergarden:depthrock_pebble",
+      "min_count": 3,
+      "max_count": 6,
+      "chance": 1
+    },
+    {
+      "item": "malum:earthen_spirit",
+      "min_count": 1,
+      "max_count": 1,
+      "chance": 1
+    },
+    {
+      "item": "malum:wicked_spirit",
+      "min_count": 1,
+      "max_count": 1,
+      "chance": 1
+    }
+  ],
+  "source_fingerprint": "ed6ef493a9ede96cc3c29986eff5b2478edcac60110eba83d63105d7040417df"
+}

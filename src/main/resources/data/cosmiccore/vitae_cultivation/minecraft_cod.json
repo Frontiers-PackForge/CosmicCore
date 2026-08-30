@@ -1,0 +1,29 @@
+{
+  "entity": "minecraft:cod",
+  "cultivation_tier": "mv",
+  "experience_min": 1,
+  "experience_max": 3,
+  "vitae": "standard",
+  "spiritus": "low",
+  "item_outputs": [
+    {
+      "item": "minecraft:bone_meal",
+      "min_count": 1,
+      "max_count": 1,
+      "chance": 0.068115234375
+    },
+    {
+      "item": "minecraft:cod",
+      "min_count": 1,
+      "max_count": 1,
+      "chance": 1
+    },
+    {
+      "item": "malum:aqueous_spirit",
+      "min_count": 1,
+      "max_count": 1,
+      "chance": 1
+    }
+  ],
+  "source_fingerprint": "4e55456c35b106bf7fe1247a4ccc951cc6d294441254f079099ebc497458ccf9"
+}

@@ -1,0 +1,41 @@
+{
+  "entity": "occultism:possessed_evoker",
+  "cultivation_tier": "ev",
+  "experience_min": 10,
+  "experience_max": 10,
+  "vitae": "standard",
+  "spiritus": "standard",
+  "item_outputs": [
+    {
+      "item": "minecraft:ominous_bottle",
+      "min_count": 1,
+      "max_count": 2,
+      "chance": 1
+    },
+    {
+      "item": "minecraft:sentry_armor_trim_smithing_template",
+      "min_count": 1,
+      "max_count": 1,
+      "chance": 0.27276611328125
+    },
+    {
+      "item": "minecraft:totem_of_undying",
+      "min_count": 1,
+      "max_count": 1,
+      "chance": 1
+    },
+    {
+      "item": "minecraft:vex_armor_trim_smithing_template",
+      "min_count": 1,
+      "max_count": 1,
+      "chance": 0.17034912109375
+    },
+    {
+      "item": "malum:wicked_spirit",
+      "min_count": 1,
+      "max_count": 1,
+      "chance": 1
+    }
+  ],
+  "source_fingerprint": "ba4059706c89da7316c2976089636f138f7b3e3afae682a54cc39b8e8887cea5"
+}

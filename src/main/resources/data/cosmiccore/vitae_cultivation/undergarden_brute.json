@@ -1,0 +1,23 @@
+{
+  "entity": "undergarden:brute",
+  "cultivation_tier": "mv",
+  "experience_min": 1,
+  "experience_max": 3,
+  "vitae": "standard",
+  "spiritus": "low",
+  "item_outputs": [
+    {
+      "item": "undergarden:brute_tusk",
+      "min_count": 1,
+      "max_count": 2,
+      "chance": 0.66668701171875
+    },
+    {
+      "item": "malum:earthen_spirit",
+      "min_count": 2,
+      "max_count": 2,
+      "chance": 1
+    }
+  ],
+  "source_fingerprint": "56ebbf49e8ea11a98df15d67070519be2f0a8c333cd6c350053d24d68411ff0e"
+}
