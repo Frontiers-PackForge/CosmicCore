@@ -1,0 +1,34 @@
+{
+  "entity": "minecraft:zombie",
+  "cultivation_tier": "mv",
+  "experience_min": 5,
+  "experience_max": 5,
+  "vitae": "trace",
+  "spiritus": "high",
+  "item_outputs": [
+    {
+      "item": "minecraft:rotten_flesh",
+      "min_count": 0,
+      "max_count": 2
+    },
+    {
+      "item": "minecraft:iron_ingot",
+      "chance": 0.025
+    },
+    {
+      "item": "minecraft:carrot",
+      "chance": 0.025
+    },
+    {
+      "item": "minecraft:potato",
+      "chance": 0.025
+    },
+    {
+      "item": "malum:wicked_spirit"
+    },
+    {
+      "item": "malum:earthen_spirit"
+    }
+  ],
+  "source_fingerprint": "bootstrap:vanilla-1.21.1+malum-1.8.2"
+}

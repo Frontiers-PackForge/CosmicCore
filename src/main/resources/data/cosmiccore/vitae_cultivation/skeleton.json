@@ -1,0 +1,29 @@
+{
+  "entity": "minecraft:skeleton",
+  "cultivation_tier": "mv",
+  "experience_min": 5,
+  "experience_max": 5,
+  "vitae": "none",
+  "spiritus": "high",
+  "item_outputs": [
+    {
+      "item": "minecraft:bone",
+      "min_count": 0,
+      "max_count": 2
+    },
+    {
+      "item": "minecraft:arrow",
+      "min_count": 0,
+      "max_count": 2
+    },
+    {
+      "item": "malum:arcane_spirit",
+      "min_count": 2,
+      "max_count": 2
+    },
+    {
+      "item": "malum:wicked_spirit"
+    }
+  ],
+  "source_fingerprint": "bootstrap:vanilla-1.21.1+malum-1.8.2"
+}
