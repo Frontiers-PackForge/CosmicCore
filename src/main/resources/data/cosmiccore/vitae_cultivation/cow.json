@@ -3,25 +3,33 @@
   "cultivation_tier": "mv",
   "experience_min": 1,
   "experience_max": 3,
-  "vitae": "high",
+  "vitae": "standard",
   "spiritus": "low",
   "item_outputs": [
     {
-      "item": "minecraft:leather",
-      "min_count": 0,
-      "max_count": 2
-    },
-    {
       "item": "minecraft:beef",
       "min_count": 1,
-      "max_count": 3
+      "max_count": 3,
+      "chance": 1
     },
     {
-      "item": "malum:sacred_spirit"
+      "item": "minecraft:leather",
+      "min_count": 1,
+      "max_count": 2,
+      "chance": 0.66668701171875
     },
     {
-      "item": "malum:earthen_spirit"
+      "item": "malum:sacred_spirit",
+      "min_count": 1,
+      "max_count": 1,
+      "chance": 1
+    },
+    {
+      "item": "malum:earthen_spirit",
+      "min_count": 1,
+      "max_count": 1,
+      "chance": 1
     }
   ],
-  "source_fingerprint": "bootstrap:vanilla-1.21.1+malum-1.8.2"
+  "source_fingerprint": "6cd868ea4835a541874d61a7fd79ed93e2f5c80851b4f1d9e2359d306f1062fb"
 }

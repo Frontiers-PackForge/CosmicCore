@@ -3,27 +3,33 @@
   "cultivation_tier": "mv",
   "experience_min": 5,
   "experience_max": 5,
-  "vitae": "none",
-  "spiritus": "high",
+  "vitae": "low",
+  "spiritus": "standard",
   "item_outputs": [
     {
-      "item": "minecraft:bone",
-      "min_count": 0,
-      "max_count": 2
+      "item": "minecraft:arrow",
+      "min_count": 1,
+      "max_count": 2,
+      "chance": 0.66668701171875
     },
     {
-      "item": "minecraft:arrow",
-      "min_count": 0,
-      "max_count": 2
+      "item": "minecraft:bone",
+      "min_count": 1,
+      "max_count": 2,
+      "chance": 0.6661376953125
     },
     {
       "item": "malum:arcane_spirit",
       "min_count": 2,
-      "max_count": 2
+      "max_count": 2,
+      "chance": 1
     },
     {
-      "item": "malum:wicked_spirit"
+      "item": "malum:wicked_spirit",
+      "min_count": 1,
+      "max_count": 1,
+      "chance": 1
     }
   ],
-  "source_fingerprint": "bootstrap:vanilla-1.21.1+malum-1.8.2"
+  "source_fingerprint": "5b540a1073d79df649adce53d9be1a074f332d3d64909a36fcd61544ebf1ebaf"
 }

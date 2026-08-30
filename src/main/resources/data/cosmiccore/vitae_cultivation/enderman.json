@@ -3,23 +3,27 @@
   "cultivation_tier": "mv",
   "experience_min": 5,
   "experience_max": 5,
-  "vitae": "low",
-  "spiritus": "high",
+  "vitae": "standard",
+  "spiritus": "exceptional",
   "item_outputs": [
     {
       "item": "minecraft:ender_pearl",
       "min_count": 1,
       "max_count": 1,
-      "chance": 0.5
+      "chance": 0.443115234375
     },
     {
       "item": "malum:eldritch_spirit",
       "min_count": 3,
-      "max_count": 3
+      "max_count": 3,
+      "chance": 1
     },
     {
-      "item": "malum:arcane_spirit"
+      "item": "malum:arcane_spirit",
+      "min_count": 1,
+      "max_count": 1,
+      "chance": 1
     }
   ],
-  "source_fingerprint": "bootstrap:vanilla-1.21.1+malum-1.8.2"
+  "source_fingerprint": "b1fd0dbcc0e0a2dd7bacc402ec335a6823314a7752ad22c028dece163cd95b5a"
 }
