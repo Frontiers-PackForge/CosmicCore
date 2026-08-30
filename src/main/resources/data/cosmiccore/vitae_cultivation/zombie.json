@@ -3,32 +3,51 @@
   "cultivation_tier": "mv",
   "experience_min": 5,
   "experience_max": 5,
-  "vitae": "trace",
-  "spiritus": "high",
+  "vitae": "low",
+  "spiritus": "standard",
   "item_outputs": [
     {
-      "item": "minecraft:rotten_flesh",
-      "min_count": 0,
-      "max_count": 2
+      "item": "minecraft:carrot",
+      "min_count": 1,
+      "max_count": 1,
+      "chance": 0.008544921875
     },
     {
       "item": "minecraft:iron_ingot",
-      "chance": 0.025
+      "min_count": 1,
+      "max_count": 1,
+      "chance": 0.00830078125
     },
     {
-      "item": "minecraft:carrot",
-      "chance": 0.025
+      "item": "farmersdelight:onion",
+      "min_count": 1,
+      "max_count": 1,
+      "chance": 0.02008056640625
     },
     {
       "item": "minecraft:potato",
-      "chance": 0.025
+      "min_count": 1,
+      "max_count": 1,
+      "chance": 0.00823974609375
     },
     {
-      "item": "malum:wicked_spirit"
+      "item": "minecraft:rotten_flesh",
+      "min_count": 1,
+      "max_count": 2,
+      "chance": 0.66668701171875
     },
     {
-      "item": "malum:earthen_spirit"
+      "item": "malum:wicked_spirit",
+      "min_count": 1,
+      "max_count": 1,
+      "chance": 1
+    },
+    {
+      "item": "malum:earthen_spirit",
+      "min_count": 1,
+      "max_count": 1,
+      "chance": 1
     }
   ],
-  "source_fingerprint": "bootstrap:vanilla-1.21.1+malum-1.8.2"
+  "source_fingerprint": "fc9442444ff1ac3d7bd8feaf00290dc479f6786cc76d38d58e99165be10d4e1f"
 }
