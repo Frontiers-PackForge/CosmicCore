@@ -1,0 +1,35 @@
+{
+  "entity": "upgrade_aquatic:flare",
+  "cultivation_tier": "mv",
+  "experience_min": 5,
+  "experience_max": 5,
+  "vitae": "standard",
+  "spiritus": "low",
+  "item_outputs": [
+    {
+      "item": "minecraft:phantom_membrane",
+      "min_count": 1,
+      "max_count": 1,
+      "chance": 0.443115234375
+    },
+    {
+      "item": "malum:arcane_spirit",
+      "min_count": 1,
+      "max_count": 1,
+      "chance": 1
+    },
+    {
+      "item": "malum:wicked_spirit",
+      "min_count": 1,
+      "max_count": 1,
+      "chance": 1
+    },
+    {
+      "item": "malum:aerial_spirit",
+      "min_count": 2,
+      "max_count": 2,
+      "chance": 1
+    }
+  ],
+  "source_fingerprint": "be72aa60481e86fc1c2632cf448cc5376b64fd6007307bb01f9008b756f314d6"
+}

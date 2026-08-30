@@ -1,0 +1,65 @@
+{
+  "entity": "minecraft:guardian",
+  "cultivation_tier": "ev",
+  "experience_min": 10,
+  "experience_max": 10,
+  "vitae": "standard",
+  "spiritus": "standard",
+  "item_outputs": [
+    {
+      "item": "minecraft:cod",
+      "min_count": 1,
+      "max_count": 2,
+      "chance": 0.40826416015625
+    },
+    {
+      "item": "minecraft:prismarine_crystals",
+      "min_count": 1,
+      "max_count": 1,
+      "chance": 0.39996337890625
+    },
+    {
+      "item": "minecraft:prismarine_shard",
+      "min_count": 1,
+      "max_count": 2,
+      "chance": 0.66668701171875
+    },
+    {
+      "item": "minecraft:pufferfish",
+      "min_count": 1,
+      "max_count": 1,
+      "chance": 0.0030517578125
+    },
+    {
+      "item": "minecraft:salmon",
+      "min_count": 1,
+      "max_count": 1,
+      "chance": 0.00653076171875
+    },
+    {
+      "item": "minecraft:tropical_fish",
+      "min_count": 1,
+      "max_count": 1,
+      "chance": 0.00054931640625
+    },
+    {
+      "item": "malum:aqueous_spirit",
+      "min_count": 3,
+      "max_count": 3,
+      "chance": 1
+    },
+    {
+      "item": "malum:sacred_spirit",
+      "min_count": 3,
+      "max_count": 3,
+      "chance": 1
+    },
+    {
+      "item": "malum:wicked_spirit",
+      "min_count": 3,
+      "max_count": 3,
+      "chance": 1
+    }
+  ],
+  "source_fingerprint": "5a3e03448ba18126685d9ad5227b3ada2ce6976bb862521a0d57fef6219c956b"
+}

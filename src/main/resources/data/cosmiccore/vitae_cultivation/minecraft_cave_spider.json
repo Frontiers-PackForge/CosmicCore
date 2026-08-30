@@ -1,0 +1,35 @@
+{
+  "entity": "minecraft:cave_spider",
+  "cultivation_tier": "mv",
+  "experience_min": 5,
+  "experience_max": 5,
+  "vitae": "standard",
+  "spiritus": "standard",
+  "item_outputs": [
+    {
+      "item": "minecraft:spider_eye",
+      "min_count": 1,
+      "max_count": 1,
+      "chance": 0.3338623046875
+    },
+    {
+      "item": "minecraft:string",
+      "min_count": 1,
+      "max_count": 2,
+      "chance": 0.66668701171875
+    },
+    {
+      "item": "malum:aerial_spirit",
+      "min_count": 1,
+      "max_count": 1,
+      "chance": 1
+    },
+    {
+      "item": "malum:wicked_spirit",
+      "min_count": 1,
+      "max_count": 1,
+      "chance": 1
+    }
+  ],
+  "source_fingerprint": "fb62c9dbdc42d4176300f04c33d47853867975c62a388af683a2c7b0ec044093"
+}

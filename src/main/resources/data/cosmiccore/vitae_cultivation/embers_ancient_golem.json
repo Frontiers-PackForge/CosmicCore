@@ -1,0 +1,29 @@
+{
+  "entity": "embers:ancient_golem",
+  "cultivation_tier": "mv",
+  "experience_min": 10,
+  "experience_max": 10,
+  "vitae": "standard",
+  "spiritus": "standard",
+  "item_outputs": [
+    {
+      "item": "embers:ancient_motive_core",
+      "min_count": 1,
+      "max_count": 1,
+      "chance": 1
+    },
+    {
+      "item": "embers:archaic_brick",
+      "min_count": 4,
+      "max_count": 11,
+      "chance": 1
+    },
+    {
+      "item": "malum:wicked_spirit",
+      "min_count": 1,
+      "max_count": 1,
+      "chance": 1
+    }
+  ],
+  "source_fingerprint": "6ff6e90af39bd107a002247ac594798e004b7cb10876ef22536611c3b0ecffcf"
+}

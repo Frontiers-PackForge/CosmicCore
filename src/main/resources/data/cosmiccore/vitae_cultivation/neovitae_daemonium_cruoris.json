@@ -1,0 +1,35 @@
+{
+  "entity": "neovitae:daemonium_cruoris",
+  "cultivation_tier": "ev",
+  "experience_min": 10,
+  "experience_max": 10,
+  "vitae": "standard",
+  "spiritus": "standard",
+  "item_outputs": [
+    {
+      "item": "neovitae:gore_clotted_fang",
+      "min_count": 1,
+      "max_count": 2,
+      "chance": 1
+    },
+    {
+      "item": "minecraft:rotten_flesh",
+      "min_count": 1,
+      "max_count": 2,
+      "chance": 0.19677734375
+    },
+    {
+      "item": "neovitae:tainted_flesh",
+      "min_count": 1,
+      "max_count": 3,
+      "chance": 0.5
+    },
+    {
+      "item": "malum:wicked_spirit",
+      "min_count": 1,
+      "max_count": 1,
+      "chance": 1
+    }
+  ],
+  "source_fingerprint": "52da1353677543d0f7ac5757841ed36d80875cb819a9b06ed43cac863be46efb"
+}

@@ -1,0 +1,17 @@
+{
+  "entity": "ars_nouveau:drygmy",
+  "cultivation_tier": "mv",
+  "experience_min": 0,
+  "experience_max": 0,
+  "vitae": "standard",
+  "spiritus": "low",
+  "item_outputs": [
+    {
+      "item": "malum:sacred_spirit",
+      "min_count": 1,
+      "max_count": 1,
+      "chance": 1
+    }
+  ],
+  "source_fingerprint": "1bcdee5fd71535803bcef5d427c0a342cfc80729d23c561e91b6244eee394557"
+}

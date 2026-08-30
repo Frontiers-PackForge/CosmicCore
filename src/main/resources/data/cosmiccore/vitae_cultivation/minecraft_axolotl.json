@@ -1,0 +1,23 @@
+{
+  "entity": "minecraft:axolotl",
+  "cultivation_tier": "mv",
+  "experience_min": 1,
+  "experience_max": 3,
+  "vitae": "standard",
+  "spiritus": "low",
+  "item_outputs": [
+    {
+      "item": "malum:aqueous_spirit",
+      "min_count": 2,
+      "max_count": 2,
+      "chance": 1
+    },
+    {
+      "item": "malum:sacred_spirit",
+      "min_count": 1,
+      "max_count": 1,
+      "chance": 1
+    }
+  ],
+  "source_fingerprint": "51520cc3b4f44f573d4873d4f528b8e805d85279a3f2c5a474a66e732d5708f3"
+}

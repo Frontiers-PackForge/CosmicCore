@@ -1,0 +1,35 @@
+{
+  "entity": "minecraft:phantom",
+  "cultivation_tier": "mv",
+  "experience_min": 5,
+  "experience_max": 5,
+  "vitae": "low",
+  "spiritus": "standard",
+  "item_outputs": [
+    {
+      "item": "minecraft:phantom_membrane",
+      "min_count": 1,
+      "max_count": 1,
+      "chance": 0.443115234375
+    },
+    {
+      "item": "malum:arcane_spirit",
+      "min_count": 3,
+      "max_count": 3,
+      "chance": 1
+    },
+    {
+      "item": "malum:wicked_spirit",
+      "min_count": 3,
+      "max_count": 3,
+      "chance": 1
+    },
+    {
+      "item": "malum:aerial_spirit",
+      "min_count": 3,
+      "max_count": 3,
+      "chance": 1
+    }
+  ],
+  "source_fingerprint": "a5ef2e72f750d0a3065f286557564482e0d8dfe7115907901b32f620142eb039"
+}

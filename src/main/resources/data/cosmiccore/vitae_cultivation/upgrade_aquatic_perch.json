@@ -1,0 +1,29 @@
+{
+  "entity": "upgrade_aquatic:perch",
+  "cultivation_tier": "mv",
+  "experience_min": 1,
+  "experience_max": 3,
+  "vitae": "standard",
+  "spiritus": "low",
+  "item_outputs": [
+    {
+      "item": "minecraft:bone_meal",
+      "min_count": 1,
+      "max_count": 1,
+      "chance": 0.068115234375
+    },
+    {
+      "item": "upgrade_aquatic:perch",
+      "min_count": 1,
+      "max_count": 1,
+      "chance": 1
+    },
+    {
+      "item": "malum:aqueous_spirit",
+      "min_count": 1,
+      "max_count": 1,
+      "chance": 1
+    }
+  ],
+  "source_fingerprint": "d2c99e128ca5ee895ecc5677bd5a51e1721a8f75e88d2878fcc336bf8e08d91f"
+}

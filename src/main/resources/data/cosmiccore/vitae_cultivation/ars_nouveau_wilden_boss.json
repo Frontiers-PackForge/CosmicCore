@@ -1,0 +1,41 @@
+{
+  "entity": "ars_nouveau:wilden_boss",
+  "cultivation_tier": "luv",
+  "experience_min": 75,
+  "experience_max": 75,
+  "vitae": "exceptional",
+  "spiritus": "exceptional",
+  "item_outputs": [
+    {
+      "item": "malum:wicked_spirit",
+      "min_count": 2,
+      "max_count": 2,
+      "chance": 1
+    },
+    {
+      "item": "malum:arcane_spirit",
+      "min_count": 3,
+      "max_count": 3,
+      "chance": 1
+    },
+    {
+      "item": "malum:aerial_spirit",
+      "min_count": 1,
+      "max_count": 1,
+      "chance": 1
+    },
+    {
+      "item": "malum:aqueous_spirit",
+      "min_count": 1,
+      "max_count": 1,
+      "chance": 1
+    },
+    {
+      "item": "malum:earthen_spirit",
+      "min_count": 1,
+      "max_count": 1,
+      "chance": 1
+    }
+  ],
+  "source_fingerprint": "b47145f39aef501e0b35ad1ff94958a1d4c4a2463884d77874a64e97657b4bbd"
+}

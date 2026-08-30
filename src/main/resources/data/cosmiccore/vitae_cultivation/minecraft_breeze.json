@@ -1,0 +1,29 @@
+{
+  "entity": "minecraft:breeze",
+  "cultivation_tier": "mv",
+  "experience_min": 10,
+  "experience_max": 10,
+  "vitae": "standard",
+  "spiritus": "standard",
+  "item_outputs": [
+    {
+      "item": "minecraft:breeze_rod",
+      "min_count": 1,
+      "max_count": 2,
+      "chance": 1
+    },
+    {
+      "item": "malum:aerial_spirit",
+      "min_count": 3,
+      "max_count": 3,
+      "chance": 1
+    },
+    {
+      "item": "malum:arcane_spirit",
+      "min_count": 1,
+      "max_count": 1,
+      "chance": 1
+    }
+  ],
+  "source_fingerprint": "529c757aeef9542f955d392919212ce0a5288dc36a21ec40fe8e5517021eba59"
+}

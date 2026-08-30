@@ -1,0 +1,35 @@
+{
+  "entity": "occultism:possessed_skeleton",
+  "cultivation_tier": "ev",
+  "experience_min": 5,
+  "experience_max": 5,
+  "vitae": "low",
+  "spiritus": "standard",
+  "item_outputs": [
+    {
+      "item": "minecraft:arrow",
+      "min_count": 1,
+      "max_count": 2,
+      "chance": 0.66668701171875
+    },
+    {
+      "item": "minecraft:bone",
+      "min_count": 1,
+      "max_count": 2,
+      "chance": 0.6661376953125
+    },
+    {
+      "item": "minecraft:skeleton_skull",
+      "min_count": 1,
+      "max_count": 1,
+      "chance": 1
+    },
+    {
+      "item": "malum:wicked_spirit",
+      "min_count": 1,
+      "max_count": 1,
+      "chance": 1
+    }
+  ],
+  "source_fingerprint": "abe511cfa6960019fa2962919aa7b8940788a6060a112e2240ba7dee8019c194"
+}

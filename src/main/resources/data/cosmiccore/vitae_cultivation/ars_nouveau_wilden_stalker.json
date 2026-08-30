@@ -1,0 +1,35 @@
+{
+  "entity": "ars_nouveau:wilden_stalker",
+  "cultivation_tier": "mv",
+  "experience_min": 8,
+  "experience_max": 8,
+  "vitae": "standard",
+  "spiritus": "standard",
+  "item_outputs": [
+    {
+      "item": "ars_nouveau:wilden_wing",
+      "min_count": 1,
+      "max_count": 1,
+      "chance": 1
+    },
+    {
+      "item": "malum:wicked_spirit",
+      "min_count": 1,
+      "max_count": 1,
+      "chance": 1
+    },
+    {
+      "item": "malum:arcane_spirit",
+      "min_count": 1,
+      "max_count": 1,
+      "chance": 1
+    },
+    {
+      "item": "malum:aerial_spirit",
+      "min_count": 1,
+      "max_count": 1,
+      "chance": 1
+    }
+  ],
+  "source_fingerprint": "4ffa5dacfe931bb129e6b4a0623efbb65ae06fb8d9b98f6807090b83b8a7d9a6"
+}

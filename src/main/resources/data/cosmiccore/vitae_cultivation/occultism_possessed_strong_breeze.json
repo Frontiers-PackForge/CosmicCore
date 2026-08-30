@@ -1,0 +1,47 @@
+{
+  "entity": "occultism:possessed_strong_breeze",
+  "cultivation_tier": "luv",
+  "experience_min": 10,
+  "experience_max": 10,
+  "vitae": "standard",
+  "spiritus": "standard",
+  "item_outputs": [
+    {
+      "item": "minecraft:flow_armor_trim_smithing_template",
+      "min_count": 1,
+      "max_count": 1,
+      "chance": 0.2000732421875
+    },
+    {
+      "item": "minecraft:flow_banner_pattern",
+      "min_count": 1,
+      "max_count": 1,
+      "chance": 0.13330078125
+    },
+    {
+      "item": "minecraft:flow_pottery_sherd",
+      "min_count": 1,
+      "max_count": 1,
+      "chance": 0.26617431640625
+    },
+    {
+      "item": "minecraft:heavy_core",
+      "min_count": 1,
+      "max_count": 1,
+      "chance": 1
+    },
+    {
+      "item": "minecraft:music_disc_creator",
+      "min_count": 1,
+      "max_count": 1,
+      "chance": 0.06671142578125
+    },
+    {
+      "item": "malum:eldritch_spirit",
+      "min_count": 4,
+      "max_count": 4,
+      "chance": 1
+    }
+  ],
+  "source_fingerprint": "1d651af9d04d95bd48fa384870a295e8f03417777b27f455b69abb2e3e7d9946"
+}

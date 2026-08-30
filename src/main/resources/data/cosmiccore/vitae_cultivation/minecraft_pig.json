@@ -1,0 +1,23 @@
+{
+  "entity": "minecraft:pig",
+  "cultivation_tier": "mv",
+  "experience_min": 1,
+  "experience_max": 3,
+  "vitae": "standard",
+  "spiritus": "low",
+  "item_outputs": [
+    {
+      "item": "minecraft:porkchop",
+      "min_count": 1,
+      "max_count": 3,
+      "chance": 1
+    },
+    {
+      "item": "malum:sacred_spirit",
+      "min_count": 1,
+      "max_count": 1,
+      "chance": 1
+    }
+  ],
+  "source_fingerprint": "0e19fa0fd8f7aca22353fb775b810e552e8ac5f00b0d1b901d38415d22cfd635"
+}

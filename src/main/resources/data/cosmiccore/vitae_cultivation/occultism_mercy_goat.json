@@ -1,0 +1,23 @@
+{
+  "entity": "occultism:mercy_goat",
+  "cultivation_tier": "ev",
+  "experience_min": 1,
+  "experience_max": 3,
+  "vitae": "standard",
+  "spiritus": "low",
+  "item_outputs": [
+    {
+      "item": "occultism:cruelty_essence",
+      "min_count": 1,
+      "max_count": 1,
+      "chance": 1
+    },
+    {
+      "item": "malum:sacred_spirit",
+      "min_count": 1,
+      "max_count": 1,
+      "chance": 1
+    }
+  ],
+  "source_fingerprint": "e12129657bdb87cd43837cbe407b6a3fe72819556769a1ef0523270f59dafd62"
+}

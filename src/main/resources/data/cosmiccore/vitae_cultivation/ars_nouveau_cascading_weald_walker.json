@@ -1,0 +1,17 @@
+{
+  "entity": "ars_nouveau:cascading_weald_walker",
+  "cultivation_tier": "mv",
+  "experience_min": 0,
+  "experience_max": 0,
+  "vitae": "standard",
+  "spiritus": "low",
+  "item_outputs": [
+    {
+      "item": "malum:eldritch_spirit",
+      "min_count": 4,
+      "max_count": 4,
+      "chance": 1
+    }
+  ],
+  "source_fingerprint": "372d3557b8d13ced5139f024f0235e25c8b2374841e3f5af625a0e41c08c1f7f"
+}

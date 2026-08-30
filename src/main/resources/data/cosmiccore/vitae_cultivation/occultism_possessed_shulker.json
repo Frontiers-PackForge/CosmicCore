@@ -1,0 +1,41 @@
+{
+  "entity": "occultism:possessed_shulker",
+  "cultivation_tier": "ev",
+  "experience_min": 5,
+  "experience_max": 5,
+  "vitae": "standard",
+  "spiritus": "standard",
+  "item_outputs": [
+    {
+      "item": "minecraft:chorus_flower",
+      "min_count": 1,
+      "max_count": 1,
+      "chance": 0.028076171875
+    },
+    {
+      "item": "minecraft:chorus_fruit",
+      "min_count": 1,
+      "max_count": 1,
+      "chance": 0.05731201171875
+    },
+    {
+      "item": "minecraft:shulker_shell",
+      "min_count": 1,
+      "max_count": 2,
+      "chance": 1
+    },
+    {
+      "item": "minecraft:spire_armor_trim_smithing_template",
+      "min_count": 1,
+      "max_count": 1,
+      "chance": 0.0146484375
+    },
+    {
+      "item": "malum:wicked_spirit",
+      "min_count": 1,
+      "max_count": 1,
+      "chance": 1
+    }
+  ],
+  "source_fingerprint": "e0737944cdfea25d60b2e04b8435dea0f7fd2b02ed559ba0a8c608aa389a5ae1"
+}

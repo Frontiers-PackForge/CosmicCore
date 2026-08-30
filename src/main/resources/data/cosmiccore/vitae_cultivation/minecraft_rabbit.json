@@ -1,0 +1,41 @@
+{
+  "entity": "minecraft:rabbit",
+  "cultivation_tier": "mv",
+  "experience_min": 1,
+  "experience_max": 3,
+  "vitae": "standard",
+  "spiritus": "low",
+  "item_outputs": [
+    {
+      "item": "minecraft:rabbit",
+      "min_count": 1,
+      "max_count": 1,
+      "chance": 1
+    },
+    {
+      "item": "minecraft:rabbit_foot",
+      "min_count": 1,
+      "max_count": 1,
+      "chance": 0.10003662109375
+    },
+    {
+      "item": "minecraft:rabbit_hide",
+      "min_count": 1,
+      "max_count": 1,
+      "chance": 0.443115234375
+    },
+    {
+      "item": "malum:sacred_spirit",
+      "min_count": 1,
+      "max_count": 1,
+      "chance": 1
+    },
+    {
+      "item": "malum:aerial_spirit",
+      "min_count": 2,
+      "max_count": 2,
+      "chance": 1
+    }
+  ],
+  "source_fingerprint": "63352b96190542cd2ed46a3ed9384abbb715f63f81571fcf55eb6af6ebdf7344"
+}

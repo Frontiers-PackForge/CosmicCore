@@ -1,0 +1,29 @@
+{
+  "entity": "occultism:possessed_phantom",
+  "cultivation_tier": "ev",
+  "experience_min": 5,
+  "experience_max": 5,
+  "vitae": "low",
+  "spiritus": "standard",
+  "item_outputs": [
+    {
+      "item": "minecraft:phantom_membrane",
+      "min_count": 1,
+      "max_count": 4,
+      "chance": 1
+    },
+    {
+      "item": "minecraft:wind_charge",
+      "min_count": 1,
+      "max_count": 1,
+      "chance": 0.05010986328125
+    },
+    {
+      "item": "malum:wicked_spirit",
+      "min_count": 1,
+      "max_count": 1,
+      "chance": 1
+    }
+  ],
+  "source_fingerprint": "926ace4b2d2bb89e66dbda1a3dc9e5ee5fb4de2ab26977377c3faf68fc3c34c3"
+}

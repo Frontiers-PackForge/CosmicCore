@@ -1,0 +1,23 @@
+{
+  "entity": "occultism:possessed_bee",
+  "cultivation_tier": "ev",
+  "experience_min": 1,
+  "experience_max": 3,
+  "vitae": "standard",
+  "spiritus": "low",
+  "item_outputs": [
+    {
+      "item": "occultism:cursed_honey",
+      "min_count": 1,
+      "max_count": 1,
+      "chance": 1
+    },
+    {
+      "item": "malum:wicked_spirit",
+      "min_count": 1,
+      "max_count": 1,
+      "chance": 1
+    }
+  ],
+  "source_fingerprint": "1186ea8cace994439642b05265d6e8ae9e561dae3d0cb04b3fdc39815ad2b4f3"
+}

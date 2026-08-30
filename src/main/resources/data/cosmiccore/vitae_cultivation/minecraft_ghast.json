@@ -1,0 +1,59 @@
+{
+  "entity": "minecraft:ghast",
+  "cultivation_tier": "mv",
+  "experience_min": 5,
+  "experience_max": 5,
+  "vitae": "standard",
+  "spiritus": "standard",
+  "item_outputs": [
+    {
+      "item": "minecraft:ghast_tear",
+      "min_count": 1,
+      "max_count": 1,
+      "chance": 0.443115234375
+    },
+    {
+      "item": "mynethersdelight:ghasta",
+      "min_count": 1,
+      "max_count": 2,
+      "chance": 0.62518310546875
+    },
+    {
+      "item": "minecraft:gunpowder",
+      "min_count": 1,
+      "max_count": 2,
+      "chance": 0.6661376953125
+    },
+    {
+      "item": "farmersdelight:onion",
+      "min_count": 1,
+      "max_count": 1,
+      "chance": 0.0247802734375
+    },
+    {
+      "item": "malum:arcane_spirit",
+      "min_count": 1,
+      "max_count": 1,
+      "chance": 1
+    },
+    {
+      "item": "malum:infernal_spirit",
+      "min_count": 2,
+      "max_count": 2,
+      "chance": 1
+    },
+    {
+      "item": "malum:aqueous_spirit",
+      "min_count": 2,
+      "max_count": 2,
+      "chance": 1
+    },
+    {
+      "item": "malum:aerial_spirit",
+      "min_count": 1,
+      "max_count": 1,
+      "chance": 1
+    }
+  ],
+  "source_fingerprint": "698542e4c1d968f7e14168e04fdd58dc5207ac015a31efe99b7d4d648bdb1752"
+}

@@ -1,0 +1,23 @@
+{
+  "entity": "minecraft:pillager",
+  "cultivation_tier": "mv",
+  "experience_min": 5,
+  "experience_max": 5,
+  "vitae": "standard",
+  "spiritus": "standard",
+  "item_outputs": [
+    {
+      "item": "farmersdelight:onion",
+      "min_count": 1,
+      "max_count": 1,
+      "chance": 0.01995849609375
+    },
+    {
+      "item": "malum:wicked_spirit",
+      "min_count": 2,
+      "max_count": 2,
+      "chance": 1
+    }
+  ],
+  "source_fingerprint": "01f343bd39d34a873514088e12663e40ff7587eb5bd1f264b831ab31fe4268be"
+}

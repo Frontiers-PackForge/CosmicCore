@@ -1,0 +1,35 @@
+{
+  "entity": "upgrade_aquatic:pike",
+  "cultivation_tier": "mv",
+  "experience_min": 1,
+  "experience_max": 3,
+  "vitae": "standard",
+  "spiritus": "low",
+  "item_outputs": [
+    {
+      "item": "minecraft:bone_meal",
+      "min_count": 1,
+      "max_count": 1,
+      "chance": 0.2724609375
+    },
+    {
+      "item": "upgrade_aquatic:pike",
+      "min_count": 1,
+      "max_count": 1,
+      "chance": 1
+    },
+    {
+      "item": "malum:aqueous_spirit",
+      "min_count": 1,
+      "max_count": 1,
+      "chance": 1
+    },
+    {
+      "item": "malum:wicked_spirit",
+      "min_count": 1,
+      "max_count": 1,
+      "chance": 1
+    }
+  ],
+  "source_fingerprint": "31ca4b56d4370f2ef679289bf8756aeffcf8bc9423859b023076ce78c19183e0"
+}

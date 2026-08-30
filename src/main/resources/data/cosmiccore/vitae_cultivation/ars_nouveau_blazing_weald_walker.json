@@ -1,0 +1,17 @@
+{
+  "entity": "ars_nouveau:blazing_weald_walker",
+  "cultivation_tier": "mv",
+  "experience_min": 0,
+  "experience_max": 0,
+  "vitae": "standard",
+  "spiritus": "low",
+  "item_outputs": [
+    {
+      "item": "malum:eldritch_spirit",
+      "min_count": 4,
+      "max_count": 4,
+      "chance": 1
+    }
+  ],
+  "source_fingerprint": "8228820d84648fdc7ca4b9bb057d48971626b37c8e9b0bc5ded65fa1140e3b05"
+}
