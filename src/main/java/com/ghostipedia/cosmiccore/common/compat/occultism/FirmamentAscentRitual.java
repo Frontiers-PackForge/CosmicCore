@@ -1,6 +1,5 @@
 package com.ghostipedia.cosmiccore.common.compat.occultism;
 
-import com.ghostipedia.cosmiccore.common.dimension.DimensionPermitGate;
 import com.ghostipedia.cosmiccore.common.dimension.FirmamentAscentLogic;
 
 import net.minecraft.core.BlockPos;
@@ -34,8 +33,8 @@ public final class FirmamentAscentRitual extends Ritual {
             }
             return false;
         }
-        if (!DimensionPermitGate.canEnterFirmament(castingPlayer, true) ||
-                FirmamentAscentLogic.isAscending(castingPlayer)) {
+        // TODO(firmament): require the firmament deed when it is obtainable
+        if (FirmamentAscentLogic.isAscending(castingPlayer)) {
             return false;
         }
         return super.start(level, goldenBowlPosition, blockEntity, castingPlayer, activationItem);

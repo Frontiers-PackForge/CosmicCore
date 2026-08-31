@@ -22,12 +22,6 @@ import java.util.UUID;
 
 public final class DeedsAPI {
 
-    private static final ResourceLocation NETHER_PERMIT_ADVANCEMENT = CosmicCore.id("nether_permit");
-    private static final ResourceLocation ENTER_NETHER_ADVANCEMENT = ResourceLocation
-            .fromNamespaceAndPath("minecraft", "story/enter_the_nether");
-    private static final ResourceLocation NETHER_ROOT_ADVANCEMENT = ResourceLocation
-            .fromNamespaceAndPath("minecraft", "nether/root");
-
     private DeedsAPI() {}
 
     public static boolean grantCoil(ServerPlayer player, ResourceLocation deedId) {
@@ -98,17 +92,7 @@ public final class DeedsAPI {
         MinecraftServer server = player.getServer();
         if (server == null) return false;
         return player.level().dimension().equals(Level.NETHER) ||
-                hasAdvancement(player, NETHER_PERMIT_ADVANCEMENT) ||
-                hasAdvancement(player, ENTER_NETHER_ADVANCEMENT) ||
-                hasAdvancement(player, NETHER_ROOT_ADVANCEMENT) ||
                 DeedQuestCompatBridge.hasPatientZeroQuestProgress(player);
-    }
-
-    private static boolean hasAdvancement(ServerPlayer player, ResourceLocation advancementId) {
-        MinecraftServer server = player.getServer();
-        if (server == null) return false;
-        var advancement = server.getAdvancements().get(advancementId);
-        return advancement != null && player.getAdvancements().getOrStartProgress(advancement).isDone();
     }
 
     public static boolean isWoven(MinecraftServer server, String teamKey, ResourceLocation deedId) {

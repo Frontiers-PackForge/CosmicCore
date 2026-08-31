@@ -248,7 +248,8 @@
     "ebfix.PacketHandlerPlacementMixin",
     "ebfix.UndoEntryOperationMetadataMixin",
     "ebfix.UndoManagerOperationMetadataMixin",
-    "ebfix.UndoManagerStacksAccessor"
+    "ebfix.UndoManagerStacksAccessor",
+    "disable_advancements.ServerAdvancementManagerMixin"
   ],
   "injectors": {
     "defaultRequire": 1,

@@ -7,7 +7,6 @@ import net.minecraft.server.level.ServerPlayer;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.ModList;
 import net.neoforged.fml.common.EventBusSubscriber;
-import net.neoforged.neoforge.event.entity.player.AdvancementEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 import net.neoforged.neoforge.event.tick.PlayerTickEvent;
 
@@ -24,14 +23,6 @@ public final class DeedEvents {
     public static void onPlayerLogin(PlayerEvent.PlayerLoggedInEvent event) {
         if (!ModList.get().isLoaded("ftbteams") && event.getEntity() instanceof ServerPlayer player) {
             reconcileAndSync(player);
-        }
-    }
-
-    @SubscribeEvent
-    public static void onAdvancementEarned(AdvancementEvent.AdvancementEarnEvent event) {
-        if (event.getEntity() instanceof ServerPlayer player &&
-                event.getAdvancement().id().equals(CosmicCore.id("nether_permit"))) {
-            DeedsAPI.reconcilePatientZero(player);
         }
     }
 
