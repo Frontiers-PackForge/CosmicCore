@@ -11,9 +11,12 @@ import net.neoforged.neoforge.common.util.INBTSerializable;
 
 import lombok.Setter;
 
+import java.util.Collection;
+import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.function.ToIntFunction;
 
 public class SoulNetwork implements INBTSerializable<CompoundTag> {
 
@@ -24,7 +27,7 @@ public class SoulNetwork implements INBTSerializable<CompoundTag> {
 
     public SoulNetwork() {}
 
-    public SoulStack add(SoulStack stack, int throughput, int capacity, boolean simulate) {
+    public synchronized SoulStack add(SoulStack stack, int throughput, int capacity, boolean simulate) {
         int currentAmount = this.contents.getOrDefault(stack.type(), 0);
 
         int amountToAdd = Math.min(stack.amount(), throughput); // Respect throughput
@@ -39,7 +42,7 @@ public class SoulNetwork implements INBTSerializable<CompoundTag> {
         return stack.withAmount(amountToAdd);
     }
 
-    public SoulStack syphon(SoulStack stack, boolean simulate) {
+    public synchronized SoulStack syphon(SoulStack stack, boolean simulate) {
         var currentSoulContent = this.contents.getOrDefault(stack.type(), 0);
         int amountToSyphon = Math.min(stack.amount(), currentSoulContent);
 
@@ -51,13 +54,62 @@ public class SoulNetwork implements INBTSerializable<CompoundTag> {
         return stack.withAmount(amountToSyphon);
     }
 
-    public void reset() {
+    public synchronized boolean insertAll(Collection<SoulStack> stacks, ToIntFunction<SoulType> throughput,
+                                          ToIntFunction<SoulType> capacity, boolean simulate) {
+        var totals = aggregate(stacks);
+        for (var entry : totals.entrySet()) {
+            var type = entry.getKey();
+            var amount = entry.getValue();
+            if (amount > throughput.applyAsInt(type)) return false;
+            if ((long) this.contents.getOrDefault(type, 0) + amount > capacity.applyAsInt(type)) return false;
+        }
+        if (!simulate && !totals.isEmpty()) {
+            totals.forEach((type, amount) -> this.contents.merge(type, amount, Math::addExact));
+            if (dirtyCallback != null) dirtyCallback.run();
+        }
+        return true;
+    }
+
+    public synchronized boolean extractAll(Collection<SoulStack> stacks, ToIntFunction<SoulType> throughput,
+                                           boolean simulate) {
+        var totals = aggregate(stacks);
+        for (var entry : totals.entrySet()) {
+            var type = entry.getKey();
+            var amount = entry.getValue();
+            if (amount > throughput.applyAsInt(type)) return false;
+            if (amount > this.contents.getOrDefault(type, 0)) return false;
+        }
+        if (!simulate && !totals.isEmpty()) {
+            totals.forEach((type, amount) -> this.contents.compute(type, (ignored, current) -> {
+                var remaining = current - amount;
+                return remaining == 0 ? null : remaining;
+            }));
+            if (dirtyCallback != null) dirtyCallback.run();
+        }
+        return true;
+    }
+
+    private static EnumMap<SoulType, Integer> aggregate(Collection<SoulStack> stacks) {
+        var totals = new EnumMap<SoulType, Integer>(SoulType.class);
+        for (var stack : stacks) {
+            if (stack == null || stack.isEmpty()) continue;
+            totals.merge(stack.type(), stack.amount(), Math::addExact);
+        }
+        return totals;
+    }
+
+    public synchronized int getAmount(SoulType type) {
+        return this.contents.getOrDefault(type, 0);
+    }
+
+    public synchronized void reset() {
         this.contents.clear();
         if (dirtyCallback != null) dirtyCallback.run();
     }
 
-    public List<SoulStack> getContents() {
+    public synchronized List<SoulStack> getContents() {
         return contents.entrySet().stream()
+                .sorted(Map.Entry.comparingByKey())
                 .map(kvp -> new SoulStack(kvp.getKey(), kvp.getValue()))
                 .toList();
     }
@@ -87,7 +139,9 @@ public class SoulNetwork implements INBTSerializable<CompoundTag> {
         ListTag listTag = compoundTag.getList("contents", Tag.TAG_COMPOUND);
         for (Tag t : listTag) {
             var contentTag = (CompoundTag) t;
-            this.contents.put(SoulType.byName(contentTag.getString("type")), contentTag.getInt("amount"));
+            var type = SoulType.byName(contentTag.getString("type"));
+            var amount = contentTag.getInt("amount");
+            if (type != null && amount > 0) this.contents.put(type, amount);
         }
     }
 }

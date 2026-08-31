@@ -1,0 +1,549 @@
+{
+  "replace": false,
+  "values": [
+    {
+      "id": "ars_elemental:air_mage",
+      "required": false
+    },
+    {
+      "id": "ars_elemental:earth_mage",
+      "required": false
+    },
+    {
+      "id": "ars_elemental:fire_mage",
+      "required": false
+    },
+    {
+      "id": "ars_elemental:firenando_entity",
+      "required": false
+    },
+    {
+      "id": "ars_elemental:firenando_familiar",
+      "required": false
+    },
+    {
+      "id": "ars_elemental:flashing_weald_walker",
+      "required": false
+    },
+    {
+      "id": "ars_elemental:flashjack_familiar",
+      "required": false
+    },
+    {
+      "id": "ars_elemental:siren_familiar",
+      "required": false
+    },
+    {
+      "id": "ars_elemental:summon_bee",
+      "required": false
+    },
+    {
+      "id": "ars_elemental:summon_camel",
+      "required": false
+    },
+    {
+      "id": "ars_elemental:summon_direwolf",
+      "required": false
+    },
+    {
+      "id": "ars_elemental:summon_dolphin",
+      "required": false
+    },
+    {
+      "id": "ars_elemental:summon_skelehorse",
+      "required": false
+    },
+    {
+      "id": "ars_elemental:summon_slime",
+      "required": false
+    },
+    {
+      "id": "ars_elemental:summon_strider",
+      "required": false
+    },
+    {
+      "id": "ars_elemental:summon_vhex",
+      "required": false
+    },
+    {
+      "id": "ars_elemental:summon_wskeleton",
+      "required": false
+    },
+    {
+      "id": "ars_elemental:water_mage",
+      "required": false
+    },
+    {
+      "id": "ars_nouveau:ally_vex",
+      "required": false
+    },
+    {
+      "id": "ars_nouveau:amethyst_golem",
+      "required": false
+    },
+    {
+      "id": "ars_nouveau:animated_block",
+      "required": false
+    },
+    {
+      "id": "ars_nouveau:animated_head",
+      "required": false
+    },
+    {
+      "id": "ars_nouveau:bookwyrm",
+      "required": false
+    },
+    {
+      "id": "ars_nouveau:dummy",
+      "required": false
+    },
+    {
+      "id": "ars_nouveau:familiar_amethyst_golem",
+      "required": false
+    },
+    {
+      "id": "ars_nouveau:familiar_bookwyrm",
+      "required": false
+    },
+    {
+      "id": "ars_nouveau:familiar_drygmy",
+      "required": false
+    },
+    {
+      "id": "ars_nouveau:familiar_starbuncle",
+      "required": false
+    },
+    {
+      "id": "ars_nouveau:familiar_whirlisprig",
+      "required": false
+    },
+    {
+      "id": "ars_nouveau:familiar_wixie",
+      "required": false
+    },
+    {
+      "id": "ars_nouveau:gift_starby",
+      "required": false
+    },
+    {
+      "id": "ars_nouveau:lily",
+      "required": false
+    },
+    {
+      "id": "ars_nouveau:nook",
+      "required": false
+    },
+    {
+      "id": "ars_nouveau:starbuncle",
+      "required": false
+    },
+    {
+      "id": "ars_nouveau:summon_horse",
+      "required": false
+    },
+    {
+      "id": "ars_nouveau:summon_skeleton",
+      "required": false
+    },
+    {
+      "id": "ars_nouveau:summon_wolf",
+      "required": false
+    },
+    {
+      "id": "ars_nouveau:whirlisprig",
+      "required": false
+    },
+    {
+      "id": "ars_nouveau:wixie",
+      "required": false
+    },
+    {
+      "id": "create:package",
+      "required": false
+    },
+    {
+      "id": "gravestone:player_ghost",
+      "required": false
+    },
+    {
+      "id": "minecraft:armor_stand",
+      "required": false
+    },
+    {
+      "id": "minecraft:bat",
+      "required": false
+    },
+    {
+      "id": "minecraft:bee",
+      "required": false
+    },
+    {
+      "id": "minecraft:camel",
+      "required": false
+    },
+    {
+      "id": "minecraft:cat",
+      "required": false
+    },
+    {
+      "id": "minecraft:dolphin",
+      "required": false
+    },
+    {
+      "id": "minecraft:donkey",
+      "required": false
+    },
+    {
+      "id": "minecraft:ender_dragon",
+      "required": false
+    },
+    {
+      "id": "minecraft:endermite",
+      "required": false
+    },
+    {
+      "id": "minecraft:fox",
+      "required": false
+    },
+    {
+      "id": "minecraft:frog",
+      "required": false
+    },
+    {
+      "id": "minecraft:giant",
+      "required": false
+    },
+    {
+      "id": "minecraft:goat",
+      "required": false
+    },
+    {
+      "id": "minecraft:horse",
+      "required": false
+    },
+    {
+      "id": "minecraft:illusioner",
+      "required": false
+    },
+    {
+      "id": "minecraft:iron_golem",
+      "required": false
+    },
+    {
+      "id": "minecraft:llama",
+      "required": false
+    },
+    {
+      "id": "minecraft:mule",
+      "required": false
+    },
+    {
+      "id": "minecraft:ocelot",
+      "required": false
+    },
+    {
+      "id": "minecraft:panda",
+      "required": false
+    },
+    {
+      "id": "minecraft:parrot",
+      "required": false
+    },
+    {
+      "id": "minecraft:piglin_brute",
+      "required": false
+    },
+    {
+      "id": "minecraft:polar_bear",
+      "required": false
+    },
+    {
+      "id": "minecraft:silverfish",
+      "required": false
+    },
+    {
+      "id": "minecraft:skeleton_horse",
+      "required": false
+    },
+    {
+      "id": "minecraft:sniffer",
+      "required": false
+    },
+    {
+      "id": "minecraft:snow_golem",
+      "required": false
+    },
+    {
+      "id": "minecraft:tadpole",
+      "required": false
+    },
+    {
+      "id": "minecraft:trader_llama",
+      "required": false
+    },
+    {
+      "id": "minecraft:tropical_fish",
+      "required": false
+    },
+    {
+      "id": "minecraft:turtle",
+      "required": false
+    },
+    {
+      "id": "minecraft:vex",
+      "required": false
+    },
+    {
+      "id": "minecraft:villager",
+      "required": false
+    },
+    {
+      "id": "minecraft:wandering_trader",
+      "required": false
+    },
+    {
+      "id": "minecraft:wither",
+      "required": false
+    },
+    {
+      "id": "minecraft:wolf",
+      "required": false
+    },
+    {
+      "id": "minecraft:zombie_horse",
+      "required": false
+    },
+    {
+      "id": "minecraft:zombie_villager",
+      "required": false
+    },
+    {
+      "id": "minecraft:zombified_piglin",
+      "required": false
+    },
+    {
+      "id": "neovitae:necromancy_summon",
+      "required": false
+    },
+    {
+      "id": "neovitae:necromancy_summon_husk",
+      "required": false
+    },
+    {
+      "id": "neovitae:necromancy_summon_skeleton",
+      "required": false
+    },
+    {
+      "id": "neovitae:necromancy_summon_stray",
+      "required": false
+    },
+    {
+      "id": "neovitae:slime_vitae",
+      "required": false
+    },
+    {
+      "id": "occultism:afrit",
+      "required": false
+    },
+    {
+      "id": "occultism:bat_familiar",
+      "required": false
+    },
+    {
+      "id": "occultism:beaver_familiar",
+      "required": false
+    },
+    {
+      "id": "occultism:beholder_familiar",
+      "required": false
+    },
+    {
+      "id": "occultism:blacksmith_familiar",
+      "required": false
+    },
+    {
+      "id": "occultism:chimera_familiar",
+      "required": false
+    },
+    {
+      "id": "occultism:cthulhu_familiar",
+      "required": false
+    },
+    {
+      "id": "occultism:deer_familiar",
+      "required": false
+    },
+    {
+      "id": "occultism:demonic_husband",
+      "required": false
+    },
+    {
+      "id": "occultism:demonic_wife",
+      "required": false
+    },
+    {
+      "id": "occultism:devil_familiar",
+      "required": false
+    },
+    {
+      "id": "occultism:djinni",
+      "required": false
+    },
+    {
+      "id": "occultism:dragon_familiar",
+      "required": false
+    },
+    {
+      "id": "occultism:fairy_familiar",
+      "required": false
+    },
+    {
+      "id": "occultism:foliot",
+      "required": false
+    },
+    {
+      "id": "occultism:goat_familiar",
+      "required": false
+    },
+    {
+      "id": "occultism:greedy_familiar",
+      "required": false
+    },
+    {
+      "id": "occultism:guardian_familiar",
+      "required": false
+    },
+    {
+      "id": "occultism:headless_familiar",
+      "required": false
+    },
+    {
+      "id": "occultism:iesnium_golem",
+      "required": false
+    },
+    {
+      "id": "occultism:marid",
+      "required": false
+    },
+    {
+      "id": "occultism:mummy_familiar",
+      "required": false
+    },
+    {
+      "id": "occultism:otherworld_bird",
+      "required": false
+    },
+    {
+      "id": "occultism:possessed_enderman",
+      "required": false
+    },
+    {
+      "id": "occultism:shub_niggurath_familiar",
+      "required": false
+    },
+    {
+      "id": "occultism:shub_niggurath_spawn",
+      "required": false
+    },
+    {
+      "id": "occultism:wild_bogged",
+      "required": false
+    },
+    {
+      "id": "occultism:wild_cave_spider",
+      "required": false
+    },
+    {
+      "id": "occultism:wild_horde_creeper",
+      "required": false
+    },
+    {
+      "id": "occultism:wild_horde_drowned",
+      "required": false
+    },
+    {
+      "id": "occultism:wild_horde_husk",
+      "required": false
+    },
+    {
+      "id": "occultism:wild_horde_silverfish",
+      "required": false
+    },
+    {
+      "id": "occultism:wild_hunt_skeleton",
+      "required": false
+    },
+    {
+      "id": "occultism:wild_husk",
+      "required": false
+    },
+    {
+      "id": "occultism:wild_silverfish",
+      "required": false
+    },
+    {
+      "id": "occultism:wild_skeleton",
+      "required": false
+    },
+    {
+      "id": "occultism:wild_slime",
+      "required": false
+    },
+    {
+      "id": "occultism:wild_spider",
+      "required": false
+    },
+    {
+      "id": "occultism:wild_stray",
+      "required": false
+    },
+    {
+      "id": "occultism:wild_zombie",
+      "required": false
+    },
+    {
+      "id": "occultism:wondering_trader",
+      "required": false
+    },
+    {
+      "id": "regions_unexplored:ashen",
+      "required": false
+    },
+    {
+      "id": "starcatcher:fish",
+      "required": false
+    },
+    {
+      "id": "undergarden:gwib",
+      "required": false
+    },
+    {
+      "id": "undergarden:minion",
+      "required": false
+    },
+    {
+      "id": "undergarden:mysterious_pot",
+      "required": false
+    },
+    {
+      "id": "undergarden:nargoyle",
+      "required": false
+    },
+    {
+      "id": "upgrade_aquatic:box_jellyfish",
+      "required": false
+    },
+    {
+      "id": "upgrade_aquatic:cassiopea_jellyfish",
+      "required": false
+    },
+    {
+      "id": "upgrade_aquatic:goose",
+      "required": false
+    },
+    {
+      "id": "upgrade_aquatic:immortal_jellyfish",
+      "required": false
+    }
+  ]
+}

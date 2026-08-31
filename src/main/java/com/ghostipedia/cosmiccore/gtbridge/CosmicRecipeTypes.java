@@ -596,6 +596,14 @@ public class CosmicRecipeTypes {
             .UI(builder -> builder.setProgressBar(GTGuiTextures.PROGRESS_ARROW_MULTIPLE)
                     .addRecipeUIModifier(BloomwyrmRecipeUI.COMMON));
 
+    public static final GTRecipeType BIOMELD_VIVARIUM = GTRecipeTypes
+            .register(CosmicCore.id("biomeld_vivarium"), MULTIBLOCK)
+            .setMaxIOSize(0, 8, 1, 1)
+            .setMaxSize(IO.OUT, SoulRecipeCapability.CAP, 1)
+            .setSound(GTSoundEntries.CHEMICAL)
+            .UI(builder -> builder.setProgressBar(GTGuiTextures.PROGRESS_ARROW_MULTIPLE)
+                    .addRecipeUIModifier(BloomwyrmRecipeUI.COMMON));
+
     public static final GTRecipeType SCULK_BIOCHAMBER = GTRecipeTypes
             .register(CosmicCore.id("sculk_biochamber"), MULTIBLOCK)
             .setMaxIOSize(6, 6, 5, 5)
@@ -637,7 +645,7 @@ public class CosmicRecipeTypes {
                 STELLAR_SMELTING, CHROMATIC_DISTILLATION_PLANT, CELESTIAL_BORE, NAQUAHINE_REACTOR,
                 INDUSTRIAL_CHEMVAT, BIOVAT, WASP_RECIPES, BEES, VOMAHINE_CORE_DRILL, REGOLITH_SIFTER,
                 LIFE_FORCE_MANIPULATOR, NEUTRON_FORGE, MULTITHREADED_PROCESSOR, MECHANICAL_RITUAL,
-                LINK_TEST_RECIPES, ABYSSAL_CULTURE_VAT, SCULK_BIOCHAMBER, BIOMANA_DIGESTOR,
+                LINK_TEST_RECIPES, ABYSSAL_CULTURE_VAT, BIOMELD_VIVARIUM, SCULK_BIOCHAMBER, BIOMANA_DIGESTOR,
                 MANAWOMB_LEECHING_POND }) {
             type.setEUIO(IO.IN);
         }
@@ -686,7 +694,8 @@ public class CosmicRecipeTypes {
         WASP_RECIPES.getDataInfos()
                 .add(data -> Component.translatable("cosmiccore.recipe.asteroid_weight_greater_1").getString());
         for (GTRecipeType type : new GTRecipeType[] {
-                ABYSSAL_CULTURE_VAT, SCULK_BIOCHAMBER, BIOMANA_DIGESTOR, MANAWOMB_LEECHING_POND }) {
+                ABYSSAL_CULTURE_VAT, BIOMELD_VIVARIUM, SCULK_BIOCHAMBER, BIOMANA_DIGESTOR,
+                MANAWOMB_LEECHING_POND }) {
             type.getDataInfos().add(data -> data.contains(BloomwyrmRecipeKeys.BIOPOWER_INPUT) ?
                     Component.translatable(
                             "cosmiccore.bloomwyrm.recipe.biopower_input",

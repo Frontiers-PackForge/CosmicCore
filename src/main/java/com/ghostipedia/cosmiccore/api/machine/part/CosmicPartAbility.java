@@ -7,6 +7,9 @@ public class CosmicPartAbility {
     public static final PartAbility SOUL_CONTAINER = new PartAbility("soul_container");
     public static final PartAbility IMPORT_SOUL = new PartAbility("import_soul");
     public static final PartAbility EXPORT_SOUL = new PartAbility("export_soul");
+    public static final PartAbility IMPORT_VITAE_NETWORK = new PartAbility("import_vitae_network");
+    public static final PartAbility EXPORT_VITAE_NETWORK = new PartAbility("export_vitae_network");
+    public static final PartAbility VITAE_SPAWNER = new PartAbility("vitae_spawner");
     public static final PartAbility COSMIC_PARALLEL_HATCH = new PartAbility("cosmic_parallel_hatch");
     public static final PartAbility MODULE_HATCH = new PartAbility("module_hatch");
     public static final PartAbility PSS_SENSORS = new PartAbility("pss_sensors");

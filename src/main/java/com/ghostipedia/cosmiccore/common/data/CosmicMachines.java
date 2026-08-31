@@ -2,6 +2,7 @@ package com.ghostipedia.cosmiccore.common.data;
 
 import com.ghostipedia.cosmiccore.CosmicCore;
 import com.ghostipedia.cosmiccore.api.capability.recipe.CosmicRecipeCapabilities;
+import com.ghostipedia.cosmiccore.api.capability.souls.SoulType;
 import com.ghostipedia.cosmiccore.api.machine.multiblock.DimensionalEnergyCapacitor;
 import com.ghostipedia.cosmiccore.api.machine.multiblock.DimensionalEnergyInterface;
 import com.ghostipedia.cosmiccore.api.machine.part.CosmicPartAbility;
@@ -105,6 +106,7 @@ public class CosmicMachines {
     }
 
     private static final int[] EMBER_TIERS = tiersBetween(ULV, ELECTRIC_TIERS[ELECTRIC_TIERS.length - 1]);
+    private static final int[] VITAE_TIERS = tiersBetween(MV, ELECTRIC_TIERS[ELECTRIC_TIERS.length - 1]);
 
     public final static MachineDefinition[] SOUL_IMPORT_HATCH = registerSoulHatch(
             "soul_input_hatch", "Soul Input Hatch",
@@ -112,6 +114,14 @@ public class CosmicMachines {
     public static final MachineDefinition[] SOUL_EXPORT_HATCH = registerSoulHatch(
             "soul_output_hatch", "Soul Output Hatch",
             IO.OUT, HIGH_TIERS, EXPORT_SOUL);
+
+    public static final MachineDefinition[] QUINTESSENTIA_IMPORT_HATCH = registerQuintessentiaHatch(
+            "input_quintessentia_hatch", "Input Quintessentia Hatch",
+            IO.IN, VITAE_TIERS, IMPORT_VITAE_NETWORK);
+    public static final MachineDefinition[] QUINTESSENTIA_EXPORT_HATCH = registerQuintessentiaHatch(
+            "output_quintessentia_hatch", "Output Quintessentia Hatch",
+            IO.OUT, VITAE_TIERS, EXPORT_VITAE_NETWORK);
+    public static final MachineDefinition[] SPAWNER_HATCH = registerSpawnerHatch(VITAE_TIERS);
 
     public static final MachineDefinition[] EMBER_IMPORT_HATCH = registerEmberHatch(
             "ember_input_hatch", "Ember Input Hatch",
@@ -554,6 +564,37 @@ public class CosmicMachines {
                                 tooltip.add(Component.translatable("tooltip.cosmiccore.soul_hatch.input",
                                         SoulHatchPartMachine.getMaxConsumption(tier)));
                         }).register(),
+                tiers);
+    }
+
+    private static MachineDefinition[] registerQuintessentiaHatch(String name, String displayName, IO io,
+                                                                  int[] tiers, PartAbility... abilities) {
+        return registerTieredMachines(name,
+                (holder, tier) -> new QuintessentiaHatchPartMachine(holder, tier, io),
+                (tier, builder) -> builder
+                        .langValue(GTValues.VNF[tier] + ' ' + displayName)
+                        .abilities(abilities)
+                        .rotationState(RotationState.ALL)
+                        .modelProperty(GTMachineModelProperties.IS_FORMED, false)
+                        .overlayTieredHullModel("soul_hatch")
+                        .tooltipBuilder((item, tooltip) -> tooltip.add(Component.translatable(
+                                "tooltip.cosmiccore.quintessentia_hatch.limit",
+                                QuintessentiaHatchPartMachine.getMaxCapacity(tier, SoulType.Anima))))
+                        .register(),
+                tiers);
+    }
+
+    private static MachineDefinition[] registerSpawnerHatch(int[] tiers) {
+        return registerTieredMachines("spawner_hatch",
+                SpawnerHatchPartMachine::new,
+                (tier, builder) -> builder
+                        .langValue(GTValues.VNF[tier] + " Spawner Hatch")
+                        .abilities(VITAE_SPAWNER)
+                        .rotationState(RotationState.ALL)
+                        .modelProperty(GTMachineModelProperties.IS_FORMED, false)
+                        .overlayTieredHullModel("module_hatch")
+                        .tooltips(Component.translatable("tooltip.cosmiccore.spawner_hatch"))
+                        .register(),
                 tiers);
     }
 

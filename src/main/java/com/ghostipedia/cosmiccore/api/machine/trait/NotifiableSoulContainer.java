@@ -1,6 +1,7 @@
 package com.ghostipedia.cosmiccore.api.machine.trait;
 
 import com.ghostipedia.cosmiccore.api.capability.recipe.CosmicRecipeCapabilities;
+import com.ghostipedia.cosmiccore.api.capability.souls.SoulType;
 import com.ghostipedia.cosmiccore.api.data.souls.SoulNetwork;
 import com.ghostipedia.cosmiccore.api.data.souls.SoulNetworkSavedData;
 import com.ghostipedia.cosmiccore.api.recipe.ingredient.SoulIngredient;
@@ -15,24 +16,26 @@ import com.gregtechceu.gtceu.common.machine.owner.FTBOwner;
 
 import net.minecraft.server.level.ServerLevel;
 
-import lombok.Getter;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+import java.util.function.ToIntFunction;
 
 public class NotifiableSoulContainer extends NotifiableRecipeHandlerTrait<SoulIngredient> {
 
     public final IO handlerIO;
 
-    @Getter
-    private final int throughput;
+    private final ToIntFunction<SoulType> throughput;
 
-    @Getter
-    private final int capacity;
+    private final ToIntFunction<SoulType> capacity;
 
     public NotifiableSoulContainer(MetaMachine machine, IO io, int throughput, int capacity) {
+        this(machine, io, ignored -> throughput, ignored -> capacity);
+    }
+
+    public NotifiableSoulContainer(MetaMachine machine, IO io,
+                                   ToIntFunction<SoulType> throughput, ToIntFunction<SoulType> capacity) {
         super();
         this.handlerIO = io;
         this.throughput = throughput;
@@ -45,12 +48,12 @@ public class NotifiableSoulContainer extends NotifiableRecipeHandlerTrait<SoulIn
         return handlerIO;
     }
 
-    public int getThroughput() {
-        return throughput;
+    public int getThroughput(SoulType type) {
+        return throughput.applyAsInt(type);
     }
 
-    public int getCapacity() {
-        return capacity;
+    public int getCapacity(SoulType type) {
+        return capacity.applyAsInt(type);
     }
 
     private SoulNetwork getSoulNetwork() {
@@ -74,26 +77,11 @@ public class NotifiableSoulContainer extends NotifiableRecipeHandlerTrait<SoulIn
         if (io != IO.IN && io != IO.OUT) return left.isEmpty() ? null : left;
 
         var network = getSoulNetwork();
-        List<SoulIngredient> result = new ArrayList<>();
-
-        for (SoulIngredient ingredient : left) {
-            SoulStack requiredStack = ingredient.stack();
-            if (requiredStack.isEmpty()) continue;
-
-            if (io == IO.IN) {
-                SoulStack consumedStack = network.syphon(requiredStack, simulate);
-                if (consumedStack.amount() < requiredStack.amount()) {
-                    result.add(SoulIngredient
-                            .of(requiredStack.withAmount(requiredStack.amount() - consumedStack.amount())));
-                }
-            } else {
-                SoulStack canInput = network.add(requiredStack, throughput, capacity, simulate);
-                SoulStack reminder = requiredStack.withAmount(requiredStack.amount() - canInput.amount());
-                if (reminder.amount() > 0) result.add(SoulIngredient.of(reminder));
-            }
-        }
-
-        return result.isEmpty() ? null : result;
+        var stacks = left.stream().map(SoulIngredient::stack).toList();
+        var complete = io == IO.IN ?
+                network.extractAll(stacks, throughput, simulate) :
+                network.insertAll(stacks, throughput, capacity, simulate);
+        return complete ? null : left;
     }
 
     @Override
@@ -107,6 +95,10 @@ public class NotifiableSoulContainer extends NotifiableRecipeHandlerTrait<SoulIn
     /** Server-only access to the underlying network's stacks for UI display. */
     public List<SoulStack> getStacks() {
         return getSoulNetwork().getContents();
+    }
+
+    public int getAmount(SoulType type) {
+        return getSoulNetwork().getAmount(type);
     }
 
     @Override

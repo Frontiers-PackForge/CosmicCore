@@ -16,6 +16,8 @@ import java.util.stream.Collectors;
 
 public enum SoulType implements StringRepresentable {
 
+    Anima("anima", ChatFormatting.DARK_RED),
+    Spiritus("spiritus", ChatFormatting.LIGHT_PURPLE),
     Raw("raw", ChatFormatting.DARK_RED),
     Refined("refined", ChatFormatting.GRAY),
     Proud("proud", ChatFormatting.DARK_PURPLE),

@@ -207,21 +207,22 @@ public class BloomwyrmHeartMachine extends LinkedWorkableElectricMultiblockMachi
         if (cycleTicksRemaining > 0) {
             cycleTicksRemaining--;
         }
-        int activeUnits = getActiveUnitCount();
-        if (allocationBatchActive && allocationBatchParticipants.length == 0 && activeUnits > 0) {
+        int activeCycleUnits = getActiveCycleUnitCount();
+        if (allocationBatchActive && allocationBatchParticipants.length == 0 && activeCycleUnits > 0) {
             allocationBatchParticipants = getLoadedUnits().stream()
+                    .filter(BloomwyrmUnitMachine::usesHeartCycleAllocation)
                     .filter(BloomwyrmUnitMachine::hasAllocation)
                     .mapToLong(unit -> unit.getBlockPos().asLong())
                     .toArray();
         }
-        if (allocationBatchActive && activeUnits == 0 && !hasPendingBatchAllocations()) {
+        if (allocationBatchActive && activeCycleUnits == 0 && !hasPendingBatchAllocations()) {
             allocationBatchActive = false;
             allocatedBiopowerCapacity = 0;
             allocationBatchParticipants = new long[0];
             evaluatedPowerTick = Long.MIN_VALUE;
         }
         if (!allocationBatchActive) {
-            if (activeUnits > 0) {
+            if (activeCycleUnits > 0) {
                 allocationBatchActive = true;
                 allocatedBiopowerCapacity = getCurrentBiopowerOutput();
             } else if (cycleTicksRemaining == 0) {
@@ -235,7 +236,7 @@ public class BloomwyrmHeartMachine extends LinkedWorkableElectricMultiblockMachi
         List<BloomwyrmUnitMachine> units = getLoadedUnits();
         List<UnitRequest> requests = new ArrayList<>();
         for (BloomwyrmUnitMachine unit : units) {
-            if (!unit.isAvailableForAllocation()) {
+            if (!unit.usesHeartCycleAllocation() || !unit.isAvailableForAllocation()) {
                 continue;
             }
             var request = unit.getRecipeLogic().createRequest();
@@ -312,8 +313,51 @@ public class BloomwyrmHeartMachine extends LinkedWorkableElectricMultiblockMachi
         allocatedBiopowerCapacity = producedBiopower;
         allocationBatchParticipants = batchParticipants.stream().mapToLong(Long::longValue).toArray();
         lastLimitedUnits = limited;
-        allocationBatchActive = getActiveUnitCount() > 0;
+        allocationBatchActive = getActiveCycleUnitCount() > 0;
         evaluatedPowerTick = Long.MIN_VALUE;
+    }
+
+    public boolean tryAllocateIndependent(BloomwyrmUnitMachine unit, BloomwyrmWorkRequest request) {
+        if (unit.usesHeartCycleAllocation() || !unit.isAvailableForAllocation() || unit.getHeart() != this) {
+            return false;
+        }
+        long remainingEU = Math.max(0, getCampusEnergyBudget() - getAllocatedEUt());
+        long inputVoltage = getCampusInputVoltage();
+        int remainingBiopower = Math.max(0, getBiopowerCapacity() - getAllocatedBiopower());
+        long remainingCharge = storedCharge;
+        long reservedChargeOutput = getReservedChargeOutput();
+        int heartOffer = request.eligibleParallel();
+        if (request.requiredVoltage() > inputVoltage) {
+            heartOffer = 0;
+        }
+        heartOffer = limit(heartOffer, remainingEU, request.eutPerParallel());
+        heartOffer = limit(heartOffer, remainingBiopower, request.biopowerInputPerParallel());
+        heartOffer = limit(heartOffer, remainingCharge, request.chargeInputPerParallel());
+        heartOffer = limit(heartOffer, CHARGE_CAPACITY - remainingCharge - reservedChargeOutput,
+                netChargeOutputPerParallel(request));
+
+        BloomwyrmAllocationConstraint constraint = findConstraint(
+                request,
+                heartOffer,
+                inputVoltage,
+                remainingEU,
+                remainingBiopower,
+                remainingCharge,
+                CHARGE_CAPACITY - remainingCharge - reservedChargeOutput);
+        unit.recordHeartOffer(heartOffer, constraint);
+        int parallel = Math.min(request.requestedParallel(), heartOffer);
+        if (parallel <= 0) {
+            unit.denyAllocation(constraint);
+            return false;
+        }
+        if (!unit.beginAllocation(request, parallel)) {
+            unit.recordHeartOffer(0, BloomwyrmAllocationConstraint.LOCAL_IO);
+            return false;
+        }
+        storedCharge = Math.max(0, storedCharge - multiply(request.chargeInputPerParallel(), parallel));
+        unit.recordHeartOffer(heartOffer, constraint);
+        evaluatedPowerTick = Long.MIN_VALUE;
+        return true;
     }
 
     public void markAllocationComplete(BlockPos position) {
@@ -347,11 +391,21 @@ public class BloomwyrmHeartMachine extends LinkedWorkableElectricMultiblockMachi
     private int getCurrentBiopowerOutput() {
         int output = 0;
         for (BloomwyrmUnitMachine unit : getLoadedUnits()) {
-            if (unit.hasAllocation()) {
+            if (unit.usesHeartCycleAllocation() && unit.hasAllocation()) {
                 output = saturatingAdd(output, unit.getAllocatedBiopowerOutput());
             }
         }
         return output;
+    }
+
+    private int getActiveCycleUnitCount() {
+        int active = 0;
+        for (BloomwyrmUnitMachine unit : getLoadedUnits()) {
+            if (unit.usesHeartCycleAllocation() && unit.hasAllocation()) {
+                active++;
+            }
+        }
+        return active;
     }
 
     private List<BloomwyrmUnitMachine> getLoadedUnits() {

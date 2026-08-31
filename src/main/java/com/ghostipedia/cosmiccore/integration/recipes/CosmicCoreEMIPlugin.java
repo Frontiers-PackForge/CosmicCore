@@ -7,12 +7,16 @@ import com.ghostipedia.cosmiccore.common.data.CosmicItems;
 import com.ghostipedia.cosmiccore.common.data.materials.CosmicBundleMaterials;
 import com.ghostipedia.cosmiccore.common.data.materials.CosmicOreFormPolicy;
 import com.ghostipedia.cosmiccore.common.food.CosmicFoodRegistry;
+import com.ghostipedia.cosmiccore.common.machine.multiblock.multi.BloomwyrmSystem;
 import com.ghostipedia.cosmiccore.common.machine.multiblock.multi.IndustrialFlotationPlant;
 import com.ghostipedia.cosmiccore.common.machine.multiblock.multi.IndustrialOreSorter;
 import com.ghostipedia.cosmiccore.common.machine.multiblock.multi.LARVA;
 import com.ghostipedia.cosmiccore.common.machine.multiblock.multi.Powderizer;
 import com.ghostipedia.cosmiccore.common.machine.multiblock.multi.logic.LarvaMachine;
+import com.ghostipedia.cosmiccore.common.vitae.CultivationProfileManager;
+import com.ghostipedia.cosmiccore.common.vitae.EnderIOSpawnerResolver;
 import com.ghostipedia.cosmiccore.integration.recipes.emi.AsteroidEmiRecipe;
+import com.ghostipedia.cosmiccore.integration.recipes.emi.BiomeldVivariumEmiRecipe;
 import com.ghostipedia.cosmiccore.integration.recipes.emi.CompositeOreSortingEmiRecipe;
 import com.ghostipedia.cosmiccore.integration.recipes.emi.CraftingStationRecipeHandler;
 import com.ghostipedia.cosmiccore.integration.recipes.emi.FactoryGaugeEmiCompat;
@@ -39,6 +43,7 @@ import dev.emi.emi.api.stack.EmiStack;
 import dev.emi.emi.api.widget.Bounds;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -63,6 +68,9 @@ public class CosmicCoreEMIPlugin implements EmiPlugin {
     @Override
     public void register(EmiRegistry registry) {
         registry.setDefaultComparison(CosmicItems.TARGETING_CHIP.asStack(), Comparison.compareComponents());
+        registry.removeEmiStacks(stack -> EnderIOSpawnerResolver.resolveSpawnerSoul(stack.getItemStack())
+                .filter(entity -> CultivationProfileManager.INSTANCE.get(entity).isEmpty())
+                .isPresent());
 
         registerModularUIScreen(registry, ScreenWrapper.class);
         registerModularUIScreen(registry, ContainerScreenWrapper.class);
@@ -89,6 +97,13 @@ public class CosmicCoreEMIPlugin implements EmiPlugin {
         for (var bundle : CosmicBundleMaterials.bundleOres()) {
             registry.addRecipe(new CompositeOreSortingEmiRecipe(bundle));
         }
+
+        registry.addCategory(BiomeldVivariumEmiRecipe.CATEGORY);
+        registry.addWorkstation(BiomeldVivariumEmiRecipe.CATEGORY,
+                EmiStack.of(BloomwyrmSystem.BIOMELD_VIVARIUM.asStack()));
+        CultivationProfileManager.INSTANCE.profiles().values().stream()
+                .sorted(Comparator.comparing(profile -> profile.entity().toString()))
+                .forEach(profile -> registry.addRecipe(new BiomeldVivariumEmiRecipe(profile)));
 
         registry.addCategory(ASTEROID_CATEGORY);
         registry.addWorkstation(ASTEROID_CATEGORY, EmiStack.of(LARVA.LARVA.getBlock()));

@@ -12,7 +12,9 @@ import com.gregtechceu.gtceu.api.multiblock.error.BlockMatchingError;
 import com.gregtechceu.gtceu.api.multiblock.util.BlockInfo;
 import com.gregtechceu.gtceu.api.recipe.GTRecipeType;
 
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 
@@ -70,6 +72,16 @@ public class CosmicPredicates {
                 CosmicBlocks.HV_CAPACITOR_BATTERY.get(),
                 CosmicBlocks.EMPTY_TIER_0_CAPACITOR.get())
                 .addTooltips(Component.translatable("cosmiccore.multiblock.pattern.power_capacitor_batteries"));
+    }
+
+    public static MultiPredicate blockById(ResourceLocation blockId) {
+        return Predicates.builder("Block " + blockId)
+                .predicate(ctx -> blockId.equals(BuiltInRegistries.BLOCK.getKey(ctx.state().getBlock())))
+                .candidatesSupplier(() -> BuiltInRegistries.BLOCK.getOptional(blockId)
+                        .map(block -> List.of(BlockInfo.fromBlock(block)))
+                        .orElse(List.of()))
+                .contents(builder -> builder.append(blockId))
+                .toMultiPredicate();
     }
 
     public static MultiPredicate starLadderModules() {

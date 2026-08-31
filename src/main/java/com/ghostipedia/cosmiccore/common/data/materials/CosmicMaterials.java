@@ -162,6 +162,9 @@ public class CosmicMaterials {
     public static Material BloomingSludge;
     public static Material BloomRichAlgaeSolution;
     public static Material PhytoGrease;
+    public static Material BiomeldNutrientMV;
+    public static Material BiomeldNutrientEV;
+    public static Material BiomeldNutrientLuV;
 
     public static void register() {
         HighPressureSteam = new Material.Builder(CosmicCore.id("high_pressure_steam"))
@@ -185,6 +188,18 @@ public class CosmicMaterials {
         PhytoGrease = new Material.Builder(CosmicCore.id("phyto_grease"))
                 .liquid()
                 .color(0xA0A943).secondaryColor(0x596427)
+                .buildAndRegister();
+        BiomeldNutrientMV = new Material.Builder(CosmicCore.id("biomeld_nutrient"))
+                .liquid()
+                .color(0x7FAE58).secondaryColor(0xC77A82)
+                .buildAndRegister();
+        BiomeldNutrientEV = new Material.Builder(CosmicCore.id("biomeld_nutrient_ev"))
+                .liquid()
+                .color(0x6F8F67).secondaryColor(0xB85D7B)
+                .buildAndRegister();
+        BiomeldNutrientLuV = new Material.Builder(CosmicCore.id("biomeld_nutrient_luv"))
+                .liquid()
+                .color(0x5C7080).secondaryColor(0x9F4D85)
                 .buildAndRegister();
         AdvancedDrillingFluid = new Material.Builder(CosmicCore.id("advanced_drilling_fluid"))
                 .liquid()
@@ -575,8 +590,8 @@ public class CosmicMaterials {
 
         Kuvite = new Material.Builder(CosmicCore.id("kuvite"))
                 .ingot()
-                .liquid(new FluidBuilder().temperature(1340))
-                .color(0xff6a4d).secondaryColor(0xa1311b).iconSet(CosmicMaterialSet.CRYSTAL)
+                .liquid(new FluidBuilder().temperature(1340).color(0xff6a4d))
+                .iconSet(CosmicMaterialSet.KUVITE)
                 .flags(GENERATE_BOLT_SCREW, GENERATE_ROUND, GENERATE_GEAR, GENERATE_SMALL_GEAR, GENERATE_RING,
                         GENERATE_FRAME, GENERATE_SPRING, GENERATE_SPRING_SMALL, GENERATE_FINE_WIRE, GENERATE_DENSE)
                 .blastTemp(4500, BlastProperty.GasTier.HIGH, GTValues.VA[GTValues.EV], 1200)
