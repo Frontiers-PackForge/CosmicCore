@@ -107,6 +107,9 @@ public class CosmicLangHandler extends LangHandler {
 
         replace(provider, "material.cosmiccore.blooming_sludge", "Blooming Sludge");
         replace(provider, "material.cosmiccore.bloom_rich_algae_solution", "Bloom Rich Algae Solution");
+        replace(provider, "material.cosmiccore.biomeld_nutrient", "Biomeld Nutrient");
+        replace(provider, "material.cosmiccore.biomeld_nutrient_ev", "Enriched Biomeld Nutrient");
+        replace(provider, "material.cosmiccore.biomeld_nutrient_luv", "Blooming Biomeld Nutrient");
         replace(provider, "material.cosmiccore.phyto_grease", "Phyto-Grease");
         replace(provider, "material.cosmiccore.energetic_aluminium", "Energized Aluminium");
         replace(provider, "material.gtceu.multi_phase_oil", "Multi-Phase Oil");
@@ -547,6 +550,12 @@ public class CosmicLangHandler extends LangHandler {
         provider.add("cosmiccore.wire_coil.magnet_stats", "§8Magnet Stats");
         provider.add("tooltip.cosmiccore.soul_hatch.input", "§cMax Recipe Input§f:§6 %s");
         provider.add("tooltip.cosmiccore.soul_hatch.output", "§cMax Soul Network Capacity§f:§6 %s");
+        provider.add("tooltip.cosmiccore.quintessentia_hatch.limit", "§cAtomic Quintessentia Limit§f:§6 %s");
+        provider.add("cosmiccore.quintessentia_hatch.network", "Team Quintessentia Network");
+        provider.add("cosmiccore.quintessentia_hatch.scale.input", "Stored / Maximum");
+        provider.add("cosmiccore.quintessentia_hatch.scale.output", "Stored / Hatch Limit");
+        provider.add("cosmiccore.quintessentia_hatch.channel", "%s: %s / %s");
+        provider.add("tooltip.cosmiccore.spawner_hatch", "Holds one attuned Ender IO Powered Spawner as a blueprint");
         provider.add("tooltip.cosmiccore.ember_hatch.consumption", "§cMax Ember Consumption§f:§6 %s");
         provider.add("tooltip.cosmiccore.ember_hatch.capacity", "§cMax Ember capacity§f:§6 %s");
         provider.add("tooltip.cosmiccore.thermia_hatch_limit", "§cTemp. Limit: %sK");
@@ -585,6 +594,10 @@ public class CosmicLangHandler extends LangHandler {
         provider.add("gui.cosmiccore.soul.network_contents", "Network Contents:");
         provider.add("gui.cosmiccore.soul.empty_network", "Network is empty.");
         provider.add("gui.cosmiccore.soul.reset", "Soul network has been reset.");
+        provider.add("cosmiccore.command.vitae.export_fail", "Vitae cultivation export failed: %s");
+        provider.add("cosmiccore.command.vitae.export_done", "Exported %s living entity profiles to %s");
+        provider.add("gui.cosmiccore.soul.anima.name", "Anima");
+        provider.add("gui.cosmiccore.soul.spiritus.name", "Spiritus");
         provider.add("gui.cosmiccore.soul.raw.name", "Raw");
         provider.add("gui.cosmiccore.soul.refined.name", "Refined");
         provider.add("gui.cosmiccore.soul.proud.name", "Proud");
@@ -1718,6 +1731,15 @@ public class CosmicLangHandler extends LangHandler {
         provider.add("cosmiccore.emi.composite_ore_sorting.entry", "Raw Ore -> Crushed Ore");
         provider.add("cosmiccore.emi.composite_ore_sorting.entry.hammer", "Forge Hammer: 1:1");
         provider.add("cosmiccore.emi.composite_ore_sorting.entry.macerator", "Macerator: 1:2");
+        provider.add("cosmiccore.emi.biomeld_vivarium", "Biomeld Vivarium Cultivation");
+        provider.add("cosmiccore.emi.biomeld_vivarium.requirements", "%s | %s EU/t | %s s");
+        provider.add("cosmiccore.emi.biomeld_vivarium.spawner", "Attuned Spawner: %s");
+        provider.add("cosmiccore.emi.biomeld_vivarium.nutrient", "Accepted Biomeld Nutrient: %s mB");
+        provider.add("cosmiccore.emi.biomeld_vivarium.count_range", "Yield: %s-%s");
+        provider.add("cosmiccore.emi.biomeld_vivarium.chance", "Chance: %s");
+        provider.add("cosmiccore.emi.biomeld_vivarium.vitae", "Essentia Vitae: %s mB");
+        provider.add("cosmiccore.emi.biomeld_vivarium.spiritus", "Spiritus: +%s network units");
+        provider.add("cosmiccore.emi.biomeld_vivarium.charge", "Bloomwyrm Charge: %s");
         provider.add("cosmiccore.tooltip.oxygen_tank.fill", "Oxygen: %s / %s mB");
         provider.add("cosmiccore.tooltip.oxygen_tank.runtime", "No-Air breathing time: %s");
         provider.add("cosmiccore.tooltip.oxygen_tank.rebreather", "Requires Pressurized Rebreather or Diving Helmet");
@@ -1793,6 +1815,19 @@ public class CosmicLangHandler extends LangHandler {
                 "Cultivates abyssal samples into §aBiopower§f and §3Bloomwyrm Charge§f.");
         provider.add("cosmiccore.machine.abyssal_culture_vat.tooltip.1",
                 "§aBiopower§f yield depends on the §6active culture recipe§f.");
+        provider.add("cosmiccore.machine.biomeld_vivarium.tooltip.0",
+                "§7Uses Powered Spawner Mob Data to vat grow mobs.");
+        provider.add("cosmiccore.machine.biomeld_vivarium.tooltip.1",
+                "§7Materials, Spirits, and Essences are produced by default.");
+        provider.add("cosmiccore.machine.biomeld_vivarium.tooltip.2",
+                "§7Experience Mode will convert all materials to xp.");
+        provider.add("cosmiccore.biomeld_vivarium.mode_control", "Cultivation Mode");
+        provider.add("cosmiccore.biomeld_vivarium.mode.material", "Mode: Material Cultivation");
+        provider.add("cosmiccore.biomeld_vivarium.mode.experience", "Mode: Experience Squeezer");
+        provider.add("cosmiccore.biomeld_vivarium.mode.material.short", "Drops");
+        provider.add("cosmiccore.biomeld_vivarium.mode.experience.short", "XP");
+        provider.add("cosmiccore.biomeld_vivarium.unattuned", "Spawner: Unattuned or unsupported");
+        provider.add("cosmiccore.biomeld_vivarium.attuned", "Spawner: %s | Profile: %s");
         provider.add("cosmiccore.machine.sculk_biochamber.tooltip.0",
                 "Consumes prepared cultures, Biopower, and Bloomwyrm Charge through the Bloomwyrm campus.");
         provider.add("cosmiccore.machine.sculk_biochamber.tooltip.1",

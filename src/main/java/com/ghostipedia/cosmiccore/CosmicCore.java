@@ -37,6 +37,7 @@ import com.ghostipedia.cosmiccore.common.machine.multiblock.multi.modular.Multib
 import com.ghostipedia.cosmiccore.common.mob.DimensionMobScaling;
 import com.ghostipedia.cosmiccore.common.network.CCoreNetwork;
 import com.ghostipedia.cosmiccore.common.recipe.condition.CosmicConditions;
+import com.ghostipedia.cosmiccore.common.recipe.ingredient.CosmicIngredientTypes;
 import com.ghostipedia.cosmiccore.ember.CosmicEmberCapabilities;
 import com.ghostipedia.cosmiccore.gtbridge.CosmicRecipeTypes;
 
@@ -88,6 +89,7 @@ public class CosmicCore {
         CosmicEffects.EFFECTS.register(modBus);
         CosmicParticleTypes.PARTICLE_TYPES.register(modBus);
         CosmicLootModifiers.register(modBus);
+        CosmicIngredientTypes.register(modBus);
         CosmicTemperatureModifiers.register(modBus);
         CosmicChunkGenerators.register(modBus);
         CosmicCropFeatures.register(modBus);

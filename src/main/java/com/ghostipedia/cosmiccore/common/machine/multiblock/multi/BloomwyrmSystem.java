@@ -4,8 +4,10 @@ import com.ghostipedia.cosmiccore.CosmicCore;
 import com.ghostipedia.cosmiccore.client.renderer.machine.CosmicDynamicRenderHelpers;
 import com.ghostipedia.cosmiccore.common.block.MurkFloraBlock;
 import com.ghostipedia.cosmiccore.common.data.CosmicMachines;
+import com.ghostipedia.cosmiccore.common.data.materials.CosmicMaterials;
 import com.ghostipedia.cosmiccore.common.machine.multiblock.multi.logic.bloomwyrm.AbyssalCultureVatMachine;
 import com.ghostipedia.cosmiccore.common.machine.multiblock.multi.logic.bloomwyrm.BiomanaDigestorMachine;
+import com.ghostipedia.cosmiccore.common.machine.multiblock.multi.logic.bloomwyrm.BiomeldVivariumMachine;
 import com.ghostipedia.cosmiccore.common.machine.multiblock.multi.logic.bloomwyrm.BloomwyrmHeartMachine;
 import com.ghostipedia.cosmiccore.common.machine.multiblock.multi.logic.bloomwyrm.BloomwyrmUnitMachine;
 import com.ghostipedia.cosmiccore.common.machine.multiblock.multi.logic.bloomwyrm.ManawombLeachingPondMachine;
@@ -13,6 +15,8 @@ import com.ghostipedia.cosmiccore.common.machine.multiblock.multi.logic.bloomwyr
 import com.ghostipedia.cosmiccore.gtbridge.CosmicRecipeTypes;
 
 import com.gregtechceu.gtceu.api.data.RotationState;
+import com.gregtechceu.gtceu.api.data.chemical.ChemicalHelper;
+import com.gregtechceu.gtceu.api.data.tag.TagPrefix;
 import com.gregtechceu.gtceu.api.machine.MachineDefinition;
 import com.gregtechceu.gtceu.api.machine.MultiblockMachineDefinition;
 import com.gregtechceu.gtceu.api.machine.multiblock.PartAbility;
@@ -24,6 +28,7 @@ import com.gregtechceu.gtceu.common.data.GTRecipeTypes;
 import com.gregtechceu.gtceu.utils.TagUtil;
 
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.Blocks;
 
 import com.sammy.malum.registry.common.block.MalumBlocks;
@@ -32,7 +37,10 @@ import java.util.Arrays;
 import java.util.Objects;
 import java.util.stream.Stream;
 
+import static com.ghostipedia.cosmiccore.api.machine.part.CosmicPartAbility.EXPORT_VITAE_NETWORK;
+import static com.ghostipedia.cosmiccore.api.machine.part.CosmicPartAbility.VITAE_SPAWNER;
 import static com.ghostipedia.cosmiccore.api.pattern.CosmicPredicates.autoAbilitiesNoEnergyIn;
+import static com.ghostipedia.cosmiccore.api.pattern.CosmicPredicates.blockById;
 import static com.ghostipedia.cosmiccore.api.registries.CosmicRegistration.REGISTRATE;
 import static com.ghostipedia.cosmiccore.common.data.CosmicBlocks.*;
 import static com.ghostipedia.cosmiccore.common.data.datagen.CosmicMachineModels.createSeparateControllerCasingMachineModel;
@@ -140,6 +148,48 @@ public final class BloomwyrmSystem {
                     .build())
             .workableCasingModel(
                     CosmicCore.id("block/casings/solid/somarust_casing"),
+                    CosmicCore.id("block/multiblock/mixing_vessel"))
+            .register();
+
+    public static final MultiblockMachineDefinition BIOMELD_VIVARIUM = REGISTRATE
+            .multiblock("biomeld_vivarium", BiomeldVivariumMachine::new)
+            .langValue("Biomeld Vivarium")
+            .tooltips(
+                    Component.translatable("cosmiccore.machine.biomeld_vivarium.tooltip.0"),
+                    Component.translatable("cosmiccore.machine.biomeld_vivarium.tooltip.1"),
+                    Component.translatable("cosmiccore.machine.biomeld_vivarium.tooltip.2"))
+            .rotationState(RotationState.NON_Y_AXIS)
+            .recipeType(CosmicRecipeTypes.BIOMELD_VIVARIUM)
+            .recipeModifier(BloomwyrmUnitMachine::recipeModifier)
+            .appearanceBlock(LIGHTWEIGHT_STAINLESS_STEEL_CASING)
+            .partAppearance((controller, part, side) -> LIGHTWEIGHT_STAINLESS_STEEL_CASING.getDefaultState())
+            .pattern(definition -> MultiblockPatternBuilder
+                    .start(RelativeDirection.BACK, RelativeDirection.UP, RelativeDirection.LEFT)
+                    .slice("AAAAAAAAGAA", "      B   B", "      B   B", "      B   B", "      B   B", "      B   B",
+                            "      AAAAA")
+                    .slice("ACCCCCACCCA", " CDCDC EDE ", " CDCDC EDE ", " CCCCC EDE ", "  F    EDE ", "  FFFFFEDE ",
+                            "      ACCCA")
+                    .slice("ACCCCCACCCA", " A A A D D ", " A A A D D ", " CCCCC D D ", "       D D ", "       D D ",
+                            "      ACCCA")
+                    .slice("ACCCCCACCCA", " CDCDC EDE ", " CDCDC EDE ", " CCCCC EDE ", "  F    EDE ", "  FFFFFEDE ",
+                            "      ACCCA")
+                    .slice("AAAAAAAAAAA", "      B   B", "      B   B", "      B   B", "      B   B", "      B   B",
+                            "      AAAAA")
+                    .where(' ', any())
+                    .where('A', blocks(LIGHTWEIGHT_STAINLESS_STEEL_CASING.get())
+                            .or(autoAbilitiesNoEnergyIn(CosmicRecipeTypes.BIOMELD_VIVARIUM))
+                            .or(abilities(VITAE_SPAWNER).setExactLimit(1))
+                            .or(abilities(EXPORT_VITAE_NETWORK).setExactLimit(1)))
+                    .where('B', blocks(ChemicalHelper.getBlock(TagPrefix.frameGt,
+                            CosmicMaterials.EnergeticAluminium)))
+                    .where('C', blocks(LIGHTWEIGHT_DARK_STEEL_CASING.get()))
+                    .where('D', blockById(ResourceLocation.fromNamespaceAndPath("cognition", "whisperglass")))
+                    .where('E', blocks(SOMARUST_CASING.get()))
+                    .where('F', blocks(VIBRANT_PIPE_FRAMEWORK.get()))
+                    .where('G', controller(blocks(definition.getBlock())))
+                    .build())
+            .workableCasingModel(
+                    CosmicCore.id("block/casings/solid/lightweight_stainless_steel_casing"),
                     CosmicCore.id("block/multiblock/mixing_vessel"))
             .register();
 

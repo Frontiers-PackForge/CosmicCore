@@ -8,6 +8,7 @@ import com.ghostipedia.cosmiccore.common.commands.ExportRegistryCommand;
 import com.ghostipedia.cosmiccore.common.commands.SoulCommand;
 import com.ghostipedia.cosmiccore.common.commands.StarLadderCommand;
 import com.ghostipedia.cosmiccore.common.commands.VeinSurveyCommand;
+import com.ghostipedia.cosmiccore.common.commands.VitaeCultivationExportCommand;
 import com.ghostipedia.cosmiccore.common.commands.WirelessEnergyCommand;
 import com.ghostipedia.cosmiccore.common.compat.effortlessbuilding.EffortlessBuildingGTPipeRenderSync;
 import com.ghostipedia.cosmiccore.common.data.CosmicItems;
@@ -23,6 +24,7 @@ import com.ghostipedia.cosmiccore.common.mirror.deed.DeedTeams;
 import com.ghostipedia.cosmiccore.common.network.CCoreNetwork;
 import com.ghostipedia.cosmiccore.common.network.packet.EffortlessBuildingAE2CountQueryPacket;
 import com.ghostipedia.cosmiccore.common.network.packet.RevealFieldsPacket;
+import com.ghostipedia.cosmiccore.common.vitae.CultivationProfileManager;
 import com.ghostipedia.cosmiccore.mixin.accessor.LivingEntityAccessor;
 
 import net.minecraft.core.registries.Registries;
@@ -39,6 +41,7 @@ import net.minecraft.world.level.Level;
 import net.neoforged.bus.api.EventPriority;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.neoforge.event.AddReloadListenerEvent;
 import net.neoforged.neoforge.event.RegisterCommandsEvent;
 import net.neoforged.neoforge.event.entity.living.LivingDeathEvent;
 import net.neoforged.neoforge.event.entity.living.LivingEquipmentChangeEvent;
@@ -55,6 +58,11 @@ import static com.ghostipedia.cosmiccore.common.item.armor.ChestSanguineWarptech
 @SuppressWarnings("unused")
 @EventBusSubscriber(modid = CosmicCore.MOD_ID, bus = EventBusSubscriber.Bus.GAME)
 public class ForgeCommonEventListener {
+
+    @SubscribeEvent
+    public static void addReloadListeners(AddReloadListenerEvent event) {
+        event.addListener(CultivationProfileManager.INSTANCE);
+    }
 
     @SubscribeEvent
     public static void onPlayerLoggedIn(PlayerEvent.PlayerLoggedInEvent event) {
@@ -177,6 +185,7 @@ public class ForgeCommonEventListener {
         SoulCommand.register(event.getDispatcher(), event.getBuildContext());
         VeinSurveyCommand.register(event.getDispatcher());
         ExportRegistryCommand.register(event.getDispatcher());
+        VitaeCultivationExportCommand.register(event.getDispatcher());
         StarLadderCommand.register(event.getDispatcher());
         CosmicFoodCommand.register(event.getDispatcher());
         DeedCommand.register(event.getDispatcher());

@@ -61,7 +61,11 @@ public abstract class BloomwyrmUnitMachine extends LinkedWorkableElectricMultibl
     private int allocationConstraint = BloomwyrmAllocationConstraint.NONE.ordinal();
 
     protected BloomwyrmUnitMachine(BlockEntityCreationInfo info) {
-        super(info, new BloomwyrmRecipeLogic());
+        this(info, new BloomwyrmRecipeLogic());
+    }
+
+    protected BloomwyrmUnitMachine(BlockEntityCreationInfo info, BloomwyrmRecipeLogic recipeLogic) {
+        super(info, recipeLogic);
     }
 
     @NotNull
@@ -111,6 +115,10 @@ public abstract class BloomwyrmUnitMachine extends LinkedWorkableElectricMultibl
     }
 
     public boolean supportsParallelControl() {
+        return true;
+    }
+
+    public boolean usesHeartCycleAllocation() {
         return true;
     }
 
@@ -303,7 +311,8 @@ public abstract class BloomwyrmUnitMachine extends LinkedWorkableElectricMultibl
             BloomwyrmHeartMachine heart = getHeart();
             return heart != null && heart.isCycleBlockedByActiveBatch();
         });
-        BooleanSyncValue waitingForCycle = new BooleanSyncValue(this::isAvailableForAllocation);
+        BooleanSyncValue waitingForCycle = new BooleanSyncValue(
+                () -> usesHeartCycleAllocation() && isAvailableForAllocation());
         syncManager.syncValue("bloomwyrm_unit_linked", linked);
         syncManager.syncValue("bloomwyrm_unit_desired", desired);
         syncManager.syncValue("bloomwyrm_unit_requested", requested);

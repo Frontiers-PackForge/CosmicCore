@@ -45,22 +45,15 @@ public class SoulRecipeCapability extends RecipeCapability<SoulIngredient> {
 
     @Override
     public List<Object> compressIngredients(Collection<Object> ingredients) {
-        List<Object> list = new ArrayList<>(ingredients.size());
+        var totals = new EnumMap<SoulType, Integer>(SoulType.class);
         for (Object item : ingredients) {
             if (item instanceof SoulIngredient soul) {
-                var isEqual = false;
-                for (Object obj : list) {
-                    if (obj instanceof SoulIngredient soulIngredient &&
-                            soul.stack().type().equals(soulIngredient.stack().type())) {
-                        isEqual = true;
-                        break;
-                    }
-                }
-                if (isEqual) continue;
-                list.add(item);
+                totals.merge(soul.stack().type(), soul.stack().amount(), Math::addExact);
             }
         }
-        return list;
+        return totals.entrySet().stream()
+                .map(entry -> (Object) SoulIngredient.of(entry.getKey(), entry.getValue()))
+                .toList();
     }
 
     /// Get the total available input of each soul type.
@@ -70,7 +63,6 @@ public class SoulRecipeCapability extends RecipeCapability<SoulIngredient> {
         var handlerLists = holder.getCapabilitiesForIO(IO.IN);
         if (handlerLists.isEmpty()) return new HashMap<>();
 
-        var totalThroughput = 0;
         var totalSouls = new HashMap<SoulType, Integer>();
 
         for (var handlerList : handlerLists) {
@@ -78,20 +70,16 @@ public class SoulRecipeCapability extends RecipeCapability<SoulIngredient> {
             var soulHandlers = handlerList.getCapability(SoulRecipeCapability.CAP);
             for (var handler : soulHandlers) {
                 var soulHandler = (NotifiableSoulContainer) handler;
-                totalThroughput += soulHandler.getThroughput();
                 for (var content : soulHandler.getContents()) {
                     if (content instanceof SoulIngredient soulIngredient) {
-                        totalSouls.put(soulIngredient.stack().type(), soulIngredient.stack().amount());
+                        var type = soulIngredient.stack().type();
+                        var available = Math.min(soulIngredient.stack().amount(), soulHandler.getThroughput(type));
+                        totalSouls.merge(type, available, Math::max);
                     } else throw new IllegalArgumentException("Invalid content type");
                 }
             }
         }
-
-        final int finalTotalThroughput = totalThroughput;
-        return totalSouls.entrySet().stream()
-                .collect(Collectors.toMap(
-                        Map.Entry::getKey,
-                        entry -> Math.min(entry.getValue(), finalTotalThroughput)));
+        return totalSouls;
     }
 
     @Override
@@ -103,16 +91,17 @@ public class SoulRecipeCapability extends RecipeCapability<SoulIngredient> {
 
         var totalInputs = getInputContents(holder);
 
-        var parallelMap = inputs.stream()
+        var requiredInputs = new EnumMap<SoulType, Integer>(SoulType.class);
+        inputs.stream()
                 .map(content -> (SoulIngredient) content.content())
+                .forEach(ingredient -> requiredInputs.merge(
+                        ingredient.stack().type(), ingredient.stack().amount(), Math::addExact));
+
+        var parallelMap = requiredInputs.entrySet().stream()
                 .collect(Collectors.toMap(
-                        ingredient -> ingredient.stack().type(),
-                        ingredient -> {
-                            int available = totalInputs.getOrDefault(ingredient.stack().type(), 0);
-                            int required = ingredient.stack().amount();
-                            return required == 0 ? Integer.MAX_VALUE : available / required;
-                        },
-                        Math::min));
+                        Map.Entry::getKey,
+                        entry -> entry.getValue() == 0 ? Integer.MAX_VALUE :
+                                totalInputs.getOrDefault(entry.getKey(), 0) / entry.getValue()));
 
         int maxParallel = parallelMap.values().stream()
                 .mapToInt(Integer::intValue)
