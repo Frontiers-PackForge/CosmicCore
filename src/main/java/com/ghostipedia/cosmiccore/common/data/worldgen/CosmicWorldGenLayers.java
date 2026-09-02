@@ -48,6 +48,11 @@ public class CosmicWorldGenLayers {
         return HOLLOW;
     }
 
+    public static SimpleWorldGenLayer overworld() {
+        init();
+        return OVERWORLD;
+    }
+
     public static void reassign(GTOreDefinition vein) {
         init();
         if (OVERWORLD == null) return;
