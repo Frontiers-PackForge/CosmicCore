@@ -881,6 +881,18 @@ public class CosmicItems {
             .properties(p -> p.stacksTo(64))
             .defaultModel()
             .register();
+    public static final ItemEntry<ComponentItem> MESHGROWN_FLESH_FRAMEWORK = REGISTRATE
+            .item("meshgrown_flesh_framework", ComponentItem::new)
+            .lang("Meshgrown Flesh Framework")
+            .properties(p -> p.stacksTo(64))
+            .defaultModel()
+            .register();
+    public static final ItemEntry<ComponentItem> BLOOMING_KUVINE_CULTURE = REGISTRATE
+            .item("blooming_kuvine_culture", ComponentItem::new)
+            .lang("Blooming Kuvine Culture")
+            .properties(p -> p.stacksTo(64))
+            .defaultModel()
+            .register();
 
     public static final ItemEntry<ComponentItem> THERMAL_CHAIN_AGENT = REGISTRATE
             .item("thermal_chain_agent", ComponentItem::new)
