@@ -6,7 +6,10 @@ import com.ghostipedia.cosmiccore.common.murkbloom.MurkbloomServerLogic;
 
 import com.gregtechceu.gtceu.api.data.chemical.material.Material;
 import com.gregtechceu.gtceu.api.data.worldgen.GTOreDefinition;
+import com.gregtechceu.gtceu.api.data.worldgen.IWorldGenLayer;
+import com.gregtechceu.gtceu.api.data.worldgen.WorldGenLayers;
 import com.gregtechceu.gtceu.api.data.worldgen.generator.VeinGenerator;
+import com.gregtechceu.gtceu.integration.kjs.builders.worldgen.OreVeinDefinitionBuilderJS;
 
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.valueproviders.ConstantInt;
@@ -151,7 +154,7 @@ public class CosmicOreVeins {
         return List.copyOf(all);
     }
 
-    public static void applyCaptured(GTOreDefinition dest, String bundle) {
+    public static void applyCaptured(OreVeinDefinitionBuilderJS dest, String bundle) {
         if (HOLLOW_BANDS.containsKey(bundle)) {
             applyHollow(dest, bundle);
             return;
@@ -161,7 +164,7 @@ public class CosmicOreVeins {
         copyInto(dest, src, bundle);
     }
 
-    private static void applyHollow(GTOreDefinition dest, String bundle) {
+    private static void applyHollow(OreVeinDefinitionBuilderJS dest, String bundle) {
         Material mono = NAME_TO_MONO.get(bundle);
         int[] band = HOLLOW_BANDS.get(bundle);
         if (mono == null || band == null) return;
@@ -180,14 +183,19 @@ public class CosmicOreVeins {
         return id.getNamespace().equals("gtceu") && VEINS.containsKey(id.getPath());
     }
 
-    private static void copyInto(GTOreDefinition dest, GTOreDefinition src, String bundle) {
+    private static void copyInto(OreVeinDefinitionBuilderJS dest, GTOreDefinition src, String bundle) {
         Material mono = NAME_TO_MONO.get(bundle);
         if (mono == null) return;
+
+        IWorldGenLayer layer = src.layer();
+        if (layer == WorldGenLayers.STONE || layer == WorldGenLayers.DEEPSLATE) {
+            layer = CosmicWorldGenLayers.overworld();
+        }
 
         dest.clusterSize(src.clusterSize());
         dest.density(src.density() * 0.8f);
         dest.weight(0);
-        dest.layer(src.layer());
+        dest.layer(layer);
         dest.dimensions(src.dimensionFilter());
         dest.heightRange(src.heightRange());
         dest.discardChanceOnAirExposure(src.discardChanceOnAirExposure());
@@ -195,7 +203,6 @@ public class CosmicOreVeins {
         dest.biomeWeightModifier(src.biomeWeightModifier());
         dest.veinGenerator(pocket(mono));
 
-        CosmicWorldGenLayers.reassign(dest);
         dest.clusterSize(ConstantInt.of(FIELD_POCKET_CLUSTER_SIZE));
     }
 
