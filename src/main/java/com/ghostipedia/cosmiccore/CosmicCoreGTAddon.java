@@ -6,7 +6,6 @@ import com.ghostipedia.cosmiccore.common.data.materials.CosmicBundleMaterials;
 import com.ghostipedia.cosmiccore.common.data.recipe.CosmicCoreOreRecipeHandler;
 import com.ghostipedia.cosmiccore.common.data.recipe.CosmicGemQualityRecipeHandler;
 import com.ghostipedia.cosmiccore.common.data.recipe.CosmicWoods;
-import com.ghostipedia.cosmiccore.common.data.worldgen.CosmicWorldGenLayers;
 import com.ghostipedia.cosmiccore.common.data.worldgen.generator.CosmicVeinGenerators;
 
 import com.gregtechceu.gtceu.api.addon.GTAddon;
@@ -58,11 +57,6 @@ public class CosmicCoreGTAddon implements IGTAddon {
         // (integration.kjs.recipe.components.CosmicRecipeComponent) is ported to the 1.21 KJS API.
         event.registerKey(CosmicRecipeCapabilities.EMBER,
                 ContentJS.create(NumberComponent.NON_NEGATIVE_DOUBLE, CosmicRecipeCapabilities.EMBER));
-    }
-
-    @Override
-    public void registerWorldgenLayers() {
-        CosmicWorldGenLayers.init();
     }
 
     @Override

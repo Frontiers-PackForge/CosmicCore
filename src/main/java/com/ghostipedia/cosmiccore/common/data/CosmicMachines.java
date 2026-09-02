@@ -402,7 +402,7 @@ public class CosmicMachines {
                     .tooltips(workableTiered(tier, GTValues.V[tier], GTValues.V[tier] * 64,
                             BIO_LAB, defaultTankSizeFunction.applyAsInt(tier), true))
                     .register(),
-            EV, IV, LuV, ZPM, UV);
+            LV, MV, HV, EV, IV, LuV, ZPM, UV);
 
     public final static MachineDefinition COSMIC_STOCKING_ME_PART_BUS = REGISTRATE
             .machine("cosmic_me_assemblyline_bus", CosmicStockingBusPartMachine::new)
