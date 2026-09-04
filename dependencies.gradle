@@ -82,11 +82,6 @@ dependencies {
     // file 8295861 = "1.5.4 Beta 1", the exact build the pack ships.
     implementation("curse.maven:embers-re-ignited-1579725:8295861")
 
-    // Create Cosmonautics (Create-addon space mod, Frontiers' rocketry + planets layer). Pinned to the
-    // pack's exact build. implementation so the GT integration (thrusters, rocket assembler multiblock,
-    // space location bridging) can compile against it and the dev run loads it.
-    implementation("curse.maven:create-cosmonautics-1595491:8358740")
-
     runtimeOnly(forge.undergarden) { transitive = false }
 
     compileOnly("maven.modrinth:XMlHoHNU:dcHZSOWO")
@@ -132,6 +127,7 @@ dependencies {
     // plus Sinytra's Forgified Fabric API shims for the FRAPI paths 0.8 needs. Coords pinned from chloride.
     compileOnly("net.caffeinemc:sodium-neoforge-api:${sodiumNeoVersion}")
     compileOnly("net.caffeinemc:sodium-neoforge-mod:${sodiumNeoVersion}")
+    compileOnly("org.sinytra.forgified-fabric-api:fabric-renderer-api-v1:3.4.1+9125b6dc19")
     sodiumShell("net.caffeinemc:sodium-neoforge:${sodiumNeoVersion}")
     runtimeOnly("net.caffeinemc:sodium-neoforge-mod:${sodiumNeoVersion}")
     runtimeOnly(files(tasks.named('stripSodiumShell')))
@@ -139,6 +135,7 @@ dependencies {
     runtimeOnly("org.sinytra.forgified-fabric-api:fabric-renderer-api-v1:3.4.1+9125b6dc19")
     runtimeOnly("org.sinytra.forgified-fabric-api:fabric-rendering-data-attachment-v1:0.3.48+73761d2e19")
     runtimeOnly("org.sinytra.forgified-fabric-api:fabric-block-view-api-v2:1.0.10+9afaaf8c19")
+    compileOnly("curse.maven:irisshaders-455508:8242804")
     runtimeOnly("curse.maven:irisshaders-455508:8242804")
 
     // Dev tooling
