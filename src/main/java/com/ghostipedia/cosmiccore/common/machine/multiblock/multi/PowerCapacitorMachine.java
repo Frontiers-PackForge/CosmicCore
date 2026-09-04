@@ -1,6 +1,7 @@
 package com.ghostipedia.cosmiccore.common.machine.multiblock.multi;
 
 import com.gregtechceu.gtceu.api.blockentity.BlockEntityCreationInfo;
+import com.gregtechceu.gtceu.api.multiblock.pattern.PatternState;
 import com.gregtechceu.gtceu.common.machine.multiblock.electric.PowerSubstationMachine;
 
 import brachy.modularui.api.drawable.Text;
@@ -14,6 +15,16 @@ public class PowerCapacitorMachine extends PowerSubstationMachine {
 
     public PowerCapacitorMachine(BlockEntityCreationInfo info) {
         super(info);
+    }
+
+    @Override
+    public void formStructure(String substructureName) {
+        var patternState = getPatternState(substructureName);
+        if (!patternState.isFormed() && patternState.getState() == PatternState.CheckState.VALID_CACHED) {
+            patternState.getCache().clear();
+            checkStructurePattern(substructureName);
+        }
+        super.formStructure(substructureName);
     }
 
     @Override
