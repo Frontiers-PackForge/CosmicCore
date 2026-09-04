@@ -481,6 +481,71 @@ public class CosmicLangHandler extends LangHandler {
         provider.add("cosmiccore.block.power_capacitor.tooltip_empty",
                 "Fills an unused battery position in a Power Capacitor");
 
+        provider.add("cosmiccore.machine.power_tower.tooltip.0",
+                "§7Lossless long-range power transmission across unloaded chunks.§r");
+        provider.add("cosmiccore.machine.power_tower.tooltip.1",
+                "§7Does not require energy hatches or dynamos by default, only for input/output§r");
+        provider.add("cosmiccore.multiblock.power_tower.mixed_voltage",
+                "Power towers may not mix tiers of voltage hatches, 1 tier per tower.");
+        provider.add("cosmiccore.multiblock.power_tower.graph_conflict",
+                "This tower conflicts with the voltage or ownership of this wire grid.");
+        provider.add("cosmiccore.power_tower.line.first",
+                "Selected Power Tower at %s. Select your second power tower");
+        provider.add("cosmiccore.power_tower.line.dimension",
+                "The selected Power Tower is in another dimension. Selection cleared.");
+        provider.add("cosmiccore.power_tower.line.coil",
+                "Hold a Power Tower Coil in the other hand to set the line voltage tier.");
+        provider.add("cosmiccore.power_tower.line.endpoint",
+                "The selected Power Tower is unavailable or no longer accessible. Selection cleared.");
+        provider.add("cosmiccore.power_tower.line.created", "Power Tower line created.");
+        provider.add("cosmiccore.power_tower.line.cleared", "Power Tower selection cleared.");
+        provider.add("cosmiccore.power_tower.line.tooltip",
+                "Select two formed Power Towers. Power tower coil in your offhand sets max voltage tier.");
+        provider.add("cosmiccore.power_tower.line.tooltip.selected", "Selected endpoint dimension: %s");
+        provider.add("cosmiccore.power_tower.line.error.endpoint_not_found", "One endpoint no longer exists.");
+        provider.add("cosmiccore.power_tower.line.error.self_link", "A tower cannot be linked to itself.");
+        provider.add("cosmiccore.power_tower.line.error.too_far",
+                "Power towers are too far away.");
+        provider.add("cosmiccore.power_tower.line.error.owner_mismatch",
+                "Both towers must belong to the same owner or team.");
+        provider.add("cosmiccore.power_tower.line.error.path_chunk_unloaded",
+                "Linking towers requires both towers loaded.");
+        provider.add("cosmiccore.power_tower.line.error.path_obstructed",
+                "A solid block is preventing wire attachment.");
+        provider.add("cosmiccore.power_tower.line.error.graph_invariant_rejected",
+                "A existing connection or mismatch in voltage tier is preventing connection!");
+        provider.add("cosmiccore.deployment.power_tower.success", "Power Tower deployed!");
+        provider.add("cosmiccore.deployment.power_tower.error.permission",
+                "You cannot deploy a Power Tower at that position.");
+        provider.add("cosmiccore.deployment.power_tower.error.preflight_failed",
+                "Power tower placement blocked by fluids or blocks.");
+        provider.add("cosmiccore.deployment.power_tower.error.preflight.out_of_bounds",
+                "How did you manage this? No you can't put a power tower outside the world border.");
+        provider.add("cosmiccore.deployment.power_tower.error.preflight.chunk_not_loaded",
+                "Attempted to assemble a power tower into an unloaded chunk");
+        provider.add("cosmiccore.deployment.power_tower.error.preflight.block_entity_present",
+                "A block entity obstructs the Power Tower footprint at %s.");
+        provider.add("cosmiccore.deployment.power_tower.error.preflight.fluid_present",
+                "Fluid obstructs the Power Tower footprint at %s.");
+        provider.add("cosmiccore.deployment.power_tower.error.preflight.not_replaceable",
+                "A solid block obstructs the Power Tower footprint at %s.");
+        provider.add("cosmiccore.deployment.power_tower.error.permission_denied",
+                "At least one position in the Power Tower footprint is protected.");
+        provider.add("cosmiccore.deployment.power_tower.error.placement_failed",
+                "Power Tower deployment failed.");
+        provider.add("cosmiccore.deployment.power_tower.error.machine_initialization_failed",
+                "The deployed Power Tower controller could not initialize. The world was restored.");
+        provider.add("cosmiccore.deployment.power_tower.error.post_placement_validation_failed",
+                "The deployed blocks did not form a Power Tower. The world was restored.");
+        provider.add("cosmiccore.deployment.power_tower.error.invalid",
+                "The seal on your leyline container shudder, the blueprint fails and could not resolve.");
+        provider.add("cosmiccore.deployment.power_tower.tooltip.0",
+                "Using spatial compression rituals to jam a multiblock into a portable deployment package");
+        provider.add("cosmiccore.deployment.power_tower.tooltip.1",
+                "Power tower will be placed on controller center, facing away from you. (controller faces towards you)");
+        provider.add("cosmiccore.deployment.power_tower.tooltip.2",
+                "WIP: No Animation.");
+
         multiLang(provider, "cosmiccore.machine.me_computation_array.tooltip",
                 "§aStorage Size§r : §b%s§r component bays.",
                 "Accepts §7%s-%s§r components. Each bay uses its installed component tier's listed EU and output values.",
