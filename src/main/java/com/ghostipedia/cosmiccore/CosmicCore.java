@@ -142,6 +142,7 @@ public class CosmicCore {
     @SubscribeEvent
     public void modifyExistingMaterials(PostMaterialEvent event) {
         CosmicMaterials.modifyMaterials();
+        CosmicBundleMaterials.registerLateOutputs();
     }
 
     @SubscribeEvent
