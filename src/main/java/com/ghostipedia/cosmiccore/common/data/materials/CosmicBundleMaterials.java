@@ -6,9 +6,13 @@ import com.gregtechceu.gtceu.GTCEu;
 import com.gregtechceu.gtceu.api.data.chemical.material.Material;
 import com.gregtechceu.gtceu.api.data.chemical.material.info.MaterialIconSet;
 import com.gregtechceu.gtceu.api.data.chemical.material.stack.MaterialStack;
+import com.gregtechceu.gtceu.api.registry.GTRegistries;
+
+import net.minecraft.resources.ResourceLocation;
 
 import org.jetbrains.annotations.Nullable;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
@@ -118,6 +122,21 @@ public class CosmicBundleMaterials {
     private static void out(Material bundleOre, Material... minerals) {
         OUTPUTS.put(bundleOre, List.of(minerals));
         Collections.addAll(OUTPUT_MATERIALS, minerals);
+    }
+
+    public static void registerLateOutputs() {
+        appendRegisteredOutput(Utherite, GTCEu.id("ambrosium"));
+    }
+
+    private static void appendRegisteredOutput(Material bundleOre, ResourceLocation mineralId) {
+        Material mineral = GTRegistries.MATERIALS.get(mineralId);
+        if (mineral == null || mineral.isNull()) return;
+
+        List<Material> outputs = new ArrayList<>(OUTPUTS.getOrDefault(bundleOre, List.of()));
+        if (outputs.contains(mineral)) return;
+        outputs.add(mineral);
+        OUTPUTS.put(bundleOre, List.copyOf(outputs));
+        OUTPUT_MATERIALS.add(mineral);
     }
 
     private static void sort(Material bundleOre, Material output, int tinyDusts) {
