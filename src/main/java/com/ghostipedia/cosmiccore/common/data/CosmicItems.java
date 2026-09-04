@@ -12,6 +12,7 @@ import com.ghostipedia.cosmiccore.common.item.AirBladderItem;
 import com.ghostipedia.cosmiccore.common.item.AsteroidItem;
 import com.ghostipedia.cosmiccore.common.item.AsteroidTargetingChipItem;
 import com.ghostipedia.cosmiccore.common.item.OxygenTankItem;
+import com.ghostipedia.cosmiccore.common.item.PowerTowerCoilItem;
 import com.ghostipedia.cosmiccore.common.item.SoulNetworkReaderItem;
 import com.ghostipedia.cosmiccore.common.item.StealthCoatingItem;
 import com.ghostipedia.cosmiccore.common.item.armor.ChestSanguineWarptechSuite;
@@ -22,6 +23,8 @@ import com.ghostipedia.cosmiccore.common.item.behavior.DowsingRodBehavior;
 import com.ghostipedia.cosmiccore.common.item.behavior.EffectApplicationBehavior;
 import com.ghostipedia.cosmiccore.common.item.behavior.InfiniteSprayCanBehavior;
 import com.ghostipedia.cosmiccore.common.item.behavior.OxygenSupplyTankBehavior;
+import com.ghostipedia.cosmiccore.common.item.behavior.PowerTowerDeploymentPackageBehavior;
+import com.ghostipedia.cosmiccore.common.item.behavior.PowerTowerLineToolBehavior;
 import com.ghostipedia.cosmiccore.common.item.behavior.StructureWriteBehavior;
 import com.ghostipedia.cosmiccore.common.item.behavior.VeinSurveyBehavior;
 import com.ghostipedia.cosmiccore.common.item.behavior.WirelessPDABehavior;
@@ -67,11 +70,13 @@ import com.tterrag.registrate.util.nullness.NonNullBiConsumer;
 import com.tterrag.registrate.util.nullness.NonNullConsumer;
 
 import java.awt.*;
+import java.util.Locale;
 import java.util.function.Function;
 
 import static com.ghostipedia.cosmiccore.CosmicUtils.attachRenderer;
 import static com.ghostipedia.cosmiccore.api.registries.CosmicRegistration.REGISTRATE;
 import static com.gregtechceu.gtceu.common.data.GTItems.attach;
+import static com.gregtechceu.gtceu.common.data.machines.GTMachineUtils.ELECTRIC_TIERS;
 
 public class CosmicItems {
 
@@ -98,6 +103,44 @@ public class CosmicItems {
             .tag()
             .defaultModel()
             .register();
+
+    public static final ItemEntry<ComponentItem> POWER_TOWER_LINE_TOOL = REGISTRATE
+            .item("power_tower_line_tool", ComponentItem::new)
+            .lang("Power Tower Line Tool")
+            .properties(properties -> properties.stacksTo(1))
+            .onRegister(attach(new PowerTowerLineToolBehavior()))
+            .model((context, provider) -> provider.generated(context,
+                    CosmicCore.id("item/debug_structure_writer")))
+            .register();
+
+    public static final ItemEntry<PowerTowerCoilItem>[] POWER_TOWER_COILS = registerPowerTowerCoils();
+
+    public static final ItemEntry<ComponentItem> POWER_TOWER_DEPLOYMENT_PACKAGE = REGISTRATE
+            .item("power_tower_deployment_package", ComponentItem::new)
+            .lang("Sealed Power Tower Leyline Package")
+            .properties(properties -> properties.stacksTo(1))
+            .onRegister(attach(new PowerTowerDeploymentPackageBehavior()))
+            .model((context, provider) -> provider.generated(context,
+                    CosmicCore.id("item/masked_crystal_chiplet_package")))
+            .register();
+
+    @SuppressWarnings("unchecked")
+    private static ItemEntry<PowerTowerCoilItem>[] registerPowerTowerCoils() {
+        ItemEntry<PowerTowerCoilItem>[] coils = new ItemEntry[ELECTRIC_TIERS.length];
+        for (int index = 0; index < ELECTRIC_TIERS.length; index++) {
+            int tier = ELECTRIC_TIERS[index];
+            coils[index] = REGISTRATE
+                    .item(GTValues.VN[tier].toLowerCase(Locale.ROOT) + "_power_tower_coil",
+                            properties -> new PowerTowerCoilItem(properties, tier))
+                    .lang(GTValues.VNF[tier] + " Power Tower Coil")
+                    .properties(properties -> properties.stacksTo(64))
+                    .color(() -> () -> (stack, tintIndex) -> tintIndex == 0 ? GTValues.VC[tier] : -1)
+                    .model((context, provider) -> provider.generated(context,
+                            GTCEu.id("item/material_sets/dull/wire_spool")))
+                    .register();
+        }
+        return coils;
+    }
 
     public static final ItemEntry<AbyssalSonarItem> ABYSSAL_SONAR = REGISTRATE
             .item("abyssal_sonar", AbyssalSonarItem::new)

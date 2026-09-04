@@ -24,6 +24,7 @@ import com.ghostipedia.cosmiccore.common.machine.multiblock.multi.logic.MEComput
 import com.ghostipedia.cosmiccore.common.machine.multiblock.part.*;
 import com.ghostipedia.cosmiccore.common.machine.multiblock.tier.TieredMultiblockPatterns;
 import com.ghostipedia.cosmiccore.common.machine.part.WirelessDataSensor;
+import com.ghostipedia.cosmiccore.common.machine.transmission.PowerTowerMachine;
 import com.ghostipedia.cosmiccore.common.power.steam.SteamBoilerTooltips;
 import com.ghostipedia.cosmiccore.gtbridge.CosmicRecipeTypes;
 import com.ghostipedia.nebulaeae2.compute.ComputeTuning;
@@ -111,6 +112,40 @@ public class CosmicMachines {
     public final static MachineDefinition[] SOUL_IMPORT_HATCH = registerSoulHatch(
             "soul_input_hatch", "Soul Input Hatch",
             IO.IN, HIGH_TIERS, IMPORT_SOUL);
+
+    public static final MultiblockMachineDefinition POWER_TOWER = REGISTRATE
+            .multiblock("power_tower", PowerTowerMachine::new)
+            .langValue("Power Tower")
+            .rotationState(RotationState.NON_Y_AXIS)
+            .recipeType(GTRecipeTypes.DUMMY_RECIPES)
+            .appearanceBlock(CASING_STEEL_SOLID)
+            .tooltips(Component.translatable("cosmiccore.machine.power_tower.tooltip.0"),
+                    Component.translatable("cosmiccore.machine.power_tower.tooltip.1"))
+            .pattern(definition -> MultiblockPatternBuilder.start(UP, FRONT, LEFT)
+                    .slice("CCC", "CCC", "CSC")
+                    .slice("F F", " C ", "F F")
+                    .slice("F F", " C ", "F F")
+                    .slice("F F", " C ", "F F")
+                    .slice("F F", " C ", "F F")
+                    .slice("F F", " C ", "F F")
+                    .slice("III", "FCF", "III")
+                    .slice("I I", " F ", "I I")
+                    .slice("I I", "   ", "I I")
+                    .where('S', controller(blocks(definition.getBlock())))
+                    .where('C', blocks(CASING_STEEL_SOLID.get())
+                            .or(abilities(PartAbility.INPUT_ENERGY).setMaxGlobalLimited(4).setPreviewCount(1))
+                            .or(abilities(PartAbility.OUTPUT_ENERGY).setMaxGlobalLimited(4).setPreviewCount(1))
+                            .or(abilities(PartAbility.SUBSTATION_INPUT_ENERGY).setMaxGlobalLimited(4)
+                                    .setPreviewCount(1))
+                            .or(abilities(PartAbility.SUBSTATION_OUTPUT_ENERGY).setMaxGlobalLimited(4)
+                                    .setPreviewCount(1)))
+                    .where('F', frames(GTMaterials.Steel))
+                    .where('I', blocks(CASING_LAMINATED_GLASS.get()))
+                    .where(' ', any())
+                    .build())
+            .workableCasingModel(GTCEu.id("block/casings/solid/machine_casing_solid_steel"),
+                    GTCEu.id("block/multiblock/data_bank"))
+            .register();
     public static final MachineDefinition[] SOUL_EXPORT_HATCH = registerSoulHatch(
             "soul_output_hatch", "Soul Output Hatch",
             IO.OUT, HIGH_TIERS, EXPORT_SOUL);
