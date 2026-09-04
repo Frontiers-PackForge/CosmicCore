@@ -1128,7 +1128,7 @@ public class CosmicMachines {
                         .where('M', abilities(PartAbility.MUFFLER))
                         .where('F', blocks(ChemicalHelper.getBlock(TagPrefix.frameGt, CosmicMaterials.Nostium)))
                         .where('R', blocks(SOMARUST_CASING.get()))
-                        .where('C', blocks(COIL_CUPRONICKEL.get()))
+                        .where('C', heatingCoils())
                         .where(' ', any())
                         .build());
         GTMultiMachines.ELECTRIC_BLAST_FURNACE.setRecipeModifier(new RecipeModifierList(
