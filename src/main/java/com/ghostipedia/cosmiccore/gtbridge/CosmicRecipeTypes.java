@@ -29,6 +29,10 @@ import static com.gregtechceu.gtceu.common.data.GTRecipeTypes.*;
 
 public class CosmicRecipeTypes {
 
+    public static final GTRecipeType LEYLINE_FABRICATION = register(CosmicCore.id("leyline_fabrication"), MULTIBLOCK)
+            .setMaxIOSize(0, 0, 0, 0)
+            .setSound(GTSoundEntries.COMPRESSOR);
+
     public static final GTRecipeType SLUDGE_DIGESTOR = register(CosmicCore.id("sludge_digestor"), MULTIBLOCK)
             .setMaxIOSize(3, 3, 2, 2)
             .UI(builder -> builder.setProgressBar(GTGuiTextures.PROGRESS_ARROW));

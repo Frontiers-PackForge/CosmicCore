@@ -124,6 +124,26 @@ public class CosmicItems {
                     CosmicCore.id("item/masked_crystal_chiplet_package")))
             .register();
 
+    public static final ItemEntry<net.minecraft.world.item.Item> BLANK_LEYLINE_PATTERN = REGISTRATE
+            .item("blank_leyline_pattern", net.minecraft.world.item.Item::new).lang("Blank Leyline Pattern")
+            .model((context, provider) -> provider.generated(context,
+                    CosmicCore.id("item/masked_crystal_chiplet_package")))
+            .register();
+    public static final ItemEntry<com.ghostipedia.cosmiccore.common.item.LeylinePrefabItem> LEYLINE_PATTERN = REGISTRATE
+            .item("leyline_pattern",
+                    properties -> new com.ghostipedia.cosmiccore.common.item.LeylinePrefabItem(properties, true))
+            .lang("Encoded Leyline Pattern").properties(properties -> properties.stacksTo(1))
+            .model((context, provider) -> provider.generated(context,
+                    CosmicCore.id("item/masked_crystal_chiplet_package")))
+            .register();
+    public static final ItemEntry<com.ghostipedia.cosmiccore.common.item.LeylinePrefabItem> LEYLINE_PACKAGE = REGISTRATE
+            .item("leyline_package",
+                    properties -> new com.ghostipedia.cosmiccore.common.item.LeylinePrefabItem(properties, false))
+            .lang("Sealed Leyline Package").properties(properties -> properties.stacksTo(16))
+            .model((context, provider) -> provider.generated(context,
+                    CosmicCore.id("item/masked_crystal_chiplet_package")))
+            .register();
+
     @SuppressWarnings("unchecked")
     private static ItemEntry<PowerTowerCoilItem>[] registerPowerTowerCoils() {
         ItemEntry<PowerTowerCoilItem>[] coils = new ItemEntry[ELECTRIC_TIERS.length];

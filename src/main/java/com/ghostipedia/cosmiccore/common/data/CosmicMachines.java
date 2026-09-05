@@ -109,6 +109,54 @@ public class CosmicMachines {
     private static final int[] EMBER_TIERS = tiersBetween(ULV, ELECTRIC_TIERS[ELECTRIC_TIERS.length - 1]);
     private static final int[] VITAE_TIERS = tiersBetween(MV, ELECTRIC_TIERS[ELECTRIC_TIERS.length - 1]);
 
+    public static final MachineDefinition LEYLINE_ME_HATCH = REGISTRATE
+            .machine("leyline_me_hatch", com.ghostipedia.cosmiccore.common.machine.part.LeylineMEHatch::new)
+            .langValue("ME Leyline Pattern Hatch").tier(MV).rotationState(RotationState.ALL)
+            .modelProperty(com.gregtechceu.gtceu.api.machine.property.GTMachineModelProperties.IS_FORMED, false)
+            .overlayTieredHullModel(GTCEu.id("block/machine/part/computation_data_hatch"))
+            .register();
+
+    public static final MultiblockMachineDefinition LEYLINE_COMPRESSOR = REGISTRATE
+            .multiblock("leyline_compressor",
+                    com.ghostipedia.cosmiccore.common.machine.multiblock.LeylineCompressorMachine::new)
+            .langValue("Leyline Compressor").rotationState(RotationState.NON_Y_AXIS)
+            .recipeType(com.ghostipedia.cosmiccore.gtbridge.CosmicRecipeTypes.LEYLINE_FABRICATION)
+            .appearanceBlock(LIGHTWEIGHT_DARK_STEEL_CASING)
+            .pattern(definition -> MultiblockPatternBuilder.start(BACK, DOWN, LEFT)
+                    .slice(" AA   AA ", " A     A ", " A     A ", "         ", "         ", "         ", "         ",
+                            "         ", " A     A ", " A     A ", " AA   AA ")
+                    .slice("ABBBBBBBA", "ABB   BBA", "AA     AA", " A     A ", " C     C ", " C     C ", " C     C ",
+                            " A     A ", "AA     AA", "ABB   BBA", "ABBBFBBBA")
+                    .slice("ABDDDDDBA", " B     B ", "         ", "   DDD   ", "         ", "         ", "         ",
+                            "   DDD   ", "         ", " B     B ", "ABDDDDDBA")
+                    .slice(" BDDDDDB ", "   D D   ", "   E E   ", "  DDDDD  ", "         ", "         ", "         ",
+                            "  DDDDD  ", "   E E   ", "   D D   ", " BDDDDDB ")
+                    .slice(" BDDDDDB ", "         ", "         ", "  DDDDD  ", "         ", "         ", "         ",
+                            "  DDDDD  ", "         ", "         ", " BDDDDDB ")
+                    .slice(" BDDDDDB ", "   D D   ", "   E E   ", "  DDDDD  ", "         ", "         ", "         ",
+                            "  DDDDD  ", "   E E   ", "   D D   ", " BDDDDDB ")
+                    .slice("ABDDDDDBA", " B     B ", "         ", "   DDD   ", "         ", "         ", "         ",
+                            "   DDD   ", "         ", " B     B ", "ABDDDDDBA")
+                    .slice("ABBBBBBBA", "ABB   BBA", "AA     AA", " A     A ", " C     C ", " C     C ", " C     C ",
+                            " A     A ", "AA     AA", "ABB   BBA", "ABBBBBBBA")
+                    .slice(" AA   AA ", " A     A ", " A     A ", "         ", "         ", "         ", "         ",
+                            "         ", " A     A ", " A     A ", " AA   AA ")
+                    .where(' ', any())
+                    .where('A', blocks(LIGHTWEIGHT_INDUSTRIAL_CASING.get()))
+                    .where('B', blocks(LIGHTWEIGHT_DARK_STEEL_CASING.get())
+                            .or(abilities(PartAbility.INPUT_ENERGY).setMinGlobalLimited(1).setMaxGlobalLimited(2)
+                                    .setPreviewCount(1))
+                            .or(abilities(PartAbility.MAINTENANCE).setExactLimit(1))
+                            .or(blocks(LEYLINE_ME_HATCH.getBlock()).setExactLimit(1)))
+                    .where('C', blockTag(com.gregtechceu.gtceu.utils.TagUtil.createBlockTag("frames/dark_steel")))
+                    .where('D', blocks(SOMARUST_CASING.get()))
+                    .where('E', frames(GTMaterials.StainlessSteel))
+                    .where('F', controller(blocks(definition.getBlock())))
+                    .build())
+            .workableCasingModel(CosmicCore.id("block/casings/solid/lightweight_dark_steel_casing"),
+                    GTCEu.id("block/multiblock/data_bank"))
+            .register();
+
     public final static MachineDefinition[] SOUL_IMPORT_HATCH = registerSoulHatch(
             "soul_input_hatch", "Soul Input Hatch",
             IO.IN, HIGH_TIERS, IMPORT_SOUL);

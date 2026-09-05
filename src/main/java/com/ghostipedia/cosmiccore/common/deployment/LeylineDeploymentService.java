@@ -55,12 +55,17 @@ public final class LeylineDeploymentService {
         ServerLevel level = player.serverLevel();
         Direction facing = player.getDirection().getOpposite();
         try {
-            var blueprint = LeylineDeploymentBlueprints.forPackage(stack, facing);
+            LeylinePrefab.migrate(stack, level);
+            var blueprint = LeylineDeploymentBlueprints.forPackage(stack, facing, level);
+            if (blueprint == null) {
+                fail(player, stack, "invalid");
+                return;
+            }
             var plan = blueprint.planOnBase(LeylineDeploymentTarget.anchor(player, hit));
             if (!preflight(player, stack, hit.getDirection(), plan)) return;
             if (ACTIVE.values().stream().anyMatch(deployment -> deployment.level == level &&
                     deployment.animation.bounds().intersects(LeylineDeploymentAnimation.bounds(plan)))) {
-                fail(player, "busy");
+                fail(player, stack, "busy");
                 return;
             }
             var chain = PowerTowerChain.prepare(player, hand, plan);
@@ -87,7 +92,7 @@ public final class LeylineDeploymentService {
             cancel(player);
             refund(player);
             CosmicCore.LOGGER.error("Unable to start leyline deployment", exception);
-            fail(player, "invalid");
+            fail(player, stack, "invalid");
         }
     }
 
@@ -96,14 +101,14 @@ public final class LeylineDeploymentService {
         var preflight = LeyLineDeploymentCheck.validateFootprint(player.level(), plan);
         if (!preflight.valid()) {
             var failure = preflight.failures().getFirst();
-            fail(player, "preflight." + failure.kind().name().toLowerCase(Locale.ROOT),
+            fail(player, packageStack, "preflight." + failure.kind().name().toLowerCase(Locale.ROOT),
                     failure.pos().toShortString());
             return false;
         }
         if (plan.worldPlacements().stream()
                 .anyMatch(placement -> !player.level().mayInteract(player, placement.pos()) ||
                         !player.mayUseItemAt(placement.pos(), face, packageStack))) {
-            fail(player, "permission");
+            fail(player, packageStack, "permission");
             return false;
         }
         return true;
@@ -143,15 +148,16 @@ public final class LeylineDeploymentService {
                     committed = result.committed();
                     if (committed) {
                         PowerTowerChain.placed(player, deployment.plan.controllerPos());
-                        player.displayClientMessage(Component.translatable("cosmiccore.deployment.power_tower.success")
+                        player.displayClientMessage(Component.translatable("cosmiccore.deployment.success",
+                                LeylinePrefab.machineName(deployment.stack))
                                 .withStyle(ChatFormatting.GREEN), true);
                     } else {
-                        fail(player, result.status().name().toLowerCase(Locale.ROOT));
+                        fail(player, deployment.stack, result.status().name().toLowerCase(Locale.ROOT));
                     }
                 }
             } catch (RuntimeException exception) {
                 CosmicCore.LOGGER.error("Unable to finish leyline deployment {}", deployment.id, exception);
-                fail(player, "invalid");
+                fail(player, deployment.stack, "invalid");
             }
             if (!committed && deployment.chain != null) deployment.chain.rollback(player);
             deployment.finish(committed, player);
@@ -209,6 +215,8 @@ public final class LeylineDeploymentService {
     private static void refund(ServerPlayer player) {
         var data = player.getPersistentData();
         boolean returned = false;
+        Component machine = LeylinePrefab.machineName(ItemStack.parseOptional(player.registryAccess(),
+                data.getCompound(RESERVED_PACKAGE)));
         for (String key : new String[] { RESERVED_PACKAGE, RESERVED_COIL }) {
             if (!data.contains(key)) continue;
             var stack = ItemStack.parseOptional(player.registryAccess(), data.getCompound(key));
@@ -218,13 +226,16 @@ public final class LeylineDeploymentService {
             returned = true;
         }
         if (!returned) return;
-        player.displayClientMessage(Component.translatable("cosmiccore.deployment.power_tower.refunded")
+        player.displayClientMessage(Component.translatable("cosmiccore.deployment.refunded", machine)
                 .withStyle(ChatFormatting.YELLOW), false);
     }
 
-    private static void fail(ServerPlayer player, String reason, Object... arguments) {
-        player.displayClientMessage(Component.translatable("cosmiccore.deployment.power_tower.error." + reason,
-                arguments).withStyle(ChatFormatting.RED), true);
+    private static void fail(ServerPlayer player, ItemStack stack, String reason, Object... arguments) {
+        Object[] named = new Object[arguments.length + 1];
+        named[0] = LeylinePrefab.machineName(stack);
+        System.arraycopy(arguments, 0, named, 1, arguments.length);
+        player.displayClientMessage(Component.translatable("cosmiccore.deployment.error." + reason,
+                named).withStyle(ChatFormatting.RED), true);
     }
 
     private static final class Deployment {

@@ -15,6 +15,8 @@ import com.ghostipedia.cosmiccore.common.network.packet.FirmamentTideHudPacket;
 import com.ghostipedia.cosmiccore.common.network.packet.LeylineDeploymentFinishPacket;
 import com.ghostipedia.cosmiccore.common.network.packet.LeylineDeploymentRequestPacket;
 import com.ghostipedia.cosmiccore.common.network.packet.LeylineDeploymentStartPacket;
+import com.ghostipedia.cosmiccore.common.network.packet.LeylinePrefabRequestPacket;
+import com.ghostipedia.cosmiccore.common.network.packet.LeylinePrefabResponsePacket;
 import com.ghostipedia.cosmiccore.common.network.packet.MirrorWeavePacket;
 import com.ghostipedia.cosmiccore.common.network.packet.MurkbloomDevImmunityPacket;
 import com.ghostipedia.cosmiccore.common.network.packet.MurkbloomSyncPacket;
@@ -42,7 +44,7 @@ import net.neoforged.neoforge.network.registration.PayloadRegistrar;
 
 public class CCoreNetwork {
 
-    private static final String PROTOCOL_VERSION = "1.20.0";
+    private static final String PROTOCOL_VERSION = "1.21.1";
 
     public static void sendToServer(CustomPacketPayload packet) {
         PacketDistributor.sendToServer(packet);
@@ -54,6 +56,10 @@ public class CCoreNetwork {
 
     public static void registerPayloads(RegisterPayloadHandlersEvent event) {
         PayloadRegistrar registrar = event.registrar(PROTOCOL_VERSION);
+        registrar.playToServer(LeylinePrefabRequestPacket.TYPE, LeylinePrefabRequestPacket.CODEC,
+                LeylinePrefabRequestPacket::execute);
+        registrar.playToClient(LeylinePrefabResponsePacket.TYPE, LeylinePrefabResponsePacket.CODEC,
+                LeylinePrefabResponsePacket::execute);
         registrar.playToClient(PowerTowerChainPacket.TYPE, PowerTowerChainPacket.CODEC, PowerTowerChainPacket::execute);
         registrar.playToServer(PowerTowerRideRequestPacket.TYPE, PowerTowerRideRequestPacket.CODEC,
                 PowerTowerRideRequestPacket::execute);
