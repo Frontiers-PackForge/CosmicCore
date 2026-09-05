@@ -16,6 +16,7 @@ import com.gregtechceu.gtceu.api.machine.ConditionalSubscriptionHandler;
 import com.gregtechceu.gtceu.api.machine.multiblock.MultiblockControllerMachine;
 import com.gregtechceu.gtceu.api.machine.multiblock.part.MultiblockPartMachine;
 import com.gregtechceu.gtceu.api.multiblock.error.PatternStringError;
+import com.gregtechceu.gtceu.api.multiblock.pattern.BlockPattern;
 import com.gregtechceu.gtceu.common.machine.owner.FTBOwner;
 import com.gregtechceu.gtceu.utils.GTUtil;
 import com.gregtechceu.gtceu.utils.ISubscription;
@@ -36,8 +37,6 @@ import java.util.Set;
 import java.util.UUID;
 
 public class PowerTowerMachine extends MultiblockControllerMachine {
-
-    public static final double ATTACHMENT_HEIGHT = 8.0;
 
     private final ConditionalSubscriptionHandler energyTransferSubscription;
     private final Set<BlockPos> formedStructurePositions = new HashSet<>();
@@ -92,11 +91,12 @@ public class PowerTowerMachine extends MultiblockControllerMachine {
         try {
             if (node == null) {
                 graphNodeId = graph.addNode(getBlockPos(), wireAttachmentCenter(), role, resolveGraphOwner(),
-                        voltageTier);
+                        voltageTier, wireAttachmentPoints());
                 data.markGraphDirty();
             } else {
                 graphNodeId = node.id();
-                if (graph.updateNode(node.id(), wireAttachmentCenter(), role, resolveGraphOwner(), voltageTier)) {
+                if (graph.updateNode(node.id(), wireAttachmentCenter(), role, resolveGraphOwner(), voltageTier,
+                        wireAttachmentPoints())) {
                     data.markGraphDirty();
                 }
             }
@@ -148,7 +148,15 @@ public class PowerTowerMachine extends MultiblockControllerMachine {
     }
 
     protected Vec3 wireAttachmentCenter() {
-        return Vec3.atCenterOf(getBlockPos()).add(0.0, ATTACHMENT_HEIGHT, 0.0);
+        var points = wireAttachmentPoints();
+        return points.stream().reduce(Vec3.ZERO, Vec3::add).scale(1.0 / points.size());
+    }
+
+    private List<Vec3> wireAttachmentPoints() {
+        if (!(getSubstructurePattern(DEFAULT_STRUCTURE) instanceof BlockPattern pattern))
+            throw new IllegalStateException("Power Tower requires an authored block pattern");
+        return com.ghostipedia.cosmiccore.common.transmission.geometry.PowerTowerAttachments.resolve(pattern,
+                getBlockPos(), getFrontFacing(), getUpwardsFacing(), isFlipped());
     }
 
     private EnergyHatches collectAndSubscribeEnergyHatches() {

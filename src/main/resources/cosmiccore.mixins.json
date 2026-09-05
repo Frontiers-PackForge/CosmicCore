@@ -9,6 +9,9 @@
   },
   "plugin": "com.ghostipedia.cosmiccore.mixin.CosmicCoreMixinPlugin",
   "client": [
+    "client.PowerTowerWireTravelMixin",
+    "client.PowerTowerWirePoseMixin",
+    "client.PowerTowerWireLightingMixin",
     "client.deployment.LeylineParticleAccessor",
     "client.deployment.LeylineSectionUploadMixin",
     "sodium.deployment.LeylineSodiumSectionUploadMixin",

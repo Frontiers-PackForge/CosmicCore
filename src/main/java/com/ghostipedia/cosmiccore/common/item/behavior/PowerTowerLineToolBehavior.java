@@ -2,6 +2,7 @@ package com.ghostipedia.cosmiccore.common.item.behavior;
 
 import com.ghostipedia.cosmiccore.common.item.PowerTowerCoilItem;
 import com.ghostipedia.cosmiccore.common.machine.transmission.PowerTowerMachine;
+import com.ghostipedia.cosmiccore.common.transmission.PowerTowerChain;
 import com.ghostipedia.cosmiccore.common.transmission.graph.PowerTowerNode;
 import com.ghostipedia.cosmiccore.common.transmission.graph.PowerTowerSavedData;
 import com.ghostipedia.cosmiccore.common.transmission.link.PowerTowerLinkResult;
@@ -18,6 +19,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.InteractionResultHolder;
@@ -42,6 +44,11 @@ public final class PowerTowerLineToolBehavior implements IInteractionItem, IAddI
     @Override
     public InteractionResult useOn(UseOnContext context) {
         Player player = context.getPlayer();
+        if (!(context.getItemInHand().getItem() instanceof PowerTowerCoilItem coil)) {
+            if (player != null && !context.getLevel().isClientSide)
+                player.displayClientMessage(Component.translatable("cosmiccore.power_tower.line.coil"), true);
+            return InteractionResult.PASS;
+        }
         if (player == null || !(MetaMachine.getMachine(context.getLevel(),
                 context.getClickedPos()) instanceof PowerTowerMachine tower) || !tower.isFormed())
             return InteractionResult.PASS;
@@ -53,6 +60,7 @@ public final class PowerTowerLineToolBehavior implements IInteractionItem, IAddI
         PendingTowerSelection selection = readPendingSelection(tool);
         if (selection == null) {
             writePendingSelection(tool, context.getLevel(), nodeId);
+            PowerTowerChain.select((ServerPlayer) player, nodeId);
             player.displayClientMessage(Component.translatable("cosmiccore.power_tower.line.first",
                     context.getClickedPos().toShortString()).withStyle(ChatFormatting.AQUA), true);
             return InteractionResult.SUCCESS;
@@ -60,13 +68,6 @@ public final class PowerTowerLineToolBehavior implements IInteractionItem, IAddI
         if (!selection.dimension().equals(context.getLevel().dimension().location())) {
             clearPendingSelection(tool);
             player.displayClientMessage(Component.translatable("cosmiccore.power_tower.line.dimension")
-                    .withStyle(ChatFormatting.RED), true);
-            return InteractionResult.FAIL;
-        }
-        ItemStack coilStack = player.getItemInHand(context.getHand() == InteractionHand.MAIN_HAND ?
-                InteractionHand.OFF_HAND : InteractionHand.MAIN_HAND);
-        if (!(coilStack.getItem() instanceof PowerTowerCoilItem coil)) {
-            player.displayClientMessage(Component.translatable("cosmiccore.power_tower.line.coil")
                     .withStyle(ChatFormatting.RED), true);
             return InteractionResult.FAIL;
         }
@@ -82,15 +83,14 @@ public final class PowerTowerLineToolBehavior implements IInteractionItem, IAddI
                     .withStyle(ChatFormatting.RED), true);
             return InteractionResult.FAIL;
         }
-        double distance = firstNode.wireAttachmentCenter().distanceTo(secondNode.wireAttachmentCenter());
-        double sag = Math.max(1.0, Math.min(4.0, distance * 0.06));
         PowerTowerLinkResult result = new PowerTowerLinkService(data.graph(), data).tryCreateSpan(context.getLevel(),
-                selection.nodeId(), nodeId, coil.getVoltageTier(), 0.65, sag,
+                selection.nodeId(), nodeId, coil.getVoltageTier(),
                 pos -> firstTower.containsFormedStructurePosition(pos) ||
                         tower.containsFormedStructurePosition(pos));
         if (result.spanCreated()) {
-            if (!player.getAbilities().instabuild) coilStack.shrink(1);
             clearPendingSelection(tool);
+            PowerTowerChain.select((ServerPlayer) player, nodeId);
+            if (!player.getAbilities().instabuild) tool.shrink(1);
             data.loadedTerminals().wakeComponentTerminals(data.graph(), nodeId);
             player.displayClientMessage(Component.translatable("cosmiccore.power_tower.line.created")
                     .withStyle(ChatFormatting.GREEN), true);
@@ -104,9 +104,10 @@ public final class PowerTowerLineToolBehavior implements IInteractionItem, IAddI
     @Override
     public InteractionResultHolder<ItemStack> use(ItemStack stack, Level level, Player player,
                                                   InteractionHand usedHand) {
-        if (readPendingSelection(stack) == null) return InteractionResultHolder.pass(stack);
+        if (!(stack.getItem() instanceof PowerTowerCoilItem)) return InteractionResultHolder.pass(stack);
         if (!level.isClientSide) {
             clearPendingSelection(stack);
+            PowerTowerChain.clear((ServerPlayer) player);
             player.displayClientMessage(Component.translatable("cosmiccore.power_tower.line.cleared")
                     .withStyle(ChatFormatting.YELLOW), true);
         }
@@ -116,6 +117,10 @@ public final class PowerTowerLineToolBehavior implements IInteractionItem, IAddI
     @Override
     public void appendHoverText(ItemStack stack, Item.TooltipContext context, List<Component> lines,
                                 TooltipFlag flag) {
+        if (!(stack.getItem() instanceof PowerTowerCoilItem)) {
+            lines.add(Component.translatable("cosmiccore.power_tower.line.coil").withStyle(ChatFormatting.GRAY));
+            return;
+        }
         lines.add(Component.translatable("cosmiccore.power_tower.line.tooltip").withStyle(ChatFormatting.GRAY));
         PendingTowerSelection selection = readPendingSelection(stack);
         if (selection != null) {

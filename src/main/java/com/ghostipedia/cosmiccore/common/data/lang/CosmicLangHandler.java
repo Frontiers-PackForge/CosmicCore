@@ -494,16 +494,22 @@ public class CosmicLangHandler extends LangHandler {
         provider.add("cosmiccore.power_tower.line.dimension",
                 "The selected Power Tower is in another dimension. Selection cleared.");
         provider.add("cosmiccore.power_tower.line.coil",
-                "Hold a Power Tower Coil in the other hand to set the line voltage tier.");
+                "Use a Power Tower Coil directly to link towers; the separate line tool is no longer needed.");
         provider.add("cosmiccore.power_tower.line.endpoint",
                 "The selected Power Tower is unavailable or no longer accessible. Selection cleared.");
         provider.add("cosmiccore.power_tower.line.created", "Power Tower line created.");
         provider.add("cosmiccore.power_tower.line.cleared", "Power Tower selection cleared.");
         provider.add("cosmiccore.power_tower.line.tooltip",
-                "Select two formed Power Towers. Power tower coil in your offhand sets max voltage tier.");
+                "Right-click two formed Power Towers to link them. Success consumes one coil; right-click air to clear selection.");
         provider.add("cosmiccore.power_tower.line.tooltip.selected", "Selected endpoint dimension: %s");
         provider.add("cosmiccore.power_tower.line.error.endpoint_not_found", "One endpoint no longer exists.");
         provider.add("cosmiccore.power_tower.line.error.self_link", "A tower cannot be linked to itself.");
+        provider.add("cosmiccore.power_tower.line.error.bad_angle",
+                "Wires must leave each tower within 45 degrees of its forward/backward axis.");
+        provider.add("cosmiccore.power_tower.chain.preview", "Last tower: %s / %s blocks | Angle: %s / %s degrees");
+        provider.add("cosmiccore.power_tower.chain.no_coil", "Hold a coil in the other hand to wire this placement.");
+        provider.add("cosmiccore.power_tower.chain.tooltip",
+                "Packages stack to 16. Hold a coil in the other hand to link each new tower to the last placed or selected tower.");
         provider.add("cosmiccore.power_tower.line.error.too_far",
                 "Power towers are too far away.");
         provider.add("cosmiccore.power_tower.line.error.owner_mismatch",
@@ -516,7 +522,7 @@ public class CosmicLangHandler extends LangHandler {
                 "A existing connection or mismatch in voltage tier is preventing connection!");
         provider.add("cosmiccore.deployment.power_tower.success", "Power Tower deployed!");
         provider.add("cosmiccore.deployment.power_tower.refunded",
-                "Leyline deployment cancelled. Your package was returned to your inventory or dropped beside you if full.");
+                "Leyline deployment cancelled. Your reserved items were returned to your inventory or dropped beside you if full.");
         provider.add("cosmiccore.deployment.power_tower.error.permission",
                 "You cannot deploy a Power Tower at that position.");
         provider.add("cosmiccore.deployment.power_tower.error.preflight_failed",

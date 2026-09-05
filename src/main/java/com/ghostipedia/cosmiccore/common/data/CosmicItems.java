@@ -118,7 +118,7 @@ public class CosmicItems {
     public static final ItemEntry<ComponentItem> POWER_TOWER_DEPLOYMENT_PACKAGE = REGISTRATE
             .item("power_tower_deployment_package", ComponentItem::new)
             .lang("Sealed Power Tower Leyline Package")
-            .properties(properties -> properties.stacksTo(1))
+            .properties(properties -> properties.stacksTo(16))
             .onRegister(attach(new PowerTowerDeploymentPackageBehavior()))
             .model((context, provider) -> provider.generated(context,
                     CosmicCore.id("item/masked_crystal_chiplet_package")))
@@ -134,9 +134,10 @@ public class CosmicItems {
                             properties -> new PowerTowerCoilItem(properties, tier))
                     .lang(GTValues.VNF[tier] + " Power Tower Coil")
                     .properties(properties -> properties.stacksTo(64))
-                    .color(() -> () -> (stack, tintIndex) -> tintIndex == 0 ? GTValues.VC[tier] : -1)
+                    .color(() -> () -> (stack, tintIndex) -> tintIndex == 0 ? 0xFF000000 | GTValues.VC[tier] : -1)
                     .model((context, provider) -> provider.generated(context,
-                            GTCEu.id("item/material_sets/dull/wire_spool")))
+                            GTCEu.id("item/material_sets/dull/wire_spool"),
+                            GTCEu.id("item/material_sets/dull/wire_spool_overlay")))
                     .register();
         }
         return coils;

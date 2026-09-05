@@ -1,8 +1,6 @@
 package com.ghostipedia.cosmiccore.common.transmission.link;
 
-import com.ghostipedia.cosmiccore.common.transmission.geometry.AttachmentBasis;
-import com.ghostipedia.cosmiccore.common.transmission.geometry.TwinWireSagCurve;
-import com.ghostipedia.cosmiccore.common.transmission.geometry.TwinWireSample;
+import com.ghostipedia.cosmiccore.common.transmission.geometry.PowerTowerWireGeometry;
 import com.ghostipedia.cosmiccore.common.transmission.graph.PowerTowerGraph;
 import com.ghostipedia.cosmiccore.common.transmission.graph.PowerTowerNode;
 import com.ghostipedia.cosmiccore.common.transmission.graph.PowerTowerSavedData;
@@ -10,7 +8,7 @@ import com.ghostipedia.cosmiccore.common.transmission.graph.PowerTowerSavedData;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.phys.Vec3;
+import net.minecraft.world.phys.AABB;
 
 import org.jetbrains.annotations.Nullable;
 
@@ -21,7 +19,23 @@ import java.util.function.Predicate;
 public final class PowerTowerLinkService {
 
     public static final double DEFAULT_MAX_ATTACHMENT_DISTANCE = 64.0;
-    public static final double MAX_SAMPLE_STEP = 0.25;
+    public static final double MAX_DEPARTURE_ANGLE = 45.0;
+
+    public static double departureAngle(PowerTowerNode node, PowerTowerNode other) {
+        if (node.attachmentPoints().size() < 2) return 0;
+        var arm = node.attachmentPoints().get(1).subtract(node.attachmentPoints().getFirst());
+        var axis = arm.cross(new net.minecraft.world.phys.Vec3(0, 1, 0)).normalize();
+        var span = other.wireAttachmentCenter().subtract(node.wireAttachmentCenter()).normalize();
+        return Math.toDegrees(Math.acos(Math.clamp(Math.abs(axis.dot(span)), 0, 1)));
+    }
+
+    public static double distance(PowerTowerNode first, PowerTowerNode second) {
+        var points = PowerTowerWireGeometry.endpoints(first, second);
+        double distance = 0;
+        for (int i = 0; i < points.starts().size(); i++)
+            distance = Math.max(distance, points.starts().get(i).distanceTo(points.ends().get(i)));
+        return distance;
+    }
 
     private final PowerTowerGraph graph;
     @Nullable
@@ -42,7 +56,6 @@ public final class PowerTowerLinkService {
     }
 
     public PowerTowerLinkResult tryCreateSpan(Level level, UUID firstNodeId, UUID secondNodeId, int cableVoltageTier,
-                                              double wireHalfSeparation, double sagDepth,
                                               @Nullable Predicate<BlockPos> structureBlockExemption) {
         PowerTowerNode first = graph.node(firstNodeId);
         PowerTowerNode second = graph.node(secondNodeId);
@@ -56,48 +69,57 @@ public final class PowerTowerLinkService {
             return new PowerTowerLinkResult(PowerTowerLinkResult.Status.OWNER_MISMATCH, null);
         Objects.requireNonNull(level);
 
-        TwinWireSagCurve wires;
-        try {
-            wires = TwinWireSagCurve.of(first.wireAttachmentCenter(), second.wireAttachmentCenter(),
-                    AttachmentBasis.worldAligned(), wireHalfSeparation, sagDepth);
-        } catch (IllegalArgumentException exception) {
-            return new PowerTowerLinkResult(PowerTowerLinkResult.Status.GRAPH_INVARIANT_REJECTED, null);
-        }
-
-        for (var chunk : wires.coveredChunks()) {
-            if (!level.hasChunkAt(new BlockPos(chunk.getMinBlockX(), 0, chunk.getMinBlockZ())))
-                return new PowerTowerLinkResult(PowerTowerLinkResult.Status.PATH_CHUNK_UNLOADED, null);
-        }
-
-        Predicate<BlockPos> exempt = structureBlockExemption == null ? ignored -> false : structureBlockExemption;
-        double spanDistance = first.wireAttachmentCenter().distanceTo(second.wireAttachmentCenter());
-        int sampleSegments = Math.max(1,
-                (int) Math.ceil((spanDistance + 8.0 * sagDepth) / MAX_SAMPLE_STEP));
-        for (int i = 0; i <= sampleSegments; i++) {
-            double t = (double) i / sampleSegments;
-            TwinWireSample sample = wires.sample(t);
-            if (occupiesCollisionBlock(level, sample.positiveLateral(), exempt) ||
-                    occupiesCollisionBlock(level, sample.negativeLateral(), exempt))
-                return new PowerTowerLinkResult(PowerTowerLinkResult.Status.PATH_OBSTRUCTED, null);
-        }
+        var failure = validatePath(level, first, second, structureBlockExemption);
+        if (failure != null) return new PowerTowerLinkResult(failure, null);
 
         UUID spanId;
         try {
-            // Construction validates once. added power towers never poll crossed chunks or collisions.
             spanId = graph.addSpan(firstNodeId, secondNodeId, cableVoltageTier);
         } catch (IllegalArgumentException exception) {
             return new PowerTowerLinkResult(PowerTowerLinkResult.Status.GRAPH_INVARIANT_REJECTED, null);
         }
-        if (savedData != null)
-            savedData.markGraphDirty();
+        if (savedData != null) savedData.markGraphDirty();
         return new PowerTowerLinkResult(PowerTowerLinkResult.Status.CREATED, spanId);
     }
 
-    private static boolean occupiesCollisionBlock(Level level, Vec3 point, Predicate<BlockPos> exemption) {
-        BlockPos pos = BlockPos.containing(point);
+    public @Nullable PowerTowerLinkResult.Status validatePath(Level level, PowerTowerNode first, PowerTowerNode second,
+                                                              @Nullable Predicate<BlockPos> structureBlockExemption) {
+        if (Math.max(departureAngle(first, second), departureAngle(second, first)) > MAX_DEPARTURE_ANGLE + 1.0E-6)
+            return PowerTowerLinkResult.Status.BAD_ANGLE;
+
+        PowerTowerWireGeometry wires;
+        try {
+            var endpoints = PowerTowerWireGeometry.endpoints(first, second);
+            for (int i = 0; i < endpoints.starts().size(); i++) {
+                if (endpoints.starts().get(i).distanceTo(endpoints.ends().get(i)) > maxAttachmentDistance)
+                    return PowerTowerLinkResult.Status.TOO_FAR;
+            }
+            wires = endpoints.geometry();
+        } catch (IllegalArgumentException exception) {
+            return PowerTowerLinkResult.Status.GRAPH_INVARIANT_REJECTED;
+        }
+
+        Predicate<BlockPos> exempt = structureBlockExemption == null ? ignored -> false : structureBlockExemption;
+        for (var segment : wires.segments()) {
+            var bounds = segment.bounds();
+            for (BlockPos pos : BlockPos.betweenClosed(BlockPos.containing(bounds.minX, bounds.minY, bounds.minZ),
+                    BlockPos.containing(bounds.maxX, bounds.maxY, bounds.maxZ))) {
+                if (!level.hasChunkAt(pos))
+                    return PowerTowerLinkResult.Status.PATH_CHUNK_UNLOADED;
+                if (occupiesCollisionBlock(level, pos, bounds, exempt))
+                    return PowerTowerLinkResult.Status.PATH_OBSTRUCTED;
+            }
+        }
+
+        return null;
+    }
+
+    private static boolean occupiesCollisionBlock(Level level, BlockPos pos, AABB bounds,
+                                                  Predicate<BlockPos> exemption) {
         if (exemption.test(pos))
             return false;
         BlockState state = level.getBlockState(pos);
-        return !state.getCollisionShape(level, pos).isEmpty();
+        return state.getCollisionShape(level, pos).toAabbs().stream()
+                .anyMatch(box -> box.move(pos).intersects(bounds));
     }
 }
