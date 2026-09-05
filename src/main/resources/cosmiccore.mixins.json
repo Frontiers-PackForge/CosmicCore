@@ -13,6 +13,7 @@
     "client.PowerTowerWirePoseMixin",
     "client.PowerTowerWireLightingMixin",
     "client.LeylineAEIconMixin",
+    "client.LeylineOrreryHandMixin",
     "client.deployment.LeylineParticleAccessor",
     "client.deployment.LeylineSectionUploadMixin",
     "sodium.deployment.LeylineSodiumSectionUploadMixin",
