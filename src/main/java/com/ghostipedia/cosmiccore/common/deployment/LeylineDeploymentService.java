@@ -1,0 +1,258 @@
+package com.ghostipedia.cosmiccore.common.deployment;
+
+import com.ghostipedia.cosmiccore.CosmicCore;
+import com.ghostipedia.cosmiccore.common.network.CCoreNetwork;
+import com.ghostipedia.cosmiccore.common.network.packet.LeylineDeploymentFinishPacket;
+import com.ghostipedia.cosmiccore.common.network.packet.LeylineDeploymentStartPacket;
+
+import net.minecraft.ChatFormatting;
+import net.minecraft.core.Direction;
+import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.HitResult;
+import net.neoforged.bus.api.EventPriority;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.neoforge.event.entity.living.LivingDeathEvent;
+import net.neoforged.neoforge.event.entity.player.PlayerEvent;
+import net.neoforged.neoforge.event.level.ChunkWatchEvent;
+import net.neoforged.neoforge.event.server.ServerStoppedEvent;
+import net.neoforged.neoforge.event.server.ServerStoppingEvent;
+import net.neoforged.neoforge.event.tick.ServerTickEvent;
+import net.neoforged.neoforge.items.ItemHandlerHelper;
+
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Locale;
+import java.util.Map;
+import java.util.Set;
+import java.util.UUID;
+
+@EventBusSubscriber(modid = CosmicCore.MOD_ID)
+public final class LeylineDeploymentService {
+
+    private static final Map<UUID, Deployment> ACTIVE = new HashMap<>();
+    private static final String RESERVED_PACKAGE = "cosmiccore:leyline_reserved_package";
+
+    private LeylineDeploymentService() {}
+
+    public static void begin(ServerPlayer player, InteractionHand hand, BlockHitResult requestedHit) {
+        if (ACTIVE.containsKey(player.getUUID()) || !player.isAlive() || player.isSpectator()) return;
+        ItemStack stack = player.getItemInHand(hand);
+        if (!LeylineDeploymentBlueprints.isPackage(stack) || player.getCooldowns().isOnCooldown(stack.getItem()))
+            return;
+        player.getCooldowns().addCooldown(stack.getItem(), 6);
+        BlockHitResult hit = LeylineDeploymentTarget.trace(player, 1);
+        if (hit.getType() != HitResult.Type.BLOCK || !hit.getBlockPos().equals(requestedHit.getBlockPos()) ||
+                hit.getDirection() != requestedHit.getDirection())
+            return;
+        ServerLevel level = player.serverLevel();
+        Direction facing = player.getDirection().getOpposite();
+        try {
+            var blueprint = LeylineDeploymentBlueprints.forPackage(stack, facing);
+            var plan = blueprint.planOnBase(LeylineDeploymentTarget.anchor(player, hit));
+            if (!preflight(player, stack, hit.getDirection(), plan)) return;
+            if (ACTIVE.values().stream().anyMatch(deployment -> deployment.level == level &&
+                    deployment.animation.bounds().intersects(LeylineDeploymentAnimation.bounds(plan)))) {
+                fail(player, "busy");
+                return;
+            }
+            Deployment deployment = new Deployment(player, stack, hit.getDirection(), plan,
+                    LeylineDeploymentAnimation.resolve(level, plan), facing);
+            if (!player.getAbilities().instabuild) {
+                refund(player);
+                player.getPersistentData().put(RESERVED_PACKAGE, deployment.stack.save(player.registryAccess()));
+                stack.shrink(1);
+            }
+            ACTIVE.put(player.getUUID(), deployment);
+            for (ServerPlayer observer : level.players()) {
+                if (deployment.visibleTo(observer)) {
+                    deployment.observe(observer);
+                }
+            }
+            deployment.observe(player);
+        } catch (RuntimeException exception) {
+            cancel(player);
+            CosmicCore.LOGGER.error("Unable to start leyline deployment", exception);
+            fail(player, "invalid");
+        }
+    }
+
+    private static boolean preflight(ServerPlayer player, ItemStack packageStack, Direction face,
+                                     LeylineDeploymentPlan plan) {
+        var preflight = LeyLineDeploymentCheck.validateFootprint(player.level(), plan);
+        if (!preflight.valid()) {
+            var failure = preflight.failures().getFirst();
+            fail(player, "preflight." + failure.kind().name().toLowerCase(Locale.ROOT),
+                    failure.pos().toShortString());
+            return false;
+        }
+        if (plan.worldPlacements().stream()
+                .anyMatch(placement -> !player.level().mayInteract(player, placement.pos()) ||
+                        !player.mayUseItemAt(placement.pos(), face, packageStack))) {
+            fail(player, "permission");
+            return false;
+        }
+        return true;
+    }
+
+    @SubscribeEvent
+    public static void tick(ServerTickEvent.Post event) {
+        var iterator = ACTIVE.values().iterator();
+        while (iterator.hasNext()) {
+            Deployment deployment = iterator.next();
+            ServerPlayer player = event.getServer().getPlayerList().getPlayer(deployment.owner);
+            if (player == null || !player.isAlive() || player.serverLevel() != deployment.level) {
+                deployment.finish(false, player);
+                iterator.remove();
+                continue;
+            }
+            if (deployment.level.getGameTime() < deployment.startTick + LeylineDeploymentAnimation.IMPACT_TICK) {
+                if (deployment.level.getGameTime() % 10 == 0) {
+                    for (ServerPlayer observer : deployment.level.players()) {
+                        if (deployment.visibleTo(observer)) deployment.observe(observer);
+                    }
+                }
+                continue;
+            }
+            iterator.remove();
+            boolean committed = false;
+            try {
+                if (preflight(player, deployment.stack, deployment.face, deployment.plan)) {
+                    var result = LeylineDeploymentExecutor.deployAtomically(deployment.level, deployment.plan,
+                            deployment.owner, (level, pos, existing, placing) -> level.mayInteract(player, pos) &&
+                                    player.mayUseItemAt(pos, deployment.face, deployment.stack),
+                            new GtmMultiblockFormationValidator(), player, deployment.face);
+                    committed = result.committed();
+                    if (committed) {
+                        player.displayClientMessage(Component.translatable("cosmiccore.deployment.power_tower.success")
+                                .withStyle(ChatFormatting.GREEN), true);
+                    } else {
+                        fail(player, result.status().name().toLowerCase(Locale.ROOT));
+                    }
+                }
+            } catch (RuntimeException exception) {
+                CosmicCore.LOGGER.error("Unable to finish leyline deployment {}", deployment.id, exception);
+                fail(player, "invalid");
+            }
+            deployment.finish(committed, player);
+        }
+    }
+
+    @SubscribeEvent
+    public static void watch(ChunkWatchEvent.Sent event) {
+        for (Deployment deployment : ACTIVE.values()) {
+            if (deployment.level == event.getLevel() &&
+                    deployment.visibleTo(event.getPlayer())) {
+                deployment.observe(event.getPlayer());
+            }
+        }
+    }
+
+    @SubscribeEvent
+    public static void stopped(ServerStoppedEvent event) {
+        ACTIVE.clear();
+    }
+
+    @SubscribeEvent
+    public static void stopping(ServerStoppingEvent event) {
+        for (Deployment deployment : ACTIVE.values()) {
+            deployment.finish(false, event.getServer().getPlayerList().getPlayer(deployment.owner));
+        }
+        ACTIVE.clear();
+    }
+
+    @SubscribeEvent
+    public static void logout(PlayerEvent.PlayerLoggedOutEvent event) {
+        if (event.getEntity() instanceof ServerPlayer player) cancel(player);
+    }
+
+    @SubscribeEvent
+    public static void login(PlayerEvent.PlayerLoggedInEvent event) {
+        if (event.getEntity() instanceof ServerPlayer player && !ACTIVE.containsKey(player.getUUID())) refund(player);
+    }
+
+    @SubscribeEvent(priority = EventPriority.LOWEST)
+    public static void death(LivingDeathEvent event) {
+        if (event.getEntity() instanceof ServerPlayer player) cancel(player);
+    }
+
+    @SubscribeEvent
+    public static void dimension(PlayerEvent.PlayerChangedDimensionEvent event) {
+        if (event.getEntity() instanceof ServerPlayer player) cancel(player);
+    }
+
+    private static void cancel(ServerPlayer player) {
+        Deployment deployment = ACTIVE.remove(player.getUUID());
+        if (deployment != null) deployment.finish(false, player);
+    }
+
+    private static void refund(ServerPlayer player) {
+        var data = player.getPersistentData();
+        if (!data.contains(RESERVED_PACKAGE)) return;
+        var stack = ItemStack.parseOptional(player.registryAccess(), data.getCompound(RESERVED_PACKAGE));
+        if (stack.isEmpty()) return;
+        ItemHandlerHelper.giveItemToPlayer(player, stack);
+        data.remove(RESERVED_PACKAGE);
+        player.displayClientMessage(Component.translatable("cosmiccore.deployment.power_tower.refunded")
+                .withStyle(ChatFormatting.YELLOW), false);
+    }
+
+    private static void fail(ServerPlayer player, String reason, Object... arguments) {
+        player.displayClientMessage(Component.translatable("cosmiccore.deployment.power_tower.error." + reason,
+                arguments).withStyle(ChatFormatting.RED), true);
+    }
+
+    private static final class Deployment {
+
+        private final UUID id = UUID.randomUUID();
+        private final UUID owner;
+        private final ServerLevel level;
+        private final ItemStack stack;
+        private final Direction face;
+        private final LeylineDeploymentPlan plan;
+        private final LeylineDeploymentAnimation animation;
+        private final long startTick;
+        private final LeylineDeploymentStartPacket startPacket;
+        private final Set<UUID> observers = new HashSet<>();
+
+        private Deployment(ServerPlayer player, ItemStack stack, Direction face,
+                           LeylineDeploymentPlan plan, LeylineDeploymentAnimation animation, Direction facing) {
+            this.owner = player.getUUID();
+            this.level = player.serverLevel();
+            this.stack = stack.copyWithCount(1);
+            this.face = face;
+            this.plan = plan;
+            this.animation = animation;
+            this.startTick = level.getGameTime() + LeylineDeploymentAnimation.START_DELAY_TICKS;
+            this.startPacket = new LeylineDeploymentStartPacket(id, level.dimension().location(),
+                    plan.blueprint().id(), plan.controllerPos(), facing, startTick, animation.openingY());
+        }
+
+        private void observe(ServerPlayer player) {
+            if (observers.add(player.getUUID())) CCoreNetwork.sendToPlayer(player, startPacket);
+        }
+
+        private boolean visibleTo(ServerPlayer player) {
+            int chunks = Math.min(player.requestedViewDistance(), level.getServer().getPlayerList().getViewDistance());
+            return animation.bounds().inflate((Math.max(2, chunks) + 1) * 16).contains(player.position());
+        }
+
+        private void finish(boolean committed, ServerPlayer ownerPlayer) {
+            if (ownerPlayer != null) {
+                if (committed) ownerPlayer.getPersistentData().remove(RESERVED_PACKAGE);
+                else refund(ownerPlayer);
+            }
+            for (UUID observer : observers) {
+                ServerPlayer player = level.getServer().getPlayerList().getPlayer(observer);
+                if (player != null && player.serverLevel() == level) {
+                    CCoreNetwork.sendToPlayer(player, new LeylineDeploymentFinishPacket(id, committed));
+                }
+            }
+        }
+    }
+}

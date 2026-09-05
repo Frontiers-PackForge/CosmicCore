@@ -6,9 +6,13 @@ import com.gregtechceu.gtceu.api.block.MetaMachineBlock;
 import com.gregtechceu.gtceu.api.machine.MetaMachine;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
+import net.neoforged.neoforge.common.util.BlockSnapshot;
+import net.neoforged.neoforge.event.EventHooks;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,7 +21,7 @@ import java.util.UUID;
 
 public final class LeylineDeploymentExecutor {
 
-    private static final int TRANSACTIONAL_PLACEMENT_FLAGS = Block.UPDATE_CLIENTS | Block.UPDATE_KNOWN_SHAPE |
+    private static final int TRANSACTIONAL_PLACEMENT_FLAGS = Block.UPDATE_KNOWN_SHAPE |
             Block.UPDATE_SUPPRESS_DROPS;
 
     private LeylineDeploymentExecutor() {}
@@ -25,12 +29,19 @@ public final class LeylineDeploymentExecutor {
     public static Result deployAtomically(ServerLevel level, LeylineDeploymentPlan plan, UUID ownerId,
                                           PlacementPermission placementPermission,
                                           PostPlacementValidator postPlacementValidator) {
+        return deployAtomically(level, plan, ownerId, placementPermission, postPlacementValidator, null, Direction.UP);
+    }
+
+    public static Result deployAtomically(ServerLevel level, LeylineDeploymentPlan plan, UUID ownerId,
+                                          PlacementPermission placementPermission,
+                                          PostPlacementValidator postPlacementValidator,
+                                          ServerPlayer player, Direction placementFace) {
         Objects.requireNonNull(level);
         Objects.requireNonNull(plan);
         Objects.requireNonNull(ownerId);
         Objects.requireNonNull(placementPermission);
         Objects.requireNonNull(postPlacementValidator);
-        LeylineDeploymentPreflight.Result preflight = LeylineDeploymentPreflight.validateFootprint(level, plan);
+        LeyLineDeploymentCheck.Result preflight = LeyLineDeploymentCheck.validateFootprint(level, plan);
         if (!preflight.valid()) return new Result(Status.PREFLIGHT_FAILED, preflight.failures());
         for (var placement : plan.worldPlacements()) {
             BlockState current = level.getBlockState(placement.pos());
@@ -42,6 +53,8 @@ public final class LeylineDeploymentExecutor {
         List<BlockStateSnapshot> snapshots = plan.worldPlacements().stream()
                 .map(placement -> new BlockStateSnapshot(placement.pos(), level.getBlockState(placement.pos())))
                 .toList();
+        List<BlockSnapshot> eventSnapshots = player == null ? List.of() : plan.worldPlacements().stream()
+                .map(placement -> BlockSnapshot.create(level.dimension(), level, placement.pos())).toList();
         List<BlockPos> placedPositions = new ArrayList<>();
         try {
             for (var placement : plan.worldPlacements()) {
@@ -62,9 +75,17 @@ public final class LeylineDeploymentExecutor {
                 }
                 machine.setOwnerUUID(ownerId);
             }
+            if (player != null && EventHooks.onMultiBlockPlace(player, eventSnapshots, placementFace)) {
+                restoreSnapshots(level, snapshots);
+                return new Result(Status.PERMISSION_DENIED, List.of());
+            }
             if (!postPlacementValidator.validate(level, plan)) {
                 restoreSnapshots(level, snapshots);
                 return new Result(Status.POST_PLACEMENT_VALIDATION_FAILED, List.of());
+            }
+            for (BlockStateSnapshot snapshot : snapshots) {
+                level.sendBlockUpdated(snapshot.pos(), snapshot.state(), level.getBlockState(snapshot.pos()),
+                        Block.UPDATE_CLIENTS);
             }
             for (BlockPos pos : placedPositions) level.updateNeighborsAt(pos, level.getBlockState(pos).getBlock());
             return new Result(Status.COMMITTED, List.of());
@@ -95,7 +116,7 @@ public final class LeylineDeploymentExecutor {
         POST_PLACEMENT_VALIDATION_FAILED
     }
 
-    public record Result(Status status, List<LeylineDeploymentPreflight.Failure> failures) {
+    public record Result(Status status, List<LeyLineDeploymentCheck.Failure> failures) {
 
         public Result {
             Objects.requireNonNull(status);
