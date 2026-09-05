@@ -41,5 +41,6 @@ public final class PowerTowerDeploymentPackageBehavior implements IInteractionIt
                 .withStyle(ChatFormatting.DARK_AQUA));
         lines.add(Component.translatable("cosmiccore.deployment.power_tower.tooltip.2")
                 .withStyle(ChatFormatting.DARK_GRAY));
+        lines.add(Component.translatable("cosmiccore.power_tower.chain.tooltip").withStyle(ChatFormatting.AQUA));
     }
 }

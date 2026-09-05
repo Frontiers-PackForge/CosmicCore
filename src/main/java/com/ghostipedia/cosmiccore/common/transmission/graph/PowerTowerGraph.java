@@ -1,5 +1,7 @@
 package com.ghostipedia.cosmiccore.common.transmission.graph;
 
+import com.ghostipedia.cosmiccore.common.transmission.geometry.PowerTowerWireGeometry;
+
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
@@ -32,6 +34,15 @@ public final class PowerTowerGraph {
     private final Map<Long, Set<UUID>> spansByChunk = new HashMap<>();
     private final Map<UUID, Set<UUID>> adjacentNodes = new HashMap<>();
     private final Map<UUID, Set<UUID>> reachabilityCache = new HashMap<>();
+    private final Map<UUID, PowerTowerWireGeometry> wireGeometry = new HashMap<>();
+
+    public PowerTowerWireGeometry wireGeometry(UUID spanId) {
+        return wireGeometry.get(spanId);
+    }
+
+    public boolean hasSpans() {
+        return !componentBySpan.isEmpty();
+    }
 
     public Map<UUID, ComponentSnapshot> componentSnapshots() {
         Map<UUID, ComponentSnapshot> result = new LinkedHashMap<>();
@@ -86,14 +97,25 @@ public final class PowerTowerGraph {
         return addNode(UUID.randomUUID(), controllerPos, wireAttachmentCenter, role, ownerId, terminalVoltageTier);
     }
 
+    public UUID addNode(BlockPos controllerPos, Vec3 wireAttachmentCenter, PowerTowerRole role, UUID ownerId,
+                        int terminalVoltageTier, List<Vec3> attachmentPoints) {
+        return addNode(UUID.randomUUID(), controllerPos, wireAttachmentCenter, role, ownerId, terminalVoltageTier,
+                attachmentPoints);
+    }
+
     public UUID addNode(UUID nodeId, BlockPos controllerPos, Vec3 wireAttachmentCenter, PowerTowerRole role,
                         UUID ownerId, int terminalVoltageTier) {
+        return addNode(nodeId, controllerPos, wireAttachmentCenter, role, ownerId, terminalVoltageTier, List.of());
+    }
+
+    private UUID addNode(UUID nodeId, BlockPos controllerPos, Vec3 wireAttachmentCenter, PowerTowerRole role,
+                         UUID ownerId, int terminalVoltageTier, List<Vec3> attachmentPoints) {
         if (nodeByPosition.containsKey(controllerPos) || componentByNode.containsKey(nodeId))
             throw new IllegalArgumentException("Power tower node already exists");
         UUID componentId = UUID.randomUUID();
         PowerTowerComponent component = new PowerTowerComponent(componentId);
         component.addNode(new PowerTowerNode(nodeId, controllerPos, wireAttachmentCenter, role, ownerId,
-                terminalVoltageTier, true));
+                terminalVoltageTier, true, attachmentPoints));
         components.put(componentId, component);
         indexNode(componentId, component.nodes().get(nodeId));
         recordTopologyMutation(component);
@@ -102,10 +124,16 @@ public final class PowerTowerGraph {
 
     public boolean updateNode(UUID nodeId, Vec3 wireAttachmentCenter, PowerTowerRole role, UUID ownerId,
                               int terminalVoltageTier) {
+        return updateNode(nodeId, wireAttachmentCenter, role, ownerId, terminalVoltageTier,
+                node(nodeId).attachmentPoints());
+    }
+
+    public boolean updateNode(UUID nodeId, Vec3 wireAttachmentCenter, PowerTowerRole role, UUID ownerId,
+                              int terminalVoltageTier, List<Vec3> attachmentPoints) {
         PowerTowerComponent component = requireComponentContainingNode(nodeId);
         PowerTowerNode current = component.nodes().get(nodeId);
         PowerTowerNode replacement = new PowerTowerNode(nodeId, current.controllerPos(), wireAttachmentCenter, role,
-                ownerId, terminalVoltageTier, true);
+                ownerId, terminalVoltageTier, true, attachmentPoints);
         if (current.equals(replacement)) return false;
         for (PowerTowerNode other : component.nodes().values()) {
             if (!other.id().equals(nodeId) && !Objects.equals(other.ownerId(), ownerId))
@@ -126,7 +154,8 @@ public final class PowerTowerGraph {
         PowerTowerNode current = component.nodes().get(nodeId);
         if (current.structureOperational() == structureOperational) return false;
         component.addNode(new PowerTowerNode(current.id(), current.controllerPos(), current.wireAttachmentCenter(),
-                current.role(), current.ownerId(), current.terminalVoltageTier(), structureOperational));
+                current.role(), current.ownerId(), current.terminalVoltageTier(), structureOperational,
+                current.attachmentPoints()));
         recordTopologyMutation(component);
         return true;
     }
@@ -258,6 +287,15 @@ public final class PowerTowerGraph {
                 nodeTag.putDouble("AttachmentX", node.wireAttachmentCenter().x);
                 nodeTag.putDouble("AttachmentY", node.wireAttachmentCenter().y);
                 nodeTag.putDouble("AttachmentZ", node.wireAttachmentCenter().z);
+                ListTag attachments = new ListTag();
+                for (Vec3 point : node.attachmentPoints()) {
+                    CompoundTag attachment = new CompoundTag();
+                    attachment.putDouble("X", point.x);
+                    attachment.putDouble("Y", point.y);
+                    attachment.putDouble("Z", point.z);
+                    attachments.add(attachment);
+                }
+                nodeTag.put("Attachments", attachments);
                 nodeTag.putString("Role", node.role().name());
                 if (node.ownerId() != null)
                     nodeTag.putUUID("Owner", node.ownerId());
@@ -293,12 +331,17 @@ public final class PowerTowerGraph {
             for (Tag nodeRaw : tag.getList("Nodes", Tag.TAG_COMPOUND)) {
                 CompoundTag nodeTag = (CompoundTag) nodeRaw;
                 UUID owner = nodeTag.hasUUID("Owner") ? nodeTag.getUUID("Owner") : null;
+                List<Vec3> attachments = new ArrayList<>();
+                for (Tag entry : nodeTag.getList("Attachments", Tag.TAG_COMPOUND)) {
+                    CompoundTag point = (CompoundTag) entry;
+                    attachments.add(new Vec3(point.getDouble("X"), point.getDouble("Y"), point.getDouble("Z")));
+                }
                 PowerTowerNode node = new PowerTowerNode(nodeTag.getUUID("Id"),
                         NbtUtils.readBlockPos(nodeTag, "Position").orElseThrow(),
                         new Vec3(nodeTag.getDouble("AttachmentX"), nodeTag.getDouble("AttachmentY"),
                                 nodeTag.getDouble("AttachmentZ")),
                         PowerTowerRole.valueOf(nodeTag.getString("Role")), owner, nodeTag.getInt("TerminalTier"),
-                        !nodeTag.contains("Operational") || nodeTag.getBoolean("Operational"));
+                        !nodeTag.contains("Operational") || nodeTag.getBoolean("Operational"), attachments);
                 component.addNode(node);
             }
             for (Tag spanRaw : tag.getList("Spans", Tag.TAG_COMPOUND)) {
@@ -410,14 +453,12 @@ public final class PowerTowerGraph {
         if (first == null || second == null) return;
         adjacentNodes.computeIfAbsent(first.id(), ignored -> new HashSet<>()).add(second.id());
         adjacentNodes.computeIfAbsent(second.id(), ignored -> new HashSet<>()).add(first.id());
-        int minX = (int) Math.floor(Math.min(first.wireAttachmentCenter().x,
-                second.wireAttachmentCenter().x) - 2.0);
-        int maxX = (int) Math.floor(Math.max(first.wireAttachmentCenter().x,
-                second.wireAttachmentCenter().x) + 2.0);
-        int minZ = (int) Math.floor(Math.min(first.wireAttachmentCenter().z,
-                second.wireAttachmentCenter().z) - 2.0);
-        int maxZ = (int) Math.floor(Math.max(first.wireAttachmentCenter().z,
-                second.wireAttachmentCenter().z) + 2.0);
+        var geometry = PowerTowerWireGeometry.endpoints(first, second).geometry();
+        wireGeometry.put(span.id(), geometry);
+        int minX = (int) Math.floor(geometry.bounds().minX);
+        int maxX = (int) Math.floor(geometry.bounds().maxX);
+        int minZ = (int) Math.floor(geometry.bounds().minZ);
+        int maxZ = (int) Math.floor(geometry.bounds().maxZ);
         for (int chunkX = minX >> 4; chunkX <= maxX >> 4; chunkX++) {
             for (int chunkZ = minZ >> 4; chunkZ <= maxZ >> 4; chunkZ++) {
                 spansByChunk.computeIfAbsent(ChunkPos.asLong(chunkX, chunkZ), ignored -> new HashSet<>())
@@ -428,6 +469,7 @@ public final class PowerTowerGraph {
 
     private void unindexSpan(PowerTowerSpan span) {
         if (span == null) return;
+        wireGeometry.remove(span.id());
         Set<UUID> first = adjacentNodes.get(span.firstNodeId());
         if (first != null) first.remove(span.secondNodeId());
         Set<UUID> second = adjacentNodes.get(span.secondNodeId());

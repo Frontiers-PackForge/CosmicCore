@@ -11,6 +11,7 @@ public final class PowerTowerSavedData extends SavedData {
 
     private static final String DATA_NAME = "cosmiccore_power_towers";
     private final PowerTowerGraph graph;
+    private ServerLevel level;
     private final LoadedPowerTowerTerminalRegistry loadedTerminals = new LoadedPowerTowerTerminalRegistry();
 
     private PowerTowerSavedData() {
@@ -22,8 +23,10 @@ public final class PowerTowerSavedData extends SavedData {
     }
 
     public static PowerTowerSavedData getOrCreate(ServerLevel level) {
-        return level.getDataStorage().computeIfAbsent(new SavedData.Factory<>(PowerTowerSavedData::new,
+        var data = level.getDataStorage().computeIfAbsent(new SavedData.Factory<>(PowerTowerSavedData::new,
                 PowerTowerSavedData::load), DATA_NAME);
+        data.level = level;
+        return data;
     }
 
     public static PowerTowerSavedData load(CompoundTag tag, HolderLookup.Provider provider) {
@@ -40,6 +43,7 @@ public final class PowerTowerSavedData extends SavedData {
 
     public void markGraphDirty() {
         setDirty();
+        if (level != null) com.ghostipedia.cosmiccore.common.transmission.PowerTowerSpanSync.changed(level);
     }
 
     @Override

@@ -19,6 +19,10 @@ import com.ghostipedia.cosmiccore.common.network.packet.MirrorWeavePacket;
 import com.ghostipedia.cosmiccore.common.network.packet.MurkbloomDevImmunityPacket;
 import com.ghostipedia.cosmiccore.common.network.packet.MurkbloomSyncPacket;
 import com.ghostipedia.cosmiccore.common.network.packet.OxygenWarnPacket;
+import com.ghostipedia.cosmiccore.common.network.packet.PowerTowerChainPacket;
+import com.ghostipedia.cosmiccore.common.network.packet.PowerTowerRideRequestPacket;
+import com.ghostipedia.cosmiccore.common.network.packet.PowerTowerRideStatePacket;
+import com.ghostipedia.cosmiccore.common.network.packet.PowerTowerSpanPacket;
 import com.ghostipedia.cosmiccore.common.network.packet.RevealFieldsPacket;
 import com.ghostipedia.cosmiccore.common.network.packet.SetMultiblockStructureTierPacket;
 import com.ghostipedia.cosmiccore.common.network.packet.StarLadderUplinkPackets;
@@ -38,7 +42,7 @@ import net.neoforged.neoforge.network.registration.PayloadRegistrar;
 
 public class CCoreNetwork {
 
-    private static final String PROTOCOL_VERSION = "1.17.0";
+    private static final String PROTOCOL_VERSION = "1.20.0";
 
     public static void sendToServer(CustomPacketPayload packet) {
         PacketDistributor.sendToServer(packet);
@@ -50,6 +54,12 @@ public class CCoreNetwork {
 
     public static void registerPayloads(RegisterPayloadHandlersEvent event) {
         PayloadRegistrar registrar = event.registrar(PROTOCOL_VERSION);
+        registrar.playToClient(PowerTowerChainPacket.TYPE, PowerTowerChainPacket.CODEC, PowerTowerChainPacket::execute);
+        registrar.playToServer(PowerTowerRideRequestPacket.TYPE, PowerTowerRideRequestPacket.CODEC,
+                PowerTowerRideRequestPacket::execute);
+        registrar.playToClient(PowerTowerRideStatePacket.TYPE, PowerTowerRideStatePacket.CODEC,
+                PowerTowerRideStatePacket::execute);
+        registrar.playToClient(PowerTowerSpanPacket.TYPE, PowerTowerSpanPacket.CODEC, PowerTowerSpanPacket::execute);
 
         registrar.playToServer(LeylineDeploymentRequestPacket.TYPE, LeylineDeploymentRequestPacket.CODEC,
                 LeylineDeploymentRequestPacket::execute);

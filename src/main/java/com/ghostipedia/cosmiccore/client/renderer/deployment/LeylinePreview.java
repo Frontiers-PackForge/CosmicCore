@@ -33,6 +33,7 @@ final class LeylinePreview {
     private static final Map<Key, LeylinePreview> CACHE = new HashMap<>();
     private static final int CHECKS_PER_TICK = 512;
     private final CompletableFuture<Prepared> preparation;
+    private final Direction facing;
     private PatternPreviewRenderer renderer;
     private BlockPos anchor;
     private long checkedAt = Long.MIN_VALUE;
@@ -40,6 +41,7 @@ final class LeylinePreview {
     private boolean valid;
 
     private LeylinePreview(Key key) {
+        facing = key.facing;
         preparation = CompletableFuture.supplyAsync(() -> {
             var plan = LeylineDeploymentBlueprints.resolve(key.id, key.facing).planOnBase(BlockPos.ZERO);
             var blocks = new Long2ReferenceOpenHashMap<BlockState>(plan.worldPlacements().size());
@@ -72,6 +74,9 @@ final class LeylinePreview {
     void draw(RenderLevelStageEvent event) {
         Prepared prepared = preparation.getNow(null);
         if (prepared == null || anchor == null) return;
+        if (prepared.plan.blueprint().id()
+                .equals(com.ghostipedia.cosmiccore.common.data.CosmicMachines.POWER_TOWER.getId()))
+            com.ghostipedia.cosmiccore.client.renderer.transmission.PowerTowerChainClient.draw(event, anchor(), facing);
         var minecraft = Minecraft.getInstance();
         AABB bounds = prepared.bounds.move(anchor);
         if (!event.getFrustum().isVisible(bounds)) return;

@@ -19,6 +19,7 @@ public record PowerTowerLinkResult(Status status, @Nullable UUID spanId) {
         ENDPOINT_NOT_FOUND,
         SELF_LINK,
         TOO_FAR,
+        BAD_ANGLE,
         OWNER_MISMATCH,
         PATH_CHUNK_UNLOADED,
         PATH_OBSTRUCTED,
