@@ -46,6 +46,7 @@ All Code is issued under LGPL-3.0 unless explicitly stated within the file heade
 ## Assets
 ### All Files with the extension `.mtl`, `.obj`,`.fsh`, and `.vsh` are All Rights reserved.
 ### All assets in `resources/assets/cosmiccore/textures` are licensed under All Rights Reserved by default
+### All assets in `resources/assets/cosmiccore/models/item/unique` and `resources/assets/cosmiccore/models/block/unique` and are licensed under All Rights Reserved
 Exclusions to this rule are as follows  
  - All files contained in the subfolder(s) `item` are licensed as MIT
  - All files contained in the subfolder(s) `block` EXCLUDING `iris` are licensed as MIT
@@ -53,7 +54,7 @@ Exclusions to this rule are as follows
 ```
 Human readable format:
 You may use code freely under LGPL-3.0, and most assets are licensed under MIT.
-You are NOT allowed to use my .mtl, .obj, .fsh, or .vsh files or associated assets linked to them for any reason.
+You are NOT allowed to use my .mtl, .obj, .fsh, or .vsh files or associated assets linked to them for any reason. Anything in the models folder under `unique` also may not be reused.
 Other Assets from Different Mods are used and in good faith have I tried to make sure I follow their respective licenses , please reach out to me if something needs to be removed, thanks!
 ```
 
