@@ -515,6 +515,8 @@ public class CosmicLangHandler extends LangHandler {
         provider.add("cosmiccore.power_tower.line.error.graph_invariant_rejected",
                 "A existing connection or mismatch in voltage tier is preventing connection!");
         provider.add("cosmiccore.deployment.power_tower.success", "Power Tower deployed!");
+        provider.add("cosmiccore.deployment.power_tower.refunded",
+                "Leyline deployment cancelled. Your package was returned to your inventory or dropped beside you if full.");
         provider.add("cosmiccore.deployment.power_tower.error.permission",
                 "You cannot deploy a Power Tower at that position.");
         provider.add("cosmiccore.deployment.power_tower.error.preflight_failed",
@@ -539,12 +541,14 @@ public class CosmicLangHandler extends LangHandler {
                 "The deployed blocks did not form a Power Tower. The world was restored.");
         provider.add("cosmiccore.deployment.power_tower.error.invalid",
                 "The seal on your leyline container shudder, the blueprint fails and could not resolve.");
+        provider.add("cosmiccore.deployment.power_tower.error.busy",
+                "Another leyline deployment is already using this footprint.");
         provider.add("cosmiccore.deployment.power_tower.tooltip.0",
                 "Using spatial compression rituals to jam a multiblock into a portable deployment package");
         provider.add("cosmiccore.deployment.power_tower.tooltip.1",
-                "Power tower will be placed on controller center, facing away from you. (controller faces towards you)");
+                "The lowest layer rests at the target height; the controller faces you.");
         provider.add("cosmiccore.deployment.power_tower.tooltip.2",
-                "WIP: No Animation.");
+                "Aim up to 96 blocks away. Confirmation reserves one package; failed deployment returns it.");
 
         multiLang(provider, "cosmiccore.machine.me_computation_array.tooltip",
                 "§aStorage Size§r : §b%s§r component bays.",

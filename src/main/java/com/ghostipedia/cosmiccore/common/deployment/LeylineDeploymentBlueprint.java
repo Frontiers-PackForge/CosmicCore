@@ -50,4 +50,10 @@ public record LeylineDeploymentBlueprint(ResourceLocation id, BlockPos controlle
     public LeylineDeploymentPlan planAt(BlockPos controllerPos) {
         return new LeylineDeploymentPlan(this, controllerPos);
     }
+
+    public LeylineDeploymentPlan planOnBase(BlockPos basePos) {
+        int lowestY = relativePlacements.stream().filter(placement -> !placement.state().isAir())
+                .mapToInt(placement -> placement.relativeOffset().getY()).min().orElseThrow();
+        return planAt(basePos.above(controllerOffset.getY() - lowestY));
+    }
 }

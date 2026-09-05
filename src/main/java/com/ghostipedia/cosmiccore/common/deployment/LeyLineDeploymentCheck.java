@@ -6,9 +6,9 @@ import net.minecraft.world.level.Level;
 import java.util.ArrayList;
 import java.util.List;
 
-public final class LeylineDeploymentPreflight {
+public final class LeyLineDeploymentCheck {
 
-    private LeylineDeploymentPreflight() {}
+    private LeyLineDeploymentCheck() {}
 
     public static Result validateFootprint(Level level, LeylineDeploymentPlan plan) {
         if (level == null || plan == null) throw new NullPointerException();

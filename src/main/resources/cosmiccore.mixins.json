@@ -9,6 +9,9 @@
   },
   "plugin": "com.ghostipedia.cosmiccore.mixin.CosmicCoreMixinPlugin",
   "client": [
+    "client.deployment.LeylineParticleAccessor",
+    "client.deployment.LeylineSectionUploadMixin",
+    "sodium.deployment.LeylineSodiumSectionUploadMixin",
     "StarKillerMixin",
     "quake.QuakeMovementMixin",
     "gravity.client.CameraMixin",

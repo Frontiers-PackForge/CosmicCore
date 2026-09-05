@@ -12,6 +12,9 @@ import com.ghostipedia.cosmiccore.common.network.packet.EffortlessBuildingAE2Cou
 import com.ghostipedia.cosmiccore.common.network.packet.FactoryGaugeFluidSelectionPacket;
 import com.ghostipedia.cosmiccore.common.network.packet.FactoryGaugePromiseLimitPacket;
 import com.ghostipedia.cosmiccore.common.network.packet.FirmamentTideHudPacket;
+import com.ghostipedia.cosmiccore.common.network.packet.LeylineDeploymentFinishPacket;
+import com.ghostipedia.cosmiccore.common.network.packet.LeylineDeploymentRequestPacket;
+import com.ghostipedia.cosmiccore.common.network.packet.LeylineDeploymentStartPacket;
 import com.ghostipedia.cosmiccore.common.network.packet.MirrorWeavePacket;
 import com.ghostipedia.cosmiccore.common.network.packet.MurkbloomDevImmunityPacket;
 import com.ghostipedia.cosmiccore.common.network.packet.MurkbloomSyncPacket;
@@ -35,7 +38,7 @@ import net.neoforged.neoforge.network.registration.PayloadRegistrar;
 
 public class CCoreNetwork {
 
-    private static final String PROTOCOL_VERSION = "1.16.0";
+    private static final String PROTOCOL_VERSION = "1.17.0";
 
     public static void sendToServer(CustomPacketPayload packet) {
         PacketDistributor.sendToServer(packet);
@@ -47,6 +50,13 @@ public class CCoreNetwork {
 
     public static void registerPayloads(RegisterPayloadHandlersEvent event) {
         PayloadRegistrar registrar = event.registrar(PROTOCOL_VERSION);
+
+        registrar.playToServer(LeylineDeploymentRequestPacket.TYPE, LeylineDeploymentRequestPacket.CODEC,
+                LeylineDeploymentRequestPacket::execute);
+        registrar.playToClient(LeylineDeploymentStartPacket.TYPE, LeylineDeploymentStartPacket.CODEC,
+                LeylineDeploymentStartPacket::execute);
+        registrar.playToClient(LeylineDeploymentFinishPacket.TYPE, LeylineDeploymentFinishPacket.CODEC,
+                LeylineDeploymentFinishPacket::execute);
 
         registrar.playToClient(SyncTimeBarPacket.TYPE, SyncTimeBarPacket.CODEC, SyncTimeBarPacket::execute);
         registrar.playToClient(AbyssTimeWarnPacket.TYPE, AbyssTimeWarnPacket.CODEC, AbyssTimeWarnPacket::execute);

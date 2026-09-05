@@ -118,32 +118,69 @@ public class CosmicMachines {
             .langValue("Power Tower")
             .rotationState(RotationState.NON_Y_AXIS)
             .recipeType(GTRecipeTypes.DUMMY_RECIPES)
-            .appearanceBlock(CASING_STEEL_SOLID)
+            .appearanceBlock(REFRACTORY_STRUCTURAL_CASING)
             .tooltips(Component.translatable("cosmiccore.machine.power_tower.tooltip.0"),
                     Component.translatable("cosmiccore.machine.power_tower.tooltip.1"))
-            .pattern(definition -> MultiblockPatternBuilder.start(UP, FRONT, LEFT)
-                    .slice("CCC", "CCC", "CSC")
-                    .slice("F F", " C ", "F F")
-                    .slice("F F", " C ", "F F")
-                    .slice("F F", " C ", "F F")
-                    .slice("F F", " C ", "F F")
-                    .slice("F F", " C ", "F F")
-                    .slice("III", "FCF", "III")
-                    .slice("I I", " F ", "I I")
-                    .slice("I I", "   ", "I I")
-                    .where('S', controller(blocks(definition.getBlock())))
-                    .where('C', blocks(CASING_STEEL_SOLID.get())
-                            .or(abilities(PartAbility.INPUT_ENERGY).setMaxGlobalLimited(4).setPreviewCount(1))
-                            .or(abilities(PartAbility.OUTPUT_ENERGY).setMaxGlobalLimited(4).setPreviewCount(1))
+            .pattern(definition -> MultiblockPatternBuilder.start(BACK, DOWN, LEFT)
+                    .slice("             ", "             ", "             ", "             ", "             ",
+                            "             ", "             ", "             ", "             ", "             ",
+                            "             ", "             ", "             ", "             ", "             ",
+                            "             ", "             ", "             ", "             ", "             ",
+                            "   B     B   ", "  BB     BB  ", "  BB     BB  ", "  CCC   CCC  ")
+                    .slice("             ", "             ", "             ", "             ", "             ",
+                            "             ", "             ", "             ", "             ", "             ",
+                            "             ", "             ", "             ", "             ", "             ",
+                            "             ", "   BB   BB   ", "   BD   DB   ", "   B D D B   ", "   B  D  B   ",
+                            "  BB D D BB  ", "  BBD   DBB  ", "  BB     BB  ", "  CCCDDDCCC  ")
+                    .slice("             ", "             ", "             ", "             ", "             ",
+                            "             ", "             ", "             ", "             ", "             ",
+                            "             ", "             ", "             ", "             ", "    B   B    ",
+                            "    B   B    ", "   BBBBBBB   ", "   D     D   ", "             ", "             ",
+                            "             ", "   D     D   ", "             ", "  CCCCCCCCC  ")
+                    .slice("     CCC     ", "B  DDD DDD  B", "     DDD     ", "     D D     ", "  B  D D  B  ",
+                            "     DDD     ", "     D D     ", "     DDD     ", "     D D     ", "     DDD     ",
+                            "     D D     ", "     D D     ", "     B B     ", "     BBB     ", "     B B     ",
+                            "     BBB     ", "    BB BB    ", "             ", "   D     D   ", "             ",
+                            "   D EEE D   ", "     EFE     ", "     EEE     ", "   DCCCCCD   ")
+                    .slice("    CCCCC    ", "BBBBBBGBBBBBB", "A     G     A", "    DDGDD    ", "  BBBBGBBBB  ",
+                            "  A   G   A  ", "      G      ", "     BGB     ", "     BGB     ", "    BBGBB    ",
+                            "    BBGBB    ", "    BBGBB    ", "    BBGBB    ", "    BBGBB    ", "    BBGBB    ",
+                            "    BBBBB    ", "    B   B    ", "             ", "             ", "   D     D   ",
+                            "     EEE     ", "     EEE     ", "     EEE     ", "   DCCCCCD   ")
+                    .slice("     CCC     ", "B  DDD DDD  B", "     DDD     ", "     D D     ", "  B  D D  B  ",
+                            "     DDD     ", "     D D     ", "     DDD     ", "     D D     ", "     DDD     ",
+                            "     D D     ", "     D D     ", "     B B     ", "     BBB     ", "     B B     ",
+                            "     BBB     ", "    BB BB    ", "             ", "   D     D   ", "             ",
+                            "   D EEE D   ", "     EEE     ", "     EEE     ", "   DCCCCCD   ")
+                    .slice("             ", "             ", "             ", "             ", "             ",
+                            "             ", "             ", "             ", "             ", "             ",
+                            "             ", "             ", "             ", "             ", "    B   B    ",
+                            "    B   B    ", "   BBBBBBB   ", "   D     D   ", "             ", "             ",
+                            "             ", "   D     D   ", "             ", "  CCCCCCCCC  ")
+                    .slice("             ", "             ", "             ", "             ", "             ",
+                            "             ", "             ", "             ", "             ", "             ",
+                            "             ", "             ", "             ", "             ", "             ",
+                            "             ", "   BB   BB   ", "   BD   DB   ", "   B D D B   ", "   B  D  B   ",
+                            "  BB D D BB  ", "  BBD   DBB  ", "  BB     BB  ", "  CCCDDDCCC  ")
+                    .slice("             ", "             ", "             ", "             ", "             ",
+                            "             ", "             ", "             ", "             ", "             ",
+                            "             ", "             ", "             ", "             ", "             ",
+                            "             ", "             ", "             ", "             ", "             ",
+                            "   B     B   ", "  BB     BB  ", "  BB     BB  ", "  CCC   CCC  ")
+                    .where('A', blocks(VIBRANT_PIPE_FRAMEWORK.get()))
+                    .where('B', blocks(INDUSTRIAL_PARTWORK.get()))
+                    .where('C', blocks(REFRACTORY_STRUCTURAL_CASING.get()))
+                    .where('D', frames(GTMaterials.StainlessSteel))
+                    .where('E', blocks(REFRACTORY_STRUCTURAL_CASING.get())
                             .or(abilities(PartAbility.SUBSTATION_INPUT_ENERGY).setMaxGlobalLimited(4)
                                     .setPreviewCount(1))
                             .or(abilities(PartAbility.SUBSTATION_OUTPUT_ENERGY).setMaxGlobalLimited(4)
                                     .setPreviewCount(1)))
-                    .where('F', frames(GTMaterials.Steel))
-                    .where('I', blocks(CASING_LAMINATED_GLASS.get()))
+                    .where('F', controller(blocks(definition.getBlock())))
+                    .where('G', blocks(VIBRANT_PIPE_FRAMEWORK.get()))
                     .where(' ', any())
                     .build())
-            .workableCasingModel(GTCEu.id("block/casings/solid/machine_casing_solid_steel"),
+            .workableCasingModel(CosmicCore.id("block/casings/solid/refractory_structural_casing"),
                     GTCEu.id("block/multiblock/data_bank"))
             .register();
     public static final MachineDefinition[] SOUL_EXPORT_HATCH = registerSoulHatch(
