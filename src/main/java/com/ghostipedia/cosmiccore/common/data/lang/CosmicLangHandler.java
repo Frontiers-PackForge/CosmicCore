@@ -47,6 +47,34 @@ public class CosmicLangHandler extends LangHandler {
     }
 
     public static void init(RegistrateLangProvider provider) {
+        provider.add("cosmiccore.leyline.encoder", "Leyline Pattern Encoder");
+        provider.add("cosmiccore.leyline.search", "Search multiblocks...");
+        provider.add("cosmiccore.leyline.name", "Pattern name");
+        provider.add("cosmiccore.leyline.input", "Blank leyline pattern input");
+        provider.add("cosmiccore.leyline.output",
+                "Pattern output / design input. Insert a leyline package to load its design. Re-Encode to update design.");
+        provider.add("cosmiccore.leyline.encode_hint",
+                "Validate the layout. Use a Blank Leyline Pattern to encode.");
+        provider.add("cosmiccore.leyline.idle", "Fabrication idle");
+        provider.add("cosmiccore.leyline.remaining", "Fabrication remaining: %s s");
+        provider.add("cosmiccore.leyline.invalid_at", "Invalid block at %s. Allowed examples:");
+        provider.add("cosmiccore.leyline.unsupported",
+                "This structure cannot currently be edited as a leyline prefab.");
+        provider.add("cosmiccore.leyline.choose", "Choose a multiblock, then validate its layout.");
+        provider.add("cosmiccore.leyline.validate", "Validate");
+        provider.add("cosmiccore.leyline.encode", "Encode");
+        provider.add("cosmiccore.leyline.library", "Fabrication Library");
+        provider.add("cosmiccore.leyline.icon",
+                "AE2 icon;Will Display as this item with an indicator of leyline packaging.");
+        provider.add("cosmiccore.leyline.valid", "Valid layout. Insert a leyline pattern to encode.");
+        provider.add("cosmiccore.leyline.invalid",
+                "Layout cannot form. Check its blocks, hatch requirements and dimensions.");
+        provider.add("cosmiccore.leyline.encoded", "Leyline pattern encoded.");
+        provider.add("cosmiccore.leyline.machine", "Multiblock: %s");
+        provider.add("cosmiccore.leyline.duration", "Fabrication time: %s s");
+        provider.add("cosmiccore.leyline.energy", "Power: %s EU/t (MV) | Total: %s EU");
+        provider.add("cosmiccore.leyline.blocks", "Placed blocks: %s");
+        provider.add("cosmiccore.leyline.estimate", "%s s at 128 EU/t (MV)");
         // Vein Survey Scanner
         provider.add("cosmiccore.survey.mode.radial", "Mode: Radial Scan (360°)");
         provider.add("cosmiccore.survey.mode.directional", "Mode: Directional Cone (90°)");
@@ -520,35 +548,38 @@ public class CosmicLangHandler extends LangHandler {
                 "A solid block is preventing wire attachment.");
         provider.add("cosmiccore.power_tower.line.error.graph_invariant_rejected",
                 "A existing connection or mismatch in voltage tier is preventing connection!");
-        provider.add("cosmiccore.deployment.power_tower.success", "Power Tower deployed!");
-        provider.add("cosmiccore.deployment.power_tower.refunded",
-                "Leyline deployment cancelled. Your reserved items were returned to your inventory or dropped beside you if full.");
-        provider.add("cosmiccore.deployment.power_tower.error.permission",
-                "You cannot deploy a Power Tower at that position.");
-        provider.add("cosmiccore.deployment.power_tower.error.preflight_failed",
-                "Power tower placement blocked by fluids or blocks.");
-        provider.add("cosmiccore.deployment.power_tower.error.preflight.out_of_bounds",
-                "How did you manage this? No you can't put a power tower outside the world border.");
-        provider.add("cosmiccore.deployment.power_tower.error.preflight.chunk_not_loaded",
-                "Attempted to assemble a power tower into an unloaded chunk");
-        provider.add("cosmiccore.deployment.power_tower.error.preflight.block_entity_present",
-                "A block entity obstructs the Power Tower footprint at %s.");
-        provider.add("cosmiccore.deployment.power_tower.error.preflight.fluid_present",
-                "Fluid obstructs the Power Tower footprint at %s.");
-        provider.add("cosmiccore.deployment.power_tower.error.preflight.not_replaceable",
-                "A solid block obstructs the Power Tower footprint at %s.");
-        provider.add("cosmiccore.deployment.power_tower.error.permission_denied",
-                "At least one position in the Power Tower footprint is protected.");
-        provider.add("cosmiccore.deployment.power_tower.error.placement_failed",
-                "Power Tower deployment failed.");
-        provider.add("cosmiccore.deployment.power_tower.error.machine_initialization_failed",
-                "The deployed Power Tower controller could not initialize. The world was restored.");
-        provider.add("cosmiccore.deployment.power_tower.error.post_placement_validation_failed",
-                "The deployed blocks did not form a Power Tower. The world was restored.");
-        provider.add("cosmiccore.deployment.power_tower.error.invalid",
-                "The seal on your leyline container shudder, the blueprint fails and could not resolve.");
-        provider.add("cosmiccore.deployment.power_tower.error.busy",
-                "Another leyline deployment is already using this footprint.");
+        provider.add("cosmiccore.deployment.success", "%s deployed!");
+        provider.add("cosmiccore.deployment.refunded",
+                "%s deployment cancelled. Your reserved items were returned to your inventory or dropped beside you if full.");
+        provider.add("cosmiccore.deployment.error.permission",
+                "You cannot deploy %s at that position.");
+        provider.add("cosmiccore.deployment.error.preflight_failed",
+                "%s placement blocked by fluids or blocks.");
+        provider.add("cosmiccore.deployment.error.preflight.out_of_bounds",
+                "How did you manage this? No you can't put %s outside the world border.");
+        provider.add("cosmiccore.deployment.error.preflight.chunk_not_loaded",
+                "Attempted to assemble %s into an unloaded chunk.");
+        provider.add("cosmiccore.deployment.error.preflight.block_entity_present",
+                "A block entity obstructs the %s footprint at %s.");
+        provider.add("cosmiccore.deployment.error.preflight.fluid_present",
+                "Fluid obstructs the %s footprint at %s.");
+        provider.add("cosmiccore.deployment.error.preflight.not_replaceable",
+                "A solid block obstructs the %s footprint at %s.");
+        provider.add("cosmiccore.deployment.error.permission_denied",
+                "At least one position in the %s footprint is protected.");
+        provider.add("cosmiccore.deployment.error.placement_failed",
+                "%s deployment failed.");
+        provider.add("cosmiccore.deployment.error.machine_initialization_failed",
+                "The deployed %s controller could not initialize. The world was restored.");
+        provider.add("cosmiccore.deployment.error.post_placement_validation_failed",
+                "The deployed blocks did not form %s. The world was restored.");
+        provider.add("cosmiccore.deployment.error.invalid",
+                "The seal on your leyline container shudders. The %s blueprint could not resolve.");
+        provider.add("cosmiccore.deployment.error.busy",
+                "Another leyline deployment is already using this %s footprint.");
+        provider.add("cosmiccore.leyline.unknown_machine", "Unknown multiblock");
+        provider.add("cosmiccore.leyline.loading", "Loading blueprint...");
+        provider.add("cosmiccore.leyline.unavailable", "This blueprint is unavailable in this world.");
         provider.add("cosmiccore.deployment.power_tower.tooltip.0",
                 "Using spatial compression rituals to jam a multiblock into a portable deployment package");
         provider.add("cosmiccore.deployment.power_tower.tooltip.1",

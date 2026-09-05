@@ -24,13 +24,12 @@ import net.neoforged.neoforge.client.event.RenderLevelStageEvent;
 import brachy.modularui.drawable.schema.RenderFilter;
 import it.unimi.dsi.fastutil.longs.Long2ReferenceOpenHashMap;
 
-import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 
 final class LeylinePreview {
 
-    private static final Map<Key, LeylinePreview> CACHE = new HashMap<>();
+    private static final Map<Key, LeylinePreview> CACHE = new java.util.LinkedHashMap<>(8, 0.75f, true);
     private static final int CHECKS_PER_TICK = 512;
     private final CompletableFuture<Prepared> preparation;
     private final Direction facing;
@@ -54,7 +53,19 @@ final class LeylinePreview {
     }
 
     static LeylinePreview get(ResourceLocation id, Direction facing) {
-        return CACHE.computeIfAbsent(new Key(id, facing), LeylinePreview::new);
+        Key key = new Key(id, facing);
+        var existing = CACHE.get(key);
+        if (existing != null) return existing;
+        if (CACHE.size() >= 8) {
+            var iterator = CACHE.values().iterator();
+            var oldest = iterator.next();
+            oldest.preparation.cancel(false);
+            if (oldest.renderer != null) oldest.renderer.dispose();
+            iterator.remove();
+        }
+        var created = new LeylinePreview(key);
+        CACHE.put(key, created);
+        return created;
     }
 
     void target(BlockPos target) {

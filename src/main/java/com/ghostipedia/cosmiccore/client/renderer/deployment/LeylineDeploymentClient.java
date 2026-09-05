@@ -65,8 +65,18 @@ public final class LeylineDeploymentClient {
         if (minecraft.level == null || !minecraft.level.dimension().location().equals(packet.dimension()) ||
                 ACTIVE.containsKey(packet.id()) || PENDING.containsKey(packet.id()))
             return;
-        var plan = CompletableFuture.supplyAsync(
-                () -> LeylineDeploymentBlueprints.resolve(packet.blueprint(), packet.facing()).planAt(packet.anchor()),
+        CompletableFuture<com.ghostipedia.cosmiccore.common.deployment.LeylineDeploymentBlueprint> blueprint;
+        if (packet.blueprint().getNamespace().equals(CosmicCore.MOD_ID) &&
+                packet.blueprint().getPath().startsWith("prefab/")) {
+            blueprint = LeylinePrefabClient.request(UUID.fromString(packet.blueprint().getPath().substring(6)))
+                    .thenApply(prefab -> prefab == null ? null :
+                            LeylineDeploymentBlueprints.register(prefab, packet.facing()));
+        } else {
+            blueprint = CompletableFuture.supplyAsync(
+                    () -> LeylineDeploymentBlueprints.resolve(packet.blueprint(), packet.facing()),
+                    Util.backgroundExecutor());
+        }
+        var plan = blueprint.thenApplyAsync(value -> value == null ? null : value.planAt(packet.anchor()),
                 Util.backgroundExecutor()).exceptionally(error -> {
                     CosmicCore.LOGGER.error("Unable to resolve leyline presentation {}", packet.blueprint(), error);
                     return null;
@@ -213,7 +223,12 @@ public final class LeylineDeploymentClient {
         }
         BlockPos anchor = LeylineDeploymentTarget.anchor(minecraft.player, hit);
         Direction facing = minecraft.player.getDirection().getOpposite();
-        preview = LeylinePreview.get(LeylineDeploymentBlueprints.selectedId(), facing);
+        var blueprint = LeylineDeploymentBlueprints.forPackage(stack, facing, minecraft.level);
+        if (blueprint == null) {
+            preview = null;
+            return;
+        }
+        preview = LeylinePreview.get(blueprint.id(), facing);
         preview.target(anchor);
     }
 
