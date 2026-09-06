@@ -29,6 +29,7 @@ dependencies {
     // WAILA-likes
     implementation(forge.jade)
     compileOnly("maven.modrinth:Ahdn1OE0:Q2Ua4hew")
+    compileOnly("curse.maven:farmers-delight-398521:8083481") { transitive = false }
 
     // Curios
     compileOnly(variantOf(forge.curios) { classifier("api") })

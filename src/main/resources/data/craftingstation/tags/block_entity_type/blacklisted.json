@@ -3,6 +3,7 @@
   "values": [
     "create:item_vault",
     "create_connected:item_silo",
+    { "id": "dndecor:dyed_container", "required": false },
     "createdeco:shipping_container_white",
     "createdeco:shipping_container_orange",
     "createdeco:shipping_container_magenta",

@@ -12,6 +12,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectCategory;
+import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -167,6 +168,7 @@ public final class CosmicFoodRegistry {
         if (possible.effect().getDuration() < ABSORB_MIN_DURATION_TICKS) return false;
         var holder = possible.effect().getEffect();
         if (isBlockedEffect(holder)) return false;
+        if (holder.is(MobEffects.ABSORPTION)) return false;
         return holder.value().getCategory() == MobEffectCategory.BENEFICIAL;
     }
 

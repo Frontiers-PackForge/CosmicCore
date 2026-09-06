@@ -11,6 +11,7 @@ import com.ghostipedia.cosmiccore.common.food.FoodDefinition;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.effect.MobEffectCategory;
+import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.item.ItemStack;
 
@@ -76,8 +77,12 @@ public final class FoodTooltips {
                     value(signed(regen) + "/s", 0xFFB3DA)));
         }
         for (FoodDefinition.EffectSpec spec : def.effects()) {
+            String effectValue = roman(spec.amplifier() + 1);
+            if (spec.effect().is(MobEffects.ABSORPTION)) {
+                effectValue += " (" + mmss(QualityFoodCompat.scaleDuration(def.durationTicks(), quality) / 20) + ")";
+            }
             lines.add(new FoodTooltipComponent.Line(new FoodTooltipComponent.Icon.Effect(spec.effect()),
-                    spec.effect().value().getDisplayName().copy(), value(roman(spec.amplifier() + 1), 0x8EE6B0)));
+                    spec.effect().value().getDisplayName().copy(), value(effectValue, 0x8EE6B0)));
         }
         for (FoodDefinition.ConsumeEffectSpec spec : def.consumeEffects()) {
             boolean harmful = spec.effect().value().getCategory() == MobEffectCategory.HARMFUL;

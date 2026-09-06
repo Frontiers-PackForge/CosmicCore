@@ -72,6 +72,8 @@ public class CosmicCoreMixinPlugin implements IMixinConfigPlugin {
                 Map.entry(".ftbquests.", "dev/ftb/mods/ftbquests/quest/Quest.class"),
                 Map.entry(".occultism.", "com/klikli_dev/occultism/crafting/recipe/PasteRepairItemRecipe.class"),
                 Map.entry(".terrablender.", "terrablender/worldgen/surface/NamespacedSurfaceRuleSource.class"),
+                Map.entry(".biomesoplenty.", "biomesoplenty/entity/ChestBoatBOP.class"),
+                Map.entry(".createultimine.", "io/github/chaosunity/createultimine/WrenchUse.class"),
                 Map.entry(".drippy.",
                         "de/keksuccino/drippyloadingscreen/mixin/mixins/common/client/MixinLoadingOverlay.class"),
                 Map.entry(".undergarden.", "quek/undergarden/event/UthericInfectionEvents.class"));
@@ -87,6 +89,10 @@ public class CosmicCoreMixinPlugin implements IMixinConfigPlugin {
                 ".qualityfoodultimine.",
                 loader.getResource(QUALITY_FOOD_MARKER) != null &&
                         loader.getResource(ULTIMINE_CROP_MARKER) != null);
+        GATES.put(
+                ".qualityfoodfarmersdelight.",
+                loader.getResource(QUALITY_FOOD_MARKER) != null &&
+                        loader.getResource("vectorwing/farmersdelight/common/block/MushroomColonyBlock.class") != null);
         GATES.put(".ebfix.", matchesEffortlessBuildingBaseline(loader));
     }
 

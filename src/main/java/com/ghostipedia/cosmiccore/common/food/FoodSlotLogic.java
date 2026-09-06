@@ -12,6 +12,7 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.effect.MobEffectCategory;
 import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.food.FoodData;
 import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.ItemStack;
@@ -62,15 +63,20 @@ public final class FoodSlotLogic {
         data.eat(stack);
         stripVanillaFoodEffects(player, stack);
         extendPositiveConsumeEffects(player, stack);
+        applyDeclaredAbsorption(player, CosmicFoodRegistry.get(stack), QualityFoodCompat.level(stack));
         syncNow(player, data);
     }
 
     private static void stripVanillaFoodEffects(ServerPlayer player, ItemStack stack) {
-        if (CosmicFoodRegistry.isDefined(stack.getItem())) return;
         FoodProperties props = stack.get(DataComponents.FOOD);
         if (props == null) return;
+        //TODO: A PROPER EFFECT DENIAL REGISTRY AT SOME POINT
+        boolean defined = CosmicFoodRegistry.isDefined(stack.getItem());
+        boolean replacesAbsorption = CosmicFoodRegistry.get(stack).effects().stream()
+                .anyMatch(spec -> spec.effect().is(MobEffects.ABSORPTION));
         for (FoodProperties.PossibleEffect possible : props.effects()) {
-            if (!CosmicFoodRegistry.isAbsorbed(possible)) continue;
+            boolean overridden = replacesAbsorption && possible.effect().is(MobEffects.ABSORPTION);
+            if (!overridden && (defined || !CosmicFoodRegistry.isAbsorbed(possible))) continue;
             MobEffectInstance applied = possible.effect();
             MobEffectInstance active = player.getEffect(applied.getEffect());
             if (active == null || active.isInfiniteDuration()) continue;
@@ -94,6 +100,32 @@ public final class FoodSlotLogic {
             int duration = QualityFoodCompat.scaleDuration(spec.durationTicks(), quality);
             player.addEffect(new MobEffectInstance(active.getEffect(), duration, active.getAmplifier(),
                     active.isAmbient(), active.isVisible(), active.showIcon()));
+        }
+    }
+
+    static void applyDeclaredAbsorption(ServerPlayer player, FoodDefinition def, int quality) {
+        for (FoodDefinition.EffectSpec spec : def.effects()) {
+            if (!spec.effect().is(MobEffects.ABSORPTION)) continue;
+            player.addEffect(new MobEffectInstance(spec.effect(),
+                    QualityFoodCompat.scaleDuration(def.durationTicks(), quality), spec.amplifier(), true, false,
+                    false));
+        }
+    }
+
+    static void applyMealAbsorption(ServerPlayer player, ItemStack stack, int quality) {
+        FoodDefinition def = CosmicFoodRegistry.get(stack);
+        if (def.effects().stream().anyMatch(spec -> spec.effect().is(MobEffects.ABSORPTION))) {
+            applyDeclaredAbsorption(player, def, quality);
+            return;
+        }
+        FoodProperties props = stack.get(DataComponents.FOOD);
+        if (props == null) return;
+        for (FoodProperties.PossibleEffect possible : props.effects()) {
+            MobEffectInstance effect = possible.effect();
+            if (!effect.is(MobEffects.ABSORPTION) || player.getRandom().nextFloat() >= possible.probability()) continue;
+            player.addEffect(new MobEffectInstance(effect.getEffect(),
+                    QualityFoodCompat.scaleDuration(effect.getDuration(), quality), effect.getAmplifier(), true, false,
+                    false));
         }
     }
 
@@ -181,6 +213,7 @@ public final class FoodSlotLogic {
         applyEffectsFrom(player, data.brews);
         if (data.memory != null) {
             for (FoodDefinition.EffectSpec spec : data.memory.effects()) {
+                if (spec.effect().is(MobEffects.ABSORPTION)) continue;
                 player.addEffect(new MobEffectInstance(spec.effect(), 40, spec.amplifier(), true, false, false));
             }
         }
@@ -189,6 +222,7 @@ public final class FoodSlotLogic {
     private static void applyEffectsFrom(ServerPlayer player, List<ActiveFood> list) {
         for (ActiveFood af : list) {
             for (FoodDefinition.EffectSpec spec : af.def.effects()) {
+                if (spec.effect().is(MobEffects.ABSORPTION)) continue;
                 player.addEffect(new MobEffectInstance(spec.effect(), 40, spec.amplifier(), true, false, false));
             }
         }

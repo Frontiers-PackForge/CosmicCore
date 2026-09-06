@@ -11,6 +11,7 @@ import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.effect.MobEffect;
+import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 
@@ -98,6 +99,13 @@ public final class HearthLogic {
                 hearts * palate, regen * palate, mainQuality, sideQuality, drinkQuality, sharedWith, day,
                 memoryEffects);
         data.setMemory(memory);
+        FoodSlotLogic.applyMealAbsorption(player, main, mainQuality);
+        if (sideItem != null) {
+            FoodSlotLogic.applyMealAbsorption(player, side, sideQuality);
+        }
+        if (drinkItem != null) {
+            FoodSlotLogic.applyMealAbsorption(player, drink, drinkQuality);
+        }
 
         String pageKey = pageKey(main, side, drink);
         long gameTime = player.serverLevel().getGameTime();
@@ -160,6 +168,7 @@ public final class HearthLogic {
 
     private static void collectEffects(FoodDefinition def, Map<Holder<MobEffect>, Integer> into) {
         for (FoodDefinition.EffectSpec spec : def.effects()) {
+            if (spec.effect().is(MobEffects.ABSORPTION)) continue;
             into.merge(spec.effect(), spec.amplifier(), Math::max);
         }
     }
