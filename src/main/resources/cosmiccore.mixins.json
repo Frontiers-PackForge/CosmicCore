@@ -131,6 +131,9 @@
     "repackaged.FactoryPanelSetItemScreenFluidMixin"
   ],
   "mixins": [
+    "biomesoplenty.ChestBoatBOPInventoryPersistenceMixin",
+    "createultimine.GTWrenchUseFixMixin",
+    "gtfix.SimpleSteamMachineVerticalVentDirectionFixMixin",
     "ae2.OrreryCraftAmountMixin",
     "ae2.OrreryCraftConfirmMixin",
     "CrashReportCosmicFrontiersNoticeMixin",
@@ -252,6 +255,8 @@
     "architectury.ArchitecturyNullCodecSkipFixMixin",
     "neoforge.LegacyAccessoriesPlayerDataScrubberMixin",
     "qualityfoodultimine.VanillaCropLikeHandlerQualityFixMixin",
+    "qualityfoodfarmersdelight.MushroomColonyQualityCarrierMixin",
+    "qualityfoodfarmersdelight.MushroomColonyQualityCropMixin",
     "ftbquests.QuestDependencyLineDataMixin",
     "lso.FrostbiteEffectMixin",
     "lso.HeatstrokeEffectMixin",

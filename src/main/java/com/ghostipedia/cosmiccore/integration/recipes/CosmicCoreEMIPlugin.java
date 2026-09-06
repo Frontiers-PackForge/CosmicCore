@@ -3,6 +3,7 @@ package com.ghostipedia.cosmiccore.integration.recipes;
 import com.ghostipedia.cosmiccore.CosmicCore;
 import com.ghostipedia.cosmiccore.client.mirror.ClientDeedCache;
 import com.ghostipedia.cosmiccore.client.mirror.DeedInventoryButton;
+import com.ghostipedia.cosmiccore.client.tooltip.FoodTooltips;
 import com.ghostipedia.cosmiccore.common.data.CosmicItems;
 import com.ghostipedia.cosmiccore.common.data.materials.CosmicBundleMaterials;
 import com.ghostipedia.cosmiccore.common.data.materials.CosmicOreFormPolicy;
@@ -85,7 +86,7 @@ public class CosmicCoreEMIPlugin implements EmiPlugin {
         });
         CraftingStationRecipeHandler.register(registry);
         FactoryGaugeEmiCompat.register(registry);
-        registerFoodRoleAliases(registry);
+        registerFoodAliases(registry);
 
         registry.addCategory(CompositeOreSortingEmiRecipe.CATEGORY);
         registry.addWorkstation(CompositeOreSortingEmiRecipe.CATEGORY,
@@ -137,11 +138,20 @@ public class CosmicCoreEMIPlugin implements EmiPlugin {
                 CosmicItems.WASTELAND_ASTEROID.asStack());
     }
 
-    private static void registerFoodRoleAliases(EmiRegistry registry) {
+    private static void registerFoodAliases(EmiRegistry registry) {
         for (Item item : BuiltInRegistries.ITEM) {
             ItemStack stack = item.getDefaultInstance();
+            if (CosmicFoodRegistry.isVile(item)) {
+                for (var line : FoodTooltips.buildVile().lines()) {
+                    registry.addAlias(EmiStack.of(stack), line.label());
+                }
+                continue;
+            }
             if (!CosmicFoodRegistry.isConsumable(stack)) continue;
             registry.addAlias(EmiStack.of(stack), CosmicFoodRegistry.plateRole(stack).label());
+            for (var line : FoodTooltips.build(stack, CosmicFoodRegistry.get(stack)).lines()) {
+                registry.addAlias(EmiStack.of(stack), line.label());
+            }
         }
     }
 
