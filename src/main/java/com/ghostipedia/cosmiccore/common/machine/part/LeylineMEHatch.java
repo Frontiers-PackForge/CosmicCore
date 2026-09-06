@@ -4,11 +4,13 @@ import com.ghostipedia.cosmiccore.common.data.CosmicItems;
 import com.ghostipedia.cosmiccore.common.deployment.LeylineCraftingPattern;
 import com.ghostipedia.cosmiccore.common.deployment.LeylinePrefab;
 import com.ghostipedia.cosmiccore.common.machine.multiblock.LeylineCompressorMachine;
+import com.ghostipedia.cosmiccore.common.orrery.OrreryCatalogue;
 
 import com.gregtechceu.gtceu.api.blockentity.BlockEntityCreationInfo;
 import com.gregtechceu.gtceu.api.capability.recipe.IO;
 import com.gregtechceu.gtceu.api.machine.multiblock.MultiblockControllerMachine;
 import com.gregtechceu.gtceu.api.machine.trait.notifiable.NotifiableItemStackHandler;
+import com.gregtechceu.gtceu.api.sync_system.annotations.SaveField;
 import com.gregtechceu.gtceu.integration.ae2.machine.MEBusPartMachine;
 
 import appeng.api.config.Actionable;
@@ -31,6 +33,8 @@ public final class LeylineMEHatch extends MEBusPartMachine implements ICraftingP
     private boolean refresh = true;
     private boolean formed;
     private boolean pendingMigration;
+    @SaveField
+    private net.minecraft.nbt.CompoundTag catalogue = new net.minecraft.nbt.CompoundTag();
 
     public LeylineMEHatch(BlockEntityCreationInfo info) {
         super(info, IO.IN, new NotifiableItemStackHandler(36, IO.NONE, IO.NONE));
@@ -72,12 +76,16 @@ public final class LeylineMEHatch extends MEBusPartMachine implements ICraftingP
                     }
                     var descriptor = LeylinePrefab.descriptor(stack);
                     pendingMigration |= descriptor.contains("payload") || descriptor.contains("positions");
-                    next.add(new LeylineCraftingPattern(stack, getLevel()));
+                    var pattern = new LeylineCraftingPattern(stack, getLevel());
+                    next.add(pattern);
+                    rememberDesigns(List.of(pattern.prefab().id()));
                 } catch (RuntimeException ignored) {}
             }
             patterns = List.copyOf(next);
             refresh = false;
             ICraftingProvider.requestUpdate(getMainNode());
+            if (grid != null)
+                grid.getService(OrreryCatalogue.class).invalidate();
         }
         if (compressor != null && getMainNode().getGrid() != null) {
             var output = compressor.finishedPackage();
@@ -90,6 +98,25 @@ public final class LeylineMEHatch extends MEBusPartMachine implements ICraftingP
     @Override
     public List<IPatternDetails> getAvailablePatterns() {
         return patterns;
+    }
+
+    public Set<UUID> registeredDesigns() {
+        var result = new HashSet<UUID>();
+        for (String key : catalogue.getAllKeys()) {
+            try {
+                result.add(UUID.fromString(key));
+            } catch (IllegalArgumentException ignored) {}
+        }
+        return result;
+    }
+
+    public void rememberDesigns(Collection<UUID> designs) {
+        boolean changed = false;
+        for (UUID id : designs) if (!catalogue.contains(id.toString())) {
+            catalogue.putBoolean(id.toString(), true);
+            changed = true;
+        }
+        if (changed) setChanged();
     }
 
     @Override

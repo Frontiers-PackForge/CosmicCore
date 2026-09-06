@@ -1,6 +1,7 @@
 package com.ghostipedia.cosmiccore.integration.emi;
 
 import com.ghostipedia.cosmiccore.api.machine.multiblock.ITieredMultiblockPreview;
+import com.ghostipedia.cosmiccore.client.renderer.deployment.LeylineEncoderCache;
 import com.ghostipedia.cosmiccore.mixin.CosmicCoreMixinPlugin;
 import com.ghostipedia.cosmiccore.mixin.gtfix.emi.accessor.MultiblockSchemaInfoAccessor;
 
@@ -46,6 +47,7 @@ public final class MultiblockPreviewSchemaCache {
     public static void clear() {
         CACHE.clear();
         GUARDED_CACHE.clear();
+        LeylineEncoderCache.clear();
     }
 
     public static void capture(MultiblockMachineDefinition definition, Map<BlockPos, BlockInfo> blocks) {

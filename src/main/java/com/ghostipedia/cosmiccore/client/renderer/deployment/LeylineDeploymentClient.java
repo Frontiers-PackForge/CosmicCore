@@ -1,6 +1,7 @@
 package com.ghostipedia.cosmiccore.client.renderer.deployment;
 
 import com.ghostipedia.cosmiccore.CosmicCore;
+import com.ghostipedia.cosmiccore.client.orrery.OrreryClient;
 import com.ghostipedia.cosmiccore.common.deployment.LeylineDeploymentAnimation;
 import com.ghostipedia.cosmiccore.common.deployment.LeylineDeploymentBlueprints;
 import com.ghostipedia.cosmiccore.common.deployment.LeylineDeploymentPlan;
@@ -68,7 +69,8 @@ public final class LeylineDeploymentClient {
         CompletableFuture<com.ghostipedia.cosmiccore.common.deployment.LeylineDeploymentBlueprint> blueprint;
         if (packet.blueprint().getNamespace().equals(CosmicCore.MOD_ID) &&
                 packet.blueprint().getPath().startsWith("prefab/")) {
-            blueprint = LeylinePrefabClient.request(UUID.fromString(packet.blueprint().getPath().substring(6)))
+            blueprint = LeylinePrefabClient
+                    .request(UUID.fromString(packet.blueprint().getPath().substring("prefab/".length())))
                     .thenApply(prefab -> prefab == null ? null :
                             LeylineDeploymentBlueprints.register(prefab, packet.facing()));
         } else {
@@ -212,6 +214,34 @@ public final class LeylineDeploymentClient {
         InteractionHand hand = LeylineDeploymentBlueprints.isPackage(minecraft.player.getMainHandItem()) ?
                 InteractionHand.MAIN_HAND : InteractionHand.OFF_HAND;
         var stack = minecraft.player.getItemInHand(hand);
+        if (OrreryClient.heldHand() != null) {
+            var state = OrreryClient.state();
+            if (state == null || !state.showPreview || state.selection() == null) {
+                preview = null;
+                return;
+            }
+            var prefab = LeylinePrefabClient.get(state.selection());
+            if (prefab == null) {
+                preview = null;
+                return;
+            }
+            var proposal = OrreryClient.proposal();
+            Direction facing = proposal == null ? minecraft.player.getDirection().getOpposite() : proposal.facing();
+            BlockPos anchor;
+            if (proposal != null) anchor = proposal.anchor();
+            else {
+                var hit = LeylineDeploymentTarget.trace(minecraft.player, partialTick);
+                if (hit.getType() != HitResult.Type.BLOCK) {
+                    preview = null;
+                    return;
+                }
+                anchor = LeylineDeploymentTarget.anchor(minecraft.player, hit);
+            }
+            var blueprint = LeylineDeploymentBlueprints.register(prefab, facing);
+            preview = LeylinePreview.get(blueprint.id(), facing);
+            preview.target(anchor);
+            return;
+        }
         if (!LeylineDeploymentBlueprints.isPackage(stack)) {
             preview = null;
             return;

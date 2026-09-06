@@ -115,33 +115,50 @@ public class CosmicItems {
 
     public static final ItemEntry<PowerTowerCoilItem>[] POWER_TOWER_COILS = registerPowerTowerCoils();
 
+    public static final ItemEntry<ComponentItem> LEYLINE_ORRERY = REGISTRATE
+            .item("leyline_orrery", ComponentItem::new)
+            .lang("Leyline Orrery")
+            .properties(properties -> properties.stacksTo(1))
+            .model((context, provider) -> provider.withExistingParent(context.getName(),
+                    CosmicCore.id("item/unique/leyline_orrery")))
+            .onRegister(attach(new TooltipBehavior(list -> {
+                list.add(Component.translatable("item.cosmiccore.orrery_desc.tooltip.0"));
+                list.add(Component.translatable("item.cosmiccore.orrery_desc.tooltip.1"));
+                list.add(Component.translatable("item.cosmiccore.orrery_desc.tooltip.2"));
+                list.add(Component.translatable("item.cosmiccore.orrery_desc.tooltip.3"));
+                list.add(Component.translatable("item.cosmiccore.orrery_desc.tooltip.4"));
+                list.add(Component.translatable("item.cosmiccore.orrery_desc.tooltip.5"));
+                list.add(Component.translatable("item.cosmiccore.orrery_desc.tooltip.6"));
+            })))
+            .register();
+
     public static final ItemEntry<ComponentItem> POWER_TOWER_DEPLOYMENT_PACKAGE = REGISTRATE
             .item("power_tower_deployment_package", ComponentItem::new)
             .lang("Sealed Power Tower Leyline Package")
             .properties(properties -> properties.stacksTo(16))
             .onRegister(attach(new PowerTowerDeploymentPackageBehavior()))
             .model((context, provider) -> provider.generated(context,
-                    CosmicCore.id("item/masked_crystal_chiplet_package")))
+                    CosmicCore.id("item/sealed_leyline_package")))
             .register();
 
     public static final ItemEntry<net.minecraft.world.item.Item> BLANK_LEYLINE_PATTERN = REGISTRATE
             .item("blank_leyline_pattern", net.minecraft.world.item.Item::new).lang("Blank Leyline Pattern")
             .model((context, provider) -> provider.generated(context,
-                    CosmicCore.id("item/masked_crystal_chiplet_package")))
+                    CosmicCore.id("item/blank_leyline_pattern")))
             .register();
     public static final ItemEntry<com.ghostipedia.cosmiccore.common.item.LeylinePrefabItem> LEYLINE_PATTERN = REGISTRATE
             .item("leyline_pattern",
                     properties -> new com.ghostipedia.cosmiccore.common.item.LeylinePrefabItem(properties, true))
             .lang("Encoded Leyline Pattern").properties(properties -> properties.stacksTo(1))
             .model((context, provider) -> provider.generated(context,
-                    CosmicCore.id("item/masked_crystal_chiplet_package")))
+                    CosmicCore.id("item/encoded_leyline_pattern")))
             .register();
     public static final ItemEntry<com.ghostipedia.cosmiccore.common.item.LeylinePrefabItem> LEYLINE_PACKAGE = REGISTRATE
             .item("leyline_package",
                     properties -> new com.ghostipedia.cosmiccore.common.item.LeylinePrefabItem(properties, false))
             .lang("Sealed Leyline Package").properties(properties -> properties.stacksTo(16))
             .model((context, provider) -> provider.generated(context,
-                    CosmicCore.id("item/masked_crystal_chiplet_package")))
+                    CosmicCore.id("item/sealed_leyline_package")))
             .register();
 
     @SuppressWarnings("unchecked")
@@ -347,13 +364,13 @@ public class CosmicItems {
      * .tag()
      * .defaultModel()
      * .register();
-     * 
+     *
      * public static MalumSpiritType ETHERIC_SPIRIT = SpiritTypeRegistry.register(MalumSpiritType.create("etheric",
      * new SpiritVisualMotif(new Color(120, 75, 255), new Color(55, 55, 55), 0.9f, Easing.BOUNCE_IN_OUT),
      * ETHERIC_SPIRIT_ITEM)
      * .setItemColor(SpiritVisualMotif::getPrimaryColor)
      * .build());
-     * 
+     *
      * public static final ItemEntry<SpiritShardItem> WRATHFUL_SPIRIT_ITEM = REGISTRATE
      * .item("wrathful_spirit", (properties -> new SpiritShardItem(properties, CosmicItems.WRATHFUL_SPIRIT)))
      * .lang("Wrathful Spirit")
@@ -361,13 +378,13 @@ public class CosmicItems {
      * .tag()
      * .defaultModel()
      * .register();
-     * 
+     *
      * public static MalumSpiritType WRATHFUL_SPIRIT = SpiritTypeRegistry.register(MalumSpiritType.create("wrathful",
      * new SpiritVisualMotif(2, new Color(120, 200, 80), new Color(200, 55, 0), 0.9f, Easing.SINE_IN_OUT),
      * WRATHFUL_SPIRIT_ITEM)
      * .setItemColor(SpiritVisualMotif::getPrimaryColor)
      * .build());
-     * 
+     *
      * public static final ItemEntry<SpiritShardItem> PRIDEFUL_SPIRIT_ITEM = REGISTRATE
      * .item("prideful_spirit", (properties -> new SpiritShardItem(properties, CosmicItems.PRIDEFUL_SPIRIT)))
      * .lang("Prideful Spirit")
@@ -375,13 +392,13 @@ public class CosmicItems {
      * .tag()
      * .defaultModel()
      * .register();
-     * 
+     *
      * public static MalumSpiritType PRIDEFUL_SPIRIT = SpiritTypeRegistry.register(MalumSpiritType.create("prideful",
      * new SpiritVisualMotif(4, new Color(120, 0, 100), new Color(200, 55, 0), 0.9f, Easing.SINE_IN_OUT),
      * PRIDEFUL_SPIRIT_ITEM)
      * .setItemColor(SpiritVisualMotif::getPrimaryColor)
      * .build());
-     * 
+     *
      * public static final ItemEntry<SpiritShardItem> MALICE_SPIRIT_ITEM = REGISTRATE
      * .item("malice_spirit", (properties -> new SpiritShardItem(properties, CosmicItems.MALICE_SPIRIT)))
      * .lang("Malice Spirit")
@@ -389,7 +406,7 @@ public class CosmicItems {
      * .tag()
      * .defaultModel()
      * .register();
-     * 
+     *
      * public static MalumSpiritType MALICE_SPIRIT = SpiritTypeRegistry.register(MalumSpiritType.create("malice",
      * new SpiritVisualMotif(4, new Color(210, 210, 210), new Color(200, 55, 0), 0.9f, Easing.SINE_IN_OUT),
      * MALICE_SPIRIT_ITEM)
@@ -1402,7 +1419,7 @@ public class CosmicItems {
      * .lang("Nano Scythe")
      * .defaultModel()
      * .register();
-     * 
+     *
      * public static final ItemEntry<CosmicScytheItem> QUANTUM_SCYTHE = REGISTRATE
      * .item("quantum_scythe",
      * props -> new CosmicScytheItem(
@@ -1412,7 +1429,7 @@ public class CosmicItems {
      * .lang("Quark Scythe")
      * .defaultModel()
      * .register();
-     * 
+     *
      * public static final ItemEntry<CosmicScytheItem> SANGUINE_SCYTHE = REGISTRATE
      * .item("sanguine_scythe",
      * props -> new CosmicScytheItem(

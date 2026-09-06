@@ -17,12 +17,14 @@ import net.minecraft.world.item.ItemStack;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
 import net.neoforged.neoforge.client.ClientHooks;
+import net.neoforged.neoforge.common.util.TransformationHelper;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
+import org.joml.Vector3f;
 
-import java.util.ArrayList;
 import java.util.EnumSet;
+import java.util.List;
 import java.util.Map;
 
 @OnlyIn(Dist.CLIENT)
@@ -35,12 +37,25 @@ public final class LeylineOrreryHandRenderer {
     private static final float ARM_TIP_Y = 10.0F;
     private static final float ARM_WIDTH_SCALE = 0.9F;
     private static final float ARM_DEPTH_SCALE = 0.8F;
-    private static final int FOREARM_SEGMENT_LENGTH = 4;
-    private static final int FOREARM_SEGMENTS = 6;
+    private static final float TOOL_BACK_OFFSET = 3.0F;
+    private static final float TOOL_DOWN_OFFSET = -0.5F;
     private static final ModelPart[] ARMS = createArms(false);
     private static final ModelPart[] SLEEVES = createArms(true);
 
     private LeylineOrreryHandRenderer() {}
+
+    public static void offsetTool(LivingEntity entity, ItemStack stack, ItemDisplayContext context, boolean leftHand,
+                                  PoseStack poseStack) {
+        var model = Minecraft.getInstance().getItemRenderer().getModel(stack, entity.level(), entity,
+                entity.getId() + context.ordinal());
+        var transform = model.getTransforms().getTransform(context);
+        float side = leftHand ? -1 : 1;
+        var offset = new Vector3f(0, TOOL_DOWN_OFFSET, TOOL_BACK_OFFSET).mul(transform.scale)
+                .rotate(TransformationHelper.quatFromXYZ(transform.rotation.x(), transform.rotation.y() * side,
+                        transform.rotation.z() * side, true))
+                .mul(MODEL_UNIT);
+        poseStack.translate(offset.x(), offset.y(), offset.z());
+    }
 
     public static void renderArm(LivingEntity entity, ItemStack stack, ItemDisplayContext context, boolean leftHand,
                                  PoseStack poseStack, MultiBufferSource buffer, int packedLight) {
@@ -57,7 +72,11 @@ public final class LeylineOrreryHandRenderer {
         int armIndex = (slim ? 2 : 0) + (leftHand ? 1 : 0);
         poseStack.pushPose();
         try {
-            ClientHooks.handleCameraTransforms(poseStack, model, context, leftHand);
+            var transformedModel = ClientHooks.handleCameraTransforms(poseStack, model, context, leftHand);
+            var mounting = transformedModel.getTransforms().getTransform(context).rightRotation;
+            float side = leftHand ? -1 : 1;
+            poseStack.mulPose(TransformationHelper.quatFromXYZ(mounting.x(), mounting.y() * side,
+                    mounting.z() * side, true).conjugate());
             poseStack.translate(-0.5F, -0.5F, -0.5F);
             poseStack.translate(CUFF_CENTER_X * MODEL_UNIT, CUFF_CENTER_Y * MODEL_UNIT,
                     (FINGERTIP_Z + ARM_TIP_Y) * MODEL_UNIT);
@@ -85,17 +104,8 @@ public final class LeylineOrreryHandRenderer {
             int u = left ? (sleeve ? 48 : 32) : 40;
             int v = left ? 48 : (sleeve ? 32 : 16);
             float inflation = sleeve ? 0.25F : 0.0F;
-            var cubes = new ArrayList<ModelPart.Cube>();
-            var handFaces = EnumSet.allOf(Direction.class);
-            handFaces.remove(Direction.DOWN);
-            cubes.add(new ModelPart.Cube(u, v, x, -2, -2, width, 12, 4,
-                    inflation, inflation, inflation, false, 64, 64, handFaces));
-            var sideFaces = EnumSet.of(Direction.NORTH, Direction.SOUTH, Direction.EAST, Direction.WEST);
-            for (int segment = 0; segment < FOREARM_SEGMENTS; segment++) {
-                float start = -2 - inflation - (segment + 1) * FOREARM_SEGMENT_LENGTH;
-                cubes.add(new ModelPart.Cube(u, v, x, start, -2, width, FOREARM_SEGMENT_LENGTH, 4,
-                        inflation, 0, inflation, false, 64, 64, sideFaces));
-            }
+            var cubes = List.of(new ModelPart.Cube(u, v, x, -2, -2, width, 12, 4,
+                    inflation, inflation, inflation, false, 64, 64, EnumSet.allOf(Direction.class)));
             parts[index] = new ModelPart(cubes, Map.of());
         }
         return parts;

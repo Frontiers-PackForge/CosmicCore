@@ -1,6 +1,7 @@
 package com.ghostipedia.cosmiccore.client.renderer.transmission;
 
 import com.ghostipedia.cosmiccore.CosmicCore;
+import com.ghostipedia.cosmiccore.client.orrery.OrreryClient;
 import com.ghostipedia.cosmiccore.common.deployment.LeylineDeploymentBlueprints;
 import com.ghostipedia.cosmiccore.common.item.PowerTowerCoilItem;
 import com.ghostipedia.cosmiccore.common.network.packet.PowerTowerChainPacket;
@@ -14,6 +15,7 @@ import net.minecraft.client.renderer.RenderType;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
+import net.minecraft.world.InteractionHand;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
@@ -50,6 +52,9 @@ public final class PowerTowerChainClient {
     private static ItemStack coil() {
         var player = Minecraft.getInstance().player;
         if (player == null) return ItemStack.EMPTY;
+        var orreryHand = OrreryClient.heldHand();
+        if (orreryHand != null) return player.getItemInHand(orreryHand == InteractionHand.MAIN_HAND ?
+                InteractionHand.OFF_HAND : InteractionHand.MAIN_HAND);
         if (LeylineDeploymentBlueprints.isPackage(player.getMainHandItem())) return player.getOffhandItem();
         if (LeylineDeploymentBlueprints.isPackage(player.getOffhandItem())) return player.getMainHandItem();
         return ItemStack.EMPTY;
@@ -101,9 +106,7 @@ public final class PowerTowerChainClient {
     public static void hud(RenderGuiEvent.Post event) {
         var minecraft = Minecraft.getInstance();
         if (source == null || minecraft.level == null || minecraft.player == null ||
-                drawnAt != minecraft.level.getGameTime() || minecraft.options.hideGui ||
-                !(LeylineDeploymentBlueprints.isPackage(minecraft.player.getMainHandItem()) ||
-                        LeylineDeploymentBlueprints.isPackage(minecraft.player.getOffhandItem())))
+                drawnAt != minecraft.level.getGameTime() || minecraft.options.hideGui || minecraft.screen != null)
             return;
         var graphics = event.getGuiGraphics();
         var text = Component.translatable("cosmiccore.power_tower.chain.preview",

@@ -604,12 +604,14 @@
 			"translation": [0, -1.75, 6.75]
 		},
 		"firstperson_righthand": {
-			"rotation": [6, 12, -24],
+			"rotation": [6, 12, -9],
+			"right_rotation": [0, 180, 0],
 			"translation": [1.25, 1.75, 0],
 			"scale": [0.68, 0.68, 0.68]
 		},
 		"firstperson_lefthand": {
-			"rotation": [6, 12, -24],
+			"rotation": [6, 12, -9],
+			"right_rotation": [0, 180, 0],
 			"translation": [1.25, 1.75, 0],
 			"scale": [0.68, 0.68, 0.68]
 		},
