@@ -70,7 +70,7 @@ public final class FoodSlotLogic {
     private static void stripVanillaFoodEffects(ServerPlayer player, ItemStack stack) {
         FoodProperties props = stack.get(DataComponents.FOOD);
         if (props == null) return;
-        //TODO: A PROPER EFFECT DENIAL REGISTRY AT SOME POINT
+        // TODO: A PROPER EFFECT DENIAL REGISTRY AT SOME POINT
         boolean defined = CosmicFoodRegistry.isDefined(stack.getItem());
         boolean replacesAbsorption = CosmicFoodRegistry.get(stack).effects().stream()
                 .anyMatch(spec -> spec.effect().is(MobEffects.ABSORPTION));
