@@ -149,6 +149,8 @@ public class CosmicCore {
     public void commonSetup(FMLCommonSetupEvent event) {
         event.enqueueWork(() -> {
             com.ghostipedia.cosmiccore.common.deployment.LeylineCraftingPattern.register();
+            com.ghostipedia.cosmiccore.common.orrery.OrreryNetwork.register();
+            com.ghostipedia.cosmiccore.common.deployment.LeylineDeploymentBehaviors.registerDefaults();
             CosmicRegistryAliases.validatePetrochemicalAliases();
             MapIngredientTypeManager.registerMapIngredient(SoulIngredient.class, MapSoulIngredient::from);
             TravelerBootsMigration.registerAliases();

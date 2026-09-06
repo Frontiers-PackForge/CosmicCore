@@ -120,7 +120,7 @@ public final class LeylinePrefab {
             case WEST -> Rotation.COUNTERCLOCKWISE_90;
             default -> Rotation.NONE;
         };
-        return new LeylineDeploymentBlueprint(blueprintId(), BlockPos.ZERO, blocks.stream()
+        return new LeylineDeploymentBlueprint(blueprintId(), machine, BlockPos.ZERO, blocks.stream()
                 .map(p -> new LeylineBlockPlacement(p.relativeOffset().rotate(rotation), p.state().rotate(rotation)))
                 .toList());
     }

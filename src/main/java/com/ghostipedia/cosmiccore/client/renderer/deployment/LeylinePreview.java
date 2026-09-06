@@ -85,9 +85,7 @@ final class LeylinePreview {
     void draw(RenderLevelStageEvent event) {
         Prepared prepared = preparation.getNow(null);
         if (prepared == null || anchor == null) return;
-        if (prepared.plan.blueprint().id()
-                .equals(com.ghostipedia.cosmiccore.common.data.CosmicMachines.POWER_TOWER.getId()))
-            com.ghostipedia.cosmiccore.client.renderer.transmission.PowerTowerChainClient.draw(event, anchor(), facing);
+        LeylineDeploymentPreviewBehaviors.draw(prepared.plan.blueprint().machineId(), event, anchor(), facing);
         var minecraft = Minecraft.getInstance();
         AABB bounds = prepared.bounds.move(anchor);
         if (!event.getFrustum().isVisible(bounds)) return;

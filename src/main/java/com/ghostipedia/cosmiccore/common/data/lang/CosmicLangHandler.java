@@ -47,6 +47,72 @@ public class CosmicLangHandler extends LangHandler {
     }
 
     public static void init(RegistrateLangProvider provider) {
+        provider.add("key.cosmiccore.orrery", "Open Orrery loadout radial");
+        provider.add("key.categories.cosmiccore.orrery", "CosmicCore: Leyline Orrery");
+        provider.add("cosmiccore.orrery.title", "Leyline Orrery");
+        provider.add("cosmiccore.orrery.machine", "Machine: %s");
+        provider.add("cosmiccore.orrery.craft_hint", "Middle-click: request packages");
+        provider.add("cosmiccore.orrery.crafting_unavailable",
+                "Crafting cancelled: the Orrery is no longer connected to this AE2 network.");
+        provider.add("cosmiccore.orrery.loadout", "Loadout %s");
+        provider.add("cosmiccore.orrery.loadout_name", "Loadout name");
+        provider.add("cosmiccore.orrery.rename", "Rename");
+        provider.add("cosmiccore.orrery.search", "Search design, multiblock or machine ID...");
+        provider.add("cosmiccore.orrery.sort.0", "Sort: Design name");
+        provider.add("cosmiccore.orrery.sort.1", "Sort: Multiblock");
+        provider.add("cosmiccore.orrery.sort.2", "Sort: Stored count");
+        provider.add("cosmiccore.orrery.ascending", "Ascending");
+        provider.add("cosmiccore.orrery.descending", "Descending");
+        provider.add("cosmiccore.orrery.volume", "Sound: %s%%");
+        provider.add("cosmiccore.orrery.muted", "Sound: Muted");
+        provider.add("cosmiccore.orrery.sound", "Sound");
+        provider.add("cosmiccore.orrery.volume_hint",
+                "Sound accepts 0-100%. Set 0 to mute.");
+        provider.add("cosmiccore.orrery.preview", "Preview: %s");
+        provider.add("cosmiccore.orrery.hud", "HUD: %s");
+        provider.add("cosmiccore.orrery.status.connected", "AE2 connected");
+        provider.add("cosmiccore.orrery.status.unbound", "Bind in a Wireless Access Point");
+        provider.add("cosmiccore.orrery.status.network_unavailable", "AE2 network unavailable");
+        provider.add("cosmiccore.orrery.status.out_of_range", "Out of wireless range");
+        provider.add("cosmiccore.orrery.charges", "%s stored packages");
+        provider.add("cosmiccore.orrery.no_stock", "Placement Failed: No Charges");
+        provider.add("cosmiccore.orrery.no_target", "Aim at a block to lock a placement.");
+        provider.add("cosmiccore.orrery.choose", "Choose a design in the Orrery.");
+        provider.add("cosmiccore.orrery.busy", "A leyline summon is already in progress.");
+        provider.add("cosmiccore.orrery.too_far", "Move within placement range to confirm.");
+        provider.add("cosmiccore.orrery.unavailable_design", "This design is unavailable in AE2 network.");
+        provider.add("cosmiccore.orrery.aim_hint", "Right-click: lock placement");
+        provider.add("cosmiccore.orrery.lock_hint", "Right-click: confirm | Left-click: cancel");
+        provider.add("cosmiccore.orrery.radial_hint", "Scroll: loadouts");
+        provider.add("cosmiccore.orrery.pattern_ready", "Crafting pattern available");
+        provider.add("cosmiccore.orrery.pattern_missing", "Crafting pattern unavailable");
+        provider.add("cosmiccore.orrery.pattern_ready_short", "Pattern ready");
+        provider.add("cosmiccore.orrery.pattern_missing_short", "No pattern");
+        provider.add("cosmiccore.orrery.empty_catalogue", "No Designs");
+        provider.add("cosmiccore.orrery.connect_hint", "Connect to AE2 to Search Designs");
+        provider.add("cosmiccore.orrery.filter_hint", "Drag to assign | Click to select | Right-click to clear");
+        multiLang(provider, "cosmiccore.orrery.help",
+                "Bind the Orrery in an AE2 Wireless Access Point to use.",
+                "§7Packages stored in AE2 require being within range of wireless, carried packages do not.",
+                "",
+                "Hold the radial key to browse loadouts.",
+                "§7Release over a design to select it.",
+                "Shift + right-click opens configuration.",
+                "",
+                "Drag a design onto a filter to assign it to that radial menu.",
+                "§7Click to select. Right-click to clear.",
+                "Middle-click a design to request packages through AE2.",
+                "§7You can request more even when packages are already in stock.",
+                "Drag between filters to swap; hold Shift to copy.",
+                "§7Filters never store items. Counts show stored or carried packages",
+                "? means the pattern is missing from the AE2 Network.",
+                "",
+                "Right-click to lock placement without consuming a package.",
+                "§7Right-click again to confirm. Left-click to cancel.",
+                "",
+                "Designs are provided by linked Leyline Compressor Hatches.",
+                "§7Sound: 0-100%. Set 0 to mute.",
+                "Press Enter to Apply.");
         provider.add("cosmiccore.leyline.encoder", "Leyline Pattern Encoder");
         provider.add("cosmiccore.leyline.search", "Search multiblocks...");
         provider.add("cosmiccore.leyline.name", "Pattern name");
@@ -1241,6 +1307,15 @@ public class CosmicLangHandler extends LangHandler {
                 "§fEach thread requires a uniquely §6colored§f input bus/hatch",
                 "§fMax threads = Energy Hatch amperage (4A=4, 16A=16)",
                 "§aAll threads share output buses/hatches");
+        // Leyline Orrery
+        multiLang(provider, "item.cosmiccore.orrery_desc.tooltip",
+                "§6The Ultimate Interface§r",
+                "§fLinks to AE2 to allow easy Leyline package deployment§r",
+                "§7Can be filtered to any known Leyline Package within AE§r",
+                "§fConsumes stored packages from the bound AE2 network§r",
+                "§7Right click once to lock a design in place, right click again to build§r",
+                "§fLeft click while design is locked to cancel placement confirmation.",
+                "§7Shift + right-click to configure; hold the radial key (default R) to select.§r");
 
         // Multithreaded Machine Display (base)
         provider.add("cosmiccore.machine.multithreaded.thread_status", "§b=== Thread Status ===");

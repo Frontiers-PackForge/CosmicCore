@@ -1,7 +1,7 @@
 package com.ghostipedia.cosmiccore.common.transmission;
 
 import com.ghostipedia.cosmiccore.CosmicCore;
-import com.ghostipedia.cosmiccore.common.data.CosmicMachines;
+import com.ghostipedia.cosmiccore.common.deployment.LeylineDeploymentBehavior;
 import com.ghostipedia.cosmiccore.common.deployment.LeylineDeploymentPlan;
 import com.ghostipedia.cosmiccore.common.item.PowerTowerCoilItem;
 import com.ghostipedia.cosmiccore.common.machine.transmission.PowerTowerMachine;
@@ -18,6 +18,7 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.item.ItemStack;
@@ -28,6 +29,7 @@ import net.neoforged.neoforge.event.server.ServerStoppedEvent;
 
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
@@ -49,12 +51,12 @@ public final class PowerTowerChain {
         return existed;
     }
 
-    public static Request prepare(ServerPlayer player, InteractionHand packageHand, LeylineDeploymentPlan plan) {
-        if (!plan.blueprint().id().equals(CosmicMachines.POWER_TOWER.getId())) return null;
+    public static LeylineDeploymentBehavior.Reservation prepare(ServerPlayer player, InteractionHand packageHand) {
         ItemStack coil = player.getItemInHand(
                 packageHand == InteractionHand.MAIN_HAND ? InteractionHand.OFF_HAND : InteractionHand.MAIN_HAND);
         UUID anchor = ANCHORS.get(player.getUUID());
-        return anchor == null || !(coil.getItem() instanceof PowerTowerCoilItem) ? null : new Request(anchor, coil);
+        return anchor == null || !(coil.getItem() instanceof PowerTowerCoilItem) ?
+                LeylineDeploymentBehavior.Reservation.NONE : new Request(anchor, coil);
     }
 
     public static void placed(ServerPlayer player, BlockPos controller) {
@@ -77,7 +79,7 @@ public final class PowerTowerChain {
         ANCHORS.clear();
     }
 
-    public static final class Request {
+    private static final class Request implements LeylineDeploymentBehavior.Reservation {
 
         private final UUID source;
         private final ItemStack heldCoil;
@@ -90,14 +92,17 @@ public final class PowerTowerChain {
             this.reservedCoil = heldCoil.copyWithCount(1);
         }
 
-        public ItemStack coil() {
-            return reservedCoil;
+        @Override
+        public List<ItemStack> reservedItems() {
+            return List.of(reservedCoil.copy());
         }
 
+        @Override
         public void consume() {
             heldCoil.shrink(1);
         }
 
+        @Override
         public boolean validate(ServerPlayer player, LeylineDeploymentPlan plan, Direction facing) {
             var data = PowerTowerSavedData.getOrCreate(player.serverLevel());
             var node = data.graph().node(source);
@@ -120,7 +125,8 @@ public final class PowerTowerChain {
             return failure == null || fail(player, failure.name().toLowerCase(java.util.Locale.ROOT));
         }
 
-        public boolean connect(ServerPlayer player, LeylineDeploymentPlan plan) {
+        @Override
+        public boolean afterFormation(ServerPlayer player, LeylineDeploymentPlan plan) {
             var data = PowerTowerSavedData.getOrCreate(player.serverLevel());
             var first = data.graph().node(source);
             var second = data.graph().nodeAtController(plan.controllerPos());
@@ -139,9 +145,11 @@ public final class PowerTowerChain {
             return true;
         }
 
-        public void rollback(ServerPlayer player) {
-            var data = PowerTowerSavedData.getOrCreate(player.serverLevel());
+        @Override
+        public void rollback(ServerLevel level) {
+            var data = PowerTowerSavedData.getOrCreate(level);
             if (createdSpan != null && data.graph().removeSpan(createdSpan)) data.markGraphDirty();
+            createdSpan = null;
         }
 
         private static boolean fail(ServerPlayer player, String failure) {

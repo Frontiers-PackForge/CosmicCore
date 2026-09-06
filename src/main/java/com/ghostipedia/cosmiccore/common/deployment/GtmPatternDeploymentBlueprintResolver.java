@@ -43,7 +43,7 @@ public final class GtmPatternDeploymentBlueprintResolver {
                 .orElseThrow(() -> new IllegalStateException("Blueprint has no controller"));
         Map<BlockPos, BlockState> states = new HashMap<>();
         populated.forEach((pos, info) -> states.put(pos, info.getBlockState()));
-        return LeylineDeploymentBlueprint.fromPopulated(blueprintId, controller, states);
+        return LeylineDeploymentBlueprint.fromPopulated(blueprintId, definition.getId(), controller, states);
     }
 
     private static AbstractStructureHelper createStructureHelper(IBlockPattern pattern) {

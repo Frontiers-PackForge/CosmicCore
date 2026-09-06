@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
-public record LeylineDeploymentBlueprint(ResourceLocation id, BlockPos controllerOffset,
+public record LeylineDeploymentBlueprint(ResourceLocation id, ResourceLocation machineId, BlockPos controllerOffset,
                                          List<LeylineBlockPlacement> relativePlacements) {
 
     private static final Comparator<LeylineBlockPlacement> ORDER = Comparator
@@ -21,6 +21,7 @@ public record LeylineDeploymentBlueprint(ResourceLocation id, BlockPos controlle
 
     public LeylineDeploymentBlueprint {
         Objects.requireNonNull(id, "id");
+        Objects.requireNonNull(machineId, "machineId");
         Objects.requireNonNull(controllerOffset, "controllerOffset");
         Objects.requireNonNull(relativePlacements, "relativePlacements");
         BlockPos immutableControllerOffset = controllerOffset.immutable();
@@ -37,14 +38,25 @@ public record LeylineDeploymentBlueprint(ResourceLocation id, BlockPos controlle
         controllerOffset = immutableControllerOffset;
     }
 
+    public LeylineDeploymentBlueprint(ResourceLocation id, BlockPos controllerOffset,
+                                      List<LeylineBlockPlacement> relativePlacements) {
+        this(id, id, controllerOffset, relativePlacements);
+    }
+
     public static LeylineDeploymentBlueprint fromPopulated(ResourceLocation id, BlockPos controllerOffset,
+                                                           Map<BlockPos, BlockState> populated) {
+        return fromPopulated(id, id, controllerOffset, populated);
+    }
+
+    public static LeylineDeploymentBlueprint fromPopulated(ResourceLocation id, ResourceLocation machineId,
+                                                           BlockPos controllerOffset,
                                                            Map<BlockPos, BlockState> populated) {
         Objects.requireNonNull(populated, "populated");
         var placements = new ArrayList<LeylineBlockPlacement>(populated.size());
         for (var entry : populated.entrySet()) {
             placements.add(new LeylineBlockPlacement(entry.getKey(), entry.getValue()));
         }
-        return new LeylineDeploymentBlueprint(id, controllerOffset, placements);
+        return new LeylineDeploymentBlueprint(id, machineId, controllerOffset, placements);
     }
 
     public LeylineDeploymentPlan planAt(BlockPos controllerPos) {

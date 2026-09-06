@@ -10,7 +10,6 @@ import com.gregtechceu.gtceu.api.registry.GTRegistries;
 import com.gregtechceu.gtceu.common.mui.GTGuiTextures;
 import com.gregtechceu.gtceu.integration.recipeviewer.widgets.MultiblockPreviewWidget;
 
-import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.Direction;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -53,6 +52,8 @@ public final class LeylineEncoderUI {
         private final DynamicHandler preview = new DynamicHandler();
         private MultiblockMachineDefinition definition;
         private MultiblockSchemaInfo schema;
+        private LeylineEncoderCache.Lease lease;
+        private LeylinePrefab loaded;
         private ItemStack icon = ItemStack.EMPTY;
         private UUID validated;
         private LeylinePrefab cached;
@@ -160,31 +161,19 @@ public final class LeylineEncoderUI {
         private ListWidget<?, ?> buildMachineList() {
             var machines = new ListWidget<>().size(138, 154).padding(3).scrollDirection(new EncoderListScrollData())
                     .background(GTGuiTextures.BACKGROUND_INVERSE);
-            String query = normalizeSearch(search);
-            GTRegistries.MACHINES.stream().filter(MultiblockMachineDefinition.class::isInstance)
-                    .map(MultiblockMachineDefinition.class::cast)
-                    .sorted(Comparator.comparing(d -> d.getId().toString()))
-                    .forEach(d -> {
-                        Component title = new ItemStack(d.getItem()).getHoverName();
-                        if (!normalizeSearch(title.getString()).contains(query) &&
-                                !normalizeSearch(d.getId().toString()).contains(query))
-                            return;
-                        machines.child(new ButtonWidget<>().width(123)
-                                .height(Math.max(26, Minecraft.getInstance().font.split(title, 115).size() *
-                                        Minecraft.getInstance().font.lineHeight + 8))
-                                .padding(4).overlay(Text.str(title.getString()))
-                                .tooltip(t -> t.addLine(title).addLine(Component.literal(d.getId().toString())))
-                                .onMousePressed((context, button) -> {
-                                    select(d, null);
-                                    return true;
-                                }));
-                    });
+            String query = LeylineEncoderCache.normalize(search);
+            for (var row : LeylineEncoderCache.machines()) {
+                if (!row.matches(query)) continue;
+                machines.child(new ButtonWidget<>().width(123).height(row.height())
+                        .padding(4).overlay(Text.str(row.title().getString()))
+                        .tooltip(t -> t.addLine(row.title())
+                                .addLine(Component.literal(row.definition().getId().toString())))
+                        .onMousePressed((context, button) -> {
+                            select(row.definition(), null);
+                            return true;
+                        }));
+            }
             return machines;
-        }
-
-        private static String normalizeSearch(String text) {
-            return Objects.requireNonNullElse(ChatFormatting.stripFormatting(text), "").strip()
-                    .toLowerCase(Locale.ROOT);
         }
 
         private boolean canEncode() {
@@ -207,6 +196,9 @@ public final class LeylineEncoderUI {
         }
 
         private UUID currentId() {
+            if (loaded != null && loaded.name().equals(name.getStringValue().strip()) &&
+                    loaded.icon().equals(BuiltInRegistries.ITEM.getKey(icon.getItem())))
+                return loaded.id();
             try {
                 return current().id();
             } catch (RuntimeException ignored) {
@@ -231,6 +223,7 @@ public final class LeylineEncoderUI {
                     java.util.stream.IntStream.range(0, schema.getUserSliceRepeats().size())
                             .map(schema.getUserSliceRepeats()::get).boxed().toList(),
                     schema.getUserDimensions().intStream().boxed().toList());
+            lease.identify(cached.id());
             return cached;
         }
 
@@ -240,6 +233,7 @@ public final class LeylineEncoderUI {
                 selectSupported(definition, saved);
             } catch (RuntimeException exception) {
                 schema = null;
+                loaded = null;
                 cached = null;
                 validated = null;
                 status = Component.translatable("cosmiccore.leyline.unsupported");
@@ -251,34 +245,43 @@ public final class LeylineEncoderUI {
         private void selectSupported(MultiblockMachineDefinition definition, LeylinePrefab saved) {
             if (this.definition == definition && schema != null && saved == null) return;
             this.definition = definition;
-            schema = new MultiblockSchemaInfo();
+            lease = LeylineEncoderCache.acquire(definition, saved == null ? null : saved.id());
+            schema = lease.schema();
             cached = null;
-            if (saved != null) {
-                for (int i = 0; i < saved.repeats().size(); i++)
-                    schema.getUserSliceRepeats().put(i, saved.repeats().get(i).intValue());
-                saved.dimensions().forEach(value -> schema.getUserDimensions().add(value.intValue()));
-            }
-            if (!MultiblockPreviewSchemaCache.apply(definition, schema, Direction.NORTH, Direction.UP, false)) {
-                schema.refreshSchema(definition, Direction.NORTH, Direction.UP, false, null);
-                if (saved == null && definition.getRotationState().defaultDirection == Direction.NORTH) {
-                    MultiblockPreviewSchemaCache.capture(definition, schema.getStructureBlocks());
+            loaded = saved;
+            if (schema.getMapSchema() == null) {
+                if (saved != null) {
+                    for (int i = 0; i < saved.repeats().size(); i++)
+                        schema.getUserSliceRepeats().put(i, saved.repeats().get(i).intValue());
+                    saved.dimensions().forEach(value -> schema.getUserDimensions().add(value.intValue()));
                 }
-            }
-            if (saved != null) {
-                var origin = schema.getMapSchema().getControllerPos();
-                saved.blocks().forEach(p -> schema.getUserGlobalBlockPreferences()
-                        .put(p.relativeOffset().offset(origin).asLong(), new BlockInfo(p.state())));
-                schema.refreshSchema(definition, Direction.NORTH, Direction.UP, false, null);
+                if (!MultiblockPreviewSchemaCache.apply(definition, schema, Direction.NORTH, Direction.UP, false)) {
+                    schema.refreshSchema(definition, Direction.NORTH, Direction.UP, false, null);
+                    if (saved == null && definition.getRotationState().defaultDirection == Direction.NORTH) {
+                        MultiblockPreviewSchemaCache.capture(definition, schema.getStructureBlocks());
+                    }
+                }
+                if (saved != null) {
+                    var origin = schema.getMapSchema().getControllerPos();
+                    saved.blocks().forEach(p -> schema.getUserGlobalBlockPreferences()
+                            .put(p.relativeOffset().offset(origin).asLong(), new BlockInfo(p.state())));
+                    schema.refreshSchema(definition, Direction.NORTH, Direction.UP, false, null);
+                }
             }
             name.setStringValue(saved == null ? definition.getItem().getDescription().getString() : saved.name());
             icon = saved == null ? new ItemStack(definition.getItem()) :
                     new ItemStack(BuiltInRegistries.ITEM.get(saved.icon()));
             validated = null;
             blockCount = schema.getStructureBlocks().values().stream().filter(BlockInfo::nonAir).count();
+            var selectedLease = lease;
+            var selectedSchema = schema;
             preview.widgetProvider(() -> {
-                var widget = new EncoderPreviewWidget(definition, schema);
+                var widget = new EncoderPreviewWidget(definition, selectedLease);
                 widget.setFrontFacing(Direction.NORTH).setUpFacing(Direction.UP)
                         .setOnSchemaRefresh(() -> {
+                            selectedLease.changed();
+                            if (schema != selectedSchema) return;
+                            loaded = null;
                             validated = null;
                             cached = null;
                             blockCount = schema.getStructureBlocks().values().stream().filter(BlockInfo::nonAir)
@@ -310,9 +313,17 @@ public final class LeylineEncoderUI {
     private static final class EncoderPreviewWidget extends MultiblockPreviewWidget {
 
         private boolean initialized;
+        private final LeylineEncoderCache.Lease lease;
 
-        private EncoderPreviewWidget(MultiblockMachineDefinition definition, MultiblockSchemaInfo schema) {
-            super(definition, schema, 176, 120);
+        private EncoderPreviewWidget(MultiblockMachineDefinition definition, LeylineEncoderCache.Lease lease) {
+            super(definition, lease.schema(), 176, 120);
+            this.lease = lease;
+        }
+
+        @Override
+        public void dispose() {
+            super.dispose();
+            lease.release();
         }
 
         @Override

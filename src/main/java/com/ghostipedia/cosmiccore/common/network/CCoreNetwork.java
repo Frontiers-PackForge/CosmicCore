@@ -56,6 +56,7 @@ public class CCoreNetwork {
 
     public static void registerPayloads(RegisterPayloadHandlersEvent event) {
         PayloadRegistrar registrar = event.registrar(PROTOCOL_VERSION);
+        com.ghostipedia.cosmiccore.common.network.packet.OrreryPackets.register(registrar);
         registrar.playToServer(LeylinePrefabRequestPacket.TYPE, LeylinePrefabRequestPacket.CODEC,
                 LeylinePrefabRequestPacket::execute);
         registrar.playToClient(LeylinePrefabResponsePacket.TYPE, LeylinePrefabResponsePacket.CODEC,

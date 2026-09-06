@@ -131,6 +131,8 @@
     "repackaged.FactoryPanelSetItemScreenFluidMixin"
   ],
   "mixins": [
+    "ae2.OrreryCraftAmountMixin",
+    "ae2.OrreryCraftConfirmMixin",
     "CrashReportCosmicFrontiersNoticeMixin",
     "BlockPatternMixin",
     "BlocksMixin",

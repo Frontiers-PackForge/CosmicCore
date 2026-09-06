@@ -4,10 +4,11 @@ import com.ghostipedia.cosmiccore.CosmicCore;
 import com.ghostipedia.cosmiccore.common.network.CCoreNetwork;
 import com.ghostipedia.cosmiccore.common.network.packet.LeylineDeploymentFinishPacket;
 import com.ghostipedia.cosmiccore.common.network.packet.LeylineDeploymentStartPacket;
-import com.ghostipedia.cosmiccore.common.transmission.PowerTowerChain;
 
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.Direction;
+import net.minecraft.nbt.ListTag;
+import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -39,6 +40,8 @@ public final class LeylineDeploymentService {
     private static final Map<UUID, Deployment> ACTIVE = new HashMap<>();
     private static final String RESERVED_PACKAGE = "cosmiccore:leyline_reserved_package";
     private static final String RESERVED_COIL = "cosmiccore:leyline_reserved_coil";
+    private static final String RESERVED_EXTRAS = "cosmiccore:leyline_reserved_extras";
+    private static final String RETURN_NETWORK = "cosmiccore:leyline_return_network";
 
     private LeylineDeploymentService() {}
 
@@ -62,38 +65,83 @@ public final class LeylineDeploymentService {
                 return;
             }
             var plan = blueprint.planOnBase(LeylineDeploymentTarget.anchor(player, hit));
-            if (!preflight(player, stack, hit.getDirection(), plan)) return;
-            if (ACTIVE.values().stream().anyMatch(deployment -> deployment.level == level &&
-                    deployment.animation.bounds().intersects(LeylineDeploymentAnimation.bounds(plan)))) {
-                fail(player, stack, "busy");
-                return;
-            }
-            var chain = PowerTowerChain.prepare(player, hand, plan);
-            if (chain != null && !chain.validate(player, plan, facing)) return;
-            Deployment deployment = new Deployment(player, stack, hit.getDirection(), plan,
-                    LeylineDeploymentAnimation.resolve(level, plan), facing, chain);
-            if (!player.getAbilities().instabuild) {
-                refund(player);
-                player.getPersistentData().put(RESERVED_PACKAGE, deployment.stack.save(player.registryAccess()));
-                stack.shrink(1);
-                if (chain != null) {
-                    player.getPersistentData().put(RESERVED_COIL, chain.coil().save(player.registryAccess()));
-                    chain.consume();
-                }
-            }
-            ACTIVE.put(player.getUUID(), deployment);
-            for (ServerPlayer observer : level.players()) {
-                if (deployment.visibleTo(observer)) {
-                    deployment.observe(observer);
-                }
-            }
-            deployment.observe(player);
+            start(player, hand, stack, hit.getDirection(), facing, plan, () -> {
+                var reserved = stack.copyWithCount(1);
+                if (!player.getAbilities().instabuild) stack.shrink(1);
+                return reserved;
+            }, null, !player.getAbilities().instabuild);
         } catch (RuntimeException exception) {
             cancel(player);
             refund(player);
             CosmicCore.LOGGER.error("Unable to start leyline deployment", exception);
             fail(player, stack, "invalid");
         }
+    }
+
+    public static boolean isActive(ServerPlayer player) {
+        return ACTIVE.containsKey(player.getUUID());
+    }
+
+    public static boolean beginFromNetwork(ServerPlayer player, InteractionHand hand, LeylinePrefab prefab,
+                                           net.minecraft.core.BlockPos anchor, Direction face, Direction facing,
+                                           net.minecraft.core.GlobalPos returnTarget,
+                                           java.util.function.Supplier<ItemStack> reserve) {
+        if (isActive(player) || !player.isAlive() || player.isSpectator()) return false;
+        var stack = prefab.stack(false);
+        try {
+            var plan = LeylineDeploymentBlueprints.register(prefab, facing).planOnBase(anchor);
+            return start(player, hand, stack, face, facing, plan, reserve, returnTarget, true);
+        } catch (RuntimeException exception) {
+            cancel(player);
+            refund(player);
+            CosmicCore.LOGGER.error("Unable to start network leyline deployment", exception);
+            fail(player, stack, "invalid");
+            return false;
+        }
+    }
+
+    private static boolean start(ServerPlayer player, InteractionHand hand, ItemStack stack, Direction face,
+                                 Direction facing, LeylineDeploymentPlan plan,
+                                 java.util.function.Supplier<ItemStack> reserve,
+                                 net.minecraft.core.GlobalPos returnTarget, boolean paid) {
+        var level = player.serverLevel();
+        if (!preflight(player, stack, face, plan)) return false;
+        if (ACTIVE.values().stream().anyMatch(deployment -> deployment.level == level &&
+                deployment.animation.bounds().intersects(LeylineDeploymentAnimation.bounds(plan)))) {
+            fail(player, stack, "busy");
+            return false;
+        }
+        var behavior = LeylineDeploymentBehaviors.forMachine(plan.blueprint().machineId());
+        var reservation = behavior.prepare(player, hand, plan);
+        if (!reservation.validate(player, plan, facing)) return false;
+        var animation = LeylineDeploymentAnimation.resolve(level, plan);
+        refund(player);
+        var reserved = reserve.get();
+        if (reserved.isEmpty()) {
+            player.displayClientMessage(Component.translatable("cosmiccore.orrery.no_stock")
+                    .withStyle(ChatFormatting.RED), true);
+            return false;
+        }
+        if (paid) {
+            player.getPersistentData().put(RESERVED_PACKAGE, reserved.save(player.registryAccess()));
+            if (returnTarget != null) {
+                var target = new net.minecraft.nbt.CompoundTag();
+                target.putString("dimension", returnTarget.dimension().location().toString());
+                target.putLong("pos", returnTarget.pos().asLong());
+                player.getPersistentData().put(RETURN_NETWORK, target);
+            }
+            var extras = new ListTag();
+            for (var extra : reservation.reservedItems())
+                if (!extra.isEmpty()) extras.add(extra.save(player.registryAccess()));
+            if (!extras.isEmpty()) player.getPersistentData().put(RESERVED_EXTRAS, extras);
+            reservation.consume();
+        }
+        var deployment = new Deployment(player, reserved, face, plan, animation, facing, behavior, reservation);
+        ACTIVE.put(player.getUUID(), deployment);
+        for (ServerPlayer observer : level.players())
+            if (deployment.visibleTo(observer)) deployment.observe(observer);
+        deployment.observe(player);
+        return true;
     }
 
     private static boolean preflight(ServerPlayer player, ItemStack packageStack, Direction face,
@@ -137,17 +185,16 @@ public final class LeylineDeploymentService {
             boolean committed = false;
             try {
                 if (preflight(player, deployment.stack, deployment.face, deployment.plan) &&
-                        (deployment.chain == null ||
-                                deployment.chain.validate(player, deployment.plan, deployment.facing))) {
+                        deployment.reservation.validate(player, deployment.plan, deployment.facing)) {
                     var result = LeylineDeploymentExecutor.deployAtomically(deployment.level, deployment.plan,
                             deployment.owner, (level, pos, existing, placing) -> level.mayInteract(player, pos) &&
                                     player.mayUseItemAt(pos, deployment.face, deployment.stack),
                             (level, plan) -> new GtmMultiblockFormationValidator().validate(level, plan) &&
-                                    (deployment.chain == null || deployment.chain.connect(player, plan)),
+                                    deployment.reservation.afterFormation(player, plan),
                             player, deployment.face);
                     committed = result.committed();
                     if (committed) {
-                        PowerTowerChain.placed(player, deployment.plan.controllerPos());
+                        deployment.behavior.placed(player, deployment.plan);
                         player.displayClientMessage(Component.translatable("cosmiccore.deployment.success",
                                 LeylinePrefab.machineName(deployment.stack))
                                 .withStyle(ChatFormatting.GREEN), true);
@@ -159,7 +206,6 @@ public final class LeylineDeploymentService {
                 CosmicCore.LOGGER.error("Unable to finish leyline deployment {}", deployment.id, exception);
                 fail(player, deployment.stack, "invalid");
             }
-            if (!committed && deployment.chain != null) deployment.chain.rollback(player);
             deployment.finish(committed, player);
         }
     }
@@ -220,11 +266,35 @@ public final class LeylineDeploymentService {
         for (String key : new String[] { RESERVED_PACKAGE, RESERVED_COIL }) {
             if (!data.contains(key)) continue;
             var stack = ItemStack.parseOptional(player.registryAccess(), data.getCompound(key));
-            if (stack.isEmpty()) continue;
-            ItemHandlerHelper.giveItemToPlayer(player, stack);
+            if (stack.isEmpty()) {
+                data.remove(key);
+                continue;
+            }
+            if (key.equals(RESERVED_PACKAGE) && data.contains(RETURN_NETWORK)) {
+                var tag = data.getCompound(RETURN_NETWORK);
+                var dimension = net.minecraft.resources.ResourceLocation.tryParse(tag.getString("dimension"));
+                if (dimension != null) {
+                    var target = net.minecraft.core.GlobalPos.of(net.minecraft.resources.ResourceKey.create(
+                            net.minecraft.core.registries.Registries.DIMENSION, dimension),
+                            net.minecraft.core.BlockPos.of(tag.getLong("pos")));
+                    stack = com.ghostipedia.cosmiccore.common.orrery.OrreryNetwork.refund(player, target, stack);
+                }
+            }
+            if (!stack.isEmpty()) ItemHandlerHelper.giveItemToPlayer(player, stack);
             data.remove(key);
             returned = true;
         }
+        var extras = data.getList(RESERVED_EXTRAS, Tag.TAG_COMPOUND);
+        while (!extras.isEmpty()) {
+            var stack = ItemStack.parseOptional(player.registryAccess(), extras.getCompound(0));
+            if (!stack.isEmpty()) {
+                ItemHandlerHelper.giveItemToPlayer(player, stack);
+                returned = true;
+            }
+            extras.remove(0);
+        }
+        data.remove(RESERVED_EXTRAS);
+        data.remove(RETURN_NETWORK);
         if (!returned) return;
         player.displayClientMessage(Component.translatable("cosmiccore.deployment.refunded", machine)
                 .withStyle(ChatFormatting.YELLOW), false);
@@ -246,7 +316,8 @@ public final class LeylineDeploymentService {
         private final ItemStack stack;
         private final Direction face;
         private final Direction facing;
-        private final PowerTowerChain.Request chain;
+        private final LeylineDeploymentBehavior behavior;
+        private final LeylineDeploymentBehavior.Reservation reservation;
         private final LeylineDeploymentPlan plan;
         private final LeylineDeploymentAnimation animation;
         private final long startTick;
@@ -255,13 +326,14 @@ public final class LeylineDeploymentService {
 
         private Deployment(ServerPlayer player, ItemStack stack, Direction face,
                            LeylineDeploymentPlan plan, LeylineDeploymentAnimation animation, Direction facing,
-                           PowerTowerChain.Request chain) {
+                           LeylineDeploymentBehavior behavior, LeylineDeploymentBehavior.Reservation reservation) {
             this.owner = player.getUUID();
             this.level = player.serverLevel();
             this.stack = stack.copyWithCount(1);
             this.face = face;
             this.facing = facing;
-            this.chain = chain;
+            this.behavior = behavior;
+            this.reservation = reservation;
             this.plan = plan;
             this.animation = animation;
             this.startTick = level.getGameTime() + LeylineDeploymentAnimation.START_DELAY_TICKS;
@@ -279,10 +351,19 @@ public final class LeylineDeploymentService {
         }
 
         private void finish(boolean committed, ServerPlayer ownerPlayer) {
+            if (!committed) {
+                try {
+                    reservation.rollback(level);
+                } catch (RuntimeException exception) {
+                    CosmicCore.LOGGER.error("Unable to roll back leyline behavior {}", id, exception);
+                }
+            }
             if (ownerPlayer != null) {
                 if (committed) {
                     ownerPlayer.getPersistentData().remove(RESERVED_PACKAGE);
                     ownerPlayer.getPersistentData().remove(RESERVED_COIL);
+                    ownerPlayer.getPersistentData().remove(RESERVED_EXTRAS);
+                    ownerPlayer.getPersistentData().remove(RETURN_NETWORK);
                 } else refund(ownerPlayer);
             }
             for (UUID observer : observers) {
