@@ -10,9 +10,10 @@ The rules are simple:
 
 * **Disclose AI usage.** If AI tools helped produce a contribution, say so:
 name the tool (for example Claude Code, Cursor, Copilot) and the extent it was
-used. Disclosure can be a note in the pull request or a `Co-authored-by:`
-trailer on the commit. There is no penalty for using AI. There **is** a problem
-with hiding it.
+used. Disclosure can be a note in the pull request which elaborates on the
+extent of usage. Please do not co-author Agents in PRs/Commits, as this compromises
+the goal of making sure a human has checked everything There is no penalty
+for using AI. There **is** a problem with hiding it and being dishonest.
 
 * **You must fully understand your own code.** If you cannot explain what a
 change does and how it fits the rest of the system without the AI holding your
