@@ -189,5 +189,6 @@ public class CosmicCore {
     @SubscribeEvent
     public void registerCapabilities(RegisterCapabilitiesEvent event) {
         CosmicEmberCapabilities.register(event);
+        CosmicBlockEntities.registerCapabilities(event);
     }
 }

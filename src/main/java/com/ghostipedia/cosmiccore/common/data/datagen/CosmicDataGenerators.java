@@ -30,6 +30,7 @@ public class CosmicDataGenerators {
 
         if (event.includeClient()) {
             generator.addProvider(true, new SoundEntryBuilder.SoundEntryProvider(packOutput, CosmicCore.MOD_ID));
+            generator.addProvider(true, new MEInterfaceModels(packOutput, existingFileHelper));
         }
     }
 }

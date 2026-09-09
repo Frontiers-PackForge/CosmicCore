@@ -241,9 +241,8 @@ public abstract class BloomwyrmUnitMachine extends LinkedWorkableElectricMultibl
         long pending = Math.max(0, target - deliveredChargeOutput);
         BloomwyrmHeartMachine heart = getHeart();
         if (heart != null && pending > 0) {
-            deliveredChargeOutput = saturatingAdd(
-                    deliveredChargeOutput,
-                    heart.acceptCharge(pending));
+            heart.acceptCharge(pending);
+            deliveredChargeOutput = target;
         }
     }
 

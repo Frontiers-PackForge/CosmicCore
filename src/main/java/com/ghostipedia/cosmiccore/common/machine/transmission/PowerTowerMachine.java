@@ -41,6 +41,7 @@ public class PowerTowerMachine extends MultiblockControllerMachine {
     private final ConditionalSubscriptionHandler energyTransferSubscription;
     private final Set<BlockPos> formedStructurePositions = new HashSet<>();
     private final List<ISubscription> hatchEnergySubscriptions = new ArrayList<>();
+    private final Set<PowerTowerMEHatch> meHatches = new HashSet<>();
     private @Nullable UUID graphNodeId;
     private @Nullable LoadedPowerTowerTerminal loadedTerminal;
     private boolean unloadingChunk;
@@ -61,6 +62,7 @@ public class PowerTowerMachine extends MultiblockControllerMachine {
     @Override
     public void onUnload() {
         unloadingChunk = true;
+        updateMEHatches(false);
         // Chunk unload removes the live hatch endpoint but preserves the graph.
         unregisterLoadedTerminal();
         clearHatchEnergySubscriptions();
@@ -113,12 +115,14 @@ public class PowerTowerMachine extends MultiblockControllerMachine {
                     energyTransferSubscription::updateSubscription);
         }
         data.loadedTerminals().wakeComponentTerminals(graph, graphNodeId);
+        updateMEHatches(true);
         brokenStructureValidationScheduled = false;
         energyTransferSubscription.updateSubscription();
     }
 
     @Override
     public void invalidateStructure(String substructureName) {
+        updateMEHatches(false);
         unregisterLoadedTerminal();
         clearHatchEnergySubscriptions();
         energyTransferSubscription.unsubscribe();
@@ -128,6 +132,7 @@ public class PowerTowerMachine extends MultiblockControllerMachine {
 
     @Override
     public void onMachineDestroyed() {
+        updateMEHatches(false);
         unregisterLoadedTerminal();
         if (getLevel() instanceof ServerLevel serverLevel) {
             PowerTowerSavedData data = PowerTowerSavedData.getOrCreate(serverLevel);
@@ -145,6 +150,20 @@ public class PowerTowerMachine extends MultiblockControllerMachine {
 
     public boolean containsFormedStructurePosition(BlockPos pos) {
         return formedStructurePositions.contains(pos);
+    }
+
+    private void updateMEHatches(boolean formed) {
+        if (formed) {
+            for (var part : getParts()) {
+                if (part instanceof PowerTowerMEHatch hatch) {
+                    meHatches.add(hatch);
+                    hatch.setTower(this);
+                }
+            }
+        } else {
+            for (var hatch : meHatches) hatch.setTower(null);
+            meHatches.clear();
+        }
     }
 
     protected Vec3 wireAttachmentCenter() {

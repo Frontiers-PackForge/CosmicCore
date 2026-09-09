@@ -23,6 +23,7 @@ public class CosmicCoreJadePlugin implements IWailaPlugin {
 
     @Override
     public void register(IWailaCommonRegistration registration) {
+        registration.registerBlockDataProvider(RainSealantProvider.INSTANCE, Block.class);
         registration.registerBlockDataProvider(CosmicEmberProvider.INSTANCE, Block.class);
         registration.registerBlockDataProvider(MEComputationArrayProvider.INSTANCE, Block.class);
         registration.registerBlockDataProvider(ModularPowerStationModeProvider.INSTANCE, Block.class);
@@ -31,6 +32,7 @@ public class CosmicCoreJadePlugin implements IWailaPlugin {
 
     @Override
     public void registerClient(IWailaClientRegistration registration) {
+        registration.registerBlockComponent(RainSealantProvider.INSTANCE, MetaMachineBlock.class);
         registration.registerBlockComponent(CosmicEmberProvider.INSTANCE, Block.class);
         registration.registerBlockComponent(MEComputationArrayProvider.INSTANCE, Block.class);
         registration.registerBlockComponent(ModularPowerStationModeProvider.INSTANCE, Block.class);

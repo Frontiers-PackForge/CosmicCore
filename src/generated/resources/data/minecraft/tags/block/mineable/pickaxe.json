@@ -30,6 +30,8 @@
         "cosmiccore:uxv_ember_receptor",
         "cosmiccore:opv_ember_receptor",
         "cosmiccore:max_ember_receptor",
+        "cosmiccore:crafting_acceleration_core",
+        "cosmiccore:crafting_parallel_core",
         "cosmiccore:firmament_saprolite",
         "cosmiccore:firmament_saprolite_slab",
         "cosmiccore:sunscalded_saprolite",

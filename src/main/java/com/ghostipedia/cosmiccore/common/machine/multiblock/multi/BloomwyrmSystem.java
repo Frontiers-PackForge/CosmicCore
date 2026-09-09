@@ -179,7 +179,7 @@ public final class BloomwyrmSystem {
                     .where('A', blocks(LIGHTWEIGHT_STAINLESS_STEEL_CASING.get())
                             .or(autoAbilitiesNoEnergyIn(CosmicRecipeTypes.BIOMELD_VIVARIUM))
                             .or(abilities(VITAE_SPAWNER).setExactLimit(1))
-                            .or(abilities(EXPORT_VITAE_NETWORK).setExactLimit(1)))
+                            .or(abilities(EXPORT_VITAE_NETWORK).setMaxCount(1)))
                     .where('B', blocks(ChemicalHelper.getBlock(TagPrefix.frameGt,
                             CosmicMaterials.EnergeticAluminium)))
                     .where('C', blocks(LIGHTWEIGHT_DARK_STEEL_CASING.get()))

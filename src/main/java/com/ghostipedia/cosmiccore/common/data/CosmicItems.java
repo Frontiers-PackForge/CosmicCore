@@ -2262,6 +2262,16 @@ public class CosmicItems {
             .defaultModel()
             .register();
     // infinite spraycan
+    public static final ItemEntry<ComponentItem> RAIN_SEALANT_SPRAY_CAN = REGISTRATE
+            .item("rain_sealant_spray_can", ComponentItem::new)
+            .lang("Spray Can (Rain Sealant)")
+            .properties(p -> p.stacksTo(1))
+            .onRegister(attach(new com.ghostipedia.cosmiccore.common.item.behavior.RainSealantSprayBehavior()))
+            .model((ctx, prov) -> prov.singleTexture(ctx.getName(),
+                    net.minecraft.resources.ResourceLocation.withDefaultNamespace("item/generated"),
+                    "layer0", CosmicCore.id("item/solvent_spray_can")))
+            .register();
+
     public static final ItemEntry<ComponentItem> INFINITE_SPRAY_CAN = REGISTRATE
             .item("infinite_spray_can", ComponentItem::new)
             .lang("Â§5 Infinite_spray_can")

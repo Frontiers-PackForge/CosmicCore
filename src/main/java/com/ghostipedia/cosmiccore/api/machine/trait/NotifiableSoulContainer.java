@@ -74,14 +74,20 @@ public class NotifiableSoulContainer extends NotifiableRecipeHandlerTrait<SoulIn
     @Override
     public List<SoulIngredient> handleRecipeInner(IO io, GTRecipe recipe, List<SoulIngredient> left, boolean simulate) {
         if (io != handlerIO) return left;
-        if (io != IO.IN && io != IO.OUT) return left.isEmpty() ? null : left;
+        if (io != IO.IN && io != IO.OUT) return left;
 
         var network = getSoulNetwork();
         var stacks = left.stream().map(SoulIngredient::stack).toList();
         var complete = io == IO.IN ?
                 network.extractAll(stacks, throughput, simulate) :
                 network.insertAll(stacks, throughput, capacity, simulate);
-        return complete ? null : left;
+        if (complete) left.clear();
+        return left;
+    }
+
+    public SoulStack insertUpTo(SoulStack stack, boolean simulate) {
+        if (handlerIO != IO.OUT) return stack.withAmount(0);
+        return getSoulNetwork().add(stack, getThroughput(stack.type()), getCapacity(stack.type()), simulate);
     }
 
     @Override

@@ -63,6 +63,7 @@ public class CosmicMaterials {
     public static Material Triphenylphosphine;
     public static Material Neutronite;
     public static Material PolyethyleneOxide;
+    public static Material RainSealant;
     public static Material MultiPhaseOil;
     public static Material HotPyrolysisVapors;
     public static Material CrudeBenzene;
@@ -269,6 +270,12 @@ public class CosmicMaterials {
                 .flags(DISABLE_DECOMPOSITION)
                 .buildAndRegister();
         MultiPhaseOil = RawOil;
+        RainSealant = new Material.Builder(CosmicCore.id("rain_sealant"))
+                .liquid(new FluidBuilder().temperature(295))
+                .color(0xB9D9C8).secondaryColor(0x668F80)
+                .iconSet(CosmicMaterialSet.FLUID_B)
+                .flags(DISABLE_DECOMPOSITION)
+                .buildAndRegister();
         HotPyrolysisVapors = CharcoalByproducts;
         CrudeBenzene = new Material.Builder(CosmicCore.id("crude_benzene"))
                 .liquid()

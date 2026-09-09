@@ -40,6 +40,7 @@ dependencies {
     implementation(forge.guideme)
     implementation(forge.ae2wtlib)
     implementation(forge.clothconfig)
+    compileOnly("curse.maven:extendedae-892005:8273365") { transitive = false }
     implementation(files(project.nebulaeArtifactFile))
 
     // Create

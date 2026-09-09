@@ -24,6 +24,7 @@ import com.ghostipedia.cosmiccore.common.machine.multiblock.multi.logic.MEComput
 import com.ghostipedia.cosmiccore.common.machine.multiblock.part.*;
 import com.ghostipedia.cosmiccore.common.machine.multiblock.tier.TieredMultiblockPatterns;
 import com.ghostipedia.cosmiccore.common.machine.part.WirelessDataSensor;
+import com.ghostipedia.cosmiccore.common.machine.transmission.PowerTowerMEHatch;
 import com.ghostipedia.cosmiccore.common.machine.transmission.PowerTowerMachine;
 import com.ghostipedia.cosmiccore.common.power.steam.SteamBoilerTooltips;
 import com.ghostipedia.cosmiccore.gtbridge.CosmicRecipeTypes;
@@ -161,6 +162,24 @@ public class CosmicMachines {
             "soul_input_hatch", "Soul Input Hatch",
             IO.IN, HIGH_TIERS, IMPORT_SOUL);
 
+    public static final MachineDefinition POWER_TOWER_ME_INPUT = REGISTRATE
+            .machine("power_tower_me_input", info -> new PowerTowerMEHatch(info, true))
+            .langValue("Power Tower ME Input").tier(HV).rotationState(RotationState.ALL)
+            .modelProperty(GTMachineModelProperties.IS_FORMED, false)
+            .tooltips(Component.translatable("cosmiccore.tower_me.input_tooltip"),
+                    Component.translatable("cosmiccore.tower_me.copy_hint"))
+            .overlayTieredHullModel(GTCEu.id("block/machine/part/computation_data_hatch"))
+            .register();
+
+    public static final MachineDefinition POWER_TOWER_ME_OUTPUT = REGISTRATE
+            .machine("power_tower_me_output", info -> new PowerTowerMEHatch(info, false))
+            .langValue("Power Tower ME Output").tier(HV).rotationState(RotationState.ALL)
+            .modelProperty(GTMachineModelProperties.IS_FORMED, false)
+            .tooltips(Component.translatable("cosmiccore.tower_me.output_tooltip"),
+                    Component.translatable("cosmiccore.tower_me.bind_hint"))
+            .overlayTieredHullModel(GTCEu.id("block/machine/part/optical_data_hatch"))
+            .register();
+
     public static final MultiblockMachineDefinition POWER_TOWER = REGISTRATE
             .multiblock("power_tower", PowerTowerMachine::new)
             .langValue("Power Tower")
@@ -220,6 +239,7 @@ public class CosmicMachines {
                     .where('C', blocks(REFRACTORY_STRUCTURAL_CASING.get()))
                     .where('D', frames(GTMaterials.StainlessSteel))
                     .where('E', blocks(REFRACTORY_STRUCTURAL_CASING.get())
+                            .or(blocks(POWER_TOWER_ME_INPUT.getBlock(), POWER_TOWER_ME_OUTPUT.getBlock()))
                             .or(abilities(PartAbility.SUBSTATION_INPUT_ENERGY).setMaxGlobalLimited(4)
                                     .setPreviewCount(1))
                             .or(abilities(PartAbility.SUBSTATION_OUTPUT_ENERGY).setMaxGlobalLimited(4)
@@ -1273,6 +1293,8 @@ public class CosmicMachines {
         GTMultiMachines.LARGE_STEAM_TURBINE.setRecipeTypes(new GTRecipeType[] { DUMMY_RECIPES });
         GTMultiMachines.LARGE_STEAM_TURBINE.setRenderXEIPreview(false);
         GTMultiMachines.LARGE_STEAM_TURBINE.setRenderWorldPreview(false);
+
+        com.ghostipedia.cosmiccore.common.compat.gtceu.FluidDrillingRegistration.init();
 
         for (MachineDefinition miner : GTMachines.MINER) {
             if (miner == null) continue;
