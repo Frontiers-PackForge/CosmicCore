@@ -80,7 +80,7 @@ public final class PowerTowerChainClient {
                 distance = 0;
             }
             valid = geometry != null && distance <= PowerTowerLinkService.DEFAULT_MAX_ATTACHMENT_DISTANCE &&
-                    angle <= PowerTowerLinkService.MAX_DEPARTURE_ANGLE + 1.0E-6;
+                    PowerTowerLinkService.isDepartureAngleAllowed(angle);
         }
         if (geometry == null || !(coil().getItem() instanceof PowerTowerCoilItem)) return;
         var buffers = minecraft.renderBuffers().bufferSource();
@@ -111,7 +111,9 @@ public final class PowerTowerChainClient {
         var graphics = event.getGuiGraphics();
         var text = Component.translatable("cosmiccore.power_tower.chain.preview",
                 String.format(Locale.ROOT, "%.1f", distance),
-                (int) PowerTowerLinkService.DEFAULT_MAX_ATTACHMENT_DISTANCE, String.format(Locale.ROOT, "%.0f", angle),
+                (int) PowerTowerLinkService.DEFAULT_MAX_ATTACHMENT_DISTANCE,
+                String.format(Locale.ROOT, "%.1f", PowerTowerLinkService.isDepartureAngleAllowed(angle) ? angle :
+                        Math.ceil(angle * 10) / 10),
                 (int) PowerTowerLinkService.MAX_DEPARTURE_ANGLE);
         graphics.drawCenteredString(minecraft.font, text, graphics.guiWidth() / 2, graphics.guiHeight() / 2 + 24,
                 valid ? 0xFF80E8FF : 0xFFFF6655);

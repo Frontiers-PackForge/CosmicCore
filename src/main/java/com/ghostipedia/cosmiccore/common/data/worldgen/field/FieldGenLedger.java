@@ -23,14 +23,18 @@ import net.neoforged.neoforge.event.level.LevelEvent;
 import net.neoforged.neoforge.event.server.ServerAboutToStartEvent;
 import net.neoforged.neoforge.event.server.ServerStoppedEvent;
 
-import java.io.DataInputStream;
+import it.unimi.dsi.fastutil.longs.LongOpenHashSet;
+
+import java.io.EOFException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.ByteBuffer;
 import java.nio.file.AtomicMoveNotSupportedException;
 import java.nio.file.DirectoryStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -71,6 +75,10 @@ public final class FieldGenLedger {
 
     private static final Map<ResourceLocation, Map<Long, String>> RAW_RECORDS = new HashMap<>();
     private static final Map<ResourceLocation, String> LOADED_FINGERPRINTS = new HashMap<>();
+    private static final Map<Path, RegionCandidates> REGION_CANDIDATES = new HashMap<>();
+
+    private record RegionCandidates(byte[] header, long[] cells) {}
+
     private static volatile Map<ResourceLocation, Map<Long, Material>> snapshot = Map.of();
     private static volatile Map<ResourceLocation, Set<Long>> unresolvable = Map.of();
 
@@ -98,6 +106,7 @@ public final class FieldGenLedger {
         worldSeed = server.getWorldData().worldGenOptions().seed();
         RAW_RECORDS.clear();
         LOADED_FINGERPRINTS.clear();
+        REGION_CANDIDATES.clear();
         dirty = false;
         recordingEnabled = true;
         lastAutosaveScan = System.currentTimeMillis();
@@ -156,6 +165,7 @@ public final class FieldGenLedger {
         }
         RAW_RECORDS.clear();
         LOADED_FINGERPRINTS.clear();
+        REGION_CANDIDATES.clear();
         snapshot = Map.of();
         unresolvable = Map.of();
         ledgerFile = null;
@@ -169,7 +179,7 @@ public final class FieldGenLedger {
             Path regionDir = DimensionType.getStorageFolder(dimension, worldRoot).resolve("region");
             if (!Files.isDirectory(regionDir)) continue;
             Map<Long, String> raw = RAW_RECORDS.computeIfAbsent(dimension.location(), k -> new HashMap<>());
-            Set<Long> candidateCells = new HashSet<>();
+            Set<Long> candidateCells = new LongOpenHashSet();
             try (DirectoryStream<Path> files = Files.newDirectoryStream(regionDir, "r.*.mca")) {
                 for (Path file : files) {
                     if (!collectCandidateCells(file, candidateCells)) {
@@ -203,25 +213,30 @@ public final class FieldGenLedger {
         int regionX = Integer.parseInt(matcher.group(1));
         int regionZ = Integer.parseInt(matcher.group(2));
 
-        int[] header = new int[1024];
+        byte[] header;
         try {
             if (Files.size(regionFile) < 4096) {
                 return true;
             }
-            try (InputStream in = Files.newInputStream(regionFile);
-                    DataInputStream data = new DataInputStream(in)) {
-                for (int i = 0; i < 1024; i++) {
-                    header[i] = data.readInt();
-                }
+            try (InputStream in = Files.newInputStream(regionFile)) {
+                header = in.readNBytes(4096);
+                if (header.length != 4096) throw new EOFException("Incomplete region offset table");
             }
         } catch (IOException e) {
             CosmicCore.LOGGER.error("[FieldGen] failed to read region header {}", regionFile, e);
             return false;
         }
 
+        RegionCandidates cached = REGION_CANDIDATES.get(regionFile);
+        if (cached != null && Arrays.equals(header, cached.header())) {
+            for (long cell : cached.cells()) out.add(cell);
+            return true;
+        }
+        LongOpenHashSet cells = new LongOpenHashSet();
+        ByteBuffer offsets = ByteBuffer.wrap(header);
         int cellSize = OreFieldPlacement.MIN_DISTANCE;
         for (int i = 0; i < 1024; i++) {
-            if (header[i] == 0) continue;
+            if (offsets.getInt() == 0) continue;
             int blockX = (regionX * 32 + (i & 31)) * 16;
             int blockZ = (regionZ * 32 + (i >> 5)) * 16;
             int cxLo = Math.floorDiv(blockX - FOOTPRINT_PAD, cellSize) - 1;
@@ -236,11 +251,13 @@ public final class FieldGenLedger {
                     long cellMaxZ = (long) cz * cellSize + cellSize + FOOTPRINT_PAD;
                     if (blockX + 16 > cellMinX && blockX < cellMaxX &&
                             blockZ + 16 > cellMinZ && blockZ < cellMaxZ) {
-                        out.add(pack(cx, cz));
+                        cells.add(pack(cx, cz));
                     }
                 }
             }
         }
+        REGION_CANDIDATES.put(regionFile, new RegionCandidates(header, cells.toLongArray()));
+        out.addAll(cells);
         return true;
     }
 

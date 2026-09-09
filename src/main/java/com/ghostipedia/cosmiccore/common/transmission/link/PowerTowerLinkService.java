@@ -18,15 +18,19 @@ import java.util.function.Predicate;
 
 public final class PowerTowerLinkService {
 
-    public static final double DEFAULT_MAX_ATTACHMENT_DISTANCE = 64.0;
+    public static final double DEFAULT_MAX_ATTACHMENT_DISTANCE = 96.0;
     public static final double MAX_DEPARTURE_ANGLE = 45.0;
 
     public static double departureAngle(PowerTowerNode node, PowerTowerNode other) {
         if (node.attachmentPoints().size() < 2) return 0;
         var arm = node.attachmentPoints().get(1).subtract(node.attachmentPoints().getFirst());
         var axis = arm.cross(new net.minecraft.world.phys.Vec3(0, 1, 0)).normalize();
-        var span = other.wireAttachmentCenter().subtract(node.wireAttachmentCenter()).normalize();
+        var span = other.wireAttachmentCenter().subtract(node.wireAttachmentCenter()).multiply(1, 0, 1).normalize();
         return Math.toDegrees(Math.acos(Math.clamp(Math.abs(axis.dot(span)), 0, 1)));
+    }
+
+    public static boolean isDepartureAngleAllowed(double angle) {
+        return Double.isFinite(angle) && angle <= MAX_DEPARTURE_ANGLE + 1.0E-6;
     }
 
     public static double distance(PowerTowerNode first, PowerTowerNode second) {
@@ -84,7 +88,7 @@ public final class PowerTowerLinkService {
 
     public @Nullable PowerTowerLinkResult.Status validatePath(Level level, PowerTowerNode first, PowerTowerNode second,
                                                               @Nullable Predicate<BlockPos> structureBlockExemption) {
-        if (Math.max(departureAngle(first, second), departureAngle(second, first)) > MAX_DEPARTURE_ANGLE + 1.0E-6)
+        if (!isDepartureAngleAllowed(Math.max(departureAngle(first, second), departureAngle(second, first))))
             return PowerTowerLinkResult.Status.BAD_ANGLE;
 
         PowerTowerWireGeometry wires;

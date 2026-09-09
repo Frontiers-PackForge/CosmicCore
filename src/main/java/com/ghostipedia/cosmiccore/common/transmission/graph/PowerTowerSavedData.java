@@ -1,6 +1,7 @@
 package com.ghostipedia.cosmiccore.common.transmission.graph;
 
 import com.ghostipedia.cosmiccore.common.transmission.energy.LoadedPowerTowerTerminalRegistry;
+import com.ghostipedia.cosmiccore.common.transmission.me.PowerTowerMERegistry;
 
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
@@ -11,15 +12,18 @@ public final class PowerTowerSavedData extends SavedData {
 
     private static final String DATA_NAME = "cosmiccore_power_towers";
     private final PowerTowerGraph graph;
+    private final PowerTowerMERegistry meCircuits;
     private ServerLevel level;
     private final LoadedPowerTowerTerminalRegistry loadedTerminals = new LoadedPowerTowerTerminalRegistry();
 
     private PowerTowerSavedData() {
         graph = new PowerTowerGraph();
+        meCircuits = new PowerTowerMERegistry(this, new CompoundTag());
     }
 
     private PowerTowerSavedData(CompoundTag tag) {
         graph = PowerTowerGraph.loadFromTag(tag);
+        meCircuits = new PowerTowerMERegistry(this, tag.getCompound("MECircuits"));
     }
 
     public static PowerTowerSavedData getOrCreate(ServerLevel level) {
@@ -43,11 +47,18 @@ public final class PowerTowerSavedData extends SavedData {
 
     public void markGraphDirty() {
         setDirty();
+        meCircuits.changed();
         if (level != null) com.ghostipedia.cosmiccore.common.transmission.PowerTowerSpanSync.changed(level);
     }
 
     @Override
     public CompoundTag save(CompoundTag tag, HolderLookup.Provider provider) {
-        return graph.saveToTag();
+        var result = graph.saveToTag();
+        result.put("MECircuits", meCircuits.save());
+        return result;
+    }
+
+    public PowerTowerMERegistry meCircuits() {
+        return meCircuits;
     }
 }

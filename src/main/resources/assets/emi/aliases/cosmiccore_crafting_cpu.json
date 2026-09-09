@@ -1,0 +1,8 @@
+{
+  "aliases": [
+    {
+      "stacks": ["item:cosmiccore:crafting_acceleration_core", "item:cosmiccore:crafting_parallel_core"],
+      "text": "alias.cosmiccore.crafting_cpu"
+    }
+  ]
+}

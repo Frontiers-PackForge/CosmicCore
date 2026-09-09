@@ -3,7 +3,8 @@ package com.ghostipedia.cosmiccore.common.machine.multiblock.multi.logic.bloomwy
 import com.ghostipedia.cosmiccore.CosmicCore;
 import com.ghostipedia.cosmiccore.api.capability.recipe.CosmicRecipeCapabilities;
 import com.ghostipedia.cosmiccore.api.capability.souls.SoulType;
-import com.ghostipedia.cosmiccore.api.recipe.ingredient.SoulIngredient;
+import com.ghostipedia.cosmiccore.api.machine.trait.NotifiableSoulContainer;
+import com.ghostipedia.cosmiccore.api.recipe.ingredient.SoulStack;
 import com.ghostipedia.cosmiccore.common.machine.multiblock.part.SpawnerHatchPartMachine;
 import com.ghostipedia.cosmiccore.common.vitae.CultivationProfile;
 import com.ghostipedia.cosmiccore.common.vitae.CultivationProfileManager;
@@ -25,6 +26,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.neoforge.fluids.FluidStack;
+import net.neoforged.neoforge.fluids.crafting.SizedFluidIngredient;
 
 import brachy.modularui.api.drawable.Text;
 import brachy.modularui.api.widget.IWidget;
@@ -45,6 +47,8 @@ public final class BiomeldVivariumMachine extends BloomwyrmUnitMachine {
     private static final ResourceLocation EXPERIENCE_FLUID = ResourceLocation.fromNamespaceAndPath(
             "enderio", "xp_juice");
     private static final int EXPERIENCE_FLUID_PER_POINT = 20;
+    private static final String VITAE_BYPRODUCT = "vivarium_vitae";
+    private static final String SPIRITUS_BYPRODUCT = "vivarium_spiritus";
 
     @SaveField
     private int mode;
@@ -53,6 +57,7 @@ public final class BiomeldVivariumMachine extends BloomwyrmUnitMachine {
 
     public BiomeldVivariumMachine(BlockEntityCreationInfo info) {
         super(info, new BiomeldVivariumRecipeLogic());
+        getRecipeLogic().setKeepSubscribing(true);
     }
 
     @Override
@@ -109,18 +114,11 @@ public final class BiomeldVivariumMachine extends BloomwyrmUnitMachine {
             if (experience.isEmpty()) return Optional.empty();
             builder.outputFluids(experience.get());
         } else {
-            Optional<FluidStack> vitae = createVitaeOutput(profile);
-            if (vitae.isEmpty()) return Optional.empty();
             for (ItemStack output : createItemOutputs(profile, random)) {
                 builder.outputItems(output);
             }
-            if (!vitae.get().isEmpty()) {
-                builder.outputFluids(vitae.get());
-            }
-            int spiritus = profile.spiritus().units(profile.tier());
-            if (spiritus > 0) {
-                builder.output(CosmicRecipeCapabilities.SOUL, SoulIngredient.of(SoulType.Spiritus, spiritus));
-            }
+            builder.addData(VITAE_BYPRODUCT, profile.vitae().units(profile.tier()));
+            builder.addData(SPIRITUS_BYPRODUCT, profile.spiritus().units(profile.tier()));
         }
         return Optional.of(builder.build());
     }
@@ -191,11 +189,23 @@ public final class BiomeldVivariumMachine extends BloomwyrmUnitMachine {
         return Optional.empty();
     }
 
-    private Optional<FluidStack> createVitaeOutput(CultivationProfile profile) {
-        int amount = profile.vitae().units(profile.tier());
-        if (amount <= 0) return Optional.of(FluidStack.EMPTY);
-        if (!BuiltInRegistries.FLUID.containsKey(VITAE_FLUID)) return Optional.empty();
-        return Optional.of(new FluidStack(BuiltInRegistries.FLUID.get(VITAE_FLUID), amount));
+    public void outputCultivationByproducts(GTRecipe recipe) {
+        int vitae = Math.max(0, recipe.data.getInt(VITAE_BYPRODUCT));
+        int spiritus = Math.max(0, recipe.data.getInt(SPIRITUS_BYPRODUCT));
+        for (var handler : getCapabilitiesFlat(IO.OUT, CosmicRecipeCapabilities.SOUL)) {
+            if (handler instanceof NotifiableSoulContainer container) {
+                container.insertUpTo(new SoulStack(SoulType.Anima, vitae), false);
+                container.insertUpTo(new SoulStack(SoulType.Spiritus, spiritus), false);
+                return;
+            }
+        }
+        if (vitae <= 0 || !BuiltInRegistries.FLUID.containsKey(VITAE_FLUID)) return;
+        List<?> remaining = List
+                .of(SizedFluidIngredient.of(new FluidStack(BuiltInRegistries.FLUID.get(VITAE_FLUID), vitae)));
+        for (var handler : getCapabilitiesFlat(IO.OUT, FluidRecipeCapability.CAP)) {
+            remaining = handler.handleRecipe(IO.OUT, recipe, remaining, false);
+            if (remaining.isEmpty()) break;
+        }
     }
 
     private Optional<FluidStack> createExperienceOutput(CultivationProfile profile, RandomSource random) {

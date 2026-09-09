@@ -273,7 +273,7 @@ public class InfiniteSprayCanBehavior implements IInteractionItem, IAddInformati
         }
         if (GTCEu.Mods.isAE2Loaded() && AE2CallWrapper.isAE2Cable(first)) {
             var collected = AE2CallWrapper.collect(first, limit);
-            var ae2Color = color == null ? AEColor.TRANSPARENT : AEColor.values()[color.ordinal()];
+            var ae2Color = color == null ? AEColor.TRANSPARENT : AEColor.fromDye(color.getColor());
             for (var c : collected) {
                 if (c.getColor() == ae2Color) {
                     continue;

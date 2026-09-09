@@ -6,6 +6,8 @@ import com.ghostipedia.cosmiccore.api.block.IMagnetType;
 import com.ghostipedia.cosmiccore.client.renderer.block.NebulaeCoilRenderer;
 import com.ghostipedia.cosmiccore.common.block.BerryVineBlock;
 import com.ghostipedia.cosmiccore.common.block.ComputationBayCasingBlock;
+import com.ghostipedia.cosmiccore.common.block.CraftingCpuCoreBlock;
+import com.ghostipedia.cosmiccore.common.block.CraftingCpuCoreType;
 import com.ghostipedia.cosmiccore.common.block.LargeArcaniteClusterBlock;
 import com.ghostipedia.cosmiccore.common.block.MagnetBlock;
 import com.ghostipedia.cosmiccore.common.block.MurkFloraBlock;
@@ -46,6 +48,7 @@ import net.minecraft.world.level.storage.loot.providers.number.UniformGenerator;
 import net.neoforged.neoforge.client.model.generators.ConfiguredModel;
 import net.neoforged.neoforge.client.model.generators.ModelFile;
 
+import appeng.block.crafting.AbstractCraftingUnitBlock;
 import com.rekindled.embers.RegistryManager;
 import com.tterrag.registrate.providers.DataGenContext;
 import com.tterrag.registrate.providers.RegistrateBlockstateProvider;
@@ -71,6 +74,36 @@ public class CosmicBlocks {
 
     public static final Map<Integer, BlockEntry<CosmicEmberEmitterBlock>> EMBER_EMITTER_BLOCKS = registerEmberEmitters();
     public static final Map<Integer, BlockEntry<CosmicEmberReceptorBlock>> EMBER_RECEPTOR_BLOCKS = registerEmberReceptors();
+
+    public static final BlockEntry<CraftingCpuCoreBlock> CRAFTING_ACCELERATION_CORE = craftingCpuCore(
+            "crafting_acceleration_core", "Crafting Acceleration Core", CraftingCpuCoreType.ACCELERATION,
+            "accelerator");
+    public static final BlockEntry<CraftingCpuCoreBlock> CRAFTING_PARALLEL_CORE = craftingCpuCore(
+            "crafting_parallel_core", "Crafting Parallel Core", CraftingCpuCoreType.PARALLEL, "unit");
+
+    private static BlockEntry<CraftingCpuCoreBlock> craftingCpuCore(String id, String name, CraftingCpuCoreType type,
+                                                                    String texture) {
+        return REGISTRATE.block(id, properties -> new CraftingCpuCoreBlock(properties, type))
+                .lang(name)
+                .initialProperties(() -> Blocks.IRON_BLOCK)
+                .properties(properties -> properties.strength(2.2F).noOcclusion())
+                .blockstate((context, provider) -> {
+                    ModelFile unformed = provider.models().withExistingParent(context.getName(),
+                            ResourceLocation.fromNamespaceAndPath("ae2", "block/crafting/" + texture));
+                    ModelFile formed = provider.models().getExistingFile(
+                            ResourceLocation.fromNamespaceAndPath("ae2", "block/crafting/" + texture + "_formed"));
+                    provider.getVariantBuilder(context.get())
+                            .forAllStatesExcept(state -> ConfiguredModel.builder()
+                                    .modelFile(state.getValue(AbstractCraftingUnitBlock.FORMED) ?
+                                            formed : unformed)
+                                    .build(), AbstractCraftingUnitBlock.POWERED);
+                })
+                .loot((tables, block) -> tables.dropSelf(block))
+                .tag(BlockTags.MINEABLE_WITH_PICKAXE)
+                .item(BlockItem::new)
+                .build()
+                .register();
+    }
 
     public static final BlockEntry<Block> FIRMAMENT_SAPROLITE = firmamentTerrainBlock(
             "firmament_saprolite", "Firmament Saprolite", Blocks.STONE, "firmament_saprolite",

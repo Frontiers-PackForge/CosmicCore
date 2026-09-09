@@ -6,6 +6,10 @@ import com.ghostipedia.cosmiccore.ember.blockentity.CosmicEmberReceptorBlockEnti
 
 import com.gregtechceu.gtceu.api.GTValues;
 
+import net.neoforged.neoforge.capabilities.RegisterCapabilitiesEvent;
+
+import appeng.api.AECapabilities;
+import appeng.blockentity.crafting.CraftingBlockEntity;
 import com.tterrag.registrate.util.entry.BlockEntityEntry;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 
@@ -17,6 +21,21 @@ import static com.ghostipedia.cosmiccore.common.data.CosmicBlocks.EMBER_EMITTER_
 import static com.ghostipedia.cosmiccore.common.data.CosmicBlocks.EMBER_RECEPTOR_BLOCKS;
 
 public class CosmicBlockEntities {
+
+    public static final BlockEntityEntry<CraftingBlockEntity> CRAFTING_CPU_CORE = REGISTRATE
+            .<CraftingBlockEntity>blockEntity("crafting_cpu_core", CraftingBlockEntity::new)
+            .validBlocks(CosmicBlocks.CRAFTING_ACCELERATION_CORE, CosmicBlocks.CRAFTING_PARALLEL_CORE)
+            .onRegister(type -> {
+                CosmicBlocks.CRAFTING_ACCELERATION_CORE.get().setBlockEntity(CraftingBlockEntity.class, type, null,
+                        null);
+                CosmicBlocks.CRAFTING_PARALLEL_CORE.get().setBlockEntity(CraftingBlockEntity.class, type, null, null);
+            })
+            .register();
+
+    public static void registerCapabilities(RegisterCapabilitiesEvent event) {
+        event.registerBlockEntity(AECapabilities.IN_WORLD_GRID_NODE_HOST, CRAFTING_CPU_CORE.get(),
+                (blockEntity, context) -> blockEntity);
+    }
 
     public static final BlockEntityEntry<HearthPlateBlockEntity> HEARTH_PLATE_BE = REGISTRATE
             .<HearthPlateBlockEntity>blockEntity("hearth_plate",

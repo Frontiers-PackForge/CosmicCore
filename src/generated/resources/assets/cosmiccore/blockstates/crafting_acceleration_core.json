@@ -1,0 +1,10 @@
+{
+    "variants": {
+        "formed=false": {
+            "model": "cosmiccore:block/crafting_acceleration_core"
+        },
+        "formed=true": {
+            "model": "ae2:block/crafting/accelerator_formed"
+        }
+    }
+}
