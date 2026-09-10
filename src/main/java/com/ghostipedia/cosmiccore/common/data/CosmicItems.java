@@ -2388,66 +2388,16 @@ public class CosmicItems {
             .defaultModel()
             .register();
 
-    // MANA WAFERS AND CHIPS
-    public static final ItemEntry<ComponentItem> LATENT_CAPACITY_WAFER = REGISTRATE
-            .item("latent_capacity_wafer", ComponentItem::new)
-            .lang("Latent Capacity Wafer")
-            .properties(p -> p.stacksTo(64))
-            .defaultModel()
-            .register();
-    public static final ItemEntry<ComponentItem> LATENT_EFFICACY_WAFER = REGISTRATE
-            .item("latent_efficacy_wafer", ComponentItem::new)
-            .lang("Latent Efficacy Wafer")
-            .properties(p -> p.stacksTo(64))
-            .defaultModel()
-            .register();
-    public static final ItemEntry<ComponentItem> LATENT_POTENCY_WAFER = REGISTRATE
-            .item("latent_potency_wafer", ComponentItem::new)
-            .lang("Latent Potency Wafer")
-            .properties(p -> p.stacksTo(64))
-            .defaultModel()
-            .register();
-    public static final ItemEntry<ComponentItem> LATENT_VERBOSITY_WAFER = REGISTRATE
-            .item("latent_verbosity_wafer", ComponentItem::new)
-            .lang("Latent Verbosity Wafer")
-            .properties(p -> p.stacksTo(64))
-            .defaultModel()
-            .register();
     // BOULE AND WAFER
-    public static final ItemEntry<ComponentItem> LIVINGROCK_ALUMINATE_BOULE = REGISTRATE
-            .item("livingrock_aluminate_boule", ComponentItem::new)
-            .lang("Livingrock Aluminate Boule")
+    public static final ItemEntry<ComponentItem> OTHERWORLDY_SILICON_BOULE = REGISTRATE
+            .item("otherworldy_silicon_boule", ComponentItem::new)
+            .lang("Otherworldy Silicon Boule")
             .properties(p -> p.stacksTo(64))
             .defaultModel()
             .register();
-    public static final ItemEntry<ComponentItem> LIVINGROCK_ALUMINATE_WAFER = REGISTRATE
-            .item("livirock_aluminite_wafer", ComponentItem::new)
-            .lang("Livingrock Aluminate Wafer")
-            .properties(p -> p.stacksTo(64))
-            .defaultModel()
-            .register();
-    // CHIPS
-    public static final ItemEntry<ComponentItem> CAPACITY_CHIP = REGISTRATE
-            .item("capacity_chip", ComponentItem::new)
-            .lang("Capacity Chip")
-            .properties(p -> p.stacksTo(64))
-            .defaultModel()
-            .register();
-    public static final ItemEntry<ComponentItem> EFFICACY_CHIP = REGISTRATE
-            .item("efficacy_chip", ComponentItem::new)
-            .lang("Efficacy Chip")
-            .properties(p -> p.stacksTo(64))
-            .defaultModel()
-            .register();
-    public static final ItemEntry<ComponentItem> POTENCY_CHIP = REGISTRATE
-            .item("potency_chip", ComponentItem::new)
-            .lang("Potency Chip")
-            .properties(p -> p.stacksTo(64))
-            .defaultModel()
-            .register();
-    public static final ItemEntry<ComponentItem> VERBOSITY_CHIP = REGISTRATE
-            .item("verbosity_chip", ComponentItem::new)
-            .lang("Verbosity Chip")
+    public static final ItemEntry<ComponentItem> OTHERWORLDY_SILICON_WAFER = REGISTRATE
+            .item("otherworldy_silicon_wafer", ComponentItem::new)
+            .lang("Otherworldy Silicon Wafer")
             .properties(p -> p.stacksTo(64))
             .defaultModel()
             .register();
