@@ -1,6 +1,6 @@
 {
     "parent": "minecraft:item/generated",
     "textures": {
-        "layer0": "cosmiccore:item/verbosity_chip"
+        "layer0": "cosmiccore:item/otherworldy_silicon_wafer"
     }
 }
