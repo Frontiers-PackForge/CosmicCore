@@ -47,6 +47,92 @@ public class CosmicLangHandler extends LangHandler {
     }
 
     public static void init(RegistrateLangProvider provider) {
+        multiLang(provider, "cosmiccore.sealant.tooltip",
+                "§fSeals a §bsingle machine§f or §eall parts§f of a multiblock, including controller.",
+                "§fAll devices remain §brain §fand §bliquid §fresistant until broken.",
+                "§fBreaking a sealed device or multipart unseals them and returns the normal block.",
+                "§eNote: Some dimensions with esoteric weather patterns may still damage or destroy machines!",
+                "Legally Distinct FlexSeal...");
+        provider.add("cosmiccore.sealant.already_sealed", "This device is already sealed...");
+        provider.add("cosmiccore.sealant.applied", "Sealed %s components against rain and water!");
+        provider.add("cosmiccore.sealant.sealed", "Rain / water seal: Sealed");
+        provider.add("cosmiccore.sealant.unsealed", "Rain / water seal: Unsealed");
+        provider.add("cosmiccore.sealant.coverage", "Rain / water seal: %s / %s components");
+        provider.add("config.jade.plugin_cosmiccore.rain_sealant", "Rain sealant");
+        provider.add("cosmiccore.fluid_drill.prospected_yield", "%s: %s mB/cycle base yield");
+        provider.add("cosmiccore.fluid_drill.output", "%s: %s mB/s");
+        provider.add("cosmiccore.fluid_drill.area", "Drilling area: %s x %s chunks");
+        provider.add("cosmiccore.fluid_drill.area.tooltip",
+                "Select single-chunk or %1$s x %1$s chunk drilling in the UI.");
+        provider.add("cosmiccore.fluid_drill.hatches",
+                "Accepts multiple output hatches and quad hatches.");
+        provider.add("cosmiccore.crafting.acceleration_core.effect",
+                "Reduces the CPU dispatch latency by 1 tick.");
+        provider.add("cosmiccore.crafting.parallel_core.effect",
+                "Allows 1 more complete pattern execution per dispatch.");
+        provider.add("cosmiccore.crafting.core.limit",
+                "Maximum %s of this core per CPU.");
+        provider.add("alias.cosmiccore.crafting_cpu", "AE2 Applied Energistics crafting CPU core");
+        provider.add("cosmiccore.gui.me.item_amount", "%sx");
+        provider.add("cosmiccore.gui.me.amount", "Amount");
+        provider.add("cosmiccore.tower_me.input_tooltip",
+                "§7Extends an ME network to bound hatches on Power Tower.§r");
+        provider.add("cosmiccore.tower_me.output_tooltip", "§7Connects to exactly one Power Tower ME Input.§r");
+        provider.add("cosmiccore.tower_me.copy_hint",
+                "Shift + right-click this input with an AE2 Memory Card to copy the connection.");
+        provider.add("cosmiccore.tower_me.bind_hint", "Right-click with a bound memory card to link.");
+        provider.add("cosmiccore.tower_me.card", "Power Tower ME Links: %s");
+        provider.add("cosmiccore.tower_me.copied", "§bCircuit copied. Right-click an output hatch to bind.§r");
+        provider.add("cosmiccore.tower_me.bound",
+                "§aOutput bound.§r");
+        provider.add("cosmiccore.tower_me.cleared", "§eOutput binding cleared.§r");
+        provider.add("cosmiccore.tower_me.denied", "§cYou cannot configure this hatch or its source tower.§r");
+        provider.add("cosmiccore.tower_me.invalid_card",
+                "§cInvalid: Copy a Power Tower ME Input hatch first!§r");
+        provider.add("cosmiccore.tower_me.wrong_dimension", "§cPower towers must be in the same dimension!§r");
+        provider.add("cosmiccore.tower_me.name", "Network name");
+        provider.add("cosmiccore.tower_me.source", "Source: %s");
+        provider.add("cosmiccore.tower_me.unnamed", "Unnamed Network");
+        provider.add("cosmiccore.tower_me.identity", "Network: %s");
+        provider.add("cosmiccore.tower_me.input_position", "Input hatch: %s");
+        provider.add("cosmiccore.tower_me.channels", "Used Channels: %s | Input Channels: %s");
+        provider.add("cosmiccore.tower_me.branch_channels", "Branch channels: %s | Input Channels: %s");
+        provider.add("cosmiccore.tower_me.destinations", "Bound output hatches: %s");
+        provider.add("cosmiccore.tower_me.destination", "%s | %s channels");
+        provider.add("cosmiccore.tower_me.page", "Page %s / %s");
+        provider.add("cosmiccore.tower_me.clear", "Clear binding");
+        provider.add("cosmiccore.tower_me.locate", "Locate hatch");
+        provider.add("cosmiccore.tower_me.locate_hint",
+                "Will highlight nearby hatches or optionally place a waypoint at the hatch if too far away.");
+        provider.add("cosmiccore.tower_me.input_waypoint", "%s: ME input");
+        provider.add("cosmiccore.tower_me.output_waypoint", "%s: ME output");
+        provider.add("cosmiccore.tower_me.waypoint_added", "§bHatch waypoint placed at %s.§r");
+        provider.add("cosmiccore.tower_me.locate_unavailable",
+                "§eHatch at %s. No available highlight or map integration.§r");
+        provider.add("cosmiccore.tower_me.unavailable", "Unavailable");
+        provider.add("cosmiccore.tower_me.unlimited", "Unlimited");
+        provider.add("cosmiccore.tower_me.unformed", "Tower not formed");
+        provider.add("cosmiccore.tower_me.unbound", "Output not bound");
+        provider.add("cosmiccore.tower_me.input_unavailable", "Input unloaded or replaced");
+        provider.add("cosmiccore.tower_me.input_unformed", "Input tower not formed");
+        provider.add("cosmiccore.tower_me.route_broken", "Routing Failure: No Valid Route!");
+        provider.add("cosmiccore.tower_me.connecting", "Waiting for connections");
+        provider.add("cosmiccore.tower_me.controller_conflict", "AE2 ME Controller Conflict");
+        provider.add("cosmiccore.tower_me.booting", "AE2 recalculating channel network");
+        provider.add("cosmiccore.tower_me.offline", "AE2 network offline");
+        provider.add("cosmiccore.tower_me.overloaded", "Channel Overload! TODO: STACKING COST INFO AND OVERLOAD GRACE");
+        provider.add("cosmiccore.tower_me.linked", "Connected");
+        provider.add("cosmiccore.tower_me.unloaded", "Output unloaded");
+        provider.add("cosmiccore.tower_me.external_connection", "Direct external ME connection");
+        multiLang(provider, "cosmiccore.tower_me.help",
+                "§bShift + right-click an input with an AE2 Memory Card to copy its circuit.§r",
+                "Right-click outputs with that card to bind them. Shift + right-click an output to clear it.",
+                "All output hatches pull from the same channel count supplied to the input.",
+                "These Act similar to Quantum Tunnels, where P2P links can be sent across the network.",
+                "Both endpoint towers must be loaded and formed to establish connection, intermediate towers do not need to be chunk loaded",
+                "Ordinary AE2 controller and channel rules still apply.",
+                "Use the locate button beside a hatch to highlight nearby hatches or place a distant map waypoint if too far away!");
+
         provider.add("key.cosmiccore.orrery", "Open Orrery loadout radial");
         provider.add("key.categories.cosmiccore.orrery", "CosmicCore: Leyline Orrery");
         provider.add("cosmiccore.orrery.title", "Leyline Orrery");
@@ -599,8 +685,9 @@ public class CosmicLangHandler extends LangHandler {
         provider.add("cosmiccore.power_tower.line.error.endpoint_not_found", "One endpoint no longer exists.");
         provider.add("cosmiccore.power_tower.line.error.self_link", "A tower cannot be linked to itself.");
         provider.add("cosmiccore.power_tower.line.error.bad_angle",
-                "Wires must leave each tower within 45 degrees of its forward/backward axis.");
-        provider.add("cosmiccore.power_tower.chain.preview", "Last tower: %s / %s blocks | Angle: %s / %s degrees");
+                "Wires must leave each tower within 45 horizontal degrees of its forward/backward axis.");
+        provider.add("cosmiccore.power_tower.chain.preview",
+                "Last tower: %s / %s blocks | Horizontal angle: %s / %s degrees");
         provider.add("cosmiccore.power_tower.chain.no_coil", "Hold a coil in the other hand to wire this placement.");
         provider.add("cosmiccore.power_tower.chain.tooltip",
                 "Packages stack to 16. Hold a coil in the other hand to link each new tower to the last placed or selected tower.");
@@ -1918,8 +2005,10 @@ public class CosmicLangHandler extends LangHandler {
         provider.add("cosmiccore.emi.biomeld_vivarium.nutrient", "Accepted Biomeld Nutrient: %s mB");
         provider.add("cosmiccore.emi.biomeld_vivarium.count_range", "Yield: %s-%s");
         provider.add("cosmiccore.emi.biomeld_vivarium.chance", "Chance: %s");
-        provider.add("cosmiccore.emi.biomeld_vivarium.vitae", "Essentia Vitae: %s mB");
-        provider.add("cosmiccore.emi.biomeld_vivarium.spiritus", "Spiritus: +%s network units");
+        provider.add("cosmiccore.emi.biomeld_vivarium.vitae",
+                "Essentia Vitae: %s mB (Anima with output Quintessentia Hatch; excess voided)");
+        provider.add("cosmiccore.emi.biomeld_vivarium.spiritus",
+                "Spiritus: +%s units (requires output Quintessentia Hatch; excess voided)");
         provider.add("cosmiccore.emi.biomeld_vivarium.charge", "Bloomwyrm Charge: %s");
         provider.add("cosmiccore.tooltip.oxygen_tank.fill", "Oxygen: %s / %s mB");
         provider.add("cosmiccore.tooltip.oxygen_tank.runtime", "No-Air breathing time: %s");
@@ -1999,7 +2088,7 @@ public class CosmicLangHandler extends LangHandler {
         provider.add("cosmiccore.machine.biomeld_vivarium.tooltip.0",
                 "§7Uses Powered Spawner Mob Data to vat grow mobs.");
         provider.add("cosmiccore.machine.biomeld_vivarium.tooltip.1",
-                "§7Materials, Spirits, and Essences are produced by default.");
+                "§7Produces drops, spirits, and Vitae. An optional output Quintessentia Hatch stores Vitae as Anima and collects Spiritus. Excess byproducts are voided.");
         provider.add("cosmiccore.machine.biomeld_vivarium.tooltip.2",
                 "§7Experience Mode will convert all materials to xp.");
         provider.add("cosmiccore.biomeld_vivarium.mode_control", "Cultivation Mode");
@@ -2044,6 +2133,8 @@ public class CosmicLangHandler extends LangHandler {
         provider.add("cosmiccore.bloomwyrm.unit.waiting_for_cycle", "Waiting for next Heart cycle: %s");
         provider.add("cosmiccore.bloomwyrm.unit.cycle_blocked", "Waiting for active campus work to finish");
         provider.add("cosmiccore.bloomwyrm.heart.charge", "Bloomwyrm Charge: %s / %s");
+        provider.add("cosmiccore.bloomwyrm.heart.charge_overflow",
+                "Excess Bloomwyrm Charge is discarded when storage is full. Campus work continues.");
         provider.add("cosmiccore.bloomwyrm.heart.biopower", "Biopower: %s used / %s capacity");
         provider.add("cosmiccore.bloomwyrm.heart.energy", "Campus draw: %s EU/t");
         provider.add("cosmiccore.bloomwyrm.heart.supply", "Power supply: %s EU/t at %s V");

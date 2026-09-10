@@ -246,6 +246,7 @@
     "gtfix.accessor.BasicSliceGroupAccessor",
     "gtfix.accessor.BasicSliceStrategyAccessor",
     "gtfix.WorkableMultiblockRecipeTypeCacheFixMixin",
+    "gtfix.RecipeAmperageOverclockFixMixin",
     "gttweak.MachineUIPanelBackgroundFixMixin",
     "gttweak.GTMuiTitleBarBackgroundFixMixin",
     "gttweak.GTPetrochemicalMaterialIdMixin",
