@@ -47,6 +47,11 @@ public class CosmicLangHandler extends LangHandler {
     }
 
     public static void init(RegistrateLangProvider provider) {
+        provider.add("cosmiccore.rate_calculator.title", "§6Rate Calculator");
+        provider.add("cosmiccore.rate_calculator.machine", "§aMachine: %s");
+        provider.add("cosmiccore.rate_calculator.status", "§eStatus: %s");
+        provider.add("cosmiccore.rate_calculator.elapsed", "§bObserved: %s");
+        provider.add("cosmiccore.rate_calculator.unknown", "§cUnknown");
         multiLang(provider, "cosmiccore.sealant.tooltip",
                 "§fSeals a §bsingle machine§f or §eall parts§f of a multiblock, including controller.",
                 "§fAll devices remain §brain §fand §bliquid §fresistant until broken.",

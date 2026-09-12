@@ -1,7 +1,9 @@
 package com.ghostipedia.cosmiccore.common.machine.multiblock.multi.logic;
 
+import com.ghostipedia.cosmiccore.api.machine.activity.ActivityScope;
 import com.ghostipedia.cosmiccore.common.machine.multiblock.part.MEComputationComponentPartMachine;
 import com.ghostipedia.cosmiccore.common.machine.multiblock.part.MEComputationUplinkPartMachine;
+import com.ghostipedia.cosmiccore.common.machine.trait.activity.MachineActivityRuntime;
 
 import com.gregtechceu.gtceu.api.blockentity.BlockEntityCreationInfo;
 import com.gregtechceu.gtceu.api.machine.TickableSubscription;
@@ -209,12 +211,19 @@ public final class MEComputationArrayMachine extends WorkableElectricMultiblockM
         long euToConsume = Math.min(
                 Math.max(0, targetCoreEu - paidCoreEuThisTick),
                 energyContainer.getEnergyStored());
-        long additionalEu = euToConsume <= 0 ? 0 : energyContainer.removeEnergy(euToConsume);
+        long additionalEu;
+        try (ActivityScope ignored = MachineActivityRuntime.scope(this)) {
+            additionalEu = euToConsume <= 0 ? 0 : energyContainer.removeEnergy(euToConsume);
+        }
         paidCoreEuThisTick += additionalEu;
         long fundedCwut = Math.min(
                 targetCwut,
                 paidCoreEuThisTick * MEComputationArrayTuning.CORE_EU_RATIO_DENOMINATOR /
                         MEComputationArrayTuning.CORE_EU_RATIO_NUMERATOR);
+        long additionalCwut = Math.max(0, fundedCwut - committedCwut);
+        try (ActivityScope ignored = MachineActivityRuntime.scope(this)) {
+            ActivityScope.value("computation", "gtceu:cwut", additionalCwut, false);
+        }
         setCommittedCwut(Math.max(committedCwut, fundedCwut));
         setCurrentConsumption(currentEuPerTick + additionalEu, currentRelayEuPerTick);
         if (committedCwut < requestedCwut) {
@@ -339,7 +348,10 @@ public final class MEComputationArrayMachine extends WorkableElectricMultiblockM
             if (energyContainer.getEnergyStored() < standbyEu) {
                 continue;
             }
-            long consumed = energyContainer.removeEnergy(standbyEu);
+            long consumed;
+            try (ActivityScope ignored = MachineActivityRuntime.scope(this)) {
+                consumed = energyContainer.removeEnergy(standbyEu);
+            }
             if (consumed != standbyEu) {
                 continue;
             }
@@ -357,7 +369,10 @@ public final class MEComputationArrayMachine extends WorkableElectricMultiblockM
         if (euToConsume <= 0) {
             return 0;
         }
-        long consumed = energyContainer.removeEnergy(euToConsume);
+        long consumed;
+        try (ActivityScope ignored = MachineActivityRuntime.scope(this)) {
+            consumed = energyContainer.removeEnergy(euToConsume);
+        }
         uplink.acceptRelayPower(MEComputationArrayTuning.euToAe(consumed));
         setRelayActivity(consumed);
         return consumed;

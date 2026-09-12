@@ -13,6 +13,7 @@ import com.ghostipedia.cosmiccore.common.item.AsteroidItem;
 import com.ghostipedia.cosmiccore.common.item.AsteroidTargetingChipItem;
 import com.ghostipedia.cosmiccore.common.item.OxygenTankItem;
 import com.ghostipedia.cosmiccore.common.item.PowerTowerCoilItem;
+import com.ghostipedia.cosmiccore.common.item.RateCalculatorItem;
 import com.ghostipedia.cosmiccore.common.item.SoulNetworkReaderItem;
 import com.ghostipedia.cosmiccore.common.item.StealthCoatingItem;
 import com.ghostipedia.cosmiccore.common.item.armor.ChestSanguineWarptechSuite;
@@ -102,6 +103,14 @@ public class CosmicItems {
             .properties(p -> p.stacksTo(1))
             .tag()
             .defaultModel()
+            .register();
+
+    public static final ItemEntry<RateCalculatorItem> RATE_CALCULATOR = REGISTRATE
+            .item("rate_calculator", RateCalculatorItem::new)
+            .lang("Rate Calculator")
+            .properties(p -> p.stacksTo(1))
+            .model((context, provider) -> provider.generated(context,
+                    CosmicCore.id("item/rate_calculator")))
             .register();
 
     public static final ItemEntry<ComponentItem> POWER_TOWER_LINE_TOOL = REGISTRATE
