@@ -1,5 +1,7 @@
 package com.ghostipedia.cosmiccore.common.ae2gt;
 
+import com.ghostipedia.cosmiccore.common.machine.trait.activity.MachineActivityRuntime;
+
 import com.gregtechceu.gtceu.api.blockentity.BlockEntityCreationInfo;
 import com.gregtechceu.gtceu.api.machine.MetaMachine;
 import com.gregtechceu.gtceu.api.machine.multiblock.MultiblockControllerMachine;
@@ -360,7 +362,7 @@ public class CosmicStockingHatchPartMachine extends CosmicInputHatchPartMachine 
                             this.onContentsChanged.run();
                         }
                     }
-                    return resultStack;
+                    return MachineActivityRuntime.recordedInput(resultStack, action);
                 }
             }
             return FluidStack.EMPTY;

@@ -1,6 +1,6 @@
 package com.ghostipedia.cosmiccore.mixin.gtfix;
 
-import com.ghostipedia.cosmiccore.api.machine.activity.ActivityScope;
+import com.ghostipedia.cosmiccore.common.machine.trait.activity.MachineActivityRuntime;
 
 import com.gregtechceu.gtceu.integration.ae2.slot.ExportOnlyAEItemSlot;
 
@@ -15,8 +15,6 @@ public abstract class MachineActivityAEItemInputMixin {
 
     @WrapMethod(method = "extractItem")
     private ItemStack cosmiccore$input(int slot, int amount, boolean simulated, Operation<ItemStack> original) {
-        ItemStack extracted = original.call(slot, amount, simulated);
-        if (!simulated) ActivityScope.item(extracted, extracted.getCount(), true);
-        return extracted;
+        return MachineActivityRuntime.recordedInput(original.call(slot, amount, simulated), simulated);
     }
 }

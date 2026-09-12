@@ -16,6 +16,9 @@ import com.gregtechceu.gtceu.api.recipe.ActionResult;
 import com.gregtechceu.gtceu.api.recipe.GTRecipe;
 
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.item.ItemStack;
+import net.neoforged.neoforge.fluids.FluidStack;
+import net.neoforged.neoforge.fluids.capability.IFluidHandler.FluidAction;
 
 public final class MachineActivityRuntime {
 
@@ -45,6 +48,16 @@ public final class MachineActivityRuntime {
             return new ActivityScope(activity, lane);
         }
         return ActivityScope.suspend();
+    }
+
+    public static FluidStack recordedInput(FluidStack extracted, FluidAction action) {
+        if (action.execute()) ActivityScope.fluid(extracted, extracted.getAmount(), true);
+        return extracted;
+    }
+
+    public static ItemStack recordedInput(ItemStack extracted, boolean simulated) {
+        if (!simulated) ActivityScope.item(extracted, extracted.getCount(), true);
+        return extracted;
     }
 
     public static void tick(MetaMachine machine) {

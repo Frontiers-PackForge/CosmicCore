@@ -1,5 +1,7 @@
 package com.ghostipedia.cosmiccore.common.ae2gt;
 
+import com.ghostipedia.cosmiccore.common.machine.trait.activity.MachineActivityRuntime;
+
 import com.gregtechceu.gtceu.api.blockentity.BlockEntityCreationInfo;
 import com.gregtechceu.gtceu.api.machine.multiblock.MultiblockControllerMachine;
 import com.gregtechceu.gtceu.api.machine.multiblock.part.MultiblockPartMachine;
@@ -384,7 +386,7 @@ public class CosmicStockingBusPartMachine extends CosmicInputBusPartMachine impl
                                 this.onContentsChanged.run();
                             }
                         }
-                        return resultStack;
+                        return MachineActivityRuntime.recordedInput(resultStack, simulate);
                     }
                 }
             }

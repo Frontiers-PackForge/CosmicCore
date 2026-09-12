@@ -1,6 +1,6 @@
 package com.ghostipedia.cosmiccore.mixin.gtfix;
 
-import com.ghostipedia.cosmiccore.api.machine.activity.ActivityScope;
+import com.ghostipedia.cosmiccore.common.machine.trait.activity.MachineActivityRuntime;
 
 import com.gregtechceu.gtceu.integration.ae2.slot.ExportOnlyAEFluidSlot;
 
@@ -16,8 +16,6 @@ public abstract class MachineActivityAEFluidInputMixin {
 
     @WrapMethod(method = "drain(ILnet/neoforged/neoforge/fluids/capability/IFluidHandler$FluidAction;)Lnet/neoforged/neoforge/fluids/FluidStack;")
     private FluidStack cosmiccore$input(int amount, FluidAction action, Operation<FluidStack> original) {
-        FluidStack extracted = original.call(amount, action);
-        if (action.execute()) ActivityScope.fluid(extracted, extracted.getAmount(), true);
-        return extracted;
+        return MachineActivityRuntime.recordedInput(original.call(amount, action), action);
     }
 }
