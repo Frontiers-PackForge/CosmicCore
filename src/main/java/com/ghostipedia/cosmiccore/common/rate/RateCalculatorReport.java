@@ -11,9 +11,7 @@ import java.util.Map;
 
 final class RateCalculatorReport {
 
-    private static final int MAX_ROWS = 512;
     private static final int MAX_MACHINES = 256;
-    private static final long MAX_SIZE = 512L * 1024L;
 
     private RateCalculatorReport() {}
 
@@ -50,7 +48,7 @@ final class RateCalculatorReport {
                 reportPartial |= !rate.expectedKnown;
                 rows.computeIfAbsent(rate.key, Row::new).add(rate, machine);
             }
-            if (snapshots.size() < MAX_MACHINES) snapshots.add(machine.copy());
+            if (snapshots.size() < MAX_MACHINES) snapshots.add(clientSnapshot(machine));
             else truncated = true;
         }
         ListTag rowTags = new ListTag();
@@ -59,10 +57,6 @@ final class RateCalculatorReport {
                 .thenComparing(row -> row.key.id)
                 .thenComparing(row -> row.key.icon.toString())
                 .thenComparing(row -> row.key.alternatives.toString())).toList()) {
-            if (rowTags.size() == MAX_ROWS) {
-                truncated = true;
-                break;
-            }
             rowTags.add(row.toTag());
         }
         CompoundTag report = new CompoundTag();
@@ -82,15 +76,19 @@ final class RateCalculatorReport {
         report.putBoolean("truncated", truncated);
         report.putInt("machineCount", snapshots.size());
         report.putInt("rowCount", rowTags.size());
-        while (report.sizeInBytes() > MAX_SIZE && (!snapshots.isEmpty() || !rowTags.isEmpty())) {
-            if (!snapshots.isEmpty()) snapshots.remove(snapshots.size() - 1);
-            else rowTags.remove(rowTags.size() - 1);
-            report.putBoolean("truncated", true);
-            report.putBoolean("partial", true);
-            report.putInt("machineCount", snapshots.size());
-            report.putInt("rowCount", rowTags.size());
+        return truncated ? RateCalculatorReportTransport.unavailable(report) : report;
+    }
+
+    private static CompoundTag clientSnapshot(CompoundTag machine) {
+        CompoundTag snapshot = machine.copy();
+        snapshot.remove("activity");
+        snapshot.remove("observedIn");
+        snapshot.remove("observedOut");
+        if (!snapshot.getList("capacityProfiles", Tag.TAG_COMPOUND).isEmpty()) {
+            snapshot.remove("configuredIn");
+            snapshot.remove("configuredOut");
         }
-        return report;
+        return snapshot;
     }
 
     private static boolean hasKnownActivity(CompoundTag machine) {

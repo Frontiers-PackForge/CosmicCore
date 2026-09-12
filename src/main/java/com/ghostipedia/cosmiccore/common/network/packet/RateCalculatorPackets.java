@@ -2,12 +2,12 @@ package com.ghostipedia.cosmiccore.common.network.packet;
 
 import com.ghostipedia.cosmiccore.CosmicCore;
 import com.ghostipedia.cosmiccore.client.rate.RateCalculatorScreen;
+import com.ghostipedia.cosmiccore.common.rate.RateCalculatorReportTransport;
 import com.ghostipedia.cosmiccore.common.rate.RateCalculatorService;
 
 import net.minecraft.core.UUIDUtil;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.server.level.ServerPlayer;
@@ -23,9 +23,9 @@ public final class RateCalculatorPackets {
 
     public record Open(UUID tool, CompoundTag report) implements CustomPacketPayload {
 
-        public static final Type<Open> TYPE = new Type<>(CosmicCore.id("rate_calculator_open"));
+        public static final Type<Open> TYPE = new Type<>(CosmicCore.id("rate_calculator_open_v2"));
         public static final StreamCodec<FriendlyByteBuf, Open> CODEC = StreamCodec.composite(UUIDUtil.STREAM_CODEC,
-                Open::tool, ByteBufCodecs.COMPOUND_TAG, Open::report, Open::new);
+                Open::tool, RateCalculatorReportTransport.CODEC, Open::report, Open::new);
 
         public void execute(IPayloadContext context) {
             context.enqueueWork(() -> RateCalculatorScreen.open(tool, report));
@@ -39,9 +39,9 @@ public final class RateCalculatorPackets {
 
     public record Update(UUID tool, CompoundTag report) implements CustomPacketPayload {
 
-        public static final Type<Update> TYPE = new Type<>(CosmicCore.id("rate_calculator_update"));
+        public static final Type<Update> TYPE = new Type<>(CosmicCore.id("rate_calculator_update_v2"));
         public static final StreamCodec<FriendlyByteBuf, Update> CODEC = StreamCodec.composite(UUIDUtil.STREAM_CODEC,
-                Update::tool, ByteBufCodecs.COMPOUND_TAG, Update::report, Update::new);
+                Update::tool, RateCalculatorReportTransport.CODEC, Update::report, Update::new);
 
         public void execute(IPayloadContext context) {
             context.enqueueWork(() -> RateCalculatorScreen.update(tool, report));
