@@ -2358,5 +2358,71 @@ public class CosmicLangHandler extends LangHandler {
                         "through your boots: small lightnings walking their fenced circles, patient, waiting to be " +
                         "spent. You pulled this thread home yourself, and nothing tore. Somewhere in the dark below " +
                         "your ribs, something that has never once been spoken to is beginning to suspect it was.");
+        provider.add("gui.cosmiccore.rate_calculator.scale_value", "§6Scale§f: %s");
+        provider.add("gui.cosmiccore.rate_calculator.select_corners",
+                "§bUse on a machine to add, or block two normal blocks to set a detection box.");
+        provider.add("gui.cosmiccore.rate_calculator.finish_corner",
+                "§bSelect the second corner before calculating.");
+        provider.add("gui.cosmiccore.rate_calculator.selection_limit",
+                "§cSelection must be nearby and within 129 blocks per axis, 81 chunks, and 256 machines.");
+        provider.add("gui.cosmiccore.rate_calculator.instructions",
+                "§aUse blocks to add machines or areas. Use in air to recalculate the selection.");
+        provider.add("gui.cosmiccore.rate_calculator.snapshot", "§6Smoothed flow per§7: §f%s");
+        provider.add("gui.cosmiccore.rate_calculator.columns.snapshot", "§7Rates §7(inc. idle)");
+        provider.add("gui.cosmiccore.rate_calculator.compact_rates", "§b+%s §7/ §6-%s  §7[net §f%s§7]");
+        provider.add("gui.cosmiccore.rate_calculator.ratio", "§7Ideal producer:consumer §b%s§7:§6%s");
+        provider.add("gui.cosmiccore.rate_calculator.adjustment", "§aAdd §f%sx %s§7, net §f%s");
+        provider.add("gui.cosmiccore.rate_calculator.balanced", "§aBalanced at the selected machine counts");
+        provider.add("gui.cosmiccore.rate_calculator.locate_group",
+                "§bClick to highlight this machine group for §f20 seconds§b.");
+        provider.add("gui.cosmiccore.rate_calculator.unknown_resource", "§cUnknown ingredient group");
+        provider.add("gui.cosmiccore.rate_calculator.configured_rates", "§7I/O/Net: §6%s §7/ §b%s §7/ §f%s");
+        provider.add("gui.cosmiccore.rate_calculator.smoothed_rates",
+                "§6Smoothed §7(~5s) I/O/Net: §6%s §7/ §b%s §7/ §f%s");
+        provider.add("gui.cosmiccore.rate_calculator.raw_rates", "§7Raw I/O/Net: §6%s §7/ §b%s §7/ §f%s");
+        provider.add("gui.cosmiccore.rate_calculator.reset", "§cReset");
+        provider.add("gui.cosmiccore.rate_calculator.hold", "§6Hold");
+        provider.add("gui.cosmiccore.rate_calculator.live", "§aLive");
+        provider.add("gui.cosmiccore.rate_calculator.held_snapshot", "§eSnapshot sim for§7: §f%s");
+        provider.add("gui.cosmiccore.rate_calculator.hold_tooltip",
+                "§bToggle between snapshot rates or live rates. §7Measurement continues while snapshotted.");
+        provider.add("gui.cosmiccore.rate_calculator.machines",
+                "§aLoaded§7: §f%s §7/ &bSelected§7: §f%s §7/ §6Unknown§7: §f%s §7/ §cUnloaded§7: §f%s");
+        provider.add("gui.cosmiccore.rate_calculator.electrical", "§6Net Energy§7: §e%s §7EU/t");
+        provider.add("gui.cosmiccore.rate_calculator.flags", "§7Status: §f%s");
+        provider.add("gui.cosmiccore.rate_calculator.resources", "§6Resources");
+        provider.add("gui.cosmiccore.rate_calculator.detail", "§6Machine Impact");
+        provider.add("gui.cosmiccore.rate_calculator.recipe", "§7Recipe: §f%s");
+        provider.add("gui.cosmiccore.rate_calculator.select_resource", "§bSelect a resource to inspect its machines.");
+        provider.add("gui.cosmiccore.rate_calculator.partial", "§ePartial");
+        provider.add("gui.cosmiccore.rate_calculator.learning", "§eLearning");
+        provider.add("gui.cosmiccore.rate_calculator.resource.energy", "§eEnergy §7(EU)");
+        provider.add("gui.cosmiccore.rate_calculator.resource.charge", "§dBloomwyrm charge");
+        provider.add("gui.cosmiccore.rate_calculator.resource.computation", "§bComputation §7(CWU)");
+        provider.add("gui.cosmiccore.rate_calculator.evidence",
+                "§f%s §7ticks retained, §f%s §7target; §f%s §7completed cycles");
+        provider.add("gui.cosmiccore.rate_calculator.remembered_activity", "§7Retained activity from before loading");
+        provider.add("gui.cosmiccore.rate_calculator.provisional",
+                "§e* Learning or incomplete coverage; known amounts only");
+        provider.add("gui.cosmiccore.rate_calculator.recorded_capacity",
+                "§7Last completed cycle: §6-%s §7/ §b+%s §7/ net §f%s");
+        provider.add("gui.cosmiccore.rate_calculator.activity_contributor", "§b%s§7, net §f%s§7, §f%s");
+        provider.add("gui.cosmiccore.rate_calculator.reason.input", "§eWaiting for input");
+        provider.add("gui.cosmiccore.rate_calculator.reason.power", "§eWaiting for power");
+        provider.add("gui.cosmiccore.rate_calculator.reason.output", "§coOutput blocked");
+        provider.add("gui.cosmiccore.rate_calculator.reason.condition", "§eCondition unmet");
+        provider.add("gui.cosmiccore.rate_calculator.reason.disabled", "§7Disabled");
+        provider.add("gui.cosmiccore.rate_calculator.reason.working", "§aWorking");
+        provider.add("gui.cosmiccore.rate_calculator.reason.unknown", "§cUnknown");
+        provider.add("gui.cosmiccore.rate_calculator.truncated", "§etruncated");
+        provider.add("gui.cosmiccore.rate_calculator.time.tick", "§f1 Tick");
+        provider.add("gui.cosmiccore.rate_calculator.time.5_ticks", "§f5 Ticks");
+        provider.add("gui.cosmiccore.rate_calculator.time.second", "§f1 Second");
+        provider.add("gui.cosmiccore.rate_calculator.time.5_seconds", "§f5 Seconds");
+        provider.add("gui.cosmiccore.rate_calculator.time.minute", "§f1 Minute");
+        provider.add("gui.cosmiccore.rate_calculator.time.5_minutes", "§f5 minutes");
+        provider.add("gui.cosmiccore.rate_calculator.time.30_minutes", "§f30 Minutes");
+        provider.add("gui.cosmiccore.rate_calculator.time.hour", "§f1 Hour");
+        provider.add("gui.cosmiccore.rate_calculator.time.day", "§f24 Hours");
     }
 }
