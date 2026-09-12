@@ -436,6 +436,20 @@ public class CosmicMachines {
                     .register(),
             tiersBetween(LV, UIV));
 
+    public static final MachineDefinition[] AIO_LITHOGRAPHY_PROCESSOR = registerTieredMachines(
+            "aio_lithography_processor",
+            (holder, tier) -> new SimpleTieredMachine(holder, tier, defaultTankSizeFunction),
+            (tier, builder) -> builder
+                    .langValue("%s AIO Lithography Processor %s".formatted(VLVH[tier], VLVT[tier]))
+                    .recipeType(CosmicRecipeTypes.AIO_LITHOGRAPHY_PROCESSOR)
+                    .ui(GTSingleblockMachinePanels.GENERAL_MACHINE)
+                    .tooltips(workableTiered(tier, GTValues.V[tier], GTValues.V[tier] * 64,
+                            CosmicRecipeTypes.AIO_LITHOGRAPHY_PROCESSOR,
+                            defaultTankSizeFunction.applyAsInt(tier), true))
+                    .workableTieredHullModel(CosmicCore.id("block/overlay/machine/aio_lithography_processor"))
+                    .register(),
+            tiersBetween(LV, UIV));
+
     public static final MachineDefinition[] CHEMICAL_DEHYDRATOR = registerTieredMachines("chemical_dehydrator",
             (holder, tier) -> new SimpleTieredMachine(holder, tier, defaultTankSizeFunction),
             (tier, builder) -> builder
