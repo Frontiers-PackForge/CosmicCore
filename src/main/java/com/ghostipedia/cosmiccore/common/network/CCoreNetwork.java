@@ -25,6 +25,7 @@ import com.ghostipedia.cosmiccore.common.network.packet.PowerTowerChainPacket;
 import com.ghostipedia.cosmiccore.common.network.packet.PowerTowerRideRequestPacket;
 import com.ghostipedia.cosmiccore.common.network.packet.PowerTowerRideStatePacket;
 import com.ghostipedia.cosmiccore.common.network.packet.PowerTowerSpanPacket;
+import com.ghostipedia.cosmiccore.common.network.packet.RateCalculatorPackets;
 import com.ghostipedia.cosmiccore.common.network.packet.RevealFieldsPacket;
 import com.ghostipedia.cosmiccore.common.network.packet.SetMultiblockStructureTierPacket;
 import com.ghostipedia.cosmiccore.common.network.packet.StarLadderUplinkPackets;
@@ -95,6 +96,12 @@ public class CCoreNetwork {
                 EffortlessBuildingAE2CountSyncPacket::execute);
         registrar.playToClient(SyncWirelessPDAHudPacket.TYPE, SyncWirelessPDAHudPacket.CODEC,
                 SyncWirelessPDAHudPacket::execute);
+        registrar.playToClient(RateCalculatorPackets.Open.TYPE, RateCalculatorPackets.Open.CODEC,
+                RateCalculatorPackets.Open::execute);
+        registrar.playToClient(RateCalculatorPackets.Update.TYPE, RateCalculatorPackets.Update.CODEC,
+                RateCalculatorPackets.Update::execute);
+        registrar.playToClient(RateCalculatorPackets.Clear.TYPE, RateCalculatorPackets.Clear.CODEC,
+                RateCalculatorPackets.Clear::execute);
         DeedQuestCompatBridge.registerPayloads(registrar);
 
         registrar.playToServer(DashPacket.TYPE, DashPacket.CODEC, DashPacket::execute);
@@ -114,6 +121,12 @@ public class CCoreNetwork {
                 FactoryGaugePromiseLimitPacket::execute);
         registrar.playToServer(FactoryGaugeFluidSelectionPacket.TYPE, FactoryGaugeFluidSelectionPacket.CODEC,
                 FactoryGaugeFluidSelectionPacket::execute);
+        registrar.playToServer(RateCalculatorPackets.Refresh.TYPE, RateCalculatorPackets.Refresh.CODEC,
+                RateCalculatorPackets.Refresh::execute);
+        registrar.playToServer(RateCalculatorPackets.Reset.TYPE, RateCalculatorPackets.Reset.CODEC,
+                RateCalculatorPackets.Reset::execute);
+        registrar.playToServer(RateCalculatorPackets.Close.TYPE, RateCalculatorPackets.Close.CODEC,
+                RateCalculatorPackets.Close::execute);
 
         registrar.playToServer(StarLadderUplinkPackets.UplinkActionPacket.TYPE,
                 StarLadderUplinkPackets.UplinkActionPacket.CODEC,

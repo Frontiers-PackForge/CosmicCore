@@ -1,6 +1,9 @@
 package com.ghostipedia.cosmiccore.common.machine.multiblock.multi.logic;
 
 import com.ghostipedia.cosmiccore.CosmicCore;
+import com.ghostipedia.cosmiccore.api.machine.activity.ActivityScope;
+import com.ghostipedia.cosmiccore.api.machine.activity.MachineActivity;
+import com.ghostipedia.cosmiccore.common.machine.trait.activity.MachineActivityRuntime;
 
 import com.gregtechceu.gtceu.api.capability.recipe.EURecipeCapability;
 import com.gregtechceu.gtceu.api.capability.recipe.IO;
@@ -146,6 +149,7 @@ public class MultithreadedRecipeLogic extends RecipeLogic implements IRecipeCapa
      * Called by the parent machine to deactivate this thread.
      */
     public void deactivateThread() {
+        interruptActivity();
         this.threadActive = false;
         if (isWorking()) {
             setStatus(Status.IDLE);
@@ -448,12 +452,20 @@ public class MultithreadedRecipeLogic extends RecipeLogic implements IRecipeCapa
         if (!recipe.hasTick()) return ActionResult.SUCCESS;
 
         var result = RecipeHelper.matchTickRecipe(this, recipe);
-        if (!result.isSuccess()) return result;
+        if (!result.isSuccess()) {
+            MachineActivityRuntime.failure(this, result);
+            return result;
+        }
 
         result = handleTickRecipeIO(recipe, IO.IN);
-        if (!result.isSuccess()) return result;
+        if (!result.isSuccess()) {
+            MachineActivityRuntime.failure(this, result);
+            return result;
+        }
 
-        return handleTickRecipeIO(recipe, IO.OUT);
+        result = handleTickRecipeIO(recipe, IO.OUT);
+        if (!result.isSuccess()) MachineActivityRuntime.failure(this, result);
+        return result;
     }
 
     /**
@@ -470,7 +482,11 @@ public class MultithreadedRecipeLogic extends RecipeLogic implements IRecipeCapa
             // but we can still access them since we're in the same hierarchy
 
             consecutiveRecipes++;
-            handleRecipeIO(lastRecipe, IO.OUT);
+            ActionResult outputResult;
+            try (ActivityScope ignored = MachineActivityRuntime.scope(this)) {
+                outputResult = handleRecipeIO(lastRecipe, IO.OUT);
+            }
+            MachineActivityRuntime.completed(this, outputResult);
 
             // CRITICAL: Do NOT call getRLMachine().fullModifyRecipe here!
             // Instead, re-apply OUR thread-specific overclock to the origin recipe
@@ -515,6 +531,11 @@ public class MultithreadedRecipeLogic extends RecipeLogic implements IRecipeCapa
     @Nullable
     public GTRecipe getCurrentRecipe() {
         return lastRecipe;
+    }
+
+    private void interruptActivity() {
+        MachineActivity activity = MachineActivityRuntime.activity(getMachine());
+        if (activity != null) activity.interrupt(threadIndex);
     }
 
     /**

@@ -1,7 +1,9 @@
 package com.ghostipedia.cosmiccore.common.machine.multiblock;
 
+import com.ghostipedia.cosmiccore.api.machine.activity.ActivityScope;
 import com.ghostipedia.cosmiccore.common.data.CosmicItems;
 import com.ghostipedia.cosmiccore.common.deployment.*;
+import com.ghostipedia.cosmiccore.common.machine.trait.activity.MachineActivityRuntime;
 
 import com.gregtechceu.gtceu.api.blockentity.BlockEntityCreationInfo;
 import com.gregtechceu.gtceu.api.capability.recipe.IO;
@@ -77,6 +79,13 @@ public final class LeylineCompressorMachine extends WorkableElectricMultiblockMa
         LeylineFabricationLibrary.get(level).add(prefab);
         fabrication = pattern.output();
         remainingTicks = prefab.blocks().size();
+        var activity = MachineActivityRuntime.activity(this);
+        if (activity != null) {
+            activity.begin(0, "cosmiccore:leyline_fabrication", remainingTicks);
+            try (ActivityScope ignored = MachineActivityRuntime.scope(this)) {
+                prefab.ingredients().forEach((item, count) -> ActivityScope.item(new ItemStack(item), count, true));
+            }
+        }
         setChanged();
         return true;
     }
@@ -91,11 +100,28 @@ public final class LeylineCompressorMachine extends WorkableElectricMultiblockMa
             return;
         }
         if (getMaxVoltage() >= 128 && energyContainer != null && energyContainer.getEnergyStored() >= 128 &&
-                energyContainer.removeEnergy(128) == 128) {
+                consumeFabricationEnergy()) {
             remainingTicks--;
             getRecipeLogic().setStatus(remainingTicks > 0 ? RecipeLogic.Status.WORKING : RecipeLogic.Status.IDLE);
+            if (remainingTicks == 0) {
+                try (ActivityScope ignored = MachineActivityRuntime.scope(this)) {
+                    ActivityScope.item(fabrication, fabrication.getCount(), false);
+                }
+                var activity = MachineActivityRuntime.activity(this);
+                if (activity != null) activity.complete(0);
+            }
             setChanged();
-        } else getRecipeLogic().setStatus(RecipeLogic.Status.WAITING);
+        } else {
+            getRecipeLogic().setStatus(RecipeLogic.Status.WAITING);
+            var activity = MachineActivityRuntime.activity(this);
+            if (activity != null) activity.failure(0, "power");
+        }
+    }
+
+    private boolean consumeFabricationEnergy() {
+        try (ActivityScope ignored = MachineActivityRuntime.scope(this)) {
+            return energyContainer.removeEnergy(128) == 128;
+        }
     }
 
     public ItemStack finishedPackage() {
@@ -143,6 +169,8 @@ public final class LeylineCompressorMachine extends WorkableElectricMultiblockMa
                 });
             }
             fabrication = ItemStack.EMPTY;
+            var activity = MachineActivityRuntime.activity(this);
+            if (activity != null) activity.interrupt(0);
         }
         super.onMachineDestroyed();
     }

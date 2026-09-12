@@ -1,5 +1,8 @@
 package com.ghostipedia.cosmiccore.common.machine.multiblock.multi.logic;
 
+import com.ghostipedia.cosmiccore.api.machine.activity.ActivityScope;
+import com.ghostipedia.cosmiccore.common.machine.trait.activity.MachineActivityRuntime;
+
 import com.gregtechceu.gtceu.api.GTValues;
 import com.gregtechceu.gtceu.api.capability.recipe.IO;
 import com.gregtechceu.gtceu.api.data.worldgen.bedrockfluid.BedrockFluidVeinSavedData;
@@ -110,7 +113,11 @@ public class VoidFluidDrillLogic extends RecipeLogic {
     public void onRecipeFinish() {
         getRLMachine().afterWorking();
         if (lastRecipe != null) {
-            RecipeHelper.handleRecipeIO(getMachine(), lastRecipe, IO.OUT, this.chanceCaches);
+            var result = com.gregtechceu.gtceu.api.recipe.ActionResult.SUCCESS;
+            try (ActivityScope ignored = MachineActivityRuntime.scope(this)) {
+                result = RecipeHelper.handleRecipeIO(getMachine(), lastRecipe, IO.OUT, this.chanceCaches);
+            }
+            MachineActivityRuntime.completed(this, result);
         }
         // try it again
         var match = getFluidDrillRecipe();

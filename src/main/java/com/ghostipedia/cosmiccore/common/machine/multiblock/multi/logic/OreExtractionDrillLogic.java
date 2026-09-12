@@ -1,6 +1,9 @@
 package com.ghostipedia.cosmiccore.common.machine.multiblock.multi.logic;
 
+import com.ghostipedia.cosmiccore.api.machine.activity.ActivityScope;
+import com.ghostipedia.cosmiccore.api.machine.activity.MachineActivity;
 import com.ghostipedia.cosmiccore.common.data.materials.CosmicMaterials;
+import com.ghostipedia.cosmiccore.common.machine.trait.activity.MachineActivityRuntime;
 
 import com.gregtechceu.gtceu.api.capability.recipe.FluidRecipeCapability;
 import com.gregtechceu.gtceu.api.capability.recipe.IO;
@@ -279,13 +282,18 @@ public class OreExtractionDrillLogic extends RecipeLogic {
         }
 
         if (!getMachine().drainEnergy(false)) {
+            failure("power");
             setStatus(Status.WAITING);
             return;
         }
         if (miningProgress == 0) {
             currentCycleTicks = selectCycleTicks();
+            MachineActivity activity = MachineActivityRuntime.activity(getMachine());
+            if (activity != null) activity.begin(0, "cosmiccore:ore_extraction", currentCycleTicks);
         }
-        getMachine().drainEnergy(true);
+        try (ActivityScope ignored = MachineActivityRuntime.scope(getMachine())) {
+            getMachine().drainEnergy(true);
+        }
         setStatus(Status.WORKING);
 
         miningProgress++;
@@ -296,9 +304,16 @@ public class OreExtractionDrillLogic extends RecipeLogic {
     }
 
     private void finishCurrentOre(ServerLevel serverLevel) {
-        if (!processCurrentOre(serverLevel)) {
+        OreResult result = processCurrentOre(serverLevel);
+        if (result == OreResult.BLOCKED) {
+            failure("output");
             setStatus(Status.WAITING);
             return;
+        }
+        MachineActivity activity = MachineActivityRuntime.activity(getMachine());
+        if (activity != null) {
+            if (result == OreResult.MINED) activity.complete(0);
+            else activity.interrupt(0);
         }
 
         miningProgress = 0;
@@ -308,14 +323,14 @@ public class OreExtractionDrillLogic extends RecipeLogic {
         }
     }
 
-    private boolean processCurrentOre(ServerLevel serverLevel) {
-        if (currentOreIndex >= pendingOres.size()) return true;
+    private OreResult processCurrentOre(ServerLevel serverLevel) {
+        if (currentOreIndex >= pendingOres.size()) return OreResult.VANISHED;
 
         BlockPos orePos = pendingOres.get(currentOreIndex);
         BlockState state = serverLevel.getBlockState(orePos);
 
         if (!isOre(state)) {
-            return true;
+            return OreResult.VANISHED;
         }
 
         NonNullList<ItemStack> drops = NonNullList.create();
@@ -325,11 +340,11 @@ public class OreExtractionDrillLogic extends RecipeLogic {
                 .withParameter(LootContextParams.TOOL, ItemStack.EMPTY);
         drops.addAll(state.getDrops(builder));
         if (!outputDrops(drops)) {
-            return false;
+            return OreResult.BLOCKED;
         }
 
         serverLevel.setBlock(orePos, Blocks.STONE.defaultBlockState(), 3);
-        return true;
+        return OreResult.MINED;
     }
 
     private boolean outputDrops(NonNullList<ItemStack> drops) {
@@ -338,7 +353,12 @@ public class OreExtractionDrillLogic extends RecipeLogic {
             return false;
         }
 
-        return GTTransferUtils.addItemsToItemHandler(handler, false, drops);
+        try (ActivityScope scope = MachineActivityRuntime.scope(getMachine())) {
+            boolean accepted = GTTransferUtils.addItemsToItemHandler(handler, false, drops);
+            if (accepted && scope.mutations() == 0L)
+                for (ItemStack drop : drops) ActivityScope.item(drop, drop.getCount(), false);
+            return accepted;
+        }
     }
 
     @Nullable
@@ -383,9 +403,19 @@ public class OreExtractionDrillLogic extends RecipeLogic {
                 handler, requested, IFluidHandler.FluidAction.SIMULATE);
         if (simulated.getAmount() != DRILLING_FLUID_PER_BLOCK) return false;
 
-        FluidStack drained = GTTransferUtils.drainFluidAccountNotifiableList(
-                handler, requested, IFluidHandler.FluidAction.EXECUTE);
+        FluidStack drained;
+        try (ActivityScope scope = MachineActivityRuntime.scope(getMachine())) {
+            drained = GTTransferUtils.drainFluidAccountNotifiableList(
+                    handler, requested, IFluidHandler.FluidAction.EXECUTE);
+            if (scope.mutations() == 0L && !drained.isEmpty())
+                ActivityScope.fluid(drained, drained.getAmount(), true);
+        }
         return drained.getAmount() == DRILLING_FLUID_PER_BLOCK;
+    }
+
+    private void failure(String reason) {
+        MachineActivity activity = MachineActivityRuntime.activity(getMachine());
+        if (activity != null) activity.failure(0, reason);
     }
 
     @Nullable
@@ -674,6 +704,12 @@ public class OreExtractionDrillLogic extends RecipeLogic {
     public record OreLedgerEntry(String translationKey, ResourceLocation itemId, int count) {}
 
     private record OreIdentity(String key, String translationKey, ResourceLocation itemId) {}
+
+    private enum OreResult {
+        MINED,
+        VANISHED,
+        BLOCKED
+    }
 
     @Override
     public void findAndHandleRecipe() {}

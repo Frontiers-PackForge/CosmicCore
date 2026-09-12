@@ -1,5 +1,7 @@
 package com.ghostipedia.cosmiccore.common.recipe;
 
+import com.ghostipedia.cosmiccore.common.rate.RateCalculatorTracker;
+
 import com.gregtechceu.gtceu.api.recipe.GTRecipe;
 import com.gregtechceu.gtceu.api.recipe.GTRecipeType;
 import com.gregtechceu.gtceu.common.item.armor.PowerlessJetpack;
@@ -13,6 +15,7 @@ public final class GTRecipeReloadLifecycle {
     private GTRecipeReloadLifecycle() {}
 
     public static void clearCategories() {
+        RateCalculatorTracker.invalidateAll();
         for (RecipeType<?> type : BuiltInRegistries.RECIPE_TYPE) {
             if (type instanceof GTRecipeType gtRecipeType) {
                 gtRecipeType.getCategoryMap().clear();

@@ -1,7 +1,9 @@
 package com.ghostipedia.cosmiccore.common.machine.multiblock.multi.logic.bloomwyrm;
 
 import com.ghostipedia.cosmiccore.api.capability.ILinkedMultiblock;
+import com.ghostipedia.cosmiccore.api.machine.activity.ActivityScope;
 import com.ghostipedia.cosmiccore.api.machine.multiblock.LinkedWorkableElectricMultiblockMachine;
+import com.ghostipedia.cosmiccore.common.machine.trait.activity.MachineActivityRuntime;
 
 import com.gregtechceu.gtceu.api.blockentity.BlockEntityCreationInfo;
 import com.gregtechceu.gtceu.api.capability.recipe.EURecipeCapability;
@@ -241,7 +243,8 @@ public abstract class BloomwyrmUnitMachine extends LinkedWorkableElectricMultibl
         long pending = Math.max(0, target - deliveredChargeOutput);
         BloomwyrmHeartMachine heart = getHeart();
         if (heart != null && pending > 0) {
-            heart.acceptCharge(pending);
+            long accepted = heart.acceptCharge(pending);
+            ActivityScope.value("charge", "cosmiccore:bloomwyrm", accepted, false);
             deliveredChargeOutput = target;
         }
     }
@@ -249,13 +252,17 @@ public abstract class BloomwyrmUnitMachine extends LinkedWorkableElectricMultibl
     public void deliverCharge(long producedCharge) {
         BloomwyrmHeartMachine heart = getHeart();
         if (heart != null && producedCharge > 0) {
-            heart.acceptCharge(producedCharge);
+            long accepted = heart.acceptCharge(producedCharge);
+            ActivityScope.value("charge", "cosmiccore:bloomwyrm", accepted, false);
         }
     }
 
     public boolean hasCampusPowerThisTick() {
         BloomwyrmHeartMachine heart = getHeart();
-        return heart != null && heart.ensureCampusPowerForCurrentTick();
+        if (heart == null) return false;
+        try (ActivityScope ignored = MachineActivityRuntime.scope(heart)) {
+            return heart.ensureCampusPowerForCurrentTick();
+        }
     }
 
     public BloomwyrmHeartMachine getHeart() {

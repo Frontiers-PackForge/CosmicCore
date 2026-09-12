@@ -692,11 +692,7 @@ public class StarLadderUplinkManager implements INBTSerializable<CompoundTag> {
             material(TagPrefix.plate, CosmicMaterials.Enderium, 32, 128),
             material(TagPrefix.wireFine, CosmicMaterials.Lumium, 64, 256),
             item(GTItems.LAPOTRON_CRYSTAL::asStack, 16, 64),
-            item(GTItems.ENERGIUM_CRYSTAL::asStack, 16, 64),
-            item(CosmicItems.EFFICACY_CHIP::asStack, 256, 512),
-            item(CosmicItems.CAPACITY_CHIP::asStack, 256, 512),
-            item(CosmicItems.POTENCY_CHIP::asStack, 256, 512),
-            item(CosmicItems.VERBOSITY_CHIP::asStack, 256, 512));
+            item(GTItems.ENERGIUM_CRYSTAL::asStack, 16, 64));
 
     // Phase 3: IV-tier exotic bulk
     private static final List<DemandEntry> PHASE_3_BULK = List.of(
