@@ -54,7 +54,8 @@ public final class RateCalculatorMachineSnapshot {
     public long position() {
         return position;
     }
-    //mmmmmm, gross, but whatever, go my param spam.
+
+    // mmmmmm, gross, but whatever, go my param spam.
     void configure(String machineId, String status, String recipeId, int duration, int progressTicks, int totalRuns,
                    long voltage, long amperage, long inputEUt, long outputEUt, int overclockTier,
                    int minimumOverclockTier, int maximumOverclockTier, List<RateCalculatorResource> inputs,
@@ -105,7 +106,8 @@ public final class RateCalculatorMachineSnapshot {
             }
         }
     }
-    //This sounds way cooler than it actually is. Yay Equality Slop.
+
+    // This sounds way cooler than it actually is. Yay Equality Slop.
     private static int indexOfIdentity(List<RateCalculatorResource> resources, RateCalculatorResource target) {
         for (int index = 0; index < resources.size(); index++) {
             RateCalculatorResource resource = resources.get(index);
@@ -141,7 +143,8 @@ public final class RateCalculatorMachineSnapshot {
         if (input) observedInUncertainty++;
         else observedOutUncertainty++;
     }
-    //The Monolith Tag, in all its horrible glory lmfao
+
+    // The Monolith Tag, in all its horrible glory lmfao
     public CompoundTag toTag(HolderLookup.Provider registries) {
         CompoundTag tag = new CompoundTag();
         tag.putInt("schema", SCHEMA);
