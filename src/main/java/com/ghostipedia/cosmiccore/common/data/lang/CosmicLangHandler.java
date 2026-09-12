@@ -17,7 +17,7 @@ public class CosmicLangHandler extends LangHandler {
             "oneiric_sieve", "dissolution_vat", "phase_separator", "simple_desalter", "desalter",
             "steam_cracking_furnace", "fractional_condenser", "fluid_catalytic_cracking", "hydrotreating",
             "hydrocracking", "catalytic_reforming", "delayed_coking", "vacuum_distillation", "fuckassbeeball",
-            "laminator",
+            "laminator", "aio_lithography_processor",
             "chemical_dehydrator",
             "crystallizer", "eclipsed_dawnforge", "vorax", "mana_fluidizer", "pcb_fab", "titan_fusion", "lunar_hammer",
             "cryo_chamber", "soul_tester", "void_miner", "heavy_assembler", "plasmite_forge",
@@ -2206,6 +2206,7 @@ public class CosmicLangHandler extends LangHandler {
         for (String id : COSMIC_RECIPE_TYPE_IDS) {
             String name = switch (id) {
                 case "fuckassbeeball" -> "Internal Recipe Type";
+                case "aio_lithography_processor" -> "AIO Lithography Processor";
                 case "atmo_siphon" -> "Atmosphere Siphon";
                 case "pcb_fab" -> "PCB Fabricator";
                 case "cryo_chamber" -> "Cryogenics Chamber";

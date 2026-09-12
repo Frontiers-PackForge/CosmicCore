@@ -112,6 +112,11 @@ public class CosmicRecipeTypes {
             .setSound(CosmicSounds.LAMINATOR)
             .setMaxIOSize(3, 2, 2, 0)
             .UI(builder -> builder.setProgressBar(GTGuiTextures.PROGRESS_ARROW));
+    public static final GTRecipeType AIO_LITHOGRAPHY_PROCESSOR = GTRecipeTypes
+            .register(CosmicCore.id("aio_lithography_processor"), ELECTRIC)
+            .setSound(GTSoundEntries.COOLING)
+            .setMaxIOSize(6, 3, 2, 0)
+            .UI(builder -> builder.setProgressBar(GTGuiTextures.PROGRESS_ARROW));
     public static final GTRecipeType CHEMICAL_DEHYDRATOR = GTRecipeTypes
             .register(CosmicCore.id("chemical_dehydrator"), ELECTRIC)
             .setSound(GTSoundEntries.CHEMICAL)
@@ -635,7 +640,7 @@ public class CosmicRecipeTypes {
                 DISSOLUTION_VAT, PHASE_SEPARATOR, SIMPLE_DESALTER, DESALTER, STEAM_CRACKING_FURNACE,
                 FRACTIONAL_CONDENSER, FLUID_CATALYTIC_CRACKING, HYDROTREATING, HYDROCRACKING,
                 CATALYTIC_REFORMING, DELAYED_COKING, VACUUM_DISTILLATION, COSMIC_DUMMY_SPAM_YEETER, LAMINATOR,
-                CHEMICAL_DEHYDRATOR, CRYSTALLIZER,
+                AIO_LITHOGRAPHY_PROCESSOR, CHEMICAL_DEHYDRATOR, CRYSTALLIZER,
                 DAWNFORGE_ECLIPSED,
                 VORAX, MANA_FLUIDIZER,
                 PCB_FABRICATOR, TITAN_FUSION_RECIPES, LUNAR_HAMMER, CRYOGENICS_CHAMBER, SOUL_TESTER_RECIPES,
