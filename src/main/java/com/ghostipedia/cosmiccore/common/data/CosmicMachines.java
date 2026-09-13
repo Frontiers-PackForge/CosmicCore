@@ -31,6 +31,7 @@ import com.ghostipedia.cosmiccore.gtbridge.CosmicRecipeTypes;
 import com.ghostipedia.nebulaeae2.compute.ComputeTuning;
 
 import com.gregtechceu.gtceu.GTCEu;
+import com.gregtechceu.gtceu.api.GTCEuAPI;
 import com.gregtechceu.gtceu.api.GTValues;
 import com.gregtechceu.gtceu.api.blockentity.BlockEntityCreationInfo;
 import com.gregtechceu.gtceu.api.capability.recipe.IO;
@@ -644,10 +645,10 @@ public class CosmicMachines {
             GTValues.tiersBetween(LV, HV));
     public static final MachineDefinition[] ENERGY_INPUT_HATCH_256A = registerEnergyHatches(
             "energy_input_hatch_256a", IO.IN, 256, PartAbility.SUBSTATION_INPUT_ENERGY,
-            GTValues.tiersBetween(LV, HV));
+            GTValues.tiersBetween(LV, GTCEuAPI.isHighTier() ? OpV : UHV));
     public static final MachineDefinition[] ENERGY_OUTPUT_HATCH_256A = registerEnergyHatches(
             "energy_output_hatch_256a", IO.OUT, 256, PartAbility.SUBSTATION_OUTPUT_ENERGY,
-            GTValues.tiersBetween(LV, HV));
+            GTValues.tiersBetween(LV, GTCEuAPI.isHighTier() ? OpV : UHV));
 
     static {
         REGISTRATE.creativeModeTab(CosmicCreativeModeTabs.COSMIC_CORE);
