@@ -31,4 +31,15 @@ public final class RainSealant {
         }
         return result;
     }
+
+    public static int apply(List<MetaMachine> targets) {
+        int changed = 0;
+        for (var target : targets) {
+            if (!sealed(target)) {
+                ((RainSealable) target).cosmiccore$setRainSealed(true);
+                changed++;
+            }
+        }
+        return changed;
+    }
 }

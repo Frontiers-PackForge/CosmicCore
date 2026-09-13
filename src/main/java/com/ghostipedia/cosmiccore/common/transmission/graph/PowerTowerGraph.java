@@ -84,6 +84,16 @@ public final class PowerTowerGraph {
         return componentId == null ? null : componentSnapshot(componentId);
     }
 
+    public UUID componentIdContainingNode(UUID nodeId) {
+        return componentByNode.get(nodeId);
+    }
+
+    public long componentVersionContainingNode(UUID nodeId) {
+        UUID componentId = componentByNode.get(nodeId);
+        PowerTowerComponent component = componentId == null ? null : components.get(componentId);
+        return component == null ? -1 : component.topologyVersion();
+    }
+
     public Set<UUID> nodeIdsInChunk(long chunkKey) {
         return Collections.unmodifiableSet(new HashSet<>(nodesByChunk.getOrDefault(chunkKey, Set.of())));
     }
@@ -201,16 +211,17 @@ public final class PowerTowerGraph {
             throw new IllegalArgumentException("Power tower endpoints must be operational");
         if (!Objects.equals(firstRecord.ownerId(), secondRecord.ownerId()))
             throw new IllegalArgumentException("Power tower owners must match");
-        requireTerminalVoltageCompatibility(firstRecord, cableVoltageTier);
-        requireTerminalVoltageCompatibility(secondRecord, cableVoltageTier);
+        int resultingWireTier = Math.min(cableVoltageTier,
+                Math.min(minimumCableVoltageTier(first), minimumCableVoltageTier(second)));
+        requireComponentTerminalCompatibility(first, resultingWireTier);
+        if (first != second)
+            requireComponentTerminalCompatibility(second, resultingWireTier);
         boolean duplicate = first.spans().values().stream()
                 .anyMatch(span -> connectsNodes(span, firstNodeId, secondNodeId));
         if (duplicate)
             throw new IllegalArgumentException("Power tower span already exists");
-        requireComponentCableVoltage(first, cableVoltageTier);
-        if (first != second)
-            requireComponentCableVoltage(second, cableVoltageTier);
         PowerTowerComponent target = first.id().compareTo(second.id()) <= 0 ? first : second;
+        target.upgradeTargetTier(Math.max(first.upgradeTargetTier(), second.upgradeTargetTier()));
         if (first != second) {
             PowerTowerComponent source = target == first ? second : first;
             target.topologyVersion(Math.max(target.topologyVersion(), source.topologyVersion()));
@@ -230,8 +241,53 @@ public final class PowerTowerGraph {
         target.addSpan(span);
         componentBySpan.put(spanId, target.id());
         indexSpan(span);
+        normalizeUpgradeTarget(target);
         recordTopologyMutation(target);
         return spanId;
+    }
+
+    public boolean acceptsCableTier(UUID nodeId, int cableVoltageTier) {
+        if (cableVoltageTier < 0) return false;
+        UUID componentId = componentByNode.get(nodeId);
+        PowerTowerComponent component = componentId == null ? null : components.get(componentId);
+        if (component == null) return false;
+        int resultingWireTier = Math.min(cableVoltageTier, minimumCableVoltageTier(component));
+        return component.nodes().values().stream().filter(node -> node.role() == PowerTowerRole.TERMINAL)
+                .allMatch(node -> node.terminalVoltageTier() <= resultingWireTier);
+    }
+
+    public boolean setUpgradeTarget(UUID nodeId, int targetTier) {
+        PowerTowerComponent component = requireComponentContainingNode(nodeId);
+        int wireTier = minimumCableVoltageTier(component);
+        if (component.spans().isEmpty() || targetTier <= wireTier)
+            throw new IllegalArgumentException("Upgrade target must be above the current wire tier");
+        if (component.upgradeTargetTier() == targetTier) return false;
+        component.upgradeTargetTier(targetTier);
+        recordTopologyMutation(component);
+        return true;
+    }
+
+    public boolean upgradeSpans(UUID componentId, long expectedVersion, int targetTier, List<UUID> spanIds) {
+        PowerTowerComponent component = components.get(componentId);
+        if (component == null || component.topologyVersion() != expectedVersion ||
+                component.upgradeTargetTier() != targetTier)
+            throw new IllegalArgumentException("Power tower upgrade request is stale");
+        if (spanIds.isEmpty()) return false;
+        Set<UUID> unique = new HashSet<>(spanIds);
+        if (unique.size() != spanIds.size())
+            throw new IllegalArgumentException("Power tower upgrade contains duplicate spans");
+        for (UUID spanId : spanIds) {
+            PowerTowerSpan span = component.spans().get(spanId);
+            if (span == null || span.cableVoltageTier() >= targetTier)
+                throw new IllegalArgumentException("Power tower upgrade request is stale");
+        }
+        for (UUID spanId : spanIds) {
+            PowerTowerSpan span = component.spans().get(spanId);
+            component.addSpan(new PowerTowerSpan(span.id(), span.firstNodeId(), span.secondNodeId(), targetTier));
+        }
+        normalizeUpgradeTarget(component);
+        recordTopologyMutation(component);
+        return true;
     }
 
     public boolean removeSpan(UUID spanId) {
@@ -243,6 +299,7 @@ public final class PowerTowerGraph {
         unindexSpan(removed);
         recordTopologyMutation(component);
         splitDisconnectedComponent(component);
+        normalizeUpgradeTargets();
         return true;
     }
 
@@ -269,6 +326,7 @@ public final class PowerTowerGraph {
             recordTopologyMutation(component);
             splitDisconnectedComponent(component);
         }
+        normalizeUpgradeTargets();
         return true;
     }
 
@@ -279,6 +337,7 @@ public final class PowerTowerGraph {
             CompoundTag tag = new CompoundTag();
             tag.putUUID("Id", component.id());
             tag.putLong("Version", component.topologyVersion());
+            tag.putInt("UpgradeTarget", component.upgradeTargetTier());
             ListTag nodes = new ListTag();
             component.nodes().values().stream().sorted(Comparator.comparing(PowerTowerNode::id)).forEach(node -> {
                 CompoundTag nodeTag = new CompoundTag();
@@ -328,6 +387,7 @@ public final class PowerTowerGraph {
             UUID componentId = tag.getUUID("Id");
             PowerTowerComponent component = new PowerTowerComponent(componentId);
             component.topologyVersion(tag.getLong("Version"));
+            component.upgradeTargetTier(tag.contains("UpgradeTarget") ? tag.getInt("UpgradeTarget") : -1);
             for (Tag nodeRaw : tag.getList("Nodes", Tag.TAG_COMPOUND)) {
                 CompoundTag nodeTag = (CompoundTag) nodeRaw;
                 UUID owner = nodeTag.hasUUID("Owner") ? nodeTag.getUUID("Owner") : null;
@@ -352,6 +412,8 @@ public final class PowerTowerGraph {
             graph.components.put(componentId, component);
         }
         graph.rebuildIndexes();
+        graph.validateLoadedComponents();
+        graph.normalizeUpgradeTargets();
         return graph;
     }
 
@@ -390,6 +452,7 @@ public final class PowerTowerGraph {
             Set<UUID> partition = partitions.get(i);
             PowerTowerComponent replacement = new PowerTowerComponent(id);
             replacement.topologyVersion(component.topologyVersion() + 1);
+            replacement.upgradeTargetTier(component.upgradeTargetTier());
             partition.forEach(nodeId -> replacement.addNode(component.nodes().get(nodeId)));
             oldSpans.stream()
                     .filter(span -> partition.contains(span.firstNodeId()) &&
@@ -398,6 +461,7 @@ public final class PowerTowerGraph {
             components.put(id, replacement);
         }
         rebuildIndexes();
+        normalizeUpgradeTargets();
     }
 
     private PowerTowerComponent requireComponentContainingNode(UUID nodeId) {
@@ -490,16 +554,40 @@ public final class PowerTowerGraph {
                 span.firstNodeId().equals(second) && span.secondNodeId().equals(first);
     }
 
-    private static void requireComponentCableVoltage(PowerTowerComponent component, int cableVoltageTier) {
-        OptionalInt current = component.spans().values().stream().mapToInt(PowerTowerSpan::cableVoltageTier)
-                .findFirst();
-        if (current.isPresent() && current.getAsInt() != cableVoltageTier)
-            throw new IllegalArgumentException("Power tower component voltage mismatch");
+    private static int minimumCableVoltageTier(PowerTowerComponent component) {
+        return component.spans().values().stream().mapToInt(PowerTowerSpan::cableVoltageTier).min()
+                .orElse(Integer.MAX_VALUE);
     }
 
     private static void requireTerminalVoltageCompatibility(PowerTowerNode node, int cableVoltageTier) {
-        if (node.role() == PowerTowerRole.TERMINAL && node.terminalVoltageTier() != cableVoltageTier)
+        if (node.role() == PowerTowerRole.TERMINAL && node.terminalVoltageTier() > cableVoltageTier)
             throw new IllegalArgumentException("Power tower terminal voltage mismatch");
+    }
+
+    private static void requireComponentTerminalCompatibility(PowerTowerComponent component, int cableVoltageTier) {
+        component.nodes().values().forEach(node -> requireTerminalVoltageCompatibility(node, cableVoltageTier));
+    }
+
+    private void validateLoadedComponents() {
+        for (PowerTowerComponent component : components.values()) {
+            int wireTier = minimumCableVoltageTier(component);
+            requireComponentTerminalCompatibility(component, wireTier);
+            for (PowerTowerSpan span : component.spans().values()) {
+                if (!component.nodes().containsKey(span.firstNodeId()) ||
+                        !component.nodes().containsKey(span.secondNodeId()))
+                    throw new IllegalArgumentException("Power tower span endpoint is missing");
+            }
+        }
+    }
+
+    private void normalizeUpgradeTargets() {
+        components.values().forEach(PowerTowerGraph::normalizeUpgradeTarget);
+    }
+
+    private static void normalizeUpgradeTarget(PowerTowerComponent component) {
+        int target = component.upgradeTargetTier();
+        if (target >= 0 && (component.spans().isEmpty() || minimumCableVoltageTier(component) >= target))
+            component.upgradeTargetTier(-1);
     }
 
     private void recordTopologyMutation(PowerTowerComponent component) {
@@ -509,15 +597,28 @@ public final class PowerTowerGraph {
 
     private static ComponentSnapshot snapshot(PowerTowerComponent component) {
         return new ComponentSnapshot(component.id(), component.topologyVersion(), component.nodes(),
-                component.spans());
+                component.spans(), component.upgradeTargetTier());
     }
 
     public record ComponentSnapshot(UUID id, long topologyVersion, Map<UUID, PowerTowerNode> nodes,
-                                    Map<UUID, PowerTowerSpan> spans) {
+                                    Map<UUID, PowerTowerSpan> spans, int upgradeTargetTier) {
 
         public ComponentSnapshot {
             nodes = Collections.unmodifiableMap(new LinkedHashMap<>(nodes));
             spans = Collections.unmodifiableMap(new LinkedHashMap<>(spans));
+        }
+
+        public OptionalInt wireTier() {
+            return spans.values().stream().mapToInt(PowerTowerSpan::cableVoltageTier).min();
+        }
+
+        public int upgradedConnections() {
+            return upgradeTargetTier < 0 ? spans.size() :
+                    (int) spans.values().stream().filter(span -> span.cableVoltageTier() >= upgradeTargetTier).count();
+        }
+
+        public int remainingConnections() {
+            return spans.size() - upgradedConnections();
         }
     }
 }

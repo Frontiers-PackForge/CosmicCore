@@ -11,6 +11,7 @@ final class PowerTowerComponent {
     private final Map<UUID, PowerTowerNode> nodes = new LinkedHashMap<>();
     private final Map<UUID, PowerTowerSpan> spans = new LinkedHashMap<>();
     private long topologyVersion;
+    private int upgradeTargetTier = -1;
 
     PowerTowerComponent(UUID id) {
         this.id = id;
@@ -34,6 +35,14 @@ final class PowerTowerComponent {
 
     void topologyVersion(long value) {
         topologyVersion = value;
+    }
+
+    int upgradeTargetTier() {
+        return upgradeTargetTier;
+    }
+
+    void upgradeTargetTier(int value) {
+        upgradeTargetTier = value;
     }
 
     void addNode(PowerTowerNode node) {

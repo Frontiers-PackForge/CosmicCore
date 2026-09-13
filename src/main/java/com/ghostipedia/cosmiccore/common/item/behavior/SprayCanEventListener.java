@@ -34,10 +34,13 @@ public class SprayCanEventListener {
         ItemStack can = player.getOffhandItem();
         var behavior = getSprayCanBehavior(can);
         if (behavior == null) return;
-        if (hasSprayCan(can)) return;
 
         UseOnContext fakeContext = new UseOnContext(player, InteractionHand.OFF_HAND,
                 new BlockHitResult(Vec3.atCenterOf(pos), Direction.UP, pos, false));
+        if (SprayCanState.read(can).rainSealant()) {
+            behavior.applyRainSealant(fakeContext);
+            return;
+        }
 
         if (!behavior.handleSpecialBlockEntities(level.getBlockEntity(pos),
                 ConfigHolder.INSTANCE.tools.sprayCanChainLength, fakeContext)) {
@@ -48,8 +51,8 @@ public class SprayCanEventListener {
     }
 
     // just pulls out some repeated code for cleanliness into this method to check if it is a spraycan
-    static boolean hasSprayCan(ItemStack stack) {
-        return stack.getItem() != INFINITE_SPRAY_CAN.get().asItem();
+    public static boolean isSprayCan(ItemStack stack) {
+        return stack.is(INFINITE_SPRAY_CAN.get().asItem());
     }
 
     // gets the bahavior to reduce repeated code

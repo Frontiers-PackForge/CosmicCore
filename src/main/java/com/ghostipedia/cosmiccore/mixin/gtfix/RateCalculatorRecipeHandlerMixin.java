@@ -3,8 +3,10 @@ package com.ghostipedia.cosmiccore.mixin.gtfix;
 import com.ghostipedia.cosmiccore.api.machine.activity.ActivityScope;
 import com.ghostipedia.cosmiccore.common.rate.RateCalculatorConsumption;
 
+import com.gregtechceu.gtceu.api.capability.recipe.FluidRecipeCapability;
 import com.gregtechceu.gtceu.api.capability.recipe.IO;
 import com.gregtechceu.gtceu.api.capability.recipe.IRecipeHandler;
+import com.gregtechceu.gtceu.api.capability.recipe.ItemRecipeCapability;
 import com.gregtechceu.gtceu.api.recipe.GTRecipe;
 
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
@@ -35,8 +37,11 @@ public interface RateCalculatorRecipeHandlerMixin {
                 handler.getCapability(), left);
         List<?> result = RateCalculatorConsumption.handle(handler, io, recipe, left, false,
                 () -> original.call(handler, io, recipe, left, false));
-        ActivityScope.partialIfUnrecorded(io == IO.IN, before,
-                RateCalculatorConsumption.handled(handler.getCapability(), requested, result));
+        boolean handled = RateCalculatorConsumption.handled(handler.getCapability(), requested, result);
+        String kind = handler.getCapability() == ItemRecipeCapability.CAP ? "item" :
+                handler.getCapability() == FluidRecipeCapability.CAP ? "fluid" : "";
+        if (kind.isEmpty()) ActivityScope.partialIfUnrecorded(io == IO.IN, before, handled);
+        else ActivityScope.partialIfUnrecorded(kind, io == IO.IN, before, handled);
         return result;
     }
 }

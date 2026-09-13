@@ -23,6 +23,23 @@ public final class PowerTowerMELocator {
     private PowerTowerMELocator() {}
 
     public static boolean locate(BlockPos pos, ResourceKey<Level> dimension, String circuitName, boolean input) {
+        Component waypointName = Component.translatable("cosmiccore.tower_me." +
+                (input ? "input_waypoint" : "output_waypoint"),
+                circuitName.isBlank() ? Component.translatable("cosmiccore.tower_me.unnamed") :
+                        Component.literal(circuitName));
+        return locate(pos, dimension, waypointName, "tower_me",
+                Component.translatable("cosmiccore.tower_me.waypoint_added", pos.toShortString()),
+                Component.translatable("cosmiccore.tower_me.locate_unavailable", pos.toShortString()));
+    }
+
+    public static boolean locateTower(BlockPos pos, ResourceKey<Level> dimension) {
+        return locate(pos, dimension, Component.translatable("cosmiccore.power_tower.ui.waypoint"), "power_tower",
+                Component.translatable("cosmiccore.power_tower.ui.waypoint_added", pos.toShortString()),
+                Component.translatable("cosmiccore.power_tower.ui.locate_unavailable", pos.toShortString()));
+    }
+
+    private static boolean locate(BlockPos pos, ResourceKey<Level> dimension, Component waypointName, String group,
+                                  Component waypointFeedback, Component unavailableFeedback) {
         var minecraft = Minecraft.getInstance();
         var level = minecraft.level;
         var player = minecraft.player;
@@ -40,17 +57,12 @@ public final class PowerTowerMELocator {
         }
         if (WaypointManager.isActive()) {
             var session = WAYPOINT_SESSIONS.computeIfAbsent(minecraft.getConnection(), ignored -> UUID.randomUUID());
-            String key = "cosmiccore:tower_me/" + session + "/" + dimension.location() + "/" + pos.asLong();
-            var name = Component.translatable("cosmiccore.tower_me." + (input ? "input_waypoint" : "output_waypoint"),
-                    circuitName.isBlank() ? Component.translatable("cosmiccore.tower_me.unnamed") :
-                            Component.literal(circuitName));
-            WaypointManager.setWaypoint(key, name.getString(), 0x59C9E8, dimension, pos);
-            player.displayClientMessage(Component.translatable("cosmiccore.tower_me.waypoint_added",
-                    pos.toShortString()), true);
+            String key = "cosmiccore:" + group + "/" + session + "/" + dimension.location() + "/" + pos.asLong();
+            WaypointManager.setWaypoint(key, waypointName.getString(), 0x59C9E8, dimension, pos);
+            player.displayClientMessage(waypointFeedback, true);
             return true;
         }
-        player.displayClientMessage(Component.translatable("cosmiccore.tower_me.locate_unavailable",
-                pos.toShortString()), false);
+        player.displayClientMessage(unavailableFeedback, false);
         return false;
     }
 

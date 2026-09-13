@@ -24,7 +24,7 @@ public final class LoadedPowerTowerTerminalRegistry {
     public void register(PowerTowerGraph graph, LoadedPowerTowerTerminal terminal, Runnable transferWakeup) {
         PowerTowerNode node = graph.node(terminal.graphNodeId());
         if (node == null || node.role() != PowerTowerRole.TERMINAL ||
-                node.terminalVoltageTier() != terminal.voltageTier())
+                node.terminalVoltageTier() != terminal.maximumVoltageTier())
             throw new IllegalArgumentException("Loaded terminal does not match its persistent graph node");
         loadedTerminals.put(terminal.graphNodeId(), terminal);
         transferWakeups.put(terminal.graphNodeId(), transferWakeup);
