@@ -4,6 +4,7 @@ import com.ghostipedia.cosmiccore.api.capability.recipe.CosmicRecipeCapabilities
 import com.ghostipedia.cosmiccore.api.registries.CosmicRegistration;
 import com.ghostipedia.cosmiccore.common.data.materials.CosmicBundleMaterials;
 import com.ghostipedia.cosmiccore.common.data.recipe.CosmicCoreOreRecipeHandler;
+import com.ghostipedia.cosmiccore.common.data.recipe.CosmicEnergyHatchRecipes;
 import com.ghostipedia.cosmiccore.common.data.recipe.CosmicGemQualityRecipeHandler;
 import com.ghostipedia.cosmiccore.common.data.recipe.CosmicWoods;
 import com.ghostipedia.cosmiccore.common.data.worldgen.generator.CosmicVeinGenerators;
@@ -36,6 +37,7 @@ public class CosmicCoreGTAddon implements IGTAddon {
 
     @Override
     public void addRecipes(RecipeOutput provider) {
+        CosmicEnergyHatchRecipes.register(provider);
         CosmicGemQualityRecipeHandler.register(provider);
         CosmicCoreOreRecipeHandler.registerFlocculant(provider);
         CosmicCoreOreRecipeHandler.registerCrystallization(provider);
