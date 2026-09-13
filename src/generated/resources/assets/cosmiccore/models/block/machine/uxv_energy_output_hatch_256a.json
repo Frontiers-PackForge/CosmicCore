@@ -1,0 +1,22 @@
+{
+    "parent": "minecraft:block/block",
+    "loader": "gtceu:machine",
+    "machine": "cosmiccore:uxv_energy_output_hatch_256a",
+    "replaceable_textures": [
+        "bottom",
+        "top",
+        "side"
+    ],
+    "variants": {
+        "": {
+            "model": {
+                "parent": "gtceu:block/machine/part/energy_output_hatch_64a",
+                "textures": {
+                    "bottom": "gtceu:block/casings/voltage/uxv/bottom",
+                    "side": "gtceu:block/casings/voltage/uxv/side",
+                    "top": "gtceu:block/casings/voltage/uxv/top"
+                }
+            }
+        }
+    }
+}
