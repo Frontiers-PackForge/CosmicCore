@@ -26,11 +26,11 @@ import com.ghostipedia.cosmiccore.common.item.behavior.InfiniteSprayCanBehavior;
 import com.ghostipedia.cosmiccore.common.item.behavior.OxygenSupplyTankBehavior;
 import com.ghostipedia.cosmiccore.common.item.behavior.PowerTowerDeploymentPackageBehavior;
 import com.ghostipedia.cosmiccore.common.item.behavior.PowerTowerLineToolBehavior;
+import com.ghostipedia.cosmiccore.common.item.behavior.SprayCanState;
 import com.ghostipedia.cosmiccore.common.item.behavior.StructureWriteBehavior;
 import com.ghostipedia.cosmiccore.common.item.behavior.VeinSurveyBehavior;
 import com.ghostipedia.cosmiccore.common.item.behavior.WirelessPDABehavior;
 import com.ghostipedia.cosmiccore.gtbridge.recipemaker.RecipeMakerBehavior;
-import com.ghostipedia.cosmiccore.utils.ItemData;
 import com.ghostipedia.cosmiccore.utils.StringUtil;
 
 import com.gregtechceu.gtceu.GTCEu;
@@ -2286,9 +2286,9 @@ public class CosmicItems {
             .lang("Â§5 Infinite_spray_can")
             .setData(ProviderType.ITEM_MODEL, NonNullBiConsumer.noop())
             .properties(p -> p.stacksTo(1))
-            .onRegister(attach(new InfiniteSprayCanBehavior(1)))
+            .onRegister(attach(new InfiniteSprayCanBehavior()))
             .onRegister(modelPredicate(CosmicCore.id("color"),
-                    (itemStack) -> (float) ItemData.readTag(itemStack).getInt(InfiniteSprayCanBehavior.ColorTag)))
+                    SprayCanState::modelColor))
             .register();
 
     public static ItemEntry<ComponentItem> NEUTRONITE_FLUID_CELL = GTRegistration.REGISTRATE

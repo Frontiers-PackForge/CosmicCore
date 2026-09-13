@@ -22,7 +22,7 @@ public abstract class MachineActivityItemHandlerMixin {
             if (root) ActivityScope.item(result, result.getCount(), true);
             return result;
         } catch (RuntimeException exception) {
-            ActivityScope.partial(true);
+            ActivityScope.partial("item", true);
             throw exception;
         } finally {
             scope.leaveMutation();
@@ -40,7 +40,7 @@ public abstract class MachineActivityItemHandlerMixin {
             if (root) ActivityScope.item(stack, Math.max(0, requested - result.getCount()), false);
             return result;
         } catch (RuntimeException exception) {
-            ActivityScope.partial(false);
+            ActivityScope.partial("item", false);
             throw exception;
         } finally {
             scope.leaveMutation();

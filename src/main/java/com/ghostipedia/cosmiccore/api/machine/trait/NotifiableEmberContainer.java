@@ -1,6 +1,7 @@
 package com.ghostipedia.cosmiccore.api.machine.trait;
 
 import com.ghostipedia.cosmiccore.api.capability.recipe.EmberRecipeCapability;
+import com.ghostipedia.cosmiccore.api.machine.activity.ActivityScope;
 import com.ghostipedia.cosmiccore.common.machine.multiblock.part.EmberHatchPartMachine;
 
 import com.gregtechceu.gtceu.api.capability.recipe.IO;
@@ -87,6 +88,7 @@ public class NotifiableEmberContainer extends NotifiableRecipeHandlerTrait<Doubl
 
     @Override
     public List<Double> handleRecipeInner(IO io, GTRecipe recipe, List<Double> left, boolean simulate) {
+        double before = capability.getEmber();
         double ember = left.stream().reduce(0.0D, Double::sum);
         if (io == IO.IN) {
             var canOutput = Math.min(maxConsumption, capability.getEmber());
@@ -98,7 +100,15 @@ public class NotifiableEmberContainer extends NotifiableRecipeHandlerTrait<Doubl
             if (!simulate) ember = capability.addAmount(Math.min(canInput, ember), true);
             ember -= canInput;
         }
+        recordDelta(before, capability.getEmber(), simulate);
         return ember <= 0 ? Collections.emptyList() : Collections.singletonList(ember);
+    }
+
+    static void recordDelta(double before, double after, boolean simulate) {
+        if (simulate) return;
+        double delta = after - before;
+        if (delta < 0) ActivityScope.ember(-delta, true);
+        else if (delta > 0) ActivityScope.ember(delta, false);
     }
 
     @Override

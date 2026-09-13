@@ -110,6 +110,7 @@ dependencies {
     implementation(forge.ftbteams)
     compileOnly(forge.ftbquests)
     runtimeOnly(forge.ftbquests)
+    compileOnly(forge.ftbchunks)
 
     // Resourceful Lib
     implementation(forge.resourcefullib)
