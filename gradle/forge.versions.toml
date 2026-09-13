@@ -21,6 +21,7 @@ curios = "9.5.1+1.21.1"
 ftblibrary = "2101.1.32"
 ftbteams = "2101.1.10"
 ftbquests = "2101.1.27"
+ftbchunks = "2101.1.20"
 resourcefullib = "3.0.12"
 tmrv = "0.8.1+mc.21.1"
 
@@ -87,6 +88,7 @@ curios              = { module = "top.theillusivec4.curios:curios-neoforge", ver
 ftblibrary          = { module = "dev.ftb.mods:ftb-library-neoforge", version.ref = "ftblibrary" }
 ftbteams            = { module = "dev.ftb.mods:ftb-teams-neoforge", version.ref = "ftbteams" }
 ftbquests           = { module = "dev.ftb.mods:ftb-quests-neoforge", version.ref = "ftbquests" }
+ftbchunks           = { module = "dev.ftb.mods:ftb-chunks-neoforge", version.ref = "ftbchunks" }
 resourcefullib      = { module = "com.teamresourceful.resourcefullib:resourcefullib-neoforge-1.21", version.ref = "resourcefullib" }
 
 arsnouveau          = { module = "maven.modrinth:ars-nouveau", version.ref = "arsnouveau" }

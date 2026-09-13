@@ -23,7 +23,7 @@ public abstract class MachineActivityFluidTankMixin {
             if (root) ActivityScope.fluid(stack, amount, false);
             return amount;
         } catch (RuntimeException exception) {
-            ActivityScope.partial(false);
+            ActivityScope.partial("fluid", false);
             throw exception;
         } finally {
             scope.leaveMutation();
@@ -40,7 +40,7 @@ public abstract class MachineActivityFluidTankMixin {
             if (root) ActivityScope.fluid(result, result.getAmount(), true);
             return result;
         } catch (RuntimeException exception) {
-            ActivityScope.partial(true);
+            ActivityScope.partial("fluid", true);
             throw exception;
         } finally {
             scope.leaveMutation();
@@ -57,7 +57,7 @@ public abstract class MachineActivityFluidTankMixin {
             if (root) ActivityScope.fluid(result, result.getAmount(), true);
             return result;
         } catch (RuntimeException exception) {
-            ActivityScope.partial(true);
+            ActivityScope.partial("fluid", true);
             throw exception;
         } finally {
             scope.leaveMutation();

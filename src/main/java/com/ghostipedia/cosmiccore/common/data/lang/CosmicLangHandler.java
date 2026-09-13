@@ -47,6 +47,55 @@ public class CosmicLangHandler extends LangHandler {
     }
 
     public static void init(RegistrateLangProvider provider) {
+        provider.add("key.cosmiccore.production_statistics", "Open Production Statistics");
+        provider.add("key.categories.cosmiccore.production_statistics", "CosmicCore: Production Statistics");
+        provider.add("gui.cosmiccore.production_statistics.title", "Production Statistics");
+        provider.add("gui.cosmiccore.production_statistics.search", "Search resources...");
+        provider.add("gui.cosmiccore.production_statistics.columns", "Consumption / Production");
+        provider.add("gui.cosmiccore.production_statistics.page", "Page %s");
+        provider.add("gui.cosmiccore.production_statistics.coverage", "Server time represented: %s");
+        provider.add("gui.cosmiccore.production_statistics.lifetime", "Recorded server time: %s");
+        provider.add("gui.cosmiccore.production_statistics.all_no_graph", "No graph for lifetime statistics");
+        provider.add("gui.cosmiccore.production_statistics.global", "All dimensions");
+        provider.add("gui.cosmiccore.production_statistics.kind.all", "All types");
+        provider.add("gui.cosmiccore.production_statistics.kind.item", "Items");
+        provider.add("gui.cosmiccore.production_statistics.kind.fluid", "Fluids");
+        provider.add("gui.cosmiccore.production_statistics.kind.ember", "Embers");
+        provider.add("gui.cosmiccore.production_statistics.kind.soul", "Quintessentia");
+        provider.add("gui.cosmiccore.production_statistics.kind.energy", "EU");
+        provider.add("gui.cosmiccore.production_statistics.resource.ember", "Ember");
+        provider.add("gui.cosmiccore.production_statistics.resource.anima", "Anima");
+        provider.add("gui.cosmiccore.production_statistics.resource.spiritus", "Spiritus");
+        provider.add("gui.cosmiccore.production_statistics.resource.eu", "EU");
+        provider.add("gui.cosmiccore.production_statistics.energy_coverage", "EU recording began at %s");
+        provider.add("gui.cosmiccore.production_statistics.precise", "Consumed %s, produced %s");
+        provider.add("gui.cosmiccore.production_statistics.rate", "Per minute: consumed %s, produced %s");
+        provider.add("gui.cosmiccore.production_statistics.precise_energy", "Consumed %s EU, generated %s EU");
+        provider.add("gui.cosmiccore.production_statistics.rate_energy", "Average: consumed %s/t, generated %s/t");
+        provider.add("gui.cosmiccore.production_statistics.interval", "Server ticks %s to %s");
+        provider.add("gui.cosmiccore.production_statistics.partial_input", "Incomplete consumption coverage");
+        provider.add("gui.cosmiccore.production_statistics.partial_output", "Incomplete production coverage");
+        provider.add("gui.cosmiccore.production_statistics.partial_both", "Incomplete input/output coverage");
+        provider.add("gui.cosmiccore.production_statistics.sort.default", "Default");
+        provider.add("gui.cosmiccore.production_statistics.sort.id", "Resource ID");
+        provider.add("gui.cosmiccore.production_statistics.sort.produced", "Produced");
+        provider.add("gui.cosmiccore.production_statistics.sort.consumed", "Consumed");
+        provider.add("gui.cosmiccore.production_statistics.sort.order.default.top",
+                "EU, Anima, Spiritus, Ember, then highest total frequency");
+        provider.add("gui.cosmiccore.production_statistics.sort.order.default.reverse",
+                "Lowest total frequency, then Ember, Spiritus, Anima, EU");
+        provider.add("gui.cosmiccore.production_statistics.sort.order.id.top", "Resource IDs: A to Z");
+        provider.add("gui.cosmiccore.production_statistics.sort.order.id.reverse", "Resource IDs: Z to A");
+        provider.add("gui.cosmiccore.production_statistics.sort.order.produced.top", "Highest produced quantity first");
+        provider.add("gui.cosmiccore.production_statistics.sort.order.produced.reverse",
+                "Lowest produced quantity first");
+        provider.add("gui.cosmiccore.production_statistics.sort.order.consumed.top", "Highest consumed quantity first");
+        provider.add("gui.cosmiccore.production_statistics.sort.order.consumed.reverse",
+                "Lowest consumed quantity first");
+        provider.add("gui.cosmiccore.production_statistics.sort.direction.top", "Current direction: top-down");
+        provider.add("gui.cosmiccore.production_statistics.sort.direction.reverse", "Current direction: bottom-up");
+        provider.add("gui.cosmiccore.production_statistics.sort.action.reverse", "Click to reverse");
+        provider.add("gui.cosmiccore.production_statistics.sort.action.select", "Click to select top-down");
         provider.add("cosmiccore.rate_calculator.title", "§6Rate Calculator");
         provider.add("cosmiccore.rate_calculator.machine", "§aMachine: %s");
         provider.add("cosmiccore.rate_calculator.status", "§eStatus: %s");
@@ -671,7 +720,9 @@ public class CosmicLangHandler extends LangHandler {
         provider.add("cosmiccore.machine.power_tower.tooltip.1",
                 "§7Does not require energy hatches or dynamos by default, only for input/output§r");
         provider.add("cosmiccore.multiblock.power_tower.mixed_voltage",
-                "Power towers may not mix tiers of voltage hatches, 1 tier per tower.");
+                "Power Tower hatches must use standard voltage tiers.");
+        provider.add("cosmiccore.multiblock.power_tower.invalid_voltage",
+                "Power Tower hatches must use standard voltage tiers.");
         provider.add("cosmiccore.multiblock.power_tower.graph_conflict",
                 "This tower conflicts with the voltage or ownership of this wire grid.");
         provider.add("cosmiccore.power_tower.line.first",
@@ -705,7 +756,68 @@ public class CosmicLangHandler extends LangHandler {
         provider.add("cosmiccore.power_tower.line.error.path_obstructed",
                 "A solid block is preventing wire attachment.");
         provider.add("cosmiccore.power_tower.line.error.graph_invariant_rejected",
-                "A existing connection or mismatch in voltage tier is preventing connection!");
+                "An existing connection, wire tier, or hatch tier prevents this connection.");
+        provider.add("cosmiccore.power_tower.ui.tab.overview", "Overview");
+        provider.add("cosmiccore.power_tower.ui.tab.wires", "Wire Upgrades");
+        provider.add("cosmiccore.power_tower.ui.tab.towers", "Connected Towers");
+        provider.add("cosmiccore.power_tower.ui.network", "Network");
+        provider.add("cosmiccore.power_tower.ui.local_tower", "Local Tower");
+        provider.add("cosmiccore.power_tower.ui.wire_tier", "Wire Tier: %s");
+        provider.add("cosmiccore.power_tower.ui.tower_count", "Towers: %s");
+        provider.add("cosmiccore.power_tower.ui.connection_count", "Connections: %s");
+        provider.add("cosmiccore.power_tower.ui.counts", "Towers: %s | Connections: %s");
+        provider.add("cosmiccore.power_tower.ui.role", "Role: %s");
+        provider.add("cosmiccore.power_tower.ui.hatch_tier", "Hatch Tier: %s");
+        provider.add("cosmiccore.power_tower.ui.this_tower", "This Tower: %s %s");
+        provider.add("cosmiccore.power_tower.ui.up_to", "(up to %s)");
+        provider.add("cosmiccore.power_tower.ui.input_capacity", "Input: %s EU/t");
+        provider.add("cosmiccore.power_tower.ui.output_capacity", "Output: %s EU/t");
+        provider.add("cosmiccore.power_tower.ui.wire_upgrade", "Wire Upgrade");
+        provider.add("cosmiccore.power_tower.ui.target", "Target Tier");
+        provider.add("cosmiccore.power_tower.ui.current_wire", "Wire: %s");
+        provider.add("cosmiccore.power_tower.ui.upgrade_progress", "%s / %s wires upgraded");
+        provider.add("cosmiccore.power_tower.ui.coils_remaining", "%s %s Coils remaining");
+        provider.add("cosmiccore.power_tower.ui.hatch_limit_short",
+                "Hatches above %s need all wires upgraded.");
+        provider.add("cosmiccore.power_tower.ui.upgrade_help_cost", "Each wire uses one target-tier coil.");
+        provider.add("cosmiccore.power_tower.ui.upgrade_help_refund", "Its old coil is returned.");
+        provider.add("cosmiccore.power_tower.ui.upgrade_help_inventory",
+                "Upgrading stops without coils or inventory space.");
+        provider.add("cosmiccore.power_tower.ui.upgrade_help_hatches",
+                "Higher-tier hatches work only when every wire is upgraded.");
+        provider.add("cosmiccore.power_tower.ui.no_upgrade", "No connected wires to upgrade.");
+        provider.add("cosmiccore.power_tower.ui.choose_upgrade", "Upgrade Tier: %s");
+        provider.add("cosmiccore.power_tower.ui.upgrading", "Upgrading to %s: %s / %s connections");
+        provider.add("cosmiccore.power_tower.ui.requires", "Requires %s more %s Coils.");
+        provider.add("cosmiccore.power_tower.ui.hatch_limit",
+                "All connections must be upgraded before %s hatches can be used.");
+        provider.add("cosmiccore.power_tower.ui.set_target", "Set Upgrade Tier");
+        provider.add("cosmiccore.power_tower.ui.upgrade_wires", "Upgrade Wires");
+        provider.add("cosmiccore.power_tower.ui.upgrade_available", "Upgrade Available Wires");
+        provider.add("cosmiccore.power_tower.ui.connected_towers", "Connected Towers");
+        provider.add("cosmiccore.power_tower.ui.coordinates", "Coordinates");
+        provider.add("cosmiccore.power_tower.ui.tier", "Tier");
+        provider.add("cosmiccore.power_tower.ui.status", "Status");
+        provider.add("cosmiccore.power_tower.ui.no_connected_towers", "No other towers connected");
+        provider.add("cosmiccore.power_tower.ui.tower_row", "%s | %s | %s");
+        provider.add("cosmiccore.power_tower.ui.page", "Page %s / %s");
+        provider.add("cosmiccore.power_tower.ui.locate", "Locate tower");
+        provider.add("cosmiccore.power_tower.ui.loaded", "Loaded");
+        provider.add("cosmiccore.power_tower.ui.unloaded", "Unloaded");
+        provider.add("cosmiccore.power_tower.ui.broken", "Broken");
+        provider.add("cosmiccore.power_tower.ui.relay", "Relay");
+        provider.add("cosmiccore.power_tower.ui.terminal", "Terminal");
+        provider.add("cosmiccore.power_tower.ui.waypoint", "Power Tower");
+        provider.add("cosmiccore.power_tower.ui.waypoint_added", "Power Tower waypoint placed at %s.");
+        provider.add("cosmiccore.power_tower.ui.locate_unavailable",
+                "Power Tower at %s. No available highlight or map integration.");
+        provider.add("cosmiccore.power_tower.ui.target_set", "Upgrade tier set to %s.");
+        provider.add("cosmiccore.power_tower.ui.batch_complete", "Upgraded %s connections. %s remain.");
+        provider.add("cosmiccore.power_tower.ui.batch_stopped",
+                "No wires upgraded. Bring %s Coils or make room for the old coils.");
+        provider.add("cosmiccore.power_tower.ui.invalid_target", "Choose a tier above the current wire tier.");
+        provider.add("cosmiccore.power_tower.ui.stale_or_denied",
+                "The Power Tower network changed or you cannot configure this tower. Try again.");
         provider.add("cosmiccore.deployment.success", "%s deployed!");
         provider.add("cosmiccore.deployment.refunded",
                 "%s deployment cancelled. Your reserved items were returned to your inventory or dropped beside you if full.");
@@ -1242,15 +1354,31 @@ public class CosmicLangHandler extends LangHandler {
         provider.add("debug.team.uuid", "§aTeam UUID:§a %s");
 
         provider.add("cosmiccore.item.spraycan.tooltip.lclick", "§4Left Click: §8Cycle color");
-        provider.add("cosmiccore.item.spraycan.tooltip.lclick_sneak", "§4Left Click + Sneak: §8Cycle color");
+        provider.add("cosmiccore.item.spraycan.tooltip.lclick_sneak", "§4Shift + Left Click: §8Cycle color backward");
         provider.add("cosmiccore.item.spraycan.tooltip.rclick", "§4Right Click: §8Paint block");
-        provider.add("cosmiccore.item.spraycan.tooltip.rclick_sneak", "§5Right Click + Sneak: §8Open UI");
+        provider.add("cosmiccore.item.spraycan.tooltip.rclick_sneak",
+                "§5Shift + Right Click: §8Use spray mode; open UI in air");
         provider.add("cosmiccore.item.spraycan.tooltip.rclick_offhand", "§5Right Click in Offhand: §8Place & paint");
+        provider.add("cosmiccore.item.spraycan.tooltip.middle", "§4Middle Click: §8Pick block color");
+        provider.add("cosmiccore.item.spraycan.tooltip.middle_sneak", "§4Shift + Middle Click: §8Toggle lock");
+        provider.add("cosmiccore.item.spraycan.tooltip.current_mode", "Spray Mode: %s");
         provider.add("cosmiccore.item.spraycan.tooltip.locked", "Spraycan is locked");
         provider.add("cosmiccore.item.spraycan.tooltip.current_color", "Current Color: %s");
         provider.add("cosmiccore.item.spraycan.tooltip.solvent_mode", "Spraycan in SOLVENT mode");
         provider.add("cosmiccore.item.spraycan.gui.title", "Prismatic Spray Can");
         provider.add("cosmiccore.item.spraycan.gui.solvent", "Solvent (Strip Color)");
+        provider.add("cosmiccore.item.spraycan.gui.rain_sealant", "Rain Sealant");
+        provider.add("cosmiccore.item.spraycan.gui.color", "Color: ");
+        provider.add("cosmiccore.item.spraycan.mode.line", "Line");
+        provider.add("cosmiccore.item.spraycan.mode.connected_color", "Connected");
+        provider.add("cosmiccore.item.spraycan.mode.a_b", "P2P");
+        provider.add("cosmiccore.item.spraycan.mode.tooltip.line", "Paint a straight line along your facing axis");
+        provider.add("cosmiccore.item.spraycan.mode.tooltip.connected_color",
+                "Paint connected cables matching the original color");
+        provider.add("cosmiccore.item.spraycan.mode.tooltip.a_b", "Select two endpoints on one straight line");
+        provider.add("cosmiccore.item.spraycan.ab.selected", "First spray endpoint selected");
+        provider.add("cosmiccore.item.spraycan.ab.invalid",
+                "Endpoints must form a connected straight line within the spray limit");
         provider.add("cosmiccore.item.spraycan.locked", "Spray Can is locked");
         provider.add("cosmiccore.item.spraycan.actionbar.color", "Spray Can Color: %s");
         provider.add("cosmiccore.item.spraycan.now_locked", "Spray Can locked");

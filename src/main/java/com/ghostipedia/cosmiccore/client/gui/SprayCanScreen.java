@@ -1,45 +1,53 @@
 package com.ghostipedia.cosmiccore.client.gui;
 
-import com.ghostipedia.cosmiccore.common.data.CosmicSounds;
+import com.ghostipedia.cosmiccore.CosmicCore;
+import com.ghostipedia.cosmiccore.common.data.CosmicItems;
 import com.ghostipedia.cosmiccore.common.item.behavior.ExtendedDyeColor;
-import com.ghostipedia.cosmiccore.common.item.behavior.InfiniteSprayCanBehavior;
+import com.ghostipedia.cosmiccore.common.item.behavior.SprayCanClientHandler;
+import com.ghostipedia.cosmiccore.common.item.behavior.SprayCanState;
+import com.ghostipedia.cosmiccore.common.network.packet.SprayCanStatePacket;
+
+import com.gregtechceu.gtceu.common.data.GTItems;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.Screen;
-import net.minecraft.client.resources.sounds.SimpleSoundInstance;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
 
 public class SprayCanScreen extends Screen {
 
     private static final int GUI_WIDTH = 176;
-    private static final int GUI_HEIGHT = 90;
+    private static final int GUI_HEIGHT = 112;
     private static final int BUTTON_SIZE = 18;
     private static final int GRID_COLS = 8;
     private static final int GRID_ROWS = 2;
     private static final int PADDING = 8;
+    private static final int MODE_BUTTON_WIDTH = 50;
+    private static final int MODE_BUTTON_HEIGHT = 14;
+    private static final int MODE_BUTTON_GAP = 3;
 
-    private static final int BG_TOP = 0xFF080c14;
-    private static final int BG_BOTTOM = 0xFF040608;
-    private static final int GRID_COLOR = 0x0A4080FF;
-    private static final int BORDER_COLOR = 0xFF304060;
-    private static final int ACCENT_COLOR = 0xFF4080C0;
-    private static final int BUTTON_BG = 0xC0101018;
-    private static final int BUTTON_BORDER = 0xFF405070;
-    private static final int BUTTON_HOVER = 0xFF6090D0;
+    private static final ResourceLocation PANEL = CosmicCore.id("textures/gui/rate_calculator/panel.png");
+    private static final ResourceLocation BUTTON = CosmicCore.id("textures/gui/rate_calculator/button.png");
+    private static final ResourceLocation BUTTON_HIGHLIGHTED = CosmicCore
+            .id("textures/gui/rate_calculator/button_highlighted.png");
 
     private final Player player;
-    private final InfiniteSprayCanBehavior behavior;
+    private final InteractionHand hand;
 
     private int guiLeft;
     private int guiTop;
     private int hoveredColorIndex = -1;
+    private int hoveredModeIndex = -1;
 
-    public SprayCanScreen(Player player, InfiniteSprayCanBehavior behavior) {
+    public SprayCanScreen(Player player, InteractionHand hand) {
         super(Component.translatable("cosmiccore.item.spraycan.gui.title"));
         this.player = player;
-        this.behavior = behavior;
+        this.hand = hand;
     }
 
     @Override
@@ -52,43 +60,22 @@ public class SprayCanScreen extends Screen {
     @Override
     public void render(GuiGraphics graphics, int mouseX, int mouseY, float partialTick) {
         renderBackground(graphics, mouseX, mouseY, partialTick);
+        super.render(graphics, mouseX, mouseY, partialTick);
         drawBackground(graphics);
         drawColorGrid(graphics, mouseX, mouseY);
-        drawSolventButton(graphics, mouseX, mouseY);
+        drawSpecialButtons(graphics, mouseX, mouseY);
         drawCurrentColor(graphics);
+        drawModeButtons(graphics, mouseX, mouseY);
         drawTooltip(graphics, mouseX, mouseY);
-        super.render(graphics, mouseX, mouseY, partialTick);
     }
 
     private void drawBackground(GuiGraphics graphics) {
-        // Gradient background
-        for (int row = 0; row < GUI_HEIGHT; row++) {
-            float progress = (float) row / GUI_HEIGHT;
-            int color = lerpColor(BG_TOP, BG_BOTTOM, progress);
-            graphics.fill(guiLeft, guiTop + row, guiLeft + GUI_WIDTH, guiTop + row + 1, color);
-        }
-
-        // Grid pattern
-        int spacing = 10;
-        for (int gx = guiLeft + spacing; gx < guiLeft + GUI_WIDTH; gx += spacing) {
-            graphics.fill(gx, guiTop, gx + 1, guiTop + GUI_HEIGHT, GRID_COLOR);
-        }
-        for (int gy = guiTop + spacing; gy < guiTop + GUI_HEIGHT; gy += spacing) {
-            graphics.fill(guiLeft, gy, guiLeft + GUI_WIDTH, gy + 1, GRID_COLOR);
-        }
-
-        // Border
-        drawBorder(graphics, guiLeft, guiTop, GUI_WIDTH, GUI_HEIGHT, BORDER_COLOR);
-
-        // Corner accents
-        drawCornerAccents(graphics, guiLeft, guiTop, GUI_WIDTH, GUI_HEIGHT, ACCENT_COLOR);
-
-        // Title
+        drawNineSlice(graphics, PANEL, guiLeft, guiTop, GUI_WIDTH, GUI_HEIGHT, 9, 62, 62);
         var font = Minecraft.getInstance().font;
         Component title = getTitle();
         int titleWidth = font.width(title);
         int titleX = guiLeft + (GUI_WIDTH - titleWidth) / 2;
-        graphics.drawString(font, title, titleX, guiTop + 4, ACCENT_COLOR, true);
+        graphics.drawString(font, title, titleX, guiTop + 4, 0xFFFFFFFF, true);
     }
 
     private void drawColorGrid(GuiGraphics graphics, int mouseX, int mouseY) {
@@ -104,7 +91,8 @@ public class SprayCanScreen extends Screen {
             int y = startY + row * BUTTON_SIZE + row * 2;
 
             boolean hovered = mouseX >= x && mouseX < x + BUTTON_SIZE && mouseY >= y && mouseY < y + BUTTON_SIZE;
-            boolean selected = behavior.getColor() == dyeColor;
+            SprayCanState state = SprayCanState.read(stack());
+            boolean selected = !state.rainSealant() && state.color() == dyeColor;
 
             if (hovered) {
                 hoveredColorIndex = i;
@@ -116,69 +104,76 @@ public class SprayCanScreen extends Screen {
 
     private void drawColorButton(GuiGraphics graphics, int x, int y, ExtendedDyeColor color, boolean hovered,
                                  boolean selected) {
-        // Button background
-        graphics.fill(x, y, x + BUTTON_SIZE, y + BUTTON_SIZE, BUTTON_BG);
-
-        // Border
-        int borderColor = selected ? ACCENT_COLOR : (hovered ? BUTTON_HOVER : BUTTON_BORDER);
-        drawBorder(graphics, x, y, BUTTON_SIZE, BUTTON_SIZE, borderColor);
-
-        // Color fill (inner area)
-        int innerPad = 2;
-        int dyeRgb = color.getTextColor();
-        int fillColor = 0xFF000000 | dyeRgb;
-        graphics.fill(x + innerPad, y + innerPad, x + BUTTON_SIZE - innerPad, y + BUTTON_SIZE - innerPad, fillColor);
+        drawButton(graphics, x, y, BUTTON_SIZE, BUTTON_SIZE, hovered || selected);
+        graphics.renderItem(dyeStack(color), x + 1, y + 1);
     }
 
-    private void drawSolventButton(GuiGraphics graphics, int mouseX, int mouseY) {
-        // Align to rightmost column of the grid
+    private void drawSpecialButtons(GuiGraphics graphics, int mouseX, int mouseY) {
         int gridWidth = GRID_COLS * BUTTON_SIZE + (GRID_COLS - 1) * 2;
         int x = guiLeft + PADDING + gridWidth - BUTTON_SIZE;
-        int y = guiTop + GUI_HEIGHT - 28;
+        int y = guiTop + 62;
+
+        int rainX = x - BUTTON_SIZE - 2;
+        boolean rainHovered = mouseX >= rainX && mouseX < rainX + BUTTON_SIZE && mouseY >= y &&
+                mouseY < y + BUTTON_SIZE;
+        if (rainHovered) hoveredColorIndex = 16;
+        drawButton(graphics, rainX, y, BUTTON_SIZE, BUTTON_SIZE,
+                rainHovered || SprayCanState.read(stack()).rainSealant());
+        graphics.renderItem(CosmicItems.RAIN_SEALANT_SPRAY_CAN.asStack(), rainX + 1, y + 1);
 
         boolean hovered = mouseX >= x && mouseX < x + BUTTON_SIZE && mouseY >= y && mouseY < y + BUTTON_SIZE;
-        boolean selected = behavior.getColor() == ExtendedDyeColor.SOLVENT;
+        boolean selected = !SprayCanState.read(stack()).rainSealant() &&
+                SprayCanState.read(stack()).color() == ExtendedDyeColor.SOLVENT;
 
         if (hovered) {
-            hoveredColorIndex = 16; // Solvent index
+            hoveredColorIndex = 17;
         }
-
-        // Button background
-        graphics.fill(x, y, x + BUTTON_SIZE, y + BUTTON_SIZE, BUTTON_BG);
-
-        // Border
-        int borderColor = selected ? ACCENT_COLOR : (hovered ? BUTTON_HOVER : BUTTON_BORDER);
-        drawBorder(graphics, x, y, BUTTON_SIZE, BUTTON_SIZE, borderColor);
-
-        // X pattern for solvent
-        int innerPad = 4;
-        int lineColor = 0xFFCC4444;
-        // Draw X
-        for (int i = 0; i < BUTTON_SIZE - innerPad * 2; i++) {
-            graphics.fill(x + innerPad + i, y + innerPad + i, x + innerPad + i + 1, y + innerPad + i + 2, lineColor);
-            graphics.fill(x + BUTTON_SIZE - innerPad - i - 1, y + innerPad + i, x + BUTTON_SIZE - innerPad - i,
-                    y + innerPad + i + 2, lineColor);
-        }
+        drawButton(graphics, x, y, BUTTON_SIZE, BUTTON_SIZE, hovered || selected);
+        graphics.renderItem(GTItems.SPRAY_SOLVENT.asStack(), x + 1, y + 1);
     }
 
     private void drawCurrentColor(GuiGraphics graphics) {
         var font = Minecraft.getInstance().font;
         int y = guiTop + 18 + GRID_ROWS * (BUTTON_SIZE + 2) + 4;
 
-        ExtendedDyeColor current = behavior.getColor();
-        String colorName = current != null ? current.name().replace('_', ' ') : "NONE";
+        SprayCanState state = SprayCanState.read(stack());
+        ExtendedDyeColor current = state.color();
+        Component colorName = state.rainSealant() ?
+                Component.translatable("material.cosmiccore.rain_sealant") :
+                dyeName(current);
         int textColor = getReadableTextColor(current);
 
-        String label = "Color: ";
+        Component label = Component.translatable("cosmiccore.item.spraycan.gui.color");
         graphics.drawString(font, label, guiLeft + PADDING, y, 0xFFAAAAAA, false);
-        graphics.drawString(font, colorName, guiLeft + PADDING + font.width(label), y, textColor, false);
+        int valueX = guiLeft + PADDING + font.width(label);
+        int availableWidth = guiLeft + PADDING + 6 * (BUTTON_SIZE + 2) - 2 - valueX;
+        graphics.drawString(font, font.plainSubstrByWidth(colorName.getString(), availableWidth), valueX, y,
+                state.rainSealant() ? 0xFF9CD7FF : textColor, false);
+    }
+
+    private void drawModeButtons(GuiGraphics graphics, int mouseX, int mouseY) {
+        hoveredModeIndex = -1;
+        var font = Minecraft.getInstance().font;
+        SprayCanState.SprayMode selectedMode = SprayCanState.read(stack()).mode();
+        int startX = guiLeft + PADDING;
+        int y = guiTop + GUI_HEIGHT - MODE_BUTTON_HEIGHT - PADDING;
+        for (int i = 0; i < SprayCanState.SprayMode.values().length; i++) {
+            int x = startX + i * (MODE_BUTTON_WIDTH + MODE_BUTTON_GAP);
+            boolean hovered = mouseX >= x && mouseX < x + MODE_BUTTON_WIDTH && mouseY >= y &&
+                    mouseY < y + MODE_BUTTON_HEIGHT;
+            if (hovered) hoveredModeIndex = i;
+            boolean selected = selectedMode.ordinal() == i;
+            drawButton(graphics, x, y, MODE_BUTTON_WIDTH, MODE_BUTTON_HEIGHT, selected || hovered);
+            Component name = Component.translatable("cosmiccore.item.spraycan.mode." +
+                    SprayCanState.SprayMode.values()[i].name().toLowerCase());
+            graphics.drawCenteredString(font, name, x + MODE_BUTTON_WIDTH / 2, y + 3, 0xFFFFFFFF);
+        }
     }
 
     private int getReadableTextColor(ExtendedDyeColor color) {
         if (color == null || color == ExtendedDyeColor.SOLVENT) {
             return 0xFFFFFFFF;
         }
-        // Black and other dark colors need a lighter display color
         if (color == ExtendedDyeColor.BLACK) {
             return 0xFF666666;
         }
@@ -186,14 +181,18 @@ public class SprayCanScreen extends Screen {
     }
 
     private void drawTooltip(GuiGraphics graphics, int mouseX, int mouseY) {
-        if (hoveredColorIndex < 0) return;
+        if (hoveredColorIndex < 0 && hoveredModeIndex < 0) return;
 
         Component tooltip;
-        if (hoveredColorIndex == 16) {
+        if (hoveredModeIndex >= 0) {
+            tooltip = Component.translatable("cosmiccore.item.spraycan.mode.tooltip." +
+                    SprayCanState.SprayMode.values()[hoveredModeIndex].name().toLowerCase());
+        } else if (hoveredColorIndex == 16) {
+            tooltip = Component.translatable("cosmiccore.item.spraycan.gui.rain_sealant");
+        } else if (hoveredColorIndex == 17) {
             tooltip = Component.translatable("cosmiccore.item.spraycan.gui.solvent");
         } else {
-            String colorName = ExtendedDyeColor.values()[hoveredColorIndex].name().replace('_', ' ');
-            tooltip = Component.literal(colorName);
+            tooltip = dyeName(ExtendedDyeColor.values()[hoveredColorIndex]);
         }
 
         graphics.renderTooltip(Minecraft.getInstance().font, tooltip, mouseX, mouseY);
@@ -204,16 +203,19 @@ public class SprayCanScreen extends Screen {
         if (button == 0) {
             int clickedIndex = getColorIndexAt((int) mouseX, (int) mouseY);
             if (clickedIndex >= 0) {
-                ExtendedDyeColor newColor;
                 if (clickedIndex == 16) {
-                    newColor = ExtendedDyeColor.SOLVENT;
+                    SprayCanClientHandler.updateState(hand, stack(), SprayCanStatePacket.Action.SET_RAIN_SEALANT, 1);
                 } else {
-                    newColor = ExtendedDyeColor.values()[clickedIndex];
+                    ExtendedDyeColor newColor = clickedIndex == 17 ? ExtendedDyeColor.SOLVENT :
+                            ExtendedDyeColor.values()[clickedIndex];
+                    SprayCanClientHandler.updateState(hand, stack(), SprayCanStatePacket.Action.SET_COLOR,
+                            newColor.ordinal());
                 }
-                behavior.setColor(newColor);
-                behavior.sendColorToTag(player, newColor);
-                Minecraft.getInstance().getSoundManager().play(
-                        SimpleSoundInstance.forUI(CosmicSounds.SHAKE_CAN.getMainEvent(), 1.0f, 1.0f));
+                return true;
+            }
+            int modeIndex = getModeIndexAt((int) mouseX, (int) mouseY);
+            if (modeIndex >= 0) {
+                SprayCanClientHandler.updateState(hand, stack(), SprayCanStatePacket.Action.SET_MODE, modeIndex);
                 return true;
             }
         }
@@ -224,7 +226,6 @@ public class SprayCanScreen extends Screen {
         int startX = guiLeft + PADDING;
         int startY = guiTop + 18;
 
-        // Check color grid
         for (int i = 0; i < 16; i++) {
             int col = i % GRID_COLS;
             int row = i / GRID_COLS;
@@ -236,15 +237,30 @@ public class SprayCanScreen extends Screen {
             }
         }
 
-        // Check solvent button (aligned to rightmost column)
         int gridWidth = GRID_COLS * BUTTON_SIZE + (GRID_COLS - 1) * 2;
         int solventX = guiLeft + PADDING + gridWidth - BUTTON_SIZE;
-        int solventY = guiTop + GUI_HEIGHT - 28;
-        if (mouseX >= solventX && mouseX < solventX + BUTTON_SIZE && mouseY >= solventY &&
-                mouseY < solventY + BUTTON_SIZE) {
+        int solventY = guiTop + 62;
+        int rainX = solventX - BUTTON_SIZE - 2;
+        if (mouseX >= rainX && mouseX < rainX + BUTTON_SIZE && mouseY >= solventY && mouseY < solventY + BUTTON_SIZE) {
             return 16;
         }
+        if (mouseX >= solventX && mouseX < solventX + BUTTON_SIZE && mouseY >= solventY &&
+                mouseY < solventY + BUTTON_SIZE) {
+            return 17;
+        }
 
+        return -1;
+    }
+
+    private int getModeIndexAt(int mouseX, int mouseY) {
+        int startX = guiLeft + PADDING;
+        int y = guiTop + GUI_HEIGHT - MODE_BUTTON_HEIGHT - PADDING;
+        for (int i = 0; i < SprayCanState.SprayMode.values().length; i++) {
+            int x = startX + i * (MODE_BUTTON_WIDTH + MODE_BUTTON_GAP);
+            if (mouseX >= x && mouseX < x + MODE_BUTTON_WIDTH && mouseY >= y &&
+                    mouseY < y + MODE_BUTTON_HEIGHT)
+                return i;
+        }
         return -1;
     }
 
@@ -253,43 +269,52 @@ public class SprayCanScreen extends Screen {
         return false;
     }
 
-    private void drawBorder(GuiGraphics graphics, int x, int y, int w, int h, int color) {
-        graphics.fill(x, y, x + w, y + 1, color); // Top
-        graphics.fill(x, y + h - 1, x + w, y + h, color); // Bottom
-        graphics.fill(x, y, x + 1, y + h, color); // Left
-        graphics.fill(x + w - 1, y, x + w, y + h, color); // Right
+    private ItemStack stack() {
+        return player.getItemInHand(hand);
     }
 
-    private void drawCornerAccents(GuiGraphics graphics, int x, int y, int w, int h, int color) {
-        int len = 12;
-        int thickness = 2;
-        int accentAlpha = (color & 0x00FFFFFF) | 0x60000000;
-
-        // Top-left
-        graphics.fill(x, y, x + len, y + thickness, accentAlpha);
-        graphics.fill(x, y, x + thickness, y + len, accentAlpha);
-        // Top-right
-        graphics.fill(x + w - len, y, x + w, y + thickness, accentAlpha);
-        graphics.fill(x + w - thickness, y, x + w, y + len, accentAlpha);
-        // Bottom-left
-        graphics.fill(x, y + h - thickness, x + len, y + h, accentAlpha);
-        graphics.fill(x, y + h - len, x + thickness, y + h, accentAlpha);
-        // Bottom-right
-        graphics.fill(x + w - len, y + h - thickness, x + w, y + h, accentAlpha);
-        graphics.fill(x + w - thickness, y + h - len, x + w, y + h, accentAlpha);
+    private static ItemStack dyeStack(ExtendedDyeColor color) {
+        return new ItemStack(BuiltInRegistries.ITEM.get(ResourceLocation.withDefaultNamespace(
+                color.getColor().getName() + "_dye")));
     }
 
-    private int lerpColor(int c1, int c2, float t) {
-        int a1 = (c1 >> 24) & 0xFF, a2 = (c2 >> 24) & 0xFF;
-        int r1 = (c1 >> 16) & 0xFF, r2 = (c2 >> 16) & 0xFF;
-        int g1 = (c1 >> 8) & 0xFF, g2 = (c2 >> 8) & 0xFF;
-        int b1 = c1 & 0xFF, b2 = c2 & 0xFF;
+    private static Component dyeName(ExtendedDyeColor color) {
+        return Component.translatable("item.minecraft." + color.getColor().getName() + "_dye");
+    }
 
-        int a = (int) (a1 + (a2 - a1) * t);
-        int r = (int) (r1 + (r2 - r1) * t);
-        int g = (int) (g1 + (g2 - g1) * t);
-        int b = (int) (b1 + (b2 - b1) * t);
+    private static void drawButton(GuiGraphics graphics, int x, int y, int width, int height, boolean highlighted) {
+        drawNineSlice(graphics, highlighted ? BUTTON_HIGHLIGHTED : BUTTON, x, y, width, height, 3, 200, 20);
+    }
 
-        return (a << 24) | (r << 16) | (g << 8) | b;
+    private static void drawNineSlice(GuiGraphics graphics, ResourceLocation texture, int x, int y, int width,
+                                      int height, int border, int textureWidth, int textureHeight) {
+        int centerWidth = Math.max(0, width - border * 2);
+        int centerHeight = Math.max(0, height - border * 2);
+        int sourceCenterWidth = textureWidth - border * 2;
+        int sourceCenterHeight = textureHeight - border * 2;
+        blit(graphics, texture, x, y, border, border, 0, 0, border, border, textureWidth, textureHeight);
+        blit(graphics, texture, x + border, y, centerWidth, border, border, 0, sourceCenterWidth, border,
+                textureWidth, textureHeight);
+        blit(graphics, texture, x + border + centerWidth, y, border, border, textureWidth - border, 0, border,
+                border, textureWidth, textureHeight);
+        blit(graphics, texture, x, y + border, border, centerHeight, 0, border, border, sourceCenterHeight,
+                textureWidth, textureHeight);
+        blit(graphics, texture, x + border, y + border, centerWidth, centerHeight, border, border,
+                sourceCenterWidth, sourceCenterHeight, textureWidth, textureHeight);
+        blit(graphics, texture, x + border + centerWidth, y + border, border, centerHeight, textureWidth - border,
+                border, border, sourceCenterHeight, textureWidth, textureHeight);
+        blit(graphics, texture, x, y + border + centerHeight, border, border, 0, textureHeight - border, border,
+                border, textureWidth, textureHeight);
+        blit(graphics, texture, x + border, y + border + centerHeight, centerWidth, border, border,
+                textureHeight - border, sourceCenterWidth, border, textureWidth, textureHeight);
+        blit(graphics, texture, x + border + centerWidth, y + border + centerHeight, border, border,
+                textureWidth - border, textureHeight - border, border, border, textureWidth, textureHeight);
+    }
+
+    private static void blit(GuiGraphics graphics, ResourceLocation texture, int x, int y, int width, int height,
+                             int sourceX, int sourceY, int sourceWidth, int sourceHeight, int textureWidth,
+                             int textureHeight) {
+        if (width > 0 && height > 0) graphics.blit(texture, x, y, width, height, sourceX, sourceY, sourceWidth,
+                sourceHeight, textureWidth, textureHeight);
     }
 }

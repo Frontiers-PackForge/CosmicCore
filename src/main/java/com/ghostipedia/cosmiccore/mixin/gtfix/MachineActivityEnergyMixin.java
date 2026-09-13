@@ -1,6 +1,6 @@
 package com.ghostipedia.cosmiccore.mixin.gtfix;
 
-import com.ghostipedia.cosmiccore.api.machine.activity.ActivityScope;
+import com.ghostipedia.cosmiccore.common.machine.trait.activity.EnergyMutationAdapter;
 
 import com.gregtechceu.gtceu.api.machine.trait.notifiable.NotifiableEnergyContainer;
 
@@ -13,9 +13,6 @@ public abstract class MachineActivityEnergyMixin {
 
     @WrapMethod(method = "changeEnergy")
     private long cosmiccore$energy(long amount, Operation<Long> original) {
-        long changed = original.call(amount);
-        if (changed == Long.MIN_VALUE) ActivityScope.partial(true);
-        else ActivityScope.value("energy", "gtceu:eu", Math.abs(changed), changed < 0);
-        return changed;
+        return EnergyMutationAdapter.execute(amount, original::call);
     }
 }

@@ -25,9 +25,11 @@ import com.ghostipedia.cosmiccore.common.network.packet.PowerTowerChainPacket;
 import com.ghostipedia.cosmiccore.common.network.packet.PowerTowerRideRequestPacket;
 import com.ghostipedia.cosmiccore.common.network.packet.PowerTowerRideStatePacket;
 import com.ghostipedia.cosmiccore.common.network.packet.PowerTowerSpanPacket;
+import com.ghostipedia.cosmiccore.common.network.packet.ProductionStatisticsPackets;
 import com.ghostipedia.cosmiccore.common.network.packet.RateCalculatorPackets;
 import com.ghostipedia.cosmiccore.common.network.packet.RevealFieldsPacket;
 import com.ghostipedia.cosmiccore.common.network.packet.SetMultiblockStructureTierPacket;
+import com.ghostipedia.cosmiccore.common.network.packet.SprayCanStatePacket;
 import com.ghostipedia.cosmiccore.common.network.packet.StarLadderUplinkPackets;
 import com.ghostipedia.cosmiccore.common.network.packet.StellarUpgradePacket;
 import com.ghostipedia.cosmiccore.common.network.packet.SyncAbyssAttunementPacket;
@@ -102,6 +104,8 @@ public class CCoreNetwork {
                 RateCalculatorPackets.Update::execute);
         registrar.playToClient(RateCalculatorPackets.Clear.TYPE, RateCalculatorPackets.Clear.CODEC,
                 RateCalculatorPackets.Clear::execute);
+        registrar.playToClient(ProductionStatisticsPackets.Response.TYPE, ProductionStatisticsPackets.Response.CODEC,
+                ProductionStatisticsPackets.Response::execute);
         DeedQuestCompatBridge.registerPayloads(registrar);
 
         registrar.playToServer(DashPacket.TYPE, DashPacket.CODEC, DashPacket::execute);
@@ -127,6 +131,9 @@ public class CCoreNetwork {
                 RateCalculatorPackets.Reset::execute);
         registrar.playToServer(RateCalculatorPackets.Close.TYPE, RateCalculatorPackets.Close.CODEC,
                 RateCalculatorPackets.Close::execute);
+        registrar.playToServer(ProductionStatisticsPackets.Request.TYPE, ProductionStatisticsPackets.Request.CODEC,
+                ProductionStatisticsPackets.Request::execute);
+        registrar.playToServer(SprayCanStatePacket.TYPE, SprayCanStatePacket.CODEC, SprayCanStatePacket::execute);
 
         registrar.playToServer(StarLadderUplinkPackets.UplinkActionPacket.TYPE,
                 StarLadderUplinkPackets.UplinkActionPacket.CODEC,

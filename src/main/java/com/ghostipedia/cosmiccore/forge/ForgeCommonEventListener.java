@@ -24,6 +24,7 @@ import com.ghostipedia.cosmiccore.common.mirror.deed.DeedTeams;
 import com.ghostipedia.cosmiccore.common.network.CCoreNetwork;
 import com.ghostipedia.cosmiccore.common.network.packet.EffortlessBuildingAE2CountQueryPacket;
 import com.ghostipedia.cosmiccore.common.network.packet.RevealFieldsPacket;
+import com.ghostipedia.cosmiccore.common.production.ProductionStatisticsData;
 import com.ghostipedia.cosmiccore.common.vitae.CultivationProfileManager;
 import com.ghostipedia.cosmiccore.mixin.accessor.LivingEntityAccessor;
 
@@ -69,6 +70,10 @@ public class ForgeCommonEventListener {
         if (!(event.getEntity() instanceof ServerPlayer player)) return;
         FlightDiffuserBehavior.clear(player);
         TravelerBootsLogic.clearStepAssist(player);
+        ProductionStatisticsData production = ProductionStatisticsData.get(player.getServer());
+        production.initialize();
+        production.ensurePool(
+                com.ghostipedia.cosmiccore.common.production.ProductionStatisticsService.viewerPool(player));
         FieldDiscoveryData data = FieldDiscoveryData.get(player.getServer());
         String teamKey = DeedTeams.teamKey(player);
         for (String dimensionId : data.dimensionsFor(teamKey)) {
@@ -130,6 +135,7 @@ public class ForgeCommonEventListener {
     @SubscribeEvent
     public static void onServerTickPost(ServerTickEvent.Post event) {
         EffortlessBuildingGTPipeRenderSync.flush(event.getServer());
+        ProductionStatisticsData.get(event.getServer()).tick();
     }
 
     @SubscribeEvent
@@ -190,6 +196,7 @@ public class ForgeCommonEventListener {
         CosmicFoodCommand.register(event.getDispatcher());
         DeedCommand.register(event.getDispatcher());
         GravityDebugCommand.register(event.getDispatcher());
+        com.ghostipedia.cosmiccore.common.commands.ProductionStatisticsCommand.register(event.getDispatcher());
     }
 
     @SubscribeEvent(priority = EventPriority.HIGH)

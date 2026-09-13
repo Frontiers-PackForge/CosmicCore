@@ -1,6 +1,6 @@
 package com.ghostipedia.cosmiccore.common.item.behavior;
 
-import com.ghostipedia.cosmiccore.utils.ItemData;
+import com.ghostipedia.cosmiccore.common.compat.gtceu.RainSealant;
 
 import com.gregtechceu.gtceu.GTCEu;
 import com.gregtechceu.gtceu.api.GTValues;
@@ -22,11 +22,11 @@ import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.chat.Style;
 import net.minecraft.network.chat.TextColor;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.InteractionResultHolder;
-import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.Item;
@@ -42,62 +42,34 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.ShulkerBoxBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.Property;
+import net.neoforged.fml.ModList;
 import net.neoforged.neoforge.common.Tags;
 import net.neoforged.neoforge.common.util.TriPredicate;
 
+import appeng.api.implementations.parts.ICablePart;
 import appeng.api.util.AECableType;
 import appeng.api.util.AEColor;
 import appeng.blockentity.networking.CableBusBlockEntity;
 import com.google.common.collect.ImmutableMap;
+import dev.ftb.mods.ftbchunks.api.FTBChunksAPI;
+import dev.ftb.mods.ftbchunks.api.Protection;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.function.BiPredicate;
+import java.util.function.Predicate;
 
 public class InfiniteSprayCanBehavior implements IInteractionItem, IAddInformation {
 
-    public ExtendedDyeColor color;
-
-    private Boolean isLocked = false;
-
-    public boolean isSwinging = false;
-
-    public static final String ColorTag = "color";
-
-    public InfiniteSprayCanBehavior(int color) {
-        ExtendedDyeColor[] colors = ExtendedDyeColor.values();
-        this.color = color >= colors.length || color < 0 ? null : colors[color];
-    }
-
-    public ExtendedDyeColor getColor() {
-        return color;
-    }
-
-    public void setColor(ExtendedDyeColor color) {
-        this.color = color;
-    }
-
-    public Boolean getIsLocked() {
-        return isLocked;
-    }
-
-    public void setIsLocked(Boolean isLocked) {
-        this.isLocked = isLocked;
-    }
-
-    public void sendColorToTag(Player Player, ExtendedDyeColor color) {
-        var stack = Player.getMainHandItem();
-        ItemData.mutateTag(stack, tag -> tag.putInt(ColorTag, color.getColorId()));
-        PrintColorToActionBar(Player, color);
-    }
+    public InfiniteSprayCanBehavior() {}
 
     @Override
     public InteractionResultHolder<ItemStack> use(ItemStack item, Level level, Player player,
                                                   InteractionHand usedHand) {
         if (level.isClientSide && player.isShiftKeyDown()) {
-            SprayCanClientHandler.openScreen(player, this);
+            SprayCanClientHandler.openScreen(player, usedHand);
             return InteractionResultHolder.success(player.getItemInHand(usedHand));
         }
         return InteractionResultHolder.pass(player.getItemInHand(usedHand));
@@ -108,44 +80,77 @@ public class InfiniteSprayCanBehavior implements IInteractionItem, IAddInformati
         var player = context.getPlayer();
         var level = context.getLevel();
         var pos = context.getClickedPos();
-        int maxBlocksToRecolor = Math.max(1,
-                player.isCrouching() ? ConfigHolder.INSTANCE.tools.sprayCanChainLength : 1);
+        if (player == null) return InteractionResult.PASS;
+        if (level.isClientSide) return InteractionResult.SUCCESS;
+        SprayCanState state = SprayCanState.read(itemStack);
+        if (state.rainSealant()) return applyRainSealant(context);
+        int maxBlocksToRecolor = Math.max(1, ConfigHolder.INSTANCE.tools.sprayCanChainLength);
+        if (player.isShiftKeyDown() && state.mode() == SprayCanState.SprayMode.A_B) {
+            handleABSelection(itemStack, context, maxBlocksToRecolor);
+            return InteractionResult.SUCCESS;
+        }
+        int limit = player.isShiftKeyDown() ? maxBlocksToRecolor : 1;
         var first = level.getBlockEntity(pos);
 
-        if (first == null || !handleSpecialBlockEntities(first, maxBlocksToRecolor, context)) {
-            handleBlocks(pos, maxBlocksToRecolor, context);
+        if (player.isShiftKeyDown() && state.mode() == SprayCanState.SprayMode.LINE) {
+            if (first instanceof ShulkerBoxBlockEntity) {
+                handleSpecialBlockEntities(first, 1, context);
+            } else {
+                Direction direction = Direction.getNearest(player.getLookAngle().x, player.getLookAngle().y,
+                        player.getLookAngle().z);
+                paintLine(validPrefix(SprayCanTraversal.line(pos, direction, limit), context), context);
+            }
+        } else if (first == null || !handleSpecialBlockEntities(first, limit, context)) {
+            handleBlocks(pos, limit, context);
         }
         GTSoundEntries.SPRAY_CAN_TOOL.play(level, null, player.position(), 1.0f, 1.0f);
         return InteractionResult.SUCCESS;
     }
 
-    @Override
-    public boolean onEntitySwing(ItemStack stack, LivingEntity entity, InteractionHand hand) {
-        if (!(entity instanceof Player player) || isSwinging) {
-            return true;
+    InteractionResult applyRainSealant(UseOnContext context) {
+        var player = context.getPlayer();
+        if (player == null || !player.mayBuild()) return InteractionResult.PASS;
+        var machine = MetaMachine.getMachine(context.getLevel(), context.getClickedPos());
+        if (machine == null) return InteractionResult.PASS;
+        var targets = RainSealant.targets(machine);
+        if (targets.isEmpty()) return InteractionResult.PASS;
+        for (var target : targets) {
+            if (!canEdit(context, target.getBlockPos())) return InteractionResult.FAIL;
         }
-        if (!this.isLocked) {
-            int totalColors = ExtendedDyeColor.values().length;
-            int nextColor = player.isCrouching() ? (color.ordinal() - 1 + totalColors) % totalColors :
-                    (color.ordinal() + 1) % totalColors;
-
-            this.color = ExtendedDyeColor.values()[nextColor];
-            sendColorToTag(player, this.color);
-            if (player.level().isClientSide) {
-                SprayCanClientHandler.playShakeSound();
-            }
-        } else {
-            player.displayClientMessage(Component.translatable("cosmiccore.item.spraycan.locked")
-                    .withStyle(style -> style
-                            .withColor(ChatFormatting.RED)
-                            .withBold(true)),
-                    true);
+        int changed = RainSealant.apply(targets);
+        if (changed == 0) {
+            player.displayClientMessage(Component.translatable("cosmiccore.sealant.already_sealed"), true);
+            return InteractionResult.CONSUME;
         }
-        isSwinging = true;
-        return true;
+        GTSoundEntries.SPRAY_CAN_TOOL.play(context.getLevel(), null, player.position(), 1.0f, 1.0f);
+        player.displayClientMessage(Component.translatable("cosmiccore.sealant.applied", changed), true);
+        return InteractionResult.CONSUME;
     }
 
-    public void PrintColorToActionBar(Player player, ExtendedDyeColor color) {
+    private void handleABSelection(ItemStack stack, UseOnContext context, int limit) {
+        Player player = context.getPlayer();
+        if (player == null) return;
+        ResourceLocation dimension = context.getLevel().dimension().location();
+        BlockPos clicked = context.getClickedPos();
+        var selection = SprayCanState.selection(stack);
+        if (selection.isEmpty()) {
+            SprayCanState.select(stack, dimension, clicked);
+            player.displayClientMessage(Component.translatable("cosmiccore.item.spraycan.ab.selected"), true);
+            return;
+        }
+        SprayCanState.clearSelection(stack);
+        var first = selection.get();
+        List<BlockPos> positions = first.dimension().equals(dimension) ?
+                SprayCanTraversal.between(first.position(), clicked, limit) : List.of();
+        if (!SprayCanTraversal.isComplete(positions, candidate -> canPaintLine(candidate, context))) {
+            player.displayClientMessage(Component.translatable("cosmiccore.item.spraycan.ab.invalid"), true);
+            return;
+        }
+        paintLine(positions, context);
+        GTSoundEntries.SPRAY_CAN_TOOL.play(context.getLevel(), null, player.position(), 1.0f, 1.0f);
+    }
+
+    public static void printColorToActionBar(Player player, ExtendedDyeColor color) {
         String colorName = color.name().replace('_', ' ');
         MutableComponent colorComponent = Component.literal(colorName)
                 .setStyle(
@@ -154,6 +159,16 @@ public class InfiniteSprayCanBehavior implements IInteractionItem, IAddInformati
 
         player.displayClientMessage(
                 Component.translatable("cosmiccore.item.spraycan.actionbar.color", colorComponent), true);
+    }
+
+    public static Component lockedMessage() {
+        return Component.translatable("cosmiccore.item.spraycan.locked")
+                .withStyle(style -> style.withColor(ChatFormatting.RED).withBold(true));
+    }
+
+    public static Component lockMessage(boolean locked) {
+        return Component.translatable(locked ? "cosmiccore.item.spraycan.now_locked" :
+                "cosmiccore.item.spraycan.now_unlocked");
     }
 
     // vanilla
@@ -228,20 +243,26 @@ public class InfiniteSprayCanBehavior implements IInteractionItem, IAddInformati
 
     @Override
     public void appendHoverText(ItemStack stack, Item.TooltipContext world, List<Component> tooltip, TooltipFlag flag) {
+        SprayCanState state = SprayCanState.read(stack);
+        ExtendedDyeColor color = state.color();
         tooltip.add(Component.translatable("cosmiccore.item.spraycan.tooltip.lclick"));
         tooltip.add(Component.translatable("cosmiccore.item.spraycan.tooltip.lclick_sneak"));
         tooltip.add(Component.translatable("cosmiccore.item.spraycan.tooltip.rclick"));
         tooltip.add(Component.translatable("cosmiccore.item.spraycan.tooltip.rclick_sneak"));
         tooltip.add(Component.translatable("cosmiccore.item.spraycan.tooltip.rclick_offhand"));
+        tooltip.add(Component.translatable("cosmiccore.item.spraycan.tooltip.middle"));
+        tooltip.add(Component.translatable("cosmiccore.item.spraycan.tooltip.middle_sneak"));
+        tooltip.add(Component.translatable("cosmiccore.item.spraycan.tooltip.current_mode",
+                Component.translatable("cosmiccore.item.spraycan.mode." + state.mode().name().toLowerCase())));
 
-        if (this.isLocked) {
+        if (state.locked()) {
             tooltip.add(Component.translatable("cosmiccore.item.spraycan.tooltip.locked")
                     .withStyle(ChatFormatting.RED, ChatFormatting.BOLD));
         }
 
-        if (this.color != null) {
+        if (color != null) {
             tooltip.add(Component
-                    .translatable("cosmiccore.item.spraycan.tooltip.current_color", this.color.getSerializedName())
+                    .translatable("cosmiccore.item.spraycan.tooltip.current_color", color.getSerializedName())
                     .setStyle(
                             color == ExtendedDyeColor.SOLVENT ? Style.EMPTY.withColor(TextColor.fromRgb(0xFFFFFF)) // white
                                     : Style.EMPTY.withColor(TextColor.fromRgb(color.getTextColor()))));
@@ -271,9 +292,11 @@ public class InfiniteSprayCanBehavior implements IInteractionItem, IAddInformati
         if (player == null) {
             return false;
         }
+        ExtendedDyeColor color = SprayCanState.read(context.getItemInHand()).color();
+        Predicate<BlockPos> authorization = pos -> canEdit(context, pos);
         if (GTCEu.Mods.isAE2Loaded() && AE2CallWrapper.isAE2Cable(first)) {
-            var collected = AE2CallWrapper.collect(first, limit);
-            var ae2Color = color == null ? AEColor.TRANSPARENT : AEColor.fromDye(color.getColor());
+            var collected = AE2CallWrapper.collect(first, limit, authorization);
+            var ae2Color = color.isSolvent() ? AEColor.TRANSPARENT : AEColor.fromDye(color.getColor());
             for (var c : collected) {
                 if (c.getColor() == ae2Color) {
                     continue;
@@ -282,7 +305,9 @@ public class InfiniteSprayCanBehavior implements IInteractionItem, IAddInformati
             }
         } else if (first instanceof PipeBlockEntity pipe) {
             var collected = BreadthFirstBlockSearch.conditionalBlockEntitySearch(PipeBlockEntity.class, pipe,
-                    gtPipePredicate, limit, limit * 6);
+                    (parent, child, direction) -> SprayCanTraversal.canEnter(child.getBlockPos(), authorization,
+                            gtPipePredicate.test(parent, child, direction)),
+                    limit, limit * 6);
             for (var c : collected) {
                 if (!paintPaintable(c, color)) {
                     continue;
@@ -290,7 +315,9 @@ public class InfiniteSprayCanBehavior implements IInteractionItem, IAddInformati
             }
         } else if (first instanceof MetaMachine mmbe) {
             var collected = BreadthFirstBlockSearch.conditionalBlockEntitySearch(MetaMachine.class, mmbe,
-                    gtMetaMachinePredicate, limit, limit * 6);
+                    (parent, child, direction) -> SprayCanTraversal.canEnter(child.getBlockPos(), authorization,
+                            gtMetaMachinePredicate.test(parent, child, direction)),
+                    limit, limit * 6);
             for (var c : collected) {
                 if (!paintPaintable(c, color)) {
                     continue;
@@ -299,7 +326,9 @@ public class InfiniteSprayCanBehavior implements IInteractionItem, IAddInformati
 
         } else if (first instanceof IPaintable) {
             var collected = BreadthFirstBlockSearch.conditionalBlockEntitySearch(BlockEntity.class, first,
-                    paintablePredicateWrapper, limit, limit * 6);
+                    (parent, child, direction) -> SprayCanTraversal.canEnter(child.getBlockPos(), authorization,
+                            paintablePredicateWrapper.test(parent, child, direction)),
+                    limit, limit * 6);
             for (var c : collected) {
                 if (!paintPaintable((IPaintable) c, color)) {
                     continue;
@@ -326,25 +355,119 @@ public class InfiniteSprayCanBehavior implements IInteractionItem, IAddInformati
             return;
         }
         var stack = context.getItemInHand();
+        ExtendedDyeColor color = SprayCanState.read(stack).color();
+        Predicate<BlockPos> authorization = pos -> canEdit(context, pos);
         var collected = BreadthFirstBlockSearch
                 .conditionalBlockPosSearch(start,
-                        (parent, child) -> parent == null ||
-                                level.getBlockState(child).is(level.getBlockState(parent).getBlock()),
+                        (parent, child) -> SprayCanTraversal.canEnter(child, authorization,
+                                parent == null ||
+                                        level.getBlockState(child).is(level.getBlockState(parent).getBlock())),
                         limit, limit * 6);
         for (var pos : collected) {
-            if (!tryPaintBlock(level, pos)) {
+            if (!tryPaintBlock(level, pos, color)) {
                 break;
             }
         }
     }
 
-    private boolean tryPaintBlock(Level world, BlockPos pos) {
+    private boolean canPaintLine(List<BlockPos> positions, UseOnContext context) {
+        if (positions.isEmpty()) return false;
+        if (!SprayCanTraversal.allAuthorized(positions, pos -> canEdit(context, pos))) return false;
+        Level level = context.getLevel();
+        BlockEntity seed = level.getBlockEntity(positions.getFirst());
+        if (seed instanceof CableBusBlockEntity cable) return AE2CallWrapper.matchesLine(cable, positions, level);
+        if (seed instanceof PipeBlockEntity pipe) return matchesPipeLine(pipe, positions, level);
+        if (seed instanceof MetaMachine machine) return matchesMachineLine(machine, positions, level);
+        if (seed instanceof IPaintable paintable) return matchesPaintableLine(paintable, positions, level);
+        Block seedBlock = level.getBlockState(positions.getFirst()).getBlock();
+        return positions.stream().allMatch(pos -> level.hasChunkAt(pos) && level.getBlockState(pos).is(seedBlock));
+    }
+
+    private static boolean canEdit(UseOnContext context, BlockPos pos) {
+        if (!(context.getPlayer() instanceof ServerPlayer player)) return false;
+        Level level = context.getLevel();
+        if (!level.isInWorldBounds(pos) || !level.mayInteract(player, pos)) return false;
+        if (!ModList.get().isLoaded("ftbchunks")) return true;
+        return FTBChunksProtection.canEdit(player, context.getHand(), pos);
+    }
+
+    private List<BlockPos> validPrefix(List<BlockPos> positions, UseOnContext context) {
+        return SprayCanTraversal.validPrefix(positions, candidate -> canPaintLine(candidate, context));
+    }
+
+    private void paintLine(List<BlockPos> positions, UseOnContext context) {
+        if (!canPaintLine(positions, context)) return;
+        Level level = context.getLevel();
+        Player player = context.getPlayer();
+        if (player == null) return;
+        ExtendedDyeColor color = SprayCanState.read(context.getItemInHand()).color();
+        BlockEntity seed = level.getBlockEntity(positions.getFirst());
+        if (seed instanceof CableBusBlockEntity) {
+            AEColor aeColor = color.isSolvent() ? AEColor.TRANSPARENT : AEColor.fromDye(color.getColor());
+            for (BlockPos pos : positions) {
+                ((CableBusBlockEntity) level.getBlockEntity(pos)).recolourBlock(null, aeColor, player);
+            }
+        } else if (seed instanceof IPaintable) {
+            for (BlockPos pos : positions) {
+                paintPaintable((IPaintable) level.getBlockEntity(pos), color);
+            }
+        } else {
+            for (BlockPos pos : positions) {
+                tryPaintBlock(level, pos, color);
+            }
+        }
+    }
+
+    @SuppressWarnings("rawtypes")
+    private static boolean matchesPipeLine(PipeBlockEntity seed, List<BlockPos> positions, Level level) {
+        PipeBlockEntity previous = null;
+        for (BlockPos pos : positions) {
+            if (!level.hasChunkAt(pos) || !(level.getBlockEntity(pos) instanceof PipeBlockEntity pipe) ||
+                    !samePipeType(seed, pipe))
+                return false;
+            if (previous != null) {
+                Direction direction = directionBetween(previous.getBlockPos(), pos);
+                if (!previous.isConnected(direction) || !pipe.isConnected(direction.getOpposite())) return false;
+            }
+            previous = pipe;
+        }
+        return true;
+    }
+
+    private static boolean matchesMachineLine(MetaMachine seed, List<BlockPos> positions, Level level) {
+        return positions.stream().allMatch(pos -> level.hasChunkAt(pos) &&
+                level.getBlockEntity(pos) instanceof MetaMachine machine &&
+                seed.getDefinition().equals(machine.getDefinition()));
+    }
+
+    private static boolean matchesPaintableLine(IPaintable seed, List<BlockPos> positions, Level level) {
+        return positions.stream().allMatch(pos -> level.hasChunkAt(pos) &&
+                level.getBlockEntity(pos) instanceof IPaintable paintable &&
+                seed.getClass().equals(paintable.getClass()));
+    }
+
+    @SuppressWarnings("rawtypes")
+    private static boolean samePipeType(PipeBlockEntity first, PipeBlockEntity second) {
+        return pipeSignature(first).equals(pipeSignature(second));
+    }
+
+    @SuppressWarnings("rawtypes")
+    private static SprayCanTraversal.ConnectionSignature pipeSignature(PipeBlockEntity pipe) {
+        return new SprayCanTraversal.ConnectionSignature(pipe.getPipeBlock(), pipe.getPipeType(), pipe.getNodeData());
+    }
+
+    private static Direction directionBetween(BlockPos first, BlockPos second) {
+        return Direction.getNearest(second.getX() - first.getX(), second.getY() - first.getY(),
+                second.getZ() - first.getZ());
+    }
+
+    private boolean tryPaintBlock(Level world, BlockPos pos, ExtendedDyeColor color) {
         var blockState = world.getBlockState(pos);
         var block = blockState.getBlock();
         if (color.isSolvent()) {
             return tryStripBlockColor(world, pos, block);
         }
-        return recolorBlockState(world, pos, color) || tryPaintSpecialBlock(world, pos, block);
+        return recolorBlockState(world, pos, color) || tryPaintSpecialBlock(world, pos, block, color);
     }
 
     @SuppressWarnings({ "rawtypes", "unchecked" })
@@ -359,44 +482,44 @@ public class InfiniteSprayCanBehavior implements IInteractionItem, IAddInformati
         return false;
     }
 
-    private boolean tryPaintSpecialBlock(Level world, BlockPos pos, @NotNull Block block) {
+    private boolean tryPaintSpecialBlock(Level world, BlockPos pos, @NotNull Block block, ExtendedDyeColor color) {
         if (block.defaultBlockState().is(Tags.Blocks.GLASS_BLOCKS)) {
-            if (recolorBlockNoState(GLASS_MAP, this.color.getColor(), world, pos, Blocks.GLASS)) {
+            if (recolorBlockNoState(GLASS_MAP, color.getColor(), world, pos, Blocks.GLASS)) {
                 return true;
             }
         }
         if (block.defaultBlockState().is(Tags.Blocks.GLASS_PANES)) {
-            if (recolorBlockNoState(GLASS_PANE_MAP, this.color.getColor(), world, pos, Blocks.GLASS_PANE)) {
+            if (recolorBlockNoState(GLASS_PANE_MAP, color.getColor(), world, pos, Blocks.GLASS_PANE)) {
                 return true;
             }
         }
         if (block.defaultBlockState().is(BlockTags.TERRACOTTA)) {
-            if (recolorBlockNoState(TERRACOTTA_MAP, this.color.getColor(), world, pos, Blocks.TERRACOTTA)) {
+            if (recolorBlockNoState(TERRACOTTA_MAP, color.getColor(), world, pos, Blocks.TERRACOTTA)) {
                 return true;
             }
         }
         if (block.defaultBlockState().is(BlockTags.WOOL)) {
-            if (recolorBlockNoState(WOOL_MAP, this.color.getColor(), world, pos)) {
+            if (recolorBlockNoState(WOOL_MAP, color.getColor(), world, pos)) {
                 return true;
             }
         }
         if (block.defaultBlockState().is(BlockTags.WOOL_CARPETS)) {
-            if (recolorBlockNoState(CARPET_MAP, this.color.getColor(), world, pos)) {
+            if (recolorBlockNoState(CARPET_MAP, color.getColor(), world, pos)) {
                 return true;
             }
         }
         if (CONCRETE_MAP.containsValue(block)) {
-            if (recolorBlockNoState(CONCRETE_MAP, this.color.getColor(), world, pos)) {
+            if (recolorBlockNoState(CONCRETE_MAP, color.getColor(), world, pos)) {
                 return true;
             }
         }
         if (CONCRETE_POWDER_MAP.containsValue(block)) {
-            if (recolorBlockNoState(CONCRETE_POWDER_MAP, this.color.getColor(), world, pos)) {
+            if (recolorBlockNoState(CONCRETE_POWDER_MAP, color.getColor(), world, pos)) {
                 return true;
             }
         }
         if (block.defaultBlockState().is(BlockTags.CANDLES)) {
-            if (recolorBlockNoState(CANDLE_MAP, this.color.getColor(), world, pos)) {
+            if (recolorBlockNoState(CANDLE_MAP, color.getColor(), world, pos)) {
                 return true;
             }
         }
@@ -501,10 +624,9 @@ public class InfiniteSprayCanBehavior implements IInteractionItem, IAddInformati
     private static final TriPredicate<PipeBlockEntity, PipeBlockEntity, Direction> gtPipePredicate = (parent, child,
                                                                                                       direction) -> {
         if (parent == null) return true;
-        if (!paintablePredicate.test(parent, child)) {
-            return false;
-        }
-        return parent.isConnected(direction) && child.isConnected(direction.getOpposite());
+        boolean connected = parent.isConnected(direction) && child.isConnected(direction.getOpposite());
+        return SprayCanTraversal.connectedColorMatches(pipeSignature(parent), parent.getPaintingColor(),
+                pipeSignature(child), child.getPaintingColor(), connected);
     };
 
     private static final TriPredicate<MetaMachine, MetaMachine, Direction> gtMetaMachinePredicate = (parent,
@@ -517,10 +639,11 @@ public class InfiniteSprayCanBehavior implements IInteractionItem, IAddInformati
 
     private static class AE2CallWrapper {
 
-        static Set<CableBusBlockEntity> collect(BlockEntity first, int limit) {
+        static Set<CableBusBlockEntity> collect(BlockEntity first, int limit, Predicate<BlockPos> authorization) {
             return BreadthFirstBlockSearch.conditionalBlockEntitySearch(CableBusBlockEntity.class,
                     (CableBusBlockEntity) first,
-                    AE2CallWrapper::ae2CablePredicate,
+                    (parent, child, direction) -> SprayCanTraversal.canEnter(child.getBlockPos(), authorization,
+                            ae2CablePredicate(parent, child, direction)),
                     limit, limit * 6);
         }
 
@@ -531,13 +654,51 @@ public class InfiniteSprayCanBehavior implements IInteractionItem, IAddInformati
         static boolean ae2CablePredicate(CableBusBlockEntity parent, CableBusBlockEntity child, Direction direction) {
             if (parent == null) return true;
             var childDirection = direction.getOpposite();
-            if (parent.getPart(direction) != null || parent.getCableConnectionType(direction) == AECableType.NONE ||
-                    child.getPart(childDirection) != null ||
-                    child.getCableConnectionType(childDirection) == AECableType.NONE ||
-                    parent.getColor() != child.getColor()) {
-                return false;
+            boolean connected = parent.getPart(direction) == null &&
+                    parent.getCableConnectionType(direction) != AECableType.NONE &&
+                    child.getPart(childDirection) == null &&
+                    child.getCableConnectionType(childDirection) != AECableType.NONE;
+            return SprayCanTraversal.connectedColorMatches(signature(parent), parent.getColor().ordinal(),
+                    signature(child), child.getColor().ordinal(), connected);
+        }
+
+        static SprayCanTraversal.ConnectionSignature signature(CableBusBlockEntity cable) {
+            if (cable.getPart(null) instanceof ICablePart part) {
+                return new SprayCanTraversal.ConnectionSignature(part.getPartItem(), null, null);
+            }
+            return new SprayCanTraversal.ConnectionSignature(null, null, null);
+        }
+
+        static boolean matchesLine(CableBusBlockEntity seed, List<BlockPos> positions, Level level) {
+            CableBusBlockEntity previous = null;
+            for (BlockPos pos : positions) {
+                if (!level.hasChunkAt(pos) || !(level.getBlockEntity(pos) instanceof CableBusBlockEntity cable) ||
+                        !sameType(seed, cable))
+                    return false;
+                if (previous != null) {
+                    Direction direction = directionBetween(previous.getBlockPos(), pos);
+                    if (previous.getPart(direction) != null ||
+                            previous.getCableConnectionType(direction) == AECableType.NONE ||
+                            cable.getPart(direction.getOpposite()) != null ||
+                            cable.getCableConnectionType(direction.getOpposite()) == AECableType.NONE)
+                        return false;
+                }
+                previous = cable;
             }
             return true;
+        }
+
+        static boolean sameType(CableBusBlockEntity first, CableBusBlockEntity second) {
+            return signature(first).equals(signature(second)) && signature(first).family() != null;
+        }
+    }
+
+    private static class FTBChunksProtection {
+
+        static boolean canEdit(ServerPlayer player, InteractionHand hand, BlockPos pos) {
+            var api = FTBChunksAPI.api();
+            return !api.isManagerLoaded() || !api.getManager()
+                    .shouldPreventInteraction(player, hand, pos, Protection.EDIT_BLOCK, null);
         }
     }
 }

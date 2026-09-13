@@ -4,6 +4,7 @@ import com.ghostipedia.cosmiccore.api.capability.recipe.CosmicRecipeCapabilities
 import com.ghostipedia.cosmiccore.api.capability.souls.SoulType;
 import com.ghostipedia.cosmiccore.api.data.souls.SoulNetwork;
 import com.ghostipedia.cosmiccore.api.data.souls.SoulNetworkSavedData;
+import com.ghostipedia.cosmiccore.api.machine.activity.ActivityScope;
 import com.ghostipedia.cosmiccore.api.recipe.ingredient.SoulIngredient;
 import com.ghostipedia.cosmiccore.api.recipe.ingredient.SoulStack;
 
@@ -77,17 +78,35 @@ public class NotifiableSoulContainer extends NotifiableRecipeHandlerTrait<SoulIn
         if (io != IO.IN && io != IO.OUT) return left;
 
         var network = getSoulNetwork();
+        int animaBefore = network.getAmount(SoulType.Anima);
+        int spiritusBefore = network.getAmount(SoulType.Spiritus);
         var stacks = left.stream().map(SoulIngredient::stack).toList();
         var complete = io == IO.IN ?
                 network.extractAll(stacks, throughput, simulate) :
                 network.insertAll(stacks, throughput, capacity, simulate);
         if (complete) left.clear();
+        if (!simulate) {
+            recordDelta(SoulType.Anima, animaBefore, network.getAmount(SoulType.Anima));
+            recordDelta(SoulType.Spiritus, spiritusBefore, network.getAmount(SoulType.Spiritus));
+        }
         return left;
     }
 
     public SoulStack insertUpTo(SoulStack stack, boolean simulate) {
         if (handlerIO != IO.OUT) return stack.withAmount(0);
-        return getSoulNetwork().add(stack, getThroughput(stack.type()), getCapacity(stack.type()), simulate);
+        SoulStack accepted = getSoulNetwork().add(stack, getThroughput(stack.type()), getCapacity(stack.type()),
+                simulate);
+        recordAccepted(accepted, simulate);
+        return accepted;
+    }
+
+    static void recordAccepted(SoulStack accepted, boolean simulate) {
+        if (!simulate) ActivityScope.soul(accepted.type(), accepted.amount(), false);
+    }
+
+    static void recordDelta(SoulType type, int before, int after) {
+        if (after < before) ActivityScope.soul(type, (long) before - after, true);
+        else if (after > before) ActivityScope.soul(type, (long) after - before, false);
     }
 
     @Override

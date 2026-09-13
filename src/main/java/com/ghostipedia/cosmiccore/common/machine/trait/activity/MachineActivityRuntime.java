@@ -3,6 +3,7 @@ package com.ghostipedia.cosmiccore.common.machine.trait.activity;
 import com.ghostipedia.cosmiccore.api.machine.activity.ActivityScope;
 import com.ghostipedia.cosmiccore.api.machine.activity.MachineActivity;
 import com.ghostipedia.cosmiccore.api.machine.activity.MachineActivitySource;
+import com.ghostipedia.cosmiccore.api.machine.activity.ProductionBindingSource;
 import com.ghostipedia.cosmiccore.common.machine.multiblock.multi.logic.MultithreadedMachine;
 import com.ghostipedia.cosmiccore.common.machine.multiblock.multi.logic.MultithreadedRecipeLogic;
 
@@ -31,11 +32,11 @@ public final class MachineActivityRuntime {
     }
 
     public static ActivityScope scope(RecipeLogic logic) {
-        return new ActivityScope(activity(logic.getMachine()), lane(logic));
+        return new ActivityScope(activity(logic.getMachine()), lane(logic), logic.getMachine());
     }
 
     public static ActivityScope scope(MetaMachine machine) {
-        return new ActivityScope(activity(machine), 0);
+        return new ActivityScope(activity(machine), 0, machine);
     }
 
     public static ActivityScope scope(IRecipeCapabilityHolder holder, boolean simulated) {
@@ -45,7 +46,7 @@ public final class MachineActivityRuntime {
             ActivityScope current = ActivityScope.current();
             MachineActivity activity = activity(machine);
             int lane = current != null && current.activity() == activity ? current.lane() : 0;
-            return new ActivityScope(activity, lane);
+            return new ActivityScope(activity, lane, machine);
         }
         return ActivityScope.suspend();
     }
@@ -61,6 +62,8 @@ public final class MachineActivityRuntime {
     }
 
     public static void tick(MetaMachine machine) {
+        if (machine.getLevel() instanceof ServerLevel && machine instanceof ProductionBindingSource source)
+            source.cosmiccore$productionBinding().pool(machine);
         MachineActivity activity = activity(machine);
         if (activity == null || !(machine instanceof IRecipeLogicMachine)) return;
         activity.tick(machine.getLevel().getGameTime(), machine.getLevel().registryAccess());
