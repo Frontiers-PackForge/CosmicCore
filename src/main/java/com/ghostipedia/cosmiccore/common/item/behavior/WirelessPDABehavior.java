@@ -50,7 +50,6 @@ public class WirelessPDABehavior implements IItemHUDProvider, IInteractionItem, 
 
     private static final String TAG_LOCAL_MONITOR = "LocalPowerCapacitor";
     private static final String TAG_ME_CONTROLLER = "MEController";
-    private static final BigInteger COMPACT_THRESHOLD = BigInteger.valueOf(1_000_000_000L);
     private static HudData clientData = HudData.empty();
 
     @Override
@@ -230,7 +229,7 @@ public class WirelessPDABehavior implements IItemHUDProvider, IInteractionItem, 
     }
 
     private static String formatEnergy(BigInteger energy) {
-        return FormattingUtil.formatNumberOrSic(energy, COMPACT_THRESHOLD);
+        return FormattingUtil.formatNumberReadable2F(energy.doubleValue(), false);
     }
 
     private static void bind(ItemStack stack, String key, GlobalPos position) {
