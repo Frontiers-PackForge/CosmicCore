@@ -1,6 +1,5 @@
 package com.ghostipedia.cosmiccore.common.item.behavior;
 
-import com.ghostipedia.cosmiccore.common.compat.gtceu.RainSealable;
 import com.ghostipedia.cosmiccore.common.compat.gtceu.RainSealant;
 
 import com.gregtechceu.gtceu.api.machine.MetaMachine;
@@ -37,13 +36,7 @@ public final class RainSealantSprayBehavior extends ColorSprayBehaviour {
         for (var target : targets) {
             if (!context.getLevel().mayInteract(player, target.getBlockPos())) return InteractionResult.FAIL;
         }
-        int changed = 0;
-        for (var target : targets) {
-            if (!RainSealant.sealed(target)) {
-                ((RainSealable) target).cosmiccore$setRainSealed(true);
-                changed++;
-            }
-        }
+        int changed = RainSealant.apply(targets);
         if (changed == 0) {
             player.displayClientMessage(Component.translatable("cosmiccore.sealant.already_sealed"), true);
             return InteractionResult.CONSUME;

@@ -1,7 +1,6 @@
 package com.ghostipedia.cosmiccore.common.transmission.energy;
 
 import com.ghostipedia.cosmiccore.common.transmission.graph.PowerTowerGraph;
-import com.ghostipedia.cosmiccore.common.transmission.graph.PowerTowerSpan;
 
 import com.gregtechceu.gtceu.api.capability.IEnergyContainer;
 
@@ -63,8 +62,8 @@ public final class PowerTowerEnergyRouter {
 
     private static boolean matchesVoltage(PowerTowerGraph.ComponentSnapshot component,
                                           LoadedPowerTowerTerminal terminal) {
-        PowerTowerSpan first = component.spans().values().stream().findFirst().orElse(null);
-        return first != null && first.cableVoltageTier() == terminal.voltageTier();
+        return component.wireTier().isPresent() &&
+                terminal.maximumVoltageTier() <= component.wireTier().getAsInt();
     }
 
     private static long saturatedAdd(long first, long second) {

@@ -642,6 +642,12 @@ public class CosmicMachines {
     public static final MachineDefinition[] ENERGY_OUTPUT_HATCH_64A = registerEnergyHatches(
             "energy_output_hatch_64a", IO.OUT, 64, PartAbility.SUBSTATION_OUTPUT_ENERGY,
             GTValues.tiersBetween(LV, HV));
+    public static final MachineDefinition[] ENERGY_INPUT_HATCH_256A = registerEnergyHatches(
+            "energy_input_hatch_256a", IO.IN, 256, PartAbility.SUBSTATION_INPUT_ENERGY,
+            GTValues.tiersBetween(LV, HV));
+    public static final MachineDefinition[] ENERGY_OUTPUT_HATCH_256A = registerEnergyHatches(
+            "energy_output_hatch_256a", IO.OUT, 256, PartAbility.SUBSTATION_OUTPUT_ENERGY,
+            GTValues.tiersBetween(LV, HV));
 
     static {
         REGISTRATE.creativeModeTab(CosmicCreativeModeTabs.COSMIC_CORE);
@@ -809,7 +815,8 @@ public class CosmicMachines {
                                         FormattingUtil.formatNumbers(V[tier] * capacityMultiplier * amperage)),
                                 Component.translatable(tooltipKey))
                         .overlayTieredHullModel(GTCEu.id(
-                                "block/machine/part/energy_" + direction + "_hatch_" + amperage + "a"))
+                                "block/machine/part/energy_" + direction + "_hatch_" +
+                                        (substation ? 64 : amperage) + "a"))
                         .register(),
                 tiers);
     }

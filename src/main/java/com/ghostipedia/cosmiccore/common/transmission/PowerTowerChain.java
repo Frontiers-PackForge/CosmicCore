@@ -112,10 +112,7 @@ public final class PowerTowerChain {
                     !tower.isFormed() || !MachineOwner.canBreakOwnerMachine(player, tower))
                 return fail(player, "endpoint_not_found");
             int tier = ((PowerTowerCoilItem) reservedCoil.getItem()).getVoltageTier();
-            var component = data.graph().componentContainingNode(source);
-            if (component.spans().values().stream().anyMatch(span -> span.cableVoltageTier() != tier) ||
-                    component.nodes().values().stream()
-                            .anyMatch(n -> n.terminalVoltageTier() >= 0 && n.terminalVoltageTier() != tier))
+            if (!data.graph().acceptsCableTier(source, tier))
                 return fail(player, "graph_invariant_rejected");
             var destination = PowerTowerAttachments.preview(plan.controllerPos(), facing, node.ownerId());
             var footprint = new HashSet<BlockPos>();

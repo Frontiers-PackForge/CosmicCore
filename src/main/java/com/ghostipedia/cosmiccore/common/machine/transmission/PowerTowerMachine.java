@@ -6,6 +6,7 @@ import com.ghostipedia.cosmiccore.common.transmission.graph.PowerTowerGraph;
 import com.ghostipedia.cosmiccore.common.transmission.graph.PowerTowerNode;
 import com.ghostipedia.cosmiccore.common.transmission.graph.PowerTowerRole;
 import com.ghostipedia.cosmiccore.common.transmission.graph.PowerTowerSavedData;
+import com.ghostipedia.cosmiccore.common.transmission.ui.PowerTowerPanel;
 
 import com.gregtechceu.gtceu.api.GTValues;
 import com.gregtechceu.gtceu.api.blockentity.BlockEntityCreationInfo;
@@ -13,6 +14,7 @@ import com.gregtechceu.gtceu.api.capability.IEnergyContainer;
 import com.gregtechceu.gtceu.api.capability.recipe.EURecipeCapability;
 import com.gregtechceu.gtceu.api.capability.recipe.IO;
 import com.gregtechceu.gtceu.api.machine.ConditionalSubscriptionHandler;
+import com.gregtechceu.gtceu.api.machine.feature.IMuiMachine;
 import com.gregtechceu.gtceu.api.machine.multiblock.MultiblockControllerMachine;
 import com.gregtechceu.gtceu.api.machine.multiblock.part.MultiblockPartMachine;
 import com.gregtechceu.gtceu.api.multiblock.error.PatternStringError;
@@ -24,8 +26,15 @@ import com.gregtechceu.gtceu.utils.ISubscription;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
 
+import brachy.modularui.factory.PosGuiData;
+import brachy.modularui.screen.ModularPanel;
+import brachy.modularui.screen.UISettings;
+import brachy.modularui.value.sync.PanelSyncManager;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -36,7 +45,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
-public class PowerTowerMachine extends MultiblockControllerMachine {
+public class PowerTowerMachine extends MultiblockControllerMachine implements IMuiMachine {
 
     private final ConditionalSubscriptionHandler energyTransferSubscription;
     private final Set<BlockPos> formedStructurePositions = new HashSet<>();
@@ -77,16 +86,15 @@ public class PowerTowerMachine extends MultiblockControllerMachine {
         if (!(getLevel() instanceof ServerLevel serverLevel)) return;
         captureFormedStructurePositions();
         EnergyHatches hatches = collectAndSubscribeEnergyHatches();
-        Integer terminalVoltageTier = resolveExactTerminalVoltageTier(hatches);
-        if ((!hatches.inputHatches().isEmpty() || !hatches.outputHatches().isEmpty()) &&
-                terminalVoltageTier == null) {
+        int maximumTerminalVoltageTier = resolveMaximumTerminalVoltageTier(hatches);
+        if (maximumTerminalVoltageTier == Integer.MIN_VALUE) {
             getPatternState(substructureName).setError(new PatternStringError(
-                    Component.translatable("cosmiccore.multiblock.power_tower.mixed_voltage")));
+                    Component.translatable("cosmiccore.multiblock.power_tower.invalid_voltage")));
             invalidateStructure(substructureName);
             return;
         }
-        PowerTowerRole role = terminalVoltageTier == null ? PowerTowerRole.DUMMY : PowerTowerRole.TERMINAL;
-        int voltageTier = terminalVoltageTier == null ? -1 : terminalVoltageTier;
+        PowerTowerRole role = maximumTerminalVoltageTier < 0 ? PowerTowerRole.DUMMY : PowerTowerRole.TERMINAL;
+        int voltageTier = maximumTerminalVoltageTier;
         PowerTowerSavedData data = PowerTowerSavedData.getOrCreate(serverLevel);
         PowerTowerGraph graph = data.graph();
         PowerTowerNode node = graph.nodeAtController(getBlockPos());
@@ -198,22 +206,40 @@ public class PowerTowerMachine extends MultiblockControllerMachine {
         return new EnergyHatches(List.copyOf(inputHatches), List.copyOf(outputHatches));
     }
 
-    private @Nullable Integer resolveExactTerminalVoltageTier(EnergyHatches hatches) {
-        Set<Integer> tiers = new HashSet<>();
-        for (IEnergyContainer input : hatches.inputHatches()) addExactVoltageTier(tiers, input.getInputVoltage());
-        for (IEnergyContainer output : hatches.outputHatches()) {
-            addExactVoltageTier(tiers, output.getOutputVoltage());
+    private int resolveMaximumTerminalVoltageTier(EnergyHatches hatches) {
+        int maximum = -1;
+        for (IEnergyContainer input : hatches.inputHatches()) {
+            int tier = exactVoltageTier(input.getInputVoltage());
+            if (tier < 0) return Integer.MIN_VALUE;
+            maximum = Math.max(maximum, tier);
         }
-        return tiers.size() == 1 && !tiers.contains(-1) ? tiers.iterator().next() : null;
+        for (IEnergyContainer output : hatches.outputHatches()) {
+            int tier = exactVoltageTier(output.getOutputVoltage());
+            if (tier < 0) return Integer.MIN_VALUE;
+            maximum = Math.max(maximum, tier);
+        }
+        return maximum;
     }
 
-    private static void addExactVoltageTier(Set<Integer> tiers, long voltage) {
+    private static int exactVoltageTier(long voltage) {
         int tier = GTUtil.getTierByVoltage(voltage);
-        if (tier < 0 || tier >= GTValues.V.length || GTValues.V[tier] != voltage) {
-            tiers.add(-1);
-        } else {
-            tiers.add(tier);
-        }
+        return tier >= 0 && tier < GTValues.V.length && GTValues.V[tier] == voltage ? tier : -1;
+    }
+
+    public boolean canConfigure(Player player) {
+        return isFormed() && !isRemoved() && player.level() == getLevel() && !player.isSpectator() &&
+                player.distanceToSqr(getBlockPos().getCenter()) <= 64 &&
+                com.gregtechceu.gtceu.common.machine.owner.MachineOwner.canBreakOwnerMachine(player, this);
+    }
+
+    @Override
+    public boolean shouldOpenUI(Player player, InteractionHand hand, BlockHitResult hit) {
+        return isFormed();
+    }
+
+    @Override
+    public ModularPanel<?> buildUI(PosGuiData data, PanelSyncManager syncManager, UISettings settings) {
+        return PowerTowerPanel.build(this, data, syncManager);
     }
 
     private boolean hasTransferWork() {

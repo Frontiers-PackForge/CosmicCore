@@ -3,6 +3,8 @@ package com.ghostipedia.cosmiccore.common.item.behavior;
 import com.ghostipedia.cosmiccore.CosmicCore;
 import com.ghostipedia.cosmiccore.client.gui.SprayCanScreen;
 import com.ghostipedia.cosmiccore.common.data.CosmicSounds;
+import com.ghostipedia.cosmiccore.common.network.CCoreNetwork;
+import com.ghostipedia.cosmiccore.common.network.packet.SprayCanStatePacket;
 
 import com.gregtechceu.gtceu.api.blockentity.IPaintable;
 import com.gregtechceu.gtceu.api.machine.MetaMachine;
@@ -10,7 +12,7 @@ import com.gregtechceu.gtceu.api.machine.MetaMachine;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.sounds.SimpleSoundInstance;
 import net.minecraft.core.BlockPos;
-import net.minecraft.network.chat.Component;
+import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.ItemStack;
@@ -28,12 +30,10 @@ import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.client.event.InputEvent;
 
 import appeng.blockentity.networking.CableBusBlockEntity;
-import org.lwjgl.glfw.GLFW;
 
 import java.util.Objects;
 
-import static com.ghostipedia.cosmiccore.common.item.behavior.SprayCanEventListener.getSprayCanBehavior;
-import static com.ghostipedia.cosmiccore.common.item.behavior.SprayCanEventListener.hasSprayCan;
+import static com.ghostipedia.cosmiccore.common.item.behavior.SprayCanEventListener.isSprayCan;
 
 @SuppressWarnings("unused")
 @EventBusSubscriber(modid = CosmicCore.MOD_ID, bus = EventBusSubscriber.Bus.GAME, value = Dist.CLIENT)
@@ -42,22 +42,36 @@ public class SprayCanClientHandler {
     @OnlyIn(Dist.CLIENT)
     @SubscribeEvent
     public static void onClickEvent(InputEvent.InteractionKeyMappingTriggered event) {
-        // isPickBlock() returns button == 2 which is the middle mouse click
-        if (!event.isPickBlock()) {
-            return;
-        }
-
-        // grabs thine game
         Minecraft mc = Minecraft.getInstance();
         Level level = mc.level;
         Player player = mc.player;
-
-        // null checks the player level and if there is a blokc
         if (player == null || level == null || mc.hitResult == null) return;
 
-        // gets the spraycan and makes sure it is a spraycan
+        boolean shiftDown = mc.options.keyShift.isDown();
+        if (event.isUseItem() && shiftDown && mc.hitResult.getType() != HitResult.Type.BLOCK) {
+            InteractionHand useHand = findSprayCanHand(player);
+            if (useHand == null) return;
+            openScreen(player, useHand);
+            event.setCanceled(true);
+            return;
+        }
+
+        InteractionHand hand = InteractionHand.MAIN_HAND;
         ItemStack spraycan = player.getMainHandItem();
-        if (hasSprayCan(spraycan)) return;
+        if (!isSprayCan(spraycan)) return;
+
+        if (event.isAttack()) {
+            updateState(hand, spraycan, SprayCanStatePacket.Action.CYCLE, shiftDown ? -1 : 1);
+            event.setCanceled(true);
+            return;
+        }
+
+        if (!event.isPickBlock()) return;
+        if (shiftDown) {
+            updateState(hand, spraycan, SprayCanStatePacket.Action.TOGGLE_LOCK, 0);
+            event.setCanceled(true);
+            return;
+        }
 
         // sets an id for the dye to properly assign the color
         int dyeID = 0;
@@ -138,70 +152,48 @@ public class SprayCanClientHandler {
 
         }
 
-        // send to spraycan when finished
-        InfiniteSprayCanBehavior behavior = getSprayCanBehavior(spraycan);
-        if (behavior != null) {
-
-            // checks if it is locked first before anything
-            if (!behavior.getIsLocked()) {
-                color = Objects.requireNonNullElse(color, ExtendedDyeColor.SOLVENT);
-                behavior.setColor(color);
-                behavior.sendColorToTag(player, behavior.color);
-                Minecraft.getInstance().getSoundManager().play(
-                        SimpleSoundInstance.forUI(CosmicSounds.SHAKE_CAN.getMainEvent(), 1.0f, 1.0f));
-            } else {
-                player.displayClientMessage(Component.translatable("cosmiccore.item.spraycan.locked"), true);
-            }
-
-            event.setCanceled(true);
-        }
-    }
-
-    // this event is used here because the other one needs a b lock to be clicked on this one works in the air
-    @OnlyIn(Dist.CLIENT)
-    @SubscribeEvent
-    public static void onMouseInput(InputEvent.MouseButton.Pre event) {
-        int button = event.getButton();
-        if ((button != 0 && button != 2) || event.getAction() != GLFW.GLFW_PRESS) return;
-
-        Minecraft mc = Minecraft.getInstance();
-        Player player = mc.player;
-        Level level = mc.level;
-
-        // null check same as above
-        if (player == null || level == null || mc.hitResult == null) return;
-        ItemStack spraycan = player.getMainHandItem();
-        if (hasSprayCan(spraycan)) return;
-
-        InfiniteSprayCanBehavior behavior = getSprayCanBehavior(spraycan);
-        if (behavior == null) return;
-
-        // resets the isSwinging flag
-        if (button == 0) {
-            behavior.isSwinging = false;
-            return;
-        }
-
-        // returns if the player isn't crouching
-        if (!player.isCrouching()) return;
-
-        // if its locked invert it
-        boolean nowLocked = !behavior.getIsLocked();
-        behavior.setIsLocked(nowLocked);
+        color = Objects.requireNonNullElse(color, ExtendedDyeColor.SOLVENT);
+        updateState(hand, spraycan, SprayCanStatePacket.Action.SET_COLOR, color.ordinal());
         event.setCanceled(true);
-
-        String langKey = nowLocked ? "cosmiccore.item.spraycan.now_locked" : "cosmiccore.item.spraycan.now_unlocked";
-        player.displayClientMessage(Component.translatable(langKey), true);
     }
 
     @OnlyIn(Dist.CLIENT)
-    public static void openScreen(Player player, InfiniteSprayCanBehavior behavior) {
-        Minecraft.getInstance().setScreen(new SprayCanScreen(player, behavior));
+    public static void openScreen(Player player, InteractionHand hand) {
+        Minecraft.getInstance().setScreen(new SprayCanScreen(player, hand));
     }
 
     @OnlyIn(Dist.CLIENT)
     public static void playShakeSound() {
         Minecraft.getInstance().getSoundManager().play(
                 SimpleSoundInstance.forUI(CosmicSounds.SHAKE_CAN.getMainEvent(), 1.0f, 1.0f));
+    }
+
+    private static InteractionHand findSprayCanHand(Player player) {
+        if (isSprayCan(player.getMainHandItem())) return InteractionHand.MAIN_HAND;
+        if (isSprayCan(player.getOffhandItem())) return InteractionHand.OFF_HAND;
+        return null;
+    }
+
+    public static void updateState(InteractionHand hand, ItemStack stack, SprayCanStatePacket.Action action,
+                                   int value) {
+        SprayCanState before = SprayCanState.read(stack);
+        SprayCanState after = SprayCanStatePacket.apply(before, action, value);
+        if (after.equals(before)) {
+            if (before.locked() && action != SprayCanStatePacket.Action.TOGGLE_LOCK &&
+                    action != SprayCanStatePacket.Action.SET_MODE) {
+                Minecraft.getInstance().player.displayClientMessage(InfiniteSprayCanBehavior.lockedMessage(), true);
+            }
+            return;
+        }
+        after.write(stack);
+        if (action == SprayCanStatePacket.Action.SET_MODE) SprayCanState.clearSelection(stack);
+        CCoreNetwork.sendToServer(new SprayCanStatePacket(hand, action, value));
+        if (action == SprayCanStatePacket.Action.TOGGLE_LOCK) {
+            Minecraft.getInstance().player.displayClientMessage(InfiniteSprayCanBehavior.lockMessage(after.locked()),
+                    true);
+        } else if (action == SprayCanStatePacket.Action.CYCLE || action == SprayCanStatePacket.Action.SET_COLOR) {
+            InfiniteSprayCanBehavior.printColorToActionBar(Minecraft.getInstance().player, after.color());
+            playShakeSound();
+        }
     }
 }
