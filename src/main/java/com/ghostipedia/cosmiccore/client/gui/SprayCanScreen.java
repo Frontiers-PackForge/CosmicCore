@@ -75,7 +75,7 @@ public class SprayCanScreen extends Screen {
         Component title = getTitle();
         int titleWidth = font.width(title);
         int titleX = guiLeft + (GUI_WIDTH - titleWidth) / 2;
-        graphics.drawString(font, title, titleX, guiTop + 4, 0xFFFFFFFF, true);
+        graphics.drawString(font, title, titleX, guiTop + 7, 0xFFFFFFFF, true);
     }
 
     private void drawColorGrid(GuiGraphics graphics, int mouseX, int mouseY) {
@@ -140,7 +140,8 @@ public class SprayCanScreen extends Screen {
         ExtendedDyeColor current = state.color();
         Component colorName = state.rainSealant() ?
                 Component.translatable("material.cosmiccore.rain_sealant") :
-                dyeName(current);
+                current.isSolvent() ? Component.translatable("cosmiccore.item.spraycan.gui.solvent") :
+                        dyeName(current);
         int textColor = getReadableTextColor(current);
 
         Component label = Component.translatable("cosmiccore.item.spraycan.gui.color");
@@ -166,7 +167,16 @@ public class SprayCanScreen extends Screen {
             drawButton(graphics, x, y, MODE_BUTTON_WIDTH, MODE_BUTTON_HEIGHT, selected || hovered);
             Component name = Component.translatable("cosmiccore.item.spraycan.mode." +
                     SprayCanState.SprayMode.values()[i].name().toLowerCase());
-            graphics.drawCenteredString(font, name, x + MODE_BUTTON_WIDTH / 2, y + 3, 0xFFFFFFFF);
+            if (SprayCanState.SprayMode.values()[i] == SprayCanState.SprayMode.CONNECTED_COLOR) {
+                float scale = Math.min(1.0f, (MODE_BUTTON_WIDTH - 4.0f) / font.width(name));
+                graphics.pose().pushPose();
+                graphics.pose().translate(x + MODE_BUTTON_WIDTH / 2.0f, y + 3.0f, 0.0f);
+                graphics.pose().scale(scale, scale, 1.0f);
+                graphics.drawString(font, name, -font.width(name) / 2, 0, 0xFFFFFFFF, false);
+                graphics.pose().popPose();
+            } else {
+                graphics.drawCenteredString(font, name, x + MODE_BUTTON_WIDTH / 2, y + 3, 0xFFFFFFFF);
+            }
         }
     }
 
