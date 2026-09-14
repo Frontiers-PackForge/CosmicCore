@@ -30,7 +30,7 @@ public abstract class FluidDrillingUiMixin {
     private void cosmiccore$areaControl(PanelSyncManager syncManager, CallbackInfoReturnable<List<IWidget>> cir) {
         if (!((Object) this instanceof FluidDrillMachine drill)) return;
         var area = (FluidDrillingArea) drill.getRecipeLogic();
-        var expanded = new BooleanSyncValue(area::cosmiccore$isExpanded, area::cosmiccore$setExpanded);
+        var expanded = new BooleanSyncValue(area::cosmiccore$isExpanded, area::cosmiccore$setExpanded).allowC2S();
         syncManager.syncValue("cosmiccore_drill_area", expanded);
         int diameter = 2 * Math.clamp(drill.getTier() - GTValues.MV + 1, 1, 3) + 1;
         cir.getReturnValue().add(new ToggleButton().size(162, 18).value(expanded)
