@@ -30,6 +30,7 @@ import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.client.event.InputEvent;
 
 import appeng.blockentity.networking.CableBusBlockEntity;
+import org.lwjgl.glfw.GLFW;
 
 import java.util.Objects;
 
@@ -68,7 +69,6 @@ public class SprayCanClientHandler {
 
         if (!event.isPickBlock()) return;
         if (shiftDown) {
-            updateState(hand, spraycan, SprayCanStatePacket.Action.TOGGLE_LOCK, 0);
             event.setCanceled(true);
             return;
         }
@@ -158,6 +158,22 @@ public class SprayCanClientHandler {
     }
 
     @OnlyIn(Dist.CLIENT)
+    @SubscribeEvent
+    public static void onMouseInput(InputEvent.MouseButton.Pre event) {
+        if (event.getButton() != GLFW.GLFW_MOUSE_BUTTON_MIDDLE || event.getAction() != GLFW.GLFW_PRESS) return;
+
+        Minecraft mc = Minecraft.getInstance();
+        Player player = mc.player;
+        if (player == null || !player.isCrouching()) return;
+
+        InteractionHand hand = findSprayCanHand(player);
+        if (hand == null) return;
+
+        updateState(hand, player.getItemInHand(hand), SprayCanStatePacket.Action.TOGGLE_LOCK, 0);
+        event.setCanceled(true);
+    }
+
+    @OnlyIn(Dist.CLIENT)
     public static void openScreen(Player player, InteractionHand hand) {
         Minecraft.getInstance().setScreen(new SprayCanScreen(player, hand));
     }
@@ -194,6 +210,9 @@ public class SprayCanClientHandler {
         } else if (action == SprayCanStatePacket.Action.CYCLE || action == SprayCanStatePacket.Action.SET_COLOR) {
             InfiniteSprayCanBehavior.printColorToActionBar(Minecraft.getInstance().player, after.color());
             playShakeSound();
-        }
+        } else if (action == SprayCanStatePacket.Action.SET_RAIN_SEALANT ||
+                action == SprayCanStatePacket.Action.SET_MODE) {
+                    playShakeSound();
+                }
     }
 }
