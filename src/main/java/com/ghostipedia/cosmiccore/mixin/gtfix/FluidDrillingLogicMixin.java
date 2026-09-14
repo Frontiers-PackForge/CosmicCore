@@ -87,6 +87,24 @@ public abstract class FluidDrillingLogicMixin extends RecipeLogic implements Flu
         return RecipeHelper.matchContents(getMachine(), recipe).isSuccess() ? recipe : null;
     }
 
+    @Inject(method = "onRecipeFinish",
+            at = @At(value = "INVOKE",
+                     target = "Lcom/gregtechceu/gtceu/common/machine/trait/FluidDrillLogic;depleteVein()V",
+                     shift = At.Shift.AFTER),
+            cancellable = true)
+    private void cosmiccore$pauseAfterCurrentCycle(CallbackInfo ci) {
+        if (!suspendAfterFinish) return;
+        setStatus(Status.SUSPEND);
+        consecutiveRecipes = 0;
+        progress = 0;
+        duration = 0;
+        isActive = false;
+        lastRecipe = null;
+        lastUnrolledRecipe = null;
+        syncDataHolder.resyncAllFields();
+        ci.cancel();
+    }
+
     @Inject(method = "findAndHandleRecipe", at = @At("HEAD"), cancellable = true)
     private void cosmiccore$findAreaRecipe(CallbackInfo ci) {
         if (getMachine().getLevel() instanceof ServerLevel) {
