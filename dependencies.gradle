@@ -134,6 +134,7 @@ dependencies {
     // Dev tooling
     compileOnly(forge.effortless)
     runtimeOnly(forge.effortless)
+    runtimeOnly("curse.maven:worldedit-225608:5830452") { transitive = false }
 
     compileOnly("net.liukrast:deployer-1.21.1:0.1.2")
     compileOnly("net.liukrast:repackaged-1.21.1:0.0.7")
@@ -144,6 +145,6 @@ dependencies {
     // Embeddium + Oculus          -> pack uses Sodium + Iris
     // Travel Anchors + LibX       -> not in pack
     // New Thin Air                -> discontinued
-    // Modern AE2 Additions, ModKit, WorldEdit, World Stripper -> dropped
+    // Modern AE2 Additions, ModKit -> dropped
     // botarium / yabn / byteCodecs / resourcefulConfig -> Ad Astra stack, dropped with AA
 }

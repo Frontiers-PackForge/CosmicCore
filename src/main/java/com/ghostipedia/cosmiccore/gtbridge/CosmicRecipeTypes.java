@@ -369,6 +369,17 @@ public class CosmicRecipeTypes {
             // 8.0.0 removed GTRecipeType.addDataInfo(...) -> data infos registered in init() via
             // getDataInfos().add(...)
             .UI(builder -> builder.setProgressBar(GTGuiTextures.PROGRESS_ARROW_MULTIPLE));
+    public static final GTRecipeType ALLOY_BLASTING_KILN = GTRecipeTypes
+            .register(CosmicCore.id("alloy_blasting_kiln"), GTRecipeTypes.MULTIBLOCK)
+            .setMaxIOSize(9, 0, 3, 1)
+            .setEUIO(IO.IN)
+            .UI(builder -> builder
+                    .setItemSlotsOverlay(IO.IN, 0, 8, GTGuiTextures.FURNACE_OVERLAY_1)
+                    .setFluidSlotsOverlay(IO.IN, 0, 2, GTGuiTextures.FURNACE_OVERLAY_2)
+                    .setFluidSlotOverlay(IO.OUT, 0, GTGuiTextures.FURNACE_OVERLAY_2)
+                    .setProgressBar(GTGuiTextures.PROGRESS_ARROW)
+                    .addRecipeUIModifier(AlloyBlastingKilnRecipeUI.COIL_INFO))
+            .setSound(GTSoundEntries.ARC);
     public static final GTRecipeType DAWN_FORGE = GTRecipeTypes
             .register(CosmicCore.id("dawn_forge"), GTRecipeTypes.MULTIBLOCK)
             .setMaxIOSize(8, 1, 2, 0)
@@ -649,7 +660,8 @@ public class CosmicRecipeTypes {
                 ARCANE_DISTILLERY, ARCANE_FOLDING, POLYMERIZER, HEMOPHAGIC_TRANSFUSER, CHROMATIC_FLOTATION_PLANT,
                 SPIRIT_CRUCIBLE, SOUL_FOUNDRY, CALX_REACTOR, ROASTER, MANA_LEACHING_TUB, THERMOMAG, VAC_BUBBLER,
                 LARGE_ROASTER, VILE_FISSION, VOID_SALT_FISSION, RADBOLT_RECONSTRUCTOR, SPOOLING_MACHINE,
-                ORBITAL_FORGE_EBF, ORBITAL_FORGE_ABS, DAWN_FORGE, CINDER_HEARTH, ARCANE_CRUCIBLE,
+                ORBITAL_FORGE_EBF, ORBITAL_FORGE_ABS, ALLOY_BLASTING_KILN, DAWN_FORGE, CINDER_HEARTH,
+                ARCANE_CRUCIBLE,
                 PYROTHERMIC_REFINERY, MANA_ETCHING_FACTORY, BIO_LAB, STAR_LADDER_RESEARCH, STELLAR_IRIS,
                 STELLAR_SMELTING, CHROMATIC_DISTILLATION_PLANT, CELESTIAL_BORE, NAQUAHINE_REACTOR,
                 INDUSTRIAL_CHEMVAT, BIOVAT, WASP_RECIPES, BEES, VOMAHINE_CORE_DRILL, REGOLITH_SIFTER,
@@ -800,6 +812,7 @@ public class CosmicRecipeTypes {
         // .save(provider);
         // });
 
+        ALLOY_BLAST_RECIPES.getCategory().setXEIVisible(false);
         ALLOY_BLAST_RECIPES.onRecipeBuild((builder, provider) -> {
             var orbitBuilderABS = ORBITAL_FORGE_ABS.copyFrom(builder);
             // Orbital Forge ONLY copies Standard ABS recipes, if an ABS recipe contains a dimension condition, it is
@@ -815,6 +828,7 @@ public class CosmicRecipeTypes {
                                         ResourceLocation.parse("frontiers:sun_orbit"))))
                         .save(provider);
             }
+            builder.recipeType(ALLOY_BLASTING_KILN).category(ALLOY_BLASTING_KILN.getCategory());
         });
     }
 }
