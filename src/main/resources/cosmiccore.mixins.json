@@ -23,6 +23,8 @@
     "quake.QuakeMovementMixin",
     "gravity.client.CameraMixin",
     "gravity.client.PlayerRendererMixin",
+    "undergarden.client.UthericInfectionClientDisableMixin",
+    "undergarden.client.UthericInfectionLayerDisableMixin",
     "spacegravity.client.ClientZeroGravityControllerMixin",
     "client.MinecraftMixin",
     "client.ChatComponentPositionMixin",
