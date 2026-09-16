@@ -9,6 +9,7 @@ import com.ghostipedia.cosmiccore.common.rate.RateCalculatorReportTransport;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.StringTag;
+import net.minecraft.nbt.Tag;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
@@ -36,6 +37,9 @@ public final class ProductionStatisticsPackets {
                 int window = Math.max(-1,
                         Math.min(ProductionStatisticsData.WINDOWS.length - 1, query.getInt("window")));
                 int page = Math.max(0, Math.min(100_000, query.getInt("page")));
+                int pageSize = query.contains("pageSize", Tag.TAG_INT) ?
+                        Math.max(1, Math.min(ProductionStatisticsData.MAX_PAGE_SIZE, query.getInt("pageSize"))) :
+                        ProductionStatisticsData.MAX_PAGE_SIZE;
                 String kind = bounded(query.getString("kind"), 32);
                 String dimension = bounded(query.getString("dimension"), 512);
                 String search = bounded(query.getString("search"), 256).toLowerCase(java.util.Locale.ROOT);
@@ -50,7 +54,7 @@ public final class ProductionStatisticsPackets {
                 var pool = ProductionStatisticsService.viewerPool(player);
                 ProductionStatisticsData data = ProductionStatisticsData.get(player.getServer());
                 Response.send(player,
-                        data.query(pool, dimension, kind, search, window, page, selected, sortMode, reverse),
+                        data.query(pool, dimension, kind, search, window, page, selected, sortMode, reverse, pageSize),
                         data.dimensions(pool), window, page, kind, dimension, search, selected, false);
             });
         }

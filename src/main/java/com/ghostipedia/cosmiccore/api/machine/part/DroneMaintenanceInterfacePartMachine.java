@@ -2,31 +2,42 @@ package com.ghostipedia.cosmiccore.api.machine.part;
 
 import com.ghostipedia.cosmiccore.api.machine.multiblock.DroneStationMachine;
 import com.ghostipedia.cosmiccore.api.misc.DroneStationConnection;
+import com.ghostipedia.cosmiccore.api.misc.DroneStationNetwork;
+import com.ghostipedia.cosmiccore.api.misc.DroneStationServiceLogic;
+import com.ghostipedia.cosmiccore.api.misc.DroneStationSpace;
+import com.ghostipedia.cosmiccore.mixin.accessor.CleanroomReceiverTraitAccessor;
 
-import com.gregtechceu.gtceu.api.GTValues;
 import com.gregtechceu.gtceu.api.blockentity.BlockEntityCreationInfo;
+import com.gregtechceu.gtceu.api.machine.multiblock.CleanroomType;
+import com.gregtechceu.gtceu.api.machine.multiblock.MultiblockControllerMachine;
+import com.gregtechceu.gtceu.api.sync_system.annotations.SyncToClient;
 import com.gregtechceu.gtceu.common.data.GTItems;
 import com.gregtechceu.gtceu.common.machine.multiblock.part.MaintenanceHatchPartMachine;
+import com.gregtechceu.gtceu.common.machine.trait.CleanroomProviderTrait;
+import com.gregtechceu.gtceu.common.machine.trait.CleanroomReceiverTrait;
 import com.gregtechceu.gtceu.utils.ExtendedUseOnContext;
 
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.phys.BlockHitResult;
+
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Set;
 
 public class DroneMaintenanceInterfacePartMachine extends MaintenanceHatchPartMachine {
 
     private DroneStationConnection connection;
+    private final CleanroomProviderTrait cleanroomProvider;
 
-    // Can't sync a DroneStationConnection so magic value it is
-    // -1 = no connection, otherwise it's the Long packed BPos
-    private long syncedConnectionPos;
+    @SyncToClient
+    private long syncedConnectionPos = -1;
 
     public DroneMaintenanceInterfacePartMachine(BlockEntityCreationInfo holder) {
-        super(holder, GTValues.HV, false);
+        super(holder, DroneStationServiceLogic.INTERFACE_TIER, false);
+        cleanroomProvider = attachTrait(new CleanroomProviderTrait(Set.of(CleanroomType.CLEANROOM)));
     }
 
     @Override
@@ -36,37 +47,32 @@ public class DroneMaintenanceInterfacePartMachine extends MaintenanceHatchPartMa
 
     @Override
     public InteractionResult onUseWithItem(ExtendedUseOnContext context) {
-        if (context.getItemInHand().is(GTItems.DUCT_TAPE.get())) {
-            return InteractionResult.PASS;
-        }
+        if (context.getItemInHand().is(GTItems.DUCT_TAPE.get())) return InteractionResult.PASS;
         return super.onUseWithItem(context);
     }
-
-    //////////////////////////////////////
-    // ****** Initialization ******//
-    //////////////////////////////////////
 
     @Override
     public byte startProblems() {
         return ALL_PROBLEMS;
     }
 
-    //////////////////////////////////////
-    // ********* Logic **********//
-    //////////////////////////////////////
-    public DroneStationConnection getConnection() {
+    public @Nullable DroneStationConnection getConnection() {
         return connection;
+    }
+
+    public @Nullable MultiblockControllerMachine getController() {
+        return getControllers().isEmpty() ? null : getControllers().first();
     }
 
     @Override
     protected void updateMaintenanceSubscription() {
-        if (!isRemote()) {
-            maintenanceSubs = subscribeServerTick(maintenanceSubs, this::update);
-        }
+        if (!isRemote()) maintenanceSubs = subscribeServerTick(maintenanceSubs, this::update);
     }
 
     @Override
     public void onUnload() {
+        revokeCleanroom();
+        disconnect();
         if (maintenanceSubs != null) {
             maintenanceSubs.unsubscribe();
             maintenanceSubs = null;
@@ -76,80 +82,123 @@ public class DroneMaintenanceInterfacePartMachine extends MaintenanceHatchPartMa
 
     @Override
     public void onMachineDestroyed() {
+        revokeCleanroom();
+        disconnect();
         super.onMachineDestroyed();
-        if (hasConnection()) connection.machine = null;
+    }
+
+    @Override
+    public void removedFromController(MultiblockControllerMachine controller) {
+        revokeCleanroom(controller);
+        super.removedFromController(controller);
+        if (getControllers().isEmpty()) disconnect();
     }
 
     @Override
     public void update() {
-        if (isRemote()) return;
-        // Fix maintenance problems every second
-        if (getOffsetTimer() % 20 == 0) {
-            if (hasConnection()) {
-                syncedConnectionPos = connection.droneStationPos.asLong();
-                updateCleanroomStyle();
-                if (hasMaintenanceProblems()) {
-                    // See if we are allowed to fix maintenance issues + potentially consume a drone
-                    if (connection.droneStation.fixMaintenanceIssue()) {
-                        fixAllMaintenanceProblems();
-                    }
-                }
-            } else {
-                syncedConnectionPos = -1;
-                // Find a new connection every 10 seconds
-                if (getOffsetTimer() % 200 == 0) {
-                    tryFindConnection();
-                }
-            }
-        }
-    }
-
-    private void updateCleanroomStyle() {
-        if (!hasConnection()) return;
-        if (connection.droneStation.currentTier != DroneStationMachine.DroneTier.SANGUINE &&
-                connection.droneStation.currentTier != DroneStationMachine.DroneTier.PLASMATIC)
+        if (isRemote() || getOffsetTimer() % 20 != 0) return;
+        if (getController() == null) {
+            disconnect();
             return;
-        // TODO[GTCEu 8.0 port]: cleanroom-supplying disabled. The 1.20.1 API used here
-        // (ICleanroomProvider / ICleanroomReceiver / DummyCleanroom.createForTypes) was removed.
-        // 8.0 replaces it with the trait pair CleanroomProviderTrait / CleanroomReceiverTrait
-        // (com.gregtechceu.gtceu.common.machine.trait). Reimplementing requires attaching a
-        // CleanroomProviderTrait to this part and pushing it into each controller's
-        // CleanroomReceiverTrait via CleanroomReceiverTrait#setCleanroomProvider; there is no
-        // DummyCleanroom factory anymore, so a real provider trait must be constructed.
+        }
+        if (!hasConnection()) tryFindConnection();
+        if (!hasConnection()) {
+            revokeCleanroom();
+            setSyncedConnectionPos(-1);
+            return;
+        }
+        DroneStationMachine station = connection.station(getLevel());
+        if (station == null) {
+            disconnect();
+            return;
+        }
+        setSyncedConnectionPos(DroneStationSpace.worldPosition(getLevel(), station.getBlockPos()).asLong());
+        updateCleanroom(station);
+        int missingProblem = DroneStationServiceLogic.firstMissingProblem(getMaintenanceProblems());
+        if (missingProblem >= 0 && station.consumeServiceUse(getBlockPos())) setMaintenanceFixed(missingProblem);
     }
 
     public boolean hasConnection() {
         if (connection == null) return false;
-        if (connection.isValid()) return true;
-        return connection.reCheckConnection();
+        if (connection.isValid(getLevel())) return true;
+        disconnect();
+        return false;
     }
 
     private void tryFindConnection() {
-        ResourceLocation dimension = this.getLevel().dimension().location();
-        if (!DroneStationMachine.droneStations.containsKey(dimension)) return;
-
-        Set<DroneStationMachine> stations = DroneStationMachine.droneStations.get(dimension);
-        for (DroneStationMachine station : stations) {
-            // TODO: Do we want to take specifically the closest one (slower), or just take the first within range
-            // (faster)?
-            // the speed difference should be negligible :P
-            long blockLimit = station.getBlockLimit();
-            if (station.getBlockPos().distSqr(this.getBlockPos()) > blockLimit * blockLimit) continue;
-            if (!station.isActive()) continue;
-            connection = new DroneStationConnection(this, station);
-            station.connections.add(connection);
-            return;
-        }
+        if (!(getLevel() instanceof ServerLevel level)) return;
+        DroneStationMachine station = DroneStationNetwork.nearestActive(level, getBlockPos());
+        if (station == null) return;
+        connection = station.connect(this);
+        setSyncedConnectionPos(DroneStationSpace.worldPosition(getLevel(), station.getBlockPos()).asLong());
     }
 
-    // TODO(8.0.0 MUI2): custom UI shelved; default UI used (orig in git).
-    // attachTooltips(TooltipsPanel) used the removed api.gui.fancy IFancyTooltip/TooltipsPanel API.
-    // It surfaced two GTECH-logo fancy tooltips driven by syncedConnectionPos:
-    // - when connected (syncedConnectionPos != -1): green "drone_maintenance_interface.connection_location"
-    // with BlockPos.of(syncedConnectionPos) X/Y/Z;
-    // - when disconnected (== -1): red "drone_maintenance_interface.no_connection".
-    // Reinstate via GTMultiblockTextUtil rows in the controller's getWidgetsForDisplay when porting to MUI2.
-    // The syncedConnectionPos field + connection logic above remain fully functional.
+    private void disconnect() {
+        revokeCleanroom();
+        DroneStationConnection oldConnection = connection;
+        connection = null;
+        setSyncedConnectionPos(-1);
+        if (oldConnection == null || getLevel() == null) return;
+        DroneStationMachine station = oldConnection.station(getLevel());
+        if (station != null) station.disconnect(getBlockPos());
+    }
+
+    public void disconnectFrom(DroneStationMachine station) {
+        if (connection == null || !connection.stationPos().equals(station.getBlockPos())) return;
+        revokeCleanroom();
+        connection = null;
+        setSyncedConnectionPos(-1);
+        station.disconnect(getBlockPos());
+    }
+
+    public void refreshCleanroomService(DroneStationMachine station) {
+        if (connection == null || !connection.stationPos().equals(station.getBlockPos())) return;
+        updateCleanroom(station);
+    }
+
+    private void updateCleanroom(DroneStationMachine station) {
+        if (!DroneStationServiceLogic.providesCleanroom(station.getActiveTier(), station.isOnline())) {
+            revokeCleanroom();
+            return;
+        }
+        MultiblockControllerMachine controller = getController();
+        if (controller == null) {
+            revokeCleanroom();
+            return;
+        }
+        controller.getTraitOptional(CleanroomReceiverTrait.class).ifPresent(receiver -> {
+            CleanroomProviderTrait current = ((CleanroomReceiverTraitAccessor) receiver)
+                    .cosmiccore$getCleanroomProvider();
+            if (current == null || current == cleanroomProvider) {
+                cleanroomProvider.setActive(true);
+                receiver.setCleanroomProvider(cleanroomProvider);
+            }
+        });
+    }
+
+    private void revokeCleanroom() {
+        cleanroomProvider.setActive(false);
+        for (MultiblockControllerMachine controller : Set.copyOf(getControllers())) revokeCleanroom(controller);
+    }
+
+    private void revokeCleanroom(MultiblockControllerMachine controller) {
+        cleanroomProvider.setActive(false);
+        controller.getTraitOptional(CleanroomReceiverTrait.class).ifPresent(receiver -> {
+            if (((CleanroomReceiverTraitAccessor) receiver).cosmiccore$getCleanroomProvider() == cleanroomProvider) {
+                receiver.removeCleanroom();
+            }
+        });
+    }
+
+    private void setSyncedConnectionPos(long position) {
+        if (syncedConnectionPos == position) return;
+        syncedConnectionPos = position;
+        getSyncDataHolder().markClientSyncFieldDirty("syncedConnectionPos");
+    }
+
+    public long getSyncedConnectionPos() {
+        return syncedConnectionPos;
+    }
 
     @Override
     public void setTaped(boolean ignored) {}

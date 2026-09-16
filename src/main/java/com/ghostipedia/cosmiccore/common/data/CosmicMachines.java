@@ -9,6 +9,7 @@ import com.ghostipedia.cosmiccore.api.machine.part.CosmicPartAbility;
 import com.ghostipedia.cosmiccore.api.machine.part.DroneMaintenanceInterfacePartMachine;
 import com.ghostipedia.cosmiccore.api.machine.part.SteamFluidHatchPartMachine;
 import com.ghostipedia.cosmiccore.api.machine.part.WirelessEnergyHatchPartMachine;
+import com.ghostipedia.cosmiccore.api.misc.DroneStationServiceLogic;
 import com.ghostipedia.cosmiccore.api.pattern.CosmicPredicates;
 import com.ghostipedia.cosmiccore.api.registries.CosmicRegistration;
 import com.ghostipedia.cosmiccore.common.ae2gt.CosmicStockingBusPartMachine;
@@ -1196,7 +1197,7 @@ public class CosmicMachines {
             .rotationState(RotationState.ALL)
             .abilities(PartAbility.MAINTENANCE)
             .tooltips(Component.translatable("gtceu.part_sharing.disabled"))
-            .tier(EV)
+            .tier(DroneStationServiceLogic.INTERFACE_TIER)
             .modelProperty(GTMachineModelProperties.IS_FORMED, false)
             .overlayTieredHullModel("drone_hatch_maint")
             .langValue("Drone Maintenance Interface")

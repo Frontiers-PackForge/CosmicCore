@@ -147,6 +147,21 @@ public final class LeylineCompressorMachine extends WorkableElectricMultiblockMa
         return true;
     }
 
+    public void saveDraft(LeylinePrefab prefab) {
+        CompoundTag saved = new CompoundTag();
+        saved.putByteArray("payload", prefab.payload());
+        draft = saved;
+        getSyncDataHolder().markClientSyncFieldDirty("draft");
+        setChanged();
+    }
+
+    public void clearDraft() {
+        if (draft.isEmpty()) return;
+        draft = new CompoundTag();
+        getSyncDataHolder().markClientSyncFieldDirty("draft");
+        setChanged();
+    }
+
     private boolean canWritePattern() {
         return encoder.getStackInSlot(1).is(CosmicItems.LEYLINE_PATTERN.get()) ||
                 encoder.getStackInSlot(1).isEmpty() &&

@@ -1,6 +1,7 @@
 package com.ghostipedia.cosmiccore.client.transmission;
 
 import com.gregtechceu.gtceu.GTCEu;
+import com.gregtechceu.gtceu.api.GTValues;
 import com.gregtechceu.gtceu.integration.map.WaypointManager;
 
 import net.minecraft.client.Minecraft;
@@ -11,6 +12,7 @@ import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.level.Level;
 
 import com.glodblock.github.extendedae.client.render.EAEHighlightHandler;
+import xaero.hud.minimap.BuiltInHudModules;
 
 import java.util.Map;
 import java.util.UUID;
@@ -36,6 +38,34 @@ public final class PowerTowerMELocator {
         return locate(pos, dimension, Component.translatable("cosmiccore.power_tower.ui.waypoint"), "power_tower",
                 Component.translatable("cosmiccore.power_tower.ui.waypoint_added", pos.toShortString()),
                 Component.translatable("cosmiccore.power_tower.ui.locate_unavailable", pos.toShortString()));
+    }
+
+    public static boolean locateDroneMachine(BlockPos pos, ResourceKey<Level> dimension) {
+        var minecraft = Minecraft.getInstance();
+        var level = minecraft.level;
+        var player = minecraft.player;
+        if (level == null || player == null || minecraft.getConnection() == null ||
+                !level.dimension().equals(dimension)) {
+            return false;
+        }
+
+        int viewDistance = minecraft.options.getEffectiveRenderDistance();
+        var origin = player.chunkPosition();
+        int chunkDistance = Math.max(Math.abs((pos.getX() >> 4) - origin.x),
+                Math.abs((pos.getZ() >> 4) - origin.z));
+        if (DroneMachineLocatorPolicy.route(chunkDistance, viewDistance, level.hasChunkAt(pos),
+                GTCEu.isModLoaded("extendedae")) == DroneMachineLocatorPolicy.Route.HIGHLIGHT) {
+            ExtendedAE.highlight(pos, dimension);
+            return true;
+        }
+        if (GTCEu.isModLoaded(GTValues.MODID_XAEROS_MINIMAP) && XaeroTemporary.locate(pos, dimension)) {
+            player.displayClientMessage(Component.translatable(
+                    "cosmiccore.multiblock.drone_station.temporary_waypoint", pos.toShortString()), true);
+            return true;
+        }
+        player.displayClientMessage(Component.translatable(
+                "cosmiccore.multiblock.drone_station.locate_unavailable", pos.toShortString()), false);
+        return false;
     }
 
     private static boolean locate(BlockPos pos, ResourceKey<Level> dimension, Component waypointName, String group,
@@ -70,6 +100,19 @@ public final class PowerTowerMELocator {
 
         private static void highlight(BlockPos pos, ResourceKey<Level> dimension) {
             EAEHighlightHandler.highlight(pos, dimension, System.currentTimeMillis() + 10_000);
+        }
+    }
+
+    private static final class XaeroTemporary {
+
+        private static boolean locate(BlockPos pos, ResourceKey<Level> dimension) {
+            var session = BuiltInHudModules.MINIMAP.getCurrentSession();
+            if (session == null) return false;
+            var world = session.getWorldManager().getCurrentWorld();
+            if (world == null || !dimension.equals(world.getDimId())) return false;
+            session.getWaypointSession().getTemporaryHandler()
+                    .createTemporaryWaypoint(world, pos.getX(), pos.getY(), pos.getZ());
+            return true;
         }
     }
 }

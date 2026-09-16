@@ -58,8 +58,8 @@ public class Desalter {
                             .or(abilities(PartAbility.MAINTENANCE).setExactLimit(1)))
                     .where('B', frames(GTMaterials.StainlessSteel))
                     .where('C', blocks(LIGHTWEIGHT_STAINLESS_STEEL_CASING.get())
-                            .or(abilities(PartAbility.IMPORT_FLUIDS).setExactLimit(3))
-                            .or(abilities(PartAbility.EXPORT_FLUIDS).setExactLimit(3)))
+                            .or(abilities(PartAbility.IMPORT_FLUIDS).setMinGlobalLimited(1))
+                            .or(abilities(PartAbility.EXPORT_FLUIDS).setMinGlobalLimited(1)))
                     .where(' ', any())
                     .build())
             .model(createWorkableCasingMachineModel(
