@@ -1,55 +1,62 @@
 package com.ghostipedia.cosmiccore.api.misc;
 
 import com.ghostipedia.cosmiccore.api.machine.multiblock.DroneStationMachine;
+import com.ghostipedia.cosmiccore.api.machine.part.DroneMaintenanceInterfacePartMachine;
 
 import com.gregtechceu.gtceu.api.machine.MetaMachine;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.entity.BlockEntity;
 
-import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
-public class DroneStationConnection {
+import java.lang.ref.WeakReference;
 
-    public MetaMachine machine;
-    public BlockPos machinePos;
-    public DroneStationMachine droneStation;
-    public BlockPos droneStationPos;
-    public Level world;
+public final class DroneStationConnection {
 
-    public DroneStationConnection(MetaMachine machine, DroneStationMachine droneStation) {
-        this.machine = machine;
-        this.machinePos = machine.getBlockPos();
-        this.droneStation = droneStation;
-        this.droneStationPos = droneStation.getBlockPos();
-        this.world = machine.getLevel();
+    private final BlockPos interfacePos;
+    private final BlockPos stationPos;
+    private WeakReference<DroneMaintenanceInterfacePartMachine> interfaceReference;
+    private WeakReference<DroneStationMachine> stationReference;
+
+    public DroneStationConnection(DroneMaintenanceInterfacePartMachine maintenanceInterface,
+                                  DroneStationMachine station) {
+        interfacePos = maintenanceInterface.getBlockPos().immutable();
+        stationPos = station.getBlockPos().immutable();
+        interfaceReference = new WeakReference<>(maintenanceInterface);
+        stationReference = new WeakReference<>(station);
     }
 
-    public boolean reCheckConnection() {
-        if (machine == null) this.machine = getMetaMachineAt(machinePos, world);
-        if (droneStation == null) {
-            MetaMachine droneStation = getMetaMachineAt(droneStationPos, world);
-            if (!(droneStation instanceof DroneStationMachine droneStationMachine)) return false;
-            this.droneStation = droneStationMachine;
-        }
-
-        if (machine != null && !droneStation.connections.contains(this))
-            droneStation.connections.add(this);
-        return isValid();
+    public BlockPos interfacePos() {
+        return interfacePos;
     }
 
-    // gets a metamachine at a position
-    private MetaMachine getMetaMachineAt(@NotNull BlockPos pos, Level level) {
-        BlockEntity blockEntity = level.getBlockEntity(pos);
-        if (blockEntity == null) return null;
-        if (blockEntity instanceof MetaMachine machineBlockEntity) {
-            return machineBlockEntity;
-        }
-        return null;
+    public BlockPos stationPos() {
+        return stationPos;
     }
 
-    public boolean isValid() {
-        return machine != null && !machine.isRemoved() && droneStation != null && !droneStation.isRemoved();
+    public @Nullable DroneMaintenanceInterfacePartMachine maintenanceInterface(Level level) {
+        DroneMaintenanceInterfacePartMachine maintenanceInterface = interfaceReference.get();
+        if (maintenanceInterface != null && !maintenanceInterface.isRemoved()) return maintenanceInterface;
+        MetaMachine machine = MetaMachine.getMachine(level, interfacePos);
+        if (!(machine instanceof DroneMaintenanceInterfacePartMachine resolved)) return null;
+        interfaceReference = new WeakReference<>(resolved);
+        return resolved;
+    }
+
+    public @Nullable DroneStationMachine station(Level level) {
+        DroneStationMachine station = stationReference.get();
+        if (station != null && !station.isRemoved()) return station;
+        MetaMachine machine = MetaMachine.getMachine(level, stationPos);
+        if (!(machine instanceof DroneStationMachine resolved)) return null;
+        stationReference = new WeakReference<>(resolved);
+        return resolved;
+    }
+
+    public boolean isValid(Level level) {
+        DroneMaintenanceInterfacePartMachine maintenanceInterface = maintenanceInterface(level);
+        DroneStationMachine station = station(level);
+        return maintenanceInterface != null && station != null && station.canServe(interfacePos) &&
+                maintenanceInterface.getConnection() == this;
     }
 }

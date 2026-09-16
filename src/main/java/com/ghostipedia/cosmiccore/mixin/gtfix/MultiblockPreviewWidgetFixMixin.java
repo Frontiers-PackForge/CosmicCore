@@ -1,11 +1,13 @@
 package com.ghostipedia.cosmiccore.mixin.gtfix;
 
 import com.ghostipedia.cosmiccore.api.machine.multiblock.GroupedSlicePreviewSupport;
+import com.ghostipedia.cosmiccore.client.renderer.deployment.LeylineEncoderPreviewAccess;
 
 import com.gregtechceu.gtceu.api.machine.MultiblockMachineDefinition;
 import com.gregtechceu.gtceu.api.mui.MultiblockSchemaInfo;
 import com.gregtechceu.gtceu.api.multiblock.MultiPredicate;
 import com.gregtechceu.gtceu.api.multiblock.pattern.BlockPattern;
+import com.gregtechceu.gtceu.api.multiblock.pattern.ExpandablePattern;
 import com.gregtechceu.gtceu.api.multiblock.pattern.IBlockPattern;
 import com.gregtechceu.gtceu.api.multiblock.predicates.BasePredicate;
 import com.gregtechceu.gtceu.api.multiblock.util.BlockInfo;
@@ -15,12 +17,14 @@ import com.gregtechceu.gtceu.integration.recipeviewer.widgets.MultiblockPreviewW
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.phys.HitResult;
 
 import brachy.modularui.api.drawable.Text;
 import brachy.modularui.api.widget.IWidget;
 import brachy.modularui.drawable.Icon;
 import brachy.modularui.drawable.ItemDrawable;
 import brachy.modularui.drawable.text.ModularComponent;
+import brachy.modularui.screen.viewport.GuiContext;
 import brachy.modularui.value.IntValue;
 import brachy.modularui.widget.ParentWidget;
 import brachy.modularui.widgets.ButtonWidget;
@@ -109,8 +113,10 @@ public abstract class MultiblockPreviewWidgetFixMixin {
             if (!multiblockSchemaInfo.getUserSliceRepeats().containsKey(key)) {
                 multiblockSchemaInfo.getUserSliceRepeats().put(key, group.minRepeats());
             }
-            column.child(Text.dynamic(() -> Component.translatable("cosmiccore.multiblock.preview.group_repeats",
-                    multiblockSchemaInfo.getUserSliceRepeats().getOrDefault(key, group.minRepeats()))).asWidget());
+            if (!((Object) this instanceof LeylineEncoderPreviewAccess)) {
+                column.child(Text.dynamic(() -> Component.translatable("cosmiccore.multiblock.preview.group_repeats",
+                        multiblockSchemaInfo.getUserSliceRepeats().getOrDefault(key, group.minRepeats()))).asWidget());
+            }
             column.child(new SliderWidget()
                     .background(GTGuiTextures.FLUID_SLOT)
                     .height(16)
@@ -121,6 +127,63 @@ public abstract class MultiblockPreviewWidgetFixMixin {
                             () -> multiblockSchemaInfo.getUserSliceRepeats().getOrDefault(key, group.minRepeats()),
                             value -> cosmiccore$setGroupedSliceRepeats(key, value))));
         }
+        cosmiccore$compactEncoderSliders(column);
+    }
+
+    @Inject(method = "createConstraintSliders", at = @At("TAIL"), require = 1)
+    private void cosmiccore$compactEncoderConstraints(Flow column, ExpandablePattern pattern, CallbackInfo ci) {
+        cosmiccore$compactEncoderSliders(column);
+    }
+
+    @Inject(method = "lambda$new$0", at = @At("RETURN"), require = 1)
+    private void cosmiccore$forwardEncoderSelection(GuiContext context, int button,
+                                                    CallbackInfoReturnable<Boolean> cir) {
+        if (!cir.getReturnValueZ() || !((Object) this instanceof LeylineEncoderPreviewAccess receiver)) return;
+        var hit = multiblockSchemaInfo.getRenderer().lastRayTrace();
+        if (hit != null && hit.getType() == HitResult.Type.BLOCK) {
+            receiver.cosmiccore$selectFacingTarget(hit.getBlockPos());
+        }
+    }
+
+    @Unique
+    private void cosmiccore$compactEncoderSliders(Flow column) {
+        if (!((Object) this instanceof LeylineEncoderPreviewAccess receiver) ||
+                !receiver.cosmiccore$usesCompactControls())
+            return;
+        List<SliderWidget> sliders = column.getChildren().stream()
+                .filter(SliderWidget.class::isInstance)
+                .map(SliderWidget.class::cast)
+                .toList();
+        if (sliders.isEmpty()) return;
+        sliders.forEach(column::remove);
+        var row = Flow.row().height(18).coverChildrenWidth();
+        for (int index = 0; index < sliders.size(); index++) {
+            SliderWidget slider = sliders.get(index);
+            int number = index + 1;
+            row.child(new ButtonWidget<>().size(38, 18)
+                    .overlay(Text.dynamic(() -> Component.literal(Integer.toString((int) slider.getSliderValue()))))
+                    .tooltip(t -> {
+                        t.addLine(Component.translatable("cosmiccore.multiblock.preview.adjustment", number,
+                                (int) slider.getSliderValue()));
+                        t.addLine(Component.translatable("cosmiccore.multiblock.preview.adjustment_hint"));
+                    }).tooltipAutoUpdate(true)
+                    .onMousePressed((context, button) -> {
+                        if (button != 0 && button != 1) return false;
+                        cosmiccore$stepSlider(slider, button == 0 ? 1 : -1);
+                        return true;
+                    })
+                    .onMouseScrolled((context, scrollX, scrollY) -> {
+                        if (scrollY == 0) return false;
+                        cosmiccore$stepSlider(slider, scrollY > 0 ? 1 : -1);
+                        return true;
+                    }));
+        }
+        column.child(row);
+    }
+
+    @Unique
+    private static void cosmiccore$stepSlider(SliderWidget slider, int step) {
+        slider.setValue(slider.getSliderValue() + step, true);
     }
 
     @Unique

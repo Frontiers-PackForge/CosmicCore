@@ -56,6 +56,8 @@ public class CosmicLangHandler extends LangHandler {
         provider.add("gui.cosmiccore.production_statistics.coverage", "Server time represented: %s");
         provider.add("gui.cosmiccore.production_statistics.lifetime", "Recorded server time: %s");
         provider.add("gui.cosmiccore.production_statistics.all_no_graph", "No graph for lifetime statistics");
+        provider.add("gui.cosmiccore.production_statistics.graph_placeholder",
+                "Placeholder graph: future, not yet implemented");
         provider.add("gui.cosmiccore.production_statistics.global", "All dimensions");
         provider.add("gui.cosmiccore.production_statistics.kind.all", "All types");
         provider.add("gui.cosmiccore.production_statistics.kind.item", "Items");
@@ -261,6 +263,27 @@ public class CosmicLangHandler extends LangHandler {
                 "Pattern output / design input. Insert a leyline package to load its design. Re-Encode to update design.");
         provider.add("cosmiccore.leyline.encode_hint",
                 "Validate the layout. Use a Blank Leyline Pattern to encode.");
+        provider.add("cosmiccore.leyline.facing",
+                "Choose a rotatable machine part with the facing controls, then choose its direction.");
+        provider.add("cosmiccore.leyline.facing.label", "Part facing");
+        provider.add("cosmiccore.leyline.facing.none", "No rotatable machine parts");
+        provider.add("cosmiccore.leyline.facing.previous", "Previous rotatable part");
+        provider.add("cosmiccore.leyline.facing.next", "Next rotatable part");
+        provider.add("cosmiccore.leyline.facing.position", "Schema position: %s");
+        provider.add("cosmiccore.leyline.facing.north", "North");
+        provider.add("cosmiccore.leyline.facing.south", "South");
+        provider.add("cosmiccore.leyline.facing.east", "East");
+        provider.add("cosmiccore.leyline.facing.west", "West");
+        provider.add("cosmiccore.leyline.facing.up", "Up");
+        provider.add("cosmiccore.leyline.facing.down", "Down");
+        provider.add("cosmiccore.leyline.facing.short.north", "N");
+        provider.add("cosmiccore.leyline.facing.short.south", "S");
+        provider.add("cosmiccore.leyline.facing.short.east", "E");
+        provider.add("cosmiccore.leyline.facing.short.west", "W");
+        provider.add("cosmiccore.leyline.facing.short.up", "U");
+        provider.add("cosmiccore.leyline.facing.short.down", "D");
+        provider.add("cosmiccore.leyline.materials", "Parts");
+        provider.add("cosmiccore.leyline.material_count", "Required: %s");
         provider.add("cosmiccore.leyline.idle", "Fabrication idle");
         provider.add("cosmiccore.leyline.remaining", "Fabrication remaining: %s s");
         provider.add("cosmiccore.leyline.invalid_at", "Invalid block at %s. Allowed examples:");
@@ -269,6 +292,8 @@ public class CosmicLangHandler extends LangHandler {
         provider.add("cosmiccore.leyline.choose", "Choose a multiblock, then validate its layout.");
         provider.add("cosmiccore.leyline.validate", "Validate");
         provider.add("cosmiccore.leyline.encode", "Encode");
+        provider.add("cosmiccore.leyline.clear", "Clear");
+        provider.add("cosmiccore.leyline.clear_hint", "Clear the saved encoder template.");
         provider.add("cosmiccore.leyline.library", "Fabrication Library");
         provider.add("cosmiccore.leyline.icon",
                 "AE2 icon;Will Display as this item with an indicator of leyline packaging.");
@@ -1342,9 +1367,36 @@ public class CosmicLangHandler extends LangHandler {
         provider.add("cosmiccore.multiblock.hpca.incomplete-array", "Incomplete Array will not generate");
 
         // Drone Station
-        provider.add("cosmiccore.multiblock.drone_station_machine.drone_amount", "Currently serving %s drones");
-        provider.add("cosmiccore.multiblock.drone_station_machine.no_drones", "No drones connected");
-        provider.add("cosmiccore.multiblock.drone_station_machine.current_tier", "Current tier: %s");
+        provider.add("cosmiccore.multiblock.drone_station.online", "Drone network online");
+        provider.add("cosmiccore.multiblock.drone_station.offline", "Drone network offline");
+        provider.add("cosmiccore.multiblock.drone_station.no_drones", "No drones available");
+        provider.add("cosmiccore.multiblock.drone_station.tier_status",
+                "%s | Radius: %s blocks | Draw: %s EU/t | Uses: %s");
+        provider.add("cosmiccore.multiblock.drone_station.connections", "Connected machines: %s");
+        provider.add("cosmiccore.multiblock.drone_station.machine_list", "Machine control");
+        provider.add("cosmiccore.multiblock.drone_station.previous", "Prev");
+        provider.add("cosmiccore.multiblock.drone_station.next", "Next");
+        provider.add("cosmiccore.multiblock.drone_station.page", "Page %s of %s");
+        provider.add("cosmiccore.multiblock.drone_station.wake_all", "All On");
+        provider.add("cosmiccore.multiblock.drone_station.sleep_all", "All Off");
+        provider.add("cosmiccore.multiblock.drone_station.wake", "Enable");
+        provider.add("cosmiccore.multiblock.drone_station.sleep", "Disable");
+        provider.add("cosmiccore.multiblock.drone_station.machine_row", "%s | %s");
+        provider.add("cosmiccore.multiblock.drone_station.machine_location", "Coordinates: %s, %s, %s");
+        provider.add("cosmiccore.multiblock.drone_station.locate", "Click to locate this controller");
+        provider.add("cosmiccore.multiblock.drone_station.temporary_waypoint", "Temporary waypoint placed at %s");
+        provider.add("cosmiccore.multiblock.drone_station.locate_unavailable",
+                "Controller at %s. No available highlight or Xaero temporary waypoint integration.");
+        provider.add("cosmiccore.multiblock.drone_station.status.0", "Unavailable");
+        provider.add("cosmiccore.multiblock.drone_station.status.1", "Ready");
+        provider.add("cosmiccore.multiblock.drone_station.status.2", "Running");
+        provider.add("cosmiccore.multiblock.drone_station.status.3", "Sleeping after cycle");
+        provider.add("cosmiccore.multiblock.drone_station.status.4", "Sleeping");
+        provider.add("cosmiccore.multiblock.drone_station.tier.rusty", "Rusty");
+        provider.add("cosmiccore.multiblock.drone_station.tier.robust", "Robust");
+        provider.add("cosmiccore.multiblock.drone_station.tier.industrial", "Industrial");
+        provider.add("cosmiccore.multiblock.drone_station.tier.sanguine", "Sanguine");
+        provider.add("cosmiccore.multiblock.drone_station.tier.plasmatic", "Plasmatic");
 
         provider.add("cosmiccore.multiblock.drone_maintenance_interface.connection_location",
                 "Currently connected to (%s, %s, %s)");
@@ -2283,6 +2335,9 @@ public class CosmicLangHandler extends LangHandler {
         provider.add("cosmiccore.steam.recipe.high_pressure", "%s mB/t @ %s s (High Pressure Steam Machines)");
         provider.add("cosmiccore.steam.recipe.low_pressure", "%s mB/t @ %s s (Low Pressure Steam Machines)");
         provider.add("cosmiccore.multiblock.preview.group_repeats", "Repeated Module Groups: %s");
+        provider.add("cosmiccore.multiblock.preview.adjustment", "Adjustment %s: %s");
+        provider.add("cosmiccore.multiblock.preview.adjustment_hint",
+                "Left-click or scroll up to increase. Right-click or scroll down to decrease.");
         provider.add("cosmiccore.multiblock.modular_power_station.tooltip.0",
                 "Attach §eDrive Modules§f (1-4) and a Stator Module to create a suitable power plant.");
         provider.add("cosmiccore.multiblock.modular_power_station.tooltip.1",
@@ -2389,7 +2444,7 @@ public class CosmicLangHandler extends LangHandler {
         provider.add("key.cosmiccore.deeds.open", "Open Deeds");
         provider.add("key.categories.cosmiccore.deeds", "CosmicCore: Deeds");
         provider.add("button.cosmiccore.deeds", "Deeds");
-        provider.add("button.cosmiccore.deeds.tooltip", "Enter the Inner Vault");
+        provider.add("button.cosmiccore.deeds.tooltip", "Hold to enter the Inner Vault");
         provider.add("cosmiccore.deeds.banner.first",
                 "Something in the darkness of your being clatters, lost but felt.");
         provider.add("cosmiccore.deeds.banner.second",

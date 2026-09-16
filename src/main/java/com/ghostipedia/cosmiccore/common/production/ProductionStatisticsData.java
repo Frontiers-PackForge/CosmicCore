@@ -26,6 +26,7 @@ import java.util.UUID;
 public final class ProductionStatisticsData extends SavedData {
 
     public static final String DEFAULT_SORT_MODE = "default";
+    public static final int MAX_PAGE_SIZE = 50;
 
     public static final long[] WINDOWS = { 100, 1_200, 12_000, 72_000, 720_000, 1_800_000, 3_600_000,
             7_200_000, 18_000_000, 36_000_000, 54_000_000, 72_000_000 };
@@ -93,12 +94,18 @@ public final class ProductionStatisticsData extends SavedData {
 
     public Query query(UUID poolId, String dimension, String kind, String search, int window, int page,
                        List<String> selected, String sortMode, boolean reverse) {
+        return query(poolId, dimension, kind, search, window, page, selected, sortMode, reverse, MAX_PAGE_SIZE);
+    }
+
+    public Query query(UUID poolId, String dimension, String kind, String search, int window, int page,
+                       List<String> selected, String sortMode, boolean reverse, int pageSize) {
         String normalizedSort = normalizeSortMode(sortMode);
+        int boundedPageSize = Math.max(1, Math.min(MAX_PAGE_SIZE, pageSize));
         Pool pool = pools.get(poolId);
         if (pool == null)
             return new Query(clock, 0, 0, 0, 0, normalizedSort, reverse, List.of(), List.of(), false, false, false);
         return pool.query(clock, dimension, kind, search, window, Math.max(0, Math.min(100_000, page)), selected,
-                normalizedSort, reverse);
+                normalizedSort, reverse, boundedPageSize);
     }
 
     public static String normalizeSortMode(String sortMode) {
@@ -184,7 +191,7 @@ public final class ProductionStatisticsData extends SavedData {
         }
 
         Query query(long now, String dimension, String kind, String search, int window, int page,
-                    List<String> selected, String sortMode, boolean reverse) {
+                    List<String> selected, String sortMode, boolean reverse, int pageSize) {
             int wi = Math.max(-1, Math.min(WINDOWS.length - 1, window));
             long kindStarted = kind.equals("energy") ? Math.max(started, energyStarted) : started;
             long representedStart = wi < 0 ? kindStarted : representedStart(kindStarted, now, wi);
@@ -205,8 +212,8 @@ public final class ProductionStatisticsData extends SavedData {
             List<Aggregate> sorted = aggregate.values().stream()
                     .sorted(comparator(sortMode, reverse))
                     .toList();
-            int from = Math.min(sorted.size(), page * 50);
-            int to = Math.min(sorted.size(), from + 50);
+            int from = Math.min(sorted.size(), page * pageSize);
+            int to = Math.min(sorted.size(), from + pageSize);
             List<Row> rows = sorted.subList(from, to).stream()
                     .map(value -> new Row(value.resource, text(value.input), text(value.output))).toList();
             List<Point> graph = graph(records.values(), dimension, kind, now, wi, representedStart,

@@ -33,11 +33,31 @@ public final class LeylineEncoderControl extends SyncHandler<LeylineEncoderContr
         syncToServer(encode ? 1 : 0, buf -> LeylinePrefab.writePayload(buf, prefab.save()));
     }
 
+    public void saveDraft(LeylinePrefab prefab) {
+        syncToServer(2, buf -> buf.writeByteArray(prefab.payload()));
+    }
+
+    public void clearDraft() {
+        syncToServer(3, buf -> {});
+    }
+
     @Override
     public void readOnServer(int id, RegistryFriendlyByteBuf buf) {
         if (!(machine.getLevel() instanceof ServerLevel level) || machine.isRemoved() ||
                 getSyncManager().getPlayer().distanceToSqr(machine.getBlockPos().getCenter()) > 64)
             return;
+        if (id == 3) {
+            machine.clearDraft();
+            return;
+        }
+        if (id == 2) {
+            try {
+                machine.saveDraft(LeylinePrefab.fromPayload(buf.readByteArray(28_000)));
+            } catch (RuntimeException exception) {
+                CosmicCore.LOGGER.debug("Rejected leyline draft", exception);
+            }
+            return;
+        }
         long tick = level.getGameTime();
         if (lastRequest != Long.MIN_VALUE && tick - lastRequest < 5) return;
         lastRequest = tick;

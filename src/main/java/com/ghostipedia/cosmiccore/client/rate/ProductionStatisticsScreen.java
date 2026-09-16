@@ -18,7 +18,6 @@ import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
-import net.minecraft.nbt.StringTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -40,10 +39,7 @@ public final class ProductionStatisticsScreen extends Screen {
             "250h", "500h", "750h", "1000h" };
     private static final String[] SORT_MODES = { "default", "id", "produced", "consumed" };
     private static final String[] SORT_ICONS = { "◆", "A", "+", "−" };
-    private static final int[] COLORS = { 0xFF78C8FF, 0xFFFFB45E, 0xFFA5E887, 0xFFE394FF, 0xFFFF718D, 0xFFEBDF73,
-            0xFF76E3D4, 0xFFC2A2FF };
     private CompoundTag report = new CompoundTag();
-    private final List<String> selected = new ArrayList<>();
     private final List<Button> sortButtons = new ArrayList<>();
     private EditBox search;
     private int kindIndex;
@@ -52,7 +48,7 @@ public final class ProductionStatisticsScreen extends Screen {
     private String sortMode = ProductionStatisticsData.DEFAULT_SORT_MODE;
     private boolean reverseSort;
     private int page;
-    private int scroll;
+    private int pageSize;
     private long nextRefresh;
     private List<net.minecraft.util.FormattedCharSequence> rowTooltip;
 
@@ -82,15 +78,14 @@ public final class ProductionStatisticsScreen extends Screen {
         kindIndex = Math.max(0, indexOf(KINDS, value.getString("kind")));
         List<String> dimensions = dimensions();
         dimensionIndex = Math.max(0, dimensions.indexOf(value.getString("dimension")) + 1);
-        selected.clear();
-        ListTag tags = value.getList("selected", Tag.TAG_STRING);
-        for (int i = 0; i < tags.size(); i++) selected.add(tags.getString(i));
-        scroll = 0;
         updateSortButtons();
     }
 
     @Override
     protected void init() {
+        int visiblePageSize = rowCount();
+        if (pageSize > 0 && pageSize != visiblePageSize) page = 0;
+        pageSize = visiblePageSize;
         int x = left() + 10;
         int y = top() + 30;
         int controlWidth = Math.max(60, (panelWidth() - 38) / 4);
@@ -158,6 +153,7 @@ public final class ProductionStatisticsScreen extends Screen {
                         request();
                     }
                 }));
+        request();
     }
 
     @Override
@@ -177,34 +173,9 @@ public final class ProductionStatisticsScreen extends Screen {
         query.putString("search", search == null ? "" : search.getValue());
         query.putString("sort", sortMode);
         query.putBoolean("reverse", reverseSort);
-        ListTag selection = new ListTag();
-        selected.forEach(key -> selection.add(StringTag.valueOf(key)));
-        query.put("selected", selection);
+        query.putInt("pageSize", pageSize);
+        query.put("selected", new ListTag());
         CCoreNetwork.sendToServer(new ProductionStatisticsPackets.Request(query));
-    }
-
-    @Override
-    public boolean mouseScrolled(double mouseX, double mouseY, double horizontal, double vertical) {
-        if (mouseX < left() + panelWidth() / 2 && mouseY > top() + 86 && mouseY < bottom() - 32) {
-            scroll = Math.max(0,
-                    Math.min(Math.max(0, visibleRows().size() - rowCount()), scroll + (vertical < 0 ? 1 : -1)));
-            return true;
-        }
-        return super.mouseScrolled(mouseX, mouseY, horizontal, vertical);
-    }
-
-    @Override
-    public boolean mouseClicked(double mouseX, double mouseY, int button) {
-        if (super.mouseClicked(mouseX, mouseY, button)) return true;
-        int row = (int) ((mouseY - top() - 88) / 22) + scroll;
-        List<CompoundTag> rows = visibleRows();
-        if (button == 0 && mouseX >= left() + 10 && mouseX < left() + panelWidth() / 2 - 4 && row >= 0 &&
-                row < rows.size() && mouseY >= top() + 88 && mouseY < bottom() - 32) {
-            String key = rows.get(row).getString("key");
-            if (selected.remove(key) || selected.size() < 8 && selected.add(key)) request();
-            return true;
-        }
-        return false;
     }
 
     @Override
@@ -220,7 +191,7 @@ public final class ProductionStatisticsScreen extends Screen {
                         .getString();
         graphics.drawString(font, coverage, left() + panelWidth() - 12 - font.width(coverage), top() + 12, 0xA8A8A8);
         drawRows(graphics, mouseX, mouseY);
-        drawGraph(graphics, mouseX, mouseY);
+        drawGraphPlaceholder(graphics);
         graphics.drawString(font, Component.translatable("gui.cosmiccore.production_statistics.page", page + 1),
                 left() + 112, bottom() - 21, 0xB8B8B8);
         Component partial = partialLabel();
@@ -238,14 +209,12 @@ public final class ProductionStatisticsScreen extends Screen {
                 top() + 76, 0xB8B8B8);
         graphics.enableScissor(x, top() + 87, x + width, bottom() - 32);
         for (int shown = 0; shown < rowCount(); shown++) {
-            int index = shown + scroll;
-            if (index >= rows.size()) break;
-            CompoundTag row = rows.get(index);
+            if (shown >= rows.size()) break;
+            CompoundTag row = rows.get(shown);
             int y = top() + 88 + shown * 22;
-            boolean chosen = selected.contains(row.getString("key"));
-            RateCalculatorButton.drawRow(graphics, x, y, width, 20, chosen || mouseX >= x && mouseX < x + width &&
+            RateCalculatorButton.drawRow(graphics, x, y, width, 20, mouseX >= x && mouseX < x + width &&
                     mouseY >= y && mouseY < y + 20);
-            graphics.drawString(font, (chosen ? "◆ " : "◇ ") + name(row), x + 4, y + 3, 0xE8E8E8);
+            graphics.drawString(font, name(row), x + 4, y + 3, 0xE8E8E8);
             if (row.getString("kind").equals("energy")) {
                 String average = "-" + compactRate(row, "input") + "/+" + compactRate(row, "output") + " EU/t";
                 graphics.drawString(font, average, x + width - 5 - font.width(average), y + 3, 0xFFFFD27A);
@@ -274,62 +243,19 @@ public final class ProductionStatisticsScreen extends Screen {
         graphics.disableScissor();
     }
 
-    private void drawGraph(GuiGraphics graphics, int mouseX, int mouseY) {
+    private void drawGraphPlaceholder(GuiGraphics graphics) {
         int x = left() + panelWidth() / 2 + 4, y = top() + 88, width = panelWidth() / 2 - 14;
         int height = bottom() - y - 34;
         graphics.fill(x, y, x + width, y + height, 0x88202028);
-        if (window < 0) {
-            graphics.drawCenteredString(font,
-                    Component.translatable("gui.cosmiccore.production_statistics.all_no_graph"),
-                    x + width / 2, y + height / 2, 0xB8B8B8);
-            return;
-        }
-        ListTag points = report.getList("graph", Tag.TAG_COMPOUND);
-        BigDecimal max = BigDecimal.ONE;
-        for (int i = 0; i < points.size(); i++) {
-            CompoundTag point = points.getCompound(i);
-            max = max.max(number(point.getString("input"))).max(number(point.getString("output")));
-        }
-        long cutoff = report.getLong("clock") - ProductionStatisticsData.WINDOWS[window] + 1;
-        for (int i = 0; i < points.size(); i++) {
-            CompoundTag point = points.getCompound(i);
-            int color = COLORS[Math.max(0, selected.indexOf(point.getString("resource"))) % COLORS.length];
-            int px = x + (int) Math.max(0, Math.min(width - 1,
-                    (point.getLong("start") - cutoff) * width / ProductionStatisticsData.WINDOWS[window]));
-            int half = Math.max(1, height / 2 - 8);
-            int inputBar = bar(number(point.getString("input")), max, half);
-            int outputBar = bar(number(point.getString("output")), max, half);
-            int middle = y + height / 2;
-            graphics.fill(px, middle - outputBar, Math.min(x + width, px + 2), middle, color);
-            graphics.fill(px, middle, Math.min(x + width, px + 2), middle + inputBar,
-                    0x88000000 | color & 0x00FFFFFF);
-            if (mouseX >= px && mouseX < px + 3 && mouseY >= middle - outputBar && mouseY <= middle + inputBar) {
-                graphics.renderTooltip(font, List.of(
-                        Component.literal(nameForKey(point.getString("resource"))).getVisualOrderText(),
-                        Component.literal("-" + amount(point.getString("input")) + "  +" +
-                                amount(point.getString("output"))).getVisualOrderText(),
-                        Component.translatable("gui.cosmiccore.production_statistics.interval", point.getLong("start"),
-                                point.getLong("end")).getVisualOrderText()),
-                        mouseX, mouseY);
-            }
-        }
-        int legendY = y + 4;
-        for (int i = 0; i < selected.size(); i++) {
-            graphics.drawString(font, "◆ " + nameForKey(selected.get(i)), x + 5, legendY, COLORS[i % COLORS.length]);
-            legendY += 10;
-        }
+        graphics.drawCenteredString(font,
+                Component.translatable("gui.cosmiccore.production_statistics.graph_placeholder"),
+                x + width / 2, y + height / 2, 0xB8B8B8);
     }
 
     private List<CompoundTag> visibleRows() {
-        String term = search == null ? "" : search.getValue().toLowerCase(Locale.ROOT);
         ListTag tags = report.getList("rows", Tag.TAG_COMPOUND);
         List<CompoundTag> rows = new ArrayList<>();
-        for (int i = 0; i < tags.size(); i++) {
-            CompoundTag row = tags.getCompound(i);
-            if (term.isEmpty() || name(row).toLowerCase(Locale.ROOT).contains(term) ||
-                    row.getString("id").toLowerCase(Locale.ROOT).contains(term))
-                rows.add(row);
-        }
+        for (int i = 0; i < tags.size(); i++) rows.add(tags.getCompound(i));
         return rows;
     }
 
@@ -354,12 +280,6 @@ public final class ProductionStatisticsScreen extends Screen {
         if (row.getString("kind").equals("energy"))
             return Component.translatable("gui.cosmiccore.production_statistics.resource.eu").getString();
         return row.getString("id");
-    }
-
-    private String nameForKey(String key) {
-        for (CompoundTag row : visibleRows()) if (row.getString("key").equals(key)) return name(row);
-        String[] parts = key.split("\\u0000", 3);
-        return parts.length > 1 ? parts[1] : key;
     }
 
     private List<String> dimensions() {
@@ -466,11 +386,6 @@ public final class ProductionStatisticsScreen extends Screen {
         } catch (NumberFormatException ignored) {
             return BigDecimal.ZERO;
         }
-    }
-
-    private static int bar(BigDecimal value, BigDecimal max, int height) {
-        if (value.signum() == 0) return 0;
-        return Math.max(1, value.multiply(BigDecimal.valueOf(height)).divide(max, 0, RoundingMode.DOWN).intValue());
     }
 
     private static String amount(String value) {
