@@ -273,6 +273,7 @@
     "gtfix.MachineActivityAEItemOutputMixin",
     "gtfix.MachineActivityAEFluidOutputMixin",
     "gtfix.RecipeAmperageOverclockFixMixin",
+    "gtfix.AlloyBlastRecipeProducerMoltenOutputMixin",
     "gttweak.MachineUIPanelBackgroundFixMixin",
     "gttweak.GTMuiTitleBarBackgroundFixMixin",
     "gttweak.GTPetrochemicalMaterialIdMixin",

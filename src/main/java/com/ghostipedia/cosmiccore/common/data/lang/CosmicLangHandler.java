@@ -26,7 +26,8 @@ public class CosmicLangHandler extends LangHandler {
             "polymerizer", "hemophagic_transfuser", "chromatic_flotation_plant", "spirit_crucible",
             "soul_foundry", "calx_reactor", "roaster", "mana_leaching_tub", "thermomagnitizer",
             "vacuum_bubbler", "large_roaster", "vile_fission", "void_salt_fission", "reconstructor",
-            "spooling_machine", "orbital_forge", "orbital_forge_abs", "dawn_forge", "cinder_hearth",
+            "spooling_machine", "orbital_forge", "orbital_forge_abs", "alloy_blasting_kiln", "dawn_forge",
+            "cinder_hearth",
             "arcane_crucible", "pyrothermic_refinery", "mana_etching", "bio_lab", "star_ladder_research",
             "stellar_iris", "ignition_complex", "chormatic_distillation_plant", "celestial_bore",
             "naquahine_reactor", "mini_naquahine_reactor", "industrial_chemvat", "biovat", "wasp", "bees",
@@ -750,6 +751,23 @@ public class CosmicLangHandler extends LangHandler {
                 "Power Tower hatches must use standard voltage tiers.");
         provider.add("cosmiccore.multiblock.power_tower.graph_conflict",
                 "This tower conflicts with the voltage or ownership of this wire grid.");
+        provider.add("cosmiccore.machine.hephaestus_cauldron.tooltip.0",
+                "Provides Pyroflux fuel injection to nearby foundry machines.");
+        provider.add("cosmiccore.machine.hephaestus_cauldron.tooltip.1",
+                "It supports §e4§f, §e8§f, or §e16§f active furnaces, determined by structure tier.");
+        provider.add("cosmiccore.machine.hephaestus_cauldron.tooltip.2",
+                "Linked foundry devices maintain their own inputs/outputs, the cauldron provides preheating.");
+        provider.add("cosmiccore.machine.hephaestus_cauldron.status.tier", "Foundry Tier: %s");
+        provider.add("cosmiccore.machine.hephaestus_cauldron.status.capacity", "Capacity: %s");
+        provider.add("cosmiccore.machine.hephaestus_cauldron.status.total", "Linked Furnaces: %s");
+        provider.add("cosmiccore.machine.hephaestus_cauldron.status.active", "Active Links: %s");
+        provider.add("cosmiccore.machine.hephaestus_cauldron.status.dormant", "Dormant Links: %s");
+        provider.add("cosmiccore.machine.alloy_blasting_kiln.tooltip.0",
+                "The metallurgy furnace of a Hephaestus' Cauldron's work force.");
+        provider.add("cosmiccore.machine.alloy_blasting_kiln.tooltip.1",
+                "Processes up to §e4§f Alloy Blast Kiln recipes at once.");
+        provider.add("cosmiccore.machine.alloy_blasting_kiln.tooltip.2",
+                "Requires an active Cauldron linked within 96 tiles, Pyroflux charge is required to run.");
         provider.add("cosmiccore.power_tower.line.first",
                 "Selected Power Tower at %s. Select your second power tower");
         provider.add("cosmiccore.power_tower.line.dimension",

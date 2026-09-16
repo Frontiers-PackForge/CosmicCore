@@ -12,6 +12,7 @@ import com.ghostipedia.cosmiccore.common.network.packet.EffortlessBuildingAE2Cou
 import com.ghostipedia.cosmiccore.common.network.packet.FactoryGaugeFluidSelectionPacket;
 import com.ghostipedia.cosmiccore.common.network.packet.FactoryGaugePromiseLimitPacket;
 import com.ghostipedia.cosmiccore.common.network.packet.FirmamentTideHudPacket;
+import com.ghostipedia.cosmiccore.common.network.packet.FoundryCampusSyncPacket;
 import com.ghostipedia.cosmiccore.common.network.packet.LeylineDeploymentFinishPacket;
 import com.ghostipedia.cosmiccore.common.network.packet.LeylineDeploymentRequestPacket;
 import com.ghostipedia.cosmiccore.common.network.packet.LeylineDeploymentStartPacket;
@@ -94,6 +95,8 @@ public class CCoreNetwork {
                 DeedPresentationPacket::execute);
         registrar.playToClient(FirmamentTideHudPacket.TYPE, FirmamentTideHudPacket.CODEC,
                 FirmamentTideHudPacket::execute);
+        registrar.playToClient(FoundryCampusSyncPacket.TYPE, FoundryCampusSyncPacket.CODEC,
+                FoundryCampusSyncPacket::execute);
         registrar.playToClient(EffortlessBuildingAE2CountSyncPacket.TYPE, EffortlessBuildingAE2CountSyncPacket.CODEC,
                 EffortlessBuildingAE2CountSyncPacket::execute);
         registrar.playToClient(SyncWirelessPDAHudPacket.TYPE, SyncWirelessPDAHudPacket.CODEC,

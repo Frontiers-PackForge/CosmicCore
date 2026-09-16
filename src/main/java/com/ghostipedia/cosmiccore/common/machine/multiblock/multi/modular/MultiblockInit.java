@@ -79,6 +79,8 @@ public class MultiblockInit {
         VoidSaltReactor.init();
         AtomicReconstructor.init();
         LinkTestStation.init();
+        HephaestusCauldron.init();
+        AlloyBlastingKiln.init();
         BloomwyrmSystem.init();
         StarLadder.init();
         StarLadderResearchHub.init();

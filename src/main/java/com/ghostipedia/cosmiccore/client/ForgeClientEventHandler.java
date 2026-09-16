@@ -2,6 +2,7 @@ package com.ghostipedia.cosmiccore.client;
 
 import com.ghostipedia.cosmiccore.CosmicCore;
 import com.ghostipedia.cosmiccore.CosmicUtils;
+import com.ghostipedia.cosmiccore.client.foundry.FoundryCampusClientState;
 import com.ghostipedia.cosmiccore.client.map.RevealedFieldStorage;
 import com.ghostipedia.cosmiccore.client.map.RevealedFields;
 import com.ghostipedia.cosmiccore.client.mirror.ClientDeedCache;
@@ -41,6 +42,7 @@ public class ForgeClientEventHandler {
         if (event.getLevel().isClientSide()) {
             RingUpgradePreviewRenderer.clearAllPreviews();
             EffortlessBuildingAE2Bridge.clearClientCache();
+            FoundryCampusClientState.clear();
         }
     }
 
@@ -56,6 +58,7 @@ public class ForgeClientEventHandler {
     @SubscribeEvent
     public static void onLoggingOut(ClientPlayerNetworkEvent.LoggingOut event) {
         EffortlessBuildingAE2Bridge.clearClientCache();
+        FoundryCampusClientState.clear();
         ClientDeedCache.clear();
         RevealedFields.INSTANCE.clearAll();
         RevealedFieldStorage.reset();
