@@ -12,6 +12,7 @@ import net.minecraft.world.level.saveddata.SavedData;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
+import java.util.Objects;
 import java.util.UUID;
 
 public class SoulNetworkSavedData extends SavedData {
@@ -35,6 +36,7 @@ public class SoulNetworkSavedData extends SavedData {
     }
 
     public SoulNetwork getNetwork(UUID owner) {
+        Objects.requireNonNull(owner, "Soul networks require an owner");
         return soulNetworkMapping.computeIfAbsent(owner, id -> {
             SoulNetwork network = new SoulNetwork();
             network.setDirtyCallback(this::setDirty);

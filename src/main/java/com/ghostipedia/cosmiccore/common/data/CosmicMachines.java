@@ -28,6 +28,7 @@ import com.ghostipedia.cosmiccore.common.machine.part.WirelessDataSensor;
 import com.ghostipedia.cosmiccore.common.machine.transmission.PowerTowerMEHatch;
 import com.ghostipedia.cosmiccore.common.machine.transmission.PowerTowerMachine;
 import com.ghostipedia.cosmiccore.common.power.steam.SteamBoilerTooltips;
+import com.ghostipedia.cosmiccore.common.transmission.energy.PowerTowerEnergyPolicy;
 import com.ghostipedia.cosmiccore.gtbridge.CosmicRecipeTypes;
 import com.ghostipedia.nebulaeae2.compute.ComputeTuning;
 
@@ -242,9 +243,11 @@ public class CosmicMachines {
                     .where('D', frames(GTMaterials.StainlessSteel))
                     .where('E', blocks(REFRACTORY_STRUCTURAL_CASING.get())
                             .or(blocks(POWER_TOWER_ME_INPUT.getBlock(), POWER_TOWER_ME_OUTPUT.getBlock()))
-                            .or(abilities(PartAbility.SUBSTATION_INPUT_ENERGY).setMaxGlobalLimited(4)
+                            .or(abilities(PartAbility.SUBSTATION_INPUT_ENERGY)
+                                    .setMaxGlobalLimited(PowerTowerEnergyPolicy.MAX_HATCHES_PER_DIRECTION)
                                     .setPreviewCount(1))
-                            .or(abilities(PartAbility.SUBSTATION_OUTPUT_ENERGY).setMaxGlobalLimited(4)
+                            .or(abilities(PartAbility.SUBSTATION_OUTPUT_ENERGY)
+                                    .setMaxGlobalLimited(PowerTowerEnergyPolicy.MAX_HATCHES_PER_DIRECTION)
                                     .setPreviewCount(1)))
                     .where('F', controller(blocks(definition.getBlock())))
                     .where('G', blocks(VIBRANT_PIPE_FRAMEWORK.get()))
@@ -1285,7 +1288,7 @@ public class CosmicMachines {
                         .slice("XRRRX", "RRRRR", " CCC ", " CCC ", " CCC ", "RRRRR", "XXXXX")
                         .slice("XXSXX", "FRRRF", "F   F", "F   F", "F   F", "FRRRF", "XXXXX")
                         .where('S', controller(blocks(GTMultiMachines.ELECTRIC_BLAST_FURNACE.getBlock())))
-                        .where('X', blocks(CASING_INVAR_HEATPROOF.get()).setMinGlobalLimited(32)
+                        .where('X', blocks(CASING_INVAR_HEATPROOF.get()).setMinGlobalLimited(16)
                                 .and(autoAbilities(GTMultiMachines.ELECTRIC_BLAST_FURNACE.getRecipeTypes()))
                                 .and(autoAbilities(true, false, false)))
                         .where('M', abilities(PartAbility.MUFFLER))

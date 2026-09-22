@@ -1,6 +1,6 @@
 {
     "parent": "minecraft:item/generated",
     "textures": {
-        "layer0": "cosmiccore:item/wasteland_asteroid"
+        "layer0": "gtceu:item/material_sets/certus/gem"
     }
 }

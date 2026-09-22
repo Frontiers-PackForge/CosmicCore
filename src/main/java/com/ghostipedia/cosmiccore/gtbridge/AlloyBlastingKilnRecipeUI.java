@@ -1,5 +1,7 @@
 package com.ghostipedia.cosmiccore.gtbridge;
 
+import com.ghostipedia.cosmiccore.common.machine.foundry.FoundryPyrofluxPolicy;
+
 import com.gregtechceu.gtceu.api.GTCEuAPI;
 import com.gregtechceu.gtceu.api.block.ICoilType;
 import com.gregtechceu.gtceu.api.recipe.gui.RecipeUIModifier;
@@ -14,7 +16,6 @@ import brachy.modularui.integration.recipeviewer.RecipeSlotRole;
 import brachy.modularui.integration.recipeviewer.RecipeViewerSlotWidget;
 import brachy.modularui.integration.recipeviewer.entry.item.ItemStackList;
 import brachy.modularui.widgets.TextWidget;
-import brachy.modularui.widgets.layout.Flow;
 
 import java.util.List;
 
@@ -27,13 +28,16 @@ public final class AlloyBlastingKilnRecipeUI {
         widget.textComponents.child(new TextWidget<>(
                 Text.lang("gtceu.recipe.temperature", FormattingUtil.formatTemperature(temperature))));
 
-        Flow coilRow = Flow.row().coverChildrenHeight(18);
         ICoilType requiredCoil = ICoilType.getMinRequiredType(temperature);
         if (requiredCoil != null && !requiredCoil.getMaterial().isNull()) {
-            coilRow.child(new TextWidget<>(Text.lang("gtceu.recipe.coil.tier",
+            widget.textComponents.child(new TextWidget<>(Text.lang("gtceu.recipe.coil.tier",
                     Component.translatable(requiredCoil.getMaterial().getUnlocalizedName()).getString())));
         }
-        widget.textComponents.child(coilRow);
+
+        long pyroflux = FoundryPyrofluxPolicy.demand(recipe);
+        widget.textComponents.child(new TextWidget<>(Text.lang(
+                "cosmiccore.recipe.alloy_blasting_kiln.pyroflux",
+                FormattingUtil.formatNumbers(pyroflux))));
 
         List<ItemStack> items = GTCEuAPI.HEATING_COILS.entrySet().stream()
                 .filter(coil -> coil.getKey().getCoilTemperature() >= temperature)

@@ -18,6 +18,7 @@ import com.gregtechceu.gtceu.common.machine.owner.FTBOwner;
 import net.minecraft.server.level.ServerLevel;
 
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 import java.util.UUID;
@@ -57,14 +58,16 @@ public class NotifiableSoulContainer extends NotifiableRecipeHandlerTrait<SoulIn
         return capacity.applyAsInt(type);
     }
 
-    private SoulNetwork getSoulNetwork() {
+    private @Nullable SoulNetwork getSoulNetwork() {
         if (getMachine().getLevel() instanceof ServerLevel serverLevel) {
-            return SoulNetworkSavedData.getSoulNetwork(serverLevel, getOwner());
+            UUID owner = getOwner();
+            if (owner != null) return SoulNetworkSavedData.getSoulNetwork(serverLevel, owner);
         }
-        return new SoulNetwork();
+        return null;
     }
 
     private UUID getOwner() {
+        if (getMachine().getOwnerUUID() == null) return null;
         if (getMachine().getOwner() instanceof FTBOwner ftbOwner) {
             var team = ftbOwner.getPlayerTeam(getMachine().getOwnerUUID());
             if (team != null) return team.getTeamId();
@@ -78,6 +81,7 @@ public class NotifiableSoulContainer extends NotifiableRecipeHandlerTrait<SoulIn
         if (io != IO.IN && io != IO.OUT) return left;
 
         var network = getSoulNetwork();
+        if (network == null) return left;
         int animaBefore = network.getAmount(SoulType.Anima);
         int spiritusBefore = network.getAmount(SoulType.Spiritus);
         var stacks = left.stream().map(SoulIngredient::stack).toList();
@@ -94,7 +98,9 @@ public class NotifiableSoulContainer extends NotifiableRecipeHandlerTrait<SoulIn
 
     public SoulStack insertUpTo(SoulStack stack, boolean simulate) {
         if (handlerIO != IO.OUT) return stack.withAmount(0);
-        SoulStack accepted = getSoulNetwork().add(stack, getThroughput(stack.type()), getCapacity(stack.type()),
+        var network = getSoulNetwork();
+        if (network == null) return stack.withAmount(0);
+        SoulStack accepted = network.add(stack, getThroughput(stack.type()), getCapacity(stack.type()),
                 simulate);
         recordAccepted(accepted, simulate);
         return accepted;
@@ -111,7 +117,7 @@ public class NotifiableSoulContainer extends NotifiableRecipeHandlerTrait<SoulIn
 
     @Override
     public @NotNull List<Object> getContents() {
-        return getSoulNetwork().getContents().stream()
+        return getStacks().stream()
                 .map(SoulIngredient::new)
                 .map(Object.class::cast)
                 .toList();
@@ -119,21 +125,23 @@ public class NotifiableSoulContainer extends NotifiableRecipeHandlerTrait<SoulIn
 
     /** Server-only access to the underlying network's stacks for UI display. */
     public List<SoulStack> getStacks() {
-        return getSoulNetwork().getContents();
+        var network = getSoulNetwork();
+        return network == null ? List.of() : network.getContents();
     }
 
     public int getAmount(SoulType type) {
-        return getSoulNetwork().getAmount(type);
+        var network = getSoulNetwork();
+        return network == null ? 0 : network.getAmount(type);
     }
 
     @Override
     public int getSize() {
-        return getSoulNetwork().getContents().size();
+        return getStacks().size();
     }
 
     @Override
     public double getTotalContentAmount() {
-        return getSoulNetwork().getContents().stream()
+        return getStacks().stream()
                 .mapToInt(SoulStack::amount)
                 .sum();
     }

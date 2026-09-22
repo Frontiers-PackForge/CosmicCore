@@ -20,11 +20,11 @@ public final class CompositeOreSortingPlan {
     public static final int SORTER_IO_CAP = 6;
 
     private static final List<SortStage> STAGES = List.of(
-            new SortStage(crushedPurified, 2, 1, "sort_purified_"),
-            new SortStage(powderizedOre, 3, 1, "sort_powder_"),
-            new SortStage(flocculatedOre, 4, 2, "sort_flocculated_"),
-            new SortStage(crystallizedOreChunk, 5, 2, "sort_crystallized_"),
-            new SortStage(atomicallyPurifiedOreChunk, SORTER_IO_CAP, 3, "sort_atom_purified_"));
+            new SortStage(crushedPurified, 2, 1, 0, "sort_purified_"),
+            new SortStage(powderizedOre, 3, 1, 0, "sort_powder_"),
+            new SortStage(flocculatedOre, 4, 2, 0, "sort_flocculated_"),
+            new SortStage(crystallizedOreChunk, 5, 2, 1, "sort_crystallized_"),
+            new SortStage(atomicallyPurifiedOreChunk, SORTER_IO_CAP, 3, 1, "sort_atom_purified_"));
 
     private CompositeOreSortingPlan() {}
 
@@ -33,14 +33,11 @@ public final class CompositeOreSortingPlan {
     }
 
     public static int amountFor(int index) {
-        return switch (index) {
-            case 0 -> 4;
-            case 1 -> 2;
-            default -> 1;
-        };
+        return CompositeOreYieldPolicy.baseAmount(index);
     }
 
-    public record SortStage(TagPrefix inputForm, int typeCount, int yieldMultiplier, String recipeNamePrefix) {
+    public record SortStage(TagPrefix inputForm, int typeCount, int yieldMultiplier, int outputBonus,
+                            String recipeNamePrefix) {
 
         public int firstOutputIndex() {
             int stageIndex = STAGES.indexOf(this);
@@ -48,7 +45,7 @@ public final class CompositeOreSortingPlan {
         }
 
         public int outputAmount(int index) {
-            return amountFor(index) * yieldMultiplier;
+            return CompositeOreYieldPolicy.outputAmount(index, yieldMultiplier, outputBonus);
         }
     }
 }

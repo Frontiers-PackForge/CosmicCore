@@ -68,6 +68,7 @@ dependencies {
 
     // Magic / content mods
     implementation(forge.malum)
+    implementation(files("libs/neovitae-1.21.1-1.0.25.jar"))
     implementation(forge.lodestone)
     implementation(forge.occultism) {
         // Occultism pulls SmartBrainLib under net.tslat.smartbrainlib; the Modrinth jar below provides the same classes.

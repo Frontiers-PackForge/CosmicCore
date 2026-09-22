@@ -98,7 +98,7 @@ public class CosmicBundleMaterials {
         out(MonaziteSalts, Bastnasite, Monazite);
         out(Agarlite, Cooperite, Bornite);
         out(CrudeRadionite, Pitchblende, Uraninite, Naquadah, Scheelite, Tungstate);
-        out(Vanachrome, Magnetite, VanadiumMagnetite, Chromite, Bauxite, Ilmenite, Gold);
+        out(Vanachrome, Magnetite, VanadiumMagnetite, Chromite, Bauxite, Gold);
         out(Utherite, Utherium, CosmicMaterials.Aphotite, CosmicMaterials.Arcanite);
         out(Phycolite, CosmicMaterials.Gloomarcine, CosmicMaterials.Veilspar, CosmicMaterials.Bathyst,
                 CosmicMaterials.Nyctophyte, CosmicMaterials.Hadalite, CosmicMaterials.Abyssbloom);

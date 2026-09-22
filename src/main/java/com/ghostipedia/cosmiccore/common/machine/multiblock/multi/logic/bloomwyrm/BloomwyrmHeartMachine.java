@@ -145,6 +145,12 @@ public class BloomwyrmHeartMachine extends LinkedWorkableElectricMultiblockMachi
         return lastLimitedUnits;
     }
 
+    public int getResourceLimitedUnitCount() {
+        return (int) getLoadedUnits().stream()
+                .filter(unit -> unit.getAllocationConstraint().isResourceLimit())
+                .count();
+    }
+
     public int getCycleTicksRemaining() {
         return Math.max(0, cycleTicksRemaining);
     }
@@ -215,7 +221,10 @@ public class BloomwyrmHeartMachine extends LinkedWorkableElectricMultiblockMachi
                     .mapToLong(unit -> unit.getBlockPos().asLong())
                     .toArray();
         }
-        if (allocationBatchActive && activeCycleUnits == 0 && !hasPendingBatchAllocations()) {
+        if (BloomwyrmAllocationPolicy.shouldCloseBatch(
+                allocationBatchActive,
+                getActiveBatchDependentUnitCount(),
+                hasPendingBatchAllocations())) {
             allocationBatchActive = false;
             allocatedBiopowerCapacity = 0;
             allocationBatchParticipants = new long[0];
@@ -390,6 +399,16 @@ public class BloomwyrmHeartMachine extends LinkedWorkableElectricMultiblockMachi
         return active;
     }
 
+    private int getActiveBatchDependentUnitCount() {
+        int active = 0;
+        for (BloomwyrmUnitMachine unit : getLoadedUnits()) {
+            if (unit.hasAllocation() && (unit.usesHeartCycleAllocation() || unit.getAllocatedBiopower() > 0)) {
+                active++;
+            }
+        }
+        return active;
+    }
+
     private List<BloomwyrmUnitMachine> getLoadedUnits() {
         return getLinkedPartners().stream()
                 .filter(this::isPartnerInRange)
@@ -528,7 +547,7 @@ public class BloomwyrmHeartMachine extends LinkedWorkableElectricMultiblockMachi
         LongSyncValue inputVoltage = new LongSyncValue(this::getCampusInputVoltage);
         IntSyncValue linked = new IntSyncValue(this::getLoadedUnitCount);
         IntSyncValue active = new IntSyncValue(this::getActiveUnitCount);
-        IntSyncValue limited = new IntSyncValue(this::getLastLimitedUnits);
+        IntSyncValue limited = new IntSyncValue(this::getResourceLimitedUnitCount);
         IntSyncValue cycleSeconds = new IntSyncValue(this::getCycleSecondsRemaining);
         BooleanSyncValue powered = new BooleanSyncValue(this::ensureCampusPowerForCurrentTick);
         BooleanSyncValue cycleBlocked = new BooleanSyncValue(this::isCycleBlockedByActiveBatch);

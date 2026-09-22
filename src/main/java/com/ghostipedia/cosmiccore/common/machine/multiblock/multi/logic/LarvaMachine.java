@@ -163,13 +163,6 @@ public class LarvaMachine extends WorkableElectricMultiblockMachine {
                 .duration(40)
                 .EUt(GTValues.VA[GTValues.HV])
                 .save(provider);
-        SCANNER_RECIPES.recipeBuilder(CosmicCore.id("wasteland_asteroid"))
-                .inputItems(TagPrefix.rawOre, CosmicMaterials.PaleOreBad)
-                .inputItems(CosmicItems.TARGETING_CHIP.asStack())
-                .outputItems(getAstroidDataChip("wasteland_asteroid", 1))
-                .duration(40)
-                .EUt(GTValues.VA[GTValues.HV])
-                .save(provider);
     }
 
     private static Map<ItemStack, Pair<Integer, ItemStack>> getLarvaLoottable() {
@@ -199,8 +192,6 @@ public class LarvaMachine extends WorkableElectricMultiblockMachine {
                     Pair.of(0, CosmicItems.OXIDE_ASTEROID.asStack()));
             LARVA_LOOTTABLE.put(getAstroidDataChip("sanguine_asteroid", 1),
                     Pair.of(0, CosmicItems.SANGUINE_ASTEROID.asStack()));
-            LARVA_LOOTTABLE.put(getAstroidDataChip("wasteland_asteroid", 1),
-                    Pair.of(0, CosmicItems.WASTELAND_ASTEROID.asStack()));
             // spotless: on
         }
         return LARVA_LOOTTABLE;

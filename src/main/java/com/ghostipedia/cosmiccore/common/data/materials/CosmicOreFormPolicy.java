@@ -18,8 +18,7 @@ public final class CosmicOreFormPolicy {
 
     private static final Set<ResourceLocation> EXPOSED_RAW_ORE_MATERIALS = Set.of(
             GTCEu.id("alunite"),
-            CosmicCore.id("moondrop"),
-            CosmicCore.id("reclaimed_pale_ore"));
+            CosmicCore.id("moondrop"));
     private static final Set<TagPrefix> STANDARD_ORE_SUBSTEP_PREFIXES = Set.of(
             TagPrefix.rawOre,
             TagPrefix.rawOreBlock,

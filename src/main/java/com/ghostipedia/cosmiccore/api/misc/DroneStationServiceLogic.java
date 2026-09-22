@@ -15,11 +15,11 @@ public final class DroneStationServiceLogic {
 
     public enum DroneTier {
 
-        PLASMATIC(GTValues.ZPM, 4096, 6),
-        SANGUINE(GTValues.LuV, 2048, 5),
-        INDUSTRIAL(GTValues.IV, 1024, 4),
-        ROBUST(GTValues.EV, 512, 3),
-        RUSTY(GTValues.HV, 256, 2);
+        PLASMATIC(GTValues.ZPM, 8192, 6),
+        SANGUINE(GTValues.LuV, 4096, 5),
+        INDUSTRIAL(GTValues.IV, 2048, 4),
+        ROBUST(GTValues.EV, 1024, 3),
+        RUSTY(GTValues.HV, 512, 2);
 
         private final int voltageTier;
         private final int range;

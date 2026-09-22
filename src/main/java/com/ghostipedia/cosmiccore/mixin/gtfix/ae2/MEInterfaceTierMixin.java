@@ -17,7 +17,8 @@ public abstract class MEInterfaceTierMixin {
         for (var definition : new MachineDefinition[] {
                 GTAEMachines.ITEM_IMPORT_BUS_ME, GTAEMachines.FLUID_IMPORT_HATCH_ME,
                 GTAEMachines.ITEM_EXPORT_BUS_ME, GTAEMachines.FLUID_EXPORT_HATCH_ME,
-                GTAEMachines.STOCKING_IMPORT_BUS_ME, GTAEMachines.STOCKING_IMPORT_HATCH_ME }) {
+                GTAEMachines.STOCKING_IMPORT_BUS_ME, GTAEMachines.STOCKING_IMPORT_HATCH_ME,
+                GTAEMachines.ME_PATTERN_BUFFER, GTAEMachines.ME_PATTERN_BUFFER_PROXY }) {
             definition.setTier(GTValues.HV);
         }
     }

@@ -46,8 +46,9 @@ public record ProductionResource(String kind, String id, CompoundTag icon) {
     public static ProductionResource fromTag(CompoundTag tag) {
         String kind = tag.getString("kind");
         String id = tag.getString("id");
-        if (kind.length() > 32 || id.length() > 512 || tag.sizeInBytes() > MAX_IDENTITY_BYTES) return null;
-        return new ProductionResource(kind, id, tag.getCompound("icon").copy());
+        if (kind.length() > 32 || id.length() > 512) return null;
+        ProductionResource resource = new ProductionResource(kind, id, tag.getCompound("icon").copy());
+        return resource.toTag().sizeInBytes() > MAX_IDENTITY_BYTES ? null : resource;
     }
 
     @Override

@@ -20,6 +20,9 @@ public record LoadedPowerTowerTerminal(UUID graphNodeId, int maximumVoltageTier,
             throw new IllegalArgumentException("Invalid terminal voltage tier");
         inputHatches = List.copyOf(inputHatches);
         outputHatches = List.copyOf(outputHatches);
+        if (!PowerTowerEnergyPolicy.acceptsHatchCount(inputHatches.size()) ||
+                !PowerTowerEnergyPolicy.acceptsHatchCount(outputHatches.size()))
+            throw new IllegalArgumentException("A terminal exceeds its energy hatch limit");
         if (inputHatches.isEmpty() && outputHatches.isEmpty())
             throw new IllegalArgumentException("A terminal requires at least one energy hatch");
         if (inputHatches.stream().anyMatch(container -> container == null || container.getInputAmperage() <= 0 ||

@@ -9,26 +9,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Collections;
 import java.util.Iterator;
 
-public final class BiomeldVivariumRecipeLogic extends BloomwyrmRecipeLogic {
-
-    @Override
-    public void serverTick() {
-        BiomeldVivariumMachine machine = getMachine();
-        if (machine.isAvailableForAllocation() && machine.getOffsetTimer() % 5 == 0) {
-            BloomwyrmHeartMachine heart = machine.getHeart();
-            if (heart == null) {
-                machine.denyAllocation(BloomwyrmAllocationConstraint.NO_HEART);
-            } else {
-                var request = createRequest();
-                if (request.isPresent()) {
-                    heart.tryAllocateIndependent(machine, request.get());
-                } else {
-                    machine.denyAllocation(BloomwyrmAllocationConstraint.NO_RECIPE);
-                }
-            }
-        }
-        super.serverTick();
-    }
+public final class BiomeldVivariumRecipeLogic extends IndependentBloomwyrmRecipeLogic {
 
     @Override
     public BiomeldVivariumMachine getMachine() {

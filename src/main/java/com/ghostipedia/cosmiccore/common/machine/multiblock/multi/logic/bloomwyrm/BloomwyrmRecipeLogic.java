@@ -1,10 +1,11 @@
 package com.ghostipedia.cosmiccore.common.machine.multiblock.multi.logic.bloomwyrm;
 
+import com.ghostipedia.cosmiccore.common.machine.multiblock.PhysicalRecipeParallel;
+
 import com.gregtechceu.gtceu.api.machine.trait.recipe.RecipeLogic;
 import com.gregtechceu.gtceu.api.recipe.ActionResult;
 import com.gregtechceu.gtceu.api.recipe.GTRecipe;
 import com.gregtechceu.gtceu.api.recipe.RecipeHelper;
-import com.gregtechceu.gtceu.api.recipe.modifier.ParallelLogic;
 
 import net.minecraft.network.chat.Component;
 
@@ -27,10 +28,7 @@ public class BloomwyrmRecipeLogic extends RecipeLogic {
             int recipeLimit = recipe.data.contains(BloomwyrmRecipeKeys.MAX_PARALLEL) ?
                     Math.max(1, recipe.data.getInt(BloomwyrmRecipeKeys.MAX_PARALLEL)) :
                     maximumCandidate;
-            int eligibleParallel = ParallelLogic.getParallelAmountWithoutEU(
-                    unit,
-                    recipe,
-                    Math.min(maximumCandidate, recipeLimit));
+            int eligibleParallel = findEligibleParallel(unit, recipe, Math.min(maximumCandidate, recipeLimit));
             if (eligibleParallel <= 0) {
                 continue;
             }
@@ -72,16 +70,20 @@ public class BloomwyrmRecipeLogic extends RecipeLogic {
 
     @Override
     public void onRecipeFinish() {
-        long producedCharge = getUnit().completeAllocation();
         markLastRecipeDirty();
         super.onRecipeFinish();
+        long producedCharge = getUnit().completeAllocation();
         getUnit().deliverCharge(producedCharge);
     }
 
     @Override
     protected void regressRecipe() {}
 
-    private BloomwyrmUnitMachine getUnit() {
+    private static int findEligibleParallel(BloomwyrmUnitMachine unit, GTRecipe recipe, int maximum) {
+        return PhysicalRecipeParallel.highestMatchingWithoutEnergy(unit, recipe, maximum);
+    }
+
+    protected BloomwyrmUnitMachine getUnit() {
         return (BloomwyrmUnitMachine) getMachine();
     }
 }
