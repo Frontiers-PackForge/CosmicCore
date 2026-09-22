@@ -7,6 +7,7 @@ import com.ghostipedia.cosmiccore.common.data.materials.CosmicBundleMaterials;
 import com.ghostipedia.cosmiccore.common.data.materials.CosmicOreFormPolicy;
 import com.ghostipedia.cosmiccore.common.food.CosmicFoodRegistry;
 import com.ghostipedia.cosmiccore.common.machine.multiblock.multi.BloomwyrmSystem;
+import com.ghostipedia.cosmiccore.common.machine.multiblock.multi.HephaestusCauldron;
 import com.ghostipedia.cosmiccore.common.machine.multiblock.multi.IndustrialFlotationPlant;
 import com.ghostipedia.cosmiccore.common.machine.multiblock.multi.IndustrialOreSorter;
 import com.ghostipedia.cosmiccore.common.machine.multiblock.multi.LARVA;
@@ -19,6 +20,7 @@ import com.ghostipedia.cosmiccore.integration.recipes.emi.BiomeldVivariumEmiReci
 import com.ghostipedia.cosmiccore.integration.recipes.emi.CompositeOreSortingEmiRecipe;
 import com.ghostipedia.cosmiccore.integration.recipes.emi.CraftingStationRecipeHandler;
 import com.ghostipedia.cosmiccore.integration.recipes.emi.FactoryGaugeEmiCompat;
+import com.ghostipedia.cosmiccore.integration.recipes.emi.HephaestusCauldronEmiRecipe;
 
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -75,6 +77,11 @@ public class CosmicCoreEMIPlugin implements EmiPlugin {
         FactoryGaugeEmiCompat.register(registry);
         registerFoodAliases(registry);
 
+        registry.addCategory(HephaestusCauldronEmiRecipe.CATEGORY);
+        registry.addWorkstation(HephaestusCauldronEmiRecipe.CATEGORY,
+                EmiStack.of(HephaestusCauldron.MACHINE.asStack()));
+        registry.addRecipe(new HephaestusCauldronEmiRecipe());
+
         registry.addCategory(CompositeOreSortingEmiRecipe.CATEGORY);
         registry.addWorkstation(CompositeOreSortingEmiRecipe.CATEGORY,
                 EmiStack.of(IndustrialOreSorter.INDUSTRIAL_ORE_SORTER.asStack()));
@@ -120,9 +127,6 @@ public class CosmicCoreEMIPlugin implements EmiPlugin {
                 List.of(EmiStack.of(CosmicItems.OXIDE_ASTEROID.asStack())), CosmicItems.OXIDE_ASTEROID.asStack());
         addAsteroidRecipe(registry, "sanguine_asteroid", CosmicItems.TUNGSTENSTEEL_NANOLATTICE_SPOOL.asStack(),
                 List.of(EmiStack.of(CosmicItems.SANGUINE_ASTEROID.asStack())), CosmicItems.SANGUINE_ASTEROID.asStack());
-        addAsteroidRecipe(registry, "wasteland_asteroid", CosmicItems.TUNGSTENSTEEL_NANOLATTICE_SPOOL.asStack(),
-                List.of(EmiStack.of(CosmicItems.WASTELAND_ASTEROID.asStack())),
-                CosmicItems.WASTELAND_ASTEROID.asStack());
     }
 
     private static void registerFoodAliases(EmiRegistry registry) {

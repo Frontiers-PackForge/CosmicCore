@@ -13,7 +13,8 @@ import com.tterrag.registrate.providers.RegistrateLangProvider;
 public class CosmicLangHandler extends LangHandler {
 
     private static final String[] COSMIC_RECIPE_TYPE_IDS = {
-            "sludge_digestor", "powderizer", "industrial_ore_sorter", "industrial_flotation_plant",
+            "mechanical_mineshaft", "essence_reactor", "sludge_digestor", "powderizer", "industrial_ore_sorter",
+            "industrial_flotation_plant",
             "oneiric_sieve", "dissolution_vat", "phase_separator", "simple_desalter", "desalter",
             "steam_cracking_furnace", "fractional_condenser", "fluid_catalytic_cracking", "hydrotreating",
             "hydrocracking", "catalytic_reforming", "delayed_coking", "vacuum_distillation", "fuckassbeeball",
@@ -23,7 +24,7 @@ public class CosmicLangHandler extends LangHandler {
             "cryo_chamber", "soul_tester", "void_miner", "heavy_assembler", "plasmite_forge",
             "prisma_foundry", "atmo_siphon", "mana_digitizer", "component_assembly_line", "drygmy_grove",
             "leaching_plant", "hellfire_foundry", "suffering_chamber", "arcane_distillery", "arcane_folding",
-            "polymerizer", "hemophagic_transfuser", "chromatic_flotation_plant", "spirit_crucible",
+            "polymerizer", "hemophagic_transfuser", "imbument_pylon", "chromatic_flotation_plant", "spirit_crucible",
             "soul_foundry", "calx_reactor", "roaster", "mana_leaching_tub", "thermomagnitizer",
             "vacuum_bubbler", "large_roaster", "vile_fission", "void_salt_fission", "reconstructor",
             "spooling_machine", "orbital_forge", "orbital_forge_abs", "alloy_blasting_kiln", "dawn_forge",
@@ -99,6 +100,18 @@ public class CosmicLangHandler extends LangHandler {
         provider.add("gui.cosmiccore.production_statistics.sort.direction.reverse", "Current direction: bottom-up");
         provider.add("gui.cosmiccore.production_statistics.sort.action.reverse", "Click to reverse");
         provider.add("gui.cosmiccore.production_statistics.sort.action.select", "Click to select top-down");
+        provider.add("gui.cosmiccore.rate_calculator.sort.default", "Total Activity");
+        provider.add("gui.cosmiccore.rate_calculator.sort.id", "Resource ID");
+        provider.add("gui.cosmiccore.rate_calculator.sort.produced", "Produced");
+        provider.add("gui.cosmiccore.rate_calculator.sort.consumed", "Consumed");
+        provider.add("gui.cosmiccore.rate_calculator.sort.order.default.top", "Highest total observed rate first");
+        provider.add("gui.cosmiccore.rate_calculator.sort.order.default.reverse", "Lowest total observed rate first");
+        provider.add("gui.cosmiccore.rate_calculator.sort.order.id.top", "Resource IDs: A to Z");
+        provider.add("gui.cosmiccore.rate_calculator.sort.order.id.reverse", "Resource IDs: Z to A");
+        provider.add("gui.cosmiccore.rate_calculator.sort.order.produced.top", "Highest observed production first");
+        provider.add("gui.cosmiccore.rate_calculator.sort.order.produced.reverse", "Lowest observed production first");
+        provider.add("gui.cosmiccore.rate_calculator.sort.order.consumed.top", "Highest observed consumption first");
+        provider.add("gui.cosmiccore.rate_calculator.sort.order.consumed.reverse", "Lowest observed consumption first");
         provider.add("cosmiccore.rate_calculator.title", "§6Rate Calculator");
         provider.add("cosmiccore.rate_calculator.machine", "§aMachine: %s");
         provider.add("cosmiccore.rate_calculator.status", "§eStatus: %s");
@@ -762,12 +775,54 @@ public class CosmicLangHandler extends LangHandler {
         provider.add("cosmiccore.machine.hephaestus_cauldron.status.total", "Linked Furnaces: %s");
         provider.add("cosmiccore.machine.hephaestus_cauldron.status.active", "Active Links: %s");
         provider.add("cosmiccore.machine.hephaestus_cauldron.status.dormant", "Dormant Links: %s");
+        provider.add("cosmiccore.machine.hephaestus_cauldron.status.pyroflux", "Pyroflux: %s / %s");
+        provider.add("cosmiccore.machine.hephaestus_cauldron.status.generation", "Generation: %s/t - %s");
+        provider.add("cosmiccore.machine.hephaestus_cauldron.status.allocation", "Allocated / Demanded: %s / %s");
+        provider.add("cosmiccore.machine.hephaestus_cauldron.status.links", "Active: %s / %s, Dormant: %s");
+        provider.add("cosmiccore.machine.hephaestus_cauldron.state.unformed", "Structure unformed");
+        provider.add("cosmiccore.machine.hephaestus_cauldron.state.generating", "Generating");
+        provider.add("cosmiccore.machine.hephaestus_cauldron.state.no_power", "Waiting for HV power");
+        provider.add("cosmiccore.machine.hephaestus_cauldron.state.no_liquor", "Waiting for Acidic Wood Liquor");
+        provider.add("cosmiccore.machine.hephaestus_cauldron.state.no_stone", "Waiting for Stone Dust");
+        provider.add("cosmiccore.machine.hephaestus_cauldron.state.storage_full", "Pyroflux storage full");
+        provider.add("cosmiccore.machine.hephaestus_cauldron.state.input_changed", "Inputs changed during transfer");
         provider.add("cosmiccore.machine.alloy_blasting_kiln.tooltip.0",
                 "The metallurgy furnace of a Hephaestus' Cauldron's work force.");
         provider.add("cosmiccore.machine.alloy_blasting_kiln.tooltip.1",
                 "Processes up to §e4§f Alloy Blast Kiln recipes at once.");
         provider.add("cosmiccore.machine.alloy_blasting_kiln.tooltip.2",
                 "Requires an active Cauldron linked within 96 tiles, Pyroflux charge is required to run.");
+        provider.add("cosmiccore.machine.alloy_blasting_kiln.waiting_pyroflux", "Waiting for Pyroflux fuel");
+        provider.add("cosmiccore.recipe.alloy_blasting_kiln.pyroflux", "Pyroflux: %s mB");
+        provider.add("cosmiccore.machine.alloy_blasting_kiln.status.linked", "Cauldron linked");
+        provider.add("cosmiccore.machine.alloy_blasting_kiln.status.unlinked", "No Cauldron linked");
+        provider.add("cosmiccore.machine.alloy_blasting_kiln.status.pyroflux", "Available Pyroflux: %s");
+        provider.add("cosmiccore.machine.alloy_blasting_kiln.status.ready", "Hephaestus Cauldron Ready!");
+        provider.add("cosmiccore.machine.alloy_blasting_kiln.status.stalled", "Hephaestus Cauldron Stalled!");
+        provider.add("cosmiccore.machine.alloy_blasting_kiln.status.dormant", "Dormant: Cauldron capacity exceeded");
+        provider.add("cosmiccore.machine.alloy_blasting_kiln.status.core_unavailable", "Cauldron unavailable");
+        provider.add("cosmiccore.machine.alloy_blasting_kiln.status.no_pyroflux", "Waiting for Pyroflux");
+        provider.add("cosmiccore.foundry.datastick", "Foundry Link: %s");
+        provider.add("cosmiccore.foundry.link.copied", "Copied %s foundry link");
+        provider.add("cosmiccore.foundry.link.established", "Foundry link established");
+        provider.add("cosmiccore.foundry.link.not_ready", "Both foundry structures must be formed");
+        provider.add("cosmiccore.foundry.link.invalid", "Invalid foundry link data");
+        provider.add("cosmiccore.foundry.link.dimension", "Foundry links must stay in one dimension");
+        provider.add("cosmiccore.foundry.link.range", "Foundry link exceeds 96 blocks");
+        provider.add("cosmiccore.foundry.link.unloaded", "The selected foundry machine is not loaded");
+        provider.add("cosmiccore.foundry.link.incompatible", "Link a Hephaestus Cauldron to an Alloy Blasting Kiln");
+        provider.add("cosmiccore.foundry.link.owner", "Foundry machines must share an owner or team");
+        provider.add("cosmiccore.foundry.link.capacity", "This Cauldron has no free furnace capacity");
+        provider.add("cosmiccore.foundry.link.already", "This kiln is linked to another Cauldron");
+        provider.add("cosmiccore.emi.hephaestus_cauldron", "Hephaestus' Cauldron Pyroflux");
+        provider.add("cosmiccore.emi.hephaestus_cauldron.instruction", "Insert ingredients into the Cauldron.");
+        provider.add("cosmiccore.emi.hephaestus_cauldron.liquor", "%s mB Acidic Wood Liquor");
+        provider.add("cosmiccore.emi.hephaestus_cauldron.stone", "%s Stone Dust");
+        provider.add("cosmiccore.emi.hephaestus_cauldron.pyroflux", "Yield: %s Pyroflux Charge");
+        provider.add("cosmiccore.emi.hephaestus_cauldron.pyroflux_short", "%s Pyroflux");
+        provider.add("cosmiccore.emi.hephaestus_cauldron.virtual",
+                "Virtual campus charge; no item or fluid is produced");
+        provider.add("cosmiccore.emi.hephaestus_cauldron.requirements", "%s EU/t (HV) for %s ticks (%s seconds)");
         provider.add("cosmiccore.power_tower.line.first",
                 "Selected Power Tower at %s. Select your second power tower");
         provider.add("cosmiccore.power_tower.line.dimension",
@@ -974,6 +1029,24 @@ public class CosmicLangHandler extends LangHandler {
         provider.add("cosmiccore.quintessentia_hatch.scale.input", "Stored / Maximum");
         provider.add("cosmiccore.quintessentia_hatch.scale.output", "Stored / Hatch Limit");
         provider.add("cosmiccore.quintessentia_hatch.channel", "%s: %s / %s");
+        provider.add("cosmiccore.machine.hemophagic_transfuser.status.altar", "Altar Level: %s");
+        provider.add("cosmiccore.machine.hemophagic_transfuser.status.limit", "Per-Machine Anima / Spiritus Limit: %s");
+        provider.add("cosmiccore.machine.imbument_pylon.status.linked", "Linked to Hemophagic Transfuser");
+        provider.add("cosmiccore.machine.imbument_pylon.status.unlinked", "No Available Hemophagic Transfuser");
+        provider.add("cosmiccore.machine.imbument_pylon.status.altar", "Altar Level: %s");
+        provider.add("cosmiccore.machine.imbument_pylon.status.limit", "Anima / Spiritus Limit: %s");
+        provider.add("cosmiccore.vitae_campus.datastick", "Vitae Altar Link: %s");
+        provider.add("cosmiccore.vitae_campus.link.copied", "Vitae Altar endpoint copied");
+        provider.add("cosmiccore.vitae_campus.link.established", "Vitae Altar link established");
+        provider.add("cosmiccore.vitae_campus.link.relinked", "Vitae Altar link moved to the new core");
+        provider.add("cosmiccore.vitae_campus.link.not_ready", "The Vitae Altar endpoint is not ready");
+        provider.add("cosmiccore.vitae_campus.link.invalid", "The Vitae Altar link is invalid");
+        provider.add("cosmiccore.vitae_campus.link.dimension", "Vitae Altar endpoints must share a dimension");
+        provider.add("cosmiccore.vitae_campus.link.range", "Vitae Altar endpoints are too far apart");
+        provider.add("cosmiccore.vitae_campus.link.unloaded", "The copied Vitae Altar endpoint is not loaded");
+        provider.add("cosmiccore.vitae_campus.link.incompatible", "These Vitae Altar endpoints are incompatible");
+        provider.add("cosmiccore.vitae_campus.link.owner", "Vitae Altar endpoints must share an owner or team");
+        provider.add("cosmiccore.vitae_campus.recipe.altar_tier", "Required Altar Level: %s");
         provider.add("tooltip.cosmiccore.spawner_hatch", "Holds one attuned Ender IO Powered Spawner as a blueprint");
         provider.add("tooltip.cosmiccore.ember_hatch.consumption", "§cMax Ember Consumption§f:§6 %s");
         provider.add("tooltip.cosmiccore.ember_hatch.capacity", "§cMax Ember capacity§f:§6 %s");
@@ -2210,8 +2283,7 @@ public class CosmicLangHandler extends LangHandler {
         provider.add("cosmiccore.emi.biomeld_vivarium.chance", "Chance: %s");
         provider.add("cosmiccore.emi.biomeld_vivarium.vitae",
                 "Essentia Vitae: %s mB (Anima with output Quintessentia Hatch; excess voided)");
-        provider.add("cosmiccore.emi.biomeld_vivarium.spiritus",
-                "Spiritus: +%s units (requires output Quintessentia Hatch; excess voided)");
+        provider.add("cosmiccore.emi.biomeld_vivarium.spiritus", "Spiritus: +%s units");
         provider.add("cosmiccore.emi.biomeld_vivarium.charge", "Bloomwyrm Charge: %s");
         provider.add("cosmiccore.tooltip.oxygen_tank.fill", "Oxygen: %s / %s mB");
         provider.add("cosmiccore.tooltip.oxygen_tank.runtime", "No-Air breathing time: %s");

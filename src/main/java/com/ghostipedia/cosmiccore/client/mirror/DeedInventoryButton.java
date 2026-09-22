@@ -22,7 +22,7 @@ public final class DeedInventoryButton extends Button {
 
     private static final int BUTTON_GAP = 2;
     private static final int BUTTON_HEIGHT = 18;
-    private static final int BUTTON_HORIZONTAL_PADDING = 12;
+    private static final int BUTTON_HORIZONTAL_PADDING = 20;
     private static final int TEXTURE_WIDTH = 28;
     private static final int TEXTURE_HEIGHT = 28;
     private static final int FRAME_INSET = 4;
@@ -38,7 +38,7 @@ public final class DeedInventoryButton extends Button {
 
     DeedInventoryButton(InventoryScreen screen, AbstractWidget recipeButton, Component message, OnPress onPress) {
         super(
-                buttonX(screen, recipeButton, buttonWidth(message)),
+                buttonX(recipeButton),
                 recipeButton.getY(),
                 buttonWidth(message),
                 BUTTON_HEIGHT,
@@ -107,7 +107,7 @@ public final class DeedInventoryButton extends Button {
 
     @Override
     protected void renderWidget(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick) {
-        setPosition(buttonX(screen, recipeButton, getWidth()), recipeButton.getY());
+        setPosition(buttonX(recipeButton), recipeButton.getY());
         if (!visibleOnScreen(screen)) {
             setFocused(false);
             resetHold();
@@ -142,11 +142,8 @@ public final class DeedInventoryButton extends Button {
                 TEXTURE_HEIGHT, TEXTURE_WIDTH, TEXTURE_HEIGHT);
     }
 
-    private static int buttonX(InventoryScreen screen, AbstractWidget recipeButton, int width) {
-        int preferredX = recipeButton.getX() + recipeButton.getWidth() + BUTTON_GAP;
-        int maximumX = screen.getGuiLeft() + screen.getXSize() - width - BUTTON_GAP;
-        if (preferredX <= maximumX) return preferredX;
-        return Math.max(screen.getGuiLeft() + BUTTON_GAP, recipeButton.getX() - width - BUTTON_GAP);
+    private static int buttonX(AbstractWidget recipeButton) {
+        return recipeButton.getX() + recipeButton.getWidth() + BUTTON_GAP;
     }
 
     private static int buttonWidth(Component message) {

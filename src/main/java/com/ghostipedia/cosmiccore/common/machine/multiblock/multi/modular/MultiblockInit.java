@@ -15,6 +15,9 @@ public class MultiblockInit {
         StellarSmeltingModule.init();
         // StellarStarBallast.init();
         HemophagicTransfuser.init();
+        ImbumentPylon.init();
+        MechanicalMineshaft.init();
+        EssenceReactor.init();
         PlasmiteDistillery.init();
         HeavyAssembler.init();
         PCBFoundry.init();

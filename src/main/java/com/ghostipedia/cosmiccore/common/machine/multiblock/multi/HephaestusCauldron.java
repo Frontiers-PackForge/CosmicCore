@@ -9,12 +9,14 @@ import com.ghostipedia.cosmiccore.common.machine.multiblock.tier.TieredMultibloc
 import com.gregtechceu.gtceu.GTCEu;
 import com.gregtechceu.gtceu.api.data.RotationState;
 import com.gregtechceu.gtceu.api.machine.MultiblockMachineDefinition;
+import com.gregtechceu.gtceu.api.machine.multiblock.PartAbility;
 import com.gregtechceu.gtceu.api.multiblock.MultiPredicate;
 import com.gregtechceu.gtceu.api.multiblock.pattern.IBlockPattern;
 import com.gregtechceu.gtceu.api.multiblock.pattern.MultiblockPatternBuilder;
 import com.gregtechceu.gtceu.api.multiblock.util.RelativeDirection;
 
 import net.minecraft.network.chat.Component;
+
 import org.jetbrains.annotations.NotNull;
 
 import static com.ghostipedia.cosmiccore.api.registries.CosmicRegistration.REGISTRATE;
@@ -24,6 +26,7 @@ import static com.ghostipedia.cosmiccore.common.data.CosmicBlocks.INDUSTRIAL_PAR
 import static com.ghostipedia.cosmiccore.common.data.CosmicBlocks.REFRACTORY_STRUCTURAL_CASING;
 import static com.ghostipedia.cosmiccore.common.data.CosmicBlocks.SUPERHEAVY_STEEL_CASING;
 import static com.ghostipedia.cosmiccore.common.data.CosmicBlocks.VIBRANT_PIPE_FRAMEWORK;
+import static com.gregtechceu.gtceu.api.multiblock.Predicates.abilities;
 import static com.gregtechceu.gtceu.api.multiblock.Predicates.air;
 import static com.gregtechceu.gtceu.api.multiblock.Predicates.any;
 import static com.gregtechceu.gtceu.api.multiblock.Predicates.blocks;
@@ -60,8 +63,8 @@ public final class HephaestusCauldron {
     }
 
     public static @NotNull IBlockPattern pattern(
-                                                                                     MultiblockMachineDefinition definition,
-                                                                                     HephaestusCauldronStructure.@NotNull TierPattern tier) {
+                                                 MultiblockMachineDefinition definition,
+                                                 HephaestusCauldronStructure.@NotNull TierPattern tier) {
         MultiblockPatternBuilder builder = MultiblockPatternBuilder.start(
                 RelativeDirection.BACK, RelativeDirection.UP, RelativeDirection.LEFT);
         for (String[] slice : FoundryPatternAirspace.classify(tier.slices())) builder.slice(slice);
@@ -107,6 +110,9 @@ public final class HephaestusCauldron {
     }
 
     private static MultiPredicate coreHatchPositions() {
-        return blocks(SUPERHEAVY_STEEL_CASING.get());
+        return blocks(SUPERHEAVY_STEEL_CASING.get()).or(abilities(
+                PartAbility.INPUT_ENERGY,
+                PartAbility.IMPORT_ITEMS,
+                PartAbility.IMPORT_FLUIDS));
     }
 }

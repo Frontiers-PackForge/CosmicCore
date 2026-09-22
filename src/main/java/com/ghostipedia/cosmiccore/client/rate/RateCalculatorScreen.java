@@ -6,9 +6,11 @@ import com.ghostipedia.cosmiccore.common.network.packet.RateCalculatorPackets;
 import com.gregtechceu.gtceu.api.GTValues;
 import com.gregtechceu.gtceu.utils.FormattingUtil;
 
+import net.minecraft.ChatFormatting;
 import net.minecraft.Util;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.Renderable;
 import net.minecraft.client.gui.components.Tooltip;
 import net.minecraft.client.gui.screens.Screen;
@@ -34,14 +36,19 @@ public final class RateCalculatorScreen extends Screen {
     private static final long[] SCALES = { 1, 5, 20, 100, 1_200, 6_000, 36_000, 72_000, 1_728_000 };
     private static final String[] SCALE_KEYS = { "tick", "5_ticks", "second", "5_seconds", "minute", "5_minutes",
             "30_minutes", "hour", "day" };
+    private static final String[] SORT_MODES = { "default", "id", "produced", "consumed" };
+    private static final String[] SORT_ICONS = { "◆", "A", "+", "−" };
     private static final DecimalFormat AMOUNT = new DecimalFormat("#,##0.##");
     private final UUID tool;
     private final RateCalculatorSmoothing smoothing = new RateCalculatorSmoothing();
+    private final List<Button> sortButtons = new ArrayList<>();
     private CompoundTag report;
     private CompoundTag latestReport;
     private boolean held;
     private int rowScroll, contributorScroll, selectedRow = -1, scaleIndex = 2;
     private String selectedKey = "";
+    private String sortMode = RateCalculatorRowOrdering.DEFAULT_MODE;
+    private boolean reverseSort;
     private long nextRefresh;
     private boolean closed;
     private List<net.minecraft.util.FormattedCharSequence> hoverTooltip;
@@ -98,6 +105,25 @@ public final class RateCalculatorScreen extends Screen {
         holdButton.setHeight(12);
         holdButton.setTooltip(Tooltip.create(Component.translatable("gui.cosmiccore.rate_calculator.hold_tooltip")));
         addRenderableWidget(holdButton);
+        sortButtons.clear();
+        int sortY = top + 100;
+        for (int i = 0; i < SORT_MODES.length; i++) {
+            String mode = SORT_MODES[i];
+            Button sortButton = RateCalculatorButton.create(left + 12 + i * 24, sortY, 20,
+                    Component.literal(SORT_ICONS[i]), button -> {
+                        if (sortMode.equals(mode)) reverseSort = !reverseSort;
+                        else {
+                            sortMode = mode;
+                            reverseSort = false;
+                        }
+                        selectedRow = indexOfSelected();
+                        rowScroll = 0;
+                        updateSortButtons();
+                    });
+            sortButtons.add(sortButton);
+            addRenderableWidget(sortButton);
+        }
+        updateSortButtons();
     }
 
     private Component holdLabel() {
@@ -232,7 +258,7 @@ public final class RateCalculatorScreen extends Screen {
         int rowWidth = width / 2 - 22;
         graphics.drawString(font, ellipsis(Component.translatable("gui.cosmiccore.rate_calculator.columns.snapshot")
                 .getString(), rowWidth - 58),
-                left + 12, top() + 103, 0xA0A0A0);
+                left + 12, top() + 124, 0xA0A0A0);
         graphics.enableScissor(left + 9, rowsTop(), left + width / 2 - 4, rowBottom());
         for (int display = 0; display < visibleRows(); display++) {
             int index = display + rowScroll;
@@ -368,7 +394,37 @@ public final class RateCalculatorScreen extends Screen {
     }
 
     private List<CompoundTag> rows() {
-        return tags(report.getList("rows", Tag.TAG_COMPOUND));
+        return RateCalculatorRowOrdering.sorted(tags(report.getList("rows", Tag.TAG_COMPOUND)), sortMode, reverseSort);
+    }
+
+    private void updateSortButtons() {
+        for (int i = 0; i < sortButtons.size(); i++) {
+            Button button = sortButtons.get(i);
+            boolean selectedMode = SORT_MODES[i].equals(sortMode);
+            button.setMessage(Component.literal(SORT_ICONS[i] + (selectedMode ? reverseSort ? "↑" : "↓" : "")));
+            button.setTooltip(sortTooltip(SORT_MODES[i], selectedMode));
+        }
+    }
+
+    private Tooltip sortTooltip(String mode, boolean selectedMode) {
+        boolean shownReverse = selectedMode && reverseSort;
+        Component tooltip = Component.empty()
+                .append(Component.translatable("gui.cosmiccore.rate_calculator.sort." + mode)
+                        .withStyle(ChatFormatting.GOLD, ChatFormatting.BOLD))
+                .append("\n")
+                .append(Component.translatable("gui.cosmiccore.rate_calculator.sort.order." + mode + "." +
+                        (shownReverse ? "reverse" : "top")).withStyle(ChatFormatting.GRAY));
+        if (selectedMode)
+            tooltip = tooltip.copy().append("\n")
+                    .append(Component.translatable("gui.cosmiccore.production_statistics.sort.direction." +
+                            (reverseSort ? "reverse" : "top")).withStyle(ChatFormatting.AQUA))
+                    .append("\n")
+                    .append(Component.translatable("gui.cosmiccore.production_statistics.sort.action.reverse")
+                            .withStyle(ChatFormatting.YELLOW));
+        else tooltip = tooltip.copy().append("\n")
+                .append(Component.translatable("gui.cosmiccore.production_statistics.sort.action.select")
+                        .withStyle(ChatFormatting.YELLOW));
+        return Tooltip.create(tooltip);
     }
 
     private List<CompoundTag> contributors() {
@@ -623,7 +679,7 @@ public final class RateCalculatorScreen extends Screen {
     }
 
     private int rowsTop() {
-        return top() + 114;
+        return top() + 135;
     }
 
     private int visibleRows() {

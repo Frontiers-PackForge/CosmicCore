@@ -58,7 +58,6 @@ public class AsteroidTargetingChipItem extends Item {
             case "occult", "occult_asteroid" -> "Occult Asteroid";
             case "oxide", "oxide_asteroid" -> "Oxide Asteroid";
             case "sanguine", "sanguine_asteroid" -> "Sanguine Asteroid";
-            case "wasteland", "wasteland_asteroid" -> "Wasteland Asteroid";
             default -> k.isEmpty() ? "Unknown" : Character.toUpperCase(k.charAt(0)) + k.substring(1);
         };
     }

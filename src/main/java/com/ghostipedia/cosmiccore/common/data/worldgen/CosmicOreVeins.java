@@ -159,9 +159,17 @@ public class CosmicOreVeins {
             applyHollow(dest, bundle);
             return;
         }
-        GTOreDefinition src = SNAPSHOTS.get(bundle);
+        GTOreDefinition src = snapshotFor(bundle);
         if (src == null) return;
         copyInto(dest, src, bundle);
+    }
+
+    private static GTOreDefinition snapshotFor(String bundle) {
+        if (bundle.equals(CosmicBundleMaterials.CrudeRadionite.getName())) {
+            GTOreDefinition netherProfile = SNAPSHOTS.get(CosmicBundleMaterials.Fahlorium.getName());
+            if (netherProfile != null) return netherProfile;
+        }
+        return SNAPSHOTS.get(bundle);
     }
 
     private static void applyHollow(OreVeinDefinitionBuilderJS dest, String bundle) {

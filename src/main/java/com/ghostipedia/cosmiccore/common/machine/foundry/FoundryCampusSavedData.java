@@ -33,6 +33,7 @@ public final class FoundryCampusSavedData extends SavedData {
             .thenComparingLong(member -> member.position().pos().asLong());
     private final Map<GlobalPos, Campus> campuses = new HashMap<>();
     private final Map<GlobalPos, GlobalPos> furnaceCores = new HashMap<>();
+    private final Map<GlobalPos, Boolean> operationalCores = new HashMap<>();
 
     public static FoundryCampusSavedData get(MinecraftServer server) {
         return server.overworld().getDataStorage().computeIfAbsent(
@@ -53,6 +54,7 @@ public final class FoundryCampusSavedData extends SavedData {
             if (!current.owner.equals(owner)) return CoreResult.OWNER_MISMATCH;
             current.tier = tier;
             current.sourceAnchor = sourceAnchor;
+            current.pyroflux = Math.min(current.pyroflux, FoundryPyrofluxPolicy.capacity(tier));
         }
         setDirty();
         return CoreResult.UPDATED;
@@ -70,6 +72,9 @@ public final class FoundryCampusSavedData extends SavedData {
         if (!campus.owner.equals(owner)) return LinkResult.OWNER_MISMATCH;
         if (!core.dimension().equals(furnace.dimension())) return LinkResult.DIFFERENT_DIMENSION;
         if (core.equals(furnace)) return LinkResult.SELF_LINK;
+        if (core.pos().distSqr(furnace.pos()) > FoundryPyrofluxPolicy.LINK_RANGE *
+                FoundryPyrofluxPolicy.LINK_RANGE)
+            return LinkResult.OUT_OF_RANGE;
         GlobalPos existingCore = furnaceCores.get(furnace);
         if (existingCore != null && !existingCore.equals(core)) return LinkResult.ALREADY_LINKED;
         Member existing = campus.members.get(furnace);
@@ -90,6 +95,7 @@ public final class FoundryCampusSavedData extends SavedData {
     public boolean unlink(GlobalPos core, GlobalPos furnace) {
         Campus campus = campuses.get(core);
         if (campus == null || campus.members.remove(furnace) == null) return false;
+        releaseReservation(campus, furnace);
         furnaceCores.remove(furnace, core);
         setDirty();
         return true;
@@ -98,6 +104,7 @@ public final class FoundryCampusSavedData extends SavedData {
     public boolean removeCore(GlobalPos core) {
         Campus removed = campuses.remove(core);
         if (removed == null) return false;
+        operationalCores.remove(core);
         removed.members.keySet().forEach(furnace -> furnaceCores.remove(furnace, core));
         setDirty();
         return true;
@@ -130,8 +137,141 @@ public final class FoundryCampusSavedData extends SavedData {
         }
         Campus campus = campuses.get(core);
         Member member = campus == null ? null : campus.members.get(furnace);
-        return member != null && campus.owner.equals(endpoint.foundryOwner()) &&
+        return member != null && operationalCores.getOrDefault(core, false) &&
+                campus.owner.equals(endpoint.foundryOwner()) &&
                 member.type.equals(endpoint.foundryFurnaceType());
+    }
+
+    public void setCoreOperational(GlobalPos core, boolean operational, long inputVoltage) {
+        Campus campus = campuses.get(core);
+        if (campus == null) return;
+        Boolean previousState = operationalCores.put(core, operational);
+        boolean stateChanged = previousState == null || previousState != operational;
+        long boundedVoltage = Math.max(0, inputVoltage);
+        boolean voltageChanged = campus.inputVoltage != boundedVoltage;
+        campus.inputVoltage = boundedVoltage;
+        if (stateChanged || voltageChanged) setDirty();
+    }
+
+    public long inputVoltage(GlobalPos core) {
+        Campus campus = campuses.get(core);
+        return campus == null ? 0 : campus.inputVoltage;
+    }
+
+    public long inputVoltageFor(GlobalPos furnace) {
+        GlobalPos core = furnaceCores.get(furnace);
+        return core == null ? 0 : inputVoltage(core);
+    }
+
+    public boolean coreOperationalFor(GlobalPos furnace) {
+        GlobalPos core = furnaceCores.get(furnace);
+        return core != null && operationalCores.getOrDefault(core, false);
+    }
+
+    public long storedPyroflux(GlobalPos core) {
+        Campus campus = campuses.get(core);
+        return campus == null ? 0 : campus.pyroflux;
+    }
+
+    public long storedPyrofluxFor(GlobalPos furnace) {
+        GlobalPos core = furnaceCores.get(furnace);
+        return core == null ? 0 : storedPyroflux(core);
+    }
+
+    public long pyrofluxCapacity(GlobalPos core) {
+        Campus campus = campuses.get(core);
+        return campus == null ? 0 : FoundryPyrofluxPolicy.capacity(campus.tier);
+    }
+
+    public long addPyroflux(GlobalPos core, long amount) {
+        Campus campus = campuses.get(core);
+        if (campus == null || amount <= 0) return 0;
+        long capacity = FoundryPyrofluxPolicy.capacity(campus.tier);
+        long accepted = Math.min(amount, Math.max(0, capacity - campus.pyroflux));
+        if (accepted > 0) {
+            campus.pyroflux += accepted;
+            setDirty();
+        }
+        return accepted;
+    }
+
+    public boolean canReservePyroflux(GlobalPos furnace, long demand) {
+        GlobalPos core = furnaceCores.get(furnace);
+        Campus campus = core == null ? null : campuses.get(core);
+        if (campus == null || demand < 0 || !operationalCores.getOrDefault(core, false) ||
+                !isActive(core, furnace))
+            return false;
+        Reservation existing = campus.reservations.get(furnace);
+        return existing != null ? existing.total == demand : campus.pyroflux >= demand;
+    }
+
+    public boolean reservePyroflux(GlobalPos furnace, long demand) {
+        GlobalPos core = furnaceCores.get(furnace);
+        Campus campus = core == null ? null : campuses.get(core);
+        if (campus == null || !canReservePyroflux(furnace, demand)) return false;
+        Reservation existing = campus.reservations.get(furnace);
+        if (existing != null) return existing.total == demand;
+        campus.pyroflux -= demand;
+        campus.reservations.put(furnace, new Reservation(demand, demand));
+        setDirty();
+        return true;
+    }
+
+    public boolean restorePyrofluxReservation(GlobalPos furnace, long totalDemand, int progress, int duration) {
+        GlobalPos core = furnaceCores.get(furnace);
+        Campus campus = core == null ? null : campuses.get(core);
+        if (campus == null || !operationalCores.getOrDefault(core, false) || !isActive(core, furnace)) return false;
+        Reservation existing = campus.reservations.get(furnace);
+        if (existing != null) return existing.total == totalDemand;
+        long remaining = Math.max(0,
+                totalDemand - FoundryPyrofluxPolicy.consumedAtProgress(totalDemand, progress, duration));
+        if (campus.pyroflux < remaining) return false;
+        campus.pyroflux -= remaining;
+        campus.reservations.put(furnace, new Reservation(totalDemand, remaining));
+        setDirty();
+        return true;
+    }
+
+    public boolean consumePyrofluxForProgress(GlobalPos furnace, int progress, int duration) {
+        GlobalPos core = furnaceCores.get(furnace);
+        Campus campus = core == null ? null : campuses.get(core);
+        Reservation reservation = campus == null ? null : campus.reservations.get(furnace);
+        if (reservation == null || !operationalCores.getOrDefault(core, false) || !isActive(core, furnace)) {
+            return false;
+        }
+        long charge = FoundryPyrofluxPolicy.chargeForNextTick(reservation.total, progress, duration);
+        if (reservation.remaining < charge) return false;
+        campus.reservations.put(furnace, new Reservation(reservation.total, reservation.remaining - charge));
+        setDirty();
+        return true;
+    }
+
+    public boolean hasReservation(GlobalPos furnace) {
+        GlobalPos core = furnaceCores.get(furnace);
+        Campus campus = core == null ? null : campuses.get(core);
+        return campus != null && campus.reservations.containsKey(furnace);
+    }
+
+    public void completeReservation(GlobalPos furnace) {
+        GlobalPos core = furnaceCores.get(furnace);
+        Campus campus = core == null ? null : campuses.get(core);
+        if (campus != null && campus.reservations.remove(furnace) != null) setDirty();
+    }
+
+    public void releaseReservation(GlobalPos furnace) {
+        GlobalPos core = furnaceCores.get(furnace);
+        Campus campus = core == null ? null : campuses.get(core);
+        if (campus != null && releaseReservation(campus, furnace)) setDirty();
+    }
+
+    public long allocatedPyroflux(GlobalPos core) {
+        Campus campus = campuses.get(core);
+        return campus == null ? 0 : campus.reservations.values().stream().mapToLong(Reservation::remaining).sum();
+    }
+
+    public long demandedPyroflux(GlobalPos core) {
+        Campus campus = campuses.get(core);
+        return campus == null ? 0 : campus.reservations.values().stream().mapToLong(Reservation::total).sum();
     }
 
     public List<Membership> memberships(GlobalPos core) {
@@ -185,6 +325,8 @@ public final class FoundryCampusSavedData extends SavedData {
                     tag.putInt("tier", campus.tier.level());
                     tag.put("sourceAnchor", campus.sourceAnchor.save());
                     tag.putLong("nextOrdinal", campus.nextOrdinal);
+                    tag.putLong("pyroflux", campus.pyroflux);
+                    tag.putLong("inputVoltage", campus.inputVoltage);
                     ListTag memberTags = new ListTag();
                     campus.members.values().stream().sorted(MEMBER_ORDER).forEach(member -> {
                         CompoundTag memberTag = new CompoundTag();
@@ -195,6 +337,17 @@ public final class FoundryCampusSavedData extends SavedData {
                         memberTags.add(memberTag);
                     });
                     tag.put("members", memberTags);
+                    ListTag reservationTags = new ListTag();
+                    campus.reservations.entrySet().stream()
+                            .sorted(Map.Entry.comparingByKey(FoundryCampusSavedData::comparePositions))
+                            .forEach(reservationEntry -> {
+                                CompoundTag reservationTag = new CompoundTag();
+                                putPosition(reservationTag, "furnace", reservationEntry.getKey());
+                                reservationTag.putLong("total", reservationEntry.getValue().total);
+                                reservationTag.putLong("remaining", reservationEntry.getValue().remaining);
+                                reservationTags.add(reservationTag);
+                            });
+                    tag.put("reservations", reservationTags);
                     campusTags.add(tag);
                 });
         root.put("campuses", campusTags);
@@ -226,6 +379,18 @@ public final class FoundryCampusSavedData extends SavedData {
                 campus.nextOrdinal = Math.max(campus.nextOrdinal, ordinal + 1);
             }
             campus.nextOrdinal = Math.max(campus.nextOrdinal, Math.max(0, tag.getLong("nextOrdinal")));
+            campus.pyroflux = Math.clamp(tag.getLong("pyroflux"), 0,
+                    FoundryPyrofluxPolicy.capacity(campus.tier));
+            campus.inputVoltage = Math.max(0, tag.getLong("inputVoltage"));
+            ListTag reservationTags = tag.getList("reservations", Tag.TAG_COMPOUND);
+            for (int reservationIndex = 0; reservationIndex < reservationTags.size(); reservationIndex++) {
+                CompoundTag reservationTag = reservationTags.getCompound(reservationIndex);
+                GlobalPos furnace = getPosition(reservationTag, "furnace");
+                if (furnace == null || !campus.members.containsKey(furnace)) continue;
+                long total = Math.max(0, reservationTag.getLong("total"));
+                long remaining = Math.clamp(reservationTag.getLong("remaining"), 0, total);
+                campus.reservations.put(furnace, new Reservation(total, remaining));
+            }
             data.campuses.put(core, campus);
         }
         return data;
@@ -255,7 +420,8 @@ public final class FoundryCampusSavedData extends SavedData {
         DIFFERENT_DIMENSION,
         SELF_LINK,
         ALREADY_LINKED,
-        CAPACITY_REACHED
+        CAPACITY_REACHED,
+        OUT_OF_RANGE
     }
 
     public enum CoreResult {
@@ -273,7 +439,10 @@ public final class FoundryCampusSavedData extends SavedData {
         private FoundryTier tier;
         private FoundryRenderAnchor sourceAnchor;
         private long nextOrdinal;
+        private long pyroflux;
+        private long inputVoltage;
         private final Map<GlobalPos, Member> members = new HashMap<>();
+        private final Map<GlobalPos, Reservation> reservations = new HashMap<>();
 
         private Campus(UUID owner, FoundryTier tier, FoundryRenderAnchor sourceAnchor) {
             this.owner = owner;
@@ -284,4 +453,14 @@ public final class FoundryCampusSavedData extends SavedData {
 
     private record Member(GlobalPos position, ResourceLocation type, FoundryRenderAnchor receivingAnchor,
                           long ordinal) {}
+
+    private static boolean releaseReservation(Campus campus, GlobalPos furnace) {
+        Reservation reservation = campus.reservations.remove(furnace);
+        if (reservation == null) return false;
+        long capacity = FoundryPyrofluxPolicy.capacity(campus.tier);
+        campus.pyroflux = Math.min(capacity, campus.pyroflux + reservation.remaining);
+        return true;
+    }
+
+    private record Reservation(long total, long remaining) {}
 }

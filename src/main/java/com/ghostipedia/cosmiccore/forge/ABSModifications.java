@@ -21,16 +21,26 @@ import net.neoforged.bus.api.EventPriority;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
+
 @EventBusSubscriber(modid = CosmicCore.MOD_ID, bus = EventBusSubscriber.Bus.MOD)
 public class ABSModifications {
 
     @SubscribeEvent(priority = EventPriority.LOW)
     public static void addAlloyBlastProperties(PostMaterialEvent event) {
-        int restored = 0;
+        List<String> restoredMaterials = new ArrayList<>();
         for (Material material : GTRegistries.MATERIALS) {
             if (!material.hasFlag(MaterialFlags.DISABLE_ALLOY_PROPERTY) && addAlloyBlastProperty(material)) {
-                restored++;
+                restoredMaterials.add(material.getResourceLocation().toString());
             }
+        }
+
+        restoredMaterials.sort(Comparator.naturalOrder());
+        if (restoredMaterials.size() > AlloyBlastLifecyclePolicy.MAX_RESTORED_ALLOYS) {
+            throw new IllegalStateException("Refusing an unbounded alloy blast restoration of " +
+                    restoredMaterials.size() + " materials");
         }
 
         GTMaterials.NiobiumNitride.getProperty(PropertyKey.ALLOY_BLAST)
@@ -41,17 +51,28 @@ public class ABSModifications {
         Material material = CosmicMaterials.ResonantVirtueMeld;
         AlloyBlastProperty property = material.getProperty(PropertyKey.ALLOY_BLAST);
         property.setRecipeProducer(new CustomAlloyBlastRecipeProducer(-1, -1, 32));
+
+        Material hslaSteel = GTMaterials.HSLASteel;
+        AlloyBlastLifecyclePolicy.RecipeShape hslaShape = recipeShape(hslaSteel);
+        if (!canGenerateAlloyBlastRecipe(hslaSteel) ||
+                hslaSteel.getFluidBuilder(FluidStorageKeys.MOLTEN) == null ||
+                hslaShape.itemInputs() != 4 || hslaShape.fluidInputs() != 0 ||
+                hslaShape.outputUnits() != 5 || hslaShape.circuitMeta() != 4) {
+            throw new IllegalStateException("HSLA Steel alloy blast lifecycle is incomplete: " + hslaShape);
+        }
+
         int generatedRecipes = 0;
         int freezerRecipes = 0;
         for (Material candidate : GTRegistries.MATERIALS) {
             if (!canGenerateAlloyBlastRecipe(candidate)) continue;
             generatedRecipes++;
             if (candidate.getProperty(PropertyKey.BLAST).getGasTier() != null) generatedRecipes++;
-            if (TagPrefix.ingotHot.doGenerateItem(candidate)) freezerRecipes++;
+            freezerRecipes++;
         }
         CosmicCore.LOGGER.info(
-                "Restored {} GTM alloy blast material properties; projected {} generated alloy blast recipes and {} molten-to-ingot vacuum freezer recipes; Watertight Steel enabled: {}",
-                restored, generatedRecipes, freezerRecipes, canGenerateAlloyBlastRecipe(GTMaterials.WatertightSteel));
+                "Restored {} GTM alloy blast material properties {}; projected {} generated Alloy Blasting Kiln recipes and {} molten-to-ingot vacuum freezer recipes; HSLA Steel and Watertight Steel enabled: {}, {}",
+                restoredMaterials.size(), restoredMaterials, generatedRecipes, freezerRecipes,
+                canGenerateAlloyBlastRecipe(hslaSteel), canGenerateAlloyBlastRecipe(GTMaterials.WatertightSteel));
     }
 
     private static boolean addAlloyBlastProperty(Material material) {
@@ -63,8 +84,11 @@ public class ABSModifications {
             return false;
         }
         material.setProperty(PropertyKey.ALLOY_BLAST, new AlloyBlastProperty());
-        material.getProperty(PropertyKey.FLUID).enqueueRegistration(
-                FluidStorageKeys.MOLTEN, new FluidBuilder().state(FluidState.LIQUID));
+        FluidBuilder moltenBuilder = new FluidBuilder().state(FluidState.LIQUID);
+        Integer temperature = AlloyBlastLifecyclePolicy.casingMoltenTemperatureOverride(
+                material.getName(), material.getBlastTemperature());
+        if (temperature != null) moltenBuilder.temperature(temperature);
+        material.getProperty(PropertyKey.FLUID).enqueueRegistration(FluidStorageKeys.MOLTEN, moltenBuilder);
         return true;
     }
 
@@ -82,8 +106,18 @@ public class ABSModifications {
                         MaterialFlags.DISABLE_ALLOY_BLAST, MaterialFlags.DISABLE_MATERIAL_RECIPES)) {
             return false;
         }
-        return material.getMaterialComponents().stream()
-                .allMatch(stack -> stack.material().hasProperty(PropertyKey.DUST) ||
-                        stack.material().hasProperty(PropertyKey.FLUID));
+        return recipeShape(material).valid();
+    }
+
+    private static AlloyBlastLifecyclePolicy.RecipeShape recipeShape(Material material) {
+        return AlloyBlastLifecyclePolicy.recipeShape(material.getMaterialComponents().stream()
+                .map(stack -> new AlloyBlastLifecyclePolicy.Component(inputForm(stack), (int) stack.amount()))
+                .toList());
+    }
+
+    private static AlloyBlastLifecyclePolicy.InputForm inputForm(MaterialStack stack) {
+        if (stack.material().hasProperty(PropertyKey.DUST)) return AlloyBlastLifecyclePolicy.InputForm.DUST;
+        if (stack.material().hasProperty(PropertyKey.FLUID)) return AlloyBlastLifecyclePolicy.InputForm.FLUID;
+        return AlloyBlastLifecyclePolicy.InputForm.INVALID;
     }
 }

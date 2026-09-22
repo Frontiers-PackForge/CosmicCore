@@ -586,6 +586,22 @@ public class CosmicBlocks {
             "soul_muted_casing",
             CosmicCore.id("block/casings/solid/soul_muted_casing"));
 
+    public static final BlockEntry<Block> VERDIGRIS_NOSTIUM_CASING = createCasingBlock(
+            "verdigris_nostium_casing", "Verdigris Nostium Casing",
+            CosmicCore.id("block/casings/solid/verdigris_nostium_casing"));
+
+    public static final BlockEntry<Block> BLOODSTEEL_KUVITE_PLATING = createCasingBlock(
+            "bloodsteel_kuvite_plating", "Bloodsteel Kuvite Plating",
+            CosmicCore.id("block/casings/solid/bloodsteel_kuvite_plating"));
+
+    public static final BlockEntry<Block> BIOMANA_REFLECTIVE_TENBRIUM_CASING = createCasingBlock(
+            "biomana_reflective_tenbrium_casing", "Biomana Reflective Tenbrium Casing",
+            CosmicCore.id("block/casings/solid/biomana_reflective_tenbrium_casing"));
+
+    public static final BlockEntry<Block> PALE_ROSE_STRUCTURAL_CASING = createCasingBlock(
+            "pale_rose_structural_casing", "Pale Rose Structural Casing",
+            CosmicCore.id("block/casings/solid/pale_rose_structural_casing"));
+
     // Blood Magic replacement blocks
     public static final BlockEntry<Block> BLANK_RUNE = createCasingBlock(
             "blank_rune",

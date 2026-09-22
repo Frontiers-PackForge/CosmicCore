@@ -311,6 +311,12 @@ public class CosmicItems {
     public static final ItemEntry<ComponentItem> CANNON_POWDER = registerChainItem(
             "cannon_powder", "Cannon Powder", CosmicCore.id("item/cannon_powder"));
 
+    public static final ItemEntry<ComponentItem> GRAVISOMANTIC_POWDER = registerChainItem(
+            "gravisomantic_powder", "Gravisomantic Powder", GTCEu.id("item/material_sets/dull/dust"));
+
+    public static final ItemEntry<ComponentItem> GRAVGLASS_SHARDS = registerChainItem(
+            "gravglass_shards", "Gravglass Shards", GTCEu.id("item/material_sets/certus/gem"));
+
     public static final ItemEntry<ComponentItem> PYROLTIC_CONTACT_CATALYST = registerChainItem(
             "pyroltic_contact_catalyst", "Pyroltic Contact Catalyst",
             CosmicCore.id("item/pyroltic_contact_catalyst"));
@@ -495,13 +501,6 @@ public class CosmicItems {
             .defaultModel()
             .register();
 
-    public static final ItemEntry<ComponentItem> PALE_SAW = REGISTRATE
-            .item("pale_saw", ComponentItem::new)
-            .lang("Pale Saw")
-            .properties(p -> p.stacksTo(64))
-            .tag()
-            .defaultModel()
-            .register();
     public static final ItemEntry<ComponentItem> PALE_SCRAP = REGISTRATE
             .item("pale_scrap", ComponentItem::new)
             .lang("Pale Scrap")
@@ -2765,15 +2764,6 @@ public class CosmicItems {
             .onRegister(attachRenderer(RadianceItemRenderData.INSTANCE))
             .register();
 
-    public static final ItemEntry<AsteroidItem> WASTELAND_ASTEROID = REGISTRATE
-            .item("wasteland_asteroid", AsteroidItem::new)
-            .lang("Wasteland Asteroid")
-            .properties(p -> p.stacksTo(1))
-            .tag()
-            .defaultModel()
-            .onRegister(attachRenderer(RadianceItemRenderData.INSTANCE))
-            .register();
-
     public static final ItemEntry<ComponentItem> TUNGSTENSTEEL_NANOLATTICE_SPOOL = REGISTRATE
             .item("tungstensteel_nanolattice_spool", ComponentItem::new)
             .lang("Tungstensteel Nanolattice Spool")
@@ -3113,6 +3103,24 @@ public class CosmicItems {
     public static final ItemEntry<ComponentItem> HV_CLADDING = REGISTRATE
             .item("hv_cladding", ComponentItem::new)
             .lang("HV Cladding")
+            .properties(p -> p.stacksTo(64))
+            .defaultModel()
+            .register();
+    public static final ItemEntry<ComponentItem> EV_COGWORK_MAGICAPACITOR = REGISTRATE
+            .item("ev_cogwork_magicapacitor", ComponentItem::new)
+            .lang("EV Cogwork Magicapacitor")
+            .properties(p -> p.stacksTo(64))
+            .defaultModel()
+            .register();
+    public static final ItemEntry<ComponentItem> EV_MODULAR_FRAMEWORKS = REGISTRATE
+            .item("ev_modular_frameworks", ComponentItem::new)
+            .lang("EV Modular Frameworks")
+            .properties(p -> p.stacksTo(64))
+            .defaultModel()
+            .register();
+    public static final ItemEntry<ComponentItem> EV_CLADDING = REGISTRATE
+            .item("ev_cladding", ComponentItem::new)
+            .lang("EV Cladding")
             .properties(p -> p.stacksTo(64))
             .defaultModel()
             .register();

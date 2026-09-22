@@ -33,6 +33,14 @@ public class CosmicRecipeTypes {
             .setMaxIOSize(0, 0, 0, 0)
             .setSound(GTSoundEntries.COMPRESSOR);
 
+    public static final GTRecipeType MECHANICAL_MINESHAFT = register(
+            CosmicCore.id("mechanical_mineshaft"), MULTIBLOCK)
+            .setMaxIOSize(4, 4, 4, 4)
+            .UI(builder -> builder.setProgressBar(GTGuiTextures.PROGRESS_ARROW));
+    public static final GTRecipeType ESSENCE_REACTOR = register(CosmicCore.id("essence_reactor"), MULTIBLOCK)
+            .setMaxIOSize(4, 4, 4, 4)
+            .UI(builder -> builder.setProgressBar(GTGuiTextures.PROGRESS_ARROW));
+
     public static final GTRecipeType SLUDGE_DIGESTOR = register(CosmicCore.id("sludge_digestor"), MULTIBLOCK)
             .setMaxIOSize(3, 3, 2, 2)
             .UI(builder -> builder.setProgressBar(GTGuiTextures.PROGRESS_ARROW));
@@ -278,6 +286,13 @@ public class CosmicRecipeTypes {
             .setMaxSize(IO.IN, SoulRecipeCapability.CAP, 1)
             .setMaxTooltips(4)
             .UI(builder -> builder.setProgressBar(GTGuiTextures.PROGRESS_ARROW));
+    public static final GTRecipeType IMBUMENT_PYLON = GTRecipeTypes
+            .register(CosmicCore.id("imbument_pylon"), GTRecipeTypes.MULTIBLOCK)
+            .setMaxIOSize(6, 6, 3, 3)
+            .setMaxSize(IO.IN, SoulRecipeCapability.CAP, 2)
+            .setMaxTooltips(5)
+            .UI(builder -> builder.setProgressBar(GTGuiTextures.PROGRESS_ARROW)
+                    .addRecipeUIModifier(VitaeCampusRecipeUI.ALTAR_TIER));
     public static final GTRecipeType CHROMATIC_FLOTATION_PLANT = GTRecipeTypes
             .register(CosmicCore.id("chromatic_flotation_plant"), GTRecipeTypes.MULTIBLOCK)
             .setMaxIOSize(3, 4, 3, 3)
@@ -640,14 +655,15 @@ public class CosmicRecipeTypes {
 
     public static final GTRecipeType MANAWOMB_LEECHING_POND = GTRecipeTypes
             .register(CosmicCore.id("manawomb_leeching_pond"), MULTIBLOCK)
-            .setMaxIOSize(4, 6, 4, 4)
+            .setMaxIOSize(6, 6, 3, 4)
             .setSound(GTSoundEntries.CHEMICAL)
             .UI(builder -> builder.setProgressBar(GTGuiTextures.PROGRESS_ARROW_MULTIPLE)
                     .addRecipeUIModifier(BloomwyrmRecipeUI.COMMON));
 
     public static void init() {
         for (GTRecipeType type : new GTRecipeType[] {
-                SLUDGE_DIGESTOR, POWDERIZER, INDUSTRIAL_ORE_SORTER, INDUSTRIAL_FLOTATION_PLANT, ONEIRIC_SIEVE,
+                MECHANICAL_MINESHAFT, ESSENCE_REACTOR, SLUDGE_DIGESTOR, POWDERIZER, INDUSTRIAL_ORE_SORTER,
+                INDUSTRIAL_FLOTATION_PLANT, ONEIRIC_SIEVE,
                 DISSOLUTION_VAT, PHASE_SEPARATOR, SIMPLE_DESALTER, DESALTER, STEAM_CRACKING_FURNACE,
                 FRACTIONAL_CONDENSER, FLUID_CATALYTIC_CRACKING, HYDROTREATING, HYDROCRACKING,
                 CATALYTIC_REFORMING, DELAYED_COKING, VACUUM_DISTILLATION, COSMIC_DUMMY_SPAM_YEETER, LAMINATOR,
@@ -657,7 +673,8 @@ public class CosmicRecipeTypes {
                 PCB_FABRICATOR, TITAN_FUSION_RECIPES, LUNAR_HAMMER, CRYOGENICS_CHAMBER, SOUL_TESTER_RECIPES,
                 VOID_MINER, HEAVY_ASSEMBLER, PLASMITE_FORGE, PRISMA_FOUNDRY, ATMOSPHERE_SIPHON, MANA_DIGITIZER,
                 COMPONENT_ASSEMBLY_LINE, GROVE_RECIPES, LEACHING_PLANT, HELLFIRE_FOUNDRY, SUFFERING_CHAMBER,
-                ARCANE_DISTILLERY, ARCANE_FOLDING, POLYMERIZER, HEMOPHAGIC_TRANSFUSER, CHROMATIC_FLOTATION_PLANT,
+                ARCANE_DISTILLERY, ARCANE_FOLDING, POLYMERIZER, HEMOPHAGIC_TRANSFUSER, IMBUMENT_PYLON,
+                CHROMATIC_FLOTATION_PLANT,
                 SPIRIT_CRUCIBLE, SOUL_FOUNDRY, CALX_REACTOR, ROASTER, MANA_LEACHING_TUB, THERMOMAG, VAC_BUBBLER,
                 LARGE_ROASTER, VILE_FISSION, VOID_SALT_FISSION, RADBOLT_RECONSTRUCTOR, SPOOLING_MACHINE,
                 ORBITAL_FORGE_EBF, ORBITAL_FORGE_ABS, ALLOY_BLASTING_KILN, DAWN_FORGE, CINDER_HEARTH,

@@ -54,9 +54,9 @@ public class HemophagicTransfuserRender extends
         // offset from the controller to the inner cube (scaled up by 1 in all directions)
         // values are from the multi pattern
         BlockPos.MutableBlockPos minPos = new BlockPos.MutableBlockPos()
-                .move(left, 3).move(up, 1).move(back, 2);
+                .move(left, 3).move(up, -2).move(back, -2);
         BlockPos.MutableBlockPos maxPos = new BlockPos.MutableBlockPos()
-                .move(left, -3).move(up, 7).move(back, 8);
+                .move(left, -3).move(up, 4).move(back, 4);
 
         return AABB.encapsulatingFullBlocks(minPos, maxPos);
     });
@@ -125,8 +125,8 @@ public class HemophagicTransfuserRender extends
             int upOffset = up.getNormal().get(axis);
             int backOffset = back.getNormal().get(axis);
 
-            float offset = upOffset * (4.0f + (upOffset * 0.5f)) +
-                    backOffset * (5.0f + (backOffset * 0.5f));
+            float offset = upOffset * (1.0f + (upOffset * 0.5f)) +
+                    backOffset * (1.0f + (backOffset * 0.5f));
             switch (axis) {
                 case X -> x0ffset = offset;
                 case Y -> y0ffset = offset;
@@ -135,14 +135,12 @@ public class HemophagicTransfuserRender extends
         }
         poseStack.translate(
                 x0ffset + (leftAxis == Direction.Axis.X ? 0.5f : 0.0f),
-                y0ffset + (leftAxis == Direction.Axis.Y ? 0.5f : 0.0f),
+                y0ffset + 6 + (leftAxis == Direction.Axis.Y ? 0.5f : 0.0f),
                 z0ffset + (leftAxis == Direction.Axis.Z ? 0.5f : 0.0f));
 
         renderBloodCube(poseStack, buffer, totalTick);
 
-        if (machine.isActive()) {
-            renderRings(up.getAxis(), totalTick, poseStack, buffer);
-        }
+        renderRings(up.getAxis(), totalTick, poseStack, buffer);
 
         poseStack.popPose();
     }
@@ -188,6 +186,7 @@ public class HemophagicTransfuserRender extends
 
         poseStack.pushPose();
         poseStack.mulPose(new Quaternionf().rotateXYZ(cosX, sinY, sinZ));
+        consumer = buffer.getBuffer(GTRenderTypes.lightRing());
         RenderBufferHelper.renderRing(poseStack, consumer,
                 0, 0, 0,
                 1.8f, 0.1F, 10, 36,
@@ -196,6 +195,7 @@ public class HemophagicTransfuserRender extends
 
         poseStack.pushPose();
         poseStack.mulPose(new Quaternionf().rotateZ(cosZ));
+        consumer = buffer.getBuffer(GTRenderTypes.lightRing());
         RenderBufferHelper.renderRing(poseStack, consumer,
                 0, 0, 0,
                 1.6f, 0.1F, 10, 36,

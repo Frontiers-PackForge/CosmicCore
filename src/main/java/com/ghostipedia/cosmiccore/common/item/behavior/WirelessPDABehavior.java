@@ -131,11 +131,12 @@ public class WirelessPDABehavior implements IItemHUDProvider, IInteractionItem, 
         Minecraft mc = Minecraft.getInstance();
         String headerKey = clientData.local() ?
                 "cosmiccore.wireless_pda.hud.local" : "cosmiccore.wireless_pda.hud.dimensional";
-        guiGraphics.drawString(mc.font, Component.translatable(headerKey), 1, 34, 0xFFE8C66A, true);
+        int localHudOffset = clientData.local() ? 10 : 0;
+        guiGraphics.drawString(mc.font, Component.translatable(headerKey), 1, 34 + localHudOffset, 0xFFE8C66A, true);
         if (!clientData.available()) {
             guiGraphics.drawString(mc.font,
                     Component.translatable("cosmiccore.wireless_pda.hud.unavailable"),
-                    1, 44, 0xFFFF5555, true);
+                    1, 44 + localHudOffset, 0xFFFF5555, true);
         } else {
             double percentStorage = clientData.capacity().signum() > 0 ?
                     clientData.stored().multiply(BigInteger.valueOf(10000)).divide(clientData.capacity())
@@ -148,15 +149,15 @@ public class WirelessPDABehavior implements IItemHUDProvider, IInteractionItem, 
                                     .withStyle(ChatFormatting.GREEN),
                             Component.literal(formatEnergy(clientData.stored())).withStyle(ChatFormatting.AQUA),
                             Component.literal(formatEnergy(clientData.capacity())).withStyle(ChatFormatting.AQUA)),
-                    1, 44, 0xFFFFFF, true);
+                    1, 44 + localHudOffset, 0xFFFFFF, true);
             guiGraphics.drawString(mc.font,
                     Component.translatable("cosmic.command.wireless.energy.input",
                             Component.literal(FormattingUtil.formatNumberReadable(clientData.input()))),
-                    -5, 54, 0xFF55FF55, true);
+                    -5, 54 + localHudOffset, 0xFF55FF55, true);
             guiGraphics.drawString(mc.font,
                     Component.translatable("cosmic.command.wireless.energy.output",
                             Component.literal(FormattingUtil.formatNumberReadable(clientData.output()))),
-                    -5, 64, 0xFFFF5555, true);
+                    -5, 64 + localHudOffset, 0xFFFF5555, true);
         }
         if (clientData.computeLinked()) {
             Component computeLine = clientData.computeAvailable() ?
@@ -166,7 +167,7 @@ public class WirelessPDABehavior implements IItemHUDProvider, IInteractionItem, 
                             Component.literal(FormattingUtil.formatNumberReadable(clientData.computeCapacity()))
                                     .withStyle(ChatFormatting.AQUA)) :
                     Component.translatable("cosmiccore.wireless_pda.hud.compute_unavailable");
-            guiGraphics.drawString(mc.font, computeLine, -5, 74,
+            guiGraphics.drawString(mc.font, computeLine, -5, 74 + localHudOffset,
                     clientData.computeAvailable() ? 0xFFFFFFFF : 0xFFFF5555, true);
         }
     }

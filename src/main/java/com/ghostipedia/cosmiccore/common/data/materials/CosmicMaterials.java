@@ -115,7 +115,7 @@ public class CosmicMaterials {
     public static Material Nevramite;
     public static Material PaleSteel;
     public static Material PaleOil;
-    public static Material PaleOreBad;
+    public static Material PrimordialSoup;
     public static Material Moondrop;
     public static Material Somanone;
 
@@ -616,7 +616,8 @@ public class CosmicMaterials {
         StarstruckHalite = new Material.Builder(CosmicCore.id("starstruck_halite"))
                 .ingot()
                 .liquid(new FluidBuilder().temperature(1340))
-                .color(0x45a2ff).secondaryColor(0x3fa115).iconSet(CosmicMaterialSet.CRYSTAL)
+                .fluid(FluidStorageKeys.MOLTEN, new FluidBuilder().temperature(4500))
+                .color(0x45a2ff).secondaryColor(0x8ad8f5).iconSet(CosmicMaterialSet.CRYSTAL)
                 .flags(GENERATE_BOLT_SCREW, GENERATE_ROUND, GENERATE_GEAR, GENERATE_SMALL_GEAR, GENERATE_RING,
                         GENERATE_FRAME, GENERATE_SPRING, GENERATE_SPRING_SMALL, GENERATE_FINE_WIRE, GENERATE_DENSE)
                 .blastTemp(4500, BlastProperty.GasTier.HIGH, GTValues.VA[GTValues.EV], 1200)
@@ -1021,6 +1022,7 @@ public class CosmicMaterials {
                 .formula("✧⚙")
                 .ingot()
                 .liquid(new FluidBuilder().temperature(50))
+                .fluid(FluidStorageKeys.MOLTEN, new FluidBuilder().temperature(1800))
                 .flags(GENERATE_ROTOR, GENERATE_FRAME, GENERATE_BOLT_SCREW, GENERATE_ROUND, GENERATE_GEAR,
                         GENERATE_SMALL_GEAR, GENERATE_RING, GENERATE_FRAME, GENERATE_SPRING, GENERATE_SPRING_SMALL,
                         GENERATE_FINE_WIRE)
@@ -1031,12 +1033,9 @@ public class CosmicMaterials {
                 .liquid(new FluidBuilder().state(FluidState.LIQUID).customStill())
                 .color(0xE8F3FF).secondaryColor(0x1F2A36).iconSet(MaterialIconSet.METALLIC)
                 .buildAndRegister();
-        PaleOreBad = new Material.Builder(CosmicCore.id("reclaimed_pale_ore"))
-                .formula("✧⚙")
-                .ore()
-                .flags(DISABLE_DECOMPOSITION, NO_SMELTING, NO_UNIFICATION, NO_SMELTING, NO_ORE_SMELTING,
-                        NO_ORE_PROCESSING_TAB, NO_SMASHING)
-                .color(0xE8F3FF).secondaryColor(0x1F2A36).iconSet(MaterialIconSet.METALLIC)
+        PrimordialSoup = new Material.Builder(CosmicCore.id("primordial_soup"))
+                .liquid(new FluidBuilder().state(FluidState.LIQUID).customStill().temperature(320))
+                .color(0x6F568F).secondaryColor(0xB9A8CF).iconSet(MaterialIconSet.DULL)
                 .buildAndRegister();
 
         Somanone = new Material.Builder(CosmicCore.id("somanone"))

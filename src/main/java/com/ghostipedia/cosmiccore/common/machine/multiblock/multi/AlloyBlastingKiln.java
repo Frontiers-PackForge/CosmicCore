@@ -15,8 +15,8 @@ import com.gregtechceu.gtceu.api.multiblock.util.RelativeDirection;
 
 import net.minecraft.network.chat.Component;
 
+import static com.ghostipedia.cosmiccore.api.machine.multiblock.PatternMappedPartAppearance.of;
 import static com.ghostipedia.cosmiccore.api.registries.CosmicRegistration.REGISTRATE;
-import static com.ghostipedia.cosmiccore.common.data.CosmicBlocks.CASING_HEAT_VENT;
 import static com.ghostipedia.cosmiccore.common.data.CosmicBlocks.REFRACTORY_STRUCTURAL_CASING;
 import static com.ghostipedia.cosmiccore.common.data.CosmicBlocks.SUPERHEAVY_STEEL_CASING;
 import static com.ghostipedia.cosmiccore.gtbridge.CosmicRecipeTypes.ALLOY_BLASTING_KILN;
@@ -25,6 +25,7 @@ import static com.gregtechceu.gtceu.api.multiblock.Predicates.air;
 import static com.gregtechceu.gtceu.api.multiblock.Predicates.any;
 import static com.gregtechceu.gtceu.api.multiblock.Predicates.blocks;
 import static com.gregtechceu.gtceu.api.multiblock.Predicates.controller;
+import static com.gregtechceu.gtceu.api.multiblock.Predicates.heatingCoils;
 import static com.gregtechceu.gtceu.common.data.GCYMBlocks.CASING_HIGH_TEMPERATURE_SMELTING;
 
 public final class AlloyBlastingKiln {
@@ -35,8 +36,10 @@ public final class AlloyBlastingKiln {
             .rotationState(RotationState.NON_Y_AXIS)
             .allowFlip(false)
             .recipeType(ALLOY_BLASTING_KILN)
-            .recipeModifiers(AlloyBlastingKilnMachine::recipeModifier)
+            .recipeModifiers(AlloyBlastingKilnMachine::recipeModifier,
+                    com.gregtechceu.gtceu.common.data.GTRecipeModifiers::ebfOverclock)
             .appearanceBlock(SUPERHEAVY_STEEL_CASING)
+            .partAppearance(of(SUPERHEAVY_STEEL_CASING::getDefaultState))
             .tooltips(
                     Component.translatable("cosmiccore.machine.alloy_blasting_kiln.tooltip.0"),
                     Component.translatable("cosmiccore.machine.alloy_blasting_kiln.tooltip.1"),
@@ -59,11 +62,11 @@ public final class AlloyBlastingKiln {
         return builder
                 .where(' ', air())
                 .where(FoundryPatternAirspace.EXTERIOR_MARKER, any())
-                .where('A', blocks(REFRACTORY_STRUCTURAL_CASING.get()))
+                .where('A', kilnEnergyHatchPositions())
                 .where('B', kilnHatchPositions())
                 .where('C', blocks(CASING_HIGH_TEMPERATURE_SMELTING.get()))
                 .where('D', blocks(SUPERHEAVY_STEEL_CASING.get()))
-                .where('E', blocks(CASING_HEAT_VENT.get()))
+                .where('E', heatingCoils())
                 .where('F', air())
                 .where('G', controller(blocks(definition.getBlock())))
                 .where('H', air())
@@ -77,5 +80,10 @@ public final class AlloyBlastingKiln {
                         PartAbility.EXPORT_ITEMS,
                         PartAbility.IMPORT_FLUIDS,
                         PartAbility.EXPORT_FLUIDS));
+    }
+
+    private static MultiPredicate kilnEnergyHatchPositions() {
+        return blocks(REFRACTORY_STRUCTURAL_CASING.get())
+                .or(abilities(PartAbility.INPUT_ENERGY).setMaxGlobalLimited(4).setPreviewCount(1));
     }
 }
