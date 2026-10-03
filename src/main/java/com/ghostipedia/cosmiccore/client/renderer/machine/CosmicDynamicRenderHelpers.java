@@ -10,6 +10,10 @@ public class CosmicDynamicRenderHelpers {
         return HemophagicTransfuserRender.INSTANCE;
     }
 
+    public static DynamicRender<?, ?> getImbumentPylonRender() {
+        return ImbumentPylonRender.INSTANCE;
+    }
+
     public static DynamicRender<?, ?> getSpiritCrucibleRender() {
         return SpiritCrucibleRender.INSTANCE;
     }

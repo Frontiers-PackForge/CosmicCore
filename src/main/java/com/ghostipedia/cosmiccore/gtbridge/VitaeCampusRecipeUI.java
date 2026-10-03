@@ -13,7 +13,7 @@ public final class VitaeCampusRecipeUI {
         int tier = recipe.data.contains(ImbumentPylonMachine.ALTAR_TIER_KEY) ?
                 recipe.data.getInt(ImbumentPylonMachine.ALTAR_TIER_KEY) : 4;
         widget.textComponents.child(new TextWidget<>(Text.lang(
-                "cosmiccore.vitae_campus.recipe.altar_tier", tier)).color(0xFFFFFFFF));
+                "cosmiccore.vitae_campus.recipe.altar_tier", tier)).color(0xFF404040));
     };
 
     private VitaeCampusRecipeUI() {}

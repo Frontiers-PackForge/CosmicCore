@@ -1031,8 +1031,11 @@ public class CosmicLangHandler extends LangHandler {
         provider.add("cosmiccore.quintessentia_hatch.channel", "%s: %s / %s");
         provider.add("cosmiccore.machine.hemophagic_transfuser.status.altar", "Altar Level: %s");
         provider.add("cosmiccore.machine.hemophagic_transfuser.status.limit", "Per-Machine Anima / Spiritus Limit: %s");
+        provider.add("cosmiccore.machine.hemophagic_transfuser.status.energy", "Max EU Distribution: %s");
         provider.add("cosmiccore.machine.imbument_pylon.status.linked", "Linked to Hemophagic Transfuser");
         provider.add("cosmiccore.machine.imbument_pylon.status.unlinked", "No Available Hemophagic Transfuser");
+        provider.add("cosmiccore.machine.imbument_pylon.status.insufficient_rating",
+                "Hemophagic Transfusers level or voltage is too low for this recipe!");
         provider.add("cosmiccore.machine.imbument_pylon.status.altar", "Altar Level: %s");
         provider.add("cosmiccore.machine.imbument_pylon.status.limit", "Anima / Spiritus Limit: %s");
         provider.add("cosmiccore.vitae_campus.datastick", "Vitae Altar Link: %s");

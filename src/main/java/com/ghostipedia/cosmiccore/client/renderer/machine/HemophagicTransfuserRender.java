@@ -20,9 +20,11 @@ import net.minecraft.client.renderer.texture.TextureAtlas;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.particles.DustParticleOptions;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraft.world.phys.AABB;
+import net.minecraft.world.phys.Vec3;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
 
@@ -30,8 +32,11 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.serialization.MapCodec;
 import org.joml.Quaternionf;
+import org.joml.Vector3f;
 
 import java.util.EnumSet;
+import java.util.Map;
+import java.util.WeakHashMap;
 import java.util.function.BiFunction;
 
 import javax.annotation.ParametersAreNonnullByDefault;
@@ -51,12 +56,10 @@ public class HemophagicTransfuserRender extends
         Direction back = RelativeDirection.BACK.getRelativeFacing(front, upwards, false);
         Direction left = RelativeDirection.LEFT.getRelativeFacing(front, upwards, false);
 
-        // offset from the controller to the inner cube (scaled up by 1 in all directions)
-        // values are from the multi pattern
         BlockPos.MutableBlockPos minPos = new BlockPos.MutableBlockPos()
-                .move(left, 3).move(up, -2).move(back, -2);
+                .move(left, 3).move(up, -2).move(back, 0);
         BlockPos.MutableBlockPos maxPos = new BlockPos.MutableBlockPos()
-                .move(left, -3).move(up, 4).move(back, 4);
+                .move(left, -3).move(up, 6).move(back, 6);
 
         return AABB.encapsulatingFullBlocks(minPos, maxPos);
     });
@@ -64,6 +67,8 @@ public class HemophagicTransfuserRender extends
     public static final ResourceLocation BLOOD_CUBE_TEXTURE = CosmicCore.id("block/iris/blood_cube");
 
     private static TextureAtlasSprite bloodCubeSprite = null;
+    private final TransfuserBloodStreams bloodStreams = new TransfuserBloodStreams();
+    private final Map<WorkableElectricMultiblockMachine, Integer> particleTicks = new WeakHashMap<>();
     private static boolean isEventListenerRegistered = false;
 
     @SuppressWarnings("deprecation")
@@ -106,53 +111,60 @@ public class HemophagicTransfuserRender extends
         if (!machine.isFormed()) {
             return;
         }
-        float totalTick = (Minecraft.getInstance().player.tickCount + partialTick);
+        var player = Minecraft.getInstance().player;
+        if (player == null) return;
+        double totalTick = (double) player.tickCount + partialTick;
 
         poseStack.pushPose();
 
-        // move the things:tm: to render at the center of the multiblock
         Direction front = machine.getFrontFacing();
         Direction upwards = machine.getUpwardsFacing();
         boolean flipped = machine.isFlipped();
         Direction up = RelativeDirection.UP.getRelativeFacing(front, upwards, flipped);
         Direction back = RelativeDirection.BACK.getRelativeFacing(front, upwards, flipped);
-        Direction.Axis leftAxis = RelativeDirection.LEFT.getRelativeFacing(front, upwards, flipped).getAxis();
-
-        // translate to the absolute center of the multiblock
-        float x0ffset = 0, y0ffset = 0, z0ffset = 0;
-
-        for (Direction.Axis axis : Direction.Axis.VALUES) {
-            int upOffset = up.getNormal().get(axis);
-            int backOffset = back.getNormal().get(axis);
-
-            float offset = upOffset * (1.0f + (upOffset * 0.5f)) +
-                    backOffset * (1.0f + (backOffset * 0.5f));
-            switch (axis) {
-                case X -> x0ffset = offset;
-                case Y -> y0ffset = offset;
-                case Z -> z0ffset = offset;
-            }
-        }
         poseStack.translate(
-                x0ffset + (leftAxis == Direction.Axis.X ? 0.5f : 0.0f),
-                y0ffset + 6 + (leftAxis == Direction.Axis.Y ? 0.5f : 0.0f),
-                z0ffset + (leftAxis == Direction.Axis.Z ? 0.5f : 0.0f));
+                0.5 + 3 * up.getStepX() + 3 * back.getStepX(),
+                0.5 + 3 * up.getStepY() + 3 * back.getStepY(),
+                0.5 + 3 * up.getStepZ() + 3 * back.getStepZ());
 
+        renderBloodPool(poseStack, buffer);
+        bloodStreams.render(poseStack, buffer, totalTick);
+        poseStack.translate(0.5 * up.getStepX(), 0.5 * up.getStepY(), 0.5 * up.getStepZ());
         renderBloodCube(poseStack, buffer, totalTick);
 
         renderRings(up.getAxis(), totalTick, poseStack, buffer);
+        if (!Integer.valueOf(player.tickCount).equals(particleTicks.put(machine, player.tickCount))) {
+            var random = machine.getLevel().random;
+            for (int i = 0; i < 2; i++) {
+                double angle = random.nextDouble() * Math.PI * 2;
+                double height = random.nextDouble() * 2 - 1;
+                double radius = Math.sqrt(1 - height * height) * 2.2;
+                machine.getLevel().addParticle(new DustParticleOptions(new Vector3f(0.65f, 0.025f, 0.07f), 0.7f),
+                        machine.getBlockPos().getX() + 0.5 + 3.5 * up.getStepX() + 3 * back.getStepX() +
+                                Math.cos(angle) * radius,
+                        machine.getBlockPos().getY() + 0.5 + 3.5 * up.getStepY() + 3 * back.getStepY() + height * 2.2,
+                        machine.getBlockPos().getZ() + 0.5 + 3.5 * up.getStepZ() + 3 * back.getStepZ() +
+                                Math.sin(angle) * radius,
+                        0, 0.015, 0);
+            }
+        }
 
         poseStack.popPose();
     }
 
     @OnlyIn(Dist.CLIENT)
-    public void renderBloodCube(PoseStack poseStack, MultiBufferSource bufferSource, float totalTick) {
+    private void renderBloodPool(PoseStack poseStack, MultiBufferSource buffer) {
+        VitaeFluidRender.renderPool(poseStack, buffer, new Vec3(0, -3.58, 0), 2);
+    }
+
+    @OnlyIn(Dist.CLIENT)
+    public void renderBloodCube(PoseStack poseStack, MultiBufferSource bufferSource, double totalTick) {
         poseStack.pushPose();
         // rotate around center
         Quaternionf rot = new Quaternionf()
-                .rotateXYZ(Mth.sin(totalTick / 20),
-                        Mth.sin(totalTick / 30),
-                        Mth.cos(Mth.HALF_PI + totalTick / 60))
+                .rotateXYZ((float) (totalTick / 80 % (Math.PI * 2)),
+                        (float) (totalTick / 60 % (Math.PI * 2)),
+                        (float) (totalTick / 120 % (Math.PI * 2)))
                 .rotateXYZ(55f * Mth.DEG_TO_RAD, 30f * Mth.DEG_TO_RAD, 0);
         poseStack.mulPose(rot);
 
@@ -166,18 +178,15 @@ public class HemophagicTransfuserRender extends
     }
 
     @OnlyIn(Dist.CLIENT)
-    private void renderRings(Direction.Axis upAxis, float totalTick, PoseStack poseStack, MultiBufferSource buffer) {
+    private void renderRings(Direction.Axis upAxis, double totalTick, PoseStack poseStack, MultiBufferSource buffer) {
         VertexConsumer consumer = buffer.getBuffer(GTRenderTypes.lightRing());
 
-        float xRot = totalTick / 20;
-        float zRot = Mth.HALF_PI + totalTick / 60;
-        float yRot = totalTick / 30;
-        float sinX = Mth.sin(xRot), cosX = Mth.cos(xRot);
-        float sinY = Mth.sin(yRot), cosY = Mth.cos(yRot);
-        float sinZ = Mth.sin(zRot), cosZ = Mth.cos(zRot);
+        float xRot = (float) (totalTick / 80 % (Math.PI * 2));
+        float zRot = (float) (totalTick / 60 % (Math.PI * 2));
+        float yRot = (float) (totalTick / 100 % (Math.PI * 2));
 
         poseStack.pushPose();
-        poseStack.mulPose(new Quaternionf().rotateXYZ(sinX, cosY, sinZ));
+        poseStack.mulPose(new Quaternionf().rotateXYZ(xRot, yRot, zRot));
         RenderBufferHelper.renderRing(poseStack, consumer,
                 0, 0, 0,
                 2f, 0.1F, 10, 36,
@@ -185,7 +194,7 @@ public class HemophagicTransfuserRender extends
         poseStack.popPose();
 
         poseStack.pushPose();
-        poseStack.mulPose(new Quaternionf().rotateXYZ(cosX, sinY, sinZ));
+        poseStack.mulPose(new Quaternionf().rotateXYZ(-xRot, yRot + Mth.HALF_PI, -zRot));
         consumer = buffer.getBuffer(GTRenderTypes.lightRing());
         RenderBufferHelper.renderRing(poseStack, consumer,
                 0, 0, 0,
@@ -194,7 +203,7 @@ public class HemophagicTransfuserRender extends
         poseStack.popPose();
 
         poseStack.pushPose();
-        poseStack.mulPose(new Quaternionf().rotateZ(cosZ));
+        poseStack.mulPose(new Quaternionf().rotateXYZ(Mth.HALF_PI, yRot, zRot));
         consumer = buffer.getBuffer(GTRenderTypes.lightRing());
         RenderBufferHelper.renderRing(poseStack, consumer,
                 0, 0, 0,
