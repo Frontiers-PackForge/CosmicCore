@@ -155,6 +155,9 @@ public class RecipeMakerBehavior implements IItemUIHolder {
         final String[] bloomwyrmChargeInput = { "" };
         final String[] bloomwyrmChargeOutput = { "" };
         final String[] bloomwyrmMaxParallel = { "" };
+        final int[] pylonAltarTier = { 4 };
+        final int[] pylonAnimaInput = { 0 };
+        final int[] pylonSpiritusInput = { 0 };
         final FoodState food = new FoodState();
 
         State() {
@@ -415,6 +418,25 @@ public class RecipeMakerBehavior implements IItemUIHolder {
                         strField(sm, "wyrm_parallel", () -> state.bloomwyrmMaxParallel[0],
                                 v -> state.bloomwyrmMaxParallel[0] = v)));
             }
+        }
+
+        if (type == CosmicRecipeTypes.IMBUMENT_PYLON) {
+            content.child(new TextWidget<>(Text.lang("block.cosmiccore.imbument_pylon")).height(9));
+            content.child(fieldRow(Text.lang("cosmiccore.recipemaker.pylon.altar"), 86,
+                    new TextFieldWidget().setNumbers(4, 6)
+                            .value(intSync(sm, "pylon_altar", () -> state.pylonAltarTier[0],
+                                    v -> state.pylonAltarTier[0] = v))
+                            .expanded().height(12)));
+            content.child(fieldRow(Text.lang("cosmiccore.recipemaker.pylon.anima"), 86,
+                    new TextFieldWidget().setNumbers(0, Integer.MAX_VALUE)
+                            .value(intSync(sm, "pylon_anima", () -> state.pylonAnimaInput[0],
+                                    v -> state.pylonAnimaInput[0] = v))
+                            .expanded().height(12)));
+            content.child(fieldRow(Text.lang("cosmiccore.recipemaker.pylon.spiritus"), 86,
+                    new TextFieldWidget().setNumbers(0, Integer.MAX_VALUE)
+                            .value(intSync(sm, "pylon_spiritus", () -> state.pylonSpiritusInput[0],
+                                    v -> state.pylonSpiritusInput[0] = v))
+                            .expanded().height(12)));
         }
 
         control.setExporter(() -> buildGtScript(type, state, player));
@@ -689,6 +711,15 @@ public class RecipeMakerBehavior implements IItemUIHolder {
                 addBloomwyrmData(draft, "maxCampusParallel", state.bloomwyrmMaxParallel[0]);
             }
         }
+        if (type == CosmicRecipeTypes.IMBUMENT_PYLON) {
+            draft.extraLines.add(".altarTier(" + state.pylonAltarTier[0] + ")");
+            if (state.pylonAnimaInput[0] > 0) {
+                draft.extraLines.add(".animaInput(" + state.pylonAnimaInput[0] + ")");
+            }
+            if (state.pylonSpiritusInput[0] > 0) {
+                draft.extraLines.add(".spiritusInput(" + state.pylonSpiritusInput[0] + ")");
+            }
+        }
         return KubeJsRecipeExporter.export(player, draft, state.recipeId[0]);
     }
 
@@ -804,8 +835,12 @@ public class RecipeMakerBehavior implements IItemUIHolder {
     }
 
     private static Flow fieldRow(String label, int labelWidth, Widget<?> widget) {
+        return fieldRow(Text.str(label), labelWidth, widget);
+    }
+
+    private static Flow fieldRow(Component label, int labelWidth, Widget<?> widget) {
         return Flow.row().coverChildrenHeight().widthRel(1f).childPadding(2)
-                .child(new TextWidget<>(Text.str(label)).width(labelWidth))
+                .child(new TextWidget<>(label).width(labelWidth))
                 .child(widget);
     }
 
