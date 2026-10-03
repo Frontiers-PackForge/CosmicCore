@@ -278,6 +278,8 @@
     "gtfix.ae2.MEPatternBufferIngredientMatchingFixMixin",
     "gtfix.ae2.MEPatternBufferTerminalInventoryMixin",
     "gtfix.RecipeAmperageOverclockFixMixin",
+    "gtfix.TurbineImmortalityMixin",
+    "gtfix.RotorHolderNoWearMixin",
     "gtfix.AlloyBlastRecipeProducerMoltenOutputMixin",
     "gtfix.BlackstoneMaceratorRecipeFixMixin",
     "gtfix.BlackstoneOreIntegrationFixMixin",

@@ -16,9 +16,7 @@ import com.gregtechceu.gtceu.common.machine.multiblock.generator.LargeTurbineMac
 import com.gregtechceu.gtceu.common.machine.multiblock.part.RotorHolderPartMachine;
 import com.gregtechceu.gtceu.utils.FormattingUtil;
 
-import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.Style;
 
 import lombok.Getter;
 import org.jetbrains.annotations.NotNull;
@@ -28,8 +26,6 @@ import java.util.List;
 
 public class CosmicLargeTurbineMachine extends WorkableElectricMultiblockMachine
                                        implements ITieredMachine {
-
-    public static final int MIN_DURABILITY_TO_WARN = 10;
 
     private final long BASE_EU_OUTPUT;
     @Getter
@@ -107,14 +103,6 @@ public class CosmicLargeTurbineMachine extends WorkableElectricMultiblockMachine
                 recipeLogic.getLastRecipe().getOutputEUt().voltage() : 0;
     }
 
-    public int getRotorDurabilityPercent() {
-        var rotorHolder = getRotorHolder();
-        if (rotorHolder != null && rotorHolder.hasRotor()) {
-            return rotorHolder.getRotorDurabilityPercent();
-        }
-        return -1;
-    }
-
     //////////////////////////////////////
     // ****** Recipe Logic *******//
     //////////////////////////////////////
@@ -186,13 +174,6 @@ public class CosmicLargeTurbineMachine extends WorkableElectricMultiblockMachine
                             FormattingUtil.formatNumbers(maxProduction)));
                 }
 
-                int rotorDurability = rotorHolder.getRotorDurabilityPercent();
-                if (rotorDurability > MIN_DURABILITY_TO_WARN) {
-                    textList.add(Component.translatable("gtceu.multiblock.turbine.rotor_durability", rotorDurability));
-                } else {
-                    textList.add(Component.translatable("gtceu.multiblock.turbine.rotor_durability", rotorDurability)
-                            .setStyle(Style.EMPTY.withColor(ChatFormatting.RED)));
-                }
             }
         }
     }
