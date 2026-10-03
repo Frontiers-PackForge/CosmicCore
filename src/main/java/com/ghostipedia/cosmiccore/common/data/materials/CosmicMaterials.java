@@ -530,7 +530,7 @@ public class CosmicMaterials {
                 .color(0xffb545).secondaryColor(0xe13923).iconSet(MaterialIconSet.METALLIC)
                 .flags(GENERATE_BOLT_SCREW, GENERATE_ROUND, GENERATE_GEAR, GENERATE_SMALL_GEAR, GENERATE_RING,
                         GENERATE_FRAME, GENERATE_SPRING, GENERATE_SPRING_SMALL, GENERATE_FINE_WIRE, GENERATE_DENSE)
-                .components(Gold, 1, Redstone, 2, Glowstone, 2)
+                .components(Aluminium, 1, Redstone, 2, Glowstone, 2)
                 .blastTemp(1700, BlastProperty.GasTier.LOW, GTValues.VA[GTValues.HV], 1200)
                 .buildAndRegister();
 

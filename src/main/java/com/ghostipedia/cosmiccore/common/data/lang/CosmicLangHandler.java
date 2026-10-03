@@ -2672,6 +2672,10 @@ public class CosmicLangHandler extends LangHandler {
         provider.add("gui.cosmiccore.rate_calculator.reset", "§cReset");
         provider.add("gui.cosmiccore.rate_calculator.hold", "§6Hold");
         provider.add("gui.cosmiccore.rate_calculator.live", "§aLive");
+        provider.add("gui.cosmiccore.rate_calculator.export", "§bExport");
+        provider.add("gui.cosmiccore.rate_calculator.export_tooltip",
+                "§bCopy the held snapshot as analysis JSON. §7Requires Hold and Dev Visor.");
+        provider.add("gui.cosmiccore.rate_calculator.exported", "§aCopied held Rate Calculator snapshot JSON.");
         provider.add("gui.cosmiccore.rate_calculator.held_snapshot", "§eSnapshot sim for§7: §f%s");
         provider.add("gui.cosmiccore.rate_calculator.hold_tooltip",
                 "§bToggle between snapshot rates or live rates. §7Measurement continues while snapshotted.");

@@ -10,7 +10,6 @@ import com.ghostipedia.cosmiccore.common.machine.multiblock.multi.BloomwyrmSyste
 import com.ghostipedia.cosmiccore.common.machine.multiblock.multi.HephaestusCauldron;
 import com.ghostipedia.cosmiccore.common.machine.multiblock.multi.IndustrialFlotationPlant;
 import com.ghostipedia.cosmiccore.common.machine.multiblock.multi.IndustrialOreSorter;
-import com.ghostipedia.cosmiccore.common.machine.multiblock.multi.LARVA;
 import com.ghostipedia.cosmiccore.common.machine.multiblock.multi.Powderizer;
 import com.ghostipedia.cosmiccore.common.machine.multiblock.multi.logic.LarvaMachine;
 import com.ghostipedia.cosmiccore.common.vitae.CultivationProfileManager;
@@ -101,7 +100,7 @@ public class CosmicCoreEMIPlugin implements EmiPlugin {
                 .forEach(profile -> registry.addRecipe(new BiomeldVivariumEmiRecipe(profile)));
 
         registry.addCategory(ASTEROID_CATEGORY);
-        registry.addWorkstation(ASTEROID_CATEGORY, EmiStack.of(LARVA.LARVA.getBlock()));
+        // registry.addWorkstation(ASTEROID_CATEGORY, EmiStack.of(LARVA.LARVA.getBlock()));
 
         addAsteroidRecipe(registry, "carbonic_asteroid", CosmicItems.TUNGSTENSTEEL_NANOLATTICE_SPOOL.asStack(),
                 List.of(EmiStack.of(CosmicItems.CARBON_ASTEROID.asStack())), CosmicItems.CARBON_ASTEROID.asStack());

@@ -1,15 +1,20 @@
 package com.ghostipedia.cosmiccore.client.tooltip;
 
+import com.ghostipedia.cosmiccore.mixin.client.tooltip.BakedGlyphAccessor;
+import com.ghostipedia.cosmiccore.mixin.client.tooltip.FontAccessor;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.tooltip.ClientTooltipComponent;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.network.chat.Style;
 
 public class FoodTooltipClientComponent implements ClientTooltipComponent {
 
     private static final int LINE_H = 13;
     private static final int ICON_COL = 13;
+    private static final int ICON_SIZE = 11;
     private static final int VALUE_GAP = 12;
     private static final float ICON_SCALE = 1.3f;
     private static final int LABEL_COLOR = 0xFF8F86AD;
@@ -53,16 +58,57 @@ public class FoodTooltipClientComponent implements ClientTooltipComponent {
 
     private static void renderIcon(FoodTooltipComponent.Icon icon, Font font, GuiGraphics guiGraphics, int x, int y) {
         if (icon instanceof FoodTooltipComponent.Icon.Glyph glyph) {
-            float gy = y + (LINE_H - font.lineHeight * ICON_SCALE) / 2f;
+            GlyphBounds bounds = glyphBounds(font, glyph.ch());
+            float scale = Math.min(ICON_SCALE,
+                    Math.min(ICON_SIZE / bounds.width(), ICON_SIZE / bounds.height()));
+            float gx = x + (ICON_COL - bounds.width() * scale) / 2f - bounds.left() * scale;
+            float gy = y + (LINE_H - bounds.height() * scale) / 2f - bounds.up() * scale;
             var pose = guiGraphics.pose();
             pose.pushPose();
-            pose.translate(x, gy, 0);
-            pose.scale(ICON_SCALE, ICON_SCALE, 1f);
+            pose.translate(gx, gy, 0);
+            pose.scale(scale, scale, 1f);
             guiGraphics.drawString(font, glyph.ch(), 0, 0, glyph.color(), false);
             pose.popPose();
         } else if (icon instanceof FoodTooltipComponent.Icon.Effect effect) {
             TextureAtlasSprite sprite = Minecraft.getInstance().getMobEffectTextures().get(effect.effect());
-            guiGraphics.blit(x, y + (LINE_H - 10) / 2, 0, 10, 10, sprite);
+            guiGraphics.blit(x + 1, y + 1, 0, ICON_SIZE, ICON_SIZE, sprite);
+        }
+    }
+
+    private static GlyphBounds glyphBounds(Font font, String text) {
+        FontAccessor fontAccessor = (FontAccessor) font;
+        var fontSet = fontAccessor.cosmiccore$invokeGetFontSet(Style.DEFAULT_FONT);
+        boolean filterFishyGlyphs = fontAccessor.cosmiccore$getFilterFishyGlyphs();
+        float cursor = 0;
+        float left = Float.POSITIVE_INFINITY;
+        float right = Float.NEGATIVE_INFINITY;
+        float up = Float.POSITIVE_INFINITY;
+        float down = Float.NEGATIVE_INFINITY;
+        var codePoints = text.codePoints().iterator();
+        while (codePoints.hasNext()) {
+            int codePoint = codePoints.nextInt();
+            BakedGlyphAccessor glyph = (BakedGlyphAccessor) fontSet.getGlyph(codePoint);
+            left = Math.min(left, cursor + glyph.cosmiccore$getLeft());
+            right = Math.max(right, cursor + glyph.cosmiccore$getRight());
+            up = Math.min(up, glyph.cosmiccore$getUp());
+            down = Math.max(down, glyph.cosmiccore$getDown());
+            cursor += fontSet.getGlyphInfo(codePoint, filterFishyGlyphs).getAdvance();
+        }
+        if (!Float.isFinite(left) || !Float.isFinite(right) || !Float.isFinite(up) || !Float.isFinite(down) ||
+                right <= left || down <= up) {
+            return new GlyphBounds(0, Math.max(1, font.width(text)), 0, Math.max(1, font.lineHeight));
+        }
+        return new GlyphBounds(left, right, up, down);
+    }
+
+    private record GlyphBounds(float left, float right, float up, float down) {
+
+        private float width() {
+            return right - left;
+        }
+
+        private float height() {
+            return down - up;
         }
     }
 }

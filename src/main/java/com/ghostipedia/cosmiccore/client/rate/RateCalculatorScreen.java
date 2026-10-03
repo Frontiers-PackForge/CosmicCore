@@ -1,7 +1,11 @@
 package com.ghostipedia.cosmiccore.client.rate;
 
+import com.ghostipedia.cosmiccore.client.recipemaker.RecipeMakerClipboard;
+import com.ghostipedia.cosmiccore.common.config.CosmicCoreConfig;
 import com.ghostipedia.cosmiccore.common.network.CCoreNetwork;
 import com.ghostipedia.cosmiccore.common.network.packet.RateCalculatorPackets;
+import com.ghostipedia.nebulaeae2.client.locating.ProviderHighlightClient;
+import com.ghostipedia.nebulaeae2.locating.ProviderLocations;
 
 import com.gregtechceu.gtceu.api.GTValues;
 import com.gregtechceu.gtceu.utils.FormattingUtil;
@@ -18,10 +22,15 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
+import net.minecraft.nbt.LongTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.FormattedCharSequence;
+import net.minecraft.world.inventory.InventoryMenu;
 import net.minecraft.world.item.ItemStack;
+import net.neoforged.neoforge.client.extensions.common.IClientFluidTypeExtensions;
+import net.neoforged.neoforge.fluids.FluidStack;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
@@ -42,6 +51,7 @@ public final class RateCalculatorScreen extends Screen {
     private final UUID tool;
     private final RateCalculatorSmoothing smoothing = new RateCalculatorSmoothing();
     private final List<Button> sortButtons = new ArrayList<>();
+    private Button exportButton;
     private CompoundTag report;
     private CompoundTag latestReport;
     private boolean held;
@@ -51,7 +61,7 @@ public final class RateCalculatorScreen extends Screen {
     private boolean reverseSort;
     private long nextRefresh;
     private boolean closed;
-    private List<net.minecraft.util.FormattedCharSequence> hoverTooltip;
+    private List<FormattedCharSequence> hoverTooltip;
 
     private RateCalculatorScreen(UUID tool, CompoundTag report) {
         super(Component.translatable("item.cosmiccore.rate_calculator"));
@@ -101,10 +111,21 @@ public final class RateCalculatorScreen extends Screen {
                     held = !held;
                     if (!held) showLatestReport();
                     button.setMessage(holdLabel());
+                    if (exportButton != null) exportButton.active = held;
                 });
         holdButton.setHeight(12);
         holdButton.setTooltip(Tooltip.create(Component.translatable("gui.cosmiccore.rate_calculator.hold_tooltip")));
         addRenderableWidget(holdButton);
+        exportButton = null;
+        if (CosmicCoreConfig.devVisor()) {
+            exportButton = RateCalculatorButton.create(left + panelWidth() / 2 - 5, top + 100, 57,
+                    Component.translatable("gui.cosmiccore.rate_calculator.export"), button -> exportSnapshot());
+            exportButton.setHeight(12);
+            exportButton.active = held;
+            exportButton.setTooltip(Tooltip.create(
+                    Component.translatable("gui.cosmiccore.rate_calculator.export_tooltip")));
+            addRenderableWidget(exportButton);
+        }
         sortButtons.clear();
         int sortY = top + 100;
         for (int i = 0; i < SORT_MODES.length; i++) {
@@ -128,6 +149,14 @@ public final class RateCalculatorScreen extends Screen {
 
     private Component holdLabel() {
         return Component.translatable("gui.cosmiccore.rate_calculator." + (held ? "live" : "hold"));
+    }
+
+    private void exportSnapshot() {
+        if (!RateCalculatorSnapshotExport.isAvailable(CosmicCoreConfig.devVisor(), held)) return;
+        RecipeMakerClipboard.copy(RateCalculatorSnapshotExport.toJson(report));
+        if (minecraft != null && minecraft.player != null)
+            minecraft.player.displayClientMessage(
+                    Component.translatable("gui.cosmiccore.rate_calculator.exported"), true);
     }
 
     @Override
@@ -347,8 +376,8 @@ public final class RateCalculatorScreen extends Screen {
                 .getString();
     }
 
-    private List<net.minecraft.util.FormattedCharSequence> contributorTooltip(CompoundTag contributor) {
-        List<net.minecraft.util.FormattedCharSequence> tooltip = new ArrayList<>();
+    private List<FormattedCharSequence> contributorTooltip(CompoundTag contributor) {
+        List<FormattedCharSequence> tooltip = new ArrayList<>();
         tooltip.add(Component.literal(machineName(contributor)).getVisualOrderText());
         tooltip.add(Component.translatable("gui.cosmiccore.rate_calculator.recipe", contributor.getString("recipe"))
                 .getVisualOrderText());
@@ -384,11 +413,11 @@ public final class RateCalculatorScreen extends Screen {
         if (!minecraft.level.dimension().location().equals(dimension)) return false;
         List<BlockPos> positions = new ArrayList<>();
         for (Tag tag : contributor.getList("positions", Tag.TAG_LONG))
-            positions.add(BlockPos.of(((net.minecraft.nbt.LongTag) tag).getAsLong()));
+            positions.add(BlockPos.of(((LongTag) tag).getAsLong()));
         if (positions.isEmpty()) return false;
         onClose();
-        com.ghostipedia.nebulaeae2.client.locating.ProviderHighlightClient.receive(
-                new com.ghostipedia.nebulaeae2.locating.ProviderLocations(
+        ProviderHighlightClient.receive(
+                new ProviderLocations(
                         minecraft.player.containerMenu.containerId, dimension, positions));
         return true;
     }
@@ -587,13 +616,13 @@ public final class RateCalculatorScreen extends Screen {
             return;
         }
         if (minecraft == null || minecraft.level == null || !row.getString("kind").equals("fluid")) return;
-        var fluid = net.neoforged.neoforge.fluids.FluidStack.parseOptional(minecraft.level.registryAccess(),
+        var fluid = FluidStack.parseOptional(minecraft.level.registryAccess(),
                 row.getCompound("icon"));
         if (fluid.isEmpty()) return;
-        var extension = net.neoforged.neoforge.client.extensions.common.IClientFluidTypeExtensions.of(fluid.getFluid());
+        var extension = IClientFluidTypeExtensions.of(fluid.getFluid());
         var texture = extension.getStillTexture(fluid);
         if (texture == null) return;
-        var sprite = minecraft.getTextureAtlas(net.minecraft.world.inventory.InventoryMenu.BLOCK_ATLAS).apply(texture);
+        var sprite = minecraft.getTextureAtlas(InventoryMenu.BLOCK_ATLAS).apply(texture);
         int color = extension.getTintColor(fluid);
         graphics.setColor(((color >> 16) & 255) / 255F, ((color >> 8) & 255) / 255F, (color & 255) / 255F,
                 ((color >>> 24) & 255) / 255F);

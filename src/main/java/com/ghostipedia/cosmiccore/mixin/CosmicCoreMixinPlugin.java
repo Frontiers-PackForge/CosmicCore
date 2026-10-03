@@ -34,6 +34,7 @@ public class CosmicCoreMixinPlugin implements IMixinConfigPlugin {
     private static final String AERONAUTICS_MARKER = "dev/eriksonn/aeronautics/content/blocks/hot_air/balloon/effect/ClientBalloonEffectRenderer.class";
     private static final String QUALITY_FOOD_MARKER = "de/cadentem/quality_food/util/QualityUtils.class";
     private static final String ULTIMINE_CROP_MARKER = "dev/ftb/mods/ftbultimine/crops/VanillaCropLikeHandler.class";
+    private static final String IRON_FURNACES_MARKER = "ironfurnaces/tileentity/furnaces/BlockIronFurnaceTileBase.class";
     private static final List<String> EFFORTLESS_BUILDING_BASELINE_CLASSES = List.of(
             "neoforge/nl/requios/effortlessbuilding/buildpipeline/BuildPipelineClient.class",
             "neoforge/nl/requios/effortlessbuilding/render/BlockPreviewRenderer.class",
@@ -74,6 +75,9 @@ public class CosmicCoreMixinPlugin implements IMixinConfigPlugin {
                 Map.entry(".terrablender.", "terrablender/worldgen/surface/NamespacedSurfaceRuleSource.class"),
                 Map.entry(".biomesoplenty.", "biomesoplenty/entity/ChestBoatBOP.class"),
                 Map.entry(".createultimine.", "io/github/chaosunity/createultimine/WrenchUse.class"),
+                Map.entry(".sophisticatedbackpacks.",
+                        "net/p3pp3rf1y/sophisticatedbackpacks/upgrades/toolswapper/ToolSwapperUpgradeWrapper.class"),
+                Map.entry(".mousetweaks.", "yalter/mousetweaks/Main.class"),
                 Map.entry(".drippy.",
                         "de/keksuccino/drippyloadingscreen/mixin/mixins/common/client/MixinLoadingOverlay.class"),
                 Map.entry(".undergarden.", "quek/undergarden/event/UthericInfectionEvents.class"));
@@ -93,6 +97,9 @@ public class CosmicCoreMixinPlugin implements IMixinConfigPlugin {
                 ".qualityfoodfarmersdelight.",
                 loader.getResource(QUALITY_FOOD_MARKER) != null &&
                         loader.getResource("vectorwing/farmersdelight/common/block/MushroomColonyBlock.class") != null);
+        GATES.put(
+                ".qualityfoodironfurnaces.",
+                loader.getResource(QUALITY_FOOD_MARKER) != null && loader.getResource(IRON_FURNACES_MARKER) != null);
         GATES.put(".ebfix.", matchesEffortlessBuildingBaseline(loader));
     }
 

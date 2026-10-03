@@ -1,6 +1,7 @@
 package com.ghostipedia.cosmiccore.common.compat.effortlessbuilding;
 
 import com.ghostipedia.cosmiccore.CosmicCore;
+import com.ghostipedia.cosmiccore.common.compat.qualityfood.QualityFoodCompat;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
@@ -81,6 +82,7 @@ public final class EffortlessBuildingPlacementHandler {
                     }
                     blockChanged = true;
                     transferBlockItemData(level, player, pos, placementItem, blockItem);
+                    QualityFoodCompat.applyPlacedBlockQuality(level, pos, placementItem);
                 } else {
                     blockChanged = true;
                     if (!EffortlessBuildingAE2CableCompat.place(

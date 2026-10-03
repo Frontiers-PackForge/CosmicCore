@@ -65,6 +65,6 @@ public class EmberHatchPartMachine extends TieredIOPartMachine implements IMuiMa
     }
 
     public static double getMaxConsumption(int tier) {
-        return 500 * Math.pow(4, tier);
+        return getMaxCapacity(tier);
     }
 }
