@@ -138,6 +138,7 @@ final class RateCalculatorReport {
                 !validBaseline || machine.getLong("observedOutUncertainty") !=
                         baseline.getLong("observedOutUncertainty"),
                 machine.getList("configuredOut", Tag.TAG_COMPOUND));
+        result.values().forEach(rate -> rate.measurementElapsed = elapsed);
         return result;
     }
 
@@ -180,6 +181,8 @@ final class RateCalculatorReport {
             MachineRate rate = result.computeIfAbsent(Key.of(resource), ignored -> new MachineRate(resource));
             boolean learning = resource.getBoolean("learning");
             if (elapsed > 0) {
+                rate.recordedIn = add(rate.recordedIn, resource.getLong("in"));
+                rate.recordedOut = add(rate.recordedOut, resource.getLong("out"));
                 rate.observedIn = resource.getLong("in") / (double) elapsed;
                 rate.observedOut = resource.getLong("out") / (double) elapsed;
                 if (resource.getBoolean("cycleRateAvailable")) {
@@ -201,6 +204,7 @@ final class RateCalculatorReport {
             rate.reason = reason;
         }
         for (MachineRate rate : result.values()) {
+            rate.measurementElapsed = elapsed;
             rate.inputLearning |= elapsed == 0 || rate.configuredInRelevant && !rate.observedInAvailable;
             rate.outputLearning |= elapsed == 0 || rate.configuredOutRelevant && !rate.observedOutAvailable;
             rate.observedInKnown = mature && !inputPartial && !rate.inputLearning;
@@ -255,8 +259,15 @@ final class RateCalculatorReport {
             double delta = Math.max(0L,
                     subtract(currentAmounts.getOrDefault(key, 0L), baselineAmounts.getOrDefault(key, 0L))) /
                     (double) elapsed;
-            if (input) rate.observedIn = delta;
-            else rate.observedOut = delta;
+            long recorded = Math.max(0L,
+                    subtract(currentAmounts.getOrDefault(key, 0L), baselineAmounts.getOrDefault(key, 0L)));
+            if (input) {
+                rate.observedIn = delta;
+                rate.recordedIn = recorded;
+            } else {
+                rate.observedOut = delta;
+                rate.recordedOut = recorded;
+            }
             if (input) rate.observedInAvailable = true;
             else rate.observedOutAvailable = true;
         }
@@ -325,6 +336,8 @@ final class RateCalculatorReport {
         private boolean recordedCapacity;
         private String reason = "unknown";
         private double configuredIn, configuredOut, observedIn, observedOut;
+        private long recordedIn, recordedOut;
+        private long measurementElapsed;
 
         private MachineRate(CompoundTag resource) {
             key = Key.of(resource);
@@ -339,6 +352,7 @@ final class RateCalculatorReport {
                 unresolved;
         private boolean observedInAvailable, observedOutAvailable;
         private double configuredIn, configuredOut, observedIn, observedOut;
+        private long recordedIn, recordedOut;
 
         private Row(Key key) {
             this.key = key;
@@ -356,6 +370,8 @@ final class RateCalculatorReport {
             configuredOut += rate.configuredOut;
             observedIn += rate.observedIn;
             observedOut += rate.observedOut;
+            recordedIn = RateCalculatorReport.add(recordedIn, rate.recordedIn);
+            recordedOut = RateCalculatorReport.add(recordedOut, rate.recordedOut);
             CompoundTag contributor = new CompoundTag();
             contributor.putLong("pos", machine.getLong("pos"));
             ListTag positions = new ListTag();
@@ -372,6 +388,8 @@ final class RateCalculatorReport {
             contributor.putDouble("observedOut", rate.observedOut);
             contributor.putDouble("configuredNet", rate.configuredOut - rate.configuredIn);
             contributor.putDouble("observedNet", rate.observedOut - rate.observedIn);
+            contributor.putLong("recordedIn", rate.recordedIn);
+            contributor.putLong("recordedOut", rate.recordedOut);
             contributor.putBoolean("configuredKnown", rate.configuredKnown && !rate.unresolved);
             contributor.putBoolean("expectedKnown", rate.expectedKnown);
             contributor.putBoolean("observedInKnown", rate.observedInKnown);
@@ -383,7 +401,7 @@ final class RateCalculatorReport {
             contributor.putBoolean("learning", rate.inputLearning || rate.outputLearning);
             contributor.putBoolean("recordedCapacity", rate.recordedCapacity);
             CompoundTag activity = machine.getCompound("activity");
-            contributor.putLong("activityElapsed", activity.getLong("elapsed"));
+            contributor.putLong("activityElapsed", rate.measurementElapsed);
             contributor.putLong("activityHorizon", activity.getLong("horizon"));
             contributor.putBoolean("activityFresh", activity.getBoolean("fresh"));
             long completed = 0;
@@ -419,6 +437,8 @@ final class RateCalculatorReport {
             tag.putDouble("observedOut", observedOut);
             tag.putDouble("configuredNet", configuredOut - configuredIn);
             tag.putDouble("observedNet", observedOut - observedIn);
+            tag.putLong("recordedIn", recordedIn);
+            tag.putLong("recordedOut", recordedOut);
             tag.putBoolean("unresolvedNet", unresolved);
             tag.putBoolean("learning", !observedInKnown || !observedOutKnown);
             ListTag orderedContributors = new ListTag();

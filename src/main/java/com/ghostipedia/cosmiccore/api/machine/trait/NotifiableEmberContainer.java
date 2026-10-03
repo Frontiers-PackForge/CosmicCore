@@ -27,27 +27,33 @@ public class NotifiableEmberContainer extends NotifiableRecipeHandlerTrait<Doubl
         @Override
         public void onContentsChanged() {
             super.onContentsChanged();
-            emberHatch.cachedEmber = getEmber();
-            emberHatch.cachedEmberCapacity = NotifiableEmberContainer.this.maxCapacity;
-            if (!emberHatch.isRemote()) {
-                emberHatch.getSyncDataHolder().markClientSyncFieldDirty("cachedEmber");
-                emberHatch.getSyncDataHolder().markClientSyncFieldDirty("cachedEmberCapacity");
-            }
-            notifyListeners();
-            NotifiableEmberContainer.this.notifyListeners();
         }
 
-        /*
-         * @Override
-         * public double getEmber() {
-         * return getTotalContentAmount();
-         * }
-         * 
-         * @Override
-         * public double addAmount(double value, boolean doAdd) {
-         * return super.addAmount(value, doAdd);
-         * }
-         */
+        @Override
+        public void setEmber(double value) {
+            super.setEmber(value);
+            NotifiableEmberContainer.this.syncCachedState();
+        }
+
+        @Override
+        public void setEmberCapacity(double value) {
+            super.setEmberCapacity(value);
+            NotifiableEmberContainer.this.syncCachedState();
+        }
+
+        @Override
+        public double addAmount(double value, boolean doAdd) {
+            double added = super.addAmount(value, doAdd);
+            if (doAdd) NotifiableEmberContainer.this.syncCachedState();
+            return added;
+        }
+
+        @Override
+        public double removeAmount(double value, boolean doRemove) {
+            double removed = super.removeAmount(value, doRemove);
+            if (doRemove) NotifiableEmberContainer.this.syncCachedState();
+            return removed;
+        }
     };
 
     private final IO handlerIO;
@@ -73,6 +79,16 @@ public class NotifiableEmberContainer extends NotifiableRecipeHandlerTrait<Doubl
         machine.attachTrait(this);
     }
 
+    private void syncCachedState() {
+        emberHatch.cachedEmber = capability.getEmber();
+        emberHatch.cachedEmberCapacity = capability.getEmberCapacity();
+        if (!emberHatch.isRemote()) {
+            emberHatch.getSyncDataHolder().markClientSyncFieldDirty("cachedEmber");
+            emberHatch.getSyncDataHolder().markClientSyncFieldDirty("cachedEmberCapacity");
+        }
+        notifyListeners();
+    }
+
     @Override
     public void onMachineLoad() {
         super.onMachineLoad();
@@ -89,19 +105,22 @@ public class NotifiableEmberContainer extends NotifiableRecipeHandlerTrait<Doubl
     @Override
     public List<Double> handleRecipeInner(IO io, GTRecipe recipe, List<Double> left, boolean simulate) {
         double before = capability.getEmber();
-        double ember = left.stream().reduce(0.0D, Double::sum);
+        double requested = left.stream().reduce(0.0D, Double::sum);
+        double transferable = 0;
         if (io == IO.IN) {
-            var canOutput = Math.min(maxConsumption, capability.getEmber());
-            if (!simulate) ember = capability.removeAmount(Math.min(canOutput, ember), true);
-            ember -= canOutput;
+            transferable = Math.min(maxConsumption, capability.getEmber());
+            if (!simulate) capability.removeAmount(Math.min(transferable, requested), true);
         } else if (io == IO.OUT) {
-            var canInput = maxCapacity - capability.getEmber();
-            if (canInput <= 0) return Collections.singletonList(ember);
-            if (!simulate) ember = capability.addAmount(Math.min(canInput, ember), true);
-            ember -= canInput;
+            transferable = Math.max(0, maxCapacity - capability.getEmber());
+            if (!simulate) capability.addAmount(Math.min(transferable, requested), true);
         }
         recordDelta(before, capability.getEmber(), simulate);
-        return ember <= 0 ? Collections.emptyList() : Collections.singletonList(ember);
+        double remainder = transferRemainder(requested, transferable);
+        return remainder <= 0 ? Collections.emptyList() : Collections.singletonList(remainder);
+    }
+
+    static double transferRemainder(double requested, double transferable) {
+        return requested - Math.min(requested, Math.max(0, transferable));
     }
 
     static void recordDelta(double before, double after, boolean simulate) {

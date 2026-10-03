@@ -15,15 +15,18 @@ import com.ghostipedia.cosmiccore.api.registries.CosmicRegistration;
 import com.ghostipedia.cosmiccore.common.ae2gt.CosmicStockingBusPartMachine;
 import com.ghostipedia.cosmiccore.common.ae2gt.CosmicStockingHatchPartMachine;
 import com.ghostipedia.cosmiccore.common.block.debug.CreativeThermiaContainerMachine;
+import com.ghostipedia.cosmiccore.common.compat.gtceu.FluidDrillingRegistration;
 import com.ghostipedia.cosmiccore.common.data.materials.CosmicMaterials;
 import com.ghostipedia.cosmiccore.common.machine.FlightDiffuserMachine;
 import com.ghostipedia.cosmiccore.common.machine.WirelessChargerMachine;
+import com.ghostipedia.cosmiccore.common.machine.multiblock.LeylineCompressorMachine;
 import com.ghostipedia.cosmiccore.common.machine.multiblock.multi.PowerCapacitorMachine;
 import com.ghostipedia.cosmiccore.common.machine.multiblock.multi.VacuumDistillationTower;
 import com.ghostipedia.cosmiccore.common.machine.multiblock.multi.WirelessDataBankMachine;
 import com.ghostipedia.cosmiccore.common.machine.multiblock.multi.logic.MEComputationComponentTier;
 import com.ghostipedia.cosmiccore.common.machine.multiblock.part.*;
 import com.ghostipedia.cosmiccore.common.machine.multiblock.tier.TieredMultiblockPatterns;
+import com.ghostipedia.cosmiccore.common.machine.part.LeylineMEHatch;
 import com.ghostipedia.cosmiccore.common.machine.part.WirelessDataSensor;
 import com.ghostipedia.cosmiccore.common.machine.transmission.PowerTowerMEHatch;
 import com.ghostipedia.cosmiccore.common.machine.transmission.PowerTowerMachine;
@@ -66,11 +69,11 @@ import com.gregtechceu.gtceu.common.machine.multiblock.electric.PowerSubstationM
 import com.gregtechceu.gtceu.common.machine.multiblock.part.EnergyHatchPartMachine;
 import com.gregtechceu.gtceu.common.machine.multiblock.part.FluidHatchPartMachine;
 import com.gregtechceu.gtceu.common.machine.multiblock.part.RotorHolderPartMachine;
-import com.gregtechceu.gtceu.common.machine.multiblock.primitive.PrimitiveWorkableMachine;
 import com.gregtechceu.gtceu.common.mui.GTGuiTheme;
 import com.gregtechceu.gtceu.common.mui.GTSingleblockMachinePanels;
 import com.gregtechceu.gtceu.data.lang.LangHandler;
 import com.gregtechceu.gtceu.utils.FormattingUtil;
+import com.gregtechceu.gtceu.utils.TagUtil;
 import com.gregtechceu.gtceu.utils.memoization.GTMemoizer;
 
 import net.minecraft.network.chat.Component;
@@ -116,17 +119,17 @@ public class CosmicMachines {
     private static final int[] VITAE_TIERS = tiersBetween(MV, ELECTRIC_TIERS[ELECTRIC_TIERS.length - 1]);
 
     public static final MachineDefinition LEYLINE_ME_HATCH = REGISTRATE
-            .machine("leyline_me_hatch", com.ghostipedia.cosmiccore.common.machine.part.LeylineMEHatch::new)
+            .machine("leyline_me_hatch", LeylineMEHatch::new)
             .langValue("ME Leyline Pattern Hatch").tier(MV).rotationState(RotationState.ALL)
-            .modelProperty(com.gregtechceu.gtceu.api.machine.property.GTMachineModelProperties.IS_FORMED, false)
+            .modelProperty(GTMachineModelProperties.IS_FORMED, false)
             .overlayTieredHullModel(GTCEu.id("block/machine/part/computation_data_hatch"))
             .register();
 
     public static final MultiblockMachineDefinition LEYLINE_COMPRESSOR = REGISTRATE
             .multiblock("leyline_compressor",
-                    com.ghostipedia.cosmiccore.common.machine.multiblock.LeylineCompressorMachine::new)
+                    LeylineCompressorMachine::new)
             .langValue("Leyline Compressor").rotationState(RotationState.NON_Y_AXIS)
-            .recipeType(com.ghostipedia.cosmiccore.gtbridge.CosmicRecipeTypes.LEYLINE_FABRICATION)
+            .recipeType(CosmicRecipeTypes.LEYLINE_FABRICATION)
             .appearanceBlock(LIGHTWEIGHT_DARK_STEEL_CASING)
             .pattern(definition -> MultiblockPatternBuilder.start(BACK, DOWN, LEFT)
                     .slice(" AA   AA ", " A     A ", " A     A ", "         ", "         ", "         ", "         ",
@@ -154,7 +157,7 @@ public class CosmicMachines {
                                     .setPreviewCount(1))
                             .or(abilities(PartAbility.MAINTENANCE).setExactLimit(1))
                             .or(blocks(LEYLINE_ME_HATCH.getBlock()).setExactLimit(1)))
-                    .where('C', blockTag(com.gregtechceu.gtceu.utils.TagUtil.createBlockTag("frames/dark_steel")))
+                    .where('C', blockTag(TagUtil.createBlockTag("frames/dark_steel")))
                     .where('D', blocks(SOMARUST_CASING.get()))
                     .where('E', frames(GTMaterials.StainlessSteel))
                     .where('F', controller(blocks(definition.getBlock())))
@@ -679,21 +682,21 @@ public class CosmicMachines {
     }
 
     // Enable If needed Inside of Dev
-    public static final MultiblockMachineDefinition SOUL_TESTER = REGISTRATE
-            .multiblock("soul_tester", PrimitiveWorkableMachine::new)
-            .rotationState(RotationState.NON_Y_AXIS)
-            .recipeType(CosmicRecipeTypes.SOUL_TESTER_RECIPES)
-            .appearanceBlock(GTBlocks.CASING_PRIMITIVE_BRICKS)
-            .pattern(definition -> MultiblockPatternBuilder
-                    .start(RelativeDirection.FRONT, RelativeDirection.UP, RelativeDirection.LEFT)
-                    .slice("S", "S", "C", "I", "I")
-                    .where('C', controller(blocks(definition.getBlock())))
-                    .where('S', abilities(CosmicPartAbility.IMPORT_SOUL).or(abilities(CosmicPartAbility.EXPORT_SOUL)))
-                    .where('I', abilities(PartAbility.EXPORT_ITEMS).or(abilities(PartAbility.IMPORT_ITEMS)))
-                    .build())
-            .workableCasingModel(GTCEu.id("block/casings/solid/machine_casing_inert_ptfe"),
-                    GTCEu.id("block/multiblock/coke_oven"))
-            .register();
+    // public static final MultiblockMachineDefinition SOUL_TESTER = REGISTRATE
+    // .multiblock("soul_tester", PrimitiveWorkableMachine::new)
+    // .rotationState(RotationState.NON_Y_AXIS)
+    // .recipeType(CosmicRecipeTypes.SOUL_TESTER_RECIPES)
+    // .appearanceBlock(GTBlocks.CASING_PRIMITIVE_BRICKS)
+    // .pattern(definition -> MultiblockPatternBuilder
+    // .start(RelativeDirection.FRONT, RelativeDirection.UP, RelativeDirection.LEFT)
+    // .slice("S", "S", "C", "I", "I")
+    // .where('C', controller(blocks(definition.getBlock())))
+    // .where('S', abilities(CosmicPartAbility.IMPORT_SOUL).or(abilities(CosmicPartAbility.EXPORT_SOUL)))
+    // .where('I', abilities(PartAbility.EXPORT_ITEMS).or(abilities(PartAbility.IMPORT_ITEMS)))
+    // .build())
+    // .workableCasingModel(GTCEu.id("block/casings/solid/machine_casing_inert_ptfe"),
+    // GTCEu.id("block/multiblock/coke_oven"))
+    // .register();
 
     /*
      * public static final MultiblockMachineDefinition EMBER_TESTER = REGISTRATE.multiblock("ember_tester",
@@ -713,26 +716,27 @@ public class CosmicMachines {
      * .register();
      */
 
-    public static final MultiblockMachineDefinition LARGE_COMBUSTION_ENGINE = registerCosmicLargeCombustionEngine(
-            "large_combustion_engine_cc", EV,
-            CASING_TITANIUM_STABLE, CASING_TITANIUM_GEARBOX, CASING_ENGINE_INTAKE,
-            GTCEu.id("block/casings/solid/machine_casing_stable_titanium"),
-            GTCEu.id("block/multiblock/generator/large_combustion_engine"));
-    public static final MultiblockMachineDefinition EXTREME_COMBUSTION_ENGINE = registerCosmicLargeCombustionEngine(
-            "extreme_combustion_engine_cc", IV,
-            CASING_TUNGSTENSTEEL_ROBUST, CASING_TUNGSTENSTEEL_GEARBOX, CASING_EXTREME_ENGINE_INTAKE,
-            GTCEu.id("block/casings/solid/machine_casing_robust_tungstensteel"),
-            GTCEu.id("block/multiblock/generator/extreme_combustion_engine"));
-    public static final MultiblockMachineDefinition LUDICROUS_COMBUSTION_ENGINE = registerCosmicLargeCombustionEngine(
-            "ludicrous_combustion_engine_cc", LuV,
-            GILDED_PTHANTERUM_CASING, GEARBOX_PTHANTERUM, CASING_INTAKE_LUDICRIOUS,
-            CosmicCore.id("block/casings/solid/gilded_pthanterum_casing"),
-            GTCEu.id("block/multiblock/generator/extreme_combustion_engine"));
-    public static final MultiblockMachineDefinition ULTIMATE_COMBUSTION_ENGINE = registerCosmicLargeCombustionEngine(
-            "ultimate_combustion_engine_cc", ZPM,
-            REINFORCED_NAQUADRIA_CASING, GEARBOX_NAQUADRIA, CASING_INTAKE_ULTIMATE,
-            CosmicCore.id("block/casings/solid/reinforced_naquadria_casing"),
-            GTCEu.id("block/multiblock/generator/extreme_combustion_engine"));
+    // public static final MultiblockMachineDefinition LARGE_COMBUSTION_ENGINE = registerCosmicLargeCombustionEngine(
+    // "large_combustion_engine_cc", EV,
+    // CASING_TITANIUM_STABLE, CASING_TITANIUM_GEARBOX, CASING_ENGINE_INTAKE,
+    // GTCEu.id("block/casings/solid/machine_casing_stable_titanium"),
+    // GTCEu.id("block/multiblock/generator/large_combustion_engine"));
+    // public static final MultiblockMachineDefinition EXTREME_COMBUSTION_ENGINE = registerCosmicLargeCombustionEngine(
+    // "extreme_combustion_engine_cc", IV,
+    // CASING_TUNGSTENSTEEL_ROBUST, CASING_TUNGSTENSTEEL_GEARBOX, CASING_EXTREME_ENGINE_INTAKE,
+    // GTCEu.id("block/casings/solid/machine_casing_robust_tungstensteel"),
+    // GTCEu.id("block/multiblock/generator/extreme_combustion_engine"));
+    // public static final MultiblockMachineDefinition LUDICROUS_COMBUSTION_ENGINE =
+    // registerCosmicLargeCombustionEngine(
+    // "ludicrous_combustion_engine_cc", LuV,
+    // GILDED_PTHANTERUM_CASING, GEARBOX_PTHANTERUM, CASING_INTAKE_LUDICRIOUS,
+    // CosmicCore.id("block/casings/solid/gilded_pthanterum_casing"),
+    // GTCEu.id("block/multiblock/generator/extreme_combustion_engine"));
+    // public static final MultiblockMachineDefinition ULTIMATE_COMBUSTION_ENGINE = registerCosmicLargeCombustionEngine(
+    // "ultimate_combustion_engine_cc", ZPM,
+    // REINFORCED_NAQUADRIA_CASING, GEARBOX_NAQUADRIA, CASING_INTAKE_ULTIMATE,
+    // CosmicCore.id("block/casings/solid/reinforced_naquadria_casing"),
+    // GTCEu.id("block/multiblock/generator/extreme_combustion_engine"));
 
     private static MachineDefinition[] registerSoulHatch(String name, String displayName, IO io,
                                                          int[] tiers, PartAbility... abilities) {
@@ -1259,14 +1263,14 @@ public class CosmicMachines {
             new int[] { GTValues.HV },                                   // only HV
             PartAbility.EXPORT_FLUIDS, PartAbility.EXPORT_FLUIDS_4X);
 
-    public static final MultiblockMachineDefinition LARGE_STEAM_TURBINE = registerLargeTurbineCosmic(
-            "steam_large_turbine",
-            HV,
-            GTRecipeTypes.STEAM_TURBINE_FUELS,
-            CASING_STEEL_TURBINE, CASING_STEEL_GEARBOX,
-            GTCEu.id("block/casings/mechanic/machine_casing_turbine_steel"),
-            GTCEu.id("block/multiblock/generator/large_steam_turbine"),
-            false);
+    // public static final MultiblockMachineDefinition LARGE_STEAM_TURBINE = registerLargeTurbineCosmic(
+    // "steam_large_turbine",
+    // HV,
+    // GTRecipeTypes.STEAM_TURBINE_FUELS,
+    // CASING_STEEL_TURBINE, CASING_STEEL_GEARBOX,
+    // GTCEu.id("block/casings/mechanic/machine_casing_turbine_steel"),
+    // GTCEu.id("block/multiblock/generator/large_steam_turbine"),
+    // false);
 
     // Dreamer's Basin is now registered in DreamersBasin.java
 
@@ -1340,7 +1344,17 @@ public class CosmicMachines {
         GTMultiMachines.LARGE_STEAM_TURBINE.setRenderXEIPreview(false);
         GTMultiMachines.LARGE_STEAM_TURBINE.setRenderWorldPreview(false);
 
-        com.ghostipedia.cosmiccore.common.compat.gtceu.FluidDrillingRegistration.init();
+        GTMultiMachines.LARGE_GAS_TURBINE.setRecipeTypes(new GTRecipeType[] { DUMMY_RECIPES });
+        GTMultiMachines.LARGE_GAS_TURBINE.setRenderXEIPreview(false);
+        GTMultiMachines.LARGE_GAS_TURBINE.setRenderWorldPreview(false);
+        GCYMMachines.ROTARY_HEARTH_FURNACE.setRecipeTypes(new GTRecipeType[] { DUMMY_RECIPES });
+        GCYMMachines.ROTARY_HEARTH_FURNACE.setRenderXEIPreview(false);
+        GCYMMachines.ROTARY_HEARTH_FURNACE.setRenderWorldPreview(false);
+        GCYMMachines.MEGA_VACUUM_FREEZER.setRecipeTypes(new GTRecipeType[] { DUMMY_RECIPES });
+        GCYMMachines.MEGA_VACUUM_FREEZER.setRenderXEIPreview(false);
+        GCYMMachines.MEGA_VACUUM_FREEZER.setRenderWorldPreview(false);
+
+        FluidDrillingRegistration.init();
 
         for (MachineDefinition miner : GTMachines.MINER) {
             if (miner == null) continue;
