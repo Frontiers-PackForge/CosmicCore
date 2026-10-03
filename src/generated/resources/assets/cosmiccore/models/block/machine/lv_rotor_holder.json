@@ -1,0 +1,64 @@
+{
+    "parent": "minecraft:block/block",
+    "loader": "gtceu:machine",
+    "machine": "cosmiccore:lv_rotor_holder",
+    "multipart": [
+        {
+            "apply": {
+                "model": {
+                    "parent": "gtceu:block/machine/template/rotor_holder/block",
+                    "textures": {
+                        "bottom": "gtceu:block/casings/voltage/lv/bottom",
+                        "side": "gtceu:block/casings/voltage/lv/side",
+                        "top": "gtceu:block/casings/voltage/lv/top"
+                    }
+                }
+            },
+            "when": {
+                "is_formed": "false"
+            }
+        },
+        {
+            "apply": {
+                "model": {
+                    "parent": "gtceu:block/cube/tinted/bottom_top",
+                    "textures": {
+                        "bottom": "gtceu:block/casings/voltage/lv/bottom",
+                        "side": "gtceu:block/casings/voltage/lv/side",
+                        "top": "gtceu:block/casings/voltage/lv/top"
+                    }
+                }
+            },
+            "when": {
+                "is_formed": "true"
+            }
+        },
+        {
+            "apply": {
+                "model": "gtceu:block/machine/template/rotor_holder/overlay"
+            },
+            "when": {
+                "is_formed": "true"
+            }
+        }
+    ],
+    "replaceable_textures": [
+        "bottom",
+        "top",
+        "side"
+    ],
+    "variants": {
+        "emissive_rotor=false,has_rotor=true,is_formed=true,rotor_spinning=false": {
+            "model": "gtceu:block/machine/template/rotor_holder/rotor_idle"
+        },
+        "emissive_rotor=false,has_rotor=true,is_formed=true,rotor_spinning=true": {
+            "model": "gtceu:block/machine/template/rotor_holder/rotor_spinning"
+        },
+        "emissive_rotor=true,has_rotor=true,is_formed=true,rotor_spinning=false": {
+            "model": "gtceu:block/machine/template/rotor_holder/rotor_idle_emissive"
+        },
+        "emissive_rotor=true,has_rotor=true,is_formed=true,rotor_spinning=true": {
+            "model": "gtceu:block/machine/template/rotor_holder/rotor_spinning_emissive"
+        }
+    }
+}

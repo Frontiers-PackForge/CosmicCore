@@ -56,6 +56,7 @@ public class MultiblockInit {
         SteamAssembler.init();
         SteamCaster.init();
         SteamMixer.init();
+        BronzeSteamTurbine.init();
         Powderizer.init();
         IndustrialOreSorter.init();
         IndustrialFlotationPlant.init();
