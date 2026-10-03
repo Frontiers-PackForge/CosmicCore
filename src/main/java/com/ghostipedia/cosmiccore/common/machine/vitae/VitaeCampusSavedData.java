@@ -120,9 +120,9 @@ public final class VitaeCampusSavedData extends SavedData {
     }
 
     public static int altarLevelForCasingCounts(int hv, int ev, int iv) {
-        if (hv == 28 && ev == 0 && iv == 0) return 4;
-        if (ev == 28 && hv == 0 && iv == 0) return 5;
-        if (iv == 28 && hv == 0 && ev == 0) return 6;
+        if (hv == 20 && ev == 0 && iv == 0) return 4;
+        if (ev == 20 && hv == 0 && iv == 0) return 5;
+        if (iv == 20 && hv == 0 && ev == 0) return 6;
         return 0;
     }
 

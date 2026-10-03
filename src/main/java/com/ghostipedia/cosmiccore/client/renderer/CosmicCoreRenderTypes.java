@@ -3,16 +3,58 @@ package com.ghostipedia.cosmiccore.client.renderer;
 import com.ghostipedia.cosmiccore.client.CosmicCoreClient;
 import com.ghostipedia.cosmiccore.client.compat.IrisCompat;
 
+import net.minecraft.Util;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.client.renderer.RenderType;
+import net.minecraft.resources.ResourceLocation;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
 
+import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.DefaultVertexFormat;
 import com.mojang.blaze3d.vertex.VertexFormat;
 
+import java.util.function.Function;
+
 @OnlyIn(Dist.CLIENT)
 public class CosmicCoreRenderTypes extends RenderType {
+
+    private static final RenderType VITAE_SPHERE = RenderType.create("cosmiccore:vitae_sphere",
+            DefaultVertexFormat.NEW_ENTITY, VertexFormat.Mode.QUADS, 65536, false, true,
+            CompositeState.builder()
+                    .setShaderState(new ShaderStateShard(GameRenderer::getRendertypeEntityTranslucentEmissiveShader))
+                    .setTextureState(new TextureStateShard(
+                            ResourceLocation.fromNamespaceAndPath("neovitae", "textures/misc/stream.png"), false,
+                            false))
+                    .setTransparencyState(TRANSLUCENT_TRANSPARENCY).setCullState(NO_CULL)
+                    .setDepthTestState(LEQUAL_DEPTH_TEST).setWriteMaskState(COLOR_WRITE)
+                    .setLightmapState(LIGHTMAP).setOverlayState(OVERLAY)
+                    .createCompositeState(false));
+    private static final Function<RenderType, RenderType> VITAE_TRANSLUCENT = Util.memoize(
+            original -> new RenderType("cosmiccore:vitae_focal/" + original, original.format(), original.mode(),
+                    original.bufferSize(), false, true, () -> {
+                        original.setupRenderState();
+                        if (original.format() == DefaultVertexFormat.NEW_ENTITY) {
+                            RenderSystem.setShader(GameRenderer::getRendertypeEntityTranslucentShader);
+                        } else if (original.format() == DefaultVertexFormat.BLOCK) {
+                            RenderSystem.setShader(GameRenderer::getRendertypeTranslucentShader);
+                        }
+                        RenderSystem.enableBlend();
+                        RenderSystem.defaultBlendFunc();
+                        RenderSystem.depthMask(false);
+                    }, () -> {
+                        original.clearRenderState();
+                        RenderSystem.depthMask(true);
+                        RenderSystem.disableBlend();
+                    }) {});
+
+    public static RenderType vitaeSphere() {
+        return VITAE_SPHERE;
+    }
+
+    public static RenderType vitaeTranslucent(RenderType original) {
+        return VITAE_TRANSLUCENT.apply(original);
+    }
 
     protected static final ShaderStateShard NEBULAE_SHADER = new ShaderStateShard(CosmicCoreClient::getNebulaeShader);
     protected static final ShaderStateShard FIRMAMENT_STORM_CURRENT_SHADER = new ShaderStateShard(

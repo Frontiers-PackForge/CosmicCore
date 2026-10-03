@@ -84,7 +84,7 @@ public class QuintessentiaHatchPartMachine extends TieredIOPartMachine implement
                 .left(8)
                 .top(18)
                 .childPadding(1)
-                .child(Text.lang("cosmiccore.quintessentia_hatch.network")
+                .child(Text.lang("gui.cosmiccore.soul.network_contents")
                         .asWidget()
                         .color(ChatFormatting.DARK_GRAY.getColor()))
                 .child(Text.lang(scaleKey)

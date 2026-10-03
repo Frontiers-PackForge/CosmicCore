@@ -1,5 +1,6 @@
 package com.ghostipedia.cosmiccore.common.machine.multiblock.multi.logic;
 
+import com.ghostipedia.cosmiccore.api.capability.souls.SoulType;
 import com.ghostipedia.cosmiccore.common.machine.multiblock.part.QuintessentiaHatchPartMachine;
 import com.ghostipedia.cosmiccore.common.machine.vitae.VitaeCampusDataStickLinking;
 import com.ghostipedia.cosmiccore.common.machine.vitae.VitaeCampusSavedData;
@@ -21,6 +22,7 @@ import net.minecraft.world.level.block.Block;
 import brachy.modularui.api.drawable.Text;
 import brachy.modularui.api.widget.IWidget;
 import brachy.modularui.value.sync.IntSyncValue;
+import brachy.modularui.value.sync.LongSyncValue;
 import brachy.modularui.value.sync.PanelSyncManager;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -75,6 +77,14 @@ public final class HemophagicTransfuserMachine extends WorkableElectricMultibloc
     }
 
     @Override
+    public void onPartUnload() {
+        if (getLevel() instanceof ServerLevel level) {
+            VitaeCampusSavedData.get(level.getServer()).setCoreOperational(globalPosition(), false);
+        }
+        super.onPartUnload();
+    }
+
+    @Override
     public void onMachineDestroyed() {
         if (getLevel() instanceof ServerLevel level) {
             VitaeCampusSavedData.get(level.getServer()).removeCore(globalPosition());
@@ -99,10 +109,14 @@ public final class HemophagicTransfuserMachine extends WorkableElectricMultibloc
         IntSyncValue limit = new IntSyncValue(this::currentResourceLimit);
         syncManager.syncValue("vitae_campus_altar", altar);
         syncManager.syncValue("vitae_campus_limit", limit);
+        LongSyncValue energy = new LongSyncValue(() -> getEnergyContainer().getEnergyStored());
+        syncManager.syncValue("vitae_campus_energy", energy);
         widgets.add(Text.dynamic(() -> Component.translatable(
                 "cosmiccore.machine.hemophagic_transfuser.status.altar", altar.getIntValue())).asWidget());
         widgets.add(Text.dynamic(() -> Component.translatable(
                 "cosmiccore.machine.hemophagic_transfuser.status.limit", limit.getIntValue())).asWidget());
+        widgets.add(Text.dynamic(() -> Component.translatable(
+                "cosmiccore.machine.hemophagic_transfuser.status.energy", energy.getLongValue())).asWidget());
         return widgets;
     }
 
@@ -140,7 +154,7 @@ public final class HemophagicTransfuserMachine extends WorkableElectricMultibloc
                 .filter(QuintessentiaHatchPartMachine.class::isInstance)
                 .map(QuintessentiaHatchPartMachine.class::cast)
                 .mapToInt(hatch -> QuintessentiaHatchPartMachine.getMaxTransfer(hatch.getTier(),
-                        com.ghostipedia.cosmiccore.api.capability.souls.SoulType.Anima))
+                        SoulType.Anima))
                 .findFirst().orElse(0);
     }
 

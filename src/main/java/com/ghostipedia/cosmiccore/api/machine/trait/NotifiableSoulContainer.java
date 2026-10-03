@@ -2,8 +2,7 @@ package com.ghostipedia.cosmiccore.api.machine.trait;
 
 import com.ghostipedia.cosmiccore.api.capability.recipe.CosmicRecipeCapabilities;
 import com.ghostipedia.cosmiccore.api.capability.souls.SoulType;
-import com.ghostipedia.cosmiccore.api.data.souls.SoulNetwork;
-import com.ghostipedia.cosmiccore.api.data.souls.SoulNetworkSavedData;
+import com.ghostipedia.cosmiccore.api.data.souls.SoulNetworkAccess;
 import com.ghostipedia.cosmiccore.api.machine.activity.ActivityScope;
 import com.ghostipedia.cosmiccore.api.recipe.ingredient.SoulIngredient;
 import com.ghostipedia.cosmiccore.api.recipe.ingredient.SoulStack;
@@ -58,10 +57,10 @@ public class NotifiableSoulContainer extends NotifiableRecipeHandlerTrait<SoulIn
         return capacity.applyAsInt(type);
     }
 
-    private @Nullable SoulNetwork getSoulNetwork() {
+    protected @Nullable SoulNetworkAccess getSoulNetwork() {
         if (getMachine().getLevel() instanceof ServerLevel serverLevel) {
             UUID owner = getOwner();
-            if (owner != null) return SoulNetworkSavedData.getSoulNetwork(serverLevel, owner);
+            if (owner != null) return SoulNetworkAccess.get(serverLevel, owner, getMachine().getOwnerUUID());
         }
         return null;
     }
@@ -86,8 +85,8 @@ public class NotifiableSoulContainer extends NotifiableRecipeHandlerTrait<SoulIn
         int spiritusBefore = network.getAmount(SoulType.Spiritus);
         var stacks = left.stream().map(SoulIngredient::stack).toList();
         var complete = io == IO.IN ?
-                network.extractAll(stacks, throughput, simulate) :
-                network.insertAll(stacks, throughput, capacity, simulate);
+                network.extractAll(stacks, this::getThroughput, simulate) :
+                network.insertAll(stacks, this::getThroughput, this::getCapacity, simulate);
         if (complete) left.clear();
         if (!simulate) {
             recordDelta(SoulType.Anima, animaBefore, network.getAmount(SoulType.Anima));
