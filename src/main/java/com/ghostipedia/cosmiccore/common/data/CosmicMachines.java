@@ -65,9 +65,11 @@ import com.gregtechceu.gtceu.common.machine.multiblock.electric.FusionReactorMac
 import com.gregtechceu.gtceu.common.machine.multiblock.electric.PowerSubstationMachine;
 import com.gregtechceu.gtceu.common.machine.multiblock.part.EnergyHatchPartMachine;
 import com.gregtechceu.gtceu.common.machine.multiblock.part.FluidHatchPartMachine;
+import com.gregtechceu.gtceu.common.machine.multiblock.part.RotorHolderPartMachine;
 import com.gregtechceu.gtceu.common.machine.multiblock.primitive.PrimitiveWorkableMachine;
 import com.gregtechceu.gtceu.common.mui.GTGuiTheme;
 import com.gregtechceu.gtceu.common.mui.GTSingleblockMachinePanels;
+import com.gregtechceu.gtceu.data.lang.LangHandler;
 import com.gregtechceu.gtceu.utils.FormattingUtil;
 import com.gregtechceu.gtceu.utils.memoization.GTMemoizer;
 
@@ -653,6 +655,24 @@ public class CosmicMachines {
     public static final MachineDefinition[] ENERGY_OUTPUT_HATCH_256A = registerEnergyHatches(
             "energy_output_hatch_256a", IO.OUT, 256, PartAbility.SUBSTATION_OUTPUT_ENERGY,
             GTValues.tiersBetween(LV, GTCEuAPI.isHighTier() ? OpV : UHV));
+
+    public static final MachineDefinition[] LOW_TIER_ROTOR_HOLDER = registerTieredMachines(
+            "rotor_holder",
+            RotorHolderPartMachine::new,
+            (tier, builder) -> builder
+                    .langValue("%s Rotor Holder".formatted(VNF[tier]))
+                    .rotationState(RotationState.ALL)
+                    .abilities(PartAbility.ROTOR_HOLDER)
+                    .modelProperty(IS_FORMED, false)
+                    .modelProperty(HAS_ROTOR, false)
+                    .modelProperty(IS_ROTOR_SPINNING, false)
+                    .modelProperty(IS_EMISSIVE_ROTOR, false)
+                    .model(createRotorHolderModel())
+                    .tooltips(LangHandler
+                            .getMultiLang("gtceu.machine.rotor_holder.tooltip"))
+                    .tooltips(Component.translatable("gtceu.part_sharing.disabled"))
+                    .register(),
+            LV, MV);
 
     static {
         REGISTRATE.creativeModeTab(CosmicCreativeModeTabs.COSMIC_CORE);

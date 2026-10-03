@@ -2575,6 +2575,14 @@ public class CosmicLangHandler extends LangHandler {
         provider.add("cosmiccore.dev.murkbloom.immunity.enabled", "Murkbloom immunity enabled");
         provider.add("cosmiccore.dev.murkbloom.immunity.disabled", "Murkbloom immunity disabled");
         provider.add("cosmiccore.dev.murkbloom.immunity.denied", "Murkbloom immunity requires operator access");
+        provider.add("cosmiccore.machine.bronze_steam_turbine.tooltip.0",
+                "Accepts Steam and High Pressure Steam. Requires one fluid input and one LV+ dynamo hatch.");
+        provider.add("cosmiccore.machine.bronze_steam_turbine.tooltip.1",
+                "LV+ rotor holders increase power by 1.5x and efficiency by 1.1x per tier above LV.");
+        provider.add("cosmiccore.multiblock.bronze_steam_turbine.rotor_speed", "Rotor speed: %s / %s RPM");
+        provider.add("cosmiccore.multiblock.bronze_steam_turbine.efficiency", "Fuel efficiency: %s%%");
+        provider.add("cosmiccore.multiblock.bronze_steam_turbine.production", "Production: %s / %s EU/t");
+        provider.add("cosmiccore.multiblock.bronze_steam_turbine.fuel_rate", "Fuel consumption: %s mB/t");
         provider.add("cosmiccore.firmament.tide.title", "SET WITH THE SUN");
         provider.add("cosmiccore.firmament.tide.prompt", "Hold sneak to return to earth");
         provider.add("cosmiccore.dimension.nether_permit_required", "You need a Nether Permit to enter the Nether.");
