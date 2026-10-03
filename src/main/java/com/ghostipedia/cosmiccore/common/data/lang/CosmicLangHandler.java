@@ -1050,6 +1050,11 @@ public class CosmicLangHandler extends LangHandler {
         provider.add("cosmiccore.vitae_campus.link.incompatible", "These Vitae Altar endpoints are incompatible");
         provider.add("cosmiccore.vitae_campus.link.owner", "Vitae Altar endpoints must share an owner or team");
         provider.add("cosmiccore.vitae_campus.recipe.altar_tier", "Required Altar Level: %s");
+        provider.add("cosmiccore.recipemaker.pylon.altar", "Altar level");
+        provider.add("cosmiccore.recipemaker.pylon.anima", "Anima use");
+        provider.add("cosmiccore.recipemaker.pylon.spiritus", "Spiritus use");
+        provider.add("cosmiccore.vitae_campus.recipe.anima", "Anima Input: %s");
+        provider.add("cosmiccore.vitae_campus.recipe.spiritus", "Spiritus Input: %s");
         provider.add("tooltip.cosmiccore.spawner_hatch", "Holds one attuned Ender IO Powered Spawner as a blueprint");
         provider.add("tooltip.cosmiccore.ember_hatch.consumption", "§cMax Ember Consumption§f:§6 %s");
         provider.add("tooltip.cosmiccore.ember_hatch.capacity", "§cMax Ember capacity§f:§6 %s");

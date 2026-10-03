@@ -1,8 +1,11 @@
 package com.ghostipedia.cosmiccore.gtbridge;
 
+import com.ghostipedia.cosmiccore.api.capability.recipe.SoulRecipeCapability;
+import com.ghostipedia.cosmiccore.api.capability.souls.SoulType;
 import com.ghostipedia.cosmiccore.common.machine.multiblock.multi.logic.ImbumentPylonMachine;
 
 import com.gregtechceu.gtceu.api.recipe.gui.RecipeUIModifier;
+import com.gregtechceu.gtceu.utils.FormattingUtil;
 
 import brachy.modularui.api.drawable.Text;
 import brachy.modularui.widgets.TextWidget;
@@ -14,6 +17,17 @@ public final class VitaeCampusRecipeUI {
                 recipe.data.getInt(ImbumentPylonMachine.ALTAR_TIER_KEY) : 4;
         widget.textComponents.child(new TextWidget<>(Text.lang(
                 "cosmiccore.vitae_campus.recipe.altar_tier", tier)).color(0xFF404040));
+        for (SoulType type : new SoulType[] { SoulType.Anima, SoulType.Spiritus }) {
+            long amount = recipe.getInputContents(SoulRecipeCapability.CAP).stream()
+                    .map(content -> SoulRecipeCapability.CAP.of(content.content()).stack())
+                    .filter(stack -> stack.type() == type).mapToLong(stack -> stack.amount()).sum();
+            if (amount > 0) {
+                String key = type == SoulType.Anima ? "cosmiccore.vitae_campus.recipe.anima" :
+                        "cosmiccore.vitae_campus.recipe.spiritus";
+                widget.textComponents.child(new TextWidget<>(Text.lang(key, FormattingUtil.formatNumbers(amount)))
+                        .color(0xFF404040));
+            }
+        }
     };
 
     private VitaeCampusRecipeUI() {}

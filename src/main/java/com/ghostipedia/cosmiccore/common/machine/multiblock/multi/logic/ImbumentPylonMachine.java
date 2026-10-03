@@ -4,6 +4,7 @@ import com.ghostipedia.cosmiccore.common.machine.vitae.VitaeCampusDataStickLinki
 import com.ghostipedia.cosmiccore.common.machine.vitae.VitaeCampusEnergyHandler;
 import com.ghostipedia.cosmiccore.common.machine.vitae.VitaeCampusSavedData;
 import com.ghostipedia.cosmiccore.common.machine.vitae.VitaeCampusSoulHandler;
+import com.ghostipedia.cosmiccore.common.machine.vitae.VitaePylonRecipes;
 import com.ghostipedia.cosmiccore.common.machine.vitae.VitaeRenderAnchors;
 
 import com.gregtechceu.gtceu.api.blockentity.BlockEntityCreationInfo;
@@ -16,6 +17,7 @@ import com.gregtechceu.gtceu.api.machine.multiblock.WorkableElectricMultiblockMa
 import com.gregtechceu.gtceu.api.misc.EnergyContainerList;
 import com.gregtechceu.gtceu.api.recipe.GTRecipe;
 import com.gregtechceu.gtceu.api.recipe.modifier.ModifierFunction;
+import com.gregtechceu.gtceu.api.recipe.modifier.ParallelLogic;
 import com.gregtechceu.gtceu.api.recipe.modifier.RecipeModifier;
 import com.gregtechceu.gtceu.api.sync_system.annotations.SaveField;
 import com.gregtechceu.gtceu.api.sync_system.annotations.SyncToClient;
@@ -230,7 +232,13 @@ public final class ImbumentPylonMachine extends WorkableElectricMultiblockMachin
         if (!(machine instanceof ImbumentPylonMachine pylon)) {
             return RecipeModifier.nullWrongType(ImbumentPylonMachine.class, machine);
         }
-        return pylon.canProcessRecipe(recipe) ? ModifierFunction.IDENTITY : ModifierFunction.NULL;
+        if (!pylon.canProcessRecipe(recipe)) return ModifierFunction.NULL;
+        int requiredTier = recipe.data.contains(ALTAR_TIER_KEY) ? recipe.data.getInt(ALTAR_TIER_KEY) : 4;
+        int limit = VitaePylonRecipes.parallelLimit(pylon.campusAccess().orElseThrow().altarLevel(), requiredTier);
+        limit = VitaePylonRecipes.limitByEnergy(recipe.getInputEUt(), pylon.getEnergyContainer().getEnergyStored(),
+                limit);
+        if (limit == 0) return ModifierFunction.NULL;
+        return VitaePylonRecipes.parallel(ParallelLogic.getParallelAmountWithoutEU(pylon, recipe, limit));
     }
 
     public boolean canProcessRecipe(GTRecipe recipe) {

@@ -1,5 +1,9 @@
 package com.ghostipedia.cosmiccore.mixin.gtceu;
 
+import com.ghostipedia.cosmiccore.api.capability.recipe.SoulRecipeCapability;
+import com.ghostipedia.cosmiccore.api.capability.souls.SoulType;
+import com.ghostipedia.cosmiccore.api.recipe.ingredient.SoulIngredient;
+import com.ghostipedia.cosmiccore.common.machine.multiblock.multi.logic.ImbumentPylonMachine;
 import com.ghostipedia.cosmiccore.common.machine.multiblock.multi.logic.bloomwyrm.BloomwyrmRecipeKeys;
 import com.ghostipedia.cosmiccore.common.recipe.condition.DeedCondition;
 
@@ -18,6 +22,38 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(targets = "com.gregtechceu.gtceu.integration.kjs.recipe.GTRecipeSchema$GTKubeRecipe", remap = false)
 public abstract class GTKubeRecipeMixin {
+
+    public GTRecipeSchema.GTKubeRecipe altarTier(int tier) {
+        if (tier < 4 || tier > 6) {
+            throw new KubeRuntimeException("Imbument Pylon altar level must be between 4 and 6");
+        }
+        return cosmiccore$putIntData((GTRecipeSchema.GTKubeRecipe) (Object) this,
+                ImbumentPylonMachine.ALTAR_TIER_KEY, tier);
+    }
+
+    public GTRecipeSchema.GTKubeRecipe animaInput(int amount) {
+        return cosmiccore$soulInput(SoulType.Anima, amount);
+    }
+
+    public GTRecipeSchema.GTKubeRecipe spiritusInput(int amount) {
+        return cosmiccore$soulInput(SoulType.Spiritus, amount);
+    }
+
+    @Unique
+    private GTRecipeSchema.GTKubeRecipe cosmiccore$soulInput(SoulType type, int amount) {
+        if (amount < 0) {
+            throw new KubeRuntimeException(type + " input must be non-negative");
+        }
+        GTRecipeSchema.GTKubeRecipe self = (GTRecipeSchema.GTKubeRecipe) (Object) this;
+        if (amount == 0) return self;
+        boolean perTick = self.perTick;
+        self.perTick = false;
+        try {
+            return self.input(SoulRecipeCapability.CAP, SoulIngredient.of(type, amount));
+        } finally {
+            self.perTick = perTick;
+        }
+    }
 
     public GTRecipeSchema.GTKubeRecipe deed(String deedId) {
         return deed(deedId, false);
