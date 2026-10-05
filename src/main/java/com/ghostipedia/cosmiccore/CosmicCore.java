@@ -28,6 +28,7 @@ import com.ghostipedia.cosmiccore.common.data.materials.CosmicMaterials;
 import com.ghostipedia.cosmiccore.common.data.recipe.CosmicCoreOreRecipeHandler;
 import com.ghostipedia.cosmiccore.common.data.temperature.CosmicTemperatureModifiers;
 import com.ghostipedia.cosmiccore.common.data.worldgen.CosmicWorldGenLayers;
+import com.ghostipedia.cosmiccore.common.data.worldgen.field.InitialOreSurvey;
 import com.ghostipedia.cosmiccore.common.data.worldgen.firmament.CosmicFirmamentFeatures;
 import com.ghostipedia.cosmiccore.common.data.worldgen.generator.CosmicChunkGenerators;
 import com.ghostipedia.cosmiccore.common.firmament.FirmamentSpaceGravityCompat;
@@ -148,6 +149,7 @@ public class CosmicCore {
     @SubscribeEvent
     public void commonSetup(FMLCommonSetupEvent event) {
         event.enqueueWork(() -> {
+            InitialOreSurvey.init();
             com.ghostipedia.cosmiccore.common.deployment.LeylineCraftingPattern.register();
             com.ghostipedia.cosmiccore.common.orrery.OrreryNetwork.register();
             com.ghostipedia.cosmiccore.common.deployment.LeylineDeploymentBehaviors.registerDefaults();

@@ -5,6 +5,7 @@ import com.ghostipedia.cosmiccore.client.map.RevealedField;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
+import net.minecraft.nbt.NbtUtils;
 import net.minecraft.nbt.Tag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
@@ -19,6 +20,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.UUID;
 
 public class FieldDiscoveryData extends SavedData {
 
@@ -27,13 +29,22 @@ public class FieldDiscoveryData extends SavedData {
     // teamKey -> dimension id -> (packed field position -> revealed field). Dedup is by field CORE position, so a
     // field discovered by any tool (dowsing rod, survey scanner) counts once regardless of the reveal tier.
     private final Map<String, Map<String, LinkedHashMap<Long, RevealedField>>> byTeam = new HashMap<>();
+    private final Set<UUID> initialSurveys = new HashSet<>();
 
     public static FieldDiscoveryData get(MinecraftServer server) {
         return server.overworld().getDataStorage().computeIfAbsent(
                 new SavedData.Factory<>(FieldDiscoveryData::new, FieldDiscoveryData::load), NAME);
     }
 
-    private FieldDiscoveryData() {}
+    FieldDiscoveryData() {}
+
+    public boolean hasInitialSurvey(UUID player) {
+        return initialSurveys.contains(player);
+    }
+
+    public void markInitialSurvey(UUID player) {
+        if (initialSurveys.add(player)) setDirty();
+    }
 
     private static long posKey(RevealedField field) {
         return ((long) field.x() << 32) | (field.z() & 0xFFFFFFFFL);
@@ -79,11 +90,17 @@ public class FieldDiscoveryData extends SavedData {
             teams.put(teamKey, dimsTag);
         });
         compound.put("teams", teams);
+        ListTag surveys = new ListTag();
+        initialSurveys.forEach(player -> surveys.add(NbtUtils.createUUID(player)));
+        compound.put("initialSurveys", surveys);
         return compound;
     }
 
-    private static FieldDiscoveryData load(CompoundTag tag, HolderLookup.Provider provider) {
+    static FieldDiscoveryData load(CompoundTag tag, HolderLookup.Provider provider) {
         FieldDiscoveryData data = new FieldDiscoveryData();
+        for (Tag player : tag.getList("initialSurveys", Tag.TAG_INT_ARRAY)) {
+            data.initialSurveys.add(NbtUtils.loadUUID(player));
+        }
         CompoundTag teams = tag.getCompound("teams");
         for (String teamKey : teams.getAllKeys()) {
             CompoundTag dimsTag = teams.getCompound(teamKey);

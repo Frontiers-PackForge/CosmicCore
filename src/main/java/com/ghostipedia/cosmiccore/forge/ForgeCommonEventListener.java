@@ -13,6 +13,7 @@ import com.ghostipedia.cosmiccore.common.commands.WirelessEnergyCommand;
 import com.ghostipedia.cosmiccore.common.compat.effortlessbuilding.EffortlessBuildingGTPipeRenderSync;
 import com.ghostipedia.cosmiccore.common.data.CosmicItems;
 import com.ghostipedia.cosmiccore.common.data.worldgen.field.FieldDiscoveryData;
+import com.ghostipedia.cosmiccore.common.data.worldgen.field.InitialOreSurvey;
 import com.ghostipedia.cosmiccore.common.flight.FlightDiffuserBehavior;
 import com.ghostipedia.cosmiccore.common.food.CosmicFoodCommand;
 import com.ghostipedia.cosmiccore.common.gravity.GravityDebugCommand;
@@ -75,6 +76,7 @@ public class ForgeCommonEventListener {
         production.ensurePool(
                 com.ghostipedia.cosmiccore.common.production.ProductionStatisticsService.viewerPool(player));
         FieldDiscoveryData data = FieldDiscoveryData.get(player.getServer());
+        InitialOreSurvey.onLogin(player, data);
         String teamKey = DeedTeams.teamKey(player);
         for (String dimensionId : data.dimensionsFor(teamKey)) {
             ResourceLocation dimensionLoc = ResourceLocation.parse(dimensionId);

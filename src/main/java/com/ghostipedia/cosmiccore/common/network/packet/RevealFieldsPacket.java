@@ -3,7 +3,6 @@ package com.ghostipedia.cosmiccore.common.network.packet;
 import com.ghostipedia.cosmiccore.CosmicCore;
 import com.ghostipedia.cosmiccore.client.map.RevealedField;
 import com.ghostipedia.cosmiccore.client.map.RevealedFieldStorage;
-import com.ghostipedia.cosmiccore.client.map.RevealedFields;
 import com.ghostipedia.cosmiccore.common.data.worldgen.field.OreFieldPlacement;
 import com.ghostipedia.cosmiccore.common.data.worldgen.field.OreFieldPlacement.FieldProfile;
 import com.ghostipedia.cosmiccore.common.data.worldgen.field.OreFieldTerrainResolver.ResolvedOreField;
@@ -71,13 +70,7 @@ public class RevealFieldsPacket implements CustomPacketPayload {
     }
 
     public void execute(IPayloadContext context) {
-        context.enqueueWork(() -> {
-            RevealedFieldStorage.ensureLoaded();
-            for (RevealedField field : fields) {
-                RevealedFields.INSTANCE.put(dimension, field);
-            }
-            RevealedFieldStorage.save();
-        });
+        context.enqueueWork(() -> RevealedFieldStorage.receive(dimension, fields));
     }
 
     @Override
